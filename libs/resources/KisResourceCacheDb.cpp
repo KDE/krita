@@ -729,9 +729,9 @@ bool KisResourceCacheDb::addStorage(KisResourceStorageSP storage, bool preinstal
         QSqlQuery q;
 
         r = q.prepare("INSERT INTO storages\n "
-                      "(storage_type_id, location, timestamp, pre_installed, active)\n"
+                      "(storage_type_id, location, timestamp, pre_installed, active, thumbnail)\n"
                       "VALUES\n"
-                      "(:storage_type_id, :location, :timestamp, :pre_installed, :active);");
+                      "(:storage_type_id, :location, :timestamp, :pre_installed, :active, :thumbnail);");
 
         if (!r) {
             qWarning() << "Could not prepare query" << q.lastError();
@@ -743,6 +743,12 @@ bool KisResourceCacheDb::addStorage(KisResourceStorageSP storage, bool preinstal
         q.bindValue(":timestamp", storage->timestamp().toSecsSinceEpoch());
         q.bindValue(":pre_installed", preinstalled ? 1 : 0);
         q.bindValue(":active", !disabledBundles.contains(storage->name()));
+        QByteArray ba;
+        QBuffer buf(&ba);
+        buf.open(QBuffer::WriteOnly);
+        storage->thumbnail().save(&buf, "PNG");
+        buf.close();
+        q.bindValue(":thumbnail", ba);
 
         r = q.exec();
 

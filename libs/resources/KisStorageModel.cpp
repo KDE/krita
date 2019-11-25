@@ -88,6 +88,15 @@ QVariant KisStorageModel::data(const QModelIndex &index, int role) const
                 return d->query.value("pre_installed");
             case Active:
                 return d->query.value("active");
+            case Thumbnail:
+            {
+                QByteArray ba = d->query.value("thumbnail").toByteArray();
+                QBuffer buf(&ba);
+                buf.open(QBuffer::ReadOnly);
+                QImage img;
+                img.load(&buf, "PNG");
+                return QVariant::fromValue<QImage>(img);
+            }
             default:
                 return v;
             }
@@ -104,6 +113,15 @@ QVariant KisStorageModel::data(const QModelIndex &index, int role) const
             return d->query.value("pre_installed");
         case Qt::UserRole + Active:
             return d->query.value("active");
+        case Qt::UserRole + Thumbnail:
+        {
+            QByteArray ba = d->query.value("thumbnail").toByteArray();
+            QBuffer buf(&ba);
+            buf.open(QBuffer::ReadOnly);
+            QImage img;
+            img.load(&buf, "PNG");
+            return QVariant::fromValue<QImage>(img);
+        }
         default:
             ;
         }
@@ -152,6 +170,7 @@ bool KisStorageModel::prepareQuery()
                               ",      timestamp\n"
                               ",      pre_installed\n"
                               ",      active\n"
+                              ",      thumbnail\n"
                               "FROM   storages\n"
                               ",      storage_types\n"
                               "WHERE  storages.storage_type_id = storage_types.id\n");

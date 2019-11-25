@@ -124,7 +124,14 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
             case Tooltip:
                 return d->resourcesQuery.value("tooltip");
             case Image:
-                ;
+            {
+                QByteArray ba = d->resourcesQuery.value("thumbnail").toByteArray();
+                QBuffer buf(&ba);
+                buf.open(QBuffer::ReadOnly);
+                QImage img;
+                img.load(&buf, "PNG");
+                return QVariant::fromValue<QImage>(img);
+            }
             case Status:
                 return d->resourcesQuery.value("status");
             case Location:

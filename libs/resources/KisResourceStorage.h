@@ -160,6 +160,9 @@ public:
     /// The type of the storage
     StorageType type() const;
 
+    /// The icond for the storage
+    QImage thumbnail() const;
+
     /// The time and date when the storage was last modified, or created
     /// for memory storages.
     QDateTime timestamp() const;

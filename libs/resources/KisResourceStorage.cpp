@@ -149,6 +149,11 @@ KisResourceStorage::StorageType KisResourceStorage::type() const
     return d->storageType;
 }
 
+QImage KisResourceStorage::thumbnail() const
+{
+    return d->storagePlugin->thumbnail();
+}
+
 QDateTime KisResourceStorage::timestamp() const
 {
     return d->storagePlugin->timestamp();

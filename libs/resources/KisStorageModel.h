@@ -34,7 +34,8 @@ public:
         Location,
         TimeStamp,
         PreInstalled,
-        Active
+        Active,
+        Thumbnail
     };
 
     static KisStorageModel * instance();

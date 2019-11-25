@@ -90,6 +90,10 @@ public:
         return m_scratchPad->imageBounds();
     }
 
+    void * sourceCookie() const override {
+        return m_scratchPad;
+    }
+
 private:
     Q_DISABLE_COPY(KisScratchPadDefaultBounds)
 

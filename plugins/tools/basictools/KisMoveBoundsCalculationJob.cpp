@@ -36,7 +36,7 @@ void KisMoveBoundsCalculationJob::run()
     QRect handlesRect;
 
     Q_FOREACH (KisNodeSP node, m_nodes) {
-        handlesRect |= KisLayerUtils::recursiveNodeExactBounds(node);
+        handlesRect |= KisLayerUtils::recursiveTightNodeVisibleBounds(node);
     }
 
     if (m_selection) {

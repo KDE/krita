@@ -22,113 +22,80 @@
 #include <QApplication>
 #include <QStyle>
 #include <QDebug>
-#include <QCheckBox>
-#include <QLabel>
-#include <QHBoxLayout>
+
 #include <QListView>
-#include <QDateTime>
-#include <QSizePolicy>
 
 #include "KisStorageChooserWidget.h"
 #include "KisStorageModel.h"
 #include <KoIcon.h>
 
 
-KisStorageChooserDelegate::KisStorageChooserDelegate(QAbstractItemView *itemView, QObject *parent)
-    : KWidgetItemDelegate(itemView, parent)
+KisStorageChooserDelegate::KisStorageChooserDelegate(QObject *parent)
+    : QAbstractItemDelegate(parent)
 {
-}
-
-QList<QWidget *> KisStorageChooserDelegate::createItemWidgets(const QModelIndex &index) const
-{
-    QList<QWidget *> widgetList;
-    QWidget *page = new QWidget;
-    QHBoxLayout *layout = new QHBoxLayout(page);
-
-    QCheckBox *checkBox = new QCheckBox;
-    checkBox->setProperty("storageItem", index);
-    QLabel *thumbnail = new QLabel;
-    QLabel *filename = new QLabel;
-    filename->setWordWrap(true);
-
-    layout->addWidget(checkBox);
-    layout->addWidget(thumbnail);
-    layout->addWidget(filename);
-
-    page->setFixedSize(400, 100);
-
-    return widgetList << page;
-}
-
-void KisStorageChooserDelegate::updateItemWidgets(const QList<QWidget *> widgets, const QStyleOptionViewItem &option, const QPersistentModelIndex &index) const
-{
-    if (option.rect == QRect()) return;
-
-    QWidget* page= widgets[0];
-    QHBoxLayout* layout = qobject_cast<QHBoxLayout*>(page->layout());
-    QCheckBox *checkBox = qobject_cast<QCheckBox*>(layout->itemAt(0)->widget());
-    QLabel *thumbnail = qobject_cast<QLabel*>(layout->itemAt(1)->widget());
-    QLabel *filename = qobject_cast<QLabel*>(layout->itemAt(2)->widget());
-
-    checkBox->setChecked(index.data(Qt::UserRole + KisStorageModel::Active).value<bool>());
-    checkBox->setFixedWidth(checkBox->height());
-    connect(checkBox, SIGNAL(toggled(bool)), this, SLOT(toggleStorage(bool)), Qt::UniqueConnection);
-
-    QString storageType = index.data(Qt::UserRole + KisStorageModel::StorageType).value<QString>();
-    if (storageType == "Folder") {
-        thumbnail->setPixmap(koIcon("document-open").pixmap(option.decorationSize));
-    }
-    else if (storageType == "Memory") {
-        thumbnail->setPixmap(koIcon("document-new").pixmap(option.decorationSize));
-    }
-    else {
-        thumbnail->setPixmap(koIcon("bundle_archive").pixmap(option.decorationSize));
-    }
-    thumbnail->setFixedSize(option.decorationSize);
-    filename->setText(index.data(Qt::UserRole + KisStorageModel::Location).value<QString>());
-
-    // move the page _up_ otherwise it will draw relative to the actual position
-    page->setGeometry(option.rect.translated(0, -option.rect.y()));
 }
 
 void KisStorageChooserDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    QStyleOptionViewItem opt = option;
-    itemView()->style()->drawPrimitive(QStyle::PE_PanelItemViewItem, &opt, painter, 0);
+    QString location = index.data(Qt::UserRole + KisStorageModel::Location).value<QString>();
+    bool active = index.data(Qt::UserRole + KisStorageModel::Active).value<bool>();
 
-    /**
-    QString location = i;
+    if (option.state & QStyle::State_Selected) {
+        painter->fillRect(option.rect, option.palette.highlight());
+    }
+
+    QString storageType = index.data(Qt::UserRole + KisStorageModel::StorageType).value<QString>();
+    QPixmap picture = QPixmap(option.decorationSize);
+    if (storageType == "Folder") {
+        picture = koIcon("document-open").pixmap(option.decorationSize);
+    }
+    else if (storageType == "Memory") {
+        picture = koIcon("document-new").pixmap(option.decorationSize);
+    }
+    else {
+        picture = koIcon("bundle_archive").pixmap(option.decorationSize);
+    }
+
     if (location.isEmpty()) {
         location = QString::number(index.row());
     }
     QColor penColor(option.palette.text().color());
-    //penColor.setAlphaF(0.6);
+    if (!active) {
+        penColor.setAlphaF(0.6);
+    }
     painter->setPen(penColor);
     painter->drawText(option.rect, 0, location);
-    QApplication::style()->drawControl(QStyle::CE_PushButtonBevel, &option, painter, 0);
-    **/
+
+    if (!active) {
+        QApplication::style()->drawControl(QStyle::CE_PushButton, &option, painter, 0);
+    }
+
 }
 
 QSize KisStorageChooserDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    return QSize(400, 100);
-}
-
-void KisStorageChooserDelegate::toggleStorage(bool toggle)
-{
-    QModelIndex index = sender()->property("storageItem").value<QModelIndex>();
-    if (index.isValid()) {
-        KisStorageModel::instance()->setData(index, QVariant(toggle), Qt::CheckStateRole);
-    }
+    int w = 400;
+    int h = option.decorationSize.height();
+    return QSize(w, h);
 }
 
 KisStorageChooserWidget::KisStorageChooserWidget(QWidget *parent) : KisPopupButton(parent)
 {
     QListView *view = new QListView(this);
-//    view->setModel(KisStorageModel::instance());
-//    view->setIconSize(QSize(80, 80));
-//    view->setItemDelegate(new KisStorageChooserDelegate(view, this));
+    view->setModel(KisStorageModel::instance());
+    view->setIconSize(QSize(32, 32));
+    view->setItemDelegate(new KisStorageChooserDelegate(this));
+    view->setSelectionMode(QAbstractItemView::SingleSelection);
+    connect(view, SIGNAL(clicked(QModelIndex)), this, SLOT(activated(QModelIndex)));
     this->setPopupWidget(view);
+}
+
+void KisStorageChooserWidget::activated(const QModelIndex &index)
+{
+    if (!index.isValid()) return;
+
+    bool active = index.data(Qt::UserRole + KisStorageModel::Active).value<bool>();
+    KisStorageModel::instance()->setData(index, !active, Qt::CheckStateRole);
 }
 
 KisStorageChooserWidget::~KisStorageChooserWidget()

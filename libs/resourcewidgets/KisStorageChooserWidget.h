@@ -21,30 +21,21 @@
 #define KISSTORAGECHOOSERWIDGET_H
 
 #include <QWidget>
-#include <KWidgetItemDelegate>
+#include <QAbstractItemDelegate>
 #include <KisPopupButton.h>
 
 #include "kritaresourcewidgets_export.h"
 
-class KRITARESOURCEWIDGETS_EXPORT KisStorageChooserDelegate  : public KWidgetItemDelegate
+class KRITARESOURCEWIDGETS_EXPORT KisStorageChooserDelegate  : public QAbstractItemDelegate
 {
     Q_OBJECT
 public:
-    explicit KisStorageChooserDelegate(QAbstractItemView *itemView, QObject *parent = 0);
+    explicit KisStorageChooserDelegate(QObject *parent = 0);
     ~KisStorageChooserDelegate() override {}
-
-    QList<QWidget*> createItemWidgets(const QModelIndex& index) const override;
-
-    void updateItemWidgets(const QList<QWidget*> widgets,
-                           const QStyleOptionViewItem &option,
-                           const QPersistentModelIndex &index) const override;
 
     void paint( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const override;
 
     QSize sizeHint ( const QStyleOptionViewItem &, const QModelIndex & ) const override;
-
-private Q_SLOTS:
-    void toggleStorage(bool toggle);
 
 };
 
@@ -56,6 +47,10 @@ public:
     KisStorageChooserWidget(QWidget *parent = 0);
 
     ~KisStorageChooserWidget();
+
+private Q_SLOTS:
+    void activated(const QModelIndex &index);
+
 };
 
 

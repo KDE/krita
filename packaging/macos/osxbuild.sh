@@ -162,8 +162,8 @@ build_3rdparty_fixes(){
         # rpath needs to be fixed an build rerun
         log "Fixing rpath on openexr file: b44ExpLogTable"
         log "Fixing rpath on openexr file: dwaLookups"
-        log_cmd install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib ${KIS_TBUILD_DIR}/ext_openexr/ext_openexr-prefix/src/ext_openexr-build/IlmImf/./b44ExpLogTable
-        log_cmd install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib ${KIS_TBUILD_DIR}/ext_openexr/ext_openexr-prefix/src/ext_openexr-build/IlmImf/./dwaLookups
+        log_cmd install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib $(find ${KIS_TBUILD_DIR}/ext_openexr/ext_openexr-prefix/src/ext_openexr-build -name b44ExpLogTable)
+        log_cmd install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib $(find ${KIS_TBUILD_DIR}/ext_openexr/ext_openexr-prefix/src/ext_openexr-build -name dwaLookups)
         # we must rerun build!
         cmake_3rdparty ext_openexr "1"
 

@@ -1,20 +1,20 @@
-diff --git a/IlmImf/CMakeLists.txt b/IlmImf/CMakeLists.txt
-index 18d90ed..6c2f48c 100644
---- a/IlmImf/CMakeLists.txt
-+++ b/IlmImf/CMakeLists.txt
-@@ -5,6 +5,7 @@ SET(CMAKE_INCLUDE_CURRENT_DIR 1)
- ADD_EXECUTABLE ( b44ExpLogTable
-   b44ExpLogTable.cpp
+diff --git a/OpenEXR/IlmImf/CMakeLists.txt b/OpenEXR/IlmImf/CMakeLists.txt
+index 165fed7..aca02ca 100644
+--- a/OpenEXR/IlmImf/CMakeLists.txt
++++ b/OpenEXR/IlmImf/CMakeLists.txt
+@@ -5,6 +5,7 @@ add_executable(b44ExpLogTable b44ExpLogTable.cpp)
+ target_link_libraries(b44ExpLogTable PRIVATE OpenEXR::Config IlmBase::Half IlmBase::IlmThread IlmBase::Iex)
+ set_target_properties(b44ExpLogTable PROPERTIES
+   RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
++  INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib;${CMAKE_INSTALL_PREFIX}/bin"
  )
-+set_target_properties(b44ExpLogTable PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib;${CMAKE_INSTALL_PREFIX}/bin")
- 
- TARGET_LINK_LIBRARIES ( b44ExpLogTable
-   Half
-@@ -22,6 +23,7 @@ ADD_CUSTOM_COMMAND (
- ADD_EXECUTABLE ( dwaLookups
-   dwaLookups.cpp
+ # TODO: Old file had logic to skip these if the file already exists
+ add_custom_command(
+@@ -18,6 +19,7 @@ add_executable(dwaLookups dwaLookups.cpp)
+ target_link_libraries(dwaLookups PRIVATE OpenEXR::Config IlmBase::Imath IlmBase::Half IlmBase::IlmThread IlmBase::Iex)
+ set_target_properties(dwaLookups PROPERTIES
+   RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
++  INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib;${CMAKE_INSTALL_PREFIX}/bin"
  )
-+set_target_properties(dwaLookups PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib;${CMAKE_INSTALL_PREFIX}/bin")
- 
- TARGET_LINK_LIBRARIES ( dwaLookups
-   Half
+ # TODO: Old file had logic to skip these if the file already exists
+ add_custom_command(

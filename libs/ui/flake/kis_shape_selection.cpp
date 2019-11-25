@@ -257,7 +257,7 @@ bool KisShapeSelection::updatesEnabled() const
 
 KUndo2Command* KisShapeSelection::resetToEmpty()
 {
-    return new KisTakeAllShapesCommand(this, true);
+    return new KisTakeAllShapesCommand(this, true, false);
 }
 
 bool KisShapeSelection::isEmpty() const

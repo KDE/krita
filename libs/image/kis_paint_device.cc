@@ -195,7 +195,7 @@ public:
     void prepareClone(KisPaintDeviceSP src)
     {
         prepareCloneImpl(src, src->m_d->currentData());
-        Q_ASSERT(fastBitBltPossible(src));
+        KIS_SAFE_ASSERT_RECOVER_NOOP(fastBitBltPossible(src));
     }
 
     bool fastBitBltPossible(KisPaintDeviceSP src)
@@ -527,10 +527,17 @@ private:
 
     void prepareCloneImpl(KisPaintDeviceSP src, Data *srcData)
     {
-        currentData()->prepareClone(srcData);
-
+        /**
+         * The result of currentData() depends on the current
+         * level of detail and animation frame index. So we
+         * should first connect the device to the new
+         * default bounds object, and only after that ask
+         * currentData() to start cloning.
+         */
         q->setDefaultPixel(KoColor(srcData->dataManager()->defaultPixel(), colorSpace()));
         q->setDefaultBounds(src->defaultBounds());
+
+        currentData()->prepareClone(srcData);
     }
 
     bool fastBitBltPossibleImpl(Data *srcData)
@@ -1086,7 +1093,6 @@ void KisPaintDevice::setProjectionDevice(bool value)
 void KisPaintDevice::prepareClone(KisPaintDeviceSP src)
 {
     m_d->prepareClone(src);
-    Q_ASSERT(fastBitBltPossible(src));
 }
 
 void KisPaintDevice::makeCloneFrom(KisPaintDeviceSP src, const QRect &rect)

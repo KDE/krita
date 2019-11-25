@@ -37,6 +37,19 @@ public:
     virtual int currentLevelOfDetail() const = 0;
     virtual int currentTime() const = 0;
     virtual bool externalFrameActive() const = 0;
+
+    /**
+     * Return an abstract pointer to the source object,
+     * where default bounds takes its data from. It the
+     * cookie is nullptr, then the default bounds is not
+     * connected to anything. One can also compare if two
+     * default bounds are connected to the same source by
+     * comparing two pointers.
+     *
+     * NOTE: It is intended to be used for debugging
+     *       purposes only!
+     */
+    virtual void* sourceCookie() const = 0;
 };
 
 

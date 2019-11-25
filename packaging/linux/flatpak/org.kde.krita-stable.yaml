@@ -111,8 +111,8 @@ modules:
       - /bin
     sources:
       - type: archive
-        url: https://www.exiv2.org/builds/exiv2-0.27.1-Source.tar.gz
-        sha256: f125286980fd1bcb28e188c02a93946951c61e10784720be2301b661a65b3081
+        url: http://files.kde.org/krita/build/dependencies/exiv2-0.26-trunk.tar.gz
+        sha256: c75e3c4a0811bf700d92c82319373b7a825a2331c12b8b37d41eb58e4f18eafb
   
   - name: ilmbase
     config-opts:

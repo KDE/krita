@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Sven Langkamp <sven.langkamp@gmail.com>
+ *  Copyright (c) 2019 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,21 +16,13 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_SHAPE_SELETION_TEST_H
-#define KIS_SHAPE_SELETION_TEST_H
+#include "KisDecoratedNodeInterface.h"
 
-#include <QtTest>
-
-class KisShapeSelectionTest : public QObject
+KisDecoratedNodeInterface::~KisDecoratedNodeInterface()
 {
-    Q_OBJECT
+}
 
-private Q_SLOTS:
-
-    void testAddChild();
-
-    void testUndoFlattening();
-};
-
-#endif
-
+void KisDecoratedNodeInterface::setDecorationsVisible(bool value)
+{
+    setDecorationsVisible(value, true);
+}

@@ -156,3 +156,8 @@ QRect KisLayerProjectionPlane::needRectForOriginal(const QRect &rect) const
     return m_d->layer->needRectForOriginal(rect);
 }
 
+QRect KisLayerProjectionPlane::tightUserVisibleBounds() const
+{
+    return m_d->layer->tightUserVisibleBounds();
+}
+

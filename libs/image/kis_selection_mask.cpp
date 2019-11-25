@@ -290,6 +290,24 @@ void KisSelectionMask::notifySelectionChangedCompressed()
     m_d->updatesCompressor->start();
 }
 
+bool KisSelectionMask::decorationsVisible() const
+{
+    return selection()->isVisible();
+}
+
+void KisSelectionMask::setDecorationsVisible(bool value, bool update)
+{
+    if (value == decorationsVisible()) return;
+
+    const QRect oldExtent = extent();
+
+    selection()->setVisible(value);
+
+    if (update) {
+        setDirty(oldExtent | extent());
+    }
+}
+
 void KisSelectionMask::flattenSelectionProjection(KisSelectionSP selection, const QRect &dirtyRect) const
 {
     Q_UNUSED(selection);

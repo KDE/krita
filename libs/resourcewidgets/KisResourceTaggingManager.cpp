@@ -37,6 +37,7 @@
 #include <KoResource.h>
 
 #include <KisResourceModel.h>
+#include <KisResourceModelProvider.h>
 #include <KisTagFilterResourceProxyModel.h>
 #include <KisTagModel.h>
 #include <KisTagModelProvider.h>
@@ -77,10 +78,11 @@ public:
     QPointer<KisTagFilterResourceProxyModel> model;
 
     KisTagModel* tagModel;
+    KisResourceModel* resourceSourceModel;
 };
 
 
-KisResourceTaggingManager::KisResourceTaggingManager(KisTagModel* tagModel, KisTagFilterResourceProxyModel *model, QWidget *parent)
+KisResourceTaggingManager::KisResourceTaggingManager(QString resourceType, KisTagFilterResourceProxyModel *model, QWidget *parent)
 
     : QObject(parent)
     , d(new Private())
@@ -88,7 +90,10 @@ KisResourceTaggingManager::KisResourceTaggingManager(KisTagModel* tagModel, KisT
     d->model = model;
     d->tagFilter = new KisTagFilterWidget(parent);
 
-    d->tagModel = tagModel;
+
+
+    d->tagModel = KisTagModelProvider::tagModel(resourceType);
+    d->resourceSourceModel = KisResourceModelProvider::resourceModel(resourceType);
     d->tagChooser = new KisTagChooserWidget(d->tagModel, parent);
 
     connect(d->tagChooser, SIGNAL(tagChosen(KisTagSP)), this, SLOT(tagChooserIndexChanged(KisTagSP)));
@@ -409,9 +414,8 @@ void KisResourceTaggingManager::contextMenuRequested(KoResourceSP resource, cons
 void KisResourceTaggingManager::contextMenuRequested(KoResourceSP currentResource, QPoint pos)
 {
     ENTER_FUNCTION();
-    // d->model->assignedTagsList(currentResource)
     if (currentResource) {
-        contextMenuRequested(currentResource, QList<KisTagSP>(), pos);
+        contextMenuRequested(currentResource, d->resourceSourceModel->tagsForResource(currentResource->resourceId()).toList(), pos);
     }
 
 }

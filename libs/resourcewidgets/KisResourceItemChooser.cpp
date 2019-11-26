@@ -196,7 +196,7 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
     d->viewModeButton = new QToolButton(this);
     d->viewModeButton->setPopupMode(QToolButton::InstantPopup);
     d->viewModeButton->setVisible(false);
-    d->tagManager = new KisResourceTaggingManager(KisTagModelProvider::tagModel(resourceType), d->tagFilterProxyModel, this);
+    d->tagManager = new KisResourceTaggingManager(resourceType, d->tagFilterProxyModel, this);
 
     d->storagePopupButton = new KisStorageChooserWidget(this);
 

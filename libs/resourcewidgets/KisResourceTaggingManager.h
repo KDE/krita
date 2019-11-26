@@ -57,7 +57,7 @@ class KisResourceTaggingManager : public QObject
 
 public:
 
-    explicit KisResourceTaggingManager(KisTagModel* tagModel, KisTagFilterResourceProxyModel *model, QWidget *parent);
+    explicit KisResourceTaggingManager(QString resourceType, KisTagFilterResourceProxyModel *model, QWidget *parent);
     ~KisResourceTaggingManager() override;
     void showTaggingBar(bool show);
     QStringList availableTags() const;

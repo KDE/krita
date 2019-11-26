@@ -143,16 +143,28 @@ KisTagSP KisTagModel::tagForIndex(QModelIndex index) const
     if (index.row() > rowCount()) return tag;
     if (index.column() > columnCount()) return tag;
 
-    bool pos = const_cast<KisTagModel*>(this)->d->query.seek(index.row());
-    if (pos) {
 
+    if (index.row() < d->fakeRowsCount) {
         tag.reset(new KisTag());
-        tag->setUrl(d->query.value("url").toString());
-        tag->setName(d->query.value("name").toString());
-        tag->setComment(d->query.value("comment").toString());
-        tag->setId(d->query.value("id").toInt());
-        tag->setActive(d->query.value("active").toBool());
+        tag->setName("All");
+        tag->setUrl("All");
+        tag->setComment("All");
+        tag->setId(-1);
+        tag->setActive(true);
         tag->setValid(true);
+    }
+    else {
+        bool pos = const_cast<KisTagModel*>(this)->d->query.seek(index.row() - d->fakeRowsCount);
+        if (pos) {
+
+            tag.reset(new KisTag());
+            tag->setUrl(d->query.value("url").toString());
+            tag->setName(d->query.value("name").toString());
+            tag->setComment(d->query.value("comment").toString());
+            tag->setId(d->query.value("id").toInt());
+            tag->setActive(d->query.value("active").toBool());
+            tag->setValid(true);
+        }
     }
 
     return tag;
@@ -166,9 +178,9 @@ bool KisTagModel::addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouce
     // A new tag doesn't have an ID yet, that comes from the database
     if (tag->id() >= 0) return false;
 
-    /*
+
     if (!KisResourceCacheDb::hasTag(tag->url(), d->resourceType)) {
-         if (!KisResourceCacheDb::addTag(d->resourceType, tag->url(), tag->name(), tag->comment())) {
+         if (!KisResourceCacheDb::addTag(d->resourceType, "", tag->url(), tag->name(), tag->comment())) {
             qWarning() << "Could not add tag" << tag;
             return false;
         }
@@ -201,7 +213,7 @@ bool KisTagModel::addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouce
 
         tagResource(tag, resource);
     }
-    */
+
 
     return prepareQuery();
 }

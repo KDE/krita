@@ -20,6 +20,7 @@
 #include <QtSql>
 
 #include <KisResourceLocator.h>
+#include <KisResourceModelProvider.h>
 
 Q_GLOBAL_STATIC(KisStorageModel, s_instance)
 
@@ -154,6 +155,7 @@ bool KisStorageModel::setData(const QModelIndex &index, const QVariant &value, i
         }
     }
     QAbstractTableModel::setData(index, value, role);
+    KisResourceModelProvider::resetAllModels();
     return prepareQuery();
 }
 

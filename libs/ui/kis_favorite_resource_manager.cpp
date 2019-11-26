@@ -324,6 +324,7 @@ void KisFavoriteResourceManager::updateFavoritePresets()
 {
 
     m_favoritePresetsList.clear();
+//    KisResourceModel* model = KisResourceModelProvider::resourceModel(ResourceType::PaintOpPresets);
 //    KisPaintOpPresetResourceServer* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
 //    QStringList presetFilenames = rServer->searchTag(m_currentTag);
 //    for(int i = 0; i < qMin(m_maxPresets, presetFilenames.size()); i++) {

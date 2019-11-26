@@ -25,6 +25,7 @@
 #include <QElapsedTimer>
 
 #include <KisTagModel.h>
+#include <KisTagModelProvider.h>
 
 #include "kis_canvas2.h"
 #include "kis_config.h"
@@ -800,31 +801,30 @@ void KisPopupPalette::mousePressEvent(QMouseEvent *event)
 
 void KisPopupPalette::slotShowTagsPopup()
 {
-//    KisTagModel *model = new KisTagModel(ResourceType::PaintOpPresets);
-//    QSet<QString> tags;
-//    for (int i = 0; i < model.rowCount(); ++i) {
-//        QModelIndex idx = model.index(i, 0);
-//        tags << model.data(idx, Qt::DisplayRole).toString();
-//    }
+    KisTagModel *model = KisTagModelProvider::tagModel(ResourceType::PaintOpPresets);
+    QVector<QString> tags;
+    for (int i = 0; i < model->rowCount(); ++i) {
+        QModelIndex idx = model->index(i, 0);
+        tags << model->data(idx, Qt::DisplayRole).toString();
+    }
 
-//    std::sort(tags.begin(), tags.end());
+    std::sort(tags.begin(), tags.end());
 
-//    if (!tags.isEmpty()) {
-//        QMenu menu;
-//        Q_FOREACH (const QString& tag, tags) {
-//            menu.addAction(tag);
-//        }
+    if (!tags.isEmpty()) {
+        QMenu menu;
+        Q_FOREACH (const QString& tag, tags) {
+            menu.addAction(tag);
+        }
 
-//        QAction *action = menu.exec(QCursor::pos());
-//        if (action) {
-//            m_resourceManager->setCurrentTag(action->text());
-//        }
-//    } else {
-//        QWhatsThis::showText(QCursor::pos(),
-//                             i18n("There are no tags available to show in this popup. To add presets, you need to tag them and then select the tag here."));
-//    }
+        QAction *action = menu.exec(QCursor::pos());
+        if (action) {
+            m_resourceManager->setCurrentTag(action->text());
+        }
+    } else {
+        QWhatsThis::showText(QCursor::pos(),
+                             i18n("There are no tags available to show in this popup. To add presets, you need to tag them and then select the tag here."));
+    }
 
-//    delete model;
 }
 
 void KisPopupPalette::slotZoomToOneHundredPercentClicked() {

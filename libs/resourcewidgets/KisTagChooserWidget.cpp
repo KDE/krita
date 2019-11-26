@@ -91,6 +91,7 @@ KisTagChooserWidget::KisTagChooserWidget(KisTagModel* model, QWidget* parent)
 
     connect(d->tagToolButton, SIGNAL(newTagRequested(KisTagSP)),
             this, SLOT(insertItem(KisTagSP)));
+
     connect(d->tagToolButton, SIGNAL(deletionOfCurrentTagRequested()),
             this, SLOT(contextDeleteCurrentTag()));
 
@@ -111,14 +112,20 @@ KisTagChooserWidget::~KisTagChooserWidget()
 void KisTagChooserWidget::contextDeleteCurrentTag()
 {
     ENTER_FUNCTION();
+    fprintf(stderr, "void KisTagChooserWidget::contextDeleteCurrentTag()\n");
     KisTagSP currentTag = currentlySelectedTag();
-    d->model->removeTag(currentTag);
+    if (!currentTag.isNull()) {
+        d->model->removeTag(currentTag);
+    }
 }
 
-void KisTagChooserWidget::tagChanged(int)
+void KisTagChooserWidget::tagChanged(int tagIndex)
 {
     ENTER_FUNCTION();
-    emit tagChosen(currentlySelectedTag());
+    fprintf(stderr, "void KisTagChooserWidget::tagChanged(int) %d\n", tagIndex);
+    if (tagIndex >= 0) {
+        emit tagChosen(currentlySelectedTag());
+    }
 }
 
 void KisTagChooserWidget::tagRenamingRequested(const KisTagSP newName)
@@ -136,6 +143,7 @@ void KisTagChooserWidget::setUndeletionCandidate(const KisTagSP tag)
 
 void KisTagChooserWidget::setCurrentIndex(int index)
 {
+    fprintf(stderr, "set current index: %d", index);
     ENTER_FUNCTION();
     d->comboBox->setCurrentIndex(index);
 }
@@ -155,6 +163,13 @@ void KisTagChooserWidget::addReadOnlyItem(KisTagSP tag)
 
 void KisTagChooserWidget::insertItem(KisTagSP tag)
 {
+    int previous = d->comboBox->currentIndex();
+
+    if(tag.isNull() || tag->name().isNull() || tag->name().isEmpty()) {
+        fprintf(stderr, "inserting item is empty\n");
+        return;
+    }
+
     fprintf(stderr, "inserting item!!! %s\n", tag->name().toUtf8().toStdString().c_str());
     tag->setUrl(tag->name());
     tag->setComment(tag->name());
@@ -163,17 +178,38 @@ void KisTagChooserWidget::insertItem(KisTagSP tag)
     ENTER_FUNCTION();
     bool added = d->model->addTag(tag);
     fprintf(stderr, "added = %d\n", added);
+
+    if (added) {
+        for (int i = 0; i < d->model->rowCount(); i++) {
+            QModelIndex index = d->model->index(i, 0);
+            KisTagSP temp = d->model->tagForIndex(index);
+            if (!temp.isNull() && temp->name() == tag->name()) {
+                setCurrentIndex(i);
+                return;
+            }
+        }
+    }
+
+    setCurrentIndex(previous);
 }
 
 KisTagSP KisTagChooserWidget::currentlySelectedTag()
 {
     int row = d->comboBox->currentIndex();
-    // TODO: RESOURCES: there shouldn't be any +1 for "All", of course;
-    //d->comboBox->currentData();
-    fprintf(stderr, "current data type = %s", d->comboBox->currentData().typeName());
+    if (row < 0) {
+        return KisTagSP();
+    }
 
-    QModelIndex index = d->model->index(row - 1, 0);
+    if (d->comboBox->currentData().data()) {
+        fprintf(stderr, "current data type = %s\n", d->comboBox->currentData().typeName());
+    } else {
+        fprintf(stderr, "current data type = (null)\n");
+    }
+
+    QModelIndex index = d->model->index(row, 0);
     KisTagSP tag =  d->model->tagForIndex(index);
+    fprintf(stderr, "current tag: %s\n", tag.isNull() ? "(null)" : tag->name().toStdString().c_str());
+    fprintf(stderr, "current index = %d\n", row);
     ENTER_FUNCTION() << tag;
     return tag;
 }

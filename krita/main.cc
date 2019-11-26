@@ -417,7 +417,7 @@ extern "C" int main(int argc, char **argv)
         // Icons in menus are ugly and distracting
         app.setAttribute(Qt::AA_DontShowIconsInMenus);
     }
-#if (QT_VERSION < QT_VERSION_CHECK(5, 10, 0))
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
     app.setAttribute(Qt::AA_DisableWindowContextHelpButton);
 #endif
     app.installEventFilter(KisQtWidgetsTweaker::instance());

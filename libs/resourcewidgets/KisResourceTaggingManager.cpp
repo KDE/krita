@@ -235,16 +235,12 @@ void KisResourceTaggingManager::contextCreateNewTag(const KisTagSP tag)
 
 void KisResourceTaggingManager::contextCreateNewTag(KoResourceSP resource , const KisTagSP tag)
 {
+    // TODO: RESOURCES: this function should use QString, not KisTagSP
     fprintf(stderr, "void KisResourceTaggingManager::contextCreateNewTag(KoResourceSP resource , const KisTagSP tag)");
-    ENTER_FUNCTION();
-    /*
-    if (!tag.isEmpty()) {
-//        d->model->tagCategoryAdded(tag);
-        if (resource) {
-            addResourceTag(resource, tag);
-        }
-    }
-    */
+    KisTagSP inserted = d->tagChooser->insertItem(tag);
+    int previousIndex = d->tagChooser->currentIndex();
+    d->tagModel->tagResource(inserted, resource);
+    d->tagChooser->setCurrentIndex(previousIndex);
 }
 
 void KisResourceTaggingManager::syncTagBoxEntryRemoval(const KisTagSP tag)

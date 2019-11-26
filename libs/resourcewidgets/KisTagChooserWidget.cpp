@@ -175,13 +175,14 @@ void KisTagChooserWidget::addReadOnlyItem(KisTagSP tag)
     ENTER_FUNCTION();
 }
 
-void KisTagChooserWidget::insertItem(KisTagSP tag)
+KisTagSP KisTagChooserWidget::insertItem(KisTagSP tag)
 {
+    // TODO: RESOURCES: this function should use QString, not KisTagSP
     int previous = d->comboBox->currentIndex();
 
     if(tag.isNull() || tag->name().isNull() || tag->name().isEmpty()) {
         fprintf(stderr, "inserting item is empty\n");
-        return;
+        return KisTagSP();
     }
 
     fprintf(stderr, "inserting item!!! %s\n", tag->name().toUtf8().toStdString().c_str());
@@ -197,14 +198,15 @@ void KisTagChooserWidget::insertItem(KisTagSP tag)
         for (int i = 0; i < d->model->rowCount(); i++) {
             QModelIndex index = d->model->index(i, 0);
             KisTagSP temp = d->model->tagForIndex(index);
-            if (!temp.isNull() && temp->name() == tag->name()) {
+            if (!temp.isNull() && temp->url() == tag->url()) {
                 setCurrentIndex(i);
-                return;
+                return temp;
             }
         }
     }
 
     setCurrentIndex(previous);
+    return KisTagSP();
 }
 
 KisTagSP KisTagChooserWidget::currentlySelectedTag()

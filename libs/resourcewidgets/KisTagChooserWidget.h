@@ -64,7 +64,7 @@ Q_SIGNALS:
     void tagChosen(const KisTagSP tag);
 
 public Q_SLOTS:
-    void insertItem(KisTagSP tag);
+    KisTagSP insertItem(KisTagSP tag);
     void tagChanged(int index);
 
 

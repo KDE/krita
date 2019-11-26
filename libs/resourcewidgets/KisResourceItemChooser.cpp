@@ -111,7 +111,7 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
 
     d->resourceModel = KisResourceModelProvider::resourceModel(resourceType);
 
-    d->tagFilterProxyModel = new KisTagFilterResourceProxyModel(this);
+    d->tagFilterProxyModel = new KisTagFilterResourceProxyModel(KisTagModelProvider::tagModel(resourceType), this);
 
     d->extraFilterModel = extraFilterProxy;
     if (d->extraFilterModel) {

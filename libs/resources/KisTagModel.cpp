@@ -28,6 +28,7 @@
 
 struct KisTagModel::Private {
     QSqlQuery query;
+    QSqlQuery tagForResourceQuery;
     QString resourceType;
     int columnCount {5};
     int cachedRowCount {-1};
@@ -350,6 +351,29 @@ bool KisTagModel::renameTag(const KisTagSP tag, const QString &name)
 
 }
 
+QVector<KisTagSP> KisTagModel::tagsForResource(int resourceId) const
+{
+    d->tagForResourceQuery.bindValue(":resource_id", resourceId);
+    bool r = d->tagForResourceQuery.exec();
+    if (!r) {
+        qWarning() << "Could not select tags for" << resourceId << d->tagForResourceQuery.lastError() << d->tagForResourceQuery.boundValues();
+    }
+
+    QVector<KisTagSP> tags;
+    while (d->tagForResourceQuery.next()) {
+        //qDebug() << d->tagQuery.value(0).toString() << d->tagQuery.value(1).toString() << d->tagQuery.value(2).toString();
+        KisTagSP tag(new KisTag());
+        tag->setId(d->tagForResourceQuery.value("id").toInt());
+        tag->setUrl(d->tagForResourceQuery.value("url").toString());
+        tag->setName(d->tagForResourceQuery.value("name").toString());
+        tag->setComment(d->tagForResourceQuery.value("comment").toString());
+        tag->setValid(true);
+        tag->setActive(true);
+        tags << tag;
+    }
+    return tags;
+}
+
 bool KisTagModel::prepareQuery()
 {
     beginResetModel();
@@ -378,6 +402,20 @@ bool KisTagModel::prepareQuery()
     if (!r) {
         qWarning() << "Could not select tags" << d->query.lastError();
     }
+
+    r = d->tagForResourceQuery.prepare("SELECT tags.id\n"
+                            ",      tags.url\n"
+                            ",      tags.name\n"
+                            ",      tags.comment\n"
+                            "FROM   tags\n"
+                            ",      resource_tags\n"
+                            "WHERE  tags.active > 0\n"                               // make sure the tag is active
+                            "AND    tags.id = resource_tags.tag_id\n"                // join tags + resource_tags by tag_id
+                            "AND    resource_tags.resource_id = :resource_id\n");    // make sure we're looking for tags for a specific resource
+    if (!r)  {
+        qWarning() << "Could not prepare TagsForResource query" << d->tagForResourceQuery.lastError();
+    }
+
 
     d->cachedRowCount = -1;
     endResetModel();

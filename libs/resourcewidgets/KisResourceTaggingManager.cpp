@@ -425,7 +425,7 @@ void KisResourceTaggingManager::contextMenuRequested(KoResourceSP currentResourc
 {
     ENTER_FUNCTION();
     if (currentResource) {
-        contextMenuRequested(currentResource, d->resourceSourceModel->tagsForResource(currentResource->resourceId()).toList(), pos);
+        contextMenuRequested(currentResource, d->tagModel->tagsForResource(currentResource->resourceId()).toList(), pos);
     }
 
 }

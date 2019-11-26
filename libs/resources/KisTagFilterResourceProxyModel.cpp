@@ -25,12 +25,14 @@
 struct KisTagFilterResourceProxyModel::Private
 {
     QList<KisTagSP> tags;
+    KisTagModel* tagModel;
 };
 
-KisTagFilterResourceProxyModel::KisTagFilterResourceProxyModel(QObject *parent)
+KisTagFilterResourceProxyModel::KisTagFilterResourceProxyModel(KisTagModel* model, QObject *parent)
     : QSortFilterProxyModel(parent)
     , d(new Private)
 {
+    d->tagModel = model;
 }
 
 KisTagFilterResourceProxyModel::~KisTagFilterResourceProxyModel()
@@ -139,16 +141,20 @@ bool KisTagFilterResourceProxyModel::filterAcceptsRow(int source_row, const QMod
     }
 
     QModelIndex idx = sourceModel()->index(source_row, KisResourceModel::Name, source_parent);
-
-    QStringList tags = sourceModel()->data(idx, Qt::UserRole + KisResourceModel::Tags).toStringList();
-
+    int resourceId = sourceModel()->data(idx, Qt::UserRole + KisResourceModel::Id).toInt();
+    //QStringList tags = sourceModel()->data(idx, Qt::UserRole + KisResourceModel::Tags).toStringList();
+    QVector<KisTagSP> tagsForResource = d->tagModel->tagsForResource(resourceId);
 
     //QString name = sourceModel()->data(idx, Qt::UserRole + KisResourceModel::Tags).toString();
 
 
     // TODO: RESOURCES: proper filtering by tag
-    if (!d->tags.first().isNull() && tags.contains(d->tags.first()->name())) {
-        return true;
+    if (!d->tags.first().isNull()) {
+        Q_FOREACH(KisTagSP temp, tagsForResource) {
+            if (temp->url() == tag->url()) {
+                return true;
+            }
+        }
     }
 
     return false;

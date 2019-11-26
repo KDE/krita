@@ -32,8 +32,10 @@
 #include <KisResourceModelProvider.h>
 #include <KisResourceTypeModel.h>
 #include <KisTagModel.h>
+#include <KisTagModelProvider.h>
 #include <KisResourceItemDelegate.h>
 #include <KisResourceItemListView.h>
+
 
 DlgDbExplorer::DlgDbExplorer(QWidget *parent)
     : KoDialog(parent)
@@ -159,7 +161,7 @@ void DlgDbExplorer::slotRvResourceTypeSelected(int index)
 
     KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(resourceType);
 
-    KisTagFilterResourceProxyModel *tagFilterModel = new KisTagFilterResourceProxyModel(this);
+    KisTagFilterResourceProxyModel *tagFilterModel = new KisTagFilterResourceProxyModel(KisTagModelProvider::tagModel(resourceType), this);
     tagFilterModel->setSourceModel(resourceModel);
 
     m_page->resourceItemView->setModel(tagFilterModel);

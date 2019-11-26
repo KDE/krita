@@ -226,8 +226,8 @@ bool KisTagModel::removeTag(const KisTagSP tag)
 
     QSqlQuery q;
     if (!q.prepare("UPDATE tags\n"
-                   "WHERE  id = :id\n"
-                   "SET    active = 0")) {
+                   "SET    active = 0\n"
+                   "WHERE  id = :id")) {
         qWarning() << "Could not prepare remove tag query" << q.lastError();
         return false;
     }

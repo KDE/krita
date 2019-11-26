@@ -132,9 +132,15 @@ void KisTagChooserWidget::tagChanged(int tagIndex)
 
 void KisTagChooserWidget::tagRenamingRequested(const KisTagSP newName)
 {
+    int previousIndex = d->comboBox->currentIndex();
     ENTER_FUNCTION();
-    // TODO: RESOURCES: implement renaming (implement update in KisTagModel?)
-    warnKrita << "Renaming of tags not implemented";
+    KisTagSP currentTag = currentlySelectedTag();
+    QString name = newName.isNull() ? "" : newName->name();
+    fprintf(stderr, "renaming tag requested! to: %s\n", name.toUtf8().toStdString().c_str());
+    if (!currentTag.isNull() && !name.isEmpty()) {
+        d->model->renameTag(currentTag, newName->name());
+        setCurrentIndex(previousIndex);
+    }
 }
 
 void KisTagChooserWidget::setUndeletionCandidate(const KisTagSP tag)

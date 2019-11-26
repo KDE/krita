@@ -116,7 +116,9 @@ void KisTagFilterResourceProxyModel::setTag(const KisTagSP tag)
     ENTER_FUNCTION();
     //d->tags = tag.split(QRegExp("[,]\\s*"), QString::SkipEmptyParts);
     d->tags.clear();
-    d->tags << tag;
+    if (!tag.isNull()) {
+        d->tags << tag;
+    }
     invalidateFilter();
 }
 
@@ -128,6 +130,11 @@ bool KisTagFilterResourceProxyModel::filterAcceptsColumn(int /*source_column*/, 
 bool KisTagFilterResourceProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
     if (d->tags.isEmpty()) {
+        return true;
+    }
+
+    KisTagSP tag = d->tags.first();
+    if (!tag.isNull() && tag->url() == "All") {
         return true;
     }
 

@@ -299,8 +299,10 @@ void KisResourceTaggingManager::removeTagFromComboBox(const KisTagSP tag)
 void KisResourceTaggingManager::removeResourceTag(KoResourceSP resource, const KisTagSP tag)
 {
     ENTER_FUNCTION();
+    int previousIndex = d->tagChooser->currentIndex();
     bool success = d->tagModel->untagResource(tag, resource);
     fprintf(stderr, "remove Resource tag: %d\n", success);
+    d->tagChooser->setCurrentIndex(previousIndex);
 
     //    QStringList tagsList = d->model->assignedTagsList(resource);
 

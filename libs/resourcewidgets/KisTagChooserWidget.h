@@ -41,6 +41,7 @@ public:
     explicit KisTagChooserWidget(KisTagModel* model, QWidget* parent);
     ~KisTagChooserWidget() override;
     void setCurrentIndex(int index);
+    int currentIndex() const;
     int findIndexOf(KisTagSP tagName);
 
     KisTagSP currentlySelectedTag();

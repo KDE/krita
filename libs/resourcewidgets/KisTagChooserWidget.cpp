@@ -157,6 +157,11 @@ void KisTagChooserWidget::setCurrentIndex(int index)
     d->comboBox->setCurrentIndex(index);
 }
 
+int KisTagChooserWidget::currentIndex() const
+{
+    return d->comboBox->currentIndex();
+}
+
 int KisTagChooserWidget::findIndexOf(KisTagSP tagName)
 {
     ENTER_FUNCTION();

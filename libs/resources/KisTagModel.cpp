@@ -304,16 +304,18 @@ bool KisTagModel::untagResource(const KisTagSP tag, const KoResourceSP resource)
     if (!resource->valid()) return false;
     if (resource->resourceId() < 0) return false;
 
-    bool r = d->query.prepare("DELETE FROM resource_tags.id\n"
+    // we need to delete an entry in resource_tags
+    bool r = d->query.prepare("DELETE FROM resource_tags\n"
                               "WHERE   resource_id = :resource_id\n"
-                              "AND     tag_id in (SELECT id\n"
-                              "                   FROM   tags where ");
+                              "AND     tag_id = :tag_id");
 
     if (!r) {
         qWarning() << "Could not prepare KisTagModel query" << d->query.lastError();
     }
 
-    d->query.bindValue(":resource_type", d->resourceType);
+    d->query.bindValue(":resource_id", resource->resourceId());
+    d->query.bindValue(":tag_id", tag->id());
+
 
     r = d->query.exec();
 

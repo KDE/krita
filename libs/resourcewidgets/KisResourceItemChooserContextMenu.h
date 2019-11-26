@@ -88,7 +88,7 @@ public:
     ~NewTagAction() override;
 
     Q_SIGNALS:
-    void triggered(KoResourceSP resource, const KisTagSP &tag);
+    void triggered(KoResourceSP resource, const KisTagSP tag);
 
 protected Q_SLOTS:
     void onTriggered(const KisTagSP tagName);

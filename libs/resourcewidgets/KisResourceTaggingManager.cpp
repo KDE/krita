@@ -195,6 +195,7 @@ QStringList KisResourceTaggingManager::availableTags() const
 void KisResourceTaggingManager::addResourceTag(KoResourceSP resource, const KisTagSP tag)
 {
     ENTER_FUNCTION();
+    fprintf(stderr, "trying to tag a resource... %s %s\n", resource->name().toUtf8().toStdString().c_str(), tag->name().toUtf8().toStdString().c_str());
     d->tagModel->tagResource(tag, resource);
     //d->tagModels->tagModel(resource->resourceType())->tagResource(tag, resource);
     // we need to find a tag from a tagName?
@@ -220,6 +221,7 @@ void KisResourceTaggingManager::syncTagBoxEntryAddition(const KisTagSP tag)
 
 void KisResourceTaggingManager::contextCreateNewTag(const KisTagSP tag)
 {
+    fprintf(stderr, "void KisResourceTaggingManager::contextCreateNewTag(const KisTagSP tag)");
     ENTER_FUNCTION();
     /*
     if (!tag.isEmpty()) {
@@ -233,6 +235,7 @@ void KisResourceTaggingManager::contextCreateNewTag(const KisTagSP tag)
 
 void KisResourceTaggingManager::contextCreateNewTag(KoResourceSP resource , const KisTagSP tag)
 {
+    fprintf(stderr, "void KisResourceTaggingManager::contextCreateNewTag(KoResourceSP resource , const KisTagSP tag)");
     ENTER_FUNCTION();
     /*
     if (!tag.isEmpty()) {
@@ -264,6 +267,7 @@ void KisResourceTaggingManager::syncTagBoxEntries()
 
 void KisResourceTaggingManager::contextAddTagToResource(KoResourceSP resource, const KisTagSP tag)
 {
+    fprintf(stderr, "void KisResourceTaggingManager::contextAddTagToResource(KoResourceSP resource, const KisTagSP tag)");
     ENTER_FUNCTION();
     addResourceTag(resource, tag);
     //    d->model->tagCategoryMembersChanged();
@@ -272,6 +276,7 @@ void KisResourceTaggingManager::contextAddTagToResource(KoResourceSP resource, c
 
 void KisResourceTaggingManager::contextRemoveTagFromResource(KoResourceSP resource, const KisTagSP tag)
 {
+    fprintf(stderr, "void KisResourceTaggingManager::contextRemoveTagFromResource(KoResourceSP resource, const KisTagSP tag)");
     ENTER_FUNCTION();
     removeResourceTag(resource, tag);
     //    d->model->tagCategoryMembersChanged();
@@ -280,6 +285,7 @@ void KisResourceTaggingManager::contextRemoveTagFromResource(KoResourceSP resour
 
 void KisResourceTaggingManager::removeTagFromComboBox(const KisTagSP tag)
 {
+    fprintf(stderr, "void KisResourceTaggingManager::removeTagFromComboBox(const KisTagSP tag)");
     ENTER_FUNCTION();
     //    QList<KoResourceSP> resources = d->model->currentlyVisibleResources();
     //    Q_FOREACH (KoResourceSP resource, resources) {
@@ -293,7 +299,9 @@ void KisResourceTaggingManager::removeTagFromComboBox(const KisTagSP tag)
 void KisResourceTaggingManager::removeResourceTag(KoResourceSP resource, const KisTagSP tag)
 {
     ENTER_FUNCTION();
-    d->tagModel->untagResource(tag, resource);
+    bool success = d->tagModel->untagResource(tag, resource);
+    fprintf(stderr, "remove Resource tag: %d\n", success);
+
     //    QStringList tagsList = d->model->assignedTagsList(resource);
 
     //    Q_FOREACH (const QString & oldName, tagsList) {
@@ -392,6 +400,8 @@ void KisResourceTaggingManager::contextMenuRequested(KoResourceSP resource, cons
     ENTER_FUNCTION();
     // No visible tag chooser usually means no intended tag interaction,
     // context menu makes no sense then either
+    fprintf(stderr, "context menu requested!");
+
     if (!resource || !d->tagChooser->isVisible())
         return;
 
@@ -400,14 +410,14 @@ void KisResourceTaggingManager::contextMenuRequested(KoResourceSP resource, cons
                                            d->tagChooser->currentlySelectedTag(),
                                            d->tagChooser->allTags());
 
-    connect(&menu, SIGNAL(resourceTagAdditionRequested(KoResourceSP,QString)),
-            this, SLOT(contextAddTagToResource(KoResourceSP,QString)));
+    connect(&menu, SIGNAL(resourceTagAdditionRequested(KoResourceSP,const KisTagSP)),
+            this, SLOT(contextAddTagToResource(KoResourceSP,const KisTagSP)));
 
-    connect(&menu, SIGNAL(resourceTagRemovalRequested(KoResourceSP,QString)),
-            this, SLOT(contextRemoveTagFromResource(KoResourceSP,QString)));
+    connect(&menu, SIGNAL(resourceTagRemovalRequested(KoResourceSP,const KisTagSP)),
+            this, SLOT(contextRemoveTagFromResource(KoResourceSP,const KisTagSP)));
 
-    connect(&menu, SIGNAL(resourceAssignmentToNewTagRequested(KoResourceSP,QString)),
-            this, SLOT(contextCreateNewTag(KoResourceSP,QString)));
+    connect(&menu, SIGNAL(resourceAssignmentToNewTagRequested(KoResourceSP,const KisTagSP)),
+            this, SLOT(contextCreateNewTag(KoResourceSP,const KisTagSP)));
     menu.exec(pos);
 }
 

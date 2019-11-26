@@ -127,6 +127,8 @@ void KisTagChooserWidget::tagChanged(int tagIndex)
     fprintf(stderr, "void KisTagChooserWidget::tagChanged(int) %d\n", tagIndex);
     if (tagIndex >= 0) {
         emit tagChosen(currentlySelectedTag());
+    } else {
+        fprintf(stderr, "Requested -1 index; previous: %d\n", d->comboBox->currentIndex());
     }
 }
 

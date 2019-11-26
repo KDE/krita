@@ -36,6 +36,7 @@ KoLineEditAction::KoLineEditAction(QObject* parent)
     : QWidgetAction(parent)
     , m_closeParentOnTrigger(false)
 {
+    fprintf(stderr, "created a new KoLineEditAction\n");
     QWidget* pWidget = new QWidget (0);
     QHBoxLayout* pLayout = new QHBoxLayout();
     m_label = new QLabel(0);
@@ -77,8 +78,10 @@ bool KoLineEditAction::closeParentOnTrigger()
 void KoLineEditAction::onTriggered()
 {
     ENTER_FUNCTION();
+
+    fprintf(stderr, "void KoLineEditAction::onTriggered()");
+
     if (! m_editBox->text().isEmpty()) {
-        // TODO: RESOURCES: what about "remove existing tag" action?
         KisTagSP tag(new KisTag());
         tag->setName(m_editBox->text());
         tag->setUrl(m_editBox->text());
@@ -120,6 +123,7 @@ ContextMenuExistingTagAction::ContextMenuExistingTagAction(KoResourceSP resource
     , m_resource(resource)
     , m_tag(tag)
 {
+    fprintf(stderr, "ContextMenuExistingTagAction created for: %s\n", tag->name().toUtf8().toStdString().c_str());
     setText(tag->name());
     connect (this, SIGNAL(triggered()),
              this, SLOT(onTriggered()));
@@ -131,6 +135,7 @@ ContextMenuExistingTagAction::~ContextMenuExistingTagAction()
 
 void ContextMenuExistingTagAction::onTriggered()
 {
+    fprintf(stderr, "void ContextMenuExistingTagAction::onTriggered()\n");
     ENTER_FUNCTION();
     emit triggered(m_resource, m_tag);
 }
@@ -141,6 +146,7 @@ NewTagAction::~NewTagAction()
 NewTagAction::NewTagAction(KoResourceSP resource, QMenu* parent)
     :KoLineEditAction (parent)
 {
+    fprintf(stderr, "NewTagAction created\n");
     m_resource = resource;
     setIcon(koIcon("document-new"));
     setPlaceholderText(i18n("New tag"));
@@ -152,9 +158,27 @@ NewTagAction::NewTagAction(KoResourceSP resource, QMenu* parent)
 
 void NewTagAction::onTriggered(const KisTagSP tag)
 {
-    ENTER_FUNCTION();
     emit triggered(m_resource,tag);
 }
+
+class CompareWithOtherTagFunctor
+{
+    KisTagSP m_referenceTag;
+
+public:
+    CompareWithOtherTagFunctor(KisTagSP referenceTag)
+    {
+        m_referenceTag = referenceTag;
+    }
+
+    bool operator()(KisTagSP otherTag)
+    {
+        return !otherTag.isNull() && otherTag->url() == m_referenceTag->url();
+    }
+
+};
+
+
 
 KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceSP resource,
                                                                    const QList<KisTagSP> resourceTags,
@@ -173,11 +197,19 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
     QMenu * assignableTagsMenu;
 
     QList<KisTagSP> removables = resourceTags;
-    QList<KisTagSP> assignables = allTags;
+    QList<KisTagSP> assignables2 = allTags;
+
+    CompareWithOtherTagFunctor comparer(currentlySelectedTag);
 
 
     std::sort(removables.begin(), removables.end(), KisTag::compareNamesAndUrls);
-    std::sort(assignables.begin(), assignables.end(), KisTag::compareNamesAndUrls);
+    std::sort(assignables2.begin(), assignables2.end(), KisTag::compareNamesAndUrls);
+    bool currentTagInRemovables = !currentlySelectedTag.isNull();
+    currentTagInRemovables = currentTagInRemovables
+            && (std::find_if(removables.begin(), removables.end(), comparer) != removables.end());
+
+
+
 
 
     assignableTagsMenu = addMenu(koIcon("list-add"),i18n("Assign to tag"));
@@ -187,30 +219,31 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
         addSeparator();
         KisTagSP currentTag = currentlySelectedTag;
 
-        if (!currentTag.isNull() && removables.contains(currentTag)) {
-            //assignables.remove(currentTag);
-            //removables.remove(currentTag);
+        if (!currentTag.isNull() && currentTagInRemovables) {
+            std::remove_if(removables.begin(), removables.end(), comparer);
+            std::remove_if(assignables2.begin(), assignables2.end(), comparer);
+
             ContextMenuExistingTagAction * removeTagAction = new ContextMenuExistingTagAction(resource, currentTag, this);
             removeTagAction->setText(i18n("Remove from this tag"));
             removeTagAction->setIcon(koIcon("list-remove"));
 
-            connect(removeTagAction, SIGNAL(triggered(KoResourceSP,KisTagSP)),
-                    this, SIGNAL(resourceTagRemovalRequested(KoResourceSP,KisTagSP)));
+            connect(removeTagAction, SIGNAL(triggered(KoResourceSP, const KisTagSP)),
+                    this, SIGNAL(resourceTagRemovalRequested(KoResourceSP, const KisTagSP)));
             addAction(removeTagAction);
         }
 
         if (!removables.isEmpty()) {
             removableTagsMenu = addMenu(koIcon("list-remove"),i18n("Remove from other tag"));
             foreach (const KisTagSP tag, removables) {
-                //assignables.remove(tag);
+                std::remove_if(assignables2.begin(), assignables2.end(), comparer);
                 if (tag.isNull()) {
                     continue;
                 }
 
                 ContextMenuExistingTagAction * removeTagAction = new ContextMenuExistingTagAction(resource, tag, this);
 
-                connect(removeTagAction, SIGNAL(triggered(KoResourceSP,KisTagSP)),
-                        this, SIGNAL(resourceTagRemovalRequested(KoResourceSP,KisTagSP)));
+                connect(removeTagAction, SIGNAL(triggered(KoResourceSP, const KisTagSP)),
+                        this, SIGNAL(resourceTagRemovalRequested(KoResourceSP, const KisTagSP)));
                 removableTagsMenu->addAction(removeTagAction);
             }
         }
@@ -218,25 +251,27 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
     }
 
 
-    foreach (const KisTagSP &tag, assignables) {
+    foreach (const KisTagSP &tag, assignables2) {
         if (tag.isNull()) {
             continue;
         }
 
         ContextMenuExistingTagAction * addTagAction = new ContextMenuExistingTagAction(resource, tag, this);
 
-        connect(addTagAction, SIGNAL(triggered(KoResourceSP, KisTagSP)),
-                this, SIGNAL(resourceTagAdditionRequested(KoResourceSP, KisTagSP)));
+        connect(addTagAction, SIGNAL(triggered(KoResourceSP, const KisTagSP)),
+                this, SIGNAL(resourceTagAdditionRequested(KoResourceSP, const KisTagSP)));
+
+
         assignableTagsMenu->addAction(addTagAction);
     }
-    /*
+
     assignableTagsMenu->addSeparator();
 
     NewTagAction * addTagAction = new NewTagAction(resource, this);
-    connect(addTagAction, SIGNAL(triggered(KoResourceSP, KisTagSP)),
-            this, SIGNAL(resourceAssignmentToNewTagRequested(KoResourceSP, KisTagSP)));
+    connect(addTagAction, SIGNAL(triggered(KoResourceSP, const KisTagSP)),
+            this, SIGNAL(resourceAssignmentToNewTagRequested(KoResourceSP, const KisTagSP)));
     assignableTagsMenu->addAction(addTagAction);
-    */
+
 }
 
 KisResourceItemChooserContextMenu::~KisResourceItemChooserContextMenu()

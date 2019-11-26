@@ -51,6 +51,8 @@ bool KisActiveFilterTagProxyModel::filterAcceptsColumn(int /*source_column*/, co
 
 bool KisActiveFilterTagProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
+    //TODO: RESOURCES: make it use active
+    bool active = source_parent.data(Qt::UserRole + KisTagModel::Active).toBool();
     return true;
 }
 

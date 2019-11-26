@@ -131,7 +131,7 @@ bool KisTagFilterResourceProxyModel::filterAcceptsColumn(int /*source_column*/, 
 
 bool KisTagFilterResourceProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
-    if (d->tags.isEmpty()) {
+    if (d->tags.isEmpty() || d->tagModel == 0) {
         return true;
     }
 

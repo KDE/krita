@@ -103,6 +103,8 @@ QVariant KisTagModel::data(const QModelIndex &index, int role) const
         }
         case Qt::UserRole + ResourceType:
             return d->resourceType;
+        case Qt::UserRole + Active:
+            return true;
         default:
             ;
         }
@@ -123,6 +125,8 @@ QVariant KisTagModel::data(const QModelIndex &index, int role) const
                 return d->query.value("url");
             case Qt::UserRole + ResourceType:
                 return d->query.value("resource_type");
+            case Qt::UserRole + Active:
+                return d->query.value("active");
             default:
                 ;
             }

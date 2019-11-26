@@ -42,7 +42,8 @@ public:
         Url,
         Name,
         Comment,
-        ResourceType
+        ResourceType,
+        Active
     };
 
 

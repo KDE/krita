@@ -21,11 +21,19 @@
 #include <QDebug>
 #include <KisResourceModel.h>
 #include <kis_debug.h>
+#include <KisResourceSearchBoxFilter.h>
 
 struct KisTagFilterResourceProxyModel::Private
 {
+    Private()
+        : filter(new KisResourceSearchBoxFilter())
+    {
+    }
+
     QList<KisTagSP> tags;
     KisTagModel* tagModel;
+    QScopedPointer<KisResourceSearchBoxFilter> filter;
+
 };
 
 KisTagFilterResourceProxyModel::KisTagFilterResourceProxyModel(KisTagModel* model, QObject *parent)
@@ -124,6 +132,12 @@ void KisTagFilterResourceProxyModel::setTag(const KisTagSP tag)
     invalidateFilter();
 }
 
+void KisTagFilterResourceProxyModel::setSearchBoxText(const QString& seatchBoxText)
+{
+    d->filter->setFilter(seatchBoxText);
+    invalidateFilter();
+}
+
 bool KisTagFilterResourceProxyModel::filterAcceptsColumn(int /*source_column*/, const QModelIndex &/*source_parent*/) const
 {
     return true;
@@ -131,17 +145,15 @@ bool KisTagFilterResourceProxyModel::filterAcceptsColumn(int /*source_column*/, 
 
 bool KisTagFilterResourceProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
-    if (d->tags.isEmpty() || d->tagModel == 0) {
+    //fprintf(stderr, "1 ");
+    if (d->tagModel == 0) {
         return true;
     }
-
-    KisTagSP tag = d->tags.first();
-    if (!tag.isNull() && tag->url() == "All") {
-        return true;
-    }
-
+    //fprintf(stderr, "2 ");
     QModelIndex idx = sourceModel()->index(source_row, KisResourceModel::Name, source_parent);
     int resourceId = sourceModel()->data(idx, Qt::UserRole + KisResourceModel::Id).toInt();
+    QString resourceName = sourceModel()->data(idx, Qt::UserRole + KisResourceModel::Name).toString();
+
     //QStringList tags = sourceModel()->data(idx, Qt::UserRole + KisResourceModel::Tags).toStringList();
     QVector<KisTagSP> tagsForResource = d->tagModel->tagsForResource(resourceId);
 
@@ -149,15 +161,39 @@ bool KisTagFilterResourceProxyModel::filterAcceptsRow(int source_row, const QMod
 
 
     // TODO: RESOURCES: proper filtering by tag
-    if (!d->tags.first().isNull()) {
+    //fprintf(stderr, "3 ");
+    KisTagSP tag = d->tags.isEmpty() ? KisTagSP() : d->tags.first();
+
+    bool hasCurrentTag = false;
+    //fprintf(stderr, "4 ");
+    //fprintf(stderr, "tag_first:_%s ", (tag.isNull() ? "(null)" : tag->name().toStdString().c_str()));
+    if (tag.isNull()) {
+        hasCurrentTag = true;
+    }
+    if (!hasCurrentTag && !tag.isNull() && tag->url() == "All") {
+        hasCurrentTag = true;
+    }
+    //fprintf(stderr, "5-%d ", hasCurrentTag);
+    if (!hasCurrentTag && !tag.isNull()) {
         Q_FOREACH(KisTagSP temp, tagsForResource) {
             if (temp->url() == tag->url()) {
-                return true;
+                hasCurrentTag = true;
+                break;
             }
         }
     }
+    //fprintf(stderr, "6-%d ", hasCurrentTag);
 
-    return false;
+    if (!hasCurrentTag) {
+        //fprintf(stderr, "end :( \n");
+        return false;
+    }
+    //fprintf(stderr, "7-%d ", hasCurrentTag);
+
+    bool currentFilterMatches = d->filter->matchesResource(resourceName);
+
+    //fprintf(stderr, "8-%d \n", hasCurrentTag);
+    return currentFilterMatches;
 
     //sourceModel()->data(idx, )
 

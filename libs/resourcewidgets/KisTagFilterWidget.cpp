@@ -126,6 +126,7 @@ void KisTagFilterWidget::clear()
 
 void KisTagFilterWidget::onTextChanged(const QString& lineEditText)
 {
+    fprintf(stderr, "Text changed!\n");
     ENTER_FUNCTION() << ppVar(lineEditText);
     d->tagSearchSaveButton->setEnabled(!lineEditText.isEmpty());
     emit filterTextChanged(lineEditText);
@@ -133,6 +134,7 @@ void KisTagFilterWidget::onTextChanged(const QString& lineEditText)
 
 void KisTagFilterWidget::onSaveButtonClicked()
 {
+    fprintf(stderr, "Save Button Clicked!\n");
     ENTER_FUNCTION() << ppVar(d->tagSearchLineEdit->text());
     emit saveButtonClicked();
     clear();

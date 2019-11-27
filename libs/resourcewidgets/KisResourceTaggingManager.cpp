@@ -340,7 +340,6 @@ void KisResourceTaggingManager::tagChooserIndexChanged(const KisTagSP tag)
     ENTER_FUNCTION();
     d->model->setTag(tag);
     d->currentTag = tag;
-
 /*
     if (!d->tagChooser->selectedTagIsReadOnly()) {
         d->currentTag = d->tagChooser->currentlySelectedTag();
@@ -353,12 +352,16 @@ void KisResourceTaggingManager::tagChooserIndexChanged(const KisTagSP tag)
     }
 */
     d->tagFilter->clear();
+    d->tagFilter->allowSave(tag->id() >= 0); // disallow save if the chosen tag has negative id (i.e. 'All' tag)
     updateTaggedResourceView();
 }
 
 void KisResourceTaggingManager::tagSearchLineEditTextChanged(const QString& lineEditText)
 {
+    fprintf(stderr, "void KisResourceTaggingManager::tagSearchLineEditTextChanged(const QString& lineEditText): %s \n", lineEditText.toStdString().c_str());
+    d->model->setSearchBoxText(lineEditText);
     ENTER_FUNCTION() << ppVar(lineEditText);
+
     //    if (d->tagChooser->selectedTagIsReadOnly()) {
     //        d->model->enableResourceFiltering(!lineEditText.isEmpty());
     //    } else {
@@ -377,6 +380,8 @@ void KisResourceTaggingManager::tagSearchLineEditTextChanged(const QString& line
 
 void KisResourceTaggingManager::tagSaveButtonPressed()
 {
+    fprintf(stderr, "void KisResourceTaggingManager::tagSaveButtonPressed()");
+
     ENTER_FUNCTION();
     //    if (!d->tagChooser->selectedTagIsReadOnly()) {
     //        QList<KoResourceSP> newResources = d->model->currentlyVisibleResources();

@@ -52,6 +52,7 @@ public:
      * @param tag
      */
     void setTag(const KisTagSP tag);
+    void setSearchBoxText(const QString& seatchBoxText);
 
 protected:
 

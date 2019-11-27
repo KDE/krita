@@ -14,6 +14,7 @@ set(kritaresources_LIB_SRCS
     KisResourceTypeModel.cpp
     KisStorageModel.cpp
     KisResourceIterator.cpp
+    KisResourceSearchBoxFilter.cpp
 
     KisStoragePlugin.cpp
     KisBundleStorage.cpp

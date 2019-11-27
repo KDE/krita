@@ -1,43 +1,16 @@
-From 5322f8d7bbba2cb8a94236aafad08189f88a1759 Mon Sep 17 00:00:00 2001
-From: Boudewijn Rempt <boud@valdyas.org>
-Date: Tue, 20 Feb 2018 12:41:23 +0100
-Subject: [PATCH] Add a cmake build system
-
----
- CMakeLists.txt                    | 117 ++++++++++++++++++++++++++++++++++
- cmake/modules/FindWcecompat.cmake |  33 ++++++++++
- config.h.cmake                    |  74 +++++++++++++++++++++
- config.h.in                       |   3 +
- doc/CMakeLists.txt                |  18 ++++++
- lib/dgif_lib.c                    |   3 +-
- lib/egif_lib.c                    |   5 +-
- lib/gif_lib.h                     | 131 +++++++++++++++++++++-----------------
- lib/stdbool.h                     |  20 ++++++
- lib/unistd.h                      |   1 +
- util/giftool.c                    |   2 +-
- util/mkstemp.c                    |  88 +++++++++++++++++++++++++
- 12 files changed, 434 insertions(+), 61 deletions(-)
- create mode 100644 CMakeLists.txt
- create mode 100644 cmake/modules/FindWcecompat.cmake
- create mode 100644 config.h.cmake
- create mode 100644 doc/CMakeLists.txt
- create mode 100644 lib/stdbool.h
- create mode 100644 lib/unistd.h
- create mode 100644 util/mkstemp.c
-
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 new file mode 100644
-index 0000000..711c7eb
+index 0000000..680267b
 --- /dev/null
 +++ b/CMakeLists.txt
-@@ -0,0 +1,117 @@
+@@ -0,0 +1,141 @@
 +# This file is copyrighted under the BSD-license for buildsystem files of KDE
 +# copyright 2010,2013, Patrick Spendrin <ps_ml@gmx.de>
++# copyright 2019, Ivan Yossi <ghevan@gmail.com>
 +
 +set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 +
 +project (libgif)
-+
 +cmake_minimum_required(VERSION 2.8)
 +
 +if(WINCE)
@@ -47,7 +20,15 @@ index 0000000..711c7eb
 +    set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${WCECOMPAT_LIBRARIES})
 +endif(WINCE)
 +
-+option(BUILD_utils "build also some small helper executables to transform gif files into other formats" ON)
++if (APPLE)
++    set(APPLE_SUPPRESS_X11_WARNING TRUE)
++    set(CMAKE_MACOSX_RPATH 1)
++    set(BUILD_WITH_INSTALL_RPATH 1)
++    add_definitions(-mmacosx-version-min=10.12 -Wno-macro-redefined -Wno-deprecated-register)
++endif()
++
++
++option(BUILD_utils "build also some small helper executables to transform gif files into other formats" OFF)
 +option(BUILD_TESTS "build some unittest files" OFF)
 +
 +include(CheckIncludeFile)
@@ -66,16 +47,13 @@ index 0000000..711c7eb
 +check_include_file("sys/types.h" HAVE_SYS_TYPES_H)
 +check_include_file("unistd.h" HAVE_UNISTD_H)
 +
-+set(PACKAGE "giflib")
-+set(PACKAGE_BUGREPORT "kde-windows@kde.org")
-+set(PACKAGE_NAME "giflib")
-+set(PACKAGE_STRING "giflib-5.0.4")
-+set(PACKAGE_TARNAME "")
-+set(PACKAGE_VERSION "5.0.4")
-+#cmakedefine VERSION
++execute_process(COMMAND ${CMAKE_SOURCE_DIR}/getversion WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}  OUTPUT_VARIABLE GIFLIB_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
++message(STATUS "Giflib version ${GIFLIB_VERSION}")
 +
-+configure_file(config.h.cmake config.h)
-+include_directories(lib ${CMAKE_BINARY_DIR}) 
++set(PACKAGE "giflib")
++set(PACKAGE_NAME "giflib")
++set(PACKAGE_STRING "giflib-${GIFLIB_VERSION}")
++set(PACKAGE_VERSION ${GIFLIB_VERSION})
 +
 +add_definitions(-DHAVE_CONFIG_H)
 +if(MSVC)
@@ -83,38 +61,53 @@ index 0000000..711c7eb
 +endif(MSVC)
 +
 +set(libgif_SRCS 
-+    lib/dgif_lib.c
-+    lib/egif_lib.c
-+    lib/gif_err.c
-+    lib/gif_font.c
-+    lib/gif_hash.c
-+    lib/gifalloc.c
-+    lib/quantize.c
-+    lib/gifalloc.c
-+    lib/openbsd-reallocarray.c
++    dgif_lib.c
++    egif_lib.c
++    gifalloc.c
++    gif_err.c
++    gif_font.c
++    gif_hash.c
++    openbsd-reallocarray.c
 +)
 +
++set(libgif_USSRCS
++    gif_err.c
++    quantize.c
++    qprintf.c
++    getarg.c
++    )
++
++if(WIN32)
++set(libgif_USSRCS ${libgif_USSRCS}
++    mkstemp.c
++)
++endif(WIN32)
++
 +add_library(gif SHARED ${libgif_SRCS})
++
++
 +
 +if(WINCE)
 +    target_link_libraries(gif ${WCECOMPAT_LIBRARIES})
 +endif(WINCE)
 +
++if(ANDROID)
++    add_definitions (-DSIZE_MAX=0xffffffff -DS_IREAD=S_IRUSR -DS_IWRITE=S_IWUSR -DS_IEXEC=S_IXUSR)
++endif(ANDROID)
++
 +install(TARGETS gif RUNTIME DESTINATION bin
 +                    LIBRARY DESTINATION lib
 +                    ARCHIVE DESTINATION lib)
-+set_target_properties(gif PROPERTIES OUTPUT_NAME giflib4)
 +
-+install(FILES lib/gif_lib.h DESTINATION include)
++install(FILES gif_lib.h DESTINATION include)
 +
 +if(BUILD_utils)
-+# add a convenience library so that these file is not recompiled for each target
-+add_library(getarg STATIC util/getarg.c util/qprintf.c util/mkstemp.c)
++    add_library(util STATIC ${libgif_USSRCS})
 +
 +macro(compileUtils)
 +foreach(srcfile ${ARGN})
-+    add_executable(${srcfile} util/${srcfile}.c)
-+    target_link_libraries(${srcfile} gif getarg)
++    add_executable(${srcfile} ${srcfile}.c)
++    target_link_libraries(${srcfile} gif util)
 +    install(TARGETS ${srcfile} RUNTIME DESTINATION bin
 +                               LIBRARY DESTINATION lib
 +                               ARCHIVE DESTINATION lib)
@@ -122,35 +115,40 @@ index 0000000..711c7eb
 +endmacro(compileUtils)
 +
 +compileUtils(
-+    gif2raw
 +    gif2rgb
 +    gifbuild
-+    gifecho
 +    giffix
-+    gifinto
 +    giftext
 +    giftool
 +    gifclrmp
++    gifbg
++    gifcolor
++    giffilter
++    gifhisto
++    gifinto
++    gifsponge
++    gifwedge
 +)
 +
 +if(BUILD_TESTS)
 +    foreach(srcfile gifbg gifcolor giffilter gifhisto gifsponge gifwedge)
-+        add_executable(${srcfile} util/${srcfile}.c)
-+        target_link_libraries(${srcfile} gif getarg)
++        add_executable(${srcfile} ${srcfile}.c)
++        target_link_libraries(${srcfile} gif util)
 +    endforeach(srcfile gifbg gifcolor giffilter gifhisto gifsponge gifwedge)
 +endif(BUILD_TESTS)
 +
 +if(NOT WIN32)
 +    target_link_libraries(gifclrmp m)
 +endif(NOT WIN32)
-+endif(BUILD_utils)
 +
++endif(BUILD_utils)
 +
 +# documentation
 +#add_subdirectory(doc)
+\ No newline at end of file
 diff --git a/cmake/modules/FindWcecompat.cmake b/cmake/modules/FindWcecompat.cmake
 new file mode 100644
-index 0000000..4276975
+index 0000000..dec9ca9
 --- /dev/null
 +++ b/cmake/modules/FindWcecompat.cmake
 @@ -0,0 +1,33 @@
@@ -187,159 +185,32 @@ index 0000000..4276975
 +find_package_handle_standard_args(Wcecompat  DEFAULT_MSG  WCECOMPAT_LIBRARIES  WCECOMPAT_LIB_FOUND)
 +
 +mark_as_advanced(WCECOMPAT_INCLUDE_DIR  WCECOMPAT_LIBRARIES  WCECOMPAT_CONST  WCECOMPAT_LIB_FOUND)
-diff --git a/config.h.cmake b/config.h.cmake
-new file mode 100644
-index 0000000..667fda4
---- /dev/null
-+++ b/config.h.cmake
-@@ -0,0 +1,74 @@
-+/* config.h.in.  Generated from configure.ac by autoheader.  */
-+
-+/* Define to 1 if you have the <dlfcn.h> header file. */
-+#cmakedefine HAVE_DLFCN_H
-+
-+/* Define to 1 if you have the <fcntl.h> header file. */
-+#cmakedefine HAVE_FCNTL_H
-+
-+/* Define to 1 if you have the <inttypes.h> header file. */
-+#cmakedefine HAVE_INTTYPES_H
-+
-+/* Define to 1 if you have the <limits.h> header file. */
-+#cmakedefine HAVE_LIMITS_H
-+
-+/* Define to 1 if you have the <memory.h> header file. */
-+#cmakedefine HAVE_MEMORY_H
-+
-+/* Define to 1 if you have the <stdarg.h> header file. */
-+#cmakedefine HAVE_STDARG_H
-+
-+/* Define to 1 if you have the <stdint.h> header file. */
-+#cmakedefine HAVE_STDINT_H
-+
-+/* Define to 1 if you have the <stdlib.h> header file. */
-+#cmakedefine HAVE_STDLIB_H
-+
-+/* Define to 1 if you have the <strings.h> header file. */
-+#cmakedefine HAVE_STRINGS_H
-+
-+/* Define to 1 if you have the <string.h> header file. */
-+#cmakedefine HAVE_STRING_H
-+
-+/* Define to 1 if you have the <sys/stat.h> header file. */
-+#cmakedefine HAVE_SYS_STAT_H
-+
-+/* Define to 1 if you have the <sys/types.h> header file. */
-+#cmakedefine HAVE_SYS_TYPES_H
-+
-+/* Define to 1 if you have the <unistd.h> header file. */
-+#cmakedefine HAVE_UNISTD_H
-+
-+/* Define to the sub-directory in which libtool stores uninstalled libraries.
-+   */
-+#cmakedefine LT_OBJDIR
-+
-+/* Define to 1 if your C compiler doesn't accept -c and -o together. */
-+#cmakedefine NO_MINUS_C_MINUS_O
-+
-+/* Name of package */
-+#cmakedefine PACKAGE
-+
-+/* Define to the address where bug reports for this package should be sent. */
-+#cmakedefine PACKAGE_BUGREPORT
-+
-+/* Define to the full name of this package. */
-+#cmakedefine PACKAGE_NAME
-+
-+/* Define to the full name and version of this package. */
-+#cmakedefine PACKAGE_STRING
-+
-+/* Define to the one symbol short name of this package. */
-+#cmakedefine PACKAGE_TARNAME
-+
-+/* Define to the home page for this package. */
-+#cmakedefine PACKAGE_URL
-+
-+/* Define to the version of this package. */
-+#cmakedefine PACKAGE_VERSION
-+
-+/* Define to 1 if you have the ANSI C header files. */
-+#cmakedefine STDC_HEADERS
-+
-+/* Version number of package */
-+#cmakedefine VERSION
-diff --git a/config.h.in b/config.h.in
-index 1747499..89e3ec7 100644
---- a/config.h.in
-+++ b/config.h.in
-@@ -43,6 +43,9 @@
-    */
- #undef LT_OBJDIR
- 
-+/* Define to 1 if your C compiler doesn't accept -c and -o together. */
-+#undef NO_MINUS_C_MINUS_O
-+
- /* Name of package */
- #undef PACKAGE
- 
-diff --git a/doc/CMakeLists.txt b/doc/CMakeLists.txt
-new file mode 100644
-index 0000000..9cbb78a
---- /dev/null
-+++ b/doc/CMakeLists.txt
-@@ -0,0 +1,18 @@
-+set(gif_MANS
-+    gif2raw.1
-+    gif2rgb.1
-+    gifbg.1
-+    gifbuild.1
-+    gifclrmp.1
-+    gifcolor.1
-+    gifecho.1
-+    giffix.1
-+    gifhisto.1
-+    gifinto.1
-+    giflib.1
-+    giftext.1
-+    giftool.1
-+    gifwedge.1
-+)
-+
-+install(FILES ${gif_MANS} DESTINATION share/man/man1)
 \ No newline at end of file
-diff --git a/lib/dgif_lib.c b/lib/dgif_lib.c
-index 66a1d6a..7d8bf7d 100644
---- a/lib/dgif_lib.c
-+++ b/lib/dgif_lib.c
-@@ -17,6 +17,7 @@ two modules will be linked.  Preserve this property!
+diff --git a/dgif_lib.c b/dgif_lib.c
+index 82fc097..b893593 100644
+--- a/dgif_lib.c
++++ b/dgif_lib.c
+@@ -18,6 +18,7 @@ SPDX-License-Identifier: MIT
  #include <string.h>
  
  #ifdef _WIN32
 +#include <stdbool.h>
  #include <io.h>
- #endif /* _WIN32 */
- 
-@@ -371,7 +372,7 @@ DGifGetImageDesc(GifFileType *GifFile)
-     }
-     /* Does this image have local color map? */
-     if (Buf[0] & 0x80) {
--	unsigned int i;
-+	    int i;
- 
-         GifFile->Image.ColorMap = GifMakeMapObject(1 << BitsPerPixel, NULL);
-         if (GifFile->Image.ColorMap == NULL) {
-diff --git a/lib/egif_lib.c b/lib/egif_lib.c
-index 18f954f..02f6fec 100644
---- a/lib/egif_lib.c
-+++ b/lib/egif_lib.c
-@@ -16,6 +16,7 @@ two modules will be linked.  Preserve this property!
+ #else
+ #include <unistd.h>
+diff --git a/egif_lib.c b/egif_lib.c
+index 6219af0..f6d9e4b 100644
+--- a/egif_lib.c
++++ b/egif_lib.c
+@@ -17,6 +17,7 @@ SPDX-License-Identifier: MIT
  #include <fcntl.h>
  
  #ifdef _WIN32
 +#include <stdbool.h>
  #include <io.h>
  #else
- #include <sys/types.h>
-@@ -35,8 +36,8 @@ static const GifPixelType CodeMask[] = {
+ #include <unistd.h>
+@@ -37,8 +38,8 @@ static const GifPixelType CodeMask[] = {
  static int EGifPutWord(int Word, GifFileType * GifFile);
  static int EGifSetupCompress(GifFileType * GifFile);
  static int EGifCompressLine(GifFileType * GifFile, GifPixelType * Line,
@@ -350,11 +221,11 @@ index 18f954f..02f6fec 100644
  static int EGifBufferedOutput(GifFileType * GifFile, GifByteType * Buf,
                                int c);
  
-diff --git a/lib/gif_lib.h b/lib/gif_lib.h
-index 078930c..47ce60d 100644
---- a/lib/gif_lib.h
-+++ b/lib/gif_lib.h
-@@ -9,6 +9,10 @@ gif_lib.h - service library for decoding and encoding GIF images
+diff --git a/gif_lib.h b/gif_lib.h
+index ebdbd3c..c80abdd 100644
+--- a/gif_lib.h
++++ b/gif_lib.h
+@@ -11,6 +11,10 @@ SPDX-License-Identifier: MIT
  
  #ifdef __cplusplus
  extern "C" {
@@ -365,7 +236,7 @@ index 078930c..47ce60d 100644
  #endif /* __cplusplus */
  
  #define GIFLIB_MAJOR 5
-@@ -19,7 +23,6 @@ extern "C" {
+@@ -21,7 +25,6 @@ extern "C" {
  #define GIF_OK      1
  
  #include <stddef.h>
@@ -373,10 +244,11 @@ index 078930c..47ce60d 100644
  
  #define GIF_STAMP "GIFVER"          /* First chars in file - GIF stamp.  */
  #define GIF_STAMP_LEN sizeof(GIF_STAMP) - 1
-@@ -119,17 +122,32 @@ typedef struct GraphicsControlBlock {
+@@ -120,18 +123,31 @@ typedef struct GraphicsControlBlock {
+ #define NO_TRANSPARENT_COLOR	-1
  } GraphicsControlBlock;
  
- /******************************************************************************
++/******************************************************************************
 + Windows exports
 +******************************************************************************/
 +#if !defined(gif_STATIC) && defined(_WIN32) || defined(_WIN64)
@@ -389,9 +261,7 @@ index 078930c..47ce60d 100644
 +# define GIF_EXPORT
 +#endif
 +
-+
-+
-+/******************************************************************************
+ /******************************************************************************
   GIF encoding routines
  ******************************************************************************/
  
@@ -412,7 +282,7 @@ index 078930c..47ce60d 100644
  
  #define E_GIF_SUCCEEDED          0
  #define E_GIF_ERR_OPEN_FAILED    1    /* And EGif possible errors. */
-@@ -144,31 +162,31 @@ int EGifCloseFile(GifFileType *GifFile, int *ErrorCode);
+@@ -146,31 +162,31 @@ int EGifCloseFile(GifFileType *GifFile, int *ErrorCode);
  #define E_GIF_ERR_NOT_WRITEABLE  10
  
  /* These are legacy.  You probably do not want to call them directly */
@@ -456,7 +326,7 @@ index 078930c..47ce60d 100644
                      const GifByteType *GifCodeBlock);
  
  /******************************************************************************
-@@ -176,11 +194,11 @@ int EGifPutCodeNext(GifFileType *GifFile,
+@@ -178,11 +194,11 @@ int EGifPutCodeNext(GifFileType *GifFile,
  ******************************************************************************/
  
  /* Main entry points */
@@ -469,27 +339,27 @@ index 078930c..47ce60d 100644
 +GIF_EXPORT GifFileType *DGifOpenFileHandle(int GifFileHandle, int *Error);
 +GIF_EXPORT int DGifSlurp(GifFileType * GifFile);
 +GIF_EXPORT GifFileType *DGifOpen(void *userPtr, InputFunc readFunc, int *Error);    /* new one (TVT) */
-+GIF_EXPORT int DGifCloseFile(GifFileType * GifFile, int *ErrorCode);
++    GIF_EXPORT int DGifCloseFile(GifFileType * GifFile, int *ErrorCode);
  
  #define D_GIF_SUCCEEDED          0
  #define D_GIF_ERR_OPEN_FAILED    101    /* And DGif possible errors. */
-@@ -198,25 +216,25 @@ GifFileType *DGifOpen(void *userPtr, InputFunc readFunc, int *Error);    /* new
+@@ -200,26 +216,26 @@ GifFileType *DGifOpen(void *userPtr, InputFunc readFunc, int *Error);    /* new
  #define D_GIF_ERR_EOF_TOO_SOON   113
  
  /* These are legacy.  You probably do not want to call them directly */
 -int DGifGetScreenDesc(GifFileType *GifFile);
 -int DGifGetRecordType(GifFileType *GifFile, GifRecordType *GifType);
+-int DGifGetImageHeader(GifFileType *GifFile);
 -int DGifGetImageDesc(GifFileType *GifFile);
 -int DGifGetLine(GifFileType *GifFile, GifPixelType *GifLine, int GifLineLen);
 -int DGifGetPixel(GifFileType *GifFile, GifPixelType GifPixel);
--int DGifGetComment(GifFileType *GifFile, char *GifComment);
 -int DGifGetExtension(GifFileType *GifFile, int *GifExtCode,
 +GIF_EXPORT int DGifGetScreenDesc(GifFileType *GifFile);
 +GIF_EXPORT int DGifGetRecordType(GifFileType *GifFile, GifRecordType *GifType);
++GIF_EXPORT int DGifGetImageHeader(GifFileType *GifFile);
 +GIF_EXPORT int DGifGetImageDesc(GifFileType *GifFile);
 +GIF_EXPORT int DGifGetLine(GifFileType *GifFile, GifPixelType *GifLine, int GifLineLen);
 +GIF_EXPORT int DGifGetPixel(GifFileType *GifFile, GifPixelType GifPixel);
-+GIF_EXPORT int DGifGetComment(GifFileType *GifFile, char *GifComment);
 +GIF_EXPORT int DGifGetExtension(GifFileType *GifFile, int *GifExtCode,
                       GifByteType **GifExtension);
 -int DGifGetExtensionNext(GifFileType *GifFile, GifByteType **GifExtension);
@@ -499,19 +369,12 @@ index 078930c..47ce60d 100644
                  GifByteType **GifCodeBlock);
 -int DGifGetCodeNext(GifFileType *GifFile, GifByteType **GifCodeBlock);
 -int DGifGetLZCodes(GifFileType *GifFile, int *GifCode);
+-const char *DGifGetGifVersion(GifFileType *GifFile);
 +GIF_EXPORT int DGifGetCodeNext(GifFileType *GifFile, GifByteType **GifCodeBlock);
 +GIF_EXPORT int DGifGetLZCodes(GifFileType *GifFile, int *GifCode);
++GIF_EXPORT const char *DGifGetGifVersion(GifFileType *GifFile);
  
  
- /******************************************************************************
-  Color table quantization (deprecated)
- ******************************************************************************/
--int GifQuantizeBuffer(unsigned int Width, unsigned int Height,
-+GIF_EXPORT int GifQuantizeBuffer(unsigned int Width, unsigned int Height,
-                    int *ColorMapSize, GifByteType * RedInput,
-                    GifByteType * GreenInput, GifByteType * BlueInput,
-                    GifByteType * OutputBuffer,
-@@ -225,7 +243,7 @@ int GifQuantizeBuffer(unsigned int Width, unsigned int Height,
  /******************************************************************************
   Error handling and reporting.
  ******************************************************************************/
@@ -520,7 +383,7 @@ index 078930c..47ce60d 100644
  
  /*****************************************************************************
   Everything below this point is new after version 1.2, supporting `slurp
-@@ -236,46 +254,45 @@ extern const char *GifErrorString(int ErrorCode);     /* new in 2012 - ESR */
+@@ -230,43 +246,43 @@ extern const char *GifErrorString(int ErrorCode);     /* new in 2012 - ESR */
   Color map handling from gif_alloc.c
  ******************************************************************************/
  
@@ -535,10 +398,6 @@ index 078930c..47ce60d 100644
                                       GifPixelType ColorTransIn2[]);
 -extern int GifBitSize(int n);
 +GIF_EXPORT extern int GifBitSize(int n);
- 
--extern void *
--reallocarray(void *optr, size_t nmemb, size_t size);
-+GIF_EXPORT extern void * reallocarray(void *optr, size_t nmemb, size_t size);
  
  /******************************************************************************
   Support for the in-core structures allocation (slurp mode).              
@@ -581,7 +440,7 @@ index 078930c..47ce60d 100644
  			    GifFileType *GifFile, 
  			    int ImageIndex);
  
-@@ -285,21 +302,21 @@ int EGifGCBToSavedExtension(const GraphicsControlBlock *GCB,
+@@ -276,21 +292,21 @@ int EGifGCBToSavedExtension(const GraphicsControlBlock *GCB,
  
  #define GIF_FONT_WIDTH  8
  #define GIF_FONT_HEIGHT 8
@@ -608,57 +467,28 @@ index 078930c..47ce60d 100644
                            const int x, const int y,
                            const char *legend,
                            const int border, const int bg, const int fg);
-diff --git a/lib/stdbool.h b/lib/stdbool.h
-new file mode 100644
-index 0000000..b268316
---- /dev/null
-+++ b/lib/stdbool.h
-@@ -0,0 +1,20 @@
-+#ifndef stdbool_h
-+#define stdbool_h
-+
-+#ifndef __cplusplus
-+typedef int bool;
-+#define false 0
-+#define true 1
-+#endif /* !__cplusplus */
-+
-+#define snprintf sprintf_s
-+
-+int mkstemp(char* tmpl);
-+
-+extern char *optarg;    // global argument pointer
-+extern int   optind;   // global argv index
-+extern int   opterr;
-+
-+int getopt(int argc, char **argv, const char *optstring);
-+
-+#endif /* stdbool_h */
-diff --git a/lib/unistd.h b/lib/unistd.h
-new file mode 100644
-index 0000000..c6017f0
---- /dev/null
-+++ b/lib/unistd.h
-@@ -0,0 +1 @@
-+// dummy 
-diff --git a/util/giftool.c b/util/giftool.c
-index e61281c..f7db774 100644
---- a/util/giftool.c
-+++ b/util/giftool.c
-@@ -10,7 +10,7 @@ giftool.c - GIF transformation tool.
+diff --git a/giftool.c b/giftool.c
+index 77c75c0..0353ea3 100644
+--- a/giftool.c
++++ b/giftool.c
+@@ -10,9 +10,11 @@ SPDX-License-Identifier: MIT
+ #include <stdlib.h>
+ #include <string.h>
  #include <fcntl.h>
- #include <stdbool.h>
+-#include <stdbool.h>
  
--#include "getopt.h"
-+//#include "getopt.h"
- #include "getarg.h"
++#ifndef WINDOWS
+ #include "getopt.h"
++#endif
++#include <stdbool.h>
  #include "gif_lib.h"
+ #include "getarg.h"
  
-diff --git a/util/mkstemp.c b/util/mkstemp.c
+diff --git a/mkstemp.c b/mkstemp.c
 new file mode 100644
 index 0000000..ace4572
 --- /dev/null
-+++ b/util/mkstemp.c
++++ b/mkstemp.c
 @@ -0,0 +1,88 @@
 +#include <stdio.h>
 +#include <string.h>
@@ -748,6 +578,30 @@ index 0000000..ace4572
 +
 +    return c;
 +}
--- 
-2.12.3
-
+diff --git a/stdbool.h b/stdbool.h
+new file mode 100644
+index 0000000..09408a5
+--- /dev/null
++++ b/stdbool.h
+@@ -0,0 +1,20 @@
++#ifndef stdbool_h
++#define stdbool_h
++
++#ifndef __cplusplus
++typedef int bool;
++#define false 0
++#define true 1
++#endif /* !__cplusplus */
++
++#define snprintf sprintf_s
++
++int mkstemp(char* tmpl);
++
++extern char *optarg;    // global argument pointer
++extern int   optind;   // global argv index
++extern int   opterr;
++
++int getopt(int argc, char **argv, const char *optstring);
++
++#endif /* stdbool_h */
+\ No newline at end of file

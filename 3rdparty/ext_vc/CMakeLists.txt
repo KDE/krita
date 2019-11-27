@@ -33,8 +33,8 @@ elseif (WIN32)
 else()
     ExternalProject_Add( ext_vc
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://github.com/VcDevel/Vc/releases/download/1.3.3/Vc-1.3.3.tar.gz
-        URL_HASH SHA1=3d3ddd29eca7c2b541fd8d0f00923e57f58d5ef0
+        URL https://github.com/VcDevel/Vc/releases/download/1.4.1/Vc-1.4.1.tar.gz
+        URL_HASH SHA1=46e852ab69192cf017a31d7c6d0b35d8aa8fea2d
 
         INSTALL_DIR ${PREFIX_ext_vc}
 

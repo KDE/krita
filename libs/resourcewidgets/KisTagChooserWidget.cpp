@@ -113,7 +113,7 @@ void KisTagChooserWidget::contextDeleteCurrentTag()
     ENTER_FUNCTION();
     fprintf(stderr, "void KisTagChooserWidget::contextDeleteCurrentTag()\n");
     KisTagSP currentTag = currentlySelectedTag();
-    if (!currentTag.isNull()) {
+    if (!currentTag.isNull() && currentTag->id() < 0) {
         fprintf(stderr, "trying to remove item: %s\n", currentTag->name().toUtf8().toStdString().c_str());
         removeItem(currentTag);
     }
@@ -126,6 +126,10 @@ void KisTagChooserWidget::tagChanged(int tagIndex)
     fprintf(stderr, "void KisTagChooserWidget::tagChanged(int) %d\n", tagIndex);
     if (tagIndex >= 0) {
         emit tagChosen(currentlySelectedTag());
+        KisTagSP tag = currentlySelectedTag();
+        if (tag->id() < 0) {
+            fprintf(stderr, "tag name: %s, url: %s, id: %d", tag->name().toUtf8().toStdString().c_str(), tag->url().toUtf8().toStdString().c_str(), tag->id());
+        }
     } else {
         fprintf(stderr, "Requested -1 index; previous: %d\n", d->comboBox->currentIndex());
     }
@@ -133,12 +137,14 @@ void KisTagChooserWidget::tagChanged(int tagIndex)
 
 void KisTagChooserWidget::tagRenamingRequested(const KisTagSP newName)
 {
+    // TODO: RESOURCES: it should use QString, not KisTagSP
     int previousIndex = d->comboBox->currentIndex();
     ENTER_FUNCTION();
     KisTagSP currentTag = currentlySelectedTag();
     QString name = newName.isNull() ? "" : newName->name();
+    bool canRenameCurrentTag = !currentTag.isNull() && currentTag->id() < 0;
     fprintf(stderr, "renaming tag requested! to: %s\n", name.toUtf8().toStdString().c_str());
-    if (!currentTag.isNull() && !name.isEmpty()) {
+    if (canRenameCurrentTag && !name.isEmpty()) {
         d->model->renameTag(currentTag, newName->name());
         setCurrentIndex(previousIndex);
     }

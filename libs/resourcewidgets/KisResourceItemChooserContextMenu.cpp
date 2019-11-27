@@ -178,9 +178,9 @@ public:
 
 };
 
-bool compareWithAllTag(KisTagSP tag) {
-    // TODO: RESOURCES: string comparison
-    return !tag.isNull() && tag->url() == "All";
+bool compareWithSpecialTags(KisTagSP tag) {
+    // TODO: RESOURCES: id < 0? For now, "All" fits
+    return !tag.isNull() && tag->id() < 0;
 }
 
 
@@ -215,8 +215,8 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
 
 
     // remove "All" tag from both "Remove from this tag" and "Assign to this tag" list
-    std::remove_if(removables.begin(), removables.end(), compareWithAllTag);
-    std::remove_if(assignables2.begin(), assignables2.end(), compareWithAllTag);
+    std::remove_if(removables.begin(), removables.end(), compareWithSpecialTags);
+    std::remove_if(assignables2.begin(), assignables2.end(), compareWithSpecialTags);
 
 
     assignableTagsMenu = addMenu(koIcon("list-add"),i18n("Assign to tag"));

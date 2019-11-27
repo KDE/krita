@@ -130,12 +130,12 @@ void KisShapeSelectionTest::testUndoFlattening()
     QVERIFY(selection->hasShapeSelection());
 
     selection->pixelSelection()->clear();
-    QCOMPARE(selection->selectedExactRect(), QRectF());
+    QCOMPARE(selection->selectedExactRect(), QRect());
 
     selection->updateProjection();
     image->waitForDone();
 
-    QCOMPARE(selection->selectedExactRect(), srcRect1);
+    QCOMPARE(selection->selectedExactRect(), srcRect1.toRect());
     QCOMPARE(selection->outlineCacheValid(), true);
     QCOMPARE(selection->outlineCache().boundingRect(), srcRect1);
     QCOMPARE(selection->hasShapeSelection(), true);
@@ -160,7 +160,7 @@ void KisShapeSelectionTest::testUndoFlattening()
     QTest::qWait(400);
     image->waitForDone();
 
-    QCOMPARE(selection->selectedExactRect(), srcRect2);
+    QCOMPARE(selection->selectedExactRect(), srcRect2.toRect());
     QCOMPARE(selection->outlineCacheValid(), true);
     QCOMPARE(selection->outlineCache().boundingRect(), srcRect2);
     QCOMPARE(selection->hasShapeSelection(), true);
@@ -180,7 +180,7 @@ void KisShapeSelectionTest::testUndoFlattening()
     QTest::qWait(400);
     image->waitForDone();
 
-    QCOMPARE(selection->selectedExactRect(), srcRect1);
+    QCOMPARE(selection->selectedExactRect(), srcRect1.toRect());
     QCOMPARE(selection->outlineCacheValid(), true);
     QCOMPARE(selection->outlineCache().boundingRect(), srcRect1);
     QCOMPARE(selection->hasShapeSelection(), true);

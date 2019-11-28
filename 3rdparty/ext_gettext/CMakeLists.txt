@@ -4,8 +4,8 @@ if (MINGW)
         ExternalProject_Add(ext_gettext_bin
         
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-            URL https://github.com/mlocati/gettext-iconv-windows/releases/download/v0.20.1-v1.16/gettext0.20.1-iconv1.16-static-64.zip
-            URL_MD5 cff2994c78d421d8a3afdc9231ed8aa9
+            URL http://files.kde.org/krita/build/dependencies/gettext0.19.8.1-iconv1.15-static-64.zip
+            URL_MD5 3f8298041738b8ec1f7278d147b7cd3d
 
             BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying gettext 64-bit dependencies
             CONFIGURE_COMMAND ""
@@ -17,8 +17,8 @@ if (MINGW)
             ExternalProject_Add(ext_gettext_bin
         
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-            URL https://github.com/mlocati/gettext-iconv-windows/releases/download/v0.20.1-v1.16/gettext0.20.1-iconv1.16-static-32.zip
-            URL_MD5 ba11885580103ab45dfe6337a3fe56e5
+            URL http://files.kde.org/krita/build/dependencies/gettext0.19.8.1-iconv1.15-static-32.zip
+            URL_MD5 970afaea0d433a73a996d709d5c22f6d
 
             BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying gettext 64-bit dependencies
             CONFIGURE_COMMAND ""
@@ -43,8 +43,8 @@ if (MINGW)
 else (MINGW)
 ExternalProject_Add( ext_gettext
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-   URL https://ftp.gnu.org/pub/gnu/gettext/gettext-0.20.tar.gz
-   URL_MD5 e71133e1bad4f2ce83121078fd33edde
+   URL http://files.kde.org/krita/build/dependencies/gettext-0.19.8.tar.gz
+   URL_MD5 e4fffc004f21596becd1055cf36be31d
     
     INSTALL_DIR ${PREFIX_ext_gettext}
     CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_gettext} --disable-java   ${GLOBAL_AUTOMAKE_PROFILE} --disable-native-java 

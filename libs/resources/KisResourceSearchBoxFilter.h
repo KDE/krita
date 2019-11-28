@@ -33,6 +33,10 @@ public:
     bool matchesResource(const QString& resourceName);
 
 private:
+
+    void initializeFilterData();
+    void clearFilterData();
+
     class Private;
     Private * d;
 

@@ -15,8 +15,8 @@ if (UNIX)
     )
     ExternalProject_Add( ext_pyqt
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://www.riverbankcomputing.com/static/Downloads/PyQt5/5.12.1/PyQt5_gpl-5.12.1.tar.gz
-        URL_MD5 67508b652098d2e05c4c2b5baeb170cc
+        URL https://www.riverbankcomputing.com/static/Downloads/PyQt5/5.13.1/PyQt5_gpl-5.13.1.tar.gz
+        URL_MD5 c77af2f4e230b0053fd22bc2ece2e6c0
         
         CONFIGURE_COMMAND ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/configure.py ${_PYQT_conf}
         BUILD_COMMAND make

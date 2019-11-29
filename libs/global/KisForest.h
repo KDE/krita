@@ -53,8 +53,9 @@ struct BaseNode : RootNodeImpl<Base>
 template <typename T>
 struct Node : public BaseNode<Node<T>>
 {
-    explicit Node(T &&newValue)
-        : value(std::forward<T>(newValue))
+    template <typename X>
+    explicit Node(X &&newValue)
+        : value(std::forward<X>(newValue))
     {
     }
 
@@ -706,8 +707,9 @@ public:
      * and is placed right before \p pos.
      * @return iterator pointing to the inserted element
      */
-    child_iterator insert(child_iterator pos, T &&value) {
-        Node<T> *node = new Node<T>(std::forward<T>(value));
+    template <typename X>
+    child_iterator insert(child_iterator pos, X &&value) {
+        Node<T> *node = new Node<T>(std::forward<X>(value));
 
         linkNode(pos, node);
 

@@ -70,7 +70,7 @@ KisImportExportErrorCode KisSVGImport::convert(KisDocument *document, QIODevice 
         cfg.setPreferredVectorImportResolutionPPI(resolutionPPI);
     }
 
-    const qreal resolution = resolutionPPI / 72.0;
+    const qreal resolution = resolutionPPI;
 
     QSizeF fragmentSize;
     QList<KoShape*> shapes =
@@ -84,7 +84,7 @@ KisImportExportErrorCode KisSVGImport::convert(KisDocument *document, QIODevice 
 
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(doc->createUndoStore(), imageRect.width(), imageRect.height(), cs, "svg image");
-    image->setResolution(resolution, resolution);
+    image->setResolution(resolution / 72.0, resolution / 72.0);
     doc->setCurrentImage(image);
 
     KisShapeLayerSP shapeLayer =

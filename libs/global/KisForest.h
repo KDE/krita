@@ -658,6 +658,10 @@ public:
     {
     }
 
+    ~Forest() {
+        erase(childBegin(), childEnd());
+    }
+
     using child_iterator = ChildIterator<T>;
     using composition_iterator = CompositionIterator<T>;
     using hierarchy_iterator = HierarchyIterator<T>;

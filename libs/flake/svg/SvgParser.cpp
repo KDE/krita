@@ -1317,7 +1317,7 @@ KoShape* SvgParser::resolveUse(const KoXmlElement &e, const QString& key)
     gc->matrix.translate(parseUnitX(e.attribute("x", "0")), parseUnitY(e.attribute("y", "0")));
 
     const KoXmlElement &referencedElement = m_context.definition(key);
-    result = parseGroup(e, referencedElement);
+    result = parseGroup(e, referencedElement, false);
 
     m_context.popGraphicsContext();
     return result;
@@ -1470,9 +1470,11 @@ inline QPointF extraShapeOffset(const KoShape *shape, const QTransform coordinat
     return QPointF(shapeToOriginalUserCoordinates.dx(), shapeToOriginalUserCoordinates.dy());
 }
 
-KoShape* SvgParser::parseGroup(const KoXmlElement &b, const KoXmlElement &overrideChildrenFrom)
+KoShape* SvgParser::parseGroup(const KoXmlElement &b, const KoXmlElement &overrideChildrenFrom, bool createContext)
 {
-    m_context.pushGraphicsContext(b);
+    if (createContext) {
+        m_context.pushGraphicsContext(b);
+    }
 
     KoShapeGroup *group = new KoShapeGroup();
     group->setZIndex(m_context.nextZIndex());
@@ -1500,7 +1502,9 @@ KoShape* SvgParser::parseGroup(const KoXmlElement &b, const KoXmlElement &overri
 
     applyCurrentStyle(group, extraOffset); // apply style to this group after size is set
 
-    m_context.popGraphicsContext();
+    if (createContext) {
+        m_context.popGraphicsContext();
+    }
 
     return group;
 }
@@ -1665,9 +1669,14 @@ QList<KoShape*> SvgParser::parseSingleElement(const KoXmlElement &b, DeferredUse
 
     if (b.tagName() == "svg") {
         shapes += parseSvg(b);
-    } else if (b.tagName() == "g" || b.tagName() == "a") {
+    } else if (b.tagName() == "g" || b.tagName() == "a" || b.tagName() == "symbol") {
         // treat svg link <a> as group so we don't miss its child elements
         shapes += parseGroup(b);
+
+        if (b.tagName() == "symbol") {
+            parseSymbol(b);
+        }
+
     } else if (b.tagName() == "switch") {
         m_context.pushGraphicsContext(b);
         shapes += parseContainer(b);
@@ -1694,8 +1703,6 @@ QList<KoShape*> SvgParser::parseSingleElement(const KoXmlElement &b, DeferredUse
         parseClipMask(b);
     } else if (b.tagName() == "marker") {
         parseMarker(b);
-    } else if (b.tagName() == "symbol") {
-        parseSymbol(b);
     } else if (b.tagName() == "style") {
         m_context.addStyleSheet(b);
     } else if (b.tagName() == "text" ||

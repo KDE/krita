@@ -1,8 +1,8 @@
 diff --git a/src/kstartupinfo.cpp b/src/kstartupinfo.cpp
-index 76ab3be..014ab36 100644
+index 6cc7bbb..efc291b 100644
 --- a/src/kstartupinfo.cpp
 +++ b/src/kstartupinfo.cpp
-@@ -490,7 +490,7 @@ bool KStartupInfo::sendStartupX(Display *disp_P, const KStartupInfoId &id_P,
+@@ -492,7 +492,7 @@ bool KStartupInfo::sendStartupX(Display *disp_P, const KStartupInfoId &id_P,
  #ifdef KSTARTUPINFO_ALL_DEBUG
      qCDebug(LOG_KWINDOWSYSTEM) << "sending " << msg;
  #endif
@@ -11,7 +11,7 @@ index 76ab3be..014ab36 100644
  #else
      Q_UNUSED(disp_P)
      Q_UNUSED(data_P)
-@@ -565,7 +565,7 @@ bool KStartupInfo::sendChangeX(Display *disp_P, const KStartupInfoId &id_P,
+@@ -567,7 +567,7 @@ bool KStartupInfo::sendChangeX(Display *disp_P, const KStartupInfoId &id_P,
  #ifdef KSTARTUPINFO_ALL_DEBUG
      qCDebug(LOG_KWINDOWSYSTEM) << "sending " << msg;
  #endif
@@ -20,7 +20,7 @@ index 76ab3be..014ab36 100644
  #else
      Q_UNUSED(disp_P)
      Q_UNUSED(data_P)
-@@ -617,7 +617,7 @@ bool KStartupInfo::sendFinishX(Display *disp_P, const KStartupInfoId &id_P)
+@@ -619,7 +619,7 @@ bool KStartupInfo::sendFinishX(Display *disp_P, const KStartupInfoId &id_P)
  #ifdef KSTARTUPINFO_ALL_DEBUG
      qCDebug(LOG_KWINDOWSYSTEM) << "sending " << msg;
  #endif
@@ -29,7 +29,7 @@ index 76ab3be..014ab36 100644
  #else
      Q_UNUSED(disp_P)
      return true;
-@@ -668,7 +668,7 @@ bool KStartupInfo::sendFinishX(Display *disp_P, const KStartupInfoId &id_P,
+@@ -670,7 +670,7 @@ bool KStartupInfo::sendFinishX(Display *disp_P, const KStartupInfoId &id_P,
  #ifdef KSTARTUPINFO_ALL_DEBUG
      qCDebug(LOG_KWINDOWSYSTEM) << "sending " << msg;
  #endif
@@ -39,15 +39,15 @@ index 76ab3be..014ab36 100644
      Q_UNUSED(disp_P)
      Q_UNUSED(id_P)
 diff --git a/src/platforms/xcb/kwindowsystem.cpp b/src/platforms/xcb/kwindowsystem.cpp
-index 6789b7c..84b6d4c 100644
+index 7f9d30f..c6ed6f0 100644
 --- a/src/platforms/xcb/kwindowsystem.cpp
 +++ b/src/platforms/xcb/kwindowsystem.cpp
-@@ -234,7 +234,7 @@ bool NETEventFilter::nativeEventFilter(xcb_generic_event_t *ev)
-         int old_number_of_desktops = numberOfDesktops();
+@@ -236,7 +236,7 @@ bool NETEventFilter::nativeEventFilter(xcb_generic_event_t *ev)
          bool old_showing_desktop = showingDesktop();
-         unsigned long m[ 5 ];
--        NETRootInfo::event(ev, m, 5);
-+        //NETRootInfo::event(ev, m, 5);
+         NET::Properties props;
+         NET::Properties2 props2;
+-        NETRootInfo::event(ev, &props, &props2);
++        // NETRootInfo::event(ev, &props, &props2);
  
-         if ((m[ PROTOCOLS ] & CurrentDesktop) && currentDesktop() != old_current_desktop) {
+         if ((props & CurrentDesktop) && currentDesktop() != old_current_desktop) {
              emit s_q->currentDesktopChanged(currentDesktop());

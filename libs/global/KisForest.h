@@ -874,10 +874,33 @@ typename Forest<T>::depth_first_tail_iterator tailSubtreeEnd(Forest<T> &forest)
     return forest.depthFirstTailEnd();
 }
 
+template <typename T>
+int depth(typename Forest<T>::child_iterator beginIt,
+          typename Forest<T>::child_iterator endIt)
+{
+
+    int currentDepth = 0;
+
+    for (auto it = beginIt; it != endIt; ++it) {
+        currentDepth = std::max(currentDepth, 1 + depth<T>(childBegin(it), childEnd(it)));
+    }
+
+    return currentDepth;
+}
+
+template <typename T>
+int depth(Forest<T> &forest) {
+    return depth<T>(childBegin(forest), childEnd(forest));
+}
+
 
 using std::begin;
 using std::end;
 using std::make_reverse_iterator;
+
+using std::find;
+using std::find_if;
+using std::find_if_not;
 }
 
 template<typename T>

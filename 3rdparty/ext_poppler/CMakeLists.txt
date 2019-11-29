@@ -10,8 +10,8 @@ if(APPLE)
 endif(APPLE)
 ExternalProject_Add( ext_poppler
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-	URL https://poppler.freedesktop.org/poppler-0.62.0.tar.xz
-	URL_MD5 42b801f2defaccb6b6cf1bf783ee1552
+	URL https://poppler.freedesktop.org/poppler-0.82.0.tar.xz
+	URL_MD5 4d6106c2382c5e66072e0b355acc3640
 	
     PATCH_COMMAND ${_PopplerPatch_COMMAND}
 

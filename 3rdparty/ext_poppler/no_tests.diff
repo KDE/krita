@@ -1,8 +1,8 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index d8072a9..3dd91fa 100644
+index 36f6587..a799615 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -659,7 +659,7 @@ endif()
+@@ -678,7 +678,7 @@ endif()
  if(ENABLE_GLIB)
    add_subdirectory(glib)
  endif()
@@ -12,10 +12,10 @@ index d8072a9..3dd91fa 100644
    add_subdirectory(qt5)
  endif()
 diff --git a/cpp/CMakeLists.txt b/cpp/CMakeLists.txt
-index 1fb20bb..00d8743 100644
+index 4d8bc7b..2d96a7c 100644
 --- a/cpp/CMakeLists.txt
 +++ b/cpp/CMakeLists.txt
-@@ -5,7 +5,7 @@ include_directories(
+@@ -6,7 +6,7 @@ include_directories(
  
  configure_file(poppler-version.h.in ${CMAKE_CURRENT_BINARY_DIR}/poppler-version.h @ONLY)
  
@@ -23,13 +23,13 @@ index 1fb20bb..00d8743 100644
 +#add_subdirectory(tests)
  
  set(poppler_cpp_SRCS
-   poppler-document.cpp
+   poppler-destination.cpp
 diff --git a/qt5/CMakeLists.txt b/qt5/CMakeLists.txt
-index 6bd7a6b..cb7c557 100644
+index 624ea64..3b94059 100644
 --- a/qt5/CMakeLists.txt
 +++ b/qt5/CMakeLists.txt
-@@ -1,5 +1,5 @@
- set(CMAKE_AUTOMOC ON)
+@@ -6,5 +6,5 @@ if(ENABLE_QT_STRICT_ITERATORS)
+ endif()
  
  add_subdirectory(src)
 -add_subdirectory(tests)

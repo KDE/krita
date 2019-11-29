@@ -9,8 +9,8 @@ if (UNIX)
 
         ExternalProject_Add( ext_sip
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://www.riverbankcomputing.com/static/Downloads/sip/4.19.15/sip-4.19.15.tar.gz
-        URL_MD5 236578d2199da630ae1251671b9a7bfe
+        URL https://www.riverbankcomputing.com/static/Downloads/sip/4.19.19/sip-4.19.19.tar.gz
+        URL_MD5 98111479309dc472410f26080d6d4a88
 
         CONFIGURE_COMMAND ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/configure.py -b ${PREFIX_ext_sip}/bin -d ${PREFIX_ext_sip}/lib/python3.5/site-packages -e ${PREFIX_ext_sip}/include  --sipdir ${PREFIX_ext_sip}/sip --target-py-version 3.5 --sip-module PyQt5.sip
         BUILD_COMMAND make
@@ -31,8 +31,8 @@ if (UNIX)
 
         ExternalProject_Add( ext_sip
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-            URL https://www.riverbankcomputing.com/static/Downloads/sip/4.19.15/sip-4.19.15.tar.gz
-            URL_MD5 236578d2199da630ae1251671b9a7bfe
+            URL https://www.riverbankcomputing.com/static/Downloads/sip/4.19.19/sip-4.19.19.tar.gz
+            URL_MD5 98111479309dc472410f26080d6d4a88
 
             CMAKE_ARGS -DPYTHON_INCLUDE_DIR=${PREFIX_ext_sip}/lib/Python.framework/Headers
             CONFIGURE_COMMAND ${PYTHON_EXECUTABLE} <SOURCE_DIR>/configure.py --deployment-target=10.11
@@ -61,7 +61,7 @@ elseif (MINGW)
     ExternalProject_Add( ext_sip
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
         URL https://www.riverbankcomputing.com/static/Downloads/sip/4.19.15/sip-4.19.15.zip
-        URL_MD5 4a1a4760cfabef15d68f45a6920974c2
+        URL_MD5 8ca9054cd17949d8a87b213cb32b6747
 
         CONFIGURE_COMMAND ${PYTHON_EXECUTABLE} <SOURCE_DIR>/configure.py ${_SIP_conf}
         BUILD_COMMAND mingw32-make -j${SUBMAKE_JOBS} LDFLAGS=${SECURITY_SHARED_LINKER_FLAGS}

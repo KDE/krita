@@ -53,14 +53,201 @@
 #include <FlakeDebug.h>
 
 #include "kis_painting_tweaks.h"
+#include "kis_debug.h"
+#include "KisForest.h"
+#include <unordered_set>
 
-bool KoShapeManager::Private::shapeUsedInRenderingTree(KoShape *shape)
+
+namespace {
+
+/**
+ * Returns whether the shape should be added to the RTree for collision and ROI
+ * detection.
+ */
+inline bool shapeUsedInRenderingTree(KoShape *shape)
 {
     // FIXME: make more general!
 
     return !dynamic_cast<KoShapeGroup*>(shape) &&
             !dynamic_cast<KoShapeLayer*>(shape) &&
             !(dynamic_cast<KoSvgTextChunkShape*>(shape) && !dynamic_cast<KoSvgTextShape*>(shape));
+}
+
+/**
+ * Returns whether a shape should be added to the rendering tree because of
+ * its clip mask/path or effects.
+ */
+inline bool shapeHasGroupEffects(KoShape *shape) {
+    return shape->clipPath() ||
+        (shape->filterEffectStack() && shape->filterEffectStack()->isEmpty()) ||
+        shape->clipMask();
+}
+
+/**
+ * Returns true if the shape is not fully transparent
+ */
+inline bool shapeIsVisible(KoShape *shape) {
+    return shape->isVisible(false) && shape->transparency() < 1.0;
+}
+
+
+/**
+ * Populate \p tree with the subtree of shapes pointed by a shape \p parentShape.
+ * All new shapes are added as children of \p parentIt. Please take it into account
+ * that \c *parentIt might be not the same as \c parentShape, because \c parentShape
+ * may be hidden from rendering.
+ */
+void populateRenderSubtree(KoShape *parentShape,
+                           KisForest<KoShape*>::child_iterator parentIt,
+                           KisForest<KoShape*> &tree,
+                           std::function<bool(KoShape*)> shouldIncludeNode,
+                           std::function<bool(KoShape*)> shouldEnterSubtree)
+{
+    KoShapeContainer *parentContainer = dynamic_cast<KoShapeContainer*>(parentShape);
+    if (!parentContainer) return;
+
+    QList<KoShape*> children = parentContainer->shapes();
+    std::sort(children.begin(), children.end(), KoShape::compareShapeZIndex);
+
+    for (auto it = children.constBegin(); it != children.constEnd(); ++it) {
+        auto newParentIt = parentIt;
+
+        if (shouldIncludeNode(*it)) {
+            newParentIt = tree.insert(childEnd(parentIt), *it);
+        }
+
+        if (shouldEnterSubtree(*it)) {
+            populateRenderSubtree(*it, newParentIt, tree, shouldIncludeNode, shouldEnterSubtree);
+        }
+    }
+
+}
+
+/**
+ * Build a rendering tree for **leaf** nodes defined by \p leafNodes
+ *
+ * Sometimes we should render only a part of the layer (e.g. when we render
+ * in patches). So we shouldn't render the whole graph. The problem is that
+ * some of the shapes may have parents with clip paths/masks and/or effects.
+ * In such a case, these parents should be also included into the rendering
+ * process.
+ *
+ * \c buildRenderTree() builds a graph for such rendering. It includes the
+ * leaf shapes themselves, and all parent shapes that have some effects affecting
+ * these shapes.
+ */
+void buildRenderTree(QList<KoShape*> leafShapes,
+                     KisForest<KoShape*> &tree)
+{
+    QList<KoShape*> sortedShapes = leafShapes;
+    std::sort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
+
+    std::unordered_set<KoShape*> includedShapes;
+
+    Q_FOREACH (KoShape *shape, sortedShapes) {
+        bool shouldSkipShape = !shapeIsVisible(shape);
+        if (shouldSkipShape) continue;
+
+        QVector<KoShape*> hierarchy = {shape};
+
+        while ((shape = shape->parent())) {
+            if (!shapeIsVisible(shape)) {
+                shouldSkipShape = true;
+                break;
+            }
+
+            if (shapeHasGroupEffects(shape)) {
+                hierarchy << shape;
+            }
+        }
+
+        if (shouldSkipShape) continue;
+
+        tree.insert(childEnd(tree), hierarchy.last());
+        std::copy(hierarchy.begin(), hierarchy.end(),
+                  std::inserter(includedShapes, end(includedShapes)));
+    }
+
+    auto shouldIncludeShape =
+        [includedShapes] (KoShape *shape) {
+            // included shapes are guaranteed to be visible
+            return includedShapes.find(shape) != end(includedShapes);
+        };
+
+    for (auto it = childBegin(tree); it != childEnd(tree); ++it) {
+        populateRenderSubtree(*it, it, tree, shouldIncludeShape, &shapeIsVisible);
+    }
+}
+
+/**
+ * Render the prebuilt rendering tree on \p painter
+ */
+void renderShapes(typename KisForest<KoShape*>::child_iterator beginIt,
+                  typename KisForest<KoShape*>::child_iterator endIt,
+                  QPainter &painter,
+                  KoShapePaintingContext &paintContext)
+{
+    for (auto it = beginIt; it != endIt; ++it) {
+        KoShape *shape = *it;
+
+        KisQPainterStateSaver saver(&painter);
+
+        KoClipPath::applyClipping(shape, painter);
+
+        if (!isEnd(parent(it))) {
+            painter.setTransform(shape->transformation() * painter.transform());
+        } else {
+            painter.setTransform(shape->absoluteTransformation() * painter.transform());
+        }
+
+        qreal transparency = shape->transparency(true);
+        if (transparency > 0.0) {
+            painter.setOpacity(1.0-transparency);
+        }
+
+        if (shape->shadow()) {
+            KisQPainterStateSaver saver(&painter);
+            shape->shadow()->paint(shape, painter);
+        }
+
+        QScopedPointer<KoClipMaskPainter> clipMaskPainter;
+        QPainter *shapePainter = &painter;
+
+        KoClipMask *clipMask = shape->clipMask();
+        if (clipMask) {
+            const QRectF bounds = painter.transform().mapRect(shape->outlineRect());
+
+            clipMaskPainter.reset(new KoClipMaskPainter(&painter, bounds/*shape->boundingRect())*/));
+            shapePainter = clipMaskPainter->shapePainter();
+        }
+
+        /**
+         * We expect the shape to save/restore the painter's state itself. Such design was not
+         * not always here, so we need a period of sanity checks to ensure all the shapes are
+         * ported correctly.
+         */
+        const QTransform sanityCheckTransformSaved = shapePainter->transform();
+
+        renderShapes(childBegin(it), childEnd(it), *shapePainter, paintContext);
+
+        shape->paint(*shapePainter, paintContext);
+        shape->paintStroke(*shapePainter, paintContext);
+
+        KIS_SAFE_ASSERT_RECOVER(shapePainter->transform() == sanityCheckTransformSaved) {
+            shapePainter->setTransform(sanityCheckTransformSaved);
+        }
+
+        if (clipMask) {
+            clipMaskPainter->maskPainter()->save();
+
+            shape->clipMask()->drawMask(clipMaskPainter->maskPainter(), shape);
+            clipMaskPainter->renderOnGlobalPainter();
+
+            clipMaskPainter->maskPainter()->restore();
+        }
+    }
+}
+
 }
 
 void KoShapeManager::Private::updateTree()
@@ -129,25 +316,6 @@ void KoShapeManager::Private::forwardCompressedUdpate()
     }
     canvas->updateCanvas(scheduledUpdate);
 
-}
-
-void KoShapeManager::Private::paintGroup(KoShapeGroup *group, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
-{
-    QList<KoShape*> shapes = group->shapes();
-    std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
-    Q_FOREACH (KoShape *child, shapes) {
-        // we paint recursively here, so we do not have to check recursively for visibility
-        if (!child->isVisible(false))
-            continue;
-        KoShapeGroup *childGroup = dynamic_cast<KoShapeGroup*>(child);
-        if (childGroup) {
-            paintGroup(childGroup, painter, converter, paintContext);
-        } else {
-            painter.save();
-            KoShapeManager::renderSingleShape(child, painter, converter, paintContext);
-            painter.restore();
-        }
-    }
 }
 
 KoShapeManager::KoShapeManager(KoCanvasBase *canvas, const QList<KoShape *> &shapes)
@@ -229,7 +397,7 @@ void KoShapeManager::addShape(KoShape *shape, Repaint repaint)
         shape->addShapeManager(this);
         d->shapes.append(shape);
 
-        if (d->shapeUsedInRenderingTree(shape)) {
+        if (shapeUsedInRenderingTree(shape)) {
             QMutexLocker l2(&d->treeMutex);
 
             QRectF br(shape->boundingRect());
@@ -277,7 +445,7 @@ void KoShapeManager::remove(KoShape *shape)
         d->aggregate4update.remove(shape);
         d->compressedUpdatedShapes.remove(shape);
 
-        if (d->shapeUsedInRenderingTree(shape)) {
+        if (shapeUsedInRenderingTree(shape)) {
             d->tree.remove(shape);
         }
         d->shapes.removeAll(shape);
@@ -326,7 +494,7 @@ KoShapeManager::ShapeInterface *KoShapeManager::shapeInterface()
 }
 
 
-void KoShapeManager::paint(QPainter &painter, const KoViewConverter &converter, bool forPrint)
+void KoShapeManager::paint(QPainter &painter, bool forPrint)
 {
     QMutexLocker l1(&d->shapesMutex);
 
@@ -338,228 +506,34 @@ void KoShapeManager::paint(QPainter &painter, const KoViewConverter &converter, 
     if (painter.hasClipping()) {
         QMutexLocker l(&d->treeMutex);
 
-        QRectF rect = converter.viewToDocument(KisPaintingTweaks::safeClipBoundingRect(painter));
+        QRectF rect = KisPaintingTweaks::safeClipBoundingRect(painter);
         unsortedShapes = d->tree.intersects(rect);
     } else {
         unsortedShapes = d->shapes;
         warnFlake << "KoShapeManager::paint  Painting with a painter that has no clipping will lead to too much being painted!";
     }
 
-    // filter all hidden shapes from the list
-    // also filter shapes with a parent which has filter effects applied
-    QList<KoShape*> sortedShapes;
-    foreach (KoShape *shape, unsortedShapes) {
-        if (!shape->isVisible())
-            continue;
-        bool addShapeToList = true;
-        // check if one of the shapes ancestors have filter effects
-        KoShapeContainer *parent = shape->parent();
-        while (parent) {
-            // parent must be part of the shape manager to be taken into account
-            if (!d->shapes.contains(parent))
-                break;
-            if (parent->filterEffectStack() && !parent->filterEffectStack()->isEmpty()) {
-                addShapeToList = false;
-                break;
-            }
-            parent = parent->parent();
-        }
-        if (addShapeToList) {
-            sortedShapes.append(shape);
-        } else if (parent) {
-            sortedShapes.append(parent);
-        }
-    }
-
-    std::sort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
-
     KoShapePaintingContext paintContext(d->canvas, forPrint); //FIXME
 
-    foreach (KoShape *shape, sortedShapes) {
-        renderSingleShape(shape, painter, converter, paintContext);
-    }
-
-#ifdef CALLIGRA_RTREE_DEBUG
-    // paint tree
-    qreal zx = 0;
-    qreal zy = 0;
-    converter.zoom(&zx, &zy);
-    painter.save();
-    painter.scale(zx, zy);
-    d->tree.paint(painter);
-    painter.restore();
-#endif
+    KisForest<KoShape*> renderTree;
+    buildRenderTree(unsortedShapes, renderTree);
+    renderShapes(childBegin(renderTree), childEnd(renderTree), painter, paintContext);
 
     if (! forPrint) {
         KoShapePaintingContext paintContext(d->canvas, forPrint); //FIXME
-        d->selection->paint(painter, converter, paintContext);
+        d->selection->paint(painter, paintContext);
     }
 }
 
-void KoShapeManager::renderSingleShape(KoShape *shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
+void KoShapeManager::renderSingleShape(KoShape *shape, QPainter &painter, KoShapePaintingContext &paintContext)
 {
-    KisQPainterStateSaver saver(&painter);
+    KisForest<KoShape*> renderTree;
 
-    // apply shape clipping
-    KoClipPath::applyClipping(shape, painter, converter);
+    KoViewConverter converter;
 
-    // apply transformation
-    painter.setTransform(shape->absoluteTransformation(&converter) * painter.transform());
-
-    // paint the shape
-    paintShape(shape, painter, converter, paintContext);
-}
-
-void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
-{
-    qreal transparency = shape->transparency(true);
-    if (transparency > 0.0) {
-        painter.setOpacity(1.0-transparency);
-    }
-
-    if (shape->shadow()) {
-        painter.save();
-        shape->shadow()->paint(shape, painter, converter);
-        painter.restore();
-    }
-    if (!shape->filterEffectStack() || shape->filterEffectStack()->isEmpty()) {
-
-        QScopedPointer<KoClipMaskPainter> clipMaskPainter;
-        QPainter *shapePainter = &painter;
-
-        KoClipMask *clipMask = shape->clipMask();
-        if (clipMask) {
-            clipMaskPainter.reset(new KoClipMaskPainter(&painter, shape->boundingRect()));
-            shapePainter = clipMaskPainter->shapePainter();
-        }
-
-        /**
-         * We expect the shape to save/restore the painter's state itself. Such design was not
-         * not always here, so we need a period of sanity checks to ensure all the shapes are
-         * ported correctly.
-         */
-        const QTransform sanityCheckTransformSaved = shapePainter->transform();
-
-        shape->paint(*shapePainter, converter, paintContext);
-        shape->paintStroke(*shapePainter, converter, paintContext);
-
-        KIS_SAFE_ASSERT_RECOVER(shapePainter->transform() == sanityCheckTransformSaved) {
-            shapePainter->setTransform(sanityCheckTransformSaved);
-        }
-
-        if (clipMask) {
-            shape->clipMask()->drawMask(clipMaskPainter->maskPainter(), shape);
-            clipMaskPainter->renderOnGlobalPainter();
-        }
-
-    } else {
-        // TODO: clipping mask is not implemented for this case!
-
-        // There are filter effects, then we need to prerender the shape on an image, to filter it
-        QRectF shapeBound(QPointF(), shape->size());
-        // First step, compute the rectangle used for the image
-        QRectF clipRegion = shape->filterEffectStack()->clipRectForBoundingRect(shapeBound);
-        // convert clip region to view coordinates
-        QRectF zoomedClipRegion = converter.documentToView(clipRegion);
-        // determine the offset of the clipping rect from the shapes origin
-        QPointF clippingOffset = zoomedClipRegion.topLeft();
-
-        // Initialize the buffer image
-        QImage sourceGraphic(zoomedClipRegion.size().toSize(), QImage::Format_ARGB32_Premultiplied);
-        sourceGraphic.fill(qRgba(0,0,0,0));
-
-        QHash<QString, QImage> imageBuffers;
-
-        QSet<QString> requiredStdInputs = shape->filterEffectStack()->requiredStandarsInputs();
-
-        if (requiredStdInputs.contains("SourceGraphic") || requiredStdInputs.contains("SourceAlpha")) {
-            // Init the buffer painter
-            QPainter imagePainter(&sourceGraphic);
-            imagePainter.translate(-1.0f*clippingOffset);
-            imagePainter.setPen(Qt::NoPen);
-            imagePainter.setBrush(Qt::NoBrush);
-            imagePainter.setRenderHint(QPainter::Antialiasing, painter.testRenderHint(QPainter::Antialiasing));
-
-            // Paint the shape on the image
-            KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(shape);
-            if (group) {
-                // the childrens matrix contains the groups matrix as well
-                // so we have to compensate for that before painting the children
-                imagePainter.setTransform(group->absoluteTransformation(&converter).inverted(), true);
-                Private::paintGroup(group, imagePainter, converter, paintContext);
-            } else {
-                imagePainter.save();
-                shape->paint(imagePainter, converter, paintContext);
-                shape->paintStroke(imagePainter, converter, paintContext);
-                imagePainter.restore();
-                imagePainter.end();
-            }
-        }
-        if (requiredStdInputs.contains("SourceAlpha")) {
-            QImage sourceAlpha = sourceGraphic;
-            sourceAlpha.fill(qRgba(0,0,0,255));
-            sourceAlpha.setAlphaChannel(sourceGraphic.alphaChannel());
-            imageBuffers.insert("SourceAlpha", sourceAlpha);
-        }
-        if (requiredStdInputs.contains("FillPaint")) {
-            QImage fillPaint = sourceGraphic;
-            if (shape->background()) {
-                QPainter fillPainter(&fillPaint);
-                QPainterPath fillPath;
-                fillPath.addRect(fillPaint.rect().adjusted(-1,-1,1,1));
-                shape->background()->paint(fillPainter, converter, paintContext, fillPath);
-            } else {
-                fillPaint.fill(qRgba(0,0,0,0));
-            }
-            imageBuffers.insert("FillPaint", fillPaint);
-        }
-
-        imageBuffers.insert("SourceGraphic", sourceGraphic);
-        imageBuffers.insert(QString(), sourceGraphic);
-
-        KoFilterEffectRenderContext renderContext(converter);
-        renderContext.setShapeBoundingBox(shapeBound);
-
-        QImage result;
-        QList<KoFilterEffect*> filterEffects = shape->filterEffectStack()->filterEffects();
-        // Filter
-        foreach (KoFilterEffect *filterEffect, filterEffects) {
-            QRectF filterRegion = filterEffect->filterRectForBoundingRect(shapeBound);
-            filterRegion = converter.documentToView(filterRegion);
-            QRect subRegion = filterRegion.translated(-clippingOffset).toRect();
-            // set current filter region
-            renderContext.setFilterRegion(subRegion & sourceGraphic.rect());
-
-            if (filterEffect->maximalInputCount() <= 1) {
-                QList<QString> inputs = filterEffect->inputs();
-                QString input = inputs.count() ? inputs.first() : QString();
-                // get input image from image buffers and apply the filter effect
-                QImage image = imageBuffers.value(input);
-                if (!image.isNull()) {
-                    result = filterEffect->processImage(imageBuffers.value(input), renderContext);
-                }
-            } else {
-                QList<QImage> inputImages;
-                Q_FOREACH (const QString &input, filterEffect->inputs()) {
-                    QImage image = imageBuffers.value(input);
-                    if (!image.isNull())
-                        inputImages.append(imageBuffers.value(input));
-                }
-                // apply the filter effect
-                if (filterEffect->inputs().count() == inputImages.count())
-                    result = filterEffect->processImages(inputImages, renderContext);
-            }
-            // store result of effect
-            imageBuffers.insert(filterEffect->output(), result);
-        }
-
-        KoFilterEffect *lastEffect = filterEffects.last();
-
-        // Paint the result
-        painter.save();
-        painter.drawImage(clippingOffset, imageBuffers.value(lastEffect->output()));
-        painter.restore();
-    }
+    auto root = renderTree.insert(childBegin(renderTree), shape);
+    populateRenderSubtree(shape, root, renderTree, &shapeIsVisible, &shapeIsVisible);
+    renderShapes(childBegin(renderTree), childEnd(renderTree), painter, paintContext);
 }
 
 KoShape *KoShapeManager::shapeAt(const QPointF &position, KoFlake::ShapeSelection selection, bool omitHiddenShapes)
@@ -639,7 +613,7 @@ QList<KoShape *> KoShapeManager::shapesAt(const QRectF &rect, bool omitHiddenSha
         if (omitHiddenShapes && !shape->isVisible()) {
             shapes.removeAt(count);
         } else {
-            const QPainterPath outline = shape->absoluteTransformation(0).map(shape->outline());
+            const QPainterPath outline = shape->absoluteTransformation().map(shape->outline());
 
             if (!containedMode && !outline.intersects(rect) && !outline.contains(rect)) {
                 shapes.removeAt(count);

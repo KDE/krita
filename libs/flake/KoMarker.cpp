@@ -29,7 +29,6 @@
 #include "KoShapeSavingContext.h"
 #include "KoOdfWorkaround.h"
 #include "KoShapePainter.h"
-#include "KoViewConverter.h"
 #include <KoShapeStroke.h>
 #include <KoGradientBackground.h>
 #include <KoColorBackground.h>
@@ -103,7 +102,7 @@ public:
 
         for (int i = 0; i < shapes.size(); i++) {
             if (shapes[i]->outline() != other[i]->outline() ||
-                shapes[i]->absoluteTransformation(0) != other[i]->absoluteTransformation(0)) {
+                shapes[i]->absoluteTransformation() != other[i]->absoluteTransformation()) {
 
                 return false;
             }
@@ -247,15 +246,13 @@ void KoMarker::paintAtPosition(QPainter *painter, const QPointF &pos, qreal stro
 {
     QTransform oldTransform = painter->transform();
 
-    KoViewConverter converter;
-
     if (!d->shapePainter) {
         d->shapePainter.reset(new KoShapePainter());
         d->shapePainter->setShapes(d->shapes);
     }
 
     painter->setTransform(d->markerTransform(strokeWidth, nodeAngle, pos), true);
-    d->shapePainter->paint(*painter, converter);
+    d->shapePainter->paint(*painter);
 
     painter->setTransform(oldTransform);
 }
@@ -294,7 +291,7 @@ QPainterPath KoMarker::outline(qreal strokeWidth, qreal nodeAngle) const
 {
     QPainterPath outline;
     Q_FOREACH (KoShape *shape, d->shapes) {
-        outline |= shape->absoluteTransformation(0).map(shape->outline());
+        outline |= shape->absoluteTransformation().map(shape->outline());
     }
 
     const QTransform t = d->markerTransform(strokeWidth, nodeAngle);
@@ -391,7 +388,7 @@ void KoMarker::applyShapeStroke(KoShape *parentShape, KoShapeStroke *stroke, con
         QList<KoShape*> linearizedShapes = KoShape::linearizeSubtree(d->shapes);
         Q_FOREACH(KoShape *shape, linearizedShapes) {
             // shape-unwinding transform
-            QTransform t = gradientToUser * markerTransformInverted * shape->absoluteTransformation(0).inverted();
+            QTransform t = gradientToUser * markerTransformInverted * shape->absoluteTransformation().inverted();
 
             // update the stroke
             KoShapeStrokeSP shapeStroke = shape->stroke() ?

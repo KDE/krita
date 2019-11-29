@@ -31,7 +31,6 @@
 class KisActionManager;
 class KisAction;
 class QAction;
-class KoViewConverter;
 class KisDocument;
 
 class KisViewManager;

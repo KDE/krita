@@ -129,6 +129,7 @@ public:
         ChildChanged, ///< a child of a container was changed/removed. This is propagated to all parents
         ConnectionPointChanged, ///< a connection point has changed
         ClipPathChanged, ///< the shapes clip path has changed
+        ClipMaskChanged, ///< the shapes clip path has changed
         TransparencyChanged ///< the shapetransparency value has changed
     };
 
@@ -176,39 +177,21 @@ public:
 
     /**
      * @brief Paint the shape fill
-     * The class extending this one is responsible for painting itself.  Since we do not
-     * assume the shape is square the paint must also clear its background if it will draw
-     * something transparent on top.
-     * This can be done with a method like:
-     * <code>
-       painter.fillRect(converter.normalToView(QRectF(QPointF(0.0,0.0), size())), background());</code>
-     * Or equivalent for non-square objects.
-     * Do note that a shape's top-left is always at coordinate 0,0. Even if the shape itself is rotated
-     * or translated.
+     * The class extending this one is responsible for painting itself. \p painter is expected
+     * to be preconfigured to work in "document" pixels.
+     *
      * @param painter used for painting the shape
-     * @param converter to convert between internal and view coordinates.
-     * @see applyConversion()
      * @param paintcontext the painting context.
      */
-    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) = 0;
+    virtual void paint(QPainter &painter, KoShapePaintingContext &paintcontext) = 0;
 
     /**
      * @brief paintStroke paints the shape's stroked outline
      * @param painter used for painting the shape
-     * @param converter to convert between internal and view coordinates.
      * @see applyConversion()
      * @param paintcontext the painting context.
      */
-    virtual void paintStroke(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
-
-    /**
-     * @brief Paint the shape's border
-     * This is a helper function that could be called from the paint() method of all shapes. 
-     * @param painter used for painting the shape
-     * @param converter to convert between internal and view coordinates.
-     * @see applyConversion()
-     */
-    virtual void paintBorder(QPainter &painter, const KoViewConverter &converter);
+    virtual void paintStroke(QPainter &painter, KoShapePaintingContext &paintcontext);
 
     /**
      * Load a shape from odf
@@ -351,13 +334,13 @@ public:
      *         boundingRect() this rect doesn't include the stroke and other
      *         insets.
      */
-    QRectF absoluteOutlineRect(KoViewConverter *converter = 0) const;
+    QRectF absoluteOutlineRect() const;
 
     /**
      * Same as a member function, but applies to a list of shapes and returns a
      * united rect.
      */
-    static QRectF absoluteOutlineRect(const QList<KoShape*> &shapes, KoViewConverter *converter = 0);
+    static QRectF absoluteOutlineRect(const QList<KoShape*> &shapes);
 
     /**
      * @brief Add a connector point to the shape
@@ -934,11 +917,8 @@ public:
      *
      * The absolute transformation is the combined transformation of this shape
      * and all its parents and grandparents.
-     *
-     * @param converter if not null, this method uses the converter to mark the right
-     *        offsets in the current view.
      */
-    QTransform absoluteTransformation(const KoViewConverter *converter) const;
+    QTransform absoluteTransformation() const;
 
     /**
      * Applies a transformation to this shape.
@@ -978,20 +958,12 @@ public:
     void copySettings(const KoShape *shape);
 
     /**
-     * Convenience method that allows people implementing paint() to use the shape
-     * internal coordinate system directly to paint itself instead of considering the
-     * views zoom.
-     * @param painter the painter to alter the zoom level of.
-     * @param converter the converter for the current views zoom.
-     */
-    static void applyConversion(QPainter &painter, const KoViewConverter &converter);
-
-    /**
      * A convenience method that creates a handles helper with applying transformations at
      * the same time. Please note that you shouldn't save/restore additionally. All the work
      * on restoring original painter's transformations is done by the helper.
      */
-    static KisHandlePainterHelper createHandlePainterHelper(QPainter *painter, KoShape *shape, const KoViewConverter &converter, qreal handleRadius = 0.0);
+    static KisHandlePainterHelper createHandlePainterHelperView(QPainter *painter, KoShape *shape, const KoViewConverter &converter, qreal handleRadius = 0.0);
+    static KisHandlePainterHelper createHandlePainterHelperDocument(QPainter *painter, KoShape *shape, qreal handleRadius);
 
     /**
      * @brief Transforms point from shape coordinates to document coordinates
@@ -1043,7 +1015,6 @@ public:
      * In this case it can be shown on screen probably partially but it should really not be printed
      * until it is fully done processing.
      * Warning! This method can be blocking for a long time
-     * @param converter    The converter
      * @param asynchronous If set to true the processing will can take place in a different thread and the
      *                     function will not block until the shape is finished.
      *                     In case of printing Flake will call this method from a non-main thread and only
@@ -1051,7 +1022,7 @@ public:
      *                     If set to false the processing needs to be done synchronously and will
      *                     block until the result is finished.
      */
-    virtual void waitUntilReady(const KoViewConverter &converter, bool asynchronous = true) const;
+    virtual void waitUntilReady(bool asynchronous = true) const;
 
     /// checks recursively if the shape or one of its parents is not visible or locked
     virtual bool isShapeEditable(bool recursive = true) const;

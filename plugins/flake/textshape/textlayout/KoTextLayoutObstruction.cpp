@@ -126,7 +126,7 @@ QPainterPath KoTextLayoutObstruction::decoratedOutline(const KoShape *shape, qre
     }
 
     if (shape->shadow() && shape->shadow()->isVisible()) {
-        QTransform transform = shape->absoluteTransformation(0);
+        QTransform transform = shape->absoluteTransformation();
         bb = transform.mapRect(bb);
         KoInsets insets;
         shape->shadow()->insets(insets);

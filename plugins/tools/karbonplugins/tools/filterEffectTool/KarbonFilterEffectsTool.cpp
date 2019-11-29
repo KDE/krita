@@ -176,7 +176,7 @@ public:
             // get the filter rectangle in shape coordinates
             QRectF filterRect = currentEffect->filterRectForBoundingRect(sizeRect);
             // get the transformation from document to shape coordinates
-            QTransform transform = currentShape->absoluteTransformation(0).inverted();
+            QTransform transform = currentShape->absoluteTransformation().inverted();
             // adjust filter rectangle by grab sensitivity
             const int grabDistance = tool->grabSensitivity();
             QPointF border = tool->canvas()->viewConverter()->viewToDocument(QPointF(grabDistance, grabDistance));
@@ -236,10 +236,9 @@ void KarbonFilterEffectsTool::paint(QPainter &painter, const KoViewConverter &co
     if (d->currentShape && d->currentShape->filterEffectStack()) {
         painter.save();
         // apply the shape transformation
-        QTransform transform = d->currentShape->absoluteTransformation(&converter);
-        painter.setTransform(transform, true);
-        // apply the zoom transformation
-        KoShape::applyConversion(painter, converter);
+
+        QTransform transform = d->currentShape->absoluteTransformation();
+        painter.setTransform(transform * converter.documentToView(), true);
         // get the size rect of the shape
         QRectF sizeRect(QPointF(), d->currentShape->size());
         // get the clipping rect of the filter stack

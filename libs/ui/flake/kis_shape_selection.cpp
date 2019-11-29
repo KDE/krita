@@ -281,7 +281,7 @@ void KisShapeSelection::recalculateOutlineCache()
 
     QPainterPath outline;
     Q_FOREACH (KoShape * shape, shapesList) {
-        QTransform shapeMatrix = shape->absoluteTransformation(0);
+        QTransform shapeMatrix = shape->absoluteTransformation();
         outline = outline.united(shapeMatrix.map(shape->outline()));
     }
 
@@ -291,10 +291,9 @@ void KisShapeSelection::recalculateOutlineCache()
     m_outline = resolutionMatrix.map(outline);
 }
 
-void KisShapeSelection::paintComponent(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &)
+void KisShapeSelection::paintComponent(QPainter& painter, KoShapePaintingContext &)
 {
     Q_UNUSED(painter);
-    Q_UNUSED(converter);
 }
 
 void KisShapeSelection::renderToProjection(KisPaintDeviceSP projection)
@@ -406,7 +405,7 @@ KUndo2Command* KisShapeSelection::transform(const QTransform &transform) {
         if (dynamic_cast<const KoShapeGroup*>(shape)) {
             newTransformations.append(oldTransform);
         } else {
-            QTransform globalTransform = shape->absoluteTransformation(0);
+            QTransform globalTransform = shape->absoluteTransformation();
             QTransform localTransform = globalTransform * realTransform * globalTransform.inverted();
             newTransformations.append(localTransform*oldTransform);
         }

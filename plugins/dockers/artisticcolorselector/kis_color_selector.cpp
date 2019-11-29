@@ -857,12 +857,13 @@ void KisColorSelector::drawGamutMaskShape(QPainter &painter, const QRect &rect)
     painter.drawEllipse(QPointF(0,0), 1.0, 1.0);
 
     painter.resetTransform();
+    painter.setTransform(m_viewConverter->documentToView());
 
     painter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
-    m_currentGamutMask->paint(painter, *m_viewConverter, m_maskPreviewActive);
+    m_currentGamutMask->paint(painter, m_maskPreviewActive);
 
     painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-    m_currentGamutMask->paintStroke(painter, *m_viewConverter, m_maskPreviewActive);
+    m_currentGamutMask->paintStroke(painter, m_maskPreviewActive);
 
     painter.restore();
 }

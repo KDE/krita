@@ -61,23 +61,11 @@ public:
 
     void forwardCompressedUdpate();
 
-    /**
-     * Returns whether the shape should be added to the RTree for collision and ROI
-     * detection.
-     */
-    bool shapeUsedInRenderingTree(KoShape *shape);
 
     /**
      * Recursively detach the shapes from this shape manager
      */
     void unlinkFromShapesRecursively(const QList<KoShape *> &shapes);
-
-    /**
-     * Recursively paints the given group shape to the specified painter
-     * This is needed for filter effects on group shapes where the filter effect
-     * applies to all the children of the group shape at once
-     */
-    static void paintGroup(KoShapeGroup *group, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
 
     class DetectCollision
     {

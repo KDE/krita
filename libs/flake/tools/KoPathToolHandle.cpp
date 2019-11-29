@@ -70,7 +70,7 @@ void PointHandle::paint(QPainter &painter, const KoViewConverter &converter, qre
     }
 
 
-    KisHandlePainterHelper helper = KoShape::createHandlePainterHelper(&painter, m_activePoint->parent(), converter, handleRadius);
+    KisHandlePainterHelper helper = KoShape::createHandlePainterHelperView(&painter, m_activePoint->parent(), converter, handleRadius);
 
 
     if (allPaintedTypes != m_activePointType) {
@@ -190,7 +190,7 @@ ParameterHandle::ParameterHandle(KoPathTool *tool, KoParameterShape *parameterSh
 
 void ParameterHandle::paint(QPainter &painter, const KoViewConverter &converter, qreal handleRadius)
 {
-    KisHandlePainterHelper helper = KoShape::createHandlePainterHelper(&painter, m_parameterShape, converter, handleRadius);
+    KisHandlePainterHelper helper = KoShape::createHandlePainterHelperView(&painter, m_parameterShape, converter, handleRadius);
     helper.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
     m_parameterShape->paintHandle(helper, m_handleId);
 }

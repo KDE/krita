@@ -213,9 +213,10 @@ public:
     bool tryUseCustomCursor() override {
         if (m_currentHandle.type != KoShapeGradientHandles::Handle::None) {
             q->useCursor(Qt::OpenHandCursor);
+            return true;
         }
 
-        return m_currentHandle.type != KoShapeGradientHandles::Handle::None;
+        return false;
     }
 
 private:
@@ -691,7 +692,7 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
     KoInteractionTool::paint(painter, converter);
 
     painter.save();
-    KoShape::applyConversion(painter, converter);
+    painter.setTransform(converter.documentToView(), true);
     canvas()->snapGuide()->paint(painter, converter);
     painter.restore();
 }
@@ -966,7 +967,7 @@ void DefaultTool::recalcSelectionBox(KoSelection *selection)
 {
     KIS_ASSERT_RECOVER_RETURN(selection->count());
 
-    QTransform matrix = selection->absoluteTransformation(0);
+    QTransform matrix = selection->absoluteTransformation();
     m_selectionOutline = matrix.map(QPolygonF(selection->outlineRect()));
     m_angle = 0.0;
 
@@ -1194,7 +1195,7 @@ void DefaultTool::selectionTransform(int transformAction)
         QTransform t;
 
         if (!shouldReset) {
-            const QTransform world = shape->absoluteTransformation(0);
+            const QTransform world = shape->absoluteTransformation();
             t =  world * centerTransInv * applyTransform * centerTrans * world.inverted() * shape->transformation();
         } else {
             const QPointF center = shape->outlineRect().center();
@@ -1229,7 +1230,7 @@ void DefaultTool::selectionBooleanOp(int booleanOp)
     KoShape *referenceShape = editableShapes[referenceShapeIndex];
 
     Q_FOREACH (KoShape *shape, editableShapes) {
-        srcOutlines << shape->absoluteTransformation(0).map(shape->outline());
+        srcOutlines << shape->absoluteTransformation().map(shape->outline());
     }
 
     if (booleanOp == BooleanUnion) {

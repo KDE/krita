@@ -99,7 +99,7 @@ const QGradient * KoGradientBackground::gradient() const
     return d->gradient;
 }
 
-void KoGradientBackground::paint(QPainter &painter, const KoViewConverter &/*converter*/, KoShapePaintingContext &/*context*/, const QPainterPath &fillPath) const
+void KoGradientBackground::paint(QPainter &painter, KoShapePaintingContext &/*context*/, const QPainterPath &fillPath) const
 {
     if (!d->gradient) return;
 

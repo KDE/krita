@@ -26,8 +26,6 @@
 #include <kritaui_export.h>
 #include <kis_types.h>
 
-class KoViewConverter;
-
 
 #define KIS_NODE_SHAPE_ID "KisNodeShape"
 
@@ -48,7 +46,7 @@ public:
     QSizeF size() const override;
     QRectF boundingRect() const override;
     void setPosition(const QPointF &) override;
-    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
+    void paint(QPainter &painter, KoShapePaintingContext &paintcontext) override;
     void saveOdf(KoShapeSavingContext & context) const override;
     bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context) override;
 

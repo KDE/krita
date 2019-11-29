@@ -30,7 +30,6 @@
 class KoShape;
 class KoGenStyle;
 class KoShapeSavingContext;
-class KoViewConverter;
 struct KoInsets;
 
 class QColor;
@@ -81,9 +80,8 @@ public:
      * @param shape the shape to paint around
      * @param painter the painter to paint to, the painter will have the topleft of the
      *       shape as its start coordinate.
-     * @param converter to convert between internal and view coordinates.
      */
-    virtual void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter) = 0;
+    virtual void paint(KoShape *shape, QPainter &painter) = 0;
 
     virtual bool compareFillTo(const KoShapeStrokeModel *other) = 0;
     virtual bool compareStyleTo(const KoShapeStrokeModel *other) = 0;

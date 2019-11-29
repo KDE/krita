@@ -168,7 +168,7 @@ QTransform ArtisticTextTool::cursorTransform() const
         transform.translate(0, metrics.descent());
     }
 
-    return transform * m_currentShape->absoluteTransformation(0);
+    return transform * m_currentShape->absoluteTransformation();
 }
 
 void ArtisticTextTool::paint(QPainter &painter, const KoViewConverter &converter)
@@ -179,7 +179,7 @@ void ArtisticTextTool::paint(QPainter &painter, const KoViewConverter &converter
 
     if (m_showCursor && m_blinkingCursor.isActive() && !m_currentStrategy) {
         painter.save();
-        m_currentShape->applyConversion(painter, converter);
+        painter.setTransform(converter.documentToView(), true);
         painter.setBrush(Qt::black);
         painter.setWorldTransform(cursorTransform(), true);
         painter.setClipping(false);
@@ -190,7 +190,7 @@ void ArtisticTextTool::paint(QPainter &painter, const KoViewConverter &converter
 
     if (m_currentShape->isOnPath()) {
         painter.save();
-        m_currentShape->applyConversion(painter, converter);
+        painter.setTransform(converter.documentToView(), true);
         if (!m_currentShape->baselineShape()) {
             painter.setPen(Qt::DotLine);
             painter.setBrush(Qt::NoBrush);
@@ -203,7 +203,8 @@ void ArtisticTextTool::paint(QPainter &painter, const KoViewConverter &converter
     }
     if (m_selection.hasSelection()) {
         painter.save();
-        m_selection.paint(painter, converter);
+        painter.setTransform(converter.documentToView(), true);
+        m_selection.paint(painter);
         painter.restore();
     }
 }
@@ -981,7 +982,7 @@ QVariant ArtisticTextTool::inputMethodQuery(Qt::InputMethodQuery query, const Ko
         // The rectangle covering the area of the input cursor in widget coordinates.
         QRectF rect = m_textCursorShape.boundingRect();
         rect.moveTop(rect.bottom());
-        QTransform shapeMatrix = m_currentShape->absoluteTransformation(&converter);
+        QTransform shapeMatrix = m_currentShape->absoluteTransformation();
         qreal zoomX, zoomY;
         converter.zoom(&zoomX, &zoomY);
         shapeMatrix.scale(zoomX, zoomY);

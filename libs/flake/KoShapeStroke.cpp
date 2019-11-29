@@ -36,7 +36,6 @@
 #include <KoOdfGraphicStyles.h>
 
 // Flake
-#include "KoViewConverter.h"
 #include "KoShape.h"
 #include "KoShapeSavingContext.h"
 #include "KoPathShape.h"
@@ -288,12 +287,10 @@ QPen KoShapeStroke::resultLinePen() const
     return pen;
 }
 
-void KoShapeStroke::paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter)
+void KoShapeStroke::paint(KoShape *shape, QPainter &painter)
 {
     KisQPainterStateSaver saver(&painter);
 
-    // TODO: move apply conversion to some centralized place
-    KoShape::applyConversion(painter, converter);
     d->paintBorder(shape, painter, resultLinePen());
 }
 

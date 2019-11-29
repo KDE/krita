@@ -358,10 +358,9 @@ QPainterPath KoSvgTextChunkShape::outline() const
     return result.simplified();
 }
 
-void KoSvgTextChunkShape::paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
+void KoSvgTextChunkShape::paintComponent(QPainter &painter, KoShapePaintingContext &paintContext)
 {
     Q_UNUSED(painter);
-    Q_UNUSED(converter);
     Q_UNUSED(paintContext);
 }
 

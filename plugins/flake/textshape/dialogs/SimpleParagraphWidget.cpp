@@ -173,7 +173,7 @@ void SimpleParagraphWidget::fillListButtons()
             }
 
             KoShapePaintingContext paintContext; //FIXME
-            textShape.paintComponent(p, zoomHandler, paintContext);
+            textShape.paintComponent(p, paintContext);
             widget.bulletListButton->addItem(pm, static_cast<int>(item.style));
         }
     }

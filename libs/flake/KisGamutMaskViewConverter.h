@@ -59,6 +59,9 @@ public:
     void setZoom(qreal zoom) override;
     void zoom(qreal *zoomX, qreal *zoomY) const override;
 
+    using KoViewConverter::documentToView;
+    using KoViewConverter::viewToDocument;
+
 private:
     void computeAndSetZoom();
 

@@ -37,31 +37,10 @@
 #include <KoShape.h>
 #include <KoShapeGroup.h>
 #include <KoShapeManager.h>
-#include <KoViewConverter.h>
 #include <KoShapePaintingContext.h>
 #include <SvgParser.h>
 
 #include <FlakeDebug.h>
-
-void paintGroup(KoShapeGroup *group, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
-{
-    QList<KoShape*> shapes = group->shapes();
-    std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
-    Q_FOREACH (KoShape *child, shapes) {
-        // we paint recursively here, so we do not have to check recursively for visibility
-        if (!child->isVisible(false))
-            continue;
-        KoShapeGroup *childGroup = dynamic_cast<KoShapeGroup*>(child);
-        if (childGroup) {
-            paintGroup(childGroup, painter, converter, paintContext);
-        } else {
-            painter.save();
-            KoShapeManager::renderSingleShape(child, painter, converter, paintContext);
-            painter.restore();
-        }
-    }
-
-}
 
 QImage KoSvgSymbol::icon()
 {
@@ -74,7 +53,6 @@ QImage KoSvgSymbol::icon()
     QPainter gc(&image);
     image.fill(Qt::gray);
 
-    KoViewConverter vc;
     KoShapePaintingContext ctx;
 
 //        debugFlake << "Going to render. Original bounding rect:" << group->boundingRect()
@@ -82,7 +60,7 @@ QImage KoSvgSymbol::icon()
 //                 << "Scale W" << 256 / rc.width() << "Scale H" << 256 / rc.height();
 
     gc.translate(-rc.x(), -rc.y());
-    paintGroup(group, gc, vc, ctx);
+    KoShapeManager::renderSingleShape(group, gc, ctx);
     gc.end();
     image = image.scaled(128, 128, Qt::KeepAspectRatio);
     return image;

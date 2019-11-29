@@ -127,13 +127,12 @@ struct SvgRenderTester : public SvgTester
     static void testRender(KoShape *shape, const QString &prefix, const QString &testName, const QSize canvasSize, int fuzzyThreshold = 0) {
         QImage canvas(canvasSize, QImage::Format_ARGB32);
         canvas.fill(0);
-        KoViewConverter converter;
         QPainter painter(&canvas);
 
         KoShapePainter p;
         p.setShapes({shape});
         painter.setClipRect(canvas.rect());
-        p.paint(painter, converter);
+        p.paint(painter);
 
         QVERIFY(TestUtil::checkQImage(canvas, "svg_render", prefix, testName, fuzzyThreshold));
     }

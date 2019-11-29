@@ -41,8 +41,8 @@ public:
 
     bool coordIsClear(const QPointF& coord, const KoViewConverter& viewConverter, int maskRotation) const;
     QPainterPath outline();
-    void paint(QPainter &painter, const KoViewConverter& viewConverter, int maskRotation);
-    void paintStroke(QPainter &painter, const KoViewConverter& viewConverter, int maskRotation);
+    void paint(QPainter &painter, int maskRotation);
+    void paintStroke(QPainter &painter, int maskRotation);
     KoShape* koShape();
 
 private:
@@ -70,8 +70,8 @@ public:
     bool save() override;
     bool saveToDevice(QIODevice* dev) const override;
 
-    void paint(QPainter &painter, KoViewConverter& viewConverter, bool preview);
-    void paintStroke(QPainter &painter, KoViewConverter& viewConverter, bool preview);
+    void paint(QPainter &painter, bool preview);
+    void paintStroke(QPainter &painter, bool preview);
 
     QString title();
     void setTitle(QString title);

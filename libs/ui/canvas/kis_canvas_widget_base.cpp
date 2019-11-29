@@ -40,6 +40,7 @@
 #include "kis_selection_manager.h"
 #include "KisDocument.h"
 #include "kis_update_info.h"
+#include "KisQPainterStateSaver.h"
 
 
 struct KisCanvasWidgetBase::Private
@@ -104,59 +105,59 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
     gc.setRenderHint(QPainter::SmoothPixmapTransform);
 
 
-    gc.save();
-    gc.setClipRect(updateWidgetRect);
+    {
+        KisQPainterStateSaver paintShapesState(&gc);
 
-    QTransform transform = m_d->coordinatesConverter->flakeToWidgetTransform();
-    gc.setTransform(transform);
+        gc.setClipRect(updateWidgetRect);
+        gc.setTransform(m_d->coordinatesConverter->documentToWidgetTransform());
 
-    // Paint the shapes (other than the layers)
-    m_d->canvas->globalShapeManager()->paint(gc, *m_d->viewConverter, false);
 
-    // draw green selection outlines around text shapes that are edited, so the user sees where they end
-    gc.save();
-    QTransform worldTransform = gc.worldTransform();
-    gc.setPen( Qt::green );
+        // Paint the shapes (other than the layers)
+        m_d->canvas->globalShapeManager()->paint(gc, false);
 
-    Q_FOREACH (KoShape *shape, canvas()->shapeManager()->selection()->selectedShapes()) {
-        if (shape->shapeId() == "ArtisticText" || shape->shapeId() == "TextShapeID") {
-            gc.setWorldTransform(shape->absoluteTransformation(m_d->viewConverter) * worldTransform);
-            KoShape::applyConversion(gc, *m_d->viewConverter);
-            gc.drawRect(QRectF(QPointF(), shape->size()));
-        }
-    }
-    gc.restore();
-
-    // Draw text shape over canvas while editing it, that's needs to show the text selection correctly
-    QString toolId = KoToolManager::instance()->activeToolId();
-    if (toolId == "ArtisticTextTool" || toolId == "TextTool") {
-        gc.save();
-        gc.setPen(Qt::NoPen);
-        gc.setBrush(Qt::NoBrush);
+        // draw green selection outlines around text shapes that are edited, so the user sees where they end
+        gc.setPen( Qt::green );
         Q_FOREACH (KoShape *shape, canvas()->shapeManager()->selection()->selectedShapes()) {
             if (shape->shapeId() == "ArtisticText" || shape->shapeId() == "TextShapeID") {
-                KoShapePaintingContext  paintContext(canvas(), false);
                 gc.save();
-                gc.setTransform(shape->absoluteTransformation(m_d->viewConverter) * gc.transform());
-                canvas()->shapeManager()->paintShape(shape, gc, *m_d->viewConverter, paintContext);
+                gc.setTransform(shape->absoluteTransformation(), true);
+                gc.drawRect(QRectF(QPointF(), shape->size()));
                 gc.restore();
             }
         }
-        gc.restore();
+
+        // Draw text shape over canvas while editing it, that's needs to show the text selection correctly
+        QString toolId = KoToolManager::instance()->activeToolId();
+        if (toolId == "ArtisticTextTool" || toolId == "TextTool") {
+            gc.save();
+            gc.setTransform(m_d->coordinatesConverter->documentToWidgetTransform());
+            gc.setPen(Qt::NoPen);
+            gc.setBrush(Qt::NoBrush);
+            Q_FOREACH (KoShape *shape, canvas()->shapeManager()->selection()->selectedShapes()) {
+                if (shape->shapeId() == "ArtisticText" || shape->shapeId() == "TextShapeID") {
+                    KoShapePaintingContext  paintContext(canvas(), false);
+                    KoShapeManager::renderSingleShape(shape, gc, paintContext);
+                }
+            }
+            gc.restore();
+        }
     }
 
-    gc.restore();
-
     // ask the decorations to paint themselves
+    // decorations are painted in "widget" coordinate system
     Q_FOREACH (KisCanvasDecorationSP deco, m_d->decorations) {
         deco->paint(gc, m_d->coordinatesConverter->widgetToDocument(updateWidgetRect), m_d->coordinatesConverter,m_d->canvas);
     }
 
-    gc.setTransform(transform);
-    // - some tools do not restore gc, but that is not important here
-    // - we need to disable clipping to draw handles properly
-    gc.setClipping(false);
-    toolProxy()->paint(gc, *m_d->viewConverter);
+    {
+        KisQPainterStateSaver paintDecorationsState(&gc);
+        gc.setTransform(m_d->coordinatesConverter->flakeToWidgetTransform());
+
+        // - some tools do not restore gc, but that is not important here
+        // - we need to disable clipping to draw handles properly
+        gc.setClipping(false);
+        toolProxy()->paint(gc, *m_d->viewConverter);
+    }
 
     gc.restore();
 }

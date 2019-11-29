@@ -168,7 +168,8 @@ QVector<KisReferenceImage*> KisReferenceImagesLayer::referenceImages() const
 }
 
 void KisReferenceImagesLayer::paintReferences(QPainter &painter) {
-    shapeManager()->paint(painter, *converter(), false);
+    painter.setTransform(converter()->documentToView(), true);
+    shapeManager()->paint(painter, false);
 }
 
 bool KisReferenceImagesLayer::allowAsChild(KisNodeSP) const

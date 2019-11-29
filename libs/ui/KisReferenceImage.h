@@ -76,7 +76,7 @@ public:
     QString filename() const;
     QString internalFile() const;
 
-    void paint(QPainter &gc, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
+    void paint(QPainter &gc, KoShapePaintingContext &paintcontext) override;
 
     bool loadOdf(const KoXmlElement &/*element*/, KoShapeLoadingContext &/*context*/) override { return false; }
     void saveOdf(KoShapeSavingContext &/*context*/) const override {}

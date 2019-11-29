@@ -31,7 +31,7 @@ KoShapeGradientHandles::KoShapeGradientHandles(KoFlake::FillVariant fillVariant,
 {
 }
 
-QVector<KoShapeGradientHandles::Handle> KoShapeGradientHandles::handles(const KoViewConverter *converter) const {
+QVector<KoShapeGradientHandles::Handle> KoShapeGradientHandles::handles() const {
     QVector<Handle> result;
 
     const QGradient *g = gradient();
@@ -69,7 +69,7 @@ QVector<KoShapeGradientHandles::Handle> KoShapeGradientHandles::handles(const Ko
         const QRectF boundingRect = m_shape->outlineRect();
         const QTransform gradientToUser(boundingRect.width(), 0, 0, boundingRect.height(),
                                         boundingRect.x(), boundingRect.y());
-        const QTransform t = gradientToUser * m_shape->absoluteTransformation(converter);
+        const QTransform t = gradientToUser * m_shape->absoluteTransformation();
 
         QVector<Handle>::iterator it = result.begin();
 
@@ -164,7 +164,7 @@ const QGradient *KoShapeGradientHandles::gradient() const {
 QPointF KoShapeGradientHandles::getNewHandlePos(const QPointF &oldPos, const QPointF &absoluteOffset, QGradient::CoordinateMode mode)
 {
     const QTransform offset = QTransform::fromTranslate(absoluteOffset.x(), absoluteOffset.y());
-    QTransform localToAbsolute = m_shape->absoluteTransformation(0);
+    QTransform localToAbsolute = m_shape->absoluteTransformation();
 
     if (mode == QGradient::ObjectBoundingMode) {
         const QRectF boundingRect = m_shape->outlineRect();

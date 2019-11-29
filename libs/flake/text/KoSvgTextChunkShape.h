@@ -67,7 +67,7 @@ public:
     QRectF outlineRect() const override;
     QPainterPath outline() const override;
 
-    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext) override;
+    void paintComponent(QPainter &painter, KoShapePaintingContext &paintContext) override;
     void saveOdf(KoShapeSavingContext &Context) const override;
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &Context) override;
 

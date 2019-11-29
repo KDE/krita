@@ -55,7 +55,7 @@ public:
     virtual KoShape *cloneShape() const override;
 
     /// reimplemented
-    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext) override;
+    void paint(QPainter &painter, KoShapePaintingContext &paintContext) override;
     /// reimplemented
     void saveOdf(KoShapeSavingContext &context) const override;
     /// reimplemented

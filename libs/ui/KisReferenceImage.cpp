@@ -171,13 +171,11 @@ KisReferenceImage *KisReferenceImage::fromClipboard(const KisCoordinatesConverte
     return reference;
 }
 
-void KisReferenceImage::paint(QPainter &gc, const KoViewConverter &converter, KoShapePaintingContext &/*paintcontext*/)
+void KisReferenceImage::paint(QPainter &gc, KoShapePaintingContext &/*paintcontext*/)
 {
     if (!parent()) return;
 
     gc.save();
-
-    applyConversion(gc, converter);
 
     QSizeF shapeSize = size();
     QTransform transform = QTransform::fromScale(shapeSize.width() / d->image.width(), shapeSize.height() / d->image.height());
@@ -187,7 +185,7 @@ void KisReferenceImage::paint(QPainter &gc, const KoViewConverter &converter, Ko
     }
 
     qreal scale;
-    QImage prescaled = d->mipmap.getClosest(gc.transform() * transform, &scale);
+    QImage prescaled = d->mipmap.getClosest(transform * gc.transform(), &scale);
     transform.scale(1.0 / scale, 1.0 / scale);
 
     gc.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
@@ -249,7 +247,7 @@ QColor KisReferenceImage::getPixel(QPointF position)
     const QSizeF shapeSize = size();
     const QTransform scale = QTransform::fromScale(d->image.width() / shapeSize.width(), d->image.height() / shapeSize.height());
 
-    const QTransform transform = absoluteTransformation(nullptr).inverted() * scale;
+    const QTransform transform = absoluteTransformation().inverted() * scale;
     const QPointF localPosition = position * transform;
 
     if (d->cachedImage.isNull()) {

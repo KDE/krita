@@ -31,7 +31,6 @@
 
 #include "kritaflake_export.h"
 
-class KoViewConverter;
 class KoShapeLayer;
 class KoSelectionPrivate;
 
@@ -57,7 +56,7 @@ public:
     KoSelection(QObject *parent = 0);
     ~KoSelection() override;
 
-    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
+    void paint(QPainter &painter, KoShapePaintingContext &paintcontext) override;
     void setSize(const QSizeF &size) override;
     QSizeF size() const override;
     QRectF outlineRect() const override;

@@ -233,12 +233,13 @@ void KisColorSelectorWheel::paint(QPainter* painter)
         maskPainter.drawEllipse(QPointF(0,0), 1.0, 1.0);
 
         maskPainter.resetTransform();
+        maskPainter.setTransform(m_viewConverter->documentToView());
 
         maskPainter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
-        m_currentGamutMask->paint(maskPainter, *m_viewConverter, m_maskPreviewActive);
+        m_currentGamutMask->paint(maskPainter, m_maskPreviewActive);
 
         maskPainter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-        m_currentGamutMask->paintStroke(maskPainter, *m_viewConverter, m_maskPreviewActive);
+        m_currentGamutMask->paintStroke(maskPainter, m_maskPreviewActive);
 
         painter->drawImage(m_renderAreaOffsetX, m_renderAreaOffsetY, maskBuffer);
     }

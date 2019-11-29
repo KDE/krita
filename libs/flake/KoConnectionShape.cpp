@@ -22,7 +22,6 @@
 #include "KoConnectionShape.h"
 #include "KoConnectionShape_p.h"
 
-#include "KoViewConverter.h"
 #include "KoShapeLoadingContext.h"
 #include "KoShapeSavingContext.h"
 #include "KoConnectionShapeLoadingUpdater.h"
@@ -154,7 +153,7 @@ QPointF KoConnectionShape::escapeDirection(int handleId) const
         }
 
         // transform escape direction by using our own transformation matrix
-        QTransform invMatrix = absoluteTransformation(0).inverted();
+        QTransform invMatrix = absoluteTransformation().inverted();
         direction = invMatrix.map(direction) - invMatrix.map(QPointF());
         direction /= sqrt(direction.x() * direction.x() + direction.y() * direction.y());
     }
@@ -285,7 +284,7 @@ void KoConnectionShape::updateConnections()
     if (d->handleConnected(StartHandle)) {
         if (d->shape1->hasConnectionPoint(d->connectionPointId1)) {
             // map connection point into our shape coordinates
-            QPointF p = documentToShape(d->shape1->absoluteTransformation(0).map(d->shape1->connectionPoint(d->connectionPointId1).position));
+            QPointF p = documentToShape(d->shape1->absoluteTransformation().map(d->shape1->connectionPoint(d->connectionPointId1).position));
             if (handles()[StartHandle] != p) {
                 handles()[StartHandle] = p;
                 updateHandles = true;
@@ -295,7 +294,7 @@ void KoConnectionShape::updateConnections()
     if (d->handleConnected(EndHandle)) {
         if (d->shape2->hasConnectionPoint(d->connectionPointId2)) {
             // map connection point into our shape coordinates
-            QPointF p = documentToShape(d->shape2->absoluteTransformation(0).map(d->shape2->connectionPoint(d->connectionPointId2).position));
+            QPointF p = documentToShape(d->shape2->absoluteTransformation().map(d->shape2->connectionPoint(d->connectionPointId2).position));
             if (handles()[EndHandle] != p) {
                 handles()[EndHandle] = p;
                 updateHandles = true;
@@ -427,7 +426,7 @@ bool KoConnectionShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
             d->shape1->addDependee(this);
             if (d->shape1->hasConnectionPoint(d->connectionPointId1)) {
                 debugFlake << "connecting to start-shape";
-                handles()[StartHandle] = d->shape1->absoluteTransformation(0).map(d->shape1->connectionPoint(d->connectionPointId1).position);
+                handles()[StartHandle] = d->shape1->absoluteTransformation().map(d->shape1->connectionPoint(d->connectionPointId1).position);
                 debugFlake << "start handle position =" << handles()[StartHandle];
             }
         } else {
@@ -449,7 +448,7 @@ bool KoConnectionShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
             d->shape2->addDependee(this);
             if (d->shape2->hasConnectionPoint(d->connectionPointId2)) {
                 debugFlake << "connecting to end-shape";
-                handles()[EndHandle] = d->shape2->absoluteTransformation(0).map(d->shape2->connectionPoint(d->connectionPointId2).position);
+                handles()[EndHandle] = d->shape2->absoluteTransformation().map(d->shape2->connectionPoint(d->connectionPointId2).position);
                 debugFlake << "end handle position =" << handles()[EndHandle];
             }
         } else {
@@ -515,14 +514,14 @@ void KoConnectionShape::finishLoadingConnection()
             QPointF p1, p2;
             if (d->handleConnected(StartHandle)) {
                 if (d->shape1->hasConnectionPoint(d->connectionPointId1)) {
-                    p1 = d->shape1->absoluteTransformation(0).map(d->shape1->connectionPoint(d->connectionPointId1).position);
+                    p1 = d->shape1->absoluteTransformation().map(d->shape1->connectionPoint(d->connectionPointId1).position);
                 }
             } else {
                 p1 = handles()[StartHandle];
             }
             if (d->handleConnected(EndHandle)) {
                 if (d->shape2->hasConnectionPoint(d->connectionPointId2)) {
-                    p2 = d->shape2->absoluteTransformation(0).map(d->shape2->connectionPoint(d->connectionPointId2).position);
+                    p2 = d->shape2->absoluteTransformation().map(d->shape2->connectionPoint(d->connectionPointId2).position);
                 }
             } else {
                 p2 = handles()[EndHandle];

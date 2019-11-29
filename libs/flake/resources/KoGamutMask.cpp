@@ -74,7 +74,7 @@ bool KoGamutMaskShape::coordIsClear(const QPointF& coord, const KoViewConverter&
     return isClear;
 }
 
-void KoGamutMaskShape::paint(QPainter &painter, const KoViewConverter& viewConverter, int maskRotation)
+void KoGamutMaskShape::paint(QPainter &painter, int maskRotation)
 {
     painter.save();
 
@@ -83,12 +83,12 @@ void KoGamutMaskShape::paint(QPainter &painter, const KoViewConverter& viewConve
     painter.translate(centerPoint);
     painter.rotate(maskRotation);
     painter.translate(-centerPoint);
-    painter.setTransform(m_maskShape->absoluteTransformation(&viewConverter) * painter.transform());
-    m_maskShape->paint(painter, viewConverter, m_shapePaintingContext);
+    painter.setTransform(m_maskShape->absoluteTransformation(), true);
+    m_maskShape->paint(painter, m_shapePaintingContext);
     painter.restore();
 }
 
-void KoGamutMaskShape::paintStroke(QPainter &painter, const KoViewConverter &viewConverter, int maskRotation)
+void KoGamutMaskShape::paintStroke(QPainter &painter, int maskRotation)
 {
     painter.save();
 
@@ -97,9 +97,8 @@ void KoGamutMaskShape::paintStroke(QPainter &painter, const KoViewConverter &vie
     painter.translate(centerPoint);
     painter.rotate(maskRotation);
     painter.translate(-centerPoint);
-
-    painter.setTransform(m_maskShape->absoluteTransformation(&viewConverter) * painter.transform());
-    m_maskShape->paintStroke(painter, viewConverter, m_shapePaintingContext);
+    painter.setTransform(m_maskShape->absoluteTransformation(), true);
+    m_maskShape->paintStroke(painter, m_shapePaintingContext);
     painter.restore();
 
 }
@@ -176,7 +175,7 @@ bool KoGamutMask::coordIsClear(const QPointF& coord, KoViewConverter &viewConver
     return false;
 }
 
-void KoGamutMask::paint(QPainter &painter, KoViewConverter& viewConverter, bool preview)
+void KoGamutMask::paint(QPainter &painter, bool preview)
 {
     QVector<KoGamutMaskShape*>* shapeVector;
 
@@ -187,11 +186,11 @@ void KoGamutMask::paint(QPainter &painter, KoViewConverter& viewConverter, bool 
     }
 
     for(KoGamutMaskShape* shape: *shapeVector) {
-        shape->paint(painter, viewConverter, rotation());
+        shape->paint(painter, rotation());
     }
 }
 
-void KoGamutMask::paintStroke(QPainter &painter, KoViewConverter &viewConverter, bool preview)
+void KoGamutMask::paintStroke(QPainter &painter, bool preview)
 {
     QVector<KoGamutMaskShape*>* shapeVector;
 
@@ -202,7 +201,7 @@ void KoGamutMask::paintStroke(QPainter &painter, KoViewConverter &viewConverter,
     }
 
     for(KoGamutMaskShape* shape: *shapeVector) {
-        shape->paintStroke(painter, viewConverter, rotation());
+        shape->paintStroke(painter, rotation());
     }
 }
 

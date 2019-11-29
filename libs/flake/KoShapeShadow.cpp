@@ -29,7 +29,6 @@
 #include "KoInsets.h"
 #include "KoPathShape.h"
 #include <KoGenStyle.h>
-#include <KoViewConverter.h>
 #include <FlakeDebug.h>
 #include <QPainter>
 #include <QAtomicInt>
@@ -54,18 +53,17 @@ public:
      * @param painter the painter to paint on the image
      * @param converter to convert between internal and view coordinates.
      */
-    void paintGroupShadow(KoShapeGroup *group, QPainter &painter, const KoViewConverter &converter);
+    void paintGroupShadow(KoShapeGroup *group, QPainter &painter);
     /**
      * Paints the shadow of the shape to the buffer image.
      * @param shape the shape to paint around
      * @param painter the painter to paint on the image
-     * @param converter to convert between internal and view coordinates.
      */
-    void paintShadow(KoShape *shape, QPainter &painter, const KoViewConverter &converter);
+    void paintShadow(KoShape *shape, QPainter &painter);
     void blurShadow(QImage &image, int radius, const QColor& shadowColor);
 };
 
-void KoShapeShadow::Private::paintGroupShadow(KoShapeGroup *group, QPainter &painter, const KoViewConverter &converter)
+void KoShapeShadow::Private::paintGroupShadow(KoShapeGroup *group, QPainter &painter)
 {
     QList<KoShape*> shapes = group->shapes();
     Q_FOREACH (KoShape *child, shapes) {
@@ -74,18 +72,17 @@ void KoShapeShadow::Private::paintGroupShadow(KoShapeGroup *group, QPainter &pai
             continue;
         painter.save();
         //apply group child's transformation
-        painter.setTransform(child->absoluteTransformation(&converter), true);
-        paintShadow(child, painter, converter);
+        painter.setTransform(child->absoluteTransformation(), true);
+        paintShadow(child, painter);
         painter.restore();
     }
 }
 
-void KoShapeShadow::Private::paintShadow(KoShape *shape, QPainter &painter, const KoViewConverter &converter)
+void KoShapeShadow::Private::paintShadow(KoShape *shape, QPainter &painter)
 {
     QPainterPath path(shape->shadowOutline());
     if (!path.isEmpty()) {
         painter.save();
-        KoShape::applyConversion(painter, converter);
         painter.setBrush(QBrush(color));
 
         // Make sure the shadow has the same fill rule as the shape.
@@ -98,7 +95,7 @@ void KoShapeShadow::Private::paintShadow(KoShape *shape, QPainter &painter, cons
     }
 
     if (shape->stroke()) {
-        shape->stroke()->paint(shape, painter, converter);
+        shape->stroke()->paint(shape, painter);
     }
 }
 
@@ -227,7 +224,7 @@ void KoShapeShadow::fillStyle(KoGenStyle &style, KoShapeSavingContext &context)
         style.addProperty("calligra:shadow-blur-radius", QString("%1pt").arg(d->blur), KoGenStyle::GraphicType);
 }
 
-void KoShapeShadow::paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter)
+void KoShapeShadow::paint(KoShape *shape, QPainter &painter)
 {
     if (! d->visible)
         return;
@@ -236,9 +233,11 @@ void KoShapeShadow::paint(KoShape *shape, QPainter &painter, const KoViewConvert
     // We offset by the shadow offset at the time we draw into the buffer
     // Then we filter the image and draw it at the position of the bounding rect on canvas
 
+    QTransform documentToView = painter.transform();
+
     //the boundingRect of the shape or the KoSelection boundingRect of the group
     QRectF shadowRect = shape->boundingRect();
-    QRectF zoomedClipRegion = converter.documentToView(shadowRect);
+    QRectF zoomedClipRegion = documentToView.mapRect(shadowRect);
 
     // Init the buffer image
     QImage sourceGraphic(zoomedClipRegion.size().toSize(), QImage::Format_ARGB32_Premultiplied);
@@ -249,30 +248,30 @@ void KoShapeShadow::paint(KoShape *shape, QPainter &painter, const KoViewConvert
     imagePainter.setBrush(Qt::NoBrush);
     imagePainter.setRenderHint(QPainter::Antialiasing, painter.testRenderHint(QPainter::Antialiasing));
     // Since our imagebuffer and the canvas don't align we need to offset our drawings
-    imagePainter.translate(-1.0f*converter.documentToView(shadowRect.topLeft()));
+    imagePainter.translate(-1.0f*documentToView.map(shadowRect.topLeft()));
 
     // Handle the shadow offset
-    imagePainter.translate(converter.documentToView(offset()));
+    imagePainter.translate(documentToView.map(offset()));
 
     KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(shape);
     if (group) {
-        d->paintGroupShadow(group, imagePainter, converter);
+        d->paintGroupShadow(group, imagePainter);
     } else {
         //apply shape's transformation
-        imagePainter.setTransform(shape->absoluteTransformation(&converter), true);
+        imagePainter.setTransform(shape->absoluteTransformation(), true);
 
-        d->paintShadow(shape, imagePainter, converter);
+        d->paintShadow(shape, imagePainter);
     }
     imagePainter.end();
 
     // Blur the shadow (well the entire buffer)
-    d->blurShadow(sourceGraphic, converter.documentToViewX(d->blur), d->color);
+    d->blurShadow(sourceGraphic, qRound(documentToView.m11() * d->blur), d->color);
 
     // Paint the result
     painter.save();
     // The painter is initialized for us with canvas transform 'plus' shape transform
     // we are only interested in the canvas transform so 'subtract' the shape transform part
-    painter.setTransform(shape->absoluteTransformation(&converter).inverted() * painter.transform());
+    painter.setTransform(shape->absoluteTransformation().inverted() * painter.transform());
     painter.drawImage(zoomedClipRegion.topLeft(), sourceGraphic);
     painter.restore();
 }

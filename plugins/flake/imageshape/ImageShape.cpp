@@ -22,7 +22,6 @@
 #include "kis_debug.h"
 
 #include <QPainter>
-#include <KoViewConverter.h>
 #include <SvgLoadingContext.h>
 #include <SvgSavingContext.h>
 #include <SvgUtil.h>
@@ -71,13 +70,12 @@ KoShape *ImageShape::cloneShape() const
     return new ImageShape(*this);
 }
 
-void ImageShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
+void ImageShape::paint(QPainter &painter, KoShapePaintingContext &paintContext)
 {
     Q_UNUSED(paintContext);
     KisQPainterStateSaver saver(&painter);
 
     const QRectF myrect(QPointF(), size());
-    applyConversion(painter, converter);
 
     painter.setRenderHint(QPainter::SmoothPixmapTransform);
     painter.setClipRect(QRectF(QPointF(), size()), Qt::IntersectClip);

@@ -27,7 +27,6 @@
 #include "KoOdfWorkaround.h"
 #include "KoPathPoint.h"
 #include "KoShapeStrokeModel.h"
-#include "KoViewConverter.h"
 #include "KoPathShapeLoader.h"
 #include "KoShapeSavingContext.h"
 #include "KoShapeLoadingContext.h"
@@ -387,16 +386,15 @@ void KoPathShape::clear()
     notifyPointsChanged();
 }
 
-void KoPathShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
+void KoPathShape::paint(QPainter &painter, KoShapePaintingContext &paintContext)
 {
     KisQPainterStateSaver saver(&painter);
 
-    applyConversion(painter, converter);
     QPainterPath path(outline());
     path.setFillRule(d->fillRule);
 
     if (background()) {
-        background()->paint(painter, converter, paintContext, path);
+        background()->paint(painter, paintContext, path);
     }
     //d->paintDebug(painter);
 }
@@ -532,7 +530,7 @@ QPainterPath KoPathShape::outline() const
 
 QRectF KoPathShape::boundingRect() const
 {
-    const QTransform transform = absoluteTransformation(0);
+    const QTransform transform = absoluteTransformation();
 
     /**
      * First we approximate the insets of the stroke by rendering a fat bezier curve
@@ -1226,8 +1224,8 @@ int KoPathShape::combine(KoPathShape *path)
     int insertSegmentPosition = -1;
     if (!path) return insertSegmentPosition;
 
-    QTransform pathMatrix = path->absoluteTransformation(0);
-    QTransform myMatrix = absoluteTransformation(0).inverted();
+    QTransform pathMatrix = path->absoluteTransformation();
+    QTransform myMatrix = absoluteTransformation().inverted();
 
     Q_FOREACH (KoSubpath* subpath, path->d->subpaths) {
         KoSubpath *newSubpath = new KoSubpath();
@@ -1255,7 +1253,7 @@ bool KoPathShape::separate(QList<KoPathShape*> & separatedPaths)
     if (! d->subpaths.size())
         return false;
 
-    QTransform myMatrix = absoluteTransformation(0);
+    QTransform myMatrix = absoluteTransformation();
 
     Q_FOREACH (KoSubpath* subpath, d->subpaths) {
         KoPathShape *shape = new KoPathShape();
@@ -1554,7 +1552,7 @@ bool KoPathShape::hitTest(const QPointF &position) const
     if (parent() && parent()->isClipped(this) && ! parent()->hitTest(position))
         return false;
 
-    QPointF point = absoluteTransformation(0).inverted().map(position);
+    QPointF point = absoluteTransformation().inverted().map(position);
     const QPainterPath outlinePath = outline();
     if (stroke()) {
         KoInsets insets;
@@ -1575,7 +1573,7 @@ bool KoPathShape::hitTest(const QPointF &position) const
 
     // the shadow has an offset to the shape, so we simply
     // check if the position minus the shadow offset hits the shape
-    point = absoluteTransformation(0).inverted().map(position - shadow()->offset());
+    point = absoluteTransformation().inverted().map(position - shadow()->offset());
 
     return outlinePath.contains(point);
 }

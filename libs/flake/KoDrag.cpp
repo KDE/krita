@@ -79,7 +79,7 @@ bool KoDrag::setSvg(const QList<KoShape *> originalShapes)
          */
         KoShape *oldParentShape = shape->parent();
         if (oldParentShape) {
-            clonedShape->applyTransformation(oldParentShape->absoluteTransformation(0));
+            clonedShape->applyTransformation(oldParentShape->absoluteTransformation());
         }
 
         shapes.append(clonedShape);

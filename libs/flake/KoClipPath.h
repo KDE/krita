@@ -30,7 +30,6 @@
 
 class KoShape;
 class KoPathShape;
-class KoViewConverter;
 class QPainter;
 class QTransform;
 class QPainterPath;
@@ -81,7 +80,7 @@ public:
     QTransform clipDataTransformation(KoShape *clippedShape) const;
 
     /// Applies the clipping to the given painter
-    static void applyClipping(KoShape *clippedShape, QPainter &painter, const KoViewConverter &converter);
+    static void applyClipping(KoShape *clippedShape, QPainter &painter);
 
 private:
     class Private;

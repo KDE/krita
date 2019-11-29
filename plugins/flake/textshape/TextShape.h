@@ -56,9 +56,9 @@ public:
     KoShape* cloneShape() const override;
 
     /// reimplemented
-    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
+    void paintComponent(QPainter &painter, KoShapePaintingContext &paintcontext) override;
     /// reimplemented
-    void waitUntilReady(const KoViewConverter &converter, bool asynchronous) const override;
+    void waitUntilReady(bool asynchronous) const override;
 
     /// helper method.
     QPointF convertScreenPos(const QPointF &point) const;

@@ -29,7 +29,6 @@
 class QPainter;
 class KoShapeContainerModel;
 class KoShapeContainerPrivate;
-class KoViewConverter;
 
 /**
  * This is the base class that all Flake group-shapes are based on.
@@ -168,7 +167,7 @@ public:
 
 
     /// reimplemented
-    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
+    void paint(QPainter &painter, KoShapePaintingContext &paintcontext) override;
 
     /**
      * @brief Paint the component
@@ -176,11 +175,10 @@ public:
      * method does.
      *
      * @param painter used for painting the shape
-     * @param converter to convert between internal and view coordinates.
      * @param paintcontext the painting context
      * @see applyConversion()
      */
-    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) = 0;
+    virtual void paintComponent(QPainter &painter, KoShapePaintingContext &paintcontext) = 0;
 
     using KoShape::update;
     /// reimplemented

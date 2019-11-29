@@ -52,6 +52,7 @@
 #include <KoPathConnectionPointStrategy.h>
 #include <KoStrokeConfigWidget.h>
 #include <KisHandlePainterHelper.h>
+#include <KoViewConverter.h>
 
 #include "kis_document_aware_spin_box_unit_manager.h"
 
@@ -195,8 +196,8 @@ void ConnectionTool::paint(QPainter &painter, const KoViewConverter &converter)
 
             painter.save();
             painter.setPen(Qt::black);
-            QTransform transform = shape->absoluteTransformation(0);
-            KoShape::applyConversion(painter, converter);
+            painter.setTransform(converter.documentToView());
+            QTransform transform = shape->absoluteTransformation();
             // Draw all the connection points of the shape
             KoConnectionPoints connectionPoints = shape->connectionPoints();
             KoConnectionPoints::const_iterator cp = connectionPoints.constBegin();
@@ -220,7 +221,7 @@ void ConnectionTool::paint(QPainter &painter, const KoViewConverter &converter)
             int radius = handleRadius() + 1;
             int handleCount = connectionShape->handleCount();
             for (int i = 0; i < handleCount; ++i) {
-                KisHandlePainterHelper helper = KoShape::createHandlePainterHelper(&painter, connectionShape, converter, radius);
+                KisHandlePainterHelper helper = KoShape::createHandlePainterHelperView(&painter, connectionShape, converter, radius);
                 helper.setHandleStyle(i == m_activeHandle ? KisHandleStyle::highlightedPrimaryHandles() : KisHandleStyle::primarySelection());
                 connectionShape->paintHandle(helper, i);
             }

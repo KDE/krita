@@ -73,6 +73,7 @@ public:
         case KoShape::GenericMatrixChange:
         case KoShape::ParameterChanged:
         case KoShape::ClipPathChanged :
+        case KoShape::ClipMaskChanged :
             m_group->invalidateSizeCache();
             break;
         default:
@@ -130,10 +131,9 @@ KoShape *KoShapeGroup::cloneShape() const
     return new KoShapeGroup(*this);
 }
 
-void KoShapeGroup::paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
+void KoShapeGroup::paintComponent(QPainter &painter, KoShapePaintingContext &)
 {
     Q_UNUSED(painter);
-    Q_UNUSED(converter);
 }
 
 bool KoShapeGroup::hitTest(const QPointF &position) const

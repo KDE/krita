@@ -43,7 +43,7 @@ KarbonPatternEditStrategyBase::KarbonPatternEditStrategyBase(KoShape *s, KoImage
     Q_ASSERT(m_shape);
     Q_ASSERT(imageCollection);
     // cache the shapes transformation matrix
-    m_matrix = shape()->absoluteTransformation(0);
+    m_matrix = shape()->absoluteTransformation();
 }
 
 KarbonPatternEditStrategyBase::~KarbonPatternEditStrategyBase()
@@ -134,7 +134,7 @@ KarbonPatternEditStrategy::KarbonPatternEditStrategy(KoShape *s, KoImageCollecti
     : KarbonPatternEditStrategyBase(s, imageCollection)
 {
     // cache the shapes transformation matrix
-    m_matrix = shape()->absoluteTransformation(0);
+    m_matrix = shape()->absoluteTransformation();
     QSizeF size = shape()->size();
     // the fixed length of half the average shape dimension
     m_normalizedLength = 0.25 * (size.width() + size.height());
@@ -162,7 +162,6 @@ void KarbonPatternEditStrategy::paint(QPainter &painter, const KoViewConverter &
     QPointF centerPoint = m_matrix.map(m_origin + m_handles[center]);
     QPointF directionPoint = m_matrix.map(m_origin + m_handles[direction]);
 
-    KoShape::applyConversion(painter, converter);
     painter.drawLine(centerPoint, directionPoint);
     paintHandle(painter, converter, centerPoint);
     paintHandle(painter, converter, directionPoint);
@@ -258,8 +257,6 @@ KarbonOdfPatternEditStrategy::~KarbonOdfPatternEditStrategy()
 
 void KarbonOdfPatternEditStrategy::paint(QPainter &painter, const KoViewConverter &converter) const
 {
-    KoShape::applyConversion(painter, converter);
-
     QSharedPointer<KoPatternBackground>  fill = qSharedPointerDynamicCast<KoPatternBackground>(shape()->background());
     if (!fill) {
         return;

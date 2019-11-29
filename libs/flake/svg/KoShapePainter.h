@@ -26,7 +26,6 @@
 #include "kritaflake_export.h"
 
 class KoShape;
-class KoViewConverter;
 class QPainter;
 class QImage;
 
@@ -53,7 +52,7 @@ public:
      * @param painter the painter to paint on
      * @param converter the view converter defining the zoom to use
      */
-    void paint(QPainter &painter, KoViewConverter &converter);
+    void paint(QPainter &painter);
 
     /**
      * Paints the shapes on the given painter.

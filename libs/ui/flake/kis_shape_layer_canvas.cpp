@@ -332,15 +332,18 @@ void KisShapeLayerCanvas::repaint()
         for (qint32 y = r.y(); y < r.y() + r.height(); y += MASK_IMAGE_HEIGHT) {
 
             image.fill(0);
-            tempPainter.translate(-x, -y);
-            tempPainter.setClipRect(QRect(x,y,MASK_IMAGE_WIDTH,MASK_IMAGE_HEIGHT));
+
+            tempPainter.setTransform(QTransform());
+            tempPainter.setClipRect(QRect(0,0,MASK_IMAGE_WIDTH,MASK_IMAGE_HEIGHT));
+            tempPainter.setTransform(m_viewConverter->documentToView() *
+                                     QTransform::fromTranslate(-x, -y));
 
             #ifdef DEBUG_REPAINT
                 QColor color = QColor(random() % 255, random() % 255, random() % 255);
                 maskPainter.fillRect(srcRect, color);
             #endif
 
-            m_shapeManager->paint(tempPainter, *m_viewConverter, false);
+            m_shapeManager->paint(tempPainter, false);
 
             tempPainter.translate(x, y);
 

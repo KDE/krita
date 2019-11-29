@@ -43,7 +43,7 @@ public:
     /**
      * Empty implementation, as the layer itself is not visible
      */
-    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
+    void paintComponent(QPainter &painter, KoShapePaintingContext &paintcontext) override;
     bool hitTest(const QPointF &position) const override;
     QRectF boundingRect() const override;
     void saveOdf(KoShapeSavingContext & context) const override;

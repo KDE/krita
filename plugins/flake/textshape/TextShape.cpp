@@ -47,7 +47,6 @@
 #include <KoTextPage.h>
 #include <KoTextShapeContainerModel.h>
 #include <KoPageProvider.h>
-#include <KoViewConverter.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
@@ -128,26 +127,27 @@ KoShape *TextShape::cloneShape() const
     return new TextShape(*this);
 }
 
-void TextShape::paintComponent(QPainter &painter, const KoViewConverter &converter,
+void TextShape::paintComponent(QPainter &painter,
                                KoShapePaintingContext &paintContext)
 {
     painter.save();
-    applyConversion(painter, converter);
     KoBorder *border = this->border();
 
     if (border) {
-        paintBorder(painter, converter);
+        const QRectF borderRect = QRectF(QPointF(0, 0), size());
+        border->paint(painter, borderRect, KoBorder::PaintInsideLine);
     } else if (paintContext.showTextShapeOutlines) {
         // No need to paint the outlines if there is a real border.
         if (qAbs(rotation()) > 1) {
             painter.setRenderHint(QPainter::Antialiasing);
         }
 
-        QPen pen(QColor(210, 210, 210)); // use cosmetic pen
-        QPointF onePixel = converter.viewToDocument(QPointF(1.0, 1.0));
-        QRectF rect(QPointF(0.0, 0.0), size() - QSizeF(onePixel.x(), onePixel.y()));
-        painter.setPen(pen);
-        painter.drawRect(rect);
+        // disabled, due to refactoring out of \p converter
+//        QPen pen(QColor(210, 210, 210)); // use cosmetic pen
+//        QPointF onePixel = converter.viewToDocument(QPointF(1.0, 1.0));
+//        QRectF rect(QPointF(0.0, 0.0), size() - QSizeF(onePixel.x(), onePixel.y()));
+//        painter.setPen(pen);
+//        painter.drawRect(rect);
     }
     painter.restore();
 
@@ -161,12 +161,10 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     Q_ASSERT(lay);
     lay->showInlineObjectVisualization(paintContext.showInlineObjectVisualization);
 
-    applyConversion(painter, converter);
-
     if (background()) {
         QPainterPath p;
         p.addRect(QRectF(QPointF(), size()));
-        background()->paint(painter, converter, paintContext, p);
+        background()->paint(painter, paintContext, p);
     }
 
     // this enables to use the same shapes on different pages showing different page numbers
@@ -194,7 +192,6 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     pc.textContext.selections.append(selection);
 
     pc.textContext.selections += KoTextDocument(doc).selections();
-    pc.viewConverter = &converter;
     pc.imageCollection = m_imageCollection;
     pc.showFormattingCharacters = paintContext.showFormattingCharacters;
     pc.showTableBorders = paintContext.showTableBorders;
@@ -222,7 +219,7 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
 
 QPointF TextShape::convertScreenPos(const QPointF &point) const
 {
-    QPointF p = absoluteTransformation(0).inverted().map(point);
+    QPointF p = absoluteTransformation().inverted().map(point);
     return p + QPointF(0.0, m_textShapeData->documentOffset());
 }
 
@@ -443,7 +440,7 @@ void TextShape::updateAbsolute(const QRectF &shape) const
     KoShape::updateAbsolute(shape);
 }
 
-void TextShape::waitUntilReady(const KoViewConverter &, bool asynchronous) const
+void TextShape::waitUntilReady(bool asynchronous) const
 {
     Q_UNUSED(asynchronous);
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout *>(m_textShapeData->document()->documentLayout());

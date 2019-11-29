@@ -37,7 +37,6 @@ class KoShape;
 class QPainter;
 class QBrush;
 class QPen;
-class KoViewConverter;
 struct KoInsets;
 
 /**
@@ -105,7 +104,7 @@ public:
     void strokeInsets(const KoShape *shape, KoInsets &insets) const override;
     qreal strokeMaxMarkersInset(const KoShape *shape) const override;
     bool hasTransparency() const override;
-    void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter) override;
+    void paint(KoShape *shape, QPainter &painter) override;
 
     QPen resultLinePen() const;
 

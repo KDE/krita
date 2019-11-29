@@ -478,7 +478,7 @@ void KoPathTool::paint(QPainter &painter, const KoViewConverter &converter)
 
     Q_FOREACH (KoPathShape *shape, m_pointSelection.selectedShapes()) {
         KisHandlePainterHelper helper =
-                KoShape::createHandlePainterHelper(&painter, shape, converter, m_handleRadius);
+                KoShape::createHandlePainterHelperView(&painter, shape, converter, m_handleRadius);
         helper.setHandleStyle(KisHandleStyle::primarySelection());
 
         KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>(shape);
@@ -521,7 +521,7 @@ void KoPathTool::paint(QPainter &painter, const KoViewConverter &converter)
             KIS_SAFE_ASSERT_RECOVER_RETURN(segment.isValid());
 
             KisHandlePainterHelper helper =
-                    KoShape::createHandlePainterHelper(&painter, shape, converter, m_handleRadius);
+                    KoShape::createHandlePainterHelperView(&painter, shape, converter, m_handleRadius);
             helper.setHandleStyle(KisHandleStyle::secondarySelection());
 
             QPainterPath path;
@@ -538,7 +538,7 @@ void KoPathTool::paint(QPainter &painter, const KoViewConverter &converter)
 
     if (m_currentStrategy) {
         painter.save();
-        KoShape::applyConversion(painter, converter);
+        painter.setTransform(converter.documentToView(), true);
         d->canvas->snapGuide()->paint(painter, converter);
         painter.restore();
     }
@@ -1181,7 +1181,7 @@ void KoPathTool::documentResourceChanged(int key, const QVariant & res)
         // repaint with the bigger of old and new handle radius
         int maxRadius = qMax(m_handleRadius, oldHandleRadius);
         Q_FOREACH (KoPathShape *shape, m_pointSelection.selectedShapes()) {
-            QRectF controlPointRect = shape->absoluteTransformation(0).map(shape->outline()).controlPointRect();
+            QRectF controlPointRect = shape->absoluteTransformation().map(shape->outline()).controlPointRect();
             repaint(controlPointRect.adjusted(-maxRadius, -maxRadius, maxRadius, maxRadius));
         }
     }

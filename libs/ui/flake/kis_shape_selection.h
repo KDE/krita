@@ -97,7 +97,7 @@ private Q_SLOTS:
 
 protected:
 
-    void paintComponent(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &paintcontext) override;
+    void paintComponent(QPainter& painter, KoShapePaintingContext &paintcontext) override;
 
 private:
     friend class KisTakeAllShapesCommand;

@@ -65,7 +65,7 @@ public:
     const QGradient *gradient() const;
 
     /// reimplemented from KoShapeBackground
-    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &context, const QPainterPath &fillPath) const override;
+    void paint(QPainter &painter, KoShapePaintingContext &context, const QPainterPath &fillPath) const override;
     /// reimplemented from KoShapeBackground
     void fillStyle(KoGenStyle &style, KoShapeSavingContext &context) override;
     /// reimplemented from KoShapeBackground

@@ -84,7 +84,7 @@ void KoPathConnectionPointStrategy::handleMouseMove(const QPointF &mouseLocation
                 connectionPoints[-7] = 0.5 * (connectionPoints[-3].position + connectionPoints[-4].position);
                 connectionPoints[-8] = 0.5 * (connectionPoints[-4].position + connectionPoints[-1].position);
             }
-            QPointF localMousePosition = shape->absoluteTransformation(0).inverted().map(mouseLocation);
+            QPointF localMousePosition = shape->absoluteTransformation().inverted().map(mouseLocation);
             KoConnectionPoints::const_iterator cp = connectionPoints.constBegin();
             KoConnectionPoints::const_iterator lastCp = connectionPoints.constEnd();
             for(; cp != lastCp; ++cp) {
@@ -102,7 +102,7 @@ void KoPathConnectionPointStrategy::handleMouseMove(const QPointF &mouseLocation
         }
 
         if (nearestShape) {
-            nearestPoint = nearestShape->absoluteTransformation(0).map(nearestPoint);
+            nearestPoint = nearestShape->absoluteTransformation().map(nearestPoint);
         } else {
             nearestPoint = mouseLocation;
         }
@@ -130,7 +130,7 @@ KUndo2Command* KoPathConnectionPointStrategy::createCommand()
         // map handle position into document coordinates
         QPointF p = d->connectionShape->shapeToDocument(d->connectionShape->handlePosition(d->handleId));
         // and add as connection point in shape coordinates
-        d->newConnectionId = d->newConnectionShape->addConnectionPoint(d->newConnectionShape->absoluteTransformation(0).inverted().map(p));
+        d->newConnectionId = d->newConnectionShape->addConnectionPoint(d->newConnectionShape->absoluteTransformation().inverted().map(p));
     }
 
     KUndo2Command *cmd = KoParameterChangeStrategy::createCommand();

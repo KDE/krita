@@ -23,7 +23,6 @@
 #include "KoShapeStrokeModel.h"
 #include "SimpleShapeContainerModel.h"
 #include "KoShapeSavingContext.h"
-#include "KoViewConverter.h"
 
 #include <QPointF>
 #include <QPainter>
@@ -108,13 +107,13 @@ bool KoShapeContainer::inheritsTransform(const KoShape *shape) const
     return d->model->inheritsTransform(shape);
 }
 
-void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext)
+void KoShapeContainer::paint(QPainter &painter, KoShapePaintingContext &paintcontext)
 {
     // Shape container paints only its internal component part. All the children are rendered
     // by the shape manager itself
 
     painter.save();
-    paintComponent(painter, converter, paintcontext);
+    paintComponent(painter, paintcontext);
     painter.restore();
 }
 

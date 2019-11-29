@@ -428,7 +428,7 @@ void KoStrokeConfigWidget::setUnit(const KoUnit &unit, KoShape *representativeSh
      */
     KoUnit newUnit(unit);
     if (representativeShape) {
-        newUnit.adjustByPixelTransform(representativeShape->absoluteTransformation(0));
+        newUnit.adjustByPixelTransform(representativeShape->absoluteTransformation());
     }
 
     d->ui->lineWidth->setUnit(newUnit);

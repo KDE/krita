@@ -49,7 +49,7 @@ public:
 
 public:
     KoShapeGradientHandles(KoFlake::FillVariant fillVariant, KoShape *shape);
-    QVector<Handle> handles(const KoViewConverter *converter = 0) const;
+    QVector<Handle> handles() const;
     QGradient::Type type() const;
 
     KUndo2Command* moveGradientHandle(Handle::Type handleType, const QPointF &absoluteOffset);

@@ -112,7 +112,7 @@ void KoSvgTextShape::shapeChanged(ChangeType type, KoShape *shape)
     }
 }
 
-void KoSvgTextShape::paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
+void KoSvgTextShape::paintComponent(QPainter &painter, KoShapePaintingContext &paintContext)
 {
 
     Q_UNUSED(paintContext);
@@ -128,7 +128,6 @@ void KoSvgTextShape::paintComponent(QPainter &painter, const KoViewConverter &co
         relayout();
     }
 
-    applyConversion(painter, converter);
     for (int i = 0; i < (int)d->cachedLayouts.size(); i++) {
         d->cachedLayouts[i]->draw(&painter, d->cachedLayoutsOffsets[i]);
     }
@@ -147,10 +146,9 @@ void KoSvgTextShape::paintComponent(QPainter &painter, const KoViewConverter &co
     }
 }
 
-void KoSvgTextShape::paintStroke(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
+void KoSvgTextShape::paintStroke(QPainter &painter, KoShapePaintingContext &paintContext)
 {
     Q_UNUSED(painter);
-    Q_UNUSED(converter);
     Q_UNUSED(paintContext);
 
     // do nothing! everything is painted in paintComponent()

@@ -73,7 +73,7 @@ KoTosContainer::~KoTosContainer()
     delete textShape();
 }
 
-void KoTosContainer::paintComponent(QPainter &, const KoViewConverter &, KoShapePaintingContext &)
+void KoTosContainer::paintComponent(QPainter &, KoShapePaintingContext &)
 {
 }
 

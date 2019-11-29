@@ -115,7 +115,7 @@ public:
      * @param forPrint if true, make sure only actual content is drawn and no decorations.
      * @param converter to convert between document and view coordinates.
      */
-    void paint(QPainter &painter, const KoViewConverter &converter, bool forPrint);
+    void paint(QPainter &painter, bool forPrint);
 
     /**
      * Returns the shape located at a specific point in the document.
@@ -170,20 +170,10 @@ public:
     void notifyShapeChanged(KoShape *shape);
 
     /**
-     * Paint a shape
-     *
-     * @param shape the shape to paint
-     * @param painter the painter to paint to.
-     * @param converter to convert between document and view coordinates.
-     * @param paintContext the painting context
-     */
-    static void paintShape(KoShape *shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
-
-    /**
      * @brief renderSingleShape renders a shape on \p painter. This method includes all the
      * needed steps for painting a single shape: setting transformations, clipping and masking.
      */
-    static void renderSingleShape(KoShape *shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
+    static void renderSingleShape(KoShape *shape, QPainter &painter, KoShapePaintingContext &paintContext);
 
     /**
      * A special interface for KoShape to use during shape destruction. Don't use this

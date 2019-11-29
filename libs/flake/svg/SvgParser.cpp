@@ -535,7 +535,7 @@ QSharedPointer<KoVectorPatternBackground> SvgParser::parsePattern(const KoXmlEle
      * correct (DK)
      */
 
-   const QTransform dstShapeTransform = shape->absoluteTransformation(0);
+   const QTransform dstShapeTransform = shape->absoluteTransformation();
    const QTransform shapeOffsetTransform = dstShapeTransform * gc->matrix.inverted();
    KIS_SAFE_ASSERT_RECOVER_NOOP(shapeOffsetTransform.type() <= QTransform::TxTranslate);
    const QPointF extraShapeOffset(shapeOffsetTransform.dx(), shapeOffsetTransform.dy());
@@ -1463,7 +1463,7 @@ void SvgParser::setFileFetcher(SvgParser::FileFetcherFunc func)
 inline QPointF extraShapeOffset(const KoShape *shape, const QTransform coordinateSystemOnLoading)
 {
     const QTransform shapeToOriginalUserCoordinates =
-        shape->absoluteTransformation(0).inverted() *
+        shape->absoluteTransformation().inverted() *
         coordinateSystemOnLoading;
 
     KIS_SAFE_ASSERT_RECOVER_NOOP(shapeToOriginalUserCoordinates.type() <= QTransform::TxTranslate);
@@ -1576,7 +1576,7 @@ KoShape *SvgParser::parseTextElement(const KoXmlElement &e, KoSvgTextShape *merg
         applyId(e.attribute("id"), textChunk);
         applyCurrentStyle(textChunk, extraOffset); // apply style to this group after size is set
     } else {
-        m_context.currentGC()->matrix = mergeIntoShape->absoluteTransformation(0);
+        m_context.currentGC()->matrix = mergeIntoShape->absoluteTransformation();
         applyCurrentBasicStyle(textChunk);
     }
 

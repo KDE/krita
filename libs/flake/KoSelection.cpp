@@ -52,10 +52,9 @@ KoSelection::~KoSelection()
 {
 }
 
-void KoSelection::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext)
+void KoSelection::paint(QPainter &painter, KoShapePaintingContext &paintcontext)
 {
     Q_UNUSED(painter);
-    Q_UNUSED(converter);
     Q_UNUSED(paintcontext);
 }
 
@@ -75,7 +74,7 @@ QRectF KoSelection::outlineRect() const
     QPolygonF globalPolygon;
     Q_FOREACH (KoShape *shape, selectedVisibleShapes()) {
         globalPolygon = globalPolygon.united(
-            shape->absoluteTransformation(0).map(QPolygonF(shape->outlineRect())));
+            shape->absoluteTransformation().map(QPolygonF(shape->outlineRect())));
     }
     const QPolygonF localPolygon = transformation().inverted().map(globalPolygon);
 
@@ -110,7 +109,7 @@ void KoSelection::select(KoShape *shape)
     shape->addShapeChangeListener(this);
 
     if (d->selectedShapes.size() == 1) {
-        setTransformation(shape->absoluteTransformation(0));
+        setTransformation(shape->absoluteTransformation());
     } else {
         setTransformation(QTransform());
     }
@@ -127,7 +126,7 @@ void KoSelection::deselect(KoShape *shape)
     shape->removeShapeChangeListener(this);
 
     if (d->selectedShapes.size() == 1) {
-        setTransformation(d->selectedShapes.first()->absoluteTransformation(0));
+        setTransformation(d->selectedShapes.first()->absoluteTransformation());
     }
 
     d->selectionChangedCompressor.start();

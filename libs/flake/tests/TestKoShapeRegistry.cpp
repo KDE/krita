@@ -207,7 +207,7 @@ void TestKoShapeRegistry::testFramedSvgShapes()
     KoShape *shape = registry->createShapeFromOdf(frameElement, shapeContext);
 
     QVERIFY(shape);
-    QCOMPARE(shape->absoluteOutlineRect(0), QRectF(83, 41, 226,141));
+    QCOMPARE(shape->absoluteOutlineRect(), QRectF(83, 41, 226,141));
 }
 
 KISTEST_MAIN(TestKoShapeRegistry)

@@ -91,7 +91,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     Q_FOREACH (KoShape *shape, KoShape::linearizeSubtree(selectedShapes)) {
         if (!haveOnlyOneEditableShape || !m_showStrokeFillGradientHandles) {
             KisHandlePainterHelper helper =
-                KoShape::createHandlePainterHelper(&painter, shape, converter, m_handleRadius);
+                KoShape::createHandlePainterHelperView(&painter, shape, converter, m_handleRadius);
 
             helper.setHandleStyle(KisHandleStyle::secondarySelection());
 
@@ -124,7 +124,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     // draw extra rubber line around all the shapes
     if (selectedShapes.size() > 1 || forceBoundngRubberLine) {
         KisHandlePainterHelper helper =
-            KoShape::createHandlePainterHelper(&painter, m_selection, converter, m_handleRadius);
+            KoShape::createHandlePainterHelperView(&painter, m_selection, converter, m_handleRadius);
 
         helper.setHandleStyle(KisHandleStyle::primarySelection());
         helper.drawRubberLine(handleArea);
@@ -134,7 +134,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     // is no need drawing the selection handles
     if (editable) {
         KisHandlePainterHelper helper =
-            KoShape::createHandlePainterHelper(&painter, m_selection, converter, m_handleRadius);
+            KoShape::createHandlePainterHelperView(&painter, m_selection, converter, m_handleRadius);
         helper.setHandleStyle(KisHandleStyle::primarySelection());
 
         QPolygonF outline = handleArea;
@@ -172,9 +172,9 @@ void SelectionDecorator::paintGradientHandles(KoShape *shape, KoFlake::FillVaria
     QVector<KoShapeGradientHandles::Handle> handles = gradientHandles.handles();
 
     KisHandlePainterHelper helper =
-        KoShape::createHandlePainterHelper(&painter, shape, converter, m_handleRadius);
+        KoShape::createHandlePainterHelperView(&painter, shape, converter, m_handleRadius);
 
-    const QTransform t = shape->absoluteTransformation(0).inverted();
+    const QTransform t = shape->absoluteTransformation().inverted();
 
     if (gradientHandles.type() == QGradient::LinearGradient) {
         KIS_SAFE_ASSERT_RECOVER_NOOP(handles.size() == 2);

@@ -87,7 +87,7 @@ ShapeShearStrategy::ShapeShearStrategy(KoToolBase *tool, KoSelection *selection,
         m_solidPoint -= QPointF(m_initialSize.width() / 2, 0);
     }
 
-    m_solidPoint = selection->absoluteTransformation(0).map(selection->outlineRect().topLeft() + m_solidPoint);
+    m_solidPoint = selection->absoluteTransformation().map(selection->outlineRect().topLeft() + m_solidPoint);
 
     QPointF edge;
     qreal angle = 0.0;

@@ -1,19 +1,17 @@
 name: krita
-version: 4.2.7.1
-summary: Krita is the digital painting studio for artists
-description: Krita is a creative application for raster images. Whether you want to create
- from scratch or work with existing images, Krita is for you. You can work with
- photos or scanned images, or start with a blank slate. Krita supports most
- graphics tablets out of the box.
+version: 4.2.8.2
+adopt-info: krita 
+
 base: core18
+confinement: strict
 
 apps:
   krita:
+    common-id: org.kde.krita
     command: usr/bin/krita
     command-chain:
       - bin/qt5-launch
     plugs: [x11, unity7, home, opengl, network, network-bind, removable-media, desktop, desktop-legacy]
-    desktop: usr/share/applications/org.kde.krita.desktop
 
 layout:
   /usr/bin/ffmpeg:
@@ -29,16 +27,12 @@ parts:
     - "-DBUILD_TESTING=OFF"
     - "-DHIDE_SAFE_ASSERTS=OFF"
     - "-DKDE_SKIP_TEST_SETTINGS=ON"
-    source: https://download.kde.org/stable/krita/4.2.7.1/krita-4.2.7.1.tar.xz
-# Use these instead to build from the git source
-#    source: https://anongit.kde.org/krita.git
-#    source-type: git
-#    source-branch: master
-    override-stage: |
-      # Stage the part
-      snapcraftctl stage
-      # Modify the .desktop file in the stage to point to where the icon will be in the installed snap
-      sed -i 's|Icon=\(.*\)|Icon=${SNAP}/usr/share/icons/hicolor/1024x1024/apps/\1.png|' usr/share/applications/org.kde.krita.desktop
+    source: https://download.kde.org/stable/krita/4.2.8/krita-$SNAPCRAFT_PROJECT_VERSION.tar.xz
+    # Use these instead to build from the git source
+    # source: https://anongit.kde.org/krita.git
+    # source-type: git
+    # source-branch: master
+    parse-info: ["usr/share/metainfo/org.kde.krita.appdata.xml"]
     build-packages:
         - gettext
         - build-essential
@@ -61,7 +55,7 @@ parts:
         - libopenexr-dev
         - libpng-dev
         - libpoppler-qt5-dev
-        - libopenjpeg-dev
+        - libopenjp2-7-dev
         - libtiff5-dev
         - libvc-dev
         - libopencolorio-dev

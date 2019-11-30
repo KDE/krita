@@ -166,6 +166,9 @@ void KisFontFamilyComboBox::setTopFont(const QString &family)
 
 void KisFontFamilyComboBox::setInitialized()
 {
+    if(m_initilized)
+        return;
+
     m_initilized = true;
 
     for(int i=m_pinnedFonts.count()-1; i>=0; i--){

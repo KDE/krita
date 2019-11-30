@@ -36,7 +36,7 @@ void KisMoveBoundsCalculationJob::run()
     QRect handlesRect;
 
     Q_FOREACH (KisNodeSP node, m_nodes) {
-        handlesRect |= KisLayerUtils::recursiveNodeExactBounds(node);
+        handlesRect |= KisLayerUtils::recursiveTightNodeVisibleBounds(node);
     }
 
     if (m_selection) {
@@ -57,4 +57,12 @@ bool KisMoveBoundsCalculationJob::overrides(const KisSpontaneousJob *_otherJob)
 int KisMoveBoundsCalculationJob::levelOfDetail() const
 {
     return 0;
+}
+
+QString KisMoveBoundsCalculationJob::debugName() const
+{
+    QString result;
+    QDebug dbg(&result);
+    dbg << "KisMoveBoundsCalculationJob" << ppVar(m_requestedBy) << m_nodes;
+    return result;
 }

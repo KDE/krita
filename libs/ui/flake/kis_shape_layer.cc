@@ -79,6 +79,8 @@
 #include "kis_processing_visitor.h"
 #include "kis_effect_mask.h"
 #include "commands/KoShapeReorderCommand.h"
+#include "kis_do_something_command.h"
+
 
 #include <SimpleShapeContainerModel.h>
 class ShapeLayerContainerModel : public SimpleShapeContainerModel
@@ -328,7 +330,7 @@ void KisShapeLayer::fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prev
 void KisShapeLayer::setParent(KoShapeContainer *parent)
 {
     Q_UNUSED(parent)
-    KIS_ASSERT_RECOVER_RETURN(0)
+    KIS_ASSERT_RECOVER_RETURN(0);
 }
 
 QIcon KisShapeLayer::icon() const
@@ -721,6 +723,29 @@ KUndo2Command* KisShapeLayer::transform(const QTransform &transform) {
                              parentCommand);
 
     return parentCommand;
+}
+
+KUndo2Command *KisShapeLayer::setProfile(const KoColorProfile *profile)
+{
+    using namespace KisDoSomethingCommandOps;
+
+    KUndo2Command *cmd = new KUndo2Command();
+    new KisDoSomethingCommand<ResetOp, KisShapeLayer*>(this, false, cmd);
+    m_d->paintDevice->setProfile(profile, cmd);
+    new KisDoSomethingCommand<ResetOp, KisShapeLayer*>(this, true, cmd);
+
+    return cmd;
+}
+
+KUndo2Command *KisShapeLayer::convertTo(const KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
+{
+    using namespace KisDoSomethingCommandOps;
+
+    KUndo2Command *cmd = new KUndo2Command();
+    new KisDoSomethingCommand<ResetOp, KisShapeLayer*>(this, false, cmd);
+    m_d->paintDevice->convertTo(dstColorSpace, renderingIntent, conversionFlags, cmd);
+    new KisDoSomethingCommand<ResetOp, KisShapeLayer*>(this, true, cmd);
+    return cmd;
 }
 
 KoShapeControllerBase *KisShapeLayer::shapeController() const

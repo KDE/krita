@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  Copyright (c) 2019 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,18 +16,16 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_COLORSPACE_CONVERT_VISITOR_TEST_H
-#define KIS_COLORSPACE_CONVERT_VISITOR_TEST_H
+#ifndef KIS_RUNNABLE_WITH_DEBUG_NAME_H
+#define KIS_RUNNABLE_WITH_DEBUG_NAME_H
 
-#include <QtTest>
+#include "kis_runnable.h"
+#include <QString>
 
-class KisColorSpaceConvertVisitorTest : public QObject
+class KRITAIMAGE_EXPORT KisRunnableWithDebugName : public KisRunnable
 {
-    Q_OBJECT
-private Q_SLOTS:
-
-    void testCreation();
-
+public:
+    virtual QString debugName() const = 0;
 };
 
-#endif
+#endif // KIS_RUNNABLE_WITH_DEBUG_NAME_H

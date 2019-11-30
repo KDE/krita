@@ -70,7 +70,7 @@ struct KisFilterStrokeStrategy::Private {
 KisFilterStrokeStrategy::KisFilterStrokeStrategy(KisFilterSP filter,
                                                  KisFilterConfigurationSP filterConfig,
                                                  KisResourcesSnapshotSP resources)
-    : KisPainterBasedStrokeStrategy("FILTER_STROKE",
+    : KisPainterBasedStrokeStrategy(QLatin1String("FILTER_STROKE"),
                                     kundo2_i18n("Filter \"%1\"", filter->name()),
                                     resources,
                                     QVector<KisFreehandStrokeInfo*>(),false),

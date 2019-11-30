@@ -31,6 +31,7 @@
 #include "kis_transform_utils.h"
 #include "kis_algebra_2d.h"
 #include "KisHandlePainterHelper.h"
+#include "kis_signal_compressor.h"
 
 
 
@@ -50,7 +51,8 @@ struct KisWarpTransformStrategy::Private
           drawTransfPoints(true),
           closeOnStartPointClick(false),
           clipOriginalPointsPosition(true),
-          pointWasDragged(false)
+          pointWasDragged(false),
+          recalculateSignalCompressor(40, KisSignalCompressor::FIRST_ACTIVE)
     {
     }
 
@@ -101,6 +103,7 @@ struct KisWarpTransformStrategy::Private
 
     // cage transform also uses this logic. This helps this class know what transform type we are using
     TransformType transformType = TransformType::WARP_TRANSFORM;
+    KisSignalCompressor recalculateSignalCompressor;
 
     void recalculateTransformations();
     inline QPointF imageToThumb(const QPointF &pt, bool useFlakeOptimization);
@@ -115,6 +118,8 @@ KisWarpTransformStrategy::KisWarpTransformStrategy(const KisCoordinatesConverter
     : KisSimplifiedActionPolicyStrategy(converter),
       m_d(new Private(this, converter, currentArgs, transaction))
 {
+    connect(&m_d->recalculateSignalCompressor, SIGNAL(timeout()),
+            SLOT(recalculateTransformations()));
 }
 
 KisWarpTransformStrategy::~KisWarpTransformStrategy()
@@ -397,8 +402,7 @@ bool KisWarpTransformStrategy::beginPrimaryAction(const QPointF &pt)
         m_d->mode = Private::OVER_POINT;
         m_d->pointIndexUnderCursor = m_d->currentArgs.origPoints().size() - 1;
 
-        m_d->recalculateTransformations();
-        emit requestCanvasUpdate();
+        m_d->recalculateSignalCompressor.start();
 
         retval = true;
     }
@@ -545,8 +549,8 @@ void KisWarpTransformStrategy::continuePrimaryAction(const QPointF &pt, bool shi
     }
 
     m_d->lastMousePos = pt;
-    m_d->recalculateTransformations();
-    emit requestCanvasUpdate();
+    m_d->recalculateSignalCompressor.start();
+
 }
 
 bool KisWarpTransformStrategy::Private::shouldCloseTheCage() const
@@ -622,6 +626,7 @@ void KisWarpTransformStrategy::Private::recalculateTransformations()
     }
 
     handlesTransform = scaleTransform;
+    emit q->requestCanvasUpdate();
 }
 
 QImage KisWarpTransformStrategy::calculateTransformedImage(ToolTransformArgs &currentArgs,
@@ -638,3 +643,5 @@ QImage KisWarpTransformStrategy::calculateTransformedImage(ToolTransformArgs &cu
         srcImage,
         srcOffset, dstOffset);
 }
+
+#include "moc_kis_warp_transform_strategy.cpp"

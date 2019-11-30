@@ -51,6 +51,7 @@
 #include "kis_command_ids.h"
 #include "KisRunnableStrokeJobUtils.h"
 #include "commands_new/KisHoldUIUpdatesCommand.h"
+#include "KisDecoratedNodeInterface.h"
 
 
 TransformStrokeStrategy::TransformStrokeStrategy(ToolTransformArgs::TransformMode mode,
@@ -136,19 +137,10 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
 
     if (runAllData) {
+        // here we only save the passed args, actual
+        // transformation will be performed during
+        // finish job
         m_savedTransformArgs = runAllData->config;
-
-        QVector<KisStrokeJobData *> mutatedJobs;
-        Q_FOREACH (KisNodeSP node, m_processedNodes) {
-            mutatedJobs << new TransformData(TransformData::PAINT_DEVICE,
-                                             runAllData->config,
-                                             node);
-        }
-        mutatedJobs << new TransformData(TransformData::SELECTION,
-                                         runAllData->config,
-                                         m_rootNode);
-        addMutatedJobs(mutatedJobs);
-
     } else if (ppd) {
         KisNodeSP rootNode = m_rootNode;
         KisNodeList processedNodes = m_processedNodes;
@@ -256,14 +248,7 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
             putDeviceCache(rootNode->paintDevice(), cacheDevice);
         }
 
-        QPainterPath selectionOutline;
-        if (m_selection && m_selection->outlineCacheValid()) {
-            selectionOutline = m_selection->outlineCache();
-        } else if (previewDevice) {
-            selectionOutline.addRect(previewDevice->exactBounds());
-        }
-
-        emit sigPreviewDeviceReady(previewDevice, selectionOutline);
+        emit sigPreviewDeviceReady(previewDevice);
     } else if(td) {
         if (td->destination == TransformData::PAINT_DEVICE) {
             QRect oldExtent = td->node->extent();
@@ -411,8 +396,10 @@ struct TransformExtraData : public KUndo2CommandExtraData
 
 void TransformStrokeStrategy::postProcessToplevelCommand(KUndo2Command *command)
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_savedTransformArgs);
+
     TransformExtraData *data = new TransformExtraData();
-    data->savedTransformArgs = m_savedTransformArgs;
+    data->savedTransformArgs = *m_savedTransformArgs;
     data->rootNode = m_rootNode;
     data->transformedNodes = m_processedNodes;
 
@@ -514,16 +501,11 @@ bool TransformStrokeStrategy::tryFetchArgsFromCommandAndUndo(ToolTransformArgs *
             const KisSavedMacroCommand *command = dynamic_cast<const KisSavedMacroCommand*>(lastCommand);
             KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(command, false);
 
-            command->getCommandExecutionJobs(undoJobs, true);
-
+            // the jobs are fetched as !shouldGoToHistory,
+            // so there is no need to put them into
+            // m_skippedWhileMergeCommands
+            command->getCommandExecutionJobs(undoJobs, true, false);
             m_overriddenCommand = command;
-            Q_FOREACH (KisStrokeJobData *commonData, *undoJobs) {
-                Data *data = dynamic_cast<Data*>(commonData);
-                KIS_SAFE_ASSERT_RECOVER(data) { continue; }
-
-                m_skippedWhileMergeCommands << data->command.data();
-            }
-
 
             result = true;
         }
@@ -539,6 +521,13 @@ void TransformStrokeStrategy::initStrokeCallback()
     if (m_selection) {
         m_selection->setVisible(false);
         m_deactivatedSelections.append(m_selection);
+    }
+
+    KisSelectionMaskSP overlaySelectionMask =
+        dynamic_cast<KisSelectionMask*>(m_rootNode->graphListener()->graphOverlayNode());
+    if (overlaySelectionMask) {
+        overlaySelectionMask->setDecorationsVisible(false);
+        m_deactivatedOverlaySelectionMask = overlaySelectionMask;
     }
 
     ToolTransformArgs initialTransformArgs;
@@ -578,6 +567,19 @@ void TransformStrokeStrategy::initStrokeCallback()
         KisLayerUtils::forceAllDelayedNodesUpdate(m_rootNode);
     });
 
+    /// Disable all decorated nodes to generate outline
+    /// and preview correctly. We will enable them back
+    /// as soon as preview generation is finished.
+    KritaUtils::addJobBarrier(extraInitJobs, [this]() {
+        Q_FOREACH (KisNodeSP node, m_processedNodes) {
+            KisDecoratedNodeInterface *decoratedNode = dynamic_cast<KisDecoratedNodeInterface*>(node.data());
+            if (decoratedNode && decoratedNode->decorationsVisible()) {
+                decoratedNode->setDecorationsVisible(false);
+                m_disabledDecoratedNodes << decoratedNode;
+            }
+        }
+    });
+
     KritaUtils::addJobBarrier(extraInitJobs, [this, initialTransformArgs, argsAreInitialized]() mutable {
         QRect srcRect;
 
@@ -592,6 +594,8 @@ void TransformStrokeStrategy::initStrokeCallback()
 
                 if (const KisTransformMask *mask = dynamic_cast<const KisTransformMask*>(node.data())) {
                     srcRect |= mask->sourceDataBounds();
+                } else if (const KisSelectionMask *mask = dynamic_cast<const KisSelectionMask*>(node.data())) {
+                    srcRect |= mask->selection()->selectedExactRect();
                 } else {
                     srcRect |= node->exactBounds();
                 }
@@ -603,7 +607,8 @@ void TransformStrokeStrategy::initStrokeCallback()
             initialTransformArgs = KisTransformUtils::resetArgsForMode(m_mode, m_filterId, transaction);
         }
 
-        emit this->sigTransactionGenerated(transaction, initialTransformArgs);
+        this->m_initialTransformArgs = initialTransformArgs;
+        emit this->sigTransactionGenerated(transaction, initialTransformArgs, this);
     });
 
     extraInitJobs << new PreparePreviewData();
@@ -612,33 +617,101 @@ void TransformStrokeStrategy::initStrokeCallback()
         extraInitJobs << new ClearSelectionData(node);
     }
 
+    /// recover back visibility of decorated nodes
+    KritaUtils::addJobBarrier(extraInitJobs, [this]() {
+        Q_FOREACH (KisDecoratedNodeInterface *decoratedNode, m_disabledDecoratedNodes) {
+            decoratedNode->setDecorationsVisible(true);
+        }
+        m_disabledDecoratedNodes.clear();
+    });
+
     extraInitJobs << new Data(toQShared(new KisHoldUIUpdatesCommand(m_updatesFacade, KisCommandUtils::FlipFlopCommand::FINALIZING)), false, KisStrokeJobData::BARRIER);
+
+    if (!lastCommandUndoJobs.isEmpty()) {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(m_overriddenCommand);
+
+        for (auto it = extraInitJobs.begin(); it != extraInitJobs.end(); ++it) {
+            (*it)->setCancellable(false);
+        }
+    }
 
     addMutatedJobs(extraInitJobs);
 }
 
+void TransformStrokeStrategy::finishStrokeImpl(bool applyTransform, const ToolTransformArgs &args)
+{
+    /**
+     * Since our finishStrokeCallback() initiates new jobs,
+     * cancellation request may come even after
+     * finishStrokeCallback() (cancellations may be called
+     * until there are no jobs left in the stroke's queue).
+     *
+     * Therefore we should check for double-entry here and
+     * make sure the finilizing jobs are no cancellable.
+     */
+
+    if (m_finalizingActionsStarted) return;
+    m_finalizingActionsStarted = true;
+
+    QVector<KisStrokeJobData *> mutatedJobs;
+
+    if (applyTransform) {
+        Q_FOREACH (KisNodeSP node, m_processedNodes) {
+            mutatedJobs << new TransformData(TransformData::PAINT_DEVICE,
+                                             args,
+                                             node);
+        }
+        mutatedJobs << new TransformData(TransformData::SELECTION,
+                                         args,
+                                         m_rootNode);
+    }
+
+    KritaUtils::addJobBarrier(mutatedJobs, [this, applyTransform]() {
+        Q_FOREACH (KisSelectionSP selection, m_deactivatedSelections) {
+            selection->setVisible(true);
+        }
+
+        Q_FOREACH (KisNodeSP node, m_hiddenProjectionLeaves) {
+            node->projectionLeaf()->setTemporaryHiddenFromRendering(false);
+        }
+
+        if (m_deactivatedOverlaySelectionMask) {
+            m_deactivatedOverlaySelectionMask->selection()->setVisible(true);
+            m_deactivatedOverlaySelectionMask->setDirty();
+        }
+
+        if (applyTransform) {
+            KisStrokeStrategyUndoCommandBased::finishStrokeCallback();
+        } else {
+            KisStrokeStrategyUndoCommandBased::cancelStrokeCallback();
+        }
+    });
+
+    for (auto it = mutatedJobs.begin(); it != mutatedJobs.end(); ++it) {
+        (*it)->setCancellable(false);
+    }
+
+    addMutatedJobs(mutatedJobs);
+}
+
 void TransformStrokeStrategy::finishStrokeCallback()
 {
-    Q_FOREACH (KisSelectionSP selection, m_deactivatedSelections) {
-        selection->setVisible(true);
+    if (!m_savedTransformArgs || m_savedTransformArgs->isIdentity()) {
+        cancelStrokeCallback();
+        return;
     }
 
-    Q_FOREACH (KisNodeSP node, m_hiddenProjectionLeaves) {
-        node->projectionLeaf()->setTemporaryHiddenFromRendering(false);
-    }
-
-    KisStrokeStrategyUndoCommandBased::finishStrokeCallback();
+    finishStrokeImpl(true, *m_savedTransformArgs);
 }
 
 void TransformStrokeStrategy::cancelStrokeCallback()
 {
-    KisStrokeStrategyUndoCommandBased::cancelStrokeCallback();
+    const bool shouldRecoverSavedInitialState =
+        !m_initialTransformArgs.isIdentity();
 
-    Q_FOREACH (KisSelectionSP selection, m_deactivatedSelections) {
-        selection->setVisible(true);
+    if (shouldRecoverSavedInitialState) {
+        m_savedTransformArgs = m_initialTransformArgs;
     }
 
-    Q_FOREACH (KisNodeSP node, m_hiddenProjectionLeaves) {
-        node->projectionLeaf()->setTemporaryHiddenFromRendering(false);
-    }
+    finishStrokeImpl(shouldRecoverSavedInitialState, *m_savedTransformArgs);
 }

@@ -41,6 +41,7 @@ public:
     int currentLevelOfDetail() const override;
     int currentTime() const override;
     bool externalFrameActive() const override;
+    void * sourceCookie() const override;
 
 protected:
     friend class KisPaintDeviceTest;
@@ -64,6 +65,7 @@ public:
     int currentLevelOfDetail() const override;
     int currentTime() const override;
     bool externalFrameActive() const override;
+    void * sourceCookie() const override;
 
 private:
     Q_DISABLE_COPY(KisSelectionDefaultBounds)

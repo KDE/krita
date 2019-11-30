@@ -1014,7 +1014,7 @@ void KisNodeManager::activateNextNode()
         node = activeNode->parent();
     }
 
-    while(node && isNodeHidden(node, true)) {
+    while(node && isNodeHidden(node, m_d->nodeDisplayModeAdapter->showGlobalSelectionMask())) {
         node = node->nextSibling();
     }
 
@@ -1042,7 +1042,7 @@ void KisNodeManager::activatePreviousNode()
         activeNode = activeNode->parent();
     }
 
-    while(node && isNodeHidden(node, true)) {
+    while(node && isNodeHidden(node, m_d->nodeDisplayModeAdapter->showGlobalSelectionMask())) {
         node = node->prevSibling();
     }
 

@@ -32,7 +32,7 @@ class KisStrokesQueueMutatedJobInterface;
 class KRITAIMAGE_EXPORT KisStrokeStrategy
 {
 public:
-    KisStrokeStrategy(QString id = QString(), const KUndo2MagicString &name = KUndo2MagicString());
+    KisStrokeStrategy(const QLatin1String &id, const KUndo2MagicString &name = KUndo2MagicString());
     virtual ~KisStrokeStrategy();
 
     /**
@@ -199,7 +199,7 @@ private:
     bool m_needsExplicitCancel;
     qreal m_balancingRatioOverride;
 
-    QString m_id;
+    QLatin1String m_id;
     KUndo2MagicString m_name;
 
     KisStrokeId m_cancelStrokeId;

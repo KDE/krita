@@ -162,7 +162,7 @@ void AnimaterionRenderer::renderAnimationImpl(KisDocument *doc, KisAnimationRend
         const QString savedFilesMask = exporter.savedFilesMask();
 
         const QString resultFile = encoderOptions.resolveAbsoluteVideoFilePath();
-        KIS_SAFE_ASSERT_RECOVER_NOOP(QFileInfo(resultFile).isAbsolute())
+        KIS_SAFE_ASSERT_RECOVER_NOOP(QFileInfo(resultFile).isAbsolute());
 
         {
             const QFileInfo info(resultFile);

@@ -37,7 +37,7 @@ struct AddReferenceImagesCommand : KoShapeCreateCommand
 
     void redo() override {
         auto layer = m_document->referenceImagesLayer();
-        KIS_SAFE_ASSERT_RECOVER_NOOP(!layer || layer == m_layer)
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!layer || layer == m_layer);
 
         if (!layer) {
             m_document->setReferenceImagesLayer(m_layer, true);
@@ -78,7 +78,7 @@ struct RemoveReferenceImagesCommand : KoShapeDeleteCommand
 
     void undo() override {
         auto layer = m_document->referenceImagesLayer();
-        KIS_SAFE_ASSERT_RECOVER_NOOP(!layer || layer == m_layer)
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!layer || layer == m_layer);
 
         if (!layer) {
             m_document->setReferenceImagesLayer(m_layer, true);
@@ -189,6 +189,22 @@ void KisReferenceImagesLayer::accept(KisProcessingVisitor &visitor, KisUndoAdapt
 bool KisReferenceImagesLayer::isFakeNode() const
 {
     return true;
+}
+
+KUndo2Command *KisReferenceImagesLayer::setProfile(const KoColorProfile *profile)
+{
+    // references should not be converted with the image
+    Q_UNUSED(profile);
+    return 0;
+}
+
+KUndo2Command *KisReferenceImagesLayer::convertTo(const KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
+{
+    // references should not be converted with the image
+    Q_UNUSED(dstColorSpace);
+    Q_UNUSED(renderingIntent);
+    Q_UNUSED(conversionFlags);
+    return 0;
 }
 
 void KisReferenceImagesLayer::signalUpdate(const QRectF &rect)

@@ -80,13 +80,15 @@ private:
     void partB() override {
         m_image->enableDirtyRequests();
 
-        if(m_flags.testFlag(KisProcessingApplicator::RECURSIVE)) {
-            m_image->refreshGraphAsync(m_node);
+        if (!m_flags.testFlag(KisProcessingApplicator::NO_IMAGE_UPDATES)) {
+            if(m_flags.testFlag(KisProcessingApplicator::RECURSIVE)) {
+                m_image->refreshGraphAsync(m_node);
+            }
+
+            m_node->setDirty(m_image->bounds());
+
+            updateClones(m_node);
         }
-
-        m_node->setDirty(m_image->bounds());
-
-        updateClones(m_node);
     }
 
     void updateClones(KisNodeSP node) {

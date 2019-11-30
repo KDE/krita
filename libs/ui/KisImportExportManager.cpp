@@ -19,6 +19,7 @@
 
 #include "KisImportExportManager.h"
 
+#include <QDir>
 #include <QFile>
 #include <QLabel>
 #include <QVBoxLayout>
@@ -423,7 +424,7 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
             result = doExport(location, filter, exportConfiguration, alsoAsKra);
         }
 
-        if (exportConfiguration && !batchMode() && showWarnings) {
+        if (exportConfiguration && !batchMode()) {
             KisConfig(false).setExportConfiguration(typeName, exportConfiguration);
         }
     }
@@ -671,7 +672,7 @@ KisImportExportErrorCode KisImportExportManager::doExportImpl(const QString &loc
     if (filter->supportsIO() && !file.open(QFile::WriteOnly)) {
 #else
     QFileInfo fi(location);
-    QTemporaryFile file(fi.absolutePath() + ".XXXXXX.kra");
+    QTemporaryFile file(QDir::tempPath() + "/.XXXXXX.kra");
     if (filter->supportsIO() && !file.open()) {
 #endif
         KisImportExportErrorCannotWrite result(file.error());

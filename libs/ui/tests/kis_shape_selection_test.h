@@ -28,6 +28,8 @@ class KisShapeSelectionTest : public QObject
 private Q_SLOTS:
 
     void testAddChild();
+
+    void testUndoFlattening();
 };
 
 #endif

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  Copyright (c) 2019 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,20 +16,13 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_change_profile_visitor_test.h"
+#include "KisDecoratedNodeInterface.h"
 
-#include <QTest>
-#include "kis_change_profile_visitor.h"
-#include "KoColorSpace.h"
-#include "KoColorSpaceRegistry.h"
-#include "kis_image.h"
-
-void KisChangeProfileVisitorTest::testCreation()
+KisDecoratedNodeInterface::~KisDecoratedNodeInterface()
 {
-    const KoColorSpace * a = KoColorSpaceRegistry::instance()->rgb8();
-    const KoColorSpace * b = KoColorSpaceRegistry::instance()->rgb8();
-    KisChangeProfileVisitor test(a, b);
 }
 
-
-QTEST_MAIN(KisChangeProfileVisitorTest)
+void KisDecoratedNodeInterface::setDecorationsVisible(bool value)
+{
+    setDecorationsVisible(value, true);
+}

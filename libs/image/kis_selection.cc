@@ -346,6 +346,11 @@ void KisSelection::requestCompressedProjectionUpdate(const QRect &rc)
     m_d->updateCompressor->requestUpdate(rc);
 }
 
+void KisSelection::notifyShapeSelectionBecameEmpty()
+{
+    m_d->pixelSelection->clear();
+}
+
 quint8 KisSelection::selected(qint32 x, qint32 y) const
 {
     KisHLineConstIteratorSP iter = m_d->pixelSelection->createHLineConstIteratorNG(x, y, 1);

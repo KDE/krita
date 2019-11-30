@@ -34,6 +34,8 @@ public:
     bool overrides(const KisSpontaneousJob *otherJob) override;
     int levelOfDetail() const override;
 
+    QString debugName() const override;
+
 Q_SIGNALS:
     void sigCalcualtionFinished(const QRect &bounds);
 

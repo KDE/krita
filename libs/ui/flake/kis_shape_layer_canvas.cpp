@@ -195,6 +195,13 @@ public:
         return 0;
     }
 
+    QString debugName() const override {
+        QString result;
+        QDebug dbg(&result);
+        dbg << "KisRepaintShapeLayerLayerJob" << m_layer;
+        return result;
+    }
+
 private:
 
     // we store a pointer to the layer just
@@ -401,7 +408,7 @@ void KisShapeLayerCanvas::resetCache()
 
 void KisShapeLayerCanvas::rerenderAfterBeingInvisible()
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN(m_parentLayer->visible(true))
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_parentLayer->visible(true));
 
     m_hasChangedWhileBeingInvisible = false;
     resetCache();

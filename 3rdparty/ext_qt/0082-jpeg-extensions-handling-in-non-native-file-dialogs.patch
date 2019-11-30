@@ -1,0 +1,161 @@
+diff --git a/src/widgets/dialogs/qfiledialog.cpp b/src/widgets/dialogs/qfiledialog.cpp
+index 9fccee8c..8c868fce 100644
+--- a/src/widgets/dialogs/qfiledialog.cpp
++++ b/src/widgets/dialogs/qfiledialog.cpp
+@@ -963,11 +963,7 @@ void QFileDialog::setDirectory(const QString &directory)
+ QDir QFileDialog::directory() const
+ {
+     Q_D(const QFileDialog);
+-    if (d->nativeDialogInUse) {
+-        QString dir = d->directory_sys().toLocalFile();
+-        return QDir(dir.isEmpty() ? d->options->initialDirectory().toLocalFile() : dir);
+-    }
+-    return d->rootPath();
++    return d->_q_directory();
+ }
+ 
+ /*!
+@@ -1160,13 +1156,38 @@ Q_AUTOTEST_EXPORT QString qt_tildeExpansion(const QString &path)
+ }
+ #endif
+ 
+-static inline QString selectedNameFilterSuffix(const QFileDialog *dialog)
++static inline QString selectedNameFilterSuffix(const QString nameFilter, const QStringList filesList, const QString directory, const QString currentExtension = "")
+ {
+-    const QString nameFilter = dialog->selectedNameFilter();
++    QString directoryPath = directory + QDir::separator();
+     if (nameFilter.isEmpty())
+         return QString();
+-    foreach (const QString &filter, QPlatformFileDialogHelper::cleanFilterList(nameFilter)) {
+ 
++    // special usecase to avoid jpg/jpeg issues
++    const QString jpeg = "jpeg";
++    const QString jpg = "jpg";
++
++    if (nameFilter.contains(".kra")) {
++        return "kra";
++    }
++
++    if (nameFilter.contains(jpg, Qt::CaseInsensitive) || nameFilter.contains(jpeg, Qt::CaseInsensitive)) {
++
++        foreach (const QString &file, filesList) {
++            if (QFile::exists(directoryPath + file + QString(".") + jpg)) {
++                return QString(jpg);
++            }
++            if (QFile::exists(directoryPath + file + QString(".") + jpeg)) {
++                return QString(jpeg);
++            }
++        }
++
++        if (currentExtension == jpg || currentExtension == jpeg) {
++            return currentExtension;
++        }
++
++    }
++
++    foreach (const QString &filter, QPlatformFileDialogHelper::cleanFilterList(nameFilter)) {
+         if (filter.startsWith(QLatin1String("*.")) && filter.indexOf(QLatin1Char('*'), 2) < 0)
+             return filter.right(filter.size() - 2);
+     }
+@@ -1214,7 +1235,7 @@ QStringList QFileDialogPrivate::typedFiles() const
+ 
+     QString suffix = q->defaultSuffix();
+     if (suffix.isNull()) // Intended, setting an empty string should suppress the name filter.
+-        suffix = selectedNameFilterSuffix(q);
++        suffix = selectedNameFilterSuffix(q->selectedNameFilter(), files, q->directory().path());
+     return addSuffixToFiles(files, suffix);
+ }
+ 
+@@ -1252,7 +1273,7 @@ QStringList QFileDialogPrivate::addSuffixToFiles(const QStringList &filesToFix,
+         // if the filename has no suffix, add the desired suffix
+         if (!suffix.isEmpty() && !info.isDir() && name.lastIndexOf(QLatin1Char('.')) == -1) {
+             name += QLatin1Char('.') + suffix;
+-		}
++        }
+         if (info.isAbsolute()) {
+             files.append(name);
+         } else {
+@@ -1276,12 +1297,12 @@ QList<QUrl> QFileDialogPrivate::addSuffixToUrls(const QList<QUrl> &urlsToFix, co
+     urls.reserve(numUrlsToFix);
+     for (int i = 0; i < numUrlsToFix; ++i) {
+         QUrl url = urlsToFix.at(i);
+-		// if the filename has no suffix, add the desired suffix
++        // if the filename has no suffix, add the desired suffix
+         if (!suffix.isEmpty() && !url.path().endsWith(QLatin1Char('/')) && url.path().lastIndexOf(QLatin1Char('.')) == -1) {
+             url.setPath(url.path() + QLatin1Char('.') + suffix);
+-		}
++        }
+         urls.append(url);
+-    }
++     }
+     return urls;
+ }
+ 
+@@ -3731,6 +3752,17 @@ void QFileDialogPrivate::_q_goToDirectory(const QString &path)
+     }
+ }
+ 
++
++QDir QFileDialogPrivate::_q_directory() const
++{
++    if (nativeDialogInUse) {
++        QString dir = directory_sys().toLocalFile();
++        return QDir(dir.isEmpty() ? options->initialDirectory().toLocalFile() : dir);
++    }
++    return rootPath();
++}
++
++
+ /*!
+     \internal
+ 
+@@ -3748,19 +3780,27 @@ void QFileDialogPrivate::_q_useNameFilter(int index)
+ 
+     QString nameFilter = nameFilters.at(index);
+     QStringList newNameFilters = QPlatformFileDialogHelper::cleanFilterList(nameFilter);
++
+     if (q_func()->acceptMode() == QFileDialog::AcceptSave) {
+         QString newNameFilterExtension;
+-        if (newNameFilters.count() > 0)
+-            newNameFilterExtension = QFileInfo(newNameFilters.at(0)).suffix();
+-
+         QString fileName = lineEdit()->text();
+         const QString fileNameExtension = QFileInfo(fileName).suffix();
+-        if (!fileNameExtension.isEmpty() && !newNameFilterExtension.isEmpty()) {
+-            const int fileNameExtensionLength = fileNameExtension.count();
+-            fileName.replace(fileName.count() - fileNameExtensionLength,
+-                             fileNameExtensionLength, newNameFilterExtension);
+-            qFileDialogUi->listView->clearSelection();
+-            lineEdit()->setText(fileName);
++
++        if (!fileNameExtension.isEmpty()) {
++
++            QString fileNameWithoutExtension(fileName);
++            int fileNameExtensionLength = fileNameExtension.count();
++            fileNameWithoutExtension.remove(fileName.count() - (fileNameExtensionLength + 1), fileNameExtensionLength + 1); // +1 to count the dot, too
++
++            QStringList filesList = {fileNameWithoutExtension};
++            newNameFilterExtension = selectedNameFilterSuffix(nameFilter, filesList, _q_directory().path(), fileNameExtension);
++
++            if (!newNameFilterExtension.isEmpty()) {
++                fileName.replace(fileName.count() - fileNameExtensionLength,
++                                 fileNameExtensionLength, newNameFilterExtension);
++                qFileDialogUi->listView->clearSelection();
++                lineEdit()->setText(fileName);
++            }
+         }
+     }
+ 
+diff --git a/src/widgets/dialogs/qfiledialog_p.h b/src/widgets/dialogs/qfiledialog_p.h
+index 0a029efa..3979c6eb 100644
+--- a/src/widgets/dialogs/qfiledialog_p.h
++++ b/src/widgets/dialogs/qfiledialog_p.h
+@@ -226,6 +226,8 @@ public:
+     void _q_rowsInserted(const QModelIndex & parent);
+     void _q_fileRenamed(const QString &path, const QString &oldName, const QString &newName);
+ 
++	QDir _q_directory() const;
++
+     // layout
+ #if QT_CONFIG(proxymodel)
+     QAbstractProxyModel *proxyModel;

@@ -30,7 +30,7 @@ KisStrokeStrategyUndoCommandBased(const KUndo2MagicString &name,
                                   KisStrokeUndoFacade *undoFacade,
                                   KUndo2CommandSP initCommand,
                                   KUndo2CommandSP finishCommand)
-  : KisRunnableBasedStrokeStrategy("STROKE_UNDO_COMMAND_BASED", name),
+  : KisRunnableBasedStrokeStrategy(QLatin1String("STROKE_UNDO_COMMAND_BASED"), name),
     m_undo(undo),
     m_initCommand(initCommand),
     m_finishCommand(finishCommand),
@@ -122,7 +122,11 @@ void KisStrokeStrategyUndoCommandBased::doStrokeCallback(KisStrokeJobData *data)
 
     if (d) {
         executeCommand(d->command, d->undo);
-        notifyCommandDone(d->command, d->sequentiality(), d->exclusivity());
+        if (d->shouldGoToHistory) {
+            notifyCommandDone(d->command,
+                              d->sequentiality(),
+                              d->exclusivity());
+        }
     } else {
         KisRunnableBasedStrokeStrategy::doStrokeCallback(data);
     }

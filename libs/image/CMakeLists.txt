@@ -85,7 +85,6 @@ set(kritaimage_LIB_SRCS
    commands/kis_image_change_layers_command.cpp
    commands/kis_image_change_visibility_command.cpp
    commands/kis_image_command.cpp
-   commands/kis_image_set_projection_color_space_command.cpp
    commands/kis_image_layer_add_command.cpp
    commands/kis_image_layer_move_command.cpp
    commands/kis_image_layer_remove_command.cpp
@@ -112,8 +111,12 @@ set(kritaimage_LIB_SRCS
    commands_new/kis_activate_selection_mask_command.cpp
    commands_new/kis_transaction_based_command.cpp
    commands_new/KisHoldUIUpdatesCommand.cpp
+   commands_new/KisChangeChannelFlagsCommand.cpp
+   commands_new/KisChangeChannelLockFlagsCommand.cpp
    processing/kis_do_nothing_processing_visitor.cpp
    processing/kis_simple_processing_visitor.cpp
+   processing/kis_convert_color_space_processing_visitor.cpp
+   processing/kis_assign_profile_processing_visitor.cpp
    processing/kis_crop_processing_visitor.cpp
    processing/kis_crop_selections_processing_visitor.cpp
    processing/kis_transform_processing_visitor.cpp
@@ -138,6 +141,7 @@ set(kritaimage_LIB_SRCS
    lazybrush/kis_colorize_stroke_strategy.cpp
    KisDelayedUpdateNodeInterface.cpp
    KisCroppedOriginalLayerInterface.cpp
+   KisDecoratedNodeInterface.cpp
    kis_adjustment_layer.cc
    kis_selection_based_layer.cpp
    kis_node_filter_interface.cpp
@@ -147,7 +151,6 @@ set(kritaimage_LIB_SRCS
    kis_bookmarked_configuration_manager.cc
    kis_node_uuid_info.cpp
    kis_clone_layer.cpp
-   kis_colorspace_convert_visitor.cpp
    kis_config_widget.cpp
    kis_convolution_kernel.cc
    kis_convolution_painter.cc

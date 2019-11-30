@@ -31,7 +31,8 @@ struct KisColorPickerStrokeStrategy::Private
 };
 
 KisColorPickerStrokeStrategy::KisColorPickerStrokeStrategy(int lod)
-    : m_d(new Private)
+    : KisSimpleStrokeStrategy(QLatin1String("KisColorPickerStrokeStrategy")),
+      m_d(new Private)
 {
     setSupportsWrapAroundMode(true);
     enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);

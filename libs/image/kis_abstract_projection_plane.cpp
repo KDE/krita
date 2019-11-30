@@ -63,6 +63,11 @@ QRect KisDumbProjectionPlane::needRectForOriginal(const QRect &rect) const
     return rect;
 }
 
+QRect KisDumbProjectionPlane::tightUserVisibleBounds() const
+{
+    return QRect();
+}
+
 KisPaintDeviceList KisDumbProjectionPlane::getLodCapableDevices() const
 {
     // arghm...

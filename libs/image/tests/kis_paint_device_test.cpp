@@ -856,6 +856,9 @@ KisPaintDeviceSP createWrapAroundPaintDevice(const KoColorSpace *cs)
         bool externalFrameActive() const override {
             return false;
         }
+        void * sourceCookie() const override {
+            return 0;
+        }
     };
 
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
@@ -1419,6 +1422,9 @@ struct TestingLodDefaultBounds : public KisDefaultBoundsBase {
 
     void testingSetLevelOfDetail(int lod) {
         m_lod = lod;
+    }
+    void * sourceCookie() const override {
+        return 0;
     }
 
 private:

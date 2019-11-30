@@ -441,7 +441,7 @@ void KisToolSelectMagnetic::reEvaluatePoints()
 void KisToolSelectMagnetic::finishSelectionAction()
 {
     KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2 *>(canvas());
-    KIS_ASSERT_RECOVER_RETURN(kisCanvas)
+    KIS_ASSERT_RECOVER_RETURN(kisCanvas);
     kisCanvas->updateCanvas();
     setMode(KisTool::HOVER_MODE);
     m_complete = false;
@@ -595,7 +595,7 @@ void KisToolSelectMagnetic::activate(KoToolBase::ToolActivation activation, cons
 void KisToolSelectMagnetic::deactivate()
 {
     KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2 *>(canvas());
-    KIS_ASSERT_RECOVER_RETURN(kisCanvas)
+    KIS_ASSERT_RECOVER_RETURN(kisCanvas);
     kisCanvas->updateCanvas();
     resetVariables();
     m_continuedMode = false;

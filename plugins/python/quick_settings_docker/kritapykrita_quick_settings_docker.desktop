@@ -49,5 +49,5 @@ Comment[sv]=En Python-baserad dockningspanel för att snabbt ändra penselstorle
 Comment[tr]=Fırça boyutunu ve matlığını hızlıca değiştirmek için Python-tabanlı bir dok.
 Comment[uk]=Панель на основі мови програмування Python для швидкої зміни розміру та непрозорості пензля.
 Comment[x-test]=xxA Python-based docker for quickly changing brush size and opacity.xx
-Comment[zh_CN]=基于 Python 的用于快速更改笔刷尺寸和透明度的工具面板。
+Comment[zh_CN]=这是一个基于 Python 的工具面板，用于快速更改笔刷尺寸和透明度。
 Comment[zh_TW]=基於 Python 的面板，用於快速變更筆刷尺寸和不透明度。

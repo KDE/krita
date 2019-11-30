@@ -84,6 +84,7 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent,
 
     //Set the color space
     m_page->colorSpaceSelector->setCurrentColorSpace(image->colorSpace());
+    m_page->chkConvertLayers->setChecked(KisConfig(true).convertLayerColorSpaceInProperties());
 
     //set the proofing space
     m_proofingConfig = m_image->proofingConfiguration();
@@ -133,7 +134,7 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent,
     }
     connect(m_page->cmbAnnotations, SIGNAL(activated(QString)), SLOT(setAnnotation(QString)));
     setAnnotation(m_page->cmbAnnotations->currentText());
-
+    connect(this, SIGNAL(accepted()), SLOT(slotSaveDialogState()));
 }
 
 KisDlgImageProperties::~KisDlgImageProperties()
@@ -141,7 +142,12 @@ KisDlgImageProperties::~KisDlgImageProperties()
     delete m_page;
 }
 
-const KoColorSpace * KisDlgImageProperties::colorSpace()
+bool KisDlgImageProperties::convertLayerPixels() const
+{
+    return m_page->chkConvertLayers->isChecked();
+}
+
+const KoColorSpace * KisDlgImageProperties::colorSpace() const
 {
     return m_page->colorSpaceSelector->currentColorSpace();
 }
@@ -176,6 +182,12 @@ void KisDlgImageProperties::setProofingConfig()
     else {
         m_image->setProofingConfiguration(KisProofingConfigurationSP());
     }
+}
+
+void KisDlgImageProperties::slotSaveDialogState()
+{
+    KisConfig cfg(false);
+    cfg.setConvertLayerColorSpaceInProperties(m_page->chkConvertLayers->isChecked());
 }
 
 void KisDlgImageProperties::setAnnotation(const QString &type)

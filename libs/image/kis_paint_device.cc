@@ -91,6 +91,9 @@ public:
     class KisPaintDeviceStrategy;
     class KisPaintDeviceWrappedStrategy;
 
+    class DeviceChangeProfileCommand;
+    class DeviceChangeColorSpaceCommand;
+
     Private(KisPaintDevice *paintDevice);
     ~Private();
 
@@ -109,7 +112,7 @@ public:
 
     void init(const KoColorSpace *cs, const quint8 *defaultPixel);
     void convertColorSpace(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags, KUndo2Command *parentCommand);
-    bool assignProfile(const KoColorProfile * profile);
+    bool assignProfile(const KoColorProfile * profile, KUndo2Command *parentCommand);
 
     inline const KoColorSpace* colorSpace() const
     {
@@ -192,7 +195,7 @@ public:
     void prepareClone(KisPaintDeviceSP src)
     {
         prepareCloneImpl(src, src->m_d->currentData());
-        Q_ASSERT(fastBitBltPossible(src));
+        KIS_SAFE_ASSERT_RECOVER_NOOP(fastBitBltPossible(src));
     }
 
     bool fastBitBltPossible(KisPaintDeviceSP src)
@@ -524,10 +527,17 @@ private:
 
     void prepareCloneImpl(KisPaintDeviceSP src, Data *srcData)
     {
-        currentData()->prepareClone(srcData);
-
+        /**
+         * The result of currentData() depends on the current
+         * level of detail and animation frame index. So we
+         * should first connect the device to the new
+         * default bounds object, and only after that ask
+         * currentData() to start cloning.
+         */
         q->setDefaultPixel(KoColor(srcData->dataManager()->defaultPixel(), colorSpace()));
         q->setDefaultBounds(src->defaultBounds());
+
+        currentData()->prepareClone(srcData);
     }
 
     bool fastBitBltPossibleImpl(Data *srcData)
@@ -897,49 +907,61 @@ void KisPaintDevice::Private::tesingFetchLodDevice(KisPaintDeviceSP targetDevice
     transferFromData(data, targetDevice);
 }
 
+class KisPaintDevice::Private::DeviceChangeProfileCommand : public KUndo2Command
+{
+public:
+    DeviceChangeProfileCommand(KisPaintDeviceSP device, KUndo2Command *parent = 0)
+        : KUndo2Command(parent),
+          m_firstRun(true),
+          m_device(device)
+    {
+    }
+
+    virtual void emitNotifications()
+    {
+        m_device->emitProfileChanged();
+    }
+
+    void redo() override
+    {
+        if (m_firstRun) {
+            m_firstRun = false;
+            return;
+        }
+
+        KUndo2Command::redo();
+        emitNotifications();
+    }
+
+    void undo() override
+    {
+        KUndo2Command::undo();
+        emitNotifications();
+    }
+
+protected:
+    KisPaintDeviceSP m_device;
+
+private:
+    bool m_firstRun;
+};
+
+class KisPaintDevice::Private::DeviceChangeColorSpaceCommand : public DeviceChangeProfileCommand
+{
+public:
+    DeviceChangeColorSpaceCommand(KisPaintDeviceSP device, KUndo2Command *parent = 0)
+        : DeviceChangeProfileCommand(device, parent)
+    {
+    }
+
+    void emitNotifications() override
+    {
+        m_device->emitColorSpaceChanged();
+    }
+};
+
 void KisPaintDevice::Private::convertColorSpace(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags, KUndo2Command *parentCommand)
 {
-
-    class DeviceChangeColorSpaceCommand : public KUndo2Command
-    {
-    public:
-        DeviceChangeColorSpaceCommand(KisPaintDeviceSP device, KUndo2Command *parent = 0)
-            : KUndo2Command(parent),
-              m_firstRun(true),
-              m_device(device)
-        {
-        }
-
-        void emitNotifications()
-        {
-            m_device->emitColorSpaceChanged();
-            m_device->setDirty();
-        }
-
-        void redo() override
-        {
-            KUndo2Command::redo();
-
-            if (!m_firstRun) {
-                m_firstRun = false;
-                return;
-            }
-
-            emitNotifications();
-        }
-
-        void undo() override
-        {
-            KUndo2Command::undo();
-            emitNotifications();
-        }
-
-    private:
-        bool m_firstRun;
-        KisPaintDeviceSP m_device;
-    };
-
-
     QList<Data*> dataObjects = allDataObjects();
     if (dataObjects.isEmpty()) return;
 
@@ -955,7 +977,7 @@ void KisPaintDevice::Private::convertColorSpace(const KoColorSpace * dstColorSpa
     q->emitColorSpaceChanged();
 }
 
-bool KisPaintDevice::Private::assignProfile(const KoColorProfile * profile)
+bool KisPaintDevice::Private::assignProfile(const KoColorProfile * profile, KUndo2Command *parentCommand)
 {
     if (!profile) return false;
 
@@ -963,10 +985,14 @@ bool KisPaintDevice::Private::assignProfile(const KoColorProfile * profile)
         KoColorSpaceRegistry::instance()->colorSpace(colorSpace()->colorModelId().id(), colorSpace()->colorDepthId().id(), profile);
     if (!dstColorSpace) return false;
 
+    KUndo2Command *mainCommand =
+        parentCommand ? new DeviceChangeColorSpaceCommand(q, parentCommand) : 0;
+
+
     QList<Data*> dataObjects = allDataObjects();
     Q_FOREACH (Data *data, dataObjects) {
         if (!data) continue;
-        data->assignColorSpace(dstColorSpace);
+        data->assignColorSpace(dstColorSpace, mainCommand);
     }
     q->emitProfileChanged();
 
@@ -1067,7 +1093,6 @@ void KisPaintDevice::setProjectionDevice(bool value)
 void KisPaintDevice::prepareClone(KisPaintDeviceSP src)
 {
     m_d->prepareClone(src);
-    Q_ASSERT(fastBitBltPossible(src));
 }
 
 void KisPaintDevice::makeCloneFrom(KisPaintDeviceSP src, const QRect &rect)
@@ -1518,9 +1543,9 @@ void KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoColorConver
     m_d->convertColorSpace(dstColorSpace, renderingIntent, conversionFlags, parentCommand);
 }
 
-bool KisPaintDevice::setProfile(const KoColorProfile * profile)
+bool KisPaintDevice::setProfile(const KoColorProfile * profile, KUndo2Command *parentCommand)
 {
-    return m_d->assignProfile(profile);
+    return m_d->assignProfile(profile, parentCommand);
 }
 
 KisDataManagerSP KisPaintDevice::dataManager() const

@@ -94,6 +94,9 @@ QModelIndex KisPaletteModel::index(int row, int column, const QModelIndex& paren
     Q_UNUSED(parent)
     Q_ASSERT(m_colorSet);
     int groupNameRow = groupNameRowForRow(row);
+    if (groupNameRow == -1) {
+        return {};
+    }
     KisSwatchGroup *group = m_colorSet->getGroup(m_rowGroupNameMap[groupNameRow]);
     KIS_ASSERT_RECOVER_RETURN_VALUE(group,QModelIndex());
     return createIndex(row, column, group);

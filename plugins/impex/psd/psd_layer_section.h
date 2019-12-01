@@ -40,16 +40,16 @@ public:
 
     QString error;
 
-    // http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/#50577409_21849
+    // https://www.adobe.com/devnet-apps/photoshop/fileformatashtml/#50577409_21849
     quint64 layerMaskBlockSize; // Length of the layer and mask information section
 
-    // layer info: http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/#50577409_16000
+    // layer info: https://www.adobe.com/devnet-apps/photoshop/fileformatashtml/#50577409_16000
     bool hasTransparency;
 
     qint16  nLayers; // If layer count is a negative number, its absolute value is the number of layers and the first alpha channel contains the transparency data for the merged result.
     QVector<PSDLayerRecord*> layers;
 
-    // mask info: http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/#50577409_17115
+    // mask info: https://www.adobe.com/devnet-apps/photoshop/fileformatashtml/#50577409_17115
     struct GlobalLayerMaskInfo {
         quint16 overlayColorSpace;  // Overlay color space (undocumented).
         quint16 colorComponents[4]; // 4 * 2 byte color components

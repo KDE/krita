@@ -201,7 +201,7 @@ void PythonPluginManager::verifyDependenciesSetStatus(PythonPlugin& plugin)
                 continue;
             }
             // Try to get __version__ from module
-            // See PEP396: http://www.python.org/dev/peps/pep-0396/
+            // See PEP396: https://www.python.org/dev/peps/pep-0396/
             PyObject* version_obj = py.itemString("__version__", PQ(dependency));
             if (!version_obj) {
                 dbgScript << "No __version__ for " << dependency

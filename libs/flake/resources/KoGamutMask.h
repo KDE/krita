@@ -27,10 +27,10 @@
 #include <FlakeDebug.h>
 #include <resources/KoResource.h>
 #include <KoShape.h>
-#include <KisGamutMaskViewConverter.h>
 #include <KoShapePaintingContext.h>
 
-class KoViewConverter;
+//class KoViewConverter;
+class QTransform;
 
 class KoGamutMaskShape
 {
@@ -39,10 +39,10 @@ public:
     KoGamutMaskShape();
     ~KoGamutMaskShape();
 
-    bool coordIsClear(const QPointF& coord, const KoViewConverter& viewConverter, int maskRotation) const;
+    bool coordIsClear(const QPointF& coord) const;
     QPainterPath outline();
-    void paint(QPainter &painter, int maskRotation);
-    void paintStroke(QPainter &painter, int maskRotation);
+    void paint(QPainter &painter);
+    void paintStroke(QPainter &painter);
     KoShape* koShape();
 
 private:
@@ -64,7 +64,7 @@ public:
     KoGamutMask(KoGamutMask *rhs);
     ~KoGamutMask() override;
 
-    bool coordIsClear(const QPointF& coord, KoViewConverter& viewConverter, bool preview);
+    bool coordIsClear(const QPointF& coord, bool preview);
     bool load() override;
     bool loadFromDevice(QIODevice *dev) override;
     bool save() override;
@@ -72,6 +72,9 @@ public:
 
     void paint(QPainter &painter, bool preview);
     void paintStroke(QPainter &painter, bool preview);
+
+    QTransform maskToViewTransform(quint8 viewSize);
+    QTransform viewToMaskTransform(quint8 viewSize);
 
     QString title();
     void setTitle(QString title);

@@ -25,8 +25,6 @@
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 
-#include <KisGamutMaskViewConverter.h>
-
 #include "kis_display_color_converter.h"
 #include "kis_acs_pixel_cache_renderer.h"
 
@@ -39,7 +37,6 @@ KisColorSelectorWheel::KisColorSelectorWheel(KisColorSelector *parent) :
     m_renderAreaOffsetY(0.0),
     m_toRenderArea(QTransform())
 {
-    m_viewConverter = new KisGamutMaskViewConverter();
 }
 
 KoColor KisColorSelectorWheel::selectColor(int x, int y)
@@ -201,11 +198,6 @@ void KisColorSelectorWheel::paint(QPainter* painter)
         m_toRenderArea.reset();
         m_toRenderArea.translate(-m_renderAreaOffsetX,-m_renderAreaOffsetY);
 
-        m_viewConverter->setViewSize(m_renderAreaSize);
-        if (m_currentGamutMask) {
-           m_viewConverter->setMaskSize(m_currentGamutMask->maskSize());
-        }
-
         QPoint ellipseCenter(width() / 2 - size / 2, height() / 2 - size / 2);
         ellipseCenter -= m_pixelCacheOffset;
 
@@ -233,7 +225,7 @@ void KisColorSelectorWheel::paint(QPainter* painter)
         maskPainter.drawEllipse(QPointF(0,0), 1.0, 1.0);
 
         maskPainter.resetTransform();
-        maskPainter.setTransform(m_viewConverter->documentToView());
+        maskPainter.setTransform(m_currentGamutMask->maskToViewTransform(m_renderAreaSize.width()));
 
         maskPainter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
         m_currentGamutMask->paint(maskPainter, m_maskPreviewActive);
@@ -320,7 +312,13 @@ KoColor KisColorSelectorWheel::colorAt(int x, int y, bool forceValid)
 
 bool KisColorSelectorWheel::allowsColorSelectionAtPoint(const QPoint &pt) const
 {
-    return !m_gamutMaskOn || !m_currentGamutMask ||
-        m_currentGamutMask->coordIsClear(m_toRenderArea.map(QPointF(pt)),
-                                         *m_viewConverter, m_maskPreviewActive);
+    if (!m_gamutMaskOn || !m_currentGamutMask) {
+        return true;
+    }
+
+    QPointF colorCoord = m_toRenderArea.map(QPointF(pt));
+    QPointF translatedPoint = m_currentGamutMask->viewToMaskTransform(m_renderAreaSize.width()).map(colorCoord);
+    bool isClear = m_currentGamutMask->coordIsClear(translatedPoint, m_maskPreviewActive);
+
+    return isClear;
 }

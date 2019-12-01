@@ -30,10 +30,10 @@
 #include "kis_signal_compressor_with_param.h"
 
 #include <resources/KoGamutMask.h>
-#include <KisGamutMaskViewConverter.h>
 
 class QPainter;
 class KisDisplayColorConverter;
+class QTransform;
 
 class KisColorSelector: public QWidget
 {
@@ -187,9 +187,10 @@ private:
     bool m_gamutMaskOn;
     KoGamutMask* m_currentGamutMask;
     bool m_enforceGamutMask;
-    QSize m_renderAreaSize;
+//    QSize m_renderAreaSize;
     bool m_maskPreviewActive;
-    KisGamutMaskViewConverter* m_viewConverter;
+//    KisGamutMaskViewConverter* m_viewConverter;
+    QTransform m_gamutMaskViewTransform;
 
     bool m_widgetUpdatesSelf;
     bool m_isDirtyWheel;

@@ -32,7 +32,8 @@
 #include <kis_config.h>
 #include <kis_arcs_constants.h>
 #include <resources/KoGamutMask.h>
-#include <KisGamutMaskViewConverter.h>
+//#include <KisGamutMaskViewConverter.h>
+#include <QTransform>
 
 #include "kis_color_selector.h"
 
@@ -50,13 +51,14 @@ KisColorSelector::KisColorSelector(QWidget* parent, KisColor::Type type)
     , m_gamutMaskOn(false)
     , m_currentGamutMask(nullptr)
     , m_maskPreviewActive(true)
+    , m_gamutMaskViewTransform(QTransform())
     , m_widgetUpdatesSelf(false)
     , m_isDirtyWheel(false)
     , m_isDirtyLightStrip(false)
     , m_isDirtyGamutMask(false)
     , m_isDirtyColorPreview(false)
 {
-    m_viewConverter = new KisGamutMaskViewConverter();
+//    m_viewConverter = new KisGamutMaskViewConverter();
 
     setLumaCoefficients(DEFAULT_LUMA_R, DEFAULT_LUMA_G, DEFAULT_LUMA_B,DEFAULT_LUMA_GAMMA);
 
@@ -226,8 +228,7 @@ void KisColorSelector::setGamutMask(KoGamutMask* gamutMask)
     }
 
     m_currentGamutMask = gamutMask;
-    m_viewConverter->setViewSize(m_renderAreaSize);
-    m_viewConverter->setMaskSize(m_currentGamutMask->maskSize());
+    m_gamutMaskViewTransform = m_currentGamutMask->maskToViewTransform(m_renderArea.width());
 
     if (m_enforceGamutMask) {
         m_isDirtyWheel = true;
@@ -432,9 +433,6 @@ void KisColorSelector::recalculateAreas(quint8 numLightPieces)
     int x = (width  - size) / 2;
     int y = (height - size) / 2;
 
-    m_renderAreaSize = QSize(size,size);
-    m_viewConverter->setViewSize(m_renderAreaSize);
-
     m_widgetArea     = QRect(0, 0, QWidget::width(), QWidget::height());
     m_renderArea     = QRect(x+stripThick, y, size, size);
     m_lightStripArea = QRect(0, 0, stripThick, QWidget::height());
@@ -500,7 +498,9 @@ bool KisColorSelector::colorIsClear(const KisColor &color)
     if (m_gamutMaskOn && m_currentGamutMask) {
 
         QPointF colorCoord = mapCoordToView(mapColorToUnit(color, false), m_renderArea);
-        bool isClear = m_currentGamutMask->coordIsClear(colorCoord, *m_viewConverter, m_maskPreviewActive);
+
+        QPointF translatedPoint = m_currentGamutMask->viewToMaskTransform(m_renderArea.width()).map(colorCoord);
+        bool isClear = m_currentGamutMask->coordIsClear(translatedPoint, m_maskPreviewActive);
 
         if (isClear) {
             return true;
@@ -856,8 +856,7 @@ void KisColorSelector::drawGamutMaskShape(QPainter &painter, const QRect &rect)
 
     painter.drawEllipse(QPointF(0,0), 1.0, 1.0);
 
-    painter.resetTransform();
-    painter.setTransform(m_viewConverter->documentToView());
+    painter.setWorldTransform(m_gamutMaskViewTransform);
 
     painter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
     m_currentGamutMask->paint(painter, m_maskPreviewActive);

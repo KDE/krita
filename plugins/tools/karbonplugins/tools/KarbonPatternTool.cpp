@@ -38,6 +38,7 @@
 #include <KoResourceServerAdapter.h>
 
 #include <klocalizedstring.h>
+#include <KoViewConverter.h>
 
 #include <QPainter>
 #include <QWidget>

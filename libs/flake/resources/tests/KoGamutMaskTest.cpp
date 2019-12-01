@@ -19,7 +19,6 @@
 
 #include <QTest>
 #include <resources/KoGamutMask.h>
-#include <KisGamutMaskViewConverter.h>
 
 #include <testutil.h>
 
@@ -42,11 +41,10 @@ void KoGamutMaskTest::testCoordIsClear()
     Q_ASSERT(mask->valid());
     mask->setRotation(maskRotation);
 
-    KisGamutMaskViewConverter* converter = new KisGamutMaskViewConverter();
-    converter->setMaskSize(mask->maskSize());
-    converter->setViewSize(QSize(100.0, 100.0));
+    // for this test we have a hardcoded view size of 100
+    QPointF translatedPoint = mask->viewToMaskTransform(100).map(coord);
 
-    bool maskOutput = mask->coordIsClear(coord, *converter, false);
+    bool maskOutput = mask->coordIsClear(translatedPoint, false);
     QCOMPARE(maskOutput, expectedOutput);
 }
 

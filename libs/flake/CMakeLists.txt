@@ -120,7 +120,6 @@ set(kritaflake_SRCS
     KoClipMask.cpp
     KoClipMaskPainter.cpp
     KoCurveFit.cpp
-    KisGamutMaskViewConverter.cpp
 
     commands/KoShapeGroupCommand.cpp
     commands/KoShapeAlignCommand.cpp

@@ -24,8 +24,6 @@ typedef unsigned int QRgb;
 #include <QImage>
 #include <QSize>
 
-#include <KisGamutMaskViewConverter.h>
-
 #include "KoColor.h"
 #include "kis_color_selector_component.h"
 
@@ -62,7 +60,6 @@ private:
     qreal m_renderAreaOffsetX;
     qreal m_renderAreaOffsetY;
     QTransform m_toRenderArea;
-    KisGamutMaskViewConverter* m_viewConverter;
 };
 
 #endif // KIS_COLOR_SELECTOR_WHEEL_H

@@ -37,9 +37,9 @@
  *
  * Magic split is used in some languages to split the message in the
  * undo history docker (which is either verb or <a
- * href="http://en.wikipedia.org/wiki/Nominative_case">noun in
+ * href="https://en.wikipedia.org/wiki/Nominative_case">noun in
  * nominative</a>) and the message in undo/redo actions (which is
- * usually a <a href="http://en.wikipedia.org/wiki/Accusative_case">noun
+ * usually a <a href="https://en.wikipedia.org/wiki/Accusative_case">noun
  * in accusative</a>). When the translator needs it he, splits two
  * translations with '\n' symbol and the magic string will recognize
  * it.

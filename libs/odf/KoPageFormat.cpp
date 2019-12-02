@@ -52,7 +52,7 @@ struct PageFormatInfo {
 
 // NOTES:
 // - the width and height of non-ISO formats are rounded
-// http://en.wikipedia.org/wiki/Paper_size can help
+// https://en.wikipedia.org/wiki/Paper_size can help
 // - the comments "should be..." indicates the exact values if the inch sizes would be multiplied by 25.4 mm/inch
 
 const PageFormatInfo pageFormatInfo[] = {

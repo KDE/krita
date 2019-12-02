@@ -9,7 +9,7 @@
  *      Monterey, California
  *
  *    * Idea of m_deleteBlockers is taken from Andrey Gulin's blog
- *      http://users.livejournal.com/_foreseer/34284.html
+ *      https://users.livejournal.com/-foreseer/34284.html
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

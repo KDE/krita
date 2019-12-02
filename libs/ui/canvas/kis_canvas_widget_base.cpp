@@ -61,7 +61,7 @@ public:
     KoToolProxy * toolProxy;
     QTimer blockMouseEvent;
 
-    bool ignorenextMouseEventExceptRightMiddleClick; // HACK work around Qt bug not sending tablet right/dblclick http://bugreports.qt.nokia.com/browse/QTBUG-8598
+    bool ignorenextMouseEventExceptRightMiddleClick; // HACK work around Qt bug not sending tablet right/dblclick https://bugreports.qt.io/browse/QTBUG-8598
     QColor borderColor;
 };
 
@@ -98,7 +98,7 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
     gc.setRenderHint(QPainter::TextAntialiasing);
 
     // This option does not do anything anymore with Qt4.6, so don't re-enable it since it seems to break display
-    // http://www.archivum.info/qt-interest@trolltech.com/2010-01/00481/Re:-(Qt-interest)-Is-QPainter::HighQualityAntialiasing-render-hint-broken-in-Qt-4.6.html
+    // https://lists.qt-project.org/pipermail/qt-interest-old/2009-December/017078.html
     // gc.setRenderHint(QPainter::HighQualityAntialiasing);
 
     gc.setRenderHint(QPainter::SmoothPixmapTransform);

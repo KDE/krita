@@ -71,7 +71,7 @@ public:
     bool convertToHtml(QString *htmlText);
 
     /**
-     * @brief convertFromHtml converted Qt rich text html (and no other: http://doc.qt.io/qt-5/richtext-html-subset.html) to SVG
+     * @brief convertFromHtml converted Qt rich text html (and no other: https://doc.qt.io/qt-5/richtext-html-subset.html) to SVG
      * @param htmlText the input html
      * @param svgText the converted svg text element
      * @param styles

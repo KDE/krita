@@ -106,7 +106,7 @@ bool SvgWriter::save(QIODevice &outputDevice, const QSizeF &pageSize)
     svgStream << "\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">" << endl;
 
     // add some PR.  one line is more than enough.
-    svgStream << "<!-- Created using Krita: http://krita.org -->" << endl;
+    svgStream << "<!-- Created using Krita: https://krita.org -->" << endl;
 
     svgStream << "<svg xmlns=\"http://www.w3.org/2000/svg\" \n";
     svgStream << "    xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n";

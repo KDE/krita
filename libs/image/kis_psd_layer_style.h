@@ -36,7 +36,7 @@ typedef QSharedPointer<KisPSDLayerStyle> KisPSDLayerStyleSP;
  * @brief The KisPSDLayerStyle class implements loading, saving and applying
  * the PSD layer effects.
  *
- * See http://www.tonton-pixel.com/Photoshop%20Additional%20File%20Formats/styles-file-format.html
+ * See https://www.tonton-pixel.com/Photoshop%20Additional%20File%20Formats/styles-file-format.html
  *
  */
 class KRITAIMAGE_EXPORT KisPSDLayerStyle

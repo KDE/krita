@@ -788,7 +788,7 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
 
     // save unique identifier of the stroke so we could
     // recognize it when sigTransactionGenerated() is
-    // recieved (theoretically, the user can start two
+    // received (theoretically, the user can start two
     // strokes at the same time, if he is quick enough)
     m_strokeStrategyCookie = strategy;
     m_strokeId = image()->startStroke(strategy);

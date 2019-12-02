@@ -40,8 +40,8 @@ class KisWeakSharedPtr;
  * pointer just as you would use a real pointer.
  *
  * See also also item 28 and 29 of More Effective C++ and
- * http://bugs.kde.org/show_bug.cgi?id=52261 as well as
- * http://www.boost.org/libs/smart_ptr/shared_ptr.htm.
+ * https://bugs.kde.org/show_bug.cgi?id=52261 as well as
+ * https://www.boost.org/libs/smart_ptr/shared_ptr.htm.
  *
  * Advantage of KisSharedPtr over boost pointer or QSharedPointer?
  *

@@ -156,6 +156,11 @@ void KisOnionSkinCompositor::composite(const KisPaintDeviceSP sourceDevice, KisP
     KisKeyframeSP keyframeFwd;
 
     int time = sourceDevice->defaultBounds()->currentTime();
+
+    if (!keyframes) { // it happens when you try to show onion skins on non-animated layer with opacity keyframes
+        return;
+    }
+
     keyframeBck = keyframeFwd = keyframes->activeKeyframeAt(time);
 
     for (int offset = 1; offset <= m_d->numberOfSkins; offset++) {
@@ -197,6 +202,11 @@ QRect KisOnionSkinCompositor::calculateExtent(const KisPaintDeviceSP device)
     KisKeyframeSP keyframeFwd;
 
     KisRasterKeyframeChannel *channel = device->keyframeChannel();
+
+    if (!channel) { // it happens when you try to show onion skins on non-animated layer with opacity keyframes
+        return rect;
+    }
+
     keyframeBck = keyframeFwd = channel->activeKeyframeAt(device->defaultBounds()->currentTime());
 
     for (int offset = 1; offset <= m_d->numberOfSkins; offset++) {

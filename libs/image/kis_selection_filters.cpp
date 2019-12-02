@@ -58,11 +58,11 @@ void KisSelectionFilter::computeBorder(qint32* circ, qint32 xradius, qint32 yrad
         else
             tmp = 0.0;
 
-        double divisor = (double) xradius * sqrt(xradius * xradius - tmp * tmp);
+        double divisor = (double) xradius;
         if (divisor == 0.0) {
             divisor = 1.0;
         }
-        circ[i] = (qint32) RINT(yradius / divisor);
+        circ[i] = (qint32) RINT(yradius * sqrt(xradius * xradius - tmp * tmp) / divisor);
     }
 }
 

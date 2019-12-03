@@ -1,0 +1,355 @@
+{
+    "app-id": "org.kde.krita",
+    "branch": "krita/4.2",
+    "runtime": "org.kde.Platform",
+    "runtime-version": "5.9",
+    "sdk": "org.kde.Sdk",
+    "command": "krita",
+    "rename-icon": "krita",
+    "tags": [
+        "stable"
+    ],
+    "desktop-file-name-prefix": "(Stable) ",
+    "finish-args": [
+        "--share=ipc",
+        "--socket=x11",
+        "--share=network",
+        "--device=dri",
+        "--filesystem=home",
+        "--env=PYTHONPATH=/app/lib/python3/dist-packages"
+    ],
+    "cleanup": [
+        "/include",
+        "/lib/pkgconfig",
+        "/lib/cmake",
+        "/share/aclocal",
+        "/share/pkgconfig",
+        "*.la",
+        "*.cmake"
+    ],
+    "modules": [
+        {
+            "name": "boost",
+            "buildsystem": "simple",
+            "build-commands": [
+                "./bootstrap.sh --prefix=/app --with-libraries=system",
+                "./b2 -j `nproc` install"
+            ],
+            "cleanup": [
+                "*.a"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://sourceforge.net/projects/boost/files/boost/1.63.0/boost_1_63_0.tar.bz2",
+                    "sha256": "beae2529f759f6b3bf3f4969a19c2e9d6f0c503edcb2de4a61d1428519fcb3b0"
+                }
+            ]
+        },
+        {
+            "name": "eigen",
+            "buildsystem": "cmake-ninja",
+            "builddir": true,
+            "config-opts": [
+                "-DCMAKE_BUILD_TYPE=Release"
+            ],
+            "cleanup": [
+                "/share"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://bitbucket.org/eigen/eigen/get/3.3.4.tar.bz2",
+                    "sha256": "dd254beb0bafc695d0f62ae1a222ff85b52dbaa3a16f76e781dce22d0d20a4a6"
+                }
+            ]
+        },
+        {
+            "name": "exiv2",
+            "buildsystem": "cmake-ninja",
+            "builddir": true,
+            "config-opts": [
+                "-DCMAKE_BUILD_TYPE=Release"
+            ],
+            "cleanup": [
+                "/bin",
+                "*.a",
+                "/share/man"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "http://www.exiv2.org/builds/exiv2-0.26-trunk.tar.gz",
+                    "sha256": "c75e3c4a0811bf700d92c82319373b7a825a2331c12b8b37d41eb58e4f18eafb"
+                }
+            ]
+        },
+        {
+            "name": "ilmbase",
+            "config-opts": [
+                "--disable-static"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://download.savannah.nongnu.org/releases/openexr/ilmbase-2.2.1.tar.gz",
+                    "sha256": "cac206e63be68136ef556c2b555df659f45098c159ce24804e9d5e9e0286609e"
+                }
+            ]
+        },
+        {
+            "name": "openexr",
+            "config-opts": [
+                "--disable-static"
+            ],
+            "cleanup": [
+                "/bin",
+                "/share/doc"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://download.savannah.nongnu.org/releases/openexr/openexr-2.2.1.tar.gz",
+                    "sha256": "8f9a5af6131583404261931d9a5c83de0a425cb4b8b25ddab2b169fbf113aecd"
+                }
+            ]
+        },
+        {
+            "name": "libraw",
+            "config-opts": [
+                "--disable-static"
+            ],
+            "cleanup": [
+                "/bin",
+                "/share/doc"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://www.libraw.org/data/LibRaw-0.18.6.tar.gz",
+                    "sha256": "e5b8acca558aa457bc9214802004320c5610d1434c2adb1f3ea367f026afa53b"
+                }
+            ]
+        },
+        {
+            "name": "fftw",
+            "config-opts": [
+                "--disable-static",
+                "--enable-shared",
+                "--disable-doc",
+                "--enable-threads"
+            ],
+            "cleanup": [
+                "/bin",
+                "/share/man"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "http://www.fftw.org/fftw-3.3.7.tar.gz",
+                    "sha256": "3b609b7feba5230e8f6dd8d245ddbefac324c5a6ae4186947670d9ac2cd25573"
+                }
+            ]
+        },
+        {
+            "name": "opencolorio",
+            "buildsystem": "cmake",
+            "builddir": true,
+            "build-options": {
+                "arch": {
+                    "arm": {
+                        "config-opts": [
+                            "-DOCIO_USE_SSE=OFF"
+                        ]
+                    },
+                    "aarch64": {
+                        "config-opts": [
+                            "-DOCIO_USE_SSE=OFF"
+                        ]
+                    }
+                }
+            },
+            "config-opts": [
+                "-DCMAKE_BUILD_TYPE=Release",
+                "-DOCIO_BUILD_STATIC=OFF"
+            ],
+            "cleanup": [
+                "/bin"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/imageworks/OpenColorIO/archive/v1.0.9.tar.gz",
+                    "sha256": "27c81e691c15753cd2b560c2ca4bd5679a60c2350eedd43c99d44ca25d65ea7f"
+                }
+            ]
+        },
+        {
+            "name": "vc",
+            "skip-arches": [
+                "aarch64",
+                "arm"
+            ],
+            "buildsystem": "cmake-ninja",
+            "builddir": true,
+            "config-opts": [
+                "-DCMAKE_BUILD_TYPE=Release"
+            ],
+            "cleanup": [
+                "*.a"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/VcDevel/Vc/releases/download/1.3.3/Vc-1.3.3.tar.gz",
+                    "sha256": "08c629d2e14bfb8e4f1a10f09535e4a3c755292503c971ab46637d2986bdb4fe"
+                },
+                {
+                    "type": "shell",
+                    "commands": [
+                        "sed -i 's/x86|/x86|i686|/' CMakeLists.txt"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "poppler-data",
+            "buildsystem": "cmake-ninja",
+            "builddir": true,
+            "config-opts": [
+                "-DCMAKE_BUILD_TYPE=Release"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://poppler.freedesktop.org/poppler-data-0.4.8.tar.gz",
+                    "sha256": "1096a18161f263cccdc6d8a2eb5548c41ff8fcf9a3609243f1b6296abdf72872"
+                }
+            ]
+        },
+        {
+            "name": "poppler",
+            "buildsystem": "cmake-ninja",
+            "builddir": true,
+            "config-opts": [
+                "-DCMAKE_BUILD_TYPE=Release",
+                "-DBUILD_GTK_TESTS=OFF",
+                "-DBUILD_QT5_TESTS=OFF",
+                "-DBUILD_CPP_TESTS=OFF",
+                "-DENABLE_UTILS=OFF",
+                "-DENABLE_CPP=OFF",
+                "-DENABLE_GLIB=OFF"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://poppler.freedesktop.org/poppler-0.62.0.tar.xz",
+                    "sha256": "5b9a73dfd4d6f61d165ada1e4f0abd2d420494bf9d0b1c15d0db3f7b83a729c6"
+                }
+            ]
+        },
+        {
+            "name": "gsl",
+            "config-opts": [
+                "--disable-static"
+            ],
+            "cleanup": [
+                "/bin",
+                "/share/info",
+                "/share/man"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://ftpmirror.gnu.org/gnu/gsl/gsl-2.4.tar.gz",
+                    "sha256": "4d46d07b946e7b31c19bbf33dda6204d7bedc2f5462a1bae1d4013426cd1ce9b"
+                }
+            ]
+        },
+        {
+            "name": "gmic-qt",
+            "buildsystem": "cmake-ninja",
+            "builddir": true,
+            "config-opts": [
+                "-DCMAKE_BUILD_TYPE=Release",
+                "-DGMIC_QT_HOST=krita",
+                "-DGMIC_PATH=./gmic/src"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/c-koi/gmic-qt/archive/v.218.tar.gz",
+                    "sha256": "697861e5a1e024a3ccf9c96e513ec9f60f65d6e3c438ba355afcd10839b06f39"
+                },
+                {
+                    "type": "file",
+                    "url": "https://gmic.eu/files/source/gmic_2.1.8.tar.gz",
+                    "sha256": "f22783f14cb202dec4a840733f2028f6e2c464fdd2f0166fc38943702cea6bde",
+                    "dest-filename": "gmic.tar.gz"
+                },
+                {
+                    "type": "shell",
+                    "commands": [
+                        "tar xf gmic.tar.gz",
+                        "mv gmic-* gmic"
+                    ]
+                }
+            ],
+            "post-install": [
+                "install -Dm755 gmic_krita_qt /app/bin/gmic_krita_qt"
+            ]
+        },
+        {
+            "name": "sip",
+            "buildsystem": "simple",
+            "build-commands": [
+                "python3 configure.py --bindir=/app/bin --destdir=/app/lib/python3/dist-packages --incdir=/app/include/python3 --sipdir=/app/share/sip --stubsdir=/app/lib/python3/dist-packages",
+                "make -j `nproc`",
+                "make install"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://sourceforge.net/projects/pyqt/files/sip/sip-4.19.6/sip-4.19.6.tar.gz",
+                    "sha256": "9dda27ae181bea782ebc8768d29f22f85ab6e5128ee3ab21f491febad707925a"
+                }
+            ]
+        },
+        {
+            "name": "pyqt",
+            "buildsystem": "simple",
+            "build-commands": [
+                "python3 configure.py --confirm-license --sip-incdir=/app/include/python3 --bindir=/app/bin --destdir=/app/lib/python3/dist-packages --designer-plugindir=/app/lib/plugins/designer --qml-plugindir=/app/lib/plugins/PyQt5 --sipdir=/app/share/sip --stubsdir=/app/lib/python3/dist-packages/PyQt5",
+                "make -j `nproc`",
+                "make install"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://sourceforge.net/projects/pyqt/files/PyQt5/PyQt-5.9.2/PyQt5_gpl-5.9.2.tar.gz",
+                    "sha256": "c190dac598c97b0113ca5e7a37c71c623f02d1d713088addfacac4acfa4b8394"
+                }
+            ]
+        },
+        {
+            "name": "krita",
+            "buildsystem": "cmake-ninja",
+            "builddir": true,
+            "build-options": {
+                "env": {
+                    "PYTHONPATH": "/app/lib/python3/dist-packages"
+                }
+            },
+            "config-opts": [
+                "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
+            ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "git://anongit.kde.org/krita.git",
+                    "branch": "master"
+                }
+            ]
+        }
+    ]
+}

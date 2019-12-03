@@ -893,6 +893,10 @@ int depth(Forest<T> &forest) {
     return depth<T>(childBegin(forest), childEnd(forest));
 }
 
+template <typename T>
+int size(Forest<T> &forest) {
+    return std::distance(begin(forest), end(forest));
+}
 
 using std::begin;
 using std::end;

@@ -79,7 +79,7 @@ inline bool shapeUsedInRenderingTree(KoShape *shape)
  */
 inline bool shapeHasGroupEffects(KoShape *shape) {
     return shape->clipPath() ||
-        (shape->filterEffectStack() && shape->filterEffectStack()->isEmpty()) ||
+        (shape->filterEffectStack() && !shape->filterEffectStack()->isEmpty()) ||
         shape->clipMask();
 }
 

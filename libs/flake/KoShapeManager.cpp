@@ -163,7 +163,9 @@ void buildRenderTree(QList<KoShape*> leafShapes,
 
         if (shouldSkipShape) continue;
 
-        tree.insert(childEnd(tree), hierarchy.last());
+        if (includedShapes.find(hierarchy.last()) == end(includedShapes)) {
+            tree.insert(childEnd(tree), hierarchy.last());
+        }
         std::copy(hierarchy.begin(), hierarchy.end(),
                   std::inserter(includedShapes, end(includedShapes)));
     }

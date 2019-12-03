@@ -149,31 +149,17 @@ KoFlake::CoordinateSystem KoClipPath::coordinates() const
 
 void KoClipPath::applyClipping(KoShape *shape, QPainter &painter)
 {
-    QPainterPath clipPath;
     if (shape->clipPath()) {
         QPainterPath path = shape->clipPath()->path();
 
-        QTransform t;
-
         if (shape->clipPath()->coordinates() == KoFlake::ObjectBoundingBox) {
             const QRectF shapeLocalBoundingRect = shape->outline().boundingRect();
-            t = KisAlgebra2D::mapToRect(shapeLocalBoundingRect) * shape->absoluteTransformation();
-
-        } else {
-            t = shape->absoluteTransformation();
+            path = KisAlgebra2D::mapToRect(shapeLocalBoundingRect).map(path);
         }
 
-        path = t.map(path);
-
-        if (clipPath.isEmpty()) {
-            clipPath = path;
-        } else {
-            clipPath &= path;
+        if (!path.isEmpty()) {
+            painter.setClipPath(path, Qt::IntersectClip);
         }
-    }
-
-    if (!clipPath.isEmpty()) {
-        painter.setClipPath(clipPath, Qt::IntersectClip);
     }
 }
 

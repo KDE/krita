@@ -194,13 +194,13 @@ void renderShapes(typename KisForest<KoShape*>::child_iterator beginIt,
 
         KisQPainterStateSaver saver(&painter);
 
-        KoClipPath::applyClipping(shape, painter);
-
         if (!isEnd(parent(it))) {
             painter.setTransform(shape->transformation() * painter.transform());
         } else {
             painter.setTransform(shape->absoluteTransformation() * painter.transform());
         }
+
+        KoClipPath::applyClipping(shape, painter);
 
         qreal transparency = shape->transparency(true);
         if (transparency > 0.0) {

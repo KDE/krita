@@ -1718,8 +1718,21 @@ QList<KoShape*> SvgParser::parseSingleElement(const KoXmlElement &b, DeferredUse
                b.tagName() == "path" ||
                b.tagName() == "image") {
         KoShape *shape = createObjectDirect(b);
-        if (shape)
-            shapes.append(shape);
+
+        if (shape) {
+            if (shape->outlineRect() != QRectF() || shape->boundingRect() != QRectF()) {
+                shapes.append(shape);
+            } else {
+                debugFlake << "WARNING: shape is totally empty!" << shape->shapeId() << ppVar(shape->outlineRect());
+                debugFlake << "    " << shape->shapeId() << ppVar(shape->outline());
+                {
+                    QString string;
+                    QTextStream stream(&string);
+                    stream << b;
+                    debugFlake << "    " << string;
+                }
+            }
+        }
     } else if (b.tagName() == "use") {
         KoShape* s = parseUse(b, deferredUseStore);
         if (s) {

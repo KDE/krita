@@ -6,11 +6,12 @@ if(MINGW)
        ext_boost
 
        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-       URL https://dl.bintray.com/boostorg/release/1.71.0/source/boost_1_71_0.zip
-       URL_HASH SHA256=85a94ac71c28e59cf97a96714e4c58a18550c227ac8b0388c260d6c717e47a69
-
+       
+       URL http://files.kde.org/krita/build/dependencies/boost_1_61_0.zip
+       URL_MD5 015ae4afa6f3e597232bfe1dab949ace
+       
        CONFIGURE_COMMAND <SOURCE_DIR>/bootstrap.bat gcc --prefix=${PREFIX_ext_boost}
-       BUILD_COMMAND <SOURCE_DIR>/b2.exe -j${SUBMAKE_JOBS} linkflags=${SECURITY_SHARED_LINKER_FLAGS} --with-system --build-dir=build-dir --prefix=${PREFIX_ext_boost} toolset=gcc variant=release link=shared  threading=multi architecture=x86 variant=release install
+       BUILD_COMMAND <SOURCE_DIR>/b2.exe -j${SUBMAKE_JOBS} linkflags=${SECURITY_SHARED_LINKER_FLAGS} --with-system --build-dir=build-dir --prefix=${PREFIX_ext_boost} toolset=gcc variant=release link=shared threading=multi architecture=x86 install
        INSTALL_COMMAND ""
        INSTALL_DIR ${EXTPREFIX_boost}
 

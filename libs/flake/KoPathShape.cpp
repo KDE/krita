@@ -556,14 +556,22 @@ QRectF KoPathShape::boundingRect() const
                                       2.0 * stroke()->strokeMaxMarkersInset(this)});
     }
 
+
+
+    /// NOTE: stroking the entire shape might be too expensive, so try to
+    ///       estimate the bounds using insets only...
+
+#if 0
     QPen pen(Qt::black, outlineSweepWidth);
 
     // select round joins and caps to ensure it sweeps exactly
     // 'outlineSweepWidth' pixels in every possible
     pen.setJoinStyle(Qt::RoundJoin);
     pen.setCapStyle(Qt::RoundCap);
-
     QRectF bb = transform.map(pathStroke(pen)).boundingRect();
+#endif
+
+    QRectF bb = transform.mapRect(kisGrowRect(outline().boundingRect(), outlineSweepWidth));
 
     if (shadow()) {
         KoInsets insets;

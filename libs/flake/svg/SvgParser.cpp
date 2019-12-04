@@ -1720,7 +1720,7 @@ QList<KoShape*> SvgParser::parseSingleElement(const KoXmlElement &b, DeferredUse
         KoShape *shape = createObjectDirect(b);
 
         if (shape) {
-            if (shape->outlineRect() != QRectF() || shape->boundingRect() != QRectF()) {
+            if (!shape->outlineRect().isNull() || !shape->boundingRect().isNull()) {
                 shapes.append(shape);
             } else {
                 debugFlake << "WARNING: shape is totally empty!" << shape->shapeId() << ppVar(shape->outlineRect());

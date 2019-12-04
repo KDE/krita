@@ -22,7 +22,7 @@
 
 #include "kis_paintop.h"
 
-#include <math.h>
+#include <QtMath>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
@@ -96,7 +96,7 @@ void KisPaintOp::setFanCornersInfo(bool fanCornersEnabled, qreal fanCornersStep)
 
 void KisPaintOp::splitCoordinate(qreal coordinate, qint32 *whole, qreal *fraction)
 {
-    const qint32 i = std::floor(coordinate);
+    const qint32 i = qFloor(coordinate);
     const qreal f = coordinate - i;
 
     *whole = i;

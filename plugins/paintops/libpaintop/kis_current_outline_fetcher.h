@@ -39,7 +39,8 @@ public:
         NO_OPTION,
         SIZE_OPTION,
         ROTATION_OPTION,
-        MIRROR_OPTION
+        MIRROR_OPTION,
+        SHARPNESS_OPTION
     };
 
     Q_DECLARE_FLAGS(Options, Option);

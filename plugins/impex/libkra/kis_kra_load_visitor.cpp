@@ -305,10 +305,15 @@ bool KisKraLoadVisitor::visit(KisCloneLayer *layer)
     }
 
     KisNodeSP srcNode = layer->copyFromInfo().findNode(m_image->rootLayer());
-    KisLayerSP srcLayer = qobject_cast<KisLayer*>(srcNode.data());
-    Q_ASSERT(srcLayer);
+    if (!srcNode.isNull()) {
+        KisLayerSP srcLayer = qobject_cast<KisLayer*>(srcNode.data());
+        Q_ASSERT(srcLayer);
 
-    layer->setCopyFrom(srcLayer);
+        layer->setCopyFrom(srcLayer);
+    } else {
+        m_warningMessages.append(i18nc("Loading a .kra file", "The file contains a clone layer that has an incorrect source node id. "
+                                                              "This layer will be converted into a paint layer."));
+    }
 
     // Clone layers have no data except for their masks
     bool result = visitAll(layer);

@@ -706,12 +706,5 @@ void TransformStrokeStrategy::finishStrokeCallback()
 
 void TransformStrokeStrategy::cancelStrokeCallback()
 {
-    const bool shouldRecoverSavedInitialState =
-        !m_initialTransformArgs.isIdentity();
-
-    if (shouldRecoverSavedInitialState) {
-        m_savedTransformArgs = m_initialTransformArgs;
-    }
-
-    finishStrokeImpl(shouldRecoverSavedInitialState, *m_savedTransformArgs);
+    finishStrokeImpl(!m_initialTransformArgs.isIdentity(), m_initialTransformArgs);
 }

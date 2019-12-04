@@ -43,7 +43,7 @@ public:
     /// Writes without date/time
     static void write(const QString &message);
 
-    static void writeSectionHeader();
+    static void writeSysInfo(const QString &message);
 
     static void writeHeader();
 

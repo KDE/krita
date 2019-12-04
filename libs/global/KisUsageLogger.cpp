@@ -39,15 +39,19 @@ const QString KisUsageLogger::s_sectionHeader("=================================
 struct KisUsageLogger::Private {
     bool active {false};
     QFile logFile;
+    QFile sysInfoFile;
 };
 
 KisUsageLogger::KisUsageLogger()
     : d(new Private)
 {
     d->logFile.setFileName(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/krita.log");
+    d->sysInfoFile.setFileName(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/krita-sysinfo.log");
 
     rotateLog();
+
     d->logFile.open(QFile::Append | QFile::Text);
+    d->sysInfoFile.open(QFile::WriteOnly | QFile::Text);
 }
 
 KisUsageLogger::~KisUsageLogger()
@@ -60,60 +64,6 @@ KisUsageLogger::~KisUsageLogger()
 void KisUsageLogger::initialize()
 {
     s_instance->d->active = true;
-}
-
-void KisUsageLogger::close()
-{
-    log("CLOSING SESSION");
-    s_instance->d->active = false;
-    s_instance->d->logFile.flush();
-    s_instance->d->logFile.close();
-}
-
-void KisUsageLogger::log(const QString &message)
-{
-    if (!s_instance->d->active) return;
-    if (!s_instance->d->logFile.isOpen()) return;
-
-    s_instance->d->logFile.write(QDateTime::currentDateTime().toString(Qt::RFC2822Date).toUtf8());
-    s_instance->d->logFile.write(": ");
-    write(message);
-}
-
-void KisUsageLogger::write(const QString &message)
-{
-    if (!s_instance->d->active) return;
-    if (!s_instance->d->logFile.isOpen()) return;
-
-    s_instance->d->logFile.write(message.toUtf8());
-    s_instance->d->logFile.write("\n");
-
-    s_instance->d->logFile.flush();
-}
-
-void KisUsageLogger::writeSectionHeader()
-{
-    s_instance->d->logFile.write(s_sectionHeader.toUtf8());
-}
-
-void KisUsageLogger::writeHeader()
-{
-    Q_ASSERT(s_instance->d->logFile.isOpen());
-
-    QString sessionHeader = QString("SESSION: %1. Executing %2\n\n")
-            .arg(QDateTime::currentDateTime().toString(Qt::RFC2822Date))
-            .arg(qApp->arguments().join(' '));
-
-    QString disclaimer = i18n("WARNING: This file contains information about your system and the\n"
-                              "images you have been working with.\n"
-                              "\n"
-                              "If you have problems with Krita, the Krita developers might ask\n"
-                              "you to share this file with them. The information in this file is\n"
-                              "not shared automatically with the Krita developers in any way. You\n"
-                              "can disable logging to this file in Krita's Configure Krita Dialog.\n"
-                              "\n"
-                              "Please review the contents of this file before sharing this file with\n"
-                              "anyone.\n\n");
 
     QString systemInfo;
 
@@ -143,12 +93,65 @@ void KisUsageLogger::writeHeader()
     systemInfo.append("\n  Product Version: ").append(QSysInfo::productVersion());
     systemInfo.append("\n\n");
 
-    writeSectionHeader();
+    s_instance->d->sysInfoFile.write(systemInfo.toUtf8());
+
+}
+
+void KisUsageLogger::close()
+{
+    log("CLOSING SESSION");
+    s_instance->d->active = false;
+    s_instance->d->logFile.flush();
+    s_instance->d->logFile.close();
+    s_instance->d->sysInfoFile.flush();
+    s_instance->d->sysInfoFile.close();
+}
+
+void KisUsageLogger::log(const QString &message)
+{
+    if (!s_instance->d->active) return;
+    if (!s_instance->d->logFile.isOpen()) return;
+
+    s_instance->d->logFile.write(QDateTime::currentDateTime().toString(Qt::RFC2822Date).toUtf8());
+    s_instance->d->logFile.write(": ");
+    write(message);
+}
+
+void KisUsageLogger::write(const QString &message)
+{
+    if (!s_instance->d->active) return;
+    if (!s_instance->d->logFile.isOpen()) return;
+
+    s_instance->d->logFile.write(message.toUtf8());
+    s_instance->d->logFile.write("\n");
+
+    s_instance->d->logFile.flush();
+}
+
+void KisUsageLogger::writeSysInfo(const QString &message)
+{
+    if (!s_instance->d->active) return;
+    if (!s_instance->d->sysInfoFile.isOpen()) return;
+
+    s_instance->d->sysInfoFile.write(message.toUtf8());
+    s_instance->d->sysInfoFile.write("\n");
+
+    s_instance->d->sysInfoFile.flush();
+
+}
+
+
+void KisUsageLogger::writeHeader()
+{
+    Q_ASSERT(s_instance->d->sysInfoFile.isOpen());
+    s_instance->d->logFile.write(s_sectionHeader.toUtf8());
+
+    QString sessionHeader = QString("SESSION: %1. Executing %2\n\n")
+            .arg(QDateTime::currentDateTime().toString(Qt::RFC2822Date))
+            .arg(qApp->arguments().join(' '));
+
     s_instance->d->logFile.write(sessionHeader.toUtf8());
-    s_instance->d->logFile.write(disclaimer.toUtf8());
-    s_instance->d->logFile.write(systemInfo.toUtf8());
-
-
+    s_instance->d->logFile.flush();
 }
 
 void KisUsageLogger::rotateLog()
@@ -158,7 +161,7 @@ void KisUsageLogger::rotateLog()
             // Check for CLOSING SESSION
             d->logFile.open(QFile::ReadOnly);
             QString log = QString::fromUtf8(d->logFile.readAll());
-            if (!log.split("\n").last().contains("CLOSING SESSION")) {
+            if (!log.split(s_sectionHeader).last().contains("CLOSING SESSION")) {
                 log.append("\nKRITA DID NOT CLOSE CORRECTLY\n");
                 QString crashLog = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QStringLiteral("/kritacrash.log");
                 if (QFileInfo(crashLog).exists()) {

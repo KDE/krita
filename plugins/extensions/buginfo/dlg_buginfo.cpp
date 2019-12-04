@@ -89,10 +89,18 @@ DlgBugInfo::DlgBugInfo(QWidget *parent)
         info.append("\n Swap: ").append(KisImageConfig(true).swapDir());
     }
     else {
-        QFile f(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/krita.log");
-        f.open(QFile::ReadOnly | QFile::Text);
-        info = QString::fromUtf8(f.readAll());
-        f.close();
+
+        QFile sysinfo(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/krita-sysinfo.log");
+        sysinfo.open(QFile::ReadOnly | QFile::Text);
+        info = QString::fromUtf8(sysinfo.readAll());
+        sysinfo.close();
+
+        info += "\n\n";
+
+        QFile log(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/krita.log");
+        log.open(QFile::ReadOnly | QFile::Text);
+        info += QString::fromUtf8(log.readAll());
+        log.close();
     }
     // calculate a default height for the widget
     int wheight = m_page->sizeHint().height();

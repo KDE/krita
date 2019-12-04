@@ -89,6 +89,7 @@ void KisStatusBar::setup()
     addStatusBarItem(m_selectionStatus);
     m_selectionStatus->setVisible(false);
 
+#ifdef Q_OS_ANDROID
     m_fullscreenToggle = new QToolButton;
     m_fullscreenToggle->setObjectName("Toggle Fullscreen");
     m_fullscreenToggle->setCheckable(false);
@@ -98,7 +99,7 @@ void KisStatusBar::setup()
     addStatusBarItem(m_fullscreenToggle);
     m_fullscreenToggle->setVisible(true);
     connect(m_fullscreenToggle, SIGNAL(clicked()), m_viewManager, SLOT(slotToggleFullscreen()));
-
+#endif
 
     m_statusBarStatusLabel = new KSqueezedTextLabel();
     m_statusBarStatusLabel->setObjectName("statsBarStatusLabel");

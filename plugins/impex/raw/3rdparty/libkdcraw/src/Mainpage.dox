@@ -1,6 +1,6 @@
 /** @mainpage libKDcraw
 
-libKDcraw is a thread-safe wrapper around <a href="http://www.libraw.org">libraw</a>. Have a look at KDcrawIface::KDcraw to get started.
+libKDcraw is a thread-safe wrapper around <a href="https://www.libraw.org">libraw</a>. Have a look at KDcrawIface::KDcraw to get started.
 
 @see KDcrawIface::KDcraw
 

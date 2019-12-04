@@ -869,7 +869,7 @@ bool KoColorSet::Private::loadAct()
 
 bool KoColorSet::Private::loadRiff()
 {
-    // http://worms2d.info/Palette_file
+    // https://worms2d.info/Palette_file
     QFileInfo info(colorSet->filename());
     colorSet->setName(info.completeBaseName());
     KisSwatch e;

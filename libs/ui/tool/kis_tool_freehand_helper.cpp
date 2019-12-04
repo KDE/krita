@@ -443,7 +443,7 @@ void KisToolFreehandHelper::paint(KisPaintInformation &info)
      * Smooth the coordinates out using the history and the
      * distance. This is a heavily modified version of an algo used in
      * Gimp and described in https://bugs.kde.org/show_bug.cgi?id=281267 and
-     * http://www24.atwiki.jp/sigetch_2007/pages/17.html.  The main
+     * https://w.atwiki.jp/sigetch_2007/pages/17.html.  The main
      * differences are:
      *
      * 1) It uses 'distance' instead of 'velocity', since time

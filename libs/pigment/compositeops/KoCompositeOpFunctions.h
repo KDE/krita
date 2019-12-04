@@ -25,7 +25,7 @@
 template<class HSXType, class TReal>
 inline void cfReorientedNormalMapCombine(TReal srcR, TReal srcG, TReal srcB, TReal& dstR, TReal& dstG, TReal& dstB)
 {
-    // see http://blog.selfshadow.com/publications/blending-in-detail/ by Barre-Brisebois and Hill
+    // see https://blog.selfshadow.com/publications/blending-in-detail/ by Barre-Brisebois and Hill
     TReal tx = 2*srcR-1;
     TReal ty = 2*srcG-1;
     TReal tz = 2*srcB;

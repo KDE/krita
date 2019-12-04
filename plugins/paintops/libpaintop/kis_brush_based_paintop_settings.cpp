@@ -67,7 +67,9 @@ struct BrushWriter {
 KisBrushBasedPaintOpSettings::KisBrushBasedPaintOpSettings()
     : KisOutlineGenerationPolicy<KisPaintOpSettings>(KisCurrentOutlineFetcher::SIZE_OPTION |
             KisCurrentOutlineFetcher::ROTATION_OPTION |
-            KisCurrentOutlineFetcher::MIRROR_OPTION)
+            KisCurrentOutlineFetcher::MIRROR_OPTION |
+            KisCurrentOutlineFetcher::SHARPNESS_OPTION)
+
 {
 }
 

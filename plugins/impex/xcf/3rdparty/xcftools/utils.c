@@ -162,7 +162,7 @@ closeout(FILE *f,const char *name)
     } else if( errno == 0 ) {
       /* Attempt to coax a valid errno out of the standard library,
        * following an idea by Bruno Haible
-       * http://lists.gnu.org/archive/html/bug-gnulib/2003-09/msg00157.html
+       * https://lists.gnu.org/archive/html/bug-gnulib/2003-09/msg00157.html
        */
       if( fputc('\0', f) != EOF &&
           fflush(f) == 0 )

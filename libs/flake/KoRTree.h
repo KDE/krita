@@ -383,9 +383,10 @@ void KoRTree<T>::insertHelper(const QRectF& bb, const T& data, int id)
     QRectF nbb(bb.normalized());
     // This has to be done as it is not possible to use QRectF::united() with a isNull()
     if (nbb.isNull()) {
+        qWarning() <<  "KoRTree::insert boundingBox isNull setting size to" << nbb.size();
+
         nbb.setWidth(0.0001);
         nbb.setHeight(0.0001);
-        qWarning() <<  "KoRTree::insert boundingBox isNull setting size to" << nbb.size();
     }
     else {
         // This has to be done as QRectF::intersects() return false if the rect does not have any area overlapping.

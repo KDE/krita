@@ -382,8 +382,7 @@ QSize RAbstractSliderSpinBox::sizeHint() const
 
     spinOpts.rect = rect();
 
-    return style()->sizeFromContents(QStyle::CT_SpinBox, &spinOpts, hint, 0)
-                   .expandedTo(QApplication::globalStrut());
+    return style()->sizeFromContents(QStyle::CT_SpinBox, &spinOpts, hint, 0);
 }
 
 QSize RAbstractSliderSpinBox::minimumSizeHint() const

@@ -344,5 +344,5 @@ QSize KisColorFilterCombo::sizeHint() const
     const QSize originalHint = QComboBox::sizeHint();
     QSize sh(3 * arrowSize, originalHint.height());
 
-    return sh.expandedTo(QApplication::globalStrut());
+    return sh;
 }

@@ -59,7 +59,10 @@ int KisTagModel::rowCount(const QModelIndex &/*parent*/) const
                   ",      resource_types\n"
                   "WHERE  active = 1\n"
                   "AND    tags.resource_type_id = resource_types.id\n"
-                  "AND    resource_types.name = :resource_type");
+                  "AND    resource_types.name = :resource_type\n"
+                  "AND    tags.storage_id in (SELECT id\n"
+                  "                      FROM   storages\n"
+                  "                      WHERE  active  == 1)");
         q.bindValue(":resource_type", d->resourceType);
         q.exec();
         q.first();
@@ -335,7 +338,6 @@ bool KisTagModel::renameTag(const KisTagSP tag, const QString &name)
 
 }
 
-
 bool KisTagModel::prepareQuery()
 {
     beginResetModel();
@@ -348,7 +350,10 @@ bool KisTagModel::prepareQuery()
                               ",       resource_types\n"
                               "WHERE   tags.resource_type_id = resource_types.id\n"
                               "AND     resource_types.name = :resource_type\n"
-                              "AND     tags.active = 1");
+                              "AND     tags.active = 1\n"
+                              "AND     tags.storage_id in (SELECT id\n"
+                              "                      FROM   storages\n"
+                              "                      WHERE  active  == 1)");
 
     if (!r) {
         qWarning() << "Could not prepare KisTagModel query" << d->query.lastError();

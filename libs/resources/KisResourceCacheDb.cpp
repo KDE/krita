@@ -645,7 +645,7 @@ bool KisResourceCacheDb::hasTag(const QString &url, const QString &resourceType)
     return false;
 }
 
-bool KisResourceCacheDb::addTag(const QString &resourceType, const QString url, const QString name, const QString comment)
+bool KisResourceCacheDb::addTag(const QString &resourceType, const QString storageLocation, const QString url, const QString name, const QString comment)
 {
     if (hasTag(url, resourceType)) {
         return true;
@@ -653,9 +653,12 @@ bool KisResourceCacheDb::addTag(const QString &resourceType, const QString url, 
 
     QSqlQuery q;
     if (!q.prepare("INSERT INTO tags\n"
-                   "( url, name, comment, resource_type_id, active)\n"
+                   "(storage_id, url, name, comment, resource_type_id, active)\n"
                    "VALUES\n"
-                   "( :url\n"
+                   "("
+                   "  (SELECT id FROM storages\n"
+                   "  WHERE location = :storage_location)\n"
+                   ", :url\n"
                    ", :name\n"
                    ", :comment\n"
                    ", (SELECT id\n"
@@ -667,6 +670,7 @@ bool KisResourceCacheDb::addTag(const QString &resourceType, const QString url, 
         return false;
     }
 
+    q.bindValue(":storage_location", KisResourceLocator::instance()->makeStorageLocationRelative(storageLocation));
     q.bindValue(":url", url);
     q.bindValue(":name", name);
     q.bindValue(":comment", comment);
@@ -685,7 +689,7 @@ bool KisResourceCacheDb::addTags(KisResourceStorageSP storage, QString resourceT
     QSharedPointer<KisResourceStorage::TagIterator> iter = storage->tags(resourceType);
     while(iter->hasNext()) {
         iter->next();
-        if (!addTag(resourceType, iter->url(), iter->name(), iter->comment())) {
+        if (!addTag(resourceType, storage->location(), iter->url(), iter->name(), iter->comment())) {
             qWarning() << "Could not add tag" << iter->url() << "to the database";
         }
         if (!iter->tag()->defaultResources().isEmpty()) {

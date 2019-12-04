@@ -80,7 +80,10 @@ KisResourceModel::KisResourceModel(const QString &resourceType, QObject *parent)
                             ",      resource_tags\n"
                             "WHERE  tags.active > 0\n"                               // make sure the tag is active
                             "AND    tags.id = resource_tags.tag_id\n"                // join tags + resource_tags by tag_id
-                            "AND    resource_tags.resource_id = :resource_id\n");    // make sure we're looking for tags for a specific resource
+                            "AND    resource_tags.resource_id = :resource_id\n"
+                            "AND    tags.storage_id in (SELECT id\n"
+                            "                      FROM   storages\n"
+                            "                      WHERE  active > 0)");    // make sure we're looking for tags for a specific resource
     if (!r)  {
         qWarning() << "Could not prepare TagsForResource query" << d->tagQuery.lastError();
     }

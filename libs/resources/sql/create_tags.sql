@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS tags (
     id INTEGER PRIMARY KEY
 ,   resource_type_id INTEGER
+,   storage_id INTEGER       /* points to the storage object that contains the actual tag */
 ,   url TEXT
 ,   name TEXT
 ,   comment TEXT

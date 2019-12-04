@@ -98,7 +98,7 @@ private:
 
     static bool tagResource(KisResourceStorageSP storage, const QString resourceName, KisTagSP tag, const QString &resourceType);
     static bool hasTag(const QString &url, const QString &resourceType);
-    static bool addTag(const QString &resourceType, const QString url, const QString name, const QString comment);
+    static bool addTag(const QString &resourceType, const QString storageLocation, const QString url, const QString name, const QString comment);
     static bool addTags(KisResourceStorageSP storage, QString resourceType);
 
     static bool addStorage(KisResourceStorageSP storage, bool preinstalled);

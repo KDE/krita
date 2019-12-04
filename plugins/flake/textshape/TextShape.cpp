@@ -82,7 +82,9 @@ TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager, KoTextR
     m_layout = new KoTextDocumentLayout(m_textShapeData->document(), provider);
     m_textShapeData->document()->setDocumentLayout(m_layout);
 
-    setCollisionDetection(true);
+    /// FIXME: collision detection was dropped in Krita
+    /// due to performance reasons
+    // setCollisionDetection(true);
 
     QObject::connect(m_layout, SIGNAL(layoutIsDirty()), m_layout, SLOT(scheduleLayout()));
 }
@@ -110,7 +112,10 @@ TextShape::TextShape(const TextShape &rhs)
     m_layout = new KoTextDocumentLayout(m_textShapeData->document(), provider);
     m_textShapeData->document()->setDocumentLayout(m_layout);
 
-    setCollisionDetection(true);
+    /// FIXME: collision detection was dropped in Krita
+    /// due to performance reasons
+    // setCollisionDetection(true);
+
     QObject::connect(m_layout, SIGNAL(layoutIsDirty()), m_layout, SLOT(scheduleLayout()));
 
     updateDocumentData();
@@ -247,7 +252,7 @@ void TextShape::shapeChanged(ChangeType type, KoShape *shape)
 {
     Q_UNUSED(shape);
     KoShapeContainer::shapeChanged(type, shape);
-    if (type == PositionChanged || type == SizeChanged || type == CollisionDetected) {
+    if (type == PositionChanged || type == SizeChanged /* || type == CollisionDetected*/) {
         m_textShapeData->setDirty();
     }
 }

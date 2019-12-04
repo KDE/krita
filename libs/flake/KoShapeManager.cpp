@@ -256,13 +256,9 @@ void KoShapeManager::Private::updateTree()
 {
     QMutexLocker l(&this->treeMutex);
 
-    // for detecting collisions between shapes.
-    DetectCollision detector;
     bool selectionModified = false;
     bool anyModified = false;
     Q_FOREACH (KoShape *shape, aggregate4update) {
-        if (shapeIndexesBeforeUpdate.contains(shape))
-            detector.detect(tree, shape, shapeIndexesBeforeUpdate[shape]);
         selectionModified = selectionModified || selection->isSelected(shape);
         anyModified = true;
     }
@@ -275,14 +271,9 @@ void KoShapeManager::Private::updateTree()
         tree.insert(br, shape);
     }
 
-    // do it again to see which shapes we intersect with _after_ moving.
-    foreach (KoShape *shape, aggregate4update) {
-        detector.detect(tree, shape, shapeIndexesBeforeUpdate[shape]);
-    }
     aggregate4update.clear();
     shapeIndexesBeforeUpdate.clear();
 
-    detector.fireSignals();
     if (selectionModified) {
         emit q->selectionContentChanged();
     }
@@ -419,14 +410,6 @@ void KoShapeManager::addShape(KoShape *shape, Repaint repaint)
             addShape(containerShape, repaint);
         }
     }
-
-    {
-        QMutexLocker l(&d->treeMutex);
-
-        Private::DetectCollision detector;
-        detector.detect(d->tree, shape, shape->zIndex());
-        detector.fireSignals();
-    }
 }
 
 void KoShapeManager::remove(KoShape *shape)
@@ -435,10 +418,6 @@ void KoShapeManager::remove(KoShape *shape)
     {
         QMutexLocker l1(&d->shapesMutex);
         QMutexLocker l2(&d->treeMutex);
-
-        Private::DetectCollision detector;
-        detector.detect(d->tree, shape, shape->zIndex());
-        detector.fireSignals();
 
         dirtyRect = shape->absoluteOutlineRect();
 

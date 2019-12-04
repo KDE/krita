@@ -117,7 +117,6 @@ public:
         GenericMatrixChange,    ///< used after the matrix was changed without knowing which property explicitly changed
         KeepAspectRatioChange, ///< used after setKeepAspectRatio()
         ParentChanged,   ///< used after a setParent()
-        CollisionDetected, ///< used when another shape moved in our boundingrect
         Deleted, ///< the shape was deleted
         StrokeChanged, ///< the shapes stroke has changed
         BackgroundChanged, ///< the shapes background has changed
@@ -1105,20 +1104,6 @@ public:
 
     /// Sets the new filter effect stack, removing the old one
     void setFilterEffectStack(KoFilterEffectStack *filterEffectStack);
-
-    /**
-     * Set the property collision detection.
-     * Setting this to true will result in calls to shapeChanged() with the CollisionDetected
-     * parameter whenever either this or another shape is moved/rotated etc and intersects this shape.
-     * @param detect if true detect collisions.
-     */
-    void setCollisionDetection(bool detect);
-
-    /**
-     * get the property collision detection.
-     * @returns true if collision detection is on.
-     */
-    bool collisionDetection();
 
     /**
      * Return the tool delegates for this shape.

@@ -126,7 +126,6 @@ KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KisImageWSP imag
         : KisShapeLayerCanvasBase(parent, image)
         , m_projection(0)
         , m_parentLayer(parent)
-        , m_canvasUpdateCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
         , m_asyncUpdateSignalCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
 {
     /**
@@ -137,8 +136,6 @@ KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KisImageWSP imag
     m_shapeManager->selection()->setActiveLayer(parent);
 
     connect(&m_asyncUpdateSignalCompressor, SIGNAL(timeout()), SLOT(slotStartAsyncRepaint()));
-    connect(this, SIGNAL(forwardRepaint()), &m_canvasUpdateCompressor, SLOT(start()));
-    connect(&m_canvasUpdateCompressor, SIGNAL(timeout()), this, SLOT(slotStartDirectSyncRepaint()));
 
     setImage(image);
 }
@@ -161,8 +158,6 @@ void KisShapeLayerCanvas::setImage(KisImageWSP image)
         connect(m_image, SIGNAL(sigSizeChanged(QPointF,QPointF)), SLOT(slotImageSizeChanged()));
         m_cachedImageRect = m_image->bounds();
     }
-
-    updateUpdateCompressorDelay();
 }
 
 
@@ -227,31 +222,8 @@ void KisShapeLayerCanvas::updateCanvas(const QVector<QRectF> &region)
         }
     }
 
-    /**
-     * HACK ALERT!
-     *
-     * The shapes may be accessed from both, GUI and worker threads! And we have no real
-     * guard against this until the vector tools will be ported to the strokes framework.
-     *
-     * Here we just avoid the most obvious conflict of threads:
-     *
-     * 1) If the layer is modified by a non-gui (worker) thread, use a spontaneous jobs
-     *    to rerender the canvas. The job will be executed (almost) exclusively and it is
-     *    the responsibility of the worker thread to add a barrier to wait until this job is
-     *    completed, and not try to access the shapes concurrently.
-     *
-     * 2) If the layer is modified by a gui thread, it means that we are being accessed by
-     *    a legacy vector tool. It this case just emit a queued signal to make sure the updates
-     *    are compressed a little bit (TODO: add a compressor?)
-     */
-
-    if (qApp->thread() == QThread::currentThread()) {
-        emit forwardRepaint();
-        m_hasDirectSyncRepaintInitiated = true;
-    } else {
-        m_asyncUpdateSignalCompressor.start();
-        m_hasUpdateInCompressor = true;
-    }
+    m_asyncUpdateSignalCompressor.start();
+    m_hasUpdateInCompressor = true;
 }
 
 
@@ -264,12 +236,6 @@ void KisShapeLayerCanvas::slotStartAsyncRepaint()
 {
     m_hasUpdateInCompressor = false;
     m_image->addSpontaneousJob(new KisRepaintShapeLayerLayerJob(m_parentLayer, this));
-}
-
-void KisShapeLayerCanvas::slotStartDirectSyncRepaint()
-{
-    m_hasDirectSyncRepaintInitiated = false;
-    repaint();
 }
 
 void KisShapeLayerCanvas::slotImageSizeChanged()
@@ -286,7 +252,6 @@ void KisShapeLayerCanvas::slotImageSizeChanged()
     updateCanvas(dirtyRects);
 
     m_cachedImageRect = m_image->bounds();
-    updateUpdateCompressorDelay();
 }
 
 void KisShapeLayerCanvas::repaint()
@@ -382,7 +347,7 @@ void KisShapeLayerCanvas::forceRepaint()
 
 bool KisShapeLayerCanvas::hasPendingUpdates() const
 {
-    return m_hasUpdateInCompressor || m_hasDirectSyncRepaintInitiated;
+    return m_hasUpdateInCompressor;
 }
 
 void KisShapeLayerCanvas::forceRepaintWithHiddenAreas()
@@ -415,15 +380,4 @@ void KisShapeLayerCanvas::rerenderAfterBeingInvisible()
 
     m_hasChangedWhileBeingInvisible = false;
     resetCache();
-}
-
-void KisShapeLayerCanvas::updateUpdateCompressorDelay()
-{
-    if (m_cachedImageRect.width() * m_cachedImageRect.height() < 2480 * 3508) { // A4 300 DPI
-        m_canvasUpdateCompressor.setDelay(25);
-    } else if (m_cachedImageRect.width() * m_cachedImageRect.height() < 4961 * 7061) { // A4 600 DPI
-        m_canvasUpdateCompressor.setDelay(100);
-    } else { // Really big
-        m_canvasUpdateCompressor.setDelay(500);
-    }
 }

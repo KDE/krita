@@ -22,6 +22,7 @@
 #include <QStylePainter>
 #include <QtCore/qmath.h>
 #include <QApplication>
+#include <QProxyStyle>
 #include <QStyleOption>
 #include <QSortFilterProxyModel>
 #include <QStandardItemModel>
@@ -159,6 +160,24 @@ public:
     }
 };
 
+class PopupComboBoxStyle : public QProxyStyle
+{
+public:
+    PopupComboBoxStyle(QStyle *baseStyle = nullptr) : QProxyStyle(baseStyle) {}
+
+    int styleHint(QStyle::StyleHint hint, const QStyleOption *option, const QWidget *widget, QStyleHintReturn *returnData) const override
+    {
+        // This flag makes ComboBox popup float ontop of its parent ComboBox, like in Fusion style.
+        // Only when this hint is set will Qt respect combobox popup size hints, otherwise the popup
+        // can never exceed the width of its parent ComboBox, like in Breeze style.
+        if (hint == QStyle::SH_ComboBox_Popup) {
+            return true;
+        }
+
+        return QProxyStyle::styleHint(hint, option, widget, returnData);
+    }
+};
+
 struct KisColorFilterCombo::Private
 {
     LabelFilteringModel *filteringModel;
@@ -170,6 +189,10 @@ KisColorFilterCombo::KisColorFilterCombo(QWidget *parent)
 {
     QStandardItemModel *newModel = new QStandardItemModel(this);
     setModel(newModel);
+
+    PopupComboBoxStyle *proxyStyle = new PopupComboBoxStyle(style());
+    proxyStyle->setParent(this);
+    setStyle(proxyStyle);
 
     setView(new FullSizedListView);
     m_eventFilters.append(new ComboEventFilter(this));

@@ -22,6 +22,7 @@
 #include <QFile>
 #include <QDomDocument>
 #include <QTextStream>
+#include <QBuffer>
 
 
 #define WORKSPACE_VERSION 1
@@ -81,6 +82,19 @@ bool KisWorkspaceResource::saveToDevice(QIODevice *dev) const
     QDomElement settings = doc.createElement("settings");
     KisPropertiesConfiguration::toXML(doc, settings);
     root.appendChild(settings);
+
+    if (!image().isNull()) {
+        QDomElement thumb = doc.createElement("image");
+        QByteArray arr;
+        QBuffer buffer(&arr);
+        buffer.open(QIODevice::WriteOnly);
+        image().save(&buffer, "PNG");
+        buffer.close();
+        thumb.appendChild(doc.createCDATASection(arr.toBase64()));
+        root.appendChild(thumb);
+    }
+
+
     doc.appendChild(root);
 
     QTextStream textStream(dev);
@@ -129,6 +143,13 @@ bool KisWorkspaceResource::loadFromDevice(QIODevice *dev)
     QDomElement settings = element.firstChildElement("settings");
     if (!settings.isNull()) {
         KisPropertiesConfiguration::fromXML(settings);
+    }
+
+    QDomElement thumb = element.firstChildElement("image");
+    if (!thumb.isNull()) {
+        QImage img;
+        img.loadFromData(QByteArray::fromBase64(thumb.text().toLatin1()));
+        this->setImage(img);
     }
 
     setValid(true);

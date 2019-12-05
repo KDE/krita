@@ -207,6 +207,12 @@ public:
     /// Copy the given file into the bundle directory.
     bool installBundle(const QString &fileName) const;
 
+    /**
+     * @brief layoutThumbnail
+     * @return image for the workspaces.
+     */
+    QImage layoutThumbnail();
+
 Q_SIGNALS:
 
     /**

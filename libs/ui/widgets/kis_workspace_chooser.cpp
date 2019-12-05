@@ -146,6 +146,7 @@ void KisWorkspaceChooser::slotSaveWorkspace()
 
     KisWorkspaceResourceSP workspace(new KisWorkspaceResource(QString()));
     workspace->setDockerState(m_view->qtMainWindow()->saveState());
+    workspace->setImage(m_view->mainWindow()->layoutThumbnail());
     m_view->canvasResourceProvider()->notifySavingWorkspace(workspace);
     workspace->setValid(true);
 

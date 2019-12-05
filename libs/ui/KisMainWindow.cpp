@@ -1117,6 +1117,40 @@ bool KisMainWindow::installBundle(const QString &fileName) const
     return QFile::copy(fileName, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/bundles/" + from.fileName());
 }
 
+QImage KisMainWindow::layoutThumbnail()
+{
+    int size = 256;
+    qreal scale = qreal(size)/qreal(qMax(geometry().width(), geometry().height()));
+    QImage layoutThumbnail = QImage(qRound(geometry().width()*scale), qRound(geometry().height()*scale), QImage::Format_ARGB32);
+    QPainter gc(&layoutThumbnail);
+    gc.fillRect(0, 0, layoutThumbnail.width(), layoutThumbnail.height(), this->palette().dark());
+
+    for (int childW = 0; childW< children().size(); childW++) {
+        if (children().at(childW)->isWidgetType()) {
+            QWidget *w = dynamic_cast<QWidget*>(children().at(childW));
+
+            if (w->isVisible()) {
+                QRect wRect = QRectF(w->geometry().x()*scale
+                                     , w->geometry().y()*scale
+                                     , w->geometry().width()*scale
+                                     , w->geometry().height()*scale
+                                     ).toRect();
+
+                wRect = wRect.intersected(layoutThumbnail.rect().adjusted(-1, -1, -1, -1));
+
+                gc.setBrush(this->palette().window());
+                if (w == d->widgetStack) {
+                    gc.setBrush(d->mdiArea->background());
+                }
+                gc.setPen(this->palette().windowText().color());
+                gc.drawRect(wRect);
+            }
+        }
+    }
+    gc.end();
+    return layoutThumbnail;
+}
+
 bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExporting)
 {
     if (!document) {

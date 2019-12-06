@@ -207,8 +207,8 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
     CompareWithOtherTagFunctor comparer(currentlySelectedTag);
 
 
-    std::sort(removables.begin(), removables.end(), KisTag::compareNamesAndUrls);
-    std::sort(assignables2.begin(), assignables2.end(), KisTag::compareNamesAndUrls);
+    //std::sort(removables.begin(), removables.end(), KisTag::compareNamesAndUrls);
+    //std::sort(assignables2.begin(), assignables2.end(), KisTag::compareNamesAndUrls);
     bool currentTagInRemovables = !currentlySelectedTag.isNull();
     currentTagInRemovables = currentTagInRemovables
             && (std::find_if(removables.begin(), removables.end(), comparer) != removables.end());

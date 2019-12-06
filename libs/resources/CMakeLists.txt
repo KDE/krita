@@ -26,6 +26,10 @@ set(kritaresources_LIB_SRCS
     KisTagModelProvider.cpp
     KisActiveFilterTagProxyModel.cpp
 
+    KisTagsResourcesModel.cpp
+    KisTagsResourcesModelProvider.cpp
+
+
     KoResource.cpp
     KoResourceBundle.cpp
     KoResourceBundleManifest.cpp

@@ -88,13 +88,11 @@ KisResourceTaggingManager::KisResourceTaggingManager(QString resourceType, KisTa
     , d(new Private())
 {
     d->model = model;
-    d->tagFilter = new KisTagFilterWidget(parent);
-
-
 
     d->tagModel = KisTagModelProvider::tagModel(resourceType);
     d->resourceSourceModel = KisResourceModelProvider::resourceModel(resourceType);
     d->tagChooser = new KisTagChooserWidget(d->tagModel, parent);
+    d->tagFilter = new KisTagFilterWidget(d->tagModel, parent);
 
     connect(d->tagChooser, SIGNAL(tagChosen(KisTagSP)), this, SLOT(tagChooserIndexChanged(KisTagSP)));
     connect(d->tagChooser, SIGNAL(newTagRequested(KisTagSP)), this, SLOT(contextCreateNewTag(KisTagSP)));
@@ -194,23 +192,7 @@ QStringList KisResourceTaggingManager::availableTags() const
 
 void KisResourceTaggingManager::addResourceTag(KoResourceSP resource, const KisTagSP tag)
 {
-    ENTER_FUNCTION();
-    fprintf(stderr, "trying to tag a resource... %s %s\n", resource->name().toUtf8().toStdString().c_str(), tag->name().toUtf8().toStdString().c_str());
     d->tagModel->tagResource(tag, resource);
-    //d->tagModels->tagModel(resource->resourceType())->tagResource(tag, resource);
-    // we need to find a tag from a tagName?
-    // or...
-
-    //    QStringList tagsList = d->model->assignedTagsList(resource);
-    //    if (tagsList.isEmpty()) {
-    //        d->model->addTag(resource, tagName);
-    //    } else {
-    //        Q_FOREACH (const QString & tag, tagsList) {
-    //            if (tag.compare(tagName)) {
-    //                d->model->addTag(resource, tagName);
-    //            }
-    //        }
-    //    }
 }
 
 void KisResourceTaggingManager::syncTagBoxEntryAddition(const KisTagSP tag)
@@ -266,7 +248,6 @@ void KisResourceTaggingManager::contextAddTagToResource(KoResourceSP resource, c
     fprintf(stderr, "void KisResourceTaggingManager::contextAddTagToResource(KoResourceSP resource, const KisTagSP tag)");
     ENTER_FUNCTION();
     addResourceTag(resource, tag);
-    //    d->model->tagCategoryMembersChanged();
     updateTaggedResourceView();
 }
 

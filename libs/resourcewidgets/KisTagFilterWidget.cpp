@@ -29,6 +29,8 @@
 #include <QAction>
 #include <QGridLayout>
 #include <QLineEdit>
+#include <QCompleter>
+
 #include <klocalizedstring.h>
 
 #include <KoIcon.h>
@@ -43,9 +45,10 @@ public:
     QLineEdit* tagSearchLineEdit;
     QPushButton* tagSearchSaveButton;
     QGridLayout* filterBarLayout;
+    QCompleter* completer;
 };
 
-KisTagFilterWidget::KisTagFilterWidget(QWidget* parent)
+KisTagFilterWidget::KisTagFilterWidget(KisTagModel* model, QWidget* parent)
     : QWidget(parent)
     , d(new Private())
 {
@@ -77,6 +80,11 @@ KisTagFilterWidget::KisTagFilterWidget(QWidget* parent)
     d->tagSearchLineEdit->setPlaceholderText(i18n("Search"));
     d->tagSearchLineEdit->setToolTip(d->tagSearchBarTooltip_saving_disabled);
     d->tagSearchLineEdit->setEnabled(true);
+
+    d->completer = new QCompleter(model, this);
+    d->completer->setCompletionRole(Qt::DisplayRole);
+    d->completer->setCaseSensitivity(Qt::CaseInsensitive);
+    d->tagSearchLineEdit->setCompleter(d->completer);
 
     filterBarLayout->setSpacing(0);
     filterBarLayout->setMargin(0);
@@ -126,7 +134,6 @@ void KisTagFilterWidget::clear()
 
 void KisTagFilterWidget::onTextChanged(const QString& lineEditText)
 {
-    fprintf(stderr, "Text changed!\n");
     ENTER_FUNCTION() << ppVar(lineEditText);
     d->tagSearchSaveButton->setEnabled(!lineEditText.isEmpty());
     emit filterTextChanged(lineEditText);
@@ -134,7 +141,6 @@ void KisTagFilterWidget::onTextChanged(const QString& lineEditText)
 
 void KisTagFilterWidget::onSaveButtonClicked()
 {
-    fprintf(stderr, "Save Button Clicked!\n");
     ENTER_FUNCTION() << ppVar(d->tagSearchLineEdit->text());
     emit saveButtonClicked();
     clear();

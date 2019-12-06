@@ -28,13 +28,14 @@
 #define KISTAGFILTERWIDGET_H
 
 #include <QWidget>
+#include <KisTagModel.h>
 
 class KisTagFilterWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit KisTagFilterWidget(QWidget* parent);
+    explicit KisTagFilterWidget(KisTagModel* model, QWidget* parent);
     ~KisTagFilterWidget() override;
     void allowSave(bool allow);
     void clear();

@@ -42,7 +42,7 @@ KisTagsResourcesModelProvider::~KisTagsResourcesModelProvider()
     delete d;
 }
 
-KisTagsResourcesModel* KisTagsResourcesModelProvider::tagModel(const QString& resourceType)
+KisTagsResourcesModel* KisTagsResourcesModelProvider::getModel(const QString& resourceType)
 {
 
     std::map<QString, std::unique_ptr<KisTagsResourcesModel> >::const_iterator found

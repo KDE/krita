@@ -29,7 +29,7 @@ public:
 
     ~KisTagsResourcesModelProvider();
 
-    static KisTagsResourcesModel* tagModel(const QString& resourceType);
+    static KisTagsResourcesModel* getModel(const QString& resourceType);
     static void resetModels();
 
 private:

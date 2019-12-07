@@ -79,11 +79,34 @@ int KisTagsResourcesModel::columnCount(const QModelIndex &parent) const
 
 QVariant KisTagsResourcesModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid())
-        return QVariant();
+    QVariant v;
+    if (!index.isValid()) return v;
+    if (index.row() > rowCount()) return v;
+    if (index.column() > d->columnCount) return v;
 
-    // FIXME: Implement me!
-    return QVariant();
+    bool pos = const_cast<KisTagsResourcesModel*>(this)->d->query.seek(index.row());
+    if (pos) {
+        switch(role) {
+        case Qt::DisplayRole:
+            return QVariant(d->query.value("id").toString() + ": " + d->query.value("resource_id").toString() + ", "
+                    + d->query.value("tag_id").toString());
+        case Qt::ToolTipRole:   // fallthrough
+        case Qt::StatusTipRole: // fallthrough
+        case Qt::WhatsThisRole:
+            return QVariant("Tag/Resource relationship: " + d->query.value("id").toString() + ": "
+                    + d->query.value("resource_id").toString() + ", " + d->query.value("tag_id").toString());
+        case Qt::UserRole + Id:
+            return d->query.value("id");
+        case Qt::UserRole + ResourceId:
+            return d->query.value("resource_id");
+        case Qt::UserRole + TagId:
+            return d->query.value("tag_id");
+        default:
+            ;
+        }
+    }
+
+    return v;
 }
 
 
@@ -152,7 +175,7 @@ bool KisTagsResourcesModel::untagResource(const KisTagSP tag, const KoResourceSP
                               "AND     tag_id = :tag_id");
 
     if (!r) {
-        qWarning() << "Could not prepare KisTagModel query" << query.lastError();
+        qWarning() << "Could not prepare KisTagsResourcesModel query" << query.lastError();
     }
 
     query.bindValue(":resource_id", resource->resourceId());

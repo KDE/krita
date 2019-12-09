@@ -147,6 +147,10 @@ public:
      */
     KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const override;
     KoResourceSP resourceForId(int id) const;
+    KoResourceSP resourceForFilename(QString name) const;
+    KoResourceSP resourceForName(QString name) const;
+
+
     QModelIndex indexFromResource(KoResourceSP resource) const override;
     bool removeResource(const QModelIndex &index) override;
     bool removeResource(KoResourceSP resource) override;

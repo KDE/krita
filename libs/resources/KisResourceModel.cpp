@@ -298,6 +298,102 @@ KoResourceSP KisResourceModel::resourceForId(int id) const
     return KisResourceLocator::instance()->resourceForId(id);
 }
 
+KoResourceSP KisResourceModel::resourceForFilename(QString filename) const
+{
+    KoResourceSP resource = 0;
+
+    QSqlQuery q;
+    bool r = q.prepare("SELECT resources.id\n"
+                                       ",      resources.storage_id\n"
+                                       ",      resources.name\n"
+                                       ",      resources.filename\n"
+                                       ",      resources.tooltip\n"
+                                       ",      resources.thumbnail\n"
+                                       ",      resources.status\n"
+                                       ",      storages.location\n"
+                                       ",      resources.version\n"
+                                       ",      resource_types.name as resource_type\n"
+                                       "FROM   resources\n"
+                                       ",      resource_types\n"
+                                       ",      storages\n"
+                                       "WHERE  resources.resource_type_id = resource_types.id\n"
+                                       "AND    resources.storage_id = storages.id\n"
+                                       "AND    resources.filename = :resource_filename\n"
+                                       "AND    resource_types.name = :resource_type\n"
+                                       "AND    resources.status = 1\n"
+                                       "AND    storages.active = 1");
+    if (!r) {
+        qWarning() << "Could not prepare KisResourceModel query for resource name" << q.lastError();
+    }
+    q.bindValue(":resource_type", d->resourceType);
+    q.bindValue(":resource_filename", filename);
+
+    r = q.exec();
+    if (!r) {
+        qWarning() << "Could not select" << d->resourceType << "resources" << q.lastError() << q.boundValues();
+    }
+
+    if (q.first()) {
+        qDebug() << "setting up resource from filename";
+        QString storageLocation = q.value("location").toString();
+        QString filename = q.value("filename").toString();
+        resource = KisResourceLocator::instance()->resource(storageLocation, d->resourceType, filename);
+        resource->setResourceId(q.value("id").toInt());
+        resource->setVersion(q.value("version").toInt());
+        resource->setFilename(filename);
+        resource->setStorageLocation(storageLocation);
+    }
+    return resource;
+}
+
+KoResourceSP KisResourceModel::resourceForName(QString name) const
+{
+    KoResourceSP resource = 0;
+
+    QSqlQuery q;
+    bool r = q.prepare("SELECT resources.id\n"
+                                       ",      resources.storage_id\n"
+                                       ",      resources.name\n"
+                                       ",      resources.filename\n"
+                                       ",      resources.tooltip\n"
+                                       ",      resources.thumbnail\n"
+                                       ",      resources.status\n"
+                                       ",      storages.location\n"
+                                       ",      resources.version\n"
+                                       ",      resource_types.name as resource_type\n"
+                                       "FROM   resources\n"
+                                       ",      resource_types\n"
+                                       ",      storages\n"
+                                       "WHERE  resources.resource_type_id = resource_types.id\n"
+                                       "AND    resources.storage_id = storages.id\n"
+                                       "AND    resources.name = :resource_name\n"
+                                       "AND    resource_types.name = :resource_type\n"
+                                       "AND    resources.status = 1\n"
+                                       "AND    storages.active = 1");
+    if (!r) {
+        qWarning() << "Could not prepare KisResourceModel query for resource name" << q.lastError();
+    }
+    q.bindValue(":resource_type", d->resourceType);
+    q.bindValue(":resource_name", name);
+
+    r = q.exec();
+    if (!r) {
+        qWarning() << "Could not select" << d->resourceType << "resources" << q.lastError() << q.boundValues();
+    }
+
+    if (q.first()) {
+        qDebug() << "setting up resource from name";
+        QString storageLocation = q.value("location").toString();
+        QString filename = q.value("filename").toString();
+        resource = KisResourceLocator::instance()->resource(storageLocation, d->resourceType, filename);
+        resource->setResourceId(q.value("id").toInt());
+        resource->setVersion(q.value("version").toInt());
+        resource->setFilename(filename);
+        resource->setStorageLocation(storageLocation);
+    }
+    return resource;
+}
+
 //static int s_i3 {0};
 
 QModelIndex KisResourceModel::indexFromResource(KoResourceSP resource) const
@@ -393,6 +489,8 @@ bool KisResourceModel::updateResource(KoResourceSP resource)
     }
 
     //qDebug() << "KisResourceModel::updateResource" << s_i8 << d->resourceType; s_i8++;
+
+    qDebug() << "KisResourceModel::updateResource" << resource->name();
 
     if (!KisResourceLocator::instance()->updateResource(d->resourceType, resource)) {
         qWarning() << "Failed to update resource";

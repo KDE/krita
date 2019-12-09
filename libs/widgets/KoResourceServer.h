@@ -203,7 +203,10 @@ public:
 //        if (m_resourcesByFilename.contains(filename)) {
 //            return m_resourcesByFilename[filename];
 //        }
-        return 0;
+        if (filename.isEmpty() || filename.isNull()) {
+            return 0;
+        }
+        return m_resourceModel->resourceForFilename(filename).dynamicCast<T>();
     }
 
 
@@ -211,14 +214,19 @@ public:
     {
         QMutexLocker l(&m_mutex);
         qDebug() << "resourceByName" << name;
+        if (name.isEmpty() || name.isNull()) {
+            return 0;
+        }
+        return m_resourceModel->resourceForName(name).dynamicCast<T>();
 //        if (m_resourcesByName.contains(name)) {
 //            return m_resourcesByName[name];
 //        }
-        return 0;
+        //return 0;
     }
 
     QSharedPointer<T> resourceByMD5(const QByteArray& md5) const
     {
+        //This needs MD5 sums to be implemented properly...
         QMutexLocker l(&m_mutex);
         qDebug() << "resourceByMD5" << md5;
 //        return m_resourcesByMd5.value(md5);

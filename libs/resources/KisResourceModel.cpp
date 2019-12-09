@@ -289,6 +289,10 @@ KoResourceSP KisResourceModel::resourceForIndex(QModelIndex index) const
         resource->setVersion(d->resourcesQuery.value("version").toInt());
         resource->setFilename(filename);
         resource->setStorageLocation(storageLocation);
+        QString name = d->resourcesQuery.value("name").toString();
+        if (!name.isNull()) {
+            resource->setName(name);
+        }
     }
     return resource;
 }
@@ -342,6 +346,10 @@ KoResourceSP KisResourceModel::resourceForFilename(QString filename) const
         resource->setVersion(q.value("version").toInt());
         resource->setFilename(filename);
         resource->setStorageLocation(storageLocation);
+        QString name = q.value("name").toString();
+        if (!name.isNull()) {
+            resource->setName(name);
+        }
     }
     return resource;
 }
@@ -390,6 +398,10 @@ KoResourceSP KisResourceModel::resourceForName(QString name) const
         resource->setVersion(q.value("version").toInt());
         resource->setFilename(filename);
         resource->setStorageLocation(storageLocation);
+        QString name = q.value("name").toString();
+        if (!name.isNull()) {
+            resource->setName(name);
+        }
     }
     return resource;
 }

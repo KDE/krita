@@ -22,6 +22,7 @@
 #include "KoToolBox_p.h"
 #include "KoToolBoxLayout_p.h"
 #include "KoToolBoxButton_p.h"
+#include "kis_assert.h"
 
 #include <QButtonGroup>
 #include <QToolButton>
@@ -47,6 +48,8 @@
 
 static int buttonSize(int screen)
 {
+    KIS_ASSERT_RECOVER_RETURN_VALUE(screen < QGuiApplication::screens().size() && screen >= 0, 16);
+
     QRect rc = QGuiApplication::screens().at(screen)->availableGeometry();
     if (rc.width() <= 1024) {
         return 12;
@@ -60,6 +63,7 @@ static int buttonSize(int screen)
     else {
         return 22;
     }
+
 }
 
 class KoToolBox::Private

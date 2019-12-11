@@ -221,6 +221,13 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
             QMap<QString, QVariant> r = KisResourceLocator::instance()->metaDataForResource(d->resourcesQuery.value("id").toInt());
             return r;
         }
+        case Qt::UserRole + KoResourceRole:
+        {
+            KoResourceSP tag = resourceForIndex(index);
+            QVariant response;
+            response.setValue(tag);
+            return response;
+        }
             
         default:
             ;

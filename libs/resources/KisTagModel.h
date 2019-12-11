@@ -43,7 +43,8 @@ public:
         Name,
         Comment,
         ResourceType,
-        Active
+        Active,
+        KisTagRole,
     };
 
 

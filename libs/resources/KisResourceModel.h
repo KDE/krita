@@ -122,7 +122,8 @@ public:
         /// A dirty resource is one that has been modified locally but not saved
         Dirty,
         /// MetaData is a map of key, value pairs that is associated with this resource
-        MetaData
+        MetaData,
+        KoResourceRole
     };
 
 private:

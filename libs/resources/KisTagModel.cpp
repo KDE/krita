@@ -30,6 +30,9 @@
 #include <KisTagsResourcesModel.h>
 
 
+Q_DECLARE_METATYPE(QSharedPointer<KisTag>)
+
+
 struct KisTagModel::Private {
     QSqlQuery query;
     QSqlQuery tagForResourceQuery;
@@ -109,6 +112,13 @@ QVariant KisTagModel::data(const QModelIndex &index, int role) const
             return d->resourceType;
         case Qt::UserRole + Active:
             return true;
+        case Qt::UserRole + KisTagRole:
+        {
+            KisTagSP tag = tagForIndex(index);
+            QVariant response;
+            response.setValue(tag);
+            return response;
+        }
         default:
             ;
         }
@@ -131,6 +141,13 @@ QVariant KisTagModel::data(const QModelIndex &index, int role) const
                 return d->query.value("resource_type");
             case Qt::UserRole + Active:
                 return d->query.value("active");
+            case Qt::UserRole + KisTagRole:
+            {
+                KisTagSP tag = tagForIndex(index);
+                QVariant response;
+                response.setValue(tag);
+                return response;
+            }
             default:
                 ;
             }

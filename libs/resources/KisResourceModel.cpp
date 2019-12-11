@@ -28,6 +28,10 @@
 #include <KisResourceLocator.h>
 #include <KisResourceCacheDb.h>
 
+#include <KisTagsResourcesModel.h>
+#include <KisTagsResourcesModelProvider.h>
+
+
 struct KisResourceModel::Private {
     QSqlQuery resourcesQuery;
     QSqlQuery tagQuery;
@@ -442,6 +446,8 @@ bool KisResourceModel::removeResource(const QModelIndex &index)
         qWarning() << "Failed to remove resource" << resourceId;
         return false;
     }
+    // reset tags-resources model
+    KisTagsResourcesModelProvider::getModel(d->resourceType)->resetQuery();
     return resetQuery();
 }
 
@@ -457,6 +463,8 @@ bool KisResourceModel::removeResource(KoResourceSP resource)
         qWarning() << "Failed to remove resource" << resource->resourceId();
         return false;
     }
+    // reset tags-resources model
+    KisTagsResourcesModelProvider::getModel(d->resourceType)->resetQuery();
     return resetQuery();
 }
 
@@ -542,6 +550,8 @@ bool KisResourceModel::resetQuery()
 
 QVector<KisTagSP> KisResourceModel::tagsForResource(int resourceId) const
 {
+    return KisTagsResourcesModelProvider::getModel(d->resourceType)->tagsForResource(resourceId);
+    /*
     d->tagQuery.bindValue(":resource_id", resourceId);
     bool r = d->tagQuery.exec();
     if (!r) {
@@ -560,6 +570,7 @@ QVector<KisTagSP> KisResourceModel::tagsForResource(int resourceId) const
         tags << tag;
     }
     return tags;
+    */
 }
 
 int KisResourceModel::rowCount(const QModelIndex &) const

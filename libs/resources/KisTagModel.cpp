@@ -26,6 +26,10 @@
 #include <KisResourceCacheDb.h>
 #include <KisTag.h>
 
+#include <KisTagsResourcesModelProvider.h>
+#include <KisTagsResourcesModel.h>
+
+
 struct KisTagModel::Private {
     QSqlQuery query;
     QSqlQuery tagForResourceQuery;
@@ -244,11 +248,16 @@ bool KisTagModel::removeTag(const KisTagSP tag)
         return false;
     }
 
+    // reset tags-resources model
+    KisTagsResourcesModelProvider::getModel(d->resourceType)->resetQuery();
     return prepareQuery();
 }
 
 bool KisTagModel::tagResource(const KisTagSP tag, const KoResourceSP resource)
 {
+    return KisTagsResourcesModelProvider::getModel(d->resourceType)->tagResource(tag, resource);
+
+    /*
     if (!tag) return false;
     if (!tag->valid()) return false;
     if (tag->id() < 0) return false;
@@ -292,10 +301,13 @@ bool KisTagModel::tagResource(const KisTagSP tag, const KoResourceSP resource)
     }
 
     return prepareQuery();
+    */
 }
 
 bool KisTagModel::untagResource(const KisTagSP tag, const KoResourceSP resource)
 {
+    return KisTagsResourcesModelProvider::getModel(d->resourceType)->untagResource(tag, resource);
+    /*
     if (!tag) return false;
     if (!tag->valid()) return false;
     if (!tag->id()) return false;
@@ -324,6 +336,7 @@ bool KisTagModel::untagResource(const KisTagSP tag, const KoResourceSP resource)
     }
 
     return prepareQuery();
+    */
 }
 
 bool KisTagModel::renameTag(const KisTagSP tag, const QString &name)
@@ -359,6 +372,9 @@ bool KisTagModel::renameTag(const KisTagSP tag, const QString &name)
 
 QVector<KisTagSP> KisTagModel::tagsForResource(int resourceId) const
 {
+    return KisTagsResourcesModelProvider::getModel(d->resourceType)->tagsForResource(resourceId);
+
+    /*
     d->tagForResourceQuery.bindValue(":resource_id", resourceId);
     bool r = d->tagForResourceQuery.exec();
     if (!r) {
@@ -378,6 +394,7 @@ QVector<KisTagSP> KisTagModel::tagsForResource(int resourceId) const
         tags << tag;
     }
     return tags;
+    */
 }
 
 bool KisTagModel::prepareQuery()

@@ -28,6 +28,8 @@
 #include "kis_tool.h"
 #include <kis_icon.h>
 
+#include <KoResourceServerObserver.h>
+
 class KoResource;
 class KoColorSet;
 
@@ -45,7 +47,7 @@ public:
     }
 };
 
-class KisToolColorPicker : public KisTool
+class KisToolColorPicker : public KisTool,public KoResourceServerObserver<KoColorSet>
 {
     Q_OBJECT
     Q_PROPERTY(bool toForeground READ toForeground WRITE setToForeground NOTIFY toForegroundChanged)
@@ -81,6 +83,15 @@ public:
 
     bool toForeground() const;
 
+public: //KoResourceServerObserver
+    void unsetResourceServer() override;
+    void resourceAdded(KoColorSet* resource) override;
+    void removingResource(KoColorSet* resource) override;
+    void resourceChanged(KoColorSet* resource) override;
+    void syncTaggedResourceView() override;
+    void syncTagAddition(const QString& tag) override;
+    void syncTagRemoval(const QString& tag) override;
+
 Q_SIGNALS:
     void toForegroundChanged();
 
@@ -95,14 +106,14 @@ public Q_SLOTS:
     void slotSetAddPalette(bool);
     void slotChangeRadius(int);
     void slotChangeBlend(int);
-    void slotAddPalette(KoResource* resource);
+    //void slotAddPalette(KoResource* resource);
     void slotSetColorSource(int value);
 
 private:
     void displayPickedColor();
     bool pickColor(const QPointF& pos);
     void updateOptionWidget();
-
+    void updateCmbPalette();
     // Configuration
     QScopedPointer<KisToolUtils::ColorPickerConfig> m_config;
 

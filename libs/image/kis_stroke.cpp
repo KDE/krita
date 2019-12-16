@@ -49,8 +49,8 @@ KisStroke::KisStroke(KisStrokeStrategy *strokeStrategy, Type type, int levelOfDe
 
 KisStroke::~KisStroke()
 {
-    KIS_ASSERT_RECOVER_NOOP(m_strokeEnded);
-    KIS_ASSERT_RECOVER_NOOP(m_jobsQueue.isEmpty());
+    Q_ASSERT(m_strokeEnded);
+    Q_ASSERT(m_jobsQueue.isEmpty());
 }
 
 bool KisStroke::supportsSuspension()
@@ -81,7 +81,7 @@ void KisStroke::suspendStroke(KisStrokeSP recipient)
 
 void KisStroke::addJob(KisStrokeJobData *data)
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN(!m_strokeEnded || m_isCancelled);
+    Q_ASSERT(!m_strokeEnded || m_isCancelled);
     enqueue(m_dabStrategy.data(), data);
 }
 

@@ -106,7 +106,6 @@ public Q_SLOTS:
     void slotSetAddPalette(bool);
     void slotChangeRadius(int);
     void slotChangeBlend(int);
-    //void slotAddPalette(KoResource* resource);
     void slotSetColorSource(int value);
 
 private:

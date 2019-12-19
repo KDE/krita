@@ -206,7 +206,7 @@ void KisToolColorPicker::endPrimaryAction(KoPointerEvent *event)
 
         KoColorSet *palette = m_palettes.at(m_optionsWidget->cmbPalette->currentIndex());        
         palette->add(swatch);
-	    
+
         if (!palette->save()) {
             QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Cannot write to palette file %1. Maybe it is read-only.", palette->filename()));
         } 
@@ -365,16 +365,7 @@ void KisToolColorPicker::slotSetColorSource(int value)
 {
     m_config->sampleMerged = value == SAMPLE_MERGED;
 }
-/*
-void KisToolColorPicker::slotAddPalette(KoResource *resource)
-{
-    KoColorSet *palette = dynamic_cast<KoColorSet*>(resource);
-    if (palette) {
-        m_optionsWidget->cmbPalette->addSqueezedItem(palette->name());
-        m_palettes.append(palette);
-    }
-}
-*/
+
 void KisToolColorPicker::unsetResourceServer()
 {
     KoResourceServer<KoColorSet> *srv = KoResourceServerProvider::instance()->paletteServer();
@@ -382,7 +373,8 @@ void KisToolColorPicker::unsetResourceServer()
 }
 
 void KisToolColorPicker::resourceAdded(KoColorSet* resource){
-    if( !resource || !m_optionsWidget || m_palettes.contains(resource)) return;
+    if(!resource || !m_optionsWidget) return;
+    if(m_palettes.contains(resource)) return;
 
     if(m_config->addColorToCurrentPalette){
         updateCmbPalette();
@@ -390,7 +382,8 @@ void KisToolColorPicker::resourceAdded(KoColorSet* resource){
 }
 
 void KisToolColorPicker::removingResource(KoColorSet* resource){
-    if(!resource || !m_optionsWidget || !m_palettes.contains(resource)) return;
+    if(!resource || !m_optionsWidget) return; 
+    if(!m_palettes.contains(resource)) return;
     
     if(m_config->addColorToCurrentPalette){
             updateCmbPalette();

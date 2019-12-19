@@ -91,14 +91,11 @@ Qt::ItemFlags KisPaletteModel::flags(const QModelIndex& index) const
 
 QModelIndex KisPaletteModel::index(int row, int column, const QModelIndex& parent) const
 {
-    Q_UNUSED(parent);
+    Q_UNUSED(parent)
     Q_ASSERT(m_colorSet);
     int groupNameRow = groupNameRowForRow(row);
-    if (groupNameRow == -1) {
-        return {};
-    }
     KisSwatchGroup *group = m_colorSet->getGroup(m_rowGroupNameMap[groupNameRow]);
-    Q_ASSERT(group);
+    KIS_ASSERT_RECOVER_RETURN_VALUE(group,QModelIndex());
     return createIndex(row, column, group);
 }
 

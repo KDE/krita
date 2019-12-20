@@ -232,7 +232,7 @@ index ebdbd3c..c80abdd 100644
 +#elif !defined(_STDBOOL_H)
 +#include <stdbool.h>
 +#else
-+typedef int bool;
++//typedef int bool;
  #endif /* __cplusplus */
  
  #define GIFLIB_MAJOR 5
@@ -588,9 +588,9 @@ index 0000000..09408a5
 +#define stdbool_h
 +
 +#ifndef __cplusplus
-+typedef int bool;
-+#define false 0
-+#define true 1
++//typedef int bool;
++//#define false 0
++//#define true 1
 +#endif /* !__cplusplus */
 +
 +#define snprintf sprintf_s

@@ -5,6 +5,8 @@ ExternalProject_Add( ext_libraw
         URL_MD5 865ab9a40910709ff86988e8c0a7d146
 
         PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/LibRaw-cmake.diff
+		COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/01-use_cmake_install_prefix.patch
+
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_libraw} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
 
         UPDATE_COMMAND ""

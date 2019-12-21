@@ -31,6 +31,7 @@ Comment[ca]=Un acoblador basat en Python per a canviar ràpidament la mida i l'o
 Comment[ca@valencia]=Un acoblador basat en Python per a canviar ràpidament la mida i l'opacitat del pinzell.
 Comment[en_GB]=A Python-based docker for quickly changing brush size and opacity.
 Comment[es]=Un panel basado en Python para cambiar rápidamente el tamaño y la opacidad del pincel.
+Comment[et]=Pythoni-põhine dokk pintsli suuruse ja läbipaistmatuse kiireks muutmiseks.
 Comment[eu]=Isipu-neurria eta -opakotasuna aldatzeko Python-oinarridun panel bat.
 Comment[fi]=Python-pohjainen telakka siveltimen koon ja läpikuultavuuden nopean muuttamiseen.
 Comment[fr]=Panneau en python pour modifier rapidement la taille et l'opacité des brosses.

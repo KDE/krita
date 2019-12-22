@@ -58,10 +58,10 @@ KisToolSelectMagnetic::KisToolSelectMagnetic(KoCanvasBase *canvas)
     : KisToolSelect(canvas,
                     KisCursor::load("tool_magnetic_selection_cursor.png", 5, 5),
                     i18n("Magnetic Selection")),
-    m_continuedMode(false), m_complete(false), m_selected(false), m_finished(false),
+    m_continuedMode(false), m_complete(false), m_selected(false), m_finished(false), m_isDoubleClick(false),
     m_worker(image()->projection()), m_threshold(70), m_searchRadius(30), m_anchorGap(30),
-    m_filterRadius(3.0), m_mouseHoverCompressor(100, KisSignalCompressor::FIRST_ACTIVE)
-
+    m_filterRadius(3.0), m_mouseHoverCompressor(100, KisSignalCompressor::FIRST_ACTIVE),
+    m_singleClickCompressor(100, KisSignalCompressor::FIRST_ACTIVE)
 { }
 
 void KisToolSelectMagnetic::keyPressEvent(QKeyEvent *event)
@@ -208,26 +208,7 @@ void KisToolSelectMagnetic::beginPrimaryAction(KoPointerEvent *event)
     }
 
     m_cursorOnPress = temp;
-
-    checkIfAnchorIsSelected(temp);
-
-    if (m_complete || m_selected) {
-        return;
-    }
-
-    if (m_anchorPoints.count() != 0) {
-        vQPointF edge = computeEdgeWrapper(m_anchorPoints.last(), temp.toPoint());
-        m_points.append(edge);
-        m_pointCollection.push_back(edge);
-    } else {
-        updateInitialAnchorBounds(temp.toPoint());
-    }
-
-    m_lastAnchor = temp.toPoint();
-    m_anchorPoints.push_back(m_lastAnchor);
-    m_lastCursorPos = temp;
-    reEvaluatePoints();
-    updateCanvasPixelRect(image()->bounds());
+    m_singleClickCompressor.start();
 } // KisToolSelectMagnetic::beginPrimaryAction
 
 void KisToolSelectMagnetic::checkIfAnchorIsSelected(QPointF temp)
@@ -245,9 +226,40 @@ void KisToolSelectMagnetic::checkIfAnchorIsSelected(QPointF temp)
     }
 }
 
+void KisToolSelectMagnetic::slotExecuteSingleClick()
+{
+    if(m_isDoubleClick){
+        qDebug() << "ping";
+        m_isDoubleClick = false;
+        return;
+    }
+
+    checkIfAnchorIsSelected(m_cursorOnPress);
+
+    if (m_complete || m_selected) {
+        return;
+    }
+
+    if (m_anchorPoints.count() != 0) {
+        vQPointF edge = computeEdgeWrapper(m_anchorPoints.last(), m_cursorOnPress.toPoint());
+        m_points.append(edge);
+        m_pointCollection.push_back(edge);
+    } else {
+        updateInitialAnchorBounds(m_cursorOnPress.toPoint());
+    }
+
+    m_lastAnchor = m_cursorOnPress.toPoint();
+    m_anchorPoints.push_back(m_lastAnchor);
+    m_lastCursorPos = m_cursorOnPress;
+    reEvaluatePoints();
+    updateCanvasPixelRect(image()->bounds());
+}
+
 void KisToolSelectMagnetic::beginPrimaryDoubleClickAction(KoPointerEvent *event)
 {
     QPointF temp = convertToPixelCoord(event);
+
+    m_isDoubleClick = true;
 
     if (!image()->bounds().contains(temp.toPoint())) {
         return;
@@ -589,6 +601,7 @@ void KisToolSelectMagnetic::activate(KoToolBase::ToolActivation activation, cons
     m_configGroup = KSharedConfig::openConfig()->group(toolId());
     connect(action("undo_polygon_selection"), SIGNAL(triggered()), SLOT(undoPoints()), Qt::UniqueConnection);
     connect(&m_mouseHoverCompressor, SIGNAL(timeout()), this, SLOT(slotCalculateEdge()));
+    connect(&m_singleClickCompressor, SIGNAL(timeout()), this, SLOT(slotExecuteSingleClick()));
     KisToolSelect::activate(activation, shapes);
 }
 

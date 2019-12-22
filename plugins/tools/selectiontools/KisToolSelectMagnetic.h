@@ -61,6 +61,7 @@ public Q_SLOTS:
     void slotSetSearchRadius(int);
     void slotSetAnchorGap(int);
     void slotCalculateEdge();
+    void slotExecuteSingleClick();
 
 protected:
     using KisToolSelectBase::m_widgetHelper;
@@ -87,14 +88,14 @@ private:
     bool m_continuedMode;
     QPointF m_lastCursorPos, m_cursorOnPress;
     QPoint m_lastAnchor;
-    bool m_complete, m_selected, m_finished;
+    bool m_complete, m_selected, m_finished, m_isDoubleClick;
     KisMagneticWorker m_worker;
     int m_threshold, m_searchRadius, m_selectedAnchor, m_anchorGap;
     qreal m_filterRadius;
     QRectF m_snapBound;
     KConfigGroup m_configGroup;
     QVector<vQPointF> m_pointCollection;
-    KisSignalCompressor m_mouseHoverCompressor;
+    KisSignalCompressor m_mouseHoverCompressor, m_singleClickCompressor;
 };
 
 class KisToolSelectMagneticFactory : public KisSelectionToolFactoryBase

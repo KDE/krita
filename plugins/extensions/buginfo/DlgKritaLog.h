@@ -16,43 +16,31 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef DLG_BUGINFO
-#define DLG_BUGINFO
+#ifndef DLG_KRITA_LOG
+#define DLG_KRITA_LOG
 
 #include <KoDialog.h>
-
-#include "ui_wdg_buginfo.h"
+#include <dlg_buginfo.h>
 
 class QSettings;
 
-class WdgBugInfo : public QWidget, public Ui::WdgBugInfo
+class DlgKritaLog: public DlgBugInfo
 {
     Q_OBJECT
-
 public:
-    WdgBugInfo(QWidget *parent) : QWidget(parent) {
-        setupUi(this);
+    DlgKritaLog(QWidget * parent = 0);
+    ~DlgKritaLog() override;
+
+
+    QString defaultNewFileName() override {
+        return "KritaUsageLog.txt";
     }
-};
 
-class DlgBugInfo: public KoDialog
-{
-    Q_OBJECT
+    QString originalFileName() override;
+
 public:
-    DlgBugInfo(QWidget * parent = 0);
-    ~DlgBugInfo() override;
-
-    void initialize();
-    void initializeText();
-    void saveToFile();
-
-    virtual QString defaultNewFileName() = 0;
-    virtual QString originalFileName() = 0;
-    virtual QString captionText() = 0;
-    virtual QString replacementWarningText() = 0;
-    QString infoText(QSettings& kritarc);
-
-    QString basicSystemInformationReplacementText();
+    QString replacementWarningText() override;
+    QString captionText() override;
 
 private:
     WdgBugInfo *m_page;

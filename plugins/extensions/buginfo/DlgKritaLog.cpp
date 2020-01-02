@@ -16,46 +16,31 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef DLG_BUGINFO
-#define DLG_BUGINFO
+#include "DlgKritaLog.h"
+#include <QStandardPaths>
 
-#include <KoDialog.h>
-
-#include "ui_wdg_buginfo.h"
-
-class QSettings;
-
-class WdgBugInfo : public QWidget, public Ui::WdgBugInfo
+DlgKritaLog::DlgKritaLog(QWidget *parent)
+    : DlgBugInfo(parent)
 {
-    Q_OBJECT
+    initialize();
+}
 
-public:
-    WdgBugInfo(QWidget *parent) : QWidget(parent) {
-        setupUi(this);
-    }
-};
-
-class DlgBugInfo: public KoDialog
+QString DlgKritaLog::originalFileName()
 {
-    Q_OBJECT
-public:
-    DlgBugInfo(QWidget * parent = 0);
-    ~DlgBugInfo() override;
+    return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/krita.log";
+}
 
-    void initialize();
-    void initializeText();
-    void saveToFile();
+QString DlgKritaLog::captionText()
+{
+    return i18nc("Caption of the dialog with Krita usage log for bug reports", "Krita Usage Log: please paste this information to the bug report");
+}
 
-    virtual QString defaultNewFileName() = 0;
-    virtual QString originalFileName() = 0;
-    virtual QString captionText() = 0;
-    virtual QString replacementWarningText() = 0;
-    QString infoText(QSettings& kritarc);
+QString DlgKritaLog::replacementWarningText()
+{
+    return "WARNING: The Krita usage log file doesn't exist.";
+}
 
-    QString basicSystemInformationReplacementText();
+DlgKritaLog::~DlgKritaLog()
+{
 
-private:
-    WdgBugInfo *m_page;
-};
-
-#endif // DLG_BUGINFO
+}

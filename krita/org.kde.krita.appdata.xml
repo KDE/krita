@@ -11,6 +11,7 @@
   <developer_name xml:lang="de">Krita Foundation</developer_name>
   <developer_name xml:lang="en-GB">Krita Foundation</developer_name>
   <developer_name xml:lang="es">Fundación Krita</developer_name>
+  <developer_name xml:lang="et">Krita sihtasutus</developer_name>
   <developer_name xml:lang="eu">Krita Fundazioa</developer_name>
   <developer_name xml:lang="fi">Krita Foundation</developer_name>
   <developer_name xml:lang="fr">La Fondation Krita</developer_name>
@@ -40,6 +41,7 @@
   <name xml:lang="el">Krita</name>
   <name xml:lang="en-GB">Krita</name>
   <name xml:lang="es">Krita</name>
+  <name xml:lang="et">Krita</name>
   <name xml:lang="eu">Krita</name>
   <name xml:lang="fi">Krita</name>
   <name xml:lang="fr">Krita</name>
@@ -231,6 +233,7 @@
       <caption xml:lang="de">Krita ist ein digitales Zeichenstudio mit umfangreichen Funktionen.</caption>
       <caption xml:lang="en-GB">Krita is a full-featured digital painting studio.</caption>
       <caption xml:lang="es">Krita es un completo estudio de dibujo digital.</caption>
+      <caption xml:lang="et">Krita on rohkete võimalustega digitaalkunstistuudio.</caption>
       <caption xml:lang="gl">Krita é un estudio completo de debuxo dixital.</caption>
       <caption xml:lang="id">Krita adalah studio pelukisan digital dengan fitur yang lengkap.</caption>
       <caption xml:lang="it">Krita è uno studio d'arte digitale completo.</caption>
@@ -254,6 +257,7 @@
       <caption xml:lang="ca-valencia">La finestra d'inici ara proporciona les darreres noticies quant al Krita.</caption>
       <caption xml:lang="en-GB">The startup window now also gives you the latest news about Krita.</caption>
       <caption xml:lang="es">La ventana de bienvenida también le proporciona ahora las últimas noticias sobre Krita.</caption>
+      <caption xml:lang="et">Käivitusaken jagab nüüd ka Krita värskemaid uudiseid.</caption>
       <caption xml:lang="gl">Agora a xanela de inicio tamén fornece as últimas novas sobre Krita.</caption>
       <caption xml:lang="id">Window pemulaian kini juga memberikan kamu kabar terkini tentang Krita.</caption>
       <caption xml:lang="it">La finestra di avvio ora fornisce anche le ultime novità su Krita.</caption>
@@ -277,6 +281,7 @@
       <caption xml:lang="ca-valencia">Hi ha uns deu motors de pinzell immensament potents.</caption>
       <caption xml:lang="en-GB">There are over ten immensely powerful brush engines.</caption>
       <caption xml:lang="es">Existen unos diez inmensamente potentes motores de pinceles.</caption>
+      <caption xml:lang="et">Üle kümne ääretult võimeka pintslimootori.</caption>
       <caption xml:lang="gl">Hai máis de dez motores de pinceis inmensamente potentes.</caption>
       <caption xml:lang="id">Ada lebih dari sepuluh mesin kuas yang sangat manjur.</caption>
       <caption xml:lang="it">Ci sono oltre dieci motori di pennelli incredibilmente potenti.</caption>

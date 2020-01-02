@@ -1655,7 +1655,15 @@ void KisPainter::drawDDALine(const QPointF & start, const QPointF & end)
     int xd = x2 - x;
     int yd = y2 - y;
 
-    float m = (float)yd / (float)xd;
+    float m = 0;
+    bool lockAxis = true;
+
+    if (xd == 0) {
+        m = 2.0;
+    } else if ( yd != 0) {
+        lockAxis = false;
+        m = (float)yd / (float)xd;
+    }
 
     float fx = x;
     float fy = y;
@@ -1677,7 +1685,7 @@ void KisPainter::drawDDALine(const QPointF & start, const QPointF & end)
 
     if (fabs(m) > 1.0f) {
         inc = (yd > 0) ? 1 : -1;
-        m = 1.0f / m;
+        m = (lockAxis)? 0 : 1.0f / m;
         m *= inc;
         while (y != y2) {
             y = y + inc;

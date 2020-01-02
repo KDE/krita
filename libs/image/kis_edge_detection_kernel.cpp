@@ -33,7 +33,7 @@ KisEdgeDetectionKernel::KisEdgeDetectionKernel()
 /*
  * This code is very similar to the gaussian kernel code, except unlike the gaussian code,
  * edge-detection kernels DO use the diagonals.
- * Except for the simple mode. We implement the simple mode because it is an analogue to
+ * Except for the simple mode. We implement the simple mode because it is an analog to
  * the old sobel filter.
  */
 

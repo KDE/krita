@@ -142,17 +142,19 @@ quint8 KisRectangleMaskGenerator::valueAt(qreal x, qreal y) const
     qreal fxr = xr * d->transformedFadeX;
     qreal fyr = yr * d->transformedFadeY;
 
-    int fxrInt = fxr * 1e4;
-    int fyrInt = fyr * 1e4;
+    qreal fxnorm = nxr * (fxr - 1.0) / (fxr - nxr);
+    qreal fynorm = nyr * (fyr - 1.0) / (fyr - nyr);
 
-    if (fxr > 1.0 && (fxrInt >= fyrInt || fyr < 1.0)) {
-        return 255 * nxr * (fxr - 1.0) / (fxr - nxr);
-    }
+    qreal retValue = 0;
 
-    if (fyr > 1.0 && (fyrInt > fxrInt || fxr < 1.0)) {
-        return 255 * nyr * (fyr - 1.0) / (fyr - nyr);
-    }
+    if(fxr > 1.0) {
+        retValue = fxnorm;
+     }
 
-    return 0;
+    if (fxnorm < fynorm && fyr > 1.0) {
+        retValue = fynorm;
+     }
+
+    return retValue * 255;
 }
 

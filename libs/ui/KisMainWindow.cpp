@@ -986,12 +986,12 @@ bool KisMainWindow::openDocumentInternal(const QUrl &url, OpenFlags flags)
     connect(newdoc, SIGNAL(canceled(QString)), this, SLOT(slotLoadCanceled(QString)));
 
     KisDocument::OpenFlags openFlags = KisDocument::None;
+    // XXX: Why this duplication of of OpenFlags...
     if (flags & RecoveryFile) {
         openFlags |= KisDocument::RecoveryFile;
     }
 
     bool openRet = !(flags & Import) ? newdoc->openUrl(url, openFlags) : newdoc->importDocument(url);
-
 
     if (!openRet) {
         delete newdoc;
@@ -1004,6 +1004,15 @@ bool KisMainWindow::openDocumentInternal(const QUrl &url, OpenFlags flags)
     if (!QFileInfo(url.toLocalFile()).isWritable()) {
         setReadWrite(false);
     }
+
+    if (flags & RecoveryFile &&
+            (   url.toLocalFile().startsWith(QDir::tempPath())
+             || url.toLocalFile().startsWith(QDir::homePath()))
+            ) {
+        newdoc->setUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation) + "/" + QFileInfo(url.toLocalFile()).fileName()));
+        newdoc->save(false, 0);
+    }
+
     return true;
 }
 

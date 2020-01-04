@@ -323,10 +323,17 @@ extern "C" int main(int argc, char **argv)
     bool rightToLeft = false;
     if (!language.isEmpty()) {
         KLocalizedString::setLanguages(language.split(":"));
+
         // And override Qt's locale, too
-        qputenv("LANG", language.split(":").first().toLocal8Bit());
         QLocale locale(language.split(":").first());
         QLocale::setDefault(locale);
+#ifdef Q_OS_MAC
+        // prevents python >=3.7 nl_langinfo(CODESET) fail.
+        qputenv("LANG", locale.name().split('_').first().toLocal8Bit());
+#else
+        qputenv("LANG", locale.nmae().toLocal8Bit());
+#endif
+
 
         const QStringList rtlLanguages = QStringList()
                 << "ar" << "dv" << "he" << "ha" << "ku" << "fa" << "ps" << "ur" << "yi";

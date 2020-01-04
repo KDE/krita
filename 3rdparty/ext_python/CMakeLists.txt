@@ -4,8 +4,8 @@ if (UNIX)
     set(PYTHON_VERSION "3.8")
     ExternalProject_Add( ext_python
 	    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    	URL https://www.python.org/ftp/python/3.8.0/Python-3.8.0.tgz
-        URL_MD5 e18a9d1a0a6d858b9787e03fc6fdaa20
+        URL https://www.python.org/ftp/python/3.8.1/Python-3.8.1.tar.xz
+        URL_MD5 b3fb85fd479c0bf950c626ef80cacb57
         
         PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/osx_fixappinstall.diff
 
@@ -28,8 +28,8 @@ if (UNIX)
 
     ExternalProject_Add( ext_python
 	    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    	URL https://www.python.org/ftp/python/3.8.0/Python-3.8.0.tgz
-        URL_MD5 e18a9d1a0a6d858b9787e03fc6fdaa20
+        URL https://www.python.org/ftp/python/3.8.1/Python-3.8.1.tar.xz
+        URL_MD5 b3fb85fd479c0bf950c626ef80cacb57
         
         CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_python} ${GLOBAL_AUTOMAKE_PROFILE} --enable-shared
         BUILD_COMMAND make

@@ -131,7 +131,7 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     m_triangleColorSelector->setDisplayRenderer(displayRenderer);
     m_triangleColorSelector->setConfig(true,false);
     m_triangleColorSelector->move(m_popupPaletteSize/2-m_colorHistoryInnerRadius+borderWidth, m_popupPaletteSize/2-m_colorHistoryInnerRadius+borderWidth);
-    m_triangleColorSelector->resize(m_colorHistoryInnerRadius*2-borderWidth*2, m_colorHistoryInnerRadius*2-borderWidth*2);
+    m_triangleColorSelector->resize(m_popupPaletteSize - 2*m_triangleColorSelector->x(), m_popupPaletteSize - 2*m_triangleColorSelector->y());
     m_triangleColorSelector->setVisible(true);
     KoColor fgcolor(Qt::black, KoColorSpaceRegistry::instance()->rgb8());
     if (m_resourceManager) {

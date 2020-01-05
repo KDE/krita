@@ -22,7 +22,7 @@
 #include <QStatusBar>
 #include <QVBoxLayout>
 
-#include "encoder.h"
+#include "encoder_queue.h"
 #include "kis_canvas2.h"
 #include "kis_image.h"
 #include "kis_paint_device.h"
@@ -46,9 +46,7 @@ RecorderDockerDock::RecorderDockerDock()
     : QDockWidget(i18n("Recorder"))
     , m_canvas(nullptr)
     , m_imageIdleWatcher(1000)
-    , m_recordEnabled(false)
-    , m_recordCounter(0)
-    , m_encoder(nullptr)
+    , m_encoderQueue(nullptr)
 {
     QWidget* page = new QWidget(this);
     m_layout = new QGridLayout(page);
@@ -159,77 +157,36 @@ void RecorderDockerDock::onSelectRecordFolderButtonClicked()
 
 void RecorderDockerDock::enableRecord(bool& enabled, const QString& path)
 {
-    m_recordEnabled = enabled;
-    if (m_recordEnabled) {
-        m_recordPath = path;
+    if (!m_encoderQueue)
+    {
+        m_encoderQueue = new EncoderQueue();
+    }
 
-        QUrl fileUrl(m_recordPath);
+    m_encoderQueue->setEnable(enabled,path,m_canvas);
 
-        QString filename = fileUrl.fileName();
-        QString dirPath = fileUrl.adjusted(QUrl::RemoveFilename).path();
-
-        QDir dir(dirPath);
-
-        if (!dir.exists()) {
-            if (!dir.mkpath(dirPath)) {
-                enabled = m_recordEnabled = false;
-                return;
-            }
-        }
-
-        QFileInfoList images = dir.entryInfoList({filename % "_*.webm"});
-
-        QRegularExpression namePattern("^" % filename % "_([0-9]{7}).webm$");
-        m_recordCounter = -1;
-        Q_FOREACH (auto info, images) {
-            QRegularExpressionMatch match = namePattern.match(info.fileName());
-            if (match.hasMatch()) {
-                QString count = match.captured(1);
-                int numCount = count.toInt();
-
-                if (m_recordCounter < numCount) {
-                    m_recordCounter = numCount;
-                }
-            }
-        }
-
-        if (m_canvas) {
-            m_recordingCanvas = m_canvas;
-
-            QString finalFileName = QString(m_recordPath % "_%1.webm").arg(++m_recordCounter, 7, 10, QChar('0'));
-            m_encoder = new Encoder();
-            m_encoder->init(finalFileName.toStdString().c_str(), m_canvas->image()->width(),
-                            m_canvas->image()->height());
-            startUpdateCanvasProjection();
-        } else {
-            enabled = m_recordEnabled = false;
-            return;
-        }
-    } else {
-        if (m_encoder) {
-            m_encoder->finish();
-            delete m_encoder;
-            m_encoder = nullptr;
-        }
+    if (enabled)
+    {
+        startUpdateCanvasProjection();
+    }
+    else
+    {
+        delete m_encoderQueue;
+        m_encoderQueue = nullptr;
     }
 }
 
 void RecorderDockerDock::generateThumbnail()
 {
-    if (m_recordEnabled) {
-        if (m_canvas && m_recordingCanvas == m_canvas) {
+    if (m_encoderQueue && m_encoderQueue->isRecording()) {
+        if (m_canvas && (m_encoderQueue->recordingCanvas() == m_canvas)) {
             disconnect(&m_imageIdleWatcher, &KisIdleWatcher::startedIdleMode, this,
                        &RecorderDockerDock::generateThumbnail);
-            if (m_encoder) {
+            if (m_encoderQueue) {
                 KisImageSP image = m_canvas->image();
-                gpointer data;
-                gsize size = image->width() * image->height() * 4;
-                data = g_malloc(size);
                 image->barrierLock();
                 KisPaintDeviceSP dev = image->projection();
-                dev->readBytes((quint8*)data, 0, 0, image->width(), image->height());
+                m_encoderQueue->pushFrame(dev, image->width(), image->height());
                 image->unlock();
-                m_encoder->pushFrame(data, size);
             }
 
             connect(&m_imageIdleWatcher, &KisIdleWatcher::startedIdleMode, this,

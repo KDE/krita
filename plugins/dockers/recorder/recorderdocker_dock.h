@@ -33,7 +33,7 @@
 
 class QVBoxLayout;
 class RecorderWidget;
-class Encoder;
+class EncoderQueue;
 
 class RecorderDockerDock : public QDockWidget, public KoCanvasObserverBase
 {
@@ -49,8 +49,6 @@ public:
 
 private:
     QGridLayout* m_layout;
-    QPointer<KisCanvas2> m_recordingCanvas;
-    QString m_recordPath;
 
     QPointer<KisCanvas2> m_canvas;
     QLabel* m_recordDirectoryLabel;
@@ -65,10 +63,8 @@ private:
     KisIdleWatcher m_imageIdleWatcher;
     QMutex m_saveMutex;
     QMutex m_eventMutex;
-    Encoder* m_encoder;
+    EncoderQueue* m_encoderQueue;
 
-    bool m_recordEnabled;
-    int m_recordCounter;
     void enableRecord(bool& enabled, const QString& path);
 
 private Q_SLOTS:

@@ -703,30 +703,13 @@ set_package_properties(PyQt5 PROPERTIES
     PURPOSE "Required by the Krita PyQt plugin")
 macro_bool_to_01(PYQT5_FOUND HAVE_PYQT5)
 
-find_package(GSTREAMER "1.5.2")
-set_package_properties(GSTREAMER PROPERTIES
-    DESCRIPTION "gstreamer video encoder."
-    URL "https://gstreamer.freedesktop.org/"
+find_package(FFmpeg)
+set_package_properties(FFmpeg PROPERTIES
+    DESCRIPTION "FFmpeg video encoder."
+    URL "http://ffmpeg.org/"
     TYPE OPTIONAL
     PURPOSE "Required by the Krita recorder plugin")
-macro_bool_to_01(GSTREAMER_FOUND HAVE_GSTREAMER)
-
-find_package(GLIB "2.0")
-set_package_properties(GLIB PROPERTIES
-    DESCRIPTION "glib."
-    URL "https://www.gtk.org/"
-    TYPE OPTIONAL
-    PURPOSE "Required by the Krita recorder plugin")
-macro_bool_to_01(GLIB_FOUND HAVE_GLIB)
-
-find_package(GOBJECT "2.0")
-set_package_properties(GOBJECT PROPERTIES
-    DESCRIPTION "gobject."
-    URL "https://www.gtk.org/"
-    TYPE OPTIONAL
-    PURPOSE "Required by the Krita recorder plugin")
-macro_bool_to_01(GOBJECT_FOUND HAVE_GOBJECT)
-
+macro_bool_to_01(FFMPEG_FOUND HAVE_FFMPEG)
 
 ##
 ## Look for OpenGL

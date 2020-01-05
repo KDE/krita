@@ -1,77 +1,177 @@
 #include "encoder.h"
-#include <QDebug>
+#include <kis_debug.h>
 
-void Encoder::init(const std::string &filename, int width, int height)
+void Encoder::init(const std::string& filename, int width, int height)
 {
-    GstStateChangeReturn state_ret;
-    gst_init(NULL, NULL);
+    av_register_all();
+    avcodec_register_all();
 
-    m_width = width;
-    m_height = height;
     m_filename = filename;
 
-    m_pipeline = (GstPipeline*)gst_pipeline_new("mypipeline");
-    m_src = (GstAppSrc*)gst_element_factory_make("appsrc", "mysrc");
-    m_filter1 = gst_element_factory_make("capsfilter", "myfilter1");
-    m_videoconvert = gst_element_factory_make("videoconvert", "vc");
-    m_encoder = gst_element_factory_make("vp9enc", "my9enc");
-    m_queue = gst_element_factory_make("queue", "qu");
-    m_webmmux = gst_element_factory_make("webmmux", "mymux");
-    m_sink = gst_element_factory_make("filesink", NULL);
-    m_timestamp = 0;
-    if (!m_pipeline || !m_src || !m_filter1 || !m_encoder || /*!m_videoconvert   ||*/ !m_webmmux || /*!m_queue ||*/
-        !m_sink) {
-        printf("Error creating pipeline elements!\n");
-        exit(2);
+    m_outputFormat = av_guess_format(nullptr, m_filename.c_str(), nullptr);
+    if (!m_outputFormat) {
+        errPlugins << "can't create output format";
+        return;
     }
 
-    gst_bin_add_many(GST_BIN(m_pipeline), (GstElement*)m_src, m_filter1, m_videoconvert, m_encoder, m_queue, m_webmmux,
-                     m_sink, NULL);
+    int err = avformat_alloc_output_context2(&m_formatContext, m_outputFormat, nullptr, filename.c_str());
 
-    qDebug() << "width " << m_width << " height " << m_height;
+    if (err) {
+        errPlugins << "can't create output context";
+        return;
+    }
 
-    g_object_set(m_src, "format", GST_FORMAT_TIME, NULL);
-    g_object_set(m_src, "is-live", true, NULL);
-    GstCaps* filtercaps1 =
-        gst_caps_new_simple("video/x-raw", "format", G_TYPE_STRING, "BGRA", "width", G_TYPE_INT, m_width, "height",
-                            G_TYPE_INT, m_height, "framerate", GST_TYPE_FRACTION, 4, 1, NULL);
-    g_object_set(G_OBJECT(m_filter1), "caps", filtercaps1, NULL);
-    g_object_set(G_OBJECT(m_sink), "location", filename.c_str(), NULL);
-    g_object_set(G_OBJECT(m_encoder), "keyframe-max-dist" ,4, NULL);
-    g_object_set(G_OBJECT(m_encoder), "target-bitrate", 10240000, NULL);
+    AVCodec* codec = nullptr;
 
-    g_assert(gst_element_link_many((GstElement*)m_src, m_filter1, m_videoconvert, m_encoder, m_queue, m_webmmux, m_sink,
-                                   NULL));
+    codec = avcodec_find_encoder(m_outputFormat->video_codec);
+    if (!codec) {
+        errPlugins << "can't create codec";
+        return;
+    }
 
-    state_ret = gst_element_set_state((GstElement*)m_pipeline, GST_STATE_PLAYING);
-    g_assert(state_ret == GST_STATE_CHANGE_ASYNC);
+    AVStream* stream = avformat_new_stream(m_formatContext, codec);
+
+    if (!stream) {
+        errPlugins << "can't find format";
+        return;
+    }
+
+    m_codecContext = avcodec_alloc_context3(codec);
+
+    if (!m_codecContext) {
+        errPlugins << "can't create codec context";
+        return;
+    }
+
+    stream->codecpar->codec_id = m_outputFormat->video_codec;
+    stream->codecpar->codec_type = AVMEDIA_TYPE_VIDEO;
+    stream->codecpar->width = width;
+    stream->codecpar->height = height;
+    stream->codecpar->format = AV_PIX_FMT_YUV420P;
+    stream->codecpar->bit_rate = m_bitrate * 1000;
+    avcodec_parameters_to_context(m_codecContext, stream->codecpar);
+    m_codecContext->time_base = (AVRational){1, 1};
+    m_codecContext->max_b_frames = 2;
+    m_codecContext->gop_size = 12;
+    m_codecContext->framerate = (AVRational){m_fps, 1};
+
+    av_opt_set_int(m_codecContext, "lossless", 1, 0);
+
+    avcodec_parameters_from_context(stream->codecpar, m_codecContext);
+
+    if ((err = avcodec_open2(m_codecContext, codec, NULL)) < 0) {
+        errPlugins << "Failed to open codec: " << err;
+        return;
+    }
+
+    if (!(m_outputFormat->flags & AVFMT_NOFILE)) {
+        if ((err = avio_open(&m_formatContext->pb, m_filename.c_str(), AVIO_FLAG_WRITE)) < 0) {
+            errPlugins << "Failed to open file: " << err;
+            return;
+        }
+    }
+
+    if ((err = avformat_write_header(m_formatContext, NULL)) < 0) {
+        errPlugins << "Failed to write header" << err;
+        return;
+    }
+
+    av_dump_format(m_formatContext, 0, m_filename.c_str(), 1);
     m_frameCount = 0;
 }
 
-void Encoder::pushFrame(gpointer data, gsize size)
+void Encoder::pushFrame(uint8_t* data)
 {
-    GstBuffer* buffer = gst_buffer_new_wrapped(data, size); // Actual databuffer
-    GstFlowReturn ret; // Return value
-    // Set frame timestamp
-    GST_BUFFER_PTS(buffer) = m_timestamp;
-    GST_BUFFER_DTS(buffer) = m_timestamp;
-    GST_BUFFER_DURATION(buffer) = gst_util_uint64_scale_int(GST_SECOND, 1, 4);
-    m_timestamp += GST_BUFFER_DURATION(buffer);
-    ret = gst_app_src_push_buffer(m_src, buffer); // Push data into pipeline
+    int err;
+    if (!m_frame) {
+        m_frame = av_frame_alloc();
+        m_frame->format = AV_PIX_FMT_YUV420P;
+        m_frame->width = m_codecContext->width;
+        m_frame->height = m_codecContext->height;
 
-    g_assert(ret == GST_FLOW_OK);
-    qDebug() << "push frame" << m_frameCount++;
+        if ((err = av_frame_get_buffer(m_frame, 32)) < 0) {
+            errPlugins << "Failed to allocate picture" << err;
+            return;
+        }
+    }
+
+    if (!m_swsContext) {
+        m_swsContext =
+            sws_getContext(m_codecContext->width, m_codecContext->height, AV_PIX_FMT_BGRA, m_codecContext->width,
+                           m_codecContext->height, AV_PIX_FMT_YUV420P, SWS_BICUBIC, 0, 0, 0);
+    }
+
+    int inLinesize[1] = {4 * m_codecContext->width};
+
+    // From RGB to YUV
+    sws_scale(m_swsContext, (const uint8_t* const*)&data, inLinesize, 0, m_codecContext->height, m_frame->data,
+              m_frame->linesize);
+
+    m_frame->pts = (1.0 / m_fps) * 90000 * (m_frameCount++);
+
+    if ((err = avcodec_send_frame(m_codecContext, m_frame)) < 0) {
+        errPlugins << "Failed to send frame" << err;
+        return;
+    }
+
+    AVPacket pkt;
+    av_init_packet(&pkt);
+    pkt.data = NULL;
+    pkt.size = 0;
+    pkt.flags |= AV_PKT_FLAG_KEY;
+
+    if (avcodec_receive_packet(m_codecContext, &pkt) == 0) {
+        av_interleaved_write_frame(m_formatContext, &pkt);
+        av_packet_unref(&pkt);
+        infoPlugins << "Write frame: " << m_frameCount;
+    }
 }
 
 void Encoder::finish()
 {
-    qDebug() << "finishe called";
-    // Declare end of stream
-    gst_app_src_end_of_stream(GST_APP_SRC(m_src));
-    // Wait for EOS message
-    GstBus* bus = gst_pipeline_get_bus(GST_PIPELINE(m_pipeline));
-    gst_bus_poll(bus, GST_MESSAGE_EOS, GST_CLOCK_TIME_NONE);
+    AVPacket pkt;
+    av_init_packet(&pkt);
+    pkt.data = NULL;
+    pkt.size = 0;
 
-    qDebug() << "finished:" << QString::fromStdString(m_filename);
+    for (;;) {
+        avcodec_send_frame(m_codecContext, NULL);
+        if (avcodec_receive_packet(m_codecContext, &pkt) == 0) {
+            av_interleaved_write_frame(m_formatContext, &pkt);
+            av_packet_unref(&pkt);
+        } else {
+            break;
+        }
+    }
+
+    av_write_trailer(m_formatContext);
+    if (!(m_outputFormat->flags & AVFMT_NOFILE)) {
+        int err = avio_close(m_formatContext->pb);
+        if (err < 0) {
+            errPlugins << "Failed to close file" << err;
+        }
+    }
+    infoPlugins << "finished: " << QString::fromStdString(m_filename);
     m_frameCount = 0;
+
+    if (m_frame) {
+        av_frame_free(&m_frame);
+        m_frame = nullptr;
+    }
+    if (m_codecContext) {
+        avcodec_free_context(&m_codecContext);
+        m_codecContext = nullptr;
+    }
+    if (m_formatContext) {
+        avformat_free_context(m_formatContext);
+        m_formatContext = nullptr;
+    }
+    if (m_swsContext) {
+        sws_freeContext(m_swsContext);
+        m_swsContext = nullptr;
+    }
+    if (m_outputFormat) {
+        // no need to free this.
+        m_outputFormat = nullptr;
+    }
 }

@@ -20,45 +20,41 @@
 #define ENCODER_H
 
 #include <fstream>
-
-#include <gst/app/gstappsrc.h>
-#include <gst/gst.h>
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
 
+extern "C" {
+#include <libavcodec/avcodec.h>
+#include <libavformat/avformat.h>
+#include <libavutil/avutil.h>
+#include <libavutil/opt.h>
+#include <libavutil/time.h>
+#include <libswscale/swscale.h>
+}
+
 class Encoder
 {
-    GstPipeline* m_pipeline;
-    GstAppSrc* m_src;
-    GstElement* m_filter1;
-    GstElement* m_encoder;
-    GstElement* m_videoconvert;
-    GstElement* m_queue;
-    GstElement* m_webmmux;
-    GstElement* m_sink;
     int m_width;
     int m_height;
-    GstClockTime m_timestamp;
     std::string m_filename;
     int m_frameCount;
+    AVFrame* m_frame = nullptr;
+    AVCodecContext* m_codecContext = nullptr;
+    SwsContext* m_swsContext = nullptr;
+    AVFormatContext* m_formatContext = nullptr;
+    AVOutputFormat* m_outputFormat = nullptr;
+    int m_fps = 4;
+    int m_bitrate = 2000;
 
 public:
     Encoder()
-        : m_pipeline(nullptr)
-        , m_src(nullptr)
-        , m_filter1(nullptr)
-        , m_encoder(nullptr)
-        , m_videoconvert(nullptr)
-        , m_queue(nullptr)
-        , m_webmmux(nullptr)
-        , m_sink(nullptr)
-        , m_filename()
+        : m_filename()
     {
     }
 
     void init(const std::string &filename, int width, int height);
-    void pushFrame(gpointer data, gsize size);
+    void pushFrame(uint8_t *frame);
     void finish();
 };
 

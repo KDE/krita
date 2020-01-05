@@ -630,6 +630,13 @@ void KisMainWindow::showView(KisView *imageView)
         subwin->setOption(QMdiSubWindow::RubberBandResize, cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
         subwin->setWindowIcon(qApp->windowIcon());
 
+        if (d->mdiArea->subWindowList().size() == 1) {
+            imageView->showMaximized();
+        }
+        else {
+            imageView->show();
+        }
+
         /**
          * Hack alert!
          *
@@ -651,13 +658,6 @@ void KisMainWindow::showView(KisView *imageView)
          */
 
         KoToolManager::instance()->initializeCurrentToolForCanvas();
-
-        if (d->mdiArea->subWindowList().size() == 1) {
-            imageView->showMaximized();
-        }
-        else {
-            imageView->show();
-        }
 
         // No, no, no: do not try to call this _before_ the show() has
         // been called on the view; only when that has happened is the

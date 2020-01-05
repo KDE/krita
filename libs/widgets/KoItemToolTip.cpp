@@ -109,7 +109,6 @@ QSize KoItemToolTip::sizeHint() const
 void KoItemToolTip::paintEvent(QPaintEvent*)
 {
     QPainter p(this);
-    p.initFrom(this);
     d->document->drawContents(&p, rect());
     p.drawRect(0, 0, width() - 1, height() - 1);
 }

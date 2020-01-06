@@ -754,7 +754,8 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
         kisCanvas->viewManager()->
             showFloatingMessage(
                 i18nc("floating message in transformation tool",
-                      "Layer type cannot use the transform tool"),
+                     (currentNode->inherits("KisColorizeMask") ?
+                      "Layer type cannot use the transform tool": "Use transform mask instead")),
                  koIcon("object-locked"), 4000, KisFloatingMessage::High);
 
         return;

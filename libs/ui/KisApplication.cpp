@@ -157,7 +157,7 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     setWindowIcon(KisIconUtils::loadIcon("krita"));
 
     if (qgetenv("KRITA_NO_STYLE_OVERRIDE").isEmpty()) {
-        QStringList styles = QStringList() /*<< "breeze"*/ << "fusion" << "plastique";
+        QStringList styles = QStringList() << "breeze" << "fusion" << "plastique";
         if (!styles.contains(style()->objectName().toLower())) {
             Q_FOREACH (const QString & style, styles) {
                 if (!setStyle(style)) {

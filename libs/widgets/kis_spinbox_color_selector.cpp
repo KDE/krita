@@ -179,9 +179,8 @@ void KisSpinboxColorSelector::slotSetColorSpace(const KoColorSpace *cs)
 
 void KisSpinboxColorSelector::createColorFromSpinboxValues()
 {
-    KoColor newColor;
+    KoColor newColor(m_d->cs);
     int channelcount = m_d->cs->channelCount();
-    quint8 *data = new quint8[m_d->cs->pixelSize()];
     QVector <float> channelValues(channelcount);
     channelValues.fill(1.0);
     QList<KoChannelInfo *> channels = KoChannelInfo::displayOrderSorted(m_d->cs->channels());
@@ -207,8 +206,7 @@ void KisSpinboxColorSelector::createColorFromSpinboxValues()
         }
     }
 
-    m_d->cs->fromNormalisedChannelsValue(data, channelValues);
-    newColor.setColor(data, m_d->cs);
+    m_d->cs->fromNormalisedChannelsValue(newColor.data(), channelValues);
     newColor.setOpacity(m_d->color.opacityU8());
 
     m_d->color = newColor;

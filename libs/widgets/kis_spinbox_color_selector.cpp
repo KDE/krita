@@ -84,10 +84,6 @@ void KisSpinboxColorSelector::slotSetColorSpace(const KoColorSpace *cs)
         o->deleteLater();
     }
 
-    Q_FOREACH(QObject *o, m_d->labels) {
-        o->deleteLater();
-    }
-
     m_d->labels.clear();
     m_d->spinBoxList.clear();
     m_d->doubleSpinBoxList.clear();

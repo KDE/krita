@@ -260,12 +260,6 @@ void KisDlgInternalColorSelector::chooseAlpha(bool chooseAlpha)
     m_d->chooseAlpha = chooseAlpha;
 }
 
-void KisDlgInternalColorSelector::slotConfigurationChanged()
-{
-    //m_d->canvas->displayColorConverter()->
-    //slotColorSpaceChanged(m_d->canvas->image()->colorSpace());
-}
-
 void KisDlgInternalColorSelector::setPreviousColor(KoColor c)
 {
     m_d->previousColor = c;

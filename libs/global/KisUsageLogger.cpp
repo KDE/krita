@@ -66,6 +66,12 @@ void KisUsageLogger::initialize()
 {
     s_instance->d->active = true;
 
+    QString systemInfo = basicSystemInfo();
+    s_instance->d->sysInfoFile.write(systemInfo.toUtf8());
+}
+
+QString KisUsageLogger::basicSystemInfo()
+{
     QString systemInfo;
 
     // NOTE: This is intentionally not translated!
@@ -94,7 +100,7 @@ void KisUsageLogger::initialize()
     systemInfo.append("\n  Product Version: ").append(QSysInfo::productVersion());
     systemInfo.append("\n\n");
 
-    s_instance->d->sysInfoFile.write(systemInfo.toUtf8());
+    return systemInfo;
 }
 
 void KisUsageLogger::close()
@@ -151,6 +157,12 @@ void KisUsageLogger::writeHeader()
             .arg(qApp->arguments().join(' '));
 
     s_instance->d->logFile.write(sessionHeader.toUtf8());
+
+    QString KritaAndQtVersion;
+    KritaAndQtVersion.append("Krita Version: ").append(KritaVersionWrapper::versionString(true));
+    KritaAndQtVersion.append(", Qt version compiled: ").append(QT_VERSION_STR).append(", loaded: ").append(qVersion()).append("\n");
+    KritaAndQtVersion.append("-- -- -- -- -- -- -- --\n");
+    s_instance->d->logFile.write(KritaAndQtVersion.toUtf8());
     s_instance->d->logFile.flush();
 }
 

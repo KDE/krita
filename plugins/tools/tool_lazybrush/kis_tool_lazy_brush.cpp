@@ -121,7 +121,15 @@ void KisToolLazyBrush::slotCurrentNodeChanged(KisNodeSP node)
 
 void KisToolLazyBrush::resetCursorStyle()
 {
-    KisToolFreehand::resetCursorStyle();
+    // If there's no mask yet, we show the hand cursor
+    if (!colorizeMaskActive() && canCreateColorizeMask()) {
+        useCursor(KisCursor::handCursor());
+        m_d->activateMaskMode = true;
+        setOutlineEnabled(false);
+    }
+    else {
+        KisToolFreehand::resetCursorStyle();
+    }
 }
 
 bool KisToolLazyBrush::colorizeMaskActive() const
@@ -172,9 +180,10 @@ void KisToolLazyBrush::activatePrimaryAction()
 {
     KisToolFreehand::activatePrimaryAction();
 
-    if (shouldActivateKeyStrokes() ||
-        (!colorizeMaskActive() && canCreateColorizeMask())) {
+    qDebug() << "1";
 
+    if (!colorizeMaskActive() && canCreateColorizeMask()) {
+        qDebug() << "2";
         useCursor(KisCursor::handCursor());
         m_d->activateMaskMode = true;
         setOutlineEnabled(false);

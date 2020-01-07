@@ -653,6 +653,13 @@ void KisMainWindow::showView(KisView *imageView, QMdiSubWindow *subwin)
         subwin->setOption(QMdiSubWindow::RubberBandResize, cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
         subwin->setWindowIcon(qApp->windowIcon());
 
+        if (d->mdiArea->subWindowList().size() == 1) {
+            imageView->showMaximized();
+        }
+        else {
+            imageView->show();
+        }
+
         /**
          * Hack alert!
          *
@@ -674,13 +681,6 @@ void KisMainWindow::showView(KisView *imageView, QMdiSubWindow *subwin)
          */
 
         KoToolManager::instance()->initializeCurrentToolForCanvas();
-
-        if (d->mdiArea->subWindowList().size() == 1) {
-            imageView->showMaximized();
-        }
-        else {
-            imageView->show();
-        }
 
         // No, no, no: do not try to call this _before_ the show() has
         // been called on the view; only when that has happened is the
@@ -986,12 +986,12 @@ bool KisMainWindow::openDocumentInternal(const QUrl &url, OpenFlags flags)
     connect(newdoc, SIGNAL(canceled(QString)), this, SLOT(slotLoadCanceled(QString)));
 
     KisDocument::OpenFlags openFlags = KisDocument::None;
+    // XXX: Why this duplication of of OpenFlags...
     if (flags & RecoveryFile) {
         openFlags |= KisDocument::RecoveryFile;
     }
 
     bool openRet = !(flags & Import) ? newdoc->openUrl(url, openFlags) : newdoc->importDocument(url);
-
 
     if (!openRet) {
         delete newdoc;
@@ -1004,6 +1004,15 @@ bool KisMainWindow::openDocumentInternal(const QUrl &url, OpenFlags flags)
     if (!QFileInfo(url.toLocalFile()).isWritable()) {
         setReadWrite(false);
     }
+
+    if (flags & RecoveryFile &&
+            (   url.toLocalFile().startsWith(QDir::tempPath())
+             || url.toLocalFile().startsWith(QDir::homePath()))
+            ) {
+        newdoc->setUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation) + "/" + QFileInfo(url.toLocalFile()).fileName()));
+        newdoc->save(false, 0);
+    }
+
     return true;
 }
 

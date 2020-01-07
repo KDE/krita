@@ -536,6 +536,7 @@ void KisToolMultihand::slotSetTransformMode(int index)
     customUI->subbrushLabel->setVisible(false);
     customUI->addSubbrushButton->setVisible(false);
     customUI->removeSubbrushButton->setVisible(false);
+    m_addSubbrushesMode = 0;
 
     // turn on what we need
     if (index == MIRROR) {
@@ -558,6 +559,7 @@ void KisToolMultihand::slotSetTransformMode(int index)
     else if (index == COPYTRANSLATE) {
         customUI->subbrushLabel->setVisible(true);
         customUI->addSubbrushButton->setVisible(true);
+        customUI->addSubbrushButton->setChecked(false);
         customUI->removeSubbrushButton->setVisible(true);
     }
 

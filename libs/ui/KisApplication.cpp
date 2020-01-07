@@ -111,6 +111,7 @@ public:
     KisAutoSaveRecoveryDialog *autosaveDialog {0};
     QPointer<KisMainWindow> mainWindow; // The first mainwindow we create on startup
     bool batchRun {false};
+    QVector<QByteArray> earlyRemoteArguments;
 
 };
 
@@ -156,7 +157,7 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     setWindowIcon(KisIconUtils::loadIcon("krita"));
 
     if (qgetenv("KRITA_NO_STYLE_OVERRIDE").isEmpty()) {
-        QStringList styles = QStringList() /*<< "breeze"*/ << "fusion" << "plastique";
+        QStringList styles = QStringList() << "breeze" << "fusion" << "plastique";
         if (!styles.contains(style()->objectName().toLower())) {
             Q_FOREACH (const QString & style, styles) {
                 if (!setStyle(style)) {
@@ -615,6 +616,10 @@ bool KisApplication::start(const KisApplicationArguments &args)
         d->splashScreen->displayRecentFiles(true);
     }
 
+    Q_FOREACH(const QByteArray &message, d->earlyRemoteArguments) {
+        executeRemoteArguments(message, d->mainWindow);
+    }
+
 
     // not calling this before since the program will quit there.
     return true;
@@ -662,20 +667,8 @@ bool KisApplication::notify(QObject *receiver, QEvent *event)
 }
 
 
-void KisApplication::remoteArguments(QByteArray message, QObject *socket)
+void KisApplication::executeRemoteArguments(QByteArray message, KisMainWindow *mainWindow)
 {
-    Q_UNUSED(socket);
-
-    // check if we have any mainwindow
-    KisMainWindow *mw = qobject_cast<KisMainWindow*>(qApp->activeWindow());
-    if (!mw) {
-        mw = KisPart::instance()->mainWindows().first();
-    }
-
-    if (!mw) {
-        return;
-    }
-
     KisApplicationArguments args = KisApplicationArguments::deserialize(message);
     const bool doTemplate = args.doTemplate();
     const int argsCount = args.filenames().count();
@@ -686,14 +679,28 @@ void KisApplication::remoteArguments(QByteArray message, QObject *socket)
             QString filename = args.filenames().at(argNumber);
             // are we just trying to open a template?
             if (doTemplate) {
-                createNewDocFromTemplate(filename, mw);
+                createNewDocFromTemplate(filename, mainWindow);
             }
             else if (QFile(filename).exists()) {
                 KisMainWindow::OpenFlags flags = d->batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
-                mw->openDocument(QUrl::fromLocalFile(filename), flags);
+                mainWindow->openDocument(QUrl::fromLocalFile(filename), flags);
             }
         }
     }
+}
+
+
+void KisApplication::remoteArguments(QByteArray message, QObject *socket)
+{
+    Q_UNUSED(socket);
+
+    // check if we have any mainwindow
+    KisMainWindow *mw = qobject_cast<KisMainWindow*>(qApp->activeWindow());
+    if (!mw) {
+        d->earlyRemoteArguments << message;
+        return;
+    }
+    executeRemoteArguments(message, mw);
 }
 
 void KisApplication::fileOpenRequested(const QString &url)

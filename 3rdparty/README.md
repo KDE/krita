@@ -154,6 +154,7 @@ Note: on all operating systems the entire procedure is done in a terminal window
     cmake --build . --config RelWithDebInfo --target ext_libraw
     cmake --build . --config RelWithDebInfo --target ext_giflib
     cmake --build . --config RelWithDebInfo --target ext_openjpeg
+    ```
 
     On Linux (if you want to build your own SIP and PyQt instead of the system one)
     ```

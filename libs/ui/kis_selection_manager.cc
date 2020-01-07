@@ -664,6 +664,8 @@ void KisSelectionManager::slotStrokeSelection()
         isVectorLayer = true;
     }
 
+    qDebug() << "isVectorLayer" << isVectorLayer;
+
     QPointer<KisDlgStrokeSelection> dlg = new KisDlgStrokeSelection(image, m_view, isVectorLayer);
 
     if (dlg->exec() == QDialog::Accepted) {

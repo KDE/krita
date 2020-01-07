@@ -44,6 +44,7 @@ class Encoder
     SwsContext* m_swsContext = nullptr;
     AVFormatContext* m_formatContext = nullptr;
     AVOutputFormat* m_outputFormat = nullptr;
+    AVStream* m_stream = nullptr;
     int m_fps = 4;
     int m_bitrate = 2000;
 

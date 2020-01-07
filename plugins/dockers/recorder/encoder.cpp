@@ -29,9 +29,9 @@ void Encoder::init(const std::string& filename, int width, int height)
         return;
     }
 
-    AVStream* stream = avformat_new_stream(m_formatContext, codec);
+    m_stream = avformat_new_stream(m_formatContext, codec);
 
-    if (!stream) {
+    if (!m_stream) {
         errPlugins << "can't find format";
         return;
     }
@@ -43,13 +43,14 @@ void Encoder::init(const std::string& filename, int width, int height)
         return;
     }
 
-    stream->codecpar->codec_id = m_outputFormat->video_codec;
-    stream->codecpar->codec_type = AVMEDIA_TYPE_VIDEO;
-    stream->codecpar->width = width;
-    stream->codecpar->height = height;
-    stream->codecpar->format = AV_PIX_FMT_YUV420P;
-    stream->codecpar->bit_rate = m_bitrate * 1000;
-    avcodec_parameters_to_context(m_codecContext, stream->codecpar);
+    m_stream->codecpar->codec_id = m_outputFormat->video_codec;
+    m_stream->codecpar->codec_type = AVMEDIA_TYPE_VIDEO;
+    m_stream->codecpar->width = width;
+    m_stream->codecpar->height = height;
+    m_stream->codecpar->format = AV_PIX_FMT_YUV420P;
+    m_stream->codecpar->bit_rate = m_bitrate * 1000;
+    m_stream->avg_frame_rate = (AVRational){m_fps, 1};
+    avcodec_parameters_to_context(m_codecContext, m_stream->codecpar);
     m_codecContext->time_base = (AVRational){1, 1};
     m_codecContext->max_b_frames = 2;
     m_codecContext->gop_size = 12;
@@ -57,7 +58,7 @@ void Encoder::init(const std::string& filename, int width, int height)
 
     av_opt_set_int(m_codecContext, "lossless", 1, 0);
 
-    avcodec_parameters_from_context(stream->codecpar, m_codecContext);
+    avcodec_parameters_from_context(m_stream->codecpar, m_codecContext);
 
     if ((err = avcodec_open2(m_codecContext, codec, NULL)) < 0) {
         errPlugins << "Failed to open codec: " << err;
@@ -107,7 +108,7 @@ void Encoder::pushFrame(uint8_t* data)
     sws_scale(m_swsContext, (const uint8_t* const*)&data, inLinesize, 0, m_codecContext->height, m_frame->data,
               m_frame->linesize);
 
-    m_frame->pts = (1.0 / m_fps) * 90000 * (m_frameCount++);
+    m_frame->pts = (m_frameCount++) * m_stream->time_base.den / (m_stream->time_base.num * m_fps);
 
     if ((err = avcodec_send_frame(m_codecContext, m_frame)) < 0) {
         errPlugins << "Failed to send frame" << err;
@@ -119,16 +120,20 @@ void Encoder::pushFrame(uint8_t* data)
     pkt.data = NULL;
     pkt.size = 0;
     pkt.flags |= AV_PKT_FLAG_KEY;
-
-    if (avcodec_receive_packet(m_codecContext, &pkt) == 0) {
+    int ret = 0;
+    if ((ret = avcodec_receive_packet(m_codecContext, &pkt)) == 0) {
         av_interleaved_write_frame(m_formatContext, &pkt);
-        av_packet_unref(&pkt);
+    //    av_packet_unref(&pkt);
         infoPlugins << "Write frame: " << m_frameCount;
+        qDebug() << "Write frame: " << m_frameCount;
     }
+    qDebug() << "Write push: " << m_frameCount << ret;
+    av_packet_unref(&pkt);
 }
 
 void Encoder::finish()
 {
+    qDebug() << "Encoder finish";
     AVPacket pkt;
     av_init_packet(&pkt);
     pkt.data = NULL;
@@ -138,11 +143,13 @@ void Encoder::finish()
         avcodec_send_frame(m_codecContext, NULL);
         if (avcodec_receive_packet(m_codecContext, &pkt) == 0) {
             av_interleaved_write_frame(m_formatContext, &pkt);
-            av_packet_unref(&pkt);
+            qDebug() << "final push" ;
         } else {
             break;
         }
     }
+
+    av_packet_unref(&pkt);
 
     av_write_trailer(m_formatContext);
     if (!(m_outputFormat->flags & AVFMT_NOFILE)) {
@@ -159,8 +166,10 @@ void Encoder::finish()
         m_frame = nullptr;
     }
     if (m_codecContext) {
+        avcodec_close(m_codecContext);
         avcodec_free_context(&m_codecContext);
         m_codecContext = nullptr;
+        m_stream = nullptr;
     }
     if (m_formatContext) {
         avformat_free_context(m_formatContext);

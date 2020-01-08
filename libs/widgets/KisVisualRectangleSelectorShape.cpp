@@ -285,6 +285,30 @@ QRegion KisVisualRectangleSelectorShape::getMaskMap()
     return mask;
 }
 
+QImage KisVisualRectangleSelectorShape::renderAlphaMask() const
+{
+    // Hi-DPI aware rendering requires that we determine the device pixel dimension;
+    // actual widget size in device pixels is not accessible unfortunately, it might be 1px smaller...
+    const int deviceWidth = qCeil(width() * devicePixelRatioF());
+    const int deviceHeight = qCeil(height() * devicePixelRatioF());
+
+    QImage alphaMask(deviceWidth, deviceHeight, QImage::Format_Alpha8);
+    alphaMask.fill(0);
+    alphaMask.setDevicePixelRatio(devicePixelRatioF());
+    QPainter painter(&alphaMask);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setBrush(Qt::white);
+    painter.setPen(Qt::NoPen);
+
+    painter.drawRect(3, 3, width() - 6, height() - 6);
+    if (m_type == border || m_type == borderMirrored) {
+        painter.setBrush(Qt::black);
+        painter.drawRect(m_barWidth, m_barWidth, width() - 2 * m_barWidth, height() - 2 * m_barWidth);
+    }
+
+    return alphaMask;
+}
+
 void KisVisualRectangleSelectorShape::drawCursor()
 {
     //qDebug() << this << "KisVisualRectangleSelectorShape::drawCursor: image needs update" << imagesNeedUpdate();
@@ -305,14 +329,6 @@ void KisVisualRectangleSelectorShape::drawCursor()
         int x = ( cursorPoint.x()-(width()/2)+1 );
         int y = ( cursorPoint.y()-cursorwidth );
         rect.setCoords(x, y, x+width()-2, y+(cursorwidth*2));
-        painter.save();
-        painter.setCompositionMode(QPainter::CompositionMode_Clear);
-        QPen pen;
-        pen.setWidth(5);
-        painter.setPen(pen);
-        painter.drawLine(QLine(QPoint(0.0,0.0), QPoint(0.0,height())));
-        painter.drawLine(QLine(QPoint(width(),0.0), QPoint(width(),height())));
-        painter.restore();
     } else {
         int x = cursorPoint.x()-cursorwidth;
         int y = cursorPoint.y()-(height()/2)+1;
@@ -346,14 +362,6 @@ void KisVisualRectangleSelectorShape::drawCursor()
         painter.drawEllipse(mirror, cursorwidth-1, cursorwidth-1);
 
     } else {
-        painter.save();
-        painter.setCompositionMode(QPainter::CompositionMode_Clear);
-        QPen pen;
-        pen.setWidth(5);
-        painter.setPen(pen);
-        painter.drawRect(QRect(0,0,width(),height()));
-        painter.restore();
-
         painter.setPen(Qt::white);
         fill.setColor(Qt::white);
         painter.setBrush(fill);

@@ -173,16 +173,18 @@ QImage KisVisualColorSelectorShape::getImageMap()
     return m_d->gradient;
 }
 
-QImage KisVisualColorSelectorShape::convertImageMap(const quint8 *rawColor, quint32 size) const
+QImage KisVisualColorSelectorShape::convertImageMap(const quint8 *rawColor, quint32 bufferSize, QSize imgSize) const
 {
-    Q_ASSERT(size == width()*height()*m_d->colorSpace->pixelSize());
+    Q_ASSERT(bufferSize == imgSize.width() * imgSize.height() * m_d->colorSpace->pixelSize());
     QImage image;
     // Convert the buffer to a qimage
     if (m_d->displayRenderer) {
-        image = m_d->displayRenderer->convertToQImage(m_d->colorSpace, rawColor, width(), height());
+        image = m_d->displayRenderer->convertToQImage(m_d->colorSpace, rawColor, imgSize.width(), imgSize.height());
     }
     else {
-        image = m_d->colorSpace->convertToQImage(rawColor, width(), height(), 0, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+        image = m_d->colorSpace->convertToQImage(rawColor, imgSize.width(), imgSize.height(), 0,
+                                                 KoColorConversionTransformation::internalRenderingIntent(),
+                                                 KoColorConversionTransformation::internalConversionFlags());
     }
     // safeguard:
     if (image.isNull())
@@ -199,13 +201,18 @@ QImage KisVisualColorSelectorShape::renderBackground(const QVector4D &channelVal
     const KisVisualColorSelector *selector = qobject_cast<KisVisualColorSelector*>(parent());
     Q_ASSERT(selector);
 
-    quint32 imageSize = width() * height() * m_d->colorSpace->pixelSize();
+    // Hi-DPI aware rendering requires that we determine the device pixel dimension;
+    // actual widget size in device pixels is not accessible unfortunately, it might be 1px smaller...
+    const qreal deviceDivider = 1.0 / devicePixelRatioF();
+    const int deviceWidth = qCeil(width() * devicePixelRatioF());
+    const int deviceHeight = qCeil(height() * devicePixelRatioF());
+    quint32 imageSize = deviceWidth * deviceHeight * m_d->colorSpace->pixelSize();
     QScopedArrayPointer<quint8> raw(new quint8[imageSize] {});
     quint8 *dataPtr = raw.data();
     QVector4D coordinates = channelValues;
-    for (int y = 0; y < height(); y++) {
-        for (int x=0; x < width(); x++) {
-            QPointF newcoordinate = convertWidgetCoordinateToShapeCoordinate(QPointF(x, y));
+    for (int y = 0; y < deviceHeight; y++) {
+        for (int x=0; x < deviceWidth; x++) {
+            QPointF newcoordinate = convertWidgetCoordinateToShapeCoordinate(QPointF(x, y) * deviceDivider);
             coordinates[m_d->channel1] = newcoordinate.x();
             if (m_d->dimension == Dimensions::twodimensional){
                 coordinates[m_d->channel2] = newcoordinate.y();
@@ -215,7 +222,9 @@ QImage KisVisualColorSelectorShape::renderBackground(const QVector4D &channelVal
             dataPtr += pixelSize;
         }
     }
-    return convertImageMap(raw.data(), imageSize);
+    QImage image = convertImageMap(raw.data(), imageSize, QSize(deviceWidth, deviceHeight));
+    image.setDevicePixelRatio(devicePixelRatioF());
+    return image;
 }
 
 void KisVisualColorSelectorShape::mousePressEvent(QMouseEvent *e)

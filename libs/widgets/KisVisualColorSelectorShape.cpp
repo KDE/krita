@@ -48,6 +48,7 @@ struct KisVisualColorSelectorShape::Private
     QImage fullSelector;
     bool imagesNeedUpdate { true };
     bool alphaNeedsUpdate { true };
+    bool acceptTabletEvents { false };
     QPointF currentCoordinates; // somewhat redundant?
     QVector4D currentChannelValues;
     Dimensions dimension;
@@ -116,6 +117,11 @@ void KisVisualColorSelectorShape::setChannelValues(QVector4D channelValues, bool
     }
     m_d->imagesNeedUpdate = true;
     update();
+}
+
+void KisVisualColorSelectorShape::setAcceptTabletEvents(bool on)
+{
+    m_d->acceptTabletEvents = on;
 }
 
 void KisVisualColorSelectorShape::setDisplayRenderer (const KoColorDisplayRendererInterface *displayRenderer)
@@ -295,6 +301,43 @@ void KisVisualColorSelectorShape::mouseReleaseEvent(QMouseEvent *e)
         e->ignore();
     }
 }
+
+void KisVisualColorSelectorShape::tabletEvent(QTabletEvent* event)
+{
+    // only accept tablet events that are associated to "left" button
+    // NOTE: QTabletEvent does not have a windowPos() equivalent, but we don't need it
+    if (m_d->acceptTabletEvents &&
+        (event->button() == Qt::LeftButton || (event->buttons() & Qt::LeftButton)))
+    {
+        event->accept();
+        switch (event->type()) {
+        case  QEvent::TabletPress: {
+            QMouseEvent mouseEvent(QEvent::MouseButtonPress, event->posF(), event->posF(),
+                                   event->globalPosF(), event->button(), event->buttons(),
+                                   event->modifiers(), Qt::MouseEventSynthesizedByApplication);
+            mousePressEvent(&mouseEvent);
+            break;
+        }
+        case QEvent::TabletMove: {
+            QMouseEvent mouseEvent(QEvent::MouseMove, event->posF(), event->posF(),
+                                   event->globalPosF(), event->button(), event->buttons(),
+                                   event->modifiers(), Qt::MouseEventSynthesizedByApplication);
+            mouseMoveEvent(&mouseEvent);
+            break;
+        }
+        case QEvent::TabletRelease: {
+            QMouseEvent mouseEvent(QEvent::MouseButtonRelease, event->posF(), event->posF(),
+                                   event->globalPosF(), event->button(), event->buttons(),
+                                   event->modifiers(), Qt::MouseEventSynthesizedByApplication);
+            mouseReleaseEvent(&mouseEvent);
+            break;
+        }
+        default:
+            event->ignore();
+        }
+    }
+}
+
 void KisVisualColorSelectorShape::paintEvent(QPaintEvent*)
 {
     QPainter painter(this);

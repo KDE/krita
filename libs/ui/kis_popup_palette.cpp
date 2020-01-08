@@ -116,7 +116,9 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     const int borderWidth = 3;
 
     if (KisConfig(true).readEntry<bool>("popuppalette/usevisualcolorselector", false)) {
-        m_triangleColorSelector = new KisVisualColorSelector(this);
+        KisVisualColorSelector *selector = new KisVisualColorSelector(this);
+        selector->setAcceptTabletEvents(true);
+        m_triangleColorSelector = selector;
     }
     else {
         m_triangleColorSelector  = new PopupColorTriangle(displayRenderer, this);

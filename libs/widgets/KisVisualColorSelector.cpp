@@ -52,6 +52,7 @@ struct KisVisualColorSelector::Private
     KoColor currentcolor;
     const KoColorSpace *currentCS {0};
     QList<KisVisualColorSelectorShape*> widgetlist;
+    bool acceptTabletEvents {false};
     bool circular {false};
     bool exposureSupported {false};
     bool isRGBA {false};
@@ -109,6 +110,14 @@ void KisVisualColorSelector::setConfig(bool forceCircular, bool forceSelfUpdate)
 {
     Q_UNUSED(forceSelfUpdate)
     m_d->circular = forceCircular;
+}
+
+void KisVisualColorSelector::setAcceptTabletEvents(bool on)
+{
+    m_d->acceptTabletEvents = on;
+    Q_FOREACH (KisVisualColorSelectorShape *shape, m_d->widgetlist) {
+        shape->setAcceptTabletEvents(on);
+    }
 }
 
 KoColor KisVisualColorSelector::getCurrentColor() const
@@ -488,6 +497,7 @@ void KisVisualColorSelector::slotRebuildSelectors()
     m_d->channelValues = convertKoColorToShapeCoordinates(m_d->currentcolor);
     Q_FOREACH (KisVisualColorSelectorShape *shape, m_d->widgetlist) {
         shape->setChannelValues(m_d->channelValues, true);
+        shape->setAcceptTabletEvents(m_d->acceptTabletEvents);
         // if this widget is currently visible, new children are hidden by default
         shape->show();
     }

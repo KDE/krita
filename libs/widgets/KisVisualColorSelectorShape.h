@@ -154,6 +154,7 @@ public:
       */
     void setChannelValues(QVector4D channelValues, bool setCursor);
 
+    void setAcceptTabletEvents(bool on);
 
 Q_SIGNALS:
     void sigCursorMoved(QPointF pos);
@@ -195,6 +196,7 @@ protected:
     void mousePressEvent(QMouseEvent *e) override;
     void mouseMoveEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;
+    void tabletEvent(QTabletEvent* event) override;
     void paintEvent(QPaintEvent*) override;
     void resizeEvent(QResizeEvent *) override;
 

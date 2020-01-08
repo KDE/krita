@@ -57,7 +57,7 @@ public:
     QRect getSpaceForTriangle(QRect geom) override;
 private:
     QPointF convertShapeCoordinateToWidgetCoordinate(QPointF coordinate) const override;
-    QPointF convertWidgetCoordinateToShapeCoordinate(QPoint coordinate) const override;
+    QPointF convertWidgetCoordinateToShapeCoordinate(QPointF coordinate) const override;
 
     singelDTypes m_type;
     int m_barWidth;

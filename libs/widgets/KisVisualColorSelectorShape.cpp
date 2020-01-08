@@ -205,7 +205,7 @@ QImage KisVisualColorSelectorShape::renderBackground(const QVector4D &channelVal
     QVector4D coordinates = channelValues;
     for (int y = 0; y < height(); y++) {
         for (int x=0; x < width(); x++) {
-            QPointF newcoordinate = convertWidgetCoordinateToShapeCoordinate(QPoint(x, y));
+            QPointF newcoordinate = convertWidgetCoordinateToShapeCoordinate(QPointF(x, y));
             coordinates[m_d->channel1] = newcoordinate.x();
             if (m_d->dimension == Dimensions::twodimensional){
                 coordinates[m_d->channel2] = newcoordinate.y();
@@ -221,7 +221,7 @@ QImage KisVisualColorSelectorShape::renderBackground(const QVector4D &channelVal
 void KisVisualColorSelectorShape::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::LeftButton) {
-        QPointF coordinates = convertWidgetCoordinateToShapeCoordinate(e->pos());
+        QPointF coordinates = convertWidgetCoordinateToShapeCoordinate(e->localPos());
         setCursorPosition(coordinates, true);
     }
     else {
@@ -232,7 +232,7 @@ void KisVisualColorSelectorShape::mousePressEvent(QMouseEvent *e)
 void KisVisualColorSelectorShape::mouseMoveEvent(QMouseEvent *e)
 {
     if (e->buttons() & Qt::LeftButton) {
-        QPointF coordinates = convertWidgetCoordinateToShapeCoordinate(e->pos());
+        QPointF coordinates = convertWidgetCoordinateToShapeCoordinate(e->localPos());
         setCursorPosition(coordinates, true);
     } else {
         e->ignore();

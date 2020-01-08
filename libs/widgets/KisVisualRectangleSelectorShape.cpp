@@ -182,7 +182,7 @@ QPointF KisVisualRectangleSelectorShape::convertShapeCoordinateToWidgetCoordinat
     return QPointF(x,y);
 }
 
-QPointF KisVisualRectangleSelectorShape::convertWidgetCoordinateToShapeCoordinate(QPoint coordinate) const
+QPointF KisVisualRectangleSelectorShape::convertWidgetCoordinateToShapeCoordinate(QPointF coordinate) const
 {
     // Reminder: in Qt widget space, origin is top-left, but we want zero y to be at the bottom
     //default values:

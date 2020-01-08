@@ -175,69 +175,27 @@ QRegion KisVisualEllipticalSelectorShape::getMaskMap()
     return mask;
 }
 
-QImage KisVisualEllipticalSelectorShape::renderBackground(const QVector4D &channelValues, quint32 pixelSize) const
+QImage KisVisualEllipticalSelectorShape::renderAlphaMask() const
 {
-    const KisVisualColorSelector *selector = qobject_cast<KisVisualColorSelector*>(parent());
-    Q_ASSERT(selector);
     // Hi-DPI aware rendering requires that we determine the device pixel dimension;
     // actual widget size in device pixels is not accessible unfortunately, it might be 1px smaller...
-    const qreal deviceDivider = 1.0 / devicePixelRatioF();
     const int deviceWidth = qCeil(width() * devicePixelRatioF());
     const int deviceHeight = qCeil(height() * devicePixelRatioF());
-    // optimization assumes widget is (close to) square, but should still render correctly as ellipse
-    int rMaxSquare = qRound(qMax(deviceWidth, deviceHeight) * 0.5f + 0.5f);
-    rMaxSquare *= rMaxSquare;
-    int rMinSquare = 0;
-    if (getDimensions() == Dimensions::onedimensional)
-    {
-        rMinSquare = qMax(0, qRound(qMin(deviceWidth, deviceHeight) * 0.5f - m_barWidth * devicePixelRatioF()));
-        rMinSquare *= rMinSquare;
-    }
-    int cx = deviceWidth/2;
-    int cy = deviceHeight/2;
 
-    // Fill a buffer with the right kocolors
-    quint32 imageSize = deviceWidth * deviceHeight * pixelSize;
-    QScopedArrayPointer<quint8> raw(new quint8[imageSize] {});
-    quint8 *dataPtr = raw.data();
-    bool is2D = (getDimensions() == Dimensions::twodimensional);
-    QVector4D coordinates = channelValues;
-    QVector<int> channels = getChannels();
-    for (int y = 0; y < deviceHeight; y++) {
-        int dy = y - cy;
-        for (int x=0; x < deviceWidth; x++) {
-            int dx = x - cx;
-            int radSquare = dx*dx + dy*dy;
-            if (radSquare >= rMinSquare && radSquare < rMaxSquare)
-            {
-                QPointF newcoordinate = convertWidgetCoordinateToShapeCoordinate(QPointF(x, y) * deviceDivider);
-                coordinates[channels.at(0)] = newcoordinate.x();
-                if (is2D){
-                    coordinates[channels.at(1)] = newcoordinate.y();
-                }
-                KoColor c = selector->convertShapeCoordsToKoColor(coordinates);
-                memcpy(dataPtr, c.data(), pixelSize);
-            }
-            dataPtr += pixelSize;
-        }
-    }
-    QImage image = convertImageMap(raw.data(), imageSize, QSize(deviceWidth, deviceHeight));
-    image.setDevicePixelRatio(devicePixelRatioF());
-    // cleanup edges by erasing with antialiased circles
-    QPainter painter(&image);
+    QImage alphaMask(deviceWidth, deviceHeight, QImage::Format_Alpha8);
+    alphaMask.fill(0);
+    alphaMask.setDevicePixelRatio(devicePixelRatioF());
+    QPainter painter(&alphaMask);
     painter.setRenderHint(QPainter::Antialiasing);
-    painter.setCompositionMode(QPainter::CompositionMode_Clear);
-    QPen pen;
-    pen.setWidth(5);
-    painter.setPen(pen);
-    painter.drawEllipse(QRect(0,0,width(),height()));
-
-    if (getDimensions()==KisVisualColorSelectorShape::onedimensional) {
-        QRect innerRect(m_barWidth, m_barWidth, width()-(m_barWidth*2), height()-(m_barWidth*2));
-        painter.setBrush(Qt::SolidPattern);
-        painter.drawEllipse(innerRect);
+    painter.setBrush(Qt::white);
+    painter.setPen(Qt::NoPen);
+    painter.drawEllipse(2, 2, width() - 4, height() - 4);
+    //painter.setBrush(Qt::black);
+    if (getDimensions() == KisVisualColorSelectorShape::onedimensional) {
+        painter.setCompositionMode(QPainter::CompositionMode_Clear);
+        painter.drawEllipse(m_barWidth - 2, m_barWidth - 2, width() - 2*(m_barWidth-2), height() - 2*(m_barWidth-2));
     }
-    return image;
+    return alphaMask;
 }
 
 void KisVisualEllipticalSelectorShape::drawCursor()

@@ -44,8 +44,10 @@
 struct KisVisualColorSelectorShape::Private
 {
     QImage gradient;
+    QImage alphaMask;
     QImage fullSelector;
-    bool imagesNeedUpdate {true};
+    bool imagesNeedUpdate { true };
+    bool alphaNeedsUpdate { true };
     QPointF currentCoordinates; // somewhat redundant?
     QVector4D currentChannelValues;
     Dimensions dimension;
@@ -131,6 +133,7 @@ void KisVisualColorSelectorShape::setDisplayRenderer (const KoColorDisplayRender
 void KisVisualColorSelectorShape::forceImageUpdate()
 {
     //qDebug() << this  << "forceImageUpdate";
+    m_d->alphaNeedsUpdate = true;
     m_d->imagesNeedUpdate = true;
 }
 
@@ -173,6 +176,15 @@ QImage KisVisualColorSelectorShape::getImageMap()
     return m_d->gradient;
 }
 
+const QImage KisVisualColorSelectorShape::getAlphaMask() const
+{
+    if (m_d->alphaNeedsUpdate) {
+        m_d->alphaMask = renderAlphaMask();
+        m_d->alphaNeedsUpdate = false;
+    }
+    return m_d->alphaMask;
+}
+
 QImage KisVisualColorSelectorShape::convertImageMap(const quint8 *rawColor, quint32 bufferSize, QSize imgSize) const
 {
     Q_ASSERT(bufferSize == imgSize.width() * imgSize.height() * m_d->colorSpace->pixelSize());
@@ -210,21 +222,50 @@ QImage KisVisualColorSelectorShape::renderBackground(const QVector4D &channelVal
     QScopedArrayPointer<quint8> raw(new quint8[imageSize] {});
     quint8 *dataPtr = raw.data();
     QVector4D coordinates = channelValues;
+
+    QImage alpha = getAlphaMask();
+    bool checkAlpha = !alpha.isNull() && alpha.valid(deviceWidth - 1, deviceHeight - 1);
+    KIS_SAFE_ASSERT_RECOVER(!checkAlpha || alpha.format() == QImage::Format_Alpha8) {
+        checkAlpha = false;
+    }
+
+    KoColor filler(Qt::white, m_d->colorSpace);
     for (int y = 0; y < deviceHeight; y++) {
+        const uchar *alphaLine = checkAlpha ? alpha.scanLine(y) : 0;
         for (int x=0; x < deviceWidth; x++) {
-            QPointF newcoordinate = convertWidgetCoordinateToShapeCoordinate(QPointF(x, y) * deviceDivider);
-            coordinates[m_d->channel1] = newcoordinate.x();
-            if (m_d->dimension == Dimensions::twodimensional){
-                coordinates[m_d->channel2] = newcoordinate.y();
+            if (!checkAlpha || alphaLine[x]) {
+                QPointF newcoordinate = convertWidgetCoordinateToShapeCoordinate(QPointF(x, y) * deviceDivider);
+                coordinates[m_d->channel1] = newcoordinate.x();
+                if (m_d->dimension == Dimensions::twodimensional) {
+                    coordinates[m_d->channel2] = newcoordinate.y();
+                }
+                KoColor c = selector->convertShapeCoordsToKoColor(coordinates);
+                memcpy(dataPtr, c.data(), pixelSize);
             }
-            KoColor c = selector->convertShapeCoordsToKoColor(coordinates);
-            memcpy(dataPtr, c.data(), pixelSize);
+            else {
+                // need to write a color with non-zero alpha, otherwise the display converter
+                // will for some arcane reason crop the final QImage and screw rendering
+                memcpy(dataPtr, filler.data(), pixelSize);
+            }
             dataPtr += pixelSize;
         }
     }
     QImage image = convertImageMap(raw.data(), imageSize, QSize(deviceWidth, deviceHeight));
     image.setDevicePixelRatio(devicePixelRatioF());
+
+    if (!alpha.isNull()) {
+        QPainter painter(&image);
+        // transfer alphaMask to Alpha channel
+        painter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+        painter.drawImage(0, 0, alpha);
+    }
+
     return image;
+}
+
+QImage KisVisualColorSelectorShape::renderAlphaMask() const
+{
+    return QImage();
 }
 
 void KisVisualColorSelectorShape::mousePressEvent(QMouseEvent *e)

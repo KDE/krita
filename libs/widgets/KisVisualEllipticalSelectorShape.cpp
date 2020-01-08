@@ -112,16 +112,12 @@ QRect KisVisualEllipticalSelectorShape::getSpaceForTriangle(QRect geom)
 
 QPointF KisVisualEllipticalSelectorShape::convertShapeCoordinateToWidgetCoordinate(QPointF coordinate) const
 {
-    qreal x;
-    qreal y;
-    qreal offset=7.0;
+    qreal offset = 7.0;
     qreal a = (qreal)width()*0.5;
     QPointF center(a, a);
     QLineF line(center, QPoint((m_barWidth*0.5),a));
     qreal angle = coordinate.x()*360.0;
-    angle = fmod(angle+180.0,360.0);
-    angle = 180.0-angle;
-    angle = angle+180.0;
+    angle = 360.0 - fmod(angle+180.0, 360.0);
     if (m_type==KisVisualEllipticalSelectorShape::borderMirrored) {
         angle = (coordinate.x()/2)*360.0;
         angle = fmod((angle+270.0), 360.0);
@@ -130,9 +126,7 @@ QPointF KisVisualEllipticalSelectorShape::convertShapeCoordinateToWidgetCoordina
     if (getDimensions()!=KisVisualColorSelectorShape::onedimensional) {
         line.setLength(qMin(coordinate.y()*(a-offset), a-offset));
     }
-    x = qRound(line.p2().x());
-    y = qRound(line.p2().y());
-    return QPointF(x,y);
+    return line.p2();
 }
 
 QPointF KisVisualEllipticalSelectorShape::convertWidgetCoordinateToShapeCoordinate(QPoint coordinate) const
@@ -249,7 +243,6 @@ void KisVisualEllipticalSelectorShape::drawCursor()
     QPainter painter;
     painter.begin(&fullSelector);
     painter.setRenderHint(QPainter::Antialiasing);
-    QRect innerRect(m_barWidth, m_barWidth, width()-(m_barWidth*2), height()-(m_barWidth*2));
     QBrush fill;
     fill.setStyle(Qt::SolidPattern);
 
@@ -260,7 +253,7 @@ void KisVisualEllipticalSelectorShape::drawCursor()
         fill.setColor(Qt::white);
         painter.setBrush(fill);
         painter.drawEllipse(cursorPoint, cursorwidth, cursorwidth);
-        QPoint mirror(innerRect.center().x()+(innerRect.center().x()-cursorPoint.x()),cursorPoint.y());
+        QPointF mirror(width() - cursorPoint.x(), cursorPoint.y());
         painter.drawEllipse(mirror, cursorwidth, cursorwidth);
         fill.setColor(col);
         painter.setPen(Qt::black);

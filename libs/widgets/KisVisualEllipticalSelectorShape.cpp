@@ -97,17 +97,19 @@ QRect KisVisualEllipticalSelectorShape::getSpaceForCircle(QRect geom)
 QRect KisVisualEllipticalSelectorShape::getSpaceForTriangle(QRect geom)
 {
     int sizeValue = qMin(width(),height());
-    QRect b(geom.left(), geom.top(), sizeValue, sizeValue);
-    QLineF radius(b.center(), QPointF(b.left()+m_barWidth, b.center().y()) );
-    radius.setAngle(90);//point at yellowgreen :)
-    QPointF t = radius.p2();
-    radius.setAngle(330);//point to purple :)
-    QPointF br = radius.p2();
-    radius.setAngle(210);//point to cerulean :)
-    QPointF bl = radius.p2();
-    QPointF tl = QPoint(bl.x(),t.y());
-    QRect r(tl.toPoint(), br.toPoint());
-    return r;
+    QPointF center(0.5 * width(), 0.5 * height());
+    qreal radius = 0.5 * sizeValue - (m_barWidth + 4);
+    QLineF rLine(center, QPointF(center.x() + radius, center.y()));
+    rLine.setAngle(330);
+    QPoint br(rLine.p2().toPoint());
+    //QPoint br(qCeil(rLine.p2().x()), qCeil(rLine.p2().y()));
+    QPoint tl(width() - br.x(), m_barWidth + 4);
+    QRect bound(tl, br);
+    // adjust with triangle default margin for cursor rendering
+    // it's not +5 because above calculation is for pixel center and ignores
+    // the fact that dimensions are then effectively 1px smaller...
+    bound.adjust(-5, -5, 4, 4);
+    return bound.intersected(geom);
 }
 
 QPointF KisVisualEllipticalSelectorShape::convertShapeCoordinateToWidgetCoordinate(QPointF coordinate) const

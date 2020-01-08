@@ -52,7 +52,6 @@ struct KisVisualColorSelectorShape::Private
     const KoColorSpace *colorSpace;
     int channel1;
     int channel2;
-    bool mousePressActive = false;
     const KoColorDisplayRendererInterface *displayRenderer = 0;
 };
 
@@ -221,16 +220,18 @@ QImage KisVisualColorSelectorShape::renderBackground(const QVector4D &channelVal
 
 void KisVisualColorSelectorShape::mousePressEvent(QMouseEvent *e)
 {
-    if (e->button()==Qt::LeftButton) {
-        m_d->mousePressActive = true;
+    if (e->button() == Qt::LeftButton) {
         QPointF coordinates = convertWidgetCoordinateToShapeCoordinate(e->pos());
         setCursorPosition(coordinates, true);
+    }
+    else {
+        e->ignore();
     }
 }
 
 void KisVisualColorSelectorShape::mouseMoveEvent(QMouseEvent *e)
 {
-    if (m_d->mousePressActive==true) {
+    if (e->buttons() & Qt::LeftButton) {
         QPointF coordinates = convertWidgetCoordinateToShapeCoordinate(e->pos());
         setCursorPosition(coordinates, true);
     } else {
@@ -240,8 +241,8 @@ void KisVisualColorSelectorShape::mouseMoveEvent(QMouseEvent *e)
 
 void KisVisualColorSelectorShape::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (e->button()==Qt::LeftButton) {
-        m_d->mousePressActive = false;
+    if (e->button() != Qt::LeftButton) {
+        e->ignore();
     }
 }
 void KisVisualColorSelectorShape::paintEvent(QPaintEvent*)

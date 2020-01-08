@@ -124,6 +124,7 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     }
     else {
         m_triangleColorSelector  = new PopupColorTriangle(displayRenderer, this);
+        connect(m_triangleColorSelector, SIGNAL(requestCloseContainer()), this, SLOT(slotHide()));
     }
     m_triangleColorSelector->setDisplayRenderer(displayRenderer);
     m_triangleColorSelector->setConfig(true,false);
@@ -154,8 +155,6 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
             m_colorChangeCompressor.data(), SLOT(start()));
     connect(m_colorChangeCompressor.data(), SIGNAL(timeout()),
             SLOT(slotEmitColorChanged()));
-
-    connect(m_triangleColorSelector, SIGNAL(requestCloseContainer()), this, SLOT(slotHide()));
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), m_triangleColorSelector, SLOT(configurationChanged()));
 

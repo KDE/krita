@@ -174,7 +174,7 @@ protected:
      * @param size the number of bytes to read from data, must match aforementioned cirteria
      * @return the converted QImage guaranteed to match the widget size (black content on failure)
      */
-    QImage convertImageMap(const quint8 *rawColor, quint32 size) const;
+    QImage convertImageMap(const quint8 *rawColor, quint32 bufferSize, QSize imgSize) const;
     /**
      * @brief renderBackground
      * Render the widget background visible inside the widget's mask in current color space

@@ -179,33 +179,38 @@ QImage KisVisualEllipticalSelectorShape::renderBackground(const QVector4D &chann
 {
     const KisVisualColorSelector *selector = qobject_cast<KisVisualColorSelector*>(parent());
     Q_ASSERT(selector);
+    // Hi-DPI aware rendering requires that we determine the device pixel dimension;
+    // actual widget size in device pixels is not accessible unfortunately, it might be 1px smaller...
+    const qreal deviceDivider = 1.0 / devicePixelRatioF();
+    const int deviceWidth = qCeil(width() * devicePixelRatioF());
+    const int deviceHeight = qCeil(height() * devicePixelRatioF());
     // optimization assumes widget is (close to) square, but should still render correctly as ellipse
-    int rMaxSquare = qRound(qMax(width(), height()) * 0.5f + 0.5f);
+    int rMaxSquare = qRound(qMax(deviceWidth, deviceHeight) * 0.5f + 0.5f);
     rMaxSquare *= rMaxSquare;
     int rMinSquare = 0;
     if (getDimensions() == Dimensions::onedimensional)
     {
-        rMinSquare = qMax(0, qRound(qMin(width(), height()) * 0.5f - m_barWidth));
+        rMinSquare = qMax(0, qRound(qMin(deviceWidth, deviceHeight) * 0.5f - m_barWidth * devicePixelRatioF()));
         rMinSquare *= rMinSquare;
     }
-    int cx = width()/2;
-    int cy = height()/2;
+    int cx = deviceWidth/2;
+    int cy = deviceHeight/2;
 
     // Fill a buffer with the right kocolors
-    quint32 imageSize = width() * height() * pixelSize;
+    quint32 imageSize = deviceWidth * deviceHeight * pixelSize;
     QScopedArrayPointer<quint8> raw(new quint8[imageSize] {});
     quint8 *dataPtr = raw.data();
     bool is2D = (getDimensions() == Dimensions::twodimensional);
     QVector4D coordinates = channelValues;
     QVector<int> channels = getChannels();
-    for (int y = 0; y < height(); y++) {
+    for (int y = 0; y < deviceHeight; y++) {
         int dy = y - cy;
-        for (int x=0; x < width(); x++) {
+        for (int x=0; x < deviceWidth; x++) {
             int dx = x - cx;
             int radSquare = dx*dx + dy*dy;
             if (radSquare >= rMinSquare && radSquare < rMaxSquare)
             {
-                QPointF newcoordinate = convertWidgetCoordinateToShapeCoordinate(QPoint(x, y));
+                QPointF newcoordinate = convertWidgetCoordinateToShapeCoordinate(QPointF(x, y) * deviceDivider);
                 coordinates[channels.at(0)] = newcoordinate.x();
                 if (is2D){
                     coordinates[channels.at(1)] = newcoordinate.y();
@@ -216,7 +221,8 @@ QImage KisVisualEllipticalSelectorShape::renderBackground(const QVector4D &chann
             dataPtr += pixelSize;
         }
     }
-    QImage image = convertImageMap(raw.data(), imageSize);
+    QImage image = convertImageMap(raw.data(), imageSize, QSize(deviceWidth, deviceHeight));
+    image.setDevicePixelRatio(devicePixelRatioF());
     // cleanup edges by erasing with antialiased circles
     QPainter painter(&image);
     painter.setRenderHint(QPainter::Antialiasing);

@@ -129,7 +129,7 @@ QPointF KisVisualEllipticalSelectorShape::convertShapeCoordinateToWidgetCoordina
     return line.p2();
 }
 
-QPointF KisVisualEllipticalSelectorShape::convertWidgetCoordinateToShapeCoordinate(QPoint coordinate) const
+QPointF KisVisualEllipticalSelectorShape::convertWidgetCoordinateToShapeCoordinate(QPointF coordinate) const
 {
     //default implementation:
     qreal x = 0.5;

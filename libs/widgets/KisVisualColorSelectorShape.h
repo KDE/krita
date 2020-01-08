@@ -207,7 +207,7 @@ private:
      * Convert a coordinate in the widget's height/width to a shape coordinate.
      * @param coordinate the position your wish to have the shape coordinates of.
      */
-    virtual QPointF convertWidgetCoordinateToShapeCoordinate(QPoint coordinate) const = 0;
+    virtual QPointF convertWidgetCoordinateToShapeCoordinate(QPointF coordinate) const = 0;
 
     /**
      * @brief getPixmap

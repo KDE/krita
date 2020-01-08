@@ -113,7 +113,7 @@ QPointF KisVisualTriangleSelectorShape::convertShapeCoordinateToWidgetCoordinate
     return QPointF(x,y);
 }
 
-QPointF KisVisualTriangleSelectorShape::convertWidgetCoordinateToShapeCoordinate(QPoint coordinate) const
+QPointF KisVisualTriangleSelectorShape::convertWidgetCoordinateToShapeCoordinate(QPointF coordinate) const
 {
     //default implementation: gotten from the kotrianglecolorselector/kis_color_selector_triangle.
     qreal x = 0.5;

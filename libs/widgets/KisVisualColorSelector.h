@@ -57,6 +57,7 @@ public:
      * ignored, can possibly be removed from parent class now
      */
     void setConfig(bool forceCircular, bool forceSelfUpdate) override;
+    void setAcceptTabletEvents(bool on);
     KoColor getCurrentColor() const override;
     QVector4D getChannelValues() const;
     KoColor convertShapeCoordsToKoColor(const QVector4D &coordinates) const;

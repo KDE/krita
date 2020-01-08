@@ -45,12 +45,11 @@ KisVisualTriangleSelectorShape::KisVisualTriangleSelectorShape(QWidget *parent,
                                                                const KoColorSpace *cs,
                                                                int channel1, int channel2,
                                                                const KoColorDisplayRendererInterface *displayRenderer,
-                                                               int barwidth)
-    : KisVisualColorSelectorShape(parent, dimension, cs, channel1, channel2, displayRenderer)
+                                                               int margin)
+    : KisVisualColorSelectorShape(parent, dimension, cs, channel1, channel2, displayRenderer),
+      m_margin(margin)
 {
     //qDebug() << "creating KisVisualTriangleSelectorShape" << this;
-    m_barWidth = barwidth;
-    setTriangle();
 }
 
 KisVisualTriangleSelectorShape::~KisVisualTriangleSelectorShape()
@@ -58,9 +57,9 @@ KisVisualTriangleSelectorShape::~KisVisualTriangleSelectorShape()
     //qDebug() << "deleting KisVisualTriangleSelectorShape" << this;
 }
 
-void KisVisualTriangleSelectorShape::setBorderWidth(int width)
+void KisVisualTriangleSelectorShape::setBorderWidth(int /*width*/)
 {
-    m_barWidth = width;
+    // triangle doesn't have a 1-dimensional mode
 }
 
 QRect KisVisualTriangleSelectorShape::getSpaceForSquare(QRect geom)
@@ -77,80 +76,78 @@ QRect KisVisualTriangleSelectorShape::getSpaceForTriangle(QRect geom)
 {
     return geom;
 }
-void KisVisualTriangleSelectorShape::setTriangle()
-{
-    QPoint apex = QPoint (width()*0.5,0);
-    QPolygon triangle;
-    triangle<< QPoint(0,height()) << apex << QPoint(width(),height()) << QPoint(0,height());
-    m_triangle = triangle;
-    QLineF a(triangle.at(0),triangle.at(1));
-    QLineF b(triangle.at(0),triangle.at(2));
-    QLineF ap(triangle.at(2), a.pointAt(0.5));
-    QLineF bp(triangle.at(1), b.pointAt(0.5));
-    QPointF intersect;
-    ap.intersect(bp,&intersect);
-    m_center = intersect;
-    QLineF r(triangle.at(0), intersect);
-    m_radius = r.length();
-}
 
 QPointF KisVisualTriangleSelectorShape::convertShapeCoordinateToWidgetCoordinate(QPointF coordinate) const
 {
-    qreal offset=7.0;//the offset is so we get a nice little border that allows selecting extreme colors better.
-    qreal yOffset = (cos(kisDegreesToRadians(30))*offset)*2;
-    qreal xOffset = qFloor(sin(kisDegreesToRadians(30))*offset);
-    qreal y = qMax(qMin((coordinate.y()*(height()-yOffset-offset))+yOffset, (qreal)height()-offset),yOffset);
+    // margin serves to render the cursor, and triangle is rendered 1px larger than its active area
+    qreal offset = m_margin + 1.0;
 
-    qreal triWidth = width();
-    qreal horizontalLineLength = ((y-yOffset)*(2./sqrt(3.)));
-    qreal horizontalLineStart = (triWidth*0.5)-(horizontalLineLength*0.5);
-    qreal relativeX = qMin(coordinate.x()*(horizontalLineLength), horizontalLineLength);
-    qreal x = qMax(relativeX + horizontalLineStart + xOffset, horizontalLineStart+xOffset);
-    if (y<=yOffset){
-        x = 0.5*width();
-    }
+    qreal y = (coordinate.y() * (height() - 1 - 2 * offset)) + offset;
 
-    return QPointF(x,y);
+    qreal triWidth = width() - 1 - 2 * offset;
+    qreal horizontalLineLength = coordinate.y() * triWidth;
+    qreal horizontalLineStart = offset + 0.5 * (triWidth - horizontalLineLength);
+
+    qreal x = coordinate.x() * horizontalLineLength + horizontalLineStart;
+
+    return QPointF(x, y);
 }
 
 QPointF KisVisualTriangleSelectorShape::convertWidgetCoordinateToShapeCoordinate(QPointF coordinate) const
 {
-    //default implementation: gotten from the kotrianglecolorselector/kis_color_selector_triangle.
+    // margin serves to render the cursor, and triangle is rendered 1px larger than its active area
+    qreal offset = m_margin + 1.0;
+
     qreal x = 0.5;
-    qreal y = 0.5;
-    qreal offset=7.0; //the offset is so we get a nice little border that allows selecting extreme colors better.
-    qreal yOffset = (cos(kisDegreesToRadians(30))*offset)*2;
-    qreal xOffset = qFloor(sin(kisDegreesToRadians(30))*offset);
+    qreal y = qBound(0.0, (coordinate.y() - offset)/(height() - 1 - 2 * offset), 1.0);
 
-    y = qMin(qMax((qreal)coordinate.y()-yOffset, 0.0)/(height()-yOffset-offset), 1.0);
+    if (y > 0) {
+        qreal triWidth = width() - 1 - 2 * offset;
+        qreal horizontalLineLength = y * triWidth;
+        qreal horizontalLineStart = offset + 0.5 * (triWidth - horizontalLineLength);
 
-    qreal triWidth = width();
-    qreal horizontalLineLength = ((qreal)coordinate.y()-yOffset)*(2./sqrt(3.));
-    qreal horizontalLineStart = (triWidth*0.5)-(horizontalLineLength*0.5);
-
-    qreal relativeX = qMax((qreal)coordinate.x()-xOffset-horizontalLineStart,0.0);
-    x = qMin(relativeX/horizontalLineLength, 1.0);
-    if (coordinate.y()<=yOffset){
-        x = 0.5;
+        x = qBound(0.0, (coordinate.x() - horizontalLineStart) / horizontalLineLength, 1.0);
     }
+
     return QPointF(x, y);
 }
 
 QRegion KisVisualTriangleSelectorShape::getMaskMap()
 {
-    QRegion mask = QRegion(m_triangle);
-    //QRegion mask =  QRegion();
-    //if (getDimensions()==KisVisualColorSelectorShape::onedimensional) {
-    //    mask = mask.subtracted(QRegion(m_barWidth, m_barWidth, width()-(m_barWidth*2), height()-(m_barWidth*2)));
-    //}
-    return mask;
+    const int cursorWidth = qMax(2 * m_margin, 2);
+    QPolygon maskPoly;
+    maskPoly << QPoint(qFloor(0.5 * (width() - cursorWidth)), 0)
+             << QPoint(qCeil(0.5 * (width() + cursorWidth)), 0)
+             << QPoint(width(), height() - cursorWidth)
+             << QPoint(width(), height())
+             << QPoint(0, height())
+             << QPoint(0, height() - cursorWidth);
+
+    return QRegion(maskPoly);
 }
 
-void KisVisualTriangleSelectorShape::resizeEvent(QResizeEvent *e)
+QImage KisVisualTriangleSelectorShape::renderAlphaMask() const
 {
-    //qDebug() << this << "KisVisualTriangleSelectorShape::resizeEvent(QResizeEvent *)";
-    setTriangle();
-    KisVisualColorSelectorShape::resizeEvent(e);
+    // Hi-DPI aware rendering requires that we determine the device pixel dimension;
+    // actual widget size in device pixels is not accessible unfortunately, it might be 1px smaller...
+    const int deviceWidth = qCeil(width() * devicePixelRatioF());
+    const int deviceHeight = qCeil(height() * devicePixelRatioF());
+
+    QImage alphaMask(deviceWidth, deviceHeight, QImage::Format_Alpha8);
+    alphaMask.fill(0);
+    alphaMask.setDevicePixelRatio(devicePixelRatioF());
+    QPainter painter(&alphaMask);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setBrush(Qt::white);
+    painter.setPen(Qt::NoPen);
+    QPointF triangle[3] = {
+        QPointF(0.5 * width(), m_margin),
+        QPointF(m_margin, height() - m_margin),
+        QPointF(width() - m_margin, height() - m_margin),
+    };
+    painter.drawConvexPolygon(triangle, 3);
+
+    return alphaMask;
 }
 
 void KisVisualTriangleSelectorShape::drawCursor()
@@ -159,38 +156,13 @@ void KisVisualTriangleSelectorShape::drawCursor()
     QPointF cursorPoint = convertShapeCoordinateToWidgetCoordinate(getCursorPosition());
     QImage fullSelector = getImageMap();
     QColor col = getColorFromConverter(getCurrentColor());
-    QPainter painter;
-    painter.begin(&fullSelector);
+    QPainter painter(&fullSelector);
     painter.setRenderHint(QPainter::Antialiasing);
 
-    painter.save();
-    painter.setCompositionMode(QPainter::CompositionMode_Clear);
-    QPen pen;
-    pen.setWidth(10);
-    painter.setPen(pen);
-    painter.drawPolygon(m_triangle);
-    painter.restore();
-
-    //QPainterPath path;
-    QBrush fill;
-    fill.setStyle(Qt::SolidPattern);
+    QBrush fill(Qt::SolidPattern);
 
     int cursorwidth = 5;
-    //QRect innerRect(m_barWidth, m_barWidth, width()-(m_barWidth*2), height()-(m_barWidth*2));
-    /*if(m_type==KisVisualTriangleSelectorShape::borderMirrored){
-        painter.setPen(Qt::white);
-        fill.setColor(Qt::white);
-        painter.setBrush(fill);
-        painter.drawEllipse(cursorPoint, cursorwidth, cursorwidth);
-        QPoint mirror(innerRect.center().x()+(innerRect.center().x()-cursorPoint.x()),cursorPoint.y());
-        painter.drawEllipse(mirror, cursorwidth, cursorwidth);
-        fill.setColor(col);
-        painter.setPen(Qt::black);
-        painter.setBrush(fill);
-        painter.drawEllipse(cursorPoint, cursorwidth-1, cursorwidth-1);
-        painter.drawEllipse(mirror, cursorwidth-1, cursorwidth-1);
 
-    } else {*/
     painter.setPen(Qt::white);
     fill.setColor(Qt::white);
     painter.setBrush(fill);
@@ -199,7 +171,7 @@ void KisVisualTriangleSelectorShape::drawCursor()
     painter.setPen(Qt::black);
     painter.setBrush(fill);
     painter.drawEllipse(cursorPoint, cursorwidth-1.0, cursorwidth-1.0);
-    //}
+
     painter.end();
     setFullImage(fullSelector);
 }

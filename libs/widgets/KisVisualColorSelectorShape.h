@@ -81,6 +81,7 @@ public:
      */
     bool imagesNeedUpdate() const;
     QImage getImageMap();
+    const QImage getAlphaMask() const;
     /**
      * @brief setFullImage
      * Set the full widget image to be painted.
@@ -185,6 +186,11 @@ protected:
      * @param channelValues the normalized channel values of the currently picked color
      */
     virtual QImage renderBackground(const QVector4D &channelValues, quint32 pixelSize) const;
+    /**
+     * @brief render the alpha mask for the widget background
+     * the returned image is expected to be QImage::Format_Alpha8
+     */
+    virtual QImage renderAlphaMask() const;
 
     void mousePressEvent(QMouseEvent *e) override;
     void mouseMoveEvent(QMouseEvent *e) override;

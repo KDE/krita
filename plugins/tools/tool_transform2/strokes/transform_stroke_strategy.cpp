@@ -249,7 +249,8 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
         }
 
         emit sigPreviewDeviceReady(previewDevice);
-    } else if(td) {
+    }
+    else if (td) {
         if (td->destination == TransformData::PAINT_DEVICE) {
             QRect oldExtent = td->node->extent();
             KisPaintDeviceSP device = td->node->paintDevice();

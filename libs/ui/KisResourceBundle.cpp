@@ -264,7 +264,10 @@ bool saveResourceToStore(KoResource *resource, KoStore *store, const QString &re
         warnKrita << "Could not open buffer";
         return false;
     }
-    Q_ASSERT(!store->hasFile(resType + "/" + resource->shortFilename()));
+    if(!store->hasFile(resType + "/" + resource->shortFilename())) {
+        warnKrita << "Store does not have file" << (resType + "/" + resource->shortFilename());
+        return false;
+    }
     if (!store->open(resType + "/" + resource->shortFilename())) {
         warnKrita << "Could not open file in store for resource";
         return false;

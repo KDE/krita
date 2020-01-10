@@ -462,7 +462,6 @@ void KoStrokeConfigWidget::activate()
     d->deactivationLocks.clear();
     d->fillConfigWidget->activate();
     if (!d->noSelectionTrackingMode) {
-        // selectionChanged();
         d->selectionChangedCompressor.start();
     } else {
         loadCurrentStrokeFillFromResourceServer();

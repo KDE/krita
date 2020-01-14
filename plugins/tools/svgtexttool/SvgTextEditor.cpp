@@ -44,6 +44,9 @@
 #include <QUrl>
 #include <QVBoxLayout>
 #include <QWidgetAction>
+#include <QApplication>
+#include <QDesktopWidget>
+#include <QScreen>
 
 #include <kcharselect.h>
 #include <klocalizedstring.h>
@@ -100,12 +103,32 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
     actionCollection()->setComponentName("svgtexttool");
     actionCollection()->setComponentDisplayName(i18n("Text Tool"));
 
-    QByteArray state;
     if (cg.hasKey("WindowState")) {
-        state = cg.readEntry("State", state);
-        state = QByteArray::fromBase64(state);
+        QByteArray state = cg.readEntry("State", state);
         // One day will need to load the version number, but for now, assume 0
-        restoreState(state);
+        restoreState(QByteArray::fromBase64(state));
+    }
+    if (cg.hasKey("Geometry")) {
+        QByteArray ba = cg.readEntry("Geometry", QByteArray());
+        restoreGeometry(QByteArray::fromBase64(ba));
+    }
+    else {
+        const int scnum = QApplication::desktop()->screenNumber(parentWidget());
+        QRect desk = QGuiApplication::screens().at(scnum)->availableVirtualGeometry();
+
+        quint32 x = desk.x();
+        quint32 y = desk.y();
+        quint32 w = 0;
+        quint32 h = 0;
+        const int deskWidth = desk.width();
+        w = (deskWidth / 3) * 2;
+        h = (desk.height() / 3) * 2;
+        x += (desk.width() - w) / 2;
+        y += (desk.height() - h) / 2;
+
+        move(x,y);
+        setGeometry(geometry().x(), geometry().y(), w, h);
+
     }
 
     setAcceptDrops(true);
@@ -146,6 +169,7 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
     m_textEditorWidget.richTextEdit->document()->setDefaultStyleSheet("p {margin:0px;}");
 
     applySettings();
+
 }
 
 SvgTextEditor::~SvgTextEditor()
@@ -153,6 +177,8 @@ SvgTextEditor::~SvgTextEditor()
     KConfigGroup g(KSharedConfig::openConfig(), "SvgTextTool");
     QByteArray ba = saveState();
     g.writeEntry("windowState", ba.toBase64());
+    ba = saveGeometry();
+    g.writeEntry("Geometry", ba.toBase64());
 }
 
 

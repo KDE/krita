@@ -47,6 +47,9 @@ public:
 
     static void writeHeader();
 
+    /// Returns information about all available screens
+    static QString screenInformation();
+
 private:
 
     void rotateLog();

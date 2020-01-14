@@ -45,12 +45,9 @@
 
 
 PSDLayerMaskSection::PSDLayerMaskSection(const PSDHeader& header)
-    : globalInfoSection(header),
-      m_header(header)
+    : globalInfoSection(header)
+    , m_header(header)
 {
-    hasTransparency = false;
-    layerMaskBlockSize = 0;
-    nLayers = 0;
 }
 
 PSDLayerMaskSection::~PSDLayerMaskSection()

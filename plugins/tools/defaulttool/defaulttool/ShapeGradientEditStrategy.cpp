@@ -43,7 +43,7 @@ struct ShapeGradientEditStrategy::Private
     QPointF start;
     QPointF initialOffset;
     KoShapeGradientHandles gradientHandles;
-    KoShapeGradientHandles::Handle::Type handleType;
+    KoShapeGradientHandles::Handle::Type handleType {KoShapeGradientHandles::Handle::Type::None};
     QScopedPointer<KUndo2Command> intermediateCommand;
 };
 

@@ -129,7 +129,7 @@ private:
 
     KoColor m_sourceColor;
     const quint8 *m_data {0};
-    int m_pixelSize;
+    int m_pixelSize {0};
 };
 
 class DifferencePolicySlow

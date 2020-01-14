@@ -249,7 +249,8 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
         }
 
         emit sigPreviewDeviceReady(previewDevice);
-    } else if(td) {
+    }
+    else if (td) {
         if (td->destination == TransformData::PAINT_DEVICE) {
             QRect oldExtent = td->node->extent();
             KisPaintDeviceSP device = td->node->paintDevice();
@@ -706,12 +707,5 @@ void TransformStrokeStrategy::finishStrokeCallback()
 
 void TransformStrokeStrategy::cancelStrokeCallback()
 {
-    const bool shouldRecoverSavedInitialState =
-        !m_initialTransformArgs.isIdentity();
-
-    if (shouldRecoverSavedInitialState) {
-        m_savedTransformArgs = m_initialTransformArgs;
-    }
-
-    finishStrokeImpl(shouldRecoverSavedInitialState, *m_savedTransformArgs);
+    finishStrokeImpl(!m_initialTransformArgs.isIdentity(), m_initialTransformArgs);
 }

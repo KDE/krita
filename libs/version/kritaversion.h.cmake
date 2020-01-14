@@ -159,14 +159,4 @@
 #define KRITA_VERSION \
     KRITA_MAKE_VERSION(KRITA_VERSION_MAJOR,KRITA_VERSION_MINOR,KRITA_VERSION_RELEASE)
 
-/**
- * @def KRITA_YEAR
- * @ingroup KritaMacros
- * @brief Year of the Krita release, set at compile time
- *
- * This macro is used in "About application" dialog for strings such as "© 2012-..., The Author Team".
-*/
-#define KRITA_YEAR "@KRITA_YEAR@"
-
-
 #endif // _KRITA_VERSION_H_

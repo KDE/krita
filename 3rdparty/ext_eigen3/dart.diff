@@ -1,10 +1,10 @@
 diff --git a/cmake/EigenConfigureTesting.cmake b/cmake/EigenConfigureTesting.cmake
-index 2b11d83..8cf56ff 100644
+index 3a82439..4c28246 100644
 --- a/cmake/EigenConfigureTesting.cmake
 +++ b/cmake/EigenConfigureTesting.cmake
-@@ -26,19 +26,6 @@ include(CTest)
- 
- set(EIGEN_TEST_BUILD_FLAGS " " CACHE STRING "Options passed to the build command of unit tests")
+@@ -21,19 +21,6 @@ set(EIGEN_TEST_BUILD_FLAGS "" CACHE STRING "Options passed to the build command
+ set(EIGEN_DASHBOARD_BUILD_TARGET "buildtests" CACHE STRING "Target to be built in dashboard mode, default is buildtests")
+ set(EIGEN_CTEST_ERROR_EXCEPTION "" CACHE STRING "Regular expression for build error messages to be filtered out")
  
 -# Overwrite default DartConfiguration.tcl such that ctest can build our unit tests.
 -# Recall that our unit tests are not in the "all" target, so we have to explicitely ask ctest to build our custom 'buildtests' target.
@@ -15,7 +15,7 @@ index 2b11d83..8cf56ff 100644
 -if(NOT CMAKE_MATCH_1)
 -string(REGEX MATCH "MakeCommand:.*[^c]make (.*)\nDefaultCTestConfigurationType" EIGEN_DUMMY ${EIGEN_DART_CONFIG_FILE})
 -endif()
--string(REGEX REPLACE "MakeCommand:.*DefaultCTestConfigurationType" "MakeCommand: ${CMAKE_COMMAND} --build . --target buildtests --config \"\${CTEST_CONFIGURATION_TYPE}\" -- ${CMAKE_MATCH_1} ${EIGEN_TEST_BUILD_FLAGS}\nDefaultCTestConfigurationType"
+-string(REGEX REPLACE "MakeCommand:.*DefaultCTestConfigurationType" "MakeCommand: ${CMAKE_COMMAND} --build . --target ${EIGEN_DASHBOARD_BUILD_TARGET} --config \"\${CTEST_CONFIGURATION_TYPE}\" -- ${CMAKE_MATCH_1} ${EIGEN_TEST_BUILD_FLAGS}\nDefaultCTestConfigurationType"
 -       EIGEN_DART_CONFIG_FILE2 ${EIGEN_DART_CONFIG_FILE})
 -file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/DartConfiguration.tcl" ${EIGEN_DART_CONFIG_FILE2})
 -

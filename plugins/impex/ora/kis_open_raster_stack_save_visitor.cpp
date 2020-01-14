@@ -60,6 +60,8 @@ void KisOpenRasterStackSaveVisitor::saveLayerInfo(QDomElement& elt, KisLayer* la
     elt.setAttribute("name", layer->name());
     elt.setAttribute("opacity", QString().setNum(layer->opacity() / 255.0));
     elt.setAttribute("visibility", layer->visible() ? "visible" : "hidden");
+    elt.setAttribute("x", QString().setNum(layer->x()));
+    elt.setAttribute("y", QString().setNum(layer->y()));
     if (layer->userLocked()) {
         elt.setAttribute("edit-locked", "true");
     }
@@ -161,7 +163,11 @@ bool KisOpenRasterStackSaveVisitor::visit(KisExternalLayer * layer)
 
 bool KisOpenRasterStackSaveVisitor::saveLayer(KisLayer *layer)
 {
-    QString filename = d->saveContext->saveDeviceData(layer->projection(), layer->metaData(), layer->image()->bounds(), layer->image()->xRes(), layer->image()->yRes());
+
+    // here we adjust the bounds to encompass the entire area of the layer with color data by adding the current offsets
+    QRect adjustedBounds = layer->image()->bounds();
+    adjustedBounds.adjust(layer->x(), layer->y(), layer->x(), layer->y());
+    QString filename = d->saveContext->saveDeviceData(layer->projection(), layer->metaData(), adjustedBounds, layer->image()->xRes(), layer->image()->yRes());
 
     QDomElement elt = d->layerStack.createElement("layer");
     saveLayerInfo(elt, layer);

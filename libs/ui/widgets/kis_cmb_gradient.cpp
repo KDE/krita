@@ -67,8 +67,7 @@ QSize KisCmbGradient::sizeHint() const
     QStyleOptionComboBox options;
     options.initFrom(this);
 
-    return style()->sizeFromContents(QStyle::CT_ComboBox, &options,
-                                     QSize(maxW, maxH), this).expandedTo(QApplication::globalStrut());
+    return style()->sizeFromContents(QStyle::CT_ComboBox, &options, QSize(maxW, maxH), this);
 }
 
 void KisCmbGradient::resizeEvent(QResizeEvent *event)

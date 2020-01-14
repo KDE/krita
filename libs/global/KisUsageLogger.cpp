@@ -188,8 +188,6 @@ QString KisUsageLogger::screenInformation()
         info.append("\n\t\tRefresh Rate: ").append(QString::number(screen->refreshRate()));
     }
     info.append("\n");
-
-    qDebug() << info;
     return info;
 }
 

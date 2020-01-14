@@ -69,25 +69,17 @@ static int buttonSize(int screen)
 class KoToolBox::Private
 {
 public:
-    Private()
-        : layout(0)
-        , buttonGroup(0)
-        , floating(false)
-        , contextSize(0)
-    {
-    }
-
     void addSection(Section *section, const QString &name);
 
     QList<QToolButton*> buttons;
     QMap<QString, Section*> sections;
-    KoToolBoxLayout *layout;
-    QButtonGroup *buttonGroup;
+    KoToolBoxLayout *layout {0};
+    QButtonGroup *buttonGroup {0};
     QHash<QToolButton*, QString> visibilityCodes;
-    bool floating;
+    bool floating {false};
     QMap<QAction*,int> contextIconSizes;
-    QMenu* contextSize;
-    Qt::Orientation orientation;
+    QMenu *contextSize {0};
+    Qt::Orientation orientation {Qt::Vertical};
 };
 
 void KoToolBox::Private::addSection(Section *section, const QString &name)

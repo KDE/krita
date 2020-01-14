@@ -107,15 +107,8 @@
 
 KisLayerManager::KisLayerManager(KisViewManager * view)
     : m_view(view)
-    , m_imageView(0)
-    , m_imageFlatten(0)
-    , m_imageMergeLayer(0)
-    , m_groupLayersSave(0)
-    , m_imageResizeToLayer(0)
-    , m_flattenLayer(0)
-    , m_rasterizeLayer(0)
     , m_commandsAdapter(new KisNodeCommandsAdapter(m_view))
-    , m_layerStyle(0)
+
 {
 }
 

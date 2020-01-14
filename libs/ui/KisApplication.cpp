@@ -620,6 +620,8 @@ bool KisApplication::start(const KisApplicationArguments &args)
         executeRemoteArguments(message, d->mainWindow);
     }
 
+    KisUsageLogger::writeSysInfo(KisUsageLogger::screenInformation());
+
 
     // not calling this before since the program will quit there.
     return true;

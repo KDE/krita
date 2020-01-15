@@ -619,7 +619,8 @@ bool KisApplication::start(const KisApplicationArguments &args)
     Q_FOREACH(const QByteArray &message, d->earlyRemoteArguments) {
         executeRemoteArguments(message, d->mainWindow);
     }
-
+    
+    KisUsageLogger::writeSysInfo(KisUsageLogger::screenInformation());
 
     // not calling this before since the program will quit there.
     return true;

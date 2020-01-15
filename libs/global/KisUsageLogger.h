@@ -47,10 +47,14 @@ public:
 
     /// Writes without date/time
     static void write(const QString &message);
+
     /// Writes to the system information file and Krita log
     static void writeSysInfo(const QString &message);
 
     static void writeHeader();
+
+    /// Returns information about all available screens
+    static QString screenInformation();
 
 private:
 

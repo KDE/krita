@@ -112,7 +112,7 @@ public:
     QString id() const;
     KUndo2MagicString name() const;
 
-    void setMutatedJobsInterface(KisStrokesQueueMutatedJobInterface *mutatedJobsInterface);
+    void setMutatedJobsInterface(KisStrokesQueueMutatedJobInterface *mutatedJobsInterface, KisStrokeId strokeId);
 
 protected:
     // testing surrogate class
@@ -187,7 +187,7 @@ private:
     QLatin1String m_id;
     KUndo2MagicString m_name;
 
-    KisStrokeId m_cancelStrokeId;
+    KisStrokeId m_strokeId;
     KisStrokesQueueMutatedJobInterface *m_mutatedJobsInterface;
 };
 

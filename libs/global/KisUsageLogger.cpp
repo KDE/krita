@@ -159,8 +159,12 @@ void KisUsageLogger::writeHeader()
     s_instance->d->logFile.write(sessionHeader.toUtf8());
 
     QString KritaAndQtVersion;
-    KritaAndQtVersion.append("Krita Version: ").append(KritaVersionWrapper::versionString(true));
-    KritaAndQtVersion.append(", Qt version compiled: ").append(QT_VERSION_STR).append(", loaded: ").append(qVersion()).append("\n");
+    KritaAndQtVersion.append("Krita Version: ").append(KritaVersionWrapper::versionString(true))
+            .append(", Qt version compiled: ").append(QT_VERSION_STR)
+            .append(", loaded: ").append(qVersion())
+            .append(". Process ID: ")
+            .append(QString::number(qApp->applicationPid())).append("\n");
+
     KritaAndQtVersion.append("-- -- -- -- -- -- -- --\n");
     s_instance->d->logFile.write(KritaAndQtVersion.toUtf8());
     s_instance->d->logFile.flush();
@@ -168,7 +172,7 @@ void KisUsageLogger::writeHeader()
 
 QString KisUsageLogger::screenInformation()
 {
-    QList<QScreen*> screens = qobject_cast<QGuiApplication*>(qApp)->screens();
+    QList<QScreen*> screens = qApp->screens();
 
     QString info;
     info.append("Display Information");

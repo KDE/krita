@@ -112,26 +112,11 @@ public:
     QString id() const;
     KUndo2MagicString name() const;
 
-    /**
-     * Set up by the strokes queue during the stroke initialization
-     */
-    void setCancelStrokeId(KisStrokeId id) { m_cancelStrokeId = id; }
-
     void setMutatedJobsInterface(KisStrokesQueueMutatedJobInterface *mutatedJobsInterface);
 
 protected:
     // testing surrogate class
     friend class KisMutatableDabStrategy;
-
-    /**
-     * The cancel job may populate the stroke with some new jobs
-     * for cancelling. To achieve this it needs the stroke id.
-     *
-     * WARNING: you can't add new jobs in any places other than
-     * cancel job, because the stroke may be ended in any moment
-     * by the user and the sequence of jobs will be broken
-     */
-    KisStrokeId cancelStrokeId() { return m_cancelStrokeId; }
 
     /**
      * This function is supposed to be called by internal asynchronous

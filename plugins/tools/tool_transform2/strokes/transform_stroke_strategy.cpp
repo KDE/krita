@@ -697,34 +697,9 @@ void TransformStrokeStrategy::finishStrokeImpl(bool applyTransform, const ToolTr
 
 void TransformStrokeStrategy::finishStrokeCallback()
 {
-    /// This part is commented out,
-    ///    because trying to cancel the stroke now in such an improper way
-    ///    (in a finishing code) causes an assert later, because new jobs
-    ///    are added when the stroke already ended or is in the middle of
-    ///    being finished (adding new jobs is permitted only when you cancel
-    ///    the stroke, which isn't what we're dealing with now, despite that
-    ///    we'd like to have the same effect).
-    /// The fact that the code is calling finishStrokeImpl(true, ...), instead
-    ///    of false as the first argument, causes an unnecessary undo step to appear
-    ///    when switching between tools without actually transforming the selection/layer.
-    ///    This is a known issue with this fix.
-    /*
     if (!m_savedTransformArgs || m_savedTransformArgs->isIdentity()) {
         cancelStrokeCallback();
         return;
-    }
-    */
-
-    /// This part was added to make sure no boost::optional
-    ///    uninitialized variable assert is happening.
-    ///    I put transform args in the m_savedTransformArgs
-    ///    instead of just calling finishStrokeImpl(true, m_initialTransformArgs)
-    ///    because then there would be a safe assert because the code
-    ///    assumes we're finishing the stroke, not cancelling it,
-    ///    so those args really should be initialized.
-    ///
-    if (!m_savedTransformArgs) {
-        m_savedTransformArgs = m_initialTransformArgs;
     }
 
     finishStrokeImpl(true, *m_savedTransformArgs);

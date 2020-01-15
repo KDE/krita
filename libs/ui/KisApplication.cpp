@@ -699,7 +699,7 @@ void KisApplication::remoteArguments(QByteArray message, QObject *socket)
     // check if we have any mainwindow
     KisMainWindow *mw = qobject_cast<KisMainWindow*>(qApp->activeWindow());
 
-    if (!mw) {
+    if (!mw && KisPart::instance()->mainWindows().size() > 0) {
         mw = KisPart::instance()->mainWindows().first();
     }
 

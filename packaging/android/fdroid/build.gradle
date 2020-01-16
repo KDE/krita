@@ -1,0 +1,5 @@
+// Hack!
+// This is a placeholder file, the real build.gradle is in $KRITA_SRC/packaging/android/apk/
+// without this f-droid build will fail.
+task clean() {}
+task assembleRelease() {}

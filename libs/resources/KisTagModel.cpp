@@ -456,6 +456,7 @@ bool KisTagModel::prepareQuery()
         qWarning() << "Could not prepare TagsForResource query" << d->tagForResourceQuery.lastError();
     }
 
+    KisTagsResourcesModelProvider::resetModel(d->resourceType);
 
     d->cachedRowCount = -1;
     endResetModel();

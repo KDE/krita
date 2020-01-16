@@ -20,6 +20,10 @@
 #include "KisResourceModel.h"
 #include "KoResource.h"
 
+#include <memory>
+
+#include <KisTagsResourcesModelProvider.h>
+
 #include <QGlobalStatic>
 
 Q_GLOBAL_STATIC(KisResourceModelProvider, s_instance)
@@ -53,6 +57,15 @@ void KisResourceModelProvider::resetAllModels()
     Q_FOREACH(KisResourceModel *model, s_instance->d->resourceModels.values()) {
         model->resetQuery();
     }
-
 }
 
+void KisResourceModelProvider::resetModel(const QString& resourceType)
+{
+    QMap<QString, KisResourceModel*>::iterator found
+            = s_instance->d->resourceModels.find(resourceType);
+
+    if (found != s_instance->d->resourceModels.end())
+    {
+        found.value()->resetQuery();
+    }
+}

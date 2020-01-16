@@ -69,4 +69,13 @@ void KisTagsResourcesModelProvider::resetModels()
     }
 }
 
+void KisTagsResourcesModelProvider::resetModel(const QString& resourceType)
+{
+    std::map<QString, std::unique_ptr<KisTagsResourcesModel> >::const_iterator found
+            = s_instance->d->tagsResourcesModelsMap.find(resourceType);
 
+    if (found != s_instance->d->tagsResourcesModelsMap.end())
+    {
+        found->second->resetQuery();
+    }
+}

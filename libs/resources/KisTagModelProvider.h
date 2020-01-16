@@ -40,6 +40,8 @@ public:
     ~KisTagModelProvider();
 
     static KisTagModel* tagModel(const QString& resourceType);
+    static void resetModels();
+    static void resetModel(const QString& resourceType);
 
 private:
 

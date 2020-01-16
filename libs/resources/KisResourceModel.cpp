@@ -546,11 +546,13 @@ bool KisResourceModel::resetQuery()
         qWarning() << "Could not select" << d->resourceType << "resources" << d->resourcesQuery.lastError() << d->resourcesQuery.boundValues();
     }
     d->cachedRowCount = -1;
+
+    KisTagsResourcesModelProvider::resetModel(d->resourceType);
+
     endResetModel();
     emit afterResourcesLayoutReset();
 
     qDebug() << "KisResourceModel::resetQuery for" << d->resourceType << "took" << t.elapsed() << "ms";
-
 
     return r;
 }

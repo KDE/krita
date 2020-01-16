@@ -184,9 +184,9 @@ bool KisTagFilterResourceProxyModel::filterAcceptsRow(int source_row, const QMod
     }
     //fprintf(stderr, "6-%d ", hasCurrentTag);
 
-    if (hasCurrentTag) {
+    if (!hasCurrentTag) {
         //fprintf(stderr, "end :( \n");
-        return true;
+        return false;
     }
     //fprintf(stderr, "7-%d ", hasCurrentTag);
 

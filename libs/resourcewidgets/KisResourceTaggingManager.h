@@ -89,7 +89,6 @@ private Q_SLOTS:
 
 private:
 
-    void contextMenuRequested(KoResourceSP resource, const QList<KisTagSP> resourceTags, const QPoint& pos);
     void enableContextMenu(bool enable);
     void removeResourceTag(KoResourceSP resource, const KisTagSP tagName);
     void addResourceTag(KoResourceSP resource, const KisTagSP tagName);

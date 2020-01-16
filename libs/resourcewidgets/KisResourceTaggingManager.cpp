@@ -345,7 +345,7 @@ void KisResourceTaggingManager::tagSaveButtonPressed()
     updateTaggedResourceView();
 }
 
-void KisResourceTaggingManager::contextMenuRequested(KoResourceSP resource, const QList<KisTagSP> resourceTags, const QPoint& pos)
+void KisResourceTaggingManager::contextMenuRequested(KoResourceSP resource, QPoint pos)
 {
     ENTER_FUNCTION();
     // No visible tag chooser usually means no intended tag interaction,
@@ -355,10 +355,7 @@ void KisResourceTaggingManager::contextMenuRequested(KoResourceSP resource, cons
     if (!resource || !d->tagChooser->isVisible())
         return;
 
-    KisResourceItemChooserContextMenu menu(resource,
-                                           resourceTags,
-                                           d->tagChooser->currentlySelectedTag(),
-                                           d->tagChooser->allTags());
+    KisResourceItemChooserContextMenu menu(resource, d->tagChooser->currentlySelectedTag());
 
     connect(&menu, SIGNAL(resourceTagAdditionRequested(KoResourceSP,const KisTagSP)),
             this, SLOT(contextAddTagToResource(KoResourceSP,const KisTagSP)));
@@ -369,15 +366,6 @@ void KisResourceTaggingManager::contextMenuRequested(KoResourceSP resource, cons
     connect(&menu, SIGNAL(resourceAssignmentToNewTagRequested(KoResourceSP,const KisTagSP)),
             this, SLOT(contextCreateNewTag(KoResourceSP,const KisTagSP)));
     menu.exec(pos);
-}
-
-void KisResourceTaggingManager::contextMenuRequested(KoResourceSP currentResource, QPoint pos)
-{
-    ENTER_FUNCTION();
-    if (currentResource) {
-        contextMenuRequested(currentResource, d->tagModel->tagsForResource(currentResource->resourceId()).toList(), pos);
-    }
-
 }
 
 KisTagChooserWidget *KisResourceTaggingManager::tagChooserWidget()

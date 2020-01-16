@@ -21,7 +21,7 @@
 #include <QObject>
 #include <KisTagsResourcesModel.h>
 
-class KisTagsResourcesModelProvider : public QObject
+class KRITARESOURCES_EXPORT KisTagsResourcesModelProvider : public QObject
 {
     Q_OBJECT
 public:

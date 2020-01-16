@@ -101,13 +101,7 @@ class KisResourceItemChooserContextMenu :  public QMenu
 {
     Q_OBJECT
 public:
-    explicit KisResourceItemChooserContextMenu
-    (
-        KoResourceSP resource,
-        const QList<KisTagSP> resourceTags,
-        const KisTagSP currentlySelectedTag,
-        const QList<KisTagSP> allTags
-    );
+    explicit KisResourceItemChooserContextMenu(KoResourceSP resource, const KisTagSP currentlySelectedTag);
     ~KisResourceItemChooserContextMenu() override;
 
 Q_SIGNALS:

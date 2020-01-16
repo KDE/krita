@@ -27,6 +27,9 @@
 #include <KoIcon.h>
 #include <klocalizedstring.h>
 #include <KoResource.h>
+#include <KisTagsResourcesModelProvider.h>
+#include <KisTagModelProvider.h>
+
 
 #include <KisTag.h>
 
@@ -186,9 +189,7 @@ bool compareWithSpecialTags(KisTagSP tag) {
 
 
 KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceSP resource,
-                                                                   const QList<KisTagSP> resourceTags,
-                                                                   const KisTagSP currentlySelectedTag,
-                                                                   const QList<KisTagSP> allTags)
+                                                                   const KisTagSP currentlySelectedTag)
 {
 
     QImage image = resource->image();
@@ -201,8 +202,22 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
     QMenu * removableTagsMenu;
     QMenu * assignableTagsMenu;
 
-    QList<KisTagSP> removables = resourceTags;
-    QList<KisTagSP> assignables2 = allTags;
+    KisTagsResourcesModel* model = KisTagsResourcesModelProvider::getModel(resource->resourceType().first);
+    KisTagModel* tagModel = KisTagModelProvider::tagModel(resource->resourceType().first);
+
+
+    QList<KisTagSP> removables = model->tagsForResource(resource->resourceId()).toList();
+
+    QList<KisTagSP> list;
+    for (int i = 0; i < tagModel->rowCount(); i++) {
+        QModelIndex index = tagModel->index(i, 0);
+        KisTagSP tag = tagModel->tagForIndex(index);
+         if (!tag.isNull()) {
+             list << tag;
+         }
+     }
+
+    QList<KisTagSP> assignables2 = list;
 
     CompareWithOtherTagFunctor comparer(currentlySelectedTag);
 

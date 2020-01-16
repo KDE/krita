@@ -281,4 +281,4 @@ void KisLayerStylesTest::testLayerStylesRects()
     testDropShadowNeedChangeRects(0, 0, 10, 75, applyRect, needRect, changeRect);
 }
 
-QTEST_MAIN(KisLayerStylesTest)
+KISTEST_MAIN(KisLayerStylesTest)

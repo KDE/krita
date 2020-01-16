@@ -42,7 +42,6 @@ public:
     ~KisTagChooserWidget() override;
     void setCurrentIndex(int index);
     int currentIndex() const;
-    int findIndexOf(KisTagSP tagName);
 
     KisTagSP currentlySelectedTag();
     bool selectedTagIsReadOnly();

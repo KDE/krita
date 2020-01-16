@@ -168,13 +168,6 @@ int KisTagChooserWidget::currentIndex() const
     return d->comboBox->currentIndex();
 }
 
-int KisTagChooserWidget::findIndexOf(KisTagSP tagName)
-{
-    ENTER_FUNCTION();
-    return -1;
-    //return d->comboBox->findOriginalText(tagName);
-}
-
 void KisTagChooserWidget::addReadOnlyItem(KisTagSP tag)
 {
     d->model->addTag(tag);

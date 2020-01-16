@@ -115,7 +115,7 @@ void KisTagChooserWidget::contextDeleteCurrentTag()
     KisTagSP currentTag = currentlySelectedTag();
     if (!currentTag.isNull() && currentTag->id() < 0) {
         fprintf(stderr, "trying to remove item: %s\n", currentTag->name().toUtf8().toStdString().c_str());
-        removeItem(currentTag);
+        d->model->removeTag(currentTag);
     }
     setCurrentIndex(0);
 }
@@ -248,15 +248,6 @@ void KisTagChooserWidget::addItems(QList<KisTagSP> tags)
 void KisTagChooserWidget::clear()
 {
     ENTER_FUNCTION();
-}
-
-void KisTagChooserWidget::removeItem(KisTagSP item)
-{
-    fprintf(stderr, "removing item: %s\n", item->name().toUtf8().toStdString().c_str());
-    ENTER_FUNCTION();
-    if (!item.isNull()) {
-        d->model->removeTag(item);
-    }
 }
 
 void KisTagChooserWidget::tagOptionsContextMenuAboutToShow()

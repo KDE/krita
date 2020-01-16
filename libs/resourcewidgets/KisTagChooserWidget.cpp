@@ -236,21 +236,6 @@ KisTagSP KisTagChooserWidget::currentlySelectedTag()
     return tag;
 }
 
-QList<KisTagSP> KisTagChooserWidget::allTags()
-{
-    ENTER_FUNCTION();
-    QList<KisTagSP> list;
-    for (int i = 0; i < d->model->rowCount(); i++) {
-        QModelIndex index = d->model->index(i, 0);
-        KisTagSP tag = d->model->tagForIndex(index);
-         if (!tag.isNull()) {
-             list << tag;
-         }
-     }
-
-    return list;
-}
-
 bool KisTagChooserWidget::selectedTagIsReadOnly()
 {
     ENTER_FUNCTION();

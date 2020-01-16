@@ -45,7 +45,6 @@ public:
     int findIndexOf(KisTagSP tagName);
 
     KisTagSP currentlySelectedTag();
-    QList<KisTagSP> allTags();
     bool selectedTagIsReadOnly();
     void removeItem(KisTagSP item);
     void addItems(QList<KisTagSP> tagNames);

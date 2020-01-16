@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>449</width>
-    <height>273</height>
+    <height>412</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <property name="fieldGrowthPolicy">
       <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
      </property>
-     <item row="0" column="0">
+     <item row="1" column="0">
       <widget class="QCheckBox" name="chkCreateGroupLayer">
        <property name="text">
         <string>Put all new layers in a group layer</string>
@@ -29,14 +29,14 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="0" colspan="2">
+     <item row="2" column="0" colspan="2">
       <widget class="QCheckBox" name="chkSeparateGroupLayers">
        <property name="text">
         <string>Put every layer in its own, separate group layer</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
+     <item row="3" column="0">
       <widget class="QCheckBox" name="chkAlphaLock">
        <property name="text">
         <string>Alpha-lock every new layer</string>
@@ -46,7 +46,7 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
+     <item row="4" column="0">
       <widget class="QCheckBox" name="chkHideOriginal">
        <property name="text">
         <string>Hide the original layer</string>
@@ -56,7 +56,7 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="0" colspan="2">
+     <item row="5" column="0" colspan="2">
       <widget class="QCheckBox" name="chkSortLayers">
        <property name="text">
         <string>Sort layers by amount of non-transparent pixels</string>
@@ -67,6 +67,13 @@
       </widget>
      </item>
      <item row="6" column="0">
+      <widget class="QCheckBox" name="chkDisregardOpacity">
+       <property name="text">
+        <string>Disregard opacity</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
         <string>Fuzziness:</string>
@@ -76,28 +83,35 @@
        </property>
       </widget>
      </item>
-     <item row="6" column="1">
+     <item row="7" column="1">
       <widget class="KisSliderSpinBox" name="intFuzziness" native="true"/>
      </item>
-     <item row="5" column="0">
-      <widget class="QCheckBox" name="chkDisregardOpacity">
-       <property name="text">
-        <string>Disregard opacity</string>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="0" colspan="2">
+     <item row="8" column="0" colspan="2">
       <widget class="QLabel" name="label_2">
        <property name="text">
         <string>Palette to use for naming the layers:</string>
        </property>
       </widget>
      </item>
-     <item row="8" column="0" colspan="2">
+     <item row="9" column="0" colspan="2">
       <widget class="KisPopupButton" name="paletteChooser">
        <property name="text">
         <string>Choose Palette</string>
        </property>
+      </widget>
+     </item>
+     <item row="0" column="0" colspan="2">
+      <widget class="QComboBox" name="cmbMode">
+       <item>
+        <property name="text">
+         <string>Split Into Layers</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Split Into Local Selection Masks</string>
+        </property>
+       </item>
       </widget>
      </item>
     </layout>

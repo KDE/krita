@@ -107,6 +107,12 @@ public:
 
     static KisPaintDeviceSP convertToAlphaAsAlpha(KisPaintDeviceSP src);
     static KisPaintDeviceSP convertToAlphaAsGray(KisPaintDeviceSP src);
+
+    /**
+     * creates a paint device with only alpha values from src
+     */
+    static KisPaintDeviceSP convertToAlphaAsPureAlpha(KisPaintDeviceSP src);
+
     static bool checkDeviceHasTransparency(KisPaintDeviceSP dev);
 
     /**

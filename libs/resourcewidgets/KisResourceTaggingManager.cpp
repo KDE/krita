@@ -104,14 +104,6 @@ KisResourceTaggingManager::KisResourceTaggingManager(QString resourceType, KisTa
     connect(d->tagFilter, SIGNAL(saveButtonClicked()), this, SLOT(tagSaveButtonPressed()));
     connect(d->tagFilter, SIGNAL(filterTextChanged(QString)), this, SLOT(tagSearchLineEditTextChanged(QString)));
 
-//    connect(d->model, SIGNAL(tagBoxEntryAdded(QString)), this, SLOT(syncTagBoxEntryAddition(QString)));
-//    connect(d->model, SIGNAL(tagBoxEntryRemoved(QString)), this, SLOT(syncTagBoxEntryRemoval(QString)));
-//    connect(d->model, SIGNAL(tagBoxEntryModified()), this, SLOT(syncTagBoxEntries()));
-
-    // FIXME: fix tag completer
-    // d->tagCompleter = new QCompleter(this);
-    //  d->tagSearchLineEdit->setCompleter(d->tagCompleter);
-
     syncTagBoxEntries();
 }
 
@@ -122,20 +114,8 @@ KisResourceTaggingManager::~KisResourceTaggingManager()
 
 void KisResourceTaggingManager::showTaggingBar(bool show)
 {
-    ENTER_FUNCTION();
     show ? d->tagFilter->show() : d->tagFilter->hide();
     show ? d->tagChooser->show() : d->tagChooser->hide();
-
-//    blockSignals(!show);
-
-//    QString tag("All");
-//    if (show) {
-//        KConfigGroup group =  KSharedConfig::openConfig()->group("SelectedTags");
-//        tag = group.readEntry<QString>(d->model->serverType(), "All");
-//    }
-//    int idx = d->tagChooser->findIndexOf(tag);
-//    if (idx < 0) idx = 0;
-//    d->tagChooser->setCurrentIndex(idx);
 }
 
 void KisResourceTaggingManager::purgeTagUndeleteList()
@@ -181,13 +161,6 @@ void KisResourceTaggingManager::undeleteTag(const KisTagSP tagToUndelete)
     d->tagChooser->setUndeletionCandidate(QString());
     //    d->lastDeletedTag = TaggedResourceSet();
     */
-}
-
-QStringList KisResourceTaggingManager::availableTags() const
-{
-    ENTER_FUNCTION();
-    return QStringList();
-    //return d->tagChooser->allTags();
 }
 
 void KisResourceTaggingManager::addResourceTag(KoResourceSP resource, const KisTagSP tag)
@@ -256,7 +229,6 @@ void KisResourceTaggingManager::contextRemoveTagFromResource(KoResourceSP resour
     fprintf(stderr, "void KisResourceTaggingManager::contextRemoveTagFromResource(KoResourceSP resource, const KisTagSP tag)");
     ENTER_FUNCTION();
     removeResourceTag(resource, tag);
-    //    d->model->tagCategoryMembersChanged();
     updateTaggedResourceView();
 }
 
@@ -280,14 +252,6 @@ void KisResourceTaggingManager::removeResourceTag(KoResourceSP resource, const K
     bool success = d->tagModel->untagResource(tag, resource);
     fprintf(stderr, "remove Resource tag: %d\n", success);
     d->tagChooser->setCurrentIndex(previousIndex);
-
-    //    QStringList tagsList = d->model->assignedTagsList(resource);
-
-    //    Q_FOREACH (const QString & oldName, tagsList) {
-    //        if (!oldName.compare(tagName)) {
-    //            d->model->deleteTag(resource, oldName);
-    //        }
-    //    }
 }
 
 void KisResourceTaggingManager::renameTag(const KisTagSP oldTag, const KisTagSP newName)
@@ -342,20 +306,6 @@ void KisResourceTaggingManager::tagSearchLineEditTextChanged(const QString& line
     fprintf(stderr, "void KisResourceTaggingManager::tagSearchLineEditTextChanged(const QString& lineEditText): %s \n", lineEditText.toStdString().c_str());
     d->model->setSearchBoxText(lineEditText);
     ENTER_FUNCTION() << ppVar(lineEditText);
-
-    //    if (d->tagChooser->selectedTagIsReadOnly()) {
-    //        d->model->enableResourceFiltering(!lineEditText.isEmpty());
-    //    } else {
-    //        d->model->enableResourceFiltering(true);
-    //    }
-
-    //    d->model->searchTextChanged(lineEditText);
-    //    d->model->updateServer();
-
-    //FIXME: fix completer
-    //      d->tagCompleter = new QCompleter(tagNamesList(lineEditText),this);
-    //      d->tagSearchLineEdit->setCompleter(d->tagCompleter);
-
     emit updateView();
 }
 
@@ -392,18 +342,6 @@ void KisResourceTaggingManager::tagSaveButtonPressed()
     d->tagChooser->setCurrentIndex(previousTagIndex);
 
     ENTER_FUNCTION();
-    //    if (!d->tagChooser->selectedTagIsReadOnly()) {
-    //        QList<KoResourceSP> newResources = d->model->currentlyVisibleResources();
-    //        Q_FOREACH (KoResourceSP oldRes, d->originalResources) {
-    //            if (!newResources.contains(oldRes))
-    //                removeResourceTag(oldRes, d->currentTag);
-    //        }
-    //        Q_FOREACH (KoResourceSP newRes, newResources) {
-    //            if (!d->originalResources.contains(newRes))
-    //                addResourceTag(newRes, d->currentTag);
-    //        }
-    //        d->model->tagCategoryMembersChanged();
-    //    }
     updateTaggedResourceView();
 }
 
@@ -444,13 +382,11 @@ void KisResourceTaggingManager::contextMenuRequested(KoResourceSP currentResourc
 
 KisTagChooserWidget *KisResourceTaggingManager::tagChooserWidget()
 {
-    ENTER_FUNCTION();
     return d->tagChooser;
 }
 
 KisTagFilterWidget *KisResourceTaggingManager::tagFilterWidget()
 {
-    ENTER_FUNCTION();
     return d->tagFilter;
 }
 

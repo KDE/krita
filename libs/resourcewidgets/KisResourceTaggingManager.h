@@ -60,7 +60,6 @@ public:
     explicit KisResourceTaggingManager(QString resourceType, KisTagFilterResourceProxyModel *model, QWidget *parent);
     ~KisResourceTaggingManager() override;
     void showTaggingBar(bool show);
-    QStringList availableTags() const;
     void contextMenuRequested(KoResourceSP currentResource, QPoint pos);
     void allowTagModification( bool set );
     bool allowTagModification();

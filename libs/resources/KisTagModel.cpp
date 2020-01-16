@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2018 boud <boud@valdyas.org>
+ *    Copyright (c) 2020 Agata Cacko <cacko.azh@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

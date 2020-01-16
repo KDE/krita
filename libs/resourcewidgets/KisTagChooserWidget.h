@@ -7,6 +7,7 @@
  *    Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
  *    Copyright (c) 2013 Sascha Suelzer <s.suelzer@gmail.com>
  *    Copyright (c) 2019 Boudewijn Rempt <boud@valdyas.org> 
+ *    Copyright (c) 2020 Agata Cacko <cacko.azh@gmail.com>
  *
  *    This library is free software; you can redistribute it and/or
  *    modify it under the terms of the GNU Library General Public

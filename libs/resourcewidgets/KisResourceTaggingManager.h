@@ -73,20 +73,15 @@ Q_SIGNALS:
     
 private Q_SLOTS:
 
-    void undeleteTag(const KisTagSP tagToUndelete);
-    void purgeTagUndeleteList();
     void contextCreateNewTag(KoResourceSP resource, const KisTagSP tag);
-    void contextCreateNewTag(const KisTagSP tag);
     void syncTagBoxEntryRemoval(const KisTagSP tag);
     void syncTagBoxEntryAddition(const KisTagSP tag);
     void syncTagBoxEntries();
     void tagSaveButtonPressed();
     void contextRemoveTagFromResource(KoResourceSP resource, const KisTagSP tag);
     void contextAddTagToResource(KoResourceSP resource, const KisTagSP tag);
-    void renameTag(const KisTagSP oldName, const KisTagSP newName);
     void tagChooserIndexChanged(const KisTagSP lineEditText);
     void tagSearchLineEditTextChanged(const QString &lineEditText);
-    void removeTagFromComboBox(const KisTagSP tag);
 
 private:
 

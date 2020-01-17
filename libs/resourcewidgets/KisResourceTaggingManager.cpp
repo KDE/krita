@@ -95,11 +95,6 @@ KisResourceTaggingManager::KisResourceTaggingManager(QString resourceType, KisTa
     d->tagFilter = new KisTagFilterWidget(d->tagModel, parent);
 
     connect(d->tagChooser, SIGNAL(tagChosen(KisTagSP)), this, SLOT(tagChooserIndexChanged(KisTagSP)));
-    connect(d->tagChooser, SIGNAL(newTagRequested(KisTagSP)), this, SLOT(contextCreateNewTag(KisTagSP)));
-    connect(d->tagChooser, SIGNAL(tagDeletionRequested(KisTagSP)), this, SLOT(removeTagFromComboBox(KisTagSP)));
-    connect(d->tagChooser, SIGNAL(tagRenamingRequested(KisTagSP,KisTagSP)), this, SLOT(renameTag(KisTagSP,KisTagSP)));
-    connect(d->tagChooser, SIGNAL(tagUndeletionRequested(KisTagSP)), this, SLOT(undeleteTag(KisTagSP)));
-    connect(d->tagChooser, SIGNAL(tagUndeletionListPurgeRequested()), this, SLOT(purgeTagUndeleteList()));
 
     connect(d->tagFilter, SIGNAL(saveButtonClicked()), this, SLOT(tagSaveButtonPressed()));
     connect(d->tagFilter, SIGNAL(filterTextChanged(QString)), this, SLOT(tagSearchLineEditTextChanged(QString)));
@@ -118,51 +113,6 @@ void KisResourceTaggingManager::showTaggingBar(bool show)
     show ? d->tagChooser->show() : d->tagChooser->hide();
 }
 
-void KisResourceTaggingManager::purgeTagUndeleteList()
-{
-    ENTER_FUNCTION();
-    //d->lastDeletedTag = TaggedResourceSet();
-    //d->tagChooser->setUndeletionCandidate(QString());
-}
-
-void KisResourceTaggingManager::undeleteTag(const KisTagSP tagToUndelete)
-{
-    ENTER_FUNCTION();
-    /*
-    QString tagName = tagToUndelete;
-    QStringList allTags = availableTags();
-
-    if (allTags.contains(tagName)) {
-        bool ok;
-        tagName = QInputDialog::getText(
-                    d->tagChooser, i18n("Unable to undelete tag"),
-                    i18n("<qt>The tag you are trying to undelete already exists in tag list.<br>Please enter a new, unique name for it.</qt>"),
-                    QLineEdit::Normal,
-                    tagName, &ok);
-
-        if (!ok || allTags.contains(tagName) || tagName.isEmpty()) {
-            QMessageBox msgBox;
-            msgBox.setIcon(QMessageBox::Warning);
-            msgBox.setText(i18n("Tag was not undeleted."));
-            msgBox.exec();
-            return;
-        }
-    }
-
-    //    QList<KoResourceSP> serverResources = d->model->serverResources();
-
-    //    Q_FOREACH(KoResourceSP resource, d->lastDeletedTag.resources) {
-    //        if (serverResources.contains(resource)) {
-    //            addResourceTag(resource, tagName);
-    //        }
-    //    }
-    //    d->model->tagCategoryAdded(tagName);
-    d->tagChooser->setCurrentIndex(d->tagChooser->findIndexOf(tagName));
-    d->tagChooser->setUndeletionCandidate(QString());
-    //    d->lastDeletedTag = TaggedResourceSet();
-    */
-}
-
 void KisResourceTaggingManager::addResourceTag(KoResourceSP resource, const KisTagSP tag)
 {
     d->tagModel->tagResource(tag, resource);
@@ -172,20 +122,6 @@ void KisResourceTaggingManager::syncTagBoxEntryAddition(const KisTagSP tag)
 {
     ENTER_FUNCTION();
     //d->tagChooser->insertItem(tag);
-}
-
-void KisResourceTaggingManager::contextCreateNewTag(const KisTagSP tag)
-{
-    fprintf(stderr, "void KisResourceTaggingManager::contextCreateNewTag(const KisTagSP tag)");
-    ENTER_FUNCTION();
-    /*
-    if (!tag.isEmpty()) {
-//        d->model->addTag(0, tag);
-//        d->model->tagCategoryAdded(tag);
-        d->tagChooser->setCurrentIndex(d->tagChooser->findIndexOf(tag));
-        updateTaggedResourceView();
-    }
-    */
 }
 
 void KisResourceTaggingManager::contextCreateNewTag(KoResourceSP resource , const KisTagSP tag)
@@ -232,19 +168,6 @@ void KisResourceTaggingManager::contextRemoveTagFromResource(KoResourceSP resour
     updateTaggedResourceView();
 }
 
-void KisResourceTaggingManager::removeTagFromComboBox(const KisTagSP tag)
-{
-    fprintf(stderr, "void KisResourceTaggingManager::removeTagFromComboBox(const KisTagSP tag)");
-    ENTER_FUNCTION();
-    //    QList<KoResourceSP> resources = d->model->currentlyVisibleResources();
-    //    Q_FOREACH (KoResourceSP resource, resources) {
-    //        removeResourceTag(resource, tag);
-    //    }
-    //    d->model->tagCategoryRemoved(tag);
-    //    d->lastDeletedTag = TaggedResourceSet(tag, resources);
-    // d->tagChooser->setUndeletionCandidate(tag);
-}
-
 void KisResourceTaggingManager::removeResourceTag(KoResourceSP resource, const KisTagSP tag)
 {
     ENTER_FUNCTION();
@@ -252,23 +175,6 @@ void KisResourceTaggingManager::removeResourceTag(KoResourceSP resource, const K
     bool success = d->tagModel->untagResource(tag, resource);
     fprintf(stderr, "remove Resource tag: %d\n", success);
     d->tagChooser->setCurrentIndex(previousIndex);
-}
-
-void KisResourceTaggingManager::renameTag(const KisTagSP oldTag, const KisTagSP newName)
-{
-    ENTER_FUNCTION();
-    //d->tagModel
-    //    if (!d->model->tagNamesList().contains(newName)) {
-    //        QList<KoResourceSP> resources = d->model->currentlyVisibleResources();
-
-    //        Q_FOREACH (KoResourceSP resource, resources) {
-    //            removeResourceTag(resource, oldName);
-    //            addResourceTag(resource, newName);
-    //        }
-    //        contextCreateNewTag(newName);
-    //        d->model->tagCategoryRemoved(oldName);
-    //        d->model->tagCategoryAdded(newName);
-    //    }
 }
 
 void KisResourceTaggingManager::updateTaggedResourceView()

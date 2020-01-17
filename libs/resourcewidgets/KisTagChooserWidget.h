@@ -41,7 +41,7 @@
 /// (Example of usage: tag combobox in Brushes docker).
 /// It uses KisTagModel as a model for items in the combobox.
 /// It is also responsible for the popup for tag removal, renaming and creation
-/// that appears on the right side of the tag combobox.
+/// that appears on the right side of the tag combobox (via KisTagToolButton)
 /// All the logic for adding and removing tags is done through KisTagModel.
 ///
 /// For logic related to tagging and untagging resources, check KisTaggingManager

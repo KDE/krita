@@ -98,7 +98,7 @@ KisTagChooserWidget::KisTagChooserWidget(KisTagModel* model, QWidget* parent)
     connect(d->tagToolButton, SIGNAL(renamingOfCurrentTagRequested(KisTagSP)),
             this, SLOT(tagRenamingRequested(KisTagSP)));
     connect(d->tagToolButton, SIGNAL(undeletionOfTagRequested(KisTagSP)),
-            this, SIGNAL(tagUndeletionRequested(KisTagSP)));
+            this, SLOT(tagUndeletionRequested(KisTagSP)));
     connect(d->tagToolButton, SIGNAL(purgingOfTagUndeleteListRequested()),
             this, SIGNAL(tagUndeletionListPurgeRequested()));
 
@@ -118,6 +118,7 @@ void KisTagChooserWidget::contextDeleteCurrentTag()
         fprintf(stderr, "trying to remove item: %s\n", currentTag->name().toUtf8().toStdString().c_str());
         d->model->removeTag(currentTag);
         setCurrentIndex(0);
+        d->tagToolButton->setUndeletionCandidate(currentTag);
     }
 }
 
@@ -151,10 +152,17 @@ void KisTagChooserWidget::tagRenamingRequested(const KisTagSP newName)
     }
 }
 
-void KisTagChooserWidget::setUndeletionCandidate(const KisTagSP tag)
+void KisTagChooserWidget::tagUndeletionRequested(const KisTagSP tag)
 {
+    int previousIndex = d->comboBox->currentIndex();
     ENTER_FUNCTION();
-    d->tagToolButton->setUndeletionCandidate(tag);
+    fprintf(stderr, "undeleting tag requested! to: %s\n", tag->name().toUtf8().toStdString().c_str());
+    bool success = d->model->changeTagActive(tag, true);
+    setCurrentIndex(previousIndex);
+    if (success) {
+        d->tagToolButton->setUndeletionCandidate(KisTagSP());
+        setCurrentItem(tag);
+    }
 }
 
 void KisTagChooserWidget::setCurrentIndex(int index)
@@ -173,6 +181,17 @@ void KisTagChooserWidget::addReadOnlyItem(KisTagSP tag)
 {
     d->model->addTag(tag);
     ENTER_FUNCTION();
+}
+
+void KisTagChooserWidget::setCurrentItem(KisTagSP tag)
+{
+    for (int i = 0; i < d->model->rowCount(); i++) {
+        QModelIndex index = d->model->index(i, 0);
+        KisTagSP temp = d->model->tagForIndex(index);
+        if (!temp.isNull() && temp->url() == tag->url()) {
+            setCurrentIndex(i);
+        }
+    }
 }
 
 KisTagSP KisTagChooserWidget::insertItem(KisTagSP tag)
@@ -195,14 +214,8 @@ KisTagSP KisTagChooserWidget::insertItem(KisTagSP tag)
     fprintf(stderr, "added = %d\n", added);
 
     if (added) {
-        for (int i = 0; i < d->model->rowCount(); i++) {
-            QModelIndex index = d->model->index(i, 0);
-            KisTagSP temp = d->model->tagForIndex(index);
-            if (!temp.isNull() && temp->url() == tag->url()) {
-                setCurrentIndex(i);
-                return temp;
-            }
-        }
+        setCurrentItem(tag);
+        return currentlySelectedTag();
     }
 
     setCurrentIndex(previous);

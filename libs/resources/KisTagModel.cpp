@@ -388,6 +388,35 @@ bool KisTagModel::renameTag(const KisTagSP tag, const QString &name)
 
 }
 
+bool KisTagModel::changeTagActive(const KisTagSP tag, bool active)
+{
+    if (!tag) return false;
+    if (!tag->valid()) return false;
+
+    QSqlQuery q;
+    if (!q.prepare("UPDATE tags\n"
+                   "SET    active = :active\n"
+                   "WHERE  url = :url\n"
+                   "AND    resource_type_id = (SELECT id\n"
+                   "                           FROM   resource_types\n"
+                   "                           WHERE  name = :resource_type\n)")) {
+        qWarning() << "Couild not prepare make existing tag active query" << tag << q.lastError();
+        return false;
+    }
+
+    q.bindValue(":active", active);
+    q.bindValue(":url", tag->url());
+    q.bindValue(":resource_type", d->resourceType);
+
+    if (!q.exec()) {
+        qWarning() << "Couild not execute make existing tag active query" << q.boundValues(), q.lastError();
+        return false;
+    }
+
+    return prepareQuery();
+
+}
+
 QVector<KisTagSP> KisTagModel::tagsForResource(int resourceId) const
 {
     return KisTagsResourcesModelProvider::getModel(d->resourceType)->tagsForResource(resourceId);

@@ -74,14 +74,13 @@ public:
     void addItems(QList<KisTagSP> tagNames);
     void addReadOnlyItem(KisTagSP tagName);
     void clear();
-    void setUndeletionCandidate(const KisTagSP tag);
     void showTagToolButton(bool show);
 
 Q_SIGNALS:
     void newTagRequested(const KisTagSP tag);
     void tagDeletionRequested(const KisTagSP tag);
     void tagRenamingRequested(const KisTagSP oldTag, const KisTagSP newTag);
-    void tagUndeletionRequested(const KisTagSP tag);
+
     void tagUndeletionListPurgeRequested();
     void popupMenuAboutToShow();
     void tagChosen(const KisTagSP tag);
@@ -90,19 +89,20 @@ public Q_SLOTS:
     KisTagSP insertItem(KisTagSP tag);
     void tagChanged(int index);
 
-
 private Q_SLOTS:
     void tagRenamingRequested(const KisTagSP newName);
+    void tagUndeletionRequested(const KisTagSP tag);
     void tagOptionsContextMenuAboutToShow();
     void contextDeleteCurrentTag();
 
 
+private:
+    void setCurrentItem(KisTagSP tag);
 
 private:
     class Private;
     Private* const d;
 
 };
-;
 
 #endif // KOTAGCHOOSERWIDGET_H

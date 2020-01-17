@@ -135,10 +135,17 @@ void KisTagToolButton::readOnlyMode(bool activate)
 void KisTagToolButton::setUndeletionCandidate(const KisTagSP deletedTag)
 {
     ENTER_FUNCTION();
-    d->undeleteCandidate = deletedTag;
-    d->action_undeleteTag->setText(i18n("Undelete") +" "+ deletedTag->name());
-    d->action_undeleteTag->setVisible(!deletedTag->name().isEmpty());
-    d->action_purgeTagUndeleteList->setVisible(!deletedTag->name().isEmpty());
+    if (deletedTag.isNull() || deletedTag->name().isEmpty()) {
+        d->action_undeleteTag->setVisible(false);
+        return;
+    } else {
+        d->undeleteCandidate = deletedTag;
+        d->action_undeleteTag->setText(i18n("Undelete") +" "+ deletedTag->name());
+        d->action_undeleteTag->setVisible(true);
+    }
+    // TODO: RESOURCES: do it properly
+    // since there is only one tag to undelete, there is no need to clear the list
+    //d->action_purgeTagUndeleteList->setVisible(!deletedTag->name().isEmpty());
 }
 
 void KisTagToolButton::onTagUndeleteClicked()

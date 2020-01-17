@@ -99,7 +99,6 @@ KisResourceTaggingManager::KisResourceTaggingManager(QString resourceType, KisTa
     connect(d->tagFilter, SIGNAL(saveButtonClicked()), this, SLOT(tagSaveButtonPressed()));
     connect(d->tagFilter, SIGNAL(filterTextChanged(QString)), this, SLOT(tagSearchLineEditTextChanged(QString)));
 
-    syncTagBoxEntries();
 }
 
 KisResourceTaggingManager::~KisResourceTaggingManager()
@@ -118,12 +117,6 @@ void KisResourceTaggingManager::addResourceTag(KoResourceSP resource, const KisT
     d->tagModel->tagResource(tag, resource);
 }
 
-void KisResourceTaggingManager::syncTagBoxEntryAddition(const KisTagSP tag)
-{
-    ENTER_FUNCTION();
-    //d->tagChooser->insertItem(tag);
-}
-
 void KisResourceTaggingManager::contextCreateNewTag(KoResourceSP resource , const KisTagSP tag)
 {
     // TODO: RESOURCES: this function should use QString, not KisTagSP
@@ -132,24 +125,6 @@ void KisResourceTaggingManager::contextCreateNewTag(KoResourceSP resource , cons
     int previousIndex = d->tagChooser->currentIndex();
     d->tagModel->tagResource(inserted, resource);
     d->tagChooser->setCurrentIndex(previousIndex);
-}
-
-void KisResourceTaggingManager::syncTagBoxEntryRemoval(const KisTagSP tag)
-{
-    ENTER_FUNCTION();
-    //d->tagChooser->removeItem(tag);
-}
-
-void KisResourceTaggingManager::syncTagBoxEntries()
-{
-    ENTER_FUNCTION();
-    /*
-    QList<KisTagSP> tags = d->tagModel->allTags();
-    tags.sort();
-    Q_FOREACH (const KisTagSP &tag, tags) {
-        //d->tagChooser->insertItem(tag);
-    }
-    */
 }
 
 void KisResourceTaggingManager::contextAddTagToResource(KoResourceSP resource, const KisTagSP tag)

@@ -74,9 +74,6 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void contextCreateNewTag(KoResourceSP resource, const KisTagSP tag);
-    void syncTagBoxEntryRemoval(const KisTagSP tag);
-    void syncTagBoxEntryAddition(const KisTagSP tag);
-    void syncTagBoxEntries();
     void tagSaveButtonPressed();
     void contextRemoveTagFromResource(KoResourceSP resource, const KisTagSP tag);
     void contextAddTagToResource(KoResourceSP resource, const KisTagSP tag);

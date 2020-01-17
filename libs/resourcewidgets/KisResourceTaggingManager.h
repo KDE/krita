@@ -69,8 +69,8 @@ public:
     
 private Q_SLOTS:
 
-    void contextCreateNewTag(KoResourceSP resource, const KisTagSP tag);
     void tagSaveButtonPressed();
+    void contextCreateNewTag(KoResourceSP resource, const KisTagSP tag);
     void contextRemoveTagFromResource(KoResourceSP resource, const KisTagSP tag);
     void contextAddTagToResource(KoResourceSP resource, const KisTagSP tag);
     void tagChooserIndexChanged(const KisTagSP lineEditText);
@@ -79,8 +79,6 @@ private Q_SLOTS:
 private:
 
     void enableContextMenu(bool enable);
-    void removeResourceTag(KoResourceSP resource, const KisTagSP tagName);
-    void addResourceTag(KoResourceSP resource, const KisTagSP tagName);
 
     class Private;
     Private* const d;

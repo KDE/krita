@@ -112,11 +112,6 @@ void KisResourceTaggingManager::showTaggingBar(bool show)
     show ? d->tagChooser->show() : d->tagChooser->hide();
 }
 
-void KisResourceTaggingManager::addResourceTag(KoResourceSP resource, const KisTagSP tag)
-{
-    d->tagModel->tagResource(tag, resource);
-}
-
 void KisResourceTaggingManager::contextCreateNewTag(KoResourceSP resource , const KisTagSP tag)
 {
     // TODO: RESOURCES: this function should use QString, not KisTagSP
@@ -131,18 +126,12 @@ void KisResourceTaggingManager::contextAddTagToResource(KoResourceSP resource, c
 {
     fprintf(stderr, "void KisResourceTaggingManager::contextAddTagToResource(KoResourceSP resource, const KisTagSP tag)");
     ENTER_FUNCTION();
-    addResourceTag(resource, tag);
+    d->tagModel->tagResource(tag, resource);
 }
 
 void KisResourceTaggingManager::contextRemoveTagFromResource(KoResourceSP resource, const KisTagSP tag)
 {
     fprintf(stderr, "void KisResourceTaggingManager::contextRemoveTagFromResource(KoResourceSP resource, const KisTagSP tag)");
-    ENTER_FUNCTION();
-    removeResourceTag(resource, tag);
-}
-
-void KisResourceTaggingManager::removeResourceTag(KoResourceSP resource, const KisTagSP tag)
-{
     ENTER_FUNCTION();
     int previousIndex = d->tagChooser->currentIndex();
     bool success = d->tagModel->untagResource(tag, resource);
@@ -155,17 +144,6 @@ void KisResourceTaggingManager::tagChooserIndexChanged(const KisTagSP tag)
     ENTER_FUNCTION();
     d->model->setTag(tag);
     d->currentTag = tag;
-/*
-    if (!d->tagChooser->selectedTagIsReadOnly()) {
-        d->currentTag = d->tagChooser->currentlySelectedTag();
-        d->tagFilter->allowSave(true);
-        //        d->model->enableResourceFiltering(true);
-    } else {
-        //        d->model->enableResourceFiltering(false);
-        d->tagFilter->allowSave(false);
-        d->currentTag.clear();
-    }
-*/
     d->tagFilter->clear();
     d->tagFilter->allowSave(tag->id() >= 0); // disallow save if the chosen tag has negative id (i.e. 'All' tag)
 }

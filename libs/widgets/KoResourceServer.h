@@ -245,25 +245,9 @@ public:
         notifyResourceChanged(resource);
     }
 
-
-    // don't use these method directly since it doesn't update views!
-    void addTag(KoResourceSP resource, const QString& tag)
+    QVector<KisTagSP> assignedTagsList(KoResourceSP resource) const
     {
-        QMutexLocker l(&m_mutex);
-//        m_tagStore->addTag(resource, tag);
-    }
-
-    // don't use these method directly since it doesn't update views!
-    void delTag(KoResourceSP resource, const QString& tag)
-    {
-        QMutexLocker l(&m_mutex);
-//        m_tagStore->delTag(resource, tag);
-    }
-
-
-    QStringList assignedTagsList(KoResourceSP resource) const
-    {
-        return QStringList(); //m_tagStore->assignedTagsList(resource);
+        return m_resourceModel->tagsForResource(resource->resourceId());
     }
 
 protected:

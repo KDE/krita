@@ -336,9 +336,13 @@ const QString KoResourceBundle::metaData(const QString &key, const QString &defa
     }
 }
 
-void KoResourceBundle::addResource(QString fileType, QString filePath, QStringList fileTagList, const QByteArray md5sum)
+void KoResourceBundle::addResource(QString fileType, QString filePath, QVector<KisTagSP> fileTagList, const QByteArray md5sum)
 {
-    m_manifest.addResource(fileType, filePath, fileTagList, md5sum);
+    QStringList tags;
+    Q_FOREACH(KisTagSP tag, fileTagList) {
+        tags << tag->url();
+    }
+    m_manifest.addResource(fileType, filePath, tags, md5sum);
 }
 
 QList<QString> KoResourceBundle::getTagsList()

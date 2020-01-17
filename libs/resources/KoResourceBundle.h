@@ -31,6 +31,8 @@
 
 #include "kritaresources_export.h"
 
+#include <KisTag.h>
+
 class KoStore;
 
 /**
@@ -86,7 +88,7 @@ public:
      * @param fileType type of the resource file
      * @param filePath path of the resource file
      */
-    void addResource(QString fileType, QString filePath, QStringList fileTagList, const QByteArray md5sum);
+    void addResource(QString fileType, QString filePath, QVector<KisTagSP> fileTagList, const QByteArray md5sum);
 
     QList<QString> getTagsList();
 

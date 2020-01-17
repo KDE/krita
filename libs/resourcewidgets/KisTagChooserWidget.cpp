@@ -246,7 +246,7 @@ KisTagSP KisTagChooserWidget::currentlySelectedTag()
 bool KisTagChooserWidget::selectedTagIsReadOnly()
 {
     ENTER_FUNCTION();
-    return false;
+    return currentlySelectedTag()->id() < 0;
 }
 
 void KisTagChooserWidget::addItems(QList<KisTagSP> tags)

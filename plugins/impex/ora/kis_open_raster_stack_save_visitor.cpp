@@ -70,9 +70,7 @@ void KisOpenRasterStackSaveVisitor::saveLayerInfo(QDomElement& elt, KisLayer* la
     }
     QString compop = layer->compositeOpId();
     if (layer->compositeOpId() == COMPOSITE_CLEAR) compop = "svg:clear";
-    else if (layer->compositeOpId() == COMPOSITE_OVER) compop = "svg:src-over";
     else if (layer->compositeOpId() == COMPOSITE_ERASE) compop = "svg:dst-out";
-    else if (layer->alphaChannelDisabled()) compop = "svg:src-atop";
     else if (layer->compositeOpId() == COMPOSITE_DESTINATION_ATOP) compop = "svg:dst-atop";
     else if (layer->compositeOpId() == COMPOSITE_DESTINATION_IN) compop = "svg:dst-in";
     else if (layer->compositeOpId() == COMPOSITE_ADD) compop = "svg:plus";
@@ -90,6 +88,12 @@ void KisOpenRasterStackSaveVisitor::saveLayerInfo(QDomElement& elt, KisLayer* la
     else if (layer->compositeOpId() == COMPOSITE_LUMINIZE) compop = "svg:luminosity";
     else if (layer->compositeOpId() == COMPOSITE_HUE) compop = "svg:hue";
     else if (layer->compositeOpId() == COMPOSITE_SATURATION) compop = "svg:saturation";
+
+    // it is important that the check for alphaChannelDisabled (and other non compositeOpId checks)
+    // come before the check for COMPOSITE_OVER, otherwise they will be logically ignored.
+    else if (layer->alphaChannelDisabled()) compop = "svg:src-atop";
+    else if (layer->compositeOpId() == COMPOSITE_OVER) compop = "svg:src-over";
+
     //else if (layer->compositeOpId() == COMPOSITE_EXCLUSION) compop = "svg:exclusion";
     else compop = "krita:" + layer->compositeOpId();
     elt.setAttribute("composite-op", compop);

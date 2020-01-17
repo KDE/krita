@@ -132,7 +132,6 @@ void KisResourceTaggingManager::contextAddTagToResource(KoResourceSP resource, c
     fprintf(stderr, "void KisResourceTaggingManager::contextAddTagToResource(KoResourceSP resource, const KisTagSP tag)");
     ENTER_FUNCTION();
     addResourceTag(resource, tag);
-    updateTaggedResourceView();
 }
 
 void KisResourceTaggingManager::contextRemoveTagFromResource(KoResourceSP resource, const KisTagSP tag)
@@ -140,7 +139,6 @@ void KisResourceTaggingManager::contextRemoveTagFromResource(KoResourceSP resour
     fprintf(stderr, "void KisResourceTaggingManager::contextRemoveTagFromResource(KoResourceSP resource, const KisTagSP tag)");
     ENTER_FUNCTION();
     removeResourceTag(resource, tag);
-    updateTaggedResourceView();
 }
 
 void KisResourceTaggingManager::removeResourceTag(KoResourceSP resource, const KisTagSP tag)
@@ -150,15 +148,6 @@ void KisResourceTaggingManager::removeResourceTag(KoResourceSP resource, const K
     bool success = d->tagModel->untagResource(tag, resource);
     fprintf(stderr, "remove Resource tag: %d\n", success);
     d->tagChooser->setCurrentIndex(previousIndex);
-}
-
-void KisResourceTaggingManager::updateTaggedResourceView()
-{
-    ENTER_FUNCTION();
-    //    d->model->setCurrentTag(d->currentTag);
-    //    d->model->updateServer();
-    //    d->originalResources = d->model->currentlyVisibleResources();
-    emit updateView();
 }
 
 void KisResourceTaggingManager::tagChooserIndexChanged(const KisTagSP tag)
@@ -179,7 +168,6 @@ void KisResourceTaggingManager::tagChooserIndexChanged(const KisTagSP tag)
 */
     d->tagFilter->clear();
     d->tagFilter->allowSave(tag->id() >= 0); // disallow save if the chosen tag has negative id (i.e. 'All' tag)
-    updateTaggedResourceView();
 }
 
 void KisResourceTaggingManager::tagSearchLineEditTextChanged(const QString& lineEditText)
@@ -187,7 +175,6 @@ void KisResourceTaggingManager::tagSearchLineEditTextChanged(const QString& line
     fprintf(stderr, "void KisResourceTaggingManager::tagSearchLineEditTextChanged(const QString& lineEditText): %s \n", lineEditText.toStdString().c_str());
     d->model->setSearchBoxText(lineEditText);
     ENTER_FUNCTION() << ppVar(lineEditText);
-    emit updateView();
 }
 
 void KisResourceTaggingManager::tagSaveButtonPressed()
@@ -223,7 +210,6 @@ void KisResourceTaggingManager::tagSaveButtonPressed()
     d->tagChooser->setCurrentIndex(previousTagIndex);
 
     ENTER_FUNCTION();
-    updateTaggedResourceView();
 }
 
 void KisResourceTaggingManager::contextMenuRequested(KoResourceSP resource, QPoint pos)

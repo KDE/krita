@@ -66,10 +66,6 @@ public:
     bool allowTagModification();
     KisTagFilterWidget *tagFilterWidget();
     KisTagChooserWidget *tagChooserWidget();
-
-Q_SIGNALS:
-
-    void updateView();
     
 private Q_SLOTS:
 
@@ -85,7 +81,6 @@ private:
     void enableContextMenu(bool enable);
     void removeResourceTag(KoResourceSP resource, const KisTagSP tagName);
     void addResourceTag(KoResourceSP resource, const KisTagSP tagName);
-    void updateTaggedResourceView();
 
     class Private;
     Private* const d;

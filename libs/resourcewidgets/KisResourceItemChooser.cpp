@@ -200,8 +200,6 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
 
     d->storagePopupButton = new KisStorageChooserWidget(this);
 
-    connect(d->tagManager, SIGNAL(updateView()), this, SLOT(updateView()));
-
     layout->addWidget(d->tagManager->tagChooserWidget(), 0, 0);
     layout->addWidget(d->viewModeButton, 0, 1);
     layout->addWidget(d->storagePopupButton, 0, 2);

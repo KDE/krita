@@ -17,6 +17,7 @@
  */
 #include "KisUsageLogger.h"
 
+#include <QScreen>
 #include <QGlobalStatic>
 #include <QDebug>
 #include <QDateTime>
@@ -30,7 +31,7 @@
 #include <QApplication>
 #include <klocalizedstring.h>
 #include <KritaVersionWrapper.h>
-
+#include <QGuiApplication>
 
 Q_GLOBAL_STATIC(KisUsageLogger, s_instance)
 
@@ -65,6 +66,12 @@ void KisUsageLogger::initialize()
 {
     s_instance->d->active = true;
 
+    QString systemInfo = basicSystemInfo();
+    s_instance->d->sysInfoFile.write(systemInfo.toUtf8());
+}
+
+QString KisUsageLogger::basicSystemInfo()
+{
     QString systemInfo;
 
     // NOTE: This is intentionally not translated!
@@ -93,8 +100,7 @@ void KisUsageLogger::initialize()
     systemInfo.append("\n  Product Version: ").append(QSysInfo::productVersion());
     systemInfo.append("\n\n");
 
-    s_instance->d->sysInfoFile.write(systemInfo.toUtf8());
-
+    return systemInfo;
 }
 
 void KisUsageLogger::close()
@@ -151,7 +157,42 @@ void KisUsageLogger::writeHeader()
             .arg(qApp->arguments().join(' '));
 
     s_instance->d->logFile.write(sessionHeader.toUtf8());
+
+    QString KritaAndQtVersion;
+    KritaAndQtVersion.append("Krita Version: ").append(KritaVersionWrapper::versionString(true))
+            .append(", Qt version compiled: ").append(QT_VERSION_STR)
+            .append(", loaded: ").append(qVersion())
+            .append(". Process ID: ")
+            .append(QString::number(qApp->applicationPid())).append("\n");
+
+    KritaAndQtVersion.append("-- -- -- -- -- -- -- --\n");
+    s_instance->d->logFile.write(KritaAndQtVersion.toUtf8());
     s_instance->d->logFile.flush();
+}
+
+QString KisUsageLogger::screenInformation()
+{
+    QList<QScreen*> screens = qApp->screens();
+
+    QString info;
+    info.append("Display Information");
+    info.append("\nNumber of screens: ").append(QString::number(screens.size()));
+
+    for (int i = 0; i < screens.size(); ++i ) {
+        QScreen *screen = screens[i];
+        info.append("\n\tScreen: ").append(QString::number(i));
+        info.append("\n\t\tName: ").append(screen->name());
+        info.append("\n\t\tDepth: ").append(QString::number(screen->depth()));
+        info.append("\n\t\tScale: ").append(QString::number(screen->devicePixelRatio()));
+        info.append("\n\t\tResolution in pixels: ").append(QString::number(screen->geometry().width()))
+                .append("x")
+                .append(QString::number(screen->geometry().height()));
+        info.append("\n\t\tManufacturer: ").append(screen->manufacturer());
+        info.append("\n\t\tModel: ").append(screen->model());
+        info.append("\n\t\tRefresh Rate: ").append(QString::number(screen->refreshRate()));
+    }
+    info.append("\n");
+    return info;
 }
 
 void KisUsageLogger::rotateLog()

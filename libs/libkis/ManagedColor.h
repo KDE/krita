@@ -82,6 +82,15 @@ public:
      * the correct configuration applied.
      */
     QColor colorForCanvas(Canvas *canvas) const;
+
+    /**
+     * @brief fromQColor is the (approximate) reverse of colorForCanvas()
+     * @param qcolor the QColor to convert to a KoColor.
+     * @param canvas the canvas whose color management you'd like to use.
+     * @return the approximated ManagedColor, to use for canvas resources.
+     */
+    static ManagedColor *fromQColor(const QColor &qcolor, Canvas *canvas = 0);
+
     /**
      * colorDepth A string describing the color depth of the image:
      * <ul>

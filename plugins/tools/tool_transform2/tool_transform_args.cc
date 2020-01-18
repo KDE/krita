@@ -31,25 +31,7 @@
 
 
 ToolTransformArgs::ToolTransformArgs()
-    : m_mode(FREE_TRANSFORM)
-    , m_defaultPoints(true)
-    , m_origPoints {QVector<QPointF>()}
-    , m_transfPoints {QVector<QPointF>()}
-    , m_warpType(KisWarpTransformWorker::RIGID_TRANSFORM)
-    , m_alpha(1.0)
-    , m_transformedCenter(QPointF(0, 0))
-    , m_originalCenter(QPointF(0, 0))
-    , m_rotationCenterOffset(QPointF(0, 0))
-    , m_aX(0)
-    , m_aY(0)
-    , m_aZ(0)
-    , m_scaleX(1.0)
-    , m_scaleY(1.0)
-    , m_shearX(0.0)
-    , m_shearY(0.0)
-    , m_liquifyProperties(new KisLiquifyProperties())
-    , m_pixelPrecision(8)
-    , m_previewPixelPrecision(16)
+    : m_liquifyProperties(new KisLiquifyProperties())
 {
     KConfigGroup configGroup =  KSharedConfig::openConfig()->group("KisToolTransform");
     QString savedFilterId = configGroup.readEntry("filterId", "Bicubic");

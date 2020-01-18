@@ -88,7 +88,7 @@ qreal Canvas::rotation() const
 void Canvas::setRotation(qreal angle)
 {
     if (!d->canvas) return;
-    d->canvas->imageView()->canvasController()->rotateCanvas(angle);
+    d->canvas->imageView()->canvasController()->rotateCanvas(angle - rotation());
 }
 
 

@@ -620,6 +620,8 @@ bool KisApplication::start(const KisApplicationArguments &args)
         executeRemoteArguments(message, d->mainWindow);
     }
 
+    KisUsageLogger::writeSysInfo(KisUsageLogger::screenInformation());
+
 
     // not calling this before since the program will quit there.
     return true;
@@ -696,6 +698,11 @@ void KisApplication::remoteArguments(QByteArray message, QObject *socket)
 
     // check if we have any mainwindow
     KisMainWindow *mw = qobject_cast<KisMainWindow*>(qApp->activeWindow());
+
+    if (!mw && KisPart::instance()->mainWindows().size() > 0) {
+        mw = KisPart::instance()->mainWindows().first();
+    }
+
     if (!mw) {
         d->earlyRemoteArguments << message;
         return;

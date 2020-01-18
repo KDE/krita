@@ -94,6 +94,7 @@ install_pykrita_plugin(lastdocumentsdocker)
 install_pykrita_plugin(comics_project_management_tools)
 install_pykrita_plugin(krita_script_starter)
 install_pykrita_plugin(plugin_importer)
+install_pykrita_plugin(mixer_slider_docker)
 
 # if(PYTHON_VERSION_MAJOR VERSION_EQUAL 3)
 #     install_pykrita_plugin(cmake_utils)

@@ -34,6 +34,7 @@
 #include <KisResourceTypeModel.h>
 #include <KisTagModel.h>
 #include <KisTagModelProvider.h>
+#include <KisTagsResourcesModelProvider.h>
 #include <KisResourceItemDelegate.h>
 #include <KisResourceItemListView.h>
 
@@ -172,7 +173,7 @@ void DlgDbExplorer::slotRvResourceTypeSelected(int index)
 
     KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(resourceType);
 
-    KisTagFilterResourceProxyModel *tagFilterModel = new KisTagFilterResourceProxyModel(KisTagModelProvider::tagModel(resourceType), this);
+    KisTagFilterResourceProxyModel *tagFilterModel = new KisTagFilterResourceProxyModel(KisTagsResourcesModelProvider::getModel(resourceType), this);
     tagFilterModel->setSourceModel(resourceModel);
     m_filterProxyModel = tagFilterModel;
 

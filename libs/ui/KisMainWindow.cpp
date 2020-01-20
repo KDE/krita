@@ -631,6 +631,11 @@ void KisMainWindow::showView(KisView *imageView)
         subwin->setOption(QMdiSubWindow::RubberBandResize, cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
         subwin->setWindowIcon(qApp->windowIcon());
 
+#ifdef Q_OS_MACOS
+        connect(subwin, SIGNAL(destroyed()), SLOT(updateSubwindowFlags()));
+        updateSubwindowFlags();
+#endif
+
         if (d->mdiArea->subWindowList().size() == 1) {
             imageView->showMaximized();
         }
@@ -2322,6 +2327,22 @@ void KisMainWindow::updateWindowMenu()
     updateCaption();
 }
 
+void KisMainWindow::updateSubwindowFlags()
+{
+    bool onlyOne = false;
+    if (d->mdiArea->subWindowList().size() == 1 && d->mdiArea->viewMode() == QMdiArea::SubWindowView) {
+        onlyOne = true;
+    }
+    Q_FOREACH (QMdiSubWindow *subwin, d->mdiArea->subWindowList()) {
+        if (onlyOne) {
+            subwin->setWindowFlags(subwin->windowFlags() | Qt::FramelessWindowHint);
+            subwin->showMaximized();
+        } else {
+            subwin->setWindowFlags((subwin->windowFlags() | Qt::FramelessWindowHint) ^ Qt::FramelessWindowHint);
+        }
+    }
+}
+
 void KisMainWindow::setActiveSubWindow(QWidget *window)
 {
     if (!window) return;
@@ -2369,8 +2390,10 @@ void KisMainWindow::configChanged()
                 subwin->showMaximized();
             }
         }
-
     }
+#ifdef Q_OS_MACOS
+    updateSubwindowFlags();
+#endif
 
     KConfigGroup group( KSharedConfig::openConfig(), "theme");
     d->themeManager->setCurrentTheme(group.readEntry("Theme", "Krita dark"));

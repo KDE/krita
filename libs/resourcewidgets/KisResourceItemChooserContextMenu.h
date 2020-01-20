@@ -33,6 +33,9 @@
 
 #include <KisTag.h>
 
+#include <KisTagsResourcesModel.h>
+#include <KisTagModel.h>
+
 class ContextMenuExistingTagAction : public QAction
 {
     Q_OBJECT
@@ -112,6 +115,17 @@ Q_SIGNALS:
     void resourceTagRemovalRequested(KoResourceSP resource, const KisTagSP tag);
     /// Emitted when a resource should be added to a new tag, which will need to be created.
     void resourceAssignmentToNewTagRequested(KoResourceSP resource, const KisTagSP tag);
+
+
+public Q_SLOTS:
+    void addResourceTag(KoResourceSP resource, const KisTagSP tag);
+    void removeResourceExistingTag(KoResourceSP resource, const KisTagSP tag);
+    void addResourceNewTag(KoResourceSP resource, const KisTagSP tag);
+
+private:
+    QString m_resourceType;
+    KisTagsResourcesModel* m_tagsResourcesModel;
+    KisTagModel* m_tagModel;
 
 };
 

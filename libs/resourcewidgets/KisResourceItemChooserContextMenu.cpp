@@ -191,6 +191,7 @@ bool compareWithSpecialTags(KisTagSP tag) {
 
 KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceSP resource,
                                                                    const KisTagSP currentlySelectedTag)
+    : m_resourceType(resource->resourceType().first)
 {
 
     QImage image = resource->image();
@@ -203,16 +204,16 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
     QMenu * removableTagsMenu;
     QMenu * assignableTagsMenu;
 
-    KisTagsResourcesModel* model = KisTagsResourcesModelProvider::getModel(resource->resourceType().first);
-    KisTagModel* tagModel = KisTagModelProvider::tagModel(resource->resourceType().first);
+    m_tagsResourcesModel = KisTagsResourcesModelProvider::getModel(resource->resourceType().first);
+    m_tagModel = KisTagModelProvider::tagModel(resource->resourceType().first);
 
 
-    QList<KisTagSP> removables = model->tagsForResource(resource->resourceId()).toList();
+    QList<KisTagSP> removables = m_tagsResourcesModel->tagsForResource(resource->resourceId()).toList();
 
     QList<KisTagSP> list;
-    for (int i = 0; i < tagModel->rowCount(); i++) {
-        QModelIndex index = tagModel->index(i, 0);
-        KisTagSP tag = tagModel->tagForIndex(index);
+    for (int i = 0; i < m_tagModel->rowCount(); i++) {
+        QModelIndex index = m_tagModel->index(i, 0);
+        KisTagSP tag = m_tagModel->tagForIndex(index);
          if (!tag.isNull()) {
              list << tag;
          }
@@ -251,7 +252,7 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
             removeTagAction->setIcon(koIcon("list-remove"));
 
             connect(removeTagAction, SIGNAL(triggered(KoResourceSP, const KisTagSP)),
-                    this, SIGNAL(resourceTagRemovalRequested(KoResourceSP, const KisTagSP)));
+                    this, SLOT(removeResourceExistingTag(KoResourceSP, const KisTagSP)));
             addAction(removeTagAction);
         }
 
@@ -266,7 +267,7 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
                 ContextMenuExistingTagAction * removeTagAction = new ContextMenuExistingTagAction(resource, tag, this);
 
                 connect(removeTagAction, SIGNAL(triggered(KoResourceSP, const KisTagSP)),
-                        this, SIGNAL(resourceTagRemovalRequested(KoResourceSP, const KisTagSP)));
+                        this, SLOT(removeResourceExistingTag(KoResourceSP, const KisTagSP)));
                 removableTagsMenu->addAction(removeTagAction);
             }
         }
@@ -282,7 +283,7 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
         ContextMenuExistingTagAction * addTagAction = new ContextMenuExistingTagAction(resource, tag, this);
 
         connect(addTagAction, SIGNAL(triggered(KoResourceSP, const KisTagSP)),
-                this, SIGNAL(resourceTagAdditionRequested(KoResourceSP, const KisTagSP)));
+                this, SLOT(addResourceTag(KoResourceSP, const KisTagSP)));
 
 
         assignableTagsMenu->addAction(addTagAction);
@@ -292,7 +293,7 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
 
     NewTagAction * addTagAction = new NewTagAction(resource, this);
     connect(addTagAction, SIGNAL(triggered(KoResourceSP, const KisTagSP)),
-            this, SIGNAL(resourceAssignmentToNewTagRequested(KoResourceSP, const KisTagSP)));
+            this, SLOT(addResourceNewTag(KoResourceSP, const KisTagSP)));
     assignableTagsMenu->addAction(addTagAction);
 
 }
@@ -300,4 +301,23 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
 KisResourceItemChooserContextMenu::~KisResourceItemChooserContextMenu()
 {
 
+}
+
+
+void KisResourceItemChooserContextMenu::addResourceTag(KoResourceSP resource, const KisTagSP tag)
+{
+    m_tagsResourcesModel->tagResource(tag, resource);
+}
+
+void KisResourceItemChooserContextMenu::removeResourceExistingTag(KoResourceSP resource, const KisTagSP tag)
+{
+    m_tagsResourcesModel->untagResource(tag, resource);
+}
+
+void KisResourceItemChooserContextMenu::addResourceNewTag(KoResourceSP resource, const KisTagSP tag)
+{
+    QString name = tag->name().isEmpty() ? tag->url() : tag->name();
+    QVector<KoResourceSP> resourceList;
+    resourceList << resource;
+    m_tagModel->addEmptyTag(tag, resourceList);
 }

@@ -197,6 +197,21 @@ KisTagSP KisTagModel::tagForIndex(QModelIndex index) const
     return tag;
 }
 
+bool KisTagModel::addEmptyTag(const QString& tagName, QVector<KoResourceSP> taggedResouces)
+{
+    KisTagSP tag = KisTagSP(new KisTag());
+    tag->setName(tagName);
+    tag->setUrl(tagName);
+    return addEmptyTag(tag, taggedResouces);
+}
+
+bool KisTagModel::addEmptyTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces)
+{
+    tag->setValid(true);
+    tag->setActive(true);
+    return addTag(tag, taggedResouces);
+}
+
 bool KisTagModel::addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces)
 {
     if (tag.isNull()) return false;

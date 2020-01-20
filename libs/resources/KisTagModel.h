@@ -60,6 +60,8 @@ public:
     KisTagSP tagForIndex(QModelIndex index = QModelIndex()) const;
     QList<KisTagSP> allTags() const;
 
+    bool addEmptyTag(const QString &tagName, QVector<KoResourceSP> taggedResouces);
+    bool addEmptyTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces);
     bool addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces = QVector<KoResourceSP>());
     bool removeTag(const KisTagSP tag);
     bool tagResource(const KisTagSP tag, const KoResourceSP resource);
@@ -67,6 +69,7 @@ public:
     bool renameTag(const KisTagSP tag, const QString &name);
     bool changeTagActive(const KisTagSP tag, bool active);
     QVector<KisTagSP> tagsForResource(int resourceId) const;
+
 
 private:
 

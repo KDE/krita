@@ -401,7 +401,7 @@ KoResourceSP KisResourceModel::resourceForName(QString name) const
     }
 
     if (q.first()) {
-        qDebug() << "setting up resource from name";
+        qDebug() << "setting up resource from name (1)";
         QString storageLocation = q.value("location").toString();
         QString filename = q.value("filename").toString();
         resource = KisResourceLocator::instance()->resource(storageLocation, d->resourceType, filename);

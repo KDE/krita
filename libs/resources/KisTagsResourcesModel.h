@@ -55,6 +55,7 @@ public:
     bool untagResource(const KisTagSP tag, const KoResourceSP resource);
 
     QVector<KisTagSP> tagsForResource(int resourceId) const;
+    QVector<KoResourceSP> resourcesForTag(int tagId) const;
 
     bool resetQuery();
 

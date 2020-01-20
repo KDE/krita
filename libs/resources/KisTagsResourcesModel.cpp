@@ -19,9 +19,11 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QTime>
+#include <KisResourceModel.h>
 
 struct KisTagsResourcesModel::Private {
     QSqlQuery query;
+    QSqlQuery resourcesForTagQuery;
     QString resourceType;
     int columnCount {3};
     int cachedRowCount {-1};
@@ -214,6 +216,19 @@ QVector<KisTagSP> KisTagsResourcesModel::tagsForResource(int resourceId) const
     return tags;
 }
 
+QVector<KoResourceSP> KisTagsResourcesModel::resourcesForTag(int tagId) const
+{
+    d->resourcesForTagQuery.bindValue(":tag_id", tagId);
+    d->resourcesForTagQuery.bindValue(":resource_type", d->resourceType);
+
+    bool r = d->resourcesForTagQuery.exec();
+    if (!r) {
+        qWarning() << "Could not select resources for tag " << tagId << d->resourcesForTagQuery.lastError() << d->resourcesForTagQuery.boundValues();
+    }
+
+    return QVector<KoResourceSP>();
+}
+
 
 void KisTagsResourcesModel::setResourceType(const QString &resourceType)
 {
@@ -223,6 +238,11 @@ void KisTagsResourcesModel::setResourceType(const QString &resourceType)
 
 bool KisTagsResourcesModel::resetQuery()
 {
+    // since it always execute a query, maybe there is no need to reset anything?
+    // which also means we don't keep anything here...
+    return true;
+
+    /*
     QTime t;
     t.start();
 
@@ -239,6 +259,7 @@ bool KisTagsResourcesModel::resetQuery()
 
 
     return r;
+    */
 }
 
 bool KisTagsResourcesModel::prepareQuery()
@@ -256,6 +277,32 @@ bool KisTagsResourcesModel::prepareQuery()
                             "AND    resource_tags.resource_id = :resource_id\n");    // make sure we're looking for tags for a specific resource
     if (!r)  {
         qWarning() << "Could not prepare TagsForResource query" << d->query.lastError();
+    }
+
+    r = d->resourcesForTagQuery.prepare("SELECT resources.id\n"
+                            ",      resources.storage_id\n"
+                            ",      resources.name\n"
+                            ",      resources.filename\n"
+                            ",      resources.tooltip\n"
+                            ",      resources.thumbnail\n"
+                            ",      resources.status\n"
+                            ",      storages.location\n"
+                            ",      resources.version\n"
+                            ",      resource_types.name as resource_type\n"
+                            "FROM   resources\n"
+                            ",      resource_tags\n"
+                            ",      storages\n"
+                            ",      resource_types\n"
+                            "WHERE  resources.id = resource_tags.resource_id\n"                // join resources + resource_tags by resource_id
+                            "AND    resources.resource_type_id = resource_types.id\n" // join with resource types via resource type id
+                            "AND    resources.storage_id = storages.id\n"         // join with storages via storage id
+
+                            "AND    resource_tags.tag_id = :tag_id\n"     // must have the tag
+                            "AND    resource_types.name = :resource_type\n"       // the type must match the current type
+                            "AND    resources.status = 1\n"         // must be active itself
+                            "AND    storages.active = 1");          // must be from active storage
+    if (!r)  {
+        qWarning() << "Could not prepare ResourcesForTag query" << d->resourcesForTagQuery.lastError();
     }
 
     d->cachedRowCount = -1;

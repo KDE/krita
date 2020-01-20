@@ -43,6 +43,8 @@
 #include "KoResourcePaths.h"
 #include <KisResourceModel.h>
 #include <KisResourceModelProvider.h>
+#include <KisTagModelProvider.h>
+#include <KisTagsResourcesModelProvider.h>
 
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
@@ -66,6 +68,8 @@ public:
 
     KoResourceServer(const QString& type)
         : m_resourceModel(KisResourceModelProvider::resourceModel(type))
+        , m_tagModel(KisTagModelProvider::tagModel(type))
+        , m_tagsResourcesModel(KisTagsResourcesModelProvider::getModel(type))
         , m_type(type)
     {
         //Q_ASSERT(QThread::currentThread() == qApp->thread());
@@ -250,6 +254,11 @@ public:
         return m_resourceModel->tagsForResource(resource->resourceId());
     }
 
+    QVector<KoResourceSP> resourcesForTag(KisTagSP tag) const
+    {
+        return m_tagsResourcesModel->resourcesForTag(tag->id());
+    }
+
 protected:
 
     void notifyResourceAdded(QSharedPointer<T> resource)
@@ -276,6 +285,8 @@ protected:
 private:
 
     QList<ObserverType*> m_observers;
+    KisTagModel *m_tagModel {0};
+    KisTagsResourcesModel *m_tagsResourcesModel {0};
     KisResourceModel *m_resourceModel {0};
     QString m_type;
     mutable QMutex m_mutex;

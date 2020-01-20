@@ -24,6 +24,7 @@
 #include <QQueue>
 #include <QList>
 #include "KoResourceServerObserver.h"
+#include <KisTag.h>
 
 #include <KoColor.h>
 #include <KoResource.h>
@@ -45,7 +46,7 @@ public:
 
     QList<QImage> favoritePresetImages();
 
-    void setCurrentTag(const QString& tagName);
+    void setCurrentTag(const KisTagSP tag);
 
     int numFavoritePresets();
 
@@ -126,7 +127,7 @@ private:
     void saveFavoritePresets();
 
     KoColor m_bgColor;
-    QString m_currentTag;
+    KisTagSP m_currentTag;
 
     bool m_initialized;
 

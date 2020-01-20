@@ -808,7 +808,7 @@ void KisPopupPalette::slotShowTagsPopup()
         tags << model->data(idx, Qt::DisplayRole).toString();
     }
 
-    std::sort(tags.begin(), tags.end());
+    //std::sort(tags.begin(), tags.end());
 
     if (!tags.isEmpty()) {
         QMenu menu;
@@ -818,7 +818,14 @@ void KisPopupPalette::slotShowTagsPopup()
 
         QAction *action = menu.exec(QCursor::pos());
         if (action) {
-            m_resourceManager->setCurrentTag(action->text());
+
+            for (int i = 0; i < model->rowCount(); ++i) {
+                QModelIndex idx = model->index(i, 0);
+                if (model->data(idx, Qt::DisplayRole).toString() == action->text()) {
+                    m_resourceManager->setCurrentTag(model->tagForIndex(idx));
+                    break;
+                }
+            }
         }
     } else {
         QWhatsThis::showText(QCursor::pos(),

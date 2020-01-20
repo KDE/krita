@@ -328,9 +328,7 @@ void KisFavoriteResourceManager::updateFavoritePresets()
     KisPaintOpPresetResourceServer* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     QVector<KoResourceSP> presetFilenames = rServer->resourcesForTag(m_currentTag);
     for(int i = 0; i < qMin(m_maxPresets, presetFilenames.size()); i++) {
-        KoResourceSP resource = presetFilenames[i];
-        KisPaintOpPresetSP preset = KisPaintOpPresetSP(dynamic_cast<KisPaintOpPreset*>(resource.data()));
-        m_favoritePresetsList.append(preset);
+        m_favoritePresetsList.append(presetFilenames[i].dynamicCast<KisPaintOpPreset>());
     }
 
     /*

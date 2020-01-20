@@ -30,6 +30,7 @@
 #include <KisResourceModel.h>
 #include <KisTagFilterResourceProxyModel.h>
 #include <KisResourceModelProvider.h>
+#include <KisTagModelProvider.h>
 #include <KisResourceTypeModel.h>
 #include <KisTagModel.h>
 #include <KisTagModelProvider.h>
@@ -152,17 +153,28 @@ DlgDbExplorer::~DlgDbExplorer()
 {
 }
 
+void DlgDbExplorer::updateTagModel(const QString& resourceType)
+{
+    m_tagModel = KisTagModelProvider::tagModel(resourceType);
+    m_page->cmbRvTags->setModelColumn(KisTagModel::Name);
+    m_page->cmbRvTags->setModel(m_tagModel);
+    m_page->cmbRvTags->update();
+    qDebug() << "number of tags in " << resourceType << " tag model: " << m_tagModel->rowCount();
+}
+
 void DlgDbExplorer::slotRvResourceTypeSelected(int index)
 {
     QModelIndex idx = m_page->cmbResourceTypes->model()->index(index, KisResourceTypeModel::ResourceType);
     QString resourceType = idx.data(Qt::DisplayRole).toString();
     qDebug() << resourceType;
-    m_tagModel->setResourceType(idx.data(Qt::DisplayRole).toString());
+
+    updateTagModel(resourceType);
 
     KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(resourceType);
 
     KisTagFilterResourceProxyModel *tagFilterModel = new KisTagFilterResourceProxyModel(KisTagModelProvider::tagModel(resourceType), this);
     tagFilterModel->setSourceModel(resourceModel);
+    m_filterProxyModel = tagFilterModel;
 
     m_page->resourceItemView->setModel(tagFilterModel);
 }
@@ -172,6 +184,8 @@ void DlgDbExplorer::slotTbResourceTypeSelected(int index)
     QModelIndex idx = m_page->cmbRvResourceTypes->model()->index(index, KisResourceTypeModel::ResourceType);
     QString resourceType = idx.data(Qt::DisplayRole).toString();
     qDebug() << resourceType;
+
+    m_tagModel = KisTagModelProvider::tagModel(resourceType);
 
     KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(resourceType);
     m_page->tableResources->setModel(resourceModel);
@@ -197,4 +211,10 @@ void DlgDbExplorer::slotTbResourceItemSelected()
 void DlgDbExplorer::slotRvTagSelected(int index)
 {
     qDebug() << "selected tag" << index;
+    QModelIndex idx = m_tagModel->index(index, 0);
+    KisTagSP tag = m_tagModel->tagForIndex(idx);
+
+    if (m_filterProxyModel && !tag.isNull() && tag->valid()) {
+        m_filterProxyModel->setTag(tag);
+    }
 }

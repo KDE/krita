@@ -24,7 +24,6 @@
 
 KisZoomButton::KisZoomButton(QWidget *parent)
     : KisDraggableToolButton(parent)
-    , m_zoomLevel(1.0)
 {
     connect(this, &KisZoomButton::valueChanged,
             this, &KisZoomButton::slotValueChanged);

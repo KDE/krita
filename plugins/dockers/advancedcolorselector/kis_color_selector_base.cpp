@@ -20,6 +20,7 @@
 #include <QMouseEvent>
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QScreen>
 #include <QTimer>
 #include <QCursor>
 #include <QPainter>
@@ -64,7 +65,7 @@ public:
     void updatePosition()
     {
         QPoint parentPos = m_parent->mapToGlobal(QPoint(0,0));
-        QRect availRect = QApplication::desktop()->availableGeometry(this);
+        const QRect availRect = QApplication::desktop()->availableGeometry(this);
         QPoint targetPos;
         if ( parentPos.x() - 100 > availRect.x() ) {
             targetPos =  QPoint(parentPos.x() - 100, parentPos.y());
@@ -229,7 +230,8 @@ void KisColorSelectorBase::mousePressEvent(QMouseEvent* event)
         x-=popupsize/2;
         y-=popupsize/2;
 
-        QRect availRect = QApplication::desktop()->availableGeometry(this);
+        const QRect availRect = QApplication::desktop()->availableGeometry(this);
+
         if(x<availRect.x())
             x = availRect.x();
         if(y<availRect.y())
@@ -387,7 +389,7 @@ void KisColorSelectorBase::lazyCreatePopup()
         // the WM from showing another taskbar entry,
         // but will require that we handle window activation manually
         m_popup->setWindowFlags(Qt::FramelessWindowHint |
-                                Qt::Window |
+                                Qt::Popup |
                                 Qt::NoDropShadowWindowHint |
                                 Qt::BypassWindowManagerHint);
         m_popup->m_parent = this;
@@ -404,12 +406,14 @@ void KisColorSelectorBase::showPopup(Move move)
     lazyCreatePopup();
 
     QPoint cursorPos = QCursor::pos();
+    QScreen *activeScreen = QGuiApplication::screenAt(cursorPos);
+    const QRect availRect = (activeScreen)? activeScreen->availableGeometry() : QApplication::desktop()->availableGeometry(this);
 
     if (move == MoveToMousePosition) {
         m_popup->move(QPoint(cursorPos.x()-m_popup->width()/2, cursorPos.y()-m_popup->height()/2));
         QRect rc = m_popup->geometry();
-        if (rc.x() < 0) rc.setX(0);
-        if (rc.y() < 0) rc.setY(0);
+        if (rc.x() < availRect.x()) rc.setX(availRect.x());
+        if (rc.y() < availRect.y()) rc.setY(availRect.y());
         m_popup->setGeometry(rc);
     }
 

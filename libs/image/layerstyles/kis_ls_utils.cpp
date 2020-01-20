@@ -116,7 +116,8 @@ namespace KisLsUtils
     {
         KisGaussianKernel::applyGaussian(selection, applyRect,
                                          radius, radius,
-                                         QBitArray(), 0, true);
+                                         QBitArray(), 0, true,
+                                         BORDER_IGNORE);
     }
 
     namespace Private {

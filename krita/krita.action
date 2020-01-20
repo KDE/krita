@@ -158,6 +158,19 @@
 
     <Action name="buginfo">
       <icon></icon>
+      <text>Show Krita log for bug reports.</text>
+      <whatsThis></whatsThis>
+      <toolTip>Show Krita log for bug reports.</toolTip>
+      <iconText>Show Krita log for bug reports.</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="sysinfo">
+      <icon></icon>
+
+
       <text>Show system information for bug reports.</text>
       <whatsThis></whatsThis>
       <toolTip>Show system information for bug reports.</toolTip>

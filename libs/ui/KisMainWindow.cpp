@@ -115,6 +115,7 @@
 #include <KisAndroidFileManager.h>
 #endif
 
+#include <KisUsageLogger.h>
 #include <brushengine/kis_paintop_settings.h>
 #include "dialogs/kis_about_application.h"
 #include "dialogs/kis_delayed_save_dialog.h"
@@ -1077,7 +1078,7 @@ void KisMainWindow::slotLoadCompleted()
 
 void KisMainWindow::slotLoadCanceled(const QString & errMsg)
 {
-    dbgUI << "KisMainWindow::slotLoadCanceled";
+    KisUsageLogger::log(QString("Loading canceled. Error:").arg(errMsg));
     if (!errMsg.isEmpty())   // empty when canceled by user
         QMessageBox::critical(this, i18nc("@title:window", "Krita"), errMsg);
     // ... can't delete the document, it's the one who emitted the signal...
@@ -1090,15 +1091,16 @@ void KisMainWindow::slotLoadCanceled(const QString & errMsg)
 
 void KisMainWindow::slotSaveCanceled(const QString &errMsg)
 {
-    dbgUI << "KisMainWindow::slotSaveCanceled";
-    if (!errMsg.isEmpty())   // empty when canceled by user
+    KisUsageLogger::log(QString("Saving canceled. Error:").arg(errMsg));
+    if (!errMsg.isEmpty()) {   // empty when canceled by user
         QMessageBox::critical(this, i18nc("@title:window", "Krita"), errMsg);
+    }
     slotSaveCompleted();
 }
 
 void KisMainWindow::slotSaveCompleted()
 {
-    dbgUI << "KisMainWindow::slotSaveCompleted";
+    KisUsageLogger::log(QString("Saving Completed"));
     KisDocument* doc = qobject_cast<KisDocument*>(sender());
     Q_ASSERT(doc);
     disconnect(doc, SIGNAL(completed()), this, SLOT(slotSaveCompleted()));

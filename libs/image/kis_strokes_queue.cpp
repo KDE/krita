@@ -138,8 +138,7 @@ executeStrokePair(const StrokePair &pair, StrokesQueue &queue, typename StrokesQ
     QList<KisStrokeJobData*> jobsData = pair.second;
 
     KisStrokeSP stroke(new KisStroke(strategy, type, levelOfDetail));
-    strategy->setCancelStrokeId(stroke);
-    strategy->setMutatedJobsInterface(mutatedJobsInterface);
+    strategy->setMutatedJobsInterface(mutatedJobsInterface, stroke);
     it = queue.insert(it, stroke);
     Q_FOREACH (KisStrokeJobData *jobData, jobsData) {
         stroke->addJob(jobData);
@@ -251,8 +250,7 @@ KisStrokeId KisStrokesQueue::startLodNUndoStroke(KisStrokeStrategy *strokeStrate
     KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->desiredLevelOfDetail > 0);
 
     KisStrokeSP buddy(new KisStroke(strokeStrategy, KisStroke::LODN, m_d->desiredLevelOfDetail));
-    strokeStrategy->setCancelStrokeId(buddy);
-    strokeStrategy->setMutatedJobsInterface(this);
+    strokeStrategy->setMutatedJobsInterface(this, buddy);
     m_d->strokesQueue.insert(m_d->findNewLodNPos(buddy), buddy);
 
     KisStrokeId id(buddy);
@@ -282,8 +280,7 @@ KisStrokeId KisStrokesQueue::startStroke(KisStrokeStrategy *strokeStrategy)
         stroke = KisStrokeSP(new KisStroke(strokeStrategy, KisStroke::LOD0, 0));
 
         KisStrokeSP buddy(new KisStroke(lodBuddyStrategy, KisStroke::LODN, m_d->desiredLevelOfDetail));
-        lodBuddyStrategy->setCancelStrokeId(buddy);
-        lodBuddyStrategy->setMutatedJobsInterface(this);
+        lodBuddyStrategy->setMutatedJobsInterface(this, buddy);
         stroke->setLodBuddy(buddy);
         m_d->strokesQueue.insert(m_d->findNewLodNPos(buddy), buddy);
 
@@ -308,8 +305,7 @@ KisStrokeId KisStrokesQueue::startStroke(KisStrokeStrategy *strokeStrategy)
     }
 
     KisStrokeId id(stroke);
-    strokeStrategy->setCancelStrokeId(id);
-    strokeStrategy->setMutatedJobsInterface(this);
+    strokeStrategy->setMutatedJobsInterface(this, id);
 
     m_d->openedStrokesCounter++;
 

@@ -48,7 +48,7 @@ KisStrokeStrategy::KisStrokeStrategy(const KisStrokeStrategy &rhs)
       m_name(rhs.m_name),
       m_mutatedJobsInterface(0)
 {
-    KIS_ASSERT_RECOVER_NOOP(!rhs.m_cancelStrokeId && !m_mutatedJobsInterface &&
+    KIS_ASSERT_RECOVER_NOOP(!rhs.m_strokeId && !m_mutatedJobsInterface &&
                             "After the stroke has been started, no copying must happen");
 }
 
@@ -145,19 +145,20 @@ KUndo2MagicString KisStrokeStrategy::name() const
     return m_name;
 }
 
-void KisStrokeStrategy::setMutatedJobsInterface(KisStrokesQueueMutatedJobInterface *mutatedJobsInterface)
+void KisStrokeStrategy::setMutatedJobsInterface(KisStrokesQueueMutatedJobInterface *mutatedJobsInterface, KisStrokeId strokeId)
 {
     m_mutatedJobsInterface = mutatedJobsInterface;
+    m_strokeId = strokeId;
 }
 
 void KisStrokeStrategy::addMutatedJobs(const QVector<KisStrokeJobData *> list)
 {
-    KIS_SAFE_ASSERT_RECOVER(m_mutatedJobsInterface && m_cancelStrokeId) {
+    KIS_SAFE_ASSERT_RECOVER(m_mutatedJobsInterface && m_strokeId) {
         qDeleteAll(list);
         return;
     }
 
-    m_mutatedJobsInterface->addMutatedJobs(m_cancelStrokeId, list);
+    m_mutatedJobsInterface->addMutatedJobs(m_strokeId, list);
 }
 
 void KisStrokeStrategy::addMutatedJob(KisStrokeJobData *data)

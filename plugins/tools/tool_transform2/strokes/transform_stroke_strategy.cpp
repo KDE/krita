@@ -657,6 +657,8 @@ void TransformStrokeStrategy::finishStrokeImpl(bool applyTransform, const ToolTr
     QVector<KisStrokeJobData *> mutatedJobs;
 
     if (applyTransform) {
+        m_savedTransformArgs = args;
+
         Q_FOREACH (KisNodeSP node, m_processedNodes) {
             mutatedJobs << new TransformData(TransformData::PAINT_DEVICE,
                                              args,

@@ -31,16 +31,16 @@
 struct KisSpacingSelectionWidget::Private
 {
     Private(KisSpacingSelectionWidget *_q)
-        : q(_q), oldSliderValue(0.1)
+        : q(_q)
     {
     }
 
     KisSpacingSelectionWidget *q;
 
-    KisDoubleSliderSpinBox *slider;
-    QCheckBox *autoButton;
+    KisDoubleSliderSpinBox *slider {0};
+    QCheckBox *autoButton {0};
 
-    qreal oldSliderValue;
+    qreal oldSliderValue {0.1};
 
     void slotSpacingChanged(qreal value);
     void slotAutoSpacing(bool value);

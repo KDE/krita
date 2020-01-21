@@ -29,7 +29,6 @@ if(HAVE_VC)
 endif()
 
 include(ECMAddTests)
-include(KritaAddBrokenUnitTest)
 
 macro_add_unittest_definitions()
 
@@ -49,7 +48,6 @@ ecm_add_tests(
     kis_effect_mask_test.cpp
     kis_iterator_test.cpp
     kis_painter_test.cpp
-    kis_selection_test.cpp
     kis_count_visitor_test.cpp
     kis_projection_test.cpp
     kis_properties_configuration_test.cpp
@@ -116,7 +114,6 @@ ecm_add_tests(
     kis_algebra_2d_test.cpp
     kis_marker_painter_test.cpp
     kis_lazy_brush_test.cpp
-    kis_colorize_mask_test.cpp
     kis_mask_similarity_test.cpp
     KisMaskGeneratorTest.cpp
     kis_layer_style_filter_environment_test.cpp
@@ -125,17 +122,13 @@ ecm_add_tests(
     KisWatershedWorkerTest.cpp
     kis_dom_utils_test.cpp
     kis_transform_worker_test.cpp
-    kis_perspective_transform_worker_test.cpp
     kis_cs_conversion_test.cpp
-    kis_processings_test.cpp
     kis_projection_leaf_test.cpp
     kis_histogram_test.cpp
     kis_onion_skin_compositor_test.cpp
-    kis_paint_device_test.cpp
     kis_queues_progress_updater_test.cpp
     kis_image_animation_interface_test.cpp
     kis_walkers_test.cpp
-    kis_async_merger_test.cpp
     kis_cage_transform_worker_test.cpp
     kis_random_generator_test.cpp
     kis_keyframing_test.cpp
@@ -147,11 +140,58 @@ ecm_add_tests(
     NAME_PREFIX "libs-image-"
 )
 
-krita_add_broken_unit_tests(
-    kis_transform_mask_test.cpp
-    kis_layer_styles_test.cpp
-    kis_update_scheduler_test.cpp
+include(KritaAddBrokenUnitTest)
 
+krita_add_broken_unit_test( kis_transform_mask_test.cpp
+    TEST_NAME     kis_transform_mask_test.cpp
+    LINK_LIBRARIES kritaimage Qt5::Test
+    NAME_PREFIX "libs-image-"
+)
+
+krita_add_broken_unit_test( kis_layer_styles_test.cpp
+    TEST_NAME kis_layer_styles_test.cpp
+    LINK_LIBRARIES kritaimage Qt5::Test
+    NAME_PREFIX "libs-image-"
+)
+
+krita_add_broken_unit_test( kis_update_scheduler_test.cpp
+    TEST_NAME kis_update_scheduler_test.cpp
+    LINK_LIBRARIES kritaimage Qt5::Test
+    NAME_PREFIX "libs-image-"
+)
+
+krita_add_broken_unit_test( kis_paint_device_test.cpp
+    TEST_NAME kis_paint_device_test.cpp
+    LINK_LIBRARIES kritaimage Qt5::Test
+    NAME_PREFIX "libs-image-"
+)
+
+krita_add_broken_unit_test( kis_colorize_mask_test.cpp
+    TEST_NAME kis_colorize_mask_test.cpp
+    LINK_LIBRARIES kritaimage Qt5::Test
+    NAME_PREFIX "libs-image-"
+)
+
+krita_add_broken_unit_test( kis_selection_test.cpp
+    TEST_NAME kis_selection_test.cpp
+    LINK_LIBRARIES kritaimage Qt5::Test
+    NAME_PREFIX "libs-image-"
+)
+
+krita_add_broken_unit_test( kis_processings_test.cpp
+    TEST_NAME kis_processings_test.cpp
+    LINK_LIBRARIES kritaimage Qt5::Test
+    NAME_PREFIX "libs-image-"
+)
+
+krita_add_broken_unit_test( kis_perspective_transform_worker_test.cpp
+    TEST_NAME kis_perspective_transform_worker_test.cpp
+    LINK_LIBRARIES kritaimage Qt5::Test
+    NAME_PREFIX "libs-image-"
+)
+
+krita_add_broken_unit_test( kis_async_merger_test.cpp
+    TEST_NAME kis_async_merger_test.cpp
     LINK_LIBRARIES kritaimage Qt5::Test
     NAME_PREFIX "libs-image-"
 )

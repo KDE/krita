@@ -6,9 +6,9 @@ include_directories(
 )
 
 macro_add_unittest_definitions()
+include(KritaAddBrokenUnitTest)
 
-########### next target ###############
-
-ecm_add_test(KisMagneticWorkerTest.cc
+krita_add_broken_unit_test( KisMagneticWorkerTest.cc
+    TEST_NAME KisMagneticWorkerTest.cc
     NAME_PREFIX plugins-magneticselection-
     LINK_LIBRARIES kritaselectiontools kritaimage Qt5::Test)

@@ -117,9 +117,7 @@ void KisResourceTaggingManager::contextCreateNewTag(KoResourceSP resource , cons
     // TODO: RESOURCES: this function should use QString, not KisTagSP
     fprintf(stderr, "void KisResourceTaggingManager::contextCreateNewTag(KoResourceSP resource , const KisTagSP tag)");
     KisTagSP inserted = d->tagChooser->insertItem(tag);
-    int previousIndex = d->tagChooser->currentIndex();
     d->tagModel->tagResource(inserted, resource);
-    d->tagChooser->setCurrentIndex(previousIndex);
 }
 
 void KisResourceTaggingManager::contextAddTagToResource(KoResourceSP resource, const KisTagSP tag)
@@ -133,10 +131,8 @@ void KisResourceTaggingManager::contextRemoveTagFromResource(KoResourceSP resour
 {
     fprintf(stderr, "void KisResourceTaggingManager::contextRemoveTagFromResource(KoResourceSP resource, const KisTagSP tag)");
     ENTER_FUNCTION();
-    int previousIndex = d->tagChooser->currentIndex();
     bool success = d->tagModel->untagResource(tag, resource);
     fprintf(stderr, "remove Resource tag: %d\n", success);
-    d->tagChooser->setCurrentIndex(previousIndex);
 }
 
 void KisResourceTaggingManager::tagChooserIndexChanged(const KisTagSP tag)
@@ -158,8 +154,6 @@ void KisResourceTaggingManager::tagSearchLineEditTextChanged(const QString& line
 void KisResourceTaggingManager::tagSaveButtonPressed()
 {
     fprintf(stderr, "void KisResourceTaggingManager::tagSaveButtonPressed()\n");
-
-    int previousTagIndex = d->tagChooser->currentIndex();
 
     KisTagSP tag = d->tagChooser->currentlySelectedTag();
 
@@ -184,8 +178,6 @@ void KisResourceTaggingManager::tagSaveButtonPressed()
             d->tagModel->tagResource(tag, resource);
         }
     }
-
-    d->tagChooser->setCurrentIndex(previousTagIndex);
 
     ENTER_FUNCTION();
 }

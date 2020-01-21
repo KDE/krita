@@ -50,6 +50,7 @@ public:
     QList<KisTagSP> tags;
     KisTagModel* model;
     QScopedPointer<KisActiveFilterTagProxyModel> activeFilterModel;
+    KisTagSP rememberedTag;
 
     Private(KisTagModel* model)
         : activeFilterModel(new KisActiveFilterTagProxyModel(0))
@@ -102,6 +103,10 @@ KisTagChooserWidget::KisTagChooserWidget(KisTagModel* model, QWidget* parent)
     connect(d->tagToolButton, SIGNAL(purgingOfTagUndeleteListRequested()),
             this, SIGNAL(tagUndeletionListPurgeRequested()));
 
+    connect(d->model, SIGNAL(modelAboutToBeReset()), this, SLOT(slotModelAboutToBeReset()));
+    connect(d->model, SIGNAL(modelReset()), this, SLOT(slotModelReset()));
+
+
 }
 
 KisTagChooserWidget::~KisTagChooserWidget()
@@ -140,7 +145,6 @@ void KisTagChooserWidget::tagChanged(int tagIndex)
 void KisTagChooserWidget::tagRenamingRequested(const KisTagSP newName)
 {
     // TODO: RESOURCES: it should use QString, not KisTagSP
-    int previousIndex = d->comboBox->currentIndex();
     ENTER_FUNCTION();
     KisTagSP currentTag = currentlySelectedTag();
     QString name = newName.isNull() ? "" : newName->name();
@@ -148,7 +152,6 @@ void KisTagChooserWidget::tagRenamingRequested(const KisTagSP newName)
     fprintf(stderr, "renaming tag requested! to: %s\n", name.toUtf8().toStdString().c_str());
     if (canRenameCurrentTag && !name.isEmpty()) {
         d->model->renameTag(currentTag, newName->name());
-        setCurrentIndex(previousIndex);
     }
 }
 
@@ -183,15 +186,17 @@ void KisTagChooserWidget::addReadOnlyItem(KisTagSP tag)
     ENTER_FUNCTION();
 }
 
-void KisTagChooserWidget::setCurrentItem(KisTagSP tag)
+bool KisTagChooserWidget::setCurrentItem(KisTagSP tag)
 {
     for (int i = 0; i < d->model->rowCount(); i++) {
         QModelIndex index = d->model->index(i, 0);
         KisTagSP temp = d->model->tagForIndex(index);
         if (!temp.isNull() && temp->url() == tag->url()) {
             setCurrentIndex(i);
+            return true;
         }
     }
+    return false;
 }
 
 KisTagSP KisTagChooserWidget::insertItem(KisTagSP tag)
@@ -214,8 +219,12 @@ KisTagSP KisTagChooserWidget::insertItem(KisTagSP tag)
     fprintf(stderr, "added = %d\n", added);
 
     if (added) {
-        setCurrentItem(tag);
-        return currentlySelectedTag();
+        bool found = setCurrentItem(tag);
+        if (found) {
+            return currentlySelectedTag();
+        } else {
+            return KisTagSP();
+        }
     }
 
     setCurrentIndex(previous);
@@ -276,4 +285,17 @@ void KisTagChooserWidget::showTagToolButton(bool show)
 {
     ENTER_FUNCTION();
     d->tagToolButton->setVisible(show);
+}
+
+void KisTagChooserWidget::slotModelAboutToBeReset()
+{
+    d->rememberedTag = currentlySelectedTag();
+}
+
+void KisTagChooserWidget::slotModelReset()
+{
+    bool selected = setCurrentItem(d->rememberedTag);
+    if (!selected) {
+        setCurrentIndex(0); // last used tag was most probably removed
+    }
 }

@@ -94,10 +94,12 @@ private Q_SLOTS:
     void tagUndeletionRequested(const KisTagSP tag);
     void tagOptionsContextMenuAboutToShow();
     void contextDeleteCurrentTag();
+    void slotModelAboutToBeReset();
+    void slotModelReset();
 
 
 private:
-    void setCurrentItem(KisTagSP tag);
+    bool setCurrentItem(KisTagSP tag);
 
 private:
     class Private;

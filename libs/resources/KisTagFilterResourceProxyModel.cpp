@@ -41,6 +41,7 @@ KisTagFilterResourceProxyModel::KisTagFilterResourceProxyModel(KisTagsResourcesM
     , d(new Private)
 {
     d->tagsResourcesModel = model;
+    connect(model, SIGNAL(modelReset()), this, SLOT(slotModelReset()));
 }
 
 KisTagFilterResourceProxyModel::~KisTagFilterResourceProxyModel()
@@ -219,4 +220,9 @@ bool KisTagFilterResourceProxyModel::lessThan(const QModelIndex &source_left, co
     QString nameLeft = sourceModel()->data(source_left, Qt::UserRole + KisResourceModel::Name).toString();
     QString nameRight = sourceModel()->data(source_right, Qt::UserRole + KisResourceModel::Name).toString();
     return nameLeft < nameRight;
+}
+
+void KisTagFilterResourceProxyModel::slotModelReset()
+{
+    invalidateFilter();
 }

@@ -46,8 +46,6 @@ class Q_DECL_HIDDEN KisTagChooserWidget::Private
 public:
     QComboBox *comboBox;
     KisTagToolButton *tagToolButton;
-    QList<KisTagSP> readOnlyTags;
-    QList<KisTagSP> tags;
     KisTagModel* model;
     QScopedPointer<KisActiveFilterTagProxyModel> activeFilterModel;
     KisTagSP rememberedTag;

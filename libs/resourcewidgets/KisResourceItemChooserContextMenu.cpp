@@ -180,6 +180,10 @@ public:
         return !otherTag.isNull() && otherTag->url() == m_referenceTag->url();
     }
 
+    void setReferenceTag(KisTagSP referenceTag) {
+        m_referenceTag = referenceTag;
+    }
+
 };
 
 bool compareWithSpecialTags(KisTagSP tag) {
@@ -231,7 +235,7 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
             && (std::find_if(removables.begin(), removables.end(), comparer) != removables.end());
 
 
-    // remove "All" tag from both "Remove from this tag" and "Assign to this tag" list
+    // remove "All" tag from both "Remove from tag: " and "Assign to tag: " lists
     std::remove_if(removables.begin(), removables.end(), compareWithSpecialTags);
     std::remove_if(assignables2.begin(), assignables2.end(), compareWithSpecialTags);
 
@@ -244,6 +248,7 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
         KisTagSP currentTag = currentlySelectedTag;
 
         if (!currentTag.isNull() && currentTagInRemovables) {
+            // remove the current tag from both "Remove from tag: " and "Assign to tag: " lists
             std::remove_if(removables.begin(), removables.end(), comparer);
             std::remove_if(assignables2.begin(), assignables2.end(), comparer);
 
@@ -258,11 +263,18 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
 
         if (!removables.isEmpty()) {
             removableTagsMenu = addMenu(koIcon("list-remove"),i18n("Remove from other tag"));
+
+            KisTagSP empty;
+            CompareWithOtherTagFunctor compareWithRemovable(empty);
             foreach (const KisTagSP tag, removables) {
-                std::remove_if(assignables2.begin(), assignables2.end(), comparer);
+
                 if (tag.isNull()) {
                     continue;
                 }
+
+                compareWithRemovable.setReferenceTag(tag);
+                std::remove_if(assignables2.begin(), assignables2.end(), compareWithRemovable);
+
 
                 ContextMenuExistingTagAction * removeTagAction = new ContextMenuExistingTagAction(resource, tag, this);
 

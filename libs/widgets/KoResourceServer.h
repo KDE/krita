@@ -252,11 +252,17 @@ public:
 
     QVector<KisTagSP> assignedTagsList(KoResourceSP resource) const
     {
+        if (resource.isNull()) {
+            return QVector<KisTagSP>();
+        }
         return m_resourceModel->tagsForResource(resource->resourceId());
     }
 
     QVector<KoResourceSP> resourcesForTag(KisTagSP tag) const
     {
+        if (tag.isNull()) {
+            return QVector<KoResourceSP>();
+        }
         return m_tagsResourcesModel->resourcesForTag(tag->id());
     }
 

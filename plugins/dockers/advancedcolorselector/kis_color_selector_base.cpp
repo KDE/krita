@@ -409,7 +409,10 @@ void KisColorSelectorBase::showPopup(Move move)
     lazyCreatePopup();
 
     QPoint cursorPos = QCursor::pos();
-    QScreen *activeScreen = QGuiApplication::screenAt(cursorPos);
+    QScreen *activeScreen = 0;
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+    activeScreen = QGuiApplication::screenAt(cursorPos);
+#endif
     const QRect availRect = (activeScreen)? activeScreen->availableGeometry() : QApplication::desktop()->availableGeometry(this);
 
     if (move == MoveToMousePosition) {

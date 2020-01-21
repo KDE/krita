@@ -157,7 +157,7 @@ bool KisTagsResourcesModel::tagResource(const KisTagSP tag, const KoResourceSP r
         return false;
     }
 
-    return prepareQuery();
+    return resetQuery();
 }
 
 bool KisTagsResourcesModel::untagResource(const KisTagSP tag, const KoResourceSP resource)
@@ -190,7 +190,7 @@ bool KisTagsResourcesModel::untagResource(const KisTagSP tag, const KoResourceSP
         qWarning() << "Could not select tags" << query.lastError();
     }
 
-    return prepareQuery();
+    return resetQuery();
 }
 
 QVector<KisTagSP> KisTagsResourcesModel::tagsForResource(int resourceId) const
@@ -238,33 +238,18 @@ void KisTagsResourcesModel::setResourceType(const QString &resourceType)
 
 bool KisTagsResourcesModel::resetQuery()
 {
-    // since it always execute a query, maybe there is no need to reset anything?
-    // which also means we don't keep anything here...
-    return true;
-
-    /*
-    QTime t;
-    t.start();
-
+    // KisTagsResourcesModel doesn't actually keep any data,
+    //  *but* the fact that the underlying data changed
+    //  is needed when some other components use this model.
+    //  Example: KisTagFilterResourcesProxyModel
     beginResetModel();
-    bool r = d->query.exec();
-    if (!r) {
-        qWarning() << "Could not select" << d->resourceType << "resources" << d->query.lastError() << d->query.boundValues();
-    }
-    d->cachedRowCount = -1;
     endResetModel();
-    //emit afterResourcesLayoutReset();
 
-    qDebug() << "KisTagsResourcesModel::resetQuery for" << d->resourceType << "took" << t.elapsed() << "ms";
-
-
-    return r;
-    */
+    return true;
 }
 
 bool KisTagsResourcesModel::prepareQuery()
 {
-    beginResetModel();
 
     bool r = d->query.prepare("SELECT tags.id\n"
                             ",      tags.url\n"
@@ -306,7 +291,8 @@ bool KisTagsResourcesModel::prepareQuery()
     }
 
     d->cachedRowCount = -1;
-    endResetModel();
+
+    resetQuery();
 
     return r;
 }

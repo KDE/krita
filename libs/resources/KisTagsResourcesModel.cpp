@@ -20,6 +20,7 @@
 #include <QSqlError>
 #include <QTime>
 #include <KisResourceModel.h>
+#include <KisResourceLocator.h>
 
 struct KisTagsResourcesModel::Private {
     QSqlQuery query;
@@ -36,7 +37,7 @@ KisTagsResourcesModel::KisTagsResourcesModel(const QString &resourceType, QObjec
 {
     d->resourceType = resourceType;
     if (!d->resourceType.isEmpty()) {
-        prepareQuery();
+        prepareQueries();
     }
 }
 
@@ -226,14 +227,20 @@ QVector<KoResourceSP> KisTagsResourcesModel::resourcesForTag(int tagId) const
         qWarning() << "Could not select resources for tag " << tagId << d->resourcesForTagQuery.lastError() << d->resourcesForTagQuery.boundValues();
     }
 
-    return QVector<KoResourceSP>();
+    QVector<KoResourceSP> resources;
+    while (d->query.next()) {
+        KoResourceSP resource = KisResourceLocator::instance()->resourceForId(d->query.value("id").toInt());
+        resources << resource;
+    }
+
+    return resources;
 }
 
 
 void KisTagsResourcesModel::setResourceType(const QString &resourceType)
 {
     d->resourceType = resourceType;
-    prepareQuery();
+    prepareQueries();
 }
 
 bool KisTagsResourcesModel::resetQuery()
@@ -248,44 +255,34 @@ bool KisTagsResourcesModel::resetQuery()
     return true;
 }
 
-bool KisTagsResourcesModel::prepareQuery()
+bool KisTagsResourcesModel::prepareQueries()
 {
 
     bool r = d->query.prepare("SELECT tags.id\n"
-                            ",      tags.url\n"
-                            ",      tags.name\n"
-                            ",      tags.comment\n"
-                            "FROM   tags\n"
-                            ",      resource_tags\n"
-                            "WHERE  tags.active > 0\n"                               // make sure the tag is active
-                            "AND    tags.id = resource_tags.tag_id\n"                // join tags + resource_tags by tag_id
-                            "AND    resource_tags.resource_id = :resource_id\n");    // make sure we're looking for tags for a specific resource
+                              ",      tags.url\n"
+                              ",      tags.name\n"
+                              ",      tags.comment\n"
+                              "FROM   tags\n"
+                              ",      resource_tags\n"
+                              "WHERE  tags.active > 0\n"                               // make sure the tag is active
+                              "AND    tags.id = resource_tags.tag_id\n"                // join tags + resource_tags by tag_id
+                              "AND    resource_tags.resource_id = :resource_id\n");    // make sure we're looking for tags for a specific resource
     if (!r)  {
         qWarning() << "Could not prepare TagsForResource query" << d->query.lastError();
     }
 
-    r = d->resourcesForTagQuery.prepare("SELECT resources.id\n"
-                            ",      resources.storage_id\n"
-                            ",      resources.name\n"
-                            ",      resources.filename\n"
-                            ",      resources.tooltip\n"
-                            ",      resources.thumbnail\n"
-                            ",      resources.status\n"
-                            ",      storages.location\n"
-                            ",      resources.version\n"
-                            ",      resource_types.name as resource_type\n"
-                            "FROM   resources\n"
-                            ",      resource_tags\n"
-                            ",      storages\n"
-                            ",      resource_types\n"
-                            "WHERE  resources.id = resource_tags.resource_id\n"                // join resources + resource_tags by resource_id
-                            "AND    resources.resource_type_id = resource_types.id\n" // join with resource types via resource type id
-                            "AND    resources.storage_id = storages.id\n"         // join with storages via storage id
-
-                            "AND    resource_tags.tag_id = :tag_id\n"     // must have the tag
-                            "AND    resource_types.name = :resource_type\n"       // the type must match the current type
-                            "AND    resources.status = 1\n"         // must be active itself
-                            "AND    storages.active = 1");          // must be from active storage
+    r = d->resourcesForTagQuery.prepare("SELECT DISTINCT resources.id\n"
+                                        "FROM   resources\n"
+                                        ",      resource_tags\n"
+                                        ",      storages\n"
+                                        ",      resource_types\n"
+                                        "WHERE  resources.id = resource_tags.resource_id\n"                // join resources + resource_tags by resource_id
+                                        "AND    resources.resource_type_id = resource_types.id\n" // join with resource types via resource type id
+                                        "AND    resources.storage_id = storages.id\n"         // join with storages via storage id
+                                        "AND    resource_tags.tag_id = :tag_id\n"     // must have the tag
+                                        "AND    resource_types.name = :resource_type\n"       // the type must match the current type
+                                        "AND    resources.status = 1\n"         // must be active itself
+                                        "AND    storages.active = 1");          // must be from active storage
     if (!r)  {
         qWarning() << "Could not prepare ResourcesForTag query" << d->resourcesForTagQuery.lastError();
     }

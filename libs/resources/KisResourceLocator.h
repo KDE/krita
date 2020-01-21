@@ -121,6 +121,7 @@ Q_SIGNALS:
 private:
 
     friend class KisResourceModel;
+    friend class KisTagsResourcesModel;
     friend class KisStorageModel;
     friend class TestResourceLocator;
     friend class TestResourceModel;

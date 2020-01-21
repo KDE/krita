@@ -33,6 +33,8 @@ class KRITARESOURCES_EXPORT KisTagsResourcesModel : public QAbstractTableModel
 
 private:
 
+    friend class KisTagsResourcesModelProvider;
+
     KisTagsResourcesModel(const QString &resourceType, QObject *parent = 0);
 
 public:
@@ -59,12 +61,9 @@ public:
 
     bool resetQuery();
 
-
 private:
 
-    bool prepareQuery();
-
-    friend class KisTagsResourcesModelProvider;
+    bool prepareQueries();
 
     struct Private;
     Private * d;

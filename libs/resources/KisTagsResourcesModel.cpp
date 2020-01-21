@@ -228,8 +228,10 @@ QVector<KoResourceSP> KisTagsResourcesModel::resourcesForTag(int tagId) const
     }
 
     QVector<KoResourceSP> resources;
-    while (d->query.next()) {
-        KoResourceSP resource = KisResourceLocator::instance()->resourceForId(d->query.value("id").toInt());
+    qDebug() << "it's around: " << d->resourcesForTagQuery.size() << " resources for " << d->resourceType;
+    while (d->resourcesForTagQuery.next()) {
+        qDebug() << "KisTagsResourcesModel::resourcesForTag(int tagId): ### query: " << d->resourcesForTagQuery.value("id").toInt();
+        KoResourceSP resource = KisResourceLocator::instance()->resourceForId(d->resourcesForTagQuery.value("id").toInt());
         resources << resource;
     }
 

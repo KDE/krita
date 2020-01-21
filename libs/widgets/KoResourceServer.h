@@ -45,6 +45,7 @@
 #include <KisResourceModelProvider.h>
 #include <KisTagModelProvider.h>
 #include <KisTagsResourcesModelProvider.h>
+#include <KisTagsResourcesModel.h>
 
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>

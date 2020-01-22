@@ -24,7 +24,7 @@
 
 #include <QSharedData>
 
-class KoPathShape::Private : public QSharedData
+class KoPathShape::Private
 {
 public:
     explicit Private();

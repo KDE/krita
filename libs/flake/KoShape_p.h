@@ -34,13 +34,13 @@ class KoBorder;
 class KoShapeManager;
 
 
-class KoShape::Private : public QSharedData
+class KoShape::SharedData : public QSharedData
 {
 public:
-    explicit Private();
-    virtual ~Private();
+    explicit SharedData();
+    virtual ~SharedData();
 
-    explicit Private(const Private &rhs);
+    explicit SharedData(const SharedData &rhs);
 
     /**
      * Fills the style stack and returns the value of the given style property (e.g fill, stroke).
@@ -65,16 +65,11 @@ public:
 
     KoConnectionPoints connectors; ///< glue point id to data mapping
 
-    KoShapeContainer *parent;
-    QSet<KoShapeManager *> shapeManagers;
-    QSet<KoShape *> toolDelegates;
     QScopedPointer<KoShapeUserData> userData;
     QSharedPointer<KoShapeStrokeModel> stroke; ///< points to a stroke, or 0 if there is no stroke
     QSharedPointer<KoShapeBackground> fill; ///< Stands for the background color / fill etc.
     bool inheritBackground = false;
     bool inheritStroke = false;
-    QList<KoShape*> dependees; ///< list of shape dependent on this shape
-    QList<KoShape::ShapeChangeListener*> listeners;
     KoShapeShadow * shadow; ///< the current shape shadow
     KoBorder *border; ///< the current shape border
     // XXX: change this to instance instead of pointer
@@ -111,6 +106,16 @@ public:
 
     /// Convert connection point position to shape coordinates, taking alignment into account
     void convertToShapeCoordinates(KoConnectionPoint &point, const QSizeF &shapeSize) const;
+};
+
+class KoShape::Private
+{
+public:
+    KoShapeContainer *parent;
+    QSet<KoShapeManager *> shapeManagers;
+    QSet<KoShape *> toolDelegates;
+    QList<KoShape*> dependees; ///< list of shape dependent on this shape
+    QList<KoShape::ShapeChangeListener*> listeners;
 };
 
 #endif

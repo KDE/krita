@@ -58,15 +58,13 @@ static bool qIsNaNPoint(const QPointF &p) {
 }
 
 KoPathShape::Private::Private()
-    : QSharedData()
-    , fillRule(Qt::OddEvenFill)
+    : fillRule(Qt::OddEvenFill)
     , autoFillMarkers(false)
 {
 }
 
 KoPathShape::Private::Private(const Private &rhs)
-    : QSharedData()
-    , fillRule(rhs.fillRule)
+    : fillRule(rhs.fillRule)
     , markersNew(rhs.markersNew)
     , autoFillMarkers(rhs.autoFillMarkers)
 {
@@ -111,8 +109,10 @@ KoPathShape::KoPathShape()
 
 KoPathShape::KoPathShape(const KoPathShape &rhs)
     : KoTosContainer(rhs)
-    , d(rhs.d)
+    , d(new Private(*rhs.d))
 {
+    // local data cannot be shared via QSharedData because
+    // every path point holds a pointer to the parent shape
     KoSubpathList subpaths;
     Q_FOREACH (KoSubpath *subPath, rhs.d->subpaths) {
         KoSubpath *clonedSubPath = new KoSubpath();

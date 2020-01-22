@@ -592,7 +592,7 @@ public:
      * The run through property is used to determine if the shape is behind, inside or before text.
      * @return the run through of this shape.
      */
-    int runThrough();
+    int runThrough() const;
 
     /**
      * Set the run through property of this shape.
@@ -1248,8 +1248,12 @@ protected:
     QTransform transform() const;
 
 private:
-    class Private;
-    QSharedDataPointer<Private> d;
+    struct Private;
+    QScopedPointer<Private> d;
+
+    class SharedData;
+    QSharedDataPointer<SharedData> s;
+
 
 protected:
     /**

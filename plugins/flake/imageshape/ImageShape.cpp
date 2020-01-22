@@ -34,11 +34,12 @@
 #include "KisQPainterStateSaver.h"
 
 
-struct Q_DECL_HIDDEN ImageShape::Private
+struct Q_DECL_HIDDEN ImageShape::Private : public QSharedData
 {
     Private() {}
     Private(const Private &rhs)
-        : image(rhs.image),
+        : QSharedData(),
+          image(rhs.image),
           ratioParser(rhs.ratioParser ? new SvgUtil::PreserveAspectRatioParser(*rhs.ratioParser) : 0),
           viewBoxTransform(rhs.viewBoxTransform)
     {
@@ -57,7 +58,7 @@ ImageShape::ImageShape()
 
 ImageShape::ImageShape(const ImageShape &rhs)
     : KoTosContainer(rhs),
-      m_d(new Private(*rhs.m_d))
+      m_d(rhs.m_d)
 {
 }
 

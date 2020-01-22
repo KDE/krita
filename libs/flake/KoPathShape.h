@@ -526,7 +526,7 @@ protected:
 
 private:
     class Private;
-    QSharedDataPointer<Private> d;
+    QScopedPointer<Private> d;
 };
 
 Q_DECLARE_METATYPE(KoPathShape*)

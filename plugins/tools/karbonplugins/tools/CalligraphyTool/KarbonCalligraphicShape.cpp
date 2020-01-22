@@ -35,9 +35,26 @@
 #undef M_PI
 const qreal M_PI = 3.1415927;
 
+
+struct KarbonCalligraphicShape::Private : public QSharedData
+{
+    Private(qreal _caps)
+        : lastWasFlip(false),
+          caps(_caps)
+
+    {
+    }
+
+    Private(const Private &rhs) = default;
+
+    bool lastWasFlip;
+    qreal caps = 0.0;
+    // the actual data then determines it's shape (guide path + data for points)
+    QList<KarbonCalligraphicPoint> points;
+};
+
 KarbonCalligraphicShape::KarbonCalligraphicShape(qreal caps)
-    : m_lastWasFlip(false)
-    , m_caps(caps)
+    : s(new Private(caps))
 {
     setShapeId(KoPathShapeId);
     setFillRule(Qt::WindingFill);
@@ -47,9 +64,7 @@ KarbonCalligraphicShape::KarbonCalligraphicShape(qreal caps)
 
 KarbonCalligraphicShape::KarbonCalligraphicShape(const KarbonCalligraphicShape &rhs)
     : KoParameterShape(rhs),
-      m_points(rhs.m_points),
-      m_lastWasFlip(rhs.m_lastWasFlip),
-      m_caps(rhs.m_caps)
+      s(rhs.s)
 {
 }
 
@@ -66,21 +81,20 @@ void KarbonCalligraphicShape::appendPoint(const QPointF &point, qreal angle, qre
 {
     // convert the point from canvas to shape coordinates
     QPointF p = point - position();
-    KarbonCalligraphicPoint *calligraphicPoint =
-        new KarbonCalligraphicPoint(p, angle, width);
+    KarbonCalligraphicPoint calligraphicPoint(p, angle, width);
 
     QList<QPointF> handles = this->handles();
     handles.append(p);
     setHandles(handles);
-    m_points.append(calligraphicPoint);
-    appendPointToPath(*calligraphicPoint);
+    s->points.append(calligraphicPoint);
+    appendPointToPath(calligraphicPoint);
 
     // make the angle of the first point more in line with the actual
     // direction
-    if (m_points.count() == 4) {
-        m_points[0]->setAngle(angle);
-        m_points[1]->setAngle(angle);
-        m_points[2]->setAngle(angle);
+    if (s->points.count() == 4) {
+        s->points[0].setAngle(angle);
+        s->points[1].setAngle(angle);
+        s->points[2].setAngle(angle);
     }
 }
 
@@ -126,10 +140,10 @@ void KarbonCalligraphicShape::appendPointToPath(const KarbonCalligraphicPoint &p
             last1->removeControlPoint2();
             last2->removeControlPoint1();
             last2->removeControlPoint2();
-            m_lastWasFlip = true;
+            s->lastWasFlip = true;
         }
 
-        if (m_lastWasFlip) {
+        if (s->lastWasFlip) {
             int index = pointCount() / 2;
             // find the previous two points
             KoPathPoint *prev1 = pointByIndex(KoPathPointIndex(0, index - 2));
@@ -141,7 +155,7 @@ void KarbonCalligraphicShape::appendPointToPath(const KarbonCalligraphicPoint &p
             prev2->removeControlPoint2();
 
             if (!flip) {
-                m_lastWasFlip = false;
+                s->lastWasFlip = false;
             }
         }
     }
@@ -151,7 +165,7 @@ void KarbonCalligraphicShape::appendPointToPath(const KarbonCalligraphicPoint &p
     // this code is here because this function is called from different places
     // pointCount() == 8 may causes crashes because it doesn't take possible
     // flips into account
-    if (m_points.count() >= 4 && &p == m_points[3]) {
+    if (s->points.count() >= 4 && &p == &s->points[3]) {
         addCap(3, 0, 0, true);
         // duplicate the last point to make the points remain "balanced"
         // needed to keep all indexes code (else I would need to change
@@ -285,8 +299,8 @@ QPointF KarbonCalligraphicShape::normalize()
     QTransform matrix;
     matrix.translate(-offset.x(), -offset.y());
 
-    for (int i = 0; i < m_points.size(); ++i) {
-        m_points[i]->setPoint(matrix.map(m_points[i]->point()));
+    for (int i = 0; i < s->points.size(); ++i) {
+        s->points[i].setPoint(matrix.map(s->points[i].point()));
     }
 
     return offset;
@@ -297,7 +311,7 @@ void KarbonCalligraphicShape::moveHandleAction(int handleId,
         Qt::KeyboardModifiers modifiers)
 {
     Q_UNUSED(modifiers);
-    m_points[handleId]->setPoint(point);
+    s->points[handleId].setPoint(point);
 }
 
 void KarbonCalligraphicShape::updatePath(const QSizeF &size)
@@ -310,15 +324,15 @@ void KarbonCalligraphicShape::updatePath(const QSizeF &size)
     clear();
     setPosition(QPoint(0, 0));
 
-    Q_FOREACH (KarbonCalligraphicPoint *p, m_points) {
-        appendPointToPath(*p);
+    Q_FOREACH (const KarbonCalligraphicPoint &p, s->points) {
+        appendPointToPath(p);
     }
 
     simplifyPath();
 
     QList<QPointF> handles;
-    Q_FOREACH (KarbonCalligraphicPoint *p, m_points) {
-        handles.append(p->point());
+    Q_FOREACH (const KarbonCalligraphicPoint &p, s->points) {
+        handles.append(p.point());
     }
     setHandles(handles);
 
@@ -327,14 +341,14 @@ void KarbonCalligraphicShape::updatePath(const QSizeF &size)
 
 void KarbonCalligraphicShape::simplifyPath()
 {
-    if (m_points.count() < 2) {
+    if (s->points.count() < 2) {
         return;
     }
 
     close();
 
     // add final cap
-    addCap(m_points.count() - 2, m_points.count() - 1, pointCount() / 2);
+    addCap(s->points.count() - 2, s->points.count() - 1, pointCount() / 2);
 
     // TODO: the error should be proportional to the width
     //       and it shouldn't be a magic number
@@ -343,8 +357,8 @@ void KarbonCalligraphicShape::simplifyPath()
 
 void KarbonCalligraphicShape::addCap(int index1, int index2, int pointIndex, bool inverted)
 {
-    QPointF p1 = m_points[index1]->point();
-    QPointF p2 = m_points[index2]->point();
+    QPointF p1 = s->points[index1].point();
+    QPointF p2 = s->points[index2].point();
 
     // TODO: review why spikes can appear with a lower limit
     QPointF delta = p2 - p1;
@@ -353,12 +367,12 @@ void KarbonCalligraphicShape::addCap(int index1, int index2, int pointIndex, boo
     }
 
     QPointF direction = QLineF(QPointF(0, 0), delta).unitVector().p2();
-    qreal width = m_points[index2]->width();
-    QPointF p = p2 + direction * m_caps * width;
+    qreal width = s->points[index2].width();
+    QPointF p = p2 + direction * s->caps * width;
 
     KoPathPoint *newPoint = new KoPathPoint(this, p);
 
-    qreal angle = m_points[index2]->angle();
+    qreal angle = s->points[index2].angle();
     if (inverted) {
         angle += M_PI;
     }
@@ -379,32 +393,32 @@ QString KarbonCalligraphicShape::pathShapeId() const
 void KarbonCalligraphicShape::simplifyGuidePath()
 {
     // do not attempt to simplify if there are too few points
-    if (m_points.count() < 3) {
+    if (s->points.count() < 3) {
         return;
     }
 
     QList<QPointF> points;
-    Q_FOREACH (KarbonCalligraphicPoint *p, m_points) {
-        points.append(p->point());
+    Q_FOREACH (KarbonCalligraphicPoint p, s->points) {
+        points.append(p.point());
     }
 
     // cumulative data used to determine if the point can be removed
     qreal widthChange = 0;
     qreal directionChange = 0;
-    QList<KarbonCalligraphicPoint *>::iterator i = m_points.begin() + 2;
+    QList<KarbonCalligraphicPoint>::iterator i = s->points.begin() + 2;
 
-    while (i != m_points.end() - 1) {
-        QPointF point = (*i)->point();
+    while (i != std::prev(s->points.end())) {
+        QPointF point = i->point();
 
-        qreal width = (*i)->width();
-        qreal prevWidth = (*(i - 1))->width();
+        qreal width = i->width();
+        qreal prevWidth = std::prev(i)->width();
         qreal widthDiff = width - prevWidth;
         widthDiff /= qMax(width, prevWidth);
 
         qreal directionDiff = 0;
-        if ((i + 1) != m_points.end()) {
-            QPointF prev = (*(i - 1))->point();
-            QPointF next = (*(i + 1))->point();
+        if (std::next(i) != s->points.end()) {
+            QPointF prev = std::prev(i)->point();
+            QPointF next = std::next(i)->point();
 
             directionDiff = QLineF(prev, point).angleTo(QLineF(point, next));
             if (directionDiff > 180) {
@@ -417,8 +431,7 @@ void KarbonCalligraphicShape::simplifyGuidePath()
                 widthChange * widthDiff >= 0 &&
                 qAbs(widthChange + widthDiff) < 0.1) {
             // deleted point
-            delete *i;
-            i = m_points.erase(i);
+            i = s->points.erase(i);
             directionChange += directionDiff;
             widthChange += widthDiff;
         } else {

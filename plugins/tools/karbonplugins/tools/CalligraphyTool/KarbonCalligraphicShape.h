@@ -30,6 +30,9 @@ public:
     KarbonCalligraphicPoint(const QPointF &point, qreal angle, qreal width)
         : m_point(point), m_angle(angle), m_width(width) {}
 
+    KarbonCalligraphicPoint(const KarbonCalligraphicPoint &rhs) = default;
+    KarbonCalligraphicPoint() = default;
+
     QPointF point() const
     {
         return m_point;
@@ -54,8 +57,8 @@ public:
 
 private:
     QPointF m_point; // in shape coordinates
-    qreal m_angle;
-    qreal m_width;
+    qreal m_angle = 0.0;
+    qreal m_width = 0.0;
 };
 
 /*class KarbonCalligraphicShape::Point
@@ -141,10 +144,8 @@ private:
     //
     void addCap(int index1, int index2, int pointIndex, bool inverted = false);
 
-    // the actual data then determines it's shape (guide path + data for points)
-    QList<KarbonCalligraphicPoint *> m_points;
-    bool m_lastWasFlip;
-    qreal m_caps;
+    struct Private;
+    QSharedDataPointer<Private> s;
 };
 
 #endif // KARBONCALLIGRAPHICSHAPE_H

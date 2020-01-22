@@ -25,13 +25,13 @@
 
 class SvgGraphicsContext;
 
-class KoSvgTextChunkShape::Private : public QSharedData
+class KoSvgTextChunkShape::SharedData : public QSharedData
 {
 public:
 
-    Private();
-    Private(const Private &rhs);
-    ~Private();
+    SharedData();
+    SharedData(const SharedData &rhs);
+    ~SharedData();
 
     KoSvgTextProperties properties;
     QFont font;
@@ -44,12 +44,16 @@ public:
 
     QString text;
 
-    struct LayoutInterface;
-    QScopedPointer<LayoutInterface> layoutInterface;
-
     QPainterPath associatedOutline;
 
     void loadContextBasedProperties(SvgGraphicsContext *gc);
     bool isRichTextPreferred = true;
+};
+
+class KoSvgTextChunkShape::Private
+{
+public:
+    struct LayoutInterface;
+    QScopedPointer<LayoutInterface> layoutInterface;
 };
 

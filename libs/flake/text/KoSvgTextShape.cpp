@@ -59,17 +59,11 @@
 class KoSvgTextShape::Private : public QSharedData
 {
 public:
-    Private()
-        : QSharedData()
-    {
-    }
 
-    Private(const Private &)
-        : QSharedData()
-    {
-    }
-
-    std::vector<std::unique_ptr<QTextLayout>> cachedLayouts;
+    // NOTE: the cache data is shared between all the instances of
+    //       the shape, though it will be reset locally if the
+    //       accessing thread changes
+    std::vector<std::shared_ptr<QTextLayout>> cachedLayouts;
     std::vector<QPointF> cachedLayoutsOffsets;
     QThread *cachedLayoutsWorkingThread = 0;
 
@@ -429,7 +423,7 @@ void KoSvgTextShape::relayout()
     QVector<TextChunk> textChunks = mergeIntoChunks(layoutInterface()->collectSubChunks());
 
     Q_FOREACH (const TextChunk &chunk, textChunks) {
-        std::unique_ptr<QTextLayout> layout(new QTextLayout());
+        std::shared_ptr<QTextLayout> layout(new QTextLayout());
 
         QTextOption option;
 
@@ -491,7 +485,7 @@ void KoSvgTextShape::relayout()
             diff.ry() = 0;
         }
 
-        d->cachedLayouts.push_back(std::move(layout));
+        d->cachedLayouts.push_back(layout);
         d->cachedLayoutsOffsets.push_back(-diff);
 
     }

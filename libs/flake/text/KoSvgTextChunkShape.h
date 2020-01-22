@@ -175,7 +175,10 @@ private:
 
 private:
     class Private;
-    QSharedDataPointer<Private> d;
+    QScopedPointer<Private> d;
+
+    class SharedData;
+    QSharedDataPointer<SharedData> s;
 };
 
 #endif // KOSVGTEXTCHUNKSHAPE_H

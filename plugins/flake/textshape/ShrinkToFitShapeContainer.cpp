@@ -62,7 +62,7 @@ ShrinkToFitShapeContainer::~ShrinkToFitShapeContainer()
 {
 }
 
-void ShrinkToFitShapeContainer::paintComponent(QPainter &painter, KoShapePaintingContext &)
+void ShrinkToFitShapeContainer::paintComponent(QPainter &painter, KoShapePaintingContext &) const
 {
     Q_UNUSED(painter);
     //painter.fillRect(converter.documentToView(QRectF(QPointF(0,0),size())), QBrush(QColor("#ffcccc"))); // for testing

@@ -36,6 +36,6 @@ public:
     /**
      * Get the page number for the given shape
      */
-    virtual KoTextPage *page(KoShape *shape) = 0;
+    virtual KoTextPage *page(const KoShape *shape) const = 0;
 };
 #endif // KOPAGEPROVIDER_H

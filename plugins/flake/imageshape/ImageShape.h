@@ -35,7 +35,7 @@ public:
 
     KoShape *cloneShape() const override;
 
-    void paint(QPainter &painter, KoShapePaintingContext &paintContext) override;
+    void paint(QPainter &painter, KoShapePaintingContext &paintContext) const override;
 
     void setSize(const QSizeF &size) override;
 

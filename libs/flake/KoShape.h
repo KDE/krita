@@ -182,7 +182,7 @@ public:
      * @param painter used for painting the shape
      * @param paintcontext the painting context.
      */
-    virtual void paint(QPainter &painter, KoShapePaintingContext &paintcontext) = 0;
+    virtual void paint(QPainter &painter, KoShapePaintingContext &paintcontext) const = 0;
 
     /**
      * @brief paintStroke paints the shape's stroked outline

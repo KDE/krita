@@ -56,7 +56,7 @@ public:
     KoShape* cloneShape() const override;
 
     /// reimplemented
-    void paintComponent(QPainter &painter, KoShapePaintingContext &paintcontext) override;
+    void paintComponent(QPainter &painter, KoShapePaintingContext &paintcontext) const override;
     /// reimplemented
     void waitUntilReady(bool asynchronous) const override;
 
@@ -139,7 +139,6 @@ private:
     KoTextShapeData *m_textShapeData;
     KoPageProvider *m_pageProvider;
     KoImageCollection *m_imageCollection;
-    QRegion m_paintRegion;
     bool m_clip;
     KoTextDocumentLayout *m_layout;
 };

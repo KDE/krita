@@ -41,7 +41,7 @@ public:
     ~KoTosContainer() override;
 
     // reimplemented
-    void paintComponent(QPainter &painter, KoShapePaintingContext &paintcontext) override;
+    void paintComponent(QPainter &painter, KoShapePaintingContext &paintcontext) const override;
 
     // reimplemented
     virtual bool loadText(const KoXmlElement &element, KoShapeLoadingContext &context);

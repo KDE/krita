@@ -56,7 +56,7 @@
 
 #include <QSharedData>
 
-class KoSvgTextShape::Private : public QSharedData
+class KoSvgTextShape::Private
 {
 public:
 
@@ -68,7 +68,7 @@ public:
     QThread *cachedLayoutsWorkingThread = 0;
 
 
-    void clearAssociatedOutlines(KoShape *rootShape);
+    void clearAssociatedOutlines(const KoShape *rootShape);
 
 };
 
@@ -81,7 +81,7 @@ KoSvgTextShape::KoSvgTextShape()
 
 KoSvgTextShape::KoSvgTextShape(const KoSvgTextShape &rhs)
     : KoSvgTextChunkShape(rhs)
-    , d(rhs.d)
+    , d(new Private)
 {
     setShapeId(KoSvgTextShape_SHAPEID);
     // QTextLayout has no copy-ctor, so just relayout everything!
@@ -106,7 +106,7 @@ void KoSvgTextShape::shapeChanged(ChangeType type, KoShape *shape)
     }
 }
 
-void KoSvgTextShape::paintComponent(QPainter &painter, KoShapePaintingContext &paintContext)
+void KoSvgTextShape::paintComponent(QPainter &painter, KoShapePaintingContext &paintContext) const
 {
 
     Q_UNUSED(paintContext);
@@ -411,7 +411,7 @@ private:
     QTextLine m_danglingLine;
 };
 
-void KoSvgTextShape::relayout()
+void KoSvgTextShape::relayout() const
 {
 
     d->cachedLayouts.clear();
@@ -560,9 +560,9 @@ void KoSvgTextShape::relayout()
     }
 }
 
-void KoSvgTextShape::Private::clearAssociatedOutlines(KoShape *rootShape)
+void KoSvgTextShape::Private::clearAssociatedOutlines(const KoShape *rootShape)
 {
-    KoSvgTextChunkShape *chunkShape = dynamic_cast<KoSvgTextChunkShape*>(rootShape);
+    const KoSvgTextChunkShape *chunkShape = dynamic_cast<const KoSvgTextChunkShape*>(rootShape);
     KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
 
     chunkShape->layoutInterface()->clearAssociatedOutline();

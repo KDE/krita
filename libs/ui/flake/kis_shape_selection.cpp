@@ -291,7 +291,7 @@ void KisShapeSelection::recalculateOutlineCache()
     m_outline = resolutionMatrix.map(outline);
 }
 
-void KisShapeSelection::paintComponent(QPainter& painter, KoShapePaintingContext &)
+void KisShapeSelection::paintComponent(QPainter& painter, KoShapePaintingContext &) const
 {
     Q_UNUSED(painter);
 }

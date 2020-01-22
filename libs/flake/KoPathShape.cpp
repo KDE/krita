@@ -386,7 +386,7 @@ void KoPathShape::clear()
     notifyPointsChanged();
 }
 
-void KoPathShape::paint(QPainter &painter, KoShapePaintingContext &paintContext)
+void KoPathShape::paint(QPainter &painter, KoShapePaintingContext &paintContext) const
 {
     KisQPainterStateSaver saver(&painter);
 

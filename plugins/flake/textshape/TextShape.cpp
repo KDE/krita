@@ -133,7 +133,7 @@ KoShape *TextShape::cloneShape() const
 }
 
 void TextShape::paintComponent(QPainter &painter,
-                               KoShapePaintingContext &paintContext)
+                               KoShapePaintingContext &paintContext) const
 {
     painter.save();
     KoBorder *border = this->border();
@@ -177,7 +177,6 @@ void TextShape::paintComponent(QPainter &painter,
         KoTextPage *page = m_pageProvider->page(this);
         if (page) {
             // this is used to not trigger repaints if layout during the painting is done
-            m_paintRegion = KisPaintingTweaks::safeClipRegion(painter);
             if (!m_textShapeData->rootArea()->page() || page->pageNumber() != m_textShapeData->rootArea()->page()->pageNumber()) {
                 m_textShapeData->rootArea()->setPage(page); // takes over ownership of the page
             } else {
@@ -219,7 +218,6 @@ void TextShape::paintComponent(QPainter &painter,
     m_textShapeData->rootArea()->paint(&painter, pc); // only need to draw ourselves
     painter.restore();
 
-    m_paintRegion = QRegion();
 }
 
 QPointF TextShape::convertScreenPos(const QPointF &point) const

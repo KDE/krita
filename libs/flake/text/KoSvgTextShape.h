@@ -40,7 +40,7 @@ public:
 
     KoShape* cloneShape() const override;
 
-    void paintComponent(QPainter &painter, KoShapePaintingContext &paintContext) override;
+    void paintComponent(QPainter &painter, KoShapePaintingContext &paintContext) const override;
     void paintStroke(QPainter &painter, KoShapePaintingContext &paintContext) const override;
 
     /**
@@ -56,7 +56,7 @@ public:
      * chunks tree. The user should always call relayout() after every change
      * in the text shapes hierarchy.
      */
-    void relayout();
+    void relayout() const;
 
     QPainterPath textOutline();
 
@@ -71,7 +71,7 @@ protected:
 
 private:
     class Private;
-    QSharedDataPointer<Private> d;
+    QScopedPointer<Private> d;
 };
 
 class KoSvgTextShapeFactory : public KoShapeFactoryBase

@@ -86,7 +86,7 @@ KoShape *ArtisticTextShape::cloneShape() const
     return clone;
 }
 
-void ArtisticTextShape::paint(QPainter &painter, KoShapePaintingContext &paintContext)
+void ArtisticTextShape::paint(QPainter &painter, KoShapePaintingContext &paintContext) const
 {
     KisQPainterStateSaver saver(&painter);
 

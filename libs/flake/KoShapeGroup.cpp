@@ -131,7 +131,7 @@ KoShape *KoShapeGroup::cloneShape() const
     return new KoShapeGroup(*this);
 }
 
-void KoShapeGroup::paintComponent(QPainter &painter, KoShapePaintingContext &)
+void KoShapeGroup::paintComponent(QPainter &painter, KoShapePaintingContext &) const
 {
     Q_UNUSED(painter);
 }

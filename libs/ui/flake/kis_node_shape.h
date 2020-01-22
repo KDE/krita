@@ -46,7 +46,7 @@ public:
     QSizeF size() const override;
     QRectF boundingRect() const override;
     void setPosition(const QPointF &) override;
-    void paint(QPainter &painter, KoShapePaintingContext &paintcontext) override;
+    void paint(QPainter &painter, KoShapePaintingContext &paintcontext) const override;
     void saveOdf(KoShapeSavingContext & context) const override;
     bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context) override;
 

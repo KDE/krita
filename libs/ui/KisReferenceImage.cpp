@@ -171,7 +171,7 @@ KisReferenceImage *KisReferenceImage::fromClipboard(const KisCoordinatesConverte
     return reference;
 }
 
-void KisReferenceImage::paint(QPainter &gc, KoShapePaintingContext &/*paintcontext*/)
+void KisReferenceImage::paint(QPainter &gc, KoShapePaintingContext &/*paintcontext*/) const
 {
     if (!parent()) return;
 
@@ -181,7 +181,8 @@ void KisReferenceImage::paint(QPainter &gc, KoShapePaintingContext &/*paintconte
     QTransform transform = QTransform::fromScale(shapeSize.width() / d->image.width(), shapeSize.height() / d->image.height());
 
     if (d->cachedImage.isNull()) {
-        d->updateCache();
+        // detach the data
+        const_cast<KisReferenceImage*>(this)->d->updateCache();
     }
 
     qreal scale;

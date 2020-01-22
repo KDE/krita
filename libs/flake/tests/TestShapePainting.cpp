@@ -132,31 +132,31 @@ void TestShapePainting::testPaintOrder()
 
     class OrderedMockShape : public MockShape {
     public:
-        OrderedMockShape(QList<MockShape*> &list) : order(list) {}
-        void paint(QPainter &painter, KoShapePaintingContext &paintcontext) override {
-            order.append(this);
+        OrderedMockShape(QList<const MockShape*> *list) : order(list) {}
+        void paint(QPainter &painter, KoShapePaintingContext &paintcontext) const override {
+            order->append(this);
             MockShape::paint(painter, paintcontext);
         }
-        QList<MockShape*> &order;
+        mutable QList<const MockShape*> *order;
     };
 
-    QList<MockShape*> order;
+    QList<const MockShape*> order;
 
     {
         QScopedPointer<MockContainer> top(new MockContainer());
         top->setZIndex(2);
-        OrderedMockShape *shape1 = new OrderedMockShape(order);
+        OrderedMockShape *shape1 = new OrderedMockShape(&order);
         shape1->setZIndex(5);
-        OrderedMockShape *shape2 = new OrderedMockShape(order);
+        OrderedMockShape *shape2 = new OrderedMockShape(&order);
         shape2->setZIndex(0);
         top->addShape(shape1);
         top->addShape(shape2);
 
         QScopedPointer<MockContainer> bottom(new MockContainer());
         bottom->setZIndex(1);
-        OrderedMockShape *shape3 = new OrderedMockShape(order);
+        OrderedMockShape *shape3 = new OrderedMockShape(&order);
         shape3->setZIndex(-1);
-        OrderedMockShape *shape4 = new OrderedMockShape(order);
+        OrderedMockShape *shape4 = new OrderedMockShape(&order);
         shape4->setZIndex(9);
         bottom->addShape(shape3);
         bottom->addShape(shape4);
@@ -210,18 +210,18 @@ void TestShapePainting::testPaintOrder()
 
         MockContainer *branch1 = new MockContainer();
         branch1->setZIndex(1);
-        OrderedMockShape *child1_1 = new OrderedMockShape(order);
+        OrderedMockShape *child1_1 = new OrderedMockShape(&order);
         child1_1->setZIndex(1);
-        OrderedMockShape *child1_2 = new OrderedMockShape(order);
+        OrderedMockShape *child1_2 = new OrderedMockShape(&order);
         child1_2->setZIndex(2);
         branch1->addShape(child1_1);
         branch1->addShape(child1_2);
 
         MockContainer *branch2 = new MockContainer();
         branch2->setZIndex(2);
-        OrderedMockShape *child2_1 = new OrderedMockShape(order);
+        OrderedMockShape *child2_1 = new OrderedMockShape(&order);
         child2_1->setZIndex(1);
-        OrderedMockShape *child2_2 = new OrderedMockShape(order);
+        OrderedMockShape *child2_2 = new OrderedMockShape(&order);
         child2_2->setZIndex(2);
         branch2->addShape(child2_1);
         branch2->addShape(child2_2);

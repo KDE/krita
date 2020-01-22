@@ -38,7 +38,7 @@ class KRITAFLAKE_EXPORT MockShape : public KoShape
 {
 public:
     MockShape() : paintedCount(0) {}
-    void paint(QPainter &painter, KoShapePaintingContext &) override {
+    void paint(QPainter &painter, KoShapePaintingContext &) const override {
         Q_UNUSED(painter);
         //qDebug() << "Shape" << kBacktrace( 10 );
         paintedCount++;
@@ -47,14 +47,14 @@ public:
     bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) override {
         return true;
     }
-    int paintedCount;
+    mutable int paintedCount;
 };
 
 class KRITAFLAKE_EXPORT MockContainer : public KoShapeContainer
 {
 public:
     MockContainer(KoShapeContainerModel *model = 0) : KoShapeContainer(model), paintedCount(0) {}
-    void paintComponent(QPainter &painter, KoShapePaintingContext &) override {
+    void paintComponent(QPainter &painter, KoShapePaintingContext &) const override {
         Q_UNUSED(painter);
         //qDebug() << "Container:" << kBacktrace( 10 );
         paintedCount++;
@@ -64,12 +64,12 @@ public:
     bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) override {
         return true;
     }
-    int paintedCount;
+    mutable int paintedCount;
 };
 
 class KRITAFLAKE_EXPORT MockGroup : public KoShapeGroup
 {
-    void paintComponent(QPainter &painter, KoShapePaintingContext &) override {
+    void paintComponent(QPainter &painter, KoShapePaintingContext &) const override {
         Q_UNUSED(painter);
     }
 };

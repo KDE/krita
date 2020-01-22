@@ -359,7 +359,7 @@ QPainterPath KoSvgTextChunkShape::outline() const
     return result.simplified();
 }
 
-void KoSvgTextChunkShape::paintComponent(QPainter &painter, KoShapePaintingContext &paintContext)
+void KoSvgTextChunkShape::paintComponent(QPainter &painter, KoShapePaintingContext &paintContext) const
 {
     Q_UNUSED(painter);
     Q_UNUSED(paintContext);
@@ -822,7 +822,7 @@ bool KoSvgTextChunkShape::isTextNode() const
     return d->layoutInterface->isTextNode();
 }
 
-KoSvgTextChunkShapeLayoutInterface *KoSvgTextChunkShape::layoutInterface()
+KoSvgTextChunkShapeLayoutInterface *KoSvgTextChunkShape::layoutInterface() const
 {
     return d->layoutInterface.data();
 }

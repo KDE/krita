@@ -56,7 +56,7 @@ public:
     KoShape* cloneShape() const override;
 
     /// This implementation is empty since a group is itself not visible.
-    void paintComponent(QPainter &painter, KoShapePaintingContext &paintcontext) override;
+    void paintComponent(QPainter &painter, KoShapePaintingContext &paintcontext) const override;
     /// always returns false since the group itself can't be selected or hit
     bool hitTest(const QPointF &position) const override;
     QSizeF size() const override;

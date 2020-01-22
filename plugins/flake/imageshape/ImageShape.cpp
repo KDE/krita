@@ -71,7 +71,7 @@ KoShape *ImageShape::cloneShape() const
     return new ImageShape(*this);
 }
 
-void ImageShape::paint(QPainter &painter, KoShapePaintingContext &paintContext)
+void ImageShape::paint(QPainter &painter, KoShapePaintingContext &paintContext) const
 {
     Q_UNUSED(paintContext);
     KisQPainterStateSaver saver(&painter);

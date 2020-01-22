@@ -46,7 +46,7 @@ public:
     ~ShrinkToFitShapeContainer() override;
 
     // reimplemented
-    void paintComponent(QPainter &painter, KoShapePaintingContext &paintcontext) override;
+    void paintComponent(QPainter &painter, KoShapePaintingContext &paintcontext) const override;
     // reimplemented
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
     // reimplemented

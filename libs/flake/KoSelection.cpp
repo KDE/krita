@@ -52,7 +52,7 @@ KoSelection::~KoSelection()
 {
 }
 
-void KoSelection::paint(QPainter &painter, KoShapePaintingContext &paintcontext)
+void KoSelection::paint(QPainter &painter, KoShapePaintingContext &paintcontext) const
 {
     Q_UNUSED(painter);
     Q_UNUSED(paintcontext);

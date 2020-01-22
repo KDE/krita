@@ -326,7 +326,7 @@ KoShape *KoShape::cloneShape() const
     return 0;
 }
 
-void KoShape::paintStroke(QPainter &painter, KoShapePaintingContext &paintcontext)
+void KoShape::paintStroke(QPainter &painter, KoShapePaintingContext &paintcontext) const
 {
     Q_UNUSED(paintcontext);
 

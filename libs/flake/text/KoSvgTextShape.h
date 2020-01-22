@@ -41,7 +41,7 @@ public:
     KoShape* cloneShape() const override;
 
     void paintComponent(QPainter &painter, KoShapePaintingContext &paintContext) override;
-    void paintStroke(QPainter &painter, KoShapePaintingContext &paintContext) override;
+    void paintStroke(QPainter &painter, KoShapePaintingContext &paintContext) const override;
 
     /**
      * Reset the text shape into initial shape, removing all the child shapes

@@ -54,7 +54,7 @@ public:
     Private(KoShapeStroke *_q) : q(_q) {}
     KoShapeStroke *q;
 
-    void paintBorder(KoShape *shape, QPainter &painter, const QPen &pen) const;
+    void paintBorder(const KoShape *shape, QPainter &painter, const QPen &pen) const;
     QColor color;
     QPen pen;
     QBrush brush;
@@ -89,10 +89,10 @@ QPair<qreal, qreal> anglesForSegment(KoPathSegment segment) {
 }
 }
 
-void KoShapeStroke::Private::paintBorder(KoShape *shape, QPainter &painter, const QPen &pen) const
+void KoShapeStroke::Private::paintBorder(const KoShape *shape, QPainter &painter, const QPen &pen) const
 {
     if (!pen.isCosmetic() && pen.style() != Qt::NoPen) {
-        KoPathShape *pathShape = dynamic_cast<KoPathShape *>(shape);
+        const KoPathShape *pathShape = dynamic_cast<const KoPathShape *>(shape);
         if (pathShape) {
             QPainterPath path = pathShape->pathStroke(pen);
 
@@ -287,7 +287,7 @@ QPen KoShapeStroke::resultLinePen() const
     return pen;
 }
 
-void KoShapeStroke::paint(KoShape *shape, QPainter &painter)
+void KoShapeStroke::paint(const KoShape *shape, QPainter &painter) const
 {
     KisQPainterStateSaver saver(&painter);
 

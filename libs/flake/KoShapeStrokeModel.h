@@ -81,7 +81,7 @@ public:
      * @param painter the painter to paint to, the painter will have the topleft of the
      *       shape as its start coordinate.
      */
-    virtual void paint(KoShape *shape, QPainter &painter) = 0;
+    virtual void paint(const KoShape *shape, QPainter &painter) const = 0;
 
     virtual bool compareFillTo(const KoShapeStrokeModel *other) = 0;
     virtual bool compareStyleTo(const KoShapeStrokeModel *other) = 0;

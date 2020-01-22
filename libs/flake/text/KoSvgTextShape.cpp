@@ -140,7 +140,7 @@ void KoSvgTextShape::paintComponent(QPainter &painter, KoShapePaintingContext &p
     }
 }
 
-void KoSvgTextShape::paintStroke(QPainter &painter, KoShapePaintingContext &paintContext)
+void KoSvgTextShape::paintStroke(QPainter &painter, KoShapePaintingContext &paintContext) const
 {
     Q_UNUSED(painter);
     Q_UNUSED(paintContext);

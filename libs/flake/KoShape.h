@@ -190,7 +190,7 @@ public:
      * @see applyConversion()
      * @param paintcontext the painting context.
      */
-    virtual void paintStroke(QPainter &painter, KoShapePaintingContext &paintcontext);
+    virtual void paintStroke(QPainter &painter, KoShapePaintingContext &paintcontext) const;
 
     /**
      * Load a shape from odf

@@ -334,7 +334,7 @@ void KoMarker::drawPreview(QPainter *painter, const QRectF &previewRect, const Q
     painter->restore();
 }
 
-void KoMarker::applyShapeStroke(KoShape *parentShape, KoShapeStroke *stroke, const QPointF &pos, qreal strokeWidth, qreal nodeAngle)
+void KoMarker::applyShapeStroke(const KoShape *parentShape, KoShapeStroke *stroke, const QPointF &pos, qreal strokeWidth, qreal nodeAngle)
 {
     const QGradient *originalGradient = stroke->lineBrush().gradient();
 

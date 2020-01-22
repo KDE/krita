@@ -34,6 +34,11 @@ class QListWidgetItem;
 class PresetHistoryDock : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
 public:
+    enum HistoryDataRole {
+        BrushPresetRole = Qt::UserRole,
+        BubbleMarkerRole = Qt::UserRole + 1
+    };
+
     PresetHistoryDock();
     QString observerName() override { return "PresetHistoryDock"; }
     void setCanvas(KoCanvasBase *canvas) override;
@@ -44,6 +49,7 @@ private Q_SLOTS:
     void presetSelected(QListWidgetItem* item);
     void canvasResourceChanged(int key, const QVariant& v);
 private:
+    int bubblePreset(int position);
     void addPreset(KisPaintOpPresetSP preset);
 private:
     QPointer<KisCanvas2> m_canvas;

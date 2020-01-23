@@ -42,7 +42,7 @@ public:
                     KisTagSP tag = QSharedPointer<KisTag>(new KisTag());
                     tag->setName(tagname);
                     tag->setComment(tagname);
-                    tag->setUrl(bundle->filename() + ':' + tagname);
+                    tag->setUrl(tagname);
                     m_tags[tagname] = tag;
                 }
                 KoResourceSP resource = m_bundle->resource(resourceType, resourceReference.resourcePath);

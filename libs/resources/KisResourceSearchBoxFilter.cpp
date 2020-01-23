@@ -29,14 +29,7 @@ class Q_DECL_HIDDEN KisResourceSearchBoxFilter::Private
 {
 public:
     Private()
-    : searchTokenizer("\\s*,+\\s*")
-    , filter("")
-    , tagNamesIncluded()
-    , tagNamesExcluded()
-    , resourceNamesPartsIncluded()
-    , resourceNamesPartsExcluded()
-    , resourceExactMatchesIncluded()
-    , resourceExactMatchesExcluded()
+        : searchTokenizer("\\s*,+\\s*")
     {}
 
     QRegularExpression searchTokenizer;
@@ -47,7 +40,6 @@ public:
 
     QSet<QString> tagNamesIncluded;
     QSet<QString> tagNamesExcluded;
-
 
     QList<QString> resourceNamesPartsIncluded;
     QList<QString> resourceNamesPartsExcluded;

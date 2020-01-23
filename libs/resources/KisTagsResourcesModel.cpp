@@ -120,6 +120,8 @@ bool KisTagsResourcesModel::tagResource(const KisTagSP tag, const KoResourceSP r
     if (!tag->valid()) return false;
     if (tag->id() < 0) return false;
 
+    qDebug() << tag << " tag id " << tag->id();
+
     if (!resource) return false;
     if (!resource->valid()) return false;
     if (resource->resourceId() < 0) return false;
@@ -133,9 +135,7 @@ bool KisTagsResourcesModel::tagResource(const KisTagSP tag, const KoResourceSP r
                   "  WHERE  id = :resource_id)\n"
                       ", (SELECT id\n"
                   "   FROM   tags\n"
-                  "   WHERE  url = :url\n"
-                  "   AND    name = :name\n"
-                  "   AND    comment = :comment\n"
+                  "   WHERE  id = :tag_id\n"
                   "   AND    resource_type_id = (SELECT id\n"
                   "                              FROM   resource_types\n"
                   "                              WHERE  name = :resource_type"
@@ -148,9 +148,7 @@ bool KisTagsResourcesModel::tagResource(const KisTagSP tag, const KoResourceSP r
     }
 
     q.bindValue(":resource_id", resource->resourceId());
-    q.bindValue(":url", tag->url());
-    q.bindValue(":name", tag->name());
-    q.bindValue(":comment", tag->comment());
+    q.bindValue(":tag_id", tag->id());
     q.bindValue(":resource_type", d->resourceType);
 
     if (!q.exec()) {

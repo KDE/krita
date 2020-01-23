@@ -143,7 +143,7 @@ void PresetHistoryDock::addPreset(KisPaintOpPresetSP preset)
         m_presetHistory->insertItem(0, item);
         m_presetHistory->setCurrentRow(0);
         if (m_presetHistory->count() > 10) {
-            m_presetHistory->takeItem(10);
+            delete m_presetHistory->takeItem(10);
         }
     }
 

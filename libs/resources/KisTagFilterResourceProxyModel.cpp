@@ -31,17 +31,17 @@ struct KisTagFilterResourceProxyModel::Private
     }
 
     QList<KisTagSP> tags;
-    KisTagsResourcesModel* tagsResourcesModel;
+    KisTagModel* tagModel;
     QScopedPointer<KisResourceSearchBoxFilter> filter;
 
 };
 
-KisTagFilterResourceProxyModel::KisTagFilterResourceProxyModel(KisTagsResourcesModel* model, QObject *parent)
+KisTagFilterResourceProxyModel::KisTagFilterResourceProxyModel(KisTagModel* model, QObject *parent)
     : QSortFilterProxyModel(parent)
     , d(new Private)
 {
-    d->tagsResourcesModel = model;
-    connect(model, SIGNAL(modelReset()), this, SLOT(slotModelReset()));
+    d->tagModel = model;
+    //connect(model, SIGNAL(modelReset()), this, SLOT(slotModelReset()));
 }
 
 KisTagFilterResourceProxyModel::~KisTagFilterResourceProxyModel()
@@ -147,7 +147,7 @@ bool KisTagFilterResourceProxyModel::filterAcceptsColumn(int /*source_column*/, 
 bool KisTagFilterResourceProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
     //fprintf(stderr, "1 ");
-    if (d->tagsResourcesModel == 0) {
+    if (d->tagModel == 0) {
         return true;
     }
     //fprintf(stderr, "2 ");
@@ -156,7 +156,7 @@ bool KisTagFilterResourceProxyModel::filterAcceptsRow(int source_row, const QMod
     QString resourceName = sourceModel()->data(idx, Qt::UserRole + KisResourceModel::Name).toString();
 
     //QStringList tags = sourceModel()->data(idx, Qt::UserRole + KisResourceModel::Tags).toStringList();
-    QVector<KisTagSP> tagsForResource = d->tagsResourcesModel->tagsForResource(resourceId);
+    QVector<KisTagSP> tagsForResource = d->tagModel->tagsForResource(resourceId);
 
     //QString name = sourceModel()->data(idx, Qt::UserRole + KisResourceModel::Tags).toString();
 

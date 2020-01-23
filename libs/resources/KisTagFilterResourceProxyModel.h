@@ -25,7 +25,7 @@
 #include <KoResource.h>
 #include <KisResourceModel.h>
 #include <KisTag.h>
-#include <KisTagsResourcesModel.h>
+#include <KisTagModel.h>
 
 #include "kritaresources_export.h"
 
@@ -33,7 +33,7 @@ class KRITARESOURCES_EXPORT KisTagFilterResourceProxyModel : public QSortFilterP
 {
     Q_OBJECT
 public:
-    KisTagFilterResourceProxyModel(KisTagsResourcesModel* model = 0, QObject *parent = 0);
+    KisTagFilterResourceProxyModel(KisTagModel* model = 0, QObject *parent = 0);
     ~KisTagFilterResourceProxyModel() override;
 
     // KisAbstractResourceModel interface

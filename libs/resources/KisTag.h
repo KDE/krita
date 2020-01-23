@@ -82,7 +82,6 @@ private:
     friend class KisTagModel;
     friend class KisResourceModel;
     friend class KisTagChooserWidget;
-    friend class KisTagsResourcesModel;
     void setId(int id);
     void setActive(bool active);
     void setValid(bool valid);

@@ -32,8 +32,6 @@
 #include <KoResource.h>
 
 #include <KisTag.h>
-
-#include <KisTagsResourcesModel.h>
 #include <KisTagModel.h>
 
 class ContextMenuExistingTagAction : public QAction
@@ -124,7 +122,6 @@ public Q_SLOTS:
 
 private:
     QString m_resourceType;
-    KisTagsResourcesModel* m_tagsResourcesModel;
     KisTagModel* m_tagModel;
 
 };

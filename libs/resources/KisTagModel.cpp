@@ -27,8 +27,7 @@
 #include <KisResourceCacheDb.h>
 #include <KisTag.h>
 
-#include <KisTagsResourcesModelProvider.h>
-#include <KisTagsResourcesModel.h>
+#include <KisResourceModelProvider.h>
 
 
 Q_DECLARE_METATYPE(QSharedPointer<KisTag>)
@@ -36,7 +35,10 @@ Q_DECLARE_METATYPE(QSharedPointer<KisTag>)
 
 struct KisTagModel::Private {
     QSqlQuery query;
-    QSqlQuery tagForResourceQuery;
+
+    QSqlQuery tagsForResourceQuery;
+    QSqlQuery resourcesForTagQuery;
+
     QString resourceType;
     int columnCount {5};
     int cachedRowCount {-1};
@@ -281,19 +283,16 @@ bool KisTagModel::removeTag(const KisTagSP tag)
         return false;
     }
 
-    // reset tags-resources model
-    KisTagsResourcesModelProvider::getModel(d->resourceType)->resetQuery();
     return prepareQuery();
 }
 
 bool KisTagModel::tagResource(const KisTagSP tag, const KoResourceSP resource)
 {
-    return KisTagsResourcesModelProvider::getModel(d->resourceType)->tagResource(tag, resource);
-
-    /*
     if (!tag) return false;
     if (!tag->valid()) return false;
     if (tag->id() < 0) return false;
+
+    qDebug() << tag << " tag id " << tag->id();
 
     if (!resource) return false;
     if (!resource->valid()) return false;
@@ -308,9 +307,7 @@ bool KisTagModel::tagResource(const KisTagSP tag, const KoResourceSP resource)
                   "  WHERE  id = :resource_id)\n"
                       ", (SELECT id\n"
                   "   FROM   tags\n"
-                  "   WHERE  url = :url\n"
-                  "   AND    name = :name\n"
-                  "   AND    comment = :comment\n"
+                  "   WHERE  id = :tag_id\n"
                   "   AND    resource_type_id = (SELECT id\n"
                   "                              FROM   resource_types\n"
                   "                              WHERE  name = :resource_type"
@@ -323,9 +320,7 @@ bool KisTagModel::tagResource(const KisTagSP tag, const KoResourceSP resource)
     }
 
     q.bindValue(":resource_id", resource->resourceId());
-    q.bindValue(":url", tag->url());
-    q.bindValue(":name", tag->name());
-    q.bindValue(":comment", tag->comment());
+    q.bindValue(":tag_id", tag->id());
     q.bindValue(":resource_type", d->resourceType);
 
     if (!q.exec()) {
@@ -333,14 +328,12 @@ bool KisTagModel::tagResource(const KisTagSP tag, const KoResourceSP resource)
         return false;
     }
 
-    return prepareQuery();
-    */
+    KisResourceModelProvider::resetModel(d->resourceType);
+    return true;
 }
 
 bool KisTagModel::untagResource(const KisTagSP tag, const KoResourceSP resource)
 {
-    return KisTagsResourcesModelProvider::getModel(d->resourceType)->untagResource(tag, resource);
-    /*
     if (!tag) return false;
     if (!tag->valid()) return false;
     if (!tag->id()) return false;
@@ -350,26 +343,27 @@ bool KisTagModel::untagResource(const KisTagSP tag, const KoResourceSP resource)
     if (resource->resourceId() < 0) return false;
 
     // we need to delete an entry in resource_tags
-    bool r = d->query.prepare("DELETE FROM resource_tags\n"
+    QSqlQuery query;
+    bool r = query.prepare("DELETE FROM resource_tags\n"
                               "WHERE   resource_id = :resource_id\n"
                               "AND     tag_id = :tag_id");
 
     if (!r) {
-        qWarning() << "Could not prepare KisTagModel query" << d->query.lastError();
+        qWarning() << "Could not prepare KisTagModel query untagResource " << query.lastError();
     }
 
-    d->query.bindValue(":resource_id", resource->resourceId());
-    d->query.bindValue(":tag_id", tag->id());
+    query.bindValue(":resource_id", resource->resourceId());
+    query.bindValue(":tag_id", tag->id());
 
 
-    r = d->query.exec();
+    r = query.exec();
 
     if (!r) {
-        qWarning() << "Could not select tags" << d->query.lastError();
+        qWarning() << "Could not select tags" << query.lastError();
     }
 
-    return prepareQuery();
-    */
+    KisResourceModelProvider::resetModel(d->resourceType);
+    return true;
 }
 
 bool KisTagModel::renameTag(const KisTagSP tag, const QString &name)
@@ -434,29 +428,76 @@ bool KisTagModel::changeTagActive(const KisTagSP tag, bool active)
 
 QVector<KisTagSP> KisTagModel::tagsForResource(int resourceId) const
 {
-    return KisTagsResourcesModelProvider::getModel(d->resourceType)->tagsForResource(resourceId);
+    bool r = d->tagsForResourceQuery.prepare("SELECT tags.id\n"
+                              ",      tags.url\n"
+                              ",      tags.name\n"
+                              ",      tags.comment\n"
+                              "FROM   tags\n"
+                              ",      resource_tags\n"
+                              "WHERE  tags.active > 0\n"                               // make sure the tag is active
+                              "AND    tags.id = resource_tags.tag_id\n"                // join tags + resource_tags by tag_id
+                              "AND    resource_tags.resource_id = :resource_id\n");    // make sure we're looking for tags for a specific resource
+    if (!r)  {
+        qWarning() << "Could not prepare TagsForResource query" << d->tagsForResourceQuery.lastError();
+    }
 
-    /*
-    d->tagForResourceQuery.bindValue(":resource_id", resourceId);
-    bool r = d->tagForResourceQuery.exec();
+    d->tagsForResourceQuery.bindValue(":resource_id", resourceId);
+    r = d->tagsForResourceQuery.exec();
     if (!r) {
-        qWarning() << "Could not select tags for" << resourceId << d->tagForResourceQuery.lastError() << d->tagForResourceQuery.boundValues();
+        qWarning() << "Could not select tags for" << resourceId << d->tagsForResourceQuery.lastError() << d->tagsForResourceQuery.boundValues();
     }
 
     QVector<KisTagSP> tags;
-    while (d->tagForResourceQuery.next()) {
+    while (d->tagsForResourceQuery.next()) {
         //qDebug() << d->tagQuery.value(0).toString() << d->tagQuery.value(1).toString() << d->tagQuery.value(2).toString();
         KisTagSP tag(new KisTag());
-        tag->setId(d->tagForResourceQuery.value("id").toInt());
-        tag->setUrl(d->tagForResourceQuery.value("url").toString());
-        tag->setName(d->tagForResourceQuery.value("name").toString());
-        tag->setComment(d->tagForResourceQuery.value("comment").toString());
+        tag->setId(d->tagsForResourceQuery.value("id").toInt());
+        tag->setUrl(d->tagsForResourceQuery.value("url").toString());
+        tag->setName(d->tagsForResourceQuery.value("name").toString());
+        tag->setComment(d->tagsForResourceQuery.value("comment").toString());
         tag->setValid(true);
         tag->setActive(true);
         tags << tag;
     }
     return tags;
-    */
+}
+
+QVector<KoResourceSP> KisTagModel::resourcesForTag(int tagId) const
+{
+    bool r = d->resourcesForTagQuery.prepare("SELECT DISTINCT resources.id\n"
+                                        "FROM   resources\n"
+                                        ",      resource_tags\n"
+                                        ",      storages\n"
+                                        ",      resource_types\n"
+                                        "WHERE  resources.id = resource_tags.resource_id\n"                // join resources + resource_tags by resource_id
+                                        "AND    resources.resource_type_id = resource_types.id\n" // join with resource types via resource type id
+                                        "AND    resources.storage_id = storages.id\n"         // join with storages via storage id
+                                        "AND    resource_tags.tag_id = :tag_id\n"     // must have the tag
+                                        "AND    resource_types.name = :resource_type\n"       // the type must match the current type
+                                        "AND    resources.status = 1\n"         // must be active itself
+                                        "AND    storages.active = 1");          // must be from active storage
+    if (!r)  {
+        qWarning() << "Could not prepare ResourcesForTag query" << d->resourcesForTagQuery.lastError();
+    }
+
+    d->resourcesForTagQuery.bindValue(":tag_id", tagId);
+    d->resourcesForTagQuery.bindValue(":resource_type", d->resourceType);
+
+    r = d->resourcesForTagQuery.exec();
+    if (!r) {
+        qWarning() << "Could not select resources for tag " << tagId << d->resourcesForTagQuery.lastError() << d->resourcesForTagQuery.boundValues();
+    }
+
+    QVector<KoResourceSP> resources;
+    qDebug() << "it's around: " << d->resourcesForTagQuery.size() << " resources for " << d->resourceType;
+    while (d->resourcesForTagQuery.next()) {
+        qDebug() << "KisTagModel::resourcesForTag(int tagId): ### query: " << d->resourcesForTagQuery.value("id").toInt();
+        KoResourceSP resource = KisResourceLocator::instance()->resourceForId(d->resourcesForTagQuery.value("id").toInt());
+        resources << resource;
+    }
+
+    return resources;
+
 }
 
 bool KisTagModel::prepareQuery()
@@ -487,21 +528,6 @@ bool KisTagModel::prepareQuery()
     if (!r) {
         qWarning() << "Could not select tags" << d->query.lastError();
     }
-
-    r = d->tagForResourceQuery.prepare("SELECT tags.id\n"
-                            ",      tags.url\n"
-                            ",      tags.name\n"
-                            ",      tags.comment\n"
-                            "FROM   tags\n"
-                            ",      resource_tags\n"
-                            "WHERE  tags.active > 0\n"                               // make sure the tag is active
-                            "AND    tags.id = resource_tags.tag_id\n"                // join tags + resource_tags by tag_id
-                            "AND    resource_tags.resource_id = :resource_id\n");    // make sure we're looking for tags for a specific resource
-    if (!r)  {
-        qWarning() << "Could not prepare TagsForResource query" << d->tagForResourceQuery.lastError();
-    }
-
-    KisTagsResourcesModelProvider::resetModel(d->resourceType);
 
     d->cachedRowCount = -1;
     endResetModel();

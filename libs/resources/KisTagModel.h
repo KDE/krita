@@ -69,6 +69,8 @@ public:
     bool renameTag(const KisTagSP tag, const QString &name);
     bool changeTagActive(const KisTagSP tag, bool active);
     QVector<KisTagSP> tagsForResource(int resourceId) const;
+    QVector<KoResourceSP> resourcesForTag(int tagId) const;
+
 
 
 private:

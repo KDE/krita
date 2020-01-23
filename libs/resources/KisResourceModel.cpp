@@ -28,8 +28,8 @@
 #include <KisResourceLocator.h>
 #include <KisResourceCacheDb.h>
 
-#include <KisTagsResourcesModel.h>
-#include <KisTagsResourcesModelProvider.h>
+#include <KisTagModelProvider.h>
+
 
 
 struct KisResourceModel::Private {
@@ -454,8 +454,6 @@ bool KisResourceModel::removeResource(const QModelIndex &index)
         qWarning() << "Failed to remove resource" << resourceId;
         return false;
     }
-    // reset tags-resources model
-    KisTagsResourcesModelProvider::getModel(d->resourceType)->resetQuery();
     return resetQuery();
 }
 
@@ -471,8 +469,6 @@ bool KisResourceModel::removeResource(KoResourceSP resource)
         qWarning() << "Failed to remove resource" << resource->resourceId();
         return false;
     }
-    // reset tags-resources model
-    KisTagsResourcesModelProvider::getModel(d->resourceType)->resetQuery();
     return resetQuery();
 }
 
@@ -546,8 +542,6 @@ bool KisResourceModel::resetQuery()
     }
     d->cachedRowCount = -1;
 
-    KisTagsResourcesModelProvider::resetModel(d->resourceType);
-
     endResetModel();
     emit afterResourcesLayoutReset();
 
@@ -558,27 +552,7 @@ bool KisResourceModel::resetQuery()
 
 QVector<KisTagSP> KisResourceModel::tagsForResource(int resourceId) const
 {
-    return KisTagsResourcesModelProvider::getModel(d->resourceType)->tagsForResource(resourceId);
-    /*
-    d->tagQuery.bindValue(":resource_id", resourceId);
-    bool r = d->tagQuery.exec();
-    if (!r) {
-        qWarning() << "Could not select tags for" << resourceId << d->tagQuery.lastError() << d->tagQuery.boundValues();
-    }
-    QVector<KisTagSP> tags;
-    while (d->tagQuery.next()) {
-        //qDebug() << d->tagQuery.value(0).toString() << d->tagQuery.value(1).toString() << d->tagQuery.value(2).toString();
-        KisTagSP tag(new KisTag());
-        tag->setId(d->tagQuery.value("id").toInt());
-        tag->setUrl(d->tagQuery.value("url").toString());
-        tag->setName(d->tagQuery.value("name").toString());
-        tag->setComment(d->tagQuery.value("comment").toString());
-        tag->setValid(true);
-        tag->setActive(true);
-        tags << tag;
-    }
-    return tags;
-    */
+    return KisTagModelProvider::tagModel(d->resourceType)->tagsForResource(resourceId);
 }
 
 int KisResourceModel::rowCount(const QModelIndex &) const

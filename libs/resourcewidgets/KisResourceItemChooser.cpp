@@ -58,7 +58,8 @@
 #include "KisTagChooserWidget.h"
 #include "KisResourceItemChooserSync.h"
 #include "KisResourceTaggingManager.h"
-#include "KisTagsResourcesModelProvider.h"
+#include "KisTagModelProvider.h"
+
 
 
 #include "KisStorageChooserWidget.h"
@@ -112,7 +113,7 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
 
     d->resourceModel = KisResourceModelProvider::resourceModel(resourceType);
 
-    d->tagFilterProxyModel = new KisTagFilterResourceProxyModel(KisTagsResourcesModelProvider::getModel(resourceType), this);
+    d->tagFilterProxyModel = new KisTagFilterResourceProxyModel(KisTagModelProvider::tagModel(resourceType), this);
 
     d->extraFilterModel = extraFilterProxy;
     if (d->extraFilterModel) {

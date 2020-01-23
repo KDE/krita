@@ -21,8 +21,6 @@
 #include <QString>
 #include <memory>
 
-#include <KisTagsResourcesModelProvider.h>
-
 Q_GLOBAL_STATIC(KisTagModelProvider, s_instance)
 
 

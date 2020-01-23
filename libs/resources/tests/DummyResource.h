@@ -23,11 +23,13 @@
 #include <QRandomGenerator64>
 #include <KoHashGenerator.h>
 #include <KoHashGeneratorProvider.h>
+#include <KisResourceTypes.h>
 
 class DummyResource : public KoResource {
 public:
-    DummyResource(const QString &f)
+    DummyResource(const QString &f, const QString &resourceType = ResourceType::PaintOpPresets)
         : KoResource(f)
+        , m_resourceType(resourceType)
     {
         QRandomGenerator64 qrg;
         QByteArray ba(1024, '0');
@@ -103,12 +105,13 @@ public:
     }
 
     QPair<QString, QString> resourceType() const override {
-        return QPair<QString, QString>("", "");
+        return QPair<QString, QString>(m_resourceType, "");
     }
 
 private:
 
     QString m_something;
+    QString m_resourceType;
 };
 
 #endif // DUMMYRESOURCE_H

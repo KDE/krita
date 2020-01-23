@@ -182,6 +182,7 @@ bool KisFolderStorage::addTag(const QString &resourceType, KisTagSP tag)
 bool KisFolderStorage::addResource(const QString &resourceType, KoResourceSP _resource)
 {
     // Find a new filename for the resource if it already exists: we do not rename old resources, but rename updated resources
+
     QString fn = location() + "/" + resourceType + "/" + _resource->filename();
     if (!QFileInfo(fn).exists()) {
         // Simply save it
@@ -219,6 +220,7 @@ bool KisFolderStorage::addResource(const QString &resourceType, KoResourceSP _re
         }
 
         _resource->setVersion(_resource->version() + 1);
+
         _resource->setFilename(newFileName);
         f.close();
     }

@@ -376,7 +376,7 @@ bool KisResourceCacheDb::addResourceVersion(int resourceId, QDateTime timestamp,
 
         q.bindValue(":resource_id", resourceId);
         q.bindValue(":storage_location", KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
-        q.bindValue(":version", resource->version() + 1);
+        q.bindValue(":version", resource->version());
         q.bindValue(":location", QFileInfo(resource->filename()).fileName());
         q.bindValue(":timestamp", timestamp.toSecsSinceEpoch());
         Q_ASSERT(!resource->md5().isEmpty());

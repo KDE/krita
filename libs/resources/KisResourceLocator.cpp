@@ -259,7 +259,6 @@ bool KisResourceLocator::addResource(const QString &resourceType, const KoResour
 
 bool KisResourceLocator::updateResource(const QString &resourceType, const KoResourceSP resource)
 {
-
     QString storageLocation = makeStorageLocationAbsolute(resource->storageLocation());
 
     Q_ASSERT(d->storages.contains(storageLocation));
@@ -269,6 +268,7 @@ bool KisResourceLocator::updateResource(const QString &resourceType, const KoRes
 
     int version = resource->version();
 
+    // This increments the version in the resource
     if (!storage->addResource(resource)) {
         qWarning() << "Failed to save the new version of " << resource->name() << "to storage" << storageLocation;
         return false;
@@ -277,6 +277,7 @@ bool KisResourceLocator::updateResource(const QString &resourceType, const KoRes
     // It's the storages that keep track of the version
     Q_ASSERT(resource->version() == version + 1);
 
+    // The version needs already to have been incremented
     if (!KisResourceCacheDb::addResourceVersion(resource->resourceId(), QDateTime::currentDateTime(), storage, resource)) {
         qWarning() << "Failed to add a new version of the resource to the database" << resource->name();
         return false;

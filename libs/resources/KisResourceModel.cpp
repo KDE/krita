@@ -517,8 +517,6 @@ bool KisResourceModel::updateResource(KoResourceSP resource)
 
     //qDebug() << "KisResourceModel::updateResource" << s_i8 << d->resourceType; s_i8++;
 
-    qDebug() << "KisResourceModel::updateResource" << resource->name();
-
     if (!KisResourceLocator::instance()->updateResource(d->resourceType, resource)) {
         qWarning() << "Failed to update resource";
         return false;

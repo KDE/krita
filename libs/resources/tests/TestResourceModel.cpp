@@ -192,38 +192,38 @@ void TestResourceModel::testAddTemporaryResource()
 
 void TestResourceModel::testUpdateResource()
 {
-//    int resourceId;
-//    {
-//        KisResourceModel resourceModel(m_resourceType);
-//        KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(0, 0));
-//        QVERIFY(resource);
-//        QVERIFY(resource.dynamicCast<DummyResource>()->something().isEmpty());
-//        resource.dynamicCast<DummyResource>()->setSomething("It's changed");
-//        resourceId = resource->resourceId();
-//        bool r = resourceModel.updateResource(resource);
-//        QVERIFY(r);
-//    }
+    int resourceId;
+    {
+        KisResourceModel resourceModel(m_resourceType);
+        KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(0, 0));
+        QVERIFY(resource);
+        QVERIFY(resource.dynamicCast<DummyResource>()->something().isEmpty());
+        resource.dynamicCast<DummyResource>()->setSomething("It's changed");
+        resourceId = resource->resourceId();
+        bool r = resourceModel.updateResource(resource);
+        QVERIFY(r);
+    }
 
-//    {
-//        // Check the resource itself
-//        KisResourceLocator::instance()->purge();
-//        KoResourceSP resource = KisResourceLocator::instance()->resourceForId(resourceId);
+    {
+        // Check the resource itself
+        KisResourceLocator::instance()->purge();
+        KoResourceSP resource = KisResourceLocator::instance()->resourceForId(resourceId);
 
-//        QVERIFY(resource);
-//        QVERIFY(!resource.dynamicCast<DummyResource>()->something().isEmpty());
-//        QVERIFY(resource->resourceId() == resourceId);
+        QVERIFY(resource);
+        QVERIFY(!resource.dynamicCast<DummyResource>()->something().isEmpty());
+        QVERIFY(resource->resourceId() == resourceId);
 
-//        // Check the versions in the database
-//        QSqlQuery q;
-//        QVERIFY(q.prepare("SELECT count(*)\n"
-//                          "FROM   versioned_resources\n"
-//                          "WHERE  resource_id = :resource_id\n"));
-//        q.bindValue(":resource_id", resourceId);
-//        QVERIFY(q.exec());
-//        q.first();
-//        int rowCount = q.value(0).toInt();
-//        QCOMPARE(rowCount, 2);
-//    }
+        // Check the versions in the database
+        QSqlQuery q;
+        QVERIFY(q.prepare("SELECT count(*)\n"
+                          "FROM   versioned_resources\n"
+                          "WHERE  resource_id = :resource_id\n"));
+        q.bindValue(":resource_id", resourceId);
+        QVERIFY(q.exec());
+        q.first();
+        int rowCount = q.value(0).toInt();
+        QCOMPARE(rowCount, 2);
+    }
 }
 
 void TestResourceModel::cleanupTestCase()

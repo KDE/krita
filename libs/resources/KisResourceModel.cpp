@@ -148,6 +148,7 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
             default:
                 ;
             };
+            Q_FALLTHROUGH();
         }
         case Qt::DecorationRole:
         {
@@ -162,9 +163,9 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
             return QVariant();
         }
         case Qt::ToolTipRole:
-            /* Falls through. */
+            Q_FALLTHROUGH();
         case Qt::StatusTipRole:
-            /* Falls through. */
+            Q_FALLTHROUGH();
         case Qt::WhatsThisRole:
             return d->resourcesQuery.value("tooltip");
         case Qt::UserRole + Id:

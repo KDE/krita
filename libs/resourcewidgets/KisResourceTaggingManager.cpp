@@ -112,29 +112,6 @@ void KisResourceTaggingManager::showTaggingBar(bool show)
     show ? d->tagChooser->show() : d->tagChooser->hide();
 }
 
-void KisResourceTaggingManager::contextCreateNewTag(KoResourceSP resource , const KisTagSP tag)
-{
-    // TODO: RESOURCES: this function should use QString, not KisTagSP
-    fprintf(stderr, "void KisResourceTaggingManager::contextCreateNewTag(KoResourceSP resource , const KisTagSP tag)");
-    KisTagSP inserted = d->tagChooser->insertItem(tag);
-    d->tagModel->tagResource(inserted, resource);
-}
-
-void KisResourceTaggingManager::contextAddTagToResource(KoResourceSP resource, const KisTagSP tag)
-{
-    fprintf(stderr, "void KisResourceTaggingManager::contextAddTagToResource(KoResourceSP resource, const KisTagSP tag)");
-    ENTER_FUNCTION();
-    d->tagModel->tagResource(tag, resource);
-}
-
-void KisResourceTaggingManager::contextRemoveTagFromResource(KoResourceSP resource, const KisTagSP tag)
-{
-    fprintf(stderr, "void KisResourceTaggingManager::contextRemoveTagFromResource(KoResourceSP resource, const KisTagSP tag)");
-    ENTER_FUNCTION();
-    bool success = d->tagModel->untagResource(tag, resource);
-    fprintf(stderr, "remove Resource tag: %d\n", success);
-}
-
 void KisResourceTaggingManager::tagChooserIndexChanged(const KisTagSP tag)
 {
     ENTER_FUNCTION();
@@ -193,15 +170,6 @@ void KisResourceTaggingManager::contextMenuRequested(KoResourceSP resource, QPoi
         return;
 
     KisResourceItemChooserContextMenu menu(resource, d->tagChooser->currentlySelectedTag());
-
-    connect(&menu, SIGNAL(resourceTagAdditionRequested(KoResourceSP,const KisTagSP)),
-            this, SLOT(contextAddTagToResource(KoResourceSP,const KisTagSP)));
-
-    connect(&menu, SIGNAL(resourceTagRemovalRequested(KoResourceSP,const KisTagSP)),
-            this, SLOT(contextRemoveTagFromResource(KoResourceSP,const KisTagSP)));
-
-    connect(&menu, SIGNAL(resourceAssignmentToNewTagRequested(KoResourceSP,const KisTagSP)),
-            this, SLOT(contextCreateNewTag(KoResourceSP,const KisTagSP)));
     menu.exec(pos);
 }
 

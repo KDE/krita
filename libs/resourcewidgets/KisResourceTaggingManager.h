@@ -62,17 +62,12 @@ public:
     ~KisResourceTaggingManager() override;
     void showTaggingBar(bool show);
     void contextMenuRequested(KoResourceSP currentResource, QPoint pos);
-    void allowTagModification( bool set );
-    bool allowTagModification();
     KisTagFilterWidget *tagFilterWidget();
     KisTagChooserWidget *tagChooserWidget();
     
 private Q_SLOTS:
 
     void tagSaveButtonPressed();
-    void contextCreateNewTag(KoResourceSP resource, const KisTagSP tag);
-    void contextRemoveTagFromResource(KoResourceSP resource, const KisTagSP tag);
-    void contextAddTagToResource(KoResourceSP resource, const KisTagSP tag);
     void tagChooserIndexChanged(const KisTagSP lineEditText);
     void tagSearchLineEditTextChanged(const QString &lineEditText);
 

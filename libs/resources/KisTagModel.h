@@ -71,6 +71,8 @@ public:
     QVector<KisTagSP> tagsForResource(int resourceId) const;
     QVector<KoResourceSP> resourcesForTag(int tagId) const;
 
+    KisTagSP tagByUrl(const QString& tagUrl) const;
+
 
 
 private:
@@ -80,6 +82,10 @@ private:
     friend class TestTagModel;
 
     void setResourceType(const QString &resourceType);
+
+    bool tagResourceByUrl(const QString& tagUrl, const int resourceId);
+    bool tagResourceById(const int tagId, const int resource);
+
 
 
     bool prepareQuery();

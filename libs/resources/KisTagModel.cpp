@@ -28,6 +28,9 @@
 #include <KisTag.h>
 
 #include <KisResourceModelProvider.h>
+#include <QVector>
+
+#include <kis_assert.h>
 
 
 Q_DECLARE_METATYPE(QSharedPointer<KisTag>)
@@ -198,6 +201,7 @@ KisTagSP KisTagModel::tagForIndex(QModelIndex index) const
 
 bool KisTagModel::addEmptyTag(const QString& tagName, QVector<KoResourceSP> taggedResouces)
 {
+    qDebug() << "bool KisTagModel::addEmptyTag(const QString& tagName, QVector<KoResourceSP> taggedResouces) ### " << tagName;
     KisTagSP tag = KisTagSP(new KisTag());
     tag->setName(tagName);
     tag->setUrl(tagName);
@@ -206,6 +210,7 @@ bool KisTagModel::addEmptyTag(const QString& tagName, QVector<KoResourceSP> tagg
 
 bool KisTagModel::addEmptyTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces)
 {
+    qDebug() << "bool KisTagModel::addEmptyTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces) ### " << tag;
     tag->setValid(true);
     tag->setActive(true);
     return addTag(tag, taggedResouces);
@@ -213,6 +218,9 @@ bool KisTagModel::addEmptyTag(const KisTagSP tag, QVector<KoResourceSP> taggedRe
 
 bool KisTagModel::addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces)
 {
+    qDebug() << "######################";
+    qDebug() << "bool KisTagModel::addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces) " << tag;
+
     if (tag.isNull()) return false;
     if (!tag) return false;
     if (!tag->valid()) return false;
@@ -221,6 +229,7 @@ bool KisTagModel::addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouce
 
 
     if (!KisResourceCacheDb::hasTag(tag->url(), d->resourceType)) {
+        qDebug() << "it doesn't have the tag!" << tag->url() << tag->name() << tag->comment();
          if (!KisResourceCacheDb::addTag(d->resourceType, "", tag->url(), tag->name(), tag->comment())) {
             qWarning() << "Could not add tag" << tag;
             return false;
@@ -245,17 +254,28 @@ bool KisTagModel::addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouce
         }
     }
 
+    qDebug() << "tag = " << tag;
+    if (!taggedResouces.isEmpty()) {
 
-    Q_FOREACH(const KoResourceSP resource, taggedResouces) {
 
-        if (!resource) continue;
-        if (!resource->valid()) continue;
-        if (resource->resourceId() < 0) continue;
+        qDebug() << "********************";
 
-        tagResource(tag, resource);
+        qDebug() << "tag = " << tag;
+        qDebug() << "tag url = " << tag->url();
+
+        KisTagSP tagFromDb = tagByUrl(tag->url());
+        qDebug() << "tag from db: " << tagFromDb << tag->id();
+        Q_FOREACH(const KoResourceSP resource, taggedResouces) {
+
+            if (!resource) continue;
+            if (!resource->valid()) continue;
+            if (resource->resourceId() < 0) continue;
+
+            tagResource(tagFromDb, resource);
+        }
     }
 
-
+    qDebug() << "^^^^^^^^^^^^^^^^^^^^^^^^^";
     return prepareQuery();
 }
 
@@ -497,6 +517,56 @@ QVector<KoResourceSP> KisTagModel::resourcesForTag(int tagId) const
 
 }
 
+KisTagSP KisTagModel::tagByUrl(const QString& tagUrl) const
+{
+    if (tagUrl.isEmpty()) {
+        return KisTagSP();
+    }
+
+    QSqlQuery query;
+    bool r = query.prepare("SELECT  tags.id\n"
+                              ",       tags.url\n"
+                              ",       tags.name\n"
+                              ",       tags.comment\n"
+                              ",       tags.active\n"
+                              ",       resource_types.name as resource_type\n"
+                              "FROM    tags\n"
+                              ",       resource_types\n"
+                              "WHERE   tags.resource_type_id = resource_types.id\n"
+                              "AND     resource_types.name = :resource_type\n"
+                              "AND     tags.active = 1\n"
+                              "AND     tags.url = :tag_url\n"
+                              "AND     tags.storage_id in (SELECT id\n"
+                              "                      FROM   storages\n"
+                              "                      WHERE  storages.active  == 1)");
+
+    if (!r) {
+        qWarning() << "Could not prepare KisTagModel::tagByUrl query" << query.lastError();
+    }
+
+    query.bindValue(":resource_type", d->resourceType);
+    QString tagUrlForSql = tagUrl;
+    query.bindValue(":tag_url", tagUrlForSql);
+
+    r = query.exec();
+    if (!r) {
+        qWarning() << "Could not execute KisTagModel::tagByUrl query" << query.lastError();
+    }
+    KisTagSP tag(new KisTag());
+    query.next();
+    tag->setUrl(query.value("url").toString());
+    tag->setName(query.value("name").toString());
+    tag->setComment(query.value("comment").toString());
+    tag->setId(query.value("id").toInt());
+    tag->setActive(query.value("active").toBool());
+    tag->setValid(true);
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(tagUrl == tag->url(), KisTagSP());
+
+    return tag;
+
+}
+
 bool KisTagModel::prepareQuery()
 {
     beginResetModel();
@@ -504,6 +574,7 @@ bool KisTagModel::prepareQuery()
                               ",       tags.url\n"
                               ",       tags.name\n"
                               ",       tags.comment\n"
+                              ",       tags.active\n"
                               ",       resource_types.name as resource_type\n"
                               "FROM    tags\n"
                               ",       resource_types\n"

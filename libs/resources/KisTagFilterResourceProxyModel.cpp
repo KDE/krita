@@ -85,11 +85,11 @@ bool KisTagFilterResourceProxyModel::importResourceFile(const QString &filename)
     return false;
 }
 
-bool KisTagFilterResourceProxyModel::addResource(KoResourceSP resource, bool save)
+bool KisTagFilterResourceProxyModel::addResource(KoResourceSP resource, const QString &storageId)
 {
     KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
     if (source) {
-        return source->addResource(resource, save);
+        return source->addResource(resource, storageId);
     }
     return false;
 }

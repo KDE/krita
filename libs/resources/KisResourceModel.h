@@ -62,12 +62,14 @@ public:
     virtual bool importResourceFile(const QString &filename) = 0;
 
     /**
-     * @brief addResource adds the given resource to the database.
-     * @param resource the resource.
-     * @param save if true, save the resource to the default storage, if false, the resource will not exist the next time Krita is started.
-     * @return
+     * @brief addResource adds the given resource to the database and storage
+     * @param resource the resource itself
+     * @param storageId the id of the storage (could be "memory" for temporary
+     * resources, the document's storage id for document storages or empty to save
+     * to the default resources folder
+     * @return true if adding the resoruce succeded.
      */
-    virtual bool addResource(KoResourceSP resource, bool save = true) = 0;
+    virtual bool addResource(KoResourceSP resource, const QString &storageId = QString()) = 0;
 
     /**
      * @brief updateResource
@@ -156,7 +158,7 @@ public:
     bool removeResource(const QModelIndex &index) override;
     bool removeResource(KoResourceSP resource) override;
     bool importResourceFile(const QString &filename) override;
-    bool addResource(KoResourceSP resource, bool save = true) override;
+    bool addResource(KoResourceSP resource, const QString &storageId = QString()) override;
     bool updateResource(KoResourceSP resource) override;
     bool setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata) override;
     QVector<KisTagSP> tagsForResource(int resourceId) const;

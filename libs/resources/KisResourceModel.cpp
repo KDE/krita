@@ -487,7 +487,7 @@ bool KisResourceModel::importResourceFile(const QString &filename)
 
 //static int s_i7 {0};
 
-bool KisResourceModel::addResource(KoResourceSP resource, bool save)
+bool KisResourceModel::addResource(KoResourceSP resource, const QString &storageId)
 {
     if (!resource || !resource->valid()) {
         qWarning() << "Cannot add resource. Resource is null or not valid";
@@ -496,7 +496,7 @@ bool KisResourceModel::addResource(KoResourceSP resource, bool save)
 
     //qDebug() << "KisResourceModel::addResource" << s_i7 << d->resourceType; s_i7++;
 
-    if (!KisResourceLocator::instance()->addResource(d->resourceType, resource, save ?  "" : "memory")) {
+    if (!KisResourceLocator::instance()->addResource(d->resourceType, resource, storageId)) {
         qWarning() << "Failed to add resource" << resource->name();
         return false;
     }

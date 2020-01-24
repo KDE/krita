@@ -185,7 +185,7 @@ void TestResourceModel::testAddTemporaryResource()
     int resourceCount = resourceModel.rowCount();
     KoResourceSP resource(new DummyResource("dummy.kpp"));
     resource->setValid(true);
-    bool r = resourceModel.addResource(resource, false);
+    bool r = resourceModel.addResource(resource, "memory");
     QVERIFY(r);
     QCOMPARE(resourceCount + 1, resourceModel.rowCount());
 }

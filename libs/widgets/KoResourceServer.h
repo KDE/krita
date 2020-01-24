@@ -111,7 +111,7 @@ public:
             return false;
         }
 
-        if (m_resourceModel->addResource(resource, save)) {
+        if (m_resourceModel->addResource(resource, save ?  "" : "memory")) {
             notifyResourceAdded(resource);
             return true;
         }
@@ -289,8 +289,8 @@ protected:
 private:
 
     QList<ObserverType*> m_observers;
-    KisTagModel *m_tagModel {0};
     KisResourceModel *m_resourceModel {0};
+    KisTagModel *m_tagModel {0};
     QString m_type;
     mutable QMutex m_mutex;
 };

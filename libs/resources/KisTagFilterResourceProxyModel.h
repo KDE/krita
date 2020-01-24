@@ -42,7 +42,7 @@ public:
     QModelIndex indexFromResource(KoResourceSP resource) const override;
     bool removeResource(const QModelIndex &index) override;
     bool importResourceFile(const QString &filename) override;
-    bool addResource(KoResourceSP resource, bool save = true) override;
+    bool addResource(KoResourceSP resource, const QString &storageId = QString()) override;
     bool updateResource(KoResourceSP resource) override;
     bool removeResource(KoResourceSP resource) override;
     bool setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata) override;

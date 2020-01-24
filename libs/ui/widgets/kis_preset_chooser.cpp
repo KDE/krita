@@ -220,11 +220,11 @@ public:
         return false;
     }
 
-    bool addResource(KoResourceSP resource, bool save) override
+    bool addResource(KoResourceSP resource, const QString &storageId = QString()) override
     {
         KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
         if (source) {
-            return source->addResource(resource, save);
+            return source->addResource(resource, storageId);
         }
         return false;
     }

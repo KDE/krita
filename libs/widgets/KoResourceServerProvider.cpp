@@ -44,8 +44,6 @@ public:
 
     GradientResourceServer(const QString& type)
         : KoResourceServer<KoAbstractGradient>(type)
-        , m_foregroundToTransparent(0)
-        , m_foregroundToBackground(0)
     {
         insertSpecialGradients();
     }

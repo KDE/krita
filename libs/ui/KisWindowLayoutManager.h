@@ -72,7 +72,7 @@ public:
 
     void activeDocumentChanged(KisDocument *document);
 
-    void setLastUsedLayout(KisWindowLayoutResourceSP layout);
+    void setLastUsedLayout(KisWindowLayoutResource *layout);
 
 private Q_SLOTS:
     void slotFocusChanged(QWidget*, QWidget*);

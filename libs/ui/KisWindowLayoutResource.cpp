@@ -263,7 +263,7 @@ void KisWindowLayoutResource::applyLayout()
     auto *kisPart = KisPart::instance();
     auto *layoutManager= KisWindowLayoutManager::instance();
 
-    layoutManager->setLastUsedLayout(KisWindowLayoutResourceSP(this));
+    layoutManager->setLastUsedLayout(this);
 
     QList<QPointer<KisMainWindow>> currentWindows = kisPart->mainWindows();
 

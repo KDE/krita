@@ -208,10 +208,10 @@ void KisWindowLayoutManager::slotFocusChanged(QWidget *old, QWidget *now)
     newMainWindow->windowFocused();
 }
 
-void KisWindowLayoutManager::setLastUsedLayout(KisWindowLayoutResourceSP layout)
+void KisWindowLayoutManager::setLastUsedLayout(KisWindowLayoutResource *layout)
 {
     // For automatic switching, only allow a window layout proper
-    KisSessionResourceSP session = layout.dynamicCast<KisSessionResource>();
+    KisSessionResource *session = dynamic_cast<KisSessionResource*>(layout);
     if (session) return;
 
     QList<QScreen*> screens = QGuiApplication::screens();
@@ -234,7 +234,7 @@ void KisWindowLayoutManager::slotScreensChanged()
             KisWindowLayoutResourceSP layout = windowLayoutServer->resourceByName(displayLayout->preferredWindowLayout);
 
             if (layout) {
-                setLastUsedLayout(layout);
+                setLastUsedLayout(layout.data());
                 layout->applyLayout();
                 return;
             }

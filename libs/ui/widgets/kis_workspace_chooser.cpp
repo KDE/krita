@@ -226,6 +226,6 @@ void KisWorkspaceChooser::slotUpdateWindowLayoutSaveButton()
 
 void KisWorkspaceChooser::windowLayoutSelected(KoResourceSP resource)
 {
-    KisWindowLayoutResourceSP layout = resource.staticCast<KisWindowLayoutResource>();
+    KisWindowLayoutResourceSP layout = resource.dynamicCast<KisWindowLayoutResource>();
     layout->applyLayout();
 }

@@ -25,9 +25,13 @@
 #include <QList>
 #include <QObject>
 #include <QSet>
+#include <QRect>
 
 #include "KoFlake.h"
 #include "kritaflake_export.h"
+
+#include <memory>
+#include <vector>
 
 class KoShape;
 class KoSelection;
@@ -108,6 +112,55 @@ public Q_SLOTS:
 public:
     /// return the selection shapes for this shapeManager
     KoSelection *selection() const;
+
+    struct PaintJob {
+        using ShapesStorage = std::vector<std::unique_ptr<KoShape>>;
+        using SharedSafeStorage = std::shared_ptr<ShapesStorage>;
+
+        PaintJob() = default;
+        PaintJob(QRectF _docUpdateRect, QRect _viewUpdateRect)
+            : docUpdateRect(_docUpdateRect),
+              viewUpdateRect(_viewUpdateRect)
+        {
+        }
+
+        QRectF docUpdateRect;
+        QRect viewUpdateRect;
+
+        QList<KoShape*> shapes;
+        SharedSafeStorage allClonedShapes;
+    };
+
+    using PaintJobsList = QList<PaintJob>;
+
+
+    /**
+     * Prepare a shallow copy of all the shapes and the jobs to be rendered
+     * asynchronoursly later. The copies are stored in jobs, so that the user
+     * could later pass these jobs into paintJob() in a separate thread.
+     *
+     * @param jobs a list of rects that are going to be updated. docUpdateRect
+     *             and viewUpdateRect should be preinitialized by the caller.
+     * @param excludeRoot the root shape which should not be copied. It is basically
+     *                    a hack to avoid copying of KisShapeLayer, which is not
+     *                    copiable.
+     * \see paintJob()
+     * \see a comment in KisShapeLayerCanvas::slotStartAsyncRepaint()
+     */
+    void preparePaintJobs(PaintJobsList &jobs, KoShape *excludeRoot);
+
+    /**
+     * Render a \p job on \p painter. No mutable internals of the shape
+     * manager are accessed, so calling this method is safe in multithreading
+     * environment.
+     *
+     * @param painter a painter to paint on. Clip rect of the painter is expected to be setup correctly.
+     * @param job a job to paint.
+     * @param forPrint not used in Krita.
+     *
+     * \see preparePaintJobs
+     */
+    void paintJob(QPainter &painter, const KoShapeManager::PaintJob &job, bool forPrint);
 
     /**
      * Paint all shapes and their selection handles etc.

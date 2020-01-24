@@ -1158,7 +1158,7 @@ protected:
 
 public:
     static QList<KoShape*> linearizeSubtree(const QList<KoShape*> &shapes);
-
+    static QList<KoShape *> linearizeSubtreeSorted(const QList<KoShape *> &shapes);
 protected:
     KoShape(const KoShape &rhs);
 

@@ -2390,3 +2390,22 @@ QList<KoShape *> KoShape::linearizeSubtree(const QList<KoShape *> &shapes)
 
     return result;
 }
+
+QList<KoShape *> KoShape::linearizeSubtreeSorted(const QList<KoShape *> &shapes)
+{
+    QList<KoShape*> sortedShapes = shapes;
+    std::sort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
+
+    QList<KoShape *> result;
+
+    Q_FOREACH (KoShape *shape, sortedShapes) {
+        result << shape;
+
+        KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
+        if (container) {
+            result << linearizeSubtreeSorted(container->shapes());
+        }
+    }
+
+    return result;
+}

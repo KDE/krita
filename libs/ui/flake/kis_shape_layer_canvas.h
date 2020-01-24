@@ -126,6 +126,7 @@ private:
     bool m_forceUpdateHiddenAreasOnly = false;
     QRegion m_dirtyRegion;
     QMutex m_dirtyRegionMutex;
+    KoShapeManager::PaintJobsList m_paintJobs;
 
     QRect m_cachedImageRect;
 

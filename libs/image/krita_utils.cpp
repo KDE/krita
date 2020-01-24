@@ -79,6 +79,21 @@ namespace KritaUtils
         return patches;
     }
 
+    QVector<QRect> splitRectIntoPatchesTight(const QRect &rc, const QSize &patchSize)
+    {
+        QVector<QRect> patches;
+
+        for (qint32 y = rc.y(); y < rc.y() + rc.height(); y += patchSize.height()) {
+            for (qint32 x = rc.x(); x < rc.x() + rc.width(); x += patchSize.width()) {
+                patches << QRect(x, y,
+                                 qMin(rc.x() + rc.width() - x, patchSize.width()),
+                                 qMin(rc.y() + rc.height() - y, patchSize.height()));
+            }
+        }
+
+        return patches;
+    }
+
     QVector<QRect> splitRegionIntoPatches(const QRegion &region, const QSize &patchSize)
     {
         QVector<QRect> patches;

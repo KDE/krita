@@ -43,8 +43,7 @@
 
 #include <kis_spontaneous_job.h>
 #include "kis_global.h"
-
-//#define DEBUG_REPAINT
+#include "krita_utils.h"
 
 KisShapeLayerCanvasBase::KisShapeLayerCanvasBase(KisShapeLayer *parent, KisImageWSP image)
     : KoCanvasBase(0)
@@ -160,12 +159,6 @@ void KisShapeLayerCanvas::setImage(KisImageWSP image)
     }
 }
 
-
-#ifdef DEBUG_REPAINT
-# include <stdlib.h>
-#endif
-
-
 class KisRepaintShapeLayerLayerJob : public KisSpontaneousJob
 {
 public:
@@ -234,6 +227,86 @@ void KisShapeLayerCanvas::updateCanvas(const QRectF& rc)
 
 void KisShapeLayerCanvas::slotStartAsyncRepaint()
 {
+    QRect repaintRect;
+    bool forceUpdateHiddenAreasOnly = false;
+    const qint32 MASK_IMAGE_WIDTH = 256;
+    const qint32 MASK_IMAGE_HEIGHT = 256;
+    {
+        QMutexLocker locker(&m_dirtyRegionMutex);
+
+        repaintRect = m_dirtyRegion.boundingRect();
+        forceUpdateHiddenAreasOnly = m_forceUpdateHiddenAreasOnly;
+
+        /// Since we are going to override the previous jobs, we should fetch
+        /// all the area covered by it. Otherwise we'll get dirty leftovers of
+        /// the layer on the projection
+        Q_FOREACH (const KoShapeManager::PaintJob &job, m_paintJobs) {
+            repaintRect |= m_viewConverter->documentToView().mapRect(job.docUpdateRect).toAlignedRect();
+        }
+        m_paintJobs.clear();
+
+        m_dirtyRegion = QRegion();
+        m_forceUpdateHiddenAreasOnly = false;
+    }
+
+    if (!forceUpdateHiddenAreasOnly) {
+        if (repaintRect.isEmpty()) {
+            return;
+        }
+
+        // Crop the update rect by the image bounds. We keep the cache consistent
+        // by tracking the size of the image in slotImageSizeChanged()
+        repaintRect = repaintRect.intersected(m_parentLayer->image()->bounds());
+    } else {
+        const QRectF shapesBounds = KoShape::boundingRect(m_shapeManager->shapes());
+        repaintRect = kisGrowRect(m_viewConverter->documentToView(shapesBounds).toAlignedRect(), 2);
+    }
+
+    /**
+     * Vector shapes are not thread-safe against concurrent read-writes, so we
+     * need to utilize rather complicated policy on accessing them:
+     *
+     * 1) All shape writes happen in GUI thread (right in the tools)
+     * 2) No concurrent reads from the shapes may happen  in other threads
+     *    while the user is modifying them.
+     *
+     * That is why our shape rendering code is split into two parts:
+     *
+     * 1) First we just fetch a shallow copy of the shapes of the layer (it
+     *    takes about 1ms for complicated vecotor layers) and pack them into
+     *    KoShapeManager::PaintJobsList jobs. It happens here, in
+     *    slotStartAsyncRepaint(), which runs in the GUI thread. It guarantees
+     *    that noone is accessing the shapes during the copy operation.
+     *
+     * 2) The rendering itself happens in the worker thread in repaint(). But
+     *    repaint() doesn't access original shapes anymore. It accesses only they
+     *    shallow copies, which means that there is no concurrent
+     *    access to anything (*).
+     *
+     * (*) "no concurrent access to anything" is a rather fragile term :) There
+     *     will still be concurrent access to it, on detaching... But(!), when detaching,
+     *     the original data is kept unchanged, so "it should be safe enough"(c). Especially
+     *     if we guarantee that rendering thread may not cause a detach (?), and the detach
+     *     can happen only from a single GUI thread.
+     */
+
+    const QVector<QRect> updateRects =
+        KritaUtils::splitRectIntoPatchesTight(repaintRect,
+                                              QSize(MASK_IMAGE_WIDTH, MASK_IMAGE_HEIGHT));
+
+    KoShapeManager::PaintJobsList jobs;
+    Q_FOREACH (const QRect &viewUpdateRect, updateRects) {
+        jobs << KoShapeManager::PaintJob(m_viewConverter->viewToDocument().mapRect(QRectF(viewUpdateRect)),
+                                         viewUpdateRect);
+    }
+
+    m_shapeManager->preparePaintJobs(jobs, m_parentLayer);
+
+    {
+        QMutexLocker locker(&m_dirtyRegionMutex);
+        m_paintJobs = jobs;
+    }
+
     m_hasUpdateInCompressor = false;
     m_image->addSpontaneousJob(new KisRepaintShapeLayerLayerJob(m_parentLayer, this));
 }
@@ -256,32 +329,14 @@ void KisShapeLayerCanvas::slotImageSizeChanged()
 
 void KisShapeLayerCanvas::repaint()
 {
-    QRect repaintRect;
-    bool forceUpdateHiddenAreasOnly = false;
+
+    KoShapeManager::PaintJobsList paintJobs;
 
     {
         QMutexLocker locker(&m_dirtyRegionMutex);
-        repaintRect = m_dirtyRegion.boundingRect();
-        forceUpdateHiddenAreasOnly = m_forceUpdateHiddenAreasOnly;
-
-        m_dirtyRegion = QRegion();
-        m_forceUpdateHiddenAreasOnly = false;
+        std::swap(paintJobs, m_paintJobs);
     }
 
-    if (!forceUpdateHiddenAreasOnly) {
-        if (repaintRect.isEmpty()) {
-            return;
-        }
-
-        // Crop the update rect by the image bounds. We keep the cache consistent
-        // by tracking the size of the image in slotImageSizeChanged()
-        repaintRect = repaintRect.intersected(m_parentLayer->image()->bounds());
-    } else {
-        const QRectF shapesBounds = KoShape::boundingRect(m_shapeManager->shapes());
-        repaintRect = kisGrowRect(m_viewConverter->documentToView(shapesBounds).toAlignedRect(), 2);
-    }
-
-    const QRect r = repaintRect;
     const qint32 MASK_IMAGE_WIDTH = 256;
     const qint32 MASK_IMAGE_HEIGHT = 256;
 
@@ -293,34 +348,34 @@ void KisShapeLayerCanvas::repaint()
 
     quint8 * dstData = new quint8[MASK_IMAGE_WIDTH * MASK_IMAGE_HEIGHT * m_projection->pixelSize()];
 
-    for (qint32 x = r.x(); x < r.x() + r.width(); x += MASK_IMAGE_WIDTH) {
-        for (qint32 y = r.y(); y < r.y() + r.height(); y += MASK_IMAGE_HEIGHT) {
+    QRect repaintRect;
 
-            image.fill(0);
+    Q_FOREACH (const KoShapeManager::PaintJob &job, paintJobs) {
+        image.fill(0);
 
-            tempPainter.setTransform(QTransform());
-            tempPainter.setClipRect(QRect(0,0,MASK_IMAGE_WIDTH,MASK_IMAGE_HEIGHT));
-            tempPainter.setTransform(m_viewConverter->documentToView() *
-                                     QTransform::fromTranslate(-x, -y));
+        tempPainter.setTransform(QTransform());
+        tempPainter.setClipRect(QRect(0,0,MASK_IMAGE_WIDTH,MASK_IMAGE_HEIGHT));
+        tempPainter.setTransform(m_viewConverter->documentToView() *
+                                 QTransform::fromTranslate(-job.viewUpdateRect.x(), -job.viewUpdateRect.y()));
 
-            #ifdef DEBUG_REPAINT
-                QColor color = QColor(random() % 255, random() % 255, random() % 255);
-                maskPainter.fillRect(srcRect, color);
-            #endif
+        m_shapeManager->paintJob(tempPainter, job, false);
 
-            m_shapeManager->paint(tempPainter, false);
+        KoColorSpaceRegistry::instance()->rgb8()
+        ->convertPixelsTo(image.constBits(), dstData, m_projection->colorSpace(),
+                          MASK_IMAGE_WIDTH * MASK_IMAGE_HEIGHT,
+                          KoColorConversionTransformation::internalRenderingIntent(),
+                          KoColorConversionTransformation::internalConversionFlags());
 
-            tempPainter.translate(x, y);
+        // TODO: use job.viewUpdateRect instead of MASK_IMAGE_WIDTH/HEIGHT
+        m_projection->writeBytes(dstData,
+                                 job.viewUpdateRect.x(),
+                                 job.viewUpdateRect.y(),
+                                 MASK_IMAGE_WIDTH,
+                                 MASK_IMAGE_HEIGHT);
 
-            KoColorSpaceRegistry::instance()->rgb8()
-            ->convertPixelsTo(image.constBits(), dstData, m_projection->colorSpace(),
-                              MASK_IMAGE_WIDTH * MASK_IMAGE_HEIGHT,
-                              KoColorConversionTransformation::internalRenderingIntent(),
-                              KoColorConversionTransformation::internalConversionFlags());
-
-            m_projection->writeBytes(dstData, x, y, MASK_IMAGE_WIDTH, MASK_IMAGE_HEIGHT);
-        }
+        repaintRect |= job.viewUpdateRect;
     }
+
     delete[] dstData;
     m_projection->purgeDefaultPixels();
     m_parentLayer->setDirty(repaintRect);

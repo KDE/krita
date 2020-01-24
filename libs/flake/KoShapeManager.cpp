@@ -474,6 +474,72 @@ KoShapeManager::ShapeInterface *KoShapeManager::shapeInterface()
     return &d->shapeInterface;
 }
 
+void KoShapeManager::preparePaintJobs(PaintJobsList &jobs,
+                                      KoShape *excludeRoot)
+{
+    QMutexLocker l1(&d->shapesMutex);
+    d->updateTree();
+
+    QSet<KoShape*> rootShapesSet;
+    Q_FOREACH (KoShape *shape, d->shapes) {
+        while (shape->parent() && shape->parent() != excludeRoot) {
+            shape = shape->parent();
+        }
+
+        if (!rootShapesSet.contains(shape) && shape != excludeRoot) {
+            rootShapesSet.insert(shape);
+        }
+    }
+
+    const QList<KoShape*> rootShapes = rootShapesSet.toList();
+
+    QList<KoShape*> newRootShapes;
+
+    Q_FOREACH (KoShape *srcShape, rootShapes) {
+        newRootShapes << srcShape->cloneShape();
+    }
+
+    PaintJobsList result;
+
+    PaintJob::SharedSafeStorage shapesStorage = std::make_shared<PaintJob::ShapesStorage>();
+    Q_FOREACH (KoShape *shape, newRootShapes) {
+        shapesStorage->emplace_back(std::unique_ptr<KoShape>(shape));
+    }
+
+    const QList<KoShape*> originalShapes = KoShape::linearizeSubtreeSorted(rootShapes);
+    const QList<KoShape*> clonedShapes = KoShape::linearizeSubtreeSorted(newRootShapes);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(clonedShapes.size() == originalShapes.size());
+
+    QHash<KoShape*, KoShape*> clonedFromOriginal;
+    for (int i = 0; i < originalShapes.size(); i++) {
+        clonedFromOriginal[originalShapes[i]] = clonedShapes[i];
+    }
+
+
+    for (auto it = std::begin(jobs); it != std::end(jobs); ++it) {
+        QMutexLocker l(&d->treeMutex);
+        QList<KoShape*> unsortedOriginalShapes = d->tree.intersects(it->docUpdateRect);
+
+        it->allClonedShapes = shapesStorage;
+
+        Q_FOREACH (KoShape *shape, unsortedOriginalShapes) {
+            KIS_SAFE_ASSERT_RECOVER(shapeUsedInRenderingTree(shape)) { continue; }
+            it->shapes << clonedFromOriginal[shape];
+        }
+    }
+}
+
+void KoShapeManager::paintJob(QPainter &painter, const KoShapeManager::PaintJob &job, bool forPrint)
+{
+    painter.setPen(Qt::NoPen);  // painters by default have a black stroke, lets turn that off.
+    painter.setBrush(Qt::NoBrush);
+
+    KisForest<KoShape*> renderTree;
+    buildRenderTree(job.shapes, renderTree);
+
+    KoShapePaintingContext paintContext(d->canvas, forPrint); //FIXME
+    renderShapes(childBegin(renderTree), childEnd(renderTree), painter, paintContext);
+}
 
 void KoShapeManager::paint(QPainter &painter, bool forPrint)
 {
@@ -499,11 +565,6 @@ void KoShapeManager::paint(QPainter &painter, bool forPrint)
     KisForest<KoShape*> renderTree;
     buildRenderTree(unsortedShapes, renderTree);
     renderShapes(childBegin(renderTree), childEnd(renderTree), painter, paintContext);
-
-    if (! forPrint) {
-        KoShapePaintingContext paintContext(d->canvas, forPrint); //FIXME
-        d->selection->paint(painter, paintContext);
-    }
 }
 
 void KoShapeManager::renderSingleShape(KoShape *shape, QPainter &painter, KoShapePaintingContext &paintContext)

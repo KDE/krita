@@ -52,6 +52,7 @@
 #include <KisMemoryStorage.h>
 #include <KisResourceStorage.h>
 #include <KisResourceLocator.h>
+#include <KisResourceTypes.h>
 
 #include <KisUsageLogger.h>
 #include <klocalizedstring.h>
@@ -330,9 +331,6 @@ public:
     QColor globalAssistantsColor;
 
     KisSharedPtr<KisReferenceImagesLayer> referenceImagesLayer;
-    QList<KoColorSetSP> paletteList;
-    bool ownsPaletteList = false;
-
     KisGridConfig gridConfig;
 
     StdLockableWrapper<QMutex> savingLock;
@@ -347,8 +345,8 @@ public:
 
     bool batchMode { false };
 
-    QString uniqueID {QUuid::createUuid().toString()};
-    KisResourceStorageSP documentResourceStorage {new KisResourceStorage(uniqueID)};
+    QString documentStorageID {QUuid::createUuid().toString()};
+    KisResourceStorageSP documentResourceStorage {new KisResourceStorage(documentStorageID)};
 
     void syncDecorationsWrapperLayerState();
 
@@ -370,8 +368,6 @@ public:
 
     /// clones the palette list oldList
     /// the ownership of the returned KoColorSet * belongs to the caller
-    QList<KoColorSetSP> clonePaletteList(const QList<KoColorSetSP> &oldList);
-
     class StrippedSafeSavingLocker;
 };
 
@@ -456,30 +452,25 @@ void KisDocument::Private::copyFromImpl(const Private &rhs, KisDocument *q, KisD
     lastMod = rhs.lastMod;
     // XXX: the display properties will be shared between different snapshots
     globalAssistantsColor = rhs.globalAssistantsColor;
-
-    if (policy == REPLACE) {
-        QList<KoColorSetSP> newPaletteList = clonePaletteList(rhs.paletteList);
-        q->setPaletteList(newPaletteList, /* emitSignal = */ true);
-        // we still do not own palettes if we did not
-    } else {
-        paletteList = rhs.paletteList;
-    }
-
     batchMode = rhs.batchMode;
 
-    // Clone the resources, but don't add them to the database, only the editable
-    // version of the document should have those resources in the database.
-    documentResourceStorage = rhs.documentResourceStorage->clone();
-
-}
-
-QList<KoColorSetSP> KisDocument::Private::clonePaletteList(const QList<KoColorSetSP> &oldList)
-{
-    QList<KoColorSetSP> newList;
-    Q_FOREACH (KoColorSetSP palette, oldList) {
-        newList.append(QSharedPointer<KoColorSet>(new KoColorSet(*palette.data())));
+    // CHECK THIS! This is what happened to the palette list -- but is it correct here as well? Ask Dmitry!!!
+    //    if (policy == REPLACE) {
+    //        QList<KoColorSetSP> newPaletteList = clonePaletteList(rhs.paletteList);
+    //        q->setPaletteList(newPaletteList, /* emitSignal = */ true);
+    //        // we still do not own palettes if we did not
+    //    } else {
+    //        paletteList = rhs.paletteList;
+    //    }
+    if (policy == REPLACE) {
+        // Clone the resources, but don't add them to the database, only the editable
+        // version of the document should have those resources in the database.
+        documentResourceStorage = rhs.documentResourceStorage->clone();
     }
-    return newList;
+    else {
+        documentResourceStorage = rhs.documentResourceStorage;
+    }
+
 }
 
 class KisDocument::Private::StrippedSafeSavingLocker {
@@ -537,7 +528,7 @@ KisDocument::KisDocument()
     connect(d->autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
     setObjectName(newObjectName());
 
-    KisResourceLocator::instance()->addStorage(d->uniqueID, d->documentResourceStorage);
+    KisResourceLocator::instance()->addStorage(d->documentStorageID, d->documentResourceStorage);
 
     // preload the krita resources
     KisResourceServerProvider::instance();
@@ -608,8 +599,8 @@ KisDocument::~KisDocument()
         // check if the image has actually been deleted
         KIS_SAFE_ASSERT_RECOVER_NOOP(!sanityCheckPointer.isValid());
     }
-    if (KisResourceLocator::instance()->hasStorage(d->uniqueID)) {
-        KisResourceLocator::instance()->removeStorage(d->uniqueID);
+    if (KisResourceLocator::instance()->hasStorage(d->documentStorageID)) {
+        KisResourceLocator::instance()->removeStorage(d->documentStorageID);
     }
 
     delete d;
@@ -617,7 +608,7 @@ KisDocument::~KisDocument()
 
 QString KisDocument::uniqueID() const
 {
-    return d->uniqueID;
+    return d->documentStorageID;
 }
 
 bool KisDocument::reload()
@@ -883,8 +874,8 @@ KisDocument *KisDocument::lockAndCreateSnapshot()
 {
     KisDocument *doc = lockAndCloneForSaving();
     if (doc) {
-        // clone palette list
-        doc->d->paletteList = doc->d->clonePaletteList(doc->d->paletteList);
+        // clone the local resource storage and its contents -- that is, the old palette list
+        doc->d->documentResourceStorage = doc->d->documentResourceStorage->clone();
     }
     return doc;
 }
@@ -1860,16 +1851,39 @@ void KisDocument::setGridConfig(const KisGridConfig &config)
     }
 }
 
-QList<KoColorSetSP > &KisDocument::paletteList()
+QList<KoColorSetSP > KisDocument::paletteList()
 {
-    return d->paletteList;
+    QList<KoColorSetSP> _paletteList;
+    QSharedPointer<KisResourceStorage::ResourceIterator> iter = d->documentResourceStorage->resources(ResourceType::Palettes);
+    while (iter->hasNext()) {
+        iter->next();
+        KoResourceSP resource = iter->resource();
+        if (resource && resource->valid()) {
+            _paletteList << resource.dynamicCast<KoColorSet>();
+        }
+    }
+    return _paletteList;
 }
 
 void KisDocument::setPaletteList(const QList<KoColorSetSP > &paletteList, bool emitSignal)
 {
-    if (d->paletteList != paletteList) {
-        QList<KoColorSetSP> oldPaletteList = d->paletteList;
-        d->paletteList = paletteList;
+    QList<KoColorSetSP> oldPaletteList;
+    QSharedPointer<KisResourceStorage::ResourceIterator> iter = d->documentResourceStorage->resources(ResourceType::Palettes);
+    while (iter->hasNext()) {
+        iter->next();
+        KoResourceSP resource = iter->resource();
+        if (resource && resource->valid()) {
+            oldPaletteList << resource.dynamicCast<KoColorSet>();
+        }
+    }
+    if (oldPaletteList != paletteList) {
+        KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(ResourceType::Palettes);
+        Q_FOREACH(KoColorSetSP palette, oldPaletteList) {
+            resourceModel->removeResource(palette);
+        }
+        Q_FOREACH(KoColorSetSP palette, paletteList) {
+            resourceModel->addResource(palette, d->documentStorageID);
+        }
         if (emitSignal) {
             emit sigPaletteListChanged(oldPaletteList, paletteList);
         }

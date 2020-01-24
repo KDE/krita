@@ -365,8 +365,16 @@ public:
     const KisGuidesConfig& guidesConfig() const;
     void setGuidesConfig(const KisGuidesConfig &data);
 
+    /**
+     * @brief paletteList returns all the palettes found in the document's local resource storage
+     */
+    QList<KoColorSetSP> paletteList();
 
-    QList<KoColorSetSP > &paletteList();
+    /**
+     * @brief setPaletteList replaces the palettes in the document's local resource storage with the list
+     * of palettes passed to this function. It will then emitsigPaletteListChanged with both the old and
+     * the new list, if emitsignal is true.
+     */
     void setPaletteList(const QList<KoColorSetSP> &paletteList, bool emitSignal = false);
 
     const KisMirrorAxisConfig& mirrorAxisConfig() const;

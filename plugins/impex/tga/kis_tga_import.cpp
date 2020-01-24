@@ -126,8 +126,8 @@ static bool loadTGA(QDataStream & s, const TgaHeader & tga, QImage &img)
      * have this flag unset. It contradicts TGA specification,
      * but we cannot do anything about it.
      */
-    const bool hasAlpha = tga.flags & 0xf;
-    if (tga.pixel_size == 32 && !hasAlpha) {
+    const bool alphaFlag = tga.flags & 0xf;
+    if (tga.pixel_size == 32 && !alphaFlag) {
         qWarning() << "WARNING: TGA image with 32-bit pixel size reports absence of alpha channel. It is not possible, fixing...";
     }
 
@@ -201,6 +201,7 @@ static bool loadTGA(QDataStream & s, const TgaHeader & tga, QImage &img)
 
     uchar* src = image;
 
+    bool hasAlpha = false;
     for (int y = y_start; y != y_end; y += y_step) {
         QRgb * scanline = (QRgb *) img.scanLine(y);
 
@@ -234,9 +235,20 @@ static bool loadTGA(QDataStream & s, const TgaHeader & tga, QImage &img)
                     const uchar alpha = src[3];
                     scanline[x] = qRgba(src[2], src[1], src[0], alpha);
                     src += 4;
+                    hasAlpha |= alpha;
                 }
             }
         }
+    }
+    /* According to http://www.paulbourke.net/dataformats/tga/
+     * Targa 24 images are sometimes stored as Targa 32 images.
+     *
+     * In case all alpha information is transparent, we convert
+     * image to 24 bits.
+     */
+    if (!hasAlpha && tga.pixel_size == 32) {
+        img = img.convertToFormat(QImage::Format_RGB32);
+        qWarning() << "WARNING: TGA image with 32-bit has all pixels transparent, removing alpha information.";
     }
 
     // Free image.

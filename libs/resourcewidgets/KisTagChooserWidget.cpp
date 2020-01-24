@@ -130,7 +130,7 @@ void KisTagChooserWidget::tagChanged(int tagIndex)
     ENTER_FUNCTION();
     fprintf(stderr, "void KisTagChooserWidget::tagChanged(int) %d\n", tagIndex);
     if (tagIndex >= 0) {
-        emit tagChosen(currentlySelectedTag());
+        emit sigTagChosen(currentlySelectedTag());
         KisTagSP tag = currentlySelectedTag();
         if (tag->id() < 0) {
             fprintf(stderr, "tag name: %s, url: %s, id: %d", tag->name().toUtf8().toStdString().c_str(), tag->url().toUtf8().toStdString().c_str(), tag->id());

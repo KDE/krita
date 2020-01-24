@@ -77,13 +77,9 @@ public:
     void showTagToolButton(bool show);
 
 Q_SIGNALS:
-    void newTagRequested(const KisTagSP tag);
-    void tagDeletionRequested(const KisTagSP tag);
-    void tagToolRenameCurrentTag(const KisTagSP oldTag, const KisTagSP newTag);
-
     void tagUndeletionListPurgeRequested();
     void popupMenuAboutToShow();
-    void tagChosen(const KisTagSP tag);
+    void sigTagChosen(const KisTagSP tag);
 
 public Q_SLOTS:
     KisTagSP tagToolCreateNewTag(KisTagSP tag);

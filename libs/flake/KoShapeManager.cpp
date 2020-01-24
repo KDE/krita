@@ -148,11 +148,17 @@ void buildRenderTree(QList<KoShape*> leafShapes,
         bool shouldSkipShape = !shapeIsVisible(shape);
         if (shouldSkipShape) continue;
 
+        bool shapeIsPartOfIncludedSubtree = false;
         QVector<KoShape*> hierarchy = {shape};
 
         while ((shape = shape->parent())) {
             if (!shapeIsVisible(shape)) {
                 shouldSkipShape = true;
+                break;
+            }
+
+            if (includedShapes.find(shape) != end(includedShapes)) {
+                shapeIsPartOfIncludedSubtree = true;
                 break;
             }
 
@@ -163,7 +169,9 @@ void buildRenderTree(QList<KoShape*> leafShapes,
 
         if (shouldSkipShape) continue;
 
-        if (includedShapes.find(hierarchy.last()) == end(includedShapes)) {
+        if (!shapeIsPartOfIncludedSubtree &&
+            includedShapes.find(hierarchy.last()) == end(includedShapes)) {
+
             tree.insert(childEnd(tree), hierarchy.last());
         }
         std::copy(hierarchy.begin(), hierarchy.end(),

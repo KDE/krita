@@ -79,21 +79,22 @@ public:
 Q_SIGNALS:
     void newTagRequested(const KisTagSP tag);
     void tagDeletionRequested(const KisTagSP tag);
-    void tagRenamingRequested(const KisTagSP oldTag, const KisTagSP newTag);
+    void tagToolRenameCurrentTag(const KisTagSP oldTag, const KisTagSP newTag);
 
     void tagUndeletionListPurgeRequested();
     void popupMenuAboutToShow();
     void tagChosen(const KisTagSP tag);
 
 public Q_SLOTS:
-    KisTagSP insertItem(KisTagSP tag);
+    KisTagSP tagToolCreateNewTag(KisTagSP tag);
     void tagChanged(int index);
 
 private Q_SLOTS:
-    void tagRenamingRequested(const KisTagSP newName);
-    void tagUndeletionRequested(const KisTagSP tag);
-    void tagOptionsContextMenuAboutToShow();
-    void contextDeleteCurrentTag();
+    void tagToolRenameCurrentTag(const KisTagSP newName);
+    void tagToolUndeleteLastTag(const KisTagSP tag);
+    void tagToolContextMenuAboutToShow();
+    void tagToolDeleteCurrentTag();
+
     void slotModelAboutToBeReset();
     void slotModelReset();
 

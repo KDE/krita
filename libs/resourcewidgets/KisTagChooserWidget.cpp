@@ -86,18 +86,18 @@ KisTagChooserWidget::KisTagChooserWidget(KisTagModel* model, QWidget* parent)
             this, SLOT(tagChanged(int)));
 
     connect(d->tagToolButton, SIGNAL(popupMenuAboutToShow()),
-            this, SLOT (tagOptionsContextMenuAboutToShow()));
+            this, SLOT (tagToolContextMenuAboutToShow()));
 
     connect(d->tagToolButton, SIGNAL(newTagRequested(KisTagSP)),
-            this, SLOT(insertItem(KisTagSP)));
+            this, SLOT(tagToolCreateNewTag(KisTagSP)));
 
     connect(d->tagToolButton, SIGNAL(deletionOfCurrentTagRequested()),
-            this, SLOT(contextDeleteCurrentTag()));
+            this, SLOT(tagToolDeleteCurrentTag()));
 
     connect(d->tagToolButton, SIGNAL(renamingOfCurrentTagRequested(KisTagSP)),
-            this, SLOT(tagRenamingRequested(KisTagSP)));
+            this, SLOT(tagToolRenameCurrentTag(KisTagSP)));
     connect(d->tagToolButton, SIGNAL(undeletionOfTagRequested(KisTagSP)),
-            this, SLOT(tagUndeletionRequested(KisTagSP)));
+            this, SLOT(tagToolUndeleteLastTag(KisTagSP)));
     connect(d->tagToolButton, SIGNAL(purgingOfTagUndeleteListRequested()),
             this, SIGNAL(tagUndeletionListPurgeRequested()));
 
@@ -112,7 +112,7 @@ KisTagChooserWidget::~KisTagChooserWidget()
     delete d;
 }
 
-void KisTagChooserWidget::contextDeleteCurrentTag()
+void KisTagChooserWidget::tagToolDeleteCurrentTag()
 {
     ENTER_FUNCTION();
     fprintf(stderr, "void KisTagChooserWidget::contextDeleteCurrentTag()\n");
@@ -140,7 +140,7 @@ void KisTagChooserWidget::tagChanged(int tagIndex)
     }
 }
 
-void KisTagChooserWidget::tagRenamingRequested(const KisTagSP newName)
+void KisTagChooserWidget::tagToolRenameCurrentTag(const KisTagSP newName)
 {
     // TODO: RESOURCES: it should use QString, not KisTagSP
     ENTER_FUNCTION();
@@ -153,7 +153,7 @@ void KisTagChooserWidget::tagRenamingRequested(const KisTagSP newName)
     }
 }
 
-void KisTagChooserWidget::tagUndeletionRequested(const KisTagSP tag)
+void KisTagChooserWidget::tagToolUndeleteLastTag(const KisTagSP tag)
 {
     int previousIndex = d->comboBox->currentIndex();
     ENTER_FUNCTION();
@@ -197,7 +197,7 @@ bool KisTagChooserWidget::setCurrentItem(KisTagSP tag)
     return false;
 }
 
-KisTagSP KisTagChooserWidget::insertItem(KisTagSP tag)
+KisTagSP KisTagChooserWidget::tagToolCreateNewTag(KisTagSP tag)
 {
     // TODO: RESOURCES: this function should use QString, not KisTagSP
     int previous = d->comboBox->currentIndex();
@@ -262,7 +262,7 @@ void KisTagChooserWidget::addItems(QList<KisTagSP> tags)
     warnKrita << "not implemented";
 
     Q_FOREACH(KisTagSP tag, tags) {
-        insertItem(tag);
+        tagToolCreateNewTag(tag);
     }
 }
 
@@ -271,7 +271,7 @@ void KisTagChooserWidget::clear()
     ENTER_FUNCTION();
 }
 
-void KisTagChooserWidget::tagOptionsContextMenuAboutToShow()
+void KisTagChooserWidget::tagToolContextMenuAboutToShow()
 {
     ENTER_FUNCTION();
     /* only enable the save button if the selected tag set is editable */

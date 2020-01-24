@@ -174,7 +174,7 @@ KisFolderStorage::~KisFolderStorage()
 {
 }
 
-bool KisFolderStorage::addTag(const QString &resourceType, KisTagSP tag)
+bool KisFolderStorage::addTag(const QString &/*resourceType*/, KisTagSP /*tag*/)
 {
     return false;
 }

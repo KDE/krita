@@ -23,6 +23,7 @@
 #include <QString>
 #include <QDebug>
 
+#include <KisResourceCacheDb.h>
 #include <KisMimeDatabase.h>
 
 KisResourceLoaderRegistry::KisResourceLoaderRegistry(QObject *parent)
@@ -42,6 +43,12 @@ KisResourceLoaderRegistry* KisResourceLoaderRegistry::instance()
         reg = new KisResourceLoaderRegistry(qApp);
     }
     return reg;
+}
+
+bool KisResourceLoaderRegistry::registerLoader(KisResourceLoaderBase *loader)
+{
+    add(loader);
+    return KisResourceCacheDb::registerResourceType(loader->resourceType());
 }
 
 KisResourceLoaderBase *KisResourceLoaderRegistry::loader(const QString &resourceType, const QString &mimetype) const

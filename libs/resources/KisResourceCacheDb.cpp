@@ -1078,6 +1078,44 @@ void KisResourceCacheDb::deleteTemporaryResources()
     QSqlDatabase::database().commit();
 }
 
+bool KisResourceCacheDb::registerResourceType(const QString &resourceType)
+{
+    // Check whether the type already exists
+    {
+        QSqlQuery q;
+        if (!q.prepare("SELECT count(*)\n"
+                       "FROM   resource_types\n"
+                       "WHERE  name = :resource_type\n")) {
+            qWarning() << "Could not prepare select from resource_types query" << q.lastError();
+            return false;
+        }
+        q.bindValue(":resource_type", resourceType);
+        if (!q.exec()) {
+            qWarning() << "Could not execute select from resource_types query" << q.lastError();
+            return false;
+        }
+        q.first();
+        int rowCount = q.value(0).toInt();
+        if (rowCount > 0) {
+            return true;
+        }
+    }
+    // if not, add it
+    QFile f(":/fill_resource_types.sql");
+    if (f.open(QFile::ReadOnly)) {
+        QString sql = f.readAll();
+        QSqlQuery q(sql);
+        q.addBindValue(resourceType);
+        if (!q.exec()) {
+            qWarning() << "Could not insert" << resourceType << q.lastError();
+            return false;
+        }
+        return true;
+    }
+    qWarning() << "Could not open fill_resource_types.sql";
+    return false;
+}
+
 QMap<QString, QVariant> KisResourceCacheDb::metaDataForId(int id, const QString &tableName)
 {
     QMap<QString, QVariant> map;

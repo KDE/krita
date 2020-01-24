@@ -43,6 +43,11 @@ public:
 
     static KisResourceLoaderRegistry *instance();
 
+    /**
+     * Adds the given loader and registers its type in the database, if it hasn't been registered yet.
+     */
+    bool registerLoader(KisResourceLoaderBase* loader);
+
     /// @return the first loader for the given resource type and mimetype
     KisResourceLoaderBase *loader(const QString &resourceType, const QString &mimetype) const;
 

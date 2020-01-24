@@ -72,10 +72,18 @@ private:
     friend class TestResourceLocator;
     friend class TestResourceCacheDb;
     friend class KisTagModel;
+    friend class KisResourceLoaderRegistry;
 
     explicit KisResourceCacheDb(); // Deleted
     ~KisResourceCacheDb(); // Deleted
     KisResourceCacheDb operator=(const KisResourceCacheDb&); // Deleted
+
+    /**
+     * @brief registerResourceType registers this resource type in the database
+     * @param resourceType the string that represents the type
+     * @return true if the type was registered or had already been registered
+     */
+    static bool registerResourceType(const QString &resourceType);
 
     static int resourceIdForResource(const QString &resourceName, const QString &resourceType, const QString &storageLocation);
     static bool resourceNeedsUpdating(int resourceId, QDateTime timestamp);

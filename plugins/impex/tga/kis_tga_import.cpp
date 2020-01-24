@@ -202,7 +202,7 @@ static bool loadTGA(QDataStream & s, const TgaHeader & tga, QImage &img)
     uchar* src = image;
 
     for (int y = y_start; y != y_end; y += y_step) {
-        QRgb * scanline = (QRgb *) img.scanLine(y);
+        QRgb * scanline = (QRgb *) (void*) img.scanLine(y);
 
         if (info.pal) {
             // Paletted.

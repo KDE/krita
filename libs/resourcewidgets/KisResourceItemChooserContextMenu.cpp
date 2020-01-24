@@ -39,7 +39,6 @@ KoLineEditAction::KoLineEditAction(QObject* parent)
     : QWidgetAction(parent)
     , m_closeParentOnTrigger(false)
 {
-    fprintf(stderr, "created a new KoLineEditAction\n");
     QWidget* pWidget = new QWidget (0);
     QHBoxLayout* pLayout = new QHBoxLayout();
     m_label = new QLabel(0);
@@ -81,9 +80,6 @@ bool KoLineEditAction::closeParentOnTrigger()
 void KoLineEditAction::onTriggered()
 {
     ENTER_FUNCTION();
-
-    fprintf(stderr, "void KoLineEditAction::onTriggered()");
-
     if (! m_editBox->text().isEmpty()) {
         KisTagSP tag(new KisTag());
         tag->setName(m_editBox->text());
@@ -126,7 +122,6 @@ ContextMenuExistingTagAction::ContextMenuExistingTagAction(KoResourceSP resource
     , m_resource(resource)
     , m_tag(tag)
 {
-    fprintf(stderr, "ContextMenuExistingTagAction created for: %s\n", tag->name().toUtf8().toStdString().c_str());
     setText(tag->name());
     connect (this, SIGNAL(triggered()),
              this, SLOT(onTriggered()));
@@ -138,7 +133,6 @@ ContextMenuExistingTagAction::~ContextMenuExistingTagAction()
 
 void ContextMenuExistingTagAction::onTriggered()
 {
-    fprintf(stderr, "void ContextMenuExistingTagAction::onTriggered()\n");
     ENTER_FUNCTION();
     emit triggered(m_resource, m_tag);
 }
@@ -149,7 +143,6 @@ NewTagAction::~NewTagAction()
 NewTagAction::NewTagAction(KoResourceSP resource, QMenu* parent)
     :KoLineEditAction (parent)
 {
-    fprintf(stderr, "NewTagAction created\n");
     m_resource = resource;
     setIcon(koIcon("document-new"));
     setPlaceholderText(i18n("New tag"));

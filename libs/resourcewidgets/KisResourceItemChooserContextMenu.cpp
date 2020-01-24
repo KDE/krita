@@ -79,7 +79,6 @@ bool KoLineEditAction::closeParentOnTrigger()
 
 void KoLineEditAction::onTriggered()
 {
-    ENTER_FUNCTION();
     if (! m_editBox->text().isEmpty()) {
         KisTagSP tag(new KisTag());
         tag->setName(m_editBox->text());
@@ -136,6 +135,7 @@ void ContextMenuExistingTagAction::onTriggered()
     ENTER_FUNCTION();
     emit triggered(m_resource, m_tag);
 }
+
 NewTagAction::~NewTagAction()
 {
 }
@@ -218,9 +218,6 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
 
     CompareWithOtherTagFunctor comparer(currentlySelectedTag);
 
-
-    //std::sort(removables.begin(), removables.end(), KisTag::compareNamesAndUrls);
-    //std::sort(assignables2.begin(), assignables2.end(), KisTag::compareNamesAndUrls);
     bool currentTagInRemovables = !currentlySelectedTag.isNull();
     currentTagInRemovables = currentTagInRemovables
             && (std::find_if(removables.begin(), removables.end(), comparer) != removables.end());

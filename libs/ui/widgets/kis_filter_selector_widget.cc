@@ -278,9 +278,13 @@
             }
         }
 
+        slotBookMarkCurrentFilter();
+        emit(configurationChanged());
+    }
+
+    void KisFilterSelectorWidget::slotBookMarkCurrentFilter() {
         KisConfig cfg(false);
         cfg.writeEntry<QString>("FilterSelector/LastUsedFilter", d->currentFilter->id());
-        emit(configurationChanged());
     }
 
     void KisFilterSelectorWidget::slotBookmarkedFilterConfigurationSelected(int index)

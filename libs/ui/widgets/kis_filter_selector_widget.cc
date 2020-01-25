@@ -140,7 +140,7 @@
             idx = d->filtersModel->indexForFilter("levels");
         }
 
-        if (isFilterGalleryVisible()) {
+        if (d->usedForMask && isFilterGalleryVisible()) {
             d->uiFilterSelector.filtersSelector->activateFilter(idx);
         }
 

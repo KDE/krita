@@ -363,17 +363,21 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
             result = doImport(location, filter);
         }
         if (result.status().isOk()) {
-            KisImageSP image = m_document->image();
-            KisUsageLogger::log(QString("Loaded image from %1. Size: %2 * %3 pixels, %4 dpi. Color model: %6 %5 (%7). Layers: %8")
-                                .arg(QString::fromLatin1(from))
-                                .arg(image->width())
-                                .arg(image->height())
-                                .arg(image->xRes())
-                                .arg(image->colorSpace()->colorModelId().name())
-                                .arg(image->colorSpace()->colorDepthId().name())
-                                .arg(image->colorSpace()->profile()->name())
-                                .arg(image->nlayers()));
-
+            KisImageSP image = m_document->image().toStrongRef();
+            if (image) {
+                KisUsageLogger::log(QString("Loaded image from %1. Size: %2 * %3 pixels, %4 dpi. Color model: %6 %5 (%7). Layers: %8")
+                                    .arg(QString::fromLatin1(from))
+                                    .arg(image->width())
+                                    .arg(image->height())
+                                    .arg(image->xRes())
+                                    .arg(image->colorSpace()->colorModelId().name())
+                                    .arg(image->colorSpace()->colorDepthId().name())
+                                    .arg(image->colorSpace()->profile()->name())
+                                    .arg(image->nlayers()));
+            }
+            else {
+                qWarning() << "The filter returned OK, but there is no image";
+            }
 
         }
         else {

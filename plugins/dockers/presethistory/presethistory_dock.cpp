@@ -43,9 +43,6 @@
 
 PresetHistoryDock::PresetHistoryDock( )
     : QDockWidget(i18n("Brush Preset History"))
-    , m_canvas(0)
-    , m_block(false)
-    , m_initialized(false)
 {
     m_presetHistory = new QListWidget(this);
     m_presetHistory->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
@@ -86,6 +83,8 @@ void PresetHistoryDock::setCanvas(KoCanvasBase * canvas)
             KisPaintOpPresetSP preset = rserver->resourceByName(p);
             addPreset(preset);
         }
+        int ordering = qBound(int(Static), cfg.readEntry("presethistorySorting", 0), int(Bubbling));
+        m_sorting = static_cast<DisplayOrder>(ordering);
         m_initialized = true;
     }
 }
@@ -103,21 +102,19 @@ void PresetHistoryDock::unsetCanvas()
     }
     KisConfig cfg(false);
     cfg.writeEntry("presethistory", presetHistory.join(","));
+    cfg.writeEntry("presethistorySorting", int(m_sorting));
 }
 
 void PresetHistoryDock::presetSelected(QListWidgetItem *item)
 {
     if (item) {
         int oldPosition = m_presetHistory->currentRow();
-        int newPosition = bubblePreset(oldPosition);
+        sortPresets(oldPosition);
         QVariant v = item->data(BrushPresetRole);
         KisPaintOpPresetSP preset = v.value<KisPaintOpPresetSP>();
         m_block = true;
         m_canvas->viewManager()->paintOpBox()->resourceSelected(preset);
         m_block = false;
-        if (oldPosition != newPosition) {
-            m_presetHistory->setCurrentRow(newPosition);
-        }
     }
 }
 
@@ -130,14 +127,28 @@ void PresetHistoryDock::canvasResourceChanged(int key, const QVariant& v)
         if (preset) {
             for (int i = 0; i < m_presetHistory->count(); ++i) {
                 if (preset->name() == m_presetHistory->item(i)->text()) {
-                    int newPosition = bubblePreset(i);
-                    m_presetHistory->setCurrentRow(newPosition);
+                    sortPresets(i);
                     return;
                 }
             }
             addPreset(preset);
         }
     }
+}
+
+void PresetHistoryDock::sortPresets(int position)
+{
+    switch (m_sorting) {
+    case Static:
+        break;
+    case MostRecent:
+        m_presetHistory->insertItem(0, m_presetHistory->takeItem(position));
+        m_presetHistory->setCurrentRow(0);
+        break;
+    case Bubbling:
+        position = bubblePreset(position);
+        m_presetHistory->setCurrentRow(position);
+    };
 }
 
 int PresetHistoryDock::bubblePreset(int position)

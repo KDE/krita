@@ -39,6 +39,12 @@ public:
         BubbleMarkerRole = Qt::UserRole + 1
     };
 
+    enum DisplayOrder {
+        Static = 0,
+        MostRecent = 1,
+        Bubbling = 2
+    };
+
     PresetHistoryDock();
     QString observerName() override { return "PresetHistoryDock"; }
     void setCanvas(KoCanvasBase *canvas) override;
@@ -49,13 +55,15 @@ private Q_SLOTS:
     void presetSelected(QListWidgetItem* item);
     void canvasResourceChanged(int key, const QVariant& v);
 private:
+    void sortPresets(int position);
     int bubblePreset(int position);
     void addPreset(KisPaintOpPresetSP preset);
 private:
     QPointer<KisCanvas2> m_canvas;
     QListWidget *m_presetHistory;
-    bool m_block;
-    bool m_initialized;
+    DisplayOrder m_sorting {Static};
+    bool m_block {false};
+    bool m_initialized {false};
 };
 
 

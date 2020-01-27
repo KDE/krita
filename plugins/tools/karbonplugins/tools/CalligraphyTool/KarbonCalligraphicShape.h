@@ -21,6 +21,7 @@
 #define KARBONCALLIGRAPHICSHAPE_H
 
 #include <KoParameterShape.h>
+#include <QDebug>
 
 #define KarbonCalligraphicShapeId "KarbonCalligraphicShape"
 
@@ -32,6 +33,12 @@ public:
 
     KarbonCalligraphicPoint(const KarbonCalligraphicPoint &rhs) = default;
     KarbonCalligraphicPoint() = default;
+
+    bool operator==(const KarbonCalligraphicPoint &rhs) const {
+        return m_point == rhs.m_point &&
+            qFuzzyCompare(m_angle, rhs.m_angle) &&
+            qFuzzyCompare(m_width, rhs.m_width);
+    }
 
     QPointF point() const
     {
@@ -60,6 +67,12 @@ private:
     qreal m_angle = 0.0;
     qreal m_width = 0.0;
 };
+
+inline QDebug operator<<(QDebug dbg, const KarbonCalligraphicPoint &pt)
+{
+    dbg.nospace() << "(" << pt.point() << ", a: " << pt.angle() << ", w: " << pt.width() << ")";
+    return dbg.space();
+}
 
 /*class KarbonCalligraphicShape::Point
 {

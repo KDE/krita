@@ -35,7 +35,6 @@
 #undef M_PI
 const qreal M_PI = 3.1415927;
 
-
 struct KarbonCalligraphicShape::Private : public QSharedData
 {
     Private(qreal _caps)
@@ -96,6 +95,8 @@ void KarbonCalligraphicShape::appendPoint(const QPointF &point, qreal angle, qre
         s->points[1].setAngle(angle);
         s->points[2].setAngle(angle);
     }
+
+    normalize();
 }
 
 void KarbonCalligraphicShape::appendPointToPath(const KarbonCalligraphicPoint &p)
@@ -110,7 +111,6 @@ void KarbonCalligraphicShape::appendPointToPath(const KarbonCalligraphicPoint &p
     if (pointCount() == 0) {
         moveTo(p1);
         lineTo(p2);
-        normalize();
         return;
     }
     // pointCount > 0
@@ -159,14 +159,14 @@ void KarbonCalligraphicShape::appendPointToPath(const KarbonCalligraphicPoint &p
             }
         }
     }
-    normalize();
 
     // add initial cap if it's the fourth added point
     // this code is here because this function is called from different places
     // pointCount() == 8 may causes crashes because it doesn't take possible
     // flips into account
-    if (s->points.count() >= 4 && &p == &s->points[3]) {
-        addCap(3, 0, 0, true);
+
+    if (s->points.count() >= 4 && p == s->points[3]) {
+       addCap(3, 0, 0, true);
         // duplicate the last point to make the points remain "balanced"
         // needed to keep all indexes code (else I would need to change
         // everything in the code...)
@@ -328,8 +328,6 @@ void KarbonCalligraphicShape::updatePath(const QSizeF &size)
         appendPointToPath(p);
     }
 
-    simplifyPath();
-
     QList<QPointF> handles;
     Q_FOREACH (const KarbonCalligraphicPoint &p, s->points) {
         handles.append(p.point());
@@ -337,6 +335,7 @@ void KarbonCalligraphicShape::updatePath(const QSizeF &size)
     setHandles(handles);
 
     setPosition(pos);
+    normalize();
 }
 
 void KarbonCalligraphicShape::simplifyPath()
@@ -398,7 +397,7 @@ void KarbonCalligraphicShape::simplifyGuidePath()
     }
 
     QList<QPointF> points;
-    Q_FOREACH (KarbonCalligraphicPoint p, s->points) {
+    Q_FOREACH (const KarbonCalligraphicPoint &p, s->points) {
         points.append(p.point());
     }
 

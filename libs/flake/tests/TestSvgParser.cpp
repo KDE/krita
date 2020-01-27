@@ -53,7 +53,7 @@ void TestSvgParser::testUnitPx()
     KoShape *shape = t.findShape("testRect");
     QVERIFY(shape);
 
-    QCOMPARE(shape->boundingRect(), kisGrowRect(QRectF(0,0,10,20), 0.5));
+    QCOMPARE(shape->boundingRect(), QRectF(0,0,10,20));
     QCOMPARE(shape->absoluteTransformation(), QTransform());
     QCOMPARE(shape->outlineRect(), QRectF(0,0,10,20));
     QCOMPARE(shape->absolutePosition(KoFlake::TopLeft), QPointF(0,0));
@@ -78,7 +78,7 @@ void TestSvgParser::testUnitPxResolution()
     KoShape *shape = t.findShape("testRect");
     QVERIFY(shape);
 
-    QCOMPARE(shape->boundingRect(), kisGrowRect(QRectF(0,0,5,10), 0.25));
+    QCOMPARE(shape->boundingRect(), QRectF(0,0,5,10));
     QCOMPARE(shape->absoluteTransformation(), QTransform::fromScale(0.5, 0.5));
     QCOMPARE(shape->outlineRect(), QRectF(0,0,10,20));
     QCOMPARE(shape->absolutePosition(KoFlake::TopLeft), QPointF(0,0));
@@ -104,7 +104,7 @@ void TestSvgParser::testUnitPt()
     KoShape *shape = t.findShape("testRect");
     QVERIFY(shape);
 
-    QCOMPARE(shape->boundingRect(), kisGrowRect(QRectF(0,0,10,20), 0.5));
+    QCOMPARE(shape->boundingRect(), kisGrowRect(QRectF(0,0,10,20), 0));
     QCOMPARE(shape->absoluteTransformation(), QTransform());
     QCOMPARE(shape->outlineRect(), QRectF(0,0,10,20));
     QCOMPARE(shape->absolutePosition(KoFlake::TopLeft), QPointF(0,0));
@@ -129,7 +129,7 @@ void TestSvgParser::testUnitIn()
     KoShape *shape = t.findShape("testRect");
     QVERIFY(shape);
 
-    QCOMPARE(shape->boundingRect(), kisGrowRect(QRectF(0,0,720,1440), 36));
+    QCOMPARE(shape->boundingRect(), QRectF(0,0,720,1440));
     QCOMPARE(shape->absoluteTransformation(), QTransform::fromScale(72, 72));
     QCOMPARE(shape->outlineRect(), QRectF(0,0,10,20));
     QCOMPARE(shape->absolutePosition(KoFlake::TopLeft), QPointF(0,0));
@@ -154,7 +154,7 @@ void TestSvgParser::testUnitPercentInitial()
     KoShape *shape = t.findShape("testRect");
     QVERIFY(shape);
 
-    QCOMPARE(shape->boundingRect(), kisGrowRect(QRectF(0,0,5,10), 0.25));
+    QCOMPARE(shape->boundingRect(), QRectF(0,0,5,10));
     QCOMPARE(shape->absoluteTransformation(), QTransform::fromScale(0.5, 0.5));
     QCOMPARE(shape->outlineRect(), QRectF(0,0,10,20));
     QCOMPARE(shape->absolutePosition(KoFlake::TopLeft), QPointF(0,0));
@@ -540,7 +540,7 @@ void TestSvgParser::testTransformNesting()
     KoShape *shape = t.findShape("testRect");
     QVERIFY(shape);
 
-    QCOMPARE(shape->boundingRect(), QRectF(10 - 1,10 - 0.5, 20 + 2, 20 + 1));
+    QCOMPARE(shape->boundingRect(), QRectF(10,10,20,20));
     QCOMPARE(shape->outlineRect(), QRectF(0,0,10,20));
     QCOMPARE(shape->absolutePosition(KoFlake::TopLeft), QPointF(10,10));
     QCOMPARE(shape->absolutePosition(KoFlake::BottomRight), QPointF(30,30));
@@ -567,7 +567,7 @@ void TestSvgParser::testTransformNestingGroups()
     KoShape *shape = t.findShape("testRect");
     QVERIFY(shape);
 
-    QCOMPARE(shape->boundingRect(), QRectF(10 - 1,10 - 0.5, 20 + 2, 20 + 1));
+    QCOMPARE(shape->boundingRect(), QRectF(10,10, 20, 20));
     QCOMPARE(shape->outlineRect(), QRectF(0,0,10,20));
     QCOMPARE(shape->absolutePosition(KoFlake::TopLeft), QPointF(10,10));
     QCOMPARE(shape->absolutePosition(KoFlake::BottomRight), QPointF(30,30));
@@ -592,7 +592,7 @@ void TestSvgParser::testTransformRotation1()
     KoShape *shape = t.findShape("testRect");
     QVERIFY(shape);
 
-    QCOMPARE(shape->boundingRect(), kisGrowRect(QRectF(-20,0,20,10), 0.5));
+    QCOMPARE(shape->boundingRect(), QRectF(-20,0,20,10));
     QCOMPARE(shape->outlineRect(), QRectF(0,0,10,20));
     QCOMPARE(shape->absolutePosition(KoFlake::TopLeft), QPointF(0,0));
     QCOMPARE(shape->absolutePosition(KoFlake::BottomRight), QPointF(-20,10));
@@ -617,7 +617,7 @@ void TestSvgParser::testTransformRotation2()
     KoShape *shape = t.findShape("testRect");
     QVERIFY(shape);
 
-    QCOMPARE(shape->boundingRect(), kisGrowRect(QRectF(5,5,20,10), 0.5));
+    QCOMPARE(shape->boundingRect(), QRectF(5,5,20,10));
     QCOMPARE(shape->outlineRect(), QRectF(0,0,10,20));
     QCOMPARE(shape->absolutePosition(KoFlake::TopLeft), QPointF(5,15));
     QCOMPARE(shape->absolutePosition(KoFlake::BottomRight), QPointF(25,5));

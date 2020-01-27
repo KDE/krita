@@ -36,6 +36,7 @@
 #include <KoResourcePaths.h>
 #include <kis_icon.h>
 #include <KoCanvasBase.h>
+#include <KoCanvasController.h>
 #include <KisViewManager.h>
 #include <kis_canvas2.h>
 #include <KisMainWindow.h>
@@ -302,7 +303,13 @@ QAction *TouchDockerDock::action(QString id) const
         if (d->buttonMapping.contains(id)) {
             id = d->buttonMapping[id];
         }
-        return m_canvas->viewManager()->actionManager()->actionByName(id);
+
+        QAction *action = m_canvas->viewManager()->actionManager()->actionByName(id);
+        if(!action) {
+            return m_canvas->canvasController()->actionCollection()->action(id);
+        }
+
+        return action;
     }
     return 0;
 }

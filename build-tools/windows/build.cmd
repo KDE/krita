@@ -712,10 +712,9 @@ set CMDLINE_CMAKE_KRITA="%CMAKE_EXE%" "%KRITA_SRC_DIR%\." ^
     -DHAVE_MEMORY_LEAK_TRACKER=OFF ^
     -DFOUNDATION_BUILD=ON ^
     -DUSE_QT_TABLET_WINDOWS=ON ^
-    -DHIDE_SAFE_ASSERTS=OFF ^
+    -DHIDE_SAFE_ASSERTS=ON ^
     -Wno-dev ^
-    -G "MinGW Makefiles" ^
-    -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%
+    -G "MinGW Makefiles"
 
 :: Launch CMD prompt if requested
 if "%ARG_CMD%" == "1" (

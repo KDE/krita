@@ -189,6 +189,7 @@ void TestKoShapeRegistry::testFramedSvgShapes()
     QScopedPointer<KoStore> store(KoStore::createStore(resourcesBlob, KoStore::Read, "krita", KoStore::Zip));
     QScopedPointer<KoDocumentResourceManager> resourceManager(new KoDocumentResourceManager());
 
+    resourceManager->setResource(KoDocumentResourceManager::DocumentRectInPixels, QRect(0,0,1000,1000));
 
     QScopedPointer<MockShapeController> document(new MockShapeController());
     QScopedPointer<MockCanvas> canvas(new MockCanvas(document.data()));

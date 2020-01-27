@@ -94,27 +94,8 @@
 #include "kis_tool_shape.h"
 
 KisSelectionManager::KisSelectionManager(KisViewManager * view)
-        : m_view(view),
-          m_doc(0),
-          m_imageView(0),
-          m_adapter(new KisNodeCommandsAdapter(view)),
-          m_copy(0),
-          m_copyMerged(0),
-          m_cut(0),
-          m_paste(0),
-          m_pasteNew(0),
-          m_cutToNewLayer(0),
-          m_selectAll(0),
-          m_deselect(0),
-          m_clear(0),
-          m_reselect(0),
-          m_invert(0),
-          m_copyToNewLayer(0),
-          m_fillForegroundColor(0),
-          m_fillBackgroundColor(0),
-          m_fillPattern(0),
-          m_imageResizeToSelection(0),
-          m_selectionDecoration(0)
+        : m_view(view)
+        , m_adapter(new KisNodeCommandsAdapter(view))
 {
     m_clipboard = KisClipboard::instance();
 }
@@ -662,6 +643,8 @@ void KisSelectionManager::slotStrokeSelection()
     if (currentNode->inherits("KisShapeLayer")) {
         isVectorLayer = true;
     }
+
+    qDebug() << "isVectorLayer" << isVectorLayer;
 
     QPointer<KisDlgStrokeSelection> dlg = new KisDlgStrokeSelection(image, m_view, isVectorLayer);
 

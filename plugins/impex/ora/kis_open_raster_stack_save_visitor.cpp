@@ -60,6 +60,8 @@ void KisOpenRasterStackSaveVisitor::saveLayerInfo(QDomElement& elt, KisLayer* la
     elt.setAttribute("name", layer->name());
     elt.setAttribute("opacity", QString().setNum(layer->opacity() / 255.0));
     elt.setAttribute("visibility", layer->visible() ? "visible" : "hidden");
+    elt.setAttribute("x", QString().setNum(layer->x()));
+    elt.setAttribute("y", QString().setNum(layer->y()));
     if (layer->userLocked()) {
         elt.setAttribute("edit-locked", "true");
     }
@@ -68,9 +70,7 @@ void KisOpenRasterStackSaveVisitor::saveLayerInfo(QDomElement& elt, KisLayer* la
     }
     QString compop = layer->compositeOpId();
     if (layer->compositeOpId() == COMPOSITE_CLEAR) compop = "svg:clear";
-    else if (layer->compositeOpId() == COMPOSITE_OVER) compop = "svg:src-over";
     else if (layer->compositeOpId() == COMPOSITE_ERASE) compop = "svg:dst-out";
-    else if (layer->alphaChannelDisabled()) compop = "svg:src-atop";
     else if (layer->compositeOpId() == COMPOSITE_DESTINATION_ATOP) compop = "svg:dst-atop";
     else if (layer->compositeOpId() == COMPOSITE_DESTINATION_IN) compop = "svg:dst-in";
     else if (layer->compositeOpId() == COMPOSITE_ADD) compop = "svg:plus";
@@ -88,6 +88,12 @@ void KisOpenRasterStackSaveVisitor::saveLayerInfo(QDomElement& elt, KisLayer* la
     else if (layer->compositeOpId() == COMPOSITE_LUMINIZE) compop = "svg:luminosity";
     else if (layer->compositeOpId() == COMPOSITE_HUE) compop = "svg:hue";
     else if (layer->compositeOpId() == COMPOSITE_SATURATION) compop = "svg:saturation";
+
+    // it is important that the check for alphaChannelDisabled (and other non compositeOpId checks)
+    // come before the check for COMPOSITE_OVER, otherwise they will be logically ignored.
+    else if (layer->alphaChannelDisabled()) compop = "svg:src-atop";
+    else if (layer->compositeOpId() == COMPOSITE_OVER) compop = "svg:src-over";
+
     //else if (layer->compositeOpId() == COMPOSITE_EXCLUSION) compop = "svg:exclusion";
     else compop = "krita:" + layer->compositeOpId();
     elt.setAttribute("composite-op", compop);
@@ -161,7 +167,11 @@ bool KisOpenRasterStackSaveVisitor::visit(KisExternalLayer * layer)
 
 bool KisOpenRasterStackSaveVisitor::saveLayer(KisLayer *layer)
 {
-    QString filename = d->saveContext->saveDeviceData(layer->projection(), layer->metaData(), layer->image()->bounds(), layer->image()->xRes(), layer->image()->yRes());
+
+    // here we adjust the bounds to encompass the entire area of the layer with color data by adding the current offsets
+    QRect adjustedBounds = layer->image()->bounds();
+    adjustedBounds.adjust(layer->x(), layer->y(), layer->x(), layer->y());
+    QString filename = d->saveContext->saveDeviceData(layer->projection(), layer->metaData(), adjustedBounds, layer->image()->xRes(), layer->image()->yRes());
 
     QDomElement elt = d->layerStack.createElement("layer");
     saveLayerInfo(elt, layer);

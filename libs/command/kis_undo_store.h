@@ -29,7 +29,7 @@ class KUndo2MagicString;
 
 
 /**
- * See also: http://community.kde.org/Krita/Undo_adapter_vs_Undo_store
+ * See also: https://community.kde.org/Krita/Undo_adapter_vs_Undo_store
  *
  * Split the functionality of KisUndoAdapter into two classes:
  * KisUndoStore and KisUndoAdapter. The former one works as an

@@ -22,6 +22,7 @@
 #include "KoToolBox_p.h"
 #include "KoToolBoxLayout_p.h"
 #include "KoToolBoxButton_p.h"
+#include "kis_assert.h"
 
 #include <QButtonGroup>
 #include <QToolButton>
@@ -47,6 +48,8 @@
 
 static int buttonSize(int screen)
 {
+    KIS_ASSERT_RECOVER_RETURN_VALUE(screen < QGuiApplication::screens().size() && screen >= 0, 16);
+
     QRect rc = QGuiApplication::screens().at(screen)->availableGeometry();
     if (rc.width() <= 1024) {
         return 12;
@@ -60,30 +63,23 @@ static int buttonSize(int screen)
     else {
         return 22;
     }
+
 }
 
 class KoToolBox::Private
 {
 public:
-    Private()
-        : layout(0)
-        , buttonGroup(0)
-        , floating(false)
-        , contextSize(0)
-    {
-    }
-
     void addSection(Section *section, const QString &name);
 
     QList<QToolButton*> buttons;
     QMap<QString, Section*> sections;
-    KoToolBoxLayout *layout;
-    QButtonGroup *buttonGroup;
+    KoToolBoxLayout *layout {0};
+    QButtonGroup *buttonGroup {0};
     QHash<QToolButton*, QString> visibilityCodes;
-    bool floating;
+    bool floating {false};
     QMap<QAction*,int> contextIconSizes;
-    QMenu* contextSize;
-    Qt::Orientation orientation;
+    QMenu *contextSize {0};
+    Qt::Orientation orientation {Qt::Vertical};
 };
 
 void KoToolBox::Private::addSection(Section *section, const QString &name)

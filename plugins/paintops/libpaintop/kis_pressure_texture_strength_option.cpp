@@ -30,37 +30,3 @@ double KisPressureTextureStrengthOption::apply(const KisPaintInformation & info)
     if (!isChecked()) return 1.0;
     return computeSizeLikeValue(info);
 }
-
-void KisPressureTextureStrengthOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
-{
-    KisCurveOption::readOptionSetting(setting);
-
-    /**
-     * Backward compatibility with Krita < 2.7.
-     *
-     * Process the presets created with the old UI, when the
-     * strength was a part of Texture/Pattern option.
-     */
-    int strengthVersion = setting->getInt("Texture/Strength/StrengthVersion", 1);
-    if (strengthVersion == 1) {
-        double legacyStrength = setting->getDouble("Texture/Pattern/Strength", 1.0);
-        setChecked(true);
-        setValue(legacyStrength);
-    }
-}
-
-void KisPressureTextureStrengthOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
-{
-    KisCurveOption::writeOptionSetting(setting);
-
-    /**
-     * Forward compatibility with the Krita < 2.7
-     *
-     * Duplicate the value of the maximum strength into the
-     * property used by older versions of Krita.
-     */
-    setting->setProperty("Texture/Strength/StrengthVersion", 2);
-    if (isChecked()) {
-        setting->setProperty("Texture/Pattern/Strength", value());
-    }
-}

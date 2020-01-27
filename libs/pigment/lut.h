@@ -223,7 +223,7 @@ FULL_LUT_INT_SPECIALIZATION(lut_uint16, 0, 65535)
  * This provide an implementation for a LutKey for floating point input values.
  *
  * Based on "High-speed Conversion of Floating Point Images to 8-bit" by Bill Spitzaks
- * (http://mysite.verizon.net/spitzak/conversion/)
+ * (https://spitzak.github.io/conversion/sketches_0265.pdf)
  */
 template<>
 class LutKey<float> {

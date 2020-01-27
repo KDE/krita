@@ -90,7 +90,6 @@ set(KRITA_VERSION_REVISION 0)
 set(KRITA_ALPHA 1) # uncomment only for Alpha
 #set(KRITA_BETA 1) # uncomment only for Beta
 #set(KRITA_RC 1) # uncomment only for RC
-set(KRITA_YEAR 2018) # update every year
 
 if(NOT DEFINED KRITA_ALPHA AND NOT DEFINED KRITA_BETA AND NOT DEFINED KRITA_RC)
     set(KRITA_STABLE 1) # do not edit
@@ -381,7 +380,7 @@ macro_ensure_out_of_source_build("Compiling Krita inside the source directory is
 find_package(Qt5Multimedia ${MIN_QT_VERSION})
 set_package_properties(Qt5Multimedia PROPERTIES
         DESCRIPTION "Qt multimedia integration"
-        URL "http://www.qt.io/"
+        URL "https://www.qt.io/"
         TYPE OPTIONAL
         PURPOSE "Optionally used to provide sound support for animations")
 
@@ -392,7 +391,7 @@ if (NOT APPLE)
 find_package(Qt5Quick ${MIN_QT_VERSION})
 set_package_properties(Qt5Quick PROPERTIES
         DESCRIPTION "QtQuick"
-        URL "http://www.qt.io/"
+        URL "https://www.qt.io/"
         TYPE OPTIONAL
         PURPOSE "Optionally used for the touch gui for Krita")
 
@@ -401,7 +400,7 @@ macro_bool_to_01(Qt5Quick_FOUND HAVE_QT_QUICK)
 find_package(Qt5QuickWidgets ${MIN_QT_VERSION})
 set_package_properties(Qt5QuickWidgets PROPERTIES
         DESCRIPTION "QtQuickWidgets"
-        URL "http://www.qt.io/"
+        URL "https://www.qt.io/"
         TYPE OPTIONAL
         PURPOSE "Optionally used for the touch gui for Krita")
 endif()
@@ -414,7 +413,7 @@ if (NOT WIN32 AND NOT APPLE AND NOT ANDROID)
     set(HAVE_DBUS ${Qt5DBus_FOUND})
     set_package_properties(Qt5DBus PROPERTIES
         DESCRIPTION "Qt DBUS integration"
-        URL "http://www.qt.io/"
+        URL "https://www.qt.io/"
         TYPE OPTIONAL
         PURPOSE "Optionally used to provide a dbus api on Linux")
 
@@ -422,7 +421,7 @@ if (NOT WIN32 AND NOT APPLE AND NOT ANDROID)
     macro_bool_to_01(KF5Crash_FOUND HAVE_KCRASH)
     set_package_properties(KF5Crash PROPERTIES
         DESCRIPTION "KDE's Crash Handler"
-        URL "http://api.kde.org/frameworks-api/frameworks5-apidocs/kcrash/html/index.html"
+        URL "https://api.kde.org/frameworks-api/frameworks5-apidocs/kcrash/html/index.html"
         TYPE OPTIONAL
         PURPOSE "Optionally used to provide crash reporting on Linux")
 
@@ -559,7 +558,7 @@ find_package(PNG REQUIRED)
 list (APPEND ANDROID_EXTRA_LIBS ${PNG_LIBRARY})
 
 if (APPLE)
-    # this is not added correctly on OSX -- see http://forum.kde.org/viewtopic.php?f=139&t=101867&p=221242#p221242
+    # this is not added correctly on OSX -- see https://forum.kde.org/viewtopic.php?f=139&t=101867&p=221242#p221242
     include_directories(SYSTEM ${PNG_INCLUDE_DIR})
 endif()
 
@@ -571,7 +570,7 @@ include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 ##
 find_package(GSL)
 set_package_properties(GSL PROPERTIES
-    URL "http://www.gnu.org/software/gsl"
+    URL "https://www.gnu.org/software/gsl"
     TYPE RECOMMENDED
     PURPOSE "Required by Krita's Transform tool.")
 macro_bool_to_01(GSL_FOUND HAVE_GSL)
@@ -589,7 +588,7 @@ endif()
 find_package(ZLIB)
 set_package_properties(ZLIB PROPERTIES
     DESCRIPTION "Compression library"
-    URL "http://www.zlib.net/"
+    URL "https://www.zlib.net/"
     TYPE OPTIONAL
     PURPOSE "Optionally used by the G'Mic and the PSD plugins")
 macro_bool_to_01(ZLIB_FOUND HAVE_ZLIB)
@@ -597,7 +596,7 @@ macro_bool_to_01(ZLIB_FOUND HAVE_ZLIB)
 find_package(OpenEXR)
 set_package_properties(OpenEXR PROPERTIES
     DESCRIPTION "High dynamic-range (HDR) image file format"
-    URL "http://www.openexr.com"
+    URL "https://www.openexr.com"
     TYPE OPTIONAL
     PURPOSE "Required by the Krita OpenEXR filter")
 macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
@@ -611,7 +610,7 @@ endif()
 find_package(TIFF)
 set_package_properties(TIFF PROPERTIES
     DESCRIPTION "TIFF Library and Utilities"
-    URL "http://www.remotesensing.org/libtiff"
+    URL "http://www.libtiff.org"
     TYPE OPTIONAL
     PURPOSE "Required by the Krita TIFF filter")
 if (TIFF_FOUND)
@@ -621,7 +620,7 @@ endif()
 find_package(JPEG)
 set_package_properties(JPEG PROPERTIES
     DESCRIPTION "Free library for JPEG image compression. Note: libjpeg8 is NOT supported."
-    URL "http://www.libjpeg-turbo.org"
+    URL "https://www.libjpeg-turbo.org"
     TYPE OPTIONAL
     PURPOSE "Required by the Krita JPEG filter")
 if (JPEG_FOUND)
@@ -648,7 +647,7 @@ set_package_properties(HEIF PROPERTIES
 find_package(OpenJPEG "2.3.0")
 set_package_properties(OpenJPEG PROPERTIES
     DESCRIPTION "Library for loading and saving jp2000 files."
-    URL "http://www.openjpeg.org/"
+    URL "https://www.openjpeg.org/"
     TYPE OPTIONAL
     PURPOSE "Required by the Krita JP2000 filter")
 
@@ -656,7 +655,7 @@ set(LIBRAW_MIN_VERSION  "0.16")
 find_package(LibRaw ${LIBRAW_MIN_VERSION})
 set_package_properties(LibRaw PROPERTIES
     DESCRIPTION "Library to decode RAW images"
-    URL "http://www.libraw.org"
+    URL "https://www.libraw.org/"
     TYPE OPTIONAL
     PURPOSE "Required to build the raw import plugin")
 
@@ -674,14 +673,14 @@ endif()
 find_package(OCIO)
 set_package_properties(OCIO PROPERTIES
     DESCRIPTION "The OpenColorIO Library"
-    URL "http://www.opencolorio.org"
+    URL "https://www.opencolorio.org"
     TYPE OPTIONAL
     PURPOSE "Required by the Krita LUT docker")
 macro_bool_to_01(OCIO_FOUND HAVE_OCIO)
 
 set_package_properties(PythonLibrary PROPERTIES
     DESCRIPTION "Python Library"
-    URL "http://www.python.org"
+    URL "https://www.python.org"
     TYPE OPTIONAL
     PURPOSE "Required by the Krita PyQt plugin")
 macro_bool_to_01(PYTHONLIBS_FOUND HAVE_PYTHONLIBS)
@@ -813,7 +812,7 @@ test_big_endian(CMAKE_WORDS_BIGENDIAN)
 find_package(Poppler COMPONENTS Qt5)
 set_package_properties(Poppler PROPERTIES
     DESCRIPTION "A PDF rendering library"
-    URL "http://poppler.freedesktop.org"
+    URL "https://poppler.freedesktop.org/"
     TYPE OPTIONAL
     PURPOSE "Required by the Krita PDF filter.")
 

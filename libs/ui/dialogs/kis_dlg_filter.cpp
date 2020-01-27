@@ -98,6 +98,7 @@ KisDlgFilter::KisDlgFilter(KisViewManager *view, KisNodeSP node, KisFilterManage
     connect(d->uiFilterDialog.filterSelection, SIGNAL(configurationChanged()), SLOT(filterSelectionChanged()));
 
     connect(this, SIGNAL(accepted()), SLOT(slotOnAccept()));
+    connect(this, SIGNAL(accepted()), d->uiFilterDialog.filterSelection, SLOT(slotBookMarkCurrentFilter()));
     connect(this, SIGNAL(rejected()), SLOT(slotOnReject()));
 
     KConfigGroup group( KSharedConfig::openConfig(), "filterdialog");

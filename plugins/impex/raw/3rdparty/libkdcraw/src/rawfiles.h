@@ -2,7 +2,7 @@
  * @file
  *
  * This file is a part of digiKam project
- * <a href="http://www.digikam.org">http://www.digikam.org</a>
+ * <a href="https://www.digikam.org">https://www.digikam.org</a>
  *
  * @date   2005-11-06
  * @brief  list of RAW file extensions supported by libraw
@@ -26,7 +26,7 @@
 #ifndef RAW_FILES_H
 #define RAW_FILES_H
 
-// NOTE: extension list Version 1 and 2 are taken from http://www.cybercom.net/~dcoffin/dcraw/rawphoto.c
+// NOTE: extension list Version 1 and 2 are taken from https://www.dechifro.org/dcraw/rawphoto.c
 
 //                                           Ext    Descriptions From
 //                                                  www.file-extensions.org

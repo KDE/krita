@@ -37,6 +37,7 @@
 #include <kis_paint_layer.h>
 #include <kis_png_converter.h>
 #include <KisDocument.h>
+#include <kis_clone_layer.h>
 
 static const char CURRENT_DTD_VERSION[] = "2.0";
 
@@ -60,6 +61,26 @@ KraConverter::~KraConverter()
     delete m_kraLoader;
 }
 
+void fixCloneLayers(KisImageSP image, KisNodeSP root)
+{
+    KisNodeSP first = root->firstChild();
+    KisNodeSP node = first;
+    while (!node.isNull()) {
+        if (node->inherits("KisCloneLayer")) {
+            KisCloneLayer* layer = dynamic_cast<KisCloneLayer*>(node.data());
+            if (layer && layer->copyFrom().isNull()) {
+                KisLayerSP reincarnation = layer->reincarnateAsPaintLayer();
+                image->addNode(reincarnation, node->parent(), node->prevSibling());
+                image->removeNode(node);
+                node = reincarnation;
+            }
+        } else if (node->childCount() > 0) {
+            fixCloneLayers(image, node);
+        }
+        node = node->nextSibling();
+    }
+}
+
 KisImportExportErrorCode KraConverter::buildImage(QIODevice *io)
 {
     m_store = KoStore::createStore(io, KoStore::Read, "", KoStore::Zip);
@@ -69,7 +90,7 @@ KisImportExportErrorCode KraConverter::buildImage(QIODevice *io)
         return ImportExportCodes::FileFormatIncorrect;
     }
 
-    bool success;
+    bool success = false;
     {
         if (m_store->hasFile("root") || m_store->hasFile("maindoc.xml")) {   // Fallback to "old" file format (maindoc.xml)
             KoXmlDocument doc;
@@ -89,12 +110,15 @@ KisImportExportErrorCode KraConverter::buildImage(QIODevice *io)
 
         if (m_store->hasFile("documentinfo.xml")) {
             KoXmlDocument doc;
-            if (oldLoadAndParse(m_store, "documentinfo.xml", doc).isOk()) {
+            KisImportExportErrorCode resultHere = oldLoadAndParse(m_store, "documentinfo.xml", doc);
+            if (resultHere.isOk()) {
                 m_doc->documentInfo()->load(doc);
             }
         }
         success = completeLoading(m_store);
     }
+
+    fixCloneLayers(m_image, m_image->root());
 
     return success ? ImportExportCodes::OK : ImportExportCodes::Failure;
 }
@@ -380,6 +404,11 @@ bool KraConverter::completeLoading(KoStore* store)
     m_kraLoader->loadBinaryData(store, m_image, m_doc->localFilePath(), true);
     m_kraLoader->loadPalettes(store, m_doc);
 
+    if (!m_kraLoader->errorMessages().isEmpty()) {
+        m_doc->setErrorMessage(m_kraLoader->errorMessages().join("\n"));
+        return false;
+    }
+
     m_image->unblockUpdates();
 
     if (!m_kraLoader->warningMessages().isEmpty()) {
@@ -391,6 +420,7 @@ bool KraConverter::completeLoading(KoStore* store)
     m_assistants = m_kraLoader->assistants();
 
     return true;
+    return m_kraLoader->errorMessages().isEmpty();
 }
 
 void KraConverter::cancel()

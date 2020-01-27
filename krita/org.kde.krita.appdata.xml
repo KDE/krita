@@ -11,6 +11,7 @@
   <developer_name xml:lang="de">Krita Foundation</developer_name>
   <developer_name xml:lang="en-GB">Krita Foundation</developer_name>
   <developer_name xml:lang="es">Fundación Krita</developer_name>
+  <developer_name xml:lang="et">Krita sihtasutus</developer_name>
   <developer_name xml:lang="eu">Krita Fundazioa</developer_name>
   <developer_name xml:lang="fi">Krita Foundation</developer_name>
   <developer_name xml:lang="fr">La Fondation Krita</developer_name>
@@ -40,6 +41,7 @@
   <name xml:lang="el">Krita</name>
   <name xml:lang="en-GB">Krita</name>
   <name xml:lang="es">Krita</name>
+  <name xml:lang="et">Krita</name>
   <name xml:lang="eu">Krita</name>
   <name xml:lang="fi">Krita</name>
   <name xml:lang="fr">Krita</name>
@@ -231,6 +233,7 @@
       <caption xml:lang="de">Krita ist ein digitales Zeichenstudio mit umfangreichen Funktionen.</caption>
       <caption xml:lang="en-GB">Krita is a full-featured digital painting studio.</caption>
       <caption xml:lang="es">Krita es un completo estudio de dibujo digital.</caption>
+      <caption xml:lang="et">Krita on rohkete võimalustega digitaalkunstistuudio.</caption>
       <caption xml:lang="gl">Krita é un estudio completo de debuxo dixital.</caption>
       <caption xml:lang="id">Krita adalah studio pelukisan digital dengan fitur yang lengkap.</caption>
       <caption xml:lang="it">Krita è uno studio d'arte digitale completo.</caption>
@@ -254,6 +257,7 @@
       <caption xml:lang="ca-valencia">La finestra d'inici ara proporciona les darreres noticies quant al Krita.</caption>
       <caption xml:lang="en-GB">The startup window now also gives you the latest news about Krita.</caption>
       <caption xml:lang="es">La ventana de bienvenida también le proporciona ahora las últimas noticias sobre Krita.</caption>
+      <caption xml:lang="et">Käivitusaken jagab nüüd ka Krita värskemaid uudiseid.</caption>
       <caption xml:lang="gl">Agora a xanela de inicio tamén fornece as últimas novas sobre Krita.</caption>
       <caption xml:lang="id">Window pemulaian kini juga memberikan kamu kabar terkini tentang Krita.</caption>
       <caption xml:lang="it">La finestra di avvio ora fornisce anche le ultime novità su Krita.</caption>
@@ -277,6 +281,7 @@
       <caption xml:lang="ca-valencia">Hi ha uns deu motors de pinzell immensament potents.</caption>
       <caption xml:lang="en-GB">There are over ten immensely powerful brush engines.</caption>
       <caption xml:lang="es">Existen unos diez inmensamente potentes motores de pinceles.</caption>
+      <caption xml:lang="et">Üle kümne ääretult võimeka pintslimootori.</caption>
       <caption xml:lang="gl">Hai máis de dez motores de pinceis inmensamente potentes.</caption>
       <caption xml:lang="id">Ada lebih dari sepuluh mesin kuas yang sangat manjur.</caption>
       <caption xml:lang="it">Ci sono oltre dieci motori di pennelli incredibilmente potenti.</caption>
@@ -299,6 +304,7 @@
       <caption xml:lang="ca-valencia">Creeu i useu màscares de gamma per donar a les imatges una aparença coherent.</caption>
       <caption xml:lang="en-GB">Create and use gamut masks to give your images a coherent feel.</caption>
       <caption xml:lang="es">Cree y use gamas para proporcionar a sus imágenes un aspecto coherente.</caption>
+      <caption xml:lang="et">Värviulatuse maskide loomine ja kasutamine piltidele kooskõlalise välimuse andmiseks.</caption>
       <caption xml:lang="gl">Crea e usa máscaras de gama para dar ás túas imaxes un aspecto coherente.</caption>
       <caption xml:lang="id">Ciptakan dan gunakan masker gamut untuk memberikan gambarmu sebuah suasana koheren.</caption>
       <caption xml:lang="it">Crea e utilizza maschere gamut per dare alle tue immagini un aspetto coerente.</caption>
@@ -321,6 +327,7 @@
       <caption xml:lang="ca-valencia">Esteu amb animacions? El Krita proporciona tol el que cal per a l'animació a mà tradicional.</caption>
       <caption xml:lang="en-GB">Into animation? Krita provides everything you need for traditional, hand-drawn animation.</caption>
       <caption xml:lang="es">¿Trabaja con animación? Krita proporciona todo lo necesario para la animación manual tradicional.</caption>
+      <caption xml:lang="et">Sind huvitab animatsioon? Krita pakub kõike, mida läheb tarvis traditsioonilise käsitsi loodud animatsiooni jaoks.</caption>
       <caption xml:lang="gl">Gusta das animacións? Krita fornece todo o necesario para animacións tradicionais debuxadas a man.</caption>
       <caption xml:lang="id">Soal animasi? krita menyediakan apa pun yang kamu perlukan untuk animasi gambar-tangan, tradisional.</caption>
       <caption xml:lang="it">Per le animazioni? Krita fornisce tutto ciò che ti server per l'animazione tradizionale, disegnata a mano.</caption>
@@ -344,6 +351,7 @@
       <caption xml:lang="ca-valencia">Si sou nou a la pintura digital, o voleu conèixer més quant a les possibilitats del Krita, hi ha un ampli manual actualitzat.</caption>
       <caption xml:lang="en-GB">If you're new to digital painting, or want to know more about Krita's possibilities, there's an extensive, up-to-date manual.</caption>
       <caption xml:lang="es">Si está empezando con el dibujo digital o si quiere saber más sobre la posibilidades de Krita, dispone de un extenso y actualizado manual.</caption>
+      <caption xml:lang="et">Kui oled digitaalkunstis alles uustulnuk või tunned huvi Krita võimaluste vastu, on meil välja pakkuda mahukas ajakohane käsiraamat.</caption>
       <caption xml:lang="gl">Se está a empezar co debuxo dixital, ou quere saber máis sobre as posibilidades de Krita, existe un manual exhaustivo e actualizado.</caption>
       <caption xml:lang="id">Jika kamu baru dalam pelukisan digital, atau ingin mengetahui selebihnya tentang Krita, di situ ada manual yang update dan luas.</caption>
       <caption xml:lang="it">Se sei nuovo del disegno digitale, o vuoi saperne di più sulle possibilità di Krita, è disponibile un manuale completo e aggiornato.</caption>

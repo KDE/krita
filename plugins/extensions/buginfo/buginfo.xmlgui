@@ -1,8 +1,9 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui library="kritabuginfo" version="8" translationDomain="krita">
+<kpartgui library="kritabuginfo" version="9" translationDomain="krita">
     <MenuBar>
         <Menu name="Help">
             <Action name="buginfo"/>
+            <Action name="sysinfo"/>
         </Menu>
     </MenuBar>
 </kpartgui>

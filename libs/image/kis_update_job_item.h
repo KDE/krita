@@ -47,9 +47,7 @@ public:
 
 public:
     KisUpdateJobItem(KisUpdaterContext *updaterContext)
-        : m_updaterContext(updaterContext),
-          m_atomicType(Type::EMPTY),
-          m_runnableJob(0)
+        : m_updaterContext(updaterContext)
     {
         setAutoDelete(false);
         KIS_SAFE_ASSERT_RECOVER_NOOP(m_atomicType.is_lock_free());
@@ -238,24 +236,20 @@ private:
     }
 
 private:
-    KisUpdaterContext *m_updaterContext;
-
-    bool m_exclusive;
-
-    std::atomic<Type> m_atomicType;
-
+    KisUpdaterContext *m_updaterContext {0};
+    bool m_exclusive {false};
+    std::atomic<Type> m_atomicType {Type::EMPTY};
     volatile KisStrokeJobData::Sequentiality m_strokeJobSequentiality;
 
     /**
      * Runnable jobs part
      * The job is owned by the context and deleted after completion
      */
-    KisRunnableWithDebugName *m_runnableJob;
+    KisRunnableWithDebugName *m_runnableJob {0};
 
     /**
      * Merge jobs part
      */
-
     KisBaseRectsWalkerSP m_walker;
     KisAsyncMerger m_merger;
 

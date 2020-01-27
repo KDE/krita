@@ -149,11 +149,6 @@ public Q_SLOTS:
     void reject() override;
 
 private Q_SLOTS:
-    /**
-     * @brief slotConfigurationChanged
-     * Wrapper slot for changes to the colorspace.
-     */
-    void slotConfigurationChanged();
 
     void endUpdateWithNewColor();
 

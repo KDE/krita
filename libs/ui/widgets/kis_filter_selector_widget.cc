@@ -140,7 +140,7 @@
             idx = d->filtersModel->indexForFilter("levels");
         }
 
-        if (isFilterGalleryVisible()) {
+        if (d->usedForMask && isFilterGalleryVisible()) {
             d->uiFilterSelector.filtersSelector->activateFilter(idx);
         }
 
@@ -278,9 +278,13 @@
             }
         }
 
+        slotBookMarkCurrentFilter();
+        emit(configurationChanged());
+    }
+
+    void KisFilterSelectorWidget::slotBookMarkCurrentFilter() {
         KisConfig cfg(false);
         cfg.writeEntry<QString>("FilterSelector/LastUsedFilter", d->currentFilter->id());
-        emit(configurationChanged());
     }
 
     void KisFilterSelectorWidget::slotBookmarkedFilterConfigurationSelected(int index)

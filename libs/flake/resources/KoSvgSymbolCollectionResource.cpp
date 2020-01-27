@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
 
-   Copyright (c) 2017 L. E. Segovia <leo.segovia@siggraph.org>
+   Copyright (c) 2017 L. E. Segovia <amy@amyspark.me>
 
 
    This library is free software; you can redistribute it and/or

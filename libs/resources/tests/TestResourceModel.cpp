@@ -263,7 +263,6 @@ void TestResourceModel::testResourceForMD5()
     QVERIFY(!resource.isNull());
     KoResourceSP resource2 = resourceModel.resourceForMD5(resource->md5());
     QVERIFY(!resource2.isNull());
-
     QCOMPARE(resource->md5(), resource2->md5());
 }
 

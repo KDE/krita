@@ -39,6 +39,10 @@ private Q_SLOTS:
     void testAddResource();
     void testAddTemporaryResource();
     void testUpdateResource();
+    void testResourceForId();
+    void testResourceForName();
+    void testResourceForFileName();
+    void testResourceForMD5();
     void cleanupTestCase();
 private:
 

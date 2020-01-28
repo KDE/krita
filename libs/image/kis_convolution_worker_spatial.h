@@ -62,8 +62,8 @@ public:
         // store some kernel characteristics
         m_kw = kernel->width();
         m_kh = kernel->height();
-        m_khalfWidth = (m_kw - 1) / 2;
-        m_khalfHeight = (m_kh - 1) / 2;
+        m_khalfWidth = (m_kw > 0) ? (m_kw - 1) / 2 : m_kw;
+        m_khalfHeight = (m_kh > 0) ? (m_kh - 1) / 2 : m_kh;
         m_cacheSize = m_kw * m_kh;
         m_pixelSize = src->colorSpace()->pixelSize();
         quint32 channelCount = src->colorSpace()->channelCount();

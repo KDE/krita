@@ -55,8 +55,6 @@ KisShortcutsDialog::KisShortcutsDialog(KisShortcutsEditor::ActionTypes types,
 
     d->m_shortcutsEditor = new KisShortcutsEditor(this, types, allowLetterShortcuts);
 
-
-
     /*  Construct & Connect UI  */
     QVBoxLayout *mainLayout = new QVBoxLayout;
     setLayout(mainLayout);

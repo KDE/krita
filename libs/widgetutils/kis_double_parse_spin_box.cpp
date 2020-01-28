@@ -158,7 +158,8 @@ void KisDoubleParseSpinBox::stepBy(int steps)
 
 void KisDoubleParseSpinBox::setValue(double value)
 {
-    if(value == oldValue && hasFocus()){ //avoid to reset the button when it set the value of something that will recall this slot.
+    // Avoid to reset the button when it set the val of something that will recall this slot.
+    if(hasFocus() && QString::number( value, 'f', this->decimals()) == QString::number( oldValue, 'f', this->decimals())){
         return;
     }
 

@@ -330,6 +330,7 @@ void KisFloatColorInput::update()
     qreal value = 1.0;
     m_minValue = m_displayRenderer->minVisibleFloatValue(m_channelInfo);
     m_maxValue = m_displayRenderer->maxVisibleFloatValue(m_channelInfo);
+    m_dblNumInput->blockSignals(true);
     m_colorSlider->blockSignals(true);
 
     switch (m_channelInfo->channelValueType()) {
@@ -362,11 +363,13 @@ void KisFloatColorInput::update()
         m_dblNumInput->setDecimals(newPrecision);
         m_dblNumInput->updateGeometry();
     }
+    m_dblNumInput->setValue(value);
 
     m_colorSlider->setColors(min, max);
 
     const qreal floatRange = m_maxValue - m_minValue;
     m_colorSlider->setValue((value - m_minValue) / floatRange * 255);
+    m_dblNumInput->blockSignals(false);
     m_colorSlider->blockSignals(false);
 }
 

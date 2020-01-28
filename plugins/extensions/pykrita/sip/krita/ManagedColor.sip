@@ -8,6 +8,7 @@ public:
     ManagedColor(const QString &colorModel, const QString &colorDepth, const QString &colorProfile, QObject *parent = 0);
     bool operator==(const ManagedColor &other) const;
     QColor colorForCanvas(Canvas *canvas) const;
+    static ManagedColor *fromQColor(const QColor &qcolor, Canvas *canvas = 0);
     QString colorDepth() const;
     QString colorModel() const;
     QString colorProfile() const;

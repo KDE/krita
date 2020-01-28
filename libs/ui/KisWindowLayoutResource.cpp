@@ -112,8 +112,8 @@ struct KisWindowLayoutResource::Private
     };
 
     QVector<Window> windows;
-    bool showImageInAllWindows;
-    bool primaryWorkspaceFollowsFocus;
+    bool showImageInAllWindows {false};
+    bool primaryWorkspaceFollowsFocus {false};
     QUuid primaryWindow;
 
     Private() = default;

@@ -36,14 +36,15 @@ struct KisKeyframe::Private
     QPointer<KisKeyframeChannel> channel;
     int time;
 
-    InterpolationMode interpolationMode;
-    InterpolationTangentsMode tangentsMode;
+    InterpolationMode interpolationMode {InterpolationMode::Constant};
+    InterpolationTangentsMode tangentsMode {InterpolationTangentsMode::Smooth};
     QPointF leftTangent;
     QPointF rightTangent;
     int colorLabel{0};
 
     Private(KisKeyframeChannel *channel, int time)
-        : channel(channel), time(time), interpolationMode(Constant)
+        : channel(channel)
+        , time(time)
     {}
 };
 

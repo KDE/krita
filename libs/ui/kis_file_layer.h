@@ -84,6 +84,8 @@ public:
     KUndo2Command* crop(const QRect & rect) override;
     KUndo2Command* transform(const QTransform &transform) override;
 
+    void setImage(KisImageWSP image) override;
+
 public Q_SLOTS:
     void slotLoadingFinished(KisPaintDeviceSP projection, int xRes, int yRes);
 

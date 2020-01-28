@@ -5,7 +5,7 @@ includedir=${INCLUDE_INSTALL_DIR}
 
 Name: ${PROJECT_NAME}
 Description: A C++ wrapper around LibRaw library to decode RAW pictures. This library is used by digiKam and kipi-plugins.
-URL: http://www.digikam.org/sharedlibs
+URL: https://commits.kde.org/libkdcraw
 Requires:
 Version: ${DCRAW_LIB_VERSION_STRING}
 Libs: -L${LIB_INSTALL_DIR} -lkdcraw

@@ -2,7 +2,7 @@
  * @file
  *
  * This file is a part of digiKam project
- * <a href="http://www.digikam.org">http://www.digikam.org</a>
+ * <a href="https://www.digikam.org">https://www.digikam.org</a>
  *
  * @date   2014-11-30
  * @brief  Save space slider widget
@@ -382,8 +382,7 @@ QSize RAbstractSliderSpinBox::sizeHint() const
 
     spinOpts.rect = rect();
 
-    return style()->sizeFromContents(QStyle::CT_SpinBox, &spinOpts, hint, 0)
-                   .expandedTo(QApplication::globalStrut());
+    return style()->sizeFromContents(QStyle::CT_SpinBox, &spinOpts, hint, 0);
 }
 
 QSize RAbstractSliderSpinBox::minimumSizeHint() const

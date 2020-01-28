@@ -27,6 +27,7 @@
 #include "kis_signals_blocker.h"
 #include "kis_brush_option.h"
 #include <KisPaintopSettingsIds.h>
+#include <brushengine/kis_paintop_preset.h>
 
 struct BrushReader {
     BrushReader(const KisBrushBasedPaintOpSettings *parent)
@@ -66,7 +67,9 @@ struct BrushWriter {
 KisBrushBasedPaintOpSettings::KisBrushBasedPaintOpSettings()
     : KisOutlineGenerationPolicy<KisPaintOpSettings>(KisCurrentOutlineFetcher::SIZE_OPTION |
             KisCurrentOutlineFetcher::ROTATION_OPTION |
-            KisCurrentOutlineFetcher::MIRROR_OPTION)
+            KisCurrentOutlineFetcher::MIRROR_OPTION |
+            KisCurrentOutlineFetcher::SHARPNESS_OPTION)
+
 {
 }
 

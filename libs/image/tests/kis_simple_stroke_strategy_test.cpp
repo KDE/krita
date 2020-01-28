@@ -27,7 +27,8 @@ class TestingSimpleStrokeStrategy : public KisSimpleStrokeStrategy
 {
 public:
     TestingSimpleStrokeStrategy()
-        : m_stageCounter(0)
+        : KisSimpleStrokeStrategy(QLatin1String("TestingSimpleStrokeStrategy")),
+          m_stageCounter(0)
     {
         enableJob(KisSimpleStrokeStrategy::JOB_INIT);
         enableJob(KisSimpleStrokeStrategy::JOB_FINISH);

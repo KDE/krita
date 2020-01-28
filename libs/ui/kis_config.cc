@@ -79,18 +79,18 @@ KisConfig::~KisConfig()
 
 void KisConfig::logImportantSettings() const
 {
-    KisUsageLogger::write("Current Settings\n");
-    KisUsageLogger::write(QString("\tCurrent Swap Location: %1").arg(KisImageConfig(true).swapDir()));
-    KisUsageLogger::write(QString("\tUndo Enabled: %1").arg(undoEnabled()));
-    KisUsageLogger::write(QString("\tUndo Stack Limit: %1").arg(undoStackLimit()));
-    KisUsageLogger::write(QString("\tUse OpenGL: %1").arg(useOpenGL()));
-    KisUsageLogger::write(QString("\tUse OpenGL Texture Buffer: %1").arg(useOpenGLTextureBuffer()));
-    KisUsageLogger::write(QString("\tUse AMD Vectorization Workaround: %1").arg(enableAmdVectorizationWorkaround()));
-    KisUsageLogger::write(QString("\tCanvas State: %1").arg(canvasState()));
-    KisUsageLogger::write(QString("\tAutosave Interval: %1").arg(autoSaveInterval()));
-    KisUsageLogger::write(QString("\tUse Backup Files: %1").arg(backupFile()));
-    KisUsageLogger::write(QString("\tNumber of Backups Kept: %1").arg(m_cfg.readEntry("numberofbackupfiles", 1)));
-    KisUsageLogger::write(QString("\tBackup File Suffix: %1").arg(m_cfg.readEntry("backupfilesuffix", "~")));
+    KisUsageLogger::writeSysInfo("Current Settings\n");
+    KisUsageLogger::writeSysInfo(QString("  Current Swap Location: %1").arg(KisImageConfig(true).swapDir()));
+    KisUsageLogger::writeSysInfo(QString("  Undo Enabled: %1").arg(undoEnabled()));
+    KisUsageLogger::writeSysInfo(QString("  Undo Stack Limit: %1").arg(undoStackLimit()));
+    KisUsageLogger::writeSysInfo(QString("  Use OpenGL: %1").arg(useOpenGL()));
+    KisUsageLogger::writeSysInfo(QString("  Use OpenGL Texture Buffer: %1").arg(useOpenGLTextureBuffer()));
+    KisUsageLogger::writeSysInfo(QString("  Use AMD Vectorization Workaround: %1").arg(enableAmdVectorizationWorkaround()));
+    KisUsageLogger::writeSysInfo(QString("  Canvas State: %1").arg(canvasState()));
+    KisUsageLogger::writeSysInfo(QString("  Autosave Interval: %1").arg(autoSaveInterval()));
+    KisUsageLogger::writeSysInfo(QString("  Use Backup Files: %1").arg(backupFile()));
+    KisUsageLogger::writeSysInfo(QString("  Number of Backups Kept: %1").arg(m_cfg.readEntry("numberofbackupfiles", 1)));
+    KisUsageLogger::writeSysInfo(QString("  Backup File Suffix: %1").arg(m_cfg.readEntry("backupfilesuffix", "~")));
 
     QString backupDir;
     switch(m_cfg.readEntry("backupfilelocation", 0)) {
@@ -104,14 +104,14 @@ void KisConfig::logImportantSettings() const
         // Do nothing: the empty string is user file location
         backupDir = "Same Folder as the File";
     }
-    KisUsageLogger::write(QString("\tBackup Location: %1").arg(backupDir));
+    KisUsageLogger::writeSysInfo(QString("  Backup Location: %1").arg(backupDir));
 
-    KisUsageLogger::write(QString("\tUse Win8 Pointer Input: %1").arg(useWin8PointerInput()));
-    KisUsageLogger::write(QString("\tUse RightMiddleTabletButton Workaround: %1").arg(useRightMiddleTabletButtonWorkaround()));
-    KisUsageLogger::write(QString("\tLevels of Detail Enabled: %1").arg(levelOfDetailEnabled()));
-    KisUsageLogger::write(QString("\tUse Zip64: %1").arg(useZip64()));
+    KisUsageLogger::writeSysInfo(QString("  Use Win8 Pointer Input: %1").arg(useWin8PointerInput()));
+    KisUsageLogger::writeSysInfo(QString("  Use RightMiddleTabletButton Workaround: %1").arg(useRightMiddleTabletButtonWorkaround()));
+    KisUsageLogger::writeSysInfo(QString("  Levels of Detail Enabled: %1").arg(levelOfDetailEnabled()));
+    KisUsageLogger::writeSysInfo(QString("  Use Zip64: %1").arg(useZip64()));
 
-    KisUsageLogger::write("\n");
+    KisUsageLogger::writeSysInfo("\n");
 }
 
 bool KisConfig::disableTouchOnCanvas(bool defaultValue) const
@@ -1856,7 +1856,13 @@ void KisConfig::setKineticScrollingEnabled(bool value)
 
 int KisConfig::kineticScrollingGesture(bool defaultValue) const
 {
-    return (defaultValue ? 2 : m_cfg.readEntry("KineticScrollingGesture", 2));
+#ifdef Q_OS_ANDROID
+    int defaultGesture = 0; // TouchGesture
+#else
+    int defaultGesture = 2; // MiddleMouseButtonGesture
+#endif
+
+    return (defaultValue ? defaultGesture : m_cfg.readEntry("KineticScrollingGesture", defaultGesture));
 }
 
 void KisConfig::setKineticScrollingGesture(int gesture)

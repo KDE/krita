@@ -89,17 +89,6 @@ void KisStatusBar::setup()
     addStatusBarItem(m_selectionStatus);
     m_selectionStatus->setVisible(false);
 
-    m_resetAngleButton = new QToolButton;
-    m_resetAngleButton->setObjectName("Reset Rotation");
-    m_resetAngleButton->setCheckable(false);
-    m_resetAngleButton->setToolTip(i18n("Reset Rotation"));
-    m_resetAngleButton->setAutoRaise(true);
-    m_resetAngleButton->setIcon(KisIconUtils::loadIcon("rotate-canvas-left"));
-    addStatusBarItem(m_resetAngleButton);
-
-    connect(m_resetAngleButton, SIGNAL(clicked()), m_viewManager, SLOT(slotResetRotation()));
-    m_resetAngleButton->setVisible(false);
-
     m_statusBarStatusLabel = new KSqueezedTextLabel();
     m_statusBarStatusLabel->setObjectName("statsBarStatusLabel");
     m_statusBarStatusLabel->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
@@ -146,6 +135,18 @@ void KisStatusBar::setup()
     connect(KisMemoryStatisticsServer::instance(),
             SIGNAL(sigUpdateMemoryStatistics()),
             SLOT(imageSizeChanged()));
+
+    m_resetAngleButton = new QToolButton;
+    m_resetAngleButton->setObjectName("Reset Rotation");
+    m_resetAngleButton->setCheckable(false);
+    m_resetAngleButton->setToolTip(i18n("Reset Rotation"));
+    m_resetAngleButton->setAutoRaise(true);
+    m_resetAngleButton->setIcon(KisIconUtils::loadIcon("rotate-canvas-left"));
+    addStatusBarItem(m_resetAngleButton);
+
+    connect(m_resetAngleButton, SIGNAL(clicked()), m_viewManager, SLOT(slotResetRotation()));
+    m_resetAngleButton->setVisible(false);
+
 }
 
 KisStatusBar::~KisStatusBar()

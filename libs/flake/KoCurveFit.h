@@ -35,8 +35,8 @@ class KoPathShape;
  * by Philip J. Schneider
  * from "Graphics Gems", Academic Press, 1990
  *
- * http://www.acm.org/pubs/tog/GraphicsGems/gems/FitCurves.c
- * http://www.acm.org/pubs/tog/GraphicsGems/gems/README
+ * http://web.archive.org/web/20061118130015/http://www.acm.org/pubs/tog/GraphicsGems/gems/FitCurves.c
+ * http://web.archive.org/web/20040519052901/http://www.acm.org/pubs/tog/GraphicsGems/gems/README
  *
  * @param points the list of points to fit curve to
  * @param error the max. fitting error

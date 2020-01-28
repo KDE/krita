@@ -22,6 +22,7 @@
 #include "kis_types.h"
 #include "kis_layer.h"
 #include "kis_indirect_painting_support.h"
+#include "KisDecoratedNodeInterface.h"
 
 #include <QBitArray>
 
@@ -36,7 +37,7 @@ class KoColorSpace;
  * The transparency mask has two rendering forms: as a selection mask
  * and by changing the transparency of the paint layer's pixels.
  */
-class KRITAIMAGE_EXPORT KisPaintLayer : public KisLayer, public KisIndirectPaintingSupport
+class KRITAIMAGE_EXPORT KisPaintLayer : public KisLayer, public KisIndirectPaintingSupport, public KisDecoratedNodeInterface
 {
 
     Q_OBJECT
@@ -144,6 +145,10 @@ public:
     void setOnionSkinEnabled(bool state);
 
     KisPaintDeviceList getLodCapableDevices() const override;
+
+    bool decorationsVisible() const override;
+    void setDecorationsVisible(bool value, bool update) override;
+    using KisDecoratedNodeInterface::setDecorationsVisible;
 
 public Q_SLOTS:
     void slotExternalUpdateOnionSkins();

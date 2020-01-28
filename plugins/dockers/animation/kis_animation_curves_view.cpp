@@ -37,32 +37,28 @@ const int VERTICAL_PADDING = 30;
 struct KisAnimationCurvesView::Private
 {
     Private()
-        : model(0)
-        , isDraggingKeyframe(false)
-        , isAdjustingHandle(false)
-        , panning(false)
     {}
 
-    KisAnimationCurvesModel *model;
-    TimelineRulerHeader *horizontalHeader;
-    KisAnimationCurvesValueRuler *verticalHeader;
-    KisAnimationCurvesKeyframeDelegate *itemDelegate;
-    KisZoomButton *horizontalZoomButton;
-    KisZoomButton *verticalZoomButton;
-    KisCustomModifiersCatcher *modifiersCatcher;
+    KisAnimationCurvesModel *model {0};
+    TimelineRulerHeader *horizontalHeader {0};
+    KisAnimationCurvesValueRuler *verticalHeader {0};
+    KisAnimationCurvesKeyframeDelegate *itemDelegate {0};
+    KisZoomButton *horizontalZoomButton {0};
+    KisZoomButton *verticalZoomButton {0};
+    KisCustomModifiersCatcher *modifiersCatcher {0};
 
-    bool isDraggingKeyframe;
-    bool isAdjustingHandle;
-    int adjustedHandle; // 0 = left, 1 = right
+    bool isDraggingKeyframe {false};
+    bool isAdjustingHandle {false};
+    int adjustedHandle {0}; // 0 = left, 1 = right
     QPoint dragStart;
     QPoint dragOffset;
 
-    int horizontalZoomStillPointIndex;
-    int horizontalZoomStillPointOriginalOffset;
-    qreal verticalZoomStillPoint;
-    qreal verticalZoomStillPointOriginalOffset;
+    int horizontalZoomStillPointIndex {0};
+    int horizontalZoomStillPointOriginalOffset {0};
+    qreal verticalZoomStillPoint {0.0};
+    qreal verticalZoomStillPointOriginalOffset {0.0};
 
-    bool panning;
+    bool panning {false};
     QPoint panStartOffset;
 };
 

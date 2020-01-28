@@ -77,7 +77,7 @@ namespace KoOdfWorkaround
 
     /**
      * Old versions of ooimpress does not set the placeholder for shapes that should have it set
-     * See open office issue http://www.openoffice.org/issues/show_bug.cgi?id=96406
+     * See open office issue https://bz.apache.org/ooo/show_bug.cgi?id=96406
      * And kde bug https://bugs.kde.org/show_bug.cgi?id=185354
      */
     KRITAFLAKE_EXPORT void setFixPresentationPlaceholder(bool fix, KoShapeLoadingContext &context);

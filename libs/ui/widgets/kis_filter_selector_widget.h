@@ -57,6 +57,7 @@ public Q_SLOTS:
     void showFilterGallery(bool visible);
 protected Q_SLOTS:
     void slotBookmarkedFilterConfigurationSelected(int);
+    void slotBookMarkCurrentFilter();
     void setFilterIndex(const QModelIndex&);
     void editConfigurations();
     void update();

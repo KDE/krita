@@ -97,6 +97,7 @@
 #include <kis_signal_auto_connection.h>
 #include <kis_canvas_widget_base.h>
 #include "kis_layer_utils.h"
+#include "kis_selection_mask.h"
 
 // Local
 #include "KisViewManager.h"
@@ -380,7 +381,8 @@ void KisDocument::Private::syncDecorationsWrapperLayerState()
 
     struct SyncDecorationsWrapperStroke : public KisSimpleStrokeStrategy {
         SyncDecorationsWrapperStroke(KisDocument *document, bool needsDecorationsWrapper)
-            : KisSimpleStrokeStrategy("sync-decorations-wrapper", kundo2_noi18n("start-isolated-mode")),
+            : KisSimpleStrokeStrategy(QLatin1String("sync-decorations-wrapper"),
+                                      kundo2_noi18n("start-isolated-mode")),
               m_document(document),
               m_needsDecorationsWrapper(needsDecorationsWrapper)
         {
@@ -1015,6 +1017,11 @@ bool KisDocument::initiateSavingInBackground(const QString actionName,
             KisLayerUtils::forceAllDelayedNodesUpdate(newRoot);
             waitForImage(clonedDocument->image());
         }
+    }
+
+    if (clonedDocument->image()->hasOverlaySelectionMask()) {
+        clonedDocument->image()->setOverlaySelectionMask(0);
+        waitForImage(clonedDocument->image());
     }
 
     KIS_SAFE_ASSERT_RECOVER(clonedDocument->image()->isIdle()) {

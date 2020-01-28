@@ -1,5 +1,3 @@
-add_subdirectory(tests)
-
 set(kritaselectiontools_SOURCES
     selection_tools.cc
     kis_tool_select_rectangular.cc

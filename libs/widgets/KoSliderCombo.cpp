@@ -104,7 +104,7 @@ QSize KoSliderCombo::minimumSizeHint() const
     opt.editable = true;
     sh = style()->sizeFromContents(QStyle::CT_ComboBox, &opt, sh, this);
 
-    return sh.expandedTo(QApplication::globalStrut());
+    return sh;
 }
 
 void KoSliderCombo::KoSliderComboPrivate::showPopup()

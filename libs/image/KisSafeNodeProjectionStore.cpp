@@ -48,7 +48,7 @@ struct StoreImplementaionInterface
 template <typename DeviceSP>
 struct StoreImplementation : public StoreImplementaionInterface
 {
-    bool releaseDevice() {
+    bool releaseDevice() override {
         bool hasDeletedProjection = false;
 
         if (m_projection) {
@@ -61,12 +61,12 @@ struct StoreImplementation : public StoreImplementaionInterface
         return hasDeletedProjection;
     }
 
-    virtual void discardCaches() {
+    virtual void discardCaches() override {
 //        qDebug() << "discard caches";
         m_dirtyProjections.clear();
     }
 
-    virtual void recycleProjectionsInSafety() {
+    virtual void recycleProjectionsInSafety() override {
 //        qDebug() << "recycle caches";
         Q_FOREACH (DeviceSP projection, m_dirtyProjections) {
             projection->clear();
@@ -93,7 +93,7 @@ struct StoreImplementationForDevice : StoreImplementation<KisPaintDeviceSP>
         m_projection = new KisPaintDevice(prototype);
     }
 
-    StoreImplementaionInterface* clone() const {
+    StoreImplementaionInterface* clone() const override {
         return m_projection ?
             new StoreImplementationForDevice(*m_projection) :
             new StoreImplementationForDevice();
@@ -128,7 +128,7 @@ struct StoreImplementationForSelection : StoreImplementation<KisSelectionSP>
         m_projection = new KisSelection(prototype);
     }
 
-    StoreImplementaionInterface* clone() const {
+    StoreImplementaionInterface* clone() const override {
         return m_projection ?
             new StoreImplementationForSelection(*m_projection) :
             new StoreImplementationForSelection();

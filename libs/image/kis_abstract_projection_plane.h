@@ -86,6 +86,13 @@ public:
     virtual QRect needRectForOriginal(const QRect &rect) const = 0;
 
     /**
+     * Return a tight rectange, where the contents of the plane
+     * is placed from user's point of view. It includes everything
+     * belonging to the plane (e.g. layer styles).
+     */
+    virtual QRect tightUserVisibleBounds() const = 0;
+
+    /**
      * Returns a list of devices which should synchronize the lod cache on update
      */
     virtual KisPaintDeviceList getLodCapableDevices() const = 0;
@@ -105,7 +112,7 @@ public:
     QRect changeRect(const QRect &rect, KisLayer::PositionToFilthy pos) const override;
     QRect accessRect(const QRect &rect, KisLayer::PositionToFilthy pos) const override;
     QRect needRectForOriginal(const QRect &rect) const override;
-
+    QRect tightUserVisibleBounds() const override;
 
     KisPaintDeviceList getLodCapableDevices() const override;
 };

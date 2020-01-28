@@ -477,7 +477,7 @@ void KoTextDocumentLayout::positionAnchoredObstructions()
     //    hit us bad, our source-code become way more worse, layouting slower and
     //    the result was still different from OO.org. So, we decided it's not
     //    worth it.
-    // 3. The explanation provided at http://lists.oasis-open.org/archives/office/200409/msg00018.html
+    // 3. The explanation provided at https://lists.oasis-open.org/archives/office/200409/msg00018.html
     //    why the specs support those 3 anchor modes is, well, poor. It just doesn't
     //    make sense. The specs should be fixed.
     // 4. The only support mode, the once-successive, is the one (only) support by

@@ -21,6 +21,7 @@
 #include "kis_pressure_size_option.h"
 #include "kis_pressure_rotation_option.h"
 #include "kis_pressure_mirror_option.h"
+#include "kis_pressure_sharpness_option.h"
 #include <brushengine/kis_paintop_settings.h>
 #include <kis_properties_configuration.h>
 #include "kis_paintop_settings.h"
@@ -42,11 +43,16 @@ struct KisCurrentOutlineFetcher::Private {
         if (optionsAvailable & MIRROR_OPTION) {
             mirrorOption.reset(new KisPressureMirrorOption());
         }
+
+        if (optionsAvailable & SHARPNESS_OPTION) {
+            sharpnessOption.reset(new KisPressureSharpnessOption());
+        }
     }
 
     QScopedPointer<KisPressureSizeOption> sizeOption;
     QScopedPointer<KisPressureRotationOption> rotationOption;
     QScopedPointer<KisPressureMirrorOption> mirrorOption;
+    QScopedPointer<KisPressureSharpnessOption> sharpnessOption;
 
     bool isDirty;
     QElapsedTimer lastUpdateTime;
@@ -93,6 +99,11 @@ QPainterPath KisCurrentOutlineFetcher::fetchOutline(const KisPaintInformation &i
         if (d->mirrorOption) {
             d->mirrorOption->readOptionSetting(settings);
             d->mirrorOption->resetAllSensors();
+        }
+
+        if (d->sharpnessOption) {
+            d->sharpnessOption->readOptionSetting(settings);
+            d->sharpnessOption->resetAllSensors();
         }
 
         d->isDirty = false;
@@ -145,7 +156,6 @@ QPainterPath KisCurrentOutlineFetcher::fetchOutline(const KisPaintInformation &i
         }
     }
 
-
     QTransform rot;
     rot.rotateRadians(-rotation);
 
@@ -154,8 +164,17 @@ QPainterPath KisCurrentOutlineFetcher::fetchOutline(const KisPaintInformation &i
         hotSpot.setX(tiltcenterx);
         hotSpot.setY(tiltcentery);
     }
+
+    QPointF pos = info.pos();
+    if (d->sharpnessOption) {
+        qint32 x = 0, y = 0;
+        qreal subPixelX = 0.0, subPixelY = 0.0;
+        d->sharpnessOption->apply(info, pos - hotSpot, x, y, subPixelX, subPixelY);
+        pos = QPointF(x + subPixelX, y + subPixelY) + hotSpot;
+    }
+
     QTransform T1 = QTransform::fromTranslate(-hotSpot.x(), -hotSpot.y());
-    QTransform T2 = QTransform::fromTranslate(info.pos().x(), info.pos().y());
+    QTransform T2 = QTransform::fromTranslate(pos.x(), pos.y());
     QTransform S  = QTransform::fromScale(xFlip * scale, yFlip * scale);
 
     return (T1 * rot * S * T2).map(originalOutline);

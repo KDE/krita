@@ -37,15 +37,15 @@ class KisRunnableStrokeJobData;
 class KRITAUI_EXPORT KisPainterBasedStrokeStrategy : public KisRunnableBasedStrokeStrategy
 {
 public:
-    KisPainterBasedStrokeStrategy(const QString &id,
+    KisPainterBasedStrokeStrategy(const QLatin1String &id,
                                   const KUndo2MagicString &name,
                                   KisResourcesSnapshotSP resources,
                                   QVector<KisFreehandStrokeInfo*> strokeInfos, bool useMergeID = false);
 
-    KisPainterBasedStrokeStrategy(const QString &id,
+    KisPainterBasedStrokeStrategy(const QLatin1String &id,
                                   const KUndo2MagicString &name,
                                   KisResourcesSnapshotSP resources,
-                                  KisFreehandStrokeInfo *strokeInfo,bool useMergeID = false);
+                                  KisFreehandStrokeInfo *strokeInfo, bool useMergeID = false);
 
     ~KisPainterBasedStrokeStrategy();
 

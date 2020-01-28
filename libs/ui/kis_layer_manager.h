@@ -117,18 +117,18 @@ private:
 private:
 
     KisViewManager * m_view;
-    QPointer<KisView>m_imageView;
+    QPointer<KisView>m_imageView {0};
 
-    KisAction *m_imageFlatten;
-    KisAction *m_imageMergeLayer;
-    KisAction *m_groupLayersSave;
-    KisAction *m_convertGroupAnimated;
-    KisAction *m_imageResizeToLayer;
-    KisAction *m_flattenLayer;
-    KisAction *m_rasterizeLayer;
+    KisAction *m_imageFlatten {0};
+    KisAction *m_imageMergeLayer {0};
+    KisAction *m_groupLayersSave {0};
+    KisAction *m_convertGroupAnimated {0};
+    KisAction *m_imageResizeToLayer {0};
+    KisAction *m_flattenLayer {0};
+    KisAction *m_rasterizeLayer {0};
     KisNodeCommandsAdapter* m_commandsAdapter;
 
-    KisAction *m_layerStyle;
+    KisAction *m_layerStyle {0};
 };
 
 #endif

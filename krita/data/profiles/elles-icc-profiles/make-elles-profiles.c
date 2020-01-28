@@ -19,7 +19,7 @@
  * 
  * Contact information:
  * ellestone@ninedegreesbelow.com
- * http://ninedegreesbelow.com
+ * https://ninedegreesbelow.com
  * 
  * */
 
@@ -72,7 +72,7 @@ printf("D50X, D50Y, D50Z = %1.8f %1.8f %1.8f\n", cmsD50X, cmsD50Y, cmsD50Z);
  * these TRCs can work in unbounded mode.
  * For the V2 profiles, the resulting TRC is a 4096-point curve and 
  * cannot work in unbounded mode. 
- * See http://ninedegreesbelow.com/photography/lcms2-unbounded-mode.html
+ * See https://ninedegreesbelow.com/photography/lcms2-unbounded-mode.html
  * for an explanation of unbounded mode ICC profile conversions. 
  * 
  * Also, during ICC profile conversions,
@@ -135,7 +135,7 @@ cmsToneCurve* gamma180[3];
 gamma180[0] = gamma180[1] = gamma180[2] = cmsBuildGamma (NULL, 1.80078125); 
 
 /* gamma=2.19921875 tone response curve */
-/* per http://www.adobe.com/digitalimag/pdfs/AdobeRGB1998.pdf;
+/* per https://www.adobe.com/digitalimag/pdfs/AdobeRGB1998.pdf;
  * ClayRGB uses this value. Based on an old proprietary profile, 
  * it also appears to be the correct gamma for WideGamutRGB.
  * It also is what you get when you 
@@ -154,7 +154,7 @@ gamma220[0] = gamma220[1] = gamma220[2] = cmsBuildGamma (NULL, 2.19921875);
 /* D50 WHITE POINTS */
 
 cmsCIExyY d50_romm_spec= {0.3457, 0.3585, 1.0};
-/* http://photo-lovers.org/pdf/color/romm.pdf */
+/* https://photo-lovers.org/pdf/color/romm.pdf */
 
 cmsCIExyY d50_illuminant_specs = {0.345702915, 0.358538597, 1.0};
 /* calculated from D50 illuminant XYZ values in ICC specs */
@@ -164,7 +164,7 @@ cmsCIExyY d50_illuminant_specs = {0.345702915, 0.358538597, 1.0};
 
 cmsCIExyY  d65_srgb_adobe_specs = {0.3127, 0.3290, 1.0};
 /* White point from the sRGB.icm and AdobeRGB1998 profile specs:
- * http://www.adobe.com/digitalimag/pdfs/AdobeRGB1998.pdf 
+ * https://www.adobe.com/digitalimag/pdfs/AdobeRGB1998.pdf 
  * 4.2.1 Reference Display White Point
  * The chromaticity coordinates of white displayed on 
  * the reference color monitor shall be x=0.3127, y=0.3290. 
@@ -195,10 +195,10 @@ cmsCIExyY c_cie= {0.310, 0.316};
 cmsCIExyY e_cie= {0.333, 0.333};
 
 cmsCIExyY c_6774_robertson= {0.308548930, 0.324928102, 1.0}; 
-/* see http://en.wikipedia.org/wiki/Standard_illuminant#White_points_of_standard_illuminants
+/* see https://en.wikipedia.org/wiki/Standard_illuminant#White_points_of_standard_illuminants
  * also see  http://www.brucelindbloom.com/index.html?Eqn_T_to_xy.html for the equations */
 cmsCIExyY e_5454_robertson= {0.333608970, 0.348572909, 1.0}; 
-/* see http://en.wikipedia.org/wiki/Standard_illuminant#White_points_of_standard_illuminants
+/* see https://en.wikipedia.org/wiki/Standard_illuminant#White_points_of_standard_illuminants
  * also see http://www.brucelindbloom.com/index.html?Eqn_T_to_xy.html for the equations */
  
  
@@ -464,10 +464,10 @@ cmsMLUfree(description);
  * It holds all visible colors.
  * Just like the ACES color space, 
  * AllColors also holds a high percentage of imaginary colors.
- * See http://ninedegreesbelow.com/photography/xyz-rgb.html#xyY 
+ * See https://ninedegreesbelow.com/photography/xyz-rgb.html#xyY 
  * for more information about imaginary colors.
  * AllColors primaries for red and blue from 
- * http://www.ledtuning.nl/en/cie-convertor
+ * https://www.ledtuning.nl/en/cie-convertor
  * blue 375nm red 780nm, plus Y intercepts:
  * Color Wavelength (): 375 nm.
  * Spectral Locus coordinates: X:0.17451 Y:0.005182
@@ -667,7 +667,7 @@ cmsMLUfree(description);
 /* Reference Input/Output Medium Metric RGB Color Encodings (RIMM/ROMM RGB)
  * Kevin E. Spaulding, Geoffrey J. Woolfe and Edward J. Giorgianni
  * Eastman Kodak Company, Rochester, New York, U.S.A.
- * Above document is available at http://photo-lovers.org/pdf/color/romm.pdf
+ * Above document is available at https://photo-lovers.org/pdf/color/romm.pdf
  * Kodak designed the Romm (ProPhoto) color gamut to include all printable 
  * and most real world colors. It includes some imaginary colors and excludes 
  * some of the real world blues and violet blues that can be captured by 
@@ -1103,7 +1103,7 @@ cmsMLUfree(description);
 
 
 /* ***** Make profile: sRGB, D65, sRGB TRC */
-/* http://en.wikipedia.org/wiki/Srgb */
+/* https://en.wikipedia.org/wiki/Srgb */
 /* Hewlett-Packard and Microsoft designed sRGB to match 
  * the color gamut of consumer-grade CRTs from the 1990s
  * and to be the standard color space for the world wide web.
@@ -1243,7 +1243,7 @@ cmsMLUfree(description);
  * This page has resources for calculating xy values given a spectral color wavelength:
  * http://www.cvrl.org/cmfs.htm
  * This page does the calculations for you:
- * http://www.ledtuning.nl/cie.php
+ * https://www.ledtuning.nl/en/cie-convertor
  * Plugging the wavelengths into the ledtuning website 
  * gives the following CIE RGB xy primaries:
 700.0 nm has Spectral Locus coordinates: x:0.734690023  y:0.265309977
@@ -1530,8 +1530,8 @@ cmsMLUfree(description);
 /* old monitor-based editing profiles */
 
 /* ColorMatchRGB, D50, gamma=1.80 */
-/* http://www.dpreview.com/forums/post/3902882 
- * http://lists.apple.com/archives/colorsync-users/2001/Apr/msg00073.html
+/* https://www.dpreview.com/forums/post/3902882 
+ * https://lists.apple.com/archives/colorsync-users/2001/Apr/msg00073.html
  * ColorMatch was designed to fit Radius PressView CRT monitors,
  * similar to sRGB fitting consumer-grade CRT monitors, 
  * "fit" meaning "could be calibrated to match".
@@ -1581,7 +1581,7 @@ tone_curve[0] = tone_curve[1] = tone_curve[2] = gamma180[0];
 /* video profiles */
 
 /* PAL-SECAM, D65 gamma=2.20 */
-/* http://en.wikipedia.org/wiki/PAL */
+/* https://en.wikipedia.org/wiki/PAL */
 cmsCIExyYTRIPLE pal_primaries = {
 {0.6400, 0.3300, 1.0},
 {0.2900, 0.6000, 1.0},
@@ -1607,7 +1607,7 @@ whitepoint = d65_srgb_adobe_specs;
 tone_curve[0] = tone_curve[1] = tone_curve[2] = gamma220[0];
 
 /* SMPTE-C, D65, gamma=2.20 */
-/* http://en.wikipedia.org/wiki/NTSC#SMPTE_C 
+/* https://en.wikipedia.org/wiki/NTSC#SMPTE_C 
  * SMPTE-C is one of many video and television-related color spaces 
  * and is an update of the original NTSC. */
 cmsCIExyYTRIPLE smpte_c_primaries = {
@@ -1625,7 +1625,7 @@ whitepoint = d65_srgb_adobe_specs;
 tone_curve[0] = tone_curve[1] = tone_curve[2] = gamma220[0];
 
 /* NTSC, C, gamma=2.20 */
-/* http://en.wikipedia.org/wiki/NTSC#Colorimetry*/
+/* https://en.wikipedia.org/wiki/NTSC#Colorimetry*/
 /* According to Wikipedia, these "original 1953 color NTSC specifications"
  * were used by early television receivers. */
 cmsCIExyYTRIPLE ntcs_primaries = {

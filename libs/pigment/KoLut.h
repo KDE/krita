@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-// The file lut.h comes from http://bitbucket.org/cyrille/lut, keep it as much untouched as possible for easier sync
+// The file lut.h comes from https://bitbucket.org/cyrille/lut/src/default/, keep it as much untouched as possible for easier sync
 
 #ifndef _KO_LUT_H_
 #define _KO_LUT_H_

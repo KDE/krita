@@ -80,6 +80,11 @@ bool KisDefaultBounds::externalFrameActive() const
     return interface ? interface->externalFrameActive() : false;
 }
 
+void *KisDefaultBounds::sourceCookie() const
+{
+    return m_d->image.data();
+}
+
 /******************************************************************/
 /*                  KisSelectionDefaultBounds                     */
 /******************************************************************/
@@ -127,7 +132,12 @@ int KisSelectionDefaultBounds::currentTime() const
 bool KisSelectionDefaultBounds::externalFrameActive() const
 {
     return m_d->parentDevice ?
-        m_d->parentDevice->defaultBounds()->externalFrameActive() : false;
+                m_d->parentDevice->defaultBounds()->externalFrameActive() : false;
+}
+
+void *KisSelectionDefaultBounds::sourceCookie() const
+{
+    return m_d->parentDevice.data();
 }
 
 /******************************************************************/

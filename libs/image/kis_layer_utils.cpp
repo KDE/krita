@@ -1635,11 +1635,11 @@ namespace KisLayerUtils {
         }
     }
 
-    QRect recursiveNodeExactBounds(KisNodeSP rootNode)
+    QRect recursiveTightNodeVisibleBounds(KisNodeSP rootNode)
     {
         QRect exactBounds;
         recursiveApplyNodes(rootNode, [&exactBounds] (KisNodeSP node) {
-            exactBounds |= node->exactBounds();
+            exactBounds |= node->projectionPlane()->tightUserVisibleBounds();
         });
         return exactBounds;
     }

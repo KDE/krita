@@ -30,7 +30,7 @@ KisStrokeStrategyUndoCommandBased(const KUndo2MagicString &name,
                                   KisStrokeUndoFacade *undoFacade,
                                   KUndo2CommandSP initCommand,
                                   KUndo2CommandSP finishCommand)
-  : KisRunnableBasedStrokeStrategy("STROKE_UNDO_COMMAND_BASED", name),
+  : KisRunnableBasedStrokeStrategy(QLatin1String("STROKE_UNDO_COMMAND_BASED"), name),
     m_undo(undo),
     m_initCommand(initCommand),
     m_finishCommand(finishCommand),
@@ -110,7 +110,10 @@ void KisStrokeStrategyUndoCommandBased::cancelStrokeCallback()
 {
     QMutexLocker locker(&m_mutex);
     if(m_macroCommand) {
-        m_macroCommand->performCancel(cancelStrokeId(), m_undo);
+        QVector<KisStrokeJobData *> jobs;
+        m_macroCommand->getCommandExecutionJobs(&jobs, !m_undo);
+        addMutatedJobs(jobs);
+
         delete m_macroCommand;
         m_macroCommand = 0;
     }

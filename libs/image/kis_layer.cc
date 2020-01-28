@@ -810,6 +810,21 @@ KisPaintDeviceSP KisLayer::projection() const
         m_d->safeProjection->getDeviceLazy(originalDevice) : originalDevice;
 }
 
+QRect KisLayer::tightUserVisibleBounds() const
+{
+    QRect changeRect = exactBounds();
+
+    /// we do not use incomingChangeRect() here, because
+    /// exactBounds() already takes it into account (it
+    /// was used while preparing original())
+
+    bool changeRectVaries;
+    changeRect = outgoingChangeRect(changeRect);
+    changeRect = masksChangeRect(effectMasks(), changeRect, changeRectVaries);
+
+    return changeRect;
+}
+
 QRect KisLayer::changeRect(const QRect &rect, PositionToFilthy pos) const
 {
     QRect changeRect = rect;

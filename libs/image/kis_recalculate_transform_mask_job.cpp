@@ -90,3 +90,11 @@ int KisRecalculateTransformMaskJob::levelOfDetail() const
 {
     return 0;
 }
+
+QString KisRecalculateTransformMaskJob::debugName() const
+{
+    QString result;
+    QDebug dbg(&result);
+    dbg << "KisRecalculateTransformMaskJob" << m_mask;
+    return result;
+}

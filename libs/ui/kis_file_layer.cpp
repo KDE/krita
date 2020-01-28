@@ -43,6 +43,8 @@ KisFileLayer::KisFileLayer(KisImageWSP image, const QString &name, quint8 opacit
      * in the failing execution path.
      */
     m_paintDevice = new KisPaintDevice(image->colorSpace());
+    m_paintDevice->setDefaultBounds(new KisDefaultBounds(image));
+
     connect(&m_loader, SIGNAL(loadingFinished(KisPaintDeviceSP,int,int)), SLOT(slotLoadingFinished(KisPaintDeviceSP,int,int)));
 }
 
@@ -58,6 +60,7 @@ KisFileLayer::KisFileLayer(KisImageWSP image, const QString &basePath, const QSt
      * in the failing execution path.
      */
     m_paintDevice = new KisPaintDevice(image->colorSpace());
+    m_paintDevice->setDefaultBounds(new KisDefaultBounds(image));
 
     connect(&m_loader, SIGNAL(loadingFinished(KisPaintDeviceSP,int,int)), SLOT(slotLoadingFinished(KisPaintDeviceSP,int,int)));
 
@@ -248,5 +251,11 @@ KUndo2Command* KisFileLayer::transform(const QTransform &/*transform*/)
 {
     warnKrita << "WARNING: File Layer does not support transformations!" << name();
     return 0;
+}
+
+void KisFileLayer::setImage(KisImageWSP image)
+{
+    m_paintDevice->setDefaultBounds(new KisDefaultBounds(image));
+    KisExternalLayer::setImage(image);
 }
 

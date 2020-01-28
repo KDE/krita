@@ -57,6 +57,7 @@ public:
     KoColor maskColor;
 
     void slotSelectionChangedCompressed();
+    void slotConfigChangedImpl(bool blockUpdates);
     void slotConfigChanged();
 };
 
@@ -77,7 +78,7 @@ KisSelectionMask::KisSelectionMask(KisImageWSP image)
     this->moveToThread(image->thread());
 
     connect(KisImageConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
-    m_d->slotConfigChanged();
+    m_d->slotConfigChangedImpl(false);
 }
 
 KisSelectionMask::KisSelectionMask(const KisSelectionMask& rhs)
@@ -92,7 +93,7 @@ KisSelectionMask::KisSelectionMask(const KisSelectionMask& rhs)
     this->moveToThread(m_d->image->thread());
 
     connect(KisImageConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
-    m_d->slotConfigChanged();
+    m_d->slotConfigChangedImpl(false);
 }
 
 KisSelectionMask::~KisSelectionMask()
@@ -289,6 +290,24 @@ void KisSelectionMask::notifySelectionChangedCompressed()
     m_d->updatesCompressor->start();
 }
 
+bool KisSelectionMask::decorationsVisible() const
+{
+    return selection()->isVisible();
+}
+
+void KisSelectionMask::setDecorationsVisible(bool value, bool update)
+{
+    if (value == decorationsVisible()) return;
+
+    const QRect oldExtent = extent();
+
+    selection()->setVisible(value);
+
+    if (update) {
+        setDirty(oldExtent | extent());
+    }
+}
+
 void KisSelectionMask::flattenSelectionProjection(KisSelectionSP selection, const QRect &dirtyRect) const
 {
     Q_UNUSED(selection);
@@ -303,7 +322,7 @@ void KisSelectionMask::Private::slotSelectionChangedCompressed()
     currentSelection->notifySelectionChanged();
 }
 
-void KisSelectionMask::Private::slotConfigChanged()
+void KisSelectionMask::Private::slotConfigChangedImpl(bool doUpdates)
 {
     const KoColorSpace *cs = image ?
         image->colorSpace() :
@@ -313,9 +332,14 @@ void KisSelectionMask::Private::slotConfigChanged()
 
     maskColor = KoColor(cfg.selectionOverlayMaskColor(), cs);
 
-    if (image && image->overlaySelectionMask() == q) {
+    if (doUpdates && image && image->overlaySelectionMask() == q) {
         q->setDirty();
     }
+}
+
+void KisSelectionMask::Private::slotConfigChanged()
+{
+    slotConfigChangedImpl(true);
 }
 
 #include "moc_kis_selection_mask.cpp"

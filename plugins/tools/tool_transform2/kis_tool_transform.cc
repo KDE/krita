@@ -751,12 +751,21 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
         currentNode->inherits("KisCloneLayer")) {
 
         KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-        kisCanvas->viewManager()->
-            showFloatingMessage(
-                i18nc("floating message in transformation tool",
-                      "Layer type cannot use the transform tool"),
-                 koIcon("object-locked"), 4000, KisFloatingMessage::High);
 
+        if(currentNode->inherits("KisColorizeMask")){
+            kisCanvas->viewManager()->
+                showFloatingMessage(
+                    i18nc("floating message in transformation tool",
+                          "Layer type cannot use the transform tool"),
+                    koIcon("object-locked"), 4000, KisFloatingMessage::High);
+        }
+        else{
+            kisCanvas->viewManager()->
+                showFloatingMessage(
+                    i18nc("floating message in transformation tool",
+                          "Layer type cannot use the transform tool. Use transform mask instead."),
+                    koIcon("object-locked"), 4000, KisFloatingMessage::High);
+        }
         return;
     }
 
@@ -788,7 +797,7 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
 
     // save unique identifier of the stroke so we could
     // recognize it when sigTransactionGenerated() is
-    // recieved (theoretically, the user can start two
+    // received (theoretically, the user can start two
     // strokes at the same time, if he is quick enough)
     m_strokeStrategyCookie = strategy;
     m_strokeId = image()->startStroke(strategy);

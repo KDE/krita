@@ -116,7 +116,8 @@ void KisGaussianKernel::applyGaussian(KisPaintDeviceSP device,
                                       qreal xRadius, qreal yRadius,
                                       const QBitArray &channelFlags,
                                       KoUpdater *progressUpdater,
-                                      bool createTransaction)
+                                      bool createTransaction,
+                                      KisConvolutionBorderOp borderOp)
 {
     QPoint srcTopLeft = rect.topLeft();
 
@@ -133,7 +134,7 @@ void KisGaussianKernel::applyGaussian(KisPaintDeviceSP device,
             transaction.reset(new KisTransaction(device));
         }
 
-        painter.applyMatrix(kernel2D, device, srcTopLeft, srcTopLeft, rect.size(), BORDER_REPEAT);
+        painter.applyMatrix(kernel2D, device, srcTopLeft, srcTopLeft, rect.size(), borderOp);
 
     } else if (xRadius > 0.0 && yRadius > 0.0) {
         KisPaintDeviceSP interm = new KisPaintDevice(device->colorSpace());
@@ -150,13 +151,13 @@ void KisGaussianKernel::applyGaussian(KisPaintDeviceSP device,
         horizPainter.applyMatrix(kernelHoriz, device,
                                  srcTopLeft - QPoint(0, ceil(verticalCenter)),
                                  srcTopLeft - QPoint(0, ceil(verticalCenter)),
-                                 rect.size() + QSize(0, 2 * ceil(verticalCenter)), BORDER_REPEAT);
+                                 rect.size() + QSize(0, 2 * ceil(verticalCenter)), borderOp);
 
 
         KisConvolutionPainter verticalPainter(device);
         verticalPainter.setChannelFlags(channelFlags);
         verticalPainter.setProgress(progressUpdater);
-        verticalPainter.applyMatrix(kernelVertical, interm, srcTopLeft, srcTopLeft, rect.size(), BORDER_REPEAT);
+        verticalPainter.applyMatrix(kernelVertical, interm, srcTopLeft, srcTopLeft, rect.size(), borderOp);
 
     } else if (xRadius > 0.0) {
         KisConvolutionPainter painter(device);
@@ -170,7 +171,7 @@ void KisGaussianKernel::applyGaussian(KisPaintDeviceSP device,
             transaction.reset(new KisTransaction(device));
         }
 
-        painter.applyMatrix(kernelHoriz, device, srcTopLeft, srcTopLeft, rect.size(), BORDER_REPEAT);
+        painter.applyMatrix(kernelHoriz, device, srcTopLeft, srcTopLeft, rect.size(), borderOp);
 
     } else if (yRadius > 0.0) {
         KisConvolutionPainter painter(device);
@@ -184,7 +185,7 @@ void KisGaussianKernel::applyGaussian(KisPaintDeviceSP device,
             transaction.reset(new KisTransaction(device));
         }
 
-        painter.applyMatrix(kernelVertical, device, srcTopLeft, srcTopLeft, rect.size(), BORDER_REPEAT);
+        painter.applyMatrix(kernelVertical, device, srcTopLeft, srcTopLeft, rect.size(), borderOp);
     }
 }
 

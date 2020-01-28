@@ -144,7 +144,7 @@ public:
      * <li>A KoColor
      * <li>A QColor
      * <li>A string that can be parsed as an XML color definition
-     * <li>A string that QColor can convert to a color (see http://doc.qt.io/qt-5/qcolor.html#setNamedColor)
+     * <li>A string that QColor can convert to a color (see https://doc.qt.io/qt-5/qcolor.html#setNamedColor)
      * <li>An integer that QColor can convert to a color
      * </ul>
      *

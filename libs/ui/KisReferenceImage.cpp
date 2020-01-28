@@ -25,6 +25,9 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QSharedData>
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+#include <QColorSpace>
+#endif
 
 #include <kundo2command.h>
 #include <KoStore.h>
@@ -56,7 +59,14 @@ struct KisReferenceImage::Private : public QSharedData
 
     bool loadFromFile() {
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!externalFilename.isEmpty(), false);
-        return image.load(externalFilename);
+        bool r = image.load(externalFilename);
+        // See https://bugs.kde.org/show_bug.cgi?id=416515 -- a jpeg image
+        // loaded into a qimage cannot be saved to png unless we explicitly
+        // convert the colorspace of the QImage
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+        image.convertToColorSpace(QColorSpace(QColorSpace::SRgb));
+#endif
+        return r;
     }
 
     bool loadFromClipboard() {

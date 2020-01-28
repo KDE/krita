@@ -14,7 +14,7 @@
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select the location of the G'Mic-Qt plugin. You can download the plugin from the &lt;a href=&quot;http://gmic.eu/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;G'Mic website&lt;/span&gt;&lt;/a&gt;. Make sure you download the special version for Krita, not the standalone or the GIMP version.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select the location of the G'Mic-Qt plugin. You can download the plugin from the &lt;a href=&quot;https://gmic.eu/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;G'Mic website&lt;/span&gt;&lt;/a&gt;. Make sure you download the special version for Krita, not the standalone or the GIMP version.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="textFormat">
       <enum>Qt::RichText</enum>

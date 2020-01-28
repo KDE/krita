@@ -2,7 +2,7 @@
  * @file
  *
  * This file is a part of digiKam project
- * <a href="http://www.digikam.org">http://www.digikam.org</a>
+ * <a href="https://www.digikam.org">https://www.digikam.org</a>
  *
  * @date   2006-12-09
  * @brief  Raw decoding settings
@@ -73,7 +73,7 @@ public:
      * 
      * NOTE: from GPL2/GPL3 demosaic packs - will not work with libraw>=0.19
      * 
-     *  PL_AHD:   modified AHD interpolation (see http://sites.google.com/site/demosaicalgorithms/modified-dcraw
+     *  PL_AHD:   modified AHD interpolation (see https://sites.google.com/site/demosaicalgorithms/modified-dcraw
      *            for details).
      *  AFD:      demosaicing through 5 pass median filter from PerfectRaw project.
      *  VCD:      VCD interpolation.

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2018 Dmitry Kazakov <dimula73@gmail.com>
+ * Copyright (c) 2017 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,15 +16,34 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_spontaneous_job.h"
+#ifndef DLG_SYSINFO
+#define DLG_SYSINFO
+
+#include <KoDialog.h>
+#include "dlg_buginfo.h"
 
 
-bool KisSpontaneousJob::isExclusive() const
+class QSettings;
+
+class DlgSysInfo: public DlgBugInfo
 {
-    return m_isExclusive;
-}
+    Q_OBJECT
+public:
+    DlgSysInfo(QWidget * parent = 0);
+    ~DlgSysInfo() override;
 
-void KisSpontaneousJob::setExclusive(bool value)
-{
+    QString defaultNewFileName() override {
+        return "KritaSystemInformation.txt";
+    }
 
-}
+    QString originalFileName() override;
+
+public:
+    QString replacementWarningText() override;
+    QString captionText() override;
+
+private:
+    WdgBugInfo *m_page;
+};
+
+#endif // DLG_SYSINFO

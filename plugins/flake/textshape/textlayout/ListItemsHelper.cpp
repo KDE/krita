@@ -148,15 +148,15 @@ QString Lists::intToScriptList(int n, KoListStyle::Style type)
     static const char* const chinese1[] = { '零','壹','貳','叄','肆','伍','陸','柒','捌','玖' };
     static const char* const chinese2[] = { '〇','一','二','三','四','五','六','七','八','九' };
 
-    TODO: http://en.wikipedia.org/wiki/Korean_numerals
-    http://en.wikipedia.org/wiki/Japanese_numerals
-    'http://en.wikipedia.org/wiki/Hebrew_numerals'
-    'http://en.wikipedia.org/wiki/Armenian_numerals'
-    'http://en.wikipedia.org/wiki/Greek_numerals'
-    'http://en.wikipedia.org/wiki/Cyrillic_numerals'
-    'http://en.wikipedia.org/wiki/Sanskrit_numerals'
-    'http://en.wikipedia.org/wiki/Ge%27ez_alphabet#Numerals'
-    'http://en.wikipedia.org/wiki/Abjad_numerals'
+    TODO: https://en.wikipedia.org/wiki/Korean_numerals
+    https://en.wikipedia.org/wiki/Japanese_numerals
+    'https://en.wikipedia.org/wiki/Hebrew_numerals'
+    'https://en.wikipedia.org/wiki/Armenian_numerals'
+    'https://en.wikipedia.org/wiki/Greek_numerals'
+    'https://en.wikipedia.org/wiki/Cyrillic_numerals'
+    'https://en.wikipedia.org/wiki/Sanskrit_numerals'
+    'https://en.wikipedia.org/wiki/Ge%27ez_alphabet#Numerals'
+    'https://en.wikipedia.org/wiki/Abjad_numerals'
     */
 
     switch (type) {

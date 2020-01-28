@@ -323,17 +323,14 @@ class KisDlgPreferences : public KPageDialog
 
 public:
 
-    static bool editPreferences();
-
-
-protected:
-
     KisDlgPreferences(QWidget *parent = 0, const char *name = 0);
     ~KisDlgPreferences() override;
 
+    bool editPreferences();
+
     void showEvent(QShowEvent *event) override;
 
-protected:
+private:
 
     GeneralTab *m_general;
     ShortcutSettingsTab  *m_shortcutSettings;
@@ -347,10 +344,14 @@ protected:
 
     QList<KPageWidgetItem*> m_pages;
 
-protected Q_SLOTS:
+private Q_SLOTS:
 
+    void slotButtonClicked(QAbstractButton *button);
     void slotDefault();
 
+private:
+
+    bool m_cancelClicked {false};
 };
 
 #endif

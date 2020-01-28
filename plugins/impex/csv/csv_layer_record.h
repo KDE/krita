@@ -32,14 +32,14 @@ public:
 
     QString     name;
     QString     blending;
-    float       density;
-    int         visible;
+    float       density {0.0};
+    int         visible {0};
 
-    KisLayer*   layer;
-    KisRasterKeyframeChannel *channel;
+    KisLayer*   layer {0};
+    KisRasterKeyframeChannel *channel {0};
     QString     last;
     QString     path;
-    int         frame;
+    int         frame {0};
 };
 
 #endif

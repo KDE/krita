@@ -89,7 +89,8 @@ class ForbiddenLodStrokeStrategy : public KisStrokeStrategy
 {
 public:
     ForbiddenLodStrokeStrategy(std::function<void()> lodCallback)
-        : m_lodCallback(lodCallback)
+        : KisStrokeStrategy(QLatin1String("ForbiddenLodStrokeStrategy")),
+          m_lodCallback(lodCallback)
     {
     }
 
@@ -1273,15 +1274,20 @@ void KisImageTest::testPaintOverlayMask()
     p.image->setOverlaySelectionMask(mask);
     p.image->waitForDone();
 
-    KIS_DUMP_DEVICE_2(p.image->projection(), refRect, "01_activated", "dd");
+    KIS_DUMP_DEVICE_2(p.image->projection(), refRect, "01_activated_00_image", "dd");
+    KIS_DUMP_DEVICE_2(p.image->root()->original(), refRect, "01_activated_01_root_original", "dd");
+    KIS_DUMP_DEVICE_2(p.image->root()->projection(), refRect, "01_activated_02_root_projection", "dd");
+
+    KisImageSP clonedImage = p.image->clone();
+    clonedImage->waitForDone();
+    KIS_DUMP_DEVICE_2(clonedImage->projection(), refRect, "02_cloned_when_activated_00_image", "dd");
+    KIS_DUMP_DEVICE_2(clonedImage->root()->original(), refRect, "02_cloned_when_activated_01_root_original", "dd");
+    KIS_DUMP_DEVICE_2(clonedImage->root()->projection(), refRect, "02_cloned_when_activated_02_root_projection", "dd");
 
     p.image->setOverlaySelectionMask(0);
     p.image->waitForDone();
 
-    KIS_DUMP_DEVICE_2(p.image->projection(), refRect, "02_deactivated", "dd");
-
-
-
+    KIS_DUMP_DEVICE_2(p.image->projection(), refRect, "03_deactivated", "dd");
 }
 
 KISTEST_MAIN(KisImageTest)

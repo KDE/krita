@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project
    Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
-   Copyright (c) 2016 L. E. Segovia <leo.segovia@siggraph.org>
+   Copyright (c) 2016 L. E. Segovia <amy@amyspark.me>
 
 
     This library is free software; you can redistribute it and/or
@@ -856,7 +856,7 @@ bool KoColorSet::Private::loadAct()
 
 bool KoColorSet::Private::loadRiff()
 {
-    // http://worms2d.info/Palette_file
+    // https://worms2d.info/Palette_file
     QFileInfo info(colorSet->filename());
     colorSet->setName(info.completeBaseName());
     KisSwatch e;

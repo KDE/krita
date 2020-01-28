@@ -199,6 +199,8 @@ public:
      */
     void requestCompressedProjectionUpdate(const QRect &rc);
 
+    void notifyShapeSelectionBecameEmpty();
+
     /// XXX: This method was marked KDE_DEPRECATED but without information on what to
     /// replace it with. Undeprecate, therefore.
     quint8 selected(qint32 x, qint32 y) const;

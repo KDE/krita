@@ -97,6 +97,10 @@ void KisShapeSelectionModel::remove(KoShape *child)
         updateRect = matrix.mapRect(updateRect);
         if (m_shapeSelection) { // No m_shapeSelection indicates the selection is being deleted
             requestUpdate(updateRect);
+
+            if (m_updatesEnabled && m_shapeMap.isEmpty()) {
+                m_parentSelection->notifyShapeSelectionBecameEmpty();
+            }
         }
     }
 }

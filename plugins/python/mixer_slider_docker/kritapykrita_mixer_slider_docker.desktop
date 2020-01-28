@@ -1,0 +1,26 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=Krita/PythonPlugin
+X-KDE-Library=mixer_slider_docker
+X-Python-2-Compatible=false
+X-Krita-Manual=Manual.html
+Name=Mixer Slider docker
+Name[ca]=Acoblador Control lliscant del mesclador
+Name[es]=Panel del deslizador del mezclador
+Name[et]=Mikseri liuguri dokk
+Name[nl]=Vastzetter van schuifregelaar van mixer
+Name[pt]=Área da Barra de Mistura
+Name[sv]=Dockningsfönster för blandningsreglage
+Name[uk]=Бічна панель повзунка мікшера
+Name[x-test]=xxMixer Slider dockerxx
+Name[zh_TW]=混色滑動條工具面板
+Comment=A color slider.
+Comment[ca]=Un control lliscant per al color.
+Comment[es]=Deslizador de color.
+Comment[et]=Värviliugur.
+Comment[nl]=Een schuifregelaar voor kleur
+Comment[pt]=Uma barra de cores.
+Comment[sv]=Ett färgreglage.
+Comment[uk]=Повзунок кольору.
+Comment[x-test]=xxA color slider.xx
+Comment[zh_TW]=色彩滑動條。

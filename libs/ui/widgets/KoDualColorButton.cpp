@@ -61,7 +61,7 @@ public:
         arrowBitmap.fill(Qt::transparent);
 
         QPainter p(&arrowBitmap);
-        p.setPen(dialogParent->palette().window().color());
+        p.setPen(dialogParent->palette().windowText().color());
 
         // arrow pointing left
         p.drawLine(0, 3, 7, 3);

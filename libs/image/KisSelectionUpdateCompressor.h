@@ -41,12 +41,12 @@ private Q_SLOTS:
     void startUpdateJob();
 
 private:
-    KisSelection *m_parentSelection;
-    KisThreadSafeSignalCompressor *m_updateSignalCompressor;
+    KisSelection *m_parentSelection {0};
+    KisThreadSafeSignalCompressor *m_updateSignalCompressor {0};
     QRect m_updateRect;
-    bool m_fullUpdateRequested;
+    bool m_fullUpdateRequested {false};
 
-    bool m_hasStalledUpdate;
+    bool m_hasStalledUpdate {false};
 };
 
 #endif // KISSELECTIONUPDATECOMPRESSOR_H

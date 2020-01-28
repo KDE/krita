@@ -251,6 +251,14 @@ public:
 
     QImage createThumbnailForFrame(qint32 w, qint32 h, int time) override;
 
+    /**
+     * Return a tight rectange, where the contents of the layer
+     * is placed from user's point of view. This rectangle includes
+     * all the masks and effects the layer has (excluding layer
+     * styles, they report their bounds via projection plane).
+     */
+    QRect tightUserVisibleBounds() const;
+
 public:
     /**
      * Returns true if there are any effect masks present

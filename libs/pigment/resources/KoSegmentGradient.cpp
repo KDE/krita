@@ -234,8 +234,9 @@ bool KoSegmentGradient::saveToDevice(QIODevice *dev) const
 
 KoGradientSegment *KoSegmentGradient::segmentAt(qreal t) const
 {
-    Q_ASSERT(t >= 0 || t <= 1);
-    Q_ASSERT(!m_segments.empty());
+    if (t < 0.0) return 0;
+    if (t > 1.0) return 0;
+    if (m_segments.isEmpty()) return 0;
 
     for (QList<KoGradientSegment *>::const_iterator it = m_segments.begin(); it != m_segments.end(); ++it) {
         if (t > (*it)->startOffset() - DBL_EPSILON && t < (*it)->endOffset() + DBL_EPSILON) {

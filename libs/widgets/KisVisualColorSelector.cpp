@@ -510,21 +510,18 @@ void KisVisualColorSelector::slotCursorMoved(QPointF pos)
     Q_ASSERT(shape);
     QVector<int> channels = shape->getChannels();
     m_d->channelValues[channels.at(0)] = pos.x();
-    if (shape->getDimensions() == KisVisualColorSelectorShape::twodimensional)
-    {
+    if (shape->getDimensions() == KisVisualColorSelectorShape::twodimensional) {
         m_d->channelValues[channels.at(1)] = pos.y();
     }
     KoColor newColor = convertShapeCoordsToKoColor(m_d->channelValues);
-    if (newColor != m_d->currentcolor)
-    {
+    if (newColor != m_d->currentcolor) {
         m_d->currentcolor = newColor;
-
-        Q_FOREACH (KisVisualColorSelectorShape *widget, m_d->widgetlist) {
-            if (widget != shape){
-                widget->setChannelValues(m_d->channelValues, false);
-            }
-        }
         emit sigNewColor(m_d->currentcolor);
+    }
+    Q_FOREACH (KisVisualColorSelectorShape *widget, m_d->widgetlist) {
+        if (widget != shape){
+            widget->setChannelValues(m_d->channelValues, false);
+        }
     }
 }
 

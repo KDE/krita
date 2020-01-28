@@ -619,7 +619,7 @@ QSize KisAbstractSliderSpinBox::minimumSizeHint() const
 
 QSize KisAbstractSliderSpinBox::minimumSize() const
 {
-    return QWidget::minimumSize().expandedTo(minimumSizeHint());
+    return QWidget::minimumSize();
 }
 
 QStyleOptionSpinBox KisAbstractSliderSpinBox::spinBoxOptions() const

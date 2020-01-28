@@ -252,7 +252,7 @@ struct psd_layer_type_tool {
 /**
  * @brief The PsdAdditionalLayerInfoBlock class implements the Additional Layer Information block
  *
- * See: http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/#50577409_71546
+ * See: https://www.adobe.com/devnet-apps/photoshop/fileformatashtml/#50577409_71546
  */
 class PsdAdditionalLayerInfoBlock
 {

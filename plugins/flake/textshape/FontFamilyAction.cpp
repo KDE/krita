@@ -38,7 +38,7 @@
 #include <QIcon>
 #include <klocalizedstring.h>
 #include <kfontchooser.h>
-#include <KoFontComboBox.h>
+#include <QFontComboBox>
 
 class KoFontFamilyAction::KoFontFamilyActionPrivate
 {
@@ -51,7 +51,7 @@ public:
 
     void _ko_slotFontChanged(const QFont &font)
     {
-        qDebug() << "KoFontComboBox - slotFontChanged("
+        qDebug() << "QFontComboBox - slotFontChanged("
                  << font.family() << ") settingFont=" << settingFont;
         if (settingFont) {
             return;
@@ -127,7 +127,7 @@ QWidget *KoFontFamilyAction::createWidget(QWidget *parent)
     // This is the visual element on the screen.  This method overrides
     // the KSelectAction one, preventing KSelectAction from creating its
     // regular KComboBox.
-    KoFontComboBox *cb = new KoFontComboBox(parent);
+    QFontComboBox *cb = new QFontComboBox(parent);
     //cb->setFontList(items());
 
     qDebug() << "\tset=" << font();
@@ -151,7 +151,7 @@ void KoFontFamilyAction::setFont(const QString &family)
     d->settingFont++;
 
     Q_FOREACH (QWidget *w, createdWidgets()) {
-        KoFontComboBox *cb = qobject_cast<KoFontComboBox *>(w);
+        QFontComboBox *cb = qobject_cast<QFontComboBox *>(w);
         qDebug() << "\tw=" << w << "cb=" << cb;
 
         if (!cb) {

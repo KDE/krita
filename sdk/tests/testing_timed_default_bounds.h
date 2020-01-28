@@ -61,6 +61,10 @@ struct TestingTimedDefaultBounds : public KisDefaultBoundsBase {
         m_lod = lod;
     }
 
+    void * sourceCookie() const override {
+        return 0;
+    }
+
 private:
     int m_time;
     int m_lod;

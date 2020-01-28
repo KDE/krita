@@ -1,7 +1,7 @@
 /** ===========================================================
  *
  * This file is a part of digiKam project
- * <a href="http://www.digikam.org">http://www.digikam.org</a>
+ * <a href="https://www.digikam.org">https://www.digikam.org</a>
  *
  * @date   2008-15-09
  * @brief  a command line tool to convert RAW file to PNG

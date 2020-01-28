@@ -305,7 +305,7 @@ QAction *TouchDockerDock::action(QString id) const
         }
 
         QAction *action = m_canvas->viewManager()->actionManager()->actionByName(id);
-        if(!action) {
+        if (!action) {
             return m_canvas->canvasController()->actionCollection()->action(id);
         }
 

@@ -88,7 +88,7 @@ public:
     KoShape *cloneShape() const override;
 
     /// reimplemented
-    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext) override;
+    void paint(QPainter &painter, KoShapePaintingContext &paintContext) const override;
     virtual void paintPoints(KisHandlePainterHelper &handlesHelper);
 
     /// reimplemented
@@ -526,7 +526,7 @@ protected:
 
 private:
     class Private;
-    QSharedDataPointer<Private> d;
+    QScopedPointer<Private> d;
 };
 
 Q_DECLARE_METATYPE(KoPathShape*)

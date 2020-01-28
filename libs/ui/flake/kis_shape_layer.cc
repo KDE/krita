@@ -99,7 +99,7 @@ public:
          */
         KIS_SAFE_ASSERT_RECOVER_NOOP(inheritsTransform(child));
         if (inheritsTransform(child)) {
-            QTransform parentTransform = q->absoluteTransformation(0);
+            QTransform parentTransform = q->absoluteTransformation();
             child->applyAbsoluteTransformation(parentTransform.inverted());
         }
     }
@@ -107,7 +107,7 @@ public:
     void remove(KoShape *child) override {
         KIS_SAFE_ASSERT_RECOVER_NOOP(inheritsTransform(child));
         if (inheritsTransform(child)) {
-            QTransform parentTransform = q->absoluteTransformation(0);
+            QTransform parentTransform = q->absoluteTransformation();
             child->applyAbsoluteTransformation(parentTransform);
         }
 
@@ -175,14 +175,14 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, KoShapeControllerBase* c
      * The transformaitons of the added shapes are automatically merged into the transformation
      * of the layer, so we should apply this extra transform separately
      */
-    const QTransform thisInvertedTransform = this->absoluteTransformation(0).inverted();
+    const QTransform thisInvertedTransform = this->absoluteTransformation().inverted();
 
     m_d->canvas->shapeManager()->setUpdatesBlocked(true);
 
     Q_FOREACH (KoShape *shape, _rhs.shapes()) {
         KoShape *clonedShape = shape->cloneShape();
         KIS_SAFE_ASSERT_RECOVER(clonedShape) { continue; }
-        clonedShape->setTransformation(shape->absoluteTransformation(0) * thisInvertedTransform);
+        clonedShape->setTransformation(shape->absoluteTransformation() * thisInvertedTransform);
         addShape(clonedShape);
     }
 
@@ -204,7 +204,7 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, const KisShapeLayer &_ad
      * we do not copy the transformation from any of the source layers. But we should
      * handle this anyway, to not be caught by this in the future.
      */
-    const QTransform thisInvertedTransform = this->absoluteTransformation(0).inverted();
+    const QTransform thisInvertedTransform = this->absoluteTransformation().inverted();
 
     QList<KoShape *> shapesAbove;
     QList<KoShape *> shapesBelow;
@@ -213,7 +213,7 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, const KisShapeLayer &_ad
     Q_FOREACH (KoShape *shape, _rhs.shapes()) {
         KoShape *clonedShape = shape->cloneShape();
         KIS_SAFE_ASSERT_RECOVER(clonedShape) { continue; }
-        clonedShape->setTransformation(shape->absoluteTransformation(0) * thisInvertedTransform);
+        clonedShape->setTransformation(shape->absoluteTransformation() * thisInvertedTransform);
         shapesBelow.append(clonedShape);
     }
 
@@ -221,7 +221,7 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, const KisShapeLayer &_ad
     Q_FOREACH (KoShape *shape, _addShapes.shapes()) {
         KoShape *clonedShape = shape->cloneShape();
         KIS_SAFE_ASSERT_RECOVER(clonedShape) { continue; }
-        clonedShape->setTransformation(shape->absoluteTransformation(0) * thisInvertedTransform);
+        clonedShape->setTransformation(shape->absoluteTransformation() * thisInvertedTransform);
         shapesAbove.append(clonedShape);
     }
 
@@ -696,7 +696,7 @@ KUndo2Command* KisShapeLayer::transform(const QTransform &transform) {
         QTransform oldTransform = shape->transformation();
         oldTransformations.append(oldTransform);
 
-        QTransform globalTransform = shape->absoluteTransformation(0);
+        QTransform globalTransform = shape->absoluteTransformation();
         QTransform localTransform = globalTransform * realTransform * globalTransform.inverted();
         newTransformations.append(localTransform * oldTransform);
 

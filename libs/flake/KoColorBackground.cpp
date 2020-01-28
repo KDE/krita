@@ -88,7 +88,7 @@ QBrush KoColorBackground::brush() const
     return QBrush(d->color, d->style);
 }
 
-void KoColorBackground::paint(QPainter &painter, const KoViewConverter &/*converter*/, KoShapePaintingContext &/*context*/, const QPainterPath &fillPath) const
+void KoColorBackground::paint(QPainter &painter, KoShapePaintingContext &/*context*/, const QPainterPath &fillPath) const
 {
     painter.setBrush(brush());
     painter.drawPath(fillPath);

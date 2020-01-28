@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2019 Anna Medonosova <anna.medonosova@gmail.com>
+ *  Copyright (c) 2019 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,31 +15,31 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef KISCPPQUIRKS_H
+#define KISCPPQUIRKS_H
 
-#ifndef KISGAMUTMASKVIEWCONVERTERTEST_H
-#define KISGAMUTMASKVIEWCONVERTERTEST_H
+namespace std {
 
-#include <QObject>
-#include <QTest>
+#if __cplusplus < 201402L
 
-class KisGamutMaskViewConverterTest : public QObject
+template <typename Cont>
+inline auto rbegin(Cont &cont) -> decltype(declval<Cont>().rbegin()) {
+    return cont.rbegin();
+}
+
+template <typename Cont>
+inline auto rend(Cont &cont) -> decltype(declval<Cont>().rend()) {
+    return cont.rend();
+}
+
+template <class BidirectionalIterator>
+inline reverse_iterator<BidirectionalIterator> make_reverse_iterator(BidirectionalIterator x)
 {
-    Q_OBJECT
-public:
-    explicit KisGamutMaskViewConverterTest(QObject *parent = nullptr);
+    return reverse_iterator<BidirectionalIterator>(x);
+}
 
-private Q_SLOTS:
-    void testDocumentToViewX();
-    void testDocumentToViewX_data();
+#endif
 
-    void testDocumentToViewY();
-    void testDocumentToViewY_data();
+}
 
-    void testViewToDocumentX();
-    void testViewToDocumentX_data();
-
-    void testViewToDocumentY();
-    void testViewToDocumentY_data();
-};
-
-#endif // KISGAMUTMASKVIEWCONVERTERTEST_H
+#endif // KISCPPQUIRKS_H

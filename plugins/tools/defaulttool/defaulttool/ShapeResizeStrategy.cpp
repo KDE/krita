@@ -103,10 +103,10 @@ ShapeResizeStrategy::ShapeResizeStrategy(KoToolBase *tool, KoSelection *selectio
         }
 
         const QPointF p0 = shape->outlineRect().topLeft();
-        m_globalStillPoint = shape->absoluteTransformation(0).map(p0 + m_globalStillPoint);
+        m_globalStillPoint = shape->absoluteTransformation().map(p0 + m_globalStillPoint);
         m_globalCenterPoint = shape->absolutePosition(KoFlake::Center);
 
-        m_unwindMatrix = shape->absoluteTransformation(0).inverted();
+        m_unwindMatrix = shape->absoluteTransformation().inverted();
         m_initialSelectionSize = shape->size();
         m_postScalingCoveringTransform = shape->transformation();
     }

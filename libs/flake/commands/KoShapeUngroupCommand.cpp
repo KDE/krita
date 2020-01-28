@@ -90,7 +90,7 @@ void KoShapeUngroupCommand::redo()
 
     indexedSiblings = KoShapeReorderCommand::homogenizeZIndexesLazy(indexedSiblings);
 
-    const QTransform ungroupTransform = m_d->container->absoluteTransformation(0);
+    const QTransform ungroupTransform = m_d->container->absoluteTransformation();
     for (auto it = m_d->shapes.begin(); it != m_d->shapes.end(); ++it) {
         KoShape *shape = *it;
         KIS_SAFE_ASSERT_RECOVER(shape->parent() == m_d->container) { continue; }
@@ -107,7 +107,7 @@ void KoShapeUngroupCommand::redo()
 
 void KoShapeUngroupCommand::undo()
 {
-    const QTransform groupTransform = m_d->container->absoluteTransformation(0).inverted();
+    const QTransform groupTransform = m_d->container->absoluteTransformation().inverted();
     for (auto it = m_d->shapes.begin(); it != m_d->shapes.end(); ++it) {
         KoShape *shape = *it;
 

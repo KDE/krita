@@ -448,7 +448,7 @@ QString SvgStyleWriter::saveSvgPattern(QSharedPointer<KoPatternBackground> patte
         break;
     }
 
-    offset = shape->absoluteTransformation(0).map(offset);
+    offset = shape->absoluteTransformation().map(offset);
 
     context.styleWriter().startElement("pattern");
     context.styleWriter().addAttribute("id", uid);

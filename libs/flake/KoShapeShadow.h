@@ -31,7 +31,6 @@ class KoShapeSavingContext;
 class QPainter;
 class QPointF;
 class QColor;
-class KoViewConverter;
 struct KoInsets;
 
 class KRITAFLAKE_EXPORT KoShapeShadow
@@ -56,7 +55,7 @@ public:
      * @param painter the painter to paint shadows to canvas
      * @param converter to convert between internal and view coordinates.
      */
-    void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter);
+    void paint(KoShape *shape, QPainter &painter);
 
     /**
      * Sets the shadow offset from the topleft corner of the shape

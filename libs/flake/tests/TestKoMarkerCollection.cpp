@@ -97,8 +97,8 @@ void TestKoMarkerCollection::testMarkerBounds()
     QList<KoMarker*> allMarkers = collection.markers();
     KoMarker *marker = allMarkers[3];
 
-    QCOMPARE(marker->boundingRect(1, 0).toAlignedRect(), QRect(-7,-3,9,6));
-    QCOMPARE(marker->boundingRect(1, M_PI).toAlignedRect(), QRect(-2,-3,9,6));
+    QCOMPARE(marker->boundingRect(1, 0).toAlignedRect(), QRect(-8,-4,11,8));
+    QCOMPARE(marker->boundingRect(1, M_PI).toAlignedRect(), QRect(-3,-4,11,8));
 
     QCOMPARE(marker->outline(1, 0).boundingRect().toAlignedRect(), QRect(-6,-2,7,4));
     QCOMPARE(marker->outline(1, M_PI).boundingRect().toAlignedRect(), QRect(-1,-2,7,4));

@@ -86,10 +86,11 @@ void KarbonCalligraphyTool::paint(QPainter &painter, const KoViewConverter &conv
 
     painter.save();
 
-    painter.setTransform(m_shape->absoluteTransformation(&converter) *
+    painter.setTransform(m_shape->absoluteTransformation() *
+                         converter.documentToView() *
                          painter.transform());
     KoShapePaintingContext paintContext; //FIXME
-    m_shape->paint(painter, converter, paintContext);
+    m_shape->paint(painter, paintContext);
 
     painter.restore();
 }

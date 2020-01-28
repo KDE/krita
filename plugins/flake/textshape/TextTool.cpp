@@ -631,7 +631,7 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
     converter.zoom(&zoomX, &zoomY);
 
     painter.save();
-    QTransform shapeMatrix = m_textShape->absoluteTransformation(&converter);
+    QTransform shapeMatrix = m_textShape->absoluteTransformation();
     shapeMatrix.scale(zoomX, zoomY);
     shapeMatrix.translate(0, -m_textShapeData->documentOffset());
 
@@ -834,7 +834,7 @@ void TextTool::updateSelectedShape(const QPointF &point, bool noDocumentChange)
                 // For now we will not consider table cells, but just give the shape dimensions
                 QVariant v;
                 QRectF rect(QPoint(), m_textShape->size());
-                rect = m_textShape->absoluteTransformation(0).mapRect(rect);
+                rect = m_textShape->absoluteTransformation().mapRect(rect);
                 v.setValue(rect);
                 canvas()->resourceManager()->setResource(KoCanvasResourceProvider::ActiveRange, v);
             }
@@ -1749,7 +1749,7 @@ QVariant TextTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConv
         // The rectangle covering the area of the input cursor in widget coordinates.
         QRectF rect = caretRect(textEditor->cursor());
         rect.moveTop(rect.top() - m_textShapeData->documentOffset());
-        QTransform shapeMatrix = m_textShape->absoluteTransformation(&converter);
+        QTransform shapeMatrix = m_textShape->absoluteTransformation();
         qreal zoomX, zoomY;
         converter.zoom(&zoomX, &zoomY);
         shapeMatrix.scale(zoomX, zoomY);
@@ -1838,7 +1838,7 @@ void TextTool::ensureCursorVisible(bool moveView)
         return; // we shouldn't move to an obsolete position
     }
     cRect.moveTop(cRect.top() - m_textShapeData->documentOffset());
-    canvas()->ensureVisible(m_textShape->absoluteTransformation(0).mapRect(cRect));
+    canvas()->ensureVisible(m_textShape->absoluteTransformation().mapRect(cRect));
 }
 
 void TextTool::keyReleaseEvent(QKeyEvent *event)
@@ -2007,7 +2007,7 @@ void TextTool::activate(ToolActivation activation, const QSet<KoShape *> &shapes
     // For now we will not consider table cells, but just give the shape dimensions
     QVariant v;
     QRectF rect(QPoint(), m_textShape->size());
-    rect = m_textShape->absoluteTransformation(0).mapRect(rect);
+    rect = m_textShape->absoluteTransformation().mapRect(rect);
     v.setValue(rect);
     canvas()->resourceManager()->setResource(KoCanvasResourceProvider::ActiveRange, v);
     if ((!m_oldTextEditor.isNull()) && m_oldTextEditor.data()->document() != static_cast<KoTextShapeData *>(m_textShape->userData())->document()) {
@@ -2082,7 +2082,7 @@ void TextTool::repaintCaret()
     QRectF repaintRect = caretRect(textEditor->cursor(), &upToDate);
     repaintRect.moveTop(repaintRect.top() - m_textShapeData->documentOffset());
     if (repaintRect.isValid()) {
-        repaintRect = m_textShape->absoluteTransformation(0).mapRect(repaintRect);
+        repaintRect = m_textShape->absoluteTransformation().mapRect(repaintRect);
 
         // Make sure there is enough space to show an icon
         QRectF iconSize = canvas()->viewConverter()->viewToDocument(QRect(0, 0, 18, 18));
@@ -2122,7 +2122,7 @@ void TextTool::repaintSelection()
     foreach (TextShape *ts, shapes) {
         QRectF rect = repaintRect;
         rect.moveTop(rect.y() - ts->textShapeData()->documentOffset());
-        rect = ts->absoluteTransformation(0).mapRect(rect);
+        rect = ts->absoluteTransformation().mapRect(rect);
         QRectF r = ts->boundingRect().intersected(rect);
         canvas()->updateCanvas(r);
     }

@@ -109,6 +109,8 @@ KisToolChangesTrackerData *ToolTransformArgs::clone() const
 
 ToolTransformArgs& ToolTransformArgs::operator=(const ToolTransformArgs& args)
 {
+    if (this == &args) return *this;
+
     clear();
 
     m_liquifyProperties.reset(new KisLiquifyProperties(*args.m_liquifyProperties.data()));

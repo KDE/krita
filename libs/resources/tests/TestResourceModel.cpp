@@ -226,6 +226,47 @@ void TestResourceModel::testUpdateResource()
     }
 }
 
+void TestResourceModel::testResourceForId()
+{
+    KisResourceModel resourceModel(m_resourceType);
+    KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(0, 0));
+    QVERIFY(!resource.isNull());
+    KoResourceSP resource2 = resourceModel.resourceForId(resource->resourceId());
+    QVERIFY(!resource2.isNull());
+    QCOMPARE(resource, resource2);
+}
+
+void TestResourceModel::testResourceForName()
+{
+    KisResourceModel resourceModel(m_resourceType);
+    KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(0, 0));
+    QVERIFY(!resource.isNull());
+    KoResourceSP resource2 = resourceModel.resourceForName(resource->name());
+    QVERIFY(!resource2.isNull());
+    QCOMPARE(resource, resource2);
+}
+
+void TestResourceModel::testResourceForFileName()
+{
+    KisResourceModel resourceModel(m_resourceType);
+    KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(0, 0));
+    QVERIFY(!resource.isNull());
+    KoResourceSP resource2 = resourceModel.resourceForFilename(resource->filename());
+    QVERIFY(!resource2.isNull());
+    QCOMPARE(resource, resource2);
+}
+
+void TestResourceModel::testResourceForMD5()
+{
+    KisResourceModel resourceModel(m_resourceType);
+    KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(0, 0));
+    QVERIFY(!resource.isNull());
+    KoResourceSP resource2 = resourceModel.resourceForMD5(resource->md5());
+    QVERIFY(!resource2.isNull());
+
+    QCOMPARE(resource->md5(), resource2->md5());
+}
+
 void TestResourceModel::cleanupTestCase()
 {
     ResourceTestHelper::rmTestDb();

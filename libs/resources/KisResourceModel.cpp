@@ -388,11 +388,11 @@ KoResourceSP KisResourceModel::resourceForMD5(const QByteArray md5sum) const
     QSqlQuery q;
     bool r = q.prepare("SELECT resource_id AS id\n"
                        "FROM   versioned_resources\n"
-                       "WHERE  md5 = :md5");
+                       "WHERE  md5sum = :md5sum");
     if (!r) {
         qWarning() << "Could not prepare KisResourceModel query for resource md5" << q.lastError();
     }
-    q.bindValue(":md5", md5sum);
+    q.bindValue(":md5sum", md5sum.toHex());
 
     r = q.exec();
     if (!r) {
@@ -401,6 +401,7 @@ KoResourceSP KisResourceModel::resourceForMD5(const QByteArray md5sum) const
 
     if (q.first()) {
         int id = q.value("id").toInt();
+        qDebug() << "found id" << id << "for" << md5sum.toHex();
         resource = KisResourceLocator::instance()->resourceForId(id);
     }
     return resource;

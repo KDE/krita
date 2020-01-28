@@ -152,7 +152,7 @@ public:
     KoResourceSP resourceForId(int id) const;
     KoResourceSP resourceForFilename(QString name) const;
     KoResourceSP resourceForName(QString name) const;
-
+    KoResourceSP resourceForMD5(const QByteArray md5sum) const;
 
     QModelIndex indexFromResource(KoResourceSP resource) const override;
     bool removeResource(const QModelIndex &index) override;

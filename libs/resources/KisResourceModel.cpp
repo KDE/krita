@@ -319,7 +319,7 @@ KoResourceSP KisResourceModel::resourceForFilename(QString filename) const
     KoResourceSP resource = 0;
 
     QSqlQuery q;
-    bool r = q.prepare("SELECT resources.id\n"
+    bool r = q.prepare("SELECT resources.id AS id\n"
                        "FROM   resources\n"
                        ",      resource_types\n"
                        ",      storages\n"
@@ -337,7 +337,7 @@ KoResourceSP KisResourceModel::resourceForFilename(QString filename) const
 
     r = q.exec();
     if (!r) {
-        qWarning() << "Could not select" << d->resourceType << "resources" << q.lastError() << q.boundValues();
+        qWarning() << "Could not select" << d->resourceType << "resources by filename" << q.lastError() << q.boundValues();
     }
 
     if (q.first()) {
@@ -352,7 +352,7 @@ KoResourceSP KisResourceModel::resourceForName(QString name) const
     KoResourceSP resource = 0;
 
     QSqlQuery q;
-    bool r = q.prepare("SELECT resources.id\n"
+    bool r = q.prepare("SELECT resources.id AS id\n"
                        "FROM   resources\n"
                        ",      resource_types\n"
                        ",      storages\n"
@@ -370,7 +370,33 @@ KoResourceSP KisResourceModel::resourceForName(QString name) const
 
     r = q.exec();
     if (!r) {
-        qWarning() << "Could not select" << d->resourceType << "resources" << q.lastError() << q.boundValues();
+        qWarning() << "Could not select" << d->resourceType << "resources by name" << q.lastError() << q.boundValues();
+    }
+
+    if (q.first()) {
+        int id = q.value("id").toInt();
+        resource = KisResourceLocator::instance()->resourceForId(id);
+    }
+    return resource;
+}
+
+
+KoResourceSP KisResourceModel::resourceForMD5(const QByteArray md5sum) const
+{
+    KoResourceSP resource = 0;
+
+    QSqlQuery q;
+    bool r = q.prepare("SELECT resource_id AS id\n"
+                       "FROM   versioned_resources\n"
+                       "WHERE  md5 = :md5");
+    if (!r) {
+        qWarning() << "Could not prepare KisResourceModel query for resource md5" << q.lastError();
+    }
+    q.bindValue(":md5", md5sum);
+
+    r = q.exec();
+    if (!r) {
+        qWarning() << "Could not select" << d->resourceType << "resources by md5" << q.lastError() << q.boundValues();
     }
 
     if (q.first()) {

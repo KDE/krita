@@ -44,6 +44,7 @@
 #include <KisResourceModel.h>
 #include <KisResourceModelProvider.h>
 #include <KisTagModelProvider.h>
+#include <kis_assert.h>
 
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
@@ -70,7 +71,7 @@ public:
         , m_tagModel(KisTagModelProvider::tagModel(type))
         , m_type(type)
     {
-        //Q_ASSERT(QThread::currentThread() == qApp->thread());
+        KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
     }
 
     virtual ~KoResourceServer()
@@ -84,7 +85,7 @@ public:
     KisResourceModel *resourceModel() const
     {
         QMutexLocker l(&m_mutex);
-        //Q_ASSERT(QThread::currentThread() == qApp->thread());
+        KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
         return m_resourceModel;
     }
 
@@ -92,20 +93,20 @@ public:
     QSharedPointer<T> firstResource() const
     {
         QMutexLocker l(&m_mutex);
-        //Q_ASSERT(QThread::currentThread() == qApp->thread());
+        KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
         return m_resourceModel->resourceForIndex(m_resourceModel->index(0, 0)).dynamicCast<T>();
     }
 
     int resourceCount() const {
         QMutexLocker l(&m_mutex);
-        //Q_ASSERT(QThread::currentThread() == qApp->thread());
+        KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
         return m_resourceModel->rowCount();
     }
 
     /// Adds an already loaded resource to the server
     bool addResource(QSharedPointer<T> resource, bool save = true) {
         QMutexLocker l(&m_mutex);
-        //Q_ASSERT(QThread::currentThread() == qApp->thread());
+        KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
         if (!resource->valid()) {
             warnWidgets << "Tried to add an invalid resource!";
             return false;
@@ -122,7 +123,7 @@ public:
     /// Remove a resource from Resource Server but not from a file
     bool removeResourceFromServer(QSharedPointer<T> resource){
         QMutexLocker l(&m_mutex);
-        //Q_ASSERT(QThread::currentThread() == qApp->thread());
+        KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
         if (m_resourceModel->removeResource(resource)) {
             notifyRemovingResource(resource);
             return true;
@@ -133,8 +134,8 @@ public:
     QList<QSharedPointer<T>> resources() {
         QMutexLocker l(&m_mutex);
         qDebug() << "KoResourceServer::resources()" << m_type;
-        //Q_ASSERT(QThread::currentThread() == qApp->thread());
-        //Q_ASSERT(m_type != "paintoppresets");
+        KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
+        KIS_SAFE_ASSERT_RECOVER_NOOP(m_type != "paintoppresets");
         QList<QSharedPointer<T>> resourceList;
         for (int row = 0; row < m_resourceModel->rowCount(); ++row) {
             resourceList << m_resourceModel->resourceForIndex(m_resourceModel->index(row, 0)).dynamicCast<T>();
@@ -156,7 +157,7 @@ public:
     bool importResourceFile(const QString &filename)
     {
         QMutexLocker l(&m_mutex);
-        //Q_ASSERT(QThread::currentThread() == qApp->thread());
+        KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
         return m_resourceModel->importResourceFile(filename);
     }
 
@@ -238,7 +239,7 @@ public:
     void updateResource(QSharedPointer<T> resource)
     {
         QMutexLocker l(&m_mutex);
-        //Q_ASSERT(QThread::currentThread() == qApp->thread());
+        KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
         m_resourceModel->updateResource(resource);
         notifyResourceChanged(resource);
     }

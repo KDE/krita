@@ -55,7 +55,7 @@ public:
     void setShapes(const QList<KoShape*> value);
     QList<KoShape*> shapes() const;
 
-    void paint(QPainter &painter, const KoViewConverter &converter_Unused, KoShapePaintingContext &context_Unused, const QPainterPath &fillPath) const override;
+    void paint(QPainter &painter, KoShapePaintingContext &context_Unused, const QPainterPath &fillPath) const override;
     bool hasTransparency() const override;
     void fillStyle(KoGenStyle &style, KoShapeSavingContext &context) override;
     bool loadStyle(KoOdfLoadingContext &context, const QSizeF &shapeSize) override;

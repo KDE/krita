@@ -111,7 +111,7 @@ public:
                      const QPen &pen, KoFlake::MarkerPosition position);
 
 
-    void applyShapeStroke(KoShape *shape, KoShapeStroke *stroke, const QPointF &pos, qreal strokeWidth, qreal nodeAngle);
+    void applyShapeStroke(const KoShape *shape, KoShapeStroke *stroke, const QPointF &pos, qreal strokeWidth, qreal nodeAngle);
 
 private:
     class Private;

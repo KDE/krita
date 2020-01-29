@@ -620,7 +620,7 @@ void KoTextDocumentLayout::positionAnchorTextRanges(int pos, int length, const Q
             //refPos += QPointF(refTextShapeData->leftPadding(), -refTextShapeData->documentOffset() + refTextShapeData->topPadding());
 
             refPos += QPointF(0, -d->anchoringRootArea->top());
-            refPos = refShape->absoluteTransformation(0).map(refPos);
+            refPos = refShape->absoluteTransformation().map(refPos);
 
             //FIXME we need a more precise position than anchorParagraph Rect
             emit foundAnnotation(annotation->annotationShape(), refPos);

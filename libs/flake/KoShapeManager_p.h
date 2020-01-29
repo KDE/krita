@@ -61,55 +61,11 @@ public:
 
     void forwardCompressedUdpate();
 
-    /**
-     * Returns whether the shape should be added to the RTree for collision and ROI
-     * detection.
-     */
-    bool shapeUsedInRenderingTree(KoShape *shape);
 
     /**
      * Recursively detach the shapes from this shape manager
      */
     void unlinkFromShapesRecursively(const QList<KoShape *> &shapes);
-
-    /**
-     * Recursively paints the given group shape to the specified painter
-     * This is needed for filter effects on group shapes where the filter effect
-     * applies to all the children of the group shape at once
-     */
-    static void paintGroup(KoShapeGroup *group, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
-
-    class DetectCollision
-    {
-    public:
-        DetectCollision() {}
-        void detect(KoRTree<KoShape *> &tree, KoShape *s, int prevZIndex) {
-            Q_FOREACH (KoShape *shape, tree.intersects(s->boundingRect())) {
-                bool isChild = false;
-                KoShapeContainer *parent = s->parent();
-                while (parent && !isChild) {
-                    if (parent == shape)
-                        isChild = true;
-                    parent = parent->parent();
-                }
-                if (isChild)
-                    continue;
-                if (s->zIndex() <= shape->zIndex() && prevZIndex <= shape->zIndex())
-                    // Moving a shape will only make it collide with shapes below it.
-                    continue;
-                if (shape->collisionDetection() && !shapesWithCollisionDetection.contains(shape))
-                    shapesWithCollisionDetection.append(shape);
-            }
-        }
-
-        void fireSignals() {
-            Q_FOREACH (KoShape *shape, shapesWithCollisionDetection)
-                shape->shapeChangedPriv(KoShape::CollisionDetected);
-        }
-
-    private:
-        QList<KoShape*> shapesWithCollisionDetection;
-    };
 
     QList<KoShape *> shapes;
     KoSelection *selection;

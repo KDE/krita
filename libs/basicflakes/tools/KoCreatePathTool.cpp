@@ -65,7 +65,7 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
         painter.restore();
 
         KisHandlePainterHelper helper =
-            KoShape::createHandlePainterHelper(&painter, d->shape, converter, d->handleRadius);
+            KoShape::createHandlePainterHelperView(&painter, d->shape, converter, d->handleRadius);
 
         const bool firstPointActive = d->firstPoint == d->activePoint;
 
@@ -90,13 +90,13 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
     }
 
     if (d->hoveredPoint) {
-        KisHandlePainterHelper helper = KoShape::createHandlePainterHelper(&painter, d->hoveredPoint->parent(), converter, d->handleRadius);
+        KisHandlePainterHelper helper = KoShape::createHandlePainterHelperView(&painter, d->hoveredPoint->parent(), converter, d->handleRadius);
         helper.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
         d->hoveredPoint->paint(helper, KoPathPoint::Node);
     }
 
     painter.save();
-    KoShape::applyConversion(painter, converter);
+    painter.setTransform(converter.documentToView());
     canvas()->snapGuide()->paint(painter, converter);
     painter.restore();
 }
@@ -104,16 +104,18 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
 void KoCreatePathTool::paintPath(KoPathShape& pathShape, QPainter &painter, const KoViewConverter &converter)
 {
     Q_D(KoCreatePathTool);
-    painter.setTransform(pathShape.absoluteTransformation(&converter) * painter.transform());
+    painter.setTransform(pathShape.absoluteTransformation() *
+                         converter.documentToView() *
+                         painter.transform());
     painter.save();
 
     KoShapePaintingContext paintContext; //FIXME
-    pathShape.paint(painter, converter, paintContext);
+    pathShape.paint(painter, paintContext);
     painter.restore();
 
     if (pathShape.stroke()) {
         painter.save();
-        pathShape.stroke()->paint(d->shape, painter, converter);
+        pathShape.stroke()->paint(d->shape, painter);
         painter.restore();
     }
 }

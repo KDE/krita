@@ -705,7 +705,9 @@ KisOpenGL::RendererConfig KisOpenGL::selectSurfaceConfig(KisOpenGL::OpenGLRender
     using Info = boost::optional<KisOpenGLModeProber::Result>;
 
     QHash<OpenGLRenderer, Info> renderersToTest;
+#ifndef Q_OS_ANDROID
     renderersToTest.insert(RendererDesktopGL, Info());
+#endif
     renderersToTest.insert(RendererOpenGLES, Info());
 
 #ifdef Q_OS_WIN

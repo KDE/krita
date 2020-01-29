@@ -331,7 +331,7 @@ extern "C" int main(int argc, char **argv)
         // prevents python >=3.7 nl_langinfo(CODESET) fail.
         qputenv("LANG", locale.name().split('_').first().toLocal8Bit());
 #else
-        qputenv("LANG", locale.nmae().toLocal8Bit());
+        qputenv("LANG", locale.name().toLocal8Bit());
 #endif
 
 

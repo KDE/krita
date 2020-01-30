@@ -1,5 +1,5 @@
 [Desktop Entry]
 Type=Tag
-Name=* Favorites
+Name=★ My Favorites
 Comment=Your favorite brush presets
-URL=* Favorites
+URL=★ My Favorites

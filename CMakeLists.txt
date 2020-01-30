@@ -250,7 +250,7 @@ endif(MINGW)
 ########################
 
 find_package(ECM 5.22 REQUIRED NOMODULE)
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR} ${ECM_FIND_MODULE_DIR})
 include(ECMOptionalAddSubdirectory)
 include(ECMAddAppIcon)
 include(ECMSetupVersion)

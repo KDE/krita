@@ -109,277 +109,187 @@ QPointF ConjugateAssistant::adjustPosition(const QPointF& pt, const QPointF& str
 
 void ConjugateAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible, bool previewVisible)
 {
-  gc.save();
-  gc.resetTransform();
+    gc.save();
+    gc.resetTransform();
+    QPointF mousePos(0,0);
+    
+    if (canvas){
+	//simplest, cheapest way to get the mouse-position//
+	mousePos= canvas->canvasWidget()->mapFromGlobal(QCursor::pos());
+	m_canvas = canvas;
+    }
+    else {
+	mousePos = QCursor::pos();//this'll give an offset//
+	dbgFile<<"canvas does not exist in ruler, you may have passed arguments incorrectly:"<<canvas;
+    }
 
+    const QTransform initialTransform = converter->documentToWidgetTransform();
+    bool isEditing = canvas->paintingAssistantsDecoration()->isEditingAssistants();
 
-  QPointF mousePos(0,0);
-  
-  if (canvas){
-    mousePos= canvas->canvasWidget()->mapFromGlobal(QCursor::pos());
-    m_canvas = canvas;
-  }
-  else {
-    mousePos = QCursor::pos();//this'll give an offset//
-    dbgFile<<"canvas does not exist in ruler, you may have passed arguments incorrectly:"<<canvas;
-  }
+    if (isEditing){
+	Q_FOREACH (const QPointF* handle, handles()) {
+	    QPointF h = initialTransform.map(*handle);
+	    QRectF ellipse = QRectF(QPointF(h.x() -15, h.y() -15), QSizeF(30, 30));
 
-  const QTransform initialTransform = converter->documentToWidgetTransform();
+	    QPainterPath pathCenter;
+	    pathCenter.addEllipse(ellipse);
+	    drawPath(gc, pathCenter, isSnappingActive());
+	}}
 
-  if (handles().size() >= 2) {
+    if (handles().size() >= 2) {
+	const QPointF p1 = *handles()[0];
+	const QPointF p2 = *handles()[1];
+	const QRect viewport= gc.viewport();
+	
+	hl = QLineF(p1,p2); // the objective horizon line
+	QLineF horizonLine = initialTransform.map(hl); // The apparent, SUBJECTIVE horizon line to draw
+	KisAlgebra2D::intersectLineRect(horizonLine, viewport);
+	
+	QPainterPath path;
+	
+	// draw the horizon
+	if (assistantVisible == true
+	    || isEditing == true)
+	    {
+		path.moveTo(horizonLine.p1());
+		path.lineTo(horizonLine.p2());
+		drawPath(gc, path, isSnappingActive());
+	    }
+	
+	// draw the VP-->mousePos lines
+	if (isEditing == false
+	    && previewVisible == true
+	    && isSnappingActive() == true)
+	    {
+		QLineF snapMouse1 = QLineF(initialTransform.map(p1), mousePos);
+		QLineF snapMouse2 = QLineF(initialTransform.map(p2), mousePos);
+		KisAlgebra2D::intersectLineRect(snapMouse1, viewport);
+		KisAlgebra2D::intersectLineRect(snapMouse2, viewport);
+		path.moveTo(initialTransform.map(p1));
+		path.lineTo(snapMouse1.p1());
+		path.moveTo(initialTransform.map(p2));
+		path.lineTo(snapMouse2.p1());
+		drawPreview(gc, path);
+	    }
 
-    const QPointF p1 = initialTransform.map(*handles()[0]); 
-    const QPointF p2 = initialTransform.map(*handles()[1]); 
-    const QRect viewport= gc.viewport();
+	QPointF p3;
 
-    QPainterPath path;
-    QLineF horizonLine = QLineF(p1, p2);
-    KisAlgebra2D::intersectLineRect(horizonLine, viewport);
+	if (handles().size() >= 3) {
 
-    if (assistantVisible == true) {
-      path.moveTo(horizonLine.p1());
-      path.lineTo(horizonLine.p2());
+	    p3 = *handles()[2];
+
+	    QLineF norm = hl.normalVector();	// objective normal to get objective cov
+	    norm.translate(-norm.p1()+p3);	// make normal start on p3
+	    hl.intersect(norm,&cov);		// set objective cov here
+
+	    // p3 is invalid if cov doesnt lie somewhere between p1 and p2
+	    if(!((p1.y() < p2.y() && cov.y() > p1.y() && cov.y() < p2.y()) ||
+		 (p1.y() > p2.y() && cov.y() < p1.y() && cov.y() > p2.y()) ||
+		 (p1.x() < p2.x() && cov.x() > p1.x() && cov.x() < p2.x()) ||
+		 (p1.x() > p2.x() && cov.x() < p1.x() && cov.x() > p2.x())))
+		{
+		    qDebug() << "p3 IS INVALID !! !! !!";
+		    cov = QLineF(p1,p2).center();
+		    p3 = QLineF(p1,p2).center();
+		    norm.translate(-norm.p1()+p3);
+		}
+
+	    QLineF normalLine = initialTransform.map(norm); // subjective normal line for drawing
+	    
+	    // now we draw the normal line 
+	    if (assistantVisible == true || isEditing == true) {
+		KisAlgebra2D::intersectLineRect(normalLine, viewport);
+		path.moveTo(normalLine.p1());
+		path.lineTo(normalLine.p2());
+		drawPath(gc, path, isSnappingActive());
+	    }}
+
+	if (isAssistantComplete() == true) { // ie handles().size() >= 4
+	    QPointF p4 = *handles()[3];
+
+	    float radius = QLineF(p1,p2).length()/2;
+	    QLineF distanceLine(cov,p3);
+	    
+	    float gap = QLineF(cov,QLineF(p1,p2).center()).length();
+	    float distance = sqrt((radius*radius) - (gap*gap));
+	    distanceLine.setLength(distance);
+
+	    setStationPoint(distanceLine.p2()); // now we have a valid station point
+	    
+	    // all good now, so we create the side handles if they dont already exist
+	    if (sideHandles().isEmpty()) {
+		QLineF workingLine;
+		QLineF distance;
+		
+		distance=QLineF(p3,cov);
+		workingLine= QLineF(distance.p1(), p1);
+		workingLine.setLength(distance.length());
+		addHandle(new KisPaintingAssistantHandle(workingLine.p2()), HandleType::SIDE);
+		workingLine.setLength(distance.length() * 0.5);
+		addHandle(new KisPaintingAssistantHandle(workingLine.p2()), HandleType::SIDE);
+		workingLine= QLineF(distance.p1(), p2);
+		workingLine.setLength(distance.length());
+		addHandle(new KisPaintingAssistantHandle(workingLine.p2()), HandleType::SIDE);
+		workingLine.setLength(distance.length() * 0.5);
+		addHandle(new KisPaintingAssistantHandle(workingLine.p2()), HandleType::SIDE);
+		
+		distance=QLineF(p4,cov);
+		workingLine= QLineF(distance.p1(), p1);
+		workingLine.setLength(distance.length());
+		addHandle(new KisPaintingAssistantHandle(workingLine.p2()), HandleType::SIDE);
+		workingLine.setLength(distance.length() * 0.5);
+		addHandle(new KisPaintingAssistantHandle(workingLine.p2()), HandleType::SIDE);
+		workingLine= QLineF(distance.p1(), p2);
+		workingLine.setLength(distance.length());
+		addHandle(new KisPaintingAssistantHandle(workingLine.p2()), HandleType::SIDE);
+		workingLine.setLength(distance.length() * 0.5);
+		addHandle(new KisPaintingAssistantHandle(workingLine.p2()), HandleType::SIDE);
+		}
+	    
+	    // draw the side handles
+	    if (isEditing == true) {
+		path.moveTo(initialTransform.map(p1));
+		path.lineTo(initialTransform.map(*sideHandles()[0]));
+		path.lineTo(initialTransform.map(*sideHandles()[1]));
+		path.moveTo(initialTransform.map(p2));
+		path.lineTo(initialTransform.map(*sideHandles()[2]));
+		path.lineTo(initialTransform.map(*sideHandles()[3]));
+		path.moveTo(initialTransform.map(p1));
+		path.lineTo(initialTransform.map(*sideHandles()[4]));
+		path.lineTo(initialTransform.map(*sideHandles()[5]));
+		path.moveTo(initialTransform.map(p2));
+		path.lineTo(initialTransform.map(*sideHandles()[6]));
+		path.lineTo(initialTransform.map(*sideHandles()[7]));
+		drawPreview(gc,path);
+	    }
+	}
     }
     
-    if (isAssistantComplete()) {
-      
-      // persp lines, only draw when not editing eg when on brush tool
-      if (canvas->paintingAssistantsDecoration()->isEditingAssistants() == false
-      	  && previewVisible == true
-      	  && isSnappingActive()) {
-        QLineF snapMouse1 = QLineF(p1, mousePos);
-        QLineF snapMouse2 = QLineF(p2, mousePos);
-        KisAlgebra2D::intersectLineRect(snapMouse1, viewport);
-        KisAlgebra2D::intersectLineRect(snapMouse2, viewport);
-        path.moveTo(p1);
-        path.lineTo(snapMouse1.p1());
-        path.moveTo(p2);
-        path.lineTo(snapMouse2.p1());
-      }
-
-      if (canvas->paintingAssistantsDecoration()->isEditingAssistants() == true && assistantVisible == true){
-    	// normal
-    	QPointF p3 = initialTransform.map(*handles()[2]);
-    	float rise = horizonLine.dy();
-    	float run = horizonLine.dx();
-    	QPointF p4;
-    	if (rise == 0) {
-    	  p4 = QPointF(p3.x(),p3.y()+100);
-    	} else {
-    	  p4 = QPointF(p3.x()+100,p3.y()-(100/(rise/run)));
-    	}
-    	QLineF normal = QLineF(p3,p4);
-    	KisAlgebra2D::intersectLineRect(normal, viewport);
-    	QPointF* inter = new QPointF();
-    	horizonLine.intersect(normal,inter);
-	
-    	// station point
-    	QPointF h1 = *handles()[0];
-    	QPointF h2 = *handles()[1];
-    	QPointF h3 = *handles()[2];
-	
-    	hl = QLineF(h1,h2);
-    	QLineF norm = hl.normalVector();
-	
-    	norm.translate(h3 - h1);
-	
-    	norm.intersect(hl,&cov);
-	
-    	qreal h1dst = QLineF(h1,cov).length();
-    	qreal h2dst = QLineF(h2,cov).length();
-	
-    	qreal radius = (h1dst + h2dst) / 2;
-    	qreal spdst = qSqrt(qPow(radius,2) - qPow(radius-qMin(h1dst,h2dst),2));
-	
-    	norm.setP1(cov);
-    	norm.setLength(spdst);
-	norm.setP1(norm.p2());
-	norm.setP2(cov);
-	norm.setLength(spdst*2);
-	
-    	if (sideHandles().isEmpty()) {
-    	  addHandle(new KisPaintingAssistantHandle(norm.p1()), HandleType::SIDE);
-    	  addHandle(new KisPaintingAssistantHandle(norm.p2()), HandleType::SIDE);
-	}
-
-        sideHandles()[0]->setX(norm.p1().x());
-	sideHandles()[0]->setY(norm.p1().y());
-	sideHandles()[1]->setX(norm.p2().x());
-	sideHandles()[1]->setY(norm.p2().y());
-
-    	sp = norm.p1();
-	
-    	QPointF snapPoint = *sideHandles()[0];
-	
-    	// finally draw Station Point and Normal
-    	if (// inter must be between both p1 and p2
-    	    (p2.x() < inter->x() && inter->x() < p1.x()) ||
-    	    (p2.y() < inter->y() && inter->y() < p1.y()) ||
-    	    (p2.x() > inter->x() && inter->x() > p1.x()) ||
-    	    (p2.y() > inter->y() && inter->y() > p1.y())
-    	    ) {
-    	  // normal
-    	  path.moveTo(normal.p1());
-    	  path.lineTo(normal.p2());
-    	  // conjugate ray, only draw when in assistant tool
-    	  if (canvas->paintingAssistantsDecoration()->isEditingAssistants()) {
-    	    path.moveTo(initialTransform.map(h1));
-    	    path.lineTo(initialTransform.map(snapPoint));
-    	    path.moveTo(initialTransform.map(h2));
-    	    path.lineTo(initialTransform.map(snapPoint));
-    	  }
-    	} else {
-    	  QPointF mid = QPointF((h2.x()-h1.x())/2+h1.x(),(h2.y()-h1.y())/2+h1.y()); // ?????????
-    	  norm = QLineF(mid,h1).normalVector();
-    	  norm.setLength(QLineF(mid,h1).length());
-	  
-    	  if (sideHandles().isEmpty()) {
-    	    addHandle(new KisPaintingAssistantHandle(norm.p2()), HandleType::SIDE);
-    	    sideHandles()[0]->setX(norm.p2().x());
-    	    sideHandles()[0]->setY(norm.p2().y());
-    	  } else {
-    	    sideHandles()[0]->setX(norm.p2().x());
-    	    sideHandles()[0]->setY(norm.p2().y());
-    	  }
-    	  sp = norm.p2();
-    	}
-      }
-
-      if (assistantVisible == true && isSnappingActive()) {
-
-    	// transform 
-      QPointF tSP = initialTransform.map(sp);
-      QPointF tCOV = initialTransform.map(cov);
-
-      // these are already transformed
-      QList<QPointF> vanishingPoints = QList<QPointF>({p1,p2});
-
-      Q_FOREACH (QPointF p0, vanishingPoints) {
-	
-    	qreal horizonAngle = initialTransform.map(hl).angleTo(QLineF(0,0,100,0));
-
-    	QLineF unit = QLineF(p0,tCOV).normalVector();
-    	unit.setLength(1);
-
-    	qreal square = 1.0;
-	
-    	QList<qreal> coefficients = QList<qreal>({1.0,-1.0});
-    	QColor paintingColor = effectiveAssistantColor();
-	
-    	Q_FOREACH (qreal coefficient, coefficients)
-    	  {
-	    
-    	    int count = 0;
-    	    qreal opacity = 1.00;
-    	    qreal tilt = coefficient*horizonAngle;
-
-    	    QLinearGradient grad(QPointF(p0.x()+unit.dx()*700, p0.y()+unit.dy()*700),
-    				 QPointF(p0.x()-unit.dx()*700, p0.y()-unit.dy()*700));
-    	    grad.setSpread(QGradient::PadSpread);
-    	    QColor colorStep3 = QColor(paintingColor.rgb());
-    	    colorStep3.setAlphaF(0.0);
-    	    grad.setColorAt(0.0, paintingColor);
-    	    grad.setColorAt(0.50, colorStep3);
-    	    grad.setColorAt(1.0, paintingColor);
-	    
-    	    QBrush brush_a(grad);
-    	    brush_a.setStyle(Qt::LinearGradientPattern);
-    	    QPen pen_a(brush_a, 1);
-    	    pen_a.setStyle(Qt::SolidLine);
-    	    pen_a.setCosmetic(true);
-    	    gc.setPen(pen_a);
-
-    	    gc.setOpacity(opacity);
-    	    QPainterPath path;
-
-    	    // QLineF groundLine = QLineF(tSP, p0);
-    	    // KisAlgebra2D::intersectLineRect(groundLine, viewport);
-    	    // path.moveTo(groundLine.p1());
-    	    // path.lineTo(groundLine.p2());
-	    
-    	    gc.drawPath(path);
-
-    	    qreal deviation = QLineF(tSP,p0).angleTo(QLineF(tSP,tCOV));
-    	    if (deviation > 90) {
-    	      deviation = 360 - deviation;
-            }
-    	    deviation = deviation * (M_PI/180);
-            qreal interval = square/qCos(deviation);
-
-    	    // normals
-    	    QLineF normalLine = QLineF(tCOV,tSP);
-    	    normalLine.translate(p0-tCOV);
-    	    KisAlgebra2D::intersectLineRect(normalLine, viewport);
-    	    path.moveTo(normalLine.p1());
-    	    path.lineTo(normalLine.p2());
-
-    	    for (qreal angle = atan(interval)*(180/M_PI)	+ 90.0+tilt;
-    		 angle < 89.99					+ 90.0+tilt;
-    		 angle = atan(interval*count)*(180/M_PI)	+ 90.0+tilt)
-    	      {
-
-    		QPointF unitAngle;
-    		unitAngle.setX(p0.x() + coefficient * cos(angle * M_PI / 180));
-    		unitAngle.setY(p0.y() +		      sin(angle * M_PI / 180));
-		
-    		gc.setOpacity(opacity);
-		
-    		QLineF snapLine = QLineF(p0, unitAngle);
-		
-    		KisAlgebra2D::intersectLineRect(snapLine, viewport);
-		
-    		path.moveTo(snapLine.p1());
-    		path.lineTo(snapLine.p2());
-    		//drawPreview(gc, path);//and we draw the preview.
-    		KisPaintingAssistantHandleSP handle = handles()[0];
-		
-    		gc.drawPath(path);
-		
-    		count++;
-    		if (opacity > 0) {opacity=opacity-m_fade;}
-    		if (count > m_count) {break;}
-    	      }
-    	  }
-      }
-      }
-
-    }
-
-    // drawPreview(gc, path);//and we draw the preview.
-    drawPath(gc, path, isSnappingActive());
-    // gc.restore();
-  }
-
-  gc.restore();
-  KisPaintingAssistant::drawAssistant(gc, updateRect, converter, cached, canvas, assistantVisible, previewVisible);
+    gc.restore();
+    //KisPaintingAssistant::drawAssistant(gc, updateRect, converter, cached, canvas, assistantVisible, previewVisible);
 }
 
 void ConjugateAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter, bool assistantVisible)
 {
-      if (!m_canvas || !isAssistantComplete()) {
+    if (!m_canvas || !isAssistantComplete()) {
         return;
     }
-
+    
     if (assistantVisible == false ||   m_canvas->paintingAssistantsDecoration()->isEditingAssistants()) {
         return;
     }
-
+    
     QTransform initialTransform = converter->documentToWidgetTransform();
     QPainterPath path;
-    QList<QPointF> points = QList<QPointF>({initialTransform.map(*handles()[0]),initialTransform.map(*handles()[1])});
-
-    Q_FOREACH (QPointF p0, points) {
-
-      // draws an "X"
-      path.moveTo(QPointF(p0.x() - 10.0, p0.y() - 10.0));
-      path.lineTo(QPointF(p0.x() + 10.0, p0.y() + 10.0));
-
-      path.moveTo(QPointF(p0.x() - 10.0, p0.y() + 10.0));
-      path.lineTo(QPointF(p0.x() + 10.0, p0.y() - 10.0));
-    }
-
     
+    QPointF centerOfVision = initialTransform.map(cov);
 
+    path.moveTo(QPointF(centerOfVision.x() - 10.0, centerOfVision.y() - 10.0));
+    path.lineTo(QPointF(centerOfVision.x() + 10.0, centerOfVision.y() + 10.0));
+    				     
+    path.moveTo(QPointF(centerOfVision.x() - 10.0, centerOfVision.y() + 10.0));
+    path.lineTo(QPointF(centerOfVision.x() + 10.0, centerOfVision.y() - 10.0));
+    
     drawPath(gc, path, isSnappingActive());
 }
 
@@ -404,7 +314,7 @@ float ConjugateAssistant::referenceLineDensity()
 
 bool ConjugateAssistant::isAssistantComplete() const
 {
-  return handles().size() >= 3;
+  return handles().size() >= 4;
 }
 
 void ConjugateAssistant::saveCustomXml(QXmlStreamWriter* xml)

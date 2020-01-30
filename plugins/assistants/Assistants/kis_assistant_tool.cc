@@ -115,6 +115,22 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
         *m_newAssistant->handles().back() = canvasDecoration->snapToGuide(event, QPointF(), false);
         if (m_newAssistant->handles().size() == m_newAssistant->numHandles()) {
             addAssistant();
+
+	} else if (m_newAssistant->id() == "conjugate" && m_newAssistant->handles().size() == 3){ 
+	    // conjugate assistant's 4th point is to be placed automaticlly if 3rd one is already placed
+	    QPointF cov;
+	    QLineF hl;
+	    QLineF normal;
+
+	    hl = QLineF(*m_newAssistant->handles()[0],*m_newAssistant->handles()[1]);
+	    normal = hl.normalVector();
+	    normal.translate(-normal.p1() + *m_newAssistant->handles()[2]);
+	    hl.intersect(normal, &cov);
+
+	    QLineF distance = QLineF(*m_newAssistant->handles()[2], cov);
+	    distance.setLength(distance.length() * 2.0);
+	    m_newAssistant->addHandle(new KisPaintingAssistantHandle(distance.p2()), HandleType::NORMAL);
+            addAssistant();
         } else {
             m_newAssistant->addHandle(new KisPaintingAssistantHandle(canvasDecoration->snapToGuide(event, QPointF(), false)), HandleType::NORMAL);
         }
@@ -536,35 +552,40 @@ void KisAssistantTool::continuePrimaryAction(KoPointerEvent *event)
         }
         if (m_handleDrag &&
 	    assistant->id() == "conjugate" &&
-            assistant->handles().size() == 3) {
+            assistant->handles().size() == 4) {
 
 	  QSharedPointer <ConjugateAssistant> assis = qSharedPointerCast<ConjugateAssistant>(assistant);
 
 	  int working_handle_id;
 	  int other_handle_id;
 
-	  if (m_handleDrag == assistant->handles()[0]) {
-	    working_handle_id = 0;
-	    other_handle_id = 1;
+	  if (m_handleDrag == assistant->handles()[2]) {
+	    QPointF sp = assis->stationPoint();
+	    assistant->handles()[2]->setX(sp.x());
+	    assistant->handles()[2]->setY(sp.y());
 	  } else {
-	    working_handle_id = 1;
-	    other_handle_id = 0;
+	    if (m_handleDrag == assistant->handles()[0]) {
+	      working_handle_id = 0;
+	      other_handle_id = 1;
+	    } else {
+	      working_handle_id = 1;
+	      other_handle_id = 0;
+	    }
+
+	    QPointF working_handle = *assistant->handles()[working_handle_id];
+
+	    QLineF arm = QLineF(assis->stationPoint(), working_handle);
+	    QPointF new_other;
+	    arm.normalVector().intersect(assis->horizonLine(), &new_other);
+	    assis->handles()[other_handle_id]->setX(new_other.x());
+	    assis->handles()[other_handle_id]->setY(new_other.y());
+
+	    arm = QLineF(assis->stationPoint(), new_other);
+	    QPointF new_working;
+	    arm.normalVector().intersect(assis->horizonLine(), &new_working);
+	    assis->handles()[working_handle_id]->setX(new_working.x());
+	    assis->handles()[working_handle_id]->setY(new_working.y());
 	  }
-
-	  QPointF working_handle = *assistant->handles()[working_handle_id];
-
-	  QLineF snap = QLineF(assis->stationPoint(), working_handle);
-	  QPointF new_other;
-	  snap.normalVector().intersect(assis->horizonLine(), &new_other);
-	  assis->handles()[other_handle_id]->setX(new_other.x());
-	  assis->handles()[other_handle_id]->setY(new_other.y());
-
-	  snap = QLineF(assis->stationPoint(),new_other);
-
-	  QPointF new_working;
-	  snap.normalVector().intersect(assis->horizonLine(), &new_working);
-	  assis->handles()[working_handle_id]->setX(new_working.x());
-	  assis->handles()[working_handle_id]->setY(new_working.y());
 
         }
     }

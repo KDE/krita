@@ -761,11 +761,11 @@ echo Running CMake for deps...
 @echo off
 echo.
 
-set EXT_TARGETS=patch png2ico zlib lzma gettext openssl qt boost exiv2 fftw3 eigen3
-set EXT_TARGETS=%EXT_TARGETS% ilmbase jpeg lcms2 ocio openexr png tiff gsl vc libraw
-set EXT_TARGETS=%EXT_TARGETS% giflib freetype poppler kwindowsystem drmingw gmic
+set EXT_TARGETS=patch png2ico zlib gettext openssl qt boost exiv2 fftw3 eigen3
+set EXT_TARGETS=%EXT_TARGETS% jpeg lcms2 ocio ilmbase openexr png tiff gsl vc libraw
+set EXT_TARGETS=%EXT_TARGETS% giflib kwindowsystem drmingw gmic freetype poppler 
 set EXT_TARGETS=%EXT_TARGETS% python sip pyqt
-set EXT_TARGETS=%EXT_TARGETS% quazip
+set EXT_TARGETS=%EXT_TARGETS% lzma quazip
 
 for %%a in (%EXT_TARGETS%) do (
     echo Building ext_%%a...

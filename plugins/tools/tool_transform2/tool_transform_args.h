@@ -301,17 +301,17 @@ public:
 private:
     void clear();
     void init(const ToolTransformArgs& args);
-    TransformMode m_mode;
+    TransformMode m_mode {ToolTransformArgs::TransformMode::FREE_TRANSFORM};
 
     // warp-related arguments
     // these are basically the arguments taken by the warp transform worker
-    bool m_defaultPoints; // true : the original points are set to make a grid
+    bool m_defaultPoints {true}; // true : the original points are set to make a grid
                           // which density is given by numPoints()
     QVector<QPointF> m_origPoints;
     QVector<QPointF> m_transfPoints;
-    KisWarpTransformWorker::WarpType m_warpType;
-    KisWarpTransformWorker::WarpCalculation m_warpCalculation; // DRAW or GRID
-    double m_alpha;
+    KisWarpTransformWorker::WarpType m_warpType {KisWarpTransformWorker::WarpType_::RIGID_TRANSFORM};
+    KisWarpTransformWorker::WarpCalculation m_warpCalculation {KisWarpTransformWorker::WarpCalculation::DRAW}; // DRAW or GRID
+    double m_alpha {1.0};
 
     //'free transform'-related
     // basically the arguments taken by the transform worker
@@ -320,23 +320,23 @@ private:
     QPointF m_rotationCenterOffset; // the position of the rotation center relative to
                                     // the original top left corner of the selection
                                     // before any transformation
-    bool m_transformAroundRotationCenter; // In freehand mode makes the scaling and other transformations
+    bool m_transformAroundRotationCenter {false}; // In freehand mode makes the scaling and other transformations
                                           // be anchored to the rotation center point.
 
-    double m_aX;
-    double m_aY;
-    double m_aZ;
+    double m_aX {0};
+    double m_aY {0};
+    double m_aZ {0};
     QVector3D m_cameraPos {QVector3D(0,0,1024)};
-    double m_scaleX;
-    double m_scaleY;
-    double m_shearX;
-    double m_shearY;
+    double m_scaleX {1.0};
+    double m_scaleY {1.0};
+    double m_shearX {0.0};
+    double m_shearY {0.0};
     bool m_keepAspectRatio {false};
 
     // perspective trasform related
     QTransform m_flattenedPerspectiveTransform;
 
-    KisFilterStrategy *m_filter;
+    KisFilterStrategy *m_filter {0};
     bool m_editTransformPoints {false};
     QSharedPointer<KisLiquifyProperties> m_liquifyProperties;
     QScopedPointer<KisLiquifyTransformWorker> m_liquifyWorker;
@@ -349,8 +349,8 @@ private:
     QScopedPointer<ToolTransformArgs> m_continuedTransformation;
 
     //PixelPrecision should always be in powers of 2
-    int m_pixelPrecision;
-    int m_previewPixelPrecision;
+    int m_pixelPrecision {8};
+    int m_previewPixelPrecision {16};
 };
 
 #endif // TOOL_TRANSFORM_ARGS_H_

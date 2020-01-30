@@ -81,7 +81,7 @@ void KisStroke::suspendStroke(KisStrokeSP recipient)
 
 void KisStroke::addJob(KisStrokeJobData *data)
 {
-    Q_ASSERT(!m_strokeEnded || m_isCancelled);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!m_strokeEnded);
     enqueue(m_dabStrategy.data(), data);
 }
 

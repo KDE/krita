@@ -164,7 +164,7 @@ QRectF calculateSelectionBounds(KoSelection *selection,
     tryAnchorPosition(anchor, resultRect, &resultPoint);
 
     if (useGlobalSize) {
-        resultRect = shape->absoluteTransformation(0).mapRect(resultRect);
+        resultRect = shape->absoluteTransformation().mapRect(resultRect);
     } else {
         /**
          * Some shapes, e.g. KoSelection and KoShapeGroup don't have real size() and
@@ -176,7 +176,7 @@ QRectF calculateSelectionBounds(KoSelection *selection,
         resultRect = matrix.scaleTransform().mapRect(resultRect);
     }
 
-    resultPoint = shape->absoluteTransformation(0).map(resultPoint);
+    resultPoint = shape->absoluteTransformation().map(resultPoint);
 
     if (outShapes) {
         *outShapes = shapes;

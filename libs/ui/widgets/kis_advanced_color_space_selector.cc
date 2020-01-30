@@ -482,8 +482,8 @@ void KisAdvancedColorSpaceSelector::fillDescription()
         d->colorSpaceSelector->textProfileDescription->append("<p>"+i18nc("These are Elle Stone's notes on her profiles that we ship.",
                                                                     "<p><b>Extra notes on profiles by Elle Stone:</b></p>"
                                                                     "<p><i>Krita comes with a number of high quality profiles created by "
-                                                                    "<a href=\"http://ninedegreesbelow.com\">Elle Stone</a>. This is a summary. Please check "
-                                                                    "<a href=\"http://ninedegreesbelow.com/photography/lcms-make-icc-profiles.html\">the full documentation</a> as well.</i></p>"));
+                                                                    "<a href=\"https://ninedegreesbelow.com\">Elle Stone</a>. This is a summary. Please check "
+                                                                    "<a href=\"https://ninedegreesbelow.com/photography/lcms-make-icc-profiles.html\">the full documentation</a> as well.</i></p>"));
 
                 if (profileName.contains("ACES-")) {
 
@@ -522,7 +522,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
                                                                         "actually has a slightly larger color gamut (to capture some fringe colors that barely qualify "
                                                                         "as real when viewed by the standard observer) and uses the D50 white point.</p><p>"
                                                                         "Just like the ACES color space, AllColorsRGB holds a high percentage of imaginary colors. See the Completely "
-                                                                        "<a href=\"http://ninedegreesbelow.com/photography/xyz-rgb.html\">"
+                                                                        "<a href=\"https://ninedegreesbelow.com/photography/xyz-rgb.html\">"
                                                                         "Painless Programmer's Guide to XYZ, RGB, ICC, xyY, and TRCs</a> for more information about imaginary "
                                                                         "colors.</p><p>"
                                                                         "There is no particular reason why anyone would want to use this profile "

@@ -22,7 +22,6 @@
 #include <KoShape.h>
 #include <KoShapePainter.h>
 #include <KoBakedShapeRenderer.h>
-#include <KoViewConverter.h>
 
 class KoVectorPatternBackground::Private : public QSharedData
 {
@@ -117,10 +116,9 @@ QList<KoShape *> KoVectorPatternBackground::shapes() const
     return d->shapes;
 }
 
-void KoVectorPatternBackground::paint(QPainter &painter, const KoViewConverter &converter_Unused, KoShapePaintingContext &context_Unused, const QPainterPath &fillPath) const
+void KoVectorPatternBackground::paint(QPainter &painter, KoShapePaintingContext &context_Unused, const QPainterPath &fillPath) const
 {
     Q_UNUSED(context_Unused);
-    Q_UNUSED(converter_Unused);
 
     const QPainterPath dstShapeOutline = fillPath;
     const QRectF dstShapeBoundingBox = dstShapeOutline.boundingRect();
@@ -135,10 +133,9 @@ void KoVectorPatternBackground::paint(QPainter &painter, const KoViewConverter &
 
     QPainter *patchPainter = renderer.bakeShapePainter();
 
-    KoViewConverter converter;
     KoShapePainter p;
     p.setShapes(d->shapes);
-    p.paint(*patchPainter, converter);
+    p.paint(*patchPainter);
 
     // uncomment for debug
     // renderer.patchImage().save("dd_patch_image.png");

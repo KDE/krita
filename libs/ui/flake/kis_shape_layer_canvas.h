@@ -111,27 +111,22 @@ private Q_SLOTS:
     friend class KisRepaintShapeLayerLayerJob;
     void repaint();
     void slotStartAsyncRepaint();
-    void slotStartDirectSyncRepaint();
     void slotImageSizeChanged();
 
 Q_SIGNALS:
     void forwardRepaint();
 
 private:
-    void updateUpdateCompressorDelay();
-
-private:
     KisPaintDeviceSP m_projection;
     KisShapeLayer *m_parentLayer {0};
-    KisThreadSafeSignalCompressor m_canvasUpdateCompressor;
 
     KisThreadSafeSignalCompressor m_asyncUpdateSignalCompressor;
     volatile bool m_hasUpdateInCompressor = false;
-    volatile bool m_hasDirectSyncRepaintInitiated = false;
 
     bool m_forceUpdateHiddenAreasOnly = false;
     QRegion m_dirtyRegion;
     QMutex m_dirtyRegionMutex;
+    KoShapeManager::PaintJobsList m_paintJobs;
 
     QRect m_cachedImageRect;
 

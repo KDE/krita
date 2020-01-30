@@ -79,7 +79,7 @@ bool OrthogonalSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy * pr
     qreal minVertDist = HUGE_VAL;
     qreal minHorzDist = HUGE_VAL;
 
-    QList<KoShape*> shapes = proxy->shapes();
+    QList<KoShape*> shapes = proxy->shapes(true);
     Q_FOREACH (KoShape * shape, shapes) {
         QList<QPointF> points = proxy->pointsFromShape(shape);
         foreach (const QPointF &point, points) {
@@ -192,7 +192,7 @@ bool ExtensionSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy * pro
         if (! path) {
             continue;
         }
-        QTransform matrix = path->absoluteTransformation(0);
+        QTransform matrix = path->absoluteTransformation();
 
         const int subpathCount = path->subpathCount();
         for (int subpathIndex = 0; subpathIndex < subpathCount; ++subpathIndex) {

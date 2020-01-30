@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2019 Anna Medonosova <anna.medonosova@gmail.com>
+ * Copyright (c) 2017 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,30 +16,34 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KISGAMUTMASKVIEWCONVERTERTEST_H
-#define KISGAMUTMASKVIEWCONVERTERTEST_H
+#ifndef DLG_SYSINFO
+#define DLG_SYSINFO
 
-#include <QObject>
-#include <QTest>
+#include <KoDialog.h>
+#include "dlg_buginfo.h"
 
-class KisGamutMaskViewConverterTest : public QObject
+
+class QSettings;
+
+class DlgSysInfo: public DlgBugInfo
 {
     Q_OBJECT
 public:
-    explicit KisGamutMaskViewConverterTest(QObject *parent = nullptr);
+    DlgSysInfo(QWidget * parent = 0);
+    ~DlgSysInfo() override;
 
-private Q_SLOTS:
-    void testDocumentToViewX();
-    void testDocumentToViewX_data();
+    QString defaultNewFileName() override {
+        return "KritaSystemInformation.txt";
+    }
 
-    void testDocumentToViewY();
-    void testDocumentToViewY_data();
+    QString originalFileName() override;
 
-    void testViewToDocumentX();
-    void testViewToDocumentX_data();
+public:
+    QString replacementWarningText() override;
+    QString captionText() override;
 
-    void testViewToDocumentY();
-    void testViewToDocumentY_data();
+private:
+    WdgBugInfo *m_page;
 };
 
-#endif // KISGAMUTMASKVIEWCONVERTERTEST_H
+#endif // DLG_SYSINFO

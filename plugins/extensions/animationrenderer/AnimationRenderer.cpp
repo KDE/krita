@@ -118,7 +118,7 @@ void AnimaterionRenderer::renderAnimationImpl(KisDocument *doc, KisAnimationRend
     KIS_SAFE_ASSERT_RECOVER(
         !((encoderOptions.width & 0x1 || encoderOptions.height & 0x1)
           && (encoderOptions.videoMimeType == "video/mp4" ||
-              encoderOptions.videoMimeType == "video/x-matroska"))) {
+              encoderOptions.videoMimeType == "video/x-matroska") && !(encoderOptions.renderMode() == encoderOptions.RENDER_FRAMES_ONLY))) {
 
         encoderOptions.width = encoderOptions.width + (encoderOptions.width & 0x1);
         encoderOptions.height = encoderOptions.height + (encoderOptions.height & 0x1);
@@ -129,9 +129,10 @@ void AnimaterionRenderer::renderAnimationImpl(KisDocument *doc, KisAnimationRend
             encoderOptions.width, encoderOptions.height,
             Qt::KeepAspectRatio);
 
+
     if ((scaledSize.width() & 0x1 || scaledSize.height() & 0x1)
             && (encoderOptions.videoMimeType == "video/mp4" ||
-                encoderOptions.videoMimeType == "video/x-matroska")) {
+                encoderOptions.videoMimeType == "video/x-matroska") && !(encoderOptions.renderMode() == encoderOptions.RENDER_FRAMES_ONLY)) {
         QString m = "Mastroska (.mkv)";
         if (encoderOptions.videoMimeType == "video/mp4") {
             m = "Mpeg4 (.mp4)";
@@ -141,6 +142,7 @@ void AnimaterionRenderer::renderAnimationImpl(KisDocument *doc, KisAnimationRend
         QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not render animation:\n%1", doc->errorMessage()));
         return;
     }
+
 
     const bool batchMode = false; // TODO: fetch correctly!
     KisAsyncAnimationFramesSaveDialog exporter(doc->image(),

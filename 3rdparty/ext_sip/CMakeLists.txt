@@ -12,7 +12,7 @@ if (UNIX)
         URL https://www.riverbankcomputing.com/static/Downloads/sip/4.19.15/sip-4.19.15.tar.gz
         URL_MD5 236578d2199da630ae1251671b9a7bfe
 
-        CONFIGURE_COMMAND ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/configure.py -b ${PREFIX_ext_sip}/bin -d ${PREFIX_ext_sip}/lib/python3.5/site-packages -e ${PREFIX_ext_sip}/include  --sipdir ${PREFIX_ext_sip}/sip --target-py-version 3.5 --sip-module PyQt5.sip
+        CONFIGURE_COMMAND ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/configure.py -b ${PREFIX_ext_sip}/bin -d ${PREFIX_ext_sip}/lib/python3.5/site-packages -e ${PREFIX_ext_sip}/include  --sipdir ${PREFIX_ext_sip}/sip --target-py-version 3.8 --sip-module PyQt5.sip
         BUILD_COMMAND make
         INSTALL_COMMAND make install
 
@@ -37,7 +37,7 @@ if (UNIX)
             CMAKE_ARGS -DPYTHON_INCLUDE_DIR=${PREFIX_ext_sip}/lib/Python.framework/Headers
             CONFIGURE_COMMAND ${PYTHON_EXECUTABLE} <SOURCE_DIR>/configure.py --deployment-target=10.11
                 -b ${PREFIX_ext_sip}/bin -d ${PREFIX_ext_sip}/lib/Python.framework/Versions/Current/site-packages/ 
-                -e ${PREFIX_ext_sip}/include --sipdir ${PREFIX_ext_sip}/share/sip --target-py-version 3.5 --sip-module PyQt5.sip
+                -e ${PREFIX_ext_sip}/include --sipdir ${PREFIX_ext_sip}/share/sip --target-py-version 3.8 --sip-module PyQt5.sip
             BUILD_COMMAND make
             INSTALL_COMMAND make install
                 # COMMAND ${CMAKE_COMMAND} -E create_symlink ./PyQt5/sip.so ${PREFIX_ext_sip}/lib/Python.framework/Versions/Current/site-packages/sip.so
@@ -55,7 +55,7 @@ elseif (MINGW)
         -d ${PREFIX_ext_sip}/lib/krita-python-libs
         -e ${PREFIX_ext_sip}/include
         --sipdir ${PREFIX_ext_sip}/share/sip
-        --target-py-version 3.6
+        --target-py-version 3.8
         --sip-module PyQt5.sip
     )
     ExternalProject_Add( ext_sip

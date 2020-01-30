@@ -84,5 +84,4 @@ void KisAssignProfileProcessingVisitor::visitColorizeMask(KisColorizeMask *mask,
 
         mask->invalidateFrames(KisTimeRange::infinite(0), mask->extent());
     }
-    KisSimpleProcessingVisitor::visit(mask, undoAdapter);
 }

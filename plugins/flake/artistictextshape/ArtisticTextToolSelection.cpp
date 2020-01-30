@@ -21,7 +21,6 @@
 #include "ArtisticTextShape.h"
 
 #include <KoCanvasBase.h>
-#include <KoViewConverter.h>
 
 #include <QDebug>
 
@@ -94,13 +93,11 @@ void ArtisticTextToolSelection::clear()
     m_selectionCount = 0;
 }
 
-void ArtisticTextToolSelection::paint(QPainter &painter, const KoViewConverter &converter)
+void ArtisticTextToolSelection::paint(QPainter &painter)
 {
     if (!hasSelection()) {
         return;
     }
-
-    m_currentShape->applyConversion(painter, converter);
     painter.setPen(Qt::NoPen);
     painter.setBrush(QColor(0, 0, 255, 127));
     painter.drawPath(outline());
@@ -182,7 +179,7 @@ QPainterPath ArtisticTextToolSelection::outline()
     }
 
     // transform to document coordinates
-    return m_currentShape->absoluteTransformation(0).map(outline);
+    return m_currentShape->absoluteTransformation().map(outline);
 }
 
 void ArtisticTextToolSelection::repaintDecoration()

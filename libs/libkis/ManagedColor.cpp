@@ -69,6 +69,7 @@ bool ManagedColor::operator==(const ManagedColor &other) const
 {
     return d->color == other.d->color;
 }
+
 QColor ManagedColor::colorForCanvas(Canvas *canvas) const
 {
     QColor c = QColor(0,0,0);
@@ -83,6 +84,22 @@ QColor ManagedColor::colorForCanvas(Canvas *canvas) const
         c = KoDumbColorDisplayRenderer::instance()->toQColor(d->color);
     }
     return c;
+}
+
+ManagedColor *ManagedColor::fromQColor(const QColor &qcolor, Canvas *canvas)
+{
+    KoColor c;
+    if (canvas && canvas->displayColorConverter() && canvas->displayColorConverter()->displayRendererInterface()) {
+        KoColorDisplayRendererInterface *converter = canvas->displayColorConverter()->displayRendererInterface();
+        if (converter) {
+            c = converter->approximateFromRenderedQColor(qcolor);
+        } else {
+            c = KoDumbColorDisplayRenderer::instance()->approximateFromRenderedQColor(qcolor);
+        }
+    } else {
+        c = KoDumbColorDisplayRenderer::instance()->approximateFromRenderedQColor(qcolor);
+    }
+    return new ManagedColor(c);
 }
 
 QString ManagedColor::colorDepth() const

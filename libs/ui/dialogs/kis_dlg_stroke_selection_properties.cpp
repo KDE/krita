@@ -54,21 +54,21 @@ KisDlgStrokeSelection::KisDlgStrokeSelection(KisImageWSP image, KisViewManager *
     : KoDialog(view->mainWindow())
 {
     m_resourceManager = view->mainWindow()->resourceManager();
+    KisPropertiesConfigurationSP cfg = KisConfig(true).exportConfiguration("StrokeSelection");
 
     converter = view->canvasBase()->displayColorConverter();
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
     setCaption(i18nc("@title:window", "Stroke Selection Properties"));
     m_page = new WdgStrokeSelection(this);
+    m_page->m_isVectorLayer = isVectorLayer;
+    m_page->m_cfg = cfg;
 
     m_image = image;
 
     setMainWidget(m_page);
-    resize(m_page->sizeHint());
 
-    KisPropertiesConfigurationSP cfg = KisConfig(true).exportConfiguration("StrokeSelection");
-
-    auto &m_options = m_page->m_options;
+    StrokeSelectionOptions &m_options = m_page->m_options;
     m_options.color = cfg->getColor("color");
     m_options.lineColorSource = cfg->getInt("lineColorSource");
     m_page->lineColorBox->setCurrentIndex(m_options.lineColorSource);
@@ -81,6 +81,7 @@ KisDlgStrokeSelection::KisDlgStrokeSelection(KisImageWSP image, KisViewManager *
     m_options._colorFillSource = cfg->getInt("colorFillSource", 0);
     m_page->fillBox->setCurrentIndex(m_options._colorFillSource);
     m_options.customColor = cfg->getColor("customColor");
+
     if (m_options._colorFillSource == static_cast<int>(colorFillSource::CustomColor)) {
         m_page->colorFillSelector->setColor(m_options.customColor.toQColor());
     }
@@ -88,21 +89,8 @@ KisDlgStrokeSelection::KisDlgStrokeSelection(KisImageWSP image, KisViewManager *
         m_page->colorFillSelector->setColor(getFillSelectedColor().toQColor());
     }
 
-    m_options.fillColor = cfg->getColor("fillColor");
-    if (m_options._colorFillSource == static_cast<int>(colorFillSource::None)) {
-        m_page->colorFillSelector->setDisabled(true);
-    }
-    else {
-        m_page->colorFillSelector->setDisabled(false);    }
-
     m_options.lineSize = cfg->getInt("lineSize", 1);
     m_page->lineSize->setValue(m_options.lineSize);
-    if (m_options.brushSelected) {
-        m_page->lineSize->setDisabled(true);
-        m_page->fillBox->setDisabled(true);
-        m_page->colorFillSelector->setDisabled(true);
-        m_page->sizeBox->setDisabled(true);
-    }
 
     m_options.lineDimension = cfg->getInt("lineDimension", 0);
     m_page->sizeBox->setCurrentIndex(m_options.lineDimension);
@@ -112,14 +100,13 @@ KisDlgStrokeSelection::KisDlgStrokeSelection(KisImageWSP image, KisViewManager *
     connect(m_page->colorFillSelector, SIGNAL(changed(QColor)), SLOT(colorFillChanged(QColor)));
     connect(m_page->colorSelector, SIGNAL(changed(QColor)), SLOT(colorChanged(QColor)));
 
-    if (isVectorLayer) {
-        lockVectorLayerFunctions();
-    }
+    m_page->enableControls();
+
 }
 
 KisDlgStrokeSelection::~KisDlgStrokeSelection()
 {
-    auto &m_options = m_page->m_options;
+    StrokeSelectionOptions &m_options = m_page->m_options;
     m_options.lineSize = m_page->lineSize->value();
 
     m_options.lineDimension = m_page->sizeBox->currentIndex();
@@ -159,11 +146,11 @@ KoColor KisDlgStrokeSelection::getSelectedColor() const
         color = m_resourceManager->resource(KoCanvasResourceProvider::ForegroundColor).value<KoColor>();
     }
     else  if (currentSource == "Background color") {
-              color = m_resourceManager->resource(KoCanvasResourceProvider::BackgroundColor).value<KoColor>();
-          }
-          else  {
-              color = m_page->m_options.color;
-           }
+        color = m_resourceManager->resource(KoCanvasResourceProvider::BackgroundColor).value<KoColor>();
+    }
+    else  {
+        color = m_page->m_options.color;
+    }
 
     return color;
 }
@@ -178,14 +165,14 @@ KoColor KisDlgStrokeSelection::getFillSelectedColor() const
         color = m_resourceManager->resource(KoCanvasResourceProvider::ForegroundColor).value<KoColor>();
     }
     else  if (currentSource == colorFillSource::BGColor) {
-              color = m_resourceManager->resource(KoCanvasResourceProvider::BackgroundColor).value<KoColor>();
-          }
-          else  if (currentSource == colorFillSource::PaintColor) {
-                    color = converter->approximateFromRenderedQColor(m_page->colorSelector->color());
-                }
-                else  {
-                    color = m_page->m_options.customColor;
-                }
+        color = m_resourceManager->resource(KoCanvasResourceProvider::BackgroundColor).value<KoColor>();
+    }
+    else  if (currentSource == colorFillSource::PaintColor) {
+        color = converter->approximateFromRenderedQColor(m_page->colorSelector->color());
+    }
+    else  {
+        color = m_page->m_options.customColor;
+    }
 
     return color;
 }
@@ -193,47 +180,27 @@ KoColor KisDlgStrokeSelection::getFillSelectedColor() const
 
 bool KisDlgStrokeSelection::isBrushSelected() const
 {
-     int index = m_page->typeBox->currentIndex();
-     drawType type = static_cast<drawType>(index);
-
-     if (type == drawType::brushDraw){
-         return true;
-     }
-     else {
-         return false;
-     }
+    if (static_cast<drawType>(m_page->typeBox->currentIndex()) == drawType::brushDraw){
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
 StrokeSelectionOptions KisDlgStrokeSelection::getParams() const
- {
-     StrokeSelectionOptions params;
-
-     params.lineSize = getLineSize();
-     params.color = getSelectedColor();
-     params.brushSelected = isBrushSelected();
-     params.fillColor = getFillSelectedColor();
-     params._colorFillSource = m_page->m_options._colorFillSource;
-     return params;
-
-}
-
-void KisDlgStrokeSelection::lockVectorLayerFunctions()
 {
-    m_page->colorFillSelector->setEnabled(false);
-    m_page->lineSize->setEnabled(false);
-    m_page->sizeBox->setEnabled(false);
-    m_page->fillBox->setEnabled(false);
-    m_page->typeBox->setEnabled(false);
+    StrokeSelectionOptions params;
+
+    params.lineSize = getLineSize();
+    params.color = getSelectedColor();
+    params.brushSelected = isBrushSelected();
+    params.fillColor = getFillSelectedColor();
+    params._colorFillSource = m_page->m_options._colorFillSource;
+    return params;
+
 }
 
-void KisDlgStrokeSelection::unlockVectorLayerFunctions()
-{
-    m_page->colorFillSelector->setEnabled(true);
-    m_page->lineSize->setEnabled(true);
-    m_page->sizeBox->setEnabled(true);
-    m_page->fillBox->setEnabled(true);
-    m_page->typeBox->setEnabled(true);
-}
 
 void KisDlgStrokeSelection::setColorFillButton()
 {
@@ -254,12 +221,12 @@ int KisDlgStrokeSelection::getLineSize() const
         return value;
     }
     else if (m_page->sizeBox->currentText() == i18n("mm")) {
-             int pixels =  static_cast<int>(KoUnit::convertFromUnitToUnit(value,KoUnit(KoUnit::Millimeter), KoUnit(KoUnit::Pixel)));
-             return pixels;
+        int pixels =  static_cast<int>(KoUnit::convertFromUnitToUnit(value,KoUnit(KoUnit::Millimeter), KoUnit(KoUnit::Pixel)));
+        return pixels;
     }
-         else {
-             int  pixels = static_cast<int>(KoUnit::convertFromUnitToUnit(value, KoUnit(KoUnit::Inch), KoUnit(KoUnit::Pixel)));
-             return pixels;
+    else {
+        int  pixels = static_cast<int>(KoUnit::convertFromUnitToUnit(value, KoUnit(KoUnit::Inch), KoUnit(KoUnit::Pixel)));
+        return pixels;
     }
 }
 
@@ -290,10 +257,10 @@ void KisDlgStrokeSelection::colorChanged(const QColor &newColor)
     KoColor tempColor= converter->approximateFromRenderedQColor(newColor);
 
 
-     if (!(newColor == BGColor) && !(newColor == FGColor)) {
+    if (!(newColor == BGColor) && !(newColor == FGColor)) {
         m_page->m_options.color = tempColor;
         m_page->lineColorBox->setCurrentIndex(2);  //custom color
-     }
+    }
 }
 
 void KisDlgStrokeSelection::colorFillChanged(const QColor &newColor)
@@ -317,6 +284,27 @@ WdgStrokeSelection::WdgStrokeSelection(QWidget *parent) : QWidget(parent)
     setupUi(this);
 }
 
+void WdgStrokeSelection::enableControls()
+{
+    m_options.fillColor = m_cfg->getColor("fillColor");
+    if (m_options._colorFillSource == static_cast<int>(colorFillSource::None)) {
+        colorFillSelector->setEnabled(false);
+    }
+    else {
+        colorFillSelector->setEnabled(true);
+    }
+
+    if (m_isVectorLayer) {
+        typeBox->setCurrentIndex(1);
+        typeBox->setEnabled(false);
+    }
+    else {
+        typeBox->setEnabled(true);
+    }
+
+    on_typeBox_currentIndexChanged(typeBox->currentIndex());
+}
+
 void WdgStrokeSelection::on_fillBox_currentIndexChanged(int index)
 {
     if (index == static_cast<int>(colorFillSource::None)) {
@@ -329,25 +317,25 @@ void WdgStrokeSelection::on_fillBox_currentIndexChanged(int index)
     m_options._colorFillSource = index;
 }
 
-void WdgStrokeSelection::on_typeBox_currentIndexChanged(const QString &arg1)
+void WdgStrokeSelection::on_typeBox_currentIndexChanged(int arg1)
 {
-  if (arg1 == "Current Brush") {
-      m_options.brushSelected = true;
-      lineSize->setDisabled(true);
-      fillBox->setDisabled(true);
-      colorFillSelector->setDisabled(true);
-      sizeBox->setDisabled(true);
-  }
-  else {
-      m_options.brushSelected = false;
-      lineSize->setDisabled(false);
-      fillBox->setDisabled(false);
-      colorFillSelector->setDisabled(false);
-      sizeBox->setDisabled(false);
-      }
+    if (arg1 == 0) {
+        m_options.brushSelected = true;
+        lineSize->setEnabled(false);
+        fillBox->setEnabled(false);
+        colorFillSelector->setEnabled(false);
+        sizeBox->setEnabled(false);
+    }
+    else {
+        m_options.brushSelected = false;
+        lineSize->setEnabled(true);
+        fillBox->setEnabled(true);
+        colorFillSelector->setEnabled(true);
+        sizeBox->setEnabled(true);
+    }
 }
 
-void WdgStrokeSelection::on_lineColorBox_currentIndexChanged(const QString &/*arg1*/)
+void WdgStrokeSelection::on_lineColorBox_currentIndexChanged(int/*arg1*/)
 {
     emit colorSelectorChanged();
 }

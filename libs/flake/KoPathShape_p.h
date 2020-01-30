@@ -24,7 +24,7 @@
 
 #include <QSharedData>
 
-class KoPathShape::Private : public QSharedData
+class KoPathShape::Private
 {
 public:
     explicit Private();
@@ -87,8 +87,6 @@ public:
 
     QMap<KoFlake::MarkerPosition, QExplicitlySharedDataPointer<KoMarker>> markersNew;
     bool autoFillMarkers;
-
-    QList<KoPathShape::PointSelectionChangeListener*> pointChangeListeners;
 };
 
 #endif

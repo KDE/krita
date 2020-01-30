@@ -47,7 +47,7 @@ public:
     /// reimplemented from KoShapeBackground
     bool loadStyle(KoOdfLoadingContext& context, const QSizeF& shapeSize) override;
     /// reimplemented from KoShapeBackground
-    void paint(QPainter& painter, const KoViewConverter &converter, KoShapePaintingContext &context, const QPainterPath& fillPath) const override;
+    void paint(QPainter& painter, KoShapePaintingContext &context, const QPainterPath& fillPath) const override;
 
 private:
     bool loadOdf(const KoXmlElement &element);

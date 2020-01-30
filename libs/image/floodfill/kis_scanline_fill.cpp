@@ -129,7 +129,7 @@ private:
 
     KoColor m_sourceColor;
     const quint8 *m_data {0};
-    int m_pixelSize;
+    int m_pixelSize {0};
 };
 
 class DifferencePolicySlow
@@ -253,9 +253,9 @@ private:
 class IsNonNullPolicySlow
 {
 public:
-    ALWAYS_INLINE void initDifferences(KisPaintDeviceSP device, const KoColor &srcPixel, int /*threshold*/) {
+    ALWAYS_INLINE void initDifferences(KisPaintDeviceSP device, const KoColor &srcPixel, int /*threshold*/)
+    {
         Q_UNUSED(srcPixel);
-
         m_pixelSize = device->pixelSize();
         m_testPixel.resize(m_pixelSize);
     }
@@ -268,7 +268,7 @@ public:
     }
 
 private:
-    int m_pixelSize;
+    int m_pixelSize {0};
     QByteArray m_testPixel;
 };
 

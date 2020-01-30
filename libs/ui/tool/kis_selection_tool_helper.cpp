@@ -216,8 +216,8 @@ void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes, Select
 
                     if (existingShapes.size() == 1) {
                         KoShape *currentShape = existingShapes.first();
-                        QPainterPath path1 = currentShape->absoluteTransformation(0).map(currentShape->outline());
-                        QPainterPath path2 = m_shape->absoluteTransformation(0).map(m_shape->outline());
+                        QPainterPath path1 = currentShape->absoluteTransformation().map(currentShape->outline());
+                        QPainterPath path2 = m_shape->absoluteTransformation().map(m_shape->outline());
 
                         QPainterPath path = path2;
 

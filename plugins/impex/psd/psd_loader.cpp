@@ -166,7 +166,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice *io)
     // Read the projection into our single layer. Since we only read the projection when
     // we have just one layer, we don't need to later on apply the alpha channel of the
     // first layer to the projection if the number of layers is negative/
-    // See http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/#50577409_16000.
+    // See https://www.adobe.com/devnet-apps/photoshop/fileformatashtml/#50577409_16000.
     if (layerSection.nLayers == 0) {
         dbgFile << "Position" << io->pos() << "Going to read the projection into the first layer, which Photoshop calls 'Background'";
 

@@ -40,7 +40,7 @@ int KisChangeProjectionColorCommand::id() const
     // we don't have a common commands id source in Krita yet, so
     // just use a random one ;)
 
-    // http://www.scientificamerican.com/article/most-popular-numbers-grapes-of-math/
+    // https://www.scientificamerican.com/article/most-popular-numbers-grapes-of-math/
     return 142857;
 }
 

@@ -49,6 +49,9 @@ public:
     using KisToolFreehandHelper::isRunning;
 
 private:
+    void adjustPointsToDDA(QVector<KisPaintInformation> &points);
+
+private:
     struct Private;
     Private * const m_d;
 };

@@ -25,6 +25,9 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QSharedData>
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+#include <QColorSpace>
+#endif
 
 #include <kundo2command.h>
 #include <KoStore.h>
@@ -56,7 +59,14 @@ struct KisReferenceImage::Private : public QSharedData
 
     bool loadFromFile() {
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!externalFilename.isEmpty(), false);
-        return image.load(externalFilename);
+        bool r = image.load(externalFilename);
+        // See https://bugs.kde.org/show_bug.cgi?id=416515 -- a jpeg image
+        // loaded into a qimage cannot be saved to png unless we explicitly
+        // convert the colorspace of the QImage
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+        image.convertToColorSpace(QColorSpace(QColorSpace::SRgb));
+#endif
+        return r;
     }
 
     bool loadFromClipboard() {
@@ -171,23 +181,22 @@ KisReferenceImage *KisReferenceImage::fromClipboard(const KisCoordinatesConverte
     return reference;
 }
 
-void KisReferenceImage::paint(QPainter &gc, const KoViewConverter &converter, KoShapePaintingContext &/*paintcontext*/)
+void KisReferenceImage::paint(QPainter &gc, KoShapePaintingContext &/*paintcontext*/) const
 {
     if (!parent()) return;
 
     gc.save();
 
-    applyConversion(gc, converter);
-
     QSizeF shapeSize = size();
     QTransform transform = QTransform::fromScale(shapeSize.width() / d->image.width(), shapeSize.height() / d->image.height());
 
     if (d->cachedImage.isNull()) {
-        d->updateCache();
+        // detach the data
+        const_cast<KisReferenceImage*>(this)->d->updateCache();
     }
 
     qreal scale;
-    QImage prescaled = d->mipmap.getClosest(gc.transform() * transform, &scale);
+    QImage prescaled = d->mipmap.getClosest(transform * gc.transform(), &scale);
     transform.scale(1.0 / scale, 1.0 / scale);
 
     gc.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
@@ -249,7 +258,7 @@ QColor KisReferenceImage::getPixel(QPointF position)
     const QSizeF shapeSize = size();
     const QTransform scale = QTransform::fromScale(d->image.width() / shapeSize.width(), d->image.height() / shapeSize.height());
 
-    const QTransform transform = absoluteTransformation(nullptr).inverted() * scale;
+    const QTransform transform = absoluteTransformation().inverted() * scale;
     const QPointF localPosition = position * transform;
 
     if (d->cachedImage.isNull()) {

@@ -3,10 +3,16 @@ include_directories(   ${CMAKE_CURRENT_SOURCE_DIR}/..  ${CMAKE_SOURCE_DIR}/sdk/t
 
 macro_add_unittest_definitions()
 
-########### next target ###############
+include(KritaAddBrokenUnitTest)
+
+krita_add_broken_unit_test(timeline_model_test.cpp
+    TEST_NAME timeline_model_test.cpp
+    NAME_PREFIX "plugins-dockers-animation-"
+    LINK_LIBRARIES ${KDE4_KDEUI_LIBS} kritaanimationdocker kritaui kritaimage Qt5::Test)
 
 ecm_add_tests(
-    timeline_model_test.cpp
     kis_animation_utils_test.cpp
     NAME_PREFIX "plugins-dockers-animation-"
     LINK_LIBRARIES ${KDE4_KDEUI_LIBS} kritaanimationdocker kritaui kritaimage Qt5::Test)
+
+    

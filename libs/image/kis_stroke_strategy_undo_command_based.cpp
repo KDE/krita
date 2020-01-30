@@ -110,7 +110,10 @@ void KisStrokeStrategyUndoCommandBased::cancelStrokeCallback()
 {
     QMutexLocker locker(&m_mutex);
     if(m_macroCommand) {
-        m_macroCommand->performCancel(cancelStrokeId(), m_undo);
+        QVector<KisStrokeJobData *> jobs;
+        m_macroCommand->getCommandExecutionJobs(&jobs, !m_undo);
+        addMutatedJobs(jobs);
+
         delete m_macroCommand;
         m_macroCommand = 0;
     }

@@ -163,6 +163,6 @@ void KoVariable::documentDestroyed()
 {
     // deleteLater(); does not work when closing a document as the inline object manager is deleted before the control is given back to the event loop
     // therefore commit suicide.
-    // See http://www.parashift.com/c++-faq-lite/delete-this.html
+    // See https://isocpp.org/wiki/faq/freestore-mgmt#delete-this
     delete(this);
 }

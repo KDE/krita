@@ -68,15 +68,15 @@ private:
     KisDuplicateOpSettingsSP m_settings;
     KisPaintDeviceSP m_srcdev;
     KisPaintDeviceSP m_target;
-    QPointF m_duplicateStart;
-    bool m_duplicateStartIsSet;
+    QPointF m_duplicateStart {QPointF(0.0, 0.0)};
+    bool m_duplicateStartIsSet {false};
     KisPressureSizeOption m_sizeOption;
     KisPressureOpacityOption m_opacityOption;
     KisPressureRotationOption m_rotationOption;
-    bool m_healing;
-    bool m_perspectiveCorrection;
-    bool m_moveSourcePoint;
-    bool m_cloneFromProjection;
+    bool m_healing {false};
+    bool m_perspectiveCorrection {false};
+    bool m_moveSourcePoint {false};
+    bool m_cloneFromProjection {false};
 };
 
 #endif // KIS_DUPLICATEOP_H_

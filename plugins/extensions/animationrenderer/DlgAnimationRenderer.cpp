@@ -77,11 +77,11 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
     m_page->intEnd->setValue(doc->image()->animationInterface()->playbackRange().end());
 
     m_page->intHeight->setMinimum(1);
-    m_page->intHeight->setMaximum(10000);
+    m_page->intHeight->setMaximum(100000);
     m_page->intHeight->setValue(doc->image()->height());
 
     m_page->intWidth->setMinimum(1);
-    m_page->intWidth->setMaximum(10000);
+    m_page->intWidth->setMaximum(100000);
     m_page->intWidth->setValue(doc->image()->width());
 
     // try to lock the width and height being updated

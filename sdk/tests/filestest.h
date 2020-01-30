@@ -277,7 +277,6 @@ void testImportIncorrectFormat(const QString& _dirname, QString mimetype = "")
     KisImportExportErrorCode status = manager.importDocument(sourceFileInfo.absoluteFilePath(), mimetype);
     qDebug() << "import result = " << status;
 
-
     qApp->processEvents();
 
     if (doc->image()) {

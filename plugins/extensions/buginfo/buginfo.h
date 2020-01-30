@@ -33,7 +33,8 @@ public:
 
 public Q_SLOTS:
 
-    void slotBugInfo();
+    void slotKritaLog();
+    void slotSysInfo();
 
 };
 

@@ -173,7 +173,7 @@ void KisOpenGL::initialize()
 //    debugOut << "\n== end log ==";
 
     dbgOpenGL.noquote().nospace() << g_debugText;
-    KisUsageLogger::write(g_debugText);
+    KisUsageLogger::writeSysInfo(g_debugText);
 
     if (!openGLCheckResult) {
         return;

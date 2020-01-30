@@ -20,7 +20,7 @@ https://docs.krita.org/en/user_manual.html
 ### Development Notes and Build Instructions
 If you're building on Windows or OSX you'll need to build some third-party dependencies first. You should look at the README in the 3rdparty folder for directions. 
 
-If you're building on Linux, please follow David Revoy's Cat Guide: http://www.davidrevoy.com/article193/guide-building-krita-on-linux-for-cats
+If you're building on Linux, please follow [the online documentation](https://docs.krita.org/en/untranslatable_pages/building_krita.html).
 
 Other developer guides, notes and wiki:
 

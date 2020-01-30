@@ -79,7 +79,7 @@ KisFontFamilyComboBox::KisFontFamilyComboBox(QWidget *parent)
                        << "msam10" << "msbm10" << "rsfs10"
                        << "stmary10" << "wasy10" << "wasyb10";
     refillComboBox();
-    QFontComboBox *temp = new QFontComboBox();
+    QFontComboBox *temp = new QFontComboBox(this);
     m_fontSeparator = new PinnedFontsSeparator(temp->itemDelegate(), this);
     temp->setEnabled(true);
     temp->hide();
@@ -166,6 +166,9 @@ void KisFontFamilyComboBox::setTopFont(const QString &family)
 
 void KisFontFamilyComboBox::setInitialized()
 {
+    if(m_initilized)
+        return;
+
     m_initilized = true;
 
     for(int i=m_pinnedFonts.count()-1; i>=0; i--){

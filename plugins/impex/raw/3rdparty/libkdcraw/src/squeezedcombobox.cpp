@@ -2,7 +2,7 @@
  * @file
  *
  * This file is a part of digiKam project
- * <a href="http://www.digikam.org">http://www.digikam.org</a>
+ * <a href="https://www.digikam.org">https://www.digikam.org</a>
  *
  * @date   2008-08-21
  * @brief  a combo box with a width not depending of text
@@ -99,8 +99,7 @@ QSize SqueezedComboBox::sizeHint() const
     QStyleOptionComboBox options;
     options.initFrom(this);
 
-    return style()->sizeFromContents(QStyle::CT_ComboBox, &options,
-                                     QSize(maxW, maxH), this).expandedTo(QApplication::globalStrut());
+    return style()->sizeFromContents(QStyle::CT_ComboBox, &options, QSize(maxW, maxH), this);
 }
 
 void SqueezedComboBox::insertSqueezedItem(const QString& newItem, int index,

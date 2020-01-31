@@ -521,6 +521,8 @@ bool KisResourceModel::resetQuery()
     QTime t;
     t.start();
 
+    emit beforeResourcesLayoutReset(QModelIndex());
+
     beginResetModel();
     bool r = d->resourcesQuery.exec();
     if (!r) {

@@ -701,6 +701,7 @@ set CMDLINE_CMAKE_DEPS="%CMAKE_EXE%" "%KRITA_SRC_DIR%\3rdparty" ^
     -G "MinGW Makefiles" ^
     -DUSE_QT_TABLET_WINDOWS=ON ^
     -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%
+    
 set CMDLINE_CMAKE_KRITA="%CMAKE_EXE%" "%KRITA_SRC_DIR%\." ^
     -DBoost_DEBUG=OFF ^
     -DBOOST_INCLUDEDIR=%BUILDDIR_DEPS_INSTALL_CMAKE%/include ^
@@ -714,7 +715,8 @@ set CMDLINE_CMAKE_KRITA="%CMAKE_EXE%" "%KRITA_SRC_DIR%\." ^
     -DUSE_QT_TABLET_WINDOWS=ON ^
     -DHIDE_SAFE_ASSERTS=ON ^
     -Wno-dev ^
-    -G "MinGW Makefiles"
+    -G "MinGW Makefiles"  ^
+    -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%
 
 :: Launch CMD prompt if requested
 if "%ARG_CMD%" == "1" (
@@ -761,9 +763,9 @@ echo Running CMake for deps...
 @echo off
 echo.
 
-set EXT_TARGETS=patch png2ico zlib gettext openssl qt boost exiv2 fftw3 eigen3
+set EXT_TARGETS=patch png2ico zlib gettext openssl boost exiv2 fftw3 eigen3 
 set EXT_TARGETS=%EXT_TARGETS% jpeg lcms2 ocio ilmbase openexr png tiff gsl vc libraw
-set EXT_TARGETS=%EXT_TARGETS% giflib kwindowsystem drmingw gmic freetype poppler 
+set EXT_TARGETS=%EXT_TARGETS% giflib qt kwindowsystem drmingw gmic freetype poppler 
 set EXT_TARGETS=%EXT_TARGETS% python sip pyqt
 set EXT_TARGETS=%EXT_TARGETS% lzma quazip
 

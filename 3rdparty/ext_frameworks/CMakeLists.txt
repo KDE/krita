@@ -203,6 +203,7 @@ ExternalProject_Add(
     URL_MD5 744090cf90ddde84f51dcabd167dd607
     INSTALL_DIR ${EXTPREFIX_frameworks}
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/kimageformats.diff
+          COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/disable_exr.diff
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks}
             -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} 
                 ${GLOBAL_PROFILE}

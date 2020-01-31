@@ -88,8 +88,6 @@ endforeach(OPENEXR_LIB)
 list(APPEND OPENEXR_INCLUDE_DIRS ${OPENEXR_INCLUDE_DIR})
 list(APPEND OPENEXR_INCLUDE_DIRS ${OPENEXR_INCLUDE_DIR}/OpenEXR)
 
-set(OPENEXR_INCLUDE_DIR ${OPENEXR_INCLUDE_DIR}/OpenEXR)
-
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(OpenEXR
     REQUIRED_VARS

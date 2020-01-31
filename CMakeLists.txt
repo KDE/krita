@@ -602,7 +602,7 @@ set_package_properties(OpenEXR PROPERTIES
 macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
 set(LINK_OPENEXR_LIB)
 if(OPENEXR_FOUND)
-    include_directories(SYSTEM ${OPENEXR_INCLUDE_DIR})
+    include_directories(SYSTEM ${OPENEXR_INCLUDE_DIRS})
     set(LINK_OPENEXR_LIB ${OPENEXR_LIBRARIES})
     add_definitions(${OPENEXR_DEFINITIONS})
 endif()

@@ -28,7 +28,7 @@ include(FindPackageHandleStandardArgs)
 if (ENABLE_PYTHON_2)
     find_package(PythonInterp 2.7 REQUIRED)
 else(ENABLE_PYTHON_2)
-    find_package(PythonInterp 3.0 REQUIRED)
+    find_package(PythonInterp 3.8 REQUIRED)
 endif(ENABLE_PYTHON_2)
 
 if (PYTHONINTERP_FOUND)

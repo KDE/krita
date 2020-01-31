@@ -44,8 +44,8 @@ elseif(MINGW)
     if("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
         ExternalProject_Add( ext_python
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-            URL https://www.python.org/ftp/python/3.8.0/python-3.8.0-embed-amd64.zip
-            URL_MD5 99cca948512b53fb165084787143ef19
+            URL https://www.python.org/ftp/python/3.8.1/python-3.8.1-embed-amd64.zip
+            URL_MD5 4d091857a2153d9406bb5c522b211061
 
             INSTALL_DIR ${PREFIX_ext_python}
             CONFIGURE_COMMAND ""
@@ -59,8 +59,8 @@ elseif(MINGW)
     else("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
         ExternalProject_Add( ext_python
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-            URL https://www.python.org/ftp/python/3.8.0/python-3.8.0-embed-win32.zip
-            URL_MD5 2ec3abf05f3f1046e0dbd1ca5c74ce88
+            URL https://www.python.org/ftp/python/3.8.1/python-3.8.1-embed-win32.zip
+            URL_MD5 980d5745a7e525be5abf4b443a00f734
 
             INSTALL_DIR ${PREFIX_ext_python}
             CONFIGURE_COMMAND ""

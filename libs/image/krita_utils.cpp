@@ -94,7 +94,7 @@ namespace KritaUtils
         return patches;
     }
 
-    QVector<QRect> splitRegionIntoPatches(const QRegion &region, const QSize &patchSize)
+    QVector<QRect> splitRegionIntoPatches(const KisRegion &region, const QSize &patchSize)
     {
         QVector<QRect> patches;
 
@@ -112,8 +112,8 @@ namespace KritaUtils
     }
 
 
-    QRegion KRITAIMAGE_EXPORT splitTriangles(const QPointF &center,
-                                             const QVector<QPointF> &points)
+    KisRegion KRITAIMAGE_EXPORT splitTriangles(const QPointF &center,
+                                               const QVector<QPointF> &points)
     {
 
         Q_ASSERT(points.size());
@@ -137,7 +137,7 @@ namespace KritaUtils
         const int right = totalRect.x() + totalRect.width();
         const int bottom = totalRect.y() + totalRect.height();
 
-        QRegion dirtyRegion;
+        QVector<QRect> dirtyRects;
 
         for (int y = totalRect.y(); y < bottom;) {
             int nextY = qMin((y + step) & ~(step-1), bottom);
@@ -149,7 +149,7 @@ namespace KritaUtils
 
                 Q_FOREACH (const QPolygonF &triangle, triangles) {
                     if(checkInTriangle(rect, triangle)) {
-                        dirtyRegion |= rect;
+                        dirtyRects << rect;
                         break;
                     }
                 }
@@ -158,11 +158,12 @@ namespace KritaUtils
             }
             y = nextY;
         }
-        return dirtyRegion;
+        return KisRegion(std::move(dirtyRects));
     }
 
-    QRegion KRITAIMAGE_EXPORT splitPath(const QPainterPath &path)
+    KisRegion KRITAIMAGE_EXPORT splitPath(const QPainterPath &path)
     {
+        QVector<QRect> dirtyRects;
         QRect totalRect = path.boundingRect().toAlignedRect();
 
         // adjust the rect for antialiasing to work
@@ -171,9 +172,6 @@ namespace KritaUtils
         const int step = 64;
         const int right = totalRect.x() + totalRect.width();
         const int bottom = totalRect.y() + totalRect.height();
-
-        QRegion dirtyRegion;
-
 
         for (int y = totalRect.y(); y < bottom;) {
             int nextY = qMin((y + step) & ~(step-1), bottom);
@@ -184,7 +182,7 @@ namespace KritaUtils
                 QRect rect(x, y, nextX - x, nextY - y);
 
                 if(path.intersects(rect)) {
-                    dirtyRegion |= rect;
+                    dirtyRects << rect;
                 }
 
                 x = nextX;
@@ -192,7 +190,7 @@ namespace KritaUtils
             y = nextY;
         }
 
-        return dirtyRegion;
+        return KisRegion(std::move(dirtyRects));
     }
 
     QString KRITAIMAGE_EXPORT prettyFormatReal(qreal value)
@@ -528,6 +526,4 @@ namespace KritaUtils
             *color = newColor;
         }
     }
-
-
 }

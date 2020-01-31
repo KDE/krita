@@ -45,6 +45,7 @@ class KoColor;
 class KoColorSpace;
 class KoColorProfile;
 
+class KisRegion;
 class KisDataManager;
 class KisPaintDeviceWriter;
 class KisKeyframe;
@@ -254,13 +255,13 @@ public:
      * For tiled data manager, it region will consist of a number
      * of rects each corresponding to a tile.
      */
-    QRegion region() const;
+    KisRegion region() const;
 
     /**
      * The slow version of region() that searches for exact bounds of
      * each rectangle in the region
      */
-    QRegion regionExact() const;
+    KisRegion regionExact() const;
 
     /**
      * Cut the paint device down to the specified rect. If the crop
@@ -750,11 +751,7 @@ public:
      */
     void setDirty(const QRect & rc);
 
-    /**
-     *  Add the specified region to the parent layer's dirty region
-     *  (if there is a parent layer)
-     */
-    void setDirty(const QRegion & region);
+    void setDirty(const KisRegion &region);
 
     /**
      *  Set the parent layer completely dirty, if this paint device has
@@ -762,7 +759,7 @@ public:
      */
     void setDirty();
 
-    void setDirty(const QVector<QRect> rects);
+    void setDirty(const QVector<QRect> &rects);
 
     /**
      * Called by KisTransactionData when it thinks current time should
@@ -852,7 +849,7 @@ public:
         virtual ~LodDataStruct();
     };
 
-    QRegion regionForLodSyncing() const;
+    KisRegion regionForLodSyncing() const;
     LodDataStruct* createLodDataStruct(int lod);
     void updateLodDataStruct(LodDataStruct *dst, const QRect &srcRect);
     void uploadLodDataStruct(LodDataStruct *dst);

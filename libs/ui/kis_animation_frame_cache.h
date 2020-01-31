@@ -29,6 +29,7 @@
 class KisImage;
 class KisImageAnimationInterface;
 class KisTimeRange;
+class KisRegion;
 
 class KisOpenGLImageTextures;
 typedef KisSharedPtr<KisOpenGLImageTextures> KisOpenGLImageTexturesSP;
@@ -62,7 +63,7 @@ public:
 
     KisImageWSP image();
 
-    KisOpenGLUpdateInfoSP fetchFrameData(int time, KisImageSP image, const QRegion &requestedRegion) const;
+    KisOpenGLUpdateInfoSP fetchFrameData(int time, KisImageSP image, const KisRegion &requestedRegion) const;
     void addConvertedFrameData(KisOpenGLUpdateInfoSP info, int time);
 
     /**

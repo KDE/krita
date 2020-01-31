@@ -104,7 +104,7 @@ struct KisAsyncAnimationRenderDialogBase::Private
     QList<int> framesInProgress;
     int dirtyFramesCount = 0;
     Result result = RenderComplete;
-    QRegion regionOfInterest;
+    KisRegion regionOfInterest;
 
     KisSignalCompressor progressDialogCompressor;
     using ProgressData = QPair<int, QString>;
@@ -239,12 +239,12 @@ KisAsyncAnimationRenderDialogBase::regenerateRange(KisViewManager *viewManager)
     return m_d->result;
 }
 
-void KisAsyncAnimationRenderDialogBase::setRegionOfInterest(const QRegion &roi)
+void KisAsyncAnimationRenderDialogBase::setRegionOfInterest(const KisRegion &roi)
 {
     m_d->regionOfInterest = roi;
 }
 
-QRegion KisAsyncAnimationRenderDialogBase::regionOfInterest() const
+KisRegion KisAsyncAnimationRenderDialogBase::regionOfInterest() const
 {
     return m_d->regionOfInterest;
 }

@@ -106,16 +106,16 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
             for (; it != end; ++it) {
                 KisNodeSP node = it.key();
 
-                QRegion region;
+                QVector<QRect> dirtyRects;
 
                 bool resetAnimationCache = false;
                 Q_FOREACH (const Request &req, it.value()) {
-                    region += alignRect(req.rect, step);
+                    dirtyRects += alignRect(req.rect, step);
                     resetAnimationCache |= req.resetAnimationCache;
                 }
 
                 // FIXME: constness: port rPU to SP
-                listener->requestProjectionUpdate(const_cast<KisNode*>(node.data()), region.rects(), resetAnimationCache);
+                listener->requestProjectionUpdate(const_cast<KisNode*>(node.data()), KisRegion(dirtyRects).rects(), resetAnimationCache);
             }
         }
 

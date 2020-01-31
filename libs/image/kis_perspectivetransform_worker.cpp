@@ -68,7 +68,7 @@ KisPerspectiveTransformWorker::KisPerspectiveTransformWorker(KisPaintDeviceSP de
 
 void KisPerspectiveTransformWorker::fillParams(const QRectF &srcRect,
                                                const QRect &dstBaseClipRect,
-                                               QRegion *dstRegion,
+                                               KisRegion *dstRegion,
                                                QPolygonF *dstClipPolygon)
 {
     QPolygonF bounds = srcRect;

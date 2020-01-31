@@ -77,7 +77,7 @@ public:
     virtual void resetCache();
 
     /**
-     * for KisLayer::setDirty(const QRegion&)
+     * for KisLayer::setDirty(const KisRegion&)
      */
     using KisLayer::setDirty;
 

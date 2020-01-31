@@ -92,7 +92,7 @@ KisAsyncAnimationFramesSavingRenderer::~KisAsyncAnimationFramesSavingRenderer()
 {
 }
 
-void KisAsyncAnimationFramesSavingRenderer::frameCompletedCallback(int frame, const QRegion &requestedRegion)
+void KisAsyncAnimationFramesSavingRenderer::frameCompletedCallback(int frame, const KisRegion &requestedRegion)
 {
     KisImageSP image = requestedImage();
     if (!image) return;

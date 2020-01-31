@@ -82,7 +82,7 @@ KisExperimentPaintOp::~KisExperimentPaintOp()
     delete m_originalPainter;
 }
 
-void KisExperimentPaintOp::paintRegion(const QRegion &changedRegion)
+void KisExperimentPaintOp::paintRegion(const KisRegion &changedRegion)
 {
     if (m_windingFill) {
         m_path.setFillRule(Qt::WindingFill);
@@ -225,7 +225,7 @@ void KisExperimentPaintOp::paintLine(const KisPaintInformation &pi1, const KisPa
                  */
                 const int pathSizeThreshold = 128;
 
-                QRegion changedRegion;
+                KisRegion changedRegion;
                 if (distanceMetric < pathSizeThreshold) {
 
                     QRectF changedRect = m_path.boundingRect().toRect() |
@@ -245,7 +245,7 @@ void KisExperimentPaintOp::paintLine(const KisPaintInformation &pi1, const KisPa
                 m_lastPaintedPath = m_path;
             }
             else if (!m_savedPoints.isEmpty()) {
-                QRegion changedRegion = KritaUtils::splitTriangles(m_center, m_savedPoints);
+                KisRegion changedRegion = KritaUtils::splitTriangles(m_center, m_savedPoints);
                 paintRegion(changedRegion);
             }
 

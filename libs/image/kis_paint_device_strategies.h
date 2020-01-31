@@ -60,7 +60,7 @@ public:
         return extent;
     }
 
-    virtual QRegion region() const {
+    virtual KisRegion region() const {
         return m_d->cache()->region().translated(m_d->x(), m_d->y());
     }
 
@@ -264,7 +264,7 @@ public:
         return KisPaintDeviceStrategy::extent() & m_wrapRect;
     }
 
-    QRegion region() const override {
+    KisRegion region() const override {
         return KisPaintDeviceStrategy::region() & m_wrapRect;
     }
 

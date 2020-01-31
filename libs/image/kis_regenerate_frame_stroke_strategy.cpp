@@ -18,7 +18,7 @@
 
 #include "kis_regenerate_frame_stroke_strategy.h"
 
-#include <QRegion>
+#include <KisRegion.h>
 #include "kis_image_interfaces.h"
 #include "kis_image_animation_interface.h"
 #include "kis_node.h"
@@ -35,7 +35,7 @@ struct KisRegenerateFrameStrokeStrategy::Private
     Type type;
     int frameId;
     int previousFrameId;
-    QRegion dirtyRegion;
+    KisRegion dirtyRegion;
     KisImageAnimationInterface *interface;
     KisProjectionUpdatesFilterSP prevUpdatesFilter;
 
@@ -76,7 +76,7 @@ struct KisRegenerateFrameStrokeStrategy::Private
 };
 
 KisRegenerateFrameStrokeStrategy::KisRegenerateFrameStrokeStrategy(int frameId,
-                                                                   const QRegion &dirtyRegion,
+                                                                   const KisRegion &dirtyRegion,
                                                                    KisImageAnimationInterface *interface)
     : KisSimpleStrokeStrategy(QLatin1String("regenerate_external_frame_stroke")),
       m_d(new Private)
@@ -108,7 +108,7 @@ KisRegenerateFrameStrokeStrategy::KisRegenerateFrameStrokeStrategy(KisImageAnima
     m_d->type = CURRENT_FRAME;
 
     m_d->frameId = 0;
-    m_d->dirtyRegion = QRegion();
+    m_d->dirtyRegion = KisRegion();
     m_d->interface = interface;
 
     enableJob(JOB_INIT);

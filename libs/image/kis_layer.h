@@ -22,7 +22,6 @@
 #define KIS_LAYER_H_
 
 #include <QRect>
-#include <QRegion>
 #include <QMetaType>
 #include <QObject>
 

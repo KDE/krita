@@ -46,6 +46,7 @@ typedef KisSafeReadList<KisNodeSP> KisSafeReadNodeList;
 #include "kis_keyframe_channel.h"
 #include "kis_image.h"
 #include "kis_layer_utils.h"
+#include "KisRegion.h"
 
 /**
  *The link between KisProjection and KisImageUpdater
@@ -616,7 +617,7 @@ void KisNode::setDirty(const QVector<QRect> &rects)
     }
 }
 
-void KisNode::setDirty(const QRegion &region)
+void KisNode::setDirty(const KisRegion &region)
 {
     setDirty(region.rects());
 }

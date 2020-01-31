@@ -34,7 +34,7 @@ struct KRITAUI_NO_EXPORT KisAsyncAnimationRendererBase::Private
     KisImageSP requestedImage;
     int requestedFrame = -1;
     bool isCancelled = false;
-    QRegion requestedRegion;
+    KisRegion requestedRegion;
 
     static const int WAITING_FOR_FRAME_TIMEOUT = 30000;
 };
@@ -53,7 +53,7 @@ KisAsyncAnimationRendererBase::~KisAsyncAnimationRendererBase()
 
 }
 
-void KisAsyncAnimationRendererBase::startFrameRegeneration(KisImageSP image, int frame, const QRegion &regionOfInterest)
+void KisAsyncAnimationRendererBase::startFrameRegeneration(KisImageSP image, int frame, const KisRegion &regionOfInterest)
 {
     KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == this->thread());
 
@@ -81,7 +81,7 @@ void KisAsyncAnimationRendererBase::startFrameRegeneration(KisImageSP image, int
 
 void KisAsyncAnimationRendererBase::startFrameRegeneration(KisImageSP image, int frame)
 {
-    startFrameRegeneration(image, frame, QRegion());
+    startFrameRegeneration(image, frame, KisRegion());
 }
 
 bool KisAsyncAnimationRendererBase::isActive() const
@@ -157,7 +157,7 @@ void KisAsyncAnimationRendererBase::clearFrameRegenerationState(bool isCancelled
     m_d->requestedFrame = -1;
     m_d->regenerationTimeout.stop();
     m_d->isCancelled = true;
-    m_d->requestedRegion = QRegion();
+    m_d->requestedRegion = KisRegion();
 }
 
 KisImageSP KisAsyncAnimationRendererBase::requestedImage() const

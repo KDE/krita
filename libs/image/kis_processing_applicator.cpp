@@ -109,7 +109,7 @@ private:
                 QRegion dirtyRegion(m_image->bounds());
                 dirtyRegion -= m_image->bounds().translated(offset);
 
-                clone->setDirty(dirtyRegion);
+                clone->setDirty(KisRegion::fromQRegion(dirtyRegion));
             }
         }
     }

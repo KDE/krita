@@ -478,14 +478,14 @@ void KisPaintDeviceTest::testRegion()
     dev->fill(129, 0, 10, 10, whitePixel);
     dev->fill(0, 1030, 10, 10, whitePixel);
 
-    QRegion referenceRegion;
+    QVector<QRect> referenceRegion;
     referenceRegion += QRect(0,0,64,64);
     referenceRegion += QRect(64,64,64,64);
     referenceRegion += QRect(128,0,64,64);
     referenceRegion += QRect(0,1024,64,64);
 
     QCOMPARE(dev->exactBounds(), QRect(0,0,139,1040));
-    QCOMPARE(dev->region(), referenceRegion);
+    QCOMPARE(dev->region(), KisRegion(referenceRegion));
 }
 
 void KisPaintDeviceTest::testPixel()
@@ -1466,7 +1466,7 @@ void syncLodCache(KisPaintDeviceSP dev, int levelOfDetail)
 {
     KisPaintDevice::LodDataStruct* s = dev->createLodDataStruct(levelOfDetail);
 
-    QRegion region = dev->regionForLodSyncing();
+    KisRegion region = dev->regionForLodSyncing();
     Q_FOREACH(QRect rect2, KritaUtils::splitRegionIntoPatches(region, KritaUtils::optimalPatchSize())) {
         dev->updateLodDataStruct(s, rect2);
     }

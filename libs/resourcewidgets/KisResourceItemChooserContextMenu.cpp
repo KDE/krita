@@ -169,11 +169,18 @@ public:
 
     bool operator()(KisTagSP otherTag)
     {
-        return !otherTag.isNull() && otherTag->url() == m_referenceTag->url();
+        ENTER_FUNCTION() << "refTag: " << (m_referenceTag.isNull() ? "null" : m_referenceTag->name())
+                         << " other: " << (otherTag.isNull() ? "null" : otherTag->name())
+                         << " result = " << (!otherTag.isNull() && !m_referenceTag.isNull() && otherTag->url() == m_referenceTag->url());
+        return !otherTag.isNull() && !m_referenceTag.isNull() && otherTag->url() == m_referenceTag->url();
     }
 
     void setReferenceTag(KisTagSP referenceTag) {
         m_referenceTag = referenceTag;
+    }
+
+    KisTagSP referenceTag() {
+        return m_referenceTag;
     }
 
 };
@@ -222,6 +229,8 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
     currentTagInRemovables = currentTagInRemovables
             && (std::find_if(removables.begin(), removables.end(), comparer) != removables.end());
 
+    ENTER_FUNCTION() << "current tag in removeables: " <<currentTagInRemovables;
+
 
     // remove "All" tag from both "Remove from tag: " and "Assign to tag: " lists
     std::remove_if(removables.begin(), removables.end(), compareWithSpecialTags);
@@ -237,8 +246,23 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
 
         if (!currentTag.isNull() && currentTagInRemovables) {
             // remove the current tag from both "Remove from tag: " and "Assign to tag: " lists
-            std::remove_if(removables.begin(), removables.end(), comparer);
-            std::remove_if(assignables2.begin(), assignables2.end(), comparer);
+            ENTER_FUNCTION() << "# remove the current tag from both lists";
+
+            ENTER_FUNCTION() << "now just removeables";
+            ENTER_FUNCTION() << "comparer's tag: " << comparer.referenceTag();
+            QList<QSharedPointer<KisTag> >::iterator b = std::remove_if(removables.begin(), removables.end(), comparer);
+            if (b != removables.end()) {
+                removables.removeAll(*b);
+            }
+            QList<QSharedPointer<KisTag> >::iterator b2 = std::remove_if(assignables2.begin(), assignables2.end(), comparer);
+            if (b2 != assignables2.end()) {
+                assignables2.removeAll(*b2);
+            }
+            ENTER_FUNCTION() << "done. The list now consists of: ";
+            Q_FOREACH(KisTagSP tag, removables) {
+                ENTER_FUNCTION() << tag;
+            }
+            ENTER_FUNCTION() << "end";
 
             ContextMenuExistingTagAction * removeTagAction = new ContextMenuExistingTagAction(resource, currentTag, this);
             removeTagAction->setText(i18n("Remove from this tag"));

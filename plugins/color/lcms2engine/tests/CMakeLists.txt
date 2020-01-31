@@ -13,7 +13,7 @@ include_directories( ../colorspaces/cmyk_u16
     ..
 )
 if(OPENEXR_FOUND)
-    include_directories(SYSTEM ${OPENEXR_INCLUDE_DIR})
+    include_directories(SYSTEM ${OPENEXR_INCLUDE_DIRS})
 endif()
 include_directories( ${LCMS2_INCLUDE_DIR} )
 

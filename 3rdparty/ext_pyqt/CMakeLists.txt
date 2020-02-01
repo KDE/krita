@@ -47,7 +47,7 @@ elseif(MINGW)
     )
     ExternalProject_Add( ext_pyqt
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://www.riverbankcomputing.com/static/Downloads/PyQt5/5.12.1/PyQt5_gpl-5.12.1.zip
+        URL /https://files.kde.org/krita/build/dependencies/PyQt5_gpl-5.12.1.zip
         URL_MD5 0b2912828a4d59e13d86decdce1687e6
 
         PATCH_COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/pyqt-configure-fix.patch

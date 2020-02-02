@@ -699,7 +699,7 @@ void KisMainWindow::slotPreferences()
 {
     QScopedPointer<KisDlgPreferences> dlgPreferences(new KisDlgPreferences(this));
 
-    if (!dlgPreferences->editPreferences()) {
+    if (dlgPreferences->editPreferences()) {
         KisConfigNotifier::instance()->notifyConfigChanged();
         KisConfigNotifier::instance()->notifyPixelGridModeChanged();
         KisImageConfigNotifier::instance()->notifyConfigChanged();

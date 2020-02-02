@@ -933,7 +933,8 @@ void KisOpenGLCanvas2::renderCanvasGL()
 
         QVector<float> channels = QVector<float>(4);
         convertedBackgroudColor.colorSpace()->normalisedChannelsValue(convertedBackgroudColor.data(), channels);
-        glClearColor(channels[0], channels[1], channels[2], 1.0);
+        // Data returned by KoRgbU8ColorSpace comes in the order: blue, green, red.
+        glClearColor(channels[2], channels[1], channels[0], 1.0);
     }
 
     glClear(GL_COLOR_BUFFER_BIT);

@@ -107,6 +107,8 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
         tagsDelegate->addBooleanColumn(5);
         tagsModel->select();
 
+        connect(tagsModel, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(slotResetTagModel(QModelIndex, QModelIndex)));
+
         m_page->tableTags->setModel(tagsModel);
         m_page->tableTags->hideColumn(0);
         m_page->tableTags->setItemDelegate(tagsDelegate);
@@ -159,6 +161,11 @@ void DlgDbExplorer::updateTagModel(const QString& resourceType)
     m_page->cmbRvTags->setModel(m_tagModel);
     m_page->cmbRvTags->update();
     qDebug() << "number of tags in " << resourceType << " tag model: " << m_tagModel->rowCount();
+}
+
+void DlgDbExplorer::slotResetTagModel(QModelIndex topLeft, QModelIndex bottomRight)
+{
+    KisTagModelProvider::resetModels();
 }
 
 void DlgDbExplorer::slotRvResourceTypeSelected(int index)

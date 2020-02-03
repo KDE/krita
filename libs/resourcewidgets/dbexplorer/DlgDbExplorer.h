@@ -55,6 +55,8 @@ private Q_SLOTS:
     void slotRvResourceTypeSelected(int index);
     void slotRvTagSelected(int index);
 
+    void slotResetTagModel(QModelIndex topLeft, QModelIndex bottomRight);
+
 private:
     void updateTagModel(const QString& resourceType);
 

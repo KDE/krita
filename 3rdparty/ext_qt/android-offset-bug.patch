@@ -1,0 +1,43 @@
+commit 9987a45acf5fbe650f28a85bf9ba260ef777eaa0
+Author: Sharaf Zaman <sharafzaz121@gmail.com>
+Date:   Mon Feb 3 17:58:33 2020 +0530
+
+    Bugfix: fix the offset bug when using Stylus with Android
+    
+    Platform plugin for Android calculated the local coordinates of the
+    tabletEvent by using QWindow::position(), which returned High-DPI
+    scaled coordinates. But, globalPosF being unscaled made the
+    calculation invalid.
+    
+    Proper demonstration of this can be seen in Krita Android.
+    
+    [ChangeLog][Android] Fix offset bug in tabletEvents
+    
+    Change-Id: I4679df7de3b1491009708d7e80d5bc176e29afed
+
+diff --git a/src/plugins/platforms/android/androidjniinput.cpp b/src/plugins/platforms/android/androidjniinput.cpp
+index 56885f2e23..5101514b2b 100644
+--- a/src/plugins/platforms/android/androidjniinput.cpp
++++ b/src/plugins/platforms/android/androidjniinput.cpp
+@@ -43,6 +43,7 @@
+ #include "androidjniinput.h"
+ #include "androidjnimain.h"
+ #include "qandroidplatformintegration.h"
++#include "qandroidplatformwindow.h"
+ 
+ #include <qpa/qwindowsysteminterface.h>
+ #include <QTouchEvent>
+@@ -310,7 +311,12 @@ namespace QtAndroidInput
+         QPointF globalPosF(x, y);
+         QPoint globalPos((int)x, (int)y);
+         QWindow *tlw = topLevelWindowAt(globalPos);
+-        QPointF localPos = tlw ? (globalPosF - tlw->position()) : globalPosF;
++
++        QPointF localPos = globalPosF;
++        if (tlw) {
++            QPlatformWindow *platformWindow = tlw->handle();
++            localPos = platformWindow ? platformWindow->mapFromGlobal(globalPos) : globalPosF;
++        }
+ 
+         // Galaxy Note with plain Android:
+         // 0 1 0    stylus press

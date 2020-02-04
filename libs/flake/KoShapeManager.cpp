@@ -504,7 +504,17 @@ void KoShapeManager::preparePaintJobs(PaintJobsList &jobs,
     QList<KoShape*> newRootShapes;
 
     Q_FOREACH (KoShape *srcShape, rootShapes) {
-        newRootShapes << srcShape->cloneShape();
+        KIS_SAFE_ASSERT_RECOVER(srcShape->parent() == excludeRoot) { continue; }
+
+        KoShape *clonedShape = srcShape->cloneShape();
+
+        KoShapeContainer *parentShape = srcShape->parent();
+
+        if (parentShape && !parentShape->transformation().isIdentity()) {
+            clonedShape->applyAbsoluteTransformation(parentShape->transformation());
+        }
+
+        newRootShapes << clonedShape;
     }
 
     PaintJobsList result;

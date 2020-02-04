@@ -163,8 +163,8 @@ struct KoLabU8Traits : public KoLabTraits<quint8> {
             case a_pos:
             case b_pos:
                 b = qBound((float)0,
-                           (float)MAX_CHANNEL_AB * values[i] + CHANNEL_AB_ZERO_OFFSET,
-                           (float)MAX_CHANNEL_AB);
+                           (float)KoLabColorSpaceMathsTraits<channels_type>::unitValueAB * values[i],
+                           (float)KoLabColorSpaceMathsTraits<channels_type>::unitValueAB);
                 break;
             default:
                 b = qBound((float)KoLabColorSpaceMathsTraits<channels_type>::min,
@@ -234,8 +234,13 @@ struct KoLabU16Traits : public KoLabTraits<quint16> {
             case a_pos:
             case b_pos:
                 b = qBound((float)0,
-                           (float)MAX_CHANNEL_AB * values[i] + CHANNEL_AB_ZERO_OFFSET,
-                           (float)MAX_CHANNEL_AB);
+                           (float)KoLabColorSpaceMathsTraits<channels_type>::unitValueAB * values[i],
+                           (float)KoLabColorSpaceMathsTraits<channels_type>::unitValueAB);
+                break;
+            default:
+                b = qBound((float)KoLabColorSpaceMathsTraits<channels_type>::min,
+                           (float)KoLabColorSpaceMathsTraits<channels_type>::unitValue * values[i],
+                           (float)KoLabColorSpaceMathsTraits<channels_type>::max);
                 break;
             }
             c = (channels_type)b;

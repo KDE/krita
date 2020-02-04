@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2020 L. E. Segovia <amy@amyspark.me>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -259,6 +260,15 @@ public:
      */
     inline double getUIMax(void) const {
         return m_uiMinMax.maxVal;
+    }
+
+    /**
+     * @brief getUIUnitValue
+     * Gets the unit value for this channel.
+     * This is suitable for converting between representations.
+     */
+    inline double getUIUnitValue(void) const {
+        return m_uiMinMax.maxVal - m_uiMinMax.minVal;
     }
 
 private:

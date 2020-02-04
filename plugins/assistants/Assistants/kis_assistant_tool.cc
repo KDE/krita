@@ -115,7 +115,7 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
         *m_newAssistant->handles().back() = canvasDecoration->snapToGuide(event, QPointF(), false);
 
 	// give conjugate assistant side handles once it is completed
-	if (m_newAssistant->id() == "conjugate" && m_newAssistant->handles().size() == m_newAssistant->numHandles() && m_newAssistant->sideHandles().isEmpty()){ 
+	if (m_newAssistant->id() == "conjugate" && m_newAssistant->handles().size() == m_newAssistant->numHandles() && m_newAssistant->sideHandles().isEmpty()){
 	    QList<KisPaintingAssistantHandleSP> handles = m_newAssistant->handles();
 	    const QLineF horizon = QLineF(*handles[0],*handles[1]);
 	    QLineF vertical = horizon.normalVector();
@@ -605,7 +605,7 @@ void KisAssistantTool::continuePrimaryAction(KoPointerEvent *event)
 	  vertical = horizon.normalVector();
 	  vertical.translate(*hndl[2] - vertical.p1());
 	  horizon.intersect(vertical,&cov);
-	  
+
 	  const qreal radius = horizon.length() / 2.0;
 	  const qreal gap = QLineF(horizon.center(),cov).length();
 	  vertical.translate(cov - vertical.p1());
@@ -618,7 +618,7 @@ void KisAssistantTool::continuePrimaryAction(KoPointerEvent *event)
 	      QPointF new_opp_vp;
 	      QLineF dragged_arm;
 	      QLineF opp_arm;
-	      
+
 	      dragged_arm = QLineF(sp,*vp_dragged);
 	      dragged_arm.intersect(horizon, &new_dragged_vp);
 	      opp_arm = dragged_arm.normalVector();
@@ -636,7 +636,7 @@ void KisAssistantTool::continuePrimaryAction(KoPointerEvent *event)
 		  dragged_arm = opp_arm.normalVector();
 		  dragged_arm.translate(sp - dragged_arm.p1());
 		  dragged_arm.intersect(horizon, &new_dragged_vp);
-		  if (new_dragged_vp == cov) { 
+		  if (new_dragged_vp == cov) {
 		      new_dragged_vp = vp_dragged_original_pos;
 		      if (new_dragged_vp == cov) {
 			  QLineF dst = QLineF(cov,*vp_dragged);
@@ -652,12 +652,12 @@ void KisAssistantTool::continuePrimaryAction(KoPointerEvent *event)
 	  }
 
           // recalculate side handle bars
-	  if (vp_is_dragged || near_handle_is_dragged) { 
+	  if (vp_is_dragged || near_handle_is_dragged) {
 	    QLineF arm_a1;
 	    QLineF arm_b1;
 	    QLineF arm_a2;
 	    QLineF arm_b2;
-	    
+
 	    arm_a1 = QLineF(*hndl[0], *side_hndl[0]);
 	    arm_a1.setLength(QLineF(*side_hndl[0],*side_hndl[1]).length());
 	    arm_a1.translate(*side_hndl[0] - arm_a1.p1());
@@ -666,7 +666,7 @@ void KisAssistantTool::continuePrimaryAction(KoPointerEvent *event)
 	    arm_b1.setLength(QLineF(*side_hndl[4],*side_hndl[5]).length());
 	    arm_b1.translate(*side_hndl[4] - arm_b1.p1());
 	    *side_hndl[5] = arm_b1.p2();
-	    
+
 	    arm_a2 = QLineF(*hndl[1], *side_hndl[2]);
 	    arm_a2.setLength(QLineF(*side_hndl[2],*side_hndl[3]).length());
 	    arm_a2.translate(*side_hndl[2] - arm_a2.p1());

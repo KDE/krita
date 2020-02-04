@@ -45,7 +45,7 @@ QPointF ConjugateAssistant::project(const QPointF& pt, const QPointF& strokeBegi
     //code nicked from the perspective ruler.
     qreal dx = pt.x() - strokeBegin.x();
     qreal dy = pt.y() - strokeBegin.y();
-    
+
     if (dx * dx + dy * dy < 4.0) {
         // allow some movement before snapping
         return strokeBegin;
@@ -87,7 +87,7 @@ QPointF ConjugateAssistant::project(const QPointF& pt, const QPointF& strokeBegi
     }
 
     //= QLineF(*handles()[0], strokeBegin);
-    
+
     dx = snapLine.dx();
     dy = snapLine.dy();
 
@@ -112,7 +112,7 @@ void ConjugateAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, c
     gc.save();
     gc.resetTransform();
     QPointF mousePos(0,0);
-    
+
     if (canvas){
 	//simplest, cheapest way to get the mouse-position//
 	mousePos= canvas->canvasWidget()->mapFromGlobal(QCursor::pos());
@@ -140,20 +140,20 @@ void ConjugateAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, c
 	const QPointF p1 = *handles()[0];
 	const QPointF p2 = *handles()[1];
 	const QRect viewport= gc.viewport();
-	
+
 	hl = QLineF(p1,p2); // the objective horizon line
 	QLineF horizonLine = initialTransform.map(hl); // The apparent, SUBJECTIVE horizon line to draw
 	KisAlgebra2D::intersectLineRect(horizonLine, viewport);
-	
+
 	QPainterPath path;
-	
+
 	// draw the horizon
 	if (assistantVisible == true || isEditing == true) {
 		path.moveTo(horizonLine.p1());
 		path.lineTo(horizonLine.p2());
 		drawPath(gc, path, isSnappingActive());
 	    }
-	
+
 	// draw the VP-->mousePos lines
 	if (isEditing == false && previewVisible == true && isSnappingActive() == true) {
 		QLineF snapMouse1 = QLineF(initialTransform.map(p1), mousePos);
@@ -170,9 +170,9 @@ void ConjugateAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, c
 	QPointF p3;
 	if (handles().size() >= 3) {
 	    p3 = *handles()[2];
-	    QLineF norm = hl.normalVector();	
-	    norm.translate(-norm.p1()+p3);	
-	    hl.intersect(norm,&cov);		
+	    QLineF norm = hl.normalVector();
+	    norm.translate(-norm.p1()+p3);
+	    hl.intersect(norm,&cov);
 
 	    // p3 is invalid if cov doesnt lie somewhere between p1 and p2, so set a valid cov
 	    if(!((p1.y() <= p2.y() && cov.y() >= p1.y() && cov.y() <= p2.y()) ||
@@ -213,7 +213,7 @@ void ConjugateAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, c
 	  drawPreview(gc,path);
 	}
     }
-    
+
     gc.restore();
     //KisPaintingAssistant::drawAssistant(gc, updateRect, converter, cached, canvas, assistantVisible, previewVisible);
 }
@@ -223,22 +223,22 @@ void ConjugateAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *
     if (!m_canvas || !isAssistantComplete()) {
         return;
     }
-    
+
     if (assistantVisible == false ||   m_canvas->paintingAssistantsDecoration()->isEditingAssistants()) {
         return;
     }
-    
+
     QTransform initialTransform = converter->documentToWidgetTransform();
     QPainterPath path;
-    
+
     QPointF centerOfVision = initialTransform.map(cov);
 
     path.moveTo(QPointF(centerOfVision.x() - 10.0, centerOfVision.y() - 10.0));
     path.lineTo(QPointF(centerOfVision.x() + 10.0, centerOfVision.y() + 10.0));
-    				     
+
     path.moveTo(QPointF(centerOfVision.x() - 10.0, centerOfVision.y() + 10.0));
     path.lineTo(QPointF(centerOfVision.x() + 10.0, centerOfVision.y() - 10.0));
-    
+
     drawPath(gc, path, isSnappingActive());
 }
 
@@ -366,4 +366,3 @@ void ConjugateAssistant::setCount(int value)
 {
     m_count = value;
 }
-

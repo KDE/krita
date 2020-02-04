@@ -113,23 +113,44 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
     if (m_newAssistant) {
         m_internalMode = MODE_CREATION;
         *m_newAssistant->handles().back() = canvasDecoration->snapToGuide(event, QPointF(), false);
-        if (m_newAssistant->handles().size() == m_newAssistant->numHandles()) {
-            addAssistant();
 
-	} else if (m_newAssistant->id() == "conjugate" && m_newAssistant->handles().size() == 3){ 
-	    // conjugate assistant's 4th point is to be placed automaticlly if 3rd one is already placed
+	// give conjugate assistant side handles once it is completed
+	if (m_newAssistant->id() == "conjugate" && m_newAssistant->handles().size() == m_newAssistant->numHandles() && m_newAssistant->sideHandles().isEmpty()){ 
+	    QList<KisPaintingAssistantHandleSP> handles = m_newAssistant->handles();
+	    const QLineF horizon = QLineF(*handles[0],*handles[1]);
+	    QLineF vertical = horizon.normalVector();
+	    vertical.translate(*handles[2] - vertical.p1()) ;
 	    QPointF cov;
-	    QLineF hl;
-	    QLineF normal;
+	    horizon.intersect(vertical, &cov);
+	    QLineF distance = QLineF(*handles[2],cov);
+	    distance.setLength(distance.length() * 2.0); // Double it, we will ise both p1() and p2()
+	    const qreal length = QLineF(*handles[2],cov).length();
 
-	    hl = QLineF(*m_newAssistant->handles()[0],*m_newAssistant->handles()[1]);
-	    normal = hl.normalVector();
-	    normal.translate(-normal.p1() + *m_newAssistant->handles()[2]);
-	    hl.intersect(normal, &cov);
+	    QLineF bar;
+	    bar= QLineF(distance.p1(), *handles[0]);
+	    bar.setLength(length);
+	    m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
+	    bar.setLength(length * 0.5);
+	    m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
+	    bar= QLineF(distance.p1(), *handles[1]);
+	    bar.setLength(length);
+	    m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
+	    bar.setLength(length * 0.5);
+	    m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
 
-	    QLineF distance = QLineF(*m_newAssistant->handles()[2], cov);
-	    distance.setLength(distance.length() * 2.0);
-	    m_newAssistant->addHandle(new KisPaintingAssistantHandle(distance.p2()), HandleType::NORMAL);
+	    bar= QLineF(distance.p2(), *handles[0]);
+	    bar.setLength(length);
+	    m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
+	    bar.setLength(length * 0.5);
+	    m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
+	    bar= QLineF(distance.p2(), *handles[1]);
+	    bar.setLength(length);
+	    m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
+	    bar.setLength(length * 0.5);
+	    m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
+	}
+
+        if (m_newAssistant->handles().size() == m_newAssistant->numHandles()) {
             addAssistant();
         } else {
             m_newAssistant->addHandle(new KisPaintingAssistantHandle(canvasDecoration->snapToGuide(event, QPointF(), false)), HandleType::NORMAL);
@@ -459,7 +480,7 @@ void KisAssistantTool::continuePrimaryAction(KoPointerEvent *event)
         Q_FOREACH (KisPaintingAssistantHandleSP handle, m_assistantDrag->handles()) {
             *handle += (newAdjustment - m_currentAdjustment);
         }
-        if (m_assistantDrag->id()== "vanishing point"){
+        if (m_assistantDrag->id()== "vanishing point" || m_assistantDrag->id()== "conjugate"){
             Q_FOREACH (KisPaintingAssistantHandleSP handle, m_assistantDrag->sideHandles()) {
                 *handle += (newAdjustment - m_currentAdjustment);
             }
@@ -550,43 +571,138 @@ void KisAssistantTool::continuePrimaryAction(KoPointerEvent *event)
             }
 
         }
-        if (m_handleDrag &&
-	    assistant->id() == "conjugate" &&
-            assistant->handles().size() == 4) {
+        if (m_handleDrag && assistant->id() == "conjugate" && assistant->handles().size() >= 3 &&
+	    assistant->sideHandles().size() == 8) {
 
 	  QSharedPointer <ConjugateAssistant> assis = qSharedPointerCast<ConjugateAssistant>(assistant);
+	  QList<KisPaintingAssistantHandleSP> hndl = assistant->handles();
+	  QList<KisPaintingAssistantHandleSP> side_hndl = assistant->sideHandles();
+	  KisPaintingAssistantHandleSP vp_dragged;
+	  KisPaintingAssistantHandleSP vp_opp;
+	  QPointF vp_dragged_original_pos;
 
-	  int working_handle_id;
-	  int other_handle_id;
+	  bool vp_is_dragged =		m_handleDrag == hndl[0] || m_handleDrag == hndl[1];
+	  bool near_handle_is_dragged = m_handleDrag == side_hndl[0] || m_handleDrag == side_hndl[2] ||
+					m_handleDrag == side_hndl[4] || m_handleDrag == side_hndl[6] ;
+	  bool far_handle_is_dragged =	m_handleDrag == side_hndl[1] || m_handleDrag == side_hndl[3] ||
+					m_handleDrag == side_hndl[5] || m_handleDrag == side_hndl[7] ;
 
-	  if (m_handleDrag == assistant->handles()[2]) {
-	    QPointF sp = assis->stationPoint();
-	    assistant->handles()[2]->setX(sp.x());
-	    assistant->handles()[2]->setY(sp.y());
+	  // A valid horizon line will be needed for later
+	  QLineF horizon;
+
+	  // Here we will attempt to get a valid horizon
+	  if (vp_is_dragged) {
+	      // If either VP got dragged, we need its original location to get a correct horizon
+	      // The side handle bars can be used to derive the original VP position
+	      QLineF arm_a, arm_b;
+	      if (m_handleDrag == hndl[0]) {
+		  vp_dragged = hndl[0]; vp_opp = hndl[1];
+		  arm_a = QLineF(*side_hndl[0],*side_hndl[1]);
+		  arm_b = QLineF(*side_hndl[4],*side_hndl[5]);
+	      } else if (m_handleDrag == hndl[1]){
+		  vp_dragged = hndl[1]; vp_opp = hndl[0];
+		  arm_a = QLineF(*side_hndl[3],*side_hndl[2]);
+		  arm_b = QLineF(*side_hndl[6],*side_hndl[7]);
+	      }
+	      arm_a.intersect(arm_b, &vp_dragged_original_pos);
+	      horizon = QLineF(*vp_opp, vp_dragged_original_pos);
 	  } else {
-	    if (m_handleDrag == assistant->handles()[0]) {
-	      working_handle_id = 0;
-	      other_handle_id = 1;
-	    } else {
-	      working_handle_id = 1;
-	      other_handle_id = 0;
+	    // First calcuate relevant VP's new position if any far handles got dragged
+	    if (far_handle_is_dragged ){
+	      QLineF arm_a, arm_b;
+	      QPointF vp_new_pos;
+	      KisPaintingAssistantHandleSP vp_moved;
+	      if (m_handleDrag == side_hndl[1] || m_handleDrag == side_hndl[5]) {
+		vp_moved = hndl[0];
+		arm_a = QLineF(*side_hndl[0],*side_hndl[1]);
+		arm_b = QLineF(*side_hndl[4],*side_hndl[5]);
+	      } else if (m_handleDrag == side_hndl[3] || m_handleDrag == side_hndl[7]) {
+		vp_moved = hndl[1];
+		arm_a = QLineF(*side_hndl[3],*side_hndl[2]);
+		arm_b = QLineF(*side_hndl[6],*side_hndl[7]);
+	      }
+	      arm_a.intersect(arm_b, &vp_new_pos);
+	      *vp_moved = vp_new_pos;
 	    }
-
-	    QPointF working_handle = *assistant->handles()[working_handle_id];
-
-	    QLineF arm = QLineF(assis->stationPoint(), working_handle);
-	    QPointF new_other;
-	    arm.normalVector().intersect(assis->horizonLine(), &new_other);
-	    assis->handles()[other_handle_id]->setX(new_other.x());
-	    assis->handles()[other_handle_id]->setY(new_other.y());
-
-	    arm = QLineF(assis->stationPoint(), new_other);
-	    QPointF new_working;
-	    arm.normalVector().intersect(assis->horizonLine(), &new_working);
-	    assis->handles()[working_handle_id]->setX(new_working.x());
-	    assis->handles()[working_handle_id]->setY(new_working.y());
+	    horizon = QLineF(*hndl[0],*hndl[1]);
 	  }
 
+	  QLineF vertical;
+	  QPointF cov;
+	  vertical = horizon.normalVector();
+	  vertical.translate(*hndl[2] - vertical.p1());
+	  horizon.intersect(vertical,&cov);
+	  
+	  const qreal radius = horizon.length() / 2.0;
+	  const qreal gap = QLineF(horizon.center(),cov).length();
+	  vertical.translate(cov - vertical.p1());
+	  vertical.setLength(sqrt((radius*radius) - (gap*gap)));
+	  const QPointF sp = vertical.p2();
+
+	  // Set both VP's new locations
+	  if (vp_is_dragged) {
+	      QPointF new_dragged_vp;
+	      QPointF new_opp_vp;
+	      QLineF dragged_arm;
+	      QLineF opp_arm;
+	      
+	      dragged_arm = QLineF(sp,*vp_dragged);
+	      dragged_arm.intersect(horizon, &new_dragged_vp);
+	      opp_arm = dragged_arm.normalVector();
+	      opp_arm.translate(sp - opp_arm.p1());
+	      opp_arm.intersect(horizon, &new_opp_vp);
+
+	      if (new_dragged_vp == new_opp_vp) {
+		  new_opp_vp = *vp_opp;
+	      }
+
+	      // Several contingencies to avoid edge-case
+	      if (new_dragged_vp == cov) {
+		  opp_arm = QLineF(sp,*vp_opp);
+		  opp_arm.intersect(horizon, &new_opp_vp);
+		  dragged_arm = opp_arm.normalVector();
+		  dragged_arm.translate(sp - dragged_arm.p1());
+		  dragged_arm.intersect(horizon, &new_dragged_vp);
+		  if (new_dragged_vp == cov) { 
+		      new_dragged_vp = vp_dragged_original_pos;
+		      if (new_dragged_vp == cov) {
+			  QLineF dst = QLineF(cov,*vp_dragged);
+			  QLineF hor = QLineF(*vp_opp,cov);
+			  hor.setLength(dst.length());
+			  hor.translate(cov-hor.p1());
+			  new_dragged_vp = hor.p2();
+		      }
+		  }
+	      }
+	      *vp_dragged = new_dragged_vp;
+	      *vp_opp = new_opp_vp;
+	  }
+
+          // recalculate side handle bars
+	  if (vp_is_dragged || near_handle_is_dragged) { 
+	    QLineF arm_a1;
+	    QLineF arm_b1;
+	    QLineF arm_a2;
+	    QLineF arm_b2;
+	    
+	    arm_a1 = QLineF(*hndl[0], *side_hndl[0]);
+	    arm_a1.setLength(QLineF(*side_hndl[0],*side_hndl[1]).length());
+	    arm_a1.translate(*side_hndl[0] - arm_a1.p1());
+	    *side_hndl[1] = arm_a1.p2();
+	    arm_b1 = QLineF(*hndl[0], *side_hndl[4]);
+	    arm_b1.setLength(QLineF(*side_hndl[4],*side_hndl[5]).length());
+	    arm_b1.translate(*side_hndl[4] - arm_b1.p1());
+	    *side_hndl[5] = arm_b1.p2();
+	    
+	    arm_a2 = QLineF(*hndl[1], *side_hndl[2]);
+	    arm_a2.setLength(QLineF(*side_hndl[2],*side_hndl[3]).length());
+	    arm_a2.translate(*side_hndl[2] - arm_a2.p1());
+	    *side_hndl[3] = arm_a2.p2();
+	    arm_b2 = QLineF(*hndl[1], *side_hndl[6]);
+	    arm_b2.setLength(QLineF(*side_hndl[6],*side_hndl[7]).length());
+	    arm_b2.translate(*side_hndl[6] - arm_b2.p1());
+	    *side_hndl[7] = arm_b2.p2();
+	  }
         }
     }
     if (wasHiglightedNode && !m_higlightedNode) {

@@ -15,7 +15,7 @@ public:
     KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const override;
     //virtual void endStroke();
     QPointF getEditorPosition() const override;
-    int numHandles() const override { return 4; }
+    int numHandles() const override { return 3; }
 
     float referenceLineDensity();
     void setReferenceLineDensity(float value);

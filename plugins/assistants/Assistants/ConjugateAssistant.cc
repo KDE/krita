@@ -148,19 +148,14 @@ void ConjugateAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, c
 	QPainterPath path;
 	
 	// draw the horizon
-	if (assistantVisible == true
-	    || isEditing == true)
-	    {
+	if (assistantVisible == true || isEditing == true) {
 		path.moveTo(horizonLine.p1());
 		path.lineTo(horizonLine.p2());
 		drawPath(gc, path, isSnappingActive());
 	    }
 	
 	// draw the VP-->mousePos lines
-	if (isEditing == false
-	    && previewVisible == true
-	    && isSnappingActive() == true)
-	    {
+	if (isEditing == false && previewVisible == true && isSnappingActive() == true) {
 		QLineF snapMouse1 = QLineF(initialTransform.map(p1), mousePos);
 		QLineF snapMouse2 = QLineF(initialTransform.map(p2), mousePos);
 		KisAlgebra2D::intersectLineRect(snapMouse1, viewport);
@@ -173,95 +168,49 @@ void ConjugateAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, c
 	    }
 
 	QPointF p3;
-
 	if (handles().size() >= 3) {
-
 	    p3 = *handles()[2];
+	    QLineF norm = hl.normalVector();	
+	    norm.translate(-norm.p1()+p3);	
+	    hl.intersect(norm,&cov);		
 
-	    QLineF norm = hl.normalVector();	// objective normal to get objective cov
-	    norm.translate(-norm.p1()+p3);	// make normal start on p3
-	    hl.intersect(norm,&cov);		// set objective cov here
-
-	    // p3 is invalid if cov doesnt lie somewhere between p1 and p2
-	    if(!((p1.y() < p2.y() && cov.y() > p1.y() && cov.y() < p2.y()) ||
-		 (p1.y() > p2.y() && cov.y() < p1.y() && cov.y() > p2.y()) ||
-		 (p1.x() < p2.x() && cov.x() > p1.x() && cov.x() < p2.x()) ||
-		 (p1.x() > p2.x() && cov.x() < p1.x() && cov.x() > p2.x())))
-		{
-		    qDebug() << "p3 IS INVALID !! !! !!";
+	    // p3 is invalid if cov doesnt lie somewhere between p1 and p2, so set a valid cov
+	    if(!((p1.y() <= p2.y() && cov.y() >= p1.y() && cov.y() <= p2.y()) ||
+		 (p1.y() >= p2.y() && cov.y() <= p1.y() && cov.y() >= p2.y()) ||
+		 (p1.x() <= p2.x() && cov.x() >= p1.x() && cov.x() <= p2.x()) ||
+		 (p1.x() >= p2.x() && cov.x() <= p1.x() && cov.x() >= p2.x()))) {
 		    cov = QLineF(p1,p2).center();
 		    p3 = QLineF(p1,p2).center();
 		    norm.translate(-norm.p1()+p3);
+		    *handles()[2] = norm.p2();
 		}
 
 	    QLineF normalLine = initialTransform.map(norm); // subjective normal line for drawing
-	    
-	    // now we draw the normal line 
+
+	    // draw the vertical normal line
 	    if (assistantVisible == true || isEditing == true) {
 		KisAlgebra2D::intersectLineRect(normalLine, viewport);
 		path.moveTo(normalLine.p1());
 		path.lineTo(normalLine.p2());
 		drawPath(gc, path, isSnappingActive());
-	    }}
-
-	if (isAssistantComplete() == true) { // ie handles().size() >= 4
-	    QPointF p4 = *handles()[3];
-
-	    float radius = QLineF(p1,p2).length()/2;
-	    QLineF distanceLine(cov,p3);
-	    
-	    float gap = QLineF(cov,QLineF(p1,p2).center()).length();
-	    float distance = sqrt((radius*radius) - (gap*gap));
-	    distanceLine.setLength(distance);
-
-	    setStationPoint(distanceLine.p2()); // now we have a valid station point
-	    
-	    // all good now, so we create the side handles if they dont already exist
-	    if (sideHandles().isEmpty()) {
-		QLineF workingLine;
-		QLineF distance;
-		
-		distance=QLineF(p3,cov);
-		workingLine= QLineF(distance.p1(), p1);
-		workingLine.setLength(distance.length());
-		addHandle(new KisPaintingAssistantHandle(workingLine.p2()), HandleType::SIDE);
-		workingLine.setLength(distance.length() * 0.5);
-		addHandle(new KisPaintingAssistantHandle(workingLine.p2()), HandleType::SIDE);
-		workingLine= QLineF(distance.p1(), p2);
-		workingLine.setLength(distance.length());
-		addHandle(new KisPaintingAssistantHandle(workingLine.p2()), HandleType::SIDE);
-		workingLine.setLength(distance.length() * 0.5);
-		addHandle(new KisPaintingAssistantHandle(workingLine.p2()), HandleType::SIDE);
-		
-		distance=QLineF(p4,cov);
-		workingLine= QLineF(distance.p1(), p1);
-		workingLine.setLength(distance.length());
-		addHandle(new KisPaintingAssistantHandle(workingLine.p2()), HandleType::SIDE);
-		workingLine.setLength(distance.length() * 0.5);
-		addHandle(new KisPaintingAssistantHandle(workingLine.p2()), HandleType::SIDE);
-		workingLine= QLineF(distance.p1(), p2);
-		workingLine.setLength(distance.length());
-		addHandle(new KisPaintingAssistantHandle(workingLine.p2()), HandleType::SIDE);
-		workingLine.setLength(distance.length() * 0.5);
-		addHandle(new KisPaintingAssistantHandle(workingLine.p2()), HandleType::SIDE);
-		}
-	    
-	    // draw the side handles
-	    if (isEditing == true) {
-		path.moveTo(initialTransform.map(p1));
-		path.lineTo(initialTransform.map(*sideHandles()[0]));
-		path.lineTo(initialTransform.map(*sideHandles()[1]));
-		path.moveTo(initialTransform.map(p2));
-		path.lineTo(initialTransform.map(*sideHandles()[2]));
-		path.lineTo(initialTransform.map(*sideHandles()[3]));
-		path.moveTo(initialTransform.map(p1));
-		path.lineTo(initialTransform.map(*sideHandles()[4]));
-		path.lineTo(initialTransform.map(*sideHandles()[5]));
-		path.moveTo(initialTransform.map(p2));
-		path.lineTo(initialTransform.map(*sideHandles()[6]));
-		path.lineTo(initialTransform.map(*sideHandles()[7]));
-		drawPreview(gc,path);
 	    }
+	}
+
+	// draw the side handle bars
+	if (isEditing == true && !sideHandles().isEmpty()) {
+	  path.moveTo(initialTransform.map(p1));
+	  path.lineTo(initialTransform.map(*sideHandles()[0]));
+	  path.lineTo(initialTransform.map(*sideHandles()[1]));
+	  path.moveTo(initialTransform.map(p2));
+	  path.lineTo(initialTransform.map(*sideHandles()[2]));
+	  path.lineTo(initialTransform.map(*sideHandles()[3]));
+	  path.moveTo(initialTransform.map(p1));
+	  path.lineTo(initialTransform.map(*sideHandles()[4]));
+	  path.lineTo(initialTransform.map(*sideHandles()[5]));
+	  path.moveTo(initialTransform.map(p2));
+	  path.lineTo(initialTransform.map(*sideHandles()[6]));
+	  path.lineTo(initialTransform.map(*sideHandles()[7]));
+	  drawPreview(gc,path);
 	}
     }
     
@@ -314,7 +263,7 @@ float ConjugateAssistant::referenceLineDensity()
 
 bool ConjugateAssistant::isAssistantComplete() const
 {
-  return handles().size() >= 4;
+  return handles().size() >= 3;
 }
 
 void ConjugateAssistant::saveCustomXml(QXmlStreamWriter* xml)

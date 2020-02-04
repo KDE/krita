@@ -2,8 +2,8 @@ SET(PREFIX_ext_quazip "${EXTPREFIX}" )
 if (ANDROID)
     ExternalProject_Add( ext_quazip
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://api.github.com/repos/stachenov/quazip/zipball/v0.8.1
-        URL_MD5 948f74e191d8d111e050720763678280
+        URL https://github.com/stachenov/quazip/archive/v0.8.1.tar.gz
+        URL_MD5 0161c679b1d32c289dab2f96c81354aa
         PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/find_quazip.diff
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/liblocation.diff
         INSTALL_DIR ${PREFIX_ext_quazip}
@@ -15,8 +15,8 @@ if (ANDROID)
 else()
     ExternalProject_Add( ext_quazip
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://api.github.com/repos/stachenov/quazip/zipball/v0.8.1
-        URL_MD5 948f74e191d8d111e050720763678280
+        URL https://github.com/stachenov/quazip/archive/v0.8.1.tar.gz
+        URL_MD5 0161c679b1d32c289dab2f96c81354aa
         PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/find_quazip.diff
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/liblocation.diff
         INSTALL_DIR ${PREFIX_ext_quazip}

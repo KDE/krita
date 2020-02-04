@@ -2,8 +2,8 @@ SET(PREFIX_ext_iconv "${EXTPREFIX}" )
 if (MINGW)
 ExternalProject_Add( ext_iconv
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-	URL https://api.github.com/repos/win-iconv/win-iconv/tarball/v0.0.8
-	URL_MD5 e5ce777bbc364c7c797ad8628a59966f
+	URL https://github.com/win-iconv/win-iconv/archive/v0.0.8.tar.gz
+	URL_MD5 https://github.com/win-iconv/win-iconv/archive/v0.0.8.tar.gz
 	
     INSTALL_DIR ${PREFIX_ext_iconv}
 	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_iconv} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}

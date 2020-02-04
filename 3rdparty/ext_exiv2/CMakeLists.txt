@@ -3,8 +3,8 @@ SET(PREFIX_ext_exiv2  "${EXTPREFIX}" )
 if (ANDROID)
 ExternalProject_Add( ext_exiv2
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-	URL https://api.github.com/repos/Exiv2/exiv2/tarball/v0.27.2
-	URL_MD5 38c991d96ec293d24db9516eb923f205
+	URL https://github.com/libexpat/libexpat/releases/download/R_2_2_9/expat-2.2.9.tar.gz
+	URL_MD5 077b953cc38df8fed78e92841cc35443
 
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/tzname.patch
     COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/patch_mingw.patch
@@ -23,8 +23,8 @@ else()
 message(STATUS ${PREFIX_ext_exiv2}/lib)
 ExternalProject_Add( ext_exiv2
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-	URL https://api.github.com/repos/Exiv2/exiv2/tarball/v0.27.2
-	URL_MD5 38c991d96ec293d24db9516eb923f205
+	URL https://github.com/libexpat/libexpat/releases/download/R_2_2_9/expat-2.2.9.tar.gz
+	URL_MD5 077b953cc38df8fed78e92841cc35443
 
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/tzname.patch
     COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/patch_mingw.patch

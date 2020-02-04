@@ -2,8 +2,8 @@ SET(EXTPREFIX_openexr "${EXTPREFIX}" )
 if (MINGW)
 ExternalProject_Add( ext_openexr
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://api.github.com/repos/AcademySoftwareFoundation/openexr/tarball/v2.4.0
-        URL_MD5 a22f9f2eeed5ef20e18b68018af0d429
+        URL https://github.com/AcademySoftwareFoundation/openexr/archive/v2.4.0.tar.gz
+        URL_MD5 9e4d69cf2a12c6fb19b98af7c5e0eaee
 
         PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/openexr.diff
               COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/symlink.patch
@@ -18,8 +18,8 @@ ExternalProject_Add( ext_openexr
 else()
 ExternalProject_Add(ext_openexr
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://api.github.com/repos/AcademySoftwareFoundation/openexr/tarball/v2.4.0
-        URL_MD5 a22f9f2eeed5ef20e18b68018af0d429
+        URL https://github.com/AcademySoftwareFoundation/openexr/archive/v2.4.0.tar.gz
+        URL_MD5 9e4d69cf2a12c6fb19b98af7c5e0eaee
 
         PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/openexr.diff
 

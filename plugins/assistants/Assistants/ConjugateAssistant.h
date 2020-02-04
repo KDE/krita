@@ -20,22 +20,6 @@ public:
     float referenceLineDensity();
     void setReferenceLineDensity(float value);
 
-    qreal spacing();
-    void setSpacing(qreal value);
-    qreal tilt();
-    void setTilt(qreal value);
-    qreal fade();
-    void setFade(qreal value);
-    qreal count();
-    void setCount(int value);
-
-    QPointF stationPoint();
-    void setStationPoint(QPointF p);
-    QLineF horizonLine();
-    void setHorizonLine(QLineF l);
-    QPointF centerOfVision();
-    void setCenterOfVision(QPointF c);
-
     bool isAssistantComplete() const override;
 
     void saveCustomXml(QXmlStreamWriter* xml) override;
@@ -50,15 +34,6 @@ private:
     KisCanvas2 *m_canvas;
 
     float m_referenceLineDensity = 15.0;
-    double m_spacing = 1.0;
-    float m_spacingTilt = 0;
-    double m_fade = 0.01;
-    int m_count = 25;
-    bool m_useSpacing = false;
-
-    QPointF sp = QPointF(0,0);
-    QLineF hl = QLineF();
-    QPointF cov = QPointF(0,0);
   QLineF m_snapLine;
 
 

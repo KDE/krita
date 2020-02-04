@@ -22,14 +22,6 @@ ConjugateAssistant::ConjugateAssistant(const ConjugateAssistant &rhs, QMap<KisPa
     : KisPaintingAssistant(rhs, handleMap)
     , m_canvas(rhs.m_canvas)
     , m_referenceLineDensity(rhs.m_referenceLineDensity)
-    , m_spacing(rhs.m_spacing)
-    , m_spacingTilt(rhs.m_spacingTilt)
-    , m_fade(rhs.m_fade)
-    , m_count(rhs.m_count)
-    , m_useSpacing(rhs.m_useSpacing)
-    , sp(rhs.sp)
-    , hl(rhs.hl)
-    , cov(rhs.cov)
     , m_snapLine(rhs.m_snapLine)
 {
 }
@@ -125,6 +117,7 @@ void ConjugateAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, c
 
     const QTransform initialTransform = converter->documentToWidgetTransform();
     bool isEditing = canvas->paintingAssistantsDecoration()->isEditingAssistants();
+    QLineF hl; // objective horizon line
 
     if (isEditing){
 	Q_FOREACH (const QPointF* handle, handles()) {
@@ -141,7 +134,7 @@ void ConjugateAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, c
 	const QPointF p2 = *handles()[1];
 	const QRect viewport= gc.viewport();
 
-	hl = QLineF(p1,p2); // the objective horizon line
+	hl = QLineF(p1,p2);
 	QLineF horizonLine = initialTransform.map(hl); // The apparent, SUBJECTIVE horizon line to draw
 	KisAlgebra2D::intersectLineRect(horizonLine, viewport);
 
@@ -168,6 +161,7 @@ void ConjugateAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, c
 	    }
 
 	QPointF p3;
+	QPointF cov;
 	if (handles().size() >= 3) {
 	    p3 = *handles()[2];
 	    QLineF norm = hl.normalVector();
@@ -231,15 +225,22 @@ void ConjugateAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *
     QTransform initialTransform = converter->documentToWidgetTransform();
     QPainterPath path;
 
-    QPointF centerOfVision = initialTransform.map(cov);
+    if (isAssistantComplete()){
+      QPointF cov;
+      QLineF hl = QLineF(*handles()[0],*handles()[1]);
+      QLineF vertical = hl.normalVector();
+      vertical.translate(*handles()[2] - vertical.p1());
+      vertical.intersect(hl, &cov);
+      QPointF centerOfVision = initialTransform.map(cov);
 
-    path.moveTo(QPointF(centerOfVision.x() - 10.0, centerOfVision.y() - 10.0));
-    path.lineTo(QPointF(centerOfVision.x() + 10.0, centerOfVision.y() + 10.0));
+      path.moveTo(QPointF(centerOfVision.x() - 10.0, centerOfVision.y() - 10.0));
+      path.lineTo(QPointF(centerOfVision.x() + 10.0, centerOfVision.y() + 10.0));
 
-    path.moveTo(QPointF(centerOfVision.x() - 10.0, centerOfVision.y() + 10.0));
-    path.lineTo(QPointF(centerOfVision.x() + 10.0, centerOfVision.y() - 10.0));
+      path.moveTo(QPointF(centerOfVision.x() - 10.0, centerOfVision.y() + 10.0));
+      path.lineTo(QPointF(centerOfVision.x() + 10.0, centerOfVision.y() - 10.0));
 
-    drawPath(gc, path, isSnappingActive());
+      drawPath(gc, path, isSnappingActive());
+    }
 }
 
 QPointF ConjugateAssistant::getEditorPosition() const
@@ -276,30 +277,6 @@ bool ConjugateAssistant::loadCustomXml(QXmlStreamReader* xml)
   return b;
 }
 
-QPointF ConjugateAssistant::stationPoint() {
-  return sp;
-}
-
-void ConjugateAssistant::setStationPoint(QPointF p) {
-  sp = p;
-}
-
-QPointF ConjugateAssistant::centerOfVision() {
-  return cov;
-}
-
-void ConjugateAssistant::setCenterOfVision(QPointF c) {
-  cov = c;
-}
-
-QLineF ConjugateAssistant::horizonLine() {
-  return hl;
-}
-
-void ConjugateAssistant::setHorizonLine(QLineF l) {
-  hl = l;
-}
-
 ConjugateAssistantFactory::ConjugateAssistantFactory()
 {
 }
@@ -321,48 +298,4 @@ QString ConjugateAssistantFactory::name() const
 KisPaintingAssistant* ConjugateAssistantFactory::createPaintingAssistant() const
 {
     return new ConjugateAssistant;
-}
-
-qreal ConjugateAssistant::spacing()
-{
-    return m_spacing;
-}
-
-void ConjugateAssistant::setSpacing(qreal value)
-{
-    if (value < 0.0) {
-        value = 1.0;
-    }
-
-    m_spacing = value;
-}
-
-qreal ConjugateAssistant::tilt()
-{
-    return m_spacingTilt;
-}
-
-void ConjugateAssistant::setTilt(qreal value)
-{
-    m_spacingTilt = value;
-}
-
-qreal ConjugateAssistant::fade()
-{
-    return m_fade;
-}
-
-void ConjugateAssistant::setFade(qreal value)
-{
-    m_fade = value;
-}
-
-qreal ConjugateAssistant::count()
-{
-    return m_count;
-}
-
-void ConjugateAssistant::setCount(int value)
-{
-    m_count = value;
 }

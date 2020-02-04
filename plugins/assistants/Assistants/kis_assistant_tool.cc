@@ -325,33 +325,6 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
             m_dragStart = assistant->getEditorPosition();
             m_snapIsRadial = false;
         }
-
-	if (assistant->id() == "conjugate") {
-
-	  // QSharedPointer <ConjugateAssistant> assis = qSharedPointerCast<ConjugateAssistant>(assistant);
-	  // QPointF h1 = *assis->handles()[0];
-	  // QPointF h2 = *assis->handles()[1];
-	  // QPointF h3 = *assis->handles()[2];
-
-	  // QLineF horiz = QLineF(h1,h2);
-	  // QLineF norm = horiz.normalVector();
-
-	  // norm.translate(h3 - h1);
-
-	  // QPointF inter;
-	  // norm.intersect(horiz,&inter);
-
-	  // qreal h1dst = QLineF(h1,inter).length();
-	  // qreal h2dst = QLineF(h2,inter).length();
-
-	  // qreal radius = (h1dst + h2dst) / 2;
-	  // qreal spdst = qSqrt(qPow(radius,2) - qPow(radius-qMin(h1dst,h2dst),2));
-
-	  // norm.setP1(inter);
-	  // norm.setLength(spdst);
-
-	  // assis->setStationPoint(norm.p2());
-	}
     }
 
     if (m_handleDrag) {

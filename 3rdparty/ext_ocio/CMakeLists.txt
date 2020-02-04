@@ -8,8 +8,8 @@ if (MINGW)
 ExternalProject_Add(
     ext_ocio
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL http://github.com/AcademySoftwareFoundation/OpenColorIO/zipball/v1.1.1
-    URL_MD5 fb2a44554cd10029b7a35b9e1e91d345
+    URL https://github.com/AcademySoftwareFoundation/OpenColorIO/archive/v1.1.1.tar.gz
+    URL_MD5 23d8b9ac81599305539a5a8674b94a3d
 
     INSTALL_DIR ${EXTPREFIX_ocio}
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/ocio-mingw.patch
@@ -23,8 +23,8 @@ else()
 ExternalProject_Add(
     ext_ocio
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL http://github.com/AcademySoftwareFoundation/OpenColorIO/tarball/v1.1.1
-    URL_MD5 599cec5a47174e92cc7fecc25a749131
+    URL https://github.com/AcademySoftwareFoundation/OpenColorIO/archive/v1.1.1.tar.gz
+    URL_MD5 23d8b9ac81599305539a5a8674b94a3d
 
     INSTALL_DIR ${EXTPREFIX_ocio}
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/warnings.diff

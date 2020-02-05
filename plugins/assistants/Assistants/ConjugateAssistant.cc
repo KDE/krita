@@ -142,23 +142,23 @@ void ConjugateAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, c
 
 	// draw the horizon
 	if (assistantVisible == true || isEditing == true) {
-		path.moveTo(horizonLine.p1());
-		path.lineTo(horizonLine.p2());
-		drawPath(gc, path, isSnappingActive());
-	    }
+	  path.moveTo(horizonLine.p1());
+	  path.lineTo(horizonLine.p2());
+	  drawPath(gc, path, isSnappingActive());
+	}
 
 	// draw the VP-->mousePos lines
 	if (isEditing == false && previewVisible == true && isSnappingActive() == true) {
-		QLineF snapMouse1 = QLineF(initialTransform.map(p1), mousePos);
-		QLineF snapMouse2 = QLineF(initialTransform.map(p2), mousePos);
-		KisAlgebra2D::intersectLineRect(snapMouse1, viewport);
-		KisAlgebra2D::intersectLineRect(snapMouse2, viewport);
-		path.moveTo(initialTransform.map(p1));
-		path.lineTo(snapMouse1.p1());
-		path.moveTo(initialTransform.map(p2));
-		path.lineTo(snapMouse2.p1());
-		drawPreview(gc, path);
-	    }
+	    QLineF snapMouse1 = QLineF(initialTransform.map(p1), mousePos);
+	    QLineF snapMouse2 = QLineF(initialTransform.map(p2), mousePos);
+	    KisAlgebra2D::intersectLineRect(snapMouse1, viewport);
+	    KisAlgebra2D::intersectLineRect(snapMouse2, viewport);
+	    path.moveTo(initialTransform.map(p1));
+	    path.lineTo(snapMouse1.p1());
+	    path.moveTo(initialTransform.map(p2));
+	    path.lineTo(snapMouse2.p1());
+	    drawPreview(gc, path);
+	}
 
 	QPointF p3;
 	QPointF cov;
@@ -173,11 +173,11 @@ void ConjugateAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, c
 		 (p1.y() >= p2.y() && cov.y() <= p1.y() && cov.y() >= p2.y()) ||
 		 (p1.x() <= p2.x() && cov.x() >= p1.x() && cov.x() <= p2.x()) ||
 		 (p1.x() >= p2.x() && cov.x() <= p1.x() && cov.x() >= p2.x()))) {
-		    cov = QLineF(p1,p2).center();
-		    p3 = QLineF(p1,p2).center();
-		    norm.translate(-norm.p1()+p3);
-		    *handles()[2] = norm.p2();
-		}
+		cov = QLineF(p1,p2).center();
+		p3 = QLineF(p1,p2).center();
+		norm.translate(-norm.p1()+p3);
+		*handles()[2] = norm.p2();
+	    }
 
 	    QLineF normalLine = initialTransform.map(norm); // subjective normal line for drawing
 
@@ -192,19 +192,21 @@ void ConjugateAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, c
 
 	// draw the side handle bars
 	if (isEditing == true && !sideHandles().isEmpty()) {
-	  path.moveTo(initialTransform.map(p1));
-	  path.lineTo(initialTransform.map(*sideHandles()[0]));
-	  path.lineTo(initialTransform.map(*sideHandles()[1]));
-	  path.moveTo(initialTransform.map(p2));
-	  path.lineTo(initialTransform.map(*sideHandles()[2]));
-	  path.lineTo(initialTransform.map(*sideHandles()[3]));
-	  path.moveTo(initialTransform.map(p1));
-	  path.lineTo(initialTransform.map(*sideHandles()[4]));
-	  path.lineTo(initialTransform.map(*sideHandles()[5]));
-	  path.moveTo(initialTransform.map(p2));
-	  path.lineTo(initialTransform.map(*sideHandles()[6]));
-	  path.lineTo(initialTransform.map(*sideHandles()[7]));
-	  drawPreview(gc,path);
+	    path.moveTo(initialTransform.map(p1));
+	    path.lineTo(initialTransform.map(*sideHandles()[0]));
+	    path.lineTo(initialTransform.map(*sideHandles()[1]));
+	    path.moveTo(initialTransform.map(p2));
+	    path.lineTo(initialTransform.map(*sideHandles()[2]));
+	    path.lineTo(initialTransform.map(*sideHandles()[3]));
+	    path.moveTo(initialTransform.map(p1));
+	    path.lineTo(initialTransform.map(*sideHandles()[4]));
+	    path.lineTo(initialTransform.map(*sideHandles()[5]));
+	    path.moveTo(initialTransform.map(p2));
+	    path.lineTo(initialTransform.map(*sideHandles()[6]));
+	    path.lineTo(initialTransform.map(*sideHandles()[7]));
+	    drawPreview(gc,path);
+	}
+
 	if (handles().size() >= 3) {
 	    const QLineF hl = QLineF(*handles()[0], *handles()[1]);
 	    const qreal radius = hl.length() / 2.0;

@@ -170,9 +170,9 @@ void KisPrescaledProjection::viewportMoved(const QPointF &offset)
     }
 
     QPainter gc(&newImage);
-    QVector<QRect> rects = updateRegion.rects();
-
-    Q_FOREACH (const QRect &rect, rects) {
+    auto rc = updateRegion.begin();
+    while (rc != updateRegion.end()) {
+        QRect rect = *rc;
         QRect imageRect =
             m_d->coordinatesConverter->viewportToImage(rect).toAlignedRect();
         QVector<QRect> patches =
@@ -186,6 +186,7 @@ void KisPrescaledProjection::viewportMoved(const QPointF &offset)
             fillInUpdateInformation(viewportPatch, info);
             drawUsingBackend(gc, info);
         }
+        rc++;
     }
 
     m_d->prescaledQImage = newImage;

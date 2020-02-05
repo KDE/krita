@@ -163,8 +163,11 @@ void KisFloatingMessage::tryOverrideMessage(const QString message,
 void KisFloatingMessage::showMessage()
 {
     if (widgetQueuedForDeletion) return;
-
+#if QT_VERSION >= QT_VERSION_CHECK(5,13,0)
+    setGeometry(determineMetrics(fontMetrics().horizontalAdvance('x')));
+#else
     setGeometry(determineMetrics(fontMetrics().width('x')));
+#endif
     setWindowOpacity(OSD_WINDOW_OPACITY);
 
     QWidget::setVisible(true);

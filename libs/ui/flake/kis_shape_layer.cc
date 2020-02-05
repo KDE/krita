@@ -295,6 +295,8 @@ void KisShapeLayer::initShapeLayer(KoShapeControllerBase* controller, KisPaintDe
             this, SIGNAL(currentLayerChanged(const KoShapeLayer*)));
 
     connect(this, SIGNAL(sigMoveShapes(QPointF)), SLOT(slotMoveShapes(QPointF)));
+    connect(this, SIGNAL(sigTransformShapes(QTransform)), SLOT(slotTransformShapes(QTransform)), Qt::BlockingQueuedConnection);
+
 }
 
 bool KisShapeLayer::allowAsChild(KisNodeSP node) const
@@ -420,6 +422,12 @@ void KisShapeLayer::slotMoveShapes(const QPointF &diff)
     if (shapes.isEmpty()) return;
 
     KoShapeMoveCommand cmd(shapes, diff);
+    cmd.redo();
+}
+
+void KisShapeLayer::slotTransformShapes(const QTransform &newTransform)
+{
+    KoShapeTransformCommand cmd({this}, {transformation()}, {newTransform});
     cmd.redo();
 }
 
@@ -678,51 +686,51 @@ KUndo2Command* KisShapeLayer::crop(const QRect & rect)
     return new KisNodeMoveCommand2(this, oldPos, newPos);
 }
 
-KUndo2Command* KisShapeLayer::transform(const QTransform &transform) {
-    QList<KoShape*> shapes = shapesToBeTransformed();
-    if (shapes.isEmpty()) return 0;
-
-    KisImageViewConverter *converter = dynamic_cast<KisImageViewConverter*>(this->converter());
-    QTransform realTransform = converter->documentToView() *
-        transform * converter->viewToDocument();
-
-    QList<QTransform> oldTransformations;
-    QList<QTransform> newTransformations;
-
-    QList<KoShapeShadow*> newShadows;
-    const qreal transformBaseScale = KoUnit::approxTransformScale(transform);
-
-    Q_FOREACH (const KoShape* shape, shapes) {
-        QTransform oldTransform = shape->transformation();
-        oldTransformations.append(oldTransform);
-
-        QTransform globalTransform = shape->absoluteTransformation();
-        QTransform localTransform = globalTransform * realTransform * globalTransform.inverted();
-        newTransformations.append(localTransform * oldTransform);
-
-        KoShapeShadow *shadow = 0;
-
-        if (shape->shadow()) {
-            shadow = new KoShapeShadow(*shape->shadow());
-            shadow->setOffset(transformBaseScale * shadow->offset());
-            shadow->setBlur(transformBaseScale * shadow->blur());
-        }
-
-        newShadows.append(shadow);
-
+struct TransformShapeLayerDeferred : public KUndo2Command
+{
+    TransformShapeLayerDeferred(KisShapeLayer *shapeLayer, const QTransform &globalDocTransform)
+        : m_shapeLayer(shapeLayer),
+          m_globalDocTransform(globalDocTransform)
+    {
     }
 
-    KUndo2Command *parentCommand = new KUndo2Command();
-    new KoShapeTransformCommand(shapes,
-                                oldTransformations,
-                                newTransformations,
-                                parentCommand);
+    void undo()
+    {
+        emit m_shapeLayer->sigTransformShapes(m_savedTransform);
+    }
 
-    new KoShapeShadowCommand(shapes,
-                             newShadows,
-                             parentCommand);
+    void redo()
+    {
+        m_savedTransform = m_shapeLayer->transformation();
 
-    return parentCommand;
+        const QTransform globalTransform = m_shapeLayer->absoluteTransformation();
+        const QTransform localTransform = globalTransform * m_globalDocTransform * globalTransform.inverted();
+
+        emit m_shapeLayer->sigTransformShapes(localTransform * m_savedTransform);
+    }
+
+private:
+    KisShapeLayer *m_shapeLayer;
+    QTransform m_globalDocTransform;
+    QTransform m_savedTransform;
+};
+
+
+KUndo2Command* KisShapeLayer::transform(const QTransform &transform)
+{
+    QList<KoShape*> shapes = shapesToBeTransformed();
+    if (shapes.isEmpty()) return 0;
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(shapes.size() == 1 && shapes.first() == this, 0);
+
+    /**
+     * We cannot transform shapes in the worker thread. Therefor we emit blocking-queued
+     * signal to transform them in the GUI thread and then return.
+     */
+    KisImageViewConverter *converter = dynamic_cast<KisImageViewConverter*>(this->converter());
+    QTransform docSpaceTransform = converter->documentToView() *
+        transform * converter->viewToDocument();
+
+    return new TransformShapeLayerDeferred(this, docSpaceTransform);
 }
 
 KUndo2Command *KisShapeLayer::setProfile(const KoColorProfile *profile)

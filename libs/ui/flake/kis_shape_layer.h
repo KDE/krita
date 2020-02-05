@@ -193,8 +193,17 @@ Q_SIGNALS:
      */
     void sigMoveShapes(const QPointF &diff);
 
+    /**
+     * A signal + slot to synchronize UI and image
+     * threads. Image thread emits the signal, UI
+     * thread performs the action
+     */
+    void sigTransformShapes(const QTransform &transform);
+
+
 private Q_SLOTS:
     void slotMoveShapes(const QPointF &diff);
+    void slotTransformShapes(const QTransform &transform);
 
 private:
     QList<KoShape*> shapesToBeTransformed();

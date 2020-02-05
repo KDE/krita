@@ -114,7 +114,7 @@ private Q_SLOTS:
     void slotImageSizeChanged();
 
 Q_SIGNALS:
-    void forwardRepaint();
+    void sigBlockingForceAsyncRepaintStart();
 
 private:
     KisPaintDeviceSP m_projection;

@@ -135,6 +135,7 @@ KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KisImageWSP imag
     m_shapeManager->selection()->setActiveLayer(parent);
 
     connect(&m_asyncUpdateSignalCompressor, SIGNAL(timeout()), SLOT(slotStartAsyncRepaint()));
+    connect(this, SIGNAL(sigBlockingForceAsyncRepaintStart()), SLOT(slotStartAsyncRepaint()), Qt::BlockingQueuedConnection);
 
     setImage(image);
 }
@@ -267,13 +268,13 @@ void KisShapeLayerCanvas::slotStartAsyncRepaint()
      * need to utilize rather complicated policy on accessing them:
      *
      * 1) All shape writes happen in GUI thread (right in the tools)
-     * 2) No concurrent reads from the shapes may happen  in other threads
+     * 2) No concurrent reads from the shapes may happen in other threads
      *    while the user is modifying them.
      *
      * That is why our shape rendering code is split into two parts:
      *
      * 1) First we just fetch a shallow copy of the shapes of the layer (it
-     *    takes about 1ms for complicated vecotor layers) and pack them into
+     *    takes about 1ms for complicated vector layers) and pack them into
      *    KoShapeManager::PaintJobsList jobs. It happens here, in
      *    slotStartAsyncRepaint(), which runs in the GUI thread. It guarantees
      *    that noone is accessing the shapes during the copy operation.
@@ -398,7 +399,7 @@ void KisShapeLayerCanvas::forceRepaint()
 
     if (hasPendingUpdates()) {
         m_asyncUpdateSignalCompressor.stop();
-        slotStartAsyncRepaint();
+        emit sigBlockingForceAsyncRepaintStart();
     }
 }
 
@@ -418,7 +419,7 @@ void KisShapeLayerCanvas::forceRepaintWithHiddenAreas()
     }
 
     m_asyncUpdateSignalCompressor.stop();
-    slotStartAsyncRepaint();
+    emit sigBlockingForceAsyncRepaintStart();
 }
 
 void KisShapeLayerCanvas::resetCache()

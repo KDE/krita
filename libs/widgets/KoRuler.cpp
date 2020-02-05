@@ -274,7 +274,11 @@ void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPain
     // length of a unit in pixels
     const qreal unitLength = d->viewConverter->documentToViewX(d->unit.fromUserValue(1.0));
     // length of the text for longest number with some padding
+#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
+    const int textLength = fontMetrics.horizontalAdvance(QString::number(qCeil(rulerLengthUnit))) + 20;
+#else
     const int textLength = fontMetrics.width(QString::number(qCeil(rulerLengthUnit))) + 20;
+#endif
     // the minimal separation of numbers that won't make the text a mess
     const qreal minimalNumberSeparation = qCeil(textLength / unitLength);
     // the chosen separation of numbers so that we have "whole" numbers
@@ -346,10 +350,15 @@ void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPain
                 QPointF(x, rectangle.bottom() - fullStepMarkerLength));
         QString numberText = QString::number(n);
         painter.setPen(numberPen);
+#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
+        painter.drawText(QPointF(x - fontMetrics.horizontalAdvance(numberText)/2.0,
+                    rectangle.bottom() - fullStepMarkerLength - measurementTextAboveBelowMargin),
+                numberText);
+#else
         painter.drawText(QPointF(x - fontMetrics.width(numberText)/2.0,
                     rectangle.bottom() - fullStepMarkerLength - measurementTextAboveBelowMargin),
                 numberText);
-
+#endif
         // start to draw secondary marks following the primary mark
         painter.setPen(markerPen);
 
@@ -505,7 +514,12 @@ void VerticalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainte
     // length of a unit in pixels
     const qreal unitLength = d->viewConverter->documentToViewY(d->unit.fromUserValue(1.0));
     // length of the text for longest number with some padding
+#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
+     const int textLength = fontMetrics.horizontalAdvance(QString::number(qCeil(rulerLengthUnit))) + 20;
+#else
     const int textLength = fontMetrics.width(QString::number(qCeil(rulerLengthUnit))) + 20;
+#endif
+
     // the minimal separation of numbers that won't make the text a mess
     const qreal minimalNumberSeparation = qCeil(textLength / unitLength);
     // the chosen separation of numbers so that we have "whole" numbers
@@ -556,8 +570,13 @@ void VerticalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainte
                 QPointF(rectangle.right() - fullStepMarkerLength, 0));
         painter.setPen(numberPen);
         painter.rotate(-90);
+#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
+        painter.drawText(QPointF(-fontMetrics.horizontalAdvance(numberText) / 2.0, 0),
+                numberText);
+#else
         painter.drawText(QPointF(-fontMetrics.width(numberText) / 2.0, 0),
                 numberText);
+#endif
         painter.restore();
 
         // start to draw secondary marks following the primary mark
@@ -631,13 +650,22 @@ void HorizontalDistancesPaintingStrategy::drawDistanceLine(const KoRulerPrivate 
     const QFontMetrics fontMetrics(font);
     QString label = d->unit.toUserStringValue(
             d->viewConverter->viewToDocumentX(line.length())) + ' ' + d->unit.symbol();
+#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
+    QPointF labelPosition = QPointF(midPoint.x() - fontMetrics.horizontalAdvance(label)/2,
+            midPoint.y() + fontMetrics.ascent()/2);
+#else
     QPointF labelPosition = QPointF(midPoint.x() - fontMetrics.width(label)/2,
             midPoint.y() + fontMetrics.ascent()/2);
+#endif
     painter.setFont(font);
     painter.drawText(labelPosition, label);
 
     // Draw the arrow lines
+#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
+    qreal arrowLength = (line.length() - fontMetrics.horizontalAdvance(label)) / 2 - 2;
+#else
     qreal arrowLength = (line.length() - fontMetrics.width(label)) / 2 - 2;
+#endif
     arrowLength = qMax(qreal(0.0), arrowLength);
     QLineF startArrow(line.p1(), line.pointAt(arrowLength / line.length()));
     QLineF endArrow(line.p2(), line.pointAt(1.0 - arrowLength / line.length()));

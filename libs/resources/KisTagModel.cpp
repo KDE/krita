@@ -569,6 +569,9 @@ KisTagSP KisTagModel::tagByUrl(const QString& tagUrl) const
 
 bool KisTagModel::prepareQuery()
 {
+    QTime t;
+    t.start();
+
     beginResetModel();
     bool r = d->query.prepare("SELECT  tags.id\n"
                               ",       tags.url\n"
@@ -596,6 +599,8 @@ bool KisTagModel::prepareQuery()
 
     d->cachedRowCount = -1;
     endResetModel();
+
+    qDebug() << "bool KisTagModel::prepareQuery() ### RESET TAG MODEL ### for "  << d->resourceType << " took " << t.elapsed() << " ms.";
 
     return r;
 }

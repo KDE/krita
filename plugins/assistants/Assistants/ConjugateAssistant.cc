@@ -179,10 +179,9 @@ void ConjugateAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, c
 		*handles()[2] = norm.p2();
 	    }
 
-	    QLineF normalLine = initialTransform.map(norm); // subjective normal line for drawing
-
 	    // draw the vertical normal line
-	    if (assistantVisible == true || isEditing == true) {
+	    if (isEditing == true) {
+		QLineF normalLine = initialTransform.map(norm);
 		KisAlgebra2D::intersectLineRect(normalLine, viewport);
 		path.moveTo(normalLine.p1());
 		path.lineTo(normalLine.p2());

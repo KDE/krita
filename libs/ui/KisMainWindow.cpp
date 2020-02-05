@@ -2266,7 +2266,9 @@ void KisMainWindow::updateWindowMenu()
     docMenu->clear();
 
     QFontMetrics fontMetrics = docMenu->fontMetrics();
-    int fileStringWidth = int(QApplication::desktop()->screenGeometry(this).width() * .40f);
+
+    QScreen *screen = qApp->screenAt(this->geometry().topLeft());
+    int fileStringWidth = int(screen->availableGeometry().width() * .40f);
 
     Q_FOREACH (QPointer<KisDocument> doc, KisPart::instance()->documents()) {
         if (doc) {

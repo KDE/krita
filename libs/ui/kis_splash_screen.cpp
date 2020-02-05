@@ -79,7 +79,11 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
 
     // positioning of the text over the image (version)
     // also see setLoadingText() for positiong (loading progress text)
+#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
+    qreal leftEdge = 475 * m_scaleFactor - metrics.horizontalAdvance(version);
+#else
     qreal leftEdge = 475 * m_scaleFactor - metrics.width(version);
+#endif
     qreal topEdge = 58 * m_scaleFactor + metrics.ascent();
 
     //draw shadow
@@ -222,7 +226,11 @@ void KisSplashScreen::setLoadingText(QString text)
     p.setRenderHint(QPainter::Antialiasing);
 
     // position text for loading text
+#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
+    qreal leftEdge = 475 *  m_scaleFactor - metrics.horizontalAdvance(text);
+#else
     qreal leftEdge = 475 *  m_scaleFactor - metrics.width(text);
+#endif
     qreal topEdge = m_textTop;
 
     //draw shadow
@@ -241,7 +249,7 @@ void KisSplashScreen::setLoadingText(QString text)
 QString KisSplashScreen::colorString() const
 {
     QString color = "#FFFFFF";
-    if (m_themed && qApp->palette().background().color().value() > 100) {
+    if (m_themed && qApp->palette().window().color().value() > 100) {
         color = "#000000";
     }
 

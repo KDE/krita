@@ -66,7 +66,7 @@ void KisTagModelProvider::resetModels()
     mapIterator end = s_instance->d->tagModelsMap.end();
 
     for (mapIterator iter = begin; iter!=end; iter++) {
-        begin->second->prepareQuery();
+        iter->second->prepareQuery();
     }
 }
 

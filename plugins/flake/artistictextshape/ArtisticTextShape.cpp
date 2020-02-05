@@ -911,7 +911,12 @@ QRectF ArtisticTextShape::charExtentsAt(int charIndex) const
     if (charPos.first < m_ranges.size()) {
         const ArtisticTextRange &range = m_ranges.at(charPos.first);
         QFontMetrics metrics(range.font());
+#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
+        QChar c = range.text().at(charPos.second);
+        int w = metrics.horizontalAdvance(c);
+#else
         int w = metrics.charWidth(range.text(), charPos.second);
+#endif
         return QRectF(0, 0, w, metrics.height());
     }
 

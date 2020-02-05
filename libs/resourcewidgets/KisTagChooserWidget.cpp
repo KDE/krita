@@ -114,11 +114,8 @@ KisTagChooserWidget::~KisTagChooserWidget()
 
 void KisTagChooserWidget::tagToolDeleteCurrentTag()
 {
-    ENTER_FUNCTION();
-    fprintf(stderr, "void KisTagChooserWidget::contextDeleteCurrentTag()\n");
     KisTagSP currentTag = currentlySelectedTag();
     if (!currentTag.isNull() && currentTag->id() >= 0) {
-        fprintf(stderr, "trying to remove item: %s\n", currentTag->name().toUtf8().toStdString().c_str());
         d->model->removeTag(currentTag);
         setCurrentIndex(0);
         d->tagToolButton->setUndeletionCandidate(currentTag);
@@ -127,27 +124,17 @@ void KisTagChooserWidget::tagToolDeleteCurrentTag()
 
 void KisTagChooserWidget::tagChanged(int tagIndex)
 {
-    ENTER_FUNCTION();
-    fprintf(stderr, "void KisTagChooserWidget::tagChanged(int) %d\n", tagIndex);
     if (tagIndex >= 0) {
         emit sigTagChosen(currentlySelectedTag());
-        KisTagSP tag = currentlySelectedTag();
-        if (tag->id() < 0) {
-            fprintf(stderr, "tag name: %s, url: %s, id: %d", tag->name().toUtf8().toStdString().c_str(), tag->url().toUtf8().toStdString().c_str(), tag->id());
-        }
-    } else {
-        fprintf(stderr, "Requested -1 index; previous: %d\n", d->comboBox->currentIndex());
     }
 }
 
 void KisTagChooserWidget::tagToolRenameCurrentTag(const KisTagSP newName)
 {
     // TODO: RESOURCES: it should use QString, not KisTagSP
-    ENTER_FUNCTION();
     KisTagSP currentTag = currentlySelectedTag();
     QString name = newName.isNull() ? "" : newName->name();
     bool canRenameCurrentTag = !currentTag.isNull() && currentTag->id() < 0;
-    fprintf(stderr, "renaming tag requested! to: %s\n", name.toUtf8().toStdString().c_str());
     if (canRenameCurrentTag && !name.isEmpty()) {
         d->model->renameTag(currentTag, newName->name());
     }
@@ -156,8 +143,6 @@ void KisTagChooserWidget::tagToolRenameCurrentTag(const KisTagSP newName)
 void KisTagChooserWidget::tagToolUndeleteLastTag(const KisTagSP tag)
 {
     int previousIndex = d->comboBox->currentIndex();
-    ENTER_FUNCTION();
-    fprintf(stderr, "undeleting tag requested! to: %s\n", tag->name().toUtf8().toStdString().c_str());
     bool success = d->model->changeTagActive(tag, true);
     setCurrentIndex(previousIndex);
     if (success) {
@@ -168,8 +153,6 @@ void KisTagChooserWidget::tagToolUndeleteLastTag(const KisTagSP tag)
 
 void KisTagChooserWidget::setCurrentIndex(int index)
 {
-    fprintf(stderr, "set current index: %d", index);
-    ENTER_FUNCTION();
     d->comboBox->setCurrentIndex(index);
 }
 
@@ -181,7 +164,6 @@ int KisTagChooserWidget::currentIndex() const
 void KisTagChooserWidget::addReadOnlyItem(KisTagSP tag)
 {
     d->model->addTag(tag);
-    ENTER_FUNCTION();
 }
 
 bool KisTagChooserWidget::setCurrentItem(KisTagSP tag)
@@ -203,18 +185,14 @@ KisTagSP KisTagChooserWidget::tagToolCreateNewTag(KisTagSP tag)
     int previous = d->comboBox->currentIndex();
 
     if(tag.isNull() || tag->name().isNull() || tag->name().isEmpty()) {
-        fprintf(stderr, "inserting item is empty\n");
         return KisTagSP();
     }
 
-    fprintf(stderr, "inserting item!!! %s\n", tag->name().toUtf8().toStdString().c_str());
     tag->setUrl(tag->name());
     tag->setComment(tag->name());
     tag->setActive(true);
     tag->setValid(true);
-    ENTER_FUNCTION();
     bool added = d->model->addTag(tag);
-    fprintf(stderr, "added = %d\n", added);
 
     if (added) {
         bool found = setCurrentItem(tag);
@@ -236,23 +214,13 @@ KisTagSP KisTagChooserWidget::currentlySelectedTag()
         return KisTagSP();
     }
 
-    if (d->comboBox->currentData().data()) {
-        fprintf(stderr, "current data type = %s\n", d->comboBox->currentData().typeName());
-    } else {
-        fprintf(stderr, "current data type = (null)\n");
-    }
-
     QModelIndex index = d->model->index(row, 0);
     KisTagSP tag =  d->model->tagForIndex(index);
-    fprintf(stderr, "current tag: %s\n", tag.isNull() ? "(null)" : tag->name().toStdString().c_str());
-    fprintf(stderr, "current index = %d\n", row);
-    ENTER_FUNCTION() << tag;
     return tag;
 }
 
 bool KisTagChooserWidget::selectedTagIsReadOnly()
 {
-    ENTER_FUNCTION();
     return currentlySelectedTag()->id() < 0;
 }
 
@@ -273,7 +241,6 @@ void KisTagChooserWidget::clear()
 
 void KisTagChooserWidget::tagToolContextMenuAboutToShow()
 {
-    ENTER_FUNCTION();
     /* only enable the save button if the selected tag set is editable */
     d->tagToolButton->readOnlyMode(selectedTagIsReadOnly());
     emit popupMenuAboutToShow();
@@ -281,7 +248,6 @@ void KisTagChooserWidget::tagToolContextMenuAboutToShow()
 
 void KisTagChooserWidget::showTagToolButton(bool show)
 {
-    ENTER_FUNCTION();
     d->tagToolButton->setVisible(show);
 }
 

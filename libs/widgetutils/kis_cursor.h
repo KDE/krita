@@ -22,11 +22,11 @@
 #ifndef __kis_cursor_h__
 #define __kis_cursor_h__
 
-#include <kritaui_export.h>
+#include <kritawidgetutils_export.h>
 
 #include <QCursor>
 
-class KRITAUI_EXPORT KisCursor
+class KRITAWIDGETUTILS_EXPORT KisCursor
 {
 
 public:

@@ -319,8 +319,10 @@ void KisShapeLayerCanvas::slotImageSizeChanged()
     dirtyCacheRegion -= m_image->bounds() & m_cachedImageRect;
 
     QVector<QRectF> dirtyRects;
-    Q_FOREACH (const QRect &rc, dirtyCacheRegion.rects()) {
-        dirtyRects.append(m_viewConverter->viewToDocument(rc));
+    auto rc = dirtyCacheRegion.begin();
+    while (rc != dirtyCacheRegion.end()) {
+        dirtyRects.append(m_viewConverter->viewToDocument(*rc));
+        rc++;
     }
     updateCanvas(dirtyRects);
 

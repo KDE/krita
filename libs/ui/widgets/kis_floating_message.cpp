@@ -25,7 +25,7 @@
 #include "kis_floating_message.h"
 
 #include <QApplication>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QTimer>
@@ -195,7 +195,9 @@ QRect KisFloatingMessage::determineMetrics( const int M )
     // determine a sensible maximum size, don't cover the whole desktop or cross the screen
     const QSize margin( (M + MARGIN) * 2, (M + MARGIN) * 2); //margins
     const QSize image = m_icon.isNull() ? QSize(0, 0) : minImageSize;
-    const QSize max = QApplication::desktop()->availableGeometry(parentWidget()).size() - margin;
+
+    QScreen *s = qApp->screenAt(parentWidget()->geometry().topLeft());
+    const QSize max = s->availableGeometry().size() - margin;
 
     // If we don't do that, the boundingRect() might not be suitable for drawText() (Qt issue N67674)
     m_message.replace(QRegExp( " +\n"), "\n");
@@ -226,7 +228,7 @@ QRect KisFloatingMessage::determineMetrics( const int M )
 
 
     const QSize newSize = rect.size();
-    QRect screen = QApplication::desktop()->screenGeometry(parentWidget());
+    QRect screen = s->availableGeometry();
 
     QPoint newPos(MARGIN, MARGIN);
 

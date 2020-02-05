@@ -245,11 +245,7 @@ void ConjugateAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *
 
 QPointF ConjugateAssistant::getEditorPosition() const
 {
-  if (sideHandles().isEmpty()) {
-      return (*handles()[0] + *handles()[1]) * 0.5;
-  } else {
-    return *sideHandles()[0];
-  }
+    return *handles()[2];
 }
 
 void ConjugateAssistant::setReferenceLineDensity(float value)

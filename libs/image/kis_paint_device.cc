@@ -910,7 +910,6 @@ class KisPaintDevice::Private::DeviceChangeProfileCommand : public KUndo2Command
 public:
     DeviceChangeProfileCommand(KisPaintDeviceSP device, KUndo2Command *parent = 0)
         : KUndo2Command(parent),
-          m_firstRun(true),
           m_device(device)
     {
     }
@@ -941,7 +940,7 @@ protected:
     KisPaintDeviceSP m_device;
 
 private:
-    bool m_firstRun;
+    bool m_firstRun {true};
 };
 
 class KisPaintDevice::Private::DeviceChangeColorSpaceCommand : public DeviceChangeProfileCommand

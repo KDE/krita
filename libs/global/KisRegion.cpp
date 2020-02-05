@@ -188,7 +188,12 @@ KisRegion KisRegion::translated(int dx, int dy) const
 KisRegion KisRegion::fromQRegion(const QRegion &region)
 {
     KisRegion result;
-    result.m_rects = region.rects();
+    result.m_rects.clear();
+    QRegion::const_iterator begin = region.begin();
+    while (begin != region.end()) {
+        result.m_rects << *begin;
+        begin++;
+    }
     return result;
 }
 

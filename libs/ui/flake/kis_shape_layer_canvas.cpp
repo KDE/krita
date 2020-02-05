@@ -260,7 +260,7 @@ void KisShapeLayerCanvas::slotStartAsyncRepaint()
         repaintRect = repaintRect.intersected(m_parentLayer->image()->bounds());
     } else {
         const QRectF shapesBounds = KoShape::boundingRect(m_shapeManager->shapes());
-        repaintRect = kisGrowRect(m_viewConverter->documentToView(shapesBounds).toAlignedRect(), 2);
+        repaintRect |= kisGrowRect(m_viewConverter->documentToView(shapesBounds).toAlignedRect(), 2);
     }
 
     /**

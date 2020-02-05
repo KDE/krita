@@ -215,70 +215,60 @@ void ConjugateAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, c
 	    vertical.translate(cov - vertical.p1());
 	    vertical.setLength(sqrt((radius*radius) - (gap*gap)));
 	    const QPointF sp = vertical.p2();
-	    vertical.translate(vertical.p1() - vertical.p2());
-	    const QPointF sp2 = vertical.p1();
 
-	    qDebug() << ppVar(sp);
-
-	    qreal offset = hl.angle();
+	    qreal hl_angle = hl.angle();
 	    qreal interval = QLineF(sp,cov).length();
-	    offset > 180 ? offset = offset - 180: offset = offset;
+	    hl_angle > 180 ? hl_angle = hl_angle - 180: hl_angle = hl_angle;
 
 	    QList<QPointF> points = QList<QPointF>({p1,p2});
 
 	    Q_FOREACH (QPointF pt, points) {
 
+		QPointF point = initialTransform.map(pt);
 		qreal arm = QLineF(pt,cov).length();
 		QLineF gridline = QLineF(pt,sp);
+		const QLineF sp_line = QLineF(pt,sp);
 		QLineF ray = initialTransform.map(gridline);
 		KisAlgebra2D::intersectLineRect(ray, viewport);
-		path.moveTo(ray.p1());
-		path.lineTo(ray.p2());
 
 		QLineF other_gridline;
 		pt == p1 ? other_gridline = QLineF(p2,sp) : other_gridline = QLineF(p1,sp);
 
-		qreal actual_interval = abs( interval / cos((other_gridline.angle()-offset) * M_PI / 180) );
-
-
-		gridline = QLineF(pt,sp2);
-		ray = initialTransform.map(gridline);
-		KisAlgebra2D::intersectLineRect(ray, viewport);
-		path.moveTo(ray.p1());
-		path.lineTo(ray.p2());
+		qreal actual_interval = abs( interval / cos((other_gridline.angle()-hl_angle) * M_PI / 180) );
 
 		qreal new_angle;
 		qreal actual_angle;
 		qreal mirroring_adjustment;
 
-		for (int i = 1; i!=100; i++) {
+		for (int i = -50; i!=50; i++) {
 		    new_angle = atan2(interval,arm + actual_interval*i) * 180 / M_PI;
 
-		    if (gridline.angle() - offset <  90) {
-			actual_angle = new_angle + offset;
-			mirroring_adjustment = 360 - new_angle + offset;}
+		    if (sp_line.angle() - hl_angle <  90) {
+			actual_angle = new_angle ;
+			mirroring_adjustment = 360 - new_angle ;}
 
-		    if (gridline.angle() - offset >  90)  {
-			actual_angle = 180 + offset - new_angle;
-			mirroring_adjustment = new_angle + 180 + offset;}
+		    if (sp_line.angle() - hl_angle >  90)  {
+			actual_angle = 180  - new_angle;
+			mirroring_adjustment = new_angle + 180 ;}
 
-		    if (gridline.angle() - offset >  180) {
-			actual_angle = new_angle + 180 + offset;
-			mirroring_adjustment = 180 + offset - new_angle;}
+		    if (sp_line.angle() - hl_angle >  180) {
+			actual_angle = new_angle + 180 ;
+			mirroring_adjustment = 180  - new_angle;}
 
-		    if (gridline.angle() - offset >  270) {
-			actual_angle = offset + 360 - new_angle;
-			mirroring_adjustment = new_angle + offset;}
+		    if (sp_line.angle() - hl_angle >  270) {
+			actual_angle = 360 - new_angle;
+			mirroring_adjustment = new_angle ;}
 
-		    gridline.setAngle(actual_angle);
+		    gridline.setAngle(actual_angle + hl_angle);
 		    ray = initialTransform.map(gridline);
 		    KisAlgebra2D::intersectLineRect(ray, viewport);
-		    path.moveTo(ray.p1());
+		    path.moveTo(point);
 		    path.lineTo(ray.p2());
-		    gridline.setAngle(mirroring_adjustment);
+
+		    gridline.setAngle(mirroring_adjustment + hl_angle);
 		    ray = initialTransform.map(gridline);
 		    KisAlgebra2D::intersectLineRect(ray, viewport);
-		    path.moveTo(ray.p1());
+		    path.moveTo(point);
 		    path.lineTo(ray.p2());
 		}
 	    }

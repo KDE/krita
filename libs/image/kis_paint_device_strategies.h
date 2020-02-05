@@ -227,7 +227,9 @@ public:
 
         const int pixelSize = m_device->pixelSize();
 
-        Q_FOREACH (const QRect &rc, borderRegion.rects()) {
+        auto rectIter = borderRegion.begin();
+        while (rectIter != borderRegion.end()) {
+            QRect rc = *rectIter;
             KisRandomConstAccessorSP srcIt = KisPaintDeviceStrategy::createRandomConstAccessorNG(rc.x(), rc.y());
             KisRandomAccessorSP dstIt = createRandomAccessorNG(rc.x(), rc.y());
 
@@ -257,6 +259,7 @@ public:
                     }
                 }
             }
+            rectIter++;
         }
     }
 

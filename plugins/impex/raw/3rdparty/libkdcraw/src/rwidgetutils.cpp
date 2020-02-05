@@ -306,8 +306,11 @@ void RAdjustableLabel::adjustTextToLabel()
 
     Q_FOREACH(const QString& line, d->ajdText.split(QLatin1Char('\n')))
     {
+#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
+        int lineW = fm.horizontalAdvance(line);
+#else
         int lineW = fm.width(line);
-
+#endif
         if (lineW > lblW)
         {
             adjusted = true;
@@ -615,7 +618,7 @@ void RColorSelector::paintEvent(QPaintEvent*)
         QStyleOptionFocusRect focusOpt;
         focusOpt.init(this);
         focusOpt.rect            = focusRect;
-        focusOpt.backgroundColor = palette().background().color();
+        focusOpt.backgroundColor = palette().window().color();
         style->drawPrimitive(QStyle::PE_FrameFocusRect, &focusOpt, &painter, this);
     }
 }

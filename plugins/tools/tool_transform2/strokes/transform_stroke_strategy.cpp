@@ -675,6 +675,9 @@ void TransformStrokeStrategy::finishStrokeImpl(bool applyTransform, const ToolTr
 
         Q_FOREACH (KisNodeSP node, m_hiddenProjectionLeaves) {
             node->projectionLeaf()->setTemporaryHiddenFromRendering(false);
+            if (!applyTransform) {
+                node->setDirty();
+            }
         }
 
         if (m_deactivatedOverlaySelectionMask) {

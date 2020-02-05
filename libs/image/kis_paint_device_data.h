@@ -87,7 +87,6 @@ public:
                              const KoColorSpace *oldCs, const KoColorSpace *newCs,
                              KUndo2Command *parent)
             : KUndo2Command(parent),
-              m_firstRun(true),
               m_data(data),
               m_oldCs(oldCs),
               m_newCs(newCs)
@@ -120,7 +119,7 @@ public:
         KisPaintDeviceData *m_data;
 
     private:
-        bool m_firstRun;
+        bool m_firstRun {true};
         const KoColorSpace *m_oldCs;
         const KoColorSpace *m_newCs;
     };

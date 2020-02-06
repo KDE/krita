@@ -49,7 +49,7 @@ void KisSimpleUpdateQueueTest::testJobProcessing()
 
     KisPaintLayerSP paintLayer = new KisPaintLayer(image, "test", OPACITY_OPAQUE_U8);
 
-    image->lock();
+    image->barrierLock();
     image->addNode(paintLayer);
     image->unlock();
 
@@ -115,7 +115,7 @@ void KisSimpleUpdateQueueTest::testSplit(bool useFullRefresh)
 
     KisPaintLayerSP paintLayer = new KisPaintLayer(image, "test", OPACITY_OPAQUE_U8);
 
-    image->lock();
+    image->barrierLock();
     image->addNode(paintLayer);
     image->unlock();
 
@@ -160,7 +160,7 @@ void KisSimpleUpdateQueueTest::testChecksum()
     KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
     KisAdjustmentLayerSP adjustmentLayer = new KisAdjustmentLayer(image, "adj", 0, 0);
 
-    image->lock();
+    image->barrierLock();
     image->addNode(paintLayer1, image->rootLayer());
     image->addNode(adjustmentLayer, image->rootLayer());
     image->unlock();
@@ -213,7 +213,7 @@ void KisSimpleUpdateQueueTest::testMixingTypes()
 
     KisPaintLayerSP paintLayer = new KisPaintLayer(image, "test", OPACITY_OPAQUE_U8);
 
-    image->lock();
+    image->barrierLock();
     image->addNode(paintLayer);
     image->unlock();
 

@@ -102,10 +102,10 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
     fillpainter.setFeather(m_feather);
     fillpainter.setSizemod(m_sizemod);
 
-    KisImageWSP image = currentImage();
+    KisImageSP image = currentImage();
     KisPaintDeviceSP sourceDevice = m_limitToCurrentLayer ? dev : image->projection();
 
-    image->lock();
+    image->barrierLock();
     KisSelectionSP selection = fillpainter.createFloodSelection(pos.x(), pos.y(), sourceDevice);
     image->unlock();
 

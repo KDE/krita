@@ -45,7 +45,7 @@ void KisUpdaterContextTest::testJobInterference()
 
     KisPaintLayerSP paintLayer = new KisPaintLayer(image, "test", OPACITY_OPAQUE_U8);
 
-    image->lock();
+    image->barrierLock();
     image->addNode(paintLayer);
     image->unlock();
 

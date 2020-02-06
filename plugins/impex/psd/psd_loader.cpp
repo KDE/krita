@@ -51,6 +51,7 @@
 #include "psd_layer_section.h"
 #include "psd_resource_block.h"
 #include "psd_image_data.h"
+#include "kis_image_barrier_locker.h"
 
 PSDLoader::PSDLoader(KisDocument *doc)
     : m_image(0)
@@ -135,7 +136,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice *io)
     QString name = file ? file->fileName() : "Imported";
     m_image = new KisImage(m_doc->createUndoStore(),  header.width, header.height, cs, name);
     Q_CHECK_PTR(m_image);
-    m_image->lock();
+    KisImageBarrierLocker locker(m_image);
 
     // set the correct resolution
     if (resourceSection.resources.contains(PSDImageResourceSection::RESN_INFO)) {
@@ -178,7 +179,6 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice *io)
         m_image->addNode(layer, m_image->rootLayer());
 
         // Only one layer, the background layer, so we're done.
-        m_image->unlock();
         return ImportExportCodes::OK;
     }
 
@@ -356,8 +356,6 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice *io)
         server->addResource(collection, false);
     }
 
-
-    m_image->unlock();
     return ImportExportCodes::OK;
 }
 

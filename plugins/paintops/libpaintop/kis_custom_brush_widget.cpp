@@ -46,6 +46,7 @@
 #include <kis_selection.h>
 #include <KoProperties.h>
 #include "kis_iterator_ng.h"
+#include "kis_image_barrier_locker.h"
 
 KisCustomBrushWidget::KisCustomBrushWidget(QWidget *parent, const QString& caption, KisImageWSP image)
     : KisWdgCustomBrush(parent)
@@ -194,7 +195,7 @@ void KisCustomBrushWidget::createBrush()
     if (brushStyle->currentIndex() == 0) {
         KisSelectionSP selection = m_image->globalSelection();
         // create copy of the data
-        m_image->lock();
+        m_image->barrierLock();
         KisPaintDeviceSP dev = new KisPaintDevice(*m_image->projection());
         m_image->unlock();
 
@@ -231,7 +232,7 @@ void KisCustomBrushWidget::createBrush()
         int w = m_image->width();
         int h = m_image->height();
 
-        m_image->lock();
+        KisImageBarrierLocker locker(m_image);
 
         // We only loop over the rootLayer. Since we actually should have a layer selection
         // list, no need to elaborate on that here and now
@@ -255,7 +256,6 @@ void KisCustomBrushWidget::createBrush()
         }
 
         m_brush = new KisImagePipeBrush(m_image->objectName(), w, h, devices, modes);
-        m_image->unlock();
     }
 
     static_cast<KisGbrBrush*>(m_brush.data())->setUseColorAsMask(colorAsMask->isChecked());

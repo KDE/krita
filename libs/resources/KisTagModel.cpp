@@ -70,10 +70,7 @@ int KisTagModel::rowCount(const QModelIndex &/*parent*/) const
                   ",      resource_types\n"
                   "WHERE  active = 1\n"
                   "AND    tags.resource_type_id = resource_types.id\n"
-                  "AND    resource_types.name = :resource_type\n"
-                  "AND    tags.storage_id in (SELECT id\n"
-                  "                      FROM   storages\n"
-                  "                      WHERE  active  == 1)");
+                  "AND    resource_types.name = :resource_type\n");
         q.bindValue(":resource_type", d->resourceType);
         q.exec();
         q.first();
@@ -429,14 +426,14 @@ bool KisTagModel::changeTagActive(const KisTagSP tag, bool active)
 QVector<KisTagSP> KisTagModel::tagsForResource(int resourceId) const
 {
     bool r = d->tagsForResourceQuery.prepare("SELECT tags.id\n"
-                              ",      tags.url\n"
-                              ",      tags.name\n"
-                              ",      tags.comment\n"
-                              "FROM   tags\n"
-                              ",      resource_tags\n"
-                              "WHERE  tags.active > 0\n"                               // make sure the tag is active
-                              "AND    tags.id = resource_tags.tag_id\n"                // join tags + resource_tags by tag_id
-                              "AND    resource_tags.resource_id = :resource_id\n");    // make sure we're looking for tags for a specific resource
+                                             ",      tags.url\n"
+                                             ",      tags.name\n"
+                                             ",      tags.comment\n"
+                                             "FROM   tags\n"
+                                             ",      resource_tags\n"
+                                             "WHERE  tags.active > 0\n"                               // make sure the tag is active
+                                             "AND    tags.id = resource_tags.tag_id\n"                // join tags + resource_tags by tag_id
+                                             "AND    resource_tags.resource_id = :resource_id\n");    // make sure we're looking for tags for a specific resource
     if (!r)  {
         qWarning() << "Could not prepare TagsForResource query" << d->tagsForResourceQuery.lastError();
     }
@@ -465,17 +462,17 @@ QVector<KisTagSP> KisTagModel::tagsForResource(int resourceId) const
 QVector<KoResourceSP> KisTagModel::resourcesForTag(int tagId) const
 {
     bool r = d->resourcesForTagQuery.prepare("SELECT DISTINCT resources.id\n"
-                                        "FROM   resources\n"
-                                        ",      resource_tags\n"
-                                        ",      storages\n"
-                                        ",      resource_types\n"
-                                        "WHERE  resources.id = resource_tags.resource_id\n"                // join resources + resource_tags by resource_id
-                                        "AND    resources.resource_type_id = resource_types.id\n" // join with resource types via resource type id
-                                        "AND    resources.storage_id = storages.id\n"         // join with storages via storage id
-                                        "AND    resource_tags.tag_id = :tag_id\n"     // must have the tag
-                                        "AND    resource_types.name = :resource_type\n"       // the type must match the current type
-                                        "AND    resources.status = 1\n"         // must be active itself
-                                        "AND    storages.active = 1");          // must be from active storage
+                                             "FROM   resources\n"
+                                             ",      resource_tags\n"
+                                             ",      storages\n"
+                                             ",      resource_types\n"
+                                             "WHERE  resources.id = resource_tags.resource_id\n"                // join resources + resource_tags by resource_id
+                                             "AND    resources.resource_type_id = resource_types.id\n" // join with resource types via resource type id
+                                             "AND    resources.storage_id = storages.id\n"         // join with storages via storage id
+                                             "AND    resource_tags.tag_id = :tag_id\n"     // must have the tag
+                                             "AND    resource_types.name = :resource_type\n"       // the type must match the current type
+                                             "AND    resources.status = 1\n"         // must be active itself
+                                             "AND    storages.active = 1");          // must be from active storage
     if (!r)  {
         qWarning() << "Could not prepare ResourcesForTag query" << d->resourcesForTagQuery.lastError();
     }
@@ -512,10 +509,7 @@ bool KisTagModel::prepareQuery()
                               ",       resource_types\n"
                               "WHERE   tags.resource_type_id = resource_types.id\n"
                               "AND     resource_types.name = :resource_type\n"
-                              "AND     tags.active = 1\n"
-                              "AND     tags.storage_id in (SELECT id\n"
-                              "                      FROM   storages\n"
-                              "                      WHERE  active  == 1)");
+                              "AND     tags.active = 1\n");
 
     if (!r) {
         qWarning() << "Could not prepare KisTagModel query" << d->query.lastError();

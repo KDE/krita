@@ -18,5 +18,6 @@
         <file alias="select_tag.sql">sql/select_tag.sql</file>
         <file alias="update_from_001.sql">sql/update_from_001.sql</file>
         <file alias="create_metadata.sql">sql/create_metadata.sql</file>
+        <file alias="create_tags_storages.sql">sql/create_tags_storages.sql</file>
     </qresource>
 </RCC>

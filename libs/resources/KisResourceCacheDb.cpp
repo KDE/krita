@@ -98,7 +98,8 @@ QSqlError createDatabase(const QString &location)
                                        << "resources"
                                        << "versioned_resources"
                                        << "resource_tags"
-                                       << "metadata";
+                                       << "metadata"
+                                       << "tags_storages";
 
     QStringList dbTables;
     // Verify whether we should recreate the database
@@ -645,40 +646,105 @@ bool KisResourceCacheDb::hasTag(const QString &url, const QString &resourceType)
     return false;
 }
 
-bool KisResourceCacheDb::addTag(const QString &resourceType, const QString storageLocation, const QString url, const QString name, const QString comment)
+bool KisResourceCacheDb::linkTagToStorage(const QString &url, const QString &resourceType, const QString &storageLocation)
 {
-    if (hasTag(url, resourceType)) {
-        return true;
-    }
-
     QSqlQuery q;
-    if (!q.prepare("INSERT INTO tags\n"
-                   "(storage_id, url, name, comment, resource_type_id, active)\n"
+    if (!q.prepare("INSERT INTO tags_storages\n"
+                   "(tag_id, storage_id)\n"
                    "VALUES\n"
-                   "("
-                   "  (SELECT id FROM storages\n"
-                   "  WHERE location = :storage_location)\n"
-                   ", :url\n"
-                   ", :name\n"
-                   ", :comment\n"
-                   ", (SELECT id\n"
-                   "   FROM   resource_types\n"
-                   "   WHERE  name = :resource_type)\n"
-                   ", 1"
+                   "(\n"
+                   " ( SELECT id\n"
+                   "   FROM  tags\n"
+                   "   WHERE url = :url\n"
+                   "   AND   resource_type_id = (SELECT id \n"
+                   "                              FROM   resource_types\n"
+                   "                              WHERE  name = :resource_type)"
+                   " )\n"
+                   ",( SELECT id\n"
+                   "   FROM   storages\n"
+                   "   WHERE  location = :storage_location\n"
+                   " )\n"
                    ");")) {
-        qWarning() << "Could not prepare add tag statement" << q.lastError();
+        qWarning() << "Could not prepare add tag/storage statement" << q.lastError();
         return false;
     }
 
-    q.bindValue(":storage_location", KisResourceLocator::instance()->makeStorageLocationRelative(storageLocation));
     q.bindValue(":url", url);
-    q.bindValue(":name", name);
-    q.bindValue(":comment", comment);
     q.bindValue(":resource_type", resourceType);
+    q.bindValue(":storage_location", KisResourceLocator::instance()->makeStorageLocationRelative(storageLocation));
 
     if (!q.exec()) {
-        qWarning() << "Could not insert tag" << q.boundValues() << q.lastError();
+        qWarning() << "Could not insert tag/storage link" << q.boundValues() << q.lastError();
+        return false;
     }
+    return true;
+}
+
+
+bool KisResourceCacheDb::addTag(const QString &resourceType, const QString storageLocation, const QString url, const QString name, const QString comment)
+{
+    if (hasTag(url, resourceType)) {
+        // Check whether this storage is already registered for this tag
+        QSqlQuery q;
+        if (!q.prepare("SELECT storages.location\n"
+                       "FROM   tags_storages\n"
+                       ",      tags\n"
+                       ",      storages\n"
+                       "WHERE  tags.id = tags_storages.tag_id\n"
+                       "AND    storages.id = tags_storages.storage_id\n"
+                       "AND    tags.resource_type_id = (SELECT id\n"
+                       "                                FROM   resource_types\n"
+                       "                                WHERE  name = :resource_type)\n"
+                       "AND    tags.url = :url"))
+        {
+            qWarning() << "Could not prepare select tags from tags_storages query" << q.lastError();
+        }
+
+        q.bindValue(":url", url);
+        q.bindValue(":resource_type", resourceType);
+
+        if (!q.exec()) {
+            qWarning() << "Could not execute tags_storages query" << q.boundValues() << q.lastError();
+        }
+
+        // If this tag is not yet linked to the storage, link it
+        if (!q.first()) {
+            return linkTagToStorage(url, resourceType, storageLocation);
+        }
+
+        return true;
+    }
+
+    // Insert the tag
+    {
+        QSqlQuery q;
+        if (!q.prepare("INSERT INTO tags\n"
+                       "(url, name, comment, resource_type_id, active)\n"
+                       "VALUES\n"
+                       "( :url\n"
+                       ", :name\n"
+                       ", :comment\n"
+                       ", (SELECT id\n"
+                       "   FROM   resource_types\n"
+                       "   WHERE  name = :resource_type)\n"
+                       ", 1"
+                       ");")) {
+            qWarning() << "Could not prepare insert tag statement" << q.lastError();
+            return false;
+        }
+
+        q.bindValue(":url", url);
+        q.bindValue(":name", name);
+        q.bindValue(":comment", comment);
+        q.bindValue(":resource_type", resourceType);
+
+
+        if (!q.exec()) {
+            qWarning() << "Could not insert tag" << q.boundValues() << q.lastError();
+        }
+    }
+
+    linkTagToStorage(url, resourceType, storageLocation);
 
     return true;
 }

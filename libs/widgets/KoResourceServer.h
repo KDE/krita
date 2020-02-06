@@ -223,7 +223,6 @@ public:
 
     QSharedPointer<T> resourceByMD5(const QByteArray& md5) const
     {
-        //This needs MD5 sums to be implemented properly...
         QMutexLocker l(&m_mutex);
         qDebug() << "resourceByFilename" << md5.toHex();
         if (md5.isEmpty() || md5.isNull()) {

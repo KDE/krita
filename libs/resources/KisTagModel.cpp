@@ -297,20 +297,20 @@ bool KisTagModel::tagResource(const KisTagSP tag, const KoResourceSP resource)
 
     QSqlQuery q;
     bool r = q.prepare("INSERT INTO resource_tags\n"
-                  "(resource_id, tag_id)\n"
-                  "VALUES\n"
-                  "( (SELECT id\n"
-                  "  FROM   resources\n"
-                  "  WHERE  id = :resource_id)\n"
-                      ", (SELECT id\n"
-                  "   FROM   tags\n"
-                  "   WHERE  id = :tag_id\n"
-                  "   AND    resource_type_id = (SELECT id\n"
-                  "                              FROM   resource_types\n"
-                  "                              WHERE  name = :resource_type"
-                  "                             \n)"
-                  "  )\n"
-                  ")\n");
+                       "(resource_id, tag_id)\n"
+                       "VALUES\n"
+                       "( (SELECT id\n"
+                       "  FROM   resources\n"
+                       "  WHERE  id = :resource_id)\n"
+                       ", (SELECT id\n"
+                       "   FROM   tags\n"
+                       "   WHERE  id = :tag_id\n"
+                       "   AND    resource_type_id = (SELECT id\n"
+                       "                              FROM   resource_types\n"
+                       "                              WHERE  name = :resource_type"
+                       "                             \n)"
+                       "  )\n"
+                       ")\n");
     if (!r) {
         qWarning() << "Could not prepare insert into resource tags statement" << q.lastError();
         return false;
@@ -342,8 +342,8 @@ bool KisTagModel::untagResource(const KisTagSP tag, const KoResourceSP resource)
     // we need to delete an entry in resource_tags
     QSqlQuery query;
     bool r = query.prepare("DELETE FROM resource_tags\n"
-                              "WHERE   resource_id = :resource_id\n"
-                              "AND     tag_id = :tag_id");
+                           "WHERE   resource_id = :resource_id\n"
+                           "AND     tag_id = :tag_id");
 
     if (!r) {
         qWarning() << "Could not prepare KisTagModel query untagResource " << query.lastError();

@@ -27,7 +27,6 @@
 #include <KoCanvasBase.h>
 
 class ArtisticTextShape;
-class KoViewConverter;
 class QPainter;
 
 class ArtisticTextToolSelection : public KoToolSelection
@@ -58,7 +57,7 @@ public:
     void clear();
 
     /// Paints the selection
-    void paint(QPainter &painter, const KoViewConverter &converter);
+    void paint(QPainter &painter);
 
     /// Triggers a repaint of the selection
     void repaintDecoration();

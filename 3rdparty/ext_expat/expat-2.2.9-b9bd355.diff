@@ -1,0 +1,22 @@
+diff --git a/expat/lib/libexpat.def b/expat/lib/libexpat.def
+index 16faf59..660448d 100644
+--- a/expat/lib/libexpat.def
++++ b/expat/lib/libexpat.def
+@@ -1,6 +1,5 @@
+ ; DEF file for MS VC++
+ 
+-LIBRARY
+ EXPORTS
+   XML_DefaultCurrent @1
+   XML_ErrorString @2
+diff --git a/expat/lib/libexpatw.def b/expat/lib/libexpatw.def
+index 16faf59..660448d 100644
+--- a/expat/lib/libexpatw.def
++++ b/expat/lib/libexpatw.def
+@@ -1,6 +1,5 @@
+ ; DEF file for MS VC++
+ 
+-LIBRARY
+ EXPORTS
+   XML_DefaultCurrent @1
+   XML_ErrorString @2

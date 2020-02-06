@@ -429,6 +429,7 @@ private Q_SLOTS:
     void undo();
     void redo();
     void updateWindowMenu();
+    void updateSubwindowFlags();
     void setActiveSubWindow(QWidget *window);
     void configChanged();
 

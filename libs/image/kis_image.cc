@@ -29,7 +29,6 @@
 #include <QSize>
 #include <QDateTime>
 #include <QRect>
-#include <QRegion>
 #include <QtConcurrent>
 
 #include <klocalizedstring.h>

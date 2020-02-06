@@ -93,7 +93,11 @@ QSize SqueezedComboBox::sizeHint() const
 {
     ensurePolished();
     QFontMetrics fm = fontMetrics();
+#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
+    int maxW        = count() ? 18 : 7 * fm.horizontalAdvance(QChar('x')) + 18;
+#else
     int maxW        = count() ? 18 : 7 * fm.width(QChar('x')) + 18;
+#endif
     int maxH        = qMax( fm.lineSpacing(), 14 ) + 2;
 
     QStyleOptionComboBox options;
@@ -157,16 +161,27 @@ QString SqueezedComboBox::squeezeText(const QString& original) const
     QFontMetrics fm( fontMetrics() );
 
     // If we can fit the full text, return that.
+#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
+    if (fm.horizontalAdvance(original) < widgetSize)
+#else
     if (fm.width(original) < widgetSize)
+#endif
         return(original);
 
     // We need to squeeze.
     QString sqItem = original; // prevent empty return value;
+#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
+    widgetSize     = widgetSize-fm.horizontalAdvance("...");
+#else
     widgetSize     = widgetSize-fm.width("...");
-
+#endif
     for (int i = 0 ; i != original.length(); ++i)
     {
+#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
+        if ((int)fm.horizontalAdvance(original.right(i)) > widgetSize)
+#else
         if ((int)fm.width(original.right(i)) > widgetSize)
+#endif
         {
             sqItem = QString(original.left(i) + "...");
             break;

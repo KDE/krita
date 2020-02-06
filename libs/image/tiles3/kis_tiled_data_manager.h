@@ -21,7 +21,7 @@
 
 #include <QtGlobal>
 #include <QVector>
-#include <QRegion>
+#include <KisRegion.h>
 
 #include <kis_shared.h>
 #include <kis_shared_ptr.h>
@@ -226,7 +226,7 @@ public:
     QRect extent() const;
     void  setExtent(QRect newRect);
 
-    QRegion region() const;
+    KisRegion region() const;
 
     void clear(QRect clearRect, quint8 clearValue);
     void clear(QRect clearRect, const quint8 *clearPixel);

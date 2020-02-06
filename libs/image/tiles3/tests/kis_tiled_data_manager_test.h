@@ -62,6 +62,9 @@ private Q_SLOTS:
     void stressTest();
 
     void stressTestLazyCopying();
+
+    void benchmaskQRegion();
+    void benchmaskKisRegion();
 };
 
 #endif /* KIS_TILED_DATA_MANAGER_TEST_H */

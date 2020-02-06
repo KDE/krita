@@ -1,0 +1,17 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+new file mode 100644
+index 0000000..b24ad45
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -85,8 +85,8 @@
+ SET(DEMOSAIC_PACK_GPL3_PATH "${CMAKE_CURRENT_SOURCE_DIR}/${DEMOSAIC_PACK_GPL3_RPATH}")
+ SET(RAWSPEED_PATH           "${CMAKE_CURRENT_SOURCE_DIR}/${RAWSPEED_RPATH}")
+
+-SET(INSTALL_CMAKE_MODULE_PATH  "${CMAKE_ROOT}/Modules"  CACHE STRING
+-    "Path to install cmake module              (default=${CMAKE_ROOT}/Modules)")
++SET(INSTALL_CMAKE_MODULE_PATH  "${CMAKE_INSTALL_PREFIX}/Modules"  CACHE STRING
++    "Path to install cmake module              (default=${CMAKE_INSTALL_PREFIX}/Modules)")
+
+ # ==================================================================================================
+ # General definitions rules
+

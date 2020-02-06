@@ -300,7 +300,7 @@ void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId, bool useUnd
     emit sigUiTimeChanged(frameId);
 }
 
-void KisImageAnimationInterface::requestFrameRegeneration(int frameId, const QRegion &dirtyRegion)
+void KisImageAnimationInterface::requestFrameRegeneration(int frameId, const KisRegion &dirtyRegion)
 {
     KisStrokeStrategy *strategy =
         new KisRegenerateFrameStrokeStrategy(frameId,

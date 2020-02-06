@@ -148,7 +148,7 @@ void BibliographyPreview::finishedPreviewLayout()
             m_textShape->setSize(m_previewPixSize);
         }
         KoShapePaintingContext paintContext; //FIXME
-        m_textShape->paintComponent(p, m_zoomHandler, paintContext);
+        m_textShape->paintComponent(p, paintContext);
     }
     emit pixmapGenerated();
     update();

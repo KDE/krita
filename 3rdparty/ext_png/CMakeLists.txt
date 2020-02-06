@@ -1,8 +1,8 @@
 SET(PREFIX_ext_png "${EXTPREFIX}" )
 ExternalProject_Add( ext_png
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-	URL http://files.kde.org/krita/build/dependencies/libpng-1.6.34.tar.gz
-	URL_MD5 03fbc5134830240104e96d3cda648e71
+	URL https://download.sourceforge.net/libpng/libpng-1.6.37.tar.gz
+	URL_HASH SHA256=daeb2620d829575513e35fecc83f0d3791a620b9b93d800b763542ece9390fb4
 
 	PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/androidpng.patch
 	INSTALL_DIR ${PREFIX_ext_png}

@@ -368,7 +368,8 @@ void IccColorProfile::calculateFloatUIMinMax(void)
                               (COLORSPACE_SH(color_space_mask) | CHANNELS_SH(num_channels) | BYTES_SH(2)),
                               cprofile,
                               (COLORSPACE_SH(color_space_mask) | FLOAT_SH(1) | CHANNELS_SH(num_channels) | BYTES_SH(0)), //NOTE THAT 'BYTES' FIELD IS SET TO ZERO ON DLB because 8 bytes overflows the bitfield
-                              INTENT_PERCEPTUAL, 0);      // does the intent matter in this case?
+                              INTENT_ABSOLUTE_COLORIMETRIC, 0);      // does the intent matter in this case?
+                                                                     // absolute colorimetric gives bigger bounds with cmyk's Chemical Proof
 
     if (trans) {
         cmsDoTransform(trans, in_min_pixel, out_min_pixel, 1);

@@ -83,7 +83,8 @@ void KisBlurFilter::processImpl(KisPaintDeviceSP device,
     qreal aspectRatio = (qreal) height / width;
     int rotate = (config->getProperty("rotate", value)) ? value.toInt() : 0;
     qreal strength = (config->getProperty("strength", value) ? value.toUInt() : 0) / (qreal) 100;
-    qreal hFade, vFade = strength;
+    qreal hFade = strength;
+    qreal vFade = strength;
 
     KisMaskGenerator* kas;
     dbgKrita << width << "" << height << "" << hFade << "" << vFade;

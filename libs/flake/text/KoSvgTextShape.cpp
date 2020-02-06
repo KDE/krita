@@ -56,25 +56,19 @@
 
 #include <QSharedData>
 
-class KoSvgTextShape::Private : public QSharedData
+class KoSvgTextShape::Private
 {
 public:
-    Private()
-        : QSharedData()
-    {
-    }
 
-    Private(const Private &)
-        : QSharedData()
-    {
-    }
-
-    std::vector<std::unique_ptr<QTextLayout>> cachedLayouts;
+    // NOTE: the cache data is shared between all the instances of
+    //       the shape, though it will be reset locally if the
+    //       accessing thread changes
+    std::vector<std::shared_ptr<QTextLayout>> cachedLayouts;
     std::vector<QPointF> cachedLayoutsOffsets;
     QThread *cachedLayoutsWorkingThread = 0;
 
 
-    void clearAssociatedOutlines(KoShape *rootShape);
+    void clearAssociatedOutlines(const KoShape *rootShape);
 
 };
 
@@ -87,7 +81,7 @@ KoSvgTextShape::KoSvgTextShape()
 
 KoSvgTextShape::KoSvgTextShape(const KoSvgTextShape &rhs)
     : KoSvgTextChunkShape(rhs)
-    , d(rhs.d)
+    , d(new Private)
 {
     setShapeId(KoSvgTextShape_SHAPEID);
     // QTextLayout has no copy-ctor, so just relayout everything!
@@ -112,7 +106,7 @@ void KoSvgTextShape::shapeChanged(ChangeType type, KoShape *shape)
     }
 }
 
-void KoSvgTextShape::paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
+void KoSvgTextShape::paintComponent(QPainter &painter, KoShapePaintingContext &paintContext) const
 {
 
     Q_UNUSED(paintContext);
@@ -128,7 +122,6 @@ void KoSvgTextShape::paintComponent(QPainter &painter, const KoViewConverter &co
         relayout();
     }
 
-    applyConversion(painter, converter);
     for (int i = 0; i < (int)d->cachedLayouts.size(); i++) {
         d->cachedLayouts[i]->draw(&painter, d->cachedLayoutsOffsets[i]);
     }
@@ -147,10 +140,9 @@ void KoSvgTextShape::paintComponent(QPainter &painter, const KoViewConverter &co
     }
 }
 
-void KoSvgTextShape::paintStroke(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
+void KoSvgTextShape::paintStroke(QPainter &painter, KoShapePaintingContext &paintContext) const
 {
     Q_UNUSED(painter);
-    Q_UNUSED(converter);
     Q_UNUSED(paintContext);
 
     // do nothing! everything is painted in paintComponent()
@@ -419,7 +411,7 @@ private:
     QTextLine m_danglingLine;
 };
 
-void KoSvgTextShape::relayout()
+void KoSvgTextShape::relayout() const
 {
 
     d->cachedLayouts.clear();
@@ -431,7 +423,7 @@ void KoSvgTextShape::relayout()
     QVector<TextChunk> textChunks = mergeIntoChunks(layoutInterface()->collectSubChunks());
 
     Q_FOREACH (const TextChunk &chunk, textChunks) {
-        std::unique_ptr<QTextLayout> layout(new QTextLayout());
+        std::shared_ptr<QTextLayout> layout(new QTextLayout());
 
         QTextOption option;
 
@@ -493,7 +485,7 @@ void KoSvgTextShape::relayout()
             diff.ry() = 0;
         }
 
-        d->cachedLayouts.push_back(std::move(layout));
+        d->cachedLayouts.push_back(layout);
         d->cachedLayoutsOffsets.push_back(-diff);
 
     }
@@ -568,9 +560,9 @@ void KoSvgTextShape::relayout()
     }
 }
 
-void KoSvgTextShape::Private::clearAssociatedOutlines(KoShape *rootShape)
+void KoSvgTextShape::Private::clearAssociatedOutlines(const KoShape *rootShape)
 {
-    KoSvgTextChunkShape *chunkShape = dynamic_cast<KoSvgTextChunkShape*>(rootShape);
+    const KoSvgTextChunkShape *chunkShape = dynamic_cast<const KoSvgTextChunkShape*>(rootShape);
     KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
 
     chunkShape->layoutInterface()->clearAssociatedOutline();

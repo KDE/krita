@@ -46,7 +46,7 @@ void KoPathToolSelection::paint(QPainter &painter, const KoViewConverter &conver
     PathShapePointMap::iterator it(m_shapePointMap.begin());
     for (; it != m_shapePointMap.end(); ++it) {
         KisHandlePainterHelper helper =
-            KoShape::createHandlePainterHelper(&painter, it.key(), converter, handleRadius);
+            KoShape::createHandlePainterHelperView(&painter, it.key(), converter, handleRadius);
         helper.setHandleStyle(KisHandleStyle::selectedPrimaryHandles());
 
         Q_FOREACH (KoPathPoint *p, it.value()) {

@@ -200,7 +200,18 @@ void KisFrameCacheStore::saveFrame(int frameId, KisOpenGLUpdateInfoSP info, cons
     if (m_d->lastSavedFullFrame.isValid()) {
         boost::optional<qreal> uniqueness = KisFrameDataSerializer::estimateFrameUniqueness(m_d->lastSavedFullFrame, frame, 0.01);
 
+
         if (uniqueness) {
+
+            /**
+             * The full-copying code is disabled intentionally:
+             *
+             * We should never remove user-visible data on basis of statistics. On smaller
+             * images, like 32x32 pixels, there might be really subtle changes that
+             * are important for the user. So we should use difference instead of dumb
+             * copying.
+             */
+#if 0
             if (*uniqueness == 0.0) {
                 FrameInfoSP baseFrameInfo = m_d->savedFrames[m_d->lastSavedFullFrameId];
                 frameInfo = toQShared(new FrameInfo(info->dirtyImageRect(),
@@ -209,7 +220,9 @@ void KisFrameCacheStore::saveFrame(int frameId, KisOpenGLUpdateInfoSP info, cons
                                                     m_d->serializer,
                                                     baseFrameInfo));
 
-            } else if (*uniqueness < 0.5) {
+            } else
+#endif
+            if (*uniqueness < 0.5) {
                 FrameInfoSP baseFrameInfo = m_d->savedFrames[m_d->lastSavedFullFrameId];
 
                 KisFrameDataSerializer::subtractFrames(frame, m_d->lastSavedFullFrame);

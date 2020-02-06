@@ -191,7 +191,7 @@ void KoFlake::resizeShape(KoShape *shape, qreal scaleX, qreal scaleY,
                           bool useGlobalMode,
                           bool usePostScaling, const QTransform &postScalingCoveringTransform)
 {
-    QPointF localStillPoint = shape->absoluteTransformation(0).inverted().map(absoluteStillPoint);
+    QPointF localStillPoint = shape->absoluteTransformation().inverted().map(absoluteStillPoint);
 
     QPointF relativeStillPoint = KisAlgebra2D::absoluteToRelative(localStillPoint, shape->outlineRect());
     QPointF parentalStillPointBefore = shape->transformation().map(localStillPoint);
@@ -205,9 +205,9 @@ void KoFlake::resizeShape(KoShape *shape, qreal scaleX, qreal scaleY,
                                      scale * postScalingCoveringTransform);
         } else {
             const QTransform uniformGlobalTransform =
-                    shape->absoluteTransformation(0) *
+                    shape->absoluteTransformation() *
                     scale *
-                    shape->absoluteTransformation(0).inverted() *
+                    shape->absoluteTransformation().inverted() *
                     shape->transformation();
 
             shape->setTransformation(uniformGlobalTransform);
@@ -218,9 +218,9 @@ void KoFlake::resizeShape(KoShape *shape, qreal scaleX, qreal scaleY,
         if (useGlobalMode) {
             const QTransform scale = QTransform::fromScale(scaleX, scaleY);
             const QTransform uniformGlobalTransform =
-                    shape->absoluteTransformation(0) *
+                    shape->absoluteTransformation() *
                     scale *
-                    shape->absoluteTransformation(0).inverted();
+                    shape->absoluteTransformation().inverted();
 
             const QRectF rect = shape->outlineRect();
 
@@ -264,7 +264,7 @@ void KoFlake::resizeShape(KoShape *shape, qreal scaleX, qreal scaleY,
             // find min and max points (in absolute coordinates),
             // by default use top-left and bottom-right
             QPolygonF localPoints(rect);
-            QPolygonF globalPoints = shape->absoluteTransformation(0).map(localPoints);
+            QPolygonF globalPoints = shape->absoluteTransformation().map(localPoints);
 
             int minPointIndex = 0;
             int maxPointIndex = 2;

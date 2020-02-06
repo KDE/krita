@@ -24,7 +24,7 @@
 #include "kritaimage_export.h"
 
 #include <QRect>
-#include <QRegion>
+#include <KisRegion.h>
 #include <QTransform>
 #include <KoUpdater.h>
 
@@ -52,13 +52,13 @@ private:
 
     void fillParams(const QRectF &srcRect,
                     const QRect &dstBaseClipRect,
-                    QRegion *dstRegion,
+                    KisRegion *dstRegion,
                     QPolygonF *dstClipPolygon);
 
 private:
     KisPaintDeviceSP m_dev;
     KoUpdaterPtr m_progressUpdater;
-    QRegion m_dstRegion;
+    KisRegion m_dstRegion;
     QRectF m_srcRect;
     QTransform m_backwardTransform;
     QTransform m_forwardTransform;

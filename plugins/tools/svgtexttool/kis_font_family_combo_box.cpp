@@ -125,8 +125,14 @@ void KisFontFamilyComboBox::refillComboBox(QVector<QFontDatabase::WritingSystem>
                     duplicateFonts.append(family + "_" + style);
                 }
                 filteredFonts.append(family);
+#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
+                int width = 1.5 * view()->fontMetrics()
+                        .horizontalAdvance(family + " " + fonts.writingSystemSample(QFontDatabase::Any));
+#else
                 int width = 1.5 * view()->fontMetrics()
                         .width(family + " " + fonts.writingSystemSample(QFontDatabase::Any));
+
+#endif
                 if (width > maxWidth) {
                     maxWidth = width;
                 }
@@ -281,7 +287,11 @@ void KisFontComboBoxes::fontFamilyChanged()
         }
         if (!styles.contains(style)) {
             styles.insert(bindex, style);
+#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
+            maxWidth = qMax(m_styles->view()->fontMetrics().horizontalAdvance(style + "  "), maxWidth);
+#else
             maxWidth = qMax(m_styles->view()->fontMetrics().width(style + "  "), maxWidth);
+#endif
         }
     }
     m_styles->addItems(styles);

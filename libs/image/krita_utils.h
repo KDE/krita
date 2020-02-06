@@ -28,6 +28,7 @@ class QPainterPath;
 class QBitArray;
 class QPainter;
 struct KisRenderedDab;
+class KisRegion;
 
 #include <QVector>
 #include "kritaimage_export.h"
@@ -41,11 +42,13 @@ namespace KritaUtils
     QSize KRITAIMAGE_EXPORT optimalPatchSize();
 
     QVector<QRect> KRITAIMAGE_EXPORT splitRectIntoPatches(const QRect &rc, const QSize &patchSize);
+    QVector<QRect> KRITAIMAGE_EXPORT splitRectIntoPatchesTight(const QRect &rc, const QSize &patchSize);
     QVector<QRect> KRITAIMAGE_EXPORT splitRegionIntoPatches(const QRegion &region, const QSize &patchSize);
+    QVector<QRect> KRITAIMAGE_EXPORT splitRegionIntoPatches(const KisRegion &region, const QSize &patchSize);
 
-    QRegion KRITAIMAGE_EXPORT splitTriangles(const QPointF &center,
+    KisRegion splitTriangles(const QPointF &center,
                                              const QVector<QPointF> &points);
-    QRegion KRITAIMAGE_EXPORT splitPath(const QPainterPath &path);
+    KisRegion splitPath(const QPainterPath &path);
 
     QString KRITAIMAGE_EXPORT prettyFormatReal(qreal value);
 

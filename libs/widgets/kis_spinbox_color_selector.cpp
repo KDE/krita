@@ -1,5 +1,6 @@
 /*
  * Copyright (C) Wolthera van Hovell tot Westerflier <griffinvalley@gmail.com>, (C) 2016
+ * Copyright (C) 2020 L. E. Segovia <amy@amyspark.me>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -69,7 +70,6 @@ void KisSpinboxColorSelector::slotSetColorSpace(const KoColorSpace *cs)
     }
 
     m_d->cs = cs;
-    
     //remake spinboxes
     delete m_d->layout;
     m_d->layout = new QFormLayout(this);
@@ -140,8 +140,8 @@ void KisSpinboxColorSelector::slotSetColorSpace(const KoColorSpace *cs)
 #ifdef HAVE_OPENEXR
         case KoChannelInfo::FLOAT16: {
             KisDoubleParseSpinBox *input = new KisDoubleParseSpinBox(this);
-            input->setMinimum(0);
-            input->setMaximum(KoColorSpaceMathsTraits<half>::max);
+            input->setMinimum(channel->getUIMin());
+            input->setMaximum(channel->getUIMax());
             input->setSingleStep(0.1);
             m_d->doubleSpinBoxList.append(input);
             m_d->layout->addRow(inlb,input);
@@ -156,8 +156,8 @@ void KisSpinboxColorSelector::slotSetColorSpace(const KoColorSpace *cs)
 #endif
         case KoChannelInfo::FLOAT32: {
             KisDoubleParseSpinBox *input = new KisDoubleParseSpinBox(this);
-            input->setMinimum(0);
-            input->setMaximum(KoColorSpaceMathsTraits<float>::max);
+            input->setMinimum(channel->getUIMin());
+            input->setMaximum(channel->getUIMax());
             input->setSingleStep(0.1);
             m_d->doubleSpinBoxList.append(input);
             m_d->layout->addRow(inlb,input);
@@ -248,7 +248,8 @@ void KisSpinboxColorSelector::updateSpinboxesWithNewValues()
         } else if ((channels.at(i)->channelValueType()==KoChannelInfo::FLOAT16 ||
                     channels.at(i)->channelValueType()==KoChannelInfo::FLOAT32 ||
                     channels.at(i)->channelValueType()==KoChannelInfo::FLOAT64) && m_d->doubleSpinBoxList.at(i)) {
-            m_d->doubleSpinBoxList.at(i)->setValue(channelValues[channelposition]);
+            float value = channels.at(i)->getUIMin() + channelValues[channelposition] * channels.at(i)->getUIUnitValue();
+            m_d->doubleSpinBoxList.at(i)->setValue(value);
         }
     }
 

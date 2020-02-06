@@ -24,6 +24,8 @@
 
 #include "kritaui_export.h"
 
+class KisRegion;
+
 /**
  * KisAsyncAnimationRendererBase is a special class representing a
  * single worker thread inside KisAsyncAnimationRenderDialogBase. It connects
@@ -46,7 +48,7 @@ public:
      * Only \p regionOfInterest is regenerated. If \p regionOfInterest is
      * empty, then entire bounds of the image is regenerated.
      */
-    void startFrameRegeneration(KisImageSP image, int frame, const QRegion &regionOfInterest);
+    void startFrameRegeneration(KisImageSP image, int frame, const KisRegion &regionOfInterest);
 
     /**
      * Convenience overload that regenerates the full image
@@ -102,7 +104,7 @@ protected:
      * NOTE3: In case of failure, notifyFrameCancelled(). The same threading
      *        rules apply.
      */
-    virtual void frameCompletedCallback(int frame, const QRegion &requestedRegion) = 0;
+    virtual void frameCompletedCallback(int frame, const KisRegion &requestedRegion) = 0;
 
     /**
      * @brief frameCancelledCallback is called when the rendering of

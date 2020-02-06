@@ -15,7 +15,7 @@ include_directories(
 set(FILE_OPENEXR_SOURCES)
 set(LINK_OPENEXR_LIB)
 if(OPENEXR_FOUND)
-    include_directories(SYSTEM ${OPENEXR_INCLUDE_DIR})
+    include_directories(SYSTEM ${OPENEXR_INCLUDE_DIRS})
     set(LINK_OPENEXR_LIB ${OPENEXR_LIBRARIES})
     add_definitions(${OPENEXR_DEFINITIONS})
 endif()
@@ -52,6 +52,8 @@ set(kritapigment_SRCS
     KoColorSpaceEngine.cpp
     KoColorSpaceFactory.cpp
     KoColorSpaceMaths.cpp
+    KoCmykColorSpaceMaths.cpp
+    KoLabColorSpaceMaths.cpp
     KoColorSpaceRegistry.cpp
     KoColorProfileStorage.cpp
     KoColorTransformation.cpp

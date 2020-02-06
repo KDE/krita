@@ -200,12 +200,14 @@ void KisPrecisePaintDeviceWrapper::readRects(const QVector<QRect> &rects)
     KisRandomConstAccessorSP srcIt = m_d->srcDevice->createRandomConstAccessorNG(firstPoint.x(), firstPoint.y());
     KisRandomAccessorSP dstIt = m_d->precDevice->createRandomAccessorNG(firstPoint.x(), firstPoint.y());
 
-    Q_FOREACH (const QRect &rc, diff.rects()) {
-        KritaUtils::processTwoDevices(rc,
+    auto rectIter = diff.begin();
+    while (rectIter != diff.end()) {
+        KritaUtils::processTwoDevices(*rectIter,
                                       srcIt, dstIt,
                                       m_d->srcDevice->pixelSize(),
                                       m_d->precDevice->pixelSize(),
                                       ReadProcessor(channelCount));
+        rectIter++;
     }
 
     /**

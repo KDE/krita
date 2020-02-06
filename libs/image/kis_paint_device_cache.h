@@ -81,7 +81,7 @@ public:
         return m_nonDefaultPixelAreaCache.getValue();
     }
 
-    QRegion region() {
+    KisRegion region() {
         return m_regionCache.getValue();
     }
 
@@ -148,10 +148,10 @@ private:
         KisPaintDevice *m_paintDevice;
     };
 
-    struct RegionCache : KisLockFreeCache<QRegion> {
+    struct RegionCache : KisLockFreeCache<KisRegion> {
         RegionCache(KisPaintDevice *paintDevice) : m_paintDevice(paintDevice) {}
 
-        QRegion calculateNewValue() const override {
+        KisRegion calculateNewValue() const override {
             return m_paintDevice->dataManager()->region();
         }
     private:

@@ -176,9 +176,11 @@ public:
             return true;
         }
 
-        Q_FOREACH (const QRect &rect, prepareRegion.rects()) {
-            walker.collectRects(srcLayer, rect);
+        auto rect = prepareRegion.begin();
+        while (rect != prepareRegion.end()) {
+            walker.collectRects(srcLayer,*rect);
             merger.startMerge(walker, false);
+            rect++;
         }
 
         return true;

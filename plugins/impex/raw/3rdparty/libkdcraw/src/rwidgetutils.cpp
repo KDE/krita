@@ -34,7 +34,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QApplication>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QPushButton>
 #include <QFileInfo>
 #include <QPainter>
@@ -258,8 +258,13 @@ QSize RAdjustableLabel::minimumSizeHint() const
 QSize RAdjustableLabel::sizeHint() const
 {
     QFontMetrics fm(fontMetrics());
-    int maxW     = QApplication::desktop()->screenGeometry(this).width() * 3 / 4;
+    QScreen *s = qApp->screenAt(geometry().topLeft());
+    int maxW     = s->availableGeometry().width() * 3 / 4;
+#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
+    int currentW = fm.horizontalAdvance(d->ajdText);
+#else
     int currentW = fm.width(d->ajdText);
+#endif
 
     return (QSize(currentW > maxW ? maxW : currentW, QLabel::sizeHint().height()));
 }
@@ -301,8 +306,11 @@ void RAdjustableLabel::adjustTextToLabel()
 
     Q_FOREACH(const QString& line, d->ajdText.split(QLatin1Char('\n')))
     {
+#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
+        int lineW = fm.horizontalAdvance(line);
+#else
         int lineW = fm.width(line);
-
+#endif
         if (lineW > lblW)
         {
             adjusted = true;
@@ -610,7 +618,7 @@ void RColorSelector::paintEvent(QPaintEvent*)
         QStyleOptionFocusRect focusOpt;
         focusOpt.init(this);
         focusOpt.rect            = focusRect;
-        focusOpt.backgroundColor = palette().background().color();
+        focusOpt.backgroundColor = palette().window().color();
         style->drawPrimitive(QStyle::PE_FrameFocusRect, &focusOpt, &painter, this);
     }
 }

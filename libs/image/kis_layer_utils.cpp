@@ -1629,8 +1629,10 @@ namespace KisLayerUtils {
             QRegion dirtyRegion = realNodeRect;
             dirtyRegion -= preparedArea;
 
-            Q_FOREACH (const QRect &rc, dirtyRegion.rects()) {
-                image->refreshGraphAsync(rootNode, rc, realNodeRect);
+            auto rc = dirtyRegion.begin();
+            while (rc != dirtyRegion.end()) {
+                image->refreshGraphAsync(rootNode, *rc, realNodeRect);
+                rc++;
             }
         }
     }

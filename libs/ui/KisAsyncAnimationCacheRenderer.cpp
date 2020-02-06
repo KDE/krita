@@ -43,7 +43,7 @@ void KisAsyncAnimationCacheRenderer::setFrameCache(KisAnimationFrameCacheSP cach
     m_d->requestedCache = cache;
 }
 
-void KisAsyncAnimationCacheRenderer::frameCompletedCallback(int frame, const QRegion &requestedRegion)
+void KisAsyncAnimationCacheRenderer::frameCompletedCallback(int frame, const KisRegion &requestedRegion)
 {
     KisAnimationFrameCacheSP cache = m_d->requestedCache;
     KisImageSP image = requestedImage();

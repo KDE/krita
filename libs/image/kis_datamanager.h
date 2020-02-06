@@ -163,7 +163,7 @@ public:
         return ACTUAL_DATAMGR::extent();
     }
 
-    QRegion region() const {
+    KisRegion region() const {
         return ACTUAL_DATAMGR::region();
     }
 

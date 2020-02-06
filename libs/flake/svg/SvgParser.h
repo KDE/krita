@@ -95,7 +95,7 @@ public:
 protected:
 
     /// Parses a group-like element element, saving all its topmost properties
-    KoShape* parseGroup(const KoXmlElement &e, const KoXmlElement &overrideChildrenFrom = KoXmlElement());
+    KoShape* parseGroup(const KoXmlElement &e, const KoXmlElement &overrideChildrenFrom = KoXmlElement(), bool createContext = true);
 
     // XXX
     KoShape* parseTextNode(const KoXmlText &e);

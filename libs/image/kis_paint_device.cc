@@ -26,6 +26,7 @@
 #include <QHash>
 #include <QIODevice>
 #include <qmath.h>
+#include <KisRegion.h>
 
 #include <klocalizedstring.h>
 
@@ -408,7 +409,7 @@ public:
     LodDataStruct* createLodDataStruct(int lod);
     void updateLodDataStruct(LodDataStruct *dst, const QRect &srcRect);
     void uploadLodDataStruct(LodDataStruct *dst);
-    QRegion regionForLodSyncing() const;
+    KisRegion regionForLodSyncing() const;
 
     void updateLodDataManager(KisDataManager *srcDataManager,
                               KisDataManager *dstDataManager, const QPoint &srcOffset, const QPoint &dstOffset,
@@ -451,8 +452,6 @@ public:
 
 
 private:
-
-    QRegion syncWholeDevice(Data *srcData);
 
     inline DataSP currentFrameData() const
     {
@@ -658,7 +657,7 @@ struct KisPaintDevice::Private::LodDataStructImpl : public KisPaintDevice::LodDa
     QScopedPointer<Data> lodData;
 };
 
-QRegion KisPaintDevice::Private::regionForLodSyncing() const
+KisRegion KisPaintDevice::Private::regionForLodSyncing() const
 {
     Data *srcData = currentNonLodData();
     return srcData->dataManager()->region().translated(srcData->x(), srcData->y());
@@ -695,7 +694,6 @@ KisPaintDevice::LodDataStruct* KisPaintDevice::Private::createLodDataStruct(int 
         // FIXME: different kind of synchronization
     }
 
-    //QRegion dirtyRegion = syncWholeDevice(srcData);
     lodData->cache()->invalidate();
 
     return lodStruct;
@@ -912,7 +910,6 @@ class KisPaintDevice::Private::DeviceChangeProfileCommand : public KUndo2Command
 public:
     DeviceChangeProfileCommand(KisPaintDeviceSP device, KUndo2Command *parent = 0)
         : KUndo2Command(parent),
-          m_firstRun(true),
           m_device(device)
     {
     }
@@ -943,7 +940,7 @@ protected:
     KisPaintDeviceSP m_device;
 
 private:
-    bool m_firstRun;
+    bool m_firstRun {true};
 };
 
 class KisPaintDevice::Private::DeviceChangeColorSpaceCommand : public DeviceChangeProfileCommand
@@ -1131,14 +1128,14 @@ void KisPaintDevice::setDirty(const QRect & rc)
         m_d->parent->setDirty(rc);
 }
 
-void KisPaintDevice::setDirty(const QRegion & region)
+void KisPaintDevice::setDirty(const KisRegion &region)
 {
     m_d->cache()->invalidate();
     if (m_d->parent.isValid())
         m_d->parent->setDirty(region);
 }
 
-void KisPaintDevice::setDirty(const QVector<QRect> rects)
+void KisPaintDevice::setDirty(const QVector<QRect> &rects)
 {
     m_d->cache()->invalidate();
     if (m_d->parent.isValid())
@@ -1234,7 +1231,7 @@ QRect KisPaintDevice::extent() const
     return m_d->currentStrategy()->extent();
 }
 
-QRegion KisPaintDevice::region() const
+KisRegion KisPaintDevice::region() const
 {
     return m_d->currentStrategy()->region();
 }
@@ -1435,15 +1432,15 @@ QRect KisPaintDevice::calculateExactBounds(bool nonDefaultOnly) const
     return endRect;
 }
 
-QRegion KisPaintDevice::regionExact() const
+KisRegion KisPaintDevice::regionExact() const
 {
-    QRegion resultRegion;
-    QVector<QRect> rects = region().rects();
+    QVector<QRect> sourceRects = region().rects();
+    QVector<QRect> resultRects;
 
     const KoColor defaultPixel = this->defaultPixel();
     Impl::CheckNonDefault compareOp(pixelSize(), defaultPixel.data());
 
-    Q_FOREACH (const QRect &rc1, rects) {
+    Q_FOREACH (const QRect &rc1, sourceRects) {
         const int patchSize = 64;
         QVector<QRect> smallerRects = KritaUtils::splitRectIntoPatches(rc1, QSize(patchSize, patchSize));
         Q_FOREACH (const QRect &rc2, smallerRects) {
@@ -1452,11 +1449,11 @@ QRegion KisPaintDevice::regionExact() const
                 Impl::calculateExactBoundsImpl(this, rc2, QRect(), compareOp);
 
             if (!result.isEmpty()) {
-                resultRegion += result;
+                resultRects << result;
             }
         }
     }
-    return resultRegion;
+    return KisRegion(std::move(resultRects));
 }
 
 void KisPaintDevice::crop(qint32 x, qint32 y, qint32 w, qint32 h)
@@ -2071,7 +2068,7 @@ KisPaintDevice::LodDataStruct::~LodDataStruct()
 {
 }
 
-QRegion KisPaintDevice::regionForLodSyncing() const
+KisRegion KisPaintDevice::regionForLodSyncing() const
 {
     return m_d->regionForLodSyncing();
 }

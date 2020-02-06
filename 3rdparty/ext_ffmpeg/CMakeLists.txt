@@ -4,8 +4,8 @@ if(MINGW)
     if("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
         ExternalProject_Add( ext_ffmpeg
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-            URL https://ffmpeg.zeranoe.com/builds/win64/static/ffmpeg-4.0-win64-static.zip
-            URL_MD5 bf496481c6991c529e2e94a8e0fa3113
+            URL https://ffmpeg.zeranoe.com/builds/win64/static/ffmpeg-4.2.1-win64-static.zip
+            URL_MD5 ae19c3a0006e4f1f34c5f3910bfb3635
 
             INSTALL_DIR ${PREFIX_ext_ffmpeg}
             CONFIGURE_COMMAND ""
@@ -18,8 +18,8 @@ if(MINGW)
     else("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
         ExternalProject_Add( ext_ffmpeg
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-            URL https://ffmpeg.zeranoe.com/builds/win32/static/ffmpeg-4.0-win32-static.zip
-            URL_MD5 a969a969e3404fe35100e85a37186e5f
+            URL https://ffmpeg.zeranoe.com/builds/win32/static/ffmpeg-4.2.1-win32-static.zip
+            URL_MD5 6a437c84d498ee77df69e446d8384bd4
 
             INSTALL_DIR ${PREFIX_ext_ffmpeg}
             CONFIGURE_COMMAND ""

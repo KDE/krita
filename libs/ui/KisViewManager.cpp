@@ -1439,3 +1439,11 @@ void KisViewManager::slotResetRotation()
     KisCanvasController *canvasController = d->currentImageView->canvasController();
     canvasController->resetCanvasRotation();
 }
+
+void KisViewManager::slotToggleFullscreen()
+{
+    KisConfig cfg(false);
+    KisMainWindow *main = mainWindow();
+    main->viewFullscreen(!main->isFullScreen());
+    cfg.fullscreenMode(main->isFullScreen());
+}

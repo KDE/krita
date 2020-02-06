@@ -19,7 +19,7 @@
 #include "kis_shade_selector_line_combo_box.h"
 
 #include <QApplication>
-#include <QDesktopWidget>
+#include <QScreen>
 
 #include <QGridLayout>
 #include <QPainter>
@@ -67,7 +67,8 @@ void KisShadeSelectorLineComboBox::showPopup()
     m_popup->show();
 
     const int widgetMargin = 20;
-    const QRect fitRect = kisGrowRect(QApplication::desktop()->screenGeometry(), -widgetMargin);
+    QScreen *screen = qApp->screenAt(this->geometry().topLeft());
+    const QRect fitRect = kisGrowRect(screen->availableGeometry(), -widgetMargin);
     QRect popupRect = m_popup->rect();
     popupRect.moveTo(mapToGlobal(QPoint()));
     popupRect = kisEnsureInRect(popupRect, fitRect);

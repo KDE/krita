@@ -29,7 +29,6 @@
 #include <KoOdfGraphicStyles.h>
 #include <KoOdfStylesReader.h>
 #include <KoUnit.h>
-#include <KoViewConverter.h>
 #include <KoXmlReader.h>
 
 #include <FlakeDebug.h>
@@ -243,7 +242,7 @@ QSizeF KoPatternBackground::patternOriginalSize() const
     return d->imageData->imageSize();
 }
 
-void KoPatternBackground::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &/*context*/, const QPainterPath &fillPath) const
+void KoPatternBackground::paint(QPainter &painter, KoShapePaintingContext &/*context*/, const QPainterPath &fillPath) const
 {
     if (! d->imageData)
         return;
@@ -281,13 +280,9 @@ void KoPatternBackground::paint(QPainter &painter, const KoViewConverter &conver
     } else if (d->repeat == Stretched) {
         painter.setClipPath(fillPath);
         // undo conversion of the scaling so that we can use a nicely scaled image of the correct size
-        qreal zoomX, zoomY;
-        converter.zoom(&zoomX, &zoomY);
-        zoomX = zoomX ? 1 / zoomX : zoomX;
-        zoomY = zoomY ? 1 / zoomY : zoomY;
-        painter.scale(zoomX, zoomY);
 
-        QRectF targetRect = converter.documentToView(fillPath.boundingRect());
+        qWarning() << "WARNING: stretched KoPatternBackground painting code is abandoned. The result might be not correct";
+        const QRectF targetRect = fillPath.boundingRect();
         painter.drawPixmap(targetRect.topLeft(), d->imageData->pixmap(targetRect.size().toSize()));
     }
 

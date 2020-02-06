@@ -99,7 +99,7 @@ public:
          */
         KIS_SAFE_ASSERT_RECOVER_NOOP(inheritsTransform(child));
         if (inheritsTransform(child)) {
-            QTransform parentTransform = q->absoluteTransformation(0);
+            QTransform parentTransform = q->absoluteTransformation();
             child->applyAbsoluteTransformation(parentTransform.inverted());
         }
     }
@@ -107,7 +107,7 @@ public:
     void remove(KoShape *child) override {
         KIS_SAFE_ASSERT_RECOVER_NOOP(inheritsTransform(child));
         if (inheritsTransform(child)) {
-            QTransform parentTransform = q->absoluteTransformation(0);
+            QTransform parentTransform = q->absoluteTransformation();
             child->applyAbsoluteTransformation(parentTransform);
         }
 
@@ -175,14 +175,14 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, KoShapeControllerBase* c
      * The transformaitons of the added shapes are automatically merged into the transformation
      * of the layer, so we should apply this extra transform separately
      */
-    const QTransform thisInvertedTransform = this->absoluteTransformation(0).inverted();
+    const QTransform thisInvertedTransform = this->absoluteTransformation().inverted();
 
     m_d->canvas->shapeManager()->setUpdatesBlocked(true);
 
     Q_FOREACH (KoShape *shape, _rhs.shapes()) {
         KoShape *clonedShape = shape->cloneShape();
         KIS_SAFE_ASSERT_RECOVER(clonedShape) { continue; }
-        clonedShape->setTransformation(shape->absoluteTransformation(0) * thisInvertedTransform);
+        clonedShape->setTransformation(shape->absoluteTransformation() * thisInvertedTransform);
         addShape(clonedShape);
     }
 
@@ -204,7 +204,7 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, const KisShapeLayer &_ad
      * we do not copy the transformation from any of the source layers. But we should
      * handle this anyway, to not be caught by this in the future.
      */
-    const QTransform thisInvertedTransform = this->absoluteTransformation(0).inverted();
+    const QTransform thisInvertedTransform = this->absoluteTransformation().inverted();
 
     QList<KoShape *> shapesAbove;
     QList<KoShape *> shapesBelow;
@@ -213,7 +213,7 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, const KisShapeLayer &_ad
     Q_FOREACH (KoShape *shape, _rhs.shapes()) {
         KoShape *clonedShape = shape->cloneShape();
         KIS_SAFE_ASSERT_RECOVER(clonedShape) { continue; }
-        clonedShape->setTransformation(shape->absoluteTransformation(0) * thisInvertedTransform);
+        clonedShape->setTransformation(shape->absoluteTransformation() * thisInvertedTransform);
         shapesBelow.append(clonedShape);
     }
 
@@ -221,7 +221,7 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, const KisShapeLayer &_ad
     Q_FOREACH (KoShape *shape, _addShapes.shapes()) {
         KoShape *clonedShape = shape->cloneShape();
         KIS_SAFE_ASSERT_RECOVER(clonedShape) { continue; }
-        clonedShape->setTransformation(shape->absoluteTransformation(0) * thisInvertedTransform);
+        clonedShape->setTransformation(shape->absoluteTransformation() * thisInvertedTransform);
         shapesAbove.append(clonedShape);
     }
 
@@ -295,6 +295,8 @@ void KisShapeLayer::initShapeLayer(KoShapeControllerBase* controller, KisPaintDe
             this, SIGNAL(currentLayerChanged(const KoShapeLayer*)));
 
     connect(this, SIGNAL(sigMoveShapes(QPointF)), SLOT(slotMoveShapes(QPointF)));
+    connect(this, SIGNAL(sigTransformShapes(QTransform)), SLOT(slotTransformShapes(QTransform)), Qt::BlockingQueuedConnection);
+
 }
 
 bool KisShapeLayer::allowAsChild(KisNodeSP node) const
@@ -420,6 +422,12 @@ void KisShapeLayer::slotMoveShapes(const QPointF &diff)
     if (shapes.isEmpty()) return;
 
     KoShapeMoveCommand cmd(shapes, diff);
+    cmd.redo();
+}
+
+void KisShapeLayer::slotTransformShapes(const QTransform &newTransform)
+{
+    KoShapeTransformCommand cmd({this}, {transformation()}, {newTransform});
     cmd.redo();
 }
 
@@ -678,51 +686,51 @@ KUndo2Command* KisShapeLayer::crop(const QRect & rect)
     return new KisNodeMoveCommand2(this, oldPos, newPos);
 }
 
-KUndo2Command* KisShapeLayer::transform(const QTransform &transform) {
-    QList<KoShape*> shapes = shapesToBeTransformed();
-    if (shapes.isEmpty()) return 0;
-
-    KisImageViewConverter *converter = dynamic_cast<KisImageViewConverter*>(this->converter());
-    QTransform realTransform = converter->documentToView() *
-        transform * converter->viewToDocument();
-
-    QList<QTransform> oldTransformations;
-    QList<QTransform> newTransformations;
-
-    QList<KoShapeShadow*> newShadows;
-    const qreal transformBaseScale = KoUnit::approxTransformScale(transform);
-
-    Q_FOREACH (const KoShape* shape, shapes) {
-        QTransform oldTransform = shape->transformation();
-        oldTransformations.append(oldTransform);
-
-        QTransform globalTransform = shape->absoluteTransformation(0);
-        QTransform localTransform = globalTransform * realTransform * globalTransform.inverted();
-        newTransformations.append(localTransform * oldTransform);
-
-        KoShapeShadow *shadow = 0;
-
-        if (shape->shadow()) {
-            shadow = new KoShapeShadow(*shape->shadow());
-            shadow->setOffset(transformBaseScale * shadow->offset());
-            shadow->setBlur(transformBaseScale * shadow->blur());
-        }
-
-        newShadows.append(shadow);
-
+struct TransformShapeLayerDeferred : public KUndo2Command
+{
+    TransformShapeLayerDeferred(KisShapeLayer *shapeLayer, const QTransform &globalDocTransform)
+        : m_shapeLayer(shapeLayer),
+          m_globalDocTransform(globalDocTransform)
+    {
     }
 
-    KUndo2Command *parentCommand = new KUndo2Command();
-    new KoShapeTransformCommand(shapes,
-                                oldTransformations,
-                                newTransformations,
-                                parentCommand);
+    void undo()
+    {
+        emit m_shapeLayer->sigTransformShapes(m_savedTransform);
+    }
 
-    new KoShapeShadowCommand(shapes,
-                             newShadows,
-                             parentCommand);
+    void redo()
+    {
+        m_savedTransform = m_shapeLayer->transformation();
 
-    return parentCommand;
+        const QTransform globalTransform = m_shapeLayer->absoluteTransformation();
+        const QTransform localTransform = globalTransform * m_globalDocTransform * globalTransform.inverted();
+
+        emit m_shapeLayer->sigTransformShapes(localTransform * m_savedTransform);
+    }
+
+private:
+    KisShapeLayer *m_shapeLayer;
+    QTransform m_globalDocTransform;
+    QTransform m_savedTransform;
+};
+
+
+KUndo2Command* KisShapeLayer::transform(const QTransform &transform)
+{
+    QList<KoShape*> shapes = shapesToBeTransformed();
+    if (shapes.isEmpty()) return 0;
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(shapes.size() == 1 && shapes.first() == this, 0);
+
+    /**
+     * We cannot transform shapes in the worker thread. Therefor we emit blocking-queued
+     * signal to transform them in the GUI thread and then return.
+     */
+    KisImageViewConverter *converter = dynamic_cast<KisImageViewConverter*>(this->converter());
+    QTransform docSpaceTransform = converter->documentToView() *
+        transform * converter->viewToDocument();
+
+    return new TransformShapeLayerDeferred(this, docSpaceTransform);
 }
 
 KUndo2Command *KisShapeLayer::setProfile(const KoColorProfile *profile)

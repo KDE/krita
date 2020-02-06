@@ -23,7 +23,6 @@
 #include <QString>
 #include <QPainter>
 #include <QRect>
-#include <QRegion>
 #include <QBitArray>
 
 #include <KoColorConversionTransformation.h>

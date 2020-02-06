@@ -307,7 +307,7 @@ KisOpenGLUpdateInfoSP KisAnimationFrameCache::Private::fetchFrameDataImpl(KisIma
     }
 }
 
-KisOpenGLUpdateInfoSP KisAnimationFrameCache::fetchFrameData(int time, KisImageSP image, const QRegion &requestedRegion) const
+KisOpenGLUpdateInfoSP KisAnimationFrameCache::fetchFrameData(int time, KisImageSP image, const KisRegion &requestedRegion) const
 {
     if (time != image->animationInterface()->currentTime()) {
         qWarning() << "WARNING: KisAnimationFrameCache::frameReady image's time doesn't coincide with the requested time!";

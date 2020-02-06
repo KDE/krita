@@ -19,7 +19,6 @@
 
 #include "KoClipPath.h"
 #include "KoPathShape.h"
-#include "KoViewConverter.h"
 #include "KoShapeGroup.h"
 
 #include <QTransform>
@@ -77,7 +76,7 @@ public:
     void collectShapePath(QPainterPath *result, const KoShape *shape) {
         if (const KoPathShape *pathShape = dynamic_cast<const KoPathShape*>(shape)) {
             // different shapes add up to the final path using Windind Fill rule (acc. to SVG 1.1)
-            QTransform t = pathShape->absoluteTransformation(0);
+            QTransform t = pathShape->absoluteTransformation();
             result->addPath(t.map(pathShape->outline()));
         } else if (const KoShapeGroup *groupShape = dynamic_cast<const KoShapeGroup*>(shape)) {
             QList<KoShape*> shapes = groupShape->shapes();
@@ -148,41 +147,19 @@ KoFlake::CoordinateSystem KoClipPath::coordinates() const
     return d->coordinates;
 }
 
-void KoClipPath::applyClipping(KoShape *clippedShape, QPainter &painter, const KoViewConverter &converter)
+void KoClipPath::applyClipping(KoShape *shape, QPainter &painter)
 {
-    QPainterPath clipPath;
-    KoShape *shape = clippedShape;
-    while (shape) {
-        if (shape->clipPath()) {
-            QPainterPath path = shape->clipPath()->path();
+    if (shape->clipPath()) {
+        QPainterPath path = shape->clipPath()->path();
 
-            QTransform t;
-
-            if (shape->clipPath()->coordinates() == KoFlake::ObjectBoundingBox) {
-                const QRectF shapeLocalBoundingRect = shape->outline().boundingRect();
-                t = KisAlgebra2D::mapToRect(shapeLocalBoundingRect) * shape->absoluteTransformation(0);
-
-            } else {
-                t = shape->absoluteTransformation(0);
-            }
-
-            path = t.map(path);
-
-            if (clipPath.isEmpty()) {
-                clipPath = path;
-            } else {
-                clipPath &= path;
-            }
+        if (shape->clipPath()->coordinates() == KoFlake::ObjectBoundingBox) {
+            const QRectF shapeLocalBoundingRect = shape->outline().boundingRect();
+            path = KisAlgebra2D::mapToRect(shapeLocalBoundingRect).map(path);
         }
-        shape = shape->parent();
-    }
 
-    if (!clipPath.isEmpty()) {
-        QTransform viewMatrix;
-        qreal zoomX, zoomY;
-        converter.zoom(&zoomX, &zoomY);
-        viewMatrix.scale(zoomX, zoomY);
-        painter.setClipPath(viewMatrix.map(clipPath), Qt::IntersectClip);
+        if (!path.isEmpty()) {
+            painter.setClipPath(path, Qt::IntersectClip);
+        }
     }
 }
 
@@ -223,7 +200,7 @@ QTransform KoClipPath::clipDataTransformation(KoShape *clippedShape) const
         return d->initialTransformToShape;
 
     // the current transformation of the clipped shape
-    QTransform currentShapeTransform = clippedShape->absoluteTransformation(0);
+    QTransform currentShapeTransform = clippedShape->absoluteTransformation();
 
     // calculate the transformation which represents any resizing of the clipped shape
     const QSizeF currentShapeSize = clippedShape->outline().boundingRect().size();

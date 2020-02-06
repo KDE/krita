@@ -149,6 +149,8 @@ set(kritaimage_LIB_SRCS
    kis_base_node.cpp
    kis_base_processor.cpp
    kis_bookmarked_configuration_manager.cc
+   KisBusyWaitBroker.cpp
+   KisSafeBlockingQueueConnectionProxy.cpp
    kis_node_uuid_info.cpp
    kis_clone_layer.cpp
    kis_config_widget.cpp

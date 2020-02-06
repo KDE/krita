@@ -26,11 +26,15 @@
 /**
  * A special class that converts a Qt signal into a std::function call.
  *
- * Example:
+ * Usage:
  *
- * std::function<void ()> destinationFunctionCall(std::bind(someNiceFunc, firstParam, secondParam));
- * SignalToFunctionProxy proxy(destinationFunctionCall);
- * connect(srcObject, SIGNAL(sigSomethingChanged()), &proxy, SLOT(start()));
+ *        \code{.cpp}
+ *
+ *        std::function<void ()> destinationFunctionCall(std::bind(someNiceFunc, firstParam, secondParam));
+ *        SignalToFunctionProxy proxy(destinationFunctionCall);
+ *        connect(srcObject, SIGNAL(sigSomethingChanged()), &proxy, SLOT(start()));
+ *
+ *        \endcode
  *
  * Now every time sigSomethingChanged() is emitted, someNiceFunc is
  * called. std::bind allows us to call any method of any class without
@@ -56,6 +60,35 @@ public Q_SLOTS:
 private:
     TrivialFunction m_function;
 };
+
+/**
+ * A special class that converts a standard function call into Qt signal
+ *
+ * Usage:
+ *
+ *        \code{.cpp}
+ *
+ *        FunctionToSignalProxy proxy;
+ *        connect(&proxy, SIGNAL(timeout()), &dstObject, SLOT(someDestinationSlot()));
+ *
+ *        \endcode
+ *
+ *        Now every time `proxy.start()` is called, the signal `timeout()` is
+ *        forwarded to `someDestinationSlot()`
+ */
+class KRITAGLOBAL_EXPORT FunctionToSignalProxy : public QObject
+{
+    Q_OBJECT
+
+public:
+    void start() {
+        emit timeout();
+    }
+
+Q_SIGNALS:
+    void timeout();
+};
+
 
 
 /**

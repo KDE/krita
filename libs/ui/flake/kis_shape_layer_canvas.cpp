@@ -126,6 +126,7 @@ KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KisImageWSP imag
         , m_projection(0)
         , m_parentLayer(parent)
         , m_asyncUpdateSignalCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
+        , m_safeForcedConnection(std::bind(&KisShapeLayerCanvas::slotStartAsyncRepaint, this))
 {
     /**
      * The layour should also add itself to its own shape manager, so that the canvas
@@ -135,7 +136,6 @@ KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KisImageWSP imag
     m_shapeManager->selection()->setActiveLayer(parent);
 
     connect(&m_asyncUpdateSignalCompressor, SIGNAL(timeout()), SLOT(slotStartAsyncRepaint()));
-    connect(this, SIGNAL(sigBlockingForceAsyncRepaintStart()), SLOT(slotStartAsyncRepaint()), Qt::BlockingQueuedConnection);
 
     setImage(image);
 }
@@ -399,7 +399,7 @@ void KisShapeLayerCanvas::forceRepaint()
 
     if (hasPendingUpdates()) {
         m_asyncUpdateSignalCompressor.stop();
-        emit sigBlockingForceAsyncRepaintStart();
+        m_safeForcedConnection.start();
     }
 }
 
@@ -419,7 +419,7 @@ void KisShapeLayerCanvas::forceRepaintWithHiddenAreas()
     }
 
     m_asyncUpdateSignalCompressor.stop();
-    emit sigBlockingForceAsyncRepaintStart();
+    m_safeForcedConnection.start();
 }
 
 void KisShapeLayerCanvas::resetCache()

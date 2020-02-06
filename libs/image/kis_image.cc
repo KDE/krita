@@ -109,6 +109,9 @@
 #include "KisRunnableStrokeJobUtils.h"
 #include "KisRunnableStrokeJobsInterface.h"
 
+#include "KisBusyWaitBroker.h"
+
+
 // #define SANITY_CHECKS
 
 #ifdef SANITY_CHECKS
@@ -675,7 +678,9 @@ void KisImage::barrierLock(bool readOnly)
 {
     if (!locked()) {
         requestStrokeEnd();
+        KisBusyWaitBroker::instance()->notifyWaitOnImageStarted(this);
         m_d->scheduler.barrierLock();
+        KisBusyWaitBroker::instance()->notifyWaitOnImageEnded(this);
         m_d->lockedForReadOnly = readOnly;
     } else {
         m_d->lockedForReadOnly &= readOnly;
@@ -710,7 +715,9 @@ void KisImage::lock()
 {
     if (!locked()) {
         requestStrokeEnd();
+        KisBusyWaitBroker::instance()->notifyWaitOnImageStarted(this);
         m_d->scheduler.lock();
+        KisBusyWaitBroker::instance()->notifyWaitOnImageEnded(this);
     }
     m_d->lockCount++;
     m_d->lockedForReadOnly = false;
@@ -1662,7 +1669,9 @@ KisImageSignalRouter* KisImage::signalRouter()
 void KisImage::waitForDone()
 {
     requestStrokeEnd();
+    KisBusyWaitBroker::instance()->notifyWaitOnImageStarted(this);
     m_d->scheduler.waitForDone();
+    KisBusyWaitBroker::instance()->notifyWaitOnImageEnded(this);
 }
 
 KisStrokeId KisImage::startStroke(KisStrokeStrategy *strokeStrategy)

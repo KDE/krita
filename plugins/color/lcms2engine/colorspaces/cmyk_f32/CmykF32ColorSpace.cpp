@@ -88,7 +88,7 @@ void CmykF32ColorSpace::colorFromXML(quint8 *pixel, const QDomElement &elt) cons
     p->cyan = this->channels()[0]->getUIMin() + KoColorSpaceMaths< qreal, KoCmykF32Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("c"))) * this->channels()[0]->getUIUnitValue();
     p->magenta = this->channels()[1]->getUIMin() + KoColorSpaceMaths< qreal, KoCmykF32Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("m"))) * this->channels()[1]->getUIUnitValue();
     p->yellow = this->channels()[2]->getUIMin() + KoColorSpaceMaths< qreal, KoCmykF32Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("y"))) * this->channels()[2]->getUIUnitValue();
-    p->black = this->channels()[2]->getUIMin() + KoColorSpaceMaths< qreal, KoCmykF32Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("k"))) * this->channels()[2]->getUIUnitValue();
+    p->black = this->channels()[3]->getUIMin() + KoColorSpaceMaths< qreal, KoCmykF32Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("k"))) * this->channels()[3]->getUIUnitValue();
     p->alpha = 1.0;
 }
 

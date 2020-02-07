@@ -171,8 +171,14 @@ bool KisTagFilterResourceProxyModel::filterAcceptsRow(int source_row, const QMod
     if (tag.isNull()) {
         hasCurrentTag = true;
     }
-    if (!hasCurrentTag && !tag.isNull() && tag->url() == "All") {
-        hasCurrentTag = true;
+    if (!hasCurrentTag && !tag.isNull()) {
+        if (tag->id() == KisTagModel::All) {
+            hasCurrentTag = true;
+        } else if (tag->id() == KisTagModel::AllUntagged) {
+            if (tagsForResource.size() == 0) {
+                hasCurrentTag = true;
+            }
+        }
     }
     //fprintf(stderr, "5-%d ", hasCurrentTag);
     if (!hasCurrentTag && !tag.isNull()) {

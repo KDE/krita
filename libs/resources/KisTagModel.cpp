@@ -45,7 +45,7 @@ struct KisTagModel::Private {
     QString resourceType;
     int columnCount {5};
     int cachedRowCount {-1};
-    int fakeRowsCount {1};
+    int fakeRowsCount {2};
 };
 
 
@@ -100,30 +100,58 @@ QVariant KisTagModel::data(const QModelIndex &index, int role) const
     // The first row is All
     // XXX: Should we also add an "All Untagged"?
     if (index.row() < d->fakeRowsCount) {
-        switch(role) {
-        case Qt::DisplayRole:   // fallthrough
-        case Qt::ToolTipRole:   // fallthrough
-        case Qt::StatusTipRole: // fallthrough
-        case Qt::WhatsThisRole:
-            return i18n("All");
-        case Qt::UserRole + Id:
-            return "-1";
-        case Qt::UserRole + Url: {
-            return "All";
-        }
-        case Qt::UserRole + ResourceType:
-            return d->resourceType;
-        case Qt::UserRole + Active:
-            return true;
-        case Qt::UserRole + KisTagRole:
-        {
-            KisTagSP tag = tagForIndex(index);
-            QVariant response;
-            response.setValue(tag);
-            return response;
-        }
-        default:
-            ;
+        if (index.row() == KisTagModel::All + d->fakeRowsCount) {
+            switch(role) {
+            case Qt::DisplayRole:   // fallthrough
+            case Qt::ToolTipRole:   // fallthrough
+            case Qt::StatusTipRole: // fallthrough
+            case Qt::WhatsThisRole:
+                return i18n("All");
+            case Qt::UserRole + Id:
+                return QString::number(KisTagModel::All);
+            case Qt::UserRole + Url: {
+                return "All";
+            }
+            case Qt::UserRole + ResourceType:
+                return d->resourceType;
+            case Qt::UserRole + Active:
+                return true;
+            case Qt::UserRole + KisTagRole:
+            {
+                KisTagSP tag = tagForIndex(index);
+                QVariant response;
+                response.setValue(tag);
+                return response;
+            }
+            default:
+                ;
+            }
+        } else if (index.row() == KisTagModel::AllUntagged + d->fakeRowsCount) {
+            switch(role) {
+            case Qt::DisplayRole:   // fallthrough
+            case Qt::ToolTipRole:   // fallthrough
+            case Qt::StatusTipRole: // fallthrough
+            case Qt::WhatsThisRole:
+                return i18n("All untagged");
+            case Qt::UserRole + Id:
+                return QString::number(KisTagModel::AllUntagged);
+            case Qt::UserRole + Url: {
+                return "All untagged";
+            }
+            case Qt::UserRole + ResourceType:
+                return d->resourceType;
+            case Qt::UserRole + Active:
+                return true;
+            case Qt::UserRole + KisTagRole:
+            {
+                KisTagSP tag = tagForIndex(index);
+                QVariant response;
+                response.setValue(tag);
+                return response;
+            }
+            default:
+                ;
+            }
         }
     }
     else {
@@ -174,13 +202,23 @@ KisTagSP KisTagModel::tagForIndex(QModelIndex index) const
 
 
     if (index.row() < d->fakeRowsCount) {
-        tag.reset(new KisTag());
-        tag->setName("All");
-        tag->setUrl("All");
-        tag->setComment("All");
-        tag->setId(-1);
-        tag->setActive(true);
-        tag->setValid(true);
+        if (index.row() == KisTagModel::All + d->fakeRowsCount) {
+            tag.reset(new KisTag());
+            tag->setName(i18n("All"));
+            tag->setUrl("All");
+            tag->setComment(i18n("All"));
+            tag->setId(KisTagModel::All);
+            tag->setActive(true);
+            tag->setValid(true);
+        } else if (index.row() == KisTagModel::AllUntagged + d->fakeRowsCount) {
+            tag.reset(new KisTag());
+            tag->setName(i18n("All untagged"));
+            tag->setUrl("All untagged");
+            tag->setComment(i18n("All untagged"));
+            tag->setId(KisTagModel::AllUntagged);
+            tag->setActive(true);
+            tag->setValid(true);
+        }
     }
     else {
         bool pos = const_cast<KisTagModel*>(this)->d->query.seek(index.row() - d->fakeRowsCount);

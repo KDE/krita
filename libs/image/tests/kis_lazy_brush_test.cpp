@@ -525,11 +525,16 @@ void KisLazyBrushTest::testGraphMultilabel()
     QRect bLabelRect2(20, 80, 20, 20);
     QRect bLabelRect3(60, 40, 20, 30);
 
-    KisRegion aLabelRegion({aLabelRect1, aLabelRect2});
+    QRegion aLabelRegion;
+    aLabelRegion += aLabelRect1;
+    aLabelRegion += aLabelRect2;
 
-    KisRegion bLabelRegion({bLabelRect1, bLabelRect2, bLabelRect2});
+    QRegion bLabelRegion;
+    bLabelRegion += bLabelRect1;
+    bLabelRegion += bLabelRect2;
+    bLabelRegion += bLabelRect3;
 
-    KisLazyFillGraph g(mainRect, aLabelRegion, bLabelRegion);
+    KisLazyFillGraph g(mainRect, KisRegion::fromQRegion(aLabelRegion), KisRegion::fromQRegion(bLabelRegion));
 
     const int numVertices = g.num_vertices();
     const int numEdges = g.num_edges();

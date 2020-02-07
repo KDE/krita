@@ -199,12 +199,15 @@ QVector<KisPaintOpPresetSP>  KisFavoriteResourceManager::favoritePresetList()
 QVector<QString> KisFavoriteResourceManager::favoritePresetNamesList()
 {
     init();
+
     QVector<QString> names;
-    Q_FOREACH(KisPaintOpPresetSP preset, m_favoritePresetsList) {
-        if (preset) {
-            names << preset->name();
-        }
+    for (int i = 0; i < m_maxPresets; i++) {
+        QModelIndex index = m_resourcesProxyModel->index(i, 0);
+        QString name = m_resourcesProxyModel->data(index, Qt::UserRole + KisResourceModel::Name).toString();
+        names << name;
     }
+
+
     return names;
 }
 
@@ -212,11 +215,22 @@ QList<QImage> KisFavoriteResourceManager::favoritePresetImages()
 {
     init();
     QList<QImage> images;
+    /*
     Q_FOREACH (KisPaintOpPresetSP preset, m_favoritePresetsList) {
         if (preset) {
             images.append(preset->image());
         }
+    }
+    */
 
+
+    for (int i = 0; i < m_maxPresets; i++) {
+        QModelIndex index = m_resourcesProxyModel->index(i, 0);
+        if (index.isValid()) {
+            QVariant tmp = m_resourcesProxyModel->data(index, Qt::UserRole + KisResourceModel::Image);
+            QImage image = tmp.value<QImage>();
+            images << image;
+        }
     }
     return images;
 }

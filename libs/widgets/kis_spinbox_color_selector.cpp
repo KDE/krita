@@ -28,6 +28,7 @@
 #include <half.h>
 #endif
 #include <KoChannelInfo.h>
+#include <KoColorModelStandardIds.h>
 #include <KoColorSpaceTraits.h>
 #include <KoColorSpaceMaths.h>
 #include <KoColorSpaceRegistry.h>
@@ -139,9 +140,18 @@ void KisSpinboxColorSelector::slotSetColorSpace(const KoColorSpace *cs)
             break;
 #ifdef HAVE_OPENEXR
         case KoChannelInfo::FLOAT16: {
+            half m_uiMin, m_uiMax;
+            if (cs->colorModelId() == LABAColorModelID || cs->colorModelId() == CMYKAColorModelID) {
+                m_uiMin = channel->getUIMin();
+                m_uiMax = channel->getUIMax();
+            } else {
+                m_uiMin = 0;
+                m_uiMax = KoColorSpaceMathsTraits<half>::max;
+            }
+
             KisDoubleParseSpinBox *input = new KisDoubleParseSpinBox(this);
-            input->setMinimum(channel->getUIMin());
-            input->setMaximum(channel->getUIMax());
+            input->setMinimum(m_uiMin);
+            input->setMaximum(m_uiMax);
             input->setSingleStep(0.1);
             m_d->doubleSpinBoxList.append(input);
             m_d->layout->addRow(inlb,input);
@@ -155,9 +165,18 @@ void KisSpinboxColorSelector::slotSetColorSpace(const KoColorSpace *cs)
             break;
 #endif
         case KoChannelInfo::FLOAT32: {
+            float m_uiMin, m_uiMax;
+            if (cs->colorModelId() == LABAColorModelID || cs->colorModelId() == CMYKAColorModelID) {
+                m_uiMin = channel->getUIMin();
+                m_uiMax = channel->getUIMax();
+            } else {
+                m_uiMin = 0;
+                m_uiMax = KoColorSpaceMathsTraits<float>::max;
+            }
+
             KisDoubleParseSpinBox *input = new KisDoubleParseSpinBox(this);
-            input->setMinimum(channel->getUIMin());
-            input->setMaximum(channel->getUIMax());
+            input->setMinimum(m_uiMin);
+            input->setMaximum(m_uiMax);
             input->setSingleStep(0.1);
             m_d->doubleSpinBoxList.append(input);
             m_d->layout->addRow(inlb,input);

@@ -47,6 +47,7 @@ class KRITAUI_EXPORT KisToolFreehandHelper : public QObject
 public:
 
     KisToolFreehandHelper(KisPaintingInformationBuilder *infoBuilder,
+                          KoCanvasResourceProvider *resourceManager,
                           const KUndo2MagicString &transactionText = KUndo2MagicString(),
                           KisSmoothingOptions *smoothingOptions = 0);
     ~KisToolFreehandHelper() override;
@@ -70,7 +71,6 @@ public:
      */
     void initPaint(KoPointerEvent *event,
                    const QPointF &pixelCoords,
-                   KoCanvasResourceProvider *resourceManager,
                    KisImageWSP image,
                    KisNodeSP currentNode,
                    KisStrokesFacade *strokesFacade,
@@ -105,6 +105,8 @@ protected:
                        KisStrokesFacade *strokesFacade,
                        KisNodeSP overrideNode = 0,
                        KisDefaultBoundsBaseSP bounds = 0);
+
+    KoCanvasResourceProvider *resourceManager() const;
 
 protected:
 
@@ -147,6 +149,8 @@ private:
     KisPaintInformation getStabilizedPaintInfo(const QQueue<KisPaintInformation> &queue,
                                                const KisPaintInformation &lastPaintInfo);
     int computeAirbrushTimerInterval() const;
+
+    qreal currentZoom() const;
 
 private Q_SLOTS:
     void finishStroke();

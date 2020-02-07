@@ -60,6 +60,7 @@ KisToolMultihand::KisToolMultihand(KoCanvasBase *canvas)
 
     m_helper =
         new KisToolMultihandHelper(paintingInformationBuilder(),
+                                   canvas->resourceManager(),
                                    kundo2_i18n("Multibrush Stroke"));
     resetHelper(m_helper);
     if (image()) {

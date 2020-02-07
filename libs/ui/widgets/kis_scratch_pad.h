@@ -166,7 +166,7 @@ private:
     KisNodeGraphListener *m_nodeListener;
     KisScratchPadEventFilter *m_eventFilter;
 
-    KisToolFreehandHelper *m_helper;
+    QScopedPointer<KisToolFreehandHelper> m_helper;
     KisPaintingInformationBuilder *m_infoBuilder;
 
     QTransform m_scaleTransform;

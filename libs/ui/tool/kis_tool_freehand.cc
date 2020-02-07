@@ -75,7 +75,7 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
     setMaskSyntheticEvents(KisConfig(true).disableTouchOnCanvas()); // Disallow mouse events from finger presses unless enabled
 
     m_infoBuilder = new KisToolFreehandPaintingInformationBuilder(this);
-    m_helper = new KisToolFreehandHelper(m_infoBuilder, transactionText);
+    m_helper = new KisToolFreehandHelper(m_infoBuilder, canvas->resourceManager(), transactionText);
 
     connect(m_helper, SIGNAL(requestExplicitUpdateOutline()), SLOT(explicitUpdateOutline()));
 }
@@ -168,7 +168,6 @@ void KisToolFreehand::initStroke(KoPointerEvent *event)
 {
     m_helper->initPaint(event,
                         convertToPixelCoord(event),
-                        canvas()->resourceManager(),
                         image(),
                         currentNode(),
                         image().data());

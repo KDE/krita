@@ -219,6 +219,14 @@ QPointF KisTool::convertToPixelCoord(const QPointF& pt)
     return image()->documentToPixel(pt);
 }
 
+QPointF KisTool::convertToPixelCoordAndAlignOnWidget(const QPointF &pt)
+{
+    KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
+    const KisCoordinatesConverter *converter = canvas2->coordinatesConverter();
+    const QPointF imagePos = converter->widgetToImage(QPointF(converter->documentToWidget(pt).toPoint()));
+    return imagePos;
+}
+
 QPointF KisTool::convertToPixelCoordAndSnap(KoPointerEvent *e, const QPointF &offset, bool useModifiers)
 {
     if (!image())

@@ -756,9 +756,9 @@ QPainterPath KisToolPaint::getOutlinePath(const QPointF &documentPos,
 {
     Q_UNUSED(event);
 
-    QPointF imagePos = currentImage()->documentToPixel(documentPos);
     QPainterPath path = currentPaintOpPreset()->settings()->
-        brushOutline(KisPaintInformation(imagePos), outlineMode);
+        brushOutline(KisPaintInformation(convertToPixelCoordAndAlignOnWidget(documentPos)),
+                     outlineMode);
 
     return path;
 }

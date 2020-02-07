@@ -747,7 +747,7 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent *event)
             int pos = calculatePresetIndex(point, m_resourceManager->numFavoritePresets());
 
             if (pos >= 0 && pos < m_resourceManager->numFavoritePresets()) {
-                setToolTip(m_resourceManager->favoritePresetList().at(pos).data()->name());
+                setToolTip(m_resourceManager->favoritePresetNamesList().at(pos));
                 setHoveredPreset(pos);
             }
         }

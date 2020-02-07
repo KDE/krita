@@ -36,6 +36,8 @@
 #include "kis_config_notifier.h"
 #include <kis_paintop_preset.h>
 
+
+
 class KisFavoriteResourceManager::ColorDataList
 {
 public:
@@ -194,6 +196,18 @@ QVector<KisPaintOpPresetSP>  KisFavoriteResourceManager::favoritePresetList()
     return m_favoritePresetsList;
 }
 
+QVector<QString> KisFavoriteResourceManager::favoritePresetNamesList()
+{
+    init();
+    QVector<QString> names;
+    Q_FOREACH(KisPaintOpPresetSP preset, m_favoritePresetsList) {
+        if (preset) {
+            names << preset->name();
+        }
+    }
+    return names;
+}
+
 QList<QImage> KisFavoriteResourceManager::favoritePresetImages()
 {
     init();
@@ -322,6 +336,15 @@ bool sortPresetByName(KisPaintOpPresetSP preset1, KisPaintOpPresetSP preset2)
 
 void KisFavoriteResourceManager::updateFavoritePresets()
 {
+    //KisTagModel* tagModel = KisTagModelProvider::tagModel(ResourceType::PaintOpPresets);
+    //KisTagFilterResourceProxyModel proxy(tagModel);
+    //proxy.setTag(m_currentTag);
+
+    m_tagModel = KisTagModelProvider::tagModel(ResourceType::PaintOpPresets);
+    m_resourcesProxyModel = new KisTagFilterResourceProxyModel(m_tagModel, this);
+    m_resourcesProxyModel->setSourceModel(KisResourceModelProvider::resourceModel(ResourceType::PaintOpPresets));
+    m_resourcesProxyModel->setTag(m_currentTag);
+
 
     m_favoritePresetsList.clear();
     KisResourceModel* model = KisResourceModelProvider::resourceModel(ResourceType::PaintOpPresets);

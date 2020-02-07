@@ -25,6 +25,8 @@
 #include <QList>
 #include "KoResourceServerObserver.h"
 #include <KisTag.h>
+#include "KisTagFilterResourceProxyModel.h"
+#include <KisTagModelProvider.h>
 
 #include <KoColor.h>
 #include <KoResource.h>
@@ -51,6 +53,8 @@ public:
     int numFavoritePresets();
 
     QVector<KisPaintOpPresetSP> favoritePresetList();
+    QVector<QString> favoritePresetNamesList();
+
 
     int recentColorsTotal();
     const KoColor& recentColorAt(int pos);
@@ -132,6 +136,9 @@ private:
     bool m_initialized;
 
     int m_maxPresets;
+
+    KisTagModel* m_tagModel;
+    KisTagFilterResourceProxyModel* m_resourcesProxyModel;
 };
 
 #endif

@@ -1107,10 +1107,10 @@ void KisPaintopBox::slotPreviousFavoritePreset()
 {
     if (!m_favoriteResourceManager) return;
 
-    QVector<KisPaintOpPresetSP> presets = m_favoriteResourceManager->favoritePresetList();
+    QVector<QString> presets = m_favoriteResourceManager->favoritePresetNamesList();
     for (int i=0; i < presets.size(); ++i) {
         if (m_resourceProvider->currentPreset() &&
-                m_resourceProvider->currentPreset()->name() == presets[i]->name()) {
+                m_resourceProvider->currentPreset()->name() == presets[i]) {
             if (i > 0) {
                 m_favoriteResourceManager->slotChangeActivePaintop(i - 1);
             } else {
@@ -1133,9 +1133,9 @@ void KisPaintopBox::slotNextFavoritePreset()
 {
     if (!m_favoriteResourceManager) return;
 
-    QVector<KisPaintOpPresetSP> presets = m_favoriteResourceManager->favoritePresetList();
+    QVector<QString> presets = m_favoriteResourceManager->favoritePresetNamesList();
     for(int i = 0; i < presets.size(); ++i) {
-        if (m_resourceProvider->currentPreset()->name() == presets[i]->name()) {
+        if (m_resourceProvider->currentPreset()->name() == presets[i]) {
             if (i < m_favoriteResourceManager->numFavoritePresets() - 1) {
                 m_favoriteResourceManager->slotChangeActivePaintop(i + 1);
             } else {

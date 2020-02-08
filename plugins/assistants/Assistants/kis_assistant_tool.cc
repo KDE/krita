@@ -916,6 +916,7 @@ void KisAssistantTool::loadAssistants()
     QByteArray data = file.readAll();
     QXmlStreamReader xml(data);
     QMap<int, KisPaintingAssistantHandleSP> handleMap;
+    QMap<int, KisPaintingAssistantHandleSP> sideHandleMap;
     KisPaintingAssistantSP assistant;
     bool errors = false;
     while (!xml.atEnd()) {

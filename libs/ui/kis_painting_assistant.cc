@@ -620,6 +620,12 @@ void KisPaintingAssistant::saveXmlList(QDomDocument& doc, QDomElement& assistant
         assistantElement.setAttribute("filename", QString("ruler%1.assistant").arg(count));
         assistantsElement.appendChild(assistantElement);
     }
+    else if (d->s->id == "conjugate"){
+        QDomElement assistantElement = doc.createElement("assistant");
+        assistantElement.setAttribute("type", "conjugate");
+        assistantElement.setAttribute("filename", QString("conjugate%1.assistant").arg(count));
+        assistantsElement.appendChild(assistantElement);
+    }
 }
 
 void KisPaintingAssistant::findPerspectiveAssistantHandleLocation() {

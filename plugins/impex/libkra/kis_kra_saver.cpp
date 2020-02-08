@@ -414,7 +414,7 @@ bool KisKraSaver::saveAssistants(KoStore* store, QString uri, bool external)
 
 bool KisKraSaver::saveAssistantsList(QDomDocument& doc, QDomElement& element)
 {
-    int count_ellipse = 0, count_perspective = 0, count_ruler = 0, count_vanishingpoint = 0,count_infiniteruler = 0, count_parallelruler = 0, count_concentricellipse = 0, count_fisheyepoint = 0, count_spline = 0;
+    int count_ellipse = 0, count_conjugate = 0, count_perspective = 0, count_ruler = 0, count_vanishingpoint = 0,count_infiniteruler = 0, count_parallelruler = 0, count_concentricellipse = 0, count_fisheyepoint = 0, count_spline = 0;
     QList<KisPaintingAssistantSP> assistants =  m_d->doc->assistants();
     if (!assistants.isEmpty()) {
         QDomElement assistantsElement = doc.createElement("assistants");
@@ -450,6 +450,11 @@ bool KisKraSaver::saveAssistantsList(QDomDocument& doc, QDomElement& element)
             else if (assist->id() == "fisheye-point"){
                 assist->saveXmlList(doc, assistantsElement, count_fisheyepoint);
                 count_fisheyepoint++;
+            }
+            else if (assist->id() == "conjugate"){
+		qDebug() << "saving conjugate";
+                assist->saveXmlList(doc, assistantsElement, count_conjugate);
+                count_conjugate++;
             }
             else if (assist->id() == "ruler"){
                 assist->saveXmlList(doc, assistantsElement, count_ruler);

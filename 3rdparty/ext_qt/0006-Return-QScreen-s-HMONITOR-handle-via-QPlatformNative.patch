@@ -1,7 +1,7 @@
-From ca3018536c7625f76969fe0031e35ead039071ae Mon Sep 17 00:00:00 2001
+From 563a582f67d3dfa7c8028fa0449b6038bb7fe034 Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Tue, 4 Dec 2018 20:11:34 +0300
-Subject: [PATCH 14/19] Return QScreen's HMONITOR handle via
+Subject: [PATCH 14/22] Return QScreen's HMONITOR handle via
  QPlatformNativeInterface
 
 It is needed to be able to fetch extra information about the display via
@@ -62,10 +62,10 @@ index e6f8aae8fb..ce395dc5a4 100644
      void *nativeResourceForCursor(const QByteArray &resource, const QCursor &cursor) override;
  #endif
 diff --git a/src/plugins/platforms/windows/qwindowsscreen.cpp b/src/plugins/platforms/windows/qwindowsscreen.cpp
-index 4137a4bd9a..bc37263298 100644
+index cecd06f5a4..46e107d75e 100644
 --- a/src/plugins/platforms/windows/qwindowsscreen.cpp
 +++ b/src/plugins/platforms/windows/qwindowsscreen.cpp
-@@ -328,6 +328,11 @@ void QWindowsScreen::handleChanges(const QWindowsScreenData &newData)
+@@ -329,6 +329,11 @@ void QWindowsScreen::handleChanges(const QWindowsScreenData &newData)
      }
  }
  

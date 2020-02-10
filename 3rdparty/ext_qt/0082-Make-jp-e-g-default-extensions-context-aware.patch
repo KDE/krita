@@ -1,5 +1,27 @@
+From 19ff8c4b3906aa31db9381edbcfc16c7393a7dc4 Mon Sep 17 00:00:00 2001
+From: Agata Cacko <tamtamy.tymona@gmail.com>
+Date: Mon, 10 Feb 2020 17:03:26 +0300
+Subject: [PATCH 22/22] Make jp(e)g default extensions context-aware
+
+This commit contains changes to Qt that enable two things:
+- non-native file dialogs give .jpg or .jpeg extension depending
+on the context:
+1. If the current file is *.jp(e)g, suggest that extension.
+2. Whether there are already files with this name
+and extension in the directory, take that extension.
+3. Take .jpg.
+- "All" filter now suggests .kra extension instead of .exr.
+
+CCBUG:412651
+
+Change-Id: I6a61c3ab70942110ab1ead6eca8e1f1bd664ef3b
+---
+ src/widgets/dialogs/qfiledialog.cpp | 84 +++++++++++++++++++++--------
+ src/widgets/dialogs/qfiledialog_p.h |  2 +
+ 2 files changed, 64 insertions(+), 22 deletions(-)
+
 diff --git a/src/widgets/dialogs/qfiledialog.cpp b/src/widgets/dialogs/qfiledialog.cpp
-index 9fccee8c..8c868fce 100644
+index 9fccee8c81..8c868fceb6 100644
 --- a/src/widgets/dialogs/qfiledialog.cpp
 +++ b/src/widgets/dialogs/qfiledialog.cpp
 @@ -963,11 +963,7 @@ void QFileDialog::setDirectory(const QString &directory)
@@ -147,7 +169,7 @@ index 9fccee8c..8c868fce 100644
      }
  
 diff --git a/src/widgets/dialogs/qfiledialog_p.h b/src/widgets/dialogs/qfiledialog_p.h
-index 0a029efa..3979c6eb 100644
+index 0a029efaaa..3979c6eb29 100644
 --- a/src/widgets/dialogs/qfiledialog_p.h
 +++ b/src/widgets/dialogs/qfiledialog_p.h
 @@ -226,6 +226,8 @@ public:
@@ -159,3 +181,6 @@ index 0a029efa..3979c6eb 100644
      // layout
  #if QT_CONFIG(proxymodel)
      QAbstractProxyModel *proxyModel;
+-- 
+2.20.1.windows.1
+

@@ -1,7 +1,8 @@
-From dc661e2f61cb37998a457a21ca786f9b0186ece2 Mon Sep 17 00:00:00 2001
+From f76bc9e01bae3b6ccfa3395d7e98b1f197147514 Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Thu, 3 Oct 2019 19:20:07 +0300
-Subject: [PATCH] Sync buffers of the destination file after QFile::copy()
+Subject: [PATCH 20/22] Sync buffers of the destination file after
+ QFile::copy()
 
 After doing native file copying operating system (tested on Windows)
 doesn't sync the buffers of the file for some time. That is, if the
@@ -16,10 +17,10 @@ Change-Id: Id1b716ae86f68303ef6a9745a3275628d91e2d93
  1 file changed, 13 insertions(+)
 
 diff --git a/src/corelib/io/qfile.cpp b/src/corelib/io/qfile.cpp
-index 37de4450cc..6400df5727 100644
+index 1fb9af576c..c0d9415871 100644
 --- a/src/corelib/io/qfile.cpp
 +++ b/src/corelib/io/qfile.cpp
-@@ -796,6 +796,19 @@ QFile::copy(const QString &newName)
+@@ -784,6 +784,19 @@ QFile::copy(const QString &newName)
      close();
      if(error() == QFile::NoError) {
          if (d->engine()->copy(newName)) {

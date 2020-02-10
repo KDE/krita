@@ -31,11 +31,13 @@ ELSE(EXISTS PYQT5_VERSION)
 
 
   if (WIN32)
-    EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E env "PYTHONPATH=${CMAKE_PREFIX_PATH}/lib/krita-python-libs" ${PYTHON_EXECUTABLE} ${_find_pyqt5_py} OUTPUT_VARIABLE pyqt5_config)
+    EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E env "PREFIX_PATH=${CMAKE_PREFIX_PATH}" "PYTHONPATH=${CMAKE_PREFIX_PATH}/lib/krita-python-libs" ${PYTHON_EXECUTABLE} ${_find_pyqt5_py} OUTPUT_VARIABLE pyqt5_config)
   else (WIN32)
     EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} ${_find_pyqt5_py} OUTPUT_VARIABLE pyqt5_config)
   endif (WIN32)
 
+  message(${pyqt5_config})
+  
   IF(pyqt5_config)
     STRING(REGEX REPLACE "^pyqt_version:([^\n]+).*$" "\\1" PYQT5_VERSION ${pyqt5_config})
     STRING(REGEX REPLACE ".*\npyqt_version_str:([^\n]+).*$" "\\1" PYQT5_VERSION_STR ${pyqt5_config})

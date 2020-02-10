@@ -6,9 +6,9 @@ ExternalProject_Add( ext_expat
 	URL https://github.com/libexpat/libexpat/releases/download/R_2_2_9/expat-2.2.9.tar.gz
 	URL_MD5 077b953cc38df8fed78e92841cc35443
 
-	PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/expat-2.2.9-b9bd355.diff
+	#PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/expat-2.2.9-b9bd355.diff
 	INSTALL_DIR ${PREFIX_ext_expat}
-	SOURCE_SUBDIR expat
+	#SOURCE_SUBDIR expat
 	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_expat} -DBUILD_tests=OFF -DBUILD_examples=OFF -DBUILD_tools=OFF -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
 	UPDATE_COMMAND ""
 

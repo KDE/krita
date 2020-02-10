@@ -429,8 +429,8 @@ struct KoLabF64Traits : public KoLabTraits<double> {
                                                    (qreal)KoLabColorSpaceMathsTraits<channels_type>::unitValueL));
         case a_pos:
         case b_pos:
-            return QString().setNum(100.0 * qBound((qreal)0,
-                                                   (((qreal)c) - KoLabColorSpaceMathsTraits<channels_type>::halfValueAB) / KoLabColorSpaceMathsTraits<channels_type>::unitValueAB,
+            return QString().setNum(100.0 * qBound((qreal)KoLabColorSpaceMathsTraits<channels_type>::zeroValueAB,
+                                                   (((qreal)c) - KoLabColorSpaceMathsTraits<channels_type>::zeroValueAB) / (KoLabColorSpaceMathsTraits<channels_type>::unitValueAB - KoLabColorSpaceMathsTraits<channels_type>::zeroValueAB),
                                                    (qreal)KoLabColorSpaceMathsTraits<channels_type>::unitValueAB));
         case 3:
             return QString().setNum(100.0 * qBound((qreal)0,
@@ -447,22 +447,16 @@ struct KoLabF64Traits : public KoLabTraits<double> {
             c = nativeArray(pixel)[i];
             switch (i) {
             case L_pos:
-                channels[i] = qBound((qreal)0,
-                                     ((qreal)c) / KoLabColorSpaceMathsTraits<channels_type>::unitValueL,
-                                     (qreal)KoLabColorSpaceMathsTraits<channels_type>::unitValueL);
+                channels[i] = (qreal)c / KoLabColorSpaceMathsTraits<channels_type>::unitValueL;
                 break;
             case a_pos:
             case b_pos:
-                channels[i] = qBound((qreal)0,
-                                     (((qreal)c) - KoLabColorSpaceMathsTraits<channels_type>::halfValueAB) / KoLabColorSpaceMathsTraits<channels_type>::unitValueAB,
-                                     (qreal)KoLabColorSpaceMathsTraits<channels_type>::unitValueAB);
+                channels[i] = ((qreal)c - KoLabColorSpaceMathsTraits<channels_type>::zeroValueAB) / (KoLabColorSpaceMathsTraits<channels_type>::unitValueAB - KoLabColorSpaceMathsTraits<channels_type>::zeroValueAB);
                 break;
             // As per KoChannelInfo alpha channels are [0..1]
             case 3:
             default:
-                channels[i] = qBound((qreal)0,
-                                     ((qreal)c) / KoLabColorSpaceMathsTraits<channels_type>::unitValue,
-                                     (qreal)KoLabColorSpaceMathsTraits<channels_type>::unitValue);
+                channels[i] = (qreal)c / KoLabColorSpaceMathsTraits<channels_type>::unitValue;
                 break;
             }
         }
@@ -474,14 +468,14 @@ struct KoLabF64Traits : public KoLabTraits<double> {
             float b = 0;
             switch(i) {
             case L_pos:
-                b = qBound((float)0,
+                b = qBound((float)KoLabColorSpaceMathsTraits<channels_type>::zeroValueL,
                            (float)KoLabColorSpaceMathsTraits<channels_type>::unitValueL * values[i],
                            (float)KoLabColorSpaceMathsTraits<channels_type>::unitValueL);
                 break;
             case a_pos:
             case b_pos:
-                b = qBound((float)0,
-                           (float)KoLabColorSpaceMathsTraits<channels_type>::unitValueAB * values[i],
+                b = qBound((float)KoLabColorSpaceMathsTraits<channels_type>::zeroValueAB,
+                           (float)((KoLabColorSpaceMathsTraits<channels_type>::unitValueAB - KoLabColorSpaceMathsTraits<channels_type>::zeroValueAB) * values[i] + KoLabColorSpaceMathsTraits<channels_type>::zeroValueAB),
                            (float)KoLabColorSpaceMathsTraits<channels_type>::unitValueAB);
                 break;
             case 3:

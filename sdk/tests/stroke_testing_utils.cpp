@@ -49,7 +49,7 @@ KisImageSP utils::createImage(KisUndoStore *undoStore, const QSize &imageSize) {
     KisPaintLayerSP paintLayer4 = new KisPaintLayer(image, "paint4", OPACITY_OPAQUE_U8);
     KisPaintLayerSP paintLayer5 = new KisPaintLayer(image, "paint5", OPACITY_OPAQUE_U8);
 
-    image->lock();
+    image->barrierLock();
     image->addNode(paintLayer1);
     image->addNode(paintLayer2);
     image->addNode(paintLayer3);

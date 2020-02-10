@@ -151,7 +151,7 @@ void KisCustomPattern::createPattern()
         rc = rc.intersected(rc2);
     }
     else {
-        image->lock();
+        image->barrierLock();
         dev = image->projection();
         image->unlock();
         name = image->objectName();

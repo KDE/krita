@@ -258,8 +258,13 @@ QSize RAdjustableLabel::minimumSizeHint() const
 QSize RAdjustableLabel::sizeHint() const
 {
     QFontMetrics fm(fontMetrics());
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
     QScreen *s = qApp->screenAt(geometry().topLeft());
     int maxW     = s->availableGeometry().width() * 3 / 4;
+#else
+    int maxW     = QApplication::desktop()->screenGeometry(this).width() * 3 / 4;
+#endif
+
 #if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
     int currentW = fm.horizontalAdvance(d->ajdText);
 #else

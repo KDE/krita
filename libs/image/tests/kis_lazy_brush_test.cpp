@@ -525,11 +525,16 @@ void KisLazyBrushTest::testGraphMultilabel()
     QRect bLabelRect2(20, 80, 20, 20);
     QRect bLabelRect3(60, 40, 20, 30);
 
-    KisRegion aLabelRegion({aLabelRect1, aLabelRect2});
+    QRegion aLabelRegion;
+    aLabelRegion += aLabelRect1;
+    aLabelRegion += aLabelRect2;
 
-    KisRegion bLabelRegion({bLabelRect1, bLabelRect2, bLabelRect2});
+    QRegion bLabelRegion;
+    bLabelRegion += bLabelRect1;
+    bLabelRegion += bLabelRect2;
+    bLabelRegion += bLabelRect3;
 
-    KisLazyFillGraph g(mainRect, aLabelRegion, bLabelRegion);
+    KisLazyFillGraph g(mainRect, KisRegion::fromQRegion(aLabelRegion), KisRegion::fromQRegion(bLabelRegion));
 
     const int numVertices = g.num_vertices();
     const int numEdges = g.num_edges();
@@ -1206,6 +1211,7 @@ void KisLazyBrushTest::testCutOnGraphDevice()
 }
 
 #include "lazybrush/kis_multiway_cut.h"
+#include "testing_timed_default_bounds.h"
 
 void KisLazyBrushTest::testCutOnGraphDeviceMulti()
 {
@@ -1218,8 +1224,11 @@ void KisLazyBrushTest::testCutOnGraphDeviceMulti()
     KisPaintDeviceSP dLabelDev = loadTestImage("fill4_d.png", true);
     KisPaintDeviceSP eLabelDev = loadTestImage("fill4_e.png", true);
 
-
     KisPaintDeviceSP filteredMainDev = KisPainter::convertToAlphaAsGray(mainDev);
+    KisDefaultBoundsBaseSP bounds = new TestUtil::TestingTimedDefaultBounds(mainDev->exactBounds());
+    mainDev->setDefaultBounds(bounds);
+    filteredMainDev->setDefaultBounds(bounds);
+
     const QRect filterRect = filteredMainDev->exactBounds();
     KisGaussianKernel::applyLoG(filteredMainDev,
                                 filterRect,
@@ -1265,6 +1274,11 @@ void KisLazyBrushTest::testLoG()
     // mainDev->fill(fillRect, fg);
 
     KisPaintDeviceSP filteredMainDev = KisPainter::convertToAlphaAsGray(mainDev);
+
+    KisDefaultBoundsBaseSP bounds = new TestUtil::TestingTimedDefaultBounds(mainDev->exactBounds());
+    mainDev->setDefaultBounds(bounds);
+    filteredMainDev->setDefaultBounds(bounds);
+
     KisGaussianKernel::applyLoG(filteredMainDev,
                                 rect,
                                 4.0,

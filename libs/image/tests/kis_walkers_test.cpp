@@ -1206,7 +1206,7 @@ void KisWalkersTest::testRectsChecksum()
     KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
     KisAdjustmentLayerSP adjustmentLayer = new KisAdjustmentLayer(image, "adj", 0, 0);
 
-    image->lock();
+    image->barrierLock();
     image->addNode(paintLayer1, image->rootLayer());
     image->addNode(adjustmentLayer, image->rootLayer());
     image->unlock();
@@ -1257,7 +1257,7 @@ void KisWalkersTest::testGraphStructureChecksum()
     KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
     KisLayerSP paintLayer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE_U8);
 
-    image->lock();
+    image->barrierLock();
     image->addNode(paintLayer1, image->rootLayer());
     image->unlock();
 
@@ -1265,7 +1265,7 @@ void KisWalkersTest::testGraphStructureChecksum()
     walker.collectRects(paintLayer1, dirtyRect);
     QCOMPARE(walker.checksumValid(), true);
 
-    image->lock();
+    image->barrierLock();
     image->addNode(paintLayer2, image->rootLayer());
     image->unlock();
     QCOMPARE(walker.checksumValid(), false);
@@ -1273,7 +1273,7 @@ void KisWalkersTest::testGraphStructureChecksum()
     walker.recalculate(dirtyRect);
     QCOMPARE(walker.checksumValid(), true);
 
-    image->lock();
+    image->barrierLock();
     image->moveNode(paintLayer1, image->rootLayer(), paintLayer2);
     image->unlock();
     QCOMPARE(walker.checksumValid(), false);
@@ -1281,7 +1281,7 @@ void KisWalkersTest::testGraphStructureChecksum()
     walker.recalculate(dirtyRect);
     QCOMPARE(walker.checksumValid(), true);
 
-    image->lock();
+    image->barrierLock();
     image->removeNode(paintLayer1);
     image->unlock();
     QCOMPARE(walker.checksumValid(), false);

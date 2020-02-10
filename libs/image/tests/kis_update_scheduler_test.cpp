@@ -61,7 +61,7 @@ KisImageSP KisUpdateSchedulerTest::buildTestingImage()
     paintLayer1->paintDevice()->convertFromQImage(sourceImage1, 0, 0, 0);
     paintLayer2->paintDevice()->convertFromQImage(sourceImage2, 0, 0, 0);
 
-    image->lock();
+    image->barrierLock();
     image->addNode(paintLayer1);
     image->addNode(paintLayer2);
     image->addNode(blur1);

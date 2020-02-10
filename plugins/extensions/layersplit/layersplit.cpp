@@ -46,6 +46,7 @@
 #include "kis_node_manager.h"
 #include "kis_node_commands_adapter.h"
 #include "kis_undo_adapter.h"
+#include <kis_image_barrier_locker.h>
 
 #include <KoUpdater.h>
 #include <KoProgressUpdater.h>
@@ -91,7 +92,7 @@ void LayerSplit::slotLayerSplit()
         KisImageSP image = viewManager()->image();
         if (!image) return;
 
-        image->lock();
+        KisImageBarrierLocker locker(image);
 
         KisNodeSP node = viewManager()->activeNode();
         if (!node) return;
@@ -216,7 +217,6 @@ void LayerSplit::slotLayerSplit()
         }
 
         undo->endMacro();
-        image->unlock();
         image->setModified();
    }
 

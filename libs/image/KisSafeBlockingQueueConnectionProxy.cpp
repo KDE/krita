@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2020 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,7 +15,24 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "KisSafeBlockingQueueConnectionProxy.h"
 
-#include "kis_signal_compressor_with_param.h"
+#include <QThread>
+#include <QApplication>
+#include <KisBusyWaitBroker.h>
 
-#include "kis_signal_compressor_with_param.moc"
+void KisSafeBlockingQueueConnectionProxyPrivate::passBlockingSignalSafely(FunctionToSignalProxy &source, SignalToFunctionProxy &destination)
+{
+    if (QThread::currentThread() == qApp->thread() ||
+        KisBusyWaitBroker::instance()->guiThreadIsWaitingForBetterWeather()) {
+
+        destination.start();
+    } else {
+        source.start();
+    }
+}
+
+void KisSafeBlockingQueueConnectionProxyPrivate::initProxyObject(QObject *object)
+{
+    object->moveToThread(qApp->thread());
+}

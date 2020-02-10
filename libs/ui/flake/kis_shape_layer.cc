@@ -80,6 +80,9 @@
 #include "kis_effect_mask.h"
 #include "commands/KoShapeReorderCommand.h"
 #include "kis_do_something_command.h"
+#include <KisSafeBlockingQueueConnectionProxy.h>
+#include <QThread>
+#include <QApplication>
 
 
 #include <SimpleShapeContainerModel.h>
@@ -295,8 +298,6 @@ void KisShapeLayer::initShapeLayer(KoShapeControllerBase* controller, KisPaintDe
             this, SIGNAL(currentLayerChanged(const KoShapeLayer*)));
 
     connect(this, SIGNAL(sigMoveShapes(QPointF)), SLOT(slotMoveShapes(QPointF)));
-    connect(this, SIGNAL(sigTransformShapes(QTransform)), SLOT(slotTransformShapes(QTransform)), Qt::BlockingQueuedConnection);
-
 }
 
 bool KisShapeLayer::allowAsChild(KisNodeSP node) const
@@ -686,17 +687,20 @@ KUndo2Command* KisShapeLayer::crop(const QRect & rect)
     return new KisNodeMoveCommand2(this, oldPos, newPos);
 }
 
-struct TransformShapeLayerDeferred : public KUndo2Command
+class TransformShapeLayerDeferred : public KUndo2Command
 {
+public:
     TransformShapeLayerDeferred(KisShapeLayer *shapeLayer, const QTransform &globalDocTransform)
         : m_shapeLayer(shapeLayer),
-          m_globalDocTransform(globalDocTransform)
+          m_globalDocTransform(globalDocTransform),
+          m_blockingConnection(std::bind(&KisShapeLayer::slotTransformShapes, shapeLayer, std::placeholders::_1))
     {
     }
 
     void undo()
     {
-        emit m_shapeLayer->sigTransformShapes(m_savedTransform);
+        KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() != qApp->thread());
+        m_blockingConnection.start(m_savedTransform);
     }
 
     void redo()
@@ -706,13 +710,15 @@ struct TransformShapeLayerDeferred : public KUndo2Command
         const QTransform globalTransform = m_shapeLayer->absoluteTransformation();
         const QTransform localTransform = globalTransform * m_globalDocTransform * globalTransform.inverted();
 
-        emit m_shapeLayer->sigTransformShapes(localTransform * m_savedTransform);
+        KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() != qApp->thread());
+        m_blockingConnection.start(localTransform * m_savedTransform);
     }
 
 private:
     KisShapeLayer *m_shapeLayer;
     QTransform m_globalDocTransform;
     QTransform m_savedTransform;
+    KisSafeBlockingQueueConnectionProxy<QTransform> m_blockingConnection;
 };
 
 

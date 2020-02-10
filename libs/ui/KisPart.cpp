@@ -72,6 +72,8 @@
 #include "kis_action.h"
 #include "kis_action_registry.h"
 #include "KisSessionResource.h"
+#include "KisBusyWaitBroker.h"
+#include "dialogs/kis_delayed_save_dialog.h"
 
 Q_GLOBAL_STATIC(KisPart, s_instance)
 
@@ -120,6 +122,14 @@ KisPart* KisPart::instance()
     return s_instance;
 }
 
+namespace {
+void busyWaitWithFeedback(KisImageSP image)
+{
+    const int busyWaitDelay = 1000;
+    KisDelayedSaveDialog dialog(image, KisDelayedSaveDialog::ForcedDialog, busyWaitDelay, KisPart::instance()->currentMainwindow());
+    dialog.blockIfImageIsBusy();
+}
+}
 
 KisPart::KisPart()
     : d(new Private(this))
@@ -142,6 +152,7 @@ KisPart::KisPart()
 
 
     d->animationCachePopulator.slotRequestRegeneration();
+    KisBusyWaitBroker::instance()->setFeedbackCallback(&busyWaitWithFeedback);
 }
 
 KisPart::~KisPart()

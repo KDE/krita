@@ -467,7 +467,7 @@ KisImportExportErrorCode CSVLoader::createNewImage(int width, int height, float 
         if (!m_image) return ImportExportCodes::Failure;
 
         m_image->setResolution(ratio, 1.0);
-        m_image->lock();
+        m_image->barrierLock();
     }
     return ImportExportCodes::OK;
 }

@@ -60,8 +60,8 @@ elseif (MINGW)
     )
     ExternalProject_Add( ext_sip
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://www.riverbankcomputing.com/static/Downloads/sip/4.19.19/sip-4.19.19.tar.gz
-        URL_MD5 98111479309dc472410f26080d6d4a88
+        URL https://files.kde.org/krita/build/dependencies/sip-4.19.15.zip
+        URL_MD5 4a1a4760cfabef15d68f45a6920974c2
 
         CONFIGURE_COMMAND ${PYTHON_EXECUTABLE} <SOURCE_DIR>/configure.py ${_SIP_conf}
         BUILD_COMMAND mingw32-make -j${SUBMAKE_JOBS} LDFLAGS=${SECURITY_SHARED_LINKER_FLAGS}

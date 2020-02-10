@@ -133,14 +133,23 @@ public:
         QPointF result;
         const qreal pointSwapThreshold = 7.0 / zoom;
 
-        const qreal coeff = qMin(1.0, kisDistance(pt, m_second) / pointSwapThreshold);
+        /**
+         * We use per-axis distance to avoid artifacts when using devices that
+         * send events in a staircase way.
+         */
+        const qreal distance = qMin(qAbs(pt.x() - m_second.x()), qAbs(pt.y() - m_second.y()));
+        const qreal coeff = qMin(1.0, distance / pointSwapThreshold);
 
         if (coeff > 1.0 - std::numeric_limits<qreal>::epsilon()) {
             result = m_second;
             m_first = m_second;
             m_second = pt;
         } else {
-            result = m_first * (1.0 - coeff) + coeff * m_second;
+            /**
+             * Ideally, we should make the transition from m_first to m_second smooth,
+             * but simple blending via 'coeff' doesn't work for some reason.
+             */
+            result = m_first;
         }
 
         return result;

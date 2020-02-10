@@ -185,7 +185,7 @@ public:
      * Outline mode has to be passed to the paintop which builds the outline as some paintops have to paint outline
      * always like clone paintop indicating the duplicate position
      */
-    virtual QPainterPath brushOutline(const KisPaintInformation &info, const OutlineMode &mode);
+    virtual QPainterPath brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom);
 
     /**
     * Helpers for drawing the brush outline

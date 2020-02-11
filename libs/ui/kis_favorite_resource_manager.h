@@ -139,6 +139,8 @@ private:
 
     KisTagModel* m_tagModel;
     KisTagFilterResourceProxyModel* m_resourcesProxyModel;
+    KisResourceModel* m_resourceModel;
+
 };
 
 #endif

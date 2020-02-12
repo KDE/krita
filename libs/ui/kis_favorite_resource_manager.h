@@ -53,7 +53,7 @@ public:
 
     int numFavoritePresets();
 
-
+    void updateFavoritePresets();
 
     int recentColorsTotal();
     const KoColor& recentColorAt(int pos);
@@ -68,12 +68,6 @@ public:
 
     //BgColor;
     KoColor bgColor() const;
-
-    /**
-     * Set palette to block updates, paintops won't be deleted when they are deleted from server
-     * Used when overwriting a resource
-     */
-    void setBlockUpdates(bool block);
 
 Q_SIGNALS:
 
@@ -110,7 +104,7 @@ public Q_SLOTS:
     void slotSetBGColor(const KoColor c);
 
 private Q_SLOTS:
-    void updateFavoritePresets();
+
     void configChanged();
 
 private:
@@ -121,8 +115,6 @@ private:
 
     class ColorDataList;
     ColorDataList *m_colorList;
-
-    bool m_blockUpdates;
 
     void saveFavoritePresets();
 

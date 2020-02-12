@@ -167,7 +167,6 @@ private:
 KisFavoriteResourceManager::KisFavoriteResourceManager(KisPaintopBox *paintopBox)
     : m_paintopBox(paintopBox)
     , m_colorList(0)
-    , m_blockUpdates(false)
     , m_initialized(false)
 {
     KisConfig cfg(true);
@@ -189,7 +188,6 @@ void KisFavoriteResourceManager::unsetResourceServer()
 {
     // ...
 }
-
 QVector<QString> KisFavoriteResourceManager::favoritePresetNamesList()
 {
     init();
@@ -276,32 +274,23 @@ void KisFavoriteResourceManager::slotChangeFGColorSelector(KoColor c)
     emit sigChangeFGColorSelector(c);
 }
 
-void KisFavoriteResourceManager::removingResource(QSharedPointer<KisPaintOpPreset>  resource)
+void KisFavoriteResourceManager::removingResource(QSharedPointer<KisPaintOpPreset> /*resource*/)
 {
-
+    updateFavoritePresets();
 }
 
 void KisFavoriteResourceManager::resourceAdded(QSharedPointer<KisPaintOpPreset>  /*resource*/)
 {
-
+    updateFavoritePresets();
 }
 
 void KisFavoriteResourceManager::resourceChanged(QSharedPointer<KisPaintOpPreset>  /*resource*/)
 {
+    updateFavoritePresets();
 }
 
-void KisFavoriteResourceManager::setBlockUpdates(bool block)
+void KisFavoriteResourceManager::syncTaggedResourceView()
 {
-    m_blockUpdates = block;
-    if (!block) {
-        updateFavoritePresets();
-    }
-}
-
-void KisFavoriteResourceManager::syncTaggedResourceView() {
-    if (m_blockUpdates) {
-        return;
-    }
     updateFavoritePresets();
 }
 

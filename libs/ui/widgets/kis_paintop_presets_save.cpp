@@ -163,8 +163,6 @@ void KisPresetSaveWidget::savePreset()
     if (!curPreset)
         return;
 
-    m_favoriteResourceManager->setBlockUpdates(true);
-
     KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     QString saveLocation = rServer->saveLocation();
 
@@ -202,7 +200,7 @@ void KisPresetSaveWidget::savePreset()
 //    // automatically, so we need to call theupdate manually!
 //    rServer->tagCategoryMembersChanged();
 
-    m_favoriteResourceManager->setBlockUpdates(false);
+    m_favoriteResourceManager->updateFavoritePresets();
 
     close(); // we are done... so close the save brush dialog
 

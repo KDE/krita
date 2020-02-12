@@ -373,9 +373,6 @@ void KisPaintOpPresetsPopup::slotSaveRenameCurrentBrush()
     // but that is what we are going with for now
     emit reloadPresetClicked();
 
-
-    m_d->favoriteResManager->setBlockUpdates(true);
-
     // get a reference to the existing (and new) file name and path that we are working with
     KisPaintOpPresetSP curPreset = m_d->resourceProvider->currentPreset();
 
@@ -408,7 +405,7 @@ void KisPaintOpPresetsPopup::slotSaveRenameCurrentBrush()
         rServer->removeResourceFromServer(curPreset);
     }
 
-    m_d->favoriteResManager->setBlockUpdates(false);
+    m_d->favoriteResManager->updateFavoritePresets();
 
     toggleBrushRenameUIActive(false); // this returns the UI to its original state after saving
 

@@ -47,13 +47,12 @@ public:
     void unsetResourceServer() override;
 
     QList<QImage> favoritePresetImages();
+    QVector<QString> favoritePresetNamesList();
 
     void setCurrentTag(const KisTagSP tag);
 
     int numFavoritePresets();
 
-    QVector<KisPaintOpPresetSP> favoritePresetList();
-    QVector<QString> favoritePresetNamesList();
 
 
     int recentColorsTotal();
@@ -116,12 +115,9 @@ private Q_SLOTS:
 
 private:
 
-    // Loads the favorite preset list for the first time
     void init();
 
     KisPaintopBox *m_paintopBox;
-
-    QVector<KisPaintOpPresetSP> m_favoritePresetsList;
 
     class ColorDataList;
     ColorDataList *m_colorList;

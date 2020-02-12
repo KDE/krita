@@ -123,8 +123,7 @@ bool KisTagFilterResourceProxyModel::setResourceMetaData(KoResourceSP resource, 
 
 void KisTagFilterResourceProxyModel::setTag(const KisTagSP tag)
 {
-    fprintf(stderr, "we're setting a tag!: %s\n", tag->name().toUtf8().toStdString().c_str());
-    ENTER_FUNCTION();
+    ENTER_FUNCTION() << (tag.isNull() ? "(null)" : tag->name());
     //d->tags = tag.split(QRegExp("[,]\\s*"), QString::SkipEmptyParts);
     d->tags.clear();
     if (!tag.isNull()) {

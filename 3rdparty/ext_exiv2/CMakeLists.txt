@@ -19,7 +19,7 @@ ExternalProject_Add( ext_exiv2
 )
 
 
-else()
+elseif(MINGW)
 message(STATUS ${PREFIX_ext_exiv2}/lib)
 ExternalProject_Add( ext_exiv2
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
@@ -39,4 +39,16 @@ ExternalProject_Add( ext_exiv2
     INSTALL_COMMAND $(MAKE) install
 	DEPENDS ext_iconv ext_expat
 )
+else()
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    URL https://github.com/Exiv2/exiv2/archive/v0.27.2.tar.gz
+    URL_MD5 15780152b1dfb5a0d2c0cdfe5f5a1588
+
+    INSTALL_DIR ${PREFIX_ext_exiv2}
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_exiv2} -DCMAKE_LIBRARY_PATH=${PREFIX_ext_exiv2}/lib -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} -DEXIV2_BUILD_SAMPLES=OFF -DIconv_INCLUDE_DIR=${PREFIX_ext_exiv2}/include -DEXIV2_ENABLE_NLS=OFF -DEXIV2_BUILD_EXIV2_COMMAND=OFF
+
+    UPDATE_COMMAND ""
+    INSTALL_COMMAND $(MAKE) install
+    DEPENDS ext_iconv ext_expat
+
 endif()

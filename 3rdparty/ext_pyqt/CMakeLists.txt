@@ -56,7 +56,7 @@ elseif(MINGW)
 
         CONFIGURE_COMMAND ${PYTHON_EXECUTABLE} <SOURCE_DIR>/configure.py ${_PYQT_conf}
         BUILD_COMMAND mingw32-make -j${SUBMAKE_JOBS} CXXFLAGS=-D_hypot=hypot LDFLAGS=${SECURITY_SHARED_LINKER_FLAGS}
-        INSTALL_COMMAND mingw32-make install
+        INSTALL_COMMAND mingw32-make -j1 install
         
         BUILD_IN_SOURCE 1
 

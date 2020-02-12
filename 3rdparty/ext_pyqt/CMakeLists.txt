@@ -20,7 +20,10 @@ if (UNIX)
         
         CONFIGURE_COMMAND ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/configure.py ${_PYQT_conf}
         BUILD_COMMAND make
-        INSTALL_COMMAND make install
+
+        # force single-threaded installation to avoid
+        # race conditions in post-install .py script
+        INSTALL_COMMAND make -j1 install
         
         BUILD_IN_SOURCE 1
 
@@ -56,6 +59,9 @@ elseif(MINGW)
 
         CONFIGURE_COMMAND ${PYTHON_EXECUTABLE} <SOURCE_DIR>/configure.py ${_PYQT_conf}
         BUILD_COMMAND mingw32-make -j${SUBMAKE_JOBS} CXXFLAGS=-D_hypot=hypot LDFLAGS=${SECURITY_SHARED_LINKER_FLAGS}
+
+        # force single-threaded installation to avoid
+        # race conditions in post-install .py script
         INSTALL_COMMAND mingw32-make -j1 install
         
         BUILD_IN_SOURCE 1

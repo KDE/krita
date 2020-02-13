@@ -345,106 +345,52 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
     m_ui->tableAvailable->clear();
     m_ui->tableSelected->clear();
 
-    if (resourceType == ResourceType::Brushes) {
-        KoResourceServer<KisBrush> *server = KisBrushServerProvider::instance()->brushServer();
-        Q_FOREACH (KisBrushSP res, server->resources()) {
-            QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
-            item->setData(Qt::UserRole, res->filename());
+    QString standarizedResourceType = (resourceType == "presets" ? ResourceType::PaintOpPresets : resourceType);
+    QStringList& list = m_selectedBrushes;
 
-            if (m_selectedBrushes.contains(res->filename())) {
-                m_ui->tableSelected->addItem(item);
-            }
-            else {
-                m_ui->tableAvailable->addItem(item);
+    if (standarizedResourceType == ResourceType::Brushes) {
+        list = m_selectedBrushes;
+    } else if (standarizedResourceType == ResourceType::Gradients) {
+        list = m_selectedGradients;
+    } else if (standarizedResourceType == ResourceType::GamutMasks) {
+        list = m_selectedGamutMasks;
+    } else if (standarizedResourceType == ResourceType::Palettes) {
+        list = m_selectedPalettes;
+    } else if (standarizedResourceType == ResourceType::Patterns) {
+        list = m_selectedPatterns;
+    } else if (standarizedResourceType == ResourceType::PaintOpPresets) {
+        list = m_selectedPresets;
+    } else if (standarizedResourceType == ResourceType::Workspaces) {
+        list = m_selectedWorkspaces;
+    }
+
+    KisResourceModel* model = KisResourceModelProvider::resourceModel(standarizedResourceType);
+    for (int i = 0; i < model->rowCount(); i++) {
+        QModelIndex idx = model->index(i, 0);
+        QString filename = model->data(idx, Qt::UserRole + KisResourceModel::Filename).toString();
+
+        if (resourceType == ResourceType::Gradients) {
+            if (filename == "Foreground to Transparent" || filename == "Foreground to Background") {
+                continue;
             }
         }
-    }
-    else if (resourceType == "presets") {
-        KisPaintOpPresetResourceServer* server = KisResourceServerProvider::instance()->paintOpPresetServer();
-        Q_FOREACH (KisPaintOpPresetSP res, server->resources()) {
-            QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
-            item->setData(Qt::UserRole, res->filename());
 
-            if (m_selectedPresets.contains(res->filename())) {
-                m_ui->tableSelected->addItem(item);
-            }
-            else {
-                m_ui->tableAvailable->addItem(item);
-            }
+        QImage image = (model->data(idx, Qt::UserRole + KisResourceModel::Image)).value<QImage>();
+        QString name = model->data(idx, Qt::UserRole + KisResourceModel::Name).toString();
+
+        // Function imageToIcon(QImage()) returns a square white pixmap and a warning "QImage::scaled: Image is a null image"
+        //  while QPixmap() returns an empty pixmap.
+        // The difference between them is relevant in case of Workspaces which has no images.
+        // Using QPixmap() makes them appear in a dense list without icons, while imageToIcon(QImage())
+        //  would give a list with big white rectangles and names of the workspaces.
+        QListWidgetItem *item = new QListWidgetItem(image.isNull() ? QPixmap() : imageToIcon(image), name);
+        item->setData(Qt::UserRole, filename);
+
+        if (list.contains(filename)) {
+            m_ui->tableSelected->addItem(item);
         }
-    }
-    else if (resourceType == ResourceType::Gradients) {
-        KoResourceServer<KoAbstractGradient>* server = KoResourceServerProvider::instance()->gradientServer();
-        Q_FOREACH (KoResourceSP res, server->resources()) {
-            if (res->filename()!="Foreground to Transparent" && res->filename()!="Foreground to Background") {
-            //technically we should read from the file-name whether or not the file can be opened, but this works for now. The problem is making sure that bundle-resource know where they are stored.//
-            //dbgKrita<<res->filename();
-                QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
-                item->setData(Qt::UserRole, res->filename());
-
-                if (m_selectedGradients.contains(res->filename())) {
-                    m_ui->tableSelected->addItem(item);
-                }
-                else {
-                    m_ui->tableAvailable->addItem(item);
-                }
-            }
-        }
-    }
-    else if (resourceType == ResourceType::Patterns) {
-        KoResourceServer<KoPattern>* server = KoResourceServerProvider::instance()->patternServer();
-        Q_FOREACH (KoResourceSP res, server->resources()) {
-            QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
-            item->setData(Qt::UserRole, res->filename());
-
-            if (m_selectedPatterns.contains(res->filename())) {
-                m_ui->tableSelected->addItem(item);
-            }
-            else {
-                m_ui->tableAvailable->addItem(item);
-            }
-        }
-    }
-    else if (resourceType == ResourceType::Palettes) {
-        KoResourceServer<KoColorSet>* server = KoResourceServerProvider::instance()->paletteServer();
-        Q_FOREACH (KoResourceSP res, server->resources()) {
-            QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
-            item->setData(Qt::UserRole, res->filename());
-
-            if (m_selectedPalettes.contains(res->filename())) {
-                m_ui->tableSelected->addItem(item);
-            }
-            else {
-                m_ui->tableAvailable->addItem(item);
-            }
-        }
-    }
-    else if (resourceType == ResourceType::Workspaces) {
-        KoResourceServer<KisWorkspaceResource>* server = KisResourceServerProvider::instance()->workspaceServer();
-        Q_FOREACH (KoResourceSP res, server->resources()) {
-            QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
-            item->setData(Qt::UserRole, res->filename());
-
-            if (m_selectedWorkspaces.contains(res->filename())) {
-                m_ui->tableSelected->addItem(item);
-            }
-            else {
-                m_ui->tableAvailable->addItem(item);
-            }
-        }
-    }
-    else if (resourceType == ResourceType::GamutMasks) {
-        KoResourceServer<KoGamutMask>* server = KoResourceServerProvider::instance()->gamutMaskServer();
-        Q_FOREACH (KoResourceSP res, server->resources()) {
-            QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
-            item->setData(Qt::UserRole, res->filename());
-
-            if (m_selectedGamutMasks.contains(res->filename())) {
-                m_ui->tableSelected->addItem(item);
-            }
-            else {
-                m_ui->tableAvailable->addItem(item);
-            }
+        else {
+            m_ui->tableAvailable->addItem(item);
         }
     }
 

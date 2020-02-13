@@ -45,6 +45,7 @@
 #include "strokes/freehand_stroke.h"
 #include "strokes/KisFreehandStrokeInfo.h"
 #include "KisAsyncronousStrokeUpdateHelper.h"
+#include "kis_canvas_resource_provider.h"
 
 #include <math.h>
 
@@ -65,6 +66,7 @@ const qreal TIMING_UPDATE_INTERVAL = 50.0;
 
 struct KisToolFreehandHelper::Private
 {
+    KoCanvasResourceProvider *resourceManager;
     KisPaintingInformationBuilder *infoBuilder;
     KisStrokesFacade *strokesFacade;
     KisAsyncronousStrokeUpdateHelper asyncUpdateHelper;
@@ -116,10 +118,12 @@ struct KisToolFreehandHelper::Private
 
 
 KisToolFreehandHelper::KisToolFreehandHelper(KisPaintingInformationBuilder *infoBuilder,
+                                             KoCanvasResourceProvider *resourceManager,
                                              const KUndo2MagicString &transactionText,
                                              KisSmoothingOptions *smoothingOptions)
     : m_d(new Private())
 {
+    m_d->resourceManager = resourceManager;
     m_d->infoBuilder = infoBuilder;
     m_d->transactionText = transactionText;
     m_d->smoothingOptions = KisSmoothingOptionsSP(
@@ -166,7 +170,7 @@ QPainterPath KisToolFreehandHelper::paintOpOutline(const QPointF &savedCursorPos
 {
     KisPaintOpSettingsSP settings = globalSettings;
     KisPaintInformation info = m_d->infoBuilder->hover(savedCursorPos, event);
-    QPointF prevPoint = m_d->lastCursorPos.pushThroughHistory(savedCursorPos);
+    QPointF prevPoint = m_d->lastCursorPos.pushThroughHistory(savedCursorPos, currentZoom());
     qreal startAngle = KisAlgebra2D::directionBetweenPoints(prevPoint, savedCursorPos, 0);
     KisDistanceInformation distanceInfo(prevPoint, startAngle);
 
@@ -212,7 +216,7 @@ QPainterPath KisToolFreehandHelper::paintOpOutline(const QPointF &savedCursorPos
     info.setRandomSource(m_d->fakeDabRandomSource);
     info.setPerStrokeRandomSource(m_d->fakeStrokeRandomSource);
 
-    QPainterPath outline = settings->brushOutline(info, mode);
+    QPainterPath outline = settings->brushOutline(info, mode, currentZoom());
 
     if (m_d->resources &&
         m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::STABILIZER &&
@@ -229,26 +233,25 @@ QPainterPath KisToolFreehandHelper::paintOpOutline(const QPointF &savedCursorPos
 
 void KisToolFreehandHelper::cursorMoved(const QPointF &cursorPos)
 {
-    m_d->lastCursorPos.pushThroughHistory(cursorPos);
+    m_d->lastCursorPos.pushThroughHistory(cursorPos, currentZoom());
 }
 
 void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
                                       const QPointF &pixelCoords,
-                                      KoCanvasResourceProvider *resourceManager,
                                       KisImageWSP image, KisNodeSP currentNode,
                                       KisStrokesFacade *strokesFacade,
                                       KisNodeSP overrideNode,
                                       KisDefaultBoundsBaseSP bounds)
 {
-    QPointF prevPoint = m_d->lastCursorPos.pushThroughHistory(pixelCoords);
+    QPointF prevPoint = m_d->lastCursorPos.pushThroughHistory(pixelCoords, currentZoom());
     m_d->strokeTime.start();
     KisPaintInformation pi =
-        m_d->infoBuilder->startStroke(event, elapsedStrokeTime(), resourceManager);
+        m_d->infoBuilder->startStroke(event, elapsedStrokeTime(), m_d->resourceManager);
     qreal startAngle = KisAlgebra2D::directionBetweenPoints(prevPoint, pixelCoords, 0.0);
 
     initPaintImpl(startAngle,
                   pi,
-                  resourceManager,
+                  m_d->resourceManager,
                   image,
                   currentNode,
                   strokesFacade,
@@ -325,6 +328,11 @@ void KisToolFreehandHelper::initPaintImpl(qreal startAngle,
     if (airbrushing) {
         paintAt(pi);
     }
+}
+
+KoCanvasResourceProvider *KisToolFreehandHelper::resourceManager() const
+{
+    return m_d->resourceManager;
 }
 
 void KisToolFreehandHelper::paintBezierSegment(KisPaintInformation pi1, KisPaintInformation pi2,
@@ -880,6 +888,11 @@ int KisToolFreehandHelper::computeAirbrushTimerInterval() const
 {
     qreal realInterval = m_d->resources->airbrushingInterval() * AIRBRUSH_INTERVAL_FACTOR;
     return qMax(1, qFloor(realInterval));
+}
+
+qreal KisToolFreehandHelper::currentZoom() const
+{
+    return m_d->resourceManager ? m_d->resourceManager->resource(KisCanvasResourceProvider::EffectiveZoom).toReal() : 1.0;
 }
 
 void KisToolFreehandHelper::paintAt(int strokeInfoId,

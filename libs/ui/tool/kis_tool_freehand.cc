@@ -76,7 +76,7 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
     setMaskSyntheticEvents(KisConfig(true).disableTouchOnCanvas()); // Disallow mouse events from finger presses unless enabled
 
     m_infoBuilder = new KisToolFreehandPaintingInformationBuilder(this);
-    m_helper = new KisToolFreehandHelper(m_infoBuilder, transactionText);
+    m_helper = new KisToolFreehandHelper(m_infoBuilder, canvas->resourceManager(), transactionText);
 
     connect(m_helper, SIGNAL(requestExplicitUpdateOutline()), SLOT(explicitUpdateOutline()));
 }
@@ -169,7 +169,6 @@ void KisToolFreehand::initStroke(KoPointerEvent *event)
 {
     m_helper->initPaint(event,
                         convertToPixelCoord(event),
-                        canvas()->resourceManager(),
                         image(),
                         currentNode(),
                         image().data());
@@ -445,10 +444,8 @@ QPainterPath KisToolFreehand::getOutlinePath(const QPointF &documentPos,
                                              const KoPointerEvent *event,
                                              KisPaintOpSettings::OutlineMode outlineMode)
 {
-    QPointF imagePos = convertToPixelCoord(documentPos);
-
     if (currentPaintOpPreset())
-        return m_helper->paintOpOutline(imagePos,
+        return m_helper->paintOpOutline(convertToPixelCoord(documentPos),
                                         event,
                                         currentPaintOpPreset()->settings(),
                                         outlineMode);

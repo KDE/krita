@@ -644,6 +644,8 @@ private:
 
 std::pair<QPointF, QTransform> KRITAGLOBAL_EXPORT transformEllipse(const QPointF &axes, const QTransform &fullLocalToGlobal);
 
+QPointF KRITAGLOBAL_EXPORT alignForZoom(const QPointF &pt, qreal zoom);
+
 
 }
 

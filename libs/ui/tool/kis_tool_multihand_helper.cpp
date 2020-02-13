@@ -30,8 +30,9 @@ struct KisToolMultihandHelper::Private
 };
 
 KisToolMultihandHelper::KisToolMultihandHelper(KisPaintingInformationBuilder *infoBuilder,
+                                               KoCanvasResourceProvider *resourceManager,
                                                const KUndo2MagicString &transactionText)
-    : KisToolFreehandHelper(infoBuilder, transactionText)
+    : KisToolFreehandHelper(infoBuilder, resourceManager, transactionText)
     , d(new Private)
 {
 }

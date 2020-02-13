@@ -37,7 +37,7 @@ public:
     void setPaintOpSize(qreal value) override;
     qreal paintOpSize() const override;
 
-    QPainterPath brushOutline(const KisPaintInformation &info, const OutlineMode &mode) override;
+    QPainterPath brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom) override;
 
     QString modelName() const override {
         return "airbrush";

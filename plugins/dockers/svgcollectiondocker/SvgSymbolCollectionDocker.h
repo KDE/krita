@@ -32,6 +32,7 @@
 #include "ui_WdgSvgCollection.h"
 
 class KoSvgSymbolCollectionResource;
+class KisResourceModel;
 
 class SvgCollectionModel : public QAbstractListModel
 {
@@ -70,6 +71,7 @@ class SvgSymbolCollectionDocker : public QDockWidget, public KoCanvasObserverBas
 public:
 
     explicit SvgSymbolCollectionDocker(QWidget *parent = 0);
+    ~SvgSymbolCollectionDocker();
 
     /// reimplemented
     void setCanvas(KoCanvasBase *canvas) override;
@@ -82,11 +84,21 @@ private Q_SLOTS:
 
     void collectionActivated(int index);
     void slotSetIconSize();
+
+    void slotResourceModelAboutToBeReset();
+    void slotResourceModelReset();
+
+
 private:
 
+    void clearModels();
+
     Ui_WdgSvgCollection *m_wdgSvgCollection;
-    QVector<SvgCollectionModel*> m_models;
+    QMap<int, SvgCollectionModel*> m_collectionsModelsCache;
     QSlider* m_iconSizeSlider;
+
+    KisResourceModel* m_resourceModel;
+    int m_rememberedSvgCollectionId;
 };
 
 #endif

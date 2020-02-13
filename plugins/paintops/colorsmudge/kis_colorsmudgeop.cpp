@@ -39,6 +39,8 @@
 #include <kis_lod_transform.h>
 #include <kis_spacing_information.h>
 #include <KoColorModelStandardIds.h>
+#include "kis_paintop_plugin_utils.h"
+
 
 KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPainter* painter, KisNodeSP node, KisImageSP image)
     : KisBrushBasedPaintOp(settings, painter)
@@ -62,6 +64,7 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
     m_opacityOption.readOptionSetting(settings);
     m_ratioOption.readOptionSetting(settings);
     m_spacingOption.readOptionSetting(settings);
+    m_rateOption.readOptionSetting(settings);
     m_smudgeRateOption.readOptionSetting(settings);
     m_colorRateOption.readOptionSetting(settings);
     m_smudgeRadiusOption.readOptionSetting(settings);
@@ -69,11 +72,13 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
     m_rotationOption.readOptionSetting(settings);
     m_scatterOption.readOptionSetting(settings);
     m_gradientOption.readOptionSetting(settings);
+    m_airbrushOption.readOptionSetting(settings);
 
     m_sizeOption.resetAllSensors();
     m_opacityOption.resetAllSensors();
     m_ratioOption.resetAllSensors();
     m_spacingOption.resetAllSensors();
+    m_rateOption.resetAllSensors();
     m_smudgeRateOption.resetAllSensors();
     m_colorRateOption.resetAllSensors();
     m_smudgeRadiusOption.resetAllSensors();
@@ -233,7 +238,7 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
 
     KisSpacingInformation spacingInfo =
         effectiveSpacing(scale, rotation,
-                         m_spacingOption, info);
+                         &m_airbrushOption, &m_spacingOption, info);
 
     if (m_firstRun) {
         m_firstRun = false;
@@ -360,5 +365,11 @@ KisSpacingInformation KisColorSmudgeOp::updateSpacingImpl(const KisPaintInformat
 {
     const qreal scale = m_sizeOption.apply(info) * KisLodTransform::lodToScale(painter()->device());
     const qreal rotation = m_rotationOption.apply(info);
-    return effectiveSpacing(scale, rotation, m_spacingOption, info);
+    return effectiveSpacing(scale, rotation, &m_airbrushOption, &m_spacingOption, info);
+}
+
+
+KisTimingInformation KisColorSmudgeOp::updateTimingImpl(const KisPaintInformation &info) const
+{
+    return KisPaintOpPluginUtils::effectiveTiming(&m_airbrushOption, &m_rateOption, info);
 }

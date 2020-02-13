@@ -60,6 +60,7 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
     Q_ASSERT(painter);
     m_sizeOption.readOptionSetting(settings);
     m_opacityOption.readOptionSetting(settings);
+    m_ratioOption.readOptionSetting(settings);
     m_spacingOption.readOptionSetting(settings);
     m_smudgeRateOption.readOptionSetting(settings);
     m_colorRateOption.readOptionSetting(settings);
@@ -71,6 +72,7 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
 
     m_sizeOption.resetAllSensors();
     m_opacityOption.resetAllSensors();
+    m_ratioOption.resetAllSensors();
     m_spacingOption.resetAllSensors();
     m_smudgeRateOption.resetAllSensors();
     m_colorRateOption.resetAllSensors();
@@ -118,7 +120,7 @@ KisColorSmudgeOp::~KisColorSmudgeOp()
     delete m_hsvTransform;
 }
 
-void KisColorSmudgeOp::updateMask(const KisPaintInformation& info, double scale, double rotation, const QPointF &cursorPoint)
+void KisColorSmudgeOp::updateMask(const KisPaintInformation& info, const KisDabShape &shape, const QPointF &cursorPoint)
 {
     static const KoColorSpace *cs = KoColorSpaceRegistry::instance()->alpha8();
     static KoColor color(Qt::black, cs);
@@ -126,7 +128,7 @@ void KisColorSmudgeOp::updateMask(const KisPaintInformation& info, double scale,
     m_maskDab = m_dabCache->fetchDab(cs,
                                      color,
                                      cursorPoint,
-                                     KisDabShape(scale, 1.0, rotation),
+                                     shape,
                                      info,
                                      1.0,
                                      &m_dstDabRect);
@@ -195,7 +197,9 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     qreal rotation = m_rotationOption.apply(info);
     if (checkSizeTooSmall(scale)) return KisSpacingInformation();
 
-    KisDabShape shape(scale, 1.0, rotation);
+    qreal ratio = m_ratioOption.apply(info);
+
+    KisDabShape shape(scale, ratio, rotation);
 
     QPointF scatteredPos =
         m_scatterOption.apply(info,
@@ -213,7 +217,7 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
      *   o m_dstDabRect stores the destination rect where the mask is going
      *     to be written to
      */
-    updateMask(info, scale, rotation, scatteredPos);
+    updateMask(info, shape, scatteredPos);
 
     QPointF newCenterPos = QRectF(m_dstDabRect).center();
     /**

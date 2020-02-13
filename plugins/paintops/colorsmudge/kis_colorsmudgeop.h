@@ -25,6 +25,7 @@
 #include <kis_types.h>
 #include <kis_pressure_size_option.h>
 #include <kis_pressure_opacity_option.h>
+#include <kis_pressure_ratio_option.h>
 #include <kis_pressure_spacing_option.h>
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_scatter_option.h>
@@ -57,7 +58,7 @@ protected:
 
 private:
     // Sets the m_maskDab _and m_maskDabRect
-    void updateMask(const KisPaintInformation& info, double scale, double rotation, const QPointF &cursorPoint);
+    void updateMask(const KisPaintInformation& info, const KisDabShape &shape, const QPointF &cursorPoint);
 
     inline void getTopLeftAligned(const QPointF &pos, const QPointF &hotSpot, qint32 *x, qint32 *y);
 
@@ -75,6 +76,7 @@ private:
     const KoAbstractGradient* m_gradient {0};
     KisPressureSizeOption     m_sizeOption;
     KisPressureOpacityOption  m_opacityOption;
+    KisPressureRatioOption    m_ratioOption;
     KisPressureSpacingOption  m_spacingOption;
     KisSmudgeOption           m_smudgeRateOption;
     KisRateOption             m_colorRateOption;

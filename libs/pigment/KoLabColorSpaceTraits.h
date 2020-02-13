@@ -96,10 +96,17 @@ struct KoLabTraits : public KoColorSpaceTrait<_channels_type_, 4, 3> {
             return QString().setNum(100.0 * qBound((qreal)0, ((qreal)c) / KoLabColorSpaceMathsTraits<channels_type>::unitValueL, (qreal)KoLabColorSpaceMathsTraits<channels_type>::unitValueL));
         case a_pos:
         case b_pos:
-            return QString().setNum(100.0 *
-                                    qBound((qreal)KoLabColorSpaceMathsTraits<channels_type>::zeroValueAB,
-                                           (((qreal)c) - KoLabColorSpaceMathsTraits<channels_type>::zeroValueAB) / (KoLabColorSpaceMathsTraits<channels_type>::unitValueAB - KoLabColorSpaceMathsTraits<channels_type>::zeroValueAB),
-                                           (qreal)KoLabColorSpaceMathsTraits<channels_type>::unitValueAB));
+            if (c <= 0.5) {
+                return QString().setNum(100.0 *
+                                qBound((qreal)KoLabColorSpaceMathsTraits<channels_type>::zeroValueAB,
+                                       (qreal)(2.0 * c * KoLabColorSpaceMathsTraits<channels_type>::halfValueAB),
+                                       (qreal)KoLabColorSpaceMathsTraits<channels_type>::halfValueAB));
+            } else {
+                return QString().setNum(100.0 *
+                                qBound((qreal)KoLabColorSpaceMathsTraits<channels_type>::halfValueAB,
+                                       (qreal)(KoLabColorSpaceMathsTraits<channels_type>::halfValueAB + 2.0 * (c - 0.5) * (KoLabColorSpaceMathsTraits<channels_type>::unitValueAB - KoLabColorSpaceMathsTraits<channels_type>::halfValueAB)),
+                                       (qreal)KoLabColorSpaceMathsTraits<channels_type>::unitValueAB));
+            }
         case 3:
             return QString().setNum(100.0 * qBound((qreal)0, ((qreal)c) / KoLabColorSpaceMathsTraits<channels_type>::unitValue, (qreal)KoLabColorSpaceMathsTraits<channels_type>::unitValue));
         default:
@@ -118,7 +125,11 @@ struct KoLabTraits : public KoColorSpaceTrait<_channels_type_, 4, 3> {
                 break;
             case a_pos:
             case b_pos:
-                channels[i] = ((qreal)c - KoLabColorSpaceMathsTraits<channels_type>::zeroValueAB) / (KoLabColorSpaceMathsTraits<channels_type>::unitValueAB - KoLabColorSpaceMathsTraits<channels_type>::zeroValueAB);
+                if (c <= KoLabColorSpaceMathsTraits<channels_type>::halfValueAB) {
+                    channels[i] = ((qreal)c - KoLabColorSpaceMathsTraits<channels_type>::zeroValueAB) / (2.0 * (KoLabColorSpaceMathsTraits<channels_type>::halfValueAB - KoLabColorSpaceMathsTraits<channels_type>::zeroValueAB));
+                } else {
+                    channels[i] = 0.5 + ((qreal)c - KoLabColorSpaceMathsTraits<channels_type>::halfValueAB) / (2.0 * (KoLabColorSpaceMathsTraits<channels_type>::unitValueAB - KoLabColorSpaceMathsTraits<channels_type>::halfValueAB));
+                }
                 break;
             // As per KoChannelInfo alpha channels are [0..1]
             case 3:
@@ -136,16 +147,27 @@ struct KoLabTraits : public KoColorSpaceTrait<_channels_type_, 4, 3> {
             float b = 0;
             switch (i) {
             case L_pos:
-                b = qBound((float)KoLabColorSpaceMathsTraits<channels_type>::zeroValueL, (float)KoLabColorSpaceMathsTraits<channels_type>::unitValueL * values[i], (float)KoLabColorSpaceMathsTraits<channels_type>::unitValueL);
+                b = qBound((float)KoLabColorSpaceMathsTraits<channels_type>::zeroValueL,
+                           (float)KoLabColorSpaceMathsTraits<channels_type>::unitValueL * values[i],
+                           (float)KoLabColorSpaceMathsTraits<channels_type>::unitValueL);
                 break;
             case a_pos:
             case b_pos:
-                b = qBound((float)KoLabColorSpaceMathsTraits<channels_type>::zeroValueAB,
-                           (float)((KoLabColorSpaceMathsTraits<channels_type>::unitValueAB - KoLabColorSpaceMathsTraits<channels_type>::zeroValueAB) * values[i] + KoLabColorSpaceMathsTraits<channels_type>::zeroValueAB),
-                           (float)KoLabColorSpaceMathsTraits<channels_type>::unitValueAB);
+                if (values[i] <= 0.5) {
+                    b = qBound((float)KoLabColorSpaceMathsTraits<channels_type>::zeroValueAB,
+                               (float)(KoLabColorSpaceMathsTraits<channels_type>::zeroValueAB + 2.0 * values[i] * (KoLabColorSpaceMathsTraits<channels_type>::halfValueAB - KoLabColorSpaceMathsTraits<channels_type>::zeroValueAB)),
+                               (float)KoLabColorSpaceMathsTraits<channels_type>::halfValueAB);
+                }
+                else {
+                    b = qBound((float)KoLabColorSpaceMathsTraits<channels_type>::halfValueAB,
+                               (float)(KoLabColorSpaceMathsTraits<channels_type>::halfValueAB + 2.0 * (values[i] - 0.5) * (KoLabColorSpaceMathsTraits<channels_type>::unitValueAB - KoLabColorSpaceMathsTraits<channels_type>::halfValueAB)),
+                               (float)KoLabColorSpaceMathsTraits<channels_type>::unitValueAB);
+                }
                 break;
             case 3:
-                b = qBound((float)KoLabColorSpaceMathsTraits<channels_type>::min, (float)KoLabColorSpaceMathsTraits<channels_type>::unitValue * values[i], (float)KoLabColorSpaceMathsTraits<channels_type>::max);
+                b = qBound((float)KoLabColorSpaceMathsTraits<channels_type>::min,
+                           (float)KoLabColorSpaceMathsTraits<channels_type>::unitValue * values[i],
+                           (float)KoLabColorSpaceMathsTraits<channels_type>::unitValue);
             default:
                 break;
             }

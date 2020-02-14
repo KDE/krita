@@ -47,12 +47,23 @@ public:
     bool sortLayers() const;
     bool disregardOpacity() const;
     int fuzziness() const;
+<<<<<<< HEAD
     KoColorSetSP palette() const;
 
 private Q_SLOTS:
 
     void applyClicked();
     void slotSetPalette(KoColorSetSP pal);
+=======
+    KoColorSet* palette() const;
+    bool modeToMask;
+
+private Q_SLOTS:
+
+    void slotApplyClicked();
+    void slotSetPalette(KoColorSet *pal);
+    void slotChangeMode(int);
+>>>>>>> master
 
 private:
     WdgLayerSplit *m_page {0};

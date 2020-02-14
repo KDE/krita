@@ -665,4 +665,9 @@ std::pair<QPointF, QTransform> transformEllipse(const QPointF &axes, const QTran
     return std::make_pair(QPointF(newA, newB), newLocalToGlobal);
 }
 
+QPointF alignForZoom(const QPointF &pt, qreal zoom)
+{
+    return QPointF((pt * zoom).toPoint()) / zoom;
+}
+
 }

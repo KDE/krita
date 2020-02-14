@@ -27,11 +27,14 @@ set(kritawidgetutils_LIB_SRCS
     KisSqueezedComboBox.cpp
     KisDialogStateSaver.cpp
     KisPopupButton.cpp
+    kis_cursor.cc
+    kis_cursor_cache.cpp
     
     kis_double_parse_spin_box.cpp
     kis_double_parse_unit_spin_box.cpp
     kis_int_parse_spin_box.cpp
     kis_num_parser.cpp
+    kis_slider_spin_box.cpp
     kis_spin_box_unit_manager.cpp
 
     config/kcolorscheme.cpp

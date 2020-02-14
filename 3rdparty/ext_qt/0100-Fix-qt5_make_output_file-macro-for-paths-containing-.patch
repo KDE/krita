@@ -1,0 +1,45 @@
+From e2dfc5e463910dc76af615bb7ff9733df81bb832 Mon Sep 17 00:00:00 2001
+From: Joerg Bornemann <joerg.bornemann@qt.io>
+Date: Wed, 29 Jan 2020 11:06:35 +0100
+Subject: [PATCH] Fix qt5_make_output_file macro for paths containing dots
+
+Commit 89bd5a7e broke CMake projects that use dots in their build
+paths, because the used regular expression matches the directory part
+of the path as well.
+
+The regex wants to achieve the same as get_filename_component(...
+NAME_WLE) which is available since CMake 3.14. Re-implement the
+NAME_WLE functionality for older CMake versions by using multiple
+get_filename_component calls.
+
+Fixes: QTBUG-81715
+Task-number: QTBUG-80295
+Change-Id: I2ef053300948f6e1b2c0c5eafac35105f193d4e6
+Reviewed-by: Alexandru Croitor <alexandru.croitor@qt.io>
+---
+ src/corelib/Qt5CoreMacros.cmake | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/src/corelib/Qt5CoreMacros.cmake b/src/corelib/Qt5CoreMacros.cmake
+index 7735e51012..b3da6406a1 100644
+--- a/src/corelib/Qt5CoreMacros.cmake
++++ b/src/corelib/Qt5CoreMacros.cmake
+@@ -59,7 +59,14 @@ macro(QT5_MAKE_OUTPUT_FILE infile prefix ext outfile )
+     set(_outfile "${CMAKE_CURRENT_BINARY_DIR}/${rel}")
+     string(REPLACE ".." "__" _outfile ${_outfile})
+     get_filename_component(outpath ${_outfile} PATH)
+-    string(REGEX REPLACE "\\.[^.]*$" "" _outfile ${_outfile})
++    if(CMAKE_VERSION VERSION_LESS "3.14")
++        get_filename_component(_outfile_ext ${_outfile} EXT)
++        get_filename_component(_outfile_ext ${_outfile_ext} NAME_WE)
++        get_filename_component(_outfile ${_outfile} NAME_WE)
++        string(APPEND _outfile ${_outfile_ext})
++    else()
++        get_filename_component(_outfile ${_outfile} NAME_WLE)
++    endif()
+     file(MAKE_DIRECTORY ${outpath})
+     set(${outfile} ${outpath}/${prefix}${_outfile}.${ext})
+ endmacro()
+-- 
+2.20.1.windows.1
+

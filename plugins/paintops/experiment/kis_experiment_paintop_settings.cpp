@@ -18,6 +18,7 @@
 
 #include "kis_experiment_paintop_settings.h"
 #include "kis_current_outline_fetcher.h"
+#include "kis_algebra_2d.h"
 
 struct KisExperimentPaintOpSettings::Private
 {
@@ -47,7 +48,7 @@ bool KisExperimentPaintOpSettings::paintIncremental()
     return false;
 }
 
-QPainterPath KisExperimentPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode)
+QPainterPath KisExperimentPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
 {
     QPainterPath path;
     if (mode.isVisible) {
@@ -63,7 +64,7 @@ QPainterPath KisExperimentPaintOpSettings::brushOutline(const KisPaintInformatio
             path.addPath(makeTiltIndicator(info, QPointF(0.0, 0.0), 0.0, 3.0));
         }
 
-        path.translate(info.pos());
+        path.translate(KisAlgebra2D::alignForZoom(info.pos(), alignForZoom));
     }
     return path;
 }

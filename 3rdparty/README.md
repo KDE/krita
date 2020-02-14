@@ -34,7 +34,7 @@ Note: on all operating systems the entire procedure is done in a terminal window
                idea to create a batch file which sets the path and start cmd.
         * MSVC is *not* supported at the moment.
 
-4. On Windows, you will also need a release of Python 3.6 (*not* 3.7 or any other versions): https://www.python.org. Make sure to have that version of python.exe in your path. This version of Python will be used for two things: to configure Qt and to build the Python scripting module.  Make sure that this version of Python comes first in your path. Do not set PYTHONHOME or PYTHONPATH.
+4. On Windows, you will also need a release of Python 3.8 (*not* 3.7 or 3.9 or any other versions): https://www.python.org. Make sure to have that version of python.exe in your path. This version of Python will be used for two things: to configure Qt and to build the Python scripting module.  Make sure that this version of Python comes first in your path. Do not set PYTHONHOME or PYTHONPATH.
     * Make sure that your Python will have the correct architecture for the version you are trying to build. If building for 32-bit target, you need the 32-bit release of Python.
 
 5. On Windows, if you want to compile Qt with ANGLE support, you will need to install Windows 10 SDK and have the environment variable `WindowsSdkDir` set to it (typically `C:\Program Files (x86)\Windows Kits\10`)
@@ -184,6 +184,13 @@ Note: on all operating systems the entire procedure is done in a terminal window
     cmake --build . --config RelWithDebInfo --target ext_sip
     cmake --build . --config RelWithDebInfo --target ext_pyqt
     ```
+
+    Troubleshooting: if you have problems with 'install' step
+    of ext_sip or ext_pyqt, make sure you install it in single
+    thread only (`mingw32-make -j1 install`). Otherwise, a
+    race condition may happen in the post-install script and
+    metadata generation will be started before actual libraries
+    are installed.
 
     On Windows and Linux (if you want to include gmic-qt)
     ```

@@ -1,6 +1,4 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-new file mode 100644
-index 0000000..b24ad45
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -85,8 +85,8 @@

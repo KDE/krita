@@ -58,7 +58,9 @@ KisToolLine::KisToolLine(KoCanvasBase * canvas)
       m_showGuideline(true),
       m_strokeIsRunning(false),
       m_infoBuilder(new KisConverterPaintingInformationBuilder(getCoordinatesConverter(canvas))),
-      m_helper(new KisToolLineHelper(m_infoBuilder.data(), kundo2_i18n("Draw Line"))),
+      m_helper(new KisToolLineHelper(m_infoBuilder.data(),
+                                     canvas->resourceManager(),
+                                     kundo2_i18n("Draw Line"))),
       m_strokeUpdateCompressor(500, KisSignalCompressor::POSTPONE),
       m_longStrokeUpdateCompressor(1000, KisSignalCompressor::FIRST_INACTIVE)
 {
@@ -202,8 +204,7 @@ void KisToolLine::updateStroke()
 {
     if (!m_strokeIsRunning) return;
 
-    m_helper->repaintLine(canvas()->resourceManager(),
-                          image(),
+    m_helper->repaintLine(image(),
                           currentNode(),
                           image().data());
 }

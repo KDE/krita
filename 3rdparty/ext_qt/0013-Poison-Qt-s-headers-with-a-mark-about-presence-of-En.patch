@@ -1,7 +1,7 @@
-From 22c69acd5168dff36197b11edfc3fc0735253b91 Mon Sep 17 00:00:00 2001
+From 5d631de72030e0072c9bde32660e1ad737f5f7bc Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Mon, 11 Mar 2019 16:17:17 +0300
-Subject: [PATCH 2/2] Poison Qt's headers with a mark about presence of
+Subject: [PATCH 13/13] Poison Qt's headers with a mark about presence of
  Enter/Leave patch
 
 ---
@@ -9,7 +9,7 @@ Subject: [PATCH 2/2] Poison Qt's headers with a mark about presence of
  1 file changed, 4 insertions(+)
 
 diff --git a/src/gui/kernel/qevent.h b/src/gui/kernel/qevent.h
-index 2b1c6a6e31..69cafaaa29 100644
+index 30f058ea07..b09a21300b 100644
 --- a/src/gui/kernel/qevent.h
 +++ b/src/gui/kernel/qevent.h
 @@ -242,6 +242,10 @@ protected:

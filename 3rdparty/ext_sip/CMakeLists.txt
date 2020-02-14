@@ -14,7 +14,10 @@ if (UNIX)
 
         CONFIGURE_COMMAND ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/configure.py -b ${PREFIX_ext_sip}/bin -d ${PREFIX_ext_sip}/lib/python3.5/site-packages -e ${PREFIX_ext_sip}/include  --sipdir ${PREFIX_ext_sip}/sip --target-py-version 3.8 --sip-module PyQt5.sip
         BUILD_COMMAND make
-        INSTALL_COMMAND make install
+
+        # force single-threaded installation to avoid
+        # race conditions in post-install .py script
+        INSTALL_COMMAND make -j1 install
 
             BUILD_IN_SOURCE 1
 
@@ -39,7 +42,10 @@ if (UNIX)
                 -b ${PREFIX_ext_sip}/bin -d ${PREFIX_ext_sip}/lib/Python.framework/Versions/Current/site-packages/ 
                 -e ${PREFIX_ext_sip}/include --sipdir ${PREFIX_ext_sip}/share/sip --target-py-version 3.8 --sip-module PyQt5.sip
             BUILD_COMMAND make
-            INSTALL_COMMAND make install
+
+            # force single-threaded installation to avoid
+            # race conditions in post-install .py script
+            INSTALL_COMMAND make -j1 install
                 # COMMAND ${CMAKE_COMMAND} -E create_symlink ./PyQt5/sip.so ${PREFIX_ext_sip}/lib/Python.framework/Versions/Current/site-packages/sip.so
                 # COMMAND ${CMAKE_COMMAND} -E create_symlink ./PyQt5/sip.pyi ${PREFIX_ext_sip}/lib/Python.framework/Versions/Current/site-packages/sip.pyi
 
@@ -65,7 +71,10 @@ elseif (MINGW)
 
         CONFIGURE_COMMAND ${PYTHON_EXECUTABLE} <SOURCE_DIR>/configure.py ${_SIP_conf}
         BUILD_COMMAND mingw32-make -j${SUBMAKE_JOBS} LDFLAGS=${SECURITY_SHARED_LINKER_FLAGS}
-        INSTALL_COMMAND mingw32-make -j${SUBMAKE_JOBS} install
+
+        # force single-threaded installation to avoid
+        # race conditions in post-install .py script
+        INSTALL_COMMAND mingw32-make -j1 install
         
         BUILD_IN_SOURCE 1
 

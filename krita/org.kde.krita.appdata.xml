@@ -16,6 +16,7 @@
   <developer_name xml:lang="fi">Krita Foundation</developer_name>
   <developer_name xml:lang="fr">La Fondation Krita</developer_name>
   <developer_name xml:lang="gl">Fundación Krita</developer_name>
+  <developer_name xml:lang="ia">Krita Foundation (Fundatiomn de Krita)</developer_name>
   <developer_name xml:lang="id">Asas Krita</developer_name>
   <developer_name xml:lang="it">Fondazione Krita</developer_name>
   <developer_name xml:lang="ko">Krita Foundation</developer_name>
@@ -46,6 +47,7 @@
   <name xml:lang="fi">Krita</name>
   <name xml:lang="fr">Krita</name>
   <name xml:lang="gl">Krita</name>
+  <name xml:lang="ia">Krita</name>
   <name xml:lang="id">Krita</name>
   <name xml:lang="it">Krita</name>
   <name xml:lang="ko">Krita</name>

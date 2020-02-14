@@ -1,7 +1,7 @@
-From fc3645ac36979772878e9d3380224d870bfb80c5 Mon Sep 17 00:00:00 2001
+From 48eb2593876ba9e6b674f38c8111e1ce67dfe6e9 Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Thu, 6 Dec 2018 16:16:27 +0300
-Subject: [PATCH 16/19] Fix notification of QDockWidget when it gets undocked
+Subject: [PATCH 16/22] Fix notification of QDockWidget when it gets undocked
 
 Before the patch the notification was emitted only when the docker
 was attached to the panel or changed a position on it.

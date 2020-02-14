@@ -62,7 +62,7 @@ public:
 
     KisPaintOpSettingsSP clone() const override;
     using KisBrushBasedPaintOpSettings::brushOutline;
-    QPainterPath brushOutline(const KisPaintInformation &info, const OutlineMode &mode) override;
+    QPainterPath brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom) override;
 
     KisNodeWSP sourceNode() const;
 

@@ -35,8 +35,6 @@ public:
 
     bool willDegrade(ColorSpaceIndependence independence) const override;
 
-    QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const override;
-
     static QString colorSpaceId()
     {
         return QString("LABA");

@@ -32,7 +32,6 @@ class LabU8ColorSpace : public LcmsColorSpace<KoLabU8Traits>
 public:
     LabU8ColorSpace(const QString &name, KoColorProfile *p);
     bool willDegrade(ColorSpaceIndependence independence) const override;
-    QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const override;
 
     static QString colorSpaceId()
     {

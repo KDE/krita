@@ -10,7 +10,8 @@ try:
     # from the current PATH environment, therefore we should add
     # path to Qt's DLL's manually. This variable is passed from
     # FindPyQt5.cmake
-    os.add_dll_directory(os.environ['PYTHONDLLPATH'])
+    for path in os.environ['PYTHONDLLPATH'].split(';'):
+        os.add_dll_directory(path)
 except:
     pass
 

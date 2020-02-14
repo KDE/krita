@@ -59,8 +59,8 @@ DlgLayerSplit::DlgLayerSplit()
     QString paletteName = cfg.readEntry<QString>("layersplit/paletteName", i18n("Default"));
     KoResourceServer<KoColorSet> *pserver = KoResourceServerProvider::instance()->paletteServer();
     KoColorSetSP pal = pserver->resourceByName(paletteName);
-    modeToMask = m_page->cmbMode->currentIndex();
-    slotChangeMode(modeToMask);
+    m_modeToMask = m_page->cmbMode->currentIndex();
+    slotChangeMode(m_modeToMask);
 
     if (pal) {
         m_palette = pal;
@@ -144,8 +144,8 @@ void DlgLayerSplit::slotSetPalette(KoColorSetSP pal)
 }
 
 void DlgLayerSplit::slotChangeMode(int idx){
-    modeToMask = idx;
-    if( modeToMask){
+    m_modeToMask = idx;
+    if( m_modeToMask){
         m_page->chkCreateGroupLayer->hide();
         m_page->chkSeparateGroupLayers->hide();
         m_page->chkAlphaLock->hide();

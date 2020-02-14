@@ -84,7 +84,7 @@ void LayerSplit::slotLayerSplit()
 
     if (dlg.exec() == QDialog::Accepted) {
 
-        bool modeToLayer = !dlg.modeToMask;
+        bool modeToLayer = !dlg.m_modeToMask;
         dlg.hide();
 
         QApplication::setOverrideCursor(Qt::WaitCursor);

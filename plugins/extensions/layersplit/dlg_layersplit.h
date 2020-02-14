@@ -47,25 +47,19 @@ public:
     bool sortLayers() const;
     bool disregardOpacity() const;
     int fuzziness() const;
-<<<<<<< HEAD
     KoColorSetSP palette() const;
 
 private Q_SLOTS:
 
-    void applyClicked();
-    void slotSetPalette(KoColorSetSP pal);
-=======
-    KoColorSet* palette() const;
-    bool modeToMask;
-
-private Q_SLOTS:
-
     void slotApplyClicked();
-    void slotSetPalette(KoColorSet *pal);
+    void slotSetPalette(KoColorSetSP pal);
     void slotChangeMode(int);
->>>>>>> master
 
 private:
+
+    friend class LayerSplit;
+    bool m_modeToMask;
+
     WdgLayerSplit *m_page {0};
     KisPaletteListWidget *m_colorSetChooser {0};
     KoColorSetSP m_palette {0};

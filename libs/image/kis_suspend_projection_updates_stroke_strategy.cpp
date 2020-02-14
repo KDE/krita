@@ -44,6 +44,7 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
     bool sanityResumingFinished = false;
     int updatesEpoch = 0;
     bool haveDisabledGUILodSync = false;
+    SharedDataSP sharedData;
 
     void tryFetchUsedUpdatesFilter(KisImageSP image);
     void tryIssueRecordedDirtyRequests(KisImageSP image);
@@ -168,17 +169,20 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
         void redo() override {
             KisImageSP image = m_d->image.toStrongRef();
             KIS_SAFE_ASSERT_RECOVER_RETURN(image);
-            KIS_SAFE_ASSERT_RECOVER_RETURN(!image->projectionUpdatesFilter());
+            KIS_SAFE_ASSERT_RECOVER_RETURN(!image->currentProjectionUpdatesFilter());
+            KIS_SAFE_ASSERT_RECOVER_RETURN(!m_d->sharedData->installedFilterCookie);
 
-            image->setProjectionUpdatesFilter(
-                KisProjectionUpdatesFilterSP(new Private::SuspendLod0Updates()));
+            m_d->sharedData->installedFilterCookie = image->addProjectionUpdatesFilter(
+                toQShared(new Private::SuspendLod0Updates()));
         }
 
 
         void undo() override {
             KisImageSP image = m_d->image.toStrongRef();
             KIS_SAFE_ASSERT_RECOVER_RETURN(image);
-            KIS_SAFE_ASSERT_RECOVER_RETURN(image->projectionUpdatesFilter());
+            KIS_SAFE_ASSERT_RECOVER_RETURN(image->currentProjectionUpdatesFilter());
+            KIS_SAFE_ASSERT_RECOVER_RETURN(image->currentProjectionUpdatesFilter() == m_d->sharedData->installedFilterCookie);
+
 
             m_d->tryFetchUsedUpdatesFilter(image);
         }
@@ -196,7 +200,8 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
         void redo() override {
             KisImageSP image = m_d->image.toStrongRef();
             KIS_SAFE_ASSERT_RECOVER_RETURN(image);
-            KIS_SAFE_ASSERT_RECOVER_RETURN(image->projectionUpdatesFilter());
+            KIS_SAFE_ASSERT_RECOVER_RETURN(image->currentProjectionUpdatesFilter());
+            KIS_SAFE_ASSERT_RECOVER_RETURN(image->currentProjectionUpdatesFilter() == m_d->sharedData->installedFilterCookie);
 
             image->disableUIUpdates();
             m_d->tryFetchUsedUpdatesFilter(image);
@@ -206,10 +211,11 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
         void undo() override {
             KisImageSP image = m_d->image.toStrongRef();
             KIS_SAFE_ASSERT_RECOVER_RETURN(image);
-            KIS_SAFE_ASSERT_RECOVER_RETURN(!image->projectionUpdatesFilter());
+            KIS_SAFE_ASSERT_RECOVER_RETURN(!image->currentProjectionUpdatesFilter());
+            KIS_SAFE_ASSERT_RECOVER_RETURN(!m_d->sharedData->installedFilterCookie);
 
-            image->setProjectionUpdatesFilter(
-                KisProjectionUpdatesFilterSP(new Private::SuspendLod0Updates()));
+            m_d->sharedData->installedFilterCookie = image->addProjectionUpdatesFilter(
+                toQShared(new Private::SuspendLod0Updates()));
             image->enableUIUpdates();
         }
 
@@ -358,13 +364,13 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
     QVector<StrokeJobCommand*> executedCommands;
 };
 
-KisSuspendProjectionUpdatesStrokeStrategy::KisSuspendProjectionUpdatesStrokeStrategy(KisImageWSP image, bool suspend)
+KisSuspendProjectionUpdatesStrokeStrategy::KisSuspendProjectionUpdatesStrokeStrategy(KisImageWSP image, bool suspend, SharedDataSP sharedData)
     : KisRunnableBasedStrokeStrategy(suspend ? "suspend_stroke_strategy" : "resume_stroke_strategy"),
       m_d(new Private)
 {
     m_d->image = image;
     m_d->suspend = suspend;
-
+    m_d->sharedData = sharedData;
 
     /**
      * Here we add a dumb INIT job so that KisStrokesQueue would know that the
@@ -466,20 +472,26 @@ QList<KisStrokeJobData*> KisSuspendProjectionUpdatesStrokeStrategy::createResume
     return QList<KisStrokeJobData*>();
 }
 
+KisSuspendProjectionUpdatesStrokeStrategy::SharedDataSP KisSuspendProjectionUpdatesStrokeStrategy::createSharedData()
+{
+    return toQShared(new SharedData());
+}
+
 void KisSuspendProjectionUpdatesStrokeStrategy::Private::tryFetchUsedUpdatesFilter(KisImageSP image)
 {
-    KisProjectionUpdatesFilterSP filter =
-        image->projectionUpdatesFilter();
+    if (!this->sharedData->installedFilterCookie) return;
 
-    if (!filter) return;
+    KisProjectionUpdatesFilterSP filter = image->removeProjectionUpdatesFilter(image->currentProjectionUpdatesFilter());
+    this->sharedData->installedFilterCookie = KisProjectionUpdatesFilterCookie();
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(filter);
 
     QSharedPointer<Private::SuspendLod0Updates> localFilter =
         filter.dynamicCast<Private::SuspendLod0Updates>();
 
-    if (localFilter) {
-        image->setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP());
-        this->usedFilters.append(localFilter);
-    }
+    KIS_SAFE_ASSERT_RECOVER_RETURN(localFilter);
+
+    this->usedFilters.append(localFilter);
 }
 
 void KisSuspendProjectionUpdatesStrokeStrategy::Private::tryIssueRecordedDirtyRequests(KisImageSP image)

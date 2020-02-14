@@ -1011,9 +1011,11 @@ public Q_SLOTS:
      * node, it can ask for an update itself. This method is a way of
      * blocking such intermediate (and excessive) requests.
      *
-     * NOTE: this is a convenience function for setProjectionUpdatesFilter()
+     * NOTE: this is a convenience function for addProjectionUpdatesFilter()
      *       that installs a predefined filter that eats everything. Please
-     *       note that these calls are *not* recursive
+     *       note that these calls are *not* recursive.
+     *
+     * WARNING: The calls to enable/disable must be balanced.
      */
     void disableDirtyRequests() override;
 
@@ -1026,14 +1028,49 @@ public Q_SLOTS:
      * Installs a filter object that will filter all the incoming projection update
      * requests. If the filter return true, the incoming update is dropped.
      *
-     * NOTE: you cannot set filters recursively!
+     * NOTE: you can add multiple filters to the image, **but** the calls to add/remove
+     *       must be nested and balanced. E.g.
+     *
+     *       \code{.cpp}
+     *
+     *       auto cookie1 = image->addProjectionUpdatesFilter(filter1);
+     *       auto cookie2 = image->addProjectionUpdatesFilter(filter2);
+     *
+     *       /// ...do something...
+     *
+     *       /// correct:
+     *       image->removeProjectionUpdatesFilter(cookie2)
+     *       image->removeProjectionUpdatesFilter(cookie1)
+     *
+     *       /// incorrect:
+     *       // image->removeProjectionUpdatesFilter(cookie1)
+     *       // image->removeProjectionUpdatesFilter(cookie2)
+     *       \endcode
      */
-    void setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP filter) override;
+    KisProjectionUpdatesFilterCookie addProjectionUpdatesFilter(KisProjectionUpdatesFilterSP filter) override;
 
     /**
-     * \see setProjectionUpdatesFilter()
+     * @brief removes already installed filter from the stack of updates filers
+     * @param cookie a cookie object returned by addProjectionUpdatesFilter() on intallation
+     * @return the installed filter. If the cookie is invalid, or nesting rule has been
+     *         broken, then removeProjectionUpdatesFilter() may safe-assert and return nullptr.
+     *
+     * NOTE: some weird code (e.g. KisRegenerateFrameStrokeStrategy) needs to temporary remove
+     * all the filters and then install them back. Current implementation ensures that after removal
+     * and the following installation, cookies will be preserved. So this operation is considered
+     * safe.
+     *
+     * \see addProjectionUpdatesFilter()
      */
-    KisProjectionUpdatesFilterSP projectionUpdatesFilter() const override;
+    KisProjectionUpdatesFilterSP removeProjectionUpdatesFilter(KisProjectionUpdatesFilterCookie cookie) override;
+
+    /**
+     * Return the cookie of the lastly-installed filter
+     *
+     * \see addProjectionUpdatesFilter()
+     */
+    KisProjectionUpdatesFilterCookie currentProjectionUpdatesFilter() const override;
+
 
     void refreshGraphAsync(KisNodeSP root = KisNodeSP()) override;
     void refreshGraphAsync(KisNodeSP root, const QRect &rc) override;

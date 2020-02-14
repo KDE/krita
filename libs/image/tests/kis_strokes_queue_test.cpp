@@ -391,23 +391,23 @@ struct KisStrokesQueueTest::LodStrokesQueueTester {
           realContext(2),
           context(!real ? fakeContext : realContext)
     {
-        queue.setSuspendUpdatesStrokeStrategyFactory(
+        queue.setSuspendResumeUpdatesStrokeStrategyFactory(
             []() {
-                return KisSuspendResumePair(
+                KisSuspendResumePair suspend(
                     new KisTestingStrokeStrategy("susp_u_", false, true, true),
                     QList<KisStrokeJobData*>());
-            });
 
-        queue.setResumeUpdatesStrokeStrategyFactory(
-            []() {
-                return KisSuspendResumePair(
+                KisSuspendResumePair resume(
                     new KisTestingStrokeStrategy("resu_u_", false, true, true),
                     QList<KisStrokeJobData*>());
+
+                return std::make_pair(suspend, resume);
             });
+
         queue.setLod0ToNStrokeStrategyFactory(
-            [](bool forgettable) {
+            [] (bool forgettable) {
                 Q_UNUSED(forgettable);
-                return KisSuspendResumePair(
+                return KisLodSyncPair(
                     new KisTestingStrokeStrategy("sync_u_", false, true, true),
                     QList<KisStrokeJobData*>());
             });

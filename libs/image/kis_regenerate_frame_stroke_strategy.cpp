@@ -37,7 +37,7 @@ struct KisRegenerateFrameStrokeStrategy::Private
     int previousFrameId;
     QRegion dirtyRegion;
     KisImageAnimationInterface *interface;
-    KisProjectionUpdatesFilterSP prevUpdatesFilter;
+    QStack<KisProjectionUpdatesFilterSP> prevUpdatesFilters;
 
     class Data : public KisStrokeJobData {
     public:
@@ -61,8 +61,10 @@ struct KisRegenerateFrameStrokeStrategy::Private
         if (!image) {
             return;
         }
-        prevUpdatesFilter = image->projectionUpdatesFilter();
-        image->setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP());
+
+        while (KisProjectionUpdatesFilterCookie cookie = image->currentProjectionUpdatesFilter()) {
+            prevUpdatesFilters.push(image->removeProjectionUpdatesFilter(cookie));
+        }
     }
 
     void restoreUpdatesFilter() {
@@ -70,8 +72,10 @@ struct KisRegenerateFrameStrokeStrategy::Private
         if (!image) {
             return;
         }
-        image->setProjectionUpdatesFilter(prevUpdatesFilter);
-        prevUpdatesFilter.clear();
+
+        while (!prevUpdatesFilters.isEmpty()) {
+            image->addProjectionUpdatesFilter(prevUpdatesFilters.pop());
+        }
     }
 };
 

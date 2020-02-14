@@ -387,7 +387,7 @@ bool KraConverter::completeLoading(KoStore* store)
         return false;
     }
 
-    m_image->blockUpdates();
+    m_image->disableDirtyRequests();
 
     QString layerPathName = m_kraLoader->imageName();
     if (!m_store->hasDirectory(layerPathName)) {
@@ -409,7 +409,7 @@ bool KraConverter::completeLoading(KoStore* store)
         return false;
     }
 
-    m_image->unblockUpdates();
+    m_image->enableDirtyRequests();
 
     if (!m_kraLoader->warningMessages().isEmpty()) {
         // warnings do not interrupt loading process, so we do not return here

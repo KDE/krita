@@ -49,41 +49,6 @@ bool LabU16ColorSpace::willDegrade(ColorSpaceIndependence independence) const
     }
 }
 
-QString LabU16ColorSpace::normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const
-{
-    const KoLabU16Traits::channels_type *pix = reinterpret_cast<const  KoLabU16Traits::channels_type *>(pixel);
-    Q_ASSERT(channelIndex < channelCount());
-
-    // These convert from lcms encoded format to standard ranges.
-
-    switch (channelIndex) {
-    case 0:
-        return QString().setNum(100.0 * static_cast<float>(pix[0]) / KoLabColorSpaceMathsTraits<KoLabU16Traits::channels_type>::unitValueL);
-    case 1:
-    case 2:
-        if (pix[channelIndex] <= 0.5) {
-            return QString().setNum(100.0 *
-                                    qBound((qreal)KoLabColorSpaceMathsTraits<KoLabU16Traits::channels_type>::zeroValueAB,
-                                           (qreal)(2.0 * static_cast<float>(pix[channelIndex]) * KoLabColorSpaceMathsTraits<KoLabU16Traits::channels_type>::halfValueAB),
-                                           (qreal)KoLabColorSpaceMathsTraits<KoLabU16Traits::channels_type>::halfValueAB));
-        } else {
-            return QString().setNum(
-                100.0 *
-                qBound((qreal)KoLabColorSpaceMathsTraits<KoLabU16Traits::channels_type>::halfValueAB,
-                       (qreal)(KoLabColorSpaceMathsTraits<KoLabU16Traits::channels_type>::halfValueAB +
-                               2.0 * (static_cast<float>(pix[channelIndex]) - 0.5) * (KoLabColorSpaceMathsTraits<KoLabU16Traits::channels_type>::unitValueAB - KoLabColorSpaceMathsTraits<KoLabU16Traits::channels_type>::halfValueAB)),
-                       (qreal)KoLabColorSpaceMathsTraits<KoLabU16Traits::channels_type>::unitValueAB));
-        }
-    case 3:
-        return QString().setNum(
-            100.0 * qBound((qreal)0,
-                           (qreal)(static_cast<float>(pix[channelIndex]) / KoLabColorSpaceMathsTraits<KoLabU16Traits::channels_type>::unitValue),
-                           (qreal)KoLabColorSpaceMathsTraits<KoLabU16Traits::channels_type>::unitValue));
-    default:
-        return QString("Error");
-    }
-}
-
 KoColorSpace *LabU16ColorSpace::clone() const
 {
     return new LabU16ColorSpace(name(), profile()->clone());

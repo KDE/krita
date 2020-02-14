@@ -52,13 +52,27 @@ QString LabU8ColorSpace::normalisedChannelValueText(const quint8 *pixel, quint32
 
     switch (channelIndex) {
     case 0:
-        return QString().setNum(100.0 * static_cast<float>(pix[0]) / MAX_CHANNEL_L);
+        return QString().setNum(100.0 * static_cast<float>(pix[0]) / KoLabColorSpaceMathsTraits<KoLabU8Traits::channels_type>::unitValueL);
     case 1:
-        return QString().setNum(100.0 * ((static_cast<float>(pix[1]) - CHANNEL_AB_ZERO_OFFSET) / MAX_CHANNEL_AB));
     case 2:
-        return QString().setNum(100.0 * ((static_cast<float>(pix[2]) - CHANNEL_AB_ZERO_OFFSET) / MAX_CHANNEL_AB));
+        if (pix[channelIndex] <= 0.5) {
+            return QString().setNum(100.0 *
+                                    qBound((qreal)KoLabColorSpaceMathsTraits<KoLabU8Traits::channels_type>::zeroValueAB,
+                                           (qreal)(2.0 * static_cast<float>(pix[channelIndex]) * KoLabColorSpaceMathsTraits<KoLabU8Traits::channels_type>::halfValueAB),
+                                           (qreal)KoLabColorSpaceMathsTraits<KoLabU8Traits::channels_type>::halfValueAB));
+        } else {
+            return QString().setNum(
+                100.0 *
+                qBound((qreal)KoLabColorSpaceMathsTraits<KoLabU8Traits::channels_type>::halfValueAB,
+                       (qreal)(KoLabColorSpaceMathsTraits<KoLabU8Traits::channels_type>::halfValueAB +
+                               2.0 * (static_cast<float>(pix[channelIndex]) - 0.5) * (KoLabColorSpaceMathsTraits<KoLabU8Traits::channels_type>::unitValueAB - KoLabColorSpaceMathsTraits<KoLabU8Traits::channels_type>::halfValueAB)),
+                       (qreal)KoLabColorSpaceMathsTraits<KoLabU8Traits::channels_type>::unitValueAB));
+        }
     case 3:
-        return QString().setNum(100.0 * static_cast<float>(pix[3]) / UINT8_MAX);
+        return QString().setNum(
+            100.0 * qBound((qreal)0,
+                           (qreal)(static_cast<float>(pix[channelIndex]) / KoLabColorSpaceMathsTraits<KoLabU8Traits::channels_type>::unitValue),
+                           (qreal)KoLabColorSpaceMathsTraits<KoLabU8Traits::channels_type>::unitValue));
     default:
         return QString("Error");
     }
@@ -74,9 +88,30 @@ void LabU8ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomEle
 {
     const KoLabU8Traits::Pixel *p = reinterpret_cast<const KoLabU8Traits::Pixel *>(pixel);
     QDomElement labElt = doc.createElement("Lab");
-    labElt.setAttribute("L", KisDomUtils::toString(KoColorSpaceMaths< KoLabU8Traits::channels_type, qreal>::scaleToA(p->L)));
-    labElt.setAttribute("a", KisDomUtils::toString(KoColorSpaceMaths< KoLabU8Traits::channels_type, qreal>::scaleToA(p->a)));
-    labElt.setAttribute("b", KisDomUtils::toString(KoColorSpaceMaths< KoLabU8Traits::channels_type, qreal>::scaleToA(p->b)));
+
+    double a, b;
+
+    if (p->a <= KoLabColorSpaceMathsTraits<KoLabU8Traits::channels_type>::halfValueAB) {
+        a = (p->a - KoLabColorSpaceMathsTraits<KoLabU8Traits::channels_type>::zeroValueAB) /
+            (2.0 * (KoLabColorSpaceMathsTraits<KoLabU8Traits::channels_type>::halfValueAB - KoLabColorSpaceMathsTraits<KoLabU8Traits::channels_type>::zeroValueAB));
+    } else {
+        a = 0.5 +
+            (p->a - KoLabColorSpaceMathsTraits<KoLabU8Traits::channels_type>::halfValueAB) /
+                (2.0 * (KoLabColorSpaceMathsTraits<KoLabU8Traits::channels_type>::unitValueAB - KoLabColorSpaceMathsTraits<KoLabU8Traits::channels_type>::halfValueAB));
+    }
+
+    if (p->b <= KoLabColorSpaceMathsTraits<KoLabU8Traits::channels_type>::halfValueAB) {
+        b = (p->b - KoLabColorSpaceMathsTraits<KoLabU8Traits::channels_type>::zeroValueAB) /
+            (2.0 * (KoLabColorSpaceMathsTraits<KoLabU8Traits::channels_type>::halfValueAB - KoLabColorSpaceMathsTraits<KoLabU8Traits::channels_type>::zeroValueAB));
+    } else {
+        b = 0.5 +
+            (p->b - KoLabColorSpaceMathsTraits<KoLabU8Traits::channels_type>::halfValueAB) /
+                (2.0 * (KoLabColorSpaceMathsTraits<KoLabU8Traits::channels_type>::unitValueAB - KoLabColorSpaceMathsTraits<KoLabU8Traits::channels_type>::halfValueAB));
+    }
+
+    labElt.setAttribute("L", KisDomUtils::toString(KoColorSpaceMaths<KoLabU8Traits::channels_type, qreal>::scaleToA(p->L)));
+    labElt.setAttribute("a", KisDomUtils::toString(a));
+    labElt.setAttribute("b", KisDomUtils::toString(b));
     labElt.setAttribute("space", profile()->name());
     colorElt.appendChild(labElt);
 }
@@ -84,9 +119,28 @@ void LabU8ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomEle
 void LabU8ColorSpace::colorFromXML(quint8 *pixel, const QDomElement &elt) const
 {
     KoLabU8Traits::Pixel *p = reinterpret_cast<KoLabU8Traits::Pixel *>(pixel);
-    p->L = KoColorSpaceMaths< qreal, KoLabU8Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("L")));
-    p->a = KoColorSpaceMaths< qreal, KoLabU8Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("a")));
-    p->b = KoColorSpaceMaths< qreal, KoLabU8Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("b")));
+
+    double a = KisDomUtils::toDouble(elt.attribute("a"));
+    double b = KisDomUtils::toDouble(elt.attribute("b"));
+
+    p->L = KoColorSpaceMaths<qreal, KoLabU8Traits::channels_type>::scaleToA(KisDomUtils::toDouble(elt.attribute("L")));
+
+    if (a <= 0.5) {
+        p->a =
+            KoLabColorSpaceMathsTraits<KoLabU8Traits::channels_type>::zeroValueAB + 2.0 * a * (KoLabColorSpaceMathsTraits<KoLabU8Traits::channels_type>::halfValueAB - KoLabColorSpaceMathsTraits<KoLabU8Traits::channels_type>::zeroValueAB);
+    } else {
+        p->a = (KoLabColorSpaceMathsTraits<KoLabU8Traits::channels_type>::halfValueAB +
+                2.0 * (a - 0.5) * (KoLabColorSpaceMathsTraits<KoLabU8Traits::channels_type>::unitValueAB - KoLabColorSpaceMathsTraits<KoLabU8Traits::channels_type>::halfValueAB));
+    }
+
+    if (b <= 0.5) {
+        p->b =
+            KoLabColorSpaceMathsTraits<KoLabU8Traits::channels_type>::zeroValueAB + 2.0 * b * (KoLabColorSpaceMathsTraits<KoLabU8Traits::channels_type>::halfValueAB - KoLabColorSpaceMathsTraits<KoLabU8Traits::channels_type>::zeroValueAB);
+    } else {
+        p->b = (KoLabColorSpaceMathsTraits<KoLabU8Traits::channels_type>::halfValueAB +
+                2.0 * (b - 0.5) * (KoLabColorSpaceMathsTraits<KoLabU8Traits::channels_type>::unitValueAB - KoLabColorSpaceMathsTraits<KoLabU8Traits::channels_type>::halfValueAB));
+    }
+
     p->alpha = KoColorSpaceMathsTraits<quint8>::max;
 }
 

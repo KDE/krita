@@ -61,11 +61,6 @@ public:
     QVector <double> fromHSY(qreal *hue, qreal *sat, qreal *luma) const override;
     void toYUV(const QVector<double> &channelValues, qreal *y, qreal *u, qreal *v) const override;
     QVector <double> fromYUV(qreal *y, qreal *u, qreal *v) const override;
-
-private:
-    static const quint32 MAX_CHANNEL_L = 0xff00;
-    static const quint32 MAX_CHANNEL_AB = 0xffff;
-    static const quint32 CHANNEL_AB_ZERO_OFFSET = 0x8000;
 };
 
 class LabU16ColorSpaceFactory : public LcmsColorSpaceFactory

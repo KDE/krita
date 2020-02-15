@@ -126,13 +126,13 @@ KisPaintInformation KisPaintingInformationBuilder::createPaintingInformation(KoP
     qreal speed = m_speedSmoother->getNextSpeed(imageToView(imagePoint));
 
     KisPaintInformation pi(imagePoint,
-                               !m_pressureDisabled ? 1.0 : pressureToCurve(event->pressure()),
-                               event->xTilt(), event->yTilt(),
-                               event->rotation(),
-                               event->tangentialPressure(),
-                               perspective,
-                               timeElapsed,
-                               speed);
+                           !m_pressureDisabled ? 1.0 : pressureToCurve(event->pressure()),
+                           event->xTilt(), event->yTilt(),
+                           event->rotation(),
+                           event->tangentialPressure(),
+                           perspective,
+                           timeElapsed,
+                           speed);
 
     pi.setCanvasRotation(canvasRotation());
     pi.setCanvasMirroredH(canvasMirroredX());

@@ -74,7 +74,7 @@ private:
     KisAslCallbackObjectCatcher m_catcher;
     QVector<KisPSDLayerStyleSP> m_stylesVector;
     QHash<QString, KisPSDLayerStyleSP> m_stylesHash;
-    bool m_initialized;
+    bool m_initialized {false};
 };
 
 #endif /* __KIS_ASL_LAYER_STYLE_SERIALIZER_H */

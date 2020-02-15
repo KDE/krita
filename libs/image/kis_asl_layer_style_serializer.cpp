@@ -43,9 +43,6 @@
 using namespace std::placeholders;
 
 KisAslLayerStyleSerializer::KisAslLayerStyleSerializer()
-    : m_stylesVector()
-    , m_initialized(false)
-    , m_stylesHash()
 {
 }
 

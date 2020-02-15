@@ -148,6 +148,7 @@ private:
     friend class TestResourceLocator;
     friend class TestFolderStorage;
     friend class KisFolderStorage;
+    friend class KisMemoryStorage;
 
     void setVersion(int version);
     void setResourceId(int id);

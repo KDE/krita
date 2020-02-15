@@ -296,22 +296,26 @@ void KisCanvasResourceProvider::slotOnScreenResolutionChanged()
 
 void KisCanvasResourceProvider::slotCanvasResourceChanged(int key, const QVariant & res)
 {
-    if(key == KoCanvasResourceProvider::ForegroundColor || key == KoCanvasResourceProvider::BackgroundColor) {
-        KoAbstractGradientSP resource = KoResourceServerProvider::instance()->gradientServer()->resources()[0];
-        KoStopGradientSP stopGradient = resource.dynamicCast<KoStopGradient>();
-        if(stopGradient) {
-            QList<KoGradientStop> stops;
-            stops << KoGradientStop(0.0, fgColor()) << KoGradientStop(1.0,  KoColor(QColor(0, 0, 0, 0), fgColor().colorSpace()));
-            stopGradient->setStops(stops);
-            KoResourceServerProvider::instance()->gradientServer()->updateResource(resource);
+    if (key == KoCanvasResourceProvider::ForegroundColor || key == KoCanvasResourceProvider::BackgroundColor) {
+        KoAbstractGradientSP resource = KoResourceServerProvider::instance()->gradientServer()->resourceByFilename("Foreground to Background");
+        if (resource) {
+            KoStopGradientSP stopGradient = resource.dynamicCast<KoStopGradient>();
+            if (stopGradient) {
+                QList<KoGradientStop> stops;
+                stops << KoGradientStop(0.0, fgColor()) << KoGradientStop(1.0,  KoColor(QColor(0, 0, 0, 0), fgColor().colorSpace()));
+                stopGradient->setStops(stops);
+                KoResourceServerProvider::instance()->gradientServer()->updateResource(resource);
+            }
         }
-        resource = KoResourceServerProvider::instance()->gradientServer()->resources()[1];
-        stopGradient = resource.dynamicCast<KoStopGradient>();
-        if(stopGradient) {
-            QList<KoGradientStop> stops;
-            stops << KoGradientStop(0.0, fgColor()) << KoGradientStop(1.0, bgColor());
-            stopGradient->setStops(stops);
-            KoResourceServerProvider::instance()->gradientServer()->updateResource(resource);
+        resource = KoResourceServerProvider::instance()->gradientServer()->resourceByFilename("Foreground to Transparent");
+        if (resource){
+            KoStopGradientSP stopGradient = resource.dynamicCast<KoStopGradient>();
+            if (stopGradient) {
+                QList<KoGradientStop> stops;
+                stops << KoGradientStop(0.0, fgColor()) << KoGradientStop(1.0, bgColor());
+                stopGradient->setStops(stops);
+                KoResourceServerProvider::instance()->gradientServer()->updateResource(resource);
+            }
         }
     }
     switch (key) {

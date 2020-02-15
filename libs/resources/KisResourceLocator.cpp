@@ -166,14 +166,17 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
     }
     else {
         KisResourceStorageSP storage = d->storages[storageLocation];
-        Q_ASSERT(storage);
+        if (!storage) {
+            qWarning() << "Could not find storage" << storageLocation;
+            return 0;
+        }
 
         resource = storage->resource(resourceType + "/" + filename);
-        Q_ASSERT(resource);
-
-        if (resource) {
-            d->resourceCache[key] = resource;
+        if (!resource) {
+            qWarning() << "Could not find resource" << resourceType + "/" + filename;
+            return 0;
         }
+        d->resourceCache[key] = resource;
     }
     Q_ASSERT(resource);
     resource->setStorageLocation(storageLocation);
@@ -185,9 +188,9 @@ KoResourceSP KisResourceLocator::resourceForId(int resourceId)
 {
     ResourceStorage rs = getResourceStorage(resourceId);
     KoResourceSP r = resource(rs.storageLocation, rs.resourceType, rs.resourceFileName);
-    Q_ASSERT(r);
-    r->setResourceId(resourceId);
-
+    if (r) {
+        r->setResourceId(resourceId);
+    }
     return r;
 }
 
@@ -266,12 +269,18 @@ bool KisResourceLocator::updateResource(const QString &resourceType, const KoRes
 
     KisResourceStorageSP storage = d->storages[storageLocation];
 
+
     int version = resource->version();
 
     // This increments the version in the resource
     if (!storage->addResource(resource)) {
         qWarning() << "Failed to save the new version of " << resource->name() << "to storage" << storageLocation;
         return false;
+    }
+
+    // Memory storages don't store versioned resources
+    if (storage->type() == KisResourceStorage::StorageType::Memory) {
+        return true;
     }
 
     // It's the storages that keep track of the version
@@ -501,14 +510,7 @@ KisResourceLocator::ResourceStorage KisResourceLocator::getResourceStorage(int r
     QString resourceType= q.value("resource_type").toString();
     QString resourceFilename = q.value("filename").toString();
 
-    if (storageLocation.isEmpty()) {
-        storageLocation = resourceLocationBase();
-    }
-    else {
-        storageLocation = resourceLocationBase() + storageLocation;
-    }
-
-    rs.storageLocation = storageLocation;
+    rs.storageLocation = makeStorageLocationAbsolute(storageLocation);
     rs.resourceType = resourceType;
     rs.resourceFileName = resourceFilename;
 
@@ -520,8 +522,10 @@ QString KisResourceLocator::makeStorageLocationAbsolute(QString storageLocation)
     if (storageLocation.isEmpty()) {
         storageLocation = resourceLocationBase();
     }
-    if (!storageLocation.startsWith('/') && storageLocation != "memory") {
 
+    // XXX: This breaks with document storages!
+
+    if (!storageLocation.startsWith('/') && storageLocation != "memory") {
         if (resourceLocationBase().endsWith('/')) {
             storageLocation = resourceLocationBase() + storageLocation;
         }

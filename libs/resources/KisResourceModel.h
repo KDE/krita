@@ -150,7 +150,25 @@ public:
      */
     KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const override;
     KoResourceSP resourceForId(int id) const;
-    KoResourceSP resourceForFilename(QString name) const;
+
+    /**
+     * resourceForFilename returns the first resource with the given filename that
+     * is active and is in an active store. Note that the filename does not include
+     * a path to the storage, and if there are resources with the same filename
+     * in several active storages, only one resource is returned.
+     *
+     * @return a resource if one is found, or 0 if none are found
+     */
+    KoResourceSP resourceForFilename(QString fileName) const;
+
+    /**
+     * resourceForName returns the first resource with the given name that
+     * is active and is in an active store. Note that if there are resources
+     * with the same name in several active storages, only one resource
+     * is returned.
+     *
+     * @return a resource if one is found, or 0 if none are found
+     */
     KoResourceSP resourceForName(QString name) const;
     KoResourceSP resourceForMD5(const QByteArray md5sum) const;
 

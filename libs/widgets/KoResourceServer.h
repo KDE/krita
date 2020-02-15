@@ -134,6 +134,7 @@ public:
     QList<QSharedPointer<T>> resources() {
         QMutexLocker l(&m_mutex);
         qDebug() << "KoResourceServer::resources()" << m_type;
+
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
         KIS_SAFE_ASSERT_RECOVER_NOOP(m_type != "paintoppresets");
         QList<QSharedPointer<T>> resourceList;

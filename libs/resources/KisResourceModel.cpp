@@ -329,8 +329,8 @@ KoResourceSP KisResourceModel::resourceForFilename(QString filename) const
     if (!r) {
         qWarning() << "Could not prepare KisResourceModel query for resource name" << q.lastError();
     }
-    q.bindValue(":resource_type", d->resourceType);
     q.bindValue(":resource_filename", filename);
+    q.bindValue(":resource_type", d->resourceType);
 
     r = q.exec();
     if (!r) {
@@ -398,7 +398,6 @@ KoResourceSP KisResourceModel::resourceForMD5(const QByteArray md5sum) const
 
     if (q.first()) {
         int id = q.value("id").toInt();
-        qDebug() << "found id" << id << "for" << md5sum.toHex();
         resource = KisResourceLocator::instance()->resourceForId(id);
     }
     return resource;

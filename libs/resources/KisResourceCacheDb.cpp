@@ -521,7 +521,7 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     q.bindValue(":timestamp", timestamp.toSecsSinceEpoch());
     //Q_ASSERT(!resource->md5().isEmpty());
     if (resource->md5().isEmpty()) {
-        qDebug() << "No md5 for resource" << resource->name() << resourceType << storage->location();
+        qWarning() << "No md5 for resource" << resource->name() << resourceType << storage->location();
     }
     q.bindValue(":md5sum", resource->md5().toHex());
 

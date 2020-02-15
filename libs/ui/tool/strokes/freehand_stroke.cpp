@@ -19,6 +19,8 @@
 #include "freehand_stroke.h"
 
 #include <QElapsedTimer>
+#include <QThread>
+#include <QApplication>
 
 #include "kis_canvas_resource_provider.h"
 #include <brushengine/kis_paintop_preset.h>
@@ -145,6 +147,8 @@ void FreehandStrokeStrategy::finishStrokeCallback()
 
 void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
+    qDebug() << "FreehandStrokeStrategy::doStrokeCallback" << QThread::currentThread() << qApp->thread();
+
     if (KisAsyncronousStrokeUpdateHelper::UpdateData *d =
             dynamic_cast<KisAsyncronousStrokeUpdateHelper::UpdateData*>(data)) {
 

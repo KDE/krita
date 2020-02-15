@@ -100,8 +100,13 @@ void KisPerChannelConfigWidget::updateChannelControls()
     case KoChannelInfo::FLOAT64:
     default:
         //Hack Alert: should be changed to float
-        min = 0;
-        max = 100;
+        if (m_dev->colorSpace()->colorModelId() == LABAColorModelID || m_dev->colorSpace()->colorModelId() == CMYKAColorModelID) {
+            min = m_dev->colorSpace()->channels()[m_activeVChannel]->getUIMin();
+            max = m_dev->colorSpace()->channels()[m_activeVChannel]->getUIMax();
+        } else {
+            min = 0;
+            max = 100;
+        }
         break;
     }
 

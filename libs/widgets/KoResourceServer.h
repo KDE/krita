@@ -45,6 +45,7 @@
 #include <KisResourceModelProvider.h>
 #include <KisTagModelProvider.h>
 #include <kis_assert.h>
+#include <kis_debug.h>
 
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
@@ -72,6 +73,12 @@ public:
         , m_type(type)
     {
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
+        if (QThread::currentThread() != qApp->thread()) {
+            Q_FOREACH(const QString &s, kisBacktrace().split('\n')) {
+                qDebug() << s;
+            }
+        }
+
     }
 
     virtual ~KoResourceServer()
@@ -86,6 +93,12 @@ public:
     {
         QMutexLocker l(&m_mutex);
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
+        if (QThread::currentThread() != qApp->thread()) {
+            Q_FOREACH(const QString &s, kisBacktrace().split('\n')) {
+                qDebug() << s;
+            }
+        }
+
         return m_resourceModel;
     }
 
@@ -94,6 +107,17 @@ public:
     {
         QMutexLocker l(&m_mutex);
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
+        if (QThread::currentThread() != qApp->thread()) {
+            Q_FOREACH(const QString &s, kisBacktrace().split('\n')) {
+                qDebug() << s;
+            }
+        }
+
+        if (QThread::currentThread() != qApp->thread()) {
+            Q_FOREACH(const QString &s, kisBacktrace().split('\n')) {
+                qDebug() << s;
+            }
+        }
         return m_resourceModel->resourceForIndex(m_resourceModel->index(0, 0)).dynamicCast<T>();
     }
 
@@ -107,6 +131,12 @@ public:
     bool addResource(QSharedPointer<T> resource, bool save = true) {
         QMutexLocker l(&m_mutex);
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
+        if (QThread::currentThread() != qApp->thread()) {
+            Q_FOREACH(const QString &s, kisBacktrace().split('\n')) {
+                qDebug() << s;
+            }
+        }
+
         if (!resource->valid()) {
             warnWidgets << "Tried to add an invalid resource!";
             return false;
@@ -124,6 +154,12 @@ public:
     bool removeResourceFromServer(QSharedPointer<T> resource){
         QMutexLocker l(&m_mutex);
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
+        if (QThread::currentThread() != qApp->thread()) {
+            Q_FOREACH(const QString &s, kisBacktrace().split('\n')) {
+                qDebug() << s;
+            }
+        }
+
         if (m_resourceModel->removeResource(resource)) {
             notifyRemovingResource(resource);
             return true;
@@ -136,6 +172,12 @@ public:
         qDebug() << "KoResourceServer::resources()" << m_type;
 
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
+        if (QThread::currentThread() != qApp->thread()) {
+            Q_FOREACH(const QString &s, kisBacktrace().split('\n')) {
+                qDebug() << s;
+            }
+        }
+
         KIS_SAFE_ASSERT_RECOVER_NOOP(m_type != "paintoppresets");
         QList<QSharedPointer<T>> resourceList;
         for (int row = 0; row < m_resourceModel->rowCount(); ++row) {
@@ -159,6 +201,12 @@ public:
     {
         QMutexLocker l(&m_mutex);
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
+        if (QThread::currentThread() != qApp->thread()) {
+            Q_FOREACH(const QString &s, kisBacktrace().split('\n')) {
+                qDebug() << s;
+            }
+        }
+
         return m_resourceModel->importResourceFile(filename);
     }
 
@@ -202,6 +250,13 @@ public:
 
     QSharedPointer<T> resourceByFilename(const QString& filename) const
     {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
+        if (QThread::currentThread() != qApp->thread()) {
+            Q_FOREACH(const QString &s, kisBacktrace().split('\n')) {
+                qDebug() << s;
+            }
+        }
+
         QMutexLocker l(&m_mutex);
         qDebug() << "resourceByFilename" << filename;
         if (filename.isEmpty() || filename.isNull()) {
@@ -213,6 +268,13 @@ public:
 
     QSharedPointer<T> resourceByName(const QString& name) const
     {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
+        if (QThread::currentThread() != qApp->thread()) {
+            Q_FOREACH(const QString &s, kisBacktrace().split('\n')) {
+                qDebug() << s;
+            }
+        }
+
         QMutexLocker l(&m_mutex);
         qDebug() << "resourceByName" << name;
         if (name.isEmpty() || name.isNull()) {
@@ -224,8 +286,15 @@ public:
 
     QSharedPointer<T> resourceByMD5(const QByteArray& md5) const
     {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
+        if (QThread::currentThread() != qApp->thread()) {
+            Q_FOREACH(const QString &s, kisBacktrace().split('\n')) {
+                qDebug() << s;
+            }
+        }
+
         QMutexLocker l(&m_mutex);
-        qDebug() << "resourceByFilename" << md5.toHex();
+        qDebug() << "resourceByMD5" << md5.toHex();
         if (md5.isEmpty() || md5.isNull()) {
             return 0;
         }
@@ -239,7 +308,14 @@ public:
     void updateResource(QSharedPointer<T> resource)
     {
         QMutexLocker l(&m_mutex);
+
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
+        if (QThread::currentThread() != qApp->thread()) {
+            Q_FOREACH(const QString &s, kisBacktrace().split('\n')) {
+                qDebug() << s;
+            }
+        }
+        qDebug() << "updateResource" << resource;
         m_resourceModel->updateResource(resource);
         notifyResourceChanged(resource);
     }

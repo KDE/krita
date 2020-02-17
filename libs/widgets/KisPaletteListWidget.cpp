@@ -82,7 +82,7 @@ KisPaletteListWidget::~KisPaletteListWidget()
 void KisPaletteListWidget::slotPaletteResourceSelected(KoResource *r)
 {
     KoColorSet *g = static_cast<KoColorSet*>(r);
-    emit sigPaletteSelected(g);
+    Q_EMIT sigPaletteSelected(g);
     if (!m_d->allowModification) { return; }
     if (g->isEditable()) {
         m_ui->bnRemove->setEnabled(true);
@@ -94,7 +94,7 @@ void KisPaletteListWidget::slotPaletteResourceSelected(KoResource *r)
 void KisPaletteListWidget::slotAdd()
 {
     if (!m_d->allowModification) { return; }
-    emit sigAddPalette();
+    Q_EMIT sigAddPalette();
     m_d->itemChooser->setCurrentItem(m_d->rAdapter->resources().size() - 1, 0);
 }
 
@@ -103,7 +103,7 @@ void KisPaletteListWidget::slotRemove()
     if (!m_d->allowModification) { return; }
     if (m_d->itemChooser->currentResource()) {
         KoColorSet *cs = static_cast<KoColorSet*>(m_d->itemChooser->currentResource());
-        emit sigRemovePalette(cs);
+        Q_EMIT sigRemovePalette(cs);
     }
     m_d->itemChooser->setCurrentItem(0, 0);
 }
@@ -111,14 +111,14 @@ void KisPaletteListWidget::slotRemove()
 void KisPaletteListWidget::slotImport()
 {
     if (!m_d->allowModification) { return; }
-    emit sigImportPalette();
+    Q_EMIT sigImportPalette();
     m_d->itemChooser->setCurrentItem(m_d->rAdapter->resources().size()-1, 0);
 }
 
 void KisPaletteListWidget::slotExport()
 {
     if (!m_d->allowModification) { return; }
-    emit sigExportPalette(static_cast<KoColorSet*>(m_d->itemChooser->currentResource()));
+    Q_EMIT sigExportPalette(static_cast<KoColorSet*>(m_d->itemChooser->currentResource()));
 }
 
 void KisPaletteListWidget::setAllowModification(bool allowModification)

@@ -148,7 +148,7 @@ void KisToolPaint::activate(ToolActivation toolActivation, const QSet<KoShape*> 
 {
     if (currentPaintOpPreset()) {
         QString formattedBrushName = currentPaintOpPreset()->name().replace("_", " ");
-        emit statusTextChanged(formattedBrushName);
+        Q_EMIT statusTextChanged(formattedBrushName);
     }
 
     KisTool::activate(toolActivation, shapes);
@@ -238,7 +238,7 @@ void KisToolPaint::setMode(ToolMode mode)
             mode != KisTool::PAINT_MODE) {
 
         // Let's add history information about recently used colors
-        emit sigPaintingFinished();
+        Q_EMIT sigPaintingFinished();
     }
 
     KisTool::setMode(mode);

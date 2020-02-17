@@ -452,7 +452,7 @@ void KoStyleManager::add(KoCharacterStyle *style)
     }
 
     ++d->s_stylesNumber;
-    emit styleAdded(style);
+    Q_EMIT styleAdded(style);
 }
 
 void KoStyleManager::add(KoParagraphStyle *style)
@@ -484,7 +484,7 @@ void KoStyleManager::add(KoParagraphStyle *style)
     }
 
     ++d->s_stylesNumber;
-    emit styleAdded(style);
+    Q_EMIT styleAdded(style);
 }
 
 void KoStyleManager::add(KoListStyle *style)
@@ -496,7 +496,7 @@ void KoStyleManager::add(KoListStyle *style)
     d->listStyles.insert(d->s_stylesNumber, style);
 
     ++d->s_stylesNumber;
-    emit styleAdded(style);
+    Q_EMIT styleAdded(style);
 }
 
 void KoStyleManager::addAutomaticListStyle(KoListStyle *style)
@@ -516,7 +516,7 @@ void KoStyleManager::add(KoTableStyle *style)
     style->setStyleId(d->s_stylesNumber);
     d->tableStyles.insert(d->s_stylesNumber, style);
     ++d->s_stylesNumber;
-    emit styleAdded(style);
+    Q_EMIT styleAdded(style);
 }
 
 void KoStyleManager::add(KoTableColumnStyle *style)
@@ -526,7 +526,7 @@ void KoStyleManager::add(KoTableColumnStyle *style)
     style->setStyleId(d->s_stylesNumber);
     d->tableColumnStyles.insert(d->s_stylesNumber, style);
     ++d->s_stylesNumber;
-    emit styleAdded(style);
+    Q_EMIT styleAdded(style);
 }
 
 void KoStyleManager::add(KoTableRowStyle *style)
@@ -536,7 +536,7 @@ void KoStyleManager::add(KoTableRowStyle *style)
     style->setStyleId(d->s_stylesNumber);
     d->tableRowStyles.insert(d->s_stylesNumber, style);
     ++d->s_stylesNumber;
-    emit styleAdded(style);
+    Q_EMIT styleAdded(style);
 }
 
 void KoStyleManager::add(KoTableCellStyle *style)
@@ -547,7 +547,7 @@ void KoStyleManager::add(KoTableCellStyle *style)
     style->setStyleId(d->s_stylesNumber);
     d->tableCellStyles.insert(d->s_stylesNumber, style);
     ++d->s_stylesNumber;
-    emit styleAdded(style);
+    Q_EMIT styleAdded(style);
 }
 
 void KoStyleManager::add(KoSectionStyle *style)
@@ -558,7 +558,7 @@ void KoStyleManager::add(KoSectionStyle *style)
     style->setStyleId(d->s_stylesNumber);
     d->sectionStyles.insert(d->s_stylesNumber, style);
     ++d->s_stylesNumber;
-    emit styleAdded(style);
+    Q_EMIT styleAdded(style);
 }
 
 void KoStyleManager::add(KoTextTableTemplate *tableTemplate)
@@ -577,13 +577,13 @@ void KoStyleManager::add(KoTextTableTemplate *tableTemplate)
 void KoStyleManager::slotAppliedStyle(const KoParagraphStyle *style)
 {
     d->m_usedParagraphStyles.append(style->styleId());
-    emit styleApplied(style);
+    Q_EMIT styleApplied(style);
 }
 
 void KoStyleManager::slotAppliedStyle(const KoCharacterStyle *style)
 {
     d->m_usedCharacterStyles.append(style->styleId());
-    emit styleApplied(style);
+    Q_EMIT styleApplied(style);
 }
 
 void KoStyleManager::setNotesConfiguration(KoOdfNotesConfiguration *notesConfiguration)
@@ -607,7 +607,7 @@ void KoStyleManager::remove(KoCharacterStyle *style)
     }
 
     if (d->charStyles.remove(style->styleId()))
-        emit styleRemoved(style);
+        Q_EMIT styleRemoved(style);
 }
 
 void KoStyleManager::remove(KoParagraphStyle *style)
@@ -617,7 +617,7 @@ void KoStyleManager::remove(KoParagraphStyle *style)
     }
 
     if (d->paragStyles.remove(style->styleId()))
-        emit styleRemoved(style);
+        Q_EMIT styleRemoved(style);
 }
 
 void KoStyleManager::remove(KoListStyle *style)
@@ -627,7 +627,7 @@ void KoStyleManager::remove(KoListStyle *style)
     }
 
     if (d->listStyles.remove(style->styleId()))
-        emit styleRemoved(style);
+        Q_EMIT styleRemoved(style);
 }
 
 void KoStyleManager::remove(KoTableStyle *style)
@@ -637,7 +637,7 @@ void KoStyleManager::remove(KoTableStyle *style)
     }
 
     if (d->tableStyles.remove(style->styleId()))
-        emit styleRemoved(style);
+        Q_EMIT styleRemoved(style);
 }
 
 void KoStyleManager::remove(KoTableColumnStyle *style)
@@ -647,7 +647,7 @@ void KoStyleManager::remove(KoTableColumnStyle *style)
     }
 
     if (d->tableColumnStyles.remove(style->styleId()))
-        emit styleRemoved(style);
+        Q_EMIT styleRemoved(style);
 }
 
 void KoStyleManager::remove(KoTableRowStyle *style)
@@ -657,7 +657,7 @@ void KoStyleManager::remove(KoTableRowStyle *style)
     }
 
     if (d->tableRowStyles.remove(style->styleId()))
-        emit styleRemoved(style);
+        Q_EMIT styleRemoved(style);
 }
 
 void KoStyleManager::remove(KoTableCellStyle *style)
@@ -667,7 +667,7 @@ void KoStyleManager::remove(KoTableCellStyle *style)
     }
 
     if (d->tableCellStyles.remove(style->styleId()))
-        emit styleRemoved(style);
+        Q_EMIT styleRemoved(style);
 }
 
 void KoStyleManager::remove(KoSectionStyle *style)
@@ -677,7 +677,7 @@ void KoStyleManager::remove(KoSectionStyle *style)
     }
 
     if (d->sectionStyles.remove(style->styleId()))
-        emit styleRemoved(style);
+        Q_EMIT styleRemoved(style);
 }
 
 void KoStyleManager::alteredStyle(const KoParagraphStyle *newStyle)
@@ -693,7 +693,7 @@ void KoStyleManager::alteredStyle(const KoParagraphStyle *newStyle)
         return;
     }
     KoParagraphStyle *style = paragraphStyle(id);
-    emit styleHasChanged(id, style, newStyle);
+    Q_EMIT styleHasChanged(id, style, newStyle);
 
     // check if anyone that uses 'style' as a parent needs to be flagged as changed as well.
     Q_FOREACH (const KoParagraphStyle *ps, d->paragStyles) {
@@ -715,7 +715,7 @@ void KoStyleManager::alteredStyle(const KoCharacterStyle *newStyle)
         return;
     }
     KoCharacterStyle *style = characterStyle(id);
-    emit styleHasChanged(id, style, newStyle);
+    Q_EMIT styleHasChanged(id, style, newStyle);
 
     // check if anyone that uses 'style' as a parent needs to be flagged as changed as well.
     Q_FOREACH (const KoCharacterStyle *cs, d->charStyles) {
@@ -736,7 +736,7 @@ void KoStyleManager::alteredStyle(const KoListStyle *style)
         warnText << "alteredStyle received from a non registered style!";
         return;
     }
-    emit styleHasChanged(id);
+    Q_EMIT styleHasChanged(id);
 }
 
 void KoStyleManager::alteredStyle(const KoTableStyle *style)
@@ -751,7 +751,7 @@ void KoStyleManager::alteredStyle(const KoTableStyle *style)
         warnText << "alteredStyle received from a non registered style!";
         return;
     }
-    emit styleHasChanged(id);
+    Q_EMIT styleHasChanged(id);
 }
 
 void KoStyleManager::alteredStyle(const KoTableColumnStyle *style)
@@ -766,7 +766,7 @@ void KoStyleManager::alteredStyle(const KoTableColumnStyle *style)
         warnText << "alteredStyle received from a non registered style!";
         return;
     }
-    emit styleHasChanged(id);
+    Q_EMIT styleHasChanged(id);
 }
 
 void KoStyleManager::alteredStyle(const KoTableRowStyle *style)
@@ -781,7 +781,7 @@ void KoStyleManager::alteredStyle(const KoTableRowStyle *style)
         warnText << "alteredStyle received from a non registered style!";
         return;
     }
-    emit styleHasChanged(id);
+    Q_EMIT styleHasChanged(id);
 }
 
 void KoStyleManager::alteredStyle(const KoTableCellStyle *style)
@@ -796,7 +796,7 @@ void KoStyleManager::alteredStyle(const KoTableCellStyle *style)
         warnText << "alteredStyle received from a non registered style!";
         return;
     }
-    emit styleHasChanged(id);
+    Q_EMIT styleHasChanged(id);
 }
 
 void KoStyleManager::alteredStyle(const KoSectionStyle *style)
@@ -807,18 +807,18 @@ void KoStyleManager::alteredStyle(const KoSectionStyle *style)
         warnText << "alteredStyle received from a non registered style!";
         return;
     }
-    emit styleHasChanged(id);
+    Q_EMIT styleHasChanged(id);
 }
 
 
 void KoStyleManager::beginEdit()
 {
-    emit editHasBegun();
+    Q_EMIT editHasBegun();
 }
 
 void KoStyleManager::endEdit()
 {
-    emit editHasEnded();
+    Q_EMIT editHasEnded();
 }
 
 KoCharacterStyle *KoStyleManager::characterStyle(int id) const
@@ -1124,7 +1124,7 @@ void KoStyleManager::moveToUsedStyles(int id)
     if (root != d->defaultParagraphStyle && root->parentStyle() == 0)
         root->setParentStyle(d->defaultParagraphStyle);
 
-    emit styleAdded(style);
+    Q_EMIT styleAdded(style);
 }
 
 KoParagraphStyle *KoStyleManager::unusedStyle(int id) const

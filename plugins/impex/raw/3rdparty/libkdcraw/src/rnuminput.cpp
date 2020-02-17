@@ -140,13 +140,13 @@ void RIntNumInput::slotReset()
 {
     d->input->setValue(d->defaultValue);
     d->resetButton->setEnabled(false);
-    emit reset();
+    Q_EMIT reset();
 }
 
 void RIntNumInput::slotValueChanged(int v)
 {
     d->resetButton->setEnabled(v != d->defaultValue);
-    emit valueChanged(v);
+    Q_EMIT valueChanged(v);
 }
 
 // ----------------------------------------------------
@@ -245,13 +245,13 @@ void RDoubleNumInput::slotReset()
 {
     d->input->setValue(d->defaultValue);
     d->resetButton->setEnabled(false);
-    emit reset();
+    Q_EMIT reset();
 }
 
 void RDoubleNumInput::slotValueChanged(double v)
 {
     d->resetButton->setEnabled(v != d->defaultValue);
-    emit valueChanged(v);
+    Q_EMIT valueChanged(v);
 }
 
 }  // namespace KDcrawIface

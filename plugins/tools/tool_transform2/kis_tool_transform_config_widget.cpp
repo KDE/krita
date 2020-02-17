@@ -287,7 +287,7 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     // Liquify
     //
     // liquify brush options do not affect the image directly and are not
-    // saved to undo, so we don't emit notifyEditingFinished() for them
+    // saved to undo, so we don't Q_EMIT notifyEditingFinished() for them
 
     // Connect Apply/Reset buttons
     connect(buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(slotButtonBoxClicked(QAbstractButton*)));
@@ -714,7 +714,7 @@ void KisToolTransformConfigWidget::unblockNotifications()
 void KisToolTransformConfigWidget::notifyConfigChanged()
 {
     if (!m_notificationsBlocked) {
-        emit sigConfigChanged();
+        Q_EMIT sigConfigChanged();
     }
     m_configChanged = true;
 }
@@ -733,7 +733,7 @@ void KisToolTransformConfigWidget::notifyEditingFinished()
 {
     if (m_uiSlotsBlocked || m_notificationsBlocked || !m_configChanged) return;
 
-    emit sigEditingFinished();
+    Q_EMIT sigEditingFinished();
     m_configChanged = false;
 }
 
@@ -765,10 +765,10 @@ void KisToolTransformConfigWidget::slotButtonBoxClicked(QAbstractButton *button)
     resetUIOptions();
 
     if (button == applyButton) {
-        emit sigApplyTransform();
+        Q_EMIT sigApplyTransform();
     }
     else if (button == resetButton) {
-        emit sigResetTransform();
+        Q_EMIT sigResetTransform();
     }
 
 }
@@ -781,7 +781,7 @@ void KisToolTransformConfigWidget::slotSetFreeTransformModeButtonClicked(bool va
 
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->setMode(ToolTransformArgs::FREE_TRANSFORM);
-    emit sigResetTransform();
+    Q_EMIT sigResetTransform();
 }
 
 void KisToolTransformConfigWidget::slotSetWarpModeButtonClicked(bool value)
@@ -793,7 +793,7 @@ void KisToolTransformConfigWidget::slotSetWarpModeButtonClicked(bool value)
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->setMode(ToolTransformArgs::WARP);
     config->setWarpCalculation(KisWarpTransformWorker::WarpCalculation::GRID);
-    emit sigResetTransform();
+    Q_EMIT sigResetTransform();
 }
 
 void KisToolTransformConfigWidget::slotSetCageModeButtonClicked(bool value)
@@ -804,7 +804,7 @@ void KisToolTransformConfigWidget::slotSetCageModeButtonClicked(bool value)
 
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->setMode(ToolTransformArgs::CAGE);
-    emit sigResetTransform();
+    Q_EMIT sigResetTransform();
 }
 
 void KisToolTransformConfigWidget::slotSetLiquifyModeButtonClicked(bool value)
@@ -815,7 +815,7 @@ void KisToolTransformConfigWidget::slotSetLiquifyModeButtonClicked(bool value)
 
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->setMode(ToolTransformArgs::LIQUIFY);
-    emit sigResetTransform();
+    Q_EMIT sigResetTransform();
 }
 
 void KisToolTransformConfigWidget::slotSetPerspectiveModeButtonClicked(bool value)
@@ -826,7 +826,7 @@ void KisToolTransformConfigWidget::slotSetPerspectiveModeButtonClicked(bool valu
 
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->setMode(ToolTransformArgs::PERSPECTIVE_4POINT);
-    emit sigResetTransform();
+    Q_EMIT sigResetTransform();
 }
 
 void KisToolTransformConfigWidget::slotFilterChanged(const KoID &filterId)

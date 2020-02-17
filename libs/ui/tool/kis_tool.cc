@@ -134,13 +134,13 @@ void KisTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
     }
 
     d->m_isActive = true;
-    emit isActiveChanged(true);
+    Q_EMIT isActiveChanged(true);
 }
 
 void KisTool::deactivate()
 {
     d->m_isActive = false;
-    emit isActiveChanged(false);
+    Q_EMIT isActiveChanged(false);
 
     KoToolBase::deactivate();
 }
@@ -172,7 +172,7 @@ void KisTool::canvasResourceChanged(int key, const QVariant & v)
         d->currentGenerator = static_cast<KisFilterConfiguration*>(v.value<void *>());
         break;
     case(KisCanvasResourceProvider::CurrentPaintOpPreset):
-        emit statusTextChanged(formattedBrushName);
+        Q_EMIT statusTextChanged(formattedBrushName);
         break;
     case(KisCanvasResourceProvider::CurrentKritaNode):
         resetCursorStyle();

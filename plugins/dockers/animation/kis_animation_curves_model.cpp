@@ -386,7 +386,7 @@ void KisAnimationCurvesModel::setCurveVisible(KisAnimationCurve *curve, bool vis
     curve->setVisible(visible);
 
     int row = m_d->rowForCurve(curve);
-    emit dataChanged(index(row, 0), index(row, columnCount()));
+    Q_EMIT dataChanged(index(row, 0), index(row, columnCount()));
 }
 
 KisNodeSP KisAnimationCurvesModel::nodeAt(QModelIndex index) const
@@ -410,5 +410,5 @@ void KisAnimationCurvesModel::slotKeyframeChanged(KisKeyframeSP keyframe)
 {
     int row = m_d->rowForChannel(keyframe->channel());
     QModelIndex changedIndex = index(row, keyframe->time());
-    emit dataChanged(changedIndex, changedIndex);
+    Q_EMIT dataChanged(changedIndex, changedIndex);
 }

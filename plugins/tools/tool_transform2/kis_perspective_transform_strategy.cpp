@@ -688,5 +688,5 @@ void KisPerspectiveTransformStrategy::Private::recalculateTransformations()
     // recalculate cached handles position
     recalculateTransformedHandles();
 
-    emit q->requestShowImageTooBig(imageTooBig);
+    Q_EMIT q->requestShowImageTooBig(imageTooBig);
 }

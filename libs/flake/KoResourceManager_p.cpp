@@ -77,7 +77,7 @@ void KoResourceManager::setResource(int key, const QVariant &value)
 
 void KoResourceManager::notifyResourceChanged(int key, const QVariant &value)
 {
-    emit resourceChanged(key, value);
+    Q_EMIT resourceChanged(key, value);
     notifyDerivedResourcesChanged(key, value);
 }
 

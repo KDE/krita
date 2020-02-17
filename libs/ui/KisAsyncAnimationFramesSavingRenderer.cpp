@@ -98,7 +98,7 @@ void KisAsyncAnimationFramesSavingRenderer::frameCompletedCallback(int frame, co
     if (!image) return;
 
     KIS_SAFE_ASSERT_RECOVER (requestedRegion == image->bounds()) {
-        emit sigCancelRegenerationInternal(frame);
+        Q_EMIT sigCancelRegenerationInternal(frame);
         return;
     }
 
@@ -114,9 +114,9 @@ void KisAsyncAnimationFramesSavingRenderer::frameCompletedCallback(int frame, co
     }
 
     if (status.isOk()) {
-        emit sigCompleteRegenerationInternal(frame);
+        Q_EMIT sigCompleteRegenerationInternal(frame);
     } else {
-        emit sigCancelRegenerationInternal(frame);
+        Q_EMIT sigCancelRegenerationInternal(frame);
     }
 }
 

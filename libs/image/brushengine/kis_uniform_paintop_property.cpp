@@ -99,7 +99,7 @@ void KisUniformPaintOpProperty::setValue(const QVariant &value)
     if (m_d->value == value) return;
     m_d->value = value;
 
-    emit valueChanged(value);
+    Q_EMIT valueChanged(value);
 
     if (!m_d->isReadingValue) {
         m_d->isWritingValue = true;

@@ -657,7 +657,7 @@ void RSliderSpinBox::setInternalValue(int _value)
 {
     Q_D(RAbstractSliderSpinBox);
     d->value = qBound(d->minimum, _value, d->maximum);
-    emit(valueChanged(value()));
+    Q_EMIT (valueChanged(value()));
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -770,7 +770,7 @@ void RDoubleSliderSpinBox::setInternalValue(int val)
 {
     Q_D(RAbstractSliderSpinBox);
     d->value = qBound(d->minimum, val, d->maximum);
-    emit(valueChanged(value()));
+    Q_EMIT (valueChanged(value()));
 }
 
 }  // namespace KDcrawIface

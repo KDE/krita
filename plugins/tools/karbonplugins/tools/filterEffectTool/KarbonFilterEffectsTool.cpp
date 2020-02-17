@@ -276,7 +276,7 @@ void KarbonFilterEffectsTool::activate(ToolActivation toolActivation, const QSet
 {
     Q_UNUSED(toolActivation);
     if (shapes.isEmpty()) {
-        emit done();
+        Q_EMIT done();
         return;
     }
 

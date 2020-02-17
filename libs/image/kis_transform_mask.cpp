@@ -451,7 +451,7 @@ bool KisTransformMask::hasPendingTimedUpdates() const
 
 void KisTransformMask::threadSafeForceStaticImageUpdate()
 {
-    emit sigInternalForceStaticImageUpdate();
+    Q_EMIT sigInternalForceStaticImageUpdate();
 }
 
 void KisTransformMask::slotInternalForceStaticImageUpdate()

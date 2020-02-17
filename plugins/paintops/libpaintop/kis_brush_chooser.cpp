@@ -230,7 +230,7 @@ void KisPredefinedBrushChooser::slotResetBrush()
         brush->setAngle(0.0);
 
         updateBrushTip(brush);
-        emit sigBrushChanged();
+        Q_EMIT sigBrushChanged();
     }
 }
 
@@ -242,7 +242,7 @@ void KisPredefinedBrushChooser::slotSetItemSize(qreal sizeValue)
         int brushWidth = m_brush->width();
 
         m_brush->setScale(sizeValue / qreal(brushWidth));
-        emit sigBrushChanged();
+        Q_EMIT sigBrushChanged();
     }
 }
 
@@ -252,7 +252,7 @@ void KisPredefinedBrushChooser::slotSetItemRotation(qreal rotationValue)
 
     if (m_brush) {
         m_brush->setAngle(rotationValue / 180.0 * M_PI);
-        emit sigBrushChanged();
+        Q_EMIT sigBrushChanged();
     }
 }
 
@@ -264,7 +264,7 @@ void KisPredefinedBrushChooser::slotSpacingChanged()
         m_brush->setSpacing(brushSpacingSelectionWidget->spacing());
         m_brush->setAutoSpacing(brushSpacingSelectionWidget->autoSpacingActive(), brushSpacingSelectionWidget->autoSpacingCoeff());
 
-        emit sigBrushChanged();
+        Q_EMIT sigBrushChanged();
     }
 }
 
@@ -275,7 +275,7 @@ void KisPredefinedBrushChooser::slotSetItemUseColorAsMask(bool useColorAsMask)
     KisGbrBrush *brush = dynamic_cast<KisGbrBrush *>(m_brush.data());
     if (brush) {
         brush->setUseColorAsMask(useColorAsMask);
-        emit sigBrushChanged();
+        Q_EMIT sigBrushChanged();
     }
 }
 
@@ -380,7 +380,7 @@ void KisPredefinedBrushChooser::updateBrushTip(KoResource * resource, bool isCha
         }
         useColorAsMaskCheckbox->setEnabled(m_brush->hasColor() && gimpBrush);
 
-        emit sigBrushChanged();
+        Q_EMIT sigBrushChanged();
     }
 }
 

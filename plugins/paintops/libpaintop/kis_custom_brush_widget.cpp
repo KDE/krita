@@ -181,7 +181,7 @@ void KisCustomBrushWidget::slotAddPredefined()
         }
 
         m_rServerAdapter->addResource(resource);
-        emit sigNewPredefinedBrush(resource);
+        Q_EMIT sigNewPredefinedBrush(resource);
     }
 
     close();

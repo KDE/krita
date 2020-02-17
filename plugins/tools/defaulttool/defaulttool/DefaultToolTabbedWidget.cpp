@@ -81,16 +81,16 @@ bool DefaultToolTabbedWidget::useUniformScaling() const
 void DefaultToolTabbedWidget::slotCurrentIndexChanged(int current)
 {
     if (m_oldTabIndex == FillTab) {
-        emit sigSwitchModeEditFillGradient(false);
+        Q_EMIT sigSwitchModeEditFillGradient(false);
     } else if (m_oldTabIndex == StrokeTab) {
-        emit sigSwitchModeEditStrokeGradient(false);
+        Q_EMIT sigSwitchModeEditStrokeGradient(false);
     }
 
     m_oldTabIndex = current;
 
     if (current == FillTab) {
-        emit sigSwitchModeEditFillGradient(true);
+        Q_EMIT sigSwitchModeEditFillGradient(true);
     } else if (m_oldTabIndex == StrokeTab) {
-        emit sigSwitchModeEditStrokeGradient(true);
+        Q_EMIT sigSwitchModeEditStrokeGradient(true);
     }
 }

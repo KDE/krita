@@ -168,7 +168,7 @@ void KisBrushSelectionWidget::setCurrentBrush(KisBrushSP brush)
 void KisBrushSelectionWidget::buttonClicked(int id)
 {
     setCurrentWidget(m_chooserMap[id]);
-    emit sigBrushChanged();
+    Q_EMIT sigBrushChanged();
 }
 
 void KisBrushSelectionWidget::precisionChanged(int value)
@@ -220,7 +220,7 @@ void KisBrushSelectionWidget::precisionChanged(int value)
     uiWdgBrushChooser.sliderPrecision->blockSignals(false);
     uiWdgBrushChooser.sliderPrecision->setToolTip(toolTip);
     m_precisionOption.setPrecisionLevel(value);
-    emit sigPrecisionChanged();
+    Q_EMIT sigPrecisionChanged();
 }
 
 void KisBrushSelectionWidget::writeOptionSetting(KisPropertiesConfigurationSP settings) const
@@ -319,7 +319,7 @@ void KisBrushSelectionWidget::setAutoPrecisionEnabled(int value)
         uiWdgBrushChooser.lblPrecision->setEnabled(true);
     }
 
-    emit sigPrecisionChanged();
+    Q_EMIT sigPrecisionChanged();
 }
 
 #include "moc_kis_brush_selection_widget.cpp"

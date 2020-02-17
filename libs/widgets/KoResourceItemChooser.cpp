@@ -382,7 +382,7 @@ void KoResourceItemChooser::activated(const QModelIndex &index)
 
     if (resource) {
         d->updatesBlocked = true;
-        emit resourceSelected(resource);
+        Q_EMIT resourceSelected(resource);
         d->updatesBlocked = false;
         updatePreview(resource);
         updateButtonState();
@@ -395,7 +395,7 @@ void KoResourceItemChooser::clicked(const QModelIndex &index)
 
     KoResource *resource = currentResource();
     if (resource) {
-        emit resourceClicked(resource);
+        Q_EMIT resourceClicked(resource);
     }
 }
 

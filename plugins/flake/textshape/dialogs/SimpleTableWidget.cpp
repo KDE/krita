@@ -82,7 +82,7 @@ void SimpleTableWidget::restartPainting()
 void SimpleTableWidget::emitTableBorderDataUpdated(int i)
 {
     m_lastStyleEmitted = i;
-    emit tableBorderDataUpdated(m_cellStyles[i - 1]->getEdge(KoBorder::TopBorder));
+    Q_EMIT tableBorderDataUpdated(m_cellStyles[i - 1]->getEdge(KoBorder::TopBorder));
 }
 
 void SimpleTableWidget::setStyleManager(KoStyleManager *sm)

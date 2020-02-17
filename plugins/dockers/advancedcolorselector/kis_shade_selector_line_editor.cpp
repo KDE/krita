@@ -116,7 +116,7 @@ void KisShadeSelectorLineEditor::fromString(const QString &string)
 
 void KisShadeSelectorLineEditor::valueChanged() {
     updatePreview();
-    emit requestActivateLine(this);
+    Q_EMIT requestActivateLine(this);
 }
 
 void KisShadeSelectorLineEditor::mousePressEvent(QMouseEvent* e) {

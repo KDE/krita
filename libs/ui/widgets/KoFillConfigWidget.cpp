@@ -349,7 +349,7 @@ void KoFillConfigWidget::activate()
 
 void KoFillConfigWidget::deactivate()
 {
-    emit sigInternalRecoverColorInResourceManager();
+    Q_EMIT sigInternalRecoverColorInResourceManager();
     d->deactivationLocks.clear();
     d->deactivationLocks.push_back(KisAcyclicSignalConnector::Blocker(d->shapeChangedAcyclicConnector));
     d->deactivationLocks.push_back(KisAcyclicSignalConnector::Blocker(d->resourceManagerAcyclicConnector));
@@ -486,7 +486,7 @@ void KoFillConfigWidget::noColorSelected()
 
     QList<KoShape*> selectedShapes = currentShapes();
     if (selectedShapes.isEmpty()) {
-        emit sigFillChanged();
+        Q_EMIT sigFillChanged();
         return;
     }
 
@@ -506,7 +506,7 @@ void KoFillConfigWidget::noColorSelected()
      }
 
 
-    emit sigFillChanged();
+    Q_EMIT sigFillChanged();
 }
 
 void KoFillConfigWidget::colorChanged()
@@ -515,8 +515,8 @@ void KoFillConfigWidget::colorChanged()
 
     QList<KoShape*> selectedShapes = currentShapes();
     if (selectedShapes.isEmpty()) {
-        emit sigInternalRequestColorToResourceManager();
-        emit sigFillChanged();
+        Q_EMIT sigInternalRequestColorToResourceManager();
+        Q_EMIT sigFillChanged();
         return;
     }
 
@@ -550,8 +550,8 @@ void KoFillConfigWidget::colorChanged()
     d->colorAction->setCurrentColor(wrapper.color());
 
 
-    emit sigFillChanged();
-    emit sigInternalRequestColorToResourceManager();
+    Q_EMIT sigFillChanged();
+    Q_EMIT sigInternalRequestColorToResourceManager();
 }
 
 void KoFillConfigWidget::slotProposeCurrentColorToResourceManager()
@@ -655,7 +655,7 @@ void KoFillConfigWidget::activeGradientChanged()
     setNewGradientBackgroundToShape();
     updateGradientSaveButtonAvailability();
 
-    emit sigInternalRequestColorToResourceManager();
+    Q_EMIT sigInternalRequestColorToResourceManager();
 }
 
 void KoFillConfigWidget::gradientResourceChanged()
@@ -708,7 +708,7 @@ void KoFillConfigWidget::setNewGradientBackgroundToShape()
 {
     QList<KoShape*> selectedShapes = currentShapes();
     if (selectedShapes.isEmpty()) {
-        emit sigFillChanged();
+        Q_EMIT sigFillChanged();
         return;
     }
 
@@ -722,7 +722,7 @@ void KoFillConfigWidget::setNewGradientBackgroundToShape()
         d->canvas->addCommand(command);
     }
 
-    emit sigFillChanged();
+    Q_EMIT sigFillChanged();
 }
 
 void KoFillConfigWidget::updateGradientSaveButtonAvailability()
@@ -783,7 +783,7 @@ void KoFillConfigWidget::loadCurrentFillFromResourceServer()
         button->setEnabled(true);
     }
 
-    emit sigFillChanged();
+    Q_EMIT sigFillChanged();
 }
 
 void KoFillConfigWidget::shapeChanged()
@@ -821,9 +821,9 @@ void KoFillConfigWidget::shapeChanged()
     slotUpdateFillTitle();
 
     if (shouldUploadColorToResourceManager) {
-        emit sigInternalRequestColorToResourceManager();
+        Q_EMIT sigInternalRequestColorToResourceManager();
     } else {
-        emit sigInternalRecoverColorInResourceManager();
+        Q_EMIT sigInternalRecoverColorInResourceManager();
     }
 }
 

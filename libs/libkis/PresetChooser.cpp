@@ -45,11 +45,11 @@ Resource *PresetChooser::currentPreset() const
 void PresetChooser::slotResourceSelected(KoResource *resource)
 {
     Resource *r = new Resource(resource);
-    emit presetSelected(r);
+    Q_EMIT presetSelected(r);
 }
 
 void PresetChooser::slotResourceClicked(KoResource *resource)
 {
     Resource *r = new Resource(resource);
-    emit presetClicked(r);
+    Q_EMIT presetClicked(r);
 }

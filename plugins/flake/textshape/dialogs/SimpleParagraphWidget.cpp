@@ -310,7 +310,7 @@ void SimpleParagraphWidget::setInitialUsedStyles(QVector<int> list)
 
 void SimpleParagraphWidget::listStyleChanged(int id)
 {
-    emit doneWithFocus();
+    Q_EMIT doneWithFocus();
     if (m_blockSignals) {
         return;
     }
@@ -325,9 +325,9 @@ void SimpleParagraphWidget::styleSelected(int index)
 {
     KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(m_sortedStylesModel->index(index, 0, QModelIndex()).internalId());
     if (paragStyle) {
-        emit paragraphStyleSelected(paragStyle);
+        Q_EMIT paragraphStyleSelected(paragStyle);
     }
-    emit doneWithFocus();
+    Q_EMIT doneWithFocus();
 }
 
 void SimpleParagraphWidget::styleSelected(const QModelIndex &index)
@@ -337,16 +337,16 @@ void SimpleParagraphWidget::styleSelected(const QModelIndex &index)
     }
     KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(index.internalId());
     if (paragStyle) {
-        emit paragraphStyleSelected(paragStyle);
+        Q_EMIT paragraphStyleSelected(paragStyle);
     }
-    emit doneWithFocus();
+    Q_EMIT doneWithFocus();
 }
 
 void SimpleParagraphWidget::slotShowStyleManager(int index)
 {
     int styleId = m_sortedStylesModel->index(index, 0, QModelIndex()).internalId();
-    emit showStyleManager(styleId);
-    emit doneWithFocus();
+    Q_EMIT showStyleManager(styleId);
+    Q_EMIT doneWithFocus();
 }
 
 void SimpleParagraphWidget::slotParagraphStyleApplied(const KoParagraphStyle *style)
@@ -356,7 +356,7 @@ void SimpleParagraphWidget::slotParagraphStyleApplied(const KoParagraphStyle *st
 
 void SimpleParagraphWidget::changeListLevel(int level)
 {
-    emit doneWithFocus();
+    Q_EMIT doneWithFocus();
     if (m_blockSignals) {
         return;
     }

@@ -210,7 +210,7 @@ KUndo2Command *KisReferenceImagesLayer::convertTo(const KoColorSpace *dstColorSp
 
 void KisReferenceImagesLayer::signalUpdate(const QRectF &rect)
 {
-    emit sigUpdateCanvas(rect);
+    Q_EMIT sigUpdateCanvas(rect);
 }
 
 QRectF KisReferenceImagesLayer::boundingImageRect() const

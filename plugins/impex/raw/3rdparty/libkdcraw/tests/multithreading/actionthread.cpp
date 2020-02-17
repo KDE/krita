@@ -54,19 +54,19 @@ protected:
 
     void run()
     {
-        emit signalStarted();
+        Q_EMIT signalStarted();
 
         QImage image;
 
         if (m_cancel) return;
 
-        emit signalProgress(20);
+        Q_EMIT signalProgress(20);
 
         KDcraw rawProcessor;
 
         if (m_cancel) return;
 
-        emit signalProgress(30);
+        Q_EMIT signalProgress(30);
 
         QFileInfo input(fileUrl.toLocalFile());
         QString   fullFilePath(input.baseName() + QString::fromLatin1(".full.png"));
@@ -74,7 +74,7 @@ protected:
 
         if (m_cancel) return;
 
-        emit signalProgress(40);
+        Q_EMIT signalProgress(40);
 
         if (!rawProcessor.loadFullImage(image, fileUrl.toLocalFile(), settings))
         {
@@ -84,7 +84,7 @@ protected:
 
         if (m_cancel) return;
 
-        emit signalProgress(60);
+        Q_EMIT signalProgress(60);
 
         qDebug() << "raw2png: Saving full RAW image to "
                  << fullOutput.fileName() << " size ("
@@ -93,11 +93,11 @@ protected:
 
         if (m_cancel) return;
 
-        emit signalProgress(80);
+        Q_EMIT signalProgress(80);
 
         image.save(fullFilePath, "PNG");
 
-        emit signalDone();
+        Q_EMIT signalDone();
     }
 };
 
@@ -146,11 +146,11 @@ void ActionThread::slotJobDone()
 
     if (task->errString.isEmpty())
     {
-        emit finished(task->fileUrl);
+        Q_EMIT finished(task->fileUrl);
     }
     else
     {
-        emit failed(task->fileUrl, task->errString);
+        Q_EMIT failed(task->fileUrl, task->errString);
     }
 }
 
@@ -159,7 +159,7 @@ void ActionThread::slotJobProgress(int p)
     Task* const task = dynamic_cast<Task*>(sender());
     if (!task) return;
 
-    emit progress(task->fileUrl, p);
+    Q_EMIT progress(task->fileUrl, p);
 }
 
 void ActionThread::slotJobStarted()
@@ -167,5 +167,5 @@ void ActionThread::slotJobStarted()
     Task* const task = dynamic_cast<Task*>(sender());
     if (!task) return;
 
-    emit starting(task->fileUrl);
+    Q_EMIT starting(task->fileUrl);
 }

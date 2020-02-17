@@ -363,10 +363,10 @@ void KisClipboard::clipboardDataChanged()
         }
     }
     if (m_hasClip) {
-        emit clipCreated();
+        Q_EMIT clipCreated();
     }
     m_pushedClipboard = false;
-    emit clipChanged();
+    Q_EMIT clipChanged();
 }
 
 

@@ -516,7 +516,7 @@ void KisVisualColorSelector::slotCursorMoved(QPointF pos)
     KoColor newColor = convertShapeCoordsToKoColor(m_d->channelValues);
     if (newColor != m_d->currentcolor) {
         m_d->currentcolor = newColor;
-        emit sigNewColor(m_d->currentcolor);
+        Q_EMIT sigNewColor(m_d->currentcolor);
     }
     Q_FOREACH (KisVisualColorSelectorShape *widget, m_d->widgetlist) {
         if (widget != shape){

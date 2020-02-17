@@ -82,7 +82,7 @@ class KRITAGLOBAL_EXPORT FunctionToSignalProxy : public QObject
 
 public:
     void start() {
-        emit timeout();
+        Q_EMIT timeout();
     }
 
 Q_SIGNALS:

@@ -28,7 +28,7 @@ class QRect;
 
 /**
  * Implementations of this class are called by nodes whenever the node
- * graph changes. These implementations can then emit the right
+ * graph changes. These implementations can then Q_EMIT the right
  * signals so Qt interview models can be updated before and after
  * changes.
  *

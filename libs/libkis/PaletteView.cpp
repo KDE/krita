@@ -84,10 +84,10 @@ void PaletteView::trySelectClosestColor(ManagedColor *color)
 
 void PaletteView::fgSelected(KisSwatch swatch)
 {
-    emit entrySelectedForeGround(Swatch(swatch));
+    Q_EMIT entrySelectedForeGround(Swatch(swatch));
 }
 
 void PaletteView::bgSelected(KisSwatch swatch)
 {
-    emit entrySelectedBackGround(Swatch(swatch));
+    Q_EMIT entrySelectedBackGround(Swatch(swatch));
 }

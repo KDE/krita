@@ -94,7 +94,7 @@ QString ToolHelper::toolTip() const
 
 void ToolHelper::activate()
 {
-    emit toolActivated(this);
+    Q_EMIT toolActivated(this);
 }
 
 void ToolHelper::shortcutToolActionUpdated()
@@ -107,7 +107,7 @@ void ToolHelper::shortcutToolActionUpdated()
         m_hasCustomShortcut = true;
         m_customShortcut = actionShortcut;
         if (m_toolAction) {
-            emit m_toolAction->changed();
+            Q_EMIT m_toolAction->changed();
         }
         // no need to forward the new shortcut to the other ShortcutToolAction objects,
         // they are synchronized behind the scenes
@@ -240,7 +240,7 @@ Connector::Connector(KoShapeManager *parent)
 
 void Connector::selectionChanged()
 {
-    emit selectionChanged(m_shapeManager->selection()->selectedShapes());
+    Q_EMIT selectionChanged(m_shapeManager->selection()->selectedShapes());
 }
 
 //   ************ ShortcutToolAction **********

@@ -160,7 +160,7 @@ KisToolTransform::~KisToolTransform()
 
 void KisToolTransform::outlineChanged()
 {
-    emit freeTransformChanged();
+    Q_EMIT freeTransformChanged();
     m_canvas->updateCanvas();
 }
 
@@ -583,7 +583,7 @@ void KisToolTransform::setTransformMode(KisToolTransform::TransformToolMode newM
         } else if( newMode == PerspectiveTransformMode ) {
             m_optionsWidget->slotSetPerspectiveModeButtonClicked( true );
         }
-        emit transformModeChanged();
+        Q_EMIT transformModeChanged();
     }
 }
 

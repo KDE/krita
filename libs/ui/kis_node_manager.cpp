@@ -662,8 +662,8 @@ void KisNodeManager::slotSomethingActivatedNodeImpl(KisNodeSP node)
 
     KIS_ASSERT_RECOVER_RETURN(node != activeNode());
     if (m_d->activateNodeImpl(node)) {
-        emit sigUiNeedChangeActiveNode(node);
-        emit sigNodeActivated(node);
+        Q_EMIT sigUiNeedChangeActiveNode(node);
+        Q_EMIT sigNodeActivated(node);
         nodesUpdated();
         if (node) {
             bool toggled =  m_d->view->actionCollection()->action("view_show_canvas_only")->isChecked();
@@ -828,7 +828,7 @@ void KisNodeManager::slotImageRequestNodeReselection(KisNodeSP activeNode, const
 void KisNodeManager::slotSetSelectedNodes(const KisNodeList &nodes)
 {
     m_d->selectedNodes = nodes;
-    emit sigUiNeedChangeSelectedNodes(nodes);
+    Q_EMIT sigUiNeedChangeSelectedNodes(nodes);
 }
 
 KisNodeList KisNodeManager::selectedNodes()

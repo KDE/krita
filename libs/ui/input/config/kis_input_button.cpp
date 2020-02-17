@@ -209,7 +209,7 @@ void KisInputButton::reset()
 {
     setChecked(false);
     d->updateLabel();
-    emit dataChanged();
+    Q_EMIT dataChanged();
 }
 
 void KisInputButton::Private::updateLabel()

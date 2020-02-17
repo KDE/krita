@@ -109,7 +109,7 @@ void FiltersModel::activateFilter(int index)
             d->view->filterManager()->apply(KisFilterConfigurationSP(d->filters[index]->defaultConfiguration()));
         }
         d->view->filterManager()->finish();
-        emit filterActivated(index);
+        Q_EMIT filterActivated(index);
     }
 }
 
@@ -157,7 +157,7 @@ QObject* FiltersModel::view() const
 void FiltersModel::setView(QObject* newView)
 {
     d->view = qobject_cast<KisViewManager*>( newView );
-    emit viewChanged();
+    Q_EMIT viewChanged();
 }
 
 QObject* FiltersModel::configuration(int index)
@@ -201,7 +201,7 @@ void FiltersModel::setConfiguration(int index, QObject* configuration)
         config->setCurve(qobject_cast< PropertyContainer* >(configuration)->curve());
         config->setCurves(qobject_cast< PropertyContainer* >(configuration)->curves());
         d->configurations[index] = config;
-        emit configurationChanged(index);
+        Q_EMIT configurationChanged(index);
     }
 }
 

@@ -223,14 +223,14 @@ void KisKeyframeChannel::moveKeyframeImpl(KisKeyframeSP keyframe, int newTime)
     KisTimeRange rangeSrc = affectedFrames(keyframe->time());
     QRect rectSrc = affectedRect(keyframe);
 
-    emit sigKeyframeAboutToBeMoved(keyframe, newTime);
+    Q_EMIT sigKeyframeAboutToBeMoved(keyframe, newTime);
 
     m_d->keys.remove(keyframe->time());
     int oldTime = keyframe->time();
     keyframe->setTime(newTime);
     m_d->keys.insert(newTime, keyframe);
 
-    emit sigKeyframeMoved(keyframe, oldTime);
+    Q_EMIT sigKeyframeMoved(keyframe, oldTime);
 
     KisTimeRange rangeDst = affectedFrames(keyframe->time());
     QRect rectDst = affectedRect(keyframe);
@@ -253,8 +253,8 @@ void KisKeyframeChannel::swapKeyframesImpl(KisKeyframeSP lhsKeyframe, KisKeyfram
     const int lhsTime = lhsKeyframe->time();
     const int rhsTime = rhsKeyframe->time();
 
-    emit sigKeyframeAboutToBeMoved(lhsKeyframe, rhsTime);
-    emit sigKeyframeAboutToBeMoved(rhsKeyframe, lhsTime);
+    Q_EMIT sigKeyframeAboutToBeMoved(lhsKeyframe, rhsTime);
+    Q_EMIT sigKeyframeAboutToBeMoved(rhsKeyframe, lhsTime);
 
     m_d->keys.remove(lhsTime);
     m_d->keys.remove(rhsTime);
@@ -265,8 +265,8 @@ void KisKeyframeChannel::swapKeyframesImpl(KisKeyframeSP lhsKeyframe, KisKeyfram
     m_d->keys.insert(lhsTime, rhsKeyframe);
     m_d->keys.insert(rhsTime, lhsKeyframe);
 
-    emit sigKeyframeMoved(lhsKeyframe, lhsTime);
-    emit sigKeyframeMoved(rhsKeyframe, rhsTime);
+    Q_EMIT sigKeyframeMoved(lhsKeyframe, lhsTime);
+    Q_EMIT sigKeyframeMoved(rhsKeyframe, rhsTime);
 
     const QRect rectLhsDst = affectedRect(lhsKeyframe);
     const QRect rectRhsDst = affectedRect(rhsKeyframe);
@@ -295,9 +295,9 @@ void KisKeyframeChannel::insertKeyframeLogical(KisKeyframeSP keyframe)
 {
     const int time = keyframe->time();
 
-    emit sigKeyframeAboutToBeAdded(keyframe);
+    Q_EMIT sigKeyframeAboutToBeAdded(keyframe);
     m_d->keys.insert(time, keyframe);
-    emit sigKeyframeAdded(keyframe);
+    Q_EMIT sigKeyframeAdded(keyframe);
 
     QRect rect = affectedRect(keyframe);
     KisTimeRange range = affectedFrames(time);
@@ -309,9 +309,9 @@ void KisKeyframeChannel::removeKeyframeLogical(KisKeyframeSP keyframe)
     QRect rect = affectedRect(keyframe);
     KisTimeRange range = affectedFrames(keyframe->time());
 
-    emit sigKeyframeAboutToBeRemoved(keyframe);
+    Q_EMIT sigKeyframeAboutToBeRemoved(keyframe);
     m_d->keys.remove(keyframe->time());
-    emit sigKeyframeRemoved(keyframe);
+    Q_EMIT sigKeyframeRemoved(keyframe);
 
     requestUpdate(range, rect);
 }

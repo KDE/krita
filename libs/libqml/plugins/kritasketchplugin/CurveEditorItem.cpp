@@ -75,7 +75,7 @@ KisCubicCurve CurveEditorItem::curve() const
 void CurveEditorItem::setCurve(KisCubicCurve curve)
 {
     d->curveWidget->setCurve(curve);
-    emit curveChanged();
+    Q_EMIT curveChanged();
 }
 
 bool CurveEditorItem::pointSelected() const

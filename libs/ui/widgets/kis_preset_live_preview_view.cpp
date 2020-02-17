@@ -198,11 +198,11 @@ public:
     }
 
     void initStrokeCallback() {
-        emit timeout();
+        Q_EMIT timeout();
     }
 
     void cancelStrokeCallback() {
-        emit cancelled();
+        Q_EMIT cancelled();
     }
 
 Q_SIGNALS:

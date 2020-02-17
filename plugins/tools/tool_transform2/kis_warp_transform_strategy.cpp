@@ -626,7 +626,7 @@ void KisWarpTransformStrategy::Private::recalculateTransformations()
     }
 
     handlesTransform = scaleTransform;
-    emit q->requestCanvasUpdate();
+    Q_EMIT q->requestCanvasUpdate();
 }
 
 QImage KisWarpTransformStrategy::calculateTransformedImage(ToolTransformArgs &currentArgs,

@@ -254,7 +254,7 @@ void KisDisplayColorConverter::setImageColorSpace(const KoColorSpace *cs)
         cs->profile() :
         KoColorSpaceRegistry::instance()->p709SRGBProfile();
 
-    emit displayConfigurationChanged();
+    Q_EMIT displayConfigurationChanged();
 }
 
 
@@ -349,7 +349,7 @@ void KisDisplayColorConverter::Private::selectPaintingColorSpace()
         paintingColorSpace = nodeColorSpace;
     }
 
-    emit q->displayConfigurationChanged();
+    Q_EMIT q->displayConfigurationChanged();
 }
 
 const KoColorSpace* KisDisplayColorConverter::paintingColorSpace() const
@@ -373,7 +373,7 @@ void KisDisplayColorConverter::setMonitorProfile(const KoColorProfile *monitorPr
     m_d->renderingIntent = renderingIntent();
     m_d->conversionFlags = conversionFlags();
 
-    emit displayConfigurationChanged();
+    Q_EMIT displayConfigurationChanged();
 }
 
 void KisDisplayColorConverter::setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter)
@@ -448,7 +448,7 @@ bool KisDisplayColorConverter::isHDRMode() const
 void KisDisplayColorConverter::notifyOpenGLCanvasIsActive(bool value)
 {
     m_d->openGLCanvasIsActive = value;
-    emit displayConfigurationChanged();
+    Q_EMIT displayConfigurationChanged();
 }
 
 

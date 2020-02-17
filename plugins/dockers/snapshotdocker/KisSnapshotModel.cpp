@@ -123,7 +123,7 @@ bool KisSnapshotModel::setData(const QModelIndex &index, const QVariant &value, 
     case Qt::DisplayRole:
     case Qt::EditRole:
         m_d->curDocList[i].first = value.toString();
-        emit dataChanged(index, index);
+        Q_EMIT dataChanged(index, index);
         return true;
         break;
     }

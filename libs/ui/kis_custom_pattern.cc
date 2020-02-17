@@ -133,7 +133,7 @@ void KisCustomPattern::slotUsePattern()
 
     Q_CHECK_PTR(copy);
 
-    emit(activatedResource(copy));
+    Q_EMIT (activatedResource(copy));
 }
 
 void KisCustomPattern::createPattern()

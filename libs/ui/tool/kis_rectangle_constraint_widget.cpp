@@ -64,7 +64,7 @@ KisRectangleConstraintWidget::KisRectangleConstraintWidget(QWidget *parent, KisT
 
 void KisRectangleConstraintWidget::inputsChanged() 
 {
-    emit constraintsChanged(
+    Q_EMIT constraintsChanged(
         lockRatioButton->isChecked(),
         lockWidthButton->isChecked(),
         lockHeightButton->isChecked(),

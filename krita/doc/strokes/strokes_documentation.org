@@ -677,7 +677,7 @@
    guess you know what it means. They simply lost all their sense. So
    we had to start to use /Qt::BlockingQueuedConnection/. But there is
    another problem with it. Some of the (old) code is still executed
-   in a context of the UI thread and they emit signals as well. So all
+   in a context of the UI thread and they Q_EMIT signals as well. So all
    that code causes deadlocks when using
    =Qt::BlockingQueuedConnection=. That is why we had to introduce
    =KisImageSignalRouter=. This class checks which thread emits the

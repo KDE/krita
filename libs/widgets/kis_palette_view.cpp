@@ -283,13 +283,13 @@ void KisPaletteView::slotCurrentSelectionChanged(const QModelIndex &newCurrent)
 
     const KisSwatch newEntry = m_d->model->getEntry(newCurrent);
 
-    emit sigIndexSelected(newCurrent);
+    Q_EMIT sigIndexSelected(newCurrent);
     if (isGroupName) {
         return;
     }
 
     if (isCheckSlot) {
-        emit sigColorSelected(newEntry.color());
+        Q_EMIT sigColorSelected(newEntry.color());
     }
 }
 

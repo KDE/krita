@@ -46,7 +46,7 @@ void KisToolChangesTracker::requestUndo()
 
     m_d->undoStack.removeLast();
     if (!m_d->undoStack.isEmpty()) {
-        emit sigConfigChanged(m_d->undoStack.last());
+        Q_EMIT sigConfigChanged(m_d->undoStack.last());
     }
 }
 

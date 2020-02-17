@@ -105,7 +105,7 @@ void KisSpacingSelectionWidget::setSpacing(bool isAuto, qreal spacing)
 void KisSpacingSelectionWidget::Private::slotSpacingChanged(qreal value)
 {
     Q_UNUSED(value);
-    emit q->sigSpacingChanged();
+    Q_EMIT q->sigSpacingChanged();
 }
 
 void KisSpacingSelectionWidget::Private::slotAutoSpacing(bool value)
@@ -124,7 +124,7 @@ void KisSpacingSelectionWidget::Private::slotAutoSpacing(bool value)
         slider->setValue(newSliderValue);
     }
 
-    emit q->sigSpacingChanged();
+    Q_EMIT q->sigSpacingChanged();
 }
 
 #include "moc_kis_spacing_selection_widget.moc"

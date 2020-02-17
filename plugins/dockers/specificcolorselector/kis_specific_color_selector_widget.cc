@@ -231,7 +231,7 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs, bool 
     m_colorspaceSelector->blockSignals(false);
 
     m_updateAllowed = false;
-    emit(updated());
+    Q_EMIT (updated());
     m_updateAllowed = true;
 }
 
@@ -245,13 +245,13 @@ void KisSpecificColorSelectorWidget::setColor(const KoColor& c)
 {
     m_updateAllowed = false;
     m_color.fromKoColor(c);
-    emit(updated());
+    Q_EMIT (updated());
     m_updateAllowed = true;
 }
 
 void KisSpecificColorSelectorWidget::updateTimeout()
 {
-    emit(colorChanged(m_color));
+    Q_EMIT (colorChanged(m_color));
 }
 
 void KisSpecificColorSelectorWidget::setCustomColorSpace(const KoColorSpace *colorSpace)
@@ -266,5 +266,5 @@ void KisSpecificColorSelectorWidget::onChkUsePercentageChanged(bool isChecked)
     for (auto input: m_inputs) {
         input->setPercentageWise(isChecked);
     }
-    emit(updated());
+    Q_EMIT (updated());
 }

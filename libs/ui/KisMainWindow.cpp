@@ -609,7 +609,7 @@ void KisMainWindow::addView(KisView *view, QMdiSubWindow *subWindow)
 
     showView(view, subWindow);
     updateCaption();
-    emit restoringDone();
+    Q_EMIT restoringDone();
 
     if (d->activeView) {
         connect(d->activeView, SIGNAL(titleModified(QString,bool)), SLOT(slotDocumentTitleModified()));
@@ -669,14 +669,14 @@ void KisMainWindow::showView(KisView *imageView, QMdiSubWindow *subwin)
         /**
          * Hack alert!
          *
-         * Here we explicitly request KoToolManager to emit all the tool
+         * Here we explicitly request KoToolManager to Q_EMIT all the tool
          * activation signals, to reinitialize the tool options docker.
          *
          * That is needed due to a design flaw we have in the
          * initialization procedure.  The tool in the KoToolManager is
          * initialized in KisView::setViewManager() calls, which
          * happens early enough. During this call the tool manager
-         * requests KoCanvasControllerWidget to emit the signal to
+         * requests KoCanvasControllerWidget to Q_EMIT the signal to
          * update the widgets in the tool docker. *But* at that moment
          * of time the view is not yet connected to the main window,
          * because it happens in KisViewManager::setCurrentView a bit
@@ -753,7 +753,7 @@ void KisMainWindow::slotThemeChanged()
         }
     }
 
-    emit themeChanged();
+    Q_EMIT themeChanged();
 }
 
 bool KisMainWindow::canvasDetached() const
@@ -1046,7 +1046,7 @@ KisView* KisMainWindow::addViewAndNotifyLoadingCompleted(KisDocument *document,
     KisView *view = KisPart::instance()->createView(document, d->viewManager, this);
     addView(view, subWindow);
 
-    emit guiLoadingFinished();
+    Q_EMIT guiLoadingFinished();
 
     return view;
 }
@@ -1071,7 +1071,7 @@ void KisMainWindow::slotLoadCompleted()
         disconnect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
         disconnect(newdoc, SIGNAL(canceled(QString)), this, SLOT(slotLoadCanceled(QString)));
 
-        emit loadCompleted();
+        Q_EMIT loadCompleted();
     }
 }
 
@@ -1609,21 +1609,21 @@ void KisMainWindow::slotFileOpenRecent(const QUrl &url)
 void KisMainWindow::slotFileSave()
 {
     if (saveDocument(d->activeView->document(), false, false)) {
-        emit documentSaved();
+        Q_EMIT documentSaved();
     }
 }
 
 void KisMainWindow::slotFileSaveAs()
 {
     if (saveDocument(d->activeView->document(), true, false)) {
-        emit documentSaved();
+        Q_EMIT documentSaved();
     }
 }
 
 void KisMainWindow::slotExportFile()
 {
     if (saveDocument(d->activeView->document(), true, true)) {
-        emit documentSaved();
+        Q_EMIT documentSaved();
     }
 }
 
@@ -2786,7 +2786,7 @@ void KisMainWindow::showManual()
 
 void KisMainWindow::windowScreenChanged(QScreen *screen)
 {
-    emit screenChanged();
+    Q_EMIT screenChanged();
     d->screenConnectionsStore.clear();
     d->screenConnectionsStore.addConnection(screen, SIGNAL(physicalDotsPerInchChanged(qreal)),
                                             this, SIGNAL(screenChanged()));

@@ -46,7 +46,7 @@ KoUpdater::~KoUpdater()
 
 void KoUpdater::cancel()
 {
-    emit sigCancel();
+    Q_EMIT sigCancel();
 }
 
 void KoUpdater::setProgress(int percent)
@@ -55,7 +55,7 @@ void KoUpdater::setProgress(int percent)
 
     if (percentChanged || percent == 0 || percent == 100) {
         m_progressPercent = percent;
-        emit sigProgress( percent );
+        Q_EMIT sigProgress( percent );
     }
 }
 
@@ -84,7 +84,7 @@ void KoUpdater::setValue( int value )
 
     if (range == 0) {
         m_progressPercent = max;
-        emit sigProgress(max);
+        Q_EMIT sigProgress(max);
     } else {
         setProgress((100 * (value - min)) / range);
     }
@@ -95,17 +95,17 @@ void KoUpdater::setRange( int minimum, int maximum )
     min = minimum;
     max = maximum;
     range = max - min;
-    emit sigHasValidRangeChanged(range != 0);
+    Q_EMIT sigHasValidRangeChanged(range != 0);
 }
 
 void KoUpdater::setFormat( const QString & format )
 {
-    emit sigNestedNameChanged(format);
+    Q_EMIT sigNestedNameChanged(format);
 }
 
 void KoUpdater::setAutoNestedName(const QString &name)
 {
-    emit sigNestedNameChanged(name);
+    Q_EMIT sigNestedNameChanged(name);
 }
 
 void KoUpdater::setInterrupted(bool value)

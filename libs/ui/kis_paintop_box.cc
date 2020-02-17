@@ -1222,13 +1222,13 @@ void KisPaintopBox::slotReloadPreset()
         m_resourceProvider->setPaintOpPreset(preset);
     } else {
         /**
-         * HACK ALERT: here we emit a private signal from the resource manager to
+         * HACK ALERT: here we Q_EMIT a private signal from the resource manager to
          * ensure that all the subscribers of resource-changed signal got the
          * notification. That is especially important for
          * KisPaintopTransformationConnector. See bug 392622.
          */
 
-        emit m_resourceProvider->resourceManager()->canvasResourceChanged(
+        Q_EMIT m_resourceProvider->resourceManager()->canvasResourceChanged(
             KisCanvasResourceProvider::CurrentPaintOpPreset,
             QVariant::fromValue(preset));
     }

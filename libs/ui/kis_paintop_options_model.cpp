@@ -108,5 +108,5 @@ bool operator==(const KisOptionInfo& a, const KisOptionInfo& b)
 }
 void KisPaintOpOptionListModel::signalDataChanged(const QModelIndex& index)
 {
-    emit dataChanged(index,index);
+    Q_EMIT dataChanged(index,index);
 }

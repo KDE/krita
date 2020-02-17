@@ -134,7 +134,7 @@ void KisWdgOptionsHeightmap::updateStatus()
     }
 
     if (old_status.compare(statusLabel->text()) != 0) {
-        emit statusUpdated(status_ok);
+        Q_EMIT statusUpdated(status_ok);
     }
 }
 

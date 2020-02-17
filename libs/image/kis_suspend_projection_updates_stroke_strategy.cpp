@@ -510,10 +510,10 @@ void KisSuspendProjectionUpdatesStrokeStrategy::cancelStrokeCallback()
     }
 
     /**
-     * We shouldn't emit any ad-hoc updates when cancelling the
+     * We shouldn't Q_EMIT any ad-hoc updates when cancelling the
      * stroke.  It generates weird temporary holes on the canvas,
      * making the user feel awful, thinking his image got
-     * corrupted. We will just emit a common refreshGraphAsync() that
+     * corrupted. We will just Q_EMIT a common refreshGraphAsync() that
      * will do all the work in a beautiful way
      */
     if (!m_d->suspend) {

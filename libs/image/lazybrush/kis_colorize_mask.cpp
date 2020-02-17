@@ -223,7 +223,7 @@ struct SetKeyStrokesColorSpaceCommand : public KUndo2Command {
         }
 
         m_node->setNeedsUpdate(true);
-        emit m_node->sigKeyStrokesListChanged();
+        Q_EMIT m_node->sigKeyStrokesListChanged();
     }
 
     void redo() override {
@@ -242,7 +242,7 @@ struct SetKeyStrokesColorSpaceCommand : public KUndo2Command {
         }
 
         m_node->setNeedsUpdate(true);
-        emit m_node->sigKeyStrokesListChanged();
+        Q_EMIT m_node->sigKeyStrokesListChanged();
     }
 
 private:
@@ -520,7 +520,7 @@ QRect KisColorizeMask::decorateRect(KisPaintDeviceSP &src,
         // the source layer has changed, we should update the filtered cache!
 
         if (!m_d->filteringDirty) {
-            emit sigUpdateOnDirtyParent();
+            Q_EMIT sigUpdateOnDirtyParent();
         }
     }
 
@@ -723,14 +723,14 @@ struct KeyStrokeAddRemoveCommand : public KisCommandUtils::FlipFlopCommand {
     void partA() override {
         m_list->insert(m_index, m_stroke);
         m_node->setNeedsUpdate(true);
-        emit m_node->sigKeyStrokesListChanged();
+        Q_EMIT m_node->sigKeyStrokesListChanged();
     }
 
     void partB() override {
         KIS_ASSERT_RECOVER_RETURN((*m_list)[m_index] == m_stroke);
         m_list->removeAt(m_index);
         m_node->setNeedsUpdate(true);
-        emit m_node->sigKeyStrokesListChanged();
+        Q_EMIT m_node->sigKeyStrokesListChanged();
     }
 
 private:
@@ -905,7 +905,7 @@ struct SetKeyStrokeColorsCommand : public KUndo2Command {
         *m_list = m_newList;
 
         m_node->setNeedsUpdate(true);
-        emit m_node->sigKeyStrokesListChanged();
+        Q_EMIT m_node->sigKeyStrokesListChanged();
         m_node->setDirty();
     }
 
@@ -913,7 +913,7 @@ struct SetKeyStrokeColorsCommand : public KUndo2Command {
         *m_list = m_oldList;
 
         m_node->setNeedsUpdate(true);
-        emit m_node->sigKeyStrokesListChanged();
+        Q_EMIT m_node->sigKeyStrokesListChanged();
         m_node->setDirty();
     }
 

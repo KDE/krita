@@ -219,7 +219,7 @@ void KisPresetSaveWidget::savePreset()
         rServer->addResource(newPreset);
 
         // trying to get brush preset to load after it is created
-        emit resourceSelected(newPreset.data());
+        Q_EMIT resourceSelected(newPreset.data());
     }
     else { // saving a preset that is replacing an existing one
 

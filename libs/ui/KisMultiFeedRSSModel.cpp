@@ -175,7 +175,7 @@ void MultiFeedRssModel::appendFeedData(QNetworkReply *reply)
     beginResetModel();
     endResetModel();
 
-    emit feedDataChanged();
+    Q_EMIT feedDataChanged();
 }
 
 void MultiFeedRssModel::removeFeed(const QString &feed)

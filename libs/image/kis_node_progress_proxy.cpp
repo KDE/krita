@@ -82,7 +82,7 @@ void KisNodeProgressProxy::setValue(int _value)
 {
     d->value = _value;
     if (d->node && d->computePercentage()) {
-        emit(percentageChanged(d->percentage, d->node));
+        Q_EMIT (percentageChanged(d->percentage, d->node));
     }
 }
 
@@ -91,7 +91,7 @@ void KisNodeProgressProxy::setRange(int _minimum, int _maximum)
     d->minimum = _minimum;
     d->maximum = _maximum;
     if (d->node && d->computePercentage()) {
-        emit(percentageChanged(d->percentage, d->node));
+        Q_EMIT (percentageChanged(d->percentage, d->node));
     }
 }
 

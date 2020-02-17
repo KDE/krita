@@ -88,7 +88,7 @@ void ValidParentStylesProxyModel::createMapping()
 void ValidParentStylesProxyModel::setCurrentChildStyleId(int styleId)
 {
     m_currentChildStyleId = styleId;
-    emit layoutAboutToBeChanged();
+    Q_EMIT layoutAboutToBeChanged();
     createMapping();
-    emit layoutChanged();
+    Q_EMIT layoutChanged();
 }

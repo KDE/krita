@@ -163,7 +163,7 @@ void KisColorButton::setColor(const KoColor &c)
 {
     d->col = c;
     update();
-    emit changed(d->col);
+    Q_EMIT changed(d->col);
 }
 
 void KisColorButton::setAlphaChannelEnabled(bool alpha)

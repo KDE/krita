@@ -324,7 +324,7 @@ QObject* LayerModel::engine() const
 void LayerModel::setEngine(QObject* newEngine)
 {
     d->declarativeEngine = qobject_cast<QQmlEngine*>(newEngine);
-    emit engineChanged();
+    Q_EMIT engineChanged();
 }
 
 QString LayerModel::fullImageThumbUrl() const
@@ -646,7 +646,7 @@ void LayerModel::source_rowsAboutToBeInserted(QModelIndex /*p*/, int /*from*/, i
 void LayerModel::source_rowsInserted(QModelIndex /*p*/, int, int)
 {
     d->rebuildLayerList();
-    emit countChanged();
+    Q_EMIT countChanged();
     endResetModel();
 }
 
@@ -658,7 +658,7 @@ void LayerModel::source_rowsAboutToBeRemoved(QModelIndex /*p*/, int /*from*/, in
 void LayerModel::source_rowsRemoved(QModelIndex, int, int)
 {
     d->rebuildLayerList();
-    emit countChanged();
+    Q_EMIT countChanged();
     endResetModel();
 }
 
@@ -679,7 +679,7 @@ void LayerModel::source_modelReset()
         d->nodeManager->slotUiActivatedNode(d->layers.at(0));
         currentNodeChanged(d->layers.at(0));
     }
-    emit countChanged();
+    Q_EMIT countChanged();
     endResetModel();
 }
 
@@ -713,17 +713,17 @@ void LayerModel::aboutToRemoveNode(KisNodeSP node)
 
 void LayerModel::emitActiveChanges()
 {
-    emit activeFilterConfigChanged();
-    emit activeNameChanged();
-    emit activeTypeChanged();
-    emit activeCompositeOpChanged();
-    emit activeOpacityChanged();
-    emit activeVisibleChanged();
-    emit activeLockedChanged();
-    emit activeRChannelActiveChanged();
-    emit activeGChannelActiveChanged();
-    emit activeBChannelActiveChanged();
-    emit activeAChannelActiveChanged();
+    Q_EMIT activeFilterConfigChanged();
+    Q_EMIT activeNameChanged();
+    Q_EMIT activeTypeChanged();
+    Q_EMIT activeCompositeOpChanged();
+    Q_EMIT activeOpacityChanged();
+    Q_EMIT activeVisibleChanged();
+    Q_EMIT activeLockedChanged();
+    Q_EMIT activeRChannelActiveChanged();
+    Q_EMIT activeGChannelActiveChanged();
+    Q_EMIT activeBChannelActiveChanged();
+    Q_EMIT activeAChannelActiveChanged();
 }
 
 QString LayerModel::activeName() const
@@ -738,7 +738,7 @@ void LayerModel::setActiveName(QString newName)
     if (d->activeNode.isNull())
         return;
     d->activeNode->setName(newName);
-    emit activeNameChanged();
+    Q_EMIT activeNameChanged();
 }
 
 QString LayerModel::activeType() const
@@ -766,7 +766,7 @@ void LayerModel::setActiveCompositeOp(int newOp)
     {
         d->activeNode->setCompositeOpId(entry.id());
         d->activeNode->setDirty();
-        emit activeCompositeOpChanged();
+        Q_EMIT activeCompositeOpChanged();
     }
 }
 
@@ -781,7 +781,7 @@ void LayerModel::setActiveOpacity(int newOpacity)
 {
     d->activeNode->setOpacity(newOpacity);
     d->activeNode->setDirty();
-    emit activeOpacityChanged();
+    Q_EMIT activeOpacityChanged();
 }
 
 bool LayerModel::activeVisible() const
@@ -795,7 +795,7 @@ void LayerModel::setActiveVisible(bool newVisible)
     if (d->activeNode.isNull())
         return;
     setVisible(d->layers.indexOf(d->activeNode), newVisible);
-    emit activeVisibleChanged();
+    Q_EMIT activeVisibleChanged();
 }
 
 bool LayerModel::activeLocked() const
@@ -810,7 +810,7 @@ void LayerModel::setActiveLocked(bool newLocked)
     if (d->activeNode.isNull())
         return;
     d->activeNode->setUserLocked(newLocked);
-    emit activeLockedChanged();
+    Q_EMIT activeLockedChanged();
 }
 
 bool LayerModel::activeAChannelActive() const
@@ -829,7 +829,7 @@ void LayerModel::setActiveAChannelActive(bool newActive)
     {
         layer->disableAlphaChannel(!newActive);
         layer->setDirty();
-        emit activeAChannelActiveChanged();
+        Q_EMIT activeAChannelActiveChanged();
     }
 }
 
@@ -867,7 +867,7 @@ bool LayerModel::activeBChannelActive() const
 void LayerModel::setActiveBChannelActive(bool newActive)
 {
     setChannelActive(d->activeNode, 2, newActive);
-    emit activeBChannelActiveChanged();
+    Q_EMIT activeBChannelActiveChanged();
 }
 
 bool LayerModel::activeGChannelActive() const
@@ -878,7 +878,7 @@ bool LayerModel::activeGChannelActive() const
 void LayerModel::setActiveGChannelActive(bool newActive)
 {
     setChannelActive(d->activeNode, 1, newActive);
-    emit activeGChannelActiveChanged();
+    Q_EMIT activeGChannelActiveChanged();
 }
 
 bool LayerModel::activeRChannelActive() const
@@ -889,7 +889,7 @@ bool LayerModel::activeRChannelActive() const
 void LayerModel::setActiveRChannelActive(bool newActive)
 {
     setChannelActive(d->activeNode, 0, newActive);
-    emit activeRChannelActiveChanged();
+    Q_EMIT activeRChannelActiveChanged();
 }
 
 QObject* LayerModel::activeFilterConfig() const

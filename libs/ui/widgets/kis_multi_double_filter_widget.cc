@@ -45,7 +45,7 @@ void KisDelayedActionDoubleInput::slotTimeToUpdate()
 
 void KisDelayedActionDoubleInput::slotValueChanged()
 {
-    emit valueChangedDelayed(value());
+    Q_EMIT valueChangedDelayed(value());
 }
 
 void KisDelayedActionDoubleInput::cancelDelayedSignal()

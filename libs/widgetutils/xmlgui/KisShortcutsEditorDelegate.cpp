@@ -291,7 +291,7 @@ bool KisShortcutsEditorDelegate::eventFilter(QObject *o, QEvent *e)
 void KisShortcutsEditorDelegate::keySequenceChanged(const QKeySequence &seq)
 {
     QVariant ret = QVariant::fromValue(seq);
-    emit shortcutChanged(ret, m_editingIndex);
+    Q_EMIT shortcutChanged(ret, m_editingIndex);
 }
 
 void KisShortcutsEditorDelegate::setCheckActionCollections(

@@ -119,5 +119,5 @@ KisPropertiesConfigurationSP  KisDesaturateConfigWidget::configuration() const
 void KisDesaturateConfigWidget::setConfiguration(const KisPropertiesConfigurationSP  config)
 {
     m_group->button(config->getInt("type", 0))->setChecked(true);
-    emit sigConfigurationItemChanged();
+    Q_EMIT sigConfigurationItemChanged();
 }

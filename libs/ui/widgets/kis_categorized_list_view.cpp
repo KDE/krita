@@ -86,7 +86,7 @@ void KisCategorizedListView::slotIndexChanged(const QModelIndex& index)
     if(model()->data(index, __CategorizedListModelBase::IsHeaderRole).toBool()) {
         bool expanded = model()->data(index, __CategorizedListModelBase::ExpandCategoryRole).toBool();
         model()->setData(index, !expanded, __CategorizedListModelBase::ExpandCategoryRole);
-        emit sigCategoryToggled(index, !expanded);
+        Q_EMIT sigCategoryToggled(index, !expanded);
     }
 }
 
@@ -104,7 +104,7 @@ void KisCategorizedListView::dataChanged(const QModelIndex& topLeft, const QMode
             int row = topLeft.row();
             int column = topLeft.column();
 
-            emit sigEntryChecked(model()->index(row, column));
+            Q_EMIT sigEntryChecked(model()->index(row, column));
         } else if (__CategorizedListModelBase::ExpandCategoryRole == roles.at(i)) {
            // logic to target the expand/contract menus if needed
         }
@@ -147,7 +147,7 @@ void KisCategorizedListView::mousePressEvent(QMouseEvent* event)
                             event->modifiers());
 
             QListView::mouseReleaseEvent(&releaseEvent);
-            emit sigEntryChecked(index);
+            Q_EMIT sigEntryChecked(index);
 
             return; // don't worry about running the 'right' click logic below. that is not relevant with composite ops
         }

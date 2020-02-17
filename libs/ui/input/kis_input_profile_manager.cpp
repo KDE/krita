@@ -96,7 +96,7 @@ void KisInputProfileManager::setCurrentProfile(KisInputProfile *profile)
 {
     if (profile && profile != d->currentProfile) {
         d->currentProfile = profile;
-        emit currentProfileChanged();
+        Q_EMIT currentProfileChanged();
     }
 }
 
@@ -110,7 +110,7 @@ KisInputProfile *KisInputProfileManager::addProfile(const QString &name)
     profile->setName(name);
     d->profiles.insert(name, profile);
 
-    emit profilesChanged();
+    Q_EMIT profilesChanged();
 
     return profile;
 }
@@ -132,10 +132,10 @@ void KisInputProfileManager::removeProfile(const QString &name)
 
         if (currentProfileName == name) {
             d->currentProfile = d->profiles.begin().value();
-            emit currentProfileChanged();
+            Q_EMIT currentProfileChanged();
         }
 
-        emit profilesChanged();
+        Q_EMIT profilesChanged();
     }
 }
 
@@ -151,7 +151,7 @@ bool KisInputProfileManager::renameProfile(const QString &oldName, const QString
         profile->setName(newName);
         d->profiles.insert(newName, profile);
 
-        emit profilesChanged();
+        Q_EMIT profilesChanged();
 
 
         return true;
@@ -176,7 +176,7 @@ void KisInputProfileManager::duplicateProfile(const QString &name, const QString
         newProfile->addShortcut(new KisShortcutConfiguration(*shortcut));
     }
 
-    emit profilesChanged();
+    Q_EMIT profilesChanged();
 }
 
 QList< KisAbstractInputAction * > KisInputProfileManager::actions()
@@ -294,7 +294,7 @@ void KisInputProfileManager::loadProfiles()
         }
     }
     if (d->currentProfile) {
-        emit currentProfileChanged();
+        Q_EMIT currentProfileChanged();
     }
 }
 
@@ -327,7 +327,7 @@ void KisInputProfileManager::saveProfiles()
     config.setCurrentInputProfile(d->currentProfile->name());
 
     //Force a reload of the current profile in input manager and whatever else uses the profile.
-    emit currentProfileChanged();
+    Q_EMIT currentProfileChanged();
 }
 
 void KisInputProfileManager::resetAll()
@@ -345,7 +345,7 @@ void KisInputProfileManager::resetAll()
     //Load the profiles again, this should now only load those shipped with Krita.
     loadProfiles();
 
-    emit profilesChanged();
+    Q_EMIT profilesChanged();
 }
 
 KisInputProfileManager::KisInputProfileManager(QObject *parent)

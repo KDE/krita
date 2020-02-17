@@ -75,6 +75,6 @@ void KisPaintOpListWidget::setCurrent(const QString& paintOpId)
 
 void KisPaintOpListWidget::slotOpActivated(const QModelIndex& index)
 {
-    emit activated(itemAt(index.row()));
+    Q_EMIT activated(itemAt(index.row()));
 }
 

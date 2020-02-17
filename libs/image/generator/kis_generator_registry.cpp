@@ -68,7 +68,7 @@ void KisGeneratorRegistry::add(const QString &id, KisGeneratorSP item)
 {
     dbgPlugins << "adding " << item->name() << " with id " << id;
     KoGenericRegistry<KisGeneratorSP>::add(id, item);
-    emit(generatorAdded(id));
+    Q_EMIT (generatorAdded(id));
 }
 
 KisFilterConfigurationSP KisGeneratorRegistry::cloneConfiguration(const KisFilterConfigurationSP kfc)

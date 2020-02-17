@@ -30,30 +30,30 @@ KoAbstractResourceServerAdapter::~KoAbstractResourceServerAdapter()
 
 void KoAbstractResourceServerAdapter::emitResourceAdded(KoResource* resource)
 {
-    emit resourceAdded(resource);
+    Q_EMIT resourceAdded(resource);
 }
 
 void KoAbstractResourceServerAdapter::emitRemovingResource(KoResource* resource)
 {
-    emit removingResource(resource);
+    Q_EMIT removingResource(resource);
 }
 
 void KoAbstractResourceServerAdapter::emitResourceChanged(KoResource* resource)
 {
-    emit resourceChanged(resource);
+    Q_EMIT resourceChanged(resource);
 }
 
 void KoAbstractResourceServerAdapter::emitTagsWereChanged()
 {
-    emit tagsWereChanged();
+    Q_EMIT tagsWereChanged();
 }
 
 void KoAbstractResourceServerAdapter::emitTagCategoryWasAdded(const QString& tag)
 {
-    emit tagCategoryWasAdded(tag);
+    Q_EMIT tagCategoryWasAdded(tag);
 }
 
 void KoAbstractResourceServerAdapter::emitTagCategoryWasRemoved(const QString& tag)
 {
-    emit tagCategoryWasRemoved(tag);
+    Q_EMIT tagCategoryWasRemoved(tag);
 }

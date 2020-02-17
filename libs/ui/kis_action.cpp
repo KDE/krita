@@ -143,5 +143,5 @@ void KisAction::slotTriggered()
 
 void KisAction::slotChanged()
 {
-    emit sigEnableSlaves(isEnabled());
+    Q_EMIT sigEnableSlaves(isEnabled());
 }

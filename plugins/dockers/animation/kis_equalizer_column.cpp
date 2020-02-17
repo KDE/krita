@@ -90,13 +90,13 @@ void KisEqualizerColumn::slotSliderChanged(int value)
     m_d->stateButton->setChecked(value > 0);
     updateState();
 
-    emit sigColumnChanged(m_d->id, m_d->stateButton->isChecked(), m_d->mainSlider->value());
+    Q_EMIT sigColumnChanged(m_d->id, m_d->stateButton->isChecked(), m_d->mainSlider->value());
 }
 
 void KisEqualizerColumn::slotButtonChanged(bool value)
 {
     Q_UNUSED(value);
-    emit sigColumnChanged(m_d->id, m_d->stateButton->isChecked(), m_d->mainSlider->value());
+    Q_EMIT sigColumnChanged(m_d->id, m_d->stateButton->isChecked(), m_d->mainSlider->value());
 
     updateState();
 }

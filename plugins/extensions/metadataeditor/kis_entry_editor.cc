@@ -100,6 +100,6 @@ void KisEntryEditor::valueEdited()
     QVariant val = d->object->property(d->propertyName.toLatin1());
     dbgMetaData << "Value edited: " << d->propertyName << val;
     d->setValue(val);
-    emit valueHasBeenEdited();
+    Q_EMIT valueHasBeenEdited();
 }
 

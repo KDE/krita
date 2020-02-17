@@ -53,7 +53,7 @@ void KisPaintopSettingsUpdateProxy::notifySettingsChanged()
 
 void KisPaintopSettingsUpdateProxy::notifyUniformPropertiesChanged()
 {
-    emit sigUniformPropertiesChanged();
+    Q_EMIT sigUniformPropertiesChanged();
 }
 
 void KisPaintopSettingsUpdateProxy::postponeSettingsChanges()
@@ -67,7 +67,7 @@ void KisPaintopSettingsUpdateProxy::unpostponeSettingsChanges()
 
     if (!m_d->updatesBlocked && m_d->numUpdatesWhileBlocked) {
         m_d->numUpdatesWhileBlocked = 0;
-        emit sigSettingsChanged();
+        Q_EMIT sigSettingsChanged();
     }
 }
 
@@ -76,6 +76,6 @@ void KisPaintopSettingsUpdateProxy::slotDeliverSettingsChanged()
     if (m_d->updatesBlocked) {
         m_d->numUpdatesWhileBlocked++;
     } else {
-        emit sigSettingsChanged();
+        Q_EMIT sigSettingsChanged();
     }
 }

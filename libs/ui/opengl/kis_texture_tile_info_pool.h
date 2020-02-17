@@ -171,7 +171,7 @@ public:
         QMutexLocker l(&m_mutex);
         KisTextureTileInfoPoolSingleSize *pool = m_pools[pixelSize];
         if (pool->free(ptr)) {
-            emit purge(pixelSize, pool->numFrees());
+            Q_EMIT purge(pixelSize, pool->numFrees());
         }
     }
 

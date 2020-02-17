@@ -219,7 +219,7 @@ void KisColorSelectorComponent::setParam(qreal hue, qreal hsvSaturation, qreal v
 
 
     m_dirty=true;
-    emit update();
+    Q_EMIT update();
 }
 
 int KisColorSelectorComponent::width() const

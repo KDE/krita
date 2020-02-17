@@ -46,7 +46,7 @@ void KisZoomButton::beginZoom(QPoint mousePos, qreal staticPoint)
 {
     m_initialDragZoomLevel = m_zoomLevel;
     beginDrag(mousePos);
-    emit zoomStarted(staticPoint);
+    Q_EMIT zoomStarted(staticPoint);
 }
 
 void KisZoomButton::continueZoom(QPoint mousePos)
@@ -65,5 +65,5 @@ void KisZoomButton::slotValueChanged(int value)
     qreal zoomCoeff = std::pow(2.0, qreal(value) / unitRadius());
     m_zoomLevel = m_initialDragZoomLevel * zoomCoeff;
 
-    emit zoomLevelChanged(m_zoomLevel);
+    Q_EMIT zoomLevelChanged(m_zoomLevel);
 }

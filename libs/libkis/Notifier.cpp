@@ -67,24 +67,24 @@ void Notifier::setActive(bool value)
 void Notifier::imageCreated(KisDocument* document)
 {
     Document *doc = new Document(document);
-    emit imageCreated(doc);
+    Q_EMIT imageCreated(doc);
 }
 
 void Notifier::viewCreated(KisView *view)
 {
     View *v = new View(view);
-    emit viewCreated(v);
+    Q_EMIT viewCreated(v);
 }
 
 void Notifier::viewClosed(KisView *view)
 {
     View *v = new View(view);
-    emit viewClosed(v);
+    Q_EMIT viewClosed(v);
 }
 
 void Notifier::windowCreated(KisMainWindow *window)
 {
     Window *w = new Window(window);
-    emit windowCreated(w);
+    Q_EMIT windowCreated(w);
 }
 

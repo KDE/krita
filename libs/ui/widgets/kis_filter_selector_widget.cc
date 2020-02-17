@@ -154,8 +154,8 @@
 
         d->showFilterGallery = visible;
         update();
-        emit sigFilterGalleryToggled(visible);
-        emit sigSizeChanged();
+        Q_EMIT sigFilterGalleryToggled(visible);
+        Q_EMIT sigSizeChanged();
     }
 
     void KisFilterSelectorWidget::showXMLdialog()
@@ -279,7 +279,7 @@
         }
 
         slotBookMarkCurrentFilter();
-        emit(configurationChanged());
+        Q_EMIT (configurationChanged());
     }
 
     void KisFilterSelectorWidget::slotBookMarkCurrentFilter() {
@@ -354,7 +354,7 @@
         selectionModel()->select(idx, QItemSelectionModel::SelectCurrent);
         expand(idx);
         scrollTo(idx);
-        emit activated(idx);
+        Q_EMIT activated(idx);
     }
 
     void KisFilterSelectorWidget::setVisible(bool visible)

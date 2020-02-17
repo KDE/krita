@@ -762,9 +762,9 @@ void KisAdvancedColorSpaceSelector::setCurrentColorSpace(const KoColorSpace* col
 void KisAdvancedColorSpaceSelector::colorSpaceChanged()
 {
     bool valid = d->colorSpaceSelector->lstProfile->count() != 0;
-    emit(selectionChanged(valid));
+    Q_EMIT (selectionChanged(valid));
     if (valid) {
-        emit colorSpaceChanged(currentColorSpace());
+        Q_EMIT colorSpaceChanged(currentColorSpace());
     }
 }
 

@@ -236,12 +236,12 @@ bool StylesDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const
         } else {
             m_editButtonPressed = false;
         }
-        emit needsUpdate(index);
+        Q_EMIT needsUpdate(index);
     }
     if (event->type() == QEvent::MouseButtonRelease) {
         m_deleteButtonPressed = false;
         m_editButtonPressed = false;
-        emit needsUpdate(index);
+        Q_EMIT needsUpdate(index);
 
         if (index.flags() == Qt::NoItemFlags) { //if the item is NoItemFlagged, it means it is a separator in the view. In that case, we should not close the combo's drop down.
             return true;
@@ -255,7 +255,7 @@ bool StylesDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const
         /*TODO: when we can safely delete styles, re-enable this
                 QRect delRect = option.rect.adjusted(dx1 - scrollBarWidth, dy1, dx2 - scrollBarWidth, dy2);
                 if (delRect.contains(mouseEvent->pos())) {
-                    emit deleteStyleButtonClicked(index);
+                    Q_EMIT deleteStyleButtonClicked(index);
                     return true;
                 }
         */
@@ -265,10 +265,10 @@ bool StylesDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const
         dy2 = -1 - (option.rect.height() - qMin(option.rect.height(), m_buttonSize)) / 2;
         QRect editRect = option.rect.adjusted(dx1 - scrollBarWidth, dy1, dx2 - scrollBarWidth, dy2);
         if (editRect.contains(mouseEvent->pos())) {
-            emit styleManagerButtonClicked(index);
+            Q_EMIT styleManagerButtonClicked(index);
             return true;
         }
-        emit clickedInItem(index);
+        Q_EMIT clickedInItem(index);
         return true; //returning true here means the QComboBox mouseRelease code will not get called. The effect of it is that hidePopup will not get called. StylesCombo calls it in the corresponding slot.
     }
     if (event->type() == QEvent::MouseMove) {
@@ -291,7 +291,7 @@ bool StylesDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const
         if (!editRect.contains(mouseEvent->pos())) {
             m_editButtonPressed = false;
         }
-        emit needsUpdate(index);
+        Q_EMIT needsUpdate(index);
         return false;
     }
     return false;

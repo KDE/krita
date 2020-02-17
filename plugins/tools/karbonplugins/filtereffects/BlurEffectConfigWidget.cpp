@@ -63,5 +63,5 @@ void BlurEffectConfigWidget::stdDeviationChanged(double stdDeviation)
 
     qreal newDev = 0.01 * stdDeviation;
     m_effect->setDeviation(QPointF(newDev, newDev));
-    emit filterChanged();
+    Q_EMIT filterChanged();
 }

@@ -241,7 +241,7 @@ void TimelineLayersHeader::mousePressEvent(QMouseEvent *e)
 
         } else if (e->button() == Qt::RightButton) {
             model()->setHeaderData(logical, orientation(), true, TimelineFramesModel::ActiveLayerRole);
-            emit sigRequestContextMenu(e->globalPos());
+            Q_EMIT sigRequestContextMenu(e->globalPos());
             return;
         } else if (e->button() == Qt::LeftButton) {
             model()->setHeaderData(logical, orientation(), true, TimelineFramesModel::ActiveLayerRole);

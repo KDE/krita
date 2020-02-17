@@ -150,7 +150,7 @@ void BibliographyPreview::finishedPreviewLayout()
         KoShapePaintingContext paintContext; //FIXME
         m_textShape->paintComponent(p, paintContext);
     }
-    emit pixmapGenerated();
+    Q_EMIT pixmapGenerated();
     update();
 }
 

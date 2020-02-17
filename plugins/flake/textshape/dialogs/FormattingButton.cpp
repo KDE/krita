@@ -194,7 +194,7 @@ void FormattingButton::itemSelected()
         m_lastId = m_styleMap.key(sender());
     }
     m_menu->hide();
-    emit itemTriggered(m_lastId);
+    Q_EMIT itemTriggered(m_lastId);
 }
 
 bool FormattingButton::hasItemId(int id)

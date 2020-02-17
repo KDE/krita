@@ -91,7 +91,7 @@ void KisIntegerColorInput::setValue(int v)
     default:
         Q_ASSERT(false);
     }
-    emit(updated());
+    Q_EMIT (updated());
 }
 
 void KisIntegerColorInput::update()
@@ -279,7 +279,7 @@ void KisFloatColorInput::setValue(double v)
     default:
         Q_ASSERT(false);
     }
-    emit(updated());
+    Q_EMIT (updated());
 }
 
 QWidget* KisFloatColorInput::createInput()
@@ -406,7 +406,7 @@ void KisHexColorInput::setValue()
             valueString.remove(0, 2);
         }
     }
-    emit(updated());
+    Q_EMIT (updated());
 }
 
 void KisHexColorInput::update()

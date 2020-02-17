@@ -439,7 +439,7 @@ void KoTableCellStyle::setName(const QString &name)
     if (name == d->name)
         return;
     d->name = name;
-    emit nameChanged(name);
+    Q_EMIT nameChanged(name);
 }
 
 int KoTableCellStyle::styleId() const
@@ -747,7 +747,7 @@ void KoTableCellStyle::copyProperties(const KoTableCellStyle *style)
     const KoTableCellStylePrivate *styleD = static_cast<const KoTableCellStylePrivate*>(style->d_func());
 
     d->stylesPrivate = styleD->stylesPrivate;
-    setName(style->name()); // make sure we emit property change
+    setName(style->name()); // make sure we Q_EMIT property change
     d->next = styleD->next;
     d->parentStyle = styleD->parentStyle;
 }

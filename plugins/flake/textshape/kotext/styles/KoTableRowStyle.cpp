@@ -76,7 +76,7 @@ KoTableRowStyle::~KoTableRowStyle()
 void KoTableRowStyle::copyProperties(const KoTableRowStyle *style)
 {
     d->stylesPrivate = style->d->stylesPrivate;
-    setName(style->name()); // make sure we emit property change
+    setName(style->name()); // make sure we Q_EMIT property change
     d->parentStyle = style->d->parentStyle;
 }
 

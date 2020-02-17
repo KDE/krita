@@ -112,7 +112,7 @@ void KoAnchorSelectionWidget::setValue(KoFlake::AnchorPosition value)
         }
     }
 
-    emit valueChanged(value);
+    Q_EMIT valueChanged(value);
 }
 
 QSize KoAnchorSelectionWidget::sizeHint() const
@@ -132,6 +132,6 @@ QSize KoAnchorSelectionWidget::minimumSizeHint() const
 void KoAnchorSelectionWidget::slotGroupClicked(int id)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(id >= 0 && id < KoFlake::NumAnchorPositions);
-    emit valueChanged(KoFlake::AnchorPosition(id));
+    Q_EMIT valueChanged(KoFlake::AnchorPosition(id));
 }
 

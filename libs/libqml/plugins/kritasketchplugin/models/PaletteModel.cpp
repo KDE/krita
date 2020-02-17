@@ -110,7 +110,7 @@ void PaletteModel::itemActivated(int index)
     if (index >= 0 && index < resources.count())
     {
         d->currentSet = dynamic_cast<KoColorSet*>(resources.at(index));
-        emit colorSetChanged();
+        Q_EMIT colorSetChanged();
     }
 }
 

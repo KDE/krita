@@ -86,7 +86,7 @@ void KisCmbIDList::slotIDActivated(int i)
 {
     if (i > m_list.count() - 1) return;
 
-    emit activated(m_list[i]);
+    Q_EMIT activated(m_list[i]);
 
 }
 
@@ -94,7 +94,7 @@ void KisCmbIDList::slotIDHighlighted(int i)
 {
     if (i > m_list.count() - 1) return;
 
-    emit highlighted(m_list[i]);
+    Q_EMIT highlighted(m_list[i]);
 
 }
 

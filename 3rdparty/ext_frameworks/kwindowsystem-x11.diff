@@ -50,4 +50,4 @@ index 7f9d30f..c6ed6f0 100644
 +        // NETRootInfo::event(ev, &props, &props2);
  
          if ((props & CurrentDesktop) && currentDesktop() != old_current_desktop) {
-             emit s_q->currentDesktopChanged(currentDesktop());
+             Q_EMIT s_q->currentDesktopChanged(currentDesktop());

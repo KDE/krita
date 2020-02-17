@@ -860,7 +860,7 @@ void KoRulerPrivate::emitTabChanged()
     KoRuler::Tab tab;
     if (currentIndex >= 0)
         tab = tabs[currentIndex];
-    emit ruler->tabChanged(originalIndex, currentIndex >= 0 ? &tab : 0);
+    Q_EMIT ruler->tabChanged(originalIndex, currentIndex >= 0 ? &tab : 0);
 }
 
 
@@ -1176,7 +1176,7 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
         d->paintingStrategy = d->distancesPaintingStrategy;
 
     if (d->selected != KoRulerPrivate::None)
-        emit aboutToChange();
+        Q_EMIT aboutToChange();
 }
 
 void KoRuler::mouseReleaseEvent ( QMouseEvent* ev )
@@ -1184,7 +1184,7 @@ void KoRuler::mouseReleaseEvent ( QMouseEvent* ev )
     ev->accept();
     if (d->selected == KoRulerPrivate::None && d->guideCreationStarted) {
         d->guideCreationStarted = false;
-        emit guideCreationFinished(d->orientation, ev->globalPos());
+        Q_EMIT guideCreationFinished(d->orientation, ev->globalPos());
     } else if (d->selected == KoRulerPrivate::Tab) {
         if (d->originalIndex >= 0 && !d->tabMoved) {
             int type = d->tabs[d->currentIndex].type;
@@ -1197,7 +1197,7 @@ void KoRuler::mouseReleaseEvent ( QMouseEvent* ev )
         d->emitTabChanged();
     }
     else if( d->selected != KoRulerPrivate::None)
-        emit indentsChanged(true);
+        Q_EMIT indentsChanged(true);
     else
         ev->ignore();
 
@@ -1210,7 +1210,7 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
     QPoint pos = ev->pos();
 
     if (d->selected == KoRulerPrivate::None && d->guideCreationStarted) {
-        emit guideCreationInProgress(d->orientation, ev->globalPos());
+        Q_EMIT guideCreationInProgress(d->orientation, ev->globalPos());
         ev->accept();
         update();
         return;
@@ -1234,7 +1234,7 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
                 d->paintingStrategy = d->distancesPaintingStrategy;
         }
 
-        emit indentsChanged(false);
+        Q_EMIT indentsChanged(false);
         break;
     case KoRulerPrivate::ParagraphIndent:
         if (d->rightToLeft)
@@ -1253,7 +1253,7 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
 
         if (d->paragraphIndent + d->endIndent > activeLength)
             d->paragraphIndent = activeLength - d->endIndent;
-        emit indentsChanged(false);
+        Q_EMIT indentsChanged(false);
         break;
     case KoRulerPrivate::EndIndent:
         if (d->rightToLeft)
@@ -1272,7 +1272,7 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
 
         if (d->paragraphIndent + d->endIndent > activeLength)
             d->endIndent = activeLength - d->paragraphIndent;
-        emit indentsChanged(false);
+        Q_EMIT indentsChanged(false);
         break;
     case KoRulerPrivate::Tab:
         d->tabMoved = true;
@@ -1302,7 +1302,7 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
             d->currentIndex = -1;
             // was that a temporary added tab?
             if ( d->originalIndex == -1 )
-                emit guideLineCreated(d->orientation,
+                Q_EMIT guideLineCreated(d->orientation,
                         d->orientation == Qt::Horizontal
                         ? d->viewConverter->viewToDocumentY(ev->pos().y())
                         : d->viewConverter->viewToDocumentX(ev->pos().x()));
@@ -1317,7 +1317,7 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
         else
             newPos= d->viewConverter->viewToDocumentY(pos.y() - d->offset);
         d->hotspots[d->currentIndex].position = newPos;
-        emit hotSpotChanged(d->hotspots[d->currentIndex].id, newPos);
+        Q_EMIT hotSpotChanged(d->hotspots[d->currentIndex].id, newPos);
         break;
     case KoRulerPrivate::None:
         d->mouseCoordinate = (d->orientation == Qt::Horizontal ?  pos.x() : pos.y()) - d->offset;
@@ -1337,9 +1337,9 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
         case KoRulerPrivate::None:
             if (ev->buttons() & Qt::LeftButton) {
                 if (d->orientation == Qt::Horizontal && ev->pos().y() > height() + OutsideRulerThreshold)
-                    emit guideLineCreated(d->orientation, d->viewConverter->viewToDocumentY(ev->pos().y()));
+                    Q_EMIT guideLineCreated(d->orientation, d->viewConverter->viewToDocumentY(ev->pos().y()));
                 else if (d->orientation == Qt::Vertical && ev->pos().x() > width() + OutsideRulerThreshold)
-                    emit guideLineCreated(d->orientation, d->viewConverter->viewToDocumentX(ev->pos().x()));
+                    Q_EMIT guideLineCreated(d->orientation, d->viewConverter->viewToDocumentX(ev->pos().x()));
             }
             break;
         default:

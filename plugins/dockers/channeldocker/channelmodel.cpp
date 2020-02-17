@@ -119,8 +119,8 @@ bool ChannelModel::setData(const QModelIndex& index, const QVariant& value, int 
             flags.setBit(channelIndex, value.toInt() == Qt::Checked);
             rootLayer->setChannelFlags(flags);
 
-            emit channelFlagsChanged();
-            emit dataChanged(this->index(0, 0), this->index(channels.count(), 0));
+            Q_EMIT channelFlagsChanged();
+            Q_EMIT dataChanged(this->index(0, 0), this->index(channels.count(), 0));
             return true;
         }
     }
@@ -153,8 +153,8 @@ void ChannelModel::rowActivated(const QModelIndex &index)
 
         rootLayer->setChannelFlags(flags);
 
-        emit channelFlagsChanged();
-        emit dataChanged(this->index(0, 0), this->index(channels.count(), 0));
+        Q_EMIT channelFlagsChanged();
+        Q_EMIT dataChanged(this->index(0, 0), this->index(channels.count(), 0));
     }
 }
 

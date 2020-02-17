@@ -147,20 +147,20 @@ QModelIndex KoResourceModel::index ( int row, int column, const QModelIndex & ) 
 
 void KoResourceModel::doSafeLayoutReset(KoResource *activateAfterReformat)
 {
-    emit beforeResourcesLayoutReset(activateAfterReformat);
+    Q_EMIT beforeResourcesLayoutReset(activateAfterReformat);
     beginResetModel();
     endResetModel();
-    emit afterResourcesLayoutReset();
+    Q_EMIT afterResourcesLayoutReset();
 }
 
 void KoResourceModel::setColumnCount( int columnCount )
 {
     if (columnCount != m_columnCount) {
-        emit beforeResourcesLayoutReset(0);
+        Q_EMIT beforeResourcesLayoutReset(0);
         m_columnCount = columnCount;
         beginResetModel();
         endResetModel();
-        emit afterResourcesLayoutReset();
+        Q_EMIT afterResourcesLayoutReset();
     }
 }
 
@@ -189,23 +189,23 @@ void KoResourceModel::resourceChanged(KoResource* resource)
         return;
     }
 
-    emit dataChanged(modelIndex, modelIndex);
+    Q_EMIT dataChanged(modelIndex, modelIndex);
 }
 
 void KoResourceModel::tagBoxEntryWasModified()
 {
     m_resourceAdapter->updateServer();
-    emit tagBoxEntryModified();
+    Q_EMIT tagBoxEntryModified();
 }
 
 void KoResourceModel::tagBoxEntryWasAdded(const QString& tag)
 {
-    emit tagBoxEntryAdded(tag);
+    Q_EMIT tagBoxEntryAdded(tag);
 }
 
 void KoResourceModel::tagBoxEntryWasRemoved(const QString& tag)
 {
-    emit tagBoxEntryRemoved(tag);
+    Q_EMIT tagBoxEntryRemoved(tag);
 }
 
 QModelIndex KoResourceModel::indexFromResource(KoResource* resource) const
@@ -252,7 +252,7 @@ QStringList KoResourceModel::assignedTagsList(KoResource *resource) const
 void KoResourceModel::addTag(KoResource* resource, const QString& tag)
 {
     m_resourceAdapter->addTag(resource, tag);
-    emit tagBoxEntryAdded(tag);
+    Q_EMIT tagBoxEntryAdded(tag);
 }
 
 void KoResourceModel::deleteTag(KoResource *resource, const QString &tag)

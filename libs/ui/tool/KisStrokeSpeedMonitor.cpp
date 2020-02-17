@@ -108,7 +108,7 @@ void KisStrokeSpeedMonitor::slotConfigChanged()
     KisConfig cfg(true);
     m_d->haveStrokeSpeedMeasurement = cfg.enableBrushSpeedLogging();
     resetAccumulatedValues();
-    emit sigStatsUpdated();
+    Q_EMIT sigStatsUpdated();
 }
 
 void KisStrokeSpeedMonitor::notifyStrokeFinished(qreal cursorSpeed, qreal renderingSpeed, qreal fps, KisPaintOpPresetSP preset)
@@ -148,7 +148,7 @@ void KisStrokeSpeedMonitor::notifyStrokeFinished(qreal cursorSpeed, qreal render
         m_d->cachedAvgFps = m_d->avgFps.rollingMean();
     }
 
-    emit sigStatsUpdated();
+    Q_EMIT sigStatsUpdated();
 
 
     ENTER_FUNCTION() <<

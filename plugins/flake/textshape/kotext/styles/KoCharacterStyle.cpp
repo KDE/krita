@@ -352,7 +352,7 @@ KoCharacterStyle::Type KoCharacterStyle::styleType() const
 void KoCharacterStyle::copyProperties(const KoCharacterStyle *style)
 {
     d->stylesPrivate = style->d->stylesPrivate;
-    setName(style->name()); // make sure we emit property change
+    setName(style->name()); // make sure we Q_EMIT property change
     d->parentStyle = style->d->parentStyle;
     d->defaultStyle = style->d->defaultStyle;
 }
@@ -493,7 +493,7 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format, bool emitSignal) cons
         format.clearProperty(property);
     }
     if (emitSignal) {
-        emit styleApplied(this);
+        Q_EMIT styleApplied(this);
         d->m_inUse = true;
     }
 }
@@ -902,7 +902,7 @@ void KoCharacterStyle::setName(const QString &name)
     if (name == d->name)
         return;
     d->name = name;
-    emit nameChanged(name);
+    Q_EMIT nameChanged(name);
 }
 int KoCharacterStyle::styleId() const
 {

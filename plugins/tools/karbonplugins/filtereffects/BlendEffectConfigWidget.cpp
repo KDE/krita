@@ -88,5 +88,5 @@ void BlendEffectConfigWidget::modeChanged(int index)
 
     m_effect->setBlendMode(static_cast<BlendEffect::BlendMode>(index));
 
-    emit filterChanged();
+    Q_EMIT filterChanged();
 }

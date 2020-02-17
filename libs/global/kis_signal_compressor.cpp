@@ -187,7 +187,7 @@ bool KisSignalCompressor::tryEmitSignalSafely()
     m_isEmitting++;
 
     if (m_isEmitting == 1) {
-        emit timeout();
+        Q_EMIT timeout();
         wasEmitted = true;
     }
 

@@ -116,5 +116,5 @@ KoResourceServer<KisPSDLayerStyleCollectionResource> *KisResourceServerProvider:
 
 void KisResourceServerProvider::brushBlacklistCleanup()
 {
-    emit notifyBrushBlacklistCleanup();
+    Q_EMIT notifyBrushBlacklistCleanup();
 }

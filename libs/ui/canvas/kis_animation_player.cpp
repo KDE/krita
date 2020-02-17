@@ -414,7 +414,7 @@ void KisAnimationPlayer::play()
         m_d->syncedAudio->play(m_d->framesToMSec(m_d->currentFrame, animationInterface->framerate()));
     }
 
-    emit sigPlaybackStarted();
+    Q_EMIT sigPlaybackStarted();
 }
 
 
@@ -439,7 +439,7 @@ void KisAnimationPlayer::Private::stopImpl(bool doUpdates)
         }
     }
 
-    emit q->sigPlaybackStopped();
+    Q_EMIT q->sigPlaybackStopped();
 }
 
 void KisAnimationPlayer::stop()
@@ -569,7 +569,7 @@ void KisAnimationPlayer::uploadFrame(int frame, bool forceSyncAudio)
     }
 
     m_d->lastPaintedFrame = frame;
-    emit sigFrameChanged();
+    Q_EMIT sigFrameChanged();
 }
 
 qreal KisAnimationPlayer::effectiveFps() const
@@ -598,7 +598,7 @@ void KisAnimationPlayer::slotCancelPlaybackSafe()
      * If there is no openGL support, then we have no (!) cache at
      * all. Therefore we should regenerate frame on every time switch,
      * which, yeah, can be very slow.  What is more important, when
-     * regenerating a frame animation interface will emit a
+     * regenerating a frame animation interface will Q_EMIT a
      * sigStrokeEndRequested() signal and we should ignore it. That is
      * not an ideal solution, because the user will be able to paint
      * on random frames while playing, but it lets users with faulty

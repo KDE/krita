@@ -138,6 +138,6 @@ void KoTagToolButton::setUndeletionCandidate(const QString& deletedTagName)
 
 void KoTagToolButton::onTagUndeleteClicked()
 {
-    emit undeletionOfTagRequested(d->undeleteCandidate);
+    Q_EMIT undeletionOfTagRequested(d->undeleteCandidate);
 }
 

@@ -175,5 +175,5 @@ void QuickTableButton::addAction(QAction *action)
 void QuickTableButton::emitCreate(int rows, int columns)
 {
     m_menu->hide();
-    emit create(rows, columns);
+    Q_EMIT create(rows, columns);
 }

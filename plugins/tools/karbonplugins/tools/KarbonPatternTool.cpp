@@ -230,7 +230,7 @@ void KarbonPatternTool::activate(ToolActivation activation, const QSet<KoShape *
     KoToolBase::activate(activation, shapes);
 
     if (shapes.isEmpty()) {
-        emit done();
+        Q_EMIT done();
         return;
     }
 

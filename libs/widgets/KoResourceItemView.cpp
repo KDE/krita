@@ -57,9 +57,9 @@ bool KoResourceItemView::viewportEvent(QEvent *event)
 void KoResourceItemView::selectionChanged(const QItemSelection &selected, const QItemSelection &/*deselected*/)
 {
     if (selected.isEmpty()) {
-        emit currentResourceChanged(QModelIndex());
+        Q_EMIT currentResourceChanged(QModelIndex());
     } else {
-        emit currentResourceChanged(selected.indexes().first());
+        Q_EMIT currentResourceChanged(selected.indexes().first());
     }
 }
 
@@ -72,7 +72,7 @@ void KoResourceItemView::mousePressEvent(QMouseEvent *event)
 void KoResourceItemView::slotItemClicked(const QModelIndex &index)
 {
     if (m_beforeClickIndex == index) {
-        emit currentResourceClicked(index);
+        Q_EMIT currentResourceClicked(index);
     }
 
     m_beforeClickIndex = QModelIndex();
@@ -81,5 +81,5 @@ void KoResourceItemView::slotItemClicked(const QModelIndex &index)
 void KoResourceItemView::contextMenuEvent(QContextMenuEvent *event)
 {
     QTableView::contextMenuEvent(event);
-    emit contextMenuRequested(event->globalPos());
+    Q_EMIT contextMenuRequested(event->globalPos());
 }

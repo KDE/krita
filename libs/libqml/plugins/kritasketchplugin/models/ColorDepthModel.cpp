@@ -82,7 +82,7 @@ void ColorDepthModel::setColorModelId(const QString& id)
             beginInsertRows(QModelIndex(), 0, d->colorDepths.count() - 1);
             endInsertRows();
         }
-        emit colorModelIdChanged();
+        Q_EMIT colorModelIdChanged();
     }
 }
 

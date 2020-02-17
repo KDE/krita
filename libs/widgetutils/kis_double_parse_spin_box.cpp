@@ -123,10 +123,10 @@ QString KisDoubleParseSpinBox::textFromValue(double val) const
 {
 
     if (!boolLastValid) {
-        emit errorWhileParsing(lastExprParsed);
+        Q_EMIT errorWhileParsing(lastExprParsed);
         return lastExprParsed;
     }
-    emit noMoreParsingError();
+    Q_EMIT noMoreParsingError();
 
     return QDoubleSpinBox::textFromValue(val);
 }
@@ -150,7 +150,7 @@ void KisDoubleParseSpinBox::stepBy(int steps)
 {
 
     boolLastValid = true; //reset to valid state so we can use the up and down buttons.
-    emit noMoreParsingError();
+    Q_EMIT noMoreParsingError();
 
     QDoubleSpinBox::stepBy(steps);
 
@@ -231,7 +231,7 @@ void KisDoubleParseSpinBox::clearErrorStyle()
 void KisDoubleParseSpinBox::clearError()
 {
     boolLastValid = true;
-    emit noMoreParsingError();
+    Q_EMIT noMoreParsingError();
     oldValue = value();
     clearErrorStyle();
 }

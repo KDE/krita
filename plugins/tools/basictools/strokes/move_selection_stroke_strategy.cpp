@@ -86,7 +86,7 @@ void MoveSelectionStrokeStrategy::initStrokeCallback()
 
     m_selection->setVisible(false);
 
-    emit sigHandlesRectCalculated(movedDevice->exactBounds());
+    Q_EMIT sigHandlesRectCalculated(movedDevice->exactBounds());
 }
 
 void MoveSelectionStrokeStrategy::finishStrokeCallback()

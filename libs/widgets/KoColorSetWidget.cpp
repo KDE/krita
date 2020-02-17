@@ -174,19 +174,19 @@ void KoColorSetWidget::setDisplayRenderer(const KoColorDisplayRendererInterface 
 
 void KoColorSetWidget::resizeEvent(QResizeEvent *event)
 {
-    emit widgetSizeChanged(event->size());
+    Q_EMIT widgetSizeChanged(event->size());
     QFrame::resizeEvent(event);
 }
 
 void KoColorSetWidget::slotColorSelectedByPalette(const KoColor &color)
 {
-    emit colorChanged(color, true);
+    Q_EMIT colorChanged(color, true);
     d->addRecent(color);
 }
 
 void KoColorSetWidget::slotPatchTriggered(KoColorPatch *patch)
 {
-    emit colorChanged(patch->color(), true);
+    Q_EMIT colorChanged(patch->color(), true);
 
     int i;
 
@@ -210,7 +210,7 @@ void KoColorSetWidget::slotPaletteChoosen(KoColorSet *colorSet)
 
 void KoColorSetWidget::slotNameListSelection(const KoColor &color)
 {
-    emit colorChanged(color, true);
+    Q_EMIT colorChanged(color, true);
 }
 
 //have to include this because of Q_PRIVATE_SLOT

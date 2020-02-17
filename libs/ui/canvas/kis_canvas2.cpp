@@ -604,7 +604,7 @@ void KisCanvas2::connectCurrentCanvas()
     startResizingImage();
     setLodAllowedInCanvas(m_d->lodAllowedInImage);
 
-    emit sigCanvasEngineChanged();
+    Q_EMIT sigCanvasEngineChanged();
 }
 
 void KisCanvas2::resetCanvas(bool useOpenGL)
@@ -759,7 +759,7 @@ void KisCanvas2::startResizingImage()
     qint32 w = image->width();
     qint32 h = image->height();
 
-    emit sigContinueResizeImage(w, h);
+    Q_EMIT sigContinueResizeImage(w, h);
 
     QRect imageBounds(0, 0, w, h);
     startUpdateInPatches(imageBounds);
@@ -774,7 +774,7 @@ void KisCanvas2::startUpdateCanvasProjection(const QRect & rc)
 {
     KisUpdateInfoSP info = m_d->canvasWidget->startUpdateCanvasProjection(rc, m_d->channelFlags);
     if (m_d->projectionUpdatesCompressor.putUpdateInfo(info)) {
-        emit sigCanvasCacheUpdated();
+        Q_EMIT sigCanvasCacheUpdated();
     }
 }
 
@@ -856,7 +856,7 @@ void KisCanvas2::slotBeginUpdatesBatch()
         new KisMarkerUpdateInfo(KisMarkerUpdateInfo::StartBatch,
                                       m_d->coordinatesConverter->imageRectInImagePixels());
     m_d->projectionUpdatesCompressor.putUpdateInfo(info);
-    emit sigCanvasCacheUpdated();
+    Q_EMIT sigCanvasCacheUpdated();
 }
 
 void KisCanvas2::slotEndUpdatesBatch()
@@ -865,7 +865,7 @@ void KisCanvas2::slotEndUpdatesBatch()
         new KisMarkerUpdateInfo(KisMarkerUpdateInfo::EndBatch,
                                       m_d->coordinatesConverter->imageRectInImagePixels());
     m_d->projectionUpdatesCompressor.putUpdateInfo(info);
-    emit sigCanvasCacheUpdated();
+    Q_EMIT sigCanvasCacheUpdated();
 }
 
 void KisCanvas2::slotSetLodUpdatesBlocked(bool value)
@@ -876,7 +876,7 @@ void KisCanvas2::slotSetLodUpdatesBlocked(bool value)
                                 KisMarkerUpdateInfo::UnblockLodUpdates,
                                 m_d->coordinatesConverter->imageRectInImagePixels());
     m_d->projectionUpdatesCompressor.putUpdateInfo(info);
-    emit sigCanvasCacheUpdated();
+    Q_EMIT sigCanvasCacheUpdated();
 }
 
 void KisCanvas2::slotDoCanvasUpdate()
@@ -894,9 +894,9 @@ void KisCanvas2::slotDoCanvasUpdate()
 
     if (m_d->savedUpdateRect.isEmpty()) {
         m_d->canvasWidget->widget()->update();
-        emit updateCanvasRequested(m_d->canvasWidget->widget()->rect());
+        Q_EMIT updateCanvasRequested(m_d->canvasWidget->widget()->rect());
     } else {
-        emit updateCanvasRequested(m_d->savedUpdateRect);
+        Q_EMIT updateCanvasRequested(m_d->savedUpdateRect);
         m_d->canvasWidget->widget()->update(m_d->savedUpdateRect);
     }
 
@@ -969,7 +969,7 @@ void KisCanvas2::slotUpdateRegionOfInterest()
     m_d->regionOfInterest = proposedRoi & imageRect;
 
     if (m_d->regionOfInterest != oldRegionOfInterest) {
-        emit sigRegionOfInterestChanged(m_d->regionOfInterest);
+        Q_EMIT sigRegionOfInterestChanged(m_d->regionOfInterest);
     }
 }
 
@@ -1064,7 +1064,7 @@ void KisCanvas2::documentOffsetMoved(const QPoint &documentOffset)
     if (!m_d->currentCanvasIsOpenGL)
         m_d->prescaledProjection->viewportMoved(moveOffset);
 
-    emit documentOffsetUpdateFinished();
+    Q_EMIT documentOffsetUpdateFinished();
 
     updateCanvas();
 

@@ -58,7 +58,7 @@ void KisColorPickerStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
     KoColor color;
     KoColor previous = d->currentColor;
     if (KisToolUtils::pickColor(color, d->dev, d->pt, &previous, m_d->radius, m_d->blend) == true) {
-        emit sigColorUpdated(color);
+        Q_EMIT sigColorUpdated(color);
     }
 }
 

@@ -59,7 +59,7 @@ void KisSelectedShapesProxy::setShapeManager(KoShapeManager *shapeManager)
                 m_d->shapeManager, SIGNAL(selectionContentChanged()), this, SIGNAL(selectionContentChanged()));
         }
 
-        emit selectionChanged();
+        Q_EMIT selectionChanged();
     }
 }
 

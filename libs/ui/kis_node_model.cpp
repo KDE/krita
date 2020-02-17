@@ -167,7 +167,7 @@ KisModelIndexConverterBase *KisNodeModel::createIndexConverter()
 void KisNodeModel::regenerateItems(KisNodeDummy *dummy)
 {
     const QModelIndex &index = m_d->indexConverter->indexFromDummy(dummy);
-    emit dataChanged(index, index);
+    Q_EMIT dataChanged(index, index);
 
     dummy = dummy->firstChild();
     while (dummy) {
@@ -218,7 +218,7 @@ void KisNodeModel::progressPercentageChanged(int, const KisNodeSP node)
     if (m_d->dummiesFacade->hasDummyForNode(node)) {
         QModelIndex index = indexFromNode(node);
 
-        emit dataChanged(index, index);
+        Q_EMIT dataChanged(index, index);
     }
 }
 
@@ -416,7 +416,7 @@ void KisNodeModel::processUpdateQueue()
     }
 
     Q_FOREACH (const QModelIndex &index, indexes) {
-        emit dataChanged(index, index);
+        Q_EMIT dataChanged(index, index);
     }
 
     m_d->updateQueue.clear();
@@ -587,10 +587,10 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
         }
 
         if (role == KisNodeModel::AlternateActiveRole) {
-            emit toggleIsolateActiveNode();
+            Q_EMIT toggleIsolateActiveNode();
         }
 
-        emit dataChanged(index, index);
+        Q_EMIT dataChanged(index, index);
         return true;
     }
 
@@ -631,10 +631,10 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
             QSet<QModelIndex> indexes;
             addChangedIndex(index, &indexes);
             Q_FOREACH (const QModelIndex &index, indexes) {
-                emit dataChanged(index, index);
+                Q_EMIT dataChanged(index, index);
             }
         } else {
-            emit dataChanged(index, index);
+            Q_EMIT dataChanged(index, index);
         }
     }
 
@@ -744,7 +744,7 @@ void KisNodeModel::updateDropEnabled(const QList<KisNodeSP> &nodes, QModelIndex 
         if (dropEnabled) {
             m_d->dropEnabled.insert(idx.internalId());
         }
-        emit dataChanged(idx, idx); // indicate to QT that flags() have changed
+        Q_EMIT dataChanged(idx, idx); // indicate to QT that flags() have changed
 
         if (hasChildren(idx)) {
             updateDropEnabled(nodes, idx);

@@ -166,14 +166,14 @@ QString TouchDockerDock::currentSketchPage() const
 void TouchDockerDock::setCurrentSketchPage(QString newPage)
 {
     d->currentSketchPage = newPage;
-    emit currentSketchPageChanged();
+    Q_EMIT currentSketchPageChanged();
 }
 
 void TouchDockerDock::closeEvent(QCloseEvent* event)
 {
     if (!d->allowClose) {
         event->ignore();
-        emit closeRequested();
+        Q_EMIT closeRequested();
     } else {
         event->accept();
     }
@@ -408,7 +408,7 @@ void TouchDockerDock::setSketchKisView(QObject* newView)
 
     if (d->sketchView != newView) {
         d->sketchView = qobject_cast<KisSketchView*>(newView);
-        emit sketchKisViewChanged();
+        Q_EMIT sketchKisViewChanged();
     }
 }
 

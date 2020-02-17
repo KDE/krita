@@ -352,7 +352,7 @@ void KisStatusBar::updateMemoryStatus()
     m_memoryReportBox->setCurrentMemory(stats.totalMemorySize);
     m_memoryReportBox->setImageWeight(stats.imageSize);
 
-    emit memoryStatusUpdated();
+    Q_EMIT memoryStatusUpdated();
 }
 
 void KisStatusBar::showMemoryInfoToolTip()

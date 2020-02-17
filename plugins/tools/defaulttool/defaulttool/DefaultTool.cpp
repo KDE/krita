@@ -660,7 +660,7 @@ void DefaultTool::updateCursor()
     }
     useCursor(cursor);
     if (currentStrategy() == 0) {
-        emit statusTextChanged(statusText);
+        Q_EMIT statusTextChanged(statusText);
     }
 }
 
@@ -1623,7 +1623,7 @@ void DefaultTool::updateActions()
 
     updateDistinctiveActions(editableShapes);
 
-    emit selectionChanged(editableShapes.size());
+    Q_EMIT selectionChanged(editableShapes.size());
 }
 
 void DefaultTool::updateDistinctiveActions(const QList<KoShape*> &editableShapes) {
@@ -1732,5 +1732,5 @@ void DefaultTool::addTransformActions(QMenu *menu) const {
 void DefaultTool::explicitUserStrokeEndRequest()
 {
     QList<KoShape *> shapes = koSelection()->selectedEditableShapesAndDelegates();
-    emit activateTemporary(KoToolManager::instance()->preferredToolForSelection(shapes));
+    Q_EMIT activateTemporary(KoToolManager::instance()->preferredToolForSelection(shapes));
 }

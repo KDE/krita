@@ -134,11 +134,11 @@ QString KisIntParseSpinBox::textFromValue(int val) const
 {
 
     if (!boolLastValid) {
-        emit errorWhileParsing(*lastExprParsed);
+        Q_EMIT errorWhileParsing(*lastExprParsed);
         return *lastExprParsed;
     }
 
-    emit noMoreParsingError();
+    Q_EMIT noMoreParsingError();
 
     return QSpinBox::textFromValue(val);
 
@@ -160,7 +160,7 @@ void KisIntParseSpinBox::stepBy(int steps)
 {
 
     boolLastValid = true;
-    emit noMoreParsingError();
+    Q_EMIT noMoreParsingError();
 
     QSpinBox::stepBy(steps);
 
@@ -243,7 +243,7 @@ void KisIntParseSpinBox::clearErrorStyle()
 void KisIntParseSpinBox::clearError()
 {
     boolLastValid = true;
-    emit noMoreParsingError();
+    Q_EMIT noMoreParsingError();
     oldVal = value();
     clearErrorStyle();
 }

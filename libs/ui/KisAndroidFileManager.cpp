@@ -87,10 +87,10 @@ void KisAndroidFileManager::ActivityResultReceiver::handleActivityResult(int req
                 dbgAndroid << path;
                 if (path.isEmpty())
                 {
-                    emit _manager->sigEmptyFilePath();
+                    Q_EMIT _manager->sigEmptyFilePath();
                     return;
                 }
-                emit _manager->sigFileSelected(path);
+                Q_EMIT _manager->sigFileSelected(path);
             }
             else
             {
@@ -99,7 +99,7 @@ void KisAndroidFileManager::ActivityResultReceiver::handleActivityResult(int req
         }
         else if (resultCode == RESULT_CANCELED)
         {
-            emit _manager->cancelled();
+            Q_EMIT _manager->cancelled();
         }
     }
 }

@@ -212,7 +212,7 @@ void KisActionRegistry::settingsPageSaved()
    loadCustomShortcuts();
 
    // Announce UI should reload current shortcuts.
-   emit shortcutsUpdated();
+   Q_EMIT shortcutsUpdated();
 }
 
 

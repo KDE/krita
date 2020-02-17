@@ -70,7 +70,7 @@ void KisSelectionPropertySliderBase::setInternalValue(int _value, bool blockUpda
 
 void KisSelectionPropertySliderBase::slotCompressedUpdate()
 {
-    emit(valueChanged(value()));
+    Q_EMIT (valueChanged(value()));
 }
 
 void KisSelectionPropertySliderBase::setSelectionValue(qreal commonValue, bool mixed)

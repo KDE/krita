@@ -171,7 +171,7 @@ void KisAspectRatioLocker::slotSpinOneChanged()
     }
 
     if (!m_d->blockUpdatesOnDrag || !m_d->spinOne->isDragging()) {
-        emit sliderValueChanged();
+        Q_EMIT sliderValueChanged();
     }
 }
 
@@ -183,7 +183,7 @@ void KisAspectRatioLocker::slotSpinTwoChanged()
     }
 
     if (!m_d->blockUpdatesOnDrag || !m_d->spinTwo->isDragging()) {
-        emit sliderValueChanged();
+        Q_EMIT sliderValueChanged();
     }
 }
 
@@ -199,8 +199,8 @@ void KisAspectRatioLocker::slotAspectButtonChanged()
     }
 
     if (!m_d->spinTwo->isDragging()) {
-        emit aspectButtonChanged();
-        emit aspectButtonToggled(m_d->aspectButton->keepAspectRatio());
+        Q_EMIT aspectButtonChanged();
+        Q_EMIT aspectButtonToggled(m_d->aspectButton->keepAspectRatio());
     }
 }
 

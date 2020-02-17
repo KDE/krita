@@ -170,7 +170,7 @@ void KisCanvasController::updateDocumentSize(const QSizeF &sz, bool recalculateC
 {
     KoCanvasControllerWidget::updateDocumentSize(sz, recalculateCenter);
 
-    emit documentSizeChanged();
+    Q_EMIT documentSizeChanged();
 }
 
 void KisCanvasController::Private::showMirrorStateOnCanvas()

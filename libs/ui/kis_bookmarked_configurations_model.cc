@@ -83,7 +83,7 @@ bool KisBookmarkedConfigurationsModel::setData(const QModelIndex & index, const 
         d->bookmarkManager->save(name, config);
         d->configsKey[idx] = name;
 
-        emit(dataChanged(index, index));
+        Q_EMIT (dataChanged(index, index));
         return true;
     }
     return false;

@@ -91,7 +91,7 @@ void KisToolRectangleBase::activate(KoToolBase::ToolActivation toolActivation, c
 {
     KisToolShape::activate(toolActivation, shapes);
 
-    emit sigRequestReloadConfig();
+    Q_EMIT sigRequestReloadConfig();
 }
 
 void KisToolRectangleBase::deactivate()
@@ -284,6 +284,6 @@ void KisToolRectangleBase::updateArea() {
 
     canvas()->updateCanvas(convertToPt(bound).adjusted(-100, -100, +200, +200));
 
-    emit rectangleChanged(bound);
+    Q_EMIT rectangleChanged(bound);
 }
 

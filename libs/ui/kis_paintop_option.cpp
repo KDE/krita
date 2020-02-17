@@ -55,7 +55,7 @@ void KisPaintOpOption::emitSettingChanged()
     KIS_ASSERT_RECOVER_RETURN(!m_d->isWritingSettings);
 
     if (!m_d->updatesBlocked) {
-        emit sigSettingChanged();
+        Q_EMIT sigSettingChanged();
     }
 }
 
@@ -64,7 +64,7 @@ void KisPaintOpOption::emitCheckedChanged()
     KIS_ASSERT_RECOVER_RETURN(!m_d->isWritingSettings);
 
     if (!m_d->updatesBlocked) {
-        emit sigCheckedChanged(isChecked());
+        Q_EMIT sigCheckedChanged(isChecked());
     }
 }
 

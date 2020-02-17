@@ -72,7 +72,7 @@ void KisStopGradientSliderWidget::setGradientResource(KoStopGradient* gradient)
 
     if (m_gradient && m_selectedStop >= 0) {
         m_selectedStop = qBound(0, m_selectedStop, m_gradient->stops().size() - 1);
-        emit sigSelectedStop(m_selectedStop);
+        Q_EMIT sigSelectedStop(m_selectedStop);
     } else {
         m_selectedStop = -1;
     }
@@ -178,7 +178,7 @@ void KisStopGradientSliderWidget::mousePressEvent(QMouseEvent * e)
     if (clickedStop >= 0) {
         if (m_selectedStop != clickedStop) {
             m_selectedStop = clickedStop;
-            emit sigSelectedStop(m_selectedStop);
+            Q_EMIT sigSelectedStop(m_selectedStop);
         }
         m_drag = true;
     } else {
@@ -244,7 +244,7 @@ void KisStopGradientSliderWidget::mouseMoveEvent(QMouseEvent * e)
         }
 
         m_gradient->setStops(stops);
-        emit sigSelectedStop(m_selectedStop);
+        Q_EMIT sigSelectedStop(m_selectedStop);
 
         update();
 
@@ -299,7 +299,7 @@ void KisStopGradientSliderWidget::insertStop(double t)
     m_gradient->setStops(stops);
 
     m_selectedStop = newPos;
-    emit sigSelectedStop(m_selectedStop);
+    Q_EMIT sigSelectedStop(m_selectedStop);
 }
 
 QRect KisStopGradientSliderWidget::sliderRect() const
@@ -335,7 +335,7 @@ int KisStopGradientSliderWidget::selectedStop()
 void KisStopGradientSliderWidget::setSelectedStop(int selected)
 {
     m_selectedStop = selected;
-    emit sigSelectedStop(m_selectedStop);
+    Q_EMIT sigSelectedStop(m_selectedStop);
 
     update();
 }

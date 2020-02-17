@@ -135,7 +135,7 @@ typedef QHash<KisNodeSP, MoveNodeStructSP> MovedNodesHash;
 
 /**
  * All the commands executed bythe stroke system are running in the
- * background asynchronously. But, at the same time, they emit updates
+ * background asynchronously. But, at the same time, they Q_EMIT updates
  * in parallel to the ones emitted by the juggler. Therefore, the
  * juggler and all its commands should share some data: which updates
  * have been requested, but not yet dispatched (m_movedNodesInitial),
@@ -201,7 +201,7 @@ public:
             // which would also like to get a lock, so we should release it beforehand
         }
         if (m_parentJuggler) {
-            emit m_parentJuggler->requestUpdateAsyncFromCommand();
+            Q_EMIT m_parentJuggler->requestUpdateAsyncFromCommand();
         }
     }
 
@@ -251,7 +251,7 @@ public:
         } else {
             /**
              * When being executed by real undo/redo operations, we
-             * should emit all the update signals. No one else will do
+             * should Q_EMIT all the update signals. No one else will do
              * that for us (juggler, which did it in the previous
              * case, might have already died).
              */

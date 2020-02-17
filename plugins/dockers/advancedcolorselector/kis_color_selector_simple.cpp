@@ -49,72 +49,72 @@ KoColor KisColorSelectorSimple::selectColor(int x, int y)
 
     switch (m_parameter) {
     case KisColorSelectorConfiguration::H:
-        emit paramChanged(relPos, -1, -1, -1, -1, -1, -1, -1, -1);
+        Q_EMIT paramChanged(relPos, -1, -1, -1, -1, -1, -1, -1, -1);
         break;
     case KisColorSelectorConfiguration::hsvS:
-        emit paramChanged(-1, relPos, -1, -1, -1, -1, -1, -1, -1);
+        Q_EMIT paramChanged(-1, relPos, -1, -1, -1, -1, -1, -1, -1);
         break;
     case KisColorSelectorConfiguration::hslS:
-        emit paramChanged(-1, -1, -1, relPos, -1, -1, -1, -1, -1);
+        Q_EMIT paramChanged(-1, -1, -1, relPos, -1, -1, -1, -1, -1);
         break;
     case KisColorSelectorConfiguration::hsiS:
-        emit paramChanged(-1, -1, -1, -1, -1, relPos, -1, -1, -1);
+        Q_EMIT paramChanged(-1, -1, -1, -1, -1, relPos, -1, -1, -1);
         break;
     case KisColorSelectorConfiguration::hsyS:
-        emit paramChanged(-1, -1, -1, -1, -1, -1, -1, relPos, -1);
+        Q_EMIT paramChanged(-1, -1, -1, -1, -1, -1, -1, relPos, -1);
         break;
     case KisColorSelectorConfiguration::V:
-        emit paramChanged(-1, -1, relPos, -1, -1, -1, -1, -1, -1);
+        Q_EMIT paramChanged(-1, -1, relPos, -1, -1, -1, -1, -1, -1);
         break;
     case KisColorSelectorConfiguration::L:
-        emit paramChanged(-1, -1, -1, -1, relPos, -1, -1, -1, -1);
+        Q_EMIT paramChanged(-1, -1, -1, -1, relPos, -1, -1, -1, -1);
         break;
     case KisColorSelectorConfiguration::I:
-        emit paramChanged(-1, -1, -1, -1, -1, -1, relPos, -1, -1);
+        Q_EMIT paramChanged(-1, -1, -1, -1, -1, -1, relPos, -1, -1);
         break;
     case KisColorSelectorConfiguration::Y:
-        emit paramChanged(-1, -1, -1, -1, -1, -1, -1, -1, relPos);
+        Q_EMIT paramChanged(-1, -1, -1, -1, -1, -1, -1, -1, relPos);
         break;
     case KisColorSelectorConfiguration::SL:
-        emit paramChanged(-1, -1, -1, xRel, yRel, -1, -1, -1, -1);
+        Q_EMIT paramChanged(-1, -1, -1, xRel, yRel, -1, -1, -1, -1);
         break;
     case KisColorSelectorConfiguration::SI:
-        emit paramChanged(-1, -1, -1, -1, -1, xRel, yRel, -1, -1);
+        Q_EMIT paramChanged(-1, -1, -1, -1, -1, xRel, yRel, -1, -1);
         break;
     case KisColorSelectorConfiguration::SY:
-        emit paramChanged(-1, -1, -1, -1, -1, -1, -1, xRel, yRel);
+        Q_EMIT paramChanged(-1, -1, -1, -1, -1, -1, -1, xRel, yRel);
         break;
     case KisColorSelectorConfiguration::SV2:
     case KisColorSelectorConfiguration::SV:
-        emit paramChanged(-1, xRel, yRel, -1, -1, -1, -1, -1, -1);
+        Q_EMIT paramChanged(-1, xRel, yRel, -1, -1, -1, -1, -1, -1);
         break;
     case KisColorSelectorConfiguration::hsvSH:
-        emit paramChanged(xRel, yRel, -1, -1, -1, -1, -1, -1, -1);
+        Q_EMIT paramChanged(xRel, yRel, -1, -1, -1, -1, -1, -1, -1);
         break;
     case KisColorSelectorConfiguration::hslSH:
-        emit paramChanged(xRel, -1, -1, yRel, -1, -1, -1, -1, -1);
+        Q_EMIT paramChanged(xRel, -1, -1, yRel, -1, -1, -1, -1, -1);
         break;
     case KisColorSelectorConfiguration::hsiSH:
-        emit paramChanged(xRel, -1, -1, -1, -1, yRel, -1, -1, -1);
+        Q_EMIT paramChanged(xRel, -1, -1, -1, -1, yRel, -1, -1, -1);
         break;
     case KisColorSelectorConfiguration::hsySH:
-        emit paramChanged(xRel, -1, -1, -1, -1, -1, -1, yRel, -1);
+        Q_EMIT paramChanged(xRel, -1, -1, -1, -1, -1, -1, yRel, -1);
         break;
     case KisColorSelectorConfiguration::VH:
-        emit paramChanged(xRel, -1, yRel, -1, -1, -1, -1, -1, -1);
+        Q_EMIT paramChanged(xRel, -1, yRel, -1, -1, -1, -1, -1, -1);
         break;
     case KisColorSelectorConfiguration::LH:
-        emit paramChanged(xRel, -1, -1, -1, yRel, -1, -1, -1, -1);
+        Q_EMIT paramChanged(xRel, -1, -1, -1, yRel, -1, -1, -1, -1);
         break;
     case KisColorSelectorConfiguration::IH:
-        emit paramChanged(xRel, -1, -1, -1, -1, -1, yRel, -1, -1);
+        Q_EMIT paramChanged(xRel, -1, -1, -1, -1, -1, yRel, -1, -1);
         break;
     case KisColorSelectorConfiguration::YH:
-        emit paramChanged(xRel, -1, -1, -1, -1, -1, -1, -1, yRel);
+        Q_EMIT paramChanged(xRel, -1, -1, -1, -1, -1, -1, -1, yRel);
         break;
     }
 
-    emit update();
+    Q_EMIT update();
     return colorAt(x, y);
 }
 
@@ -143,27 +143,27 @@ void KisColorSelectorSimple::setColor(const KoColor &color)
     case KisColorSelectorConfiguration::SL:
         m_lastClickPos.setX(hslS);
         m_lastClickPos.setY(1 - hslL);
-        emit paramChanged(-1, -1, -1, hslS, hslL, -1, -1, -1, -1);
+        Q_EMIT paramChanged(-1, -1, -1, hslS, hslL, -1, -1, -1, -1);
         break;
     case KisColorSelectorConfiguration::SI:
         m_lastClickPos.setX(hsiS);
         m_lastClickPos.setY(1 - hsiI);
-        emit paramChanged(-1, -1, -1, -1, -1, hsiS, hsiI, -1, -1);
+        Q_EMIT paramChanged(-1, -1, -1, -1, -1, hsiS, hsiI, -1, -1);
         break;
     case KisColorSelectorConfiguration::SY:
         m_lastClickPos.setX(hsyS);
         m_lastClickPos.setY(1 - hsyY);
-        emit paramChanged(-1, -1, -1, -1, -1, -1, -1, hsyS, hsyY);
+        Q_EMIT paramChanged(-1, -1, -1, -1, -1, -1, -1, hsyS, hsyY);
         break;
     case KisColorSelectorConfiguration::LH:
         m_lastClickPos.setX(qBound<qreal>(0., hslH, 1.));
         m_lastClickPos.setY(1 - hslL);
-        emit paramChanged(hslH, -1, -1, -1, hslL, -1, -1, -1, -1);
+        Q_EMIT paramChanged(hslH, -1, -1, -1, hslL, -1, -1, -1, -1);
         break;
     case KisColorSelectorConfiguration::SV:
         m_lastClickPos.setX(hsvS);
         m_lastClickPos.setY(1 - hsvV);
-        emit paramChanged(-1, hsvS, hsvV, -1, -1, -1, -1, -1, -1);
+        Q_EMIT paramChanged(-1, hsvS, hsvV, -1, -1, -1, -1, -1, -1);
         break;
     case KisColorSelectorConfiguration::SV2: {
         qreal xRel = hsvS;
@@ -174,87 +174,87 @@ void KisColorSelectorSimple::setColor(const KoColor &color)
 
         m_lastClickPos.setX(xRel);
         m_lastClickPos.setY(yRel);
-        emit paramChanged(-1, -1, -1, xRel, yRel, -1, -1, -1, -1);
+        Q_EMIT paramChanged(-1, -1, -1, xRel, yRel, -1, -1, -1, -1);
         break;
     }
     case KisColorSelectorConfiguration::VH:
         m_lastClickPos.setX(qBound<qreal>(0., hsvH, 1.));
         m_lastClickPos.setY(1 - hsvV);
-        emit paramChanged(hsvH, -1, hsvV, -1, -1, -1, -1, -1, -1);
+        Q_EMIT paramChanged(hsvH, -1, hsvV, -1, -1, -1, -1, -1, -1);
         break;
     case KisColorSelectorConfiguration::IH:
         m_lastClickPos.setX(qBound<qreal>(0., hsiH, 1.));
         m_lastClickPos.setY(1 - hsiI);
-        emit paramChanged(hsiH, -1, -1, -1, -1, -1, hsiI, -1, -1);
+        Q_EMIT paramChanged(hsiH, -1, -1, -1, -1, -1, hsiI, -1, -1);
         break;
     case KisColorSelectorConfiguration::YH:
         m_lastClickPos.setX(qBound<qreal>(0., hsyH, 1.));
         m_lastClickPos.setY(1 - hsyY);
-        emit paramChanged(hsyH, -1, -1, -1, -1, -1, -1, -1, hsyY);
+        Q_EMIT paramChanged(hsyH, -1, -1, -1, -1, -1, -1, -1, hsyY);
         break;
     case KisColorSelectorConfiguration::hsvSH:
         m_lastClickPos.setX(qBound<qreal>(0., hsvH, 1.));
         m_lastClickPos.setY(1 - hsvS);
-        emit paramChanged(hsvH, hsvS, -1, -1, -1, -1, -1, -1, -1);
+        Q_EMIT paramChanged(hsvH, hsvS, -1, -1, -1, -1, -1, -1, -1);
         break;
     case KisColorSelectorConfiguration::hslSH:
         m_lastClickPos.setX(qBound<qreal>(0., hslH, 1.));
         m_lastClickPos.setY(1 - hslS);
-        emit paramChanged(hslH, -1, -1, hslS, -1, -1, -1, -1, -1);
+        Q_EMIT paramChanged(hslH, -1, -1, hslS, -1, -1, -1, -1, -1);
         break;
 
     case KisColorSelectorConfiguration::hsiSH:
         m_lastClickPos.setX(qBound<qreal>(0., hsiH, 1.));
         m_lastClickPos.setY(1 - hsiS);
-        emit paramChanged(hsiH, -1, -1, hsiS, -1, -1, -1, -1, -1);
+        Q_EMIT paramChanged(hsiH, -1, -1, hsiS, -1, -1, -1, -1, -1);
         break;
 
     case KisColorSelectorConfiguration::hsySH:
         m_lastClickPos.setX(qBound<qreal>(0., hsyH, 1.));
         m_lastClickPos.setY(1 - hsyS);
-        emit paramChanged(hsyH, -1, -1, hsyS, -1, -1, -1, -1, -1);
+        Q_EMIT paramChanged(hsyH, -1, -1, hsyS, -1, -1, -1, -1, -1);
         break;
     case KisColorSelectorConfiguration::L:
         m_lastClickPos.setX(qBound<qreal>(0., hslL, 1.));
-        emit paramChanged(-1, -1, -1, -1, hslL, -1, -1, -1, -1);
+        Q_EMIT paramChanged(-1, -1, -1, -1, hslL, -1, -1, -1, -1);
         break;
     case KisColorSelectorConfiguration::I:
         m_lastClickPos.setX(qBound<qreal>(0., hsiI, 1.));
-        emit paramChanged(-1, -1, -1, -1, -1, -1, hsiI, -1, -1);
+        Q_EMIT paramChanged(-1, -1, -1, -1, -1, -1, hsiI, -1, -1);
         break;
     case KisColorSelectorConfiguration::V:
         m_lastClickPos.setX(hsvV);
-        emit paramChanged(-1, -1, hsvV, -1, -1, -1, -1, -1, -1);
+        Q_EMIT paramChanged(-1, -1, hsvV, -1, -1, -1, -1, -1, -1);
         break;
     case KisColorSelectorConfiguration::Y:
         m_lastClickPos.setX(qBound<qreal>(0., hsyY, 1.));
-        emit paramChanged(-1, -1, -1, -1, -1, -1, -1, -1, hsyY);
+        Q_EMIT paramChanged(-1, -1, -1, -1, -1, -1, -1, -1, hsyY);
         break;
     case KisColorSelectorConfiguration::hsvS:
         m_lastClickPos.setX( hsvS );
-        emit paramChanged(-1, hsvS, -1, -1, -1, -1, -1, -1, -1);
+        Q_EMIT paramChanged(-1, hsvS, -1, -1, -1, -1, -1, -1, -1);
         break;
     case KisColorSelectorConfiguration::hslS:
         m_lastClickPos.setX( hslS );
-        emit paramChanged(-1, -1, -1, hslS, -1, -1, -1, -1, -1);
+        Q_EMIT paramChanged(-1, -1, -1, hslS, -1, -1, -1, -1, -1);
         break;
     case KisColorSelectorConfiguration::hsiS:
         m_lastClickPos.setX( hsiS );
-        emit paramChanged(-1, -1, -1, -1, -1, hsiS, -1, -1, -1);
+        Q_EMIT paramChanged(-1, -1, -1, -1, -1, hsiS, -1, -1, -1);
         break;
     case KisColorSelectorConfiguration::hsyS:
         m_lastClickPos.setX( hsyS );
-        emit paramChanged(-1, -1, -1, -1, -1, -1, -1, hsyS, -1);
+        Q_EMIT paramChanged(-1, -1, -1, -1, -1, -1, -1, hsyS, -1);
         break;
     case KisColorSelectorConfiguration::H:
         m_lastClickPos.setX(qBound<qreal>(0., hsvH, 1.));
-        emit paramChanged(hsvH, -1, -1, -1, -1, -1, -1, -1, -1);
+        Q_EMIT paramChanged(hsvH, -1, -1, -1, -1, -1, -1, -1, -1);
         break;
     default:
         Q_ASSERT(false);
         break;
     }
-    emit update();
+    Q_EMIT update();
     //Workaround for bug 317648
     setLastMousePosition((m_lastClickPos.x()*width()), (m_lastClickPos.y()*height()));
     KisColorSelectorComponent::setColor(color);

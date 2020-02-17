@@ -51,7 +51,7 @@ public:
     void setExponentRatio(qreal dbl);
 
     /**
-     * If set to block, it informs inheriting classes that they shouldn't emit signals
+     * If set to block, it informs inheriting classes that they shouldn't Q_EMIT signals
      * if the update comes from a mouse dragging the slider.
      * Set this to true when dragging the slider and updates during the drag are not needed.
      */

@@ -485,5 +485,5 @@ void KisScalarKeyframeChannel::notifyKeyframeChanged(KisKeyframeSP keyframe)
 
     requestUpdate(range, rect);
 
-    emit sigKeyframeChanged(keyframe);
+    Q_EMIT sigKeyframeChanged(keyframe);
 }

@@ -117,7 +117,7 @@ void MoveStrokeStrategy::initStrokeCallback()
 
         KisStrokeStrategyUndoCommandBased::initStrokeCallback();
 
-        emit this->sigHandlesRectCalculated(handlesRect);
+        Q_EMIT this->sigHandlesRectCalculated(handlesRect);
         m_updateTimer.start();
     });
 

@@ -130,7 +130,7 @@ void CharacterGeneral::save(KoCharacterStyle *style)
     savingStyle->setName(widget.name->text());
 
     if (m_style == savingStyle) {
-        emit styleAltered(savingStyle);
+        Q_EMIT styleAltered(savingStyle);
     }
 }
 

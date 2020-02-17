@@ -124,7 +124,7 @@ void KoPageLayoutWidget::sizeChanged(int row)
     d->widget.width->changeValue( d->pageLayout.width );
     d->widget.height->changeValue( d->pageLayout.height );
 
-    emit layoutChanged(d->pageLayout);
+    Q_EMIT layoutChanged(d->pageLayout);
     d->allowSignals = true;
 }
 
@@ -147,7 +147,7 @@ void KoPageLayoutWidget::setUnit(const KoUnit &unit)
     d->widget.pageEdgeMargin->setUnit(unit);
     d->widget.units->setCurrentIndex(unit.indexInListForUi(KoUnit::HidePixel));
 
-    emit unitChanged(d->unit);
+    Q_EMIT unitChanged(d->unit);
 }
 
 void KoPageLayoutWidget::setPageLayout(const KoPageLayout &layout)
@@ -226,7 +226,7 @@ void KoPageLayoutWidget::marginsChanged()
     }
     // debugWidgets << "  " << d->pageLayout.left <<"|"<< d->pageLayout.bindingSide << "," <<
     //    d->pageLayout.right << "|"<< d->pageLayout.pageEdge;
-    emit layoutChanged(d->pageLayout);
+    Q_EMIT layoutChanged(d->pageLayout);
     d->allowSignals = true;
 }
 

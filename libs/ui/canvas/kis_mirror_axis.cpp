@@ -132,8 +132,8 @@ void KisMirrorAxis::setHandleSize(float newSize)
         d->horizontalHandleIcon = KisIconUtils::loadIcon("transform-move").pixmap(d->config.handleSize(), QIcon::Normal, QIcon::On);
         d->verticalHandleIcon = KisIconUtils::loadIcon("transform-move").pixmap(d->config.handleSize(), QIcon::Normal, QIcon::On);
         d->minHandlePosition = d->sideMargin + newSize;
-        emit handleSizeChanged();
-        emit sigConfigChanged();
+        Q_EMIT handleSizeChanged();
+        Q_EMIT sigConfigChanged();
     }
 }
 
@@ -273,7 +273,7 @@ bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
 
             d->setAxisPosition(axisX, d->config.axisPosition().y());
             d->config.setHorizontalHandlePosition(KisAlgebra2D::dotProduct<QPointF>(pos - d->horizontalAxis.p1(), d->horizontalAxis.unitVector().p2() - d->horizontalAxis.p1()));
-            emit sigConfigChanged();
+            Q_EMIT sigConfigChanged();
 
             event->accept();
             return true;
@@ -283,7 +283,7 @@ bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
 
             d->setAxisPosition(d->config.axisPosition().x(), axisY);
             d->config.setVerticalHandlePosition(KisAlgebra2D::dotProduct<QPointF>(pos - d->verticalAxis.p1(), d->verticalAxis.unitVector().p2() - d->verticalAxis.p1()));
-            emit sigConfigChanged();
+            Q_EMIT sigConfigChanged();
 
             event->accept();
             return true;
@@ -347,7 +347,7 @@ void KisMirrorAxis::mirrorModeChanged()
 
     setVisible(d->config.mirrorHorizontal() || d->config.mirrorVertical());
 
-    emit sigConfigChanged();
+    Q_EMIT sigConfigChanged();
 }
 
 void KisMirrorAxis::setVisible(bool v)
@@ -427,7 +427,7 @@ void KisMirrorAxis::moveHorizontalAxisToCenter()
     }
 
     d->setAxisPosition(d->image->width()/2, d->config.axisPosition().y());
-    emit sigConfigChanged();
+    Q_EMIT sigConfigChanged();
 }
 
 void KisMirrorAxis::moveVerticalAxisToCenter()
@@ -437,7 +437,7 @@ void KisMirrorAxis::moveVerticalAxisToCenter()
     }
 
     d->setAxisPosition(d->config.axisPosition().x(), d->image->height()/2 );
-    emit sigConfigChanged();
+    Q_EMIT sigConfigChanged();
 }
 
 

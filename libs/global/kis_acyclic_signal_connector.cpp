@@ -190,7 +190,7 @@ void KisAcyclicSignalConnector::forwardSlotDouble(double value)
     if (m_signalsBlocked) return;
 
     lock();
-    emit forwardSignalDouble(value);
+    Q_EMIT forwardSignalDouble(value);
     unlock();
 }
 
@@ -199,7 +199,7 @@ void KisAcyclicSignalConnector::backwardSlotDouble(double value)
     if (m_signalsBlocked) return;
 
     lock();
-    emit backwardSignalDouble(value);
+    Q_EMIT backwardSignalDouble(value);
     unlock();
 }
 
@@ -208,7 +208,7 @@ void KisAcyclicSignalConnector::forwardSlotInt(int value)
     if (m_signalsBlocked) return;
 
     lock();
-    emit forwardSignalInt(value);
+    Q_EMIT forwardSignalInt(value);
     unlock();
 }
 
@@ -217,7 +217,7 @@ void KisAcyclicSignalConnector::backwardSlotInt(int value)
     if (m_signalsBlocked) return;
 
     lock();
-    emit backwardSignalInt(value);
+    Q_EMIT backwardSignalInt(value);
     unlock();
 }
 
@@ -226,7 +226,7 @@ void KisAcyclicSignalConnector::forwardSlotBool(bool value)
     if (m_signalsBlocked) return;
 
     lock();
-    emit forwardSignalBool(value);
+    Q_EMIT forwardSignalBool(value);
     unlock();
 }
 
@@ -235,7 +235,7 @@ void KisAcyclicSignalConnector::backwardSlotBool(bool value)
     if (m_signalsBlocked) return;
 
     lock();
-    emit backwardSignalBool(value);
+    Q_EMIT backwardSignalBool(value);
     unlock();
 }
 
@@ -244,7 +244,7 @@ void KisAcyclicSignalConnector::forwardSlotVoid()
     if (m_signalsBlocked) return;
 
     lock();
-    emit forwardSignalVoid();
+    Q_EMIT forwardSignalVoid();
     unlock();
 }
 
@@ -253,7 +253,7 @@ void KisAcyclicSignalConnector::backwardSlotVoid()
     if (m_signalsBlocked) return;
 
     lock();
-    emit backwardSignalVoid();
+    Q_EMIT backwardSignalVoid();
     unlock();
 }
 
@@ -262,7 +262,7 @@ void KisAcyclicSignalConnector::forwardSlotVariant(const QVariant &value)
     if (m_signalsBlocked) return;
 
     lock();
-    emit forwardSignalVariant(value);
+    Q_EMIT forwardSignalVariant(value);
     unlock();
 }
 
@@ -271,7 +271,7 @@ void KisAcyclicSignalConnector::backwardSlotVariant(const QVariant &value)
     if (m_signalsBlocked) return;
 
     lock();
-    emit backwardSignalVariant(value);
+    Q_EMIT backwardSignalVariant(value);
     unlock();
 }
 
@@ -280,7 +280,7 @@ void KisAcyclicSignalConnector::forwardSlotResourcePair(int key, const QVariant 
     if (m_signalsBlocked) return;
 
     lock();
-    emit forwardSignalResourcePair(key, resource);
+    Q_EMIT forwardSignalResourcePair(key, resource);
     unlock();
 }
 
@@ -289,7 +289,7 @@ void KisAcyclicSignalConnector::backwardSlotResourcePair(int key, const QVariant
     if (m_signalsBlocked) return;
 
     lock();
-    emit backwardSignalResourcePair(key, resource);
+    Q_EMIT backwardSignalResourcePair(key, resource);
     unlock();
 }
 
@@ -298,7 +298,7 @@ void KisAcyclicSignalConnector::forwardSlotKoColor(const KoColor &value)
     if (m_signalsBlocked) return;
 
     lock();
-    emit forwardSignalKoColor(value);
+    Q_EMIT forwardSignalKoColor(value);
     unlock();
 }
 
@@ -307,6 +307,6 @@ void KisAcyclicSignalConnector::backwardSlotKoColor(const KoColor &value)
     if (m_signalsBlocked) return;
 
     lock();
-    emit backwardSignalKoColor(value);
+    Q_EMIT backwardSignalKoColor(value);
     unlock();
 }

@@ -139,7 +139,7 @@ void ColorMatrixEffectConfigWidget::matrixChanged()
     }
 
     m_effect->setColorMatrix(m_matrixModel->matrix());
-    emit filterChanged();
+    Q_EMIT filterChanged();
 }
 
 void ColorMatrixEffectConfigWidget::saturateChanged(double saturate)
@@ -149,7 +149,7 @@ void ColorMatrixEffectConfigWidget::saturateChanged(double saturate)
     }
 
     m_effect->setSaturate(saturate);
-    emit filterChanged();
+    Q_EMIT filterChanged();
 }
 
 void ColorMatrixEffectConfigWidget::hueRotateChanged(double angle)
@@ -159,7 +159,7 @@ void ColorMatrixEffectConfigWidget::hueRotateChanged(double angle)
     }
 
     m_effect->setHueRotate(angle);
-    emit filterChanged();
+    Q_EMIT filterChanged();
 }
 
 void ColorMatrixEffectConfigWidget::typeChanged(int index)
@@ -177,5 +177,5 @@ void ColorMatrixEffectConfigWidget::typeChanged(int index)
     } else {
         m_effect->setLuminanceAlpha();
     }
-    emit filterChanged();
+    Q_EMIT filterChanged();
 }

@@ -126,7 +126,7 @@ void KisDoubleWidget::setSliderValue(double value)
         intValue = static_cast<int>(value * 100 + 0.5);
     }
     m_slider->setValue(intValue);
-    emit valueChanged(value);
+    Q_EMIT valueChanged(value);
 }
 
 void KisDoubleWidget::sliderValueChanged(int value)

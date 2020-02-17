@@ -357,7 +357,7 @@ void KoTableStyle::setName(const QString &name)
     if (name == d->name)
         return;
     d->name = name;
-    emit nameChanged(name);
+    Q_EMIT nameChanged(name);
 }
 
 int KoTableStyle::styleId() const
@@ -558,7 +558,7 @@ void KoTableStyle::loadOdfProperties(KoStyleStack &styleStack)
 void KoTableStyle::copyProperties(const KoTableStyle *style)
 {
     d->stylesPrivate = style->d->stylesPrivate;
-    setName(style->name()); // make sure we emit property change
+    setName(style->name()); // make sure we Q_EMIT property change
     d->next = style->d->next;
     d->parentStyle = style->d->parentStyle;
 }

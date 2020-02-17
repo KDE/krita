@@ -59,7 +59,7 @@ public:
 
         // this will tell the pop-up palette widget to close
         if(event->button() == Qt::RightButton) {
-            emit requestCloseContainer();
+            Q_EMIT requestCloseContainer();
         }
 
         // ignore any tablet events that are done with the right click
@@ -285,7 +285,7 @@ void KisPopupPalette::slotEmitColorChanged()
 {
     if (isVisible()) {
         update();
-        emit sigChangefGColor(m_triangleColorSelector->getCurrentColor());
+        Q_EMIT sigChangefGColor(m_triangleColorSelector->getCurrentColor());
     }
 }
 
@@ -327,11 +327,11 @@ void KisPopupPalette::slotTriggerTimer()
 
 void KisPopupPalette::slotEnableChangeFGColor()
 {
-    emit sigEnableChangeFGColor(true);
+    Q_EMIT sigEnableChangeFGColor(true);
 }
 
 void KisPopupPalette::slotZoomSliderChanged(int zoom) {
-    emit zoomLevelChanged(zoom);
+    Q_EMIT zoomLevelChanged(zoom);
 }
 
 void KisPopupPalette::slotZoomSliderPressed()
@@ -416,9 +416,9 @@ void KisPopupPalette::showPopupPalette(bool show)
             KisSignalsBlocker b(zoomCanvasSlider);
             zoomCanvasSlider->setValue(m_coordinatesConverter->zoomInPercent()); // sync the zoom slider
         }
-        emit sigEnableChangeFGColor(!show);
+        Q_EMIT sigEnableChangeFGColor(!show);
     } else {
-        emit sigTriggerTimer();
+        Q_EMIT sigTriggerTimer();
     }
     setVisible(show);
     m_brushHud->setVisible(show && m_brushHudButton->isChecked());
@@ -733,7 +733,7 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent *event)
         canvasController->rotateCanvas(angleDifference);
 
 
-        emit sigUpdateCanvas();
+        Q_EMIT sigUpdateCanvas();
     }
 
     // don't highlight the presets if we are in the middle of rotating the canvas
@@ -790,7 +790,7 @@ void KisPopupPalette::mousePressEvent(QMouseEvent *event)
                     dynamic_cast<KisCanvasController*>(m_viewManager->canvasBase()->canvasController());
             canvasController->rotateCanvas(angleDifference);
 
-            emit sigUpdateCanvas();
+            Q_EMIT sigUpdateCanvas();
         }
     }
 }
@@ -859,13 +859,13 @@ void KisPopupPalette::mouseReleaseEvent(QMouseEvent *event)
         //in favorite brushes area
         if (hoveredPreset() > -1) {
             //setSelectedBrush(hoveredBrush());
-            emit sigChangeActivePaintop(hoveredPreset());
+            Q_EMIT sigChangeActivePaintop(hoveredPreset());
         }
         if (pathColor.contains(point)) {
             int pos = calculateIndex(point, m_resourceManager->recentColorsTotal());
 
             if (pos >= 0 && pos < m_resourceManager->recentColorsTotal()) {
-                emit sigUpdateRecentColor(pos);
+                Q_EMIT sigUpdateRecentColor(pos);
             }
         }
     }

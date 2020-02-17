@@ -95,7 +95,7 @@ void KoListStyle::setName(const QString &name)
     if (d->name == name)
         return;
     d->name = name;
-    emit nameChanged(d->name);
+    Q_EMIT nameChanged(d->name);
 }
 
 int KoListStyle::styleId() const
@@ -141,7 +141,7 @@ void KoListStyle::setLevelProperties(const KoListLevelProperties &properties)
 {
     int level = qMax(1, properties.level());
     refreshLevelProperties(properties);
-    emit styleChanged(level);
+    Q_EMIT styleChanged(level);
 }
 
 void KoListStyle::refreshLevelProperties(const KoListLevelProperties &properties)

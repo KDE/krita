@@ -163,14 +163,14 @@ void KisLiquifyTransformStrategy::continuePrimaryAction(KoPointerEvent *event)
 
     // the updates should be compressed
     m_d->recalculateOnNextRedraw = true;
-    emit requestCanvasUpdate();
+    Q_EMIT requestCanvasUpdate();
 }
 
 bool KisLiquifyTransformStrategy::endPrimaryAction(KoPointerEvent *event)
 {
     if (m_d->helper.endPaint(event)) {
         m_d->recalculateTransformations();
-        emit requestCanvasUpdate();
+        Q_EMIT requestCanvasUpdate();
     }
 
     return true;
@@ -188,7 +188,7 @@ void KisLiquifyTransformStrategy::activateAlternateAction(KisTool::AlternateActi
 
         KisLiquifyProperties *props = m_d->currentArgs.liquifyProperties();
         props->setReverseDirection(!props->reverseDirection());
-        emit requestUpdateOptionWidget();
+        Q_EMIT requestUpdateOptionWidget();
     }
 }
 
@@ -199,7 +199,7 @@ void KisLiquifyTransformStrategy::deactivateAlternateAction(KisTool::AlternateAc
 
         KisLiquifyProperties *props = m_d->currentArgs.liquifyProperties();
         props->setReverseDirection(!props->reverseDirection());
-        emit requestUpdateOptionWidget();
+        Q_EMIT requestUpdateOptionWidget();
     }
 }
 
@@ -236,7 +236,7 @@ void KisLiquifyTransformStrategy::continueAlternateAction(KoPointerEvent *event,
 
         m_d->lastMouseWidgetPos = widgetPoint;
 
-        emit requestCursorOutlineUpdate(m_d->startResizeImagePos);
+        Q_EMIT requestCursorOutlineUpdate(m_d->startResizeImagePos);
     } else if (action == KisTool::PickFgNode || action == KisTool::PickBgNode ||
                action == KisTool::PickFgImage || action == KisTool::PickBgImage) {
 

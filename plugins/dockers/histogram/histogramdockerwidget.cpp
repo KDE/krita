@@ -195,5 +195,5 @@ void HistogramComputationThread::run()
         }
     }
 
-    emit resultReady(&bins);
+    Q_EMIT resultReady(&bins);
 }

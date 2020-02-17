@@ -186,9 +186,9 @@ void KisColorSpaceSelector::colorSpaceChanged()
 {
     bool valid = d->colorSpaceSelector->cmbProfile->count() != 0;
     d->profileValid = valid;
-    emit(selectionChanged(valid));
+    Q_EMIT (selectionChanged(valid));
     if(valid) {
-        emit colorSpaceChanged(currentColorSpace());
+        Q_EMIT colorSpaceChanged(currentColorSpace());
         QString text = currentColorSpace()->profile()->name();
     }
 }

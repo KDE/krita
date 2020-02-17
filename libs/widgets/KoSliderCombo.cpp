@@ -223,7 +223,7 @@ void KoSliderCombo::KoSliderComboPrivate::lineEditFinished()
     slider->blockSignals(true);
     slider->setValue(int((value - minimum) * 256 / (maximum - minimum) + 0.5));
     slider->blockSignals(false);
-    emit thePublic->valueChanged(value, true);
+    Q_EMIT thePublic->valueChanged(value, true);
 }
 
 void KoSliderCombo::KoSliderComboPrivate::sliderValueChanged(int slidervalue)
@@ -231,13 +231,13 @@ void KoSliderCombo::KoSliderComboPrivate::sliderValueChanged(int slidervalue)
     thePublic->setEditText(QLocale().toString(minimum + (maximum - minimum)*slidervalue/256, decimals));
 
     qreal value = QLocale().toDouble(thePublic->currentText());
-    emit thePublic->valueChanged(value, false);
+    Q_EMIT thePublic->valueChanged(value, false);
 }
 
 void KoSliderCombo::KoSliderComboPrivate::sliderReleased()
 {
     qreal value = QLocale().toDouble(thePublic->currentText());
-    emit thePublic->valueChanged(value, true);
+    Q_EMIT thePublic->valueChanged(value, true);
 }
 
 qreal KoSliderCombo::maximum() const
@@ -287,7 +287,7 @@ void KoSliderCombo::setValue(qreal value)
     d->slider->blockSignals(true);
     d->slider->setValue(int((value - d->minimum) * 256 / (d->maximum - d->minimum) + 0.5));
     d->slider->blockSignals(false);
-    emit valueChanged(value, true);
+    Q_EMIT valueChanged(value, true);
 }
 
 //have to include this because of Q_PRIVATE_SLOT

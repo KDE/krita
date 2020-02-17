@@ -321,7 +321,7 @@ void KisSelectionManager::updateGUI()
 //    m_save->setEnabled(havePixelsSelected);
 
     updateStatusBar();
-    emit signalUpdateGUI();
+    Q_EMIT signalUpdateGUI();
 }
 
 void KisSelectionManager::updateStatusBar()
@@ -334,7 +334,7 @@ void KisSelectionManager::updateStatusBar()
 void KisSelectionManager::selectionChanged()
 {
     m_view->updateGUI();
-    emit currentSelectionChanged();
+    Q_EMIT currentSelectionChanged();
 }
 
 void KisSelectionManager::cut()
@@ -429,8 +429,8 @@ void KisSelectionManager::editSelection()
 
     if (!action->isChecked()) {
         action->setChecked(true);
-        emit action->toggled(true);
-        emit action->triggered(true);
+        Q_EMIT action->toggled(true);
+        Q_EMIT action->triggered(true);
     }
 
     KisNodeSP node = selection->parentNode();
@@ -546,7 +546,7 @@ void KisSelectionManager::toggleDisplaySelection()
     m_toggleDisplaySelection->setChecked(m_selectionDecoration->visible());
     m_toggleDisplaySelection->blockSignals(false);
 
-    emit displaySelectionChanged();
+    Q_EMIT displaySelectionChanged();
 }
 
 bool KisSelectionManager::displaySelection()
@@ -620,7 +620,7 @@ void KisSelectionManager::slotToggleSelectionDecoration()
         KisSelectionDecoration::Ants : KisSelectionDecoration::Mask;
 
     m_selectionDecoration->setMode(mode);
-    emit displaySelectionChanged();
+    Q_EMIT displaySelectionChanged();
 }
 
 bool KisSelectionManager::showSelectionAsMask() const

@@ -93,7 +93,7 @@ void KisVisualColorSelectorShape::setCursorPosition(QPointF position, bool signa
         }
         update();
         if (signal){
-            emit sigCursorMoved(newPos);
+            Q_EMIT sigCursorMoved(newPos);
         }
     }
 }

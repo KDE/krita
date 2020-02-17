@@ -32,7 +32,7 @@ void MultinodePropertyConnectorInterface::connectValueChangedSignal(const QObjec
 }
 
 void MultinodePropertyConnectorInterface::notifyValueChanged() {
-    emit sigValueChanged();
+    Q_EMIT sigValueChanged();
 }
 
 void MultinodePropertyConnectorInterface::connectAutoEnableWidget(QWidget *widget)
@@ -84,7 +84,7 @@ public:
         if (event->type() == QEvent::MouseButtonPress ||
             event->type() == QEvent::TabletPress) {
 
-            emit enableWidget(true);
+            Q_EMIT enableWidget(true);
         }
 
         return false;

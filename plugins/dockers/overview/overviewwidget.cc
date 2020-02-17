@@ -371,7 +371,7 @@ void OverviewThumbnailStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
         overviewImage = d_fp->thumbDev->convertToQImage(KoColorSpaceRegistry::instance()->rgb8()->profile(),
                                                         QRect(QPoint(0,0), d_fp->thumbnailSize));
-        emit thumbnailUpdated(overviewImage);
+        Q_EMIT thumbnailUpdated(overviewImage);
         return;
     }
 }

@@ -220,7 +220,7 @@ void KisFavoriteResourceManager::slotChangeActivePaintop(int pos)
     KoResource* resource = const_cast<KisPaintOpPreset*>(m_favoritePresetsList.at(pos).data());
     m_paintopBox->resourceSelected(resource);
 
-    emit hidePalettes();
+    Q_EMIT hidePalettes();
 }
 
 int KisFavoriteResourceManager::numFavoritePresets()
@@ -236,21 +236,21 @@ void KisFavoriteResourceManager::slotUpdateRecentColor(int pos)
     // to update the colour priority when we select it.
     m_colorList->updateKey(pos);
 
-    emit setSelectedColor(pos);
-    emit sigSetFGColor(m_colorList->guiColor(pos));
-    emit hidePalettes();
+    Q_EMIT setSelectedColor(pos);
+    Q_EMIT sigSetFGColor(m_colorList->guiColor(pos));
+    Q_EMIT hidePalettes();
 }
 
 void KisFavoriteResourceManager::slotAddRecentColor(const KoColor& color)
 {
     m_colorList->append(color);
     int pos = m_colorList->findPos(color);
-    emit setSelectedColor(pos);
+    Q_EMIT setSelectedColor(pos);
 }
 
 void KisFavoriteResourceManager::slotChangeFGColorSelector(KoColor c)
 {
-    emit sigChangeFGColorSelector(c);
+    Q_EMIT sigChangeFGColorSelector(c);
 }
 
 void KisFavoriteResourceManager::removingResource(PointerType resource)
@@ -330,7 +330,7 @@ void KisFavoriteResourceManager::updateFavoritePresets()
         m_favoritePresetsList.append(pr.data());
         std::sort(m_favoritePresetsList.begin(), m_favoritePresetsList.end(), sortPresetByName);
     }
-    emit updatePalettes();
+    Q_EMIT updatePalettes();
 }
 
 void KisFavoriteResourceManager::configChanged()

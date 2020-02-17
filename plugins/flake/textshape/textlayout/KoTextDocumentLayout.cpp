@@ -352,7 +352,7 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
         }
     }
 
-    // Once done we emit the layoutIsDirty signal. The consumer (e.g. the TextShape) will then layout dirty
+    // Once done we Q_EMIT the layoutIsDirty signal. The consumer (e.g. the TextShape) will then layout dirty
     // root-areas and if needed following ones which got dirty cause content moved to them. Also this will
     // created new root-areas using KoTextLayoutRootAreaProvider::provide if needed.
     emitLayoutIsDirty();
@@ -623,7 +623,7 @@ void KoTextDocumentLayout::positionAnchorTextRanges(int pos, int length, const Q
             refPos = refShape->absoluteTransformation().map(refPos);
 
             //FIXME we need a more precise position than anchorParagraph Rect
-            emit foundAnnotation(annotation->annotationShape(), refPos);
+            Q_EMIT foundAnnotation(annotation->annotationShape(), refPos);
         }
     }
 }
@@ -676,7 +676,7 @@ void KoTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int positi
 
 void KoTextDocumentLayout::emitLayoutIsDirty()
 {
-    emit layoutIsDirty();
+    Q_EMIT layoutIsDirty();
 }
 
 void KoTextDocumentLayout::layout()
@@ -704,7 +704,7 @@ void KoTextDocumentLayout::layout()
 
     if (finished) {
         // We are only finished with layouting if continuousLayout()==true.
-        emit finishedLayout();
+        Q_EMIT finishedLayout();
     }
 }
 
@@ -1017,9 +1017,9 @@ void KoTextDocumentLayout::updateProgress(const QTextFrame::iterator &it)
     QTextBlock block = it.currentBlock();
     if (block.isValid()) {
         int percent = block.position() / qreal(document()->rootFrame()->lastPosition()) * 100.0;
-        emit layoutProgressChanged(percent);
+        Q_EMIT layoutProgressChanged(percent);
     } else if (it.currentFrame()) {
         int percent = it.currentFrame()->firstPosition() / qreal(document()->rootFrame()->lastPosition()) * 100.0;
-        emit layoutProgressChanged(percent);
+        Q_EMIT layoutProgressChanged(percent);
     }
 }

@@ -45,7 +45,7 @@ private Q_SLOTS:
 
     void slotRowChanged(int row) {
         QModelIndex changedIndex(index(row));
-        emit dataChanged(changedIndex, changedIndex);
+        Q_EMIT dataChanged(changedIndex, changedIndex);
     }
 
     void slotBeginInsertRow(int row) {
@@ -145,7 +145,7 @@ public:
         QVector<int> roles;
         roles.append(role);
 
-        emit dataChanged(idx, idx, roles);
+        Q_EMIT dataChanged(idx, idx, roles);
         return true;
     }
 

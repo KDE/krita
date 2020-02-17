@@ -84,7 +84,7 @@ void KisQmicApplicator::apply()
     KisProcessingVisitorSP  importVisitor = new KisImportQmicProcessingVisitor(m_kritaNodes, m_images, layerSize, selection);
     m_applicator->applyVisitor(importVisitor, KisStrokeJobData::SEQUENTIAL); // undo information is stored in this visitor
     m_applicator->explicitlyEmitFinalSignals();
-    emit gmicFinished(true, 0, "done!");
+    Q_EMIT gmicFinished(true, 0, "done!");
 }
 
 void KisQmicApplicator::cancel()

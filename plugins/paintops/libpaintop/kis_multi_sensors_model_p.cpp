@@ -84,7 +84,7 @@ bool KisMultiSensorsModel::setData(const QModelIndex &index, const QVariant &val
             }
 
             sensor->setActive(checked);
-            emit(parametersChanged());
+            Q_EMIT (parametersChanged());
             result = true;
         }
     }

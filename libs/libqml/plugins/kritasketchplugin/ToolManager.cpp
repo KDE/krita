@@ -61,7 +61,7 @@ void ToolManager::setView(QObject* newView)
 {
     d->view = qobject_cast<KisViewManager*>( newView );
     slotToolChanged(0, 0);
-    emit viewChanged();
+    Q_EMIT viewChanged();
 }
 
 void ToolManager::requestToolChange(QString toolID)
@@ -87,6 +87,6 @@ void ToolManager::slotToolChanged(KoCanvasController* canvas, int toolId)
 
     QString  id   = KoToolManager::instance()->activeToolId();
     d->currentTool = dynamic_cast<KisTool*>(KoToolManager::instance()->toolById(d->view->canvasBase(), id));
-    emit currentToolChanged();
+    Q_EMIT currentToolChanged();
 }
 

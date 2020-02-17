@@ -156,7 +156,7 @@ void KoDualColorButton::setForegroundColor(const KoColor &color)
     d->foregroundColor = color;
     {
         /**
-       * The internal color selector might emit the color of a different profile, so
+       * The internal color selector might Q_EMIT the color of a different profile, so
        * we should break this cycling dependency somehow.
        */
         KisSignalsBlocker b(d->colorSelectorDialog);
@@ -248,10 +248,10 @@ void KoDualColorButton::dropEvent( QDropEvent *event )
   if ( color.isValid() ) {
     if ( d->selection == Foreground ) {
       d->foregroundColor = color;
-      emit foregroundColorChanged( color );
+      Q_EMIT foregroundColorChanged( color );
     } else {
       d->backgroundColor = color;
-      emit backgroundColorChanged( color );
+      Q_EMIT backgroundColorChanged( color );
     }
 
     repaint();
@@ -263,7 +263,7 @@ void KoDualColorButton::slotSetForeGroundColorFromDialog(const KoColor color)
 {
     d->foregroundColor = color;
     repaint();
-    emit foregroundColorChanged(d->foregroundColor);
+    Q_EMIT foregroundColorChanged(d->foregroundColor);
 }
 
 void KoDualColorButton::mousePressEvent( QMouseEvent *event )
@@ -293,8 +293,8 @@ void KoDualColorButton::mousePressEvent( QMouseEvent *event )
         d->foregroundColor = d->backgroundColor;
         d->backgroundColor = tmp;
 
-        emit backgroundColorChanged( d->backgroundColor );
-        emit foregroundColorChanged( d->foregroundColor );
+        Q_EMIT backgroundColorChanged( d->backgroundColor );
+        Q_EMIT foregroundColorChanged( d->foregroundColor );
 
         d->miniCtlFlag = true;
     }
@@ -302,8 +302,8 @@ void KoDualColorButton::mousePressEvent( QMouseEvent *event )
         d->foregroundColor = d->displayRenderer->approximateFromRenderedQColor(Qt::black);
         d->backgroundColor = d->displayRenderer->approximateFromRenderedQColor(Qt::white);
 
-        emit backgroundColorChanged( d->backgroundColor );
-        emit foregroundColorChanged( d->foregroundColor );
+        Q_EMIT backgroundColorChanged( d->backgroundColor );
+        Q_EMIT foregroundColorChanged( d->foregroundColor );
 
         d->miniCtlFlag = true;
     }
@@ -352,14 +352,14 @@ void KoDualColorButton::mouseReleaseEvent( QMouseEvent *event )
                 c = QColorDialog::getColor(c, this);
                 if (c.isValid()) {
                     d->foregroundColor = d->displayRenderer->approximateFromRenderedQColor(c);
-                    emit foregroundColorChanged(d->foregroundColor);
+                    Q_EMIT foregroundColorChanged(d->foregroundColor);
                 }
 #endif
             }
         }
         else {
             d->foregroundColor = d->backgroundColor;
-            emit foregroundColorChanged( d->foregroundColor );
+            Q_EMIT foregroundColorChanged( d->foregroundColor );
         }
     }
     else if ( backgroundRect.contains( event->pos() )) {
@@ -369,19 +369,19 @@ void KoDualColorButton::mouseReleaseEvent( QMouseEvent *event )
                 KoColor c = d->backgroundColor;
                 c = KisDlgInternalColorSelector::getModalColorDialog(c, this, d->colorSelectorDialog->windowTitle());
                 d->backgroundColor = c;
-                emit backgroundColorChanged(d->backgroundColor);
+                Q_EMIT backgroundColorChanged(d->backgroundColor);
 #else
                 QColor c = d->backgroundColor.toQColor();
                 c = QColorDialog::getColor(c, this);
                 if (c.isValid()) {
                     d->backgroundColor = d->displayRenderer->approximateFromRenderedQColor(c);
-                    emit backgroundColorChanged(d->backgroundColor);
+                    Q_EMIT backgroundColorChanged(d->backgroundColor);
                 }
 #endif
             }
         } else {
             d->backgroundColor = d->foregroundColor;
-            emit backgroundColorChanged( d->backgroundColor );
+            Q_EMIT backgroundColorChanged( d->backgroundColor );
         }
     }
 

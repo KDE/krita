@@ -293,7 +293,7 @@ void KoSectionStyle::setName(const QString &name)
     if (name == d->name)
         return;
     d->name = name;
-    emit nameChanged(name);
+    Q_EMIT nameChanged(name);
 }
 
 int KoSectionStyle::styleId() const
@@ -446,7 +446,7 @@ void KoSectionStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext &c
 void KoSectionStyle::copyProperties(const KoSectionStyle *style)
 {
     d->stylesPrivate = style->d->stylesPrivate;
-    setName(style->name()); // make sure we emit property change
+    setName(style->name()); // make sure we Q_EMIT property change
     d->parentStyle = style->d->parentStyle;
 }
 

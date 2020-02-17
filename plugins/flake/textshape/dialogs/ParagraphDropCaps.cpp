@@ -48,7 +48,7 @@ void ParagraphDropCaps::dropCapsStateChanged()
     } else {
         widget.setting->setEnabled(false);
     }
-    emit parStyleChanged();
+    Q_EMIT parStyleChanged();
 }
 
 void ParagraphDropCaps::setDisplay(KoParagraphStyle *style)
@@ -104,19 +104,19 @@ void ParagraphDropCaps::paragraphDistanceChanged(qreal distance)
 {
     Q_UNUSED(distance);
     m_capsDistanceInherited = false;
-    emit parStyleChanged();
+    Q_EMIT parStyleChanged();
 }
 
 void ParagraphDropCaps::dropsLineSpanChanged(int lineSpan)
 {
     Q_UNUSED(lineSpan);
     m_capsLinesInherited = false;
-    emit parStyleChanged();
+    Q_EMIT parStyleChanged();
 }
 
 void ParagraphDropCaps::dropedCharacterCountChanged(int count)
 {
     Q_UNUSED(count);
     m_capsLengthInherited = false;
-    emit parStyleChanged();
+    Q_EMIT parStyleChanged();
 }

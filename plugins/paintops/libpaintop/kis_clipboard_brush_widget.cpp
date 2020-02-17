@@ -151,7 +151,7 @@ void KisClipboardBrushWidget::slotAddPredefined()
             resource->makeMaskImage();
         }
         m_rServerAdapter->addResource(resource);
-        emit sigNewPredefinedBrush(resource);
+        Q_EMIT sigNewPredefinedBrush(resource);
     }
 
     close();

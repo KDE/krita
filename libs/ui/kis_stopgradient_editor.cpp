@@ -96,7 +96,7 @@ void KisStopGradientEditor::setGradient(KoStopGradient *gradient)
         stopChanged(gradientSlider->selectedStop());
     }
 
-    emit sigGradientChanged();
+    Q_EMIT sigGradientChanged();
 }
 
 void KisStopGradientEditor::notifyGlobalColorChanged(const KoColor &color)
@@ -132,7 +132,7 @@ void KisStopGradientEditor::stopChanged(int stop)
         colorButton->setColor(color);
     }
 
-    emit sigGradientChanged();
+    Q_EMIT sigGradientChanged();
 }
 
 void KisStopGradientEditor::colorChanged(const KoColor& color)
@@ -153,7 +153,7 @@ void KisStopGradientEditor::colorChanged(const KoColor& color)
     m_gradient->setStops(stops);
     gradientSlider->update();
 
-    emit sigGradientChanged();
+    Q_EMIT sigGradientChanged();
 }
 
 void KisStopGradientEditor::opacityChanged(qreal value)
@@ -174,7 +174,7 @@ void KisStopGradientEditor::opacityChanged(qreal value)
     m_gradient->setStops(stops);
     gradientSlider->update();
 
-    emit sigGradientChanged();
+    Q_EMIT sigGradientChanged();
 }
 
 
@@ -183,7 +183,7 @@ void KisStopGradientEditor::nameChanged()
     if (!m_gradient) return;
 
     m_gradient->setName(nameedit->text());
-    emit sigGradientChanged();
+    Q_EMIT sigGradientChanged();
 }
 
 void KisStopGradientEditor::reverse()
@@ -198,7 +198,7 @@ void KisStopGradientEditor::reverse()
     m_gradient->setStops(reversedStops);
     gradientSlider->setSelectedStop(stops.size() - 1 - gradientSlider->selectedStop());
 
-    emit sigGradientChanged();
+    Q_EMIT sigGradientChanged();
 }
 
 void KisStopGradientEditor::sortByValue( SortFlags flags = SORT_ASCENDING )
@@ -232,7 +232,7 @@ void KisStopGradientEditor::sortByValue( SortFlags flags = SORT_ASCENDING )
     gradientSlider->setSelectedStop(stopCount - 1);
     gradientSlider->update();
 
-    emit sigGradientChanged();
+    Q_EMIT sigGradientChanged();
 }
 
 void KisStopGradientEditor::showContextMenu(const QPoint &origin)

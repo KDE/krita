@@ -147,7 +147,7 @@ void KisNodeFilterProxyModel::slotUpdateCurrentNodeFilter()
     m_d->activeNode = m_d->pendingActiveNode;
 
     /**
-     * During the filter update the model might emit "current changed" signals,
+     * During the filter update the model might Q_EMIT "current changed" signals,
      * which (in their turn) will issue setData(..., KisNodeModel::ActiveRole)
      * call, leading to a double recursion. Which, obviously, crashes Krita.
      *

@@ -261,15 +261,15 @@ void KisGradientSlider::mouseReleaseEvent(QMouseEvent * e)
     case BlackCursor:
         m_black = qRound(m_blackCursor / m_scalingFactor);
         m_feedback = true;
-        emit sigModifiedBlack(m_black);
+        Q_EMIT sigModifiedBlack(m_black);
         break;
     case WhiteCursor:
         m_white = qRound(m_whiteCursor / m_scalingFactor);
         m_feedback = true;
-        emit sigModifiedWhite(m_white);
+        Q_EMIT sigModifiedWhite(m_white);
         break;
     case GammaCursor:
-        emit sigModifiedGamma(m_gamma);
+        Q_EMIT sigModifiedGamma(m_gamma);
         break;
     default:
         break;
@@ -393,7 +393,7 @@ void KisGradientSlider::slotModifyWhite(int v)
 void KisGradientSlider::slotModifyGamma(double v)
 {
     if (m_gamma != v) {
-        emit sigModifiedGamma(v);
+        Q_EMIT sigModifiedGamma(v);
     }
     m_gamma = v;
     m_gammaCursor = calculateGammaCursor();

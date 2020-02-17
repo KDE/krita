@@ -183,7 +183,7 @@ void KisDlgInternalColorSelector::slotColorUpdated(KoColor newColor)
     if (sender() == m_d->compressColorChanges) {
         return;
     }
-    // Do not accept external updates while a color update emit is pending;
+    // Do not accept external updates while a color update Q_EMIT is pending;
     // Note: Assumes external updates only come from parent(), a separate slot might be better
     if (m_d->allowUpdates || (QObject::sender() && QObject::sender() != this->parent())) {
         // Enforce palette colors
@@ -307,7 +307,7 @@ void KisDlgInternalColorSelector::updateAllElements(QObject *source)
 
 void KisDlgInternalColorSelector::endUpdateWithNewColor()
 {
-    emit signalForegroundColorChosen(m_d->currentColor);
+    Q_EMIT signalForegroundColorChosen(m_d->currentColor);
     m_d->allowUpdates = true;
 }
 

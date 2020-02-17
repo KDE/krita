@@ -426,7 +426,7 @@ void RFileSelector::slotBtnClicked()
     connect(fileDlg, SIGNAL(urlSelected(QUrl)),
             this, SIGNAL(signalUrlSelected(QUrl)));
 
-    emit signalOpenFileDialog();
+    Q_EMIT signalOpenFileDialog();
 
     if (fileDlg->exec() == QDialog::Accepted)
     {
@@ -564,7 +564,7 @@ void RColorSelector::slotBtnClicked()
     if (color.isValid())
     {
         setColor(color);
-        emit signalColorSelected(color);
+        Q_EMIT signalColorSelected(color);
     }
 }
 

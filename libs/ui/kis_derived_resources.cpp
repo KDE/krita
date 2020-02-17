@@ -54,7 +54,7 @@ void KisPresetUpdateMediator::connectResource(QVariant sourceResource)
 
 void KisPresetUpdateMediator::slotSettingsChanged()
 {
-    emit sigResourceChanged(key());
+    Q_EMIT sigResourceChanged(key());
 }
 
 

@@ -138,7 +138,7 @@ protected:
                 }
             }
 
-            emit m_parent->selectedColorsChanged();
+            Q_EMIT m_parent->selectedColorsChanged();
 
             m_buttonPressed = false;
             return true;

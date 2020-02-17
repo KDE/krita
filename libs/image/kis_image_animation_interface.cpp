@@ -150,7 +150,7 @@ void KisImageAnimationInterface::setFullClipRange(const KisTimeRange range)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(!range.isInfinite());
     m_d->fullClipRange = range;
-    emit sigFullClipRangeChanged();
+    Q_EMIT sigFullClipRangeChanged();
 }
 
 void KisImageAnimationInterface::setFullClipRangeStartTime(int column)
@@ -174,7 +174,7 @@ void KisImageAnimationInterface::setPlaybackRange(const KisTimeRange range)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(!range.isInfinite());
     m_d->playbackRange = range;
-    emit sigPlaybackRangeChanged();
+    Q_EMIT sigPlaybackRangeChanged();
 }
 
 int KisImageAnimationInterface::framerate() const
@@ -194,7 +194,7 @@ void KisImageAnimationInterface::setAudioChannelFileName(const QString &fileName
     KIS_SAFE_ASSERT_RECOVER_NOOP(fileName.isEmpty() || info.isAbsolute());
     m_d->audioChannelFileName = fileName.isEmpty() ? fileName : info.absoluteFilePath();
 
-    emit sigAudioChannelChanged();
+    Q_EMIT sigAudioChannelChanged();
 }
 
 bool KisImageAnimationInterface::isAudioMuted() const
@@ -205,7 +205,7 @@ bool KisImageAnimationInterface::isAudioMuted() const
 void KisImageAnimationInterface::setAudioMuted(bool value)
 {
     m_d->audioChannelMuted = value;
-    emit sigAudioChannelChanged();
+    Q_EMIT sigAudioChannelChanged();
 }
 
 qreal KisImageAnimationInterface::audioVolume() const
@@ -216,13 +216,13 @@ qreal KisImageAnimationInterface::audioVolume() const
 void KisImageAnimationInterface::setAudioVolume(qreal value)
 {
     m_d->audioChannelVolume = value;
-    emit sigAudioVolumeChanged();
+    Q_EMIT sigAudioVolumeChanged();
 }
 
 void KisImageAnimationInterface::setFramerate(int fps)
 {
     m_d->framerate = fps;
-    emit sigFramerateChanged();
+    Q_EMIT sigFramerateChanged();
 }
 
 KisImageWSP KisImageAnimationInterface::image() const
@@ -253,7 +253,7 @@ void KisImageAnimationInterface::setDefaultProjectionColor(const KoColor &color)
 
 void KisImageAnimationInterface::requestTimeSwitchNonGUI(int time, bool useUndo)
 {
-    emit sigInternalRequestTimeSwitch(time, useUndo);
+    Q_EMIT sigInternalRequestTimeSwitch(time, useUndo);
 }
 
 void KisImageAnimationInterface::explicitlySetCurrentTime(int frameId)
@@ -297,7 +297,7 @@ void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId, bool useUnd
     }
 
     m_d->setCurrentUITime(frameId);
-    emit sigUiTimeChanged(frameId);
+    Q_EMIT sigUiTimeChanged(frameId);
 }
 
 void KisImageAnimationInterface::requestFrameRegeneration(int frameId, const KisRegion &dirtyRegion)
@@ -331,12 +331,12 @@ void KisImageAnimationInterface::restoreCurrentTime(int *savedValue)
 
 void KisImageAnimationInterface::notifyFrameReady()
 {
-    emit sigFrameReady(m_d->currentTime());
+    Q_EMIT sigFrameReady(m_d->currentTime());
 }
 
 void KisImageAnimationInterface::notifyFrameCancelled()
 {
-    emit sigFrameCancelled();
+    Q_EMIT sigFrameCancelled();
 }
 
 KisUpdatesFacade* KisImageAnimationInterface::updatesFacade() const
@@ -381,7 +381,7 @@ void KisImageAnimationInterface::notifyNodeChanged(const KisNode *node,
 void KisImageAnimationInterface::invalidateFrames(const KisTimeRange &range, const QRect &rect)
 {
     m_d->cachedLastFrameValue = -1;
-    emit sigFramesChanged(range, rect);
+    Q_EMIT sigFramesChanged(range, rect);
 }
 
 void KisImageAnimationInterface::blockFrameInvalidation(bool value)

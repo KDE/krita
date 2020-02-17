@@ -327,7 +327,7 @@ void KisToolColorPicker::updateOptionWidget()
 void KisToolColorPicker::setToForeground(bool newValue)
 {
     m_config->toForegroundColor = newValue;
-    emit toForegroundChanged();
+    Q_EMIT toForegroundChanged();
 }
 
 bool KisToolColorPicker::toForeground() const

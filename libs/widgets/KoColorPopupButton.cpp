@@ -58,5 +58,5 @@ void KoColorPopupButton::resizeEvent(QResizeEvent *e)
     }
     QToolButton::resizeEvent(e);
 
-    emit iconSizeChanged();
+    Q_EMIT iconSizeChanged();
 }

@@ -371,7 +371,7 @@ void KisPaintOpPresetsPopup::slotSaveRenameCurrentBrush()
     // if you are renaming a brush, that is different than updating the settings
     // make sure we are in a clean state before renaming. This logic might change,
     // but that is what we are going with for now
-    emit reloadPresetClicked();
+    Q_EMIT reloadPresetClicked();
 
 
     m_d->favoriteResManager->setBlockUpdates(true);
@@ -664,7 +664,7 @@ void KisPaintOpPresetsPopup::showEvent(QShowEvent *)
         window()->setGeometry(m_d->detachedGeometry);
     }
 
-    emit brushEditorShown();
+    Q_EMIT brushEditorShown();
 }
 
 void KisPaintOpPresetsPopup::resizeEvent(QResizeEvent* event)
@@ -761,7 +761,7 @@ void KisPaintOpPresetsPopup::slotSaveNewBrushPreset() {
 
 void KisPaintOpPresetsPopup::slotCreateNewBrushPresetEngine()
 {
-    emit createPresetFromScratch(sender()->objectName());
+    Q_EMIT createPresetFromScratch(sender()->objectName());
 }
 
 void KisPaintOpPresetsPopup::updateViewSettings()

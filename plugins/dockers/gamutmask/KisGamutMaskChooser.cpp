@@ -238,7 +238,7 @@ void KisGamutMaskChooser::updateViewSettings()
 
 void KisGamutMaskChooser::resourceSelected(KoResource* resource)
 {
-    emit sigGamutMaskSelected(static_cast<KoGamutMask*>(resource));
+    Q_EMIT sigGamutMaskSelected(static_cast<KoGamutMask*>(resource));
 }
 
 void KisGamutMaskChooser::slotSetModeThumbnail()

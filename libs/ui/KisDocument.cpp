@@ -186,7 +186,7 @@ public:
         image->unlock();
 
         /**
-         * Some very weird commands may emit blocking signals to
+         * Some very weird commands may Q_EMIT blocking signals to
          * the GUI (e.g. KisGuiContextCommand). Here is the best thing
          * we can do to avoid the deadlock
          */
@@ -684,7 +684,7 @@ bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPr
                                    this, SLOT(slotCompleteSavingDocument(KritaUtils::ExportFileJob, KisImportExportErrorCode ,QString)),
                                    job, exportConfiguration);
     if (!started) {
-        emit canceled(QString());
+        Q_EMIT canceled(QString());
     }
 
     return started;
@@ -774,7 +774,7 @@ void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &jo
     const QString fileName = QFileInfo(job.filePath).fileName();
 
     if (!status.isOk()) {
-        emit statusBarMessage(i18nc("%1 --- failing file name, %2 --- error message",
+        Q_EMIT statusBarMessage(i18nc("%1 --- failing file name, %2 --- error message",
                                     "Error during saving %1: %2",
                                     fileName,
                                     exportErrorToUserMessage(status, errorMessage)), errorMessageTimeout);
@@ -795,7 +795,7 @@ void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &jo
 
             if (!d->modifiedWhileSaving) {
                 /**
-                 * If undo stack is already clean/empty, it doesn't emit any
+                 * If undo stack is already clean/empty, it doesn't Q_EMIT any
                  * signals, so we might forget update document modified state
                  * (which was set, e.g. while recovering an autosave file)
                  */
@@ -810,10 +810,10 @@ void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &jo
             removeAutoSaveFiles(existingAutoSaveBaseName, wasRecovered);
         }
 
-        emit completed();
-        emit sigSavingFinished();
+        Q_EMIT completed();
+        Q_EMIT sigSavingFinished();
 
-        emit statusBarMessage(i18n("Finished saving %1", fileName), successMessageTimeout);
+        Q_EMIT statusBarMessage(i18n("Finished saving %1", fileName), successMessageTimeout);
     }
 }
 
@@ -1104,7 +1104,7 @@ void KisDocument::slotChildCompletedSavingInBackground(KisImportExportErrorCode 
                         .arg(fi.size())
                         .arg(QString::fromLatin1(KoMD5Generator().generateHash(job.filePath).toHex())));
 
-    emit sigCompleteBackgroundSaving(job, status, errorMessage);
+    Q_EMIT sigCompleteBackgroundSaving(job, status, errorMessage);
 }
 
 void KisDocument::slotAutoSaveImpl(std::unique_ptr<KisDocument> &&optionalClonedDocument)
@@ -1112,7 +1112,7 @@ void KisDocument::slotAutoSaveImpl(std::unique_ptr<KisDocument> &&optionalCloned
     if (!d->modified || !d->modifiedAfterAutosave) return;
     const QString autoSaveFileName = generateAutoSaveFileName(localFilePath());
 
-    emit statusBarMessage(i18n("Autosaving... %1", autoSaveFileName), successMessageTimeout);
+    Q_EMIT statusBarMessage(i18n("Autosaving... %1", autoSaveFileName), successMessageTimeout);
 
     KisUsageLogger::log(QString("Autosaving: %1").arg(autoSaveFileName));
 
@@ -1126,7 +1126,7 @@ void KisDocument::slotAutoSaveImpl(std::unique_ptr<KisDocument> &&optionalCloned
                                              0,
                                              std::move(optionalClonedDocument));
     } else {
-        emit statusBarMessage(i18n("Autosaving postponed: document is busy..."), errorMessageTimeout);
+        Q_EMIT statusBarMessage(i18n("Autosaving postponed: document is busy..."), errorMessageTimeout);
     }
 
     if (!started && !hadClonedDocument && d->autoSaveFailureCount >= 3) {
@@ -1165,7 +1165,7 @@ void KisDocument::slotCompleteAutoSaving(const KritaUtils::ExportFileJob &job, K
 
     if (!status.isOk()) {
         setEmergencyAutoSaveInterval();
-        emit statusBarMessage(i18nc("%1 --- failing file name, %2 --- error message",
+        Q_EMIT statusBarMessage(i18nc("%1 --- failing file name, %2 --- error message",
                                     "Error during autosaving %1: %2",
                                     fileName,
                                     exportErrorToUserMessage(status, errorMessage)), errorMessageTimeout);
@@ -1180,7 +1180,7 @@ void KisDocument::slotCompleteAutoSaving(const KritaUtils::ExportFileJob &job, K
             setNormalAutoSaveInterval();
         }
 
-        emit statusBarMessage(i18n("Finished autosaving %1", fileName), successMessageTimeout);
+        Q_EMIT statusBarMessage(i18n("Finished autosaving %1", fileName), successMessageTimeout);
     }
 }
 
@@ -1215,7 +1215,7 @@ bool KisDocument::startExportInBackground(const QString &actionName,
             d->savingUpdater->cancel();
         }
         d->savingImage.clear();
-        emit sigBackgroundSavingFinished(initializationStatus, initializationStatus.errorMessage());
+        Q_EMIT sigBackgroundSavingFinished(initializationStatus, initializationStatus.errorMessage());
         return false;
     }
 
@@ -1232,7 +1232,7 @@ bool KisDocument::startExportInBackground(const QString &actionName,
 void KisDocument::finishExportInBackground()
 {
     KIS_SAFE_ASSERT_RECOVER(d->childSavingFuture.isFinished()) {
-        emit sigBackgroundSavingFinished(ImportExportCodes::InternalError, "");
+        Q_EMIT sigBackgroundSavingFinished(ImportExportCodes::InternalError, "");
         return;
     }
 
@@ -1248,7 +1248,7 @@ void KisDocument::finishExportInBackground()
         d->savingUpdater->setProgress(100);
     }
 
-    emit sigBackgroundSavingFinished(status, errorMessage);
+    Q_EMIT sigBackgroundSavingFinished(status, errorMessage);
 }
 
 void KisDocument::setReadWrite(bool readwrite)
@@ -1541,7 +1541,7 @@ bool KisDocument::openFile()
 
     setMimeTypeAfterLoading(typeName);
     d->syncDecorationsWrapperLayerState();
-    emit sigLoadingFinished();
+    Q_EMIT sigLoadingFinished();
 
     undoStack()->clear();
 
@@ -1617,7 +1617,7 @@ void KisDocument::setModified(bool mod)
 
     // This influences the title
     setTitleModified();
-    emit modified(mod);
+    Q_EMIT modified(mod);
 }
 
 void KisDocument::setRecovered(bool value)
@@ -1676,7 +1676,7 @@ QString KisDocument::caption() const
 
 void KisDocument::setTitleModified()
 {
-    emit titleModified(caption(), isModified());
+    Q_EMIT titleModified(caption(), isModified());
 }
 
 QDomDocument KisDocument::createDomDocument(const QString& tagName, const QString& version) const
@@ -1768,7 +1768,7 @@ void KisDocument::setUnit(const KoUnit &unit)
 {
     if (d->unit != unit) {
         d->unit = unit;
-        emit unitChanged(unit);
+        Q_EMIT unitChanged(unit);
     }
 }
 
@@ -1838,7 +1838,7 @@ void KisDocument::setGridConfig(const KisGridConfig &config)
     if (d->gridConfig != config) {
         d->gridConfig = config;
         d->syncDecorationsWrapperLayerState();
-        emit sigGridConfigChanged(config);
+        Q_EMIT sigGridConfigChanged(config);
     }
 }
 
@@ -1853,7 +1853,7 @@ void KisDocument::setPaletteList(const QList<KoColorSet *> &paletteList, bool em
         QList<KoColorSet *> oldPaletteList = d->paletteList;
         d->paletteList = paletteList;
         if (emitSignal) {
-            emit sigPaletteListChanged(oldPaletteList, paletteList);
+            Q_EMIT sigPaletteListChanged(oldPaletteList, paletteList);
         }
     }
 }
@@ -1869,7 +1869,7 @@ void KisDocument::setGuidesConfig(const KisGuidesConfig &data)
 
     d->guidesConfig = data;
     d->syncDecorationsWrapperLayerState();
-    emit sigGuidesConfigChanged(d->guidesConfig);
+    Q_EMIT sigGuidesConfigChanged(d->guidesConfig);
 }
 
 const KisMirrorAxisConfig& KisDocument::mirrorAxisConfig() const
@@ -1886,7 +1886,7 @@ void KisDocument::setMirrorAxisConfig(const KisMirrorAxisConfig &config)
     d->mirrorAxisConfig = config;
     setModified(true);
 
-    emit sigMirrorAxisConfigChanged();
+    Q_EMIT sigMirrorAxisConfigChanged();
 }
 
 void KisDocument::resetURL() {
@@ -1987,9 +1987,9 @@ bool KisDocument::openUrlInternal(const QUrl &url)
         ret = openFile();
 
         if (ret) {
-            emit completed();
+            Q_EMIT completed();
         } else {
-            emit canceled(QString());
+            Q_EMIT canceled(QString());
         }
         return ret;
     }
@@ -2121,7 +2121,7 @@ void KisDocument::setAssistants(const QList<KisPaintingAssistantSP> &value)
     if (d->assistants != value) {
         d->assistants = value;
         d->syncDecorationsWrapperLayerState();
-        emit sigAssistantsChanged();
+        Q_EMIT sigAssistantsChanged();
     }
 }
 
@@ -2164,7 +2164,7 @@ void KisDocument::setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> 
                 this, SIGNAL(sigReferenceImagesChanged()));
     }
 
-    emit sigReferenceImagesLayerChanged(layer);
+    Q_EMIT sigReferenceImagesLayerChanged(layer);
 }
 
 void KisDocument::setPreActivatedNode(KisNodeSP activatedNode)

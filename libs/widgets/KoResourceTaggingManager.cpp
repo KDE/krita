@@ -296,7 +296,7 @@ void KoResourceTaggingManager::updateTaggedResourceView()
     d->model->setCurrentTag(d->currentTag);
     d->model->updateServer();
     d->originalResources = d->model->currentlyVisibleResources();
-    emit updateView();
+    Q_EMIT updateView();
 }
 
 void KoResourceTaggingManager::tagChooserIndexChanged(const QString& lineEditText)
@@ -332,7 +332,7 @@ void KoResourceTaggingManager::tagSearchLineEditTextChanged(const QString& lineE
     //     d->tagCompleter = new QCompleter(tagNamesList(lineEditText),this);
     //    d->tagSearchLineEdit->setCompleter(d->tagCompleter);
 
-    emit updateView();
+    Q_EMIT updateView();
 }
 
 void KoResourceTaggingManager::tagSaveButtonPressed()

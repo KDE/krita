@@ -1520,7 +1520,7 @@ void KoTextLoader::processBody()
         d->nextProgressReportMs = d->progressTime.elapsed() + 333; // report 3 times per second
         Q_ASSERT(d->bodyProgressTotal > 0);
         const int percent = d->bodyProgressValue * 100 / d->bodyProgressTotal;
-        emit sigProgress(percent);
+        Q_EMIT sigProgress(percent);
     }
 }
 

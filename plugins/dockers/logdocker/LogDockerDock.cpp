@@ -334,5 +334,5 @@ void LogDockerDock::changeTheme()
 
 void MessageSender::sendMessage(QtMsgType type, const QString &msg)
 {
-    emit emitMessage(type, msg);
+    Q_EMIT emitMessage(type, msg);
 }

@@ -45,7 +45,7 @@ void KRITAIMAGE_EXPORT initProxyObject(QObject *object);
  *        KisSafeBlockingQueueConnectionProxy<QTransform> proxy(
  *            std::bind(&KisShapeLayer::slotTransformShapes, shapeLayer));
  *
- *        // emit synchronous signal with deadlock-avoidance
+ *        // Q_EMIT synchronous signal with deadlock-avoidance
  *        proxy.start(QTransform::fromScale(0.5, 0.5));
  *
  *        \endcode

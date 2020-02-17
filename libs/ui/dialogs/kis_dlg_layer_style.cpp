@@ -231,7 +231,7 @@ void KisDlgLayerStyle::slotNotifyOnAccept()
 {
     if (m_configChangedCompressor->isActive()) {
         m_configChangedCompressor->stop();
-        emit configChanged();
+        Q_EMIT configChanged();
     }
 }
 
@@ -240,7 +240,7 @@ void KisDlgLayerStyle::slotNotifyOnReject()
     notifyPredefinedStyleSelected(m_initialLayerStyle);
 
     m_configChangedCompressor->stop();
-    emit configChanged();
+    Q_EMIT configChanged();
 }
 
 bool checkCustomNameAvailable(const QString &name)
@@ -544,7 +544,7 @@ void StylesSelector::selectStyle(QListWidgetItem *current, QListWidgetItem* /*pr
 {
     StyleItem *item = dynamic_cast<StyleItem*>(current);
     if (item) {
-        emit styleSelected(item->m_style);
+        Q_EMIT styleSelected(item->m_style);
     }
 }
 

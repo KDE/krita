@@ -84,8 +84,8 @@ void RClickLabel::mouseReleaseEvent(QMouseEvent* event)
 
     if (event->button() == Qt::LeftButton)
     {
-        emit leftClicked();
-        emit activated();
+        Q_EMIT leftClicked();
+        Q_EMIT activated();
         event->accept();
     }
 }
@@ -97,7 +97,7 @@ void RClickLabel::keyPressEvent(QKeyEvent* e)
         case Qt::Key_Down:
         case Qt::Key_Right:
         case Qt::Key_Space:
-            emit activated();
+            Q_EMIT activated();
             return;
         default:
             break;
@@ -131,8 +131,8 @@ void RSqueezedClickLabel::mouseReleaseEvent(QMouseEvent* event)
 
     if (event->button() == Qt::LeftButton)
     {
-        emit leftClicked();
-        emit activated();
+        Q_EMIT leftClicked();
+        Q_EMIT activated();
         event->accept();
     }
 }
@@ -158,7 +158,7 @@ void RSqueezedClickLabel::keyPressEvent(QKeyEvent* e)
         case Qt::Key_Down:
         case Qt::Key_Right:
         case Qt::Key_Space:
-            emit activated();
+            Q_EMIT activated();
             return;
         default:
             break;
@@ -209,7 +209,7 @@ void RArrowClickLabel::mouseReleaseEvent(QMouseEvent* event)
 {
     if (event->button() == Qt::LeftButton)
     {
-        emit leftClicked();
+        Q_EMIT leftClicked();
     }
 }
 
@@ -464,7 +464,7 @@ void RLabelExpander::setExpanded(bool b)
            d->arrow->setArrowType(Qt::RightArrow);
     }
 
-    emit signalExpanded(b);
+    Q_EMIT signalExpanded(b);
 }
 
 bool RLabelExpander::isExpanded() const
@@ -625,7 +625,7 @@ void RExpanderBox::slotItemExpanded(bool b)
     if (exp)
     {
         int index = indexOf(exp);
-        emit signalItemExpanded(index, b);
+        Q_EMIT signalItemExpanded(index, b);
     }
 }
 
@@ -636,7 +636,7 @@ void RExpanderBox::slotItemToggled(bool b)
     if (exp)
     {
         int index = indexOf(exp);
-        emit signalItemToggled(index, b);
+        Q_EMIT signalItemToggled(index, b);
     }
 }
 
@@ -810,7 +810,7 @@ void RExpanderBoxExclusive::slotItemExpanded(bool b)
             item++;
         }
     }
-    emit signalItemExpanded(indexOf(exp), b);
+    Q_EMIT signalItemExpanded(indexOf(exp), b);
 }
 
 void RExpanderBoxExclusive::setIsToolBox(bool b)

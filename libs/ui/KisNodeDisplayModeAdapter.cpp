@@ -70,7 +70,7 @@ void KisNodeDisplayModeAdapter::slotSettingsChangedImpl(bool suppressSignals)
         m_showRootNode = cfg.showRootLayer();
 
         if (!suppressSignals) {
-            emit sigNodeDisplayModeChanged(m_showRootNode, m_showGlobalSelectionMask);
+            Q_EMIT sigNodeDisplayModeChanged(m_showRootNode, m_showGlobalSelectionMask);
         }
     }
 }

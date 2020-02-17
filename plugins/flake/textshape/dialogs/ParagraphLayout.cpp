@@ -52,31 +52,31 @@ void ParagraphLayout::slotAlignChanged()
 
     m_alignmentInherited = false;
 
-    emit parStyleChanged();
+    Q_EMIT parStyleChanged();
 }
 
 void ParagraphLayout::breakAfterChanged()
 {
     m_breakAfterInherited = false;
-    emit parStyleChanged();
+    Q_EMIT parStyleChanged();
 }
 
 void ParagraphLayout::keepTogetherChanged()
 {
     m_keepTogetherInherited = false;
-    emit parStyleChanged();
+    Q_EMIT parStyleChanged();
 }
 
 void ParagraphLayout::breakBeforeChanged()
 {
     m_breakBeforeInherited = false;
-    emit parStyleChanged();
+    Q_EMIT parStyleChanged();
 }
 
 void ParagraphLayout::thresholdValueChanged()
 {
     m_orphanThresholdInherited = false;
-    emit parStyleChanged();
+    Q_EMIT parStyleChanged();
 }
 
 void ParagraphLayout::setDisplay(KoParagraphStyle *style)

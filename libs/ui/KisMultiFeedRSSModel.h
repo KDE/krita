@@ -84,7 +84,7 @@ public Q_SLOTS:
     void setArticleCount(int arg) {
         if (m_articleCount != arg) {
             m_articleCount = arg;
-            emit articleCountChanged(arg);
+            Q_EMIT articleCountChanged(arg);
         }
     }
 

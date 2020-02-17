@@ -199,7 +199,7 @@ void ThemeManager::slotChangePalette()
 #endif
 
     KisIconUtils::clearIconCache();
-    emit signalThemeChanged();
+    Q_EMIT signalThemeChanged();
 }
 
 void ThemeManager::setThemeMenuAction(KActionMenu* const action)

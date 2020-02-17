@@ -59,7 +59,7 @@ void KisGradientSliderWidget::setGradientResource(KoSegmentGradient* agr)
 {
     m_autogradientResource = agr;
     m_selectedSegment = m_autogradientResource->segmentAt(0.0);
-    emit sigSelectedSegment(m_selectedSegment);
+    Q_EMIT sigSelectedSegment(m_selectedSegment);
 }
 
 void KisGradientSliderWidget::paintEvent(QPaintEvent* pe)
@@ -151,7 +151,7 @@ void KisGradientSliderWidget::mousePressEvent(QMouseEvent * e)
 
         if (m_drag == NO_DRAG) {
             m_selectedSegment = m_currentSegment;
-            emit sigSelectedSegment(m_selectedSegment);
+            Q_EMIT sigSelectedSegment(m_selectedSegment);
         }
     }
     repaint();
@@ -184,7 +184,7 @@ void KisGradientSliderWidget::mouseMoveEvent(QMouseEvent * e)
     }
 
     if (m_drag != NO_DRAG)
-        emit sigChangedSegment(m_currentSegment);
+        Q_EMIT sigChangedSegment(m_currentSegment);
 
     repaint();
 }
@@ -198,28 +198,28 @@ void KisGradientSliderWidget::contextMenuEvent(QContextMenuEvent * e)
 void KisGradientSliderWidget::slotSplitSegment()
 {
     m_autogradientResource->splitSegment(m_selectedSegment);
-    emit sigSelectedSegment(m_selectedSegment);
+    Q_EMIT sigSelectedSegment(m_selectedSegment);
     repaint();
 }
 
 void KisGradientSliderWidget::slotDuplicateSegment()
 {
     m_autogradientResource->duplicateSegment(m_selectedSegment);
-    emit sigSelectedSegment(m_selectedSegment);
+    Q_EMIT sigSelectedSegment(m_selectedSegment);
     repaint();
 }
 
 void KisGradientSliderWidget::slotMirrorSegment()
 {
     m_autogradientResource->mirrorSegment(m_selectedSegment);
-    emit sigSelectedSegment(m_selectedSegment);
+    Q_EMIT sigSelectedSegment(m_selectedSegment);
     repaint();
 }
 
 void KisGradientSliderWidget::slotRemoveSegment()
 {
     m_selectedSegment = m_autogradientResource->removeSegment(m_selectedSegment);
-    emit sigSelectedSegment(m_selectedSegment);
+    Q_EMIT sigSelectedSegment(m_selectedSegment);
     repaint();
 }
 

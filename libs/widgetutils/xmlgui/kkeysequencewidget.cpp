@@ -421,7 +421,7 @@ void KKeySequenceWidgetPrivate::doneRecording(bool validate)
         // The sequence had conflicts and the user said no to stealing it
         keySequence = oldKeySequence;
     } else {
-        emit q->keySequenceChanged(keySequence);
+        Q_EMIT q->keySequenceChanged(keySequence);
     }
 
     updateShortcutDisplay();
@@ -522,7 +522,7 @@ bool KKeySequenceWidgetPrivate::conflictWithLocalShortcuts(const QKeySequence &k
 
         // Announce that the user agreed to override the other shortcut
         Q_FOREACH (QAction *stealAction, stealActions) {
-            emit q->stealShortcut(
+            Q_EMIT q->stealShortcut(
                 keySequence,
                 stealAction);
         }

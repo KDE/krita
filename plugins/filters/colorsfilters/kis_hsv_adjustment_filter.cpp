@@ -207,7 +207,7 @@ void KisHSVConfigWidget::configureSliderLimitsAndLabels()
 
     m_page->chkCompatibilityMode->setEnabled(compatibilityEnabled);
 
-    emit sigConfigurationItemChanged();
+    Q_EMIT sigConfigurationItemChanged();
 }
 
 void KisHSVConfigWidget::resetFilter()

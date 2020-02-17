@@ -24,12 +24,12 @@ VirtualKeyboardController* VirtualKeyboardController::sm_instance = 0;
 
 void VirtualKeyboardController::requestShowKeyboard()
 {
-    emit showKeyboard();
+    Q_EMIT showKeyboard();
 }
 
 void VirtualKeyboardController::requestHideKeyboard()
 {
-    emit hideKeyboard();
+    Q_EMIT hideKeyboard();
 }
 
 VirtualKeyboardController* VirtualKeyboardController::instance()

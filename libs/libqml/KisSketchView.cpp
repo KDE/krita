@@ -206,7 +206,7 @@ void KisSketchView::setFile(const QString& file)
 {
     if (!file.isEmpty() && file != d->file) {
         d->file = file;
-        emit fileChanged();
+        Q_EMIT fileChanged();
 
         if (!file.startsWith("temp://")) {
             DocumentManager::instance()->openDocument(file);
@@ -287,7 +287,7 @@ void KisSketchView::documentAboutToBeDeleted()
     delete d->view;
     d->view = 0;
 
-    emit viewChanged();
+    Q_EMIT viewChanged();
 
     d->canvas = 0;
     d->canvasWidget = 0;
@@ -361,7 +361,7 @@ void KisSketchView::documentChanged()
     d->viewManager->actionCollection()->action("zoom_to_100pct")->trigger();
     d->resetDocumentPosition();
 
-    emit viewChanged();
+    Q_EMIT viewChanged();
 
 }
 
@@ -485,7 +485,7 @@ bool KisSketchView::event( QEvent* event )
 //            return true;
 //        case QEvent::KeyPress:
 //        case QEvent::KeyRelease:
-//            emit interactionStarted();
+//            Q_EMIT interactionStarted();
 //            QApplication::sendEvent(d->view, event);
 //            break;
 //        default:
@@ -505,7 +505,7 @@ bool KisSketchView::sceneEvent(QEvent* event)
             QGraphicsSceneMouseEvent *gsmevent = static_cast<QGraphicsSceneMouseEvent*>(event);
             QMouseEvent mevent(QMouseEvent::MouseButtonPress, gsmevent->pos().toPoint(), gsmevent->button(), gsmevent->buttons(), gsmevent->modifiers());
             QApplication::sendEvent(d->canvasWidget, &mevent);
-            emit interactionStarted();
+            Q_EMIT interactionStarted();
             return true;
         }
         case QEvent::GraphicsSceneMouseMove: {
@@ -513,21 +513,21 @@ bool KisSketchView::sceneEvent(QEvent* event)
             QMouseEvent mevent(QMouseEvent::MouseMove, gsmevent->pos().toPoint(), gsmevent->button(), gsmevent->buttons(), gsmevent->modifiers());
             QApplication::sendEvent(d->canvasWidget, &mevent);
             update();
-            emit interactionStarted();
+            Q_EMIT interactionStarted();
             return true;
         }
         case QEvent::GraphicsSceneMouseRelease: {
             QGraphicsSceneMouseEvent *gsmevent = static_cast<QGraphicsSceneMouseEvent*>(event);
             QMouseEvent mevent(QMouseEvent::MouseButtonRelease, gsmevent->pos().toPoint(), gsmevent->button(), gsmevent->buttons(), gsmevent->modifiers());
             QApplication::sendEvent(d->canvasWidget, &mevent);
-            emit interactionStarted();
+            Q_EMIT interactionStarted();
             return true;
         }
         case QEvent::GraphicsSceneWheel: {
             QGraphicsSceneWheelEvent *gswevent = static_cast<QGraphicsSceneWheelEvent*>(event);
             QWheelEvent wevent(gswevent->pos().toPoint(), gswevent->delta(), gswevent->buttons(), gswevent->modifiers(), gswevent->orientation());
             QApplication::sendEvent(d->canvasWidget, &wevent);
-            emit interactionStarted();
+            Q_EMIT interactionStarted();
             return true;
         }
         case QEvent::GraphicsSceneHoverEnter: {
@@ -545,7 +545,7 @@ bool KisSketchView::sceneEvent(QEvent* event)
         case QEvent::TouchBegin: {
             QApplication::sendEvent(d->canvasWidget, event);
             event->accept();
-            emit interactionStarted();
+            Q_EMIT interactionStarted();
             return true;
         }
         case QEvent::TabletPress:
@@ -556,7 +556,7 @@ bool KisSketchView::sceneEvent(QEvent* event)
             return true;
         default:
             if (QApplication::sendEvent(d->canvasWidget, event)) {
-                emit interactionStarted();
+                Q_EMIT interactionStarted();
                 return true;
             }
         }

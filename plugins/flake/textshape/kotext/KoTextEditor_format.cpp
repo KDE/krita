@@ -145,7 +145,7 @@ void KoTextEditor::setHorizontalTextAlignment(Qt::Alignment align)
     d->updateState(KoTextEditor::Private::Format, kundo2_i18n("Change Alignment"));
     BlockFormatVisitor::visitSelection(this, aligner, kundo2_i18n("Change Alignment"));
     d->updateState(KoTextEditor::Private::NoOp);
-    emit textFormatChanged();
+    Q_EMIT textFormatChanged();
 }
 
 void KoTextEditor::setVerticalTextAlignment(Qt::Alignment align)
@@ -197,7 +197,7 @@ void KoTextEditor::decreaseIndent()
     d->updateState(KoTextEditor::Private::Format, kundo2_i18n("Decrease Indent"));
     BlockFormatVisitor::visitSelection(this, indenter, kundo2_i18n("Decrease Indent"));
     d->updateState(KoTextEditor::Private::NoOp);
-    emit textFormatChanged();
+    Q_EMIT textFormatChanged();
 }
 
 void KoTextEditor::increaseIndent()
@@ -233,7 +233,7 @@ void KoTextEditor::increaseIndent()
     d->updateState(KoTextEditor::Private::Format, kundo2_i18n("Increase Indent"));
     BlockFormatVisitor::visitSelection(this, indenter, kundo2_i18n("Increase Indent"));
     d->updateState(KoTextEditor::Private::NoOp);
-    emit textFormatChanged();
+    Q_EMIT textFormatChanged();
 }
 
 class FontResizer : public CharFormatVisitor
@@ -270,7 +270,7 @@ void KoTextEditor::decreaseFontSize()
     FontResizer sizer(FontResizer::Shrink);
     CharFormatVisitor::visitSelection(this, sizer, kundo2_i18n("Decrease font size"));
     d->updateState(KoTextEditor::Private::NoOp);
-    emit textFormatChanged();
+    Q_EMIT textFormatChanged();
 }
 
 void KoTextEditor::increaseFontSize()
@@ -283,7 +283,7 @@ void KoTextEditor::increaseFontSize()
     FontResizer sizer(FontResizer::Grow);
     CharFormatVisitor::visitSelection(this, sizer, kundo2_i18n("Increase font size"));
     d->updateState(KoTextEditor::Private::NoOp);
-    emit textFormatChanged();
+    Q_EMIT textFormatChanged();
 }
 
 void KoTextEditor::setFontFamily(const QString &font)
@@ -424,8 +424,8 @@ void KoTextEditor::setStyle(KoCharacterStyle *style)
     }
 
     d->updateState(KoTextEditor::Private::NoOp);
-    emit textFormatChanged();
-    emit characterStyleApplied(style);
+    Q_EMIT textFormatChanged();
+    Q_EMIT characterStyleApplied(style);
 }
 
 
@@ -486,8 +486,8 @@ void KoTextEditor::setStyle(KoParagraphStyle *style)
     }
 
     d->updateState(KoTextEditor::Private::NoOp);
-    emit paragraphStyleApplied(style);
-    emit textFormatChanged();
+    Q_EMIT paragraphStyleApplied(style);
+    Q_EMIT textFormatChanged();
 }
 
 class MergeAutoCharacterStyleVisitor : public KoTextVisitor
@@ -545,7 +545,7 @@ void KoTextEditor::mergeAutoStyle(const QTextCharFormat &deltaCharFormat)
     }
 
     d->updateState(KoTextEditor::Private::NoOp);
-    emit textFormatChanged();
+    Q_EMIT textFormatChanged();
 }
 
 
@@ -554,7 +554,7 @@ void KoTextEditor::applyDirectFormatting(const QTextCharFormat &deltaCharFormat,
                                   const KoListLevelProperties &llp)
 {
     addCommand(new ParagraphFormattingCommand(this, deltaCharFormat, deltaBlockFormat, llp));
-    emit textFormatChanged();
+    Q_EMIT textFormatChanged();
 }
 
 QTextCharFormat KoTextEditor::blockCharFormat() const
@@ -579,7 +579,7 @@ void KoTextEditor::mergeBlockFormat(const QTextBlockFormat &modifier)
         return;
     }
     d->caret.mergeBlockFormat(modifier);
-    emit textFormatChanged();
+    Q_EMIT textFormatChanged();
 }
 
 
@@ -591,7 +591,7 @@ void KoTextEditor::setBlockFormat(const QTextBlockFormat &format)
 
     Q_UNUSED(format)
     d->caret.setBlockFormat(format);
-    emit textFormatChanged();
+    Q_EMIT textFormatChanged();
 }
 
 void KoTextEditor::setCharFormat(const QTextCharFormat &format)
@@ -601,5 +601,5 @@ void KoTextEditor::setCharFormat(const QTextCharFormat &format)
     }
 
     d->caret.setCharFormat(format);
-    emit textFormatChanged();
+    Q_EMIT textFormatChanged();
 }

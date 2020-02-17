@@ -43,7 +43,7 @@ void KisMoveBoundsCalculationJob::run()
         handlesRect &= m_selection->selectedExactRect();
     }
 
-    emit sigCalcualtionFinished(handlesRect);
+    Q_EMIT sigCalcualtionFinished(handlesRect);
 }
 
 bool KisMoveBoundsCalculationJob::overrides(const KisSpontaneousJob *_otherJob)

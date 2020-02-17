@@ -385,7 +385,7 @@ void KoCreatePathTool::mouseReleaseEvent(KoPointerEvent *event)
 void KoCreatePathTool::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Escape) {
-        emit done();
+        Q_EMIT done();
     } else {
         event->ignore();
     }

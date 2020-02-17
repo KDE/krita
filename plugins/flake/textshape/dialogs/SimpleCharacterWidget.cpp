@@ -236,28 +236,28 @@ void SimpleCharacterWidget::styleSelected(int index)
     KoCharacterStyle *charStyle = m_styleManager->characterStyle(m_sortedStylesModel->index(index, 0, QModelIndex()).internalId());
 
     //if the selected item correspond to a null characterStyle, send the null pointer. the tool should set the characterStyle as per paragraph
-    emit characterStyleSelected(charStyle);
-    emit doneWithFocus();
+    Q_EMIT characterStyleSelected(charStyle);
+    Q_EMIT doneWithFocus();
 }
 
 void SimpleCharacterWidget::styleSelected(const QModelIndex &index)
 {
     if (!index.isValid()) {
-        emit doneWithFocus();
+        Q_EMIT doneWithFocus();
         return;
     }
     KoCharacterStyle *charStyle = m_styleManager->characterStyle(index.internalId());
 
     //if the selected item correspond to a null characterStyle, send the null pointer. the tool should set the characterStyle as per paragraph
-    emit characterStyleSelected(charStyle);
-    emit doneWithFocus();
+    Q_EMIT characterStyleSelected(charStyle);
+    Q_EMIT doneWithFocus();
 }
 
 void SimpleCharacterWidget::slotShowStyleManager(int index)
 {
     int styleId = m_sortedStylesModel->index(index, 0, QModelIndex()).internalId();
-    emit showStyleManager(styleId);
-    emit doneWithFocus();
+    Q_EMIT showStyleManager(styleId);
+    Q_EMIT doneWithFocus();
 }
 
 void SimpleCharacterWidget::slotCharacterStyleApplied(const KoCharacterStyle *style)

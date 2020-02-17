@@ -18,9 +18,9 @@ index 6c871aae2c..19fc2d1677 100644
 @@ -1171,6 +1171,8 @@ void QDockWidgetPrivate::setWindowState(bool floating, bool unplug, const QRect
              QMainWindowLayout *mwlayout = qt_mainwindow_layout_from_dock(q);
              if (mwlayout)
-                 emit q->dockLocationChanged(mwlayout->dockWidgetArea(q));
+                 Q_EMIT q->dockLocationChanged(mwlayout->dockWidgetArea(q));
 +        } else {
-+            emit q->dockLocationChanged(Qt::NoDockWidgetArea);
++            Q_EMIT q->dockLocationChanged(Qt::NoDockWidgetArea);
          }
      }
  

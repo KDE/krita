@@ -369,7 +369,7 @@ KisViewManager* KisView::viewManager() const
 
 void KisView::slotImageNodeAdded(KisNodeSP node)
 {
-    emit sigContinueAddNode(node);
+    Q_EMIT sigContinueAddNode(node);
 }
 
 void KisView::slotContinueAddNode(KisNodeSP newActiveNode)
@@ -392,7 +392,7 @@ void KisView::slotContinueAddNode(KisNodeSP newActiveNode)
 
 void KisView::slotImageNodeRemoved(KisNodeSP node)
 {
-    emit sigContinueRemoveNode(KritaUtils::nearestNodeAfterRemoval(node));
+    Q_EMIT sigContinueRemoveNode(KritaUtils::nearestNodeAfterRemoval(node));
 }
 
 void KisView::slotContinueRemoveNode(KisNodeSP newActiveNode)

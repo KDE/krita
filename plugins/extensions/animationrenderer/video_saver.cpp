@@ -77,11 +77,11 @@ private Q_SLOTS:
         }
 
         if (isEnded) {
-            emit sigProgressChanged(100);
-            emit sigProcessingFinished();
+            Q_EMIT sigProgressChanged(100);
+            Q_EMIT sigProcessingFinished();
         } else {
 
-            emit sigProgressChanged(100 * currentFrame / m_totalFrames);
+            Q_EMIT sigProgressChanged(100 * currentFrame / m_totalFrames);
         }
     }
 

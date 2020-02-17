@@ -90,7 +90,7 @@ public:
     void setProvideStyleNone(bool provide);
 
     /** Sets the @class KoStyleManager of the model. Setting this will populate the styles. It is required that a @param manager is set before using the model.
-      * CAUTION: Populating the style will select the first inserted item. If this model is already set on a view, this might cause the view to emit an item selection changed signal.
+      * CAUTION: Populating the style will select the first inserted item. If this model is already set on a view, this might cause the view to Q_EMIT an item selection changed signal.
     */
     void setStyleManager(KoStyleManager *manager);
 

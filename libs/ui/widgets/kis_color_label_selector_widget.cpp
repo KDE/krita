@@ -103,7 +103,7 @@ void KisColorLabelSelectorWidget::setCurrentIndex(int index)
     m_d->updateItem(m_d->selectedItem);
     m_d->hoveringItem = index;
 
-    emit currentIndexChanged(m_d->selectedItem);
+    Q_EMIT currentIndexChanged(m_d->selectedItem);
 }
 
 QSize KisColorLabelSelectorWidget::minimumSizeHint() const

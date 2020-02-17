@@ -94,12 +94,12 @@ void KoTagChooserWidget::contextDeleteCurrentTag()
     if (selectedTagIsReadOnly()) {
         return;
     }
-    emit tagDeletionRequested(currentlySelectedTag());
+    Q_EMIT tagDeletionRequested(currentlySelectedTag());
 }
 
 void KoTagChooserWidget::tagChanged(int)
 {
-    emit tagChosen(d->comboBox->currentUnsqueezedText());
+    Q_EMIT tagChosen(d->comboBox->currentUnsqueezedText());
 }
 
 void KoTagChooserWidget::tagRenamingRequested(const QString& newName)
@@ -107,7 +107,7 @@ void KoTagChooserWidget::tagRenamingRequested(const QString& newName)
     if (newName.isEmpty() || selectedTagIsReadOnly()) {
         return;
     }
-    emit tagRenamingRequested(currentlySelectedTag(), newName);
+    Q_EMIT tagRenamingRequested(currentlySelectedTag(), newName);
 }
 
 void KoTagChooserWidget::setUndeletionCandidate(const QString& tag)
@@ -193,7 +193,7 @@ void KoTagChooserWidget::tagOptionsContextMenuAboutToShow()
 {
     /* only enable the save button if the selected tag set is editable */
     d->tagToolButton->readOnlyMode(selectedTagIsReadOnly());
-    emit popupMenuAboutToShow();
+    Q_EMIT popupMenuAboutToShow();
 }
 
 void KoTagChooserWidget::showTagToolButton(bool show)

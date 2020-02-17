@@ -139,7 +139,7 @@ void RecentImagesModel::setRecentFileManager(QObject *recentFileManager)
     disconnect(d->recentFileManager);
     d->recentFileManager = qobject_cast<RecentFileManager*>(recentFileManager);
     connect(d->recentFileManager, SIGNAL(recentFilesListChanged()), SLOT(recentFilesListChanged()));
-    emit recentFileManagerChanged();
+    Q_EMIT recentFileManagerChanged();
 }
 
 void RecentImagesModel::recentFilesListChanged()

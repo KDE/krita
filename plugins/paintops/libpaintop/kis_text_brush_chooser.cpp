@@ -75,7 +75,7 @@ void KisTextBrushChooser::rebuildTextBrush()
     textBrush->setSpacing(inputSpacing->value());
     textBrush->updateBrush();
 
-    emit sigBrushChanged();
+    Q_EMIT sigBrushChanged();
 }
 
 void KisTextBrushChooser::setBrush(KisBrushSP brush)

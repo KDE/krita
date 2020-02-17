@@ -186,7 +186,7 @@ void KisNewsWidget::rssDataChanged()
     // see if we need to update our version, or we are on a dev version
     calculateVersionUpdateStatus();
 
-    emit newsDataChanged();
+    Q_EMIT newsDataChanged();
 }
 
 void KisNewsWidget::calculateVersionUpdateStatus()

@@ -340,7 +340,7 @@ void ParagraphBulletsNumbers::customCharButtonPressed()
 
 void ParagraphBulletsNumbers::recalcPreview()
 {
-    emit parStyleChanged();
+    Q_EMIT parStyleChanged();
 }
 
 void ParagraphBulletsNumbers::labelFollowedByIndexChanged(int index)
@@ -350,8 +350,8 @@ void ParagraphBulletsNumbers::labelFollowedByIndexChanged(int index)
     } else {
         widget.doubleSpinBox->setEnabled(true);
     }
-    emit parStyleChanged();
-    emit recalcPreview();
+    Q_EMIT parStyleChanged();
+    Q_EMIT recalcPreview();
 }
 
 void ParagraphBulletsNumbers::setImageCollection(KoImageCollection *imageCollection)
@@ -376,7 +376,7 @@ void ParagraphBulletsNumbers::selectListImage()
             if (m_imageCollection) {
                 m_data = m_imageCollection->createImageData(ba);
             }
-            emit recalcPreview();
+            Q_EMIT recalcPreview();
         }
     }
 }

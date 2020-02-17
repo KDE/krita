@@ -216,7 +216,7 @@ void KisCanvasResourceProvider::slotPatternActivated(KoResource * res)
     QVariant v;
     v.setValue<KoPattern*>(pattern);
     m_resourceManager->setResource(CurrentPattern, v);
-    emit sigPatternChanged(pattern);
+    Q_EMIT sigPatternChanged(pattern);
 }
 
 void KisCanvasResourceProvider::slotGradientActivated(KoResource *res)
@@ -226,7 +226,7 @@ void KisCanvasResourceProvider::slotGradientActivated(KoResource *res)
     QVariant v;
     v.setValue<KoAbstractGradient*>(gradient);
     m_resourceManager->setResource(CurrentGradient, v);
-    emit sigGradientChanged(gradient);
+    Q_EMIT sigGradientChanged(gradient);
 }
 
 
@@ -235,7 +235,7 @@ void KisCanvasResourceProvider::setBGColor(const KoColor& c)
     QVariant v;
     v.setValue(c);
     m_resourceManager->setResource(KoCanvasResourceProvider::BackgroundColor, v);
-    emit sigBGColorChanged(c);
+    Q_EMIT sigBGColorChanged(c);
 }
 
 void KisCanvasResourceProvider::setFGColor(const KoColor& c)
@@ -245,7 +245,7 @@ void KisCanvasResourceProvider::setFGColor(const KoColor& c)
     QVariant v;
     v.setValue(c);
     m_resourceManager->setResource(KoCanvasResourceProvider::ForegroundColor, v);
-    emit sigFGColorChanged(c);
+    Q_EMIT sigFGColorChanged(c);
 }
 
 void KisCanvasResourceProvider::slotSetFGColor(const KoColor& c)
@@ -263,7 +263,7 @@ void KisCanvasResourceProvider::slotNodeActivated(const KisNodeSP node)
     QVariant v;
     v.setValue(KisNodeWSP(node));
     m_resourceManager->setResource(CurrentKritaNode, v);
-    emit sigNodeChanged(currentNode());
+    Q_EMIT sigNodeChanged(currentNode());
 }
 
 
@@ -291,7 +291,7 @@ void KisCanvasResourceProvider::slotOnScreenResolutionChanged()
     qreal scaleX = zoomX / image->xRes();
     qreal scaleY = zoomY / image->yRes();
 
-    emit sigOnScreenResolutionChanged(scaleX, scaleY);
+    Q_EMIT sigOnScreenResolutionChanged(scaleX, scaleY);
 }
 
 void KisCanvasResourceProvider::slotCanvasResourceChanged(int key, const QVariant & res)
@@ -317,23 +317,23 @@ void KisCanvasResourceProvider::slotCanvasResourceChanged(int key, const QVarian
     switch (key) {
     case(KoCanvasResourceProvider::ForegroundColor):
         m_fGChanged = true;
-        emit sigFGColorChanged(res.value<KoColor>());
+        Q_EMIT sigFGColorChanged(res.value<KoColor>());
         break;
     case(KoCanvasResourceProvider::BackgroundColor):
-        emit sigBGColorChanged(res.value<KoColor>());
+        Q_EMIT sigBGColorChanged(res.value<KoColor>());
         break;
     case(CurrentPattern):
-        emit sigPatternChanged(static_cast<KoPattern *>(res.value<void *>()));
+        Q_EMIT sigPatternChanged(static_cast<KoPattern *>(res.value<void *>()));
         break;
     case(CurrentGradient):
-        emit sigGradientChanged(static_cast<KoAbstractGradient *>(res.value<void *>()));
+        Q_EMIT sigGradientChanged(static_cast<KoAbstractGradient *>(res.value<void *>()));
         break;
     case(CurrentKritaNode) :
-        emit sigNodeChanged(currentNode());
+        Q_EMIT sigNodeChanged(currentNode());
         break;
     case (Opacity):
     {
-        emit sigOpacityChanged(res.toDouble());
+        Q_EMIT sigOpacityChanged(res.toDouble());
     }
     default:
         ;
@@ -366,7 +366,7 @@ void KisCanvasResourceProvider::setEraserMode(bool value)
 void KisCanvasResourceProvider::slotPainting()
 {
     if (m_fGChanged && m_enablefGChange) {
-        emit sigFGColorUsed(fgColor());
+        Q_EMIT sigFGColorUsed(fgColor());
         m_fGChanged = false;
     }
 }
@@ -379,25 +379,25 @@ void KisCanvasResourceProvider::slotGamutMaskActivated(KoGamutMask *mask)
 
     m_resourceManager->setResource(GamutMaskActive, QVariant::fromValue(true));
 
-    emit sigGamutMaskChanged(mask);
+    Q_EMIT sigGamutMaskChanged(mask);
 }
 
 void KisCanvasResourceProvider::slotGamutMaskUnset()
 {
     m_resourceManager->setResource(GamutMaskActive, QVariant::fromValue(false));
     m_resourceManager->clearResource(CurrentGamutMask);
-    emit sigGamutMaskUnset();
+    Q_EMIT sigGamutMaskUnset();
 }
 
 void KisCanvasResourceProvider::slotGamutMaskPreviewUpdate()
 {
-    emit sigGamutMaskPreviewUpdate();
+    Q_EMIT sigGamutMaskPreviewUpdate();
 }
 
 void KisCanvasResourceProvider::slotGamutMaskDeactivate()
 {
     m_resourceManager->setResource(GamutMaskActive, QVariant::fromValue(false));
-    emit sigGamutMaskDeactivated();
+    Q_EMIT sigGamutMaskDeactivated();
 }
 
 void KisCanvasResourceProvider::slotResetEnableFGChange(bool b)
@@ -428,7 +428,7 @@ void KisCanvasResourceProvider::clearPerspectiveGrids()
 void KisCanvasResourceProvider::setMirrorHorizontal(bool mirrorHorizontal)
 {
     m_resourceManager->setResource(MirrorHorizontal, mirrorHorizontal);
-    emit mirrorModeChanged();
+    Q_EMIT mirrorModeChanged();
 }
 
 bool KisCanvasResourceProvider::mirrorHorizontal() const
@@ -439,7 +439,7 @@ bool KisCanvasResourceProvider::mirrorHorizontal() const
 void KisCanvasResourceProvider::setMirrorVertical(bool mirrorVertical)
 {
     m_resourceManager->setResource(MirrorVertical, mirrorVertical);
-    emit mirrorModeChanged();
+    Q_EMIT mirrorModeChanged();
 }
 
 bool KisCanvasResourceProvider::mirrorVertical() const
@@ -450,7 +450,7 @@ bool KisCanvasResourceProvider::mirrorVertical() const
 void KisCanvasResourceProvider::setMirrorHorizontalLock(bool isLocked)
 {
     m_resourceManager->setResource(MirrorHorizontalLock, isLocked);
-    emit mirrorModeChanged();
+    Q_EMIT mirrorModeChanged();
 }
 
 bool KisCanvasResourceProvider::mirrorHorizontalLock() {
@@ -460,7 +460,7 @@ bool KisCanvasResourceProvider::mirrorHorizontalLock() {
 void KisCanvasResourceProvider::setMirrorVerticalLock(bool isLocked)
 {
     m_resourceManager->setResource(MirrorVerticalLock, isLocked);
-    emit mirrorModeChanged();
+    Q_EMIT mirrorModeChanged();
 }
 
 
@@ -472,7 +472,7 @@ bool KisCanvasResourceProvider::mirrorVerticalHideDecorations() {
 void KisCanvasResourceProvider::setMirrorVerticalHideDecorations(bool hide)
 {
     m_resourceManager->setResource(MirrorVerticalHideDecorations, hide);
-    emit mirrorModeChanged();
+    Q_EMIT mirrorModeChanged();
 }
 
 
@@ -483,7 +483,7 @@ bool KisCanvasResourceProvider::mirrorHorizontalHideDecorations() {
 void KisCanvasResourceProvider::setMirrorHorizontalHideDecorations(bool hide)
 {
     m_resourceManager->setResource(MirrorHorizontalHideDecorations, hide);
-    emit mirrorModeChanged();
+    Q_EMIT mirrorModeChanged();
 }
 
 
@@ -492,11 +492,11 @@ bool KisCanvasResourceProvider::mirrorVerticalLock() {
 }
 
 void KisCanvasResourceProvider::mirrorVerticalMoveCanvasToCenter() {
-     emit moveMirrorVerticalCenter();
+     Q_EMIT moveMirrorVerticalCenter();
 }
 
 void KisCanvasResourceProvider::mirrorHorizontalMoveCanvasToCenter() {
-     emit moveMirrorHorizontalCenter();
+     Q_EMIT moveMirrorHorizontalCenter();
 }
 
 
@@ -553,11 +553,11 @@ bool KisCanvasResourceProvider::disablePressure() const
 
 void KisCanvasResourceProvider::notifyLoadingWorkspace(KisWorkspaceResource* workspace)
 {
-    emit sigLoadingWorkspace(workspace);
+    Q_EMIT sigLoadingWorkspace(workspace);
 }
 
 void KisCanvasResourceProvider::notifySavingWorkspace(KisWorkspaceResource* workspace)
 {
-    emit sigSavingWorkspace(workspace);
+    Q_EMIT sigSavingWorkspace(workspace);
 }
 

@@ -259,7 +259,7 @@ void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const
     if ((hasProperty(DefaultOutlineLevel)) && (!format.hasProperty(OutlineLevel))) {
        format.setProperty(OutlineLevel, defaultOutlineLevel());
     }
-    emit styleApplied(this);
+    Q_EMIT styleApplied(this);
     d->m_inUse = true;
 }
 
@@ -953,7 +953,7 @@ void KoParagraphStyle::setName(const QString &name)
         return;
     d->name = name;
     KoCharacterStyle::setName(name);
-    emit nameChanged(name);
+    Q_EMIT nameChanged(name);
 }
 
 int KoParagraphStyle::styleId() const
@@ -1980,7 +1980,7 @@ KoParagraphStyle::AutoSpace KoParagraphStyle::textAutoSpace() const
 void KoParagraphStyle::copyProperties(const KoParagraphStyle *style)
 {
     d->stylesPrivate = style->d->stylesPrivate;
-    setName(style->name()); // make sure we emit property change
+    setName(style->name()); // make sure we Q_EMIT property change
     KoCharacterStyle::copyProperties(style);
     d->parentStyle = style->d->parentStyle;
     d->defaultStyle = style->d->defaultStyle;

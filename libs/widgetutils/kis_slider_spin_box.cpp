@@ -912,7 +912,7 @@ void KisSliderSpinBox::setInternalValue(int _value, bool blockUpdateSignal)
     d->value = qBound(d->minimum, _value, d->maximum);
 
     if(!blockUpdateSignal) {
-        emit(valueChanged(value()));
+        Q_EMIT (valueChanged(value()));
     }
 }
 
@@ -1018,7 +1018,7 @@ void KisDoubleSliderSpinBox::setInternalValue(int _value, bool blockUpdateSignal
     d->value = qBound(d->minimum, _value, d->maximum);
 
     if(!blockUpdateSignal) {
-        emit(valueChanged(value()));
+        Q_EMIT (valueChanged(value()));
     }
 }
 

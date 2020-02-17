@@ -129,7 +129,7 @@ void KShortcutSchemesEditor::newScheme()
     m_schemesList->setCurrentIndex(m_schemesList->findText(newName));
     m_schemeFileLocations.insert(newName, newSchemeFileName);
     updateDeleteButton();
-    emit shortcutsSchemeChanged(newName);
+    Q_EMIT shortcutsSchemeChanged(newName);
 }
 
 void KShortcutSchemesEditor::deleteScheme()
@@ -145,7 +145,7 @@ Note that this will not remove any system wide shortcut schemes.", currentScheme
 
     m_schemesList->removeItem(m_schemesList->findText(currentScheme()));
     updateDeleteButton();
-    emit shortcutsSchemeChanged(currentScheme());
+    Q_EMIT shortcutsSchemeChanged(currentScheme());
 }
 
 QString KShortcutSchemesEditor::currentScheme()

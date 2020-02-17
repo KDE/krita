@@ -822,7 +822,7 @@ Q_SIGNALS:
      * about the node being run in a not-scheduler thread. If you need
      * information about the parent/siblings of the node connect
      * with Qt::DirectConnection, get needed information and then
-     * emit another Qt::AutoConnection signal to pass this information
+     * Q_EMIT another Qt::AutoConnection signal to pass this information
      * to your thread. See details of the implementation
      * in KisDummiesfacadeBase.
      */

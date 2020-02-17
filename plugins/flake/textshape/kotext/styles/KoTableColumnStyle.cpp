@@ -80,7 +80,7 @@ KoTableColumnStyle::~KoTableColumnStyle()
 void KoTableColumnStyle::copyProperties(const KoTableColumnStyle *style)
 {
     d->stylesPrivate = style->d->stylesPrivate;
-    setName(style->name()); // make sure we emit property change
+    setName(style->name()); // make sure we Q_EMIT property change
     d->parentStyle = style->d->parentStyle;
 }
 

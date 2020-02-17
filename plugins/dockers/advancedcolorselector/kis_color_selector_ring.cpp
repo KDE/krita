@@ -113,9 +113,9 @@ KoColor KisColorSelectorRing::selectColor(int x, int y)
     QPoint ringCoord = QPoint(x, y)-ringMiddle;
     qreal hue = std::atan2(qreal(ringCoord.y()), qreal(ringCoord.x()))+(M_PI);
     hue/=2.*M_PI;
-    emit paramChanged(hue, -1, -1, -1, -1, -1, -1, -1, -1);
+    Q_EMIT paramChanged(hue, -1, -1, -1, -1, -1, -1, -1, -1);
     m_lastHue=hue;
-    emit update();
+    Q_EMIT update();
 
     return m_parent->converter()->fromHsvF(hue, 1.0, 1.0);
 }
@@ -125,14 +125,14 @@ void KisColorSelectorRing::setColor(const KoColor &color)
     qreal h, s, v;
     m_parent->converter()->getHsvF(color, &h, &s, &v);
 
-    emit paramChanged(h, -1, -1, -1, -1, -1, -1, -1, -1);
+    Q_EMIT paramChanged(h, -1, -1, -1, -1, -1, -1, -1, -1);
 
     // selector keeps the position on the ring if hue is undefined (when saturation is 0)
     if (!qFuzzyCompare(s, 0.0)) {
         m_lastHue=h;
     }
 
-    emit update();
+    Q_EMIT update();
 
     KisColorSelectorComponent::setColor(color);
 }

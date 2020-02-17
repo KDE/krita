@@ -633,7 +633,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
         KisConfig::OcioColorManagementMode cm = cfg.ocioColorManagementMode();
 
         if (cm != KisConfig::INTERNAL) {
-            emit sigShowFloatingMessage(
+            Q_EMIT sigShowFloatingMessage(
                 i18n("OpenColorIO is disabled: image color space is not supported"), 5000, true);
         }
 

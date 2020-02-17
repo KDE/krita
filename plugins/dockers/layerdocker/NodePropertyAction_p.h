@@ -59,7 +59,7 @@ class NodeView::PropertyAction: public QAction
         {
             m_property.state = !m_property.state.toBool();
             setIcon( m_property.state.toBool() ? m_property.onIcon : m_property.offIcon );
-            emit toggled( m_property.state.toBool(), m_index, m_num );
+            Q_EMIT toggled( m_property.state.toBool(), m_index, m_num );
         }
 };
 

@@ -254,7 +254,7 @@ void KisCustomImageWidget::createImage()
     KisDocument *doc = createNewImage();
     if (doc) {
         doc->setModified(false);
-        emit m_openPane->documentSelected(doc);
+        Q_EMIT m_openPane->documentSelected(doc);
     }
 }
 

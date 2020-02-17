@@ -41,10 +41,10 @@ KisGuiContextCommand::~KisGuiContextCommand()
 
 void KisGuiContextCommand::undo()
 {
-    emit sigExecuteCommand(m_command.data(), true);
+    Q_EMIT sigExecuteCommand(m_command.data(), true);
 }
 
 void KisGuiContextCommand::redo()
 {
-    emit sigExecuteCommand(m_command.data(), false);
+    Q_EMIT sigExecuteCommand(m_command.data(), false);
 }

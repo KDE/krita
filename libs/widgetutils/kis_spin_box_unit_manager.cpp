@@ -423,7 +423,7 @@ void KisSpinBoxUnitManager::setUnitDimension(UnitDimension dimension)
     d->unitSymbol = referenceUnitSymbols[d->dim]; //Active dim is reference dim when just changed.
     d->conversionFactor = 1.0;
 
-    emit unitDimensionChanged(d->dim);
+    Q_EMIT unitDimensionChanged(d->dim);
 
 }
 
@@ -436,7 +436,7 @@ void KisSpinBoxUnitManager::setApparentUnitFromSymbol(QString pSymbol)
         return;
     }
 
-    emit unitAboutToChange();
+    Q_EMIT unitAboutToChange();
 
     QString newSymb = "";
 
@@ -518,10 +518,10 @@ default_identifier_conv_fact:
     qreal oldConversFact = d->conversionFactor;
 
     d->conversionFactor = conversFact;
-    emit conversionFactorChanged(d->conversionFactor, oldConversFact);
+    Q_EMIT conversionFactorChanged(d->conversionFactor, oldConversFact);
 
     d->unitSymbol = newSymb;
-    emit unitChanged(newSymb);
+    Q_EMIT unitChanged(newSymb);
 
 }
 
@@ -572,7 +572,7 @@ void KisSpinBoxUnitManager::newUnitSymbolToUnitIndex(QString symbol) {
     int id = getsUnitSymbolList().indexOf(symbol);
 
     if (id >= 0) {
-        emit unitChanged(id);
+        Q_EMIT unitChanged(id);
     }
 }
 
@@ -604,7 +604,7 @@ void KisSpinBoxUnitManager::recomputeConversionFactor() const
     d->conversionFactor = getConversionFactor(d->dim, d->unitSymbol);
 
     if (oldConversionFactor != d->conversionFactor) {
-        emit conversionFactorChanged(d->conversionFactor, oldConversionFactor);
+        Q_EMIT conversionFactorChanged(d->conversionFactor, oldConversionFactor);
     }
 }
 
@@ -619,7 +619,7 @@ void KisSpinBoxUnitManager::recomputeConvesrionConstant() const
     d->conversionConstant = getConversionConstant(d->dim, d->unitSymbol);
 
     if (oldConversionConstant != d->conversionConstant) {
-        emit conversionConstantChanged(d->conversionConstant, oldConversionConstant);
+        Q_EMIT conversionConstantChanged(d->conversionConstant, oldConversionConstant);
     }
 }
 

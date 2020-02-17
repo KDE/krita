@@ -71,7 +71,7 @@ void KisMultiSensorsSelector::setCurrent(KisDynamicSensorSP _sensor)
     if (!sensor) {
         sensor = d->model->getSensor(d->model->index(0, 0));
     }
-    emit(highlightedSensorChanged(sensor));
+    Q_EMIT (highlightedSensorChanged(sensor));
 }
 
 KisDynamicSensorSP KisMultiSensorsSelector::currentHighlighted()
@@ -88,7 +88,7 @@ void KisMultiSensorsSelector::sensorActivated(const QModelIndex& index)
         if (d->currentConfigWidget) {
             d->layout->addWidget(d->currentConfigWidget);
         }
-        emit(highlightedSensorChanged(sensor));
+        Q_EMIT (highlightedSensorChanged(sensor));
     }
 }
 

@@ -356,14 +356,14 @@ public Q_SLOTS:
      * <p>There is one case where two tools are activated at the same.  This is the case
      * where one tool delegates work to another temporarily.  For example, while shift is
      * being held down.  The second tool will get activated with temporary=true and
-     * it should emit done() when the state that activated it is ended.
+     * it should Q_EMIT done() when the state that activated it is ended.
      * <p>One of the important tasks of activate is to call useCursor()
      *
      * @param shapes the set of shapes that are selected or suggested for editing by a
      *      selected shape for the tool to work on.  Not all shapes will be meant for this
      *      tool.
      * @param toolActivation if TemporaryActivation, this tool is only temporarily activated
-     *                  and should emit done when it is done.
+     *                  and should Q_EMIT done when it is done.
      * @see deactivate()
      */
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);

@@ -97,7 +97,7 @@ void Theme::setId(const QString& newValue)
         d->id = newValue;
         const QString themeQmlPath = themePath(d->id);
         d->basePath = QFileInfo(themeQmlPath).dir().absolutePath();
-        emit idChanged();
+        Q_EMIT idChanged();
     }
 }
 
@@ -110,7 +110,7 @@ void Theme::setName(const QString& newValue)
 {
     if(newValue != d->name) {
         d->name = newValue;
-        emit nameChanged();
+        Q_EMIT nameChanged();
     }
 }
 
@@ -123,7 +123,7 @@ void Theme::setColors(const QVariantMap& newValue)
 {
     if(newValue != d->colors) {
         d->colors = newValue;
-        emit colorsChanged();
+        Q_EMIT colorsChanged();
     }
 }
 
@@ -177,7 +177,7 @@ void Theme::setSizes(const QVariantMap& newValue)
 {
     if(newValue != d->sizes) {
         d->sizes = newValue;
-        emit sizesChanged();
+        Q_EMIT sizesChanged();
     }
 }
 
@@ -200,7 +200,7 @@ void Theme::setFonts(const QVariantMap& newValue)
 
         d->fontMap.clear();
 
-        emit fontsChanged();
+        Q_EMIT fontsChanged();
     }
 }
 
@@ -246,7 +246,7 @@ void Theme::setFontPath(const QString& newValue)
         d->fontPath = newValue;
         d->fontsAdded = false;
 
-        emit fontPathChanged();
+        Q_EMIT fontPathChanged();
     }
 }
 
@@ -260,7 +260,7 @@ void Theme::setIconPath(const QString& newValue)
 {
     if(newValue != d->iconPath) {
         d->iconPath = newValue;
-        emit iconPathChanged();
+        Q_EMIT iconPathChanged();
     }
 }
 
@@ -283,7 +283,7 @@ void Theme::setImagePath(const QString& newValue)
 {
     if(newValue != d->imagePath) {
         d->imagePath = newValue;
-        emit imagePathChanged();
+        Q_EMIT imagePathChanged();
     }
 }
 
@@ -323,7 +323,7 @@ bool Theme::eventFilter(QObject* target, QEvent* event)
 {
     if(target == qApp->activeWindow() && target->inherits("QMainWindow") && event->type() == QEvent::Resize) {
         d->rebuildFontCache();
-        emit fontCacheRebuilt();
+        Q_EMIT fontCacheRebuilt();
     }
 
     return QObject::eventFilter(target, event);

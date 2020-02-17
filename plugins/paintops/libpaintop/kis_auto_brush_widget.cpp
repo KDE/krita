@@ -195,7 +195,7 @@ void KisAutoBrushWidget::paramChanged()
 
     drawBrushPreviewArea();
 
-    emit sigBrushChanged();
+    Q_EMIT sigBrushChanged();
 }
 
 void KisAutoBrushWidget::drawBrushPreviewArea() {

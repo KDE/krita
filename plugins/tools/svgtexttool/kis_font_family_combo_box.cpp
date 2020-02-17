@@ -306,7 +306,7 @@ void KisFontComboBoxes::fontFamilyChanged()
 
 void KisFontComboBoxes::fontChange()
 {
-    emit fontChanged(currentFont(10).toString());
+    Q_EMIT fontChanged(currentFont(10).toString());
 }
 
 void KisFontComboBoxes::setInitialized()

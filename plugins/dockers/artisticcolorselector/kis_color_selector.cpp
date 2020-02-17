@@ -551,8 +551,8 @@ void KisColorSelector::slotUpdateColorAndPreview(QPair<KisColor, Acs::ColorRole>
                << "X:" << m_selectedColor.getX();
 #endif
 
-    if (selectAsFgColor) { emit sigFgColorChanged(m_selectedColor); }
-    else                 { emit sigBgColorChanged(m_selectedColor); }
+    if (selectAsFgColor) { Q_EMIT sigFgColorChanged(m_selectedColor); }
+    else                 { Q_EMIT sigBgColorChanged(m_selectedColor); }
 }
 
 void KisColorSelector::drawRing(QPainter& painter, KisColorSelector::ColorRing& ring, const QRect& rect)

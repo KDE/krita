@@ -88,7 +88,7 @@ void KisLayerStyleAngleSelector::slotDialAngleChanged(int value)
     }
 
     ui->intAngle->setValue(normalizedValue);
-    emit valueChanged(normalizedValue);
+    Q_EMIT valueChanged(normalizedValue);
     emitChangeSignals();
 }
 
@@ -99,7 +99,7 @@ void KisLayerStyleAngleSelector::slotIntAngleChanged(int value)
     int angleDialValue = value + m_dialValueShift;
     ui->dialAngle->setValue(angleDialValue);
 
-    emit valueChanged(value);
+    Q_EMIT valueChanged(value);
     emitChangeSignals();
 }
 
@@ -111,8 +111,8 @@ void KisLayerStyleAngleSelector::slotGlobalLightToggled()
 void KisLayerStyleAngleSelector::emitChangeSignals()
 {
     if (useGlobalLight()) {
-        emit globalAngleChanged(value());
+        Q_EMIT globalAngleChanged(value());
     }
 
-    emit configChanged();
+    Q_EMIT configChanged();
 }

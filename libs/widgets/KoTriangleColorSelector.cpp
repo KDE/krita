@@ -280,8 +280,8 @@ inline qreal pow2(qreal v)
 void KoTriangleColorSelector::tellColorChanged()
 {
     d->updateAllowed = false;
-    emit(sigNewColor(getCurrentColor()));
-    emit(colorChanged(getCurrentColor().toQColor()));
+    Q_EMIT (sigNewColor(getCurrentColor()));
+    Q_EMIT (colorChanged(getCurrentColor().toQColor()));
     d->updateAllowed = true;
 }
 

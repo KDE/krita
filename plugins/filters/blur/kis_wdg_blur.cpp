@@ -101,7 +101,7 @@ void KisWdgBlur::spinBoxHalfWidthChanged(int v)
             widget()->intAngle->setEnabled(false);
         else
             widget()->intAngle->setEnabled(true);*/
-    emit sigConfigurationItemChanged();
+    Q_EMIT sigConfigurationItemChanged();
 }
 
 void KisWdgBlur::spinBoxHalfHeightChanged(int v)
@@ -113,6 +113,6 @@ void KisWdgBlur::spinBoxHalfHeightChanged(int v)
             widget()->intAngle->setEnabled(false);
         else
             widget()->intAngle->setEnabled(true);*/
-    emit sigConfigurationItemChanged();
+    Q_EMIT sigConfigurationItemChanged();
 }
 

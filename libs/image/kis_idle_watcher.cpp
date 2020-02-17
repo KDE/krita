@@ -121,7 +121,7 @@ void KisIdleWatcher::slotIdleCheckTick()
     if (isIdle()) {
         if (m_d->idleCheckCounter >= Private::IDLE_CHECK_COUNT) {
             stopIdleCheck();
-            emit startedIdleMode();
+            Q_EMIT startedIdleMode();
         } else {
             m_d->idleCheckCounter++;
             m_d->idleCheckTimer.start();

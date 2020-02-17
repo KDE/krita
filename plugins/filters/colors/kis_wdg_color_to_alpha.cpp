@@ -80,7 +80,7 @@ void KisWdgColorToAlpha::slotCustomColorSelected(const KoColor &color)
 {
     KoColor c(color, KoColorSpaceRegistry::instance()->rgb8());
     m_widget->colorSelector->slotSetColor(color);
-    emit sigConfigurationItemChanged();
+    Q_EMIT sigConfigurationItemChanged();
 }
 
 void KisWdgColorToAlpha::setConfiguration(const KisPropertiesConfigurationSP config)

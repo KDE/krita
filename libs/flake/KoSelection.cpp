@@ -236,7 +236,7 @@ KoShape *KoSelection::firstSelectedShape() const
 void KoSelection::setActiveLayer(KoShapeLayer *layer)
 {
     d->activeLayer = layer;
-    emit currentLayerChanged(layer);
+    Q_EMIT currentLayerChanged(layer);
 }
 
 KoShapeLayer* KoSelection::activeLayer() const

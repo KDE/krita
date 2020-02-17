@@ -144,7 +144,7 @@ KisToolFreehandHelper::KisToolFreehandHelper(KisPaintingInformationBuilder *info
                 });
     m_d->stabilizerDelayedPaintHelper.setUpdateOutlineCallback(
                 [this]() {
-                    emit requestExplicitUpdateOutline();
+                    Q_EMIT requestExplicitUpdateOutline();
                 });
 }
 
@@ -807,7 +807,7 @@ void KisToolFreehandHelper::stabilizerPollAndPaint()
     if (m_d->stabilizerDelayedPaintHelper.running()) {
         m_d->stabilizerDelayedPaintHelper.update(delayedPaintTodoItems);
     } else {
-        emit requestExplicitUpdateOutline();
+        Q_EMIT requestExplicitUpdateOutline();
     }
 }
 

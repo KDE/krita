@@ -121,7 +121,7 @@ void FileSystemModel::setPath(const QString& path)
             beginInsertRows(QModelIndex(), 0, d->list.count() - 1);
             endInsertRows();
         }
-        emit pathChanged();
+        Q_EMIT pathChanged();
     }
 }
 

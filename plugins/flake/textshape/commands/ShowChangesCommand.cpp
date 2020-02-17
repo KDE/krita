@@ -63,7 +63,7 @@ void ShowChangesCommand::undo()
     foreach (KUndo2Command *shapeCommand, m_shapeCommands) {
         shapeCommand->undo();
     }
-    emit toggledShowChange(!m_showChanges);
+    Q_EMIT toggledShowChange(!m_showChanges);
     enableDisableStates(!m_showChanges);
 }
 
@@ -75,7 +75,7 @@ void ShowChangesCommand::redo()
         foreach (KUndo2Command *shapeCommand, m_shapeCommands) {
             shapeCommand->redo();
         }
-        emit toggledShowChange(m_showChanges);
+        Q_EMIT toggledShowChange(m_showChanges);
         enableDisableStates(m_showChanges);
     } else {
         m_first = false;

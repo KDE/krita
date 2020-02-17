@@ -54,7 +54,7 @@ class QSize;
  * restore the last used one at next restart.
  *
  * The specialAspectMode toggle is only a UI element. It does nothing
- * except emit the aspectModeChanged signal.
+ * except Q_EMIT the aspectModeChanged signal.
  *
  */
 class KRITAWIDGETS_EXPORT KoZoomController : public QObject {

@@ -238,7 +238,7 @@ void KHelpMenu::appHelpActivated()
 void KHelpMenu::aboutApplication()
 {
     if (receivers(SIGNAL(showAboutApplication())) > 0) {
-        emit showAboutApplication();
+        Q_EMIT showAboutApplication();
     }
 }
 

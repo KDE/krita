@@ -192,8 +192,8 @@ void KisPart::addDocument(KisDocument *document)
     Q_ASSERT(document);
     if (!d->documents.contains(document)) {
         d->documents.append(document);
-        emit documentOpened('/'+objectName());
-        emit sigDocumentAdded(document);
+        Q_EMIT documentOpened('/'+objectName());
+        Q_EMIT sigDocumentAdded(document);
         connect(document, SIGNAL(sigSavingFinished()), SLOT(slotDocumentSaved()));
     }
 }
@@ -218,8 +218,8 @@ int KisPart::documentCount() const
 void KisPart::removeDocument(KisDocument *document)
 {
     d->documents.removeAll(document);
-    emit documentClosed('/'+objectName());
-    emit sigDocumentRemoved(document->url().toLocalFile());
+    Q_EMIT documentClosed('/'+objectName());
+    Q_EMIT sigDocumentRemoved(document->url().toLocalFile());
     document->deleteLater();
 }
 
@@ -228,7 +228,7 @@ KisMainWindow *KisPart::createMainWindow(QUuid id)
     KisMainWindow *mw = new KisMainWindow(id);
     dbgUI <<"mainWindow" << (void*)mw << "added to view" << this;
     d->mainWindows.append(mw);
-    emit sigWindowAdded(mw);
+    Q_EMIT sigWindowAdded(mw);
     return mw;
 }
 
@@ -270,7 +270,7 @@ void KisPart::addView(KisView *view)
         d->views.append(view);
     }
 
-    emit sigViewAdded(view);
+    Q_EMIT sigViewAdded(view);
 }
 
 void KisPart::removeView(KisView *view)
@@ -285,7 +285,7 @@ void KisPart::removeView(KisView *view)
      */
     KIS_ASSERT_RECOVER_RETURN(!view->mainWindow()->hackIsSaving());
 
-    emit sigViewRemoved(view);
+    Q_EMIT sigViewRemoved(view);
 
     QPointer<KisDocument> doc = view->document();
     d->views.removeAll(view);
@@ -377,7 +377,7 @@ bool KisPart::closeSession(bool keepWindows)
 void KisPart::slotDocumentSaved()
 {
     KisDocument *doc = qobject_cast<KisDocument*>(sender());
-    emit sigDocumentSaved(doc->url().toLocalFile());
+    Q_EMIT sigDocumentSaved(doc->url().toLocalFile());
 }
 
 void KisPart::removeMainWindow(KisMainWindow *mainWindow)

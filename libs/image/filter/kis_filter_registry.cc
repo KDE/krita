@@ -68,7 +68,7 @@ void KisFilterRegistry::add(KisFilterSP item)
 void KisFilterRegistry::add(const QString &id, KisFilterSP item)
 {
     KoGenericRegistry<KisFilterSP>::add(id, item);
-    emit(filterAdded(id));
+    Q_EMIT (filterAdded(id));
 }
 
 KisFilterConfigurationSP KisFilterRegistry::cloneConfiguration(const KisFilterConfigurationSP kfc)

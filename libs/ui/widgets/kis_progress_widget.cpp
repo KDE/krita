@@ -72,7 +72,7 @@ void KisProgressWidget::cancel()
     Q_FOREACH (KoProgressUpdater* updater, m_activeUpdaters) {
         updater->cancel();
     }
-    emit sigCancellationRequested();
+    Q_EMIT sigCancellationRequested();
 }
 
 void KisProgressWidget::correctVisibility(int progressValue)

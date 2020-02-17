@@ -43,18 +43,18 @@ void ChangeTrackingOptionsWidget::toggleRecordChanges(bool isChecked)
 void ChangeTrackingOptionsWidget::recordChangesChanged(int isChecked)
 {
     m_tool->toggleRecordChanges(isChecked);
-    emit doneWithFocus();
+    Q_EMIT doneWithFocus();
 }
 
 void ChangeTrackingOptionsWidget::showChangesChanged(int isChecked)
 {
     m_tool->toggleShowChanges(isChecked);
-    emit doneWithFocus();
+    Q_EMIT doneWithFocus();
 }
 
 void ChangeTrackingOptionsWidget::configureSettingsPressed()
 {
     m_tool->configureChangeTracking();
-    emit doneWithFocus();
+    Q_EMIT doneWithFocus();
 }
 

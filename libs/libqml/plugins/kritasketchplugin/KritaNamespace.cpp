@@ -64,7 +64,7 @@ QObject* KritaNamespace::window() const
 void KritaNamespace::setWindow(QObject* window)
 {
     d->window = window;
-    emit windowChanged();
+    Q_EMIT windowChanged();
 }
 
 QObject* KritaNamespace::virtualKeyboardController() const

@@ -147,35 +147,35 @@ void CharacterHighlighting::capitalisationChanged(int item)
     if (m_uniqueFormat || widget.capitalizationList->currentIndex() >= 0) {
         switch (item) {
         case 0:
-            emit capitalizationChanged(QFont::MixedCase);
+            Q_EMIT capitalizationChanged(QFont::MixedCase);
             m_mixedCaseInherited = false;
             break;
         case 1:
-            emit capitalizationChanged(QFont::SmallCaps);
+            Q_EMIT capitalizationChanged(QFont::SmallCaps);
             m_smallCapsInherited = false;
             break;
         case 2:
-            emit capitalizationChanged(QFont::AllUppercase);
+            Q_EMIT capitalizationChanged(QFont::AllUppercase);
             m_allUpperCaseInherited = false;
             break;
         case 3:
-            emit capitalizationChanged(QFont::AllLowercase);
+            Q_EMIT capitalizationChanged(QFont::AllLowercase);
             m_allLowerCaseInherited = false;
             break;
         case 4:
-            emit capitalizationChanged(QFont::Capitalize);
+            Q_EMIT capitalizationChanged(QFont::Capitalize);
             m_capitalizInherited = false;
             break;
         }
     }
-    emit charStyleChanged();
+    Q_EMIT charStyleChanged();
 }
 
 void CharacterHighlighting::positionChanged(int item)
 {
     Q_UNUSED(item);
     m_positionInherited = false;
-    emit charStyleChanged();
+    Q_EMIT charStyleChanged();
 }
 
 void CharacterHighlighting::underlineTypeChanged(int item)
@@ -183,26 +183,26 @@ void CharacterHighlighting::underlineTypeChanged(int item)
     widget.underlineLineStyle->setEnabled(item > 0);
     widget.underlineColor->setEnabled(item > 0);
     m_underlineInherited = false;
-    emit underlineChanged(indexToLineType(item), indexToLineStyle(widget.underlineLineStyle->currentIndex()), widget.underlineColor->color());
-    emit charStyleChanged();
+    Q_EMIT underlineChanged(indexToLineType(item), indexToLineStyle(widget.underlineLineStyle->currentIndex()), widget.underlineColor->color());
+    Q_EMIT charStyleChanged();
 }
 
 void CharacterHighlighting::underlineStyleChanged(int item)
 {
     if (widget.underlineStyle->currentIndex()) {
-        emit underlineChanged(indexToLineType(widget.underlineStyle->currentIndex()), indexToLineStyle(item), widget.underlineColor->color());
+        Q_EMIT underlineChanged(indexToLineType(widget.underlineStyle->currentIndex()), indexToLineStyle(item), widget.underlineColor->color());
     }
     m_underlineInherited = false;
-    emit charStyleChanged();
+    Q_EMIT charStyleChanged();
 }
 
 void CharacterHighlighting::underlineColorChanged(QColor color)
 {
     if (widget.underlineStyle->currentIndex()) {
-        emit underlineChanged(indexToLineType(widget.underlineStyle->currentIndex()), indexToLineStyle(widget.underlineLineStyle->currentIndex()), color);
+        Q_EMIT underlineChanged(indexToLineType(widget.underlineStyle->currentIndex()), indexToLineStyle(widget.underlineLineStyle->currentIndex()), color);
     }
     m_underlineInherited = false;
-    emit charStyleChanged();
+    Q_EMIT charStyleChanged();
 }
 
 void CharacterHighlighting::strikethroughTypeChanged(int item)
@@ -210,74 +210,74 @@ void CharacterHighlighting::strikethroughTypeChanged(int item)
     widget.strikethroughLineStyle->setEnabled(item > 0);
     widget.strikethroughColor->setEnabled(item > 0);
     m_strikeoutInherited = false;
-    emit strikethroughChanged(indexToLineType(item), indexToLineStyle(widget.strikethroughLineStyle->currentIndex()), widget.strikethroughColor->color());
-    emit charStyleChanged();
+    Q_EMIT strikethroughChanged(indexToLineType(item), indexToLineStyle(widget.strikethroughLineStyle->currentIndex()), widget.strikethroughColor->color());
+    Q_EMIT charStyleChanged();
 }
 
 void CharacterHighlighting::strikethroughStyleChanged(int item)
 {
     if (widget.strikethroughType->currentIndex()) {
-        emit strikethroughChanged(indexToLineType(widget.strikethroughType->currentIndex()), indexToLineStyle(item), widget.strikethroughColor->color());
+        Q_EMIT strikethroughChanged(indexToLineType(widget.strikethroughType->currentIndex()), indexToLineStyle(item), widget.strikethroughColor->color());
     }
     m_strikeoutInherited = false;
-    emit charStyleChanged();
+    Q_EMIT charStyleChanged();
 }
 
 void CharacterHighlighting::strikethroughColorChanged(QColor color)
 {
     if (widget.strikethroughType->currentIndex()) {
-        emit strikethroughChanged(indexToLineType(widget.strikethroughType->currentIndex()), indexToLineStyle(widget.strikethroughLineStyle->currentIndex()), color);
+        Q_EMIT strikethroughChanged(indexToLineType(widget.strikethroughType->currentIndex()), indexToLineStyle(widget.strikethroughLineStyle->currentIndex()), color);
     }
     m_strikeoutInherited = false;
-    emit charStyleChanged();
+    Q_EMIT charStyleChanged();
 }
 
 void CharacterHighlighting::backgroundColorChanged()
 {
     m_backgroundColorReset = false; m_backgroundColorChanged = true;
     if (widget.enableBackground->isChecked() && widget.backgroundColor->color().isValid()) {
-        emit backgroundColorChanged(widget.backgroundColor->color());
+        Q_EMIT backgroundColorChanged(widget.backgroundColor->color());
     }
-    emit charStyleChanged();
+    Q_EMIT charStyleChanged();
 }
 
 void CharacterHighlighting::textColorChanged()
 {
     m_textColorReset = false; m_textColorChanged = true;
     if (widget.enableText->isChecked() && widget.textColor->color().isValid()) {
-        emit textColorChanged(widget.textColor->color());
+        Q_EMIT textColorChanged(widget.textColor->color());
     }
-    emit charStyleChanged();
+    Q_EMIT charStyleChanged();
 }
 
 void CharacterHighlighting::textToggled(bool state)
 {
     widget.textColor->setEnabled(state);
     widget.resetTextColor->setEnabled(state);
-    emit charStyleChanged();
+    Q_EMIT charStyleChanged();
 }
 
 void CharacterHighlighting::backgroundToggled(bool state)
 {
     widget.backgroundColor->setEnabled(state);
     widget.resetBackground->setEnabled(state);
-    emit charStyleChanged();
+    Q_EMIT charStyleChanged();
 }
 
 void CharacterHighlighting::clearTextColor()
 {
     widget.textColor->setColor(widget.textColor->defaultColor());
     m_textColorReset = true;
-    emit textColorChanged(QColor(Qt::black));
-    emit charStyleChanged();
+    Q_EMIT textColorChanged(QColor(Qt::black));
+    Q_EMIT charStyleChanged();
 }
 
 void CharacterHighlighting::clearBackgroundColor()
 {
     widget.backgroundColor->setColor(widget.backgroundColor->defaultColor());
     m_backgroundColorReset = true;
-    emit backgroundColorChanged(QColor(Qt::transparent));
-    emit charStyleChanged();
+    Q_EMIT backgroundColorChanged(QColor(Qt::transparent));
+    Q_EMIT charStyleChanged();
 }
 
 QStringList CharacterHighlighting::capitalizationList()

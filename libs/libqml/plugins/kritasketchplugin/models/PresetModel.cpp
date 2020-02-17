@@ -160,7 +160,7 @@ void PresetModel::setView(QObject* newView)
         connect(d->view->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
                 this, SLOT(resourceChanged(int,QVariant)));
     }
-    emit viewChanged();
+    Q_EMIT viewChanged();
 }
 
 QString PresetModel::currentPreset() const
@@ -210,7 +210,7 @@ void PresetModel::resourceChanged(int /*key*/, const QVariant& /*v*/)
         if (preset && d->currentPreset != preset->name())
         {
             d->currentPreset = preset->name();
-            emit currentPresetChanged();
+            Q_EMIT currentPresetChanged();
         }
     }
 }

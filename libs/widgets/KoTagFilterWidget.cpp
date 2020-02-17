@@ -124,11 +124,11 @@ void KoTagFilterWidget::clear()
 void KoTagFilterWidget::onTextChanged(const QString& lineEditText)
 {
     d->tagSearchSaveButton->setEnabled(!lineEditText.isEmpty());
-    emit filterTextChanged(lineEditText);
+    Q_EMIT filterTextChanged(lineEditText);
 }
 
 void KoTagFilterWidget::onSaveButtonClicked()
 {
-    emit saveButtonClicked();
+    Q_EMIT saveButtonClicked();
     clear();
 }

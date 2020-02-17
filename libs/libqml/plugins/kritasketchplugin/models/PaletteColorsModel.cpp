@@ -113,7 +113,7 @@ void PaletteColorsModel::setColorSet(QObject *newColorSet)
     d->colorSet = qobject_cast<KoColorSet*>(newColorSet);
     beginResetModel();
     endResetModel();
-    emit colorSetChanged();
+    Q_EMIT colorSetChanged();
 }
 
 QObject* PaletteColorsModel::colorSet() const
@@ -130,7 +130,7 @@ QObject* PaletteColorsModel::view() const
 void PaletteColorsModel::setView(QObject* newView)
 {
     d->view = qobject_cast<KisViewManager*>( newView );
-    emit viewChanged();
+    Q_EMIT viewChanged();
 }
 
 void PaletteColorsModel::activateColor(int index, bool /*setBackgroundColor*/)
@@ -144,7 +144,7 @@ void PaletteColorsModel::activateColor(int index, bool /*setBackgroundColor*/)
             d->view->resourceProvider()->setBGColor(d->colorSet->getColorGlobal(index).color());
         else
             d->view->resourceProvider()->setFGColor( d->colorSet->getColorGlobal(index).color());
-        emit colorChanged(d->colorSet->getColorGlobal(index).color().toQColor(), setBackgroundColor);
+        Q_EMIT colorChanged(d->colorSet->getColorGlobal(index).color().toQColor(), setBackgroundColor);
         */
     }
 }

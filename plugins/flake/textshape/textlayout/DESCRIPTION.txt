@@ -31,7 +31,7 @@ A root area can be marked as dirty in several ways:
  * when any calls setDirty() on a root area (eg a shape does this when changing
    size og having collisions
 
-When a root area is marked as dirty it asks the KoTextDocumentLayout to emit a signal (layoutIsDirty) which other people can react to. The plain TextShape just connects that signal to KoTextDocumentLayout::scheduleLayout(). This will schedule a layout for later using QTimer::singleShot. If multiple layouts are scheduled they will be compressed to one single layout run.
+When a root area is marked as dirty it asks the KoTextDocumentLayout to Q_EMIT a signal (layoutIsDirty) which other people can react to. The plain TextShape just connects that signal to KoTextDocumentLayout::scheduleLayout(). This will schedule a layout for later using QTimer::singleShot. If multiple layouts are scheduled they will be compressed to one single layout run.
 
 The KoTextDocumentLayout class provides the two methods layout() and scheduleLayout(). The first allows synchronous and the second asynchronous layouting.
 

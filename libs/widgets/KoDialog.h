@@ -57,7 +57,7 @@ class KoDialogPrivate;
  * for a central KDE control tool. The following buttons are available:
  * OK, Cancel/Close, Apply/Try, Default, Help and three user definable
  * buttons: User1, User2 and User3. You must specify the text of the UserN
- * buttons. Each button emit a signal, so you can choose to connect that signal.
+ * buttons. Each button Q_EMIT a signal, so you can choose to connect that signal.
  *
  * The default action of the Help button will open the help system if you have
  * provided a path to the help text.

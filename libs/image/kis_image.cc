@@ -368,7 +368,7 @@ void KisImage::copyFromImageImpl(const KisImage &rhs, int policy)
     KIS_ASSERT_RECOVER_RETURN((policy & REPLACE) != (policy & CONSTRUCT));
 
     // only when replacing do we need to Q_EMIT signals
-#define EMIT_IF_NEEDED if (!(policy & REPLACE)) {} else emit
+#define EMIT_IF_NEEDED if (!(policy & REPLACE)) {} else Q_EMIT
 
     if (policy & REPLACE) { // if we are constructing the image, these are already set
         if (m_d->width != rhs.width() || m_d->height != rhs.height()) {

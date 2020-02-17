@@ -517,44 +517,6 @@ QVector<KisTagSP> KisTagModel::tagsForResource(int resourceId) const
     return tags;
 }
 
-QVector<KoResourceSP> KisTagModel::resourcesForTag(int tagId) const
-{
-    bool r = d->resourcesForTagQuery.prepare("SELECT DISTINCT resources.id\n"
-                                             "FROM   resources\n"
-                                             ",      resource_tags\n"
-                                             ",      storages\n"
-                                             ",      resource_types\n"
-                                             "WHERE  resources.id = resource_tags.resource_id\n"                // join resources + resource_tags by resource_id
-                                             "AND    resources.resource_type_id = resource_types.id\n" // join with resource types via resource type id
-                                             "AND    resources.storage_id = storages.id\n"         // join with storages via storage id
-                                             "AND    resource_tags.tag_id = :tag_id\n"     // must have the tag
-                                             "AND    resource_types.name = :resource_type\n"       // the type must match the current type
-                                             "AND    resources.status = 1\n"         // must be active itself
-                                             "AND    storages.active = 1");          // must be from active storage
-    if (!r)  {
-        qWarning() << "Could not prepare ResourcesForTag query" << d->resourcesForTagQuery.lastError();
-    }
-
-    d->resourcesForTagQuery.bindValue(":tag_id", tagId);
-    d->resourcesForTagQuery.bindValue(":resource_type", d->resourceType);
-
-    r = d->resourcesForTagQuery.exec();
-    if (!r) {
-        qWarning() << "Could not select resources for tag " << tagId << d->resourcesForTagQuery.lastError() << d->resourcesForTagQuery.boundValues();
-    }
-
-    QVector<KoResourceSP> resources;
-    qDebug() << "it's around: " << d->resourcesForTagQuery.size() << " resources for " << d->resourceType;
-    while (d->resourcesForTagQuery.next()) {
-        qDebug() << "KisTagModel::resourcesForTag(int tagId): ### query: " << d->resourcesForTagQuery.value("id").toInt();
-        KoResourceSP resource = KisResourceLocator::instance()->resourceForId(d->resourcesForTagQuery.value("id").toInt());
-        resources << resource;
-    }
-
-    return resources;
-
-}
-
 KisTagSP KisTagModel::tagByUrl(const QString& tagUrl) const
 {
     if (tagUrl.isEmpty()) {

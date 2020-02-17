@@ -328,14 +328,6 @@ public:
         return m_resourceModel->tagsForResource(resource->resourceId());
     }
 
-    QVector<KoResourceSP> resourcesForTag(KisTagSP tag) const
-    {
-        if (tag.isNull()) {
-            return QVector<KoResourceSP>();
-        }
-        return m_tagModel->resourcesForTag(tag->id());
-    }
-
 protected:
 
     void notifyResourceAdded(QSharedPointer<T> resource)

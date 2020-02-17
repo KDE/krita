@@ -514,11 +514,11 @@ void KisPart::openTemplate(const QUrl &url)
     qApp->restoreOverrideCursor();
 }
 
-void KisPart::addRecentURLToAllMainWindows(QUrl url)
+void KisPart::addRecentURLToAllMainWindows(QUrl url, QUrl oldUrl)
 {
     // Add to recent actions list in our mainWindows
     Q_FOREACH (KisMainWindow *mainWindow, d->mainWindows) {
-        mainWindow->addRecentURL(url);
+        mainWindow->addRecentURL(url, oldUrl);
     }
 }
 

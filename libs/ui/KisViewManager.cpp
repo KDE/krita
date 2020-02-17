@@ -986,9 +986,11 @@ void KisViewManager::slotSaveIncremental()
         QMessageBox::critical(mainWindow(), i18nc("@title:window", "Couldn't save incremental version"), i18n("Alternative names exhausted, try manually saving with a higher number"));
         return;
     }
+    QUrl newUrl = QUrl::fromUserInput(fileName);
     document()->setFileBatchMode(true);
-    document()->saveAs(QUrl::fromUserInput(fileName), document()->mimeType(), true);
+    document()->saveAs(newUrl, document()->mimeType(), true);
     document()->setFileBatchMode(false);
+    KisPart::instance()->addRecentURLToAllMainWindows(newUrl, document()->url());
 
     if (mainWindow()) {
         mainWindow()->updateCaption();

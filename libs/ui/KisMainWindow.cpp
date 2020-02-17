@@ -747,7 +747,7 @@ void KisMainWindow::setReadWrite(bool readwrite)
     updateCaption();
 }
 
-void KisMainWindow::addRecentURL(const QUrl &url)
+void KisMainWindow::addRecentURL(const QUrl &url, const QUrl &oldUrl)
 {
     // Add entry to recent documents list
     // (call coming from KisDocument because it must work with cmd line, template dlg, file/open, etc.)
@@ -771,6 +771,9 @@ void KisMainWindow::addRecentURL(const QUrl &url)
             }
         }
         if (ok) {
+            if (!oldUrl.isEmpty()) {
+                d->recentFiles->removeUrl(oldUrl);
+            }
             d->recentFiles->addUrl(url);
         }
         saveRecentFiles();

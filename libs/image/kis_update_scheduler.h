@@ -173,16 +173,11 @@ public:
     void setLod0ToNStrokeStrategyFactory(const KisLodSyncStrokeStrategyFactory &factory);
 
     /**
-     * Install a factory of a stroke strategy, that will be started
-     * every time when the scheduler needs to postpone all the updates
+     * Install a factory of a stroke strategies, that will be started
+     * every time when the scheduler needs to postpone/resume all the updates
      * of the *LOD0* strokes.
      */
-    void setSuspendUpdatesStrokeStrategyFactory(const KisSuspendResumeStrategyFactory &factory);
-
-    /**
-     * \see setSuspendUpdatesStrokeStrategyFactory()
-     */
-    void setResumeUpdatesStrokeStrategyFactory(const KisSuspendResumeStrategyFactory &factory);
+    void setSuspendResumeUpdatesStrokeStrategyFactory(const KisSuspendResumeStrategyPairFactory &factory);
 
     KisPostExecutionUndoAdapter* lodNPostExecutionUndoAdapter() const;
 

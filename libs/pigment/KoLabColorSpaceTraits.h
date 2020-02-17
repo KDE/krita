@@ -40,6 +40,7 @@ template<typename _channels_type_>
 struct KoLabTraits : public KoColorSpaceTrait<_channels_type_, 4, 3> {
     typedef _channels_type_ channels_type;
     typedef KoColorSpaceTrait<_channels_type_, 4, 3> parent;
+    typedef KoLabColorSpaceMathsTraits<channels_type> math_trait;
     static const qint32 L_pos = 0;
     static const qint32 a_pos = 1;
     static const qint32 b_pos = 2;
@@ -84,6 +85,91 @@ struct KoLabTraits : public KoColorSpaceTrait<_channels_type_, 4, 3> {
         channels_type* d = parent::nativeArray(data);
         d[b_pos] = nv;
     }
+
+    // Lab has some... particulars
+    inline static QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex)
+    {
+        if (channelIndex > parent::channels_nb)
+            return QString("Error");
+        channels_type c = parent::nativeArray(pixel)[channelIndex];
+        switch (channelIndex) {
+        case L_pos:
+            return QString().setNum(100.0 * qBound((qreal)0, ((qreal)c) / math_trait::unitValueL, (qreal)math_trait::unitValueL));
+        case a_pos:
+        case b_pos:
+            if (c <= math_trait::halfValueAB) {
+                return QString().setNum(100.0 * (qreal)((c - math_trait::zeroValueAB) / (2.0 * (math_trait::halfValueAB - math_trait::zeroValueAB))));
+            } else {
+                return QString().setNum(100.0 * (qreal)(0.5 + (c - math_trait::halfValueAB) / (2.0 * (math_trait::unitValueAB - math_trait::halfValueAB))));
+            }
+        case 3:
+            return QString().setNum(100.0 * qBound((qreal)0, ((qreal)c) / math_trait::unitValue, (qreal)math_trait::unitValue));
+        default:
+            return QString("Error");
+        }
+    }
+    inline static void normalisedChannelsValue(const quint8 *pixel, QVector<float> &channels)
+    {
+        Q_ASSERT((int)channels.count() >= (int)parent::channels_nb);
+        channels_type c;
+        for (uint i = 0; i < parent::channels_nb; i++) {
+            c = parent::nativeArray(pixel)[i];
+            switch (i) {
+            case L_pos:
+                channels[i] = (qreal)c / math_trait::unitValueL;
+                break;
+            case a_pos:
+            case b_pos:
+                if (c <= math_trait::halfValueAB) {
+                    channels[i] = ((qreal)c - math_trait::zeroValueAB) / (2.0 * (math_trait::halfValueAB - math_trait::zeroValueAB));
+                } else {
+                    channels[i] = 0.5 + ((qreal)c - math_trait::halfValueAB) / (2.0 * (math_trait::unitValueAB - math_trait::halfValueAB));
+                }
+                break;
+            // As per KoChannelInfo alpha channels are [0..1]
+            case 3:
+            default:
+                channels[i] = (qreal)c / math_trait::unitValue;
+                break;
+            }
+        }
+    }
+    inline static void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values)
+    {
+        Q_ASSERT((int)values.count() >= (int)parent::channels_nb);
+        channels_type c;
+        for (uint i = 0; i < parent::channels_nb; i++) {
+            float b = 0;
+            switch (i) {
+            case L_pos:
+                b = qBound((float)math_trait::zeroValueL,
+                           (float)math_trait::unitValueL * values[i],
+                           (float)math_trait::unitValueL);
+                break;
+            case a_pos:
+            case b_pos:
+                if (values[i] <= 0.5) {
+                    b = qBound((float)math_trait::zeroValueAB,
+                               (float)(math_trait::zeroValueAB + 2.0 * values[i] * (math_trait::halfValueAB - math_trait::zeroValueAB)),
+                               (float)math_trait::halfValueAB);
+                }
+                else {
+                    b = qBound((float)math_trait::halfValueAB,
+                               (float)(math_trait::halfValueAB + 2.0 * (values[i] - 0.5) * (math_trait::unitValueAB - math_trait::halfValueAB)),
+                               (float)math_trait::unitValueAB);
+                }
+                break;
+            case 3:
+                b = qBound((float)math_trait::min,
+                           (float)math_trait::unitValue * values[i],
+                           (float)math_trait::unitValue);
+            default:
+                break;
+            }
+            c = (channels_type)b;
+            parent::nativeArray(pixel)[i] = c;
+        }
+    }
 };
 
 //For quint* values must range from 0 to 1 - see KoColorSpaceMaths<double, quint*>
@@ -106,147 +192,10 @@ struct KoLabTraits : public KoColorSpaceTrait<_channels_type_, 4, 3> {
 
 struct KoLabU8Traits : public KoLabTraits<quint8> {
 
-    // Maps each channel to the ranges above.
-    // It works when using integers b/c it is always 0..max -- which is not in fp
-    // I've redone the implementation to be consistent with the fp version (for clarity) --LES
-    inline static void normalisedChannelsValue(const quint8 *pixel, QVector<float> &channels) {
-        Q_ASSERT((int)channels.count() >= (int)parent::channels_nb);
-        channels_type c;
-        for (uint i = 0; i < parent::channels_nb; i++) {
-            c = nativeArray(pixel)[i];
-            switch (i) {
-            case L_pos:
-                channels[i] = ((qreal)c) / KoLabColorSpaceMathsTraits<channels_type>::unitValueL;
-                break;
-            case a_pos:
-            case b_pos:
-               channels[i] = (((qreal)c) - KoLabColorSpaceMathsTraits<channels_type>::halfValueAB) / KoLabColorSpaceMathsTraits<channels_type>::unitValueAB;
-                break;
-            case 3:
-                channels[i] = ((qreal)c) / UINT8_MAX;
-                break;
-            default:
-                channels[i] = ((qreal)c) / KoLabColorSpaceMathsTraits<channels_type>::unitValue;
-                break;
-            }
-        }
-    }
-
-    inline static QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) {
-        if (channelIndex > parent::channels_nb) return QString("Error");
-        channels_type c = nativeArray(pixel)[channelIndex];
-        switch (channelIndex) {
-        case L_pos:
-            return QString().setNum(100.0 * ((qreal)c) / KoLabColorSpaceMathsTraits<channels_type>::unitValueL);
-        case a_pos:
-        case b_pos:
-            return QString().setNum(100.0 * ((((qreal)c) - KoLabColorSpaceMathsTraits<channels_type>::halfValueAB) / KoLabColorSpaceMathsTraits<channels_type>::unitValueAB));
-        case 3:
-            return QString().setNum(100.0 * ((qreal)c) / UINT8_MAX);
-        default:
-            return QString("Error");
-        }
-    }
-
-    inline static void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values) {
-        Q_ASSERT((int)values.count() >= (int)parent::channels_nb);
-        channels_type c;
-        for (uint i = 0; i < channels_nb; i++) {
-            float b = 0;
-
-            switch (i) {
-            case L_pos:
-                b = qBound((float)0,
-                           (float)KoLabColorSpaceMathsTraits<channels_type>::unitValueL * values[i],
-                           (float)KoLabColorSpaceMathsTraits<channels_type>::unitValueL);
-                break;
-            case a_pos:
-            case b_pos:
-                b = qBound((float)0,
-                           (float)KoLabColorSpaceMathsTraits<channels_type>::unitValueAB * values[i],
-                           (float)KoLabColorSpaceMathsTraits<channels_type>::unitValueAB);
-                break;
-            default:
-                b = qBound((float)KoLabColorSpaceMathsTraits<channels_type>::min,
-                           (float)KoLabColorSpaceMathsTraits<channels_type>::unitValue * values[i],
-                           (float)KoLabColorSpaceMathsTraits<channels_type>::max);
-                break;
-            }
-            c = (channels_type)b;
-            nativeArray(pixel)[i] = c;
-        }
-    }
 };
 
 struct KoLabU16Traits : public KoLabTraits<quint16> {
 
-    inline static void normalisedChannelsValue(const quint8 *pixel, QVector<float> &channels) {
-        Q_ASSERT((int)channels.count() >= (int)parent::channels_nb);
-        channels_type c;
-        for (uint i = 0; i < parent::channels_nb; i++) {
-            c = nativeArray(pixel)[i];
-            switch (i) {
-            case L_pos:
-                channels[i] = ((qreal)c) / KoLabColorSpaceMathsTraits<channels_type>::unitValueL;
-                break;
-            case a_pos:
-            case b_pos:
-                channels[i] = (((qreal)c) - KoLabColorSpaceMathsTraits<channels_type>::halfValueAB) / KoLabColorSpaceMathsTraits<channels_type>::unitValueAB;
-                break;
-            case 3:
-                channels[i] = ((qreal)c) / UINT16_MAX;
-                break;
-            default:
-                channels[i] = ((qreal)c) / KoLabColorSpaceMathsTraits<channels_type>::unitValue;
-                break;
-            }
-        }
-    }
-
-    inline static QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) {
-        if (channelIndex > parent::channels_nb) return QString("Error");
-        channels_type c = nativeArray(pixel)[channelIndex];
-        switch (channelIndex) {
-        case L_pos:
-            return QString().setNum(100.0 * ((qreal)c) / KoLabColorSpaceMathsTraits<channels_type>::unitValueL);
-        case a_pos:
-        case b_pos:
-            return QString().setNum(100.0 * ((((qreal)c) - KoLabColorSpaceMathsTraits<channels_type>::halfValueAB) / KoLabColorSpaceMathsTraits<channels_type>::unitValueAB));
-        case 3:
-            return QString().setNum(100.0 * ((qreal)c) / UINT16_MAX);
-        default:
-            return QString("Error");
-        }
-    }
-
-    inline static void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values) {
-        Q_ASSERT((int)values.count() >= (int)parent::channels_nb);
-        channels_type c;
-        for (uint i = 0; i < channels_nb; i++) {
-            float b = 0;
-
-            switch (i) {
-            case L_pos:
-                b = qBound((float)0,
-                           (float)KoLabColorSpaceMathsTraits<channels_type>::unitValueL * values[i],
-                           (float)KoLabColorSpaceMathsTraits<channels_type>::unitValueL);
-                break;
-            case a_pos:
-            case b_pos:
-                b = qBound((float)0,
-                           (float)KoLabColorSpaceMathsTraits<channels_type>::unitValueAB * values[i],
-                           (float)KoLabColorSpaceMathsTraits<channels_type>::unitValueAB);
-                break;
-            default:
-                b = qBound((float)KoLabColorSpaceMathsTraits<channels_type>::min,
-                           (float)KoLabColorSpaceMathsTraits<channels_type>::unitValue * values[i],
-                           (float)KoLabColorSpaceMathsTraits<channels_type>::max);
-                break;
-            }
-            c = (channels_type)b;
-            nativeArray(pixel)[i] = c;
-        }
-    }
 };
 
 // Float values are normalized to [0..100], [-128..+127], [-128..+127] - out of range values are clipped
@@ -257,244 +206,16 @@ struct KoLabU16Traits : public KoLabTraits<quint16> {
 
 struct KoLabF16Traits : public KoLabTraits<half> {
 
-    inline static QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) {
-        if (channelIndex > parent::channels_nb) return QString("Error");
-        channels_type c = nativeArray(pixel)[channelIndex];
-        switch (channelIndex) {
-        case L_pos:
-            return QString().setNum(100.0 * qBound((qreal)0,
-                                                   ((qreal)c) / KoLabColorSpaceMathsTraits<channels_type>::unitValueL,
-                                                   (qreal)KoLabColorSpaceMathsTraits<channels_type>::unitValueL));
-        case a_pos:
-        case b_pos:
-            return QString().setNum(100.0 * qBound((qreal)0,
-                                                   (((qreal)c) - KoLabColorSpaceMathsTraits<channels_type>::halfValueAB) / KoLabColorSpaceMathsTraits<channels_type>::unitValueAB,
-                                                   (qreal)KoLabColorSpaceMathsTraits<channels_type>::unitValueAB));
-        case 3:
-            return QString().setNum(100.0 * qBound((qreal)0,
-                                                   ((qreal)c) / KoLabColorSpaceMathsTraits<channels_type>::unitValue,
-                                                   (qreal)KoLabColorSpaceMathsTraits<channels_type>::unitValue));
-        default:
-            return QString("Error");
-        }
-    }
-    inline static void normalisedChannelsValue(const quint8 *pixel, QVector<float> &channels) {
-        Q_ASSERT((int)channels.count() >= (int)parent::channels_nb);
-        channels_type c;
-        for (uint i = 0; i < parent::channels_nb; i++) {
-            c = nativeArray(pixel)[i];
-            switch (i) {
-            case L_pos:
-                channels[i] = qBound((qreal)0,
-                                     ((qreal)c) / KoLabColorSpaceMathsTraits<channels_type>::unitValueL,
-                                     (qreal)KoLabColorSpaceMathsTraits<channels_type>::unitValueL);
-                break;
-            case a_pos:
-            case b_pos:
-                channels[i] = qBound((qreal)0,
-                                     (((qreal)c) - KoLabColorSpaceMathsTraits<channels_type>::halfValueAB) / KoLabColorSpaceMathsTraits<channels_type>::unitValueAB,
-                                     (qreal)KoLabColorSpaceMathsTraits<channels_type>::unitValueAB);
-                break;
-            // As per KoChannelInfo alpha channels are [0..1]
-            case 3:
-            default:
-                channels[i] = qBound((qreal)0,
-                                     ((qreal)c) / KoLabColorSpaceMathsTraits<channels_type>::unitValue,
-                                     (qreal)KoLabColorSpaceMathsTraits<channels_type>::unitValue);
-                break;
-            }
-        }
-    }
-    inline static void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values) {
-        Q_ASSERT((int)values.count() >= (int)parent::channels_nb);
-        channels_type c;
-        for (uint i = 0; i < parent::channels_nb; i++) {
-            float b = 0;
-            switch(i) {
-            case L_pos:
-                b = qBound((float)0,
-                           (float)KoLabColorSpaceMathsTraits<channels_type>::unitValueL * values[i],
-                           (float)KoLabColorSpaceMathsTraits<channels_type>::unitValueL);
-                break;
-            case a_pos:
-            case b_pos:
-                b = qBound((float)0,
-                           (float)KoLabColorSpaceMathsTraits<channels_type>::unitValueAB * values[i],
-                           (float)KoLabColorSpaceMathsTraits<channels_type>::unitValueAB);
-                break;
-            case 3:
-                b = qBound((float)KoLabColorSpaceMathsTraits<channels_type>::min,
-                           (float)KoLabColorSpaceMathsTraits<channels_type>::unitValue * values[i],
-                           (float)KoLabColorSpaceMathsTraits<channels_type>::max);
-            default:
-                break;
-            }
-            c = (channels_type)b;
-            parent::nativeArray(pixel)[i] = c;
-        }
-    }
 };
 
 #endif
 
 struct KoLabF32Traits : public KoLabTraits<float> {
-    // Lab has some... particulars
-    inline static QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) {
-        if (channelIndex > parent::channels_nb) return QString("Error");
-        channels_type c = nativeArray(pixel)[channelIndex];
-        switch (channelIndex) {
-        case L_pos:
-            return QString().setNum(100.0 * qBound((qreal)0,
-                                                   ((qreal)c) / KoLabColorSpaceMathsTraits<channels_type>::unitValueL,
-                                                   (qreal)KoLabColorSpaceMathsTraits<channels_type>::unitValueL));
-        case a_pos:
-        case b_pos:
-            return QString().setNum(100.0 * qBound((qreal)0,
-                                                   (((qreal)c) - KoLabColorSpaceMathsTraits<channels_type>::halfValueAB) / KoLabColorSpaceMathsTraits<channels_type>::unitValueAB,
-                                                   (qreal)KoLabColorSpaceMathsTraits<channels_type>::unitValueAB));
-        case 3:
-            return QString().setNum(100.0 * qBound((qreal)0,
-                                                   ((qreal)c) / KoLabColorSpaceMathsTraits<channels_type>::unitValue,
-                                                   (qreal)KoLabColorSpaceMathsTraits<channels_type>::unitValue));
-        default:
-            return QString("Error");
-        }
-    }
-    inline static void normalisedChannelsValue(const quint8 *pixel, QVector<float> &channels) {
-        Q_ASSERT((int)channels.count() >= (int)parent::channels_nb);
-        channels_type c;
-        for (uint i = 0; i < parent::channels_nb; i++) {
-            c = nativeArray(pixel)[i];
-            switch (i) {
-            case L_pos:
-                channels[i] = qBound((qreal)0,
-                                     ((qreal)c) / KoLabColorSpaceMathsTraits<channels_type>::unitValueL,
-                                     (qreal)KoLabColorSpaceMathsTraits<channels_type>::unitValueL);
-                break;
-            case a_pos:
-            case b_pos:
-                channels[i] = qBound((qreal)0,
-                                     (((qreal)c) - KoLabColorSpaceMathsTraits<channels_type>::halfValueAB) / KoLabColorSpaceMathsTraits<channels_type>::unitValueAB,
-                                     (qreal)KoLabColorSpaceMathsTraits<channels_type>::unitValueAB);
-                break;
-            // As per KoChannelInfo alpha channels are [0..1]
-            case 3:
-            default:
-                channels[i] = qBound((qreal)0,
-                                     ((qreal)c) / KoLabColorSpaceMathsTraits<channels_type>::unitValue,
-                                     (qreal)KoLabColorSpaceMathsTraits<channels_type>::unitValue);
-                break;
-            }
-        }
-    }
-    inline static void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values) {
-        Q_ASSERT((int)values.count() >= (int)parent::channels_nb);
-        channels_type c;
-        for (uint i = 0; i < parent::channels_nb; i++) {
-            float b = 0;
-            switch(i) {
-            case L_pos:
-                b = qBound((float)0,
-                           (float)KoLabColorSpaceMathsTraits<channels_type>::unitValueL * values[i],
-                           (float)KoLabColorSpaceMathsTraits<channels_type>::unitValueL);
-                break;
-            case a_pos:
-            case b_pos:
-                b = qBound((float)0,
-                           (float)KoLabColorSpaceMathsTraits<channels_type>::unitValueAB * values[i],
-                           (float)KoLabColorSpaceMathsTraits<channels_type>::unitValueAB);
-                break;
-            case 3:
-                b = qBound((float)KoLabColorSpaceMathsTraits<channels_type>::min,
-                           (float)KoLabColorSpaceMathsTraits<channels_type>::unitValue * values[i],
-                           (float)KoLabColorSpaceMathsTraits<channels_type>::max);
-            default:
-                break;
-            }
-            c = (channels_type)b;
-            parent::nativeArray(pixel)[i] = c;
-        }
-    }
+
 };
 
 struct KoLabF64Traits : public KoLabTraits<double> {
-    // Lab has some... particulars
-    inline static QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) {
-        if (channelIndex > parent::channels_nb) return QString("Error");
-        channels_type c = nativeArray(pixel)[channelIndex];
-        switch (channelIndex) {
-        case L_pos:
-            return QString().setNum(100.0 * qBound((qreal)0,
-                                                   ((qreal)c) / KoLabColorSpaceMathsTraits<channels_type>::unitValueL,
-                                                   (qreal)KoLabColorSpaceMathsTraits<channels_type>::unitValueL));
-        case a_pos:
-        case b_pos:
-            return QString().setNum(100.0 * qBound((qreal)0,
-                                                   (((qreal)c) - KoLabColorSpaceMathsTraits<channels_type>::halfValueAB) / KoLabColorSpaceMathsTraits<channels_type>::unitValueAB,
-                                                   (qreal)KoLabColorSpaceMathsTraits<channels_type>::unitValueAB));
-        case 3:
-            return QString().setNum(100.0 * qBound((qreal)0,
-                                                   ((qreal)c) / KoLabColorSpaceMathsTraits<channels_type>::unitValue,
-                                                   (qreal)KoLabColorSpaceMathsTraits<channels_type>::unitValue));
-        default:
-            return QString("Error");
-        }
-    }
-    inline static void normalisedChannelsValue(const quint8 *pixel, QVector<float> &channels) {
-        Q_ASSERT((int)channels.count() >= (int)parent::channels_nb);
-        channels_type c;
-        for (uint i = 0; i < parent::channels_nb; i++) {
-            c = nativeArray(pixel)[i];
-            switch (i) {
-            case L_pos:
-                channels[i] = qBound((qreal)0,
-                                     ((qreal)c) / KoLabColorSpaceMathsTraits<channels_type>::unitValueL,
-                                     (qreal)KoLabColorSpaceMathsTraits<channels_type>::unitValueL);
-                break;
-            case a_pos:
-            case b_pos:
-                channels[i] = qBound((qreal)0,
-                                     (((qreal)c) - KoLabColorSpaceMathsTraits<channels_type>::halfValueAB) / KoLabColorSpaceMathsTraits<channels_type>::unitValueAB,
-                                     (qreal)KoLabColorSpaceMathsTraits<channels_type>::unitValueAB);
-                break;
-            // As per KoChannelInfo alpha channels are [0..1]
-            case 3:
-            default:
-                channels[i] = qBound((qreal)0,
-                                     ((qreal)c) / KoLabColorSpaceMathsTraits<channels_type>::unitValue,
-                                     (qreal)KoLabColorSpaceMathsTraits<channels_type>::unitValue);
-                break;
-            }
-        }
-    }
-    inline static void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values) {
-        Q_ASSERT((int)values.count() >= (int)parent::channels_nb);
-        channels_type c;
-        for (uint i = 0; i < parent::channels_nb; i++) {
-            float b = 0;
-            switch(i) {
-            case L_pos:
-                b = qBound((float)0,
-                           (float)KoLabColorSpaceMathsTraits<channels_type>::unitValueL * values[i],
-                           (float)KoLabColorSpaceMathsTraits<channels_type>::unitValueL);
-                break;
-            case a_pos:
-            case b_pos:
-                b = qBound((float)0,
-                           (float)KoLabColorSpaceMathsTraits<channels_type>::unitValueAB * values[i],
-                           (float)KoLabColorSpaceMathsTraits<channels_type>::unitValueAB);
-                break;
-            case 3:
-                b = qBound((float)KoLabColorSpaceMathsTraits<channels_type>::min,
-                           (float)KoLabColorSpaceMathsTraits<channels_type>::unitValue * values[i],
-                           (float)KoLabColorSpaceMathsTraits<channels_type>::max);
-            default:
-                break;
-            }
-            c = (channels_type)b;
-            parent::nativeArray(pixel)[i] = c;
-        }
-    }
+
 };
 
 #endif

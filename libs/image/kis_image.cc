@@ -166,18 +166,16 @@ public:
                         KisSyncLodCacheStrokeStrategy::createJobsData(KisImageWSP(q)));
                 });
 
-            scheduler.setSuspendUpdatesStrokeStrategyFactory(
+            scheduler.setSuspendResumeUpdatesStrokeStrategyFactory(
                 [=]() {
-                    return KisSuspendResumePair(
-                        new KisSuspendProjectionUpdatesStrokeStrategy(KisImageWSP(q), true),
-                        KisSuspendProjectionUpdatesStrokeStrategy::createSuspendJobsData(KisImageWSP(q)));
-                });
+                    KisSuspendProjectionUpdatesStrokeStrategy::SharedDataSP data = KisSuspendProjectionUpdatesStrokeStrategy::createSharedData();
 
-            scheduler.setResumeUpdatesStrokeStrategyFactory(
-                [=]() {
-                    return KisSuspendResumePair(
-                        new KisSuspendProjectionUpdatesStrokeStrategy(KisImageWSP(q), false),
-                        KisSuspendProjectionUpdatesStrokeStrategy::createResumeJobsData(KisImageWSP(q)));
+                    KisSuspendResumePair suspend(new KisSuspendProjectionUpdatesStrokeStrategy(KisImageWSP(q), true, data),
+                                                 KisSuspendProjectionUpdatesStrokeStrategy::createSuspendJobsData(KisImageWSP(q)));
+                    KisSuspendResumePair resume(new KisSuspendProjectionUpdatesStrokeStrategy(KisImageWSP(q), false, data),
+                                                KisSuspendProjectionUpdatesStrokeStrategy::createResumeJobsData(KisImageWSP(q)));
+
+                    return std::make_pair(suspend, resume);
                 });
         }
 
@@ -230,7 +228,9 @@ public:
     QAtomicInt disableUIUpdateSignals;
     KisLocklessStack<QRect> savedDisabledUIUpdates;
 
-    KisProjectionUpdatesFilterSP projectionUpdatesFilter;
+    // filters are applied in a reversed way, from rbegin() to rend()
+    QVector<KisProjectionUpdatesFilterSP> projectionUpdatesFilters;
+    QStack<KisProjectionUpdatesFilterCookie> disabledUpdatesCookies;
     KisImageSignalRouter signalRouter;
     KisImageAnimationInterface *animationInterface;
     KisUpdateScheduler scheduler;
@@ -459,7 +459,7 @@ void KisImage::copyFromImageImpl(const KisImage &rhs, int policy)
     }
     m_d->annotations = newAnnotations;
 
-    KIS_ASSERT_RECOVER_NOOP(!rhs.m_d->projectionUpdatesFilter);
+    KIS_ASSERT_RECOVER_NOOP(rhs.m_d->projectionUpdatesFilters.isEmpty());
     KIS_ASSERT_RECOVER_NOOP(!rhs.m_d->disableUIUpdateSignals);
     KIS_ASSERT_RECOVER_NOOP(!rhs.m_d->disableDirtyRequests);
 
@@ -1918,27 +1918,47 @@ bool KisImage::hasUpdatesRunning() const
     return m_d->scheduler.hasUpdatesRunning();
 }
 
-void KisImage::setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP filter)
+KisProjectionUpdatesFilterCookie KisImage::addProjectionUpdatesFilter(KisProjectionUpdatesFilterSP filter)
 {
-    // update filters are *not* recursive!
-    KIS_ASSERT_RECOVER_NOOP(!filter || !m_d->projectionUpdatesFilter);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(filter, KisProjectionUpdatesFilterCookie());
 
-    m_d->projectionUpdatesFilter = filter;
+    m_d->projectionUpdatesFilters.append(filter);
+
+    return KisProjectionUpdatesFilterCookie(filter.data());
 }
 
-KisProjectionUpdatesFilterSP KisImage::projectionUpdatesFilter() const
+KisProjectionUpdatesFilterSP KisImage::removeProjectionUpdatesFilter(KisProjectionUpdatesFilterCookie cookie)
 {
-    return m_d->projectionUpdatesFilter;
+    KIS_SAFE_ASSERT_RECOVER_NOOP(cookie);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->projectionUpdatesFilters.last() == cookie);
+
+    auto it = std::find(m_d->projectionUpdatesFilters.begin(), m_d->projectionUpdatesFilters.end(), cookie);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(it != m_d->projectionUpdatesFilters.end(), KisProjectionUpdatesFilterSP());
+
+    KisProjectionUpdatesFilterSP filter = *it;
+
+    m_d->projectionUpdatesFilters.erase(it);
+
+    return filter;
+}
+
+KisProjectionUpdatesFilterCookie KisImage::currentProjectionUpdatesFilter() const
+{
+    return !m_d->projectionUpdatesFilters.isEmpty() ?
+                m_d->projectionUpdatesFilters.last().data() :
+                KisProjectionUpdatesFilterCookie();
 }
 
 void KisImage::disableDirtyRequests()
 {
-    setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP(new KisDropAllProjectionUpdatesFilter()));
+    m_d->disabledUpdatesCookies.push(
+        addProjectionUpdatesFilter(toQShared(new KisDropAllProjectionUpdatesFilter())));
 }
 
 void KisImage::enableDirtyRequests()
 {
-    setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!m_d->disabledUpdatesCookies.isEmpty());
+    removeProjectionUpdatesFilter(m_d->disabledUpdatesCookies.pop());
 }
 
 void KisImage::disableUIUpdates()
@@ -2033,10 +2053,19 @@ void KisImage::requestProjectionUpdateImpl(KisNode *node,
 
 void KisImage::requestProjectionUpdate(KisNode *node, const QVector<QRect> &rects, bool resetAnimationCache)
 {
-    if (m_d->projectionUpdatesFilter
-        && m_d->projectionUpdatesFilter->filter(this, node, rects, resetAnimationCache)) {
+    /**
+     * We iterate through the filters in a reversed way. It makes the most nested filters
+     * to execute first.
+     */
+    for (auto it = m_d->projectionUpdatesFilters.rbegin();
+         it != m_d->projectionUpdatesFilters.rend();
+         ++it) {
 
-        return;
+        KIS_SAFE_ASSERT_RECOVER(*it) { continue; }
+
+        if ((*it)->filter(this, node, rects, resetAnimationCache)) {
+            return;
+        }
     }
 
     if (resetAnimationCache) {

@@ -1156,6 +1156,15 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
         }
     }
 
+#ifdef Q_OS_ANDROID
+    if (onlyOneRendererSupported) {
+        if (KisOpenGL::getQtPreferredOpenGLRenderer() == KisOpenGL::RendererOpenGLES) {
+            cmbPreferredRenderer->addItem(rendererOpenGLESText, KisOpenGL::RendererOpenGLES);
+            cmbPreferredRenderer->setCurrentIndex(0);
+        }
+    }
+#endif
+
 #ifdef Q_OS_WIN
     if (supportedRenderers & KisOpenGL::RendererOpenGLES) {
         cmbPreferredRenderer->addItem(rendererOpenGLESText, KisOpenGL::RendererOpenGLES);

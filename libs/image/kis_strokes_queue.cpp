@@ -97,8 +97,7 @@ struct Q_DECL_HIDDEN KisStrokesQueue::Private {
     int nextDesiredLevelOfDetail;
     QMutex mutex;
     KisLodSyncStrokeStrategyFactory lod0ToNStrokeStrategyFactory;
-    KisSuspendResumeStrategyFactory suspendUpdatesStrokeStrategyFactory;
-    KisSuspendResumeStrategyFactory resumeUpdatesStrokeStrategyFactory;
+    KisSuspendResumeStrategyPairFactory suspendResumeUpdatesStrokeStrategyFactory;
     KisSurrogateUndoStore lodNUndoStore;
     LodNUndoStrokesFacade lodNStrokesFacade;
     KisPostExecutionUndoAdapter lodNPostExecutionUndoAdapter;
@@ -286,8 +285,9 @@ KisStrokeId KisStrokesQueue::startStroke(KisStrokeStrategy *strokeStrategy)
 
         if (m_d->shouldWrapInSuspendUpdatesStroke()) {
 
-            KisSuspendResumePair suspendPair = m_d->suspendUpdatesStrokeStrategyFactory();
-            KisSuspendResumePair resumePair = m_d->resumeUpdatesStrokeStrategyFactory();
+            KisSuspendResumePair suspendPair;
+            KisSuspendResumePair resumePair;
+            std::tie(suspendPair, resumePair) = m_d->suspendResumeUpdatesStrokeStrategyFactory();
 
             StrokesQueueIterator it = m_d->findNewLod0Pos();
 
@@ -629,14 +629,9 @@ void KisStrokesQueue::setLod0ToNStrokeStrategyFactory(const KisLodSyncStrokeStra
     m_d->lod0ToNStrokeStrategyFactory = factory;
 }
 
-void KisStrokesQueue::setSuspendUpdatesStrokeStrategyFactory(const KisSuspendResumeStrategyFactory &factory)
+void KisStrokesQueue::setSuspendResumeUpdatesStrokeStrategyFactory(const KisSuspendResumeStrategyPairFactory &factory)
 {
-    m_d->suspendUpdatesStrokeStrategyFactory = factory;
-}
-
-void KisStrokesQueue::setResumeUpdatesStrokeStrategyFactory(const KisSuspendResumeStrategyFactory &factory)
-{
-    m_d->resumeUpdatesStrokeStrategyFactory = factory;
+    m_d->suspendResumeUpdatesStrokeStrategyFactory = factory;
 }
 
 KisPostExecutionUndoAdapter *KisStrokesQueue::lodNPostExecutionUndoAdapter() const

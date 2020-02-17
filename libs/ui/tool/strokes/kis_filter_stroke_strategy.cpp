@@ -166,17 +166,7 @@ void KisFilterStrokeStrategy::cancelStrokeCallback()
     delete m_d->secondaryTransaction;
     m_d->filterDevice = 0;
 
-    KisProjectionUpdatesFilterSP prevUpdatesFilter;
-
     if (m_d->cancelSilently) {
-        /**
-         * TODO: Projection updates filter is not recursive, please
-         *       redesign this part
-         */
-        prevUpdatesFilter = m_d->updatesFacade->projectionUpdatesFilter();
-        if (prevUpdatesFilter) {
-            m_d->updatesFacade->setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP());
-        }
         m_d->updatesFacade->disableDirtyRequests();
     }
 
@@ -184,10 +174,6 @@ void KisFilterStrokeStrategy::cancelStrokeCallback()
 
     if (m_d->cancelSilently) {
         m_d->updatesFacade->enableDirtyRequests();
-        if (prevUpdatesFilter) {
-            m_d->updatesFacade->setProjectionUpdatesFilter(prevUpdatesFilter);
-            prevUpdatesFilter.clear();
-        }
     }
 }
 

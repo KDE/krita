@@ -68,8 +68,7 @@ public:
     void setDesiredLevelOfDetail(int lod);
     void explicitRegenerateLevelOfDetail();
     void setLod0ToNStrokeStrategyFactory(const KisLodSyncStrokeStrategyFactory &factory);
-    void setSuspendUpdatesStrokeStrategyFactory(const KisSuspendResumeStrategyFactory &factory);
-    void setResumeUpdatesStrokeStrategyFactory(const KisSuspendResumeStrategyFactory &factory);
+    void setSuspendResumeUpdatesStrokeStrategyFactory(const KisSuspendResumeStrategyPairFactory &factory);
     KisPostExecutionUndoAdapter* lodNPostExecutionUndoAdapter() const;
 
     /**

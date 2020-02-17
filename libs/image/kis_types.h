@@ -274,6 +274,7 @@ typedef KisSharedPtr<KisLockedProperties> KisLockedPropertiesSP;
 
 class KisProjectionUpdatesFilter;
 typedef QSharedPointer<KisProjectionUpdatesFilter> KisProjectionUpdatesFilterSP;
+using KisProjectionUpdatesFilterCookie = void*;
 
 class KisAbstractProjectionPlane;
 typedef QSharedPointer<KisAbstractProjectionPlane> KisAbstractProjectionPlaneSP;

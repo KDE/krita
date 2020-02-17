@@ -32,7 +32,6 @@ class LabU8ColorSpace : public LcmsColorSpace<KoLabU8Traits>
 public:
     LabU8ColorSpace(const QString &name, KoColorProfile *p);
     bool willDegrade(ColorSpaceIndependence independence) const override;
-    QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const override;
 
     static QString colorSpaceId()
     {
@@ -56,11 +55,6 @@ public:
     QVector <double> fromHSY(qreal *hue, qreal *sat, qreal *luma) const override;
     void toYUV(const QVector<double> &channelValues, qreal *y, qreal *u, qreal *v) const override;
     QVector <double> fromYUV(qreal *y, qreal *u, qreal *v) const override;
-
-private:
-    static const quint32 MAX_CHANNEL_L = 100;
-    static const quint32 MAX_CHANNEL_AB = 255;
-    static const quint32 CHANNEL_AB_ZERO_OFFSET = 128;
 };
 
 class LabU8ColorSpaceFactory : public LcmsColorSpaceFactory

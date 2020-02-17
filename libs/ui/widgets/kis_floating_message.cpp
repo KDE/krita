@@ -232,7 +232,12 @@ QRect KisFloatingMessage::determineMetrics( const int M )
 
 
     const QSize newSize = rect.size();
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
     QRect screen = s->availableGeometry();
+#else
+    QRect screen = QApplication::desktop()->screenGeometry(parentWidget());
+#endif
+
 
     QPoint newPos(MARGIN, MARGIN);
 

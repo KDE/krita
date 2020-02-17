@@ -49,7 +49,7 @@ const int KoTextDebug::INDENT = 2;
 const QTextDocument *KoTextDebug::document = 0;
 
 #define dumpIndent(T) { for (int i=0; i<T; ++i) out << ' '; }
-#define dumpList(T) { foreach (const QString &x, T) out << x << ' '; }
+#define dumpList(T) { Q_FOREACH (const QString &x, T) out << x << ' '; }
 
 Q_DECLARE_METATYPE(QList<KoText::Tab>)
 

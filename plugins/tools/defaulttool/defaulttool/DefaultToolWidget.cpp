@@ -111,7 +111,7 @@ void DefaultToolWidget::updatePosition()
 
     QList<KoShape *> selectedShapes = selection->selectedShapes(KoFlake::TopLevelSelection);
     bool aspectLocked = false;
-    foreach (KoShape *shape, selectedShapes) {
+    Q_FOREACH (KoShape *shape, selectedShapes) {
         aspectLocked = aspectLocked | shape->keepAspectRatio();
     }
     aspectButton->setKeepAspectRatio(aspectLocked);
@@ -276,7 +276,7 @@ void DefaultToolWidget::aspectButtonToggled(bool keepAspect)
         return;
     }
     KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
-    foreach (KoShape *shape, selection->selectedShapes(KoFlake::TopLevelSelection)) {
+    Q_FOREACH (KoShape *shape, selection->selectedShapes(KoFlake::TopLevelSelection)) {
         shape->setKeepAspectRatio(keepAspect);
     }
 }

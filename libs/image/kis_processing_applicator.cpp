@@ -260,7 +260,7 @@ void KisProcessingApplicator::applyVisitorAllFrames(KisProcessingVisitorSP visit
 
         applyCommand(new KisLayerUtils::SwitchFrameCommand(m_image, frame, false, switchFrameStorage), KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE);
 
-        foreach (KisNodeSP node, nodes) {
+        Q_FOREACH (KisNodeSP node, nodes) {
             applyCommand(new KisProcessingCommand(visitor, node),
                          sequentiality, exclusivity);
         }

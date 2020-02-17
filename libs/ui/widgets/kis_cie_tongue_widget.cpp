@@ -585,7 +585,7 @@ void KisCIETongueWidget::drawGamut()
         }
         gamutPaint.drawPath(path);
         gamutPaint.setOpacity(1.0);
-        foreach (QPointF Point, d->gamut) {
+        Q_FOREACH (QPointF Point, d->gamut) {
             mapPoint(x, y, Point);
             gamutPaint.drawEllipse(x + d->xBias- 2, y-2, 4, 4);
             //Point.setX(x);

@@ -264,7 +264,7 @@ void KarbonSimplifyPath::mergeSubpaths(QList<KoSubpath *> subpaths, KoPathShape 
     path->clear();
     path->moveTo(subpaths.first()->first()->point());
 
-    // TODO: to make the code more readable use foreach and explicit
+    // TODO: to make the code more readable use Q_FOREACH and explicit
     //       counters with full name
     // si: subpath index, pi: point index
     for (int si = 0; si < subpaths.size(); ++si) {

@@ -184,7 +184,7 @@ KoResourceItemChooserContextMenu::KoResourceItemChooserContextMenu(KoResource* r
         }
         if (!removables.isEmpty()) {
             removableTagsMenu = addMenu(koIcon("list-remove"),i18n("Remove from other tag"));
-            foreach (const QString &tag, removables) {
+            Q_FOREACH (const QString &tag, removables) {
                 assignables.removeAll(tag);
                 ContextMenuExistingTagAction * removeTagAction = new ContextMenuExistingTagAction(resource, tag, this);
 
@@ -195,7 +195,7 @@ KoResourceItemChooserContextMenu::KoResourceItemChooserContextMenu(KoResource* r
         }
     }
 
-    foreach (const QString &tag, assignables) {
+    Q_FOREACH (const QString &tag, assignables) {
         ContextMenuExistingTagAction * addTagAction = new ContextMenuExistingTagAction(resource, tag, this);
 
         connect(addTagAction, SIGNAL(triggered(KoResource*,QString)),

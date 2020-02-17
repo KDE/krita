@@ -113,7 +113,7 @@ public:
     {
 #if 0
         qDebug() << "XmlData" << this << "xmlFile:" << m_xmlFile;
-        foreach (const QDomElement &element, m_barList) {
+        Q_FOREACH (const QDomElement &element, m_barList) {
             qDebug() << "    ToolBar:" << toolBarText(element);
         }
         //KisActionRegistry::instance()->
@@ -691,7 +691,7 @@ void KEditToolBarPrivate::defaultClicked()
     m_accept = false;
 
     if (m_factory) {
-        foreach (KXMLGUIClient *client, m_factory->clients()) {
+        Q_FOREACH (KXMLGUIClient *client, m_factory->clients()) {
             const QString file = client->localXMLFile();
             if (file.isEmpty()) {
                 continue;
@@ -876,7 +876,7 @@ void KEditToolBarWidgetPrivate::initFromFactory(KXMLGUIFactory *factory,
 
     // add all of the client data
     bool first = true;
-    foreach (KXMLGUIClient *client, factory->clients()) {
+    Q_FOREACH (KXMLGUIClient *client, factory->clients()) {
         if (client->xmlFile().isEmpty()) {
             continue;
         }
@@ -906,7 +906,7 @@ void KEditToolBarWidgetPrivate::initFromFactory(KXMLGUIFactory *factory,
     m_widget->setMinimumSize(m_widget->sizeHint());
 
     m_widget->actionCollection()->addAssociatedWidget(m_widget);
-    foreach (QAction *action, m_widget->actionCollection()->actions()) {
+    Q_FOREACH (QAction *action, m_widget->actionCollection()->actions()) {
         action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     }
 }
@@ -977,7 +977,7 @@ void KEditToolBarWidget::rebuildKXMLGUIClients()
 
     // now, rebuild the gui from the first to the last
     //qDebug(240) << "rebuilding the gui";
-    foreach (KXMLGUIClient *client, clients) {
+    Q_FOREACH (KXMLGUIClient *client, clients) {
         //qDebug(240) << "updating client " << client << " " << client->componentName() << "  xmlFile=" << client->xmlFile();
         QString file(client->xmlFile());   // before setting ui_standards!
         if (!file.isEmpty()) {
@@ -999,7 +999,7 @@ void KEditToolBarWidget::rebuildKXMLGUIClients()
     // Now we can add the clients to the factory
     // We don't do it in the loop above because adding a part automatically
     // adds its plugins, so we must make sure the plugins were updated first.
-    foreach (KXMLGUIClient *client, clients) {
+    Q_FOREACH (KXMLGUIClient *client, clients) {
         d->m_factory->addClient(client);
     }
 }
@@ -1235,7 +1235,7 @@ void KEditToolBarWidgetPrivate::loadActions(const QDomElement &elem)
         // iterate through this client's actions
         // This used to iterate through _all_ actions, but we don't support
         // putting any action into any client...
-        foreach (QAction *action, actionCollection->actions()) {
+        Q_FOREACH (QAction *action, actionCollection->actions()) {
             // do we have a match?
             if (it.attribute(attrName) == action->objectName()) {
                 // we have a match!
@@ -1251,7 +1251,7 @@ void KEditToolBarWidgetPrivate::loadActions(const QDomElement &elem)
     }
 
     // go through the rest of the collection
-    foreach (QAction *action, actionCollection->actions()) {
+    Q_FOREACH (QAction *action, actionCollection->actions()) {
         // skip our active ones
         if (active_list.contains(action->objectName())) {
             continue;

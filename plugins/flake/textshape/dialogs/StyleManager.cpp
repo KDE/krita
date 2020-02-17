@@ -112,7 +112,7 @@ void StyleManager::setStyleManager(KoStyleManager *sm)
     QList<KoCharacterStyle *> styles;
     QList<KoParagraphStyle *> paragraphStyles = m_styleManager->paragraphStyles();
     KoParagraphStyle *defaultParagraphStyle = m_styleManager->defaultParagraphStyle();
-    foreach (KoParagraphStyle *style, paragraphStyles) {
+    Q_FOREACH (KoParagraphStyle *style, paragraphStyles) {
         if (style != defaultParagraphStyle) {
             styles.append(style);
         }

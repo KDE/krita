@@ -726,7 +726,7 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor)
 
     // Iterate over list items and add them to the textlist
     bool firstTime = true;
-    foreach (e, childElementsList) {
+    Q_FOREACH (e, childElementsList) {
       if (e.localName() != "removed-content") {
             if (!firstTime && !numberedParagraph)
                 cursor.insertBlock(d->defaultBlockFormat, d->defaultCharFormat);

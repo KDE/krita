@@ -1010,7 +1010,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     QList<QTextOption::Tab> qTabs;
     // Note: Converting to Qt tabs is needed as long as we use Qt for layout, but we
     // loose the possibility to do leader chars.
-    foreach (const KoText::Tab &kTab, tabs) {
+    Q_FOREACH (const KoText::Tab &kTab, tabs) {
         qreal value = kTab.position;
         if (value == MaximumTabPos) { // MaximumTabPos is used in index generators
             // note: we subtract right margin as this is where the tab should be

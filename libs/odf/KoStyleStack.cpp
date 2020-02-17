@@ -113,7 +113,7 @@ inline QString KoStyleStack::property(const QString &nsURI, const QString &name,
     QList<KoXmlElement>::ConstIterator it = m_stack.end();
     while (it != m_stack.begin()) {
         --it;
-        foreach (const QString &propertyTagName, m_propertiesTagNames) {
+        Q_FOREACH (const QString &propertyTagName, m_propertiesTagNames) {
             KoXmlElement properties = KoXml::namedItemNS(*it, m_styleNSURI, propertyTagName);
             if (detail) {
                 QString attribute(properties.attributeNS(nsURI, fullName));
@@ -149,7 +149,7 @@ inline bool KoStyleStack::hasProperty(const QString &nsURI, const QString &name,
     QList<KoXmlElement>::ConstIterator it = m_stack.end();
     while (it != m_stack.begin()) {
         --it;
-        foreach (const QString &propertiesTagName, m_propertiesTagNames) {
+        Q_FOREACH (const QString &propertiesTagName, m_propertiesTagNames) {
             const KoXmlElement properties = KoXml::namedItemNS(*it, m_styleNSURI, propertiesTagName);
             if (properties.hasAttributeNS(nsURI, name) ||
                     (detail && properties.hasAttributeNS(nsURI, fullName)))
@@ -169,7 +169,7 @@ QPair<qreal,qreal> KoStyleStack::fontSize(const qreal defaultFontPointSize) cons
 
     while (it != m_stack.begin()) {
         --it;
-        foreach (const QString &propertiesTagName, m_propertiesTagNames) {
+        Q_FOREACH (const QString &propertiesTagName, m_propertiesTagNames) {
             KoXmlElement properties = KoXml::namedItemNS(*it, m_styleNSURI, propertiesTagName).toElement();
             if (properties.hasAttributeNS(m_foNSURI, name)) {
                 const QString value = properties.attributeNS(m_foNSURI, name, QString());
@@ -198,7 +198,7 @@ bool KoStyleStack::hasChildNode(const QString &nsURI, const QString &localName) 
     QList<KoXmlElement>::ConstIterator it = m_stack.end();
     while (it != m_stack.begin()) {
         --it;
-        foreach (const QString &propertiesTagName, m_propertiesTagNames) {
+        Q_FOREACH (const QString &propertiesTagName, m_propertiesTagNames) {
             KoXmlElement properties = KoXml::namedItemNS(*it, m_styleNSURI, propertiesTagName);
             if (!KoXml::namedItemNS(properties, nsURI, localName).isNull())
                 return true;
@@ -214,7 +214,7 @@ KoXmlElement KoStyleStack::childNode(const QString &nsURI, const QString &localN
 
     while (it != m_stack.begin()) {
         --it;
-        foreach (const QString &propertiesTagName, m_propertiesTagNames) {
+        Q_FOREACH (const QString &propertiesTagName, m_propertiesTagNames) {
             KoXmlElement properties = KoXml::namedItemNS(*it, m_styleNSURI, propertiesTagName);
             KoXmlElement e = KoXml::namedItemNS(properties, nsURI, localName);
             if (!e.isNull())
@@ -268,7 +268,7 @@ void KoStyleStack::setTypeProperties(const char* typeProperties)
 void KoStyleStack::setTypeProperties(const QList<QString> &typeProperties)
 {
     m_propertiesTagNames.clear();
-    foreach (const QString &typeProperty, typeProperties) {
+    Q_FOREACH (const QString &typeProperty, typeProperties) {
         if (!typeProperty.isEmpty()) {
             m_propertiesTagNames.append(typeProperty + "-properties");
         }

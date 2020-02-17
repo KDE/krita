@@ -42,7 +42,7 @@ KoPathPointMoveCommand::KoPathPointMoveCommand(const QList<KoPathPointData> &poi
 {
     setText(kundo2_i18n("Move points"));
 
-    foreach (const KoPathPointData &data, pointData) {
+    Q_FOREACH (const KoPathPointData &data, pointData) {
         if (!d->points.contains(data)) {
             d->points[data] = offset;
             d->paths.insert(data.pathShape);
@@ -114,7 +114,7 @@ void KoPathPointMoveCommandPrivate::applyOffset(qreal factor)
 {
     QMap<KoShape*, QRectF> oldDirtyRects;
 
-    foreach (KoPathShape *path, paths) {
+    Q_FOREACH (KoPathShape *path, paths) {
         oldDirtyRects[path] = path->boundingRect();
     }
 
@@ -131,7 +131,7 @@ void KoPathPointMoveCommandPrivate::applyOffset(qreal factor)
             p->map(matrix);
     }
 
-    foreach (KoPathShape *path, paths) {
+    Q_FOREACH (KoPathShape *path, paths) {
         path->normalize();
         // repaint new bounding rect
         path->updateAbsolute(oldDirtyRects[path] | path->boundingRect());

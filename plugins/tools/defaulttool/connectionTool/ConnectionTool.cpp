@@ -637,7 +637,7 @@ KoConnectionShape *ConnectionTool::nearestConnectionShape(const QList<KoShape *>
 
         // check all segments of this shape which intersect the region of interest
         QList<KoPathSegment> segments = connectionShape->segmentsAt(roi);
-        foreach (const KoPathSegment &s, segments) {
+        Q_FOREACH (const KoPathSegment &s, segments) {
             qreal nearestPointParam = s.nearestPoint(p);
             QPointF nearestPoint = s.pointAt(nearestPointParam);
             QPointF diff = p - nearestPoint;
@@ -663,7 +663,7 @@ void ConnectionTool::setEditMode(EditMode mode, KoShape *currentShape, int handl
     m_editMode = mode;
     if (m_currentShape != currentShape) {
         KoConnectionShape *connectionShape = dynamic_cast<KoConnectionShape *>(currentShape);
-        foreach (KoShapeConfigWidgetBase *cw, m_connectionShapeWidgets) {
+        Q_FOREACH (KoShapeConfigWidgetBase *cw, m_connectionShapeWidgets) {
             if (connectionShape) {
                 cw->open(currentShape);
             }

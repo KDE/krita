@@ -142,7 +142,7 @@ void KisShortcutsEditor::addCollection(KActionCollection *collection, const QStr
     // Add a subtree for each category? Perhaps easier to think that this
     // doesn't exist. Basically you add KActionCategory as a QObject child of
     // KActionCollection, and then tag objects as belonging to the category.
-    foreach (KActionCategory *category, collection->categories()) {
+    Q_FOREACH (KActionCategory *category, collection->categories()) {
 
         // Don't display empty categories.
         if (category->actions().isEmpty()) {
@@ -153,7 +153,7 @@ void KisShortcutsEditor::addCollection(KActionCollection *collection, const QStr
           d->findOrMakeItem(hierarchy[KisShortcutsEditorPrivate::Program], category->text());
 
         // Add every item from the category.
-        foreach (QAction *action, category->actions()) {
+        Q_FOREACH (QAction *action, category->actions()) {
             actionsSeen.insert(action);
             d->addAction(action, hierarchy, KisShortcutsEditorPrivate::Action);
         }
@@ -164,7 +164,7 @@ void KisShortcutsEditor::addCollection(KActionCollection *collection, const QStr
     }
 
     // Finally, tack on any uncategorized actions.
-    foreach (QAction *action, collection->actions()) {
+    Q_FOREACH (QAction *action, collection->actions()) {
         if (!actionsSeen.contains(action)) {
             d->addAction(action, hierarchy, KisShortcutsEditorPrivate::Program);
         }
@@ -223,7 +223,7 @@ void KisShortcutsEditor::exportConfiguration(KConfigBase *config) const
 
     if (d->actionTypes) {
         KConfigGroup group(config,QStringLiteral("Shortcuts"));
-        foreach (KActionCollection *collection, d->actionCollections) {
+        Q_FOREACH (KActionCollection *collection, d->actionCollections) {
             collection->writeSettings(&group, true);
         }
     }
@@ -243,7 +243,7 @@ void KisShortcutsEditor::saveShortcuts(KConfigGroup *config) const
 
     // Clear and reset temporary shortcuts
     config->deleteGroup();
-    foreach (KActionCollection *collection, d->actionCollections) {
+    Q_FOREACH (KActionCollection *collection, d->actionCollections) {
         collection->writeSettings(config, false);
     }
 

@@ -130,7 +130,7 @@ bool KoBorder::operator==(const KoBorder &other) const
 
     KoBorder::BorderSide key;
 
-    foreach (key, d->data.keys()) {
+    Q_FOREACH (key, d->data.keys()) {
         if (!other.d->data.contains(key))
             return false;
         if (!(other.d->data[key] == d->data[key]))

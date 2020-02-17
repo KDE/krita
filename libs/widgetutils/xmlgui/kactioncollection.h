@@ -87,7 +87,7 @@ public:
      * Unlike addAssociatedWidget, this method only adds all current actions
      * in the collection to the given widget. Any action added after this call
      * will not be added to the given widget automatically.
-     * So this is just a shortcut for a foreach loop and a widget->addAction call.
+     * So this is just a shortcut for a Q_FOREACH loop and a widget->addAction call.
      */
     void associateWidget(QWidget *widget) const;
 

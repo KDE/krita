@@ -2057,7 +2057,7 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
     }
 
 
-    foreach (int key, keys) {
+    Q_FOREACH (int key, keys) {
         if (key == QTextFormat::BlockAlignment) {
             int alignValue = 0;
             bool ok = false;

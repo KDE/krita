@@ -255,7 +255,7 @@ public:
     void printDebug() const
     {
         int index = 0;
-        foreach (const QPointF &p, points) {
+        Q_FOREACH (const QPointF &p, points) {
             debugFlake << QString("P%1 ").arg(index++) << p;
         }
     }
@@ -745,7 +745,7 @@ QRectF KoPathSegment::boundingRect() const
          * was found in comp.graphics.algorithms:
          * Use the points at the extrema of the curve to calculate the AABB.
          */
-        foreach (qreal t, d->extrema()) {
+        Q_FOREACH (qreal t, d->extrema()) {
             if (t >= 0.0 && t <= 1.0) {
                 QPointF p = pointAt(t);
                 rect.setLeft(qMin(rect.left(), p.x()));
@@ -1148,7 +1148,7 @@ bool KoPathSegment::isFlat(qreal tolerance) const
     qreal minDist = 0.0;
     qreal maxDist = 0.0;
 
-    foreach (qreal t, s.d->extrema()) {
+    Q_FOREACH (qreal t, s.d->extrema()) {
         if (t >= 0.0 && t <= 1.0) {
             QPointF p = pointAt(t);
             qreal dist = s.d->distanceFromChord(p);
@@ -1413,7 +1413,7 @@ qreal KoPathSegment::nearestPoint(const QPointF &point) const
     qreal resultParam = 0.0;
 
     // Iterate over the found candidate params.
-    foreach (qreal root, rootParams) {
+    Q_FOREACH (qreal root, rootParams) {
         distanceSquared = kisSquareDistance(point, pointAt(root));
 
         if (distanceSquared < minDistanceSquared) {

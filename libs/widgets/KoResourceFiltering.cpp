@@ -88,9 +88,9 @@ void KoResourceFiltering::setTagSetFilenames(const QStringList& filenames)
 bool KoResourceFiltering::matchesResource(const QStringList &filteredList,const QStringList &filterList) const
 {
     Qt::CaseSensitivity sensitivity = Qt::CaseInsensitive;
-    foreach (QString filter, filterList) {
+    Q_FOREACH (QString filter, filterList) {
         if (!filter.startsWith('"')) {
-            foreach (QString filtered, filteredList) {
+            Q_FOREACH (QString filtered, filteredList) {
                 if (filtered.contains(filter,sensitivity)) {
                     return true;
                 }
@@ -110,7 +110,7 @@ void KoResourceFiltering::sanitizeExclusionList()
 {
    if(!d->includedNames.isEmpty()) {
 
-        foreach (const QString &exclusion, d->excludedNames) {
+        Q_FOREACH (const QString &exclusion, d->excludedNames) {
             if (!excludeFilterIsValid(exclusion))
                 d->excludedNames.removeAll(exclusion);
         }
@@ -124,7 +124,7 @@ QStringList KoResourceFiltering::tokenizeSearchString(const QString& searchStrin
 
 void KoResourceFiltering::populateIncludeExcludeFilters(const QStringList& filteredNames)
 {
-    foreach (QString name, filteredNames) {
+    Q_FOREACH (QString name, filteredNames) {
         QStringList* target;
 
         if(name.startsWith('!')) {
@@ -196,7 +196,7 @@ bool KoResourceFiltering::presetMatchesSearch(KoResource * resource) const
         return true;
     }
 
-    foreach (const QString &filter, d->tagSetFilenames) {
+    Q_FOREACH (const QString &filter, d->tagSetFilenames) {
         if (!resourceFileName.compare(filter) || !resourceName.compare(filter)) {
             return true;
         }

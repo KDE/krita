@@ -183,7 +183,7 @@ void HorizontalPaintingStrategy::drawTabs(const KoRulerPrivate *d, QPainter &pai
 
     qreal position = -10000;
 
-    foreach (const KoRuler::Tab & t, d->tabs) {
+    Q_FOREACH (const KoRuler::Tab & t, d->tabs) {
         qreal x;
         if (d->rightToLeft) {
             x = d->viewConverter->documentToViewX(d->effectiveActiveRangeEnd()
@@ -391,7 +391,7 @@ void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPain
                 && d->mouseCoordinate > 0
                 && d->mouseCoordinate < rulerLengthPixel)
             painter.drawLine(QPointF(mouseCoord, top), QPointF(mouseCoord, bottom));
-        foreach (const KoRulerPrivate::HotSpotData & hp, d->hotspots) {
+        Q_FOREACH (const KoRulerPrivate::HotSpotData & hp, d->hotspots) {
             const qreal x = d->viewConverter->documentToViewX(hp.position) + d->offset;
             painter.drawLine(QPointF(x, top), QPointF(x, bottom));
         }
@@ -611,7 +611,7 @@ void VerticalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainte
                 && d->mouseCoordinate > 0
                 && d->mouseCoordinate < rulerLengthPixel)
             painter.drawLine(QPointF(left, mouseCoord), QPointF(right, mouseCoord));
-        foreach (const KoRulerPrivate::HotSpotData & hp, d->hotspots) {
+        Q_FOREACH (const KoRulerPrivate::HotSpotData & hp, d->hotspots) {
             const qreal y = d->viewConverter->documentToViewY(hp.position) + d->offset;
             painter.drawLine(QPointF(left, y), QPointF(right, y));
         }
@@ -1119,7 +1119,7 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
     if (d->showTabs) {
         int i = 0;
         int x;
-        foreach (const Tab & t, d->tabs) {
+        Q_FOREACH (const Tab & t, d->tabs) {
             if (d->rightToLeft) {
                 x = d->viewConverter->documentToViewX(d->effectiveActiveRangeEnd()
                         - (d->relativeTabs ? d->paragraphIndent : 0) - t.position) + d->offset;

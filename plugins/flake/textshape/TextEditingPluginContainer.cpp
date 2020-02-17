@@ -27,7 +27,7 @@
 TextEditingPluginContainer::TextEditingPluginContainer(QObject *parent)
     : QObject(parent)
 {
-    foreach (const QString &key, KoTextEditingRegistry::instance()->keys()) {
+    Q_FOREACH (const QString &key, KoTextEditingRegistry::instance()->keys()) {
         KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);
         Q_ASSERT(factory);
         if (m_textEditingPlugins.contains(factory->id())) {

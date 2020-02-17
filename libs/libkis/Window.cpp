@@ -71,7 +71,7 @@ QList<View*> Window::views() const
 {
     QList<View *> ret;
     if (d->window) {
-        foreach(QPointer<KisView> view, KisPart::instance()->views()) {
+        Q_FOREACH(QPointer<KisView> view, KisPart::instance()->views()) {
             if (view->mainWindow() == d->window) {
                 ret << new View(view);
             }

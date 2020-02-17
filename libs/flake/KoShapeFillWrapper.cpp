@@ -378,7 +378,7 @@ KUndo2Command *KoShapeFillWrapper::setGradient(const QGradient *gradient, const 
     if (m_d->fillVariant == KoFlake::Fill) {
         QList<QSharedPointer<KoShapeBackground>> newBackgrounds;
 
-        foreach (KoShape *shape, m_d->shapes) {
+        Q_FOREACH (KoShape *shape, m_d->shapes) {
             Q_UNUSED(shape);
 
             KoGradientBackground *newGradient = new KoGradientBackground(KoFlake::cloneGradient(gradient));
@@ -414,7 +414,7 @@ KUndo2Command* KoShapeFillWrapper::applyGradientStopsOnly(const QGradient *gradi
     if (m_d->fillVariant == KoFlake::Fill) {
         QList<QSharedPointer<KoShapeBackground>> newBackgrounds;
 
-        foreach (KoShape *shape, m_d->shapes) {
+        Q_FOREACH (KoShape *shape, m_d->shapes) {
             newBackgrounds <<  m_d->applyFillGradientStops(shape, gradient);
         }
 

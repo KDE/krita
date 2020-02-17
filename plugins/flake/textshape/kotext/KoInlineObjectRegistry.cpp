@@ -51,12 +51,12 @@ void KoInlineObjectRegistry::Private::init(KoInlineObjectRegistry *q)
     KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Text-InlineObject"),
                                      QString::fromLatin1("[X-KoText-PluginVersion] == 28"), config);
 
-    foreach (KoInlineObjectFactoryBase *factory, q->values()) {
+    Q_FOREACH (KoInlineObjectFactoryBase *factory, q->values()) {
         QString nameSpace = factory->odfNameSpace();
         if (nameSpace.isEmpty() || factory->odfElementNames().isEmpty()) {
             debugText << "Variable factory" << factory->id() << " does not have odfNameSpace defined, ignoring";
         } else {
-            foreach (const QString &elementName, factory->odfElementNames()) {
+            Q_FOREACH (const QString &elementName, factory->odfElementNames()) {
                 factories.insert(QPair<QString, QString>(nameSpace, elementName), factory);
 
                 debugText << "Inserting variable factory" << factory->id() << " for"
@@ -77,10 +77,10 @@ KoInlineObjectRegistry* KoInlineObjectRegistry::instance()
 QList<QAction*> KoInlineObjectRegistry::createInsertVariableActions(KoCanvasBase *host) const
 {
     QList<QAction*> answer;
-    foreach (const QString &key, keys()) {
+    Q_FOREACH (const QString &key, keys()) {
         KoInlineObjectFactoryBase *factory = value(key);
         if (factory->type() == KoInlineObjectFactoryBase::TextVariable) {
-            foreach (const KoInlineObjectTemplate &templ, factory->templates()) {
+            Q_FOREACH (const KoInlineObjectTemplate &templ, factory->templates()) {
                 answer.append(new InsertVariableAction(host, factory, templ));
             }
 #ifndef NDEBUG

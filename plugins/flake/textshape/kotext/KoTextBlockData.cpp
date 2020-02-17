@@ -99,7 +99,7 @@ void KoTextBlockData::clearMarkups(MarkupType type)
 
 KoTextBlockData::MarkupRange KoTextBlockData::findMarkup(MarkupType type, int positionWithin) const
 {
-    foreach (const MarkupRange &range, d->markupRangesMap[type]) {
+    Q_FOREACH (const MarkupRange &range, d->markupRangesMap[type]) {
         if (positionWithin <= range.lastChar) {
             // possible hit
             if (positionWithin >= range.firstChar) {

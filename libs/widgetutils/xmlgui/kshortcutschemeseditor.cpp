@@ -230,7 +230,7 @@ void KShortcutSchemesEditor::importShortcutsScheme()
 // XXX: Not implemented
 void KShortcutSchemesEditor::saveAsDefaultsForScheme()
 {
-    foreach (KActionCollection *collection, m_dialog->actionCollections()) {
+    Q_FOREACH (KActionCollection *collection, m_dialog->actionCollections()) {
         KShortcutSchemesHelper::exportActionCollection(collection, currentScheme());
     }
 }

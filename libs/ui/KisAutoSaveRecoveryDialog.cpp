@@ -251,7 +251,7 @@ KisAutoSaveRecoveryDialog::~KisAutoSaveRecoveryDialog()
 
 void KisAutoSaveRecoveryDialog::slotDeleteAll()
 {
-    foreach(FileItem* fileItem, m_model->m_fileItems) {
+    Q_FOREACH(FileItem* fileItem, m_model->m_fileItems) {
         fileItem->checked = false;
     }
     accept();

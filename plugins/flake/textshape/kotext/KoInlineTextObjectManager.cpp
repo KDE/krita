@@ -129,7 +129,7 @@ void KoInlineTextObjectManager::setProperty(KoInlineObject::Property key, const 
         m_properties.remove(key);
     }
     m_properties.insert(key, value);
-    foreach (KoInlineObject *obj, m_listeners)
+    Q_FOREACH (KoInlineObject *obj, m_listeners)
         obj->propertyChanged(key, value);
 }
 

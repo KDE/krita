@@ -602,7 +602,7 @@ void KoTextEditor::setListProperties(const KoListLevelProperties &llp,
         KoListStyle *listStyle = list->style();
         if (KoStyleManager *styleManager = KoTextDocument(d->document).styleManager()) {
             QList<KoParagraphStyle *> paragraphStyles = styleManager->paragraphStyles();
-            foreach (KoParagraphStyle *paragraphStyle, paragraphStyles) {
+            Q_FOREACH (KoParagraphStyle *paragraphStyle, paragraphStyles) {
                 if (paragraphStyle->listStyle() == listStyle ||
                         (paragraphStyle->list() && paragraphStyle->list()->style() == listStyle)) {
                     flags = NoFlags;

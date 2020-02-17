@@ -103,7 +103,7 @@ KoTableOfContentsGeneratorInfo::KoTableOfContentsGeneratorInfo(bool generateEntr
 
 KoTableOfContentsGeneratorInfo::~KoTableOfContentsGeneratorInfo()
 {
-    foreach (const TocEntryTemplate &entryTemplate, m_entryTemplate) {
+    Q_FOREACH (const TocEntryTemplate &entryTemplate, m_entryTemplate) {
         qDeleteAll(entryTemplate.indexEntries);
     }
 }
@@ -113,7 +113,7 @@ void KoTableOfContentsGeneratorInfo::loadOdf(KoTextSharedLoadingData *sharedLoad
 {
     Q_ASSERT(element.localName() == "table-of-content-source" && element.namespaceURI() == KoXmlNS::text);
 
-    foreach (const TocEntryTemplate &entryTemplate, m_entryTemplate) {
+    Q_FOREACH (const TocEntryTemplate &entryTemplate, m_entryTemplate) {
         qDeleteAll(entryTemplate.indexEntries);
     }
     m_entryTemplate.clear();
@@ -230,11 +230,11 @@ void KoTableOfContentsGeneratorInfo::saveOdf(KoXmlWriter * writer) const
 
     m_indexTitleTemplate.saveOdf(writer);
 
-    foreach (const TocEntryTemplate &entry, m_entryTemplate) {
+    Q_FOREACH (const TocEntryTemplate &entry, m_entryTemplate) {
         entry.saveOdf(writer);
     }
 
-    foreach (const IndexSourceStyles &sourceStyle, m_indexSourceStyles) {
+    Q_FOREACH (const IndexSourceStyles &sourceStyle, m_indexSourceStyles) {
         sourceStyle.saveOdf(writer);
     }
 
@@ -255,11 +255,11 @@ KoTableOfContentsGeneratorInfo *KoTableOfContentsGeneratorInfo::clone()
     newToCInfo->m_useOutlineLevel = m_useOutlineLevel;
     newToCInfo->m_indexTitleTemplate = m_indexTitleTemplate;
 
-    foreach (const TocEntryTemplate &tocTemplate, m_entryTemplate) {
+    Q_FOREACH (const TocEntryTemplate &tocTemplate, m_entryTemplate) {
         newToCInfo->m_entryTemplate.append(tocTemplate);
     }
 
-    foreach (const IndexSourceStyles &indexSourceStyles, m_indexSourceStyles) {
+    Q_FOREACH (const IndexSourceStyles &indexSourceStyles, m_indexSourceStyles) {
         newToCInfo->m_indexSourceStyles.append(indexSourceStyles);
     }
 

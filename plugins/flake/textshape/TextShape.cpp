@@ -279,7 +279,7 @@ void TextShape::saveOdf(KoShapeSavingContext &context) const
     int index = -1;
     if (lay) {
         int i = 0;
-        foreach (KoShape *shape, lay->shapes()) {
+        Q_FOREACH (KoShape *shape, lay->shapes()) {
             if (shape == this) {
                 index = i;
             } else if (index >= 0) {

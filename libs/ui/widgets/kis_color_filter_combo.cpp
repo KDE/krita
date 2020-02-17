@@ -212,7 +212,7 @@ KisColorFilterCombo::KisColorFilterCombo(QWidget *parent)
     newModel->appendRow(item);
 
     int labelIndex = 0;
-    foreach (const QColor &color, scm.allColorLabels()) {
+    Q_FOREACH (const QColor &color, scm.allColorLabels()) {
         const QString title = color.alpha() > 0 ? "" : i18nc("combo box: select all layers without a label", "No Label");
 
         QStandardItem* item = new QStandardItem(title);

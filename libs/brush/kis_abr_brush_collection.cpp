@@ -73,7 +73,7 @@ static qint32 rle_decode(QDataStream & abr, char *buffer, qint32 height)
     short *cscanline_len;
     char *data = buffer;
 
-    // read compressed size foreach scanline
+    // read compressed size Q_FOREACH scanline
     cscanline_len = new short[ height ];
     for (i = 0; i < height; i++) {
         // short

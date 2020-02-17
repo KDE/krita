@@ -38,7 +38,7 @@ public:
         : resourceManager(new KoDocumentResourceManager())
     {
         KoShapeRegistry *registry = KoShapeRegistry::instance();
-        foreach (const QString &id, registry->keys()) {
+        Q_FOREACH (const QString &id, registry->keys()) {
             KoShapeFactoryBase *shapeFactory = registry->value(id);
             shapeFactory->newDocumentResourceManager(resourceManager);
         }

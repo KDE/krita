@@ -85,7 +85,7 @@ public:
         int x = 0;
         int y = 0; const QSize &size = buttonSize();
         if (m_orientation == Qt::Vertical) {
-            foreach (QWidgetItem* w, m_items) {
+            Q_FOREACH (QWidgetItem* w, m_items) {
                 if (w->isEmpty())
                     continue;
                 w->widget()->setGeometry(QRect(x, y, size.width(), size.height()));
@@ -96,7 +96,7 @@ public:
                 }
             }
         } else {
-            foreach (QWidgetItem* w, m_items) {
+            Q_FOREACH (QWidgetItem* w, m_items) {
                 if (w->isEmpty())
                     continue;
                 w->widget()->setGeometry(QRect(x, y, size.width(), size.height()));
@@ -385,7 +385,7 @@ private:
         int x = 0;
         int y = 0;
         bool firstSection = true;
-        foreach (QWidgetItem *wi, m_sections) {
+        Q_FOREACH (QWidgetItem *wi, m_sections) {
             Section *section = static_cast<Section*> (wi->widget());
             const int buttonCount = section->visibleButtonCount();
             if (buttonCount == 0) {

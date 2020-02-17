@@ -184,7 +184,7 @@ KoConfigAuthorPage::KoConfigAuthorPage()
     QStringList profiles = authorGroup.readEntry("profile-names", QStringList());
 
 
-    foreach (const QString &profile , profiles) {
+    Q_FOREACH (const QString &profile , profiles) {
         if (!profilesNew.contains(profile)) {
             KConfigGroup cgs(&authorGroup, "Author-" + profile);
             aUi = new Ui::KoConfigAuthorPage();

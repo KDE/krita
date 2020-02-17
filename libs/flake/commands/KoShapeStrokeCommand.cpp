@@ -80,7 +80,7 @@ KoShapeStrokeCommand::KoShapeStrokeCommand(const QList<KoShape*> &shapes,
     // save old strokes
     Q_FOREACH (KoShape *shape, shapes)
         d->addOldStroke(shape->stroke());
-    foreach (KoShapeStrokeModelSP stroke, strokes)
+    Q_FOREACH (KoShapeStrokeModelSP stroke, strokes)
         d->addNewStroke(stroke);
 
     setText(kundo2_i18n("Set stroke"));

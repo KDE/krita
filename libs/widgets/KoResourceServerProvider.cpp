@@ -164,7 +164,7 @@ KoResourceServerProvider* KoResourceServerProvider::instance()
 QStringList KoResourceServerProvider::blacklistFileNames(QStringList fileNames, const QStringList &blacklistedFileNames)
 {
     if (!blacklistedFileNames.isEmpty()) {
-        foreach (const QString &s, blacklistedFileNames) {
+        Q_FOREACH (const QString &s, blacklistedFileNames) {
             fileNames.removeAll(s);
         }
     }

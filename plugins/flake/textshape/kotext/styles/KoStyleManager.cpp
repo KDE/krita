@@ -988,7 +988,7 @@ KoListStyle *KoStyleManager::defaultOutlineStyle() const
         d->defaultOutlineStyle = d->defaultListStyle->clone();
 
         QList<int> levels = d->defaultOutlineStyle->listLevels();
-        foreach (int level, levels) {
+        Q_FOREACH (int level, levels) {
             KoListLevelProperties llp = d->defaultOutlineStyle->levelProperties(level);
             llp.setOutlineList(true);
             llp.setDisplayLevel(level);

@@ -54,7 +54,7 @@ BibliographyConfigureDialog::BibliographyConfigureDialog(const QTextDocument *do
                                         << QPair<QString, Qt::SortOrder>("identifier", Qt::AscendingOrder));
     }
 
-    foreach (const SortKeyPair &key, m_bibConfiguration->sortKeys()) {
+    Q_FOREACH (const SortKeyPair &key, m_bibConfiguration->sortKeys()) {
         dialog.sortKeyGroupBox->layout()->addWidget(
             new SortKeyWidget(key.first, key.second, dialog.sortKeyGroupBox));
     }
@@ -74,7 +74,7 @@ void BibliographyConfigureDialog::save(QAbstractButton *button)
 
         QList<SortKeyPair> sortKeys;
 
-        foreach (QObject *o, dialog.sortKeyGroupBox->children()) {
+        Q_FOREACH (QObject *o, dialog.sortKeyGroupBox->children()) {
             SortKeyWidget *widget = dynamic_cast<SortKeyWidget *>(o);
             if (widget) {
                 sortKeys << SortKeyPair(widget->sortKey(), widget->sortOrder());

@@ -184,7 +184,7 @@ QPointF KoSnapGuide::snap(const QPointF &mousePosition, Qt::KeyboardModifiers mo
     qreal maxSnapDistance = d->canvas->viewConverter()->viewToDocument(QSizeF(d->snapDistance,
                 d->snapDistance)).width();
 
-    foreach (Private::KoSnapStrategySP strategy, d->strategies) {
+    Q_FOREACH (Private::KoSnapStrategySP strategy, d->strategies) {
         if (d->usedStrategies & strategy->type() ||
             strategy->type() == GridSnapping ||
             strategy->type() == CustomSnapping) {

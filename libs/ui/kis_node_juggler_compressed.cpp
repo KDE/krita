@@ -591,7 +591,7 @@ private:
 
     QList<KisSelectionMaskSP> findActiveSelectionMasks(KisNodeList nodes) {
         QList<KisSelectionMaskSP> masks;
-        foreach (KisNodeSP node, nodes) {
+        Q_FOREACH (KisNodeSP node, nodes) {
             KisSelectionMaskSP mask = toActiveSelectionMask(node);
             if (mask) {
                 masks << mask;

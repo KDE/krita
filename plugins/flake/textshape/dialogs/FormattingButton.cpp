@@ -118,7 +118,7 @@ void FormattingButton::setNumColumns(int columns)
 void FormattingButton::setItemsBackground(const QColor &color)
 {
     if (m_styleAction) {
-        foreach (QObject *o, m_styleAction->defaultWidget()->children()) {
+        Q_FOREACH (QObject *o, m_styleAction->defaultWidget()->children()) {
             QWidget *w = qobject_cast<QWidget *>(o);
             if (w) {
                 QPalette p = w->palette();

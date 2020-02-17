@@ -125,7 +125,7 @@ bool RunAroundHelper::fit(const bool resetHorizontalPosition, bool isRightToLeft
 void RunAroundHelper::validateObstructions()
 {
     m_validObstructions.clear();
-    foreach (KoTextLayoutObstruction *obstruction, m_obstructions) {
+    Q_FOREACH (KoTextLayoutObstruction *obstruction, m_obstructions) {
         validateObstruction(obstruction);
     }
 }
@@ -150,7 +150,7 @@ void RunAroundHelper::createLineParts()
         bool lastRightRectValid = false;
         std::sort(m_validObstructions.begin(), m_validObstructions.end(), KoTextLayoutObstruction::compareRectLeft);
         // Divide rect to parts, part can be invalid when obstructions are not disjunct.
-        foreach (KoTextLayoutObstruction *validObstruction, m_validObstructions) {
+        Q_FOREACH (KoTextLayoutObstruction *validObstruction, m_validObstructions) {
             QRectF leftLineRect = validObstruction->getLeftLinePart(rightLineRect);
             lineParts.append(leftLineRect);
             QRectF lineRect = validObstruction->getRightLinePart(rightLineRect);
@@ -198,7 +198,7 @@ void RunAroundHelper::createLineParts()
             }
         }
         // Filter invalid parts.
-        foreach (const QRectF &rect, lineParts) {
+        Q_FOREACH (const QRectF &rect, lineParts) {
             if (rect.isValid()) {
                 m_lineParts.append(rect);
             }
@@ -235,7 +235,7 @@ void RunAroundHelper::updateLineParts(const QRectF &lineRect)
 QRectF RunAroundHelper::getLineRectPart()
 {
     QRectF retVal;
-    foreach (const QRectF &lineRectPart, m_lineParts) {
+    Q_FOREACH (const QRectF &lineRectPart, m_lineParts) {
         if (m_horizontalPosition <= lineRectPart.left() && m_textWidth <= lineRectPart.width()) {
             retVal = lineRectPart;
             break;

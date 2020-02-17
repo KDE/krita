@@ -351,7 +351,7 @@ QString KoToolManager::preferredToolForSelection(const QList<KoShape*> &shapes)
             continue;
 
         bool toolWillWork = false;
-        foreach (const QString &type, shapeTypes) {
+        Q_FOREACH (const QString &type, shapeTypes) {
             if (helper->activationShapeId().split(',').contains(type)) {
                 toolWillWork = true;
                 break;
@@ -844,7 +844,7 @@ void KoToolManager::Private::selectionChanged(const QList<KoShape*> &shapes)
             delegates << shape;
         }
 
-        foreach (KoShape *shape2, delegates) {
+        Q_FOREACH (KoShape *shape2, delegates) {
             Q_ASSERT(shape2);
             if (! types.contains(shape2->shapeId())) {
                 types.append(shape2->shapeId());
@@ -864,7 +864,7 @@ void KoToolManager::Private::selectionChanged(const QList<KoShape*> &shapes)
             && !activationShapeIds.contains("flake/edit")) {
 
         bool currentToolWorks = false;
-        foreach (const QString &type, types) {
+        Q_FOREACH (const QString &type, types) {
             if (activationShapeIds.contains(type)) {
                 currentToolWorks = true;
                 break;

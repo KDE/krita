@@ -495,7 +495,7 @@ void KoTextLayoutTableArea::layoutColumns()
     }
 
     // Relative column widths have now been summed up and can be distributed.
-    foreach (int col, relativeWidthColumns) {
+    Q_FOREACH (int col, relativeWidthColumns) {
         KoTableColumnStyle columnStyle = d->carsManager.columnStyle(col);
         if (columnStyle.hasProperty(KoTableColumnStyle::RelativeColumnWidth) || columnStyle.hasProperty(KoTableColumnStyle::ColumnWidth)) {
             d->columnWidths[col] = qMax<qreal>(columnStyle.relativeColumnWidth() * availableWidth / relativeWidthSum, 0.0);

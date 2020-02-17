@@ -343,7 +343,7 @@ bool KoChangeTracker::saveInlineChange(int changeId, KoGenChange &change)
 
 QMap<int, QString> KoChangeTracker::saveInlineChanges(QMap<int, QString> changeTransTable, KoGenChanges &genChanges)
 {
-    foreach (int changeId, d->changes.keys()) {
+    Q_FOREACH (int changeId, d->changes.keys()) {
 
         // return if the id we find in the changetranstable already has a length.
         if (changeTransTable.value(changeId).length()) {
@@ -391,7 +391,7 @@ int KoChangeTracker::getLoadedChangeId(const QString &odfId) const
 int KoChangeTracker::getDeletedChanges(QVector<KoChangeTrackerElement *>& deleteVector) const
 {
     int numAppendedItems = 0;
-    foreach (KoChangeTrackerElement *element, d->changes.values()) {
+    Q_FOREACH (KoChangeTrackerElement *element, d->changes.values()) {
         if(element->getChangeType() == KoGenChange::DeleteChange && !element->acceptedRejected()) {
           deleteVector << element;
           numAppendedItems++;

@@ -114,7 +114,7 @@ void EnhancedPathShape::updatePath(const QSizeF &size)
         clear();
         enableResultCache(true);
 
-        foreach (EnhancedPathCommand *cmd, m_commands) {
+        Q_FOREACH (EnhancedPathCommand *cmd, m_commands) {
             cmd->execute();
         }
 
@@ -138,8 +138,8 @@ void EnhancedPathShape::updatePath(const QSizeF &size)
         } else {
             matrix = m_mirrorMatrix * m_viewMatrix * matrix;
         }
-        foreach (KoSubpath *subpath, subpaths()) {
-            foreach (KoPathPoint *point, *subpath) {
+        Q_FOREACH (KoSubpath *subpath, subpaths()) {
+            Q_FOREACH (KoPathPoint *point, *subpath) {
                 point->map(matrix);
             }
         }
@@ -420,8 +420,8 @@ bool EnhancedPathShape::useStretchPoints(const QSizeF &size, qreal &scale)
         qreal scaleY = size.height();
         if (qreal(m_viewBox.width()) / m_viewBox.height() < qreal(scaleX) / scaleY) {
             qreal deltaX = (scaleX * m_viewBox.height()) / scaleY - m_viewBox.width();
-            foreach (KoSubpath *subpath, subpaths()) {
-                foreach (KoPathPoint *currPoint, *subpath) {
+            Q_FOREACH (KoSubpath *subpath, subpaths()) {
+                Q_FOREACH (KoPathPoint *currPoint, *subpath) {
                     if (currPoint->point().x() >=  m_pathStretchPointX &&
                             currPoint->controlPoint1().x() >= m_pathStretchPointX &&
                             currPoint->controlPoint2().x() >= m_pathStretchPointX) {
@@ -437,8 +437,8 @@ bool EnhancedPathShape::useStretchPoints(const QSizeF &size, qreal &scale)
             scale = scaleY / m_viewBox.height();
         } else if (qreal(m_viewBox.width()) / m_viewBox.height() > qreal(scaleX) / scaleY) {
             qreal deltaY = (m_viewBox.width() * scaleY) / scaleX - m_viewBox.height();
-            foreach (KoSubpath *subpath, subpaths()) {
-                foreach (KoPathPoint *currPoint, *subpath) {
+            Q_FOREACH (KoSubpath *subpath, subpaths()) {
+                Q_FOREACH (KoPathPoint *currPoint, *subpath) {
                     if (currPoint->point().y() >=  m_pathStretchPointY &&
                             currPoint->controlPoint1().y() >= m_pathStretchPointY &&
                             currPoint->controlPoint2().y() >= m_pathStretchPointY) {
@@ -521,7 +521,7 @@ void EnhancedPathShape::saveOdf(KoShapeSavingContext &context) const
         }
 
         QString modifiers;
-        foreach (qreal modifier, m_modifiers) {
+        Q_FOREACH (qreal modifier, m_modifiers) {
             modifiers += QString::number(modifier) + ' ';
         }
         context.xmlWriter().addAttribute("draw:modifiers", modifiers.trimmed());
@@ -531,7 +531,7 @@ void EnhancedPathShape::saveOdf(KoShapeSavingContext &context) const
         }
 
         QString path;
-        foreach (EnhancedPathCommand *c, m_commands) {
+        Q_FOREACH (EnhancedPathCommand *c, m_commands) {
             path += c->toString() + ' ';
         }
         context.xmlWriter().addAttribute("draw:enhanced-path", path.trimmed());
@@ -544,7 +544,7 @@ void EnhancedPathShape::saveOdf(KoShapeSavingContext &context) const
             context.xmlWriter().endElement(); // draw:equation
         }
 
-        foreach (EnhancedPathHandle *handle, m_enhancedHandles) {
+        Q_FOREACH (EnhancedPathHandle *handle, m_enhancedHandles) {
             handle->saveOdf(context);
         }
 

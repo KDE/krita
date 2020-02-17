@@ -312,7 +312,7 @@ static void propagateTranslationDomain(QDomDocument &doc, const QStringList tagN
             return;
         }
     }
-    foreach (const QString &tagName, tagNames) {
+    Q_FOREACH (const QString &tagName, tagNames) {
         QDomNodeList textNodes = base.elementsByTagName(tagName);
         for (int i = 0; i < textNodes.length(); ++i) {
             QDomElement e = textNodes.item(i).toElement();
@@ -794,7 +794,7 @@ void KXMLGUIClient::stateChanged(const QString &newstate, KXMLGUIClient::Reverse
 void KXMLGUIClient::beginXMLPlug(QWidget *w)
 {
     actionCollection()->addAssociatedWidget(w);
-    foreach (KXMLGUIClient *client, d->m_children) {
+    Q_FOREACH (KXMLGUIClient *client, d->m_children) {
         client->beginXMLPlug(w);
     }
 }
@@ -806,7 +806,7 @@ void KXMLGUIClient::endXMLPlug()
 void KXMLGUIClient::prepareXMLUnplug(QWidget *w)
 {
     actionCollection()->removeAssociatedWidget(w);
-    foreach (KXMLGUIClient *client, d->m_children) {
+    Q_FOREACH (KXMLGUIClient *client, d->m_children) {
         client->prepareXMLUnplug(w);
     }
 }

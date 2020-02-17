@@ -297,7 +297,7 @@ void KoStyleThumbnailer::setText(const QString &text)
 void KoStyleThumbnailer::removeFromCache(const QString &expr)
 {
     QList<QString> keys = d->thumbnailCache.keys();
-    foreach (const QString &key, keys) {
+    Q_FOREACH (const QString &key, keys) {
         if (key.contains(expr)) {
             d->thumbnailCache.remove(key);
         }

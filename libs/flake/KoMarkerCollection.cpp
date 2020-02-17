@@ -115,7 +115,7 @@ void KoMarkerCollection::loadDefaultMarkers()
 QList<KoMarker*> KoMarkerCollection::markers() const
 {
     QList<KoMarker*> markerList;
-    foreach (const QExplicitlySharedDataPointer<KoMarker>& m, d->markers){
+    Q_FOREACH (const QExplicitlySharedDataPointer<KoMarker>& m, d->markers){
         markerList.append(m.data());
     }
     return markerList;
@@ -123,7 +123,7 @@ QList<KoMarker*> KoMarkerCollection::markers() const
 
 KoMarker * KoMarkerCollection::addMarker(KoMarker *marker)
 {
-    foreach (const QExplicitlySharedDataPointer<KoMarker>& m, d->markers) {
+    Q_FOREACH (const QExplicitlySharedDataPointer<KoMarker>& m, d->markers) {
         if (marker == m.data()) {
             return marker;
         }

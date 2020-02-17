@@ -296,7 +296,7 @@ bool QGIFLibHandler::write ( const QImage & image )
     //	else
     //		qDebug("description is of qvariant type %d", descText.type());
 
-    /// @todo foreach of multiple images in an animation...
+    /// @todo Q_FOREACH of multiple images in an animation...
     if (EGifPutImageDesc(gif, 0, 0, toWrite.width(), toWrite.height(), 0, &cmap) == GIF_ERROR)
         qWarning("EGifPutImageDesc returned error %d", gif->Error);
 

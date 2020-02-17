@@ -244,7 +244,7 @@ void KoResourceItemChooser::slotButtonClicked(int button)
 
 void KoResourceItemChooser::showButtons(bool show)
 {
-    foreach (QAbstractButton * button, d->buttonGroup->buttons()) {
+    Q_FOREACH (QAbstractButton * button, d->buttonGroup->buttons()) {
         show ? button->show() : button->hide();
     }
 

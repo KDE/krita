@@ -886,7 +886,7 @@ void DefaultTool::copy() const
 void DefaultTool::deleteSelection()
 {
     QList<KoShape *> shapes;
-    foreach (KoShape *s, koSelection()->selectedShapes()) {
+    Q_FOREACH (KoShape *s, koSelection()->selectedShapes()) {
         if (s->isGeometryProtected()) {
             continue;
         }
@@ -1647,7 +1647,7 @@ void DefaultTool::updateDistinctiveActions(const QList<KoShape*> &editableShapes
 
 
     bool hasGroupShape = false;
-            foreach (KoShape *shape, editableShapes) {
+            Q_FOREACH (KoShape *shape, editableShapes) {
             if (dynamic_cast<KoShapeGroup *>(shape)) {
                 hasGroupShape = true;
                 break;

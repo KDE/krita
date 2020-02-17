@@ -132,7 +132,7 @@ void ChangeStylesCommand::redo()
         KoStyleManager *sm = KoTextDocument(m_document).styleManager();
 
         QTextCursor cursor(m_document);
-        foreach (Memento *memento, m_mementos) {
+        Q_FOREACH (Memento *memento, m_mementos) {
 
             cursor.setPosition(memento->blockPosition);
             QTextBlock block = cursor.block();

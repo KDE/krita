@@ -258,12 +258,12 @@ QList<QPair<QString, KoParagraphStyle *> > KoTextSharedLoadingData::loadParagrap
 
     // second pass; resolve all the 'next-style's and parent-style's.
     // TODO iterate via values
-    foreach (KoParagraphStyle *style, nextStyles.keys()) {
+    Q_FOREACH (KoParagraphStyle *style, nextStyles.keys()) {
         KoParagraphStyle *next = d->namedParagraphStyles.value(nextStyles.value(style));
         if (next && next->styleId() >= 0)
             style->setNextStyle(next->styleId());
     }
-    foreach (KoParagraphStyle *style, parentStyles.keys()) {
+    Q_FOREACH (KoParagraphStyle *style, parentStyles.keys()) {
         KoParagraphStyle *parent = d->namedParagraphStyles.value(parentStyles.value(style));
         if (parent)
             style->setParentStyle(parent);
@@ -277,7 +277,7 @@ void KoTextSharedLoadingData::addCharacterStyles(KoShapeLoadingContext &context,
 {
     QList<OdfCharStyle> characterStyles(loadCharacterStyles(context, styleElements));
 
-    foreach (const OdfCharStyle &odfStyle, characterStyles) {
+    Q_FOREACH (const OdfCharStyle &odfStyle, characterStyles) {
         if (styleTypes & ContentDotXml) {
             d->characterContentDotXmlStyles.insert(odfStyle.odfName, odfStyle.style);
         }
@@ -293,7 +293,7 @@ void KoTextSharedLoadingData::addCharacterStyles(KoShapeLoadingContext &context,
     }
 
     // now that all name styles have been added we resolve parent relation ships
-    foreach (const OdfCharStyle &odfStyle, characterStyles) {
+    Q_FOREACH (const OdfCharStyle &odfStyle, characterStyles) {
 
         KoCharacterStyle *parent = 0;
         if (!odfStyle.parentStyle.isEmpty()) {

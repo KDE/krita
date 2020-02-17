@@ -60,7 +60,7 @@ KoShapeReorderCommand::KoShapeReorderCommand(const QList<KoShape*> &shapes, QLis
       d(new KoShapeReorderCommandPrivate(shapes, newIndexes))
 {
     Q_ASSERT(shapes.count() == newIndexes.count());
-    foreach (KoShape *shape, shapes)
+    Q_FOREACH (KoShape *shape, shapes)
         d->previousIndexes.append(shape->zIndex());
 
     setText(kundo2_i18n("Reorder shapes"));

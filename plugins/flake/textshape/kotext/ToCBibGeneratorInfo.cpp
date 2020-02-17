@@ -209,7 +209,7 @@ IndexSourceStyles::IndexSourceStyles(const IndexSourceStyles &indexSourceStyles)
 {
     outlineLevel = indexSourceStyles.outlineLevel;
 
-    foreach (const IndexSourceStyle &style, indexSourceStyles.styles) {
+    Q_FOREACH (const IndexSourceStyle &style, indexSourceStyles.styles) {
         styles.append(style);
     }
 }
@@ -256,7 +256,7 @@ TocEntryTemplate::TocEntryTemplate(const TocEntryTemplate &entryTemplate)
     styleName = entryTemplate.styleName;
     styleId = entryTemplate.styleId;
 
-    foreach (IndexEntry *entry, entryTemplate.indexEntries) {
+    Q_FOREACH (IndexEntry *entry, entryTemplate.indexEntries) {
         indexEntries.append(entry->clone());
     }
 }
@@ -330,7 +330,7 @@ BibliographyEntryTemplate::BibliographyEntryTemplate(const BibliographyEntryTemp
     styleName = entryTemplate.styleName;
     styleId = entryTemplate.styleId;
 
-    foreach (IndexEntry *entry, entryTemplate.indexEntries) {
+    Q_FOREACH (IndexEntry *entry, entryTemplate.indexEntries) {
         indexEntries.append(entry->clone());
     }
 

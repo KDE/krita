@@ -66,7 +66,7 @@ const int BlinkInterval = 500;
 
 static bool hit(const QKeySequence &input, KStandardShortcut::StandardShortcut shortcut)
 {
-    foreach (const QKeySequence &ks, KStandardShortcut::shortcut(shortcut)) {
+    Q_FOREACH (const QKeySequence &ks, KStandardShortcut::shortcut(shortcut)) {
         if (input == ks) {
             return true;
         }
@@ -495,7 +495,7 @@ void ArtisticTextTool::activate(ToolActivation activation, const QSet<KoShape *>
 {
     KoToolBase::activate(activation, shapes);
 
-    foreach (KoShape *shape, shapes) {
+    Q_FOREACH (KoShape *shape, shapes) {
         ArtisticTextShape *text = dynamic_cast<ArtisticTextShape *>(shape);
         if (text) {
             setCurrentShape(text);
@@ -790,7 +790,7 @@ void ArtisticTextTool::shapeSelectionChanged()
         return;
     }
 
-    foreach (KoShape *shape, selection->selectedShapes()) {
+    Q_FOREACH (KoShape *shape, selection->selectedShapes()) {
         ArtisticTextShape *text = dynamic_cast<ArtisticTextShape *>(shape);
         if (text) {
             setCurrentShape(text);

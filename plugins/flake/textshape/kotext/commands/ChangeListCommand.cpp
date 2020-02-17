@@ -49,7 +49,7 @@ ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, const KoListLeve
     if (styleCompletelySetAlready && !(m_flags & KoTextEditor::DontUnsetIfSame))
         style = KoListStyle::None;
 
-    foreach (int lev, levels) {
+    Q_FOREACH (int lev, levels) {
         KoListLevelProperties llp;
         llp.setLevel(lev);
         llp.setStyle(style);
@@ -176,7 +176,7 @@ void ChangeListCommand::initList(KoListStyle *listStyle)
         // attempt to merge with previous block
         QTextBlock prev = m_blocks.value(0).previous();
         bool isMergeable = true;
-        foreach (int lev, levels) {
+        Q_FOREACH (int lev, levels) {
             KoListLevelProperties llp = listStyle->levelProperties(lev);
             // checks format compatibility
             isMergeable = (isMergeable && prev.isValid() && prev.textList() && (formatsEqual(llp, prev.textList()->format())));
@@ -188,7 +188,7 @@ void ChangeListCommand::initList(KoListStyle *listStyle)
             // attempt to merge with next block if previous failed
             isMergeable = true;
             QTextBlock next = m_blocks.value(m_blocks.size()-1).next();
-            foreach (int lev, levels) {
+            Q_FOREACH (int lev, levels) {
                 KoListLevelProperties llp = listStyle->levelProperties(lev);
                 isMergeable = (isMergeable && next.isValid() && next.textList() && (formatsEqual(llp, next.textList()->format())));
             }

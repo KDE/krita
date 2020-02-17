@@ -34,7 +34,7 @@ KoDeletedRowData::KoDeletedRowData(int rowNumber)
 KoDeletedRowData::~KoDeletedRowData()
 {
     KoDeletedCellData *cellData;
-    foreach (cellData, deleted_cells) {
+    Q_FOREACH (cellData, deleted_cells) {
         delete cellData;
     }
 }

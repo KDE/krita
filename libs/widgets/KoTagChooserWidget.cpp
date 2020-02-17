@@ -135,7 +135,7 @@ void KoTagChooserWidget::insertItem(QString tagName)
     QStringList tags = allTags();
     tags.append(tagName);
     tags.sort();
-    foreach (QString readOnlyTag, d->readOnlyTags) {
+    Q_FOREACH (QString readOnlyTag, d->readOnlyTags) {
         tags.prepend(readOnlyTag);
     }
 

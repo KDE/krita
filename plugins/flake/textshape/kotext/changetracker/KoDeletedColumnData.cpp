@@ -34,7 +34,7 @@ KoDeletedColumnData::KoDeletedColumnData(int columnNumber)
 KoDeletedColumnData::~KoDeletedColumnData()
 {
     KoDeletedCellData *cellData;
-    foreach (cellData, deleted_cells) {
+    Q_FOREACH (cellData, deleted_cells) {
         delete cellData;
     }
 }

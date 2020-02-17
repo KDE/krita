@@ -71,7 +71,7 @@ void KoTextShapeContainerModel::add(KoShape *child)
     d->children.insert(child, relation);
 
     KoShapeAnchor *toBeAddedAnchor = 0;
-    foreach (KoShapeAnchor *anchor, d->shapeRemovedAnchors) {
+    Q_FOREACH (KoShapeAnchor *anchor, d->shapeRemovedAnchors) {
         if (child == anchor->shape()) {
             toBeAddedAnchor = anchor;
             break;
@@ -128,7 +128,7 @@ QList<KoShape*> KoTextShapeContainerModel::shapes() const
 {
     QList<KoShape*> answer;
     answer.reserve(d->children.count());
-    foreach (const Relation &relation, d->children) {
+    Q_FOREACH (const Relation &relation, d->children) {
         answer << relation.child;
     }
     return answer;

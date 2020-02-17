@@ -841,7 +841,7 @@ void EnhancedPathFormula::debugTokens(const TokenList &tokens)
 void EnhancedPathFormula::debugOpcodes()
 {
 #ifndef NDEBUG
-    foreach (const Opcode &c, m_codes) {
+    Q_FOREACH (const Opcode &c, m_codes) {
         QString ctext;
         switch (c.type) {
         case Opcode::Load: ctext = QString("Load #%1").arg(c.index); break;

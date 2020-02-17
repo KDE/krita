@@ -46,7 +46,7 @@ void DeleteAnnotationsCommand::redo()
     m_deleteAnnotations = true;
     KoTextRangeManager *rangeManager = KoTextDocument(m_document).textRangeManager();
     if (rangeManager) {
-        foreach (KoAnnotation *annotation, m_annotations) {
+        Q_FOREACH (KoAnnotation *annotation, m_annotations) {
             rangeManager->remove(annotation);
         }
     }
@@ -57,7 +57,7 @@ void DeleteAnnotationsCommand::undo()
     KUndo2Command::undo();
     KoTextRangeManager *rangeManager = KoTextDocument(m_document).textRangeManager();
     if (rangeManager) {
-        foreach (KoAnnotation *annotation, m_annotations) {
+        Q_FOREACH (KoAnnotation *annotation, m_annotations) {
             rangeManager->insert(annotation);
             //it's a textrange so we need to ask for a layout so we know where it is
             m_document->markContentsDirty(annotation->rangeStart(), 0);

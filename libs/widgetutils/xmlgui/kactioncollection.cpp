@@ -136,7 +136,7 @@ QList<KActionCategory *> KActionCollection::categories() const
 
 KActionCategory *KActionCollection::getCategory(const QString &name) {
     KActionCategory *category = 0;
-    foreach (KActionCategory *c, categories()) {
+    Q_FOREACH (KActionCategory *c, categories()) {
         if (c->text() == name) {
             category = c;
         }

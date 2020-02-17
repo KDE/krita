@@ -133,7 +133,7 @@ public:
 
 static bool hit(const QKeySequence &input, KStandardShortcut::StandardShortcut shortcut)
 {
-    foreach (const QKeySequence &ks, KStandardShortcut::shortcut(shortcut)) {
+    Q_FOREACH (const QKeySequence &ks, KStandardShortcut::shortcut(shortcut)) {
         if (input == ks) {
             return true;
         }
@@ -171,7 +171,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
 
     m_unit = canvas->resourceManager()->unitResource(KoCanvasResourceProvider::Unit);
 
-    foreach (KoTextEditingPlugin *plugin, textEditingPluginContainer()->values()) {
+    Q_FOREACH (KoTextEditingPlugin *plugin, textEditingPluginContainer()->values()) {
         connect(plugin, SIGNAL(startMacro(QString)),
                 this, SLOT(startMacro(QString)));
         connect(plugin, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
@@ -189,7 +189,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
     KisSignalMapper *signalMapper = new KisSignalMapper(this);
     connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(startTextEditingPlugin(QString)));
     m_contextMenu->addAction(this->action("format_font"));
-    foreach (const QString &key, KoTextEditingRegistry::instance()->keys()) {
+    Q_FOREACH (const QString &key, KoTextEditingRegistry::instance()->keys()) {
         KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);
         if (factory->showInMenu()) {
             QAction *a = new QAction(factory->title(), this);
@@ -599,7 +599,7 @@ void TextTool::relayoutContent()
 {
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout *>(m_textShapeData->document()->documentLayout());
     Q_ASSERT(lay);
-    foreach (KoTextLayoutRootArea *rootArea, lay->rootAreas()) {
+    Q_FOREACH (KoTextLayoutRootArea *rootArea, lay->rootAreas()) {
         rootArea->setDirty();
     }
     lay->emitLayoutIsDirty();
@@ -994,7 +994,7 @@ void TextTool::setShapeData(KoTextShapeData *data)
 
         m_variableMenu->menu()->clear();
         KoTextDocument document(m_textShapeData->document());
-        foreach (QAction *action, document.inlineTextObjectManager()->createInsertVariableActions(canvas())) {
+        Q_FOREACH (QAction *action, document.inlineTextObjectManager()->createInsertVariableActions(canvas())) {
             m_variableMenu->addAction(action);
             connect(action, SIGNAL(triggered()), this, SLOT(returnFocusToCanvas()));
         }
@@ -1074,7 +1074,7 @@ TextEditingPluginContainer *TextTool::textEditingPluginContainer()
         variant.setValue(m_textEditingPlugins.data());
         canvas()->resourceManager()->setResource(TextEditingPluginContainer::ResourceId, variant);
 
-        foreach (KoTextEditingPlugin *plugin, m_textEditingPlugins->values()) {
+        Q_FOREACH (KoTextEditingPlugin *plugin, m_textEditingPlugins->values()) {
             connect(plugin, SIGNAL(startMacro(QString)),
                     this, SLOT(startMacro(QString)));
             connect(plugin, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
@@ -1989,7 +1989,7 @@ void TextTool::activate(ToolActivation activation, const QSet<KoShape *> &shapes
 
     m_caretTimer.start();
     m_caretTimerState = true;
-    foreach (KoShape *shape, shapes) {
+    Q_FOREACH (KoShape *shape, shapes) {
         m_textShape = dynamic_cast<TextShape *>(shape);
         if (m_textShape) {
             break;
@@ -2105,7 +2105,7 @@ void TextTool::repaintSelection()
     QList<TextShape *> shapes;
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout *>(textEditor->document()->documentLayout());
     Q_ASSERT(lay);
-    foreach (KoShape *shape, lay->shapes()) {
+    Q_FOREACH (KoShape *shape, lay->shapes()) {
         TextShape *textShape = dynamic_cast<TextShape *>(shape);
         if (textShape == 0) { // when the shape is being deleted its no longer a TextShape but a KoShape
             continue;
@@ -2119,7 +2119,7 @@ void TextTool::repaintSelection()
 
     // loop over all shapes that contain the text and update per shape.
     QRectF repaintRect = textRect(cursor);
-    foreach (TextShape *ts, shapes) {
+    Q_FOREACH (TextShape *ts, shapes) {
         QRectF rect = repaintRect;
         rect.moveTop(rect.y() - ts->textShapeData()->documentOffset());
         rect = ts->absoluteTransformation().mapRect(rect);
@@ -2878,7 +2878,7 @@ void TextTool::editingPluginEvents()
 void TextTool::finishedWord()
 {
     if (m_textShapeData && textEditingPluginContainer()) {
-        foreach (KoTextEditingPlugin *plugin, textEditingPluginContainer()->values()) {
+        Q_FOREACH (KoTextEditingPlugin *plugin, textEditingPluginContainer()->values()) {
             plugin->finishedWord(m_textShapeData->document(), m_prevCursorPosition);
         }
     }
@@ -2887,7 +2887,7 @@ void TextTool::finishedWord()
 void TextTool::finishedParagraph()
 {
     if (m_textShapeData && textEditingPluginContainer()) {
-        foreach (KoTextEditingPlugin *plugin, textEditingPluginContainer()->values()) {
+        Q_FOREACH (KoTextEditingPlugin *plugin, textEditingPluginContainer()->values()) {
             plugin->finishedParagraph(m_textShapeData->document(), m_prevCursorPosition);
         }
     }
@@ -2896,7 +2896,7 @@ void TextTool::finishedParagraph()
 void TextTool::startingSimpleEdit()
 {
     if (m_textShapeData && textEditingPluginContainer()) {
-        foreach (KoTextEditingPlugin *plugin, textEditingPluginContainer()->values()) {
+        Q_FOREACH (KoTextEditingPlugin *plugin, textEditingPluginContainer()->values()) {
             plugin->startingSimpleEdit(m_textShapeData->document(), m_prevCursorPosition);
         }
     }
@@ -3030,7 +3030,7 @@ void TextTool::debugTextDocument()
         } else if (block.length() == 1) { // no actual tet
             qDebug() << "\\n";
         }
-        foreach (const QTextCharFormat &cf, inlineCharacters) {
+        Q_FOREACH (const QTextCharFormat &cf, inlineCharacters) {
             KoInlineObject *object = inlineManager->inlineTextObject(cf);
             qDebug() << "At pos:" << cf.intProperty(CHARPOSITION) << object;
             // qDebug() << "-> id:" << cf.intProperty(577297549);
@@ -3059,13 +3059,13 @@ void TextTool::debugTextStyles()
 
     QSet<int> seenStyles;
 
-    foreach (KoParagraphStyle *style, styleManager->paragraphStyles()) {
+    Q_FOREACH (KoParagraphStyle *style, styleManager->paragraphStyles()) {
         qDebug() << style->styleId() << style->name() << (styleManager->defaultParagraphStyle() == style ? "[Default]" : "");
         KoListStyle *ls = style->listStyle();
         if (ls) { // optional ;)
             qDebug() << "  +- ListStyle: " << ls->styleId() << ls->name()
                      << (ls == styleManager->defaultListStyle() ? "[Default]" : "");
-            foreach (int level, ls->listLevels()) {
+            Q_FOREACH (int level, ls->listLevels()) {
                 KoListLevelProperties llp = ls->levelProperties(level);
                 qDebug() << "  |  level" << llp.level() << " style (enum):" << llp.style();
                 if (llp.bulletCharacter().unicode() != 0) {
@@ -3077,7 +3077,7 @@ void TextTool::debugTextStyles()
     }
 
     bool first = true;
-    foreach (KoCharacterStyle *style, styleManager->characterStyles()) {
+    Q_FOREACH (KoCharacterStyle *style, styleManager->characterStyles()) {
         if (seenStyles.contains(style->styleId())) {
             continue;
         }
@@ -3090,7 +3090,7 @@ void TextTool::debugTextStyles()
     }
 
     first = true;
-    foreach (KoListStyle *style, styleManager->listStyles()) {
+    Q_FOREACH (KoListStyle *style, styleManager->listStyles()) {
         if (seenStyles.contains(style->styleId())) {
             continue;
         }

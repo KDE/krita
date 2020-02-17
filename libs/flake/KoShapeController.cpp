@@ -108,7 +108,7 @@ public:
     }
 
     void handleAttachedConnections(KoShape *shape, KUndo2Command *parentCmd) {
-        foreach (KoShape *dependee, shape->dependees()) {
+        Q_FOREACH (KoShape *dependee, shape->dependees()) {
             KoConnectionShape *connection = dynamic_cast<KoConnectionShape*>(dependee);
             if (connection) {
                 if (shape == connection->firstShape()) {
@@ -171,7 +171,7 @@ KUndo2Command* KoShapeController::removeShapes(const QList<KoShape*> &shapes, KU
 {
     KUndo2Command *cmd = new KoShapeDeleteCommand(d->shapeController, shapes, parent);
     d->shapeController->shapesRemoved(shapes, cmd);
-    foreach (KoShape *shape, shapes) {
+    Q_FOREACH (KoShape *shape, shapes) {
         d->handleAttachedConnections(shape, cmd);
     }
     return cmd;

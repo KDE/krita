@@ -93,7 +93,7 @@ QPainterPath KoTextLayoutObstruction::decoratedOutline(const KoShape *shape, qre
     if (shapeGroup) {
         QPainterPath groupPath;
 
-        foreach (const KoShape *child, shapeGroup->shapes()) {
+        Q_FOREACH (const KoShape *child, shapeGroup->shapes()) {
             groupPath += decoratedOutline(child, borderHalfWidth);
         }
         return groupPath;
@@ -183,7 +183,7 @@ void KoTextLayoutObstruction::init(const QTransform &matrix, const QPainterPath 
     // Now we need to change the path into a polygon for easier handling later on
     m_polygon = path.toFillPolygon();
     QPointF prev = *(m_polygon.begin());
-    foreach (const QPointF &vtx, m_polygon) { //initialized edges
+    Q_FOREACH (const QPointF &vtx, m_polygon) { //initialized edges
         if (vtx.x() == prev.x() && vtx.y() == prev.y())
             continue;
         QLineF line;
@@ -219,7 +219,7 @@ QRectF KoTextLayoutObstruction::cropToLine(const QRectF &lineRect)
         m_line = lineRect;
         bool untilFirst = true;
         //check inner points
-        foreach (const QPointF &point, m_polygon) {
+        Q_FOREACH (const QPointF &point, m_polygon) {
             if (lineRect.contains(point)) {
                 if (untilFirst) {
                     m_line.setLeft(point.x());

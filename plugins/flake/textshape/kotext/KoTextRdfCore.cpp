@@ -124,7 +124,7 @@ bool KoTextRdfCore::loadManifest(KoStore *store, QSharedPointer<Soprano::Model> 
                                     Soprano::SerializationRdfXml);
     QList<Statement> allStatements = it.allElements();
     debugText << "Found " << allStatements.size() << " triples...";
-    foreach (const Soprano::Statement &s, allStatements) {
+    Q_FOREACH (const Soprano::Statement &s, allStatements) {
         Error::ErrorCode err = model->addStatement(s.subject(), s.predicate(),
                 s.object(), context);
         if (err != Error::ErrorNone) {
@@ -144,7 +144,7 @@ void KoTextRdfCore::dumpModel(const QString &msg, QSharedPointer<Soprano::Model>
 #ifndef NDEBUG
     QList<Soprano::Statement> allStatements = m->listStatements().allElements();
     debugText << "----- " << msg << " ----- model size:" << allStatements.size() << endl;
-    foreach (const Soprano::Statement &s, allStatements) {
+    Q_FOREACH (const Soprano::Statement &s, allStatements) {
         debugText << s;
     }
 #else
@@ -212,7 +212,7 @@ void KoTextRdfCore::saveList(QSharedPointer<Soprano::Model> model, Soprano::Node
     Soprano::Node listBNode = ListHeadSubject;
     Soprano::Node prevListBNode;
 
-    foreach (const Soprano::Node &dataBNode, dataBNodeList) {
+    Q_FOREACH (const Soprano::Node &dataBNode, dataBNodeList) {
         // Link the list in Rdf
         model->addStatement(listBNode, rdfFirst, dataBNode, context);
         if (prevListBNode.isValid()) {
@@ -232,7 +232,7 @@ void KoTextRdfCore::saveList(QSharedPointer<Soprano::Model> model, Soprano::Node
 
 void KoTextRdfCore::removeStatementsIfTheyExist( QSharedPointer<Soprano::Model> m, const QList<Soprano::Statement> &removeList)
 {
-    foreach (const Soprano::Statement &s, removeList) {
+    Q_FOREACH (const Soprano::Statement &s, removeList) {
         StatementIterator it = m->listStatements(s.subject(), s.predicate(), s.object(), s.context());
         QList<Statement> allStatements = it.allElements();
         Q_FOREACH (const Soprano::Statement &z, allStatements) {
@@ -263,7 +263,7 @@ QString KoTextRdfCore::getProperty(QSharedPointer<Soprano::Model> m, Soprano::No
 {
     StatementIterator it = m->listStatements(subj, pred, Node());
     QList<Statement> allStatements = it.allElements();
-    foreach (const Soprano::Statement &s, allStatements) {
+    Q_FOREACH (const Soprano::Statement &s, allStatements) {
         return s.object().toString();
     }
     return defval;

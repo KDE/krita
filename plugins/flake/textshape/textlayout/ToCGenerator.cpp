@@ -74,7 +74,7 @@ QString ToCGenerator::fetchBookmarkRef(const QTextBlock &block, KoTextRangeManag
 {
     QHash<int, KoTextRange *> ranges = textRangeManager->textRangesChangingWithin(block.document(), block.position(), block.position() + block.length(), block.position(), block.position() + block.length());
 
-    foreach (KoTextRange *range, ranges) {
+    Q_FOREACH (KoTextRange *range, ranges) {
         KoBookmark *bookmark = dynamic_cast<KoBookmark *>(range);
         if (bookmark) {
             return bookmark->name();
@@ -152,8 +152,8 @@ bool ToCGenerator::generate()
 
         if (m_ToCInfo->m_useIndexSourceStyles) {
             bool inserted = false;
-            foreach (const IndexSourceStyles &indexSourceStyles, m_ToCInfo->m_indexSourceStyles) {
-                foreach (const IndexSourceStyle &indexStyle, indexSourceStyles.styles) {
+            Q_FOREACH (const IndexSourceStyles &indexSourceStyles, m_ToCInfo->m_indexSourceStyles) {
+                Q_FOREACH (const IndexSourceStyle &indexStyle, indexSourceStyles.styles) {
                     if (indexStyle.styleId == block.blockFormat().intProperty(KoParagraphStyle::StyleId)) {
                         generateEntry(indexSourceStyles.outlineLevel, cursor, block, blockId);
                         inserted = true;
@@ -230,7 +230,7 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
 
             // save the current style due to hyperlinks
             QTextCharFormat savedCharFormat = cursor.charFormat();
-            foreach (IndexEntry * entry, tocEntryTemplate->indexEntries) {
+            Q_FOREACH (IndexEntry * entry, tocEntryTemplate->indexEntries) {
                 switch(entry->name) {
                     case IndexEntry::LINK_START: {
                         //IndexEntryLinkStart *linkStart = static_cast<IndexEntryLinkStart*>(entry);
@@ -313,7 +313,7 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
                         break;
                     }
                 }
-            }// foreach
+            }// Q_FOREACH
             cursor.setCharFormat(savedCharFormat);   // restore the cursor char format
         }
     }

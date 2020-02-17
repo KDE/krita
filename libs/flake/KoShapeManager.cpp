@@ -271,7 +271,7 @@ void KoShapeManager::Private::updateTree()
         anyModified = true;
     }
 
-    foreach (KoShape *shape, aggregate4update) {
+    Q_FOREACH (KoShape *shape, aggregate4update) {
         if (!shapeUsedInRenderingTree(shape)) continue;
 
         tree.remove(shape);
@@ -414,7 +414,7 @@ void KoShapeManager::addShape(KoShape *shape, Repaint repaint)
     KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
 
     if (container) {
-        foreach (KoShape *containerShape, container->shapes()) {
+        Q_FOREACH (KoShape *containerShape, container->shapes()) {
             addShape(containerShape, repaint);
         }
     }
@@ -447,7 +447,7 @@ void KoShapeManager::remove(KoShape *shape)
     // remove the children of a KoShapeContainer
     KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
     if (container) {
-        foreach (KoShape *containerShape, container->shapes()) {
+        Q_FOREACH (KoShape *containerShape, container->shapes()) {
             remove(containerShape);
         }
     }

@@ -229,7 +229,7 @@ void KoPathTool::insertPoints()
         // TODO: this construction is dangerous. The canvas can remove the command right after
         //       it has been added to it!
         m_pointSelection.clear();
-        foreach (KoPathPoint * p, cmd->insertedPoints()) {
+        Q_FOREACH (KoPathPoint * p, cmd->insertedPoints()) {
             m_pointSelection.add(p, false);
         }
     }
@@ -858,7 +858,7 @@ void KoPathTool::mouseDoubleClickEvent(KoPointerEvent *event)
         d->canvas->addCommand(cmd);
 
         m_pointSelection.clear();
-        foreach (KoPathPoint * p, cmd->insertedPoints()) {
+        Q_FOREACH (KoPathPoint * p, cmd->insertedPoints()) {
             m_pointSelection.add(p, false);
         }
         updateActions();
@@ -898,7 +898,7 @@ KoPathTool::PathSegment* KoPathTool::segmentAtPoint(const QPointF &point)
         // check all segments of this shape which intersect the region of interest
         const QList<KoPathSegment> segments = shape->segmentsAt(roi);
 
-        foreach (const KoPathSegment &s, segments) {
+        Q_FOREACH (const KoPathSegment &s, segments) {
             const qreal nearestPointParam = s.nearestPoint(p);
             const QPointF nearestPoint = s.pointAt(nearestPointParam);
             const qreal distance = kisDistance(p, nearestPoint);

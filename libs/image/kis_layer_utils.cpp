@@ -61,7 +61,7 @@ namespace KisLayerUtils {
 
     void fetchSelectionMasks(KisNodeList mergedNodes, QVector<KisSelectionMaskSP> &selectionMasks)
     {
-        foreach (KisNodeSP node, mergedNodes) {
+        Q_FOREACH (KisNodeSP node, mergedNodes) {
 
             Q_FOREACH(KisNodeSP child, node->childNodes(QStringList("KisSelectionMask"), KoProperties())) {
 
@@ -137,7 +137,7 @@ namespace KisLayerUtils {
             : MergeDownInfoBase(_image),
               mergedNodes(_mergedNodes)
         {
-            foreach (KisNodeSP node, mergedNodes) {
+            Q_FOREACH (KisNodeSP node, mergedNodes) {
                 frames |= fetchLayerFramesRecursive(node);
                 useInTimeline |= node->useInTimeline();
 
@@ -300,7 +300,7 @@ namespace KisLayerUtils {
             const QRect preparedRect = !interface->externalFrameActive() ?
                 m_info->image->bounds() : QRect();
 
-            foreach (KisNodeSP node, m_info->allSrcNodes()) {
+            Q_FOREACH (KisNodeSP node, m_info->allSrcNodes()) {
                 refreshHiddenAreaAsync(m_info->image, node, preparedRect);
             }
         }
@@ -313,7 +313,7 @@ namespace KisLayerUtils {
         RefreshDelayedUpdateLayers(MergeDownInfoBaseSP info) : m_info(info) {}
 
         void redo() override {
-            foreach (KisNodeSP node, m_info->allSrcNodes()) {
+            Q_FOREACH (KisNodeSP node, m_info->allSrcNodes()) {
                 forceAllDelayedNodesUpdate(node);
             }
         }
@@ -430,7 +430,7 @@ namespace KisLayerUtils {
             bool compositionVaries = false;
             bool isFirstCycle = true;
 
-            foreach (KisNodeSP node, m_info->allSrcNodes()) {
+            Q_FOREACH (KisNodeSP node, m_info->allSrcNodes()) {
                 if (isFirstCycle) {
                     compositeOpId = node->compositeOpId();
                     channelFlags = channelFlagsLazy(node);
@@ -486,7 +486,7 @@ namespace KisLayerUtils {
         void populateChildCommands() override {
             KisPainter gc(m_info->dstNode->paintDevice());
 
-            foreach (KisNodeSP node, m_info->allSrcNodes()) {
+            Q_FOREACH (KisNodeSP node, m_info->allSrcNodes()) {
                 QRect rc = node->exactBounds() | m_info->image->bounds();
                 node->projectionPlane()->apply(&gc, rc);
             }
@@ -610,7 +610,7 @@ namespace KisLayerUtils {
     }
 
     bool RemoveNodeHelper::checkIsSourceForClone(KisNodeSP src, const KisNodeList &nodes) {
-        foreach (KisNodeSP node, nodes) {
+        Q_FOREACH (KisNodeSP node, nodes) {
             if (node == src) continue;
 
             KisCloneLayer *clone = dynamic_cast<KisCloneLayer*>(node.data());
@@ -816,7 +816,7 @@ namespace KisLayerUtils {
 
             KIS_SAFE_ASSERT_RECOVER_RETURN(newLayer);
 
-            foreach (KisSelectionMaskSP mask, selectionMasks) {
+            Q_FOREACH (KisSelectionMaskSP mask, selectionMasks) {
                 addCommand(new KisImageLayerMoveCommand(image, mask, newLayer, newLayer->lastChild()));
                 addCommand(new KisActivateSelectionMaskCommand(mask, false));
             }
@@ -917,7 +917,7 @@ namespace KisLayerUtils {
         if (frames.isEmpty()) {
             (*jobs)[0].insert(node);
         } else {
-            foreach (int frame, frames) {
+            Q_FOREACH (int frame, frames) {
                 (*jobs)[frame].insert(node);
             }
         }
@@ -980,7 +980,7 @@ namespace KisLayerUtils {
             applicator.applyCommand(new KUndo2Command(), KisStrokeJobData::BARRIER);
 
             if (info->frames.size() > 0) {
-                foreach (int frame, info->frames) {
+                Q_FOREACH (int frame, info->frames) {
                     applicator.applyCommand(new SwitchFrameCommand(info->image, frame, false, info->storage));
 
                     applicator.applyCommand(new AddNewFrame(info, frame));
@@ -1044,7 +1044,7 @@ namespace KisLayerUtils {
             parent = parent->parent();
         }
 
-        foreach(KisNodeSP perspectiveParent, parents) {
+        Q_FOREACH(KisNodeSP perspectiveParent, parents) {
             if (nodeParents.contains(perspectiveParent)) {
                 return true;
             }
@@ -1350,7 +1350,7 @@ namespace KisLayerUtils {
             applicator.applyCommand(new KUndo2Command(), KisStrokeJobData::BARRIER);
 
             if (!info->frames.isEmpty()) {
-                foreach (int frame, info->frames) {
+                Q_FOREACH (int frame, info->frames) {
                     applicator.applyCommand(new SwitchFrameCommand(info->image, frame, false, info->storage));
 
                     applicator.applyCommand(new AddNewFrame(info, frame));
@@ -1415,7 +1415,7 @@ namespace KisLayerUtils {
 
             KisSelectionSP selection = new KisSelection();
 
-            foreach (KisNodeSP node, m_info->allSrcNodes()) {
+            Q_FOREACH (KisNodeSP node, m_info->allSrcNodes()) {
                 KisMaskSP mask = dynamic_cast<KisMask*>(node.data());
                 if (!mask) continue;
 

@@ -366,7 +366,7 @@ void KKeySequenceWidget::applyStealShortcut()
         // The following code will find the action we are about to
         // steal from and save it's actioncollection.
         KActionCollection *parentCollection = 0;
-        foreach (KActionCollection *collection, d->checkActionCollections) {
+        Q_FOREACH (KActionCollection *collection, d->checkActionCollections) {
             if (collection->actions().contains(stealAction)) {
                 parentCollection = collection;
                 break;
@@ -446,7 +446,7 @@ bool shortcutsConflictWith(const QList<QKeySequence> &shortcuts, const QKeySeque
         return false;
     }
 
-    foreach (const QKeySequence &sequence, shortcuts) {
+    Q_FOREACH (const QKeySequence &sequence, shortcuts) {
         if (sequence.isEmpty()) {
             continue;
         }
@@ -475,7 +475,7 @@ bool KKeySequenceWidgetPrivate::conflictWithLocalShortcuts(const QKeySequence &k
     // removed from the collection again.
     QList<QAction *> allActions;
     allActions += checkList;
-    foreach (KActionCollection *collection, checkActionCollections) {
+    Q_FOREACH (KActionCollection *collection, checkActionCollections) {
         allActions += collection->actions();
     }
 
@@ -499,7 +499,7 @@ bool KKeySequenceWidgetPrivate::conflictWithLocalShortcuts(const QKeySequence &k
     QList<QAction *> conflictingActions;
 
     //find conflicting shortcuts with existing actions
-    foreach (QAction *qaction, allActions) {
+    Q_FOREACH (QAction *qaction, allActions) {
         if (shortcutsConflictWith(qaction->shortcuts(), keySequence)) {
             // A conflict with a KAction. If that action is configurable
             // ask the user what to do. If not reject this keySequence.

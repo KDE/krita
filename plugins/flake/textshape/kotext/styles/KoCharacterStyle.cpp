@@ -488,7 +488,7 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format, bool emitSignal) cons
         ++it;
     }
 
-    foreach (int property, clearProperty) {
+    Q_FOREACH (int property, clearProperty) {
         debugText << "clearProperty" << property;
         format.clearProperty(property);
     }
@@ -567,7 +567,7 @@ void KoCharacterStyle::applyStyle(QTextBlock &block) const
         }
     }
 
-    foreach (const FragmentData &fragment, fragments) {
+    Q_FOREACH (const FragmentData &fragment, fragments) {
         cursor.setPosition(fragment.position);
         cursor.setPosition(fragment.position + fragment.length, QTextCursor::KeepAnchor);
         cursor.setCharFormat(fragment.format);

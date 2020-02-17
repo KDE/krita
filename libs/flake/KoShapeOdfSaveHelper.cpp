@@ -48,7 +48,7 @@ bool KoShapeOdfSaveHelper::writeBody()
     bodyWriter.startElement(KoOdf::bodyContentElement(KoOdf::Text, true));
 
     std::sort(d->shapes.begin(), d->shapes.end(), KoShape::compareShapeZIndex);
-    foreach (KoShape *shape, d->shapes) {
+    Q_FOREACH (KoShape *shape, d->shapes) {
         shape->saveOdf(*d->context);
     }
 

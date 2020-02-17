@@ -85,7 +85,7 @@ KoShapeBackgroundCommand::KoShapeBackgroundCommand(const QList<KoShape*> &shapes
     Q_FOREACH (KoShape *shape, d->shapes) {
         d->addOldFill(shape->background());
     }
-    foreach (QSharedPointer<KoShapeBackground>  fill, fills) {
+    Q_FOREACH (QSharedPointer<KoShapeBackground>  fill, fills) {
         d->addNewFill(fill);
     }
 

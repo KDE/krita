@@ -37,7 +37,7 @@ public:
         , combinedPathParent(0)
         , isCombined(false)
     {
-        foreach (KoPathShape * path, paths) {
+        Q_FOREACH (KoPathShape * path, paths) {
             oldParents.append(path->parent());
         }
     }

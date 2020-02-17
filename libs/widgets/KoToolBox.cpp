@@ -133,7 +133,7 @@ void KoToolBox::addButton(KoToolAction *toolAction)
     int iconSize = cfg.readEntry("iconSize", toolbuttonSize);
 
    button->setIconSize(QSize(iconSize, iconSize));
-    foreach (Section *section, d->sections.values())  {
+    Q_FOREACH (Section *section, d->sections.values())  {
         section->setButtonSize(QSize(iconSize + BUTTON_MARGIN, iconSize + BUTTON_MARGIN));
     }
 
@@ -204,7 +204,7 @@ void KoToolBox::setCurrentLayer(const KoCanvasController *canvas, const KoShapeL
 {
     Q_UNUSED(canvas);
     const bool enabled = layer == 0 || (layer->isShapeEditable() && layer->isVisible());
-    foreach (QToolButton *button, d->visibilityCodes.keys()) {
+    Q_FOREACH (QToolButton *button, d->visibilityCodes.keys()) {
         if (d->visibilityCodes[button].endsWith( QLatin1String( "/always") ) ) {
             continue;
         }
@@ -311,7 +311,7 @@ void KoToolBox::contextMenuEvent(QContextMenuEvent *event)
         }
 
         QActionGroup *sizeGroup = new QActionGroup(d->contextSize);
-        foreach (QAction *action, d->contextSize->actions()) {
+        Q_FOREACH (QAction *action, d->contextSize->actions()) {
             action->setActionGroup(sizeGroup);
             action->setCheckable(true);
         }

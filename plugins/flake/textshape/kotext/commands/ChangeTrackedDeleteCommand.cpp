@@ -86,7 +86,7 @@ void ChangeTrackedDeleteCommand::undo()
 
     KoTextDocument textDocument(m_document.data());
     textDocument.changeTracker()->elementById(m_addedChangeElement)->setValid(false);
-    foreach (int changeId, m_removedElements) {
+    Q_FOREACH (int changeId, m_removedElements) {
         textDocument.changeTracker()->elementById(changeId)->setValid(true);
     }
     updateListChanges();
@@ -104,7 +104,7 @@ void ChangeTrackedDeleteCommand::redo()
         KoTextCommandBase::redo();
         UndoRedoFinalizer finalizer(this);
         textDocument.changeTracker()->elementById(m_addedChangeElement)->setValid(true);
-        foreach (int changeId, m_removedElements) {
+        Q_FOREACH (int changeId, m_removedElements) {
             textDocument.changeTracker()->elementById(changeId)->setValid(false);
         }
     } else {
@@ -309,7 +309,7 @@ void ChangeTrackedDeleteCommand::deleteSelection(KoTextEditor *editor)
             selection->movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor,1);
         }
 
-        foreach (KoShape *shape, shapesInSelection) {
+        Q_FOREACH (KoShape *shape, shapesInSelection) {
             KUndo2Command *shapeDeleteCommand = m_shapeController->removeShape(shape, this);
             shapeDeleteCommand->redo();
             m_canMerge = false;
@@ -426,7 +426,7 @@ ChangeTrackedDeleteCommand::~ChangeTrackedDeleteCommand()
     if (m_undone) {
         removeChangeElement(m_addedChangeElement);
     } else {
-        foreach (int changeId, m_removedElements) {
+        Q_FOREACH (int changeId, m_removedElements) {
            removeChangeElement(changeId);
         }
     }

@@ -403,7 +403,7 @@ KisCurveOption::ValueComponents KisCurveOption::computeValueComponents(const Kis
             if (m_curveMode == 1){           // add
                 components.scaling = 0;
                 double i;
-                foreach (i, sensorValues) {
+                Q_FOREACH (i, sensorValues) {
                     components.scaling += i;
                 }
             } else if (m_curveMode == 2){    //max
@@ -419,7 +419,7 @@ KisCurveOption::ValueComponents KisCurveOption::computeValueComponents(const Kis
 
             } else {                         //multuply - default
                 double i;
-                foreach (i, sensorValues) {
+                Q_FOREACH (i, sensorValues) {
                     components.scaling *= i;
                 }
             }

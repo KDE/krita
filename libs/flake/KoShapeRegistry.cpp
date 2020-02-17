@@ -130,7 +130,7 @@ void KoShapeRegistry::Private::insertFactory(KoShapeFactoryBase *factory)
     else {
         int priority = factory->loadingPriority();
         for (QList<QPair<QString, QStringList> >::const_iterator it(odfElements.begin()); it != odfElements.end(); ++it) {
-            foreach (const QString &elementName, (*it).second) {
+            Q_FOREACH (const QString &elementName, (*it).second) {
                 QPair<QString, QString> p((*it).first, elementName);
 
                 QMultiMap<int, KoShapeFactoryBase*> & priorityMap = factoryMap[p];
@@ -517,7 +517,7 @@ KoShape *KoShapeRegistry::Private::createShapeInternal(const KoXmlElement &fullE
 
 #ifndef NDEBUG
     debugFlake << "Supported factories for=" << p;
-    foreach (KoShapeFactoryBase *f, factories)
+    Q_FOREACH (KoShapeFactoryBase *f, factories)
         debugFlake << f->id() << f->name();
 #endif
 

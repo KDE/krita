@@ -39,7 +39,7 @@ DeleteAnchorsCommand::DeleteAnchorsCommand(const QList<KoShapeAnchor*> &anchorOb
 , m_first(true)
 , m_deleteAnchors(false)
 {
-    foreach (KoShapeAnchor *anchor, anchorObjects) {
+    Q_FOREACH (KoShapeAnchor *anchor, anchorObjects) {
         KoAnchorInlineObject *anchorObject = dynamic_cast<KoAnchorInlineObject *>(anchor->textLocation());
         KoAnchorTextRange *anchorRange = dynamic_cast<KoAnchorTextRange *>(anchor->textLocation());
         if (anchorObject && anchorObject->document() == document) {
@@ -64,7 +64,7 @@ void DeleteAnchorsCommand::redo()
     m_deleteAnchors = true;
     if (m_first) {
         m_first = false;
-        foreach (KoAnchorInlineObject *anchorObject, m_anchorObjects) {
+        Q_FOREACH (KoAnchorInlineObject *anchorObject, m_anchorObjects) {
             QTextCursor cursor(m_document);
             cursor.setPosition(anchorObject->position());
             cursor.deleteChar();
@@ -73,13 +73,13 @@ void DeleteAnchorsCommand::redo()
     KoInlineTextObjectManager *manager = KoTextDocument(m_document).inlineTextObjectManager();
     Q_ASSERT(manager);
     if (manager) {
-        foreach (KoAnchorInlineObject *anchorObject, m_anchorObjects) {
+        Q_FOREACH (KoAnchorInlineObject *anchorObject, m_anchorObjects) {
             manager->removeInlineObject(anchorObject);
         }
     }
     KoTextRangeManager *rangeManager = KoTextDocument(m_document).textRangeManager();
     if (rangeManager) {
-        foreach (KoAnchorTextRange *anchorRange, m_anchorRanges) {
+        Q_FOREACH (KoAnchorTextRange *anchorRange, m_anchorRanges) {
             rangeManager->remove(anchorRange);
             m_document->markContentsDirty(anchorRange->position(), 0);
         }
@@ -91,14 +91,14 @@ void DeleteAnchorsCommand::undo()
     KoInlineTextObjectManager *manager = KoTextDocument(m_document).inlineTextObjectManager();
     Q_ASSERT(manager);
     if (manager) {
-        foreach (KoAnchorInlineObject *anchorObject, m_anchorObjects) {
+        Q_FOREACH (KoAnchorInlineObject *anchorObject, m_anchorObjects) {
             manager->addInlineObject(anchorObject);
         }
     }
     KUndo2Command::undo();
     KoTextRangeManager *rangeManager = KoTextDocument(m_document).textRangeManager();
     if (rangeManager) {
-        foreach (KoAnchorTextRange *anchorRange, m_anchorRanges) {
+        Q_FOREACH (KoAnchorTextRange *anchorRange, m_anchorRanges) {
             rangeManager->insert(anchorRange);
             m_document->markContentsDirty(anchorRange->position(), 0);
         }

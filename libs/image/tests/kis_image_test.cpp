@@ -840,7 +840,7 @@ void KisImageTest::testMergeDownMultipleFrames()
         QSet<int> newFrames = KisLayerUtils::fetchLayerFramesRecursive(newLayer);
         QCOMPARE(newFrames, initialFrames);
 
-        foreach (int frame, newFrames) {
+        Q_FOREACH (int frame, newFrames) {
             KisImageAnimationInterface *interface = p.image->animationInterface();
             int savedSwitchedTime = 0;
             interface->saveAndResetCurrentTime(frame, &savedSwitchedTime);

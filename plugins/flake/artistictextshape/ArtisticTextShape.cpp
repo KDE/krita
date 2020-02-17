@@ -269,7 +269,7 @@ void ArtisticTextShape::createOutline()
         qreal startCharOffset = m_startOffset * m_baseline.length();
         // calculate total text width
         qreal totalTextWidth = 0.0;
-        foreach (const ArtisticTextRange &range, m_ranges) {
+        Q_FOREACH (const ArtisticTextRange &range, m_ranges) {
             QFontMetricsF metrics(QFont(range.font(), &m_paintDevice));
             totalTextWidth += metrics.width(range.text());
         }
@@ -284,7 +284,7 @@ void ArtisticTextShape::createOutline()
         qreal rotation = 0.0;
         qreal charOffset;
 
-        foreach (const ArtisticTextRange &range, m_ranges) {
+        Q_FOREACH (const ArtisticTextRange &range, m_ranges) {
             QFontMetricsF metrics(QFont(range.font(), &m_paintDevice));
             const QString localText = range.text();
             const int localTextLength = localText.length();
@@ -537,7 +537,7 @@ void ArtisticTextShape::setTextAnchor(TextAnchor anchor)
     }
 
     qreal totalTextWidth = 0.0;
-    foreach (const ArtisticTextRange &range, m_ranges) {
+    Q_FOREACH (const ArtisticTextRange &range, m_ranges) {
         QFontMetricsF metrics(QFont(range.font(), &m_paintDevice));
         totalTextWidth += metrics.width(range.text());
     }
@@ -1337,7 +1337,7 @@ void ArtisticTextShape::parseTextRanges(const KoXmlElement &element, SvgLoadingC
             QString href = e.attribute("xlink:href").mid(1);
             ArtisticTextShape *refText = dynamic_cast<ArtisticTextShape *>(context.shapeById(href));
             if (refText) {
-                foreach (const ArtisticTextRange &range, refText->text()) {
+                Q_FOREACH (const ArtisticTextRange &range, refText->text()) {
                     appendText(range);
                 }
             } else if (context.hasDefinition(href)) {

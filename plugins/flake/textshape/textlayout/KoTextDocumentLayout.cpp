@@ -367,7 +367,7 @@ KoTextLayoutRootArea *KoTextDocumentLayout::rootAreaForPosition(int position) co
     if (!line.isValid())
         return 0;
 
-    foreach (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
+    Q_FOREACH (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
         QRectF rect = rootArea->boundingRect(); // should already be normalized()
         if (rect.width() <= 0.0 && rect.height() <= 0.0) // ignore the rootArea if it has a size of QSizeF(0,0)
             continue;
@@ -821,7 +821,7 @@ bool KoTextDocumentLayout::doLayout()
                 }
             } while (d->anchoringIndex < d->textAnchors.count());
 
-            foreach (KoShapeAnchor *anchor, d->textAnchors) {
+            Q_FOREACH (KoShapeAnchor *anchor, d->textAnchors) {
                 if (!d->foundAnchors.contains(anchor)) {
                     d->anchoredObstructions.remove(anchor->shape());
                     d->anchoringSoftBreak = qMin(d->anchoringSoftBreak, anchor->textLocation()->position());
@@ -1005,7 +1005,7 @@ void KoTextDocumentLayout::removeRootArea(KoTextLayoutRootArea *rootArea)
 QList<KoShape*> KoTextDocumentLayout::shapes() const
 {
     QList<KoShape*> listOfShapes;
-    foreach (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
+    Q_FOREACH (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
         if (rootArea->associatedShape())
             listOfShapes.append(rootArea->associatedShape());
     }

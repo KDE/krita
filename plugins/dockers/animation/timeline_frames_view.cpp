@@ -628,7 +628,7 @@ void TimelineFramesView::slotSelectionChanged()
     int minColumn = std::numeric_limits<int>::max();
     int maxColumn = std::numeric_limits<int>::min();
 
-    foreach (const QModelIndex &idx, selectedIndexes()) {
+    Q_FOREACH (const QModelIndex &idx, selectedIndexes()) {
         if (idx.column() > maxColumn) {
             maxColumn = idx.column();
         }

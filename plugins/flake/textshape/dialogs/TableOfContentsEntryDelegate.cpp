@@ -58,7 +58,7 @@ void TableOfContentsEntryDelegate::setEditorData(QWidget *editor,
     QList<KoParagraphStyle *> paragraphStyles = m_styleManager->paragraphStyles();
     int count = 0;
     int indexCount = 0;
-    foreach (const KoParagraphStyle *style, paragraphStyles) {
+    Q_FOREACH (const KoParagraphStyle *style, paragraphStyles) {
         comboBox->addItem(style->name());
         comboBox->setItemData(count, style->styleId());
 

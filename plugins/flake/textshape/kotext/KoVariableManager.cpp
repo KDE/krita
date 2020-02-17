@@ -179,7 +179,7 @@ void KoVariableManager::saveOdf(KoXmlWriter *bodyWriter)
         return;
     }
     bodyWriter->startElement("text:user-field-decls");
-    foreach (const QString &name, userVariables()) {
+    Q_FOREACH (const QString &name, userVariables()) {
         bodyWriter->startElement("text:user-field-decl");
         bodyWriter->addAttribute("text:name", name);
         QByteArray tag;

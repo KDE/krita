@@ -93,7 +93,7 @@ KoShape *EnhancedPathShapeFactory::createShape(const KoProperties *params, KoDoc
     shape->addModifiers(params->stringProperty("modifiers"));
 
     ListType handles = params->property("handles").toList();
-    foreach (const QVariant &v, handles) {
+    Q_FOREACH (const QVariant &v, handles) {
         shape->addHandle(v.toMap());
     }
 
@@ -105,7 +105,7 @@ KoShape *EnhancedPathShapeFactory::createShape(const KoProperties *params, KoDoc
     }
 
     QStringList commands = params->property("commands").toStringList();
-    foreach (const QString &cmd, commands) {
+    Q_FOREACH (const QString &cmd, commands) {
         shape->addCommand(cmd);
     }
 

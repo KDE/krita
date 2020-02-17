@@ -107,13 +107,13 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *doc, int from, int to, QH
     cur.setPosition(from);
     while (to == -1 || cur.position() <= to) {
         if (cur.block().position() >= from) { // Begin of the block is inside selection.
-            foreach (const KoSection *sec, KoSectionUtils::sectionStartings(cur.blockFormat())) {
+            Q_FOREACH (const KoSection *sec, KoSectionUtils::sectionStartings(cur.blockFormat())) {
                 sectionNamesStack.push_back(sec->name());
             }
         }
 
         if (to == -1 || cur.block().position() + cur.block().length() - 1 <= to) { // End of the block is inside selection.
-            foreach (const KoSectionEnd *sec, KoSectionUtils::sectionEndings(cur.blockFormat())) {
+            Q_FOREACH (const KoSectionEnd *sec, KoSectionUtils::sectionEndings(cur.blockFormat())) {
                 if (!sectionNamesStack.empty() && sectionNamesStack.top() == sec->name()) {
                     sectionNamesStack.pop();
                     entireWithinSectionNames.insert(sec->name());
@@ -139,7 +139,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *doc, int from, int to, QH
 
         QTextBlockFormat format = block.blockFormat();
 
-        foreach (const KoSection *section, KoSectionUtils::sectionStartings(format)) {
+        Q_FOREACH (const KoSection *section, KoSectionUtils::sectionStartings(format)) {
             // We are writing in only sections, that are completely inside selection.
             if (entireWithinSectionNames.contains(section->name())) {
                 section->saveOdf(context);
@@ -180,7 +180,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *doc, int from, int to, QH
 
         saveParagraph(block, from, to);
 
-        foreach (const KoSectionEnd *sectionEnd, KoSectionUtils::sectionEndings(format)) {
+        Q_FOREACH (const KoSectionEnd *sectionEnd, KoSectionUtils::sectionEndings(format)) {
             // We are writing in only sections, that are completely inside selection.
             if (entireWithinSectionNames.contains(sectionEnd->name())) {
                 sectionEnd->saveOdf(context);
@@ -250,7 +250,7 @@ void KoTextWriter::Private::openTagRegion(ElementType elementType, TagInformatio
     //debugText << "tag:" << tagInformation.name() << openedTagStack.size();
     if (tagInformation.name()) {
     writer->startElement(tagInformation.name(), elementType != ParagraphOrHeader);
-    foreach (const Attribute &attribute, tagInformation.attributes()) {
+    Q_FOREACH (const Attribute &attribute, tagInformation.attributes()) {
         writer->addAttribute(attribute.first.toLocal8Bit(), attribute.second);
     }
     }
@@ -469,7 +469,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
         // write tags for ranges which end at the first position of the block
         const QHash<int, KoTextRange *> endingTextRangesAtStart =
             textRangeManager->textRangesChangingWithin(block.document(), block.position(), block.position(), globalFrom, globalTo);
-        foreach (const KoTextRange *range, endingTextRangesAtStart) {
+        Q_FOREACH (const KoTextRange *range, endingTextRangesAtStart) {
             range->saveOdf(context, block.position(), KoTextRange::EndTag);
         }
     }
@@ -549,7 +549,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
         // get all text ranges which start before this
         const QList<KoTextRange *> textRangesBefore = textRanges.values(currentFragment.position());
         // write tags for ranges which start before this content or at positioned at it
-        foreach (const KoTextRange *range, textRangesBefore) {
+        Q_FOREACH (const KoTextRange *range, textRangesBefore) {
             range->saveOdf(context, currentFragment.position(), KoTextRange::StartTag);
         }
 
@@ -576,7 +576,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
 
                 // write tags for ranges which end after this inline object
                 const QList<KoTextRange *> textRangesAfter = textRanges.values(currentFragment.position()+1);
-                foreach (const KoTextRange *range, textRangesAfter) {
+                Q_FOREACH (const KoTextRange *range, textRangesAfter) {
                     range->saveOdf(context, currentFragment.position()+1, KoTextRange::EndTag);
                 }
 
@@ -636,10 +636,10 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                         }
                         int subSpanFrom = spanFrom;
                         // for all subspans
-                        foreach (int subSpanTo, subSpanTos) {
+                        Q_FOREACH (int subSpanTo, subSpanTos) {
                             // write tags for text ranges which start before this subspan or are positioned at it
                             const QList<KoTextRange *> textRangesStartingBefore = textRanges.values(subSpanFrom);
-                            foreach (const KoTextRange *range, textRangesStartingBefore) {
+                            Q_FOREACH (const KoTextRange *range, textRangesStartingBefore) {
                                 range->saveOdf(context, subSpanFrom, KoTextRange::StartTag);
                             }
 
@@ -648,7 +648,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
 
                             // write tags for text ranges which end behind this subspan
                             const QList<KoTextRange *> textRangesEndingBehind = textRanges.values(subSpanTo);
-                            foreach (const KoTextRange *range, textRangesEndingBehind) {
+                            Q_FOREACH (const KoTextRange *range, textRangesEndingBehind) {
                                 range->saveOdf(context, subSpanTo, KoTextRange::EndTag);
                             }
 
@@ -676,7 +676,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
         // i.e. at the position after the last (text) fragment
         const QHash<int, KoTextRange *> startingTextRangesAtEnd =
             textRangeManager->textRangesChangingWithin(block.document(), lastEndPosition, lastEndPosition, globalFrom, globalTo);
-        foreach (const KoTextRange *range, startingTextRangesAtEnd) {
+        Q_FOREACH (const KoTextRange *range, startingTextRangesAtEnd) {
             range->saveOdf(context, lastEndPosition, KoTextRange::StartTag);
         }
     }
@@ -702,7 +702,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
      }
 
     if (to !=-1 && to < block.position() + block.length()) {
-        foreach (KoInlineObject* inlineObject, *currentPairedInlineObjectsStack) {
+        Q_FOREACH (KoInlineObject* inlineObject, *currentPairedInlineObjectsStack) {
             inlineObject->saveOdf(context);
         }
     }

@@ -140,7 +140,7 @@ void KoShapePainter::setShapes(const QList<KoShape*> &shapes)
 
 void KoShapePainter::paint(QPainter &painter)
 {
-    foreach (KoShape *shape, d->canvas->shapeManager()->shapes()) {
+    Q_FOREACH (KoShape *shape, d->canvas->shapeManager()->shapes()) {
         shape->waitUntilReady(false);
     }
 
@@ -200,7 +200,7 @@ void KoShapePainter::paint(QImage &image)
 QRectF KoShapePainter::contentRect() const
 {
     QRectF bound;
-    foreach (KoShape *shape, d->canvas->shapeManager()->shapes()) {
+    Q_FOREACH (KoShape *shape, d->canvas->shapeManager()->shapes()) {
         if (!shape->isVisible())
             continue;
         if (dynamic_cast<KoShapeGroup*>(shape))

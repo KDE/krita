@@ -172,8 +172,8 @@ void TableOfContentsStyleModel::saveData()
 
 int TableOfContentsStyleModel::getOutlineLevel(int styleId)
 {
-    foreach (const IndexSourceStyles &indexSourceStyles, m_tocInfo->m_indexSourceStyles) {
-        foreach (const IndexSourceStyle &indexStyle, indexSourceStyles.styles) {
+    Q_FOREACH (const IndexSourceStyles &indexSourceStyles, m_tocInfo->m_indexSourceStyles) {
+        Q_FOREACH (const IndexSourceStyle &indexStyle, indexSourceStyles.styles) {
             if (m_styleManager->paragraphStyle(indexStyle.styleId) && styleId == indexStyle.styleId) {
                 return indexSourceStyles.outlineLevel;
             }
@@ -199,9 +199,9 @@ void TableOfContentsStyleModel::setOutlineLevel(int styleId, int outLineLevel)
     IndexSourceStyle indexStyleMoved;
     bool styleFound = false;
     int sourceStyleIndex = 0;
-    foreach (const IndexSourceStyles &indexSourceStyles, m_tocInfo->m_indexSourceStyles) {
+    Q_FOREACH (const IndexSourceStyles &indexSourceStyles, m_tocInfo->m_indexSourceStyles) {
         int index = 0;
-        foreach (const IndexSourceStyle &indexStyle, indexSourceStyles.styles) {
+        Q_FOREACH (const IndexSourceStyle &indexStyle, indexSourceStyles.styles) {
             if (styleId == indexStyle.styleId) {
                 styleFound = true;
                 indexStyleMoved = m_tocInfo->m_indexSourceStyles[sourceStyleIndex].styles.takeAt(index);
@@ -224,7 +224,7 @@ void TableOfContentsStyleModel::setOutlineLevel(int styleId, int outLineLevel)
 
     //check if IndexSourceStyles are there for this outlineLevel, if not create it
     bool sourceStylePresent = false;
-    foreach (const IndexSourceStyles &indexSourceStyles, m_tocInfo->m_indexSourceStyles) {
+    Q_FOREACH (const IndexSourceStyles &indexSourceStyles, m_tocInfo->m_indexSourceStyles) {
         if (outLineLevel == indexSourceStyles.outlineLevel) {
             sourceStylePresent = true;
             break;
@@ -238,7 +238,7 @@ void TableOfContentsStyleModel::setOutlineLevel(int styleId, int outLineLevel)
     }
 
     sourceStyleIndex = 0;
-    foreach (const IndexSourceStyles &indexSourceStyles, m_tocInfo->m_indexSourceStyles) {
+    Q_FOREACH (const IndexSourceStyles &indexSourceStyles, m_tocInfo->m_indexSourceStyles) {
         if (outLineLevel == indexSourceStyles.outlineLevel) {
             m_tocInfo->m_indexSourceStyles[sourceStyleIndex].styles.append(indexStyleMoved);
             break;

@@ -40,10 +40,10 @@ SectionsSplitDialog::SectionsSplitDialog(QWidget *parent, KoTextEditor *editor)
 
     QList<KoSection *> secStartings = KoSectionUtils::sectionStartings(editor->blockFormat());
     QList<KoSectionEnd *> secEndings = KoSectionUtils::sectionEndings(editor->blockFormat());
-    foreach (KoSection *sec, secStartings) {
+    Q_FOREACH (KoSection *sec, secStartings) {
         m_widget.beforeList->addItem(sec->name());
     }
-    foreach (KoSectionEnd *secEnd, secEndings) {
+    Q_FOREACH (KoSectionEnd *secEnd, secEndings) {
         m_widget.afterList->addItem(secEnd->name());
     }
 

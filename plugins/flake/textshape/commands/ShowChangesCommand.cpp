@@ -60,7 +60,7 @@ void ShowChangesCommand::undo()
 {
     KoTextCommandBase::undo();
     UndoRedoFinalizer finalizer(this);
-    foreach (KUndo2Command *shapeCommand, m_shapeCommands) {
+    Q_FOREACH (KUndo2Command *shapeCommand, m_shapeCommands) {
         shapeCommand->undo();
     }
     Q_EMIT toggledShowChange(!m_showChanges);
@@ -72,7 +72,7 @@ void ShowChangesCommand::redo()
     if (!m_first) {
         KoTextCommandBase::redo();
         UndoRedoFinalizer finalizer(this);
-        foreach (KUndo2Command *shapeCommand, m_shapeCommands) {
+        Q_FOREACH (KUndo2Command *shapeCommand, m_shapeCommands) {
             shapeCommand->redo();
         }
         Q_EMIT toggledShowChange(m_showChanges);

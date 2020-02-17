@@ -85,7 +85,7 @@ public:
         QStringList extensionList = m_extensions.split(':');
         QStringList fileNames;
 
-        foreach (const QString &extension, extensionList) {
+        Q_FOREACH (const QString &extension, extensionList) {
             fileNames += KoResourcePaths::findAllResources(type().toLatin1(), extension, KoResourcePaths::Recursive);
         }
         return fileNames;

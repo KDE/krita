@@ -48,7 +48,7 @@ KoEditColorSetWidget::KoEditColorSetWidget(const QList<KoColorSet *> &palettes, 
     m_activeColorSetRequested(false)
 {
     widget.setupUi(this);
-    foreach (KoColorSet *colorSet, m_colorSets) {
+    Q_FOREACH (KoColorSet *colorSet, m_colorSets) {
         //colorSet->load(); resources are loaded at startup...
         widget.selector->addItem(colorSet->name());
     }
@@ -59,7 +59,7 @@ KoEditColorSetWidget::KoEditColorSetWidget(const QList<KoColorSet *> &palettes, 
     m_scrollArea = new QScrollArea(widget.patchesFrame);
 
     int index = 0;
-    foreach (KoColorSet *set, m_colorSets) {
+    Q_FOREACH (KoColorSet *set, m_colorSets) {
         if (set->name() == activePalette) {
             m_activeColorSet = set;
             index = widget.selector->findText(set->name());

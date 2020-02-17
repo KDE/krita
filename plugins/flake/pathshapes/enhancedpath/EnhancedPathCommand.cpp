@@ -178,7 +178,7 @@ bool EnhancedPathCommand::execute()
     case 'X': {
         KoPathPoint *lastPoint = lastPathPoint();
         bool xDir = true;
-        foreach (const QPointF &point, points) {
+        Q_FOREACH (const QPointF &point, points) {
             qreal rx = point.x() - lastPoint->point().x();
             qreal ry = point.y() - lastPoint->point().y();
             qreal startAngle = xDir ? (ry > 0.0 ? 90.0 : 270.0) : (rx < 0.0 ? 0.0 : 180.0);
@@ -192,7 +192,7 @@ bool EnhancedPathCommand::execute()
     case 'Y': {
         KoPathPoint *lastPoint = lastPathPoint();
         bool xDir = false;
-        foreach (const QPointF &point, points) {
+        Q_FOREACH (const QPointF &point, points) {
             qreal rx = point.x() - lastPoint->point().x();
             qreal ry = point.y() - lastPoint->point().y();
             qreal startAngle = xDir ? (ry > 0.0 ? 90.0 : 270.0) : (rx < 0.0 ? 0.0 : 180.0);

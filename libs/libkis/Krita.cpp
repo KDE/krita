@@ -147,7 +147,7 @@ void Krita::setBatchmode(bool value)
 QList<Document *> Krita::documents() const
 {
     QList<Document *> ret;
-    foreach(QPointer<KisDocument> doc, KisPart::instance()->documents()) {
+    Q_FOREACH(QPointer<KisDocument> doc, KisPart::instance()->documents()) {
         ret << new Document(doc);
     }
     return ret;
@@ -230,7 +230,7 @@ QString Krita::version() const
 QList<View *> Krita::views() const
 {
     QList<View *> ret;
-    foreach(QPointer<KisView> view, KisPart::instance()->views()) {
+    Q_FOREACH(QPointer<KisView> view, KisPart::instance()->views()) {
         ret << new View(view);
     }
     return ret;
@@ -248,7 +248,7 @@ Window *Krita::activeWindow() const
 QList<Window*>  Krita::windows() const
 {
     QList<Window*> ret;
-    foreach(QPointer<KisMainWindow> mainWin, KisPart::instance()->mainWindows()) {
+    Q_FOREACH(QPointer<KisMainWindow> mainWin, KisPart::instance()->mainWindows()) {
         ret << new Window(mainWin);
     }
     return ret;

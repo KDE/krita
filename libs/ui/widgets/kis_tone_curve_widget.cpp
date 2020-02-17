@@ -210,7 +210,7 @@ void KisToneCurveWidget::updatePixmap()
         start = d->ToneCurveGray.at(0);
         mapPoint(start);
         path.moveTo(start);
-        foreach (QPointF Point, d->ToneCurveGray) {
+        Q_FOREACH (QPointF Point, d->ToneCurveGray) {
             mapPoint(Point);
             path.lineTo(Point);
         }
@@ -223,7 +223,7 @@ void KisToneCurveWidget::updatePixmap()
         start = d->ToneCurveRed.at(0);
         mapPoint(start);
         path.moveTo(start);
-        foreach (QPointF Point, d->ToneCurveRed) {
+        Q_FOREACH (QPointF Point, d->ToneCurveRed) {
             mapPoint(Point);
             path.lineTo(Point);
         }
@@ -233,7 +233,7 @@ void KisToneCurveWidget::updatePixmap()
         start = d->ToneCurveGreen.at(0);
         mapPoint(start);
         path2.moveTo(start);
-        foreach (QPointF Point, d->ToneCurveGreen) {
+        Q_FOREACH (QPointF Point, d->ToneCurveGreen) {
             mapPoint(Point);
             path2.lineTo(Point);
         }
@@ -243,7 +243,7 @@ void KisToneCurveWidget::updatePixmap()
         start = d->ToneCurveBlue.at(0);
         mapPoint(start);
         path3.moveTo(start);
-        foreach (QPointF Point, d->ToneCurveBlue) {
+        Q_FOREACH (QPointF Point, d->ToneCurveBlue) {
             mapPoint(Point);
             path3.lineTo(Point);
         }
@@ -258,7 +258,7 @@ void KisToneCurveWidget::updatePixmap()
         start = d->ToneCurveRed.at(0);
         mapPoint(start);
         path.moveTo(start);
-        foreach (QPointF Point, d->ToneCurveRed) {
+        Q_FOREACH (QPointF Point, d->ToneCurveRed) {
             mapPoint(Point);
             path.lineTo(Point);
         }
@@ -268,7 +268,7 @@ void KisToneCurveWidget::updatePixmap()
         start = d->ToneCurveGreen.at(0);
         mapPoint(start);
         path2.moveTo(start);
-        foreach (QPointF Point, d->ToneCurveGreen) {
+        Q_FOREACH (QPointF Point, d->ToneCurveGreen) {
             mapPoint(Point);
             path2.lineTo(Point);
         }
@@ -278,7 +278,7 @@ void KisToneCurveWidget::updatePixmap()
         start = d->ToneCurveBlue.at(0);
         mapPoint(start);
         path3.moveTo(start);
-        foreach (QPointF Point, d->ToneCurveBlue) {
+        Q_FOREACH (QPointF Point, d->ToneCurveBlue) {
             mapPoint(Point);
             path3.lineTo(Point);
         }
@@ -288,7 +288,7 @@ void KisToneCurveWidget::updatePixmap()
         start = d->ToneCurveGray.at(0);
         mapPoint(start);
         path4.moveTo(start);
-        foreach (QPointF Point, d->ToneCurveGray) {
+        Q_FOREACH (QPointF Point, d->ToneCurveGray) {
             mapPoint(Point);
             path4.lineTo(Point);
         }

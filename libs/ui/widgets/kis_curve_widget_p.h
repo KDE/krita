@@ -257,7 +257,7 @@ void KisCurveWidget::Private::setCurveModified(bool rewriteSpinBoxesValues = tru
     }
     m_splineDirty = true;
     m_curveWidget->update();
-    m_curveWidget->emit compressorShouldEmitModified();
+    m_curveWidget->Q_EMIT compressorShouldEmitModified();
 }
 
 void KisCurveWidget::Private::setCurveRepaint()

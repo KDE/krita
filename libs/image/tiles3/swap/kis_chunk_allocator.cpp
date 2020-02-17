@@ -49,7 +49,7 @@ KisChunk KisChunkAllocator::getChunk(quint64 size)
     KisChunkDataListIterator startPosition = m_iterator;
     START_COUNTING();
 
-    forever {
+    Q_FOREVER {
         if(tryInsertChunk(m_list, m_iterator, size))
             return WRAP_PREVIOUS_CHUNK_DATA(m_iterator);
 
@@ -63,7 +63,7 @@ KisChunk KisChunkAllocator::getChunk(quint64 size)
     REGISTER_FAIL();
     m_iterator = m_list.begin();
 
-    forever {
+    Q_FOREVER {
         if(tryInsertChunk(m_list, m_iterator, size))
             return WRAP_PREVIOUS_CHUNK_DATA(m_iterator);
 

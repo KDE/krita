@@ -136,7 +136,7 @@ QVector<QPolygon> KisOutlineGenerator::outlineImpl(typename StorageStrategy::Sto
                     EdgeType currentEdge = edge;
                     EdgeType lastEdge = currentEdge;
 
-                    forever {
+                    Q_FOREVER {
                         //While following a straight line no points need to be added
                         if (lastEdge != currentEdge) {
                             appendCoordinate(&path, col + xOffset, row + yOffset, currentEdge);

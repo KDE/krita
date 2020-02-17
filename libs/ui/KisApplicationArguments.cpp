@@ -48,6 +48,7 @@ struct Q_DECL_HIDDEN KisApplicationArguments::Private
     QString workspace;
     QString windowLayout;
     QString session;
+    QString fileLayer;
     bool canvasOnly {false};
     bool noSplash {false};
     bool fullScreen {false};
@@ -77,7 +78,7 @@ KisApplicationArguments::KisApplicationArguments(const QApplication &app)
     parser.addVersionOption();
     parser.addHelpOption();
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("template"), i18n("Open a new document with a template")));
-    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("new-image"), i18n("Create a new image on startup.\n"
+    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("new-image"), i18n("Create a new image.\n"
                                                                                           "Possible colorspace values are:\n"
                                                                                           "    * RGBA\n"
                                                                                           "    * XYZA\n"
@@ -101,6 +102,7 @@ KisApplicationArguments::KisApplicationArguments(const QApplication &app)
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("export"), i18n("Export to the given filename and exit")));
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("export-sequence"), i18n("Export animation to the given filename and exit")));
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("export-filename"), i18n("Filename for export"), QLatin1String("filename")));
+    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("file-layer"), i18n("File layer to be added to existing or new file"), QLatin1String("file-layer")));
     parser.addPositionalArgument(QLatin1String("[file(s)]"), i18n("File(s) or URL(s) to open"));
     parser.process(app);
 
@@ -135,7 +137,7 @@ KisApplicationArguments::KisApplicationArguments(const QApplication &app)
         d->height = v[3].toInt();
     }
 
-
+    d->fileLayer = parser.value("file-layer");
     d->exportFileName = parser.value("export-filename");
     d->workspace = parser.value("workspace");
     d->windowLayout = parser.value("windowlayout");
@@ -214,8 +216,7 @@ QByteArray KisApplicationArguments::serialize()
     ds << d->height;
     ds << d->colorModel;
     ds << d->colorDepth;
-
-
+    ds << d->fileLayer;
 
     buf.close();
 
@@ -254,6 +255,7 @@ KisApplicationArguments KisApplicationArguments::deserialize(QByteArray &seriali
     ds >> args.d->height;
     ds >> args.d->colorModel;
     ds >> args.d->colorDepth;
+    ds >> args.d->fileLayer;
 
     buf.close();
 
@@ -308,6 +310,11 @@ QString KisApplicationArguments::windowLayout() const
 QString KisApplicationArguments::session() const
 {
     return d->session;
+}
+
+QString KisApplicationArguments::fileLayer() const
+{
+    return d->fileLayer;
 }
 
 bool KisApplicationArguments::canvasOnly() const

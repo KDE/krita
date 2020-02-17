@@ -98,6 +98,9 @@
 
 #include <dialogs/KisAsyncAnimationFramesSaveDialog.h>
 #include <kis_image_animation_interface.h>
+#include "kis_file_layer.h"
+#include "kis_group_layer.h"
+#include "kis_node_commands_adapter.h"
 
 namespace {
 const QTime appStartTime(QTime::currentTime());
@@ -503,7 +506,6 @@ bool KisApplication::start(const KisApplicationArguments &args)
     connect(this, &KisApplication::aboutToQuit, &KisSpinBoxUnitManagerFactory::clearUnitManagerBuilder); //ensure the builder is destroyed when the application leave.
     //the new syntax slot syntax allow to connect to a non q_object static method.
 
-
     // Create a new image, if needed
     if (doNewImage) {
         KisDocument *doc = args.image();
@@ -609,6 +611,36 @@ bool KisApplication::start(const KisApplicationArguments &args)
         }
     }
 
+    //add an image as file-layer
+    if (!args.fileLayer().isEmpty()){
+        if (d->mainWindow->viewManager()->image()){
+            KisFileLayer *fileLayer = new KisFileLayer(d->mainWindow->viewManager()->image(), "",
+                                                    args.fileLayer(), KisFileLayer::None,
+                                                    d->mainWindow->viewManager()->image()->nextLayerName(), OPACITY_OPAQUE_U8);
+            QFileInfo fi(fileLayer->path());
+            if (fi.exists()){
+                KisNodeCommandsAdapter adapter(d->mainWindow->viewManager());
+                adapter.addNode(fileLayer, d->mainWindow->viewManager()->activeNode()->parent(),
+                                    d->mainWindow->viewManager()->activeNode());
+            }
+            else{
+                QMessageBox::warning(nullptr, i18nc("@title:window", "Krita:Warning"),
+                                            i18n("Cannot add %1 as a file layer: the file does not exist.", fileLayer->path()));
+            }
+        }
+        else if (this->isRunning()){
+            QMessageBox::warning(nullptr, i18nc("@title:window", "Krita:Warning"),
+                                i18n("Cannot add the file layer: no document is open.\n\n"
+"You can create a new document using the --new-image option, or you can open an existing file.\n\n"
+"If you instead want to add the file layer to a document in an already running instance of Krita, check the \"Allow only one instance of Krita\" checkbox in the settings (Settings -> General -> Window)."));
+        }
+        else {
+            QMessageBox::warning(nullptr, i18nc("@title:window", "Krita: Warning"),
+                                i18n("Cannot add the file layer: no document is open.\n"
+                                     "You can either create a new file using the --new-image option, or you can open an existing file."));
+        }
+    }
+
     // fixes BUG:369308  - Krita crashing on splash screen when loading.
     // trying to open a file before Krita has loaded can cause it to hang and crash
     if (d->splashScreen) {
@@ -673,20 +705,58 @@ void KisApplication::executeRemoteArguments(QByteArray message, KisMainWindow *m
 {
     KisApplicationArguments args = KisApplicationArguments::deserialize(message);
     const bool doTemplate = args.doTemplate();
+    const bool doNewImage = args.doNewImage();
     const int argsCount = args.filenames().count();
+    bool documentCreated = false;
 
+    // Create a new image, if needed
+    if (doNewImage) {
+        KisDocument *doc = args.createDocumentFromArguments();
+        if (doc) {
+            KisPart::instance()->addDocument(doc);
+            d->mainWindow->addViewAndNotifyLoadingCompleted(doc);
+        }
+    }
     if (argsCount > 0) {
         // Loop through arguments
         for (int argNumber = 0; argNumber < argsCount; ++argNumber) {
             QString filename = args.filenames().at(argNumber);
             // are we just trying to open a template?
             if (doTemplate) {
-                createNewDocFromTemplate(filename, mainWindow);
+                documentCreated |= createNewDocFromTemplate(filename, mainWindow);
             }
             else if (QFile(filename).exists()) {
                 KisMainWindow::OpenFlags flags = d->batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
-                mainWindow->openDocument(QUrl::fromLocalFile(filename), flags);
+                documentCreated |= mainWindow->openDocument(QUrl::fromLocalFile(filename), flags);
             }
+        }
+    }
+
+    //add an image as file-layer if called in another process and singleApplication is enabled
+    if (!args.fileLayer().isEmpty()){
+        if (argsCount > 0  && !documentCreated){
+            //arg was passed but document was not created so don't add the file layer.
+            QMessageBox::warning(mainWindow, i18nc("@title:window", "Krita:Warning"),
+                                            i18n("Couldn't open file %1",args.filenames().at(argsCount - 1)));
+        }
+        else if (mainWindow->viewManager()->image()){
+            KisFileLayer *fileLayer = new KisFileLayer(mainWindow->viewManager()->image(), "",
+                                                    args.fileLayer(), KisFileLayer::None,
+                                                    mainWindow->viewManager()->image()->nextLayerName(), OPACITY_OPAQUE_U8);
+            QFileInfo fi(fileLayer->path());
+            if (fi.exists()){
+                KisNodeCommandsAdapter adapter(d->mainWindow->viewManager());
+                adapter.addNode(fileLayer, d->mainWindow->viewManager()->activeNode()->parent(),
+                                    d->mainWindow->viewManager()->activeNode());
+            }
+            else{
+                QMessageBox::warning(mainWindow, i18nc("@title:window", "Krita:Warning"),
+                                            i18n("Cannot add %1 as a file layer: the file does not exist.", fileLayer->path()));
+            }
+        }
+        else {
+            QMessageBox::warning(mainWindow, i18nc("@title:window", "Krita:Warning"),
+                                            i18n("Cannot add the file layer: no document is open."));
         }
     }
 }

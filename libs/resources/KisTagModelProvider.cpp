@@ -50,8 +50,9 @@ KisTagModel* KisTagModelProvider::tagModel(const QString& resourceType)
 
     if (found == s_instance->d->tagModelsMap.end())
     {
-        KisTagModel* model = new KisTagModel(resourceType);
-        s_instance->d->tagModelsMap.insert(std::make_pair(resourceType, model));
+        std::unique_ptr<KisTagModel> modelStorage(new KisTagModel(resourceType));
+        KisTagModel *model = modelStorage.get();
+        s_instance->d->tagModelsMap.insert(std::make_pair(resourceType, std::move(modelStorage)));
         return model;
     }
     return found->second.get();

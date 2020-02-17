@@ -2216,7 +2216,9 @@ void KisDocument::hackPreliminarySetImage(KisImageSP image)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(!d->image);
 
-    d->setImageAndInitIdleWatcher(image);
+    // we set image without connecting idle-watcher, because loading
+    // hasn't been finished yet
+    d->image = image;
     d->shapeController->setImage(image);
 }
 

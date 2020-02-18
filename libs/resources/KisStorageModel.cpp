@@ -61,15 +61,16 @@ int KisStorageModel::rowCount(const QModelIndex & /*parent*/) const
 
 int KisStorageModel::columnCount(const QModelIndex &/*parent*/) const
 {
-    return 6;
+    return 8;
 }
 
 QVariant KisStorageModel::data(const QModelIndex &index, int role) const
 {
     QVariant v;
+
     if (!index.isValid()) return v;
     if (index.row() > rowCount()) return v;
-    if (index.column() > (int)Active) return v;
+    if (index.column() > (int)MetaData) return v;
 
     bool pos = d->query.seek(index.row());
 
@@ -99,6 +100,23 @@ QVariant KisStorageModel::data(const QModelIndex &index, int role) const
                 img.load(&buf, "PNG");
                 return QVariant::fromValue<QImage>(img);
             }
+            case DisplayName:
+            {
+                QMap<QString, QVariant> r = KisResourceLocator::instance()->metaDataForStorage(d->query.value("location").toString());
+                QVariant name = d->query.value("location");
+                if (r.contains(KisResourceStorage::s_meta_name) && !r[KisResourceStorage::s_meta_name].isNull()) {
+                    name = r[KisResourceStorage::s_meta_name];
+                }
+                else if (r.contains(KisResourceStorage::s_meta_title) && !r[KisResourceStorage::s_meta_title].isNull()) {
+                    name = r[KisResourceStorage::s_meta_title];
+                }
+                return name;
+            }
+            case Qt::UserRole + MetaData:
+            {
+                QMap<QString, QVariant> r = KisResourceLocator::instance()->metaDataForStorage(d->query.value("location").toString());
+                return r;
+            }
             default:
                 return v;
             }
@@ -124,6 +142,12 @@ QVariant KisStorageModel::data(const QModelIndex &index, int role) const
             img.load(&buf, "PNG");
             return QVariant::fromValue<QImage>(img);
         }
+        case Qt::UserRole + MetaData:
+        {
+            QMap<QString, QVariant> r = KisResourceLocator::instance()->metaDataForStorage(d->query.value("location").toString());
+            return r;
+        }
+
         default:
             ;
         }
@@ -166,7 +190,7 @@ Qt::ItemFlags KisStorageModel::flags(const QModelIndex &index) const
 
 KisResourceStorageSP KisStorageModel::storageForId(const QModelIndex &index) const
 {
-    return KisResourceLocator::instance()->storageByLocation(index.data(Qt::UserRole + Location).toString());
+    return KisResourceLocator::instance()->storageByLocation(KisResourceLocator::instance()->makeStorageLocationAbsolute(index.data(Qt::UserRole + Location).toString()));
 }
 
 QVariant KisStorageModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -198,12 +222,33 @@ QVariant KisStorageModel::headerData(int section, Qt::Orientation orientation, i
         case 6:
             v = i18n("Thumbnail");
             break;
+        case 7:
+            v = i18n("Name");
+            break;
         default:
             v = QString::number(section);
         }
         return v;
     }
     return QAbstractTableModel::headerData(section, orientation, role);
+}
+
+bool KisStorageModel::resetQuery()
+{
+    QTime t;
+    t.start();
+
+    beginResetModel();
+    bool r = d->query.exec();
+    if (!r) {
+        qWarning() << "Could not select storages" << d->query.lastError() << d->query.boundValues();
+    }
+    d->cachedRowCount = -1;
+
+    endResetModel();
+    qDebug() << "KisStorageModel::resetQuery took" << t.elapsed() << "ms";
+
+    return r;
 }
 
 bool KisStorageModel::prepareQuery()

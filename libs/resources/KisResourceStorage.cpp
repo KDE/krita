@@ -189,6 +189,11 @@ bool KisResourceStorage::addResource(KoResourceSP resource)
     return d->storagePlugin->addResource(resource->resourceType().first, resource);
 }
 
+void KisResourceStorage::setMetaData(const QString &key, const QVariant &value)
+{
+    d->storagePlugin->setMetaData(key, value);
+}
+
 bool KisResourceStorage::valid() const
 {
     return d->valid;

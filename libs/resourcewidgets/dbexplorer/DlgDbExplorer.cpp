@@ -33,6 +33,7 @@
 #include <KisTagModelProvider.h>
 #include <KisResourceTypeModel.h>
 #include <KisTagModel.h>
+#include <KisStorageModel.h>
 #include <KisTagModelProvider.h>
 #include <KisResourceItemDelegate.h>
 #include <KisResourceItemListView.h>
@@ -54,26 +55,8 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
     m_tagModel = new KisTagModel("", this);
 
     {
-        TableModel *storagesModel = new TableModel(this, QSqlDatabase::database());
-        TableDelegate *storagesDelegate = new TableDelegate(m_page->tableStorages);
-        storagesModel->setTable("storages");
-        storagesModel->setHeaderData(0, Qt::Horizontal, i18n("Id"));
-        storagesModel->setHeaderData(1, Qt::Horizontal, i18n("Type"));
-        storagesModel->setRelation(1, QSqlRelation("storage_types", "id", "name"));
-        storagesModel->setHeaderData(2, Qt::Horizontal, i18n("Location"));
-        storagesModel->setHeaderData(3, Qt::Horizontal, i18n("Creation Date"));
-        storagesModel->addDateTimeColumn(3);
-        storagesDelegate->addDateTimeColumn(3);
-        storagesModel->setHeaderData(4, Qt::Horizontal, i18n("Preinstalled"));
-        storagesModel->addBooleanColumn(4);
-        storagesDelegate->addBooleanColumn(4);
-        storagesModel->setHeaderData(5, Qt::Horizontal, i18n("Active"));
-        storagesModel->addBooleanColumn(5);
-        storagesDelegate->addBooleanColumn(5);
-        storagesModel->select();
-        m_page->tableStorages->setModel(storagesModel);
+        m_page->tableStorages->setModel(new KisStorageModel(this));
         m_page->tableStorages->hideColumn(0);
-        m_page->tableStorages->setItemDelegate(storagesDelegate);
         m_page->tableStorages->setSelectionMode(QAbstractItemView::SingleSelection);
         m_page->tableStorages->resizeColumnsToContents();
     }
@@ -103,6 +86,8 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
         tagsModel->setHeaderData(3, Qt::Horizontal, i18n("Name"));
         tagsModel->setHeaderData(4, Qt::Horizontal, i18n("Comment"));
         tagsModel->setHeaderData(5, Qt::Horizontal, i18n("Active"));
+        tagsModel->setHeaderData(6, Qt::Horizontal, i18n("Thumbnail"));
+        tagsModel->setHeaderData(7, Qt::Horizontal, i18n("Display Name"));
         tagsModel->addBooleanColumn(5);
         tagsDelegate->addBooleanColumn(5);
         tagsModel->select();

@@ -49,7 +49,6 @@
 #include <KisImportExportErrorCode.h>
 #include <KoDocumentResourceManager.h>
 #include <KoMD5Generator.h>
-#include <KisMemoryStorage.h>
 #include <KisResourceStorage.h>
 #include <KisResourceLocator.h>
 #include <KisResourceTypes.h>
@@ -2231,6 +2230,8 @@ void KisDocument::setCurrentImage(KisImageSP image, bool forceInitialUpdate)
     }
 
     if (!image) return;
+
+    d->documentResourceStorage->setMetaData(KisResourceStorage::s_meta_name, image->objectName());
 
     d->setImageAndInitIdleWatcher(image);
     d->image->setUndoStore(new KisDocumentUndoStore(this));

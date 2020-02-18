@@ -48,13 +48,12 @@ void TestBundleStorage::testMetaData()
 {
     KisBundleStorage storage(KRITA_SOURCE_DIR + QString("/krita/data/bundles/Krita_4_Default_Resources.bundle"));
     QVERIFY(storage.location() == KRITA_SOURCE_DIR + QString("/krita/data/bundles/Krita_4_Default_Resources.bundle"));
-    qDebug() << storage.metaData(KisResourceStorage::s_meta_generator);
-    QVERIFY(!storage.metaData(KisResourceStorage::s_meta_generator).isEmpty());
-    QVERIFY(!storage.metaData(KisResourceStorage::s_meta_author).isEmpty());
-    QVERIFY(!storage.metaData(KisResourceStorage::s_meta_description).isEmpty());
-    QVERIFY(!storage.metaData(KisResourceStorage::s_meta_initial_creator).isEmpty());
-    QVERIFY(!storage.metaData(KisResourceStorage::s_meta_dc_date).isEmpty());
-    QVERIFY(!storage.metaData(KisResourceStorage::s_meta_version).isEmpty());
+    QVERIFY(!storage.metaData(KisResourceStorage::s_meta_generator).isNull());
+    QVERIFY(!storage.metaData(KisResourceStorage::s_meta_author).isNull());
+    QVERIFY(!storage.metaData(KisResourceStorage::s_meta_description).isNull());
+    QVERIFY(!storage.metaData(KisResourceStorage::s_meta_initial_creator).isNull());
+    QVERIFY(!storage.metaData(KisResourceStorage::s_meta_dc_date).isNull());
+    QVERIFY(!storage.metaData(KisResourceStorage::s_meta_version).isNull());
 }
 
 void TestBundleStorage::testResourceIterator()
@@ -65,7 +64,6 @@ void TestBundleStorage::testResourceIterator()
     int count = 0;
     while (iter->hasNext()) {
         iter->next();
-        qDebug() << iter->url();
         KoResourceSP res = iter->resource();
         QVERIFY(res);
         count++;

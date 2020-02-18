@@ -37,7 +37,7 @@ public:
     QSharedPointer<KisResourceStorage::TagIterator> tags(const QString &resourceType) override;
     QImage thumbnail() const override;
     QStringList metaDataKeys() const override;
-    QString metaData(const QString &key) const override;
+    QVariant metaData(const QString &key) const override;
 
     /// Add a tag to this bundle: note, the bundle itself should NOT be rewritten, but we need to
     /// put these tags in a place in the file system

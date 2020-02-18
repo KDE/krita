@@ -263,3 +263,17 @@ QSharedPointer<KisResourceStorage::TagIterator> KisFolderStorage::tags(const QSt
 {
     return QSharedPointer<KisResourceStorage::TagIterator>(new FolderTagIterator(location(), resourceType));
 }
+
+QStringList KisFolderStorage::metaDataKeys() const
+{
+    return QStringList() << KisResourceStorage::s_meta_name;
+}
+
+QVariant KisFolderStorage::metaData(const QString &key) const
+{
+    if (key == KisResourceStorage::s_meta_name) {
+        return i18n("Local Resources");
+    }
+    return QVariant();
+
+}

@@ -199,6 +199,7 @@ public:
     static const QString s_meta_value;
     static const QString s_meta_version;
 
+    void setMetaData(const QString &key, const QVariant &value);
     QStringList metaDataKeys() const;
     QVariant metaData(const QString &key) const;
 

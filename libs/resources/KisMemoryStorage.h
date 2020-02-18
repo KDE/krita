@@ -48,6 +48,11 @@ public:
     QSharedPointer<KisResourceStorage::ResourceIterator> resources(const QString &resourceType) override;
     QSharedPointer<KisResourceStorage::TagIterator> tags(const QString &resourceType) override;
 
+    void setMetaData(const QString &key, const QVariant &value) override;
+    QStringList metaDataKeys() const override;
+    QVariant metaData(const QString &key) const override;
+
+
 private:
     class Private;
     QScopedPointer<Private> d;

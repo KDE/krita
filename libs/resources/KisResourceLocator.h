@@ -202,7 +202,27 @@ private:
      */
     QMap<QString, QVariant> metaDataForResource(int id) const;
 
+    /**
+     * @brief setMetaDataForResource
+     * @param id
+     * @param map
+     * @return
+     */
     bool setMetaDataForResource(int id, QMap<QString, QVariant> map) const;
+
+    /**
+     * @brief metaDataForStorage
+     * @param storage
+     * @return
+     */
+    QMap<QString, QVariant> metaDataForStorage(const QString &storageLocation) const;
+
+    /**
+     * @brief setMetaDataForStorage
+     * @param storage
+     * @param map
+     */
+    void setMetaDataForStorage(const QString &storageLocation, QMap<QString, QVariant> map) const;
 
     KisResourceLocator(QObject *parent);
     KisResourceLocator(const KisResourceLocator&);

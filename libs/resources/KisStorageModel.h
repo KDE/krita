@@ -36,7 +36,9 @@ public:
         TimeStamp,
         PreInstalled,
         Active,
-        Thumbnail
+        Thumbnail,
+        DisplayName,
+        MetaData
     };
 
     static KisStorageModel * instance();
@@ -53,6 +55,8 @@ public:
     KisResourceStorageSP storageForId(const QModelIndex &index) const;
 
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+
+    bool resetQuery();
 
 private:
 

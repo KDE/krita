@@ -25,6 +25,8 @@
 
 #include <KisSessionResource.h>
 
+class KisResourceModel;
+
 class KisSessionManagerDialog : public QDialog, Ui::DlgSessionManager
 {
     Q_OBJECT
@@ -37,14 +39,21 @@ private Q_SLOTS:
     void slotRenameSession();
     void slotSwitchSession();
     void slotDeleteSession();
-    void slotSessionDoubleClicked(QListWidgetItem* item);
+    void slotSessionDoubleClicked(QModelIndex item);
 
     void slotClose();
 
+    void slotModelAboutToBeReset(QModelIndex);
+    void slotModelReset();
+
+
 private:
-    void updateSessionList();
 
     KisSessionResourceSP getSelectedSession() const;
+
+    int m_lastSessionId;
+
+    KisResourceModel* m_model;
 };
 
 #endif

@@ -27,24 +27,24 @@ KisSessionManagerDialog::KisSessionManagerDialog(QWidget *parent)
 {
     setupUi(this);
 
-    updateSessionList();
-
     connect(btnNew, SIGNAL(clicked()), this, SLOT(slotNewSession()));
     connect(btnRename, SIGNAL(clicked()), this, SLOT(slotRenameSession()));
     connect(btnSwitchTo, SIGNAL(clicked()), this, SLOT(slotSwitchSession()));
     connect(btnDelete, SIGNAL(clicked()), this, SLOT(slotDeleteSession()));
     connect(btnClose, SIGNAL(clicked()), this, SLOT(slotClose()));
 
-    connect(lstSessions, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(slotSessionDoubleClicked(QListWidgetItem*)));
-}
 
-void KisSessionManagerDialog::updateSessionList() {
-    KoResourceServer<KisSessionResource> *server = KisResourceServerProvider::instance()->sessionServer();
+    m_model = KisResourceModelProvider::resourceModel(ResourceType::Sessions);
+    lstSessions->setModel(m_model);
+    lstSessions->setModelColumn(KisResourceModel::Name);
 
-    lstSessions->clear();
-    Q_FOREACH(KisSessionResourceSP session, server->resources()) {
-        lstSessions->addItem(session->name());
-    }
+
+    connect(m_model, SIGNAL(beforeResourcesLayoutReset(QModelIndex)), this, SLOT(slotModelAboutToBeReset(QModelIndex)));
+    connect(m_model, SIGNAL(afterResourcesLayoutReset()), this, SLOT(slotModelReset()));
+
+    connect(lstSessions, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(slotSessionDoubleClicked(QModelIndex)));
+
+
 }
 
 void KisSessionManagerDialog::slotNewSession()
@@ -86,8 +86,6 @@ void KisSessionManagerDialog::slotNewSession()
     server->addResource(session);
 
     KisPart::instance()->setCurrentSession(session);
-
-    updateSessionList();
 }
 
 void KisSessionManagerDialog::slotRenameSession()
@@ -102,12 +100,11 @@ void KisSessionManagerDialog::slotRenameSession()
     if (!session) return;
 
     session->setName(name);
+    m_model->updateResource(session);
     session->save();
-
-    updateSessionList();
 }
 
-void KisSessionManagerDialog::slotSessionDoubleClicked(QListWidgetItem* /*item*/)
+void KisSessionManagerDialog::slotSessionDoubleClicked(QModelIndex /*item*/)
 {
     slotSwitchSession();
     slotClose();
@@ -127,10 +124,11 @@ void KisSessionManagerDialog::slotSwitchSession()
 
 KisSessionResourceSP KisSessionManagerDialog::getSelectedSession() const
 {
-    QListWidgetItem *item = lstSessions->currentItem();
-    if (item) {
+    QModelIndex idx = lstSessions->currentIndex();
+    if (idx.isValid()) {
         KoResourceServer<KisSessionResource> *server = KisResourceServerProvider::instance()->sessionServer();
-        return server->resourceByName(item->text());
+        QString name = m_model->data(idx, Qt::UserRole + KisResourceModel::Name).toString();
+        return server->resourceByName(name);
     }
     return nullptr;
 }
@@ -153,12 +151,29 @@ void KisSessionManagerDialog::slotDeleteSession()
 
         QFile file(filename);
         file.remove();
-
-        updateSessionList();
     }
 }
 
 void KisSessionManagerDialog::slotClose()
 {
     hide();
+}
+
+void KisSessionManagerDialog::slotModelAboutToBeReset(QModelIndex)
+{
+    QModelIndex idx = lstSessions->currentIndex();
+    if (idx.isValid()) {
+        m_lastSessionId = m_model->data(idx, Qt::UserRole + KisResourceModel::Id).toInt();
+    }
+}
+
+void KisSessionManagerDialog::slotModelReset()
+{
+    for (int i = 0; i < m_model->rowCount(); i++) {
+        QModelIndex idx = m_model->index(i, 0);
+        int id = m_model->data(idx, Qt::UserRole + KisResourceModel::Id).toInt();
+        if (id == m_lastSessionId) {
+            lstSessions->setCurrentIndex(idx);
+        }
+    }
 }

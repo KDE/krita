@@ -90,6 +90,11 @@ QImage KoResource::image() const
     return d->image;
 }
 
+QImage KoResource::thumbnail() const
+{
+    return image();
+}
+
 void KoResource::setImage(const QImage &image)
 {
     d->image = image;

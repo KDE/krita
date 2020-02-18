@@ -265,7 +265,7 @@ QMap<QString, Resource*> Krita::resources(const QString &type) const
         int id = resourceModel->data(idx, Qt::UserRole + KisResourceModel::Id).toInt();
         QString name  = resourceModel->data(idx, Qt::UserRole + KisResourceModel::Name).toString();
         QString filename  = resourceModel->data(idx, Qt::UserRole + KisResourceModel::Filename).toString();
-        QImage image = resourceModel->data(idx, Qt::UserRole + KisResourceModel::Image).value<QImage>();
+        QImage image = resourceModel->data(idx, Qt::UserRole + KisResourceModel::Thumbnail).value<QImage>();
 
         resources[name] = new Resource(id, type, name, filename, image, 0);
     }

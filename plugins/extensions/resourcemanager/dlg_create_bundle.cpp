@@ -375,7 +375,7 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
             }
         }
 
-        QImage image = (model->data(idx, Qt::UserRole + KisResourceModel::Image)).value<QImage>();
+        QImage image = (model->data(idx, Qt::UserRole + KisResourceModel::Thumbnail)).value<QImage>();
         QString name = model->data(idx, Qt::UserRole + KisResourceModel::Name).toString();
 
         // Function imageToIcon(QImage()) returns a square white pixmap and a warning "QImage::scaled: Image is a null image"

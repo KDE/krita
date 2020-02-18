@@ -213,7 +213,7 @@ QList<QImage> KisFavoriteResourceManager::favoritePresetImages()
     for (int i = 0; i < m_maxPresets; i++) {
         QModelIndex index = m_resourcesProxyModel->index(i, 0);
         if (index.isValid()) {
-            QVariant tmp = m_resourcesProxyModel->data(index, Qt::UserRole + KisResourceModel::Image);
+            QVariant tmp = m_resourcesProxyModel->data(index, Qt::UserRole + KisResourceModel::Thumbnail);
             QImage image = tmp.value<QImage>();
             images << image;
         } else {

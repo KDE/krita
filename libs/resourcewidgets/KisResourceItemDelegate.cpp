@@ -43,7 +43,7 @@ void KisResourceItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
 
     QRect innerRect = option.rect.adjusted(2, 2, -2, -2);
 
-    QImage thumbnail = index.data(Qt::UserRole + KisResourceModel::Image).value<QImage>();
+    QImage thumbnail = index.data(Qt::UserRole + KisResourceModel::Thumbnail).value<QImage>();
 
     QSize imageSize = thumbnail.size();
 

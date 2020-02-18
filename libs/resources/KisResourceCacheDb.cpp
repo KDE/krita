@@ -409,7 +409,7 @@ bool KisResourceCacheDb::addResourceVersion(int resourceId, QDateTime timestamp,
         QByteArray ba;
         QBuffer buf(&ba);
         buf.open(QBuffer::WriteOnly);
-        resource->image().save(&buf, "PNG");
+        resource->thumbnail().save(&buf, "PNG");
         buf.close();
         q.bindValue(":thumbnail", ba);
 

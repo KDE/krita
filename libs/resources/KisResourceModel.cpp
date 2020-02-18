@@ -127,7 +127,7 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
                 return d->resourcesQuery.value("filename");
             case Tooltip:
                 return d->resourcesQuery.value("tooltip");
-            case Image:
+            case Thumbnail:
             {
                 QByteArray ba = d->resourcesQuery.value("thumbnail").toByteArray();
                 QBuffer buf(&ba);
@@ -149,7 +149,7 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
         }
         case Qt::DecorationRole:
         {
-            if (index.column() == Image) {
+            if (index.column() == Thumbnail) {
                 QByteArray ba = d->resourcesQuery.value("thumbnail").toByteArray();
                 QBuffer buf(&ba);
                 buf.open(QBuffer::ReadOnly);
@@ -175,7 +175,7 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
             return d->resourcesQuery.value("filename");
         case Qt::UserRole + Tooltip:
             return d->resourcesQuery.value("tooltip");
-        case Qt::UserRole + Image:
+        case Qt::UserRole + Thumbnail:
         {
             QByteArray ba = d->resourcesQuery.value("thumbnail").toByteArray();
             QBuffer buf(&ba);
@@ -257,7 +257,7 @@ QVariant KisResourceModel::headerData(int section, Qt::Orientation orientation, 
         case Tooltip:
             v = i18n("Tooltip");
             break;
-        case Image:
+        case Thumbnail:
             v = i18n("Image");
             break;
         case Status:

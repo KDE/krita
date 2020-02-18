@@ -410,7 +410,7 @@ void KisResourceItemChooser::updatePreview(const QModelIndex &idx)
         return;
     }
 
-    QImage image = idx.data(Qt::UserRole + KisResourceModel::Image).value<QImage>();
+    QImage image = idx.data(Qt::UserRole + KisResourceModel::Thumbnail).value<QImage>();
 
     if (image.format() != QImage::Format_RGB32 &&
         image.format() != QImage::Format_ARGB32 &&

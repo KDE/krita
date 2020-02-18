@@ -124,7 +124,7 @@ public:
         Name,
         Filename,
         Tooltip,
-        Image,
+        Thumbnail,
         Status,
         Location,
         ResourceType,

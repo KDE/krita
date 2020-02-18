@@ -21,8 +21,8 @@
 #include "KoResource.h"
 #include <QDebug>
 #include <QRandomGenerator64>
-#include <KoHashGenerator.h>
-#include <KoHashGeneratorProvider.h>
+#include <KoMD5Generator.h>
+#include <KoMD5Generator.h>
 #include <KisResourceTypes.h>
 
 class DummyResource : public KoResource {
@@ -37,8 +37,7 @@ public:
             quint64 v = qrg.generate64();
             ba[i] = v;
         }
-        KoHashGenerator *hashGenerator = KoHashGeneratorProvider::instance()->getGenerator("MD5");
-        QByteArray hash = hashGenerator->generateHash(ba);
+        QByteArray hash = KoMD5Generator::generateHash(ba);
         setMD5(hash);
         setValid(true);
     }

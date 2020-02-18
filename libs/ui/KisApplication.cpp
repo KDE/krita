@@ -57,7 +57,6 @@
 #include <KoShapeRegistry.h>
 #include <KoDpi.h>
 #include "KoConfig.h"
-#include <KoHashGeneratorProvider.h>
 #include <KoResourcePaths.h>
 #include <KisMimeDatabase.h>
 #include "thememanager.h"
@@ -67,7 +66,6 @@
 #include "KisAutoSaveRecoveryDialog.h"
 #include "KisPart.h"
 #include <kis_icon.h>
-#include "kis_md5_generator.h"
 #include "kis_splash_screen.h"
 #include "kis_config.h"
 #include "flake/kis_shape_selection.h"
@@ -447,8 +445,6 @@ bool KisApplication::start(const KisApplicationArguments &args)
         d->splashScreen->repaint();
         processEvents();
     }
-
-    KoHashGeneratorProvider::instance()->setGenerator("MD5", new KisMD5Generator());
 
     KConfigGroup group(KSharedConfig::openConfig(), "theme");
     Digikam::ThemeManager themeManager;

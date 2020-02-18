@@ -378,7 +378,6 @@ set(kritaui_LIB_SRCS
     qtsingleapplication/qtlocalpeer.cpp
     qtsingleapplication/qtsingleapplication.cpp
 
-    kis_md5_generator.cpp
     KisApplicationArguments.cpp
 
     KisNetworkAccessManager.cpp

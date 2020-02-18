@@ -1,4 +1,4 @@
-/*
+#/*
  * Copyright (c) 2015 Stefano Bonicatti <smjert@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -19,17 +19,16 @@
 #ifndef KOMD5GENERATOR_H
 #define KOMD5GENERATOR_H
 
-#include "KoHashGenerator.h"
+#include <QByteArray>
+#include <QString>
 
 #include <kritaresources_export.h>
 
-class KRITARESOURCES_EXPORT KoMD5Generator : public KoHashGenerator
+class KRITARESOURCES_EXPORT KoMD5Generator
 {
 public:
-    KoMD5Generator();
-    ~KoMD5Generator() override;
-    QByteArray generateHash(const QString &filename) override;
-    QByteArray generateHash(const QByteArray &array) override;
+    static QByteArray generateHash(const QString &filename);
+    static QByteArray generateHash(const QByteArray &array);
 };
 
 #endif

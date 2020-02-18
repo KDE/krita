@@ -30,7 +30,6 @@ set(kritaresources_LIB_SRCS
     KoResourceBundle.cpp
     KoResourceBundleManifest.cpp
     KoMD5Generator.cpp
-    KoHashGeneratorProvider.cpp
     KoResourcePaths.cpp
 
     kconfigini.cpp

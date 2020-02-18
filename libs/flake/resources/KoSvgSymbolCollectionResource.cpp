@@ -39,8 +39,7 @@
 #include <KoShapeManager.h>
 #include <KoShapePaintingContext.h>
 #include <SvgParser.h>
-#include <KoHashGenerator.h>
-#include <KoHashGeneratorProvider.h>
+#include <KoMD5Generator.h>
 
 #include <FlakeDebug.h>
 
@@ -136,8 +135,7 @@ bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev)
     }
 
     QByteArray ba = dev->readAll();
-    KoHashGenerator *hashGenerator = KoHashGeneratorProvider::instance()->getGenerator("MD5");
-    setMD5(hashGenerator->generateHash(ba));
+    setMD5(KoMD5Generator::generateHash(ba));
 
     dev->seek(0);
 

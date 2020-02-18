@@ -34,8 +34,7 @@
 
 #include <KisMimeDatabase.h>
 #include "KoResourceBundleManifest.h"
-#include <KoHashGenerator.h>
-#include <KoHashGeneratorProvider.h>
+#include <KoMD5Generator.h>
 #include <KoResourcePaths.h>
 #include <KoStore.h>
 #include <KoXmlReader.h>

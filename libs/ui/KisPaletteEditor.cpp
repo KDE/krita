@@ -149,13 +149,6 @@ void KisPaletteEditor::importPalette()
 
     QString filename = dialog.filename();
     if (filename.isEmpty()) { return; }
-    if (duplicateExistsFilename(filename, false)) {
-        QMessageBox message;
-        message.setWindowTitle(i18n("Can't Import Palette"));
-        message.setText(i18n("Can't import palette: there's already imported with the same filename"));
-        message.exec();
-        return;
-    }
 
     QMessageBox messageBox;
     messageBox.setText(i18n("Do you want to store this palette in your current image?"));
@@ -585,13 +578,7 @@ bool KisPaletteEditor::duplicateExistsFilename(const QString &filename, bool glo
         prefix = m_d->rServer->saveLocation();
     }
 
-    Q_FOREACH (const KoResourceSP r, KoResourceServerProvider::instance()->paletteServer()->resources()) {
-        if (r->filename() == prefix + filename && r != m_d->model->colorSet()) {
-            return true;
-        }
-    }
-
-    return false;
+    return QFileInfo(prefix+filename).exists();
 }
 
 QString KisPaletteEditor::relativePathFromSaveLocation() const

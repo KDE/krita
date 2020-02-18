@@ -727,12 +727,27 @@ bool KoColorSet::Private::init()
     }
     colorSet->setValid(res);
 
-    QImage img(global().columnCount() * 4, global().rowCount() * 4, QImage::Format_ARGB32);
+    int rows = 0;
+    for (QString groupName : groupNames) {
+        int lastRowGroup = 0;
+        for (const KisSwatchGroup::SwatchInfo &info : groups[groupName].infoList()) {
+            lastRowGroup = qMax(lastRowGroup, info.row);
+        }
+        rows += (lastRowGroup + 1);
+    }
+
+    QImage img(global().columnCount() * 4, rows*4, QImage::Format_ARGB32);
     QPainter gc(&img);
+    int lastRow = 0;
     gc.fillRect(img.rect(), Qt::darkGray);
-    for (const KisSwatchGroup::SwatchInfo &info : global().infoList()) {
-        QColor c = info.swatch.color().toQColor();
-        gc.fillRect(info.column * 4, info.row * 4, 4, 4, c);
+    for (QString groupName : groupNames) {
+        int lastRowGroup = 0;
+        for (const KisSwatchGroup::SwatchInfo &info : groups[groupName].infoList()) {
+            QColor c = info.swatch.color().toQColor();
+            gc.fillRect(info.column * 4, (lastRow + info.row) * 4, 4, 4, c);
+            lastRowGroup = qMax(lastRowGroup, info.row);
+        }
+        lastRow += (lastRowGroup + 1);
     }
     colorSet->setImage(img);
     colorSet->setValid(res);

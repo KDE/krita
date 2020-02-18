@@ -120,7 +120,7 @@ void KisSessionManagerDialog::slotSwitchSession()
     if (session) {
         bool closed = KisPart::instance()->closeSession(true);
         if (closed) {
-            session->restore();
+            KisPart::instance()->restoreSession(session);
         }
     }
 }

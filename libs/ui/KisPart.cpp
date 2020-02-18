@@ -568,8 +568,13 @@ bool KisPart::restoreSession(const QString &sessionName)
     KisSessionResourceSP session = rserver->resourceByName(sessionName);
     if (!session || !session->valid()) return false;
 
-    session->restore();
+    return restoreSession(session);
+}
 
+bool KisPart::restoreSession(KisSessionResourceSP session)
+{
+    session->restore();
+    d->currentSession = session;
     return true;
 }
 

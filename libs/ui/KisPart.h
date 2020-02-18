@@ -244,6 +244,7 @@ public:
      * Restores a saved session by name
      */
     bool restoreSession(const QString &sessionName);
+    bool restoreSession(KisSessionResourceSP session);
 
     void setCurrentSession(KisSessionResourceSP session);
 

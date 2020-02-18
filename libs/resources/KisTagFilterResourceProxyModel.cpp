@@ -103,6 +103,15 @@ bool KisTagFilterResourceProxyModel::updateResource(KoResourceSP resource)
     return false;
 }
 
+bool KisTagFilterResourceProxyModel::renameResource(KoResourceSP resource, const QString &name)
+{
+    KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+    if (source) {
+        return source->renameResource(resource, name);
+    }
+    return false;
+}
+
 bool KisTagFilterResourceProxyModel::removeResource(KoResourceSP resource)
 {
     KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());

@@ -188,6 +188,14 @@ private:
     bool updateResource(const QString &resourceType, const KoResourceSP resource);
 
     /**
+     * @brief renameResource
+     * @param resource
+     * @param name
+     * @return
+     */
+    bool renameResource(const KoResourceSP resource, const QString &name);
+
+    /**
      * @brief metaDataForResource
      * @param id
      * @return

@@ -43,6 +43,7 @@ private Q_SLOTS:
     void testResourceForName();
     void testResourceForFileName();
     void testResourceForMD5();
+    void testRenameResource();
     void cleanupTestCase();
 private:
 

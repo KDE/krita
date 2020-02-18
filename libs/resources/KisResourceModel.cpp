@@ -500,7 +500,20 @@ bool KisResourceModel::updateResource(KoResourceSP resource)
     //qDebug() << "KisResourceModel::updateResource" << s_i8 << d->resourceType; s_i8++;
 
     if (!KisResourceLocator::instance()->updateResource(d->resourceType, resource)) {
-        qWarning() << "Failed to update resource";
+        qWarning() << "Failed to update resource" << resource;
+        return false;
+    }
+    return resetQuery();
+}
+
+bool KisResourceModel::renameResource(KoResourceSP resource, const QString &name)
+{
+    if (!resource || !resource->valid() || name.isEmpty()) {
+        qWarning() << "Cannot rename resources. Resource is NULL or not valid or name is empty";
+        return false;
+    }
+    if (!KisResourceLocator::instance()->renameResource(resource, name)) {
+        qWarning() << "Failed to rename resource" << resource << name;
         return false;
     }
     return resetQuery();

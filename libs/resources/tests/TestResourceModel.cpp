@@ -266,6 +266,34 @@ void TestResourceModel::testResourceForMD5()
     QCOMPARE(resource->md5(), resource2->md5());
 }
 
+void TestResourceModel::testRenameResource()
+{
+    KisResourceModel resourceModel(m_resourceType);
+
+    KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(0, 0));
+    QVERIFY(!resource.isNull());
+    const QString name = resource->name();
+    bool r = resourceModel.renameResource(resource, "A New Name");
+    QVERIFY(r);
+    QSqlQuery q;
+    if (!q.prepare("SELECT name\n"
+                   "FROM   resources\n"
+                   "WHERE  id = :resource_id\n")) {
+        qWarning() << "Could not prepare testRenameResource Query" << q.lastError();
+    }
+
+    q.bindValue(":resource_id", resource->resourceId());
+
+    if (!q.exec()) {
+        qWarning() << "Could not execute testRenameResource Query" << q.lastError();
+    }
+
+    q.first();
+    QString newName = q.value(0).toString();
+    QVERIFY(name != newName);
+    QCOMPARE("A New Name", newName);
+}
+
 void TestResourceModel::cleanupTestCase()
 {
     ResourceTestHelper::rmTestDb();

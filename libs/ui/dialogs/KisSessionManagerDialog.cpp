@@ -135,22 +135,9 @@ KisSessionResourceSP KisSessionManagerDialog::getSelectedSession() const
 
 void KisSessionManagerDialog::slotDeleteSession()
 {
-    KisSessionResourceSP session = getSelectedSession();
-    if (!session) return;
-
-    if (QMessageBox::warning(this,
-        i18nc("@title:window", "Krita"),
-        QString(i18n("Permanently delete session %1?", session->name())),
-        QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
-
-        KisPart::instance()->setCurrentSession(0);
-        const QString filename = session->filename();
-
-        KoResourceServer<KisSessionResource> *server = KisResourceServerProvider::instance()->sessionServer();
-        server->removeResourceFromServer(session);
-
-        QFile file(filename);
-        file.remove();
+    QModelIndex idx = lstSessions->currentIndex();
+    if (idx.isValid()) {
+        m_model->removeResource(lstSessions->currentIndex());
     }
 }
 

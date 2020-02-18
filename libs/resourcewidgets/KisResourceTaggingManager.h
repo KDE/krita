@@ -70,6 +70,7 @@ private Q_SLOTS:
     void tagSaveButtonPressed();
     void tagChooserIndexChanged(const KisTagSP lineEditText);
     void tagSearchLineEditTextChanged(const QString &lineEditText);
+    void slotFilterByTagChanged(const bool filterByTag);
 
 private:
 

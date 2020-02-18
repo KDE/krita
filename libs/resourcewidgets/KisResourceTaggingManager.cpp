@@ -96,8 +96,9 @@ KisResourceTaggingManager::KisResourceTaggingManager(QString resourceType, KisTa
 
     connect(d->tagChooser, SIGNAL(sigTagChosen(KisTagSP)), this, SLOT(tagChooserIndexChanged(KisTagSP)));
 
-    connect(d->tagFilter, SIGNAL(saveButtonClicked()), this, SLOT(tagSaveButtonPressed()));
+    connect(d->tagFilter, SIGNAL(filterByTagChanged(bool)), this, SLOT(slotFilterByTagChanged(bool)));
     connect(d->tagFilter, SIGNAL(filterTextChanged(QString)), this, SLOT(tagSearchLineEditTextChanged(QString)));
+
 
 }
 
@@ -118,7 +119,6 @@ void KisResourceTaggingManager::tagChooserIndexChanged(const KisTagSP tag)
     d->model->setTag(tag);
     d->currentTag = tag;
     d->tagFilter->clear();
-    d->tagFilter->allowSave(tag->id() >= 0); // disallow save if the chosen tag has negative id (i.e. 'All' tag)
 }
 
 void KisResourceTaggingManager::tagSearchLineEditTextChanged(const QString& lineEditText)
@@ -126,6 +126,11 @@ void KisResourceTaggingManager::tagSearchLineEditTextChanged(const QString& line
     fprintf(stderr, "void KisResourceTaggingManager::tagSearchLineEditTextChanged(const QString& lineEditText): %s \n", lineEditText.toStdString().c_str());
     d->model->setSearchBoxText(lineEditText);
     ENTER_FUNCTION() << ppVar(lineEditText);
+}
+
+void KisResourceTaggingManager::slotFilterByTagChanged(const bool filterByTag)
+{
+    d->model->setFilterByCurrentTag(filterByTag);
 }
 
 void KisResourceTaggingManager::tagSaveButtonPressed()

@@ -54,14 +54,15 @@ public:
      */
     void setTag(const KisTagSP tag);
     void setSearchBoxText(const QString& seatchBoxText);
+    void setFilterByCurrentTag(bool filterInCurrentTag);
 
 protected:
-
-
 
     bool filterAcceptsColumn(int source_column, const QModelIndex &source_parent) const override;
     bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
     bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;
+
+    bool resourceHasCurrentTag(KisTagSP currentTag, QVector<KisTagSP> tagsForResource) const;
 
 private Q_SLOTS:
     void slotModelReset();

@@ -33,6 +33,7 @@ struct KisTagFilterResourceProxyModel::Private
     QList<KisTagSP> tags;
     KisTagModel* tagModel;
     QScopedPointer<KisResourceSearchBoxFilter> filter;
+    bool filterInCurrentTag;
 
 };
 
@@ -145,37 +146,46 @@ void KisTagFilterResourceProxyModel::setSearchBoxText(const QString& seatchBoxTe
     invalidateFilter();
 }
 
+void KisTagFilterResourceProxyModel::setFilterByCurrentTag(const bool filterInCurrentTag)
+{
+    d->filterInCurrentTag = filterInCurrentTag;
+    invalidateFilter();
+}
+
 bool KisTagFilterResourceProxyModel::filterAcceptsColumn(int /*source_column*/, const QModelIndex &/*source_parent*/) const
 {
     return true;
 }
 
-bool resourceHasCurrentTag(KisTagSP currentTag, QVector<KisTagSP> tagsForResource)
+bool KisTagFilterResourceProxyModel::resourceHasCurrentTag(KisTagSP currentTag, QVector<KisTagSP> tagsForResource) const
 {
-    bool hasCurrentTag = false;
-    // no tag set; all resources are allowed
+
+    if (!d->filterInCurrentTag && !d->filter->isEmpty()) {
+        // we don't need to check anything else because the user wants to search in all resources
+        // but if the filter text is empty, we do need to filter by the current tag
+        return true;
+    }
+
     if (currentTag.isNull()) {
-        hasCurrentTag = true;
+        // no tag set; all resources are allowed
+        return true;
     } else {
         if (currentTag->id() == KisTagModel::All) {
             // current tag is "All", all resources are allowed
-            hasCurrentTag = true;
+            return true;
         } else if (currentTag->id() == KisTagModel::AllUntagged) {
             // current tag is "All untagged", all resources without any tags are allowed
-            if (tagsForResource.size() == 0) {
-                hasCurrentTag = true;
-            }
+            return tagsForResource.size() == 0;
         } else {
              // checking whether the current tag is on the list of tags assigned to the resource
             Q_FOREACH(KisTagSP temp, tagsForResource) {
                 if (temp->id() == currentTag->id()) {
-                    hasCurrentTag = true;
-                    break;
+                    return true;
                 }
             }
         }
     }
-    return hasCurrentTag;
+    return false;
 }
 
 bool KisTagFilterResourceProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const

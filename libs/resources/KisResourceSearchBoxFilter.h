@@ -31,6 +31,7 @@ public:
     KisResourceSearchBoxFilter();
     void setFilter(const QString& filter);
     bool matchesResource(const QString& resourceName);
+    bool isEmpty();
 
 private:
 

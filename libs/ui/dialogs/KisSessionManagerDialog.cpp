@@ -99,9 +99,7 @@ void KisSessionManagerDialog::slotRenameSession()
     KisSessionResourceSP session = getSelectedSession();
     if (!session) return;
 
-    session->setName(name);
-    m_model->updateResource(session);
-    session->save();
+    m_model->renameResource(session, name);
 }
 
 void KisSessionManagerDialog::slotSessionDoubleClicked(QModelIndex /*item*/)

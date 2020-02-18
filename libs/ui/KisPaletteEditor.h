@@ -129,7 +129,6 @@ private Q_SLOTS:
     void slotSetDocumentModified();
 
 private:
-    QString newPaletteFileName(bool isGlobal, const QString &filename = QString());
     QString newGroupName() const;
     void setNonGlobal();
     void setGlobal();

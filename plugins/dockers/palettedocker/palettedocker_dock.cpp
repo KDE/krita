@@ -232,12 +232,6 @@ void PaletteDockerDock::unsetCanvas()
     m_ui->paletteView->setDisplayRenderer(0);
     m_paletteEditor->setView(0);
 
-    for (KoResourceSP r : m_rServer->resources()) {
-        KoColorSetSP c = r.staticCast<KoColorSet>();
-        if (!c->isGlobal()) {
-            m_rServer->removeResourceFromServer(c);
-        }
-    }
     if (!m_currentColorSet) {
         slotSetColorSet(0);
     }

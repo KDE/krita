@@ -132,8 +132,6 @@ bool KisTagFilterResourceProxyModel::setResourceMetaData(KoResourceSP resource, 
 
 void KisTagFilterResourceProxyModel::setTag(const KisTagSP tag)
 {
-    ENTER_FUNCTION() << (tag.isNull() ? "(null)" : tag->name());
-    //d->tags = tag.split(QRegExp("[,]\\s*"), QString::SkipEmptyParts);
     d->tags.clear();
     if (!tag.isNull()) {
         d->tags << tag;
@@ -152,81 +150,55 @@ bool KisTagFilterResourceProxyModel::filterAcceptsColumn(int /*source_column*/, 
     return true;
 }
 
+bool resourceHasCurrentTag(KisTagSP currentTag, QVector<KisTagSP> tagsForResource)
+{
+    bool hasCurrentTag = false;
+    // no tag set; all resources are allowed
+    if (currentTag.isNull()) {
+        hasCurrentTag = true;
+    } else {
+        if (currentTag->id() == KisTagModel::All) {
+            // current tag is "All", all resources are allowed
+            hasCurrentTag = true;
+        } else if (currentTag->id() == KisTagModel::AllUntagged) {
+            // current tag is "All untagged", all resources without any tags are allowed
+            if (tagsForResource.size() == 0) {
+                hasCurrentTag = true;
+            }
+        } else {
+             // checking whether the current tag is on the list of tags assigned to the resource
+            Q_FOREACH(KisTagSP temp, tagsForResource) {
+                if (temp->id() == currentTag->id()) {
+                    hasCurrentTag = true;
+                    break;
+                }
+            }
+        }
+    }
+    return hasCurrentTag;
+}
+
 bool KisTagFilterResourceProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
-    //fprintf(stderr, "1 ");
     if (d->tagModel == 0) {
         return true;
     }
-    //fprintf(stderr, "2 ");
+
     QModelIndex idx = sourceModel()->index(source_row, KisResourceModel::Name, source_parent);
     int resourceId = sourceModel()->data(idx, Qt::UserRole + KisResourceModel::Id).toInt();
     QString resourceName = sourceModel()->data(idx, Qt::UserRole + KisResourceModel::Name).toString();
 
-    //QStringList tags = sourceModel()->data(idx, Qt::UserRole + KisResourceModel::Tags).toStringList();
     QVector<KisTagSP> tagsForResource = d->tagModel->tagsForResource(resourceId);
-
-    //QString name = sourceModel()->data(idx, Qt::UserRole + KisResourceModel::Tags).toString();
-
-
-    // TODO: RESOURCES: proper filtering by tag
-    //fprintf(stderr, "3 ");
     KisTagSP tag = d->tags.isEmpty() ? KisTagSP() : d->tags.first();
 
-    bool hasCurrentTag = false;
-    //fprintf(stderr, "4 ");
-    //fprintf(stderr, "tag_first:_%s ", (tag.isNull() ? "(null)" : tag->name().toStdString().c_str()));
-    if (tag.isNull()) {
-        hasCurrentTag = true;
-    }
-    if (!hasCurrentTag && !tag.isNull()) {
-        if (tag->id() == KisTagModel::All) {
-            hasCurrentTag = true;
-        } else if (tag->id() == KisTagModel::AllUntagged) {
-            if (tagsForResource.size() == 0) {
-                hasCurrentTag = true;
-            }
-        }
-    }
-    //fprintf(stderr, "5-%d ", hasCurrentTag);
-    if (!hasCurrentTag && !tag.isNull()) {
-        Q_FOREACH(KisTagSP temp, tagsForResource) {
-            if (temp->url() == tag->url()) {
-                hasCurrentTag = true;
-                break;
-            }
-        }
-    }
-    //fprintf(stderr, "6-%d ", hasCurrentTag);
-
+    bool hasCurrentTag = resourceHasCurrentTag(tag, tagsForResource);
     if (!hasCurrentTag) {
-        //fprintf(stderr, "end :( \n");
         return false;
     }
-    //fprintf(stderr, "7-%d ", hasCurrentTag);
 
     bool currentFilterMatches = d->filter->matchesResource(resourceName);
 
-    //fprintf(stderr, "8-%d \n", hasCurrentTag);
     return currentFilterMatches;
-
-    //sourceModel()->data(idx, )
-
-    /*
-    QSet<QString> tagResult = tags.toSet().subtract(tags.toSet());
-    if (!tagResult.isEmpty()) {
-        return true;
-    }
-
-    QString name = sourceModel()->data(idx, Qt::UserRole + KisResourceModel::Name).toString();
-    Q_FOREACH(const KisTagSP &tag, d->tags) {
-        if (name.startsWith(tag)) {
-            return true;
-        }
-    }
-    */
-
-    return false;
 }
 
 bool KisTagFilterResourceProxyModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const

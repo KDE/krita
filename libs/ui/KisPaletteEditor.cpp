@@ -481,7 +481,7 @@ void KisPaletteEditor::updatePalette()
         palette->setColumnCount(modified.columnCount);
     }
     if (m_d->isNameModified) {
-        palette->setName(modified.name);
+        m_d->rServer->resourceModel()->renameResource(palette, modified.name);
     }
     if (m_d->isFilenameModified) {
         palette->setFilename(modified.filename);

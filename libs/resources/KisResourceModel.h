@@ -79,10 +79,12 @@ public:
     virtual bool updateResource(KoResourceSP resource) = 0;
 
     /**
-     * @brief renameResource
-     * @param resource
-     * @param name
-     * @return
+     * @brief renameResource name the given resource. The resource will have its
+     * name field reset, will be saved to the storage and there will be a new
+     * version created in the database.
+     * @param resource The resource to rename
+     * @param name The new name
+     * @return true if the operation succeeded.
      */
     virtual bool renameResource(KoResourceSP resource, const QString &name) = 0;
 

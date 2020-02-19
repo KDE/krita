@@ -21,7 +21,7 @@
 
 #include <KoDialog.h>
 #include <KoColorSet.h>
-#include <KisPaletteListWidget.h>
+#include <KisPaletteChooser.h>
 #include <kis_types.h>
 
 #include "wdg_layersplit.h"
@@ -61,7 +61,7 @@ private:
     bool m_modeToMask;
 
     WdgLayerSplit *m_page {0};
-    KisPaletteListWidget *m_colorSetChooser {0};
+    KisPaletteChooser *m_colorSetChooser {0};
     KoColorSetSP m_palette {0};
 };
 

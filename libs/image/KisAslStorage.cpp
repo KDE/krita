@@ -19,6 +19,9 @@
 
 #include "KisAslStorage.h"
 #include <KisResourceStorage.h>
+#include <KisResourceLoaderRegistry.h>
+#include <KisResourceLoader.h>
+#include <kis_psd_layer_style.h>
 
 #include <QFileInfo>
 
@@ -77,7 +80,6 @@ public:
         , m_aslSerializer(aslSerializer)
         , m_isLoaded(false)
     {
-
     }
 
     bool hasNext() const override
@@ -142,6 +144,10 @@ KisAslStorage::KisAslStorage(const QString &location)
     : KisStoragePlugin(location)
     , m_aslSerializer(new KisAslLayerStyleSerializer())
 {
+    KisResourceLoaderRegistry::instance()->add(new KisResourceLoader<KisPSDLayerStyle>(ResourceType::LayerStyles,
+                                                                                       "",
+                                                                                       "",
+                                                                                       QStringList() << "application/x-photoshop-style"));
 
 }
 

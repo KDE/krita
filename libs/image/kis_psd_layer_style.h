@@ -43,7 +43,7 @@ class KRITAPSD_EXPORT KisPSDLayerStyle : public KoResource
 {
 
 public:
-    explicit KisPSDLayerStyle();
+    KisPSDLayerStyle(const QString& name = QString());
     virtual ~KisPSDLayerStyle();
     KisPSDLayerStyle(const KisPSDLayerStyle& rhs);
     KisPSDLayerStyle operator=(const KisPSDLayerStyle& rhs);

@@ -93,8 +93,8 @@ struct Q_DECL_HIDDEN KisPSDLayerStyle::Private
     psd_layer_effects_stroke stroke;
 };
 
-KisPSDLayerStyle::KisPSDLayerStyle()
-    : KoResource(QString())
+KisPSDLayerStyle::KisPSDLayerStyle(const QString &name)
+    : KoResource(name)
     , d(new Private())
 {
     d->name = i18n("Unnamed");

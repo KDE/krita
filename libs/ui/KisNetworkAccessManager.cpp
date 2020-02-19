@@ -27,6 +27,7 @@
 KisNetworkAccessManager::KisNetworkAccessManager(QObject *parent)
     : QNetworkAccessManager(parent)
 {
+    setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
 }
 
 void KisNetworkAccessManager::getUrl(const QUrl &url)

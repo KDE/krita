@@ -19,7 +19,8 @@
 
 #include <QApplication>
 #include <QStyledItemDelegate>
-
+#include <QKeyEvent>
+#include <QMouseEvent>
 
 TableDelegate::TableDelegate(QObject *parent)
     : QSqlRelationalDelegate(parent)

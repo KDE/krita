@@ -56,7 +56,7 @@ public:
     bool noSplash() const;
     bool fullScreen() const;
     bool doNewImage() const;
-    KisDocument *image() const;
+    KisDocument *createDocumentFromArguments() const;
 
 private:
 

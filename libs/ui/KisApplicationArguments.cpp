@@ -337,7 +337,7 @@ bool KisApplicationArguments::doNewImage() const
     return d->newImage;
 }
 
-KisDocument *KisApplicationArguments::image() const
+KisDocument *KisApplicationArguments::createDocumentFromArguments() const
 {
     KisDocument *doc = KisPart::instance()->createDocument();
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(d->colorModel, d->colorDepth, "");

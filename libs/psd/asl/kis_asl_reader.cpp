@@ -150,7 +150,7 @@ void readChildObject(QIODevice *device,
     //dbgKrita << "Child" << ppVar(key) << ppVar(OSType);
 
     if (OSType == "obj ") {
-        qFatal("no implemented");
+        throw KisAslReaderUtils::ASLParseException("OSType 'obj' not implemented");
 
     } else if (OSType == "Objc" || OSType == "GlbO") {
         readDescriptor(device, key, parent, doc);
@@ -193,13 +193,13 @@ void readChildObject(QIODevice *device,
         appendXMLNodeCommon(key, value, "Boolean", parent, doc);
 
     } else if (OSType == "type") {
-        qFatal("no implemented");
+        throw KisAslReaderUtils::ASLParseException("OSType 'type' not implemented");
     } else if (OSType == "GlbC") {
-        qFatal("no implemented");
+        throw KisAslReaderUtils::ASLParseException("OSType 'GlbC' not implemented");
     } else if (OSType == "alis") {
-        qFatal("no implemented");
+        throw KisAslReaderUtils::ASLParseException("OSType 'alis' not implemented");
     } else if (OSType == "tdta") {
-        qFatal("no implemented");
+        throw KisAslReaderUtils::ASLParseException("OSType 'tdta' not implemented");
     }
 }
 

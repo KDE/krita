@@ -23,20 +23,27 @@ TableDelegate::TableDelegate(QObject *parent)
     : QSqlRelationalDelegate(parent)
 {}
 
+QRect getNewRect(const QStyleOptionViewItem &option)
+{
+    // get the rectangle in the middle of the field
+    const int textMargin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin) + 1;
+    QRect newRect = QStyle::alignedRect(option.direction, Qt::AlignCenter,
+                                        QSize(option.decorationSize.width() +
+                                              5,option.decorationSize.height()),
+                                        QRect(option.rect.x() + textMargin, option.rect.y(),
+                                              option.rect.width() -
+                                              (2 * textMargin), option.rect.height()));
+    return newRect;
+}
+
+
 void TableDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QStyleOptionViewItem viewItemOption(option);
     // Only do this if we are accessing the column with boolean variables.
     if (m_booleanColumns.contains(index.column())) {
         // This basically changes the rectangle in which the check box is drawn.
-        const int textMargin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin) + 1;
-        QRect newRect = QStyle::alignedRect(option.direction, Qt::AlignCenter,
-                                            QSize(option.decorationSize.width() +
-                                                  5,option.decorationSize.height()),
-                                            QRect(option.rect.x() + textMargin, option.rect.y(),
-                                                  option.rect.width() -
-                                                  (2 * textMargin), option.rect.height()));
-        viewItemOption.rect = newRect;
+        viewItemOption.rect = getNewRect(option);
     }
     // Draw the check box using the new rectangle.
     QSqlRelationalDelegate::paint(painter, viewItemOption, index);

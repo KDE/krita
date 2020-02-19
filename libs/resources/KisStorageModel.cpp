@@ -188,7 +188,7 @@ Qt::ItemFlags KisStorageModel::flags(const QModelIndex &index) const
     return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
 }
 
-KisResourceStorageSP KisStorageModel::storageForId(const QModelIndex &index) const
+KisResourceStorageSP KisStorageModel::storageForIndex(const QModelIndex &index) const
 {
     return KisResourceLocator::instance()->storageByLocation(KisResourceLocator::instance()->makeStorageLocationAbsolute(index.data(Qt::UserRole + Location).toString()));
 }

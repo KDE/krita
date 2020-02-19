@@ -1,0 +1,96 @@
+/*
+ * Copyright (C) 2018 Boudewijn Rempt <boud@valdyas.org>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
+#include "KisStorageFilterProxyModel.h"
+
+#include <QDebug>
+#include <KisResourceModel.h>
+#include <kis_debug.h>
+#include <KisResourceSearchBoxFilter.h>
+#include <KisResourceLocator.h>
+
+struct KisStorageFilterProxyModel::Private
+{
+    FilterType filterType {KisStorageFilterProxyModel::ByStorageType};
+    QVariant filter;
+
+};
+
+KisStorageFilterProxyModel::KisStorageFilterProxyModel(QObject *parent)
+    : QSortFilterProxyModel(parent)
+    , d(new Private)
+{
+}
+
+KisStorageFilterProxyModel::~KisStorageFilterProxyModel()
+{
+    delete d;
+}
+
+KisResourceStorageSP KisStorageFilterProxyModel::storageForIndex(QModelIndex index) const
+{
+    KisStorageModel *source = dynamic_cast<KisStorageModel*>(sourceModel());
+    if (source) {
+        return source->storageForIndex(mapToSource(index));
+    }
+    return 0;
+}
+
+
+bool KisStorageFilterProxyModel::filterAcceptsColumn(int /*source_column*/, const QModelIndex &/*source_parent*/) const
+{
+    return true;
+}
+
+bool KisStorageFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
+{
+    if (d->filter.isNull()) return true;
+
+    QModelIndex idx = sourceModel()->index(source_row, KisResourceModel::Name, source_parent);
+
+    switch (d->filterType) {
+    case ByFileName:
+    {
+        QMap<QString, QVariant> v = d->filter.toMap();
+        return KisResourceLocator::instance()->storageContainsResourceByFile(sourceModel()->data(idx, Qt::UserRole + KisStorageModel::Location).toString()
+                                                                             , v["resourcetype"].toString()
+                                                                             , v["filename"].toString());
+    }
+    case ByStorageType:
+    {
+        int storageType = sourceModel()->data(idx, Qt::UserRole + KisStorageModel::StorageType).toInt();
+        return (storageType == d->filter.toInt());
+    }
+    default:
+        ;
+    }
+
+    return false;
+}
+
+bool KisStorageFilterProxyModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const
+{
+    QString nameLeft = sourceModel()->data(source_left, Qt::UserRole + KisResourceModel::Name).toString();
+    QString nameRight = sourceModel()->data(source_right, Qt::UserRole + KisResourceModel::Name).toString();
+    return nameLeft < nameRight;
+}
+
+void KisStorageFilterProxyModel::slotModelReset()
+{
+    invalidateFilter();
+}

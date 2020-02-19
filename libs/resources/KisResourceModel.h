@@ -101,6 +101,8 @@ public:
      * @return
      */
     virtual bool setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata) = 0;
+
+
 };
 
 /**
@@ -191,7 +193,6 @@ public:
     bool renameResource(KoResourceSP resource, const QString &name) override;
     bool setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata) override;
     QVector<KisTagSP> tagsForResource(int resourceId) const;
-
 
 Q_SIGNALS:
 

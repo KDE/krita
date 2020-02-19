@@ -130,7 +130,7 @@ void TestStorageModel::testMetaData()
     QModelIndex idx;
     for (int row = 0; row < storageModel.rowCount(); ++row) {
         idx = storageModel.index(row, 7);
-        KisResourceStorageSP st = storageModel.storageForId(idx);
+        KisResourceStorageSP st = storageModel.storageForIndex(idx);
         QVERIFY(st);
         if (st == storage) {
             break;

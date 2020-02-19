@@ -52,7 +52,7 @@ public:
     bool setData(const QModelIndex &index, const QVariant &value, int role) override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 
-    KisResourceStorageSP storageForId(const QModelIndex &index) const;
+    KisResourceStorageSP storageForIndex(const QModelIndex &index) const;
 
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 

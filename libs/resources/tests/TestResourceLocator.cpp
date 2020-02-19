@@ -147,6 +147,12 @@ void TestResourceLocator::testResourceForId()
     QCOMPARE(res, res2);
 }
 
+void TestResourceLocator::testStorageContainsResourceByFile()
+{
+    QVERIFY(m_locator->storageContainsResourceByFile("", "paintoppresets", "test0.kpp") > 0);
+    QVERIFY(m_locator->storageContainsResourceByFile("", "paintoppresets", "XSLKDJSADLKSAJDA") == 0);
+}
+
 
 void TestResourceLocator::testDocumentStorage()
 {
@@ -172,7 +178,7 @@ void TestResourceLocator::testDocumentStorage()
 
 void TestResourceLocator::cleanupTestCase()
 {
-    ResourceTestHelper::rmTestDb();
+    //ResourceTestHelper::rmTestDb();
     ResourceTestHelper::cleanDstLocation(m_dstLocation);
 }
 

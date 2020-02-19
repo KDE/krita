@@ -508,7 +508,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
 
     // Create a new image, if needed
     if (doNewImage) {
-        KisDocument *doc = args.image();
+        KisDocument *doc = args.createDocumentFromArguments();
         if (doc) {
             kisPart->addDocument(doc);
             d->mainWindow->addViewAndNotifyLoadingCompleted(doc);

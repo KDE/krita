@@ -71,7 +71,7 @@ set(kritawidgets_LIB_SRCS
     KisPaletteModel.cpp
     KisPaletteDelegate.cpp
     kis_palette_view.cpp
-    KisPaletteListWidget.cpp
+    KisPaletteChooser.cpp
     KisPaletteComboBox.cpp
 
     kis_color_button.cpp

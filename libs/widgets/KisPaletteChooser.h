@@ -31,14 +31,14 @@
 class KoResource;
 
 
-struct KisPaletteListWidgetPrivate;
+struct KisPaletteChooserPrivate;
 
-class KRITAWIDGETS_EXPORT KisPaletteListWidget : public QWidget
+class KRITAWIDGETS_EXPORT KisPaletteChooser : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KisPaletteListWidget(QWidget *parent = nullptr);
-    virtual ~KisPaletteListWidget();
+    explicit KisPaletteChooser(QWidget *parent = nullptr);
+    virtual ~KisPaletteChooser();
 
 public:
     void setAllowModification(bool allowModification);
@@ -64,7 +64,7 @@ private Q_SLOTS:
 
 private:
     QScopedPointer<Ui_WdgPaletteListWidget> m_ui;
-    QScopedPointer<KisPaletteListWidgetPrivate> m_d;
+    QScopedPointer<KisPaletteChooserPrivate> m_d;
 };
 
 #endif // KISPALETTELISTWIDGET_H

@@ -30,7 +30,7 @@
 #include "KoColorSpaceRegistry.h"
 #include <KoColorSet.h>
 #include <KisPaletteModel.h>
-#include <KisPaletteListWidget.h>
+#include <KisPaletteChooser.h>
 #include <kis_palette_view.h>
 #include <KoResourceServerProvider.h>
 #include <KoResourceServer.h>
@@ -62,7 +62,7 @@ struct KisDlgInternalColorSelector::Private
     const KoColorDisplayRendererInterface *displayRenderer;
     KisHexColorInput *hexColorInput = 0;
     KisPaletteModel *paletteModel = 0;
-    KisPaletteListWidget *paletteChooser = 0;
+    KisPaletteChooser *paletteChooser = 0;
     KisScreenColorPickerBase *screenColorPicker = 0;
 };
 
@@ -94,7 +94,7 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
         m_ui->visualSelector->hide();
     }
 
-    m_d->paletteChooser = new KisPaletteListWidget(this);
+    m_d->paletteChooser = new KisPaletteChooser(this);
     m_d->paletteModel = new KisPaletteModel(this);
     m_ui->bnPaletteChooser->setIcon(KisIconUtils::loadIcon("hi16-palette_library"));
     m_ui->paletteBox->setPaletteModel(m_d->paletteModel);

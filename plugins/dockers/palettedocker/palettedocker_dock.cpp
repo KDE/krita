@@ -54,7 +54,7 @@
 #include <KisPaletteModel.h>
 #include <KisPaletteDelegate.h>
 #include <kis_palette_view.h>
-#include <KisPaletteListWidget.h>
+#include <KisPaletteChooser.h>
 
 #include <KisPaletteEditor.h>
 #include <dialogs/KisDlgPaletteEditor.h>
@@ -65,7 +65,7 @@ PaletteDockerDock::PaletteDockerDock( )
     : QDockWidget(i18n("Palette"))
     , m_ui(new Ui_WdgPaletteDock())
     , m_model(new KisPaletteModel(this))
-    , m_paletteChooser(new KisPaletteListWidget(this))
+    , m_paletteChooser(new KisPaletteChooser(this))
     , m_view(0)
     , m_resourceProvider(0)
     , m_rServer(KoResourceServerProvider::instance()->paletteServer())

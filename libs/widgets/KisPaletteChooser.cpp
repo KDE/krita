@@ -34,13 +34,13 @@
 #include <KisResourceItemListView.h>
 
 #include <ui_WdgPaletteListWidget.h>
-#include "KisPaletteListWidget.h"
-#include "KisPaletteListWidget_p.h"
+#include "KisPaletteChooser.h"
+#include "KisPaletteChooser_p.h"
 
-KisPaletteListWidget::KisPaletteListWidget(QWidget *parent)
+KisPaletteChooser::KisPaletteChooser(QWidget *parent)
     : QWidget(parent)
     , m_ui(new Ui_WdgPaletteListWidget)
-    , m_d(new KisPaletteListWidgetPrivate(this))
+    , m_d(new KisPaletteChooserPrivate(this))
 {
     m_d->allowModification = false;
 
@@ -79,10 +79,10 @@ KisPaletteListWidget::KisPaletteListWidget(QWidget *parent)
     connect(m_d->itemChooser.data(), SIGNAL(resourceSelected(KoResourceSP )), SLOT(slotPaletteResourceSelected(KoResourceSP )));
 }
 
-KisPaletteListWidget::~KisPaletteListWidget()
+KisPaletteChooser::~KisPaletteChooser()
 { }
 
-void KisPaletteListWidget::slotPaletteResourceSelected(KoResourceSP r)
+void KisPaletteChooser::slotPaletteResourceSelected(KoResourceSP r)
 {
     KoColorSetSP g = r.staticCast<KoColorSet>();
     emit sigPaletteSelected(g);
@@ -94,14 +94,14 @@ void KisPaletteListWidget::slotPaletteResourceSelected(KoResourceSP r)
     }
 }
 
-void KisPaletteListWidget::slotAdd()
+void KisPaletteChooser::slotAdd()
 {
     if (!m_d->allowModification) { return; }
     emit sigAddPalette();
     m_d->itemChooser->setCurrentItem(m_d->itemChooser->rowCount() - 1);
 }
 
-void KisPaletteListWidget::slotRemove()
+void KisPaletteChooser::slotRemove()
 {
     if (!m_d->allowModification) { return; }
     if (m_d->itemChooser->currentResource()) {
@@ -111,20 +111,20 @@ void KisPaletteListWidget::slotRemove()
     m_d->itemChooser->setCurrentItem(0);
 }
 
-void KisPaletteListWidget::slotImport()
+void KisPaletteChooser::slotImport()
 {
     if (!m_d->allowModification) { return; }
     emit sigImportPalette();
     m_d->itemChooser->setCurrentItem(m_d->itemChooser->rowCount() - 1);
 }
 
-void KisPaletteListWidget::slotExport()
+void KisPaletteChooser::slotExport()
 {
     if (!m_d->allowModification) { return; }
     emit sigExportPalette(m_d->itemChooser->currentResource().staticCast<KoColorSet>());
 }
 
-void KisPaletteListWidget::setAllowModification(bool allowModification)
+void KisPaletteChooser::setAllowModification(bool allowModification)
 {
     m_d->allowModification = allowModification;
     m_ui->bnAdd->setEnabled(allowModification);
@@ -134,27 +134,27 @@ void KisPaletteListWidget::setAllowModification(bool allowModification)
     m_ui->bnRemove->setEnabled(allowModification && cs && cs->isEditable());
 }
 
-/************************* KisPaletteListWidgetPrivate **********************/
+/************************* KisPaletteChooserPrivate **********************/
 
-KisPaletteListWidgetPrivate::KisPaletteListWidgetPrivate(KisPaletteListWidget *a_c)
+KisPaletteChooserPrivate::KisPaletteChooserPrivate(KisPaletteChooser *a_c)
     : c(a_c)
     , itemChooser(new KisResourceItemChooser(ResourceType::Palettes, false, a_c))
     , delegate(new Delegate(a_c))
 {  }
 
-KisPaletteListWidgetPrivate::~KisPaletteListWidgetPrivate()
+KisPaletteChooserPrivate::~KisPaletteChooserPrivate()
 { }
 
-/******************* KisPaletteListWidgetPrivate::Delegate ******************/
+/******************* KisPaletteChooserPrivate::Delegate ******************/
 
-KisPaletteListWidgetPrivate::Delegate::Delegate(QObject *parent)
+KisPaletteChooserPrivate::Delegate::Delegate(QObject *parent)
     : QAbstractItemDelegate(parent)
 {  }
 
-KisPaletteListWidgetPrivate::Delegate::~Delegate()
+KisPaletteChooserPrivate::Delegate::~Delegate()
 {  }
 
-void KisPaletteListWidgetPrivate::Delegate::paint(QPainter *painter,
+void KisPaletteChooserPrivate::Delegate::paint(QPainter *painter,
                                                   const QStyleOptionViewItem &option,
                                                   const QModelIndex &index) const
 {
@@ -187,7 +187,7 @@ void KisPaletteListWidgetPrivate::Delegate::paint(QPainter *painter,
     painter->restore();
 }
 
-inline QSize KisPaletteListWidgetPrivate::Delegate::sizeHint(const QStyleOptionViewItem & option,
+inline QSize KisPaletteChooserPrivate::Delegate::sizeHint(const QStyleOptionViewItem & option,
                                                              const QModelIndex &) const
 {
     return option.decorationSize;

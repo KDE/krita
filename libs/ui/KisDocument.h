@@ -83,7 +83,7 @@ class KRITAUI_EXPORT KisDocument : public QObject, public KoDocumentBase
 
 protected:
 
-    explicit KisDocument();
+    explicit KisDocument(bool addStorage = true);
 
     /**
      * @brief KisDocument makes a deep copy of the document \p rhs.

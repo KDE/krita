@@ -208,6 +208,12 @@ KisDocument *KisPart::createDocument() const
     return doc;
 }
 
+KisDocument *KisPart::createTemporaryDocument() const
+{
+    KisDocument *doc = new KisDocument(false);
+    return doc;
+}
+
 
 int KisPart::documentCount() const
 {

@@ -292,7 +292,7 @@ void KisWelcomePageWidget::populateRecentDocuments()
                 else if (mimeType == "image/tiff" || mimeType == "image/x-tiff") {
                     // Workaround for a bug in Qt tiff QImageIO plugin
                     QScopedPointer<KisDocument> doc;
-                    doc.reset(KisPart::instance()->createDocument());
+                    doc.reset(KisPart::instance()->createTemporaryDocument());
                     doc->setFileBatchMode(true);
                     bool r = doc->openUrl(QUrl::fromLocalFile(recentFileUrlPath), KisDocument::DontAddToRecent);
                     if (r) {

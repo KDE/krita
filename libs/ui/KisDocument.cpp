@@ -345,7 +345,7 @@ public:
     bool batchMode { false };
 
     QString documentStorageID {QUuid::createUuid().toString()};
-    KisResourceStorageSP documentResourceStorage {new KisResourceStorage(documentStorageID)};
+    KisResourceStorageSP documentResourceStorage;
 
     void syncDecorationsWrapperLayerState();
 
@@ -461,13 +461,15 @@ void KisDocument::Private::copyFromImpl(const Private &rhs, KisDocument *q, KisD
     //    } else {
     //        paletteList = rhs.paletteList;
     //    }
-    if (policy == REPLACE) {
-        // Clone the resources, but don't add them to the database, only the editable
-        // version of the document should have those resources in the database.
-        documentResourceStorage = rhs.documentResourceStorage->clone();
-    }
-    else {
-        documentResourceStorage = rhs.documentResourceStorage;
+    if (documentResourceStorage) {
+        if (policy == REPLACE) {
+            // Clone the resources, but don't add them to the database, only the editable
+            // version of the document should have those resources in the database.
+            documentResourceStorage = rhs.documentResourceStorage->clone();
+        }
+        else {
+            documentResourceStorage = rhs.documentResourceStorage;
+        }
     }
 
 }
@@ -519,7 +521,7 @@ private:
     KisImageBarrierLockAdapter m_imageLock;
 };
 
-KisDocument::KisDocument()
+KisDocument::KisDocument(bool addStorage)
     : d(new Private(this))
 {
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
@@ -527,7 +529,11 @@ KisDocument::KisDocument()
     connect(d->autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
     setObjectName(newObjectName());
 
-    KisResourceLocator::instance()->addStorage(d->documentStorageID, d->documentResourceStorage);
+
+    if (addStorage) {
+        d->documentResourceStorage.reset(new KisResourceStorage(d->documentStorageID));
+        KisResourceLocator::instance()->addStorage(d->documentStorageID, d->documentResourceStorage);
+    }
 
     // preload the krita resources
     KisResourceServerProvider::instance();
@@ -874,7 +880,9 @@ KisDocument *KisDocument::lockAndCreateSnapshot()
     KisDocument *doc = lockAndCloneForSaving();
     if (doc) {
         // clone the local resource storage and its contents -- that is, the old palette list
-        doc->d->documentResourceStorage = doc->d->documentResourceStorage->clone();
+        if (doc->d->documentResourceStorage) {
+            doc->d->documentResourceStorage = doc->d->documentResourceStorage->clone();
+        }
     }
     return doc;
 }
@@ -1853,6 +1861,10 @@ void KisDocument::setGridConfig(const KisGridConfig &config)
 QList<KoColorSetSP > KisDocument::paletteList()
 {
     QList<KoColorSetSP> _paletteList;
+    if (d->documentResourceStorage.isNull()) {
+        return _paletteList;
+    }
+
     QSharedPointer<KisResourceStorage::ResourceIterator> iter = d->documentResourceStorage->resources(ResourceType::Palettes);
     while (iter->hasNext()) {
         iter->next();
@@ -1867,24 +1879,26 @@ QList<KoColorSetSP > KisDocument::paletteList()
 void KisDocument::setPaletteList(const QList<KoColorSetSP > &paletteList, bool emitSignal)
 {
     QList<KoColorSetSP> oldPaletteList;
-    QSharedPointer<KisResourceStorage::ResourceIterator> iter = d->documentResourceStorage->resources(ResourceType::Palettes);
-    while (iter->hasNext()) {
-        iter->next();
-        KoResourceSP resource = iter->resource();
-        if (resource && resource->valid()) {
-            oldPaletteList << resource.dynamicCast<KoColorSet>();
+    if (d->documentResourceStorage) {
+        QSharedPointer<KisResourceStorage::ResourceIterator> iter = d->documentResourceStorage->resources(ResourceType::Palettes);
+        while (iter->hasNext()) {
+            iter->next();
+            KoResourceSP resource = iter->resource();
+            if (resource && resource->valid()) {
+                oldPaletteList << resource.dynamicCast<KoColorSet>();
+            }
         }
-    }
-    if (oldPaletteList != paletteList) {
-        KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(ResourceType::Palettes);
-        Q_FOREACH(KoColorSetSP palette, oldPaletteList) {
-            resourceModel->removeResource(palette);
-        }
-        Q_FOREACH(KoColorSetSP palette, paletteList) {
-            resourceModel->addResource(palette, d->documentStorageID);
-        }
-        if (emitSignal) {
-            emit sigPaletteListChanged(oldPaletteList, paletteList);
+        if (oldPaletteList != paletteList) {
+            KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(ResourceType::Palettes);
+            Q_FOREACH(KoColorSetSP palette, oldPaletteList) {
+                resourceModel->removeResource(palette);
+            }
+            Q_FOREACH(KoColorSetSP palette, paletteList) {
+                resourceModel->addResource(palette, d->documentStorageID);
+            }
+            if (emitSignal) {
+                emit sigPaletteListChanged(oldPaletteList, paletteList);
+            }
         }
     }
 }
@@ -2231,7 +2245,9 @@ void KisDocument::setCurrentImage(KisImageSP image, bool forceInitialUpdate)
 
     if (!image) return;
 
-    d->documentResourceStorage->setMetaData(KisResourceStorage::s_meta_name, image->objectName());
+    if (d->documentResourceStorage){
+        d->documentResourceStorage->setMetaData(KisResourceStorage::s_meta_name, image->objectName());
+    }
 
     d->setImageAndInitIdleWatcher(image);
     d->image->setUndoStore(new KisDocumentUndoStore(this));

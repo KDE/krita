@@ -107,12 +107,14 @@ public:
             m_patternsIterator->next();
             KoPatternSP currentPattern = m_patternsIterator->value();
             m_currentResource = currentPattern;
-            m_currentUuid = m_patternsIterator->value()->filename();
+            KIS_ASSERT(currentPattern);
+            m_currentUuid = currentPattern->filename();
         }
         else if (m_stylesIterator->hasNext()) {
             m_currentType = ResourceType::LayerStyles;
             KisPSDLayerStyleSP currentLayerStyle = m_stylesIterator->next();
             m_currentResource = currentLayerStyle;
+            KIS_ASSERT(currentLayerStyle);
             m_currentUuid = currentLayerStyle->filename();
         }
     }

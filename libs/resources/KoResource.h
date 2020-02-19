@@ -96,6 +96,13 @@ public:
     void setImage(const QImage &image);
 
     /**
+     * @brief updateThumbnail updates the thumbnail for this resource.
+     * Reimplement if your thumbnail is something else than the image
+     * set with setImage.
+     */
+    virtual void updateThumbnail();
+
+    /**
      * @brief thumbnail the thumbnail image to use in resource selectors
      * @return a valid qimage. All thumbnails for a given resource have the
      * same size (which is not true for image(), but that size need not

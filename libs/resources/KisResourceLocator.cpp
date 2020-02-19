@@ -268,8 +268,7 @@ bool KisResourceLocator::updateResource(const QString &resourceType, const KoRes
     Q_ASSERT(resource->resourceId() > -1);
 
     KisResourceStorageSP storage = d->storages[storageLocation];
-
-
+    resource->updateThumbnail();
     int version = resource->version();
 
     // This increments the version in the resource

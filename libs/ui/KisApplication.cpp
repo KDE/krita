@@ -343,6 +343,11 @@ bool KisApplication::registerResources()
     reg->add(new KisResourceLoader<KisSessionResource>(ResourceType::Sessions, ResourceType::Sessions, i18n("Sessions"), QStringList() << "application/x-krita-session"));
     reg->add(new KisResourceLoader<KoGamutMask>(ResourceType::GamutMasks, ResourceType::GamutMasks, i18n("Gamut masks"), QStringList() << "application/x-krita-gamutmasks"));
 
+    reg->add(new KisResourceLoader<KisPSDLayerStyle>(ResourceType::LayerStyles,
+                                                     "",
+                                                     "",
+                                                     QStringList() << "application/x-photoshop-style"));
+
     if (!KisResourceCacheDb::initialize(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation))) {
         QMessageBox::critical(0, i18nc("@title:window", "Krita: Fatal error"), i18n("%1\n\nKrita will quit now.").arg(KisResourceCacheDb::lastError()));
         //return false;

@@ -144,11 +144,6 @@ KisAslStorage::KisAslStorage(const QString &location)
     : KisStoragePlugin(location)
     , m_aslSerializer(new KisAslLayerStyleSerializer())
 {
-    KisResourceLoaderRegistry::instance()->add(new KisResourceLoader<KisPSDLayerStyle>(ResourceType::LayerStyles,
-                                                                                       "",
-                                                                                       "",
-                                                                                       QStringList() << "application/x-photoshop-style"));
-
 }
 
 KisAslStorage::~KisAslStorage()

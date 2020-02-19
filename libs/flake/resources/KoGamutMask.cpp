@@ -83,7 +83,6 @@ void KoGamutMaskShape::paintStroke(QPainter &painter)
 struct KoGamutMask::Private {
     QString name;
     QString title;
-    QString description;
     QByteArray data;
     QVector<KoGamutMaskShape*> maskShapes;
     QVector<KoGamutMaskShape*> previewShapes;
@@ -310,7 +309,7 @@ bool KoGamutMask::loadFromDevice(QIODevice *dev)
 
     d->title = parser.documentTitle();
     setName(d->title);
-    d->description = parser.documentDescription();
+    setDescription(parser.documentDescription());
 
     setMaskShapes(shapes);
 
@@ -377,7 +376,7 @@ bool KoGamutMask::saveToDevice(QIODevice *dev) const
 
     SvgWriter writer(shapes);
     writer.setDocumentTitle(d->title);
-    writer.setDocumentDescription(d->description);
+    writer.setDocumentDescription(description());
 
     writer.save(storeDev, d->maskSize);
 
@@ -410,12 +409,13 @@ void KoGamutMask::setTitle(QString title)
 
 QString KoGamutMask::description() const
 {
-    return d->description;
+    QMap<QString, QVariant> m = metadata();
+    return m["description"].toString();
 }
 
 void KoGamutMask::setDescription(QString description)
 {
-    d->description = description;
+    addMetaData("description", description);
 }
 
 QString KoGamutMask::defaultFileExtension() const

@@ -98,6 +98,9 @@ public:
 
             QHash<QString, KisPSDLayerStyleSP> layerStyles = const_cast<AslIterator*>(this)->m_aslSerializer->stylesHash();
         }
+        if (!m_aslSerializer->isValid()) {
+            return false;
+        }
         return m_patternsIterator->hasNext() ? true : m_stylesIterator->hasNext();
     }
     void next() override

@@ -31,10 +31,10 @@ public:
     virtual ~KisFolderStorage();
 
     /// Adds or updates this tag to the storage
-    bool addTag(const QString &resourceType, KisTagSP tag);
+    bool addTag(const QString &resourceType, KisTagSP tag) override;
 
     /// Adds or updates this resource to the storage
-    bool addResource(const QString &resourceType, KoResourceSP resource);
+    bool addResource(const QString &resourceType, KoResourceSP resource) override;
 
     KisResourceStorage::ResourceItem resourceItem(const QString &url) override;
     KoResourceSP resource(const QString &url) override;

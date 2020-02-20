@@ -48,7 +48,7 @@ public:
     KisPSDLayerStyle(const KisPSDLayerStyle& rhs);
     KisPSDLayerStyle operator=(const KisPSDLayerStyle& rhs);
 
-    KoResourceSP clone() const;
+    KoResourceSP clone() const override;
 
     void clear();
 

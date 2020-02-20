@@ -40,8 +40,8 @@ public:
     /// This clones all contained resources and tags from rhs
     KisMemoryStorage &operator=(const KisMemoryStorage &rhs);
 
-    bool addTag(const QString &resourceType, KisTagSP tag);
-    bool addResource(const QString &resourceType, KoResourceSP resource);
+    bool addTag(const QString &resourceType, KisTagSP tag) override;
+    bool addResource(const QString &resourceType, KoResourceSP resource) override;
 
     KisResourceStorage::ResourceItem resourceItem(const QString &url) override;
     KoResourceSP resource(const QString &url) override;

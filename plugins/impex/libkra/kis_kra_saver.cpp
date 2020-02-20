@@ -165,20 +165,18 @@ bool KisKraSaver::savePalettes(KoStore *store, KisImageSP image, const QString &
     }
     for (const KoColorSetSP palette : m_d->doc->paletteList()) {
         qDebug() << "saving palette..." << palette->storageLocation() << palette->filename();
-        if (palette->storageLocation() == m_d->doc->uniqueID()) {
-            if (!store->open(m_d->imageName + PALETTE_PATH + palette->filename())) {
-                m_d->errorMessages << i18n("could not save palettes");
-                return false;
-            }
-            QByteArray ba = palette->toByteArray();
-            if (!ba.isEmpty()) {
-                store->write(ba);
-            } else {
-                qWarning() << "Cannot save the palette to a byte array:" << palette->name();
-            }
-            store->close();
-            res = true;
+        if (!store->open(m_d->imageName + PALETTE_PATH + palette->filename())) {
+            m_d->errorMessages << i18n("could not save palettes");
+            return false;
         }
+        QByteArray ba = palette->toByteArray();
+        if (!ba.isEmpty()) {
+            store->write(ba);
+        } else {
+            qWarning() << "Cannot save the palette to a byte array:" << palette->name();
+        }
+        store->close();
+        res = true;
     }
     return res;
 }

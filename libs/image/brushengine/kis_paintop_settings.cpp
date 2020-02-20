@@ -363,11 +363,6 @@ bool KisPaintOpSettings::isValid() const
     return true;
 }
 
-bool KisPaintOpSettings::isLoadable()
-{
-    return isValid();
-}
-
 QString KisPaintOpSettings::indirectPaintingCompositeOp() const
 {
     return COMPOSITE_ALPHA_DARKEN;

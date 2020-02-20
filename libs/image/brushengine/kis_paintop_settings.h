@@ -279,11 +279,6 @@ public:
     /// @return state of the settings, default implementation is true
     virtual bool isValid() const;
 
-    /// Check if the settings are loadable, that might the case if we can fallback to something
-    /// Overwrite if the settings can do some kind of fallback
-    /// @return loadable state of the settings, by default implementation return the same as isValid()
-    virtual bool isLoadable();
-
     /**
      * Overrides the method in KisPropertiesCofiguration to allow
      * onPropertyChanged() callback

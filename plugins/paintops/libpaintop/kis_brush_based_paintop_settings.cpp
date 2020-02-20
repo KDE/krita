@@ -160,10 +160,6 @@ bool KisBrushBasedPaintOpSettings::isValid() const
 
     return true;
 }
-bool KisBrushBasedPaintOpSettings::isLoadable()
-{
-    return (KisBrushServerProvider::instance()->brushServer()->resourceCount() > 0);
-}
 
 void KisBrushBasedPaintOpSettings::setAngle(qreal value)
 {

@@ -42,9 +42,6 @@ public:
     ///Reimplemented
     bool isValid() const override;
 
-    ///Reimplemented
-    bool isLoadable() override;
-
     KisBrushSP brush() const;
 
     KisPaintOpSettingsSP clone() const override;

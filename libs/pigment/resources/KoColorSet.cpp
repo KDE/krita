@@ -203,17 +203,15 @@ bool KoColorSet::saveToDevice(QIODevice *dev) const
 
 QByteArray KoColorSet::toByteArray() const
 {
-    QBuffer s;
+    QByteArray ba;
+    QBuffer s(&ba);
     s.open(QIODevice::WriteOnly);
     if (!saveToDevice(&s)) {
         warnPigment << "saving palette failed:" << name();
         return QByteArray();
     }
     s.close();
-    s.open(QIODevice::ReadOnly);
-    QByteArray res = s.readAll();
-    s.close();
-    return res;
+    return ba;
 }
 
 bool KoColorSet::fromByteArray(QByteArray &data)

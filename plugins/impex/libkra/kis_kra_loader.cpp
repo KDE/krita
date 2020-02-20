@@ -526,6 +526,7 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP image, const QStri
 
 void KisKraLoader::loadPalettes(KoStore *store, KisDocument *doc)
 {
+    qDebug() << ">>>> loadPalettes" << m_d->paletteFilenames;
     QList<KoColorSetSP> list;
     Q_FOREACH (const QString &filename, m_d->paletteFilenames) {
         qDebug() << "loading palettes" << filename;

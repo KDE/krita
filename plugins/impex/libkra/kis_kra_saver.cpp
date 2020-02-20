@@ -185,11 +185,9 @@ void KisKraSaver::savePalettesToXML(QDomDocument &doc, QDomElement &element)
 {
     QDomElement ePalette = doc.createElement(PALETTES);
     for (const KoColorSetSP palette : m_d->doc->paletteList()) {
-        if (palette->storageLocation() == m_d->doc->uniqueID()) {
-            QDomElement eFile =  doc.createElement("palette");
-            eFile.setAttribute("filename", palette->filename());
-            ePalette.appendChild(eFile);
-        }
+        QDomElement eFile =  doc.createElement("palette");
+        eFile.setAttribute("filename", palette->filename());
+        ePalette.appendChild(eFile);
     }
     element.appendChild(ePalette);
 }

@@ -116,6 +116,8 @@
 #include <dialogs/KisAsyncAnimationFramesSaveDialog.h>
 #include <kis_image_animation_interface.h>
 
+#include <kis_psd_layer_style.h>
+
 namespace {
 const QTime appStartTime(QTime::currentTime());
 }

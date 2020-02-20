@@ -78,7 +78,8 @@ void DlgBundleManager::addBundle()
 
 void DlgBundleManager::createBundle()
 {
-
+    DlgCreateBundle* dlg = new DlgCreateBundle(0, this);
+    dlg->exec();
 }
 
 void DlgBundleManager::deleteBundle()

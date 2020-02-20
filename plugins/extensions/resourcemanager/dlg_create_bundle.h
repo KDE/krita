@@ -64,8 +64,13 @@ private Q_SLOTS:
 
 
 private:
+
+    void putResourcesInTheBundle() const;
+
     QWidget *m_page;
     Ui::WdgDlgCreateBundle *m_ui;
+
+    QList<int> m_selectedResourcesIds;
 
     QStringList m_selectedBrushes;
     QStringList m_selectedPresets;

@@ -154,42 +154,26 @@ bool saveResourceToStore(KoResourceSP resource, KoStore *store, const QString &r
 
     QByteArray ba;
     QBuffer buf;
+    buf.open(QFile::ReadWrite);
 
-    QFileInfo fi(resource->filename());
-    if (fi.exists() && fi.isReadable()) {
-
-        QFile f(resource->filename());
-        if (!f.open(QFile::ReadOnly)) {
-            qWarning() << "Could not open resource" << resource->filename();
-            return false;
-        }
-        ba = f.readAll();
-        if (ba.size() == 0) {
-            qWarning() << "Resource is empty" << resource->filename();
-            return false;
-        }
-        f.close();
-        buf.setBuffer(&ba);
-    }
-    else {
-        qWarning() << "Could not find the resource " << resource->filename() << " or it isn't readable";
+    bool response = resource->saveToDevice(&buf);
+    if (!response) {
+        ENTER_FUNCTION() << "Cannot save to device";
         return false;
     }
 
-    if (!buf.open(QBuffer::ReadOnly)) {
-        qWarning() << "Could not open buffer";
-        return false;
-    }
-    Q_ASSERT(!store->hasFile(resType + "/" + resource->filename()));
     if (!store->open(resType + "/" + resource->filename())) {
         qWarning() << "Could not open file in store for resource";
         return false;
     }
 
-    bool res = (store->write(buf.data()) == buf.size());
+    qint64 size = store->write(buf.data());
     store->close();
-    return res;
-
+    buf.close();
+    if (size != buf.size()) {
+        ENTER_FUNCTION() << "Cannot save to the store" << size << buf.size();
+    }
+    return size == buf.size();
 }
 
 bool KoResourceBundle::save()
@@ -210,6 +194,7 @@ bool KoResourceBundle::save()
         Q_FOREACH (const KoResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
             KoResourceSP res = model->resourceForMD5(ref.md5sum);
             if (!res) res = model->resourceForFilename(QFileInfo(ref.resourcePath).fileName());
+            qDebug() << "res  is or isn't found: " << (res.isNull() ? "(null)" : res->name());
             if (!saveResourceToStore(res, store.data(), resType)) {
                 if (res) {
                     qWarning() << "Could not save resource" << resType << res->name();
@@ -259,13 +244,13 @@ const QString KoResourceBundle::metaData(const QString &key, const QString &defa
     }
 }
 
-void KoResourceBundle::addResource(QString fileType, QString filePath, QVector<KisTagSP> fileTagList, const QByteArray md5sum)
+void KoResourceBundle::addResource(QString resourceType, QString filePath, QVector<KisTagSP> fileTagList, const QByteArray md5sum)
 {
     QStringList tags;
     Q_FOREACH(KisTagSP tag, fileTagList) {
         tags << tag->url();
     }
-    m_manifest.addResource(fileType, filePath, tags, md5sum);
+    m_manifest.addResource(resourceType, filePath, tags, md5sum);
 }
 
 QList<QString> KoResourceBundle::getTagsList()

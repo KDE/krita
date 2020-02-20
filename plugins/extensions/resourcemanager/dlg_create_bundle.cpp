@@ -36,10 +36,8 @@
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
 
-#include <KisResourceServerProvider.h>
 #include <kis_workspace_resource.h>
 #include <brushengine/kis_paintop_preset.h>
-#include <KisBrushServerProvider.h>
 
 #include <kis_config.h>
 
@@ -218,9 +216,23 @@ QString DlgCreateBundle::previewImage() const
     return m_previewImage;
 }
 
+void DlgCreateBundle::putResourcesInTheBundle() const
+{
+    KisResourceModel* emptyModel = KisResourceModelProvider::resourceModel("");
+    Q_FOREACH(int id, m_selectedResourcesIds) {
+        KoResourceSP res = emptyModel->resourceForId(id);
+        KisResourceModel* resModel = KisResourceModelProvider::resourceModel(res->resourceType().first);
+        QVector<KisTagSP> tags = resModel->tagsForResource(id);
+        m_bundle->addResource(res->resourceType().first, res->filename(), tags, res->md5());
+    }
+
+}
+
 void DlgCreateBundle::accept()
 {
-    QString name = m_ui->editBundleName->text().remove(" ");
+    ENTER_FUNCTION();
+    QString name = bundleName();
+    QString filename = m_ui->lblSaveLocation->text() + "/" + name + ".bundle";
 
     if (name.isEmpty()) {
         m_ui->editBundleName->setStyleSheet(QString(" border: 1px solid red"));
@@ -228,21 +240,29 @@ void DlgCreateBundle::accept()
         return;
     }
     else {
-        QFileInfo fileInfo(m_ui->lblSaveLocation->text() + "/" + name + ".bundle");
+        ENTER_FUNCTION() << "(1)";
+        QFileInfo fileInfo(filename);
 
         if (fileInfo.exists() && !m_bundle) {
+            ENTER_FUNCTION() << "(2)";
             m_ui->editBundleName->setStyleSheet("border: 1px solid red");
             QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("A bundle with this name already exists."));
             return;
         }
         else {
+            ENTER_FUNCTION() << "(3)";
             if (!m_bundle) {
                 KisConfig cfg(false);
-                cfg.writeEntry<QString>("BunleExportLocation", m_ui->lblSaveLocation->text());
-                cfg.writeEntry<QString>("BundleAuthorName", m_ui->editAuthor->text());
-                cfg.writeEntry<QString>("BundleAuthorEmail", m_ui->editEmail->text());
-                cfg.writeEntry<QString>("BundleWebsite", m_ui->editWebsite->text());
-                cfg.writeEntry<QString>("BundleLicense", m_ui->editLicense->text());
+                cfg.writeEntry<QString>("BunleExportLocation", saveLocation());
+                cfg.writeEntry<QString>("BundleAuthorName", authorName());
+                cfg.writeEntry<QString>("BundleAuthorEmail", email());
+                cfg.writeEntry<QString>("BundleWebsite", website());
+                cfg.writeEntry<QString>("BundleLicense", license());
+
+                m_bundle.reset(new KoResourceBundle(filename));
+                putResourcesInTheBundle();
+                m_bundle->save();
+
             }
             KoDialog::accept();
         }
@@ -264,6 +284,9 @@ void DlgCreateBundle::addSelected()
 
     Q_FOREACH (QListWidgetItem *item, m_ui->tableAvailable->selectedItems()) {
         m_ui->tableSelected->addItem(m_ui->tableAvailable->takeItem(m_ui->tableAvailable->row(item)));
+        m_selectedResourcesIds.append(item->data(Qt::UserRole).toInt());
+
+        /*
         QString resourceType = m_ui->cmbResourceTypes->itemData(m_ui->cmbResourceTypes->currentIndex()).toString();
         if (resourceType == ResourceType::Brushes) {
             m_selectedBrushes.append(item->data(Qt::UserRole).toString());
@@ -287,6 +310,7 @@ void DlgCreateBundle::addSelected()
         else if (resourceType == ResourceType::GamutMasks) {
             m_selectedGamutMasks.append(item->data(Qt::UserRole).toString());
         }
+        */
     }
 
     m_ui->tableAvailable->setCurrentRow(row);
@@ -298,6 +322,9 @@ void DlgCreateBundle::removeSelected()
 
     Q_FOREACH (QListWidgetItem *item, m_ui->tableSelected->selectedItems()) {
         m_ui->tableAvailable->addItem(m_ui->tableSelected->takeItem(m_ui->tableSelected->row(item)));
+        m_selectedResourcesIds.removeAll(item->data(Qt::UserRole).toInt());
+
+        /*
         QString resourceType = m_ui->cmbResourceTypes->itemData(m_ui->cmbResourceTypes->currentIndex()).toString();
         if (resourceType == ResourceType::Brushes) {
             m_selectedBrushes.removeAll(item->data(Qt::UserRole).toString());
@@ -321,6 +348,7 @@ void DlgCreateBundle::removeSelected()
         else if (resourceType == ResourceType::GamutMasks) {
             m_selectedGamutMasks.removeAll(item->data(Qt::UserRole).toString());
         }
+        */
     }
 
     m_ui->tableSelected->setCurrentRow(row);
@@ -368,6 +396,7 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
     for (int i = 0; i < model->rowCount(); i++) {
         QModelIndex idx = model->index(i, 0);
         QString filename = model->data(idx, Qt::UserRole + KisResourceModel::Filename).toString();
+        int id = model->data(idx, Qt::UserRole + KisResourceModel::Id).toInt();
 
         if (resourceType == ResourceType::Gradients) {
             if (filename == "Foreground to Transparent" || filename == "Foreground to Background") {
@@ -384,9 +413,9 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
         // Using QPixmap() makes them appear in a dense list without icons, while imageToIcon(QImage())
         //  would give a list with big white rectangles and names of the workspaces.
         QListWidgetItem *item = new QListWidgetItem(image.isNull() ? QPixmap() : imageToIcon(image), name);
-        item->setData(Qt::UserRole, filename);
+        item->setData(Qt::UserRole, id);
 
-        if (list.contains(filename)) {
+        if (m_selectedResourcesIds.contains(id)) {
             m_ui->tableSelected->addItem(item);
         }
         else {

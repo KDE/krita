@@ -20,6 +20,7 @@
 
 #include <QApplication>
 #include <QScreen>
+#include <QDesktopWidget>
 
 #include <QGridLayout>
 #include <QPainter>

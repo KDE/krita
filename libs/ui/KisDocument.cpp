@@ -653,7 +653,7 @@ bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPr
                 KisUsageLogger::log(QString("Create a simple backup for %1 in %2.").arg(job.filePath).arg(backupDir.isEmpty() ? "the same location as the file" : backupDir));
             }
         }
-        else if (numOfBackupsKept > 2) {
+        else if (numOfBackupsKept > 1) {
             if (!KBackup::numberedBackupFile(job.filePath, backupDir, suffix, numOfBackupsKept)) {
                 qWarning() << "Failed to create numbered backup file!" << job.filePath << backupDir << suffix;
                 KisUsageLogger::log(QString("Failed to create a numbered backup for %2.").arg(job.filePath).arg(backupDir.isEmpty() ? "the same location as the file" : backupDir));

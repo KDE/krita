@@ -213,12 +213,16 @@ private:
 
 inline QDebug operator<<(QDebug dbg, const KisResourceStorageSP storage)
 {
-    dbg.nospace() << "[RESOURCESTORAGE] Name: " << storage->name()
-                  << " Version: " << storage->location()
-                  << " Valid: " << storage->valid()
-                  << " Storage: " << KisResourceStorage::storageTypeToString(storage->type())
-                  << " Timestamp: " << storage->timestamp();
-
+    if (storage.isNull()) {
+        dbg.nospace() << "[RESOURCESTORAGE] NULL";
+    }
+    else {
+        dbg.nospace() << "[RESOURCESTORAGE] Name: " << storage->name()
+                      << " Version: " << storage->location()
+                      << " Valid: " << storage->valid()
+                      << " Storage: " << KisResourceStorage::storageTypeToString(storage->type())
+                      << " Timestamp: " << storage->timestamp();
+    }
     return dbg.space();
 }
 

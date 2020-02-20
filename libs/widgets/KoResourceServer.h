@@ -315,7 +315,6 @@ public:
                 qDebug() << s;
             }
         }
-        qDebug() << "updateResource" << resource;
         m_resourceModel->updateResource(resource);
         notifyResourceChanged(resource);
     }

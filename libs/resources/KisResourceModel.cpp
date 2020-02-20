@@ -291,17 +291,8 @@ KoResourceSP KisResourceModel::resourceForIndex(QModelIndex index) const
 
     bool pos = const_cast<KisResourceModel*>(this)->d->resourcesQuery.seek(index.row());
     if (pos) {
-        QString storageLocation = d->resourcesQuery.value("location").toString();
-        QString filename = d->resourcesQuery.value("filename").toString();
-        resource = KisResourceLocator::instance()->resource(storageLocation, d->resourceType, filename);
-        resource->setResourceId(d->resourcesQuery.value("id").toInt());
-        resource->setVersion(d->resourcesQuery.value("version").toInt());
-        resource->setFilename(filename);
-        resource->setStorageLocation(storageLocation);
-        QString name = d->resourcesQuery.value("name").toString();
-        if (!name.isNull()) {
-            resource->setName(name);
-        }
+        int id = d->resourcesQuery.value("id").toInt();
+        resource = resourceForId(id);
     }
     return resource;
 }
@@ -512,7 +503,8 @@ bool KisResourceModel::renameResource(KoResourceSP resource, const QString &name
         qWarning() << "Cannot rename resources. Resource is NULL or not valid or name is empty";
         return false;
     }
-    if (!KisResourceLocator::instance()->renameResource(resource, name)) {
+    resource->setName(name);
+    if (!KisResourceLocator::instance()->updateResource(d->resourceType, resource)) {
         qWarning() << "Failed to rename resource" << resource << name;
         return false;
     }

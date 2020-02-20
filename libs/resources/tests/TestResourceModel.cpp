@@ -71,7 +71,9 @@ void TestResourceModel::initTestCase()
     QVERIFY(KisResourceCacheDb::isValid());
 
     KisResourceLocator::LocatorError r = m_locator->initialize(m_srcLocation);
-    if (!m_locator->errorMessages().isEmpty()) qDebug() << m_locator->errorMessages();
+    if (!m_locator->errorMessages().isEmpty()) {
+        qDebug() << m_locator->errorMessages();
+    }
 
     QVERIFY(r == KisResourceLocator::LocatorError::Ok);
     QVERIFY(QDir(m_dstLocation).exists());
@@ -270,7 +272,7 @@ void TestResourceModel::testRenameResource()
 {
     KisResourceModel resourceModel(m_resourceType);
 
-    KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(0, 0));
+    KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(1, 0));
     QVERIFY(!resource.isNull());
     const QString name = resource->name();
     bool r = resourceModel.renameResource(resource, "A New Name");

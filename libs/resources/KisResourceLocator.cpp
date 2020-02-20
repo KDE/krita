@@ -298,42 +298,6 @@ bool KisResourceLocator::updateResource(const QString &resourceType, const KoRes
     return true;
 }
 
-bool KisResourceLocator::renameResource(const KoResourceSP resource, const QString &name)
-{
-    resource->setName(name);
-
-    QString storageLocation = makeStorageLocationAbsolute(resource->storageLocation());
-
-    Q_ASSERT(d->storages.contains(storageLocation));
-    Q_ASSERT(resource->resourceId() > -1);
-
-    KisResourceStorageSP storage = d->storages[storageLocation];
-
-
-    int version = resource->version();
-
-    // This increments the version in the resource
-    if (!storage->addResource(resource)) {
-        qWarning() << "Failed to save the new version of " << resource->name() << "to storage" << storageLocation;
-        return false;
-    }
-
-    // It's the storages that keep track of the version
-    Q_ASSERT(resource->version() == version + 1);
-
-    // The version needs already to have been incremented
-    if (!KisResourceCacheDb::addResourceVersion(resource->resourceId(), QDateTime::currentDateTime(), storage, resource)) {
-        qWarning() << "Failed to add a new version of the resource to the database" << resource->name();
-        return false;
-    }
-
-    // Update the resource in the cache
-    QPair<QString, QString> key = QPair<QString, QString> (storageLocation, resource->resourceType().first + "/" + QFileInfo(resource->filename()).fileName());
-    d->resourceCache[key] = resource;
-
-    return true;
-}
-
 QMap<QString, QVariant> KisResourceLocator::metaDataForResource(int id) const
 {
     return KisResourceCacheDb::metaDataForId(id, "resources");
@@ -348,7 +312,7 @@ QMap<QString, QVariant> KisResourceLocator::metaDataForStorage(const QString &st
 {
     QMap<QString, QVariant> metadata;
     if (!d->storages.contains(makeStorageLocationAbsolute(storageLocation))) {
-        qDebug() << storageLocation << "not in" << d->storages.keys();
+        qWarning() << storageLocation << "not in" << d->storages.keys();
         return metadata;
     }
 
@@ -356,7 +320,6 @@ QMap<QString, QVariant> KisResourceLocator::metaDataForStorage(const QString &st
 
     if (d->storages[makeStorageLocationAbsolute(storageLocation)].isNull()) {
         return metadata;
-
     }
 
     Q_FOREACH(const QString key, st->metaDataKeys()) {
@@ -375,8 +338,6 @@ void KisResourceLocator::setMetaDataForStorage(const QString &storageLocation, Q
 
 bool KisResourceLocator::storageContainsResourceByFile(const QString &storageLocation, const QString &resourceType, const QString &filename) const
 {
-    qDebug() << storageLocation << resourceType << filename;
-
     QSqlQuery q;
     if (!q.prepare("SELECT *\n"
                    "FROM   storages\n"

@@ -42,6 +42,8 @@
 #include "KisPaletteModel.h"
 #include "kis_color_button.h"
 #include <KisSwatch.h>
+#include <KisResourceModel.h>
+#include <KisResourceModelProvider.h>
 
 int KisPaletteView::MININUM_ROW_HEIGHT = 10;
 
@@ -143,6 +145,7 @@ bool KisPaletteView::addEntryWithDialog(KoColor color)
         newEntry.setId(lnIDName->text());
         newEntry.setSpotColor(chkSpot->isChecked());
         m_d->model->addEntry(newEntry, groupName);
+        saveModification();
         return true;
     }
 
@@ -162,7 +165,7 @@ bool KisPaletteView::addGroupWithDialog()
         KisSwatchGroup group;
         group.setName(lnName->text());
         m_d->model->addGroup(group);
-        m_d->model->colorSet()->save();
+        saveModification();
         return true;
     }
     return false;
@@ -182,9 +185,9 @@ bool KisPaletteView::removeEntryWithDialog(QModelIndex index)
         keepColors = chkKeep->isChecked();
     }
     m_d->model->removeEntry(index, keepColors);
-    if (m_d->model->colorSet()->isGlobal()) {
-        m_d->model->colorSet()->save();
-    }
+
+    saveModification();
+
     return true;
 }
 
@@ -252,6 +255,13 @@ void KisPaletteView::resizeRows(int newSize)
 {
     verticalHeader()->setDefaultSectionSize(newSize);
     verticalHeader()->resizeSections(QHeaderView::Fixed);
+}
+
+void KisPaletteView::saveModification()
+{
+    qDebug() << "saving modification in palette view" << m_d->model->colorSet()->filename() << m_d->model->colorSet()->storageLocation();
+    KisResourceModel *model = KisResourceModelProvider::resourceModel(m_d->model->colorSet()->resourceType().first);
+    model->updateResource(m_d->model->colorSet());
 }
 
 void KisPaletteView::removeSelectedEntry()

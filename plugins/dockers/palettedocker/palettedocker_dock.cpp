@@ -183,14 +183,11 @@ void PaletteDockerDock::slotExportPalette(KoColorSetSP palette)
     dialog.setDefaultDir(palette->filename());
     dialog.setMimeTypeFilters(QStringList() << "krita/x-colorset");
     QString newPath;
-    bool isStandAlone = palette->isGlobal();
     QString oriPath = palette->filename();
     if ((newPath = dialog.filename()).isEmpty()) { return; }
     palette->setFilename(newPath);
-    palette->setIsGlobal(true);
     palette->save();
     palette->setFilename(oriPath);
-    palette->setIsGlobal(isStandAlone);
 }
 
 void PaletteDockerDock::setCanvas(KoCanvasBase *canvas)

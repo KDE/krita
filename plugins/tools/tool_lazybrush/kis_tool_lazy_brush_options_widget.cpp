@@ -116,7 +116,6 @@ KisToolLazyBrushOptionsWidget::KisToolLazyBrushOptionsWidget(KisCanvasResourcePr
 
     m_d->provider = provider;
 
-    m_d->colorSet->setIsGlobal(false);
     m_d->colorSet->setIsEditable(true);
     m_d->colorModel->setPalette(m_d->colorSet);
 

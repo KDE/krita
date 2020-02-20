@@ -121,6 +121,7 @@ private Q_SLOTS:
 
 private:
     void resizeRows(int newSize);
+    void saveModification();
 
 private:
     struct Private;

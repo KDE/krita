@@ -136,7 +136,6 @@ KoColorSet &KoColorSet::operator=(const KoColorSet &rhs)
         d->comment = rhs.d->comment;
         d->groupNames = rhs.d->groupNames;
         d->groups = rhs.d->groups;
-        d->isGlobal = rhs.d->isGlobal;
         d->isEditable = rhs.d->isEditable;
     }
     return *this;
@@ -177,18 +176,13 @@ bool KoColorSet::loadFromDevice(QIODevice *dev)
 
 bool KoColorSet::save()
 {
-    if (d->isGlobal) {
-        // save to resource dir
-        QFile file(filename());
-        if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-            return false;
-        }
-        saveToDevice(&file);
-        file.close();
-        return true;
-    } else {
-        return true; // palette is not global, but still indicate that it's saved
+    QFile file(filename());
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        return false;
     }
+    saveToDevice(&file);
+    file.close();
+    return true;
 }
 
 bool KoColorSet::saveToDevice(QIODevice *dev) const
@@ -452,15 +446,6 @@ KisSwatchGroup *KoColorSet::getGlobalGroup()
     return getGroup(GLOBAL_GROUP_NAME);
 }
 
-bool KoColorSet::isGlobal() const
-{
-    return d->isGlobal;
-}
-
-void KoColorSet::setIsGlobal(bool isGlobal)
-{
-    d->isGlobal = isGlobal;
-}
 
 bool KoColorSet::isEditable() const
 {
@@ -1551,7 +1536,7 @@ bool KoColorSet::Private::saveKpl(QIODevice *dev) const
         root.setAttribute(KPL_PALETTE_NAME_ATTR, colorSet->name());
         root.setAttribute(KPL_PALETTE_COMMENT_ATTR, comment);
         root.setAttribute(KPL_PALETTE_READONLY_ATTR,
-                          (colorSet->isEditable() || !colorSet->isGlobal()) ? "false" : "true");
+                          (colorSet->isEditable()) ? "false" : "true");
         root.setAttribute(KPL_PALETTE_COLUMN_COUNT_ATTR, colorSet->columnCount());
         root.setAttribute(KPL_GROUP_ROW_COUNT_ATTR, groups[KoColorSet::GLOBAL_GROUP_NAME].rowCount());
 

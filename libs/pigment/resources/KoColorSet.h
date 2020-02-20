@@ -114,18 +114,6 @@ public:
     PaletteType paletteType() const;
     void setPaletteType(PaletteType paletteType);
 
-    /**
-     * @brief isGlobal
-     * A global color set is a set stored in the config directory
-     * Such a color set would be opened every time Krita is launched.
-     *
-     * A non-global color set, on contrary, would be stored in a kra file,
-     * and would only be opened when that file is opened by Krita.
-     * @return @c true if the set is global
-     */
-    bool isGlobal() const;
-    void setIsGlobal(bool);
-
     bool isEditable() const;
     void setIsEditable(bool isEditable);
 

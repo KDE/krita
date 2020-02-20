@@ -25,6 +25,9 @@
 #include <QImage>
 #include <QBuffer>
 
+#include <KisResourceModel.h>
+#include <KisResourceModelProvider.h>
+
 #include "KoMD5Generator.h"
 #include "KoMD5Generator.h"
 

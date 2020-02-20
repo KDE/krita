@@ -130,11 +130,8 @@ private Q_SLOTS:
 
 private:
     QString newGroupName() const;
-    void setNonGlobal();
-    void setGlobal();
     bool duplicateExistsGroupName(const QString &name) const;
     bool duplicateExistsOriginalGroupName(const QString &name) const;
-    void uploadPaletteList() const;
     QString filenameFromPath(const QString &path) const;
 
 private:

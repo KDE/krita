@@ -108,7 +108,9 @@ void KisDlgPaletteEditor::setPaletteModel(KisPaletteModel *model)
     m_ui->lineEditName->setText(m_colorSet->name());
     m_ui->lineEditFilename->setText(m_paletteEditor->relativePathFromSaveLocation());
     m_ui->spinBoxCol->setValue(m_colorSet->columnCount());
-    if (m_colorSet->isGlobal()) {
+    //Hack alert!!!
+    //TODO: replace with a storage selector.
+    if (m_colorSet->storageLocation().contains("/")) {
         m_globalButtons->button(0)->setChecked(true);
     } else {
         m_globalButtons->button(1)->setChecked(true);
@@ -203,12 +205,12 @@ void KisDlgPaletteEditor::slotNameChanged()
 
 void KisDlgPaletteEditor::slotFilenameChanged(const QString &newFilename)
 {
-    bool global = m_colorSet->isGlobal();
-    if (m_paletteEditor->duplicateExistsFilename(newFilename, global)) {
-        m_ui->lineEditFilename->setPalette(m_warnPalette);
-        m_ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
-        return;
-    }
+//    bool global = m_colorSet->storageLocation().isEmpty();
+//    if (m_paletteEditor->duplicateExistsFilename(newFilename, global)) {
+//        m_ui->lineEditFilename->setPalette(m_warnPalette);
+//        m_ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+//        return;
+//    }
     m_ui->lineEditFilename->setPalette(m_normalPalette);
     m_ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
     m_paletteEditor->changeFilename(newFilename);
@@ -217,10 +219,10 @@ void KisDlgPaletteEditor::slotFilenameChanged(const QString &newFilename)
 void KisDlgPaletteEditor::slotFilenameInputFinished()
 {
     QString newName = m_ui->lineEditFilename->text();
-    bool global = m_colorSet->isGlobal();
-    if (m_paletteEditor->duplicateExistsFilename(newName, global)) {
-        return;
-    }
+    bool global = m_colorSet->storageLocation().isEmpty();
+//    if (m_paletteEditor->duplicateExistsFilename(newName, global)) {
+//        return;
+//    }
     m_paletteEditor->changeFilename(newName);
 }
 

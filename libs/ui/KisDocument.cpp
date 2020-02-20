@@ -461,7 +461,8 @@ void KisDocument::Private::copyFromImpl(const Private &rhs, KisDocument *q, KisD
     //    } else {
     //        paletteList = rhs.paletteList;
     //    }
-    if (documentResourceStorage) {
+
+    if (rhs.documentResourceStorage) {
         if (policy == REPLACE) {
             // Clone the resources, but don't add them to the database, only the editable
             // version of the document should have those resources in the database.
@@ -1862,6 +1863,7 @@ QList<KoColorSetSP > KisDocument::paletteList()
 {
     QList<KoColorSetSP> _paletteList;
     if (d->documentResourceStorage.isNull()) {
+        qWarning() << "No documentstorage for palettes";
         return _paletteList;
     }
 

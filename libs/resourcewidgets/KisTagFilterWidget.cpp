@@ -37,6 +37,9 @@
 #include <KoIcon.h>
 
 #include <kis_debug.h>
+#include <kconfig.h>
+#include <ksharedconfig.h>
+#include <kconfiggroup.h>
 
 class KisTagFilterWidget::Private
 {
@@ -47,6 +50,9 @@ public:
     QGridLayout* filterBarLayout;
     QCompleter* completer;
     QCheckBox* filterByTagCheckbox;
+
+    QString configGroup {"resources"};
+    QString configName {"filterByTagChecked"};
 
 };
 
@@ -96,6 +102,11 @@ KisTagFilterWidget::KisTagFilterWidget(KisTagModel* model, QWidget* parent)
     d->filterByTagCheckbox->setText(i18nc("It appears in the checkbox next to the filter box "
                                           "in resources dockers; must be short.", "filter by tag"));
 
+    KConfigGroup cfg = KSharedConfig::openConfig()->group(d->configGroup);
+    bool filterByTagCheckboxChecked = cfg.readEntry(d->configName, true);
+    d->filterByTagCheckbox->setChecked(filterByTagCheckboxChecked);
+
+
     filterBarLayout->addWidget(d->filterByTagCheckbox, 0, 1);
     connect(d->tagSearchLineEdit, SIGNAL(textChanged(QString)),
             this, SLOT(onTextChanged(QString)));
@@ -123,4 +134,6 @@ void KisTagFilterWidget::onTextChanged(const QString& lineEditText)
 void KisTagFilterWidget::slotFilterByTagChanged(int filterByTag)
 {
     emit filterByTagChanged(filterByTag == Qt::Checked);
+    KConfigGroup cfg = KSharedConfig::openConfig()->group(d->configGroup);
+    cfg.writeEntry(d->configName, filterByTag == Qt::Checked);
 }

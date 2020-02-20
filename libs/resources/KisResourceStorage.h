@@ -140,6 +140,26 @@ public:
     }
 
 
+    static QString storageTypeToUntranslatedString(StorageType storageType) {
+        switch (storageType) {
+        case StorageType::Unknown:
+            return ("Unknown");
+        case StorageType::Folder:
+            return ("Folder");
+        case StorageType::Bundle:
+            return ("Bundle");
+        case StorageType::AdobeBrushLibrary:
+            return ("Adobe Brush Library");
+        case StorageType::AdobeStyleLibrary:
+            return ("Adobe Style Library");
+        case StorageType::Memory:
+            return ("Memory");
+        default:
+            return ("Invalid");
+        }
+    }
+
+
     KisResourceStorage(const QString &location);
     ~KisResourceStorage();
     KisResourceStorage(const KisResourceStorage &rhs);

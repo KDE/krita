@@ -51,6 +51,12 @@ KisResourceStorageSP KisStorageFilterProxyModel::storageForIndex(QModelIndex ind
     return 0;
 }
 
+void KisStorageFilterProxyModel::setFilter(KisStorageFilterProxyModel::FilterType filterType, QVariant filter)
+{
+    d->filter = filter;
+    d->filterType = filterType;
+}
+
 
 bool KisStorageFilterProxyModel::filterAcceptsColumn(int /*source_column*/, const QModelIndex &/*source_parent*/) const
 {
@@ -73,8 +79,8 @@ bool KisStorageFilterProxyModel::filterAcceptsRow(int source_row, const QModelIn
     }
     case ByStorageType:
     {
-        int storageType = sourceModel()->data(idx, Qt::UserRole + KisStorageModel::StorageType).toInt();
-        return (storageType == d->filter.toInt());
+        QString storageType = sourceModel()->data(idx, Qt::UserRole + KisStorageModel::StorageType).toString();
+        return (d->filter.toStringList().contains(storageType));
     }
     default:
         ;

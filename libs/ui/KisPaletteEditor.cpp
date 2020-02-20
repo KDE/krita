@@ -55,7 +55,6 @@ struct KisPaletteEditor::PaletteInfo {
 struct KisPaletteEditor::Private
 {
     bool isNameModified {false};
-    bool isFilenameModified {false};
     bool isColumnCountModified {false};
     QSet<QString> modifiedGroupNames; // key is original group name
     QSet<QString> newGroupNames;
@@ -111,10 +110,6 @@ void KisPaletteEditor::addPalette()
     QLineEdit le(i18nc("Default name for a new palette","New Palette"));
     layout.addRow(&lbl, &le);
 
-    QLabel lbl2(i18nc("Label for line edit to set a palette filename.","File Name"));
-    QLineEdit fileNameEdit(i18nc("Default file name for a new palette", "New Palette"));
-    layout.addRow(&lbl2, &fileNameEdit);
-
     QString saveLocation = m_d->rServer->saveLocation();
 
 
@@ -124,14 +119,11 @@ void KisPaletteEditor::addPalette()
 
     if (dlg.exec() != QDialog::Accepted) { return; }
 
-    QString name = fileNameEdit.text();
-    if (name.isEmpty()) {
-        name = le.text();
-    }
+    QString name = le.text();
     colorSet->setPaletteType(KoColorSet::KPL);
     colorSet->setIsEditable(true);
     colorSet->setValid(true);
-    colorSet->setName(le.text());
+    colorSet->setName(name);
     colorSet->setFilename(name.split(" ").join("_")+colorSet->defaultFileExtension());
 
     QString resourceLocation = "";
@@ -209,14 +201,6 @@ void KisPaletteEditor::rename(const QString &newName)
     if (newName.isEmpty()) { return; }
     m_d->isNameModified = true;
     m_d->modified.name = newName;
-}
-
-void KisPaletteEditor::changeFilename(const QString &newName)
-{
-    if (newName.isEmpty()) { return; }
-    m_d->isFilenameModified = true;
-    m_d->pathsToRemove.insert(m_d->modified.filename);
-    m_d->modified.filename = newName;
 }
 
 void KisPaletteEditor::changeColCount(int newCount)
@@ -450,9 +434,7 @@ void KisPaletteEditor::addEntry(const KoColor &color)
     newEntry.setId(lnIDName.text());
     newEntry.setSpotColor(chkSpot.isChecked());
     m_d->model->addEntry(newEntry, groupName);
-
-    qDebug() << "updating palette from addEntry" << m_d->model->colorSet()->filename() << m_d->model->colorSet()->storageLocation();
-    m_d->rServer->resourceModel()->addResource(m_d->model->colorSet(), m_d->model->colorSet()->storageLocation());
+    m_d->rServer->resourceModel()->updateResource(m_d->model->colorSet());
     m_d->modifiedGroupNames.insert(groupName);
     m_d->modified.groups[groupName].addEntry(newEntry);
 }

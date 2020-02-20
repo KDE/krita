@@ -71,8 +71,6 @@ private Q_SLOTS:
     void slotSetGlobal();
 
     void slotNameChanged();
-    void slotFilenameChanged(const QString &newFilename);
-    void slotFilenameInputFinished();
     void slotColCountChanged(int);
 
     void slotAccepted();

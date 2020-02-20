@@ -56,7 +56,6 @@ KisDlgPaletteEditor::KisDlgPaletteEditor()
 
     m_ui->setupUi(this);
     m_ui->gbxPalette->setTitle(i18n("Palette settings"));
-    m_ui->labelFilename->setText(i18n("Filename"));
     m_ui->labelName->setText(i18n("Palette Name"));
     m_ui->bnAddGroup->setDefaultAction(m_actAddGroup.data());
 
@@ -72,8 +71,6 @@ KisDlgPaletteEditor::KisDlgPaletteEditor()
     connect(m_ui->spinBoxRow, SIGNAL(valueChanged(int)), SLOT(slotRowCountChanged(int)));
     connect(m_ui->spinBoxCol, SIGNAL(valueChanged(int)), SLOT(slotColCountChanged(int)));
     connect(m_ui->lineEditName, SIGNAL(editingFinished()), SLOT(slotNameChanged()));
-    connect(m_ui->lineEditFilename, SIGNAL(textEdited(QString)), SLOT(slotFilenameChanged(QString)));
-    connect(m_ui->lineEditFilename, SIGNAL(editingFinished()), SLOT(slotFilenameInputFinished()));
 
     m_globalButtons->addButton(m_ui->rb_global, 0);
     m_globalButtons->addButton(m_ui->rb_document, 1);
@@ -97,7 +94,6 @@ void KisDlgPaletteEditor::setPaletteModel(KisPaletteModel *model)
     m_paletteEditor->setPaletteModel(model);
 
     // don't let editor make changes when initializing
-    const QSignalBlocker blocker1(m_ui->lineEditFilename);
     const QSignalBlocker blocker2(m_ui->lineEditName);
     const QSignalBlocker blocker3(m_ui->spinBoxCol);
     const QSignalBlocker blocker4(m_ui->spinBoxRow);
@@ -106,7 +102,6 @@ void KisDlgPaletteEditor::setPaletteModel(KisPaletteModel *model)
     const QSignalBlocker blocker7(m_ui->cbxGroup);
 
     m_ui->lineEditName->setText(m_colorSet->name());
-    m_ui->lineEditFilename->setText(m_paletteEditor->relativePathFromSaveLocation());
     m_ui->spinBoxCol->setValue(m_colorSet->columnCount());
     //Hack alert!!!
     //TODO: replace with a storage selector.
@@ -129,7 +124,6 @@ void KisDlgPaletteEditor::setPaletteModel(KisPaletteModel *model)
 
     bool canWrite = m_colorSet->isEditable();
     m_ui->lineEditName->setEnabled(canWrite);
-    m_ui->lineEditFilename->setEnabled(canWrite);
     m_ui->spinBoxCol->setEnabled(canWrite);
     m_ui->spinBoxRow->setEnabled(canWrite);
     m_ui->rb_global->setEnabled(canWrite);
@@ -201,29 +195,6 @@ void KisDlgPaletteEditor::slotSetGlobal()
 void KisDlgPaletteEditor::slotNameChanged()
 {
     m_paletteEditor->rename(qobject_cast<QLineEdit*>(sender())->text());
-}
-
-void KisDlgPaletteEditor::slotFilenameChanged(const QString &newFilename)
-{
-//    bool global = m_colorSet->storageLocation().isEmpty();
-//    if (m_paletteEditor->duplicateExistsFilename(newFilename, global)) {
-//        m_ui->lineEditFilename->setPalette(m_warnPalette);
-//        m_ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
-//        return;
-//    }
-    m_ui->lineEditFilename->setPalette(m_normalPalette);
-    m_ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
-    m_paletteEditor->changeFilename(newFilename);
-}
-
-void KisDlgPaletteEditor::slotFilenameInputFinished()
-{
-    QString newName = m_ui->lineEditFilename->text();
-    bool global = m_colorSet->storageLocation().isEmpty();
-//    if (m_paletteEditor->duplicateExistsFilename(newName, global)) {
-//        return;
-//    }
-    m_paletteEditor->changeFilename(newName);
 }
 
 void KisDlgPaletteEditor::slotColCountChanged(int newCount)

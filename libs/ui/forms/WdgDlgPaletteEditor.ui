@@ -34,16 +34,6 @@
           <widget class="QLineEdit" name="lineEditName"/>
          </item>
          <item>
-          <widget class="QLabel" name="labelFilename">
-           <property name="text">
-            <string>File name</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="lineEditFilename"/>
-         </item>
-         <item>
           <widget class="QLabel" name="labelColCount">
            <property name="text">
             <string>Column count</string>

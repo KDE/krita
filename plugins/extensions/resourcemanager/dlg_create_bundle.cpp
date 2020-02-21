@@ -306,32 +306,6 @@ void DlgCreateBundle::addSelected()
     Q_FOREACH (QListWidgetItem *item, m_ui->tableAvailable->selectedItems()) {
         m_ui->tableSelected->addItem(m_ui->tableAvailable->takeItem(m_ui->tableAvailable->row(item)));
         m_selectedResourcesIds.append(item->data(Qt::UserRole).toInt());
-
-        /*
-        QString resourceType = m_ui->cmbResourceTypes->itemData(m_ui->cmbResourceTypes->currentIndex()).toString();
-        if (resourceType == ResourceType::Brushes) {
-            m_selectedBrushes.append(item->data(Qt::UserRole).toString());
-        }
-        else if (resourceType == "presets") {
-            m_selectedPresets.append(item->data(Qt::UserRole).toString());
-        }
-        else if (resourceType == ResourceType::Gradients) {
-            m_selectedGradients.append(item->data(Qt::UserRole).toString());
-
-        }
-        else if (resourceType == ResourceType::Patterns) {
-            m_selectedPatterns.append(item->data(Qt::UserRole).toString());
-        }
-        else if (resourceType == ResourceType::Palettes) {
-            m_selectedPalettes.append(item->data(Qt::UserRole).toString());
-        }
-        else if (resourceType == ResourceType::Workspaces) {
-            m_selectedWorkspaces.append(item->data(Qt::UserRole).toString());
-        }
-        else if (resourceType == ResourceType::GamutMasks) {
-            m_selectedGamutMasks.append(item->data(Qt::UserRole).toString());
-        }
-        */
     }
 
     m_ui->tableAvailable->setCurrentRow(row);
@@ -344,32 +318,6 @@ void DlgCreateBundle::removeSelected()
     Q_FOREACH (QListWidgetItem *item, m_ui->tableSelected->selectedItems()) {
         m_ui->tableAvailable->addItem(m_ui->tableSelected->takeItem(m_ui->tableSelected->row(item)));
         m_selectedResourcesIds.removeAll(item->data(Qt::UserRole).toInt());
-
-        /*
-        QString resourceType = m_ui->cmbResourceTypes->itemData(m_ui->cmbResourceTypes->currentIndex()).toString();
-        if (resourceType == ResourceType::Brushes) {
-            m_selectedBrushes.removeAll(item->data(Qt::UserRole).toString());
-        }
-        else if (resourceType == "presets") {
-            m_selectedPresets.removeAll(item->data(Qt::UserRole).toString());
-        }
-        else if (resourceType == ResourceType::Gradients) {
-            m_selectedGradients.removeAll(item->data(Qt::UserRole).toString());
-
-        }
-        else if (resourceType == ResourceType::Patterns) {
-            m_selectedPatterns.removeAll(item->data(Qt::UserRole).toString());
-        }
-        else if (resourceType == ResourceType::Palettes) {
-            m_selectedPalettes.removeAll(item->data(Qt::UserRole).toString());
-        }
-        else if (resourceType == ResourceType::Workspaces) {
-            m_selectedWorkspaces.removeAll(item->data(Qt::UserRole).toString());
-        }
-        else if (resourceType == ResourceType::GamutMasks) {
-            m_selectedGamutMasks.removeAll(item->data(Qt::UserRole).toString());
-        }
-        */
     }
 
     m_ui->tableSelected->setCurrentRow(row);
@@ -395,26 +343,6 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
     m_ui->tableSelected->clear();
 
     QString standarizedResourceType = (resourceType == "presets" ? ResourceType::PaintOpPresets : resourceType);
-
-    /*
-    QStringList& list = m_selectedBrushes;
-
-    if (standarizedResourceType == ResourceType::Brushes) {
-        list = m_selectedBrushes;
-    } else if (standarizedResourceType == ResourceType::Gradients) {
-        list = m_selectedGradients;
-    } else if (standarizedResourceType == ResourceType::GamutMasks) {
-        list = m_selectedGamutMasks;
-    } else if (standarizedResourceType == ResourceType::Palettes) {
-        list = m_selectedPalettes;
-    } else if (standarizedResourceType == ResourceType::Patterns) {
-        list = m_selectedPatterns;
-    } else if (standarizedResourceType == ResourceType::PaintOpPresets) {
-        list = m_selectedPresets;
-    } else if (standarizedResourceType == ResourceType::Workspaces) {
-        list = m_selectedWorkspaces;
-    }
-    */
 
     KisResourceModel* model = KisResourceModelProvider::resourceModel(standarizedResourceType);
     for (int i = 0; i < model->rowCount(); i++) {

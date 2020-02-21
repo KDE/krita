@@ -198,24 +198,12 @@ void PaletteDockerDock::setCanvas(KoCanvasBase *canvas)
         m_ui->paletteView->setDisplayRenderer(cv->displayColorConverter()->displayRendererInterface());
     }
 
-    if (m_activeDocument) {
-        m_connections.clear();
-        for (KoColorSetSP  &cs : m_activeDocument->paletteList()) {
-            KoColorSetSP tmpAddr = cs;
-            cs = KoColorSetSP(new KoColorSet(*cs));
-            m_rServer->removeResourceFromServer(tmpAddr);
-        }
-    }
-
     if (m_view && m_view->document()) {
         m_activeDocument = m_view->document();
         m_paletteEditor->setView(m_view);
-
-        for (KoColorSetSP cs : m_activeDocument->paletteList()) {
-            m_rServer->addResource(cs);
+        if (m_currentColorSet) {
+            m_currentColorSet = m_rServer->resourceByFilename(m_currentColorSet->filename());
         }
-        m_connections.addConnection(m_activeDocument, &KisDocument::sigPaletteListChanged,
-                                    this, &PaletteDockerDock::slotUpdatePaletteList);
     }
 
     if (!m_currentColorSet) {
@@ -229,6 +217,7 @@ void PaletteDockerDock::unsetCanvas()
     m_ui->paletteView->setDisplayRenderer(0);
     m_paletteEditor->setView(0);
 
+    m_currentColorSet = m_rServer->resourceByFilename(m_currentColorSet->filename());
     if (!m_currentColorSet) {
         slotSetColorSet(0);
     }
@@ -374,19 +363,4 @@ void PaletteDockerDock::slotNameListSelection(const KoColor &color)
     m_ui->paletteView->selectClosestColor(color);
     m_resourceProvider->setFGColor(color);
     m_colorSelfUpdate = false;
-}
-
-void PaletteDockerDock::slotUpdatePaletteList(const QList<KoColorSetSP> &oldPaletteList, const QList<KoColorSetSP> &newPaletteList)
-{
-    for (KoColorSetSP cs : oldPaletteList) {
-        m_rServer->removeResourceFromServer(cs);
-    }
-
-    for (KoColorSetSP cs : newPaletteList) {
-        m_rServer->addResource(cs);
-    }
-
-    if (!m_currentColorSet) {
-        slotSetColorSet(0);
-    }
 }

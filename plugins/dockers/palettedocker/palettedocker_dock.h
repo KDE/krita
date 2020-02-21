@@ -85,7 +85,6 @@ private Q_SLOTS:
     void loadFromWorkspace(KisWorkspaceResourceSP workspace);
 
     void slotFGColorResourceChanged(const KoColor& color);
-    void slotUpdatePaletteList(const QList<KoColorSetSP> &oldPaletteList, const QList<KoColorSetSP> &newPaletteList);
 
 private:
     void setEntryByForeground(const QModelIndex &index);
@@ -112,8 +111,6 @@ private /* member variables */:
     QMenu m_viewContextMenu;
 
     bool m_colorSelfUpdate;
-
-    KisSignalAutoConnectionsStore m_connections;
 };
 
 

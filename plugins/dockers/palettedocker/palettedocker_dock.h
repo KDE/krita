@@ -86,6 +86,8 @@ private Q_SLOTS:
 
     void slotFGColorResourceChanged(const KoColor& color);
 
+    void slotStoragesChanged();
+
 private:
     void setEntryByForeground(const QModelIndex &index);
     void setFGColorByPalette(const KisSwatch &entry);

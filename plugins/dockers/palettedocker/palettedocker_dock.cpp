@@ -36,6 +36,7 @@
 #include <KisSqueezedComboBox.h>
 #include <klocalizedstring.h>
 #include <KoResourceServerProvider.h>
+#include <KisResourceLocator.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoFileDialog.h>
 #include <kis_icon.h>
@@ -80,6 +81,8 @@ PaletteDockerDock::PaletteDockerDock( )
     QWidget *mainWidget = new QWidget(this);
     setWidget(mainWidget);
     m_ui->setupUi(mainWidget);
+
+    connect(KisResourceLocator::instance(), SIGNAL(storageRemoved()), this, SLOT(slotStoragesChanged()));
 
     m_ui->bnAdd->setDefaultAction(m_actAdd.data());
     m_ui->bnRemove->setDefaultAction(m_actRemove.data());
@@ -201,9 +204,6 @@ void PaletteDockerDock::setCanvas(KoCanvasBase *canvas)
     if (m_view && m_view->document()) {
         m_activeDocument = m_view->document();
         m_paletteEditor->setView(m_view);
-        if (m_currentColorSet) {
-            m_currentColorSet = m_rServer->resourceByFilename(m_currentColorSet->filename());
-        }
     }
 
     if (!m_currentColorSet) {
@@ -219,11 +219,6 @@ void PaletteDockerDock::unsetCanvas()
 
     if (!m_currentColorSet) {
         slotSetColorSet(0);
-    } else {
-        m_currentColorSet = m_rServer->resourceByFilename(m_currentColorSet->filename());
-        if (!m_currentColorSet) {
-            slotSetColorSet(0);
-        }
     }
 }
 
@@ -315,6 +310,18 @@ void PaletteDockerDock::slotFGColorResourceChanged(const KoColor &color)
 {
     if (!m_colorSelfUpdate) {
         m_ui->paletteView->slotFGColorChanged(color);
+    }
+}
+
+void PaletteDockerDock::slotStoragesChanged()
+{
+    if (m_activeDocument.isNull()) {
+        slotSetColorSet(0);
+    }
+    if (m_currentColorSet) {
+        if (!m_rServer->resourceByFilename(m_currentColorSet->filename())) {
+            slotSetColorSet(0);
+        }
     }
 }
 

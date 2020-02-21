@@ -191,8 +191,9 @@ KisBrush::~KisBrush()
 
 QImage KisBrush::brushTipImage() const
 {
+    //TODO: what happens there?
     if (d->brushTipImage.isNull()) {
-        const_cast<KisBrush*>(this)->load();
+        //const_cast<KisBrush*>(this)->load();
     }
     return d->brushTipImage;
 }

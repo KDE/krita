@@ -25,6 +25,7 @@
 #include <KisTag.h>
 #include <KisResourceLoaderRegistry.h>
 #include <kbackup.h>
+#include <KisGlobalResourcesInterface.h>
 
 class FolderTagIterator : public KisResourceStorage::TagIterator
 {
@@ -147,7 +148,7 @@ protected:
                 const_cast<FolderIterator*>(this)->m_resourceLoader = KisResourceLoaderRegistry::instance()->loader(m_resourceType, KisMimeDatabase::mimeTypeForFile(m_dirIterator->filePath()));
             }
             if (m_resourceLoader) {
-                const_cast<FolderIterator*>(this)->m_resource = m_resourceLoader->load(m_dirIterator->filePath(), f);
+                const_cast<FolderIterator*>(this)->m_resource = m_resourceLoader->load(m_dirIterator->filePath(), f, KisGlobalResourcesInterface::instance());
             }
             else {
                 qWarning() << "Could not get resource loader for type" << m_resourceType;
@@ -249,7 +250,7 @@ KoResourceSP KisFolderStorage::resource(const QString &url)
         qWarning() << "Could not open" << fi.absoluteFilePath() << "for reading";
         return 0;
     }
-    KoResourceSP res = loader->load(url, f);
+    KoResourceSP res = loader->load(url, f, KisGlobalResourcesInterface::instance());
     f.close();
     return res;
 }

@@ -48,6 +48,7 @@
 
 #include <KisPrefixedPaintOpOptionWrapper.h>
 #include <KisPaintopSettingsIds.h>
+#include <KisGlobalResourcesInterface.h>
 
 KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     : KisBrushBasedPaintopOptionWidget(parent)
@@ -155,7 +156,7 @@ KisBrushOpSettingsWidget::~KisBrushOpSettingsWidget()
 
 KisPropertiesConfigurationSP KisBrushOpSettingsWidget::configuration() const
 {
-    KisBrushBasedPaintOpSettingsSP config = new KisBrushOpSettings();
+    KisBrushBasedPaintOpSettingsSP config = new KisBrushOpSettings(KisGlobalResourcesInterface::instance());
     config->setOptionsWidget(const_cast<KisBrushOpSettingsWidget*>(this));
     config->setProperty("paintop", "paintbrush"); // XXX: make this a const id string
     writeConfiguration(config);

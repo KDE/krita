@@ -165,8 +165,10 @@ bool KoPattern::savePatToDevice(QIODevice* dev) const
     return true;
 }
 
-bool KoPattern::loadFromDevice(QIODevice *dev)
+bool KoPattern::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
+    Q_UNUSED(resourcesInterface);
+
     QString fileExtension;
     int index = filename().lastIndexOf('.');
 

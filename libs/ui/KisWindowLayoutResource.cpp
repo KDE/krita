@@ -340,8 +340,10 @@ bool KisWindowLayoutResource::saveToDevice(QIODevice *dev) const
     return true;
 }
 
-bool KisWindowLayoutResource::loadFromDevice(QIODevice *dev)
+bool KisWindowLayoutResource::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
+    Q_UNUSED(resourcesInterface);
+
     QDomDocument doc;
     if (!doc.setContent(dev)) {
         return false;

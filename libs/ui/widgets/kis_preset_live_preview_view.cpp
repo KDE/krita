@@ -25,6 +25,7 @@
 #include <strokes/KisFreehandStrokeInfo.h>
 #include "KisAsyncronousStrokeUpdateHelper.h"
 #include <kis_brush.h>
+#include <KisGlobalResourcesInterface.h>
 
 KisPresetLivePreviewView::KisPresetLivePreviewView(QWidget *parent)
     : QGraphicsView(parent),
@@ -245,7 +246,7 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
             d.setContent(brushDefinition, false);
             element = d.firstChildElement("Brush");
 
-            KisBrushSP brush = KisBrush::fromXML(element);
+            KisBrushSP brush = KisBrush::fromXML(element, KisGlobalResourcesInterface::instance());
 
             qreal width = brush->image().width();
             qreal scale = brush->scale();

@@ -45,6 +45,7 @@
 #include "KisResourceLoaderRegistry.h"
 #include "KisMemoryStorage.h"
 #include "KisResourceModelProvider.h"
+#include <KisGlobalResourcesInterface.h>
 
 
 const QString KisResourceLocator::resourceLocationKey {"ResourceDirectory"};
@@ -214,7 +215,7 @@ bool KisResourceLocator::importResourceFromFile(const QString &resourceType, con
         return false;
     }
 
-    KoResourceSP resource = loader->load(QFileInfo(fileName).fileName(), f);
+    KoResourceSP resource = loader->load(QFileInfo(fileName).fileName(), f, KisGlobalResourcesInterface::instance());
     if (!resource) {
         qWarning() << "Could not import" << fileName << ": resource doesn't load.";
         return false;

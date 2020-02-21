@@ -28,12 +28,13 @@
 #include "kis_brush_option.h"
 #include <KisPaintopSettingsIds.h>
 #include <kis_paintop_preset.h>
+#include <KisGlobalResourcesInterface.h>
 
 struct BrushReader {
     BrushReader(const KisBrushBasedPaintOpSettings *parent)
         : m_parent(parent)
     {
-        m_option.readOptionSetting(m_parent);
+        m_option.readOptionSetting(m_parent, parent->resourcesInterface());
     }
 
     KisBrushSP brush() {
@@ -48,7 +49,7 @@ struct BrushWriter {
     BrushWriter(KisBrushBasedPaintOpSettings *parent)
         : m_parent(parent)
     {
-        m_option.readOptionSetting(m_parent);
+        m_option.readOptionSetting(m_parent, parent->resourcesInterface());
     }
 
     ~BrushWriter() {
@@ -64,11 +65,12 @@ struct BrushWriter {
 };
 
 
-KisBrushBasedPaintOpSettings::KisBrushBasedPaintOpSettings()
+KisBrushBasedPaintOpSettings::KisBrushBasedPaintOpSettings(KisResourcesInterfaceSP resourcesInterface)
     : KisOutlineGenerationPolicy<KisPaintOpSettings>(KisCurrentOutlineFetcher::SIZE_OPTION |
-            KisCurrentOutlineFetcher::ROTATION_OPTION |
-            KisCurrentOutlineFetcher::MIRROR_OPTION |
-            KisCurrentOutlineFetcher::SHARPNESS_OPTION)
+                                                     KisCurrentOutlineFetcher::ROTATION_OPTION |
+                                                     KisCurrentOutlineFetcher::MIRROR_OPTION |
+                                                     KisCurrentOutlineFetcher::SHARPNESS_OPTION,
+                                                     resourcesInterface)
 
 {
 }
@@ -149,7 +151,7 @@ bool KisBrushBasedPaintOpSettings::isValid() const
 
     Q_FOREACH (const QString &file, files) {
         if (!file.isEmpty()) {
-            KisBrushSP brush = KisBrushServerProvider::instance()->brushServer()->resourceByFilename(file);
+            KisBrushSP brush = resourcesInterface()->source<KisBrush>(ResourceType::Brushes).resourceForFilename(file);
             if (!brush) {
                 return false;
             }

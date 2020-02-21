@@ -87,9 +87,10 @@ KoResourceSP KoSegmentGradient::clone() const
     return KoResourceSP(new KoSegmentGradient(*this));
 }
 
-
-bool KoSegmentGradient::loadFromDevice(QIODevice *dev)
+bool KoSegmentGradient::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
+    Q_UNUSED(resourcesInterface);
+
     QByteArray data = dev->readAll();
 
     QTextStream fileContent(data, QIODevice::ReadOnly);

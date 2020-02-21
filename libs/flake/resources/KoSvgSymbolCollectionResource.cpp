@@ -115,10 +115,10 @@ KoSvgSymbolCollectionResource::~KoSvgSymbolCollectionResource()
 {
 }
 
-
-
-bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev)
+bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
+    Q_UNUSED(resourcesInterface);
+
     if (!dev->isOpen()) {
         dev->open(QIODevice::ReadOnly);
     }

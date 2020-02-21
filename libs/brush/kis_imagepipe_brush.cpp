@@ -267,9 +267,10 @@ KisImagePipeBrush::~KisImagePipeBrush()
     delete d;
 }
 
-
-bool KisImagePipeBrush::loadFromDevice(QIODevice *dev)
+bool KisImagePipeBrush::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
+    Q_UNUSED(resourcesInterface);
+
     QByteArray data = dev->readAll();
     return initFromData(data);
 }

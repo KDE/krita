@@ -59,6 +59,7 @@ struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
     QString modelName;
     QPointer<KisPaintopSettingsUpdateProxy> updateProxy;
     QList<KisUniformPaintOpPropertyWSP> uniformProperties;
+    KisResourcesInterfaceSP resourcesInterface = 0;
 
     bool disableDirtyNotifications;
 
@@ -83,10 +84,11 @@ struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
 };
 
 
-KisPaintOpSettings::KisPaintOpSettings()
+KisPaintOpSettings::KisPaintOpSettings(KisResourcesInterfaceSP resourcesInterface)
     : d(new Private)
 {
     d->updateProxy = 0;
+    d->resourcesInterface = resourcesInterface;
 }
 
 KisPaintOpSettings::~KisPaintOpSettings()
@@ -100,6 +102,7 @@ KisPaintOpSettings::KisPaintOpSettings(const KisPaintOpSettings &rhs)
     d->settingsWidget = 0;
     d->updateProxy = rhs.updateProxy();
     d->modelName = rhs.modelName();
+    d->resourcesInterface = rhs.d->resourcesInterface;
 }
 
 void KisPaintOpSettings::setOptionsWidget(KisPaintOpConfigWidget* widget)
@@ -159,7 +162,7 @@ KisPaintOpSettingsSP KisPaintOpSettings::createMaskingSettings() const
 
     const KoID pixelBrushId(KisPaintOpUtils::MaskingBrushPaintOpId, QString());
 
-    KisPaintOpSettingsSP maskingSettings = KisPaintOpRegistry::instance()->createSettings(pixelBrushId);
+    KisPaintOpSettingsSP maskingSettings = KisPaintOpRegistry::instance()->createSettings(pixelBrushId, resourcesInterface());
     this->getPrefixedProperties(KisPaintOpUtils::MaskingBrushPresetPrefix, maskingSettings);
 
     const bool useMasterSize = this->getBool(KisPaintOpUtils::MaskingBrushUseMasterSizeTag, true);
@@ -176,13 +179,23 @@ QString KisPaintOpSettings::maskingBrushCompositeOp() const
     return getString(KisPaintOpUtils::MaskingBrushCompositeOpTag, COMPOSITE_MULT);
 }
 
+KisResourcesInterfaceSP KisPaintOpSettings::resourcesInterface() const
+{
+    return d->resourcesInterface;
+}
+
+void KisPaintOpSettings::setResourcesInterface(KisResourcesInterfaceSP resourcesInterface)
+{
+    d->resourcesInterface = resourcesInterface;
+}
+
 KisPaintOpSettingsSP KisPaintOpSettings::clone() const
 {
     QString paintopID = getString("paintop");
     if (paintopID.isEmpty())
         return 0;
 
-    KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->createSettings(KoID(paintopID));
+    KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->createSettings(KoID(paintopID), resourcesInterface());
     QMapIterator<QString, QVariant> i(getProperties());
     while (i.hasNext()) {
         i.next();

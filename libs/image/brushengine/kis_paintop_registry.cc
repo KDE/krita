@@ -55,20 +55,6 @@ KisPaintOpRegistry::~KisPaintOpRegistry()
 void KisPaintOpRegistry::initRegistry()
 {
     KoPluginLoader::instance()->load("Krita/Paintop", "(Type == 'Service') and ([X-Krita-Version] == 28)");
-
-    QStringList toBeRemoved;
-
-    Q_FOREACH (const QString & id, keys()) {
-        KisPaintOpFactory *factory = get(id);
-        if (!factory->createSettings()) {
-            toBeRemoved << id;
-        } else {
-            factory->processAfterLoading();
-        }
-    }
-    Q_FOREACH (const QString & id, toBeRemoved) {
-        remove(id);
-    }
 }
 
 KisPaintOpRegistry* KisPaintOpRegistry::instance()
@@ -120,21 +106,21 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const KisPaintOpPresetSP preset, KisPai
     return paintOp(preset->paintOp().id(), preset->settings(), painter, node, image);
 }
 
-KisPaintOpSettingsSP KisPaintOpRegistry::createSettings(const KoID& id) const
+KisPaintOpSettingsSP KisPaintOpRegistry::createSettings(const KoID& id, KisResourcesInterfaceSP resourcesInterface) const
 {
     KisPaintOpFactory *f = value(id.id());
     Q_ASSERT(f);
     if (f) {
-        KisPaintOpSettingsSP settings = f->createSettings();
+        KisPaintOpSettingsSP settings = f->createSettings(resourcesInterface);
         settings->setProperty("paintop", id.id());
         return settings;
     }
     return 0;
 }
 
-KisPaintOpPresetSP KisPaintOpRegistry::defaultPreset(const KoID& id) const
+KisPaintOpPresetSP KisPaintOpRegistry::defaultPreset(const KoID& id, KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisPaintOpSettingsSP s = createSettings(id);
+    KisPaintOpSettingsSP s = createSettings(id, resourcesInterface);
     if (s.isNull()) {
         return KisPaintOpPresetSP();
     }

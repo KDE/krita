@@ -28,8 +28,9 @@ struct KisParticlePaintOpSettings::Private
     QList<KisUniformPaintOpPropertyWSP> uniformProperties;
 };
 
-KisParticlePaintOpSettings::KisParticlePaintOpSettings()
-    : m_d(new Private)
+KisParticlePaintOpSettings::KisParticlePaintOpSettings(KisResourcesInterfaceSP resourcesInterface)
+    : KisNoSizePaintOpSettings(resourcesInterface),
+      m_d(new Private)
 {
 }
 

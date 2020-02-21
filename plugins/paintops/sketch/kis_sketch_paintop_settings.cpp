@@ -24,7 +24,8 @@
 #include "kis_current_outline_fetcher.h"
 
 
-KisSketchPaintOpSettings::KisSketchPaintOpSettings()
+KisSketchPaintOpSettings::KisSketchPaintOpSettings(KisResourcesInterfaceSP resourcesInterface)
+    : KisBrushBasedPaintOpSettings(resourcesInterface)
 {
 }
 

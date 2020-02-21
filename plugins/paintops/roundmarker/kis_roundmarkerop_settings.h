@@ -27,7 +27,7 @@
 class KisRoundMarkerOpSettings : public KisOutlineGenerationPolicy<KisPaintOpSettings>
 {
 public:
-    KisRoundMarkerOpSettings();
+    KisRoundMarkerOpSettings(KisResourcesInterfaceSP resourcesInterface);
     ~KisRoundMarkerOpSettings() override;
 
     bool paintIncremental() override;

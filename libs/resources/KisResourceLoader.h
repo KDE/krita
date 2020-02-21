@@ -97,7 +97,7 @@ public:
      * Load this resource.
      * @return a resource if loading the resource succeeded, 0 otherwise
      */
-    virtual KoResourceSP load(const QString &name, QIODevice &dev) { Q_UNUSED(name); Q_UNUSED(dev); return 0; }
+    virtual KoResourceSP load(const QString &name, QIODevice &dev, KisResourcesInterfaceSP resourcesInterface) { Q_UNUSED(name); Q_UNUSED(dev); Q_UNUSED(resourcesInterface); return 0; }
 
 private:
     QString m_resourceSubType;
@@ -115,11 +115,11 @@ public:
     {
     }
 
-    KoResourceSP load(const QString &name, QIODevice &dev) override
+    KoResourceSP load(const QString &name, QIODevice &dev, KisResourcesInterfaceSP resourcesInterface) override
     {
         QSharedPointer<T> resource = QSharedPointer<T>::create(name);
         Q_ASSERT(dev.isOpen() && dev.isReadable());
-        if (resource->loadFromDevice(&dev)) {
+        if (resource->loadFromDevice(&dev, resourcesInterface)) {
             return resource;
         }
         return 0;

@@ -74,7 +74,7 @@ public:
     KoSvgSymbolCollectionResource &operator=(const KoSvgSymbolCollectionResource &rhs);
     KoResourceSP clone() const override;
 
-    bool loadFromDevice(QIODevice *dev) override;
+    bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;
     bool saveToDevice(QIODevice* dev) const override;
 
     QString defaultFileExtension() const override;

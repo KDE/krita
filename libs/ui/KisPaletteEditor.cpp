@@ -42,6 +42,7 @@
 #include <kis_color_button.h>
 
 #include "KisPaletteEditor.h"
+#include <KisGlobalResourcesInterface.h>
 
 struct KisPaletteEditor::PaletteInfo {
     QString name;
@@ -157,7 +158,7 @@ void KisPaletteEditor::importPalette()
 
     KoColorSetSP colorSet(new KoColorSet(filename));
 
-    colorSet->load();
+    colorSet->load(KisGlobalResourcesInterface::instance());
     QString name = filenameFromPath(colorSet->filename());
 
     if (duplicateExistsFilename(name, false)) {

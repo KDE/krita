@@ -30,7 +30,7 @@ public:
     KisSvgBrush &operator=(const KisSvgBrush &rhs);
     KoResourceSP clone() const override;
 
-    bool loadFromDevice(QIODevice *dev) override;
+    bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;
     bool saveToDevice(QIODevice *dev) const override;
 
     QPair<QString, QString> resourceType() const override {

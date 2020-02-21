@@ -18,9 +18,42 @@
 
 #include "KisPaintopPropertiesBase.h"
 #include "kis_properties_configuration.h"
+#include <KisResourcesInterface.h>
 
-KisPaintopPropertiesBase::~KisPaintopPropertiesBase()
+
+KisPaintopPropertiesResourcesBase::~KisPaintopPropertiesResourcesBase()
 {
+
+}
+
+void KisPaintopPropertiesResourcesBase::readOptionSetting(KisPropertiesConfigurationSP settings, KisResourcesInterfaceSP resourcesInterface)
+{
+    readOptionSettingResourceImpl(settings.data(), resourcesInterface);
+}
+
+void KisPaintopPropertiesResourcesBase::writeOptionSetting(KisPropertiesConfigurationSP settings) const
+{
+    writeOptionSettingImpl(settings.data());
+}
+
+void KisPaintopPropertiesResourcesBase::readOptionSetting(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface)
+{
+    readOptionSettingResourceImpl(settings, resourcesInterface);
+}
+
+void KisPaintopPropertiesResourcesBase::writeOptionSetting(KisPropertiesConfiguration *settings) const
+{
+    writeOptionSettingImpl(settings);
+}
+
+QList<KoResourceSP> KisPaintopPropertiesResourcesBase::prepareResources(const KisPropertiesConfigurationSP settings, KisResourcesInterfaceSP resourcesInterface) const
+{
+    return prepareResourcesImpl(settings.data(), resourcesInterface);
+}
+
+QList<KoResourceSP> KisPaintopPropertiesResourcesBase::prepareResources(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const
+{
+    return prepareResourcesImpl(settings, resourcesInterface);
 }
 
 void KisPaintopPropertiesBase::readOptionSetting(KisPropertiesConfigurationSP settings)
@@ -28,18 +61,20 @@ void KisPaintopPropertiesBase::readOptionSetting(KisPropertiesConfigurationSP se
     readOptionSettingImpl(settings.data());
 }
 
-void KisPaintopPropertiesBase::writeOptionSetting(KisPropertiesConfigurationSP settings) const
-{
-    writeOptionSettingImpl(settings.data());
-}
-
 void KisPaintopPropertiesBase::readOptionSetting(const KisPropertiesConfiguration *settings)
 {
     readOptionSettingImpl(settings);
 }
 
-void KisPaintopPropertiesBase::writeOptionSetting(KisPropertiesConfiguration *settings) const
+void KisPaintopPropertiesBase::readOptionSettingResourceImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface)
 {
-    writeOptionSettingImpl(settings);
+    Q_UNUSED(resourcesInterface);
+    readOptionSettingImpl(settings);
 }
 
+QList<KoResourceSP> KisPaintopPropertiesBase::prepareResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const
+{
+    Q_UNUSED(settings);
+    Q_UNUSED(resourcesInterface);
+    return {};
+}

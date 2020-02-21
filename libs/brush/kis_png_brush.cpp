@@ -54,9 +54,9 @@ KoResourceSP KisPngBrush::clone() const
     return KoResourceSP(new KisPngBrush(*this));
 }
 
-
-bool KisPngBrush::loadFromDevice(QIODevice *dev)
+bool KisPngBrush::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
+    Q_UNUSED(resourcesInterface);
 
     // Workaround for some OS (Debian, Ubuntu), where loading directly from the QIODevice
     // fails with "libpng error: IDAT: CRC error"

@@ -52,6 +52,35 @@ void preinitializeOpStatically(const KisPaintOpSettingsSP settings, typename std
 
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
+namespace detail {
+
+template< class, class = std::void_t<> >
+struct has_prepare_resources : std::false_type { };
+
+template< class T >
+struct has_prepare_resources<T, std::void_t<decltype(std::declval<T>().prepareResources(KisPaintOpSettingsSP(),KisResourcesInterfaceSP()))>> : std::true_type { };
+
+template <typename T>
+QList<KoResourceSP> prepareResources(const KisPaintOpSettingsSP settings,
+                                     KisResourcesInterfaceSP resourcesInterface,
+                                     std::enable_if_t<has_prepare_resources<T>::value> * = 0)
+{
+    return T::prepareResources(settings, resourcesInterface);
+}
+
+template <typename T>
+QList<KoResourceSP> prepareResources(const KisPaintOpSettingsSP settings,
+                                     KisResourcesInterfaceSP resourcesInterface,
+                                     std::enable_if_t<!has_prepare_resources<T>::value> * = 0)
+{
+    Q_UNUSED(settings);
+    Q_UNUSED(resourcesInterface);
+    // noop
+    return {};
+}
+
+}
+
 /**
  * Base template class for simple paintop factories
  */
@@ -87,8 +116,12 @@ public:
         return op;
     }
 
-    KisPaintOpSettingsSP createSettings() override {
-        KisPaintOpSettingsSP settings = new OpSettings();
+    QList<KoResourceSP> prepareResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface) {
+        return detail::prepareResources<Op>(settings, resourcesInterface);
+    }
+
+    KisPaintOpSettingsSP createSettings(KisResourcesInterfaceSP resourcesInterface) override {
+        KisPaintOpSettingsSP settings = new OpSettings(resourcesInterface);
         settings->setModelName(m_model);
         return settings;
     }

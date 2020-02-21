@@ -78,7 +78,7 @@ KoResource &KoResource::operator=(const KoResource &rhs)
     return *this;
 }
 
-bool KoResource::load()
+bool KoResource::load(KisResourcesInterfaceSP resourcesInterface)
 {
     QFile file(filename());
 
@@ -97,7 +97,7 @@ bool KoResource::load()
         return false;
     }
 
-    const bool res = loadFromDevice(&file);
+    const bool res = loadFromDevice(&file, resourcesInterface);
     file.close();
 
     return res;

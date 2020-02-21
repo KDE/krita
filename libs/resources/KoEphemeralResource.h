@@ -47,14 +47,16 @@ public:
     {
     }
 
-    bool load() override
+    bool load(KisResourcesInterfaceSP resourcesInterface) override
     {
+        Q_UNUSED(resourcesInterface);
         return false;
     }
 
-    bool loadFromDevice(QIODevice *dev) override
+    bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override
     {
         Q_UNUSED(dev);
+        Q_UNUSED(resourcesInterface);
         return false;
     }
 

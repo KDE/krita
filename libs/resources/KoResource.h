@@ -35,6 +35,9 @@ class QDomElement;
 class KoResource;
 typedef QSharedPointer<KoResource> KoResourceSP;
 
+class KisResourcesInterface;
+typedef QSharedPointer<KisResourcesInterface> KisResourcesInterfaceSP;
+
 /**
  * The KoResource class provides a representation of resources.  This
  * includes, but not limited to, brushes and patterns.
@@ -76,8 +79,8 @@ public:
      * Load this resource.
      * @return true if loading the resource succeeded.
      */
-    virtual bool load();
-    virtual bool loadFromDevice(QIODevice *dev) = 0;
+    virtual bool load(KisResourcesInterfaceSP resourcesInterface);
+    virtual bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) = 0;
 
     /**
      * Save this resource.

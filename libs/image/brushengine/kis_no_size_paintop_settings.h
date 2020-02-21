@@ -26,7 +26,7 @@
 class KRITAIMAGE_EXPORT KisNoSizePaintOpSettings : public KisPaintOpSettings
 {
 public:
-    KisNoSizePaintOpSettings();
+    KisNoSizePaintOpSettings(KisResourcesInterfaceSP resourcesInterface);
 
     void setPaintOpSize(qreal value) override;
     qreal paintOpSize() const override;

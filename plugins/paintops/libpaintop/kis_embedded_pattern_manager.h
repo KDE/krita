@@ -24,13 +24,16 @@
 #include <KoPattern.h>
 
 class KoAbstractGradient;
+class KisResourcesInterface;
+using KisResourcesInterfaceSP = QSharedPointer<KisResourcesInterface>;
 
 class PAINTOP_EXPORT KisEmbeddedPatternManager
 {
 public:
     static void saveEmbeddedPattern(KisPropertiesConfigurationSP setting, const KoPatternSP pattern);
-    static KoPatternSP loadEmbeddedPattern(const KisPropertiesConfigurationSP setting);
+    static KoPatternSP loadEmbeddedPattern(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface);
 
+    static KoPatternSP tryFetchPattern(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface);
 private:
     struct Private;
 };

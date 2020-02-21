@@ -50,7 +50,7 @@ public:
 
 public:
 
-    bool loadFromDevice(QIODevice *dev) override;
+    bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;
     bool saveToDevice(QIODevice* dev) const override;
 
     bool loadPatFromDevice(QIODevice *dev);

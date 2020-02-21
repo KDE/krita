@@ -30,7 +30,7 @@
 class PAINTOP_EXPORT KisBrushBasedPaintOpSettings : public KisOutlineGenerationPolicy<KisPaintOpSettings>
 {
 public:
-    KisBrushBasedPaintOpSettings();
+    KisBrushBasedPaintOpSettings(KisResourcesInterfaceSP resourcesInterface);
     ~KisBrushBasedPaintOpSettings() override {}
 
     ///Reimplemented

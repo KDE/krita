@@ -82,9 +82,10 @@ KoResourceSP KoStopGradient::clone() const
     return KoResourceSP(new KoStopGradient(*this));
 }
 
-
-bool KoStopGradient::loadFromDevice(QIODevice *dev)
+bool KoStopGradient::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
+    Q_UNUSED(resourcesInterface);
+
     QString strExt;
     const int result = filename().lastIndexOf('.');
     if (result >= 0) {

@@ -32,7 +32,7 @@
 class KisGridPaintOpSettings : public KisOutlineGenerationPolicy<KisPaintOpSettings>
 {
 public:
-    KisGridPaintOpSettings();
+    KisGridPaintOpSettings(KisResourcesInterfaceSP resourcesInterface);
     ~KisGridPaintOpSettings() override;
 
     void setPaintOpSize(qreal value) override;

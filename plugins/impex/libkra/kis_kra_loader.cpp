@@ -90,6 +90,7 @@
 #include "kis_layer_properties_icons.h"
 #include "kis_node_view_color_scheme.h"
 #include "KisMirrorAxisConfig.h"
+#include <KisGlobalResourcesInterface.h>
 
 /*
 
@@ -531,7 +532,7 @@ void KisKraLoader::loadPalettes(KoStore *store, KisDocument *doc)
         KoColorSetSP newPalette(new KoColorSet(filename));
         store->open(m_d->imageName + PALETTE_PATH + filename);
         QByteArray data = store->read(store->size());
-        newPalette->fromByteArray(data);
+        newPalette->fromByteArray(data, KisGlobalResourcesInterface::instance());
         newPalette->setIsGlobal(false);
         newPalette->setIsEditable(true);
         store->close();

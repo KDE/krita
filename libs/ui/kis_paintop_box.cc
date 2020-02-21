@@ -83,6 +83,7 @@
 #include "kis_signals_blocker.h"
 #include "kis_action_manager.h"
 #include "KisHighlightedToolButton.h"
+#include <KisGlobalResourcesInterface.h>
 
 KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *name)
     : QWidget(parent)
@@ -666,8 +667,8 @@ KisPaintOpPresetSP KisPaintopBox::defaultPreset(const KoID& paintOp)
 
     KisPaintOpPresetSP preset(new KisPaintOpPreset(path));
 
-    if (!preset->load()) {
-        preset = KisPaintOpRegistry::instance()->defaultPreset(paintOp);
+    if (!preset->load(KisGlobalResourcesInterface::instance())) {
+        preset = KisPaintOpRegistry::instance()->defaultPreset(paintOp, KisGlobalResourcesInterface::instance());
     }
 
     Q_ASSERT(preset);
@@ -1197,7 +1198,7 @@ void KisPaintopBox::slotReloadPreset()
     KisPaintOpPresetResourceServer *rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
     QSharedPointer<KisPaintOpPreset> preset = rserver->resourceByName(m_resourceProvider->currentPreset()->name());
     if (preset) {
-        preset->load();
+        preset->load(KisGlobalResourcesInterface::instance());
     }
 
     if (m_resourceProvider->currentPreset() != preset) {

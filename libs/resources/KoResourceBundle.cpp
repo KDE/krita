@@ -46,6 +46,8 @@
 #include <KritaVersionWrapper.h>
 
 #include <kis_debug.h>
+#include <KisGlobalResourcesInterface.h>
+
 
 KoResourceBundle::KoResourceBundle(QString const& fileName)
     : m_filename(fileName),
@@ -520,7 +522,7 @@ KoResourceSP KoResourceBundle::resource(const QString &resourceType, const QStri
         qWarning() << "Could not create loader for" << resourceType << filepath << mime;
         return 0;
     }
-    KoResourceSP res = loader->load(filepath, *resourceStore->device());
+    KoResourceSP res = loader->load(filepath, *resourceStore->device(), KisGlobalResourcesInterface::instance());
     resourceStore->close();
 
     return res;

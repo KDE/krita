@@ -39,6 +39,7 @@
 #include "kis_pressure_texture_strength_option.h"
 #include "kis_pressure_hsv_option.h"
 #include "kis_colorsmudgeop_settings.h"
+#include <KisGlobalResourcesInterface.h>
 
 
 KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
@@ -76,7 +77,7 @@ KisColorSmudgeOpSettingsWidget::~KisColorSmudgeOpSettingsWidget() { }
 
 KisPropertiesConfigurationSP KisColorSmudgeOpSettingsWidget::configuration() const
 {
-    KisColorSmudgeOpSettingsSP config = new KisColorSmudgeOpSettings();
+    KisColorSmudgeOpSettingsSP config = new KisColorSmudgeOpSettings(KisGlobalResourcesInterface::instance());
     config->setOptionsWidget(const_cast<KisColorSmudgeOpSettingsWidget*>(this));
     config->setProperty("paintop", "colorsmudge");
     writeConfiguration(config);

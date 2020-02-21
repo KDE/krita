@@ -153,8 +153,9 @@ KisGbrBrush::~KisGbrBrush()
     delete d;
 }
 
-bool KisGbrBrush::loadFromDevice(QIODevice *dev)
+bool KisGbrBrush::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
+    Q_UNUSED(resourcesInterface);
     d->data = dev->readAll();
     return init();
 }

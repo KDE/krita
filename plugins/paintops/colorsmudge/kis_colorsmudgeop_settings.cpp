@@ -25,8 +25,9 @@ struct KisColorSmudgeOpSettings::Private
     QList<KisUniformPaintOpPropertyWSP> uniformProperties;
 };
 
-KisColorSmudgeOpSettings::KisColorSmudgeOpSettings()
-    : m_d(new Private)
+KisColorSmudgeOpSettings::KisColorSmudgeOpSettings(KisResourcesInterfaceSP resourcesInterface)
+    : KisBrushBasedPaintOpSettings(resourcesInterface),
+      m_d(new Private)
 {
 }
 

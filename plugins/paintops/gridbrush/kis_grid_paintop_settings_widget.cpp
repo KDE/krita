@@ -27,6 +27,7 @@
 #include <kis_paint_action_type_option.h>
 #include <kis_compositeop_option.h>
 #include <klocalizedstring.h>
+#include <KisGlobalResourcesInterface.h>
 
 KisGridPaintOpSettingsWidget:: KisGridPaintOpSettingsWidget(QWidget* parent)
     : KisPaintOpSettingsWidget(parent)
@@ -48,7 +49,7 @@ KisGridPaintOpSettingsWidget::~ KisGridPaintOpSettingsWidget()
 
 KisPropertiesConfigurationSP  KisGridPaintOpSettingsWidget::configuration() const
 {
-    KisGridPaintOpSettings* config = new KisGridPaintOpSettings();
+    KisGridPaintOpSettings* config = new KisGridPaintOpSettings(KisGlobalResourcesInterface::instance());
     config->setOptionsWidget(const_cast<KisGridPaintOpSettingsWidget*>(this));
     config->setProperty("paintop", "gridbrush"); // XXX: make this a const id string
     writeConfiguration(config);

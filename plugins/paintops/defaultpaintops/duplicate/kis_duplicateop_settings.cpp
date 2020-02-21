@@ -39,8 +39,10 @@
 #include <kis_paint_action_type_option.h>
 #include <kis_dom_utils.h>
 
-KisDuplicateOpSettings::KisDuplicateOpSettings()
-    : m_isOffsetNotUptodate(false), m_duringPaintingStroke(false)
+KisDuplicateOpSettings::KisDuplicateOpSettings(KisResourcesInterfaceSP resourcesInterface)
+    : KisBrushBasedPaintOpSettings(resourcesInterface),
+      m_isOffsetNotUptodate(false),
+      m_duringPaintingStroke(false)
 {
 }
 

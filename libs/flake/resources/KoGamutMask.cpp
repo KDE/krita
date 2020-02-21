@@ -229,9 +229,10 @@ QTransform KoGamutMask::viewToMaskTransform(quint8 viewSize)
     return transform;
 }
 
-
-bool KoGamutMask::loadFromDevice(QIODevice *dev)
+bool KoGamutMask::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
+    Q_UNUSED(resourcesInterface);
+
     if (!dev->isOpen()) dev->open(QIODevice::ReadOnly);
 
     d->data = dev->readAll();
@@ -370,7 +371,7 @@ bool KoGamutMask::saveToDevice(QIODevice *dev) const
     image().save(&previewDev, "PNG");
     if (!store->close()) { return false; }
 
-    return store->finalize();
+    return store->finalize() && KoResource::saveToDevice(dev);
 }
 
 QString KoGamutMask::title() const

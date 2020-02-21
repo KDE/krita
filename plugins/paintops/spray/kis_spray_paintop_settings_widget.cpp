@@ -34,6 +34,7 @@
 #include "kis_spray_shape_dynamics.h"
 #include <kis_airbrush_option_widget.h>
 #include <kis_compositeop_option.h>
+#include <KisGlobalResourcesInterface.h>
 
 KisSprayPaintOpSettingsWidget:: KisSprayPaintOpSettingsWidget(QWidget* parent)
     : KisPaintOpSettingsWidget(parent)
@@ -61,7 +62,7 @@ KisSprayPaintOpSettingsWidget::~ KisSprayPaintOpSettingsWidget()
 
 KisPropertiesConfigurationSP  KisSprayPaintOpSettingsWidget::configuration() const
 {
-    KisSprayPaintOpSettings* config = new KisSprayPaintOpSettings();
+    KisSprayPaintOpSettings* config = new KisSprayPaintOpSettings(KisGlobalResourcesInterface::instance());
     config->setOptionsWidget(const_cast<KisSprayPaintOpSettingsWidget*>(this));
     config->setProperty("paintop", "spraybrush"); // XXX: make this a const id string
     writeConfiguration(config);

@@ -28,7 +28,7 @@ class KisDeformPaintOpSettings : public KisOutlineGenerationPolicy<KisPaintOpSet
 {
 
 public:
-    KisDeformPaintOpSettings();
+    KisDeformPaintOpSettings(KisResourcesInterfaceSP resourcesInterface);
     ~KisDeformPaintOpSettings() override;
 
     void setPaintOpSize(qreal value) override;

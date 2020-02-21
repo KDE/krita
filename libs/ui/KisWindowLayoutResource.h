@@ -44,7 +44,7 @@ public:
     void applyLayout();
 
     bool saveToDevice(QIODevice *dev) const override;
-    bool loadFromDevice(QIODevice *dev) override;
+    bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;
 
 
     QPair<QString, QString> resourceType() const override

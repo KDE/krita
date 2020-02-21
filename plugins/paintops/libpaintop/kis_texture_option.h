@@ -36,6 +36,7 @@ class KoPattern;
 class KoResource;
 class KisPropertiesConfiguration;
 class KisPaintopLodLimitations;
+class KisResourcesInterface;
 
 class PAINTOP_EXPORT KisTextureOption : public KisPaintOpOption
 {
@@ -80,7 +81,8 @@ public:
      * @param info the paint information
      */
     void apply(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation & info);
-    void fillProperties(const KisPropertiesConfigurationSP setting);
+    void fillProperties(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface);
+    QList<KoResourceSP> prepareResources(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface);
 
 private:
 

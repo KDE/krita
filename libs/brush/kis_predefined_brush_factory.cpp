@@ -22,6 +22,7 @@
 #include "KisBrushServerProvider.h"
 #include "kis_gbr_brush.h"
 #include <kis_dom_utils.h>
+#include <KisResourcesInterface.h>
 
 KisPredefinedBrushFactory::KisPredefinedBrushFactory(const QString &brushType)
     : m_id(brushType)
@@ -33,20 +34,21 @@ QString KisPredefinedBrushFactory::id() const
     return m_id;
 }
 
-KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefinition)
+KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefinition, KisResourcesInterfaceSP resourcesInterface)
 {
-    KoResourceServer<KisBrush> *rServer = KisBrushServerProvider::instance()->brushServer();
-    QString brushFileName = brushDefinition.attribute("filename", "");
-    KisBrushSP brush = rServer->resourceByFilename(brushFileName);
+    auto resourceStorage = resourcesInterface->source<KisBrush>(ResourceType::Brushes);
+
+    const QString brushFileName = brushDefinition.attribute("filename", "");
+    KisBrushSP brush = resourceStorage.resourceForFilename(brushFileName);
 
     //Fallback for files that still use the old format
     if (!brush) {
         QFileInfo info(brushFileName);
-        brush = rServer->resourceByFilename(info.fileName());
+        brush = resourceStorage.resourceForFilename(info.fileName());
     }
 
     if (!brush) {
-        brush = rServer->firstResource();
+        brush = resourceStorage.fallbackResource();
     }
 
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(brush, 0);

@@ -56,12 +56,10 @@ KoResourceSP TasksetResource::clone() const
     return KoResourceSP(new TasksetResource(*this));
 }
 
-
-
-
-
-bool TasksetResource::loadFromDevice(QIODevice *dev)
+bool TasksetResource::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
+    Q_UNUSED(resourcesInterface);
+
     QDomDocument doc;
     if (!doc.setContent(dev)) {
         return false;

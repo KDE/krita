@@ -43,6 +43,7 @@
 #include <kis_gbr_brush.h>
 #include <kis_imagepipe_brush.h>
 #include <KisAnimatedBrushAnnotation.h>
+#include <KisGlobalResourcesInterface.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(KisBrushImportFactory, "krita_brush_import.json", registerPlugin<KisBrushImport>();)
 
@@ -69,7 +70,7 @@ KisImportExportErrorCode KisBrushImport::convert(KisDocument *document, QIODevic
         return ImportExportCodes::FileFormatIncorrect;
     }
 
-    if (!brush->loadFromDevice(io)) {
+    if (!brush->loadFromDevice(io, KisGlobalResourcesInterface::instance())) {
         return ImportExportCodes::FileFormatIncorrect;
     }
 

@@ -52,8 +52,9 @@ KoResourceSP KisSvgBrush::clone() const
     return KoResourceSP(new KisSvgBrush(*this));
 }
 
-bool KisSvgBrush::loadFromDevice(QIODevice *dev)
+bool KisSvgBrush::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
+    Q_UNUSED(resourcesInterface);
 
     m_svg = dev->readAll();
 

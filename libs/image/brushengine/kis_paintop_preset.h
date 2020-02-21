@@ -97,8 +97,8 @@ public:
     KisPaintOpSettingsSP settings() const;
     KisPaintOpSettingsSP originalSettings() const;
 
-    bool load() override;
-    bool loadFromDevice(QIODevice *dev) override;
+    bool load(KisResourcesInterfaceSP resourcesInterface) override;
+    bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;
 
     bool save() override;
     bool saveToDevice(QIODevice* dev) const override;
@@ -110,7 +110,7 @@ public:
 
     void toXML(QDomDocument& doc, QDomElement& elt) const;
 
-    void fromXML(const QDomElement& elt);
+    void fromXML(const QDomElement& elt, KisResourcesInterfaceSP resourcesInterface);
 
     bool removable() const {
         return true;
@@ -138,6 +138,26 @@ public:
      *         alongside the current brush
      */
     KisPaintOpPresetSP createMaskingPreset() const;
+
+    /**
+     * @return resource interface that is used by KisPaintOpSettings object for
+     * loading linked resources
+     */
+    KisResourcesInterfaceSP resourcesInterface() const;
+
+    /**
+     * Set resource interface that will be used by KisPaintOpSettings object for
+     * loading linked resources
+     */
+    void setResourcesInterface(KisResourcesInterfaceSP resourcesInterface);
+
+    /**
+     * Loads all the linked resources either from \p globalResourcesInterface or
+     * from embedded data. The preset first tried to fetch the linked resource
+     * from the global source, and only if it fails, tries to load it from the
+     * embedded data.
+     */
+    void createLocalResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface);
 
 
 private:

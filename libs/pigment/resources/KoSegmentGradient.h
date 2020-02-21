@@ -265,10 +265,7 @@ public:
     KoSegmentGradient &operator=(const KoSegmentGradient &rhs);
     KoResourceSP clone() const override;
 
-    /// reimplemented
-    bool loadFromDevice(QIODevice *dev) override;
-
-    /// not implemented
+    bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;
     bool saveToDevice(QIODevice* dev) const override;
 
     QPair<QString, QString> resourceType() const override {

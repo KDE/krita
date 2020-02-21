@@ -94,10 +94,10 @@ bool KisWorkspaceResource::saveToDevice(QIODevice *dev) const
 
 }
 
-
-
-bool KisWorkspaceResource::loadFromDevice(QIODevice *dev)
+bool KisWorkspaceResource::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
+    Q_UNUSED(resourcesInterface);
+
     QDomDocument doc;
     if (!doc.setContent(dev)) {
         return false;

@@ -1,5 +1,4 @@
 /*
- *  Copyright (c) 2014 Victor Lafon metabolic.ewilan@hotmail.fr
  *  Copyright (c) 2020 Agata Cacko cacko.azh@gmail.com
  *
  * This library is free software; you can redistribute it and/or
@@ -17,8 +16,8 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KOBUNDLECREATIONWIDGET_H
-#define KOBUNDLECREATIONWIDGET_H
+#ifndef DLG_EMBED_TAGS_H
+#define DLG_EMBED_TAGS_H
 
 #include <KoDialog.h>
 
@@ -26,54 +25,31 @@
 
 namespace Ui
 {
-class WdgDlgCreateBundle;
+class WdgDlgEmbedTags;
 }
 
-class DlgCreateBundle : public KoDialog
+class DlgEmbedTags : public KoDialog
 {
     Q_OBJECT
 
 public:
-    explicit DlgCreateBundle(KoResourceBundleSP bundle = nullptr, QWidget *parent = 0);
-    ~DlgCreateBundle() override;
+    explicit DlgEmbedTags(QList<int> selectedTags, QWidget *parent = 0);
+    ~DlgEmbedTags() override;
 
-    QString bundleName() const;
-    QString authorName() const;
-    QString email() const;
-    QString website() const;
-    QString license() const;
-    QString description() const;
-    QString saveLocation() const;
-    QString previewImage() const;
+    QList<int> selectedTagIds();
 
 private Q_SLOTS:
 
-    void accept() override;
-    void reject() override;
-
-    void selectSaveLocation();
     void addSelected();
     void removeSelected();
     void resourceTypeSelected(int idx);
-    void getPreviewImage();
-    void saveToConfiguration();
-    void slotEmbedTags();
-    QVector<KisTagSP> getTagsForEmbeddingInResource(QVector<KisTagSP> resourceTags) const;
-
 
 private:
 
-    void putResourcesInTheBundle() const;
-
     QWidget *m_page;
-    Ui::WdgDlgCreateBundle *m_ui;
+    Ui::WdgDlgEmbedTags *m_ui;
 
-    QList<int> m_selectedResourcesIds;
     QList<int> m_selectedTagIds;
-
-    QString m_previewImage;
-
-    KoResourceBundleSP m_bundle;
 };
 
 #endif // KOBUNDLECREATIONWIDGET_H

@@ -2,11 +2,13 @@ set(kritaresourcemanager_SOURCES
     resourcemanager.cpp
     dlg_create_bundle.cpp
     dlg_bundle_manager.cpp
+    dlg_embed_tags.cpp
 )
 
 ki18n_wrap_ui(kritaresourcemanager_SOURCES
     wdgdlgcreatebundle.ui 
     wdgdlgbundlemanager.ui
+    wdgdlgembedtags.ui
 )
 
 add_library(kritaresourcemanager MODULE ${kritaresourcemanager_SOURCES})

@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2014 Victor Lafon metabolic.ewilan@hotmail.fr
+ *  Copyright (c) 2020 Agata Cacko cacko.azh@gmail.com
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -38,6 +39,7 @@
 
 #include <kis_workspace_resource.h>
 #include <brushengine/kis_paintop_preset.h>
+#include <dlg_embed_tags.h>
 
 #include <kis_config.h>
 
@@ -178,6 +180,7 @@ DlgCreateBundle::DlgCreateBundle(KoResourceBundleSP bundle, QWidget *parent)
     m_ui->tableSelected->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
     connect(m_ui->bnGetPreview, SIGNAL(clicked()), SLOT(getPreviewImage()));
+    connect(m_ui->bnEmbedTags, SIGNAL(clicked()), SLOT(slotEmbedTags()));
 
     resourceTypeSelected(0);
 }
@@ -227,13 +230,24 @@ QString DlgCreateBundle::previewImage() const
     return m_previewImage;
 }
 
+QVector<KisTagSP> DlgCreateBundle::getTagsForEmbeddingInResource(QVector<KisTagSP> resourceTags) const
+{
+    QVector<KisTagSP> tagsToEmbed;
+    Q_FOREACH(KisTagSP tag, resourceTags) {
+        if (m_selectedTagIds.contains(tag->id())) {
+            tagsToEmbed << tag;
+        }
+    }
+    return tagsToEmbed;
+}
+
 void DlgCreateBundle::putResourcesInTheBundle() const
 {
     KisResourceModel* emptyModel = KisResourceModelProvider::resourceModel("");
     Q_FOREACH(int id, m_selectedResourcesIds) {
         KoResourceSP res = emptyModel->resourceForId(id);
         KisResourceModel* resModel = KisResourceModelProvider::resourceModel(res->resourceType().first);
-        QVector<KisTagSP> tags = resModel->tagsForResource(id);
+        QVector<KisTagSP> tags = getTagsForEmbeddingInResource(resModel->tagsForResource(id));
         m_bundle->addResource(res->resourceType().first, res->filename(), tags, res->md5());
     }
 
@@ -282,6 +296,15 @@ void DlgCreateBundle::saveToConfiguration()
     cfg.writeEntry<QString>("BundleName", bundleName());
     cfg.writeEntry<QString>("BundleDescription", description());
     cfg.writeEntry<QString>("BundleImage", previewImage());
+}
+
+void DlgCreateBundle::slotEmbedTags()
+{
+    DlgEmbedTags* dlg = new DlgEmbedTags(m_selectedTagIds);
+    int response = dlg->exec();
+    if (response == KoDialog::Accepted) {
+        m_selectedTagIds = dlg->selectedTagIds();
+    }
 }
 
 void DlgCreateBundle::reject()

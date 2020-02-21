@@ -1,0 +1,22 @@
+/**
+  \mainpage Resources
+
+  The Resources library provides cached access to resources. Resources are things
+  like brush presets, brush tips or gradients. The following components play an
+  important role in the library:
+
+  - KisResourceModel: the public entry point to the library. This is a QAbstractItemModel
+    and can be used to represent resources in the user interface without loading the
+    actual resource until it is needed. KisResourceModel is available through KisResourceModelProvider.
+
+    There is only one instance of a KisResourceModel for a given resource type, and KisResourceModel
+    can only be used from the database.
+
+  - KisResourceLocator
+
+  - KisResourceCacheDB
+
+ */
+
+// DOXYGEN_SET_PROJECT_NAME = KritaResources
+// DOXYGEN_SET_IGNORE_PREFIX = Kis Ko K

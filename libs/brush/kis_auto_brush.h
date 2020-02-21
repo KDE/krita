@@ -22,6 +22,8 @@
 #include "kritabrush_export.h"
 
 #include <KoResource.h>
+#include <KoEphemeralResource.h>
+
 #include "kis_brush.h"
 
 #include <QScopedPointer>
@@ -31,7 +33,7 @@ class KisMaskGenerator;
 /**
  * XXX: docs!
  */
-class BRUSH_EXPORT KisAutoBrush : public KisBrush
+class BRUSH_EXPORT KisAutoBrush : public KoEphemeralResource<KisBrush>
 {
 
 public:
@@ -71,22 +73,6 @@ public:
     QPainterPath outline() const override;
 
 public:
-
-    bool load() override {
-        return false;
-    }
-
-    bool loadFromDevice(QIODevice *) override {
-        return false;
-    }
-
-    bool save() override {
-        return false;
-    }
-
-    bool saveToDevice(QIODevice*) const override {
-        return false;
-    }
 
     void toXML(QDomDocument& , QDomElement&) const override;
     const KisMaskGenerator* maskGenerator() const;

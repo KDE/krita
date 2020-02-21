@@ -26,6 +26,7 @@
 #include <kis_pressure_opacity_option.h>
 #include <kis_linewidth_option.h>
 #include "kis_curves_opacity_option.h"
+#include <KisGlobalResourcesInterface.h>
 
 KisCurvePaintOpSettingsWidget:: KisCurvePaintOpSettingsWidget(QWidget* parent)
     : KisPaintOpSettingsWidget(parent)
@@ -46,7 +47,7 @@ KisCurvePaintOpSettingsWidget::~ KisCurvePaintOpSettingsWidget()
 
 KisPropertiesConfigurationSP  KisCurvePaintOpSettingsWidget::configuration() const
 {
-    KisCurvePaintOpSettings* config = new KisCurvePaintOpSettings();
+    KisCurvePaintOpSettings* config = new KisCurvePaintOpSettings(KisGlobalResourcesInterface::instance());
     config->setOptionsWidget(const_cast<KisCurvePaintOpSettingsWidget*>(this));
     config->setProperty("paintop", "curvebrush"); // XXX: make this a const id string
     writeConfiguration(config);

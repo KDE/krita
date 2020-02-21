@@ -60,7 +60,7 @@ KisBrushRegistry* KisBrushRegistry::instance()
 }
 
 
-KisBrushSP KisBrushRegistry::createBrush(const QDomElement& element)
+KisBrushSP KisBrushRegistry::createBrush(const QDomElement& element, KisResourcesInterfaceSP resourcesInterface)
 {
     QString brushType = element.attribute("type");
 
@@ -69,6 +69,6 @@ KisBrushSP KisBrushRegistry::createBrush(const QDomElement& element)
     KisBrushFactory* factory = get(brushType);
     if (!factory) return 0;
 
-    return factory->createBrush(element);
+    return factory->createBrush(element, resourcesInterface);
 }
 

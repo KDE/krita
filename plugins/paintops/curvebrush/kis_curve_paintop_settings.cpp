@@ -24,8 +24,9 @@ struct KisCurvePaintOpSettings::Private
     QList<KisUniformPaintOpPropertyWSP> uniformProperties;
 };
 
-KisCurvePaintOpSettings::KisCurvePaintOpSettings()
-    : m_d(new Private)
+KisCurvePaintOpSettings::KisCurvePaintOpSettings(KisResourcesInterfaceSP resourcesInterface)
+    : KisPaintOpSettings(resourcesInterface),
+      m_d(new Private)
 {
 }
 

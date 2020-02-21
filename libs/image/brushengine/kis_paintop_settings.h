@@ -29,10 +29,12 @@
 #include <brushengine/kis_paint_information.h>
 #include <brushengine/kis_uniform_paintop_property.h>
 
-
-
 class KisPaintOpConfigWidget;
 class KisPaintopSettingsUpdateProxy;
+
+class KisResourcesInterface;
+using KisResourcesInterfaceSP = QSharedPointer<KisResourcesInterface>;
+
 
 /**
  * Configuration property used to control whether airbrushing is enabled.
@@ -74,7 +76,7 @@ class KRITAIMAGE_EXPORT KisPaintOpSettings : public KisPropertiesConfiguration
 
 public:
 
-    KisPaintOpSettings();
+    KisPaintOpSettings(KisResourcesInterfaceSP resourcesInterface);
     ~KisPaintOpSettings() override;
     KisPaintOpSettings(const KisPaintOpSettings &rhs);
 
@@ -277,11 +279,6 @@ public:
     /// @return state of the settings, default implementation is true
     virtual bool isValid() const;
 
-    /// Check if the settings are loadable, that might the case if we can fallback to something
-    /// Overwrite if the settings can do some kind of fallback
-    /// @return loadable state of the settings, by default implementation return the same as isValid()
-    virtual bool isLoadable();
-
     /**
      * Overrides the method in KisPropertiesCofiguration to allow
      * onPropertyChanged() callback
@@ -330,6 +327,16 @@ public:
      * darken mode, but the final result is combined with this composite op.
      */
     QString maskingBrushCompositeOp() const;
+
+    /**
+     * @return resource interface that is used for loading linked resources
+     */
+    KisResourcesInterfaceSP resourcesInterface() const;
+
+    /**
+     * Set resource interface that will be used for loading linked resources
+     */
+    void setResourcesInterface(KisResourcesInterfaceSP resourcesInterface);
 
 protected:
 

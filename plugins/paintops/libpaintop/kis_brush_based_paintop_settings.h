@@ -30,7 +30,7 @@
 class PAINTOP_EXPORT KisBrushBasedPaintOpSettings : public KisOutlineGenerationPolicy<KisPaintOpSettings>
 {
 public:
-    KisBrushBasedPaintOpSettings();
+    KisBrushBasedPaintOpSettings(KisResourcesInterfaceSP resourcesInterface);
     ~KisBrushBasedPaintOpSettings() override {}
 
     ///Reimplemented
@@ -41,9 +41,6 @@ public:
 
     ///Reimplemented
     bool isValid() const override;
-
-    ///Reimplemented
-    bool isLoadable() override;
 
     KisBrushSP brush() const;
 

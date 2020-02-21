@@ -58,6 +58,7 @@
 #include "kis_gbr_brush.h"
 #include "kis_debug.h"
 #include "kis_image.h"
+#include <KisGlobalResourcesInterface.h>
 
 /// The resource item delegate for rendering the resource preview
 class KisBrushDelegate : public QAbstractItemDelegate
@@ -221,7 +222,7 @@ void KisPredefinedBrushChooser::slotResetBrush()
 
     KisBrushSP brush = m_itemChooser->currentResource().dynamicCast<KisBrush>();
     if (brush) {
-        brush->load();
+        brush->load(KisGlobalResourcesInterface::instance());
         brush->setScale(1.0);
         brush->setAngle(0.0);
 

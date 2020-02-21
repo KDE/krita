@@ -55,19 +55,6 @@ KoResourceSP KisWorkspaceResource::clone() const
     return KoResourceSP(new KisWorkspaceResource(*this));
 }
 
-
-bool KisWorkspaceResource::save()
-{
-    if (filename().isEmpty())
-         return false;
-
-    QFile file(filename());
-    file.open(QIODevice::WriteOnly);
-    bool res = saveToDevice(&file);
-    file.close();
-    return res;
-}
-
 bool KisWorkspaceResource::saveToDevice(QIODevice *dev) const
 {
     QDomDocument doc;
@@ -107,25 +94,10 @@ bool KisWorkspaceResource::saveToDevice(QIODevice *dev) const
 
 }
 
-bool KisWorkspaceResource::load()
+bool KisWorkspaceResource::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
-    if (filename().isEmpty())
-         return false;
- 
-    QFile file(filename());
-    if (file.size() == 0) return false;
-    if (!file.open(QIODevice::ReadOnly)) {
-        warnKrita << "Can't open file " << filename();
-        return false;
-    }
+    Q_UNUSED(resourcesInterface);
 
-    bool res = loadFromDevice(&file);
-    file.close();
-    return res;
-}
-
-bool KisWorkspaceResource::loadFromDevice(QIODevice *dev)
-{
     QDomDocument doc;
     if (!doc.setContent(dev)) {
         return false;

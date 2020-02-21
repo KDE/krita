@@ -36,11 +36,13 @@
 #include <brushengine/kis_paintop_registry.h>
 #include <brushengine/kis_paintop_preset.h>
 
+#include "KisGlobalResourcesInterface.h"
+
 #include "tiles3/kis_tile_data_store.h"
 #include "kis_surrogate_undo_adapter.h"
 #include "kis_image_config.h"
 #define LOAD_PRESET_OR_RETURN(preset, fileName)                         \
-    if(!preset->load()) { dbgKrita << "Preset" << fileName << "was NOT loaded properly. Done."; return; } \
+    if(!preset->load(KisGlobalResourcesInterface::instance())) { dbgKrita << "Preset" << fileName << "was NOT loaded properly. Done."; return; } \
     else dbgKrita << "Loaded preset:" << fileName
 
 #define HUGE_IMAGE_SIZE 8000

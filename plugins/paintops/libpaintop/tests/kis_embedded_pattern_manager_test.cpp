@@ -28,6 +28,7 @@
 
 #include <kis_properties_configuration.h>
 #include <KisResourceServerProvider.h>
+#include <KisGlobalResourcesInterface.h>
 
 #include "sdk/tests/kistest.h"
 
@@ -53,7 +54,7 @@ void KisEmbeddedPatternManagerTest::testRoundTrip()
 
     KisEmbeddedPatternManager::saveEmbeddedPattern(config, pattern);
 
-    KoPatternSP newPattern = KisEmbeddedPatternManager::loadEmbeddedPattern(config);
+    KoPatternSP newPattern = KisEmbeddedPatternManager::loadEmbeddedPattern(config, KisGlobalResourcesInterface::instance());
 
     QCOMPARE(newPattern->pattern(), pattern->pattern());
     QCOMPARE(newPattern->name(), pattern->name());
@@ -136,7 +137,7 @@ void KisEmbeddedPatternManagerTest::checkOneConfig(NameStatus nameStatus, bool h
     KisPropertiesConfigurationSP setting = createXML(nameStatus, hasMd5);
 
 
-    KoPatternSP pattern = KisEmbeddedPatternManager::loadEmbeddedPattern(setting);
+    KoPatternSP pattern = KisEmbeddedPatternManager::loadEmbeddedPattern(setting, KisGlobalResourcesInterface::instance());
 
     QVERIFY(pattern);
     QCOMPARE(pattern->pattern(), basePattern->pattern());

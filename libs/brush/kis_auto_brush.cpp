@@ -78,7 +78,7 @@ struct KisAutoBrush::Private {
 };
 
 KisAutoBrush::KisAutoBrush(KisMaskGenerator* as, qreal angle, qreal randomness, qreal density)
-    : KisBrush(),
+    : KoEphemeralResource<KisBrush>(),
       d(new Private)
 {
     d->shape.reset(as);
@@ -114,7 +114,7 @@ void KisAutoBrush::setUserEffectiveSize(qreal value)
 }
 
 KisAutoBrush::KisAutoBrush(const KisAutoBrush& rhs)
-    : KisBrush(rhs)
+    : KoEphemeralResource<KisBrush>(rhs)
     , d(new Private(*rhs.d))
 {
 }

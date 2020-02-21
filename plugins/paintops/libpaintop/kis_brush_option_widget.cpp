@@ -23,7 +23,7 @@
 
 #include "kis_brush_selection_widget.h"
 #include "kis_brush.h"
-
+#include <KisGlobalResourcesInterface.h>
 
 KisBrushOptionWidget::KisBrushOptionWidget()
     : KisPaintOpOption(KisPaintOpOption::GENERAL, true)
@@ -83,7 +83,7 @@ void KisBrushOptionWidget::writeOptionSetting(KisPropertiesConfigurationSP setti
 void KisBrushOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     m_brushSelectionWidget->readOptionSetting(setting);
-    m_brushOption.readOptionSetting(setting);
+    m_brushOption.readOptionSetting(setting, KisGlobalResourcesInterface::instance());
     m_brushSelectionWidget->setCurrentBrush(m_brushOption.brush());
 }
 

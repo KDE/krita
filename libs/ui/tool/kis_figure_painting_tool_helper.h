@@ -49,6 +49,8 @@ public:
     void setFGColorOverride(const KoColor &color);
     void setBGColorOverride(const KoColor &color);
     void setSelectionOverride(KisSelectionSP m_selection);
+    // WARNING: setBrush() should be called with a cloned copy of the brush! The
+    //          helper (reosurce snapshot) will own and modify it!
     void setBrush(const KisPaintOpPresetSP &brush);
     void paintPainterPathQPen(const QPainterPath, const QPen &pen, const KoColor &color);
     void paintPainterPathQPenFill(const QPainterPath, const QPen &pen, const KoColor &color);

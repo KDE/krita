@@ -32,8 +32,9 @@ struct KisHatchingPaintOpSettings::Private
 };
 
 
-KisHatchingPaintOpSettings::KisHatchingPaintOpSettings()
-    : m_d(new Private)
+KisHatchingPaintOpSettings::KisHatchingPaintOpSettings(KisResourcesInterfaceSP resourcesInterface)
+    : KisBrushBasedPaintOpSettings(resourcesInterface),
+      m_d(new Private)
 {
     setProperty(HATCHING_VERSION, "2");
 }

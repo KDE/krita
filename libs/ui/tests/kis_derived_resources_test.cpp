@@ -37,7 +37,7 @@
 #include <kis_config.h>
 #include "testutil.h"
 #include "opengl/kis_opengl.h"
-
+#include <KisGlobalResourcesInterface.h>
 
 void addResourceTypes()
 {
@@ -92,7 +92,7 @@ void KisDerivedResourcesTest::test()
     if (!presetFileName.isEmpty()) {
         QString fullFileName = TestUtil::fetchDataFileLazy(presetFileName);
         preset = KisPaintOpPresetSP(new KisPaintOpPreset(fullFileName));
-        bool presetValid = preset->load();
+        bool presetValid = preset->load(KisGlobalResourcesInterface::instance());
         Q_ASSERT(presetValid); Q_UNUSED(presetValid);
 
         i.setValue(preset);

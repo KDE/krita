@@ -31,12 +31,12 @@
 #include "brushengine/kis_paint_information.h"
 #include <kis_fixed_paint_device.h>
 #include "kis_qimage_pyramid.h"
-
+#include <KisGlobalResourcesInterface.h>
 
 void KisGbrBrushTest::testMaskGenerationSingleColor()
 {
     QScopedPointer<KisGbrBrush> brush(new KisGbrBrush(QString(FILES_DATA_DIR) + QDir::separator() + "brush.gbr"));
-    brush->load();
+    brush->load(KisGlobalResourcesInterface::instance());
     Q_ASSERT(brush->valid());
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
 
@@ -64,7 +64,7 @@ void KisGbrBrushTest::testMaskGenerationSingleColor()
 void KisGbrBrushTest::testMaskGenerationDevColor()
 {
     QScopedPointer<KisGbrBrush> brush(new KisGbrBrush(QString(FILES_DATA_DIR) + QDir::separator() + "brush.gbr"));
-    brush->load();
+    brush->load(KisGlobalResourcesInterface::instance());
     Q_ASSERT(brush->valid());
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
 
@@ -97,7 +97,7 @@ void KisGbrBrushTest::testMaskGenerationDevColor()
 void KisGbrBrushTest::testImageGeneration()
 {
     QScopedPointer<KisGbrBrush> brush(new KisGbrBrush(QString(FILES_DATA_DIR) + QDir::separator() + "testing_brush_512_bars.gbr"));
-    bool res = brush->load();
+    bool res = brush->load(KisGlobalResourcesInterface::instance());
     Q_UNUSED(res);
     Q_ASSERT(res);
     QVERIFY(!brush->brushTipImage().isNull());
@@ -132,7 +132,7 @@ void KisGbrBrushTest::testImageGeneration()
 void KisGbrBrushTest::benchmarkPyramidCreation()
 {
     QScopedPointer<KisGbrBrush> brush(new KisGbrBrush(QString(FILES_DATA_DIR) + QDir::separator() + "testing_brush_512_bars.gbr"));
-    brush->load();
+    brush->load(KisGlobalResourcesInterface::instance());
     QVERIFY(!brush->brushTipImage().isNull());
 
     QBENCHMARK {
@@ -144,7 +144,7 @@ void KisGbrBrushTest::benchmarkPyramidCreation()
 void KisGbrBrushTest::benchmarkScaling()
 {
     QScopedPointer<KisGbrBrush> brush(new KisGbrBrush(QString(FILES_DATA_DIR) + QDir::separator() + "testing_brush_512_bars.gbr"));
-    brush->load();
+    brush->load(KisGlobalResourcesInterface::instance());
     QVERIFY(!brush->brushTipImage().isNull());
     qsrand(1);
 
@@ -168,7 +168,7 @@ void KisGbrBrushTest::benchmarkScaling()
 void KisGbrBrushTest::benchmarkRotation()
 {
     QScopedPointer<KisGbrBrush> brush(new KisGbrBrush(QString(FILES_DATA_DIR) + QDir::separator() + "testing_brush_512_bars.gbr"));
-    brush->load();
+    brush->load(KisGlobalResourcesInterface::instance());
     QVERIFY(!brush->brushTipImage().isNull());
     qsrand(1);
 
@@ -184,7 +184,7 @@ void KisGbrBrushTest::benchmarkRotation()
 void KisGbrBrushTest::benchmarkMaskScaling()
 {
     QScopedPointer<KisGbrBrush> brush(new KisGbrBrush(QString(FILES_DATA_DIR) + QDir::separator() + "testing_brush_512_bars.gbr"));
-    brush->load();
+    brush->load(KisGlobalResourcesInterface::instance());
     QVERIFY(!brush->brushTipImage().isNull());
     qsrand(1);
 

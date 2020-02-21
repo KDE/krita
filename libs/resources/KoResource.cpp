@@ -25,11 +25,9 @@
 #include <QImage>
 #include <QBuffer>
 
-#include <KisResourceModel.h>
-#include <KisResourceModelProvider.h>
+#include <kis_debug.h>
+#include "KoMD5Generator.h"
 
-#include "KoMD5Generator.h"
-#include "KoMD5Generator.h"
 
 struct Q_DECL_HIDDEN KoResource::Private {
     int version {0};
@@ -78,6 +76,48 @@ KoResource &KoResource::operator=(const KoResource &rhs)
         d->version = rhs.d->version;
     }
     return *this;
+}
+
+bool KoResource::load(KisResourcesInterfaceSP resourcesInterface)
+{
+    QFile file(filename());
+
+    if (!file.exists()) {
+        warnKrita << "File doesn't exist: " << filename();
+        return false;
+    }
+
+    if (file.size() == 0) {
+        warnKrita << "File is empty: " << filename();
+        return false;
+    }
+
+    if (!file.open(QIODevice::ReadOnly)) {
+        warnKrita << "Can't open file for reading" << filename();
+        return false;
+    }
+
+    const bool res = loadFromDevice(&file, resourcesInterface);
+    file.close();
+
+    return res;
+}
+
+bool KoResource::save()
+{
+    if (filename().isEmpty()) return false;
+
+    QFile file(filename());
+
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        warnKrita << "Can't open file for writing" << filename();
+        return false;
+    }
+
+    saveToDevice(&file);
+
+    file.close();
+    return true;
 }
 
 bool KoResource::saveToDevice(QIODevice *dev) const

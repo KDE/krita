@@ -92,9 +92,8 @@ public:
 
     KoResourceSP clone() const override;
 
-    bool load() override;
-    bool loadFromDevice(QIODevice *dev) override;
-    bool save() override;
+    bool load(KisResourcesInterfaceSP resourcesInterface) override;
+    bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;
     bool saveToDevice(QIODevice* dev) const override;
     QString defaultFileExtension() const override;
     QPair<QString, QString> resourceType() const override
@@ -118,7 +117,7 @@ public:
     void setIsEditable(bool isEditable);
 
     QByteArray toByteArray() const;
-    bool fromByteArray(QByteArray &data);
+    bool fromByteArray(QByteArray &data, KisResourcesInterfaceSP resourcesInterface);
 
     /**
      * @brief Add a color to the palette.

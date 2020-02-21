@@ -54,22 +54,9 @@ KoResourceSP KisPngBrush::clone() const
     return KoResourceSP(new KisPngBrush(*this));
 }
 
-bool KisPngBrush::load()
+bool KisPngBrush::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
-    QFile f(filename());
-    if (f.size() == 0) return false;
-    if (!f.exists()) return false;
-    if (!f.open(QIODevice::ReadOnly)) {
-        warnKrita << "Can't open file " << filename();
-        return false;
-    }
-    bool res = loadFromDevice(&f);
-    f.close();
-    return res;
-}
-
-bool KisPngBrush::loadFromDevice(QIODevice *dev)
-{
+    Q_UNUSED(resourcesInterface);
 
     // Workaround for some OS (Debian, Ubuntu), where loading directly from the QIODevice
     // fails with "libpng error: IDAT: CRC error"
@@ -131,15 +118,6 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev)
     setHeight(brushTipImage().height());
 
     return valid();
-}
-
-bool KisPngBrush::save()
-{
-    QFile f(filename());
-    if (!f.open(QFile::WriteOnly)) return false;
-    bool res = saveToDevice(&f);
-    f.close();
-    return res;
 }
 
 bool KisPngBrush::saveToDevice(QIODevice *dev) const

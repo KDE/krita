@@ -29,9 +29,10 @@ struct KisDeformPaintOpSettings::Private
     QList<KisUniformPaintOpPropertyWSP> uniformProperties;
 };
 
-KisDeformPaintOpSettings::KisDeformPaintOpSettings()
+KisDeformPaintOpSettings::KisDeformPaintOpSettings(KisResourcesInterfaceSP resourcesInterface)
     : KisOutlineGenerationPolicy<KisPaintOpSettings>(KisCurrentOutlineFetcher::SIZE_OPTION |
-                                                     KisCurrentOutlineFetcher::ROTATION_OPTION),
+                                                     KisCurrentOutlineFetcher::ROTATION_OPTION,
+                                                     resourcesInterface),
     m_d(new Private)
 {
 }

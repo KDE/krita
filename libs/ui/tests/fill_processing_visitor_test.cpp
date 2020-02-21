@@ -30,6 +30,7 @@
 #include "kis_canvas_resource_provider.h"
 
 #include <processing/fill_processing_visitor.h>
+#include <KisGlobalResourcesInterface.h>
 
 class FillProcessingVisitorTester : public TestUtil::QImageBasedTest
 {
@@ -56,7 +57,7 @@ public:
         KoCanvasResourceProvider *manager = utils::createResourceManager(image, fillNode);
 
         KoPatternSP newPattern(new KoPattern(TestUtil::fetchDataFileLazy("HR_SketchPaper_01.pat")));
-        newPattern->load();
+        newPattern->load(KisGlobalResourcesInterface::instance());
         Q_ASSERT(newPattern->valid());
 
         QVariant v;

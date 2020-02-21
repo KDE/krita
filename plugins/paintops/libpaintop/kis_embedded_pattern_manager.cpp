@@ -25,6 +25,7 @@
 #include <resources/KoPattern.h>
 
 #include <kis_properties_configuration.h>
+#include <KisResourcesInterface.h>
 
 
 struct KisEmbeddedPatternManager::Private {
@@ -78,26 +79,34 @@ void KisEmbeddedPatternManager::saveEmbeddedPattern(KisPropertiesConfigurationSP
     setting->setProperty("Texture/Pattern/Pattern", ba.toBase64());
 }
 
-KoPatternSP KisEmbeddedPatternManager::loadEmbeddedPattern(const KisPropertiesConfigurationSP setting)
+KoPatternSP KisEmbeddedPatternManager::tryFetchPattern(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface)
 {
     KoPatternSP pattern;
-    KoResourceServer<KoPattern> *server = KoResourceServerProvider::instance()->patternServer();
+    auto resourceSourceAdapter = resourcesInterface->source<KoPattern>(ResourceType::Patterns);
 
     QByteArray md5 = QByteArray::fromBase64(setting->getString("Texture/Pattern/PatternMD5").toLatin1());
-    pattern = server->resourceByMD5(md5);
+    pattern = resourceSourceAdapter.resourceForMD5(md5);
     if (pattern) return pattern;
 
     QString name = setting->getString("Texture/Pattern/Name");
-    pattern = server->resourceByName(name);
+    pattern = resourceSourceAdapter.resourceForName(name);
     if (pattern) return pattern;
 
     QString fileName = setting->getString("Texture/Pattern/PatternFileName");
-    pattern = server->resourceByFilename(fileName);
+    pattern = resourceSourceAdapter.resourceForFilename(fileName);
+
+    return pattern;
+}
+
+KoPatternSP KisEmbeddedPatternManager::loadEmbeddedPattern(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface)
+{
+    KoPatternSP pattern = tryFetchPattern(setting, resourcesInterface);
     if (pattern) return pattern;
 
     pattern = Private::tryLoadEmbeddedPattern(setting);
     if (pattern) {
-        KoResourceServerProvider::instance()->patternServer()->addResource(pattern, false);
+        // TODO: implement addition of the embedded resources in KisResourceLocator::resource()
+        //KoResourceServerProvider::instance()->patternServer()->addResource(pattern, false);
     }
 
     return pattern;

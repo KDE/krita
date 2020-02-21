@@ -267,17 +267,10 @@ KisImagePipeBrush::~KisImagePipeBrush()
     delete d;
 }
 
-bool KisImagePipeBrush::load()
+bool KisImagePipeBrush::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
-    QFile file(filename());
-    file.open(QIODevice::ReadOnly);
-    bool res = loadFromDevice(&file);
-    file.close();
-    return res;
-}
+    Q_UNUSED(resourcesInterface);
 
-bool KisImagePipeBrush::loadFromDevice(QIODevice *dev)
-{
     QByteArray data = dev->readAll();
     return initFromData(data);
 }
@@ -341,15 +334,6 @@ bool KisImagePipeBrush::initFromData(const QByteArray &data)
     }
 
     return true;
-}
-
-bool KisImagePipeBrush::save()
-{
-    QFile file(filename());
-    file.open(QIODevice::WriteOnly | QIODevice::Truncate);
-    bool ok = saveToDevice(&file);
-    file.close();
-    return ok;
 }
 
 bool KisImagePipeBrush::saveToDevice(QIODevice* dev) const

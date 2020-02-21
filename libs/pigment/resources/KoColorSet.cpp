@@ -146,24 +146,17 @@ KoResourceSP KoColorSet::clone() const
     return KoResourceSP(new KoColorSet(*this));
 }
 
-bool KoColorSet::load()
+bool KoColorSet::load(KisResourcesInterfaceSP resourcesInterface)
 {
-    QFile file(filename());
-    if (file.size() == 0) return false;
-    if (!file.open(QIODevice::ReadOnly)) {
-        warnPigment << "Can't open file " << filename();
-        return false;
-    }
-    bool res = loadFromDevice(&file);
-    file.close();
-    if (!QFileInfo(filename()).isWritable()) {
-        setIsEditable(false);
-    }
-    return res;
+    const bool result = KoResource::load(resourcesInterface);
+    setIsEditable(result && QFileInfo(filename()).isWritable());
+    return result;
 }
 
-bool KoColorSet::loadFromDevice(QIODevice *dev)
+bool KoColorSet::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
+    Q_UNUSED(resourcesInterface);
+
     if (!dev->isOpen()) dev->open(QIODevice::ReadOnly);
 
     d->data = dev->readAll();
@@ -171,18 +164,6 @@ bool KoColorSet::loadFromDevice(QIODevice *dev)
     Q_ASSERT(d->data.size() != 0);
 
     return d->init();
-}
-
-
-bool KoColorSet::save()
-{
-    QFile file(filename());
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-        return false;
-    }
-    saveToDevice(&file);
-    file.close();
-    return true;
 }
 
 bool KoColorSet::saveToDevice(QIODevice *dev) const
@@ -214,11 +195,11 @@ QByteArray KoColorSet::toByteArray() const
     return ba;
 }
 
-bool KoColorSet::fromByteArray(QByteArray &data)
+bool KoColorSet::fromByteArray(QByteArray &data, KisResourcesInterfaceSP resourcesInterface)
 {
     QBuffer buf(&data);
     buf.open(QIODevice::ReadOnly);
-    return loadFromDevice(&buf);
+    return loadFromDevice(&buf, resourcesInterface);
 }
 
 KoColorSet::PaletteType KoColorSet::paletteType() const

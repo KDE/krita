@@ -70,8 +70,6 @@ typedef QSharedPointer<KisBrush> KisBrushSP;
  */
 class BRUSH_EXPORT KisBrush : public KoResource
 {
-
-
 public:
     class ColoringInformation
     {
@@ -124,23 +122,6 @@ public:
 
     virtual qreal userEffectiveSize() const = 0;
     virtual void setUserEffectiveSize(qreal value) = 0;
-
-    bool load() override {
-        return false;
-    }
-
-    bool loadFromDevice(QIODevice *) override {
-        return false;
-    }
-
-
-    bool save() override {
-        return false;
-    }
-
-    bool saveToDevice(QIODevice* ) const override {
-        return false;
-    }
 
     QPair<QString, QString> resourceType() const override {
         return QPair<QString, QString>(ResourceType::Brushes, "");
@@ -331,7 +312,7 @@ public:
      */
     virtual void toXML(QDomDocument& , QDomElement&) const;
 
-    static KisBrushSP fromXML(const QDomElement& element);
+    static KisBrushSP fromXML(const QDomElement& element, KisResourcesInterfaceSP resourcesInterface);
 
     virtual const KisBoundary* boundary() const;
     virtual QPainterPath outline() const;

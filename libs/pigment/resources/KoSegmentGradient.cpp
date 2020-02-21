@@ -87,20 +87,10 @@ KoResourceSP KoSegmentGradient::clone() const
     return KoResourceSP(new KoSegmentGradient(*this));
 }
 
-bool KoSegmentGradient::load()
+bool KoSegmentGradient::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
-    QFile file(filename());
-    if (!file.open(QIODevice::ReadOnly)) {
-        warnPigment << "Can't open file " << filename();
-        return false;
-    }
-    bool res = loadFromDevice(&file);
-    file.close();
-    return res;
-}
+    Q_UNUSED(resourcesInterface);
 
-bool KoSegmentGradient::loadFromDevice(QIODevice *dev)
-{
     QByteArray data = dev->readAll();
 
     QTextStream fileContent(data, QIODevice::ReadOnly);
@@ -198,20 +188,6 @@ bool KoSegmentGradient::loadFromDevice(QIODevice *dev)
         return false;
     }
 
-}
-
-bool KoSegmentGradient::save()
-{
-    QFile file(filename());
-
-    if (!file.open(QIODevice::WriteOnly)) {
-        return false;
-    }
-
-    saveToDevice(&file);
-    file.close();
-
-    return true;
 }
 
 bool KoSegmentGradient::saveToDevice(QIODevice *dev) const

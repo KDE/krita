@@ -30,9 +30,7 @@ public:
     KoResourceSP clone() const override;
     // No operator= needed, because there's no local data in KisPngBrush
 
-    bool load() override;
-    bool loadFromDevice(QIODevice *dev) override;
-    bool save() override;
+    bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;
     bool saveToDevice(QIODevice *dev) const override;
     QString defaultFileExtension() const override;
     void toXML(QDomDocument& d, QDomElement& e) const override;

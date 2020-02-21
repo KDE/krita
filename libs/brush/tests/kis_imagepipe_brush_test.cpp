@@ -31,6 +31,7 @@
 #include "kis_imagepipe_brush.h"
 #include <kis_paint_device.h>
 #include <kis_painter.h>
+#include <KisGlobalResourcesInterface.h>
 
 #define COMPARE_ALL(brush, method)                                      \
     Q_FOREACH (KisGbrBrushSP child, brush->brushes()) {           \
@@ -96,7 +97,7 @@ inline void KisImagePipeBrushTest::checkConsistency(KisImagePipeBrushSP brush)
 void KisImagePipeBrushTest::testLoading()
 {
     QSharedPointer<KisImagePipeBrush> brush(new KisImagePipeBrush(QString(FILES_DATA_DIR) + QDir::separator() + "C_Dirty_Spot.gih"));
-    brush->load();
+    brush->load(KisGlobalResourcesInterface::instance());
     QVERIFY(brush->valid());
 
     checkConsistency(brush);
@@ -105,7 +106,7 @@ void KisImagePipeBrushTest::testLoading()
 void KisImagePipeBrushTest::testChangingBrushes()
 {
     QSharedPointer<KisImagePipeBrush> brush(new KisImagePipeBrush(QString(FILES_DATA_DIR) + QDir::separator() + "C_Dirty_Spot.gih"));
-    brush->load();
+    brush->load(KisGlobalResourcesInterface::instance());
     QVERIFY(brush->valid());
 
     qreal rotation = 0;
@@ -151,7 +152,7 @@ void checkIncrementalPainting(KisBrushSP brush, const QString &prefix)
 void KisImagePipeBrushTest::testSimpleDabApplication()
 {
     QSharedPointer<KisImagePipeBrush> brush(new KisImagePipeBrush(QString(FILES_DATA_DIR) + QDir::separator() + "C_Dirty_Spot.gih"));
-    brush->load();
+    brush->load(KisGlobalResourcesInterface::instance());
     QVERIFY(brush->valid());
 
     checkConsistency(brush);
@@ -161,7 +162,7 @@ void KisImagePipeBrushTest::testSimpleDabApplication()
 void KisImagePipeBrushTest::testColoredDab()
 {
     QSharedPointer<KisImagePipeBrush> brush(new KisImagePipeBrush(QString(FILES_DATA_DIR) + QDir::separator() + "G_Sparks.gih"));
-    brush->load();
+    brush->load(KisGlobalResourcesInterface::instance());
     QVERIFY(brush->valid());
 
     checkConsistency(brush);
@@ -197,7 +198,7 @@ void KisImagePipeBrushTest::testColoredDab()
 void KisImagePipeBrushTest::testColoredDabWash()
 {
     QSharedPointer<KisImagePipeBrush> brush(new KisImagePipeBrush(QString(FILES_DATA_DIR) + QDir::separator() + "G_Sparks.gih"));
-    brush->load();
+    brush->load(KisGlobalResourcesInterface::instance());
     QVERIFY(brush->valid());
 
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();

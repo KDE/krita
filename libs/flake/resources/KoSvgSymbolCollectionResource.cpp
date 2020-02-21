@@ -114,22 +114,10 @@ KoSvgSymbolCollectionResource::~KoSvgSymbolCollectionResource()
 {
 }
 
-bool KoSvgSymbolCollectionResource::load()
+bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
-    QFile file(filename());
-    if (file.size() == 0) return false;
-    if (!file.open(QIODevice::ReadOnly)) {
-        return false;
-    }
-    bool res =  loadFromDevice(&file);
-    file.close();
-    return res;
-}
+    Q_UNUSED(resourcesInterface);
 
-
-
-bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev)
-{
     if (!dev->isOpen()) {
         dev->open(QIODevice::ReadOnly);
     }
@@ -178,17 +166,6 @@ bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev)
     }
     setValid(true);
     setImage(d->symbols[0]->icon());
-    return true;
-}
-
-bool KoSvgSymbolCollectionResource::save()
-{
-    QFile file(filename());
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-        return false;
-    }
-    saveToDevice(&file);
-    file.close();
     return true;
 }
 

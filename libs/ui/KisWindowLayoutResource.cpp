@@ -320,35 +320,6 @@ void KisWindowLayoutResource::applyLayout()
     layoutManager->setPrimaryWorkspaceFollowsFocus(d->primaryWorkspaceFollowsFocus, d->primaryWindow);
 }
 
-bool KisWindowLayoutResource::save()
-{
-    if (filename().isEmpty())
-        return false;
-
-    QFile file(filename());
-    file.open(QIODevice::WriteOnly);
-    bool res = saveToDevice(&file);
-    file.close();
-    return res;
-}
-
-bool KisWindowLayoutResource::load()
-{
-    if (filename().isEmpty())
-         return false;
-
-    QFile file(filename());
-    if (file.size() == 0) return false;
-    if (!file.open(QIODevice::ReadOnly)) {
-        warnKrita << "Can't open file " << filename();
-        return false;
-    }
-
-    bool res = loadFromDevice(&file);
-    file.close();
-    return res;
-}
-
 bool KisWindowLayoutResource::saveToDevice(QIODevice *dev) const
 {
     QDomDocument doc;
@@ -369,8 +340,10 @@ bool KisWindowLayoutResource::saveToDevice(QIODevice *dev) const
     return true;
 }
 
-bool KisWindowLayoutResource::loadFromDevice(QIODevice *dev)
+bool KisWindowLayoutResource::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
+    Q_UNUSED(resourcesInterface);
+
     QDomDocument doc;
     if (!doc.setContent(dev)) {
         return false;

@@ -39,22 +39,6 @@ public:
     explicit KoAbstractGradient(const QString &filename);
     ~KoAbstractGradient() override;
 
-    bool load() override {
-        return false;
-    }
-
-    bool loadFromDevice(QIODevice *) override {
-        return false;
-    }
-
-    bool save() override {
-        return false;
-    }
-
-    bool saveToDevice(QIODevice*) const override {
-        return false;
-    }
-
     /**
     * Creates a QGradient from the gradient.
     * The resulting QGradient might differ from original gradient

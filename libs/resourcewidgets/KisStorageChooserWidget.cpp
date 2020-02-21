@@ -99,6 +99,7 @@ void KisStorageChooserDelegate::paint(QPainter *painter, const QStyleOptionViewI
 
 QSize KisStorageChooserDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
+    Q_UNUSED(index);
     int w = 200;
     int h = option.decorationSize.height()+8;
     return QSize(w, h);

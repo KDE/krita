@@ -65,9 +65,7 @@ public:
 
     KisGbrBrush &operator=(const KisGbrBrush &rhs);
 
-    bool load() override;
-    bool loadFromDevice(QIODevice *dev) override;
-    bool save() override;
+    bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;
     bool saveToDevice(QIODevice* dev) const override;
 
     QPair<QString, QString> resourceType() const override {

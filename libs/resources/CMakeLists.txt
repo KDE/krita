@@ -38,6 +38,10 @@ set(kritaresources_LIB_SRCS
     kconfigini.cpp
     kconfigdata.cpp
     kconfigbackend.cpp
+
+    KisResourcesInterface.cpp
+    KisLocalStrokeResources.cpp
+    KisGlobalResourcesInterface.cpp
 )
 
 qt5_add_resources(kritaresources_LIB_SRCS sql.qrc)

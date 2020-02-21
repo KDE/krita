@@ -26,6 +26,7 @@
 #include <kis_scaling_size_brush.h>
 #include <kis_types.h>
 #include <kis_shared.h>
+#include <KoEphemeralResource.h>
 
 #include "kritabrush_export.h"
 
@@ -37,7 +38,7 @@ class QString;
 class QIODevice;
 
 
-class BRUSH_EXPORT KisAbrBrush : public KisScalingSizeBrush
+class BRUSH_EXPORT KisAbrBrush : public KoEphemeralResource<KisScalingSizeBrush>
 {
 
 public:
@@ -48,15 +49,6 @@ public:
     KisAbrBrush(const KisAbrBrush& rhs, KisAbrBrushCollection *parent);
     KisAbrBrush &operator=(const KisAbrBrush &rhs);
     KoResourceSP clone() const override;
-
-
-    bool load() override;
-
-    bool loadFromDevice(QIODevice *dev) override;
-
-    bool save() override;
-
-    bool saveToDevice(QIODevice* dev) const override;
 
     QPair<QString, QString> resourceType() const override {
         return QPair<QString, QString>(ResourceType::Brushes, ResourceSubType::AbrBrushes);

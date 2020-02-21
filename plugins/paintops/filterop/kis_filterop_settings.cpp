@@ -34,7 +34,8 @@
 #include <kis_types.h>
 #include <kis_paint_device.h>
 
-KisFilterOpSettings::KisFilterOpSettings()
+KisFilterOpSettings::KisFilterOpSettings(KisResourcesInterfaceSP resourcesInterface)
+    : KisBrushBasedPaintOpSettings(resourcesInterface)
 {
     setPropertyNotSaved(FILTER_CONFIGURATION);
 }

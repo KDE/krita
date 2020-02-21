@@ -26,7 +26,8 @@
 #include "kis_brush_based_paintop_options_widget.h"
 #include "kis_boundary.h"
 
-KisHairyPaintOpSettings::KisHairyPaintOpSettings()
+KisHairyPaintOpSettings::KisHairyPaintOpSettings(KisResourcesInterfaceSP resourcesInterface)
+    : KisBrushBasedPaintOpSettings(resourcesInterface)
 {
 }
 

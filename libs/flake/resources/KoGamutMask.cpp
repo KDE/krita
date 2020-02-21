@@ -228,21 +228,10 @@ QTransform KoGamutMask::viewToMaskTransform(quint8 viewSize)
     return transform;
 }
 
-bool KoGamutMask::load()
+bool KoGamutMask::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
-    QFile file(filename());
-    if (file.size() == 0) return false;
-    if (!file.open(QIODevice::ReadOnly)) {
-        warnFlake << "Can't open file " << filename();
-        return false;
-    }
-    bool res = loadFromDevice(&file);
-    file.close();
-    return res;
-}
+    Q_UNUSED(resourcesInterface);
 
-bool KoGamutMask::loadFromDevice(QIODevice *dev)
-{
     if (!dev->isOpen()) dev->open(QIODevice::ReadOnly);
 
     d->data = dev->readAll();
@@ -336,18 +325,6 @@ void KoGamutMask::setMaskShapes(QList<KoShape*> shapes)
     setMaskShapesToVector(shapes, d->maskShapes);
 }
 
-bool KoGamutMask::save()
-{
-    QFile file(filename());
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-        return false;
-    }
-    saveToDevice(&file);
-    file.close();
-
-    return true;
-}
-
 QList<KoShape*> KoGamutMask::koShapes() const
 {
     QList<KoShape*> shapes;
@@ -393,7 +370,7 @@ bool KoGamutMask::saveToDevice(QIODevice *dev) const
     image().save(&previewDev, "PNG");
     if (!store->close()) { return false; }
 
-    return store->finalize();
+    return store->finalize() && KoResource::saveToDevice(dev);
 }
 
 QString KoGamutMask::title() const

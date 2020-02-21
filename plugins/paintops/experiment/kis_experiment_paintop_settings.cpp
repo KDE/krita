@@ -25,8 +25,9 @@ struct KisExperimentPaintOpSettings::Private
     QList<KisUniformPaintOpPropertyWSP> uniformProperties;
 };
 
-KisExperimentPaintOpSettings::KisExperimentPaintOpSettings()
-    : m_d(new Private)
+KisExperimentPaintOpSettings::KisExperimentPaintOpSettings(KisResourcesInterfaceSP resourcesInterface)
+    : KisNoSizePaintOpSettings(resourcesInterface),
+      m_d(new Private)
 {
 }
 

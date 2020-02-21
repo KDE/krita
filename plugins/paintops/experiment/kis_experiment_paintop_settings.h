@@ -25,7 +25,7 @@
 class KisExperimentPaintOpSettings : public KisNoSizePaintOpSettings
 {
 public:
-    KisExperimentPaintOpSettings();
+    KisExperimentPaintOpSettings(KisResourcesInterfaceSP resourcesInterface);
     ~KisExperimentPaintOpSettings() override;
 
     bool lodSizeThresholdSupported() const override;

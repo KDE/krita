@@ -66,7 +66,13 @@ void KisMaskingBrushOptionProperties::write(KisPropertiesConfiguration *setting,
     }
 }
 
-void KisMaskingBrushOptionProperties::read(const KisPropertiesConfiguration *setting, qreal masterBrushSize)
+QList<KoResourceSP> KisMaskingBrushOptionProperties::prepareResources(const KisPropertiesConfigurationSP settings, KisResourcesInterfaceSP resourcesInterface)
+{
+    KisBrushOptionProperties option;
+    return option.prepareResources(settings, resourcesInterface);
+}
+
+void KisMaskingBrushOptionProperties::read(const KisPropertiesConfiguration *setting, qreal masterBrushSize, KisResourcesInterfaceSP resourcesInterface)
 {
     isEnabled = setting->getBool(KisPaintOpUtils::MaskingBrushEnabledTag);
     compositeOpId = setting->getString(KisPaintOpUtils::MaskingBrushCompositeOpTag, COMPOSITE_MULT);
@@ -76,7 +82,7 @@ void KisMaskingBrushOptionProperties::read(const KisPropertiesConfiguration *set
     setting->getPrefixedProperties(KisPaintOpUtils::MaskingBrushPresetPrefix, embeddedConfig);
 
     KisBrushOptionProperties option;
-    option.readOptionSetting(embeddedConfig);
+    option.readOptionSetting(embeddedConfig, resourcesInterface);
 
     brush = option.brush();
 

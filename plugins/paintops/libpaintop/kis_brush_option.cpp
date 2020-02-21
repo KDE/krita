@@ -25,6 +25,7 @@
 
 #include "kis_properties_configuration.h"
 #include <KisPaintopSettingsIds.h>
+#include <kis_brush.h>
 
 void KisBrushOptionProperties::writeOptionSettingImpl(KisPropertiesConfiguration *setting) const
 {
@@ -68,13 +69,29 @@ QDomElement getBrushXMLElement(const KisPropertiesConfiguration *setting)
     return element;
 }
 
-void KisBrushOptionProperties::readOptionSettingImpl(const KisPropertiesConfiguration *setting)
+void KisBrushOptionProperties::readOptionSettingResourceImpl(const KisPropertiesConfiguration *setting, KisResourcesInterfaceSP resourcesInterface)
 {
     QDomElement element = getBrushXMLElement(setting);
 
     if (!element.isNull()) {
-        m_brush = KisBrush::fromXML(element);
+        m_brush = KisBrush::fromXML(element, resourcesInterface);
     }
+}
+
+QList<KoResourceSP> KisBrushOptionProperties::prepareResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const
+{
+    QList<KoResourceSP> resources;
+
+    QDomElement element = getBrushXMLElement(settings);
+    if (element.isNull()) return resources;
+
+    KisBrushSP brush = KisBrush::fromXML(element, resourcesInterface);
+    // TODO: check if ephemeral and don't add it!
+    if (brush) {
+        resources << brush;
+    }
+
+    return resources;
 }
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND

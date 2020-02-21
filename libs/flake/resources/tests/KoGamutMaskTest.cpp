@@ -23,6 +23,7 @@
 #include <testutil.h>
 
 #include "KoGamutMaskTest.h"
+#include <KisGlobalResourcesInterface.h>
 
 KoGamutMaskTest::KoGamutMaskTest(QObject *parent) : QObject(parent)
 {
@@ -37,7 +38,7 @@ void KoGamutMaskTest::testCoordIsClear()
     QFETCH(bool, expectedOutput);
 
     QScopedPointer<KoGamutMask> mask(new KoGamutMask(TestUtil::fetchDataFileLazy(maskFile)));
-    mask->load();
+    mask->load(KisGlobalResourcesInterface::instance());
     Q_ASSERT(mask->valid());
     mask->setRotation(maskRotation);
 
@@ -103,7 +104,7 @@ void KoGamutMaskTest::testLoad()
     QFETCH(int, expectedShapeCount);
 
     QScopedPointer<KoGamutMask> mask(new KoGamutMask(TestUtil::fetchDataFileLazy(maskFile)));
-    mask->load();
+    mask->load(KisGlobalResourcesInterface::instance());
 
     Q_ASSERT(mask->valid());
 

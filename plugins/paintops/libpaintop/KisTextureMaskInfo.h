@@ -30,6 +30,7 @@
 #include <KoPattern.h>
 
 class KisTextureMaskInfo;
+class KisResourcesInterface;
 
 class KisTextureMaskInfo : public boost::equality_comparable<KisTextureMaskInfo>
 {
@@ -51,7 +52,7 @@ public:
 
     QRect maskBounds() const;
 
-    bool fillProperties(const KisPropertiesConfigurationSP setting);
+    bool fillProperties(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface);
 
     void recalculateMask();
 

@@ -35,7 +35,7 @@ public:
     using KisPaintOpSettings::fromXML;
     using KisPaintOpSettings::toXML;
 
-    KisDuplicateOpSettings();
+    KisDuplicateOpSettings(KisResourcesInterfaceSP resourcesInterface);
     ~KisDuplicateOpSettings() override;
     bool paintIncremental() override;
     QString indirectPaintingCompositeOp() const override;

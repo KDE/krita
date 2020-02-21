@@ -33,6 +33,7 @@ class KisPropertiesConfiguration;
 class KisPressureSpacingOption;
 class KisPressureRateOption;
 class KisDabCache;
+class KisResourcesInterface;
 
 /// Internal
 class TextBrushInitializationWorkaround
@@ -42,7 +43,7 @@ public:
     ~TextBrushInitializationWorkaround();
     static TextBrushInitializationWorkaround* instance();
 
-    void preinitialize(KisPropertiesConfigurationSP settings);
+    void preinitialize(KisPaintOpSettingsSP settings);
 
     KisBrushSP tryGetBrush(const KisPropertiesConfigurationSP settings);
 
@@ -63,7 +64,7 @@ class PAINTOP_EXPORT KisBrushBasedPaintOp : public KisPaintOp
 
 public:
 
-    KisBrushBasedPaintOp(const KisPropertiesConfigurationSP settings, KisPainter* painter);
+    KisBrushBasedPaintOp(const KisPaintOpSettingsSP settings, KisPainter* painter);
     ~KisBrushBasedPaintOp() override;
 
     bool checkSizeTooSmall(qreal scale);
@@ -84,6 +85,9 @@ public:
     typedef int needs_preinitialization;
     static void preinitializeOpStatically(KisPaintOpSettingsSP settings);
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
+
+    static QList<KoResourceSP> prepareResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface);
+
 
 private:
     KisSpacingInformation effectiveSpacing(qreal dabWidth, qreal dabHeight, qreal extraScale, bool isotropicSpacing, qreal rotation, bool axesFlipped) const;

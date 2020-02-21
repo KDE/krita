@@ -26,6 +26,7 @@
 #include <KisResourceLoaderRegistry.h>
 #include <KisResourceLoader.h>
 #include <KoResource.h>
+#include <KisGlobalResourcesInterface.h>
 
 #include "DummyResource.h"
 
@@ -41,7 +42,7 @@ void TestResourceLoaderRegistry::testRegistry()
     QByteArray ba;
     QBuffer f(&ba);
     f.open(QFile::ReadOnly);
-    KoResourceSP res = l2->load("test", f);
+    KoResourceSP res = l2->load("test", f, KisGlobalResourcesInterface::instance());
     QVERIFY(res.data());
     QVERIFY(dynamic_cast<DummyResource*>(res.data()));
 }

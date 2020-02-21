@@ -19,6 +19,11 @@
 #include "KisBrushOpSettings.h"
 
 
+KisBrushOpSettings::KisBrushOpSettings(KisResourcesInterfaceSP resourcesInterface)
+    : KisBrushBasedPaintOpSettings(resourcesInterface)
+{
+}
+
 bool KisBrushOpSettings::needsAsynchronousUpdates() const
 {
     return true;

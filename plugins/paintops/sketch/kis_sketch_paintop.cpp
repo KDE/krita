@@ -75,7 +75,7 @@ KisSketchPaintOp::KisSketchPaintOp(const KisPaintOpSettingsSP settings, KisPaint
     m_rotationOption.readOptionSetting(settings);
     m_rateOption.readOptionSetting(settings);
     m_sketchProperties.readOptionSetting(settings);
-    m_brushOption.readOptionSetting(settings);
+    m_brushOption.readOptionSetting(settings, settings->resourcesInterface());
     m_densityOption.readOptionSetting(settings);
     m_lineWidthOption.readOptionSetting(settings);
     m_offsetScaleOption.readOptionSetting(settings);
@@ -96,6 +96,12 @@ KisSketchPaintOp::~KisSketchPaintOp()
 {
     delete m_painter;
     delete m_dabCache;
+}
+
+QList<KoResourceSP> KisSketchPaintOp::prepareResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
+{
+    KisBrushOptionProperties brushOption;
+    return brushOption.prepareResources(settings, resourcesInterface);
 }
 
 void KisSketchPaintOp::drawConnection(const QPointF& start, const QPointF& end, double lineWidth)

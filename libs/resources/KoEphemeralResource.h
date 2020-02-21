@@ -26,7 +26,8 @@
  * representation on disk. Therefore, its load()/save() calls do
  * nothing.
  *
- * This type of resources is created directly by the factory.
+ * This type of resources is created directly by the corresponding
+ * factory or other object (e.g. KisAutoBrushFactory).
  */
 template<class ParentClass>
 class KoEphemeralResource : public ParentClass

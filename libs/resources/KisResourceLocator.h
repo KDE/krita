@@ -118,6 +118,12 @@ Q_SIGNALS:
 
     void progressMessage(const QString&);
 
+    /// Emitted whenever a storage is added
+    void storageAdded();
+
+    /// Emitted whenever a storage is removed
+    void storageRemoved();
+
 private:
 
     friend class KisResourceModel;

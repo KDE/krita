@@ -32,6 +32,7 @@
  */
 class KRITARESOURCES_EXPORT KisStorageModel : public QAbstractTableModel
 {
+    Q_OBJECT
 public:
 
     enum Columns {
@@ -46,11 +47,11 @@ public:
         MetaData
     };
 
-    static KisStorageModel * instance();
-
     KisStorageModel(QObject *parent = 0);
     ~KisStorageModel() override;
 
+
+    static KisStorageModel * instance();
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role) const override;
@@ -60,6 +61,8 @@ public:
     KisResourceStorageSP storageForIndex(const QModelIndex &index) const;
 
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+
+public Q_SLOTS:
 
     bool resetQuery();
 

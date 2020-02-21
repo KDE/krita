@@ -34,6 +34,8 @@ KisStorageModel::KisStorageModel(QObject *parent)
     , d(new Private())
 {
     prepareQuery();
+    connect(KisResourceLocator::instance(), SIGNAL(storageAdded()), this, SLOT(resetQuery()));
+    connect(KisResourceLocator::instance(), SIGNAL(storageRemoved()), this, SLOT(resetQuery()));
 }
 
 KisStorageModel *KisStorageModel::instance()

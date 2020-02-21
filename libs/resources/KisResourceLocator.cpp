@@ -384,6 +384,8 @@ bool KisResourceLocator::addStorage(const QString &storageLocation, KisResourceS
     }
 
     KisResourceModelProvider::resetAllModels();
+    emit storageAdded();
+
     return true;
 }
 
@@ -399,6 +401,8 @@ bool KisResourceLocator::removeStorage(const QString &document)
         return false;
     }
     KisResourceModelProvider::resetAllModels();
+
+    emit storageRemoved();
     return true;
 }
 

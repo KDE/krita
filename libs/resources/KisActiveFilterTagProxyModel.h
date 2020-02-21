@@ -28,6 +28,10 @@
 
 #include "kritaresources_export.h"
 
+/**
+ * KisActiveFilterTagProxyModel is a sort/filter proxy model that does no filtering,
+ * but sorts tags by name and url.
+ */
 class KRITARESOURCES_EXPORT KisActiveFilterTagProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT

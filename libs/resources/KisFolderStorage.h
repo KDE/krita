@@ -24,6 +24,13 @@
 
 #include <kritaresources_export.h>
 
+/**
+ * KisFolderStorage is a KisStoragePlugin which handles resources 
+ * stored in the user's resource folder. On initial startup, every
+ * resource that comes as a folder resource is copied to the user's
+ * resource folder. This is also the default location where the
+ * resources the user creates are stored. 
+ */
 class KRITARESOURCES_EXPORT KisFolderStorage : public KisStoragePlugin
 {
 public:

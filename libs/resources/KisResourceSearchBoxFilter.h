@@ -23,6 +23,10 @@
 
 #include <QString>
 
+/**
+ * XXX: Apidox
+ * 
+ */
 class KRITARESOURCES_EXPORT KisResourceSearchBoxFilter
 {
 

@@ -34,6 +34,8 @@
  * by a KisResourceLoader instance. A loader corresponds to a particular file type. Resources are organized in
  * folders that represent the main type of a certain resource (brushes) and subtypes, that identify a particular
  * resource format (gbr, gih, png, svg).
+ * 
+ * KisResourceLoaderRegistry has full knowlege of all resource types that are defined for Krita.
  */
 class KRITARESOURCES_EXPORT KisResourceLoaderRegistry : public QObject, public KoGenericRegistry<KisResourceLoaderBase*>
 {

@@ -27,6 +27,10 @@
 #include <KoResource.h>
 #include <KisTag.h>
 
+/**
+ * KisAbstractResourceModel defines the interface for accessing resources
+ * that is used in KisResourceModel and the various filter/proxy models
+ */
 class KRITARESOURCES_EXPORT KisAbstractResourceModel {
 
 public:

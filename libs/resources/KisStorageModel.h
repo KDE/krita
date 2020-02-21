@@ -25,6 +25,11 @@
 #include "KisResourceStorage.h"
 #include "kritaresources_export.h"
 
+/**
+ * KisStorageModel provides a model of all registered storages, like
+ * the folder storages, the bundle storages or the memory storages. Note
+ * that inactive storages are also part of this model.
+ */
 class KRITARESOURCES_EXPORT KisStorageModel : public QAbstractTableModel
 {
 public:

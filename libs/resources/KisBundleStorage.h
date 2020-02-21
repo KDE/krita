@@ -23,6 +23,11 @@
 #include <KisStoragePlugin.h>
 #include "kritaresources_export.h"
 
+/**
+ * KisBundleStorage is KisStoragePlugin that can load resources 
+ * from bundles. It can also manage overrridden resources from bundles,
+ * which are not stored in the bundles themselves.
+ */
 class KRITARESOURCES_EXPORT KisBundleStorage : public KisStoragePlugin
 {
 public:

@@ -26,7 +26,9 @@
 
 /**
  * @brief The KisMemoryStorage class stores the temporary resources
- * that are not saved to disk or bundle.
+ * that are not saved to disk or bundle. It is also used to stores
+ * transient per-document resources, such as the document-local palette
+ * list.
  */
 class KRITARESOURCES_EXPORT KisMemoryStorage : public KisStoragePlugin
 {

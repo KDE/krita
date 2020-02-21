@@ -26,6 +26,15 @@
 #include <KisStorageModel.h>
 #include "kritaresources_export.h"
 
+/**
+ * KisStorageFilterProxyModel provides a filtered view on the available storages.
+ * It can be used to find the storages that have resource with a particular file
+ * name, or storages of particular types.
+ * 
+ * Filtering by file name takes a string, filtering by storage type a list
+ * of untranslated strings (there is a method in KisResourceStorage for retrieving
+ * those strings from the ResourceType).
+ */
 class KRITARESOURCES_EXPORT KisStorageFilterProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT

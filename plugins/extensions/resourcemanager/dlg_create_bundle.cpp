@@ -65,6 +65,7 @@ DlgCreateBundle::DlgCreateBundle(KoResourceBundleSP bundle, QWidget *parent)
 
         setCaption(i18n("Edit Resource Bundle"));
 #if 0
+        /*
         m_ui->lblSaveLocation->setText(QFileInfo(bundle->filename()).absolutePath());
         m_ui->editBundleName->setText(bundle->name());
         m_ui->editAuthor->setText(bundle->getMeta("author"));
@@ -130,6 +131,7 @@ DlgCreateBundle::DlgCreateBundle(KoResourceBundleSP bundle, QWidget *parent)
                 }
             }
         }
+        */
 #endif
     }
     else {
@@ -142,6 +144,15 @@ DlgCreateBundle::DlgCreateBundle(KoResourceBundleSP bundle, QWidget *parent)
         m_ui->editEmail->setText(cfg.readEntry<QString>("BundleAuthorEmail", info.authorInfo("email")));
         m_ui->editWebsite->setText(cfg.readEntry<QString>("BundleWebsite", "http://"));
         m_ui->editLicense->setText(cfg.readEntry<QString>("BundleLicense", "CC-BY-SA"));
+        m_ui->editBundleName->setText(cfg.readEntry<QString>("BundleName", "New Bundle"));
+        m_ui->editDescription->document()->setPlainText(cfg.readEntry<QString>("BundleDescription", "New Bundle"));
+        m_previewImage = cfg.readEntry<QString>("BundleImage", "");
+        if (!m_previewImage.isEmpty()) {
+            QImage img(m_previewImage);
+            img = img.scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            m_ui->lblPreview->setPixmap(QPixmap::fromImage(img));
+        }
+
         m_ui->lblSaveLocation->setText(cfg.readEntry<QString>("BundleExportLocation", QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
     }
 
@@ -230,7 +241,6 @@ void DlgCreateBundle::putResourcesInTheBundle() const
 
 void DlgCreateBundle::accept()
 {
-    ENTER_FUNCTION();
     QString name = bundleName();
     QString filename = m_ui->lblSaveLocation->text() + "/" + name + ".bundle";
 
@@ -240,24 +250,16 @@ void DlgCreateBundle::accept()
         return;
     }
     else {
-        ENTER_FUNCTION() << "(1)";
         QFileInfo fileInfo(filename);
 
         if (fileInfo.exists() && !m_bundle) {
-            ENTER_FUNCTION() << "(2)";
             m_ui->editBundleName->setStyleSheet("border: 1px solid red");
             QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("A bundle with this name already exists."));
             return;
         }
         else {
-            ENTER_FUNCTION() << "(3)";
             if (!m_bundle) {
-                KisConfig cfg(false);
-                cfg.writeEntry<QString>("BunleExportLocation", saveLocation());
-                cfg.writeEntry<QString>("BundleAuthorName", authorName());
-                cfg.writeEntry<QString>("BundleAuthorEmail", email());
-                cfg.writeEntry<QString>("BundleWebsite", website());
-                cfg.writeEntry<QString>("BundleLicense", license());
+                saveToConfiguration();
 
                 m_bundle.reset(new KoResourceBundle(filename));
                 putResourcesInTheBundle();
@@ -267,6 +269,25 @@ void DlgCreateBundle::accept()
             KoDialog::accept();
         }
     }
+}
+
+void DlgCreateBundle::saveToConfiguration()
+{
+    KisConfig cfg(false);
+    cfg.writeEntry<QString>("BundleExportLocation", saveLocation());
+    cfg.writeEntry<QString>("BundleAuthorName", authorName());
+    cfg.writeEntry<QString>("BundleAuthorEmail", email());
+    cfg.writeEntry<QString>("BundleWebsite", website());
+    cfg.writeEntry<QString>("BundleLicense", license());
+    cfg.writeEntry<QString>("BundleName", bundleName());
+    cfg.writeEntry<QString>("BundleDescription", description());
+    cfg.writeEntry<QString>("BundleImage", previewImage());
+}
+
+void DlgCreateBundle::reject()
+{
+    saveToConfiguration();
+    KoDialog::reject();
 }
 
 void DlgCreateBundle::selectSaveLocation()
@@ -374,6 +395,8 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
     m_ui->tableSelected->clear();
 
     QString standarizedResourceType = (resourceType == "presets" ? ResourceType::PaintOpPresets : resourceType);
+
+    /*
     QStringList& list = m_selectedBrushes;
 
     if (standarizedResourceType == ResourceType::Brushes) {
@@ -391,6 +414,7 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
     } else if (standarizedResourceType == ResourceType::Workspaces) {
         list = m_selectedWorkspaces;
     }
+    */
 
     KisResourceModel* model = KisResourceModelProvider::resourceModel(standarizedResourceType);
     for (int i = 0; i < model->rowCount(); i++) {

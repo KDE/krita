@@ -56,11 +56,14 @@ public:
 private Q_SLOTS:
 
     void accept() override;
+    void reject() override;
+
     void selectSaveLocation();
     void addSelected();
     void removeSelected();
     void resourceTypeSelected(int idx);
     void getPreviewImage();
+    void saveToConfiguration();
 
 
 private:

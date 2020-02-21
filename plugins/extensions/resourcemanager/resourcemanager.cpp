@@ -146,6 +146,7 @@ KoResourceBundleSP ResourceManager::saveBundle(const DlgCreateBundle &dlgCreateB
     newBundle->setMetaData("description", dlgCreateBundle.description());
     newBundle->setThumbnail(dlgCreateBundle.previewImage());
 
+    /*
     QStringList res = dlgCreateBundle.selectedBrushes();
     Q_FOREACH (const QString &r, res) {
         KoResourceSP res = d->brushServer->resourceByFilename(r);
@@ -202,6 +203,7 @@ KoResourceBundleSP ResourceManager::saveBundle(const DlgCreateBundle &dlgCreateB
         KoResourceSP res = d->gamutMaskServer->resourceByFilename(r);
         newBundle->addResource(ResourceType::GamutMasks, res->filename(), d->gamutMaskServer->assignedTagsList(res), res->md5());
     }
+    */
 
     newBundle->setMetaData("fileName", bundlePath);
     newBundle->setMetaData("created", QDateTime::currentDateTime().toOffsetFromUtc(0).toString(Qt::ISODate));

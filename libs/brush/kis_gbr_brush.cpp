@@ -153,17 +153,6 @@ KisGbrBrush::~KisGbrBrush()
     delete d;
 }
 
-bool KisGbrBrush::load()
-{
-    QFile file(filename());
-    if (file.size() == 0) return false;
-    file.open(QIODevice::ReadOnly);
-    bool res = loadFromDevice(&file);
-    file.close();
-
-    return res;
-}
-
 bool KisGbrBrush::loadFromDevice(QIODevice *dev)
 {
     d->data = dev->readAll();
@@ -321,15 +310,6 @@ bool KisGbrBrush::initFromPaintDev(KisPaintDeviceSP image, int x, int y, int w, 
     setHasColor(true);
 
     return true;
-}
-
-bool KisGbrBrush::save()
-{
-    QFile file(filename());
-    file.open(QIODevice::WriteOnly | QIODevice::Truncate);
-    bool ok = saveToDevice(&file);
-    file.close();
-    return ok;
 }
 
 bool KisGbrBrush::saveToDevice(QIODevice* dev) const

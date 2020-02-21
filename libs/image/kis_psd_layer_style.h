@@ -22,6 +22,7 @@ class QIODevice;
 class QUuid;
 
 #include <QVector>
+#include <KoEphemeralResource.h>
 
 #include <psd.h>
 
@@ -39,7 +40,7 @@ typedef QSharedPointer<KisPSDLayerStyle> KisPSDLayerStyleSP;
  * See https://www.tonton-pixel.com/Photoshop%20Additional%20File%20Formats/styles-file-format.html
  *
  */
-class KRITAPSD_EXPORT KisPSDLayerStyle : public KoResource
+class KRITAPSD_EXPORT KisPSDLayerStyle : public KoEphemeralResource<KoResource>
 {
 
 public:
@@ -62,16 +63,6 @@ public:
 
     QString psdUuid() const;
     void setPsdUuid(const QString &value) const;
-
-    /*
-     * KoResource functions
-     * they do nothing, just return true
-     */
-    bool load() override;
-    bool loadFromDevice(QIODevice *dev) override;
-    bool save() override;
-    bool saveToDevice(QIODevice* dev) const override;
-
 
     QPair<QString, QString> resourceType() const override
     {

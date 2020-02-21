@@ -76,14 +76,14 @@ public:
      * Load this resource.
      * @return true if loading the resource succeeded.
      */
-    virtual bool load() = 0;
+    virtual bool load();
     virtual bool loadFromDevice(QIODevice *dev) = 0;
 
     /**
      * Save this resource.
      *@return true if saving the resource succeeded.
      */
-    virtual bool save() = 0;
+    virtual bool save();
     virtual bool saveToDevice(QIODevice* dev) const;
 
     /**

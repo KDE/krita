@@ -266,11 +266,9 @@ public:
     KoResourceSP clone() const override;
 
     /// reimplemented
-    bool load() override;
     bool loadFromDevice(QIODevice *dev) override;
 
     /// not implemented
-    bool save() override;
     bool saveToDevice(QIODevice* dev) const override;
 
     QPair<QString, QString> resourceType() const override {

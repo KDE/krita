@@ -35,9 +35,7 @@ public:
     TasksetResource &operator=(const TasksetResource &rhs);
     KoResourceSP clone() const override;
 
-    bool load() override;
     bool loadFromDevice(QIODevice *dev) override;
-    bool save() override;
     bool saveToDevice(QIODevice* dev) const override;
 
     QString defaultFileExtension() const override;

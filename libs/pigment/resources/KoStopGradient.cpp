@@ -82,17 +82,6 @@ KoResourceSP KoStopGradient::clone() const
     return KoResourceSP(new KoStopGradient(*this));
 }
 
-bool KoStopGradient::load()
-{
-    QFile f(filename());
-    if (!f.open(QIODevice::ReadOnly)) {
-        warnPigment << "Can't open file " << filename();
-        return false;
-    }
-    bool res = loadFromDevice(&f);
-    f.close();
-    return res;
-}
 
 bool KoStopGradient::loadFromDevice(QIODevice *dev)
 {
@@ -110,18 +99,6 @@ bool KoStopGradient::loadFromDevice(QIODevice *dev)
     }
     updatePreview();
     return true;
-}
-
-bool KoStopGradient::save()
-{
-    QFile fileOut(filename());
-    if (! fileOut.open(QIODevice::WriteOnly))
-        return false;
-
-    bool retval = saveToDevice(&fileOut);
-    fileOut.close();
-
-    return retval;
 }
 
 QGradient* KoStopGradient::toQGradient() const

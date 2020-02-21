@@ -186,7 +186,7 @@ KisTextBrush::KisTextBrush()
 }
 
 KisTextBrush::KisTextBrush(const KisTextBrush &rhs)
-    : KisScalingSizeBrush(rhs),
+    : KoEphemeralResource<KisScalingSizeBrush>(rhs),
       m_font(rhs.m_font),
       m_text(rhs.m_text),
       m_brushesPipe(new KisTextBrushesPipe(*rhs.m_brushesPipe))

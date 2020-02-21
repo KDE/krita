@@ -24,6 +24,7 @@
 #include <KoColorSpace.h>
 #include <resources/KoAbstractGradient.h>
 #include <KoUpdater.h>
+#include <KoEphemeralResource.h>
 
 #include "kis_global.h"
 #include "kis_paint_device.h"
@@ -39,12 +40,12 @@
 #include "krita_utils.h"
 
 
-class CachedGradient : public KoAbstractGradient
+class CachedGradient : public KoEphemeralResource<KoAbstractGradient>
 {
 
 public:
     explicit CachedGradient(const KoAbstractGradientSP gradient, qint32 steps, const KoColorSpace *cs)
-        : KoAbstractGradient(gradient->filename())
+        : KoEphemeralResource<KoAbstractGradient>(gradient->filename())
         , m_subject(gradient)
         , m_max(steps - 1)
         , m_colorSpace(cs)

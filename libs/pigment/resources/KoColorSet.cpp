@@ -178,14 +178,7 @@ bool KoColorSet::loadFromDevice(QIODevice *dev)
 bool KoColorSet::save()
 {
     if (d->isGlobal) {
-        // save to resource dir
-        QFile file(filename());
-        if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-            return false;
-        }
-        saveToDevice(&file);
-        file.close();
-        return true;
+        return KoResource::save();
     } else {
         return true; // palette is not global, but still indicate that it's saved
     }

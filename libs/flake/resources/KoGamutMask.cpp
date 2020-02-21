@@ -229,18 +229,6 @@ QTransform KoGamutMask::viewToMaskTransform(quint8 viewSize)
     return transform;
 }
 
-bool KoGamutMask::load()
-{
-    QFile file(filename());
-    if (file.size() == 0) return false;
-    if (!file.open(QIODevice::ReadOnly)) {
-        warnFlake << "Can't open file " << filename();
-        return false;
-    }
-    bool res = loadFromDevice(&file);
-    file.close();
-    return res;
-}
 
 bool KoGamutMask::loadFromDevice(QIODevice *dev)
 {
@@ -335,18 +323,6 @@ bool KoGamutMask::loadFromDevice(QIODevice *dev)
 void KoGamutMask::setMaskShapes(QList<KoShape*> shapes)
 {
     setMaskShapesToVector(shapes, d->maskShapes);
-}
-
-bool KoGamutMask::save()
-{
-    QFile file(filename());
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-        return false;
-    }
-    saveToDevice(&file);
-    file.close();
-
-    return true;
 }
 
 QList<KoShape*> KoGamutMask::koShapes() const

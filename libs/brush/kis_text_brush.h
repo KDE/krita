@@ -22,13 +22,15 @@
 
 #include <QFont>
 
+#include <KoEphemeralResource.h>
+
 #include "kis_scaling_size_brush.h"
 #include "kritabrush_export.h"
 
 class KisTextBrushesPipe;
 
 
-class BRUSH_EXPORT KisTextBrush : public KisScalingSizeBrush
+class BRUSH_EXPORT KisTextBrush : public KoEphemeralResource<KisScalingSizeBrush>
 {
 
 public:
@@ -52,22 +54,6 @@ public:
 
     KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace,
         KisDabShape const&, const KisPaintInformation& info, double subPixelX, double subPixelY) const override;
-
-    bool load() override {
-        return false;
-    }
-
-    bool loadFromDevice(QIODevice *) override {
-        return false;
-    }
-
-    bool save() override {
-        return false;
-    }
-
-    bool saveToDevice(QIODevice* ) const override {
-        return false;
-    }
 
     void setText(const QString& txt);
     QString text(void) const;

@@ -87,17 +87,6 @@ KoResourceSP KoSegmentGradient::clone() const
     return KoResourceSP(new KoSegmentGradient(*this));
 }
 
-bool KoSegmentGradient::load()
-{
-    QFile file(filename());
-    if (!file.open(QIODevice::ReadOnly)) {
-        warnPigment << "Can't open file " << filename();
-        return false;
-    }
-    bool res = loadFromDevice(&file);
-    file.close();
-    return res;
-}
 
 bool KoSegmentGradient::loadFromDevice(QIODevice *dev)
 {
@@ -198,20 +187,6 @@ bool KoSegmentGradient::loadFromDevice(QIODevice *dev)
         return false;
     }
 
-}
-
-bool KoSegmentGradient::save()
-{
-    QFile file(filename());
-
-    if (!file.open(QIODevice::WriteOnly)) {
-        return false;
-    }
-
-    saveToDevice(&file);
-    file.close();
-
-    return true;
 }
 
 bool KoSegmentGradient::saveToDevice(QIODevice *dev) const

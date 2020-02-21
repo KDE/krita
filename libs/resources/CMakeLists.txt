@@ -33,6 +33,8 @@ set(kritaresources_LIB_SRCS
     KoMD5Generator.cpp
     KoResourcePaths.cpp
 
+    ResourceDebug.cpp
+
     kconfigini.cpp
     kconfigdata.cpp
     kconfigbackend.cpp

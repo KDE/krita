@@ -36,19 +36,19 @@ QString KisPredefinedBrushFactory::id() const
 
 KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefinition, KisResourcesInterfaceSP resourcesInterface)
 {
-    auto resourceStorage = resourcesInterface->source<KisBrush>(ResourceType::Brushes);
+    auto resourceSourceAdapter = resourcesInterface->source<KisBrush>(ResourceType::Brushes);
 
     const QString brushFileName = brushDefinition.attribute("filename", "");
-    KisBrushSP brush = resourceStorage.resourceForFilename(brushFileName);
+    KisBrushSP brush = resourceSourceAdapter.resourceForFilename(brushFileName);
 
     //Fallback for files that still use the old format
     if (!brush) {
         QFileInfo info(brushFileName);
-        brush = resourceStorage.resourceForFilename(info.fileName());
+        brush = resourceSourceAdapter.resourceForFilename(info.fileName());
     }
 
     if (!brush) {
-        brush = resourceStorage.fallbackResource();
+        brush = resourceSourceAdapter.fallbackResource();
     }
 
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(brush, 0);

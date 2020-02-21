@@ -22,41 +22,32 @@
 #include <brushengine/kis_paintop_factory.h>
 #include <brushengine/kis_paintop_settings.h>
 #include <kis_icon.h>
+#include <KisCppQuirks.h>
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
 
-#include <boost/type_traits.hpp>
-#include <boost/utility/enable_if.hpp>
+namespace detail {
+
+template< class, class = std::void_t<> >
+struct has_preinitialize_statically : std::false_type { };
+
+template< class T >
+struct has_preinitialize_statically<T, std::void_t<decltype(std::declval<T>().preinitializeOpStatically(KisPaintOpSettingsSP()))>> : std::true_type { };
+
 
 template <typename T>
-struct __impl_has_typedef_needs_preinitialization {
-    typedef char yes[1];
-    typedef char no[2];
-
-    template <typename C>
-    static yes& test(typename C::needs_preinitialization*);
-
-    template <typename>
-    static no& test(...);
-
-    static const bool value = sizeof(test<T>(0)) == sizeof(yes);
-};
-
-template <typename T>
-struct has_typedef_needs_preinitialization
-        : public boost::integral_constant <bool, __impl_has_typedef_needs_preinitialization<T>::value>
-{};
-
-template <typename T>
-void preinitializeOpStatically(const KisPaintOpSettingsSP settings, typename boost::enable_if<has_typedef_needs_preinitialization<T> >::type * = 0)
+void preinitializeOpStatically(const KisPaintOpSettingsSP settings, typename std::enable_if_t<has_preinitialize_statically<T>::value> * = 0)
 {
     T::preinitializeOpStatically(settings);
 }
 
 template <typename T>
-void preinitializeOpStatically(const KisPaintOpSettingsSP settings, typename boost::disable_if<has_typedef_needs_preinitialization<T> >::type * = 0)
+void preinitializeOpStatically(const KisPaintOpSettingsSP settings, typename std::enable_if_t<!has_preinitialize_statically<T>::value> * = 0)
 {
     Q_UNUSED(settings);
+    // noop
+}
+
 }
 
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
@@ -86,7 +77,7 @@ public:
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
     void preinitializePaintOpIfNeeded(const KisPaintOpSettingsSP settings) override {
-        preinitializeOpStatically<Op>(settings);
+        detail::preinitializeOpStatically<Op>(settings);
     }
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 

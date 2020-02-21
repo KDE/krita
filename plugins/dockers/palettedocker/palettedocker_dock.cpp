@@ -217,9 +217,13 @@ void PaletteDockerDock::unsetCanvas()
     m_ui->paletteView->setDisplayRenderer(0);
     m_paletteEditor->setView(0);
 
-    m_currentColorSet = m_rServer->resourceByFilename(m_currentColorSet->filename());
     if (!m_currentColorSet) {
         slotSetColorSet(0);
+    } else {
+        m_currentColorSet = m_rServer->resourceByFilename(m_currentColorSet->filename());
+        if (!m_currentColorSet) {
+            slotSetColorSet(0);
+        }
     }
 }
 

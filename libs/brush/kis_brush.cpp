@@ -191,10 +191,7 @@ KisBrush::~KisBrush()
 
 QImage KisBrush::brushTipImage() const
 {
-    //TODO: what happens there?
-    if (d->brushTipImage.isNull()) {
-        //const_cast<KisBrush*>(this)->load();
-    }
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!d->brushTipImage.isNull());
     return d->brushTipImage;
 }
 

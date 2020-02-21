@@ -62,15 +62,19 @@ public:
         return KoResourceSP(new DummyResource(*this));
     }
 
-    bool load() override
+    bool load(KisResourcesInterfaceSP resourcesInterface) override
     {
+        Q_UNUSED(resourcesInterface);
+
         Q_ASSERT(false);
         setValid(true);
         return true;
     }
 
-    bool loadFromDevice(QIODevice *dev) override
+    bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override
     {
+        Q_UNUSED(resourcesInterface);
+
         if (!dev->isOpen()) {
             dev->open(QIODevice::ReadOnly);
         }

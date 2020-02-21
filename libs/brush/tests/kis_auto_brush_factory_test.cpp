@@ -7,6 +7,7 @@
 #include "kis_mask_generator.h"
 #include <KoColor.h>
 #include <brushengine/kis_paint_information.h>
+#include <KisGlobalResourcesInterface.h>
 
 void KisAutoBrushFactoryTest::testXMLClone()
 {
@@ -19,7 +20,7 @@ void KisAutoBrushFactoryTest::testXMLClone()
     QDomDocument d;
     QDomElement e = d.createElement("Brush");
     brush->toXML(d, e);
-    KisBrushSP clone = KisAutoBrushFactory().createBrush(e);
+    KisBrushSP clone = KisAutoBrushFactory().createBrush(e, KisGlobalResourcesInterface::instance());
 
     // Test that the clone has the same settings as the original brush.
     QCOMPARE(brush->width(), clone->width());

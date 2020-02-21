@@ -35,6 +35,7 @@
 #include <KisViewManager.h>
 
 #include "testutil.h"
+#include <KisGlobalResourcesInterface.h>
 
 
 KisImageSP utils::createImage(KisUndoStore *undoStore, const QSize &imageSize) {
@@ -97,7 +98,7 @@ KoCanvasResourceProvider* utils::createResourceManager(KisImageWSP image,
     if (!presetFileName.isEmpty()) {
         QString fullFileName = TestUtil::fetchDataFileLazy(presetFileName);
         preset = KisPaintOpPresetSP(new KisPaintOpPreset(fullFileName));
-        bool presetValid = preset->load();
+        bool presetValid = preset->load(KisGlobalResourcesInterface::instance());
         Q_ASSERT(presetValid); Q_UNUSED(presetValid);
 
         i.setValue(preset);

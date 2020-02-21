@@ -38,7 +38,7 @@
 #include "layerstyles/kis_layer_style_projection_plane.h"
 #include "kis_psd_layer_style.h"
 #include "kis_paint_device_debug_utils.h"
-
+#include <KisGlobalResourcesInterface.h>
 
 void KisLayerStyleProjectionPlaneTest::test(KisPSDLayerStyleSP style, const QString testName)
 {
@@ -339,7 +339,7 @@ void KisLayerStyleProjectionPlaneTest::testPatternOverlay()
     QString fileName(TestUtil::fetchDataFileLazy("pattern.pat"));
 
     KoPatternSP pattern(new KoPattern(fileName));
-    QVERIFY(pattern->load());
+    QVERIFY(pattern->load(KisGlobalResourcesInterface::instance()));
 
     style->patternOverlay()->setPattern(pattern);
 
@@ -370,7 +370,7 @@ void KisLayerStyleProjectionPlaneTest::testStroke()
 
     QString fileName(TestUtil::fetchDataFileLazy("pattern.pat"));
     KoPatternSP pattern(new KoPattern(fileName));
-    QVERIFY(pattern->load());
+    QVERIFY(pattern->load(KisGlobalResourcesInterface::instance()));
     style->stroke()->setPattern(pattern);
     style->stroke()->setFillType(psd_fill_pattern);
 
@@ -451,7 +451,7 @@ void KisLayerStyleProjectionPlaneTest::testBevel()
 
     QString fileName(TestUtil::fetchDataFileLazy("pattern.pat"));
     KoPatternSP pattern(new KoPattern(fileName));
-    QVERIFY(pattern->load());
+    QVERIFY(pattern->load(KisGlobalResourcesInterface::instance()));
 
     style->bevelAndEmboss()->setTexturePattern(pattern);
 

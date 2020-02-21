@@ -36,6 +36,7 @@
 #include <kis_action_manager.h>
 #include "KisMainWindow.h"
 #include "kis_selection_mask.h"
+#include <KisGlobalResourcesInterface.h>
 
 namespace TestUtil
 {
@@ -62,7 +63,7 @@ public:
         view = new KisViewManager(mainWindow, mainWindow->actionCollection());
 
         KoPatternSP newPattern(new KoPattern(fetchDataFileLazy("HR_SketchPaper_01.pat")));
-        newPattern->load();
+        newPattern->load(KisGlobalResourcesInterface::instance());
         Q_ASSERT(newPattern->valid());
         view->canvasResourceProvider()->slotPatternActivated(newPattern);
 

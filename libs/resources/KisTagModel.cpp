@@ -106,6 +106,7 @@ QVariant KisTagModel::data(const QModelIndex &index, int role) const
             case Qt::ToolTipRole:   // fallthrough
             case Qt::StatusTipRole: // fallthrough
             case Qt::WhatsThisRole:
+            case Qt::UserRole + Name:
                 return i18n("All");
             case Qt::UserRole + Id:
                 return QString::number(KisTagModel::All);
@@ -132,6 +133,7 @@ QVariant KisTagModel::data(const QModelIndex &index, int role) const
             case Qt::ToolTipRole:   // fallthrough
             case Qt::StatusTipRole: // fallthrough
             case Qt::WhatsThisRole:
+            case Qt::UserRole + Name:
                 return i18n("All untagged");
             case Qt::UserRole + Id:
                 return QString::number(KisTagModel::AllUntagged);
@@ -166,6 +168,8 @@ QVariant KisTagModel::data(const QModelIndex &index, int role) const
                 return d->query.value("comment");
             case Qt::UserRole + Id:
                 return d->query.value("id");
+            case Qt::UserRole + Name:
+                return d->query.value("name");
             case Qt::UserRole + Url:
                 return d->query.value("url");
             case Qt::UserRole + ResourceType:

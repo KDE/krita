@@ -23,6 +23,13 @@
 #include <unordered_map>
 #include <memory>
 
+#include <QReadWriteLock>
+#include <QReadLocker>
+#include <QWriteLocker>
+
+#include "kis_assert.h"
+
+
 namespace std
 {
     template<> struct hash<QString>
@@ -39,6 +46,18 @@ public:
     mutable std::unordered_map<QString,
                        std::unique_ptr<
                            KisResourcesInterface::ResourceSourceAdapter>> sourceAdapters;
+    mutable QReadWriteLock lock;
+
+    KisResourcesInterface::ResourceSourceAdapter* findExistingSource(const QString &type) const {
+        auto it = this->sourceAdapters.find(type);
+        if (it != this->sourceAdapters.end()) {
+            KIS_ASSERT(bool(it->second));
+
+            return it->second.get();
+        }
+
+        return nullptr;
+    }
 };
 
 #endif // KisResourcesInterface_P_H

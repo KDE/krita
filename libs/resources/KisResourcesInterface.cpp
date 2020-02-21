@@ -43,17 +43,28 @@ KisResourcesInterface::ResourceSourceAdapter &KisResourcesInterface::source(cons
 {
     Q_D(const KisResourcesInterface);
 
-    auto it = d->sourceAdapters.find(type);
-    if (it != d->sourceAdapters.end()) {
-        return *(it->second);
+    // use double-locking for fetching the source
+
+    ResourceSourceAdapter *source = 0;
+
+    {
+        QReadLocker l(&d->lock);
+        source = d->findExistingSource(type);
+        if (source) return *source;
     }
 
-    ResourceSourceAdapter *source = createSourceImpl(type);
+    {
+        QWriteLocker l(&d->lock);
+        source = d->findExistingSource(type);
+        if (source) return *source;
+
+        source = createSourceImpl(type);
+
+        std::unique_ptr<ResourceSourceAdapter> sourcePtr(source);
+        d->sourceAdapters.emplace(type, std::move(sourcePtr));
+    }
+
     KIS_ASSERT(source);
-
-    std::unique_ptr<ResourceSourceAdapter> sourcePtr(source);
-    d->sourceAdapters.emplace(type, std::move(sourcePtr));
-
     return *source;
 }
 

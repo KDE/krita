@@ -41,10 +41,8 @@ void KisStorageChooserDelegate::paint(QPainter *painter, const QStyleOptionViewI
 
     painter->save();
 
-    QString location = index.data(Qt::UserRole + KisStorageModel::Location).value<QString>();
-    location = location.split("/").last();
-    location = location.split(".").first();
-    location = location.split("_").join(" ");
+    QString name = index.siblingAtColumn(KisStorageModel::DisplayName).data(Qt::DisplayRole).value<QString>();
+    QString location = index.siblingAtColumn(KisStorageModel::Location).data(Qt::DisplayRole).value<QString>();
     bool active = index.data(Qt::UserRole + KisStorageModel::Active).value<bool>();
     QString storageType = index.data(Qt::UserRole + KisStorageModel::StorageType).value<QString>();
 
@@ -64,7 +62,7 @@ void KisStorageChooserDelegate::paint(QPainter *painter, const QStyleOptionViewI
             thumbnail = koIcon("select-all").pixmap(option.decorationSize).toImage();
         }
         else if (storageType == "Memory") {
-            if (location.startsWith("{")) {
+            if (location != "memory") {
                 thumbnail = koIcon("document-new").pixmap(option.decorationSize).toImage();
             } else {
                 thumbnail = koIcon("drive-harddisk").pixmap(option.decorationSize).toImage();
@@ -94,14 +92,14 @@ void KisStorageChooserDelegate::paint(QPainter *painter, const QStyleOptionViewI
     QRect text = option.rect;
     text.setLeft(text.left()+option.decorationSize.width()+8);
     text.setTop(text.top()+4);
-    painter->drawText(text, 0, location);
+    painter->drawText(text, Qt::TextWordWrap, name.split("_").join(" "));
 
     painter->restore();
 }
 
 QSize KisStorageChooserDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    int w = 400;
+    int w = 200;
     int h = option.decorationSize.height()+8;
     return QSize(w, h);
 }

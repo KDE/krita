@@ -892,13 +892,15 @@ void KisAslLayerStyleSerializer::assignPatternObject(const QString &patternUuid,
     KoPatternSP pattern = m_patternsStore[patternUuid];
 
     if (!pattern) {
-        warnKrita << "WARNING: ASL style contains non-existent pattern reference!";
+        warnKrita << "WARNING: ASL style contains non-existent pattern reference! Searching for uuid: "
+                  << patternUuid << " (name: " << patternName << ")";
 
         QImage dumbImage(32, 32, QImage::Format_ARGB32);
         dumbImage.fill(Qt::red);
         KoPatternSP dumbPattern(new KoPattern(dumbImage, "invalid", ""));
         registerPatternObject(dumbPattern, patternUuid + QString("_invalid"));
         pattern = dumbPattern;
+        m_isValid = false;
     }
 
     setPattern(pattern);

@@ -24,6 +24,11 @@
 
 #include "kritaresources_export.h"
 
+/**
+ * KisResourceTypeModel provides a view on the various resource types
+ * defined in the database. This should be the same list as available
+ * from KisResourceLoaderRegistry. 
+ */
 class KRITARESOURCES_EXPORT KisResourceTypeModel : public QAbstractTableModel
 {
     Q_OBJECT

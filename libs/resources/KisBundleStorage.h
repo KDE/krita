@@ -23,6 +23,11 @@
 #include <KisStoragePlugin.h>
 #include "kritaresources_export.h"
 
+/**
+ * KisBundleStorage is KisStoragePlugin that can load resources 
+ * from bundles. It can also manage overrridden resources from bundles,
+ * which are not stored in the bundles themselves.
+ */
 class KRITARESOURCES_EXPORT KisBundleStorage : public KisStoragePlugin
 {
 public:
@@ -37,7 +42,7 @@ public:
     QSharedPointer<KisResourceStorage::TagIterator> tags(const QString &resourceType) override;
     QImage thumbnail() const override;
     QStringList metaDataKeys() const override;
-    QString metaData(const QString &key) const override;
+    QVariant metaData(const QString &key) const override;
 
     /// Add a tag to this bundle: note, the bundle itself should NOT be rewritten, but we need to
     /// put these tags in a place in the file system

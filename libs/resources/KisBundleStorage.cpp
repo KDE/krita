@@ -204,7 +204,7 @@ QStringList KisBundleStorage::metaDataKeys() const
 
 }
 
-QString KisBundleStorage::metaData(const QString &key) const
+QVariant KisBundleStorage::metaData(const QString &key) const
 {
     return d->bundle->metaData(key);
 }

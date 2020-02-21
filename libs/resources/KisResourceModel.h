@@ -27,6 +27,10 @@
 #include <KoResource.h>
 #include <KisTag.h>
 
+/**
+ * KisAbstractResourceModel defines the interface for accessing resources
+ * that is used in KisResourceModel and the various filter/proxy models
+ */
 class KRITARESOURCES_EXPORT KisAbstractResourceModel {
 
 public:
@@ -79,6 +83,16 @@ public:
     virtual bool updateResource(KoResourceSP resource) = 0;
 
     /**
+     * @brief renameResource name the given resource. The resource will have its
+     * name field reset, will be saved to the storage and there will be a new
+     * version created in the database.
+     * @param resource The resource to rename
+     * @param name The new name
+     * @return true if the operation succeeded.
+     */
+    virtual bool renameResource(KoResourceSP resource, const QString &name) = 0;
+
+    /**
      * @brief removeResource
      * @param resource
      * @return
@@ -91,6 +105,8 @@ public:
      * @return
      */
     virtual bool setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata) = 0;
+
+
 };
 
 /**
@@ -114,7 +130,7 @@ public:
         Name,
         Filename,
         Tooltip,
-        Image,
+        Thumbnail,
         Status,
         Location,
         ResourceType,
@@ -178,9 +194,9 @@ public:
     bool importResourceFile(const QString &filename) override;
     bool addResource(KoResourceSP resource, const QString &storageId = QString()) override;
     bool updateResource(KoResourceSP resource) override;
+    bool renameResource(KoResourceSP resource, const QString &name) override;
     bool setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata) override;
     QVector<KisTagSP> tagsForResource(int resourceId) const;
-
 
 Q_SIGNALS:
 

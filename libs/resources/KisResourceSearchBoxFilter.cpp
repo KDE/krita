@@ -99,6 +99,11 @@ bool KisResourceSearchBoxFilter::matchesResource(const QString &resourceName)
     return true;
 }
 
+bool KisResourceSearchBoxFilter::isEmpty()
+{
+    return d->filter.isEmpty();
+}
+
 void KisResourceSearchBoxFilter::clearFilterData()
 {
 

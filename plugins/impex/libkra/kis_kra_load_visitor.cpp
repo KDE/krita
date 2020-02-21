@@ -29,8 +29,8 @@
 #include <QByteArray>
 #include <QMessageBox>
 
-#include <KoHashGenerator.h>
-#include <KoHashGeneratorProvider.h>
+#include <KoMD5Generator.h>
+#include <KoMD5Generator.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
 #include <KoFileDialog.h>
@@ -567,8 +567,7 @@ bool KisKraLoadVisitor::loadProfile(KisPaintDeviceSP device, const QString& loca
         dbgFile << "Profile size: " << data.size() << " " << m_store->atEnd() << " " << m_store->device()->bytesAvailable() << " " << read;
         m_store->close();
 
-        KoHashGenerator *hashGenerator = KoHashGeneratorProvider::instance()->getGenerator("MD5");
-        QByteArray hash = hashGenerator->generateHash(data);
+        QByteArray hash = KoMD5Generator::generateHash(data);
 
         if (m_profileCache.contains(hash)) {
             if (device->setProfile(m_profileCache[hash], 0)) {

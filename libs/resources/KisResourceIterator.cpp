@@ -71,7 +71,7 @@ QString KisResourceItem::tooltip()
 QImage KisResourceItem::thumbnail()
 {
     if (m_index.isValid()) {
-        return m_index.data(Qt::UserRole + KisResourceModel::Image).value<QImage>();
+        return m_index.data(Qt::UserRole + KisResourceModel::Thumbnail).value<QImage>();
     }
     return QImage();
 }

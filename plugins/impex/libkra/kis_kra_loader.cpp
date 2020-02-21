@@ -527,13 +527,14 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP image, const QStri
 
 void KisKraLoader::loadPalettes(KoStore *store, KisDocument *doc)
 {
+    qDebug() << ">>>> loadPalettes" << m_d->paletteFilenames;
     QList<KoColorSetSP> list;
     Q_FOREACH (const QString &filename, m_d->paletteFilenames) {
+        qDebug() << "loading palettes" << filename;
         KoColorSetSP newPalette(new KoColorSet(filename));
         store->open(m_d->imageName + PALETTE_PATH + filename);
         QByteArray data = store->read(store->size());
         newPalette->fromByteArray(data, KisGlobalResourcesInterface::instance());
-        newPalette->setIsGlobal(false);
         newPalette->setIsEditable(true);
         store->close();
         list.append(newPalette);

@@ -30,35 +30,32 @@
 #include <QStringList>
 #include <QList>
 #include <QFileInfo>
-#include <QDir>
 #include <QApplication>
 #include <QThread>
 #include <QMutex>
 #include <QMutexLocker>
-
+#include <QDir>
 #include <QTemporaryFile>
-#include <QDomDocument>
+
 #include "KoResource.h"
 #include "KoResourceServerObserver.h"
 #include "KoResourcePaths.h"
+#include "ksharedconfig.h"
+
 #include <KisResourceModel.h>
 #include <KisResourceModelProvider.h>
 #include <KisTagModelProvider.h>
 #include <kis_assert.h>
 #include <kis_debug.h>
 
-#include <kconfiggroup.h>
-#include <ksharedconfig.h>
-
-#include "kritawidgets_export.h"
-#include "WidgetsDebug.h"
+#include <ResourceDebug.h>
 
 class KoResource;
 
 /**
- * KoResourceServer manages the resources of one type. It stores,
- * loads and saves the resources. To keep track of changes the server
- * can be observed with a KoResourceServerObserver
+ * KoResourceServer is a shim around KisResourceModel. It knows
+ * nothing by its own, and does nothing on its own. It can only
+ * be used in the gui thread.
  */
 template <class T>
 class KoResourceServer
@@ -138,7 +135,7 @@ public:
         }
 
         if (!resource->valid()) {
-            warnWidgets << "Tried to add an invalid resource!";
+            warnResource << "Tried to add an invalid resource!";
             return false;
         }
 
@@ -217,7 +214,7 @@ public:
 
         QSharedPointer<T> resource = resourceByFilename(fi.fileName());
         if (!resource) {
-            warnWidgets << "Resource file do not exist ";
+            warnResource << "Resource file do not exist ";
             return;
         }
         removeResourceFromServer(resource);
@@ -315,7 +312,6 @@ public:
                 qDebug() << s;
             }
         }
-        qDebug() << "updateResource" << resource;
         m_resourceModel->updateResource(resource);
         notifyResourceChanged(resource);
     }
@@ -326,14 +322,6 @@ public:
             return QVector<KisTagSP>();
         }
         return m_resourceModel->tagsForResource(resource->resourceId());
-    }
-
-    QVector<KoResourceSP> resourcesForTag(KisTagSP tag) const
-    {
-        if (tag.isNull()) {
-            return QVector<KoResourceSP>();
-        }
-        return m_tagModel->resourcesForTag(tag->id());
     }
 
 protected:

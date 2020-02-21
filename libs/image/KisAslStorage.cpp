@@ -19,6 +19,9 @@
 
 #include "KisAslStorage.h"
 #include <KisResourceStorage.h>
+#include <KisResourceLoaderRegistry.h>
+#include <KisResourceLoader.h>
+#include <kis_psd_layer_style.h>
 
 #include <QFileInfo>
 
@@ -77,7 +80,6 @@ public:
         , m_aslSerializer(aslSerializer)
         , m_isLoaded(false)
     {
-
     }
 
     bool hasNext() const override
@@ -96,6 +98,9 @@ public:
 
             QHash<QString, KisPSDLayerStyleSP> layerStyles = const_cast<AslIterator*>(this)->m_aslSerializer->stylesHash();
         }
+        if (!m_aslSerializer->isValid()) {
+            return false;
+        }
         return m_patternsIterator->hasNext() ? true : m_stylesIterator->hasNext();
     }
     void next() override
@@ -105,12 +110,14 @@ public:
             m_patternsIterator->next();
             KoPatternSP currentPattern = m_patternsIterator->value();
             m_currentResource = currentPattern;
-            m_currentUuid = m_patternsIterator->value()->filename();
+            KIS_ASSERT(currentPattern);
+            m_currentUuid = currentPattern->filename();
         }
         else if (m_stylesIterator->hasNext()) {
             m_currentType = ResourceType::LayerStyles;
             KisPSDLayerStyleSP currentLayerStyle = m_stylesIterator->next();
             m_currentResource = currentLayerStyle;
+            KIS_ASSERT(currentLayerStyle);
             m_currentUuid = currentLayerStyle->filename();
         }
     }
@@ -142,7 +149,6 @@ KisAslStorage::KisAslStorage(const QString &location)
     : KisStoragePlugin(location)
     , m_aslSerializer(new KisAslLayerStyleSerializer())
 {
-
 }
 
 KisAslStorage::~KisAslStorage()

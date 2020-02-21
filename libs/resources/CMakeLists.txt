@@ -13,6 +13,7 @@ set(kritaresources_LIB_SRCS
     KisResourceModelProvider.cpp
     KisResourceTypeModel.cpp
     KisStorageModel.cpp
+    KisStorageFilterProxyModel.cpp
     KisResourceIterator.cpp
     KisResourceSearchBoxFilter.cpp
 
@@ -30,8 +31,9 @@ set(kritaresources_LIB_SRCS
     KoResourceBundle.cpp
     KoResourceBundleManifest.cpp
     KoMD5Generator.cpp
-    KoHashGeneratorProvider.cpp
     KoResourcePaths.cpp
+
+    ResourceDebug.cpp
 
     kconfigini.cpp
     kconfigdata.cpp

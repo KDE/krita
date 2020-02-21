@@ -23,6 +23,10 @@
 
 #include <QString>
 
+/**
+ * XXX: Apidox
+ * 
+ */
 class KRITARESOURCES_EXPORT KisResourceSearchBoxFilter
 {
 
@@ -31,6 +35,7 @@ public:
     KisResourceSearchBoxFilter();
     void setFilter(const QString& filter);
     bool matchesResource(const QString& resourceName);
+    bool isEmpty();
 
 private:
 

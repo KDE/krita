@@ -44,12 +44,12 @@ class KRITAPSD_EXPORT KisPSDLayerStyle : public KoEphemeralResource<KoResource>
 {
 
 public:
-    explicit KisPSDLayerStyle();
+    KisPSDLayerStyle(const QString& name = QString());
     virtual ~KisPSDLayerStyle();
     KisPSDLayerStyle(const KisPSDLayerStyle& rhs);
     KisPSDLayerStyle operator=(const KisPSDLayerStyle& rhs);
 
-    KoResourceSP clone() const;
+    KoResourceSP clone() const override;
 
     void clear();
 

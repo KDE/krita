@@ -25,9 +25,9 @@
 #include <QImage>
 #include <QBuffer>
 
-#include "KoHashGenerator.h"
-#include "KoHashGeneratorProvider.h"
 #include <kis_debug.h>
+#include "KoMD5Generator.h"
+
 
 struct Q_DECL_HIDDEN KoResource::Private {
     int version {0};
@@ -133,6 +133,15 @@ QImage KoResource::image() const
     return d->image;
 }
 
+void KoResource::updateThumbnail()
+{
+}
+
+QImage KoResource::thumbnail() const
+{
+    return image();
+}
+
 void KoResource::setImage(const QImage &image)
 {
     d->image = image;
@@ -153,14 +162,13 @@ void KoResource::setMD5(const QByteArray &md5)
 
 QByteArray KoResource::generateMD5() const
 {
-    KoHashGenerator *hashGenerator = KoHashGeneratorProvider::instance()->getGenerator("MD5");
     QByteArray hash;
     QByteArray ba;
     QBuffer buf(&ba);
     buf.open(QBuffer::WriteOnly);
     if (saveToDevice(&buf)) {
         buf.close();
-        hash = hashGenerator->generateHash(ba);
+        hash = KoMD5Generator::generateHash(ba);
     }
     else {
         qWarning() << "Could not create md5sum for resource" << d->filename;

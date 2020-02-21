@@ -295,14 +295,8 @@ QWidget* KisToolColorPicker::createOptionWidget()
         return m_optionsWidget;
     }
 
-    QList<KoColorSetSP> palettes = srv->resources();
-
-    Q_FOREACH (KoColorSetSP palette, palettes) {
-        if (palette) {
-            m_optionsWidget->cmbPalette->addSqueezedItem(palette->name());
-            m_palettes.append(palette);
-        }
-    }
+    m_optionsWidget->cmbPalette->setModel(srv->resourceModel());
+    m_optionsWidget->cmbPalette->setModelColumn(KisResourceModel::Name);
 
     return m_optionsWidget;
 }

@@ -31,7 +31,7 @@ public:
     KoResourceSP clone() const override;
 
     void storeCurrentWindows();
-    void restore();
+
 
     QString defaultFileExtension() const override;
 
@@ -46,6 +46,11 @@ protected:
     }
 
 private:
+
+    // Only KisPart should be able to call restore() to make sure it contains the pointer to it
+    void restore();
+    friend class KisPart;
+
     struct Private;
     QScopedPointer<Private> d;
 };

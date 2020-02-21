@@ -131,6 +131,7 @@ class KisMemoryStorage::Private {
 public:
     QHash<QString, QVector<KoResourceSP> > resources;
     QHash<QString, QVector<KisTagSP> > tags;
+    QMap<QString, QVariant> metadata;
 };
 
 
@@ -226,4 +227,23 @@ QSharedPointer<KisResourceStorage::ResourceIterator> KisMemoryStorage::resources
 QSharedPointer<KisResourceStorage::TagIterator> KisMemoryStorage::tags(const QString &resourceType)
 {
     return QSharedPointer<KisResourceStorage::TagIterator>(new MemoryTagIterator(d->tags[resourceType], resourceType));
+}
+
+void KisMemoryStorage::setMetaData(const QString &key, const QVariant &value)
+{
+    d->metadata[key] = value;
+}
+
+QStringList KisMemoryStorage::metaDataKeys() const
+{
+    return QStringList() << KisResourceStorage::s_meta_name;
+}
+
+QVariant KisMemoryStorage::metaData(const QString &key) const
+{
+    QVariant r;
+    if (d->metadata.contains(key)) {
+        r = d->metadata[key];
+    }
+    return r;
 }

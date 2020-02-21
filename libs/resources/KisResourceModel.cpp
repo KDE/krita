@@ -127,7 +127,7 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
                 return d->resourcesQuery.value("filename");
             case Tooltip:
                 return d->resourcesQuery.value("tooltip");
-            case Image:
+            case Thumbnail:
             {
                 QByteArray ba = d->resourcesQuery.value("thumbnail").toByteArray();
                 QBuffer buf(&ba);
@@ -149,7 +149,7 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
         }
         case Qt::DecorationRole:
         {
-            if (index.column() == Image) {
+            if (index.column() == Thumbnail) {
                 QByteArray ba = d->resourcesQuery.value("thumbnail").toByteArray();
                 QBuffer buf(&ba);
                 buf.open(QBuffer::ReadOnly);
@@ -175,7 +175,7 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
             return d->resourcesQuery.value("filename");
         case Qt::UserRole + Tooltip:
             return d->resourcesQuery.value("tooltip");
-        case Qt::UserRole + Image:
+        case Qt::UserRole + Thumbnail:
         {
             QByteArray ba = d->resourcesQuery.value("thumbnail").toByteArray();
             QBuffer buf(&ba);
@@ -257,7 +257,7 @@ QVariant KisResourceModel::headerData(int section, Qt::Orientation orientation, 
         case Tooltip:
             v = i18n("Tooltip");
             break;
-        case Image:
+        case Thumbnail:
             v = i18n("Image");
             break;
         case Status:
@@ -291,17 +291,8 @@ KoResourceSP KisResourceModel::resourceForIndex(QModelIndex index) const
 
     bool pos = const_cast<KisResourceModel*>(this)->d->resourcesQuery.seek(index.row());
     if (pos) {
-        QString storageLocation = d->resourcesQuery.value("location").toString();
-        QString filename = d->resourcesQuery.value("filename").toString();
-        resource = KisResourceLocator::instance()->resource(storageLocation, d->resourceType, filename);
-        resource->setResourceId(d->resourcesQuery.value("id").toInt());
-        resource->setVersion(d->resourcesQuery.value("version").toInt());
-        resource->setFilename(filename);
-        resource->setStorageLocation(storageLocation);
-        QString name = d->resourcesQuery.value("name").toString();
-        if (!name.isNull()) {
-            resource->setName(name);
-        }
+        int id = d->resourcesQuery.value("id").toInt();
+        resource = resourceForId(id);
     }
     return resource;
 }
@@ -500,7 +491,21 @@ bool KisResourceModel::updateResource(KoResourceSP resource)
     //qDebug() << "KisResourceModel::updateResource" << s_i8 << d->resourceType; s_i8++;
 
     if (!KisResourceLocator::instance()->updateResource(d->resourceType, resource)) {
-        qWarning() << "Failed to update resource";
+        qWarning() << "Failed to update resource" << resource;
+        return false;
+    }
+    return resetQuery();
+}
+
+bool KisResourceModel::renameResource(KoResourceSP resource, const QString &name)
+{
+    if (!resource || !resource->valid() || name.isEmpty()) {
+        qWarning() << "Cannot rename resources. Resource is NULL or not valid or name is empty";
+        return false;
+    }
+    resource->setName(name);
+    if (!KisResourceLocator::instance()->updateResource(d->resourceType, resource)) {
+        qWarning() << "Failed to rename resource" << resource << name;
         return false;
     }
     return resetQuery();

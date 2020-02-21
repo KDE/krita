@@ -49,8 +49,9 @@ public:
 
     virtual QImage thumbnail() const { return QImage(); }
 
+    virtual void setMetaData(const QString &key, const QVariant &value) {Q_UNUSED(key); Q_UNUSED(value);}
     virtual QStringList metaDataKeys() const { return QStringList(); }
-    virtual QString metaData(const QString &key) const { Q_UNUSED(key); return QString(); }
+    virtual QVariant metaData(const QString &key) const { Q_UNUSED(key); return QString(); }
 
     QDateTime timestamp();
 

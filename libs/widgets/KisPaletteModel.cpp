@@ -30,6 +30,8 @@
 #include <KoColorModelStandardIds.h>
 #include <resources/KoColorSet.h>
 #include <KoColorDisplayRendererInterface.h>
+#include <KisResourceModel.h>
+#include <KisResourceModelProvider.h>
 
 KisPaletteModel::KisPaletteModel(QObject* parent)
     : QAbstractTableModel(parent)
@@ -158,9 +160,7 @@ bool KisPaletteModel::addEntry(const KisSwatch &entry, const QString &groupName)
     beginInsertRows(QModelIndex(), rowCount(), rowCount() + 1);
     m_colorSet->add(entry, groupName);
     endInsertRows();
-    if (m_colorSet->isGlobal()) {
-        m_colorSet->save();
-    }
+    saveModification();
     emit sigPaletteModified();
     return true;
 }
@@ -192,7 +192,7 @@ void KisPaletteModel::removeGroup(const QString &groupName, bool keepColors)
     resetGroupNameRows();
     endRemoveRows();
     beginInsertRows(QModelIndex(),
-		    insertStart, m_colorSet->getGlobalGroup()->rowCount());
+    insertStart, m_colorSet->getGlobalGroup()->rowCount());
     endInsertRows();
     emit sigPaletteModified();
 }
@@ -234,9 +234,7 @@ bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
             resetGroupNameRows();
             endMoveRows();
             emit sigPaletteModified();
-            if (m_colorSet->isGlobal()) {
-                m_colorSet->save();
-            }
+            saveModification();
         }
         return true;
     }
@@ -287,9 +285,7 @@ bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
             }
             setEntry(entry, finalIndex);
             emit sigPaletteModified();
-            if (m_colorSet->isGlobal()) {
-                m_colorSet->save();
-            }
+            saveModification();
         }
     }
 
@@ -347,9 +343,7 @@ void KisPaletteModel::setEntry(const KisSwatch &entry,
     group->setEntry(entry, index.column(), rowNumberInGroup(index.row()));
     emit sigPaletteModified();
     emit dataChanged(index, index);
-    if (m_colorSet->isGlobal()) {
-        m_colorSet->save();
-    }
+    saveModification();
 }
 
 bool KisPaletteModel::renameGroup(const QString &groupName, const QString &newName)
@@ -468,6 +462,13 @@ void KisPaletteModel::setDisplayRenderer(const KoColorDisplayRendererInterface *
     } else {
         m_displayRenderer = KoDumbColorDisplayRenderer::instance();
     }
+}
+
+void KisPaletteModel::saveModification()
+{
+    qDebug() << "saving modification in palette model" << m_colorSet->filename() << m_colorSet->storageLocation();
+    KisResourceModel *model = KisResourceModelProvider::resourceModel(m_colorSet->resourceType().first);
+    model->updateResource(m_colorSet);
 }
 
 void KisPaletteModel::slotDisplayConfigurationChanged()

@@ -26,7 +26,7 @@ Note: on all operating systems the entire procedure is done in a terminal window
 3. Make sure you have a compiler:
     * Linux: gcc, minimum version 4.8
     * OSX: clang, you need to install xcode for this
-    * Windows: mingw-w64 7.3 (by mingw-builds): https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/
+    * Windows: mingw-w64 7.3 (by mingw-builds): https://files.kde.org/krita/build/x86_64-7.3.0-release-posix-seh-rt_v5-rev0.7z
         * For threading, select posix.
         * For exceptions, select seh (64-bit) or dwarf (32-bit).
         * Install mingw to something like C:\mingw; the full path must not contain any spaces.

@@ -27,22 +27,22 @@
 #include <QAction>
 #include <QPainter>
 
-#include <KisPaletteListWidget.h>
+#include <KisPaletteChooser.h>
 #include <KisResourceItemView.h>
 #include <KisResourceItemChooser.h>
 #include <KoColorSet.h>
 
-struct KisPaletteListWidgetPrivate
+struct KisPaletteChooserPrivate
 {
     class View;
     class Delegate;
     class Model;
-    KisPaletteListWidgetPrivate(KisPaletteListWidget *);
-    virtual ~KisPaletteListWidgetPrivate();
+    KisPaletteChooserPrivate(KisPaletteChooser *);
+    virtual ~KisPaletteChooserPrivate();
 
     bool allowModification;
 
-    QPointer<KisPaletteListWidget> c;
+    QPointer<KisPaletteChooser> c;
 
     QSharedPointer<KisResourceItemChooser> itemChooser;
 
@@ -55,7 +55,7 @@ struct KisPaletteListWidgetPrivate
     QScopedPointer<QAction> actRemove;
 };
 
-class KisPaletteListWidgetPrivate::Delegate : public QAbstractItemDelegate
+class KisPaletteChooserPrivate::Delegate : public QAbstractItemDelegate
 {
 public:
     Delegate(QObject *);

@@ -127,6 +127,7 @@ private:
     friend class TestResourceModel;
     friend class Resource;
     friend class KisResourceCacheDb;
+    friend class KisStorageFilterProxyModel;
 
     /// @return true if the resource is present in the cache, false if it hasn't been loaded
     bool resourceCached(QString storageLocation, const QString &resourceType, const QString &filename) const;
@@ -194,7 +195,36 @@ private:
      */
     QMap<QString, QVariant> metaDataForResource(int id) const;
 
+    /**
+     * @brief setMetaDataForResource
+     * @param id
+     * @param map
+     * @return
+     */
     bool setMetaDataForResource(int id, QMap<QString, QVariant> map) const;
+
+    /**
+     * @brief metaDataForStorage
+     * @param storage
+     * @return
+     */
+    QMap<QString, QVariant> metaDataForStorage(const QString &storageLocation) const;
+
+    /**
+     * @brief setMetaDataForStorage
+     * @param storage
+     * @param map
+     */
+    void setMetaDataForStorage(const QString &storageLocation, QMap<QString, QVariant> map) const;
+
+    /**
+     * @brief storageContainsResourceByFile
+     * @param storageLocation
+     * @param filename
+     * @return
+     */
+    bool storageContainsResourceByFile(const QString &storageLocation, const QString &resourceType, const QString &filename) const;
+
 
     KisResourceLocator(QObject *parent);
     KisResourceLocator(const KisResourceLocator&);
@@ -227,7 +257,7 @@ private:
         QString storageLocation;
         QString resourceType;
         QString resourceFileName;
-    };
+     };
 
     ResourceStorage getResourceStorage(int resourceId) const;
     QString makeStorageLocationAbsolute(QString storageLocation) const;

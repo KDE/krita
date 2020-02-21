@@ -41,7 +41,7 @@
 #include <WidgetsDebug.h>
 #include <KoResourceServer.h>
 #include <KisPopupButton.h>
-#include <KisPaletteListWidget.h>
+#include <KisPaletteChooser.h>
 #include <KisPaletteComboBox.h>
 
 #include <resources/KoColorSet.h>
@@ -56,7 +56,7 @@ public:
     KoColorSetSP colorSet;
 
     KisPaletteView *paletteView;
-    KisPaletteListWidget *paletteChooser;
+    KisPaletteChooser *paletteChooser;
     KisPopupButton *paletteChooserButton;
 
     QVBoxLayout *mainLayout;

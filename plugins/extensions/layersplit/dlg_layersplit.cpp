@@ -47,7 +47,7 @@ DlgLayerSplit::DlgLayerSplit()
     m_page->intFuzziness->setRange(0, 200);
     m_page->intFuzziness->setSingleStep(1);
 
-    m_colorSetChooser = new KisPaletteListWidget();
+    m_colorSetChooser = new KisPaletteChooser();
     m_page->paletteChooser->setPopupWidget(m_colorSetChooser);
     connect(m_colorSetChooser, SIGNAL(sigPaletteSelected(KoColorSetSP)), this, SLOT(slotSetPalette(KoColorSetSP)));
 

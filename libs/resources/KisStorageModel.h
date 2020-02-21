@@ -25,6 +25,11 @@
 #include "KisResourceStorage.h"
 #include "kritaresources_export.h"
 
+/**
+ * KisStorageModel provides a model of all registered storages, like
+ * the folder storages, the bundle storages or the memory storages. Note
+ * that inactive storages are also part of this model.
+ */
 class KRITARESOURCES_EXPORT KisStorageModel : public QAbstractTableModel
 {
 public:
@@ -36,7 +41,9 @@ public:
         TimeStamp,
         PreInstalled,
         Active,
-        Thumbnail
+        Thumbnail,
+        DisplayName,
+        MetaData
     };
 
     static KisStorageModel * instance();
@@ -50,9 +57,11 @@ public:
     bool setData(const QModelIndex &index, const QVariant &value, int role) override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 
-    KisResourceStorageSP storageForId(const QModelIndex &index) const;
+    KisResourceStorageSP storageForIndex(const QModelIndex &index) const;
 
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+
+    bool resetQuery();
 
 private:
 

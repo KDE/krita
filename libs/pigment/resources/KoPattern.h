@@ -45,7 +45,7 @@ public:
 
     KoPattern(const KoPattern &rhs);
     KoPattern& operator=(const KoPattern& rhs);
-    KoResourceSP clone() const;
+    KoResourceSP clone() const override;
 
 
 public:

@@ -90,6 +90,11 @@ public:
     KisDocument *createDocument() const;
 
     /**
+     * create a throwaway empty document. The document does not register a resource storage
+     */
+    KisDocument *createTemporaryDocument() const;
+
+    /**
      * Add the specified document to the list of documents this KisPart manages.
      */
     void addDocument(KisDocument *document);
@@ -244,6 +249,7 @@ public:
      * Restores a saved session by name
      */
     bool restoreSession(const QString &sessionName);
+    bool restoreSession(KisSessionResourceSP session);
 
     void setCurrentSession(KisSessionResourceSP session);
 

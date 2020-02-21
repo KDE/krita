@@ -265,12 +265,13 @@ bool KisResourceLocator::updateResource(const QString &resourceType, const KoRes
 {
     QString storageLocation = makeStorageLocationAbsolute(resource->storageLocation());
 
+    qDebug() << ">>>>>>>>>>>>>>>> storageLocation"<< storageLocation << "resource storage location" << resource->storageLocation();
+
     Q_ASSERT(d->storages.contains(storageLocation));
     Q_ASSERT(resource->resourceId() > -1);
 
     KisResourceStorageSP storage = d->storages[storageLocation];
-
-
+    resource->updateThumbnail();
     int version = resource->version();
 
     // This increments the version in the resource
@@ -310,16 +311,73 @@ bool KisResourceLocator::setMetaDataForResource(int id, QMap<QString, QVariant> 
     return KisResourceCacheDb::updateMetaDataForId(map, id, "resources");
 }
 
+QMap<QString, QVariant> KisResourceLocator::metaDataForStorage(const QString &storageLocation) const
+{
+    QMap<QString, QVariant> metadata;
+    if (!d->storages.contains(makeStorageLocationAbsolute(storageLocation))) {
+        qWarning() << storageLocation << "not in" << d->storages.keys();
+        return metadata;
+    }
+
+    KisResourceStorageSP st = d->storages[makeStorageLocationAbsolute(storageLocation)];
+
+    if (d->storages[makeStorageLocationAbsolute(storageLocation)].isNull()) {
+        return metadata;
+    }
+
+    Q_FOREACH(const QString key, st->metaDataKeys()) {
+        metadata[key] = st->metaData(key);
+    }
+    return metadata;
+}
+
+void KisResourceLocator::setMetaDataForStorage(const QString &storageLocation, QMap<QString, QVariant> map) const
+{
+    Q_ASSERT(d->storages.contains(storageLocation));
+    Q_FOREACH(const QString &key, map.keys()) {
+        d->storages[storageLocation]->setMetaData(key, map[key]);
+    }
+}
+
+bool KisResourceLocator::storageContainsResourceByFile(const QString &storageLocation, const QString &resourceType, const QString &filename) const
+{
+    QSqlQuery q;
+    if (!q.prepare("SELECT *\n"
+                   "FROM   storages\n"
+                   ",      resources\n"
+                   ",      resource_types\n"
+                   "WHERE  resources.filename = :filename\n"
+                   "AND    resources.storage_id = storages.id\n"
+                   "AND    storages.location = :storage_location\n"
+                   "AND    resources.resource_type_id = resource_types.id\n"
+                   "AND    resource_types.name = :resource_type"))
+    {
+        qWarning() << "Could not prepare storageCOntainsResourceByFile query" << q.lastError();
+        return false;
+    }
+
+    q.bindValue(":filename", filename);
+    q.bindValue(":storage_location", storageLocation);
+    q.bindValue(":resource_type", resourceType);
+
+    if (!q.exec()) {
+        qWarning() << "Could not execute storageCOntainsResourceByFile query" << q.lastError() << q.boundValues();
+        return false;
+    }
+
+    return q.first();
+}
+
 void KisResourceLocator::purge()
 {
     d->resourceCache.clear();
 }
 
-bool KisResourceLocator::addStorage(const QString &document, KisResourceStorageSP storage)
+bool KisResourceLocator::addStorage(const QString &storageLocation, KisResourceStorageSP storage)
 {
-    Q_ASSERT(!d->storages.contains(document));
+    Q_ASSERT(!d->storages.contains(storageLocation));
 
-    d->storages[document] = storage;
+    d->storages[storageLocation] = storage;
 
     if (!KisResourceCacheDb::addStorage(storage, false)) {
         d->errorMessages.append(i18n("Could not add %1 to the database", storage->location()));
@@ -336,7 +394,7 @@ bool KisResourceLocator::removeStorage(const QString &document)
     if (!d->storages.contains(document)) return true;
 
     purge();
-    KisResourceStorageSP storage = d->storages.take(document);
+    KisResourceStorageSP storage = d->storages. take(document);
     if (!KisResourceCacheDb::deleteStorage(storage)) {
         d->errorMessages.append(i18n("Could not remove storage %1 from the database", storage->location()));
         return false;
@@ -436,6 +494,7 @@ void KisResourceLocator::findStorages()
 
     // Add the memory storage
     d->storages["memory"] = QSharedPointer<KisResourceStorage>::create("memory");
+    d->storages["memory"]->setMetaData(KisResourceStorage::s_meta_name, i18n("Temporary Resources"));
 
     // And add bundles and adobe libraries
     QStringList filters = QStringList() << "*.bundle" << "*.abr" << "*.asl";
@@ -455,7 +514,7 @@ QList<KisResourceStorageSP> KisResourceLocator::storages() const
 KisResourceStorageSP KisResourceLocator::storageByLocation(const QString &location) const
 {
     if (!d->storages.contains(location)) {
-        qWarning() << "No" << location << "storage defined";
+        qWarning() << "No" << location << "storage defined:" << d->storages.keys();
         return 0;
     }
     KisResourceStorageSP storage = d->storages[location];
@@ -521,12 +580,12 @@ KisResourceLocator::ResourceStorage KisResourceLocator::getResourceStorage(int r
 QString KisResourceLocator::makeStorageLocationAbsolute(QString storageLocation) const
 {
     if (storageLocation.isEmpty()) {
-        storageLocation = resourceLocationBase();
+        return resourceLocationBase();
     }
 
-    // XXX: This breaks with document storages!
-
-    if (!storageLocation.startsWith('/') && storageLocation != "memory") {
+    if (!storageLocation.startsWith('/') && (storageLocation.endsWith("bundle")
+                                             || storageLocation.endsWith("asl")
+                                             || storageLocation.endsWith("abr"))) {
         if (resourceLocationBase().endsWith('/')) {
             storageLocation = resourceLocationBase() + storageLocation;
         }

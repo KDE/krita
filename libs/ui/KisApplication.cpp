@@ -57,7 +57,6 @@
 #include <KoShapeRegistry.h>
 #include <KoDpi.h>
 #include "KoConfig.h"
-#include <KoHashGeneratorProvider.h>
 #include <KoResourcePaths.h>
 #include <KisMimeDatabase.h>
 #include "thememanager.h"
@@ -67,7 +66,6 @@
 #include "KisAutoSaveRecoveryDialog.h"
 #include "KisPart.h"
 #include <kis_icon.h>
-#include "kis_md5_generator.h"
 #include "kis_splash_screen.h"
 #include "kis_config.h"
 #include "flake/kis_shape_selection.h"
@@ -117,6 +115,8 @@
 
 #include <dialogs/KisAsyncAnimationFramesSaveDialog.h>
 #include <kis_image_animation_interface.h>
+
+#include <kis_psd_layer_style.h>
 
 namespace {
 const QTime appStartTime(QTime::currentTime());
@@ -345,6 +345,11 @@ bool KisApplication::registerResources()
     reg->add(new KisResourceLoader<KisSessionResource>(ResourceType::Sessions, ResourceType::Sessions, i18n("Sessions"), QStringList() << "application/x-krita-session"));
     reg->add(new KisResourceLoader<KoGamutMask>(ResourceType::GamutMasks, ResourceType::GamutMasks, i18n("Gamut masks"), QStringList() << "application/x-krita-gamutmasks"));
 
+    reg->add(new KisResourceLoader<KisPSDLayerStyle>(ResourceType::LayerStyles,
+                                                     ResourceType::LayerStyles,
+                                                     ResourceType::LayerStyles,
+                                                     QStringList() << "application/x-photoshop-style"));
+
     if (!KisResourceCacheDb::initialize(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation))) {
         QMessageBox::critical(0, i18nc("@title:window", "Krita: Fatal error"), i18n("%1\n\nKrita will quit now.").arg(KisResourceCacheDb::lastError()));
         //return false;
@@ -447,8 +452,6 @@ bool KisApplication::start(const KisApplicationArguments &args)
         d->splashScreen->repaint();
         processEvents();
     }
-
-    KoHashGeneratorProvider::instance()->setGenerator("MD5", new KisMD5Generator());
 
     KConfigGroup group(KSharedConfig::openConfig(), "theme");
     Digikam::ThemeManager themeManager;

@@ -160,20 +160,22 @@ void KisPresetSaveWidget::setFavoriteResourceManager(KisFavoriteResourceManager 
 void KisPresetSaveWidget::savePreset()
 {
     KisPaintOpPresetSP curPreset = m_resourceProvider->currentPreset();
-    if (!curPreset)
+    if (!curPreset) {
         return;
+    }
 
     KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     QString saveLocation = rServer->saveLocation();
 
     // if we are saving a new brush, use what we type in for the input
-    QString presetName = m_useNewBrushDialog ? newBrushNameTexField->text() : curPreset->name();
-    QString currentPresetFileName = saveLocation + presetName.replace(" ", "_") + curPreset->defaultFileExtension();
+    QString presetFileName = m_useNewBrushDialog ? newBrushNameTexField->text() : curPreset->name();
+    // We don't want dots or spaces in the filenames
+    presetFileName = presetFileName.replace(' ', '_').replace('.', '_');
 
     if (m_useNewBrushDialog) {
         KisPaintOpPresetSP newPreset = curPreset->clone().dynamicCast<KisPaintOpPreset>();
-        newPreset->setFilename(currentPresetFileName.split("/").last());
-        newPreset->setName(presetName);
+        newPreset->setFilename(presetFileName);
+        newPreset->setName(m_useNewBrushDialog ? newBrushNameTexField->text() : curPreset->name());
         newPreset->setImage(brushPresetThumbnailWidget->cutoutOverlay());
         newPreset->setDirty(false);
         newPreset->setValid(true);
@@ -184,15 +186,12 @@ void KisPresetSaveWidget::savePreset()
         emit resourceSelected(newPreset);
     }
     else { // saving a preset that is replacing an existing one
-
-        curPreset->setFilename(currentPresetFileName.split("/").last());
-        curPreset->setName(presetName);
-
+        curPreset->setName(m_useNewBrushDialog ? newBrushNameTexField->text() : curPreset->name());
         if (curPreset->image().isNull()) {
             curPreset->setImage(brushPresetThumbnailWidget->cutoutOverlay());
         }
 
-        rServer->addResource(curPreset);
+        rServer->updateResource(curPreset);
     }
 
 

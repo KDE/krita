@@ -157,25 +157,26 @@ bool KisKraSaver::savePalettes(KoStore *store, KisImageSP image, const QString &
     Q_UNUSED(image);
     Q_UNUSED(uri);
 
+    qDebug() << "saving palettes to document" << m_d->doc->paletteList().size();
+
     bool res = false;
     if (m_d->doc->paletteList().size() == 0) {
         return true;
     }
     for (const KoColorSetSP palette : m_d->doc->paletteList()) {
-        if (!palette->isGlobal()) {
-            if (!store->open(m_d->imageName + PALETTE_PATH + palette->filename())) {
-                m_d->errorMessages << i18n("could not save palettes");
-                return false;
-            }
-            QByteArray ba = palette->toByteArray();
-            if (!ba.isEmpty()) {
-                store->write(ba);
-            } else {
-                qWarning() << "Cannot save the palette to a byte array:" << palette->name();
-            }
-            store->close();
-            res = true;
+        qDebug() << "saving palette..." << palette->storageLocation() << palette->filename();
+        if (!store->open(m_d->imageName + PALETTE_PATH + palette->filename())) {
+            m_d->errorMessages << i18n("could not save palettes");
+            return false;
         }
+        QByteArray ba = palette->toByteArray();
+        if (!ba.isEmpty()) {
+            store->write(ba);
+        } else {
+            qWarning() << "Cannot save the palette to a byte array:" << palette->name();
+        }
+        store->close();
+        res = true;
     }
     return res;
 }
@@ -184,11 +185,9 @@ void KisKraSaver::savePalettesToXML(QDomDocument &doc, QDomElement &element)
 {
     QDomElement ePalette = doc.createElement(PALETTES);
     for (const KoColorSetSP palette : m_d->doc->paletteList()) {
-        if (!palette->isGlobal()) {
-            QDomElement eFile =  doc.createElement("palette");
-            eFile.setAttribute("filename", palette->filename());
-            ePalette.appendChild(eFile);
-        }
+        QDomElement eFile =  doc.createElement("palette");
+        eFile.setAttribute("filename", palette->filename());
+        ePalette.appendChild(eFile);
     }
     element.appendChild(ePalette);
 }

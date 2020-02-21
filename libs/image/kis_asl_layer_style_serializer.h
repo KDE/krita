@@ -55,6 +55,10 @@ public:
         return m_initialized;
     }
 
+    bool isValid() {
+        return isInitialized() && m_isValid;
+    }
+
 
 private:
     void registerPatternObject(const KoPatternSP pattern, const  QString& patternUuid);
@@ -75,6 +79,7 @@ private:
     QVector<KisPSDLayerStyleSP> m_stylesVector;
     QHash<QString, KisPSDLayerStyleSP> m_stylesHash;
     bool m_initialized {false};
+    bool m_isValid {true};
 };
 
 #endif /* __KIS_ASL_LAYER_STYLE_SERIALIZER_H */

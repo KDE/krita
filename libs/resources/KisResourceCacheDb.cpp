@@ -351,7 +351,6 @@ bool KisResourceCacheDb::addResourceVersion(int resourceId, QDateTime timestamp,
 {
     bool r = false;
 
-
     // Create the new version. The resource is expected to have an updated version number, or
     // this will fail on the unique index on resource_id, storage_id and version.
     {
@@ -409,7 +408,7 @@ bool KisResourceCacheDb::addResourceVersion(int resourceId, QDateTime timestamp,
         QByteArray ba;
         QBuffer buf(&ba);
         buf.open(QBuffer::WriteOnly);
-        resource->image().save(&buf, "PNG");
+        resource->thumbnail().save(&buf, "PNG");
         buf.close();
         q.bindValue(":thumbnail", ba);
 
@@ -420,7 +419,6 @@ bool KisResourceCacheDb::addResourceVersion(int resourceId, QDateTime timestamp,
             qWarning() << "Could not update resource" << q.boundValues() << q.lastError();
         }
     }
-
     return r;
 }
 

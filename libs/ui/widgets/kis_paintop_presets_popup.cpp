@@ -380,12 +380,10 @@ void KisPaintOpPresetsPopup::slotSaveRenameCurrentBrush()
         return;
 
     KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
-    QString saveLocation = rServer->saveLocation();
 
     QString originalPresetName = curPreset->name();
     QString renamedPresetName = m_d->uiWdgPaintOpPresetSettings.renameBrushNameTextField->text();
-    QString originalPresetPathAndFile = saveLocation + originalPresetName + curPreset->defaultFileExtension();
-    QString renamedPresetPathAndFile = saveLocation + renamedPresetName + curPreset->defaultFileExtension();
+    QString renamedPresetPathAndFile = renamedPresetName + curPreset->defaultFileExtension();
 
 
     // create a new brush preset with the name specified and add to resource provider

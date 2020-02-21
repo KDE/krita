@@ -37,15 +37,14 @@ class KisTagFilterWidget : public QWidget
 public:
     explicit KisTagFilterWidget(KisTagModel* model, QWidget* parent);
     ~KisTagFilterWidget() override;
-    void allowSave(bool allow);
     void clear();
 
 Q_SIGNALS:
     void filterTextChanged(const QString &filterText);
-    void saveButtonClicked();
+    void filterByTagChanged(const bool filterByTag);
 private Q_SLOTS:
     void onTextChanged(const QString &lineEditText);
-    void onSaveButtonClicked();
+    void slotFilterByTagChanged(int filterByTag);
 private:
     class Private;
     Private* const d;

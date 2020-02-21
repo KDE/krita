@@ -22,16 +22,6 @@
 #include <QFile>
 #include <QCryptographicHash>
 
-KoMD5Generator::KoMD5Generator()
-{
-
-}
-
-KoMD5Generator::~KoMD5Generator()
-{
-
-}
-
 QByteArray KoMD5Generator::generateHash(const QByteArray &array)
 {
     if (!array.isEmpty()) {

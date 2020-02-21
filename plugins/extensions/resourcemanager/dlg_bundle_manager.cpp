@@ -31,12 +31,14 @@
 
 #include <kis_icon.h>
 #include "kis_action.h"
+#include <KisResourceStorage.h>
 #include <KisResourceServerProvider.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 #include <KoIcon.h>
 
 #include <KisStorageModel.h>
+#include <KisStorageFilterProxyModel.h>
 
 DlgBundleManager::DlgBundleManager(QWidget *parent)
     : KoDialog(parent)
@@ -59,7 +61,13 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
 
     setButtons(Close);
 
-    m_ui->tableView->setModel(KisStorageModel::instance());
+    KisStorageFilterProxyModel *proxyModel = new KisStorageFilterProxyModel(this);
+    proxyModel->setSourceModel(KisStorageModel::instance());
+    proxyModel->setFilter(KisStorageFilterProxyModel::ByStorageType,
+                          QStringList()
+                          << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType::Bundle)
+                          << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType::Folder));
+    m_ui->tableView->setModel(proxyModel);
 
 }
 

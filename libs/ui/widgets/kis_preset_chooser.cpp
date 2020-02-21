@@ -88,7 +88,7 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
 
     bool dirty = index.data(Qt::UserRole + KisResourceModel::Dirty).toBool();
 
-    QImage preview = index.data(Qt::UserRole + KisResourceModel::Image).value<QImage>();
+    QImage preview = index.data(Qt::UserRole + KisResourceModel::Thumbnail).value<QImage>();
 
     if (preview.isNull()) {
         qDebug() << "KisPresetDelegate::paint:  Preview is null";
@@ -234,6 +234,15 @@ public:
         KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
         if (source) {
             return source->updateResource(resource);
+        }
+        return false;
+    }
+
+    bool renameResource(KoResourceSP resource, const QString &name) override
+    {
+        KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+        if (source) {
+            return source->renameResource(resource, name);
         }
         return false;
     }

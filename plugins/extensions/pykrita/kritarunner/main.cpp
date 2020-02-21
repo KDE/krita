@@ -23,8 +23,6 @@
 #include <QCommandLineOption>
 
 #include <KisApplication.h>
-#include <KoHashGeneratorProvider.h>
-#include "kis_md5_generator.h"
 #include "PythonPluginManager.h"
 #include <opengl/kis_opengl.h>
 
@@ -66,7 +64,6 @@ extern "C" int main(int argc, char **argv)
     qDebug() << "running:" << parser.value(scriptOption) << parser.value(functionOption);
     qDebug() << parser.positionalArguments();
 
-    KoHashGeneratorProvider::instance()->setGenerator("MD5", new KisMD5Generator());
     app.addResourceTypes();
     app.registerResources();
     app.loadPlugins();

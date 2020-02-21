@@ -148,7 +148,7 @@ protected:
                 const_cast<FolderIterator*>(this)->m_resourceLoader = KisResourceLoaderRegistry::instance()->loader(m_resourceType, KisMimeDatabase::mimeTypeForFile(m_dirIterator->filePath()));
             }
             if (m_resourceLoader) {
-                const_cast<FolderIterator*>(this)->m_resource = m_resourceLoader->load(m_dirIterator->filePath(), f, KisGlobalResourcesInterface::instance());
+                const_cast<FolderIterator*>(this)->m_resource = m_resourceLoader->load(m_dirIterator->fileName(), f, KisGlobalResourcesInterface::instance());
             }
             else {
                 qWarning() << "Could not get resource loader for type" << m_resourceType;
@@ -183,7 +183,6 @@ bool KisFolderStorage::addTag(const QString &/*resourceType*/, KisTagSP /*tag*/)
 bool KisFolderStorage::addResource(const QString &resourceType, KoResourceSP _resource)
 {
     // Find a new filename for the resource if it already exists: we do not rename old resources, but rename updated resources
-
     QString fn = location() + "/" + resourceType + "/" + _resource->filename();
     if (!QFileInfo(fn).exists()) {
         // Simply save it
@@ -199,18 +198,16 @@ bool KisFolderStorage::addResource(const QString &resourceType, KoResourceSP _re
         f.close();
     }
     else {
-        QFileInfo fi(_resource->filename());
-
-        // Rename the old resource
-        KBackup::backupFile(fn);
+        QFileInfo fi(fn);
 
         // Save the new resource
         QString newFileName = fi.baseName() +
-                "_"
+                "."
                 + QString("%1").arg(_resource->version() + 1, 4, 10, QChar('0'))
                 + "."
-                + fi.completeSuffix();
+                + fi.suffix();
         QFile f(location() + "/" + resourceType + "/" + newFileName);
+
         if (!f.open(QFile::WriteOnly)) {
             qWarning() << "Could not open resource file for writing" << fn;
             return false;
@@ -250,7 +247,8 @@ KoResourceSP KisFolderStorage::resource(const QString &url)
         qWarning() << "Could not open" << fi.absoluteFilePath() << "for reading";
         return 0;
     }
-    KoResourceSP res = loader->load(url, f, KisGlobalResourcesInterface::instance());
+
+    KoResourceSP res = loader->load(fi.fileName(), f, KisGlobalResourcesInterface::instance());
     f.close();
     return res;
 }
@@ -263,4 +261,18 @@ QSharedPointer<KisResourceStorage::ResourceIterator> KisFolderStorage::resources
 QSharedPointer<KisResourceStorage::TagIterator> KisFolderStorage::tags(const QString &resourceType)
 {
     return QSharedPointer<KisResourceStorage::TagIterator>(new FolderTagIterator(location(), resourceType));
+}
+
+QStringList KisFolderStorage::metaDataKeys() const
+{
+    return QStringList() << KisResourceStorage::s_meta_name;
+}
+
+QVariant KisFolderStorage::metaData(const QString &key) const
+{
+    if (key == KisResourceStorage::s_meta_name) {
+        return i18n("Local Resources");
+    }
+    return QVariant();
+
 }

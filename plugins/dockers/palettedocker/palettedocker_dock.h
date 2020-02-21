@@ -42,7 +42,7 @@
 
 class KisViewManager;
 class KisCanvasResourceProvider;
-class KisPaletteListWidget;
+class KisPaletteChooser;
 class KisPaletteModel;
 
 class KisPaletteEditor;
@@ -94,7 +94,7 @@ private:
 private /* member variables */:
     QScopedPointer<Ui_WdgPaletteDock> m_ui;
     KisPaletteModel *m_model;
-    KisPaletteListWidget *m_paletteChooser;
+    KisPaletteChooser *m_paletteChooser;
 
     QPointer<KisViewManager> m_view;
     KisCanvasResourceProvider *m_resourceProvider;

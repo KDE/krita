@@ -48,16 +48,14 @@ struct KisPaletteEditor::PaletteInfo {
     QString name;
     QString filename;
     int columnCount;
-    bool isGlobal;
     bool isReadOnly;
+    bool isGlobal;
     QHash<QString, KisSwatchGroup> groups;
 };
 
 struct KisPaletteEditor::Private
 {
-    bool isGlobalModified {false};
     bool isNameModified {false};
-    bool isFilenameModified {false};
     bool isColumnCountModified {false};
     QSet<QString> modifiedGroupNames; // key is original group name
     QSet<QString> newGroupNames;
@@ -104,6 +102,8 @@ void KisPaletteEditor::addPalette()
     if (!m_d->view) { return; }
     if (!m_d->view->document()) { return; }
 
+    KoColorSetSP colorSet(new KoColorSet());
+
     KoDialog dlg;
     QFormLayout layout;
     dlg.mainWidget()->setLayout(&layout);
@@ -111,9 +111,7 @@ void KisPaletteEditor::addPalette()
     QLineEdit le(i18nc("Default name for a new palette","New Palette"));
     layout.addRow(&lbl, &le);
 
-    QLabel lbl2(i18nc("Label for line edit to set a palette filename.","File Name"));
-    QLineEdit le2(i18nc("Default file name for a new palette", "New Palette"));
-    layout.addRow(&lbl2, &le2);
+    QString saveLocation = m_d->rServer->saveLocation();
 
 
     QCheckBox chkSaveInDocument(i18n("Save Palette in the Current Document"));
@@ -121,17 +119,19 @@ void KisPaletteEditor::addPalette()
     layout.addRow(&chkSaveInDocument);
 
     if (dlg.exec() != QDialog::Accepted) { return; }
-    KoColorSetSP newColorSet(new KoColorSet(newPaletteFileName(!chkSaveInDocument.isChecked(), le2.text())));
 
-    newColorSet->setPaletteType(KoColorSet::KPL);
-    newColorSet->setIsGlobal(!chkSaveInDocument.isChecked());
-    newColorSet->setIsEditable(true);
-    newColorSet->setValid(true);
-    newColorSet->setName(le.text());
+    QString name = le.text();
+    colorSet->setPaletteType(KoColorSet::KPL);
+    colorSet->setIsEditable(true);
+    colorSet->setValid(true);
+    colorSet->setName(name);
+    colorSet->setFilename(name.split(" ").join("_")+colorSet->defaultFileExtension());
 
-    m_d->rServer->addResource(newColorSet, !chkSaveInDocument.isChecked());
-    //m_d->rServer->removeFromBlacklist(newColorSet);
-    uploadPaletteList();
+    QString resourceLocation = "";
+    if (chkSaveInDocument.isChecked()) {
+        resourceLocation = m_d->view->document()->uniqueID();
+    }
+    m_d->rServer->resourceModel()->addResource(colorSet, resourceLocation);
 }
 
 void KisPaletteEditor::importPalette()
@@ -143,36 +143,18 @@ void KisPaletteEditor::importPalette()
 
     QString filename = dialog.filename();
     if (filename.isEmpty()) { return; }
-    if (duplicateExistsFilename(filename, false)) {
-        QMessageBox message;
-        message.setWindowTitle(i18n("Can't Import Palette"));
-        message.setText(i18n("Can't import palette: there's already imported with the same filename"));
-        message.exec();
-        return;
-    }
 
     QMessageBox messageBox;
     messageBox.setText(i18n("Do you want to store this palette in your current image?"));
     messageBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-    bool global = (messageBox.exec() == QMessageBox::Yes);
-
-    KoColorSetSP colorSet(new KoColorSet(filename));
-
-    colorSet->load(KisGlobalResourcesInterface::instance());
-    QString name = filenameFromPath(colorSet->filename());
-
-    if (duplicateExistsFilename(name, false)) {
-        colorSet->setFilename(newPaletteFileName(global));
-    } else {
-        colorSet->setFilename(name);
+    QString storageLocation = "";
+    if (messageBox.exec() == QMessageBox::Yes) {
+        storageLocation = m_d->view->document()->uniqueID();
     }
 
-
-    colorSet->setIsGlobal(global);
-    m_d->rServer->addResource(colorSet, global);
-    //m_d->rServer->removeFromBlacklist(colorSet);
-
-    uploadPaletteList();
+    KoColorSetSP colorSet(new KoColorSet(filename));
+    colorSet->load(KisGlobalResourcesInterface::instance());
+    m_d->rServer->resourceModel()->addResource(colorSet, storageLocation);
 }
 
 void KisPaletteEditor::removePalette(KoColorSetSP cs)
@@ -183,7 +165,6 @@ void KisPaletteEditor::removePalette(KoColorSetSP cs)
         return;
     }
     m_d->rServer->removeResourceFromServer(cs);
-    uploadPaletteList();
 }
 
 int KisPaletteEditor::rowNumberOfGroup(const QString &oriName) const
@@ -221,18 +202,6 @@ void KisPaletteEditor::rename(const QString &newName)
     if (newName.isEmpty()) { return; }
     m_d->isNameModified = true;
     m_d->modified.name = newName;
-}
-
-void KisPaletteEditor::changeFilename(const QString &newName)
-{
-    if (newName.isEmpty()) { return; }
-    m_d->isFilenameModified = true;
-    m_d->pathsToRemove.insert(m_d->modified.filename);
-    if (m_d->modified.isGlobal) {
-        m_d->modified.filename = m_d->rServer->saveLocation() + newName;
-    } else {
-        m_d->modified.filename = newName;
-    }
 }
 
 void KisPaletteEditor::changeColCount(int newCount)
@@ -347,7 +316,6 @@ void KisPaletteEditor::changeGroupRowCount(const QString &name, int newRowCount)
 
 void KisPaletteEditor::setGlobal(bool isGlobal)
 {
-    m_d->isGlobalModified = true;
     m_d->modified.isGlobal = isGlobal;
 }
 
@@ -365,6 +333,7 @@ void KisPaletteEditor::setEntry(const KoColor &color, const QModelIndex &index)
 
 void KisPaletteEditor::slotSetDocumentModified()
 {
+    m_d->rServer->resourceModel()->addResource(m_d->model->colorSet(), m_d->model->colorSet()->storageLocation());
     m_d->view->document()->setModified(true);
 }
 
@@ -376,14 +345,10 @@ void KisPaletteEditor::removeEntry(const QModelIndex &index)
     if (!m_d->view->document()) { return; }
     if (qvariant_cast<bool>(index.data(KisPaletteModel::IsGroupNameRole))) {
         removeGroup(qvariant_cast<QString>(index.data(KisPaletteModel::GroupNameRole)));
-        updatePalette();
     } else {
         m_d->model->removeEntry(index, false);
     }
-    if (m_d->model->colorSet()->isGlobal()) {
-        m_d->model->colorSet()->save();
-        return;
-    }
+    updatePalette();
 }
 
 void KisPaletteEditor::modifyEntry(const QModelIndex &index)
@@ -470,11 +435,7 @@ void KisPaletteEditor::addEntry(const KoColor &color)
     newEntry.setId(lnIDName.text());
     newEntry.setSpotColor(chkSpot.isChecked());
     m_d->model->addEntry(newEntry, groupName);
-
-    if (m_d->model->colorSet()->isGlobal()) {
-        m_d->model->colorSet()->save();
-        return;
-    }
+    m_d->rServer->resourceModel()->updateResource(m_d->model->colorSet());
     m_d->modifiedGroupNames.insert(groupName);
     m_d->modified.groups[groupName].addEntry(newEntry);
 }
@@ -493,26 +454,13 @@ void KisPaletteEditor::updatePalette()
         palette->setColumnCount(modified.columnCount);
     }
     if (m_d->isNameModified) {
-        palette->setName(modified.name);
+        m_d->rServer->resourceModel()->renameResource(palette, modified.name);
     }
-    if (m_d->isFilenameModified) {
-        QString originalPath = palette->filename();
-        palette->setFilename(modified.filename);
-        if (palette->isGlobal()) {
-            if (!palette->save()) {
-                palette->setFilename(newPaletteFileName(true));
-                palette->save();
-            }
-            QFile::remove(originalPath);
-        }
-    }
-    if (m_d->isGlobalModified) {
-        palette->setIsGlobal(modified.isGlobal);
-        if (modified.isGlobal) {
-            setGlobal();
-        } else {
-            setNonGlobal();
-        }
+    QString resourceLocation = m_d->model->colorSet()->storageLocation();
+    if (m_d->modified.isGlobal) {
+        resourceLocation = QString();
+    } else {
+        resourceLocation = m_d->view->document()->uniqueID();
     }
     Q_FOREACH (const QString &groupName, palette->getGroupNames()) {
         if (!modified.groups.contains(groupName)) {
@@ -535,10 +483,8 @@ void KisPaletteEditor::updatePalette()
         m_d->model->addGroup(modified.groups[newGroupName]);
     }
     m_d->newGroupNames.clear();
-
-    if (m_d->model->colorSet()->isGlobal()) {
-        m_d->model->colorSet()->save();
-    }
+    qDebug() << "updating palette from updatePalette" << m_d->model->colorSet()->filename() << resourceLocation;
+    m_d->rServer->resourceModel()->addResource(m_d->model->colorSet(), resourceLocation);
 }
 
 void KisPaletteEditor::slotPaletteChanged()
@@ -552,9 +498,9 @@ void KisPaletteEditor::slotPaletteChanged()
     m_d->modifiedGroupNames.clear();
 
     m_d->modified.name = palette->name();
-    m_d->modified.filename = palette->filename();
+    //hack alert! needs better solution.
+    m_d->modified.isGlobal = !palette->storageLocation().contains("/");
     m_d->modified.columnCount = palette->columnCount();
-    m_d->modified.isGlobal = palette->isGlobal();
     m_d->modified.isReadOnly = !palette->isEditable();
 
     Q_FOREACH (const QString &groupName, palette->getGroupNames()) {
@@ -563,97 +509,9 @@ void KisPaletteEditor::slotPaletteChanged()
     }
 }
 
-void KisPaletteEditor::setGlobal()
-{
-    Q_ASSERT(m_d->model);
-    if (!m_d->view) { return; }
-    if (!m_d->view->document()) { return; }
-    if (!m_d->model->colorSet()) { return; }
-
-    KoColorSetSP colorSet = m_d->model->colorSet();
-    QString saveLocation = m_d->rServer->saveLocation();
-    QString name = filenameFromPath(colorSet->filename());
-
-    QFileInfo fileInfo(saveLocation + name);
-
-    colorSet->setFilename(fileInfo.filePath());
-    colorSet->setIsGlobal(true);
-    //m_d->rServer->removeFromBlacklist(colorSet);
-    if (!colorSet->save()) {
-        QMessageBox message;
-        message.setWindowTitle(i18n("Saving palette failed"));
-        message.setText(i18n("Failed to save global palette file. Please set it to non-global, or you will lose the file when you close Krita"));
-        message.exec();
-    }
-
-    uploadPaletteList();
-}
-
-bool KisPaletteEditor::duplicateExistsFilename(const QString &filename, bool global) const
-{
-    QString prefix;
-    if (global) {
-        prefix = m_d->rServer->saveLocation();
-    }
-
-    Q_FOREACH (const KoResourceSP r, KoResourceServerProvider::instance()->paletteServer()->resources()) {
-        if (r->filename() == prefix + filename && r != m_d->model->colorSet()) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 QString KisPaletteEditor::relativePathFromSaveLocation() const
 {
     return filenameFromPath(m_d->modified.filename);
-}
-
-void KisPaletteEditor::setNonGlobal()
-{
-    Q_ASSERT(m_d->model);
-    if (!m_d->view) { return; }
-    if (!m_d->view->document()) { return; }
-    if (!m_d->model->colorSet()) { return; }
-
-    KoColorSetSP colorSet = m_d->model->colorSet();
-
-    QString name = filenameFromPath(colorSet->filename());
-    QFile::remove(colorSet->filename());
-
-    if (duplicateExistsFilename(name, false)) {
-        colorSet->setFilename(newPaletteFileName(false));
-    } else {
-        colorSet->setFilename(name);
-    }
-
-    colorSet->setIsGlobal(false);
-
-    uploadPaletteList();
-}
-
-QString KisPaletteEditor::newPaletteFileName(bool isGlobal, const QString &filename)
-{
-    QSet<QString> nameSet;
-
-    Q_FOREACH (const KoResourceSP r, m_d->rServer->resources()) {
-        nameSet.insert(r->filename());
-    }
-
-    KoColorSet tmpColorSet;
-    QString result = (filename.isEmpty() ? "new_palette" : filename);
-
-    if (isGlobal) {
-        result = m_d->rServer->saveLocation() + result;
-    }
-
-    int i = 0;
-    while (nameSet.contains(result + QString::number(i) + tmpColorSet.defaultFileExtension())) {
-        i++;
-    }
-    result = result + (i > 0 ? QString::number(i) : "") + tmpColorSet.defaultFileExtension();
-    return result;
 }
 
 QString KisPaletteEditor::newGroupName() const
@@ -665,19 +523,6 @@ QString KisPaletteEditor::newGroupName() const
         groupname = i18nc("Default new group name", "New Group %1", QString::number(i));
     }
     return groupname;
-}
-
-void KisPaletteEditor::uploadPaletteList() const
-{
-    QList<KoColorSetSP > list;
-    Q_FOREACH (KoResourceSP paletteResource, m_d->rServer->resources()) {
-        KoColorSetSP palette = paletteResource.staticCast<KoColorSet>();
-        Q_ASSERT(palette);
-        if (!palette->isGlobal()) {
-            list.append(palette);
-        }
-    }
-    m_d->view->document()->setPaletteList(list);
 }
 
 QString KisPaletteEditor::filenameFromPath(const QString &path) const

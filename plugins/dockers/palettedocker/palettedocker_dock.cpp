@@ -54,7 +54,7 @@
 #include <KisPaletteModel.h>
 #include <KisPaletteDelegate.h>
 #include <kis_palette_view.h>
-#include <KisPaletteListWidget.h>
+#include <KisPaletteChooser.h>
 
 #include <KisPaletteEditor.h>
 #include <dialogs/KisDlgPaletteEditor.h>
@@ -65,7 +65,7 @@ PaletteDockerDock::PaletteDockerDock( )
     : QDockWidget(i18n("Palette"))
     , m_ui(new Ui_WdgPaletteDock())
     , m_model(new KisPaletteModel(this))
-    , m_paletteChooser(new KisPaletteListWidget(this))
+    , m_paletteChooser(new KisPaletteChooser(this))
     , m_view(0)
     , m_resourceProvider(0)
     , m_rServer(KoResourceServerProvider::instance()->paletteServer())
@@ -183,14 +183,11 @@ void PaletteDockerDock::slotExportPalette(KoColorSetSP palette)
     dialog.setDefaultDir(palette->filename());
     dialog.setMimeTypeFilters(QStringList() << "krita/x-colorset");
     QString newPath;
-    bool isStandAlone = palette->isGlobal();
     QString oriPath = palette->filename();
     if ((newPath = dialog.filename()).isEmpty()) { return; }
     palette->setFilename(newPath);
-    palette->setIsGlobal(true);
     palette->save();
     palette->setFilename(oriPath);
-    palette->setIsGlobal(isStandAlone);
 }
 
 void PaletteDockerDock::setCanvas(KoCanvasBase *canvas)
@@ -232,12 +229,6 @@ void PaletteDockerDock::unsetCanvas()
     m_ui->paletteView->setDisplayRenderer(0);
     m_paletteEditor->setView(0);
 
-    for (KoResourceSP r : m_rServer->resources()) {
-        KoColorSetSP c = r.staticCast<KoColorSet>();
-        if (!c->isGlobal()) {
-            m_rServer->removeResourceFromServer(c);
-        }
-    }
     if (!m_currentColorSet) {
         slotSetColorSet(0);
     }

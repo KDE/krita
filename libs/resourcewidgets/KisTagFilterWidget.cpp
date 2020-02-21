@@ -30,12 +30,16 @@
 #include <QGridLayout>
 #include <QLineEdit>
 #include <QCompleter>
+#include <QCheckBox>
 
 #include <klocalizedstring.h>
 
 #include <KoIcon.h>
 
 #include <kis_debug.h>
+#include <kconfig.h>
+#include <ksharedconfig.h>
+#include <kconfiggroup.h>
 
 class KisTagFilterWidget::Private
 {
@@ -43,9 +47,13 @@ public:
     QString tagSearchBarTooltip_saving_disabled;
     QString tagSearchBarTooltip_saving_enabled;
     QLineEdit* tagSearchLineEdit;
-    QPushButton* tagSearchSaveButton;
     QGridLayout* filterBarLayout;
     QCompleter* completer;
+    QCheckBox* filterByTagCheckbox;
+
+    QString configGroup {"resources"};
+    QString configName {"filterByTagChecked"};
+
 };
 
 KisTagFilterWidget::KisTagFilterWidget(KisTagModel* model, QWidget* parent)
@@ -86,25 +94,23 @@ KisTagFilterWidget::KisTagFilterWidget(KisTagModel* model, QWidget* parent)
     d->completer->setCaseSensitivity(Qt::CaseInsensitive);
     d->tagSearchLineEdit->setCompleter(d->completer);
 
-    filterBarLayout->setSpacing(0);
     filterBarLayout->setMargin(0);
     filterBarLayout->setColumnStretch(0, 1);
     filterBarLayout->addWidget(d->tagSearchLineEdit, 0, 0);
 
-    d->tagSearchSaveButton = new QPushButton(this);
-    d->tagSearchSaveButton->setIcon(koIcon("media-floppy"));
-    d->tagSearchSaveButton->setToolTip(i18nc("@info:tooltip", "<qt>Save the currently filtered set as the new members of the current tag.</qt>"));
-    d->tagSearchSaveButton->setEnabled(false);
+    d->filterByTagCheckbox = new QCheckBox(this);
+    d->filterByTagCheckbox->setText(i18nc("It appears in the checkbox next to the filter box "
+                                          "in resources dockers; must be short.", "filter by tag"));
 
-    filterBarLayout->addWidget(d->tagSearchSaveButton, 0, 1);
+    KConfigGroup cfg = KSharedConfig::openConfig()->group(d->configGroup);
+    bool filterByTagCheckboxChecked = cfg.readEntry(d->configName, true);
+    d->filterByTagCheckbox->setChecked(filterByTagCheckboxChecked);
 
-    connect(d->tagSearchSaveButton, SIGNAL(pressed()),
-            this, SLOT(onSaveButtonClicked()));
-    connect(d->tagSearchLineEdit, SIGNAL(returnPressed()),
-            this, SLOT(onSaveButtonClicked()));
+
+    filterBarLayout->addWidget(d->filterByTagCheckbox, 0, 1);
     connect(d->tagSearchLineEdit, SIGNAL(textChanged(QString)),
             this, SLOT(onTextChanged(QString)));
-    allowSave(false);
+    connect(d->filterByTagCheckbox, SIGNAL(stateChanged(int)), this, SLOT(slotFilterByTagChanged(int)));
     this->setLayout(filterBarLayout);
 
 }
@@ -113,35 +119,21 @@ KisTagFilterWidget::~KisTagFilterWidget()
 {
     delete d;
 }
-void KisTagFilterWidget::allowSave(bool allow)
-{
-    if (allow)  {
-        d->tagSearchSaveButton->show();
-        d->tagSearchLineEdit->setToolTip(d->tagSearchBarTooltip_saving_enabled);
-    }
-    else {
-        d->tagSearchSaveButton->hide();
-        d->tagSearchLineEdit->setToolTip(d->tagSearchBarTooltip_saving_disabled);
-    }
-}
 
 void KisTagFilterWidget::clear()
 {
     d->tagSearchLineEdit->clear();
-    d->tagSearchSaveButton->setEnabled(false);
 }
 
 
 void KisTagFilterWidget::onTextChanged(const QString& lineEditText)
 {
-    ENTER_FUNCTION() << ppVar(lineEditText);
-    d->tagSearchSaveButton->setEnabled(!lineEditText.isEmpty());
     emit filterTextChanged(lineEditText);
 }
 
-void KisTagFilterWidget::onSaveButtonClicked()
+void KisTagFilterWidget::slotFilterByTagChanged(int filterByTag)
 {
-    ENTER_FUNCTION() << ppVar(d->tagSearchLineEdit->text());
-    emit saveButtonClicked();
-    clear();
+    emit filterByTagChanged(filterByTag == Qt::Checked);
+    KConfigGroup cfg = KSharedConfig::openConfig()->group(d->configGroup);
+    cfg.writeEntry(d->configName, filterByTag == Qt::Checked);
 }

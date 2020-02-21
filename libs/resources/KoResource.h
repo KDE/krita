@@ -90,12 +90,28 @@ public:
     virtual bool saveToDevice(QIODevice* dev) const;
 
     /**
-     * @returns a QImage thumbnail image representing this resource.
+     * @returns a QImage image representing this resource: in the case
+     * of some resources, it is the actual resource.
      *
      * This image could be null. The image can be in any valid format.
      */
     QImage image() const;
     void setImage(const QImage &image);
+
+    /**
+     * @brief updateThumbnail updates the thumbnail for this resource.
+     * Reimplement if your thumbnail is something else than the image
+     * set with setImage.
+     */
+    virtual void updateThumbnail();
+
+    /**
+     * @brief thumbnail the thumbnail image to use in resource selectors
+     * @return a valid qimage. All thumbnails for a given resource have the
+     * same size (which is not true for image(), but that size need not
+     * be square. By default it's the same as image(), but that is not guaranteed.
+     */
+    virtual QImage thumbnail() const;
 
     /// @return the md5sum calculated over the contents of the resource.
     QByteArray md5() const;

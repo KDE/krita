@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 boud <boud@valdyas.org>
+ *  Copyright (c) 2020 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,27 +15,17 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef TESTRESOURCETYPEMODEL_H
-#define TESTRESOURCETYPEMODEL_H
+#ifndef RESOURCE_DEBUG_H_
+#define RESOURCE_DEBUG_H_
 
-#include <QObject>
-class KisResourceLocator;
+#include <QDebug>
+#include <QLoggingCategory>
+#include <kritaresources_export.h>
 
-class TestStorageModel : public QObject
-{
-    Q_OBJECT
-private Q_SLOTS:
-    void initTestCase();
-    void testRowCount();
-    void testSetActive();
-    void cleanupTestCase();
-    void testMetaData();
+extern const KRITARESOURCES_EXPORT QLoggingCategory &RESOURCE_LOG();
 
-private:
-
-    QString m_srcLocation;
-    QString m_dstLocation;
-    KisResourceLocator *m_locator;
-};
+#define debugResource qCDebug(RESOURCE_LOG)
+#define warnResource qCWarning(RESOURCE_LOG)
+#define errorResource qCCritical(RESOURCE_LOG)
 
 #endif

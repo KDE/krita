@@ -115,6 +115,39 @@ void TestStorageModel::cleanupTestCase()
     ResourceTestHelper::cleanDstLocation(m_dstLocation);
 }
 
+void TestStorageModel::testMetaData()
+{
+    KisStorageModel storageModel;
+    int rowCount = storageModel.rowCount();
+
+    KisResourceStorageSP storage {new KisResourceStorage("My Named Memory Storage")};
+    KisResourceLocator::instance()->addStorage("My Named Memory Storage", storage);
+    storage->setMetaData(KisResourceStorage::s_meta_name, "My Named Memory Storage");
+    storageModel.resetQuery();
+
+    QVERIFY(storageModel.rowCount() > rowCount);
+
+    QModelIndex idx;
+    for (int row = 0; row < storageModel.rowCount(); ++row) {
+        idx = storageModel.index(row, 7);
+        KisResourceStorageSP st = storageModel.storageForIndex(idx);
+        QVERIFY(st);
+        if (st == storage) {
+            break;
+        }
+    }
+
+    QVERIFY(idx.isValid());
+
+    QString displayName = storageModel.data(idx, Qt::DisplayRole).toString();
+    QCOMPARE("My Named Memory Storage", displayName);
+
+    idx = storageModel.index(idx.row(), 0);
+    QMap<QString, QVariant> metadata = storageModel.data(idx, Qt::UserRole + KisStorageModel::MetaData).toMap();
+    QVERIFY(metadata.contains(KisResourceStorage::s_meta_name));
+    QVERIFY(metadata[KisResourceStorage::s_meta_name] == "My Named Memory Storage");
+}
+
 
 
 

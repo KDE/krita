@@ -71,7 +71,9 @@ void TestResourceModel::initTestCase()
     QVERIFY(KisResourceCacheDb::isValid());
 
     KisResourceLocator::LocatorError r = m_locator->initialize(m_srcLocation);
-    if (!m_locator->errorMessages().isEmpty()) qDebug() << m_locator->errorMessages();
+    if (!m_locator->errorMessages().isEmpty()) {
+        qDebug() << m_locator->errorMessages();
+    }
 
     QVERIFY(r == KisResourceLocator::LocatorError::Ok);
     QVERIFY(QDir(m_dstLocation).exists());
@@ -264,6 +266,34 @@ void TestResourceModel::testResourceForMD5()
     KoResourceSP resource2 = resourceModel.resourceForMD5(resource->md5());
     QVERIFY(!resource2.isNull());
     QCOMPARE(resource->md5(), resource2->md5());
+}
+
+void TestResourceModel::testRenameResource()
+{
+    KisResourceModel resourceModel(m_resourceType);
+
+    KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(1, 0));
+    QVERIFY(!resource.isNull());
+    const QString name = resource->name();
+    bool r = resourceModel.renameResource(resource, "A New Name");
+    QVERIFY(r);
+    QSqlQuery q;
+    if (!q.prepare("SELECT name\n"
+                   "FROM   resources\n"
+                   "WHERE  id = :resource_id\n")) {
+        qWarning() << "Could not prepare testRenameResource Query" << q.lastError();
+    }
+
+    q.bindValue(":resource_id", resource->resourceId());
+
+    if (!q.exec()) {
+        qWarning() << "Could not execute testRenameResource Query" << q.lastError();
+    }
+
+    q.first();
+    QString newName = q.value(0).toString();
+    QVERIFY(name != newName);
+    QCOMPARE("A New Name", newName);
 }
 
 void TestResourceModel::cleanupTestCase()

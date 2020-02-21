@@ -37,7 +37,7 @@ private Q_SLOTS:
     void testResourceLocationBase();
     void testResource();
     void testResourceForId();
-
+    void testStorageContainsResourceByFile();
     void testDocumentStorage();
 
     void cleanupTestCase();

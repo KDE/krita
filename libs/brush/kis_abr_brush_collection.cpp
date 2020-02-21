@@ -32,8 +32,8 @@
 #include <QString>
 #include <QBuffer>
 #include <QFileInfo>
-#include <KoHashGeneratorProvider.h>
-#include <KoHashGenerator.h>
+#include <KoMD5Generator.h>
+#include <KoMD5Generator.h>
 #include <klocalizedstring.h>
 
 #include <KoColor.h>
@@ -573,8 +573,7 @@ bool KisAbrBrushCollection::loadFromDevice(QIODevice *dev)
 
     QByteArray ba = dev->readAll();
 
-    KoHashGenerator *hashGenerator = KoHashGeneratorProvider::instance()->getGenerator("MD5");
-    m_md5 = hashGenerator->generateHash(ba);
+    m_md5 = KoMD5Generator::generateHash(ba);
 
     QBuffer buf(&ba);
     buf.open(QIODevice::ReadOnly);

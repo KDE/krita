@@ -197,6 +197,19 @@ public:
     qreal computeSizeLikeValue(const KisPaintInformation &info) const;
     qreal computeRotationLikeValue(const KisPaintInformation& info, qreal baseValue, bool absoluteAxesFlipped) const;
 
+    /**
+     * @brief defaultCurve returns a curve that is set when the KisCurveOption is not initialized yet
+     * the purpose of distinguishing between this one and emptyCurve() is to allow easier finding out that something is wrong
+     * in the code setting common curves
+     * @return a non-standard curve with two hills
+     */
+    KisCubicCurve defaultCurve();
+    /**
+     * @brief emptyCurve returns the simplest usable curve
+     * @return curve from (0, 0) to (1, 1)
+     */
+    KisCubicCurve emptyCurve();
+
 protected:
 
     void setValueRange(qreal min, qreal max);

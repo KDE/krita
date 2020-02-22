@@ -179,6 +179,9 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
             d->resourceCache[key] = resource;
         }
     }
+    if (!resource) {
+        qDebug() << "KoResourceSP KisResourceLocator::resource" << storageLocation << resourceType << filename;
+    }
     Q_ASSERT(resource);
 
     resource->setStorageLocation(storageLocation);

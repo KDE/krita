@@ -76,6 +76,7 @@
 #include "processing/kis_transform_processing_visitor.h"
 #include "processing/kis_convert_color_space_processing_visitor.h"
 #include "processing/kis_assign_profile_processing_visitor.h"
+#include "processing/KisTrimProcessingVisitor.h"
 #include "commands_new/kis_image_resize_command.h"
 #include "commands_new/kis_image_set_resolution_command.h"
 #include "commands_new/kis_activate_selection_mask_command.h"
@@ -795,6 +796,22 @@ void KisImage::cropImage(const QRect& newRect)
 }
 
 
+void KisImage::trimLayersOpaque()
+{
+    KUndo2MagicString actionName = kundo2_i18n("Trim All Layers");
+
+    KisImageSignalVector emitSignals;
+    emitSignals << ModifiedSignal;
+
+    KisProcessingApplicator applicator(this, m_d->rootLayer,
+                                       KisProcessingApplicator::RECURSIVE |
+                                       KisProcessingApplicator::NO_UI_UPDATES,
+                                       emitSignals, actionName);
+
+    KisProcessingVisitorSP visitor = new KisTrimProcessingVisitor(bounds());
+    applicator.applyVisitorAllFrames(visitor, KisStrokeJobData::CONCURRENT);
+    applicator.end();
+}
 void KisImage::cropNode(KisNodeSP node, const QRect& newRect)
 {
     bool isLayer = qobject_cast<KisLayer*>(node.data());

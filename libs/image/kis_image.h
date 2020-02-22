@@ -263,6 +263,15 @@ public:
      */
     void cropImage(const QRect& newRect);
 
+    /**
+     * @brief start an asynchronous operation that will trim all layers to
+     * their opaque content.
+     *
+     * Please note that the actual operation starts asynchronously in
+     * a background, so you cannot expect the image having new size
+     * right after this call
+     */
+    void trimLayersOpaque();
 
     /**
      * @brief start asynchronous operation on cropping a subtree of nodes starting at \p node

@@ -457,11 +457,6 @@ void KisDocument::Private::copyFromImpl(const Private &rhs, KisDocument *q, KisD
         paletteList = rhs.paletteList;
     }
 
-    KisConfig cfg(true);
-    if (cfg.trimKra()) {
-        image->cropImage(image->bounds());
-        image->waitForDone();
-    }
     batchMode = rhs.batchMode;
 }
 
@@ -763,7 +758,11 @@ QByteArray KisDocument::serializeToNativeByteArray()
     }
 
     d->savingImage = d->image;
-
+    KisConfig cfg(true);
+    if (cfg.trimKra()) {
+        d->savingImage->trimLayersOpaque();
+        d->savingImage->waitForDone();
+    }
     if (!filter->convert(this, &buffer).isOk()) {
         qWarning() << "serializeToByteArray():: Could not export to our native format";
     }

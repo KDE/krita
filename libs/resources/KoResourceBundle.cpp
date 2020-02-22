@@ -422,6 +422,7 @@ KoResourceSP KoResourceBundle::resource(const QString &resourceType, const QStri
 
     if (!resourceStore->open(filepath)) {
         qWarning() << "Could not open file in bundle" << filepath;
+        return 0;
     }
 
     QString mime = KisMimeDatabase::mimeTypeForSuffix(filepath);

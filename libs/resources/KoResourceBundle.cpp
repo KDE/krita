@@ -432,6 +432,8 @@ KoResourceSP KoResourceBundle::resource(const QString &resourceType, const QStri
         return 0;
     }
     KoResourceSP res = loader->load(filepath, *resourceStore->device(), KisGlobalResourcesInterface::instance());
+    QString filename = QFileInfo(filepath).fileName();
+    res->setFilename(filename);
     resourceStore->close();
 
     return res;

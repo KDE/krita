@@ -174,6 +174,9 @@ KoResourceSP KisAslStorage::resource(const QString &url)
     int indexOfUnderscore = url.lastIndexOf("_");
     QString realUuid = url;
     realUuid.remove(indexOfUnderscore, url.length() - indexOfUnderscore); // remove _pattern or _style added in iterator
+    // TODO: RESOURCES: Since we do get a resource type at the beginning of the path now
+    //  maybe we could skip adding the _[resourcetype] at the end of the path as well?
+    realUuid = QFileInfo(realUuid).fileName(); // remove patterns/ at the beginning, if there are any
     if (url.contains("pattern")) {
         QHash<QString, KoPatternSP> patterns = m_aslSerializer->patterns();
 

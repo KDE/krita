@@ -173,15 +173,55 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
         }
 
         resource = storage->resource(resourceType + "/" + filename);
-        if (!resource) {
-            qWarning() << "Could not find resource" << resourceType + "/" + filename;
-            return 0;
-        }
+
         d->resourceCache[key] = resource;
     }
     Q_ASSERT(resource);
+
     resource->setStorageLocation(storageLocation);
     Q_ASSERT(!resource->storageLocation().isEmpty());
+
+
+    {
+        QSqlQuery q;
+        if (!q.prepare("SELECT resources.id\n"
+                       ",      resources.version\n"
+                       "FROM   resources\n"
+                       ",      storages\n"
+                       ",      resource_types\n"
+                       "WHERE  storages.id = resources.storage_id\n"
+                       "AND    storages.location = :storage_location\n"
+                       "AND    resource_types.id = resources.resource_type_id\n"
+                       "AND    resource_types.name = :resource_type\n"
+                       "AND    resources.filename  = :filename")) {
+            qWarning() << "Could not prepare id/version query" << q.lastError();
+
+        }
+
+        q.bindValue(":storage_location", makeStorageLocationRelative(storageLocation));
+        q.bindValue(":resource_type", resourceType);
+        q.bindValue(":filename", filename);
+
+        if (!q.exec()) {
+            qWarning() << "Could not execute id/version quert" << q.lastError() << q.boundValues();
+        }
+
+        if (!q.first()) {
+            qWarning() << "Could not find the resource in the database" << storageLocation << resourceType << filename;
+        }
+
+        resource->setResourceId(q.value(0).toInt());
+        Q_ASSERT(resource->resourceId() >= 0);
+
+        resource->setVersion(q.value(1).toInt());
+        Q_ASSERT(resource->version() >= 0);
+    }
+
+    if (!resource) {
+        qWarning() << "Could not find resource" << resourceType + "/" + filename;
+        return 0;
+    }
+
     return resource;
 }
 

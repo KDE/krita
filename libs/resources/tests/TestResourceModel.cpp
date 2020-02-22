@@ -118,6 +118,7 @@ void TestResourceModel::testResourceForIndex()
     KisResourceModel resourceModel(m_resourceType);
     KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(0, 0));
     QVERIFY(resource);
+    QVERIFY(resource->resourceId() > -1);
 }
 
 void TestResourceModel::testIndexFromResource()

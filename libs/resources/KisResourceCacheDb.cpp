@@ -400,6 +400,9 @@ bool KisResourceCacheDb::addResourceVersion(int resourceId, QDateTime timestamp,
             qWarning() << "Could not prepare updateResource statement" << q.lastError();
             return r;
         }
+
+        qDebug() << resource->name() << resource->filename() << resource->version();
+
         q.bindValue(":name", resource->name());
         q.bindValue(":filename", QFileInfo(resource->filename()).fileName());
         q.bindValue(":tooltip", i18n(resource->name().toUtf8()));

@@ -218,8 +218,8 @@ bool KisFolderStorage::addResource(const QString &resourceType, KoResourceSP _re
         }
 
         _resource->setVersion(_resource->version() + 1);
-
         _resource->setFilename(newFileName);
+
         f.close();
     }
 

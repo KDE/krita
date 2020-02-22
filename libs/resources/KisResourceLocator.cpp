@@ -181,7 +181,6 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
     resource->setStorageLocation(storageLocation);
     Q_ASSERT(!resource->storageLocation().isEmpty());
 
-
     {
         QSqlQuery q;
         if (!q.prepare("SELECT resources.id\n"
@@ -229,9 +228,6 @@ KoResourceSP KisResourceLocator::resourceForId(int resourceId)
 {
     ResourceStorage rs = getResourceStorage(resourceId);
     KoResourceSP r = resource(rs.storageLocation, rs.resourceType, rs.resourceFileName);
-    if (r) {
-        r->setResourceId(resourceId);
-    }
     return r;
 }
 

@@ -174,9 +174,10 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
         }
 
         resource = storage->resource(resourceType + "/" + filename);
-        KIS_SAFE_ASSERT_RECOVER(!resource->filename().startsWith(resourceType));
-
-        d->resourceCache[key] = resource;
+        if (resource) {
+            KIS_SAFE_ASSERT_RECOVER(!resource->filename().startsWith(resourceType)) {};
+            d->resourceCache[key] = resource;
+        }
     }
     Q_ASSERT(resource);
 

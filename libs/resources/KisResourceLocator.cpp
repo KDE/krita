@@ -38,6 +38,7 @@
 
 #include <KritaVersionWrapper.h>
 #include <KisMimeDatabase.h>
+#include <kis_assert.h>
 
 #include "KoResourcePaths.h"
 #include "KisResourceStorage.h"
@@ -173,6 +174,7 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
         }
 
         resource = storage->resource(resourceType + "/" + filename);
+        KIS_SAFE_ASSERT_RECOVER(!resource->filename().startsWith(resourceType));
 
         d->resourceCache[key] = resource;
     }

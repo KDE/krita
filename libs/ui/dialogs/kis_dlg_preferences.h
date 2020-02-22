@@ -85,6 +85,7 @@ public:
     int favoritePresets();
     bool showCanvasMessages();
     bool compressKra();
+    bool trimKra();
     bool useZip64();
     bool toolOptionsInDocker();
     bool kineticScrollingEnabled();

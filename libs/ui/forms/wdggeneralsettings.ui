@@ -678,7 +678,7 @@
              <string extracomment="(information outside the image boundaries will get lost. Saving will be slower."/>
             </property>
             <property name="text">
-             <string>Trim .kra files when saving</string>
+             <string>Trim files before saving</string>
             </property>
            </widget>
           </item>

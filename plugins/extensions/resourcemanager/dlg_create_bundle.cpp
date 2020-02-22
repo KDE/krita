@@ -246,6 +246,10 @@ void DlgCreateBundle::putResourcesInTheBundle() const
     KisResourceModel* emptyModel = KisResourceModelProvider::resourceModel("");
     Q_FOREACH(int id, m_selectedResourcesIds) {
         KoResourceSP res = emptyModel->resourceForId(id);
+        if (!res) {
+            warnKrita << "No resource for id " << id;
+            continue;
+        }
         KisResourceModel* resModel = KisResourceModelProvider::resourceModel(res->resourceType().first);
         QVector<KisTagSP> tags = getTagsForEmbeddingInResource(resModel->tagsForResource(id));
         m_bundle->addResource(res->resourceType().first, res->filename(), tags, res->md5());

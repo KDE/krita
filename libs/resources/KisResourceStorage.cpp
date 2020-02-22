@@ -100,6 +100,9 @@ KisResourceStorage::KisResourceStorage(const QString &location)
         d->storageType = StorageType::Memory;
         d->valid = true;
     }
+    else {
+        d->valid = false;
+    }
 }
 
 KisResourceStorage::~KisResourceStorage()

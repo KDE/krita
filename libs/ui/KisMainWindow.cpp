@@ -2271,7 +2271,10 @@ void KisMainWindow::updateWindowMenu()
     QFontMetrics fontMetrics = docMenu->fontMetrics();
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
     QScreen *screen = qApp->screenAt(this->geometry().topLeft());
-    int fileStringWidth = int(screen->availableGeometry().width() * .40f);
+    int fileStringWidth = 300;
+    if (screen) {
+        fileStringWidth = int(screen->availableGeometry().width() * .40f);
+    }
 #else
     int fileStringWidth = int(QApplication::desktop()->screenGeometry(this).width() * .40f);
 #endif

@@ -30,7 +30,7 @@
 
 
 struct Q_DECL_HIDDEN KoResource::Private {
-    int version {0};
+    int version {-1};
     int resourceId {-1};
     bool valid {false};
     bool permanent {false};

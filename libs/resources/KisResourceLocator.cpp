@@ -202,7 +202,7 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
     resource->setStorageLocation(storageLocation);
     Q_ASSERT(!resource->storageLocation().isEmpty());
 
-    {
+    if (resource->resourceId() < 0 || resource->version() < 0) {
         QSqlQuery q;
         if (!q.prepare("SELECT resources.id\n"
                        ",      resources.version\n"

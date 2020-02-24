@@ -417,23 +417,29 @@ void KisPaintOpPreset::setResourcesInterface(KisResourcesInterfaceSP resourcesIn
 
 void KisPaintOpPreset::createLocalResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface)
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN(d->settings);
+    QList<KoResourceSP> resources = linkedResources(globalResourcesInterface);
+    d->settings->setResourcesInterface(QSharedPointer<KisLocalStrokeResources>::create(resources));
+}
 
+QList<KoResourceSP> KisPaintOpPreset::linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const
+{
     QList<KoResourceSP> resources;
 
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(d->settings, resources);
+
     KisPaintOpFactory* f = KisPaintOpRegistry::instance()->value(paintOp().id());
-    KIS_SAFE_ASSERT_RECOVER_RETURN(f);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(f, resources);
     resources << f->prepareResources(d->settings, globalResourcesInterface);
 
     if (hasMaskingPreset()) {
         KisPaintOpPresetSP maskingPreset = createMaskingPreset();
 
         KisPaintOpFactory* f = KisPaintOpRegistry::instance()->value(maskingPreset->paintOp().id());
-        KIS_SAFE_ASSERT_RECOVER_RETURN(f);
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(f, resources);
         resources << f->prepareResources(maskingPreset->settings(), globalResourcesInterface);
     }
 
-    d->settings->setResourcesInterface(QSharedPointer<KisLocalStrokeResources>::create(resources));
+    return resources;
 }
 
 KisPaintOpPreset::UpdatedPostponer::UpdatedPostponer(KisPaintOpPresetSP preset)

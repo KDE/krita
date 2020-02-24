@@ -227,6 +227,11 @@ int KoResource::resourceId() const
     return d->resourceId;
 }
 
+QList<KoResourceSP> KoResource::linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const
+{
+    return {};
+}
+
 QString KoResource::storageLocation() const
 {
     return d->storageLocation;

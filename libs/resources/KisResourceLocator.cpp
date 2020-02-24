@@ -156,6 +156,17 @@ bool KisResourceLocator::resourceCached(QString storageLocation, const QString &
     return d->resourceCache.contains(key);
 }
 
+void KisResourceLocator::loadLinkedResources(KoResourceSP resource)
+{
+    QList<KoResourceSP> linkedResources = resource->linkedResources(KisGlobalResourcesInterface::instance());
+    Q_FOREACH (KoResourceSP res, linkedResources) {
+        if (res->resourceId() < 0) {
+            // we put all the embedded resources into the global shared "memory" storage
+            this->addResource(res->resourceType().first, res, "memory");
+        }
+    }
+}
+
 KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString &resourceType, const QString &filename)
 {
     storageLocation = makeStorageLocationAbsolute(storageLocation);
@@ -177,8 +188,12 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
         if (resource) {
             KIS_SAFE_ASSERT_RECOVER(!resource->filename().startsWith(resourceType)) {};
             d->resourceCache[key] = resource;
+
+            // load all the embedded resources into temporary "memory" storage
+            loadLinkedResources(resource);
         }
     }
+
     if (!resource) {
         qDebug() << "KoResourceSP KisResourceLocator::resource" << storageLocation << resourceType << filename;
     }

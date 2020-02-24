@@ -159,6 +159,8 @@ public:
      */
     void createLocalResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface);
 
+    QList<KoResourceSP> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const override;
+
 
 private:
 

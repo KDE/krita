@@ -26,6 +26,8 @@
 #include "kis_properties_configuration.h"
 #include <KisPaintopSettingsIds.h>
 #include <kis_brush.h>
+#include <KoEphemeralResource.h>
+
 
 void KisBrushOptionProperties::writeOptionSettingImpl(KisPropertiesConfiguration *setting) const
 {
@@ -86,8 +88,8 @@ QList<KoResourceSP> KisBrushOptionProperties::prepareResourcesImpl(const KisProp
     if (element.isNull()) return resources;
 
     KisBrushSP brush = KisBrush::fromXML(element, resourcesInterface);
-    // TODO: check if ephemeral and don't add it!
-    if (brush) {
+    // TODO: implement proper property for KoResource about ephemerality
+    if (brush && !dynamic_cast<KoEphemeralResource<KisBrush>*>(brush.data())) {
         resources << brush;
     }
 

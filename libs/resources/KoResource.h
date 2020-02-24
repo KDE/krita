@@ -159,6 +159,15 @@ public:
     /// @return the resource type
     virtual QPair<QString, QString> resourceType() const = 0;
 
+    /**
+     * Loads all the linked resources either from \p globalResourcesInterface or
+     * from embedded data. The preset first tries to fetch the linked resource
+     * from the global source, and only if it fails, tries to load it from the
+     * embedded data. One can check if the loaded resource is embedded by checking
+     * its resourceId().
+     */
+    virtual QList<KoResourceSP> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const;
+
 private:
 
     friend class KisResourceModel;

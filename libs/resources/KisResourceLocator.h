@@ -231,6 +231,13 @@ private:
      */
     bool storageContainsResourceByFile(const QString &storageLocation, const QString &resourceType, const QString &filename) const;
 
+    /**
+     * Loads all the resources linked to \p resource into the cache
+     *
+     * loadLinkedResources() also loads embedded resources and adds them
+     * into the database.
+     */
+    void loadLinkedResources(KoResourceSP resource);
 
     KisResourceLocator(QObject *parent);
     KisResourceLocator(const KisResourceLocator&);

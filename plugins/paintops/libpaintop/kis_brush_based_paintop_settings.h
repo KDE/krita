@@ -37,7 +37,7 @@ public:
     bool paintIncremental() override;
 
     using KisPaintOpSettings::brushOutline;
-    QPainterPath brushOutline(const KisPaintInformation &info, const OutlineMode &mode) override;
+    QPainterPath brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom) override;
 
     ///Reimplemented
     bool isValid() const override;
@@ -68,7 +68,7 @@ public:
 protected:
 
     void onPropertyChanged() override;
-    QPainterPath brushOutlineImpl(const KisPaintInformation &info, const OutlineMode &mode, qreal additionalScale);
+    QPainterPath brushOutlineImpl(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom, qreal additionalScale);
     mutable KisBrushSP m_savedBrush;
     QList<KisUniformPaintOpPropertyWSP> m_uniformProperties;
 

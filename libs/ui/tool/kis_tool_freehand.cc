@@ -444,7 +444,7 @@ QPainterPath KisToolFreehand::getOutlinePath(const QPointF &documentPos,
                                              KisPaintOpSettings::OutlineMode outlineMode)
 {
     if (currentPaintOpPreset())
-        return m_helper->paintOpOutline(convertToPixelCoordAndAlignOnWidget(documentPos),
+        return m_helper->paintOpOutline(convertToPixelCoord(documentPos),
                                         event,
                                         currentPaintOpPreset()->settings(),
                                         outlineMode);

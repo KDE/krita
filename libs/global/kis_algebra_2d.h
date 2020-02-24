@@ -618,6 +618,7 @@ private:
     bool valid = true;
 };
 
+QPointF KRITAGLOBAL_EXPORT alignForZoom(const QPointF &pt, qreal zoom);
 }
 
 

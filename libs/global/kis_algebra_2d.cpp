@@ -592,4 +592,9 @@ DecomposedMatix::DecomposedMatix(const QTransform &t0)
     KIS_SAFE_ASSERT_RECOVER_NOOP(fuzzyMatrixCompare(leftOver, QTransform(), 1e-4));
 }
 
+QPointF alignForZoom(const QPointF &pt, qreal zoom)
+{
+    return QPointF((pt * zoom).toPoint()) / zoom;
+}
+
 }

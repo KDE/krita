@@ -216,7 +216,7 @@ QPainterPath KisToolFreehandHelper::paintOpOutline(const QPointF &savedCursorPos
     info.setRandomSource(m_d->fakeDabRandomSource);
     info.setPerStrokeRandomSource(m_d->fakeStrokeRandomSource);
 
-    QPainterPath outline = settings->brushOutline(info, mode);
+    QPainterPath outline = settings->brushOutline(info, mode, currentZoom());
 
     if (m_d->resources &&
         m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::STABILIZER &&

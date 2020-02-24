@@ -40,6 +40,9 @@ public:
     virtual ~KisStoragePlugin();
 
     virtual KisResourceStorage::ResourceItem resourceItem(const QString &url) = 0;
+
+    /// Retrieve the given resource. The url is the unique identifier of the resource,
+    /// for instance resourcetype plus filename.
     virtual KoResourceSP resource(const QString &url) = 0;
     virtual QSharedPointer<KisResourceStorage::ResourceIterator> resources(const QString &resourceType) = 0;
     virtual QSharedPointer<KisResourceStorage::TagIterator> tags(const QString &resourceType) = 0;

@@ -400,6 +400,11 @@ QPair<QString, KoToolBase*> KoToolManager::createTools(KoCanvasController *contr
 
 void KoToolManager::initializeCurrentToolForCanvas()
 {
+    KIS_ASSERT_RECOVER_RETURN(d->canvasData);
+
+    // make a full reconnect cycle for the currently active tool
+    d->disconnectActiveTool();
+    d->connectActiveTool();
     d->postSwitchTool(false);
 }
 

@@ -459,8 +459,10 @@ void KoStrokeConfigWidget::updateMarkers(const QList<KoMarker*> &markers)
 
 void KoStrokeConfigWidget::activate()
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!d->deactivationLocks.empty());
     d->deactivationLocks.clear();
     d->fillConfigWidget->activate();
+
     if (!d->noSelectionTrackingMode) {
         d->selectionChangedCompressor.start();
     } else {
@@ -470,7 +472,8 @@ void KoStrokeConfigWidget::activate()
 
 void KoStrokeConfigWidget::deactivate()
 {
-    d->deactivationLocks.clear();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(d->deactivationLocks.empty());
+
     d->deactivationLocks.push_back(KisAcyclicSignalConnector::Blocker(d->shapeChangedAcyclicConnector));
     d->deactivationLocks.push_back(KisAcyclicSignalConnector::Blocker(d->resourceManagerAcyclicConnector));
     d->fillConfigWidget->deactivate();

@@ -35,7 +35,6 @@ elseif(MINGW)
         --confirm-license
         --target-py-version 3.8
         --bindir ${PREFIX_ext_pyqt}/bin
-        --qt ${PREFIX_ext_pyqt}
         --qmake ${PREFIX_ext_pyqt}/bin/qmake.exe
         --sip ${PREFIX_ext_pyqt}/bin/sip.exe
         --sip-incdir ${PREFIX_ext_pyqt}/include

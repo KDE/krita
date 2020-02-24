@@ -33,8 +33,6 @@
 #include <QtDebug>
 #include <QDoubleSpinBox>
 #include "kis_cursor.h"
-#include "KisPart.h"
-#include "input/kis_input_manager.h"
 
 #include "kis_num_parser.h"
 

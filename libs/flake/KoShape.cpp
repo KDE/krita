@@ -94,7 +94,6 @@ KoShapePrivate::KoShapePrivate(KoShape *shape)
       geometryProtected(false),
       keepAspect(false),
       selectable(true),
-      detectCollision(false),
       protectContent(false),
       textRunAroundSide(KoShape::BiggestRunAroundSide),
       textRunAroundDistanceLeft(0.0),
@@ -144,7 +143,6 @@ KoShapePrivate::KoShapePrivate(const KoShapePrivate &rhs, KoShape *q)
       geometryProtected(rhs.geometryProtected),
       keepAspect(rhs.keepAspect),
       selectable(rhs.selectable),
-      detectCollision(rhs.detectCollision),
       protectContent(rhs.protectContent),
 
       textRunAroundSide(rhs.textRunAroundSide),
@@ -1287,18 +1285,6 @@ void KoShape::setShapeId(const QString &id)
 {
     Q_D(KoShape);
     d->shapeId = id;
-}
-
-void KoShape::setCollisionDetection(bool detect)
-{
-    Q_D(KoShape);
-    d->detectCollision = detect;
-}
-
-bool KoShape::collisionDetection()
-{
-    Q_D(KoShape);
-    return d->detectCollision;
 }
 
 KoShapeStrokeModelSP KoShape::stroke() const

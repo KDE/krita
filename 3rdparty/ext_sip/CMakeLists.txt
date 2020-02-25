@@ -12,7 +12,7 @@ if (UNIX)
         URL https://files.kde.org/krita/build/dependencies/sip-4.19.19.tar.gz
         URL_MD5 98111479309dc472410f26080d6d4a88
 
-        CONFIGURE_COMMAND ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/configure.py -b ${PREFIX_ext_sip}/bin -d ${PREFIX_ext_sip}/lib/python3.5/site-packages -e ${PREFIX_ext_sip}/include  --sipdir ${PREFIX_ext_sip}/sip --target-py-version 3.8 --sip-module PyQt5.sip
+        CONFIGURE_COMMAND ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/configure.py -b ${PREFIX_ext_sip}/bin -d ${PREFIX_ext_sip}/lib/python3.8/site-packages -e ${PREFIX_ext_sip}/include  --sipdir ${PREFIX_ext_sip}/sip --target-py-version 3.8 --sip-module PyQt5.sip
         BUILD_COMMAND make
 
         # force single-threaded installation to avoid

@@ -59,7 +59,7 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 {
     setupUi(this);
 
-#ifdef KRITA_BETA
+#ifdef FALSE
     lblSurveyLink->setVisible(true);
     lblSurveyLink->setTextInteractionFlags(Qt::TextBrowserInteraction);
 

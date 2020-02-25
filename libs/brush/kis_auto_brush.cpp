@@ -120,30 +120,30 @@ KisBrush* KisAutoBrush::clone() const
     return new KisAutoBrush(*this);
 }
 
-/* It's difficult to predict the mask height when exactly when there are
+/* It's difficult to predict the mask height exactly when there are
  * more than 2 spikes, so we return an upperbound instead. */
-static KisDabShape lieAboutDabShape(KisDabShape const& shape)
+static KisDabShape lieAboutDabShape(KisDabShape const& shape, int spikes)
 {
-    return KisDabShape(shape.scale(), 1.0, shape.rotation());
+    return spikes > 2 ? KisDabShape(shape.scale(), 1.0, shape.rotation()) : shape;
 }
 
 qint32 KisAutoBrush::maskHeight(KisDabShape const& shape,
     qreal subPixelX, qreal subPixelY, const KisPaintInformation& info) const
 {
     return KisBrush::maskHeight(
-        lieAboutDabShape(shape), subPixelX, subPixelY, info);
+        lieAboutDabShape(shape, maskGenerator()->spikes()), subPixelX, subPixelY, info);
 }
 
 qint32 KisAutoBrush::maskWidth(KisDabShape const& shape,
     qreal subPixelX, qreal subPixelY, const KisPaintInformation& info) const
 {
     return KisBrush::maskWidth(
-        lieAboutDabShape(shape), subPixelX, subPixelY, info);
+        lieAboutDabShape(shape, maskGenerator()->spikes()), subPixelX, subPixelY, info);
 }
 
 QSizeF KisAutoBrush::characteristicSize(KisDabShape const& shape) const
 {
-    return KisBrush::characteristicSize(lieAboutDabShape(shape));
+    return KisBrush::characteristicSize(lieAboutDabShape(shape, maskGenerator()->spikes()));
 }
 
 

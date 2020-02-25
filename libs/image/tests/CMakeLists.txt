@@ -133,6 +133,7 @@ ecm_add_tests(
     kis_random_generator_test.cpp
     kis_keyframing_test.cpp
     kis_filter_mask_test.cpp
+    kis_async_merger_test.cpp
 
     LINK_LIBRARIES kritaimage Qt5::Test
     NAME_PREFIX "libs-image-"
@@ -184,12 +185,6 @@ krita_add_broken_unit_test( kis_processings_test.cpp
 
 krita_add_broken_unit_test( kis_perspective_transform_worker_test.cpp
     TEST_NAME kis_perspective_transform_worker_test
-    LINK_LIBRARIES kritaimage Qt5::Test
-    NAME_PREFIX "libs-image-"
-)
-
-krita_add_broken_unit_test( kis_async_merger_test.cpp
-    TEST_NAME kis_async_merger_test
     LINK_LIBRARIES kritaimage Qt5::Test
     NAME_PREFIX "libs-image-"
 )

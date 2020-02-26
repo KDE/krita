@@ -53,7 +53,7 @@ elseif(MINGW)
             BUILD_COMMAND ${CMAKE_COMMAND} -E echo deploying python3 64-bit binary
             INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/ ${PREFIX_ext_python}/python
                     COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/python3.dll ${PREFIX_ext_python}/bin
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/python36.dll ${PREFIX_ext_python}/bin
+                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/python38.dll ${PREFIX_ext_python}/bin
                     COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/vcruntime140.dll ${PREFIX_ext_python}/bin
             UPDATE_COMMAND ""
         )
@@ -68,7 +68,7 @@ elseif(MINGW)
             BUILD_COMMAND ${CMAKE_COMMAND} -E echo deploying python3 32-bit binary
             INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/ ${PREFIX_ext_python}/python
                     COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/python3.dll ${PREFIX_ext_python}/bin
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/python36.dll ${PREFIX_ext_python}/bin
+                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/python38.dll ${PREFIX_ext_python}/bin
                     COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/vcruntime140.dll ${PREFIX_ext_python}/bin
             UPDATE_COMMAND ""
         )

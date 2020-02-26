@@ -366,10 +366,10 @@ bool Python::setPath(const QStringList& scriptPaths)
     QDir pythonDir(KoResourcePaths::getApplicationRoot());
     if (pythonDir.cd("python")) {
         dbgScript << "Found bundled Python at" << pythonDir.absolutePath();
-        // The default paths for Windows embeddable Python is ./python36.zip;./
-        // HACK: Assuming bundled Python is version 3.6.*
-        // FIXME: Should we read python36._pth for the paths or use Py_GetPath?
-        paths.append(pythonDir.absoluteFilePath("python36.zip"));
+        // The default paths for Windows embeddable Python is ./python38.zip;./
+        // HACK: Assuming bundled Python is version 3.8.*
+        // FIXME: Should we read python38._pth for the paths or use Py_GetPath?
+        paths.append(pythonDir.absoluteFilePath("python38.zip"));
         paths.append(pythonDir.absolutePath());
     } else {
         errScript << "Bundled Python not found, cannot set Python library paths";

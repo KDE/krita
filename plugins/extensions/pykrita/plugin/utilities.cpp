@@ -296,7 +296,11 @@ namespace
 QString findKritaPythonLibsPath(const QString &libdir)
 {
     QDir rootDir(KoResourcePaths::getApplicationRoot());
-    QFileInfoList candidates =  rootDir.entryInfoList(QStringList() << "lib*", QDir::Dirs | QDir::NoDotAndDotDot) + rootDir.entryInfoList(QStringList() << "Frameworks", QDir::Dirs | QDir::NoDotAndDotDot);
+
+    QFileInfoList candidates =
+        rootDir.entryInfoList(QStringList() << "lib*", QDir::Dirs | QDir::NoDotAndDotDot) +
+        rootDir.entryInfoList(QStringList() << "Frameworks", QDir::Dirs | QDir::NoDotAndDotDot) +
+        rootDir.entryInfoList(QStringList() << "share", QDir::Dirs | QDir::NoDotAndDotDot);
     Q_FOREACH (const QFileInfo &entry, candidates) {
         QDir libDir(entry.absoluteFilePath());
         if (libDir.cd(libdir)) {
@@ -357,6 +361,14 @@ bool Python::setPath(const QStringList& scriptPaths)
     dbgScript << "pythonLibsPath (sip)" << pythonLibsPath;
     if (!pythonLibsPath.isEmpty()) {
         dbgScript << "Found sip at" << pythonLibsPath;
+        paths.append(pythonLibsPath);
+    }
+
+    // Append the python38 libraries path
+    pythonLibsPath = findKritaPythonLibsPath("python3.8");
+    dbgScript << "pythonLibsPath (python3.8)" << pythonLibsPath;
+    if (!pythonLibsPath.isEmpty()) {
+        dbgScript << "Found python3.8 at" << pythonLibsPath;
         paths.append(pythonLibsPath);
     }
 #endif

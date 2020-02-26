@@ -363,14 +363,6 @@ bool Python::setPath(const QStringList& scriptPaths)
         dbgScript << "Found sip at" << pythonLibsPath;
         paths.append(pythonLibsPath);
     }
-
-    // Append the python38 libraries path
-    pythonLibsPath = findKritaPythonLibsPath("python3.8");
-    dbgScript << "pythonLibsPath (python3.8)" << pythonLibsPath;
-    if (!pythonLibsPath.isEmpty()) {
-        dbgScript << "Found python3.8 at" << pythonLibsPath;
-        paths.append(pythonLibsPath);
-    }
 #endif
 
 #ifdef Q_OS_WIN
@@ -393,9 +385,9 @@ bool Python::setPath(const QStringList& scriptPaths)
         // We're running from an appimage, so we need our local python
         QString p = QFileInfo(PYKRITA_PYTHON_LIBRARY).fileName();
 #ifdef Q_OS_MAC
-        QString p2 = p.remove("lib").remove("m.dy");
+        QString p2 = p.remove("lib").remove("m.dy").remove(".dy");
 #else
-        QString p2 = p.remove("lib").remove("m.so");
+        QString p2 = p.remove("lib").remove("m.so").remove(".so");
 #endif
         dbgScript << "\t" << p << p2;
         originalPath = findKritaPythonLibsPath(p);

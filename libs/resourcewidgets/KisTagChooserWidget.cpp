@@ -221,7 +221,6 @@ void KisTagChooserWidget::tagToolContextMenuAboutToShow()
 {
     /* only enable the save button if the selected tag set is editable */
     d->tagToolButton->readOnlyMode(selectedTagIsReadOnly());
-    emit popupMenuAboutToShow();
 }
 
 void KisTagChooserWidget::showTagToolButton(bool show)

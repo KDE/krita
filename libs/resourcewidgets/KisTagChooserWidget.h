@@ -79,18 +79,53 @@ public:
     void showTagToolButton(bool show);
 
 Q_SIGNALS:
+    ///
+    /// \brief sigTagChosen is emitted when the selected tag in the combobox changes due to user interaction or by other means
+    /// \param tag current tag
+    ///
     void sigTagChosen(const KisTagSP tag);
 
 public Q_SLOTS:
 
+    ///
+    /// \brief tagChanged slot for the signal from the combobox that the index changed
+    /// \param index new index
+    ///
+    /// When the index in the combobox changes, for example because of user's interaction,
+    ///  combobox emits a signal; this method is called when it happens.
     void tagChanged(int index);
 
 private Q_SLOTS:
+    ///
+    /// \brief tagToolCreateNewTag slot for the signal from KisTagToolButton that a new tag needs to be created
+    /// \param tag tag with the name to be created
+    /// \return created tag taken from the model, with a valid id
+    ///
     KisTagSP tagToolCreateNewTag(KisTagSP tag);
+    ///
+    /// \brief tagToolRenameCurrentTag slot for the signal from KisTagToolButton that the current tag needs to be renamed
+    /// \param newName new name for the tag
+    ///
     void tagToolRenameCurrentTag(const KisTagSP newName);
+    ///
+    /// \brief tagToolDeleteCurrentTag slot for the signal from the KisTagToolButton that the current tag needs to be deleted
+    ///
+    /// Note that tags are not deleted but just marked inactive in the database.
+    ///
     void tagToolDeleteCurrentTag();
 
+    ///
+    /// \brief tagToolUndeleteLastTag slot for the signal from the KisTagToolButton that the last deleted tag needs to be undeleted
+    /// \param tag tag to be undeleted (marked active)
+    ///
     void tagToolUndeleteLastTag(const KisTagSP tag);
+
+    ///
+    /// \brief tagToolContextMenuAboutToShow slot for the signal from the KisTagToolButton that the popup will be shown soon
+    ///
+    /// Based on the current tag (if it's readonly or not), the popup looks different, so this function
+    ///  sets the correct mode on the KisTagToolButton popup.
+    ///
     void tagToolContextMenuAboutToShow();
 
     ///

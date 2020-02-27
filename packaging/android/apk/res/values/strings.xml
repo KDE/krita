@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="remote_action_click">Click</string>
+	<string name="remote_action_doubleclick">Double Click</string>
+	<string name="remote_action_swipeup">Swipe Up</string>
+	<string name="remote_action_swipedown">Swipe Down</string>
+	<string name="remote_action_swipeleft">Swipe Left</string>
+	<string name="remote_action_swiperight">Swipe Right</string>
+	<string name="remote_action_circlecw">Circle Clockwise</string>
+	<string name="remote_action_circleccw">Circle Counter-Clockwise</string>
+</resources>
+

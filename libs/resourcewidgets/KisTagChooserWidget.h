@@ -35,9 +35,8 @@
 #include <KisTagModel.h>
 
 ///
-/// \brief The KisTagChooserWidget class is responsible
+/// \brief The KisTagChooserWidget class is responsible for all the logic that tags combobox has in various resource choosers.
 ///
-/// for all the logic that tags combobox has in various resource choosers.
 /// (Example of usage: tag combobox in Brushes docker).
 /// It uses KisTagModel as a model for items in the combobox.
 /// It is also responsible for the popup for tag removal, renaming and creation
@@ -57,12 +56,18 @@ public:
 
 
     /// \brief setCurrentIndex sets the current index in the combobox
-    /// \param index index is the
+    /// \param index index is the index of the tag in the combobox
     ///
     void setCurrentIndex(int index);
+
+    ///
+    /// \brief currentIndex returns the current index in tags combobox
+    /// \return the index of the current item in tags combobox
+    ///
     int currentIndex() const;
 
     /// \brief currentlySelectedTag returns the current tag from combobox
+    /// \see currentIndex
     /// \return the tag that is currently selected in the tag combobox
     ///
     KisTagSP currentlySelectedTag();
@@ -88,11 +93,26 @@ private Q_SLOTS:
     void tagToolUndeleteLastTag(const KisTagSP tag);
     void tagToolContextMenuAboutToShow();
 
+    ///
+    /// \brief slotModelAboutToBeReset is called before the tag model is being reset.
+    ///
+    /// It remembers the last selected tag to select it again after the reset of the model.
+    ///
     void slotModelAboutToBeReset();
+    ///
+    /// \brief slotModelReset is called after the tag model is reset.
+    ///
+    /// It restores the last selected tag.
+    ///
     void slotModelReset();
 
 
 private:
+    ///
+    /// \brief setCurrentItem sets the tag from the param as the current tag in the combobox
+    /// \param tag tag to be set as current in the combobox
+    /// \return true if successful, false if not successful
+    ///
     bool setCurrentItem(KisTagSP tag);
 
 private:

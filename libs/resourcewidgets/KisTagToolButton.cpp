@@ -116,7 +116,6 @@ KisTagToolButton::~KisTagToolButton()
 
 void KisTagToolButton::readOnlyMode(bool activate)
 {
-    ENTER_FUNCTION();
     activate = !activate;
     d->action_renameTag->setVisible(activate);
     d->action_deleteTag->setVisible(activate);
@@ -124,7 +123,6 @@ void KisTagToolButton::readOnlyMode(bool activate)
 
 void KisTagToolButton::setUndeletionCandidate(const KisTagSP deletedTag)
 {
-    ENTER_FUNCTION();
     if (deletedTag.isNull() || deletedTag->name().isEmpty()) {
         d->action_undeleteTag->setVisible(false);
         return;
@@ -137,7 +135,6 @@ void KisTagToolButton::setUndeletionCandidate(const KisTagSP deletedTag)
 
 void KisTagToolButton::onTagUndeleteClicked()
 {
-    ENTER_FUNCTION();
     emit undeletionOfTagRequested(d->undeleteCandidate);
 }
 

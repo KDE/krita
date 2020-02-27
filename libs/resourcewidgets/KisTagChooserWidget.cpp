@@ -223,11 +223,6 @@ void KisTagChooserWidget::tagToolContextMenuAboutToShow()
     d->tagToolButton->readOnlyMode(selectedTagIsReadOnly());
 }
 
-void KisTagChooserWidget::showTagToolButton(bool show)
-{
-    d->tagToolButton->setVisible(show);
-}
-
 void KisTagChooserWidget::slotModelAboutToBeReset()
 {
     d->rememberedTag = currentlySelectedTag();

@@ -40,6 +40,8 @@ public:
     KisFilterOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
     ~KisFilterOp() override;
 
+    static QList<KoResourceSP> prepareResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface);
+
 protected:
 
     KisSpacingInformation paintAt(const KisPaintInformation& info) override;

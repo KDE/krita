@@ -161,11 +161,6 @@ int KisTagChooserWidget::currentIndex() const
     return d->comboBox->currentIndex();
 }
 
-void KisTagChooserWidget::addReadOnlyItem(KisTagSP tag)
-{
-    d->model->addTag(tag);
-}
-
 bool KisTagChooserWidget::setCurrentItem(KisTagSP tag)
 {
     for (int i = 0; i < d->model->rowCount(); i++) {
@@ -222,21 +217,6 @@ KisTagSP KisTagChooserWidget::currentlySelectedTag()
 bool KisTagChooserWidget::selectedTagIsReadOnly()
 {
     return currentlySelectedTag()->id() < 0;
-}
-
-void KisTagChooserWidget::addItems(QList<KisTagSP> tags)
-{
-    ENTER_FUNCTION();
-    warnKrita << "not implemented";
-
-    Q_FOREACH(KisTagSP tag, tags) {
-        tagToolCreateNewTag(tag);
-    }
-}
-
-void KisTagChooserWidget::clear()
-{
-    ENTER_FUNCTION();
 }
 
 void KisTagChooserWidget::tagToolContextMenuAboutToShow()

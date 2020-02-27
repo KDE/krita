@@ -24,9 +24,9 @@
 #include <QLabel>
 
 #include <KoColor.h>
-#include <KoResourceServer.h>
 #include <resources/KoPattern.h>
 #include <KisGlobalResourcesInterface.h>
+#include <kis_generator_registry.h>
 
 #include <filter/kis_filter_configuration.h>
 #include <kis_pattern_chooser.h>
@@ -53,14 +53,14 @@ void KisWdgPattern::setConfiguration(const KisPropertiesConfigurationSP config)
 {
     auto source = KisGlobalResourcesInterface::instance()->source<KoPattern>(ResourceType::Patterns);
     KoPatternSP pattern = source.resourceForName(config->getString("pattern", "Grid01.pat"));
-    if (pattern) {
-       widget()->patternChooser->setCurrentPattern(pattern);
-    }
+    widget()->patternChooser->setCurrentPattern(pattern ? pattern : source.fallbackResource());
 }
 
 KisPropertiesConfigurationSP KisWdgPattern::configuration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("pattern", 1, KisGlobalResourcesInterface::instance());
+    KisGeneratorSP generator = KisGeneratorRegistry::instance()->get("pattern");
+    KisFilterConfigurationSP config = generator->factoryConfiguration(KisGlobalResourcesInterface::instance());
+
     QVariant v;
     v.setValue(widget()->patternChooser->currentResource()->name());
     config->setProperty("pattern", v);

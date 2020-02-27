@@ -17,3 +17,7 @@ add_subdirectory( waveletdecompose )
 add_subdirectory( pykrita )
 add_subdirectory( qmic )
 add_subdirectory( buginfo )
+
+if (ANDROID)
+    add_subdirectory( spensettings )
+endif()

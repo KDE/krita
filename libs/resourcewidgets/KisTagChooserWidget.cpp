@@ -98,8 +98,6 @@ KisTagChooserWidget::KisTagChooserWidget(KisTagModel* model, QWidget* parent)
             this, SLOT(tagToolRenameCurrentTag(KisTagSP)));
     connect(d->tagToolButton, SIGNAL(undeletionOfTagRequested(KisTagSP)),
             this, SLOT(tagToolUndeleteLastTag(KisTagSP)));
-    connect(d->tagToolButton, SIGNAL(purgingOfTagUndeleteListRequested()),
-            this, SIGNAL(tagUndeletionListPurgeRequested()));
 
     connect(d->model, SIGNAL(modelAboutToBeReset()), this, SLOT(slotModelAboutToBeReset()));
     connect(d->model, SIGNAL(modelReset()), this, SLOT(slotModelReset()));

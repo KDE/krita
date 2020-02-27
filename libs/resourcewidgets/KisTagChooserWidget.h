@@ -74,7 +74,6 @@ public:
     void showTagToolButton(bool show);
 
 Q_SIGNALS:
-    void tagUndeletionListPurgeRequested();
     void popupMenuAboutToShow();
     void sigTagChosen(const KisTagSP tag);
 

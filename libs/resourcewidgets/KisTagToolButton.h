@@ -94,7 +94,6 @@ Q_SIGNALS:
     /// Undeletion means marking them as active again. This function signals to KisTagChooserWidget
     /// that a tag mentioned in the argument should be activated.
     void undeletionOfTagRequested(const KisTagSP tag);
-    void purgingOfTagUndeleteListRequested();
     void popupMenuAboutToShow();
 
 private Q_SLOTS:

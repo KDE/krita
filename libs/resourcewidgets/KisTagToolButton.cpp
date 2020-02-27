@@ -43,7 +43,6 @@ public:
     QAction* action_undeleteTag;
     QAction* action_deleteTag;
     KoLineEditAction* action_renameTag;
-    QAction* action_purgeTagUndeleteList;
     KisTagSP undeleteCandidate;
 };
 
@@ -103,15 +102,6 @@ KisTagToolButton::KisTagToolButton(QWidget* parent)
     connect(d->action_undeleteTag, SIGNAL(triggered()),
             this, SLOT(onTagUndeleteClicked()));
 
-    d->action_purgeTagUndeleteList = new QAction(popup);
-    d->action_purgeTagUndeleteList->setText(i18n("Clear undelete list"));
-    d->action_purgeTagUndeleteList->setIcon(koIcon("edit-clear"));
-    d->action_purgeTagUndeleteList->setVisible(false);
-    popup->addAction(d->action_purgeTagUndeleteList);
-
-    connect(d->action_purgeTagUndeleteList, SIGNAL(triggered()),
-            this, SIGNAL(purgingOfTagUndeleteListRequested()));
-
     connect(popup, SIGNAL(aboutToShow()),
             this, SIGNAL(popupMenuAboutToShow()));
 
@@ -143,9 +133,6 @@ void KisTagToolButton::setUndeletionCandidate(const KisTagSP deletedTag)
         d->action_undeleteTag->setText(i18n("Undelete") +" "+ deletedTag->name());
         d->action_undeleteTag->setVisible(true);
     }
-    // TODO: RESOURCES: do it properly
-    // since there is only one tag to undelete, there is no need to clear the list
-    //d->action_purgeTagUndeleteList->setVisible(!deletedTag->name().isEmpty());
 }
 
 void KisTagToolButton::onTagUndeleteClicked()

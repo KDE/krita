@@ -77,7 +77,8 @@ void KritaGradientMapConfigWidget::setAbstractGradientToEditor()
 
 KisPropertiesConfigurationSP KritaGradientMapConfigWidget::configuration() const
 {
-    KisFilterConfigurationSP cfg = new KisFilterConfiguration("gradientmap", 2, KisGlobalResourcesInterface::instance());
+    KisFilterSP filter = KisFilterRegistry::instance()->get("gradientmap");
+    KisFilterConfigurationSP cfg = filter->factoryConfiguration(KisGlobalResourcesInterface::instance());
     if (m_activeGradient) {
         QDomDocument doc;
         QDomElement elt = doc.createElement("gradient");
@@ -107,7 +108,10 @@ void KritaGradientMapConfigWidget::setConfiguration(const KisPropertiesConfigura
     }
 
     m_page->colorModeComboBox->setCurrentIndex(config->getInt("colorMode"));
-    m_page->ditherWidget->setConfiguration(*config, "dither/");
+
+    const KisFilterConfiguration *filterConfig = dynamic_cast<const KisFilterConfiguration*>(config.data());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(filterConfig);
+    m_page->ditherWidget->setConfiguration(*filterConfig, "dither/");
 }
 
 void KritaGradientMapConfigWidget::setView(KisViewManager *view)

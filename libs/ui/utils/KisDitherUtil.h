@@ -45,13 +45,13 @@ public:
     KisDitherUtil();
 
     void setThresholdMode(const ThresholdMode thresholdMode);
-    void setPattern(const QString &name, const PatternValueMode valueMode);
+    void setPattern(const QString &name, const PatternValueMode valueMode, KisResourcesInterfaceSP resourcesInterface);
     void setNoiseSeed(const quint64 &noiseSeed);
     void setSpread(const qreal &spread);
 
     qreal threshold(const QPoint &pos);
 
-    void setConfiguration(const KisPropertiesConfiguration &config, const QString &prefix = "");
+    void setConfiguration(const KisFilterConfiguration &config, const QString &prefix = "");
 
 private:
     ThresholdMode m_thresholdMode;

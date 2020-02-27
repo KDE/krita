@@ -20,9 +20,9 @@
 
 #include "KisDitherUtil.h"
 
-#include <kis_properties_configuration.h>
-#include <KoResourceServerProvider.h>
+#include <kis_filter_configuration.h>
 #include <kis_random_generator.h>
+#include <KisResourcesInterface.h>
 
 KisDitherUtil::KisDitherUtil()
     : m_thresholdMode(ThresholdMode::Pattern), m_patternValueMode(PatternValueMode::Auto)
@@ -35,10 +35,12 @@ void KisDitherUtil::setThresholdMode(const ThresholdMode thresholdMode)
     m_thresholdMode = thresholdMode;
 }
 
-void KisDitherUtil::setPattern(const QString &name, const PatternValueMode valueMode)
+void KisDitherUtil::setPattern(const QString &name, const PatternValueMode valueMode, KisResourcesInterfaceSP resourcesInterface)
 {
     m_patternValueMode = valueMode;
-    m_pattern = KoResourceServerProvider::instance()->patternServer()->resourceByName(name);
+
+    auto source = resourcesInterface->source<KoPattern>(ResourceType::Patterns);
+    m_pattern = source.resourceForName(name);
     if (m_pattern && m_thresholdMode == ThresholdMode::Pattern && m_patternValueMode == PatternValueMode::Auto) {
         // Automatically pick between lightness-based and alpha-based patterns by whichever has maximum range
         qreal lightnessMin = 1.0, lightnessMax = 0.0;
@@ -87,10 +89,10 @@ qreal KisDitherUtil::threshold(const QPoint &pos)
     return 0.5 - (m_spread / 2.0) + threshold * m_spread;
 }
 
-void KisDitherUtil::setConfiguration(const KisPropertiesConfiguration &config, const QString &prefix)
+void KisDitherUtil::setConfiguration(const KisFilterConfiguration &config, const QString &prefix)
 {
     setThresholdMode(ThresholdMode(config.getInt(prefix + "thresholdMode")));
-    setPattern(config.getString(prefix + "pattern"), PatternValueMode(config.getInt(prefix + "patternValueMode")));
+    setPattern(config.getString(prefix + "pattern"), PatternValueMode(config.getInt(prefix + "patternValueMode")), config.resourcesInterface());
     setNoiseSeed(quint64(config.getInt(prefix + "noiseSeed")));
     setSpread(config.getDouble(prefix + "spread"));
 }

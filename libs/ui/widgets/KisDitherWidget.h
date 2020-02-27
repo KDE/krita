@@ -27,15 +27,18 @@
 
 class KisResourceItemChooser;
 class KisPropertiesConfiguration;
+class KisFilterConfiguration;
 
 class KRITAUI_EXPORT KisDitherWidget : public QWidget, public Ui::KisDitherWidget
 {
     Q_OBJECT
 public:
     KisDitherWidget(QWidget* parent = 0);
-    void setConfiguration(const KisPropertiesConfiguration &config, const QString &prefix = "");
+    void setConfiguration(const KisFilterConfiguration &config, const QString &prefix = "");
     void configuration(KisPropertiesConfiguration &config, const QString &prefix = "") const;
     static void factoryConfiguration(KisPropertiesConfiguration &config, const QString &prefix = "");
+    static QList<KoResourceSP> prepareResources(const KisFilterConfiguration &config, const QString &prefix, KisResourcesInterfaceSP resourcesInterface);
+
 Q_SIGNALS:
     void sigConfigurationItemChanged();
 private:

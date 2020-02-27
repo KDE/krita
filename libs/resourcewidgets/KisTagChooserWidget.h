@@ -77,14 +77,16 @@ Q_SIGNALS:
     void sigTagChosen(const KisTagSP tag);
 
 public Q_SLOTS:
-    KisTagSP tagToolCreateNewTag(KisTagSP tag);
+
     void tagChanged(int index);
 
 private Q_SLOTS:
+    KisTagSP tagToolCreateNewTag(KisTagSP tag);
     void tagToolRenameCurrentTag(const KisTagSP newName);
+    void tagToolDeleteCurrentTag();
+
     void tagToolUndeleteLastTag(const KisTagSP tag);
     void tagToolContextMenuAboutToShow();
-    void tagToolDeleteCurrentTag();
 
     void slotModelAboutToBeReset();
     void slotModelReset();

@@ -34,6 +34,7 @@
 #include <KoColorSet.h>
 #include "gradientmap.h"
 #include <KisDitherUtil.h>
+#include <KisGlobalResourcesInterface.h>
 
 #include <KisSequentialIteratorProgress.h>
 
@@ -112,16 +113,18 @@ void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
 
 }
 
-KisFilterConfigurationSP KritaFilterGradientMap::factoryConfiguration() const
+KisFilterConfigurationSP KritaFilterGradientMap::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
 
-    return new KisFilterConfiguration(id().id(), 2);
+    return new KisFilterConfiguration(id().id(), 2, resourcesInterface);
 }
 
-KisFilterConfigurationSP KritaFilterGradientMap::defaultConfiguration() const
+KisFilterConfigurationSP KritaFilterGradientMap::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration();
-    KoAbstractGradientSP gradient = KoResourceServerProvider::instance()->gradientServer()->firstResource();
+    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
+
+    auto source = resourcesInterface->source<KoAbstractGradient>(ResourceType::Gradients);
+    KoAbstractGradientSP gradient = source.fallbackResource();
 
     KoStopGradient stopGradient;
     QScopedPointer<QGradient> qGradient(gradient->toQGradient());

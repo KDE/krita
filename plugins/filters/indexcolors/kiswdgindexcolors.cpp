@@ -25,6 +25,7 @@
 #include "kiswdgindexcolors.h"
 #include "palettegeneratorconfig.h"
 #include "ui_kiswdgindexcolors.h"
+#include <KisGlobalResourcesInterface.h>
 
 #include "kis_int_parse_spin_box.h"
 
@@ -126,7 +127,7 @@ void KisWdgIndexColors::setup(QStringList shadesLabels, int ramps)
 
 KisPropertiesConfigurationSP KisWdgIndexColors::configuration() const
 {
-    KisColorTransformationConfigurationSP config = new KisColorTransformationConfiguration("indexcolors", 1);
+    KisColorTransformationConfigurationSP config = new KisColorTransformationConfiguration("indexcolors", 1, KisGlobalResourcesInterface::instance());
 
     PaletteGeneratorConfig palCfg;
 

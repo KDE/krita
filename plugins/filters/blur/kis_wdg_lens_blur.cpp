@@ -28,6 +28,7 @@
 #include <kis_selection.h>
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
+#include <KisGlobalResourcesInterface.h>
 
 #include "kis_lens_blur_filter.h"
 
@@ -50,7 +51,7 @@ KisWdgLensBlur::~KisWdgLensBlur()
 
 KisPropertiesConfigurationSP KisWdgLensBlur::configuration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("lens blur", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("lens blur", 1, KisGlobalResourcesInterface::instance());
     config->setProperty("irisShape", m_widget->irisShapeCombo->currentText());
     config->setProperty("irisRadius", m_widget->irisRadiusSlider->value());
     config->setProperty("irisRotation", m_widget->irisRotationSlider->value());

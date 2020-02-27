@@ -39,26 +39,56 @@ struct Q_DECL_HIDDEN KisFilterConfiguration::Private {
     QBitArray channelFlags;
     KisCubicCurve curve;
     QList< KisCubicCurve > curves;
+    KisResourcesInterfaceSP resourcesInterface = 0;
+
+    Private(const QString & _name, qint32 _version, KisResourcesInterfaceSP _resourcesInterface)
+        : name(_name),
+          version(_version),
+          resourcesInterface(_resourcesInterface)
+    {
+    }
+
+    Private(const Private &rhs)
+        : name(rhs.name),
+          version(rhs.version),
+          channelFlags(rhs.channelFlags),
+          curve(rhs.curve),
+          curves(rhs.curves),
+          resourcesInterface(rhs.resourcesInterface)
+    {
+    }
 
 #ifdef SANITY_CHECK_FILTER_CONFIGURATION_OWNER
     QAtomicInt sanityUsageCounter;
 #endif /* SANITY_CHECK_FILTER_CONFIGURATION_OWNER */
 };
 
-KisFilterConfiguration::KisFilterConfiguration(const QString & name, qint32 version)
-        : d(new Private)
+KisFilterConfiguration::KisFilterConfiguration(const QString & name, qint32 version, KisResourcesInterfaceSP resourcesInterface)
+        : d(new Private(name, version, resourcesInterface))
 {
-    d->name = name;
-    d->version = version;
-    d->channelFlags = QBitArray();
+}
+
+KisFilterConfigurationSP KisFilterConfiguration::clone() const
+{
+    return new KisFilterConfiguration(*this);
+}
+
+KisFilterConfigurationSP KisFilterConfiguration::cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface) const
+{
+    KisFilterConfigurationSP config = this->clone();
+
+    if (!config->hasLocalResourcesSnapshot()) {
+        config->createLocalResourcesSnapshot(globalResourcesInterface ? globalResourcesInterface : config->resourcesInterface());
+        KIS_SAFE_ASSERT_RECOVER_NOOP(config->hasLocalResourcesSnapshot());
+    }
+
+    return config;
 }
 
 KisFilterConfiguration::KisFilterConfiguration(const KisFilterConfiguration & rhs)
         : KisPropertiesConfiguration(rhs)
-        , d(new Private)
+        , d(new Private(*rhs.d))
 {
-    d->name = rhs.d->name;
-    d->version = rhs.d->version;
 }
 
 KisFilterConfiguration::~KisFilterConfiguration()
@@ -136,6 +166,38 @@ void KisFilterConfiguration::setCurve(const KisCubicCurve& curve)
 const QList< KisCubicCurve >& KisFilterConfiguration::curves() const
 {
     return d->curves;
+}
+
+// TODO: move into a separate interface class
+#include <KisLocalStrokeResources.h>
+#include <QApplication>
+#include <QThread>
+
+KisResourcesInterfaceSP KisFilterConfiguration::resourcesInterface() const
+{
+    return d->resourcesInterface;
+}
+
+void KisFilterConfiguration::setResourcesInterface(KisResourcesInterfaceSP resourcesInterface)
+{
+    d->resourcesInterface = resourcesInterface;
+}
+
+void KisFilterConfiguration::createLocalResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(QThread::currentThread() == qApp->thread());
+    QList<KoResourceSP> resources = linkedResources(globalResourcesInterface);
+    setResourcesInterface(QSharedPointer<KisLocalStrokeResources>::create(resources));
+}
+
+bool KisFilterConfiguration::hasLocalResourcesSnapshot() const
+{
+    return d->resourcesInterface.dynamicCast<KisLocalStrokeResources>();
+}
+
+QList<KoResourceSP> KisFilterConfiguration::linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const
+{
+    return {};
 }
 
 void KisFilterConfiguration::setCurves(QList< KisCubicCurve >& curves)

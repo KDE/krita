@@ -36,6 +36,7 @@
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
 #include "kis_node_filter_interface.h"
+#include <KisGlobalResourcesInterface.h>
 
 KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisNodeSP node,
                                          KisNodeFilterInterface* nfi,
@@ -59,7 +60,7 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisNodeSP node,
 
     setObjectName(name);
 
-    m_currentConfiguration = configuration;
+    m_currentConfiguration = configuration->clone();
     if (m_currentConfiguration) {
         m_currentFilter = KisFilterRegistry::instance()->get(m_currentConfiguration->name()).data();
     }
@@ -122,7 +123,7 @@ KisFilterConfigurationSP  KisDlgAdjLayerProps::filterConfiguration() const
             return config;
         }
     }
-    return m_currentFilter->defaultConfiguration();
+    return m_currentFilter->defaultConfiguration(KisGlobalResourcesInterface::instance());
 }
 
 QString KisDlgAdjLayerProps::layerName() const
@@ -135,7 +136,7 @@ void KisDlgAdjLayerProps::slotConfigChanged()
     enableButtonOk(true);
     KisFilterConfigurationSP  config = filterConfiguration();
     if (config) {
-        m_nodeFilterInterface->setFilter(config);
+        m_nodeFilterInterface->setFilter(config->cloneWithResourcesSnapshot());
     }
     m_node->setDirty();
 }

@@ -37,6 +37,7 @@
 #include "kis_selection.h"
 #include <kis_iterator_ng.h>
 #include "krita_utils.h"
+#include <KisGlobalResourcesInterface.h>
 
 void KisLevelFilterBenchmark::initTestCase()
 {
@@ -69,7 +70,7 @@ void KisLevelFilterBenchmark::benchmarkFilter()
     KisFilterSP filter = KisFilterRegistry::instance()->value("levels");
     //KisFilterConfigurationSP  kfc = filter->defaultConfiguration(m_device);
 
-    KisColorTransformationConfiguration * kfc= new KisColorTransformationConfiguration("levels", 1);
+    KisColorTransformationConfiguration * kfc= new KisColorTransformationConfiguration("levels", 1, KisGlobalResourcesInterface::instance());
 
     kfc->setProperty("blackvalue", 75);
     kfc->setProperty("whitevalue", 231);

@@ -50,9 +50,9 @@ KisConfigWidget * KisBlurFilter::createConfigurationWidget(QWidget* parent, cons
     return new KisWdgBlur(parent);
 }
 
-KisFilterConfigurationSP KisBlurFilter::defaultConfiguration() const
+KisFilterConfigurationSP KisBlurFilter::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration();
+    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
     config->setProperty("halfWidth", 5);
     config->setProperty("halfHeight", 5);
     config->setProperty("rotate", 0);
@@ -63,13 +63,13 @@ KisFilterConfigurationSP KisBlurFilter::defaultConfiguration() const
 
 void KisBlurFilter::processImpl(KisPaintDeviceSP device,
                                 const QRect& rect,
-                                const KisFilterConfigurationSP _config,
+                                const KisFilterConfigurationSP config,
                                 KoUpdater* progressUpdater
                                 ) const
 {
     QPoint srcTopLeft = rect.topLeft();
     Q_ASSERT(device != 0);
-    KisFilterConfigurationSP config = _config ? _config : new KisFilterConfiguration(id().id(), 1);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(config);
 
     KisLodTransformScalar t(device);
 

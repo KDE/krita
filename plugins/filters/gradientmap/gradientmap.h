@@ -39,21 +39,6 @@ public:
     }
 };
 
-
-class KritaGradientMapFilterConfiguration : public KisColorTransformationConfiguration
-{
-public:
-    KritaGradientMapFilterConfiguration();
-    ~KritaGradientMapFilterConfiguration() override;
-
-    virtual void setGradient(const KoResourceSP gradient);
-
-    virtual const KoResourceSP gradient() const;
-
-private:
-    KoResource const* m_gradient;
-};
-
 class KritaGradientMapConfigWidget : public KisConfigWidget
 {
     Q_OBJECT

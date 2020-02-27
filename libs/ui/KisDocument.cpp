@@ -52,6 +52,7 @@
 #include <KisResourceStorage.h>
 #include <KisResourceLocator.h>
 #include <KisResourceTypes.h>
+#include <KisGlobalResourcesInterface.h>
 
 #include <KisUsageLogger.h>
 #include <klocalizedstring.h>
@@ -2085,8 +2086,9 @@ bool KisDocument::newImage(const QString& name,
             layer = new KisPaintLayer(image.data(), "Background", OPACITY_OPAQUE_U8, cs);;
             layer->paintDevice()->setDefaultPixel(strippedAlpha);
         } else if (bgStyle == KisConfig::FILL_LAYER) {
-            KisFilterConfigurationSP filter_config = KisGeneratorRegistry::instance()->get("color")->defaultConfiguration();
+            KisFilterConfigurationSP filter_config = KisGeneratorRegistry::instance()->get("color")->defaultConfiguration(KisGlobalResourcesInterface::instance());
             filter_config->setProperty("color", strippedAlpha.toQColor());
+            filter_config->createLocalResourcesSnapshot();
             layer = new KisGeneratorLayer(image.data(), "Background Fill", filter_config, image->globalSelection());
         }
 

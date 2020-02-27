@@ -27,6 +27,7 @@
 #include <KoAbstractGradient.h>
 #include <KoStopGradient.h>
 #include <KoGradientBackground.h>
+#include <KisGlobalResourcesInterface.h>
 
 
 K_PLUGIN_FACTORY_WITH_JSON(KritaGradientMapFactory, "kritagradientmap.json", registerPlugin<KritaGradientMap>();)
@@ -76,7 +77,7 @@ void KritaGradientMapConfigWidget::setAbstractGradientToEditor()
 
 KisPropertiesConfigurationSP KritaGradientMapConfigWidget::configuration() const
 {
-    KisFilterConfigurationSP cfg = new KisFilterConfiguration("gradientmap", 2);
+    KisFilterConfigurationSP cfg = new KisFilterConfiguration("gradientmap", 2, KisGlobalResourcesInterface::instance());
     if (m_activeGradient) {
         QDomDocument doc;
         QDomElement elt = doc.createElement("gradient");

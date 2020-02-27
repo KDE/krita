@@ -33,6 +33,7 @@
 #include "kis_update_job_item.h"
 #include "kis_simple_update_queue.h"
 #include "scheduler_utils.h"
+#include <KisGlobalResourcesInterface.h>
 
 #include "lod_override.h"
 
@@ -167,7 +168,7 @@ void KisSimpleUpdateQueueTest::testChecksum()
 
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
     Q_ASSERT(filter);
-    KisFilterConfigurationSP configuration = filter->defaultConfiguration();
+    KisFilterConfigurationSP configuration = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
 
 
     KisTestableSimpleUpdateQueue queue;
@@ -180,7 +181,7 @@ void KisSimpleUpdateQueueTest::testChecksum()
         QCOMPARE(walkersList[0]->levelOfDetail(), 1);
     }
 
-    adjustmentLayer->setFilter(configuration);
+    adjustmentLayer->setFilter(configuration->cloneWithResourcesSnapshot());
 
     {
         TestUtil::LodOverride l(1, image);

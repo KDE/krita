@@ -37,6 +37,7 @@
 #include <KoStore.h>
 #include <KoColorSpace.h>
 #include <KoShapeControllerBase.h>
+#include <KisGlobalResourcesInterface.h>
 
 // kritaimage
 #include <kis_meta_data_io_backend.h>
@@ -68,6 +69,7 @@
 #include "kis_raster_keyframe_channel.h"
 #include "kis_paint_device_frames_interface.h"
 #include "kis_filter_registry.h"
+#include "kis_generator_registry.h"
 
 
 using namespace KRA;
@@ -265,8 +267,14 @@ bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)
         return false;
     }
 
-    loadFilterConfiguration(layer, getLocation(layer, DOT_FILTERCONFIG));
-    fixOldFilterConfigurations(layer->filter());
+    KisFilterSP filter = KisFilterRegistry::instance()->value(layer->filter()->name());
+    KisFilterConfigurationSP  kfc = filter->factoryConfiguration(KisGlobalResourcesInterface::instance());
+
+    loadFilterConfiguration(kfc, getLocation(layer, DOT_FILTERCONFIG));
+    fixOldFilterConfigurations(kfc);
+    kfc->createLocalResourcesSnapshot();
+
+    layer->setFilter(kfc);
 
     result = visitAll(layer);
     return result;
@@ -282,10 +290,13 @@ bool KisKraLoadVisitor::visit(KisGeneratorLayer *layer)
     loadNodeKeyframes(layer);
     result = loadSelection(getLocation(layer), layer->internalSelection());
 
-    // HACK ALERT: we set the same filter again to ensure the layer
-    // is correctly updated
-    result = loadFilterConfiguration(layer, getLocation(layer, DOT_FILTERCONFIG));
-    layer->setFilter(layer->filter());
+    KisGeneratorSP filter = KisGeneratorRegistry::instance()->value(layer->filter()->name());
+    KisFilterConfigurationSP  kfc = filter->factoryConfiguration(KisGlobalResourcesInterface::instance());
+
+    result = loadFilterConfiguration(kfc, getLocation(layer, DOT_FILTERCONFIG));
+    kfc->createLocalResourcesSnapshot();
+
+    layer->setFilter(kfc);
 
     result = visitAll(layer);
     return result;
@@ -343,8 +354,15 @@ bool KisKraLoadVisitor::visit(KisFilterMask *mask)
 
     bool result = true;
     result = loadSelection(getLocation(mask), mask->selection());
-    result = loadFilterConfiguration(mask, getLocation(mask, DOT_FILTERCONFIG));
-    fixOldFilterConfigurations(mask->filter());
+
+    KisFilterSP filter = KisFilterRegistry::instance()->value(mask->filter()->name());
+    KisFilterConfigurationSP  kfc = filter->factoryConfiguration(KisGlobalResourcesInterface::instance());
+    result = loadFilterConfiguration(kfc, getLocation(mask, DOT_FILTERCONFIG));
+    fixOldFilterConfigurations(kfc);
+    kfc->createLocalResourcesSnapshot();
+
+    mask->setFilter(kfc);
+
     return result;
 }
 
@@ -588,10 +606,8 @@ bool KisKraLoadVisitor::loadProfile(KisPaintDeviceSP device, const QString& loca
     return true;
 }
 
-bool KisKraLoadVisitor::loadFilterConfiguration(KisNodeFilterInterface *nodeInterface, const QString& location)
+bool KisKraLoadVisitor::loadFilterConfiguration(KisFilterConfigurationSP kfc, const QString& location)
 {
-    KisFilterConfigurationSP kfc = nodeInterface->filter();
-
     if (m_store->hasFile(location)) {
         QByteArray data;
         m_store->open(location);

@@ -262,11 +262,8 @@ void KisLayerManager::layerProperties()
             if(xmlBefore != xmlAfter) {
                 KisChangeFilterCmd *cmd
                         = new KisChangeFilterCmd(adjustmentLayer,
-                                                 configBefore->name(),
-                                                 xmlBefore,
-                                                 configAfter->name(),
-                                                 xmlAfter,
-                                                 false);
+                                                 configBefore->cloneWithResourcesSnapshot(),
+                                                 configAfter->cloneWithResourcesSnapshot());
                 // FIXME: check whether is needed
                 cmd->redo();
                 m_view->undoAdapter()->addCommand(cmd);
@@ -279,7 +276,7 @@ void KisLayerManager::layerProperties()
             QString xmlAfter = configAfter->toXML();
 
             if(xmlBefore != xmlAfter) {
-                adjustmentLayer->setFilter(KisFilterRegistry::instance()->cloneConfiguration(configBefore.data()));
+                adjustmentLayer->setFilter(configBefore->cloneWithResourcesSnapshot());
                 adjustmentLayer->setDirty();
             }
         }
@@ -287,7 +284,6 @@ void KisLayerManager::layerProperties()
     else if (generatorLayer && !multipleLayersSelected) {
         KisFilterConfigurationSP configBefore(generatorLayer->filter());
         Q_ASSERT(configBefore);
-        QString xmlBefore = configBefore->toXML();
 
         KisDlgGeneratorLayer *dlg = new KisDlgGeneratorLayer(generatorLayer->name(), m_view, m_view->mainWindow(), generatorLayer, configBefore);
         dlg->setCaption(i18n("Fill Layer Properties"));
@@ -680,7 +676,7 @@ KisAdjustmentLayerSP KisLayerManager::addAdjustmentLayer(KisNodeSP activeNode, c
                                                          KisProcessingApplicator *applicator)
 {
     KisImageWSP image = m_view->image();
-    KisAdjustmentLayerSP layer = new KisAdjustmentLayer(image, name, filter, selection);
+    KisAdjustmentLayerSP layer = new KisAdjustmentLayer(image, name, filter ? filter->cloneWithResourcesSnapshot() : 0, selection);
     addLayerCommon(activeNode, layer, true, applicator);
 
     return layer;
@@ -703,7 +699,7 @@ KisNodeSP KisLayerManager::addGeneratorLayer(KisNodeSP activeNode)
         KisFilterConfigurationSP  generator = dlg.configuration();
         QString name = dlg.layerName();
 
-        KisNodeSP node = new KisGeneratorLayer(image, name, generator, selection);
+        KisNodeSP node = new KisGeneratorLayer(image, name, generator ? generator->cloneWithResourcesSnapshot() : 0, selection);
 
         addLayerCommon(activeNode, node, true, 0);
 

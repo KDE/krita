@@ -31,6 +31,7 @@
 #include "kis_paint_layer.h"
 #include "kis_types.h"
 #include "kis_image.h"
+#include <KisGlobalResourcesInterface.h>
 
 
 #include "testutil.h"
@@ -62,11 +63,11 @@ void KisFilterMaskTest::testProjectionNotSelected()
 
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
-    KisFilterConfigurationSP  kfc = f->defaultConfiguration();
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(kfc);
 
     KisFilterMaskSP mask = new KisFilterMask();
-    mask->setFilter(kfc);
+    mask->setFilter(kfc->cloneWithResourcesSnapshot());
 
     // Check basic apply(). Shouldn't do anything, since nothing is selected yet.
     KisPaintDeviceSP projection = new KisPaintDevice(cs);
@@ -98,11 +99,11 @@ void KisFilterMaskTest::testProjectionSelected()
 
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
-    KisFilterConfigurationSP  kfc = f->defaultConfiguration();
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(kfc);
 
     KisFilterMaskSP mask = new KisFilterMask();
-    mask->setFilter(kfc);
+    mask->setFilter(kfc->cloneWithResourcesSnapshot());
     mask->createNodeProgressProxy();
 
     KisPaintDeviceSP projection = new KisPaintDevice(cs);

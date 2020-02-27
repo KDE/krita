@@ -68,9 +68,9 @@ KisFilterNoise::KisFilterNoise() : KisFilter(id(), FiltersCategoryOtherId, i18n(
     setSupportsPainting(true);
 }
 
-KisFilterConfigurationSP KisFilterNoise::defaultConfiguration() const
+KisFilterConfigurationSP KisFilterNoise::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration();
+    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
     config->setProperty("level", 50);
     config->setProperty("opacity", 100);
     config->setProperty("seedThreshold", rand());

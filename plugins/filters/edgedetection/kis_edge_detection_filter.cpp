@@ -60,8 +60,9 @@ KisEdgeDetectionFilter::KisEdgeDetectionFilter(): KisFilter(id(), FiltersCategor
 void KisEdgeDetectionFilter::processImpl(KisPaintDeviceSP device, const QRect &rect, const KisFilterConfigurationSP config, KoUpdater *progressUpdater) const
 {
     Q_ASSERT(device != 0);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(config);
 
-    KisFilterConfigurationSP configuration = config ? config : new KisFilterConfiguration(id().id(), 1);
+    KisFilterConfigurationSP configuration = config;
 
     KisLodTransformScalar t(device);
 
@@ -107,9 +108,9 @@ void KisEdgeDetectionFilter::processImpl(KisPaintDeviceSP device, const QRect &r
                                                config->getBool("transparency", false));
 }
 
-KisFilterConfigurationSP KisEdgeDetectionFilter::defaultConfiguration() const
+KisFilterConfigurationSP KisEdgeDetectionFilter::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration();
+    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
     config->setProperty("horizRadius", 1);
     config->setProperty("vertRadius", 1);
     config->setProperty("type", "prewitt");

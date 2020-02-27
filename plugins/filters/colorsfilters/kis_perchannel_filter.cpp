@@ -50,6 +50,7 @@
 #include "kis_histogram.h"
 #include "kis_painter.h"
 #include "widgets/kis_curve_widget.h"
+#include <KisGlobalResourcesInterface.h>
 
 #include "../../color/colorspaceextensions/kis_hsv_adjustment.h"
 
@@ -117,7 +118,7 @@ void KisPerChannelConfigWidget::updateChannelControls()
 KisPropertiesConfigurationSP KisPerChannelConfigWidget::configuration() const
 {
     int numChannels = m_virtualChannels.size();
-    KisPropertiesConfigurationSP cfg = new KisPerChannelFilterConfiguration(numChannels);
+    KisPropertiesConfigurationSP cfg = new KisPerChannelFilterConfiguration(numChannels, KisGlobalResourcesInterface::instance());
 
     KIS_ASSERT_RECOVER(m_activeVChannel < m_curves.size()) { return cfg; }
 
@@ -129,17 +130,27 @@ KisPropertiesConfigurationSP KisPerChannelConfigWidget::configuration() const
 
 KisPropertiesConfigurationSP KisPerChannelConfigWidget::getDefaultConfiguration()
 {
-    return new KisPerChannelFilterConfiguration(m_virtualChannels.size());
+    return new KisPerChannelFilterConfiguration(m_virtualChannels.size(), KisGlobalResourcesInterface::instance());
 }
 
-KisPerChannelFilterConfiguration::KisPerChannelFilterConfiguration(int channelCount)
-        : KisMultiChannelFilterConfiguration(channelCount, "perchannel", 1)
+KisPerChannelFilterConfiguration::KisPerChannelFilterConfiguration(int channelCount, KisResourcesInterfaceSP resourcesInterface)
+        : KisMultiChannelFilterConfiguration(channelCount, "perchannel", 1, resourcesInterface)
 {
     init();
 }
 
+KisPerChannelFilterConfiguration::KisPerChannelFilterConfiguration(const KisPerChannelFilterConfiguration &rhs)
+    : KisMultiChannelFilterConfiguration(rhs)
+{
+}
+
 KisPerChannelFilterConfiguration::~KisPerChannelFilterConfiguration()
 {
+}
+
+KisFilterConfigurationSP KisPerChannelFilterConfiguration::clone() const
+{
+    return new KisPerChannelFilterConfiguration(*this);
 }
 
 KisCubicCurve KisPerChannelFilterConfiguration::getDefaultCurve()
@@ -159,9 +170,9 @@ KisConfigWidget * KisPerChannelFilter::createConfigurationWidget(QWidget *parent
     return new KisPerChannelConfigWidget(parent, dev);
 }
 
-KisFilterConfigurationSP  KisPerChannelFilter::factoryConfiguration() const
+KisFilterConfigurationSP  KisPerChannelFilter::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    return new KisPerChannelFilterConfiguration(0);
+    return new KisPerChannelFilterConfiguration(0, resourcesInterface);
 }
 
 KoColorTransformation* KisPerChannelFilter::createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const

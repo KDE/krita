@@ -26,7 +26,7 @@
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_registry.h"
 #include "filter/kis_filter_configuration.h"
-
+#include <KisGlobalResourcesInterface.h>
 
 class FilterStrokeTester : public utils::StrokeTester
 {
@@ -55,7 +55,7 @@ protected:
 
         KisFilterSP filter = KisFilterRegistry::instance()->value(m_filterName);
         Q_ASSERT(filter);
-        KisFilterConfigurationSP filterConfig = filter->defaultConfiguration();
+        KisFilterConfigurationSP filterConfig = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
         Q_ASSERT(filterConfig);
 
         return new KisFilterStrokeStrategy(filter, KisFilterConfigurationSP(filterConfig), resources);

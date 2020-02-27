@@ -25,6 +25,12 @@
 #include "kis_types.h"
 #include "kritaimage_export.h"
 
+class KoResource;
+typedef QSharedPointer<KoResource> KoResourceSP;
+
+class KisResourcesInterface;
+typedef QSharedPointer<KisResourcesInterface> KisResourcesInterfaceSP;
+
 /**
  * KisFilterConfiguration does inherit neither KisShared or QSharedData
  * so sometimes there might be problem with broken QSharedPointer counters.
@@ -52,7 +58,26 @@ public:
     /**
      * Create a new filter config.
      */
-    KisFilterConfiguration(const QString & name, qint32 version);
+    KisFilterConfiguration(const QString & name, qint32 version, KisResourcesInterfaceSP resourcesInterface);
+
+    /**
+     * @return an exact copy of the filter configuration. Resources interface is
+     * becomes shared between two configuration objects.
+     */
+    virtual KisFilterConfigurationSP clone() const;
+
+    /**
+     * @brief creates an exact copy of the filter config object and loads
+     *        all the linked resources into the local storage.
+     * @param globalResourcesInterface is an optional override for the
+     *        resources interface used for fetching linked resources. If
+     *        \p globalResourcesInterface is null, then this->resourcesInterface()
+     *        is used.
+     *
+     * If a filter configuration object already has a resources snapshot, then
+     * the function just clones the object without reloading anything.
+     */
+    KisFilterConfigurationSP cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface = nullptr) const;
 
 protected:
     /**
@@ -117,6 +142,47 @@ public:
     virtual const KisCubicCurve& curve() const;
     virtual void setCurves(QList<KisCubicCurve> &curves);
     virtual const QList<KisCubicCurve>& curves() const;
+
+    /**
+     * @return resource interface that is used by KisFilterConfiguration object for
+     * loading linked resources
+     */
+    KisResourcesInterfaceSP resourcesInterface() const;
+
+    /**
+     * Set resource interface that will be used by KisFilterConfiguration object for
+     * loading linked resources
+     */
+    void setResourcesInterface(KisResourcesInterfaceSP resourcesInterface);
+
+    /**
+     * Loads all the linked resources either from the current resource interface
+     * or from the embedded data. The filter first tries to fetch the linked
+     * resource from the current source, and only if it fails, tries to load
+     * it from the embedded data.
+     *
+     * @param globalResourcesInterface if \p globalResourcesInterface is not null,
+     * the resources are fetched from there, not from the internally stored resources
+     * interface
+     */
+    void createLocalResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface = nullptr);
+
+    /**
+     * @return true if the configuration has all the necessary resources in
+     * local storage. It mean it can be used in a threaded environment.
+     *
+     * @see createLocalResourcesSnapshot()
+     */
+    bool hasLocalResourcesSnapshot() const;
+
+    /**
+     * Loads all the linked resources either from \p globalResourcesInterface or
+     * from embedded data. The filter first tries to fetch the linked resource
+     * from the global source, and only if it fails, tries to load it from the
+     * embedded data. One can check if the loaded resource is embedded by checking
+     * its resourceId().
+     */
+    virtual QList<KoResourceSP> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const;
 
 #ifdef SANITY_CHECK_FILTER_CONFIGURATION_OWNER
 private:

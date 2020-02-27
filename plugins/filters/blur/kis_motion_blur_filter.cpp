@@ -55,9 +55,9 @@ KisConfigWidget * KisMotionBlurFilter::createConfigurationWidget(QWidget* parent
     return new KisWdgMotionBlur(parent);
 }
 
-KisFilterConfigurationSP KisMotionBlurFilter::defaultConfiguration() const
+KisFilterConfigurationSP KisMotionBlurFilter::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration();
+    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
     config->setProperty("blurAngle", 0);
     config->setProperty("blurLength", 5);
 
@@ -66,15 +66,14 @@ KisFilterConfigurationSP KisMotionBlurFilter::defaultConfiguration() const
 
 void KisMotionBlurFilter::processImpl(KisPaintDeviceSP device,
                                       const QRect& rect,
-                                      const KisFilterConfigurationSP _config,
+                                      const KisFilterConfigurationSP config,
                                       KoUpdater* progressUpdater
                                       ) const
 {
     QPoint srcTopLeft = rect.topLeft();
 
     Q_ASSERT(device);
-
-    KisFilterConfigurationSP config = _config ? _config : new KisFilterConfiguration(id().id(), 1);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(config);
 
     QVariant value;
     uint blurAngle = 0;

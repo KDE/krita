@@ -34,6 +34,7 @@
 #include <kis_generator_layer.h>
 #include <KisViewManager.h>
 #include <KisDocument.h>
+#include <KisGlobalResourcesInterface.h>
 
 KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString & defaultName, KisViewManager *view, QWidget *parent, KisGeneratorLayerSP glayer = 0, const KisFilterConfigurationSP previousConfig = 0)
         : KoDialog(parent)
@@ -48,7 +49,7 @@ KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString & defaultName, KisViewM
     if(isEditing){
         setModal(false);
         layer = glayer;
-        configBefore = previousConfig;
+        configBefore = previousConfig->cloneWithResourcesSnapshot();
     }
 
     QWidget *page = new QWidget(this);
@@ -81,11 +82,8 @@ KisDlgGeneratorLayer::~KisDlgGeneratorLayer()
         if (xmlBefore != xmlAfter) {
             KisChangeFilterCmd *cmd
                     = new KisChangeFilterCmd(layer,
-                                             configBefore->name(),
-                                             xmlBefore,
-                                             configAfter->name(),
-                                             xmlAfter,
-                                             true);
+                                             configBefore,
+                                             configAfter->cloneWithResourcesSnapshot());
 
             m_view->undoAdapter()->addCommand(cmd);
             m_view->document()->setModified(true);
@@ -108,7 +106,7 @@ void KisDlgGeneratorLayer::slotNameChanged(const QString & text)
 void KisDlgGeneratorLayer::previewGenerator()
 {
     if (isEditing && layer)
-        layer->setFilter(configuration());
+        layer->setFilter(configuration()->cloneWithResourcesSnapshot());
 }
 
 void KisDlgGeneratorLayer::setConfiguration(const KisFilterConfigurationSP  config)

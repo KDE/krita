@@ -55,6 +55,7 @@
 
 #include <KisResourceModel.h>
 #include <KisResourceModelProvider.h>
+#include <KisGlobalResourcesInterface.h>
 
 #include "View.h"
 #include "Document.h"
@@ -168,7 +169,7 @@ Filter *Krita::filter(const QString &name) const
     Filter *filter = new Filter();
     filter->setName(name);
     KisFilterSP f = KisFilterRegistry::instance()->value(name);
-    KisFilterConfigurationSP fc = f->defaultConfiguration();
+    KisFilterConfigurationSP fc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
     InfoObject *info = new InfoObject(fc);
     filter->setConfiguration(info);
     return filter;

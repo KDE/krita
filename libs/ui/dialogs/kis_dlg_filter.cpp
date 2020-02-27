@@ -201,7 +201,7 @@ void KisDlgFilter::createMask()
     KisFilterMaskSP mask = new KisFilterMask();
     mask->setName(d->currentFilter->name());
     mask->initSelection(d->view->selection(), layer);
-    mask->setFilter(d->uiFilterDialog.filterSelection->configuration());
+    mask->setFilter(d->uiFilterDialog.filterSelection->configuration()->cloneWithResourcesSnapshot());
 
     Q_ASSERT(layer->allowAsChild(mask));
 

@@ -35,6 +35,7 @@
 #include <KoPattern.h>
 #include <kis_random_generator.h>
 #include <KisDitherUtil.h>
+#include <KisGlobalResourcesInterface.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(PalettizeFactory, "kritapalettize.json", registerPlugin<Palettize>();)
 
@@ -117,7 +118,7 @@ void KisPalettizeWidget::setConfiguration(const KisPropertiesConfigurationSP con
 
 KisPropertiesConfigurationSP KisPalettizeWidget::configuration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("palettize", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("palettize", 1, KisGlobalResourcesInterface::instance());
 
     if (m_paletteWidget->currentResource()) config->setProperty("palette", QVariant(m_paletteWidget->currentResource()->name()));
     config->setProperty("colorspace", colorspaceComboBox->currentIndex());
@@ -142,9 +143,9 @@ KisConfigWidget* KisFilterPalettize::createConfigurationWidget(QWidget *parent, 
     return new KisPalettizeWidget(parent);
 }
 
-KisFilterConfigurationSP KisFilterPalettize::defaultConfiguration() const
+KisFilterConfigurationSP KisFilterPalettize::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration();
+    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
 
     config->setProperty("palette", "Default");
     config->setProperty("colorspace", Colorspace::Lab);

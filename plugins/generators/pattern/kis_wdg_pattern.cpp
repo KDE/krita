@@ -26,7 +26,7 @@
 #include <KoColor.h>
 #include <KoResourceServer.h>
 #include <resources/KoPattern.h>
-#include <KoResourceServerProvider.h>
+#include <KisGlobalResourcesInterface.h>
 
 #include <filter/kis_filter_configuration.h>
 #include <kis_pattern_chooser.h>
@@ -51,17 +51,16 @@ KisWdgPattern::~KisWdgPattern()
 
 void KisWdgPattern::setConfiguration(const KisPropertiesConfigurationSP config)
 {
-    KoResourceServer<KoPattern> *rserver = KoResourceServerProvider::instance()->patternServer();
-    KoPatternSP pattern = rserver->resourceByName(config->getString("pattern", "Grid01.pat"));
+    auto source = KisGlobalResourcesInterface::instance()->source<KoPattern>(ResourceType::Patterns);
+    KoPatternSP pattern = source.resourceForName(config->getString("pattern", "Grid01.pat"));
     if (pattern) {
        widget()->patternChooser->setCurrentPattern(pattern);
     }
-
 }
 
 KisPropertiesConfigurationSP KisWdgPattern::configuration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("pattern", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("pattern", 1, KisGlobalResourcesInterface::instance());
     QVariant v;
     v.setValue(widget()->patternChooser->currentResource()->name());
     config->setProperty("pattern", v);

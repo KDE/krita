@@ -66,9 +66,9 @@ KoPatternGenerator::KoPatternGenerator() : KisGenerator(id(), KoID("basic"), i18
     setSupportsPainting(true);
 }
 
-KisFilterConfigurationSP KoPatternGenerator::defaultConfiguration() const
+KisFilterConfigurationSP KoPatternGenerator::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration();
+    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
 
     QVariant v;
     v.setValue(QString("Grid01.pat"));

@@ -22,6 +22,7 @@
 #include <QCheckBox>
 #include <QVBoxLayout>
 #include <filter/kis_filter_configuration.h>
+#include <KisGlobalResourcesInterface.h>
 
 #include <klocalizedstring.h>
 
@@ -71,7 +72,7 @@ void KisMultiBoolFilterWidget::setConfiguration(const KisPropertiesConfiguration
 
 KisPropertiesConfigurationSP KisMultiBoolFilterWidget::configuration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration(m_filterid, 0);
+    KisFilterConfigurationSP config = new KisFilterConfiguration(m_filterid, 0, KisGlobalResourcesInterface::instance());
     for (int i = 0; i < nbValues(); ++i) {
         config->setProperty(m_boolWidgets[i]->objectName(), valueAt(i));
     }

@@ -39,6 +39,7 @@
 #include <KisResourceServerProvider.h>
 #include <KoResourceServer.h>
 #include <KisResourceStorage.h>
+#include <KisGlobalResourcesInterface.h>
 
 
 #include <filter/kis_filter.h>
@@ -953,7 +954,8 @@ KisNodeSP KisKraLoader::loadAdjustmentLayer(const KoXmlElement& element, KisImag
         return 0; // XXX: We don't have this filter. We should warn about it!
     }
 
-    KisFilterConfigurationSP  kfc = f->factoryConfiguration();
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
+    kfc->createLocalResourcesSnapshot();
     kfc->setProperty("legacy", legacy);
     if (legacy=="brightnesscontrast") {
         kfc->setProperty("colorModel", cs->colorModelId().id());
@@ -1010,7 +1012,8 @@ KisNodeSP KisKraLoader::loadGeneratorLayer(const KoXmlElement& element, KisImage
         return 0; // XXX: We don't have this generator. We should warn about it!
     }
 
-    KisFilterConfigurationSP  kgc = generator->factoryConfiguration();
+    KisFilterConfigurationSP  kgc = generator->defaultConfiguration(KisGlobalResourcesInterface::instance());
+    kgc->createLocalResourcesSnapshot();
 
     // We'll load the configuration and the selection later.
     layer = new KisGeneratorLayer(image, name, kgc, 0);
@@ -1071,7 +1074,8 @@ KisNodeSP KisKraLoader::loadFilterMask(const KoXmlElement& element)
         return 0; // XXX: We don't have this filter. We should warn about it!
     }
 
-    KisFilterConfigurationSP  kfc = f->factoryConfiguration();
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
+    kfc->createLocalResourcesSnapshot();
 
     // We'll load the configuration and the selection later.
     mask = new KisFilterMask();

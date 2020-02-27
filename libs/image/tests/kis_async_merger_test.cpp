@@ -33,6 +33,7 @@
 #include "kis_filter_mask.h"
 #include "kis_selection.h"
 #include "kis_paint_device_debug_utils.h"
+#include <KisGlobalResourcesInterface.h>
 
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_configuration.h"
@@ -66,13 +67,13 @@ void KisAsyncMergerTest::testMerger()
 
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
     Q_ASSERT(filter);
-    KisFilterConfigurationSP configuration = filter->defaultConfiguration();
+    KisFilterConfigurationSP configuration = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(configuration);
 
     KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8, device1);
     KisLayerSP paintLayer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE_U8, device2);
     KisLayerSP groupLayer = new KisGroupLayer(image, "group", 200/*OPACITY_OPAQUE*/);
-    KisLayerSP blur1 = new KisAdjustmentLayer(image, "blur1", configuration, 0);
+    KisLayerSP blur1 = new KisAdjustmentLayer(image, "blur1", configuration->cloneWithResourcesSnapshot(), 0);
 
     image->addNode(paintLayer1, image->rootLayer());
     image->addNode(groupLayer, image->rootLayer());
@@ -187,13 +188,13 @@ void KisAsyncMergerTest::testFullRefreshWithClones()
 
     KisFilterSP filter = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(filter);
-    KisFilterConfigurationSP configuration = filter->defaultConfiguration();
+    KisFilterConfigurationSP configuration = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(configuration);
 
     KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8, device1);
     KisFilterMaskSP invertMask1 = new KisFilterMask();
     invertMask1->initSelection(paintLayer1);
-    invertMask1->setFilter(configuration);
+    invertMask1->setFilter(configuration->cloneWithResourcesSnapshot());
 
     KisLayerSP cloneLayer1 = new KisCloneLayer(paintLayer1, image, "clone_of_1", OPACITY_OPAQUE_U8);
     /**
@@ -349,10 +350,10 @@ void testFullRefreshForDependentNodes(const DependentNodeType dependentNode,
     if (dependentNode == ADJUSTMENT_LAYER) {
         KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
         KIS_ASSERT(filter);
-        KisFilterConfigurationSP configuration = filter->defaultConfiguration();
+        KisFilterConfigurationSP configuration = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
         KIS_ASSERT(configuration);
 
-        KisLayerSP blur1 = new KisAdjustmentLayer(image, "blur1", configuration, 0);
+        KisLayerSP blur1 = new KisAdjustmentLayer(image, "blur1", configuration->cloneWithResourcesSnapshot(), 0);
         blur1->setCompositeOpId(COMPOSITE_OVER);
 
         image->addNode(blur1, image->rootLayer());
@@ -361,12 +362,12 @@ void testFullRefreshForDependentNodes(const DependentNodeType dependentNode,
     if (useFilterMask) {
         KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
         KIS_ASSERT(filter);
-        KisFilterConfigurationSP configuration = filter->defaultConfiguration();
+        KisFilterConfigurationSP configuration = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
         KIS_ASSERT(configuration);
 
         KisFilterMaskSP blurMask1 = new KisFilterMask();
         blurMask1->initSelection(groupLayer);
-        blurMask1->setFilter(configuration);
+        blurMask1->setFilter(configuration->cloneWithResourcesSnapshot());
         image->addNode(blurMask1, testingLayer);
     }
 

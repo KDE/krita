@@ -53,7 +53,7 @@ KisGeneratorLayer::KisGeneratorLayer(KisImageWSP image,
                                      const QString &name,
                                      KisFilterConfigurationSP kfc,
                                      KisSelectionSP selection)
-    : KisSelectionBasedLayer(image, name, selection, kfc, true),
+    : KisSelectionBasedLayer(image, name, selection, kfc),
       m_d(new Private)
 {
     connect(&m_d->updateSignalCompressor, SIGNAL(timeout()), SLOT(slotDelayedStaticUpdate()));

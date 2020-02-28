@@ -133,37 +133,6 @@ void KisResourceTaggingManager::slotFilterByTagChanged(const bool filterByTag)
     d->model->setFilterByCurrentTag(filterByTag);
 }
 
-void KisResourceTaggingManager::tagSaveButtonPressed()
-{
-    fprintf(stderr, "void KisResourceTaggingManager::tagSaveButtonPressed()\n");
-
-    KisTagSP tag = d->tagChooser->currentlySelectedTag();
-
-    // untag all previous resources
-    int allResources = d->resourceSourceModel->rowCount();
-    for (int i = 0; i < allResources; i++) {
-        QModelIndex index = d->resourceSourceModel->index(i, 0);
-        KoResourceSP resource = d->resourceSourceModel->resourceForIndex(index);
-        QVector<KisTagSP> tags = d->resourceSourceModel->tagsForResource(resource->resourceId());
-        QVector<KisTagSP>::iterator iter = std::find_if(tags.begin(), tags.end(), [tag](KisTagSP tagFromResource) { return tagFromResource->url() == tag->url(); });
-        if (iter != tags.end()) {
-            d->tagModel->untagResource(tag, resource);
-        }
-    }
-
-    // tag all resources that are here now
-    int rows = d->model->rowCount();
-    for (int i = 0; i < rows; i++) {
-        QModelIndex index = d->model->index(i, 0);
-        KoResourceSP resource = d->model->resourceForIndex(index);
-        if (!tag.isNull() && !resource.isNull()) {
-            d->tagModel->tagResource(tag, resource);
-        }
-    }
-
-    ENTER_FUNCTION();
-}
-
 void KisResourceTaggingManager::contextMenuRequested(KoResourceSP resource, QPoint pos)
 {
     ENTER_FUNCTION();

@@ -95,8 +95,6 @@ public:
     KisTagChooserWidget *tagChooserWidget();
     
 private Q_SLOTS:
-
-    void tagSaveButtonPressed();
     ///
     /// \brief tagChooserIndexChanged slot for the signal that the tag chosen in the tags combobox changed
     /// \param tag the currently chosen tag

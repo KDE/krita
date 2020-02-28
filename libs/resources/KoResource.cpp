@@ -59,6 +59,11 @@ KoResource::KoResource(const KoResource &rhs)
 {
 }
 
+bool KoResource::operator==(const KoResource &other) const
+{
+    return other.md5() == md5();
+}
+
 bool KoResource::load(KisResourcesInterfaceSP resourcesInterface)
 {
     QFile file(filename());

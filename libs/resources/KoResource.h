@@ -65,10 +65,7 @@ public:
 
     virtual KoResourceSP clone() const = 0;
 
-    bool operator ==(const KoResource &other) const
-    {
-        return other.md5() == md5();
-    }
+    bool operator==(const KoResource &other) const;
 
 public:
     /**

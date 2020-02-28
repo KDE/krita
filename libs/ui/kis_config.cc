@@ -1839,7 +1839,7 @@ void KisConfig::setCompressKra(bool compress)
 
 bool KisConfig::trimKra(bool defaultValue) const
 {
-    return (defaultValue ? true : m_cfg.readEntry("TrimKra", false));
+    return (defaultValue ? false : m_cfg.readEntry("TrimKra", false));
 }
 
 void KisConfig::setTrimKra(bool trim)

@@ -527,7 +527,7 @@ public:
     bool compressKra(bool defaultValue = false) const;
     void setCompressKra(bool compress);
 
-    bool trimKra(bool defaultValue = true) const;
+    bool trimKra(bool defaultValue = false) const;
     void setTrimKra(bool trim);
 
     bool toolOptionsInDocker(bool defaultValue = false) const;

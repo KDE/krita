@@ -80,7 +80,7 @@ public:
     ~KisPaintOpPreset() override;
 
     KisPaintOpPreset(const KisPaintOpPreset &rhs);
-    KisPaintOpPreset &operator=(const KisPaintOpPreset &rhs);
+    KisPaintOpPreset &operator=(const KisPaintOpPreset &rhs) = delete;
     KoResourceSP clone() const override;
 
     /// set the id of the paintop plugin

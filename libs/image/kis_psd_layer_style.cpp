@@ -113,14 +113,6 @@ KisPSDLayerStyle::KisPSDLayerStyle(const KisPSDLayerStyle &rhs)
     setValid(valid());
 }
 
-KisPSDLayerStyle KisPSDLayerStyle::operator=(const KisPSDLayerStyle &rhs)
-{
-    if (this != &rhs) {
-        *d = *rhs.d;
-    }
-    return *this;
-}
-
 bool KisPSDLayerStyle::isEnabled() const
 {
     return d->effectEnabled;

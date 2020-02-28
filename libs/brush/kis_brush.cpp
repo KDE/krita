@@ -102,39 +102,58 @@ void KisBrush::PaintDeviceColoringInformation::nextRow()
 
 struct KisBrush::Private {
     Private()
-        : boundary(0)
+        : brushType(INVALID)
+        , hasColor(false)
         , angle(0)
         , scale(1.0)
-        , hasColor(false)
-        , brushType(INVALID)
         , autoSpacingActive(false)
         , autoSpacingCoeff(1.0)
         , threadingAllowed(true)
     {}
 
-    ~Private() {
-        delete boundary;
+    Private(const Private &rhs)
+        : brushType(rhs.brushType),
+          width(rhs.width),
+          height(rhs.height),
+          spacing(rhs.spacing),
+          hotSpot(rhs.hotSpot),
+          hasColor(rhs.hasColor),
+          angle(rhs.angle),
+          scale(rhs.scale),
+          autoSpacingActive(rhs.autoSpacingActive),
+          autoSpacingCoeff(rhs.autoSpacingCoeff),
+          threadingAllowed(rhs.threadingAllowed),
+          brushTipImage(rhs.brushTipImage),
+          /**
+           * Be careful! The pyramid is shared between two brush objects,
+           * therefore you cannot change it, only recreate! That is the
+           * reason why it is defined as const!
+           */
+          brushPyramid(rhs.brushPyramid)
+
+    {
+        // don't copy the boundary, it will be regenerated -- see bug 291910
     }
 
-    mutable KisBoundary* boundary;
-    qreal angle;
-    qreal scale;
-    bool hasColor;
+    ~Private() {
+    }
+
+    mutable QScopedPointer<KisBoundary> boundary;
     enumBrushType brushType;
 
     qint32 width;
     qint32 height;
     double spacing;
     QPointF hotSpot;
-
-    mutable QSharedPointer<KisSharedQImagePyramid> brushPyramid;
-
-    QImage brushTipImage;
-
+    bool hasColor;
+    qreal angle;
+    qreal scale;
     bool autoSpacingActive;
     qreal autoSpacingCoeff;
-
     bool threadingAllowed;
+
+    QImage brushTipImage;
+    mutable QSharedPointer<KisSharedQImagePyramid> brushPyramid;
 };
 
 KisBrush::KisBrush()
@@ -151,37 +170,8 @@ KisBrush::KisBrush(const QString& filename)
 
 KisBrush::KisBrush(const KisBrush& rhs)
     : KoResource(rhs)
-    , d(new Private)
+    , d(new Private(*rhs.d))
 {
-    *this = rhs;
-}
-
-KisBrush &KisBrush::operator=(const KisBrush &rhs)
-{
-    if (*this != rhs) {
-        d->brushType = rhs.d->brushType;
-        d->width = rhs.d->width;
-        d->height = rhs.d->height;
-        d->spacing = rhs.d->spacing;
-        d->hotSpot = rhs.d->hotSpot;
-        d->hasColor = rhs.d->hasColor;
-        d->angle = rhs.d->angle;
-        d->scale = rhs.d->scale;
-        d->autoSpacingActive = rhs.d->autoSpacingActive;
-        d->autoSpacingCoeff = rhs.d->autoSpacingCoeff;
-        d->threadingAllowed = rhs.d->threadingAllowed;
-        d->brushTipImage = rhs.d->brushTipImage;
-
-        /**
-         * Be careful! The pyramid is shared between two brush objects,
-         * therefore you cannot change it, only recreate! That is the
-         * reason why it is defined as const!
-         */
-        d->brushPyramid = rhs.d->brushPyramid;
-
-        // don't copy the boundary, it will be regenerated -- see bug 291910
-    }
-    return *this;
 }
 
 KisBrush::~KisBrush()
@@ -584,8 +574,7 @@ KisFixedPaintDeviceSP KisBrush::paintDevice(const KoColorSpace * colorSpace,
 
 void KisBrush::resetBoundary()
 {
-    delete d->boundary;
-    d->boundary = 0;
+    d->boundary.reset();
 }
 
 void KisBrush::generateBoundary() const
@@ -603,7 +592,7 @@ void KisBrush::generateBoundary() const
         mask(dev, KoColor(Qt::black, cs), inverseTransform, KisPaintInformation());
     }
 
-    d->boundary = new KisBoundary(dev);
+    d->boundary.reset(new KisBoundary(dev));
     d->boundary->generateBoundary();
 }
 
@@ -611,7 +600,7 @@ const KisBoundary* KisBrush::boundary() const
 {
     if (!d->boundary)
         generateBoundary();
-    return d->boundary;
+    return d->boundary.data();
 }
 
 void KisBrush::setScale(qreal _scale)

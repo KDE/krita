@@ -140,14 +140,6 @@ KoResourceSP KisGbrBrush::clone() const
     return KoResourceSP(new KisGbrBrush(*this));
 }
 
-KisGbrBrush &KisGbrBrush::operator=(const KisGbrBrush &rhs)
-{
-    if (*this != rhs) {
-        d->useColorAsMask = rhs.d->useColorAsMask;
-    }
-    return *this;
-}
-
 KisGbrBrush::~KisGbrBrush()
 {
     delete d;

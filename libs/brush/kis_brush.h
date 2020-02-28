@@ -118,7 +118,7 @@ public:
     ~KisBrush() override;
 
     KisBrush(const KisBrush &rhs);
-    KisBrush &operator=(const KisBrush &rhs);
+    KisBrush &operator=(const KisBrush &rhs) = delete;
 
     virtual qreal userEffectiveSize() const = 0;
     virtual void setUserEffectiveSize(qreal value) = 0;

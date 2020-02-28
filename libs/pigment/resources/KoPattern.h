@@ -44,7 +44,7 @@ public:
     ~KoPattern() override;
 
     KoPattern(const KoPattern &rhs);
-    KoPattern& operator=(const KoPattern& rhs);
+    KoPattern& operator=(const KoPattern& rhs) = delete;
     KoResourceSP clone() const override;
 
 

@@ -343,7 +343,7 @@ void KisDlgLayerStyle::setStyle(KisPSDLayerStyleSP style)
 {
     // we may self-assign style is some cases
     if (style != m_layerStyle) {
-        *m_layerStyle = *style;
+        m_layerStyle = style->clone().dynamicCast<KisPSDLayerStyle>();
     }
     m_sanityLayerStyleDirty = false;
 

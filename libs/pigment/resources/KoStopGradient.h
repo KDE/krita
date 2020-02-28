@@ -47,7 +47,7 @@ public:
     ~KoStopGradient() override;
     KoStopGradient(const KoStopGradient &rhs);
     bool operator==(const KoStopGradient &rhs) const;
-    KoStopGradient &operator=(const KoStopGradient &rhs);
+    KoStopGradient &operator=(const KoStopGradient &rhs) = delete;
     KoResourceSP clone() const override;
 
     bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;

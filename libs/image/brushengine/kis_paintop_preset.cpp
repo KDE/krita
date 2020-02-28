@@ -74,25 +74,17 @@ KisPaintOpPreset::KisPaintOpPreset(const KisPaintOpPreset &rhs)
     : KoResource(rhs)
     , d(new Private(this))
 {
-    *this = rhs;
-}
-
-KisPaintOpPreset &KisPaintOpPreset::operator=(const KisPaintOpPreset &rhs)
-{
-    if (*this != rhs) {
-        if (rhs.settings()) {
-            setSettings(rhs.settings()); // the settings are cloned inside!
-        }
-        setDirty(isDirty());
-        // only valid if we could clone the settings
-        setValid(rhs.settings());
-
-        setPaintOp(rhs.paintOp());
-        setName(rhs.name());
-        setImage(rhs.image());
-        settings()->setUpdateProxy(rhs.updateProxy());
+    if (rhs.settings()) {
+        setSettings(rhs.settings()); // the settings are cloned inside!
     }
-    return *this;
+    setDirty(isDirty());
+    // only valid if we could clone the settings
+    setValid(rhs.settings());
+
+    setPaintOp(rhs.paintOp());
+    setName(rhs.name());
+    setImage(rhs.image());
+    settings()->setUpdateProxy(rhs.updateProxy());
 }
 
 KoResourceSP KisPaintOpPreset::clone() const

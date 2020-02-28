@@ -198,16 +198,6 @@ KisTextBrush::~KisTextBrush()
     delete m_brushesPipe;
 }
 
-KisTextBrush &KisTextBrush::operator=(const KisTextBrush &rhs)
-{
-    if (*this != rhs) {
-        m_font = rhs.m_font;
-        m_text = rhs.m_text;
-        m_brushesPipe = new KisTextBrushesPipe(*rhs.m_brushesPipe);
-    }
-    return *this;
-}
-
 KoResourceSP KisTextBrush::clone() const
 {
     return KisBrushSP(new KisTextBrush(*this));

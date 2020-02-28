@@ -119,17 +119,6 @@ KisAutoBrush::KisAutoBrush(const KisAutoBrush& rhs)
 {
 }
 
-KisAutoBrush &KisAutoBrush::operator=(const KisAutoBrush &rhs)
-{
-    if (*this != rhs) {
-        d->shape.reset(rhs.d->shape->clone());
-        d->randomness = rhs.d->randomness;
-        d->density = rhs.d->density;
-        d->idealThreadCountCached = rhs.d->idealThreadCountCached;
-    }
-    return *this;
-}
-
 KoResourceSP KisAutoBrush::clone() const
 {
     return KoResourceSP(new KisAutoBrush(*this));

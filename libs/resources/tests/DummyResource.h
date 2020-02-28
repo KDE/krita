@@ -43,17 +43,9 @@ public:
     }
 
     DummyResource(const DummyResource &rhs)
-        : KoResource(rhs)
+        : KoResource(rhs),
+          m_something(rhs.m_something)
     {
-        *this = rhs;
-    }
-
-    DummyResource &operator=(const DummyResource &rhs)
-    {
-        if (*this != rhs) {
-            m_something = rhs.m_something;
-        }
-        return *this;
     }
 
     KoResourceSP clone() const override

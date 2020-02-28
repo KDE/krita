@@ -32,7 +32,7 @@ public:
     KisWorkspaceResource(const QString& filename);
     ~KisWorkspaceResource() override;
     KisWorkspaceResource(const KisWorkspaceResource &rhs);
-    KisWorkspaceResource &operator=(const KisWorkspaceResource &rhs);
+    KisWorkspaceResource &operator=(const KisWorkspaceResource &rhs) = delete;
     KoResourceSP clone() const override;
 
     bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;

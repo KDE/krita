@@ -63,7 +63,7 @@ public:
     KoGamutMask();
     KoGamutMask(KoGamutMask *rhs);
     KoGamutMask(const KoGamutMask &rhs);
-    KoGamutMask &operator=(const KoGamutMask &rhs);
+    KoGamutMask &operator=(const KoGamutMask &rhs) = delete;
     KoResourceSP clone() const override;
     ~KoGamutMask() override;
 

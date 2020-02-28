@@ -84,20 +84,11 @@ KoPattern::~KoPattern()
 }
 
 KoPattern::KoPattern(const KoPattern &rhs)
-    : KoResource(rhs)
+    : KoResource(rhs),
+      m_pattern(rhs.m_pattern),
+      m_md5(rhs.m_md5)
 {
-    *this = rhs;
 }
-
-KoPattern &KoPattern::operator=(const KoPattern &rhs)
-{
-    if (*this != rhs) {
-        m_pattern = rhs.m_pattern;
-        m_md5 = rhs.m_md5;
-    }
-    return *this;
-}
-
 
 KoResourceSP KoPattern::clone() const
 {

@@ -38,17 +38,9 @@ TasksetResource::~TasksetResource()
 }
 
 TasksetResource::TasksetResource(const TasksetResource &rhs)
-    : KoResource(rhs)
+    : KoResource(rhs),
+      m_actions(rhs.m_actions)
 {
-    *this = rhs;
-}
-
-TasksetResource &TasksetResource::operator=(const TasksetResource &rhs)
-{
-    if (*this != rhs) {
-        m_actions = rhs.m_actions;
-    }
-    return *this;
 }
 
 KoResourceSP TasksetResource::clone() const

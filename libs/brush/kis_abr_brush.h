@@ -47,7 +47,7 @@ public:
     KisAbrBrush(const QString& filename, KisAbrBrushCollection *parent);
     KisAbrBrush(const KisAbrBrush& rhs);
     KisAbrBrush(const KisAbrBrush& rhs, KisAbrBrushCollection *parent);
-    KisAbrBrush &operator=(const KisAbrBrush &rhs);
+    KisAbrBrush &operator=(const KisAbrBrush &rhs) = delete;
     KoResourceSP clone() const override;
 
     QPair<QString, QString> resourceType() const override {

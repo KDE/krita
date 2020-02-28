@@ -40,7 +40,7 @@ public:
 
     KisAutoBrush(KisMaskGenerator *as, qreal angle, qreal randomness, qreal density = 1.0);
     KisAutoBrush(const KisAutoBrush &rhs);
-    KisAutoBrush &operator=(const KisAutoBrush &rhs);
+    KisAutoBrush &operator=(const KisAutoBrush &rhs) = delete;
     KoResourceSP clone() const override;
 
     ~KisAutoBrush() override;

@@ -60,7 +60,7 @@ public:
     explicit KoResource(const QString &filename);
     virtual ~KoResource();
     KoResource(const KoResource &rhs);
-    KoResource &operator=(const KoResource &rhs);
+    KoResource &operator=(const KoResource &rhs) = delete;
 
     virtual KoResourceSP clone() const = 0;
 

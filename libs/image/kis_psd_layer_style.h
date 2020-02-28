@@ -47,7 +47,7 @@ public:
     KisPSDLayerStyle(const QString& name = QString());
     virtual ~KisPSDLayerStyle();
     KisPSDLayerStyle(const KisPSDLayerStyle& rhs);
-    KisPSDLayerStyle operator=(const KisPSDLayerStyle& rhs);
+    KisPSDLayerStyle operator=(const KisPSDLayerStyle& rhs) = delete;
 
     KoResourceSP clone() const override;
 

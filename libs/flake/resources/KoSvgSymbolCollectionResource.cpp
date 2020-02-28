@@ -90,19 +90,8 @@ KoSvgSymbolCollectionResource::KoSvgSymbolCollectionResource()
 
 KoSvgSymbolCollectionResource::KoSvgSymbolCollectionResource(const KoSvgSymbolCollectionResource& rhs)
     : KoResource(QString())
-    , d(new Private())
+    , d(new Private(*rhs.d))
 {
-    *this = rhs;
-}
-
-KoSvgSymbolCollectionResource &KoSvgSymbolCollectionResource::operator=(const KoSvgSymbolCollectionResource &rhs)
-{
-    if (*this != rhs) {
-        d->symbols = rhs.d->symbols;
-        d->title = rhs.d->title;
-        d->description = rhs.d->description;
-    }
-    return *this;
 }
 
 KoResourceSP KoSvgSymbolCollectionResource::clone() const

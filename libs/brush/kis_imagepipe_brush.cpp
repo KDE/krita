@@ -249,14 +249,6 @@ KisImagePipeBrush::KisImagePipeBrush(const KisImagePipeBrush& rhs)
 {
 }
 
-KisImagePipeBrush &KisImagePipeBrush::operator=(const KisImagePipeBrush &rhs)
-{
-    if (*this != rhs) {
-        d->brushesPipe = rhs.d->brushesPipe;
-    }
-    return *this;
-}
-
 KoResourceSP KisImagePipeBrush::clone() const
 {
     return KoResourceSP(new KisImagePipeBrush(*this));

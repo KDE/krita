@@ -32,7 +32,7 @@ public:
     ~TasksetResource() override;
 
     TasksetResource(const TasksetResource &rhs);
-    TasksetResource &operator=(const TasksetResource &rhs);
+    TasksetResource &operator=(const TasksetResource &rhs) = delete;
     KoResourceSP clone() const override;
 
     bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;

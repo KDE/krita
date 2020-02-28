@@ -88,7 +88,7 @@ public:
 
     ~KoColorSet() override;
 
-    KoColorSet &operator=(const KoColorSet &rhs);
+    KoColorSet &operator=(const KoColorSet &rhs) = delete;
 
     KoResourceSP clone() const override;
 

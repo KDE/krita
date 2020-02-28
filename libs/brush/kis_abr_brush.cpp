@@ -61,14 +61,6 @@ KisAbrBrush::KisAbrBrush(const KisAbrBrush& rhs, KisAbrBrushCollection *parent)
 {
 }
 
-KisAbrBrush &KisAbrBrush::operator=(const KisAbrBrush &rhs)
-{
-    if (*this != rhs) {
-        m_parent = rhs.m_parent; // XXX: should this also be zero as in the first copy constructor?
-    }
-    return *this;
-}
-
 KoResourceSP KisAbrBrush::clone() const
 {
     return KoResourceSP(new KisAbrBrush(*this));

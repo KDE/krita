@@ -28,7 +28,7 @@ public:
     KisPngBrush(const QString& filename);
     KisPngBrush(const KisPngBrush &rhs);
     KoResourceSP clone() const override;
-    // No operator= needed, because there's no local data in KisPngBrush
+    KisPngBrush &operator=(const KisPngBrush &rhs) = delete;
 
     bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;
     bool saveToDevice(QIODevice *dev) const override;

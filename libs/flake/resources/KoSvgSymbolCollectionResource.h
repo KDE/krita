@@ -71,7 +71,7 @@ public:
     ~KoSvgSymbolCollectionResource() override;
 
     KoSvgSymbolCollectionResource(const KoSvgSymbolCollectionResource &rhs);
-    KoSvgSymbolCollectionResource &operator=(const KoSvgSymbolCollectionResource &rhs);
+    KoSvgSymbolCollectionResource &operator=(const KoSvgSymbolCollectionResource &rhs) = delete;
     KoResourceSP clone() const override;
 
     bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;

@@ -117,6 +117,8 @@ struct KisWindowLayoutResource::Private
     QUuid primaryWindow;
 
     Private() = default;
+    Private(const Private &rhs) = default;
+
 
     explicit Private(QVector<Window> windows)
         : windows(std::move(windows))
@@ -224,20 +226,8 @@ KisWindowLayoutResource::~KisWindowLayoutResource()
 
 KisWindowLayoutResource::KisWindowLayoutResource(const KisWindowLayoutResource &rhs)
     : KoResource(rhs)
-    , d(new Private)
+    , d(new Private(*rhs.d))
 {
-    *this = rhs;
-}
-
-KisWindowLayoutResource &KisWindowLayoutResource::operator=(const KisWindowLayoutResource &rhs)
-{
-    if (*this != rhs) {
-        d->windows = rhs.d->windows;
-        d->primaryWindow = rhs.d->primaryWindow;
-        d->showImageInAllWindows = rhs.d->showImageInAllWindows;
-        d->primaryWorkspaceFollowsFocus = rhs.d->primaryWorkspaceFollowsFocus;
-    }
-    return *this;
 }
 
 KoResourceSP KisWindowLayoutResource::clone() const

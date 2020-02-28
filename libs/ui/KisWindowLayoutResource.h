@@ -31,7 +31,7 @@ public:
     explicit KisWindowLayoutResource(const QString &filename);
     ~KisWindowLayoutResource() override;
     KisWindowLayoutResource(const KisWindowLayoutResource &rhs);
-    KisWindowLayoutResource &operator=(const KisWindowLayoutResource &rhs);
+    KisWindowLayoutResource &operator=(const KisWindowLayoutResource &rhs) = delete;
     KoResourceSP clone() const override;
 
     static KisWindowLayoutResourceSP fromCurrentWindows (

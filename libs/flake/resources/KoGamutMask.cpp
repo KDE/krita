@@ -107,11 +107,8 @@ KoGamutMask::KoGamutMask()
 }
 
 KoGamutMask::KoGamutMask(KoGamutMask* rhs)
-    : QObject(0)
-    , KoResource(QString())
-    , d(new Private)
+    : KoGamutMask(*rhs)
 {
-    *this = *rhs;
 }
 
 KoGamutMask::KoGamutMask(const KoGamutMask &rhs)
@@ -119,23 +116,15 @@ KoGamutMask::KoGamutMask(const KoGamutMask &rhs)
     , KoResource(rhs)
     , d(new Private)
 {
-    *this = rhs;
-}
+    setTitle(rhs.title());
+    setDescription(rhs.description());
+    d->maskSize = rhs.d->maskSize;
 
-KoGamutMask &KoGamutMask::operator=(const KoGamutMask &rhs)
-{
-    if (*this != rhs) {
-        setTitle(rhs.title());
-        setDescription(rhs.description());
-        d->maskSize = rhs.d->maskSize;
-
-        QList<KoShape*> newShapes;
-        for(KoShape* sh: rhs.koShapes()) {
-            newShapes.append(sh->cloneShape());
-        }
-        setMaskShapes(newShapes);
+    QList<KoShape*> newShapes;
+    for(KoShape* sh: rhs.koShapes()) {
+        newShapes.append(sh->cloneShape());
     }
-    return *this;
+    setMaskShapes(newShapes);
 }
 
 KoResourceSP KoGamutMask::clone() const

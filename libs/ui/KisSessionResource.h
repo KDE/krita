@@ -27,7 +27,7 @@ public:
     KisSessionResource(const QString &filename);
     ~KisSessionResource();
     KisSessionResource(const KisSessionResource &rhs);
-    KisSessionResource &operator=(const KisSessionResource &rhs);
+    KisSessionResource &operator=(const KisSessionResource &rhs) = delete;
     KoResourceSP clone() const override;
 
     void storeCurrentWindows();

@@ -38,7 +38,7 @@ public:
     KisTextBrush(const KisTextBrush &rhs);
     ~KisTextBrush() override;
 
-    KisTextBrush &operator=(const KisTextBrush &rhs);
+    KisTextBrush &operator=(const KisTextBrush &rhs) = delete;
 
     KoResourceSP clone() const override;
 

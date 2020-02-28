@@ -262,7 +262,7 @@ public:
     explicit KoSegmentGradient(const QString &file = QString());
     ~KoSegmentGradient() override;
     KoSegmentGradient(const KoSegmentGradient &rhs);
-    KoSegmentGradient &operator=(const KoSegmentGradient &rhs);
+    KoSegmentGradient &operator=(const KoSegmentGradient &rhs) = delete;
     KoResourceSP clone() const override;
 
     bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;

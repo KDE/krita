@@ -65,7 +65,7 @@ public:
     /// Will call KisBrush's saveToDevice as well
     KisImagePipeBrush(const KisImagePipeBrush& rhs);
 
-    KisImagePipeBrush &operator=(const KisImagePipeBrush &rhs);
+    KisImagePipeBrush &operator=(const KisImagePipeBrush &rhs) = delete;
 
     KoResourceSP clone() const override;
 

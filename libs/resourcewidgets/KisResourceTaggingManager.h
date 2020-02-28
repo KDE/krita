@@ -119,8 +119,6 @@ private Q_SLOTS:
 
 private:
 
-    void enableContextMenu(bool enable);
-
     class Private;
     Private* const d;
 };

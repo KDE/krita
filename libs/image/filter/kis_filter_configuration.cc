@@ -78,7 +78,7 @@ KisFilterConfigurationSP KisFilterConfiguration::cloneWithResourcesSnapshot(KisR
     KisFilterConfigurationSP config = this->clone();
 
     if (!config->hasLocalResourcesSnapshot()) {
-        config->createLocalResourcesSnapshot(globalResourcesInterface ? globalResourcesInterface : config->resourcesInterface());
+        config->createLocalResourcesSnapshot(globalResourcesInterface);
         KIS_SAFE_ASSERT_RECOVER_NOOP(config->hasLocalResourcesSnapshot());
     }
 
@@ -186,7 +186,7 @@ void KisFilterConfiguration::setResourcesInterface(KisResourcesInterfaceSP resou
 void KisFilterConfiguration::createLocalResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(QThread::currentThread() == qApp->thread());
-    QList<KoResourceSP> resources = linkedResources(globalResourcesInterface);
+    QList<KoResourceSP> resources = linkedResources(globalResourcesInterface ? globalResourcesInterface : resourcesInterface());
     setResourcesInterface(QSharedPointer<KisLocalStrokeResources>::create(resources));
 }
 
@@ -197,6 +197,7 @@ bool KisFilterConfiguration::hasLocalResourcesSnapshot() const
 
 QList<KoResourceSP> KisFilterConfiguration::linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const
 {
+    Q_UNUSED(globalResourcesInterface);
     return {};
 }
 

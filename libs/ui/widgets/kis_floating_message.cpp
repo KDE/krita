@@ -30,11 +30,11 @@
 #include <QPainter>
 #include <QTimer>
 #include <QRegExp>
+#include <QDesktopWidget>
 
 #include <kis_icon.h>
 #include <kis_debug.h>
 #include "kis_global.h"
-
 
 /* Code copied from kshadowengine.cpp
  *

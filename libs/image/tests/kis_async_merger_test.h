@@ -26,6 +26,8 @@ class KisAsyncMergerTest : public QObject
     Q_OBJECT
 
 private Q_SLOTS:
+    void init();
+
     void testMerger();
     void debugObligeChild();
     void testFullRefreshWithClones();
@@ -36,6 +38,8 @@ private Q_SLOTS:
     void testFullRefreshGroupWithMaskAndStyle();
     void testFullRefreshAdjustmentWithMask();
     void testFullRefreshAdjustmentWithStyle();
+
+    void testFilterMaskOnFilterLayer();
 
 };
 

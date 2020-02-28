@@ -136,7 +136,7 @@ public:
      */
     int mainwindowCount() const;
 
-    void addRecentURLToAllMainWindows(QUrl url);
+    void addRecentURLToAllMainWindows(QUrl url, QUrl oldUrl = QUrl());
 
     /**
      * @return the currently active main window.

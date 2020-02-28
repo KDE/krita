@@ -310,7 +310,10 @@ KoFillConfigWidget::KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVarian
     connect(d->ui->cmbGradientRepeat, SIGNAL(currentIndexChanged(int)), SLOT(slotGradientRepeatChanged()));
     connect(d->ui->cmbGradientType, SIGNAL(currentIndexChanged(int)), SLOT(slotGradientTypeChanged()));
 
-    deactivate();
+    // initialize deactivation locks
+    d->deactivationLocks.push_back(KisAcyclicSignalConnector::Blocker(d->shapeChangedAcyclicConnector));
+    d->deactivationLocks.push_back(KisAcyclicSignalConnector::Blocker(d->resourceManagerAcyclicConnector));
+
 
 /*
     // Pattern selector
@@ -330,7 +333,9 @@ KoFillConfigWidget::~KoFillConfigWidget()
 
 void KoFillConfigWidget::activate()
 {
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!d->deactivationLocks.empty());
     d->deactivationLocks.clear();
+
     if (!d->noSelectionTrackingMode) {
         d->shapeChangedCompressor.start();
     } else {
@@ -343,7 +348,8 @@ void KoFillConfigWidget::activate()
 void KoFillConfigWidget::deactivate()
 {
     emit sigInternalRecoverColorInResourceManager();
-    d->deactivationLocks.clear();
+
+    KIS_SAFE_ASSERT_RECOVER_NOOP(d->deactivationLocks.empty());
     d->deactivationLocks.push_back(KisAcyclicSignalConnector::Blocker(d->shapeChangedAcyclicConnector));
     d->deactivationLocks.push_back(KisAcyclicSignalConnector::Blocker(d->resourceManagerAcyclicConnector));
 }

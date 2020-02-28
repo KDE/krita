@@ -262,25 +262,28 @@ void renderShapes(typename KisForest<KoShape*>::child_iterator beginIt,
 
 void KoShapeManager::Private::updateTree()
 {
-    QMutexLocker l(&this->treeMutex);
-
     bool selectionModified = false;
     bool anyModified = false;
-    Q_FOREACH (KoShape *shape, aggregate4update) {
-        selectionModified = selectionModified || selection->isSelected(shape);
-        anyModified = true;
+
+    {
+        QMutexLocker l(&this->treeMutex);
+
+        Q_FOREACH (KoShape *shape, aggregate4update) {
+            selectionModified = selectionModified || selection->isSelected(shape);
+            anyModified = true;
+        }
+
+        foreach (KoShape *shape, aggregate4update) {
+            if (!shapeUsedInRenderingTree(shape)) continue;
+
+            tree.remove(shape);
+            QRectF br(shape->boundingRect());
+            tree.insert(br, shape);
+        }
+
+        aggregate4update.clear();
+        shapeIndexesBeforeUpdate.clear();
     }
-
-    foreach (KoShape *shape, aggregate4update) {
-        if (!shapeUsedInRenderingTree(shape)) continue;
-
-        tree.remove(shape);
-        QRectF br(shape->boundingRect());
-        tree.insert(br, shape);
-    }
-
-    aggregate4update.clear();
-    shapeIndexesBeforeUpdate.clear();
 
     if (selectionModified) {
         emit q->selectionContentChanged();
@@ -485,8 +488,9 @@ KoShapeManager::ShapeInterface *KoShapeManager::shapeInterface()
 void KoShapeManager::preparePaintJobs(PaintJobsList &jobs,
                                       KoShape *excludeRoot)
 {
-    QMutexLocker l1(&d->shapesMutex);
     d->updateTree();
+
+    QMutexLocker l1(&d->shapesMutex);
 
     QSet<KoShape*> rootShapesSet;
     Q_FOREACH (KoShape *shape, d->shapes) {
@@ -561,9 +565,10 @@ void KoShapeManager::paintJob(QPainter &painter, const KoShapeManager::PaintJob 
 
 void KoShapeManager::paint(QPainter &painter, bool forPrint)
 {
+    d->updateTree();
+
     QMutexLocker l1(&d->shapesMutex);
 
-    d->updateTree();
     painter.setPen(Qt::NoPen);  // painters by default have a black stroke, lets turn that off.
     painter.setBrush(Qt::NoBrush);
 
@@ -598,9 +603,10 @@ void KoShapeManager::renderSingleShape(KoShape *shape, QPainter &painter, KoShap
 
 KoShape *KoShapeManager::shapeAt(const QPointF &position, KoFlake::ShapeSelection selection, bool omitHiddenShapes)
 {
+    d->updateTree();
+
     QMutexLocker l(&d->shapesMutex);
 
-    d->updateTree();
     QList<KoShape*> sortedShapes;
 
     {

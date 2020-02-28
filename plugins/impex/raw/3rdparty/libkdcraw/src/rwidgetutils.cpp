@@ -35,6 +35,7 @@
 #include <QVBoxLayout>
 #include <QApplication>
 #include <QScreen>
+#include <QDesktopWidget>
 #include <QPushButton>
 #include <QFileInfo>
 #include <QPainter>

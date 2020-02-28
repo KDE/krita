@@ -104,8 +104,9 @@ public:
 
     /**
      * The document opened a URL -> store into recent documents list.
+     * @param oldUrl if not empty, @p url will replace @p oldUrl if present
      */
-    void addRecentURL(const QUrl &url);
+    void addRecentURL(const QUrl &url, const QUrl &oldUrl = QUrl());
 
     /**
      * get list of URL strings for recent files

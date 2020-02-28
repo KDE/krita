@@ -816,7 +816,7 @@ void KisMainWindow::setReadWrite(bool readwrite)
     updateCaption();
 }
 
-void KisMainWindow::addRecentURL(const QUrl &url)
+void KisMainWindow::addRecentURL(const QUrl &url, const QUrl &oldUrl)
 {
     // Add entry to recent documents list
     // (call coming from KisDocument because it must work with cmd line, template dlg, file/open, etc.)
@@ -840,6 +840,9 @@ void KisMainWindow::addRecentURL(const QUrl &url)
             }
         }
         if (ok) {
+            if (!oldUrl.isEmpty()) {
+                d->recentFiles->removeUrl(oldUrl);
+            }
             d->recentFiles->addUrl(url);
         }
         saveRecentFiles();
@@ -2313,7 +2316,10 @@ void KisMainWindow::updateWindowMenu()
     QFontMetrics fontMetrics = docMenu->fontMetrics();
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
     QScreen *screen = qApp->screenAt(this->geometry().topLeft());
-    int fileStringWidth = int(screen->availableGeometry().width() * .40f);
+    int fileStringWidth = 300;
+    if (screen) {
+        fileStringWidth = int(screen->availableGeometry().width() * .40f);
+    }
 #else
     int fileStringWidth = int(QApplication::desktop()->screenGeometry(this).width() * .40f);
 #endif

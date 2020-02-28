@@ -141,6 +141,8 @@ public:
     QColor selectionOverlayMaskColor(bool defaultValue = false) const;
     void setSelectionOverlayMaskColor(const QColor &color);
 
+
+    static void resetConfig();
 private:
     Q_DISABLE_COPY(KisImageConfig)
 

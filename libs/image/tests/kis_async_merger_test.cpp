@@ -41,6 +41,15 @@
 
 #include "../../sdk/tests/testutil.h"
 
+#include "kis_image_config.h"
+#include "KisImageConfigNotifier.h"
+
+void KisAsyncMergerTest::init()
+{
+    KisImageConfig::resetConfig();
+}
+
+
     /*
       +-----------+
       |root       |
@@ -445,6 +454,58 @@ void KisAsyncMergerTest::testFullRefreshAdjustmentWithMask()
 void KisAsyncMergerTest::testFullRefreshAdjustmentWithStyle()
 {
     testFullRefreshForDependentNodes(ADJUSTMENT_LAYER, false, true);
+}
+
+/*
+  +---------------------------------+
+  |root                             |
+  | adj 2 (filter 2, color balance) |
+  |  mask 3 (filter 3, blur)        |
+  | paint 1                         |
+  +---------------------------------+
+ */
+
+void KisAsyncMergerTest::testFilterMaskOnFilterLayer()
+{
+    {
+        KisImageConfig cfg(false);
+        cfg.setUpdatePatchWidth(64);
+        cfg.setUpdatePatchHeight(64);
+        cfg.setMaxNumberOfThreads(1);
+    }
+    KisImageConfigNotifier::instance()->notifyConfigChanged();
+
+
+    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, 128, 128, colorSpace, "masks test");
+
+    KisPaintDeviceSP device1 = new KisPaintDevice(colorSpace);
+    device1->fill(image->bounds(), KoColor(Qt::yellow, colorSpace));
+    KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8, device1);
+    image->addNode(paintLayer1, image->rootLayer());
+
+
+    KisFilterSP filter2 = KisFilterRegistry::instance()->value("colorbalance");
+    KIS_ASSERT(filter2);
+    KisFilterConfigurationSP configuration2 = filter2->defaultConfiguration(KisGlobalResourcesInterface::instance());
+    KIS_ASSERT(configuration2);
+    KisLayerSP adjLayer2 = new KisAdjustmentLayer(image, "adj2", configuration2, 0);
+    image->addNode(adjLayer2, image->rootLayer());
+
+
+    KisFilterSP filter3 = KisFilterRegistry::instance()->value("blur");
+    KIS_ASSERT(filter3);
+    KisFilterConfigurationSP configuration3 = filter3->defaultConfiguration(KisGlobalResourcesInterface::instance());
+    KIS_ASSERT(configuration3);
+    KisFilterMaskSP mask3 = new KisFilterMask();
+    mask3->initSelection(adjLayer2);
+    mask3->setFilter(configuration3);
+    image->addNode(mask3, adjLayer2);
+
+    image->initialRefreshGraph();
+
+    QVERIFY(TestUtil::checkQImage(image->projection()->convertToQImage(0),
+                                  "async_merger_test", "mask_on_adj", "initial", 3));
 }
 
 

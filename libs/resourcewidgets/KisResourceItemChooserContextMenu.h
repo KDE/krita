@@ -121,7 +121,6 @@ public Q_SLOTS:
     void addResourceNewTag(KoResourceSP resource, const KisTagSP tag);
 
 private:
-    QString m_resourceType;
     KisTagModel* m_tagModel;
 
 };

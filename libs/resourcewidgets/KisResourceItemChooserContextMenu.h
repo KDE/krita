@@ -99,6 +99,17 @@ private:
     KoResourceSP m_resource;
 };
 
+
+///
+/// \brief The KisResourceItemChooserContextMenu class is responsible for the context menu in ResourceItemChooser
+///
+/// The context menu for the resource item in the resource item chooser (see: main area in the Brush Presets docker)
+/// contains actions to tag and untag the selected resource.
+/// In case of tagging the user can choose to create a new tag or select one of the existing ones.
+/// In case of untagging the user can untag from the current selected tag (in the combobox) or from some other tags.
+/// This class needs to provide correct lists of tags and take into account that "All" and "All untagged" (and possibly other
+/// generated tags) are special and the user cannot untage the resource from it.
+///
 class KisResourceItemChooserContextMenu :  public QMenu
 {
     Q_OBJECT
@@ -116,11 +127,29 @@ Q_SIGNALS:
 
 
 public Q_SLOTS:
+    ///
+    /// \brief addResourceTag slot for a signal from the action to add the tag to the resource
+    /// \param resource resource that needs to be tagged
+    /// \param tag tag to add to the resource
+    ///
     void addResourceTag(KoResourceSP resource, const KisTagSP tag);
+    ///
+    /// \brief removeResourceExistingTag slot for a signal from the action to remove the tag from the resource
+    /// \param resource resource that the tag needs to be removed from
+    /// \param tag tag that needs to be removed from the resource
+    ///
     void removeResourceExistingTag(KoResourceSP resource, const KisTagSP tag);
+    ///
+    /// \brief addResourceNewTag slot for the signal from the action to add the tag to the resource
+    /// \param resource resource that the tag needs to be added to
+    /// \param tag tag (more precisely, tag name encapsulated in a tag class) that needs to be added to the resource
+    ///
     void addResourceNewTag(KoResourceSP resource, const KisTagSP tag);
 
 private:
+    ///
+    /// \brief m_tagModel data model for tags (for tagging and untagging resources and create lists of tags)
+    ///
     KisTagModel* m_tagModel;
 
 };

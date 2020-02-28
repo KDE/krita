@@ -76,7 +76,6 @@
 #include "processing/kis_transform_processing_visitor.h"
 #include "processing/kis_convert_color_space_processing_visitor.h"
 #include "processing/kis_assign_profile_processing_visitor.h"
-#include "processing/KisTrimProcessingVisitor.h"
 #include "commands_new/kis_image_resize_command.h"
 #include "commands_new/kis_image_set_resolution_command.h"
 #include "commands_new/kis_activate_selection_mask_command.h"
@@ -793,23 +792,50 @@ void KisImage::cropImage(const QRect& newRect)
     resizeImageImpl(newRect, true);
 }
 
-
-void KisImage::trimLayersOpaque()
+void KisImage::purgeUnusedData(bool isCancellable)
 {
-    KUndo2MagicString actionName = kundo2_i18n("Trim All Layers");
+    struct PurgeUnusedDataStroke : public KisRunnableBasedStrokeStrategy {
+        PurgeUnusedDataStroke(KisImageSP image, bool isCancellable)
+            : KisRunnableBasedStrokeStrategy(QLatin1String("purge-unused-data"),
+                                             kundo2_noi18n("purge-unused-data")),
+              m_image(image)
+        {
+            this->enableJob(JOB_INIT, true, KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE);
+            this->enableJob(JOB_DOSTROKE, true);
+            setClearsRedoOnStart(false);
+            setRequestsOtherStrokesToEnd(!isCancellable);
+            setCanForgetAboutMe(isCancellable);
+        }
 
-    KisImageSignalVector emitSignals;
-    emitSignals << ModifiedSignal;
+        void initStrokeCallback() {
+            KisPaintDeviceList deviceList;
+            QVector<KisStrokeJobData*> jobsData;
 
-    KisProcessingApplicator applicator(this, m_d->rootLayer,
-                                       KisProcessingApplicator::RECURSIVE |
-                                       KisProcessingApplicator::NO_UI_UPDATES,
-                                       emitSignals, actionName);
+            KisLayerUtils::recursiveApplyNodes(m_image->root(),
+                [&deviceList](KisNodeSP node) {
+                   deviceList << node->getLodCapableDevices();
+                 });
 
-    KisProcessingVisitorSP visitor = new KisTrimProcessingVisitor(bounds());
-    applicator.applyVisitorAllFrames(visitor, KisStrokeJobData::CONCURRENT);
-    applicator.end();
+            Q_FOREACH (KisPaintDeviceSP device, deviceList) {
+                if (!device) continue;
+
+                KritaUtils::addJobConcurrent(jobsData,
+                    [device] () {
+                        const_cast<KisPaintDevice*>(device.data())->purgeDefaultPixels();
+                    });
+            }
+
+            addMutatedJobs(jobsData);
+        }
+
+    private:
+        KisImageSP m_image;
+    };
+
+    KisStrokeId id = startStroke(new PurgeUnusedDataStroke(this, isCancellable));
+    endStroke(id);
 }
+
 void KisImage::cropNode(KisNodeSP node, const QRect& newRect)
 {
     bool isLayer = qobject_cast<KisLayer*>(node.data());

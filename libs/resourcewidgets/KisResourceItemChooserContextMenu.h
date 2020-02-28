@@ -114,7 +114,13 @@ class KisResourceItemChooserContextMenu :  public QMenu
 {
     Q_OBJECT
 public:
+    ///
+    /// \brief KisResourceItemChooserContextMenu the constructor for the KisResourceItemChooserContextMenu class
+    /// \param resource the resource that the context menu is called for
+    /// \param currentlySelectedTag the currently selected tag in the combobox over the resource item chooser
+    ///
     explicit KisResourceItemChooserContextMenu(KoResourceSP resource, const KisTagSP currentlySelectedTag);
+    /// \brief the destructor
     ~KisResourceItemChooserContextMenu() override;
 
 Q_SIGNALS:

@@ -81,8 +81,6 @@ KisResourceTaggingManager::KisResourceTaggingManager(QString resourceType, KisTa
 
     connect(d->tagFilter, SIGNAL(filterByTagChanged(bool)), this, SLOT(slotFilterByTagChanged(bool)));
     connect(d->tagFilter, SIGNAL(filterTextChanged(QString)), this, SLOT(tagSearchLineEditTextChanged(QString)));
-
-
 }
 
 KisResourceTaggingManager::~KisResourceTaggingManager()
@@ -98,7 +96,6 @@ void KisResourceTaggingManager::showTaggingBar(bool show)
 
 void KisResourceTaggingManager::tagChooserIndexChanged(const KisTagSP tag)
 {
-    ENTER_FUNCTION();
     d->model->setTag(tag);
     d->currentTag = tag;
     d->tagFilter->clear();
@@ -106,9 +103,7 @@ void KisResourceTaggingManager::tagChooserIndexChanged(const KisTagSP tag)
 
 void KisResourceTaggingManager::tagSearchLineEditTextChanged(const QString& lineEditText)
 {
-    fprintf(stderr, "void KisResourceTaggingManager::tagSearchLineEditTextChanged(const QString& lineEditText): %s \n", lineEditText.toStdString().c_str());
     d->model->setSearchBoxText(lineEditText);
-    ENTER_FUNCTION() << ppVar(lineEditText);
 }
 
 void KisResourceTaggingManager::slotFilterByTagChanged(const bool filterByTag)
@@ -118,11 +113,8 @@ void KisResourceTaggingManager::slotFilterByTagChanged(const bool filterByTag)
 
 void KisResourceTaggingManager::contextMenuRequested(KoResourceSP resource, QPoint pos)
 {
-    ENTER_FUNCTION();
     // No visible tag chooser usually means no intended tag interaction,
     // context menu makes no sense then either
-    fprintf(stderr, "context menu requested!");
-
     if (!resource || !d->tagChooser->isVisible())
         return;
 

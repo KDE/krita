@@ -37,7 +37,7 @@
 #include "kis_image.h"
 #include "kis_paintop_settings_update_proxy.h"
 #include <brushengine/kis_paintop_config_widget.h>
-#include <KisLocalStrokeResources.h>
+#include <KisLinkedResourcesOperators.h>
 
 #include <KoStore.h>
 
@@ -407,10 +407,34 @@ void KisPaintOpPreset::setResourcesInterface(KisResourcesInterfaceSP resourcesIn
     d->settings->setResourcesInterface(resourcesInterface);
 }
 
+namespace KisLinkedResourcesOperators
+{
+template <>
+struct ResourceTraits<KisPaintOpPreset>
+{
+    template <typename T>
+    using SharedPointerType = QSharedPointer<T>;
+
+    template <typename D, typename S>
+    static inline SharedPointerType<D> dynamicCastSP(SharedPointerType<S> src) {
+        return src.template dynamicCast<D>();
+    }
+};
+}
+
 void KisPaintOpPreset::createLocalResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface)
 {
-    QList<KoResourceSP> resources = linkedResources(globalResourcesInterface);
-    d->settings->setResourcesInterface(QSharedPointer<KisLocalStrokeResources>::create(resources));
+    KisLinkedResourcesOperators::createLocalResourcesSnapshot(this, globalResourcesInterface);
+}
+
+bool KisPaintOpPreset::hasLocalResourcesSnapshot() const
+{
+    return KisLinkedResourcesOperators::hasLocalResourcesSnapshot(this);
+}
+
+KisPaintOpPresetSP KisPaintOpPreset::cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface) const
+{
+    return KisLinkedResourcesOperators::cloneWithResourcesSnapshot(this, globalResourcesInterface);
 }
 
 QList<KoResourceSP> KisPaintOpPreset::linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const

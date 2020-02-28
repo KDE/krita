@@ -34,7 +34,6 @@
 #include "kis_selection.h"
 #include "kis_selection_mask.h"
 #include "kis_algebra_2d.h"
-#include <KisGlobalResourcesInterface.h>
 
 
 struct KisResourcesSnapshot::Private {
@@ -96,8 +95,7 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
      */
     KisPaintOpPresetSP p = resourceManager->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
     if (p) {
-        m_d->currentPaintOpPreset = resourceManager->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>()->clone().dynamicCast<KisPaintOpPreset>();
-        m_d->currentPaintOpPreset->createLocalResourcesSnapshot(KisGlobalResourcesInterface::instance());
+        m_d->currentPaintOpPreset = resourceManager->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>()->cloneWithResourcesSnapshot();
     }
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
@@ -421,13 +419,9 @@ void KisResourcesSnapshot::setSelectionOverride(KisSelectionSP selection)
 
 void KisResourcesSnapshot::setBrush(const KisPaintOpPresetSP &brush)
 {
-    m_d->currentPaintOpPreset = brush;
+    m_d->currentPaintOpPreset = brush->cloneWithResourcesSnapshot();
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
     KisPaintOpRegistry::instance()->preinitializePaintOpIfNeeded(m_d->currentPaintOpPreset);
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
-
-    if (m_d->currentPaintOpPreset) {
-        m_d->currentPaintOpPreset->createLocalResourcesSnapshot(KisGlobalResourcesInterface::instance());
-    }
 }

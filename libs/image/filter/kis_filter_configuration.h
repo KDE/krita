@@ -25,6 +25,7 @@
 #include "kis_types.h"
 #include "kritaimage_export.h"
 
+
 class KoResource;
 typedef QSharedPointer<KoResource> KoResourceSP;
 
@@ -52,7 +53,6 @@ typedef QSharedPointer<KisResourcesInterface> KisResourcesInterfaceSP;
  */
 class KRITAIMAGE_EXPORT KisFilterConfiguration : public KisPropertiesConfiguration
 {
-
 public:
 
     /**
@@ -65,19 +65,6 @@ public:
      * becomes shared between two configuration objects.
      */
     virtual KisFilterConfigurationSP clone() const;
-
-    /**
-     * @brief creates an exact copy of the filter config object and loads
-     *        all the linked resources into the local storage.
-     * @param globalResourcesInterface is an optional override for the
-     *        resources interface used for fetching linked resources. If
-     *        \p globalResourcesInterface is null, then this->resourcesInterface()
-     *        is used.
-     *
-     * If a filter configuration object already has a resources snapshot, then
-     * the function just clones the object without reloading anything.
-     */
-    KisFilterConfigurationSP cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface = nullptr) const;
 
 protected:
     /**
@@ -156,24 +143,19 @@ public:
     void setResourcesInterface(KisResourcesInterfaceSP resourcesInterface);
 
     /**
-     * Loads all the linked resources either from the current resource interface
-     * or from the embedded data. The filter first tries to fetch the linked
-     * resource from the current source, and only if it fails, tries to load
-     * it from the embedded data.
-     *
-     * @param globalResourcesInterface if \p globalResourcesInterface is not null,
-     * the resources are fetched from there, not from the internally stored resources
-     * interface
+     * \see KisLinkedResourcesOperators::createLocalResourcesSnapshot
      */
     void createLocalResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface = nullptr);
 
     /**
-     * @return true if the configuration has all the necessary resources in
-     * local storage. It mean it can be used in a threaded environment.
-     *
-     * @see createLocalResourcesSnapshot()
+     * \see KisLinkedResourcesOperators::hasLocalResourcesSnapshot
      */
     bool hasLocalResourcesSnapshot() const;
+
+    /**
+     * \see KisLinkedResourcesOperators::cloneWithResourcesSnapshot
+     */
+    KisFilterConfigurationSP cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface = nullptr) const;
 
     /**
      * Loads all the linked resources either from \p globalResourcesInterface or
@@ -200,6 +182,5 @@ private:
 };
 
 Q_DECLARE_METATYPE(KisFilterConfiguration*)
-
 
 #endif // _KIS_FILTER_CONFIGURATION_H_

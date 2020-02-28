@@ -30,6 +30,7 @@
 #include "kis_selection.h"
 #include "KoID.h"
 #include "kis_types.h"
+#include <KisLinkedResourcesOperators.h>
 
 #include "kis_config_widget.h"
 
@@ -71,18 +72,6 @@ KisFilterConfiguration::KisFilterConfiguration(const QString & name, qint32 vers
 KisFilterConfigurationSP KisFilterConfiguration::clone() const
 {
     return new KisFilterConfiguration(*this);
-}
-
-KisFilterConfigurationSP KisFilterConfiguration::cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface) const
-{
-    KisFilterConfigurationSP config = this->clone();
-
-    if (!config->hasLocalResourcesSnapshot()) {
-        config->createLocalResourcesSnapshot(globalResourcesInterface);
-        KIS_SAFE_ASSERT_RECOVER_NOOP(config->hasLocalResourcesSnapshot());
-    }
-
-    return config;
 }
 
 KisFilterConfiguration::KisFilterConfiguration(const KisFilterConfiguration & rhs)
@@ -168,11 +157,6 @@ const QList< KisCubicCurve >& KisFilterConfiguration::curves() const
     return d->curves;
 }
 
-// TODO: move into a separate interface class
-#include <KisLocalStrokeResources.h>
-#include <QApplication>
-#include <QThread>
-
 KisResourcesInterfaceSP KisFilterConfiguration::resourcesInterface() const
 {
     return d->resourcesInterface;
@@ -183,16 +167,34 @@ void KisFilterConfiguration::setResourcesInterface(KisResourcesInterfaceSP resou
     d->resourcesInterface = resourcesInterface;
 }
 
+namespace KisLinkedResourcesOperators
+{
+template <>
+struct ResourceTraits<KisFilterConfiguration>
+{
+    template <typename T>
+    using SharedPointerType = KisPinnedSharedPtr<T>;
+
+    template <typename D, typename S>
+    static inline SharedPointerType<D> dynamicCastSP(SharedPointerType<S> src) {
+        return SharedPointerType<D>(dynamic_cast<D*>(src.data()));
+    }
+};
+}
+
 void KisFilterConfiguration::createLocalResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface)
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN(QThread::currentThread() == qApp->thread());
-    QList<KoResourceSP> resources = linkedResources(globalResourcesInterface ? globalResourcesInterface : resourcesInterface());
-    setResourcesInterface(QSharedPointer<KisLocalStrokeResources>::create(resources));
+    KisLinkedResourcesOperators::createLocalResourcesSnapshot(this, globalResourcesInterface);
 }
 
 bool KisFilterConfiguration::hasLocalResourcesSnapshot() const
 {
-    return d->resourcesInterface.dynamicCast<KisLocalStrokeResources>();
+    return KisLinkedResourcesOperators::hasLocalResourcesSnapshot(this);
+}
+
+KisFilterConfigurationSP KisFilterConfiguration::cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface) const
+{
+    return KisLinkedResourcesOperators::cloneWithResourcesSnapshot(this, globalResourcesInterface);
 }
 
 QList<KoResourceSP> KisFilterConfiguration::linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const

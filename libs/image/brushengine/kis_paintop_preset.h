@@ -54,7 +54,6 @@ public:
  */
 class KRITAIMAGE_EXPORT KisPaintOpPreset : public KoResource
 {
-
 public:
 
     /**
@@ -152,12 +151,20 @@ public:
     void setResourcesInterface(KisResourcesInterfaceSP resourcesInterface);
 
     /**
-     * Loads all the linked resources either from \p globalResourcesInterface or
-     * from embedded data. The preset first tried to fetch the linked resource
-     * from the global source, and only if it fails, tries to load it from the
-     * embedded data.
+     * \see KisLinkedResourcesOperators::createLocalResourcesSnapshot
      */
-    void createLocalResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface);
+    void createLocalResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface = nullptr);
+
+    /**
+     * \see KisLinkedResourcesOperators::hasLocalResourcesSnapshot
+     */
+    bool hasLocalResourcesSnapshot() const;
+
+    /**
+     * \see KisLinkedResourcesOperators::cloneWithResourcesSnapshot
+     */
+    KisPaintOpPresetSP cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface = nullptr) const;
+
 
     QList<KoResourceSP> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const override;
 

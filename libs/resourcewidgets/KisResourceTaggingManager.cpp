@@ -48,23 +48,6 @@
 #include "kis_debug.h"
 #include "KisTag.h"
 
-
-class TaggedResourceSet
-{
-public:
-    TaggedResourceSet()
-    {}
-
-    TaggedResourceSet(const QString& tagName, const QList<KoResourceSP>& resources)
-        : tagName(tagName)
-        , resources(resources)
-    {}
-
-    QString tagName;
-    QList<KoResourceSP> resources;
-};
-
-
 class KisResourceTaggingManager::Private
 {
 public:

@@ -215,6 +215,7 @@ int KoResource::resourceId() const
 
 QList<KoResourceSP> KoResource::linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const
 {
+    Q_UNUSED(globalResourcesInterface);
     return {};
 }
 

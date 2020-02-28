@@ -105,8 +105,12 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
     m_d->currentExposure = resourceManager->resource(KisCanvasResourceProvider::HdrExposure).toDouble();
-    m_d->currentGenerator = resourceManager->resource(KisCanvasResourceProvider::CurrentGeneratorConfiguration).value<KisFilterConfiguration*>()->cloneWithResourcesSnapshot();
 
+
+    m_d->currentGenerator = resourceManager->resource(KisCanvasResourceProvider::CurrentGeneratorConfiguration).value<KisFilterConfiguration*>();
+    if (m_d->currentGenerator) {
+        m_d->currentGenerator = m_d->currentGenerator->cloneWithResourcesSnapshot();
+    }
 
     QPointF relativeAxesCenter(0.5, 0.5);
     if (m_d->image) {

@@ -26,6 +26,7 @@
 #include <QDebug>
 
 #include "KisResourceTypes.h"
+#include <boost/operators.hpp>
 
 #include <kritaresources_export.h>
 
@@ -47,7 +48,7 @@ typedef QSharedPointer<KisResourcesInterface> KisResourcesInterfaceSP;
  * version isn't renamed.
  *
  */
-class KRITARESOURCES_EXPORT KoResource
+class KRITARESOURCES_EXPORT KoResource : public boost::equality_comparable<KoResource>
 {
 public:
 
@@ -63,11 +64,6 @@ public:
     KoResource &operator=(const KoResource &rhs) = delete;
 
     virtual KoResourceSP clone() const = 0;
-
-    bool operator !=(const KoResource &other) const
-    {
-        return &other != this;
-    }
 
     bool operator ==(const KoResource &other) const
     {

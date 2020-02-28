@@ -51,17 +51,12 @@
 class KisResourceTaggingManager::Private
 {
 public:
-    KisTagSP currentTag;
-
     KisTagChooserWidget *tagChooser;
     KisTagFilterWidget *tagFilter;
-
-    QCompleter *tagCompleter;
 
     QPointer<KisTagFilterResourceProxyModel> model;
 
     KisTagModel* tagModel;
-    KisResourceModel* resourceSourceModel;
 };
 
 
@@ -73,7 +68,6 @@ KisResourceTaggingManager::KisResourceTaggingManager(QString resourceType, KisTa
     d->model = model;
 
     d->tagModel = KisTagModelProvider::tagModel(resourceType);
-    d->resourceSourceModel = KisResourceModelProvider::resourceModel(resourceType);
     d->tagChooser = new KisTagChooserWidget(d->tagModel, parent);
     d->tagFilter = new KisTagFilterWidget(d->tagModel, parent);
 
@@ -97,7 +91,6 @@ void KisResourceTaggingManager::showTaggingBar(bool show)
 void KisResourceTaggingManager::tagChooserIndexChanged(const KisTagSP tag)
 {
     d->model->setTag(tag);
-    d->currentTag = tag;
     d->tagFilter->clear();
 }
 

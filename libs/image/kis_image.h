@@ -264,14 +264,13 @@ public:
     void cropImage(const QRect& newRect);
 
     /**
-     * @brief start an asynchronous operation that will trim all layers to
-     * their opaque content.
-     *
-     * Please note that the actual operation starts asynchronously in
-     * a background, so you cannot expect the image having new size
-     * right after this call
+     * @brief purge all pixels that have default pixel to free up memory
+     * @param isCancellable if true, the scheduler is allower to stop and
+     * cancel purging operation as soon as the user starts any action.
+     * If \p isCancellable is false, then the user will not be allowed to do
+     * anything until purging operation is completed.
      */
-    void trimLayersOpaque();
+    void purgeUnusedData(bool isCancellable);
 
     /**
      * @brief start asynchronous operation on cropping a subtree of nodes starting at \p node

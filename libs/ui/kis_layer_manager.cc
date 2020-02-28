@@ -219,7 +219,7 @@ void KisLayerManager::trimToImage()
 {
     KisImageWSP image = m_view->image();
     if (image) {
-        image->trimLayersOpaque();
+        image->cropImage(image->bounds());
     }
 }
 

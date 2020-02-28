@@ -758,11 +758,7 @@ QByteArray KisDocument::serializeToNativeByteArray()
     }
 
     d->savingImage = d->image;
-    KisConfig cfg(true);
-    if (cfg.trimKra()) {
-        d->savingImage->trimLayersOpaque();
-        d->savingImage->waitForDone();
-    }
+
     if (!filter->convert(this, &buffer).isOk()) {
         qWarning() << "serializeToByteArray():: Could not export to our native format";
     }
@@ -1025,6 +1021,13 @@ bool KisDocument::initiateSavingInBackground(const QString actionName,
 
     if (clonedDocument->image()->hasOverlaySelectionMask()) {
         clonedDocument->image()->setOverlaySelectionMask(0);
+        waitForImage(clonedDocument->image());
+    }
+
+    KisConfig cfg(true);
+    if (cfg.trimKra()) {
+        clonedDocument->image()->cropImage(clonedDocument->image()->bounds());
+        clonedDocument->image()->purgeUnusedData(false);
         waitForImage(clonedDocument->image());
     }
 

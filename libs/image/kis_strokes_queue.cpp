@@ -265,7 +265,10 @@ KisStrokeId KisStrokesQueue::startStroke(KisStrokeStrategy *strokeStrategy)
     KisStrokeSP stroke;
     KisStrokeStrategy* lodBuddyStrategy;
 
-    m_d->cancelForgettableStrokes();
+    // we should let forgettable strokes to queue up
+    if (!strokeStrategy->canForgetAboutMe()) {
+        m_d->cancelForgettableStrokes();
+    }
 
     if (m_d->desiredLevelOfDetail &&
         m_d->canUseLodN() &&

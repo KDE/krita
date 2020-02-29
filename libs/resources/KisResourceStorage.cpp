@@ -162,6 +162,21 @@ QDateTime KisResourceStorage::timestamp() const
     return d->storagePlugin->timestamp();
 }
 
+QDateTime KisResourceStorage::timeStampForResource(const QString &resourceType, const QString &filename) const
+{
+    QFileInfo li(d->location);
+    if (li.suffix().toLower() == "bundle") {
+        QFileInfo bf(d->location + "_modified/" + resourceType + "/" + filename);
+        if (bf.exists()) {
+            return bf.lastModified();
+        }
+    } else if (QFileInfo(d->location + "/" + resourceType + "/" + filename).exists()) {
+        return QFileInfo(d->location + "/" + resourceType + "/" + filename).lastModified();
+    }
+    qDebug() << "KoResiurceStorage 173" << this->timestamp();
+    return this->timestamp();
+}
+
 KisResourceStorage::ResourceItem KisResourceStorage::resourceItem(const QString &url)
 {
     return d->storagePlugin->resourceItem(url);

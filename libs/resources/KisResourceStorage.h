@@ -187,6 +187,10 @@ public:
     /// for memory storages.
     QDateTime timestamp() const;
 
+    /// The time and date when the resource was last modified
+    /// For filestorage
+    QDateTime timeStampForResource(const QString &resourceType, const QString &filename) const;
+
     /// And entry in the storage; this is not the loaded resource
     ResourceItem resourceItem(const QString &url);
 

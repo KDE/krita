@@ -322,7 +322,7 @@ bool KisResourceLocator::addResource(const QString &resourceType, const KoResour
 
     // And the database
     return KisResourceCacheDb::addResource(storage,
-                                           QFileInfo(resource->filename()).lastModified(),
+                                           storage->timeStampForResource(resourceType, resource->filename()),
                                            resource,
                                            resourceType);
 

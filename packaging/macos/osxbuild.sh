@@ -76,7 +76,7 @@ printf "" > "${ERROR_LOG}"
 # configure max core for make compile
 ((MAKE_THREADS=1))
 if test ${OSTYPE} == "darwin*"; then
-    ((MAKE_THREADS = $(sysctl -n hw.ncpu) - 1))
+    ((MAKE_THREADS = $(sysctl -n hw.logicalcpu)))
 fi
 
 # Prints stderr and stdout to log files

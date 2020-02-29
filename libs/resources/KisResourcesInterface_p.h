@@ -29,7 +29,7 @@
 
 #include "kis_assert.h"
 
-
+#if (QT_VERSION <= QT_VERSION_CHECK(5, 12, 0))
 namespace std
 {
     template<> struct hash<QString>
@@ -39,6 +39,7 @@ namespace std
         }
     };
 }
+#endif
 
 class KRITARESOURCES_EXPORT KisResourcesInterfacePrivate
 {

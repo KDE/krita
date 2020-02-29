@@ -139,7 +139,7 @@ public:
             return false;
         }
 
-        if (m_resourceModel->addResource(resource, save ?  "" : "memory")) {
+        if (m_resourceModel->addResource(resource, save ? resource->storageLocation() : "memory")) {
             notifyResourceAdded(resource);
             return true;
         }

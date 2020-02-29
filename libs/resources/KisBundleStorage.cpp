@@ -21,6 +21,7 @@
 
 #include <QDebug>
 #include <QFileInfo>
+#include <QDir>
 
 #include <KisTag.h>
 #include "KisResourceStorage.h"
@@ -207,5 +208,29 @@ QStringList KisBundleStorage::metaDataKeys() const
 QVariant KisBundleStorage::metaData(const QString &key) const
 {
     return d->bundle->metaData(key);
+}
+
+bool KisBundleStorage::addResource(const QString &resourceType, KoResourceSP resource)
+{
+    bool addVersion = true;
+    QString bloc = location() + "_modified" + "/" + resourceType;
+
+    if (!QDir(bloc).exists()) {
+        QDir().mkpath(bloc);
+    }
+
+    QString fn = bloc  + "/" + resource->filename();
+    if (!QFileInfo(fn).exists()) {
+        addVersion = false;
+        resource->setFilename(fn);
+    }
+
+    bool result = KisStorageVersioningHelper::addVersionedResource(fn, bloc, resource);
+
+    if (addVersion) {
+        resource->setVersion(resource->version() + 1);
+    }
+
+    return result;
 }
 

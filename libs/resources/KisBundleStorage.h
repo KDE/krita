@@ -50,7 +50,7 @@ public:
 
     /// Add a resource to this bundle: note, the bundle itself should NOT be rewritten, but we need to
     /// put these tags in a place in the file system
-    bool addResource(const QString &resourceType, KoResourceSP resource) override {Q_UNUSED(resourceType); Q_UNUSED(resource); return false;}
+    bool addResource(const QString &resourceType, KoResourceSP resource) override;
 
 
 private:

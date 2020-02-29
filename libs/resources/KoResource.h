@@ -169,6 +169,8 @@ private:
     friend class TestResourceLocator;
     friend class TestFolderStorage;
     friend class KisFolderStorage;
+    friend class KisBundleStorage;
+    friend class KisStorageVersioningHelper;
     friend class KisMemoryStorage;
 
     void setVersion(int version);

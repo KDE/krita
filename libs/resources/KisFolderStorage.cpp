@@ -182,48 +182,8 @@ bool KisFolderStorage::addTag(const QString &/*resourceType*/, KisTagSP /*tag*/)
 
 bool KisFolderStorage::addResource(const QString &resourceType, KoResourceSP _resource)
 {
-    // Find a new filename for the resource if it already exists: we do not rename old resources, but rename updated resources
     QString fn = location() + "/" + resourceType + "/" + _resource->filename();
-    if (!QFileInfo(fn).exists()) {
-        // Simply save it
-        QFile f(fn);
-        if (!f.open(QFile::WriteOnly)) {
-            qWarning() << "Could not open resource file for writing" << fn;
-            return false;
-        }
-        if (!_resource->saveToDevice(&f)) {
-            qWarning() << "Could not save resource file" << fn;
-            return false;
-        }
-        f.close();
-    }
-    else {
-        QFileInfo fi(fn);
-
-        // Save the new resource
-        QString newFileName = fi.baseName() +
-                "."
-                + QString("%1").arg(_resource->version() + 1, 4, 10, QChar('0'))
-                + "."
-                + fi.suffix();
-        QFile f(location() + "/" + resourceType + "/" + newFileName);
-
-        if (!f.open(QFile::WriteOnly)) {
-            qWarning() << "Could not open resource file for writing" << fn;
-            return false;
-        }
-        if (!_resource->saveToDevice(&f)) {
-            qWarning() << "Could not save resource file" << fn;
-            return false;
-        }
-
-        _resource->setVersion(_resource->version() + 1);
-        _resource->setFilename(newFileName);
-
-        f.close();
-    }
-
-    return true;
+    return KisStorageVersioningHelper::addVersionedResource(fn, location() + "/" + resourceType, _resource);
 }
 
 KisResourceStorage::ResourceItem KisFolderStorage::resourceItem(const QString &url)

@@ -484,6 +484,8 @@ private Q_SLOTS:
 
     void slotInitiateAsyncAutosaving(KisDocument *clonedDocument);
 
+    void slotPerformIdleRoutines();
+
 private:
 
     friend class KisPart;

@@ -173,7 +173,6 @@ QDateTime KisResourceStorage::timeStampForResource(const QString &resourceType, 
     } else if (QFileInfo(d->location + "/" + resourceType + "/" + filename).exists()) {
         return QFileInfo(d->location + "/" + resourceType + "/" + filename).lastModified();
     }
-    qDebug() << "KoResiurceStorage 173" << this->timestamp();
     return this->timestamp();
 }
 
@@ -230,7 +229,6 @@ QVariant KisResourceStorage::metaData(const QString &key) const
 bool KisStorageVersioningHelper::addVersionedResource(const QString &filename, const QString &saveLocation, KoResourceSP resource)
 {
     // Find a new filename for the resource if it already exists: we do not rename old resources, but rename updated resources
-    qDebug() << "filename rename does not exist" << filename << saveLocation + "/" + filename;
     if (!QFileInfo(filename).exists()) {
         // Simply save it
         QFile f(filename);
@@ -253,7 +251,6 @@ bool KisStorageVersioningHelper::addVersionedResource(const QString &filename, c
                 + QString("%1").arg(resource->version() + 1, 4, 10, QChar('0'))
                 + "."
                 + fi.suffix();
-        qDebug() << "newFilename" << newFilename << saveLocation + "/" + newFilename;
         QFile f(saveLocation + "/" + newFilename);
 
         if (!f.open(QFile::WriteOnly)) {

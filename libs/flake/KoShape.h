@@ -1248,7 +1248,7 @@ protected:
     QTransform transform() const;
 
 private:
-    struct Private;
+    class Private;
     QScopedPointer<Private> d;
 
     class SharedData;

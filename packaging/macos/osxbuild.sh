@@ -62,7 +62,7 @@ export LIBRARY_PATH=${KIS_INSTALL_DIR}/lib:/usr/lib:${LIBRARY_PATH}
 export FRAMEWORK_PATH=${KIS_INSTALL_DIR}/lib/
 
 # export PYTHONHOME=${KIS_INSTALL_DIR}
-# export PYTHONPATH=${KIS_INSTALL_DIR}/sip:${KIS_INSTALL_DIR}/lib/python3.5/site-packages:${KIS_INSTALL_DIR}/lib/python3.5
+# export PYTHONPATH=${KIS_INSTALL_DIR}/sip:${KIS_INSTALL_DIR}/lib/python3.8/site-packages:${KIS_INSTALL_DIR}/lib/python3.8
 
 # This will make the debug output prettier
 export KDE_COLOR_DEBUG=1
@@ -76,7 +76,7 @@ printf "" > "${ERROR_LOG}"
 # configure max core for make compile
 ((MAKE_THREADS=1))
 if test ${OSTYPE} == "darwin*"; then
-    ((MAKE_THREADS = $(sysctl -n hw.ncpu) - 1))
+    ((MAKE_THREADS = $(sysctl -n hw.logicalcpu)))
 fi
 
 # Prints stderr and stdout to log files
@@ -108,7 +108,7 @@ print_if_error() {
     fi
 }
 
-# print status messges
+# print status messages
 print_msg() {
     printf "\e[32m%s\e[0m\n" "${1}"
     printf "%s\n" "${1}" >> ${OUPUT_LOG}
@@ -162,8 +162,8 @@ build_3rdparty_fixes(){
         # rpath needs to be fixed an build rerun
         log "Fixing rpath on openexr file: b44ExpLogTable"
         log "Fixing rpath on openexr file: dwaLookups"
-        log_cmd install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib ${KIS_TBUILD_DIR}/ext_openexr/ext_openexr-prefix/src/ext_openexr-build/IlmImf/./b44ExpLogTable
-        log_cmd install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib ${KIS_TBUILD_DIR}/ext_openexr/ext_openexr-prefix/src/ext_openexr-build/IlmImf/./dwaLookups
+        log_cmd install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib $(find ${KIS_TBUILD_DIR}/ext_openexr/ext_openexr-prefix/src/ext_openexr-build -name b44ExpLogTable)
+        log_cmd install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib $(find ${KIS_TBUILD_DIR}/ext_openexr/ext_openexr-prefix/src/ext_openexr-build -name dwaLookups)
         # we must rerun build!
         cmake_3rdparty ext_openexr "1"
 
@@ -370,6 +370,7 @@ build_krita () {
         -DCMAKE_INSTALL_PREFIX=${KIS_INSTALL_DIR} \
         -DDEFINE_NO_DEPRECATED=1 \
         -DBUILD_TESTING=OFF \
+        -DHIDE_SAFE_ASSERTS=ON \
         -DKDE_INSTALL_BUNDLEDIR=${KIS_INSTALL_DIR}/bin \
         -DPYQT_SIP_DIR_OVERRIDE=${KIS_INSTALL_DIR}/share/sip/ \
         -DCMAKE_BUILD_TYPE=RelWithDebInfo \
@@ -475,7 +476,7 @@ print_usage () {
     printf "BUILDSTEPS:\t\t"
     printf "\n builddeps \t\t Run cmake step for 3rd party dependencies, optionally takes a [pkg] arg"
     printf "\n rebuilddeps \t\t Rerun make and make install step for 3rd party deps, optionally takes a [pkg] arg
-    \t\t\t usefull for cleaning install directory and quickly reinstall all deps."
+    \t\t\t useful for cleaning install directory and quickly reinstall all deps."
     printf "\n fixboost \t\t Fixes broken boost \@rpath on OSX"
     printf "\n build \t\t\t Builds krita"
     printf "\n buildtarball \t\t\t Builds krita from provided [file] tarball"

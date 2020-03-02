@@ -1,35 +1,13 @@
-commit 09b46c2a9acb0b7cb52968599499cb19fa5d8904
-Author: Boudewijn Rempt <boud@valdyas.org>
-Date:   Fri Jan 5 16:09:39 2018 +0100
-
-    Disable tests: they need blas
-
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index f584002..dcb461b 100644
+index 2bfb6d5..81bffbe 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -418,24 +418,6 @@ add_subdirectory(doc EXCLUDE_FROM_ALL)
+@@ -435,7 +435,7 @@ add_subdirectory(Eigen)
  
- include(EigenConfigureTesting)
+ add_subdirectory(doc EXCLUDE_FROM_ALL)
  
--# fixme, not sure this line is still needed:
--enable_testing() # must be called from the root CMakeLists, see man page
--
--
--if(EIGEN_LEAVE_TEST_IN_ALL_TARGET)
--  add_subdirectory(test) # can't do EXCLUDE_FROM_ALL here, breaks CTest
--else()
--  add_subdirectory(test EXCLUDE_FROM_ALL)
--endif()
--
--if(EIGEN_LEAVE_TEST_IN_ALL_TARGET)
--  add_subdirectory(blas)
--  add_subdirectory(lapack)
--else()
--  add_subdirectory(blas EXCLUDE_FROM_ALL)
--  add_subdirectory(lapack EXCLUDE_FROM_ALL)
--endif()
--
- # add SYCL
- option(EIGEN_TEST_SYCL "Add Sycl support." OFF)
- if(EIGEN_TEST_SYCL)
+-option(BUILD_TESTING "Enable creation of Eigen tests." ON)
++option(BUILD_TESTING "Enable creation of Eigen tests." OFF)
+ if(BUILD_TESTING)
+   include(EigenConfigureTesting)
+ 

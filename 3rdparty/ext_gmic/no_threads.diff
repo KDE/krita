@@ -1,13 +1,13 @@
 diff --git a/src/CImg.h b/src/CImg.h
-index 9c116d2..afd8694 100644
+index 6fe7455..a1450f4 100644
 --- a/src/CImg.h
 +++ b/src/CImg.h
-@@ -3137,7 +3137,7 @@ namespace cimg_library_suffixed {
+@@ -3194,7 +3194,7 @@ namespace cimg_library_suffixed {
  #if defined(cimg_use_fftw3)
-     static struct FFTW3_info {
+     struct FFTW3_info {
        FFTW3_info() {
 -        fftw_init_threads();
-+//        fftw_init_threads();
++        //fftw_init_threads();
        }
-     } _FFTW3_info;
- #endif
+     }; // struct FFTW3_info { ...
+     static FFTW3_info _FFTW3_info;

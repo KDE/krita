@@ -1,0 +1,12 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -194,7 +194,7 @@
+ 
+ include(CheckCSourceCompiles)
+ option(ld-version-script "Enable linker version script" ON)
+-if(ld-version-script AND NOT APPLE)
++if(ld-version-script AND NOT APPLE AND NOT ANDROID)
+   # Check if LD supports linker scripts.
+   file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/conftest.map" "VERS_1 {
+         global: sym;

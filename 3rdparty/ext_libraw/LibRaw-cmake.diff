@@ -1,15 +1,9 @@
-commit a29ccc06edf6463b8d37c8d9b6887e0ae5afbdcc
-Author: Boudewijn Rempt <boud@valdyas.org>
-Date:   Thu Jan 4 11:43:35 2018 +0100
-
-    Add cmake build system
-
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 new file mode 100644
-index 0000000..47f3869
+index 0000000..b24ad45
 --- /dev/null
 +++ b/CMakeLists.txt
-@@ -0,0 +1,658 @@
+@@ -0,0 +1,690 @@
 +# ===========================================================
 +#
 +# This file is a part of Libraw project
@@ -105,6 +99,10 @@ index 0000000..47f3869
 +
 +SET(LIB_SUFFIX "" CACHE STRING "Define suffix of lib directory name (32/64)" )
 +
++IF(WIN32 AND NOT DEFINED CMAKE_DEBUG_POSTFIX)
++    SET(CMAKE_DEBUG_POSTFIX "d")
++ENDIF()
++
 +# To prevent warnings from M$ compiler
 +IF(WIN32 AND MSVC)
 +    ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
@@ -165,6 +163,19 @@ index 0000000..47f3869
 +# For registration to libraw_config.h
 +MACRO_BOOL_TO_01(LCMS_SUPPORT_CAN_BE_COMPILED LIBRAW_USE_LCMS)
 +
++# zlib library check
++
++FIND_PACKAGE(ZLIB)
++
++# Flag to use zlib with LibRaw DNG deflate codec
++IF(ZLIB_FOUND)
++    ADD_DEFINITIONS(-DUSE_ZLIB)
++    INCLUDE_DIRECTORIES(${ZLIB_INCLUDE_DIRS})
++ENDIF()
++
++# For registration to libraw_config.h
++MACRO_BOOL_TO_01(ZLIB_FOUND LIBRAW_USE_DNGDEFLATECODEC)
++
 +# JPEG library check
 +
 +DETECT_JPEG()
@@ -194,19 +205,15 @@ index 0000000..47f3869
 +
 +IF(ENABLE_OPENMP)
 +    # OpenMP library detection (requires CMake >= 2.6.3)
-+    # NOTE: OpenMP under MacOSX do not support multithreading.
++    MACRO_OPTIONAL_FIND_PACKAGE(OpenMP)
 +
-+    IF(NOT APPLE)
-+        MACRO_OPTIONAL_FIND_PACKAGE(OpenMP)
-+
-+        IF(OPENMP_FOUND)
-+            SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-+            IF("${OpenMP_CXX_FLAGS}" STREQUAL "-fopenmp")
-+                SET(OPENMP_LDFLAGS "-lgomp")
-+            ENDIF()
-+            IF("${OpenMP_CXX_FLAGS}" STREQUAL "-xopenmp")
-+                SET(OPENMP_LDFLAGS "-xopenmp")
-+            ENDIF()
++    IF(OPENMP_FOUND)
++        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
++        IF("${OpenMP_CXX_FLAGS}" STREQUAL "-fopenmp")
++            SET(OPENMP_LDFLAGS "-lgomp")
++        ENDIF()
++        IF("${OpenMP_CXX_FLAGS}" STREQUAL "-xopenmp")
++            SET(OPENMP_LDFLAGS "-xopenmp")
 +        ENDIF()
 +    ENDIF()
 +ENDIF()
@@ -383,6 +390,11 @@ index 0000000..47f3869
 +# Create a config header for client application.
 +CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/data/libraw_config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/libraw_config.h)
 +
++# Put the include dirs which are in the source or build tree
++# before all other include dirs, so the headers in the sources
++# are preferred over the already installed ones
++SET(CMAKE_INCLUDE_DIRECTORIES_PROJECT_BEFORE ON)
++
 +INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/
 +                    ${CMAKE_CURRENT_SOURCE_DIR}/
 +                   )
@@ -416,6 +428,12 @@ index 0000000..47f3869
 +    MESSAGE(STATUS " Libraw will be compiled with RedCine codec support ........... YES")
 +ELSE()
 +    MESSAGE(STATUS " Libraw will be compiled with RedCine codec support ........... NO")
++ENDIF()
++
++IF(ZLIB_FOUND)
++    MESSAGE(STATUS " Libraw will be compiled with DNG deflate codec support ....... YES")
++ELSE()
++    MESSAGE(STATUS " Libraw will be compiled with DNG deflate codec support ....... NO")
 +ENDIF()
 +
 +IF(JPEG8_FOUND)
@@ -493,8 +511,12 @@ index 0000000..47f3869
 +    TARGET_LINK_LIBRARIES(raw ${LCMS2_LIBRARIES})
 +ENDIF()
 +
++IF(ZLIB_FOUND)
++    TARGET_LINK_LIBRARIES(raw ${ZLIB_LIBRARIES})
++ENDIF()
++
 +IF(JPEG8_FOUND)
-+    TARGET_LINK_LIBRARIES(raw ${JPEG_LIBRARY})
++    TARGET_LINK_LIBRARIES(raw ${JPEG_LIBRARIES})
 +ENDIF()
 +
 +IF(JASPER_FOUND)
@@ -537,8 +559,12 @@ index 0000000..47f3869
 +    TARGET_LINK_LIBRARIES(raw_r ${LCMS2_LIBRARIES})
 +ENDIF()
 +
++IF(ZLIB_FOUND)
++    TARGET_LINK_LIBRARIES(raw_r ${ZLIB_LIBRARIES})
++ENDIF()
++
 +IF(JPEG8_FOUND)
-+    TARGET_LINK_LIBRARIES(raw_r ${JPEG_LIBRARY})
++    TARGET_LINK_LIBRARIES(raw_r ${JPEG_LIBRARIES})
 +ENDIF()
 +
 +IF(JASPER_FOUND)
@@ -593,19 +619,19 @@ index 0000000..47f3869
 +       )
 +
 +# Install find cmake script to the system for client applications.
-+#INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/FindLibRaw.cmake
-+#        DESTINATION ${INSTALL_CMAKE_MODULE_PATH})
++INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/FindLibRaw.cmake
++        DESTINATION ${INSTALL_CMAKE_MODULE_PATH})
 +
 +# Install doc data files.
-+#IF(NOT WIN32)
-+#    INSTALL(FILES       ${CMAKE_CURRENT_SOURCE_DIR}/COPYRIGHT
-+#                        ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.CDDL
-+#                        ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.LGPL
-+#                        ${CMAKE_CURRENT_SOURCE_DIR}/Changelog.txt
-+#            DESTINATION share/libraw
-+#            COMPONENT main
-+#           )
-+#ENDIF()
++IF(NOT WIN32)
++    INSTALL(FILES       ${CMAKE_CURRENT_SOURCE_DIR}/COPYRIGHT
++                        ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.CDDL
++                        ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.LGPL
++                        ${CMAKE_CURRENT_SOURCE_DIR}/Changelog.txt
++            DESTINATION share/libraw
++            COMPONENT main
++           )
++ENDIF()
 +
 +# Uninstall rules
 +CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/Uninstall.cmake ${CMAKE_BINARY_DIR}/cmake_uninstall.cmake COPYONLY)
@@ -798,22 +824,44 @@ index 0000000..4b41776
 +(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 +THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 diff --git a/README.md b/README.md
-new file mode 100644
-index 0000000..dbb0fe2
---- /dev/null
+index e1d38e6..dbb0fe2 100644
+--- a/README.md
 +++ b/README.md
-@@ -0,0 +1,17 @@
+@@ -1,27 +1,17 @@
+-# LibRaw
+-### Library for reading and processing of RAW digicam images
 +LibRaw-cmake
 +============
-+
+ 
+-LibRaw is a library for reading RAW files from digital photo cameras 
+-(CRW/CR2, NEF, RAF, DNG, MOS, KDC, DCR, etc, virtually all RAW formats are 
+-supported). 
 +[![Build Status](https://travis-ci.org/LibRaw/LibRaw-cmake.svg?branch=master)](https://travis-ci.org/LibRaw/LibRaw-cmake)
-+
+ 
+-It pays special attention to correct retrieval of data required for subsequent 
+-RAW conversion.
+-    
+-The library is intended for embedding in RAW converters, data analyzers, and 
+-other programs using RAW files as the initial data.
 +This is a separate repository for LibRaw CMake support scripts.
 +It is [unmaintained](https://github.com/LibRaw/LibRaw/issues/44#issuecomment-60344793) by the authors of LibRaw and relies solely on user contributions.
 +The current community-maintainer of this repository is [Maik Riechert](https://github.com/neothemachine).
-+
+ 
+-LibRaw library, Copyright &copy; 2008-2019 LibRaw LLC (info@libraw.org)
+-The library includes source code from
+-      
+-     dcraw.c, Dave Coffin's raw photo decoder
+-     Copyright 1997-2016 by Dave Coffin, dcoffin a cybercom o net
+-      
+-LibRaw is distributed for free under two different licenses:
+- *  GNU Lesser General Public License, version 2.1
+- *  COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
+-    
+-You may use one of these licensing modes and switch between them.
 +If you wish to contribute to it, please open an issue or submit a pull request in this repository. Do *not* submit issues or pull requests regarding CMake to the main [LibRaw repository](https://github.com/LibRaw/LibRaw). Also, try to keep CMake related discussions out of the [main forum](http://www.libraw.org/forum), instead use the issues for that.
-+
+ 
+-If you modify LibRaw source and made your changes public, you should accept
+-both two licensing modes for your changes/additions.
 +If you like to become a direct contributor with write permissions to this repository, please contact the [LibRaw authors](https://github.com/LibRaw).
 +
 +How to use
@@ -860,10 +908,10 @@ index 0000000..aede5f2
 +Cflags: -I${includedir}
 diff --git a/cmake/data/libraw_config.h.cmake b/cmake/data/libraw_config.h.cmake
 new file mode 100644
-index 0000000..ec4fc3b
+index 0000000..e1f8d0c
 --- /dev/null
 +++ b/cmake/data/libraw_config.h.cmake
-@@ -0,0 +1,47 @@
+@@ -0,0 +1,50 @@
 +/* -*- C++ -*-
 + * File: libraw_version.h
 + * Copyright 2008-2013 LibRaw LLC (info@libraw.org)
@@ -885,6 +933,9 @@ index 0000000..ec4fc3b
 +
 +#ifndef __LIBRAW_CONFIG_H
 +#define __LIBRAW_CONFIG_H
++
++/* Define to 1 if LibRaw have been compiled with DNG deflate codec support */
++#cmakedefine LIBRAW_USE_DNGDEFLATECODEC 1
 +
 +/* Define to 1 if LibRaw have been compiled with DNG lossy codec support */
 +#cmakedefine LIBRAW_USE_DNGLOSSYCODEC 1
@@ -1075,10 +1126,10 @@ index 0000000..4e3e482
 +
 diff --git a/cmake/modules/FindLibRaw.cmake b/cmake/modules/FindLibRaw.cmake
 new file mode 100644
-index 0000000..c6187d9
+index 0000000..2ce7140
 --- /dev/null
 +++ b/cmake/modules/FindLibRaw.cmake
-@@ -0,0 +1,79 @@
+@@ -0,0 +1,96 @@
 +# - Find LibRaw
 +# Find the LibRaw library <http://www.libraw.org>
 +# This module defines
@@ -1112,17 +1163,34 @@ index 0000000..c6187d9
 +          PATH_SUFFIXES libraw
 +         )
 +
-+FIND_LIBRARY(LibRaw_LIBRARIES NAMES raw
++FIND_LIBRARY(LibRaw_LIBRARY_RELEASE NAMES raw
 +             HINTS
 +             ${PC_LIBRAW_LIBDIR}
 +             ${PC_LIBRAW_LIBRARY_DIRS}
 +            )
 +
-+FIND_LIBRARY(LibRaw_r_LIBRARIES NAMES raw_r
++FIND_LIBRARY(LibRaw_LIBRARY_DEBUG NAMES rawd
++             HINTS
++             ${PC_LIBRAW_LIBDIR}
++             ${PC_LIBRAW_LIBRARY_DIRS}
++            )
++
++include(SelectLibraryConfigurations)
++select_library_configurations(LibRaw)
++
++FIND_LIBRARY(LibRaw_r_LIBRARY_RELEASE NAMES raw_r
 +             HINTS
 +             ${PC_LIBRAW_R_LIBDIR}
 +             ${PC_LIBRAW_R_LIBRARY_DIRS}
 +            )
++
++FIND_LIBRARY(LibRaw_r_LIBRARY_DEBUG NAMES raw_rd
++             HINTS
++             ${PC_LIBRAW_R_LIBDIR}
++             ${PC_LIBRAW_R_LIBRARY_DIRS}
++            )
++
++select_library_configurations(LibRaw_r)
 +
 +IF(LibRaw_INCLUDE_DIR)
 +   FILE(READ ${LibRaw_INCLUDE_DIR}/libraw_version.h _libraw_version_content)

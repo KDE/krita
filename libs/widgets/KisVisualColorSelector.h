@@ -60,6 +60,8 @@ public:
     void setAcceptTabletEvents(bool on);
     KoColor getCurrentColor() const override;
     QVector4D getChannelValues() const;
+    ColorModel getColorModel() const;
+    bool isHSXModel() const;
     KoColor convertShapeCoordsToKoColor(const QVector4D &coordinates) const;
     QVector4D convertKoColorToShapeCoordinates(KoColor c) const;
 
@@ -67,6 +69,7 @@ public Q_SLOTS:
 
     void slotSetColor(const KoColor &c) override;
     void slotsetColorSpace(const KoColorSpace *cs);
+    void slotSetHSX(const QVector3D &hsx);
     void configurationChanged();
     void setDisplayRenderer (const KoColorDisplayRendererInterface *displayRenderer) override;
 
@@ -74,6 +77,19 @@ private Q_SLOTS:
     void slotCursorMoved(QPointF pos);
     void slotDisplayConfigurationChanged();
     void slotRebuildSelectors();
+
+Q_SIGNALS:
+    /**
+     * @brief sigColorModelChanged is emitted whenever the selector's color model changes.
+     *
+     * This is mostly relevant for configuration changes where the same RGB model
+     * gets represented in a different way like HSV, HSL etc. so the values of
+     * sigHSXChanged() change meaning.
+     *
+     * @see getColorModel()
+     */
+    void sigColorModelChanged();
+    void sigHSXChanged(const QVector3D &hsx);
 
 protected:
     void resizeEvent(QResizeEvent *) override;

@@ -272,20 +272,29 @@ void DlgCreateBundle::accept()
 
         if (fileInfo.exists() && !m_bundle) {
             m_ui->editBundleName->setStyleSheet("border: 1px solid red");
-            QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("A bundle with this name already exists."));
-            return;
-        }
-        else {
-            if (!m_bundle) {
-                saveToConfiguration(false);
 
-                m_bundle.reset(new KoResourceBundle(filename));
-                putResourcesInTheBundle();
-                m_bundle->save();
-
+            QMessageBox msgBox;
+            msgBox.setText(i18nc("In a dialog asking whether to overwrite a bundle (resource pack)", "A bundle with this name already exists."));
+            msgBox.setInformativeText(i18nc("In a dialog regarding overwriting a bundle (resource pack)", "Do you want to overwrite the existing bundle?"));
+            msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Cancel);
+            msgBox.setDefaultButton(QMessageBox::Cancel);
+            int ret = msgBox.exec();
+            if (ret == QMessageBox::Cancel) {
+                return;
             }
-            KoDialog::accept();
         }
+
+        if (!m_bundle) {
+            saveToConfiguration(false);
+
+            m_bundle.reset(new KoResourceBundle(filename));
+            putResourcesInTheBundle();
+            m_bundle->save();
+
+        } else {
+            KIS_SAFE_ASSERT_RECOVER(!m_bundle) { warnKrita << "Updating a bundle is not implemented yet"; };
+        }
+        KoDialog::accept();
     }
 }
 

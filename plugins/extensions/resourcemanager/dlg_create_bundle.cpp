@@ -277,7 +277,7 @@ void DlgCreateBundle::accept()
         }
         else {
             if (!m_bundle) {
-                saveToConfiguration();
+                saveToConfiguration(false);
 
                 m_bundle.reset(new KoResourceBundle(filename));
                 putResourcesInTheBundle();
@@ -289,17 +289,23 @@ void DlgCreateBundle::accept()
     }
 }
 
-void DlgCreateBundle::saveToConfiguration()
+void DlgCreateBundle::saveToConfiguration(bool full)
 {
     KisConfig cfg(false);
+    if (full) {
+        cfg.writeEntry<QString>("BundleName", bundleName());
+        cfg.writeEntry<QString>("BundleDescription", description());
+        cfg.writeEntry<QString>("BundleImage", previewImage());
+    } else {
+        cfg.writeEntry<QString>("BundleName", "");
+        cfg.writeEntry<QString>("BundleDescription", "");
+        cfg.writeEntry<QString>("BundleImage", "");
+    }
     cfg.writeEntry<QString>("BundleExportLocation", saveLocation());
     cfg.writeEntry<QString>("BundleAuthorName", authorName());
     cfg.writeEntry<QString>("BundleAuthorEmail", email());
     cfg.writeEntry<QString>("BundleWebsite", website());
     cfg.writeEntry<QString>("BundleLicense", license());
-    cfg.writeEntry<QString>("BundleName", bundleName());
-    cfg.writeEntry<QString>("BundleDescription", description());
-    cfg.writeEntry<QString>("BundleImage", previewImage());
 }
 
 void DlgCreateBundle::slotEmbedTags()
@@ -313,7 +319,7 @@ void DlgCreateBundle::slotEmbedTags()
 
 void DlgCreateBundle::reject()
 {
-    saveToConfiguration();
+    saveToConfiguration(true);
     KoDialog::reject();
 }
 

@@ -56,7 +56,7 @@ private Q_SLOTS:
     void removeSelected();
     void resourceTypeSelected(int idx);
     void getPreviewImage();
-    void saveToConfiguration();
+    void saveToConfiguration(bool full);
     void slotEmbedTags();
     QVector<KisTagSP> getTagsForEmbeddingInResource(QVector<KisTagSP> resourceTags) const;
 

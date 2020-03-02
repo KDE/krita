@@ -433,7 +433,10 @@ KoResourceSP KoResourceBundle::resource(const QString &resourceType, const QStri
     }
     KoResourceSP res = loader->load(filepath, *resourceStore->device(), KisGlobalResourcesInterface::instance());
     QString filename = QFileInfo(filepath).fileName();
-    res->setFilename(filename);
+    if (!res.isNull()) {
+        // Note that res will be null for Special_dyna_dots.kpp which is a brush preset based on a deleted engine
+        res->setFilename(filename);
+    }
     resourceStore->close();
 
     return res;

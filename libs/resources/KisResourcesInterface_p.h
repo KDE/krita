@@ -29,7 +29,10 @@
 
 #include "kis_assert.h"
 
-#if (QT_VERSION < QT_VERSION_CHECK(5, 13, 0))
+/// added to Qt in 5.14.0
+/// https://codereview.qt-project.org/c/qt/qtbase/+/261819
+
+#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
 namespace std
 {
     template<> struct hash<QString>

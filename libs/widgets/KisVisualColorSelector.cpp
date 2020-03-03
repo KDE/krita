@@ -52,16 +52,15 @@ struct KisVisualColorSelector::Private
     KoColor currentcolor;
     const KoColorSpace *currentCS {0};
     QList<KisVisualColorSelectorShape*> widgetlist;
-    bool updateLonesome {false}; // currently redundant; remove?
     bool circular {false};
-    bool exposureSupported = false;
-    bool isRGBA = false;
-    bool isLinear = false;
+    bool exposureSupported {false};
+    bool isRGBA {false};
+    bool isLinear {false};
     int displayPosition[4]; // map channel index to storage index for display
-    int colorChannelCount;
+    int colorChannelCount {0};
     QVector4D channelValues;
     QVector4D channelMaxValues;
-    ColorModel model;
+    ColorModel model {ColorModel::None};
     const KoColorDisplayRendererInterface *displayRenderer {0};
     KisColorSelectorConfiguration acs_config;
     KisSignalCompressor *updateTimer {0};
@@ -108,8 +107,8 @@ void KisVisualColorSelector::slotsetColorSpace(const KoColorSpace *cs)
 
 void KisVisualColorSelector::setConfig(bool forceCircular, bool forceSelfUpdate)
 {
+    Q_UNUSED(forceSelfUpdate)
     m_d->circular = forceCircular;
-    m_d->updateLonesome = forceSelfUpdate;
 }
 
 KoColor KisVisualColorSelector::getCurrentColor() const
@@ -199,7 +198,7 @@ QVector4D KisVisualColorSelector::convertKoColorToShapeCoordinates(KoColor c) co
                     channelValuesDisplay[i] = pow(channelValuesDisplay[i], 1/2.2);
                 }
             }
-            if (m_d->model == ColorModel::HSV){
+            if (m_d->model == ColorModel::HSV) {
                 QVector3D hsv;
                 RGBToHSV(channelValuesDisplay[0], channelValuesDisplay[1], channelValuesDisplay[2], &hsv[0], &hsv[1], &hsv[2]);
                 hsv[0] /= 360;

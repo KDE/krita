@@ -152,7 +152,7 @@ void AnimationDocker::slotAddOpacityKeyframe()
 {
     // remember current node's opacity and set it once we create a new opacity keyframe
     KisNodeSP node = m_canvas->viewManager()->activeNode();
-    if (!node) return;
+    KIS_SAFE_ASSERT_RECOVER_RETURN(node);
 
     addKeyframe(KisKeyframeChannel::Opacity.id(), false);
 }

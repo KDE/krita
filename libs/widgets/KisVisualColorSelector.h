@@ -81,8 +81,6 @@ private:
     struct Private;
     const QScopedPointer<Private> m_d;
 
-    void drawGradients();
-
 };
 
 #endif

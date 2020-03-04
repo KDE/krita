@@ -1786,9 +1786,16 @@ void KisImage::refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &c
 
 void KisImage::requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QRect &rc, const QRect &cropRect)
 {
+    requestProjectionUpdateNoFilthy(pseudoFilthy, rc, cropRect, true);
+}
+
+void KisImage::requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QRect &rc, const QRect &cropRect, const bool resetAnimationCache)
+{
     KIS_ASSERT_RECOVER_RETURN(pseudoFilthy);
 
-    m_d->animationInterface->notifyNodeChanged(pseudoFilthy.data(), rc, false);
+    if (resetAnimationCache) {
+        m_d->animationInterface->notifyNodeChanged(pseudoFilthy.data(), rc, false);
+    }
     m_d->scheduler.updateProjectionNoFilthy(pseudoFilthy, rc, cropRect);
 }
 

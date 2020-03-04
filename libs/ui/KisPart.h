@@ -143,10 +143,18 @@ public:
      */
     KisIdleWatcher *idleWatcher() const;
 
+    // ----------------- Cache Populator Management -----------------
     /**
      * @return the application-wide AnimationCachePopulator.
      */
     KisAnimationCachePopulator *cachePopulator() const;
+
+    /**
+     * Adds a frame time index to a priority stack, which should be
+     * cached immediately and irregardless of whether it is the
+     * the currently occupied frame.
+     */
+    void prioritizeFrameForCache(KisImageSP image, int frame);
 
 public Q_SLOTS:
 

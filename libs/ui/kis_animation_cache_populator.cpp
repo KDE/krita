@@ -55,6 +55,7 @@ struct KisAnimationCachePopulator::Private
      * Counts up the number of subsequent times Krita has been detected idle.
      */
     int idleCounter;
+    QStack<int> priorityFrames;
     static const int IDLE_COUNT_THRESHOLD = 4;
     static const int IDLE_CHECK_INTERVAL = 500;
     static const int BETWEEN_FRAMES_INTERVAL = 10;
@@ -83,6 +84,7 @@ struct KisAnimationCachePopulator::Private
         : q(_q),
           part(_part),
           idleCounter(0),
+          priorityFrames(),
           requestedFrame(-1),
           state(WaitingForIdle)
     {
@@ -140,11 +142,13 @@ struct KisAnimationCachePopulator::Private
                 KisNodeSP activeNode = activeCanvas->viewManager()->nodeManager()->activeNode();
                 KisTimeRange skipRange;
                 if (activeNode) {
-                    int currentTime = activeCanvas->currentImage()->animationInterface()->currentUITime();
+                    const int currentTime = activeCanvas->currentImage()->animationInterface()->currentUITime();
 
                     if (!activeNode->keyframeChannels().isEmpty()) {
-                        Q_FOREACH (const KisKeyframeChannel *channel, activeNode->keyframeChannels()) {
-                            skipRange |= channel->affectedFrames(currentTime);
+                        if (priorityFrames.count() == 0 || currentTime != priorityFrames.top()) {
+                            Q_FOREACH (const KisKeyframeChannel *channel, activeNode->keyframeChannels()) {
+                                skipRange |= channel->affectedFrames(currentTime);
+                            }
                         }
                     } else {
                         skipRange = KisTimeRange::infinite(0);
@@ -179,10 +183,15 @@ struct KisAnimationCachePopulator::Private
         KisImageAnimationInterface *animation = image->animationInterface();
         KisTimeRange currentRange = animation->fullClipRange();
 
-        const int frame = KisAsyncAnimationCacheRenderDialog::calcFirstDirtyFrame(cache, currentRange, skipRange);
+        const bool hasPriorityFrame = priorityFrames.count() > 0;
+        const int frame = hasPriorityFrame ? priorityFrames.top() : KisAsyncAnimationCacheRenderDialog::calcFirstDirtyFrame(cache, currentRange, skipRange);
 
         if (frame >= 0) {
-            return regenerate(cache, frame);
+            bool waiting = !regenerate(cache, frame);
+            if (hasPriorityFrame && !waiting) {
+                priorityFrames.pop();
+            }
+            return waiting;
         }
 
         return false;
@@ -283,6 +292,12 @@ KisAnimationCachePopulator::~KisAnimationCachePopulator()
 bool KisAnimationCachePopulator::regenerate(KisAnimationFrameCacheSP cache, int frame)
 {
     return m_d->regenerate(cache, frame);
+}
+
+void KisAnimationCachePopulator::appendPriorityFrame(int frameIndex)
+{
+    m_d->priorityFrames.append(frameIndex);
+    m_d->enterState(Private::WaitingForIdle);
 }
 
 void KisAnimationCachePopulator::slotTimer()

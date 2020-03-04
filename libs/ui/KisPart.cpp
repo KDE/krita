@@ -64,6 +64,8 @@
 #include "kis_shape_controller.h"
 #include "KisResourceServerProvider.h"
 #include "kis_animation_cache_populator.h"
+#include "kis_image_animation_interface.h"
+#include "kis_time_range.h"
 #include "kis_idle_watcher.h"
 #include "kis_image.h"
 #include "KisOpenPane.h"
@@ -434,6 +436,14 @@ KisIdleWatcher* KisPart::idleWatcher() const
 KisAnimationCachePopulator* KisPart::cachePopulator() const
 {
     return &d->animationCachePopulator;
+}
+
+void KisPart::prioritizeFrameForCache(KisImageSP image, int frame) {
+    KisImageAnimationInterface* animInterface = image->animationInterface();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(animInterface->fullClipRange().contains(frame));
+
+    d->animationCachePopulator.appendPriorityFrame(frame);
+
 }
 
 void KisPart::openExistingFile(const QUrl &url)

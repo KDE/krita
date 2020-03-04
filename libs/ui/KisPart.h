@@ -152,7 +152,8 @@ public:
     /**
      * Adds a frame time index to a priority stack, which should be
      * cached immediately and irregardless of whether it is the
-     * the currently occupied frame.
+     * the currently occupied frame. The process of regeneration is
+     * started immediately.
      */
     void prioritizeFrameForCache(KisImageSP image, int frame);
 

@@ -442,7 +442,7 @@ void KisPart::prioritizeFrameForCache(KisImageSP image, int frame) {
     KisImageAnimationInterface* animInterface = image->animationInterface();
     KIS_SAFE_ASSERT_RECOVER_RETURN(animInterface->fullClipRange().contains(frame));
 
-    d->animationCachePopulator.appendPriorityFrame(frame);
+    d->animationCachePopulator.requestRegenerationWithPriorityFrame(image, frame);
 
 }
 

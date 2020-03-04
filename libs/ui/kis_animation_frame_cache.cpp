@@ -212,6 +212,14 @@ const QList<KisAnimationFrameCache *> KisAnimationFrameCache::caches()
     return Private::caches.values();
 }
 
+const KisAnimationFrameCacheSP KisAnimationFrameCache::cacheForImage(KisImageWSP image)
+{
+    auto it = std::find_if(Private::caches.begin(), Private::caches.end(),
+                           [image] (KisAnimationFrameCache *cache) { return cache->image() == image; });
+
+    return it != Private::caches.end() ? *it : nullptr;
+}
+
 KisAnimationFrameCache::KisAnimationFrameCache(KisOpenGLImageTexturesSP textures)
     : m_d(new Private(textures))
 {

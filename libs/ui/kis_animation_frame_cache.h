@@ -45,6 +45,7 @@ public:
 
     static KisAnimationFrameCacheSP getFrameCache(KisOpenGLImageTexturesSP textures);
     static const QList<KisAnimationFrameCache*> caches();
+    static const KisAnimationFrameCacheSP cacheForImage(KisImageWSP image);
 
     KisAnimationFrameCache(KisOpenGLImageTexturesSP textures);
     ~KisAnimationFrameCache() override;

@@ -227,6 +227,7 @@ void KisDlgInternalColorSelector::lockUsedColorSpace(const KoColorSpace *cs)
     colorSpaceChanged(cs);
     if (m_d->currentColor.colorSpace() != m_d->currentColorSpace) {
         m_d->currentColor.convertTo(m_d->currentColorSpace);
+        m_ui->spinboxselector->slotSetColor(m_d->currentColor);
     }
     m_d->lockUsedCS = true;
 }

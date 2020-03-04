@@ -43,6 +43,8 @@ private Q_SLOTS:
 
 private:
 
+    void addBundleToActiveResources(QString filename);
+
     QWidget *m_page;
     Ui::WdgDlgBundleManager *m_ui;
 };

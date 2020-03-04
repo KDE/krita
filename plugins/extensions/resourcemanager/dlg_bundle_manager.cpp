@@ -29,16 +29,18 @@
 #include <QPixmap>
 #include <QMessageBox>
 
+#include <kconfiggroup.h>
+#include <ksharedconfig.h>
+#include <KoIcon.h>
+#include <KoFileDialog.h>
+
 #include <kis_icon.h>
 #include "kis_action.h"
 #include <KisResourceStorage.h>
 #include <KisResourceServerProvider.h>
-#include <kconfiggroup.h>
-#include <ksharedconfig.h>
-#include <KoIcon.h>
-
 #include <KisStorageModel.h>
 #include <KisStorageFilterProxyModel.h>
+
 
 DlgBundleManager::DlgBundleManager(QWidget *parent)
     : KoDialog(parent)
@@ -73,7 +75,9 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
 
 void DlgBundleManager::addBundle()
 {
-
+    KoFileDialog* dlg = new KoFileDialog(this, KoFileDialog::OpenFile, i18n("Choose the bundle to import"));
+    QString filename = dlg->filename();
+    addBundleToActiveResources(filename);
 }
 
 void DlgBundleManager::createBundle()
@@ -85,4 +89,12 @@ void DlgBundleManager::createBundle()
 void DlgBundleManager::deleteBundle()
 {
 
+}
+
+void DlgBundleManager::addBundleToActiveResources(QString filename)
+{
+    warnKrita << "DlgBundleManager::addBundle(): Loading a bundle is not implemented yet.";
+    Q_UNUSED(filename);
+    // 1. Copy the bundle to the resource folder
+    // 2. Add the bundle as a storage/update database
 }

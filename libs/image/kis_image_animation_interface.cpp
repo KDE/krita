@@ -294,6 +294,7 @@ void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId, bool useUnd
             KisStrokeId strokeId = m_d->image->startStroke(strategy);
             m_d->image->endStroke(strokeId);
         }
+
     }
 
     m_d->setCurrentUITime(frameId);

@@ -1110,6 +1110,8 @@ public Q_SLOTS:
      */
     void requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QRect &rc, const QRect &cropRect);
 
+    void requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QRect &rc, const QRect &cropRect, const bool notifyFrameChange );
+
     /**
      * Adds a spontaneous job to the updates queue.
      *

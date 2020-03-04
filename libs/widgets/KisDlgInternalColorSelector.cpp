@@ -84,15 +84,18 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
     m_ui->spinboxselector->slotSetColor(color);
     connect(m_ui->spinboxselector, SIGNAL(sigNewColor(KoColor)), this, SLOT(slotColorUpdated(KoColor)));
 
-    m_ui->visualSelector->slotSetColor(color);
+    m_ui->spinboxHSXSelector->attachToSelector(m_ui->visualSelector);
+
     m_ui->visualSelector->setDisplayRenderer(displayRenderer);
     m_ui->visualSelector->setConfig(false, config.modal);
     if (config.visualColorSelector) {
         connect(m_ui->visualSelector, SIGNAL(sigNewColor(KoColor)), this, SLOT(slotColorUpdated(KoColor)));
+        connect(m_ui->visualSelector, SIGNAL(sigColorModelChanged()), this, SLOT(slotSelectorModelChanged()));
         connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), m_ui->visualSelector, SLOT(configurationChanged()));
     } else {
         m_ui->visualSelector->hide();
     }
+    m_ui->visualSelector->slotSetColor(color);
 
     m_d->paletteChooser = new KisPaletteChooser(this);
     m_d->paletteModel = new KisPaletteModel(this);
@@ -304,6 +307,31 @@ void KisDlgInternalColorSelector::updateAllElements(QObject *source)
     }
 }
 
+void KisDlgInternalColorSelector::slotSelectorModelChanged()
+{
+    bool isHSXType = true;
+    switch (m_ui->visualSelector->getColorModel()) {
+    case KisVisualColorSelector::HSV:
+        m_ui->tabWidget->setTabText(1, "HSV");
+        break;
+    case KisVisualColorSelector::HSL:
+        m_ui->tabWidget->setTabText(1, "HSL");
+        break;
+    case KisVisualColorSelector::HSI:
+        m_ui->tabWidget->setTabText(1, "HSI");
+        break;
+    case KisVisualColorSelector::HSY:
+        m_ui->tabWidget->setTabText(1, "HSY'");
+        break;
+    default:
+        isHSXType = false;
+    }
+    qDebug() << "slotSelectorModelChanged(): isHSXType=" << isHSXType;
+    if (!isHSXType) {
+        m_ui->tabWidget->setCurrentIndex(0);
+    }
+    m_ui->tabWidget->setTabEnabled(1, isHSXType);
+}
 
 void KisDlgInternalColorSelector::endUpdateWithNewColor()
 {

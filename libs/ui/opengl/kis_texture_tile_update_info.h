@@ -22,15 +22,15 @@
 #include <QThreadStorage>
 #include <QScopedArrayPointer>
 
-#include <KoColorSpace.h>
+#include "kis_config.h"
 #include "kis_image.h"
 #include "kis_paint_device.h"
-#include "kis_config.h"
-#include <KoColorConversionTransformation.h>
-#include <KoChannelInfo.h>
-#include <kis_lod_transform.h>
 #include "kis_texture_tile_info_pool.h"
-
+#include <KoChannelInfo.h>
+#include <KoColorConversionTransformation.h>
+#include <KoColorModelStandardIds.h>
+#include <KoColorSpace.h>
+#include <kis_lod_transform.h>
 
 class KisTextureTileUpdateInfo;
 typedef QSharedPointer<KisTextureTileUpdateInfo> KisTextureTileUpdateInfoSP;
@@ -173,44 +173,14 @@ public:
             DataBuffer conversionCache(m_patchColorSpace->pixelSize(), m_pool);
 
             QList<KoChannelInfo*> channelInfo = m_patchColorSpace->channels();
-            int channelSize = channelInfo[selectedChannelIndex]->size();
-            int pixelSize = m_patchColorSpace->pixelSize();
             quint32 numPixels = m_patchRect.width() * m_patchRect.height();
 
             KisConfig cfg(true);
 
             if (onlyOneChannelSelected && !cfg.showSingleChannelAsColor()) {
-                int selectedChannelPos = channelInfo[selectedChannelIndex]->pos();
-                for (uint pixelIndex = 0; pixelIndex < numPixels; ++pixelIndex) {
-                    for (uint channelIndex = 0; channelIndex < m_patchColorSpace->channelCount(); ++channelIndex) {
-
-                        if (channelInfo[channelIndex]->channelType() == KoChannelInfo::COLOR) {
-                            memcpy(conversionCache.data() + (pixelIndex * pixelSize) + (channelIndex * channelSize),
-                                   m_patchPixels.data() + (pixelIndex * pixelSize) + selectedChannelPos,
-                                   channelSize);
-                        }
-                        else if (channelInfo[channelIndex]->channelType() == KoChannelInfo::ALPHA) {
-                            memcpy(conversionCache.data() + (pixelIndex * pixelSize) + (channelIndex * channelSize),
-                                   m_patchPixels.data() + (pixelIndex * pixelSize) + (channelIndex * channelSize),
-                                   channelSize);
-                        }
-                    }
-                }
-            }
-            else {
-                for (uint pixelIndex = 0; pixelIndex < numPixels; ++pixelIndex) {
-                    for (uint channelIndex = 0; channelIndex < m_patchColorSpace->channelCount(); ++channelIndex) {
-                        if (channelFlags.testBit(channelIndex)) {
-                            memcpy(conversionCache.data() + (pixelIndex * pixelSize) + (channelIndex * channelSize),
-                                   m_patchPixels.data() + (pixelIndex * pixelSize) + (channelIndex * channelSize),
-                                   channelSize);
-                        }
-                        else {
-                            memset(conversionCache.data() + (pixelIndex * pixelSize) + (channelIndex * channelSize), 0, channelSize);
-                        }
-                    }
-                }
-
+                m_patchColorSpace->convertChannelToVisualRepresentation(m_patchPixels.data(), conversionCache.data(), numPixels, selectedChannelIndex);
+            } else {
+                m_patchColorSpace->convertChannelToVisualRepresentation(m_patchPixels.data(), conversionCache.data(), numPixels, channelFlags);
             }
 
             conversionCache.swap(m_patchPixels);

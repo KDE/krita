@@ -397,6 +397,34 @@ public:
                                quint32 numPixels,
                                KoColorConversionTransformation *proofingTransform) const;
 
+    /**
+     * Convert @p nPixels pixels in @p src into their human-visible
+     * visual representation. The channel is shown as grayscale.
+     *
+     * Both buffers are in the same color space.
+     *
+     * @param src source buffer in (*this) color space
+     * @param dst destination buffer in the same color space as @p src
+     * @param nPixels length of the buffers in number of pixels
+     * @param pixelSize stride of each pixel in the destination buffer
+     * @param selectedChannelIndex Index of the selected channel.
+     */
+    virtual void convertChannelToVisualRepresentation(const quint8 *src, quint8 *dst, quint32 nPixels, const qint32 selectedChannelIndex) const = 0;
+
+    /**
+     * Convert @p nPixels pixels in @p src into their human-visible
+     * visual representation. The channels are shown as if other channels were null (or, if Lab, L = 1.0, *a = *b = 0.0).
+     *
+     * Both buffers are in the same color space.
+     *
+     * @param src source buffer in (*this) color space
+     * @param dst destination buffer in the same color space as @p src
+     * @param nPixels length of the buffers in number of pixels
+     * @param pixelSize stride of each pixel in the destination buffer
+     * @param selectedChannels Bitmap of selected channels
+     */
+    virtual void convertChannelToVisualRepresentation(const quint8 *src, quint8 *dst, quint32 nPixels, const QBitArray selectedChannels) const = 0;
+
 //============================== Manipulation functions ==========================//
 
 

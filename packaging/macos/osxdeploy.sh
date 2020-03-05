@@ -109,6 +109,9 @@ print_usage () {
     -style \t\t Style file defined from 'dmgstyle.sh' output
 
     -bg \t\t Set a background image for dmg folder.
+
+    -name \t\t Set the DMG name output.
+
 \t\t\t osxdeploy needs an input image to attach to the dmg background
 \t\t\t image recommended size is at least 950x500
 "
@@ -149,6 +152,10 @@ for arg in "${@}"; do
     # If string starts with -sign
     if [[ ${arg} = -s=* ]]; then
         CODE_SIGNATURE="${arg#*=}"
+    fi
+
+    if [[ ${arg} = -name=* ]]; then
+        DMG_NAME="${arg#*=}"
     fi
 
     if [[ ${arg} = -notarize-ac=* ]]; then
@@ -343,11 +350,14 @@ strip_python_dmginstall() {
     echo "Removing unnecessary files from Python.Framework to be packaged..."
     PythonFrameworkBase="${KRITA_DMG}/krita.app/Contents/Frameworks/Python.framework"
 
-    cd ${PythonFrameworkBase}
+    cd "${PythonFrameworkBase}"
     find . -name "test*" -type d | xargs rm -rf
     find "${PythonFrameworkBase}/Versions/${PY_VERSION}/bin" -not -name "python*" \( -type f -or -type l \) | xargs rm -f
     cd "${PythonFrameworkBase}/Versions/${PY_VERSION}/lib/python${PY_VERSION}"
-    rm -rf distutils tkinter ensurepip venv lib2to3 idlelib
+    rm -rf distutils tkinter ensurepip venv lib2to3 idlelib turtledemo
+
+    cd "${PythonFrameworkBase}/Versions/${PY_VERSION}/Resources"
+    rm -rf Python.app
 }
 
 # Some libraries require r_path to be removed
@@ -359,6 +369,11 @@ delete_install_rpath() {
 fix_python_framework() {
     # Fix python.framework rpath and slims down installation
     PythonFrameworkBase="${KRITA_DMG}/krita.app/Contents/Frameworks/Python.framework"
+
+    # Fix permissions
+    find "${PythonFrameworkBase}" -name "*.so" | xargs -P4 -I FILE chmod a+x FILE 2> "${BUILDROOT}/deploy_error.log"
+    cd "${PythonFrameworkBase}/Versions/${PY_VERSION}/lib/python${PY_VERSION}"
+    chmod a+x pydoc.py
 
     # Fix main library
     pythonLib="${PythonFrameworkBase}/Python"
@@ -529,6 +544,10 @@ krita_deploy () {
     install_name_tool -delete_rpath @loader_path/../../../../lib ${KRITA_DMG}/krita.app/Contents/MacOS/krita
     rm -rf ${KRITA_DMG}/krita.app/Contents/PlugIns/kf5/org.kde.kwindowsystem.platforms
 
+    # Fix permissions
+    find "${KRITA_DMG}/krita.app/Contents" -type f -name "*.dylib" -or -name "*.so" | xargs -P4 -I FILE chmod a+x FILE
+    find "${KRITA_DMG}/krita.app/Contents/Resources/applications" -name "*.desktop" | xargs -P4 -I FILE chmod a-x FILE
+
     # repair krita for plugins
     printf "Searching for missing libraries\n"
     krita_findmissinglibs $(find ${KRITA_DMG}/krita.app/Contents -type f -perm 755 -or -name "*.dylib" -or -name "*.so")
@@ -543,7 +562,7 @@ krita_deploy () {
 
 # helper to define function only once
 batch_codesign() {
-    xargs -P4 -I FILE codesign --options runtime --timestamp -f -s "${CODE_SIGNATURE}" FILE
+    xargs -P4 -I FILE codesign --options runtime --timestamp -f -s "${CODE_SIGNATURE}" --entitlements "${KIS_SRC_DIR}/packaging/macos/entitlements.plist" FILE
 }
 # Code sign must be done as recommended by apple "sign code inside out in individual stages"
 signBundle() {
@@ -561,7 +580,7 @@ signBundle() {
     find krita-python-libs -type f | batch_codesign
     # find python -type f | batch_codesign
 
-    # Sing only libraries and plugins
+    # Sign only libraries and plugins
     cd ${KRITA_DMG}/krita.app/Contents/PlugIns
     find . -type f | batch_codesign
 
@@ -641,6 +660,14 @@ createDMG () {
     cd ${BUILDROOT}
     DMG_size=700
 
+    if [[ -z "${DMG_NAME}" ]]; then
+        # Add git version number
+        GIT_SHA=$(grep "#define KRITA_GIT_SHA1_STRING" ${KIS_BUILD_DIR}/libs/version/kritagitversion.h | awk '{gsub(/"/, "", $3); printf $3}')
+        DMG_NAME="krita-nightly_${GIT_SHA}.dmg"
+    else
+        DMG_NAME="${DMG_NAME}.dmg"
+    fi
+
     ## Build dmg from folder
 
     # create dmg on local system
@@ -680,19 +707,17 @@ createDMG () {
 
     hdiutil detach $device
     hdiutil convert "krita.temp.dmg" -format UDZO -imagekey -zlib-level=9 -o krita-out.dmg
+    
 
-    # Add git version number
-    GIT_SHA=$(grep "#define KRITA_GIT_SHA1_STRING" ${KIS_BUILD_DIR}/libs/version/kritagitversion.h | awk '{gsub(/"/, "", $3); printf $3}')
-
-    mv krita-out.dmg krita-nightly_${GIT_SHA}.dmg
-    echo "moved krita-out.dmg to krita-nightly_${GIT_SHA}.dmg"
+    mv krita-out.dmg ${DMG_NAME}
+    echo "moved krita-out.dmg to ${DMG_NAME}"
     rm krita.temp.dmg
 
     if [[ -n "${CODE_SIGNATURE}" ]]; then
-        printf "krita-nightly_${GIT_SHA}.dmg" | batch_codesign
+        printf "${DMG_NAME}" | batch_codesign
     fi
 
-    notarize_build ${BUILDROOT} "krita-nightly_${GIT_SHA}.dmg"
+    notarize_build "${BUILDROOT}" "${DMG_NAME}"
 
     echo "dmg done!"
 }
@@ -708,7 +733,8 @@ if [[ -n "${CODE_SIGNATURE}" ]]; then
     signBundle
 fi
 
-notarize_build ${KRITA_DMG} krita.app
+# notarize only the outher
+notarize_build "${KRITA_DMG}" krita.app
 
 # Create DMG from files inside ${KRITA_DMG} folder
 createDMG

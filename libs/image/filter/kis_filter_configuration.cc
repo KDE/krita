@@ -30,7 +30,7 @@
 #include "kis_selection.h"
 #include "KoID.h"
 #include "kis_types.h"
-#include <KisLinkedResourcesOperators.h>
+#include <KisRequiredResourcesOperators.h>
 
 #include "kis_config_widget.h"
 
@@ -167,7 +167,7 @@ void KisFilterConfiguration::setResourcesInterface(KisResourcesInterfaceSP resou
     d->resourcesInterface = resourcesInterface;
 }
 
-namespace KisLinkedResourcesOperators
+namespace KisRequiredResourcesOperators
 {
 template <>
 struct ResourceTraits<KisFilterConfiguration>
@@ -184,20 +184,20 @@ struct ResourceTraits<KisFilterConfiguration>
 
 void KisFilterConfiguration::createLocalResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface)
 {
-    KisLinkedResourcesOperators::createLocalResourcesSnapshot(this, globalResourcesInterface);
+    KisRequiredResourcesOperators::createLocalResourcesSnapshot(this, globalResourcesInterface);
 }
 
 bool KisFilterConfiguration::hasLocalResourcesSnapshot() const
 {
-    return KisLinkedResourcesOperators::hasLocalResourcesSnapshot(this);
+    return KisRequiredResourcesOperators::hasLocalResourcesSnapshot(this);
 }
 
 KisFilterConfigurationSP KisFilterConfiguration::cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface) const
 {
-    return KisLinkedResourcesOperators::cloneWithResourcesSnapshot(this, globalResourcesInterface);
+    return KisRequiredResourcesOperators::cloneWithResourcesSnapshot(this, globalResourcesInterface);
 }
 
-QList<KoResourceSP> KisFilterConfiguration::linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const
+QList<KoResourceSP> KisFilterConfiguration::requiredResources(KisResourcesInterfaceSP globalResourcesInterface) const
 {
     Q_UNUSED(globalResourcesInterface);
     return {};

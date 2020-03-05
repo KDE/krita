@@ -232,12 +232,12 @@ private:
     bool storageContainsResourceByFile(const QString &storageLocation, const QString &resourceType, const QString &filename) const;
 
     /**
-     * Loads all the resources linked to \p resource into the cache
+     * Loads all the resources required by \p resource into the cache
      *
-     * loadLinkedResources() also loads embedded resources and adds them
+     * loadRequiredResources() also loads embedded resources and adds them
      * into the database.
      */
-    void loadLinkedResources(KoResourceSP resource);
+    void loadRequiredResources(KoResourceSP resource);
 
     KisResourceLocator(QObject *parent);
     KisResourceLocator(const KisResourceLocator&);

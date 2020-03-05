@@ -154,7 +154,7 @@ QList<KoResourceSP> KisFilterOp::prepareResources(const KisPaintOpSettingsSP set
     QList<KoResourceSP> resources = KisBrushBasedPaintOp::prepareResources(settings, resourcesInterface);
 
     KisFilterConfigurationSP config = static_cast<const KisFilterOpSettings *>(settings.data())->filterConfig();
-    resources << config->linkedResources(resourcesInterface);
+    resources << config->requiredResources(resourcesInterface);
 
     return resources;
 }

@@ -16,24 +16,24 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "KisLinkedResourcesOperators.h"
+#include "KisRequiredResourcesOperators.h"
 
 #include <KisLocalStrokeResources.h>
 #include <QApplication>
 #include <QThread>
 
 
-bool KisLinkedResourcesOperators::detail::isLocalResourcesStorage(KisResourcesInterfaceSP resourcesInterface)
+bool KisRequiredResourcesOperators::detail::isLocalResourcesStorage(KisResourcesInterfaceSP resourcesInterface)
 {
     return resourcesInterface.dynamicCast<KisLocalStrokeResources>();
 }
 
-void KisLinkedResourcesOperators::detail::assertInGuiThread()
+void KisRequiredResourcesOperators::detail::assertInGuiThread()
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(QThread::currentThread() == qApp->thread());
 }
 
-KisResourcesInterfaceSP KisLinkedResourcesOperators::detail::createLocalResourcesStorage(const QList<KoResourceSP> &resources)
+KisResourcesInterfaceSP KisRequiredResourcesOperators::detail::createLocalResourcesStorage(const QList<KoResourceSP> &resources)
 {
     return QSharedPointer<KisLocalStrokeResources>::create(resources);
 }

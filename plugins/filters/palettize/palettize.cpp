@@ -78,7 +78,7 @@ public:
         return palette(resourcesInterface());
     }
 
-    QList<KoResourceSP> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const override
+    QList<KoResourceSP> requiredResources(KisResourcesInterfaceSP globalResourcesInterface) const override
     {
         KoColorSetSP palette = this->palette(globalResourcesInterface);
 

@@ -96,7 +96,7 @@ public:
         return gradientImpl(resourcesInterface());
     }
 
-    QList<KoResourceSP> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const override
+    QList<KoResourceSP> requiredResources(KisResourcesInterfaceSP globalResourcesInterface) const override
     {
         KoStopGradientSP gradient = gradientImpl(globalResourcesInterface);
 

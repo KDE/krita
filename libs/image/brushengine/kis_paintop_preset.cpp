@@ -37,7 +37,7 @@
 #include "kis_image.h"
 #include "kis_paintop_settings_update_proxy.h"
 #include <brushengine/kis_paintop_config_widget.h>
-#include <KisLinkedResourcesOperators.h>
+#include <KisRequiredResourcesOperators.h>
 
 #include <KoStore.h>
 
@@ -407,7 +407,7 @@ void KisPaintOpPreset::setResourcesInterface(KisResourcesInterfaceSP resourcesIn
     d->settings->setResourcesInterface(resourcesInterface);
 }
 
-namespace KisLinkedResourcesOperators
+namespace KisRequiredResourcesOperators
 {
 template <>
 struct ResourceTraits<KisPaintOpPreset>
@@ -424,20 +424,20 @@ struct ResourceTraits<KisPaintOpPreset>
 
 void KisPaintOpPreset::createLocalResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface)
 {
-    KisLinkedResourcesOperators::createLocalResourcesSnapshot(this, globalResourcesInterface);
+    KisRequiredResourcesOperators::createLocalResourcesSnapshot(this, globalResourcesInterface);
 }
 
 bool KisPaintOpPreset::hasLocalResourcesSnapshot() const
 {
-    return KisLinkedResourcesOperators::hasLocalResourcesSnapshot(this);
+    return KisRequiredResourcesOperators::hasLocalResourcesSnapshot(this);
 }
 
 KisPaintOpPresetSP KisPaintOpPreset::cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface) const
 {
-    return KisLinkedResourcesOperators::cloneWithResourcesSnapshot(this, globalResourcesInterface);
+    return KisRequiredResourcesOperators::cloneWithResourcesSnapshot(this, globalResourcesInterface);
 }
 
-QList<KoResourceSP> KisPaintOpPreset::linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const
+QList<KoResourceSP> KisPaintOpPreset::requiredResources(KisResourcesInterfaceSP globalResourcesInterface) const
 {
     QList<KoResourceSP> resources;
 

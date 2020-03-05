@@ -143,28 +143,28 @@ public:
     void setResourcesInterface(KisResourcesInterfaceSP resourcesInterface);
 
     /**
-     * \see KisLinkedResourcesOperators::createLocalResourcesSnapshot
+     * \see KisRequiredResourcesOperators::createLocalResourcesSnapshot
      */
     void createLocalResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface = nullptr);
 
     /**
-     * \see KisLinkedResourcesOperators::hasLocalResourcesSnapshot
+     * \see KisRequiredResourcesOperators::hasLocalResourcesSnapshot
      */
     bool hasLocalResourcesSnapshot() const;
 
     /**
-     * \see KisLinkedResourcesOperators::cloneWithResourcesSnapshot
+     * \see KisRequiredResourcesOperators::cloneWithResourcesSnapshot
      */
     KisFilterConfigurationSP cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface = nullptr) const;
 
     /**
-     * Loads all the linked resources either from \p globalResourcesInterface or
-     * from embedded data. The filter first tries to fetch the linked resource
+     * Loads all the required resources either from \p globalResourcesInterface or
+     * from embedded data. The filter first tries to fetch the required resource
      * from the global source, and only if it fails, tries to load it from the
      * embedded data. One can check if the loaded resource is embedded by checking
      * its resourceId().
      */
-    virtual QList<KoResourceSP> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const;
+    virtual QList<KoResourceSP> requiredResources(KisResourcesInterfaceSP globalResourcesInterface) const;
 
 #ifdef SANITY_CHECK_FILTER_CONFIGURATION_OWNER
 private:

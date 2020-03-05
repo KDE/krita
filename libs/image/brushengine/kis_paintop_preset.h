@@ -151,22 +151,22 @@ public:
     void setResourcesInterface(KisResourcesInterfaceSP resourcesInterface);
 
     /**
-     * \see KisLinkedResourcesOperators::createLocalResourcesSnapshot
+     * \see KisRequiredResourcesOperators::createLocalResourcesSnapshot
      */
     void createLocalResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface = nullptr);
 
     /**
-     * \see KisLinkedResourcesOperators::hasLocalResourcesSnapshot
+     * \see KisRequiredResourcesOperators::hasLocalResourcesSnapshot
      */
     bool hasLocalResourcesSnapshot() const;
 
     /**
-     * \see KisLinkedResourcesOperators::cloneWithResourcesSnapshot
+     * \see KisRequiredResourcesOperators::cloneWithResourcesSnapshot
      */
     KisPaintOpPresetSP cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface = nullptr) const;
 
 
-    QList<KoResourceSP> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const override;
+    QList<KoResourceSP> requiredResources(KisResourcesInterfaceSP globalResourcesInterface) const override;
 
 
 private:

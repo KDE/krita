@@ -39,7 +39,7 @@ set(kritaresources_LIB_SRCS
     kconfigdata.cpp
     kconfigbackend.cpp
 
-    KisLinkedResourcesOperators.cpp
+    KisRequiredResourcesOperators.cpp
     KisResourcesInterface.cpp
     KisLocalStrokeResources.cpp
     KisGlobalResourcesInterface.cpp

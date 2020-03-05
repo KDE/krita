@@ -156,10 +156,10 @@ bool KisResourceLocator::resourceCached(QString storageLocation, const QString &
     return d->resourceCache.contains(key);
 }
 
-void KisResourceLocator::loadLinkedResources(KoResourceSP resource)
+void KisResourceLocator::loadRequiredResources(KoResourceSP resource)
 {
-    QList<KoResourceSP> linkedResources = resource->linkedResources(KisGlobalResourcesInterface::instance());
-    Q_FOREACH (KoResourceSP res, linkedResources) {
+    QList<KoResourceSP> requiredResources = resource->requiredResources(KisGlobalResourcesInterface::instance());
+    Q_FOREACH (KoResourceSP res, requiredResources) {
         if (res->resourceId() < 0) {
             // we put all the embedded resources into the global shared "memory" storage
             this->addResource(res->resourceType().first, res, "memory");
@@ -200,7 +200,7 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
             d->resourceCache[key] = resource;
 
             // load all the embedded resources into temporary "memory" storage
-            loadLinkedResources(resource);
+            loadRequiredResources(resource);
         }
     }
 

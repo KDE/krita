@@ -15,15 +15,15 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KISLINKEDRESOURCESOPERATORS_H
-#define KISLINKEDRESOURCESOPERATORS_H
+#ifndef KISREQUIREDRESOURCESOPERATORS_H
+#define KISREQUIREDRESOURCESOPERATORS_H
 
 #include "kritaresources_export.h"
 
 #include <KisResourcesInterface.h>
 #include "kis_assert.h"
 
-namespace KisLinkedResourcesOperators
+namespace KisRequiredResourcesOperators
 {
 
 namespace detail {
@@ -50,8 +50,8 @@ bool hasLocalResourcesSnapshot(const T *object)
 }
 
 /**
- * Loads all the linked resources either from the current resource interface
- * or from the embedded data. The object first tries to fetch the linked
+ * Loads all the required resources either from the current resource interface
+ * or from the embedded data. The object first tries to fetch the required
  * resource from the current source, and only if it fails, tries to load
  * it from the embedded data.
  *
@@ -64,9 +64,9 @@ void createLocalResourcesSnapshot(T *object, KisResourcesInterfaceSP globalResou
 {
     detail::assertInGuiThread();
     QList<KoResourceSP> resources =
-        object->linkedResources(globalResourcesInterface ?
-                                    globalResourcesInterface :
-                                    object->resourcesInterface());
+        object->requiredResources(globalResourcesInterface ?
+                                      globalResourcesInterface :
+                                      object->resourcesInterface());
     object->setResourcesInterface(detail::createLocalResourcesStorage(resources));
 }
 
@@ -98,4 +98,4 @@ TypeSP cloneWithResourcesSnapshot(const T* object,
 
 }
 
-#endif // KISLINKEDRESOURCESOPERATORS_H
+#endif // KISREQUIREDRESOURCESOPERATORS_H

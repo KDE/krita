@@ -28,7 +28,7 @@ if (NOT WIN32)
 
 else()
     find_path(HEIF_INCLUDE_DIR
-        NAMES heif.h
+        NAMES libheif/heif.h
     )
 
     find_library (

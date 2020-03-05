@@ -120,7 +120,14 @@ if (MSYS)
 endif()
 
 if (APPLE)
-    set(GLOBAL_PROFILE ${GLOBAL_PROFILE} -DCMAKE_MACOSX_RPATH=ON -DKDE_SKIP_RPATH_SETTINGS=ON -DBUILD_WITH_INSTALL_RPATH=ON -DAPPLE_SUPPRESS_X11_WARNING=ON)
+    set(GLOBAL_PROFILE ${GLOBAL_PROFILE}
+                        -DCMAKE_PREFIX_PATH:PATH=${CMAKE_PREFIX_PATH}
+                        -DCMAKE_INCLUDE_PATH:PATH=${CMAKE_PREFIX_PATH}/include
+                        -DCMAKE_LIBRARY_PATH:PATH=${CMAKE_PREFIX_PATH}/lib
+                        -DCMAKE_MACOSX_RPATH=ON
+                        -DKDE_SKIP_RPATH_SETTINGS=ON
+                        -DBUILD_WITH_INSTALL_RPATH=ON
+                        -DAPPLE_SUPPRESS_X11_WARNING=ON)
     set(PATCH_COMMAND patch)
 endif ()
 
@@ -222,8 +229,8 @@ endif ()
 
 if(UNIX)
     add_subdirectory( ext_pkgconfig )
-    add_subdirectory( ext_heif )
 endif()
 
+add_subdirectory( ext_heif )
 add_subdirectory(ext_giflib)
 add_subdirectory(ext_quazip)

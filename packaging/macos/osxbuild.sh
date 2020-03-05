@@ -53,7 +53,9 @@ if test -z $(which cmake); then
     exit
 fi
 
-export PATH=${KIS_INSTALL_DIR}/bin:$PATH
+export PATH=${KIS_INSTALL_DIR}/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+export PKG_CONFIG_PATH=${KIS_INSTALL_DIR}/share/pkgconfig:${KIS_INSTALL_DIR}/lib/pkgconfig
+export CMAKE_PREFIX_PATH=${KIS_INSTALL_DIR}
 export C_INCLUDE_PATH=${KIS_INSTALL_DIR}/include:/usr/include:${C_INCLUDE_PATH}
 export CPLUS_INCLUDE_PATH=${KIS_INSTALL_DIR}/include:/usr/include:${CPLUS_INCLUDE_PATH}
 export LIBRARY_PATH=${KIS_INSTALL_DIR}/lib:/usr/lib:${LIBRARY_PATH}
@@ -187,6 +189,7 @@ build_3rdparty () {
     log_cmd cmake ${KIS_SRC_DIR}/3rdparty/ \
         -DCMAKE_OSX_DEPLOYMENT_TARGET=10.12 \
         -DCMAKE_INSTALL_PREFIX=${KIS_INSTALL_DIR} \
+        -DCMAKE_PREFIX_PATH:PATH=${KIS_INSTALL_DIR} \
         -DEXTERNALS_DOWNLOAD_DIR=${KIS_DOWN_DIR} \
         -DINSTALL_ROOT=${KIS_INSTALL_DIR}
 
@@ -216,7 +219,8 @@ build_3rdparty () {
         ext_jpeg \
         ext_lcms2 \
         ext_ocio \
-        ext_openexr
+        ext_openexr \
+        ext_openjpeg
 
     cmake_3rdparty \
         ext_png \
@@ -311,6 +315,9 @@ rebuild_3rdparty () {
         ext_ocio \
         ext_ilmbase \
         ext_openexr \
+        ext_openjpeg
+
+    build_install_ext \
         ext_png \
         ext_tiff \
         ext_gsl \
@@ -325,11 +332,10 @@ rebuild_3rdparty () {
         ext_pyqt \
 
     build_install_ext \
-        ext_yasm \
         ext_nasm \
         ext_libx265 \
         ext_libde265 \
-        ext_libheif \
+        ext_libheif
 
     # Build kde_frameworks
     build_install_ext \
@@ -344,8 +350,7 @@ rebuild_3rdparty () {
         ext_kitemviews \
         ext_kimageformats \
         ext_kwindowsystem \
-        ext_quazip \
-        ext_openjpeg
+        ext_quazip
 }
 
 #not tested
@@ -369,6 +374,7 @@ build_krita () {
         -DFOUNDATION_BUILD=ON \
         -DBoost_INCLUDE_DIR=${KIS_INSTALL_DIR}/include \
         -DCMAKE_INSTALL_PREFIX=${KIS_INSTALL_DIR} \
+        -DCMAKE_PREFIX_PATH=${KIS_INSTALL_DIR} \
         -DDEFINE_NO_DEPRECATED=1 \
         -DBUILD_TESTING=OFF \
         -DHIDE_SAFE_ASSERTS=ON \

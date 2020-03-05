@@ -51,6 +51,9 @@ public:
     QVector <double> fromHSY(qreal *hue, qreal *sat, qreal *luma) const override;
     void toYUV(const QVector<double> &channelValues, qreal *y, qreal *u, qreal *v) const override;
     QVector <double> fromYUV(qreal *y, qreal *u, qreal *v) const override;
+    quint8 scaleToU8(const quint8 * srcPixel, qint32 channelIndex) const override;
+    void convertChannelToVisualRepresentation(const quint8 *src, quint8 *dst, quint32 nPixels, const qint32 selectedChannelIndex) const override;
+    void convertChannelToVisualRepresentation(const quint8 *src, quint8 *dst, quint32 nPixels, const QBitArray selectedChannels) const override;
 
 private:
 

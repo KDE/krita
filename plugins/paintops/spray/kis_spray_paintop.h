@@ -42,7 +42,7 @@ public:
     KisSprayPaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
     ~KisSprayPaintOp() override;
 
-    static QList<KoResourceSP> prepareResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface);
+    static QList<KoResourceSP> prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface);
 
 protected:
 

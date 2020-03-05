@@ -66,10 +66,10 @@ void KisMaskingBrushOptionProperties::write(KisPropertiesConfiguration *setting,
     }
 }
 
-QList<KoResourceSP> KisMaskingBrushOptionProperties::prepareResources(const KisPropertiesConfigurationSP settings, KisResourcesInterfaceSP resourcesInterface)
+QList<KoResourceSP> KisMaskingBrushOptionProperties::prepareLinkedResources(const KisPropertiesConfigurationSP settings, KisResourcesInterfaceSP resourcesInterface)
 {
     KisBrushOptionProperties option;
-    return option.prepareResources(settings, resourcesInterface);
+    return option.prepareLinkedResources(settings, resourcesInterface);
 }
 
 void KisMaskingBrushOptionProperties::read(const KisPropertiesConfiguration *setting, qreal masterBrushSize, KisResourcesInterfaceSP resourcesInterface)

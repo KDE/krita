@@ -46,14 +46,24 @@ void KisPaintopPropertiesResourcesBase::writeOptionSetting(KisPropertiesConfigur
     writeOptionSettingImpl(settings);
 }
 
-QList<KoResourceSP> KisPaintopPropertiesResourcesBase::prepareResources(const KisPropertiesConfigurationSP settings, KisResourcesInterfaceSP resourcesInterface) const
+QList<KoResourceSP> KisPaintopPropertiesResourcesBase::prepareLinkedResources(const KisPropertiesConfigurationSP settings, KisResourcesInterfaceSP resourcesInterface) const
 {
-    return prepareResourcesImpl(settings.data(), resourcesInterface);
+    return prepareLinkedResourcesImpl(settings.data(), resourcesInterface);
 }
 
-QList<KoResourceSP> KisPaintopPropertiesResourcesBase::prepareResources(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const
+QList<KoResourceSP> KisPaintopPropertiesResourcesBase::prepareLinkedResources(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const
 {
-    return prepareResourcesImpl(settings, resourcesInterface);
+    return prepareLinkedResourcesImpl(settings, resourcesInterface);
+}
+
+QList<KoResourceSP> KisPaintopPropertiesResourcesBase::prepareEmbeddedResources(const KisPropertiesConfigurationSP settings, KisResourcesInterfaceSP resourcesInterface) const
+{
+    return prepareEmbeddedResources(settings.data(), resourcesInterface);
+}
+
+QList<KoResourceSP> KisPaintopPropertiesResourcesBase::prepareEmbeddedResources(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const
+{
+    return prepareEmbeddedResources(settings, resourcesInterface);
 }
 
 void KisPaintopPropertiesBase::readOptionSetting(KisPropertiesConfigurationSP settings)
@@ -72,7 +82,14 @@ void KisPaintopPropertiesBase::readOptionSettingResourceImpl(const KisProperties
     readOptionSettingImpl(settings);
 }
 
-QList<KoResourceSP> KisPaintopPropertiesBase::prepareResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const
+QList<KoResourceSP> KisPaintopPropertiesBase::prepareLinkedResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const
+{
+    Q_UNUSED(settings);
+    Q_UNUSED(resourcesInterface);
+    return {};
+}
+
+QList<KoResourceSP> KisPaintopPropertiesBase::prepareEmbeddedResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const
 {
     Q_UNUSED(settings);
     Q_UNUSED(resourcesInterface);

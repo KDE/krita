@@ -199,6 +199,17 @@ KisFilterConfigurationSP KisFilterConfiguration::cloneWithResourcesSnapshot(KisR
 
 QList<KoResourceSP> KisFilterConfiguration::requiredResources(KisResourcesInterfaceSP globalResourcesInterface) const
 {
+    return linkedResources(globalResourcesInterface) + embeddedResources(globalResourcesInterface);
+}
+
+QList<KoResourceSP> KisFilterConfiguration::linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const
+{
+    Q_UNUSED(globalResourcesInterface);
+    return {};
+}
+
+QList<KoResourceSP> KisFilterConfiguration::embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const
+{
     Q_UNUSED(globalResourcesInterface);
     return {};
 }

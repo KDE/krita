@@ -92,7 +92,7 @@ void KisDitherWidget::factoryConfiguration(KisPropertiesConfiguration &config, c
     config.setProperty(prefix + "spread", 1.0);
 }
 
-QList<KoResourceSP> KisDitherWidget::prepareResources(const KisFilterConfiguration &config, const QString &prefix, KisResourcesInterfaceSP resourcesInterface)
+QList<KoResourceSP> KisDitherWidget::prepareLinkedResources(const KisFilterConfiguration &config, const QString &prefix, KisResourcesInterfaceSP resourcesInterface)
 {
     auto source = resourcesInterface->source<KoPattern>(ResourceType::Patterns);
     KoPatternSP pattern = source.resourceForName(config.getString(prefix + "pattern"));

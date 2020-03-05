@@ -114,15 +114,22 @@ KisBrushBasedPaintOp::~KisBrushBasedPaintOp()
     delete m_dabCache;
 }
 
-QList<KoResourceSP> KisBrushBasedPaintOp::prepareResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
+QList<KoResourceSP> KisBrushBasedPaintOp::prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
 {
     QList<KoResourceSP> resources;
 
     KisBrushOptionProperties brushOption;
-    resources << brushOption.prepareResources(settings, resourcesInterface);
+    resources << brushOption.prepareLinkedResources(settings, resourcesInterface);
+
+    return resources;
+}
+
+QList<KoResourceSP> KisBrushBasedPaintOp::prepareEmbeddedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
+{
+    QList<KoResourceSP> resources;
 
     KisTextureProperties textureProperties(0);
-    resources << textureProperties.prepareResources(settings, resourcesInterface);
+    resources << textureProperties.prepareEmbeddedResources(settings, resourcesInterface);
 
     return resources;
 }

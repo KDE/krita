@@ -437,7 +437,7 @@ KisPaintOpPresetSP KisPaintOpPreset::cloneWithResourcesSnapshot(KisResourcesInte
     return KisRequiredResourcesOperators::cloneWithResourcesSnapshot(this, globalResourcesInterface);
 }
 
-QList<KoResourceSP> KisPaintOpPreset::requiredResources(KisResourcesInterfaceSP globalResourcesInterface) const
+QList<KoResourceSP> KisPaintOpPreset::linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const
 {
     QList<KoResourceSP> resources;
 
@@ -445,14 +445,35 @@ QList<KoResourceSP> KisPaintOpPreset::requiredResources(KisResourcesInterfaceSP 
 
     KisPaintOpFactory* f = KisPaintOpRegistry::instance()->value(paintOp().id());
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(f, resources);
-    resources << f->prepareResources(d->settings, globalResourcesInterface);
+    resources << f->prepareLinkedResources(d->settings, globalResourcesInterface);
 
     if (hasMaskingPreset()) {
         KisPaintOpPresetSP maskingPreset = createMaskingPreset();
 
         KisPaintOpFactory* f = KisPaintOpRegistry::instance()->value(maskingPreset->paintOp().id());
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(f, resources);
-        resources << f->prepareResources(maskingPreset->settings(), globalResourcesInterface);
+        resources << f->prepareLinkedResources(maskingPreset->settings(), globalResourcesInterface);
+    }
+
+    return resources;
+}
+
+QList<KoResourceSP> KisPaintOpPreset::embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const
+{
+    QList<KoResourceSP> resources;
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(d->settings, resources);
+
+    KisPaintOpFactory* f = KisPaintOpRegistry::instance()->value(paintOp().id());
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(f, resources);
+    resources << f->prepareEmbeddedResources(d->settings, globalResourcesInterface);
+
+    if (hasMaskingPreset()) {
+        KisPaintOpPresetSP maskingPreset = createMaskingPreset();
+
+        KisPaintOpFactory* f = KisPaintOpRegistry::instance()->value(maskingPreset->paintOp().id());
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(f, resources);
+        resources << f->prepareEmbeddedResources(maskingPreset->settings(), globalResourcesInterface);
     }
 
     return resources;

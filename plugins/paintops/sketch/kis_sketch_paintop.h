@@ -48,7 +48,7 @@ public:
 
     void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance) override;
 
-    static QList<KoResourceSP> prepareResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface);
+    static QList<KoResourceSP> prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface);
 
 protected:
     KisSpacingInformation paintAt(const KisPaintInformation& info) override;

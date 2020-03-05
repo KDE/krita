@@ -38,7 +38,7 @@ struct PAINTOP_EXPORT KisMaskingBrushOptionProperties
 
     void write(KisPropertiesConfiguration *setting, qreal masterBrushSize) const;
     void read(const KisPropertiesConfiguration *setting, qreal masterBrushSize, KisResourcesInterfaceSP resourcesInterface);
-    QList<KoResourceSP> prepareResources(const KisPropertiesConfigurationSP settings, KisResourcesInterfaceSP resourcesInterface);
+    QList<KoResourceSP> prepareLinkedResources(const KisPropertiesConfigurationSP settings, KisResourcesInterfaceSP resourcesInterface);
 };
 
 #endif // KISMASKINGBRUSHOPTIONPROPERTIES_H

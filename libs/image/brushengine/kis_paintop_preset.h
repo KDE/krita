@@ -166,8 +166,9 @@ public:
     KisPaintOpPresetSP cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface = nullptr) const;
 
 
-    QList<KoResourceSP> requiredResources(KisResourcesInterfaceSP globalResourcesInterface) const override;
+    QList<KoResourceSP> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const;
 
+    QList<KoResourceSP> embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const;
 
 private:
 

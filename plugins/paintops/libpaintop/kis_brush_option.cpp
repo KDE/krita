@@ -80,7 +80,7 @@ void KisBrushOptionProperties::readOptionSettingResourceImpl(const KisProperties
     }
 }
 
-QList<KoResourceSP> KisBrushOptionProperties::prepareResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const
+QList<KoResourceSP> KisBrushOptionProperties::prepareLinkedResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const
 {
     QList<KoResourceSP> resources;
 
@@ -94,6 +94,12 @@ QList<KoResourceSP> KisBrushOptionProperties::prepareResourcesImpl(const KisProp
     }
 
     return resources;
+}
+
+QList<KoResourceSP> KisBrushOptionProperties::prepareEmbeddedResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const
+{
+    Q_UNUSED(resourcesInterface);
+    return {};
 }
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND

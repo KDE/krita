@@ -35,7 +35,8 @@ public:
 
     void writeOptionSettingImpl(KisPropertiesConfiguration *setting) const override;
     void readOptionSettingResourceImpl(const KisPropertiesConfiguration *setting, KisResourcesInterfaceSP resourcesInterface) override;
-    QList<KoResourceSP> prepareResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const override;
+    QList<KoResourceSP> prepareLinkedResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const override;
+    QList<KoResourceSP> prepareEmbeddedResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const override;
 
     KisBrushSP brush() const;
     void setBrush(KisBrushSP brush);

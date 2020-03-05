@@ -80,10 +80,15 @@ public:
     virtual QString category() const = 0;
 
     /**
-     * @return all the resources linked to \p settings. The resources are first tried to be loaded
+     * @return all the resources linked to \p settings.
+     */
+    virtual QList<KoResourceSP> prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface) = 0;
+
+    /**
+     * @return all the resources embedded into \p settings. The resources are first tried to be loaded
      * from \p resourcesInterface, and, if it fails, loaded from the embedded data.
      */
-    virtual QList<KoResourceSP> prepareResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface) = 0;
+    virtual QList<KoResourceSP> prepareEmbeddedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface) = 0;
 
     /**
      * List of usually hidden compositeops that are useful for this paintop.

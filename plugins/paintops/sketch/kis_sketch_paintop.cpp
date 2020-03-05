@@ -98,10 +98,10 @@ KisSketchPaintOp::~KisSketchPaintOp()
     delete m_dabCache;
 }
 
-QList<KoResourceSP> KisSketchPaintOp::prepareResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
+QList<KoResourceSP> KisSketchPaintOp::prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
 {
     KisBrushOptionProperties brushOption;
-    return brushOption.prepareResources(settings, resourcesInterface);
+    return brushOption.prepareLinkedResources(settings, resourcesInterface);
 }
 
 void KisSketchPaintOp::drawConnection(const QPointF& start, const QPointF& end, double lineWidth)

@@ -158,8 +158,26 @@ public:
      * from the global source, and only if it fails, tries to load it from the
      * embedded data. One can check if the loaded resource is embedded by checking
      * its resourceId().
+     *
+     * The set of resources returned is basically: linkedResources() + embeddedResources()
      */
-    virtual QList<KoResourceSP> requiredResources(KisResourcesInterfaceSP globalResourcesInterface) const;
+    QList<KoResourceSP> requiredResources(KisResourcesInterfaceSP globalResourcesInterface) const;
+
+    /**
+     * @return all the resources that are needed but (*this) resource and
+     * are not embedded into it. The resources are fetched from
+     * \p globalResourcesInterface. If fetching of some resources is failed,
+     * then (*this) resource is invalid.
+     */
+    virtual QList<KoResourceSP> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const;
+
+    /**
+     * @return all the resources that were embedded into (*this) resource.
+     * If the resources were already added to the global database, then they
+     * are fetched from \p globalResourcesInterface to save time/memory.
+     */
+    virtual QList<KoResourceSP> embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const;
+
 
 private:
 

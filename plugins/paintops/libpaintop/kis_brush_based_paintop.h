@@ -86,8 +86,8 @@ public:
     static void preinitializeOpStatically(KisPaintOpSettingsSP settings);
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
-    static QList<KoResourceSP> prepareResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface);
-
+    static QList<KoResourceSP> prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface);
+    static QList<KoResourceSP> prepareEmbeddedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface);
 
 private:
     KisSpacingInformation effectiveSpacing(qreal dabWidth, qreal dabHeight, qreal extraScale, bool isotropicSpacing, qreal rotation, bool axesFlipped) const;

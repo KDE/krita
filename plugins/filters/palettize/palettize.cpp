@@ -78,7 +78,7 @@ public:
         return palette(resourcesInterface());
     }
 
-    QList<KoResourceSP> requiredResources(KisResourcesInterfaceSP globalResourcesInterface) const override
+    QList<KoResourceSP> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const override
     {
         KoColorSetSP palette = this->palette(globalResourcesInterface);
 
@@ -87,8 +87,8 @@ public:
             resources << palette;
         }
 
-        resources << KisDitherWidget::prepareResources(*this, "dither/", globalResourcesInterface);
-        resources << KisDitherWidget::prepareResources(*this, "alphaDither/", globalResourcesInterface);
+        resources << KisDitherWidget::prepareLinkedResources(*this, "dither/", globalResourcesInterface);
+        resources << KisDitherWidget::prepareLinkedResources(*this, "alphaDither/", globalResourcesInterface);
 
         return resources;
     }

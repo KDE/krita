@@ -27,14 +27,13 @@
 
 #include <filter/kis_filter_category_ids.h>
 #include "kis_config_widget.h"
-#include <KoResourceServerProvider.h>
-#include <KoResourceServer.h>
 #include <KoAbstractGradient.h>
 #include <KoStopGradient.h>
 #include <KoColorSet.h>
 #include "gradientmap.h"
 #include <KisDitherUtil.h>
 #include <KisGlobalResourcesInterface.h>
+#include <QDomDocument>
 
 #include <KisSequentialIteratorProgress.h>
 
@@ -64,7 +63,7 @@ public:
             KoAbstractGradientSP gradientAb = source.resourceForName(this->getString("gradientName"));
             if (!gradientAb) {
                 qWarning() << "Could not find gradient" << this->getString("gradientName");
-                gradientAb = KoResourceServerProvider::instance()->gradientServer()->firstResource();
+                gradientAb = source.fallbackResource();
             }
 
             gradient = gradientAb.dynamicCast<KoStopGradient>();
@@ -96,16 +95,35 @@ public:
         return gradientImpl(resourcesInterface());
     }
 
-    QList<KoResourceSP> requiredResources(KisResourcesInterfaceSP globalResourcesInterface) const override
+    QList<KoResourceSP> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const override
     {
-        KoStopGradientSP gradient = gradientImpl(globalResourcesInterface);
-
         QList<KoResourceSP> resources;
-        if (gradient) {
-            resources << gradient;
+
+        // only the first version of the filter loaded the gradient by name
+        if (this->version() == 1) {
+            KoStopGradientSP gradient = gradientImpl(globalResourcesInterface);
+            if (gradient) {
+                resources << gradient;
+            }
         }
 
-        resources << KisDitherWidget::prepareResources(*this, "dither/", globalResourcesInterface);
+        resources << KisDitherWidget::prepareLinkedResources(*this, "dither/", globalResourcesInterface);
+
+        return resources;
+    }
+
+    QList<KoResourceSP> embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const override
+    {
+        QList<KoResourceSP> resources;
+
+        // the second version of the filter embeds the gradient
+        if (this->version() > 1) {
+            KoStopGradientSP gradient = gradientImpl(globalResourcesInterface);
+
+            if (gradient) {
+                resources << gradient;
+            }
+        }
 
         return resources;
     }

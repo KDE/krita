@@ -82,7 +82,7 @@ public:
      */
     void apply(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation & info);
     void fillProperties(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface);
-    QList<KoResourceSP> prepareResources(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface);
+    QList<KoResourceSP> prepareEmbeddedResources(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface);
 
 private:
 

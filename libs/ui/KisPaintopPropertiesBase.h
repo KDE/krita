@@ -57,13 +57,18 @@ public:
     void readOptionSetting(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface);
     void writeOptionSetting(KisPropertiesConfiguration *settings) const;
 
-    QList<KoResourceSP> prepareResources(const KisPropertiesConfigurationSP settings, KisResourcesInterfaceSP resourcesInterface) const;
-    QList<KoResourceSP> prepareResources(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const;
+    QList<KoResourceSP> prepareLinkedResources(const KisPropertiesConfigurationSP settings, KisResourcesInterfaceSP resourcesInterface) const;
+    QList<KoResourceSP> prepareLinkedResources(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const;
+
+    QList<KoResourceSP> prepareEmbeddedResources(const KisPropertiesConfigurationSP settings, KisResourcesInterfaceSP resourcesInterface) const;
+    QList<KoResourceSP> prepareEmbeddedResources(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const;
+
 
 protected:
     virtual void readOptionSettingResourceImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) = 0;
     virtual void writeOptionSettingImpl(KisPropertiesConfiguration *settings) const = 0;
-    virtual QList<KoResourceSP> prepareResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const = 0;
+    virtual QList<KoResourceSP> prepareLinkedResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const = 0;
+    virtual QList<KoResourceSP> prepareEmbeddedResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const = 0;
 };
 
 class KRITAUI_EXPORT KisPaintopPropertiesBase : public KisPaintopPropertiesResourcesBase
@@ -74,7 +79,8 @@ public:
 
 private:
     void readOptionSettingResourceImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) override final;
-    QList<KoResourceSP> prepareResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const override final;
+    QList<KoResourceSP> prepareLinkedResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const override final;
+    QList<KoResourceSP> prepareEmbeddedResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const override final;
 
 protected:
     virtual void readOptionSettingImpl(const KisPropertiesConfiguration *settings) = 0;

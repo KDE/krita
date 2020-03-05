@@ -91,7 +91,7 @@ public:
         return pattern(resourcesInterface());
     }
 
-    QList<KoResourceSP> requiredResources(KisResourcesInterfaceSP globalResourcesInterface) const override
+    QList<KoResourceSP> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const override
     {
         KoPatternSP pattern = this->pattern(globalResourcesInterface);
 

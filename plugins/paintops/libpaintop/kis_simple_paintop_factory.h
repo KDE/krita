@@ -55,29 +55,56 @@ void preinitializeOpStatically(const KisPaintOpSettingsSP settings, typename std
 namespace detail {
 
 template< class, class = std::void_t<> >
-struct has_prepare_resources : std::false_type { };
+struct has_prepare_linked_resources : std::false_type { };
 
 template< class T >
-struct has_prepare_resources<T, std::void_t<decltype(std::declval<T>().prepareResources(KisPaintOpSettingsSP(),KisResourcesInterfaceSP()))>> : std::true_type { };
+struct has_prepare_linked_resources<T, std::void_t<decltype(std::declval<T>().prepareLinkedResources(KisPaintOpSettingsSP(),KisResourcesInterfaceSP()))>> : std::true_type { };
 
 template <typename T>
-QList<KoResourceSP> prepareResources(const KisPaintOpSettingsSP settings,
+QList<KoResourceSP> prepareLinkedResources(const KisPaintOpSettingsSP settings,
                                      KisResourcesInterfaceSP resourcesInterface,
-                                     std::enable_if_t<has_prepare_resources<T>::value> * = 0)
+                                     std::enable_if_t<has_prepare_linked_resources<T>::value> * = 0)
 {
-    return T::prepareResources(settings, resourcesInterface);
+    return T::prepareLinkedResources(settings, resourcesInterface);
 }
 
 template <typename T>
-QList<KoResourceSP> prepareResources(const KisPaintOpSettingsSP settings,
+QList<KoResourceSP> prepareLinkedResources(const KisPaintOpSettingsSP settings,
                                      KisResourcesInterfaceSP resourcesInterface,
-                                     std::enable_if_t<!has_prepare_resources<T>::value> * = 0)
+                                     std::enable_if_t<!has_prepare_linked_resources<T>::value> * = 0)
 {
     Q_UNUSED(settings);
     Q_UNUSED(resourcesInterface);
     // noop
     return {};
 }
+
+
+template< class, class = std::void_t<> >
+struct has_prepare_embedded_resources : std::false_type { };
+
+template< class T >
+struct has_prepare_embedded_resources<T, std::void_t<decltype(std::declval<T>().prepareLinkedResources(KisPaintOpSettingsSP(),KisResourcesInterfaceSP()))>> : std::true_type { };
+
+template <typename T>
+QList<KoResourceSP> prepareEmbeddedResources(const KisPaintOpSettingsSP settings,
+                                     KisResourcesInterfaceSP resourcesInterface,
+                                     std::enable_if_t<has_prepare_embedded_resources<T>::value> * = 0)
+{
+    return T::prepareEmbeddedResources(settings, resourcesInterface);
+}
+
+template <typename T>
+QList<KoResourceSP> prepareEmbeddedResources(const KisPaintOpSettingsSP settings,
+                                     KisResourcesInterfaceSP resourcesInterface,
+                                     std::enable_if_t<!has_prepare_embedded_resources<T>::value> * = 0)
+{
+    Q_UNUSED(settings);
+    Q_UNUSED(resourcesInterface);
+    // noop
+    return {};
+}
+
 
 }
 
@@ -116,8 +143,12 @@ public:
         return op;
     }
 
-    QList<KoResourceSP> prepareResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface) {
-        return detail::prepareResources<Op>(settings, resourcesInterface);
+    QList<KoResourceSP> prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface) {
+        return detail::prepareLinkedResources<Op>(settings, resourcesInterface);
+    }
+
+    QList<KoResourceSP> prepareEmbeddedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface) {
+        return detail::prepareEmbeddedResources<Op>(settings, resourcesInterface);
     }
 
     KisPaintOpSettingsSP createSettings(KisResourcesInterfaceSP resourcesInterface) override {

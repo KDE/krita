@@ -230,7 +230,7 @@ void KisTextureProperties::fillProperties(const KisPropertiesConfigurationSP set
     m_strengthOption.resetAllSensors();
 }
 
-QList<KoResourceSP> KisTextureProperties::prepareResources(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface)
+QList<KoResourceSP> KisTextureProperties::prepareEmbeddedResources(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface)
 {
     QList<KoResourceSP> resources;
 

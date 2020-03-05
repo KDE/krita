@@ -78,10 +78,10 @@ KisHairyPaintOp::KisHairyPaintOp(const KisPaintOpSettingsSP settings, KisPainter
     m_sizeOption.resetAllSensors();
 }
 
-QList<KoResourceSP> KisHairyPaintOp::prepareResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
+QList<KoResourceSP> KisHairyPaintOp::prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
 {
     KisBrushOptionProperties brushOption;
-    return brushOption.prepareResources(settings, resourcesInterface);
+    return brushOption.prepareLinkedResources(settings, resourcesInterface);
 }
 
 void KisHairyPaintOp::loadSettings(const KisBrushBasedPaintOpSettings *settings)

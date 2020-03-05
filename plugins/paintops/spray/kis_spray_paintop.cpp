@@ -97,10 +97,10 @@ KisSprayPaintOp::~KisSprayPaintOp()
 {
 }
 
-QList<KoResourceSP> KisSprayPaintOp::prepareResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
+QList<KoResourceSP> KisSprayPaintOp::prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
 {
     KisBrushOptionProperties brushOption;
-    return brushOption.prepareResources(settings, resourcesInterface);
+    return brushOption.prepareLinkedResources(settings, resourcesInterface);
 }
 
 KisSpacingInformation KisSprayPaintOp::paintAt(const KisPaintInformation& info)

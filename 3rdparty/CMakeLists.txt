@@ -203,7 +203,7 @@ add_subdirectory( ext_vc )
 add_subdirectory( ext_gsl )
 add_subdirectory( ext_fftw3 )
 add_subdirectory( ext_ocio )
-add_subdirectory( ext_openjpeg )
+
 if (MSVC)
     add_subdirectory( ext_pthreads )
 endif (MSVC)
@@ -224,6 +224,7 @@ if (MINGW)
 endif ()
 
 if (NOT APPLE)
+    add_subdirectory( ext_openjpeg )
 	add_subdirectory( ext_gmic )
 endif ()
 

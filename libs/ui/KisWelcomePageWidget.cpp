@@ -239,6 +239,7 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
 
 void KisWelcomePageWidget::populateRecentDocuments()
 {
+
     m_recentFilesModel.clear(); // clear existing data before it gets re-populated
 
     // grab recent files data
@@ -250,7 +251,10 @@ void KisWelcomePageWidget::populateRecentDocuments()
         recentItem->setIcon(KisIconUtils::loadIcon("document-export"));
 
         QString recentFileUrlPath = m_mainWindow->recentFilesUrls().at(i).toLocalFile();
-        QString fileName = recentFileUrlPath.split("/").last();
+
+        qDebug() << recentFileUrlPath;
+
+        QString fileName = QFileInfo(recentFileUrlPath).fileName();
 
         QList<QUrl> brokenUrls;
 
@@ -259,7 +263,6 @@ void KisWelcomePageWidget::populateRecentDocuments()
         }
         else {
             QFileInfo fi(recentFileUrlPath);
-
             if (fi.exists()) {
                 QString mimeType = KisMimeDatabase::mimeTypeForFile(recentFileUrlPath);
                 if (mimeType == KisDocument::nativeFormatMimeType()
@@ -314,7 +317,7 @@ void KisWelcomePageWidget::populateRecentDocuments()
                         brokenUrls << m_mainWindow->recentFilesUrls().at(i);
                     }
                 }
-                if (brokenUrls.size() > 0 && brokenUrls.last().toLocalFile() != recentFileUrlPath) {
+                if (brokenUrls.size() == 0 || brokenUrls.last().toLocalFile() != recentFileUrlPath) {
                     m_thumbnailMap[recentFileUrlPath] = recentItem->icon();
                 }
             }

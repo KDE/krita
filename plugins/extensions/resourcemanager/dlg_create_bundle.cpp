@@ -28,6 +28,7 @@
 #include <QGridLayout>
 #include <QTableWidget>
 #include <QPainter>
+#include <QStack>
 
 #include <KisImportExportManager.h>
 #include <KoDocumentInfo.h>
@@ -36,10 +37,12 @@
 #include <KoResource.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
+#include <KoResource.h>
 
 #include <kis_workspace_resource.h>
 #include <brushengine/kis_paintop_preset.h>
 #include <dlg_embed_tags.h>
+#include <KisGlobalResourcesInterface.h>
 
 #include <kis_config.h>
 
@@ -244,7 +247,14 @@ QVector<KisTagSP> DlgCreateBundle::getTagsForEmbeddingInResource(QVector<KisTagS
 void DlgCreateBundle::putResourcesInTheBundle() const
 {
     KisResourceModel* emptyModel = KisResourceModelProvider::resourceModel("");
+    QStack<int> allResourcesIds;
     Q_FOREACH(int id, m_selectedResourcesIds) {
+        allResourcesIds << id;
+    }
+
+    // note: if there are repetitions, it's fine; the bundle will filter them out
+    while(!allResourcesIds.isEmpty()) {
+        int id = allResourcesIds.takeFirst();
         KoResourceSP res = emptyModel->resourceForId(id);
         if (!res) {
             warnKrita << "No resource for id " << id;
@@ -253,8 +263,16 @@ void DlgCreateBundle::putResourcesInTheBundle() const
         KisResourceModel* resModel = KisResourceModelProvider::resourceModel(res->resourceType().first);
         QVector<KisTagSP> tags = getTagsForEmbeddingInResource(resModel->tagsForResource(id));
         m_bundle->addResource(res->resourceType().first, res->filename(), tags, res->md5());
-    }
 
+        QList<KoResourceSP> linkedResources = res->linkedResources(KisGlobalResourcesInterface::instance());
+        if (!linkedResources.isEmpty()) {
+            Q_FOREACH(KoResourceSP resource, linkedResources) {
+                if (!allResourcesIds.contains(resource->resourceId())) {
+                    allResourcesIds.append(resource->resourceId());
+                }
+            }
+        }
+    }
 }
 
 void DlgCreateBundle::accept()

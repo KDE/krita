@@ -310,28 +310,36 @@ void KisDlgInternalColorSelector::updateAllElements(QObject *source)
 
 void KisDlgInternalColorSelector::slotSelectorModelChanged()
 {
-    bool isHSXType = true;
-    switch (m_ui->visualSelector->getColorModel()) {
-    case KisVisualColorSelector::HSV:
-        m_ui->tabWidget->setTabText(1, "HSV");
-        break;
-    case KisVisualColorSelector::HSL:
-        m_ui->tabWidget->setTabText(1, "HSL");
-        break;
-    case KisVisualColorSelector::HSI:
-        m_ui->tabWidget->setTabText(1, "HSI");
-        break;
-    case KisVisualColorSelector::HSY:
-        m_ui->tabWidget->setTabText(1, "HSY'");
-        break;
-    default:
-        isHSXType = false;
+    if (m_ui->visualSelector->isHSXModel()) {
+        QString label;
+        switch (m_ui->visualSelector->getColorModel()) {
+        case KisVisualColorSelector::HSV:
+            label = i18n("HSV");
+            break;
+        case KisVisualColorSelector::HSL:
+            label = i18n("HSL");
+            break;
+        case KisVisualColorSelector::HSI:
+            label = i18n("HSI");
+            break;
+        case KisVisualColorSelector::HSY:
+            label = i18n("HSY'");
+            break;
+        default:
+            label =  i18n("Unknown");
+        }
+        if (m_ui->tabWidget->count() == 1) {
+            m_ui->tabWidget->addTab(m_ui->tab_hsx, label);
+        }
+        else {
+            m_ui->tabWidget->setTabText(1, label);
+        }
     }
-    qDebug() << "slotSelectorModelChanged(): isHSXType=" << isHSXType;
-    if (!isHSXType) {
-        m_ui->tabWidget->setCurrentIndex(0);
+    else {
+        if (m_ui->tabWidget->count() == 2) {
+            m_ui->tabWidget->removeTab(1);
+        }
     }
-    m_ui->tabWidget->setTabEnabled(1, isHSXType);
 }
 
 void KisDlgInternalColorSelector::endUpdateWithNewColor()

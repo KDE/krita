@@ -460,6 +460,40 @@ void KisDlgLayerStyle::syncGlobalAngle(int angle)
 /***** Styles Selector **********************************************/
 /********************************************************************/
 
+StylesSelector::LocationProxyModel::LocationProxyModel(QObject *parent)
+    : QSortFilterProxyModel(parent)
+{
+
+}
+
+void StylesSelector::LocationProxyModel::setEnableFiltering(bool enableFiltering)
+{
+    m_enableFiltering = enableFiltering;
+    invalidateFilter();
+}
+
+void StylesSelector::LocationProxyModel::setLocationToFilterBy(QString location)
+{
+    m_locationToFilter = location;
+    invalidateFilter();
+}
+
+bool StylesSelector::LocationProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
+{
+    if (!m_enableFiltering) {
+        return true;
+    }
+
+    QModelIndex idx = sourceModel()->index(source_row, 0);
+    QString location = sourceModel()->data(idx, Qt::UserRole + KisResourceModel::Location).toString();
+    qDebug() << sourceModel()->data(idx, Qt::UserRole + KisResourceModel::Location).toString()
+             << sourceModel()->data(idx, Qt::UserRole + KisResourceModel::Name).toString();
+    return location == m_locationToFilter;
+}
+
+
+
+
 class StyleItem : public QListWidgetItem {
 public:
     StyleItem(KisPSDLayerStyleSP style)
@@ -478,23 +512,48 @@ StylesSelector::StylesSelector(QWidget *parent)
 {
     ui.setupUi(this);
 
+    //ui.cmbStyleCollections->setModel();
+    m_resourceModel = KisResourceModelProvider::resourceModel(ResourceType::LayerStyles);
+    m_locationsProxyModel = new LocationProxyModel(this);
+    m_locationsProxyModel->setSourceModel(m_resourceModel);
+    m_locationsProxyModel->setEnableFiltering(false);
+
+    ui.listStyles->setModel(m_locationsProxyModel);
+    ui.listStyles->setModelColumn(KisResourceModel::Name);
+
     connect(ui.cmbStyleCollections, SIGNAL(activated(QString)), this, SLOT(loadStyles(QString)));
-    connect(ui.listStyles, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)), this, SLOT(selectStyle(QListWidgetItem*,QListWidgetItem*)));
+    connect(ui.listStyles, SIGNAL(clicked(QModelIndex)), this, SLOT(selectStyle(QModelIndex)));
 
     refillCollections();
 
     if (ui.cmbStyleCollections->count()) {
         ui.cmbStyleCollections->setCurrentIndex(0);
+        m_locationsProxyModel->setEnableFiltering(true);
         loadStyles(ui.cmbStyleCollections->currentText());
     }
 }
 
 void StylesSelector::refillCollections()
 {
+    QStringList locationsList;
+    for (int i = 0; i < m_resourceModel->rowCount(); i++) {
+        QModelIndex idx = m_resourceModel->index(i, 0);
+        QString location = m_resourceModel->data(idx, Qt::UserRole + KisResourceModel::Location).toString();
+        if (!locationsList.contains(location)) {
+            locationsList << location;
+        }
+    }
+    ui.cmbStyleCollections->clear();
+    ui.cmbStyleCollections->addItems(locationsList);
+
+
+    return;
+    /*
     QString previousCollection = ui.cmbStyleCollections->currentText();
 
     ui.cmbStyleCollections->clear();
     ui.cmbStyleCollections->addItem("All Styles");
+    */
     // TODO: RESOURCES: should we differentiate asl layer styles by storage location?
     // (like it was before)
 
@@ -504,17 +563,20 @@ void StylesSelector::refillCollections()
     }
     */
 
+    /*
     if (!previousCollection.isEmpty()) {
         KisSignalsBlocker blocker(this);
 
         int index = ui.cmbStyleCollections->findText(previousCollection);
         ui.cmbStyleCollections->setCurrentIndex(index);
     }
+    */
 
 }
 
 void StylesSelector::notifyExternalStyleChanged(const QString &name, const QUuid &uuid)
 {
+    /*
     int currentIndex = -1;
 
     for (int i = 0; i < ui.listStyles->count(); i++ ) {
@@ -536,24 +598,32 @@ void StylesSelector::notifyExternalStyleChanged(const QString &name, const QUuid
     }
 
     ui.listStyles->setCurrentRow(currentIndex);
+    */
 }
 
 void StylesSelector::loadStyles(const QString &name)
 {
-    ui.listStyles->clear();
-    KoResourceServer<KisPSDLayerStyle>* server = KisResourceServerProvider::instance()->layerStyleServer();
-    server->resources();
-    Q_FOREACH(KisPSDLayerStyleSP style, server->resources()) {
-        ui.listStyles->addItem(new StyleItem(style));
-    }
+    m_locationsProxyModel->setLocationToFilterBy(name);
 }
 
-void StylesSelector::selectStyle(QListWidgetItem *current, QListWidgetItem* /*previous*/)
+void StylesSelector::selectStyle(QModelIndex current)
 {
+
+    // the index is from the proxy model
+    QModelIndex sourceModelIndex = m_locationsProxyModel->mapToSource(current);
+    KoResourceSP resource = m_resourceModel->resourceForIndex(sourceModelIndex);
+    KisPSDLayerStyleSP layerStyle = resource.dynamicCast<KisPSDLayerStyle>();
+    qDebug() << "StylesSelector::selectStyle" << (resource.isNull() ? "(null)" : resource->name()) << (layerStyle.isNull() ? "(null)" : layerStyle->name());
+    if (layerStyle) {
+        emit styleSelected(layerStyle);
+    }
+
+    /*
     StyleItem *item = dynamic_cast<StyleItem*>(current);
     if (item) {
         emit styleSelected(item->m_style);
     }
+    */
 }
 
 void StylesSelector::loadCollection(const QString &fileName)

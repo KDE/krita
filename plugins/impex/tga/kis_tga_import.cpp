@@ -277,7 +277,7 @@ KisImportExportErrorCode KisTGAImport::convert(KisDocument *document, QIODevice 
 
     // Check supported file types.
     if (!isSupported(tga)) {
-        return ImportExportCodes::FileFormatIncorrect;
+        return ImportExportCodes::FormatFeaturesUnsupported;
     }
 
     QImage img;

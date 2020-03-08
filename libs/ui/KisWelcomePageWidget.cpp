@@ -252,8 +252,6 @@ void KisWelcomePageWidget::populateRecentDocuments()
 
         QString recentFileUrlPath = m_mainWindow->recentFilesUrls().at(i).toLocalFile();
 
-        qDebug() << recentFileUrlPath;
-
         QString fileName = QFileInfo(recentFileUrlPath).fileName();
 
         QList<QUrl> brokenUrls;

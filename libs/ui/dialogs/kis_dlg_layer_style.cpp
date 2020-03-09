@@ -545,33 +545,6 @@ void StylesSelector::refillCollections()
     }
     ui.cmbStyleCollections->clear();
     ui.cmbStyleCollections->addItems(locationsList);
-
-
-    return;
-    /*
-    QString previousCollection = ui.cmbStyleCollections->currentText();
-
-    ui.cmbStyleCollections->clear();
-    ui.cmbStyleCollections->addItem("All Styles");
-    */
-    // TODO: RESOURCES: should we differentiate asl layer styles by storage location?
-    // (like it was before)
-
-    /*
-    Q_FOREACH (KoResourceSP res, KisResourceServerProvider::instance()->layerStyleServer()->resources()) {
-        //ui.cmbStyleCollections->addItem(res->name());
-    }
-    */
-
-    /*
-    if (!previousCollection.isEmpty()) {
-        KisSignalsBlocker blocker(this);
-
-        int index = ui.cmbStyleCollections->findText(previousCollection);
-        ui.cmbStyleCollections->setCurrentIndex(index);
-    }
-    */
-
 }
 
 void StylesSelector::notifyExternalStyleChanged(const QString &name, const QUuid &uuid)

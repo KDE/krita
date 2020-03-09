@@ -344,7 +344,8 @@ rebuild_3rdparty () {
         ext_kitemviews \
         ext_kimageformats \
         ext_kwindowsystem \
-        ext_quazip
+        ext_quazip \
+        ext_openjpeg
 }
 
 #not tested

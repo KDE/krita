@@ -84,7 +84,7 @@ template< class, class = std::void_t<> >
 struct has_prepare_embedded_resources : std::false_type { };
 
 template< class T >
-struct has_prepare_embedded_resources<T, std::void_t<decltype(std::declval<T>().prepareLinkedResources(KisPaintOpSettingsSP(),KisResourcesInterfaceSP()))>> : std::true_type { };
+struct has_prepare_embedded_resources<T, std::void_t<decltype(std::declval<T>().prepareEmbeddedResources(KisPaintOpSettingsSP(),KisResourcesInterfaceSP()))>> : std::true_type { };
 
 template <typename T>
 QList<KoResourceSP> prepareEmbeddedResources(const KisPaintOpSettingsSP settings,

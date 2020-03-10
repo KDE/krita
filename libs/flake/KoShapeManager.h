@@ -131,7 +131,10 @@ public:
         SharedSafeStorage allClonedShapes;
     };
 
-    using PaintJobsList = QList<PaintJob>;
+    struct PaintJobsList : public QList<PaintJob>
+    {
+        QRect uncroppedViewUpdateRect;
+    };
 
 
     /**

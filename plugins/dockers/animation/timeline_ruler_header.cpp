@@ -443,6 +443,10 @@ void TimelineRulerHeader::mousePressEvent(QMouseEvent *e)
             }
 
             QMenu menu;
+
+            menu.addSection(i18n("Edit Columns:"));
+            menu.addSeparator();
+
             KisActionManager::safePopulateMenu(&menu, "cut_columns_to_clipboard", m_d->actionMan);
             KisActionManager::safePopulateMenu(&menu, "copy_columns_to_clipboard", m_d->actionMan);
             KisActionManager::safePopulateMenu(&menu, "paste_columns_from_clipboard", m_d->actionMan);

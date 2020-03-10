@@ -187,6 +187,9 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     m_d->addLayersButton->setPopupMode(QToolButton::InstantPopup);
 
     m_d->layerEditingMenu = new QMenu(this);
+    m_d->layerEditingMenu->addSection(i18n("Edit Layers:"));
+    m_d->layerEditingMenu->addSeparator();
+
     m_d->layerEditingMenu->addAction(KisAnimationUtils::newLayerActionName, this, SLOT(slotAddNewLayer()));
     m_d->existingLayersMenu = m_d->layerEditingMenu->addMenu(KisAnimationUtils::addExistingLayerActionName);
     m_d->layerEditingMenu->addSeparator();
@@ -209,6 +212,8 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     m_d->audioOptionsButton->setPopupMode(QToolButton::InstantPopup);
 
     m_d->audioOptionsMenu = new QMenu(this);
+    m_d->audioOptionsMenu->addSection(i18n("Edit Audio:"));
+    m_d->audioOptionsMenu->addSeparator();
 
 #ifndef HAVE_QT_MULTIMEDIA
     m_d->audioOptionsMenu->addSection(i18nc("@item:inmenu", "Audio playback is not supported in this build!"));
@@ -937,9 +942,10 @@ void TimelineFramesView::createFrameEditingMenuActions(QMenu *menu, bool addFram
     int minColumn = 0;
     int maxColumn = 0;
     calculateSelectionMetrics(minColumn, maxColumn, rows);
-
     bool selectionExists = minColumn != maxColumn;
 
+    menu->addSection(i18n("Edit Frames:"));
+    menu->addSeparator();
 
     if (selectionExists) {
         KisActionManager::safePopulateMenu(menu, "update_playback_range", m_d->actionMan);

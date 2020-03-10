@@ -182,7 +182,7 @@ public:
         m_scale = KisLodTransform::lodToScale(device->defaultBounds()->currentLevelOfDetail());
     }
 
-    qreal scale(qreal value) {
+    qreal scale(qreal value) const {
         return m_scale * value;
     }
 

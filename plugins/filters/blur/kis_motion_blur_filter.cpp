@@ -64,6 +64,39 @@ KisFilterConfigurationSP KisMotionBlurFilter::defaultConfiguration() const
     return config;
 }
 
+namespace {
+struct MotionBlurProperties
+{
+    MotionBlurProperties(KisFilterConfigurationSP config, const KisLodTransformScalar &t)
+    {
+        const int blurAngle = config->getInt("blurAngle", 0);
+        const int blurLength = config->getInt("blurLength", 5);
+
+        // convert angle to radians
+        const qreal angleRadians = kisDegreesToRadians(qreal(blurAngle));
+
+        // construct image
+        const qreal halfWidth = 0.5 * t.scale(blurLength) * cos(angleRadians);
+        const qreal halfHeight = 0.5 * t.scale(blurLength) * sin(angleRadians);
+
+        kernelHalfSize.rwidth() = ceil(fabs(halfWidth));
+        kernelHalfSize.rheight() = ceil(fabs(halfHeight));
+        kernelSize = kernelHalfSize * 2 + QSize(1, 1);
+        this->blurLength = blurLength;
+
+
+        QPointF p1(0.5 * kernelSize.width(), 0.5 * kernelSize.height());
+        QPointF p2(halfWidth, halfHeight);
+        motionLine = QLineF(p1 - p2, p1 + p2);
+    }
+
+    int blurLength;
+    QSize kernelSize;
+    QSize kernelHalfSize;
+    QLineF motionLine;
+};
+}
+
 void KisMotionBlurFilter::processImpl(KisPaintDeviceSP device,
                                       const QRect& rect,
                                       const KisFilterConfigurationSP _config,
@@ -76,20 +109,10 @@ void KisMotionBlurFilter::processImpl(KisPaintDeviceSP device,
 
     KisFilterConfigurationSP config = _config ? _config : new KisFilterConfiguration(id().id(), 1);
 
-    QVariant value;
-    uint blurAngle = 0;
-    if (config->getProperty("blurAngle", value)) {
-        blurAngle = value.toUInt();
-    }
-
     KisLodTransformScalar t(device);
+    MotionBlurProperties props(config, t);
 
-    uint blurLength = 0;
-    if (config->getProperty("blurLength", value)) {
-        blurLength = t.scale(value.toUInt());
-    }
-
-    if (blurLength == 0) {
+    if (props.blurLength == 0) {
         return;
     }
 
@@ -103,33 +126,18 @@ void KisMotionBlurFilter::processImpl(KisPaintDeviceSP device,
         channelFlags = QBitArray(device->colorSpace()->channelCount(), true);
     }
 
-    // convert angle to radians
-    qreal angleRadians = blurAngle / 360.0 * 2 * M_PI;
-
-    // construct image
-    qreal halfWidth = blurLength / 2.0 * cos(angleRadians);
-    qreal halfHeight = blurLength / 2.0 * sin(angleRadians);
-
-    int kernelWidth = ceil(fabs(halfWidth)) * 2;
-    int kernelHeight = ceil(fabs(halfHeight)) * 2;
-
-    // check for zero dimensions (vertical/horizontal motion vectors)
-    kernelWidth = (kernelWidth == 0) ? 1 : kernelWidth;
-    kernelHeight = (kernelHeight == 0) ? 1 : kernelHeight;
-
-    QImage kernelRepresentation(kernelWidth, kernelHeight, QImage::Format_RGB32);
+    QImage kernelRepresentation(props.kernelSize, QImage::Format_RGB32);
     kernelRepresentation.fill(0);
 
     QPainter imagePainter(&kernelRepresentation);
     imagePainter.setRenderHint(QPainter::Antialiasing);
     imagePainter.setPen(QPen(QColor::fromRgb(255, 255, 255), 1.0));
-    imagePainter.drawLine(QPointF(kernelWidth / 2 - halfWidth, kernelHeight / 2 + halfHeight),
-                          QPointF(kernelWidth / 2 + halfWidth, kernelHeight / 2 - halfHeight));
+    imagePainter.drawLine(props.motionLine);
 
     // construct kernel from image
-    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> motionBlurKernel(kernelHeight, kernelWidth);
-    for (int j = 0; j < kernelHeight; ++j) {
-        for (int i = 0; i < kernelWidth; ++i) {
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> motionBlurKernel(props.kernelSize.height(), props.kernelSize.width());
+    for (int j = 0; j < props.kernelSize.height(); ++j) {
+        for (int i = 0; i < props.kernelSize.width(); ++i) {
             motionBlurKernel(j, i) = qRed(kernelRepresentation.pixel(i, j));
         }
     }
@@ -146,29 +154,11 @@ void KisMotionBlurFilter::processImpl(KisPaintDeviceSP device,
 QRect KisMotionBlurFilter::neededRect(const QRect & rect, const KisFilterConfigurationSP _config, int lod) const
 {
     KisLodTransformScalar t(lod);
-
-    QVariant value;
-    uint blurAngle = _config->getProperty("blurAngle", value) ? value.toUInt() : 0;
-    uint blurLength = t.scale(_config->getProperty("blurLength", value) ? value.toUInt() : 5);
-
-    qreal angleRadians = blurAngle / 360.0 * 2 * M_PI;
-    const int halfWidth = ceil(fabs(blurLength / 2.0 * cos(angleRadians)));
-    const int halfHeight = ceil(fabs(blurLength / 2.0 * cos(angleRadians)));
-
-    return rect.adjusted(-halfWidth * 2, -halfHeight * 2, halfWidth * 2, halfHeight * 2);
+    MotionBlurProperties props(_config, t);
+    return rect.adjusted(-props.kernelHalfSize.width(), -props.kernelHalfSize.height(), props.kernelHalfSize.width(), props.kernelHalfSize.height());
 }
 
 QRect KisMotionBlurFilter::changedRect(const QRect & rect, const KisFilterConfigurationSP _config, int lod) const
 {
-    KisLodTransformScalar t(lod);
-
-    QVariant value;
-    uint blurAngle = _config->getProperty("blurAngle", value) ? value.toUInt() : 0;
-    uint blurLength = t.scale(_config->getProperty("blurLength", value) ? value.toUInt() : 5);
-
-    qreal angleRadians = blurAngle / 360.0 * 2 * M_PI;
-    const int halfWidth = ceil(fabs(blurLength * cos(angleRadians)));
-    const int halfHeight = ceil(fabs(blurLength * cos(angleRadians)));
-
-    return rect.adjusted(-halfWidth * 2, -halfHeight * 2, halfWidth * 2, halfHeight * 2);
+    return neededRect(rect, _config, lod);
 }

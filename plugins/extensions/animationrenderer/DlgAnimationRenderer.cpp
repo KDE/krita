@@ -430,7 +430,9 @@ void DlgAnimationRenderer::slotButtonClicked(int button)
             return;
         }
         else if (ffmpeg.isEmpty()) {
-            QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("The location of FFmpeg is unknown. Please install FFmpeg first: Krita cannot render animations without FFmpeg. (<a href=\"https://www.ffmpeg.org\">www.ffmpeg.org</a>)"));
+            QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("<b>Krita can't find FFmpeg!</b><br> \
+               <i>Krita depends on another free program called FFmpeg to turn frame-by-frame animations into video files. (<a href=\"https://www.ffmpeg.org\">www.ffmpeg.org</a>)</i><br><br>\
+               To learn more about setting up Krita for rendering animations, <a href=\"https://docs.krita.org/en/reference_manual/render_animation.html#setting-up-krita-for-exporting-animations\">please visit this section of our User Manual.</a>"));
             return;
         }
         else {

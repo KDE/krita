@@ -359,6 +359,11 @@ void KisShapeLayerCanvas::repaint()
     m_projection->clear(repaintRect);
 
     Q_FOREACH (const KoShapeManager::PaintJob &job, paintJobs) {
+        if (job.isEmpty()) {
+            m_projection->clear(job.viewUpdateRect);
+            continue;
+        }
+
         image.fill(0);
 
         tempPainter.setTransform(QTransform());

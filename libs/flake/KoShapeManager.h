@@ -124,6 +124,10 @@ public:
         {
         }
 
+        bool isEmpty() const {
+            return shapes.isEmpty();
+        }
+
         QRectF docUpdateRect;
         QRect viewUpdateRect;
 

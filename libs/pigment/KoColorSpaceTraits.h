@@ -65,6 +65,9 @@ struct KoColorSpaceTrait {
     /// the number of bit for each channel
     static const int depth = KoColorSpaceMathsTraits<_channels_type_>::bits;
 
+    /// the associated math class
+    typedef KoColorSpaceMathsTraits<_channels_type_> math_trait;
+
     /**
      * @return the size in byte of one pixel
      */

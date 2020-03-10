@@ -76,7 +76,7 @@ printf "" > "${ERROR_LOG}"
 # configure max core for make compile
 ((MAKE_THREADS=1))
 if test ${OSTYPE} == "darwin*"; then
-    ((MAKE_THREADS = $(sysctl -n hw.ncpu) - 1))
+    ((MAKE_THREADS = $(sysctl -n hw.logicalcpu)))
 fi
 
 # Prints stderr and stdout to log files
@@ -344,7 +344,8 @@ rebuild_3rdparty () {
         ext_kitemviews \
         ext_kimageformats \
         ext_kwindowsystem \
-        ext_quazip
+        ext_quazip \
+        ext_openjpeg
 }
 
 #not tested

@@ -520,8 +520,7 @@ void LayerBox::updateUI()
     m_wdgLayerBox->cmbComposite->validate(m_image->colorSpace());
 
     if (activeNode) {
-        if (activeNode->inherits("KisColorizeMask") ||
-                activeNode->inherits("KisLayer")) {
+        if (activeNode->inherits("KisColorizeMask") || activeNode->inherits("KisLayer")) {
 
             m_wdgLayerBox->doubleOpacity->setEnabled(true);
 

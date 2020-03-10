@@ -95,7 +95,6 @@ KisTimeRange KisTimeRange::calculateNodeAffectedFrames(const KisNode *node, int 
 
     if (channels.isEmpty() ||
         !channels.contains(KisKeyframeChannel::Content.id())) {
-
         range = KisTimeRange::infinite(0);
         return range;
     }

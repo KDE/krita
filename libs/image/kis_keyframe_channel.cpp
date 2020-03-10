@@ -422,10 +422,16 @@ KisTimeRange KisKeyframeChannel::affectedFrames(int time) const
         next = active + 1;
     }
 
+    const KisKeyframe::InterpolationMode activeMode = active->data()->interpolationMode();
+
     if (next == m_d->keys.constEnd()) {
         return KisTimeRange::infinite(from);
     } else {
-        return KisTimeRange::fromTime(from, next.key() - 1);
+        if (activeMode == KisKeyframe::InterpolationMode::Constant) {
+            return KisTimeRange::fromTime(from, next.key() - 1);
+        } else {
+            return KisTimeRange::fromTime(from, from);
+        }
     }
 }
 

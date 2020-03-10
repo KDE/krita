@@ -108,8 +108,13 @@ class KisDynamicSensorTiltDirection : public KisDynamicSensor
 public:
     KisDynamicSensorTiltDirection();
     ~KisDynamicSensorTiltDirection() override {}
+
+    bool isAdditive() const override {
+        return true;
+    }
+
     qreal value(const KisPaintInformation& info) override {
-        return KisPaintInformation::tiltDirection(info, true);
+        return scalingToAdditive(KisPaintInformation::tiltDirection(info, true));
     }
 };
 

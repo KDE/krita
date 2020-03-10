@@ -144,10 +144,14 @@ public:
                 absoluteAxesFlipped ? 1.0 - absoluteOffset :
                 absoluteOffset;
 
+            // we should invert scaling part because it is expected
+            // to rotate the brush counterclockwise
+            const qreal scalingPartCoeff = -1.0;
+
             const qreal realScalingPart = hasScaling ? KisDynamicSensor::scalingToAdditive(scaling) : 0.0;
             const qreal realAdditivePart = hasAdditive ? additive : 0;
 
-            qreal value = wrapInRange(2 * offset + constant * (realScalingPart + realAdditivePart), -1.0, 1.0);
+            qreal value = wrapInRange(2 * offset + constant * (scalingPartCoeff * realScalingPart + realAdditivePart), -1.0, 1.0);
             if (qIsNaN(value)) {
                 qWarning() << "rotationLikeValue returns NaN!" << normalizedBaseAngle << absoluteAxesFlipped;
                 value = 0;

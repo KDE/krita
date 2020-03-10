@@ -40,7 +40,8 @@ double KisPressureRotationOption::apply(const KisPaintInformation & info) const
 
     qreal value = computeRotationLikeValue(info, normalizedBaseAngle, absoluteAxesFlipped);
 
-    // flip to conform global legacy code
+    /// flip to conform global legacy code
+    /// we measure rotation in the opposite direction relative Qt's way
     value = 1.0 - value;
 
     return normalizeAngle(value * M_PI);

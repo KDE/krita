@@ -31,8 +31,8 @@ public:
         AddKeyframeCommand(KisScalarKeyframeChannel *channel, int time, qreal value, KUndo2Command *parentCommand);
     };
 
-    KisScalarKeyframeChannel(const KoID& id, qreal minValue, qreal maxValue, KisDefaultBoundsBaseSP defaultBounds, KisKeyframe::InterpolationMode defaultInterpolation=KisKeyframe::Constant);
-    KisScalarKeyframeChannel(const KisScalarKeyframeChannel &rhs, KisNode *newParentNode);
+    KisScalarKeyframeChannel(const KoID& id, qreal minValue, qreal maxValue, KisNodeWSP parent, KisKeyframe::InterpolationMode defaultInterpolation=KisKeyframe::Constant);
+    KisScalarKeyframeChannel(const KisScalarKeyframeChannel &rhs, KisNodeWSP newParent);
     ~KisScalarKeyframeChannel() override;
 
     bool hasScalarValue() const override;

@@ -160,6 +160,7 @@ set(kritaimage_LIB_SRCS
    kis_edge_detection_kernel.cpp
    kis_cubic_curve.cpp
    kis_default_bounds.cpp
+   kis_default_bounds_node_wrapper.cpp
    kis_default_bounds_base.cpp
    kis_effect_mask.cc
    kis_fast_math.cpp

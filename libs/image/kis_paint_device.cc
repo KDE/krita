@@ -1981,7 +1981,7 @@ KisRasterKeyframeChannel *KisPaintDevice::createKeyframeChannel(const KoID &id)
     m_d->framesInterface.reset(new KisPaintDeviceFramesInterface(this));
 
     Q_ASSERT(!m_d->contentChannel);
-    m_d->contentChannel.reset(new KisRasterKeyframeChannel(id, this, m_d->defaultBounds));
+    m_d->contentChannel.reset(new KisRasterKeyframeChannel(id, this, this->parentNode()));
 
     // Raster channels always have at least one frame (representing a static image)
     KUndo2Command tempParentCommand;

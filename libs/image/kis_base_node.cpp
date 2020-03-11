@@ -111,7 +111,7 @@ KisBaseNode::KisBaseNode(const KisBaseNode & rhs)
                 KisScalarKeyframeChannel* pchannel = qobject_cast<KisScalarKeyframeChannel*>(channel);
                 KIS_ASSERT_RECOVER(pchannel) { continue; }
 
-                KisScalarKeyframeChannel* channelNew = new KisScalarKeyframeChannel(*pchannel, 0);
+                KisScalarKeyframeChannel* channelNew = new KisScalarKeyframeChannel(*pchannel, nullptr);
                 KIS_ASSERT(channelNew);
                 m_d->keyframeChannels.insert(channelNew->id(), channelNew);
 
@@ -473,10 +473,11 @@ KisKeyframeChannel *KisBaseNode::requestKeyframeChannel(const QString &id)
         KisPaintDeviceSP device = original();
 
         if (device) {
+            KisNode* node = dynamic_cast<KisNode*>(this);
             KisScalarKeyframeChannel * channel = new KisScalarKeyframeChannel(
                 KisKeyframeChannel::Opacity,
                 0, 255,
-                device->defaultBounds(),
+                KisNodeWSP( node ),
                 KisKeyframe::Linear
             );
 

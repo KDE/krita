@@ -50,7 +50,6 @@ void KisAsyncAnimationCacheRenderer::frameCompletedCallback(int frame, const Kis
     if (!cache || !image) return;
 
     m_d->requestInfo = cache->fetchFrameData(frame, image, requestedRegion);
-    ENTER_FUNCTION() << ppVar(frame) << ppVar(m_d->requestInfo);
     emit sigCompleteRegenerationInternal(frame);
 }
 
@@ -63,9 +62,7 @@ void KisAsyncAnimationCacheRenderer::slotCompleteRegenerationInternal(int frame)
         return;
     }
 
-    ENTER_FUNCTION() << ppVar(frame) << ppVar(m_d->requestInfo);
     m_d->requestedCache->addConvertedFrameData(m_d->requestInfo, frame);
-
     notifyFrameCompleted(frame);
 }
 

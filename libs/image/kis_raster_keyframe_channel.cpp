@@ -68,14 +68,14 @@ struct KisRasterKeyframeChannel::Private
   bool onionSkinsEnabled;
 };
 
-KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KoID &id, const KisPaintDeviceWSP paintDevice, KisDefaultBoundsBaseSP defaultBounds)
-    : KisKeyframeChannel(id, defaultBounds),
+KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KoID &id, const KisPaintDeviceWSP paintDevice, KisNodeWSP parent)
+    : KisKeyframeChannel(id, parent),
       m_d(new Private(paintDevice, QString()))
 {
 }
 
-KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KisRasterKeyframeChannel &rhs, KisNode *newParentNode, const KisPaintDeviceWSP newPaintDevice)
-    : KisKeyframeChannel(rhs, newParentNode),
+KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KisRasterKeyframeChannel &rhs, KisNodeWSP newParent, const KisPaintDeviceWSP newPaintDevice)
+    : KisKeyframeChannel(rhs, newParent),
       m_d(new Private(newPaintDevice, rhs.m_d->filenameSuffix))
 {
     KIS_ASSERT_RECOVER_NOOP(&rhs != this);
@@ -161,6 +161,8 @@ QString KisRasterKeyframeChannel::chooseFrameFilename(int frameId, const QString
 KisKeyframeSP KisRasterKeyframeChannel::createKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand)
 {
     KisRasterKeyframe *keyframe;
+
+    KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->paintDevice->defaultBounds()->currentTime() == this->currentTime());
 
     if (!copySrc) {
         int frameId = m_d->paintDevice->framesInterface()->createFrame(false, 0, QPoint(), parentCommand);

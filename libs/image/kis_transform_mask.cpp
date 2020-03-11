@@ -482,7 +482,7 @@ KisKeyframeChannel *KisTransformMask::requestKeyframeChannel(const QString &id)
             animatedParams = dynamic_cast<KisAnimatedTransformParamsInterface*>(converted.data());
         }
 
-        KisKeyframeChannel *channel = animatedParams->getKeyframeChannel(id, parent()->original()->defaultBounds());
+        KisKeyframeChannel *channel = animatedParams->getKeyframeChannel(id, parent());
         if (channel) return channel;
     }
 

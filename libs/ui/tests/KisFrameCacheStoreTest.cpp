@@ -125,8 +125,6 @@ public:
     }
 
     void frameCompletedCallback(int frame, const KisRegion &requestedRegion) override {
-        ENTER_FUNCTION() << ppVar(frame);
-
         KisImageSP image = requestedImage();
         KIS_SAFE_ASSERT_RECOVER_NOOP(frame == image->animationInterface()->currentTime());
 

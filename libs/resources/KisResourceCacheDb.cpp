@@ -23,7 +23,7 @@
 #include <QDir>
 #include <QDirIterator>
 #include <QStringList>
-#include <QTime>
+#include <QElapsedTimer>
 #include <QDataStream>
 #include <QByteArray>
 
@@ -924,7 +924,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
 {
     qDebug() << "Going to synchronize" << storage->location();
 
-    QTime t;
+    QElapsedTimer t;
     t.start();
 
     QSqlDatabase::database().transaction();
@@ -1069,7 +1069,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
         }
     }
     QSqlDatabase::database().commit();
-    qDebug() << "Synchronizing the storages took" << t.msec() << "milliseconds for" << storage->location();
+    qDebug() << "Synchronizing the storages took" << t.elapsed() << "milliseconds for" << storage->location();
 
     return success;
 }

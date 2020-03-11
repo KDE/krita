@@ -39,6 +39,7 @@
 
 #include "kis_composition_benchmark.h"
 #include <QTest>
+#include <QElapsedTimer>
 
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
@@ -420,7 +421,7 @@ void benchmarkCompositeOp(const KoCompositeOp *op,
     params.flow          = flow;
     params.channelFlags  = QBitArray();
 
-    QTime timer;
+    QElapsedTimer timer;
     timer.start();
 
     Q_FOREACH (const Tile &tile, tiles) {

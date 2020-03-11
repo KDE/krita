@@ -157,7 +157,7 @@ build_kf5() {
     sed -E -i "s|kdedir.*|kdedir $BUILD_ROOT/kf5/kde/install |g" $BUILD_ROOT/kf5/kdesrc-conf-android/kdesrc-buildrc
 
     # build first, so toolchain could be used
-    $BUILD_ROOT/kf5/kdesrc-build extra-cmake-modules
+    $BUILD_ROOT/kf5/kdesrc-build --debug extra-cmake-modules
     if [[ -e $QT_ANDROID ]]; then
         sed -E -i "s|-DCMAKE_PREFIX_PATH=.*?\\ |-DCMAKE_PREFIX_PATH=$QT_ANDROID- -DCMAKE_ANDROID_NDK=$CMAKE_ANDROID_NDK -DECM_ADDITIONAL_FIND_ROOT_PATH=$QT_ANDROID\;$BUILD_ROOT/kf5/kde/install -DANDROID_STL=c++_static -DCMAKE_TOOLCHAIN_FILE=$BUILD_ROOT/kf5/kde/install/share/ECM/toolchain/Android.cmake -DKCONFIG_USE_DBUS=OFF -DANDROID_PLATFORM=$ANDROID_NATIVE_API_LEVEL -DANDROID_API_LEVEL=$ANDROID_API_LEVEL -DANDROID_ABI=$ANDROID_ABI -DANDROID_ARCHITECTURE=$ANDROID_ARCHITECTURE |g" $BUILD_ROOT/kf5/kdesrc-conf-android/kdesrc-buildrc
 
@@ -172,8 +172,8 @@ build_kf5() {
     rm -rf $BUILD_ROOT/kf5/kde/build/* # clean build folders
 
     # Please do not change the order
-    ./kdesrc-build libintl-lite
-    ./kdesrc-build ki18n kcoreaddons \
+    ./kdesrc-build --debug libintl-lite
+    ./kdesrc-build --debug ki18n kcoreaddons \
          frameworks-android          \
          kwidgetsaddons kcompletion  \
          kguiaddons kitemmodels      \

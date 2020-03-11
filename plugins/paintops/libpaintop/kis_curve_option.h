@@ -141,7 +141,7 @@ public:
         qreal rotationLikeValue(qreal normalizedBaseAngle, bool absoluteAxesFlipped) const {
             const qreal offset =
                 !hasAbsoluteOffset ? normalizedBaseAngle :
-                absoluteAxesFlipped ? 1.0 - absoluteOffset :
+                absoluteAxesFlipped ? 0.5 - absoluteOffset :
                 absoluteOffset;
 
             // we should invert scaling part because it is expected

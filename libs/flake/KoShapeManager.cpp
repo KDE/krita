@@ -503,7 +503,7 @@ void KoShapeManager::preparePaintJobs(PaintJobsList &jobs,
         }
     }
 
-    const QList<KoShape*> rootShapes = rootShapesSet.toList();
+    const QList<KoShape*> rootShapes(rootShapesSet.begin(), rootShapesSet.end());
 
     QList<KoShape*> newRootShapes;
 

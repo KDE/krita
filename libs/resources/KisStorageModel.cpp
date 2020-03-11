@@ -18,7 +18,7 @@
 #include "KisStorageModel.h"
 
 #include <QtSql>
-
+#include <QElapsedTimer>
 #include <KisResourceLocator.h>
 #include <KisResourceModelProvider.h>
 
@@ -237,7 +237,7 @@ QVariant KisStorageModel::headerData(int section, Qt::Orientation orientation, i
 
 bool KisStorageModel::resetQuery()
 {
-    QTime t;
+    QElapsedTimer t;
     t.start();
 
     beginResetModel();

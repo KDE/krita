@@ -194,10 +194,10 @@ QStringList KoResourceBundleManifest::tags() const
     QSet<QString> tags;
     Q_FOREACH (const QString &type, m_resources.keys()) {
         Q_FOREACH (const ResourceReference &ref, m_resources[type].values()) {
-            tags += ref.tagList.toSet();
+            tags += QSet<QString>(ref.tagList.begin(), ref.tagList.end());
         }
     }
-    return QStringList::fromSet(tags);
+    return QStringList(tags.begin(), tags.end());
 }
 
 QList<KoResourceBundleManifest::ResourceReference> KoResourceBundleManifest::files(const QString &type) const

@@ -103,7 +103,7 @@ void KisHairyInkOption::writeOptionSetting(KisPropertiesConfigurationSP settings
     settings->setProperty(HAIRY_INK_BRISTLE_LENGTH_WEIGHT, bristleLengthWeight());
     settings->setProperty(HAIRY_INK_BRISTLE_INK_AMOUNT_WEIGHT, bristleInkAmountWeight());
     settings->setProperty(HAIRY_INK_DEPLETION_WEIGHT, inkDepletionWeight());
-    settings->setProperty(HAIRY_INK_DEPLETION_CURVE, qVariantFromValue(m_options->inkCurve->curve()));
+    settings->setProperty(HAIRY_INK_DEPLETION_CURVE, QVariant::fromValue(m_options->inkCurve->curve()));
     settings->setProperty(HAIRY_INK_SOAK, m_options->soakInkCBox->isChecked());
 }
 

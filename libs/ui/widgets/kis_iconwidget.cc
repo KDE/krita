@@ -66,7 +66,7 @@ void KisIconWidget::paintEvent(QPaintEvent *event)
     p.setClipRegion(clipRegion);
     p.setClipping(true);
 
-    p.setBrush(this->palette().background());
+    p.setBrush(this->palette().window());
     p.drawRect(QRect(0,0,cw,ch));
 
     if (!m_thumbnail.isNull()) {

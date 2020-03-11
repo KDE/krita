@@ -110,7 +110,7 @@ void KisCurveOption::writeOptionSetting(KisPropertiesConfigurationSP setting) co
     setting->setProperty(m_name + "UseSameCurve", m_useSameCurve);
     setting->setProperty(m_name + "Value", m_value);
     setting->setProperty(m_name + "curveMode", m_curveMode);
-    setting->setProperty(m_name + "commonCurve", qVariantFromValue(m_commonCurve));
+    setting->setProperty(m_name + "commonCurve", QVariant::fromValue(m_commonCurve));
 
 }
 

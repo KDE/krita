@@ -182,7 +182,7 @@ QStringList Krita::colorModels() const
     Q_FOREACH(KoID id, ids) {
         colorModelsIds << id.id();
     }
-    return colorModelsIds.toList();
+    return QStringList(colorModelsIds.begin(), colorModelsIds.end());
 }
 
 QStringList Krita::colorDepths(const QString &colorModel) const
@@ -192,7 +192,7 @@ QStringList Krita::colorDepths(const QString &colorModel) const
     Q_FOREACH(KoID id, ids) {
         colorDepthsIds << id.id();
     }
-    return colorDepthsIds.toList();
+    return QStringList(colorDepthsIds.begin(), colorDepthsIds.end());
 }
 
 QStringList Krita::filterStrategies() const
@@ -208,7 +208,7 @@ QStringList Krita::profiles(const QString &colorModel, const QString &colorDepth
     Q_FOREACH(const KoColorProfile *profile, profiles) {
         profileNames << profile->name();
     }
-    QStringList r = profileNames.toList();
+    QStringList r(profileNames.begin(), profileNames.end());
     r.sort();
     return r;
 }

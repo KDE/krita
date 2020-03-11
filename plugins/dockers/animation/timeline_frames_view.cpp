@@ -1234,8 +1234,8 @@ void TimelineFramesView::slotUpdateFrameActions()
     enableAction("insert_opacity_keyframe", hasEditableFrames);
     enableAction("remove_opacity_keyframe", hasEditableFrames);
 
-    QClipboard *cp = QApplication::clipboard();
-    const QMimeData *data = cp->mimeData();
+    //QClipboard *cp = QApplication::clipboard();
+    //const QMimeData *data = cp->mimeData();
 
 
     //TODO: update column actions!
@@ -1357,7 +1357,7 @@ void TimelineFramesView::insertKeyframes(int count, int timing, TimelineDirectio
     }
 
     if (!rows.isEmpty()) {
-        m_d->model->insertFrames(insertionColumn, rows.toList(), count, timing);
+        m_d->model->insertFrames(insertionColumn, QList<int>(rows.begin(), rows.end()), count, timing);
     }
 }
 

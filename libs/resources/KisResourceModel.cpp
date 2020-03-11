@@ -19,7 +19,7 @@
 
 #include "KisResourceModel.h"
 
-#include <QTime>
+#include <QElapsedTimer>
 #include <QBuffer>
 #include <QImage>
 #include <QtSql>
@@ -522,7 +522,7 @@ bool KisResourceModel::setResourceMetaData(KoResourceSP resource, QMap<QString, 
 
 bool KisResourceModel::resetQuery()
 {
-    QTime t;
+    QElapsedTimer t;
     t.start();
 
     emit beforeResourcesLayoutReset(QModelIndex());

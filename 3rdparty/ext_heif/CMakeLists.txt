@@ -1,4 +1,5 @@
 SET(EXTPREFIX_heif "${EXTPREFIX}" )
+if ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
 ExternalProject_Add(
     ext_libde265
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
@@ -11,6 +12,20 @@ ExternalProject_Add(
 
     UPDATE_COMMAND ""
 )
+else ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+ExternalProject_Add(
+    ext_libde265
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    URL https://github.com/strukturag/libde265/releases/download/v1.0.5/libde265-1.0.5.tar.gz
+    URL_MD5 385c88166cb255a068a8c936d0ab23ef
+
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/01-fix-sse41.diff
+
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} -DDISABLE_SSE=TRUE
+
+    UPDATE_COMMAND ""
+)
+endif ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
 
 if (WIN32)
     if ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")

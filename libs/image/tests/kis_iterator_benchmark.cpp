@@ -45,7 +45,7 @@ void KisIteratorBenchmark::sequentialIter(const KoColorSpace * colorSpace)
     quint8 * bytes = new quint8[colorSpace->pixelSize() * 64*64];
     memset(bytes, 128, 64 * 64 * colorSpace->pixelSize());
 
-    QTime t;
+    QElapsedTimer t;
     t.start();
 
     for (int i = 0; i < 3; i++) {
@@ -93,7 +93,7 @@ void KisIteratorBenchmark::hLineIterNG(const KoColorSpace * colorSpace)
     quint8 * bytes = new quint8[colorSpace->pixelSize() * 128];
     memset(bytes, 128, 128 * colorSpace->pixelSize());
 
-    QTime t;
+    QElapsedTimer t;
     t.start();
 
     for (int i = 0; i < 3; i++) {
@@ -144,7 +144,7 @@ void KisIteratorBenchmark::vLineIterNG(const KoColorSpace * colorSpace)
     quint8 * bytes = new quint8[colorSpace->pixelSize()];
     memset(bytes, 128, colorSpace->pixelSize());
 
-    QTime t;
+    QElapsedTimer t;
     t.start();
 
     for (int i = 0; i < 3; i++) {
@@ -178,7 +178,7 @@ void KisIteratorBenchmark::randomAccessor(const KoColorSpace * colorSpace)
     quint8 * bytes = new quint8[colorSpace->pixelSize() * 128];
     memset(bytes, 128, 128 * colorSpace->pixelSize());
 
-    QTime t;
+    QElapsedTimer t;
     t.start();
 
     for (int i = 0; i < 3; i++) {

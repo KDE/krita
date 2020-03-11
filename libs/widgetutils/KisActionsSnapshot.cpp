@@ -42,9 +42,8 @@ struct KisActionsSnapshot::Private
 KisActionsSnapshot::KisActionsSnapshot()
     : m_d(new Private)
 {
-    m_d->nonRegisteredShortcuts =
-        QSet<QString>::fromList(
-            KisActionRegistry::instance()->registeredShortcutIds());
+    QList<QString> registeredShortcutIds = KisActionRegistry::instance()->registeredShortcutIds();
+    m_d->nonRegisteredShortcuts = QSet<QString>(registeredShortcutIds.begin(), registeredShortcutIds.end());
 }
 
 KisActionsSnapshot::~KisActionsSnapshot()

@@ -591,7 +591,7 @@ void KoToolManager::Private::postSwitchTool(bool temporary)
         KoSelection *selection = canvasData->activeTool->canvas()->shapeManager()->selection();
         Q_ASSERT(selection);
 
-        shapesToOperateOn = QSet<KoShape*>::fromList(selection->selectedEditableShapesAndDelegates());
+        shapesToOperateOn = QSet<KoShape*>(selection->selectedEditableShapesAndDelegates().begin(), selection->selectedEditableShapesAndDelegates().end());
     }
 
     if (canvasData->canvas->canvas()) {

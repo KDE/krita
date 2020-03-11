@@ -49,7 +49,7 @@ void KisResourceItemListView::setItemSize(QSize size)
     setIconSize(size);
 }
 
-void KisResourceItemListView::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
+void KisResourceItemListView::selectionChanged(const QItemSelection &selected, const QItemSelection &/*deselected*/)
 {
     if (selected.isEmpty()) {
         emit currentResourceChanged(QModelIndex());

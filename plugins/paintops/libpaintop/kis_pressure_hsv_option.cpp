@@ -134,7 +134,7 @@ void KisPressureHSVOption::apply(KoColorTransformation* transfo, const KisPaintI
 
     qreal v = computeSizeLikeValue(info);
     if (d->parameterName == "h") {
-        v = computeRotationLikeValue(info, 0, false);
+        v = computeRotationLikeValue(info, 0, false, info.isHoveringMode());
     } else {
         qreal halfValue = this->value()*0.5;
         v = (v*this->value()) + (0.5-halfValue);

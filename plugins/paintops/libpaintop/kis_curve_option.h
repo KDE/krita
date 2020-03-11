@@ -138,7 +138,7 @@ public:
          * @param absoluteAxesFlipped true if underlying image coordinate system is flipped (horiz. mirror != vert. mirror)
          */
 
-        qreal rotationLikeValue(qreal normalizedBaseAngle, bool absoluteAxesFlipped) const {
+        qreal rotationLikeValue(qreal normalizedBaseAngle, bool absoluteAxesFlipped, bool disableScalingPart) const {
             const qreal offset =
                 !hasAbsoluteOffset ? normalizedBaseAngle :
                 absoluteAxesFlipped ? 0.5 - absoluteOffset :
@@ -148,7 +148,7 @@ public:
             // to rotate the brush counterclockwise
             const qreal scalingPartCoeff = -1.0;
 
-            const qreal realScalingPart = hasScaling ? KisDynamicSensor::scalingToAdditive(scaling) : 0.0;
+            const qreal realScalingPart = hasScaling && !disableScalingPart ? KisDynamicSensor::scalingToAdditive(scaling) : 0.0;
             const qreal realAdditivePart = hasAdditive ? additive : 0;
 
             qreal value = wrapInRange(2 * offset + constant * (scalingPartCoeff * realScalingPart + realAdditivePart), -1.0, 1.0);
@@ -199,7 +199,7 @@ public:
     ValueComponents computeValueComponents(const KisPaintInformation& info) const;
 
     qreal computeSizeLikeValue(const KisPaintInformation &info) const;
-    qreal computeRotationLikeValue(const KisPaintInformation& info, qreal baseValue, bool absoluteAxesFlipped) const;
+    qreal computeRotationLikeValue(const KisPaintInformation& info, qreal baseValue, bool absoluteAxesFlipped, bool disableScalingPart) const;
 
     /**
      * @brief defaultCurve returns a curve that is set when the KisCurveOption is not initialized yet

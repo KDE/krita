@@ -124,8 +124,8 @@ void KisLowMemoryBenchmark::benchmarkWideArea(const QString presetFileName,
      * Start painting on the image
      */
 
-    QTime cycleTime;
-    QTime lineTime;
+    QElapsedTimer cycleTime;
+    QElapsedTimer lineTime;
     cycleTime.start();
     lineTime.start();
 

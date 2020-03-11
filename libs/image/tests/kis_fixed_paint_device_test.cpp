@@ -248,7 +248,7 @@ void KisFixedPaintDeviceTest::testBltPerformance()
     dev->fill(0, 0, 640, 441, KoColor(Qt::white, cs).data());
 
 
-    QTime t;
+    QElapsedTimer t;
     t.start();
 
     int x;

@@ -58,7 +58,7 @@ class KRITAIMAGE_EXPORT KisAnimatedTransformParamsInterface
 public:
     virtual ~KisAnimatedTransformParamsInterface();
 
-    virtual KisKeyframeChannel *getKeyframeChannel(const QString &id, KisDefaultBoundsBaseSP defaultBounds) = 0;
+    virtual KisKeyframeChannel *getKeyframeChannel(const QString &id, KisNodeSP parent) = 0;
 };
 
 class QDomElement;

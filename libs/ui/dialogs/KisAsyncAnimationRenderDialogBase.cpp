@@ -187,8 +187,6 @@ KisAsyncAnimationRenderDialogBase::regenerateRange(KisViewManager *viewManager)
 
     const int oldWorkingThreadsLimit = m_d->image->workingThreadsLimit();
 
-    ENTER_FUNCTION() << ppVar(numWorkers) << ppVar(numThreadsPerWorker);
-
     for (int i = 0; i < numWorkers; i++) {
         // reuse the image for one of the workers
         KisImageSP image = i == numWorkers - 1 ? m_d->image : m_d->image->clone(true);
@@ -202,16 +200,12 @@ KisAsyncAnimationRenderDialogBase::regenerateRange(KisViewManager *viewManager)
         m_d->asyncRenderers.push_back(RendererPair(renderer, image));
     }
 
-    ENTER_FUNCTION() << "Copying done in" << m_d->processingTime.elapsed();
-
     tryInitiateFrameRegeneration();
     updateProgressLabel();
 
     if (m_d->numDirtyFramesLeft() > 0) {
         m_d->waitLoop.exec();
     }
-
-    ENTER_FUNCTION() << "Full regeneration done in" << m_d->processingTime.elapsed();
 
     for (auto &pair : m_d->asyncRenderers) {
         KIS_SAFE_ASSERT_RECOVER_NOOP(!pair.renderer->isActive());

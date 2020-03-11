@@ -347,7 +347,6 @@ void KisAnimationFrameCache::addConvertedFrameData(KisOpenGLUpdateInfoSP info, i
     const KisTimeRange identicalRange =
         KisTimeRange::calculateIdenticalFramesRecursive(m_d->image->root(), time);
 
-    ENTER_FUNCTION() << ppVar(identicalRange);
     m_d->addFrame(info, identicalRange);
 
     emit changed();

@@ -41,7 +41,7 @@ public:
 
     void translate(const QPointF &offset) override;
 
-    KisKeyframeChannel *getKeyframeChannel(const QString &id, KisDefaultBoundsBaseSP defaultBounds) override;
+    KisKeyframeChannel *getKeyframeChannel(const QString &id, KisNodeSP defaultBounds) override;
 
     bool isHidden() const override;
     void setHidden(bool hidden);

@@ -22,6 +22,7 @@
 #include <QString>
 #include <QBuffer>
 #include <QTest>
+#include <QElapsedTimer>
 
 class TestXmlWriter : public QObject
 {
@@ -223,7 +224,7 @@ static const int NumParagraphs = 30000;
 
 void TestXmlWriter::speedTest()
 {
-    QTime time;
+    QElapsedTimer time;
     time.start();
     QString paragText = QString::fromUtf8("This is the text of the paragraph. I'm including a euro sign to test encoding issues: €");
     QString styleName = "Heading 1";
@@ -244,7 +245,7 @@ void TestXmlWriter::speedTest()
     }
     out.close();
     out.remove();
-    qDebug("writing %i XML elements using KoXmlWriter: %i ms", NumParagraphs, time.elapsed());
+    qDebug("writing %i XML elements using KoXmlWriter: %i ms", NumParagraphs, (int)time.elapsed());
     // TODO we might want to convert this into a QBenchmark test
 }
 

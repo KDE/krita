@@ -186,9 +186,7 @@ void TasksetDockerDock::saveClicked()
     taskset->setValid(true);
     QString saveLocation = m_rserver->saveLocation();
 
-    bool newName = false;
     if (name.isEmpty()) {
-        newName = true;
         name = i18n("Taskset");
     }
     QFileInfo fileInfo(saveLocation + name + taskset->defaultFileExtension());

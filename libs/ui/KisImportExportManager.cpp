@@ -178,7 +178,7 @@ QStringList KisImportExportManager::supportedMimeTypes(Direction direction)
                 }
             }
             qDeleteAll(list);
-            m_importMimeTypes = mimeTypes.toList();
+            m_importMimeTypes = QList<QString>(mimeTypes.begin(), mimeTypes.end());
         }
         return m_importMimeTypes;
     }
@@ -193,7 +193,7 @@ QStringList KisImportExportManager::supportedMimeTypes(Direction direction)
                 }
             }
             qDeleteAll(list);
-            m_exportMimeTypes = mimeTypes.toList();
+            m_exportMimeTypes = QList<QString>(mimeTypes.begin(), mimeTypes.end());
         }
         return m_exportMimeTypes;
     }

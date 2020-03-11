@@ -209,5 +209,5 @@ QList<QRgb> KisCommonColorsRecalculationRunner::getColors()
         }
     }
 
-    return colorList.toList();
+    return QList<QRgb>(colorList.begin(), colorList.end());
 }

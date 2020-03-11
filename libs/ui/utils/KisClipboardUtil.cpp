@@ -47,7 +47,8 @@ QImage getImageFromClipboard()
 
     QImage image;
 
-    const QSet<QString> &clipboardMimeTypes = clipboard->mimeData()->formats().toSet();
+    const QSet<QString> &clipboardMimeTypes = QSet<QString>(clipboard->mimeData()->formats().begin(),
+                                                            clipboard->mimeData()->formats().end());
 
     Q_FOREACH (const ClipboardImageFormat &item, supportedFormats) {
         const QSet<QString> &intersection = item.mimeTypes & clipboardMimeTypes;

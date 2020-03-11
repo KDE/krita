@@ -241,7 +241,7 @@ void KisActionRegistry::updateShortcut(const QString &name, QAction *action)
 {
     const ActionInfoItem &info = d->actionInfo(name);
     action->setShortcuts(info.effectiveShortcuts());
-    action->setProperty("defaultShortcuts", qVariantFromValue(info.defaultShortcuts()));
+    action->setProperty("defaultShortcuts", QVariant::fromValue(info.defaultShortcuts()));
 
     d->sanityPropertizedShortcuts.insert(name);
 }

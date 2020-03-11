@@ -939,7 +939,7 @@ void KoPathTool::activate(ToolActivation activation, const QSet<KoShape*> &shape
     m_canvasConnections.addConnection(d->canvas->selectedShapesProxy(), SIGNAL(selectionContentChanged()), this, SLOT(updateActions()));
     m_shapeFillResourceConnector.connectToCanvas(d->canvas);
 
-    initializeWithShapes(shapes.toList());
+    initializeWithShapes(QList<KoShape*>(shapes.begin(), shapes.end()));
 
     connect(m_actionCurvePoint, SIGNAL(triggered()), this, SLOT(pointToCurve()), Qt::UniqueConnection);
     connect(m_actionLinePoint, SIGNAL(triggered()), this, SLOT(pointToLine()), Qt::UniqueConnection);
@@ -1191,7 +1191,7 @@ void KoPathTool::pointSelectionChanged()
 {
     Q_D(KoToolBase);
     updateActions();
-    d->canvas->snapGuide()->setIgnoredPathPoints(m_pointSelection.selectedPoints().toList());
+    d->canvas->snapGuide()->setIgnoredPathPoints(QList<KoPathPoint*>(m_pointSelection.selectedPoints().begin(), m_pointSelection.selectedPoints().end()));
     emit selectionChanged(m_pointSelection.hasSelection());
 }
 

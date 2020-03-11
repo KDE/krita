@@ -27,7 +27,7 @@
 #include <QFileInfo>
 #include <QMessageBox>
 #include <QVersionNumber>
-
+#include <QElapsedTimer>
 #include <QSqlQuery>
 #include <QSqlError>
 
@@ -541,7 +541,7 @@ bool KisResourceLocator::initializeDb()
 
     Q_FOREACH(KisResourceStorageSP storage, d->storages) {
 
-        QTime t;
+        QElapsedTimer t;
         t.start();
 
         if (!KisResourceCacheDb::addStorage(storage, (storage->type() == KisResourceStorage::StorageType::Folder ? false : true))) {

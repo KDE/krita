@@ -69,7 +69,7 @@ private:
     double m_factor;
 };
 #else /* if(USE_UTIME==0) */
-typedef QTime KisTimeCounter;
+typedef QElapsedTimer KisTimeCounter;
 #endif
 
 void KisFilterSelectionsBenchmark::initSelection()

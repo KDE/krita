@@ -20,6 +20,7 @@
 
 #include <QtSql>
 #include <QStringList>
+#include <QElapsedTimer>
 
 #include <klocalizedstring.h>
 
@@ -573,7 +574,7 @@ KisTagSP KisTagModel::tagByUrl(const QString& tagUrl) const
 
 bool KisTagModel::prepareQuery()
 {
-    QTime t;
+    QElapsedTimer t;
     t.start();
 
     beginResetModel();

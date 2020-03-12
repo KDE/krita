@@ -219,9 +219,9 @@ QString KisDynamicSensor::minimumLabel(DynamicSensorType sensorType)
     case PRESSURE:
         return i18n("Low");
     case XTILT:
-        return i18n("-30°");
+        return i18n("-60°");
     case YTILT:
-        return i18n("-30°");
+        return i18n("-60°");
     case TILT_DIRECTION:
         return i18n("0°");
     case TILT_ELEVATATION:
@@ -266,9 +266,9 @@ QString KisDynamicSensor::maximumLabel(DynamicSensorType sensorType, int max)
     case PRESSURE:
         return i18n("High");
     case XTILT:
-        return i18n("30°");
+        return i18n("0°");
     case YTILT:
-        return i18n("30°");
+        return i18n("0°");
     case TILT_DIRECTION:
         return i18n("360°");
     case TILT_ELEVATATION:
@@ -301,7 +301,7 @@ int KisDynamicSensor::minimumValue(DynamicSensorType sensorType)
         return 0;
     case XTILT:
     case YTILT:
-        return -30;
+        return -60;
     case TILT_ELEVATATION:
         return 90;
     case TANGENTIAL_PRESSURE:
@@ -346,7 +346,7 @@ int KisDynamicSensor::maximumValue(DynamicSensorType sensorType, int max)
         return 360;
     case XTILT:
     case YTILT:
-        return 30;
+        return 0;
     case TILT_ELEVATATION:
         return 0;
     default:

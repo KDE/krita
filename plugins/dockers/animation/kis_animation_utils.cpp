@@ -37,7 +37,7 @@ namespace KisAnimationUtils {
     const QString dropFramesActionName = i18n("Drop Frames");
 
     const QString newLayerActionName = i18n("New Layer");
-    const QString addExistingLayerActionName = i18n("Add Existing Layer");
+    const QString pinExistingLayerActionName = i18n("Pin Existing Layer");
     const QString removeLayerActionName = i18n("Remove Layer");
 
     const QString addTransformKeyframeActionName = i18n("Add transform keyframe");

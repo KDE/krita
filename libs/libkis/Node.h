@@ -186,15 +186,14 @@ public Q_SLOTS:
     void enableAnimation() const;
 
     /**
-     * @brief Should the node be visible in the timeline. It defaults to false
-     * with new layer
+     * @brief Set whether node should be visible on animation timeline even when inactive.
      */
-    void setShowInTimeline(bool showInTimeline) const;
+    void setPinnedToTimeline(bool pinned) const;
 
     /**
-     * @return is layer is shown in the timeline
+     * @return If true, node will be visible on animation timeline even when inactive.
      */
-    bool showInTimeline() const;
+    bool isPinnedToTimeline() const;
 
 
     /**

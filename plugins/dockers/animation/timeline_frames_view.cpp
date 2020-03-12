@@ -84,7 +84,7 @@ struct TimelineFramesView::Private
     QPoint initialDragPanPos;
 
     QToolButton *addLayersButton;
-    KisAction *showHideLayerAction;
+    KisAction *pinLayerToTimelineAction;
 
     QToolButton *audioOptionsButton;
 
@@ -178,29 +178,27 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), SLOT(slotUpdateInfiniteFramesCount()));
     connect(horizontalScrollBar(), SIGNAL(sliderReleased()), SLOT(slotUpdateInfiniteFramesCount()));
 
-    /********** New Layer Menu ***********************************************************/
-
-    m_d->addLayersButton = new QToolButton(this);
-    m_d->addLayersButton->setAutoRaise(true);
-    m_d->addLayersButton->setIcon(KisIconUtils::loadIcon("addlayer"));
-    m_d->addLayersButton->setIconSize(QSize(20, 20));
-    m_d->addLayersButton->setPopupMode(QToolButton::InstantPopup);
+    /********** Layer Menu ***********************************************************/
 
     m_d->layerEditingMenu = new QMenu(this);
     m_d->layerEditingMenu->addSection(i18n("Edit Layers:"));
     m_d->layerEditingMenu->addSeparator();
 
     m_d->layerEditingMenu->addAction(KisAnimationUtils::newLayerActionName, this, SLOT(slotAddNewLayer()));
-    m_d->existingLayersMenu = m_d->layerEditingMenu->addMenu(KisAnimationUtils::addExistingLayerActionName);
-    m_d->layerEditingMenu->addSeparator();
-
     m_d->layerEditingMenu->addAction(KisAnimationUtils::removeLayerActionName, this, SLOT(slotRemoveLayer()));
+    m_d->layerEditingMenu->addSeparator();
+    m_d->existingLayersMenu = m_d->layerEditingMenu->addMenu(KisAnimationUtils::pinExistingLayerActionName);
 
     connect(m_d->existingLayersMenu, SIGNAL(aboutToShow()), SLOT(slotUpdateLayersMenu()));
     connect(m_d->existingLayersMenu, SIGNAL(triggered(QAction*)), SLOT(slotAddExistingLayer(QAction*)));
 
     connect(m_d->layersHeader, SIGNAL(sigRequestContextMenu(QPoint)), SLOT(slotLayerContextMenuRequested(QPoint)));
 
+    m_d->addLayersButton = new QToolButton(this);
+    m_d->addLayersButton->setAutoRaise(true);
+    m_d->addLayersButton->setIcon(KisIconUtils::loadIcon("addlayer"));
+    m_d->addLayersButton->setIconSize(QSize(20, 20));
+    m_d->addLayersButton->setPopupMode(QToolButton::InstantPopup);
     m_d->addLayersButton->setMenu(m_d->layerEditingMenu);
 
     /********** Audio Channel Menu *******************************************************/
@@ -302,10 +300,10 @@ TimelineFramesView::~TimelineFramesView()
 {
 }
 
-void TimelineFramesView::setShowInTimeline(KisAction *action)
+void TimelineFramesView::setPinToTimeline(KisAction *action)
 {
-    m_d->showHideLayerAction = action;
-    m_d->layerEditingMenu->addAction(m_d->showHideLayerAction);
+    m_d->pinLayerToTimelineAction = action;
+    m_d->layerEditingMenu->addAction(m_d->pinLayerToTimelineAction);
 }
 
 void TimelineFramesView::setActionManager(KisActionManager *actionManager)

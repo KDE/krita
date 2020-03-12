@@ -113,7 +113,7 @@ struct KisNodeManager::Private {
     QScopedPointer<KisNodeInsertionAdapter> nodeInsertionAdapter;
     QScopedPointer<KisNodeDisplayModeAdapter> nodeDisplayModeAdapter;
 
-    KisAction *showInTimeline;
+    KisAction *pinToTimeline;
 
     KisNodeList selectedNodes;
     QPointer<KisNodeJugglerCompressed> nodeJuggler;
@@ -329,10 +329,10 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
     action = actionManager->createAction("new_from_visible");
     connect(action, SIGNAL(triggered()), this, SLOT(createFromVisible()));
 
-    action = actionManager->createAction("show_in_timeline");
+    action = actionManager->createAction("pin_to_timeline");
     action->setCheckable(true);
-    connect(action, SIGNAL(toggled(bool)), this, SLOT(slotShowHideTimeline(bool)));
-    m_d->showInTimeline = action;
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(slotPinToTimeline(bool)));
+    m_d->pinToTimeline = action;
 
     NEW_LAYER_ACTION("add_new_paint_layer", "KisPaintLayer");
 
@@ -599,10 +599,10 @@ void KisNodeManager::createFromVisible()
     KisLayerUtils::newLayerFromVisible(m_d->view->image(), m_d->view->image()->root()->lastChild());
 }
 
-void KisNodeManager::slotShowHideTimeline(bool value)
+void KisNodeManager::slotPinToTimeline(bool value)
 {
     Q_FOREACH (KisNodeSP node, selectedNodes()) {
-        node->setUseInTimeline(value);
+        node->setPinnedToTimeline(value);
     }
 }
 
@@ -758,8 +758,8 @@ void KisNodeManager::nodesUpdated()
     m_d->view->selectionManager()->selectionChanged();
 
     {
-        KisSignalsBlocker b(m_d->showInTimeline);
-        m_d->showInTimeline->setChecked(node->useInTimeline());
+        KisSignalsBlocker b(m_d->pinToTimeline);
+        m_d->pinToTimeline->setChecked(node->isPinnedToTimeline());
     }
 }
 

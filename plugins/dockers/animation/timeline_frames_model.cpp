@@ -197,7 +197,7 @@ struct TimelineFramesModel::Private
 
         if (nodeInterface) {
             KisLayerSP layer = nodeInterface->addPaintLayer();
-            layer->setUseInTimeline(true);
+            layer->setPinnedToTimeline(true);
         }
 
         return true;
@@ -503,7 +503,7 @@ QVariant TimelineFramesModel::headerData(int section, Qt::Orientation orientatio
         case LayerUsedInTimelineRole: {
             KisNodeDummy *dummy = m_d->converter->dummyFromRow(section);
             if (!dummy) return QVariant();
-            return dummy->node()->useInTimeline();
+            return dummy->node()->isPinnedToTimeline();
         }
         case Qt::BackgroundRole: {
             int label = m_d->layerColorLabel(section);
@@ -543,7 +543,7 @@ bool TimelineFramesModel::setHeaderData(int section, Qt::Orientation orientation
         case LayerUsedInTimelineRole: {
             KisNodeDummy *dummy = m_d->converter->dummyFromRow(section);
             if (!dummy) return false;
-            dummy->node()->setUseInTimeline(value.toBool());
+            dummy->node()->setPinnedToTimeline(value.toBool());
             return true;
         }
         }
@@ -809,7 +809,7 @@ bool TimelineFramesModel::insertOtherLayer(int index, int dstRow)
 
     if (index < 0 || index >= list.size()) return false;
 
-    list[index].dummy->node()->setUseInTimeline(true);
+    list[index].dummy->node()->setPinnedToTimeline(true);
     dstRow = m_d->converter->rowForDummy(list[index].dummy);
     setData(this->index(dstRow, 0), true, ActiveLayerRole);
 

@@ -796,7 +796,7 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageSP image)
     }
 
     const bool timelineEnabled = element.attribute(VISIBLE_IN_TIMELINE, "0") == "0" ? false : true;
-    node->setUseInTimeline(timelineEnabled);
+    node->setPinnedToTimeline(timelineEnabled);
 
     if (node->inherits("KisPaintLayer")) {
         KisPaintLayer* layer = qobject_cast<KisPaintLayer*>(node.data());

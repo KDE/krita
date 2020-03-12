@@ -303,16 +303,16 @@ void Node::enableAnimation() const
     d->node->enableAnimation();
 }
 
-void Node::setShowInTimeline(bool showInTimeline) const
+void Node::setPinnedToTimeline(bool pinned) const
 {
     if (!d->node) return;
-    d->node->setUseInTimeline(showInTimeline);
+    d->node->setPinnedToTimeline(pinned);
 }
 
-bool Node::showInTimeline() const
+bool Node::isPinnedToTimeline() const
 {
     if (!d->node) return false;
-    return d->node->useInTimeline();
+    return d->node->isPinnedToTimeline();
 }
 
 bool Node::collapsed() const

@@ -86,7 +86,7 @@ namespace KisAnimationUtils
     extern const QString dropFramesActionName;
 
     extern const QString newLayerActionName;
-    extern const QString addExistingLayerActionName;
+    extern const QString pinExistingLayerActionName;
     extern const QString removeLayerActionName;
 
     extern const QString addOpacityKeyframeActionName;

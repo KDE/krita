@@ -111,7 +111,7 @@ namespace KisLayerUtils {
                 fetchLayerFramesRecursive(prevLayer) |
                 fetchLayerFramesRecursive(currLayer);
 
-            useInTimeline = prevLayer->useInTimeline() || currLayer->useInTimeline();
+            useInTimeline = prevLayer->isPinnedToTimeline() || currLayer->isPinnedToTimeline();
 
             const KisPaintLayer *paintLayer = qobject_cast<KisPaintLayer*>(currLayer.data());
             if (paintLayer) enableOnionSkins |= paintLayer->onionSkinEnabled();
@@ -139,7 +139,7 @@ namespace KisLayerUtils {
         {
             foreach (KisNodeSP node, mergedNodes) {
                 frames |= fetchLayerFramesRecursive(node);
-                useInTimeline |= node->useInTimeline();
+                useInTimeline |= node->isPinnedToTimeline();
 
                 const KisPaintLayer *paintLayer = qobject_cast<KisPaintLayer*>(node.data());
                 if (paintLayer) {
@@ -380,7 +380,7 @@ namespace KisLayerUtils {
                 m_info->dstNode->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
             }
 
-            m_info->dstNode->setUseInTimeline(m_info->useInTimeline);
+            m_info->dstNode->setPinnedToTimeline(m_info->useInTimeline);
 
             KisPaintLayer *dstPaintLayer = qobject_cast<KisPaintLayer*>(m_info->dstNode.data());
             if (dstPaintLayer) {
@@ -459,7 +459,7 @@ namespace KisLayerUtils {
 
             m_info->nodesCompositingVaries = compositionVaries;
 
-            m_info->dstNode->setUseInTimeline(m_info->useInTimeline);
+            m_info->dstNode->setPinnedToTimeline(m_info->useInTimeline);
             dstPaintLayer->setOnionSkinEnabled(m_info->enableOnionSkins);
         }
 

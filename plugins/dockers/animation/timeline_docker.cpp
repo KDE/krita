@@ -160,7 +160,6 @@ void TimelineDocker::unsetCanvas()
 void TimelineDocker::setViewManager(KisViewManager *view)
 {
     KisActionManager *actionManager = view->actionManager();
-
-    m_d->view->setShowInTimeline(actionManager->actionByName("show_in_timeline"));
     m_d->view->setActionManager(actionManager);
+    m_d->view->setPinToTimeline(actionManager->actionByName("pin_to_timeline"));
 }

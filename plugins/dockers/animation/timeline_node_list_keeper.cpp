@@ -263,7 +263,7 @@ void TimelineNodeListKeeper::Private::findOtherLayers(KisNodeDummy *root,
     KisNodeSP node = root->node();
 
     if (converter.isDummyAvailableForTimeline(root) &&
-        !root->node()->useInTimeline()) {
+        !root->node()->isPinnedToTimeline()) {
 
         *list <<
             TimelineNodeListKeeper::OtherLayer(

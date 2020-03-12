@@ -689,7 +689,7 @@ void LayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &in
 
             menu.addSeparator();
 
-            addActionToMenu(&menu, "show_in_timeline");
+            addActionToMenu(&menu, "pin_to_timeline");
 
             if (singleLayer) {
                 KisNodeSP node = m_filteringModel->nodeFromIndex(index);

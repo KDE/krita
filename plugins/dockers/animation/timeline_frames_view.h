@@ -51,7 +51,7 @@ public:
 
     void updateGeometries() override;
 
-    void setShowInTimeline(KisAction *action);
+    void setPinToTimeline(KisAction *action);
 
     void setActionManager(KisActionManager *actionManager);
 

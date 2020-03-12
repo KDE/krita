@@ -299,8 +299,8 @@ void KisKraSaverTest::testRoundTripAnimation()
     layer1->paintDevice()->moveTo(100, 50);
     layer1->paintDevice()->setDefaultPixel(KoColor(Qt::blue, cs));
 
-    QVERIFY(!layer1->useInTimeline());
-    layer1->setUseInTimeline(true);
+    QVERIFY(!layer1->isPinnedToTimeline());
+    layer1->setPinnedToTimeline(true);
 
     doc->setCurrentImage(image);
     doc->exportDocumentSync(QUrl::fromLocalFile("roundtrip_animation.kra"), doc->mimeType());
@@ -343,7 +343,7 @@ void KisKraSaverTest::testRoundTripAnimation()
     QCOMPARE(layer2->paintDevice()->y(), 50);
     QCOMPARE(layer2->paintDevice()->defaultPixel(), KoColor(Qt::blue, cs));
 
-    QVERIFY(layer2->useInTimeline());
+    QVERIFY(layer2->isPinnedToTimeline());
 
 }
 

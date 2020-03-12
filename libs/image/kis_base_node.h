@@ -501,8 +501,8 @@ public:
     KisKeyframeChannel *getKeyframeChannel(const QString &id, bool create);
     KisKeyframeChannel *getKeyframeChannel(const QString &id) const;
 
-    bool useInTimeline() const;
-    void setUseInTimeline(bool value);
+    bool isPinnedToTimeline() const;
+    void setPinnedToTimeline(bool value);
 
     bool isAnimated() const;
     void enableAnimation();

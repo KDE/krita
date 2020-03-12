@@ -286,6 +286,26 @@ bool KisBaseNode::userLocked() const
     return m_d->properties.boolProperty(KisLayerPropertiesIcons::locked.id(), false);
 }
 
+bool KisBaseNode::belongsToIsolatedGroup() const
+{
+    if (!m_d->image) {
+        return false;
+    }
+
+    const KisBaseNode* isolatedRoot = m_d->image->isolatedModeRoot().data();
+    const KisBaseNode* element = this;
+
+    while (element) {
+        if (element == isolatedRoot) {
+            return true;
+        } else {
+            element = element->parentCallback().data();
+        }
+    }
+
+    return false;
+}
+
 void KisBaseNode::setUserLocked(bool locked)
 {
     const bool isLocked = m_d->properties.boolProperty(KisLayerPropertiesIcons::locked.id(), true);
@@ -299,7 +319,7 @@ bool KisBaseNode::isEditable(bool checkVisibility) const
 {
     bool editable = true;
     if (checkVisibility) {
-        editable = (visible(false) && !userLocked());
+        editable = ((visible(false) || belongsToIsolatedGroup()) && !userLocked());
     }
     else {
         editable = (!userLocked());

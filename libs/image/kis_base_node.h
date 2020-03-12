@@ -385,6 +385,11 @@ public:
     bool userLocked() const;
 
     /**
+     * Return whether or not the given node is isolated.
+     */
+    bool belongsToIsolatedGroup() const;
+
+    /**
      * Set the locked status of this node. Locked nodes cannot be
      * edited.
      */

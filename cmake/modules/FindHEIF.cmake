@@ -7,44 +7,42 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
-if (NOT WIN32)
-    include(LibFindMacros)
-    libfind_pkg_check_modules(HEIF_PKGCONF libheif)
 
-    find_path(HEIF_INCLUDE_DIR
-        NAMES libheif/heif.h
-        HINTS ${HEIF_PKGCONF_INCLUDE_DIRS} ${HEIF_PKGCONF_INCLUDEDIR}
-        PATH_SUFFIXES heif
-    )
+include(LibFindMacros)
+libfind_pkg_check_modules(HEIF_PKGCONF libheif)
 
-    find_library(HEIF_LIBRARY
-        NAMES heif
-        HINTS ${HEIF_PKGCONF_LIBRARY_DIRS} ${HEIF_PKGCONF_LIBDIR}
-    )
+find_path(HEIF_INCLUDE_DIR
+    NAMES libheif/heif.h
+    HINTS ${HEIF_PKGCONF_INCLUDE_DIRS} ${HEIF_PKGCONF_INCLUDEDIR}
+    PATH_SUFFIXES heif
+)
 
-    set(HEIF_PROCESS_LIBS HEIF_LIBRARY)
-    set(HEIF_PROCESS_INCLUDES HEIF_INCLUDE_DIR)
-    libfind_process(HEIF)
+find_library(HEIF_LIBRARY
+    NAMES libheif heif
+    HINTS ${HEIF_PKGCONF_LIBRARY_DIRS} ${HEIF_PKGCONF_LIBDIR}
+    DOC "Libraries to link against for HEIF Support"
+)
 
-else()
-    find_path(HEIF_INCLUDE_DIR
-        NAMES libheif/heif.h
-    )
+set(HEIF_PROCESS_LIBS HEIF_LIBRARY)
+set(HEIF_PROCESS_INCLUDES HEIF_INCLUDE_DIR)
+libfind_process(HEIF)
 
-    find_library (
-        HEIF_LIBRARY
-        NAMES libheif libheif
-        DOC "Libraries to link against for HEIF Support"
-    )
-
-    if (HEIF_LIBRARY)
-        set(HEIF_LIBRARY_DIR ${HEIF_LIBRARY})
-    endif()
-
-    set (HEIF_LIBRARIES ${HEIF_LIBRARY})
-
-    if(HEIF_INCLUDE_DIR AND HEIF_LIBRARY_DIR)
-        set (HEIF_FOUND true)
-    endif()
+if(HEIF_INCLUDE_DIR)
+  set(heif_config_file "${HEIF_INCLUDE_DIR}/libheif/heif_version.h")
+  if(EXISTS ${heif_config_file})
+      file(STRINGS
+           ${heif_config_file}
+           TMP
+           REGEX "#define LIBHEIF_VERSION.*$")
+      string(REGEX MATCHALL "[0-9.]+" LIBHEIF_VERSION ${TMP})
+  endif()
 endif()
 
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(HEIF
+    REQUIRED_VARS
+        HEIF_INCLUDE_DIR
+        HEIF_LIBRARY
+    VERSION_VAR
+        LIBHEIF_VERSION
+)

@@ -522,12 +522,14 @@ qreal KisDynamicSensor::parameter(const KisPaintInformation& info, const KisCubi
 {
     const qreal val = value(info);
     if (customCurve) {
-        qreal scaledVal = isAdditive() ? additiveToScaling(val) : val;
+        qreal scaledVal = isAdditive() ? additiveToScaling(val) :
+                          isAbsoluteRotation() ? KisAlgebra2D::wrapValue(val + 0.5, 0.0, 1.0) : val;
 
         const QVector<qreal> transfer = curve.floatTransfer(256);
         scaledVal = KisCubicCurve::interpolateLinear(scaledVal, transfer);
 
-        return isAdditive() ? scalingToAdditive(scaledVal) : scaledVal;
+        return isAdditive() ? scalingToAdditive(scaledVal) :
+               isAbsoluteRotation() ? KisAlgebra2D::wrapValue(scaledVal + 0.5, 0.0, 1.0) : scaledVal;
     }
     else {
         return val;

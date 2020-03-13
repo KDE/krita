@@ -438,10 +438,10 @@ qreal KisCurveOption::computeSizeLikeValue(const KisPaintInformation& info) cons
     return components.sizeLikeValue();
 }
 
-qreal KisCurveOption::computeRotationLikeValue(const KisPaintInformation& info, qreal baseValue, bool absoluteAxesFlipped, bool disableScalingPart) const
+qreal KisCurveOption::computeRotationLikeValue(const KisPaintInformation& info, qreal baseValue, bool absoluteAxesFlipped, qreal scalingPartCoeff, bool disableScalingPart) const
 {
     const ValueComponents components = computeValueComponents(info);
-    return components.rotationLikeValue(baseValue, absoluteAxesFlipped, disableScalingPart);
+    return components.rotationLikeValue(baseValue, absoluteAxesFlipped, scalingPartCoeff, disableScalingPart);
 }
 
 KisCubicCurve KisCurveOption::defaultCurve()

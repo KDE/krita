@@ -121,7 +121,6 @@ KisPressureHSVOption::~KisPressureHSVOption()
     delete d;
 }
 
-
 void KisPressureHSVOption::apply(KoColorTransformation* transfo, const KisPaintInformation& info) const
 {
     if (!isChecked()) {
@@ -132,10 +131,12 @@ void KisPressureHSVOption::apply(KoColorTransformation* transfo, const KisPaintI
         d->paramId = transfo->parameterId(d->parameterName);
     }
 
-    qreal v = computeSizeLikeValue(info);
+    qreal v = 0;
     if (d->parameterName == "h") {
-        v = computeRotationLikeValue(info, 0, false, info.isHoveringMode());
+        const qreal scalingPartCoeff = 1.0;
+        v = computeRotationLikeValue(info, 0, false, scalingPartCoeff, info.isHoveringMode());
     } else {
+        qreal v = computeSizeLikeValue(info);
         qreal halfValue = this->value()*0.5;
         v = (v*this->value()) + (0.5-halfValue);
         v = (v*2)-1;

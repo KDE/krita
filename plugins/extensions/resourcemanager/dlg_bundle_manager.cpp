@@ -97,7 +97,16 @@ void DlgBundleManager::createBundle()
 
 void DlgBundleManager::deleteBundle()
 {
-
+    QModelIndex idx = m_ui->tableView->currentIndex();
+    KisStorageFilterProxyModel *proxyModel = dynamic_cast<KisStorageFilterProxyModel*>(m_ui->tableView->model());
+    KIS_ASSERT(proxyModel);
+    if (!idx.isValid()) {
+        ENTER_FUNCTION() << "Index is invalid\n";
+        return;
+    }
+    bool active = proxyModel->data(idx, Qt::UserRole + KisStorageModel::Active).toBool();
+    idx = proxyModel->index(idx.row(), 0);
+    proxyModel->setData(idx, QVariant(!active), Qt::CheckStateRole);
 }
 
 QString createNewBundlePath(QString resourceFolder, QString filename)

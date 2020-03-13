@@ -45,12 +45,12 @@
         </spacer>
        </item>
        <item>
-        <widget class="QToolButton" name="bnAdd">
+        <widget class="QPushButton" name="bnAdd">
          <property name="toolTip">
           <string>Import a resource library</string>
          </property>
          <property name="text">
-          <string>...</string>
+          <string/>
          </property>
          <property name="icon">
           <iconset theme="new">
@@ -59,12 +59,12 @@
         </widget>
        </item>
        <item>
-        <widget class="QToolButton" name="bnNew">
+        <widget class="QPushButton" name="bnNew">
          <property name="toolTip">
           <string>Create a resource library</string>
          </property>
          <property name="text">
-          <string>...</string>
+          <string/>
          </property>
          <property name="icon">
           <iconset theme="add">
@@ -73,12 +73,12 @@
         </widget>
        </item>
        <item>
-        <widget class="QToolButton" name="bnDelete">
+        <widget class="QPushButton" name="bnDelete">
          <property name="toolTip">
           <string>Delete a resource library</string>
          </property>
          <property name="text">
-          <string>...</string>
+          <string/>
          </property>
          <property name="icon">
           <iconset theme="delete">

@@ -53,12 +53,15 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
     resize(m_page->sizeHint());
 
     m_ui->bnAdd->setIcon(KisIconUtils::loadIcon("list-add"));
+    m_ui->bnAdd->setText(i18n("Import"));
     connect(m_ui->bnAdd, SIGNAL(clicked(bool)), SLOT(addBundle()));
 
     m_ui->bnNew->setIcon(KisIconUtils::loadIcon("document-new"));
+    m_ui->bnNew->setText(i18n("Create"));
     connect(m_ui->bnNew, SIGNAL(clicked(bool)), SLOT(createBundle()));
 
     m_ui->bnDelete->setIcon(KisIconUtils::loadIcon("edit-delete"));
+    m_ui->bnDelete->setText(i18n("Delete"));
     connect(m_ui->bnDelete, SIGNAL(clicked(bool)), SLOT(deleteBundle()));
 
     setButtons(Close);

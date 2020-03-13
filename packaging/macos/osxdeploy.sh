@@ -99,7 +99,7 @@ print_usage () {
 \t\t\t script will attempt to get password from keychain, if fails provide one with
 \t\t\t the -notarize-pass option: To add a password run 
 
-\t\t\t   security add-generic-password -a \"AC_USERNAME\" -w <secret_password> -s \"KRITA_AC_PASS\"
+\t\t\t   security add-generic-password -a \"AC_USERNAME\" -w <secret_password> -s \"AC_PASSWORD\"
 
     -notarize-pass \t If given, the Apple account password. Otherwise an attempt will be macdeployqt_exists
 \t\t\t to get the password from keychain using the account given in <notarize-ac> option.
@@ -194,11 +194,11 @@ else
     ### NOTARIZATION
 
     if [[ -n "${NOTARIZE_ACC}" ]]; then
-        security find-generic-password -s "KRITA_AC_PASS" > /dev/null 2>&1
+        security find-generic-password -s "AC_PASSWORD" > /dev/null 2>&1
         if [[ ${?} -eq 0 || -n "${NOTARIZE_PASS}" ]]; then
             NOTARIZE="true"
         else
-            echo "No password given for notarization or KRITA_AC_PASS missig in keychain"
+            echo "No password given for notarization or AC_PASSWORD missig in keychain"
         fi
     fi
 fi
@@ -588,7 +588,7 @@ notarize_build() {
         cd "${NOT_SRC_DIR}"
         
         if [[ -z "${NOTARIZE_PASS}" ]]; then
-            NOTARIZE_PASS="@keychain:KRITA_AC_PASS"
+            NOTARIZE_PASS="@keychain:AC_PASSWORD"
         fi
 
         ASC_PROVIDER_OP=""

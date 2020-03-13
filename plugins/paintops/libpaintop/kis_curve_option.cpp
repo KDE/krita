@@ -20,6 +20,36 @@
 #include "kis_curve_option.h"
 
 #include <QDomNode>
+#include "kis_algebra_2d.h"
+
+qreal KisCurveOption::ValueComponents::rotationLikeValue(qreal normalizedBaseAngle, bool absoluteAxesFlipped, qreal scalingPartCoeff, bool disableScalingPart) const {
+    const qreal offset =
+            !hasAbsoluteOffset ? normalizedBaseAngle :
+                                 absoluteAxesFlipped ? 0.5 - absoluteOffset :
+                                                       absoluteOffset;
+
+    const qreal realScalingPart = hasScaling && !disableScalingPart ? KisDynamicSensor::scalingToAdditive(scaling) : 0.0;
+    const qreal realAdditivePart = hasAdditive ? additive : 0;
+
+    qreal value = KisAlgebra2D::wrapValue(2 * offset + constant * (scalingPartCoeff * realScalingPart + realAdditivePart), -1.0, 1.0);
+    if (qIsNaN(value)) {
+        qWarning() << "rotationLikeValue returns NaN!" << normalizedBaseAngle << absoluteAxesFlipped;
+        value = 0;
+    }
+    return value;
+}
+
+qreal KisCurveOption::ValueComponents::sizeLikeValue() const {
+    const qreal offset =
+            hasAbsoluteOffset ? absoluteOffset : 1.0;
+
+    const qreal realScalingPart = hasScaling ? scaling : 1.0;
+    const qreal realAdditivePart = hasAdditive ? KisDynamicSensor::additiveToScaling(additive) : 1.0;
+
+    return qBound(minSizeLikeValue,
+                  constant * offset * realScalingPart * realAdditivePart,
+                  maxSizeLikeValue);
+}
 
 KisCurveOption::KisCurveOption(const QString& name, KisPaintOpOption::PaintopCategory category,
                                bool checked, qreal value, qreal min, qreal max)

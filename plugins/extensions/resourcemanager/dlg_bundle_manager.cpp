@@ -28,6 +28,7 @@
 #include <QPainter>
 #include <QPixmap>
 #include <QMessageBox>
+#include <QInputDialog>
 
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
@@ -40,6 +41,8 @@
 #include <KisResourceServerProvider.h>
 #include <KisStorageModel.h>
 #include <KisStorageFilterProxyModel.h>
+#include <kis_config.h>
+#include <KisResourceLocator.h>
 
 
 DlgBundleManager::DlgBundleManager(QWidget *parent)
@@ -79,8 +82,11 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
 void DlgBundleManager::addBundle()
 {
     KoFileDialog* dlg = new KoFileDialog(this, KoFileDialog::OpenFile, i18n("Choose the bundle to import"));
+    dlg->setCaption(i18n("Select the bundle"));
     QString filename = dlg->filename();
-    addBundleToActiveResources(filename);
+    if (!filename.isEmpty()) {
+        addBundleToActiveResources(filename);
+    }
 }
 
 void DlgBundleManager::createBundle()
@@ -94,10 +100,43 @@ void DlgBundleManager::deleteBundle()
 
 }
 
+QString createNewBundlePath(QString resourceFolder, QString filename)
+{
+    return resourceFolder + QDir::separator() + "bundles" + QDir::separator() + filename;
+}
+
 void DlgBundleManager::addBundleToActiveResources(QString filename)
 {
     warnKrita << "DlgBundleManager::addBundle(): Loading a bundle is not implemented yet.";
     Q_UNUSED(filename);
     // 1. Copy the bundle to the resource folder
     // 2. Add the bundle as a storage/update database
+    QFileInfo oldFileInfo(filename);
+
+    KisConfig cfg(true);
+    QString newDir = cfg.readEntry<QString>(KisResourceLocator::resourceLocationKey,
+                                            QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+    QString newName = oldFileInfo.fileName();
+    QString newLocation = createNewBundlePath(newDir, newName);
+
+    QFileInfo newFileInfo(newLocation);
+    if (newFileInfo.exists()) {
+        bool done = false;
+        int i = 0;
+        do {
+            // ask for new filename
+            bool ok;
+            newName = QInputDialog::getText(this, i18n("New name for the bundle"), i18n("The old filename %s is taken.\nNew name:", newName),
+                                                    QLineEdit::Normal, newName, &ok);
+            newLocation = createNewBundlePath(newDir, newName);
+            newFileInfo.setFile(newLocation);
+            done = !newFileInfo.exists();
+            i++;
+        } while (!done);
+    }
+
+    QFile::copy(filename, newLocation);
+    KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(newLocation);
+    KIS_ASSERT(!storage.isNull());
+    KisResourceLocator::instance()->addStorage(newLocation, storage);
 }

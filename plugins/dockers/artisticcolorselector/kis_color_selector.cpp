@@ -33,7 +33,6 @@
 #include <kis_arcs_constants.h>
 #include <resources/KoGamutMask.h>
 //#include <KisGamutMaskViewConverter.h>
-#include <QTransform>
 
 #include "kis_color_selector.h"
 

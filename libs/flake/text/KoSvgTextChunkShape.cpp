@@ -848,8 +848,6 @@ bool KoSvgTextChunkShape::isRootTextNode() const
 /*                 KoSvgTextChunkShape::Private                                                     */
 /**************************************************************************************************/
 
-#include "SimpleShapeContainerModel.h"
-
 KoSvgTextChunkShape::SharedData::SharedData()
     : QSharedData()
 {

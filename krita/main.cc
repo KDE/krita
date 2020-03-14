@@ -278,8 +278,8 @@ extern "C" int main(int argc, char **argv)
         QLocale locale(language.split(":").first());
         QLocale::setDefault(locale);
 #ifdef Q_OS_MAC
-        // prevents python >=3.7 nl_langinfo(CODESET) fail.
-        qputenv("LANG", locale.name().split('_').first().toLocal8Bit());
+        // prevents python >=3.7 nl_langinfo(CODESET) fail bug 417312.
+        qputenv("LANG", (locale.name() + ".UTF-8").toLocal8Bit());
 #else
         qputenv("LANG", locale.name().toLocal8Bit());
 #endif
@@ -316,6 +316,9 @@ extern "C" int main(int argc, char **argv)
                 }
             }
 
+            QString envLanguage = uiLanguages.first();
+            envLanguage.replace(QChar('-'), QChar('_'));
+
             for (int i = 0; i < uiLanguages.size(); i++) {
                 QString uiLanguage = uiLanguages[i];
                 // Strip the country code
@@ -327,12 +330,13 @@ extern "C" int main(int argc, char **argv)
                 }
             }
             dbgKrita << "Converted ui languages:" << uiLanguages;
-            qputenv("LANG", uiLanguages.first().toLocal8Bit());
 #ifdef Q_OS_MAC
             // See https://bugs.kde.org/show_bug.cgi?id=396370
             KLocalizedString::setLanguages(QStringList() << uiLanguages.first());
+            qputenv("LANG", (envLanguage + ".UTF-8").toLocal8Bit());
 #else
             KLocalizedString::setLanguages(QStringList() << uiLanguages);
+            qputenv("LANG", envLanguage.toLocal8Bit());
 #endif
         }
     }

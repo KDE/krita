@@ -366,6 +366,17 @@ delete_install_rpath() {
     xargs -P4 -I FILE install_name_tool -delete_rpath "${BUILDROOT}/i/lib" FILE 2> "${BUILDROOT}/deploy_error.log"
 }
 
+# Remove any missing rpath poiting to BUILDROOT
+libs_clean_rpath () {
+    for libFile in ${@}; do
+        rpath=$(otool -l "${libFile}" | grep "${BUILDROOT}/i/lib" | awk '{$1=$1;print $2}')
+        if [[ -n "${rpath}" ]]; then
+            echo "removed rpath _${rpath}_ from ${libFile}"
+            install_name_tool -delete_rpath "${rpath}" "${libFile}"
+        fi
+    done
+}
+
 fix_python_framework() {
     # Fix python.framework rpath and slims down installation
     PythonFrameworkBase="${KRITA_DMG}/krita.app/Contents/Frameworks/Python.framework"
@@ -555,6 +566,9 @@ krita_deploy () {
     printf "removing absolute or broken linksys, if any\n"
     find "${KRITA_DMG}/krita.app/Contents" -type l \( -lname "/*" -or -not -exec test -e {} \; \) -print | xargs rm
 
+    printf "clean any left over rpath\n"
+    libs_clean_rpath $(find "${KRITA_DMG}/krita.app/Contents" -type f -perm 755 -or -name "*.dylib" -or -name "*.so")
+
     echo "Done!"
 
 }
@@ -733,7 +747,7 @@ if [[ -n "${CODE_SIGNATURE}" ]]; then
     signBundle
 fi
 
-# notarize only the outher
+# notarize app
 notarize_build "${KRITA_DMG}" krita.app
 
 # Create DMG from files inside ${KRITA_DMG} folder

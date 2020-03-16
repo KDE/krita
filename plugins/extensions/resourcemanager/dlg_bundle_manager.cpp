@@ -77,6 +77,9 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
                           << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType::Folder));
     m_ui->tableView->setModel(m_proxyModel);
 
+    QItemSelectionModel* selectionModel = m_ui->tableView->selectionModel();
+    connect(selectionModel, &QItemSelectionModel::currentChanged, this, &DlgBundleManager::currentCellSelectedChanged);
+
 }
 
 void DlgBundleManager::addBundle()
@@ -106,6 +109,22 @@ void DlgBundleManager::deleteBundle()
     bool active = m_proxyModel->data(idx, Qt::UserRole + KisStorageModel::Active).toBool();
     idx = m_proxyModel->index(idx.row(), 0);
     m_proxyModel->setData(idx, QVariant(!active), Qt::CheckStateRole);
+}
+
+void DlgBundleManager::currentCellSelectedChanged(QModelIndex current, QModelIndex previous)
+{
+    QModelIndex idx = m_ui->tableView->currentIndex();
+    KIS_ASSERT(m_proxyModel);
+    if (!idx.isValid()) {
+        return;
+    }
+    bool active = m_proxyModel->data(idx, Qt::UserRole + KisStorageModel::Active).toBool();
+
+    if (active) {
+        m_ui->bnDelete->setText(i18n("Deactivate"));
+    } else {
+        m_ui->bnDelete->setText(i18n("Activate"));
+    }
 }
 
 QString createNewBundlePath(QString resourceFolder, QString filename)

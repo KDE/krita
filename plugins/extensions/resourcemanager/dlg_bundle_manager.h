@@ -21,6 +21,7 @@
 
 #include <QWidget>
 #include <KoDialog.h>
+#include <QModelIndex>
 
 class KisStorageModel;
 class KisStorageFilterProxyModel;
@@ -41,6 +42,9 @@ private Q_SLOTS:
     void addBundle();
     void createBundle();
     void deleteBundle();
+
+    void currentCellSelectedChanged(QModelIndex current, QModelIndex previous);
+
 
 private:
 

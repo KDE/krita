@@ -77,6 +77,10 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
                           << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType::Folder));
     m_ui->tableView->setModel(m_proxyModel);
 
+    m_ui->tableView->setColumnHidden(KisStorageModel::PreInstalled, true);
+    m_ui->tableView->setColumnHidden(KisStorageModel::Id, true);
+    m_ui->tableView->setColumnHidden(KisStorageModel::TimeStamp, true);
+
     QItemSelectionModel* selectionModel = m_ui->tableView->selectionModel();
     connect(selectionModel, &QItemSelectionModel::currentChanged, this, &DlgBundleManager::currentCellSelectedChanged);
 

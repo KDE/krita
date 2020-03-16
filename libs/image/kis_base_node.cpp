@@ -51,7 +51,7 @@ struct Q_DECL_HIDDEN KisBaseNode::Private
         , collapsed(false)
         , supportsLodMoves(false)
         , animated(false)
-        , pinnedToTimeline(true)
+        , pinnedToTimeline(false)
         , image(image)
     {
     }
@@ -430,6 +430,19 @@ KisKeyframeChannel * KisBaseNode::getKeyframeChannel(const QString &id) const
     return i.value();
 }
 
+bool KisBaseNode::isPinnedToTimeline() const
+{
+    return m_d->pinnedToTimeline;
+}
+
+void KisBaseNode::setPinnedToTimeline(bool pinned)
+{
+   if (pinned == m_d->pinnedToTimeline) return;
+
+   m_d->pinnedToTimeline = pinned;
+   baseNodeChangedCallback();
+}
+
 KisKeyframeChannel * KisBaseNode::getKeyframeChannel(const QString &id, bool create)
 {
     KisKeyframeChannel *channel = getKeyframeChannel(id);
@@ -453,19 +466,6 @@ bool KisBaseNode::isAnimated() const
 void KisBaseNode::enableAnimation()
 {
     m_d->animated = true;
-    baseNodeChangedCallback();
-}
-
-bool KisBaseNode::isPinnedToTimeline() const
-{
-    return m_d->pinnedToTimeline;
-}
-
-void KisBaseNode::setPinnedToTimeline(bool value)
-{
-    if (value == m_d->pinnedToTimeline) return;
-
-    m_d->pinnedToTimeline = value;
     baseNodeChangedCallback();
 }
 

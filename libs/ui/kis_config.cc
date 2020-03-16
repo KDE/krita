@@ -1986,6 +1986,16 @@ void KisConfig::setAnimationDropFrames(bool value)
     KisConfigNotifier::instance()->notifyDropFramesModeChanged();
 }
 
+bool KisConfig::autoPinLayersToTimeline(bool defaultValue) const
+{
+    return (defaultValue ? true : m_cfg.readEntry("autoPinLayers", true));
+}
+
+void KisConfig::setAutoPinLayersToTimeline(bool value)
+{
+    m_cfg.writeEntry("autoPinLayers", value);
+}
+
 bool KisConfig::animationDropFrames(bool defaultValue) const
 {
     return (defaultValue ? true : m_cfg.readEntry("animationDropFrames", true));

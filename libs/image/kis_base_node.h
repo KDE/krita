@@ -507,8 +507,15 @@ public:
     KisKeyframeChannel *getKeyframeChannel(const QString &id, bool create);
     KisKeyframeChannel *getKeyframeChannel(const QString &id) const;
 
+    /**
+     * @return If true, node will be visible on animation timeline even when inactive.
+     */
     bool isPinnedToTimeline() const;
-    void setPinnedToTimeline(bool value);
+
+    /**
+     * Set whether node should be visible on animation timeline even when inactive.
+     */
+    void setPinnedToTimeline(bool pinned);
 
     bool isAnimated() const;
     void enableAnimation();

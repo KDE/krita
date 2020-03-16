@@ -2044,44 +2044,6 @@ bool KisDocument::newImage(const QString& name,
     documentInfo()->setAboutInfo("title", name);
     documentInfo()->setAboutInfo("abstract", description);
 
-    KisLayerSP layer;
-    if (bgStyle == KisConfig::RASTER_LAYER || bgStyle == KisConfig::FILL_LAYER) {
-        KoColor strippedAlpha = bgColor;
-        strippedAlpha.setOpacity(OPACITY_OPAQUE_U8);
-
-        if (bgStyle == KisConfig::RASTER_LAYER) {
-            layer = new KisPaintLayer(image.data(), "Background", OPACITY_OPAQUE_U8, cs);;
-            layer->paintDevice()->setDefaultPixel(strippedAlpha);
-        } else if (bgStyle == KisConfig::FILL_LAYER) {
-            KisFilterConfigurationSP filter_config = KisGeneratorRegistry::instance()->get("color")->defaultConfiguration();
-            filter_config->setProperty("color", strippedAlpha.toQColor());
-            layer = new KisGeneratorLayer(image.data(), "Background Fill", filter_config, image->globalSelection());
-        }
-
-        layer->setOpacity(bgColor.opacityU8());
-
-        if (numberOfLayers > 1) {
-            //Lock bg layer if others are present.
-            layer->setUserLocked(true);
-        }
-    }
-    else { // KisConfig::CANVAS_COLOR (needs an unlocked starting layer).
-        image->setDefaultProjectionColor(bgColor);
-        layer = new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, cs);
-    }
-
-    Q_CHECK_PTR(layer);
-    image->addNode(layer.data(), image->rootLayer().data());
-    layer->setDirty(QRect(0, 0, width, height));
-
-    setCurrentImage(image);
-
-    for(int i = 1; i < numberOfLayers; ++i) {
-        KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), OPACITY_OPAQUE_U8, cs);
-        image->addNode(layer, image->root(), i);
-        layer->setDirty(QRect(0, 0, width, height));
-    }
-
     KisConfig cfg(false);
     cfg.defImageWidth(width);
     cfg.defImageHeight(height);
@@ -2089,6 +2051,48 @@ bool KisDocument::newImage(const QString& name,
     cfg.defColorModel(image->colorSpace()->colorModelId().id());
     cfg.setDefaultColorDepth(image->colorSpace()->colorDepthId().id());
     cfg.defColorProfile(image->colorSpace()->profile()->name());
+
+    bool autopin = cfg.autoPinLayersToTimeline();
+
+    KisLayerSP bgLayer;
+    if (bgStyle == KisConfig::RASTER_LAYER || bgStyle == KisConfig::FILL_LAYER) {
+        KoColor strippedAlpha = bgColor;
+        strippedAlpha.setOpacity(OPACITY_OPAQUE_U8);
+
+        if (bgStyle == KisConfig::RASTER_LAYER) {
+            bgLayer = new KisPaintLayer(image.data(), "Background", OPACITY_OPAQUE_U8, cs);;
+            bgLayer->paintDevice()->setDefaultPixel(strippedAlpha);
+            bgLayer->setPinnedToTimeline(autopin);
+        } else if (bgStyle == KisConfig::FILL_LAYER) {
+            KisFilterConfigurationSP filter_config = KisGeneratorRegistry::instance()->get("color")->defaultConfiguration();
+            filter_config->setProperty("color", strippedAlpha.toQColor());
+            bgLayer = new KisGeneratorLayer(image.data(), "Background Fill", filter_config, image->globalSelection());
+        }
+
+        bgLayer->setOpacity(bgColor.opacityU8());
+
+        if (numberOfLayers > 1) {
+            //Lock bg layer if others are present.
+            bgLayer->setUserLocked(true);
+        }
+    }
+    else { // KisConfig::CANVAS_COLOR (needs an unlocked starting layer).
+        image->setDefaultProjectionColor(bgColor);
+        bgLayer = new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, cs);
+    }
+
+    Q_CHECK_PTR(bgLayer);
+    image->addNode(bgLayer.data(), image->rootLayer().data());
+    bgLayer->setDirty(QRect(0, 0, width, height));
+
+    setCurrentImage(image);
+
+    for(int i = 1; i < numberOfLayers; ++i) {
+        KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), OPACITY_OPAQUE_U8, cs);
+        layer->setPinnedToTimeline(autopin);
+        image->addNode(layer, image->root(), i);
+        layer->setDirty(QRect(0, 0, width, height));
+    }
 
     KisUsageLogger::log(QString("Created image \"%1\", %2 * %3 pixels, %4 dpi. Color model: %6 %5 (%7). Layers: %8")
                              .arg(name)

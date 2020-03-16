@@ -94,6 +94,7 @@ public:
     bool kineticScrollingHiddenScrollbars();
     bool switchSelectionCtrlAlt();
     bool convertToImageColorspaceOnImport();
+    bool autopinLayersToTimeline();
 
 private Q_SLOTS:
     void getBackgroundImage();

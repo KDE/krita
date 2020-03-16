@@ -89,7 +89,7 @@ namespace KisLayerUtils {
 
         SwitchFrameCommand::SharedStorageSP storage;
         QSet<int> frames;
-        bool useInTimeline = false;
+        bool pinnedToTimeline = false;
         bool enableOnionSkins = false;
 
         virtual KisNodeList allSrcNodes() = 0;
@@ -111,7 +111,7 @@ namespace KisLayerUtils {
                 fetchLayerFramesRecursive(prevLayer) |
                 fetchLayerFramesRecursive(currLayer);
 
-            useInTimeline = prevLayer->isPinnedToTimeline() || currLayer->isPinnedToTimeline();
+            pinnedToTimeline = prevLayer->isPinnedToTimeline() || currLayer->isPinnedToTimeline();
 
             const KisPaintLayer *paintLayer = qobject_cast<KisPaintLayer*>(currLayer.data());
             if (paintLayer) enableOnionSkins |= paintLayer->onionSkinEnabled();
@@ -139,7 +139,7 @@ namespace KisLayerUtils {
         {
             foreach (KisNodeSP node, mergedNodes) {
                 frames |= fetchLayerFramesRecursive(node);
-                useInTimeline |= node->isPinnedToTimeline();
+                pinnedToTimeline |= node->isPinnedToTimeline();
 
                 const KisPaintLayer *paintLayer = qobject_cast<KisPaintLayer*>(node.data());
                 if (paintLayer) {
@@ -380,7 +380,7 @@ namespace KisLayerUtils {
                 m_info->dstNode->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
             }
 
-            m_info->dstNode->setPinnedToTimeline(m_info->useInTimeline);
+            m_info->dstNode->setPinnedToTimeline(m_info->pinnedToTimeline);
 
             KisPaintLayer *dstPaintLayer = qobject_cast<KisPaintLayer*>(m_info->dstNode.data());
             if (dstPaintLayer) {
@@ -459,7 +459,7 @@ namespace KisLayerUtils {
 
             m_info->nodesCompositingVaries = compositionVaries;
 
-            m_info->dstNode->setPinnedToTimeline(m_info->useInTimeline);
+            m_info->dstNode->setPinnedToTimeline(m_info->pinnedToTimeline);
             dstPaintLayer->setOnionSkinEnabled(m_info->enableOnionSkins);
         }
 

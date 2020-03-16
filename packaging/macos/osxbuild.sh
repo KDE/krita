@@ -48,7 +48,7 @@ export MACOSX_DEPLOYMENT_TARGET=10.12
 export QMAKE_MACOSX_DEPLOYMENT_TARGET=10.12
 
 
-export PATH=${KIS_INSTALL_DIR}/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+export PATH=${KIS_INSTALL_DIR}/bin:$PATH
 export PKG_CONFIG_PATH=${KIS_INSTALL_DIR}/share/pkgconfig:${KIS_INSTALL_DIR}/lib/pkgconfig
 export CMAKE_PREFIX_PATH=${KIS_INSTALL_DIR}
 export C_INCLUDE_PATH=${KIS_INSTALL_DIR}/include:/usr/include:${C_INCLUDE_PATH}

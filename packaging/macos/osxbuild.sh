@@ -47,11 +47,6 @@ export KIS_INSTALL_DIR=${BUILDROOT}/i
 export MACOSX_DEPLOYMENT_TARGET=10.12
 export QMAKE_MACOSX_DEPLOYMENT_TARGET=10.12
 
-# Build time variables
-if test -z $(which cmake); then
-    echo "ERROR: cmake not found, exiting!"
-    exit
-fi
 
 export PATH=${KIS_INSTALL_DIR}/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 export PKG_CONFIG_PATH=${KIS_INSTALL_DIR}/share/pkgconfig:${KIS_INSTALL_DIR}/lib/pkgconfig
@@ -72,6 +67,12 @@ export QTEST_COLORED=1
 
 export OUPUT_LOG="${BUILDROOT}/osxbuild.log"
 printf "" > "${OUPUT_LOG}"
+
+# Build time variables
+if test -z $(which cmake); then
+    echo "ERROR: cmake not found, exiting!"
+    exit
+fi
 
 # configure max core for make compile
 ((MAKE_THREADS=1))

@@ -23,6 +23,7 @@
 #include <KoDialog.h>
 
 class KisStorageModel;
+class KisStorageFilterProxyModel;
 
 namespace Ui
 {
@@ -47,6 +48,8 @@ private:
 
     QWidget *m_page;
     Ui::WdgDlgBundleManager *m_ui;
+    KisStorageFilterProxyModel* m_proxyModel;
+
 };
 
 #endif // DLG_BUNDLE_MANAGER_H

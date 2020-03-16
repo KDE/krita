@@ -69,13 +69,13 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
 
     setButtons(Close);
 
-    KisStorageFilterProxyModel *proxyModel = new KisStorageFilterProxyModel(this);
-    proxyModel->setSourceModel(KisStorageModel::instance());
-    proxyModel->setFilter(KisStorageFilterProxyModel::ByStorageType,
+    m_proxyModel = new KisStorageFilterProxyModel(this);
+    m_proxyModel->setSourceModel(KisStorageModel::instance());
+    m_proxyModel->setFilter(KisStorageFilterProxyModel::ByStorageType,
                           QStringList()
                           << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType::Bundle)
                           << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType::Folder));
-    m_ui->tableView->setModel(proxyModel);
+    m_ui->tableView->setModel(m_proxyModel);
 
 }
 
@@ -98,15 +98,14 @@ void DlgBundleManager::createBundle()
 void DlgBundleManager::deleteBundle()
 {
     QModelIndex idx = m_ui->tableView->currentIndex();
-    KisStorageFilterProxyModel *proxyModel = dynamic_cast<KisStorageFilterProxyModel*>(m_ui->tableView->model());
-    KIS_ASSERT(proxyModel);
+    KIS_ASSERT(m_proxyModel);
     if (!idx.isValid()) {
         ENTER_FUNCTION() << "Index is invalid\n";
         return;
     }
-    bool active = proxyModel->data(idx, Qt::UserRole + KisStorageModel::Active).toBool();
-    idx = proxyModel->index(idx.row(), 0);
-    proxyModel->setData(idx, QVariant(!active), Qt::CheckStateRole);
+    bool active = m_proxyModel->data(idx, Qt::UserRole + KisStorageModel::Active).toBool();
+    idx = m_proxyModel->index(idx.row(), 0);
+    m_proxyModel->setData(idx, QVariant(!active), Qt::CheckStateRole);
 }
 
 QString createNewBundlePath(QString resourceFolder, QString filename)

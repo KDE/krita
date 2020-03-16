@@ -186,15 +186,15 @@ public Q_SLOTS:
     void enableAnimation() const;
 
     /**
-     * @brief Set whether node should be visible on animation timeline even when inactive.
+     * @brief Sets whether or not node should be pinned to the Timeline Docker,
+     * regardless of selection activity.
      */
     void setPinnedToTimeline(bool pinned) const;
 
     /**
-     * @return If true, node will be visible on animation timeline even when inactive.
+     * @return Returns true if node is pinned to the Timeline Docker or false if it is not.
      */
     bool isPinnedToTimeline() const;
-
 
     /**
      * Sets the state of the node to the value of @param collapsed

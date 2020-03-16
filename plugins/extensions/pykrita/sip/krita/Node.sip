@@ -23,8 +23,8 @@ public Q_SLOTS:
     QString colorDepth() const;
     bool animated() const;
     void enableAnimation() const;
-    void setPinnedToTimeline(bool pinned) const;
-    bool isPinnedToTimeline() const;
+    //void setPinnedToTimeline(bool pinned) const;
+    //bool isPinnedToTimeline() const;
     void setCollapsed(bool collapsed);
     bool collapsed() const;
     int colorLabel() const;

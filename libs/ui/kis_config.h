@@ -560,6 +560,9 @@ public:
     bool animationDropFrames(bool defaultValue = false) const;
     void setAnimationDropFrames(bool value);
 
+    bool autoPinLayersToTimeline(bool defaultValue = false) const;
+    void setAutoPinLayersToTimeline(bool value);
+
     int scrubbingUpdatesDelay(bool defaultValue = false) const;
     void setScrubbingUpdatesDelay(int value);
 

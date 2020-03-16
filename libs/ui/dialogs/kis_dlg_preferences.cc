@@ -246,6 +246,8 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     chkShowRootLayer->setChecked(cfg.showRootLayer());
 
+    m_chkAutoPin->setChecked(cfg.autoPinLayersToTimeline());
+
     KConfigGroup group = KSharedConfig::openConfig()->group("File Dialogs");
     bool dontUseNative = true;
 #ifdef Q_OS_UNIX
@@ -331,6 +333,8 @@ void GeneralTab::setDefault()
     KoColor cursorColor(KoColorSpaceRegistry::instance()->rgb8());
     cursorColor.fromQColor(cfg.getCursorMainColor(true));
     cursorColorBtutton->setColor(cursorColor);
+
+    m_chkAutoPin->setChecked(cfg.autoPinLayersToTimeline(true));
 
     m_urlCacheDbLocation->setFileName(cfg.readEntry<QString>(KisResourceCacheDb::dbLocationKey, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)));
     m_urlResourceFolder->setFileName(cfg.readEntry<QString>(KisResourceLocator::resourceLocationKey, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)));
@@ -435,12 +439,16 @@ bool GeneralTab::kineticScrollingHiddenScrollbars()
 bool GeneralTab::switchSelectionCtrlAlt()
 {
     return m_chkSwitchSelectionCtrlAlt->isChecked();
-
 }
 
 bool GeneralTab::convertToImageColorspaceOnImport()
 {
     return m_chkConvertOnImport->isChecked();
+}
+
+bool GeneralTab::autopinLayersToTimeline()
+{
+    return m_chkAutoPin->isChecked();
 }
 
 void GeneralTab::getBackgroundImage()
@@ -1697,6 +1705,8 @@ bool KisDlgPreferences::editPreferences()
         cfg.setConvertToImageColorspaceOnImport(m_general->convertToImageColorspaceOnImport());
         cfg.setUndoStackLimit(m_general->undoStackSize());
         cfg.setFavoritePresets(m_general->favoritePresets());
+
+        cfg.setAutoPinLayersToTimeline(m_general->autopinLayersToTimeline());
 
         cfg.writeEntry(KisResourceCacheDb::dbLocationKey, m_general->m_urlCacheDbLocation->fileName());
         cfg.writeEntry(KisResourceLocator::resourceLocationKey, m_general->m_urlResourceFolder->fileName());

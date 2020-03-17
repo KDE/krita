@@ -127,26 +127,7 @@ QAction *Window::createAction(const QString &id, const QString &text, const QStr
     KisAction *action = d->window->viewManager()->actionManager()->createAction(id);
     action->setText(text);
     action->setObjectName(id);
-    if (!menuLocation.isEmpty()) {
-        QAction *found = 0;
-        QList<QAction *> candidates = d->window->menuBar()->actions();
-        Q_FOREACH(const QString &name, menuLocation.split("/")) {
-            Q_FOREACH(QAction *candidate, candidates) {
-                if (candidate->objectName().toLower() == name.toLower()) {
-                    found = candidate;
-                    candidates = candidate->menu()->actions();
-                    break;
-                }
-            }
-            if (candidates.isEmpty()) {
-                break;
-            }
-        }
-
-        if (found && found->menu()) {
-            found->menu()->addAction(action);
-        }
-    }
+    action->setProperty("menulocation", menuLocation);
     return action;
 }
 

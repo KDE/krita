@@ -47,13 +47,10 @@ export KIS_INSTALL_DIR=${BUILDROOT}/i
 export MACOSX_DEPLOYMENT_TARGET=10.12
 export QMAKE_MACOSX_DEPLOYMENT_TARGET=10.12
 
-# Build time variables
-if test -z $(which cmake); then
-    echo "ERROR: cmake not found, exiting!"
-    exit
-fi
 
 export PATH=${KIS_INSTALL_DIR}/bin:$PATH
+export PKG_CONFIG_PATH=${KIS_INSTALL_DIR}/share/pkgconfig:${KIS_INSTALL_DIR}/lib/pkgconfig
+export CMAKE_PREFIX_PATH=${KIS_INSTALL_DIR}
 export C_INCLUDE_PATH=${KIS_INSTALL_DIR}/include:/usr/include:${C_INCLUDE_PATH}
 export CPLUS_INCLUDE_PATH=${KIS_INSTALL_DIR}/include:/usr/include:${CPLUS_INCLUDE_PATH}
 export LIBRARY_PATH=${KIS_INSTALL_DIR}/lib:/usr/lib:${LIBRARY_PATH}
@@ -69,9 +66,13 @@ export KDE_COLOR_DEBUG=1
 export QTEST_COLORED=1
 
 export OUPUT_LOG="${BUILDROOT}/osxbuild.log"
-export ERROR_LOG="${BUILDROOT}/osxbuild-error.log"
 printf "" > "${OUPUT_LOG}"
-printf "" > "${ERROR_LOG}"
+
+# Build time variables
+if test -z $(which cmake); then
+    echo "ERROR: cmake not found, exiting!"
+    exit
+fi
 
 # configure max core for make compile
 ((MAKE_THREADS=1))
@@ -82,29 +83,22 @@ fi
 # Prints stderr and stdout to log files
 # >(tee) works but breaks sigint
 log_cmd () {
-    if [[ "${VERBOSE}" ]]; then
-        "$@" 1>> ${OUPUT_LOG} 2>> ${ERROR_LOG}
-    else
-        "$@" 2>> ${ERROR_LOG} | tee -a ${OUPUT_LOG} > /dev/null
-    fi
+    "$@" 1>> ${OUPUT_LOG}
+    osxbuild_error="${?}"
 }
 
 # Log messages to logfile
 log () {
-    if [[ "${VERBOSE}" ]]; then
-        printf "%s\n" "${@}"  | tee -a ${OUPUT_LOG}
-    else
-        printf "%s\n" "${@}" | tee -a ${OUPUT_LOG} > /dev/null
-    fi
+    printf "%s\n" "${@}"  | tee -a ${OUPUT_LOG}
 }
 
 # if previous command gives error
 # print msg
 print_if_error() {
-    error_stat="${?}"
-    if [ ${error_stat} -ne 0 ]; then
-        printf "\e[31m%s %s\e[0m\n" "Error:" "${1}" 2>> ${ERROR_LOG}
-        printf "%s\r" "${error_stat}"
+    if [ "${osxbuild_error}" -ne 0 ]; then
+        printf "\nERROR: Printing last lines of log ouput\n\n"
+        tail ${OUPUT_LOG}
+        printf "\e[31m%s %s\e[0m\n" "Error:" "${1}"
     fi
 }
 
@@ -142,8 +136,13 @@ cmake_3rdparty () {
     for package in ${build_pkgs[@]} ; do
         print_msg "Building ${package}"
         log_cmd cmake --build . --config RelWithDebInfo --target ${package}
-        if [[ ! $(print_if_error "Failed build ${package}") ]]; then
+        
+        print_if_error "Failed build ${package}"
+        if [[ ! ${osxbuild_error} -ne 0 ]]; then
             print_msg "Build Success! ${package}"
+        else
+            echo "build dependencies stop!"
+            exit
         fi
         # fixes does not depend on failure
         if [[ ! ${nofix} ]]; then
@@ -156,6 +155,16 @@ build_3rdparty_fixes(){
     pkg=${1}
     if [[ "${pkg}" = "ext_qt" && -e "${KIS_INSTALL_DIR}/bin/qmake" ]]; then
         ln -sf qmake "${KIS_INSTALL_DIR}/bin/qmake-qt5"
+        # build macdeployqt
+        log_cmd cd "${BUILDROOT}/depbuild/ext_qt/ext_qt-prefix/src/ext_qt/qttools/src"
+        print_if_error "macdeployqt source dir was not found, it will be missing for deployment!"
+
+        if [[ ! ${osxbuild_error} -ne 0 ]]; then
+            make sub-macdeployqt-all
+            make sub-macdeployqt-install_subtargets
+            make install
+        fi
+        cd "${KIS_TBUILD_DIR}"
 
     elif [[ "${pkg}" = "ext_openexr" ]]; then
         # open exr will fail the first time is called
@@ -187,6 +196,7 @@ build_3rdparty () {
     log_cmd cmake ${KIS_SRC_DIR}/3rdparty/ \
         -DCMAKE_OSX_DEPLOYMENT_TARGET=10.12 \
         -DCMAKE_INSTALL_PREFIX=${KIS_INSTALL_DIR} \
+        -DCMAKE_PREFIX_PATH:PATH=${KIS_INSTALL_DIR} \
         -DEXTERNALS_DOWNLOAD_DIR=${KIS_DOWN_DIR} \
         -DINSTALL_ROOT=${KIS_INSTALL_DIR}
 
@@ -216,7 +226,8 @@ build_3rdparty () {
         ext_jpeg \
         ext_lcms2 \
         ext_ocio \
-        ext_openexr
+        ext_openexr \
+        ext_openjpeg
 
     cmake_3rdparty \
         ext_png \
@@ -233,7 +244,9 @@ build_3rdparty () {
     # this meant qt build fail and further builds will
     # also fail.
     log_cmd test -L "${KIS_INSTALL_DIR}/bin/qmake-qt5"
-    if [[ $(print_if_error "qmake link missing!") ]]; then
+
+    print_if_error "qmake link missing!"
+    if [[ ${osxbuild_error} -ne 0 ]]; then
         printf "
     link: ${KIS_INSTALL_DIR}/bin/qmake-qt5 missing!
     It probably means ext_qt failed!!
@@ -311,6 +324,9 @@ rebuild_3rdparty () {
         ext_ocio \
         ext_ilmbase \
         ext_openexr \
+        ext_openjpeg
+
+    build_install_ext \
         ext_png \
         ext_tiff \
         ext_gsl \
@@ -325,11 +341,10 @@ rebuild_3rdparty () {
         ext_pyqt \
 
     build_install_ext \
-        ext_yasm \
         ext_nasm \
         ext_libx265 \
         ext_libde265 \
-        ext_libheif \
+        ext_libheif
 
     # Build kde_frameworks
     build_install_ext \
@@ -344,8 +359,7 @@ rebuild_3rdparty () {
         ext_kitemviews \
         ext_kimageformats \
         ext_kwindowsystem \
-        ext_quazip \
-        ext_openjpeg
+        ext_quazip
 }
 
 #not tested
@@ -369,6 +383,7 @@ build_krita () {
         -DFOUNDATION_BUILD=ON \
         -DBoost_INCLUDE_DIR=${KIS_INSTALL_DIR}/include \
         -DCMAKE_INSTALL_PREFIX=${KIS_INSTALL_DIR} \
+        -DCMAKE_PREFIX_PATH=${KIS_INSTALL_DIR} \
         -DDEFINE_NO_DEPRECATED=1 \
         -DBUILD_TESTING=OFF \
         -DHIDE_SAFE_ASSERTS=ON \
@@ -401,8 +416,10 @@ build_krita_tarball () {
     cd "${KIS_CUSTOM_BUILD}"
 
     mkdir "src" "build" 2> /dev/null
-    tar -xzf "${file_abspath}" --strip-components=1 --directory "src"
-    if [[ $(print_if_error "Untar ${file_abspath} failed!") ]]; then
+    log_cmd tar -xzf "${file_abspath}" --strip-components=1 --directory "src"
+
+    print_if_error "Failed untar of ${filename}"
+    if [[ ${osxbuild_error} -ne 0 ]]; then
         exit
     fi
 
@@ -425,8 +442,10 @@ install_krita () {
     print_msg "Install krita from ${KIS_BUILD_DIR}"
     log_cmd check_dir_path ${KIS_BUILD_DIR}
 
-    cd ${KIS_BUILD_DIR}
-    if [[ $(print_if_error "could not cd to ${KIS_BUILD_DIR}") ]]; then
+    cd "${KIS_BUILD_DIR}"
+    osxbuild_error=$?
+    print_if_error "could not cd to ${KIS_BUILD_DIR}"
+    if [[ ${osxbuild_error} -ne 0 ]]; then
         exit
     fi
 

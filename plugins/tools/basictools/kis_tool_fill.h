@@ -69,6 +69,7 @@ private:
     void updateGUI();
 
 private:
+    Qt::KeyboardModifiers keysAtStart;
     int m_feather;
     int m_sizemod;
     QPoint m_startPos;

@@ -53,6 +53,7 @@
 #include <kis_coordinates_converter.h>
 #include <kis_time_range.h>
 #include <KisImportExportErrorCode.h>
+#include <KisPart.h>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
@@ -77,17 +78,22 @@
 struct Document::Private {
     Private() {}
     QPointer<KisDocument> document;
+    bool ownsDocument {false};
 };
 
-Document::Document(KisDocument *document, QObject *parent)
+Document::Document(KisDocument *document, bool ownsDocument, QObject *parent)
     : QObject(parent)
     , d(new Private)
 {
     d->document = document;
+    d->ownsDocument = ownsDocument;
 }
 
 Document::~Document()
 {
+    if (d->ownsDocument) {
+        KisPart::instance()->removeDocument(d->document);
+    }
     delete d;
 }
 
@@ -805,9 +811,9 @@ Document *Document::clone() const
 {
     if (!d->document) return 0;
     QPointer<KisDocument> clone = d->document->clone();
-    Document * d = new Document(clone);
-    clone->setParent(d); // It's owned by the document, not KisPart
-    return d;
+    Document * newDocument = new Document(clone, d->ownsDocument);
+    clone->setParent(newDocument); // It's owned by the document, not KisPart
+    return newDocument;
 }
 
 void Document::setHorizontalGuides(const QList<qreal> &lines)

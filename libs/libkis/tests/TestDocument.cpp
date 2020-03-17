@@ -47,7 +47,7 @@ void TestDocument::testSetColorSpace()
     image->addNode(layer);
     kisdoc->setCurrentImage(image);
 
-    Document d(kisdoc);
+    Document d(kisdoc, false);
     QStringList profiles = Krita().profiles("GRAYA", "U16");
     d.setColorSpace("GRAYA", "U16", profiles.first());
 
@@ -66,7 +66,7 @@ void TestDocument::testSetColorProfile()
     image->addNode(layer);
     kisdoc->setCurrentImage(image);
 
-    Document d(kisdoc);
+    Document d(kisdoc, false);
 
     QStringList profiles = Krita().profiles("RGBA", "U8");
     Q_FOREACH(const QString &profile, profiles) {
@@ -86,7 +86,7 @@ void TestDocument::testPixelData()
     image->addNode(layer);
     kisdoc->setCurrentImage(image);
 
-    Document d(kisdoc);
+    Document d(kisdoc, false);
     d.refreshProjection();
 
     QByteArray ba = d.pixelData(0, 0, 100, 100);
@@ -116,7 +116,7 @@ void TestDocument::testThumbnail()
     image->addNode(layer);
     kisdoc->setCurrentImage(image);
 
-    Document d(kisdoc);
+    Document d(kisdoc, false);
     d.refreshProjection();
 
     QImage thumb = d.thumbnail(10, 10);
@@ -139,7 +139,7 @@ void TestDocument::testCreateFillLayer()
     KisDocument *kisdoc = KisPart::instance()->createDocument();
     KisImageSP image = new KisImage(0, 50, 50, KoColorSpaceRegistry::instance()->rgb16(), "test");
     kisdoc->setCurrentImage(image);
-    Document d(kisdoc);
+    Document d(kisdoc, false);
 
     const QString pattern("pattern");
     const QString color("color");

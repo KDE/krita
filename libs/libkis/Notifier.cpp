@@ -41,7 +41,7 @@ Notifier::Notifier(QObject *parent)
     connect(KisPart::instance(), SIGNAL(sigViewAdded(KisView*)), SLOT(viewCreated(KisView*)));
     connect(KisPart::instance(), SIGNAL(sigViewRemoved(KisView*)), SLOT(viewClosed(KisView*)));
 
-    connect(KisPart::instance(), SIGNAL(sigWindowAdded(KisMainWindow*)), SLOT(windowCreated(KisMainWindow*)));
+    connect(KisPart::instance(), SIGNAL(sigMainWindowIsBeingCreated(KisMainWindow*)), SLOT(windowIsBeingCreated(KisMainWindow*)));
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SIGNAL(configurationChanged()));
 
@@ -66,25 +66,29 @@ void Notifier::setActive(bool value)
 
 void Notifier::imageCreated(KisDocument* document)
 {
-    Document *doc = new Document(document);
+    Document *doc = new Document(document, false);
     emit imageCreated(doc);
+    delete doc;
 }
 
 void Notifier::viewCreated(KisView *view)
 {
     View *v = new View(view);
     emit viewCreated(v);
+    delete v;
 }
 
 void Notifier::viewClosed(KisView *view)
 {
     View *v = new View(view);
     emit viewClosed(v);
+    delete v;
 }
 
-void Notifier::windowCreated(KisMainWindow *window)
+void Notifier::windowIsBeingCreated(KisMainWindow *window)
 {
     Window *w = new Window(window);
-    emit windowCreated(w);
+    emit windowIsBeingCreated(w);
+    delete w;
 }
 

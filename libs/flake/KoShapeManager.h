@@ -124,6 +124,10 @@ public:
         {
         }
 
+        bool isEmpty() const {
+            return shapes.isEmpty();
+        }
+
         QRectF docUpdateRect;
         QRect viewUpdateRect;
 
@@ -131,7 +135,10 @@ public:
         SharedSafeStorage allClonedShapes;
     };
 
-    using PaintJobsList = QList<PaintJob>;
+    struct PaintJobsList : public QList<PaintJob>
+    {
+        QRect uncroppedViewUpdateRect;
+    };
 
 
     /**

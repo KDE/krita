@@ -108,6 +108,7 @@ void KisToolFill::beginPrimaryAction(KoPointerEvent *event)
     setMode(KisTool::PAINT_MODE);
 
     m_startPos = convertToImagePixelCoordFloored(event);
+    keysAtStart = event->modifiers();
 }
 
 void KisToolFill::endPrimaryAction(KoPointerEvent *event)
@@ -125,6 +126,12 @@ void KisToolFill::endPrimaryAction(KoPointerEvent *event)
     }
 
     bool useFastMode = m_useFastMode->isChecked();
+
+    Qt::KeyboardModifiers fillOnlySelectionModifier = Qt::AltModifier; // Not sure where to keep it
+    if (keysAtStart == fillOnlySelectionModifier) {
+      m_fillOnlySelection = true;
+    }
+    keysAtStart = Qt::NoModifier; // libs/ui/tool/kis_tool_select_base.h cleans it up in endPrimaryAction so i do it too
 
     KisProcessingApplicator applicator(currentImage(), currentNode(),
                                        KisProcessingApplicator::SUPPORTS_WRAPAROUND_MODE,
@@ -152,6 +159,7 @@ void KisToolFill::endPrimaryAction(KoPointerEvent *event)
                             KisStrokeJobData::EXCLUSIVE);
 
     applicator.end();
+    m_fillOnlySelection = m_checkFillSelection->isChecked();
 }
 
 QWidget* KisToolFill::createOptionWidget()

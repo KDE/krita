@@ -229,6 +229,7 @@ void KisShapeLayerCanvas::updateCanvas(const QRectF& rc)
 void KisShapeLayerCanvas::slotStartAsyncRepaint()
 {
     QRect repaintRect;
+    QRect uncroppedRepaintRect;
     bool forceUpdateHiddenAreasOnly = false;
     const qint32 MASK_IMAGE_WIDTH = 256;
     const qint32 MASK_IMAGE_HEIGHT = 256;
@@ -257,10 +258,12 @@ void KisShapeLayerCanvas::slotStartAsyncRepaint()
 
         // Crop the update rect by the image bounds. We keep the cache consistent
         // by tracking the size of the image in slotImageSizeChanged()
+        uncroppedRepaintRect = repaintRect;
         repaintRect = repaintRect.intersected(m_parentLayer->image()->bounds());
     } else {
         const QRectF shapesBounds = KoShape::boundingRect(m_shapeManager->shapes());
         repaintRect |= kisGrowRect(m_viewConverter->documentToView(shapesBounds).toAlignedRect(), 2);
+        uncroppedRepaintRect = repaintRect;
     }
 
     /**
@@ -300,6 +303,7 @@ void KisShapeLayerCanvas::slotStartAsyncRepaint()
         jobs << KoShapeManager::PaintJob(m_viewConverter->viewToDocument().mapRect(QRectF(viewUpdateRect)),
                                          viewUpdateRect);
     }
+    jobs.uncroppedViewUpdateRect = uncroppedRepaintRect;
 
     m_shapeManager->preparePaintJobs(jobs, m_parentLayer);
 
@@ -351,9 +355,15 @@ void KisShapeLayerCanvas::repaint()
 
     quint8 * dstData = new quint8[MASK_IMAGE_WIDTH * MASK_IMAGE_HEIGHT * m_projection->pixelSize()];
 
-    QRect repaintRect;
+    QRect repaintRect = paintJobs.uncroppedViewUpdateRect;
+    m_projection->clear(repaintRect);
 
     Q_FOREACH (const KoShapeManager::PaintJob &job, paintJobs) {
+        if (job.isEmpty()) {
+            m_projection->clear(job.viewUpdateRect);
+            continue;
+        }
+
         image.fill(0);
 
         tempPainter.setTransform(QTransform());

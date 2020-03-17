@@ -44,7 +44,6 @@
 #include <QUrl>
 #include <QVBoxLayout>
 #include <QWidgetAction>
-#include <QApplication>
 #include <QDesktopWidget>
 #include <QScreen>
 

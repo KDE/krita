@@ -1,32 +1,65 @@
 SET(EXTPREFIX_heif "${EXTPREFIX}" )
+if ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
 ExternalProject_Add(
     ext_libde265
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/strukturag/libde265/releases/download/v1.0.3/libde265-1.0.3.tar.gz
-    URL_MD5 0e1e26ffcb2177c3749c748e20fcd588
+    URL https://github.com/strukturag/libde265/releases/download/v1.0.5/libde265-1.0.5.tar.gz
+    URL_MD5 385c88166cb255a068a8c936d0ab23ef
 
-    BUILD_IN_SOURCE 1
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/01-fix-sse41.diff
 
-    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${EXTPREFIX_heif} ${GLOBAL_AUTOMAKE_PROFILE}
-    BUILD_COMMAND make
-    INSTALL_COMMAND make install
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
 
     UPDATE_COMMAND ""
 )
-
+else ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
 ExternalProject_Add(
-    ext_yasm
+    ext_libde265
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL http://www.tortall.net/projects/yasm/releases/yasm-1.3.0.tar.gz
-    URL_MD5 fc9e586751ff789b34b1f21d572d96af
+    URL https://github.com/strukturag/libde265/releases/download/v1.0.5/libde265-1.0.5.tar.gz
+    URL_MD5 385c88166cb255a068a8c936d0ab23ef
 
-    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${EXTPREFIX_heif} ${GLOBAL_AUTOMAKE_PROFILE}
-    BUILD_COMMAND make
-    INSTALL_COMMAND make install
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/01-fix-sse41.diff
+
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} -DDISABLE_SSE=TRUE
 
     UPDATE_COMMAND ""
 )
+endif ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
 
+if (WIN32)
+    if ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+        ExternalProject_Add(
+            ext_nasm
+            DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+            URL https://www.nasm.us/pub/nasm/releasebuilds/2.14.03rc2/win64/nasm-2.14.03rc2-win64.zip
+            URL_MD5 f12d14ca46cf397a1d27ac0edde548fb
+
+            BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying nasm 64-bit dependencies
+            CONFIGURE_COMMAND ""
+            INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/rdoff ${EXTPREFIX_heif}/bin/rdoff
+                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/nasm.exe ${EXTPREFIX_heif}/bin/nasm.exe
+                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/ndisasm.exe ${EXTPREFIX_heif}/bin/ndisasm.exe
+
+            UPDATE_COMMAND ""
+        )
+    else("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+        ExternalProject_Add(
+            ext_nasm
+            DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+            URL https://www.nasm.us/pub/nasm/releasebuilds/2.14.03rc2/win32/nasm-2.14.03rc2-win32.zip
+            URL_MD5 9ec22ac06a6b9d993ef503ea2fe074ab
+
+            BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying nasm 64-bit dependencies
+            CONFIGURE_COMMAND ""
+            INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/rdoff ${EXTPREFIX_heif}/bin/rdoff
+                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/nasm.exe ${EXTPREFIX_heif}/bin/nasm.exe
+                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/ndisasm.exe ${EXTPREFIX_heif}/bin/ndisasm.exe
+
+            UPDATE_COMMAND ""
+        )
+    endif ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+else (WIN32)
 ExternalProject_Add(
     ext_nasm
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
@@ -39,36 +72,77 @@ ExternalProject_Add(
 
     UPDATE_COMMAND ""
 )
+endif(WIN32)
 
-ExternalProject_Add(
-    ext_libx265
-    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL http://ftp.videolan.org/pub/videolan/x265/x265_3.0.tar.gz
-    URL_MD5 8ff1780246bb7ac8506239f6129c04ec
+IF ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+    ExternalProject_Add(ext_libx265_10bit
+        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+        URL http://ftp.videolan.org/pub/videolan/x265/x265_3.2.1.tar.gz
+        URL_MD5 94808045a34d88a857e5eaf3f68f4bca
 
-    INSTALL_DIR ${EXTPREFIX_heif}
-    SOURCE_SUBDIR source/
-    
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif}
-    
-    BUILD_COMMAND make
-    INSTALL_COMMAND make install
+        SOURCE_SUBDIR source/
 
-    UPDATE_COMMAND ""
-    DEPENDS ext_yasm ext_nasm
-)
+        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} -DHIGH_BIT_DEPTH=TRUE -DEXPORT_C_API=FALSE -DENABLE_CLI=FALSE -DENABLE_SHARED=FALSE
+        INSTALL_COMMAND ${CMAKE_COMMAND} -E copy libx265.a ${EXTPREFIX_heif}/lib/libx265_main10.a
+    )
+    ExternalProject_Add(ext_libx265_12bit
+        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+        URL http://ftp.videolan.org/pub/videolan/x265/x265_3.2.1.tar.gz
+        URL_MD5 94808045a34d88a857e5eaf3f68f4bca
+
+        SOURCE_SUBDIR source/
+
+        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} 
+        -DHIGH_BIT_DEPTH=TRUE -DMAIN12=TRUE -DEXPORT_C_API=FALSE  -DENABLE_CLI=FALSE -DENABLE_SHARED=FALSE
+        INSTALL_COMMAND ${CMAKE_COMMAND} -E copy libx265.a ${EXTPREFIX_heif}/lib/libx265_main12.a
+    )
+    ExternalProject_Add(
+        ext_libx265
+        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+        URL http://ftp.videolan.org/pub/videolan/x265/x265_3.2.1.tar.gz
+        URL_MD5 94808045a34d88a857e5eaf3f68f4bca
+
+        SOURCE_SUBDIR source/
+
+        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/02-skip-pdb-in-mingw.diff
+
+        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} -DENABLE_SHARED=TRUE  -DENABLE_HDR10_PLUS=TRUE -DEXTRA_LIB:String=x265_main10.a$<SEMICOLON>x265_main12.a -DEXTRA_LINK_FLAGS:String=-L${EXTPREFIX_heif}/lib -DLINKED_10BIT=TRUE -DLINKED_12BIT=TRUE
+
+        UPDATE_COMMAND ""
+
+        DEPENDS ext_nasm ext_libx265_10bit ext_libx265_12bit
+    )
+else ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+    # x265 in 32-bit platforms cannot support 10-bit and 12-bit images
+    # because they either crash on malloc or require SSE4.1+ extensions
+    ExternalProject_Add(
+        ext_libx265
+        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+        URL http://ftp.videolan.org/pub/videolan/x265/x265_3.2.1.tar.gz
+        URL_MD5 94808045a34d88a857e5eaf3f68f4bca
+
+        SOURCE_SUBDIR source/
+
+        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/02-skip-pdb-in-mingw.diff
+
+        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} -DENABLE_SHARED=TRUE
+
+        UPDATE_COMMAND ""
+
+        DEPENDS ext_nasm
+    )
+endif ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
 
 ExternalProject_Add(
     ext_libheif
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/strukturag/libheif/releases/download/v1.4.0/libheif-1.4.0.tar.gz
-    URL_MD5 b3c726609a8750c5fc1687a7b193adff
+    URL https://github.com/strukturag/libheif/releases/download/v1.6.2/libheif-1.6.2.tar.gz
+    URL_HASH SHA256=bb229e855621deb374f61bee95c4642f60c2a2496bded35df3d3c42cc6d8eefc
 
-    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${EXTPREFIX_heif} ${GLOBAL_AUTOMAKE_PROFILE}
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/03-fix-build-macos-windows.diff
 
-    BUILD_COMMAND CXXFLAGS="-Wno-error" make
-    INSTALL_COMMAND make install
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DBUILD_EXAMPLES=ON ${GLOBAL_PROFILE}
 
     UPDATE_COMMAND ""
-    DEPENDS ext_libde265 ext_libx265 ext_pkgconfig
+    DEPENDS ext_libde265 ext_libx265 ext_jpeg ext_png
 )

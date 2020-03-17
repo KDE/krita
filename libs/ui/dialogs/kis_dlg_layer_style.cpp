@@ -38,6 +38,7 @@
 #include "kis_cmb_gradient.h"
 #include "KisResourceServerProvider.h"
 #include "kis_psd_layer_style.h"
+#include <KisAslStorage.h>
 #include <KisResourceLocator.h>
 
 #include "kis_signals_blocker.h"
@@ -546,6 +547,7 @@ StylesSelector::StylesSelector(QWidget *parent)
 
     connect(ui.cmbStyleCollections, SIGNAL(activated(QString)), this, SLOT(loadStyles(QString)));
     connect(ui.listStyles, SIGNAL(clicked(QModelIndex)), this, SLOT(selectStyle(QModelIndex)));
+    connect(m_resourceModel, SIGNAL(afterResourcesLayoutReset()), this, SLOT(slotResourceModelReset()));
 
     refillCollections();
 
@@ -647,6 +649,12 @@ void StylesSelector::loadCollection(const QString &fileName)
     ui.cmbStyleCollections->setCurrentIndex(index);
     loadStyles(collection->name());
     */
+}
+
+void StylesSelector::slotResourceModelReset()
+{
+    ENTER_FUNCTION() << "MODEL RESET!!!";
+    refillCollections();
 }
 
 void StylesSelector::addNewStyle(KisPSDLayerStyleSP style)

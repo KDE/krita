@@ -248,6 +248,9 @@ public:
     void loadCollection(const QString &fileName);
 
 private Q_SLOTS:
+
+    void slotResourceModelReset();
+
     void loadStyles(const QString &name);
     void selectStyle(QModelIndex current);
 Q_SIGNALS:

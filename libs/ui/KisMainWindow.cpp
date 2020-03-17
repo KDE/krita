@@ -495,6 +495,9 @@ KisMainWindow::KisMainWindow(QUuid uuid)
 
     configChanged();
 
+    // Make sure the python plugins create their actions in time
+    KisPart::instance()->notifyMainWindowIsBeingCreated(this);
+
     // If we have customized the toolbars, load that first
     setLocalXMLFile(KoResourcePaths::locateLocal("data", "krita4.xmlgui"));
     setXMLFile(":/kxmlgui5/krita4.xmlgui");

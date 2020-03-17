@@ -113,6 +113,13 @@ public:
     KisMainWindow *createMainWindow(QUuid id = QUuid());
 
     /**
+     * @brief notifyMainWindowIsBeingCreated emits the sigMainWindowCreated signal
+     * @param mainWindow
+     */
+    void notifyMainWindowIsBeingCreated(KisMainWindow *mainWindow);
+
+
+    /**
      * Removes a main window from the list of managed windows.
      *
      * This is called by the MainWindow after it finishes its shutdown routine.
@@ -201,7 +208,7 @@ Q_SIGNALS:
     void sigDocumentAdded(KisDocument *document);
     void sigDocumentSaved(const QString &url);
     void sigDocumentRemoved(const QString &filename);
-    void sigWindowAdded(KisMainWindow *window);
+    void sigMainWindowIsBeingCreated(KisMainWindow *window);
 
 public:
 

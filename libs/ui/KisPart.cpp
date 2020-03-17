@@ -230,8 +230,12 @@ KisMainWindow *KisPart::createMainWindow(QUuid id)
     KisMainWindow *mw = new KisMainWindow(id);
     dbgUI <<"mainWindow" << (void*)mw << "added to view" << this;
     d->mainWindows.append(mw);
-    emit sigWindowAdded(mw);
     return mw;
+}
+
+void KisPart::notifyMainWindowIsBeingCreated(KisMainWindow *mainWindow)
+{
+    emit sigMainWindowIsBeingCreated(mainWindow);
 }
 
 KisView *KisPart::createView(KisDocument *document,

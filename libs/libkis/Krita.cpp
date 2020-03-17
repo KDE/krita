@@ -78,7 +78,7 @@ Krita::Krita(QObject *parent)
     , d(new Private)
 {
     qRegisterMetaType<Notifier*>();
-    connect(KisPart::instance(), SIGNAL(sigWindowAdded(KisMainWindow*)), SLOT(mainWindowAdded(KisMainWindow*)));
+    connect(KisPart::instance(), SIGNAL(sigMainWindowIsBeingCreated(KisMainWindow*)), SLOT(mainWindowIsBeingCreated(KisMainWindow*)));
 }
 
 Krita::~Krita()
@@ -414,7 +414,7 @@ QString Krita::krita_i18n(const QString &text)
     return i18n(text.toUtf8().constData());
 }
 
-void Krita::mainWindowAdded(KisMainWindow *kisWindow)
+void Krita::mainWindowIsBeingCreated(KisMainWindow *kisWindow)
 {
     Q_FOREACH(Extension *extension, d->extensions) {
         Window window(kisWindow);

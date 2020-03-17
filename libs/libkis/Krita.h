@@ -331,7 +331,8 @@ add_document_to_window()
 
 private Q_SLOTS:
 
-    void mainWindowAdded(KisMainWindow *window);
+    /// This is called from the constructor of the window, before the xmlgui file is loaded
+    void mainWindowIsBeingCreated(KisMainWindow *window);
 
 private:
     struct Private;

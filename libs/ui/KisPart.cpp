@@ -46,6 +46,8 @@
 #include <KoDialog.h>
 #include <kdesktopfile.h>
 #include <QMessageBox>
+#include <QMenu>
+#include <QMenuBar>
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
 #include <kconfig.h>
@@ -230,6 +232,33 @@ KisMainWindow *KisPart::createMainWindow(QUuid id)
     KisMainWindow *mw = new KisMainWindow(id);
     dbgUI <<"mainWindow" << (void*)mw << "added to view" << this;
     d->mainWindows.append(mw);
+
+    // Add all actions with a menu property to the main window
+    Q_FOREACH(QAction *action, mw->actionCollection()->actions()) {
+        QString menuLocation = action->property("menulocation").toString();
+        if (!menuLocation.isEmpty()) {
+            QAction *found = 0;
+            QList<QAction *> candidates = mw->menuBar()->actions();
+            Q_FOREACH(const QString &name, menuLocation.split("/")) {
+                Q_FOREACH(QAction *candidate, candidates) {
+                    if (candidate->objectName().toLower() == name.toLower()) {
+                        found = candidate;
+                        candidates = candidate->menu()->actions();
+                        break;
+                    }
+                }
+                if (candidates.isEmpty()) {
+                    break;
+                }
+            }
+
+            if (found && found->menu()) {
+                found->menu()->addAction(action);
+            }
+        }
+    }
+
+
     return mw;
 }
 

@@ -150,6 +150,7 @@ void AnimaterionRenderer::renderAnimationImpl(KisDocument *doc, KisAnimationRend
                                                                       encoderOptions.lastFrame),
                                                baseFileName,
                                                encoderOptions.sequenceStart,
+                                               encoderOptions.onlyRenderUniqueFrames && !encoderOptions.shouldEncodeVideo,
                                                encoderOptions.frameExportConfig);
     exporter.setBatchMode(batchMode);
 

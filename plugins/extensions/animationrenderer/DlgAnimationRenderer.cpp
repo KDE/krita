@@ -98,6 +98,7 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
 
     QStringList mimes = KisImportExportManager::supportedMimeTypes(KisImportExportManager::Export);
     mimes.sort();
+    filterSequenceMimeTypes(mimes);
     Q_FOREACH(const QString &mime, mimes) {
         QString description = KisMimeDatabase::descriptionForMimeType(mime);
         if (description.isEmpty()) {
@@ -112,12 +113,7 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
 
     setMainWidget(m_page);
 
-    QVector<QString> supportedMimeType;
-    supportedMimeType << "video/x-matroska";
-    supportedMimeType << "image/gif";
-    supportedMimeType << "video/ogg";
-    supportedMimeType << "video/mp4";
-
+    QStringList supportedMimeType = makeVideoMimeTypesList();
     Q_FOREACH (const QString &mime, supportedMimeType) {
         QString description = KisMimeDatabase::descriptionForMimeType(mime);
         if (description.isEmpty()) {
@@ -186,6 +182,31 @@ void DlgAnimationRenderer::getDefaultVideoEncoderOptions(const QString &mimeType
     *forceHDRVideo = encoderConfigWidget->forceHDRModeForFrames();
 }
 
+void DlgAnimationRenderer::filterSequenceMimeTypes(QStringList &mimeTypes)
+{
+    QStringList validMimeTypes;
+    Q_FOREACH(const QString &mime, mimeTypes) {
+        if (mime.startsWith("image/")
+          || (mime.startsWith("application/") &&
+              !mime.startsWith("application/x-spriter") )) {
+            validMimeTypes.append(mime);
+        }
+    }
+
+    mimeTypes = validMimeTypes;
+}
+
+QStringList DlgAnimationRenderer::makeVideoMimeTypesList()
+{
+    QStringList supportedMimeTypes = QStringList();
+    supportedMimeTypes << "video/x-matroska";
+    supportedMimeTypes << "image/gif";
+    supportedMimeTypes << "video/ogg";
+    supportedMimeTypes << "video/mp4";
+
+    return supportedMimeTypes;
+}
+
 void DlgAnimationRenderer::loadAnimationOptions(const KisAnimationRenderingOptions &options)
 {
     const QString documentPath = m_doc->localFilePath();
@@ -237,6 +258,7 @@ void DlgAnimationRenderer::loadAnimationOptions(const KisAnimationRenderingOptio
     }
 
     m_page->chkIncludeAudio->setChecked(options.includeAudio);
+    m_page->chkOnlyUniqueFrames->setChecked(options.onlyRenderUniqueFrames);
 
     if (options.shouldDeleteSequence) {
         KIS_SAFE_ASSERT_RECOVER_NOOP(options.shouldEncodeVideo);
@@ -387,6 +409,7 @@ KisAnimationRenderingOptions DlgAnimationRenderer::getEncoderOptions() const
     options.shouldEncodeVideo = !m_page->shouldExportOnlyImageSequence->isChecked();
     options.shouldDeleteSequence = m_page->shouldExportOnlyVideo->isChecked();
     options.includeAudio = m_page->chkIncludeAudio->isChecked();
+    options.onlyRenderUniqueFrames = m_page->chkOnlyUniqueFrames->isChecked();
 
     options.ffmpegPath = m_page->ffmpegLocation->fileName();
     options.frameRate = m_page->intFramesPerSecond->value();
@@ -542,6 +565,7 @@ void DlgAnimationRenderer::slotExportTypeChanged()
     m_page->fpsLabel->setVisible(willEncodeVideo);
     m_page->lblWidth->setVisible(willEncodeVideo);
     m_page->lblHeight->setVisible(willEncodeVideo);
+    m_page->chkOnlyUniqueFrames->setVisible(false);
 
     // if only exporting video
     if (m_page->shouldExportOnlyVideo->isChecked()) {
@@ -558,6 +582,7 @@ void DlgAnimationRenderer::slotExportTypeChanged()
         m_page->videoOptionsGroup->setVisible(false);
         m_page->imageSequenceOptionsGroup->setVisible(false);
         m_page->imageSequenceOptionsGroup->setVisible(true);
+        m_page->chkOnlyUniqueFrames->setVisible(true);
     }
 
     // show all options

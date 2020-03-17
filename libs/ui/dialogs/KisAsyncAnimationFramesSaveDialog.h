@@ -30,6 +30,7 @@ public:
                                       const KisTimeRange &range,
                                       const QString &baseFilename,
                                       int sequenceNumberingOffset,
+                                      bool onlyUniqueFrames,
                                       KisPropertiesConfigurationSP exportConfiguration);
 
     ~KisAsyncAnimationFramesSaveDialog();

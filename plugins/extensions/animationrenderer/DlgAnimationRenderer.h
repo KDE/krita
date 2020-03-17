@@ -91,6 +91,8 @@ private:
                                               QString *customFFMpegOptionsString,
                                               bool *forceHDRVideo);
 
+    void filterSequenceMimeTypes(QStringList &mimeTypes);
+    QStringList makeVideoMimeTypesList();
 private:
 
     static QString findFFMpeg(const QString &customLocation);

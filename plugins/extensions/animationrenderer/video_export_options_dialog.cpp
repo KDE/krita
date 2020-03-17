@@ -373,8 +373,6 @@ QString VideoExportOptionsDialog::currentCodecId() const
 
 void VideoExportOptionsDialog::slotH265ProfileChanged(int index)
 {
-    ENTER_FUNCTION() << ppVar(m_d->profilesH265[index].id());
-
     const bool enableHDR =
         m_d->supportsHDR &&
         index >= 0 &&

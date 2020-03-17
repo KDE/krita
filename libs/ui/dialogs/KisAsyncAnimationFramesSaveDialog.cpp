@@ -35,11 +35,13 @@ struct KisAsyncAnimationFramesSaveDialog::Private {
             const KisTimeRange &_range,
             const QString &baseFilename,
             int _sequenceNumberingOffset,
+            bool _onlyUniqueFrames,
             KisPropertiesConfigurationSP _exportConfiguration)
         : originalImage(_image),
           range(_range),
           sequenceNumberingOffset(_sequenceNumberingOffset),
-          exportConfiguration(_exportConfiguration)
+          exportConfiguration(_exportConfiguration),
+          onlyUniqueFrames(_onlyUniqueFrames)
     {
         int baseLength = baseFilename.lastIndexOf(".");
         if (baseLength > -1) {
@@ -58,6 +60,7 @@ struct KisAsyncAnimationFramesSaveDialog::Private {
     QString filenamePrefix;
     QString filenameSuffix;
     QByteArray outputMimeType;
+    bool onlyUniqueFrames;
 
     int sequenceNumberingOffset;
     KisPropertiesConfigurationSP exportConfiguration;
@@ -67,9 +70,10 @@ KisAsyncAnimationFramesSaveDialog::KisAsyncAnimationFramesSaveDialog(KisImageSP 
                                                                      const KisTimeRange &range,
                                                                      const QString &baseFilename,
                                                                      int sequenceNumberingOffset,
+                                                                     bool onlyUniqueFrames,
                                                                      KisPropertiesConfigurationSP exportConfiguration)
     : KisAsyncAnimationRenderDialogBase(i18n("Saving frames..."), originalImage, 0),
-      m_d(new Private(originalImage, range, baseFilename, sequenceNumberingOffset, exportConfiguration))
+      m_d(new Private(originalImage, range, baseFilename, sequenceNumberingOffset, onlyUniqueFrames, exportConfiguration))
 {
 
 
@@ -156,10 +160,27 @@ KisAsyncAnimationRenderDialogBase::Result KisAsyncAnimationFramesSaveDialog::reg
 
 QList<int> KisAsyncAnimationFramesSaveDialog::calcDirtyFrames() const
 {
-    // TODO: optimize!
     QList<int> result;
-    for (int i = m_d->range.start(); i <= m_d->range.end(); i++) {
-        result.append(i);
+    for (int frame = m_d->range.start(); frame <= m_d->range.end(); frame++) {
+        // Currently the 'both' option is not supported for only unique frames. When doing both,
+        // you need to have all frames available for encoding and only delete non-unique frames after
+        // the video is done rendering. This can be achieved, but shouldn't be done here.
+        if( m_d->onlyUniqueFrames ) {
+            KisTimeRange heldFrameTimeRange = KisTimeRange::calculateIdenticalFramesRecursive(m_d->originalImage->root(), frame);
+            ENTER_FUNCTION() << heldFrameTimeRange;
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(heldFrameTimeRange.isValid(), result);
+
+            result.append(heldFrameTimeRange.start());
+
+            if (heldFrameTimeRange.isInfinite()) {
+                break;
+            } else {
+                frame = heldFrameTimeRange.end();
+            }
+
+        } else {
+            result.append(frame);
+        }
     }
     return result;
 }

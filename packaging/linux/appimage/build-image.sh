@@ -91,7 +91,7 @@ cd $BUILD_PREFIX
 
 # place the icon where linuxdeployqt seems to expect it
 find $APPDIR -name krita.png
-cp /home/appimage//appimage-workspace/krita.appdir/usr/share/icons/hicolor/256x256/apps/krita.png $APPDIR
+cp $APPDIR/usr/share/icons/hicolor/256x256/apps/krita.png $APPDIR
 ls $APPDIR
 
 # Step 4: Build the image!!!

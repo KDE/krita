@@ -29,6 +29,8 @@
 #include <QPixmap>
 #include <QMessageBox>
 #include <QInputDialog>
+#include <QItemSelectionModel>
+
 
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
@@ -84,6 +86,11 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
     QItemSelectionModel* selectionModel = m_ui->tableView->selectionModel();
     connect(selectionModel, &QItemSelectionModel::currentChanged, this, &DlgBundleManager::currentCellSelectedChanged);
 
+    connect(KisStorageModel::instance(), &KisStorageModel::modelAboutToBeReset, this, &DlgBundleManager::slotModelAboutToBeReset);
+    connect(KisStorageModel::instance(), &KisStorageModel::modelReset, this, &DlgBundleManager::slotModelReset);
+
+
+
 }
 
 void DlgBundleManager::addBundle()
@@ -115,11 +122,31 @@ void DlgBundleManager::deleteBundle()
     m_proxyModel->setData(idx, QVariant(!active), Qt::CheckStateRole);
 }
 
+void DlgBundleManager::slotModelAboutToBeReset()
+{
+    ENTER_FUNCTION();
+    lastIndex = QPersistentModelIndex(m_proxyModel->mapToSource(m_ui->tableView->currentIndex()));
+    ENTER_FUNCTION() << ppVar(lastIndex) << ppVar(lastIndex.isValid());
+}
+
+void DlgBundleManager::slotModelReset()
+{
+    ENTER_FUNCTION();
+    ENTER_FUNCTION() << ppVar(lastIndex) << ppVar(lastIndex.isValid());
+    if (lastIndex.isValid()) {
+        ENTER_FUNCTION() << "last index valid!";
+        m_ui->tableView->setCurrentIndex(m_proxyModel->mapToSource(lastIndex));
+    }
+    lastIndex = QModelIndex();
+}
+
 void DlgBundleManager::currentCellSelectedChanged(QModelIndex current, QModelIndex previous)
 {
+    ENTER_FUNCTION() << "Current cell changed!";
     QModelIndex idx = m_ui->tableView->currentIndex();
     KIS_ASSERT(m_proxyModel);
     if (!idx.isValid()) {
+        ENTER_FUNCTION() << "Index is invalid\n";
         return;
     }
     bool active = m_proxyModel->data(idx, Qt::UserRole + KisStorageModel::Active).toBool();

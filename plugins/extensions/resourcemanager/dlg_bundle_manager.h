@@ -22,6 +22,7 @@
 #include <QWidget>
 #include <KoDialog.h>
 #include <QModelIndex>
+#include <QPersistentModelIndex>
 
 class KisStorageModel;
 class KisStorageFilterProxyModel;
@@ -43,6 +44,8 @@ private Q_SLOTS:
     void createBundle();
     void deleteBundle();
 
+    void slotModelAboutToBeReset();
+    void slotModelReset();
     void currentCellSelectedChanged(QModelIndex current, QModelIndex previous);
 
 
@@ -52,6 +55,7 @@ private:
 
     QWidget *m_page;
     Ui::WdgDlgBundleManager *m_ui;
+    QPersistentModelIndex lastIndex;
     KisStorageFilterProxyModel* m_proxyModel;
 
 };

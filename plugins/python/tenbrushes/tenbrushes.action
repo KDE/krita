@@ -3,6 +3,19 @@
   <Actions category="Scripts">
     <text>Ten Brushes</text>
 
+    <Action name="ten_brushes">
+      <icon></icon>
+      <text>Ten Brushes</text>
+      <whatsThis></whatsThis>
+      <toolTip></toolTip>
+      <iconText></iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    
     <Action name="activate_preset_1">
       <icon></icon>
       <text>Activate Brush Preset 1</text>

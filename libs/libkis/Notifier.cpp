@@ -41,7 +41,7 @@ Notifier::Notifier(QObject *parent)
     connect(KisPart::instance(), SIGNAL(sigViewAdded(KisView*)), SLOT(viewCreated(KisView*)));
     connect(KisPart::instance(), SIGNAL(sigViewRemoved(KisView*)), SLOT(viewClosed(KisView*)));
 
-    connect(KisPart::instance(), SIGNAL(sigWindowAdded(KisMainWindow*)), SLOT(windowCreated(KisMainWindow*)));
+    connect(KisPart::instance(), SIGNAL(sigMainWindowIsBeingCreated(KisMainWindow*)), SLOT(windowIsBeingCreated(KisMainWindow*)));
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SIGNAL(configurationChanged()));
 
@@ -82,9 +82,9 @@ void Notifier::viewClosed(KisView *view)
     emit viewClosed(v);
 }
 
-void Notifier::windowCreated(KisMainWindow *window)
+void Notifier::windowIsBeingCreated(KisMainWindow *window)
 {
     Window *w = new Window(window);
-    emit windowCreated(w);
+    emit windowIsBeingCreated(w);
 }
 

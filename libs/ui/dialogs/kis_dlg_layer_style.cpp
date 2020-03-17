@@ -38,6 +38,7 @@
 #include "kis_cmb_gradient.h"
 #include "KisResourceServerProvider.h"
 #include "kis_psd_layer_style.h"
+#include <KisResourceLocator.h>
 
 #include "kis_signals_blocker.h"
 #include "kis_signal_compressor.h"
@@ -284,25 +285,47 @@ void KisDlgLayerStyle::slotNewStyle()
     m_stylesSelector->addNewStyle(style->clone().dynamicCast<KisPSDLayerStyle>());
 }
 
+QString createNewAslPath(QString resourceFolderPath, QString filename)
+{
+    return resourceFolderPath + QDir::separator() + "asl" + QDir::separator() + filename;
+}
+
 void KisDlgLayerStyle::slotLoadStyle()
 {
-    // TODO: RESOURCES: switch to loading the storage
-    QMessageBox dialog;
-    dialog.setText("Asl files cannot be loaded until AslStorage creating is sorted out.");
-    dialog.exec();
-
-    /*
     QString filename; // default value?
 
     KoFileDialog dialog(this, KoFileDialog::OpenFile, "layerstyle");
     dialog.setCaption(i18n("Select ASL file"));
     dialog.setMimeTypeFilters(QStringList() << "application/x-photoshop-style-library", "application/x-photoshop-style-library");
     filename = dialog.filename();
+    QFileInfo oldFileInfo(filename);
 
+    KisConfig cfg(true);
+    QString newDir = cfg.readEntry<QString>(KisResourceLocator::resourceLocationKey,
+                                            QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+    QString newName = oldFileInfo.fileName();
+    QString newLocation = createNewAslPath(newDir, newName);
 
-    m_stylesSelector->loadCollection(filename);
-    wdgLayerStyles.lstStyleSelector->setCurrentRow(0);
-    */
+    QFileInfo newFileInfo(newLocation);
+    if (newFileInfo.exists()) {
+        bool done = false;
+        int i = 0;
+        do {
+            // ask for new filename
+            bool ok;
+            newName = QInputDialog::getText(this, i18n("New name for ASL storage"), i18n("The old filename is taken.\nNew name:"),
+                                                    QLineEdit::Normal, newName, &ok);
+            newLocation = createNewAslPath(newDir, newName);
+            newFileInfo.setFile(newLocation);
+            done = !newFileInfo.exists();
+            i++;
+        } while (!done);
+    }
+
+    QFile::copy(filename, newLocation);
+    KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(newLocation);
+    KIS_ASSERT(!storage.isNull());
+    KisResourceLocator::instance()->addStorage(newLocation, storage);
 }
 
 void KisDlgLayerStyle::slotSaveStyle()

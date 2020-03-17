@@ -439,6 +439,14 @@ void DlgAnimationRenderer::slotButtonClicked(int button)
                 QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("The location of FFmpeg is invalid. Please select the correct location of the FFmpeg executable on your system."));
                 return;
             }
+            if (!fi.isExecutable()) {
+                QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("The location of FFmpeg is invalid. Please select the correct location of the FFmpeg executable on your system."));
+                return;
+            }
+            if (fi.fileName().endsWith("zip")) {
+                QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("Please extract ffmpeg from the archive first."));
+                return;
+            }
         }
     }
     KoDialog::slotButtonClicked(button);

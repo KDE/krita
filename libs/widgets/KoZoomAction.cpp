@@ -221,7 +221,7 @@ void KoZoomAction::regenerateItems(const qreal zoom, bool asCurrent)
 
 void KoZoomAction::sliderValueChanged(int value)
 {
-    if (d->sliderLookup.contains(value)) {
+    if (value < d->sliderLookup.size()) {
         setZoom(d->sliderLookup[value]);
         emit zoomChanged(KoZoomMode::ZOOM_CONSTANT, d->sliderLookup[value]);
     }

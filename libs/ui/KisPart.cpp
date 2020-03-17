@@ -47,6 +47,7 @@
 #include <kdesktopfile.h>
 #include <QMessageBox>
 #include <QMenu>
+
 #include <QMenuBar>
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
@@ -222,7 +223,7 @@ int KisPart::documentCount() const
 void KisPart::removeDocument(KisDocument *document)
 {
     d->documents.removeAll(document);
-    emit documentClosed('/'+objectName());
+    emit documentClosed('/' + objectName());
     emit sigDocumentRemoved(document->url().toLocalFile());
     document->deleteLater();
 }

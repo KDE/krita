@@ -33,7 +33,7 @@ struct KisTagFilterResourceProxyModel::Private
     QList<KisTagSP> tags;
     KisTagModel* tagModel;
     QScopedPointer<KisResourceSearchBoxFilter> filter;
-    bool filterInCurrentTag;
+    bool filterInCurrentTag {false};
 
 };
 

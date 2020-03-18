@@ -26,7 +26,7 @@
 #include <QList>
 #include <QColor>
 
-#include <resources/KoResource.h>
+#include <KoResource.h>
 #include <resources/KoAbstractGradient.h>
 #include "KoColor.h"
 
@@ -85,6 +85,7 @@ public:
     void setColorInterpolation(int colorInterpolationType);
 
     bool isValid() const;
+
 protected:
 
     class ColorInterpolationStrategy
@@ -260,16 +261,16 @@ class KRITAPIGMENT_EXPORT KoSegmentGradient : public KoAbstractGradient
 public:
     explicit KoSegmentGradient(const QString &file = QString());
     ~KoSegmentGradient() override;
+    KoSegmentGradient(const KoSegmentGradient &rhs);
+    KoSegmentGradient &operator=(const KoSegmentGradient &rhs) = delete;
+    KoResourceSP clone() const override;
 
-    KoAbstractGradient* clone() const override;
-
-    /// reimplemented
-    bool load() override;
-    bool loadFromDevice(QIODevice *dev) override;
-
-    /// not implemented
-    bool save() override;
+    bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;
     bool saveToDevice(QIODevice* dev) const override;
+
+    QPair<QString, QString> resourceType() const override {
+        return QPair<QString, QString>(ResourceType::Gradients, ResourceSubType::SegmentedGradients);
+    }
 
     /// reimplemented
     void colorAt(KoColor& dst, qreal t) const override;
@@ -415,7 +416,6 @@ public:
     const QList<KoGradientSegment *>& segments() const;
 
 protected:
-    KoSegmentGradient(const KoSegmentGradient &rhs);
 
     inline void pushSegment(KoGradientSegment* segment) {
         m_segments.push_back(segment);
@@ -423,9 +423,11 @@ protected:
 
     QList<KoGradientSegment *> m_segments;
 
-    private:
+private:
     bool init();
 };
+
+typedef QSharedPointer<KoSegmentGradient> KoSegmentGradientSP;
 
 #endif // KOSEGMENTGRADIENT_H
 

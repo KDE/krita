@@ -16,8 +16,6 @@ public Q_SLOTS:
     QString filename() const;
     QImage image() const;
     void setImage(QImage image);
-    QByteArray data() const;
-    bool setData(QByteArray data);
 public Q_SLOTS:
 Q_SIGNALS:
 private:

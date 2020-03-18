@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2014 Victor Lafon metabolic.ewilan@hotmail.fr
+ *  Copyright (c) 2020 Agata Cacko cacko.azh@gmail.com
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,7 +22,7 @@
 
 #include <KoDialog.h>
 
-class KisResourceBundle;
+#include <KoResourceBundle.h>
 
 namespace Ui
 {
@@ -33,7 +34,7 @@ class DlgCreateBundle : public KoDialog
     Q_OBJECT
 
 public:
-    explicit DlgCreateBundle(KisResourceBundle *bundle = 0, QWidget *parent = 0);
+    explicit DlgCreateBundle(KoResourceBundleSP bundle = nullptr, QWidget *parent = 0);
     ~DlgCreateBundle() override;
 
     QString bundleName() const;
@@ -45,39 +46,34 @@ public:
     QString saveLocation() const;
     QString previewImage() const;
 
-    QStringList selectedBrushes() const { return m_selectedBrushes; }
-    QStringList selectedPresets() const { return m_selectedPresets; }
-    QStringList selectedGradients() const { return m_selectedGradients; }
-    QStringList selectedPatterns() const { return m_selectedPatterns; }
-    QStringList selectedPalettes() const { return m_selectedPalettes; }
-    QStringList selectedWorkspaces() const { return m_selectedWorkspaces; }
-    QStringList selectedGamutMasks() const { return m_selectedGamutMasks; }
-
 private Q_SLOTS:
 
     void accept() override;
+    void reject() override;
+
     void selectSaveLocation();
     void addSelected();
     void removeSelected();
     void resourceTypeSelected(int idx);
     void getPreviewImage();
+    void saveToConfiguration(bool full);
+    void slotEmbedTags();
+    QVector<KisTagSP> getTagsForEmbeddingInResource(QVector<KisTagSP> resourceTags) const;
 
 
 private:
+
+    void putResourcesInTheBundle() const;
+
     QWidget *m_page;
     Ui::WdgDlgCreateBundle *m_ui;
 
-    QStringList m_selectedBrushes;
-    QStringList m_selectedPresets;
-    QStringList m_selectedGradients;
-    QStringList m_selectedPatterns;
-    QStringList m_selectedPalettes;
-    QStringList m_selectedWorkspaces;
-    QStringList m_selectedGamutMasks;
+    QList<int> m_selectedResourcesIds;
+    QList<int> m_selectedTagIds;
 
     QString m_previewImage;
 
-    KisResourceBundle *m_bundle;
+    KoResourceBundleSP m_bundle;
 };
 
 #endif // KOBUNDLECREATIONWIDGET_H

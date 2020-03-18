@@ -122,11 +122,19 @@ int KisMultiChannelFilter::findChannel(const QVector<VirtualChannelInfo> &virtua
 }
 
 
-KisMultiChannelFilterConfiguration::KisMultiChannelFilterConfiguration(int channelCount, const QString & name, qint32 version)
-        : KisColorTransformationConfiguration(name, version)
+KisMultiChannelFilterConfiguration::KisMultiChannelFilterConfiguration(int channelCount, const QString & name, qint32 version, KisResourcesInterfaceSP resourcesInterface)
+        : KisColorTransformationConfiguration(name, version, resourcesInterface)
         , m_channelCount(channelCount)
 {
     m_transfers.resize(m_channelCount);
+}
+
+KisMultiChannelFilterConfiguration::KisMultiChannelFilterConfiguration(const KisMultiChannelFilterConfiguration &rhs)
+    : KisColorTransformationConfiguration(rhs),
+      m_channelCount(rhs.m_channelCount),
+      m_curves(rhs.m_curves),
+      m_transfers(rhs.m_transfers)
+{
 }
 
 KisMultiChannelFilterConfiguration::~KisMultiChannelFilterConfiguration()

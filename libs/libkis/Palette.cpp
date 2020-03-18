@@ -24,11 +24,11 @@
 #include <KisPaletteModel.h>
 
 struct Palette::Private {
-    KoColorSet *palette {0};
+    KoColorSetSP palette {0};
 };
 
 Palette::Palette(Resource *resource): d(new Private()) {
-    d->palette = dynamic_cast<KoColorSet*>(resource->resource());
+    d->palette = resource->resource().dynamicCast<KoColorSet>();
 }
 
 Palette::~Palette()
@@ -149,7 +149,7 @@ bool Palette::save()
     return false;
 }
 
-KoColorSet *Palette::colorSet()
+KoColorSetSP Palette::colorSet()
 {
     return d->palette;
 }

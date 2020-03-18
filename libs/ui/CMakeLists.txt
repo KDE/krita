@@ -62,7 +62,6 @@ set(kritaui_LIB_SRCS
     dialogs/kis_dlg_layer_properties.cc
     dialogs/kis_dlg_preferences.cc
     dialogs/slider_and_spin_box_sync.cpp
-    dialogs/kis_dlg_blacklist_cleanup.cpp
     dialogs/kis_dlg_layer_style.cpp
     dialogs/kis_dlg_png_import.cpp
     dialogs/kis_dlg_import_image_sequence.cpp
@@ -142,7 +141,6 @@ set(kritaui_LIB_SRCS
     kis_png_converter.cpp
     kis_preference_set_registry.cpp
     KisResourceServerProvider.cpp
-    KisResourceBundleServerProvider.cpp
     KisSelectedShapesProxy.cpp
     kis_selection_decoration.cc
     kis_selection_manager.cc
@@ -339,8 +337,6 @@ set(kritaui_LIB_SRCS
     input/config/kis_wheel_input_editor.cpp
     input/config/kis_key_input_editor.cpp
     processing/fill_processing_visitor.cpp
-    kis_asl_layer_style_serializer.cpp
-    kis_psd_layer_style_resource.cpp
     canvas/kis_mirror_axis.cpp
 
     kis_abstract_perspective_grid.cpp
@@ -382,10 +378,6 @@ set(kritaui_LIB_SRCS
     qtsingleapplication/qtlocalpeer.cpp
     qtsingleapplication/qtsingleapplication.cpp
 
-    KisResourceBundle.cpp
-    KisResourceBundleManifest.cpp
-
-    kis_md5_generator.cpp
     KisApplicationArguments.cpp
 
     KisNetworkAccessManager.cpp
@@ -512,7 +504,6 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgpresetselectorstrip.ui
     forms/wdgsavebrushpreset.ui
     forms/wdgpreseticonlibrary.ui
-    forms/wdgdlgblacklistcleanup.ui
     forms/wdgrectangleconstraints.ui
     forms/wdgimportimagesequence.ui
     forms/wdgstrokeselectionproperties.ui
@@ -574,7 +565,7 @@ add_library(kritaui SHARED ${kritaui_HEADERS_MOC} ${kritaui_LIB_SRCS} )
 generate_export_header(kritaui BASE_NAME kritaui)
 
 target_link_libraries(kritaui KF5::CoreAddons KF5::Completion KF5::I18n KF5::ItemViews Qt5::Network
-                      kritaimpex kritacolor kritaimage kritalibbrush kritawidgets kritawidgetutils ${PNG_LIBRARIES} LibExiv2::LibExiv2
+                      kritaimpex kritacolor kritaimage kritalibbrush kritawidgets kritawidgetutils kritaresources ${PNG_LIBRARIES} LibExiv2::LibExiv2
 )
 
 if (ANDROID)

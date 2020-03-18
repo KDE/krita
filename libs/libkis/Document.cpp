@@ -61,6 +61,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorConversionTransformation.h>
 #include <KoDocumentInfo.h>
+#include <KisGlobalResourcesInterface.h>
 
 #include <InfoObject.h>
 #include <Node.h>
@@ -641,7 +642,7 @@ FillLayer *Document::createFillLayer(const QString &name, const QString generato
     KisGeneratorSP generator = KisGeneratorRegistry::instance()->value(generatorName);
     if (generator) {
 
-        KisFilterConfigurationSP config = generator->factoryConfiguration();
+        KisFilterConfigurationSP config = generator->factoryConfiguration(KisGlobalResourcesInterface::instance());
         Q_FOREACH(const QString property, configuration.properties().keys()) {
             config->setProperty(property, configuration.property(property));
         }

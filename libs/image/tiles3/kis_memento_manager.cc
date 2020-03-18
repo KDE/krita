@@ -235,7 +235,7 @@ KisMementoSP KisMementoManager::getMemento()
     /**
      * We do not allow nested transactions
      */
-    Q_ASSERT(!namedTransactionInProgress());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!namedTransactionInProgress());
 
     // Clear redo() information
     m_cancelledRevisions.clear();

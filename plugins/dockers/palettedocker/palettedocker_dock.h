@@ -36,12 +36,13 @@
 #include <kis_canvas2.h>
 #include <kis_mainwindow_observer.h>
 #include <KisView.h>
+#include <kis_workspace_resource.h>
 #include <kis_signal_auto_connection.h>
+
 
 class KisViewManager;
 class KisCanvasResourceProvider;
-class KisWorkspaceResource;
-class KisPaletteListWidget;
+class KisPaletteChooser;
 class KisPaletteModel;
 
 class KisPaletteEditor;
@@ -65,9 +66,9 @@ private Q_SLOTS:
     void slotContextMenu(const QModelIndex &);
 
     void slotAddPalette();
-    void slotRemovePalette(KoColorSet *);
+    void slotRemovePalette(KoColorSetSP );
     void slotImportPalette();
-    void slotExportPalette(KoColorSet *);
+    void slotExportPalette(KoColorSetSP );
 
     void slotAddColor();
     void slotRemoveColor();
@@ -78,13 +79,14 @@ private Q_SLOTS:
     void slotPaletteIndexClicked(const QModelIndex &index);
     void slotPaletteIndexDoubleClicked(const QModelIndex &index);
     void slotNameListSelection(const KoColor &color);
-    void slotSetColorSet(KoColorSet* colorSet);
+    void slotSetColorSet(KoColorSetSP colorSet);
 
-    void saveToWorkspace(KisWorkspaceResource* workspace);
-    void loadFromWorkspace(KisWorkspaceResource* workspace);
+    void saveToWorkspace(KisWorkspaceResourceSP workspace);
+    void loadFromWorkspace(KisWorkspaceResourceSP workspace);
 
     void slotFGColorResourceChanged(const KoColor& color);
-    void slotUpdatePaletteList(const QList<KoColorSet *> &oldPaletteList, const QList<KoColorSet *> &newPaletteList);
+
+    void slotStoragesChanged();
 
 private:
     void setEntryByForeground(const QModelIndex &index);
@@ -93,7 +95,7 @@ private:
 private /* member variables */:
     QScopedPointer<Ui_WdgPaletteDock> m_ui;
     KisPaletteModel *m_model;
-    KisPaletteListWidget *m_paletteChooser;
+    KisPaletteChooser *m_paletteChooser;
 
     QPointer<KisViewManager> m_view;
     KisCanvasResourceProvider *m_resourceProvider;
@@ -101,7 +103,7 @@ private /* member variables */:
     KoResourceServer<KoColorSet> * const m_rServer;
 
     QPointer<KisDocument> m_activeDocument;
-    QPointer<KoColorSet> m_currentColorSet;
+    QSharedPointer<KoColorSet> m_currentColorSet;
     QScopedPointer<KisPaletteEditor> m_paletteEditor;
 
     QScopedPointer<QAction> m_actAdd;
@@ -111,8 +113,6 @@ private /* member variables */:
     QMenu m_viewContextMenu;
 
     bool m_colorSelfUpdate;
-
-    KisSignalAutoConnectionsStore m_connections;
 };
 
 

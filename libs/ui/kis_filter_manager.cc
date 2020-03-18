@@ -48,6 +48,7 @@
 #include "strokes/kis_filter_stroke_strategy.h"
 #include "krita_utils.h"
 #include "kis_icon_utils.h"
+#include <KisGlobalResourcesInterface.h>
 
 
 struct KisFilterManager::Private {
@@ -248,13 +249,15 @@ void KisFilterManager::showFilterDialog(const QString &filterId)
         d->filterDialog->setFilter(filter);
         d->filterDialog->setVisible(true);
     } else {
-        apply(KisFilterConfigurationSP(filter->defaultConfiguration()));
+        apply(KisFilterConfigurationSP(filter->defaultConfiguration(KisGlobalResourcesInterface::instance())));
         finish();
     }
 }
 
-void KisFilterManager::apply(KisFilterConfigurationSP filterConfig)
+void KisFilterManager::apply(KisFilterConfigurationSP _filterConfig)
 {
+    KisFilterConfigurationSP filterConfig = _filterConfig->cloneWithResourcesSnapshot();
+
     KisFilterSP filter = KisFilterRegistry::instance()->value(filterConfig->name());
     KisImageWSP image = d->view->image();
 

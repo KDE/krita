@@ -19,5 +19,6 @@ add_subdirectory( libkis )
 if (NOT APPLE AND HAVE_QT_QUICK)
     add_subdirectory( libqml )
 endif()
+add_subdirectory( resources )
 add_subdirectory( metadata )
-
+add_subdirectory( resourcewidgets )

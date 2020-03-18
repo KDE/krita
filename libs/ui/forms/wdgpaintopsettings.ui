@@ -127,7 +127,7 @@
             </font>
            </property>
            <property name="text">
-            <string>current brush</string>
+            <string>Current brush preset</string>
            </property>
           </widget>
          </item>
@@ -369,7 +369,7 @@
           </size>
          </property>
          <property name="text">
-          <string>Overwrite Brush</string>
+          <string>Overwrite Brush Preset</string>
          </property>
         </widget>
        </item>

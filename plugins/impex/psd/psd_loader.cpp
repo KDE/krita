@@ -40,7 +40,6 @@
 #include <kis_transparency_mask.h>
 
 #include <kis_asl_layer_style_serializer.h>
-#include <kis_psd_layer_style_resource.h>
 #include "KisResourceServerProvider.h"
 
 #include "psd.h"
@@ -334,7 +333,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice *io)
                 layerStyle->setName(layer->name());
 
                 allStylesForServer << layerStyle;
-                layer->setLayerStyle(layerStyle->clone());
+                layer->setLayerStyle(layerStyle->clone().dynamicCast<KisPSDLayerStyle>());
             } else {
                 warnKrita << "WARNING: Couldn't read layer style!" << ppVar(serializer.styles());
             }
@@ -343,8 +342,15 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice *io)
     }
 
     if (!allStylesForServer.isEmpty()) {
-        KisPSDLayerStyleCollectionResource *collection =
-            new KisPSDLayerStyleCollectionResource("Embedded PSD Styles.asl");
+
+        warnKrita << "WARNING: Asl Layer Styles cannot be read (part of resource rewrite).";
+        // TODO: RESOURCES: needs implementing of creation of the storage and linking it to the database etc.
+        // Note: it would be possible to just read them and add to the server, but it would be better to do it through the storage
+
+
+        /*
+
+        KisPSDLayerStyleCollectionResourceSP collection(new KisPSDLayerStyleCollectionResource("Embedded PSD Styles.asl"));
 
         collection->setName(i18nc("Auto-generated layer style collection name for embedded styles (collection)", "<%1> (embedded)", m_image->objectName()));
         KIS_SAFE_ASSERT_RECOVER_NOOP(!collection->valid());
@@ -352,8 +358,10 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice *io)
         collection->setLayerStyles(allStylesForServer);
         KIS_SAFE_ASSERT_RECOVER_NOOP(collection->valid());
 
-        KoResourceServer<KisPSDLayerStyleCollectionResource> *server = KisResourceServerProvider::instance()->layerStyleCollectionServer();
+        KoResourceServer<KisPSDLayerStyle> *server = KisResourceServerProvider::instance()->layerStyleServer();
         server->addResource(collection, false);
+        */
+
     }
 
     return ImportExportCodes::OK;

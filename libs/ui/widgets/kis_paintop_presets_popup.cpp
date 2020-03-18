@@ -202,7 +202,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     connect(m_d->uiWdgPaintOpPresetSettings.paintPresetIcon, SIGNAL(clicked()),
             m_d->uiWdgPaintOpPresetSettings.scratchPad, SLOT(paintPresetImage()));
 
-    connect(saveDialog, SIGNAL(resourceSelected(KoResource*)), this, SLOT(resourceSelected(KoResource*)));
+    connect(saveDialog, SIGNAL(resourceSelected(KoResourceSP )), this, SLOT(resourceSelected(KoResourceSP )));
 
     connect (m_d->uiWdgPaintOpPresetSettings.renameBrushPresetButton, SIGNAL(clicked(bool)),
              this, SLOT(slotRenameBrushActivated()));
@@ -265,8 +265,8 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
 
     // preset widget connections
-    connect(m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SIGNAL(resourceSelected(KoResource*)),
-            this, SIGNAL(signalResourceSelected(KoResource*)));
+    connect(m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SIGNAL(resourceSelected(KoResourceSP )),
+            this, SIGNAL(signalResourceSelected(KoResourceSP )));
 
     connect(m_d->uiWdgPaintOpPresetSettings.reloadPresetButton, SIGNAL(clicked()),
             m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SLOT(updateViewSettings()));
@@ -324,7 +324,7 @@ void KisPaintOpPresetsPopup::slotBlackListCurrentPreset()
     KisPaintOpPresetSP curPreset = m_d->resourceProvider->currentPreset();
 
     if (rServer->resourceByName(curPreset->name())) {
-        rServer->removeResourceAndBlacklist(curPreset);
+        rServer->removeResourceFromServer(curPreset);
     }
 }
 
@@ -373,9 +373,6 @@ void KisPaintOpPresetsPopup::slotSaveRenameCurrentBrush()
     // but that is what we are going with for now
     emit reloadPresetClicked();
 
-
-    m_d->favoriteResManager->setBlockUpdates(true);
-
     // get a reference to the existing (and new) file name and path that we are working with
     KisPaintOpPresetSP curPreset = m_d->resourceProvider->currentPreset();
 
@@ -383,16 +380,14 @@ void KisPaintOpPresetsPopup::slotSaveRenameCurrentBrush()
         return;
 
     KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
-    QString saveLocation = rServer->saveLocation();
 
     QString originalPresetName = curPreset->name();
     QString renamedPresetName = m_d->uiWdgPaintOpPresetSettings.renameBrushNameTextField->text();
-    QString originalPresetPathAndFile = saveLocation + originalPresetName + curPreset->defaultFileExtension();
-    QString renamedPresetPathAndFile = saveLocation + renamedPresetName + curPreset->defaultFileExtension();
+    QString renamedPresetPathAndFile = renamedPresetName + curPreset->defaultFileExtension();
 
 
     // create a new brush preset with the name specified and add to resource provider
-    KisPaintOpPresetSP newPreset = curPreset->clone();
+    KisPaintOpPresetSP newPreset = curPreset->clone().dynamicCast<KisPaintOpPreset>();
     newPreset->setFilename(renamedPresetPathAndFile); // this also contains the path
     newPreset->setName(renamedPresetName);
     newPreset->setImage(curPreset->image()); // use existing thumbnail (might not need to do this)
@@ -400,15 +395,15 @@ void KisPaintOpPresetsPopup::slotSaveRenameCurrentBrush()
     newPreset->setValid(true);
     rServer->addResource(newPreset);
 
-    resourceSelected(newPreset.data()); // refresh and select our freshly renamed resource
+    resourceSelected(newPreset); // refresh and select our freshly renamed resource
 
 
     // Now blacklist the original file
     if (rServer->resourceByName(originalPresetName)) {
-        rServer->removeResourceAndBlacklist(curPreset);
+        rServer->removeResourceFromServer(curPreset);
     }
 
-    m_d->favoriteResManager->setBlockUpdates(false);
+    m_d->favoriteResManager->updateFavoritePresets();
 
     toggleBrushRenameUIActive(false); // this returns the UI to its original state after saving
 
@@ -545,7 +540,7 @@ void KisPaintOpPresetsPopup::setCreatingBrushFromScratch(bool enabled)
     m_d->isCreatingBrushFromScratch = enabled;
 }
 
-void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
+void KisPaintOpPresetsPopup::resourceSelected(KoResourceSP resource)
 {
     // this gets called every time the brush editor window is opened
     // TODO: this gets called multiple times whenever the preset is changed in the presets area
@@ -772,7 +767,7 @@ void KisPaintOpPresetsPopup::updateViewSettings()
 void KisPaintOpPresetsPopup::currentPresetChanged(KisPaintOpPresetSP preset)
 {
     if (preset) {
-        m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser->setCurrentResource(preset.data());
+        m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser->setCurrentResource(preset);
         setCurrentPaintOpId(preset->paintOp().id());
     }
 }

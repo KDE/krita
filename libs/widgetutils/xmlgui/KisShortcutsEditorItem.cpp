@@ -71,7 +71,7 @@ QVariant KisShortcutsEditorItem::data(int column, int role) const
             return m_id;
         case LocalPrimary:
         case LocalAlternate:
-            return qVariantFromValue(keySequence(column));
+            return QVariant::fromValue(keySequence(column));
         default:
             break;
         }
@@ -111,7 +111,7 @@ QVariant KisShortcutsEditorItem::data(int column, int role) const
         switch (column) {
         case LocalPrimary:
         case LocalAlternate:
-            return qVariantFromValue(keySequence(column));
+            return QVariant::fromValue(keySequence(column));
         default:
             // Column not valid for this role
             Q_ASSERT(false);
@@ -125,9 +125,9 @@ QVariant KisShortcutsEditorItem::data(int column, int role) const
 
         switch (column) {
         case LocalPrimary:
-            return qVariantFromValue(primarySequence(defaultShortcuts));
+            return QVariant::fromValue(primarySequence(defaultShortcuts));
         case LocalAlternate:
-            return qVariantFromValue(alternateSequence(defaultShortcuts));
+            return QVariant::fromValue(alternateSequence(defaultShortcuts));
         default:
             // Column not valid for this role
             Q_ASSERT(false);
@@ -135,7 +135,7 @@ QVariant KisShortcutsEditorItem::data(int column, int role) const
         }
     }
     case ObjectRole:
-        return qVariantFromValue((QObject *)m_action);
+        return QVariant::fromValue((QObject *)m_action);
 
     default:
         break;

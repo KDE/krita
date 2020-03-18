@@ -35,6 +35,7 @@
 #include "kis_updater_context.h"
 #include "kis_update_job_item.h"
 #include "kis_simple_update_queue.h"
+#include <KisGlobalResourcesInterface.h>
 
 #include "../../sdk/tests/testutil.h"
 
@@ -51,12 +52,12 @@ KisImageSP KisUpdateSchedulerTest::buildTestingImage()
 
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
     Q_ASSERT(filter);
-    KisFilterConfigurationSP configuration = filter->defaultConfiguration();
+    KisFilterConfigurationSP configuration = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(configuration);
 
     KisPaintLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
     KisPaintLayerSP paintLayer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE_U8 / 3);
-    KisLayerSP blur1 = new KisAdjustmentLayer(image, "blur1", configuration, 0);
+    KisLayerSP blur1 = new KisAdjustmentLayer(image, "blur1", configuration->cloneWithResourcesSnapshot(), 0);
 
     paintLayer1->paintDevice()->convertFromQImage(sourceImage1, 0, 0, 0);
     paintLayer2->paintDevice()->convertFromQImage(sourceImage2, 0, 0, 0);

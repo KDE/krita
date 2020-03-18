@@ -27,6 +27,7 @@
 #include <QAbstractItemDelegate>
 #include <QStyleOptionViewItem>
 #include <QSortFilterProxyModel>
+#include <KisResourceModel.h>
 #include <QApplication>
 
 #include <kis_config.h>
@@ -34,11 +35,11 @@
 #include <KisKineticScroller.h>
 
 #include <KoIcon.h>
-#include <KoResourceItemChooser.h>
-#include <KoResourceModel.h>
-#include <KoResourceServerAdapter.h>
-#include <KoResourceItemChooserSync.h>
-#include "KoResourceItemView.h"
+#include <KisResourceItemChooser.h>
+#include <KisResourceItemChooserSync.h>
+#include <KisResourceItemListView.h>
+#include <KisResourceModel.h>
+#include <KisResourceLocator.h>
 
 #include <brushengine/kis_paintop_settings.h>
 #include <brushengine/kis_paintop_preset.h>
@@ -79,58 +80,69 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
     painter->save();
     painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
-    if (! index.isValid())
-        return;
-
-    KisPaintOpPreset* preset = static_cast<KisPaintOpPreset*>(index.internalPointer());
-
-    QImage preview = preset->image();
-
-    if(preview.isNull()) {
+    if (!index.isValid()) {
+        qDebug() << "KisPresetDelegate::paint: index is invalid";
+        painter->restore();
         return;
     }
+
+    bool dirty = index.data(Qt::UserRole + KisResourceModel::Dirty).toBool();
+
+    QImage preview = index.data(Qt::UserRole + KisResourceModel::Thumbnail).value<QImage>();
+
+    if (preview.isNull()) {
+        qDebug() << "KisPresetDelegate::paint:  Preview is null";
+        painter->restore();
+        return;
+    }
+
+    QMap<QString, QVariant> metaData = index.data(Qt::UserRole + KisResourceModel::MetaData).value<QMap<QString, QVariant>>();
 
     QRect paintRect = option.rect.adjusted(1, 1, -1, -1);
     if (!m_showText) {
         painter->drawImage(paintRect.x(), paintRect.y(),
                            preview.scaled(paintRect.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
-    } else {
+    }
+    else {
         QSize pixSize(paintRect.height(), paintRect.height());
         painter->drawImage(paintRect.x(), paintRect.y(),
                            preview.scaled(pixSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
         // Put an asterisk after the preset if it is dirty. This will help in case the pixmap icon is too small
-         QString dirtyPresetIndicator = QString("");
-        if (m_useDirtyPresets && preset->isDirty()) {
+
+        QString dirtyPresetIndicator = QString("");
+        if (m_useDirtyPresets && dirty) {
             dirtyPresetIndicator = QString("*");
         }
 
-        qreal brushSize = preset->settings()->paintOpSize();
-        QString brushSizeText;
+//        qreal brushSize = metaData["paintopSize"].toReal();
+//        QString brushSizeText;
 
-        // Disable displayed decimal precision beyond a certain brush size
-        if (brushSize < 100) {
-            brushSizeText = QString::number(brushSize, 'g', 3);
-        } else {
-            brushSizeText = QString::number(brushSize, 'f', 0);
-        }
+//        // Disable displayed decimal precision beyond a certain brush size
+//        if (brushSize < 100) {
+//            brushSizeText = QString::number(brushSize, 'g', 3);
+//        } else {
+//            brushSizeText = QString::number(brushSize, 'f', 0);
+//        }
 
-        painter->drawText(pixSize.width() + 10, option.rect.y() + option.rect.height() - 10, brushSizeText); // brush size
+//        painter->drawText(pixSize.width() + 10, option.rect.y() + option.rect.height() - 10, brushSizeText); // brush size
 
-        QString presetDisplayName = preset->name().replace("_", " "); // don't need underscores that might be part of the file name
+        QString presetDisplayName = index.data(Qt::UserRole + KisResourceModel::Name).toString().replace("_", " "); // don't need underscores that might be part of the file name
         painter->drawText(pixSize.width() + 40, option.rect.y() + option.rect.height() - 10, presetDisplayName.append(dirtyPresetIndicator));
 
     }
-    if (m_useDirtyPresets && preset->isDirty()) {
+
+    if (m_useDirtyPresets && dirty) {
         const QIcon icon = KisIconUtils::loadIcon(koIconName("dirty-preset"));
         QPixmap pixmap = icon.pixmap(QSize(15,15));
         painter->drawPixmap(paintRect.x() + 3, paintRect.y() + 3, pixmap);
     }
 
-    if (!preset->settings() || !preset->settings()->isValid()) {
-        const QIcon icon = KisIconUtils::loadIcon("broken-preset");
-        icon.paint(painter, QRect(paintRect.x() + paintRect.height() - 25, paintRect.y() + paintRect.height() - 25, 25, 25));
-    }
+//    if (!preset->settings() || !preset->settings()->isValid()) {
+//        const QIcon icon = KisIconUtils::loadIcon("broken-preset");
+//        icon.paint(painter, QRect(paintRect.x() + paintRect.height() - 25, paintRect.y() + paintRect.height() - 25, 25, 25));
+//    }
+
     if (option.state & QStyle::State_Selected) {
         painter->setCompositionMode(QPainter::CompositionMode_HardLight);
         painter->setOpacity(1.0);
@@ -141,60 +153,155 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
         painter->setPen(QPen(option.palette.highlight(), 4, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
         QRect selectedBorder = option.rect.adjusted(2 , 2, -2, -2); // constrict the rectangle so it doesn't bleed into other presets
         painter->drawRect(selectedBorder);
-       }
+    }
+
     painter->restore();
+
 }
 
-class KisPresetProxyAdapter : public KisPaintOpPresetResourceServerAdapter
+class KisPresetChooser::PaintOpFilterModel : public QSortFilterProxyModel, public KisAbstractResourceModel
 {
-
+    Q_OBJECT
 public:
-    KisPresetProxyAdapter(KisPaintOpPresetResourceServer* resourceServer)
-        : KisPaintOpPresetResourceServerAdapter(resourceServer)
+
+    PaintOpFilterModel(QObject *parent = 0)
+        : QSortFilterProxyModel(parent)
     {
-        setSortingEnabled(true);
     }
-    ~KisPresetProxyAdapter() override {}
 
-    QList< KoResource* > resources() override {
+    ~PaintOpFilterModel() override
+    {
+    }
 
-        QList<KoResource*> serverResources =
-            KisPaintOpPresetResourceServerAdapter::resources();
+    void setPaintOpId(const QString &id)
+    {
+        m_id = id;
+    }
 
-        if (m_paintopID.isEmpty()) {
-            return serverResources;
+    QString currentPaintOpId() const
+    {
+        return m_id;
+    }
+    // KisAbstractResourceModel interface
+public:
+    KoResourceSP resourceForIndex(QModelIndex index) const override
+    {
+        KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+        if (source) {
+            return source->resourceForIndex(mapToSource(index));
+        }
+        return 0;
+    }
+
+    QModelIndex indexFromResource(KoResourceSP resource) const override
+    {
+        KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+        if (source) {
+            return mapFromSource(source->indexFromResource(resource));
+        }
+        return QModelIndex();
+    }
+
+    bool removeResource(const QModelIndex &index) override
+    {
+        KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+        if (source) {
+            return source->removeResource(mapToSource(index));
+        }
+        return false;
+    }
+
+    bool importResourceFile(const QString &filename) override
+    {
+        KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+        if (source) {
+            return source->importResourceFile(filename);
+        }
+        return false;
+    }
+
+    bool addResource(KoResourceSP resource, const QString &storageId = QString()) override
+    {
+        KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+        if (source) {
+            return source->addResource(resource, storageId);
+        }
+        return false;
+    }
+
+    bool updateResource(KoResourceSP resource) override
+    {
+        KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+        if (source) {
+            return source->updateResource(resource);
+        }
+        return false;
+    }
+
+    bool renameResource(KoResourceSP resource, const QString &name) override
+    {
+        KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+        if (source) {
+            return source->renameResource(resource, name);
+        }
+        return false;
+    }
+
+    bool removeResource(KoResourceSP resource) override
+    {
+        KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+        if (source) {
+            return source->removeResource(resource);
+        }
+        return false;
+    }
+
+    bool setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata) override
+    {
+        KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+        if (source) {
+            return source->setResourceMetaData(resource, metadata);
+        }
+        return false;
+    }
+
+
+    // QSortFilterProxyModel interface
+protected:
+
+    QVariant data(const QModelIndex &index, int role) const override
+    {
+        return sourceModel()->data(mapToSource(index), role);
+    }
+
+    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override
+    {
+        if (m_id.isEmpty()) return true;
+
+        QModelIndex idx = sourceModel()->index(source_row, 0, source_parent);
+        QMap<QString, QVariant> metadata = sourceModel()->data(idx, Qt::UserRole + KisResourceModel::MetaData).toMap();
+        if (metadata.contains("paintopid")) {
+            return (metadata["paintopid"].toString() == m_id);
         }
 
-        QList<KoResource*> resources;
-        Q_FOREACH (KoResource *resource, serverResources) {
-            KisPaintOpPreset *preset = dynamic_cast<KisPaintOpPreset*>(resource);
-
-            if (preset && preset->paintOp().id() == m_paintopID) {
-                resources.append(preset);
-            }
-        }
-        return resources;
+        return false;
     }
 
-    ///Set id for paintop to be accept by the proxy model, if not filter is set all
-    ///presets will be shown.
-    void setPresetFilter(const QString& paintOpId)
+    bool filterAcceptsColumn(int /*source_column*/, const QModelIndex &/*source_parent*/) const override
     {
-        m_paintopID = paintOpId;
-        invalidate();
+        return true;
     }
 
-    ///Resets the model connected to the adapter
-    void invalidate() {
-        emitRemovingResource(0);
-    }
-
-    QString currentPaintOpId() const {
-        return m_paintopID;
+    bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override
+    {
+        QString nameLeft = sourceModel()->data(source_left, Qt::UserRole + KisResourceModel::Name).toString();
+        QString nameRight = sourceModel()->data(source_right, Qt::UserRole + KisResourceModel::Name).toString();
+        return nameLeft < nameRight;
     }
 
 private:
-    QString m_paintopID;
+
+    QString m_id;
 };
 
 KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
@@ -203,13 +310,11 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
     setObjectName(name);
     QVBoxLayout * layout = new QVBoxLayout(this);
     layout->setMargin(0);
-    KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
 
-    m_adapter = QSharedPointer<KoAbstractResourceServerAdapter>(new KisPresetProxyAdapter(rserver));
+    m_paintOpFilterModel = new PaintOpFilterModel();
 
-    m_chooser = new KoResourceItemChooser(m_adapter, this);
+    m_chooser = new KisResourceItemChooser(ResourceType::PaintOpPresets, false, this, m_paintOpFilterModel);
     m_chooser->setObjectName("ResourceChooser");
-    m_chooser->setColumnCount(10);
     m_chooser->setRowHeight(50);
     m_delegate = new KisPresetDelegate(this);
     m_chooser->setItemDelegate(m_delegate);
@@ -223,10 +328,10 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
                     this, SLOT(slotScrollerStateChanged(QScroller::State)));
         }
     }
-    connect(m_chooser, SIGNAL(resourceSelected(KoResource*)),
-            this, SIGNAL(resourceSelected(KoResource*)));
-    connect(m_chooser, SIGNAL(resourceClicked(KoResource*)),
-            this, SIGNAL(resourceClicked(KoResource*)));
+    connect(m_chooser, SIGNAL(resourceSelected(KoResourceSP )),
+            this, SIGNAL(resourceSelected(KoResourceSP )));
+    connect(m_chooser, SIGNAL(resourceClicked(KoResourceSP )),
+            this, SIGNAL(resourceClicked(KoResourceSP )));
 
     m_mode = THUMBNAIL;
 
@@ -272,48 +377,35 @@ void KisPresetChooser::updateViewSettings()
     if (m_mode == THUMBNAIL) {
         m_chooser->setSynced(true);
         m_delegate->setShowText(false);
-    } else if (m_mode == DETAIL) {
+        m_chooser->itemView()->setViewMode(QListView::IconMode);
+        m_chooser->itemView()->setFlow(QListView::LeftToRight);
+    }
+    else if (m_mode == DETAIL) {
         m_chooser->setSynced(false);
-        m_chooser->setColumnCount(1);
+        m_chooser->itemView()->setViewMode(QListView::ListMode);
+        m_chooser->itemView()->setFlow(QListView::TopToBottom);
         m_chooser->setColumnWidth(m_chooser->width());
 
-        KoResourceItemChooserSync* chooserSync = KoResourceItemChooserSync::instance();
+        KisResourceItemChooserSync* chooserSync = KisResourceItemChooserSync::instance();
         m_chooser->setRowHeight(chooserSync->baseLength());
         m_delegate->setShowText(true);
-    } else if (m_mode == STRIP) {
+    }
+    else if (m_mode == STRIP) {
         m_chooser->setSynced(false);
-        m_chooser->setRowCount(1);
-        m_chooser->itemView()->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        m_chooser->itemView()->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        m_chooser->itemView()->setViewMode(QListView::ListMode);
+        m_chooser->itemView()->setFlow(QListView::LeftToRight);
         // An offset of 7 keeps the cell exactly square, TODO: use constants, not hardcoded numbers
         m_chooser->setColumnWidth(m_chooser->viewSize().height() - 7);
         m_delegate->setShowText(false);
     }
 }
 
-void KisPresetChooser::setCurrentResource(KoResource *resource)
+void KisPresetChooser::setCurrentResource(KoResourceSP resource)
 {
-    /**
-     * HACK ALERT: here we use a direct call to an adapter to notify the view
-     *             that the preset might have changed its dirty state. This state
-     *             doesn't affect the filtering so the server's cache must not be
-     *             invalidated!
-     *
-     *             Ideally, we should call some method of KoResourceServer instead,
-     *             but it seems like a bit too much effort for such a small fix.
-     */
-    if (resource == currentResource()) {
-        KisPresetProxyAdapter *adapter = static_cast<KisPresetProxyAdapter*>(m_adapter.data());
-        KisPaintOpPreset *preset = dynamic_cast<KisPaintOpPreset*>(resource);
-        if (preset) {
-            adapter->resourceChangedNoCacheInvalidation(preset);
-        }
-    }
-
     m_chooser->setCurrentResource(resource);
 }
 
-KoResource* KisPresetChooser::currentResource() const
+KoResourceSP KisPresetChooser::currentResource() const
 {
     return m_chooser->currentResource();
 }
@@ -323,7 +415,7 @@ void KisPresetChooser::showTaggingBar(bool show)
     m_chooser->showTaggingBar(show);
 }
 
-KoResourceItemChooser *KisPresetChooser::itemChooser()
+KisResourceItemChooser *KisPresetChooser::itemChooser()
 {
     return m_chooser;
 }
@@ -331,25 +423,22 @@ KoResourceItemChooser *KisPresetChooser::itemChooser()
 
 void KisPresetChooser::setPresetFilter(const QString& paintOpId)
 {
-    KisPresetProxyAdapter *adapter = static_cast<KisPresetProxyAdapter*>(m_adapter.data());
-
-    if (adapter->currentPaintOpId() != paintOpId) {
-        adapter->setPresetFilter(paintOpId);
+    if (m_paintOpFilterModel && m_paintOpFilterModel->currentPaintOpId() != paintOpId) {
+        m_paintOpFilterModel->setPaintOpId(paintOpId);
         updateViewSettings();
     }
 }
 
 void KisPresetChooser::setIconSize(int newSize)
 {
-    KoResourceItemChooserSync* chooserSync = KoResourceItemChooserSync::instance();
+    KisResourceItemChooserSync* chooserSync = KisResourceItemChooserSync::instance();
     chooserSync->setBaseLength(newSize);
     updateViewSettings();
 }
 
 int KisPresetChooser::iconSize()
 {
-    KoResourceItemChooserSync* chooserSync = KoResourceItemChooserSync::instance();
-
+    KisResourceItemChooserSync* chooserSync = KisResourceItemChooserSync::instance();
     return chooserSync->baseLength();
 }
 
@@ -366,3 +455,5 @@ void KisPresetChooser::slotScrollerStateChanged(QScroller::State state)
 {
     KisKineticScroller::updateCursor(this, state);
 }
+
+#include "kis_preset_chooser.moc"

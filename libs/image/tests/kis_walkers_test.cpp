@@ -30,6 +30,7 @@
 #include "kis_clone_layer.h"
 #include "kis_adjustment_layer.h"
 #include "kis_selection.h"
+#include <KisGlobalResourcesInterface.h>
 
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_configuration.h"
@@ -332,8 +333,8 @@ void KisWalkersTest::testVisitingWithTopmostMask()
     filterMask1->initSelection(groupLayer);
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
     KIS_ASSERT(filter);
-    KisFilterConfigurationSP configuration1 = filter->defaultConfiguration();
-    filterMask1->setFilter(configuration1);
+    KisFilterConfigurationSP configuration1 = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
+    filterMask1->setFilter(configuration1->cloneWithResourcesSnapshot());
 
     image->addNode(paintLayer1, image->rootLayer());
     image->addNode(groupLayer, image->rootLayer());
@@ -911,11 +912,11 @@ void KisWalkersTest::testMasksVisiting()
 
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
     Q_ASSERT(filter);
-    KisFilterConfigurationSP configuration1 = filter->defaultConfiguration();
-    KisFilterConfigurationSP configuration2 = filter->defaultConfiguration();
+    KisFilterConfigurationSP configuration1 = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
+    KisFilterConfigurationSP configuration2 = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
 
-    filterMask1->setFilter(configuration1);
-    filterMask2->setFilter(configuration2);
+    filterMask1->setFilter(configuration1->cloneWithResourcesSnapshot());
+    filterMask2->setFilter(configuration2->cloneWithResourcesSnapshot());
 
     QRect selection1(10, 10, 20, 10);
     QRect selection2(30, 15, 10, 10);
@@ -984,11 +985,11 @@ void KisWalkersTest::testMasksVisitingNoFilthy()
 
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
     Q_ASSERT(filter);
-    KisFilterConfigurationSP configuration1 = filter->defaultConfiguration();
-    KisFilterConfigurationSP configuration2 = filter->defaultConfiguration();
+    KisFilterConfigurationSP configuration1 = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
+    KisFilterConfigurationSP configuration2 = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
 
-    filterMask1->setFilter(configuration1);
-    filterMask2->setFilter(configuration2);
+    filterMask1->setFilter(configuration1->cloneWithResourcesSnapshot());
+    filterMask2->setFilter(configuration2->cloneWithResourcesSnapshot());
 
     QRect selection1(10, 10, 20, 10);
     QRect selection2(30, 15, 10, 10);
@@ -1061,11 +1062,11 @@ void KisWalkersTest::testMasksOverlapping()
     KisFilterSP invertFilter = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(blurFilter);
     Q_ASSERT(invertFilter);
-    KisFilterConfigurationSP blurConfiguration = blurFilter->defaultConfiguration();
-    KisFilterConfigurationSP invertConfiguration = invertFilter->defaultConfiguration();
+    KisFilterConfigurationSP blurConfiguration = blurFilter->defaultConfiguration(KisGlobalResourcesInterface::instance());
+    KisFilterConfigurationSP invertConfiguration = invertFilter->defaultConfiguration(KisGlobalResourcesInterface::instance());
 
-    filterMask1->setFilter(invertConfiguration);
-    filterMask2->setFilter(blurConfiguration);
+    filterMask1->setFilter(invertConfiguration->cloneWithResourcesSnapshot());
+    filterMask2->setFilter(blurConfiguration->cloneWithResourcesSnapshot());
 
     QRect selection1(0, 0, 128, 128);
     QRect selection2(128, 0, 128, 128);
@@ -1219,26 +1220,26 @@ void KisWalkersTest::testRectsChecksum()
     walker.collectRects(adjustmentLayer, dirtyRect);
     QCOMPARE(walker.checksumValid(), true);
 
-    configuration = filter->defaultConfiguration();
-    adjustmentLayer->setFilter(configuration);
+    configuration = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
+    adjustmentLayer->setFilter(configuration->cloneWithResourcesSnapshot());
     QCOMPARE(walker.checksumValid(), false);
 
     walker.recalculate(dirtyRect);
     QCOMPARE(walker.checksumValid(), true);
 
-    configuration = filter->defaultConfiguration();
+    configuration = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
     configuration->setProperty("halfWidth", 20);
     configuration->setProperty("halfHeight", 20);
-    adjustmentLayer->setFilter(configuration);
+    adjustmentLayer->setFilter(configuration->cloneWithResourcesSnapshot());
     QCOMPARE(walker.checksumValid(), false);
 
     walker.recalculate(dirtyRect);
     QCOMPARE(walker.checksumValid(), true);
 
-    configuration = filter->defaultConfiguration();
+    configuration = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
     configuration->setProperty("halfWidth", 21);
     configuration->setProperty("halfHeight", 21);
-    adjustmentLayer->setFilter(configuration);
+    adjustmentLayer->setFilter(configuration->cloneWithResourcesSnapshot());
     QCOMPARE(walker.checksumValid(), false);
 
     walker.recalculate(dirtyRect);

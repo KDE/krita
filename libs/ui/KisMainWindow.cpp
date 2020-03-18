@@ -104,7 +104,12 @@
 #include <KoPluginLoader.h>
 #include <KoColorSpaceEngine.h>
 #include <KoUpdater.h>
-#include <KoResourceModel.h>
+#include <KisResourceModel.h>
+#include <KisResourceModelProvider.h>
+#include <KisResourceLoaderRegistry.h>
+#include <KisResourceIterator.h>
+#include <KisResourceTypes.h>
+#include <KisResourceCacheDb.h>
 
 #ifdef Q_OS_ANDROID
 #include <KisAndroidFileManager.h>
@@ -261,7 +266,7 @@ public:
     KHelpMenu *helpMenu  {0};
 
     KRecentFilesAction *recentFiles {0};
-    KoResourceModel *workspacemodel {0};
+    KisResourceModel *workspacemodel {0};
 
     QScopedPointer<KisUndoActionsUpdateManager> undoActionsUpdateManager;
 
@@ -320,11 +325,8 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     : KXmlGuiWindow()
     , d(new Private(this, uuid))
 {
-    auto rserver = KisResourceServerProvider::instance()->workspaceServer();
-    QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<KisWorkspaceResource>(rserver));
-    d->workspacemodel = new KoResourceModel(adapter, this);
-    connect(d->workspacemodel, &KoResourceModel::afterResourcesLayoutReset, this, [&]() { updateWindowMenu(); });
-
+    d->workspacemodel = KisResourceModelProvider::resourceModel(ResourceType::Workspaces);
+    connect(d->workspacemodel, SIGNAL(afterResourcesLayoutReset()), this, SLOT(updateWindowMenu()));
 
     d->viewManager = new KisViewManager(this, actionCollection());
     KConfigGroup group( KSharedConfig::openConfig(), "theme");
@@ -551,9 +553,9 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     if (cfg.readEntry("CanvasOnlyActive", false)) {
         QString currentWorkspace = cfg.readEntry<QString>("CurrentWorkspace", "Default");
         KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer();
-        KisWorkspaceResource* workspace = rserver->resourceByName(currentWorkspace);
+        KisWorkspaceResourceSP workspace = rserver->resourceByName(currentWorkspace);
         if (workspace) {
-            restoreWorkspace(workspace);
+            restoreWorkspace(workspace->resourceId());
         }
         cfg.writeEntry("CanvasOnlyActive", false);
         menuBar()->setVisible(true);
@@ -900,6 +902,10 @@ void KisMainWindow::updateCaption()
         KisDocument *doc = d->activeView->document();
 
         QString caption(doc->caption());
+
+        caption = "RESOURCES REWRITE GOING ON " + caption;
+
+
         if (d->readOnly) {
             caption += " [" + i18n("Write Protected") + "] ";
         }
@@ -1131,6 +1137,40 @@ bool KisMainWindow::installBundle(const QString &fileName) const
         QFile::remove(to.canonicalFilePath());
     }
     return QFile::copy(fileName, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/bundles/" + from.fileName());
+}
+
+QImage KisMainWindow::layoutThumbnail()
+{
+    int size = 256;
+    qreal scale = qreal(size)/qreal(qMax(geometry().width(), geometry().height()));
+    QImage layoutThumbnail = QImage(qRound(geometry().width()*scale), qRound(geometry().height()*scale), QImage::Format_ARGB32);
+    QPainter gc(&layoutThumbnail);
+    gc.fillRect(0, 0, layoutThumbnail.width(), layoutThumbnail.height(), this->palette().dark());
+
+    for (int childW = 0; childW< children().size(); childW++) {
+        if (children().at(childW)->isWidgetType()) {
+            QWidget *w = dynamic_cast<QWidget*>(children().at(childW));
+
+            if (w->isVisible()) {
+                QRect wRect = QRectF(w->geometry().x()*scale
+                                     , w->geometry().y()*scale
+                                     , w->geometry().width()*scale
+                                     , w->geometry().height()*scale
+                                     ).toRect();
+
+                wRect = wRect.intersected(layoutThumbnail.rect().adjusted(-1, -1, -1, -1));
+
+                gc.setBrush(this->palette().window());
+                if (w == d->widgetStack) {
+                    gc.setBrush(d->mdiArea->background());
+                }
+                gc.setPen(this->palette().windowText().color());
+                gc.drawRect(wRect);
+            }
+        }
+    }
+    gc.end();
+    return layoutThumbnail;
 }
 
 bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExporting)
@@ -1699,8 +1739,13 @@ bool KisMainWindow::restoreWorkspaceState(const QByteArray &state)
     return success;
 }
 
-bool KisMainWindow::restoreWorkspace(KisWorkspaceResource *workspace)
+bool KisMainWindow::restoreWorkspace(int workspaceId)
 {
+
+    KisWorkspaceResourceSP workspace =
+            KisResourceModelProvider::resourceModel(ResourceType::Workspaces)
+            ->resourceForId(workspaceId).dynamicCast<KisWorkspaceResource>();
+
     bool success = restoreWorkspaceState(workspace->dockerState());
 
     if (activeKisView()) {
@@ -2298,25 +2343,23 @@ void KisMainWindow::updateWindowMenu()
     QMenu *workspaceMenu = d->workspaceMenu->menu();
     workspaceMenu->clear();
 
-    auto workspaces = KisResourceServerProvider::instance()->workspaceServer()->resources();
-    auto m_this = this;
-    for (auto &w : workspaces) {
-        auto action = workspaceMenu->addAction(w->name());
+    KisResourceIterator resourceIterator(KisResourceModelProvider::resourceModel(ResourceType::Workspaces));
+    KisMainWindow *m_this = this;
+
+    while (resourceIterator.hasNext()) {
+        KisResourceItemSP resource = resourceIterator.next();
+        QAction *action = workspaceMenu->addAction(resource->name());
         connect(action, &QAction::triggered, this, [=]() {
-            m_this->restoreWorkspace(w);
+            m_this->restoreWorkspace(resource->id());
         });
     }
     workspaceMenu->addSeparator();
     connect(workspaceMenu->addAction(i18nc("@action:inmenu", "&Import Workspace...")),
             &QAction::triggered,
             this,
-            [&]() {
-        QString extensions = d->workspacemodel->extensions();
-        QStringList mimeTypes;
-        for(const QString &suffix : extensions.split(":")) {
-            mimeTypes << KisMimeDatabase::mimeTypeForSuffix(suffix);
-        }
-
+            [&]()
+    {
+        QStringList mimeTypes = KisResourceLoaderRegistry::instance()->mimeTypes(ResourceType::Workspaces);
         KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
         dialog.setMimeTypeFilters(mimeTypes);
         dialog.setCaption(i18nc("@title:window", "Choose File to Add"));
@@ -2328,33 +2371,37 @@ void KisMainWindow::updateWindowMenu()
     connect(workspaceMenu->addAction(i18nc("@action:inmenu", "&New Workspace...")),
             &QAction::triggered,
             [=]() {
-        QString name = QInputDialog::getText(this, i18nc("@title:window", "New Workspace..."),
-                                             i18nc("@label:textbox", "Name:"));
-        if (name.isEmpty()) return;
+        QString name;
         auto rserver = KisResourceServerProvider::instance()->workspaceServer();
 
-        KisWorkspaceResource* workspace = new KisWorkspaceResource("");
+        KisWorkspaceResourceSP workspace(new KisWorkspaceResource(""));
         workspace->setDockerState(m_this->saveState());
         d->viewManager->canvasResourceProvider()->notifySavingWorkspace(workspace);
         workspace->setValid(true);
         QString saveLocation = rserver->saveLocation();
 
-        bool newName = false;
-        if(name.isEmpty()) {
-            newName = true;
-            name = i18n("Workspace");
-        }
         QFileInfo fileInfo(saveLocation + name + workspace->defaultFileExtension());
+        bool fileOverWriteAccepted = false;
 
-        int i = 1;
-        while (fileInfo.exists()) {
-            fileInfo.setFile(saveLocation + name + QString("%1").arg(i) + workspace->defaultFileExtension());
-            i++;
+        while(!fileOverWriteAccepted) {
+            name = QInputDialog::getText(this, i18nc("@title:window", "New Workspace..."),
+                                                        i18nc("@label:textbox", "Name:"));
+            if (name.isNull() || name.isEmpty()) {
+                return;
+            } else {
+                fileInfo = QFileInfo(saveLocation + name.split(" ").join("_") + workspace->defaultFileExtension());
+                if (fileInfo.exists()) {
+                    int res = QMessageBox::warning(this, i18nc("@title:window", "Name Already Exists")
+                                                                , i18n("The name '%1' already exists, do you wish to overwrite it?", name)
+                                                                , QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+                    if (res == QMessageBox::Yes) fileOverWriteAccepted = true;
+                } else {
+                    fileOverWriteAccepted = true;
+                }
+            }
         }
-        workspace->setFilename(fileInfo.filePath());
-        if(newName) {
-            name = i18n("Workspace %1", i);
-        }
+
+        workspace->setFilename(fileInfo.fileName());
         workspace->setName(name);
         rserver->addResource(workspace);
     });
@@ -2541,7 +2588,7 @@ void KisMainWindow::checkSanity()
     }
 
     KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-    if (rserver->resources().isEmpty()) {
+    if (rserver->resourceCount() == 0) {
         m_errorMessage = i18n("Krita cannot find any brush presets! Krita will quit now.");
         m_dieOnError = true;
         QTimer::singleShot(0, this, SLOT(showErrorAndDie()));

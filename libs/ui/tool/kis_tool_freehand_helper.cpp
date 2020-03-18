@@ -19,6 +19,7 @@
 #include "kis_tool_freehand_helper.h"
 
 #include <QTimer>
+#include <QElapsedTimer>
 #include <QQueue>
 
 #include <klocalizedstring.h>
@@ -78,7 +79,7 @@ struct KisToolFreehandHelper::Private
 
     bool hasPaintAtLeastOnce;
 
-    QTime strokeTime;
+    QElapsedTimer strokeTime;
     QTimer strokeTimeoutTimer;
 
     QVector<KisFreehandStrokeInfo*> strokeInfos;

@@ -38,6 +38,7 @@
 #include "kis_texture_option.h"
 #include <kis_pressure_mirror_option_widget.h>
 #include "kis_pressure_texture_strength_option.h"
+#include <KisGlobalResourcesInterface.h>
 
 KisFilterOpSettingsWidget::KisFilterOpSettingsWidget(QWidget* parent)
     : KisBrushBasedPaintopOptionWidget(parent)
@@ -61,7 +62,7 @@ KisFilterOpSettingsWidget::~KisFilterOpSettingsWidget()
 
 KisPropertiesConfigurationSP KisFilterOpSettingsWidget::configuration() const
 {
-    KisFilterOpSettings *config = new KisFilterOpSettings();
+    KisFilterOpSettings *config = new KisFilterOpSettings(KisGlobalResourcesInterface::instance());
     config->setOptionsWidget(const_cast<KisFilterOpSettingsWidget*>(this));
     config->setProperty("paintop", "filter"); // XXX: make this a const id string
     writeConfiguration(config);

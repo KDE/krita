@@ -42,7 +42,7 @@ public:
      */
     virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const = 0;
 
-    KisFilterConfigurationSP factoryConfiguration() const override;
+    KisFilterConfigurationSP factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const override;
 };
 
 #endif

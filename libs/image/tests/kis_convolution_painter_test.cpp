@@ -22,6 +22,7 @@
 #include <QTest>
 
 #include <QBitArray>
+#include <QElapsedTimer>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
@@ -287,7 +288,7 @@ void KisConvolutionPainterTest::benchmarkConvolution()
 
         KisConvolutionPainter gc(dev);
 
-        QTime timer; timer.start();
+        QElapsedTimer timer; timer.start();
 
         // CALLGRIND_START_INSTRUMENTATION;
 
@@ -320,7 +321,7 @@ void KisConvolutionPainterTest::testGaussianBase(KisPaintDeviceSP dev, bool useF
 
    for(int i = 0; i < 3 ; i++, horizontalRadius+=5, verticalRadius+=5)
    {
-       QTime timer;
+       QElapsedTimer timer;
        timer.start();
 
        gc.beginTransaction();

@@ -105,14 +105,14 @@ QRect KisTextureMaskInfo::maskBounds() const {
     return m_maskBounds;
 }
 
-bool KisTextureMaskInfo::fillProperties(const KisPropertiesConfigurationSP setting)
+bool KisTextureMaskInfo::fillProperties(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface)
 {
 
     if (!setting->hasProperty("Texture/Pattern/PatternMD5")) {
         return false;
     }
 
-    m_pattern = KisEmbeddedPatternManager::loadEmbeddedPattern(setting);
+    m_pattern = KisEmbeddedPatternManager::tryFetchPattern(setting, resourcesInterface);
 
     if (!m_pattern) {
         warnKrita << "WARNING: Couldn't load the pattern for a stroke";

@@ -99,13 +99,11 @@ void KisPainter::init()
     d->selection = 0 ;
     d->transaction = 0;
     d->paintOp = 0;
-    d->pattern = 0;
     d->sourceLayer = 0;
     d->fillStyle = FillStyleNone;
     d->strokeStyle = StrokeStyleBrush;
     d->antiAliasPolygonFill = true;
     d->progressUpdater = 0;
-    d->gradient = 0;
     d->maskPainter = 0;
     d->fillPainter = 0;
     d->maskImageWidth = 255;
@@ -2517,12 +2515,12 @@ QBitArray KisPainter::channelFlags()
     return d->paramInfo.channelFlags;
 }
 
-void KisPainter::setPattern(const KoPattern * pattern)
+void KisPainter::setPattern(const KoPatternSP pattern)
 {
     d->pattern = pattern;
 }
 
-const KoPattern * KisPainter::pattern() const
+const KoPatternSP KisPainter::pattern() const
 {
     return d->pattern;
 }
@@ -2666,12 +2664,12 @@ KoUpdater * KisPainter::progressUpdater()
     return d->progressUpdater;
 }
 
-void KisPainter::setGradient(const KoAbstractGradient* gradient)
+void KisPainter::setGradient(const KoAbstractGradientSP gradient)
 {
     d->gradient = gradient;
 }
 
-const KoAbstractGradient* KisPainter::gradient() const
+const KoAbstractGradientSP KisPainter::gradient() const
 {
     return d->gradient;
 }

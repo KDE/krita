@@ -179,7 +179,7 @@ void KisAnimationCurvesView::paintEvent(QPaintEvent *e)
 void KisAnimationCurvesView::paintFrames(QPainter &painter)
 {
     const QColor textColor = qApp->palette().text().color();
-    const QColor backgroundColor = qApp->palette().background().color();
+    const QColor backgroundColor = qApp->palette().window().color();
 
 
     // paint vertical lines so it is easier to tell where each frame starts/stops
@@ -191,7 +191,7 @@ void KisAnimationCurvesView::paintFrames(QPainter &painter)
         // draw border around entire frame, so override the height and Y position
         for (int time = 0; time <= model()->columnCount(); time++) {
 
-            QModelIndex index = model()->index(channel, time);
+            //QModelIndex index = model()->index(channel, time);
 
             int offset = 0;
             if (m_d->horizontalHeader && m_d->horizontalHeader->offset()) {

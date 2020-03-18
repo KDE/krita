@@ -21,6 +21,7 @@
 
 #include <QAbstractListModel>
 #include <QColor>
+#include <KoColorSet.h>
 
 class PaletteColorsModel : public QAbstractListModel
 {

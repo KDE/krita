@@ -82,9 +82,6 @@ set(kritapigment_SRCS
     resources/KisSwatch.cpp
     resources/KisSwatchGroup.cpp
     resources/KoPattern.cpp
-    resources/KoResource.cpp
-    resources/KoMD5Generator.cpp
-    resources/KoHashGeneratorProvider.cpp
     resources/KoStopGradient.cpp
     resources/KoSegmentGradient.cpp
 )
@@ -110,6 +107,7 @@ target_link_libraries( kritapigment
         kritaplugin
         kritastore
         kritaglobal
+        kritaresources
         ${EXTRA_LIBRARIES}
         KF5::I18n 
         KF5::ConfigCore

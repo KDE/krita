@@ -65,7 +65,6 @@ deselect=Ctrl+Shift+A
 drop_frames=none
 dual=none
 duplicatelayer=Ctrl+J
-edit_blacklist_cleanup=none
 edit_copy=Ctrl+C
 edit_cut=Ctrl+X
 edit_deselect_all=Ctrl+Shift+A

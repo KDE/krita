@@ -27,9 +27,8 @@
 #include <klocalizedstring.h>
 
 #include <KoColor.h>
-#include <KoResourceServer.h>
+#include <KisResourceTypes.h>
 #include <resources/KoPattern.h>
-#include <KoResourceServerProvider.h>
 
 #include <kis_debug.h>
 #include <kis_fill_painter.h>
@@ -43,6 +42,7 @@
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
 #include <kis_pattern_chooser.h>
+#include <KisResourcesInterface.h>
 
 
 #include "kis_wdg_pattern.h"
@@ -60,22 +60,74 @@ KritaPatternGenerator::~KritaPatternGenerator()
 {
 }
 
-KoPatternGenerator::KoPatternGenerator() : KisGenerator(id(), KoID("basic"), i18n("&Pattern..."))
+/****************************************************************************/
+/*              KoPatternGeneratorConfiguration                             */
+/****************************************************************************/
+
+class KoPatternGeneratorConfiguration : public KisFilterConfiguration
+{
+public:
+    KoPatternGeneratorConfiguration(const QString & name, qint32 version, KisResourcesInterfaceSP resourcesInterface)
+        : KisFilterConfiguration(name, version, resourcesInterface)
+    {
+    }
+
+    KoPatternGeneratorConfiguration(const KoPatternGeneratorConfiguration &rhs)
+        : KisFilterConfiguration(rhs)
+    {
+    }
+
+    virtual KisFilterConfigurationSP clone() const override {
+        return new KoPatternGeneratorConfiguration(*this);
+    }
+
+    KoPatternSP pattern(KisResourcesInterfaceSP resourcesInterface) const {
+        const QString patternName = this->getString("pattern", "Grid01.pat");
+        auto source = resourcesInterface->source<KoPattern>(ResourceType::Patterns);
+        return source.resourceForName(patternName);
+    }
+
+    KoPatternSP pattern() const {
+        return pattern(resourcesInterface());
+    }
+
+    QList<KoResourceSP> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const override
+    {
+        KoPatternSP pattern = this->pattern(globalResourcesInterface);
+
+        QList<KoResourceSP> resources;
+        if (pattern) {
+            resources << pattern;
+        }
+
+        return resources;
+    }
+};
+
+
+
+/****************************************************************************/
+/*              KoPatternGenerator                                          */
+/****************************************************************************/
+
+KoPatternGenerator::KoPatternGenerator()
+    : KisGenerator(id(), KoID("basic"), i18n("&Pattern..."))
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);
 }
 
-KisFilterConfigurationSP KoPatternGenerator::defaultConfiguration() const
+KisFilterConfigurationSP KoPatternGenerator::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration();
+    return new KoPatternGeneratorConfiguration(id().id(), 1, resourcesInterface);
+}
 
-    QVariant v;
-    v.setValue(QString("Grid01.pat"));
-    config->setProperty("pattern", v);
+KisFilterConfigurationSP KoPatternGenerator::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
+{
+    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
 
-//    v.setValue(KoColor());
-//    config->setProperty("color", v);
+    auto source = resourcesInterface->source<KoPattern>(ResourceType::Patterns);
+    config->setProperty("pattern", QVariant::fromValue(source.fallbackResource()->name()));
 
     return config;
 }
@@ -88,24 +140,21 @@ KisConfigWidget * KoPatternGenerator::createConfigurationWidget(QWidget* parent,
 
 void KoPatternGenerator::generate(KisProcessingInformation dstInfo,
                                  const QSize& size,
-                                 const KisFilterConfigurationSP config,
+                                 const KisFilterConfigurationSP _config,
                                  KoUpdater* progressUpdater) const
 {
     KisPaintDeviceSP dst = dstInfo.paintDevice();
 
     Q_ASSERT(!dst.isNull());
-    Q_ASSERT(config);
 
-    if (!config) return;
-    QString patternName = config->getString("pattern", "Grid01.pat");
-    KoResourceServer<KoPattern> *rserver = KoResourceServerProvider::instance()->patternServer();
-    KoPattern *pattern = rserver->resourceByName(patternName);
+    const KoPatternGeneratorConfiguration *config =
+        dynamic_cast<const KoPatternGeneratorConfiguration*>(_config.data());
 
-//    KoColor c = config->getColor("color");
+    KIS_SAFE_ASSERT_RECOVER_RETURN(config);
+    KoPatternSP pattern = config->pattern();
 
     KisFillPainter gc(dst);
     gc.setPattern(pattern);
-//    gc.setPaintColor(c);
     gc.setProgress(progressUpdater);
     gc.setChannelFlags(config->channelFlags());
     gc.setOpacity(OPACITY_OPAQUE_U8);

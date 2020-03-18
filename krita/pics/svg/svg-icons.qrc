@@ -153,5 +153,7 @@
         <file>light_gamut-mask-on.svg</file>
         <file>dark_ratio.svg</file>
         <file>light_ratio.svg</file>
+        <file>dark_bundle_archive.svg</file>
+        <file>light_bundle_archive.svg</file>
     </qresource>
 </RCC>

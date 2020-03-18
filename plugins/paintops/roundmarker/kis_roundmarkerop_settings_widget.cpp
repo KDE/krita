@@ -29,6 +29,7 @@
 //#include "kis_pressure_texture_strength_option.h"
 #include "kis_roundmarkerop_settings.h"
 #include "kis_roundmarker_option.h"
+#include <KisGlobalResourcesInterface.h>
 
 
 KisRoundMarkerOpSettingsWidget::KisRoundMarkerOpSettingsWidget(QWidget* parent)
@@ -50,7 +51,7 @@ KisRoundMarkerOpSettingsWidget::~KisRoundMarkerOpSettingsWidget() { }
 
 KisPropertiesConfigurationSP KisRoundMarkerOpSettingsWidget::configuration() const
 {
-    KisRoundMarkerOpSettings *config = new KisRoundMarkerOpSettings();
+    KisRoundMarkerOpSettings *config = new KisRoundMarkerOpSettings(KisGlobalResourcesInterface::instance());
     config->setOptionsWidget(const_cast<KisRoundMarkerOpSettingsWidget*>(this));
     config->setProperty("paintop", "roundmarker");
     writeConfiguration(config);

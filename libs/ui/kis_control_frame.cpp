@@ -43,7 +43,6 @@
 #include <KoDualColorButton.h>
 #include <resources/KoAbstractGradient.h>
 #include <KoResourceServer.h>
-#include <KoResourceServerAdapter.h>
 #include <KoResourceServerProvider.h>
 #include <KoColorSpaceRegistry.h>
 #include <kis_image.h>
@@ -77,12 +76,12 @@ KisControlFrame::KisControlFrame(KisViewManager *view, QWidget *parent, const ch
     setObjectName(name);
     m_font = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
 
-    m_patternWidget = new KisIconWidget(parent, "patterns");
+    m_patternWidget = new KisIconWidget(parent, ResourceType::Patterns);
     m_patternWidget->setToolTip(i18n("Fill Patterns"));
     m_patternWidget->setFixedSize(32, 32);
 
-    m_gradientWidget = new KisIconWidget(parent, "gradients");
-    m_gradientWidget->setToolTip(i18n("Gradients"));
+    m_gradientWidget = new KisIconWidget(parent, ResourceType::Gradients);
+    m_gradientWidget->setToolTip(i18n("Fill Gradients"));
     m_gradientWidget->setFixedSize(32, 32);
 }
 
@@ -93,12 +92,12 @@ void KisControlFrame::setup(QWidget *parent)
 
     QWidgetAction *action  = new QWidgetAction(this);
     action->setText(i18n("&Patterns"));
-    m_viewManager->actionCollection()->addAction("patterns", action);
+    m_viewManager->actionCollection()->addAction(ResourceType::Patterns, action);
     action->setDefaultWidget(m_patternWidget);
 
     action = new QWidgetAction(this);
     action->setText(i18n("&Gradients"));
-    m_viewManager->actionCollection()->addAction("gradients", action);
+    m_viewManager->actionCollection()->addAction(ResourceType::Gradients, action);
     action->setDefaultWidget(m_gradientWidget);
 
 
@@ -142,15 +141,15 @@ void KisControlFrame::slotUpdateDisplayRenderer()
     }
 }
 
-void KisControlFrame::slotSetPattern(KoPattern * pattern)
+void KisControlFrame::slotSetPattern(KoPatternSP pattern)
 {
-    m_patternWidget->setResource(pattern);
+    m_patternWidget->setThumbnail(pattern->image());
     m_patternChooser->setCurrentPattern(pattern);
 }
 
-void KisControlFrame::slotSetGradient(KoAbstractGradient * gradient)
+void KisControlFrame::slotSetGradient(KoAbstractGradientSP gradient)
 {
-    m_gradientWidget->setResource(gradient);
+    m_gradientWidget->setThumbnail(gradient->image());
 }
 
 void KisControlFrame::createPatternsChooser(KisViewManager * view)
@@ -179,16 +178,16 @@ void KisControlFrame::createPatternsChooser(KisViewManager * view)
     customPatterns->setFont(m_font);
     m_patternsTab->addTab(customPatterns, i18n("Custom Pattern"));
 
-    connect(m_patternChooser, SIGNAL(resourceSelected(KoResource*)),
-            view->canvasResourceProvider(), SLOT(slotPatternActivated(KoResource*)));
+    connect(m_patternChooser, SIGNAL(resourceSelected(KoResourceSP )),
+            view->canvasResourceProvider(), SLOT(slotPatternActivated(KoResourceSP )));
 
-    connect(customPatterns, SIGNAL(activatedResource(KoResource*)),
-            view->canvasResourceProvider(), SLOT(slotPatternActivated(KoResource*)));
+    connect(customPatterns, SIGNAL(activatedResource(KoResourceSP )),
+            view->canvasResourceProvider(), SLOT(slotPatternActivated(KoResourceSP )));
 
-    connect(view->canvasResourceProvider(), SIGNAL(sigPatternChanged(KoPattern*)),
-            this, SLOT(slotSetPattern(KoPattern*)));
+    connect(view->canvasResourceProvider(), SIGNAL(sigPatternChanged(KoPatternSP)),
+            this, SLOT(slotSetPattern(KoPatternSP)));
 
-    m_patternChooser->setCurrentItem(0, 0);
+    m_patternChooser->setCurrentItem(0);
     if (m_patternChooser->currentResource() && view->canvasResourceProvider()) {
         view->canvasResourceProvider()->slotPatternActivated(m_patternChooser->currentResource());
     }
@@ -220,15 +219,23 @@ void KisControlFrame::createGradientsChooser(KisViewManager * view)
     m_gradientChooser->setFont(m_font);
     m_gradientTab->addTab(m_gradientChooser, i18n("Gradients"));
 
-    connect(m_gradientChooser, SIGNAL(resourceSelected(KoResource*)),
-            view->canvasResourceProvider(), SLOT(slotGradientActivated(KoResource*)));
+    connect(m_gradientChooser, SIGNAL(resourceSelected(KoResourceSP )),
+            view->canvasResourceProvider(), SLOT(slotGradientActivated(KoResourceSP )));
 
     connect (view->mainWindow(), SIGNAL(themeChanged()), m_gradientChooser, SLOT(slotUpdateIcons()));
 
-    connect(view->canvasResourceProvider(), SIGNAL(sigGradientChanged(KoAbstractGradient*)),
-            this, SLOT(slotSetGradient(KoAbstractGradient*)));
+    connect(view->canvasResourceProvider(), SIGNAL(sigGradientChanged(KoAbstractGradientSP)),
+            this, SLOT(slotSetGradient(KoAbstractGradientSP)));
 
-    m_gradientChooser->setCurrentItem(0, 0);
+    connect(m_gradientChooser, SIGNAL(resourceSelected(KoResourceSP)),
+            view->canvasResourceProvider(), SLOT(slotGradientActivated(KoResourceSP)));
+
+    connect (view->mainWindow(), SIGNAL(themeChanged()), m_gradientChooser, SLOT(slotUpdateIcons()));
+
+    connect(view->canvasResourceProvider(), SIGNAL(sigGradientChanged(KoAbstractGradientSP)),
+            this, SLOT(slotSetGradient(KoAbstractGradientSP)));
+
+    m_gradientChooser->setCurrentItem(0);
     if (m_gradientChooser->currentResource() && view->canvasResourceProvider())
         view->canvasResourceProvider()->slotGradientActivated(m_gradientChooser->currentResource());
 

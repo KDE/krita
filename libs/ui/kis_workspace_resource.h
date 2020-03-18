@@ -20,7 +20,7 @@
 #ifndef KIS_WORKSPACE_RESOURCE_H
 #define KIS_WORKSPACE_RESOURCE_H
 
-#include <resources/KoResource.h>
+#include <KoResource.h>
 #include <kis_properties_configuration.h>
 #include "kritaui_export.h"
 
@@ -31,11 +31,17 @@ class KRITAUI_EXPORT KisWorkspaceResource : public KoResource , public KisProper
 public:
     KisWorkspaceResource(const QString& filename);
     ~KisWorkspaceResource() override;
-    bool load() override;
-    bool loadFromDevice(QIODevice *dev) override;
-    bool save() override;
+    KisWorkspaceResource(const KisWorkspaceResource &rhs);
+    KisWorkspaceResource &operator=(const KisWorkspaceResource &rhs) = delete;
+    KoResourceSP clone() const override;
+
+    bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;
     bool saveToDevice(QIODevice* dev) const override;
     QString defaultFileExtension() const override;
+    QPair<QString, QString> resourceType() const override
+    {
+        return QPair<QString, QString>(ResourceType::Workspaces, "");
+    }
 
     void setDockerState(const QByteArray& state);
     QByteArray dockerState();
@@ -43,5 +49,7 @@ public:
 private:
     QByteArray m_dockerState;
 };
+
+typedef QSharedPointer<KisWorkspaceResource> KisWorkspaceResourceSP;
 
 #endif // KIS_WORKSPACE_RESOURCE_H

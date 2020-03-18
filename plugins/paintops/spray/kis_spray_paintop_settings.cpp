@@ -32,9 +32,10 @@ struct KisSprayPaintOpSettings::Private
 };
 
 
-KisSprayPaintOpSettings::KisSprayPaintOpSettings()
+KisSprayPaintOpSettings::KisSprayPaintOpSettings(KisResourcesInterfaceSP resourcesInterface)
     : KisOutlineGenerationPolicy<KisPaintOpSettings>(KisCurrentOutlineFetcher::SIZE_OPTION |
-                                                     KisCurrentOutlineFetcher::ROTATION_OPTION),
+                                                     KisCurrentOutlineFetcher::ROTATION_OPTION,
+                                                     resourcesInterface),
     m_d(new Private)
 {
 }
@@ -124,7 +125,7 @@ QList<KisUniformPaintOpPropertySP> KisSprayPaintOpSettings::uniformProperties(Ki
                     option.writeOptionSetting(prop->settings().data());
                 });
 
-            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            QObject::connect(updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
             prop->requestReadValue();
             props << toQShared(prop);
         }
@@ -160,7 +161,7 @@ QList<KisUniformPaintOpPropertySP> KisSprayPaintOpSettings::uniformProperties(Ki
                     return !option.useDensity;
                 });
 
-            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            QObject::connect(updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
             prop->requestReadValue();
             props << toQShared(prop);
         }
@@ -197,8 +198,7 @@ QList<KisUniformPaintOpPropertySP> KisSprayPaintOpSettings::uniformProperties(Ki
                     option.readOptionSetting(prop->settings().data());
                     return option.useDensity;
                 });
-
-            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            QObject::connect(updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
             prop->requestReadValue();
             props << toQShared(prop);
         }

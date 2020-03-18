@@ -99,20 +99,24 @@ void KoQuaZipStore::setCompressionEnabled(bool enabled)
 
 qint64 KoQuaZipStore::write(const char *_data, qint64 _len)
 {
+    qDebug() << "QUAZIP! qint64 KoQuaZipStore::write(const char *_data, qint64 _len)" << _data << _len;
     Q_D(KoStore);
     if (_len == 0) return 0;
 
     if (!d->isOpen) {
+        qDebug() << "qint64 KoQuaZipStore::write (1)";
         errorStore << "KoStore: You must open before writing" << endl;
         return 0;
     }
 
     if (d->mode != Write) {
+        qDebug() << "qint64 KoQuaZipStore::write (2)";
         errorStore << "KoStore: Can not write to store that is opened for reading" << endl;
         return 0;
     }
 
     d->size += _len;
+    qDebug() << "qint64 KoQuaZipStore::write (3)";
     if (dd->buffer.write(_data, _len)) {    // writeData returns a bool!
         return _len;
     }

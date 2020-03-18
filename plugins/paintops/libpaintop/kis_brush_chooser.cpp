@@ -38,11 +38,12 @@
 #include <kconfiggroup.h>
 #include <KisKineticScroller.h>
 
-#include <KoResourceItemView.h>
-#include <KoResourceItemChooser.h>
+#include <KisResourceItemView.h>
+#include <KisResourceItemChooser.h>
+#include <KisResourceModel.h>
 
 #include <kis_icon.h>
-#include "kis_brush_server.h"
+#include "KisBrushServerProvider.h"
 #include "widgets/kis_slider_spin_box.h"
 #include "widgets/kis_multipliers_double_slider_spinbox.h"
 #include "kis_spacing_selection_widget.h"
@@ -57,6 +58,7 @@
 #include "kis_gbr_brush.h"
 #include "kis_debug.h"
 #include "kis_image.h"
+#include <KisGlobalResourcesInterface.h>
 
 /// The resource item delegate for rendering the resource preview
 class KisBrushDelegate : public QAbstractItemDelegate
@@ -77,10 +79,9 @@ void KisBrushDelegate::paint(QPainter * painter, const QStyleOptionViewItem & op
     if (! index.isValid())
         return;
 
-    KisBrush *brush = static_cast<KisBrush*>(index.internalPointer());
+    QImage thumbnail = index.data(Qt::UserRole + KisResourceModel::Thumbnail).value<QImage>();
 
     QRect itemRect = option.rect;
-    QImage thumbnail = brush->image();
 
     if (thumbnail.height() > itemRect.height() || thumbnail.width() > itemRect.width()) {
         thumbnail = thumbnail.scaled(itemRect.size() , Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -130,17 +131,13 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
 
     QObject::connect(useColorAsMaskCheckbox, SIGNAL(toggled(bool)), this, SLOT(slotSetItemUseColorAsMask(bool)));
 
-    KisBrushResourceServer* rServer = KisBrushServer::instance()->brushServer();
-    QSharedPointer<KisBrushResourceServerAdapter> adapter(new KisBrushResourceServerAdapter(rServer));
-
-    m_itemChooser = new KoResourceItemChooser(adapter, this);
+    m_itemChooser = new KisResourceItemChooser(ResourceType::Brushes, false, this);
     m_itemChooser->setObjectName("brush_selector");
 
     m_itemChooser->showTaggingBar(true);
-    m_itemChooser->setColumnCount(10);
     m_itemChooser->setRowHeight(30);
     m_itemChooser->setItemDelegate(new KisBrushDelegate(this));
-    m_itemChooser->setCurrentItem(0, 0);
+    m_itemChooser->setCurrentItem(0);
     m_itemChooser->setSynced(true);
     m_itemChooser->setMinimumWidth(100);
     m_itemChooser->setMinimumHeight(150);
@@ -158,7 +155,7 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
     presetsLayout->addWidget(m_itemChooser);
 
 
-    connect(m_itemChooser, SIGNAL(resourceSelected(KoResource*)), this, SLOT(updateBrushTip(KoResource*)));
+    connect(m_itemChooser, SIGNAL(resourceSelected(KoResourceSP )), this, SLOT(updateBrushTip(KoResourceSP )));
 
     stampButton->setIcon(KisIconUtils::loadIcon("list-add"));
     stampButton->setToolTip(i18n("Creates a brush tip from the current image selection."
@@ -198,19 +195,19 @@ void KisPredefinedBrushChooser::setBrush(KisBrushSP brush)
      * select nothing.
      */
 
-    KisBrushResourceServer* server = KisBrushServer::instance()->brushServer();
-    KoResource *resource = server->resourceByFilename(brush->shortFilename()).data();
+    KoResourceServer<KisBrush>* server = KisBrushServerProvider::instance()->brushServer();
+    KoResourceSP resource = server->resourceByFilename(brush->filename());
 
     if (!resource) {
-        resource = server->resourceByName(brush->name()).data();
+        resource = server->resourceByName(brush->name());
     }
 
     if (!resource) {
-        resource = brush.data();
+        resource = brush;
     }
 
     m_itemChooser->setCurrentResource(resource);
-    updateBrushTip(brush.data(), true);
+    updateBrushTip(brush, true);
 }
 
 void KisPredefinedBrushChooser::slotResetBrush()
@@ -223,9 +220,9 @@ void KisPredefinedBrushChooser::slotResetBrush()
      *       But it needs testing.
      */
 
-    KisBrush *brush = dynamic_cast<KisBrush *>(m_itemChooser->currentResource());
+    KisBrushSP brush = m_itemChooser->currentResource().dynamicCast<KisBrush>();
     if (brush) {
-        brush->load();
+        brush->load(KisGlobalResourcesInterface::instance());
         brush->setScale(1.0);
         brush->setAngle(0.0);
 
@@ -284,8 +281,8 @@ void KisPredefinedBrushChooser::slotOpenStampBrush()
     if(!m_stampBrushWidget) {
         m_stampBrushWidget = new KisCustomBrushWidget(this, i18n("Stamp"), m_image);
         m_stampBrushWidget->setModal(false);
-        connect(m_stampBrushWidget, SIGNAL(sigNewPredefinedBrush(KoResource*)),
-                                    SLOT(slotNewPredefinedBrush(KoResource*)));
+        connect(m_stampBrushWidget, SIGNAL(sigNewPredefinedBrush(KoResourceSP )),
+                                    SLOT(slotNewPredefinedBrush(KoResourceSP )));
     } else {
         m_stampBrushWidget->setImage(m_image);
     }
@@ -301,8 +298,8 @@ void KisPredefinedBrushChooser::slotOpenClipboardBrush()
     if(!m_clipboardBrushWidget) {
         m_clipboardBrushWidget = new KisClipboardBrushWidget(this, i18n("Clipboard"), m_image);
         m_clipboardBrushWidget->setModal(true);
-        connect(m_clipboardBrushWidget, SIGNAL(sigNewPredefinedBrush(KoResource*)),
-                                        SLOT(slotNewPredefinedBrush(KoResource*)));
+        connect(m_clipboardBrushWidget, SIGNAL(sigNewPredefinedBrush(KoResourceSP )),
+                                        SLOT(slotNewPredefinedBrush(KoResourceSP )));
     }
 
     QDialog::DialogCode result = (QDialog::DialogCode)m_clipboardBrushWidget->exec();
@@ -312,15 +309,15 @@ void KisPredefinedBrushChooser::slotOpenClipboardBrush()
     }
 }
 
-void KisPredefinedBrushChooser::updateBrushTip(KoResource * resource, bool isChangingBrushPresets)
+void KisPredefinedBrushChooser::updateBrushTip(KoResourceSP resource, bool isChangingBrushPresets)
 {
 
 
     QString animatedBrushTipSelectionMode; // incremental, random, etc
 
     {
-        KisBrush* brush = dynamic_cast<KisBrush*>(resource);
-        m_brush = brush ? brush->clone() : 0;
+        KisBrushSP brush = resource.dynamicCast<KisBrush>();
+        m_brush = brush ? brush->clone().dynamicCast<KisBrush>() : 0;
     }
 
     if (m_brush) {
@@ -339,7 +336,7 @@ void KisPredefinedBrushChooser::updateBrushTip(KoResource * resource, bool isCha
 
             // cast to GIH brush and grab parasite name
             //m_brush
-            KisImagePipeBrush* pipeBrush = dynamic_cast<KisImagePipeBrush*>(resource);
+            KisImagePipeBrushSP pipeBrush = resource.dynamicCast<KisImagePipeBrush>();
             animatedBrushTipSelectionMode =  pipeBrush->parasiteSelection();
 
 
@@ -384,7 +381,7 @@ void KisPredefinedBrushChooser::updateBrushTip(KoResource * resource, bool isCha
     }
 }
 
-void KisPredefinedBrushChooser::slotNewPredefinedBrush(KoResource *resource)
+void KisPredefinedBrushChooser::slotNewPredefinedBrush(KoResourceSP resource)
 {
     m_itemChooser->setCurrentResource(resource);
     updateBrushTip(resource);
@@ -407,11 +404,11 @@ void KisPredefinedBrushChooser::setImage(KisImageWSP image)
 }
 
 void KisPredefinedBrushChooser::slotImportNewBrushResource() {
-    m_itemChooser->slotButtonClicked(KoResourceItemChooser::Button_Import);
+    m_itemChooser->slotButtonClicked(KisResourceItemChooser::Button_Import);
 }
 
 void KisPredefinedBrushChooser::slotDeleteBrushResource() {
-    m_itemChooser->slotButtonClicked(KoResourceItemChooser::Button_Remove);
+    m_itemChooser->slotButtonClicked(KisResourceItemChooser::Button_Remove);
 }
 
 

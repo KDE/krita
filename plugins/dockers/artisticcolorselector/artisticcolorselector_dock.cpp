@@ -22,7 +22,6 @@
 #include <KoCanvasResourceProvider.h>
 #include <KoResourceServerProvider.h>
 #include <KoResourceServerObserver.h>
-#include <KoResourceServerAdapter.h>
 #include <KoCanvasBase.h>
 #include <kis_canvas2.h>
 #include <KoColor.h>
@@ -35,7 +34,7 @@
 #include <kis_node_selection_adapter.h>
 #include <kis_group_layer.h>
 #include <KisView.h>
-#include <KoResourceItemChooser.h>
+#include <KisResourceItemChooser.h>
 #include <kis_display_color_converter.h>
 
 #include <QWidget>
@@ -229,8 +228,8 @@ void ArtisticColorSelectorDock::setViewManager(KisViewManager* kisview)
     m_selectorUI->colorSelector->setFgColor(m_resourceProvider->resourceManager()->foregroundColor());
     m_selectorUI->colorSelector->setBgColor(m_resourceProvider->resourceManager()->backgroundColor());
 
-    connect(m_resourceProvider, SIGNAL(sigGamutMaskChanged(KoGamutMask*)),
-            this, SLOT(slotGamutMaskSet(KoGamutMask*)), Qt::UniqueConnection);
+    connect(m_resourceProvider, SIGNAL(sigGamutMaskChanged(KoGamutMaskSP)),
+            this, SLOT(slotGamutMaskSet(KoGamutMaskSP)), Qt::UniqueConnection);
 
     connect(m_resourceProvider, SIGNAL(sigGamutMaskUnset()),
             this, SLOT(slotGamutMaskUnset()), Qt::UniqueConnection);
@@ -421,7 +420,7 @@ void ArtisticColorSelectorDock::unsetCanvas()
     m_selectorUI->colorSelector->setColorConverter(KisDisplayColorConverter::dumbConverterInstance());
 }
 
-void ArtisticColorSelectorDock::slotGamutMaskSet(KoGamutMask *mask)
+void ArtisticColorSelectorDock::slotGamutMaskSet(KoGamutMaskSP mask)
 {
     if (!mask) {
         return;

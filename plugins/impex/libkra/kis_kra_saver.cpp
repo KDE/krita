@@ -50,7 +50,6 @@
 #include <kis_adjustment_layer.h>
 #include <kis_layer_composition.h>
 #include <kis_painting_assistants_decoration.h>
-#include <kis_psd_layer_style_resource.h>
 #include "kis_png_converter.h"
 #include "kis_keyframe_channel.h"
 #include <kis_time_range.h>
@@ -158,25 +157,26 @@ bool KisKraSaver::savePalettes(KoStore *store, KisImageSP image, const QString &
     Q_UNUSED(image);
     Q_UNUSED(uri);
 
+    qDebug() << "saving palettes to document" << m_d->doc->paletteList().size();
+
     bool res = false;
     if (m_d->doc->paletteList().size() == 0) {
         return true;
     }
-    for (const KoColorSet *palette : m_d->doc->paletteList()) {
-        if (!palette->isGlobal()) {
-            if (!store->open(m_d->imageName + PALETTE_PATH + palette->filename())) {
-                m_d->errorMessages << i18n("could not save palettes");
-                return false;
-            }
-            QByteArray ba = palette->toByteArray();
-            if (!ba.isEmpty()) {
-                store->write(ba);
-            } else {
-                qWarning() << "Cannot save the palette to a byte array:" << palette->name();
-            }
-            store->close();
-            res = true;
+    for (const KoColorSetSP palette : m_d->doc->paletteList()) {
+        qDebug() << "saving palette..." << palette->storageLocation() << palette->filename();
+        if (!store->open(m_d->imageName + PALETTE_PATH + palette->filename())) {
+            m_d->errorMessages << i18n("could not save palettes");
+            return false;
         }
+        QByteArray ba = palette->toByteArray();
+        if (!ba.isEmpty()) {
+            store->write(ba);
+        } else {
+            qWarning() << "Cannot save the palette to a byte array:" << palette->name();
+        }
+        store->close();
+        res = true;
     }
     return res;
 }
@@ -184,12 +184,10 @@ bool KisKraSaver::savePalettes(KoStore *store, KisImageSP image, const QString &
 void KisKraSaver::savePalettesToXML(QDomDocument &doc, QDomElement &element)
 {
     QDomElement ePalette = doc.createElement(PALETTES);
-    for (const KoColorSet *palette : m_d->doc->paletteList()) {
-        if (!palette->isGlobal()) {
-            QDomElement eFile =  doc.createElement("palette");
-            eFile.setAttribute("filename", palette->filename());
-            ePalette.appendChild(eFile);
-        }
+    for (const KoColorSetSP palette : m_d->doc->paletteList()) {
+        QDomElement eFile =  doc.createElement("palette");
+        eFile.setAttribute("filename", palette->filename());
+        ePalette.appendChild(eFile);
     }
     element.appendChild(ePalette);
 }
@@ -312,6 +310,10 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageSP image, const QString
     }
 
     {
+        warnKrita << "WARNING: Asl Layer Styles cannot be written (part of resource rewrite).";
+        // TODO: RESOURCES: needs implementation
+
+        /*
         KisPSDLayerStyleCollectionResource collection("not-nexists.asl");
         KIS_ASSERT_RECOVER_NOOP(!collection.valid());
         collection.collectAllLayerStyles(image->root());
@@ -329,6 +331,7 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageSP image, const QString
                 store->close();
             }
         }
+        */
     }
 
     if (!autosave) {

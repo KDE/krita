@@ -57,12 +57,11 @@ public:
      */
     static QStringList blacklistFileNames(QStringList fileNames, const QStringList &blacklistedFileNames);
 
-
-    KoResourceServer<KoPattern>* patternServer();
-    KoResourceServer<KoAbstractGradient>* gradientServer();
-    KoResourceServer<KoColorSet>* paletteServer();
-    KoResourceServer<KoSvgSymbolCollectionResource>* svgSymbolCollectionServer();
-    KoResourceServer<KoGamutMask>* gamutMaskServer();
+    KoResourceServer<KoPattern> *patternServer();
+    KoResourceServer<KoAbstractGradient> *gradientServer();
+    KoResourceServer<KoColorSet> *paletteServer();
+    KoResourceServer<KoSvgSymbolCollectionResource> *svgSymbolCollectionServer();
+    KoResourceServer<KoGamutMask> *gamutMaskServer();
 
 private:
     KoResourceServerProvider(const KoResourceServerProvider&);

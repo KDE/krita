@@ -29,6 +29,7 @@
 #include <kis_curve_option_widget.h>
 #include <kis_airbrush_option_widget.h>
 #include <kis_compositeop_option.h>
+#include <KisGlobalResourcesInterface.h>
 
 KisDeformPaintOpSettingsWidget::KisDeformPaintOpSettingsWidget(QWidget* parent)
     : KisPaintOpSettingsWidget(parent)
@@ -54,7 +55,7 @@ KisDeformPaintOpSettingsWidget::~ KisDeformPaintOpSettingsWidget()
 
 KisPropertiesConfigurationSP KisDeformPaintOpSettingsWidget::configuration() const
 {
-    KisDeformPaintOpSettings* config = new KisDeformPaintOpSettings();
+    KisDeformPaintOpSettings* config = new KisDeformPaintOpSettings(KisGlobalResourcesInterface::instance());
     config->setOptionsWidget(const_cast<KisDeformPaintOpSettingsWidget*>(this));
     config->setProperty("paintop", "deformBrush");
     writeConfiguration(config);

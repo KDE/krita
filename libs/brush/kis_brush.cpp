@@ -102,39 +102,58 @@ void KisBrush::PaintDeviceColoringInformation::nextRow()
 
 struct KisBrush::Private {
     Private()
-        : boundary(0)
+        : brushType(INVALID)
+        , hasColor(false)
         , angle(0)
         , scale(1.0)
-        , hasColor(false)
-        , brushType(INVALID)
         , autoSpacingActive(false)
         , autoSpacingCoeff(1.0)
         , threadingAllowed(true)
     {}
 
-    ~Private() {
-        delete boundary;
+    Private(const Private &rhs)
+        : brushType(rhs.brushType),
+          width(rhs.width),
+          height(rhs.height),
+          spacing(rhs.spacing),
+          hotSpot(rhs.hotSpot),
+          hasColor(rhs.hasColor),
+          angle(rhs.angle),
+          scale(rhs.scale),
+          autoSpacingActive(rhs.autoSpacingActive),
+          autoSpacingCoeff(rhs.autoSpacingCoeff),
+          threadingAllowed(rhs.threadingAllowed),
+          brushTipImage(rhs.brushTipImage),
+          /**
+           * Be careful! The pyramid is shared between two brush objects,
+           * therefore you cannot change it, only recreate! That is the
+           * reason why it is defined as const!
+           */
+          brushPyramid(rhs.brushPyramid)
+
+    {
+        // don't copy the boundary, it will be regenerated -- see bug 291910
     }
 
-    mutable KisBoundary* boundary;
-    qreal angle;
-    qreal scale;
-    bool hasColor;
+    ~Private() {
+    }
+
+    mutable QScopedPointer<KisBoundary> boundary;
     enumBrushType brushType;
 
     qint32 width;
     qint32 height;
     double spacing;
     QPointF hotSpot;
-
-    mutable QSharedPointer<KisSharedQImagePyramid> brushPyramid;
-
-    QImage brushTipImage;
-
+    bool hasColor;
+    qreal angle;
+    qreal scale;
     bool autoSpacingActive;
     qreal autoSpacingCoeff;
-
     bool threadingAllowed;
+
+    QImage brushTipImage;
+    mutable QSharedPointer<KisSharedQImagePyramid> brushPyramid;
 };
 
 KisBrush::KisBrush()
@@ -150,32 +169,9 @@ KisBrush::KisBrush(const QString& filename)
 }
 
 KisBrush::KisBrush(const KisBrush& rhs)
-    : KoResource(QString())
-    , KisShared()
-    , d(new Private)
+    : KoResource(rhs)
+    , d(new Private(*rhs.d))
 {
-    setBrushTipImage(rhs.brushTipImage());
-    d->brushType = rhs.d->brushType;
-    d->width = rhs.d->width;
-    d->height = rhs.d->height;
-    d->spacing = rhs.d->spacing;
-    d->hotSpot = rhs.d->hotSpot;
-    d->hasColor = rhs.d->hasColor;
-    d->angle = rhs.d->angle;
-    d->scale = rhs.d->scale;
-    d->autoSpacingActive = rhs.d->autoSpacingActive;
-    d->autoSpacingCoeff = rhs.d->autoSpacingCoeff;
-    d->threadingAllowed = rhs.d->threadingAllowed;
-    setFilename(rhs.filename());
-
-    /**
-     * Be careful! The pyramid is shared between two brush objects,
-     * therefore you cannot change it, only recreate! That i sthe
-     * reason why it is defined as const!
-     */
-    d->brushPyramid = rhs.d->brushPyramid;
-
-    // don't copy the boundary, it will be regenerated -- see bug 291910
 }
 
 KisBrush::~KisBrush()
@@ -185,9 +181,7 @@ KisBrush::~KisBrush()
 
 QImage KisBrush::brushTipImage() const
 {
-    if (d->brushTipImage.isNull()) {
-        const_cast<KisBrush*>(this)->load();
-    }
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!d->brushTipImage.isNull());
     return d->brushTipImage;
 }
 
@@ -335,7 +329,7 @@ enumBrushType KisBrush::brushType() const
 void KisBrush::predefinedBrushToXML(const QString &type, QDomElement& e) const
 {
     e.setAttribute("type", type);
-    e.setAttribute("filename", shortFilename());
+    e.setAttribute("filename", filename());
     e.setAttribute("spacing", QString::number(spacing()));
     e.setAttribute("useAutoSpacing", QString::number(autoSpacingActive()));
     e.setAttribute("autoSpacingCoeff", QString::number(autoSpacingCoeff()));
@@ -348,9 +342,9 @@ void KisBrush::toXML(QDomDocument& /*document*/ , QDomElement& element) const
     element.setAttribute("BrushVersion", "2");
 }
 
-KisBrushSP KisBrush::fromXML(const QDomElement& element)
+KisBrushSP KisBrush::fromXML(const QDomElement& element, KisResourcesInterfaceSP resourcesInterface)
 {
-    KisBrushSP brush = KisBrushRegistry::instance()->createBrush(element);
+    KisBrushSP brush = KisBrushRegistry::instance()->createBrush(element, resourcesInterface);
     if (brush && element.attribute("BrushVersion", "1") == "1") {
         brush->setScale(brush->scale() * 2.0);
     }
@@ -360,11 +354,11 @@ KisBrushSP KisBrush::fromXML(const QDomElement& element)
 QSizeF KisBrush::characteristicSize(KisDabShape const& shape) const
 {
     KisDabShape normalizedShape(
-         shape.scale() * d->scale,
-         shape.ratio(),
-         normalizeAngle(shape.rotation() + d->angle));
+                shape.scale() * d->scale,
+                shape.ratio(),
+                normalizeAngle(shape.rotation() + d->angle));
     return KisQImagePyramid::characteristicSize(
-        QSize(width(), height()), normalizedShape);
+                QSize(width(), height()), normalizedShape);
 }
 
 qint32 KisBrush::maskWidth(KisDabShape const& shape, qreal subPixelX, qreal subPixelY, const KisPaintInformation& info) const
@@ -473,19 +467,19 @@ void KisBrush::mask(KisFixedPaintDeviceSP dst, const KisPaintDeviceSP src, KisDa
 
 
 void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
-        ColoringInformation* coloringInformation,
-        KisDabShape const& shape,
-        const KisPaintInformation& info_,
-        double subPixelX, double subPixelY, qreal softnessFactor) const
+                                                   ColoringInformation* coloringInformation,
+                                                   KisDabShape const& shape,
+                                                   const KisPaintInformation& info_,
+                                                   double subPixelX, double subPixelY, qreal softnessFactor) const
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(valid());
     Q_UNUSED(info_);
     Q_UNUSED(softnessFactor);
 
     QImage outputImage = d->brushPyramid->pyramid(this)->createImage(KisDabShape(
-            shape.scale() * d->scale, shape.ratio(),
-            -normalizeAngle(shape.rotation() + d->angle)),
-        subPixelX, subPixelY);
+                                                                         shape.scale() * d->scale, shape.ratio(),
+                                                                         -normalizeAngle(shape.rotation() + d->angle)),
+                                                                     subPixelX, subPixelY);
 
     qint32 maskWidth = outputImage.width();
     qint32 maskHeight = outputImage.height();
@@ -559,9 +553,9 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
 }
 
 KisFixedPaintDeviceSP KisBrush::paintDevice(const KoColorSpace * colorSpace,
-        KisDabShape const& shape,
-        const KisPaintInformation& info,
-        double subPixelX, double subPixelY) const
+                                            KisDabShape const& shape,
+                                            const KisPaintInformation& info,
+                                            double subPixelX, double subPixelY) const
 {
     Q_ASSERT(valid());
     Q_UNUSED(info);
@@ -569,7 +563,7 @@ KisFixedPaintDeviceSP KisBrush::paintDevice(const KoColorSpace * colorSpace,
     double scale = shape.scale() * d->scale;
 
     QImage outputImage = d->brushPyramid->pyramid(this)->createImage(
-        KisDabShape(scale, shape.ratio(), -angle), subPixelX, subPixelY);
+                KisDabShape(scale, shape.ratio(), -angle), subPixelX, subPixelY);
 
     KisFixedPaintDeviceSP dab = new KisFixedPaintDevice(colorSpace);
     Q_CHECK_PTR(dab);
@@ -580,8 +574,7 @@ KisFixedPaintDeviceSP KisBrush::paintDevice(const KoColorSpace * colorSpace,
 
 void KisBrush::resetBoundary()
 {
-    delete d->boundary;
-    d->boundary = 0;
+    d->boundary.reset();
 }
 
 void KisBrush::generateBoundary() const
@@ -591,7 +584,7 @@ void KisBrush::generateBoundary() const
 
     if (brushType() == IMAGE || brushType() == PIPE_IMAGE) {
         dev = paintDevice(KoColorSpaceRegistry::instance()->rgb8(),
-            inverseTransform, KisPaintInformation());
+                          inverseTransform, KisPaintInformation());
     }
     else {
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
@@ -599,7 +592,7 @@ void KisBrush::generateBoundary() const
         mask(dev, KoColor(Qt::black, cs), inverseTransform, KisPaintInformation());
     }
 
-    d->boundary = new KisBoundary(dev);
+    d->boundary.reset(new KisBoundary(dev));
     d->boundary->generateBoundary();
 }
 
@@ -607,7 +600,7 @@ const KisBoundary* KisBrush::boundary() const
 {
     if (!d->boundary)
         generateBoundary();
-    return d->boundary;
+    return d->boundary.data();
 }
 
 void KisBrush::setScale(qreal _scale)

@@ -31,7 +31,7 @@
 #include <functional>
 
 class KisBrush;
-typedef KisSharedPtr<KisBrush> KisBrushSP;
+typedef QSharedPointer<KisBrush> KisBrushSP;
 
 class KisColorSource;
 class KisPressureSharpnessOption;

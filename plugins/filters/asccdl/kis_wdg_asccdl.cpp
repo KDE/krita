@@ -23,6 +23,7 @@
 #include <KisVisualColorSelectorShape.h>
 #include <KisVisualRectangleSelectorShape.h>
 #include <KisVisualEllipticalSelectorShape.h>
+#include <KisGlobalResourcesInterface.h>
 
 KisASCCDLConfigWidget::KisASCCDLConfigWidget(QWidget *parent, const KoColorSpace *cs)
     :KisConfigWidget(parent),
@@ -51,7 +52,7 @@ KisASCCDLConfigWidget::~KisASCCDLConfigWidget()
 
 KisPropertiesConfigurationSP KisASCCDLConfigWidget::configuration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("asc-cdl", 0);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("asc-cdl", 0, KisGlobalResourcesInterface::instance());
     QVariant colorVariant("KoColor");
     colorVariant.setValue(m_page->btnSlope->color());
     config->setProperty("slope", colorVariant);

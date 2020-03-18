@@ -60,9 +60,9 @@ KisEmbossFilter::KisEmbossFilter() : KisFilter(id(), FiltersCategoryEmbossId, i1
     setSupportsAdjustmentLayers(false);
 }
 
-KisFilterConfigurationSP KisEmbossFilter::defaultConfiguration() const
+KisFilterConfigurationSP KisEmbossFilter::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration();
+    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
     config->setProperty("depth", 30);
     return config;
 }

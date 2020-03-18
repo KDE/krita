@@ -27,54 +27,65 @@ KisSessionManagerDialog::KisSessionManagerDialog(QWidget *parent)
 {
     setupUi(this);
 
-    updateSessionList();
-
     connect(btnNew, SIGNAL(clicked()), this, SLOT(slotNewSession()));
     connect(btnRename, SIGNAL(clicked()), this, SLOT(slotRenameSession()));
     connect(btnSwitchTo, SIGNAL(clicked()), this, SLOT(slotSwitchSession()));
     connect(btnDelete, SIGNAL(clicked()), this, SLOT(slotDeleteSession()));
     connect(btnClose, SIGNAL(clicked()), this, SLOT(slotClose()));
 
-    connect(lstSessions, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(slotSessionDoubleClicked(QListWidgetItem*)));
-}
 
-void KisSessionManagerDialog::updateSessionList() {
-    KoResourceServer<KisSessionResource> *server = KisResourceServerProvider::instance()->sessionServer();
+    m_model = KisResourceModelProvider::resourceModel(ResourceType::Sessions);
+    lstSessions->setModel(m_model);
+    lstSessions->setModelColumn(KisResourceModel::Name);
 
-    lstSessions->clear();
-    Q_FOREACH(KisSessionResource *session, server->resources()) {
-        lstSessions->addItem(session->name());
-    }
+
+    connect(m_model, SIGNAL(beforeResourcesLayoutReset(QModelIndex)), this, SLOT(slotModelAboutToBeReset(QModelIndex)));
+    connect(m_model, SIGNAL(afterResourcesLayoutReset()), this, SLOT(slotModelReset()));
+
+    connect(lstSessions, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(slotSessionDoubleClicked(QModelIndex)));
+
+
 }
 
 void KisSessionManagerDialog::slotNewSession()
 {
-    QString name = QInputDialog::getText(this,
-        i18n("Create session"),
-        i18n("Session name:"), QLineEdit::Normal
-    );
-    if (name.isNull() || name.isEmpty()) return;
+    QString name;
 
-    auto *session = new KisSessionResource(QString());
+    KisSessionResourceSP session(new KisSessionResource(QString()));
 
     KoResourceServer<KisSessionResource> *server = KisResourceServerProvider::instance()->sessionServer();
     QString saveLocation = server->saveLocation();
-    QFileInfo fileInfo(saveLocation + name + session->defaultFileExtension());
-    int i = 1;
-    while (fileInfo.exists()) {
-        fileInfo.setFile(saveLocation + name + QString("%1").arg(i) + session->defaultFileExtension());
-        i++;
+    QFileInfo fileInfo(saveLocation + name.split(" ").join("_") + session->defaultFileExtension());
+
+    bool fileOverwriteAccepted = false;
+
+    while(!fileOverwriteAccepted) {
+        name = QInputDialog::getText(this,
+                                     i18n("Create session"),
+                                     i18n("Session name:"), QLineEdit::Normal,
+                                     name);
+        if (name.isNull() || name.isEmpty()) {
+            return;
+        } else {
+            fileInfo = QFileInfo(saveLocation + name.split(" ").join("_") + session->defaultFileExtension());
+            if (fileInfo.exists()) {
+                int res = QMessageBox::warning(this, i18nc("@title:window", "Name Already Exists")
+                                                        , i18n("The name '%1' already exists, do you wish to overwrite it?", name)
+                                                        , QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+                if (res == QMessageBox::Yes) fileOverwriteAccepted = true;
+            } else {
+                fileOverwriteAccepted = true;
+            }
+        }
     }
 
-    session->setFilename(fileInfo.filePath());
+    session->setFilename(fileInfo.fileName());
     session->setName(name);
     session->storeCurrentWindows();
 
     server->addResource(session);
 
     KisPart::instance()->setCurrentSession(session);
-
-    updateSessionList();
 }
 
 void KisSessionManagerDialog::slotRenameSession()
@@ -85,16 +96,13 @@ void KisSessionManagerDialog::slotRenameSession()
     );
     if (name.isNull() || name.isEmpty()) return;
 
-    KisSessionResource *session = getSelectedSession();
+    KisSessionResourceSP session = getSelectedSession();
     if (!session) return;
 
-    session->setName(name);
-    session->save();
-
-    updateSessionList();
+    m_model->renameResource(session, name);
 }
 
-void KisSessionManagerDialog::slotSessionDoubleClicked(QListWidgetItem* /*item*/)
+void KisSessionManagerDialog::slotSessionDoubleClicked(QModelIndex /*item*/)
 {
     slotSwitchSession();
     slotClose();
@@ -102,50 +110,55 @@ void KisSessionManagerDialog::slotSessionDoubleClicked(QListWidgetItem* /*item*/
 
 void KisSessionManagerDialog::slotSwitchSession()
 {
-    KisSessionResource *session = getSelectedSession();
+    KisSessionResourceSP session = getSelectedSession();
 
     if (session) {
         bool closed = KisPart::instance()->closeSession(true);
         if (closed) {
-            session->restore();
+            KisPart::instance()->restoreSession(session);
         }
     }
 }
 
-KisSessionResource *KisSessionManagerDialog::getSelectedSession() const
+KisSessionResourceSP KisSessionManagerDialog::getSelectedSession() const
 {
-    QListWidgetItem *item = lstSessions->currentItem();
-    if (item) {
+    QModelIndex idx = lstSessions->currentIndex();
+    if (idx.isValid()) {
         KoResourceServer<KisSessionResource> *server = KisResourceServerProvider::instance()->sessionServer();
-        return server->resourceByName(item->text());
+        QString name = m_model->data(idx, Qt::UserRole + KisResourceModel::Name).toString();
+        return server->resourceByName(name);
     }
     return nullptr;
 }
 
 void KisSessionManagerDialog::slotDeleteSession()
 {
-    KisSessionResource *session = getSelectedSession();
-    if (!session) return;
-
-    if (QMessageBox::warning(this,
-        i18nc("@title:window", "Krita"),
-        QString(i18n("Permanently delete session %1?", session->name())),
-        QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
-
-        KisPart::instance()->setCurrentSession(0);
-        const QString filename = session->filename();
-
-        KoResourceServer<KisSessionResource> *server = KisResourceServerProvider::instance()->sessionServer();
-        server->removeResourceFromServer(session);
-
-        QFile file(filename);
-        file.remove();
-
-        updateSessionList();
+    QModelIndex idx = lstSessions->currentIndex();
+    if (idx.isValid()) {
+        m_model->removeResource(lstSessions->currentIndex());
     }
 }
 
 void KisSessionManagerDialog::slotClose()
 {
     hide();
+}
+
+void KisSessionManagerDialog::slotModelAboutToBeReset(QModelIndex)
+{
+    QModelIndex idx = lstSessions->currentIndex();
+    if (idx.isValid()) {
+        m_lastSessionId = m_model->data(idx, Qt::UserRole + KisResourceModel::Id).toInt();
+    }
+}
+
+void KisSessionManagerDialog::slotModelReset()
+{
+    for (int i = 0; i < m_model->rowCount(); i++) {
+        QModelIndex idx = m_model->index(i, 0);
+        int id = m_model->data(idx, Qt::UserRole + KisResourceModel::Id).toInt();
+        if (id == m_lastSessionId) {
+            lstSessions->setCurrentIndex(idx);
+        }
+    }
 }

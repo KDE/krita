@@ -29,31 +29,34 @@
 #include <QStandardPaths>
 #include <QGlobalStatic>
 
-
 #include <resources/KoSegmentGradient.h>
 #include <resources/KoStopGradient.h>
 #include "KoColorSpaceRegistry.h"
 #include "KoResourcePaths.h"
 #include "klocalizedstring.h"
 #include <iostream>
+
 using namespace std;
 
 class GradientResourceServer : public KoResourceServer<KoAbstractGradient> {
 
 public:
 
-    GradientResourceServer(const QString& type, const QString& extensions) :
-            KoResourceServer<KoAbstractGradient>(type, extensions) , m_foregroundToTransparent(0) , m_foregroundToBackground(0)
+    GradientResourceServer(const QString& type)
+        : KoResourceServer<KoAbstractGradient>(type)
     {
         insertSpecialGradients();
     }
 
     void insertSpecialGradients()
     {
+        qDebug() << "insertSpecialGradients broken because we don't have a list we can insert in front of anymore";
+
+
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
         QList<KoGradientStop> stops;
 
-        KoStopGradient* gradient = new KoStopGradient();
+        KoStopGradientSP gradient(new KoStopGradient());
         gradient->setType(QGradient::LinearGradient);
         gradient->setName(i18n("Foreground to Transparent"));
         stops << KoGradientStop(0.0, KoColor(Qt::black, cs)) << KoGradientStop(1.0, KoColor(QColor(0, 0, 0, 0), cs));
@@ -61,10 +64,10 @@ public:
         gradient->setStops(stops);
         gradient->setValid(true);
         gradient->setPermanent(true);
-        addResource(gradient, false, true);
+        addResource(gradient, false);
         m_foregroundToTransparent = gradient;
 
-        gradient = new KoStopGradient();
+        gradient.reset(new KoStopGradient());
         gradient->setType(QGradient::LinearGradient);
         gradient->setName(i18n("Foreground to Background"));
 
@@ -74,7 +77,7 @@ public:
         gradient->setStops(stops);
         gradient->setValid(true);
         gradient->setPermanent(true);
-        addResource(gradient, false, true);
+        addResource(gradient, false);
         m_foregroundToBackground = gradient;
     }
 
@@ -82,7 +85,7 @@ private:
 
     friend class KoResourceBundle;
 
-    KoAbstractGradient* createResource( const QString & filename ) override {
+    KoAbstractGradientSP createResource( const QString & filename ) {
 
         QString fileExtension;
         int index = filename.lastIndexOf('.');
@@ -90,57 +93,38 @@ private:
         if (index != -1)
             fileExtension = filename.mid(index).toLower();
 
-        KoAbstractGradient* grad = 0;
+        KoAbstractGradientSP grad;
 
-        if(fileExtension == ".svg" || fileExtension == ".kgr")
-            grad = new KoStopGradient(filename);
-        else if(fileExtension == ".ggr" )
-            grad = new KoSegmentGradient(filename);
+        if(fileExtension == ".svg" || fileExtension == ".kgr") {
+            grad.reset(new KoStopGradient(filename));
+        }
+        else if(fileExtension == ".ggr" ) {
+            grad.reset(new KoSegmentGradient(filename));
+        }
 
         return grad;
     }
 
-    QList< KoAbstractGradient* > sortedResources() override {
-        QList< KoAbstractGradient* > resources = KoResourceServer<KoAbstractGradient>::sortedResources();
-        QList< KoAbstractGradient* > sorted;
-        if (m_foregroundToTransparent && resources.contains(m_foregroundToTransparent)) {
-            sorted.append(resources.takeAt(resources.indexOf(m_foregroundToTransparent)));
-        }
-        if (m_foregroundToBackground && resources.contains(m_foregroundToBackground)) {
-            sorted.append(resources.takeAt(resources.indexOf(m_foregroundToBackground)));
-        }
-        return sorted + resources;
-    }
-
-    KoAbstractGradient* m_foregroundToTransparent;
-    KoAbstractGradient* m_foregroundToBackground;
+    KoAbstractGradientSP m_foregroundToTransparent;
+    KoAbstractGradientSP m_foregroundToBackground;
 };
 
 struct Q_DECL_HIDDEN KoResourceServerProvider::Private
 {
-    KoResourceServer<KoPattern>* patternServer;
-    KoResourceServer<KoAbstractGradient>* gradientServer;
-    KoResourceServer<KoColorSet>* paletteServer;
+    KoResourceServer<KoPattern> *patternServer;
+    KoResourceServer<KoAbstractGradient> *gradientServer;
+    KoResourceServer<KoColorSet> *paletteServer;
     KoResourceServer<KoSvgSymbolCollectionResource> *svgSymbolCollectionServer;
-    KoResourceServer<KoGamutMask>* gamutMaskServer;
+    KoResourceServer<KoGamutMask> *gamutMaskServer;
 };
 
 KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
 {
-    d->patternServer = new KoResourceServerSimpleConstruction<KoPattern>("ko_patterns", "*.pat:*.jpg:*.gif:*.png:*.tif:*.xpm:*.bmp" );
-    d->patternServer->loadResources(blacklistFileNames(d->patternServer->fileNames(), d->patternServer->blackListedFiles()));
-
-    d->gradientServer = new GradientResourceServer("ko_gradients", "*.svg:*.ggr");
-    d->gradientServer->loadResources(blacklistFileNames(d->gradientServer->fileNames(), d->gradientServer->blackListedFiles()));
-
-    d->paletteServer = new KoResourceServerSimpleConstruction<KoColorSet>("ko_palettes", "*.kpl:*.gpl:*.pal:*.act:*.aco:*.css:*.colors:*.xml:*.sbz");
-    d->paletteServer->loadResources(blacklistFileNames(d->paletteServer->fileNames(), d->paletteServer->blackListedFiles()));
-
-    d->svgSymbolCollectionServer = new KoResourceServerSimpleConstruction<KoSvgSymbolCollectionResource>("symbols", "*.svg");
-    d->svgSymbolCollectionServer->loadResources(blacklistFileNames(d->svgSymbolCollectionServer->fileNames(), d->svgSymbolCollectionServer->blackListedFiles()));
-
-    d->gamutMaskServer = new KoResourceServerSimpleConstruction<KoGamutMask>("ko_gamutmasks", "*.kgm");
-    d->gamutMaskServer->loadResources(blacklistFileNames(d->gamutMaskServer->fileNames(), d->gamutMaskServer->blackListedFiles()));
+    d->patternServer = new KoResourceServer<KoPattern>(ResourceType::Patterns);
+    d->gradientServer = new GradientResourceServer(ResourceType::Gradients);
+    d->paletteServer = new KoResourceServer<KoColorSet>(ResourceType::Palettes);
+    d->svgSymbolCollectionServer = new KoResourceServer<KoSvgSymbolCollectionResource>(ResourceType::Symbols);
+    d->gamutMaskServer = new KoResourceServer<KoGamutMask>(ResourceType::GamutMasks);
 }
 
 KoResourceServerProvider::~KoResourceServerProvider()
@@ -156,7 +140,7 @@ KoResourceServerProvider::~KoResourceServerProvider()
 
 Q_GLOBAL_STATIC(KoResourceServerProvider, s_instance)
 
-KoResourceServerProvider* KoResourceServerProvider::instance()
+KoResourceServerProvider *KoResourceServerProvider::instance()
 {
     return s_instance;
 }
@@ -171,17 +155,17 @@ QStringList KoResourceServerProvider::blacklistFileNames(QStringList fileNames, 
     return fileNames;
 }
 
-KoResourceServer<KoPattern>* KoResourceServerProvider::patternServer()
+KoResourceServer<KoPattern> *KoResourceServerProvider::patternServer()
 {
     return d->patternServer;
 }
 
-KoResourceServer<KoAbstractGradient>* KoResourceServerProvider::gradientServer()
+KoResourceServer<KoAbstractGradient> *KoResourceServerProvider::gradientServer()
 {
     return d->gradientServer;
 }
 
-KoResourceServer<KoColorSet>* KoResourceServerProvider::paletteServer()
+KoResourceServer<KoColorSet> *KoResourceServerProvider::paletteServer()
 {
     return d->paletteServer;
 }
@@ -191,7 +175,7 @@ KoResourceServer<KoSvgSymbolCollectionResource> *KoResourceServerProvider::svgSy
     return d->svgSymbolCollectionServer;
 }
 
-KoResourceServer<KoGamutMask>* KoResourceServerProvider::gamutMaskServer()
+KoResourceServer<KoGamutMask> *KoResourceServerProvider::gamutMaskServer()
 {
     return d->gamutMaskServer;
 }

@@ -39,6 +39,7 @@
 #include <KoShapeManager.h>
 #include <KoShapePaintingContext.h>
 #include <SvgParser.h>
+#include <KoMD5Generator.h>
 
 #include <FlakeDebug.h>
 
@@ -88,36 +89,32 @@ KoSvgSymbolCollectionResource::KoSvgSymbolCollectionResource()
 }
 
 KoSvgSymbolCollectionResource::KoSvgSymbolCollectionResource(const KoSvgSymbolCollectionResource& rhs)
-    : QObject(0)
-    , KoResource(QString())
-    , d(new Private())
+    : KoResource(QString())
+    , d(new Private(*rhs.d))
 {
-    setFilename(rhs.filename());
-    d->symbols = rhs.d->symbols;
-    setValid(true);
+}
+
+KoResourceSP KoSvgSymbolCollectionResource::clone() const
+{
+    return KoResourceSP(new KoSvgSymbolCollectionResource(*this));
 }
 
 KoSvgSymbolCollectionResource::~KoSvgSymbolCollectionResource()
 {
 }
 
-bool KoSvgSymbolCollectionResource::load()
+bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
-    QFile file(filename());
-    if (file.size() == 0) return false;
-    if (!file.open(QIODevice::ReadOnly)) {
-        return false;
+    Q_UNUSED(resourcesInterface);
+
+    if (!dev->isOpen()) {
+        dev->open(QIODevice::ReadOnly);
     }
-    bool res =  loadFromDevice(&file);
-    file.close();
-    return res;
-}
 
+    QByteArray ba = dev->readAll();
+    setMD5(KoMD5Generator::generateHash(ba));
 
-
-bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev)
-{
-    if (!dev->isOpen()) dev->open(QIODevice::ReadOnly);
+    dev->seek(0);
 
     QString errorMsg;
     int errorLine = 0;
@@ -144,7 +141,7 @@ bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev)
 //    debugFlake << "Loaded" << filename() << "\n\t"
 //             << "Title" << parser.documentTitle() << "\n\t"
 //             << "Description" << parser.documentDescription()
-//             << "\n\tgot" << d->symbols.size() << "symbols"
+//             << "\n\tgot" << d->symbols.size() << ResourceType::Symbols
 //             << d->symbols[0]->shape->outlineRect()
 //             << d->symbols[0]->shape->size();
 
@@ -158,17 +155,6 @@ bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev)
     }
     setValid(true);
     setImage(d->symbols[0]->icon());
-    return true;
-}
-
-bool KoSvgSymbolCollectionResource::save()
-{
-    QFile file(filename());
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-        return false;
-    }
-    saveToDevice(&file);
-    file.close();
     return true;
 }
 

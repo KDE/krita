@@ -252,7 +252,7 @@ void KisAslXmlWriter::writeCurve(const QString &key, const QString &name, const 
     leaveDescriptor();
 }
 
-QString KisAslXmlWriter::writePattern(const QString &key, const KoPattern *pattern)
+QString KisAslXmlWriter::writePattern(const QString &key, const KoPatternSP pattern)
 {
     enterDescriptor(key, "", "KisPattern");
 
@@ -281,7 +281,7 @@ QString KisAslXmlWriter::writePattern(const QString &key, const KoPattern *patte
     return uuid;
 }
 
-void KisAslXmlWriter::writePatternRef(const QString &key, const KoPattern *pattern, const QString &uuid)
+void KisAslXmlWriter::writePatternRef(const QString &key, const KoPatternSP pattern, const QString &uuid)
 {
     enterDescriptor(key, "", "Ptrn");
 

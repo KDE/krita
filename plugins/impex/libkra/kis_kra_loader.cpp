@@ -36,7 +36,11 @@
 #include <KisImportExportManager.h>
 #include <KoXmlReader.h>
 #include <KoStoreDevice.h>
-#include <KoResourceServerProvider.h>
+#include <KisResourceServerProvider.h>
+#include <KoResourceServer.h>
+#include <KisResourceStorage.h>
+#include <KisGlobalResourcesInterface.h>
+
 
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_registry.h>
@@ -65,7 +69,6 @@
 #include <kis_layer_composition.h>
 #include <kis_file_layer.h>
 #include <kis_psd_layer_style.h>
-#include <kis_psd_layer_style_resource.h>
 #include "KisResourceServerProvider.h"
 #include "kis_keyframe_channel.h"
 #include <kis_filter_configuration.h>
@@ -88,6 +91,7 @@
 #include "kis_layer_properties_icons.h"
 #include "kis_node_view_color_scheme.h"
 #include "KisMirrorAxisConfig.h"
+#include <KisGlobalResourcesInterface.h>
 
 /*
 
@@ -466,38 +470,52 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP image, const QStri
     location = external ? QString() : uri;
     location += m_d->imageName + LAYER_STYLES_PATH;
     if (store->hasFile(location)) {
-        KisPSDLayerStyleCollectionResource *collection =
-            new KisPSDLayerStyleCollectionResource("Embedded Styles.asl");
 
-        collection->setName(i18nc("Auto-generated layer style collection name for embedded styles (collection)", "<%1> (embedded)", m_d->imageName));
 
-        KIS_ASSERT_RECOVER_NOOP(!collection->valid());
 
-        store->open(location);
-        {
-            KoStoreDevice device(store);
-            device.open(QIODevice::ReadOnly);
 
-            /**
-             * ASL loading code cannot work with non-sequential IO devices,
-             * so convert the device beforehand!
-             */
-            QByteArray buf = device.readAll();
-            QBuffer raDevice(&buf);
-            raDevice.open(QIODevice::ReadOnly);
-            collection->loadFromDevice(&raDevice);
-        }
-        store->close();
+        warnKrita << "WARNING: Asl Layer Styles cannot be read (part of resource rewrite).";
+        // TODO: RESOURCES: needs implementing of creation of the storage and linking it to the database etc.
 
-        if (collection->valid()) {
-            KoResourceServer<KisPSDLayerStyleCollectionResource> *server = KisResourceServerProvider::instance()->layerStyleCollectionServer();
-            server->addResource(collection, false);
+        // Question: do we need to use KisAslStorage or the document storage?
+        // see: QSharedPointer<KoResourceServer> storage = KisResourceServerProvider::instance()->storageByName(m_d->document->uniqueID());
+        // and then: storage->addResource(aslStyle);
+        // or through the server: get the server, add everything directly to the server
+        // but I believe it should go through the KisAslStorage? // tiar
 
-            collection->assignAllLayerStyles(image->root());
-        } else {
-            warnKrita << "WARNING: Couldn't load layer styles library from .kra!";
-            delete collection;
-        }
+
+
+//        //KisPSDLayerStyleSP collection(new KisPSDLayerStyle("Embedded Styles.asl"));
+
+//        collection->setName(i18nc("Auto-generated layer style collection name for embedded styles (collection)", "<%1> (embedded)", m_d->imageName));
+
+//        KIS_ASSERT_RECOVER_NOOP(!collection->valid());
+
+//        store->open(location);
+//        {
+//            KoStoreDevice device(store);
+//            device.open(QIODevice::ReadOnly);
+
+//            /**
+//             * ASL loading code cannot work with non-sequential IO devices,
+//             * so convert the device beforehand!
+//             */
+//            QByteArray buf = device.readAll();
+//            QBuffer raDevice(&buf);
+//            raDevice.open(QIODevice::ReadOnly);
+//            collection->loadFromDevice(&raDevice);
+//        }
+//        store->close();
+
+//        if (collection->valid()) {
+//            KoResourceServer<KisPSDLayerStyleCollectionResource> *server = KisResourceServerProvider::instance()->layerStyleCollectionServer();
+//            server->addResource(collection, false);
+
+//            collection->assignAllLayerStyles(image->root());
+//        } else {
+//            warnKrita << "WARNING: Couldn't load layer styles library from .kra!";
+//        }
+
     }
 
     if (m_d->document && m_d->document->documentInfo()->aboutInfo("title").isNull())
@@ -510,13 +528,14 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP image, const QStri
 
 void KisKraLoader::loadPalettes(KoStore *store, KisDocument *doc)
 {
-    QList<KoColorSet*> list;
+    qDebug() << ">>>> loadPalettes" << m_d->paletteFilenames;
+    QList<KoColorSetSP> list;
     Q_FOREACH (const QString &filename, m_d->paletteFilenames) {
-        KoColorSet *newPalette = new KoColorSet(filename);
+        qDebug() << "loading palettes" << filename;
+        KoColorSetSP newPalette(new KoColorSet(filename));
         store->open(m_d->imageName + PALETTE_PATH + filename);
         QByteArray data = store->read(store->size());
-        newPalette->fromByteArray(data);
-        newPalette->setIsGlobal(false);
+        newPalette->fromByteArray(data, KisGlobalResourcesInterface::instance());
         newPalette->setIsEditable(true);
         store->close();
         list.append(newPalette);
@@ -935,7 +954,8 @@ KisNodeSP KisKraLoader::loadAdjustmentLayer(const KoXmlElement& element, KisImag
         return 0; // XXX: We don't have this filter. We should warn about it!
     }
 
-    KisFilterConfigurationSP  kfc = f->factoryConfiguration();
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
+    kfc->createLocalResourcesSnapshot();
     kfc->setProperty("legacy", legacy);
     if (legacy=="brightnesscontrast") {
         kfc->setProperty("colorModel", cs->colorModelId().id());
@@ -992,7 +1012,8 @@ KisNodeSP KisKraLoader::loadGeneratorLayer(const KoXmlElement& element, KisImage
         return 0; // XXX: We don't have this generator. We should warn about it!
     }
 
-    KisFilterConfigurationSP  kgc = generator->factoryConfiguration();
+    KisFilterConfigurationSP  kgc = generator->defaultConfiguration(KisGlobalResourcesInterface::instance());
+    kgc->createLocalResourcesSnapshot();
 
     // We'll load the configuration and the selection later.
     layer = new KisGeneratorLayer(image, name, kgc, 0);
@@ -1053,7 +1074,8 @@ KisNodeSP KisKraLoader::loadFilterMask(const KoXmlElement& element)
         return 0; // XXX: We don't have this filter. We should warn about it!
     }
 
-    KisFilterConfigurationSP  kfc = f->factoryConfiguration();
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
+    kfc->createLocalResourcesSnapshot();
 
     // We'll load the configuration and the selection later.
     mask = new KisFilterMask();

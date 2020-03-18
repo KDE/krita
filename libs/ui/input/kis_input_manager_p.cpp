@@ -443,7 +443,7 @@ void KisInputManager::Private::addStrokeShortcut(KisAbstractInputAction* action,
     }
 
     if (buttonList.size() > 0) {
-        strokeShortcut->setButtons(QSet<Qt::Key>::fromList(modifiers), QSet<Qt::MouseButton>::fromList(buttonList));
+        strokeShortcut->setButtons(QSet<Qt::Key>(modifiers.begin(), modifiers.end()), QSet<Qt::MouseButton>(buttonList.begin(), buttonList.end()));
         matcher.addShortcut(strokeShortcut);
     }
     else {
@@ -465,7 +465,7 @@ void KisInputManager::Private::addKeyShortcut(KisAbstractInputAction* action, in
     //the way the shortcut matcher is currently implemented.
     QList<Qt::Key> allKeys = keys;
     Qt::Key key = allKeys.takeLast();
-    QSet<Qt::Key> modifiers = QSet<Qt::Key>::fromList(allKeys);
+    QSet<Qt::Key> modifiers = QSet<Qt::Key>(allKeys.begin(), allKeys.end());
     keyShortcut->setKey(modifiers, key);
     matcher.addShortcut(keyShortcut);
 }
@@ -498,7 +498,7 @@ void KisInputManager::Private::addWheelShortcut(KisAbstractInputAction* action, 
         return;
     }
 
-    keyShortcut->setWheel(QSet<Qt::Key>::fromList(modifiers), a);
+    keyShortcut->setWheel(QSet<Qt::Key>(modifiers.begin(), modifiers.end()), a);
     matcher.addShortcut(keyShortcut.take());
 }
 

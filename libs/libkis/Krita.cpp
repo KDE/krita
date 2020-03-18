@@ -47,13 +47,15 @@
 #include <kis_filter_configuration.h>
 #include <kis_properties_configuration.h>
 #include <kis_config.h>
-#include <KisResourceServerProvider.h>
 #include <kis_workspace_resource.h>
 #include <brushengine/kis_paintop_preset.h>
-#include <kis_brush_server.h>
-#include <KoResourceServerProvider.h>
+#include <KisBrushServerProvider.h>
 #include <kis_action_registry.h>
 #include <kis_icon_utils.h>
+
+#include <KisResourceModel.h>
+#include <KisResourceModelProvider.h>
+#include <KisGlobalResourcesInterface.h>
 
 #include "View.h"
 #include "Document.h"
@@ -167,7 +169,7 @@ Filter *Krita::filter(const QString &name) const
     Filter *filter = new Filter();
     filter->setName(name);
     KisFilterSP f = KisFilterRegistry::instance()->value(name);
-    KisFilterConfigurationSP fc = f->defaultConfiguration();
+    KisFilterConfigurationSP fc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
     InfoObject *info = new InfoObject(fc);
     filter->setConfiguration(info);
     return filter;
@@ -180,7 +182,7 @@ QStringList Krita::colorModels() const
     Q_FOREACH(KoID id, ids) {
         colorModelsIds << id.id();
     }
-    return colorModelsIds.toList();
+    return QStringList(colorModelsIds.begin(), colorModelsIds.end());
 }
 
 QStringList Krita::colorDepths(const QString &colorModel) const
@@ -190,7 +192,7 @@ QStringList Krita::colorDepths(const QString &colorModel) const
     Q_FOREACH(KoID id, ids) {
         colorDepthsIds << id.id();
     }
-    return colorDepthsIds.toList();
+    return QStringList(colorDepthsIds.begin(), colorDepthsIds.end());
 }
 
 QStringList Krita::filterStrategies() const
@@ -206,7 +208,7 @@ QStringList Krita::profiles(const QString &colorModel, const QString &colorDepth
     Q_FOREACH(const KoColorProfile *profile, profiles) {
         profileNames << profile->name();
     }
-    QStringList r = profileNames.toList();
+    QStringList r(profileNames.begin(), profileNames.end());
     r.sort();
     return r;
 }
@@ -254,46 +256,21 @@ QList<Window*>  Krita::windows() const
     return ret;
 }
 
-QMap<QString, Resource *> Krita::resources(const QString &type) const
+QMap<QString, Resource*> Krita::resources(const QString &type) const
 {
-    QMap<QString, Resource *> resources = QMap<QString, Resource *> ();
+    QMap<QString, Resource*> resources;
+    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(type);
+    for (int i = 0; i < resourceModel->rowCount(); ++i) {
 
-    if (type.toLower() == "pattern") {
-        KoResourceServer<KoPattern>* server = KoResourceServerProvider::instance()->patternServer();
-        Q_FOREACH (KoResource *res, server->resources()) {
-            resources[res->name()] = new Resource(res);
-        }
+        QModelIndex idx = resourceModel->index(i, 0);
+        int id = resourceModel->data(idx, Qt::UserRole + KisResourceModel::Id).toInt();
+        QString name  = resourceModel->data(idx, Qt::UserRole + KisResourceModel::Name).toString();
+        QString filename  = resourceModel->data(idx, Qt::UserRole + KisResourceModel::Filename).toString();
+        QImage image = resourceModel->data(idx, Qt::UserRole + KisResourceModel::Thumbnail).value<QImage>();
+
+        resources[name] = new Resource(id, type, name, filename, image, 0);
     }
-    else if (type.toLower() == "gradient") {
-        KoResourceServer<KoAbstractGradient>* server = KoResourceServerProvider::instance()->gradientServer();
-        Q_FOREACH (KoResource *res, server->resources()) {
-            resources[res->name()] = new Resource(res);
-        }
-    }
-    else if (type.toLower() == "brush") {
-        KisBrushResourceServer* server = KisBrushServer::instance()->brushServer();
-        Q_FOREACH (KisBrushSP res, server->resources()) {
-            resources[res->name()] = new Resource(res.data());
-        }
-    }
-    else if (type.toLower() == "preset") {
-        KisPaintOpPresetResourceServer* server = KisResourceServerProvider::instance()->paintOpPresetServer();
-        Q_FOREACH (KisPaintOpPresetSP res, server->resources()) {
-            resources[res->name()] = new Resource(res.data());
-        }
-    }
-    else if (type.toLower() == "palette") {
-        KoResourceServer<KoColorSet>* server = KoResourceServerProvider::instance()->paletteServer();
-        Q_FOREACH (KoResource *res, server->resources()) {
-            resources[res->name()] = new Resource(res);
-        }
-    }
-    else if (type.toLower() == "workspace") {
-        KoResourceServer< KisWorkspaceResource >* server = KisResourceServerProvider::instance()->workspaceServer();
-        Q_FOREACH (KoResource *res, server->resources()) {
-            resources[res->name()] = new Resource(res);
-        }
-    }
+
     return resources;
 }
 

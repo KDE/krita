@@ -23,7 +23,7 @@
 
 #include <kis_properties_configuration.h>
 
-class KoPattern;
+#include <KoPattern.h>
 
 class KisEmbeddedPatternManagerTest : public QObject
 {
@@ -54,7 +54,7 @@ private:
     };
     void checkOneConfig(NameStatus nameStatus, bool hasMd5, QString expectedName, bool isOnServer);
     KisPropertiesConfigurationSP createXML(NameStatus nameStatus, bool hasMd5);
-    KoPattern *createPattern();
+    KoPatternSP createPattern();
 };
 
 #endif /* __KIS_EMBEDDED_PATTERN_MANAGER_TEST_H */

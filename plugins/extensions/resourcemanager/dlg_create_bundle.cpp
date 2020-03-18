@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2014 Victor Lafon metabolic.ewilan@hotmail.fr
+ *  Copyright (c) 2020 Agata Cacko cacko.azh@gmail.com
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,27 +28,27 @@
 #include <QGridLayout>
 #include <QTableWidget>
 #include <QPainter>
+#include <QStack>
 
 #include <KisImportExportManager.h>
 #include <KoDocumentInfo.h>
 #include <KoFileDialog.h>
 #include <kis_icon.h>
-#include <resources/KoResource.h>
+#include <KoResource.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
+#include <KoResource.h>
 
-#include <KisResourceServerProvider.h>
 #include <kis_workspace_resource.h>
 #include <brushengine/kis_paintop_preset.h>
-#include <kis_brush_server.h>
+#include <dlg_embed_tags.h>
+#include <KisGlobalResourcesInterface.h>
 
 #include <kis_config.h>
 
-#include "KisResourceBundle.h"
-
 #define ICON_SIZE 48
 
-DlgCreateBundle::DlgCreateBundle(KisResourceBundle *bundle, QWidget *parent)
+DlgCreateBundle::DlgCreateBundle(KoResourceBundleSP bundle, QWidget *parent)
     : KoDialog(parent)
     , m_ui(new Ui::WdgDlgCreateBundle)
     , m_bundle(bundle)
@@ -68,7 +69,8 @@ DlgCreateBundle::DlgCreateBundle(KisResourceBundle *bundle, QWidget *parent)
     if (bundle) {
 
         setCaption(i18n("Edit Resource Bundle"));
-
+#if 0
+        /*
         m_ui->lblSaveLocation->setText(QFileInfo(bundle->filename()).absolutePath());
         m_ui->editBundleName->setText(bundle->name());
         m_ui->editAuthor->setText(bundle->getMeta("author"));
@@ -79,61 +81,63 @@ DlgCreateBundle::DlgCreateBundle(KisResourceBundle *bundle, QWidget *parent)
         m_ui->lblPreview->setPixmap(QPixmap::fromImage(bundle->image().scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
 
         Q_FOREACH (const QString & resType, bundle->resourceTypes()) {
-            if (resType == "gradients") {
-                Q_FOREACH (const KoResource *res, bundle->resources(resType)) {
+            if (resType == ResourceType::Gradients) {
+                Q_FOREACH (const KoResourceSP res, bundle->resources(resType)) {
                     if (res) {
-                        m_selectedGradients << res->shortFilename();
+                        m_selectedGradients << res->filename();
                     }
                 }
 
             }
-            else if (resType  == "patterns") {
-                Q_FOREACH (const KoResource *res, bundle->resources(resType)) {
+            else if (resType  == ResourceType::Patterns) {
+                Q_FOREACH (const KoResourceSP res, bundle->resources(resType)) {
                     if (res) {
-                        m_selectedPatterns << res->shortFilename();
+                        m_selectedPatterns << res->filename();
                     }
                 }
 
             }
-            else if (resType  == "brushes") {
-                Q_FOREACH (const KoResource *res, bundle->resources(resType)) {
+            else if (resType  == ResourceType::Brushes) {
+                Q_FOREACH (const KoResourceSP res, bundle->resources(resType)) {
                     if (res) {
-                        m_selectedBrushes << res->shortFilename();
+                        m_selectedBrushes << res->filename();
                     }
                 }
 
             }
-            else if (resType  == "palettes") {
-                Q_FOREACH (const KoResource *res, bundle->resources(resType)) {
+            else if (resType  == ResourceType::Palettes) {
+                Q_FOREACH (const KoResourceSP res, bundle->resources(resType)) {
                     if (res) {
-                        m_selectedPalettes << res->shortFilename();
+                        m_selectedPalettes << res->filename();
                     }
                 }
 
             }
-            else if (resType  == "workspaces") {
-                Q_FOREACH (const KoResource *res, bundle->resources(resType)) {
+            else if (resType  == ResourceType::Workspaces) {
+                Q_FOREACH (const KoResourceSP res, bundle->resources(resType)) {
                     if (res) {
-                        m_selectedWorkspaces << res->shortFilename();
+                        m_selectedWorkspaces << res->filename();
                     }
                 }
 
             }
-            else if (resType  == "paintoppresets") {
-                Q_FOREACH (const KoResource *res, bundle->resources(resType)) {
+            else if (resType  == ResourceType::PaintOpPresets) {
+                Q_FOREACH (const KoResourceSP res, bundle->resources(resType)) {
                     if (res) {
-                        m_selectedPresets << res->shortFilename();
+                        m_selectedPresets << res->filename();
                     }
                 }
             }
-            else if (resType  == "gamutmasks") {
-                Q_FOREACH (const KoResource *res, bundle->resources(resType)) {
+            else if (resType  == ResourceType::GamutMasks) {
+                Q_FOREACH (const KoResourceSP res, bundle->resources(resType)) {
                     if (res) {
-                        m_selectedGamutMasks << res->shortFilename();
+                        m_selectedGamutMasks << res->filename();
                     }
                 }
             }
         }
+        */
+#endif
     }
     else {
 
@@ -145,6 +149,15 @@ DlgCreateBundle::DlgCreateBundle(KisResourceBundle *bundle, QWidget *parent)
         m_ui->editEmail->setText(cfg.readEntry<QString>("BundleAuthorEmail", info.authorInfo("email")));
         m_ui->editWebsite->setText(cfg.readEntry<QString>("BundleWebsite", "http://"));
         m_ui->editLicense->setText(cfg.readEntry<QString>("BundleLicense", "CC-BY-SA"));
+        m_ui->editBundleName->setText(cfg.readEntry<QString>("BundleName", "New Bundle"));
+        m_ui->editDescription->document()->setPlainText(cfg.readEntry<QString>("BundleDescription", "New Bundle"));
+        m_previewImage = cfg.readEntry<QString>("BundleImage", "");
+        if (!m_previewImage.isEmpty()) {
+            QImage img(m_previewImage);
+            img = img.scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            m_ui->lblPreview->setPixmap(QPixmap::fromImage(img));
+        }
+
         m_ui->lblSaveLocation->setText(cfg.readEntry<QString>("BundleExportLocation", QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
     }
 
@@ -154,13 +167,13 @@ DlgCreateBundle::DlgCreateBundle(KisResourceBundle *bundle, QWidget *parent)
     m_ui->bnRemove->setIcon(KisIconUtils::loadIcon("arrow-left"));
     connect(m_ui->bnRemove, SIGNAL(clicked()), SLOT(removeSelected()));
 
-    m_ui->cmbResourceTypes->addItem(i18n("Brushes"), QString("brushes"));
-    m_ui->cmbResourceTypes->addItem(i18n("Brush Presets"), QString("presets"));
-    m_ui->cmbResourceTypes->addItem(i18n("Gradients"), QString("gradients"));
-    m_ui->cmbResourceTypes->addItem(i18n("Gamut Masks"), QString("gamutmasks"));
-    m_ui->cmbResourceTypes->addItem(i18n("Patterns"), QString("patterns"));
-    m_ui->cmbResourceTypes->addItem(i18n("Palettes"), QString("palettes"));
-    m_ui->cmbResourceTypes->addItem(i18n("Workspaces"), QString("workspaces"));
+    m_ui->cmbResourceTypes->addItem(i18n("Brushes"), ResourceType::Brushes);
+    m_ui->cmbResourceTypes->addItem(i18n("Brush Presets"), ResourceType::PaintOpPresets);
+    m_ui->cmbResourceTypes->addItem(i18n("Gradients"), ResourceType::Gradients);
+    m_ui->cmbResourceTypes->addItem(i18n("Gamut Masks"), ResourceType::GamutMasks);
+    m_ui->cmbResourceTypes->addItem(i18n("Patterns"), ResourceType::Patterns);
+    m_ui->cmbResourceTypes->addItem(i18n("Palettes"), ResourceType::Palettes);
+    m_ui->cmbResourceTypes->addItem(i18n("Workspaces"), ResourceType::Workspaces);
     connect(m_ui->cmbResourceTypes, SIGNAL(activated(int)), SLOT(resourceTypeSelected(int)));
 
     m_ui->tableAvailable->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
@@ -170,6 +183,7 @@ DlgCreateBundle::DlgCreateBundle(KisResourceBundle *bundle, QWidget *parent)
     m_ui->tableSelected->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
     connect(m_ui->bnGetPreview, SIGNAL(clicked()), SLOT(getPreviewImage()));
+    connect(m_ui->bnEmbedTags, SIGNAL(clicked()), SLOT(slotEmbedTags()));
 
     resourceTypeSelected(0);
 }
@@ -219,9 +233,52 @@ QString DlgCreateBundle::previewImage() const
     return m_previewImage;
 }
 
+QVector<KisTagSP> DlgCreateBundle::getTagsForEmbeddingInResource(QVector<KisTagSP> resourceTags) const
+{
+    QVector<KisTagSP> tagsToEmbed;
+    Q_FOREACH(KisTagSP tag, resourceTags) {
+        if (m_selectedTagIds.contains(tag->id())) {
+            tagsToEmbed << tag;
+        }
+    }
+    return tagsToEmbed;
+}
+
+void DlgCreateBundle::putResourcesInTheBundle() const
+{
+    KisResourceModel* emptyModel = KisResourceModelProvider::resourceModel("");
+    QStack<int> allResourcesIds;
+    Q_FOREACH(int id, m_selectedResourcesIds) {
+        allResourcesIds << id;
+    }
+
+    // note: if there are repetitions, it's fine; the bundle will filter them out
+    while(!allResourcesIds.isEmpty()) {
+        int id = allResourcesIds.takeFirst();
+        KoResourceSP res = emptyModel->resourceForId(id);
+        if (!res) {
+            warnKrita << "No resource for id " << id;
+            continue;
+        }
+        KisResourceModel* resModel = KisResourceModelProvider::resourceModel(res->resourceType().first);
+        QVector<KisTagSP> tags = getTagsForEmbeddingInResource(resModel->tagsForResource(id));
+        m_bundle->addResource(res->resourceType().first, res->filename(), tags, res->md5());
+
+        QList<KoResourceSP> linkedResources = res->linkedResources(KisGlobalResourcesInterface::instance());
+        if (!linkedResources.isEmpty()) {
+            Q_FOREACH(KoResourceSP resource, linkedResources) {
+                if (!allResourcesIds.contains(resource->resourceId())) {
+                    allResourcesIds.append(resource->resourceId());
+                }
+            }
+        }
+    }
+}
+
 void DlgCreateBundle::accept()
 {
-    QString name = m_ui->editBundleName->text().remove(" ");
+    QString name = bundleName();
+    QString filename = m_ui->lblSaveLocation->text() + "/" + name + ".bundle";
 
     if (name.isEmpty()) {
         m_ui->editBundleName->setStyleSheet(QString(" border: 1px solid red"));
@@ -229,25 +286,68 @@ void DlgCreateBundle::accept()
         return;
     }
     else {
-        QFileInfo fileInfo(m_ui->lblSaveLocation->text() + "/" + name + ".bundle");
+        QFileInfo fileInfo(filename);
 
         if (fileInfo.exists() && !m_bundle) {
             m_ui->editBundleName->setStyleSheet("border: 1px solid red");
-            QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("A bundle with this name already exists."));
-            return;
-        }
-        else {
-            if (!m_bundle) {
-                KisConfig cfg(false);
-                cfg.writeEntry<QString>("BunleExportLocation", m_ui->lblSaveLocation->text());
-                cfg.writeEntry<QString>("BundleAuthorName", m_ui->editAuthor->text());
-                cfg.writeEntry<QString>("BundleAuthorEmail", m_ui->editEmail->text());
-                cfg.writeEntry<QString>("BundleWebsite", m_ui->editWebsite->text());
-                cfg.writeEntry<QString>("BundleLicense", m_ui->editLicense->text());
+
+            QMessageBox msgBox;
+            msgBox.setText(i18nc("In a dialog asking whether to overwrite a bundle (resource pack)", "A bundle with this name already exists."));
+            msgBox.setInformativeText(i18nc("In a dialog regarding overwriting a bundle (resource pack)", "Do you want to overwrite the existing bundle?"));
+            msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Cancel);
+            msgBox.setDefaultButton(QMessageBox::Cancel);
+            int ret = msgBox.exec();
+            if (ret == QMessageBox::Cancel) {
+                return;
             }
-            KoDialog::accept();
         }
+
+        if (!m_bundle) {
+            saveToConfiguration(false);
+
+            m_bundle.reset(new KoResourceBundle(filename));
+            putResourcesInTheBundle();
+            m_bundle->save();
+
+        } else {
+            KIS_SAFE_ASSERT_RECOVER(!m_bundle) { warnKrita << "Updating a bundle is not implemented yet"; };
+        }
+        KoDialog::accept();
     }
+}
+
+void DlgCreateBundle::saveToConfiguration(bool full)
+{
+    KisConfig cfg(false);
+    if (full) {
+        cfg.writeEntry<QString>("BundleName", bundleName());
+        cfg.writeEntry<QString>("BundleDescription", description());
+        cfg.writeEntry<QString>("BundleImage", previewImage());
+    } else {
+        cfg.writeEntry<QString>("BundleName", "");
+        cfg.writeEntry<QString>("BundleDescription", "");
+        cfg.writeEntry<QString>("BundleImage", "");
+    }
+    cfg.writeEntry<QString>("BundleExportLocation", saveLocation());
+    cfg.writeEntry<QString>("BundleAuthorName", authorName());
+    cfg.writeEntry<QString>("BundleAuthorEmail", email());
+    cfg.writeEntry<QString>("BundleWebsite", website());
+    cfg.writeEntry<QString>("BundleLicense", license());
+}
+
+void DlgCreateBundle::slotEmbedTags()
+{
+    DlgEmbedTags* dlg = new DlgEmbedTags(m_selectedTagIds);
+    int response = dlg->exec();
+    if (response == KoDialog::Accepted) {
+        m_selectedTagIds = dlg->selectedTagIds();
+    }
+}
+
+void DlgCreateBundle::reject()
+{
+    saveToConfiguration(true);
+    KoDialog::reject();
 }
 
 void DlgCreateBundle::selectSaveLocation()
@@ -265,29 +365,7 @@ void DlgCreateBundle::addSelected()
 
     Q_FOREACH (QListWidgetItem *item, m_ui->tableAvailable->selectedItems()) {
         m_ui->tableSelected->addItem(m_ui->tableAvailable->takeItem(m_ui->tableAvailable->row(item)));
-        QString resourceType = m_ui->cmbResourceTypes->itemData(m_ui->cmbResourceTypes->currentIndex()).toString();
-        if (resourceType == "brushes") {
-            m_selectedBrushes.append(item->data(Qt::UserRole).toString());
-        }
-        else if (resourceType == "presets") {
-            m_selectedPresets.append(item->data(Qt::UserRole).toString());
-        }
-        else if (resourceType == "gradients") {
-            m_selectedGradients.append(item->data(Qt::UserRole).toString());
-
-        }
-        else if (resourceType == "patterns") {
-            m_selectedPatterns.append(item->data(Qt::UserRole).toString());
-        }
-        else if (resourceType == "palettes") {
-            m_selectedPalettes.append(item->data(Qt::UserRole).toString());
-        }
-        else if (resourceType == "workspaces") {
-            m_selectedWorkspaces.append(item->data(Qt::UserRole).toString());
-        }
-        else if (resourceType == "gamutmasks") {
-            m_selectedGamutMasks.append(item->data(Qt::UserRole).toString());
-        }
+        m_selectedResourcesIds.append(item->data(Qt::UserRole).toInt());
     }
 
     m_ui->tableAvailable->setCurrentRow(row);
@@ -299,29 +377,7 @@ void DlgCreateBundle::removeSelected()
 
     Q_FOREACH (QListWidgetItem *item, m_ui->tableSelected->selectedItems()) {
         m_ui->tableAvailable->addItem(m_ui->tableSelected->takeItem(m_ui->tableSelected->row(item)));
-        QString resourceType = m_ui->cmbResourceTypes->itemData(m_ui->cmbResourceTypes->currentIndex()).toString();
-        if (resourceType == "brushes") {
-            m_selectedBrushes.removeAll(item->data(Qt::UserRole).toString());
-        }
-        else if (resourceType == "presets") {
-            m_selectedPresets.removeAll(item->data(Qt::UserRole).toString());
-        }
-        else if (resourceType == "gradients") {
-            m_selectedGradients.removeAll(item->data(Qt::UserRole).toString());
-
-        }
-        else if (resourceType == "patterns") {
-            m_selectedPatterns.removeAll(item->data(Qt::UserRole).toString());
-        }
-        else if (resourceType == "palettes") {
-            m_selectedPalettes.removeAll(item->data(Qt::UserRole).toString());
-        }
-        else if (resourceType == "workspaces") {
-            m_selectedWorkspaces.removeAll(item->data(Qt::UserRole).toString());
-        }
-        else if (resourceType == "gamutmasks") {
-            m_selectedGamutMasks.removeAll(item->data(Qt::UserRole).toString());
-        }
+        m_selectedResourcesIds.removeAll(item->data(Qt::UserRole).toInt());
     }
 
     m_ui->tableSelected->setCurrentRow(row);
@@ -346,106 +402,36 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
     m_ui->tableAvailable->clear();
     m_ui->tableSelected->clear();
 
-    if (resourceType == "brushes") {
-        KisBrushResourceServer *server = KisBrushServer::instance()->brushServer();
-        Q_FOREACH (KisBrushSP res, server->resources()) {
-            QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
-            item->setData(Qt::UserRole, res->shortFilename());
+    QString standarizedResourceType = (resourceType == "presets" ? ResourceType::PaintOpPresets : resourceType);
 
-            if (m_selectedBrushes.contains(res->shortFilename())) {
-                m_ui->tableSelected->addItem(item);
-            }
-            else {
-                m_ui->tableAvailable->addItem(item);
+    KisResourceModel* model = KisResourceModelProvider::resourceModel(standarizedResourceType);
+    for (int i = 0; i < model->rowCount(); i++) {
+        QModelIndex idx = model->index(i, 0);
+        QString filename = model->data(idx, Qt::UserRole + KisResourceModel::Filename).toString();
+        int id = model->data(idx, Qt::UserRole + KisResourceModel::Id).toInt();
+
+        if (resourceType == ResourceType::Gradients) {
+            if (filename == "Foreground to Transparent" || filename == "Foreground to Background") {
+                continue;
             }
         }
-    }
-    else if (resourceType == "presets") {
-        KisPaintOpPresetResourceServer* server = KisResourceServerProvider::instance()->paintOpPresetServer();
-        Q_FOREACH (KisPaintOpPresetSP res, server->resources()) {
-            QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
-            item->setData(Qt::UserRole, res->shortFilename());
 
-            if (m_selectedPresets.contains(res->shortFilename())) {
-                m_ui->tableSelected->addItem(item);
-            }
-            else {
-                m_ui->tableAvailable->addItem(item);
-            }
+        QImage image = (model->data(idx, Qt::UserRole + KisResourceModel::Thumbnail)).value<QImage>();
+        QString name = model->data(idx, Qt::UserRole + KisResourceModel::Name).toString();
+
+        // Function imageToIcon(QImage()) returns a square white pixmap and a warning "QImage::scaled: Image is a null image"
+        //  while QPixmap() returns an empty pixmap.
+        // The difference between them is relevant in case of Workspaces which has no images.
+        // Using QPixmap() makes them appear in a dense list without icons, while imageToIcon(QImage())
+        //  would give a list with big white rectangles and names of the workspaces.
+        QListWidgetItem *item = new QListWidgetItem(image.isNull() ? QPixmap() : imageToIcon(image), name);
+        item->setData(Qt::UserRole, id);
+
+        if (m_selectedResourcesIds.contains(id)) {
+            m_ui->tableSelected->addItem(item);
         }
-    }
-    else if (resourceType == "gradients") {
-        KoResourceServer<KoAbstractGradient>* server = KoResourceServerProvider::instance()->gradientServer();
-        Q_FOREACH (KoResource *res, server->resources()) {
-            if (res->filename()!="Foreground to Transparent" && res->filename()!="Foreground to Background") {
-            //technically we should read from the file-name whether or not the file can be opened, but this works for now. The problem is making sure that bundle-resource know where they are stored.//
-            //dbgKrita<<res->filename();
-                QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
-                item->setData(Qt::UserRole, res->shortFilename());
-
-                if (m_selectedGradients.contains(res->shortFilename())) {
-                    m_ui->tableSelected->addItem(item);
-                }
-                else {
-                    m_ui->tableAvailable->addItem(item);
-                }
-            }
-        }
-    }
-    else if (resourceType == "patterns") {
-        KoResourceServer<KoPattern>* server = KoResourceServerProvider::instance()->patternServer();
-        Q_FOREACH (KoResource *res, server->resources()) {
-            QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
-            item->setData(Qt::UserRole, res->shortFilename());
-
-            if (m_selectedPatterns.contains(res->shortFilename())) {
-                m_ui->tableSelected->addItem(item);
-            }
-            else {
-                m_ui->tableAvailable->addItem(item);
-            }
-        }
-    }
-    else if (resourceType == "palettes") {
-        KoResourceServer<KoColorSet>* server = KoResourceServerProvider::instance()->paletteServer();
-        Q_FOREACH (KoResource *res, server->resources()) {
-            QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
-            item->setData(Qt::UserRole, res->shortFilename());
-
-            if (m_selectedPalettes.contains(res->shortFilename())) {
-                m_ui->tableSelected->addItem(item);
-            }
-            else {
-                m_ui->tableAvailable->addItem(item);
-            }
-        }
-    }
-    else if (resourceType == "workspaces") {
-        KoResourceServer<KisWorkspaceResource>* server = KisResourceServerProvider::instance()->workspaceServer();
-        Q_FOREACH (KoResource *res, server->resources()) {
-            QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
-            item->setData(Qt::UserRole, res->shortFilename());
-
-            if (m_selectedWorkspaces.contains(res->shortFilename())) {
-                m_ui->tableSelected->addItem(item);
-            }
-            else {
-                m_ui->tableAvailable->addItem(item);
-            }
-        }
-    }
-    else if (resourceType == "gamutmasks") {
-        KoResourceServer<KoGamutMask>* server = KoResourceServerProvider::instance()->gamutMaskServer();
-        Q_FOREACH (KoResource *res, server->resources()) {
-            QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
-            item->setData(Qt::UserRole, res->shortFilename());
-
-            if (m_selectedGamutMasks.contains(res->shortFilename())) {
-                m_ui->tableSelected->addItem(item);
-            }
-            else {
-                m_ui->tableAvailable->addItem(item);
-            }
+        else {
+            m_ui->tableAvailable->addItem(item);
         }
     }
 

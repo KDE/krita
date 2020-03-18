@@ -26,7 +26,7 @@ class KisCurvePaintOpSettings : public KisPaintOpSettings
 {
 
 public:
-    KisCurvePaintOpSettings();
+    KisCurvePaintOpSettings(KisResourcesInterfaceSP resourcesInterface);
     ~KisCurvePaintOpSettings() override;
 
     void setPaintOpSize(qreal value) override;

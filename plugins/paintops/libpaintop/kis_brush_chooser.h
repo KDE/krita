@@ -36,7 +36,7 @@ class KisDoubleSliderSpinBox;
 class KisSpacingSelectionWidget;
 class KisCustomBrushWidget;
 class KisClipboardBrushWidget;
-class KoResourceItemChooser;
+class KisResourceItemChooser;
 class KoResource;
 
 
@@ -68,8 +68,8 @@ private Q_SLOTS:
     void slotOpenClipboardBrush();
     void slotImportNewBrushResource();
     void slotDeleteBrushResource();
-    void slotNewPredefinedBrush(KoResource *);
-    void updateBrushTip(KoResource *, bool isChangingBrushPresets = false);
+    void slotNewPredefinedBrush(KoResourceSP );
+    void updateBrushTip(KoResourceSP , bool isChangingBrushPresets = false);
 
 Q_SIGNALS:
 
@@ -77,7 +77,7 @@ Q_SIGNALS:
 
 private:
     KisBrushSP m_brush;
-    KoResourceItemChooser* m_itemChooser;
+    KisResourceItemChooser* m_itemChooser;
     KisImageWSP m_image;
     KisCustomBrushWidget* m_stampBrushWidget;
     KisClipboardBrushWidget* m_clipboardBrushWidget;

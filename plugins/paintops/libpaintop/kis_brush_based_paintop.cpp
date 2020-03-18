@@ -41,11 +41,11 @@ TextBrushInitializationWorkaround *TextBrushInitializationWorkaround::instance()
     return s_instance;
 }
 
-void TextBrushInitializationWorkaround::preinitialize(KisPropertiesConfigurationSP settings)
+void TextBrushInitializationWorkaround::preinitialize(KisPaintOpSettingsSP settings)
 {
     if (KisBrushOptionProperties::isTextBrush(settings.data())) {
         KisBrushOptionProperties brushOption;
-        brushOption.readOptionSetting(settings);
+        brushOption.readOptionSetting(settings, settings->resourcesInterface());
         m_brush = brushOption.brush();
         m_settings = settings;
     }
@@ -67,8 +67,6 @@ TextBrushInitializationWorkaround::TextBrushInitializationWorkaround()
 TextBrushInitializationWorkaround::~TextBrushInitializationWorkaround()
 {}
 
-
-
 void KisBrushBasedPaintOp::preinitializeOpStatically(KisPaintOpSettingsSP settings)
 {
     TextBrushInitializationWorkaround::instance()->preinitialize(settings);
@@ -77,7 +75,7 @@ void KisBrushBasedPaintOp::preinitializeOpStatically(KisPaintOpSettingsSP settin
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
 
-KisBrushBasedPaintOp::KisBrushBasedPaintOp(const KisPropertiesConfigurationSP settings, KisPainter* painter)
+KisBrushBasedPaintOp::KisBrushBasedPaintOp(const KisPaintOpSettingsSP settings, KisPainter* painter)
     : KisPaintOp(painter),
       m_textureProperties(painter->device()->defaultBounds()->currentLevelOfDetail())
 {
@@ -90,7 +88,7 @@ KisBrushBasedPaintOp::KisBrushBasedPaintOp(const KisPropertiesConfigurationSP se
 
     if (!m_brush) {
         KisBrushOptionProperties brushOption;
-        brushOption.readOptionSetting(settings);
+        brushOption.readOptionSetting(settings, settings->resourcesInterface());
         m_brush = brushOption.brush();
     }
 
@@ -103,7 +101,7 @@ KisBrushBasedPaintOp::KisBrushBasedPaintOp(const KisPropertiesConfigurationSP se
     m_mirrorOption.readOptionSetting(settings);
     m_dabCache->setMirrorPostprocessing(&m_mirrorOption);
 
-    m_textureProperties.fillProperties(settings);
+    m_textureProperties.fillProperties(settings, settings->resourcesInterface());
     m_dabCache->setTexturePostprocessing(&m_textureProperties);
 
     m_precisionOption.setHasImprecisePositionOptions(
@@ -114,6 +112,26 @@ KisBrushBasedPaintOp::KisBrushBasedPaintOp(const KisPropertiesConfigurationSP se
 KisBrushBasedPaintOp::~KisBrushBasedPaintOp()
 {
     delete m_dabCache;
+}
+
+QList<KoResourceSP> KisBrushBasedPaintOp::prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
+{
+    QList<KoResourceSP> resources;
+
+    KisBrushOptionProperties brushOption;
+    resources << brushOption.prepareLinkedResources(settings, resourcesInterface);
+
+    return resources;
+}
+
+QList<KoResourceSP> KisBrushBasedPaintOp::prepareEmbeddedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
+{
+    QList<KoResourceSP> resources;
+
+    KisTextureProperties textureProperties(0);
+    resources << textureProperties.prepareEmbeddedResources(settings, resourcesInterface);
+
+    return resources;
 }
 
 bool KisBrushBasedPaintOp::checkSizeTooSmall(qreal scale)

@@ -22,7 +22,6 @@
 #include <KoCanvasResourceProvider.h>
 #include <KoResourceServerProvider.h>
 #include <KoResourceServerObserver.h>
-#include <KoResourceServerAdapter.h>
 #include <KoCanvasBase.h>
 #include <KoColor.h>
 #include <resources/KoGamutMask.h>
@@ -34,7 +33,7 @@
 #include <kis_node_selection_adapter.h>
 #include <kis_group_layer.h>
 #include <KisView.h>
-#include <KoResourceItemChooser.h>
+#include <KisResourceItemChooser.h>
 
 #include <QWidget>
 #include <QMenu>
@@ -43,6 +42,7 @@
 #include <QRegularExpression>
 #include <QFileInfo>
 #include <QMessageBox>
+#include <QInputDialog>
 
 #include "gamutmask_dock.h"
 #include <KisViewManager.h>
@@ -101,7 +101,7 @@ GamutMaskDock::GamutMaskDock()
     connect(m_dockerUI->bnPreviewMask        , SIGNAL(clicked())                        , SLOT(slotGamutMaskPreview()));
 
     connect(m_dockerUI->bnMaskEditor          , SIGNAL(clicked())               , SLOT(slotGamutMaskEdit()));
-    connect(m_dockerUI->maskChooser, SIGNAL(sigGamutMaskSelected(KoGamutMask*)), SLOT(slotGamutMaskSelected(KoGamutMask*)));
+    connect(m_dockerUI->maskChooser, SIGNAL(sigGamutMaskSelected(KoGamutMaskSP)), SLOT(slotGamutMaskSelected(KoGamutMaskSP)));
     connect(m_dockerUI->bnMaskNew          , SIGNAL(clicked())               , SLOT(slotGamutMaskCreateNew()));
     connect(m_dockerUI->bnMaskDelete          , SIGNAL(clicked())               , SLOT(slotGamutMaskDelete()));
     connect(m_dockerUI->bnMaskDuplicate       , SIGNAL(clicked())               , SLOT(slotGamutMaskDuplicate()));
@@ -121,8 +121,8 @@ void GamutMaskDock::setViewManager(KisViewManager* kisview)
 
     selectMask(m_resourceProvider->currentGamutMask());
 
-    connect(this, SIGNAL(sigGamutMaskSet(KoGamutMask*)), m_resourceProvider, SLOT(slotGamutMaskActivated(KoGamutMask*)), Qt::UniqueConnection);
-    connect(this, SIGNAL(sigGamutMaskChanged(KoGamutMask*)), m_resourceProvider, SLOT(slotGamutMaskActivated(KoGamutMask*)), Qt::UniqueConnection);
+    connect(this, SIGNAL(sigGamutMaskSet(KoGamutMaskSP)), m_resourceProvider, SLOT(slotGamutMaskActivated(KoGamutMaskSP)), Qt::UniqueConnection);
+    connect(this, SIGNAL(sigGamutMaskChanged(KoGamutMaskSP)), m_resourceProvider, SLOT(slotGamutMaskActivated(KoGamutMaskSP)), Qt::UniqueConnection);
     connect(this, SIGNAL(sigGamutMaskUnset()), m_resourceProvider, SLOT(slotGamutMaskUnset()), Qt::UniqueConnection);
     connect(this, SIGNAL(sigGamutMaskPreviewUpdate()), m_resourceProvider, SLOT(slotGamutMaskPreviewUpdate()), Qt::UniqueConnection);
     connect(KisPart::instance(), SIGNAL(sigDocumentRemoved(QString)), this, SLOT(slotDocumentRemoved(QString)), Qt::UniqueConnection);
@@ -143,7 +143,7 @@ bool GamutMaskDock::openMaskEditor()
     }
 
     // find the template resource first, so we can abort the action early on
-    QString maskTemplateFile = KoResourcePaths::findResource("ko_gamutmasks", "GamutMaskTemplate.kra");
+    QString maskTemplateFile = KoResourcePaths::findResource(ResourceType::GamutMasks, "GamutMaskTemplate.kra");
     if (maskTemplateFile.isEmpty() || maskTemplateFile.isNull() || !QFile::exists(maskTemplateFile)) {
         dbgPlugins << "GamutMaskDock::openMaskEditor(): maskTemplateFile (" << maskTemplateFile << ") was not found on the system";
         getUserFeedback(i18n("Could not open gamut mask for editing."),
@@ -227,7 +227,7 @@ void GamutMaskDock::cancelMaskEdit()
     closeMaskDocument();
 }
 
-void GamutMaskDock::selectMask(KoGamutMask *mask, bool notifyItemChooser)
+void GamutMaskDock::selectMask(KoGamutMaskSP mask, bool notifyItemChooser)
 {
     if (!mask) {
         return;
@@ -267,7 +267,7 @@ bool GamutMaskDock::saveSelectedMaskResource()
             m_selectedMask->setDescription(m_dockerUI->maskDescriptionEdit->toPlainText());
 
             m_selectedMask->clearPreview();
-            m_selectedMask->save();
+            KoResourceServerProvider::instance()->gamutMaskServer()->addResource(m_selectedMask);
             maskSaved = true;
         } else {
             getUserFeedback(i18n("Saving of gamut mask '%1' was aborted.", m_selectedMask->title()),
@@ -282,13 +282,14 @@ bool GamutMaskDock::saveSelectedMaskResource()
         }
     }
 
+
     return maskSaved;
 }
 
 void GamutMaskDock::deleteMask()
 {
     KoResourceServer<KoGamutMask>* rServer = KoResourceServerProvider::instance()->gamutMaskServer();
-    rServer->removeResourceAndBlacklist(m_selectedMask);
+    rServer->removeResourceFromServer(m_selectedMask);
     m_selectedMask = nullptr;
 }
 
@@ -341,56 +342,55 @@ int GamutMaskDock::saveOrCancel(QMessageBox::StandardButton defaultAction)
     return response;
 }
 
-KoGamutMask *GamutMaskDock::createMaskResource(KoGamutMask* sourceMask, QString newTitle)
+KoGamutMaskSP GamutMaskDock::createMaskResource(KoGamutMaskSP sourceMask, QString newTitle)
 {
     m_creatingNewMask = true;
 
-    KoGamutMask* newMask = nullptr;
+    KoGamutMaskSP newMask;
     if (sourceMask) {
-        newMask = new KoGamutMask(sourceMask);
+        newMask = KoGamutMaskSP(new KoGamutMask(sourceMask.data()));
         newMask->setImage(sourceMask->image());
     } else {
-        newMask = new KoGamutMask();
+        newMask = KoGamutMaskSP(new KoGamutMask());
 
-        QString defaultPreviewPath = KoResourcePaths::findResource("ko_gamutmasks", "empty_mask_preview.png");
+        QString defaultPreviewPath = KoResourcePaths::findResource(ResourceType::GamutMasks, "empty_mask_preview.png");
         KIS_SAFE_ASSERT_RECOVER_NOOP(!(defaultPreviewPath.isEmpty() || defaultPreviewPath.isNull() || !QFile::exists(defaultPreviewPath)));
 
         newMask->setImage(QImage(defaultPreviewPath, "PNG"));
     }
 
-    QPair<QString,QFileInfo> maskFile = resolveMaskTitle(newTitle);
-    QString maskTitle = maskFile.first;
-    QFileInfo fileInfo = maskFile.second;
-
-    newMask->setTitle(maskTitle);
-    newMask->setFilename(fileInfo.filePath());
-
-    newMask->setValid(true);
-
     KoResourceServer<KoGamutMask>* rServer = KoResourceServerProvider::instance()->gamutMaskServer();
-    rServer->removeFromBlacklist(newMask);
-    rServer->addResource(newMask, false);
 
-    return newMask;
-}
-
-QPair<QString, QFileInfo> GamutMaskDock::resolveMaskTitle(QString suggestedTitle)
-{
-    KoResourceServer<KoGamutMask>* rServer = KoResourceServerProvider::instance()->gamutMaskServer();
     QString saveLocation = rServer->saveLocation();
-    QString processedTitle = suggestedTitle.trimmed();
+    QString name = newTitle;
 
-    QString resourceName = processedTitle;
-    while (rServer->resourceByName(resourceName)) {
-        resourceName = resourceName + QString(" (Copy)");
+    QFileInfo fileInfo(saveLocation + name + newMask->defaultFileExtension());
+    bool fileOverWriteAccepted = false;
+
+    while(!fileOverWriteAccepted) {
+        name = QInputDialog::getText(this, i18nc("@title:window", "New Gamut Mask..."),
+                                                    i18nc("@label:textbox", "Name:"), QLineEdit::Normal, name);
+        if (name.isNull() || name.isEmpty()) {
+            QMessageBox::warning(this, i18nc("@title:window", "Name invalid"), i18n("Please enter a name"));
+        } else {
+            fileInfo = QFileInfo(saveLocation + name.split(" ").join("_") + newMask->defaultFileExtension());
+            if (fileInfo.exists()) {
+                int res = QMessageBox::warning(this, i18nc("@title:window", "Name Already Exists")
+                                                            , i18n("The name '%1' already exists, do you wish to overwrite it?", name)
+                                                            , QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+                if (res == QMessageBox::Yes) fileOverWriteAccepted = true;
+            } else {
+                fileOverWriteAccepted = true;
+            }
+        }
     }
 
-    QString maskTitle = resourceName;
-    QString maskFile = maskTitle + ".kgm";
-    QString path = saveLocation + maskFile.replace(QRegularExpression("\\s+"), "_");
-    QFileInfo fileInfo(path);
+    newMask->setTitle(name);
+    newMask->setFilename(fileInfo.fileName());
+    newMask->setValid(true);
+    rServer->addResource(newMask, true);
 
-    return QPair<QString, QFileInfo>(maskTitle, fileInfo);
+    return newMask;
 }
 
 void GamutMaskDock::closeMaskDocument()
@@ -469,7 +469,7 @@ void GamutMaskDock::slotGamutMaskSave()
 
     if (m_selectedMask->title() != newTitle) {
         // title has changed, rename
-        KoGamutMask* newMask = createMaskResource(m_selectedMask, newTitle);
+        KoGamutMaskSP newMask = createMaskResource(m_selectedMask, newTitle);
 
         // delete old mask and select new
         deleteMask();
@@ -502,7 +502,7 @@ void GamutMaskDock::slotGamutMaskPreview()
     emit sigGamutMaskPreviewUpdate();
 }
 
-void GamutMaskDock::slotGamutMaskSelected(KoGamutMask *mask)
+void GamutMaskDock::slotGamutMaskSelected(KoGamutMaskSP mask)
 {
     if (!m_selfSelectingMask) {
         if (m_maskDocument) {
@@ -533,7 +533,7 @@ void GamutMaskDock::unsetResourceServer()
     rServer->removeObserver(this);
 }
 
-void GamutMaskDock::removingResource(KoGamutMask *resource)
+void GamutMaskDock::removingResource(KoGamutMaskSP resource)
 {
     // if deleting previously set mask, notify selectors to unset their mask
     if (resource == m_resourceProvider->currentGamutMask()) {
@@ -542,7 +542,7 @@ void GamutMaskDock::removingResource(KoGamutMask *resource)
     }
 }
 
-void GamutMaskDock::resourceChanged(KoGamutMask *resource)
+void GamutMaskDock::resourceChanged(KoGamutMaskSP resource)
 {
     // if currently set mask has been changed, notify selectors
     if (resource == m_resourceProvider->currentGamutMask()) {
@@ -552,7 +552,7 @@ void GamutMaskDock::resourceChanged(KoGamutMask *resource)
 
 void GamutMaskDock::slotGamutMaskCreateNew()
 {
-    KoGamutMask* newMask = createMaskResource(nullptr, "new mask");
+    KoGamutMaskSP newMask = createMaskResource(nullptr, "new mask");
     selectMask(newMask);
 
     bool editorOpened = openMaskEditor();
@@ -567,7 +567,7 @@ void GamutMaskDock::slotGamutMaskDuplicate()
         return;
     }
 
-    KoGamutMask* newMask = createMaskResource(m_selectedMask, m_selectedMask->title());
+    KoGamutMaskSP newMask = createMaskResource(m_selectedMask, m_selectedMask->title() + QString(" (Copy)"));
     selectMask(newMask);
 
     bool editorOpened = openMaskEditor();
@@ -577,7 +577,7 @@ void GamutMaskDock::slotGamutMaskDuplicate()
 }
 
 void GamutMaskDock::slotGamutMaskDelete()
-{   
+{
     if (!m_selectedMask) {
         return;
     }

@@ -49,6 +49,8 @@ inline double drand48()
 #include <kis_painter.h>
 #include <brushengine/kis_paintop_registry.h>
 
+#include <KisGlobalResourcesInterface.h>
+
 //#define SAVE_OUTPUT
 
 static const int LINES = 20;
@@ -436,8 +438,8 @@ void KisStrokeBenchmark::predefinedBrushRL()
 
 inline void KisStrokeBenchmark::benchmarkLine(QString presetFileName)
 {
-    KisPaintOpPresetSP preset = new KisPaintOpPreset(m_dataPath + presetFileName);
-    preset->load();
+    KisPaintOpPresetSP preset(new KisPaintOpPreset(m_dataPath + presetFileName));
+    preset->load(KisGlobalResourcesInterface::instance());
     m_painter->setPaintOpPreset(preset, m_layer, m_image);
 
     QPointF startPoint(0.10 * TEST_IMAGE_WIDTH, 0.5 * TEST_IMAGE_HEIGHT);
@@ -461,8 +463,8 @@ void KisStrokeBenchmark::benchmarkCircle(QString presetFileName)
 {
     dbgKrita << "(circle)preset : " << presetFileName;
 
-    KisPaintOpPresetSP preset = new KisPaintOpPreset(m_dataPath + presetFileName);
-    if (!preset->load()){
+    KisPaintOpPresetSP preset(new KisPaintOpPreset(m_dataPath + presetFileName));
+    if (!preset->load(KisGlobalResourcesInterface::instance())){
         dbgKrita << "Preset was not loaded";
         return;
     }
@@ -512,8 +514,8 @@ QBENCHMARK{
 
 void KisStrokeBenchmark::benchmarkRandomLines(QString presetFileName)
 {
-    KisPaintOpPresetSP preset = new KisPaintOpPreset(m_dataPath + presetFileName);
-    bool loadedOk = preset->load();
+    KisPaintOpPresetSP preset(new KisPaintOpPreset(m_dataPath + presetFileName));
+    bool loadedOk = preset->load(KisGlobalResourcesInterface::instance());
     if (!loadedOk){
         dbgKrita << "The preset was not loaded correctly. Done.";
         return;
@@ -541,8 +543,8 @@ void KisStrokeBenchmark::benchmarkRandomLines(QString presetFileName)
 
 void KisStrokeBenchmark::benchmarkRectangle(QString presetFileName)
 {
-    KisPaintOpPresetSP preset = new KisPaintOpPreset(m_dataPath + presetFileName);
-    bool loadedOk = preset->load();
+    KisPaintOpPresetSP preset(new KisPaintOpPreset(m_dataPath + presetFileName));
+    bool loadedOk = preset->load(KisGlobalResourcesInterface::instance());
     if (!loadedOk){
         dbgKrita << "The preset was not loaded correctly. Done.";
         return;
@@ -570,8 +572,8 @@ void KisStrokeBenchmark::benchmarkRectangle(QString presetFileName)
 
 void KisStrokeBenchmark::benchmarkStroke(QString presetFileName)
 {
-    KisPaintOpPresetSP preset = new KisPaintOpPreset(m_dataPath + presetFileName);
-    bool loadedOk = preset->load();
+    KisPaintOpPresetSP preset(new KisPaintOpPreset(m_dataPath + presetFileName));
+    bool loadedOk = preset->load(KisGlobalResourcesInterface::instance());
     if (!loadedOk){
         dbgKrita << "The preset was not loaded correctly. Done.";
         return;
@@ -619,13 +621,13 @@ void KisStrokeBenchmark::benchmarkRand()
 void KisStrokeBenchmark::becnhmarkPresetCloning()
 {
     QString presetFileName = "spray_21_textures1.kpp";
-    KisPaintOpPresetSP preset = new KisPaintOpPreset(m_dataPath + presetFileName);
-    bool loadedOk = preset->load();
+    KisPaintOpPresetSP preset(new KisPaintOpPreset(m_dataPath + presetFileName));
+    bool loadedOk = preset->load(KisGlobalResourcesInterface::instance());
     KIS_ASSERT_RECOVER_RETURN(loadedOk);
     KIS_ASSERT_RECOVER_RETURN(preset->settings());
 
     QBENCHMARK {
-        KisPaintOpPresetSP other = preset->clone();
+        KisPaintOpPresetSP other = preset->clone().dynamicCast<KisPaintOpPreset>();
         other->settings()->setPaintOpOpacity(0.3);
     }
 }

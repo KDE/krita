@@ -38,7 +38,7 @@
 #include "layerstyles/kis_layer_style_projection_plane.h"
 #include "kis_psd_layer_style.h"
 #include "kis_paint_device_debug_utils.h"
-
+#include <KisGlobalResourcesInterface.h>
 
 void KisLayerStyleProjectionPlaneTest::test(KisPSDLayerStyleSP style, const QString testName)
 {
@@ -338,10 +338,10 @@ void KisLayerStyleProjectionPlaneTest::testPatternOverlay()
 
     QString fileName(TestUtil::fetchDataFileLazy("pattern.pat"));
 
-    KoPattern pattern(fileName);
-    QVERIFY(pattern.load());
+    KoPatternSP pattern(new KoPattern(fileName));
+    QVERIFY(pattern->load(KisGlobalResourcesInterface::instance()));
 
-    style->patternOverlay()->setPattern(&pattern);
+    style->patternOverlay()->setPattern(pattern);
 
     test(style, "pat_overlay");
 }
@@ -369,9 +369,9 @@ void KisLayerStyleProjectionPlaneTest::testStroke()
 
 
     QString fileName(TestUtil::fetchDataFileLazy("pattern.pat"));
-    KoPattern pattern(fileName);
-    QVERIFY(pattern.load());
-    style->stroke()->setPattern(&pattern);
+    KoPatternSP pattern(new KoPattern(fileName));
+    QVERIFY(pattern->load(KisGlobalResourcesInterface::instance()));
+    style->stroke()->setPattern(pattern);
     style->stroke()->setFillType(psd_fill_pattern);
 
     test(style, "stroke_pat");
@@ -450,10 +450,10 @@ void KisLayerStyleProjectionPlaneTest::testBevel()
     style->bevelAndEmboss()->setShadowOpacity(100);
 
     QString fileName(TestUtil::fetchDataFileLazy("pattern.pat"));
-    KoPattern pattern(fileName);
-    QVERIFY(pattern.load());
+    KoPatternSP pattern(new KoPattern(fileName));
+    QVERIFY(pattern->load(KisGlobalResourcesInterface::instance()));
 
-    style->bevelAndEmboss()->setTexturePattern(&pattern);
+    style->bevelAndEmboss()->setTexturePattern(pattern);
 
     style->bevelAndEmboss()->setTextureEnabled(true);
     style->bevelAndEmboss()->setTextureDepth(-10);

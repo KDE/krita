@@ -49,6 +49,7 @@
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
 #include <kis_random_accessor_ng.h>
+#include <KisGlobalResourcesInterface.h>
 
 #include "widgets/kis_multi_integer_filter_widget.h"
 
@@ -380,13 +381,13 @@ KisConfigWidget * KisRainDropsFilter::createConfigurationWidget(QWidget* parent,
     param.push_back(KisIntegerWidgetParam(1, 500, 80, i18n("Number of drops"), "number"));
     param.push_back(KisIntegerWidgetParam(1, 100, 30, i18n("Fish eyes"), "fishEyes"));
     KisMultiIntegerFilterWidget * w = new KisMultiIntegerFilterWidget(id().id(), parent, id().id(), param);
-    w->setConfiguration(defaultConfiguration());
+    w->setConfiguration(defaultConfiguration(KisGlobalResourcesInterface::instance()));
     return w;
 }
 
-KisFilterConfigurationSP KisRainDropsFilter::defaultConfiguration() const
+KisFilterConfigurationSP KisRainDropsFilter::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration();
+    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
     config->setProperty("dropsize", 80);
     config->setProperty("number", 80);
     config->setProperty("fishEyes", 30);

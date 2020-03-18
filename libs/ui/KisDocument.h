@@ -83,7 +83,7 @@ class KRITAUI_EXPORT KisDocument : public QObject, public KoDocumentBase
 
 protected:
 
-    explicit KisDocument();
+    explicit KisDocument(bool addStorage = true);
 
     /**
      * @brief KisDocument makes a deep copy of the document \p rhs.
@@ -109,6 +109,15 @@ public:
      * delete the attached widget as returned by widget().
      */
     ~KisDocument() override;
+
+    /**
+     * @brief uniqueID is a temporary unique ID that identifies the document. It is
+     * generated on creation and can be used to uniquely associated temporary objects
+     * with this document.
+     *
+     * @return the temporary unique id for this document.
+     */
+    QString uniqueID() const;
 
     /**
      * @brief reload Reloads the document from the original url
@@ -356,14 +365,22 @@ public:
     const KisGuidesConfig& guidesConfig() const;
     void setGuidesConfig(const KisGuidesConfig &data);
 
+    /**
+     * @brief paletteList returns all the palettes found in the document's local resource storage
+     */
+    QList<KoColorSetSP> paletteList();
+
+    /**
+     * @brief setPaletteList replaces the palettes in the document's local resource storage with the list
+     * of palettes passed to this function. It will then emitsigPaletteListChanged with both the old and
+     * the new list, if emitsignal is true.
+     */
+    void setPaletteList(const QList<KoColorSetSP> &paletteList, bool emitSignal = false);
+
     const KisMirrorAxisConfig& mirrorAxisConfig() const;
     void setMirrorAxisConfig(const KisMirrorAxisConfig& config);
 
-    QList<KoColorSet *> &paletteList();
-    void setPaletteList(const QList<KoColorSet *> &paletteList, bool emitSignal = false);
-
     void clearUndoHistory();
-
 
     /**
      *  Sets the modified flag on the document. This means that it has
@@ -471,7 +488,7 @@ Q_SIGNALS:
      * Emitted when the palette list has changed.
      * The pointers in oldPaletteList are to be deleted by the resource server.
      **/
-    void sigPaletteListChanged(const QList<KoColorSet *> &oldPaletteList, const QList<KoColorSet *> &newPaletteList);
+    void sigPaletteListChanged(const QList<KoColorSetSP> &oldPaletteList, const QList<KoColorSetSP> &newPaletteList);
 
     void sigAssistantsChanged();
 

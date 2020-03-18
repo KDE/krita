@@ -252,6 +252,16 @@ void KisMimeDatabase::fillMimeData()
         mimeType.suffixes = QStringList() << "kws";
         s_mimeDatabase << mimeType;
 
+        mimeType.mimeType = "application/x-krita-windowlayout";
+        mimeType.description = i18nc("description of a file type", "Krita Window Layout");
+        mimeType.suffixes = QStringList() << "kwl";
+        s_mimeDatabase << mimeType;
+
+        mimeType.mimeType = "application/x-krita-session";
+        mimeType.description = i18nc("description of a file type", "Krita Session");
+        mimeType.suffixes = QStringList() << "ksn";
+        s_mimeDatabase << mimeType;
+
         mimeType.mimeType = "application/x-krita-taskset";
         mimeType.description = i18nc("description of a file type", "Krita Taskset");
         mimeType.suffixes = QStringList() << "kts";
@@ -262,6 +272,11 @@ void KisMimeDatabase::fillMimeData()
         mimeType.suffixes = QStringList() << "krf";
         s_mimeDatabase << mimeType;
 
+        mimeType.mimeType = "application/x-krita-gamutmasks";
+        mimeType.description = i18nc("description of a file type", "Krita Gamut Mask");
+        mimeType.suffixes = QStringList() << "kgm";
+        s_mimeDatabase << mimeType;
+        
         mimeType.mimeType = "application/x-krita-shortcuts";
         mimeType.description = i18nc("description of a file type", "Krita Shortcut Scheme");
         mimeType.suffixes = QStringList() << "shortcuts";

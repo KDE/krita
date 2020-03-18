@@ -28,7 +28,7 @@ class KisParticlePaintOpSettings : public KisNoSizePaintOpSettings
 
 public:
 
-    KisParticlePaintOpSettings();
+    KisParticlePaintOpSettings(KisResourcesInterfaceSP resourcesInterface);
     ~KisParticlePaintOpSettings() override;
 
     bool lodSizeThresholdSupported() const override;

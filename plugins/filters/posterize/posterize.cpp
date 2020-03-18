@@ -94,9 +94,9 @@ KisConfigWidget* KisFilterPosterize::createConfigurationWidget(QWidget* parent, 
     return new KisMultiIntegerFilterWidget(id().id(), parent, id().id(), param);
 }
 
-KisFilterConfigurationSP KisFilterPosterize::defaultConfiguration() const
+KisFilterConfigurationSP KisFilterPosterize::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration();
+    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
     config->setProperty("steps", 16);
     return config;
 }

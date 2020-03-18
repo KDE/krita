@@ -11,7 +11,7 @@ set(kritalibbrush_LIB_SRCS
     kis_brush.cpp
     kis_scaling_size_brush.cpp
     kis_brush_registry.cpp
-    kis_brush_server.cpp
+    KisBrushServerProvider.cpp
     kis_gbr_brush.cpp
     kis_abr_brush.cpp
     kis_abr_brush_collection.cpp
@@ -24,6 +24,7 @@ set(kritalibbrush_LIB_SRCS
     kis_text_brush.cpp
     kis_auto_brush_factory.cpp
     kis_text_brush_factory.cpp
+    KisAbrStorage.cpp
 )
 
 add_library(kritalibbrush SHARED ${kritalibbrush_LIB_SRCS} )

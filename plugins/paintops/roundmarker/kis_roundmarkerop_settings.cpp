@@ -24,10 +24,11 @@ struct KisRoundMarkerOpSettings::Private
 {
 };
 
-KisRoundMarkerOpSettings::KisRoundMarkerOpSettings()
+KisRoundMarkerOpSettings::KisRoundMarkerOpSettings(KisResourcesInterfaceSP resourcesInterface)
     : KisOutlineGenerationPolicy<KisPaintOpSettings>(KisCurrentOutlineFetcher::SIZE_OPTION |
                                                      KisCurrentOutlineFetcher::ROTATION_OPTION |
-                                                     KisCurrentOutlineFetcher::MIRROR_OPTION),
+                                                     KisCurrentOutlineFetcher::MIRROR_OPTION,
+                                                     resourcesInterface),
     m_d(new Private)
 {
 }

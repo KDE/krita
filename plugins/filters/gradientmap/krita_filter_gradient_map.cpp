@@ -27,16 +27,109 @@
 
 #include <filter/kis_filter_category_ids.h>
 #include "kis_config_widget.h"
-#include <KoResourceServerProvider.h>
-#include <KoResourceServer.h>
 #include <KoAbstractGradient.h>
 #include <KoStopGradient.h>
 #include <KoColorSet.h>
 #include "gradientmap.h"
 #include <KisDitherUtil.h>
+#include <KisGlobalResourcesInterface.h>
+#include <QDomDocument>
 
 #include <KisSequentialIteratorProgress.h>
 
+class KritaFilterGradientMapConfiguration : public KisFilterConfiguration
+{
+public:
+    KritaFilterGradientMapConfiguration(const QString & name, qint32 version, KisResourcesInterfaceSP resourcesInterface)
+        : KisFilterConfiguration(name, version, resourcesInterface)
+    {
+    }
+
+    KritaFilterGradientMapConfiguration(const KritaFilterGradientMapConfiguration &rhs)
+        : KisFilterConfiguration(rhs)
+    {
+    }
+
+    virtual KisFilterConfigurationSP clone() const override {
+        return new KritaFilterGradientMapConfiguration(*this);
+    }
+
+    KoStopGradientSP gradientImpl(KisResourcesInterfaceSP resourcesInterface) const {
+        KoStopGradientSP gradient;
+
+        if (this->version() == 1) {
+            auto source = resourcesInterface->source<KoAbstractGradient>(ResourceType::Gradients);
+
+            KoAbstractGradientSP gradientAb = source.resourceForName(this->getString("gradientName"));
+            if (!gradientAb) {
+                qWarning() << "Could not find gradient" << this->getString("gradientName");
+                gradientAb = source.fallbackResource();
+            }
+
+            gradient = gradientAb.dynamicCast<KoStopGradient>();
+
+            if (!gradient) {
+                QScopedPointer<QGradient> qGradient(gradientAb->toQGradient());
+
+                QDomDocument doc;
+                QDomElement elt = doc.createElement("gradient");
+                KoStopGradient::fromQGradient(qGradient.data())->toXML(doc, elt);
+                doc.appendChild(elt);
+
+                gradient = KoStopGradient::fromXML(doc.firstChildElement())
+                        .clone()
+                        .dynamicCast<KoStopGradient>();
+            }
+        } else {
+            QDomDocument doc;
+            doc.setContent(this->getString("gradientXML", ""));
+            gradient = KoStopGradient::fromXML(doc.firstChildElement())
+                    .clone()
+                    .dynamicCast<KoStopGradient>();
+
+        }
+        return gradient;
+    }
+
+    KoStopGradientSP gradient() const {
+        return gradientImpl(resourcesInterface());
+    }
+
+    QList<KoResourceSP> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const override
+    {
+        QList<KoResourceSP> resources;
+
+        // only the first version of the filter loaded the gradient by name
+        if (this->version() == 1) {
+            KoStopGradientSP gradient = gradientImpl(globalResourcesInterface);
+            if (gradient) {
+                resources << gradient;
+            }
+        }
+
+        resources << KisDitherWidget::prepareLinkedResources(*this, "dither/", globalResourcesInterface);
+
+        return resources;
+    }
+
+    QList<KoResourceSP> embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const override
+    {
+        QList<KoResourceSP> resources;
+
+        // the second version of the filter embeds the gradient
+        if (this->version() > 1) {
+            KoStopGradientSP gradient = gradientImpl(globalResourcesInterface);
+
+            if (gradient) {
+                resources << gradient;
+            }
+        }
+
+        return resources;
+    }
+};
+
+using KritaFilterGradientMapConfigurationSP = KisPinnedSharedPtr<KritaFilterGradientMapConfiguration>;
 
 KritaFilterGradientMap::KritaFilterGradientMap() : KisFilter(id(), FiltersCategoryMapId, i18n("&Gradient Map..."))
 {
@@ -50,26 +143,17 @@ KritaFilterGradientMap::KritaFilterGradientMap() : KisFilter(id(), FiltersCatego
 
 void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
                                          const QRect& applyRect,
-                                         const KisFilterConfigurationSP config,
+                                         const KisFilterConfigurationSP _config,
                                          KoUpdater *progressUpdater) const
 {
     Q_ASSERT(!device.isNull());
 
-    QDomDocument doc;
-    if (config->version()==1) {
-        QDomElement elt = doc.createElement("gradient");
-        KoAbstractGradient *gradientAb = KoResourceServerProvider::instance()->gradientServer()->resourceByName(config->getString("gradientName"));
-        if (!gradientAb) {
-            qWarning() << "Could not find gradient" << config->getString("gradientName");
-        }
-        gradientAb = KoResourceServerProvider::instance()->gradientServer()->resources().first();
-        QScopedPointer<QGradient> qGradient(gradientAb->toQGradient());
-        KoStopGradient::fromQGradient(qGradient.data())->toXML(doc, elt);
-        doc.appendChild(elt);
-    } else {
-        doc.setContent(config->getString("gradientXML", ""));
-    }
-    KoStopGradient gradient = KoStopGradient::fromXML(doc.firstChildElement());
+    const KritaFilterGradientMapConfiguration* config =
+        dynamic_cast<const KritaFilterGradientMapConfiguration*>(_config.data());
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(config);
+
+    KoStopGradientSP gradient = config->gradient();
 
     const ColorMode colorMode = ColorMode(config->getInt("colorMode"));
     KisDitherUtil ditherUtil;
@@ -83,7 +167,7 @@ void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
         grey = qreal(device->colorSpace()->intensity8(it.oldRawData())) / 255;
         if (colorMode == ColorMode::Nearest) {
             KoGradientStop leftStop, rightStop;
-            if (!gradient.stopsAt(leftStop, rightStop, grey)) continue;
+            if (!gradient->stopsAt(leftStop, rightStop, grey)) continue;
             if (std::abs(grey - leftStop.first) < std::abs(grey - rightStop.first)) {
                 outColor = leftStop.second;
             }
@@ -93,7 +177,7 @@ void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
         }
         else if (colorMode == ColorMode::Dither) {
             KoGradientStop leftStop, rightStop;
-            if (!gradient.stopsAt(leftStop, rightStop, grey)) continue;
+            if (!gradient->stopsAt(leftStop, rightStop, grey)) continue;
             qreal localT = (grey - leftStop.first) / (rightStop.first - leftStop.first);
             if (localT < ditherUtil.threshold(QPoint(it.x(), it.y()))) {
                 outColor = leftStop.second;
@@ -103,7 +187,7 @@ void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
             }
         }
         else {
-            gradient.colorAt(outColor, grey);
+            gradient->colorAt(outColor, grey);
         }
         outColor.setOpacity(qMin(KoColor(it.oldRawData(), device->colorSpace()).opacityF(), outColor.opacityF()));
         outColor.convertTo(device->colorSpace());
@@ -112,15 +196,19 @@ void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
 
 }
 
-KisFilterConfigurationSP KritaFilterGradientMap::factoryConfiguration() const
+KisFilterConfigurationSP KritaFilterGradientMap::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    return new KisFilterConfiguration(id().id(), 2);
+
+    return new KritaFilterGradientMapConfiguration(id().id(), 2, resourcesInterface);
 }
 
-KisFilterConfigurationSP KritaFilterGradientMap::defaultConfiguration() const
+KisFilterConfigurationSP KritaFilterGradientMap::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration();
-    KoAbstractGradient *gradient = KoResourceServerProvider::instance()->gradientServer()->resources().first();
+    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
+
+    auto source = resourcesInterface->source<KoAbstractGradient>(ResourceType::Gradients);
+    KoAbstractGradientSP gradient = source.fallbackResource();
+
     KoStopGradient stopGradient;
     QScopedPointer<QGradient> qGradient(gradient->toQGradient());
     stopGradient.fromQGradient(qGradient.data());
@@ -136,7 +224,7 @@ KisFilterConfigurationSP KritaFilterGradientMap::defaultConfiguration() const
     return config;
 }
 
-KisConfigWidget * KritaFilterGradientMap::createConfigurationWidget(QWidget * parent, const KisPaintDeviceSP dev, bool) const
+KisConfigWidget *KritaFilterGradientMap::createConfigurationWidget(QWidget * parent, const KisPaintDeviceSP dev, bool) const
 {
     return new KritaGradientMapConfigWidget(parent, dev);
 }

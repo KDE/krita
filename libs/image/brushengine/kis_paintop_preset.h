@@ -19,16 +19,31 @@
 #ifndef KIS_PAINTOP_PRESET_H
 #define KIS_PAINTOP_PRESET_H
 
-#include <resources/KoResource.h>
+#include <QPointer>
+
+#include <KoResource.h>
 #include "KoID.h"
 
 #include "kis_types.h"
 #include "kis_shared.h"
 #include "kritaimage_export.h"
 #include <brushengine/kis_uniform_paintop_property.h>
+#include <kis_paintop_settings_update_proxy.h>
 
-class KisPaintopSettingsUpdateProxy;
 class KisPaintOpConfigWidget;
+
+
+class ProxyParent : public QObject
+{
+    Q_OBJECT
+public:
+    ProxyParent(KisPaintOpPreset *preset)
+    {
+        m_preset = preset;
+    }
+
+    KisPaintOpPreset *m_preset {0};
+};
 
 /**
  * A KisPaintOpPreset contains a particular set of settings
@@ -37,8 +52,24 @@ class KisPaintOpConfigWidget;
  * user can now temporarily save any tweaks in the Preset throughout
  * the session. The Dirty Preset setting/unsetting is handled by KisPaintOpPresetSettings
  */
-class KRITAIMAGE_EXPORT KisPaintOpPreset : public KoResource, public KisShared
+class KRITAIMAGE_EXPORT KisPaintOpPreset : public KoResource
 {
+public:
+
+    /**
+     * @brief The UpdatedPostponer class
+     * @see KisPaintopSettingsUpdateProxy::postponeSettingsChanges()
+     */
+    class KRITAIMAGE_EXPORT UpdatedPostponer{
+    public:
+        UpdatedPostponer(KisPaintOpPresetSP preset);
+
+        ~UpdatedPostponer();
+
+    private:
+        QPointer<KisPaintopSettingsUpdateProxy> m_updateProxy;
+    };
+
 public:
 
     KisPaintOpPreset();
@@ -47,7 +78,9 @@ public:
 
     ~KisPaintOpPreset() override;
 
-    KisPaintOpPresetSP clone() const;
+    KisPaintOpPreset(const KisPaintOpPreset &rhs);
+    KisPaintOpPreset &operator=(const KisPaintOpPreset &rhs) = delete;
+    KoResourceSP clone() const override;
 
     /// set the id of the paintop plugin
     void setPaintOp(const KoID & paintOp);
@@ -63,15 +96,20 @@ public:
     KisPaintOpSettingsSP settings() const;
     KisPaintOpSettingsSP originalSettings() const;
 
-    bool load() override;
-    bool loadFromDevice(QIODevice *dev) override;
+    bool load(KisResourcesInterfaceSP resourcesInterface) override;
+    bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;
 
     bool save() override;
     bool saveToDevice(QIODevice* dev) const override;
 
+    QPair<QString, QString> resourceType() const override
+    {
+        return QPair<QString, QString>(ResourceType::PaintOpPresets, "");
+    }
+
     void toXML(QDomDocument& doc, QDomElement& elt) const;
 
-    void fromXML(const QDomElement& elt);
+    void fromXML(const QDomElement& elt, KisResourcesInterfaceSP resourcesInterface);
 
     bool removable() const {
         return true;
@@ -81,52 +119,10 @@ public:
         return ".kpp";
     }
 
-    /// Mark the preset as modified but not saved
-    void setDirty(bool value);
-
-    /// @return true if the preset has been modified, but not saved
-    bool isDirty() const;
-
-    /**
-     * Never use manual save/restore calls to
-     * isPresetDirty()/setPresetDirty()! They will lead to
-     * hard-to-tack-down bugs when the dirty state will not be
-     * restored on jumps like 'return', 'break' or exception.
-     */
-    class KRITAIMAGE_EXPORT DirtyStateSaver {
-    public:
-        DirtyStateSaver(KisPaintOpPreset *preset)
-            : m_preset(preset), m_isDirty(preset->isDirty())
-        {
-        }
-
-        ~DirtyStateSaver() {
-            m_preset->setDirty(m_isDirty);
-        }
-
-    private:
-        KisPaintOpPreset *m_preset;
-        bool m_isDirty;
-    };
-
-    /**
-     * @brief The UpdatedPostponer class
-     * @see KisPaintopSettingsUpdateProxy::postponeSettingsChanges()
-     */
-    class KRITAIMAGE_EXPORT UpdatedPostponer{
-    public:
-        UpdatedPostponer(KisPaintOpPreset *preset);
-
-        ~UpdatedPostponer();
-
-    private:
-        KisPaintopSettingsUpdateProxy *m_updateProxy;
-    };
-
     void setOptionsWidget(KisPaintOpConfigWidget *widget);
 
-    KisPaintopSettingsUpdateProxy* updateProxy() const;
-    KisPaintopSettingsUpdateProxy* updateProxyNoCreate() const;
+    QPointer<KisPaintopSettingsUpdateProxy> updateProxy() const;
+    QPointer<KisPaintopSettingsUpdateProxy> updateProxyNoCreate() const;
 
     QList<KisUniformPaintOpPropertySP> uniformProperties();
 
@@ -142,11 +138,42 @@ public:
      */
     KisPaintOpPresetSP createMaskingPreset() const;
 
+    /**
+     * @return resource interface that is used by KisPaintOpSettings object for
+     * loading linked resources
+     */
+    KisResourcesInterfaceSP resourcesInterface() const;
+
+    /**
+     * Set resource interface that will be used by KisPaintOpSettings object for
+     * loading linked resources
+     */
+    void setResourcesInterface(KisResourcesInterfaceSP resourcesInterface);
+
+    /**
+     * \see KisRequiredResourcesOperators::createLocalResourcesSnapshot
+     */
+    void createLocalResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface = nullptr);
+
+    /**
+     * \see KisRequiredResourcesOperators::hasLocalResourcesSnapshot
+     */
+    bool hasLocalResourcesSnapshot() const;
+
+    /**
+     * \see KisRequiredResourcesOperators::cloneWithResourcesSnapshot
+     */
+    KisPaintOpPresetSP cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface = nullptr) const;
+
+
+    QList<KoResourceSP> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const;
+
+    QList<KoResourceSP> embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const;
 
 private:
 
     struct Private;
-    Private * const m_d;
+    Private * const d;
 };
 
 Q_DECLARE_METATYPE(KisPaintOpPresetSP)

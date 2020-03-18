@@ -70,8 +70,6 @@ quint32 const GimpV2BrushMagic = ('G' << 24) + ('I' << 16) + ('M' << 8) + ('P' <
 struct KisGbrBrush::Private {
 
     QByteArray data;
-    bool ownData;         /* seems to indicate that @ref data is owned by the brush, but in Qt4.x this is already guaranteed... so in reality it seems more to indicate whether the data is loaded from file (ownData = true) or memory (ownData = false) */
-
     bool useColorAsMask;
 
     quint32 header_size;  /*  header_size = sizeof (BrushHeader) + brush name  */
@@ -87,19 +85,17 @@ KisGbrBrush::KisGbrBrush(const QString& filename)
     : KisScalingSizeBrush(filename)
     , d(new Private)
 {
-    d->ownData = true;
     d->useColorAsMask = false;
     setHasColor(false);
     setSpacing(DEFAULT_SPACING);
 }
 
-KisGbrBrush::KisGbrBrush(const QString& filename,
-                         const QByteArray& data,
-                         qint32 & dataPos)
+KisGbrBrush::KisGbrBrush(const QString &filename,
+                         const QByteArray &data,
+                         qint32 &dataPos)
     : KisScalingSizeBrush(filename)
     , d(new Private)
 {
-    d->ownData = false;
     d->useColorAsMask = false;
     setHasColor(false);
     setSpacing(DEFAULT_SPACING);
@@ -114,7 +110,6 @@ KisGbrBrush::KisGbrBrush(KisPaintDeviceSP image, int x, int y, int w, int h)
     : KisScalingSizeBrush()
     , d(new Private)
 {
-    d->ownData = true;
     d->useColorAsMask = false;
     setHasColor(false);
     setSpacing(DEFAULT_SPACING);
@@ -125,7 +120,6 @@ KisGbrBrush::KisGbrBrush(const QImage& image, const QString& name)
     : KisScalingSizeBrush()
     , d(new Private)
 {
-    d->ownData = false;
     d->useColorAsMask = false;
     setHasColor(false);
     setSpacing(DEFAULT_SPACING);
@@ -141,27 +135,20 @@ KisGbrBrush::KisGbrBrush(const KisGbrBrush& rhs)
     d->data = QByteArray();
 }
 
+KoResourceSP KisGbrBrush::clone() const
+{
+    return KoResourceSP(new KisGbrBrush(*this));
+}
+
 KisGbrBrush::~KisGbrBrush()
 {
     delete d;
 }
 
-bool KisGbrBrush::load()
+bool KisGbrBrush::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
-    QFile file(filename());
-    if (file.size() == 0) return false;
-    file.open(QIODevice::ReadOnly);
-    bool res = loadFromDevice(&file);
-    file.close();
-
-    return res;
-}
-
-bool KisGbrBrush::loadFromDevice(QIODevice *dev)
-{
-    if (d->ownData) {
-        d->data = dev->readAll();
-    }
+    Q_UNUSED(resourcesInterface);
+    d->data = dev->readAll();
     return init();
 }
 
@@ -170,6 +157,7 @@ bool KisGbrBrush::init()
     GimpBrushHeader bh;
 
     if (sizeof(GimpBrushHeader) > (uint)d->data.size()) {
+        qWarning() << filename() << "GBR could not be loaded: expected header size larger than bytearray size. Header Size:" << sizeof(GimpBrushHeader) << "Byte array size" << d->data.size();
         return false;
     }
 
@@ -197,6 +185,7 @@ bool KisGbrBrush::init()
         bh.spacing = qFromBigEndian(bh.spacing);
 
         if (bh.spacing > 1000) {
+            qWarning() << filename()  << "GBR could not be loaded, spacing above 1000. Spacing:" << bh.spacing;
             return false;
         }
     }
@@ -204,6 +193,7 @@ bool KisGbrBrush::init()
     setSpacing(bh.spacing / 100.0);
 
     if (bh.header_size > (uint)d->data.size() || bh.header_size == 0) {
+        qWarning() << "GBR could not be loaded: header size larger than bytearray size. Header Size:" << bh.header_size << "Byte array size" << d->data.size();
         return false;
     }
 
@@ -225,6 +215,7 @@ bool KisGbrBrush::init()
     setName(name);
 
     if (bh.width == 0 || bh.height == 0) {
+        qWarning() << filename()  << "GBR loading failed: width or height is 0" << bh.width << bh.height;
         return false;
     }
 
@@ -239,6 +230,8 @@ bool KisGbrBrush::init()
     QImage image(QImage(bh.width, bh.height, imageFormat));
 
     if (image.isNull()) {
+        qWarning() << filename()  << "GBR loading failed; image could not be created from following dimensions" << bh.width << bh.height
+                   << "QImage::Format" << imageFormat;
         return false;
     }
 
@@ -251,6 +244,8 @@ bool KisGbrBrush::init()
         // Grayscale
 
         if (static_cast<qint32>(k + bh.width * bh.height) > d->data.size()) {
+            qWarning() << filename()  << "GBR file dimensions bigger than bytearray size. Header:"<< k << "Width:" << bh.width << "height" << bh.height
+                       << "expected byte array size:" << (k + (bh.width * bh.height)) << "actual byte array size" << d->data.size();
             return false;
         }
 
@@ -268,6 +263,8 @@ bool KisGbrBrush::init()
         // RGBA
 
         if (static_cast<qint32>(k + (bh.width * bh.height * 4)) > d->data.size()) {
+            qWarning() << filename()  << "GBR file dimensions bigger than bytearray size. Header:"<< k << "Width:" << bh.width << "height" << bh.height
+                       << "expected byte array size:" << (k + (bh.width * bh.height * 4)) << "actual byte array size" << d->data.size();
             return false;
         }
 
@@ -282,13 +279,13 @@ bool KisGbrBrush::init()
         }
     }
     else {
-        warnKrita << "WARNING: loading of GBR brushes with" << bh.bytes << "bytes per pixel is not supported";
+        warnKrita << filename()  << "WARNING: loading of GBR brushes with" << bh.bytes << "bytes per pixel is not supported";
         return false;
     }
 
     setWidth(image.width());
     setHeight(image.height());
-    if (d->ownData) {
+    if (!d->data.isEmpty()) {
         d->data.resize(0); // Save some memory, we're using enough of it as it is.
     }
     setValid(image.width() != 0 && image.height() != 0);
@@ -308,17 +305,12 @@ bool KisGbrBrush::initFromPaintDev(KisPaintDeviceSP image, int x, int y, int w, 
     return true;
 }
 
-bool KisGbrBrush::save()
-{
-    QFile file(filename());
-    file.open(QIODevice::WriteOnly | QIODevice::Truncate);
-    bool ok = saveToDevice(&file);
-    file.close();
-    return ok;
-}
-
 bool KisGbrBrush::saveToDevice(QIODevice* dev) const
 {
+    if (!valid() || brushTipImage().isNull()) {
+        qWarning() << "this brush is not valid, set a brush tip image" << filename();
+        return false;
+    }
     GimpBrushHeader bh;
     QByteArray utf8Name = name().toUtf8(); // Names in v2 brushes are in UTF-8
     char const* name = utf8Name.data();
@@ -393,13 +385,14 @@ bool KisGbrBrush::saveToDevice(QIODevice* dev) const
 QImage KisGbrBrush::brushTipImage() const
 {
     QImage image = KisBrush::brushTipImage();
-    if (hasColor() && useColorAsMask()) {
+    if (hasColor() && useColorAsMask() && !image.isNull()) {
         for (int y = 0; y < image.height(); y++) {
             QRgb *pixel = reinterpret_cast<QRgb *>(image.scanLine(y));
             for (int x = 0; x < image.width(); x++) {
                 QRgb c = pixel[x];
-                int a = qGray(c);
-                pixel[x] = qRgba(a, a, a, qAlpha(c));
+                float alpha = qAlpha(c) / 255.0f;
+                int a = 255 + int(alpha * (qGray(c) - 255));
+                pixel[x] = qRgba(a, a, a, 255);
             }
         }
     }
@@ -432,8 +425,8 @@ void KisGbrBrush::makeMaskImage()
     QImage brushTip = brushTipImage();
 
     if (brushTip.width() == width() && brushTip.height() == height()) {
-        int imageWidth = width();
-        int imageHeight = height();
+        int imageWidth = brushTip.width();
+        int imageHeight = brushTip.height();
         QImage image(imageWidth, imageHeight, QImage::Format_Indexed8);
         QVector<QRgb> table;
         for (int i = 0; i < 256; ++i) {
@@ -450,7 +443,7 @@ void KisGbrBrush::makeMaskImage()
                 // linear interpolation with maximum gray value which is transparent in the mask
                 //int a = (qGray(c) * alpha) + ((1.0 - alpha) * 255);
                 // single multiplication version
-                int a = 255 + alpha * (qGray(c) - 255);
+                int a = 255 + int(alpha * (qGray(c) - 255));
                 dstPixel[x] = (uchar)a;
             }
         }
@@ -461,11 +454,6 @@ void KisGbrBrush::makeMaskImage()
     setUseColorAsMask(false);
     resetBoundary();
     clearBrushPyramid();
-}
-
-KisBrush* KisGbrBrush::clone() const
-{
-    return new KisGbrBrush(*this);
 }
 
 void KisGbrBrush::toXML(QDomDocument& d, QDomElement& e) const

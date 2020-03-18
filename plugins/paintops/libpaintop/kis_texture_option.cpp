@@ -47,8 +47,8 @@
 #include <brushengine/kis_paintop_lod_limitations.h>
 #include "kis_texture_chooser.h"
 #include <time.h>
-
-
+#include "kis_signals_blocker.h"
+#include <KisGlobalResourcesInterface.h>
 
 KisTextureOption::KisTextureOption()
     : KisPaintOpOption(KisPaintOpOption::TEXTURE, true)
@@ -57,8 +57,8 @@ KisTextureOption::KisTextureOption()
     setObjectName("KisTextureOption");
     setConfigurationPage(m_textureOptions);
 
-    connect(m_textureOptions->textureSelectorWidget, SIGNAL(resourceSelected(KoResource*)), SLOT(resetGUI(KoResource*)));
-    connect(m_textureOptions->textureSelectorWidget, SIGNAL(resourceSelected(KoResource*)), SLOT(emitSettingChanged()));
+    connect(m_textureOptions->textureSelectorWidget, SIGNAL(resourceSelected(KoResourceSP )), SLOT(resetGUI(KoResourceSP )));
+    connect(m_textureOptions->textureSelectorWidget, SIGNAL(resourceSelected(KoResourceSP )), SLOT(emitSettingChanged()));
     connect(m_textureOptions->scaleSlider, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_textureOptions->brightnessSlider, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_textureOptions->contrastSlider, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
@@ -82,11 +82,16 @@ KisTextureOption::~KisTextureOption()
 
 void KisTextureOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
-     m_textureOptions->textureSelectorWidget->blockSignals(true); // Checking
-    if (!m_textureOptions->textureSelectorWidget->currentResource()) return;
-    KoPattern *pattern = static_cast<KoPattern*>(m_textureOptions->textureSelectorWidget->currentResource());
-    m_textureOptions->textureSelectorWidget->blockSignals(false); // Checking
-    if (!pattern) return;
+    KoPatternSP pattern;
+
+    {
+        KisSignalsBlocker b(m_textureOptions->textureSelectorWidget);
+        KoResourceSP resource = m_textureOptions->textureSelectorWidget->currentResource();
+        if (!resource) return;
+
+        pattern = resource.staticCast<KoPattern>();
+        if (!pattern) return;
+    }
 
     setting->setProperty("Texture/Pattern/Enabled", isChecked());
     if (!isChecked()) {
@@ -152,10 +157,10 @@ void KisTextureOption::readOptionSetting(const KisPropertiesConfigurationSP sett
     if (!isChecked()) {
         return;
     }
-    KoPattern *pattern = KisEmbeddedPatternManager::loadEmbeddedPattern(setting);
+    KoPatternSP pattern = KisEmbeddedPatternManager::loadEmbeddedPattern(setting, KisGlobalResourcesInterface::instance());
 
     if (!pattern) {
-        pattern = static_cast<KoPattern*>(m_textureOptions->textureSelectorWidget->currentResource());
+        pattern =m_textureOptions->textureSelectorWidget->currentResource().staticCast<KoPattern>();
     }
 
     m_textureOptions->textureSelectorWidget->setCurrentPattern(pattern);
@@ -181,9 +186,9 @@ void KisTextureOption::lodLimitations(KisPaintopLodLimitations *l) const
 }
 
 
-void KisTextureOption::resetGUI(KoResource* res)
+void KisTextureOption::resetGUI(KoResourceSP res)
 {
-    KoPattern *pattern = static_cast<KoPattern *>(res);
+    KoPatternSP pattern = res.staticCast<KoPattern>();
     if (!pattern) return;
 
     m_textureOptions->offsetSliderX->setRange(0, pattern->pattern().width() / 2);
@@ -200,16 +205,15 @@ KisTextureProperties::KisTextureProperties(int levelOfDetail)
 {
 }
 
-void KisTextureProperties::fillProperties(const KisPropertiesConfigurationSP setting)
+void KisTextureProperties::fillProperties(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface)
 {
-
     if (!setting->hasProperty("Texture/Pattern/PatternMD5")) {
         m_enabled = false;
         return;
     }
 
     m_maskInfo = toQShared(new KisTextureMaskInfo(m_levelOfDetail));
-    if (!m_maskInfo->fillProperties(setting)) {
+    if (!m_maskInfo->fillProperties(setting, resourcesInterface)) {
         warnKrita << "WARNING: Couldn't load the pattern for a stroke";
         m_enabled = false;
         return;
@@ -224,6 +228,18 @@ void KisTextureProperties::fillProperties(const KisPropertiesConfigurationSP set
 
     m_strengthOption.readOptionSetting(setting);
     m_strengthOption.resetAllSensors();
+}
+
+QList<KoResourceSP> KisTextureProperties::prepareEmbeddedResources(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface)
+{
+    QList<KoResourceSP> resources;
+
+    KoPatternSP pattern = KisEmbeddedPatternManager::loadEmbeddedPattern(setting, resourcesInterface);
+    if (pattern) {
+        resources << pattern;
+    }
+
+    return resources;
 }
 
 void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset, const KisPaintInformation & info)

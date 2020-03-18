@@ -6,11 +6,6 @@ set(kritawidgets_LIB_SRCS
     KoVBox.cpp
     KoDialog.cpp
     KoZoomWidget.cpp
-    KoTagToolButton.cpp
-    KoTagChooserWidget.cpp
-    KoTagFilterWidget.cpp
-    KoResourceTaggingManager.cpp
-    KoResourceItemChooserContextMenu.cpp
     KoAspectButton.cpp
     KoPagePreviewWidget.cpp
     KoSliderCombo.cpp
@@ -29,22 +24,11 @@ set(kritawidgets_LIB_SRCS
     KoColorSlider.cpp
     KoTriangleColorSelector.cpp
     KoResourcePopupAction.cpp
-    KoIconToolTip.cpp
-    KoResourceItemChooser.cpp
-    KoResourceItemChooserSync.cpp
-    KoResourceModel.cpp
-    KoResourceItemDelegate.cpp
-    KoResourceItemView.cpp
-    KoResourceTagStore.cpp
     KoRuler.cpp
-    KoItemToolTip.cpp
-    KoCheckerBoardPainter.cpp
-    KoResourceServerAdapter.cpp
     KoResourceServerProvider.cpp
     KoLineStyleSelector.cpp
     KoLineStyleItemDelegate.cpp
     KoLineStyleModel.cpp
-    KoResourceFiltering.cpp
     KoTitledTabWidget.cpp
 
     KoToolBoxButton.cpp
@@ -61,7 +45,6 @@ set(kritawidgets_LIB_SRCS
     KoMarkerItemDelegate.cpp
 
     KoDocumentInfoDlg.cpp
-    KoTableView.cpp
 
     WidgetsDebug.cpp
 
@@ -88,10 +71,9 @@ set(kritawidgets_LIB_SRCS
     KisPaletteModel.cpp
     KisPaletteDelegate.cpp
     kis_palette_view.cpp
-    KisPaletteListWidget.cpp
+    KisPaletteChooser.cpp
     KisPaletteComboBox.cpp
 
-    kis_popup_button.cc
     kis_color_button.cpp
 )
 
@@ -114,6 +96,8 @@ target_link_libraries(kritawidgets
     kritaflake
     kritapigment
     kritawidgetutils
+    kritaresources
+    kritaresourcewidgets
     Qt5::PrintSupport
     KF5::CoreAddons
     KF5::ConfigGui

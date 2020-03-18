@@ -61,7 +61,7 @@
 #include <KoCompositeOp.h>
 #include <KoDockRegistry.h>
 #include <KoProperties.h>
-#include <KoResourceItemChooserSync.h>
+#include <KisResourceItemChooserSync.h>
 #include <KoSelection.h>
 #include <KoStore.h>
 #include <KoToolManager.h>
@@ -76,7 +76,6 @@
 #include "canvas/kis_canvas2.h"
 #include "canvas/kis_canvas_controller.h"
 #include "canvas/kis_grid_manager.h"
-#include "dialogs/kis_dlg_blacklist_cleanup.h"
 #include "input/kis_input_profile_manager.h"
 #include "kis_action_manager.h"
 #include "kis_action.h"
@@ -332,7 +331,7 @@ KisViewManager::~KisViewManager()
         cfg.writeKoColor("LastBackGroundColor",canvasResourceProvider()->bgColor());
     }
 
-    cfg.writeEntry("baseLength", KoResourceItemChooserSync::instance()->baseLength());
+    cfg.writeEntry("baseLength", KisResourceItemChooserSync::instance()->baseLength());
     cfg.writeEntry("CanvasOnlyActive", false); // We never restart in CavnasOnlyMode
     delete d;
 }
@@ -421,19 +420,23 @@ void KisViewManager::setCurrentView(KisView *view)
         // Restore the last used brush preset, color and background color.
         if (first) {
             KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+            KisResourceModel *resourceModel = rserver->resourceModel();
             QString defaultPresetName = "basic_tip_default";
-            bool foundTip = false;
-            for (int i=0; i<rserver->resourceCount(); i++) {
-                KisPaintOpPresetSP resource = rserver->resources().at(i);
-                if (resource->name().toLower().contains("basic_tip_default")) {
-                    defaultPresetName = resource->name();
-                    foundTip = true;
-                } else if (foundTip == false && (resource->name().toLower().contains("default") ||
-                                                 resource->filename().toLower().contains("default"))) {
-                    defaultPresetName = resource->name();
-                    foundTip = true;
+            for (int i = 0; i < resourceModel->rowCount(); i++) {
+
+                QModelIndex idx = resourceModel->index(i, 0);
+
+                QString resourceName = idx.data(Qt::UserRole + KisResourceModel::Name).toString().toLower();
+                QString fileName = idx.data(Qt::UserRole + KisResourceModel::Filename).toString().toLower();
+
+                if (resourceName.contains("basic_tip_default")) {
+                    defaultPresetName = resourceName;
+                }
+                else if (resourceName.contains("default") || fileName.contains("default")) {
+                    defaultPresetName = resourceName;
                 }
             }
+
             KisConfig cfg(true);
             QString lastPreset = cfg.readEntry("LastPreset", defaultPresetName);
             KisPaintOpPresetSP preset = rserver->resourceByName(lastPreset);
@@ -441,11 +444,11 @@ void KisViewManager::setCurrentView(KisView *view)
                 preset = rserver->resourceByName(defaultPresetName);
             }
 
-            if (!preset && !rserver->resources().isEmpty()) {
-                preset = rserver->resources().first();
+            if (!preset && rserver->resourceCount() > 0) {
+                preset = rserver->firstResource();
             }
             if (preset) {
-                paintOpBox()->restoreResource(preset.data());
+                paintOpBox()->restoreResource(preset);
                 canvasResourceProvider()->setCurrentCompositeOp(preset->settings()->paintOpCompositeOp());
             }
         }
@@ -711,9 +714,6 @@ void KisViewManager::createActions()
         a->setDefaultShortcut(QKeySequence());
     }
 
-    a = actionManager()->createAction("edit_blacklist_cleanup");
-    connect(a, SIGNAL(triggered()), this, SLOT(slotBlacklistCleanup()));
-
     actionManager()->createAction("ruler_pixel_multiple2");
     d->showRulersAction = actionManager()->createAction("view_ruler");
     d->showRulersAction->setChecked(cfg.showRulers());
@@ -772,12 +772,6 @@ void KisViewManager::setupManagers()
 void KisViewManager::updateGUI()
 {
     d->guiUpdateCompressor.start();
-}
-
-void KisViewManager::slotBlacklistCleanup()
-{
-    KisDlgBlacklistCleanup dialog;
-    dialog.exec();
 }
 
 KisNodeManager * KisViewManager::nodeManager() const

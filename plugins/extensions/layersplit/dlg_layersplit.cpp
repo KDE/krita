@@ -47,10 +47,9 @@ DlgLayerSplit::DlgLayerSplit()
     m_page->intFuzziness->setRange(0, 200);
     m_page->intFuzziness->setSingleStep(1);
 
-    m_colorSetChooser = new KisPaletteListWidget();
+    m_colorSetChooser = new KisPaletteChooser();
     m_page->paletteChooser->setPopupWidget(m_colorSetChooser);
-
-    connect(m_colorSetChooser, SIGNAL(sigPaletteSelected(KoColorSet*)), this, SLOT(slotSetPalette(KoColorSet*)));
+    connect(m_colorSetChooser, SIGNAL(sigPaletteSelected(KoColorSetSP)), this, SLOT(slotSetPalette(KoColorSetSP)));
 
     KisDialogStateSaver::restoreState(m_page, "krita/layer_split");
 
@@ -59,9 +58,10 @@ DlgLayerSplit::DlgLayerSplit()
     KisConfig cfg(true);
     QString paletteName = cfg.readEntry<QString>("layersplit/paletteName", i18n("Default"));
     KoResourceServer<KoColorSet> *pserver = KoResourceServerProvider::instance()->paletteServer();
-    KoColorSet *pal = pserver->resourceByName(paletteName);
-    modeToMask = m_page->cmbMode->currentIndex();
-    slotChangeMode(modeToMask);
+    KoColorSetSP pal = pserver->resourceByName(paletteName);
+    m_modeToMask = m_page->cmbMode->currentIndex();
+    slotChangeMode(m_modeToMask);
+
     if (pal) {
         m_palette = pal;
         m_page->paletteChooser->setText(pal->name());
@@ -128,12 +128,12 @@ int DlgLayerSplit::fuzziness() const
 
 }
 
-KoColorSet *DlgLayerSplit::palette() const
+KoColorSetSP DlgLayerSplit::palette() const
 {
     return m_palette;
 }
 
-void DlgLayerSplit::slotSetPalette(KoColorSet *pal)
+void DlgLayerSplit::slotSetPalette(KoColorSetSP pal)
 {
     if (pal) {
         m_palette = pal;
@@ -144,8 +144,8 @@ void DlgLayerSplit::slotSetPalette(KoColorSet *pal)
 }
 
 void DlgLayerSplit::slotChangeMode(int idx){
-    modeToMask = idx;
-    if( modeToMask){
+    m_modeToMask = idx;
+    if( m_modeToMask){
         m_page->chkCreateGroupLayer->hide();
         m_page->chkSeparateGroupLayers->hide();
         m_page->chkAlphaLock->hide();

@@ -22,6 +22,7 @@
 #include <QFile>
 #include <QDomDocument>
 #include <QTextStream>
+#include <QBuffer>
 
 
 #define WORKSPACE_VERSION 1
@@ -34,16 +35,16 @@ KisWorkspaceResource::~KisWorkspaceResource()
 {
 }
 
-bool KisWorkspaceResource::save()
+KisWorkspaceResource::KisWorkspaceResource(const KisWorkspaceResource &rhs)
+    : KoResource(rhs)
+    , KisPropertiesConfiguration(rhs)
+    , m_dockerState(rhs.m_dockerState)
 {
-    if (filename().isEmpty())
-         return false;
+}
 
-    QFile file(filename());
-    file.open(QIODevice::WriteOnly);
-    bool res = saveToDevice(&file);
-    file.close();
-    return res;
+KoResourceSP KisWorkspaceResource::clone() const
+{
+    return KoResourceSP(new KisWorkspaceResource(*this));
 }
 
 bool KisWorkspaceResource::saveToDevice(QIODevice *dev) const
@@ -60,6 +61,19 @@ bool KisWorkspaceResource::saveToDevice(QIODevice *dev) const
     QDomElement settings = doc.createElement("settings");
     KisPropertiesConfiguration::toXML(doc, settings);
     root.appendChild(settings);
+
+    if (!image().isNull()) {
+        QDomElement thumb = doc.createElement("image");
+        QByteArray arr;
+        QBuffer buffer(&arr);
+        buffer.open(QIODevice::WriteOnly);
+        image().save(&buffer, "PNG");
+        buffer.close();
+        thumb.appendChild(doc.createCDATASection(arr.toBase64()));
+        root.appendChild(thumb);
+    }
+
+
     doc.appendChild(root);
 
     QTextStream textStream(dev);
@@ -72,25 +86,10 @@ bool KisWorkspaceResource::saveToDevice(QIODevice *dev) const
 
 }
 
-bool KisWorkspaceResource::load()
+bool KisWorkspaceResource::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
-    if (filename().isEmpty())
-         return false;
- 
-    QFile file(filename());
-    if (file.size() == 0) return false;
-    if (!file.open(QIODevice::ReadOnly)) {
-        warnKrita << "Can't open file " << filename();
-        return false;
-    }
+    Q_UNUSED(resourcesInterface);
 
-    bool res = loadFromDevice(&file);
-    file.close();
-    return res;
-}
-
-bool KisWorkspaceResource::loadFromDevice(QIODevice *dev)
-{
     QDomDocument doc;
     if (!doc.setContent(dev)) {
         return false;
@@ -108,6 +107,13 @@ bool KisWorkspaceResource::loadFromDevice(QIODevice *dev)
     QDomElement settings = element.firstChildElement("settings");
     if (!settings.isNull()) {
         KisPropertiesConfiguration::fromXML(settings);
+    }
+
+    QDomElement thumb = element.firstChildElement("image");
+    if (!thumb.isNull()) {
+        QImage img;
+        img.loadFromData(QByteArray::fromBase64(thumb.text().toLatin1()));
+        this->setImage(img);
     }
 
     setValid(true);

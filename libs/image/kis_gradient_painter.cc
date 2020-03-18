@@ -24,6 +24,7 @@
 #include <KoColorSpace.h>
 #include <resources/KoAbstractGradient.h>
 #include <KoUpdater.h>
+#include <KoEphemeralResource.h>
 
 #include "kis_global.h"
 #include "kis_paint_device.h"
@@ -39,19 +40,17 @@
 #include "krita_utils.h"
 
 
-class CachedGradient : public KoAbstractGradient
+class CachedGradient : public KoEphemeralResource<KoAbstractGradient>
 {
 
 public:
-    explicit CachedGradient(const KoAbstractGradient *gradient, qint32 steps, const KoColorSpace *cs)
-        : KoAbstractGradient(gradient->filename())
+    explicit CachedGradient(const KoAbstractGradientSP gradient, qint32 steps, const KoColorSpace *cs)
+        : KoEphemeralResource<KoAbstractGradient>(gradient->filename())
+        , m_subject(gradient)
+        , m_max(steps - 1)
+        , m_colorSpace(cs)
+        , m_black(KoColor(cs))
     {
-        m_subject = gradient;
-        m_max = steps - 1;
-        m_colorSpace = cs;
-
-        m_black = KoColor(cs);
-
         KoColor tmpColor(m_colorSpace);
         for(qint32 i = 0; i < steps; i++) {
             m_subject->colorAt(tmpColor, qreal(i) / m_max);
@@ -61,8 +60,8 @@ public:
 
     ~CachedGradient() override {}
 
-    KoAbstractGradient* clone() const override {
-        return new CachedGradient(m_subject, m_max + 1, m_colorSpace);
+    KoResourceSP clone() const override {
+        return KoResourceSP(new CachedGradient(m_subject, m_max + 1, m_colorSpace));
     }
 
     /**
@@ -74,6 +73,9 @@ public:
         return m_subject->toQGradient();
     }
 
+    QPair<QString, QString> resourceType() const override {
+        return m_subject->resourceType();
+    }
 
     /// gets the color data at position 0 <= t <= 1
     const quint8 *cachedAt(qreal t) const
@@ -93,9 +95,9 @@ public:
     QByteArray generateMD5() const override { return QByteArray(); }
 
 private:
-    const KoAbstractGradient *m_subject;
-    const KoColorSpace *m_colorSpace;
+    const KoAbstractGradientSP m_subject;
     qint32 m_max;
+    const KoColorSpace *m_colorSpace;
     QVector<KoColor> m_colors;
     KoColor m_black;
 };

@@ -30,8 +30,9 @@ struct KisGridPaintOpSettings::Private
     QList<KisUniformPaintOpPropertyWSP> uniformProperties;
 };
 
-KisGridPaintOpSettings::KisGridPaintOpSettings()
-    : KisOutlineGenerationPolicy<KisPaintOpSettings>(KisCurrentOutlineFetcher::NO_OPTION),
+KisGridPaintOpSettings::KisGridPaintOpSettings(KisResourcesInterfaceSP resourcesInterface)
+    : KisOutlineGenerationPolicy<KisPaintOpSettings>(KisCurrentOutlineFetcher::NO_OPTION,
+                                                     resourcesInterface),
     m_d(new Private)
 {
 }
@@ -119,7 +120,7 @@ QList<KisUniformPaintOpPropertySP> KisGridPaintOpSettings::uniformProperties(Kis
                     option.writeOptionSetting(prop->settings().data());
                 });
 
-            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            QObject::connect(updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
             prop->requestReadValue();
             props << toQShared(prop);
         }

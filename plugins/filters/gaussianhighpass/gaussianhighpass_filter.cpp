@@ -61,23 +61,22 @@ KisConfigWidget * KisGaussianHighPassFilter::createConfigurationWidget(QWidget* 
     return new KisWdgGaussianHighPass(parent);
 }
 
-KisFilterConfigurationSP KisGaussianHighPassFilter::defaultConfiguration() const
+KisFilterConfigurationSP KisGaussianHighPassFilter::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration();
+    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
     config->setProperty("blurAmount", 1);
     return config;
 }
 
 void KisGaussianHighPassFilter::processImpl(KisPaintDeviceSP device,
                                    const QRect& applyRect,
-                                   const KisFilterConfigurationSP _config,
+                                   const KisFilterConfigurationSP config,
                                    KoUpdater *
                                    ) const
 {
     QPointer<KoUpdater> convolutionUpdater = 0;
+    KIS_SAFE_ASSERT_RECOVER_RETURN(config);
 
-    KisFilterConfigurationSP config = _config ? _config : new KisFilterConfiguration(id().id(), 1);
-    
     QVariant value;
     KisLodTransformScalar t(device);
     const qreal blurAmount = t.scale(config->getProperty("blurAmount", value) ? value.toDouble() : 1.0);

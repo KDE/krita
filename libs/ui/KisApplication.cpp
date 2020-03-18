@@ -43,6 +43,9 @@
 #include <QSysInfo>
 #include <QTimer>
 #include <QWidget>
+#include <QImageReader>
+#include <QImageWriter>
+#include <QThread>
 
 #include <klocalizedstring.h>
 #include <kdesktopfile.h>
@@ -54,7 +57,6 @@
 #include <KoShapeRegistry.h>
 #include <KoDpi.h>
 #include "KoConfig.h"
-#include <resources/KoHashGeneratorProvider.h>
 #include <KoResourcePaths.h>
 #include <KisMimeDatabase.h>
 #include "thememanager.h"
@@ -64,7 +66,6 @@
 #include "KisAutoSaveRecoveryDialog.h"
 #include "KisPart.h"
 #include <kis_icon.h>
-#include "kis_md5_generator.h"
 #include "kis_splash_screen.h"
 #include "kis_config.h"
 #include "flake/kis_shape_selection.h"
@@ -79,7 +80,7 @@
 #include "KisApplicationArguments.h"
 #include <kis_debug.h>
 #include "kis_action_registry.h"
-#include <kis_brush_server.h>
+#include <KoResourceServer.h>
 #include <KisResourceServerProvider.h>
 #include <KoResourceServerProvider.h>
 #include "kis_image_barrier_locker.h"
@@ -87,17 +88,35 @@
 #include "kis_spin_box_unit_manager.h"
 #include "kis_document_aware_spin_box_unit_manager.h"
 #include "KisViewManager.h"
-#include "kis_workspace_resource.h"
 #include <KisUsageLogger.h>
 
 #include <KritaVersionWrapper.h>
 #include <dialogs/KisSessionManagerDialog.h>
+
+#include <KisResourceCacheDb.h>
+#include <KisResourceLocator.h>
+#include <KisResourceLoader.h>
+#include <KisResourceLoaderRegistry.h>
+
+#include <kis_gbr_brush.h>
+#include <kis_png_brush.h>
+#include <kis_svg_brush.h>
+#include <kis_imagepipe_brush.h>
+#include <KoColorSet.h>
+#include <KoSegmentGradient.h>
+#include <KoStopGradient.h>
+#include <KoPattern.h>
+#include <kis_workspace_resource.h>
+#include <KisSessionResource.h>
+#include <resources/KoSvgSymbolCollectionResource.h>
 
 #include "widgets/KisScreenColorPicker.h"
 #include "KisDlgInternalColorSelector.h"
 
 #include <dialogs/KisAsyncAnimationFramesSaveDialog.h>
 #include <kis_image_animation_interface.h>
+
+#include <kis_psd_layer_style.h>
 
 namespace {
 const QTime appStartTime(QTime::currentTime());
@@ -112,7 +131,6 @@ public:
     QPointer<KisMainWindow> mainWindow; // The first mainwindow we create on startup
     bool batchRun {false};
     QVector<QByteArray> earlyRemoteArguments;
-
 };
 
 class KisApplication::ResetStarting
@@ -219,43 +237,43 @@ void KisApplication::addResourceTypes()
     KoResourcePaths::addResourceType("kis_pics", "data", "/pics/");
     KoResourcePaths::addResourceType("kis_images", "data", "/images/");
     KoResourcePaths::addResourceType("metadata_schema", "data", "/metadata/schemas/");
-    KoResourcePaths::addResourceType("kis_brushes", "data", "/brushes/");
+    KoResourcePaths::addResourceType(ResourceType::Brushes, "data", "/brushes/");
     KoResourcePaths::addResourceType("kis_taskset", "data", "/taskset/");
     KoResourcePaths::addResourceType("kis_taskset", "data", "/taskset/");
     KoResourcePaths::addResourceType("gmic_definitions", "data", "/gmic/");
     KoResourcePaths::addResourceType("kis_resourcebundles", "data", "/bundles/");
     KoResourcePaths::addResourceType("kis_defaultpresets", "data", "/defaultpresets/");
-    KoResourcePaths::addResourceType("kis_paintoppresets", "data", "/paintoppresets/");
-    KoResourcePaths::addResourceType("kis_workspaces", "data", "/workspaces/");
-    KoResourcePaths::addResourceType("kis_windowlayouts", "data", "/windowlayouts/");
-    KoResourcePaths::addResourceType("kis_sessions", "data", "/sessions/");
+    KoResourcePaths::addResourceType(ResourceType::PaintOpPresets, "data", "/paintoppresets/");
+    KoResourcePaths::addResourceType(ResourceType::Workspaces, "data", "/workspaces/");
+    KoResourcePaths::addResourceType(ResourceType::WindowLayouts, "data", "/windowlayouts/");
+    KoResourcePaths::addResourceType(ResourceType::Sessions, "data", "/sessions/");
     KoResourcePaths::addResourceType("psd_layer_style_collections", "data", "/asl");
-    KoResourcePaths::addResourceType("ko_patterns", "data", "/patterns/", true);
-    KoResourcePaths::addResourceType("ko_gradients", "data", "/gradients/");
-    KoResourcePaths::addResourceType("ko_gradients", "data", "/gradients/", true);
-    KoResourcePaths::addResourceType("ko_palettes", "data", "/palettes/", true);
+    KoResourcePaths::addResourceType(ResourceType::Patterns, "data", "/patterns/", true);
+    KoResourcePaths::addResourceType(ResourceType::Gradients, "data", "/gradients/");
+    KoResourcePaths::addResourceType(ResourceType::Gradients, "data", "/gradients/", true);
+    KoResourcePaths::addResourceType(ResourceType::Palettes, "data", "/palettes/", true);
     KoResourcePaths::addResourceType("kis_shortcuts", "data", "/shortcuts/");
     KoResourcePaths::addResourceType("kis_actions", "data", "/actions");
     KoResourcePaths::addResourceType("kis_actions", "data", "/pykrita");
     KoResourcePaths::addResourceType("icc_profiles", "data", "/color/icc");
     KoResourcePaths::addResourceType("icc_profiles", "data", "/profiles/");
-    KoResourcePaths::addResourceType("ko_effects", "data", "/effects/");
+    KoResourcePaths::addResourceType(ResourceType::FilterEffects, "data", "/effects/");
     KoResourcePaths::addResourceType("tags", "data", "/tags/");
     KoResourcePaths::addResourceType("templates", "data", "/templates");
     KoResourcePaths::addResourceType("pythonscripts", "data", "/pykrita");
-    KoResourcePaths::addResourceType("symbols", "data", "/symbols");
+    KoResourcePaths::addResourceType(ResourceType::Symbols, "data", "/symbols");
     KoResourcePaths::addResourceType("preset_icons", "data", "/preset_icons");
-    KoResourcePaths::addResourceType("ko_gamutmasks", "data", "/gamutmasks/", true);
+    KoResourcePaths::addResourceType(ResourceType::GamutMasks, "data", "/gamutmasks/", true);
 
     //    // Extra directories to look for create resources. (Does anyone actually use that anymore?)
-    //    KoResourcePaths::addResourceDir("ko_gradients", "/usr/share/create/gradients/gimp");
-    //    KoResourcePaths::addResourceDir("ko_gradients", QDir::homePath() + QString("/.create/gradients/gimp"));
-    //    KoResourcePaths::addResourceDir("ko_patterns", "/usr/share/create/patterns/gimp");
-    //    KoResourcePaths::addResourceDir("ko_patterns", QDir::homePath() + QString("/.create/patterns/gimp"));
-    //    KoResourcePaths::addResourceDir("kis_brushes", "/usr/share/create/brushes/gimp");
-    //    KoResourcePaths::addResourceDir("kis_brushes", QDir::homePath() + QString("/.create/brushes/gimp"));
-    //    KoResourcePaths::addResourceDir("ko_palettes", "/usr/share/create/swatches");
-    //    KoResourcePaths::addResourceDir("ko_palettes", QDir::homePath() + QString("/.create/swatches"));
+    //    KoResourcePaths::addResourceDir(ResourceType::Gradients, "/usr/share/create/gradients/gimp");
+    //    KoResourcePaths::addResourceDir(ResourceType::Gradients, QDir::homePath() + QString("/.create/gradients/gimp"));
+    //    KoResourcePaths::addResourceDir(ResourceType::Patterns, "/usr/share/create/patterns/gimp");
+    //    KoResourcePaths::addResourceDir(ResourceType::Patterns, QDir::homePath() + QString("/.create/patterns/gimp"));
+    //    KoResourcePaths::addResourceDir(ResourceType::Brushes, "/usr/share/create/brushes/gimp");
+    //    KoResourcePaths::addResourceDir(ResourceType::Brushes, QDir::homePath() + QString("/.create/brushes/gimp"));
+    //    KoResourcePaths::addResourceDir(ResourceType::Palettes, "/usr/share/create/swatches");
+    //    KoResourcePaths::addResourceDir(ResourceType::Palettes, QDir::homePath() + QString("/.create/swatches"));
 
     // Make directories for all resources we can save, and tags
     QDir d;
@@ -267,7 +285,14 @@ void KisApplication::addResourceTypes()
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/paintoppresets/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/palettes/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/patterns/");
-    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/taskset/");
+    // between 4.2.x and 4.3.0 there was a change from 'taskset' to 'tasksets'
+    // so to make older resource folders compatible with the new version, let's rename the folder
+    // so no tasksets are lost.
+    if (d.exists(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/taskset/")) {
+        d.rename(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/taskset/",
+                 QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/tasksets/");
+    }
+    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/tasksets/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/workspaces/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/input/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/pykrita/");
@@ -279,42 +304,65 @@ void KisApplication::addResourceTypes()
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/gamutmasks/");
 }
 
-void KisApplication::loadResources()
+bool KisApplication::registerResources()
 {
-    //    qDebug() << "loadResources();";
+    KisResourceLoaderRegistry *reg = KisResourceLoaderRegistry::instance();
 
-    setSplashScreenLoadingText(i18n("Loading Resources..."));
-    processEvents();
-    KoResourceServerProvider::instance();
+    reg->add(new KisResourceLoader<KisPaintOpPreset>(ResourceType::PaintOpPresets, ResourceType::PaintOpPresets, i18n("Brush presets"), QStringList() << "application/x-krita-paintoppreset"));
 
-    setSplashScreenLoadingText(i18n("Loading Brush Presets..."));
-    processEvents();
-    KisResourceServerProvider::instance();
+    reg->add(new KisResourceLoader<KisGbrBrush>(ResourceSubType::GbrBrushes, ResourceType::Brushes, i18n("Brush tips"), QStringList() << "image/x-gimp-brush"));
+    reg->add(new KisResourceLoader<KisImagePipeBrush>(ResourceSubType::GihBrushes, ResourceType::Brushes, i18n("Brush tips"), QStringList() << "image/x-gimp-brush-animated"));
+    reg->add(new KisResourceLoader<KisSvgBrush>(ResourceSubType::SvgBrushes, ResourceType::Brushes, i18n("Brush tips"), QStringList() << "image/svg+xml"));
+    reg->add(new KisResourceLoader<KisPngBrush>(ResourceSubType::PngBrushes, ResourceType::Brushes, i18n("Brush tips"), QStringList() << "image/png"));
 
-    setSplashScreenLoadingText(i18n("Loading Brushes..."));
-    processEvents();
-    KisBrushServer::instance()->brushServer();
+    reg->add(new KisResourceLoader<KoSegmentGradient>(ResourceSubType::SegmentedGradients, ResourceType::Gradients, i18n("Gradients"), QStringList() << "application/x-gimp-gradient"));
+    reg->add(new KisResourceLoader<KoStopGradient>(ResourceSubType::StopGradients, ResourceType::Gradients, i18n("Gradients"), QStringList() << "application/x-karbon-gradient" << "image/svg+xml"));
 
-    setSplashScreenLoadingText(i18n("Loading Bundles..."));
-    processEvents();
-    KisResourceBundleServerProvider::instance();
-}
+    reg->add(new KisResourceLoader<KoColorSet>(ResourceType::Palettes, ResourceType::Palettes, i18n("Palettes"),
+                                     QStringList() << KisMimeDatabase::mimeTypeForSuffix("kpl")
+                                               << KisMimeDatabase::mimeTypeForSuffix("gpl")
+                                               << KisMimeDatabase::mimeTypeForSuffix("pal")
+                                               << KisMimeDatabase::mimeTypeForSuffix("act")
+                                               << KisMimeDatabase::mimeTypeForSuffix("aco")
+                                               << KisMimeDatabase::mimeTypeForSuffix("css")
+                                               << KisMimeDatabase::mimeTypeForSuffix("colors")
+                                               << KisMimeDatabase::mimeTypeForSuffix("xml")
+                                               << KisMimeDatabase::mimeTypeForSuffix("sbz")));
 
-void KisApplication::loadResourceTags()
-{
-    //    qDebug() << "loadResourceTags()";
+    QList<QByteArray> src = QImageReader::supportedMimeTypes();
+    QStringList allImageMimes;
+    Q_FOREACH(const QByteArray ba, src) {
+        if (QImageWriter::supportedMimeTypes().contains(ba)) {
+            allImageMimes << QString::fromUtf8(ba);
+        }
+    }
+    allImageMimes << KisMimeDatabase::mimeTypeForSuffix("pat");
 
-    KoResourceServerProvider::instance()->patternServer()->loadTags();
-    KoResourceServerProvider::instance()->gradientServer()->loadTags();
-    KoResourceServerProvider::instance()->paletteServer()->loadTags();
-    KoResourceServerProvider::instance()->svgSymbolCollectionServer()->loadTags();
-    KisBrushServer::instance()->brushServer()->loadTags();
-    KisResourceServerProvider::instance()->workspaceServer()->loadTags();
-    KisResourceServerProvider::instance()->layerStyleCollectionServer()->loadTags();
-    KisResourceBundleServerProvider::instance()->resourceBundleServer()->loadTags();
-    KisResourceServerProvider::instance()->paintOpPresetServer()->loadTags();
+    reg->add(new KisResourceLoader<KoPattern>(ResourceType::Patterns, ResourceType::Patterns, i18n("Patterns"), allImageMimes));
+    reg->add(new KisResourceLoader<KisWorkspaceResource>(ResourceType::Workspaces, ResourceType::Workspaces, i18n("Workspaces"), QStringList() << "application/x-krita-workspace"));
+    reg->add(new KisResourceLoader<KoSvgSymbolCollectionResource>(ResourceType::Symbols, ResourceType::Symbols, i18n("SVG symbol libraries"), QStringList() << "image/svg+xml"));
+    reg->add(new KisResourceLoader<KisWindowLayoutResource>(ResourceType::WindowLayouts, ResourceType::WindowLayouts, i18n("Window layouts"), QStringList() << "application/x-krita-windowlayout"));
+    reg->add(new KisResourceLoader<KisSessionResource>(ResourceType::Sessions, ResourceType::Sessions, i18n("Sessions"), QStringList() << "application/x-krita-session"));
+    reg->add(new KisResourceLoader<KoGamutMask>(ResourceType::GamutMasks, ResourceType::GamutMasks, i18n("Gamut masks"), QStringList() << "application/x-krita-gamutmasks"));
 
-    KisResourceServerProvider::instance()->paintOpPresetServer()->clearOldSystemTags();
+    reg->add(new KisResourceLoader<KisPSDLayerStyle>(ResourceType::LayerStyles,
+                                                     ResourceType::LayerStyles,
+                                                     ResourceType::LayerStyles,
+                                                     QStringList() << "application/x-photoshop-style"));
+
+    if (!KisResourceCacheDb::initialize(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation))) {
+        QMessageBox::critical(0, i18nc("@title:window", "Krita: Fatal error"), i18n("%1\n\nKrita will quit now.").arg(KisResourceCacheDb::lastError()));
+        //return false;
+    }
+
+    KisResourceLocator::LocatorError r = KisResourceLocator::instance()->initialize(KoResourcePaths::getApplicationRoot() + "/share/krita");
+    connect(KisResourceLocator::instance(), SIGNAL(progressMessage(const QString&)), this, SLOT(setSplashScreenLoadingText(const QString&)));
+    if (r != KisResourceLocator::LocatorError::Ok ) {
+        QMessageBox::critical(0, i18nc("@title:window", "Krita: Fatal error"), KisResourceLocator::instance()->errorMessages().join('\n') + i18n("\n\nKrita will quit now."));
+        //return false;
+    }
+
+    return true;
 }
 
 void KisApplication::loadPlugins()
@@ -405,8 +453,6 @@ bool KisApplication::start(const KisApplicationArguments &args)
         processEvents();
     }
 
-    KoHashGeneratorProvider::instance()->setGenerator("MD5", new KisMD5Generator());
-
     KConfigGroup group(KSharedConfig::openConfig(), "theme");
     Digikam::ThemeManager themeManager;
     themeManager.setCurrentTheme(group.readEntry("Theme", "Krita dark"));
@@ -423,10 +469,9 @@ bool KisApplication::start(const KisApplicationArguments &args)
     loadPlugins();
 
     // Load all resources
-    loadResources();
-
-    // Load all the tags
-    loadResourceTags();
+    if (!registerResources()) {
+        return false;
+    }
 
     // Load the gui plugins
     loadGuiPlugins();
@@ -460,7 +505,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
 
         if (!args.windowLayout().isEmpty()) {
             KoResourceServer<KisWindowLayoutResource> * rserver = KisResourceServerProvider::instance()->windowLayoutServer();
-            KisWindowLayoutResource* windowLayout = rserver->resourceByName(args.windowLayout());
+            KisWindowLayoutResourceSP windowLayout = rserver->resourceByName(args.windowLayout());
             if (windowLayout) {
                 windowLayout->applyLayout();
             }
@@ -471,9 +516,9 @@ bool KisApplication::start(const KisApplicationArguments &args)
 
             if (!args.workspace().isEmpty()) {
                 KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer();
-                KisWorkspaceResource* workspace = rserver->resourceByName(args.workspace());
+                KisWorkspaceResourceSP workspace = rserver->resourceByName(args.workspace());
                 if (workspace) {
-                    d->mainWindow->restoreWorkspace(workspace);
+                    d->mainWindow->restoreWorkspace(workspace->resourceId());
                 }
             }
 
@@ -629,6 +674,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
 
 KisApplication::~KisApplication()
 {
+    KisResourceCacheDb::deleteTemporaryResources();
 }
 
 void KisApplication::setSplashScreen(QWidget *splashScreen)
@@ -636,10 +682,9 @@ void KisApplication::setSplashScreen(QWidget *splashScreen)
     d->splashScreen = qobject_cast<KisSplashScreen*>(splashScreen);
 }
 
-void KisApplication::setSplashScreenLoadingText(QString textToLoad)
+void KisApplication::setSplashScreenLoadingText(const QString &textToLoad)
 {
     if (d->splashScreen) {
-        //d->splashScreen->loadingLabel->setText(textToLoad);
         d->splashScreen->setLoadingText(textToLoad);
         d->splashScreen->repaint();
     }

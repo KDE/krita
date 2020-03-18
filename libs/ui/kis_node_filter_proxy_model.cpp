@@ -127,7 +127,7 @@ QModelIndex KisNodeFilterProxyModel::indexFromNode(KisNodeSP node) const
 
 void KisNodeFilterProxyModel::setAcceptedLabels(const QList<int> &value)
 {
-    m_d->acceptedLabels = QSet<int>::fromList(value);
+    m_d->acceptedLabels = QSet<int>(value.begin(), value.end());
     invalidateFilter();
 }
 

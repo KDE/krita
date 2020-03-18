@@ -30,7 +30,7 @@
 #include "KoColorSpaceRegistry.h"
 #include <KoColorSet.h>
 #include <KisPaletteModel.h>
-#include <KisPaletteListWidget.h>
+#include <KisPaletteChooser.h>
 #include <kis_palette_view.h>
 #include <KoResourceServerProvider.h>
 #include <KoResourceServer.h>
@@ -62,7 +62,7 @@ struct KisDlgInternalColorSelector::Private
     const KoColorDisplayRendererInterface *displayRenderer;
     KisHexColorInput *hexColorInput = 0;
     KisPaletteModel *paletteModel = 0;
-    KisPaletteListWidget *paletteChooser = 0;
+    KisPaletteChooser *paletteChooser = 0;
     KisScreenColorPickerBase *screenColorPicker = 0;
 };
 
@@ -94,13 +94,13 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
         m_ui->visualSelector->hide();
     }
 
-    m_d->paletteChooser = new KisPaletteListWidget(this);
+    m_d->paletteChooser = new KisPaletteChooser(this);
     m_d->paletteModel = new KisPaletteModel(this);
     m_ui->bnPaletteChooser->setIcon(KisIconUtils::loadIcon("hi16-palette_library"));
     m_ui->paletteBox->setPaletteModel(m_d->paletteModel);
     m_ui->paletteBox->setDisplayRenderer(displayRenderer);
     m_ui->cmbNameList->setCompanionView(m_ui->paletteBox);
-    connect(m_d->paletteChooser, SIGNAL(sigPaletteSelected(KoColorSet*)), this, SLOT(slotChangePalette(KoColorSet*)));
+    connect(m_d->paletteChooser, SIGNAL(sigPaletteSelected(KoColorSetSP)), this, SLOT(slotChangePalette(KoColorSetSP)));
     connect(m_ui->cmbNameList, SIGNAL(sigColorSelected(KoColor)), SLOT(slotColorUpdated(KoColor)));
 
     // For some bizarre reason, the modal dialog doesn't like having the colorset set, so let's not.
@@ -109,12 +109,12 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
         KConfigGroup cfg(KSharedConfig::openConfig()->group(""));
         QString paletteName = cfg.readEntry("internal_selector_active_color_set", QString());
         KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
-        KoColorSet *savedPal = rServer->resourceByName(paletteName);
+        KoColorSetSP savedPal = rServer->resourceByName(paletteName);
         if (savedPal) {
             this->slotChangePalette(savedPal);
         } else {
-            if (rServer->resources().count()) {
-                savedPal = rServer->resources().first();
+            if (rServer->resourceCount()) {
+                savedPal = rServer->firstResource();
                 if (savedPal) {
                     this->slotChangePalette(savedPal);
                 }
@@ -332,7 +332,7 @@ void KisDlgInternalColorSelector::slotSetColorFromHex()
     slotColorUpdated(m_d->sRGB);
 }
 
-void KisDlgInternalColorSelector::slotChangePalette(KoColorSet *set)
+void KisDlgInternalColorSelector::slotChangePalette(KoColorSetSP set)
 {
     if (!set) {
         return;

@@ -60,7 +60,7 @@
 #include "kis_painter.h"
 #include "kis_guides_config.h"
 #include "kis_grid_config.h"
-#include "kis_popup_button.h"
+#include "KisPopupButton.h"
 #include <kis_iterator_ng.h>
 #include "kis_async_action_feedback.h"
 #include "KisReferenceImagesLayer.h"
@@ -178,7 +178,7 @@ QStringList KisImportExportManager::supportedMimeTypes(Direction direction)
                 }
             }
             qDeleteAll(list);
-            m_importMimeTypes = mimeTypes.toList();
+            m_importMimeTypes = QList<QString>(mimeTypes.begin(), mimeTypes.end());
         }
         return m_importMimeTypes;
     }
@@ -193,7 +193,7 @@ QStringList KisImportExportManager::supportedMimeTypes(Direction direction)
                 }
             }
             qDeleteAll(list);
-            m_exportMimeTypes = mimeTypes.toList();
+            m_exportMimeTypes = QList<QString>(mimeTypes.begin(), mimeTypes.end());
         }
         return m_exportMimeTypes;
     }

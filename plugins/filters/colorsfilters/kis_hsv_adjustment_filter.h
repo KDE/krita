@@ -51,7 +51,7 @@ public:
         return KoID("hsvadjustment", i18n("HSV/HSL Adjustment"));
     }
 
-    KisFilterConfigurationSP defaultConfiguration() const override;
+    KisFilterConfigurationSP defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const override;
 
 };
 

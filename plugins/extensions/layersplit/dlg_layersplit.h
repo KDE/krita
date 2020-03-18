@@ -21,7 +21,7 @@
 
 #include <KoDialog.h>
 #include <KoColorSet.h>
-#include <KisPaletteListWidget.h>
+#include <KisPaletteChooser.h>
 #include <kis_types.h>
 
 #include "wdg_layersplit.h"
@@ -47,19 +47,22 @@ public:
     bool sortLayers() const;
     bool disregardOpacity() const;
     int fuzziness() const;
-    KoColorSet* palette() const;
-    bool modeToMask;
+    KoColorSetSP palette() const;
 
 private Q_SLOTS:
 
     void slotApplyClicked();
-    void slotSetPalette(KoColorSet *pal);
+    void slotSetPalette(KoColorSetSP pal);
     void slotChangeMode(int);
 
 private:
+
+    friend class LayerSplit;
+    bool m_modeToMask;
+
     WdgLayerSplit *m_page {0};
-    KisPaletteListWidget *m_colorSetChooser {0};
-    KoColorSet *m_palette {0};
+    KisPaletteChooser *m_colorSetChooser {0};
+    KoColorSetSP m_palette {0};
 };
 
 #endif // DLG_LAYERSPLIT

@@ -111,7 +111,7 @@ void benchmarkBrush(const QString &presetName)
 
 void FreehandStrokeBenchmark::initTestCase()
 {
-    KoResourcePaths::addResourceType("kis_brushes", "data", FILES_DATA_DIR);
+    KoResourcePaths::addResourceType(ResourceType::Brushes, "data", FILES_DATA_DIR);
 }
 
 void FreehandStrokeBenchmark::testDefaultTip()

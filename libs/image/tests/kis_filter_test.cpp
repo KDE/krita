@@ -26,6 +26,7 @@
 #include "filter/kis_filter.h"
 #include "testutil.h"
 #include "kis_pixel_selection.h"
+#include <KisGlobalResourcesInterface.h>
 
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
@@ -71,7 +72,7 @@ void KisFilterTest::testWithProgressUpdater()
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
 
-    KisFilterConfigurationSP  kfc = f->defaultConfiguration();
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(kfc);
 
     f->process(dev, QRect(QPoint(0,0), qimage.size()), kfc, updater);
@@ -97,7 +98,7 @@ void KisFilterTest::testSingleThreaded()
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
 
-    KisFilterConfigurationSP  kfc = f->defaultConfiguration();
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(kfc);
 
     f->process(dev, QRect(QPoint(0,0), qimage.size()), kfc);
@@ -126,7 +127,7 @@ void KisFilterTest::testDifferentSrcAndDst()
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
 
-    KisFilterConfigurationSP  kfc = f->defaultConfiguration();
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(kfc);
 
     f->process(src, dst, sel, QRect(QPoint(0,0), qimage.size()), kfc);
@@ -167,7 +168,7 @@ void KisFilterTest::testOldDataApiAfterCopy()
 
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
-    KisFilterConfigurationSP  kfc = f->defaultConfiguration();
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(kfc);
 
     /**
@@ -215,7 +216,7 @@ void KisFilterTest::testBlurFilterApplicationRect()
 
     KisFilterSP f = KisFilterRegistry::instance()->value("blur");
     Q_ASSERT(f);
-    KisFilterConfigurationSP  kfc = f->defaultConfiguration();
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(kfc);
 
     f->process(src1, dst1, 0, filterRect, kfc);

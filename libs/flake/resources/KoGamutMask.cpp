@@ -83,7 +83,6 @@ void KoGamutMaskShape::paintStroke(QPainter &painter)
 struct KoGamutMask::Private {
     QString name;
     QString title;
-    QString description;
     QByteArray data;
     QVector<KoGamutMaskShape*> maskShapes;
     QVector<KoGamutMaskShape*> previewShapes;
@@ -108,25 +107,30 @@ KoGamutMask::KoGamutMask()
 }
 
 KoGamutMask::KoGamutMask(KoGamutMask* rhs)
-    : QObject(0)
-    , KoResource(QString())
-    , d(new Private)
+    : KoGamutMask(*rhs)
 {
-    setFilename(rhs->filename());
-    setTitle(rhs->title());
-    setDescription(rhs->description());
-    d->maskSize = rhs->d->maskSize;
-
-    QList<KoShape*> newShapes;
-    for(KoShape* sh: rhs->koShapes()) {
-        newShapes.append(sh->cloneShape());
-    }
-
-    setMaskShapes(newShapes);
-
-    setValid(true);
 }
 
+KoGamutMask::KoGamutMask(const KoGamutMask &rhs)
+    : QObject(0)
+    , KoResource(rhs)
+    , d(new Private)
+{
+    setTitle(rhs.title());
+    setDescription(rhs.description());
+    d->maskSize = rhs.d->maskSize;
+
+    QList<KoShape*> newShapes;
+    for(KoShape* sh: rhs.koShapes()) {
+        newShapes.append(sh->cloneShape());
+    }
+    setMaskShapes(newShapes);
+}
+
+KoResourceSP KoGamutMask::clone() const
+{
+    return KoResourceSP(new KoGamutMask(*this));
+}
 
 KoGamutMask::~KoGamutMask()
 {
@@ -213,21 +217,10 @@ QTransform KoGamutMask::viewToMaskTransform(quint8 viewSize)
     return transform;
 }
 
-bool KoGamutMask::load()
+bool KoGamutMask::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
-    QFile file(filename());
-    if (file.size() == 0) return false;
-    if (!file.open(QIODevice::ReadOnly)) {
-        warnFlake << "Can't open file " << filename();
-        return false;
-    }
-    bool res = loadFromDevice(&file);
-    file.close();
-    return res;
-}
+    Q_UNUSED(resourcesInterface);
 
-bool KoGamutMask::loadFromDevice(QIODevice *dev)
-{
     if (!dev->isOpen()) dev->open(QIODevice::ReadOnly);
 
     d->data = dev->readAll();
@@ -294,7 +287,7 @@ bool KoGamutMask::loadFromDevice(QIODevice *dev)
 
     d->title = parser.documentTitle();
     setName(d->title);
-    d->description = parser.documentDescription();
+    setDescription(parser.documentDescription());
 
     setMaskShapes(shapes);
 
@@ -319,18 +312,6 @@ bool KoGamutMask::loadFromDevice(QIODevice *dev)
 void KoGamutMask::setMaskShapes(QList<KoShape*> shapes)
 {
     setMaskShapesToVector(shapes, d->maskShapes);
-}
-
-bool KoGamutMask::save()
-{
-    QFile file(filename());
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-        return false;
-    }
-    saveToDevice(&file);
-    file.close();
-
-    return true;
 }
 
 QList<KoShape*> KoGamutMask::koShapes() const
@@ -361,7 +342,7 @@ bool KoGamutMask::saveToDevice(QIODevice *dev) const
 
     SvgWriter writer(shapes);
     writer.setDocumentTitle(d->title);
-    writer.setDocumentDescription(d->description);
+    writer.setDocumentDescription(description());
 
     writer.save(storeDev, d->maskSize);
 
@@ -378,10 +359,10 @@ bool KoGamutMask::saveToDevice(QIODevice *dev) const
     image().save(&previewDev, "PNG");
     if (!store->close()) { return false; }
 
-    return store->finalize();
+    return store->finalize() && KoResource::saveToDevice(dev);
 }
 
-QString KoGamutMask::title()
+QString KoGamutMask::title() const
 {
     return d->title;
 }
@@ -392,14 +373,20 @@ void KoGamutMask::setTitle(QString title)
     setName(title);
 }
 
-QString KoGamutMask::description()
+QString KoGamutMask::description() const
 {
-    return d->description;
+    QMap<QString, QVariant> m = metadata();
+    return m["description"].toString();
 }
 
 void KoGamutMask::setDescription(QString description)
 {
-    d->description = description;
+    addMetaData("description", description);
+}
+
+QString KoGamutMask::defaultFileExtension() const
+{
+    return ".kgm";
 }
 
 int KoGamutMask::rotation()

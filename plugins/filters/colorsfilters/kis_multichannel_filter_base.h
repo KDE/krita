@@ -58,7 +58,8 @@ protected:
 class KisMultiChannelFilterConfiguration : public KisColorTransformationConfiguration
 {
 public:
-    KisMultiChannelFilterConfiguration(int channelCount, const QString & name, qint32 version);
+    KisMultiChannelFilterConfiguration(int channelCount, const QString & name, qint32 version, KisResourcesInterfaceSP resourcesInterface);
+    KisMultiChannelFilterConfiguration(const KisMultiChannelFilterConfiguration &rhs);
     ~KisMultiChannelFilterConfiguration() override;
 
     using KisFilterConfiguration::fromXML;

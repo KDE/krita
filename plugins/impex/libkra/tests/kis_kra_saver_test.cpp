@@ -48,6 +48,7 @@
 #include "kis_keyframe_channel.h"
 #include "kis_image_animation_interface.h"
 #include "kis_layer_properties_icons.h"
+#include <KisGlobalResourcesInterface.h>
 
 #include "kis_transform_mask_params_interface.h"
 
@@ -61,7 +62,7 @@ const QString KraMimetype = "application/x-krita";
 
 void KisKraSaverTest::initTestCase()
 {
-    KoResourcePaths::addResourceDir("ko_patterns", QString(SYSTEM_RESOURCES_DATA_DIR) + "/patterns");
+    KoResourcePaths::addResourceDir(ResourceType::Patterns, QString(SYSTEM_RESOURCES_DATA_DIR) + "/patterns");
 
     KisFilterRegistry::instance();
     KisGeneratorRegistry::instance();
@@ -153,7 +154,7 @@ void testRoundTripFillLayerImpl(const QString &testName, KisFilterConfigurationS
     doc->documentInfo()->setAboutInfo("title", p.image->objectName());
 
     KisSelectionSP selection;
-    KisGeneratorLayerSP glayer = new KisGeneratorLayer(p.image, "glayer", config, selection);
+    KisGeneratorLayerSP glayer = new KisGeneratorLayer(p.image, "glayer", config->cloneWithResourcesSnapshot(), selection);
 
     p.image->addNode(glayer, p.image->root(), KisNodeSP());
     glayer->setDirty();
@@ -180,7 +181,7 @@ void KisKraSaverTest::testRoundTripFillLayerColor()
     Q_ASSERT(generator);
 
     // warning: we pass null paint device to the default constructed value
-    KisFilterConfigurationSP config = generator->defaultConfiguration();
+    KisFilterConfigurationSP config = generator->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(config);
 
     QVariant v;
@@ -196,7 +197,7 @@ void KisKraSaverTest::testRoundTripFillLayerPattern()
     QVERIFY(generator);
 
     // warning: we pass null paint device to the default constructed value
-    KisFilterConfigurationSP config = generator->defaultConfiguration();
+    KisFilterConfigurationSP config = generator->defaultConfiguration(KisGlobalResourcesInterface::instance());
     QVERIFY(config);
 
     QVariant v;
@@ -240,15 +241,15 @@ void KisKraSaverTest::testRoundTripLayerStyles()
 
     style->dropShadow()->setAngle(-90);
     style->dropShadow()->setUseGlobalLight(false);
-    layer1->setLayerStyle(style->clone());
+    layer1->setLayerStyle(style->clone().dynamicCast<KisPSDLayerStyle>());
 
     style->dropShadow()->setAngle(180);
     style->dropShadow()->setUseGlobalLight(true);
-    layer2->setLayerStyle(style->clone());
+    layer2->setLayerStyle(style->clone().dynamicCast<KisPSDLayerStyle>());
 
     style->dropShadow()->setAngle(90);
     style->dropShadow()->setUseGlobalLight(false);
-    layer3->setLayerStyle(style->clone());
+    layer3->setLayerStyle(style->clone().dynamicCast<KisPSDLayerStyle>());
 
     image->initialRefreshGraph();
     chk.checkImage(image, "00_initial_layers");

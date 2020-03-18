@@ -19,7 +19,7 @@
 #include "kis_paint_device_test.h"
 #include <QTest>
 
-#include <QTime>
+#include <QElapsedTimer>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
@@ -588,7 +588,7 @@ void KisPaintDeviceTest::testBltPerformance()
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->fill(0, 0, 640, 441, KoColor(Qt::white, cs).data());
 
-    QTime t;
+    QElapsedTimer t;
     t.start();
 
     int x;

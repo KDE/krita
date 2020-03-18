@@ -1,0 +1,33 @@
+/**
+  \mainpage Resources
+
+  The Resources library provides cached access to resources. Resources are things
+  like brush presets, brush tips or gradients. The following components play an
+  important role in the library:
+
+  - KisResourceModel: the public entry point to the library. This is a QAbstractItemModel
+    and can be used to represent resources in the user interface without loading the
+    actual resource until it is needed. KisResourceModel is available through KisResourceModelProvider.
+
+    There is only one instance of a KisResourceModel for a given resource type, and KisResourceModel
+    can only be used from the gui thread. Accessing the data() method will in general not load the
+    actual resource.
+
+  - KisResourceLocator: KisResourceLocator should not be used outside of the resources library.
+    Its task is to load the resources from the resource storages: resource storages are the
+    resource folder, bundles, ASL or ABR files that contain a collection of resources. Once a
+    resource is loaded, it's cached. Loading resources is handled through the KisResourceLoader
+    classes, while finding resources in the storages is handled through the KisStoragePlugin
+    implementations.
+
+    All resources are captured in a QSharedPointer and should not be used naked.
+
+    KisResourceLocator is also repsonsible for initializing the cache database.
+
+  - KisResourceCacheDB: this class creates the sqlite database and handles synchronizing resources
+    with he contents of storages.
+
+ */
+
+// DOXYGEN_SET_PROJECT_NAME = KritaResources
+// DOXYGEN_SET_IGNORE_PREFIX = Kis Ko K

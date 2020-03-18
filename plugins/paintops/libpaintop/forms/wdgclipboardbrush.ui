@@ -82,7 +82,7 @@
         <widget class="QLineEdit" name="nameEdit"/>
        </item>
        <item row="1" column="1">
-        <widget class="KisSpacingSelectionWidget" name="spacingWidget"/>
+        <widget class="KisSpacingSelectionWidget" name="spacingWidget" native="true"/>
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="spacingLbl">
@@ -153,7 +153,7 @@
           <enum>Qt::Horizontal</enum>
          </property>
          <property name="standardButtons">
-          <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+          <set>QDialogButtonBox::Cancel|QDialogButtonBox::Save</set>
          </property>
         </widget>
        </item>

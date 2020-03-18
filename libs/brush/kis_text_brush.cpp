@@ -52,10 +52,10 @@ public:
     {
         m_brushesMap.clear();
 
-        QMapIterator<QChar, KisGbrBrush*> iter(rhs.m_brushesMap);
+        QMapIterator<QChar, KisGbrBrushSP> iter(rhs.m_brushesMap);
         while (iter.hasNext()) {
             iter.next();
-            KisGbrBrush *brush = new KisGbrBrush(*iter.value());
+            KisGbrBrushSP brush(new KisGbrBrush(*iter.value()));
             m_brushesMap.insert(iter.key(), brush);
             KisBrushesPipe<KisGbrBrush>::addBrush(brush);
         }
@@ -76,7 +76,7 @@ public:
             if (m_brushesMap.contains(letter)) continue;
 
             QImage image = renderChar(letter, font);
-            KisGbrBrush *brush = new KisGbrBrush(image, letter);
+            KisGbrBrushSP brush(new KisGbrBrush(image, letter));
             brush->setSpacing(0.1); // support for letter spacing?
             brush->makeMaskImage();
 
@@ -123,7 +123,7 @@ public:
         KisBrushesPipe<KisGbrBrush>::clear();
     }
 
-    KisGbrBrush* firstBrush() const {
+    KisGbrBrushSP firstBrush() const {
         Q_ASSERT(m_text.size() > 0);
         Q_ASSERT(m_brushesMap.size() > 0);
         return m_brushesMap.value(m_text.at(0));
@@ -172,7 +172,7 @@ private:
     }
 
 private:
-    QMap<QChar, KisGbrBrush*> m_brushesMap;
+    QMap<QChar, KisGbrBrushSP> m_brushesMap;
     QString m_text;
     int m_charIndex;
     int m_currentBrushIndex;
@@ -186,7 +186,7 @@ KisTextBrush::KisTextBrush()
 }
 
 KisTextBrush::KisTextBrush(const KisTextBrush &rhs)
-    : KisScalingSizeBrush(rhs),
+    : KoEphemeralResource<KisScalingSizeBrush>(rhs),
       m_font(rhs.m_font),
       m_text(rhs.m_text),
       m_brushesPipe(new KisTextBrushesPipe(*rhs.m_brushesPipe))
@@ -197,6 +197,12 @@ KisTextBrush::~KisTextBrush()
 {
     delete m_brushesPipe;
 }
+
+KoResourceSP KisTextBrush::clone() const
+{
+    return KisBrushSP(new KisTextBrush(*this));
+}
+
 
 void KisTextBrush::setPipeMode(bool pipe)
 {
@@ -333,7 +339,3 @@ void KisTextBrush::setSpacing(double _spacing)
     m_brushesPipe->setSpacing(_spacing);
 }
 
-KisBrush* KisTextBrush::clone() const
-{
-    return new KisTextBrush(*this);
-}

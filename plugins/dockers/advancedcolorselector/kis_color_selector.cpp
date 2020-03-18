@@ -158,7 +158,7 @@ void KisColorSelector::updateSettings()
         bool gamutMaskActive = m_canvas->viewManager()->canvasResourceProvider()->gamutMaskActive();
 
         if (gamutMaskActive) {
-            KoGamutMask* currentMask = m_canvas->viewManager()->canvasResourceProvider()->currentGamutMask();
+            KoGamutMaskSP currentMask = m_canvas->viewManager()->canvasResourceProvider()->currentGamutMask();
             if (currentMask) {
                 slotGamutMaskSet(currentMask);
             }
@@ -168,7 +168,7 @@ void KisColorSelector::updateSettings()
     }
 }
 
-void KisColorSelector::slotGamutMaskSet(KoGamutMask *gamutMask)
+void KisColorSelector::slotGamutMaskSet(KoGamutMaskSP gamutMask)
 {
     m_mainComponent->setGamutMask(gamutMask);
     m_subComponent->setGamutMask(gamutMask);

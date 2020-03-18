@@ -27,7 +27,7 @@
 #include <QComboBox>
 #include <QPixmap>
 #include <QShowEvent>
-
+#include <QSharedPointer>
 
 #include <QTemporaryFile>
 
@@ -44,7 +44,8 @@
 #include "kis_paint_layer.h"
 
 KisCustomPattern::KisCustomPattern(QWidget *parent, const char* name, const QString& caption, KisViewManager* view)
-    : KisWdgCustomPattern(parent, name), m_view(view)
+    : KisWdgCustomPattern(parent, name)
+    , m_view(view)
 {
     Q_ASSERT(m_view);
     setWindowTitle(caption);
@@ -53,8 +54,7 @@ KisCustomPattern::KisCustomPattern(QWidget *parent, const char* name, const QStr
 
     preview->setScaledContents(true);
 
-    KoResourceServer<KoPattern>* rServer = KoResourceServerProvider::instance()->patternServer();
-    m_rServerAdapter = QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoPattern>(rServer));
+    m_rServer = KoResourceServerProvider::instance()->patternServer();
 
     connect(addButton, SIGNAL(pressed()), this, SLOT(slotAddPredefined()));
     connect(patternButton, SIGNAL(pressed()), this, SLOT(slotUsePattern()));
@@ -64,13 +64,12 @@ KisCustomPattern::KisCustomPattern(QWidget *parent, const char* name, const QStr
 
 KisCustomPattern::~KisCustomPattern()
 {
-    delete m_pattern;
+    m_pattern.clear();
 }
 
 void KisCustomPattern::slotUpdateCurrentPattern()
 {
-    delete m_pattern;
-    m_pattern = 0;
+    m_pattern.clear();
     if (m_view && m_view->image()) {
         createPattern();
         if (m_pattern) {
@@ -107,14 +106,15 @@ void KisCustomPattern::slotAddPredefined()
     // Save in the directory that is likely to be: ~/.kde/share/apps/krita/patterns
     // a unique file with this pattern name
     QString dir = KoResourceServerProvider::instance()->patternServer()->saveLocation();
-    QString extension;
 
     QString tempFileName;
+
+
     {
-        QTemporaryFile file(dir +  QLatin1String("/krita_XXXXXX") + QLatin1String(".pat") );
+        QTemporaryFile file(dir +  QLatin1String("/krita_XXXXXX") + m_pattern->defaultFileExtension() );
         file.setAutoRemove(false);
         file.open();
-        tempFileName = file.fileName();
+        tempFileName = file.fileName().split("/").last();
     }
 
     // Save it to that file
@@ -122,17 +122,14 @@ void KisCustomPattern::slotAddPredefined()
 
     // Add it to the pattern server, so that it automatically gets to the mediators, and
     // so to the other pattern choosers can pick it up, if they want to
-    m_rServerAdapter->addResource(m_pattern->clone());
+    m_rServer->addResource(m_pattern->clone().dynamicCast<KoPattern>());
 }
 
 void KisCustomPattern::slotUsePattern()
 {
     if (!m_pattern)
         return;
-    KoPattern* copy = m_pattern->clone();
-
-    Q_CHECK_PTR(copy);
-
+    KoPatternSP copy = m_pattern->clone().dynamicCast<KoPattern>();
     emit(activatedResource(copy));
 }
 
@@ -180,14 +177,14 @@ void KisCustomPattern::createPattern()
     QSize size = rc.size();
     if (size.width() > 1000 || size.height() > 1000) {
         lblWarning->setText(i18n("The current image is too big to create a pattern. "
-                                "The pattern will be scaled down."));
+                                 "The pattern will be scaled down."));
         size.scale(1000, 1000, Qt::KeepAspectRatio);
     }
 
     QString dir = KoResourceServerProvider::instance()->patternServer()->saveLocation();
-    m_pattern = new KoPattern(cache->createThumbnail(size.width(), size.height(), rc, /*oversample*/ 1,
-                                                    KoColorConversionTransformation::internalRenderingIntent(),
-                                                    KoColorConversionTransformation::internalConversionFlags()), name, dir);
+    m_pattern = KoPatternSP(new KoPattern(cache->createThumbnail(size.width(), size.height(), rc, /*oversample*/ 1,
+                                                                 KoColorConversionTransformation::internalRenderingIntent(),
+                                                                 KoColorConversionTransformation::internalConversionFlags()), name, dir));
 }
 
 

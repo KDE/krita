@@ -22,10 +22,9 @@
 
 #include <kpluginfactory.h>
 #include <KoUpdater.h>
-#include <KoResourceServerProvider.h>
-#include <KoResourceServer.h>
-#include <KoResourceServerAdapter.h>
-#include <KoResourceItemChooser.h>
+#include "kis_filter_configuration.h"
+#include "KisResourcesInterface.h"
+#include <KisResourceItemChooser.h>
 #include <KoColorSet.h>
 #include <KoPattern.h>
 #include <kis_properties_configuration.h>
@@ -39,12 +38,13 @@ KisDitherWidget::KisDitherWidget(QWidget* parent)
     QObject::connect(thresholdModeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KisDitherWidget::sigConfigurationItemChanged);
 
     patternIconWidget->setFixedSize(32, 32);
-    KoResourceServer<KoPattern>* patternServer = KoResourceServerProvider::instance()->patternServer();
-    QSharedPointer<KoAbstractResourceServerAdapter> patternAdapter(new KoResourceServerAdapter<KoPattern>(patternServer));
-    m_ditherPatternWidget = new KoResourceItemChooser(patternAdapter, this, false);
+    
+    // FIXME: the patterns are not rendered correctly in the dialog!
+    m_ditherPatternWidget = new KisResourceItemChooser(ResourceType::Patterns, false, this);
+
     patternIconWidget->setPopupWidget(m_ditherPatternWidget);
-    QObject::connect(m_ditherPatternWidget, &KoResourceItemChooser::resourceSelected, patternIconWidget, &KisIconWidget::setResource);
-    QObject::connect(m_ditherPatternWidget, &KoResourceItemChooser::resourceSelected, this, &KisDitherWidget::sigConfigurationItemChanged);
+    QObject::connect(m_ditherPatternWidget, &KisResourceItemChooser::resourceSelected, patternIconWidget, &KisIconWidget::setResource);
+    QObject::connect(m_ditherPatternWidget, &KisResourceItemChooser::resourceSelected, this, &KisDitherWidget::sigConfigurationItemChanged);
 
     QObject::connect(patternValueModeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KisDitherWidget::sigConfigurationItemChanged);
 
@@ -61,10 +61,13 @@ KisDitherWidget::KisDitherWidget(QWidget* parent)
     QObject::connect(spreadSpinBox, &KisDoubleSliderSpinBox::valueChanged, this, &KisDitherWidget::sigConfigurationItemChanged);
 }
 
-void KisDitherWidget::setConfiguration(const KisPropertiesConfiguration &config, const QString &prefix)
+void KisDitherWidget::setConfiguration(const KisFilterConfiguration &config, const QString &prefix)
 {
     thresholdModeComboBox->setCurrentIndex(config.getInt(prefix + "thresholdMode"));
-    KoPattern* pattern = KoResourceServerProvider::instance()->patternServer()->resourceByName(config.getString(prefix + "pattern"));
+
+    auto source = config.resourcesInterface()->source<KoPattern>(ResourceType::Patterns);
+    KoPatternSP pattern = source.resourceForName(config.getString(prefix + "pattern"));
+
     if (pattern) m_ditherPatternWidget->setCurrentResource(pattern);
     patternValueModeComboBox->setCurrentIndex(config.getInt(prefix + "patternValueMode"));
     noiseSeedLineEdit->setText(QString::number(config.getInt(prefix + "noiseSeed")));
@@ -87,4 +90,17 @@ void KisDitherWidget::factoryConfiguration(KisPropertiesConfiguration &config, c
     config.setProperty(prefix + "patternValueMode", KisDitherUtil::PatternValueMode::Auto);
     config.setProperty(prefix + "noiseSeed", rand());
     config.setProperty(prefix + "spread", 1.0);
+}
+
+QList<KoResourceSP> KisDitherWidget::prepareLinkedResources(const KisFilterConfiguration &config, const QString &prefix, KisResourcesInterfaceSP resourcesInterface)
+{
+    auto source = resourcesInterface->source<KoPattern>(ResourceType::Patterns);
+    KoPatternSP pattern = source.resourceForName(config.getString(prefix + "pattern"));
+
+    QList<KoResourceSP> resources;
+    if (pattern) {
+        resources << pattern;
+    }
+
+    return resources;
 }

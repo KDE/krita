@@ -112,7 +112,7 @@ KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter,
         [baseBrush, settings, painter] () {
             KisDabCacheUtils::DabRenderingResources *resources =
                 new KisBrushOpResources(settings, painter);
-            resources->brush = baseBrush->clone();
+            resources->brush = baseBrush->clone().dynamicCast<KisBrush>();
 
             return resources;
         };

@@ -24,14 +24,18 @@
 #include <QQueue>
 #include <QList>
 #include "KoResourceServerObserver.h"
+#include <KisTag.h>
+#include "KisTagFilterResourceProxyModel.h"
+#include <KisTagModelProvider.h>
 
 #include <KoColor.h>
+#include <KoResource.h>
 
 class QString;
 class KisPaintopBox;
 class KisPaintOpPreset;
 
-class KisFavoriteResourceManager : public QObject, public KoResourceServerObserver<KisPaintOpPreset, SharedPointerStoragePolicy<KisPaintOpPresetSP> >
+class KisFavoriteResourceManager : public QObject, public KoResourceServerObserver<KisPaintOpPreset>
 {
     Q_OBJECT
 
@@ -43,32 +47,27 @@ public:
     void unsetResourceServer() override;
 
     QList<QImage> favoritePresetImages();
+    QVector<QString> favoritePresetNamesList();
 
-    void setCurrentTag(const QString& tagName);
+    void setCurrentTag(const KisTagSP tag);
 
     int numFavoritePresets();
 
-    QVector<KisPaintOpPresetSP> favoritePresetList();
+    void updateFavoritePresets();
 
     int recentColorsTotal();
     const KoColor& recentColorAt(int pos);
 
     // Reimplemented from KoResourceServerObserver
-    void removingResource(PointerType resource) override;
-    void resourceAdded(PointerType resource) override;
-    void resourceChanged(PointerType resource) override;
+    void removingResource(QSharedPointer<KisPaintOpPreset> resource) override;
+    void resourceAdded(QSharedPointer<KisPaintOpPreset> resource) override;
+    void resourceChanged(QSharedPointer<KisPaintOpPreset> resource) override;
     void syncTaggedResourceView() override;
     void syncTagAddition(const QString& tag) override;
     void syncTagRemoval(const QString& tag) override;
 
     //BgColor;
     KoColor bgColor() const;
-
-    /**
-     * Set palette to block updates, paintops won't be deleted when they are deleted from server
-     * Used when overwriting a resource
-     */
-    void setBlockUpdates(bool block);
 
 Q_SIGNALS:
 
@@ -105,31 +104,31 @@ public Q_SLOTS:
     void slotSetBGColor(const KoColor c);
 
 private Q_SLOTS:
-    void updateFavoritePresets();
+
     void configChanged();
 
 private:
 
-    // Loads the favorite preset list for the first time
     void init();
 
     KisPaintopBox *m_paintopBox;
 
-    QVector<KisPaintOpPresetSP> m_favoritePresetsList;
-
     class ColorDataList;
     ColorDataList *m_colorList;
-
-    bool m_blockUpdates;
 
     void saveFavoritePresets();
 
     KoColor m_bgColor;
-    QString m_currentTag;
+    KisTagSP m_currentTag;
 
     bool m_initialized;
 
     int m_maxPresets;
+
+    KisTagModel* m_tagModel;
+    KisTagFilterResourceProxyModel* m_resourcesProxyModel;
+    KisResourceModel* m_resourceModel;
+
 };
 
 #endif

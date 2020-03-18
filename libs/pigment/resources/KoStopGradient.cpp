@@ -48,6 +48,15 @@ KoStopGradient::~KoStopGradient()
 {
 }
 
+KoStopGradient::KoStopGradient(const KoStopGradient &rhs)
+    : KoAbstractGradient(rhs),
+      m_stops(rhs.m_stops),
+      m_start(rhs.m_start),
+      m_stop(rhs.m_stop),
+      m_focalPoint(rhs.m_focalPoint)
+{
+}
+
 bool KoStopGradient::operator==(const KoStopGradient &rhs) const
 {
     return
@@ -57,28 +66,18 @@ bool KoStopGradient::operator==(const KoStopGradient &rhs) const
         m_start == rhs.m_start &&
         m_stop == rhs.m_stop &&
         m_focalPoint == rhs.m_focalPoint &&
-        m_stops == rhs.m_stops;
+            m_stops == rhs.m_stops;
 }
 
-KoAbstractGradient* KoStopGradient::clone() const
+KoResourceSP KoStopGradient::clone() const
 {
-    return new KoStopGradient(*this);
+    return KoResourceSP(new KoStopGradient(*this));
 }
 
-bool KoStopGradient::load()
+bool KoStopGradient::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
-    QFile f(filename());
-    if (!f.open(QIODevice::ReadOnly)) {
-        warnPigment << "Can't open file " << filename();
-        return false;
-    }
-    bool res = loadFromDevice(&f);
-    f.close();
-    return res;
-}
+    Q_UNUSED(resourcesInterface);
 
-bool KoStopGradient::loadFromDevice(QIODevice *dev)
-{
     QString strExt;
     const int result = filename().lastIndexOf('.');
     if (result >= 0) {
@@ -93,18 +92,6 @@ bool KoStopGradient::loadFromDevice(QIODevice *dev)
     }
     updatePreview();
     return true;
-}
-
-bool KoStopGradient::save()
-{
-    QFile fileOut(filename());
-    if (! fileOut.open(QIODevice::WriteOnly))
-        return false;
-
-    bool retval = saveToDevice(&fileOut);
-    fileOut.close();
-
-    return retval;
 }
 
 QGradient* KoStopGradient::toQGradient() const
@@ -217,12 +204,12 @@ void KoStopGradient::colorAt(KoColor& dst, qreal t) const
     dst.fromKoColor(buffer);
 }
 
-KoStopGradient * KoStopGradient::fromQGradient(const QGradient * gradient)
+QSharedPointer<KoStopGradient> KoStopGradient::fromQGradient(const QGradient *gradient)
 {
     if (! gradient)
-        return 0;
+        return QSharedPointer<KoStopGradient>(0);
 
-    KoStopGradient * newGradient = new KoStopGradient(QString());
+    QSharedPointer<KoStopGradient> newGradient(new KoStopGradient(QString()));
     newGradient->setType(gradient->type());
     newGradient->setSpread(gradient->spread());
 
@@ -250,8 +237,7 @@ KoStopGradient * KoStopGradient::fromQGradient(const QGradient * gradient)
         break;
     }
     default:
-        delete newGradient;
-        return 0;
+        return QSharedPointer<KoStopGradient>(0);;
     }
 
     Q_FOREACH (const QGradientStop & stop, gradient->stops()) {

@@ -24,9 +24,9 @@
 #include <QLabel>
 
 #include <KoColor.h>
-#include <KoResourceServer.h>
 #include <resources/KoPattern.h>
-#include <KoResourceServerProvider.h>
+#include <KisGlobalResourcesInterface.h>
+#include <kis_generator_registry.h>
 
 #include <filter/kis_filter_configuration.h>
 #include <kis_pattern_chooser.h>
@@ -40,7 +40,7 @@ KisWdgPattern::KisWdgPattern(QWidget* parent)
     m_widget->lblPattern->setVisible(false);
     m_widget->lblColor->setVisible(false);
     m_widget->bnColor->setVisible(false);
-    connect(m_widget->patternChooser, SIGNAL(resourceSelected(KoResource*)), this, SIGNAL(sigConfigurationUpdated()));
+    connect(m_widget->patternChooser, SIGNAL(resourceSelected(KoResourceSP)), this, SIGNAL(sigConfigurationUpdated()));
 }
 
 KisWdgPattern::~KisWdgPattern()
@@ -51,17 +51,16 @@ KisWdgPattern::~KisWdgPattern()
 
 void KisWdgPattern::setConfiguration(const KisPropertiesConfigurationSP config)
 {
-    KoResourceServer<KoPattern> *rserver = KoResourceServerProvider::instance()->patternServer();
-    KoPattern *pattern = rserver->resourceByName(config->getString("pattern", "Grid01.pat"));
-    if (pattern) {
-       widget()->patternChooser->setCurrentPattern(pattern);
-    }
-
+    auto source = KisGlobalResourcesInterface::instance()->source<KoPattern>(ResourceType::Patterns);
+    KoPatternSP pattern = source.resourceForName(config->getString("pattern", "Grid01.pat"));
+    widget()->patternChooser->setCurrentPattern(pattern ? pattern : source.fallbackResource());
 }
 
 KisPropertiesConfigurationSP KisWdgPattern::configuration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("pattern", 1);
+    KisGeneratorSP generator = KisGeneratorRegistry::instance()->get("pattern");
+    KisFilterConfigurationSP config = generator->factoryConfiguration(KisGlobalResourcesInterface::instance());
+
     QVariant v;
     v.setValue(widget()->patternChooser->currentResource()->name());
     config->setProperty("pattern", v);

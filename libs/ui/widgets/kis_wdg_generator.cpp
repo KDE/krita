@@ -33,6 +33,7 @@
 #include <kis_config_widget.h>
 #include <filter/kis_filter_configuration.h>
 #include <KoColorSpaceRegistry.h>
+#include <KisGlobalResourcesInterface.h>
 
 #include "ui_wdggenerators.h"
 
@@ -132,7 +133,7 @@ KisFilterConfigurationSP KisWdgGenerator::configuration()
             return config;
         }
     } else {
-        return d->currentGenerator->defaultConfiguration();
+        return d->currentGenerator->defaultConfiguration(KisGlobalResourcesInterface::instance());
     }
     return 0;
 }
@@ -162,7 +163,7 @@ void KisWdgGenerator::slotGeneratorActivated(int row)
             connect( widget, SIGNAL(sigConfigurationUpdated()), this, SIGNAL(previewConfiguration()));
 
             widget->setView(d->view);
-            widget->setConfiguration(d->currentGenerator->defaultConfiguration());
+            widget->setConfiguration(d->currentGenerator->defaultConfiguration(KisGlobalResourcesInterface::instance()));
         }
     }
     d->widgetLayout->addWidget(d->centralWidget, 0 , 0);

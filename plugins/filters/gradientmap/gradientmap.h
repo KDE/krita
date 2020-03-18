@@ -39,21 +39,6 @@ public:
     }
 };
 
-
-class KritaGradientMapFilterConfiguration : public KisColorTransformationConfiguration
-{
-public:
-    KritaGradientMapFilterConfiguration();
-    ~KritaGradientMapFilterConfiguration() override;
-
-    virtual void setGradient(const KoResource* gradient);
-
-    virtual const KoResource* gradient() const;
-
-private:
-    KoResource const* m_gradient;
-};
-
 class KritaGradientMapConfigWidget : public KisConfigWidget
 {
     Q_OBJECT
@@ -67,7 +52,7 @@ public:
     WdgGradientMap *m_page;
     KoResourcePopupAction *m_gradientPopUp;
     KisSignalCompressor *m_gradientChangedCompressor;
-    KoStopGradient *m_activeGradient;
+    KoStopGradientSP m_activeGradient;
     void setView(KisViewManager *view) override;
 private Q_SLOTS:
     void setAbstractGradientToEditor();

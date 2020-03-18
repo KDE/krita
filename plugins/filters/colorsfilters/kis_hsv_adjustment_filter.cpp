@@ -25,6 +25,7 @@
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
 #include <KoColorProfile.h>
+#include <KisGlobalResourcesInterface.h>
 
 namespace {
 struct SliderConfig {
@@ -126,9 +127,9 @@ KoColorTransformation* KisHSVAdjustmentFilter::createTransformation(const KoColo
     return cs->createColorTransformation("hsv_adjustment", params);
 }
 
-KisFilterConfigurationSP KisHSVAdjustmentFilter::defaultConfiguration() const
+KisFilterConfigurationSP KisHSVAdjustmentFilter::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration();
+    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
     config->setProperty("h", 0);
     config->setProperty("s", 0);
     config->setProperty("v", 0);
@@ -172,7 +173,7 @@ KisHSVConfigWidget::~KisHSVConfigWidget()
 
 KisPropertiesConfigurationSP  KisHSVConfigWidget::configuration() const
 {
-    KisColorTransformationConfigurationSP c = new KisColorTransformationConfiguration(KisHSVAdjustmentFilter::id().id(), 0);
+    KisColorTransformationConfigurationSP c = new KisColorTransformationConfiguration(KisHSVAdjustmentFilter::id().id(), 0, KisGlobalResourcesInterface::instance());
     c->setProperty("h", m_page->hueSlider->value());
     c->setProperty("s", m_page->saturationSlider->value());
     c->setProperty("v", m_page->valueSlider->value());

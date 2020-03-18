@@ -36,12 +36,12 @@
 #include <KisSqueezedComboBox.h>
 #include <klocalizedstring.h>
 #include <KoResourceServerProvider.h>
+#include <KisResourceLocator.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoFileDialog.h>
 #include <kis_icon.h>
 #include <kis_config.h>
 #include <kis_node_manager.h>
-#include <kis_workspace_resource.h>
 #include <kis_canvas_resource_provider.h>
 #include <KisMainWindow.h>
 #include <KisViewManager.h>
@@ -55,7 +55,7 @@
 #include <KisPaletteModel.h>
 #include <KisPaletteDelegate.h>
 #include <kis_palette_view.h>
-#include <KisPaletteListWidget.h>
+#include <KisPaletteChooser.h>
 
 #include <KisPaletteEditor.h>
 #include <dialogs/KisDlgPaletteEditor.h>
@@ -66,7 +66,7 @@ PaletteDockerDock::PaletteDockerDock( )
     : QDockWidget(i18n("Palette"))
     , m_ui(new Ui_WdgPaletteDock())
     , m_model(new KisPaletteModel(this))
-    , m_paletteChooser(new KisPaletteListWidget(this))
+    , m_paletteChooser(new KisPaletteChooser(this))
     , m_view(0)
     , m_resourceProvider(0)
     , m_rServer(KoResourceServerProvider::instance()->paletteServer())
@@ -81,6 +81,8 @@ PaletteDockerDock::PaletteDockerDock( )
     QWidget *mainWidget = new QWidget(this);
     setWidget(mainWidget);
     m_ui->setupUi(mainWidget);
+
+    connect(KisResourceLocator::instance(), SIGNAL(storageRemoved()), this, SLOT(slotStoragesChanged()));
 
     m_ui->bnAdd->setDefaultAction(m_actAdd.data());
     m_ui->bnRemove->setDefaultAction(m_actRemove.data());
@@ -116,11 +118,11 @@ PaletteDockerDock::PaletteDockerDock( )
     connect(m_ui->paletteView, SIGNAL(pressed(QModelIndex)), SLOT(slotContextMenu(QModelIndex)));
 
     m_paletteChooser->setAllowModification(true);
-    connect(m_paletteChooser, SIGNAL(sigPaletteSelected(KoColorSet*)), SLOT(slotSetColorSet(KoColorSet*)));
+    connect(m_paletteChooser, SIGNAL(sigPaletteSelected(KoColorSetSP)), SLOT(slotSetColorSet(KoColorSetSP)));
     connect(m_paletteChooser, SIGNAL(sigAddPalette()), SLOT(slotAddPalette()));
     connect(m_paletteChooser, SIGNAL(sigImportPalette()), SLOT(slotImportPalette()));
-    connect(m_paletteChooser, SIGNAL(sigRemovePalette(KoColorSet*)), SLOT(slotRemovePalette(KoColorSet*)));
-    connect(m_paletteChooser, SIGNAL(sigExportPalette(KoColorSet*)), SLOT(slotExportPalette(KoColorSet*)));
+    connect(m_paletteChooser, SIGNAL(sigRemovePalette(KoColorSetSP)), SLOT(slotRemovePalette(KoColorSetSP)));
+    connect(m_paletteChooser, SIGNAL(sigExportPalette(KoColorSetSP)), SLOT(slotExportPalette(KoColorSetSP)));
 
     m_ui->bnColorSets->setIcon(KisIconUtils::loadIcon("hi16-palette_library"));
     m_ui->bnColorSets->setToolTip(i18n("Choose palette"));
@@ -128,7 +130,7 @@ PaletteDockerDock::PaletteDockerDock( )
 
     KisConfig cfg(true);
     QString defaultPaletteName = cfg.defaultPalette();
-    KoColorSet* defaultPalette = m_rServer->resourceByName(defaultPaletteName);
+    KoColorSetSP defaultPalette = m_rServer->resourceByName(defaultPaletteName);
     if (defaultPalette) {
         slotSetColorSet(defaultPalette);
     } else {
@@ -147,10 +149,10 @@ void PaletteDockerDock::setViewManager(KisViewManager* kisview)
 {
     m_view = kisview;
     m_resourceProvider = kisview->canvasResourceProvider();
-    connect(m_resourceProvider, SIGNAL(sigSavingWorkspace(KisWorkspaceResource*)),
-            SLOT(saveToWorkspace(KisWorkspaceResource*)));
-    connect(m_resourceProvider, SIGNAL(sigLoadingWorkspace(KisWorkspaceResource*)),
-            SLOT(loadFromWorkspace(KisWorkspaceResource*)));
+    connect(m_resourceProvider, SIGNAL(sigSavingWorkspace(KisWorkspaceResourceSP)),
+            SLOT(saveToWorkspace(KisWorkspaceResourceSP)));
+    connect(m_resourceProvider, SIGNAL(sigLoadingWorkspace(KisWorkspaceResourceSP)),
+            SLOT(loadFromWorkspace(KisWorkspaceResourceSP)));
     connect(m_resourceProvider, SIGNAL(sigFGColorChanged(KoColor)),
             this, SLOT(slotFGColorResourceChanged(KoColor)));
     kisview->nodeManager()->disconnect(m_model);
@@ -168,7 +170,7 @@ void PaletteDockerDock::slotAddPalette()
     m_paletteEditor->addPalette();
 }
 
-void PaletteDockerDock::slotRemovePalette(KoColorSet *cs)
+void PaletteDockerDock::slotRemovePalette(KoColorSetSP cs)
 {
     m_paletteEditor->removePalette(cs);
 }
@@ -178,20 +180,17 @@ void PaletteDockerDock::slotImportPalette()
     m_paletteEditor->importPalette();
 }
 
-void PaletteDockerDock::slotExportPalette(KoColorSet *palette)
+void PaletteDockerDock::slotExportPalette(KoColorSetSP palette)
 {
     KoFileDialog dialog(this, KoFileDialog::SaveFile, "Save Palette");
     dialog.setDefaultDir(palette->filename());
     dialog.setMimeTypeFilters(QStringList() << "krita/x-colorset");
     QString newPath;
-    bool isStandAlone = palette->isGlobal();
     QString oriPath = palette->filename();
     if ((newPath = dialog.filename()).isEmpty()) { return; }
     palette->setFilename(newPath);
-    palette->setIsGlobal(true);
     palette->save();
     palette->setFilename(oriPath);
-    palette->setIsGlobal(isStandAlone);
 }
 
 void PaletteDockerDock::setCanvas(KoCanvasBase *canvas)
@@ -202,24 +201,9 @@ void PaletteDockerDock::setCanvas(KoCanvasBase *canvas)
         m_ui->paletteView->setDisplayRenderer(cv->displayColorConverter()->displayRendererInterface());
     }
 
-    if (m_activeDocument) {
-        m_connections.clear();
-        for (KoColorSet * &cs : m_activeDocument->paletteList()) {
-            KoColorSet *tmpAddr = cs;
-            cs = new KoColorSet(*cs);
-            m_rServer->removeResourceFromServer(tmpAddr);
-        }
-    }
-
     if (m_view && m_view->document()) {
         m_activeDocument = m_view->document();
         m_paletteEditor->setView(m_view);
-
-        for (KoColorSet *cs : m_activeDocument->paletteList()) {
-            m_rServer->addResource(cs);
-        }
-        m_connections.addConnection(m_activeDocument, &KisDocument::sigPaletteListChanged,
-                                    this, &PaletteDockerDock::slotUpdatePaletteList);
     }
 
     if (!m_currentColorSet) {
@@ -233,18 +217,12 @@ void PaletteDockerDock::unsetCanvas()
     m_ui->paletteView->setDisplayRenderer(0);
     m_paletteEditor->setView(0);
 
-    for (KoResource *r : m_rServer->resources()) {
-        KoColorSet *c = static_cast<KoColorSet*>(r);
-        if (!c->isGlobal()) {
-            m_rServer->removeResourceFromServer(c);
-        }
-    }
     if (!m_currentColorSet) {
         slotSetColorSet(0);
     }
 }
 
-void PaletteDockerDock::slotSetColorSet(KoColorSet* colorSet)
+void PaletteDockerDock::slotSetColorSet(KoColorSetSP colorSet)
 {
     if (colorSet && colorSet->isEditable()) {
         m_ui->bnAdd->setEnabled(true);
@@ -310,18 +288,18 @@ void PaletteDockerDock::setFGColorByPalette(const KisSwatch &entry)
     }
 }
 
-void PaletteDockerDock::saveToWorkspace(KisWorkspaceResource* workspace)
+void PaletteDockerDock::saveToWorkspace(KisWorkspaceResourceSP workspace)
 {
     if (!m_currentColorSet.isNull()) {
         workspace->setProperty("palette", m_currentColorSet->name());
     }
 }
 
-void PaletteDockerDock::loadFromWorkspace(KisWorkspaceResource* workspace)
+void PaletteDockerDock::loadFromWorkspace(KisWorkspaceResourceSP workspace)
 {
     if (workspace->hasProperty("palette")) {
         KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
-        KoColorSet* colorSet = rServer->resourceByName(workspace->getString("palette"));
+        KoColorSetSP colorSet = rServer->resourceByName(workspace->getString("palette"));
         if (colorSet) {
             slotSetColorSet(colorSet);
         }
@@ -332,6 +310,18 @@ void PaletteDockerDock::slotFGColorResourceChanged(const KoColor &color)
 {
     if (!m_colorSelfUpdate) {
         m_ui->paletteView->slotFGColorChanged(color);
+    }
+}
+
+void PaletteDockerDock::slotStoragesChanged()
+{
+    if (m_activeDocument.isNull()) {
+        slotSetColorSet(0);
+    }
+    if (m_currentColorSet) {
+        if (!m_rServer->resourceByFilename(m_currentColorSet->filename())) {
+            slotSetColorSet(0);
+        }
     }
 }
 
@@ -384,19 +374,4 @@ void PaletteDockerDock::slotNameListSelection(const KoColor &color)
     m_ui->paletteView->selectClosestColor(color);
     m_resourceProvider->setFGColor(color);
     m_colorSelfUpdate = false;
-}
-
-void PaletteDockerDock::slotUpdatePaletteList(const QList<KoColorSet *> &oldPaletteList, const QList<KoColorSet *> &newPaletteList)
-{
-    for (KoColorSet *cs : oldPaletteList) {
-        m_rServer->removeResourceFromServer(cs);
-    }
-
-    for (KoColorSet *cs : newPaletteList) {
-        m_rServer->addResource(cs);
-    }
-
-    if (!m_currentColorSet) {
-        slotSetColorSet(0);
-    }
 }

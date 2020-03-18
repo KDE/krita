@@ -110,12 +110,12 @@ void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const Ko
     }
 }
 
-void KisFillPainter::fillRect(const QRect &rc, const KoPattern *pattern, const QPoint &offset)
+void KisFillPainter::fillRect(const QRect &rc, const KoPatternSP pattern, const QPoint &offset)
 {
     fillRect(rc.x(), rc.y(), rc.width(), rc.height(), pattern, offset);
 }
 
-void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KoPattern * pattern, const QPoint &offset)
+void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KoPatternSP pattern, const QPoint &offset)
 {
     if (!pattern) return;
     if (!pattern->valid()) return;

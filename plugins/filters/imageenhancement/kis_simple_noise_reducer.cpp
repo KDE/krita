@@ -59,9 +59,9 @@ KisConfigWidget * KisSimpleNoiseReducer::createConfigurationWidget(QWidget* pare
     return new KisMultiIntegerFilterWidget(id().id(), parent, id().id(), param);
 }
 
-KisFilterConfigurationSP  KisSimpleNoiseReducer::defaultConfiguration() const
+KisFilterConfigurationSP  KisSimpleNoiseReducer::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration();
+    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
     config->setProperty("threshold", 15);
     config->setProperty("windowsize", 1);
     return config;
@@ -75,14 +75,14 @@ inline int ABS(int v)
 
 void KisSimpleNoiseReducer::processImpl(KisPaintDeviceSP device,
                                         const QRect& applyRect,
-                                        const KisFilterConfigurationSP _config,
+                                        const KisFilterConfigurationSP config,
                                         KoUpdater* progressUpdater
                                         ) const
 {
     QPoint srcTopLeft = applyRect.topLeft();
     Q_ASSERT(device);
 
-    KisFilterConfigurationSP config = _config ? _config : defaultConfiguration();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(config);
 
     const int threshold = config->getInt("threshold", 15);
     const int windowsize = config->getInt("windowsize", 1);

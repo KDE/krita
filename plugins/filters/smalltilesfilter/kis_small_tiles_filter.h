@@ -41,7 +41,7 @@ public:
         return KoID("smalltiles", i18n("Small Tiles"));
     }
 
-    KisFilterConfigurationSP defaultConfiguration() const override;
+    KisFilterConfigurationSP defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const override;
 
 public:
     KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool useForMasks) const override;

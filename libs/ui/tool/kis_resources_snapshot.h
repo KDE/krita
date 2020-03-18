@@ -78,7 +78,7 @@ public:
     const KoCompositeOp* compositeOp() const;
     QString compositeOpId() const;
 
-    KoPattern* currentPattern() const;
+    KoPatternSP currentPattern() const;
     KoColor currentFgColor() const;
     KoColor currentBgColor() const;
     KisPaintOpPresetSP currentPaintOpPreset() const;

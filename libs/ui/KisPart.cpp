@@ -44,7 +44,6 @@
 #include <kis_debug.h>
 #include <KoResourcePaths.h>
 #include <KoDialog.h>
-#include <kdesktopfile.h>
 #include <QMessageBox>
 #include <QMenu>
 
@@ -107,7 +106,7 @@ public:
     KisIdleWatcher idleWatcher;
     KisAnimationCachePopulator animationCachePopulator;
 
-    KisSessionResource *currentSession = nullptr;
+    KisSessionResourceSP currentSession;
     bool closingSession{false};
     QScopedPointer<KisSessionManagerDialog> sessionManager;
 
@@ -211,6 +210,12 @@ QList<QPointer<KisDocument> > KisPart::documents() const
 KisDocument *KisPart::createDocument() const
 {
     KisDocument *doc = new KisDocument();
+    return doc;
+}
+
+KisDocument *KisPart::createTemporaryDocument() const
+{
+    KisDocument *doc = new KisDocument(false);
     return doc;
 }
 
@@ -609,16 +614,21 @@ bool KisPart::restoreSession(const QString &sessionName)
 {
     if (sessionName.isNull()) return false;
 
-    KoResourceServer<KisSessionResource> * rserver = KisResourceServerProvider::instance()->sessionServer();
-    auto *session = rserver->resourceByName(sessionName);
+    KoResourceServer<KisSessionResource> *rserver = KisResourceServerProvider::instance()->sessionServer();
+    KisSessionResourceSP session = rserver->resourceByName(sessionName);
     if (!session || !session->valid()) return false;
 
-    session->restore();
+    return restoreSession(session);
+}
 
+bool KisPart::restoreSession(KisSessionResourceSP session)
+{
+    session->restore();
+    d->currentSession = session;
     return true;
 }
 
-void KisPart::setCurrentSession(KisSessionResource *session)
+void KisPart::setCurrentSession(KisSessionResourceSP session)
 {
     d->currentSession = session;
 }

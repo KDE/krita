@@ -25,7 +25,7 @@
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter_registry.h"
 #include "testutil.h"
-
+#include <KisGlobalResourcesInterface.h>
 
 void KisUnsharpMaskTest::testUnsharpWithTransparency()
 {
@@ -42,7 +42,7 @@ void KisUnsharpMaskTest::testUnsharpWithTransparency()
     KisFilterSP f = KisFilterRegistry::instance()->value("unsharp");
     Q_ASSERT(f);
 
-    KisFilterConfigurationSP  kfc = f->defaultConfiguration();
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(kfc);
 
     kfc->setProperty("halfSize", 3);

@@ -139,7 +139,7 @@ void KisSyncedAudioPlayback::stop()
 void KisSyncedAudioPlayback::slotOnError()
 {
 #ifdef HAVE_QT_MULTIMEDIA
-    emit error(m_d->player.media().canonicalUrl().toLocalFile(), m_d->player.errorString());
+    emit error(m_d->player.media().request().url().toLocalFile(), m_d->player.errorString());
 #endif
 }
 

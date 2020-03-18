@@ -23,6 +23,7 @@
 #include <kis_config_widget.h>
 #include <KisViewManager.h>
 #include <kis_filter_manager.h>
+#include <KisGlobalResourcesInterface.h>
 
 class FiltersModel::Private
 {
@@ -106,7 +107,7 @@ void FiltersModel::activateFilter(int index)
         }
         else
         {
-            d->view->filterManager()->apply(KisFilterConfigurationSP(d->filters[index]->defaultConfiguration()));
+            d->view->filterManager()->apply(KisFilterConfigurationSP(d->filters[index]->defaultConfiguration(KisGlobalResourcesInterface::instance())));
         }
         d->view->filterManager()->finish();
         emit filterActivated(index);
@@ -143,7 +144,7 @@ void FiltersModel::addFilter(KisFilterSP filter)
 
         }
         else {
-            d->configurations << KisFilterConfigurationSP(filter->defaultConfiguration());
+            d->configurations << KisFilterConfigurationSP(filter->defaultConfiguration(KisGlobalResourcesInterface::instance()));
         }
         endInsertRows();
     }
@@ -175,7 +176,7 @@ QObject* FiltersModel::configuration(int index)
         }
         // If we've not got one already, assign the default configuration to the cache
         else {
-            d->configurations[index] = KisFilterConfigurationSP(d->filters[index]->defaultConfiguration());
+            d->configurations[index] = KisFilterConfigurationSP(d->filters[index]->defaultConfiguration(KisGlobalResourcesInterface::instance()));
         }
     }
     QMap<QString, QVariant> props = d->configurations[index]->getProperties();

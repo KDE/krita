@@ -40,6 +40,9 @@
 #include "ui_wdgstylesselector.h"
 #include "ui_wdgTexture.h"
 
+
+#include <QSortFilterProxyModel>
+
 #include <kis_psd_layer_style.h>
 
 class QListWidgetItem;
@@ -210,8 +213,32 @@ private:
     KisCanvasResourceProvider *m_resourceProvider;
 };
 
+
+class KisResourceModel;
 class StylesSelector : public QWidget {
     Q_OBJECT
+
+protected:
+    class LocationProxyModel : public QSortFilterProxyModel
+    {
+    public:
+        LocationProxyModel(QObject* parent);
+
+        void setEnableFiltering(bool enableFiltering);
+        void setLocationToFilterBy(QString location);
+
+    private:
+        QString m_locationToFilter;
+        bool m_enableFiltering;
+
+
+        // QSortFilterProxyModel interface
+    protected:
+        bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const;
+
+    };
+
+
 public:
     StylesSelector(QWidget *parent);
 
@@ -221,16 +248,23 @@ public:
     void loadCollection(const QString &fileName);
 
 private Q_SLOTS:
+
+    void slotResourceModelReset();
+
     void loadStyles(const QString &name);
-    void selectStyle(QListWidgetItem *previous, QListWidgetItem* current);
+    void selectStyle(QModelIndex current);
 Q_SIGNALS:
     void styleSelected(KisPSDLayerStyleSP style);
 
 private:
     void refillCollections();
 
+
+
 private:
     Ui::WdgStylesSelector ui;
+    LocationProxyModel* m_locationsProxyModel;
+    KisResourceModel* m_resourceModel;
 };
 
 class KisDlgLayerStyle : public KoDialog

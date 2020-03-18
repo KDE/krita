@@ -19,6 +19,8 @@
 #include "freehand_stroke.h"
 
 #include <QElapsedTimer>
+#include <QThread>
+#include <QApplication>
 
 #include "kis_canvas_resource_provider.h"
 #include <brushengine/kis_paintop_preset.h>

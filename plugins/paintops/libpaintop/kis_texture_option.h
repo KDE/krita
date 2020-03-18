@@ -36,6 +36,7 @@ class KoPattern;
 class KoResource;
 class KisPropertiesConfiguration;
 class KisPaintopLodLimitations;
+class KisResourcesInterface;
 
 class PAINTOP_EXPORT KisTextureOption : public KisPaintOpOption
 {
@@ -53,7 +54,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
 
-    void resetGUI(KoResource*); /// called when a new pattern is selected
+    void resetGUI(KoResourceSP ); /// called when a new pattern is selected
 
 private:
     /// UI Widget that stores all the texture options
@@ -80,7 +81,8 @@ public:
      * @param info the paint information
      */
     void apply(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation & info);
-    void fillProperties(const KisPropertiesConfigurationSP setting);
+    void fillProperties(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface);
+    QList<KoResourceSP> prepareEmbeddedResources(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface);
 
 private:
 

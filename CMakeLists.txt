@@ -294,6 +294,7 @@ find_package(Qt5 ${MIN_QT_VERSION}
         Svg
         Test
         Concurrent
+        Sql
 )
 
 if (ANDROID)

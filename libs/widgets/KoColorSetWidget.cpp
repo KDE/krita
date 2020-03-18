@@ -31,7 +31,6 @@
 #include <QMenu>
 #include <QWidgetAction>
 #include <QDir>
-#include <QPointer>
 #include <QScrollArea>
 #include <QGroupBox>
 #include <QVBoxLayout>
@@ -44,7 +43,6 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
-#include <KoResourceServerAdapter.h>
 
 #include <kis_palette_view.h>
 #include <KisPaletteDelegate.h>
@@ -102,7 +100,7 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     d->paletteView->setPaletteModel(paletteModel);
     d->paletteView->setDisplayRenderer(d->displayRenderer);
 
-    d->paletteChooser = new KisPaletteListWidget(this);
+    d->paletteChooser = new KisPaletteChooser(this);
     d->paletteChooserButton = new KisPopupButton(this);
     d->paletteChooserButton->setPopupWidget(d->paletteChooser);
     d->paletteChooserButton->setIcon(KisIconUtils::loadIcon("hi16-palette_library"));
@@ -126,17 +124,14 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
 
     setLayout(d->mainLayout);
 
-    connect(d->paletteChooser, SIGNAL(sigPaletteSelected(KoColorSet*)),
-            SLOT(slotPaletteChoosen(KoColorSet*)));
-    connect(d->paletteView, SIGNAL(sigColorSelected(KoColor)),
-            SLOT(slotColorSelectedByPalette(KoColor)));
-    connect(d->colorNameCmb, SIGNAL(sigColorSelected(KoColor)),
-            SLOT(slotNameListSelection(KoColor)));
+    connect(d->paletteChooser, SIGNAL(sigPaletteSelected(KoColorSetSP)), SLOT(slotPaletteChoosen(KoColorSetSP)));
+    connect(d->paletteView, SIGNAL(sigColorSelected(KoColor)), SLOT(slotColorSelectedByPalette(KoColor)));
+    connect(d->colorNameCmb, SIGNAL(sigColorSelected(KoColor)), SLOT(slotNameListSelection(KoColor)));
 
     d->rServer = KoResourceServerProvider::instance()->paletteServer();
-    QPointer<KoColorSet> defaultColorSet = d->rServer->resourceByName("Default");
-    if (!defaultColorSet && d->rServer->resources().count() > 0) {
-        defaultColorSet = d->rServer->resources().first();
+    KoColorSetSP defaultColorSet = d->rServer->resourceByName("Default");
+    if (!defaultColorSet && d->rServer->resourceCount() > 0) {
+        defaultColorSet = d->rServer->firstResource();
     }
     setColorSet(defaultColorSet);
 }
@@ -146,16 +141,16 @@ KoColorSetWidget::~KoColorSetWidget()
     delete d;
 }
 
-void KoColorSetWidget::setColorSet(QPointer<KoColorSet> colorSet)
+void KoColorSetWidget::setColorSet(KoColorSetSP colorSet)
 {
     if (!colorSet) return;
     if (colorSet == d->colorSet) return;
 
-    d->paletteView->paletteModel()->setPalette(colorSet.data());
+    d->paletteView->paletteModel()->setPalette(colorSet);
     d->colorSet = colorSet;
 }
 
-KoColorSet* KoColorSetWidget::colorSet()
+KoColorSetSP KoColorSetWidget::colorSet()
 {
     return d->colorSet;
 }
@@ -202,7 +197,7 @@ void KoColorSetWidget::slotPatchTriggered(KoColorPatch *patch)
     }
 }
 
-void KoColorSetWidget::slotPaletteChoosen(KoColorSet *colorSet)
+void KoColorSetWidget::slotPaletteChoosen(KoColorSetSP colorSet)
 {
     d->colorSet = colorSet;
     d->paletteView->paletteModel()->setPalette(colorSet);

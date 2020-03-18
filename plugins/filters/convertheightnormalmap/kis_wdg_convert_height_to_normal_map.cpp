@@ -20,6 +20,7 @@
 #include <QComboBox>
 #include <klocalizedstring.h>
 #include <KoChannelInfo.h>
+#include <KisGlobalResourcesInterface.h>
 
 KisWdgConvertHeightToNormalMap::KisWdgConvertHeightToNormalMap(QWidget *parent, const KoColorSpace *cs) :
     KisConfigWidget(parent),
@@ -69,7 +70,7 @@ KisWdgConvertHeightToNormalMap::~KisWdgConvertHeightToNormalMap()
 
 KisPropertiesConfigurationSP KisWdgConvertHeightToNormalMap::configuration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("height to normal", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("height to normal", 1, KisGlobalResourcesInterface::instance());
     config->setProperty("horizRadius", ui->sldHorizontalRadius->value());
     config->setProperty("vertRadius", ui->sldVerticalRadius->value());
     config->setProperty("type", m_types.at(ui->cmbType->currentIndex()));

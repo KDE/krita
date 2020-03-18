@@ -28,6 +28,7 @@
 #include <KoColorSpaceRegistry.h>
 #include "kis_transaction.h"
 #include <sdk/tests/testing_timed_default_bounds.h>
+#include <KisGlobalResourcesInterface.h>
 
 
 bool KisCrashFilterTest::applyFilter(const KoColorSpace * cs,  KisFilterSP f)
@@ -40,7 +41,7 @@ bool KisCrashFilterTest::applyFilter(const KoColorSpace * cs,  KisFilterSP f)
     dev->convertFromQImage(qimage, 0, 0, 0);
 
     // Get the predefined configuration from a file
-    KisFilterConfigurationSP  kfc = f->defaultConfiguration();
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
 
     QFile file(QString(FILES_DATA_DIR) + QDir::separator() + f->id() + ".cfg");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {

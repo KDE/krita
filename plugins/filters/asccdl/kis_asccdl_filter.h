@@ -43,7 +43,7 @@ public:
     KisConfigWidget *createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool useForMasks) const override;
     bool needsTransparentPixels(const KisFilterConfigurationSP config, const KoColorSpace *cs) const override;
 protected:
-    KisFilterConfigurationSP defaultConfiguration() const override;
+    KisFilterConfigurationSP defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const override;
 };
 
 class KisASCCDLTransformation : public KoColorTransformation

@@ -57,7 +57,7 @@ void logFailure(const QString & reason, const KoColorSpace * srcCs, const KoColo
 
 void KisCsConversionTest::testColorSpaceConversion()
 {
-    QTime t;
+    QElapsedTimer t;
     t.start();
 
     QList<const KoColorSpace*> colorSpaces = KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::OnlyDefaultProfile);

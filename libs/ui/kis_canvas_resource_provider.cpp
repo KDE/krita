@@ -125,20 +125,20 @@ void KisCanvasResourceProvider::setHDRGamma(float gamma)
 }
 
 
-KoPattern * KisCanvasResourceProvider::currentPattern() const
+KoPatternSP KisCanvasResourceProvider::currentPattern() const
 {
     if (m_resourceManager->hasResource(CurrentPattern)) {
-        return m_resourceManager->resource(CurrentPattern).value<KoPattern*>();
+        return m_resourceManager->resource(CurrentPattern).value<KoPatternSP>();
     }
     else {
         return 0;
     }
 }
 
-KoAbstractGradient* KisCanvasResourceProvider::currentGradient() const
+KoAbstractGradientSP KisCanvasResourceProvider::currentGradient() const
 {
     if (m_resourceManager->hasResource(CurrentGradient)) {
-        return m_resourceManager->resource(CurrentGradient).value<KoAbstractGradient*>();
+        return m_resourceManager->resource(CurrentGradient).value<KoAbstractGradientSP>();
     }
     else {
         return 0;
@@ -155,10 +155,10 @@ KisNodeSP KisCanvasResourceProvider::currentNode() const
     return m_view->activeNode();
 }
 
-KoGamutMask *KisCanvasResourceProvider::currentGamutMask() const
+KoGamutMaskSP KisCanvasResourceProvider::currentGamutMask() const
 {
     if (m_resourceManager->hasResource(CurrentGamutMask)) {
-        return m_resourceManager->resource(CurrentGamutMask).value<KoGamutMask*>();
+        return m_resourceManager->resource(CurrentGamutMask).value<KoGamutMaskSP>();
     }
     else {
         return nullptr;
@@ -210,21 +210,21 @@ void KisCanvasResourceProvider::setPreviousPaintOpPreset(const KisPaintOpPresetS
     m_resourceManager->setResource(PreviousPaintOpPreset, v);
 }
 
-void KisCanvasResourceProvider::slotPatternActivated(KoResource * res)
+void KisCanvasResourceProvider::slotPatternActivated(KoResourceSP res)
 {
-    KoPattern *pattern = dynamic_cast<KoPattern*>(res);
+    KoPatternSP pattern = res.dynamicCast<KoPattern>();
     QVariant v;
-    v.setValue<KoPattern*>(pattern);
+    v.setValue<KoPatternSP>(pattern);
     m_resourceManager->setResource(CurrentPattern, v);
     emit sigPatternChanged(pattern);
 }
 
-void KisCanvasResourceProvider::slotGradientActivated(KoResource *res)
+void KisCanvasResourceProvider::slotGradientActivated(KoResourceSP res)
 {
 
-    KoAbstractGradient * gradient = dynamic_cast<KoAbstractGradient*>(res);
+    KoAbstractGradientSP gradient = res.dynamicCast<KoAbstractGradient>();
     QVariant v;
-    v.setValue<KoAbstractGradient*>(gradient);
+    v.setValue<KoAbstractGradientSP>(gradient);
     m_resourceManager->setResource(CurrentGradient, v);
     emit sigGradientChanged(gradient);
 }
@@ -296,22 +296,26 @@ void KisCanvasResourceProvider::slotOnScreenResolutionChanged()
 
 void KisCanvasResourceProvider::slotCanvasResourceChanged(int key, const QVariant & res)
 {
-    if(key == KoCanvasResourceProvider::ForegroundColor || key == KoCanvasResourceProvider::BackgroundColor) {
-        KoAbstractGradient* resource = KoResourceServerProvider::instance()->gradientServer()->resources()[0];
-        KoStopGradient* stopGradient = dynamic_cast<KoStopGradient*>(resource);
-        if(stopGradient) {
-            QList<KoGradientStop> stops;
-            stops << KoGradientStop(0.0, fgColor()) << KoGradientStop(1.0,  KoColor(QColor(0, 0, 0, 0), fgColor().colorSpace()));
-            stopGradient->setStops(stops);
-            KoResourceServerProvider::instance()->gradientServer()->updateResource(resource);
+    if (key == KoCanvasResourceProvider::ForegroundColor || key == KoCanvasResourceProvider::BackgroundColor) {
+        KoAbstractGradientSP resource = KoResourceServerProvider::instance()->gradientServer()->resourceByFilename("Foreground to Background");
+        if (resource) {
+            KoStopGradientSP stopGradient = resource.dynamicCast<KoStopGradient>();
+            if (stopGradient) {
+                QList<KoGradientStop> stops;
+                stops << KoGradientStop(0.0, fgColor()) << KoGradientStop(1.0,  KoColor(QColor(0, 0, 0, 0), fgColor().colorSpace()));
+                stopGradient->setStops(stops);
+                KoResourceServerProvider::instance()->gradientServer()->updateResource(resource);
+            }
         }
-        resource = KoResourceServerProvider::instance()->gradientServer()->resources()[1];
-        stopGradient = dynamic_cast<KoStopGradient*>(resource);
-        if(stopGradient) {
-            QList<KoGradientStop> stops;
-            stops << KoGradientStop(0.0, fgColor()) << KoGradientStop(1.0, bgColor());
-            stopGradient->setStops(stops);
-            KoResourceServerProvider::instance()->gradientServer()->updateResource(resource);
+        resource = KoResourceServerProvider::instance()->gradientServer()->resourceByFilename("Foreground to Transparent");
+        if (resource){
+            KoStopGradientSP stopGradient = resource.dynamicCast<KoStopGradient>();
+            if (stopGradient) {
+                QList<KoGradientStop> stops;
+                stops << KoGradientStop(0.0, fgColor()) << KoGradientStop(1.0, bgColor());
+                stopGradient->setStops(stops);
+                KoResourceServerProvider::instance()->gradientServer()->updateResource(resource);
+            }
         }
     }
     switch (key) {
@@ -323,10 +327,10 @@ void KisCanvasResourceProvider::slotCanvasResourceChanged(int key, const QVarian
         emit sigBGColorChanged(res.value<KoColor>());
         break;
     case(CurrentPattern):
-        emit sigPatternChanged(static_cast<KoPattern *>(res.value<void *>()));
+        emit sigPatternChanged(res.value<KoPatternSP>());
         break;
     case(CurrentGradient):
-        emit sigGradientChanged(static_cast<KoAbstractGradient *>(res.value<void *>()));
+        emit sigGradientChanged(res.value<KoAbstractGradientSP>());
         break;
     case(CurrentKritaNode) :
         emit sigNodeChanged(currentNode());
@@ -371,10 +375,10 @@ void KisCanvasResourceProvider::slotPainting()
     }
 }
 
-void KisCanvasResourceProvider::slotGamutMaskActivated(KoGamutMask *mask)
+void KisCanvasResourceProvider::slotGamutMaskActivated(KoGamutMaskSP mask)
 {
     QVariant v;
-    v.setValue<KoGamutMask*>(mask);
+    v.setValue<KoGamutMaskSP>(mask);
     m_resourceManager->setResource(CurrentGamutMask, v);
 
     m_resourceManager->setResource(GamutMaskActive, QVariant::fromValue(true));
@@ -551,12 +555,12 @@ bool KisCanvasResourceProvider::disablePressure() const
     return m_resourceManager->resource(DisablePressure).toBool();
 }
 
-void KisCanvasResourceProvider::notifyLoadingWorkspace(KisWorkspaceResource* workspace)
+void KisCanvasResourceProvider::notifyLoadingWorkspace(KisWorkspaceResourceSP workspace)
 {
     emit sigLoadingWorkspace(workspace);
 }
 
-void KisCanvasResourceProvider::notifySavingWorkspace(KisWorkspaceResource* workspace)
+void KisCanvasResourceProvider::notifySavingWorkspace(KisWorkspaceResourceSP workspace)
 {
     emit sigSavingWorkspace(workspace);
 }

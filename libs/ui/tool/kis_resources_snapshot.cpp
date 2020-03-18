@@ -49,8 +49,8 @@ struct KisResourcesSnapshot::Private {
     KisDefaultBoundsBaseSP bounds;
     KoColor currentFgColor;
     KoColor currentBgColor;
-    KoPattern *currentPattern = 0;
-    KoAbstractGradient *currentGradient;
+    KoPatternSP currentPattern;
+    KoAbstractGradientSP currentGradient;
     KisPaintOpPresetSP currentPaintOpPreset;
     KisNodeSP currentNode;
     qreal currentExposure;
@@ -84,8 +84,8 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
     m_d->bounds = bounds;
     m_d->currentFgColor = resourceManager->resource(KoCanvasResourceProvider::ForegroundColor).value<KoColor>();
     m_d->currentBgColor = resourceManager->resource(KoCanvasResourceProvider::BackgroundColor).value<KoColor>();
-    m_d->currentPattern = resourceManager->resource(KisCanvasResourceProvider::CurrentPattern).value<KoPattern*>();
-    m_d->currentGradient = resourceManager->resource(KisCanvasResourceProvider::CurrentGradient).value<KoAbstractGradient*>();
+    m_d->currentPattern = resourceManager->resource(KisCanvasResourceProvider::CurrentPattern).value<KoPatternSP>();
+    m_d->currentGradient = resourceManager->resource(KisCanvasResourceProvider::CurrentGradient).value<KoAbstractGradientSP>();
 
     /**
      * We should deep-copy the preset, so that long-running actions
@@ -95,7 +95,7 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
      */
     KisPaintOpPresetSP p = resourceManager->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
     if (p) {
-        m_d->currentPaintOpPreset = resourceManager->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>()->clone();
+        m_d->currentPaintOpPreset = resourceManager->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>()->cloneWithResourcesSnapshot();
     }
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
@@ -103,8 +103,12 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
     m_d->currentExposure = resourceManager->resource(KisCanvasResourceProvider::HdrExposure).toDouble();
-    m_d->currentGenerator = resourceManager->resource(KisCanvasResourceProvider::CurrentGeneratorConfiguration).value<KisFilterConfiguration*>();
 
+
+    m_d->currentGenerator = resourceManager->resource(KisCanvasResourceProvider::CurrentGeneratorConfiguration).value<KisFilterConfiguration*>();
+    if (m_d->currentGenerator) {
+        m_d->currentGenerator = m_d->currentGenerator->cloneWithResourcesSnapshot();
+    }
 
     QPointF relativeAxesCenter(0.5, 0.5);
     if (m_d->image) {
@@ -343,7 +347,7 @@ QString KisResourcesSnapshot::compositeOpId() const
     return m_d->compositeOpId;
 }
 
-KoPattern* KisResourcesSnapshot::currentPattern() const
+KoPatternSP KisResourcesSnapshot::currentPattern() const
 {
     return m_d->currentPattern;
 }
@@ -415,5 +419,9 @@ void KisResourcesSnapshot::setSelectionOverride(KisSelectionSP selection)
 
 void KisResourcesSnapshot::setBrush(const KisPaintOpPresetSP &brush)
 {
-    m_d->currentPaintOpPreset = brush;
+    m_d->currentPaintOpPreset = brush->cloneWithResourcesSnapshot();
+
+#ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
+    KisPaintOpRegistry::instance()->preinitializePaintOpIfNeeded(m_d->currentPaintOpPreset);
+#endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 }

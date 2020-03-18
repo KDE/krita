@@ -59,17 +59,17 @@ Q_SIGNALS:
     /**
      * Emitted whenever a user selects the given preset.
      */
-    void presetSelected(Resource *resource);
+    void presetSelected(Resource resource);
     
     /**
      * Emitted whenever a user clicks on the given preset.
      */
-    void presetClicked(Resource *resource);
+    void presetClicked(Resource resource);
 
 private Q_SLOTS:
 
-    void slotResourceSelected(KoResource *resource);
-    void slotResourceClicked(KoResource *resource);
+    void slotResourceSelected(KoResourceSP resource);
+    void slotResourceClicked(KoResourceSP resource);
 };
 
 #endif // PRESETCHOOSER_H

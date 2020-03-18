@@ -118,8 +118,7 @@ KoColorSet::KoColorSet(const QString& filename)
 
 /// Create an copied palette
 KoColorSet::KoColorSet(const KoColorSet& rhs)
-    : QObject(0)
-    , KoResource(rhs)
+    : KoResource(rhs)
     , d(new Private(this))
 {
     d->paletteType = rhs.d->paletteType;
@@ -127,31 +126,29 @@ KoColorSet::KoColorSet(const KoColorSet& rhs)
     d->comment = rhs.d->comment;
     d->groupNames = rhs.d->groupNames;
     d->groups = rhs.d->groups;
-    d->isGlobal = rhs.d->isGlobal;
     d->isEditable = rhs.d->isEditable;
 }
 
 KoColorSet::~KoColorSet()
-{ }
-
-bool KoColorSet::load()
 {
-    QFile file(filename());
-    if (file.size() == 0) return false;
-    if (!file.open(QIODevice::ReadOnly)) {
-        warnPigment << "Can't open file " << filename();
-        return false;
-    }
-    bool res = loadFromDevice(&file);
-    file.close();
-    if (!QFileInfo(filename()).isWritable()) {
-        setIsEditable(false);
-    }
-    return res;
 }
 
-bool KoColorSet::loadFromDevice(QIODevice *dev)
+KoResourceSP KoColorSet::clone() const
 {
+    return KoResourceSP(new KoColorSet(*this));
+}
+
+bool KoColorSet::load(KisResourcesInterfaceSP resourcesInterface)
+{
+    const bool result = KoResource::load(resourcesInterface);
+    setIsEditable(result && QFileInfo(filename()).isWritable());
+    return result;
+}
+
+bool KoColorSet::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
+{
+    Q_UNUSED(resourcesInterface);
+
     if (!dev->isOpen()) dev->open(QIODevice::ReadOnly);
 
     d->data = dev->readAll();
@@ -159,23 +156,6 @@ bool KoColorSet::loadFromDevice(QIODevice *dev)
     Q_ASSERT(d->data.size() != 0);
 
     return d->init();
-}
-
-
-bool KoColorSet::save()
-{
-    if (d->isGlobal) {
-        // save to resource dir
-        QFile file(filename());
-        if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-            return false;
-        }
-        saveToDevice(&file);
-        file.close();
-        return true;
-    } else {
-        return true; // palette is not global, but still indicate that it's saved
-    }
 }
 
 bool KoColorSet::saveToDevice(QIODevice *dev) const
@@ -196,24 +176,22 @@ bool KoColorSet::saveToDevice(QIODevice *dev) const
 
 QByteArray KoColorSet::toByteArray() const
 {
-    QBuffer s;
+    QByteArray ba;
+    QBuffer s(&ba);
     s.open(QIODevice::WriteOnly);
     if (!saveToDevice(&s)) {
         warnPigment << "saving palette failed:" << name();
         return QByteArray();
     }
     s.close();
-    s.open(QIODevice::ReadOnly);
-    QByteArray res = s.readAll();
-    s.close();
-    return res;
+    return ba;
 }
 
-bool KoColorSet::fromByteArray(QByteArray &data)
+bool KoColorSet::fromByteArray(QByteArray &data, KisResourcesInterfaceSP resourcesInterface)
 {
     QBuffer buf(&data);
     buf.open(QIODevice::ReadOnly);
-    return loadFromDevice(&buf);
+    return loadFromDevice(&buf, resourcesInterface);
 }
 
 KoColorSet::PaletteType KoColorSet::paletteType() const
@@ -439,15 +417,6 @@ KisSwatchGroup *KoColorSet::getGlobalGroup()
     return getGroup(GLOBAL_GROUP_NAME);
 }
 
-bool KoColorSet::isGlobal() const
-{
-    return d->isGlobal;
-}
-
-void KoColorSet::setIsGlobal(bool isGlobal)
-{
-    d->isGlobal = isGlobal;
-}
 
 bool KoColorSet::isEditable() const
 {
@@ -714,12 +683,27 @@ bool KoColorSet::Private::init()
     }
     colorSet->setValid(res);
 
-    QImage img(global().columnCount() * 4, global().rowCount() * 4, QImage::Format_ARGB32);
+    int rows = 0;
+    for (QString groupName : groupNames) {
+        int lastRowGroup = 0;
+        for (const KisSwatchGroup::SwatchInfo &info : groups[groupName].infoList()) {
+            lastRowGroup = qMax(lastRowGroup, info.row);
+        }
+        rows += (lastRowGroup + 1);
+    }
+
+    QImage img(global().columnCount() * 4, rows*4, QImage::Format_ARGB32);
     QPainter gc(&img);
+    int lastRow = 0;
     gc.fillRect(img.rect(), Qt::darkGray);
-    for (const KisSwatchGroup::SwatchInfo &info : global().infoList()) {
-        QColor c = info.swatch.color().toQColor();
-        gc.fillRect(info.column * 4, info.row * 4, 4, 4, c);
+    for (QString groupName : groupNames) {
+        int lastRowGroup = 0;
+        for (const KisSwatchGroup::SwatchInfo &info : groups[groupName].infoList()) {
+            QColor c = info.swatch.color().toQColor();
+            gc.fillRect(info.column * 4, (lastRow + info.row) * 4, 4, 4, c);
+            lastRowGroup = qMax(lastRowGroup, info.row);
+        }
+        lastRow += (lastRowGroup + 1);
     }
     colorSet->setImage(img);
     colorSet->setValid(res);
@@ -1523,7 +1507,7 @@ bool KoColorSet::Private::saveKpl(QIODevice *dev) const
         root.setAttribute(KPL_PALETTE_NAME_ATTR, colorSet->name());
         root.setAttribute(KPL_PALETTE_COMMENT_ATTR, comment);
         root.setAttribute(KPL_PALETTE_READONLY_ATTR,
-                          (colorSet->isEditable() || !colorSet->isGlobal()) ? "false" : "true");
+                          (colorSet->isEditable()) ? "false" : "true");
         root.setAttribute(KPL_PALETTE_COLUMN_COUNT_ATTR, colorSet->columnCount());
         root.setAttribute(KPL_GROUP_ROW_COUNT_ATTR, groups[KoColorSet::GLOBAL_GROUP_NAME].rowCount());
 

@@ -308,7 +308,12 @@ QList<KisPaintingAssistantHandleSP> KisPaintingAssistantsDecoration::handles()
 
 QList<KisPaintingAssistantSP> KisPaintingAssistantsDecoration::assistants() const
 {
-    QList<KisPaintingAssistantSP> assistants = view()->document()->assistants();
+    QList<KisPaintingAssistantSP> assistants;
+    if (view()) {
+        if (view()->document()) {
+            assistants = view()->document()->assistants();
+        }
+    }
     return assistants;
 }
 

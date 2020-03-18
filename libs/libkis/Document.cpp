@@ -880,6 +880,11 @@ QPointer<KisDocument> Document::document() const
     return d->document;
 }
 
+void Document::setOwnsDocument(bool ownsDocument)
+{
+    d->ownsDocument = ownsDocument;
+}
+
 /* Animation related function */
 
 bool Document::importAnimation(const QList<QString> &files, int firstFrame, int step)

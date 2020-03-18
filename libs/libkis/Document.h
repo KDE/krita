@@ -854,7 +854,7 @@ private:
     friend class Filter;
     friend class View;
     QPointer<KisDocument> document() const;
-
+    void setOwnsDocument(bool ownsDocument);
 
 private:
     struct Private;

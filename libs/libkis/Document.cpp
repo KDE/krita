@@ -91,7 +91,7 @@ Document::Document(KisDocument *document, bool ownsDocument, QObject *parent)
 
 Document::~Document()
 {
-    if (d->ownsDocument) {
+    if (d->ownsDocument && d->document) {
         KisPart::instance()->removeDocument(d->document);
     }
     delete d;

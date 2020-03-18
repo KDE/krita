@@ -765,15 +765,9 @@ print(root.childNodes())
      */
     QRect bounds() const;
 
-
-
-
-
-
-
     /****
      * Animation Related API
-    *****/
+     *****/
 
 
     /**

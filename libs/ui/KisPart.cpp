@@ -227,10 +227,12 @@ int KisPart::documentCount() const
 
 void KisPart::removeDocument(KisDocument *document)
 {
-    d->documents.removeAll(document);
-    emit documentClosed('/' + objectName());
-    emit sigDocumentRemoved(document->url().toLocalFile());
-    document->deleteLater();
+    if (document) {
+        d->documents.removeAll(document);
+        emit documentClosed('/' + objectName());
+        emit sigDocumentRemoved(document->url().toLocalFile());
+        document->deleteLater();
+    }
 }
 
 KisMainWindow *KisPart::createMainWindow(QUuid id)

@@ -1035,15 +1035,25 @@ void LayerBox::slotRenameCurrentNode()
 
 void LayerBox::slotColorLabelChanged(int label)
 {
-    KisNodeList nodes = m_nodeManager->selectedNodes();
+    KisNodeList selectedNodes = m_nodeManager->selectedNodes();
 
-    Q_FOREACH(KisNodeSP node, nodes) {
+    Q_FOREACH(KisNodeSP selectedNode, selectedNodes) {
+        //Always apply label to selected nodes..
+        selectedNode->setColorLabelIndex(label);
+
+        //Apply label only to unlabelled children..
+        KisNodeList children = selectedNode->childNodes(QStringList(), KoProperties());
+
         auto applyLabelFunc =
-                [label](KisNodeSP node) {
-            node->setColorLabelIndex(label);
+                [label](KisNodeSP child) {
+            if (child->colorLabelIndex() == 0) {
+                child->setColorLabelIndex(label);
+            }
         };
 
-        KisLayerUtils::recursiveApplyNodes(node, applyLabelFunc);
+        Q_FOREACH(KisNodeSP child, children) {
+            KisLayerUtils::recursiveApplyNodes(child, applyLabelFunc);
+        }
     }
 }
 

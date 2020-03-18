@@ -43,7 +43,12 @@ KisActionsSnapshot::KisActionsSnapshot()
     : m_d(new Private)
 {
     QList<QString> registeredShortcutIds = KisActionRegistry::instance()->registeredShortcutIds();
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
     m_d->nonRegisteredShortcuts = QSet<QString>(registeredShortcutIds.begin(), registeredShortcutIds.end());
+#else
+    m_d->nonRegisteredShortcuts = QSet<QString>::fromList(registeredShortcutIds);
+#endif
+
 }
 
 KisActionsSnapshot::~KisActionsSnapshot()

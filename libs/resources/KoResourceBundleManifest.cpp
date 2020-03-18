@@ -194,10 +194,19 @@ QStringList KoResourceBundleManifest::tags() const
     QSet<QString> tags;
     Q_FOREACH (const QString &type, m_resources.keys()) {
         Q_FOREACH (const ResourceReference &ref, m_resources[type].values()) {
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
             tags += QSet<QString>(ref.tagList.begin(), ref.tagList.end());
+#else
+            tags += QSet<QString>::fromList(ref.tagList);
+#endif
+
         }
     }
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
     return QStringList(tags.begin(), tags.end());
+#else
+    return QStringList::fromSet(tags);
+#endif
 }
 
 QList<KoResourceBundleManifest::ResourceReference> KoResourceBundleManifest::files(const QString &type) const

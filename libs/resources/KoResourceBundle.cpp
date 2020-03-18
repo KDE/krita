@@ -257,7 +257,11 @@ void KoResourceBundle::addResource(QString resourceType, QString filePath, QVect
 
 QList<QString> KoResourceBundle::getTagsList()
 {
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
     return QList<QString>(m_bundletags.begin(), m_bundletags.end());
+#else
+    return QList<QString>::fromSet(m_bundletags);
+#endif
 }
 
 QStringList KoResourceBundle::resourceTypes() const

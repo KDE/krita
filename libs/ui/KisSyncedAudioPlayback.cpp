@@ -139,7 +139,11 @@ void KisSyncedAudioPlayback::stop()
 void KisSyncedAudioPlayback::slotOnError()
 {
 #ifdef HAVE_QT_MULTIMEDIA
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
     emit error(m_d->player.media().request().url().toLocalFile(), m_d->player.errorString());
+#else
+    emit error(m_d->player.media().canonicalUrl().toLocalFile(), m_d->player.errorString());
+#endif
 #endif
 }
 

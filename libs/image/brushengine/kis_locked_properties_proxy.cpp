@@ -109,14 +109,20 @@ QList<QString> KisLockedPropertiesProxy::getPropertiesKeys() const
     QList<QString> result = m_parent->getPropertiesKeys();
 
     if (m_lockedProperties->lockedProperties() && !m_lockedProperties->lockedProperties()->getPropertiesKeys().isEmpty()) {
-
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
         QSet<QString> properties(result.begin(), result.end());
         QSet<QString> lockedProperties(m_lockedProperties->lockedProperties()->getPropertiesKeys().begin(),
                                        m_lockedProperties->lockedProperties()->getPropertiesKeys().end());
-
+#else
+        QSet<QString> properties = QSet<QString>::fromList(result);
+        QSet<QString> lockedProperties = QSet<QString>::fromList(m_lockedProperties->lockedProperties()->getPropertiesKeys());
+#endif
         properties += lockedProperties;
-
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
         result = QList<QString>(properties.begin(), properties.end()) ;
+#else
+        result = QList<QString>::fromSet(properties);
+#endif
     }
 
     return result;

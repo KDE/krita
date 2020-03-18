@@ -178,7 +178,11 @@ QStringList KisImportExportManager::supportedMimeTypes(Direction direction)
                 }
             }
             qDeleteAll(list);
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
             m_importMimeTypes = QList<QString>(mimeTypes.begin(), mimeTypes.end());
+#else
+            m_importMimeTypes = QList<QString>::fromSet(mimeTypes);
+#endif
         }
         return m_importMimeTypes;
     }
@@ -192,8 +196,13 @@ QStringList KisImportExportManager::supportedMimeTypes(Direction direction)
                     mimeTypes << mimetype;
                 }
             }
-            qDeleteAll(list);
+           qDeleteAll(list);
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
             m_exportMimeTypes = QList<QString>(mimeTypes.begin(), mimeTypes.end());
+#else
+           m_exportMimeTypes = QList<QString>::fromSet(mimeTypes);
+#endif
+
         }
         return m_exportMimeTypes;
     }

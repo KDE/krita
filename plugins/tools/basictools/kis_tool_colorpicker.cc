@@ -207,6 +207,9 @@ void KisToolColorPicker::endPrimaryAction(KoPointerEvent *event)
         KoColorSet *palette = m_palettes.at(m_optionsWidget->cmbPalette->currentIndex());        
         palette->add(swatch);
 
+        KoResourceServerProvider::instance()->paletteServer()->updateResource(palette);
+
+
         if (!palette->save()) {
             QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Cannot write to palette file %1. Maybe it is read-only.", palette->filename()));
         } 

@@ -394,7 +394,7 @@ void KisDocument::Private::syncDecorationsWrapperLayerState()
             setClearsRedoOnStart(false);
         }
 
-        void initStrokeCallback() {
+        void initStrokeCallback() override {
             KisDecorationsWrapperLayerSP decorationsLayer =
                 KisLayerUtils::findNodeByType<KisDecorationsWrapperLayer>(m_document->image()->root());
 

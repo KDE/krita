@@ -198,11 +198,11 @@ public:
         this->enableJob(JOB_CANCEL, true, KisStrokeJobData::BARRIER);
     }
 
-    void initStrokeCallback() {
+    void initStrokeCallback() override {
         emit timeout();
     }
 
-    void cancelStrokeCallback() {
+    void cancelStrokeCallback() override {
         emit cancelled();
     }
 

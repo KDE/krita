@@ -35,7 +35,7 @@
 
 class KisStoragePlugin;
 
-class KRITARESOURCES_EXPORT KisStoragePluginFactoryBase
+class KisStoragePluginFactoryBase
 {
 public:
     virtual ~KisStoragePluginFactoryBase(){}
@@ -43,7 +43,7 @@ public:
 };
 
 template<typename T>
-class KRITARESOURCES_EXPORT KisStoragePluginFactory : public KisStoragePluginFactoryBase
+class KisStoragePluginFactory : public KisStoragePluginFactoryBase
 {
 public:
     KisStoragePlugin *create(const QString &location) override {

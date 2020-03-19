@@ -345,6 +345,7 @@ target_link_libraries(kritaimage
         kritacommand
         kritawidgetutils 
         kritametadata
+        kritaresources
         Qt5::Concurrent
 )
 

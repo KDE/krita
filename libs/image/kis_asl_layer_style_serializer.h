@@ -19,7 +19,7 @@
 #ifndef __KIS_ASL_LAYER_STYLE_SERIALIZER_H
 #define __KIS_ASL_LAYER_STYLE_SERIALIZER_H
 
-#include "kritapsd_export.h"
+#include "kritaimage_export.h"
 
 class QIODevice;
 class KoPattern;
@@ -27,8 +27,7 @@ class KoPattern;
 #include "kis_psd_layer_style.h"
 #include "asl/kis_asl_callback_object_catcher.h"
 
-
-class KRITAPSD_EXPORT KisAslLayerStyleSerializer
+class KRITAIMAGE_EXPORT KisAslLayerStyleSerializer
 {
 public:
     KisAslLayerStyleSerializer();

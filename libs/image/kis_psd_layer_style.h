@@ -27,7 +27,7 @@ class QUuid;
 #include <psd.h>
 
 #include "kis_types.h"
-#include "kritapsd_export.h"
+#include "kritaimage_export.h"
 
 class KisPSDLayerStyle;
 typedef QSharedPointer<KisPSDLayerStyle> KisPSDLayerStyleSP;
@@ -40,7 +40,7 @@ typedef QSharedPointer<KisPSDLayerStyle> KisPSDLayerStyleSP;
  * See https://www.tonton-pixel.com/Photoshop%20Additional%20File%20Formats/styles-file-format.html
  *
  */
-class KRITAPSD_EXPORT KisPSDLayerStyle : public KoEphemeralResource<KoResource>
+class KRITAIMAGE_EXPORT KisPSDLayerStyle : public KoEphemeralResource<KoResource>
 {
 
 public:

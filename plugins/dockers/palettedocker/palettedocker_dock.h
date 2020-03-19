@@ -48,7 +48,7 @@ class KisPaletteModel;
 class KisPaletteEditor;
 class Ui_WdgPaletteDock;
 
-class PaletteDockerDock : public QDockWidget, public KisMainwindowObserver
+class PaletteDockerDock : public QDockWidget, public KisMainwindowObserver, public KoResourceServerObserver<KoColorSet>
 {
     Q_OBJECT
 public:
@@ -61,6 +61,15 @@ public: // QDockWidget
 
 public: // KisMainWindowObserver
     void setViewManager(KisViewManager* kisview) override;
+
+public: //KoResourceServerObserver
+    void unsetResourceServer() override;
+    void resourceAdded(QSharedPointer<KoColorSet> resource) override;
+    void removingResource(QSharedPointer<KoColorSet> resource) override;
+    void resourceChanged(QSharedPointer<KoColorSet> resource) override;
+    void syncTaggedResourceView() override;
+    void syncTagAddition(const QString& tag) override;
+    void syncTagRemoval(const QString& tag) override;
 
 private Q_SLOTS:
     void slotContextMenu(const QModelIndex &);

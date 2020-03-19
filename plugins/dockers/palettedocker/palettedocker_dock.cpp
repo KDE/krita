@@ -140,6 +140,9 @@ PaletteDockerDock::PaletteDockerDock( )
         m_ui->bnEditPalette->setEnabled(false);
         m_ui->paletteView->setAllowModification(false);
     }
+
+    KoResourceServer<KoColorSet> *srv = KoResourceServerProvider::instance()->paletteServer();
+    srv->addObserver(this);
 }
 
 PaletteDockerDock::~PaletteDockerDock()
@@ -157,6 +160,37 @@ void PaletteDockerDock::setViewManager(KisViewManager* kisview)
             this, SLOT(slotFGColorResourceChanged(KoColor)));
     kisview->nodeManager()->disconnect(m_model);
 }
+
+void PaletteDockerDock::unsetResourceServer()
+{
+    KoResourceServer<KoColorSet> *srv = KoResourceServerProvider::instance()->paletteServer();
+    srv->removeObserver(this);
+}
+
+void PaletteDockerDock::resourceAdded(QSharedPointer<KoColorSet> resource)
+{
+    Q_UNUSED(resource);
+}
+
+void PaletteDockerDock::removingResource(QSharedPointer<KoColorSet> resource)
+{
+    Q_UNUSED(resource);
+}
+
+void PaletteDockerDock::resourceChanged(QSharedPointer<KoColorSet> resource)
+{
+    Q_UNUSED(resource);
+    m_model->sigPaletteModified();
+}
+
+void PaletteDockerDock::syncTaggedResourceView()
+{}
+
+void PaletteDockerDock::syncTagAddition(const QString& tag)
+{   Q_UNUSED(tag); }
+
+void PaletteDockerDock::syncTagRemoval(const QString& tag)
+{   Q_UNUSED(tag); }
 
 void PaletteDockerDock::slotContextMenu(const QModelIndex &)
 {
@@ -311,6 +345,7 @@ void PaletteDockerDock::slotFGColorResourceChanged(const KoColor &color)
     if (!m_colorSelfUpdate) {
         m_ui->paletteView->slotFGColorChanged(color);
     }
+
 }
 
 void PaletteDockerDock::slotStoragesChanged()

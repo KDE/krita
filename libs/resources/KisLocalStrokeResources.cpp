@@ -31,7 +31,7 @@ public:
     {
     }
 
-    KoResourceSP resourceForFilename(const QString& filename) const {
+    KoResourceSP resourceForFilename(const QString& filename) const override {
         auto it = std::find_if(m_cachedResources.begin(),
                                m_cachedResources.end(),
                                [this, filename] (KoResourceSP res) {
@@ -41,7 +41,7 @@ public:
                                });
         return it != m_cachedResources.end() ? *it : KoResourceSP();
     }
-    KoResourceSP resourceForName(const QString& name) const {
+    KoResourceSP resourceForName(const QString& name) const override {
         auto it = std::find_if(m_cachedResources.begin(),
                                m_cachedResources.end(),
                                [this, name] (KoResourceSP res) {
@@ -50,7 +50,7 @@ public:
                                });
         return it != m_cachedResources.end() ? *it : KoResourceSP();
     }
-    KoResourceSP resourceForMD5(const QByteArray& md5) const {
+    KoResourceSP resourceForMD5(const QByteArray& md5) const override {
         auto it = std::find_if(m_cachedResources.begin(),
                                m_cachedResources.end(),
                                [this, md5] (KoResourceSP res) {
@@ -59,7 +59,7 @@ public:
                                });
         return it != m_cachedResources.end() ? *it : KoResourceSP();
     }
-    KoResourceSP fallbackResource() const {
+    KoResourceSP fallbackResource() const override {
         auto it = std::find_if(m_cachedResources.begin(),
                                m_cachedResources.end(),
                                [this] (KoResourceSP res) {

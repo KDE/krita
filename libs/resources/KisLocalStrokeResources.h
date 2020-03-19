@@ -38,7 +38,7 @@ public:
     KisLocalStrokeResources(const QList<KoResourceSP> &localResources);
 
 protected:
-    ResourceSourceAdapter* createSourceImpl(const QString &type) const;
+    ResourceSourceAdapter* createSourceImpl(const QString &type) const override;
 
 private:
     Q_DECLARE_PRIVATE(KisLocalStrokeResources);

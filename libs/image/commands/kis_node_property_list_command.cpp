@@ -213,7 +213,7 @@ void KisNodePropertyListCommand::setNodePropertiesNoUndo(KisNodeSP node, KisImag
                 this->enableJob(JOB_INIT, true);
             }
 
-            void initStrokeCallback() {
+            void initStrokeCallback() override {
                 m_cmd->redo();
             }
 

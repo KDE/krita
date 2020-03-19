@@ -233,7 +233,7 @@ QList<KisUniformPaintOpPropertySP> KisDuplicateOpSettings::uniformProperties(Kis
                     new KisUniformPaintOpPropertyCallback(
                         KisUniformPaintOpPropertyCallback::Bool,
                         "clone_movesource",
-                        i18n("Move `Source"),
+                        i18n("Move Source"),
                         settings, 0);
 
             prop->setReadCallback(

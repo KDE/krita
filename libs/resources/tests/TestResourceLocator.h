@@ -30,7 +30,7 @@ class TestResourceLocator : public QObject
     Q_OBJECT
 private Q_SLOTS:
     void initTestCase();
-    void testLocatorInitalization();
+    void testLocatorInitialization();
     void testStorageInitialization();
     void testLocatorSynchronization();
 

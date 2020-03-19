@@ -83,7 +83,7 @@ KisResourceLocator::~KisResourceLocator()
 
 KisResourceLocator::LocatorError KisResourceLocator::initialize(const QString &installationResourcesLocation)
 {
-    InitalizationStatus initalizationStatus = InitalizationStatus::Unknown;
+    InitializationStatus initializationStatus = InitializationStatus::Unknown;
 
     KConfigGroup cfg(KSharedConfig::openConfig(), "");
     d->resourceLocation = cfg.readEntry(resourceLocationKey, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
@@ -96,7 +96,7 @@ KisResourceLocator::LocatorError KisResourceLocator::initialize(const QString &i
             d->errorMessages << i18n("1. Could not create the resource location at %1.", d->resourceLocation);
             return LocatorError::CannotCreateLocation;
         }
-        initalizationStatus = InitalizationStatus::FirstRun;
+        initializationStatus = InitializationStatus::FirstRun;
     }
 
     if (!fi.isWritable()) {
@@ -105,30 +105,30 @@ KisResourceLocator::LocatorError KisResourceLocator::initialize(const QString &i
     }
 
     // Check whether we're updating from an older version
-    if (initalizationStatus != InitalizationStatus::FirstRun) {
+    if (initializationStatus != InitializationStatus::FirstRun) {
         QFile fi(d->resourceLocation + '/' + "KRITA_RESOURCE_VERSION");
         if (!fi.exists()) {
-            initalizationStatus = InitalizationStatus::FirstUpdate;
+            initializationStatus = InitializationStatus::FirstUpdate;
         }
         else {
             fi.open(QFile::ReadOnly);
             QVersionNumber resource_version = QVersionNumber::fromString(QString::fromUtf8(fi.readAll()));
             QVersionNumber krita_version = QVersionNumber::fromString(KritaVersionWrapper::versionString());
             if (krita_version > resource_version) {
-                initalizationStatus = InitalizationStatus::Updating;
+                initializationStatus = InitializationStatus::Updating;
             }
             else {
-                initalizationStatus = InitalizationStatus::Initialized;
+                initializationStatus = InitializationStatus::Initialized;
             }
         }
     }
 
-    if (initalizationStatus != InitalizationStatus::Initialized) {
-        KisResourceLocator::LocatorError res = firstTimeInstallation(initalizationStatus, installationResourcesLocation);
+    if (initializationStatus != InitializationStatus::Initialized) {
+        KisResourceLocator::LocatorError res = firstTimeInstallation(initializationStatus, installationResourcesLocation);
         if (res != LocatorError::Ok) {
             return res;
         }
-        initalizationStatus = InitalizationStatus::Initialized;
+        initializationStatus = InitializationStatus::Initialized;
     }
     else {
         if (!synchronizeDb()) {
@@ -479,10 +479,10 @@ bool KisResourceLocator::hasStorage(const QString &document)
     return d->storages.contains(document);
 }
 
-KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(InitalizationStatus initalizationStatus, const QString &installationResourcesLocation)
+KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(InitializationStatus initializationStatus, const QString &installationResourcesLocation)
 {
-    emit progressMessage(i18n("Krita is running for the first time. Intialization will take some time."));
-    Q_UNUSED(initalizationStatus);
+    emit progressMessage(i18n("Krita is running for the first time. Initialization will take some time."));
+    Q_UNUSED(initializationStatus);
 
     Q_FOREACH(const QString &folder, KisResourceLoaderRegistry::instance()->resourceTypes()) {
         QDir dir(d->resourceLocation + '/' + folder + '/');
@@ -535,7 +535,7 @@ KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(Inita
 
 bool KisResourceLocator::initializeDb()
 {
-    emit progressMessage(i18n("Initalizing the resources."));
+    emit progressMessage(i18n("Initializing the resources."));
     d->errorMessages.clear();
     findStorages();
 

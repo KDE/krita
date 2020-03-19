@@ -69,7 +69,7 @@ void TestResourceLocator::initTestCase()
     ResourceTestHelper::createDummyLoaderRegistry();
 }
 
-void TestResourceLocator::testLocatorInitalization()
+void TestResourceLocator::testLocatorInitialization()
 {
     KisResourceCacheDb::initialize(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
     KisResourceLocator::LocatorError r = m_locator->initialize(m_srcLocation);

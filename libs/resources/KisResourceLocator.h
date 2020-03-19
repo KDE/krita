@@ -243,7 +243,7 @@ private:
     KisResourceLocator(const KisResourceLocator&);
     KisResourceLocator operator=(const KisResourceLocator&);
 
-    enum class InitalizationStatus {
+    enum class InitializationStatus {
         Unknown,      // We don't know whether Krita has run on this system for this resource location yet
         Initialized,  // Everything is ready to start synchronizing the database
         FirstRun,     // Krita hasn't run for this resource location yet
@@ -251,7 +251,7 @@ private:
         Updating      // Krita is updating from an older version with resource locator
     };
 
-    LocatorError firstTimeInstallation(InitalizationStatus initalizationStatus, const QString &installationResourcesLocation);
+    LocatorError firstTimeInstallation(InitializationStatus initializationStatus, const QString &installationResourcesLocation);
 
     // First time installation
     bool initializeDb();

@@ -184,7 +184,7 @@ void DlgBundleManager::addBundleToActiveResources(QString filename)
         do {
             // ask for new filename
             bool ok;
-            newName = QInputDialog::getText(this, i18n("New name for the bundle"), i18n("The old filename %s is taken.\nNew name:", newName),
+            newName = QInputDialog::getText(this, i18n("New name for the bundle"), i18n("The old filename %1 is taken.\nNew name:", newName),
                                                     QLineEdit::Normal, newName, &ok);
             newLocation = createNewBundlePath(newDir, newName);
             newFileInfo.setFile(newLocation);

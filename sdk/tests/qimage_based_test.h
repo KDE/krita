@@ -36,8 +36,6 @@
 #if USE_DOCUMENT
 #include "KisDocument.h"
 #include "kis_shape_layer.h"
-#else
-#include "kis_filter_configuration.h"
 #endif /* USE_DOCUMENT */
 
 #include "kis_undo_stores.h"

@@ -199,7 +199,7 @@ QVector<QString> KisFavoriteResourceManager::favoritePresetNamesList()
             QString name = m_resourcesProxyModel->data(index, Qt::UserRole + KisResourceModel::Name).toString();
             names << name;
         }  else {
-            break; // no more valid indeces
+            break; // no more valid indices
         }
     }
 
@@ -217,7 +217,7 @@ QList<QImage> KisFavoriteResourceManager::favoritePresetImages()
             QImage image = tmp.value<QImage>();
             images << image;
         } else {
-            break; // no more valid indeces
+            break; // no more valid indices
         }
     }
     return images;

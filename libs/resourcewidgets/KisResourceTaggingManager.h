@@ -35,7 +35,6 @@
 #include <KisTagModel.h>
 
 #include <kis_debug.h>
-#include <KisTag.h>
 
 class QWidget;
 class QStringList;

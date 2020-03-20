@@ -32,7 +32,6 @@
 #include <KisResourceCacheDb.h>
 
 #include <KisResourceLocator.h>
-#include <KisResourceLoaderRegistry.h>
 
 #include "DummyResource.h"
 #include "ResourceTestHelper.h"

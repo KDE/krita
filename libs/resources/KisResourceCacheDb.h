@@ -95,7 +95,7 @@ private:
      * @param timestamp
      * @param storage
      * @param resource
-     * @return true if the database was succesfully updated
+     * @return true if the database was successfully updated
      */
     static bool addResourceVersion(int resourceId, QDateTime timestamp, KisResourceStorageSP storage, KoResourceSP resource);
     static bool addResource(KisResourceStorageSP storage, QDateTime timestamp, KoResourceSP resource, const QString &resourceType);
@@ -127,7 +127,7 @@ private:
      *  and inserts the metadata in the metadata table.
      * @param id
      * @param tableName
-     * @return true if succesful, false if not
+     * @return true if successful, false if not
      */
     static bool updateMetaDataForId(const QMap<QString, QVariant> map, int id, const QString &tableName);
     static bool addMetaDataForId(const QMap<QString, QVariant> map, int id, const QString &tableName);

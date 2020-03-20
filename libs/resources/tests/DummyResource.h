@@ -22,7 +22,6 @@
 #include <QDebug>
 #include <QRandomGenerator64>
 #include <KoMD5Generator.h>
-#include <KoMD5Generator.h>
 #include <KisResourceTypes.h>
 
 class DummyResource : public KoResource {

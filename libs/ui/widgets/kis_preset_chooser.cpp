@@ -38,7 +38,6 @@
 #include <KisResourceItemChooser.h>
 #include <KisResourceItemChooserSync.h>
 #include <KisResourceItemListView.h>
-#include <KisResourceModel.h>
 #include <KisResourceLocator.h>
 
 #include <brushengine/kis_paintop_settings.h>

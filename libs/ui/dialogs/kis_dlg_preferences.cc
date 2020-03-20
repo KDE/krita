@@ -74,21 +74,14 @@
 #include "widgets/kis_cmb_idlist.h"
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"
-#include "kis_action_registry.h"
 #include "kis_canvas_resource_provider.h"
-#include "kis_clipboard.h"
 #include "kis_color_manager.h"
 #include "kis_config.h"
 #include "kis_cursor.h"
 #include "kis_image_config.h"
 #include "kis_preference_set_registry.h"
-#include "widgets/kis_cmb_idlist.h"
-#include <kis_image.h>
-#include "kis_file_name_requester.h"
 
-#include <klocalizedstring.h>
-#include <kundo2stack.h>
-#include <KisSqueezedComboBox.h>
+#include "kis_file_name_requester.h"
 
 #include "slider_and_spin_box_sync.h"
 

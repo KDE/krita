@@ -30,7 +30,6 @@
 #include <QMessageBox>
 
 #include <KoMD5Generator.h>
-#include <KoMD5Generator.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
 #include <KoFileDialog.h>

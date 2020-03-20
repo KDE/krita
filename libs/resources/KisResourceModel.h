@@ -71,7 +71,7 @@ public:
      * @param storageId the id of the storage (could be "memory" for temporary
      * resources, the document's storage id for document storages or empty to save
      * to the default resources folder
-     * @return true if adding the resoruce succeded.
+     * @return true if adding the resoruce succeeded.
      */
     virtual bool addResource(KoResourceSP resource, const QString &storageId = QString()) = 0;
 

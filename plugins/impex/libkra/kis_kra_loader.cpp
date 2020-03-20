@@ -69,7 +69,6 @@
 #include <kis_layer_composition.h>
 #include <kis_file_layer.h>
 #include <kis_psd_layer_style.h>
-#include "KisResourceServerProvider.h"
 #include "kis_keyframe_channel.h"
 #include <kis_filter_configuration.h>
 #include "KisReferenceImagesLayer.h"
@@ -91,7 +90,6 @@
 #include "kis_layer_properties_icons.h"
 #include "kis_node_view_color_scheme.h"
 #include "KisMirrorAxisConfig.h"
-#include <KisGlobalResourcesInterface.h>
 
 /*
 

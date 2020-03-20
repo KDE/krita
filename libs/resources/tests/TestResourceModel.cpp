@@ -25,7 +25,6 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QTemporaryFile>
-#include <QDir>
 #include <QtSql>
 
 #include <kconfig.h>

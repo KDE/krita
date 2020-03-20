@@ -280,7 +280,7 @@ void KisShapeLayerCanvas::slotStartAsyncRepaint()
      *    takes about 1ms for complicated vector layers) and pack them into
      *    KoShapeManager::PaintJobsList jobs. It happens here, in
      *    slotStartAsyncRepaint(), which runs in the GUI thread. It guarantees
-     *    that noone is accessing the shapes during the copy operation.
+     *    that no one is accessing the shapes during the copy operation.
      *
      * 2) The rendering itself happens in the worker thread in repaint(). But
      *    repaint() doesn't access original shapes anymore. It accesses only they

@@ -96,14 +96,14 @@ public:
      * will be marked as not pre-installed.
      * @param storageLocation a unique name for the given storage
      * @param storage a storage object
-     * @return true if the storage has been added succesfully
+     * @return true if the storage has been added successfully
      */
     bool addStorage(const QString &storageLocation, KisResourceStorageSP storage);
 
     /**
      * @brief removeStorage removes the temporary storage from the database
      * @param document the unique name of the document
-     * @return true is succesful.
+     * @return true is successful.
      */
     bool removeStorage(const QString &storageLocation);
 
@@ -182,7 +182,7 @@ private:
      * @param resourceType the type of the resource
      * @param resource the actual resource object
      * @param storageLocation the storage where the resource will be saved. By default this is the the default folder storage.
-     * @return true if succesfull
+     * @return true if successful
      */
     bool addResource(const QString &resourceType, const KoResourceSP resource, const QString &storageLocation = QString());
 

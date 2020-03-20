@@ -53,7 +53,6 @@
 #include <kis_coordinates_converter.h>
 #include <kis_time_range.h>
 #include <KisImportExportErrorCode.h>
-#include <KisPart.h>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>

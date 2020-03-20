@@ -33,7 +33,6 @@
 #include <QBuffer>
 #include <QFileInfo>
 #include <KoMD5Generator.h>
-#include <KoMD5Generator.h>
 #include <klocalizedstring.h>
 
 #include <KoColor.h>

@@ -33,7 +33,6 @@
 #include <KisUsageLogger.h>
 
 #include "KisResourceLocator.h"
-#include "KisResourceCacheDb.h"
 #include "KisResourceLoaderRegistry.h"
 
 const QString dbDriver = "QSQLITE";

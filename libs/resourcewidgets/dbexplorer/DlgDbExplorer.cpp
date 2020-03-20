@@ -34,7 +34,6 @@
 #include <KisResourceTypeModel.h>
 #include <KisTagModel.h>
 #include <KisStorageModel.h>
-#include <KisTagModelProvider.h>
 #include <KisResourceItemDelegate.h>
 #include <KisResourceItemListView.h>
 

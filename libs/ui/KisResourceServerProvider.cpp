@@ -42,8 +42,6 @@
 
 #include <kis_psd_layer_style.h>
 
-#include <KoResourceServer.h>
-
 Q_GLOBAL_STATIC(KisResourceServerProvider, s_instance)
 
 typedef KoResourceServer<KisPaintOpPreset> KisPaintOpPresetResourceServer;

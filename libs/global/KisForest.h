@@ -110,7 +110,7 @@ protected:
 /*************************************************************************/
 
 /**
- * Child iterator is used to traverse all the the children of the current node.
+ * Child iterator is used to traverse all the children of the current node.
  * It models \c BidirectionalIterator concept, so you can traverse with it in both
  * directions.
  *
@@ -262,7 +262,7 @@ inline bool isEnd(const ChildIterator<T> &it) {
 
 /**
  * Hierarchy iterator is used to traverse from the current node to the root
- * of the the current subtree of the forest. It models \c ForwardIterator concept.
+ * of the current subtree of the forest. It models \c ForwardIterator concept.
  *
  * \code{.cpp}
  *

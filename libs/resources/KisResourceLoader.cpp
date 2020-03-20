@@ -36,6 +36,3 @@ QStringList KisResourceLoaderBase::filters() const
 
     return filters;
 }
-
-#include "KisResourceLoader.h"
-

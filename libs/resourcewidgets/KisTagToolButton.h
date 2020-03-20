@@ -34,7 +34,7 @@
 /// \brief The KisTagToolButton class manages the logic of the tag management popup.
 ///
 /// This class is responsible for the GUI for creating, renaming and removing tags.
-/// Since both renaming and removing is context-dependant (it depends on which tag
+/// Since both renaming and removing is context-dependent (it depends on which tag
 /// is currently selected in the combobox), all actions emit signals to the TagChooserWidget
 /// for it to handle actual creationg, renaming and removal of tags in the KisTagModel.
 ///

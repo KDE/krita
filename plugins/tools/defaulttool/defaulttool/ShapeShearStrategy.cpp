@@ -36,6 +36,7 @@
 #include <math.h>
 #include <QDebug>
 #include <klocalizedstring.h>
+#include "kis_algebra_2d.h"
 
 ShapeShearStrategy::ShapeShearStrategy(KoToolBase *tool, KoSelection *selection, const QPointF &clicked, KoFlake::SelectionHandle direction)
     : KoInteractionStrategy(tool)
@@ -178,7 +179,17 @@ KUndo2Command *ShapeShearStrategy::createCommand()
     Q_FOREACH (KoShape *shape, m_transformedShapesAndSelection) {
         newTransforms << shape->transformation();
     }
-    KoShapeTransformCommand *cmd = new KoShapeTransformCommand(m_transformedShapesAndSelection, m_oldTransforms, newTransforms);
-    cmd->setText(kundo2_i18n("Shear"));
+    const bool nothingChanged =
+        std::equal(m_oldTransforms.begin(), m_oldTransforms.end(),
+                   newTransforms.begin(),
+                   [] (const QTransform &t1, const QTransform &t2) {
+                       return KisAlgebra2D::fuzzyMatrixCompare(t1, t2, 1e-6);
+                   });
+
+    KoShapeTransformCommand *cmd = 0;
+    if (!nothingChanged) {
+        cmd = new KoShapeTransformCommand(m_transformedShapesAndSelection, m_oldTransforms, newTransforms);
+        cmd->setText(kundo2_i18n("Shear"));
+    }
     return cmd;
 }

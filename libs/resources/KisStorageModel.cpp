@@ -125,6 +125,18 @@ QVariant KisStorageModel::data(const QModelIndex &index, int role) const
         }
         case Qt::UserRole + Id:
             return d->query.value("id");
+        case Qt::UserRole + DisplayName:
+        {
+            QMap<QString, QVariant> r = KisResourceLocator::instance()->metaDataForStorage(d->query.value("location").toString());
+            QVariant name = d->query.value("location");
+            if (r.contains(KisResourceStorage::s_meta_name) && !r[KisResourceStorage::s_meta_name].isNull()) {
+                name = r[KisResourceStorage::s_meta_name];
+            }
+            else if (r.contains(KisResourceStorage::s_meta_title) && !r[KisResourceStorage::s_meta_title].isNull()) {
+                name = r[KisResourceStorage::s_meta_title];
+            }
+            return name;
+        }
         case Qt::UserRole + StorageType:
             return d->query.value("storage_type");
         case Qt::UserRole + Location:

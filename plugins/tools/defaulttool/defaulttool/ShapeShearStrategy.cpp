@@ -129,16 +129,24 @@ void ShapeShearStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModif
         shearVector = - shearVector;
     }
     if (m_top || m_bottom) {
-        shearX = shearVector.x() / m_initialSize.height();
+        shearX = m_initialSize.height() > 0 ? shearVector.x() / m_initialSize.height() : 0;
     }
     if (m_left || m_right) {
-        shearY = shearVector.y() / m_initialSize.width();
+        shearY = m_initialSize.width() > 0 ? shearVector.y() / m_initialSize.width() : 0;
     }
 
     // if selection is mirrored invert the shear values
     if (m_isMirrored) {
         shearX *= -1.0;
         shearY *= -1.0;
+    }
+
+    const qreal maxSaneShear = 1e6;
+    if ((qAbs(shearX) == 0.0 && qAbs(shearY) == 0.0) ||
+        qAbs(shearX) > maxSaneShear ||
+        qAbs(shearY) > maxSaneShear) {
+
+        return;
     }
 
     QTransform matrix;

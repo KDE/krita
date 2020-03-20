@@ -468,6 +468,14 @@ QTransform mapToRect(const QRectF &rect)
                    rect.x(), rect.y());
 }
 
+QTransform mapToRectInverse(const QRectF &rect)
+{
+    return
+        QTransform::fromTranslate(-rect.x(), -rect.y()) *
+        QTransform::fromScale(rect.width() > 0 ? 1.0 / rect.width() : 0.0,
+                              rect.height() > 0 ? 1.0 / rect.height() : 0.0);
+}
+
 bool fuzzyMatrixCompare(const QTransform &t1, const QTransform &t2, qreal delta) {
     return
             qAbs(t1.m11() - t2.m11()) < delta &&

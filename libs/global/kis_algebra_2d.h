@@ -509,6 +509,9 @@ QVector<QPointF> intersectTwoCircles(const QPointF &c1, qreal r1,
 KRITAGLOBAL_EXPORT
 QTransform mapToRect(const QRectF &rect);
 
+KRITAGLOBAL_EXPORT
+QTransform mapToRectInverse(const QRectF &rect);
+
 /**
  * Scale the relative point \pt into the bounds of \p rc. The point might be
  * outside the rectangle.

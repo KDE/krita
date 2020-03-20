@@ -261,4 +261,69 @@ void KisAlgebra2DTest::testDrawEllipse()
     image.save("ellipse_result.png");
 }
 
+void KisAlgebra2DTest::testNullRectProcessing()
+{
+    QPainterPath line;
+    line.moveTo(10,10);
+    line.lineTo(110,10);
+
+    const QRectF lineRect(line.boundingRect());
+    qDebug() << ppVar(lineRect) << ppVar(lineRect.isValid()) << ppVar(lineRect.isNull());
+
+
+
+    // test relative operations
+    const QPointF relPoint = KisAlgebra2D::absoluteToRelative(QPointF(30, 10), lineRect);
+    QCOMPARE(relPoint, QPointF(0.2, 0.0));
+
+    const QPointF absPoint = KisAlgebra2D::relativeToAbsolute(relPoint, lineRect);
+    QCOMPARE(absPoint, QPointF(30.0, 10.0));
+
+    const QTransform relTransform = KisAlgebra2D::mapToRect(lineRect);
+    QCOMPARE(relTransform.map(relPoint), absPoint);
+
+    // test relative isotropic operations
+    QCOMPARE(KisAlgebra2D::absoluteToRelative(
+                 KisAlgebra2D::relativeToAbsolute(0.2, lineRect),
+                 lineRect),
+             0.2);
+
+    /// test transformations
+
+    // translate
+    QCOMPARE(QTransform::fromTranslate(10, 20).mapRect(lineRect), QRect(20, 30, 100, 0));
+
+    // scale
+    QCOMPARE(QTransform::fromScale(2.0, 2.0).mapRect(lineRect), QRect(20, 20, 200, 0));
+
+    // rotate
+    QTransform rot;
+    rot.rotate(90);
+    QCOMPARE(rot.mapRect(lineRect), QRect(-10, 10, 0, 100));
+
+    // shear-x
+    QTransform shearX;
+    shearX.shear(2.0, 0.0);
+    QCOMPARE(shearX.mapRect(lineRect), QRect(30, 10, 100, 0));
+
+    // shear-y
+    QTransform shearY;
+    shearY.shear(0.0, 2.0);
+    QCOMPARE(shearY.mapRect(lineRect), QRect(10, 30, 100, 200));
+
+    /// binary operations
+
+    QCOMPARE(QRectF() | lineRect, lineRect);
+    QCOMPARE(QRectF(10, 10, 40, 40) | lineRect, QRectF(10, 10, 100, 40));
+
+    QCOMPARE(QRectF(20, 20, 40, 40) & lineRect, QRectF());
+
+    QEXPECT_FAIL("", "Qt's konjunstion operator doesn't work with line-rects", Continue);
+    QCOMPARE(QRectF(10, 10, 40, 40) & lineRect, QRectF(10, 10, 40, 0));
+
+    /// QPolygon's bounding rect
+
+    QCOMPARE(QPolygonF(lineRect).boundingRect(), lineRect);
+}
+
 QTEST_MAIN(KisAlgebra2DTest)

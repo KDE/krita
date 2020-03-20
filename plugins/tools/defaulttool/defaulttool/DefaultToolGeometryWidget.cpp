@@ -257,7 +257,13 @@ void DefaultToolGeometryWidget::slotUpdateAspectButton()
 
     Q_UNUSED(hasNotKeepAspectRatio); // TODO: use for tristated mode of the checkbox
 
-    aspectButton->setKeepAspectRatio(hasKeepAspectRatio);
+    const bool useGlobalSize = chkGlobalCoordinates->isChecked();
+    const KoFlake::AnchorPosition anchor = positionSelector->value();
+    const QRectF bounds = calculateSelectionBounds(selection, anchor, useGlobalSize);
+    const bool hasNullDimensions = bounds.isEmpty();
+
+    aspectButton->setKeepAspectRatio(hasKeepAspectRatio && !hasNullDimensions);
+    aspectButton->setEnabled(!hasNullDimensions);
 }
 
 //namespace {
@@ -308,17 +314,19 @@ void DefaultToolGeometryWidget::slotUpdateSizeBoxes(bool updateAspect)
     const KoFlake::AnchorPosition anchor = positionSelector->value();
 
     KoSelection *selection = m_tool->canvas()->selectedShapesProxy()->selection();
-    QRectF bounds = calculateSelectionBounds(selection, anchor, useGlobalSize);
+    const QRectF bounds = calculateSelectionBounds(selection, anchor, useGlobalSize);
 
     const bool hasSizeConfiguration = !bounds.isNull();
+    const bool hasNullDimensions = bounds.isEmpty();
 
-    widthSpinBox->setEnabled(hasSizeConfiguration);
-    heightSpinBox->setEnabled(hasSizeConfiguration);
+    widthSpinBox->setEnabled(hasSizeConfiguration && bounds.width() > 0);
+    heightSpinBox->setEnabled(hasSizeConfiguration && bounds.height() > 0);
 
     if (hasSizeConfiguration) {
         KisSignalsBlocker b(widthSpinBox, heightSpinBox);
         widthSpinBox->changeValue(bounds.width());
         heightSpinBox->changeValue(bounds.height());
+
         if (updateAspect) {
             m_sizeAspectLocker->updateAspect();
         }
@@ -403,8 +411,8 @@ void DefaultToolGeometryWidget::slotResizeShapes()
     QSizeF newSize(widthSpinBox->value(), heightSpinBox->value());
     newSize = KisAlgebra2D::ensureSizeNotSmaller(newSize, QSizeF(eps, eps));
 
-    const qreal scaleX = newSize.width() / oldSize.width();
-    const qreal scaleY = newSize.height() / oldSize.height();
+    const qreal scaleX = oldSize.width() > 0 ? newSize.width() / oldSize.width() : 1.0;
+    const qreal scaleY = oldSize.height() > 0 ? newSize.height() / oldSize.height() : 1.0;
 
     if (qAbs(scaleX - 1.0) < eps && qAbs(scaleY - 1.0) < eps) return;
 

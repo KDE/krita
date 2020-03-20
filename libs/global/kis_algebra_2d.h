@@ -522,10 +522,9 @@ inline QPointF relativeToAbsolute(const QPointF &pt, const QRectF &rc) {
  * outside the rectangle.
  */
 inline QPointF absoluteToRelative(const QPointF &pt, const QRectF &rc) {
-    if (!rc.isValid()) return QPointF();
-
     const QPointF rel = pt - rc.topLeft();
-    return QPointF(rel.x() / rc.width(), rel.y() / rc.height());
+    return QPointF(rc.width() > 0 ? rel.x() / rc.width() : 0,
+                   rc.height() > 0 ? rel.y() / rc.height() : 0);
 
 }
 

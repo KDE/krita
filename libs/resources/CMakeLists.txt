@@ -55,8 +55,8 @@ target_link_libraries(kritaresources
     PUBLIC
         Qt5::Core
         Qt5::Widgets
-    PRIVATE
         Qt5::Sql
+    PRIVATE
         kritaversion
         kritaglobal
         kritaplugin

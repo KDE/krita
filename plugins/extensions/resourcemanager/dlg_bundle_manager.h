@@ -51,6 +51,7 @@ private Q_SLOTS:
 
 private:
 
+    void updateBundleInformation(QModelIndex current);
     void addBundleToActiveResources(QString filename);
 
     QWidget *m_page;

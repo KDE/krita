@@ -156,6 +156,31 @@ void DlgBundleManager::currentCellSelectedChanged(QModelIndex current, QModelInd
     } else {
         m_ui->bnDelete->setText(i18n("Activate"));
     }
+    updateBundleInformation(current);
+}
+
+void DlgBundleManager::updateBundleInformation(QModelIndex currentInProxy)
+{
+    QModelIndex idx = m_proxyModel->mapToSource(currentInProxy);
+
+    KisResourceStorageSP storage = KisStorageModel::instance()->storageForIndex(idx);
+
+    m_ui->lblAuthor->setText(storage->metaData(KisResourceStorage::s_meta_author).toString());
+    QString date = storage->metaData(KisResourceStorage::s_meta_creation_date).toString();
+    date = QDateTime::fromSecsSinceEpoch(date.toInt()).toString();
+    m_ui->lblCreated->setText(date);
+    m_ui->lblDescription->setPlainText(storage->metaData(KisResourceStorage::s_meta_description).toString());
+    m_ui->lblName->setText(storage->name());
+    m_ui->lblType->setText(KisResourceStorage::storageTypeToString(storage->type()));
+
+
+
+    //m_ui->lblEmail->setText(storage->metaData(KisResourceStorage::s_meta_).toString());
+    //m_ui->lblLicense->setText(storage->metaData(KisResourceStorage::s_meta_).toString());
+
+    QImage thumbnail = KisStorageModel::instance()->data(idx, Qt::UserRole + KisStorageModel::Thumbnail).value<QImage>();
+    m_ui->lblPreview->setPixmap(QPixmap::fromImage(thumbnail));
+
 }
 
 QString createNewBundlePath(QString resourceFolder, QString filename)

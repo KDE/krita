@@ -23,7 +23,6 @@ target_link_libraries(kritastore
         kritaversion 
         kritaglobal 
         KF5::ConfigCore
-        KF5::Archive
         Qt5::Xml 
         Qt5::Gui 
         ${QUAZIP_LIBRARIES}

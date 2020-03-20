@@ -281,7 +281,6 @@ find_package(KF5 ${MIN_FRAMEWORKS_VERSION} REQUIRED COMPONENTS
         ItemModels
         ItemViews
         WindowSystem
-        Archive
 )
 
 find_package(Qt5 ${MIN_QT_VERSION}

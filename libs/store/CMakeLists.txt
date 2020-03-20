@@ -11,7 +11,6 @@ set(kritastore_LIB_SRCS
     KoXmlReader.cpp
     KoXmlWriter.cpp
     KoQuaZipStore.cpp
-    KoLegacyZipStore.cpp
     StoreDebug.cpp
 )
 

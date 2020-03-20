@@ -189,8 +189,8 @@ void ShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModi
         newHeight = sign * minDocSize.height();
     }
 
-    qreal zoomX = newWidth / startWidth;
-    qreal zoomY = newHeight / startHeight;
+    qreal zoomX = qAbs(startWidth) >= minDocSize.width() ? newWidth / startWidth : 1.0;
+    qreal zoomY = qAbs(startHeight) >= minDocSize.height() ? newHeight / startHeight : 1.0;
 
     if (keepAspect) {
         const bool cornerUsed = ((m_bottom ? 1 : 0) + (m_top ? 1 : 0) + (m_left ? 1 : 0) + (m_right ? 1 : 0)) == 2;

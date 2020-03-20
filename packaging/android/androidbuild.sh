@@ -175,8 +175,7 @@ build_kf5() {
          kconfig ki18n                 \
          kwidgetsaddons kcompletion    \
          kguiaddons kitemmodels        \
-         kitemviews kwindowsystem      \
-         karchive
+         kitemviews kwindowsystem      
 
     cd $BUILD_ROOT
 }

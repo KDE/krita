@@ -47,6 +47,59 @@
 #include <KisResourceLocator.h>
 
 
+
+DlgBundleManager::ItemDelegate::ItemDelegate(QObject *parent)
+    : QAbstractItemDelegate(parent)
+{
+
+}
+
+QSize DlgBundleManager::ItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    return QSize(100, 30);
+}
+
+void DlgBundleManager::ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    if (!index.isValid()) {
+        return;
+    }
+
+    int margin = 3;
+
+    painter->save();
+
+    QString name = KisStorageModel::instance()->data(index, Qt::UserRole + KisStorageModel::DisplayName).toString();
+
+
+
+    QRect paintRect = kisGrowRect(option.rect, -margin);
+    int height = paintRect.height();
+
+    // first the image
+    QImage thumbnail = KisStorageModel::instance()->data(index, Qt::UserRole + KisStorageModel::Thumbnail).value<QImage>();
+
+
+    QRect iconRect = paintRect;
+    iconRect.setWidth(height);
+    painter->drawImage(iconRect, thumbnail);
+
+    QRect nameRect = paintRect;
+    nameRect.setX(paintRect.x() + height + margin);
+    nameRect.setWidth(paintRect.width() - height - margin);
+
+    painter->setBrush(QBrush(Qt::lightGray));
+    QTextOption textOption;
+    textOption.setAlignment(Qt::AlignVCenter);
+    painter->drawText(nameRect, name, textOption);
+
+
+
+    painter->restore();
+
+}
+
+
 DlgBundleManager::DlgBundleManager(QWidget *parent)
     : KoDialog(parent)
     , m_page(new QWidget())
@@ -77,13 +130,11 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
                           QStringList()
                           << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType::Bundle)
                           << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType::Folder));
-    m_ui->tableView->setModel(m_proxyModel);
 
-    m_ui->tableView->setColumnHidden(KisStorageModel::PreInstalled, true);
-    m_ui->tableView->setColumnHidden(KisStorageModel::Id, true);
-    m_ui->tableView->setColumnHidden(KisStorageModel::TimeStamp, true);
+    m_ui->listView->setModel(m_proxyModel);
+    m_ui->listView->setItemDelegate(new ItemDelegate(this));
 
-    QItemSelectionModel* selectionModel = m_ui->tableView->selectionModel();
+    QItemSelectionModel* selectionModel = m_ui->listView->selectionModel();
     connect(selectionModel, &QItemSelectionModel::currentChanged, this, &DlgBundleManager::currentCellSelectedChanged);
 
     connect(KisStorageModel::instance(), &KisStorageModel::modelAboutToBeReset, this, &DlgBundleManager::slotModelAboutToBeReset);
@@ -111,7 +162,7 @@ void DlgBundleManager::createBundle()
 
 void DlgBundleManager::deleteBundle()
 {
-    QModelIndex idx = m_ui->tableView->currentIndex();
+    QModelIndex idx = m_ui->listView->currentIndex();
     KIS_ASSERT(m_proxyModel);
     if (!idx.isValid()) {
         ENTER_FUNCTION() << "Index is invalid\n";
@@ -125,7 +176,7 @@ void DlgBundleManager::deleteBundle()
 void DlgBundleManager::slotModelAboutToBeReset()
 {
     ENTER_FUNCTION();
-    lastIndex = QPersistentModelIndex(m_proxyModel->mapToSource(m_ui->tableView->currentIndex()));
+    lastIndex = QPersistentModelIndex(m_proxyModel->mapToSource(m_ui->listView->currentIndex()));
     ENTER_FUNCTION() << ppVar(lastIndex) << ppVar(lastIndex.isValid());
 }
 
@@ -135,7 +186,7 @@ void DlgBundleManager::slotModelReset()
     ENTER_FUNCTION() << ppVar(lastIndex) << ppVar(lastIndex.isValid());
     if (lastIndex.isValid()) {
         ENTER_FUNCTION() << "last index valid!";
-        m_ui->tableView->setCurrentIndex(m_proxyModel->mapToSource(lastIndex));
+        m_ui->listView->setCurrentIndex(m_proxyModel->mapToSource(lastIndex));
     }
     lastIndex = QModelIndex();
 }
@@ -143,7 +194,7 @@ void DlgBundleManager::slotModelReset()
 void DlgBundleManager::currentCellSelectedChanged(QModelIndex current, QModelIndex previous)
 {
     ENTER_FUNCTION() << "Current cell changed!";
-    QModelIndex idx = m_ui->tableView->currentIndex();
+    QModelIndex idx = m_ui->listView->currentIndex();
     KIS_ASSERT(m_proxyModel);
     if (!idx.isValid()) {
         ENTER_FUNCTION() << "Index is invalid\n";
@@ -223,3 +274,4 @@ void DlgBundleManager::addBundleToActiveResources(QString filename)
     KIS_ASSERT(!storage.isNull());
     KisResourceLocator::instance()->addStorage(newLocation, storage);
 }
+

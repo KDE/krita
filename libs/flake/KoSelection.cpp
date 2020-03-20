@@ -75,8 +75,6 @@ QRectF KoSelection::outlineRect() const
     QRectF boundingRect;
 
     Q_FOREACH (KoShape *shape, selectedVisibleShapes()) {
-        if (!shape->outlineRect().isValid()) continue;
-
         // it is cheaper to invert-transform each outline, than
         // to group 300+ rotated rectangles into a polygon
         boundingRect |=

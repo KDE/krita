@@ -86,6 +86,7 @@ DefaultToolGeometryWidget::DefaultToolGeometryWidget(KoInteractionTool *tool, QW
     connect(selectedShapesProxy, SIGNAL(selectionContentChanged()), this, SLOT(slotUpdateOpacitySlider()));
 
     connect(chkGlobalCoordinates, SIGNAL(toggled(bool)), SLOT(slotUpdateSizeBoxes()));
+    connect(chkGlobalCoordinates, SIGNAL(toggled(bool)), SLOT(slotUpdateAspectButton()));
 
 
     /**

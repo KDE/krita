@@ -70,6 +70,8 @@
 
 #include <KoShapeTransformCommand.h>
 
+#include "kis_action_registry.h"
+
 #include "widgets/kis_progress_widget.h"
 
 #include "kis_transform_utils.h"
@@ -692,6 +694,22 @@ void KisToolTransform::initThumbnailImage(KisPaintDeviceSP previewDevice)
 void KisToolTransform::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     KisTool::activate(toolActivation, shapes);
+    m_actionConnections.addConnection(action("movetool-move-up"), SIGNAL(triggered(bool)),
+                                      this, SLOT(slotMoveDiscreteUp()));
+    m_actionConnections.addConnection(action("movetool-move-up-more"), SIGNAL(triggered(bool)),
+                                      this, SLOT(slotMoveDiscreteUpMore()));
+    m_actionConnections.addConnection(action("movetool-move-down"), SIGNAL(triggered(bool)),
+                                      this, SLOT(slotMoveDiscreteDown()));
+    m_actionConnections.addConnection(action("movetool-move-down-more"), SIGNAL(triggered(bool)),
+                                      this, SLOT(slotMoveDiscreteDownMore()));
+    m_actionConnections.addConnection(action("movetool-move-left"), SIGNAL(triggered(bool)),
+                                      this, SLOT(slotMoveDiscreteLeft()));
+    m_actionConnections.addConnection(action("movetool-move-left-more"), SIGNAL(triggered(bool)),
+                                      this, SLOT(slotMoveDiscreteLeftMore()));
+    m_actionConnections.addConnection(action("movetool-move-right"), SIGNAL(triggered(bool)),
+                                      this, SLOT(slotMoveDiscreteRight()));
+    m_actionConnections.addConnection(action("movetool-move-right-more"), SIGNAL(triggered(bool)),
+                                      this, SLOT(slotMoveDiscreteRightMore()));
 
     if (currentNode()) {
         m_transaction = TransformTransactionProperties(QRectF(), &m_currentArgs, KisNodeSP(), {});
@@ -704,6 +722,7 @@ void KisToolTransform::deactivate()
 {
     endStroke();
     m_canvas->updateCanvas();
+    m_actionConnections.clear();
     KisTool::deactivate();
 }
 
@@ -1069,6 +1088,46 @@ void KisToolTransform::slotEditingFinished()
     commitChanges();
 }
 
+void KisToolTransform::slotMoveDiscreteUp()
+{
+    setTranslateY(translateY()-1.0);
+}
+
+void KisToolTransform::slotMoveDiscreteUpMore()
+{
+    setTranslateY(translateY()-10.0);
+}
+
+void KisToolTransform::slotMoveDiscreteDown()
+{
+    setTranslateY(translateY()+1.0);
+}
+
+void KisToolTransform::slotMoveDiscreteDownMore()
+{
+    setTranslateY(translateY()+10.0);
+}
+
+void KisToolTransform::slotMoveDiscreteLeft()
+{
+    setTranslateX(translateX()-1.0);
+}
+
+void KisToolTransform::slotMoveDiscreteLeftMore()
+{
+    setTranslateX(translateX()-10.0);
+}
+
+void KisToolTransform::slotMoveDiscreteRight()
+{
+    setTranslateX(translateX()+1.0);
+}
+
+void KisToolTransform::slotMoveDiscreteRightMore()
+{
+    setTranslateX(translateX()+10.0);
+}
+
 void KisToolTransform::slotUpdateToWarpType()
 {
     setTransformMode(KisToolTransform::TransformToolMode::WarpTransformMode);
@@ -1122,4 +1181,21 @@ void KisToolTransform::setTranslateY(double translation)
 void KisToolTransform::setTranslateX(double translation)
 {
     m_optionsWidget->slotSetTranslateX(translation);
+}
+
+QList<QAction *> KisToolTransformFactory::createActionsImpl()
+{
+    KisActionRegistry *actionRegistry = KisActionRegistry::instance();
+    QList<QAction *> actions = KisToolPaintFactoryBase::createActionsImpl();
+
+    actions << actionRegistry->makeQAction("movetool-move-up");
+    actions << actionRegistry->makeQAction("movetool-move-down");
+    actions << actionRegistry->makeQAction("movetool-move-left");
+    actions << actionRegistry->makeQAction("movetool-move-right");
+    actions << actionRegistry->makeQAction("movetool-move-up-more");
+    actions << actionRegistry->makeQAction("movetool-move-down-more");
+    actions << actionRegistry->makeQAction("movetool-move-left-more");
+    actions << actionRegistry->makeQAction("movetool-move-right-more");
+
+    return actions;
 }

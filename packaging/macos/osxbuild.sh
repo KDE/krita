@@ -127,6 +127,7 @@ cmake_3rdparty () {
     cd ${KIS_TBUILD_DIR}
 
     local build_pkgs=("${@}") # convert to array
+    local error="false"
 
     if [[ ${2} = "1" ]]; then
         local nofix="true"
@@ -141,30 +142,32 @@ cmake_3rdparty () {
         if [[ ! ${osxbuild_error} -ne 0 ]]; then
             print_msg "Build Success! ${package}"
         else
-            echo "build dependencies stop!"
-            exit
+            log "${pkg} build fail, attempting known fixes..."
+            error="true"
         fi
         # fixes does not depend on failure
         if [[ ! ${nofix} ]]; then
-            build_3rdparty_fixes ${package}
+            build_3rdparty_fixes ${package} ${error}
         fi
     done
 }
 
 build_3rdparty_fixes(){
-    pkg=${1}
+    local pkg=${1}
+    local error=${2}
     if [[ "${pkg}" = "ext_qt" && -e "${KIS_INSTALL_DIR}/bin/qmake" ]]; then
         ln -sf qmake "${KIS_INSTALL_DIR}/bin/qmake-qt5"
         # build macdeployqt
         log_cmd cd "${BUILDROOT}/depbuild/ext_qt/ext_qt-prefix/src/ext_qt/qttools/src"
         print_if_error "macdeployqt source dir was not found, it will be missing for deployment!"
 
-        if [[ ! ${osxbuild_error} -ne 0 ]]; then
+        if [[ ! ${osxbuild_error} -ne 0 && ! -e "${KIS_INSTALL_DIR}/bin/macdeployqt" ]]; then
             make sub-macdeployqt-all
             make sub-macdeployqt-install_subtargets
             make install
         fi
         cd "${KIS_TBUILD_DIR}"
+        error="false"
 
     elif [[ "${pkg}" = "ext_openexr" ]]; then
         # open exr will fail the first time is called
@@ -175,12 +178,19 @@ build_3rdparty_fixes(){
         log_cmd install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib $(find ${KIS_TBUILD_DIR}/ext_openexr/ext_openexr-prefix/src/ext_openexr-build -name dwaLookups)
         # we must rerun build!
         cmake_3rdparty ext_openexr "1"
+        error="false"
 
     elif [[ "${pkg}" = "ext_fontconfig" ]]; then
         log "fixing rpath on fc-cache"
         log_cmd install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib ${KIS_TBUILD_DIR}/ext_fontconfig/ext_fontconfig-prefix/src/ext_fontconfig-build/fc-cache/.libs/fc-cache
         # rerun rebuild
         cmake_3rdparty ext_fontconfig "1"
+        error="false"
+    fi
+
+    if [[ "${error}" = "true" ]]; then
+        log "Error building package ${pkg}, stopping..."
+        exit
     fi
 }
 

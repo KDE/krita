@@ -49,7 +49,7 @@ QImage getImageFromClipboard()
     QSet<QString> clipboardMimeTypes;
 
 #if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
-    if (clipboard->mimeData() && clipboard->mimeData()->formats().isEmpty()) {
+    if (clipboard->mimeData() && !clipboard->mimeData()->formats().isEmpty()) {
         clipboardMimeTypes = QSet<QString>(clipboard->mimeData()->formats().begin(),
                                            clipboard->mimeData()->formats().end());
     }

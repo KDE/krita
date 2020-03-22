@@ -966,7 +966,7 @@ void KisToolTransformConfigWidget::slotSetTranslateX(int value)
     const QPointF anchorPointView = m.finalTransform().map(anchorPoint);
     const QPointF newAnchorPointView(value, anchorPointView.y());
     config->setTransformedCenter(config->transformedCenter() + newAnchorPointView - anchorPointView);
-
+    translateXBox->setValue(value);
     notifyConfigChanged();
 }
 
@@ -982,7 +982,7 @@ void KisToolTransformConfigWidget::slotSetTranslateY(int value)
     const QPointF anchorPointView = m.finalTransform().map(anchorPoint);
     const QPointF newAnchorPointView(anchorPointView.x(), value);
     config->setTransformedCenter(config->transformedCenter() + newAnchorPointView - anchorPointView);
-
+    translateYBox->setValue(value);
     notifyConfigChanged();
 }
 

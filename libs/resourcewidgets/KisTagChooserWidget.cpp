@@ -66,7 +66,7 @@ KisTagChooserWidget::KisTagChooserWidget(KisTagModel* model, QWidget* parent)
     d->comboBox->setToolTip(i18n("Tag"));
     d->comboBox->setSizePolicy(QSizePolicy::MinimumExpanding , QSizePolicy::Fixed );
 
-    d->comboBox->setModel(d->activeFilterModel.get());
+    d->comboBox->setModel(d->activeFilterModel.data());
 
     d->model = model;
 

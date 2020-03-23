@@ -41,8 +41,8 @@ void KisStorageChooserDelegate::paint(QPainter *painter, const QStyleOptionViewI
 
     painter->save();
 
-    QString name = index.siblingAtColumn(KisStorageModel::DisplayName).data(Qt::DisplayRole).value<QString>();
-    QString location = index.siblingAtColumn(KisStorageModel::Location).data(Qt::DisplayRole).value<QString>();
+    QString name = index.sibling(index.row(), KisStorageModel::DisplayName).data(Qt::DisplayRole).value<QString>();
+    QString location = index.sibling(index.row(), KisStorageModel::Location).data(Qt::DisplayRole).value<QString>();
     bool active = index.data(Qt::UserRole + KisStorageModel::Active).value<bool>();
     QString storageType = index.data(Qt::UserRole + KisStorageModel::StorageType).value<QString>();
 

@@ -582,6 +582,10 @@ xcopy /S /Y /I %DEPS_INSTALL_DIR%\lib\plugins\imageformats %pkg_root%\bin\imagef
 xcopy /S /Y /I %DEPS_INSTALL_DIR%\plugins\imageformats %pkg_root%\bin\imageformats
 xcopy /S /Y /I %DEPS_INSTALL_DIR%\lib\plugins\kf5 %pkg_root%\bin\kf5
 xcopy /S /Y /I %DEPS_INSTALL_DIR%\plugins\kf5 %pkg_root%\bin\kf5
+
+:: Copy the sql drivers explicitly
+xcopy /S /Y /I %DEPS_INSTALL_DIR%\plugins\sqldrivers %pkg_root%\bin\sqldrivers
+
 :: Qt Translations
 :: it seems that windeployqt does these, but only *some* of these???
 mkdir %pkg_root%\bin\translations

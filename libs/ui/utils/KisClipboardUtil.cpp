@@ -25,6 +25,7 @@
 #include <QList>
 #include <QSet>
 #include <QPair>
+#include <QDebug>
 
 namespace KisClipboardUtil {
 
@@ -49,6 +50,9 @@ QImage getImageFromClipboard()
     QSet<QString> clipboardMimeTypes;
 
 #if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
+
+    qDebug() << clipboard->mimeData()->formats();
+
     if (clipboard->mimeData() && !clipboard->mimeData()->formats().isEmpty()) {
         clipboardMimeTypes = QSet<QString>(clipboard->mimeData()->formats().begin(),
                                            clipboard->mimeData()->formats().end());

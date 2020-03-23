@@ -26,6 +26,7 @@ inline double drand48()
 }
 #endif
 
+#include <QPainterPath>
 #include <QTest>
 
 #include "kis_stroke_benchmark.h"

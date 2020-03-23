@@ -35,6 +35,7 @@
 #include <QColor>
 #include <QString>
 #include <QPainter>
+#include <QPainterPath>
 
 class KoHatchBackground::Private : public QSharedData
 {

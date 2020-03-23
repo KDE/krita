@@ -31,6 +31,7 @@
 #include <QBrush>
 #include <QPainter>
 #include <QSharedData>
+#include <QPainterPath>
 
 class KoGradientBackground::Private : public QSharedData
 {

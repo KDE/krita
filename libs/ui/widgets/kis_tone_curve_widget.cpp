@@ -25,6 +25,7 @@
 #include <QPointF>
 #include <QPolygonF>
 #include <QPainter>
+#include <QPainterPath>
 #include <QPaintEvent>
 #include <QImage>
 #include <QTextStream>

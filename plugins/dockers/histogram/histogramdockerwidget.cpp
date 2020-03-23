@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <QTime>
 #include <QPainter>
+#include <QPainterPath>
 #include <functional>
 
 #include "KoChannelInfo.h"

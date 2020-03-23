@@ -18,6 +18,7 @@
 #include "kis_liquify_paint_helper.h"
 
 #include <QElapsedTimer>
+#include <QPainterPath>
 
 #include "kis_algebra_2d.h"
 #include "KoPointerEvent.h"

@@ -19,6 +19,7 @@
 #include "kis_transform_utils.h"
 
 #include <cmath>
+#include <QPainterPath>
 #include <QTransform>
 #include <KoUnit.h>
 #include "tool_transform_args.h"

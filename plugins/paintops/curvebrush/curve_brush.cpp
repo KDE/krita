@@ -18,6 +18,8 @@
 
 #include "curve_brush.h"
 
+#include <QPainterPath>
+
 #include <KoColor.h>
 #include <KoColorSpace.h>
 

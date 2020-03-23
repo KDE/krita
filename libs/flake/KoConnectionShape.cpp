@@ -33,6 +33,7 @@
 #include <KoXmlNS.h>
 #include <KoUnit.h>
 #include <QPainter>
+#include <QPainterPath>
 
 #include <FlakeDebug.h>
 

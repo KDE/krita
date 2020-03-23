@@ -258,6 +258,7 @@ public:
         } else {
             unit = KoUnit::Centimeter;
         }
+        connect(&imageIdleWatcher, SIGNAL(startedIdleMode()), q, SLOT(slotPerformIdleRoutines()));
     }
 
     Private(const Private &rhs, KisDocument *_q)
@@ -272,6 +273,7 @@ public:
         , savingLock(&savingMutex)
     {
         copyFromImpl(rhs, _q, CONSTRUCT);
+        connect(&imageIdleWatcher, SIGNAL(startedIdleMode()), q, SLOT(slotPerformIdleRoutines()));
     }
 
     ~Private() {
@@ -354,13 +356,6 @@ public:
         image = _image;
 
         imageIdleWatcher.setTrackedImage(image);
-
-        if (image) {
-            imageIdleConnection.reset(
-                        new KisSignalAutoConnection(
-                            &imageIdleWatcher, SIGNAL(startedIdleMode()),
-                            image.data(), SLOT(explicitRegenerateLevelOfDetail())));
-        }
     }
 
     void copyFrom(const Private &rhs, KisDocument *q);
@@ -1042,6 +1037,13 @@ bool KisDocument::initiateSavingInBackground(const QString actionName,
         waitForImage(clonedDocument->image());
     }
 
+    KisConfig cfg(true);
+    if (cfg.trimKra()) {
+        clonedDocument->image()->cropImage(clonedDocument->image()->bounds());
+        clonedDocument->image()->purgeUnusedData(false);
+        waitForImage(clonedDocument->image());
+    }
+
     KIS_SAFE_ASSERT_RECOVER(clonedDocument->image()->isIdle()) {
         waitForImage(clonedDocument->image());
     }
@@ -1173,6 +1175,12 @@ void KisDocument::slotAutoSave()
 void KisDocument::slotInitiateAsyncAutosaving(KisDocument *clonedDocument)
 {
     slotAutoSaveImpl(std::unique_ptr<KisDocument>(clonedDocument));
+}
+
+void KisDocument::slotPerformIdleRoutines()
+{
+    d->image->explicitRegenerateLevelOfDetail();
+    d->image->purgeUnusedData(true);
 }
 
 void KisDocument::slotCompleteAutoSaving(const KritaUtils::ExportFileJob &job, KisImportExportErrorCode status, const QString &errorMessage)

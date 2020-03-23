@@ -792,6 +792,49 @@ void KisImage::cropImage(const QRect& newRect)
     resizeImageImpl(newRect, true);
 }
 
+void KisImage::purgeUnusedData(bool isCancellable)
+{
+    struct PurgeUnusedDataStroke : public KisRunnableBasedStrokeStrategy {
+        PurgeUnusedDataStroke(KisImageSP image, bool isCancellable)
+            : KisRunnableBasedStrokeStrategy(QLatin1String("purge-unused-data"),
+                                             kundo2_noi18n("purge-unused-data")),
+              m_image(image)
+        {
+            this->enableJob(JOB_INIT, true, KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE);
+            this->enableJob(JOB_DOSTROKE, true);
+            setClearsRedoOnStart(false);
+            setRequestsOtherStrokesToEnd(!isCancellable);
+            setCanForgetAboutMe(isCancellable);
+        }
+
+        void initStrokeCallback() {
+            KisPaintDeviceList deviceList;
+            QVector<KisStrokeJobData*> jobsData;
+
+            KisLayerUtils::recursiveApplyNodes(m_image->root(),
+                [&deviceList](KisNodeSP node) {
+                   deviceList << node->getLodCapableDevices();
+                 });
+
+            Q_FOREACH (KisPaintDeviceSP device, deviceList) {
+                if (!device) continue;
+
+                KritaUtils::addJobConcurrent(jobsData,
+                    [device] () {
+                        const_cast<KisPaintDevice*>(device.data())->purgeDefaultPixels();
+                    });
+            }
+
+            addMutatedJobs(jobsData);
+        }
+
+    private:
+        KisImageSP m_image;
+    };
+
+    KisStrokeId id = startStroke(new PurgeUnusedDataStroke(this, isCancellable));
+    endStroke(id);
+}
 
 void KisImage::cropNode(KisNodeSP node, const QRect& newRect)
 {

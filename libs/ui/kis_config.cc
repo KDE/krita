@@ -1837,6 +1837,16 @@ void KisConfig::setCompressKra(bool compress)
     m_cfg.writeEntry("compressLayersInKra", compress);
 }
 
+bool KisConfig::trimKra(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("TrimKra", false));
+}
+
+void KisConfig::setTrimKra(bool trim)
+{
+    m_cfg.writeEntry("TrimKra", trim);
+}
+
 bool KisConfig::toolOptionsInDocker(bool defaultValue) const
 {
     return (defaultValue ? true : m_cfg.readEntry("ToolOptionsInDocker", true));

@@ -48,8 +48,9 @@
 
 
 
-DlgBundleManager::ItemDelegate::ItemDelegate(QObject *parent)
-    : QAbstractItemDelegate(parent)
+DlgBundleManager::ItemDelegate::ItemDelegate(QObject *parent, KisStorageFilterProxyModel* proxy)
+    : QStyledItemDelegate(parent)
+    , m_bundleManagerProxyModel(proxy)
 {
 
 }
@@ -65,19 +66,33 @@ void DlgBundleManager::ItemDelegate::paint(QPainter *painter, const QStyleOption
         return;
     }
 
-    int margin = 3;
+    QModelIndex sourceIndex = m_bundleManagerProxyModel->mapToSource(index);
+
+    int minMargin = 3;
+    int textMargin = 10;
+
 
     painter->save();
 
-    QString name = KisStorageModel::instance()->data(index, Qt::UserRole + KisStorageModel::DisplayName).toString();
+    // paint background
+    QColor bgColor = option.state & QStyle::State_Selected ?
+        qApp->palette().color(QPalette::Highlight) :
+        qApp->palette().color(QPalette::Base);
+    QBrush oldBrush(painter->brush());
+    QPen oldPen = painter->pen();
+    painter->setBrush(QBrush(bgColor));
+    painter->setPen(Qt::NoPen);
+    painter->drawRect(option.rect);
+    painter->setBrush(oldBrush);
+    painter->setPen(oldPen);
 
 
 
-    QRect paintRect = kisGrowRect(option.rect, -margin);
+    QRect paintRect = kisGrowRect(option.rect, -minMargin);
     int height = paintRect.height();
 
     // first the image
-    QImage thumbnail = KisStorageModel::instance()->data(index, Qt::UserRole + KisStorageModel::Thumbnail).value<QImage>();
+    QImage thumbnail = KisStorageModel::instance()->data(sourceIndex, Qt::UserRole + KisStorageModel::Thumbnail).value<QImage>();
 
 
     QRect iconRect = paintRect;
@@ -85,15 +100,33 @@ void DlgBundleManager::ItemDelegate::paint(QPainter *painter, const QStyleOption
     painter->drawImage(iconRect, thumbnail);
 
     QRect nameRect = paintRect;
-    nameRect.setX(paintRect.x() + height + margin);
-    nameRect.setWidth(paintRect.width() - height - margin);
+    nameRect.setX(paintRect.x() + height + textMargin);
+    nameRect.setWidth(paintRect.width() - height - textMargin);
 
     painter->setBrush(QBrush(Qt::lightGray));
-    QTextOption textOption;
-    textOption.setAlignment(Qt::AlignVCenter);
-    painter->drawText(nameRect, name, textOption);
+    QTextOption textCenterOption;
+    textCenterOption.setAlignment(Qt::AlignVCenter);
+    QString name = KisStorageModel::instance()->data(sourceIndex, Qt::UserRole + KisStorageModel::DisplayName).toString();
+    painter->drawText(nameRect, name, textCenterOption);
 
 
+    // now the checkbox
+
+    QStyleOptionViewItem optionCheckable = option;
+    QRect checkboxRect = paintRect;
+    painter->setPen(QPen(Qt::lightGray));
+    painter->setBrush(QBrush(Qt::lightGray));
+    checkboxRect.setX(paintRect.x() + paintRect.width() - minMargin - height);
+    checkboxRect.setWidth(height);
+    optionCheckable.rect = checkboxRect;
+    //QFlags flag = QFlags::Zero;
+
+    optionCheckable.features = QStyleOptionViewItem::ViewItemFeatures(0);
+    optionCheckable.features |= QStyleOptionViewItem::HasCheckIndicator;
+
+
+    QModelIndex columnIndex = m_bundleManagerProxyModel->index(index.row(), KisStorageModel::Active);
+    QStyledItemDelegate::paint(painter, optionCheckable, columnIndex);
 
     painter->restore();
 
@@ -132,10 +165,12 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
                           << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType::Folder));
 
     m_ui->listView->setModel(m_proxyModel);
-    m_ui->listView->setItemDelegate(new ItemDelegate(this));
+    m_ui->listView->setItemDelegate(new ItemDelegate(this, m_proxyModel));
 
     QItemSelectionModel* selectionModel = m_ui->listView->selectionModel();
     connect(selectionModel, &QItemSelectionModel::currentChanged, this, &DlgBundleManager::currentCellSelectedChanged);
+    //connect(m_ui->listView, &QItemSelectionModel::currentChanged, this, &DlgBundleManager::currentCellSelectedChanged);
+
 
     connect(KisStorageModel::instance(), &KisStorageModel::modelAboutToBeReset, this, &DlgBundleManager::slotModelAboutToBeReset);
     connect(KisStorageModel::instance(), &KisStorageModel::modelReset, this, &DlgBundleManager::slotModelReset);

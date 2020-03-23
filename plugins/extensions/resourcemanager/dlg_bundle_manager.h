@@ -23,7 +23,7 @@
 #include <KoDialog.h>
 #include <QModelIndex>
 #include <QPersistentModelIndex>
-#include <QAbstractItemDelegate>
+#include <QStyledItemDelegate>
 
 class KisStorageModel;
 class KisStorageFilterProxyModel;
@@ -38,16 +38,17 @@ class DlgBundleManager : public KoDialog
     Q_OBJECT
 public:
 
-    class ItemDelegate : public QAbstractItemDelegate
+    class ItemDelegate : public QStyledItemDelegate
     {
     public:
 
-        ItemDelegate(QObject*);
+        ItemDelegate(QObject*, KisStorageFilterProxyModel*);
         QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex & index) const override;
         void paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const override;
 
 
-
+    private:
+        KisStorageFilterProxyModel* m_bundleManagerProxyModel;
 
     };
 

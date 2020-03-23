@@ -21,6 +21,7 @@
 #include <kis_assistant_tool.h>
 
 #include <QPainter>
+#include <QPainterPath>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 #include <QStandardPaths>

@@ -21,7 +21,10 @@
 #include "KoSvgText.h"
 #include "KoSvgTextProperties.h"
 #include <QSharedData>
+#include <QPainterPath>
 #include <QTextCharFormat>
+
+#include <KoShapeContainer_p.h>
 
 class SvgGraphicsContext;
 

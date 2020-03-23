@@ -21,6 +21,7 @@
 
 #include <QImage>
 #include <QColor>
+#include <QPainterPath>
 #include <QPointer>
 
 #include <KoPointerEvent.h>

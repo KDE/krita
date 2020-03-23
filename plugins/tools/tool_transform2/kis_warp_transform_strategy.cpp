@@ -22,6 +22,7 @@
 
 #include <QPointF>
 #include <QPainter>
+#include <QPainterPath>
 
 #include "kis_coordinates_converter.h"
 #include "tool_transform_args.h"

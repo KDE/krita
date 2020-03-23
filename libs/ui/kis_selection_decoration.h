@@ -19,6 +19,7 @@
 #ifndef _KIS_SELECTION_DECORATION_H_
 #define _KIS_SELECTION_DECORATION_H_
 
+#include <QPainterPath>
 #include <QTimer>
 #include <QPolygon>
 #include <QPen>

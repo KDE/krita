@@ -22,6 +22,7 @@
 #include "kis_tool.h"
 
 #include <QGridLayout>
+#include <QPainterPath>
 #include <QTimer>
 #include <QCheckBox>
 

@@ -23,6 +23,7 @@
 #include "KoColorBackground.h"
 #include "KoShapePaintingContext.h"
 
+#include <QPainterPath>
 #include <QTest>
 
 void TestShapeBackgroundCommand::refCounting()

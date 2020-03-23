@@ -66,6 +66,7 @@
 #include <FlakeDebug.h>
 #include <klocalizedstring.h>
 #include <QPainter>
+#include <QPainterPath>
 #include <QBitmap>
 #include <QTabWidget>
 

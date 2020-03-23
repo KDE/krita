@@ -19,6 +19,8 @@
 #ifndef KIS_EXPERIMENT_PAINTOP_H_
 #define KIS_EXPERIMENT_PAINTOP_H_
 
+#include <QPainterPath>
+
 #include <klocalizedstring.h>
 #include <brushengine/kis_paintop.h>
 #include <kis_types.h>

@@ -23,6 +23,7 @@
 #include "SvgTextChangeCommand.h"
 
 #include <QLabel>
+#include <QPainterPath>
 #include <QToolButton>
 #include <QGridLayout>
 #include <QVBoxLayout>

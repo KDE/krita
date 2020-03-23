@@ -50,6 +50,7 @@
 
 #include <FlakeDebug.h>
 #include <QPainter>
+#include <QPainterPath>
 
 #include "kis_global.h"
 

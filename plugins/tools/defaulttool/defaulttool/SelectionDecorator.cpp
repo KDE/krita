@@ -21,6 +21,8 @@
 
 #include "SelectionDecorator.h"
 
+#include <QPainterPath>
+
 #include <KoShape.h>
 #include <KoSelection.h>
 #include <KoResourcePaths.h>

@@ -21,6 +21,7 @@
 #include <QRectF>
 #include <QTransform>
 #include <QPainter>
+#include <QPainterPath>
 #include <KoShape.h>
 #include "kis_algebra_2d.h"
 

@@ -27,6 +27,7 @@
 #include <KoViewConverter.h>
 
 #include <QPainter>
+#include <QPainterPath>
 
 #include <cmath>
 

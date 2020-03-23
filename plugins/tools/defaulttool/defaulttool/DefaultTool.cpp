@@ -67,6 +67,7 @@
 
 #include <KoIcon.h>
 
+#include <QPainterPath>
 #include <QPointer>
 #include <QAction>
 #include <QKeyEvent>

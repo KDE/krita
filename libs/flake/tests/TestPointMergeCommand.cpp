@@ -23,6 +23,7 @@
 #include "KoPathPoint.h"
 #include "KoPathPointData.h"
 #include <sdk/tests/kistest.h>
+#include <QPainterPath>
 #include <QTest>
 #include <FlakeDebug.h>
 

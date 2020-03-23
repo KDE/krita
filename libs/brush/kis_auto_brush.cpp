@@ -24,6 +24,7 @@
 #include <kis_debug.h>
 #include <math.h>
 
+#include <QPainterPath>
 #include <QRect>
 #include <QDomElement>
 #include <QtConcurrentMap>

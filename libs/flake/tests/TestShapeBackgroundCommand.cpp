@@ -24,6 +24,7 @@
 #include "KoShapePaintingContext.h"
 #include "KoViewConverter.h"
 
+#include <QPainterPath>
 #include <QTest>
 
 void TestShapeBackgroundCommand::refCounting()

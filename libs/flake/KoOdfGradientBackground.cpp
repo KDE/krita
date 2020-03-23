@@ -32,6 +32,7 @@
 #include <KoOdfStylesReader.h>
 
 #include <QPainter>
+#include <QPainterPath>
 #include <QColor>
 #include <QImage>
 #include <qmath.h>

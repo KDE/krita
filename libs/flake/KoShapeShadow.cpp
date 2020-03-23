@@ -32,6 +32,7 @@
 #include <KoViewConverter.h>
 #include <FlakeDebug.h>
 #include <QPainter>
+#include <QPainterPath>
 #include <QAtomicInt>
 #include <QImage>
 #include <QRectF>

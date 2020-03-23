@@ -37,6 +37,7 @@
 
 #include <QBrush>
 #include <QPainter>
+#include <QPainterPath>
 #include <QPointer>
 
 class KoPatternBackgroundPrivate : public KoShapeBackgroundPrivate

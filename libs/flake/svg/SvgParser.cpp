@@ -31,6 +31,7 @@
 
 #include <QColor>
 #include <QPainter>
+#include <QPainterPath>
 #include <QDir>
 
 #include <KoShape.h>

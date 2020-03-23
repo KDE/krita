@@ -19,6 +19,7 @@
 #include "TestSvgParser.h"
 
 
+#include <QPainterPath>
 #include <QTest>
 #include <svg/SvgUtil.h>
 #include <KoShapeStrokeModel.h>

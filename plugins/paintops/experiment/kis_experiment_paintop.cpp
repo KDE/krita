@@ -22,6 +22,8 @@
 
 #include <cmath>
 
+#include <QPainterPath>
+
 #include <KoCompositeOpRegistry.h>
 
 #include <kis_debug.h>

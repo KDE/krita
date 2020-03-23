@@ -33,6 +33,7 @@
 #include "KisViewManager.h"
 
 #include <QPainter>
+#include <QPainterPath>
 #include <QApplication>
 
 struct KisPaintingAssistantsDecoration::Private {

@@ -48,6 +48,7 @@
 #include <vector>
 #include <memory>
 #include <QPainter>
+#include <QPainterPath>
 #include <boost/optional.hpp>
 
 #include <text/KoSvgTextChunkShapeLayoutInterface.h>

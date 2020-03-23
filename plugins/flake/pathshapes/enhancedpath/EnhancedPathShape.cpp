@@ -30,6 +30,8 @@
 #include "EnhancedPathHandle.h"
 #include "EnhancedPathFormula.h"
 
+#include <QPainterPath>
+
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>

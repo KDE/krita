@@ -207,7 +207,7 @@ QStringList DlgAnimationRenderer::makeVideoMimeTypesList()
     return supportedMimeTypes;
 }
 
-bool DlgAnimationRenderer::mimeSupportsHDR(QString &mime)
+bool DlgAnimationRenderer::imageMimeSupportsHDR(QString &mime)
 {
     return (mime == "image/png");
 }
@@ -282,8 +282,16 @@ void DlgAnimationRenderer::loadAnimationOptions(const KisAnimationRenderingOptio
 
         getDefaultVideoEncoderOptions(options.videoMimeType, settings,
                                       &m_customFFMpegOptionsString,
-                                      &m_useHDR);
+                                      &m_wantsRenderWithHDR);
     }
+
+    {
+        KisConfig cfg(true);
+        KisPropertiesConfigurationSP settings = cfg.exportConfiguration("img_sequence/" + options.frameMimeType);
+
+        m_wantsRenderWithHDR |= settings->getPropertyLazy("saveAsHDR", false);
+    }
+
 
     m_page->ffmpegLocation->setStartDir(QFileInfo(m_doc->localFilePath()).path());
     m_page->ffmpegLocation->setFileName(findFFMpeg(options.ffmpegPath));
@@ -320,6 +328,8 @@ void DlgAnimationRenderer::selectRenderType(int index)
     }
     m_page->videoFilename->setMimeTypeFilters(QStringList() << mimeType, mimeType);
     m_page->videoFilename->setFileName(videoFileName);
+
+    m_wantsRenderWithHDR = (mimeType == "video/mp4") ? m_wantsRenderWithHDR : false;
 }
 
 void DlgAnimationRenderer::selectRenderOptions()
@@ -342,7 +352,7 @@ void DlgAnimationRenderer::selectRenderOptions()
         KisConfig cfg(true);
         KisPropertiesConfigurationSP settings = cfg.exportConfiguration("VIDEO_ENCODER");
         encoderConfigWidget->setConfiguration(settings);
-        encoderConfigWidget->setHDRConfiguration(m_useHDR);
+        encoderConfigWidget->setHDRConfiguration(m_wantsRenderWithHDR);
     }
 
     KoDialog dlg(this);
@@ -352,8 +362,7 @@ void DlgAnimationRenderer::selectRenderOptions()
         KisConfig cfg(false);
         cfg.setExportConfiguration("VIDEO_ENCODER", encoderConfigWidget->configuration());
         m_customFFMpegOptionsString = encoderConfigWidget->customUserOptionsString();
-        m_useHDR = encoderConfigWidget->videoConfiguredForHDR();
-        ENTER_FUNCTION() << ppVar(m_useHDR);
+        m_wantsRenderWithHDR = encoderConfigWidget->videoConfiguredForHDR();
     }
 
     dlg.setMainWidget(0);
@@ -372,25 +381,29 @@ void DlgAnimationRenderer::sequenceMimeTypeOptionsClicked()
         frameExportConfigWidget = filter->createConfigurationWidget(0, KisDocument::nativeFormatMimeType(), mimetype.toLatin1());
 
         if (frameExportConfigWidget) {
-            KisPropertiesConfigurationSP config = filter->lastSavedConfiguration("", mimetype.toLatin1());
-            if (config) {
-                KisImportExportManager::fillStaticExportConfigurationProperties(config, m_image);
+            KisConfig cfg(true);
+
+            KisPropertiesConfigurationSP exportConfig = cfg.exportConfiguration("img_sequence/" + mimetype);
+            if (exportConfig) {
+                KisImportExportManager::fillStaticExportConfigurationProperties(exportConfig, m_image);
             }
 
             //Important -- m_useHDR allows the synchronization of both the video and image render settings.
-            if(mimeSupportsHDR(mimetype)) {
-                config->setProperty("saveAsHDR", m_useHDR);
+            if(imageMimeSupportsHDR(mimetype)) {
+                exportConfig->setProperty("saveAsHDR", m_wantsRenderWithHDR);
+                if (m_wantsRenderWithHDR) {
+                    exportConfig->setProperty("forceSRGB", false);
+                }
             }
 
-            frameExportConfigWidget->setConfiguration(config);
+            frameExportConfigWidget->setConfiguration(exportConfig);
             KoDialog dlg(this);
             dlg.setMainWidget(frameExportConfigWidget);
             dlg.setButtons(KoDialog::Ok | KoDialog::Cancel);
             if (dlg.exec() == QDialog::Accepted) {
                 KisConfig cfg(false);
-                cfg.setExportConfiguration(mimetype, frameExportConfigWidget->configuration());
-                m_useHDR = frameExportConfigWidget->configuration()->getPropertyLazy("saveAsHDR", false);
-                ENTER_FUNCTION() << ppVar(m_useHDR);
+                m_wantsRenderWithHDR = frameExportConfigWidget->configuration()->getPropertyLazy("saveAsHDR", false);
+                cfg.setExportConfiguration("img_sequence/" + mimetype, frameExportConfigWidget->configuration());
             }
 
             frameExportConfigWidget->hide();
@@ -441,13 +454,13 @@ KisAnimationRenderingOptions DlgAnimationRenderer::getEncoderOptions() const
     {
         KisConfig config(true);
 
-        KisPropertiesConfigurationSP cfg = config.exportConfiguration(options.frameMimeType);
+        KisPropertiesConfigurationSP cfg = config.exportConfiguration("img_sequence/" + options.frameMimeType);
         if (cfg) {
             KisImportExportManager::fillStaticExportConfigurationProperties(cfg, m_image);
         }
 
-        const bool forceHDR = m_useHDR && !m_page->shouldExportOnlyImageSequence->isChecked();
-        if (forceHDR) {
+        const bool forceNecessaryHDRSettings = m_wantsRenderWithHDR && imageMimeSupportsHDR(options.frameMimeType);
+        if (forceNecessaryHDRSettings) {
             KIS_SAFE_ASSERT_RECOVER_NOOP(options.frameMimeType == "image/png");
             cfg->setProperty("forceSRGB", false);
             cfg->setProperty("saveAsHDR", true);

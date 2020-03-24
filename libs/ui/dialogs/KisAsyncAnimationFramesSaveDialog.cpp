@@ -162,12 +162,8 @@ QList<int> KisAsyncAnimationFramesSaveDialog::calcDirtyFrames() const
 {
     QList<int> result;
     for (int frame = m_d->range.start(); frame <= m_d->range.end(); frame++) {
-        // Currently the 'both' option is not supported for only unique frames. When doing both,
-        // you need to have all frames available for encoding and only delete non-unique frames after
-        // the video is done rendering. This can be achieved, but shouldn't be done here.
         if( m_d->onlyUniqueFrames ) {
             KisTimeRange heldFrameTimeRange = KisTimeRange::calculateIdenticalFramesRecursive(m_d->originalImage->root(), frame);
-            ENTER_FUNCTION() << heldFrameTimeRange;
             KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(heldFrameTimeRange.isValid(), result);
 
             result.append(heldFrameTimeRange.start());

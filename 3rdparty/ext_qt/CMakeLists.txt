@@ -1,6 +1,6 @@
 SET(EXTPREFIX_qt  "${EXTPREFIX}")
 if (WIN32)
-    lis t(APPEND _QT_conf -skip qt3d -skip qtactiveqt -skip qtcanvas3d
+    list(APPEND _QT_conf -skip qt3d -skip qtactiveqt -skip qtcanvas3d
         -skip qtconnectivity -skip qtdoc -skip qtgraphicaleffects
         -skip qtlocation -skip qtsensors -skip qtserialport -skip qtwayland
         -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview

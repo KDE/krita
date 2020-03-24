@@ -148,6 +148,10 @@ cmake_3rdparty () {
         # fixes does not depend on failure
         if [[ ! ${nofix} ]]; then
             build_3rdparty_fixes ${package} ${error}
+
+        elif [[ "${error}" = "true" ]]; then
+            log "ERROR: ${pkg} failed a second time, time to check the logs"
+            log "stoping..."
         fi
     done
 }
@@ -185,6 +189,11 @@ build_3rdparty_fixes(){
         log_cmd install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib ${KIS_TBUILD_DIR}/ext_fontconfig/ext_fontconfig-prefix/src/ext_fontconfig-build/fc-cache/.libs/fc-cache
         # rerun rebuild
         cmake_3rdparty ext_fontconfig "1"
+        error="false"
+
+    elif [[ "${pkg}" = "ext_poppler" && "${error}" = "true" ]]; then
+        log "re-running poppler to avoid possible glitch"
+        cmake_3rdparty ext_poppler "1"
         error="false"
     fi
 
@@ -524,9 +533,11 @@ fi
 
 if [[ ${1} = "builddeps" ]]; then
     build_3rdparty "${@:2}"
+    exit
 
 elif [[ ${1} = "rebuilddeps" ]]; then
     rebuild_3rdparty "${@:2}"
+    exit
 
 elif [[ ${1} = "fixboost" ]]; then
     if [[ -d ${1} ]]; then
@@ -536,6 +547,7 @@ elif [[ ${1} = "fixboost" ]]; then
 
 elif [[ ${1} = "build" ]]; then
     build_krita ${2}
+    exit
 
 elif [[ ${1} = "buildtarball" ]]; then
     # uncomment line to optionally change

@@ -245,8 +245,8 @@ build_3rdparty () {
         ext_jpeg \
         ext_lcms2 \
         ext_ocio \
-        ext_openexr
-        #ext_openjpeg
+        ext_openexr \
+        ext_openjpeg
 
     cmake_3rdparty \
         ext_png \

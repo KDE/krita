@@ -285,7 +285,7 @@ public:
 
     /**
      * Frees the memory occupied by the pixels containing default
-     * values. The extents() and exactBounds() of the image will
+     * values. The extents() and exactBounds() of the paint device will
      * probably also shrink
      */
     void purgeDefaultPixels();

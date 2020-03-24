@@ -119,6 +119,10 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
     iccProfileDirs.append(winPath + "/System32/Spool/Drivers/Color/");
 
 #endif
+#ifdef Q_OS_LINUX
+    iccProfileDirs.append(QDir::homePath() + "./share/color/icc");
+#endif
+
     Q_FOREACH(const QString &iccProfiledir, iccProfileDirs) {
         QDir profileDir(iccProfiledir);
         Q_FOREACH(const QString &entry, profileDir.entryList(QStringList() << "*.icm" << "*.icc", QDir::NoDotAndDotDot | QDir::Files | QDir::Readable)) {

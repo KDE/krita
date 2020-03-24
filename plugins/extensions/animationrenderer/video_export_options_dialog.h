@@ -54,7 +54,8 @@ public:
 
     QStringList customUserOptions() const;
     QString customUserOptionsString() const;
-    bool forceHDRModeForFrames() const;
+    bool videoConfiguredForHDR() const;
+    void setHDRConfiguration(bool value);
 
     void setConfiguration(const KisPropertiesConfigurationSP  config) override;
     KisPropertiesConfigurationSP configuration() const override;

@@ -93,6 +93,7 @@ private:
 
     void filterSequenceMimeTypes(QStringList &mimeTypes);
     QStringList makeVideoMimeTypesList();
+    bool mimeSupportsHDR(QString &hdr);
 private:
 
     static QString findFFMpeg(const QString &customLocation);
@@ -102,7 +103,7 @@ private:
     WdgAnimationRenderer *m_page {0};
 
     QString m_customFFMpegOptionsString;
-    bool m_forceHDRVideo = false;
+    bool m_useHDR = false;
 };
 
 #endif // DLG_ANIMATIONRENDERERIMAGE

@@ -165,7 +165,7 @@ DlgAnimationRenderer::~DlgAnimationRenderer()
 void DlgAnimationRenderer::getDefaultVideoEncoderOptions(const QString &mimeType,
                                                          KisPropertiesConfigurationSP cfg,
                                                          QString *customFFMpegOptionsString,
-                                                         bool *forceHDRVideo)
+                                                         bool *renderHDR)
 {
     const VideoExportOptionsDialog::ContainerType containerType =
         mimeType == "video/ogg" ?
@@ -179,7 +179,7 @@ void DlgAnimationRenderer::getDefaultVideoEncoderOptions(const QString &mimeType
     encoderConfigWidget->setSupportsHDR(true);
     encoderConfigWidget->setConfiguration(cfg);
     *customFFMpegOptionsString = encoderConfigWidget->customUserOptionsString();
-    *forceHDRVideo = encoderConfigWidget->forceHDRModeForFrames();
+    *renderHDR = encoderConfigWidget->videoConfiguredForHDR();
 }
 
 void DlgAnimationRenderer::filterSequenceMimeTypes(QStringList &mimeTypes)
@@ -205,6 +205,11 @@ QStringList DlgAnimationRenderer::makeVideoMimeTypesList()
     supportedMimeTypes << "video/mp4";
 
     return supportedMimeTypes;
+}
+
+bool DlgAnimationRenderer::mimeSupportsHDR(QString &mime)
+{
+    return (mime == "image/png");
 }
 
 void DlgAnimationRenderer::loadAnimationOptions(const KisAnimationRenderingOptions &options)
@@ -277,7 +282,7 @@ void DlgAnimationRenderer::loadAnimationOptions(const KisAnimationRenderingOptio
 
         getDefaultVideoEncoderOptions(options.videoMimeType, settings,
                                       &m_customFFMpegOptionsString,
-                                      &m_forceHDRVideo);
+                                      &m_useHDR);
     }
 
     m_page->ffmpegLocation->setStartDir(QFileInfo(m_doc->localFilePath()).path());
@@ -337,6 +342,7 @@ void DlgAnimationRenderer::selectRenderOptions()
         KisConfig cfg(true);
         KisPropertiesConfigurationSP settings = cfg.exportConfiguration("VIDEO_ENCODER");
         encoderConfigWidget->setConfiguration(settings);
+        encoderConfigWidget->setHDRConfiguration(m_useHDR);
     }
 
     KoDialog dlg(this);
@@ -346,7 +352,8 @@ void DlgAnimationRenderer::selectRenderOptions()
         KisConfig cfg(false);
         cfg.setExportConfiguration("VIDEO_ENCODER", encoderConfigWidget->configuration());
         m_customFFMpegOptionsString = encoderConfigWidget->customUserOptionsString();
-        m_forceHDRVideo = encoderConfigWidget->forceHDRModeForFrames();
+        m_useHDR = encoderConfigWidget->videoConfiguredForHDR();
+        ENTER_FUNCTION() << ppVar(m_useHDR);
     }
 
     dlg.setMainWidget(0);
@@ -370,6 +377,11 @@ void DlgAnimationRenderer::sequenceMimeTypeOptionsClicked()
                 KisImportExportManager::fillStaticExportConfigurationProperties(config, m_image);
             }
 
+            //Important -- m_useHDR allows the synchronization of both the video and image render settings.
+            if(mimeSupportsHDR(mimetype)) {
+                config->setProperty("saveAsHDR", m_useHDR);
+            }
+
             frameExportConfigWidget->setConfiguration(config);
             KoDialog dlg(this);
             dlg.setMainWidget(frameExportConfigWidget);
@@ -377,6 +389,8 @@ void DlgAnimationRenderer::sequenceMimeTypeOptionsClicked()
             if (dlg.exec() == QDialog::Accepted) {
                 KisConfig cfg(false);
                 cfg.setExportConfiguration(mimetype, frameExportConfigWidget->configuration());
+                m_useHDR = frameExportConfigWidget->configuration()->getPropertyLazy("saveAsHDR", false);
+                ENTER_FUNCTION() << ppVar(m_useHDR);
             }
 
             frameExportConfigWidget->hide();
@@ -432,7 +446,7 @@ KisAnimationRenderingOptions DlgAnimationRenderer::getEncoderOptions() const
             KisImportExportManager::fillStaticExportConfigurationProperties(cfg, m_image);
         }
 
-        const bool forceHDR = m_forceHDRVideo && !m_page->shouldExportOnlyImageSequence->isChecked();
+        const bool forceHDR = m_useHDR && !m_page->shouldExportOnlyImageSequence->isChecked();
         if (forceHDR) {
             KIS_SAFE_ASSERT_RECOVER_NOOP(options.frameMimeType == "image/png");
             cfg->setProperty("forceSRGB", false);

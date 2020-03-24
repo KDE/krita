@@ -176,9 +176,9 @@ public:
         }
     }
 
-    void makeMaskImage() {
+    void makeMaskImage(bool preserveAlpha) {
         Q_FOREACH (KisGbrBrush * brush, m_brushes) {
-            brush->makeMaskImage();
+            brush->makeMaskImage(preserveAlpha);
         }
     }
 
@@ -428,10 +428,10 @@ bool KisImagePipeBrush::hasColor() const
     return m_d->brushesPipe.hasColor();
 }
 
-void KisImagePipeBrush::makeMaskImage()
+void KisImagePipeBrush::makeMaskImage(bool preserveAlpha)
 {
-    m_d->brushesPipe.makeMaskImage();
-    setUseColorAsMask(false);
+    m_d->brushesPipe.makeMaskImage(preserveAlpha);
+    setUseColorAsMask(true);
 }
 
 void KisImagePipeBrush::setUseColorAsMask(bool useColorAsMask)
@@ -508,6 +508,13 @@ void KisImagePipeBrush::setHasColor(bool hasColor)
     Q_UNUSED(hasColor);
     qFatal("FATAL: protected member setHasColor has no meaning for KisImagePipeBrush");
     // hasColor() is a function of the underlying brushes
+}
+
+void KisImagePipeBrush::setPreserveLightness(bool preserveLightness)
+{
+    //Set all underlying brushes to preserve lightness
+    KisGbrBrush::setPreserveLightness(preserveLightness);
+    m_d->brushesPipe.setPreserveLightness(preserveLightness);
 }
 
 KisGbrBrush* KisImagePipeBrush::testingGetCurrentBrush(const KisPaintInformation& info) const

@@ -21,6 +21,7 @@
 #include <QDomDocument>
 #include "kis_brush_server.h"
 #include "kis_gbr_brush.h"
+#include "kis_png_brush.h"
 #include <kis_dom_utils.h>
 
 KisPredefinedBrushFactory::KisPredefinedBrushFactory(const QString &brushType)
@@ -52,6 +53,7 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(brush, 0);
 
     // we always return a copy of the brush!
+
     brush = brush->clone();
 
     double spacing = KisDomUtils::toDouble(brushDefinition.attribute("spacing", "0.25"));
@@ -67,6 +69,9 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
     double scale = KisDomUtils::toDouble(brushDefinition.attribute("scale", "1.0"));
     brush->setScale(scale);
 
+    int preserveLightness = KisDomUtils::toInt(brushDefinition.attribute("preserveLightness", "0"));
+    brush->setPreserveLightness(preserveLightness);
+
     if (m_id == "gbr_brush") {
         KisGbrBrush *gbrbrush = dynamic_cast<KisGbrBrush*>(brush.data());
         if (gbrbrush) {
@@ -74,6 +79,13 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
              * WARNING: see comment in KisGbrBrush::setUseColorAsMask()
              */
             gbrbrush->setUseColorAsMask((bool)brushDefinition.attribute("ColorAsMask").toInt());
+        }
+    }
+    else if (m_id == "png_brush") {
+        KisPngBrush* pngbrush = dynamic_cast<KisPngBrush*>(brush.data());
+        if (pngbrush) {
+            bool colorAsMask = (bool)brushDefinition.attribute("ColorAsMask").toInt();
+            pngbrush->setUseColorAsMask(colorAsMask);
         }
     }
 

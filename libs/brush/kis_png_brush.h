@@ -33,8 +33,19 @@ public:
     bool loadFromDevice(QIODevice *dev) override;
     bool save() override;
     bool saveToDevice(QIODevice *dev) const override;
+
+    enumBrushType brushType() const override;
+
+    virtual void setUseColorAsMask(bool useColorAsMask);
+
+    virtual bool useColorAsMask() const;
+
     QString defaultFileExtension() const override;
     void toXML(QDomDocument& d, QDomElement& e) const override;
+
+private:
+
+    bool colorAsMask;
 
 };
 

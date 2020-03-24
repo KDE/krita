@@ -33,6 +33,7 @@ KisPngBrush::KisPngBrush(const QString& filename)
     setBrushType(INVALID);
     setSpacing(0.25);
     setHasColor(false);
+    colorAsMask = false;
 }
 
 KisPngBrush::KisPngBrush(const KisPngBrush &rhs)
@@ -47,6 +48,7 @@ KisPngBrush::KisPngBrush(const KisPngBrush &rhs)
         setBrushType(IMAGE);
         setHasColor(true);
     }
+    colorAsMask = rhs.colorAsMask;
 }
 
 KisBrush* KisPngBrush::clone() const
@@ -126,6 +128,7 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev)
         setBrushType(IMAGE);
         setHasColor(true);
     }
+    colorAsMask = false;
 
     setWidth(brushTipImage().width());
     setHeight(brushTipImage().height());
@@ -152,6 +155,25 @@ bool KisPngBrush::saveToDevice(QIODevice *dev) const
     return false;
 }
 
+enumBrushType KisPngBrush::brushType() const
+{
+    return !hasColor() || useColorAsMask() ? MASK : IMAGE;
+}
+
+void KisPngBrush::setUseColorAsMask(bool useColorAsMask)
+{
+    if (useColorAsMask != colorAsMask) {
+        colorAsMask = useColorAsMask;
+        resetBoundary();
+        clearBrushPyramid();
+    }
+}
+bool KisPngBrush::useColorAsMask() const
+{
+    return colorAsMask;
+}
+
+
 QString KisPngBrush::defaultFileExtension() const
 {
     return QString(".png");
@@ -160,5 +182,6 @@ QString KisPngBrush::defaultFileExtension() const
 void KisPngBrush::toXML(QDomDocument& d, QDomElement& e) const
 {
     predefinedBrushToXML("png_brush", e);
+    e.setAttribute("ColorAsMask", QString::number((int)useColorAsMask()));
     KisBrush::toXML(d, e);
 }

@@ -272,6 +272,7 @@ bool KisGbrBrush::init()
         }
 
         setHasColor(true);
+        setPreserveLightness(false);
 
         for (quint32 y = 0; y < bh.height; y++) {
             QRgb *pixel = reinterpret_cast<QRgb *>(image.scanLine(y));
@@ -304,6 +305,7 @@ bool KisGbrBrush::initFromPaintDev(KisPaintDeviceSP image, int x, int y, int w, 
     setName(image->objectName());
 
     setHasColor(true);
+    setPreserveLightness(false);
 
     return true;
 }
@@ -424,14 +426,14 @@ void KisGbrBrush::setBrushTipImage(const QImage& image)
     setValid(true);
 }
 
-void KisGbrBrush::makeMaskImage()
+void KisGbrBrush::makeMaskImage(bool preserveAlpha)
 {
     if (!hasColor()) {
         return;
     }
     QImage brushTip = brushTipImage();
 
-    if (brushTip.width() == width() && brushTip.height() == height()) {
+    if (!preserveAlpha && brushTip.width() == width() && brushTip.height() == height()) {
         int imageWidth = width();
         int imageHeight = height();
         QImage image(imageWidth, imageHeight, QImage::Format_Indexed8);
@@ -456,9 +458,12 @@ void KisGbrBrush::makeMaskImage()
         }
         setBrushTipImage(image);
     }
+    else {
+        setBrushTipImage(brushTip);
+    }
 
-    setHasColor(false);
-    setUseColorAsMask(false);
+    setHasColor(preserveAlpha);
+    setUseColorAsMask(preserveAlpha);
     resetBoundary();
     clearBrushPyramid();
 }

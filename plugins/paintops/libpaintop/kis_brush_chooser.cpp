@@ -55,6 +55,7 @@
 
 #include "kis_global.h"
 #include "kis_gbr_brush.h"
+#include "kis_png_brush.h"
 #include "kis_debug.h"
 #include "kis_image.h"
 
@@ -129,6 +130,7 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
     connect(brushSpacingSelectionWidget, SIGNAL(sigSpacingChanged()), SLOT(slotSpacingChanged()));
 
     QObject::connect(useColorAsMaskCheckbox, SIGNAL(toggled(bool)), this, SLOT(slotSetItemUseColorAsMask(bool)));
+    QObject::connect(preserveLightnessCheckbox, SIGNAL(toggled(bool)), this, SLOT(slotSetItemPreserveLightness(bool)));
 
     KisBrushResourceServer* rServer = KisBrushServer::instance()->brushServer();
     QSharedPointer<KisBrushResourceServerAdapter> adapter(new KisBrushResourceServerAdapter(rServer));
@@ -272,9 +274,26 @@ void KisPredefinedBrushChooser::slotSetItemUseColorAsMask(bool useColorAsMask)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_brush);
 
+    preserveLightnessCheckbox->setEnabled(useColorAsMask);
+
     KisGbrBrush *brush = dynamic_cast<KisGbrBrush *>(m_brush.data());
+    KisPngBrush* pngBrush = dynamic_cast<KisPngBrush*>(m_brush.data());
     if (brush) {
         brush->setUseColorAsMask(useColorAsMask);
+        emit sigBrushChanged();
+    }
+    else if (pngBrush) {
+        pngBrush->setUseColorAsMask(useColorAsMask);
+        emit sigBrushChanged();
+    }
+}
+
+void KisPredefinedBrushChooser::slotSetItemPreserveLightness(bool preserveLightness)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_brush);
+
+    if (m_brush) {
+        m_brush->setPreserveLightness(preserveLightness);
         emit sigBrushChanged();
     }
 }
@@ -374,11 +393,23 @@ void KisPredefinedBrushChooser::updateBrushTip(KoResource * resource, bool isCha
         // useColorAsMask support is only in gimp brush so far
         bool prevColorAsMaskState = useColorAsMaskCheckbox->isChecked();
         KisGbrBrush *gimpBrush = dynamic_cast<KisGbrBrush*>(m_brush.data());
+        KisPngBrush *pngBrush = dynamic_cast<KisPngBrush*>(m_brush.data());
         if (gimpBrush) {
             useColorAsMaskCheckbox->setChecked(gimpBrush->useColorAsMask() || prevColorAsMaskState);
             gimpBrush->setUseColorAsMask(prevColorAsMaskState);
+
         }
-        useColorAsMaskCheckbox->setEnabled(m_brush->hasColor() && gimpBrush);
+        else if (pngBrush) {
+            useColorAsMaskCheckbox->setChecked(pngBrush->useColorAsMask() || prevColorAsMaskState);
+            pngBrush->setUseColorAsMask(prevColorAsMaskState);
+
+        }
+        useColorAsMaskCheckbox->setEnabled(m_brush->hasColor() && (gimpBrush || pngBrush));
+
+        preserveLightnessCheckbox->setEnabled(useColorAsMaskCheckbox->isEnabled() && useColorAsMaskCheckbox->isChecked());
+        bool preserveLightness = preserveLightnessCheckbox->isChecked() || m_brush->preserveLightness();
+        preserveLightnessCheckbox->setChecked(preserveLightness);
+        m_brush->setPreserveLightness(preserveLightness);
 
         emit sigBrushChanged();
     }

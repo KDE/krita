@@ -80,10 +80,13 @@ public:
 
     /**
      * Convert the mask to inverted gray scale, so it is alpha mask.
-     * It can be used as MASK brush type. This operates on the date of the brush,
-     * so it destruct the original brush data
+     * It can be used as MASK brush type. This operates on the data of the brush,
+     * so it destruct the original brush data.
+     *
+     * @param preserveAlpha convert to grayscale, but save as full RGBA format, to allow
+     *                      preserving lightness option
      */
-    virtual void makeMaskImage();
+    virtual void makeMaskImage(bool preserveAlpha);
 
     enumBrushType brushType() const override;
 

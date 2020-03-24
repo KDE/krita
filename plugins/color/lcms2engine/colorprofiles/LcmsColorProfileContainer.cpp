@@ -153,7 +153,8 @@ bool LcmsColorProfileContainer::init()
 
         cmsProfileClassSignature profile_class;
         profile_class = cmsGetDeviceClass(d->profile);
-        d->valid = (profile_class != cmsSigNamedColorClass);
+        d->valid = (   profile_class != cmsSigNamedColorClass
+                    && profile_class != cmsSigLinkClass);
 
         //This is where obtain the whitepoint, and convert it to the actual white point of the profile in the case a Chromatic adaption tag is
         //present. This is necessary for profiles following the v4 spec.

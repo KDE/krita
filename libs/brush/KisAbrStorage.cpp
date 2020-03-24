@@ -57,7 +57,7 @@ class AbrIterator : public KisResourceStorage::ResourceIterator
 public:
     KisAbrBrushCollectionSP m_brushCollection;
     QSharedPointer<QMap<QString, KisAbrBrushSP>> m_brushesMap;
-    QMap<QString, KisAbrBrushSP>::const_key_value_iterator m_brushCollectionIterator;
+    QMap<QString, KisAbrBrushSP>::const_iterator m_brushCollectionIterator;
     KisAbrBrushSP m_currentResource;
     bool isLoaded;
     QString m_currentUrl;
@@ -75,27 +75,26 @@ public:
             bool success = m_brushCollection->load();
             Q_UNUSED(success); // brush collection will be empty
             const_cast<AbrIterator*>(this)->m_brushesMap = m_brushCollection->brushesMap();
-            const_cast<AbrIterator*>(this)->m_brushCollectionIterator = m_brushesMap->constKeyValueBegin();
+            const_cast<AbrIterator*>(this)->m_brushCollectionIterator = m_brushesMap->constBegin();
             const_cast<AbrIterator*>(this)->isLoaded = true;
         }
 
-        if (m_brushCollectionIterator == m_brushesMap->constKeyValueEnd()) {
+        if (m_brushCollectionIterator == m_brushesMap->constEnd()) {
             return false;
         }
 
-        const_cast<AbrIterator*>(this)->m_brushCollectionIterator++;
-        bool hasNext = (m_brushCollectionIterator != m_brushesMap->constKeyValueEnd());
-        const_cast<AbrIterator*>(this)->m_brushCollectionIterator--;
 
+        QMap<QString, KisAbrBrushSP>::const_iterator nextIteration = m_brushCollectionIterator;
+        nextIteration++;
+        bool hasNext = (nextIteration != m_brushesMap->constEnd());
         return hasNext;
     }
 
     void next() override
     {
         m_brushCollectionIterator++;
-        std::pair<QString, KisAbrBrushSP> resourcePair = *m_brushCollectionIterator;
-        m_currentResource = resourcePair.second;
-        m_currentUrl = resourcePair.first;
+        m_currentResource = m_brushCollectionIterator.value();
+        m_currentUrl = m_brushCollectionIterator.key();
     }
 
     QString url() const override { return m_currentUrl; }

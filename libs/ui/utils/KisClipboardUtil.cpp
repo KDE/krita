@@ -49,17 +49,10 @@ QImage getImageFromClipboard()
     QImage image;
     QSet<QString> clipboardMimeTypes;
 
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
-
-    qDebug() << clipboard->mimeData()->formats();
-
-    if (clipboard->mimeData() && !clipboard->mimeData()->formats().isEmpty()) {
-        clipboardMimeTypes = QSet<QString>(clipboard->mimeData()->formats().begin(),
-                                           clipboard->mimeData()->formats().end());
+    Q_FOREACH(const QString &format, clipboard->mimeData()->formats()) {
+        clipboardMimeTypes << format;
     }
-#else
-    clipboardMimeTypes = QSet<QString>::fromList(clipboard->mimeData()->formats());
-#endif
+
     Q_FOREACH (const ClipboardImageFormat &item, supportedFormats) {
         const QSet<QString> &intersection = item.mimeTypes & clipboardMimeTypes;
         if (intersection.isEmpty()) {

@@ -33,6 +33,18 @@ public:
 
     qreal userEffectiveSize() const override;
     void setUserEffectiveSize(qreal value) override;
+
+    /**
+     * If the brush image data are colorful (e.g. you created the brush from the canvas with custom brush)
+     * and you want to paint with it as with masks, set to true.
+     */
+    virtual void setUseColorAsMask(bool useColorAsMask);
+    bool useColorAsMask() const;
+
+    QImage brushTipImage() const override;
+
+private:
+    bool m_useColorAsMask = false;
 };
 
 #endif // KISSCALINGSIZEBRUSH_H

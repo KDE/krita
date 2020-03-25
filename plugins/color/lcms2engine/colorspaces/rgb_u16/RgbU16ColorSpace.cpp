@@ -106,3 +106,8 @@ QVector <double> RgbU16ColorSpace::fromYUV(qreal *y, qreal *u, qreal *v) const
     channelValues[3]=1.0;
     return channelValues;
 }
+
+void RgbU16ColorSpace::fillGrayBrushWithColorAndLightnessOverlay(quint8 *dst, const QRgb *brush, quint8 *brushColor, qint32 nPixels) const
+{
+    fillGrayBrushWithColorPreserveLightnessRGB<KoBgrU16Traits>(dst, brush, brushColor, nPixels);
+}

@@ -72,8 +72,6 @@ struct KisGbrBrush::Private {
     QByteArray data;
     bool ownData;         /* seems to indicate that @ref data is owned by the brush, but in Qt4.x this is already guaranteed... so in reality it seems more to indicate whether the data is loaded from file (ownData = true) or memory (ownData = false) */
 
-    bool useColorAsMask;
-
     quint32 header_size;  /*  header_size = sizeof (BrushHeader) + brush name  */
     quint32 version;      /*  brush file version #  */
     quint32 bytes;        /*  depth of brush in bytes */
@@ -88,7 +86,6 @@ KisGbrBrush::KisGbrBrush(const QString& filename)
     , d(new Private)
 {
     d->ownData = true;
-    d->useColorAsMask = false;
     setHasColor(false);
     setSpacing(DEFAULT_SPACING);
 }
@@ -100,7 +97,6 @@ KisGbrBrush::KisGbrBrush(const QString& filename,
     , d(new Private)
 {
     d->ownData = false;
-    d->useColorAsMask = false;
     setHasColor(false);
     setSpacing(DEFAULT_SPACING);
 
@@ -115,7 +111,6 @@ KisGbrBrush::KisGbrBrush(KisPaintDeviceSP image, int x, int y, int w, int h)
     , d(new Private)
 {
     d->ownData = true;
-    d->useColorAsMask = false;
     setHasColor(false);
     setSpacing(DEFAULT_SPACING);
     initFromPaintDev(image, x, y, w, h);
@@ -126,7 +121,6 @@ KisGbrBrush::KisGbrBrush(const QImage& image, const QString& name)
     , d(new Private)
 {
     d->ownData = false;
-    d->useColorAsMask = false;
     setHasColor(false);
     setSpacing(DEFAULT_SPACING);
 
@@ -392,23 +386,6 @@ bool KisGbrBrush::saveToDevice(QIODevice* dev) const
     return true;
 }
 
-QImage KisGbrBrush::brushTipImage() const
-{
-    QImage image = KisBrush::brushTipImage();
-    if (hasColor() && useColorAsMask()) {
-        for (int y = 0; y < image.height(); y++) {
-            QRgb *pixel = reinterpret_cast<QRgb *>(image.scanLine(y));
-            for (int x = 0; x < image.width(); x++) {
-                QRgb c = pixel[x];
-                int a = qGray(c);
-                pixel[x] = qRgba(a, a, a, qAlpha(c));
-            }
-        }
-    }
-    return image;
-}
-
-
 enumBrushType KisGbrBrush::brushType() const
 {
     return !hasColor() || useColorAsMask() ? MASK : IMAGE;
@@ -478,31 +455,6 @@ void KisGbrBrush::toXML(QDomDocument& d, QDomElement& e) const
     predefinedBrushToXML("gbr_brush", e);
     e.setAttribute("ColorAsMask", QString::number((int)useColorAsMask()));
     KisBrush::toXML(d, e);
-}
-
-void KisGbrBrush::setUseColorAsMask(bool useColorAsMask)
-{
-    /**
-     * WARNING: There is a problem in the brush server, since it
-     * returns not copies of brushes, but direct pointers to them. It
-     * means that the brushes are shared among all the currently
-     * present paintops, which might be a problem for e.g. Multihand
-     * Brush Tool.
-     *
-     * Right now, all the instances of Multihand Brush Tool share the
-     * same brush, so there is no problem in this sharing, unless we
-     * reset the internal state of the brush on our way.
-     */
-
-    if (useColorAsMask != d->useColorAsMask) {
-        d->useColorAsMask = useColorAsMask;
-        resetBoundary();
-        clearBrushPyramid();
-    }
-}
-bool KisGbrBrush::useColorAsMask() const
-{
-    return d->useColorAsMask;
 }
 
 QString KisGbrBrush::defaultFileExtension() const

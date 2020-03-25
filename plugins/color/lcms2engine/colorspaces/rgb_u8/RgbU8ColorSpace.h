@@ -63,6 +63,8 @@ public:
     {
         return QString("RGBA");
     }
+
+    void fillGrayBrushWithColorAndLightnessOverlay(quint8 *dst, const QRgb *brush, quint8 *brushColor, qint32 nPixels) const override;
 };
 
 class RgbU8ColorSpaceFactory : public LcmsColorSpaceFactory

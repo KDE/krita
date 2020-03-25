@@ -396,10 +396,6 @@ private:
     // Initialize our boundary
     void generateBoundary() const;
 
-    void grayCopyToAlpha(const quint8 *src, quint8 *dst, int maskWidth) const;
-    int roundFloatToInt(float value) const;
-    int colorLerp(int a, int b, float t) const;
-
     struct Private;
     Private* const d;
 

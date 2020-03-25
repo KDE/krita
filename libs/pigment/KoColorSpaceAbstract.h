@@ -137,6 +137,10 @@ public:
         _CSTrait::applyInverseAlphaNormedFloatMask(pixels, alpha, nPixels);
     }
 
+    void fillGrayBrushWithColor(quint8 *dst, const QRgb *brush, quint8 *brushColor, qint32 nPixels) const override{
+        _CSTrait::fillGrayBrushWithColor(dst, brush, brushColor, nPixels);
+    }
+
     quint8 intensity8(const quint8 * src) const override {
         QColor c;
         const_cast<KoColorSpaceAbstract<_CSTrait> *>(this)->toQColor(src, &c);

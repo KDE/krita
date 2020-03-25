@@ -487,6 +487,32 @@ public:
     virtual void applyInverseNormedFloatMask(quint8 * pixels, const float * alpha, qint32 nPixels) const = 0;
 
     /**
+     * Fills \p pixels with specified \p color and then applies inverted brush
+     * mask specified in \p brush. Premultiplied red channel of the brush is
+     * used as an alpha channel for destination pixels.
+     *
+     * The equation is:
+     *
+     *     dstC = colorC;
+     *     dstA = qAlpha(brush) * (255 - qRed(brush)) / 255;
+     */
+    virtual void fillGrayBrushWithColor(quint8 *dst, const QRgb *brush, quint8 *brushColor, qint32 nPixels) const = 0;
+
+    /**
+     * Fills \p pixels with specified \p color and then applies inverted brush
+     * mask specified in \p brush. Inverted red channel of the brush is used
+     * as lightness of the destination. Alpha channel of the brush is used as
+     * alpha of the destination.
+     *
+     * The equation is:
+     *
+     *     lightFactor = 2.0f * (brushL_hsl / 255.0f) - 1.0f;
+     *     dstL_hsl = colorL_hsl + lightFactor;
+     *     dstA = qAlpha(brush);
+     */
+    virtual void fillGrayBrushWithColorAndLightnessOverlay(quint8 *dst, const QRgb *brush, quint8 *brushColor, qint32 nPixels) const;
+
+    /**
      * Create an adjustment object for adjusting the brightness and contrast
      * transferValues is a 256 bins array with values from 0 to 0xFFFF
      * This function is thread-safe, but you need to create one KoColorTransformation per thread.

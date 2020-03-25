@@ -260,10 +260,18 @@ QSize RAdjustableLabel::sizeHint() const
 {
     QFontMetrics fm(fontMetrics());
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
-    QScreen *s = qApp->screenAt(geometry().topLeft());
-    int maxW     = s->availableGeometry().width() * 3 / 4;
+    QRect geom = geometry();
+    QPoint p(geom.width() / 2 + geom.left(), geom.height() / 2 + geom.top());
+    QScreen *s = qApp->screenAt(p);
+    int maxW;
+    if (s) {
+         maxW = s->availableGeometry().width() * 3 / 4;
+    }
+    else {
+        maxW = 1024;
+    }
 #else
-    int maxW     = QApplication::desktop()->screenGeometry(this).width() * 3 / 4;
+    int maxW = QApplication::desktop()->screenGeometry(this).width() * 3 / 4;
 #endif
 
 #if QT_VERSION >= QT_VERSION_CHECK(5,11,0)

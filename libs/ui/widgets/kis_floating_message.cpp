@@ -196,8 +196,16 @@ QRect KisFloatingMessage::determineMetrics( const int M )
     const QSize margin( (M + MARGIN) * 2, (M + MARGIN) * 2); //margins
     const QSize image = m_icon.isNull() ? QSize(0, 0) : minImageSize;
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
-    QScreen *s = qApp->screenAt(parentWidget()->geometry().topLeft());
-    const QSize max = s->availableGeometry().size() - margin;
+    QRect geom = parentWidget()->geometry();
+    QPoint p(geom.width() / 2 + geom.left(), geom.height() / 2 + geom.top());
+    QScreen *s = qApp->screenAt(p);
+    QSize max;
+    if (s) {
+        max = QSize(s->availableGeometry().size() - margin);
+    }
+    else {
+        max = QSize(1024, 768);
+    }
 #else
     const QSize max = QApplication::desktop()->availableGeometry(parentWidget()).size() - margin;
 #endif
@@ -233,7 +241,13 @@ QRect KisFloatingMessage::determineMetrics( const int M )
 
     const QSize newSize = rect.size();
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
-    QRect screen = s->availableGeometry();
+    QRect screen;
+    if (s) {
+        screen = s->availableGeometry();
+    }
+    else {
+        screen = QRect(0, 0, 1024, 768);
+    }
 #else
     QRect screen = QApplication::desktop()->screenGeometry(parentWidget());
 #endif

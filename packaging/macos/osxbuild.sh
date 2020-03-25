@@ -35,6 +35,13 @@ if test -z $BUILDROOT; then
 fi
 echo "BUILDROOT set to ${BUILDROOT}"
 
+# -- Parse input args
+for arg in "${@}"; do
+    if [[ "${arg}" = --clean ]]; then
+        OSXBUILD_CLEAN="${arg#*=}"
+    fi
+done
+
 export KIS_SRC_DIR=${BUILDROOT}/krita
 export KIS_TBUILD_DIR=${BUILDROOT}/depbuild
 export KIS_TDEPINSTALL_DIR=${BUILDROOT}/depinstall
@@ -122,6 +129,28 @@ check_dir_path () {
     fi
     return 0
 }
+
+waiting_fixed() {
+    local message="${1}"
+    local waitTime=${2}
+
+    for i in $(seq ${waitTime}); do
+        sleep 1
+        printf -v dots '%*s' ${i}
+        printf -v spaces '%*s' $((${waitTime} - $i))
+        printf "\r%s [%s%s]" "${message}" "${dots// /.}" "${spaces}"
+    done
+    printf "\n"
+}
+
+dir_clean() {
+    if [[ -d "${1}" ]]; then
+        log "Clean option specified, removing old build directories..."
+        waiting_fixed "Erase of ${1} in 5 sec" 5
+        rm -rf "${1}"
+    fi
+}
+
 # builds dependencies for the first time
 cmake_3rdparty () {
     cd ${KIS_TBUILD_DIR}
@@ -226,6 +255,8 @@ build_3rdparty () {
     
     if [[ -n ${1} ]]; then
         cmake_3rdparty "${@}"
+        # log "Syncing install backup..."
+        # rsync -a --delete "${KIS_INSTALL_DIR}" "${KIS_INSTALL_DIR}.onlydeps"
         exit
     fi
 
@@ -294,6 +325,13 @@ build_3rdparty () {
         ext_kimageformats \
         ext_kwindowsystem \
         ext_quazip
+
+
+    ## All builds done, creating a new install onlydeps install dir
+    dir_clean "${KIS_INSTALL_DIR}.onlydeps"
+    log "Copying ${KIS_INSTALL_DIR} to ${KIS_INSTALL_DIR}.onlydeps"
+    cp -aP "${KIS_INSTALL_DIR}" "${KIS_INSTALL_DIR}.onlydeps"
+    print_msg "Build Finished!"
 }
 
 # Recall cmake for all 3rd party packages
@@ -392,6 +430,16 @@ set_krita_dirs() {
 # build_krita
 # run cmake krita
 build_krita () {
+    if [[ ${OSXBUILD_CLEAN} ]]; then
+        log "Deleting ${KIS_BUILD_DIR}"
+        dir_clean "${KIS_BUILD_DIR}"
+    else
+        if [[ -e "${KIS_INSTALL_DIR}.onlydeps" && -d "${KIS_INSTALL_DIR}.onlydeps" ]]; then
+            print_msg "Found ${KIS_INSTALL_DIR}.onlydeps"
+            log "==== manually copy onlydeps to ${KIS_INSTALL_DIR} if you need a fresh build"
+        fi
+    fi
+
     export DYLD_FRAMEWORK_PATH=${FRAMEWORK_PATH}
     echo ${KIS_BUILD_DIR}
     echo ${KIS_INSTALL_DIR}
@@ -458,6 +506,7 @@ install_krita () {
     if [[ -n "${1}" ]]; then
         KIS_BUILD_DIR="${1}"
     fi
+
     print_msg "Install krita from ${KIS_BUILD_DIR}"
     log_cmd check_dir_path ${KIS_BUILD_DIR}
 
@@ -518,10 +567,14 @@ print_usage () {
     \t\t\t useful for cleaning install directory and quickly reinstall all deps."
     printf "\n fixboost \t\t Fixes broken boost \@rpath on OSX"
     printf "\n build \t\t\t Builds krita"
-    printf "\n buildtarball \t\t\t Builds krita from provided [file] tarball"
+    printf "\n buildtarball \t\t Builds krita from provided [file] tarball"
+    printf "\n clean \t\t\t Removes build and install directories to start fresh"
     printf "\n install \t\t Installs krita. Optionally accepts a [build dir] as argument
     \t\t\t this will install krita from given directory"
     printf "\n buildinstall \t\t Build and Installs krita, running fixboost after installing"
+    printf "\n"
+    printf "OPTIONS:\t\t"
+    printf "\n \t --clean \t [build] Delete old build directories before build to start fresh"
     printf "\n"
 }
 
@@ -532,6 +585,10 @@ if [[ ${#} -eq 0 ]]; then
 fi
 
 if [[ ${1} = "builddeps" ]]; then
+    if [[ ${OSXBUILD_CLEAN} ]]; then
+        dir_clean "${KIS_INSTALL_DIR}"
+        dir_clean "${KIS_TBUILD_DIR}"
+    fi
     build_3rdparty "${@:2}"
     exit
 
@@ -556,6 +613,14 @@ elif [[ ${1} = "buildtarball" ]]; then
     # deps installed in the given dir beforehand.
     # KIS_INSTALL_DIR=${3}
     build_krita_tarball ${2}
+
+elif [[ ${1} = "clean" ]]; then
+    # remove all build and install directories to start
+    # a fresh install. this no different than using rm directly
+    dir_clean "${KIS_TBUILD_DIR}"
+    dir_clean "${$KIS_BUILD_DIR}"
+    dir_clean "${KIS_INSTALL_DIR}"
+    exit
 
 elif [[ ${1} = "install" ]]; then
     install_krita ${2}

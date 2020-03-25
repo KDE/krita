@@ -875,9 +875,6 @@ inline static void fillGrayBrushWithColorPreserveLightnessRGB(quint8 *pixels, co
     const float brushColorG = KoColorSpaceMaths<channels_type, float>::scaleToA(brushColorRGB->green);
     const float brushColorB = KoColorSpaceMaths<channels_type, float>::scaleToA(brushColorRGB->blue);
 
-    const float brushColorL =
-        getLightness<HSLType, float>(brushColorR, brushColorG, brushColorB);
-
     for (; nPixels > 0; --nPixels, pixels += pixelSize, ++brush) {
         RGBPixel *pixelRGB = reinterpret_cast<RGBPixel*>(pixels);
 

@@ -137,6 +137,10 @@ public:
         _CSTrait::applyInverseAlphaNormedFloatMask(pixels, alpha, nPixels);
     }
 
+    void fillInverseAlphaNormedFloatMaskWithColor(quint8 * pixels, const float * alpha, const quint8 *brushColor, qint32 nPixels) const override {
+        _CSTrait::fillInverseAlphaNormedFloatMaskWithColor(pixels, alpha, brushColor, nPixels);
+    }
+
     void fillGrayBrushWithColor(quint8 *dst, const QRgb *brush, quint8 *brushColor, qint32 nPixels) const override{
         _CSTrait::fillGrayBrushWithColor(dst, brush, brushColor, nPixels);
     }

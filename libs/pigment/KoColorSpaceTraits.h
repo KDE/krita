@@ -227,6 +227,17 @@ struct KoColorSpaceTrait {
         }
     }
 
+    inline static void fillInverseAlphaNormedFloatMaskWithColor(quint8 * pixels, const float * alpha, const quint8 *brushColor, qint32 nPixels) {
+        if (alpha_pos < 0) return;
+
+        for (; nPixels > 0; --nPixels, pixels += pixelSize, ++alpha) {
+            memcpy(pixels, brushColor, pixelSize);
+            channels_type valpha =  channels_type(KoColorSpaceMathsTraits<channels_type>::unitValue * (1.0f - *alpha));
+            *(nativeArray(pixels) + alpha_pos) = valpha;
+        }
+    }
+
+
     inline static void fillGrayBrushWithColor(quint8 *pixels, const QRgb *brush, quint8 *brushColor, qint32 nPixels) {
         if (alpha_pos > 0) {
             for (; nPixels > 0; --nPixels, pixels += pixelSize, ++brush) {

@@ -487,7 +487,13 @@ public:
     virtual void applyInverseNormedFloatMask(quint8 * pixels, const float * alpha, qint32 nPixels) const = 0;
 
     /**
-     * Fills \p pixels with specified \p color and then applies inverted brush
+     * Fills \p pixels with specified \p brushColor and then applies inverted brush
+     * mask specified in \p alpha.
+     */
+    virtual void fillInverseAlphaNormedFloatMaskWithColor(quint8 * pixels, const float * alpha, const quint8 *brushColor, qint32 nPixels) const = 0;
+
+    /**
+     * Fills \p dst with specified \p brushColor and then applies inverted brush
      * mask specified in \p brush. Premultiplied red channel of the brush is
      * used as an alpha channel for destination pixels.
      *
@@ -499,7 +505,7 @@ public:
     virtual void fillGrayBrushWithColor(quint8 *dst, const QRgb *brush, quint8 *brushColor, qint32 nPixels) const = 0;
 
     /**
-     * Fills \p pixels with specified \p color and then applies inverted brush
+     * Fills \p dst with specified \p brushColor and then applies inverted brush
      * mask specified in \p brush. Inverted red channel of the brush is used
      * as lightness of the destination. Alpha channel of the brush is used as
      * alpha of the destination.

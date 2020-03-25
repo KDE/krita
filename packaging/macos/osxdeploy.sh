@@ -201,8 +201,20 @@ else
     ### NOTARIZATION
 
     if [[ -n "${NOTARIZE_ACC}" ]]; then
-        security find-generic-password -s "AC_PASSWORD" > /dev/null 2>&1
-        if [[ ${?} -eq 0 || -n "${NOTARIZE_PASS}" ]]; then
+
+        ASC_PROVIDER_OP=""
+        if [[ -n "${ASC_PROVIDER}" ]]; then
+            ASC_PROVIDER_OP="--asc-provider ${ASC_PROVIDER}"
+        fi
+
+        if [[ -z "${NOTARIZE_PASS}" ]]; then
+            NOTARIZE_PASS="@keychain:AC_PASSWORD"
+        fi
+
+        # check if we can perform notarization
+        xcrun altool --notarization-history 0 --username "${NOTARIZE_ACC}" --password "${NOTARIZE_PASS}" ${ASC_PROVIDER_OP}
+
+        if [[ ${?} -eq 0 ]]; then
             NOTARIZE="true"
         else
             echo "No password given for notarization or AC_PASSWORD missig in keychain"
@@ -619,15 +631,6 @@ notarize_build() {
     if [[ ${NOTARIZE} = "true" ]]; then
         printf "performing notarization of %s\n" "${2}"
         cd "${NOT_SRC_DIR}"
-        
-        if [[ -z "${NOTARIZE_PASS}" ]]; then
-            NOTARIZE_PASS="@keychain:AC_PASSWORD"
-        fi
-
-        ASC_PROVIDER_OP=""
-        if [[ -n "${ASC_PROVIDER}" ]]; then
-            ASC_PROVIDER_OP="--asc-provider ${ASC_PROVIDER}"
-        fi
 
         ditto -c -k --sequesterRsrc --keepParent "${NOT_SRC_FILE}" "${BUILDROOT}/tmp_notarize/${NOT_SRC_FILE}.zip"
 

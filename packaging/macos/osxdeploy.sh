@@ -210,8 +210,6 @@ else
     fi
 fi
 
-# Disable for now... So we're not hogging the macos builder
-NOTARIZE="false"
 if [[ ${NOTARIZE} = "true" ]]; then
     print_msg "Notarization checks complete, This build will be notarized"
 else

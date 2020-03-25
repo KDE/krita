@@ -245,6 +245,13 @@ void KisToolSelectMagnetic::checkIfAnchorIsSelected(QPointF temp)
     }
 }
 
+/*
+
+~~TODO ALERT~~
+The double click adds a bit more functionality to the tool but also the reason
+of multiple problems, so disabling it for now, if someone can find some alternate
+ways for mimicking what the double clicks intended to do, please drop a patch
+
 void KisToolSelectMagnetic::beginPrimaryDoubleClickAction(KoPointerEvent *event)
 {
     QPointF temp = convertToPixelCoord(event);
@@ -284,6 +291,7 @@ void KisToolSelectMagnetic::beginPrimaryDoubleClickAction(KoPointerEvent *event)
         reEvaluatePoints();
     }
 } // KisToolSelectMagnetic::beginPrimaryDoubleClickAction
+*/
 
 // drag while primary mouse button is pressed
 void KisToolSelectMagnetic::continuePrimaryAction(KoPointerEvent *event)

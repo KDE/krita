@@ -66,11 +66,9 @@ parts:
         - pkg-config
         - vc-dev
         - zlib1g-dev
-        - libkf5kdcraw-dev
         - shared-mime-info
         - libopenimageio-dev
         - extra-cmake-modules
-        - libkf5archive-dev
         - libkf5coreaddons-dev
         - libkf5guiaddons-dev
         - libkf5itemmodels-dev
@@ -113,7 +111,6 @@ parts:
         - libboost-system1.65.1
         - librtmp1
         - libqt5quickwidgets5
-        - libkf5archive5
         - libkf5completion5
         - libkf5configcore5
         - libkf5configgui5

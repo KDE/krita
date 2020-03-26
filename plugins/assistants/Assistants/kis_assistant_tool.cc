@@ -1000,7 +1000,7 @@ QWidget *KisAssistantTool::createOptionWidget()
         m_options.vanishingPointAngleSpinbox->setPrefix(i18n("Density: "));
         m_options.vanishingPointAngleSpinbox->setSuffix(QChar(Qt::Key_degree));
         m_options.vanishingPointAngleSpinbox->setRange(1.0, 180.0);
-        m_options.vanishingPointAngleSpinbox->setSingleStep(0.5);
+        m_options.vanishingPointAngleSpinbox->setSingleStep(1.0);
 
 
         m_options.vanishingPointAngleSpinbox->setVisible(false);

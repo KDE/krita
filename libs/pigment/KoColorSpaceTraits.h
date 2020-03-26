@@ -239,7 +239,7 @@ struct KoColorSpaceTrait {
 
 
     inline static void fillGrayBrushWithColor(quint8 *pixels, const QRgb *brush, quint8 *brushColor, qint32 nPixels) {
-        if (alpha_pos > 0) {
+        if (alpha_pos >= 0) {
             for (; nPixels > 0; --nPixels, pixels += pixelSize, ++brush) {
                 memcpy(pixels, brushColor, pixelSize);
                 const quint8 opacity = KoColorSpaceMaths<quint8>::multiply(OPACITY_OPAQUE_U8 - quint8(qRed(*brush)), quint8(qAlpha(*brush)));

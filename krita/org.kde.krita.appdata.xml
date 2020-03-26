@@ -182,7 +182,7 @@
     <p xml:lang="tr">Krita, konsept sanat, çizgi roman, kaplama ve mat resimler için dokular oluşturmak için mükemmel bir seçimdir. Krita, 8 ve 16 bit tamsayı kanallarında RGB ve CMYK gibi birçok renk alanını ve 16 ve 32 bit kayan nokta kanallarını desteklemektedir.</p>
     <p xml:lang="uk">Krita — чудовий інструмент для створення концептуального живопису, коміксів, текстур для моделей та декорацій. У Krita передбачено підтримку багатьох просторів кольорів, зокрема RGB та CMYK з 8-бітовими та 16-бітовими цілими значеннями, а також 16-бітовими та 32-бітовими значеннями з рухомою крапкою для каналів кольорів.</p>
     <p xml:lang="x-test">xxKrita is a great choice for creating concept art, comics, textures for rendering and matte paintings. Krita supports many colorspaces like RGB and CMYK at 8 and 16 bits integer channels, as well as 16 and 32 bits floating point channels.xx</p>
-    <p xml:lang="zh-CN">Krita 是绘制概念美术、漫画、纹理和电影布景的理想选择。Krita 支持多种色彩空间，如 8 位和 16 位整数及 16 位和 32 位浮点的 RGB 和 CMYK 颜色模型。</p>
+    <p xml:lang="zh-CN">Krita 是绘制概念美术、漫画、纹理和接景的理想选择。Krita 支持多种色彩空间，如 8 位和 16 位整数及 16 位和 32 位浮点的 RGB 和 CMYK 颜色模型。</p>
     <p xml:lang="zh-TW">Krita 是創造概念藝術、漫畫、彩現紋理和場景繪畫的絕佳選擇。Krita 在 8 位元和 16 位元整數色版，以及 16 位元和 32 位元浮點色板中支援 RGB 和 CMYK 等多種色彩空間。</p>
     <p>Have fun painting with the advanced brush engines, amazing filters and many handy features that make Krita enormously productive.</p>
     <p xml:lang="bs">Zabavite se kreirajući napredne pogone četki, filtere i mnoge praktične osobine koje čine Krita vrlo produktivnim.</p>
@@ -232,6 +232,7 @@
       <caption xml:lang="sv">Krita är en fullfjädrad digital konststudio</caption>
       <caption xml:lang="uk">Krita — повноцінний комплекс для цифрового малювання</caption>
       <caption xml:lang="x-test">xxKrita is a full-featured digital painting studioxx</caption>
+      <caption xml:lang="zh-CN">Krita 是一款功能齐全的数字绘画工作室软件</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_001.png</image>
     </screenshot>
     <screenshot type="default">
@@ -246,6 +247,7 @@
       <caption xml:lang="sv">Startfönstret ger nu också senaste nytt om Krita</caption>
       <caption xml:lang="uk">У початковому вікні програми ви можете бачити найсвіжіші новини щодо Krita</caption>
       <caption xml:lang="x-test">xxThe startup window now also gives you the latest news about Kritaxx</caption>
+      <caption xml:lang="zh-CN">启动画面现在可以展示 Krita 的最新资讯</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_002.png</image>
     </screenshot>
     <screenshot type="default">
@@ -260,6 +262,7 @@
       <caption xml:lang="sv">Det finns mer än tio enormt kraftfulla penselgränssnitt</caption>
       <caption xml:lang="uk">У програмі передбачено понад десяток надзвичайно потужних рушіїв пензлів</caption>
       <caption xml:lang="x-test">xxThere are over ten immensely powerful brush enginesxx</caption>
+      <caption xml:lang="zh-CN">它具备十几种功能强大的笔刷引擎</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_003.png</image>
     </screenshot>
     <screenshot type="default">
@@ -274,6 +277,7 @@
       <caption xml:lang="sv">Att skapa och använda färgomfångsmasker ger bilder en sammanhängande känsla</caption>
       <caption xml:lang="uk">Створюйте маски палітри і користуйтеся ними для надання вашим малюнкам однорідного вигляду</caption>
       <caption xml:lang="x-test">xxCreate and use gamut masks to give your images a coherent feelxx</caption>
+      <caption xml:lang="zh-CN">它支持创建并使用色域蒙版，可以为图像带来更加一致的观感</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_004.png</image>
     </screenshot>
     <screenshot type="default">
@@ -288,6 +292,7 @@
       <caption xml:lang="sv">Gillar du animering? Krita tillhandahåller allt som behövs för traditionella, handritade animeringar</caption>
       <caption xml:lang="uk">Працюєте із анімацією? У Krita ви знайдете усе, що потрібно для створення традиційної, намальованої вручну анімації</caption>
       <caption xml:lang="x-test">xxInto animation? Krita provides everything you need for traditional, hand-drawn animationxx</caption>
+      <caption xml:lang="zh-CN">喜欢制作动画吗？Krita 提供了制作传统手绘动画的全套工具</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_005.png</image>
     </screenshot>
     <screenshot type="default">
@@ -302,6 +307,7 @@
       <caption xml:lang="sv">Om digital målning är nytt för dig, eller om du vill veta mer om Kritas möjligheter, finns en omfattande, aktuell handbok</caption>
       <caption xml:lang="uk">Якщо ви не маєте достатнього досвіду у цифровому малюванні, скористайтеся нашим докладним і актуальним підручником</caption>
       <caption xml:lang="x-test">xxIf you're new to digital painting, there's an extensive, up-to-date manualxx</caption>
+      <caption xml:lang="zh-CN">如果你是数字绘画的初学者，我们还准备了内容详尽，及时更新的使用手册</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_006.png</image>
     </screenshot>
   </screenshots>

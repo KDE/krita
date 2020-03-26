@@ -109,7 +109,7 @@ KisAbstractSliderSpinBox::KisAbstractSliderSpinBox(QWidget* parent, KisAbstractS
     d->parseInt = false;
 
     setExponentRatio(1.0);
-    setCursor(KisCursor::splitHCursor());
+    setMouseTracking(true);
 
     //Set sane defaults
     setFocusPolicy(Qt::StrongFocus);
@@ -436,6 +436,18 @@ void KisAbstractSliderSpinBox::mouseMoveEvent(QMouseEvent* e)
     } else {
         d->shiftMode = false;
     }
+
+
+    // change cursor shape if we are sliding left and right, or stepping and and down
+    QStyleOptionSpinBox spinOpts = spinBoxOptions();
+    QPoint localMousePosition = e->localPos().toPoint();
+    if (upButtonRect(spinOpts).contains(localMousePosition) ||
+        downButtonRect(spinOpts).contains(localMousePosition)) {
+        setCursor(KisCursor::arrowCursor());
+    } else {
+        setCursor(KisCursor::splitHCursor());
+    }
+
 
     //Respect emulated mouse grab.
     if (e->buttons() & Qt::LeftButton &&

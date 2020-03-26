@@ -438,7 +438,7 @@ QWidget* KisToolMultihand::createOptionWidget()
 
 
     customUI->axisRotationSpinbox->setSuffix(QChar(Qt::Key_degree));   // origin rotation
-    customUI->axisRotationSpinbox->setSingleStep(0.5);
+    customUI->axisRotationSpinbox->setSingleStep(1.0);
     customUI->axisRotationSpinbox->setRange(0.0, 90.0, 1);
     customUI->axisRotationSpinbox->setValue(m_configGroup.readEntry("axesAngle", 0.0));
     connect( customUI->axisRotationSpinbox, SIGNAL(valueChanged(qreal)),this, SLOT(slotSetAxesAngle(qreal)));

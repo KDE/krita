@@ -833,8 +833,7 @@ list (APPEND ANDROID_EXTRA_LIBS ${QUAZIP_LIBRARIES}
                                 ${KF5_LIBRARIES}/libKF5I18n.so
                                 ${KF5_LIBRARIES}/libKF5CoreAddons.so
                                 ${KF5_LIBRARIES}/libKF5ConfigGui.so
-                                ${KF5_LIBRARIES}/libKF5ConfigCore.so
-                                ${KF5_LIBRARIES}/libKF5Archive.so)
+                                ${KF5_LIBRARIES}/libKF5ConfigCore.so)
 
 
 ##

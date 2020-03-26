@@ -507,6 +507,13 @@ install_krita () {
         KIS_BUILD_DIR="${1}"
     fi
 
+    # Delete any "krita" named file in install
+    # this helps avoid double versioned libraries
+    log "About to delete krita libs from ${KIS_INSTALL_DIR}"
+    waiting_fixed "Deleting files in 5 seconds" 5
+    find ${KIS_INSTALL_DIR} -type d -name "*krita*" | xargs -I FILE  rm -rf FILE
+    find ${KIS_INSTALL_DIR}  \( -type f -or -type l \) -name "*krita*" | xargs -P4 -I FILE rm FILE
+
     print_msg "Install krita from ${KIS_BUILD_DIR}"
     log_cmd check_dir_path ${KIS_BUILD_DIR}
 

@@ -38,15 +38,6 @@ KisPngBrush::KisPngBrush(const QString& filename)
 KisPngBrush::KisPngBrush(const KisPngBrush &rhs)
     : KisScalingSizeBrush(rhs)
 {
-    setSpacing(rhs.spacing());
-    if (brushTipImage().isGrayscale()) {
-        setBrushType(MASK);
-        setHasColor(false);
-    }
-    else {
-        setBrushType(IMAGE);
-        setHasColor(true);
-    }
 }
 
 KisBrush* KisPngBrush::clone() const

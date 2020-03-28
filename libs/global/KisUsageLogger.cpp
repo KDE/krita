@@ -98,6 +98,9 @@ QString KisUsageLogger::basicSystemInfo()
     systemInfo.append("\n  Pretty Productname: ").append(QSysInfo::prettyProductName());
     systemInfo.append("\n  Product Type: ").append(QSysInfo::productType());
     systemInfo.append("\n  Product Version: ").append(QSysInfo::productVersion());
+#ifdef Q_OS_LINUX
+    systemInfo.append("\n  Desktop: ").append(qgetenv("XDG_CURRENT_DESKTOP"));
+#endif
     systemInfo.append("\n\n");
 
     return systemInfo;

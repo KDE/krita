@@ -195,8 +195,10 @@ public Q_SLOTS:
     void mirrorNode(KisNodeSP node, const KUndo2MagicString& commandName, Qt::Orientation orientation, KisSelectionSP selection);
 
 
-    void activateNextNode();
-    void activatePreviousNode();
+    void activateNextNode(bool siblingsOnly = false);
+    void activateNextSiblingNode() { activateNextNode(true); }
+    void activatePreviousNode(bool siblingsOnly = false);
+    void activatePreviousSiblingNode() { activatePreviousNode(true); }
     void switchToPreviouslyActiveNode();
 
     /**

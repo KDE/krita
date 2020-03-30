@@ -271,8 +271,14 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
     action = actionManager->createAction("activateNextLayer");
     connect(action, SIGNAL(triggered()), this, SLOT(activateNextNode()));
 
+    action = actionManager->createAction("activateNextSiblingLayer");
+    connect(action, SIGNAL(triggered()), this, SLOT(activateNextSiblingNode()));
+
     action = actionManager->createAction("activatePreviousLayer");
     connect(action, SIGNAL(triggered()), this, SLOT(activatePreviousNode()));
+
+    action = actionManager->createAction("activatePreviousSiblingLayer");
+    connect(action, SIGNAL(triggered()), this, SLOT(activatePreviousSiblingNode()));
 
     action = actionManager->createAction("switchToPreviouslyActiveNode");
     connect(action, SIGNAL(triggered()), this, SLOT(switchToPreviouslyActiveNode()));
@@ -999,55 +1005,63 @@ void KisNodeManager::mirrorAllNodesY()
                Qt::Vertical, m_d->view->selection());
 }
 
-void KisNodeManager::activateNextNode()
+void KisNodeManager::activateNextNode(bool siblingsOnly)
 {
     KisNodeSP activeNode = this->activeNode();
     if (!activeNode) return;
 
-    KisNodeSP node = activeNode->nextSibling();
+    KisNodeSP nextNode = activeNode->nextSibling();
 
-    while (node && node->childCount() > 0) {
-        node = node->firstChild();
+    if (!siblingsOnly) {
+        // Recurse groups...
+        while (nextNode && nextNode->childCount() > 0) {
+            nextNode = nextNode->firstChild();
+        }
+
+        // Out of nodes? Back out of group...
+        if (!nextNode && activeNode->parent()) {
+            nextNode = activeNode->parent();
+        }
     }
 
-    if (!node && activeNode->parent() && activeNode->parent()->parent()) {
-        node = activeNode->parent();
+    // Skip nodes hidden from tree view..
+    while (nextNode && isNodeHidden(nextNode, m_d->nodeDisplayModeAdapter->showGlobalSelectionMask())) {
+        nextNode = nextNode->nextSibling();
     }
 
-    while(node && isNodeHidden(node, m_d->nodeDisplayModeAdapter->showGlobalSelectionMask())) {
-        node = node->nextSibling();
-    }
-
-    if (node) {
-        slotNonUiActivatedNode(node);
+    // Select node, unless root..
+    if (nextNode && nextNode->parent()) {
+        slotNonUiActivatedNode(nextNode);
     }
 }
 
-void KisNodeManager::activatePreviousNode()
+void KisNodeManager::activatePreviousNode(bool siblingsOnly)
 {
     KisNodeSP activeNode = this->activeNode();
     if (!activeNode) return;
 
-    KisNodeSP node;
+    KisNodeSP nextNode = activeNode->prevSibling();
 
-    if (activeNode->childCount() > 0) {
-        node = activeNode->lastChild();
-    }
-    else {
-        node = activeNode->prevSibling();
-    }
+    if (!siblingsOnly) {
+        // Enter groups..
+        if (activeNode->childCount() > 0) {
+            nextNode = activeNode->lastChild();
+        }
 
-    while (!node && activeNode->parent()) {
-        node = activeNode->parent()->prevSibling();
-        activeNode = activeNode->parent();
-    }
-
-    while(node && isNodeHidden(node, m_d->nodeDisplayModeAdapter->showGlobalSelectionMask())) {
-        node = node->prevSibling();
+        // Out of nodes? Back out of group...
+        if (!nextNode && activeNode->parent()) {
+            nextNode = activeNode->parent()->prevSibling();
+        }
     }
 
-    if (node) {
-        slotNonUiActivatedNode(node);
+    // Skip nodes hidden from tree view..
+    while (nextNode && isNodeHidden(nextNode, m_d->nodeDisplayModeAdapter->showGlobalSelectionMask())) {
+        nextNode = nextNode->prevSibling();
+    }
+
+    // Select node, unless root..
+    if (nextNode && nextNode->parent()) {
+        slotNonUiActivatedNode(nextNode);
     }
 }
 

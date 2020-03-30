@@ -453,8 +453,7 @@ KisBrush* KisGbrBrush::clone() const
 void KisGbrBrush::toXML(QDomDocument& d, QDomElement& e) const
 {
     predefinedBrushToXML("gbr_brush", e);
-    e.setAttribute("ColorAsMask", QString::number((int)useColorAsMask()));
-    KisBrush::toXML(d, e);
+    KisScalingSizeBrush::toXML(d, e);
 }
 
 QString KisGbrBrush::defaultFileExtension() const

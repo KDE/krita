@@ -63,14 +63,18 @@ private Q_SLOTS:
     void slotSetItemSize(qreal);
     void slotSetItemRotation(qreal);
     void slotSpacingChanged();
-    void slotSetItemUseColorAsMask(bool);
-    void slotSetItemPreserveLightness(bool);
     void slotOpenStampBrush();
     void slotOpenClipboardBrush();
     void slotImportNewBrushResource();
     void slotDeleteBrushResource();
     void slotNewPredefinedBrush(KoResource *);
     void updateBrushTip(KoResource *, bool isChangingBrushPresets = false);
+    void slotUpdateBrushModeButtonsState();
+    void slotWriteBrushAdjustmentsState();
+
+    void slotWriteBrushMode();
+    void slotUpdateBrushAdjustments();
+
 
 Q_SIGNALS:
 

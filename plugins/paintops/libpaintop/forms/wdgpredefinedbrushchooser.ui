@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>646</width>
-    <height>325</height>
+    <width>888</width>
+    <height>454</height>
    </rect>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -158,32 +158,8 @@
        <property name="verticalSpacing">
         <number>10</number>
        </property>
-       <item row="0" column="0">
-        <widget class="QLabel" name="brushSizeLabel">
-         <property name="text">
-          <string>Size:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="1">
-        <widget class="QPushButton" name="resetBrushButton">
-         <property name="text">
-          <string>Reset Predefined Tip</string>
-         </property>
-        </widget>
-       </item>
        <item row="2" column="1">
         <widget class="KisSpacingSelectionWidget" name="brushSpacingSelectionWidget" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="KisDoubleSliderSpinBox" name="brushRotationSpinBox" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -199,20 +175,27 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="brushSpacingLabel">
+       <item row="6" column="1">
+        <widget class="QPushButton" name="resetBrushButton">
          <property name="text">
-          <string>Spacing:</string>
+          <string>Reset Predefined Tip</string>
          </property>
         </widget>
        </item>
-       <item row="5" column="1">
-        <widget class="QCheckBox" name="preserveBrushPresetSettings">
-         <property name="text">
-          <string>Preserve Brush Preset Settings</string>
+       <item row="1" column="1">
+        <widget class="KisDoubleSliderSpinBox" name="brushRotationSpinBox" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
-         <property name="checked">
-          <bool>true</bool>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="brushSizeLabel">
+         <property name="text">
+          <string>Size:</string>
          </property>
         </widget>
        </item>
@@ -226,22 +209,79 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
-        <widget class="QCheckBox" name="useColorAsMaskCheckbox">
+       <item row="2" column="0">
+        <widget class="QLabel" name="brushSpacingLabel">
          <property name="text">
-          <string>Use Color as Mask</string>
+          <string>Spacing:</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="1">
-        <widget class="QCheckBox" name="preserveLightnessCheckbox">
-         <property name="enabled">
-          <bool>false</bool>
+       <item row="3" column="0" colspan="2">
+        <widget class="QGroupBox" name="grpBrushMode">
+         <property name="title">
+          <string>Brush mode</string>
          </property>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
+           <widget class="QRadioButton" name="btnMaskMode">
+            <property name="text">
+             <string>Mask</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="btnColorMode">
+            <property name="text">
+             <string>Color</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="btnLightnessMode">
+            <property name="text">
+             <string>Lightness</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Fixed</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>30</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_4">
+              <item>
+               <widget class="KisSliderSpinBox" name="intBrightnessAdjustment" native="true"/>
+              </item>
+              <item>
+               <widget class="KisSliderSpinBox" name="intContrastAdjustment" native="true"/>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="2">
+        <widget class="QCheckBox" name="preserveBrushPresetSettings">
          <property name="text">
-          <string>Preserve Lightness</string>
+          <string>Preserve Brush Preset Settings</string>
          </property>
-         <property name="checkable">
+         <property name="checked">
           <bool>true</bool>
          </property>
         </widget>
@@ -266,6 +306,12 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>KisSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
   <customwidget>
    <class>KisDoubleSliderSpinBox</class>
    <extends>QWidget</extends>

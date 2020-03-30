@@ -72,21 +72,16 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
     int preserveLightness = KisDomUtils::toInt(brushDefinition.attribute("preserveLightness", "0"));
     brush->setPreserveLightness(preserveLightness);
 
-    if (m_id == "gbr_brush") {
-        KisGbrBrush *gbrbrush = dynamic_cast<KisGbrBrush*>(brush.data());
-        if (gbrbrush) {
-            /**
-             * WARNING: see comment in KisGbrBrush::setUseColorAsMask()
-             */
-            gbrbrush->setUseColorAsMask((bool)brushDefinition.attribute("ColorAsMask").toInt());
-        }
-    }
-    else if (m_id == "png_brush") {
-        KisPngBrush* pngbrush = dynamic_cast<KisPngBrush*>(brush.data());
-        if (pngbrush) {
-            bool colorAsMask = (bool)brushDefinition.attribute("ColorAsMask").toInt();
-            pngbrush->setUseColorAsMask(colorAsMask);
-        }
+    KisScalingSizeBrush *colorfulBrush = dynamic_cast<KisScalingSizeBrush*>(brush.data());
+    if (colorfulBrush) {
+        /**
+         * WARNING: see comment in KisGbrBrush::setUseColorAsMask()
+         */
+        colorfulBrush->setUseColorAsMask((bool)brushDefinition.attribute("ColorAsMask").toInt());
+        colorfulBrush->setBrightnessAdjustment(brushDefinition.attribute("BrightnessAdjustment").toDouble());
+        colorfulBrush->setContrastAdjustment(brushDefinition.attribute("ContrastAdjustment").toDouble());
+
+        ENTER_FUNCTION() << ppVar(colorfulBrush->brightnessAdjustment()) << ppVar(colorfulBrush->contrastAdjustment());
     }
 
     return brush;

@@ -43,8 +43,18 @@ public:
 
     QImage brushTipImage() const override;
 
+    void setBrightnessAdjustment(qreal value);
+    void setContrastAdjustment(qreal value);
+
+    qreal brightnessAdjustment() const;
+    qreal contrastAdjustment() const;
+
+    void toXML(QDomDocument& d, QDomElement& e) const override;
+
 private:
     bool m_useColorAsMask = false;
+    qreal m_brightnessAdjustment = 0.0;
+    qreal m_contrastAdjustment = 0.0;
 };
 
 #endif // KISSCALINGSIZEBRUSH_H

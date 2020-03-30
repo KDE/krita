@@ -156,6 +156,5 @@ QString KisPngBrush::defaultFileExtension() const
 void KisPngBrush::toXML(QDomDocument& d, QDomElement& e) const
 {
     predefinedBrushToXML("png_brush", e);
-    e.setAttribute("ColorAsMask", QString::number((int)useColorAsMask()));
-    KisBrush::toXML(d, e);
+    KisScalingSizeBrush::toXML(d, e);
 }

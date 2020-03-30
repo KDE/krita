@@ -30,6 +30,7 @@
 #include "compositeops/KoCompositeOps.h"
 #include "compositeops/RgbCompositeOps.h"
 #include <kis_dom_utils.h>
+#include <KoColorSpacePreserveLightnessUtils.h>
 
 #define downscale(quantum)  (quantum) //((unsigned char) ((quantum)/257UL))
 #define upscale(value)  (value) // ((quint8) (257UL*(value)))

@@ -37,6 +37,8 @@
 #include "KoConvolutionOp.h"
 #include "KoCompositeOpRegistry.h"
 #include "KoColorSpaceEngine.h"
+#include <KoColorSpaceTraits.h>
+#include <KoColorSpacePreserveLightnessUtils.h>
 
 #include <QThreadStorage>
 #include <QByteArray>
@@ -814,8 +816,6 @@ bool KoColorSpace::preferCompositionInSourceColorSpace() const
 {
     return false;
 }
-
-#include <KoColorSpaceTraits.h>
 
 void KoColorSpace::fillGrayBrushWithColorAndLightnessOverlay(quint8 *dst, const QRgb *brush, quint8 *brushColor, qint32 nPixels) const
 {

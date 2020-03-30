@@ -32,6 +32,7 @@
 #include "compositeops/KoCompositeOps.h"
 
 #include "KoColorConversions.h"
+#include <KoColorSpacePreserveLightnessUtils.h>
 
 
 KoRgbU8ColorSpace::KoRgbU8ColorSpace() :

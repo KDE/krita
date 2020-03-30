@@ -29,6 +29,7 @@
 #include <kis_dom_utils.h>
 #include <KoColorConversions.h>
 #include <KoColorSpaceMaths.h>
+#include <KoColorSpacePreserveLightnessUtils.h>
 
 RgbF32ColorSpace::RgbF32ColorSpace(const QString &name, KoColorProfile *p) :
     LcmsColorSpace<KoRgbF32Traits>(colorSpaceId(), name, TYPE_RGBA_FLT, cmsSigRgbData, p)

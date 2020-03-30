@@ -175,6 +175,11 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
     resetBrushButton->setToolTip(i18n("Reloads Spacing from file\nSets Scale to 1.0\nSets Rotation to 0.0"));
     connect(resetBrushButton, SIGNAL(clicked()), SLOT(slotResetBrush()));
 
+    intAdjustmentMidPoint->setRange(0, 255);
+    intAdjustmentMidPoint->setPageStep(10);
+    intAdjustmentMidPoint->setSingleStep(1);
+    intAdjustmentMidPoint->setPrefix(i18nc("@label:slider", "Neutral point: "));
+
     intBrightnessAdjustment->setRange(-100, 100);
     intBrightnessAdjustment->setPageStep(10);
     intBrightnessAdjustment->setSingleStep(1);
@@ -195,6 +200,7 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
     connect(btnColorMode, SIGNAL(toggled(bool)), SLOT(slotWriteBrushMode()));
     connect(btnLightnessMode, SIGNAL(toggled(bool)), SLOT(slotWriteBrushMode()));
 
+    connect(intAdjustmentMidPoint, SIGNAL(valueChanged(int)), SLOT(slotUpdateBrushAdjustments()));
     connect(intBrightnessAdjustment, SIGNAL(valueChanged(int)), SLOT(slotUpdateBrushAdjustments()));
     connect(intContrastAdjustment, SIGNAL(valueChanged(int)), SLOT(slotUpdateBrushAdjustments()));
 
@@ -404,9 +410,11 @@ void KisPredefinedBrushChooser::slotUpdateBrushModeButtonsState()
             btnColorMode->setChecked(true);
         }
 
+        intAdjustmentMidPoint->setValue(colorfulBrush->adjustmentMidPoint());
         intBrightnessAdjustment->setValue(qRound(colorfulBrush->brightnessAdjustment() * 100.0));
         intContrastAdjustment->setValue(qRound(colorfulBrush->contrastAdjustment() * 100.0));
     } else {
+        intAdjustmentMidPoint->setValue(127);
         intBrightnessAdjustment->setValue(0);
         intContrastAdjustment->setValue(0);
         btnMaskMode->setChecked(true);
@@ -419,6 +427,7 @@ void KisPredefinedBrushChooser::slotUpdateBrushModeButtonsState()
 
 void KisPredefinedBrushChooser::slotWriteBrushAdjustmentsState()
 {
+    intAdjustmentMidPoint->setEnabled(btnLightnessMode->isEnabled() && btnLightnessMode->isChecked());
     intBrightnessAdjustment->setEnabled(btnLightnessMode->isEnabled() && btnLightnessMode->isChecked());
     intContrastAdjustment->setEnabled(btnLightnessMode->isEnabled() && btnLightnessMode->isChecked());
 }
@@ -451,6 +460,7 @@ void KisPredefinedBrushChooser::slotUpdateBrushAdjustments()
     // sliders must not be user-accessible for non-colorful brushes
     KIS_SAFE_ASSERT_RECOVER_RETURN(colorfulBrush);
 
+    colorfulBrush->setAdjustmentMidPoint(quint8(intAdjustmentMidPoint->value()));
     colorfulBrush->setBrightnessAdjustment(intBrightnessAdjustment->value() / 100.0);
     colorfulBrush->setContrastAdjustment(intContrastAdjustment->value() / 100.0);
 

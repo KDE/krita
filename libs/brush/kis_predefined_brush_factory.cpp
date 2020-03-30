@@ -78,10 +78,9 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
          * WARNING: see comment in KisGbrBrush::setUseColorAsMask()
          */
         colorfulBrush->setUseColorAsMask((bool)brushDefinition.attribute("ColorAsMask").toInt());
+        colorfulBrush->setAdjustmentMidPoint(brushDefinition.attribute("AdjustmentMidPoint", "127").toInt());
         colorfulBrush->setBrightnessAdjustment(brushDefinition.attribute("BrightnessAdjustment").toDouble());
         colorfulBrush->setContrastAdjustment(brushDefinition.attribute("ContrastAdjustment").toDouble());
-
-        ENTER_FUNCTION() << ppVar(colorfulBrush->brightnessAdjustment()) << ppVar(colorfulBrush->contrastAdjustment());
     }
 
     return brush;

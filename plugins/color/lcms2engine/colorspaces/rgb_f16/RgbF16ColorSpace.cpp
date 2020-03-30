@@ -29,6 +29,7 @@
 #include "compositeops/RgbCompositeOpOut.h"
 #include "compositeops/RgbCompositeOpBumpmap.h"
 #include <kis_dom_utils.h>
+#include <KoColorSpacePreserveLightnessUtils.h>
 
 RgbF16ColorSpace::RgbF16ColorSpace(const QString &name, KoColorProfile *p) :
     LcmsColorSpace<KoRgbF16Traits>(colorSpaceId(), name, TYPE_RGBA_HALF_FLT, cmsSigRgbData, p)

@@ -32,6 +32,7 @@
 #include "KoIntegerMaths.h"
 
 #include "KoColorConversions.h"
+#include <KoColorSpacePreserveLightnessUtils.h>
 
 KoRgbU16ColorSpace::KoRgbU16ColorSpace() :
         KoSimpleColorSpace<KoBgrU16Traits>(colorSpaceId(),

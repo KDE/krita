@@ -264,6 +264,9 @@
             <item>
              <layout class="QVBoxLayout" name="verticalLayout_4">
               <item>
+               <widget class="KisSliderSpinBox" name="intAdjustmentMidPoint" native="true"/>
+              </item>
+              <item>
                <widget class="KisSliderSpinBox" name="intBrightnessAdjustment" native="true"/>
               </item>
               <item>

@@ -43,9 +43,11 @@ public:
 
     QImage brushTipImage() const override;
 
+    void setAdjustmentMidPoint(quint8 value);
     void setBrightnessAdjustment(qreal value);
     void setContrastAdjustment(qreal value);
 
+    quint8 adjustmentMidPoint() const;
     qreal brightnessAdjustment() const;
     qreal contrastAdjustment() const;
 
@@ -53,6 +55,7 @@ public:
 
 private:
     bool m_useColorAsMask = false;
+    quint8 m_adjustmentMidPoint = 127;
     qreal m_brightnessAdjustment = 0.0;
     qreal m_contrastAdjustment = 0.0;
 };

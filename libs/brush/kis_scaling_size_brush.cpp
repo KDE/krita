@@ -31,6 +31,7 @@ KisScalingSizeBrush::KisScalingSizeBrush(const QString &filename)
 KisScalingSizeBrush::KisScalingSizeBrush(const KisScalingSizeBrush &rhs)
     : KisBrush(rhs),
       m_useColorAsMask(rhs.m_useColorAsMask),
+      m_adjustmentMidPoint(rhs.m_adjustmentMidPoint),
       m_brightnessAdjustment(rhs.m_brightnessAdjustment),
       m_contrastAdjustment(rhs.m_contrastAdjustment)
 {
@@ -80,17 +81,31 @@ QImage KisScalingSizeBrush::brushTipImage() const
 {
     QImage image = KisBrush::brushTipImage();
     if (hasColor() && useColorAsMask()) {
-        if (!qFuzzyIsNull(m_brightnessAdjustment) || !qFuzzyIsNull(m_contrastAdjustment)) {
+        if (m_adjustmentMidPoint != 127 ||
+            !qFuzzyIsNull(m_brightnessAdjustment) ||
+            !qFuzzyIsNull(m_contrastAdjustment)) {
 
             const int half = KoColorSpaceMathsTraits<quint8>::halfValue;
             const int unit = KoColorSpaceMathsTraits<quint8>::unitValue;
 
-            const qreal midPoint = half * (1.0 + 0.5 * m_brightnessAdjustment);
-            const qreal loA = 2 * midPoint / (1.0 - m_contrastAdjustment) / unit;
-            const qreal hiA = 2 * (unit - midPoint) / (1.0 - m_contrastAdjustment) / unit;
+            const qreal midX = m_adjustmentMidPoint;
+            const qreal midY = m_brightnessAdjustment > 0 ?
+                        KoColorSpaceMaths<qreal>::blend(unit, half, m_brightnessAdjustment) :
+                        KoColorSpaceMaths<qreal>::blend(0, half, -m_brightnessAdjustment);
 
-            const qreal loB = midPoint - half * loA;
-            const qreal hiB = midPoint - half * hiA;
+            qreal loA = 0.0;
+            qreal hiA = 0.0;
+
+            qreal loB = 0.0;
+            qreal hiB = 255.0;
+
+            if (!qFuzzyCompare(m_contrastAdjustment, 1.0)) {
+                loA = midY / (1.0 - m_contrastAdjustment) / midX;
+                hiA = (unit - midY) / (1.0 - m_contrastAdjustment) / (unit - midX);
+
+                loB = midY - midX * loA;
+                hiB = midY - midX * hiA;
+            }
 
             for (int y = 0; y < image.height(); y++) {
                 QRgb *pixel = reinterpret_cast<QRgb *>(image.scanLine(y));
@@ -99,7 +114,7 @@ QImage KisScalingSizeBrush::brushTipImage() const
 
                     int v = qGray(c);
 
-                    if (v >= half) {
+                    if (v >= midX) {
                         v = qMin(unit, qRound(hiA * v + hiB));
                     } else {
                         v = qMax(0, qRound(loA * v + loB));
@@ -123,6 +138,11 @@ QImage KisScalingSizeBrush::brushTipImage() const
     return image;
 }
 
+void KisScalingSizeBrush::setAdjustmentMidPoint(quint8 value)
+{
+    m_adjustmentMidPoint = value;
+}
+
 void KisScalingSizeBrush::setBrightnessAdjustment(qreal value)
 {
     m_brightnessAdjustment = value;
@@ -131,6 +151,11 @@ void KisScalingSizeBrush::setBrightnessAdjustment(qreal value)
 void KisScalingSizeBrush::setContrastAdjustment(qreal value)
 {
     m_contrastAdjustment = value;
+}
+
+quint8 KisScalingSizeBrush::adjustmentMidPoint() const
+{
+    return m_adjustmentMidPoint;
 }
 
 qreal KisScalingSizeBrush::brightnessAdjustment() const
@@ -148,6 +173,7 @@ qreal KisScalingSizeBrush::contrastAdjustment() const
 void KisScalingSizeBrush::toXML(QDomDocument& d, QDomElement& e) const
 {
     e.setAttribute("ColorAsMask", QString::number((int)useColorAsMask()));
+    e.setAttribute("AdjustmentMidPoint", QString::number(m_adjustmentMidPoint));
     e.setAttribute("BrightnessAdjustment", QString::number(m_brightnessAdjustment));
     e.setAttribute("ContrastAdjustment", QString::number(m_contrastAdjustment));
     KisBrush::toXML(d, e);

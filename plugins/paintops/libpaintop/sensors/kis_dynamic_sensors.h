@@ -43,8 +43,13 @@ class KisDynamicSensorRotation : public KisDynamicSensor
 public:
     KisDynamicSensorRotation();
     ~KisDynamicSensorRotation() override { }
+
+    bool isAdditive() const override {
+        return true;
+    }
+
     qreal value(const KisPaintInformation& info) override {
-        return info.rotation() / 360.0;
+        return info.rotation() / 180.0;
     }
 };
 
@@ -103,8 +108,13 @@ class KisDynamicSensorTiltDirection : public KisDynamicSensor
 public:
     KisDynamicSensorTiltDirection();
     ~KisDynamicSensorTiltDirection() override {}
+
+    bool isAdditive() const override {
+        return true;
+    }
+
     qreal value(const KisPaintInformation& info) override {
-        return KisPaintInformation::tiltDirection(info, true);
+        return scalingToAdditive(KisPaintInformation::tiltDirection(info, true));
     }
 };
 

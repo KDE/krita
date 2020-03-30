@@ -389,6 +389,11 @@ inline T wrapValue(T value, T wrapBounds) {
     return value;
 }
 
+template<typename T>
+inline T wrapValue(T value, T min, T max) {
+    return wrapValue(value - min, max - min) + min;
+}
+
 class RightHalfPlane {
 public:
 

@@ -2626,6 +2626,18 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="activateNextSiblingLayer">
+      <icon></icon>
+      <text>Activate next sibling layer, skipping over groups.</text>
+      <whatsThis></whatsThis>
+      <toolTip>Activate next sibling layer</toolTip>
+      <iconText>Activate next sibling layer</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="activatePreviousLayer">
       <icon></icon>
       <text>Activate previous layer</text>
@@ -2635,6 +2647,18 @@
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>PgDown</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="activatePreviousSiblingLayer">
+      <icon></icon>
+      <text>Activate previous sibling layer, skipping over groups.</text>
+      <whatsThis></whatsThis>
+      <toolTip>Activate previous sibling layer</toolTip>
+      <iconText>Activate previous sibling layer</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>

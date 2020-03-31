@@ -19,9 +19,9 @@
 #ifndef KIS_PNG_BRUSH_
 #define KIS_PNG_BRUSH_
 
-#include "kis_scaling_size_brush.h"
+#include "KisColorfulBrush.h"
 
-class BRUSH_EXPORT  KisPngBrush : public KisScalingSizeBrush
+class BRUSH_EXPORT  KisPngBrush : public KisColorfulBrush
 {
 public:
     /// Construct brush to load filename later as brush

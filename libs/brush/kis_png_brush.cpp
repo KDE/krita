@@ -28,7 +28,7 @@
 #include <kis_dom_utils.h>
 
 KisPngBrush::KisPngBrush(const QString& filename)
-    : KisScalingSizeBrush(filename)
+    : KisColorfulBrush(filename)
 {
     setBrushType(INVALID);
     setSpacing(0.25);
@@ -36,7 +36,7 @@ KisPngBrush::KisPngBrush(const QString& filename)
 }
 
 KisPngBrush::KisPngBrush(const KisPngBrush &rhs)
-    : KisScalingSizeBrush(rhs)
+    : KisColorfulBrush(rhs)
 {
 }
 
@@ -156,5 +156,5 @@ QString KisPngBrush::defaultFileExtension() const
 void KisPngBrush::toXML(QDomDocument& d, QDomElement& e) const
 {
     predefinedBrushToXML("png_brush", e);
-    KisScalingSizeBrush::toXML(d, e);
+    KisColorfulBrush::toXML(d, e);
 }

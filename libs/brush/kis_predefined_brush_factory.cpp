@@ -72,7 +72,7 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
     int preserveLightness = KisDomUtils::toInt(brushDefinition.attribute("preserveLightness", "0"));
     brush->setPreserveLightness(preserveLightness);
 
-    KisScalingSizeBrush *colorfulBrush = dynamic_cast<KisScalingSizeBrush*>(brush.data());
+    KisColorfulBrush *colorfulBrush = dynamic_cast<KisColorfulBrush*>(brush.data());
     if (colorfulBrush) {
         /**
          * WARNING: see comment in KisGbrBrush::setUseColorAsMask()

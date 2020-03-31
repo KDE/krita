@@ -398,7 +398,7 @@ void KisPredefinedBrushChooser::updateBrushTip(KoResource * resource, bool isCha
 
 void KisPredefinedBrushChooser::slotUpdateBrushModeButtonsState()
 {
-    KisScalingSizeBrush *colorfulBrush = dynamic_cast<KisScalingSizeBrush*>(m_brush.data());
+    KisColorfulBrush *colorfulBrush = dynamic_cast<KisColorfulBrush*>(m_brush.data());
     const bool modeSwitchEnabled = colorfulBrush && colorfulBrush->hasColor();
 
     if (modeSwitchEnabled) {
@@ -450,7 +450,7 @@ void KisPredefinedBrushChooser::slotWriteBrushAdjustmentsState()
 
 void KisPredefinedBrushChooser::slotWriteBrushMode()
 {
-    KisScalingSizeBrush *colorfulBrush = dynamic_cast<KisScalingSizeBrush*>(m_brush.data());
+    KisColorfulBrush *colorfulBrush = dynamic_cast<KisColorfulBrush*>(m_brush.data());
 
     // sliders must not be user-accessible for non-colorful brushes
     KIS_SAFE_ASSERT_RECOVER_RETURN(colorfulBrush);
@@ -471,7 +471,7 @@ void KisPredefinedBrushChooser::slotWriteBrushMode()
 
 void KisPredefinedBrushChooser::slotUpdateBrushAdjustments()
 {
-    KisScalingSizeBrush *colorfulBrush = dynamic_cast<KisScalingSizeBrush*>(m_brush.data());
+    KisColorfulBrush *colorfulBrush = dynamic_cast<KisColorfulBrush*>(m_brush.data());
 
     // sliders must not be user-accessible for non-colorful brushes
     KIS_SAFE_ASSERT_RECOVER_RETURN(colorfulBrush);

@@ -78,6 +78,10 @@ public:
     void setUseColorAsMask(bool useColorAsMask) override;
     bool hasColor() const override;
 
+    void setAdjustmentMidPoint(quint8 value) override;
+    void setBrightnessAdjustment(qreal value) override;
+    void setContrastAdjustment(qreal value) override;
+
     enumBrushType brushType() const override;
 
     QString parasiteSelection(); // returns random, constant, etc

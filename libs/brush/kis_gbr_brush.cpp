@@ -82,7 +82,7 @@ struct KisGbrBrush::Private {
 #define DEFAULT_SPACING 0.25
 
 KisGbrBrush::KisGbrBrush(const QString& filename)
-    : KisScalingSizeBrush(filename)
+    : KisColorfulBrush(filename)
     , d(new Private)
 {
     d->ownData = true;
@@ -93,7 +93,7 @@ KisGbrBrush::KisGbrBrush(const QString& filename)
 KisGbrBrush::KisGbrBrush(const QString& filename,
                          const QByteArray& data,
                          qint32 & dataPos)
-    : KisScalingSizeBrush(filename)
+    : KisColorfulBrush(filename)
     , d(new Private)
 {
     d->ownData = false;
@@ -107,7 +107,7 @@ KisGbrBrush::KisGbrBrush(const QString& filename,
 }
 
 KisGbrBrush::KisGbrBrush(KisPaintDeviceSP image, int x, int y, int w, int h)
-    : KisScalingSizeBrush()
+    : KisColorfulBrush()
     , d(new Private)
 {
     d->ownData = true;
@@ -117,7 +117,7 @@ KisGbrBrush::KisGbrBrush(KisPaintDeviceSP image, int x, int y, int w, int h)
 }
 
 KisGbrBrush::KisGbrBrush(const QImage& image, const QString& name)
-    : KisScalingSizeBrush()
+    : KisColorfulBrush()
     , d(new Private)
 {
     d->ownData = false;
@@ -129,7 +129,7 @@ KisGbrBrush::KisGbrBrush(const QImage& image, const QString& name)
 }
 
 KisGbrBrush::KisGbrBrush(const KisGbrBrush& rhs)
-    : KisScalingSizeBrush(rhs)
+    : KisColorfulBrush(rhs)
     , d(new Private(*rhs.d))
 {
     d->data = QByteArray();
@@ -453,7 +453,7 @@ KisBrush* KisGbrBrush::clone() const
 void KisGbrBrush::toXML(QDomDocument& d, QDomElement& e) const
 {
     predefinedBrushToXML("gbr_brush", e);
-    KisScalingSizeBrush::toXML(d, e);
+    KisColorfulBrush::toXML(d, e);
 }
 
 QString KisGbrBrush::defaultFileExtension() const

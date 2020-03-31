@@ -176,6 +176,24 @@ public:
         }
     }
 
+    void setAdjustmentMidPoint(quint8 value) {
+        Q_FOREACH (KisGbrBrush * brush, m_brushes) {
+            brush->setAdjustmentMidPoint(value);
+        }
+    }
+
+    void setBrightnessAdjustment(qreal value) {
+        Q_FOREACH (KisGbrBrush * brush, m_brushes) {
+            brush->setBrightnessAdjustment(value);
+        }
+    }
+
+    void setContrastAdjustment(qreal value) {
+        Q_FOREACH (KisGbrBrush * brush, m_brushes) {
+            brush->setContrastAdjustment(value);
+        }
+    }
+
     void makeMaskImage(bool preserveAlpha) {
         Q_FOREACH (KisGbrBrush * brush, m_brushes) {
             brush->makeMaskImage(preserveAlpha);
@@ -438,6 +456,24 @@ void KisImagePipeBrush::setUseColorAsMask(bool useColorAsMask)
 {
     KisGbrBrush::setUseColorAsMask(useColorAsMask);
     m_d->brushesPipe.setUseColorAsMask(useColorAsMask);
+}
+
+void KisImagePipeBrush::setAdjustmentMidPoint(quint8 value)
+{
+    KisGbrBrush::setAdjustmentMidPoint(value);
+    m_d->brushesPipe.setAdjustmentMidPoint(value);
+}
+
+void KisImagePipeBrush::setBrightnessAdjustment(qreal value)
+{
+    KisGbrBrush::setBrightnessAdjustment(value);
+    m_d->brushesPipe.setBrightnessAdjustment(value);
+}
+
+void KisImagePipeBrush::setContrastAdjustment(qreal value)
+{
+    KisGbrBrush::setContrastAdjustment(value);
+    m_d->brushesPipe.setContrastAdjustment(value);
 }
 
 const KisBoundary* KisImagePipeBrush::boundary() const

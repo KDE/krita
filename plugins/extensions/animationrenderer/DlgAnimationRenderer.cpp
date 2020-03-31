@@ -34,6 +34,7 @@
 #include <KisMimeDatabase.h>
 #include <KoJsonTrader.h>
 #include <KisImportExportFilter.h>
+#include <krita_container_utils.h>
 #include <kis_image.h>
 #include <kis_image_animation_interface.h>
 #include <kis_time_range.h>
@@ -184,16 +185,11 @@ void DlgAnimationRenderer::getDefaultVideoEncoderOptions(const QString &mimeType
 
 void DlgAnimationRenderer::filterSequenceMimeTypes(QStringList &mimeTypes)
 {
-    QStringList validMimeTypes;
-    Q_FOREACH(const QString &mime, mimeTypes) {
-        if (mime.startsWith("image/")
-          || (mime.startsWith("application/") &&
-              !mime.startsWith("application/x-spriter") )) {
-            validMimeTypes.append(mime);
-        }
-    }
-
-    mimeTypes = validMimeTypes;
+    KritaUtils::filterContainer(mimeTypes, [](QString type) {
+        return (type.startsWith("image/")
+                || (type.startsWith("application/") &&
+                    !type.startsWith("application/x-spriter")));
+    });
 }
 
 QStringList DlgAnimationRenderer::makeVideoMimeTypesList()

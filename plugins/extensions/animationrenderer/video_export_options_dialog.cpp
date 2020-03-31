@@ -262,6 +262,12 @@ void VideoExportOptionsDialog::setHDRConfiguration(bool value) {
         ui->cmbCodec->setCurrentIndex(m_d->codecs.indexOf(KoID("libx265")));
         ui->chkUseHDRMetadata->setEnabled(true);
     }
+
+    //If HDR is enabled && the codec id is correct, we need to use main10.
+    if (value && currentCodecId() == "libx265") {
+        ui->cmbProfileH265->setCurrentIndex(m_d->profilesH265.indexOf(KoID("main10")));
+    }
+
     ui->chkUseHDRMetadata->setChecked(value);
 }
 

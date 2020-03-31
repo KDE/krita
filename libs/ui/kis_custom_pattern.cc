@@ -60,6 +60,8 @@ KisCustomPattern::KisCustomPattern(QWidget *parent, const char* name, const QStr
     connect(patternButton, SIGNAL(pressed()), this, SLOT(slotUsePattern()));
     connect(updateButton, SIGNAL(pressed()), this, SLOT(slotUpdateCurrentPattern()));
     connect(cmbSource, SIGNAL(currentIndexChanged(int)), this, SLOT(slotUpdateCurrentPattern()));
+
+    lblWarning->setVisible(false);
 }
 
 KisCustomPattern::~KisCustomPattern()
@@ -173,16 +175,10 @@ void KisCustomPattern::createPattern()
 
 
     // warn when creating large patterns
-
-    QSize size = rc.size();
-    if (size.width() > 1000 || size.height() > 1000) {
-        lblWarning->setText(i18n("The current image is too big to create a pattern. "
-                                 "The pattern will be scaled down."));
-        size.scale(1000, 1000, Qt::KeepAspectRatio);
-    }
+    lblWarning->setVisible((rc.width() > 1000 || rc.height() > 1000));
 
     QString dir = KoResourceServerProvider::instance()->patternServer()->saveLocation();
-    m_pattern = KoPatternSP(new KoPattern(cache->createThumbnail(size.width(), size.height(), rc, /*oversample*/ 1,
+    m_pattern = KoPatternSP(new KoPattern(cache->createThumbnail(rc.width(), rc.height(), rc, /*oversample*/ 1,
                                                                  KoColorConversionTransformation::internalRenderingIntent(),
                                                                  KoColorConversionTransformation::internalConversionFlags()), name, dir));
 }

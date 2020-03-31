@@ -105,7 +105,13 @@
      <item>
       <widget class="QLabel" name="lblWarning">
        <property name="text">
-        <string/>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The current image is too big to create a pattern. &lt;/p&gt;&lt;p&gt;The pattern will be scaled down.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="textFormat">
+        <enum>Qt::RichText</enum>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
        </property>
       </widget>
      </item>

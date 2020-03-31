@@ -37,8 +37,8 @@ echo "BUILDROOT set to ${BUILDROOT}"
 
 # -- Parse input args
 for arg in "${@}"; do
-    if [[ "${arg}" = --clean ]]; then
-        OSXBUILD_CLEAN="${arg#*=}"
+    if [[ "${arg}" = --dirty ]]; then
+        OSXBUILD_CLEAN="keep dirty"
     fi
 done
 
@@ -145,7 +145,7 @@ waiting_fixed() {
 
 dir_clean() {
     if [[ -d "${1}" ]]; then
-        log "Clean option specified, removing old build directories..."
+        log "Default cleaning build dirs, use --dirty to keep them..."
         waiting_fixed "Erase of ${1} in 5 sec" 5
         rm -rf "${1}"
     fi
@@ -430,7 +430,7 @@ set_krita_dirs() {
 # build_krita
 # run cmake krita
 build_krita () {
-    if [[ ${OSXBUILD_CLEAN} ]]; then
+    if [[ -z ${OSXBUILD_CLEAN} ]]; then
         log "Deleting ${KIS_BUILD_DIR}"
         dir_clean "${KIS_BUILD_DIR}"
     else
@@ -581,7 +581,7 @@ print_usage () {
     printf "\n buildinstall \t\t Build and Installs krita, running fixboost after installing"
     printf "\n"
     printf "OPTIONS:\t\t"
-    printf "\n \t --clean \t [build] Delete old build directories before build to start fresh"
+    printf "\n \t --dirty \t [build] (old default) Keep old build directories before build to start fresh"
     printf "\n"
 }
 
@@ -592,7 +592,7 @@ if [[ ${#} -eq 0 ]]; then
 fi
 
 if [[ ${1} = "builddeps" ]]; then
-    if [[ ${OSXBUILD_CLEAN} ]]; then
+    if [[ -z ${OSXBUILD_CLEAN} ]]; then
         dir_clean "${KIS_INSTALL_DIR}"
         dir_clean "${KIS_TBUILD_DIR}"
     fi

@@ -60,6 +60,8 @@ KisCustomPattern::KisCustomPattern(QWidget *parent, const char* name, const QStr
     connect(patternButton, SIGNAL(pressed()), this, SLOT(slotUsePattern()));
     connect(updateButton, SIGNAL(pressed()), this, SLOT(slotUpdateCurrentPattern()));
     connect(cmbSource, SIGNAL(currentIndexChanged(int)), this, SLOT(slotUpdateCurrentPattern()));
+
+    lblWarning->setVisible(false);
 }
 
 KisCustomPattern::~KisCustomPattern()

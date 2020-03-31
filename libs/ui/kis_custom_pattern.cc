@@ -175,10 +175,18 @@ void KisCustomPattern::createPattern()
 
 
     // warn when creating large patterns
-    lblWarning->setVisible((rc.width() > 1000 || rc.height() > 1000));
+
+    QSize size = rc.size();
+    if (size.height() > 1000 || size.width() > 1000) {
+        lblWarning->setVisible(true);
+        size.scale(1000, 1000, Qt::KeepAspectRatio);
+    }
+    else {
+        lblWarning->setVisible(false);
+    }
 
     QString dir = KoResourceServerProvider::instance()->patternServer()->saveLocation();
-    m_pattern = KoPatternSP(new KoPattern(cache->createThumbnail(rc.width(), rc.height(), rc, /*oversample*/ 1,
+    m_pattern = KoPatternSP(new KoPattern(cache->createThumbnail(size.width(), size.height(), rc, /*oversample*/ 1,
                                                                  KoColorConversionTransformation::internalRenderingIntent(),
                                                                  KoColorConversionTransformation::internalConversionFlags()), name, dir));
 }

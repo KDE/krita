@@ -42,10 +42,10 @@ KoToolRegistry::KoToolRegistry()
 void KoToolRegistry::init()
 {
     KoPluginLoader::PluginsConfig config;
-    config.group = "calligra";
+    config.group = "krita";
     config.whiteList = "ToolPlugins";
     config.blacklist = "ToolPluginsDisabled";
-    KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Tool"),
+    KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Tool"),
                                      QString::fromLatin1("[X-Flake-PluginVersion] == 28"),
                                      config);
 
@@ -53,7 +53,7 @@ void KoToolRegistry::init()
     add(new KoPathToolFactory());
     add(new KoZoomToolFactory());
 
-    KConfigGroup cfg =  KSharedConfig::openConfig()->group("calligra");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("krita");
     QStringList toolsBlacklist = cfg.readEntry("ToolsBlacklist", QStringList());
     foreach (const QString& toolID, toolsBlacklist) {
         delete value(toolID);

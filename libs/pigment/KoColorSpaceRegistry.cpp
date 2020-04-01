@@ -196,14 +196,14 @@ void KoColorSpaceRegistry::init()
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "ColorSpacePlugins";
     config.blacklist = "ColorSpacePluginsDisabled";
-    config.group = "calligra";
-    KoPluginLoader::instance()->load("Calligra/ColorSpace", "[X-Pigment-PluginVersion] == 28", config);
+    config.group = "krita";
+    KoPluginLoader::instance()->load("Krita/ColorSpace", "[X-Pigment-PluginVersion] == 28", config);
 
     KoPluginLoader::PluginsConfig configExtensions;
     configExtensions.whiteList = "ColorSpaceExtensionsPlugins";
     configExtensions.blacklist = "ColorSpaceExtensionsPluginsDisabled";
-    configExtensions.group = "calligra";
-    KoPluginLoader::instance()->load("Calligra/ColorSpaceExtension", "[X-Pigment-PluginVersion] == 28", configExtensions);
+    configExtensions.group = "krita";
+    KoPluginLoader::instance()->load("Krita/ColorSpaceExtension", "[X-Pigment-PluginVersion] == 28", configExtensions);
 
 
     dbgPigment << "Loaded the following colorspaces:";

@@ -602,7 +602,6 @@ void DlgAnimationRenderer::slotExportTypeChanged()
     m_page->fpsLabel->setVisible(willEncodeVideo);
     m_page->lblWidth->setVisible(willEncodeVideo);
     m_page->lblHeight->setVisible(willEncodeVideo);
-    m_page->chkOnlyUniqueFrames->setVisible(false);
 
     // if only exporting video
     if (m_page->shouldExportOnlyVideo->isChecked()) {
@@ -619,7 +618,6 @@ void DlgAnimationRenderer::slotExportTypeChanged()
         m_page->videoOptionsGroup->setVisible(false);
         m_page->imageSequenceOptionsGroup->setVisible(false);
         m_page->imageSequenceOptionsGroup->setVisible(true);
-        m_page->chkOnlyUniqueFrames->setVisible(true);
     }
 
     // show all options

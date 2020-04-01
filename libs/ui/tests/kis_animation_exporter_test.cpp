@@ -69,7 +69,6 @@ void KisAnimationExporterTest::testAnimationExport()
                                                KisTimeRange::fromTime(0,2),
                                                "export-test.png",
                                                0,
-                                               false,
                                                0);
 
 

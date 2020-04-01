@@ -18,6 +18,7 @@ target_link_libraries(kritaplugin
     PUBLIC
         Qt5::Core
     PRIVATE
+        kritaglobal
         KF5::ConfigCore
         KF5::CoreAddons
         KF5::I18n

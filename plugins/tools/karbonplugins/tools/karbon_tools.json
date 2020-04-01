@@ -6,6 +6,6 @@
     "X-KDE-Library": "krita_karbon_tools",
     "X-KDE-PluginInfo-Name": "krita_karbontools",
     "X-KDE-ServiceTypes": [
-        "Calligra/Tool"
+        "Krita/Tool"
     ]
 }

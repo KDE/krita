@@ -55,6 +55,10 @@ private Q_SLOTS:
 private:
     void renderAnimationImpl(KisDocument *doc, KisAnimationRenderingOptions encoderOptions);
 
+    QString getNameForFrame(QString basename, QString extension, int sequenceStart, int frame);
+
+    QStringList getNamesForFrames(QString basename, QString extension, int sequenceStart, const QList<int> &frames);
+
 };
 
 #endif // ANIMATIONRENDERERIMAGE_H

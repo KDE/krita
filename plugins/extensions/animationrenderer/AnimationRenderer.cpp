@@ -35,6 +35,7 @@
 #include <KisDocument.h>
 #include <KisMimeDatabase.h>
 #include <kis_time_range.h>
+#include <krita_container_utils.h>
 #include <KisImportExportManager.h>
 #include <KisImportExportErrorCode.h>
 
@@ -150,7 +151,6 @@ void AnimaterionRenderer::renderAnimationImpl(KisDocument *doc, KisAnimationRend
                                                                       encoderOptions.lastFrame),
                                                baseFileName,
                                                encoderOptions.sequenceStart,
-                                               encoderOptions.onlyRenderUniqueFrames && !encoderOptions.shouldEncodeVideo,
                                                encoderOptions.frameExportConfig);
     exporter.setBatchMode(batchMode);
 
@@ -159,51 +159,85 @@ void AnimaterionRenderer::renderAnimationImpl(KisDocument *doc, KisAnimationRend
         exporter.regenerateRange(viewManager()->mainWindow()->viewManager());
 
     // the folder could have been read-only or something else could happen
-    if (encoderOptions.shouldEncodeVideo &&
+    if ((encoderOptions.shouldEncodeVideo || encoderOptions.onlyRenderUniqueFrames) &&
         result == KisAsyncAnimationFramesSaveDialog::RenderComplete) {
 
         const QString savedFilesMask = exporter.savedFilesMask();
 
-        const QString resultFile = encoderOptions.resolveAbsoluteVideoFilePath();
-        KIS_SAFE_ASSERT_RECOVER_NOOP(QFileInfo(resultFile).isAbsolute());
+        if (encoderOptions.shouldEncodeVideo) {
+            const QString resultFile = encoderOptions.resolveAbsoluteVideoFilePath();
+            KIS_SAFE_ASSERT_RECOVER_NOOP(QFileInfo(resultFile).isAbsolute());
 
-        {
-            const QFileInfo info(resultFile);
-            QDir dir(info.absolutePath());
+            {
+                const QFileInfo info(resultFile);
+                QDir dir(info.absolutePath());
 
-            if (!dir.exists()) {
-                dir.mkpath(info.absolutePath());
+                if (!dir.exists()) {
+                    dir.mkpath(info.absolutePath());
+                }
+                KIS_SAFE_ASSERT_RECOVER_NOOP(dir.exists());
             }
-            KIS_SAFE_ASSERT_RECOVER_NOOP(dir.exists());
+
+            KisImportExportErrorCode res;
+            QFile fi(resultFile);
+            if (!fi.open(QIODevice::WriteOnly)) {
+                qWarning() << "Could not open" << fi.fileName() << "for writing!";
+                res = KisImportExportErrorCannotWrite(fi.error());
+            } else {
+                fi.close();
+            }
+
+            QScopedPointer<VideoSaver> encoder(new VideoSaver(doc, batchMode));
+            res = encoder->convert(doc, savedFilesMask, encoderOptions, batchMode);
+
+            if (!res.isOk()) {
+                QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not render animation:\n%1", res.errorMessage()));
+            }
         }
 
-        KisImportExportErrorCode res;
-        QFile fi(resultFile);
-        if (!fi.open(QIODevice::WriteOnly)) {
-            qWarning() << "Could not open" << fi.fileName() << "for writing!";
-            res = KisImportExportErrorCannotWrite(fi.error());
-        } else {
-            fi.close();
-        }
-
-        QScopedPointer<VideoSaver> encoder(new VideoSaver(doc, batchMode));
-        res = encoder->convert(doc, savedFilesMask, encoderOptions, batchMode);
-
-        if (!res.isOk()) {
-            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not render animation:\n%1", res.errorMessage()));
-        }
-
+        //File cleanup
         if (encoderOptions.shouldDeleteSequence) {
             QDir d(framesDirectory);
             QStringList sequenceFiles = d.entryList(QStringList() << encoderOptions.basename + "*." + extension, QDir::Files);
             Q_FOREACH(const QString &f, sequenceFiles) {
                 d.remove(f);
             }
+        } else if(encoderOptions.onlyRenderUniqueFrames) {
+            QDir d(framesDirectory);
+
+            const QList<int> uniques = exporter.getUniqueFrames();
+            QStringList uniqueFrameNames = getNamesForFrames(encoderOptions.basename, extension, encoderOptions.sequenceStart, uniques);
+            QStringList sequenceFiles = d.entryList(QStringList() << encoderOptions.basename + "*." + extension, QDir::Files);
+
+            //Filter out unique files.
+            KritaUtils::filterContainer(sequenceFiles, [uniqueFrameNames](QString &framename){
+                return !uniqueFrameNames.contains(framename);
+            });
+
+            Q_FOREACH(const QString &f, sequenceFiles) {
+                d.remove(f);
+            }
+
         }
 
     } else if (result == KisAsyncAnimationFramesSaveDialog::RenderFailed) {
         viewManager()->mainWindow()->viewManager()->showFloatingMessage(i18n("Failed to render animation frames!"), QIcon());
     }
+}
+
+QString AnimaterionRenderer::getNameForFrame(QString basename, QString extension, int sequenceStart, int frame)
+{
+    QString frameNumberText = QString("%1").arg(frame + sequenceStart, 4, 10, QChar('0'));
+    return basename + frameNumberText + "." + extension;
+}
+
+QStringList AnimaterionRenderer::getNamesForFrames(QString basename, QString extension, int sequenceStart, const QList<int> &frames)
+{
+    QStringList list;
+    Q_FOREACH(const int &i, frames) {
+        list.append(getNameForFrame(basename, extension, sequenceStart, i));
+    }
+    return list;
 }
 
 #include "AnimationRenderer.moc"

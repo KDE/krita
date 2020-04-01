@@ -30,7 +30,6 @@ public:
                                       const KisTimeRange &range,
                                       const QString &baseFilename,
                                       int sequenceNumberingOffset,
-                                      bool onlyUniqueFrames,
                                       KisPropertiesConfigurationSP exportConfiguration);
 
     ~KisAsyncAnimationFramesSaveDialog();
@@ -39,6 +38,8 @@ public:
 
     QString savedFilesMask() const;
     QString savedFilesMaskWildcard() const;
+
+    QList<int> getUniqueFrames() const;
 
 protected:
     QList<int> calcDirtyFrames() const override;

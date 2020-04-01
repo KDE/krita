@@ -5,6 +5,6 @@
     "X-Flake-PluginVersion": "28",
     "X-KDE-Library": "kritasvgcollectiondocker",
     "X-KDE-ServiceTypes": [
-        "Calligra/Dock"
+        "Krita/Dock"
     ]
 }

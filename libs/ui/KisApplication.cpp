@@ -49,6 +49,8 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 
+#include <KoDockRegistry.h>
+#include <KoToolRegistry.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoPluginLoader.h>
 #include <KoShapeRegistry.h>
@@ -323,32 +325,17 @@ void KisApplication::loadPlugins()
 
     KoShapeRegistry* r = KoShapeRegistry::instance();
     r->add(new KisShapeSelectionFactory());
-
+    KoColorSpaceRegistry::instance();
     KisActionRegistry::instance();
     KisFilterRegistry::instance();
     KisGeneratorRegistry::instance();
     KisPaintOpRegistry::instance();
-    KoColorSpaceRegistry::instance();
+    KoToolRegistry::instance();
+    KoDockRegistry::instance();
 }
 
 void KisApplication::loadGuiPlugins()
 {
-    //    qDebug() << "loadGuiPlugins();";
-    // Load the krita-specific tools
-    setSplashScreenLoadingText(i18n("Loading Plugins for Krita/Tool..."));
-    processEvents();
-    //    qDebug() << "loading tools";
-    KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Tool"),
-                                     QString::fromLatin1("[X-Krita-Version] == 28"));
-
-
-    // Load dockers
-    setSplashScreenLoadingText(i18n("Loading Plugins for Krita/Dock..."));
-    processEvents();
-    //    qDebug() << "loading dockers";
-    KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Dock"),
-                                     QString::fromLatin1("[X-Krita-Version] == 28"));
-
     // XXX_EXIV: make the exiv io backends real plugins
     setSplashScreenLoadingText(i18n("Loading Plugins Exiv/IO..."));
     processEvents();

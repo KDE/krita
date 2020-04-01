@@ -4,7 +4,7 @@
     "X-KDE-Library": "krita_colorspaces_extensions",
     "X-KDE-PluginInfo-Name": "krita_colorspaces_extensions",
     "X-KDE-ServiceTypes": [
-        "Calligra/ColorSpaceExtension"
+        "Krita/ColorSpaceExtension"
     ],
     "X-Pigment-MinVersion": "28",
     "X-Pigment-PluginVersion": "28"

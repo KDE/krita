@@ -47,8 +47,8 @@ void KoInlineObjectRegistry::Private::init(KoInlineObjectRegistry *q)
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "TextInlinePlugins";
     config.blacklist = "TextInlinePluginsDisabled";
-    config.group = "calligra";
-    KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Text-InlineObject"),
+    config.group = "krita";
+    KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Text-InlineObject"),
                                      QString::fromLatin1("[X-KoText-PluginVersion] == 28"), config);
 
     foreach (KoInlineObjectFactoryBase *factory, q->values()) {

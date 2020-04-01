@@ -6,6 +6,6 @@
     "X-KDE-Library": "krita_shape_text",
     "X-KDE-PluginInfo-Name": "textshape",
     "X-KDE-ServiceTypes": [
-        "Calligra/Flake"
+        "Krita/Flake"
     ]
 }

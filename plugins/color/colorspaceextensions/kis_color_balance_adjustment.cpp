@@ -159,9 +159,17 @@ void setParameter(int id, const QVariant& parameter) override
 }
 private:
 
-    double m_cyan_midtones, m_magenta_midtones, m_yellow_midtones,  m_cyan_shadows, m_magenta_shadows, m_yellow_shadows,
-           m_cyan_highlights, m_magenta_highlights, m_yellow_highlights;
-    bool m_preserve_luminosity;
+    double m_cyan_midtones {0.0};
+    double m_magenta_midtones {0.0};
+    double m_yellow_midtones {0.0};
+    double m_cyan_shadows {0.0};
+    double m_magenta_shadows {0.0};
+    double m_yellow_shadows {0.0};
+    double m_cyan_highlights {0.0};
+    double m_magenta_highlights {0.0};
+    double m_yellow_highlights {0.0};
+
+    bool m_preserve_luminosity {true};
 };
 
  KisColorBalanceAdjustmentFactory::KisColorBalanceAdjustmentFactory()

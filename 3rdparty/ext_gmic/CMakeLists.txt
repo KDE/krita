@@ -3,11 +3,10 @@ SET(PREFIX_ext_gmic "${EXTPREFIX}" )
 # Download the gmic sources
 ExternalProject_Add( ext_gmic_base
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://gmic.eu/files/source/gmic_2.7.1.tar.gz
-    URL_MD5 11a947bb2fc1dfdd40995982c5c448eb
+    URL https://gmic.eu/files/source/gmic_2.9.0.tar.gz
+    URL_MD5 0980af23bfc6466f6aab3d60d758f1ac
 
-    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/cmake.diff
-          COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/no_threads.diff
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/no_threads.diff
 
     SOURCE_DIR gmic
 
@@ -23,10 +22,9 @@ ExternalProject_Add( ext_gmic_base
 # FIXME: Forcing CMAKE_BUILD_TYPE to Release
 ExternalProject_Add( ext_gmic_qt
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/c-koi/gmic-qt/archive/v.2.7.0.tar.gz
-    URL_MD5 b18577dfd5be0311bdad7737b56386dc
+    URL https://github.com/c-koi/gmic-qt/archive/v.2.9.0.tar.gz
+    URL_MD5 40bb7311a4e68bd52d5fcaa19ba37c66
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/desktop_icon.diff
-          COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/gmic-qt-cmake.diff
 
     SOURCE_DIR gmic-qt
     INSTALL_DIR ${PREFIX_ext_gmic}

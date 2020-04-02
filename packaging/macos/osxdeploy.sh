@@ -212,7 +212,7 @@ else
         fi
 
         # check if we can perform notarization
-        xcrun altool --notarization-history 0 --username "${NOTARIZE_ACC}" --password "${NOTARIZE_PASS}" ${ASC_PROVIDER_OP}
+        xcrun altool --notarization-history 0 --username "${NOTARIZE_ACC}" --password "${NOTARIZE_PASS}" ${ASC_PROVIDER_OP} 1> /dev/null
 
         if [[ ${?} -eq 0 ]]; then
             NOTARIZE="true"
@@ -411,7 +411,7 @@ fix_python_framework() {
     install_name_tool -add_rpath @executable_path/../../../../ "${PythonFrameworkBase}/Versions/Current/bin/python${PY_VERSION}m"
 
     # Fix rpaths from Python.Framework
-    find ${PythonFrameworkBase} -type f -perm 755 | delete_install_rpath
+    find "${PythonFrameworkBase}" -type f -perm 755 | delete_install_rpath
     find "${PythonFrameworkBase}/Versions/Current/site-packages/PyQt5" -type f -name "*.so" | delete_install_rpath
 }
 
@@ -580,6 +580,7 @@ krita_deploy () {
 
     printf "clean any left over rpath\n"
     libs_clean_rpath $(find "${KRITA_DMG}/krita.app/Contents" -type f -perm 755 -or -name "*.dylib" -or -name "*.so")
+    find "${KRITA_DMG}/krita.app/Contents/Frameworks/" -type f -name "lib*" | delete_install_rpath
 
     echo "Done!"
 

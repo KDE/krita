@@ -164,6 +164,9 @@ cmake_3rdparty () {
     fi
 
     for package in ${build_pkgs[@]} ; do
+        if [[ ${package:0:3} != "ext" ]]; then
+            continue
+        fi
         print_msg "Building ${package}"
         log_cmd cmake --build . --config RelWithDebInfo --target ${package}
         
@@ -188,6 +191,7 @@ cmake_3rdparty () {
 build_3rdparty_fixes(){
     local pkg=${1}
     local error=${2}
+
     if [[ "${pkg}" = "ext_qt" && -e "${KIS_INSTALL_DIR}/bin/qmake" ]]; then
         ln -sf qmake "${KIS_INSTALL_DIR}/bin/qmake-qt5"
         # build macdeployqt

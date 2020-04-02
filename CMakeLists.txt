@@ -101,8 +101,8 @@ message(STATUS "Krita version: ${KRITA_VERSION_STRING}")
 # This makes it easy to advance it when the next Krita release comes.
 # 14 was the last GENERIC_KRITA_LIB_VERSION_MAJOR of the previous Krita series
 # (2.x) so we're starting with 15 in 3.x series, 16 in 4.x series
-if(KRITA_STABLE_VERSION_MAJOR EQUAL 4)
-    math(EXPR GENERIC_KRITA_LIB_VERSION_MAJOR "${KRITA_STABLE_VERSION_MINOR} + 16")
+if(KRITA_STABLE_VERSION_MAJOR EQUAL 5)
+    math(EXPR GENERIC_KRITA_LIB_VERSION_MAJOR "${KRITA_STABLE_VERSION_MINOR} + 17")
 else()
     # let's make sure we won't forget to update the "16"
     message(FATAL_ERROR "Reminder: please update offset == 16 used to compute GENERIC_KRITA_LIB_VERSION_MAJOR to something bigger")

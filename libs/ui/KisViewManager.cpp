@@ -1292,7 +1292,7 @@ void KisViewManager::guiUpdateTimeout()
     d->selectionManager.updateGUI();
     d->filterManager.updateGUI();
     if (zoomManager()) {
-        zoomManager()->updateGUI();
+        zoomManager()->updateGuiAfterDocumentSize();
     }
     d->gridManager.updateGUI();
     d->actionManager.updateGUI();

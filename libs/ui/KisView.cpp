@@ -1022,7 +1022,7 @@ void KisView::slotImageResolutionChanged()
 {
     resetImageSizeAndScroll(false);
     zoomManager()->updateImageBoundsSnapping();
-    zoomManager()->updateGUI();
+    zoomManager()->updateGuiAfterDocumentSize();
 
     // update KoUnit value for the document
     if (resourceProvider()) {
@@ -1035,7 +1035,7 @@ void KisView::slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &
 {
     resetImageSizeAndScroll(true, oldStillPoint, newStillPoint);
     zoomManager()->updateImageBoundsSnapping();
-    zoomManager()->updateGUI();
+    zoomManager()->updateGuiAfterDocumentSize();
 }
 
 void KisView::closeView()

@@ -59,17 +59,12 @@ public:
 
 public Q_SLOTS:
 
-  /**
-   * Sets the zoom. If zoom not yet on the list of zoom values, it will be inserted
-   * into the list at proper place so that the values remain sorted.
-   * emits zoomChanged
-   */
+    /**
+     * Sets the zoom. If zoom not yet on the list of zoom values, it will be inserted
+     * into the list at proper place so that the values remain sorted.
+     * emits zoomChanged
+     */
     void setZoom( qreal zoom );
-
-  /**
-   * Change the zoom modes that should be shown
-   */
-    void setZoomModes( KoZoomMode::Modes zoomModes );
 
   /**
    * Change the zoom to a closer look than current
@@ -126,6 +121,7 @@ protected Q_SLOTS:
 
     void triggered( const QString& text );
     void sliderValueChanged(int value);
+    void slotUpdateGuiAfterZoom();
 
 Q_SIGNALS:
 
@@ -204,7 +200,7 @@ public:
 
 protected:
     /// Regenerates the action's items
-    void regenerateItems( const qreal zoom, bool asCurrent = false );
+    void regenerateItems( const qreal zoom);
 
 private:
     void syncSliderWithZoom();

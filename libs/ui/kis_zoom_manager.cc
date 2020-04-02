@@ -84,6 +84,7 @@ KisZoomManager::KisZoomManager(QPointer<KisView> view, KoZoomHandler * zoomHandl
         , m_physicalDpiX(72.0)
         , m_physicalDpiY(72.0)
         , m_devicePixelRatio(1.0)
+        , m_guiUpdateCompressor(80, KisSignalCompressor::FIRST_ACTIVE)
 {
 }
 
@@ -189,6 +190,8 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
             this, SLOT(changeAspectMode(bool)));
 
     applyRulersUnit(m_view->document()->unit());
+
+    connect(&m_guiUpdateCompressor, SIGNAL(timeout()), SLOT(slotUpdateGuiAfterZoomChange()));
 }
 
 void KisZoomManager::updateImageBoundsSnapping()
@@ -298,6 +301,28 @@ void KisZoomManager::setRulersPixelMultiple2(bool enabled)
     }
 }
 
+void KisZoomManager::slotUpdateGuiAfterZoomChange()
+{
+    const qreal effectiveZoom =
+        m_view->canvasBase()->coordinatesConverter()->effectiveZoom();
+
+    const qreal humanZoom = effectiveZoom * 100.0;
+
+    // XXX: KOMVC -- this is very irritating in MDI mode
+
+    if (m_view->viewManager()) {
+        m_view->viewManager()->
+                showFloatingMessage(
+                    i18nc("floating message about zoom", "Zoom: %1 %",
+                          KritaUtils::prettyFormatReal(humanZoom)),
+                    QIcon(), 500, KisFloatingMessage::Low, Qt::AlignCenter);
+    }
+
+
+
+    m_view->canvasBase()->resourceManager()->setResource(KisCanvasResourceProvider::EffectiveZoom, effectiveZoom);
+}
+
 void KisZoomManager::setMinMaxZoom()
 {
     KisImageWSP image = m_view->image();
@@ -312,7 +337,7 @@ void KisZoomManager::setMinMaxZoom()
 
 }
 
-void KisZoomManager::updateGUI()
+void KisZoomManager::updateGuiAfterDocumentSize()
 {
     QRectF widgetRect = m_view->canvasBase()->coordinatesConverter()->imageRectInWidgetPixels();
     QSize documentSize = m_view->canvasBase()->viewConverter()->viewToDocument(widgetRect).toAlignedRect().size();
@@ -333,29 +358,13 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)
     Q_UNUSED(mode);
     Q_UNUSED(zoom);
     m_view->canvasBase()->notifyZoomChanged();
-
-    qreal humanZoom = zoom * 100.0;
-
-// XXX: KOMVC -- this is very irritating in MDI mode
-
-    if (m_view->viewManager()) {
-        m_view->viewManager()->
-                showFloatingMessage(
-                    i18nc("floating message about zoom", "Zoom: %1 %",
-                          KritaUtils::prettyFormatReal(humanZoom)),
-                    QIcon(), 500, KisFloatingMessage::Low, Qt::AlignCenter);
-    }
-
-    const qreal effectiveZoom =
-        m_view->canvasBase()->coordinatesConverter()->effectiveZoom();
-
-    m_view->canvasBase()->resourceManager()->setResource(KisCanvasResourceProvider::EffectiveZoom, effectiveZoom);
+    m_guiUpdateCompressor.start();
 }
 
 void KisZoomManager::slotScrollAreaSizeChanged()
 {
     pageOffsetChanged();
-    updateGUI();
+    updateGuiAfterDocumentSize();
 }
 
 void KisZoomManager::changeAspectMode(bool aspectMode)

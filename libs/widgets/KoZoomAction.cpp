@@ -41,6 +41,7 @@
 
 #include <klocalizedstring.h>
 #include <WidgetsDebug.h>
+#include <kis_signal_compressor.h>
 
 #include <math.h>
 
@@ -52,6 +53,7 @@ public:
         : parent(_parent)
         , minimumZoomValue(-1)
         , maximumZoomValue(-1)
+        , guiUpdateCompressor(200, KisSignalCompressor::FIRST_ACTIVE)
     {}
 
     KoZoomAction *parent;
@@ -66,6 +68,8 @@ public:
 
     qreal minimumZoomValue;
     qreal maximumZoomValue;
+
+    KisSignalCompressor guiUpdateCompressor;
 };
 
 QList<qreal> KoZoomAction::Private::generateSliderZoomLevels() const
@@ -124,9 +128,10 @@ KoZoomAction::KoZoomAction(KoZoomMode::Modes zoomModes, const QString& text, QOb
     d->sliderLookup = d->generateSliderZoomLevels();
 
     d->effectiveZoom = 1.0;
-    regenerateItems(d->effectiveZoom, true);
+    regenerateItems(d->effectiveZoom);
 
     connect( this, SIGNAL(triggered(QString)), SLOT(triggered(QString)) );
+    connect(&d->guiUpdateCompressor, SIGNAL(timeout()), SLOT(slotUpdateGuiAfterZoom()));
 }
 
 KoZoomAction::~KoZoomAction()
@@ -142,7 +147,6 @@ qreal KoZoomAction::effectiveZoom() const
 void KoZoomAction::setZoom(qreal zoom)
 {
     setEffectiveZoom(zoom);
-    regenerateItems(d->effectiveZoom, true);
 }
 
 void KoZoomAction::triggered(const QString& text)
@@ -170,14 +174,12 @@ void KoZoomAction::triggered(const QString& text)
     emit zoomChanged( mode, zoom/100.0 );
 }
 
-void KoZoomAction::setZoomModes( KoZoomMode::Modes zoomModes )
+void KoZoomAction::regenerateItems(const qreal zoom)
 {
-    d->zoomModes = zoomModes;
-    regenerateItems( d->effectiveZoom );
-}
+    // TODO: refactor this method to become less slow, then
+    //       we could reduce the timeout of d->guiUpdateCompressor
+    //       to at least 80ms (12.5fps)
 
-void KoZoomAction::regenerateItems(const qreal zoom, bool asCurrent)
-{
     QList<qreal> zoomLevels = d->filterMenuZoomLevels(d->sliderLookup);
 
     if( !zoomLevels.contains( zoom ) )
@@ -205,7 +207,6 @@ void KoZoomAction::regenerateItems(const qreal zoom, bool asCurrent)
 
     emit zoomLevelsChanged(values);
 
-    if(asCurrent)
     {
         const qreal zoomInPercent = zoom * 100;
         // TODO: why zoomInPercent and not zoom here? different from above
@@ -268,16 +269,18 @@ void KoZoomAction::zoomOut()
 QWidget * KoZoomAction::createWidget(QWidget *parent)
 {
     KoZoomWidget* zoomWidget = new KoZoomWidget(parent, d->sliderLookup.size() - 1);
+
     connect(this, SIGNAL(zoomLevelsChanged(QStringList)), zoomWidget, SLOT(setZoomLevels(QStringList)));
     connect(this, SIGNAL(currentZoomLevelChanged(QString)), zoomWidget, SLOT(setCurrentZoomLevel(QString)));
     connect(this, SIGNAL(sliderChanged(int)), zoomWidget, SLOT(setSliderValue(int)));
     connect(this, SIGNAL(aspectModeChanged(bool)), zoomWidget, SLOT(setAspectMode(bool)));
+
     connect(zoomWidget, SIGNAL(sliderValueChanged(int)), this, SLOT(sliderValueChanged(int)));
     connect(zoomWidget, SIGNAL(zoomLevelChanged(QString)), this, SLOT(triggered(QString)));
     connect(zoomWidget, SIGNAL(aspectModeChanged(bool)), this, SIGNAL(aspectModeChanged(bool)));
     connect(zoomWidget, SIGNAL(zoomedToSelection()), this, SIGNAL(zoomedToSelection()));
     connect(zoomWidget, SIGNAL(zoomedToAll()), this, SIGNAL(zoomedToAll()));
-    regenerateItems( d->effectiveZoom, true );
+    regenerateItems(d->effectiveZoom);
     syncSliderWithZoom();
     return zoomWidget;
 }
@@ -289,7 +292,15 @@ void KoZoomAction::setEffectiveZoom(qreal zoom)
 
     zoom = clampZoom(zoom);
     d->effectiveZoom = zoom;
+    d->guiUpdateCompressor.start();
+}
+
+void KoZoomAction::slotUpdateGuiAfterZoom()
+{
     syncSliderWithZoom();
+
+    // TODO: don't regenerate when only mode changes
+    regenerateItems(d->effectiveZoom);
 }
 
 void KoZoomAction::setSelectedZoomMode(KoZoomMode::Mode mode)
@@ -342,7 +353,7 @@ void KoZoomAction::setMinimumZoom(qreal zoom)
     d->minimumZoomValue = zoom;
     d->generateSliderZoomLevels();
     d->sliderLookup = d->generateSliderZoomLevels();
-    regenerateItems(d->effectiveZoom, true);
+    regenerateItems(d->effectiveZoom);
     syncSliderWithZoom();
 }
 
@@ -352,6 +363,6 @@ void KoZoomAction::setMaximumZoom(qreal zoom)
     KoZoomMode::setMaximumZoom(zoom);
     d->maximumZoomValue = zoom;
     d->sliderLookup = d->generateSliderZoomLevels();
-    regenerateItems(d->effectiveZoom, true);
+    regenerateItems(d->effectiveZoom);
     syncSliderWithZoom();
 }

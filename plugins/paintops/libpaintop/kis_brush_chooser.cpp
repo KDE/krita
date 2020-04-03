@@ -257,6 +257,14 @@ void KisPredefinedBrushChooser::slotResetBrush()
         brush->setScale(1.0);
         brush->setAngle(0.0);
 
+        if (KisColorfulBrush *colorfulBrush = dynamic_cast<KisColorfulBrush*>(m_brush.data())) {
+            colorfulBrush->setUseColorAsMask(false);
+            colorfulBrush->setPreserveLightness(false);
+            colorfulBrush->setAdjustmentMidPoint(127);
+            colorfulBrush->setBrightnessAdjustment(0.0);
+            colorfulBrush->setContrastAdjustment(0.0);
+        }
+
         updateBrushTip(brush);
         emit sigBrushChanged();
     }

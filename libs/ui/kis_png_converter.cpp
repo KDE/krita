@@ -268,6 +268,17 @@ void decode_meta_data(png_textp text, KisMetaData::Store* store, QString type, i
 }
 }
 
+extern "C" {
+static void kis_png_warning(png_structp /*png_ptr*/, png_const_charp message)
+{
+    qWarning("libpng warning: %s", message);
+}
+
+}
+
+
+
+
 KisPNGConverter::KisPNGConverter(KisDocument *doc, bool batchMode)
 {
     //     Q_ASSERT(doc);
@@ -428,9 +439,15 @@ KisImportExportErrorCode KisPNGConverter::buildImage(QIODevice* iod)
 
     // Initialize the internal structures
     png_structp png_ptr =  png_create_read_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
+
     if (!png_ptr) {
         iod->close();
     }
+
+    png_set_error_fn(png_ptr, nullptr, nullptr, kis_png_warning);
+    #ifdef PNG_BENIGN_ERRORS_SUPPORTED
+        png_set_benign_errors(png_ptr, 1);
+    #endif
 
     png_infop info_ptr = png_create_info_struct(png_ptr);
     if (!info_ptr) {
@@ -963,6 +980,11 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
         return (ImportExportCodes::Failure);
     }
 
+    png_set_error_fn(png_ptr, nullptr, nullptr, kis_png_warning);
+    #ifdef PNG_BENIGN_ERRORS_SUPPORTED
+        png_set_benign_errors(png_ptr, 1);
+    #endif
+
 #if defined(PNG_SKIP_sRGB_CHECK_PROFILE) && defined(PNG_SET_OPTION_SUPPORTED)
     png_set_option(png_ptr, PNG_SKIP_sRGB_CHECK_PROFILE, PNG_OPTION_ON);
 #endif
@@ -1092,7 +1114,7 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
     if (options.saveAsHDR) {
         // https://www.w3.org/TR/PNG/#11gAMA
 #if defined(PNG_GAMMA_SUPPORTED)
-        // the values are set in accurdance of HDR-PNG standard:
+        // the values are set in accordance of HDR-PNG standard:
         // https://www.w3.org/TR/png-hdr-pq/
 
         png_set_gAMA_fixed(png_ptr, info_ptr, 15000);

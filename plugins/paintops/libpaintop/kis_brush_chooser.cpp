@@ -451,9 +451,7 @@ void KisPredefinedBrushChooser::slotWriteBrushAdjustmentsState()
 void KisPredefinedBrushChooser::slotWriteBrushMode()
 {
     KisColorfulBrush *colorfulBrush = dynamic_cast<KisColorfulBrush*>(m_brush.data());
-
-    // sliders must not be user-accessible for non-colorful brushes
-    KIS_SAFE_ASSERT_RECOVER_RETURN(colorfulBrush);
+    if (!colorfulBrush) return;
 
     if (btnLightnessMode->isChecked()) {
         colorfulBrush->setUseColorAsMask(true);
@@ -472,9 +470,7 @@ void KisPredefinedBrushChooser::slotWriteBrushMode()
 void KisPredefinedBrushChooser::slotUpdateBrushAdjustments()
 {
     KisColorfulBrush *colorfulBrush = dynamic_cast<KisColorfulBrush*>(m_brush.data());
-
-    // sliders must not be user-accessible for non-colorful brushes
-    KIS_SAFE_ASSERT_RECOVER_RETURN(colorfulBrush);
+    if (!colorfulBrush) return;
 
     colorfulBrush->setAdjustmentMidPoint(quint8(intAdjustmentMidPoint->value()));
     colorfulBrush->setBrightnessAdjustment(intBrightnessAdjustment->value() / 100.0);

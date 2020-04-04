@@ -709,9 +709,9 @@
     </Action>
     <Action name="toggle_assistant">
       <icon></icon>
-      <text>Toggle Assistant</text>
+      <text>Toggle Snap To Assistants</text>
       <whatsThis></whatsThis>
-      <toolTip>Toggle Assistant</toolTip>
+      <toolTip>Toggle Snap to Assistants</toolTip>
       <iconText>ToggleAssistant</iconText>
       <shortcut>Ctrl+Shift+L</shortcut>
       <isCheckable>true</isCheckable>

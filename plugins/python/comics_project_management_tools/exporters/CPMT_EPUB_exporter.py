@@ -523,7 +523,7 @@ def write_opf_file(path, configDictionary, htmlFiles, pagesList, coverpageurl, c
     spreadRight = True
     direction = 0
     if "readingDirection" in configDictionary.keys():
-        if configDictionary["readingDirection"] is "rightToLeft":
+        if configDictionary["readingDirection"] == "rightToLeft":
             opfSpine.setAttribute("page-progression-direction", "rtl")
             spreadRight = False
             direction = 1

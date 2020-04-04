@@ -715,7 +715,7 @@ class comics_project_manager_docker(DockWidget):
     """
 
     def slot_open_page(self, index):
-        if index.column() is 0:
+        if index.column() == 0:
             # Get the absolute url from the relative one in the pages model.
             absoluteUrl = os.path.join(self.projecturl, str(self.pagesModel.data(index, role=CPE.URL)))
 

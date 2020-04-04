@@ -52,24 +52,24 @@ class sizesCalculator():
         oldYDPI = listSizes[3]
         if "Method" in config.keys():
             method = config["Method"]
-            if method is 0:
+            if method == 0:
                 # percentage
                 percentage = config["Percentage"] / 100
                 listScaleTo[0] = round(oldWidth * percentage)
                 listScaleTo[1] = round(oldHeight * percentage)
-            if method is 1:
+            if method == 1:
                 # dpi
                 DPI = config["DPI"]
                 listScaleTo[0] = round((oldWidth / oldXDPI) * DPI)
                 listScaleTo[1] = round((oldHeight / oldYDPI) * DPI)
                 listScaleTo[2] = DPI
                 listScaleTo[3] = DPI
-            if method is 2:
+            if method == 2:
                 # maximum width
                 width = config["Width"]
                 listScaleTo[0] = width
                 listScaleTo[1] = round((oldHeight / oldWidth) * width)
-            if method is 3:
+            if method == 3:
                 # maximum height
                 height = config["Height"]
                 listScaleTo[1] = height

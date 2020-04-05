@@ -24,6 +24,7 @@
 
 #include "LayerBox.h"
 
+#include <QApplication>
 #include <QToolButton>
 #include <QLayout>
 #include <QMouseEvent>
@@ -206,7 +207,7 @@ LayerBox::LayerBox()
     m_wdgLayerBox->bnAdd->setPopupMode(QToolButton::MenuButtonPopup);
 
     m_nodeModel = new KisNodeModel(this);
-    m_filteringModel = new KisNodeFilterProxyModel(this);
+    m_filteringModel = new KisNodeFilterProxyModel(this); //TODO add to this?
     m_filteringModel->setNodeModel(m_nodeModel);
 
     /**
@@ -245,14 +246,29 @@ LayerBox::LayerBox()
     connect(m_filteringModel.data(), &KisNodeFilterProxyModel::rowsAboutToBeRemoved,
             this, &LayerBox::slotAboutToRemoveRows);
 
-    connect(m_wdgLayerBox->cmbFilter, SIGNAL(selectedColorsChanged()), SLOT(updateLayerFiltering()));
+
+    //LayerFilter Menu
+    QMenu *layerFilterMenu = new QMenu(this);
+    m_wdgLayerBox->bnLayerFilters->setMenu(layerFilterMenu);
+    m_wdgLayerBox->bnLayerFilters->setPopupMode(QToolButton::InstantPopup);
+    m_wdgLayerBox->bnLayerFilters->setIcon(KisIconUtils::loadIcon("view-filter"));
+    layerFilterWidget = new KisLayerFilterWidget(this);
+    connect(layerFilterWidget, SIGNAL(filteringOptionsChanged()), this, SLOT(updateLayerFiltering()));
+    QWidgetAction *layerFilterMenuAction = new QWidgetAction(this);
+    layerFilterMenuAction->setDefaultWidget(layerFilterWidget);
+    layerFilterMenu->addAction(layerFilterMenuAction);
+
+    //Workaround to resize the QMenu for layerFilterMenu
+    connect(layerFilterMenu, &QMenu::aboutToShow, [this, layerFilterMenu](){
+        QResizeEvent resizeEvent(this->layerFilterWidget->size(), layerFilterMenu->size());
+        qApp->sendEvent(layerFilterMenu, &resizeEvent);
+    });
+
 
     setEnabled(false);
 
     connect(&m_thumbnailCompressor, SIGNAL(timeout()), SLOT(updateThumbnail()));
     connect(&m_colorLabelCompressor, SIGNAL(timeout()), SLOT(updateAvailableLabels()));
-
-
 
     // set up the configure menu for changing thumbnail size
     QMenu* configureMenu = new QMenu(this);
@@ -402,6 +418,7 @@ void LayerBox::setCanvas(KoCanvasBase *canvas)
 
     if (m_canvas) {
         m_image = m_canvas->image();
+        emit imageChanged();
         connect(m_image, SIGNAL(sigImageUpdated(QRect)), &m_thumbnailCompressor, SLOT(start()));
 
         KisDocument* doc = static_cast<KisDocument*>(m_canvas->imageView()->document());
@@ -1044,12 +1061,13 @@ void LayerBox::slotColorLabelChanged(int label)
 void LayerBox::updateAvailableLabels()
 {
     if (!m_image) return;
-    m_wdgLayerBox->cmbFilter->updateAvailableLabels(m_image->root());
+    layerFilterWidget->updateColorLabels(m_image->root());
 }
 
 void LayerBox::updateLayerFiltering()
 {
-    m_filteringModel->setAcceptedLabels(m_wdgLayerBox->cmbFilter->selectedColors());
+    m_filteringModel->setAcceptedLabels(layerFilterWidget->getActiveColors());
+    m_filteringModel->setTextFilter(layerFilterWidget->getTextFilter());
 }
 
 void LayerBox::slotKeyframeChannelAdded(KisKeyframeChannel *channel)

@@ -19,6 +19,8 @@
 #include "kis_node_filter_proxy_model.h"
 
 #include <QSet>
+#include <boost/optional.hpp>
+
 #include "kis_node.h"
 #include "kis_node_model.h"
 #include "kis_node_manager.h"
@@ -37,7 +39,8 @@ struct KisNodeFilterProxyModel::Private
     KisNodeModel *nodeModel;
     KisNodeSP pendingActiveNode;
     KisNodeSP activeNode;
-    QSet<int> acceptedLabels;
+    QSet<int> acceptedColorLabels;
+    boost::optional<QString> activeTextFilter;
     KisSignalCompressor activeNodeCompressor;
     bool isUpdatingFilter = false;
 
@@ -75,9 +78,9 @@ bool KisNodeFilterProxyModel::Private::checkIndexAllowedRecursively(QModelIndex 
     if (!srcIndex.isValid()) return false;
 
     KisNodeSP node = nodeModel->nodeFromIndex(srcIndex);
-    if (node == activeNode ||
-        acceptedLabels.contains(node->colorLabelIndex())) {
-
+    if ( node == activeNode ||
+         (acceptedColorLabels.contains(node->colorLabelIndex()) &&
+           (!activeTextFilter.has_value() || node->name().contains(activeTextFilter.get(), Qt::CaseInsensitive)) )) {
         return true;
     }
 
@@ -105,7 +108,7 @@ bool KisNodeFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex
     KisNodeSP node = m_d->nodeModel->nodeFromIndex(index);
 
     return !node ||
-        m_d->acceptedLabels.isEmpty() ||
+        (m_d->acceptedColorLabels.isEmpty() && !m_d->activeTextFilter.has_value()) ||
         m_d->checkIndexAllowedRecursively(index);
 }
 
@@ -128,10 +131,16 @@ QModelIndex KisNodeFilterProxyModel::indexFromNode(KisNodeSP node) const
 void KisNodeFilterProxyModel::setAcceptedLabels(const QList<int> &value)
 {
 #if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
-    m_d->acceptedLabels = QSet<int>(value.begin(), value.end());
+    m_d->acceptedColorLabels = QSet<int>(value.begin(), value.end());
 #else
-    m_d->acceptedLabels = QSet<int>::fromList(value);
+    m_d->acceptedColorLabels = QSet<int>::fromList(value);
 #endif
+    invalidateFilter();
+}
+
+void KisNodeFilterProxyModel::setTextFilter(const QString &text)
+{
+    m_d->activeTextFilter = !text.isEmpty() ? boost::make_optional(text) : boost::none;
     invalidateFilter();
 }
 

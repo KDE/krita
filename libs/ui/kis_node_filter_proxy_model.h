@@ -42,6 +42,7 @@ public:
 
     bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
     void setAcceptedLabels(const QList<int> &value);
+    void setTextFilter(const QString &text);
 
     KisNodeSP nodeFromIndex(const QModelIndex &index) const;
     QModelIndex indexFromNode(KisNodeSP node) const;

@@ -48,6 +48,12 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>20</height>
+        </size>
+       </property>
        <property name="toolTip">
         <string>Blending Mode</string>
        </property>
@@ -57,12 +63,21 @@
       </widget>
      </item>
      <item>
-      <widget class="KisColorFilterCombo" name="cmbFilter">
-       <property name="iconSize">
+      <widget class="QToolButton" name="bnLayerFilters">
+       <property name="minimumSize">
         <size>
-         <width>22</width>
-         <height>22</height>
+         <width>32</width>
+         <height>20</height>
         </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>32</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>...</string>
        </property>
       </widget>
      </item>
@@ -106,6 +121,18 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
        </property>
        <property name="text">
         <string>...</string>
@@ -329,11 +356,6 @@
    <class>KisToolButton</class>
    <extends>QToolButton</extends>
    <header>kis_tool_button.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KisColorFilterCombo</class>
-   <extends>QComboBox</extends>
-   <header>kis_color_filter_combo.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

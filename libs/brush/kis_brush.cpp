@@ -492,8 +492,6 @@ void fetchPremultipliedRed(const QRgb* src, quint8 *dst, int maskWidth)
 }
 }
 
-//#define SANITY_CHECK
-
 void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
                                                    ColoringInformation* coloringInformation,
                                                    KisDabShape const& shape,
@@ -521,12 +519,6 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
     if (dynamic_cast<PlainColoringInformation*>(coloringInformation)) {
         color = const_cast<quint8*>(coloringInformation->color());
     }
-
-#ifdef SANITY_CHECK
-    // we expect that brushTipImage() has removed image color for
-    // us already
-    KIS_SAFE_ASSERT_RECOVER_NOOP(outputImage.allGray());
-#endif
 
     const KoColorSpace *cs = dst->colorSpace();
     const quint32 pixelSize = cs->pixelSize();

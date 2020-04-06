@@ -35,6 +35,7 @@ KisIconWidget::KisIconWidget(QWidget *parent, const QString &name)
 void KisIconWidget::KisIconWidget::setThumbnail(const QImage &thumbnail)
 {
     m_thumbnail = thumbnail;
+    update();
 }
 
 void KisIconWidget::setResource(KoResourceSP resource)

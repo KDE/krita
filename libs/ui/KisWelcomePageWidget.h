@@ -79,6 +79,8 @@ private:
     QColor blendedColor;
     QString blendedStyle;
 
+    QLabel* donationLink;
+
 private Q_SLOTS:
     void slotNewFileClicked();
     void slotOpenFileClicked();

@@ -141,11 +141,29 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     connect(chkShowNews, SIGNAL(toggled(bool)), newsWidget, SLOT(toggleNews(bool)));
 
 #ifdef Q_OS_ANDROID
-    // checking this widgets crashes the app, so it is better for it to be hidden for now
+    // enabling this widgets crashes the app, so it is better for it to be hidden for now
     newsWidget->hide();
     helpTitleLabel_2->hide();
     chkShowNews->hide();
+
+    donationLink = new QLabel(dropFrameBorder);
+    donationLink->setOpenExternalLinks(true);
+    donationLink->setTextInteractionFlags(Qt::TextBrowserInteraction);
+
+    QFont f = font();
+    f.setPointSize(15);
+    donationLink->setFont(f);
+
+    verticalLayout_3->addWidget(donationLink);
+    verticalLayout_3->setSpacing(20);
+
+    QLabel *donationBannerImage = new QLabel(dropFrameBorder);
+    QString bannerPath = QStandardPaths::locate(QStandardPaths::AppDataLocation, "share/krita/donation/banner.png");
+    donationBannerImage->setPixmap(QPixmap(bannerPath));
+
+    verticalLayout_3->addWidget(donationBannerImage);
 #endif
+
     // configure the News area
     KisConfig cfg(true);
     bool m_getNews = cfg.readEntry<bool>("FetchNews", false);
@@ -269,6 +287,11 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
 
     poweredByKDELink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://userbase.kde.org/What_is_KDE?" + analyticsString + "what-is-kde" + "\">")
                               .append(i18n("Powered by KDE")).append("</a>"));
+
+#ifdef Q_OS_ANDROID
+    donationLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://krita.org/en/support-us/donations?" + analyticsString + "donations" + "\">")
+                              .append(i18n("Krita is free and open source.")).append("<br>").append(i18n("Support Krita's Development!")).append("</a>"));
+#endif
     // re-populate recent files since they might have themed icons
     populateRecentDocuments();
 

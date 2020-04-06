@@ -35,10 +35,12 @@ struct KisAsyncAnimationFramesSaveDialog::Private {
             const KisTimeRange &_range,
             const QString &baseFilename,
             int _sequenceNumberingOffset,
+            bool _onlyNeedsUniqueFrames,
             KisPropertiesConfigurationSP _exportConfiguration)
         : originalImage(_image),
           range(_range),
           sequenceNumberingOffset(_sequenceNumberingOffset),
+          onlyNeedsUniqueFrames(_onlyNeedsUniqueFrames),
           exportConfiguration(_exportConfiguration)
     {
         int baseLength = baseFilename.lastIndexOf(".");
@@ -58,7 +60,7 @@ struct KisAsyncAnimationFramesSaveDialog::Private {
     QString filenamePrefix;
     QString filenameSuffix;
     QByteArray outputMimeType;
-    bool linkRedundantFrames;
+    bool onlyNeedsUniqueFrames;
 
     int sequenceNumberingOffset;
     KisPropertiesConfigurationSP exportConfiguration;
@@ -68,9 +70,10 @@ KisAsyncAnimationFramesSaveDialog::KisAsyncAnimationFramesSaveDialog(KisImageSP 
                                                                      const KisTimeRange &range,
                                                                      const QString &baseFilename,
                                                                      int sequenceNumberingOffset,
+                                                                     bool onlyNeedsUniqeFrames,
                                                                      KisPropertiesConfigurationSP exportConfiguration)
     : KisAsyncAnimationRenderDialogBase(i18n("Saving frames..."), originalImage, 0),
-      m_d(new Private(originalImage, range, baseFilename, sequenceNumberingOffset, exportConfiguration))
+      m_d(new Private(originalImage, range, baseFilename, sequenceNumberingOffset, onlyNeedsUniqeFrames, exportConfiguration))
 {
 
 
@@ -181,6 +184,7 @@ KisAsyncAnimationRendererBase *KisAsyncAnimationFramesSaveDialog::createRenderer
                                                      m_d->outputMimeType,
                                                      m_d->range,
                                                      m_d->sequenceNumberingOffset,
+                                                     m_d->onlyNeedsUniqueFrames,
                                                      m_d->exportConfiguration);
 }
 

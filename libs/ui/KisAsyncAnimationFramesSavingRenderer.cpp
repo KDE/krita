@@ -29,10 +29,11 @@
 
 struct KisAsyncAnimationFramesSavingRenderer::Private
 {
-    Private(KisImageSP image, const KisTimeRange &_range, int _sequenceNumberingOffset, KisPropertiesConfigurationSP _exportConfiguration)
+    Private(KisImageSP image, const KisTimeRange &_range, int _sequenceNumberingOffset, bool _onlyNeedsUniqueFrames, KisPropertiesConfigurationSP _exportConfiguration)
         : savingDoc(KisPart::instance()->createDocument()),
           range(_range),
           sequenceNumberingOffset(_sequenceNumberingOffset),
+          onlyNeedsUniqueFrames(_onlyNeedsUniqueFrames),
           exportConfiguration(_exportConfiguration)
     {
 
@@ -60,6 +61,7 @@ struct KisAsyncAnimationFramesSavingRenderer::Private
     KisTimeRange range;
     int sequenceNumberingOffset = 0;
 
+    bool onlyNeedsUniqueFrames;
 
     QString filenamePrefix;
     QString filenameSuffix;
@@ -74,8 +76,9 @@ KisAsyncAnimationFramesSavingRenderer::KisAsyncAnimationFramesSavingRenderer(Kis
                                                                              const QByteArray &outputMimeType,
                                                                              const KisTimeRange &range,
                                                                              const int sequenceNumberingOffset,
+                                                                             const bool onlyNeedsUniqueFrames,
                                                                              KisPropertiesConfigurationSP exportConfiguration)
-    : m_d(new Private(image, range, sequenceNumberingOffset, exportConfiguration))
+    : m_d(new Private(image, range, sequenceNumberingOffset, onlyNeedsUniqueFrames, exportConfiguration))
 {
     m_d->filenamePrefix = fileNamePrefix;
     m_d->filenameSuffix = fileNameSuffix;
@@ -115,14 +118,14 @@ void KisAsyncAnimationFramesSavingRenderer::frameCompletedCallback(int frame, co
 
     //Get all identical frames to this one and either copy or symlink based on settings.
     KisTimeRange identicals = KisTimeRange::calculateIdenticalFramesRecursive(image->root(), frame);
-    if( identicals.start() < identicals.end() ) {
+    if( !m_d->onlyNeedsUniqueFrames && identicals.start() < identicals.end() ) {
         for (int identicalFrame = (identicals.start() + 1); identicalFrame <= identicals.end(); identicalFrame++) {
             QString identicalFrameNumber = QString("%1").arg(identicalFrame + m_d->sequenceNumberingOffset, 4, 10, QChar('0'));
             QString identicalFrameName = m_d->filenamePrefix + identicalFrameNumber + m_d->filenameSuffix;
 
             QFile::copy(filename, identicalFrameName);
 
-            /*  This would be nice to do but linking on windows isn't possible without
+            /*  This would be nice to do but sym-linking on windows isn't possible without
              *  way more other work to be done. This works on linux though!
              *
              *  if (m_d->linkRedundantFrames) {

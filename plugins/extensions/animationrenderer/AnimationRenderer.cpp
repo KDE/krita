@@ -151,6 +151,7 @@ void AnimaterionRenderer::renderAnimationImpl(KisDocument *doc, KisAnimationRend
                                                                       encoderOptions.lastFrame),
                                                baseFileName,
                                                encoderOptions.sequenceStart,
+                                               encoderOptions.wantsOnlyUniqueFrameSequence && !encoderOptions.shouldEncodeVideo,
                                                encoderOptions.frameExportConfig);
     exporter.setBatchMode(batchMode);
 
@@ -159,7 +160,7 @@ void AnimaterionRenderer::renderAnimationImpl(KisDocument *doc, KisAnimationRend
         exporter.regenerateRange(viewManager()->mainWindow()->viewManager());
 
     // the folder could have been read-only or something else could happen
-    if ((encoderOptions.shouldEncodeVideo || encoderOptions.onlyRenderUniqueFrames) &&
+    if ((encoderOptions.shouldEncodeVideo || encoderOptions.wantsOnlyUniqueFrameSequence) &&
         result == KisAsyncAnimationFramesSaveDialog::RenderComplete) {
 
         const QString savedFilesMask = exporter.savedFilesMask();
@@ -202,7 +203,7 @@ void AnimaterionRenderer::renderAnimationImpl(KisDocument *doc, KisAnimationRend
             Q_FOREACH(const QString &f, sequenceFiles) {
                 d.remove(f);
             }
-        } else if(encoderOptions.onlyRenderUniqueFrames) {
+        } else if(encoderOptions.wantsOnlyUniqueFrameSequence) {
             QDir d(framesDirectory);
 
             const QList<int> uniques = exporter.getUniqueFrames();

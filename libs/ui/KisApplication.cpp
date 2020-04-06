@@ -571,6 +571,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                                                doc->image()->animationInterface()->fullClipRange(),
                                                exportFileName,
                                                sequenceStart,
+                                               false,
                                                0);
                     exporter.setBatchMode(d->batchRun);
                     KisAsyncAnimationFramesSaveDialog::Result result =

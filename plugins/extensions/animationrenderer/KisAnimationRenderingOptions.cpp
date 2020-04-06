@@ -95,7 +95,7 @@ KisPropertiesConfigurationSP KisAnimationRenderingOptions::toProperties() const
 
     config->setProperty("encode_video", shouldEncodeVideo);
     config->setProperty("delete_sequence", shouldDeleteSequence);
-    config->setProperty("only_unique_frames", onlyRenderUniqueFrames);
+    config->setProperty("only_unique_frames", wantsOnlyUniqueFrameSequence);
 
     config->setProperty("ffmpeg_path", ffmpegPath);
     config->setProperty("framerate", frameRate);
@@ -123,7 +123,7 @@ void KisAnimationRenderingOptions::fromProperties(KisPropertiesConfigurationSP c
 
     shouldEncodeVideo = config->getPropertyLazy("encode_video", false);
     shouldDeleteSequence = config->getPropertyLazy("delete_sequence", false);
-    onlyRenderUniqueFrames = config->getPropertyLazy("only_unique_frames", false);
+    wantsOnlyUniqueFrameSequence = config->getPropertyLazy("only_unique_frames", false);
 
     ffmpegPath = config->getPropertyLazy("ffmpeg_path", "");
     frameRate = config->getPropertyLazy("framerate", 25);
@@ -135,4 +135,5 @@ void KisAnimationRenderingOptions::fromProperties(KisPropertiesConfigurationSP c
 
     frameExportConfig = new KisPropertiesConfiguration();
     frameExportConfig->setPrefixedProperties("frame_export/", frameExportConfig);
+
 }

@@ -35,6 +35,7 @@
 #include <stdint.h>
 #include <KoAlwaysInline.h>
 #include <iostream>
+#include <KoCompositeOp.h>
 
 #define BLOCKDEBUG 0
 

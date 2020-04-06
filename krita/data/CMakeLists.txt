@@ -17,6 +17,8 @@ add_subdirectory( preset_icons )
 add_subdirectory( metadata/schemas )
 add_subdirectory( gamutmasks )
 add_subdirectory( windowlayouts )
+add_subdirectory( donation )
+
 
 ########### install files ###############
 

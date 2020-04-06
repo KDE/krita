@@ -83,6 +83,8 @@ private:
 
 
 
+    QLabel* donationLink;
+
 private Q_SLOTS:
     void slotNewFileClicked();
     void slotOpenFileClicked();

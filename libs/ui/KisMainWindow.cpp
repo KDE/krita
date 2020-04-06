@@ -595,6 +595,14 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     this->winId(); // Ensures the native window has been created.
     QWindow *window = this->windowHandle();
     connect(window, SIGNAL(screenChanged(QScreen *)), this, SLOT(windowScreenChanged(QScreen *)));
+
+#ifdef Q_OS_ANDROID
+    // When Krita starts, Java side sends an event to set applicationState() to active. But, before
+    // the event could reach KisApplication's platform integration, it is cleared by KisOpenGLModeProber::probeFomat.
+    // So, we send it manually when MainWindow shows up.
+    QAndroidJniObject::callStaticMethod<void>("org/qtproject/qt5/android/QtNative", "setApplicationState", "(I)V", Qt::ApplicationActive);
+#endif
+
 }
 
 KisMainWindow::~KisMainWindow()

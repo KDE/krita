@@ -34,6 +34,7 @@ public:
                                           const QByteArray &outputMimeType,
                                           const KisTimeRange &range,
                                           const int sequenceNumberingOffset,
+                                          const bool onlyNeedsUniqueFrames,
                                           KisPropertiesConfigurationSP exportConfiguration);
     ~KisAsyncAnimationFramesSavingRenderer();
 

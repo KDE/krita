@@ -259,7 +259,7 @@ void DlgAnimationRenderer::loadAnimationOptions(const KisAnimationRenderingOptio
     }
 
     m_page->chkIncludeAudio->setChecked(options.includeAudio);
-    m_page->chkOnlyUniqueFrames->setChecked(options.onlyRenderUniqueFrames);
+    m_page->chkOnlyUniqueFrames->setChecked(options.wantsOnlyUniqueFrameSequence);
 
     if (options.shouldDeleteSequence) {
         KIS_SAFE_ASSERT_RECOVER_NOOP(options.shouldEncodeVideo);
@@ -285,7 +285,7 @@ void DlgAnimationRenderer::loadAnimationOptions(const KisAnimationRenderingOptio
         KisConfig cfg(true);
         KisPropertiesConfigurationSP settings = cfg.exportConfiguration("img_sequence/" + options.frameMimeType);
 
-        m_wantsRenderWithHDR |= settings->getPropertyLazy("saveAsHDR", false);
+        m_wantsRenderWithHDR = settings->getPropertyLazy("saveAsHDR", m_wantsRenderWithHDR);
     }
 
 
@@ -432,7 +432,7 @@ KisAnimationRenderingOptions DlgAnimationRenderer::getEncoderOptions() const
     options.shouldEncodeVideo = !m_page->shouldExportOnlyImageSequence->isChecked();
     options.shouldDeleteSequence = m_page->shouldExportOnlyVideo->isChecked();
     options.includeAudio = m_page->chkIncludeAudio->isChecked();
-    options.onlyRenderUniqueFrames = m_page->chkOnlyUniqueFrames->isChecked();
+    options.wantsOnlyUniqueFrameSequence = m_page->chkOnlyUniqueFrames->isChecked();
 
     options.ffmpegPath = m_page->ffmpegLocation->fileName();
     options.frameRate = m_page->intFramesPerSecond->value();
@@ -461,6 +461,7 @@ KisAnimationRenderingOptions DlgAnimationRenderer::getEncoderOptions() const
             cfg->setProperty("forceSRGB", false);
             cfg->setProperty("saveAsHDR", true);
         }
+
         options.frameExportConfig = cfg;
     }
 

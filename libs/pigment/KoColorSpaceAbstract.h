@@ -34,6 +34,7 @@
 
 #include "KoConvolutionOpImpl.h"
 #include "KoInvertColorTransformation.h"
+#include "KoAlphaMaskApplicatorFactory.h"
 
 /**
  * This in an implementation of KoColorSpace which can be used as a base for colorspaces with as many
@@ -52,8 +53,15 @@ public:
     typedef _CSTrait ColorSpaceTraits;
 
 public:
-    KoColorSpaceAbstract(const QString &id, const QString &name) :
-        KoColorSpace(id, name, new KoMixColorsOpImpl< _CSTrait>(), new KoConvolutionOpImpl< _CSTrait>()) {
+    KoColorSpaceAbstract(const QString &id, const QString &name)
+        : KoColorSpace(id, name, new KoMixColorsOpImpl< _CSTrait>(), new KoConvolutionOpImpl< _CSTrait>()),
+          m_alphaMaskApplicator(
+              createOptimizedClass<
+                  KoAlphaMaskApplicatorFactory<
+                      typename _CSTrait::channels_type,
+                      _CSTrait::channels_nb,
+                      _CSTrait::alpha_pos>>(0))
+    {
     }
 
     quint32 colorChannelCount() const override {
@@ -134,15 +142,15 @@ public:
     }
 
     void applyInverseNormedFloatMask(quint8 * pixels, const float * alpha, qint32 nPixels) const override {
-        _CSTrait::applyInverseAlphaNormedFloatMask(pixels, alpha, nPixels);
+        m_alphaMaskApplicator->applyInverseNormedFloatMask(pixels, alpha, nPixels);
     }
 
     void fillInverseAlphaNormedFloatMaskWithColor(quint8 * pixels, const float * alpha, const quint8 *brushColor, qint32 nPixels) const override {
-        _CSTrait::fillInverseAlphaNormedFloatMaskWithColor(pixels, alpha, brushColor, nPixels);
+        m_alphaMaskApplicator->fillInverseAlphaNormedFloatMaskWithColor(pixels, alpha, brushColor, nPixels);
     }
 
-    void fillGrayBrushWithColor(quint8 *dst, const QRgb *brush, quint8 *brushColor, qint32 nPixels) const override{
-        _CSTrait::fillGrayBrushWithColor(dst, brush, brushColor, nPixels);
+    void fillGrayBrushWithColor(quint8 *dst, const QRgb *brush, quint8 *brushColor, qint32 nPixels) const override {
+        m_alphaMaskApplicator->fillGrayBrushWithColor(dst, brush, brushColor, nPixels);
     }
 
     quint8 intensity8(const quint8 * src) const override {
@@ -250,6 +258,9 @@ private:
                 dstPixel[c] = Arithmetic::scale<TDstChannel>(srcPixel[c]);
         }
     }
+
+private:
+    QScopedPointer<KoAlphaMaskApplicatorBase> m_alphaMaskApplicator;
 };
 
 #endif // KOCOLORSPACEABSTRACT_H

@@ -100,6 +100,8 @@ private:
 #endif
     bool m_checkUpdates {false};
 
+    QLabel* donationLink;
+
 private Q_SLOTS:
     void slotNewFileClicked();
     void slotOpenFileClicked();

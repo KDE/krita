@@ -512,9 +512,11 @@ public:
      *
      * The equation is:
      *
-     *     lightFactor = 2.0f * (brushL_hsl / 255.0f) - 1.0f;
-     *     dstL_hsl = colorL_hsl + lightFactor;
+     *     dstL_hsl = preserveLightness(colorL_hsl, lightFactor);
      *     dstA = qAlpha(brush);
+     *
+     * For details on preserveLightness() formula,
+     * see KoColorSpacePreserveLightnessUtils.h
      */
     virtual void fillGrayBrushWithColorAndLightnessOverlay(quint8 *dst, const QRgb *brush, quint8 *brushColor, qint32 nPixels) const;
 

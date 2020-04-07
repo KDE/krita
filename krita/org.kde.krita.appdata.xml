@@ -349,7 +349,10 @@
   </provides>
   <content_rating type="oars-1.1"/>
   <releases>
-    <release date="2019-05-29" version="4.3.0.0"/>
+    <!-- Note: website infrastructure uses the appstream file from the master branch 
+               to determine the last release, so this entry must always reflect the
+               last actual release -->
+    <release date="2020-03-26" version="4.2.9.0"/>
   </releases>
   <custom>
     <value key="KDE::windows_store">https://www.microsoft.com/store/apps/9n6x57zgrw96</value>

@@ -1035,6 +1035,11 @@ void KisNodeManager::activateNextNode(bool siblingsOnly)
     }
 }
 
+void KisNodeManager::activateNextSiblingNode()
+{
+    activateNextNode(true);
+}
+
 void KisNodeManager::activatePreviousNode(bool siblingsOnly)
 {
     KisNodeSP activeNode = this->activeNode();
@@ -1063,6 +1068,11 @@ void KisNodeManager::activatePreviousNode(bool siblingsOnly)
     if (nextNode && nextNode->parent()) {
         slotNonUiActivatedNode(nextNode);
     }
+}
+
+void KisNodeManager::activatePreviousSiblingNode()
+{
+    activatePreviousNode(true);
 }
 
 void KisNodeManager::switchToPreviouslyActiveNode()

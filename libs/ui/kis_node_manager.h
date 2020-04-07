@@ -196,9 +196,9 @@ public Q_SLOTS:
 
 
     void activateNextNode(bool siblingsOnly = false);
-    void activateNextSiblingNode() { activateNextNode(true); }
+    void activateNextSiblingNode();
     void activatePreviousNode(bool siblingsOnly = false);
-    void activatePreviousSiblingNode() { activatePreviousNode(true); }
+    void activatePreviousSiblingNode();
     void switchToPreviouslyActiveNode();
 
     /**

@@ -71,9 +71,10 @@ void KisResourceSearchBoxFilter::setFilter(const QString& filter)
 }
 
 
-bool KisResourceSearchBoxFilter::matchesResource(const QString &resourceName)
+bool KisResourceSearchBoxFilter::matchesResource(const QString &_resourceName)
 {
     // exact matches
+    QString resourceName = _resourceName.toLower();
     if (d->resourceExactMatchesIncluded.count() > 0
             && !d->resourceExactMatchesIncluded.contains(resourceName)) {
         return false;
@@ -125,6 +126,7 @@ void KisResourceSearchBoxFilter::initializeFilterData()
     QStringList parts = tempFilter.split(d->searchTokenizer, QString::SkipEmptyParts);
     Q_FOREACH(const QString& partFor, parts) {
         QString part(partFor);
+        part = part.toLower();
 
         bool included = true;
         if (part.startsWith('!')) {

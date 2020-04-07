@@ -352,7 +352,112 @@
     <!-- Note: website infrastructure uses the appstream file from the master branch 
                to determine the last release, so this entry must always reflect the
                last actual release -->
-    <release date="2020-03-26" version="4.2.9.0"/>
+    <release date="2020-03-26" version="4.2.9.0">
+      <url>https://krita.org/en/item/krita-4-2-9-released/</url>
+      <artifacts>
+        <artifact type="binary" platform="x86_64-appimage">
+          <location>https://download.kde.org/stable/krita/4.2.9/krita-4.2.9-x86_64.appimage</location>
+          <checksum type="sha256">4b23574456338b4f5e2d7e6ba66ca5dce2d6924468fe6613bc468674ebec77d4</checksum>
+          <size type="download">207515688</size>
+          <bundle type="appimage">krita-4.2-9</bundle>
+        </artifact>
+        <artifact type="binary" platform="x86_64-appimage">
+          <location>https://download.kde.org/stable/krita/4.2.9/gmic_krita_qt-x86_64.appimage</location>
+          <checksum type="sha256">5182b77ff35de7d9aa850ffbe6fd953b2eb7c20d39cf56302a938cab9c2497a0</checksum>
+          <size type="download">32002088</size>
+          <bundle type="appimage">gmic_krita_qt-4.2-9</bundle>
+        </artifact>
+        <artifact type="binary" platform="macOS">
+          <location>https://download.kde.org/stable/krita/4.2.9/krita-4.2.9.dmg</location>
+          <checksum type="sha256">34b606dcdbdf1c3702cebc924b9c11e1c9181ca6a9d5fa91e605bbfca554df9b</checksum>
+          <size type="download">195113969</size>
+        </artifact>
+        <artifact type="binary" platform="win64">
+          <location>https://download.kde.org/stable/krita/4.2.9/krita-x64-4.2.9-setup.exe</location>
+          <checksum type="sha256">fd8345a4d4170c62e410f8cfe1547bb811eb312de953a540b3bf12bb79137b9f</checksum>
+          <size type="download">110753224</size>
+        </artifact>
+        <artifact type="binary" platform="win32">
+          <location>https://download.kde.org/stable/krita/4.2.9/krita-x86-4.2.9-setup.exe</location>
+          <checksum type="sha256">c8efe945804ec9f08f019853c60895e390edfeb03bde13874b4d05231c03261d</checksum>
+          <size type="download">110315944</size>
+        </artifact>
+        <artifact type="source">
+          <location>https://download.kde.org/stable/krita/4.2.9/krita-4.2.9.tar.xz</location>
+          <checksum type="sha256">4ef711887dd3ec5f2a1c42a80f2fd0fec1de0d4f3d0147b0efd418ac6e4d7567</checksum>
+          <size type="download">170082028</size>
+        </artifact>
+      </artifacts>
+    </release>
+    <release date="2019-11-27" version="4.2.8.0">
+      <url>https://krita.org/en/item/krita-4-2-8-released/</url>
+      <artifacts>
+        <artifact type="binary" platform="x86_64-linux-gnu">
+          <location>https://download.kde.org/stable/krita/4.2.8/krita-4.2.8-x86_64.appimage</location>
+          <checksum type="sha256">4b23574456338b4f5e2d7e6ba66ca5dce2d6924468fe6613bc468674ebec77d4</checksum>
+          <size type="download">207515688</size>
+          <bundle type="appimage">krita-4.2-8</bundle>
+        </artifact>
+        <artifact type="binary" platform="x86_64-linux-gnu">
+          <location>https://download.kde.org/stable/krita/4.2.8/gmic_krita_qt-x86_64.appimage</location>
+          <checksum type="sha256">e48ac43f86a22b7015ee2dc5ce4f35a72f22070150d926553ab0aafc8616a08f</checksum>
+          <size type="download">32944104</size>
+          <bundle type="appimage">gmic_krita_qt-4.2-8</bundle>
+        </artifact>
+        <artifact type="binary" platform="macOS">
+          <location>https://download.kde.org/stable/krita/4.2.9/krita-4.2.9.dmg</location>
+          <checksum type="sha256">34b606dcdbdf1c3702cebc924b9c11e1c9181ca6a9d5fa91e605bbfca554df9b</checksum>
+          <size type="download">195113969</size>
+        </artifact>
+        <artifact type="binary" platform="win64">
+          <location>https://download.kde.org/stable/krita/4.2.8/krita-x64-4.2.8-setup.exe</location>
+          <checksum type="sha256">dca15dad13684622ae2704d77b34f0662bc109b7b6e3e7393a549b6418fcd419</checksum>
+          <size type="download">109267000</size>
+        </artifact>
+        <artifact type="binary" platform="win32">
+          <location>https://download.kde.org/stable/krita/4.2.8/krita-x86-4.2.8-setup.exe</location>
+          <checksum type="sha256">94fbdee4a923682fd64c0010b17ebd002e52de8f2ae239e611f3bda60d8abdee</checksum>
+          <size type="download">107842760</size>
+        </artifact>
+        <artifact type="source">
+          <location>https://download.kde.org/stable/krita/4.2.8/krita-4.2.8.2.tar.xz</location>
+          <checksum type="sha256">1c3bb8a28ef8f7945e5f21f9ad87e01d8b831eea3487ff92742c930f3b7f744a</checksum>
+          <size type="download">169994064</size>
+        </artifact>
+      </artifacts>
+    </release>
+    <release date="2019-11-27" version="4.2.7.1">
+      <url>https://krita.org/en/item/krita-4-2-7-released/</url>
+      <artifacts>
+        <artifact type="binary" platform="x86_64-linux-gnu">
+          <location>https://download.kde.org/stable/krita/4.2.7.1/krita-4.2.7.1b-x86_64.appimage</location>
+          <checksum type="sha256">ddaeb8e02bad9d09fd3fc2d4ecf7ee677c3786cb13bb8e50eeaebf00e573f2d9</checksum>
+          <size type="download">192188392</size>
+          <bundle type="appimage">krita-4.2-7-1</bundle>
+        </artifact>
+        <artifact type="binary" platform="x86_64-linux-gnu">
+          <location>https://download.kde.org/stable/krita/4.2.7.1/gmic_krita_qt-x86_64.appimage</location>
+          <checksum type="sha256">ea6e151399e850feb6e177ab52a40b32d9070888339f0c35c92ceff17816cae1</checksum>
+          <size type="download">32968680</size>
+          <bundle type="appimage">gmic_krita_qt-4-2-7-1</bundle>
+        </artifact>
+        <artifact type="binary" platform="macOS">
+          <location>https://download.kde.org/stable/krita/4.2.7.1/krita-4.2.7.1.dmg</location>
+          <checksum type="sha256">eca62444e27ed51b177e75e9e674d726285e58483b41a37fa2b0d0ad2a8b34ba</checksum>
+          <size type="download">173627205</size>
+        </artifact>
+        <artifact type="binary" platform="win64">
+          <location>https://download.kde.org/stable/krita/4.2.7.1/krita-x64-4.2.7.1-setup.exe</location>
+          <checksum type="sha256">31538a959e7b271cf7c166f4e1e6162e5958e9b54055c4ecb1f50335fab2f01f</checksum>
+          <size type="download">109190240</size>
+        </artifact>
+        <artifact type="binary" platform="win32">
+          <location>https://download.kde.org/stable/krita/4.2.8/krita-x86-4.2.8-setup.exe</location>
+          <checksum type="sha256">3cb92f77e0913a20e2e02a0ba953460a7e39ad0e7a24b9530fc707f6808e8fec</checksum>
+          <size type="download">107846008</size>
+        </artifact>
+      </artifacts>
+    </release>
   </releases>
   <custom>
     <value key="KDE::windows_store">https://www.microsoft.com/store/apps/9n6x57zgrw96</value>

@@ -19,8 +19,9 @@
 #include "kis_predefined_brush_factory.h"
 
 #include <QDomDocument>
-#include "KisBrushServerProvider.h"
+#include <QFileInfo>
 #include "kis_gbr_brush.h"
+#include "kis_png_brush.h"
 #include <kis_dom_utils.h>
 #include <KisResourcesInterface.h>
 
@@ -69,14 +70,18 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
     double scale = KisDomUtils::toDouble(brushDefinition.attribute("scale", "1.0"));
     brush->setScale(scale);
 
-    if (m_id == "gbr_brush") {
-        KisGbrBrush *gbrbrush = dynamic_cast<KisGbrBrush*>(brush.data());
-        if (gbrbrush) {
-            /**
-             * WARNING: see comment in KisGbrBrush::setUseColorAsMask()
-             */
-            gbrbrush->setUseColorAsMask((bool)brushDefinition.attribute("ColorAsMask").toInt());
-        }
+    int preserveLightness = KisDomUtils::toInt(brushDefinition.attribute("preserveLightness", "0"));
+    brush->setPreserveLightness(preserveLightness);
+
+    KisColorfulBrush *colorfulBrush = dynamic_cast<KisColorfulBrush*>(brush.data());
+    if (colorfulBrush) {
+        /**
+         * WARNING: see comment in KisGbrBrush::setUseColorAsMask()
+         */
+        colorfulBrush->setUseColorAsMask((bool)brushDefinition.attribute("ColorAsMask").toInt());
+        colorfulBrush->setAdjustmentMidPoint(brushDefinition.attribute("AdjustmentMidPoint", "127").toInt());
+        colorfulBrush->setBrightnessAdjustment(brushDefinition.attribute("BrightnessAdjustment").toDouble());
+        colorfulBrush->setContrastAdjustment(brushDefinition.attribute("ContrastAdjustment").toDouble());
     }
 
     return brush;

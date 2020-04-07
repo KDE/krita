@@ -28,7 +28,7 @@
 #include <kis_dom_utils.h>
 
 KisPngBrush::KisPngBrush(const QString& filename)
-    : KisScalingSizeBrush(filename)
+    : KisColorfulBrush(filename)
 {
     setBrushType(INVALID);
     setSpacing(0.25);
@@ -36,17 +36,8 @@ KisPngBrush::KisPngBrush(const QString& filename)
 }
 
 KisPngBrush::KisPngBrush(const KisPngBrush &rhs)
-    : KisScalingSizeBrush(rhs)
+    : KisColorfulBrush(rhs)
 {
-    setSpacing(rhs.spacing());
-    if (brushTipImage().isGrayscale()) {
-        setBrushType(MASK);
-        setHasColor(false);
-    }
-    else {
-        setBrushType(IMAGE);
-        setHasColor(true);
-    }
 }
 
 KoResourceSP KisPngBrush::clone() const
@@ -130,6 +121,11 @@ bool KisPngBrush::saveToDevice(QIODevice *dev) const
     return false;
 }
 
+enumBrushType KisPngBrush::brushType() const
+{
+    return !hasColor() || useColorAsMask() ? MASK : IMAGE;
+}
+
 QString KisPngBrush::defaultFileExtension() const
 {
     return QString(".png");
@@ -138,5 +134,5 @@ QString KisPngBrush::defaultFileExtension() const
 void KisPngBrush::toXML(QDomDocument& d, QDomElement& e) const
 {
     predefinedBrushToXML("png_brush", e);
-    KisBrush::toXML(d, e);
+    KisColorfulBrush::toXML(d, e);
 }

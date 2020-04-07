@@ -32,6 +32,7 @@
 #include "KoIntegerMaths.h"
 
 #include "KoColorConversions.h"
+#include <KoColorSpacePreserveLightnessUtils.h>
 
 KoRgbU16ColorSpace::KoRgbU16ColorSpace() :
         KoSimpleColorSpace<KoBgrU16Traits>(colorSpaceId(),
@@ -95,4 +96,9 @@ QVector <double> KoRgbU16ColorSpace::fromYUV(qreal *y, qreal *u, qreal *v) const
     YUVToRGB(*y, *u, *v, &channelValues[0],&channelValues[1],&channelValues[2]);
     channelValues[3]=1.0;
     return channelValues;
+}
+
+void KoRgbU16ColorSpace::fillGrayBrushWithColorAndLightnessOverlay(quint8 *dst, const QRgb *brush, quint8 *brushColor, qint32 nPixels) const
+{
+    fillGrayBrushWithColorPreserveLightnessRGB<KoBgrU16Traits>(dst, brush, brushColor, nPixels);
 }

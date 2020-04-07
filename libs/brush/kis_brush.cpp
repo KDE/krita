@@ -105,6 +105,7 @@ struct KisBrush::Private {
     Private()
         : brushType(INVALID)
         , hasColor(false)
+        , preserveLightness(false)
         , angle(0)
         , scale(1.0)
         , autoSpacingActive(false)
@@ -119,6 +120,7 @@ struct KisBrush::Private {
           spacing(rhs.spacing),
           hotSpot(rhs.hotSpot),
           hasColor(rhs.hasColor),
+          preserveLightness(rhs.preserveLightness),
           angle(rhs.angle),
           scale(rhs.scale),
           autoSpacingActive(rhs.autoSpacingActive),
@@ -147,6 +149,7 @@ struct KisBrush::Private {
     double spacing;
     QPointF hotSpot;
     bool hasColor;
+    bool preserveLightness;
     qreal angle;
     qreal scale;
     bool autoSpacingActive;
@@ -260,6 +263,17 @@ void KisBrush::setHasColor(bool hasColor)
     d->hasColor = hasColor;
 }
 
+bool KisBrush::preserveLightness() const
+{
+    return d->preserveLightness;
+}
+
+void KisBrush::setPreserveLightness(bool preserveLightness)
+{
+    d->preserveLightness = preserveLightness;
+}
+
+
 bool KisBrush::isPiercedApprox() const
 {
     QImage image = brushTipImage();
@@ -336,6 +350,7 @@ void KisBrush::predefinedBrushToXML(const QString &type, QDomElement& e) const
     e.setAttribute("autoSpacingCoeff", QString::number(autoSpacingCoeff()));
     e.setAttribute("angle", QString::number(angle()));
     e.setAttribute("scale", QString::number(scale()));
+    e.setAttribute("preserveLightness", QString::number((int)preserveLightness()));
 }
 
 void KisBrush::toXML(QDomDocument& /*document*/ , QDomElement& element) const
@@ -466,6 +481,18 @@ void KisBrush::mask(KisFixedPaintDeviceSP dst, const KisPaintDeviceSP src, KisDa
     generateMaskAndApplyMaskOrCreateDab(dst, &pdci, shape, info, subPixelX, subPixelY, softnessFactor);
 }
 
+namespace {
+void fetchPremultipliedRed(const QRgb* src, quint8 *dst, int maskWidth)
+{
+    for (int x = 0; x < maskWidth; x++) {
+        *dst = KoColorSpaceMaths<quint8>::multiply(255 - *src, qAlpha(*src));
+        src++;
+        dst++;
+    }
+}
+}
+
+//#define SANITY_CHECK
 
 void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
                                                    ColoringInformation* coloringInformation,
@@ -488,69 +515,58 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
     dst->setRect(QRect(0, 0, maskWidth, maskHeight));
     dst->lazyGrowBufferWithoutInitialization();
 
-    quint8* color = 0;
+    KIS_SAFE_ASSERT_RECOVER_RETURN(coloringInformation);
 
-    if (coloringInformation) {
-        if (dynamic_cast<PlainColoringInformation*>(coloringInformation)) {
-            color = const_cast<quint8*>(coloringInformation->color());
-        }
+    quint8* color = 0;
+    if (dynamic_cast<PlainColoringInformation*>(coloringInformation)) {
+        color = const_cast<quint8*>(coloringInformation->color());
     }
 
+#ifdef SANITY_CHECK
+    // we expect that brushTipImage() has removed image color for
+    // us already
+    KIS_SAFE_ASSERT_RECOVER_NOOP(outputImage.allGray());
+#endif
+
     const KoColorSpace *cs = dst->colorSpace();
-    qint32 pixelSize = cs->pixelSize();
-    quint8 *dabPointer = dst->data();
-    quint8 *rowPointer = dabPointer;
-    quint8 *alphaArray = new quint8[maskWidth];
-    bool hasColor = this->hasColor();
+    const quint32 pixelSize = cs->pixelSize();
+    quint8 *rowPointer = dst->data();
+
+    const bool preserveLightness = this->preserveLightness();
 
     for (int y = 0; y < maskHeight; y++) {
         const quint8* maskPointer = outputImage.constScanLine(y);
-        if (coloringInformation) {
-            for (int x = 0; x < maskWidth; x++) {
-                if (color) {
-                    memcpy(dabPointer, color, pixelSize);
-                }
-                else {
-                    memcpy(dabPointer, coloringInformation->color(), pixelSize);
-                    coloringInformation->nextColumn();
-                }
-                dabPointer += pixelSize;
+        if (color) {
+            if (preserveLightness) {
+                cs->fillGrayBrushWithColorAndLightnessOverlay(rowPointer, reinterpret_cast<const QRgb*>(maskPointer), color, maskWidth);
             }
-        }
-
-        if (hasColor) {
-            const quint8 *src = maskPointer;
-            quint8 *dst = alphaArray;
-            for (int x = 0; x < maskWidth; x++) {
-                const QRgb *c = reinterpret_cast<const QRgb*>(src);
-
-                *dst = KoColorSpaceMaths<quint8>::multiply(255 - qGray(*c), qAlpha(*c));
-                src += 4;
-                dst++;
+            else {
+                cs->fillGrayBrushWithColor(rowPointer, reinterpret_cast<const QRgb*>(maskPointer), color, maskWidth);
             }
         }
         else {
-            const quint8 *src = maskPointer;
-            quint8 *dst = alphaArray;
-            for (int x = 0; x < maskWidth; x++) {
-                const QRgb *c = reinterpret_cast<const QRgb*>(src);
-
-                *dst = KoColorSpaceMaths<quint8>::multiply(255 - *src, qAlpha(*c));
-                src += 4;
-                dst++;
+            {
+                quint8 *dst = rowPointer;
+                for (int x = 0; x < maskWidth; x++) {
+                    memcpy(dst, coloringInformation->color(), pixelSize);
+                    coloringInformation->nextColumn();
+                    dst += pixelSize;
+                }
             }
+
+            QScopedArrayPointer<quint8> alphaArray(new quint8[maskWidth]);
+            fetchPremultipliedRed(reinterpret_cast<const QRgb*>(maskPointer), alphaArray.data(), maskWidth);
+            cs->applyAlphaU8Mask(rowPointer, alphaArray.data(), maskWidth);
         }
 
-        cs->applyAlphaU8Mask(rowPointer, alphaArray, maskWidth);
         rowPointer += maskWidth * pixelSize;
-        dabPointer = rowPointer;
 
-        if (!color && coloringInformation) {
+        if (!color) {
             coloringInformation->nextRow();
         }
     }
 
-    delete[] alphaArray;
+
 }
 
 KisFixedPaintDeviceSP KisBrush::paintDevice(const KoColorSpace * colorSpace,

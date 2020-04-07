@@ -78,6 +78,13 @@
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
       <layout class="QGridLayout" name="gridLayout">
+       <item row="2" column="1">
+        <widget class="QCheckBox" name="colorAsmask">
+         <property name="text">
+          <string>Create mask from color</string>
+         </property>
+        </widget>
+       </item>
        <item row="0" column="1">
         <widget class="QLineEdit" name="nameEdit"/>
        </item>
@@ -110,10 +117,16 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
-        <widget class="QCheckBox" name="colorAsmask">
+       <item row="1" column="1">
+        <widget class="KisSpacingSelectionWidget" name="spacingWidget" native="true"/>
+       </item>
+       <item row="3" column="1">
+        <widget class="QCheckBox" name="preserveAlpha">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
-          <string>Create mask from color</string>
+          <string>Preserve alpha</string>
          </property>
         </widget>
        </item>

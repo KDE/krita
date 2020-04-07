@@ -29,6 +29,7 @@
 #include "compositeops/RgbCompositeOpOut.h"
 #include "compositeops/RgbCompositeOpBumpmap.h"
 #include <kis_dom_utils.h>
+#include <KoColorSpacePreserveLightnessUtils.h>
 
 RgbF16ColorSpace::RgbF16ColorSpace(const QString &name, KoColorProfile *p) :
     LcmsColorSpace<KoRgbF16Traits>(colorSpaceId(), name, TYPE_RGBA_HALF_FLT, cmsSigRgbData, p)
@@ -108,4 +109,9 @@ QVector <double> RgbF16ColorSpace::fromYUV(qreal *y, qreal *u, qreal *v) const
     YUVToRGB(*y, *u, *v, &channelValues[0],&channelValues[1],&channelValues[2], lumaCoefficients()[0], lumaCoefficients()[1], lumaCoefficients()[2]);
     channelValues[3]=1.0;
     return channelValues;
+}
+
+void RgbF16ColorSpace::fillGrayBrushWithColorAndLightnessOverlay(quint8 *dst, const QRgb *brush, quint8 *brushColor, qint32 nPixels) const
+{
+    fillGrayBrushWithColorPreserveLightnessRGB<KoRgbF16Traits>(dst, brush, brushColor, nPixels);
 }

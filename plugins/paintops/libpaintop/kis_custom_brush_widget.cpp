@@ -128,6 +128,7 @@ void KisCustomBrushWidget::slotSpacingChanged()
 
 void KisCustomBrushWidget::slotUpdateUseColorAsMask(bool useColorAsMask)
 {
+    preserveAlpha->setEnabled(useColorAsMask);
     if (m_brush) {
         static_cast<KisGbrBrush*>(m_brush.data())->setUseColorAsMask(useColorAsMask);
         updatePreviewImage();
@@ -169,7 +170,7 @@ void KisCustomBrushWidget::slotAddPredefined()
             resource->setName(name);
             resource->setFilename(resource->name().split(" ").join("_") + resource->defaultFileExtension());
             if (colorAsMask->isChecked()) {
-                resource->makeMaskImage();
+                resource->makeMaskImage(preserveAlpha->isChecked());
             }
             m_rServer->addResource(resource.dynamicCast<KisBrush>());
             emit sigNewPredefinedBrush(resource);
@@ -179,12 +180,11 @@ void KisCustomBrushWidget::slotAddPredefined()
             resource->setName(name);
             resource->setFilename(resource->name().split(" ").join("_") + resource->defaultFileExtension());
             if (colorAsMask->isChecked()) {
-                resource->makeMaskImage();
+                resource->makeMaskImage(preserveAlpha->isChecked());
             }
             m_rServer->addResource(resource.dynamicCast<KisBrush>());
             emit sigNewPredefinedBrush(resource);
         }
-
     }
 
     close();

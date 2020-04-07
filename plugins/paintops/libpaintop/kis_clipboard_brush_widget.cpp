@@ -94,6 +94,8 @@ void KisClipboardBrushWidget::slotCreateBrush()
     } else {
         buttonBox->button(QDialogButtonBox::Save)->setEnabled(true);
         colorAsmask->setChecked(true); // initializing this has to happen here since we need a valid brush for it to work
+        preserveAlpha->setEnabled(true);
+        preserveAlpha->setChecked(false);
     }
 }
 
@@ -112,6 +114,7 @@ void KisClipboardBrushWidget::showEvent(QShowEvent *)
 
 void KisClipboardBrushWidget::slotUpdateUseColorAsMask(bool useColorAsMask)
 {
+    preserveAlpha->setEnabled(useColorAsMask);
     if (m_brush) {
         static_cast<KisGbrBrush*>(m_brush.data())->setUseColorAsMask(useColorAsMask);
         int w = preview->size().width()-10;
@@ -142,7 +145,7 @@ void KisClipboardBrushWidget::slotAddPredefined()
 
 
         if (colorAsmask->isChecked()) {
-            resource->makeMaskImage();
+            resource->makeMaskImage(preserveAlpha->isChecked());
         }
         m_rServer->addResource(resource.dynamicCast<KisBrush>());
         emit sigNewPredefinedBrush(resource);

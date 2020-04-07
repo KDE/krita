@@ -83,6 +83,10 @@ public:
     void setUseColorAsMask(bool useColorAsMask) override;
     bool hasColor() const override;
 
+    void setAdjustmentMidPoint(quint8 value) override;
+    void setBrightnessAdjustment(qreal value) override;
+    void setContrastAdjustment(qreal value) override;
+
     enumBrushType brushType() const override;
 
     QString parasiteSelection(); // returns random, constant, etc
@@ -91,7 +95,7 @@ public:
 
     bool canPaintFor(const KisPaintInformation& info) override;
 
-    void makeMaskImage() override;
+    void makeMaskImage(bool preserveAlpha) override;
 
 
     QString defaultFileExtension() const override;
@@ -123,6 +127,9 @@ public:
 protected:
     void setBrushType(enumBrushType type) override;
     void setHasColor(bool hasColor) override;
+    void setPreserveLightness(bool preserveLightness) override;
+    /// Will call KisBrush's saveToDevice as well
+
 private:
     friend class KisImagePipeBrushTest;
 

@@ -99,6 +99,12 @@ public:
         return false;
     }
 
+    void setPreserveLightness(bool preserveLightness) const {
+        Q_FOREACH(QSharedPointer<BrushType> brush, m_brushes) {
+            brush->setPreserveLightness(preserveLightness);
+        }
+    }
+
     void notifyCachedDabPainted(const KisPaintInformation& info) {
         updateBrushIndexes(info, -1);
     }

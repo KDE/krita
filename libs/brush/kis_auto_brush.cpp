@@ -265,13 +265,13 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
                                        dst->bounds().height() >= dstHeight);
     }
 
+    KIS_SAFE_ASSERT_RECOVER_RETURN(coloringInformation);
+
     quint8* dabPointer = dst->data();
 
     quint8* color = 0;
-    if (coloringInformation) {
-        if (dynamic_cast<PlainColoringInformation*>(coloringInformation)) {
-            color = const_cast<quint8*>(coloringInformation->color());
-        }
+    if (dynamic_cast<PlainColoringInformation*>(coloringInformation)) {
+        color = const_cast<quint8*>(coloringInformation->color());
     }
 
     double centerX = hotSpot.x() - 0.5 + subPixelX;
@@ -280,26 +280,19 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
     d->shape->setSoftness(softnessFactor); // softness must be set first
     d->shape->setScale(shape.scaleX(), shape.scaleY());
 
-    if (coloringInformation) {
-        if (color && pixelSize == 4) {
-            fillPixelOptimized_4bytes(color, dabPointer, dstWidth * dstHeight);
-        }
-        else if (color) {
-            fillPixelOptimized_general(color, dabPointer, dstWidth * dstHeight, pixelSize);
-        }
-        else {
-            for (int y = 0; y < dstHeight; y++) {
-                for (int x = 0; x < dstWidth; x++) {
-                    memcpy(dabPointer, coloringInformation->color(), pixelSize);
-                    coloringInformation->nextColumn();
-                    dabPointer += pixelSize;
-                }
-                coloringInformation->nextRow();
+    if (!color) {
+        for (int y = 0; y < dstHeight; y++) {
+            for (int x = 0; x < dstWidth; x++) {
+                memcpy(dabPointer, coloringInformation->color(), pixelSize);
+                coloringInformation->nextColumn();
+                dabPointer += pixelSize;
             }
+            coloringInformation->nextRow();
         }
     }
 
-    MaskProcessingData data(dst, cs, d->randomness, d->density,
+    MaskProcessingData data(dst, cs, color,
+                            d->randomness, d->density,
                             centerX, centerY,
                             angle);
 

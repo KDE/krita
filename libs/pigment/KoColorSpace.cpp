@@ -37,6 +37,8 @@
 #include "KoConvolutionOp.h"
 #include "KoCompositeOpRegistry.h"
 #include "KoColorSpaceEngine.h"
+#include <KoColorSpaceTraits.h>
+#include <KoColorSpacePreserveLightnessUtils.h>
 
 #include <QThreadStorage>
 #include <QByteArray>
@@ -813,4 +815,19 @@ QImage KoColorSpace::convertToQImage(const quint8 *data, qint32 width, qint32 he
 bool KoColorSpace::preferCompositionInSourceColorSpace() const
 {
     return false;
+}
+
+void KoColorSpace::fillGrayBrushWithColorAndLightnessOverlay(quint8 *dst, const QRgb *brush, quint8 *brushColor, qint32 nPixels) const
+{
+    /// Fallback implementation. All RGB color spaces have their own
+    /// implementation without any conversions.
+
+    const int rgbPixelSize = sizeof(KoBgrU16Traits::Pixel);
+    QScopedArrayPointer<quint8> rgbBuffer(new quint8[(nPixels + 1) * rgbPixelSize]);
+    quint8 *rgbBrushColorBuffer = rgbBuffer.data() + nPixels * rgbPixelSize;
+
+    this->toRgbA16(dst, rgbBuffer.data(), nPixels);
+    this->toRgbA16(brushColor, rgbBrushColorBuffer, 1);
+    fillGrayBrushWithColorPreserveLightnessRGB<KoBgrU16Traits>(rgbBuffer.data(), brush, rgbBrushColorBuffer, nPixels);
+    this->fromRgbA16(rgbBuffer.data(), dst, nPixels);
 }

@@ -176,9 +176,27 @@ public:
         }
     }
 
-    void makeMaskImage() {
+    void setAdjustmentMidPoint(quint8 value) {
         Q_FOREACH (KisGbrBrushSP brush, m_brushes) {
-            brush->makeMaskImage();
+            brush->setAdjustmentMidPoint(value);
+        }
+    }
+
+    void setBrightnessAdjustment(qreal value) {
+        Q_FOREACH (KisGbrBrushSP brush, m_brushes) {
+            brush->setBrightnessAdjustment(value);
+        }
+    }
+
+    void setContrastAdjustment(qreal value) {
+        Q_FOREACH (KisGbrBrushSP brush, m_brushes) {
+            brush->setContrastAdjustment(value);
+        }
+    }
+
+    void makeMaskImage(bool preserveAlpha) {
+        Q_FOREACH (KisGbrBrushSP brush, m_brushes) {
+            brush->makeMaskImage(preserveAlpha);
         }
     }
 
@@ -416,16 +434,34 @@ bool KisImagePipeBrush::hasColor() const
     return d->brushesPipe.hasColor();
 }
 
-void KisImagePipeBrush::makeMaskImage()
+void KisImagePipeBrush::makeMaskImage(bool preserveAlpha)
 {
-    d->brushesPipe.makeMaskImage();
-    setUseColorAsMask(false);
+    d->brushesPipe.makeMaskImage(preserveAlpha);
+    setUseColorAsMask(true);
 }
 
 void KisImagePipeBrush::setUseColorAsMask(bool useColorAsMask)
 {
     KisGbrBrush::setUseColorAsMask(useColorAsMask);
     d->brushesPipe.setUseColorAsMask(useColorAsMask);
+}
+
+void KisImagePipeBrush::setAdjustmentMidPoint(quint8 value)
+{
+    KisGbrBrush::setAdjustmentMidPoint(value);
+    d->brushesPipe.setAdjustmentMidPoint(value);
+}
+
+void KisImagePipeBrush::setBrightnessAdjustment(qreal value)
+{
+    KisGbrBrush::setBrightnessAdjustment(value);
+    d->brushesPipe.setBrightnessAdjustment(value);
+}
+
+void KisImagePipeBrush::setContrastAdjustment(qreal value)
+{
+    KisGbrBrush::setContrastAdjustment(value);
+    d->brushesPipe.setContrastAdjustment(value);
 }
 
 const KisBoundary* KisImagePipeBrush::boundary() const
@@ -491,6 +527,13 @@ void KisImagePipeBrush::setHasColor(bool hasColor)
     Q_UNUSED(hasColor);
     qFatal("FATAL: protected member setHasColor has no meaning for KisImagePipeBrush");
     // hasColor() is a function of the underlying brushes
+}
+
+void KisImagePipeBrush::setPreserveLightness(bool preserveLightness)
+{
+    //Set all underlying brushes to preserve lightness
+    KisGbrBrush::setPreserveLightness(preserveLightness);
+    d->brushesPipe.setPreserveLightness(preserveLightness);
 }
 
 KisGbrBrushSP KisImagePipeBrush::testingGetCurrentBrush(const KisPaintInformation& info) const

@@ -56,6 +56,7 @@
 
 #include "kis_global.h"
 #include "kis_gbr_brush.h"
+#include "kis_png_brush.h"
 #include "kis_debug.h"
 #include "kis_image.h"
 #include <KisGlobalResourcesInterface.h>
@@ -129,8 +130,6 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
     brushSpacingSelectionWidget->setSpacing(true, 1.0);
     connect(brushSpacingSelectionWidget, SIGNAL(sigSpacingChanged()), SLOT(slotSpacingChanged()));
 
-    QObject::connect(useColorAsMaskCheckbox, SIGNAL(toggled(bool)), this, SLOT(slotSetItemUseColorAsMask(bool)));
-
     m_itemChooser = new KisResourceItemChooser(ResourceType::Brushes, false, this);
     m_itemChooser->setObjectName("brush_selector");
 
@@ -172,6 +171,35 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
 
     resetBrushButton->setToolTip(i18n("Reloads Spacing from file\nSets Scale to 1.0\nSets Rotation to 0.0"));
     connect(resetBrushButton, SIGNAL(clicked()), SLOT(slotResetBrush()));
+
+    intAdjustmentMidPoint->setRange(0, 255);
+    intAdjustmentMidPoint->setPageStep(10);
+    intAdjustmentMidPoint->setSingleStep(1);
+    intAdjustmentMidPoint->setPrefix(i18nc("@label:slider", "Neutral point: "));
+
+    intBrightnessAdjustment->setRange(-100, 100);
+    intBrightnessAdjustment->setPageStep(10);
+    intBrightnessAdjustment->setSingleStep(1);
+    intBrightnessAdjustment->setSuffix("%");
+    intBrightnessAdjustment->setPrefix(i18nc("@label:slider", "Brightness: "));
+
+    intContrastAdjustment->setRange(-100, 100);
+    intContrastAdjustment->setPageStep(10);
+    intContrastAdjustment->setSingleStep(1);
+    intContrastAdjustment->setSuffix("%");
+    intContrastAdjustment->setPrefix(i18nc("@label:slider", "Contrast: "));
+
+    connect(btnMaskMode, SIGNAL(toggled(bool)), SLOT(slotWriteBrushAdjustmentsState()));
+    connect(btnColorMode, SIGNAL(toggled(bool)), SLOT(slotWriteBrushAdjustmentsState()));
+    connect(btnLightnessMode, SIGNAL(toggled(bool)), SLOT(slotWriteBrushAdjustmentsState()));
+
+    connect(btnMaskMode, SIGNAL(toggled(bool)), SLOT(slotWriteBrushMode()));
+    connect(btnColorMode, SIGNAL(toggled(bool)), SLOT(slotWriteBrushMode()));
+    connect(btnLightnessMode, SIGNAL(toggled(bool)), SLOT(slotWriteBrushMode()));
+
+    connect(intAdjustmentMidPoint, SIGNAL(valueChanged(int)), SLOT(slotUpdateBrushAdjustments()));
+    connect(intBrightnessAdjustment, SIGNAL(valueChanged(int)), SLOT(slotUpdateBrushAdjustments()));
+    connect(intContrastAdjustment, SIGNAL(valueChanged(int)), SLOT(slotUpdateBrushAdjustments()));
 
     updateBrushTip(m_itemChooser->currentResource());
 }
@@ -226,6 +254,14 @@ void KisPredefinedBrushChooser::slotResetBrush()
         brush->setScale(1.0);
         brush->setAngle(0.0);
 
+        if (KisColorfulBrush *colorfulBrush = dynamic_cast<KisColorfulBrush*>(m_brush.data())) {
+            colorfulBrush->setUseColorAsMask(false);
+            colorfulBrush->setPreserveLightness(false);
+            colorfulBrush->setAdjustmentMidPoint(127);
+            colorfulBrush->setBrightnessAdjustment(0.0);
+            colorfulBrush->setContrastAdjustment(0.0);
+        }
+
         updateBrushTip(brush);
         emit sigBrushChanged();
     }
@@ -261,17 +297,6 @@ void KisPredefinedBrushChooser::slotSpacingChanged()
         m_brush->setSpacing(brushSpacingSelectionWidget->spacing());
         m_brush->setAutoSpacing(brushSpacingSelectionWidget->autoSpacingActive(), brushSpacingSelectionWidget->autoSpacingCoeff());
 
-        emit sigBrushChanged();
-    }
-}
-
-void KisPredefinedBrushChooser::slotSetItemUseColorAsMask(bool useColorAsMask)
-{
-    KIS_SAFE_ASSERT_RECOVER_RETURN(m_brush);
-
-    KisGbrBrush *brush = dynamic_cast<KisGbrBrush *>(m_brush.data());
-    if (brush) {
-        brush->setUseColorAsMask(useColorAsMask);
         emit sigBrushChanged();
     }
 }
@@ -368,17 +393,95 @@ void KisPredefinedBrushChooser::updateBrushTip(KoResourceSP resource, bool isCha
         brushRotationSpinBox->setValue(m_brush->angle() * 180 / M_PI);
         brushSizeSpinBox->setValue(m_brush->width() * m_brush->scale());
 
-        // useColorAsMask support is only in gimp brush so far
-        bool prevColorAsMaskState = useColorAsMaskCheckbox->isChecked();
-        KisGbrBrush *gimpBrush = dynamic_cast<KisGbrBrush*>(m_brush.data());
-        if (gimpBrush) {
-            useColorAsMaskCheckbox->setChecked(gimpBrush->useColorAsMask() || prevColorAsMaskState);
-            gimpBrush->setUseColorAsMask(prevColorAsMaskState);
-        }
-        useColorAsMaskCheckbox->setEnabled(m_brush->hasColor() && gimpBrush);
-
         emit sigBrushChanged();
     }
+
+    slotUpdateBrushModeButtonsState();
+}
+
+#include "kis_scaling_size_brush.h"
+
+void KisPredefinedBrushChooser::slotUpdateBrushModeButtonsState()
+{
+    KisColorfulBrush *colorfulBrush = dynamic_cast<KisColorfulBrush*>(m_brush.data());
+    const bool modeSwitchEnabled = colorfulBrush && colorfulBrush->hasColor();
+
+    if (modeSwitchEnabled) {
+        if (colorfulBrush->useColorAsMask() && colorfulBrush->preserveLightness()) {
+            btnLightnessMode->setChecked(true);
+        } else if (colorfulBrush->useColorAsMask()) {
+            btnMaskMode->setChecked(true);
+        } else {
+            btnColorMode->setChecked(true);
+        }
+
+        intAdjustmentMidPoint->setValue(colorfulBrush->adjustmentMidPoint());
+        intBrightnessAdjustment->setValue(qRound(colorfulBrush->brightnessAdjustment() * 100.0));
+        intContrastAdjustment->setValue(qRound(colorfulBrush->contrastAdjustment() * 100.0));
+
+        btnMaskMode->setToolTip("Luminosity of the brush tip image is used as alpha channel for the stroke");
+        btnColorMode->setToolTip("The brush tip image is painted as it is");
+        btnLightnessMode->setToolTip("Luminosity of the brush tip image is used as lightness correction for the painting color. Alpha channel of the brush tip image is used as alpha for the final stroke");
+        intAdjustmentMidPoint->setToolTip("Luminosity value of the brush that will not change the painting color. All brush pixels darker than neutral point will paint with darker color, pixels lighter than neutral point — lighter.");
+        intBrightnessAdjustment->setToolTip("Brightness correction for the brush");
+        intContrastAdjustment->setToolTip("Contrast correction for the brush");
+        grpBrushMode->setToolTip("");
+    } else {
+        intAdjustmentMidPoint->setValue(127);
+        intBrightnessAdjustment->setValue(0);
+        intContrastAdjustment->setValue(0);
+        btnMaskMode->setChecked(true);
+
+        btnMaskMode->setToolTip("");
+        btnColorMode->setToolTip("");
+        btnLightnessMode->setToolTip("");
+        intAdjustmentMidPoint->setToolTip("");
+        intBrightnessAdjustment->setToolTip("");
+        intContrastAdjustment->setToolTip("");
+        grpBrushMode->setToolTip("The selected brush tip does not have color channels. The brush will work in \"Mask\" mode.");
+    }
+
+
+    grpBrushMode->setEnabled(modeSwitchEnabled);
+    slotWriteBrushAdjustmentsState();
+}
+
+void KisPredefinedBrushChooser::slotWriteBrushAdjustmentsState()
+{
+    intAdjustmentMidPoint->setEnabled(btnLightnessMode->isEnabled() && btnLightnessMode->isChecked());
+    intBrightnessAdjustment->setEnabled(btnLightnessMode->isEnabled() && btnLightnessMode->isChecked());
+    intContrastAdjustment->setEnabled(btnLightnessMode->isEnabled() && btnLightnessMode->isChecked());
+}
+
+void KisPredefinedBrushChooser::slotWriteBrushMode()
+{
+    KisColorfulBrush *colorfulBrush = dynamic_cast<KisColorfulBrush*>(m_brush.data());
+    if (!colorfulBrush) return;
+
+    if (btnLightnessMode->isChecked()) {
+        colorfulBrush->setUseColorAsMask(true);
+        colorfulBrush->setPreserveLightness(true);
+    } else if (btnMaskMode->isChecked()) {
+        colorfulBrush->setUseColorAsMask(true);
+        colorfulBrush->setPreserveLightness(false);
+    } else {
+        colorfulBrush->setUseColorAsMask(false);
+        colorfulBrush->setPreserveLightness(false);
+    }
+
+    emit sigBrushChanged();
+}
+
+void KisPredefinedBrushChooser::slotUpdateBrushAdjustments()
+{
+    KisColorfulBrush *colorfulBrush = dynamic_cast<KisColorfulBrush*>(m_brush.data());
+    if (!colorfulBrush) return;
+
+    colorfulBrush->setAdjustmentMidPoint(quint8(intAdjustmentMidPoint->value()));
+    colorfulBrush->setBrightnessAdjustment(intBrightnessAdjustment->value() / 100.0);
+    colorfulBrush->setContrastAdjustment(intContrastAdjustment->value() / 100.0);
+
+    emit sigBrushChanged();
 }
 
 void KisPredefinedBrushChooser::slotNewPredefinedBrush(KoResourceSP resource)

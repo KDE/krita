@@ -22,7 +22,7 @@
       <whatsThis></whatsThis>
       <toolTip></toolTip>
       <iconText></iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags></activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>ctrl+alt+1</shortcut>
       <isCheckable>false</isCheckable>
@@ -35,7 +35,7 @@
       <whatsThis></whatsThis>
       <toolTip></toolTip>
       <iconText></iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags></activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>ctrl+alt+2</shortcut>
       <isCheckable>false</isCheckable>
@@ -48,7 +48,7 @@
       <whatsThis></whatsThis>
       <toolTip></toolTip>
       <iconText></iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags></activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>ctrl+alt+3</shortcut>
       <isCheckable>false</isCheckable>
@@ -61,7 +61,7 @@
       <whatsThis></whatsThis>
       <toolTip></toolTip>
       <iconText></iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags></activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>ctrl+alt+4</shortcut>
       <isCheckable>false</isCheckable>
@@ -74,7 +74,7 @@
       <whatsThis></whatsThis>
       <toolTip></toolTip>
       <iconText></iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags></activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>ctrl+alt+5</shortcut>
       <isCheckable>false</isCheckable>
@@ -87,7 +87,7 @@
       <whatsThis></whatsThis>
       <toolTip></toolTip>
       <iconText></iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags></activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>ctrl+alt+6</shortcut>
       <isCheckable>false</isCheckable>
@@ -100,7 +100,7 @@
       <whatsThis></whatsThis>
       <toolTip></toolTip>
       <iconText></iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags></activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>ctrl+alt+7</shortcut>
       <isCheckable>false</isCheckable>
@@ -113,7 +113,7 @@
       <whatsThis></whatsThis>
       <toolTip></toolTip>
       <iconText></iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags></activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>ctrl+alt+8</shortcut>
       <isCheckable>false</isCheckable>
@@ -126,7 +126,7 @@
       <whatsThis></whatsThis>
       <toolTip></toolTip>
       <iconText></iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags></activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>ctrl+alt+9</shortcut>
       <isCheckable>false</isCheckable>
@@ -139,7 +139,7 @@
       <whatsThis></whatsThis>
       <toolTip></toolTip>
       <iconText></iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags></activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>ctrl+alt+0</shortcut>
       <isCheckable>false</isCheckable>

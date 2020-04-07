@@ -426,7 +426,7 @@
         </artifact>
       </artifacts>
     </release>
-    <release date="2019-11-27" version="4.2.7.1">
+    <release date="2019-03-10" version="4.2.7.1">
       <url>https://krita.org/en/item/krita-4-2-7-released/</url>
       <artifacts>
         <artifact type="binary" platform="x86_64-linux-gnu">

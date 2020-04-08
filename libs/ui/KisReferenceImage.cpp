@@ -25,6 +25,9 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QSharedData>
+#include <QFileInfo>
+#include <QImageReader>
+
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 #include <QColorSpace>
 #endif
@@ -40,6 +43,7 @@
 #include <libs/flake/svg/parsers/SvgTransformParser.h>
 #include <libs/brush/kis_qimage_pyramid.h>
 #include <utils/KisClipboardUtil.h>
+
 
 struct KisReferenceImage::Private : public QSharedData
 {
@@ -59,14 +63,20 @@ struct KisReferenceImage::Private : public QSharedData
 
     bool loadFromFile() {
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!externalFilename.isEmpty(), false);
-        bool r = image.load(externalFilename);
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(QFileInfo(externalFilename).exists(), false);
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(QFileInfo(externalFilename).isReadable(), false);
+
+        QImageReader reader(externalFilename);
+        reader.setDecideFormatFromContent(true);
+        image = reader.read();
+
         // See https://bugs.kde.org/show_bug.cgi?id=416515 -- a jpeg image
         // loaded into a qimage cannot be saved to png unless we explicitly
         // convert the colorspace of the QImage
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
         image.convertToColorSpace(QColorSpace(QColorSpace::SRgb));
 #endif
-        return r;
+        return (!image.isNull());
     }
 
     bool loadFromClipboard() {

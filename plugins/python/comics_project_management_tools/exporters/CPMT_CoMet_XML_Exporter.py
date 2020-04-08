@@ -112,9 +112,9 @@ def write_xml(configDictionary = {}, pagesLocationList = [], location = str()):
             authorDict = configDictionary["authorList"][authorE]
             if "role" in authorDict.keys():
                 if str(authorDict["role"]).lower() in ["writer", "penciller", "editor", "assistant editor", "cover artist", "letterer", "inker", "colorist"]:
-                    if str(authorDict["role"]).lower() is "cover artist":
+                    if str(authorDict["role"]).lower() == "cover artist":
                         author = document.createElement("coverDesigner")
-                    elif str(authorDict["role"]).lower() is "assistant editor":
+                    elif str(authorDict["role"]).lower() == "assistant editor":
                         author = document.createElement("editor")
                     else:
                         author = document.createElement(str(authorDict["role"]).lower())
@@ -140,7 +140,7 @@ def write_xml(configDictionary = {}, pagesLocationList = [], location = str()):
     readingDirection = document.createElement("readingDirection")
     readingDirection.appendChild(document.createTextNode(str("ltr")))
     if "readingDirection" in configDictionary.keys():
-        if configDictionary["readingDirection"] is "rightToLeft":
+        if configDictionary["readingDirection"] == "rightToLeft":
             readingDirection.appendChild(document.createTextNode(str("rtl")))
     root.appendChild(readingDirection)
 

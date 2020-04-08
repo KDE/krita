@@ -299,7 +299,7 @@ find_needed_libs () {
                 if [[ "${lib##*/}" = "${libFile##*/}" ]]; then
                     install_name_tool -id ${lib##*/} "${libFile}"
                 else
-                    install_name_tool -change ${lib} "@rpath/${lib##*${BUILDROOT}/i/lib/}" "${libFile}"
+                    install_name_tool -change ${lib} "@rpath/${lib##*/i/lib/}" "${libFile}"
                     local libs_used=$(add_lib_to_list "${lib}" "${libs_used}")
                 fi
             fi

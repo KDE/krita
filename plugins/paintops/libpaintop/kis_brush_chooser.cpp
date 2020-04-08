@@ -189,17 +189,17 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
     intContrastAdjustment->setSuffix("%");
     intContrastAdjustment->setPrefix(i18nc("@label:slider", "Contrast: "));
 
-    connect(btnMaskMode, SIGNAL(toggled(bool)), SLOT(slotWriteBrushAdjustmentsState()));
-    connect(btnColorMode, SIGNAL(toggled(bool)), SLOT(slotWriteBrushAdjustmentsState()));
-    connect(btnLightnessMode, SIGNAL(toggled(bool)), SLOT(slotWriteBrushAdjustmentsState()));
+    connect(btnMaskMode, SIGNAL(toggled(bool)), SLOT(slotUpdateBrushAdjustmentsState()));
+    connect(btnColorMode, SIGNAL(toggled(bool)), SLOT(slotUpdateBrushAdjustmentsState()));
+    connect(btnLightnessMode, SIGNAL(toggled(bool)), SLOT(slotUpdateBrushAdjustmentsState()));
 
     connect(btnMaskMode, SIGNAL(toggled(bool)), SLOT(slotWriteBrushMode()));
     connect(btnColorMode, SIGNAL(toggled(bool)), SLOT(slotWriteBrushMode()));
     connect(btnLightnessMode, SIGNAL(toggled(bool)), SLOT(slotWriteBrushMode()));
 
-    connect(intAdjustmentMidPoint, SIGNAL(valueChanged(int)), SLOT(slotUpdateBrushAdjustments()));
-    connect(intBrightnessAdjustment, SIGNAL(valueChanged(int)), SLOT(slotUpdateBrushAdjustments()));
-    connect(intContrastAdjustment, SIGNAL(valueChanged(int)), SLOT(slotUpdateBrushAdjustments()));
+    connect(intAdjustmentMidPoint, SIGNAL(valueChanged(int)), SLOT(slotWriteBrushAdjustments()));
+    connect(intBrightnessAdjustment, SIGNAL(valueChanged(int)), SLOT(slotWriteBrushAdjustments()));
+    connect(intContrastAdjustment, SIGNAL(valueChanged(int)), SLOT(slotWriteBrushAdjustments()));
 
     updateBrushTip(m_itemChooser->currentResource());
 }
@@ -443,10 +443,10 @@ void KisPredefinedBrushChooser::slotUpdateBrushModeButtonsState()
 
 
     grpBrushMode->setEnabled(modeSwitchEnabled);
-    slotWriteBrushAdjustmentsState();
+    slotUpdateBrushAdjustmentsState();
 }
 
-void KisPredefinedBrushChooser::slotWriteBrushAdjustmentsState()
+void KisPredefinedBrushChooser::slotUpdateBrushAdjustmentsState()
 {
     intAdjustmentMidPoint->setEnabled(btnLightnessMode->isEnabled() && btnLightnessMode->isChecked());
     intBrightnessAdjustment->setEnabled(btnLightnessMode->isEnabled() && btnLightnessMode->isChecked());
@@ -472,7 +472,7 @@ void KisPredefinedBrushChooser::slotWriteBrushMode()
     emit sigBrushChanged();
 }
 
-void KisPredefinedBrushChooser::slotUpdateBrushAdjustments()
+void KisPredefinedBrushChooser::slotWriteBrushAdjustments()
 {
     KisColorfulBrush *colorfulBrush = dynamic_cast<KisColorfulBrush*>(m_brush.data());
     if (!colorfulBrush) return;

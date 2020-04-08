@@ -14,22 +14,22 @@ KoAlphaMaskApplicatorFactory<_channels_type_, _channels_nb_, _alpha_pos_>::creat
                                      _impl>();
 }
 
-template KRITAPIGMENT_EXPORT KoAlphaMaskApplicatorBase* KoAlphaMaskApplicatorFactory<quint8,  4, 3>::template create<Vc::CurrentImplementation::current()>(int);
-template KRITAPIGMENT_EXPORT KoAlphaMaskApplicatorBase* KoAlphaMaskApplicatorFactory<quint16, 4, 3>::template create<Vc::CurrentImplementation::current()>(int);
-template KRITAPIGMENT_EXPORT KoAlphaMaskApplicatorBase* KoAlphaMaskApplicatorFactory<half,    4, 3>::template create<Vc::CurrentImplementation::current()>(int);
-template KRITAPIGMENT_EXPORT KoAlphaMaskApplicatorBase* KoAlphaMaskApplicatorFactory<float,   4, 3>::template create<Vc::CurrentImplementation::current()>(int);
+template KRITAPIGMENT_EXPORT KoAlphaMaskApplicatorBase* KoAlphaMaskApplicatorFactory<quint8,  4, 3>::create<Vc::CurrentImplementation::current()>(int);
+template KRITAPIGMENT_EXPORT KoAlphaMaskApplicatorBase* KoAlphaMaskApplicatorFactory<quint16, 4, 3>::create<Vc::CurrentImplementation::current()>(int);
+template KRITAPIGMENT_EXPORT KoAlphaMaskApplicatorBase* KoAlphaMaskApplicatorFactory<half,    4, 3>::create<Vc::CurrentImplementation::current()>(int);
+template KRITAPIGMENT_EXPORT KoAlphaMaskApplicatorBase* KoAlphaMaskApplicatorFactory<float,   4, 3>::create<Vc::CurrentImplementation::current()>(int);
 
-template KRITAPIGMENT_EXPORT KoAlphaMaskApplicatorBase* KoAlphaMaskApplicatorFactory<quint8,  5, 4>::template create<Vc::CurrentImplementation::current()>(int);
-template KRITAPIGMENT_EXPORT KoAlphaMaskApplicatorBase* KoAlphaMaskApplicatorFactory<quint16, 5, 4>::template create<Vc::CurrentImplementation::current()>(int);
-template KRITAPIGMENT_EXPORT KoAlphaMaskApplicatorBase* KoAlphaMaskApplicatorFactory<half,    5, 4>::template create<Vc::CurrentImplementation::current()>(int);
-template KRITAPIGMENT_EXPORT KoAlphaMaskApplicatorBase* KoAlphaMaskApplicatorFactory<float,   5, 4>::template create<Vc::CurrentImplementation::current()>(int);
+template KRITAPIGMENT_EXPORT KoAlphaMaskApplicatorBase* KoAlphaMaskApplicatorFactory<quint8,  5, 4>::create<Vc::CurrentImplementation::current()>(int);
+template KRITAPIGMENT_EXPORT KoAlphaMaskApplicatorBase* KoAlphaMaskApplicatorFactory<quint16, 5, 4>::create<Vc::CurrentImplementation::current()>(int);
+template KRITAPIGMENT_EXPORT KoAlphaMaskApplicatorBase* KoAlphaMaskApplicatorFactory<half,    5, 4>::create<Vc::CurrentImplementation::current()>(int);
+template KRITAPIGMENT_EXPORT KoAlphaMaskApplicatorBase* KoAlphaMaskApplicatorFactory<float,   5, 4>::create<Vc::CurrentImplementation::current()>(int);
 
-template KRITAPIGMENT_EXPORT KoAlphaMaskApplicatorBase* KoAlphaMaskApplicatorFactory<quint8,  2, 1>::template create<Vc::CurrentImplementation::current()>(int);
-template KRITAPIGMENT_EXPORT KoAlphaMaskApplicatorBase* KoAlphaMaskApplicatorFactory<quint16, 2, 1>::template create<Vc::CurrentImplementation::current()>(int);
-template KRITAPIGMENT_EXPORT KoAlphaMaskApplicatorBase* KoAlphaMaskApplicatorFactory<half,    2, 1>::template create<Vc::CurrentImplementation::current()>(int);
-template KRITAPIGMENT_EXPORT KoAlphaMaskApplicatorBase* KoAlphaMaskApplicatorFactory<float,   2, 1>::template create<Vc::CurrentImplementation::current()>(int);
+template KRITAPIGMENT_EXPORT KoAlphaMaskApplicatorBase* KoAlphaMaskApplicatorFactory<quint8,  2, 1>::create<Vc::CurrentImplementation::current()>(int);
+template KRITAPIGMENT_EXPORT KoAlphaMaskApplicatorBase* KoAlphaMaskApplicatorFactory<quint16, 2, 1>::create<Vc::CurrentImplementation::current()>(int);
+template KRITAPIGMENT_EXPORT KoAlphaMaskApplicatorBase* KoAlphaMaskApplicatorFactory<half,    2, 1>::create<Vc::CurrentImplementation::current()>(int);
+template KRITAPIGMENT_EXPORT KoAlphaMaskApplicatorBase* KoAlphaMaskApplicatorFactory<float,   2, 1>::create<Vc::CurrentImplementation::current()>(int);
 
-template KRITAPIGMENT_EXPORT KoAlphaMaskApplicatorBase* KoAlphaMaskApplicatorFactory<quint8,  1, 0>::template create<Vc::CurrentImplementation::current()>(int);
-template KRITAPIGMENT_EXPORT KoAlphaMaskApplicatorBase* KoAlphaMaskApplicatorFactory<quint16, 1, 0>::template create<Vc::CurrentImplementation::current()>(int);
-template KRITAPIGMENT_EXPORT KoAlphaMaskApplicatorBase* KoAlphaMaskApplicatorFactory<half,    1, 0>::template create<Vc::CurrentImplementation::current()>(int);
-template KRITAPIGMENT_EXPORT KoAlphaMaskApplicatorBase* KoAlphaMaskApplicatorFactory<float,   1, 0>::template create<Vc::CurrentImplementation::current()>(int);
+template KRITAPIGMENT_EXPORT KoAlphaMaskApplicatorBase* KoAlphaMaskApplicatorFactory<quint8,  1, 0>::create<Vc::CurrentImplementation::current()>(int);
+template KRITAPIGMENT_EXPORT KoAlphaMaskApplicatorBase* KoAlphaMaskApplicatorFactory<quint16, 1, 0>::create<Vc::CurrentImplementation::current()>(int);
+template KRITAPIGMENT_EXPORT KoAlphaMaskApplicatorBase* KoAlphaMaskApplicatorFactory<half,    1, 0>::create<Vc::CurrentImplementation::current()>(int);
+template KRITAPIGMENT_EXPORT KoAlphaMaskApplicatorBase* KoAlphaMaskApplicatorFactory<float,   1, 0>::create<Vc::CurrentImplementation::current()>(int);

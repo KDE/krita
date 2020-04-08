@@ -70,10 +70,10 @@ private Q_SLOTS:
     void slotNewPredefinedBrush(KoResource *);
     void updateBrushTip(KoResource *, bool isChangingBrushPresets = false);
     void slotUpdateBrushModeButtonsState();
-    void slotWriteBrushAdjustmentsState();
+    void slotUpdateBrushAdjustmentsState();
 
     void slotWriteBrushMode();
-    void slotUpdateBrushAdjustments();
+    void slotWriteBrushAdjustments();
 
 
 Q_SIGNALS:

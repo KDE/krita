@@ -16,7 +16,6 @@ set ( defaulttools_SRCS
     defaulttool/KoShapeGradientHandles.cpp
 
     connectionTool/ConnectionTool.cpp
-    connectionTool/ConnectionToolFactory.cpp
     connectionTool/AddConnectionPointCommand.cpp
     connectionTool/RemoveConnectionPointCommand.cpp
     connectionTool/ChangeConnectionPointCommand.cpp

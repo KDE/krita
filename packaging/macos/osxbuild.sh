@@ -35,10 +35,19 @@ if test -z $BUILDROOT; then
 fi
 echo "BUILDROOT set to ${BUILDROOT}"
 
+# Set some global variables.
+OSXBUILD_TYPE="RelWithDebInfo"
+OSXBUILD_TESTING="OFF"
+
 # -- Parse input args
 for arg in "${@}"; do
     if [[ "${arg}" = --dirty ]]; then
         OSXBUILD_CLEAN="keep dirty"
+    fi
+
+    if [[ "${arg}" = --debug ]]; then
+        OSXBUILD_TYPE="Debug"
+        OSXBUILD_TESTING="ON"
     fi
 done
 
@@ -456,11 +465,11 @@ build_krita () {
         -DCMAKE_INSTALL_PREFIX=${KIS_INSTALL_DIR} \
         -DCMAKE_PREFIX_PATH=${KIS_INSTALL_DIR} \
         -DDEFINE_NO_DEPRECATED=1 \
-        -DBUILD_TESTING=OFF \
+        -DBUILD_TESTING=${OSXBUILD_TESTING} \
         -DHIDE_SAFE_ASSERTS=ON \
         -DKDE_INSTALL_BUNDLEDIR=${KIS_INSTALL_DIR}/bin \
         -DPYQT_SIP_DIR_OVERRIDE=${KIS_INSTALL_DIR}/share/sip/ \
-        -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+        -DCMAKE_BUILD_TYPE=${OSXBUILD_TYPE} \
         -DCMAKE_OSX_DEPLOYMENT_TARGET=10.12 \
         -DPYTHON_INCLUDE_DIR=${KIS_INSTALL_DIR}/lib/Python.framework/Headers
 
@@ -570,6 +579,17 @@ fix_boost_rpath () {
     log "Fixing boost done!"
 }
 
+get_directory_fromargs() {
+    local OSXBUILD_DIR=""
+    for arg in "${@}"; do
+        if [[ -d "${arg}" ]]; then
+            OSXBUILD_DIR="${arg}"
+            continue
+        fi
+    done
+    echo "${OSXBUILD_DIR}"
+}
+
 print_usage () {
     printf "USAGE: osxbuild.sh <buildstep> [pkg|file]\n"
     printf "BUILDSTEPS:\t\t"
@@ -614,7 +634,9 @@ elif [[ ${1} = "fixboost" ]]; then
     fix_boost_rpath
 
 elif [[ ${1} = "build" ]]; then
-    build_krita ${2}
+    OSXBUILD_DIR=$(get_directory_fromargs "${@}")
+
+    build_krita "${OSXBUILD_DIR}"
     exit
 
 elif [[ ${1} = "buildtarball" ]]; then
@@ -623,7 +645,9 @@ elif [[ ${1} = "buildtarball" ]]; then
     # This is not on by default as build success requires all
     # deps installed in the given dir beforehand.
     # KIS_INSTALL_DIR=${3}
-    build_krita_tarball ${2}
+    OSXBUILD_DIR=$(get_directory_fromargs "${@}")
+
+    build_krita_tarball "${OSXBUILD_DIR}"
 
 elif [[ ${1} = "clean" ]]; then
     # remove all build and install directories to start
@@ -634,13 +658,17 @@ elif [[ ${1} = "clean" ]]; then
     exit
 
 elif [[ ${1} = "install" ]]; then
-    install_krita ${2}
+    OSXBUILD_DIR=$(get_directory_fromargs "${@}")
+
+    install_krita "${OSXBUILD_DIR}"
     fix_boost_rpath
 
 elif [[ ${1} = "buildinstall" ]]; then
-    build_krita ${2}
-    install_krita ${2}
-    fix_boost_rpath ${2}
+    OSXBUILD_DIR=$(get_directory_fromargs "${@}")
+
+    build_krita "${OSXBUILD_DIR}"
+    install_krita "${OSXBUILD_DIR}"
+    fix_boost_rpath "${OSXBUILD_DIR}"
 
 elif [[ ${1} = "test" ]]; then
     ${KIS_INSTALL_DIR}/bin/krita.app/Contents/MacOS/krita

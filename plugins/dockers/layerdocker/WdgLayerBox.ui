@@ -51,7 +51,7 @@
        <property name="minimumSize">
         <size>
          <width>0</width>
-         <height>32</height>
+         <height>20</height>
         </size>
        </property>
        <property name="toolTip">
@@ -67,13 +67,13 @@
        <property name="minimumSize">
         <size>
          <width>32</width>
-         <height>32</height>
+         <height>20</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
          <width>32</width>
-         <height>32</height>
+         <height>20</height>
         </size>
        </property>
        <property name="text">

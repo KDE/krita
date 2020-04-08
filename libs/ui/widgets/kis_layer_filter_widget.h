@@ -47,6 +47,7 @@ public:
     static void scanUsedColorLabels(KisNodeSP node, QSet<int> &colorLabels);
     void updateColorLabels(KisNodeSP root);
 
+    bool isCurrentlyFiltering();
     QList<int> getActiveColors();
     QString getTextFilter();
 

@@ -1,9 +1,15 @@
 #ifndef KISCOLORLABELBUTTON_H
 #define KISCOLORLABELBUTTON_H
 
+#include <QButtonGroup>
 #include <QAbstractButton>
 
 #include "kritaui_export.h"
+
+
+class KRITAUI_EXPORT KisColorLabelButtonGroup : public QButtonGroup {
+
+};
 
 class KRITAUI_EXPORT KisColorLabelButton : public QAbstractButton
 {

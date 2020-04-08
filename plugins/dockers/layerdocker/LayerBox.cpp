@@ -38,6 +38,7 @@
 #include <QCheckBox>
 #include <QVBoxLayout>
 #include <QPixmap>
+#include <QBitmap>
 #include <QList>
 #include <QVector>
 #include <QLabel>
@@ -251,9 +252,26 @@ LayerBox::LayerBox()
     QMenu *layerFilterMenu = new QMenu(this);
     m_wdgLayerBox->bnLayerFilters->setMenu(layerFilterMenu);
     m_wdgLayerBox->bnLayerFilters->setPopupMode(QToolButton::InstantPopup);
-    m_wdgLayerBox->bnLayerFilters->setIcon(KisIconUtils::loadIcon("view-filter"));
+
+    const QIcon filterIcon = KisIconUtils::loadIcon("view-filter");
+    m_wdgLayerBox->bnLayerFilters->setIcon(filterIcon);
+    ENTER_FUNCTION() << ppVar(m_wdgLayerBox->bnLayerFilters->iconSize());
+    QPixmap filterEnabledPixmap = filterIcon.pixmap(64,64);
+    const QBitmap filterEnabledBitmask = filterEnabledPixmap.mask();
+    filterEnabledPixmap.fill(palette().color(QPalette::Highlight));
+    filterEnabledPixmap.setMask(filterEnabledBitmask);
+    const QIcon filterEnabledIcon = QIcon(filterEnabledPixmap);
+
     layerFilterWidget = new KisLayerFilterWidget(this);
     connect(layerFilterWidget, SIGNAL(filteringOptionsChanged()), this, SLOT(updateLayerFiltering()));
+    connect(layerFilterWidget, &KisLayerFilterWidget::filteringOptionsChanged, [this, filterIcon, filterEnabledIcon](){
+        if(layerFilterWidget->isCurrentlyFiltering()) {
+            m_wdgLayerBox->bnLayerFilters->setIcon(filterEnabledIcon);
+        } else {
+            m_wdgLayerBox->bnLayerFilters->setIcon(filterIcon);
+        }
+    });
+
     QWidgetAction *layerFilterMenuAction = new QWidgetAction(this);
     layerFilterMenuAction->setDefaultWidget(layerFilterWidget);
     layerFilterMenu->addAction(layerFilterMenuAction);

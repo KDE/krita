@@ -49,9 +49,12 @@ void KisColorLabelButton::paintEvent(QPaintEvent *event)
         painter.fillRect(fillRect, fillColor);
     } else {
         // draw an X for no color for the first item
-        int shortestEdge = std::min(fillRect.width(), fillRect.height());
-        bool horizontal = fillRect.width() > fillRect.height();
-        QRect srcRect = horizontal ? fillRect.adjusted(shortestEdge, 0, -shortestEdge, 0) : fillRect.adjusted(0, shortestEdge, 0, -shortestEdge);
+        const int shortestEdge = std::min(fillRect.width(), fillRect.height());
+        const int longestEdge = std::max(fillRect.width(), fillRect.height());
+        bool horizontalIsShortest = (shortestEdge == fillRect.width());
+        QRect srcRect = horizontalIsShortest ?
+                    fillRect.adjusted(0, (longestEdge / 2) - (shortestEdge / 2), 0, (shortestEdge / 2) - (longestEdge / 2)) :
+                    fillRect.adjusted((longestEdge / 2) - (shortestEdge / 2), 0, (shortestEdge / 2) - (longestEdge / 2), 0);
         QRect crossRect = kisGrowRect(srcRect, -1);
 
         QColor shade = styleOption.palette.text().color();

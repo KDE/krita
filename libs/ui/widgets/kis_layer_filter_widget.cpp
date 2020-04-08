@@ -22,6 +22,8 @@ KisLayerFilterWidget::KisLayerFilterWidget(QWidget *parent) : QWidget(parent)
     textFilter->setPlaceholderText("Search...");
     textFilter->setMinimumWidth(256);
     textFilter->setMinimumHeight(32);
+    textFilter->setClearButtonEnabled(true);
+
 
     connect(textFilter, SIGNAL(textChanged(QString)), this, SIGNAL(filteringOptionsChanged()));
 
@@ -85,6 +87,20 @@ void KisLayerFilterWidget::updateColorLabels(KisNodeSP root) {
     }
 
     filteringOptionsChanged();
+}
+
+bool KisLayerFilterWidget::isCurrentlyFiltering()
+{
+    const bool isFilteringText = !textFilter->text().isEmpty();
+
+    bool isFilteringColors = false;
+    for (int index = 0; index < colorLabelButtons.size(); index++) {
+        if (colorLabelButtons[index]->isVisible() && !colorLabelButtons[index]->isChecked()) {
+            isFilteringColors = true;
+        }
+    }
+
+    return isFilteringText || isFilteringColors;
 }
 
 QList<int> KisLayerFilterWidget::getActiveColors()

@@ -115,17 +115,26 @@ QImage KisColorfulBrush::brushTipImage() const
 
 void KisColorfulBrush::setAdjustmentMidPoint(quint8 value)
 {
-    m_adjustmentMidPoint = value;
+    if (m_adjustmentMidPoint != value) {
+        m_adjustmentMidPoint = value;
+        clearBrushPyramid();
+    }
 }
 
 void KisColorfulBrush::setBrightnessAdjustment(qreal value)
 {
-    m_brightnessAdjustment = value;
+    if (m_brightnessAdjustment != value) {
+        m_brightnessAdjustment = value;
+        clearBrushPyramid();
+    }
 }
 
 void KisColorfulBrush::setContrastAdjustment(qreal value)
 {
-    m_contrastAdjustment = value;
+    if (m_contrastAdjustment != value) {
+        m_contrastAdjustment = value;
+        clearBrushPyramid();
+    }
 }
 
 quint8 KisColorfulBrush::adjustmentMidPoint() const

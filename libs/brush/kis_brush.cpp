@@ -276,7 +276,10 @@ bool KisBrush::preserveLightness() const
 
 void KisBrush::setPreserveLightness(bool preserveLightness)
 {
-    d->preserveLightness = preserveLightness;
+    if (d->preserveLightness != preserveLightness) {
+        d->preserveLightness = preserveLightness;
+        clearBrushPyramid();
+    }
 }
 
 

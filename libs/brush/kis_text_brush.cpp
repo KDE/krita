@@ -78,7 +78,7 @@ public:
             QImage image = renderChar(letter, font);
             KisGbrBrush *brush = new KisGbrBrush(image, letter);
             brush->setSpacing(0.1); // support for letter spacing?
-            brush->makeMaskImage();
+            brush->makeMaskImage(false);
 
             m_brushesMap.insert(letter, brush);
             KisBrushesPipe<KisGbrBrush>::addBrush(brush);

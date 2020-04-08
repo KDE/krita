@@ -128,6 +128,7 @@ void KisCustomBrushWidget::slotSpacingChanged()
 
 void KisCustomBrushWidget::slotUpdateUseColorAsMask(bool useColorAsMask)
 {
+    preserveAlpha->setEnabled(useColorAsMask);
     if (m_brush) {
         static_cast<KisGbrBrush*>(m_brush.data())->setUseColorAsMask(useColorAsMask);
         updatePreviewImage();
@@ -177,7 +178,7 @@ void KisCustomBrushWidget::slotAddPredefined()
         }
 
         if (colorAsMask->isChecked()) {
-            resource->makeMaskImage();
+            resource->makeMaskImage(preserveAlpha->isChecked());
         }
 
         m_rServerAdapter->addResource(resource);

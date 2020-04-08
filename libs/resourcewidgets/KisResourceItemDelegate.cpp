@@ -63,6 +63,15 @@ void KisResourceItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
         }
         painter->fillRect(innerRect, QBrush(thumbnail));
     }
+    else if (resourceType == ResourceType::Workspaces || resourceType == ResourceType::WindowLayouts) {
+        // TODO: thumbnails for workspaces and window layouts?
+        painter->fillRect(innerRect, Qt::white);
+        QString name = index.data(Qt::UserRole + KisResourceModel::Name).toString();
+        QPen before = painter->pen();
+        painter->setPen(Qt::black);
+        painter->drawText(innerRect, Qt::TextWordWrap, name.split("_").join(" "));
+        painter->setPen(before);
+    }
     else {
         painter->fillRect(innerRect, Qt::white); // no checkers, they are confusing with patterns.
         if (imageSize.height() > innerRect.height() || imageSize.width() > innerRect.width()) {

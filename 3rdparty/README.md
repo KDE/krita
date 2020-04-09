@@ -8,7 +8,11 @@ If you need to build Krita's dependencies for the following reasons:
 * you develop on Linux, but some dependencies aren't available for your distribution and aren't using the scripts in packaging/linux/appimage
 
 and you know what you're doing, you can use the following guide to build
-the dependencies that Krita needs.
+the dependencies that Krita needs. 
+
+Using the scripts mentioned above is strongly preferred because that's what
+the Krita team uses to build the binaries on the binary factory
+(https://binary-factory.kde.org/).
 
 If you develop on Linux and your distribution has all dependencies available,
 
@@ -34,10 +38,12 @@ Note: on all operating systems the entire procedure is done in a terminal window
                idea to create a batch file which sets the path and start cmd.
         * MSVC is *not* supported at the moment.
 
-4. On Windows, you will also need a release of Python 3.8 (*not* 3.7 or 3.9 or any other versions): https://www.python.org. Make sure to have that version of python.exe in your path. This version of Python will be used for two things: to configure Qt and to build the Python scripting module.  Make sure that this version of Python comes first in your path. Do not set PYTHONHOME or PYTHONPATH.
+4. On Windows, you will also need a release of Python 3.9: https://www.python.org. Make sure to have that version of python.exe in your path. This version of Python will be used for two things: to configure Qt and to build the Python scripting module.  Make sure that this version of Python comes first in your path. Do not set PYTHONHOME or PYTHONPATH.
     * Make sure that your Python will have the correct architecture for the version you are trying to build. If building for 32-bit target, you need the 32-bit release of Python.
 
 5. On Windows, if you want to compile Qt with ANGLE support, you will need to install Windows 10 SDK and have the environment variable `WindowsSdkDir` set to it (typically `C:\Program Files (x86)\Windows Kits\10`)
+
+THIS IS ALSO NEEDED IF YOU USE THE build.cmd script.
 
 ## Setup your environment
 

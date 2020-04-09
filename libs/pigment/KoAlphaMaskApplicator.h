@@ -3,7 +3,7 @@
 
 #include "KoAlphaMaskApplicatorBase.h"
 #include "KoColorSpaceTraits.h"
-#include "KoStreamedMath.h"
+#include "KoVcMultiArchBuildSupport.h"
 
 
 template<typename _channels_type_,
@@ -44,6 +44,8 @@ struct KoAlphaMaskApplicator : public KoAlphaMaskApplicatorBase
 };
 
 #ifdef HAVE_VC
+
+#include "KoStreamedMath.h"
 
 template<Vc::Implementation _impl>
 struct KoAlphaMaskApplicator<

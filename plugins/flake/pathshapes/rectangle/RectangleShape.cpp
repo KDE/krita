@@ -64,7 +64,7 @@ KoShape *RectangleShape::cloneShape() const
 
 bool RectangleShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    loadOdfAttributes(element, context, OdfMandatories | OdfGeometry | OdfAdditionalAttributes | OdfCommonChildElements);
+    loadOdfAttributes(element, context, OdfMandatories | OdfGeometry | OdfAdditionalAttributes);
 
     if (element.hasAttributeNS(KoXmlNS::svg, "rx") && element.hasAttributeNS(KoXmlNS::svg, "ry")) {
         qreal rx = KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "rx", "0"));
@@ -98,7 +98,6 @@ void RectangleShape::saveOdf(KoShapeSavingContext &context) const
             context.xmlWriter().addAttribute("svg:rx", m_cornerRadiusX * (0.5 * size().width()) / 100.0);
             context.xmlWriter().addAttribute("svg:ry", m_cornerRadiusY * (0.5 * size().height()) / 100.0);
         }
-        saveOdfCommonChildElements(context);
         saveText(context);
         context.xmlWriter().endElement();
     } else {

@@ -25,10 +25,10 @@
 
 #include "KoFlake.h"
 #include "KoFlakeTypes.h"
-#include "KoConnectionPoint.h"
 
 #include <QSharedPointer>
 #include <QSet>
+#include <QMap>
 #include <QMetaType>
 #include <QSharedDataPointer>
 
@@ -169,7 +169,7 @@ public:
     virtual ~KoShape();
 
     /**
-     * @brief creates a deep copy of the shape or shape's subtree 
+     * @brief creates a deep copy of the shape or shape's subtree
      * @return a cloned shape
      */
     virtual KoShape* cloneShape() const;
@@ -219,14 +219,6 @@ public:
      * @see saveOdf
      */
     void saveOdfAttributes(KoShapeSavingContext &context, int attributes) const;
-
-    /**
-     * This method can be used while saving the shape as Odf to add common child elements
-     *
-     * The office:event-listeners and draw:glue-point are saved.
-     * @param context the context for the current save.
-     */
-    void saveOdfCommonChildElements(KoShapeSavingContext &context) const;
 
     /**
      * This method can be used to save contour data from the clipPath()
@@ -340,51 +332,6 @@ public:
      * united rect.
      */
     static QRectF absoluteOutlineRect(const QList<KoShape*> &shapes);
-
-    /**
-     * @brief Add a connector point to the shape
-     *
-     * A connector is a place on the shape that allows a graphical connection to be made
-     * using a line, for example.
-     *
-     * @param point the connection point to add
-     * @return the id of the new connection point
-     */
-    int addConnectionPoint(const KoConnectionPoint &point);
-
-    /**
-     * Sets data of connection point with specified id.
-     *
-     * The position of the connector is restricted to the bounding rectangle of the shape.
-     * When setting a default connection point, the new position is ignored, as these
-     * are fixed at their default position.
-     * The function will insert a new connection point if the specified id was not used
-     * before.
-     *
-     * @param connectionPointId the id of the connection point to set
-     * @param point the connection point data
-     * @return false if specified connection point id is invalid, else true
-     */
-    bool setConnectionPoint(int connectionPointId, const KoConnectionPoint &point);
-
-    /// Checks if a connection point with the specified id exists
-    bool hasConnectionPoint(int connectionPointId) const;
-
-    /// Returns connection point with specified connection point id
-    KoConnectionPoint connectionPoint(int connectionPointId) const;
-
-    /**
-     * Return a list of the connection points that have been added to this shape.
-     * All the points are relative to the shape position, see absolutePosition().
-     * @return a list of the connectors that have been added to this shape.
-     */
-    KoConnectionPoints connectionPoints() const;
-
-    /// Removes connection point with specified id
-    void removeConnectionPoint(int connectionPointId);
-
-    /// Removes all connection points
-    void clearConnectionPoints();
 
     /**
      * Return the side text should flow around this shape. This implements the ODF style:wrap
@@ -783,7 +730,7 @@ public:
      * Normally this would be the same as outline() if there is a fill (background) set on the
      * shape and empty if not.  However, a shape could reimplement this to return an outline
      * even if no fill is defined. A typical example of this would be the picture shape
-     * which has a picture but almost never a background. 
+     * which has a picture but almost never a background.
      *
      * @returns the outline of the shape in the form of a path.
      */
@@ -1169,7 +1116,6 @@ protected:
         OdfSize = 2,                 ///< Store size information
         OdfPosition = 8,             ///< Store position
         OdfAdditionalAttributes = 4, ///< Store additional attributes of the shape
-        OdfCommonChildElements = 16, ///< Event actions and connection points
         OdfLayer = 64,               ///< Store layer name
         OdfStyle = 128,              ///< Store the style
         OdfId = 256,                 ///< Store the unique ID
@@ -1182,7 +1128,7 @@ protected:
         /// A mask for geometry attributes
         OdfGeometry = OdfPosition | OdfSize,
         /// A mask for all the attributes
-        OdfAllAttributes = OdfTransformation | OdfGeometry | OdfAdditionalAttributes | OdfMandatories | OdfCommonChildElements
+        OdfAllAttributes = OdfTransformation | OdfGeometry | OdfAdditionalAttributes | OdfMandatories
     };
 
     /**

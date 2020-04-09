@@ -414,7 +414,6 @@ void StarShape::saveOdf(KoShapeSavingContext &context) const
 
             context.xmlWriter().addAttribute("draw:data", drawData);
 
-            saveOdfCommonChildElements(context);
             saveText(context);
 
             // write a enhanced geometry element for compatibility with other applications
@@ -435,7 +434,6 @@ void StarShape::saveOdf(KoShapeSavingContext &context) const
                 qreal percent = (m_radius[tip] - m_radius[base]) / m_radius[tip] * 100.0;
                 context.xmlWriter().addAttribute("draw:sharpness", QString("%1%").arg(percent));
             }
-            saveOdfCommonChildElements(context);
             saveText(context);
             context.xmlWriter().endElement();
         }

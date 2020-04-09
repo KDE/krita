@@ -551,7 +551,6 @@ void EnhancedPathShape::saveOdf(KoShapeSavingContext &context) const
         }
 
         context.xmlWriter().endElement(); // draw:enhanced-geometry
-        saveOdfCommonChildElements(context);
         context.xmlWriter().endElement(); // draw:custom-shape
 
     } else {
@@ -637,7 +636,7 @@ bool EnhancedPathShape::loadOdf(const KoXmlElement &element, KoShapeLoadingConte
     pos.setY(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "y", QString())));
     setPosition(pos - m_viewMatrix.map(QPointF(0, 0)) - m_viewBoxOffset);
 
-    loadOdfAttributes(element, context, OdfMandatories | OdfTransformation | OdfAdditionalAttributes | OdfCommonChildElements);
+    loadOdfAttributes(element, context, OdfMandatories | OdfTransformation | OdfAdditionalAttributes);
 
     loadText(element, context);
 

@@ -267,7 +267,7 @@ void TextShape::saveOdf(KoShapeSavingContext &context) const
     // the geometry of the shape might have been changed.
     if (ShrinkToFitShapeContainer *stf = dynamic_cast<ShrinkToFitShapeContainer *>(this->parent())) {
         stf->saveOdfAttributes(context, OdfSize | OdfPosition | OdfTransformation);
-        saveOdfAttributes(context, OdfAdditionalAttributes | OdfMandatories | OdfCommonChildElements);
+        saveOdfAttributes(context, OdfAdditionalAttributes | OdfMandatories);
     } else {
         saveOdfAttributes(context, OdfAllAttributes);
     }
@@ -294,7 +294,6 @@ void TextShape::saveOdf(KoShapeSavingContext &context) const
 
     m_textShapeData->saveOdf(context, 0, 0, saveMyText ? -1 : 0);
     writer.endElement(); // draw:text-box
-    saveOdfCommonChildElements(context);
     writer.endElement(); // draw:frame
 }
 

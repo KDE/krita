@@ -30,10 +30,7 @@ private:
 
     protected:
         bool eventFilter(QObject *obj, QEvent *event);
-
         void checkSlideOverNeighborButtons(QMouseEvent* mouseEvent, class QAbstractButton* startingButton);
-
-        bool tryToggleButton(class QAbstractButton* btn) const;
     };
 
     EventFilter *buttonEventFilter;

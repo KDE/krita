@@ -33,7 +33,7 @@ struct KisNodeFilterProxyModel::Private
 {
     Private()
         : nodeModel(0),
-          activeNodeCompressor(500, KisSignalCompressor::FIRST_INACTIVE)
+          activeNodeCompressor(1000, KisSignalCompressor::FIRST_INACTIVE)
     {}
 
     KisNodeModel *nodeModel;

@@ -19,7 +19,7 @@ KisLayerFilterWidget::KisLayerFilterWidget(QWidget *parent) : QWidget(parent)
     setLayout(layout);
 
     textFilter = new QLineEdit(this);
-    textFilter->setPlaceholderText("Search...");
+    textFilter->setPlaceholderText("Filter by name...");
     textFilter->setMinimumWidth(256);
     textFilter->setMinimumHeight(32);
     textFilter->setClearButtonEnabled(true);
@@ -35,18 +35,18 @@ KisLayerFilterWidget::KisLayerFilterWidget(QWidget *parent) : QWidget(parent)
         QHBoxLayout *subLayout = new QHBoxLayout(buttonContainer);
         buttonContainer->setLayout(subLayout);
         subLayout->setContentsMargins(0,0,0,0);
-        QButtonGroup *btnGroup = new QButtonGroup(buttonContainer);
+        KisColorLabelButtonGroup *btnGroup = new KisColorLabelButtonGroup(buttonContainer);
         btnGroup->setExclusive(false);
         foreach (const QColor &color, colorScheme.allColorLabels()) {
             KisColorLabelButton* btn = new KisColorLabelButton(color, buttonContainer);
             btnGroup->addButton(btn);
-            btn->installEventFilter(buttonEventFilter);
             btn->setVisible(false);
+            btn->installEventFilter(buttonEventFilter);
             subLayout->addWidget(btn);
             colorLabelButtons.append(btn);
         }
 
-        connect(btnGroup, SIGNAL(buttonToggled(int,bool)), this, SIGNAL(filteringOptionsChanged()) );
+        connect(btnGroup, SIGNAL(buttonToggled(int,bool)), this, SIGNAL(filteringOptionsChanged()));
     }
 
     layout->addWidget(textFilter);
@@ -85,8 +85,6 @@ void KisLayerFilterWidget::updateColorLabels(KisNodeSP root) {
     } else {
         colorLabelButtons[0]->parentWidget()->setVisible(false);
     }
-
-    filteringOptionsChanged();
 }
 
 bool KisLayerFilterWidget::isCurrentlyFiltering()
@@ -108,7 +106,7 @@ QList<int> KisLayerFilterWidget::getActiveColors()
     QList<int> activeColors;
 
     for (int index = 0; index < colorLabelButtons.size(); index++) {
-        if (colorLabelButtons[index]->isVisible() && colorLabelButtons[index]->isChecked()) {
+        if (!colorLabelButtons[index]->isVisible() || colorLabelButtons[index]->isChecked()) {
             activeColors.append(index);
         }
     }
@@ -134,6 +132,7 @@ void KisLayerFilterWidget::reset()
 KisLayerFilterWidget::EventFilter::EventFilter(QWidget *buttonContainer, QObject* parent) : QObject(parent) {
     m_buttonContainer = buttonContainer;
     lastKnownMousePosition = QPoint(0,0);
+    currentState = Idle;
 }
 
 bool KisLayerFilterWidget::EventFilter::eventFilter(QObject *obj, QEvent *event)
@@ -152,7 +151,7 @@ bool KisLayerFilterWidget::EventFilter::eventFilter(QObject *obj, QEvent *event)
         //If we never left, toggle the original button.
         if( currentState == WaitingForDragLeave ) {
             QAbstractButton* btn = static_cast<QAbstractButton*>(obj);
-            tryToggleButton(btn);
+            btn->click();
         }
 
         currentState = Idle;
@@ -170,7 +169,7 @@ bool KisLayerFilterWidget::EventFilter::eventFilter(QObject *obj, QEvent *event)
             if (!firstClicked->rect().contains(localPosition.x(), localPosition.y()))
             {
                 QAbstractButton* btn = static_cast<QAbstractButton*>(obj);
-                tryToggleButton(btn);
+                btn->click();
 
                 checkSlideOverNeighborButtons(mouseEvent, btn);
 
@@ -209,30 +208,8 @@ void KisLayerFilterWidget::EventFilter::checkSlideOverNeighborButtons(QMouseEven
             const QRect bounds = QRect(button->mapToGlobal(QPoint(0,0)), button->size());
             const QRect mouseMovement = QRect(lastKnownMousePosition, currentPosition);
             if( bounds.intersects(mouseMovement) && !bounds.contains(lastKnownMousePosition)) {
-                tryToggleButton(button);
+                button->click();
             }
         }
     }
-}
-
-bool KisLayerFilterWidget::EventFilter::tryToggleButton(QAbstractButton *btn) const
-{
-    btn->toggle();
-
-    if (btn->group()) {
-        //todo QButtonGroup Extension for counting number of checked buttons?
-        QButtonGroup* group = btn->group();
-
-        if( !group->checkedButton() ) {
-            btn->toggle();
-            return false;
-        } else {
-            btn->toggled(btn->isChecked());
-        }
-
-    } else {
-        btn->toggled(btn->isChecked());
-    }
-
-    return true;
 }

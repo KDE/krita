@@ -172,14 +172,6 @@ inline T kisGrowRect(const T &rect, U offset) {
     return rect.adjusted(-offset, -offset, offset, offset);
 }
 
-// TODO: Get this working...
-template<class T, typename U>
-inline T kisSquareInRect(const T &src_rect) {
-    U shortestEdge = std::min(src_rect.width(), src_rect.height());
-    bool horizontal = src_rect.width() < src_rect.height();
-    return horizontal ? src_rect.adjusted(shortestEdge, 0, -shortestEdge, 0) : src_rect.adjusted(0, shortestEdge, 0, -shortestEdge);
-}
-
 inline qreal kisDistance(const QPointF &pt1, const QPointF &pt2) {
     return std::sqrt(pow2(pt1.x() - pt2.x()) + pow2(pt1.y() - pt2.y()));
 }

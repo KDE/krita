@@ -208,7 +208,7 @@ LayerBox::LayerBox()
     m_wdgLayerBox->bnAdd->setPopupMode(QToolButton::MenuButtonPopup);
 
     m_nodeModel = new KisNodeModel(this);
-    m_filteringModel = new KisNodeFilterProxyModel(this); //TODO add to this?
+    m_filteringModel = new KisNodeFilterProxyModel(this);
     m_filteringModel->setNodeModel(m_nodeModel);
 
     /**
@@ -255,7 +255,6 @@ LayerBox::LayerBox()
 
     const QIcon filterIcon = KisIconUtils::loadIcon("view-filter");
     m_wdgLayerBox->bnLayerFilters->setIcon(filterIcon);
-    ENTER_FUNCTION() << ppVar(m_wdgLayerBox->bnLayerFilters->iconSize());
     QPixmap filterEnabledPixmap = filterIcon.pixmap(64,64);
     const QBitmap filterEnabledBitmask = filterEnabledPixmap.mask();
     filterEnabledPixmap.fill(palette().color(QPalette::Highlight));

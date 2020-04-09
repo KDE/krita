@@ -14,7 +14,6 @@ struct KisColorLabelButton::Private {
 KisColorLabelButton::KisColorLabelButton(QColor color, QWidget *parent) : QAbstractButton(parent), m_d(new Private())
 {
     setCheckable(true);
-    setAcceptDrops(true);
     setChecked(true);
     m_d->color = color;
 }
@@ -43,7 +42,7 @@ void KisColorLabelButton::paintEvent(QPaintEvent *event)
         QColor fillColor = m_d->color;
 
         if (!isChecked()) {
-            fillColor.setAlpha(64);
+            fillColor.setAlpha(32);
         }
 
         painter.fillRect(fillRect, fillColor);
@@ -72,4 +71,34 @@ void KisColorLabelButton::paintEvent(QPaintEvent *event)
 QSize KisColorLabelButton::sizeHint() const
 {
     return QSize(16,32);
+}
+
+void KisColorLabelButton::nextCheckState()
+{
+    KisColorLabelButtonGroup* colorLabelButtonGroup = dynamic_cast<KisColorLabelButtonGroup*>(group());
+    if (colorLabelButtonGroup && (colorLabelButtonGroup->viableButtonsChecked() > 1 || !isChecked())) {
+        setChecked(!isChecked());
+    } else {
+        setChecked(isChecked());
+    }
+}
+
+KisColorLabelButtonGroup::KisColorLabelButtonGroup(QObject *parent)
+    : QButtonGroup(parent)
+{
+    connect(this, SIGNAL(buttonToggled(QAbstractButton*,bool)), this, SLOT(slotRegisterButtonState(QAbstractButton*,bool)));
+}
+
+KisColorLabelButtonGroup::~KisColorLabelButtonGroup() {
+
+}
+
+int KisColorLabelButtonGroup::viableButtonsChecked() {
+    int count = 0;
+
+    Q_FOREACH( QAbstractButton* btn, buttons()) {
+        count += (btn->isVisible() && btn->isChecked()) ? 1 : 0;
+    }
+
+    return count;
 }

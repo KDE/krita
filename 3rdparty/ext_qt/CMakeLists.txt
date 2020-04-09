@@ -156,7 +156,8 @@ else( APPLE )
           OUTPUT_STRIP_TRAILING_WHITESPACE
           ERROR_FILE /dev/null
         )
-        string(REGEX MATCH "Xcode ([0-9]+([.][0-9]+)*)" version_match ${xcodebuild_version})
+        # string(REGEX MATCH "Xcode ([0-9]+([.][0-9]+)*)" version_match ${xcodebuild_version})
+        string(REGEX MATCH "Xcode ([0-9]+([.][0-9]+)*)" version_match "${xcodebuild_version}")
         if (version_match)
           message(STATUS "${EXTPREFIX_qt}:Identified Xcode Version: ${CMAKE_MATCH_1}")
           set(XCODE_VERSION ${CMAKE_MATCH_1})

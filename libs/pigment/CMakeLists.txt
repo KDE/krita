@@ -29,6 +29,8 @@ if(HAVE_VC)
     ko_compile_for_all_implementations(__per_arch_alpha_applicator_factory_objs KoAlphaMaskApplicatorFactory.cpp)
     message("Following objects are generated from the per-arch lib")
     message("${__per_arch_factory_objs}")
+else()
+    set(__per_arch_alpha_applicator_factory_objs KoAlphaMaskApplicatorFactory.cpp)
 endif()
 
 add_subdirectory(tests)

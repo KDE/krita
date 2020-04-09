@@ -35,7 +35,8 @@ https://api.kde.org/extragear-api/graphics-apidocs/krita/html/index.html
 https://bugs.kde.org/buglist.cgi?bug_status=UNCONFIRMED&bug_status=CONFIRMED&bug_status=ASSIGNED&bug_status=REOPENED&list_id=1315444&product=krita&query_format=advanced
 
 ### Discussion Forum
-http://forum.kde.org/viewforum.php?f=136
+* https://krita-artists.org/
+* http://forum.kde.org/viewforum.php?f=136
 
 ### IRC channel
 Most of the developers hang out here. If you are interested in helping with the project this is a great place to start. Many of the developers based in Europe so they may be offline depending on when you join.
@@ -44,7 +45,7 @@ irc.freenode.net, #krita
 
 ### Project Website
 
-  http://www.krita.org
+https://www.krita.org
 
 ### License
 

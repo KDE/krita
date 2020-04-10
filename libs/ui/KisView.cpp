@@ -707,12 +707,6 @@ void KisView::closeEvent(QCloseEvent *event)
 
 }
 
-void KisView::mouseMoveEvent(QMouseEvent *event)
-{
-    setFocus();
-}
-
-
 bool KisView::queryClose()
 {
     if (!document())

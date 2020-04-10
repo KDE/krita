@@ -26,11 +26,11 @@ if(HAVE_VC)
     include_directories(SYSTEM ${Vc_INCLUDE_DIR})
     set(LINK_VC_LIB ${Vc_LIBRARIES})
     ko_compile_for_all_implementations_no_scalar(__per_arch_factory_objs compositeops/KoOptimizedCompositeOpFactoryPerArch.cpp)
-    ko_compile_for_all_implementations(__per_arch_alpha_applicator_factory_objs KoAlphaMaskApplicatorFactory.cpp)
+    ko_compile_for_all_implementations(__per_arch_alpha_applicator_factory_objs KoAlphaMaskApplicatorFactoryImpl.cpp)
     message("Following objects are generated from the per-arch lib")
     message("${__per_arch_factory_objs}")
 else()
-    set(__per_arch_alpha_applicator_factory_objs KoAlphaMaskApplicatorFactory.cpp)
+    set(__per_arch_alpha_applicator_factory_objs KoAlphaMaskApplicatorFactoryImpl.cpp)
 endif()
 
 add_subdirectory(tests)
@@ -80,6 +80,7 @@ set(kritapigment_SRCS
     compositeops/KoAlphaDarkenParamsWrapper.cpp
     ${__per_arch_factory_objs}
     ${__per_arch_alpha_applicator_factory_objs}
+    KoAlphaMaskApplicatorFactory.cpp
     colorprofiles/KoDummyColorProfile.cpp
     resources/KoAbstractGradient.cpp
     resources/KoColorSet.cpp

@@ -35,6 +35,7 @@
 #include "KoConvolutionOpImpl.h"
 #include "KoInvertColorTransformation.h"
 #include "KoAlphaMaskApplicatorFactory.h"
+#include "KoColorModelStandardIdsUtils.h"
 
 /**
  * This in an implementation of KoColorSpace which can be used as a base for colorspaces with as many
@@ -55,12 +56,7 @@ public:
 public:
     KoColorSpaceAbstract(const QString &id, const QString &name)
         : KoColorSpace(id, name, new KoMixColorsOpImpl< _CSTrait>(), new KoConvolutionOpImpl< _CSTrait>()),
-          m_alphaMaskApplicator(
-              createOptimizedClass<
-                  KoAlphaMaskApplicatorFactory<
-                      typename _CSTrait::channels_type,
-                      _CSTrait::channels_nb,
-                      _CSTrait::alpha_pos>>(0))
+          m_alphaMaskApplicator(KoAlphaMaskApplicatorFactory::create(colorDepthIdForChannelType<typename _CSTrait::channels_type>(), _CSTrait::channels_nb, _CSTrait::alpha_pos))
     {
     }
 

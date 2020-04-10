@@ -276,6 +276,7 @@ protected:
     void dropEvent(QDropEvent *event) override;
     void dragMoveEvent(QDragMoveEvent *event) override;
     void closeEvent(QCloseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
 
     /**
      * Generate a name for this view.

@@ -15,20 +15,24 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef KOALPHAMASKAPPLICATORFACTORYIMPL_H
+#define KOALPHAMASKAPPLICATORFACTORYIMPL_H
 
-
-#ifndef KOALPHAMASKAPPLICATORFACTORY_H
-#define KOALPHAMASKAPPLICATORFACTORY_H
-
-#include "kritapigment_export.h"
-
-#include <KoID.h>
 #include <KoAlphaMaskApplicatorBase.h>
+#include <KoVcMultiArchBuildSupport.h>
 
-class KRITAPIGMENT_EXPORT KoAlphaMaskApplicatorFactory
+template<typename _channels_type_,
+         int _channels_nb_,
+         int _alpha_pos_>
+class KRITAPIGMENT_EXPORT KoAlphaMaskApplicatorFactoryImpl
 {
 public:
-    static KoAlphaMaskApplicatorBase* create(KoID depthId, int numChannels, int alphaPos);
+    typedef int ParamType;
+    typedef KoAlphaMaskApplicatorBase* ReturnType;
+
+    template<Vc::Implementation _impl>
+    static KoAlphaMaskApplicatorBase* create(int);
 };
 
-#endif // KOALPHAMASKAPPLICATORFACTORY_H
+
+#endif // KOALPHAMASKAPPLICATORFACTORYIMPL_H

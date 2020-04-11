@@ -334,7 +334,6 @@ extern "C" int main(int argc, char **argv)
         qputenv("LANG", locale.name().toLocal8Bit());
 #endif
 
-
         const QStringList rtlLanguages = QStringList()
                 << "ar" << "dv" << "he" << "ha" << "ku" << "fa" << "ps" << "ur" << "yi";
 
@@ -366,28 +365,30 @@ extern "C" int main(int argc, char **argv)
                 }
             }
 
-            QString envLanguage = uiLanguages.first();
-            envLanguage.replace(QChar('-'), QChar('_'));
+            if (uiLanguages.size() > 0 ) {
+                QString envLanguage = uiLanguages.first();
+                envLanguage.replace(QChar('-'), QChar('_'));
 
-            for (int i = 0; i < uiLanguages.size(); i++) {
-                QString uiLanguage = uiLanguages[i];
-                // Strip the country code
-                int idx = uiLanguage.indexOf(QChar('-'));
+                for (int i = 0; i < uiLanguages.size(); i++) {
+                    QString uiLanguage = uiLanguages[i];
+                    // Strip the country code
+                    int idx = uiLanguage.indexOf(QChar('-'));
 
-                if (idx != -1) {
-                    uiLanguage = uiLanguage.left(idx);
-                    uiLanguages.replace(i, uiLanguage);
+                    if (idx != -1) {
+                        uiLanguage = uiLanguage.left(idx);
+                        uiLanguages.replace(i, uiLanguage);
+                    }
                 }
-            }
-            dbgKrita << "Converted ui languages:" << uiLanguages;
+                dbgKrita << "Converted ui languages:" << uiLanguages;
 #ifdef Q_OS_MAC
-            // See https://bugs.kde.org/show_bug.cgi?id=396370
-            KLocalizedString::setLanguages(QStringList() << uiLanguages.first());
-            qputenv("LANG", (envLanguage + ".UTF-8").toLocal8Bit());
+                // See https://bugs.kde.org/show_bug.cgi?id=396370
+                KLocalizedString::setLanguages(QStringList() << uiLanguages.first());
+                qputenv("LANG", (envLanguage + ".UTF-8").toLocal8Bit());
 #else
-            KLocalizedString::setLanguages(QStringList() << uiLanguages);
-            qputenv("LANG", envLanguage.toLocal8Bit());
+                KLocalizedString::setLanguages(QStringList() << uiLanguages);
+                qputenv("LANG", envLanguage.toLocal8Bit());
 #endif
+            }
         }
     }
 

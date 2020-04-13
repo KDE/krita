@@ -242,10 +242,10 @@ void KisShapeLayerCanvas::slotStartAsyncRepaint()
         /// Since we are going to override the previous jobs, we should fetch
         /// all the area covered by it. Otherwise we'll get dirty leftovers of
         /// the layer on the projection
-        Q_FOREACH (const KoShapeManager::PaintJob &job, m_paintJobs) {
+        Q_FOREACH (const KoShapeManager::PaintJob &job, m_paintJobsOrder.jobs) {
             repaintRect |= m_viewConverter->documentToView().mapRect(job.docUpdateRect).toAlignedRect();
         }
-        m_paintJobs.clear();
+        m_paintJobsOrder.clear();
 
         m_dirtyRegion = QRegion();
         m_forceUpdateHiddenAreasOnly = false;
@@ -298,18 +298,22 @@ void KisShapeLayerCanvas::slotStartAsyncRepaint()
         KritaUtils::splitRectIntoPatchesTight(repaintRect,
                                               QSize(MASK_IMAGE_WIDTH, MASK_IMAGE_HEIGHT));
 
-    KoShapeManager::PaintJobsList jobs;
+    KoShapeManager::PaintJobsOrder jobsOrder;
     Q_FOREACH (const QRect &viewUpdateRect, updateRects) {
-        jobs << KoShapeManager::PaintJob(m_viewConverter->viewToDocument().mapRect(QRectF(viewUpdateRect)),
-                                         viewUpdateRect);
+        jobsOrder.jobs << KoShapeManager::PaintJob(m_viewConverter->viewToDocument().mapRect(QRectF(viewUpdateRect)),
+                                              viewUpdateRect);
     }
-    jobs.uncroppedViewUpdateRect = uncroppedRepaintRect;
+    jobsOrder.uncroppedViewUpdateRect = uncroppedRepaintRect;
 
-    m_shapeManager->preparePaintJobs(jobs, m_parentLayer);
+    m_shapeManager->preparePaintJobs(jobsOrder, m_parentLayer);
 
     {
         QMutexLocker locker(&m_dirtyRegionMutex);
-        m_paintJobs = jobs;
+
+        // check if it is still empty! It should be true, because GUI thread is
+        // the only actor that can add stuff to it.
+        KIS_SAFE_ASSERT_RECOVER_NOOP(m_paintJobsOrder.isEmpty());
+        m_paintJobsOrder = jobsOrder;
     }
 
     m_hasUpdateInCompressor = false;
@@ -337,12 +341,18 @@ void KisShapeLayerCanvas::slotImageSizeChanged()
 void KisShapeLayerCanvas::repaint()
 {
 
-    KoShapeManager::PaintJobsList paintJobs;
+    KoShapeManager::PaintJobsOrder paintJobsOrder;
 
     {
         QMutexLocker locker(&m_dirtyRegionMutex);
-        std::swap(paintJobs, m_paintJobs);
+        std::swap(paintJobsOrder, m_paintJobsOrder);
     }
+
+    /**
+     * Sometimes two update jobs might not override and the second one
+     * will arrive right after the first one
+     */
+    if (paintJobsOrder.isEmpty()) return;
 
     const qint32 MASK_IMAGE_WIDTH = 256;
     const qint32 MASK_IMAGE_HEIGHT = 256;
@@ -355,10 +365,10 @@ void KisShapeLayerCanvas::repaint()
 
     quint8 * dstData = new quint8[MASK_IMAGE_WIDTH * MASK_IMAGE_HEIGHT * m_projection->pixelSize()];
 
-    QRect repaintRect = paintJobs.uncroppedViewUpdateRect;
+    QRect repaintRect = paintJobsOrder.uncroppedViewUpdateRect;
     m_projection->clear(repaintRect);
 
-    Q_FOREACH (const KoShapeManager::PaintJob &job, paintJobs) {
+    Q_FOREACH (const KoShapeManager::PaintJob &job, paintJobsOrder.jobs) {
         if (job.isEmpty()) {
             m_projection->clear(job.viewUpdateRect);
             continue;

@@ -486,7 +486,7 @@ KoShapeManager::ShapeInterface *KoShapeManager::shapeInterface()
     return &d->shapeInterface;
 }
 
-void KoShapeManager::preparePaintJobs(PaintJobsList &jobs,
+void KoShapeManager::preparePaintJobs(PaintJobsOrder &jobsOrder,
                                       KoShape *excludeRoot)
 {
     d->updateTree();
@@ -524,7 +524,7 @@ void KoShapeManager::preparePaintJobs(PaintJobsList &jobs,
         newRootShapes << clonedShape;
     }
 
-    PaintJobsList result;
+    PaintJobsOrder result;
 
     PaintJob::SharedSafeStorage shapesStorage = std::make_shared<PaintJob::ShapesStorage>();
     Q_FOREACH (KoShape *shape, newRootShapes) {
@@ -541,7 +541,7 @@ void KoShapeManager::preparePaintJobs(PaintJobsList &jobs,
     }
 
 
-    for (auto it = std::begin(jobs); it != std::end(jobs); ++it) {
+    for (auto it = std::begin(jobsOrder.jobs); it != std::end(jobsOrder.jobs); ++it) {
         QMutexLocker l(&d->treeMutex);
         QList<KoShape*> unsortedOriginalShapes = d->tree.intersects(it->docUpdateRect);
 

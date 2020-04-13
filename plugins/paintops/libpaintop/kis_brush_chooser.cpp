@@ -415,9 +415,13 @@ void KisPredefinedBrushChooser::slotUpdateBrushModeButtonsState()
             btnColorMode->setChecked(true);
         }
 
-        intAdjustmentMidPoint->setValue(colorfulBrush->adjustmentMidPoint());
-        intBrightnessAdjustment->setValue(qRound(colorfulBrush->brightnessAdjustment() * 100.0));
-        intContrastAdjustment->setValue(qRound(colorfulBrush->contrastAdjustment() * 100.0));
+        {
+            // sliders emit update signals when modified from the code
+            KisSignalsBlocker b(intAdjustmentMidPoint, intBrightnessAdjustment, intContrastAdjustment);
+            intAdjustmentMidPoint->setValue(colorfulBrush->adjustmentMidPoint());
+            intBrightnessAdjustment->setValue(qRound(colorfulBrush->brightnessAdjustment() * 100.0));
+            intContrastAdjustment->setValue(qRound(colorfulBrush->contrastAdjustment() * 100.0));
+        }
 
         btnMaskMode->setToolTip("Luminosity of the brush tip image is used as alpha channel for the stroke");
         btnColorMode->setToolTip("The brush tip image is painted as it is");
@@ -427,9 +431,14 @@ void KisPredefinedBrushChooser::slotUpdateBrushModeButtonsState()
         intContrastAdjustment->setToolTip("Contrast correction for the brush");
         grpBrushMode->setToolTip("");
     } else {
-        intAdjustmentMidPoint->setValue(127);
-        intBrightnessAdjustment->setValue(0);
-        intContrastAdjustment->setValue(0);
+
+        {
+            // sliders emit update signals when modified from the code
+            KisSignalsBlocker b(intAdjustmentMidPoint, intBrightnessAdjustment, intContrastAdjustment);
+            intAdjustmentMidPoint->setValue(127);
+            intBrightnessAdjustment->setValue(0);
+            intContrastAdjustment->setValue(0);
+        }
         btnMaskMode->setChecked(true);
 
         btnMaskMode->setToolTip("");

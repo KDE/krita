@@ -272,6 +272,13 @@
               <item>
                <widget class="KisSliderSpinBox" name="intContrastAdjustment" native="true"/>
               </item>
+              <item>
+               <widget class="QPushButton" name="btnResetAdjustments">
+                <property name="text">
+                 <string>Reset Adjustments</string>
+                </property>
+               </widget>
+              </item>
              </layout>
             </item>
            </layout>

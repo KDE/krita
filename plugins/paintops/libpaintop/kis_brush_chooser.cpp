@@ -509,8 +509,6 @@ void KisPredefinedBrushChooser::slotWriteBrushMode()
 
 void KisPredefinedBrushChooser::slotWriteBrushAdjustments()
 {
-    ENTER_FUNCTION();
-
     KisColorfulBrush *colorfulBrush = dynamic_cast<KisColorfulBrush*>(m_brush.data());
     if (!colorfulBrush) return;
 

@@ -515,9 +515,13 @@ void KisPredefinedBrushChooser::slotWriteBrushAdjustments()
     KisColorfulBrush *colorfulBrush = dynamic_cast<KisColorfulBrush*>(m_brush.data());
     if (!colorfulBrush) return;
 
-    colorfulBrush->setAdjustmentMidPoint(quint8(intAdjustmentMidPoint->value()));
-    colorfulBrush->setBrightnessAdjustment(intBrightnessAdjustment->value() / 100.0);
-    colorfulBrush->setContrastAdjustment(intContrastAdjustment->value() / 100.0);
+    {
+        // sliders emit update signals when modified from the code
+        KisSignalsBlocker b(intAdjustmentMidPoint, intBrightnessAdjustment, intContrastAdjustment);
+        colorfulBrush->setAdjustmentMidPoint(quint8(intAdjustmentMidPoint->value()));
+        colorfulBrush->setBrightnessAdjustment(intBrightnessAdjustment->value() / 100.0);
+        colorfulBrush->setContrastAdjustment(intContrastAdjustment->value() / 100.0);
+    }
 
     emit sigBrushChanged();
 }

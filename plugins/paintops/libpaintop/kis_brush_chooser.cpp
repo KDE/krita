@@ -192,6 +192,9 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
     intContrastAdjustment->setSuffix("%");
     intContrastAdjustment->setPrefix(i18nc("@label:slider", "Contrast: "));
 
+    btnResetAdjustments->setToolTip(i18nc("@info:tooltip", "Resets all the adjustments to default values:\n Neutral Point: 127\n Brightness: 0%\n Contrast: 0%"));
+    connect(btnResetAdjustments, SIGNAL(clicked()), SLOT(slotResetAdjustments()));
+
     connect(btnMaskMode, SIGNAL(toggled(bool)), SLOT(slotUpdateBrushAdjustmentsState()));
     connect(btnColorMode, SIGNAL(toggled(bool)), SLOT(slotUpdateBrushAdjustmentsState()));
     connect(btnLightnessMode, SIGNAL(toggled(bool)), SLOT(slotUpdateBrushAdjustmentsState()));
@@ -200,9 +203,17 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
     connect(btnColorMode, SIGNAL(toggled(bool)), SLOT(slotWriteBrushMode()));
     connect(btnLightnessMode, SIGNAL(toggled(bool)), SLOT(slotWriteBrushMode()));
 
+    connect(btnMaskMode, SIGNAL(toggled(bool)), SLOT(slotUpdateResetBrushAdjustmentsButtonState()));
+    connect(btnColorMode, SIGNAL(toggled(bool)), SLOT(slotUpdateResetBrushAdjustmentsButtonState()));
+    connect(btnLightnessMode, SIGNAL(toggled(bool)), SLOT(slotUpdateResetBrushAdjustmentsButtonState()));
+
     connect(intAdjustmentMidPoint, SIGNAL(valueChanged(int)), SLOT(slotWriteBrushAdjustments()));
     connect(intBrightnessAdjustment, SIGNAL(valueChanged(int)), SLOT(slotWriteBrushAdjustments()));
     connect(intContrastAdjustment, SIGNAL(valueChanged(int)), SLOT(slotWriteBrushAdjustments()));
+
+    connect(intAdjustmentMidPoint, SIGNAL(valueChanged(int)), SLOT(slotUpdateResetBrushAdjustmentsButtonState()));
+    connect(intBrightnessAdjustment, SIGNAL(valueChanged(int)), SLOT(slotUpdateResetBrushAdjustmentsButtonState()));
+    connect(intContrastAdjustment, SIGNAL(valueChanged(int)), SLOT(slotUpdateResetBrushAdjustmentsButtonState()));
 
     updateBrushTip(m_itemChooser->currentResource());
 }
@@ -456,13 +467,28 @@ void KisPredefinedBrushChooser::slotUpdateBrushModeButtonsState()
 
     grpBrushMode->setEnabled(modeSwitchEnabled);
     slotUpdateBrushAdjustmentsState();
+    slotUpdateResetBrushAdjustmentsButtonState();
 }
 
 void KisPredefinedBrushChooser::slotUpdateBrushAdjustmentsState()
 {
-    intAdjustmentMidPoint->setEnabled(btnLightnessMode->isEnabled() && btnLightnessMode->isChecked());
-    intBrightnessAdjustment->setEnabled(btnLightnessMode->isEnabled() && btnLightnessMode->isChecked());
-    intContrastAdjustment->setEnabled(btnLightnessMode->isEnabled() && btnLightnessMode->isChecked());
+    const bool adjustmentsEnabled = btnLightnessMode->isEnabled() && btnLightnessMode->isChecked();
+
+    intAdjustmentMidPoint->setEnabled(adjustmentsEnabled);
+    intBrightnessAdjustment->setEnabled(adjustmentsEnabled);
+    intContrastAdjustment->setEnabled(adjustmentsEnabled);
+}
+
+void KisPredefinedBrushChooser::slotUpdateResetBrushAdjustmentsButtonState()
+{
+    const bool adjustmentsEnabled = btnLightnessMode->isEnabled() && btnLightnessMode->isChecked();
+
+    const bool adjustmentsDefault =
+            intAdjustmentMidPoint->value() == 127 &&
+            intBrightnessAdjustment->value() == 0 &&
+            intContrastAdjustment->value() == 0;
+
+    btnResetAdjustments->setEnabled(!adjustmentsDefault && adjustmentsEnabled);
 }
 
 void KisPredefinedBrushChooser::slotWriteBrushMode()
@@ -486,6 +512,8 @@ void KisPredefinedBrushChooser::slotWriteBrushMode()
 
 void KisPredefinedBrushChooser::slotWriteBrushAdjustments()
 {
+    ENTER_FUNCTION();
+
     KisColorfulBrush *colorfulBrush = dynamic_cast<KisColorfulBrush*>(m_brush.data());
     if (!colorfulBrush) return;
 
@@ -494,6 +522,15 @@ void KisPredefinedBrushChooser::slotWriteBrushAdjustments()
     colorfulBrush->setContrastAdjustment(intContrastAdjustment->value() / 100.0);
 
     emit sigBrushChanged();
+}
+
+void KisPredefinedBrushChooser::slotResetAdjustments()
+{
+    intAdjustmentMidPoint->setValue(127);
+    intBrightnessAdjustment->setValue(0);
+    intContrastAdjustment->setValue(0);
+
+    slotWriteBrushAdjustments();
 }
 
 void KisPredefinedBrushChooser::slotNewPredefinedBrush(KoResource *resource)

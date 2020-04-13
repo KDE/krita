@@ -60,6 +60,7 @@ public:
 private Q_SLOTS:
 
     void slotResetBrush();
+    void slotResetAdjustments();
     void slotSetItemSize(qreal);
     void slotSetItemRotation(qreal);
     void slotSpacingChanged();
@@ -70,6 +71,7 @@ private Q_SLOTS:
     void slotNewPredefinedBrush(KoResource *);
     void updateBrushTip(KoResource *, bool isChangingBrushPresets = false);
     void slotUpdateBrushModeButtonsState();
+    void slotUpdateResetBrushAdjustmentsButtonState();
     void slotUpdateBrushAdjustmentsState();
 
     void slotWriteBrushMode();

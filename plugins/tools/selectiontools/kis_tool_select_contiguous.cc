@@ -49,6 +49,9 @@
 #include "kis_selection_tool_helper.h"
 #include "kis_slider_spin_box.h"
 #include "tiles3/kis_hline_iterator.h"
+#include "commands_new/KisMergeLabeledLayersCommand.h"
+#include "kis_image.h"
+#include "kis_undo_stores.h"
 
 
 KisToolSelectContiguous::KisToolSelectContiguous(KoCanvasBase *canvas)
@@ -57,8 +60,7 @@ KisToolSelectContiguous::KisToolSelectContiguous(KoCanvasBase *canvas)
                     i18n("Contiguous Area Selection")),
     m_fuzziness(20),
     m_sizemod(0),
-    m_feather(0),
-    m_limitToCurrentLayer(false)
+    m_feather(0)
 {
     setObjectName("tool_select_contiguous");
 }
@@ -103,7 +105,22 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
     fillpainter.setSizemod(m_sizemod);
 
     KisImageSP image = currentImage();
-    KisPaintDeviceSP sourceDevice = m_limitToCurrentLayer ? dev : image->projection();
+    KisPaintDeviceSP sourceDevice;
+    if (sampleLayersMode() == SampleAllLayers) {
+        sourceDevice = image->projection();
+    } else if (sampleLayersMode() == SampleColorLabeledLayers) {
+        KisImageSP refImage = KisMergeLabeledLayersCommand::createRefImage(image, "Contiguous Selection Tool Reference Image");
+        sourceDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(
+                    image, "Contiguous Selection Tool Reference Result Paint Device");
+
+        KisMergeLabeledLayersCommand* command = new KisMergeLabeledLayersCommand(refImage, sourceDevice, image->root(), colorLabelsSelected());
+        image->barrierLock();
+        command->redo();
+        image->unlock();
+        delete command;
+    } else { // Sample Current Layer
+        sourceDevice = dev;
+    }
 
     image->barrierLock();
     KisSelectionSP selection = fillpainter.createFloodSelection(pos.x(), pos.y(), sourceDevice);
@@ -168,7 +185,6 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
     KisToolSelectBase::createOptionWidget();
     KisSelectionOptions *selectionWidget = selectionOptionWidget();
 
-
     QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(selectionWidget->layout());
     Q_ASSERT(l);
     if (l) {
@@ -211,11 +227,8 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
         connect (sizemod, SIGNAL(valueChanged(int)), this, SLOT(slotSetSizemod(int)));
         connect (feather, SIGNAL(valueChanged(int)), this, SLOT(slotSetFeather(int)));
 
-        QCheckBox* limitToCurrentLayer = new QCheckBox(i18n("Limit to current layer"), selectionWidget);
-        l->insertWidget(4, limitToCurrentLayer);
-        connect (limitToCurrentLayer, SIGNAL(stateChanged(int)), this, SLOT(slotLimitToCurrentLayer(int)));
-
-
+        selectionWidget->attachToImage(image(), dynamic_cast<KisCanvas2*>(canvas()));
+        m_widgetHelper.setConfigGroupForExactTool(toolId());
 
         // load configuration settings into tool options
         input->setValue(m_configGroup.readEntry("fuzziness", 20)); // fuzziness
@@ -225,17 +238,8 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
         feather->setValue(m_configGroup.readEntry("feather", 0));
         feather->setSuffix(i18n(" px"));
 
-        limitToCurrentLayer->setChecked(m_configGroup.readEntry("limitToCurrentLayer", false));
     }
     return selectionWidget;
-}
-
-void KisToolSelectContiguous::slotLimitToCurrentLayer(int state)
-{
-    if (state == Qt::PartiallyChecked)
-        return;
-    m_limitToCurrentLayer = (state == Qt::Checked);
-    m_configGroup.writeEntry("limitToCurrentLayer", state);
 }
 
 void KisToolSelectContiguous::resetCursorStyle()

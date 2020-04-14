@@ -257,7 +257,9 @@ void collectAvailableLabels(KisNodeSP root, QSet<int> *labels)
 void KisColorFilterCombo::updateAvailableLabels(KisNodeSP rootNode)
 {
     QSet<int> labels;
-    collectAvailableLabels(rootNode, &labels);
+    if (!rootNode.isNull()) {
+        collectAvailableLabels(rootNode, &labels);
+    }
 
     updateAvailableLabels(labels);
 }

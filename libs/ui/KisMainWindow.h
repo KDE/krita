@@ -393,6 +393,11 @@ private Q_SLOTS:
     void slotNewToolbarConfig();
 
     /**
+     * Reset User Configurations.
+     */
+    void slotResetConfigurations();
+
+    /**
      *  Shows or hides a toolbar
      */
     void slotToolbarToggled(bool toggle);

@@ -455,11 +455,6 @@ extern "C" int main(int argc, char **argv)
     tryInitDrMingw();
 #endif
 
-    // If we should clear the config, it has to be done as soon as possible after
-    // KisApplication has been created. Otherwise the config file may have been read
-    // and stored in a KConfig object we have no control over.
-    app.askClearConfig();
-
     KisApplicationArguments args(app);
 
     if (singleApplication && app.isRunning()) {

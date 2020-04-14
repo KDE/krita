@@ -148,7 +148,7 @@ enum StandardAction {
     // Settings Menu
     ShowMenubar, ShowToolbar, ShowStatusbar,
     SaveOptions, KeyBindings,
-    Preferences, ConfigureToolbars,
+    Preferences, ConfigureToolbars, ResetConfigurations,
 
     // Help Menu
     Help, HelpContents, WhatsThis, ReportBug, AboutApp, AboutKDE,

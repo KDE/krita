@@ -80,7 +80,7 @@ public:
      *
      * Typically called during startup before reading the config.
      */
-    void askClearConfig();
+    void askresetConfig();
 
     /**
      * Tell KisApplication to show this splashscreen when you call start();
@@ -110,7 +110,7 @@ private:
     /// @return the number of autosavefiles opened
     void checkAutosaveFiles();
     bool createNewDocFromTemplate(const QString &fileName, KisMainWindow *m_mainWindow);
-    void clearConfig();
+    void resetConfig();
 
 private:
     class Private;

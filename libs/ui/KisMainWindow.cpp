@@ -251,6 +251,7 @@ public:
     KisAction *mdiNextWindow {0};
     KisAction *mdiPreviousWindow {0};
     KisAction *toggleDockers {0};
+    KisAction *resetConfigurations {0};
     KisAction *toggleDockerTitleBars {0};
     KisAction *toggleDetachCanvas {0};
     KisAction *fullScreenMode {0};
@@ -2014,6 +2015,12 @@ void KisMainWindow::slotConfigureToolbars()
     applyToolBarLayout();
 }
 
+void KisMainWindow::slotResetConfigurations()
+{
+    KisApplication *kisApp = static_cast<KisApplication*>(qApp);
+    kisApp->askresetConfig();
+}
+
 void KisMainWindow::slotNewToolbarConfig()
 {
     applyMainWindowSettings(d->windowStateConfig);
@@ -2742,6 +2749,9 @@ void KisMainWindow::createActions()
     KisConfig(true).showDockers(true);
     d->toggleDockers->setChecked(true);
     connect(d->toggleDockers, SIGNAL(toggled(bool)), SLOT(toggleDockersVisibility(bool)));
+
+    d->resetConfigurations  = actionManager->createAction("reset_configurations");
+    connect(d->resetConfigurations, SIGNAL(triggered()), this, SLOT(slotResetConfigurations()));
 
     d->toggleDetachCanvas = actionManager->createAction("view_detached_canvas");
     d->toggleDetachCanvas->setChecked(false);

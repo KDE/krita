@@ -897,21 +897,41 @@ bool KisApplication::createNewDocFromTemplate(const QString &fileName, KisMainWi
     return false;
 }
 
-void KisApplication::clearConfig()
+void KisApplication::resetConfig()
 {
     KIS_ASSERT_RECOVER_RETURN(qApp->thread() == QThread::currentThread());
 
     KSharedConfigPtr config =  KSharedConfig::openConfig();
-
+    config->markAsClean();
+    
     // find user settings file
-    bool createDir = false;
-    QString kritarcPath = KoResourcePaths::locateLocal("config", "kritarc", createDir);
+    const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+    QString kritarcPath = configPath + QStringLiteral("/kritarc");
+    
+    QFile kritarcFile(kritarcPath);
+    
+    if (kritarcFile.exists()) {
+        if (kritarcFile.open(QFile::ReadWrite)) {
+            QString backupKritarcPath = kritarcPath + QStringLiteral(".backup");
+    
+            QFile backupKritarcFile(backupKritarcPath);
+    
+            if (backupKritarcFile.exists()) {
+                backupKritarcFile.remove();
+            }
 
-    QFile configFile(kritarcPath);
-    if (configFile.exists()) {
-        // clear file
-        if (configFile.open(QFile::WriteOnly)) {
-            configFile.close();
+            QMessageBox::information(0,
+                                 i18nc("@title:window", "Krita"),
+                                 i18n("Krita configurations reset!\n\n"
+                                      "Backup file was created at: %1\n\n"
+                                      "Restart Krita for changes to take effect.",
+                                      backupKritarcPath),
+                                 QMessageBox::Ok, QMessageBox::Ok);
+
+            // clear file
+            kritarcFile.rename(backupKritarcPath);
+
+            kritarcFile.close();
         }
         else {
             QMessageBox::warning(0,
@@ -927,20 +947,26 @@ void KisApplication::clearConfig()
     // this should load any default configuration files shipping with the program
     config->reparseConfiguration();
     config->sync();
+
+    // Restore to default workspace
+    KConfigGroup cfg = KSharedConfig::openConfig()->group("MainWindow");
+
+    QString currentWorkspace = cfg.readEntry<QString>("CurrentWorkspace", "Default");
+    KoResourceServer<KisWorkspaceResource> *rserver = KisResourceServerProvider::instance()->workspaceServer();
+    KisWorkspaceResource *workspace = rserver->resourceByName(currentWorkspace);
+
+    if (workspace) {
+        d->mainWindow->restoreWorkspace(workspace);
+    }
 }
 
-void KisApplication::askClearConfig()
+void KisApplication::askresetConfig()
 {
-    Qt::KeyboardModifiers mods = QApplication::queryKeyboardModifiers();
-    bool askClearConfig = (mods & Qt::ControlModifier) && (mods & Qt::ShiftModifier) && (mods & Qt::AltModifier);
-
-    if (askClearConfig) {
-        bool ok = QMessageBox::question(0,
-                                        i18nc("@title:window", "Krita"),
-                                        i18n("Do you want to clear the settings file?"),
-                                        QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes;
-        if (ok) {
-            clearConfig();
-        }
+    bool ok = QMessageBox::question(0,
+                                    i18nc("@title:window", "Krita"),
+                                    i18n("Do you want to clear the settings file?"),
+                                    QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes;
+    if (ok) {
+        resetConfig();
     }
 }

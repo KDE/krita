@@ -223,7 +223,8 @@ void KisFillActionFactory::run(const QString &fillSource, KisViewManager *view)
     }
 
     KisProcessingVisitorSP visitor =
-        new FillProcessingVisitor(QPoint(0, 0), // start position
+        new FillProcessingVisitor(0,
+                                  QPoint(0, 0), // start position
                                   selection,
                                   resources,
                                   false, // fast mode

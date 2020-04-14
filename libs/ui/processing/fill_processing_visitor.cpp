@@ -25,7 +25,8 @@
 #include "lazybrush/kis_colorize_mask.h"
 
 
-FillProcessingVisitor::FillProcessingVisitor(const QPoint &startPoint,
+FillProcessingVisitor::FillProcessingVisitor(KisPaintDeviceSP refPaintDevice,
+                               const QPoint &startPoint,
                                KisSelectionSP selection,
                                KisResourcesSnapshotSP resources,
                                bool useFastMode,
@@ -36,7 +37,8 @@ FillProcessingVisitor::FillProcessingVisitor(const QPoint &startPoint,
                                int fillThreshold,
                                bool unmerged,
                                bool useBgColor)
-    : m_startPoint(startPoint),
+    : m_refPaintDevice(refPaintDevice),
+      m_startPoint(startPoint),
       m_selection(selection),
       m_useFastMode(useFastMode),
       m_selectionOnly(selectionOnly),
@@ -126,6 +128,8 @@ void FillProcessingVisitor::fillPaintDevice(KisPaintDeviceSP device, KisUndoAdap
         fillPainter.setUseCompositioning(!m_useFastMode);
 
         KisPaintDeviceSP sourceDevice = m_unmerged ? device : m_resources->image()->projection();
+        sourceDevice = m_refPaintDevice;
+
 
         if (m_usePattern) {
             fillPainter.fillPattern(startPoint.x(), startPoint.y(), sourceDevice);

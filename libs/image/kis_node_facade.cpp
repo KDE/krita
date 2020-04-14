@@ -103,14 +103,26 @@ bool KisNodeFacade::moveNode(KisNodeSP node, KisNodeSP parent, quint32 newIndex)
 
 bool KisNodeFacade::addNode(KisNodeSP node, KisNodeSP parent)
 {
+    fprintf(stderr, "KisNodeFacade::addNode | root is = %s\n", (m_d->root.isNull() ? "(null)" : m_d->root->name().toStdString().c_str()));
+    fprintf(stderr, "KisNodeFacade::addNode | node is = %s\n", (node.isNull() ? "(null)" : node->name().toStdString().c_str()));
+    fprintf(stderr, "KisNodeFacade::addNode | parent is = %s\n", (parent.isNull() ? "(null)" : parent->name().toStdString().c_str()));
+
+
     dbgImage << "Add node " << node << " to " << parent;
     if (!node) return false;
     if (!parent && !m_d->root) return false;
 
-    if (parent)
-        return parent->add(node, parent->lastChild());
-    else
+    if (parent) {
+        fprintf(stderr, "first case, root = %s\n", (m_d->root.isNull() ? "(null)" : m_d->root->name().toStdString().c_str()));
+        bool result = parent->add(node, parent->lastChild());
+        fprintf(stderr, "first case 2\n");
+        //fprintf(stderr, "first case 2, root = %s\n", (m_d->root.isNull() ? "(null)" : m_d->root->name().toStdString().c_str()));
+        return result;
+
+    } else {
+        fprintf(stderr, "second case\n");
         return m_d->root->add(node, m_d->root->lastChild());
+    }
 }
 
 bool KisNodeFacade::addNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis)

@@ -70,7 +70,8 @@ public:
                                      manager);
 
         KisProcessingVisitorSP visitor =
-            new FillProcessingVisitor(QPoint(100,100),
+            new FillProcessingVisitor(0,
+                                      QPoint(100,100),
                                       image->globalSelection(),
                                       resources,
                                       false, // useFastMode

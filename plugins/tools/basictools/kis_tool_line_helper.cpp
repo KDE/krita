@@ -93,9 +93,8 @@ void KisToolLineHelper::repaintLine(KisImageWSP image, KisNodeSP node,
         m_d->linePoints.clear();
         m_d->linePoints.append(begin);
         m_d->linePoints.append(end);
+        adjustPointsToDDA(m_d->linePoints);
     }
-    // Always adjust line sections to avoid jagged sections.
-    adjustPointsToDDA(m_d->linePoints);
 
     QVector<KisPaintInformation>::const_iterator it = m_d->linePoints.constBegin();
     QVector<KisPaintInformation>::const_iterator end = m_d->linePoints.constEnd();

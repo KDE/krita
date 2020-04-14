@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>271</width>
-    <height>110</height>
+    <height>159</height>
    </rect>
   </property>
   <layout class="QFormLayout" name="formLayout">
@@ -185,6 +185,12 @@
      </property>
     </widget>
    </item>
+   <item row="3" column="0" colspan="2">
+    <widget class="KisColorFilterCombo" name="cmbColorLabels"/>
+   </item>
+   <item row="2" column="0" colspan="2">
+    <widget class="QComboBox" name="cmbSampleLayersMode"/>
+   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -192,6 +198,11 @@
    <class>KoGroupButton</class>
    <extends>QToolButton</extends>
    <header location="global">KoGroupButton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisColorFilterCombo</class>
+   <extends>QComboBox</extends>
+   <header>kis_color_filter_combo.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

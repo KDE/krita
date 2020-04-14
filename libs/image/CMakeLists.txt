@@ -113,6 +113,7 @@ set(kritaimage_LIB_SRCS
    commands_new/KisHoldUIUpdatesCommand.cpp
    commands_new/KisChangeChannelFlagsCommand.cpp
    commands_new/KisChangeChannelLockFlagsCommand.cpp
+   commands_new/KisMergeLabeledLayersCommand.cpp
    processing/kis_do_nothing_processing_visitor.cpp
    processing/kis_simple_processing_visitor.cpp
    processing/kis_convert_color_space_processing_visitor.cpp

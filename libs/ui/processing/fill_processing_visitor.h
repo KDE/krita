@@ -30,7 +30,9 @@
 class KRITAUI_EXPORT FillProcessingVisitor : public KisSimpleProcessingVisitor
 {
 public:
-    FillProcessingVisitor(const QPoint &startPoint,
+    FillProcessingVisitor(
+                   KisPaintDeviceSP referencePaintDevice,
+                   const QPoint &startPoint,
                    KisSelectionSP selection,
                    KisResourcesSnapshotSP resources,
                    bool useFastMode,
@@ -50,6 +52,7 @@ private:
     void fillPaintDevice(KisPaintDeviceSP device, KisUndoAdapter *undoAdapter, ProgressHelper &helper);
 
 private:
+    KisPaintDeviceSP m_refPaintDevice;
     QPoint m_startPoint;
     KisSelectionSP m_selection;
     bool m_useFastMode;

@@ -26,15 +26,19 @@
 #include <KoIcon.h>
 #include <kis_icon.h>
 #include <QPoint>
+#include <QList>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-
+#include <kis_signal_compressor.h>
+#include <kis_signal_auto_connection.h>
 
 
 class QWidget;
 class QCheckBox;
 class KisSliderSpinBox;
 class KoCanvasBase;
+class KisColorFilterCombo;
+class KisDummiesFacadeBase;
 
 class KisToolFill : public KisToolPaint
 {
@@ -53,20 +57,37 @@ public:
 
 public Q_SLOTS:
     void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void deactivate() override;
     void slotSetUseFastMode(bool);
     void slotSetThreshold(int);
     void slotSetUsePattern(bool);
-    void slotSetSampleMerged(bool);
     void slotSetFillSelection(bool);
     void slotSetSizemod(int);
     void slotSetFeather(int);
+    void slotSetSampleLayers(int index);
+    void slotSetSelectedColorLabels();
 
 protected Q_SLOTS:
     void resetCursorStyle() override;
+    void slotUpdateAvailableColorLabels();
+
 protected:
     bool wantsAutoScroll() const override { return false; }
 private:
     void updateGUI();
+    QString sampleLayerModeToUserString(QString sampleLayersModeId);
+    void setCmbSampleLayersMode(QString sampleLayersModeId);
+
+    void activateConnectionsToImage();
+    void deactivateConnectionsToImage();
+
+
+private:
+
+    QString SAMPLE_LAYERS_MODE_CURRENT = {"currentLayer"};
+    QString SAMPLE_LAYERS_MODE_ALL = {"allLayers"};
+    QString SAMPLE_LAYERS_MODE_COLOR_LABELED = {"colorLabeledLayers"};
+
 
 private:
     Qt::KeyboardModifiers keysAtStart;
@@ -74,17 +95,24 @@ private:
     int m_sizemod;
     QPoint m_startPos;
     int m_threshold;
-    bool m_unmerged;
     bool m_usePattern;
     bool m_fillOnlySelection;
+    QString m_sampleLayersMode;
+    QList<int> m_selectedColors;
+
+    bool m_widgetsInitialized {false};
 
     QCheckBox *m_useFastMode;
     KisSliderSpinBox *m_slThreshold;
     KisSliderSpinBox *m_sizemodWidget;
     KisSliderSpinBox *m_featherWidget;
     QCheckBox *m_checkUsePattern;
-    QCheckBox *m_checkSampleMerged;
     QCheckBox *m_checkFillSelection;
+    QComboBox *m_cmbSampleLayersMode;
+    KisColorFilterCombo *m_cmbSelectedLabels;
+    KisSignalCompressor m_colorLabelCompressor;
+    KisDummiesFacadeBase* m_dummiesFacade;
+    KisSignalAutoConnectionsStore m_imageConnections;
 
     KConfigGroup m_configGroup;
 };

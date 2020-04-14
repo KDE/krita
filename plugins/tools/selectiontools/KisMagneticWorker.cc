@@ -25,6 +25,7 @@
 #include <QtCore>
 #include <QPolygon>
 #include <QPainter>
+#include <QPainterPath>
 
 #include <boost/graph/astar_search.hpp>
 #include <krita_utils.h>

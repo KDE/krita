@@ -84,15 +84,7 @@ public:
         return *this;
     }
 
-    bool operator==(const KoColor &other) const {
-        if (*colorSpace() != *other.colorSpace()) {
-            return false;
-        }
-        if (m_size != other.m_size) {
-            return false;
-        }
-        return memcmp(m_data, other.m_data, m_size) == 0;
-    }
+    bool operator==(const KoColor &other) const;
 
     /// return the current colorSpace
     const KoColorSpace * colorSpace() const {

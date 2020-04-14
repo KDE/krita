@@ -211,6 +211,7 @@ void KisAlgebra2DTest::testDivisionWithFloor()
 }
 
 #include <QPainter>
+#include <QPainterPath>
 
 void KisAlgebra2DTest::testDrawEllipse()
 {

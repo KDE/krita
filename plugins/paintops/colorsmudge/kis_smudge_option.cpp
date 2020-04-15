@@ -53,6 +53,7 @@ void KisSmudgeOption::writeOptionSetting(KisPropertiesConfigurationSP setting) c
 {
     KisRateOption::writeOptionSetting(setting);
     setting->setProperty(name() + "Mode", m_mode);
+    setting->setProperty(name() + "SmearAlpha", m_smearAlpha);
 }
 
 void KisSmudgeOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
@@ -60,4 +61,15 @@ void KisSmudgeOption::readOptionSetting(const KisPropertiesConfigurationSP setti
     KisRateOption::readOptionSetting(setting);
 
     m_mode = (Mode)setting->getInt(name() + "Mode", SMEARING_MODE);
+    m_smearAlpha = setting->getBool(name() + "SmearAlpha", true);
+}
+
+bool KisSmudgeOption::getSmearAlpha() const
+{
+    return m_smearAlpha;
+}
+
+void KisSmudgeOption::setSmearAlpha(bool smearAlpha)
+{
+    m_smearAlpha = smearAlpha;
 }

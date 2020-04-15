@@ -44,7 +44,7 @@ public:
     };
 
 public:
-    KisColorizeMask();
+    KisColorizeMask(const QString name  = QString());
     ~KisColorizeMask() override;
 
     KisColorizeMask(const KisColorizeMask& rhs);

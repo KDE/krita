@@ -40,7 +40,7 @@ public:
      * Create an empty selection mask. There is filter and no layer
      * associated with this mask.
      */
-    KisSelectionMask(KisImageWSP image);
+    KisSelectionMask(KisImageWSP image, const QString &name = QString());
 
     ~KisSelectionMask() override;
     KisSelectionMask(const KisSelectionMask& rhs);

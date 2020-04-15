@@ -38,7 +38,7 @@ public:
     /**
      * Create an empty effect mask.
      */
-    KisEffectMask();
+    KisEffectMask(const QString &name);
 
     ~KisEffectMask() override;
     KisEffectMask(const KisEffectMask& rhs);

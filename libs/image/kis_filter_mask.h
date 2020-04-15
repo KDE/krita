@@ -41,7 +41,7 @@ public:
     /**
      * Create an empty filter mask.
      */
-    KisFilterMask();
+    KisFilterMask(const QString &name  = QString());
 
     ~KisFilterMask() override;
 

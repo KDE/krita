@@ -591,17 +591,18 @@ Node* Document::createNode(const QString &name, const QString &nodeType)
         node = new Node(image, new KisShapeLayer(d->document->shapeController(), image, name, OPACITY_OPAQUE_U8));
     }
     else if (nodeType.toLower()  == "transparencymask") {
-        node = new Node(image, new KisTransparencyMask());
+        node = new Node(image, new KisTransparencyMask(name));
     }
     else if (nodeType.toLower()  == "filtermask") {
-        node = new Node(image, new KisFilterMask());
+        node = new Node(image, new KisFilterMask(name));
     }
     else if (nodeType.toLower()  == "transformmask") {
-        node = new Node(image, new KisTransformMask());
+        node = new Node(image, new KisTransformMask(name));
     }
     else if (nodeType.toLower()  == "selectionmask") {
-        node = new Node(image, new KisSelectionMask(image));
+        node = new Node(image, new KisSelectionMask(image, name));
     }
+
     return node;
 }
 

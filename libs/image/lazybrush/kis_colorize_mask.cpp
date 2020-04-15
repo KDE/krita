@@ -137,8 +137,9 @@ struct KisColorizeMask::Private
     bool shouldShowColoring() const;
 };
 
-KisColorizeMask::KisColorizeMask()
-    : m_d(new Private(this))
+KisColorizeMask::KisColorizeMask(const QString name)
+    : KisEffectMask(name)
+    , m_d(new Private(this))
 {
     connect(&m_d->updateCompressor,
             SIGNAL(timeout()),

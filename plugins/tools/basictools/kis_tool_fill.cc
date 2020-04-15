@@ -155,8 +155,6 @@ void KisToolFill::endPrimaryAction(KoPointerEvent *event)
                                       "Fill Tool Reference Image"));
 
 
-
-
     KisPaintDeviceSP refPaintDevice = KisPaintDeviceSP(new KisPaintDevice(image()->colorSpace(), "Fill Tool Reference Result Paint Device"));
     KisImageWSP currentImageWSP = currentImage();
     KisNodeSP currentRoot = currentImageWSP->root();
@@ -164,27 +162,18 @@ void KisToolFill::endPrimaryAction(KoPointerEvent *event)
     KUndo2Command *cmd = new KisCommandUtils::LambdaCommand(
                 [refImage, refPaintDevice, currentRoot] () mutable {
 
-        fprintf(stderr, "refImage is %p\n", refImage.data());
-        fprintf(stderr, "current root is %p\n", currentRoot.data());
-
-        fprintf(stderr, "COMMAND IS BEING EXECUTED!!!\n");
         KUndo2Command* ptr = 0; // a dummy to ensure the compiler that the lambda has a proper type
 
-        KisNodeSP root = currentRoot;
-        KisNodeSP child = root->firstChild();
-
-        fprintf(stderr, "Now: %s\n", (refImage->root().isNull() ? "(null)" : refImage->root()->name().toStdString().c_str()));
-
-
         QList<KisNodeSP> nodesList;
+
+
+
         KisLayerUtils::recursiveApplyNodes(currentRoot, [&nodesList, refImage] (KisNodeSP node) mutable {
-            fprintf(stderr, "node\n");
             if (node->colorLabelIndex() == 2)
             {
                 KisNodeSP copy = node->clone();
 
                 if (copy.isNull()) {
-                    fprintf(stderr, "(1)\n");
                     return;
                 }
 
@@ -198,116 +187,28 @@ void KisToolFill::endPrimaryAction(KoPointerEvent *event)
                 bool success = refImage->addNode(copy, refImage->root());
 
                 if (!success) {
-                    fprintf(stderr, "(2)\n");
                     return;
                 }
-
-                fprintf(stderr, "adding to nodesList\n");
-
                 nodesList << copy;
             }
-
-
 
         });
-
-        /*
-        while(child)
-        {
-            fprintf(stderr, "child: %s, %i\n", child->name().toStdString().c_str(), child->colorLabelIndex());
-            if (child->colorLabelIndex() == 2)
-            {
-                fprintf(stderr, "child adding to the image: %s, %i\n", child->name().toStdString().c_str(), child->colorLabelIndex());
-
-                fprintf(stderr, "child->paintDevice()->exactBounds(): %i %i\n",
-                        child->paintDevice()->exactBounds().width(), child->paintDevice()->exactBounds().height());
-
-
-                KisNodeSP copy = child->clone();
-                nodesList << copy;
-
-                fprintf(stderr, "copy->paintDevice()->exactBounds(): %i %i\n",
-                        copy->paintDevice()->exactBounds().width(), copy->paintDevice()->exactBounds().height());
-
-
-
-                if (copy.isNull()) {
-                    fprintf(stderr, "COPY IS NULL! FINISHING...\n");
-                    return ptr;
-                }
-
-                if (copy->inherits("KisLayer")) {
-                    // KisLayerSP layerCopy = copy.dynamicCast<KisLayer>();
-                    // KisLayerSP layerCopy = qSharedPointerDynamicCast(copy);
-                    KisLayer* layerCopy = dynamic_cast<KisLayer*>(copy.data());
-                    layerCopy->setChannelFlags(QBitArray());
-                }
-
-                copy->setCompositeOpId(COMPOSITE_OVER);
-
-                bool success = refImage->addNode(copy, refImage->root());
-
-                if (!success) {
-                    fprintf(stderr, "NO SUCCESS! FINISHING...\n");
-                    return ptr;
-                }
-            }
-            child = child->nextSibling();
-        }
-        */
 
         nodesList = KisLayerUtils::sortAndFilterAnyMergableNodesSafe(nodesList, refImage);
         refImage->initialRefreshGraph();
 
-
-        fprintf(stderr, "reference has %i children\n", refImage->root()->childCount());
         if (refImage->root()->childCount() == 0)
         {
-            fprintf(stderr, "finishing because of no kids...\n");
             return ptr;
         }
 
-        fprintf(stderr, "root->paintDevice()->exactBounds() in refImage: %i %i\n",
-                refImage->root()->exactBounds().width(), refImage->root()->exactBounds().height());
-        fprintf(stderr, "root->original()->exactBounds() in refImage: %i %i\n",
-                refImage->root()->original()->exactBounds().width(), refImage->root()->original()->exactBounds().height());
-
-
-        KisNodeSP childIt = refImage->root()->firstChild();
-        while(!childIt.isNull()) {
-            fprintf(stderr, "childIt->paintDevice()->exactBounds() in refImage: %i %i\n",
-                    childIt->paintDevice()->exactBounds().width(), childIt->paintDevice()->exactBounds().height());
-            childIt = childIt->nextSibling();
-        }
-
-
         refImage->waitForDone();
-        fprintf(stderr, "refImage->bounds() before: %i %i\n", refImage->bounds().width(), refImage->bounds().height());
-        fprintf(stderr, "refImage->root()->exactBounds() before: %i %i\n", refImage->root()->exactBounds().width(), refImage->root()->exactBounds().height());
-        fprintf(stderr, "refImage->projection()->exactBounds() before: %i %i\n", refImage->projection()->exactBounds().width(), refImage->projection()->exactBounds().height());
-
-
-
         refImage->mergeMultipleLayers(nodesList, 0);
-        //refImage->flatten(refImage->root());
-
-
         refImage->waitForDone();
-        fprintf(stderr, "refImage->bounds() after: %i %i\n", refImage->bounds().width(), refImage->bounds().height());
-        fprintf(stderr, "refImage->root()->exactBounds() after: %i %i\n", refImage->root()->exactBounds().width(), refImage->root()->exactBounds().height());
-        fprintf(stderr, "refImage->projection()->exactBounds() after: %i %i\n", refImage->projection()->exactBounds().width(), refImage->projection()->exactBounds().height());
-
-        fprintf(stderr, "root->original()->exactBounds() in refImage: %i %i\n",
-                refImage->root()->firstChild()->exactBounds().width(), refImage->root()->firstChild()->exactBounds().height());
 
         KisPainter::copyAreaOptimized(QPoint(), refImage->projection(), refPaintDevice, refImage->bounds());
-        fprintf(stderr, "bounds of refPaintDevice after: %i %i\n", refPaintDevice->exactBounds().width(), refPaintDevice->exactBounds().height());
-        //fprintf(stderr, "bounds of refImage projection after: %i %i\n", refImage->projection()->exactBounds().width(), refImage->projection()->exactBounds().height());
-
-
 
         return ptr;
-
 
         });
 
@@ -378,6 +279,11 @@ QWidget* KisToolFill::createOptionWidget()
     QLabel *lbl_sampleMerged = new QLabel(i18n("Limit to current layer:"), widget);
     m_checkSampleMerged = new QCheckBox(QString(), widget);
 
+    QLabel *lbl_sampleLayers = new QLabel(i18n("Sample:"), widget);
+    m_cmbSampleLayers = new QComboBox(widget);
+    m_cmbSampleLayers->addItem(i18n("Current Layer"), int(SampleCurrentLayer));
+    m_cmbSampleLayers->addItem(i18n("All Layers"), int(SampleAllLayers));
+    m_cmbSampleLayers->addItem(i18n("Color Labeled Layers"), int(SampleColorLabeledLayers));
 
     QLabel *lbl_fillSelection = new QLabel(i18n("Fill entire selection:"), widget);
     m_checkFillSelection = new QCheckBox(QString(), widget);
@@ -390,6 +296,7 @@ QWidget* KisToolFill::createOptionWidget()
     connect (m_checkUsePattern   , SIGNAL(toggled(bool))    , this, SLOT(slotSetUsePattern(bool)));
     connect (m_checkSampleMerged , SIGNAL(toggled(bool))    , this, SLOT(slotSetSampleMerged(bool)));
     connect (m_checkFillSelection, SIGNAL(toggled(bool))    , this, SLOT(slotSetFillSelection(bool)));
+    connect (m_cmbSampleLayers   , SIGNAL(indexChanged(int)), this, SLOT(slotSetSampleLayers(int)));
 
     addOptionWidgetOption(m_useFastMode, lbl_fastMode);
     addOptionWidgetOption(m_slThreshold, lbl_threshold);
@@ -398,7 +305,9 @@ QWidget* KisToolFill::createOptionWidget()
 
     addOptionWidgetOption(m_checkFillSelection, lbl_fillSelection);
     addOptionWidgetOption(m_checkSampleMerged, lbl_sampleMerged);
+    addOptionWidgetOption(m_cmbSampleLayers, lbl_sampleLayers);
     addOptionWidgetOption(m_checkUsePattern, lbl_usePattern);
+
 
     updateGUI();
 
@@ -414,6 +323,7 @@ QWidget* KisToolFill::createOptionWidget()
     m_featherWidget->setValue(m_configGroup.readEntry("featherAmount", 0));
     m_checkUsePattern->setChecked(m_configGroup.readEntry("usePattern", false));
     m_checkSampleMerged->setChecked(m_configGroup.readEntry("sampleMerged", false));
+    m_cmbSampleLayers->setCurrentIndex(m_configGroup.readEntry("sampleLayers", int(SampleCurrentLayer)));
     m_checkFillSelection->setChecked(m_configGroup.readEntry("fillSelection", false));
 
     return widget;
@@ -455,6 +365,12 @@ void KisToolFill::slotSetSampleMerged(bool state)
 {
     m_unmerged = state;
     m_configGroup.writeEntry("sampleMerged", state);
+}
+
+void KisToolFill::slotSetSampleLayers(int index)
+{
+    m_sampleLayersMode = KisToolFill::SampleLayersOptions(m_cmbSampleLayers->currentData().toInt());
+    m_configGroup.writeEntry("sampleLayers", int(m_sampleLayersMode));
 }
 
 void KisToolFill::slotSetFillSelection(bool state)

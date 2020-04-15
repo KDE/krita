@@ -60,6 +60,7 @@ public Q_SLOTS:
     void slotSetFillSelection(bool);
     void slotSetSizemod(int);
     void slotSetFeather(int);
+    void slotSetSampleLayers(int index);
 
 protected Q_SLOTS:
     void resetCursorStyle() override;
@@ -67,6 +68,14 @@ protected:
     bool wantsAutoScroll() const override { return false; }
 private:
     void updateGUI();
+
+private:
+    enum SampleLayersOptions
+    {
+        SampleCurrentLayer,
+        SampleAllLayers,
+        SampleColorLabeledLayers,
+    };
 
 private:
     Qt::KeyboardModifiers keysAtStart;
@@ -77,6 +86,7 @@ private:
     bool m_unmerged;
     bool m_usePattern;
     bool m_fillOnlySelection;
+    SampleLayersOptions m_sampleLayersMode;
 
     QCheckBox *m_useFastMode;
     KisSliderSpinBox *m_slThreshold;
@@ -85,6 +95,7 @@ private:
     QCheckBox *m_checkUsePattern;
     QCheckBox *m_checkSampleMerged;
     QCheckBox *m_checkFillSelection;
+    QComboBox *m_cmbSampleLayers;
 
     KConfigGroup m_configGroup;
 };

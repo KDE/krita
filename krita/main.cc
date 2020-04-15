@@ -231,13 +231,10 @@ extern "C" int main(int argc, char **argv)
     const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
     QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
 
-    bool singleApplication = true;
     bool enableOpenGLDebug = false;
     bool openGLDebugSynchronous = false;
     bool logUsage = true;
     {
-
-        singleApplication = kritarc.value("EnableSingleApplication", true).toBool();
         if (kritarc.value("EnableHiDPI", true).toBool()) {
             QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
         }
@@ -457,7 +454,7 @@ extern "C" int main(int argc, char **argv)
 
     KisApplicationArguments args(app);
 
-    if (singleApplication && app.isRunning()) {
+    if (app.isRunning()) {
         // only pass arguments to main instance if they are not for batch processing
         // any batch processing would be done in this separate instance
         const bool batchRun = args.exportAs() || args.exportSequence();

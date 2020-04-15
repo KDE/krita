@@ -184,7 +184,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_chkHiDPIFractionalScaling->setVisible(false);
 #endif
     chkUsageLogging->setChecked(kritarc.value("LogUsage", true).toBool());
-    m_chkSingleApplication->setChecked(kritarc.value("EnableSingleApplication", true).toBool());
+
 
     //
     // Tools tab
@@ -311,8 +311,6 @@ void GeneralTab::setDefault()
     m_chkTrimKra->setChecked(cfg.trimKra(true));
     chkZip64->setChecked(cfg.useZip64(true));
     m_chkHiDPI->setChecked(false);
-    m_chkSingleApplication->setChecked(true);
-
     m_chkHiDPI->setChecked(true);
 #ifdef HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY
     m_chkHiDPIFractionalScaling->setChecked(true);
@@ -1686,7 +1684,6 @@ bool KisDlgPreferences::editPreferences()
 #ifdef HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY
         kritarc.setValue("EnableHiDPIFractionalScaling", m_general->m_chkHiDPIFractionalScaling->isChecked());
 #endif
-        kritarc.setValue("EnableSingleApplication", m_general->m_chkSingleApplication->isChecked());
         kritarc.setValue("LogUsage", m_general->chkUsageLogging->isChecked());
 
         cfg.setToolOptionsInDocker(m_general->toolOptionsInDocker());

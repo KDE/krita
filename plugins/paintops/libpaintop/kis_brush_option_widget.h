@@ -51,6 +51,7 @@ public:
     void setImage(KisImageWSP image) override;
 
     void setPrecisionEnabled(bool value);
+    void setHSLBrusTipEnabled(bool value);
 
     void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
     void readOptionSetting(const KisPropertiesConfigurationSP setting) override;

@@ -55,6 +55,7 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
 {
     setObjectName("brush option widget");
     setPrecisionEnabled(true);
+    setHSLBrushTipEnabled(true);
 
     // Brush tip options
     addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));

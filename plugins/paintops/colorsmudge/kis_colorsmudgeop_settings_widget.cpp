@@ -50,6 +50,10 @@ KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
     setObjectName("brush option widget");
     setPrecisionEnabled(true);
 
+    // ColorSmudge paintoip doesn't support colorful
+    // HSL brushes yet. Though it would be nice feature to have.
+    setHSLBrushTipEnabled(false);
+
     addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")), i18n("Opacity"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")), i18n("Size"));

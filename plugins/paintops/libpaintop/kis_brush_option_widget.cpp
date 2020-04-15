@@ -74,6 +74,11 @@ void KisBrushOptionWidget::setPrecisionEnabled(bool value)
     m_brushSelectionWidget->setPrecisionEnabled(value);
 }
 
+void KisBrushOptionWidget::setHSLBrusTipEnabled(bool value)
+{
+    m_brushSelectionWidget->setHSLBrusTipEnabled(value);
+}
+
 void KisBrushOptionWidget::writeOptionSetting(KisPropertiesConfigurationSP settings) const
 {
     m_brushSelectionWidget->writeOptionSetting(settings);

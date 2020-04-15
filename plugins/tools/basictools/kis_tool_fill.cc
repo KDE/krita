@@ -51,6 +51,7 @@
 #include <widgets/kis_slider_spin_box.h>
 #include <kis_cursor.h>
 #include "kis_resources_snapshot.h"
+#include "commands_new/KisMergeLabeledLayersCommand.h"
 
 
 #include <processing/fill_processing_visitor.h>
@@ -159,62 +160,7 @@ void KisToolFill::endPrimaryAction(KoPointerEvent *event)
     KisImageWSP currentImageWSP = currentImage();
     KisNodeSP currentRoot = currentImageWSP->root();
 
-    KUndo2Command *cmd = new KisCommandUtils::LambdaCommand(
-                [refImage, refPaintDevice, currentRoot] () mutable {
-
-        KUndo2Command* ptr = 0; // a dummy to ensure the compiler that the lambda has a proper type
-
-        QList<KisNodeSP> nodesList;
-
-
-
-        KisLayerUtils::recursiveApplyNodes(currentRoot, [&nodesList, refImage] (KisNodeSP node) mutable {
-            if (node->colorLabelIndex() == 2)
-            {
-                KisNodeSP copy = node->clone();
-
-                if (copy.isNull()) {
-                    return;
-                }
-
-                if (node->inherits("KisLayer")) {
-                    KisLayer* layerCopy = dynamic_cast<KisLayer*>(copy.data());
-                    layerCopy->setChannelFlags(QBitArray());
-                }
-
-                copy->setCompositeOpId(COMPOSITE_OVER);
-
-                bool success = refImage->addNode(copy, refImage->root());
-
-                if (!success) {
-                    return;
-                }
-                nodesList << copy;
-            }
-
-        });
-
-        nodesList = KisLayerUtils::sortAndFilterAnyMergableNodesSafe(nodesList, refImage);
-        refImage->initialRefreshGraph();
-
-        if (refImage->root()->childCount() == 0)
-        {
-            return ptr;
-        }
-
-        refImage->waitForDone();
-        refImage->mergeMultipleLayers(nodesList, 0);
-        refImage->waitForDone();
-
-        KisPainter::copyAreaOptimized(QPoint(), refImage->projection(), refPaintDevice, refImage->bounds());
-
-        return ptr;
-
-        });
-
-    applicator.applyCommand(cmd,
-                                KisStrokeJobData::SEQUENTIAL);
-
+    applicator.applyCommand(new KisMergeLabeledLayersCommand(refImage, refPaintDevice, currentRoot), KisStrokeJobData::SEQUENTIAL);
 
     KisProcessingVisitorSP visitor =
         new FillProcessingVisitor(refPaintDevice,
@@ -369,6 +315,7 @@ void KisToolFill::slotSetSampleMerged(bool state)
 
 void KisToolFill::slotSetSampleLayers(int index)
 {
+    Q_UNUSED(index);
     m_sampleLayersMode = KisToolFill::SampleLayersOptions(m_cmbSampleLayers->currentData().toInt());
     m_configGroup.writeEntry("sampleLayers", int(m_sampleLayersMode));
 }

@@ -92,7 +92,7 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
     // Smudge Painter works in default COMPOSITE_OVER mode
     m_colorRatePainter->setCompositeOp(painter->compositeOp()->id());
 
-    m_finalPainter->setCompositeOp(COMPOSITE_COPY);
+    m_finalPainter->setCompositeOp(m_smudgeRateOption.getSmearAlpha() ? COMPOSITE_COPY : COMPOSITE_OVER);
     m_finalPainter->setSelection(painter->selection());
     m_finalPainter->setChannelFlags(painter->channelFlags());
     m_finalPainter->copyMirrorInformationFrom(painter);

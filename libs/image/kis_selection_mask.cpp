@@ -61,8 +61,8 @@ public:
     void slotConfigChanged();
 };
 
-KisSelectionMask::KisSelectionMask(KisImageWSP image)
-    : KisEffectMask()
+KisSelectionMask::KisSelectionMask(KisImageWSP image, const QString &name)
+    : KisEffectMask(name)
     , m_d(new Private(this))
 {
     setName("selection");

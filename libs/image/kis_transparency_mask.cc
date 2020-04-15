@@ -31,8 +31,8 @@
 #include "kis_processing_visitor.h"
 
 
-KisTransparencyMask::KisTransparencyMask()
-        : KisEffectMask()
+KisTransparencyMask::KisTransparencyMask(const QString &name)
+        : KisEffectMask(name)
 {
 }
 

@@ -35,8 +35,9 @@
 #include "kis_transaction.h"
 #include "kis_painter.h"
 
-KisFilterMask::KisFilterMask()
-    : KisEffectMask(),
+
+KisFilterMask::KisFilterMask(const QString &name)
+    : KisEffectMask(name),
       KisNodeFilterInterface(0, false)
 {
     setCompositeOpId(COMPOSITE_COPY);

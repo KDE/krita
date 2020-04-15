@@ -1423,7 +1423,7 @@ namespace KisLayerUtils {
                     mask->selection()->pixelSelection(), SELECTION_ADD);
             }
 
-            KisSelectionMaskSP mergedMask = new KisSelectionMask(m_info->image);
+            KisSelectionMaskSP mergedMask = new KisSelectionMask(m_info->image, i18n("Selection Mask"));
             mergedMask->initSelection(parentLayer);
             mergedMask->setSelection(selection);
 

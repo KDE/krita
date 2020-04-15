@@ -39,7 +39,7 @@ class KRITAIMAGE_EXPORT KisTransparencyMask : public KisEffectMask
 
 public:
 
-    KisTransparencyMask();
+    KisTransparencyMask(const QString &name = QString());
     KisTransparencyMask(const KisTransparencyMask& rhs);
     ~KisTransparencyMask() override;
 

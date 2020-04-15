@@ -160,7 +160,14 @@ void KisToolFill::endPrimaryAction(KoPointerEvent *event)
     KisImageWSP currentImageWSP = currentImage();
     KisNodeSP currentRoot = currentImageWSP->root();
 
-    applicator.applyCommand(new KisMergeLabeledLayersCommand(refImage, refPaintDevice, currentRoot), KisStrokeJobData::SEQUENTIAL);
+    if (m_sampleLayersMode == SampleAllLayers) {
+        refPaintDevice = currentImage()->projection();
+    } else if (m_sampleLayersMode == SampleCurrentLayer) {
+        refPaintDevice = currentNode()->paintDevice();
+    } else if (m_sampleLayersMode == SampleColorLabeledLayers) {
+        applicator.applyCommand(new KisMergeLabeledLayersCommand(refImage, refPaintDevice, currentRoot), KisStrokeJobData::SEQUENTIAL);
+    }
+
 
     KisProcessingVisitorSP visitor =
         new FillProcessingVisitor(refPaintDevice,
@@ -242,7 +249,7 @@ QWidget* KisToolFill::createOptionWidget()
     connect (m_checkUsePattern   , SIGNAL(toggled(bool))    , this, SLOT(slotSetUsePattern(bool)));
     connect (m_checkSampleMerged , SIGNAL(toggled(bool))    , this, SLOT(slotSetSampleMerged(bool)));
     connect (m_checkFillSelection, SIGNAL(toggled(bool))    , this, SLOT(slotSetFillSelection(bool)));
-    connect (m_cmbSampleLayers   , SIGNAL(indexChanged(int)), this, SLOT(slotSetSampleLayers(int)));
+    connect (m_cmbSampleLayers   , SIGNAL(currentIndexChanged(int)), this, SLOT(slotSetSampleLayers(int)));
 
     addOptionWidgetOption(m_useFastMode, lbl_fastMode);
     addOptionWidgetOption(m_slThreshold, lbl_threshold);

@@ -127,8 +127,7 @@ void FillProcessingVisitor::fillPaintDevice(KisPaintDeviceSP device, KisUndoAdap
         fillPainter.setHeight(fillRect.height());
         fillPainter.setUseCompositioning(!m_useFastMode);
 
-        KisPaintDeviceSP sourceDevice = m_unmerged ? device : m_resources->image()->projection();
-        sourceDevice = m_refPaintDevice;
+        KisPaintDeviceSP sourceDevice = m_refPaintDevice;
 
 
         if (m_usePattern) {

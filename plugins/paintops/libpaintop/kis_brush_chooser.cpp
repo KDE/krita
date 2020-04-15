@@ -435,12 +435,12 @@ void KisPredefinedBrushChooser::slotUpdateBrushModeButtonsState()
             intContrastAdjustment->setValue(qRound(colorfulBrush->contrastAdjustment() * 100.0));
         }
 
-        btnMaskMode->setToolTip("Luminosity of the brush tip image is used as alpha channel for the stroke");
-        btnColorMode->setToolTip("The brush tip image is painted as it is");
-        btnLightnessMode->setToolTip("Luminosity of the brush tip image is used as lightness correction for the painting color. Alpha channel of the brush tip image is used as alpha for the final stroke");
-        intAdjustmentMidPoint->setToolTip("Luminosity value of the brush that will not change the painting color. All brush pixels darker than neutral point will paint with darker color, pixels lighter than neutral point — lighter.");
-        intBrightnessAdjustment->setToolTip("Brightness correction for the brush");
-        intContrastAdjustment->setToolTip("Contrast correction for the brush");
+        btnMaskMode->setToolTip(i18nc("@info:tooltip", "Luminosity of the brush tip image is used as alpha channel for the stroke"));
+        btnColorMode->setToolTip(i18nc("@info:tooltip", "The brush tip image is painted as it is"));
+        btnLightnessMode->setToolTip(i18nc("@info:tooltip", "Luminosity of the brush tip image is used as lightness correction for the painting color. Alpha channel of the brush tip image is used as alpha for the final stroke"));
+        intAdjustmentMidPoint->setToolTip(i18nc("@info:tooltip", "Luminosity value of the brush that will not change the painting color. All brush pixels darker than neutral point will paint with darker color, pixels lighter than neutral point — lighter."));
+        intBrightnessAdjustment->setToolTip(i18nc("@info:tooltip", "Brightness correction for the brush"));
+        intContrastAdjustment->setToolTip(i18nc("@info:tooltip", "Contrast correction for the brush"));
         grpBrushMode->setToolTip("");
     } else {
 
@@ -461,9 +461,9 @@ void KisPredefinedBrushChooser::slotUpdateBrushModeButtonsState()
         intContrastAdjustment->setToolTip("");
 
         if (m_hslBrushTipEnabled) {
-            grpBrushMode->setToolTip("The selected brush tip does not have color channels. The brush will work in \"Mask\" mode.");
+            grpBrushMode->setToolTip(i18nc("@info:tooltip", "The selected brush tip does not have color channels. The brush will work in \"Mask\" mode."));
         } else {
-            grpBrushMode->setToolTip("The selected brush engine does not support \"Color\" or \"Lightness\" modes. The brush will work in \"Mask\" mode.");
+            grpBrushMode->setToolTip(i18nc("@info:tooltip", "The selected brush engine does not support \"Color\" or \"Lightness\" modes. The brush will work in \"Mask\" mode."));
         }
     }
 

@@ -57,6 +57,9 @@ public:
     void setBrushSize(qreal xPixels, qreal yPixels);
     void setImage(KisImageWSP image);
 
+    void setHSLBrusTipEnabled(bool value);
+    bool hslBrushTipEnabled() const;
+
 private Q_SLOTS:
 
     void slotResetBrush();
@@ -88,6 +91,8 @@ private:
     KisImageWSP m_image;
     KisCustomBrushWidget* m_stampBrushWidget;
     KisClipboardBrushWidget* m_clipboardBrushWidget;
+
+    bool m_hslBrushTipEnabled = false;
 };
 
 #endif // KIS_PREDEFINED_BRUSH_CHOOSER_H_

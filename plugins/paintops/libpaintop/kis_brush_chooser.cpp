@@ -418,7 +418,8 @@ void KisPredefinedBrushChooser::updateBrushTip(KoResource * resource, bool isCha
 void KisPredefinedBrushChooser::slotUpdateBrushModeButtonsState()
 {
     KisColorfulBrush *colorfulBrush = dynamic_cast<KisColorfulBrush*>(m_brush.data());
-    const bool modeSwitchEnabled = colorfulBrush && colorfulBrush->hasColor();
+    const bool modeSwitchEnabled =
+        m_hslBrushTipEnabled && colorfulBrush && colorfulBrush->hasColor();
 
     if (modeSwitchEnabled) {
         if (colorfulBrush->useColorAsMask() && colorfulBrush->preserveLightness()) {
@@ -461,7 +462,12 @@ void KisPredefinedBrushChooser::slotUpdateBrushModeButtonsState()
         intAdjustmentMidPoint->setToolTip("");
         intBrightnessAdjustment->setToolTip("");
         intContrastAdjustment->setToolTip("");
-        grpBrushMode->setToolTip("The selected brush tip does not have color channels. The brush will work in \"Mask\" mode.");
+
+        if (m_hslBrushTipEnabled) {
+            grpBrushMode->setToolTip("The selected brush tip does not have color channels. The brush will work in \"Mask\" mode.");
+        } else {
+            grpBrushMode->setToolTip("The selected brush engine does not support \"Color\" or \"Lightness\" modes. The brush will work in \"Mask\" mode.");
+        }
     }
 
 
@@ -555,6 +561,16 @@ void KisPredefinedBrushChooser::setBrushSize(qreal xPixels, qreal yPixels)
 void KisPredefinedBrushChooser::setImage(KisImageWSP image)
 {
     m_image = image;
+}
+
+void KisPredefinedBrushChooser::setHSLBrusTipEnabled(bool value)
+{
+    m_hslBrushTipEnabled = value;
+}
+
+bool KisPredefinedBrushChooser::hslBrushTipEnabled() const
+{
+    return m_hslBrushTipEnabled;
 }
 
 void KisPredefinedBrushChooser::slotImportNewBrushResource() {

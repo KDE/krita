@@ -650,20 +650,24 @@ KisResourceLocator::ResourceStorage KisResourceLocator::getResourceStorage(int r
 
 QString KisResourceLocator::makeStorageLocationAbsolute(QString storageLocation) const
 {
+//    qDebug() << "makeStorageLocationAbsolute" << storageLocation;
+
     if (storageLocation.isEmpty()) {
         return resourceLocationBase();
     }
 
-    if (!storageLocation.startsWith('/') && (storageLocation.endsWith("bundle")
+    if (QFileInfo(storageLocation).isRelative() && (storageLocation.endsWith("bundle")
                                              || storageLocation.endsWith("asl")
                                              || storageLocation.endsWith("abr"))) {
-        if (resourceLocationBase().endsWith('/')) {
+        if (resourceLocationBase().endsWith('/') || resourceLocationBase().endsWith("\\")) {
             storageLocation = resourceLocationBase() + storageLocation;
         }
         else {
             storageLocation = resourceLocationBase() + '/' + storageLocation;
         }
     }
+
+//    qDebug()  << "\t" << storageLocation;
     return storageLocation;
 }
 
@@ -682,5 +686,6 @@ bool KisResourceLocator::synchronizeDb()
 
 QString KisResourceLocator::makeStorageLocationRelative(QString location) const
 {
+//    qDebug() << "makeStorageLocationRelative" << location << "locationbase" << resourceLocationBase();
     return location.remove(resourceLocationBase());
 }

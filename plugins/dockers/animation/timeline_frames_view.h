@@ -23,6 +23,7 @@
 #include <QScopedPointer>
 #include <QTableView>
 #include <QScroller>
+#include <QScrollBar>
 #include "kis_action_manager.h"
 #include "kritaanimationdocker_export.h"
 
@@ -37,7 +38,6 @@ enum TimelineDirection : short
     RIGHT = 1,
     AFTER = 1
 };
-
 
 class KRITAANIMATIONDOCKER_EXPORT TimelineFramesView : public QTableView
 {
@@ -127,6 +127,8 @@ private Q_SLOTS:
     void slotZoomButtonPressed(qreal staticPoint);
     void slotZoomButtonChanged(qreal value);
 
+    void slotScrollbarZoom(qreal zoom);
+
     void slotColorLabelChanged(int);
     void slotEnsureRowVisible(int row);
 
@@ -139,6 +141,9 @@ private Q_SLOTS:
 
     // DragScroll
     void slotScrollerStateChanged(QScroller::State state);
+    void slotUpdateDragInfiniteFramesCount();
+
+    void slotRealignScrollBars();
 
 private:
     void setFramesPerSecond(int fps);

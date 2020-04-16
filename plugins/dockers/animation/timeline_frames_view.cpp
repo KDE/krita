@@ -34,6 +34,8 @@
 #include <QInputDialog>
 #include <QClipboard>
 #include <QMimeData>
+#include <QLayout>
+#include <QScreen>
 #include "config-qtmultimedia.h"
 
 #include "KSharedConfig"
@@ -49,12 +51,12 @@
 #include "kis_color_label_selector_widget.h"
 #include "kis_keyframe_channel.h"
 #include "kis_slider_spin_box.h"
-#include <KisImportExportManager.h>
-#include <kis_signals_blocker.h>
-#include <kis_image_config.h>
-
-#include <KoFileDialog.h>
-#include <KisIconToolTip.h>
+#include "kis_signals_blocker.h"
+#include "kis_image_config.h"
+#include "kis_zoom_scrollbar.h"
+#include "KisImportExportManager.h"
+#include "KoFileDialog.h"
+#include "KisIconToolTip.h"
 
 typedef QPair<QRect, QModelIndex> QItemViewPaintPair;
 typedef QList<QItemViewPaintPair> QItemViewPaintPairs;
@@ -69,8 +71,12 @@ struct TimelineFramesView::Private
           dragInProgress(false),
           dragWasSuccessful(false),
           modifiersCatcher(0),
-          selectionChangedCompressor(300, KisSignalCompressor::FIRST_INACTIVE)
-    {}
+          selectionChangedCompressor(300, KisSignalCompressor::FIRST_INACTIVE),
+          geometryChangedCompressor(300, KisSignalCompressor::FIRST_INACTIVE),
+          kineticScrollInfiniteFrameUpdater()
+    {
+        kineticScrollInfiniteFrameUpdater.setTimerType(Qt::CoarseTimer);
+    }
 
     TimelineFramesView *q;
 
@@ -111,7 +117,11 @@ struct TimelineFramesView::Private
     KisCustomModifiersCatcher *modifiersCatcher;
     QPoint lastPressedPosition;
     Qt::KeyboardModifiers lastPressedModifier;
+
+    QTimer kineticScrollInfiniteFrameUpdater;
+
     KisSignalCompressor selectionChangedCompressor;
+    KisSignalCompressor geometryChangedCompressor;
 
     QStyleOptionViewItem viewOptionsV4() const;
     QItemViewPaintPairs draggablePaintPairs(const QModelIndexList &indexes, QRect *r) const;
@@ -145,6 +155,13 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     m_d->horizontalRuler = new TimelineRulerHeader(this);
     this->setHorizontalHeader(m_d->horizontalRuler);
 
+    KisZoomableScrollbar* hZoomableBar = new KisZoomableScrollbar(this);
+    setHorizontalScrollBar(hZoomableBar);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    setVerticalScrollBar(new KisZoomableScrollbar(this));
+
+    connect(hZoomableBar, SIGNAL(zoom(qreal)), this, SLOT(slotScrollbarZoom(qreal)));
+
     connect(m_d->horizontalRuler, SIGNAL(sigInsertColumnLeft()), SLOT(slotInsertKeyframeColumnLeft()));
     connect(m_d->horizontalRuler, SIGNAL(sigInsertColumnRight()), SLOT(slotInsertKeyframeColumnRight()));
 
@@ -165,6 +182,8 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     connect(m_d->horizontalRuler, SIGNAL(sigCutColumns()), SLOT(slotCutColumns()));
     connect(m_d->horizontalRuler, SIGNAL(sigPasteColumns()), SLOT(slotPasteColumns()));
 
+    connect(m_d->horizontalRuler, SIGNAL(geometriesChanged()), &m_d->geometryChangedCompressor, SLOT(start()));
+
     m_d->layersHeader = new TimelineLayersHeader(this);
 
     m_d->layersHeader->setSectionResizeMode(QHeaderView::Fixed);
@@ -172,11 +191,14 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     m_d->layersHeader->setDefaultSectionSize(24);
     m_d->layersHeader->setMinimumWidth(60);
     m_d->layersHeader->setHighlightSections(true);
-
     this->setVerticalHeader(m_d->layersHeader);
 
-    connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), SLOT(slotUpdateInfiniteFramesCount()));
-    connect(horizontalScrollBar(), SIGNAL(sliderReleased()), SLOT(slotUpdateInfiniteFramesCount()));
+    connect(m_d->layersHeader, SIGNAL(geometriesChanged()), &m_d->geometryChangedCompressor, SLOT(start()));
+
+    connect(&m_d->geometryChangedCompressor, SIGNAL(timeout()), SLOT(slotRealignScrollBars()));
+
+    connect(hZoomableBar, SIGNAL(overscroll(int)), SLOT(slotUpdateInfiniteFramesCount()));
+    connect(hZoomableBar, SIGNAL(sliderReleased()), SLOT(slotUpdateInfiniteFramesCount()));
 
     /********** Layer Menu ***********************************************************/
 
@@ -280,8 +302,20 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     {
         QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(this);
         if( scroller ) {
+            QScrollerProperties props = scroller->scrollerProperties();
+
             connect(scroller, SIGNAL(stateChanged(QScroller::State)),
                     this, SLOT(slotScrollerStateChanged(QScroller::State)));
+
+            connect(&m_d->kineticScrollInfiniteFrameUpdater, &QTimer::timeout, [this, scroller](){
+                slotUpdateInfiniteFramesCount();
+                scroller->resendPrepareEvent();
+            });
+
+            props.setScrollMetric(QScrollerProperties::VerticalOvershootPolicy, QScrollerProperties::OvershootAlwaysOff);
+            props.setScrollMetric(QScrollerProperties::HorizontalOvershootPolicy, QScrollerProperties::OvershootAlwaysOff);
+
+            scroller->setScrollerProperties(props);
         }
     }
 
@@ -432,11 +466,6 @@ void TimelineFramesView::setFramesPerSecond(int fps)
 {
     m_d->fps = fps;
     m_d->horizontalRuler->setFramePerSecond(fps);
-
-    // For some reason simple update sometimes doesn't work here, so
-    // reset the whole header
-    //
-    // m_d->horizontalRuler->reset();
 }
 
 void TimelineFramesView::slotZoomButtonPressed(qreal staticPoint)
@@ -456,9 +485,14 @@ void TimelineFramesView::slotZoomButtonChanged(qreal zoomLevel)
     if (m_d->horizontalRuler->setZoom(zoomLevel)) {
         slotUpdateInfiniteFramesCount();
 
-        const int w = m_d->horizontalRuler->defaultSectionSize();
-        horizontalScrollBar()->setValue(w * m_d->zoomStillPointIndex - m_d->zoomStillPointOriginalOffset);
+        viewport()->update();
+    }
+}
 
+void TimelineFramesView::slotScrollbarZoom(qreal zoom)
+{
+    if (m_d->horizontalRuler->setZoom(m_d->horizontalRuler->zoom() + zoom)) {
+        m_d->zoomDragButton->setZoomLevel(m_d->horizontalRuler->zoom());
         viewport()->update();
     }
 }
@@ -554,18 +588,52 @@ void TimelineFramesView::slotAudioVolumeChanged(int value)
 
 void TimelineFramesView::slotUpdateInfiniteFramesCount()
 {
-    if (horizontalScrollBar()->isSliderDown()) return;
-
     const int sectionWidth = m_d->horizontalRuler->defaultSectionSize();
     const int calculatedIndex =
             (horizontalScrollBar()->value() +
              m_d->horizontalRuler->width() - 1) / sectionWidth;
 
     m_d->model->setLastVisibleFrame(calculatedIndex);
+
 }
 
 void TimelineFramesView::slotScrollerStateChanged( QScroller::State state ) {
+
+    if (state == QScroller::Dragging || state == QScroller::Scrolling ) {
+        m_d->kineticScrollInfiniteFrameUpdater.start(16);
+    } else {
+        m_d->kineticScrollInfiniteFrameUpdater.stop();
+    }
+
     KisKineticScroller::updateCursor(this, state);
+}
+
+void TimelineFramesView::slotUpdateDragInfiniteFramesCount() {
+    if(m_d->dragInProgress ||
+      (m_d->model->isScrubbing() && horizontalScrollBar()->sliderPosition() == horizontalScrollBar()->maximum()) ) {
+        slotUpdateInfiniteFramesCount();
+    }
+}
+
+void TimelineFramesView::slotRealignScrollBars() {
+    QScrollBar* hBar = horizontalScrollBar();
+    QScrollBar* vBar = verticalScrollBar();
+
+    QSize desiredScrollArea = QSize(width() - verticalHeader()->width(), height() - horizontalHeader()->height());
+
+    // Compensate for corner gap...
+    if (hBar->isVisible() && vBar->isVisible()) {
+        desiredScrollArea -= QSize(vBar->width(), hBar->height());
+    }
+
+    hBar->parentWidget()->layout()->setAlignment(Qt::AlignRight);
+    hBar->setMaximumWidth(desiredScrollArea.width());
+    hBar->setMinimumWidth(desiredScrollArea.width());
+
+
+    vBar->parentWidget()->layout()->setAlignment(Qt::AlignBottom);
+    vBar->setMaximumHeight(desiredScrollArea.height());
+    vBar->setMinimumHeight(desiredScrollArea.height());
 }
 
 void TimelineFramesView::currentChanged(const QModelIndex &current, const QModelIndex &previous)
@@ -905,6 +973,7 @@ void TimelineFramesView::dragMoveEvent(QDragMoveEvent *event)
 
     if (event->isAccepted()) {
         QModelIndex index = indexAt(event->pos());
+
         if (!m_d->model->canDropFrameData(event->mimeData(), index)) {
             event->ignore();
         } else {
@@ -1154,6 +1223,11 @@ void TimelineFramesView::wheelEvent(QWheelEvent *e)
 {
     QModelIndex index = currentIndex();
     int column= -1;
+
+    if (verticalHeader()->rect().contains(verticalHeader()->mapFromGlobal(e->globalPos()))) {
+        QTableView::wheelEvent(e);
+        return;
+    }
 
     if (index.isValid()) {
         column= index.column() + ((e->delta() > 0) ? 1 : -1);

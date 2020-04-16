@@ -48,6 +48,8 @@ DlgImagesplit::DlgImagesplit(KisViewManager* view, const QString &suffix, QStrin
 
     connect(m_page->chkAutoSave, SIGNAL(stateChanged(int)), SLOT(lineEditEnable()));
     connect(m_page->cmbFileType, SIGNAL(activated(int)), this, SLOT(setMimeType(int)));
+    connect(m_page->chkGuidesHorizontal, SIGNAL(toggled(bool)), m_page->intHorizontalSplitLines, SLOT(setDisabled(bool)));
+    connect(m_page->chkGuidesVertical, SIGNAL(toggled(bool)), m_page->intVerticalSplitLines, SLOT(setDisabled(bool)));
 }
 
 DlgImagesplit::~DlgImagesplit()

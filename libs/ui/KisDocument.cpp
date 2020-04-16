@@ -1162,7 +1162,13 @@ void KisDocument::slotInitiateAsyncAutosaving(KisDocument *clonedDocument)
 void KisDocument::slotPerformIdleRoutines()
 {
     d->image->explicitRegenerateLevelOfDetail();
-    d->image->purgeUnusedData(true);
+
+
+    /// TODO: automatical purging is disabled for now: it modifies
+    ///       data managers without creating a transaction, which breaks
+    ///       undo.
+
+    // d->image->purgeUnusedData(true);
 }
 
 void KisDocument::slotCompleteAutoSaving(const KritaUtils::ExportFileJob &job, KisImportExportErrorCode status, const QString &errorMessage)

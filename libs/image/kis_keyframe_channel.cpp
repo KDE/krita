@@ -413,10 +413,12 @@ KisTimeRange KisKeyframeChannel::affectedFrames(int time) const
     KeyframesMap::const_iterator active = activeKeyIterator(time);
     KeyframesMap::const_iterator next;
 
+    // ie. time is before the first keyframe
+    const bool noActiveKeyframe = (active == m_d->keys.constEnd());
+
     int from;
 
-    if (active == m_d->keys.constEnd()) {
-        // No active keyframe, ie. time is before the first keyframe
+    if (noActiveKeyframe) {
         from = 0;
         next = m_d->keys.constBegin();
     } else {
@@ -424,12 +426,13 @@ KisTimeRange KisKeyframeChannel::affectedFrames(int time) const
         next = active + 1;
     }
 
-    const KisKeyframe::InterpolationMode activeMode = active->data()->interpolationMode();
-
     if (next == m_d->keys.constEnd()) {
         return KisTimeRange::infinite(from);
     } else {
-        if (activeMode == KisKeyframe::InterpolationMode::Constant) {
+        const KisKeyframe::InterpolationMode activeMode = noActiveKeyframe ? KisKeyframe::Constant :
+                                                                active->data()->interpolationMode();
+
+        if (activeMode == KisKeyframe::Constant) {
             return KisTimeRange::fromTime(from, next.key() - 1);
         } else {
             return KisTimeRange::fromTime(from, from);

@@ -45,6 +45,8 @@ public:
     bool sortHorizontal();
     int horizontalLines();
     int verticalLines();
+    bool useHorizontalGuides();
+    bool useVerticalGuides();
     int cmbIndex;
     QString suffix();
 private Q_SLOTS:

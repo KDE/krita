@@ -124,18 +124,38 @@ void Imagesplit::slotImagesplit()
 
     Q_ASSERT(listMimeFilter.size() == listFileType.size());
 
-    DlgImagesplit *dlgImagesplit = new DlgImagesplit(viewManager(), suffix, listFileType, defaultMimeIndex);
+    KisCoordinatesConverter converter;
+    QList <qreal> xGuides = viewManager()->document()->guidesConfig().verticalGuideLines();
+    QList <qreal> yGuides = viewManager()->document()->guidesConfig().horizontalGuideLines();
+    KisImageWSP image = viewManager()->image();
+
+    converter.setImage(image);
+    QTransform transform = converter.imageToDocumentTransform().inverted();
+
+    for (int i = 0; i< xGuides.size(); i++) {
+        qreal line = xGuides[i];
+        xGuides[i] = transform.map(QPointF(line, line)).x();
+    }
+    for (int i = 0; i< yGuides.size(); i++) {
+        qreal line = yGuides[i];
+        yGuides[i] = transform.map(QPointF(line, line)).y();
+    }
+
+    qreal thumbnailRatio = qreal(200)/qMax(image->width(), image->height());
+
+    DlgImagesplit *dlgImagesplit = new DlgImagesplit(viewManager()
+                                                     , suffix
+                                                     , listFileType
+                                                     , defaultMimeIndex
+                                                     , viewManager()->document()->generatePreview(QSize(200, 200)).toImage()
+                                                     , yGuides, xGuides, thumbnailRatio);
     dlgImagesplit->setObjectName("Imagesplit");
     Q_CHECK_PTR(dlgImagesplit);
-
-    KisImageWSP image = viewManager()->image();
 
     if (dlgImagesplit->exec() == QDialog::Accepted) {
 
         int numHorizontalLines = dlgImagesplit->horizontalLines();
         int numVerticalLines = dlgImagesplit->verticalLines();
-        QList <qreal> xGuides = viewManager()->document()->guidesConfig().verticalGuideLines();
-        QList <qreal> yGuides = viewManager()->document()->guidesConfig().horizontalGuideLines();
 
         int img_width = image->width() / (numVerticalLines + 1);
         int img_height = image->height() / (numHorizontalLines + 1);
@@ -191,17 +211,6 @@ void Imagesplit::slotImagesplit()
             innerLoop = numHorizontalLines + 1;
         }
 
-        KisCoordinatesConverter converter;
-        converter.setImage(image);
-        QTransform transform = converter.imageToDocumentTransform().inverted();
-        for (int i = 0; i< xGuides.size(); i++) {
-            qreal line = xGuides[i];
-            xGuides[i] = transform.map(QPointF(line, line)).x();
-        }
-        for (int i = 0; i< yGuides.size(); i++) {
-            qreal line = yGuides[i];
-            yGuides[i] = transform.map(QPointF(line, line)).y();
-        }
         xGuides.prepend(qreal(0));
         xGuides.append(image->width());
         yGuides.prepend(qreal(0));

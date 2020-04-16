@@ -229,6 +229,13 @@ public:
 
 private:
 
+    friend class KisStorageModel;
+    friend class KisResourceLocator;
+    friend class KisResourceCacheDb;
+
+    void setStorageId(int storageId);
+    int storageId();
+
     class Private;
     QScopedPointer<Private> d;
 };

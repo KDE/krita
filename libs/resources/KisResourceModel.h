@@ -112,7 +112,8 @@ public:
 /**
  * @brief The KisResourceModel class provides access to the cache database
  * for a particular resource type. Instances should be retrieved using
- * KisResourceModelProvider.
+ * KisResourceModelProvider. All resources are part of this model, active and
+ * inactive.
  */
 class KRITARESOURCES_EXPORT KisResourceModel : public QAbstractTableModel, public KisAbstractResourceModel
 {

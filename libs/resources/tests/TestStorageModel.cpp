@@ -94,10 +94,14 @@ void TestStorageModel::testRowCount()
 void TestStorageModel::testSetActive()
 {
     KisStorageModel storageModel;
+
     for (int i = 0; i < storageModel.rowCount(); ++i)  {
+
         QModelIndex idx = storageModel.index(i, 0);
 
         storageModel.setData(idx, QVariant(true), Qt::CheckStateRole);
+
+        idx = storageModel.index(i, 0);
         QVERIFY(idx.data(Qt::UserRole + KisStorageModel::Active).toBool() == true);
 
         storageModel.setData(idx, QVariant(false), Qt::CheckStateRole);
@@ -123,7 +127,6 @@ void TestStorageModel::testMetaData()
     KisResourceStorageSP storage {new KisResourceStorage("My Named Memory Storage")};
     KisResourceLocator::instance()->addStorage("My Named Memory Storage", storage);
     storage->setMetaData(KisResourceStorage::s_meta_name, "My Named Memory Storage");
-    storageModel.resetQuery();
 
     QVERIFY(storageModel.rowCount() > rowCount);
 

@@ -50,8 +50,8 @@ public:
     KisStorageModel(QObject *parent = 0);
     ~KisStorageModel() override;
 
-
     static KisStorageModel * instance();
+
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role) const override;
@@ -62,16 +62,17 @@ public:
 
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
-public Q_SLOTS:
+private Q_SLOTS:
 
-    bool resetQuery();
+    friend class KisResourceLocator;
+
+    void addStorage(const QString &location);
+    void removeStorage(const QString &location);
 
 private:
 
     KisStorageModel(const KisStorageModel&);
     KisStorageModel operator=(const KisStorageModel&);
-
-    bool prepareQuery();
 
     struct Private;
     QScopedPointer<Private> d;

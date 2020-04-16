@@ -169,8 +169,10 @@ void TestResourceLocator::testDocumentStorage()
 
     QVERIFY(model->rowCount() > rowcount);
     QVERIFY(m_locator->hasStorage(documentName));
+
     m_locator->removeStorage(documentName);
     QVERIFY(!m_locator->hasStorage(documentName));
+
     QVERIFY(model->rowCount() == rowcount);
 }
 

@@ -67,6 +67,7 @@ public:
     bool valid {false};
     KisResourceStorage::StorageType storageType {KisResourceStorage::StorageType::Unknown};
     QSharedPointer<KisStoragePlugin> storagePlugin;
+    int storageId {-1};
 };
 
 KisResourceStorage::KisResourceStorage(const QString &location)
@@ -224,6 +225,16 @@ QStringList KisResourceStorage::metaDataKeys() const
 QVariant KisResourceStorage::metaData(const QString &key) const
 {
     return d->storagePlugin->metaData(key);
+}
+
+void KisResourceStorage::setStorageId(int storageId)
+{
+    d->storageId = storageId;
+}
+
+int KisResourceStorage::storageId()
+{
+    return d->storageId;
 }
 
 bool KisStorageVersioningHelper::addVersionedResource(const QString &filename, const QString &saveLocation, KoResourceSP resource)

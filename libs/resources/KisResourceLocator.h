@@ -119,10 +119,10 @@ Q_SIGNALS:
     void progressMessage(const QString&);
 
     /// Emitted whenever a storage is added
-    void storageAdded();
+    void storageAdded(const QString &location);
 
     /// Emitted whenever a storage is removed
-    void storageRemoved();
+    void storageRemoved(const QString &location);
 
 private:
 

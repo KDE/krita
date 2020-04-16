@@ -27,11 +27,21 @@
 #include <KisViewManager.h>
 #include <kis_image.h>
 #include <kis_paint_device.h>
+#include <QPainter>
 
-DlgImagesplit::DlgImagesplit(KisViewManager* view, const QString &suffix, QStringList listMimeFilter, int defaultMimeIndex)
+DlgImagesplit::DlgImagesplit(KisViewManager* view
+                             , const QString &suffix
+                             , QStringList listMimeFilter
+                             , int defaultMimeIndex, QImage thumbnail
+                             , QList<qreal> hGuides
+                             , QList<qreal> vGuides, qreal thumbnailRatio)
     : KoDialog(view->mainWindow())
 {
     m_page = new WdgImagesplit(this);
+    m_thumbnail = thumbnail;
+    m_horizontalGuides = hGuides;
+    m_verticalGuides = vGuides;
+    m_thumbnailRatio = thumbnailRatio;
 
     setCaption(i18n("Image Split"));
     setButtons(Apply | Close);
@@ -50,6 +60,13 @@ DlgImagesplit::DlgImagesplit(KisViewManager* view, const QString &suffix, QStrin
     connect(m_page->cmbFileType, SIGNAL(activated(int)), this, SLOT(setMimeType(int)));
     connect(m_page->chkGuidesHorizontal, SIGNAL(toggled(bool)), m_page->intHorizontalSplitLines, SLOT(setDisabled(bool)));
     connect(m_page->chkGuidesVertical, SIGNAL(toggled(bool)), m_page->intVerticalSplitLines, SLOT(setDisabled(bool)));
+
+    connect(m_page->intVerticalSplitLines, SIGNAL(valueChanged(int)), SLOT(updatePreview()));
+    connect(m_page->intHorizontalSplitLines, SIGNAL(valueChanged(int)), SLOT(updatePreview()));
+    connect(m_page->chkGuidesHorizontal, SIGNAL(toggled(bool)), SLOT(updatePreview()));
+    connect(m_page->chkGuidesVertical, SIGNAL(toggled(bool)), SLOT(updatePreview()));
+
+    updatePreview();
 }
 
 DlgImagesplit::~DlgImagesplit()
@@ -118,6 +135,53 @@ QString DlgImagesplit::suffix()
 void DlgImagesplit::setMimeType(int index)
 {
     cmbIndex = index;
+}
+
+void DlgImagesplit::updatePreview()
+{
+    QImage img = QImage(200, 200, QImage::Format_RGBA8888);
+    QPainter painter(&img);
+
+    img.fill(palette().background().color());
+    QPoint point;
+    point.setX((img.width()-m_thumbnail.width())*0.5);
+    point.setY((img.height()-m_thumbnail.height())*0.5);
+
+    painter.setOpacity(0.5);
+    painter.drawImage(point, m_thumbnail);
+
+    painter.setOpacity(1.0);
+    QPen pen = QPen(palette().highlight().color());
+    pen.setWidth(1);
+    painter.setPen(pen);
+
+    if (useHorizontalGuides()) {
+        for (int i = 0; i< m_horizontalGuides.size(); i++) {
+            int lineY = point.y() + (m_thumbnailRatio *m_horizontalGuides[i]);
+            painter.drawLine(point.x(), lineY, point.x()+m_thumbnail.width(), lineY);
+        }
+    } else {
+        int rowHeight = m_thumbnail.height()/(horizontalLines()+1);
+        for (int i = 0; i< horizontalLines(); i++) {
+            int lineY = point.y()+(rowHeight*(i+1));
+            painter.drawLine(point.x(), lineY, point.x()+m_thumbnail.width(), lineY);
+        }
+    }
+
+    if (useVerticalGuides()) {
+        for (int i = 0; i< m_verticalGuides.size(); i++) {
+            int lineX = point.x() + (m_thumbnailRatio *m_verticalGuides[i]);
+            painter.drawLine(lineX, point.y(), lineX, point.y()+m_thumbnail.height());
+        }
+    } else {
+        int columnWidth = m_thumbnail.width()/(verticalLines()+1);
+        for (int i = 0; i< verticalLines(); i++) {
+            int lineX = point.x()+(columnWidth*(i+1));
+            painter.drawLine(lineX, point.y(), lineX, point.y()+m_thumbnail.height());
+        }
+    }
+
+    m_page->imagePreviewLabel->setPixmap(QPixmap::fromImage(img));
 }
 
 void DlgImagesplit::applyClicked()

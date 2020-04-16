@@ -39,7 +39,14 @@ class DlgImagesplit: public KoDialog
 
 public:
 
-    DlgImagesplit(KisViewManager* view, const QString &suffix, QStringList listMimeType, int defaultMimeIndex);
+    DlgImagesplit(KisViewManager* view
+                  , const QString &suffix
+                  , QStringList listMimeType
+                  , int defaultMimeIndex
+                  , QImage thumbnail
+                  , QList<qreal> hGuides
+                  , QList<qreal> vGuides
+                  , qreal thumbnailRatio);
     ~DlgImagesplit() override;
     bool autoSave();
     bool sortHorizontal();
@@ -54,8 +61,13 @@ private Q_SLOTS:
     void applyClicked();
     void lineEditEnable();
     void setMimeType(int index);
+    void updatePreview();
 private:
     WdgImagesplit* m_page;
+    QImage m_thumbnail;
+    QList<qreal> m_horizontalGuides;
+    QList<qreal> m_verticalGuides;
+    qreal m_thumbnailRatio;
 };
 
 #endif // DLG_IMAGESPLIT

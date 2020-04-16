@@ -98,6 +98,16 @@ int DlgImagesplit::verticalLines()
     return m_page->intVerticalSplitLines->value();
 }
 
+bool DlgImagesplit::useHorizontalGuides()
+{
+    return m_page->chkGuidesHorizontal->isChecked();
+}
+
+bool DlgImagesplit::useVerticalGuides()
+{
+    return m_page->chkGuidesVertical->isChecked();
+}
+
 QString DlgImagesplit::suffix()
 {
     return m_page->lineEdit->text();

@@ -43,6 +43,8 @@
 #include <kis_painter.h>
 #include <kis_paint_device.h>
 #include <KisMimeDatabase.h>
+#include <kis_coordinates_converter.h>
+#include <kis_guides_config.h>
 
 #include "dlg_imagesplit.h"
 
@@ -132,9 +134,18 @@ void Imagesplit::slotImagesplit()
 
         int numHorizontalLines = dlgImagesplit->horizontalLines();
         int numVerticalLines = dlgImagesplit->verticalLines();
+        QList <qreal> xGuides = viewManager()->document()->guidesConfig().verticalGuideLines();
+        QList <qreal> yGuides = viewManager()->document()->guidesConfig().horizontalGuideLines();
 
         int img_width = image->width() / (numVerticalLines + 1);
         int img_height = image->height() / (numHorizontalLines + 1);
+
+        if (dlgImagesplit->useHorizontalGuides()) {
+            numHorizontalLines = yGuides.size();
+        }
+        if (dlgImagesplit->useVerticalGuides()) {
+            numVerticalLines = xGuides.size();
+        }
 
 
         bool stop = false;
@@ -180,6 +191,24 @@ void Imagesplit::slotImagesplit()
             innerLoop = numHorizontalLines + 1;
         }
 
+        KisCoordinatesConverter converter;
+        converter.setImage(image);
+        QTransform transform = converter.imageToDocumentTransform().inverted();
+        for (int i = 0; i< xGuides.size(); i++) {
+            qreal line = xGuides[i];
+            xGuides[i] = transform.map(QPointF(line, line)).x();
+        }
+        for (int i = 0; i< yGuides.size(); i++) {
+            qreal line = yGuides[i];
+            yGuides[i] = transform.map(QPointF(line, line)).y();
+        }
+        xGuides.prepend(qreal(0));
+        xGuides.append(image->width());
+        yGuides.prepend(qreal(0));
+        yGuides.append(image->height());
+
+        int currentX = 0;
+        int currentY = 0;
 
         for (int i = 0, k = 1; i < outerLoop; i++) {
             for (int j = 0; j < innerLoop; j++, k++) {
@@ -192,6 +221,19 @@ void Imagesplit::slotImagesplit()
                 else {
                     row = j;
                     column = i;
+                }
+
+                if (dlgImagesplit->useVerticalGuides()) {
+                    currentX = xGuides[column];
+                    img_width = xGuides[column+1]-currentX;
+                } else {
+                    currentX = (column * img_width);
+                }
+                if (dlgImagesplit->useHorizontalGuides()) {
+                    currentY = yGuides[row];
+                    img_height = yGuides[row+1]-currentY;
+                } else {
+                    currentY = (row * img_height);
                 }
 
                 if (dlgImagesplit->autoSave()) {
@@ -214,10 +256,11 @@ void Imagesplit::slotImagesplit()
                         return;
 
                 }
-                if (!saveAsImage(QRect((column * img_width), (row * img_height), img_width, img_height), mimeType, filepath)) {
+                if (!saveAsImage(QRect(currentX, currentY, img_width, img_height), mimeType, filepath)) {
                     stop = true;
                     break;
                 }
+
             }
             if (stop) {
                 break;

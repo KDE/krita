@@ -207,7 +207,7 @@ void KisMementoManager::commit()
     m_revisions.append(hItem);
 
     m_currentMemento = 0;
-    Q_ASSERT(m_index.isEmpty());
+    KIS_ASSERT(m_index.isEmpty());
 
     DEBUG_DUMP_MESSAGE("COMMIT_DONE");
 
@@ -226,7 +226,6 @@ KisTileSP KisMementoManager::getCommitedTile(qint32 col, qint32 row, bool &exist
         return KisTileSP();
 
     KisMementoItemSP mi = m_headsHashTable.getReadOnlyTileLazy(col, row, existingTile);
-    Q_ASSERT(mi);
     return mi->tile(0);
 }
 
@@ -235,7 +234,8 @@ KisMementoSP KisMementoManager::getMemento()
     /**
      * We do not allow nested transactions
      */
-    Q_ASSERT(!namedTransactionInProgress());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!namedTransactionInProgress());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(m_index.isEmpty());
 
     // Clear redo() information
     m_cancelledRevisions.clear();
@@ -256,13 +256,17 @@ KisMementoSP KisMementoManager::currentMemento() {
         for(iter=list.end(); iter-- != list.begin();)
 
 
-void KisMementoManager::rollback(KisTileHashTable *ht)
+void KisMementoManager::rollback(KisTileHashTable *ht, KisMementoSP memento)
 {
     commit();
 
     if (! m_revisions.size()) return;
 
     KisHistoryItem changeList = m_revisions.takeLast();
+
+    // SANITY CHECK: the transaction's memento must be in sync with
+    //               the revisions list we have locally
+    KIS_SAFE_ASSERT_RECOVER_NOOP(changeList.memento == memento);
 
     KisMementoItemSP mi;
     KisMementoItemSP parentMI;
@@ -300,7 +304,7 @@ void KisMementoManager::rollback(KisTileHashTable *ht)
 
     // We have just emulated a commit so:
     m_currentMemento = 0;
-    Q_ASSERT(!namedTransactionInProgress());
+    KIS_ASSERT(!namedTransactionInProgress());
 
     m_cancelledRevisions.prepend(changeList);
     DEBUG_DUMP_MESSAGE("UNDONE");
@@ -309,13 +313,17 @@ void KisMementoManager::rollback(KisTileHashTable *ht)
     KisTileDataStore::instance()->kickPooler();
 }
 
-void KisMementoManager::rollforward(KisTileHashTable *ht)
+void KisMementoManager::rollforward(KisTileHashTable *ht, KisMementoSP memento)
 {
-    Q_ASSERT(m_index.isEmpty());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_index.isEmpty());
 
     if (!m_cancelledRevisions.size()) return;
 
     KisHistoryItem changeList = m_cancelledRevisions.takeFirst();
+
+    // SANITY CHECK: the transaction's memento must be in sync with
+    //               the revisions list we have locally
+    KIS_SAFE_ASSERT_RECOVER_NOOP(changeList.memento == memento);
 
     KisMementoItemSP mi;
 
@@ -350,7 +358,7 @@ void KisMementoManager::purgeHistory(KisMementoSP oldestMemento)
         m_revisions.removeFirst();
     }
 
-    Q_ASSERT(m_revisions.first().memento == oldestMemento);
+    KIS_ASSERT(m_revisions.first().memento == oldestMemento);
     resetRevisionHistory(m_revisions.first().itemList);
 
     DEBUG_DUMP_MESSAGE("PURGE_HISTORY");

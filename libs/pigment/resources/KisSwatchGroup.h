@@ -68,10 +68,6 @@ public /* methods */:
 
     int colorCount() const;
 
-    /**
-     * @brief getColors
-     * @return the list of colors in this SwatchGroup, in no specific order.
-     */
     QList<SwatchInfo> infoList() const;
 
     /**

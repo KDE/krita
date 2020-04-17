@@ -284,7 +284,7 @@ void KisToolLazyBrushOptionsWidget::slotCurrentNodeChanged(KisNodeSP node)
     m_d->ui->colorView->setEnabled(m_d->activeMask);
 }
 
-void KisToolLazyBrushOptionsWidget::slotMakeTransparent(bool enableTransparency)
+void KisToolLazyBrushOptionsWidget::slotMakeTransparent(bool value)
 {
     KIS_ASSERT_RECOVER_RETURN(m_d->activeMask);
 
@@ -292,25 +292,21 @@ void KisToolLazyBrushOptionsWidget::slotMakeTransparent(bool enableTransparency)
     KisSwatch activeSwatch = m_d->colorModel->getEntry(index);
     if (!index.isValid()) return;
 
-    QVector<SwatchInfoType> infoList;
-    Q_FOREACH (const QString &groupName, m_d->colorSet->getGroupNames()) {
-        KisSwatchGroup *group = m_d->colorSet->getGroup(groupName);
+    int activeIndex = -1;
+
+    KisColorizeMask::KeyStrokeColors colors;
+
+    int i = 0;
+    Q_FOREACH (const QString &groupName, m_d->colorSet.getGroupNames()) {
+        KisSwatchGroup *group = m_d->colorSet.getGroup(groupName);
         Q_FOREACH (const KisSwatchGroup::SwatchInfo &info, group->infoList()) {
-            infoList.append(info);
+            colors.colors << info.swatch.color();
+            if (activeSwatch == info.swatch) { activeIndex = i; }
+            i++;
         }
     }
 
-    // We can't rely on the order of the colors returned, so we need to sort them row by row from left to right
-    std::sort(infoList.begin(), infoList.end(), sortSwatchInfo);
-    KisColorizeMask::KeyStrokeColors colors;
-    int i = 0;
-    for (const SwatchInfoType &info : infoList) {
-        if (activeSwatch == info.swatch && enableTransparency) {
-            colors.transparentIndex = i;
-        }
-        colors.colors << info.swatch.color();
-        i++;
-    }
+    colors.transparentIndex = value ? activeIndex : -1;
 
     m_d->activeMask->setKeyStrokesColors(colors);
 }
@@ -381,9 +377,3 @@ void KisToolLazyBrushOptionsWidget::slotLimitToDeviceChanged(bool value)
     m_d->activeMask->setLimitToDeviceBounds(value);
 }
 
-bool KisToolLazyBrushOptionsWidget::sortSwatchInfo(const SwatchInfoType &first, const SwatchInfoType &second)
-{
-    if (first.row < second.row) { return true; }
-    if (first.row > second.row) { return false; }
-    return first.column < second.column;
-}

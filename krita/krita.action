@@ -2818,12 +2818,12 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="isolate_layer">
+    <Action name="isolate_active_layer">
       <icon>view-filter</icon>
-      <text>&amp;Isolate Layer</text>
+      <text>&amp;Isolate Active Layer</text>
       <whatsThis></whatsThis>
-      <toolTip>Isolate Layer</toolTip>
-      <iconText>Isolate Layer</iconText>
+      <toolTip>Isolate Active Layer</toolTip>
+      <iconText>Isolate Active Layer</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>

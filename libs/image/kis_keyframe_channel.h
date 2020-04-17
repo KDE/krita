@@ -55,6 +55,7 @@ public:
     static const KoID TransformRotationZ;
 public:
     KisKeyframeChannel(const KoID& id, KisNodeWSP parent = 0);
+    KisKeyframeChannel(const KoID& id, KisDefaultBoundsBaseSP bounds );
     KisKeyframeChannel(const KisKeyframeChannel &rhs, KisNodeWSP newParent);
     ~KisKeyframeChannel() override;
 

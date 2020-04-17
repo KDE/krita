@@ -62,6 +62,14 @@ KisKeyframeChannel::KisKeyframeChannel(const KoID &id, KisNodeWSP parent)
     m_d->defaultBounds = KisDefaultBoundsNodeWrapperSP( new KisDefaultBoundsNodeWrapper( parent ));
 }
 
+KisKeyframeChannel::KisKeyframeChannel(const KoID &id, KisDefaultBoundsBaseSP bounds)
+    : m_d(new Private)
+{
+    m_d->id = id;
+    m_d->node = nullptr;
+    m_d->defaultBounds = bounds;
+}
+
 KisKeyframeChannel::KisKeyframeChannel(const KisKeyframeChannel &rhs, KisNodeWSP newParent)
     : m_d(new Private(*rhs.m_d))
 {

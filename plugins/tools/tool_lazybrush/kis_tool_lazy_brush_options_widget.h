@@ -24,6 +24,7 @@
 #include <QModelIndex>
 
 #include "kis_types.h"
+#include "KisSwatchGroup.h"
 
 class KisCanvasResourceProvider;
 class KoColor;
@@ -35,6 +36,9 @@ class KoColor;
 class KisToolLazyBrushOptionsWidget : public QWidget
 {
     Q_OBJECT
+private /* typedef */:
+    typedef KisSwatchGroup::SwatchInfo SwatchInfoType;
+
 public:
     KisToolLazyBrushOptionsWidget(KisCanvasResourceProvider *provider, QWidget *parent);
     ~KisToolLazyBrushOptionsWidget() override;
@@ -66,7 +70,10 @@ protected:
     void showEvent(QShowEvent *event) override;
     void hideEvent(QHideEvent *event) override;
 
-private:
+private /* methods */:
+    static bool sortSwatchInfo(const SwatchInfoType &first, const SwatchInfoType &second);
+
+private /* member variables */:
     struct Private;
     const QScopedPointer<Private> m_d;
 };

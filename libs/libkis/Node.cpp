@@ -84,6 +84,9 @@ Node::Node(KisImageSP image, KisNodeSP node, QObject *parent)
 
 Node *Node::createNode(KisImageSP image, KisNodeSP node, QObject *parent)
 {
+    if (node.isNull()) {
+        return 0;
+    }
     if (node->inherits("KisGroupLayer")) {
         return new GroupLayer(dynamic_cast<KisGroupLayer*>(node.data()));
     }
@@ -386,6 +389,7 @@ void Node::setOpacity(int value)
 Node* Node::parentNode() const
 {
     if (!d->node) return 0;
+    if (!d->node->parent()) return 0;
     return Node::createNode(d->image, d->node->parent());
 }
 

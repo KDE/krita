@@ -794,6 +794,13 @@ void KisImage::cropImage(const QRect& newRect)
 
 void KisImage::purgeUnusedData(bool isCancellable)
 {
+    /**
+     * WARNING: don't use this function unless you know what you are doing!
+     *
+     * It breaks undo on layers! Therefore, after calling it, KisImage is not
+     * undo-capable anymore!
+     */
+
     struct PurgeUnusedDataStroke : public KisRunnableBasedStrokeStrategy {
         PurgeUnusedDataStroke(KisImageSP image, bool isCancellable)
             : KisRunnableBasedStrokeStrategy(QLatin1String("purge-unused-data"),

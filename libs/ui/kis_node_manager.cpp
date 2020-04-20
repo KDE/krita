@@ -376,7 +376,7 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
     connect(&m_d->nodeConversionSignalMapper, SIGNAL(mapped(QString)),
             this, SLOT(convertNode(QString)));
 
-    action = actionManager->createAction("isolate_layer");
+    action = actionManager->createAction("isolate_active_layer");
     connect(action, SIGNAL(triggered(bool)), this, SLOT(toggleIsolateMode(bool)));
 
     action = actionManager->createAction("toggle_layer_visibility");
@@ -498,7 +498,7 @@ void KisNodeManager::toggleIsolateMode(bool checked)
                 activeNode->inherits("KisColorizeMask")) return;
 
         if (!image->startIsolatedMode(activeNode)) {
-            KisAction *action = m_d->view->actionManager()->actionByName("isolate_layer");
+            KisAction *action = m_d->view->actionManager()->actionByName("isolate_active_layer");
             action->setChecked(false);
         }
     } else {
@@ -522,7 +522,7 @@ void KisNodeManager::slotUpdateIsolateModeActionImageStatusChange()
 
 void KisNodeManager::slotUpdateIsolateModeAction()
 {
-    KisAction *action = m_d->view->actionManager()->actionByName("isolate_layer");
+    KisAction *action = m_d->view->actionManager()->actionByName("isolate_active_layer");
     Q_ASSERT(action);
 
     KisNodeSP activeNode = this->activeNode();

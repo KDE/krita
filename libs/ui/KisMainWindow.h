@@ -447,6 +447,8 @@ private Q_SLOTS:
 
     void slotXmlGuiMakingChanges(bool finished);
 
+    void orientationChanged();
+
 protected:
 
     void closeEvent(QCloseEvent * e) override;

@@ -122,7 +122,7 @@ QModelIndex KisNodeModel::indexFromNode(KisNodeSP node) const
 
 bool KisNodeModel::belongsToIsolatedGroup(KisImageSP image, KisNodeSP node, KisDummiesFacadeBase *dummiesFacade)
 {
-    KisNodeSP isolatedRoot = image->isolatedModeRoot();
+    KisNodeSP isolatedRoot = image->isolationRootNode();
     if (!isolatedRoot) return true;
 
     KisNodeDummy *isolatedRootDummy =

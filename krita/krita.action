@@ -2690,6 +2690,18 @@ Enable to preserve playback timing.</text>
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="isolate_active_group">
+      <icon>view-filter</icon>
+      <text>&amp;Isolate Active Group</text>
+      <whatsThis></whatsThis>
+      <toolTip>Isolate Active Group</toolTip>
+      <iconText>Isolate Active Group</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="toggle_layer_lock">
       <icon>layer-locked</icon>
       <text>&amp;Toggle layer lock</text>

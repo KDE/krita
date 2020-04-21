@@ -20,9 +20,11 @@
 
 #include <QObject>
 #include <QList>
+#include <QAction>
 
 #include "kis_types.h"
 #include "kis_base_node.h"
+#include "kis_image.h"
 #include <kritaui_export.h>
 
 class KActionCollection;
@@ -169,11 +171,20 @@ public Q_SLOTS:
 
     void slotPinToTimeline(bool value);
 
+    // Isolation Mode..
+
     void toggleIsolateActiveNode();
-    void toggleIsolateMode(bool checked);
-    void slotUpdateIsolateModeActionImageStatusChange();
-    void slotUpdateIsolateModeAction();
-    void slotTryRestartIsolatedMode();
+    void setIsolateActiveLayerMode(bool checked);
+    void setIsolateActiveGroupMode(bool checked);
+    void changeIsolationMode(KisImage::IsolationMode mode);
+
+    /**
+     * Updates the isolation mode as active node context changes.
+     */
+    void updateIsolationMode();
+    void reinitializeIsolationActionGroup();
+
+    // General Node Management..
 
     void moveNodeAt(KisNodeSP node, KisNodeSP parent, int index);
     KisNodeSP createNode(const QString& nodeType, bool quiet = false, KisPaintDeviceSP copyFrom = 0);

@@ -313,7 +313,7 @@ bool KisBaseNode::isIsolatedRoot() const
         return false;
     }
 
-    const KisBaseNode* isolatedRoot = m_d->image->isolatedModeRoot().data();
+    const KisBaseNode* isolatedRoot = m_d->image->isolationRootNode().data();
 
     return (this == isolatedRoot);
 }

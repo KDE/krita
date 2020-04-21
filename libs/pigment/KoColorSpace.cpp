@@ -204,34 +204,33 @@ QPolygonF KoColorSpace::estimatedTRCXYY() const
         // This is fixed to 5 since the maximum number of channels are 5 for CMYKA
         QVector <float> channelValuesF(5);//for getting the coordinates.
 
+        d->colorants.resize(3*colorChannelCount());
+
+        const int segments = 10;
         for (quint32 i=0; i<colorChannelCount(); i++) {
             qreal colorantY=1.0;
             if (colorModelId().id()!="CMYKA") {
-                for (int j=4; j>=0; j--){
+                for (int j = 0; j <= segments; j++) {
                     channelValuesF.fill(0.0);
-                    channelValuesF[i] = ((max/4)*(4-j));
+                    channelValuesF[channels()[i]->displayPosition()] = ((max/segments)*(segments-j));
 
                     if (colorModelId().id()!="XYZA") { //no need for conversion when using xyz.
                         fromNormalisedChannelsValue(data, channelValuesF);
                         convertPixelsTo(data, data2, xyzColorSpace, 1, KoColorConversionTransformation::IntentAbsoluteColorimetric,         KoColorConversionTransformation::adjustmentConversionFlags());
                         xyzColorSpace->normalisedChannelsValue(data2,channelValuesF);
                     }
-
                     if (j==0) {
                         colorantY = channelValuesF[1];
-                        if (d->colorants.size()<2){
-                            d->colorants.resize(3*colorChannelCount());
-                            d->colorants[i]  = channelValuesF[0]/(channelValuesF[0]+channelValuesF[1]+channelValuesF[2]);
-                            d->colorants[i+1]= channelValuesF[1]/(channelValuesF[0]+channelValuesF[1]+channelValuesF[2]);
-                            d->colorants[i+2]= channelValuesF[1];
-                        }
+                        d->colorants[3*i]   = channelValuesF[0]/(channelValuesF[0]+channelValuesF[1]+channelValuesF[2]);
+                        d->colorants[3*i+1] = channelValuesF[1]/(channelValuesF[0]+channelValuesF[1]+channelValuesF[2]);
+                        d->colorants[3*i+2] = channelValuesF[1];
                     }
-                    d->TRCXYY << QPointF(channelValuesF[1]/colorantY, ((1.0/4)*(4-j)));
+                    d->TRCXYY << QPointF(channelValuesF[1]/colorantY, ((1.0/segments)*(segments-j)));
                 }
             } else {
-                for (int j=0; j<5; j++){
+                for (int j = 0; j <= segments; j++) {
                     channelValuesF.fill(0.0);
-                    channelValuesF[i] = ((max/4)*(j));
+                    channelValuesF[i] = ((max/segments)*(j));
 
                     fromNormalisedChannelsValue(data, channelValuesF);
 
@@ -241,14 +240,11 @@ QPolygonF KoColorSpace::estimatedTRCXYY() const
 
                     if (j==0) {
                         colorantY = channelValuesF[1];
-                        if (d->colorants.size()<2){
-                            d->colorants.resize(3*colorChannelCount());
-                            d->colorants[i]  = channelValuesF[0]/(channelValuesF[0]+channelValuesF[1]+channelValuesF[2]);
-                            d->colorants[i+1]= channelValuesF[1]/(channelValuesF[0]+channelValuesF[1]+channelValuesF[2]);
-                            d->colorants[i+2]= channelValuesF[1];
-                        }
+                        d->colorants[3*i]   = channelValuesF[0]/(channelValuesF[0]+channelValuesF[1]+channelValuesF[2]);
+                        d->colorants[3*i+1] = channelValuesF[1]/(channelValuesF[0]+channelValuesF[1]+channelValuesF[2]);
+                        d->colorants[3*i+2] = channelValuesF[1];
                     }
-                    d->TRCXYY << QPointF(channelValuesF[1]/colorantY, ((1.0/4)*(j)));
+                    d->TRCXYY << QPointF(channelValuesF[1]/colorantY, ((1.0/segments)*(j)));
                 }
             }
         }
@@ -285,9 +281,11 @@ QVector <qreal> KoColorSpace::lumaCoefficients() const
                 d->lumaCoefficients[1]=0.7152;
                 d->lumaCoefficients[2]=0.0722;
             } else {
-                d->lumaCoefficients[0]=d->colorants[2];
-                d->lumaCoefficients[1]=d->colorants[5];
-                d->lumaCoefficients[2]=d->colorants[8];
+                // luma coefficients need to add up to 1.0
+                qreal sum = d->colorants[2] + d->colorants[5] + d->colorants[8];
+                d->lumaCoefficients[0] = d->colorants[2] / sum;
+                d->lumaCoefficients[1] = d->colorants[5] / sum;
+                d->lumaCoefficients[2] = d->colorants[8] / sum;
             }
         }
         return d->lumaCoefficients;

@@ -222,9 +222,12 @@ void KisAdvancedColorSpaceSelector::fillDescription()
             d->colorSpaceSelector->TRCwidget->setRGBCurve(redcurve, greencurve, bluecurve);
         } else {
             QPolygonF curve = currentColorSpace()->estimatedTRCXYY();
-            redcurve << curve.at(0) << curve.at(1) << curve.at(2) << curve.at(3) << curve.at(4);
-            greencurve << curve.at(5) << curve.at(6) << curve.at(7) << curve.at(8) << curve.at(9);
-            bluecurve << curve.at(10) << curve.at(11) << curve.at(12) << curve.at(13) << curve.at(14);
+            int numPoints = curve.size() / 3;
+            for (int i = 0; i < numPoints; i++) {
+                redcurve << curve.at(i);
+                greencurve << curve.at(i + numPoints);
+                bluecurve << curve.at(i + 2*numPoints);
+            }
             d->colorSpaceSelector->TRCwidget->setRGBCurve(redcurve, greencurve, bluecurve);
         }
 
@@ -281,10 +284,13 @@ void KisAdvancedColorSpaceSelector::fillDescription()
             d->colorSpaceSelector->TRCwidget->setGreyscaleCurve(tonecurve);
         } else {
             QPolygonF curve = currentColorSpace()->estimatedTRCXYY();
-            cyancurve << curve.at(0) << curve.at(1) << curve.at(2) << curve.at(3) << curve.at(4);
-            magentacurve << curve.at(5) << curve.at(6) << curve.at(7) << curve.at(8) << curve.at(9);
-            yellowcurve << curve.at(10) << curve.at(11) << curve.at(12) << curve.at(13) << curve.at(14);
-            tonecurve << curve.at(15) << curve.at(16) << curve.at(17) << curve.at(18) << curve.at(19);
+            int numPoints = curve.size() / 4;
+            for (int i = 0; i < numPoints; i++) {
+                cyancurve << curve.at(i);
+                magentacurve << curve.at(i + numPoints);
+                yellowcurve << curve.at(i + 2*numPoints);
+                tonecurve << curve.at(i + 3*numPoints);
+            }
             d->colorSpaceSelector->TRCwidget->setCMYKCurve(cyancurve, magentacurve, yellowcurve, tonecurve);
         }
         d->colorSpaceSelector->TRCwidget->setToolTip(i18nc("@info:tooltip","Estimated Gamma cannot be retrieved for CMYK."));

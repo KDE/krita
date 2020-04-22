@@ -25,7 +25,6 @@ KisLayerFilterWidget::KisLayerFilterWidget(QWidget *parent) : QWidget(parent)
     textFilter->setMinimumHeight(32);
     textFilter->setClearButtonEnabled(true);
 
-
     connect(textFilter, SIGNAL(textChanged(QString)), this, SIGNAL(filteringOptionsChanged()));
 
     KisNodeViewColorScheme colorScheme;
@@ -84,7 +83,7 @@ void KisLayerFilterWidget::updateColorLabels(KisNodeSP root) {
     if (colorLabels.size() > 1) {
         colorLabelButtons[0]->parentWidget()->setVisible(true);
 
-        for (size_t index = 0; index < colorLabelButtons.size(); index++) {
+        for (int index = 0; index < colorLabelButtons.size(); index++) {
             if (colorLabels.contains(index)) {
                 colorLabelButtons[index]->setVisible(true);
             } else {
@@ -153,15 +152,31 @@ bool KisLayerFilterWidget::EventFilter::eventFilter(QObject *obj, QEvent *event)
         currentState = WaitingForDragLeave;
         lastKnownMousePosition = mouseEvent->globalPos();
 
+
         return true;
 
     } else if (event->type() == QEvent::MouseButtonRelease) {
         QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
+        QAbstractButton* startingButton = static_cast<QAbstractButton*>(obj);
 
         //If we never left, toggle the original button.
         if( currentState == WaitingForDragLeave ) {
-            QAbstractButton* btn = static_cast<QAbstractButton*>(obj);
-            btn->click();
+            if ( startingButton->group() && (mouseEvent->modifiers() & Qt::SHIFT)) {
+                KisColorLabelButtonGroup* const group = static_cast<KisColorLabelButtonGroup*>(startingButton->group());
+                const QList<QAbstractButton*> viableCheckedButtons = group->checkedViableButtons();
+                const int buttonsEnabled = viableCheckedButtons.count();
+                const bool shouldChangeIsolation = (buttonsEnabled == 1) && (viableCheckedButtons.first() == startingButton);
+                const bool shouldIsolate = (buttonsEnabled != 1) || !shouldChangeIsolation;
+                Q_FOREACH(QAbstractButton* otherBtn, group->viableButtons()) {
+                    if (otherBtn == startingButton){
+                        startingButton->setChecked(true);
+                    } else {
+                        otherBtn->setChecked(!shouldIsolate);
+                    }
+                }
+            } else {
+                startingButton->click();
+            }
         }
 
         currentState = Idle;
@@ -176,8 +191,7 @@ bool KisLayerFilterWidget::EventFilter::eventFilter(QObject *obj, QEvent *event)
             QWidget* firstClicked = static_cast<QWidget*>(obj);
             const QPointF localPosition = mouseEvent->localPos();
 
-            if (!firstClicked->rect().contains(localPosition.x(), localPosition.y()))
-            {
+            if (!firstClicked->rect().contains(localPosition.x(), localPosition.y())) {
                 QAbstractButton* btn = static_cast<QAbstractButton*>(obj);
                 btn->click();
 

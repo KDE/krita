@@ -78,9 +78,11 @@ bool KisNodeFilterProxyModel::Private::checkIndexAllowedRecursively(QModelIndex 
     if (!srcIndex.isValid()) return false;
 
     KisNodeSP node = nodeModel->nodeFromIndex(srcIndex);
+    const bool nodeTextFilterMatch = (!activeTextFilter || node->name().contains(activeTextFilter.get(), Qt::CaseInsensitive));
+    const bool directParentTextFilterMatch =  (!activeTextFilter || (node->parent() && node->parent()->name().contains(activeTextFilter.get(), Qt::CaseInsensitive)));
+    const bool nodeColorMatch = (acceptedColorLabels.count() == 0 || acceptedColorLabels.contains(node->colorLabelIndex()));
     if ( node == activeNode ||
-         (acceptedColorLabels.contains(node->colorLabelIndex()) &&
-           (!activeTextFilter.has_value() || node->name().contains(activeTextFilter.get(), Qt::CaseInsensitive)) )) {
+         ( nodeColorMatch && (nodeTextFilterMatch || directParentTextFilterMatch) )) {
         return true;
     }
 
@@ -108,7 +110,7 @@ bool KisNodeFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex
     KisNodeSP node = m_d->nodeModel->nodeFromIndex(index);
 
     return !node ||
-        (m_d->acceptedColorLabels.isEmpty() && !m_d->activeTextFilter.has_value()) ||
+        (m_d->acceptedColorLabels.isEmpty() && !m_d->activeTextFilter) ||
         m_d->checkIndexAllowedRecursively(index);
 }
 
@@ -128,13 +130,14 @@ QModelIndex KisNodeFilterProxyModel::indexFromNode(KisNodeSP node) const
     return mapFromSource(srcIndex);
 }
 
-void KisNodeFilterProxyModel::setAcceptedLabels(const QList<int> &value)
+void KisNodeFilterProxyModel::setAcceptedLabels(const QSet<int> &value)
 {
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
-    m_d->acceptedColorLabels = QSet<int>(value.begin(), value.end());
-#else
-    m_d->acceptedColorLabels = QSet<int>::fromList(value);
-#endif
+//#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
+//    m_d->acceptedColorLabels = QSet<int>(value.begin(), value.end());
+//#else
+//    m_d->acceptedColorLabels = QSet<int>::fromList(value);
+//#endif
+    m_d->acceptedColorLabels = value;
     invalidateFilter();
 }
 

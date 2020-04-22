@@ -29,6 +29,7 @@
 #include <QListView>
 #include <QMouseEvent>
 
+#include <QStyleFactory>
 
 
 
@@ -190,7 +191,10 @@ KisColorFilterCombo::KisColorFilterCombo(QWidget *parent)
     QStandardItemModel *newModel = new QStandardItemModel(this);
     setModel(newModel);
 
-    PopupComboBoxStyle *proxyStyle = new PopupComboBoxStyle(style());
+    QStyle* newStyle = QStyleFactory::create(style()->objectName());
+    // proxy style steals the ownership of the style and deletes it later
+    PopupComboBoxStyle *proxyStyle = new PopupComboBoxStyle(newStyle);
+
     proxyStyle->setParent(this);
     setStyle(proxyStyle);
 

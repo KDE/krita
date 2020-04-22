@@ -33,7 +33,9 @@ public:
     KisColorLabelButtonGroup(QObject* parent);
     ~KisColorLabelButtonGroup();
 
-    int viableButtonsChecked();
+    QList<QAbstractButton*> viableButtons();
+    QList<QAbstractButton*> checkedViableButtons();
+    int viableCheckedButtonCount();
     void reset();
 
 };

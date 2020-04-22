@@ -6,6 +6,7 @@
 
 #include "kis_global.h"
 #include "kis_debug.h"
+#include "krita_container_utils.h"
 
 struct KisColorLabelButton::Private {
     QColor color;
@@ -76,7 +77,7 @@ QSize KisColorLabelButton::sizeHint() const
 void KisColorLabelButton::nextCheckState()
 {
     KisColorLabelButtonGroup* colorLabelButtonGroup = dynamic_cast<KisColorLabelButtonGroup*>(group());
-    if (colorLabelButtonGroup && (colorLabelButtonGroup->viableButtonsChecked() > 1 || !isChecked())) {
+    if (colorLabelButtonGroup && (colorLabelButtonGroup->viableCheckedButtonCount() > 1 || !isChecked())) {
         setChecked(!isChecked());
     } else {
         setChecked(isChecked());
@@ -93,14 +94,25 @@ KisColorLabelButtonGroup::~KisColorLabelButtonGroup() {
 
 }
 
-int KisColorLabelButtonGroup::viableButtonsChecked() {
-    int count = 0;
+QList<QAbstractButton *> KisColorLabelButtonGroup::viableButtons() {
+    QList<QAbstractButton*> viableButtons = this->buttons();
+    KritaUtils::filterContainer(viableButtons, [](QAbstractButton* btn){
+        return (btn->isVisible());
+    });
+    return viableButtons;
+}
 
-    Q_FOREACH( QAbstractButton* btn, buttons()) {
-        count += (btn->isVisible() && btn->isChecked()) ? 1 : 0;
-    }
+QList<QAbstractButton *> KisColorLabelButtonGroup::checkedViableButtons() {
+    QList<QAbstractButton*> checkedButtons = viableButtons();
+    KritaUtils::filterContainer(checkedButtons, [](QAbstractButton* btn){
+       return (btn->isChecked());
+    });
 
-    return count;
+    return checkedButtons;
+}
+
+int KisColorLabelButtonGroup::viableCheckedButtonCount() {
+    return checkedViableButtons().count();
 }
 
 void KisColorLabelButtonGroup::reset()

@@ -216,7 +216,9 @@ void KisLayerFilterWidget::EventFilter::checkSlideOverNeighborButtons(QMouseEven
 
         Q_FOREACH(QAbstractButton* button, allButtons) {
             const QRect bounds = QRect(button->mapToGlobal(QPoint(0,0)), button->size());
-            const QRect mouseMovement = QRect(lastKnownMousePosition, currentPosition);
+            const QPoint upperLeft = QPoint(qMin(lastKnownMousePosition.x(), currentPosition.x()), qMin(lastKnownMousePosition.y(), currentPosition.y()));
+            const QPoint lowerRight = QPoint(qMax(lastKnownMousePosition.x(), currentPosition.x()), qMax(lastKnownMousePosition.y(), currentPosition.y()));
+            const QRect mouseMovement = QRect(upperLeft, lowerRight);
             if( bounds.intersects(mouseMovement) && !bounds.contains(lastKnownMousePosition)) {
                 button->click();
             }

@@ -87,7 +87,6 @@ void KisColorLabelButton::nextCheckState()
 KisColorLabelButtonGroup::KisColorLabelButtonGroup(QObject *parent)
     : QButtonGroup(parent)
 {
-    connect(this, SIGNAL(buttonToggled(QAbstractButton*,bool)), this, SLOT(slotRegisterButtonState(QAbstractButton*,bool)));
 }
 
 KisColorLabelButtonGroup::~KisColorLabelButtonGroup() {

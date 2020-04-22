@@ -35,6 +35,7 @@ private:
 
     EventFilter *buttonEventFilter;
     class QLineEdit *textFilter;
+    class KisColorLabelButtonGroup *buttonGroup;
 
     QList<class KisColorLabelButton*> colorLabelButtons;
 

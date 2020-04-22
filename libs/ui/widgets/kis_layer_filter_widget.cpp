@@ -6,6 +6,7 @@
 #include <QEvent>
 #include <QMouseEvent>
 #include <QButtonGroup>
+#include <QPushButton>
 
 #include "kis_debug.h"
 #include "kis_node.h"
@@ -30,27 +31,36 @@ KisLayerFilterWidget::KisLayerFilterWidget(QWidget *parent) : QWidget(parent)
     KisNodeViewColorScheme colorScheme;
 
     QWidget *buttonContainer = new QWidget(this);
+    buttonContainer->setToolTip("Filter by color label...");
     buttonEventFilter = new EventFilter(buttonContainer);
     {
         QHBoxLayout *subLayout = new QHBoxLayout(buttonContainer);
         buttonContainer->setLayout(subLayout);
         subLayout->setContentsMargins(0,0,0,0);
-        KisColorLabelButtonGroup *btnGroup = new KisColorLabelButtonGroup(buttonContainer);
-        btnGroup->setExclusive(false);
+        buttonGroup = new KisColorLabelButtonGroup(buttonContainer);
+        buttonGroup->setExclusive(false);
         foreach (const QColor &color, colorScheme.allColorLabels()) {
             KisColorLabelButton* btn = new KisColorLabelButton(color, buttonContainer);
-            btnGroup->addButton(btn);
+            buttonGroup->addButton(btn);
             btn->setVisible(false);
             btn->installEventFilter(buttonEventFilter);
             subLayout->addWidget(btn);
             colorLabelButtons.append(btn);
         }
 
-        connect(btnGroup, SIGNAL(buttonToggled(int,bool)), this, SIGNAL(filteringOptionsChanged()));
+        connect(buttonGroup, SIGNAL(buttonToggled(int,bool)), this, SIGNAL(filteringOptionsChanged()));
     }
+
+    QPushButton *resetButton = new QPushButton("Reset Filters", this);
+    connect(resetButton, &QPushButton::clicked, [this](){
+       textFilter->clear();
+       buttonGroup->reset();
+    });
+
 
     layout->addWidget(textFilter);
     layout->addWidget(buttonContainer);
+    layout->addWidget(resetButton);
 }
 
 void KisLayerFilterWidget::scanUsedColorLabels(KisNodeSP node, QSet<int> &colorLabels) {

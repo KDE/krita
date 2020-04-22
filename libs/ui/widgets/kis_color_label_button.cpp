@@ -102,3 +102,10 @@ int KisColorLabelButtonGroup::viableButtonsChecked() {
 
     return count;
 }
+
+void KisColorLabelButtonGroup::reset()
+{
+    Q_FOREACH( QAbstractButton* btn, buttons()) {
+        btn->setChecked(true);
+    }
+}

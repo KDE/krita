@@ -34,6 +34,8 @@ public:
     ~KisColorLabelButtonGroup();
 
     int viableButtonsChecked();
+    void reset();
+
 };
 
 #endif // KISCOLORLABELBUTTON_H

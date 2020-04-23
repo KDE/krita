@@ -50,6 +50,7 @@ struct KisVisualColorSelectorShape::Private
     bool alphaNeedsUpdate { true };
     bool acceptTabletEvents { false };
     QPointF currentCoordinates; // somewhat redundant?
+    QPointF dragStart;
     QVector4D currentChannelValues;
     Dimensions dimension;
     const KoColorSpace *colorSpace;
@@ -274,10 +275,17 @@ QImage KisVisualColorSelectorShape::renderAlphaMask() const
     return QImage();
 }
 
+QPointF KisVisualColorSelectorShape::mousePositionToShapeCoordinate(const QPointF &pos, const QPointF &dragStart) const
+{
+    Q_UNUSED(dragStart)
+    return convertWidgetCoordinateToShapeCoordinate(pos);
+}
+
 void KisVisualColorSelectorShape::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::LeftButton) {
-        QPointF coordinates = convertWidgetCoordinateToShapeCoordinate(e->localPos());
+        m_d->dragStart = e->localPos();
+        QPointF coordinates = mousePositionToShapeCoordinate(e->localPos(), m_d->dragStart);
         setCursorPosition(coordinates, true);
     }
     else {
@@ -288,7 +296,7 @@ void KisVisualColorSelectorShape::mousePressEvent(QMouseEvent *e)
 void KisVisualColorSelectorShape::mouseMoveEvent(QMouseEvent *e)
 {
     if (e->buttons() & Qt::LeftButton) {
-        QPointF coordinates = convertWidgetCoordinateToShapeCoordinate(e->localPos());
+        QPointF coordinates = mousePositionToShapeCoordinate(e->localPos(), m_d->dragStart);
         setCursorPosition(coordinates, true);
     } else {
         e->ignore();

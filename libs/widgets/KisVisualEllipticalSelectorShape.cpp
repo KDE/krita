@@ -64,6 +64,7 @@ QSize KisVisualEllipticalSelectorShape::sizeHint() const
 {
     return QSize(180,180);
 }
+
 void KisVisualEllipticalSelectorShape::setBorderWidth(int width)
 {
     m_barWidth = width;
@@ -166,6 +167,20 @@ QPointF KisVisualEllipticalSelectorShape::convertWidgetCoordinateToShapeCoordina
     }
 
     return QPointF(x, y);
+}
+
+QPointF KisVisualEllipticalSelectorShape::mousePositionToShapeCoordinate(const QPointF &pos, const QPointF &dragStart) const
+{
+    QPointF pos2(pos);
+    if (m_type == KisVisualEllipticalSelectorShape::borderMirrored) {
+        qreal h_center = width()/2.0;
+        bool start_left = dragStart.x() < h_center;
+        bool cursor_left = pos.x() < h_center;
+        if (start_left != cursor_left) {
+            pos2.setX(h_center);
+        }
+    }
+    return convertWidgetCoordinateToShapeCoordinate(pos2);
 }
 
 QRegion KisVisualEllipticalSelectorShape::getMaskMap()

@@ -19,6 +19,7 @@
 #include "FreehandStrokeBenchmark.h"
 
 #include <QTest>
+#include <sdk/tests/kistest.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoColor.h>
 #include "stroke_testing_utils.h"
@@ -154,4 +155,4 @@ void FreehandStrokeBenchmark::testColorsmudgeDefaultTip()
     benchmarkBrush("testing_200px_colorsmudge_default.kpp");
 }
 
-QTEST_MAIN(FreehandStrokeBenchmark)
+KISTEST_MAIN(FreehandStrokeBenchmark)

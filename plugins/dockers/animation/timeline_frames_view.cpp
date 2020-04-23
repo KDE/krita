@@ -75,8 +75,11 @@ struct TimelineFramesView::Private
           dragWasSuccessful(false),
           modifiersCatcher(0),
           selectionChangedCompressor(300, KisSignalCompressor::FIRST_INACTIVE),
-          geometryChangedCompressor(300, KisSignalCompressor::FIRST_INACTIVE)
-    {}
+          geometryChangedCompressor(300, KisSignalCompressor::FIRST_INACTIVE),
+          kineticScrollInfiniteFrameUpdater()
+    {
+        kineticScrollInfiniteFrameUpdater.setTimerType(Qt::CoarseTimer);
+    }
 
     TimelineFramesView *q;
 
@@ -118,6 +121,8 @@ struct TimelineFramesView::Private
     QPoint lastPressedPosition;
     Qt::KeyboardModifiers lastPressedModifier;
 
+    QTimer kineticScrollInfiniteFrameUpdater;
+
     KisSignalCompressor selectionChangedCompressor;
     KisSignalCompressor geometryChangedCompressor;
 
@@ -155,6 +160,7 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
 
     KisZoomableScrollbar* hZoomableBar = new KisZoomableScrollbar(this);
     setHorizontalScrollBar(hZoomableBar);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     setVerticalScrollBar(new KisZoomableScrollbar(this));
 
     connect(hZoomableBar, SIGNAL(zoom(qreal)), this, SLOT(slotScrollbarZoom(qreal)));
@@ -195,7 +201,7 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     connect(&m_d->geometryChangedCompressor, SIGNAL(timeout()), SLOT(slotRealignScrollBars()));
 
     connect(hZoomableBar, SIGNAL(overscroll(int)), SLOT(slotUpdateInfiniteFramesCount()));
-    connect(horizontalScrollBar(), SIGNAL(sliderReleased()), SLOT(slotUpdateInfiniteFramesCount()));
+    connect(hZoomableBar, SIGNAL(sliderReleased()), SLOT(slotUpdateInfiniteFramesCount()));
 
     /********** Layer Menu ***********************************************************/
 
@@ -299,8 +305,20 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     {
         QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(this);
         if( scroller ) {
+            QScrollerProperties props = scroller->scrollerProperties();
+
             connect(scroller, SIGNAL(stateChanged(QScroller::State)),
                     this, SLOT(slotScrollerStateChanged(QScroller::State)));
+
+            connect(&m_d->kineticScrollInfiniteFrameUpdater, &QTimer::timeout, [this, scroller](){
+                slotUpdateInfiniteFramesCount();
+                scroller->resendPrepareEvent();
+            });
+
+            props.setScrollMetric(QScrollerProperties::VerticalOvershootPolicy, QScrollerProperties::OvershootAlwaysOff);
+            props.setScrollMetric(QScrollerProperties::HorizontalOvershootPolicy, QScrollerProperties::OvershootAlwaysOff);
+
+            scroller->setScrollerProperties(props);
         }
     }
 
@@ -579,9 +597,17 @@ void TimelineFramesView::slotUpdateInfiniteFramesCount()
              m_d->horizontalRuler->width() - 1) / sectionWidth;
 
     m_d->model->setLastVisibleFrame(calculatedIndex);
+
 }
 
 void TimelineFramesView::slotScrollerStateChanged( QScroller::State state ) {
+
+    if (state == QScroller::Dragging || state == QScroller::Scrolling ) {
+        m_d->kineticScrollInfiniteFrameUpdater.start(16);
+    } else {
+        m_d->kineticScrollInfiniteFrameUpdater.stop();
+    }
+
     KisKineticScroller::updateCursor(this, state);
 }
 

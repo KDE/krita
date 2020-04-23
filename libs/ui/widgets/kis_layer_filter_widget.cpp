@@ -1,3 +1,21 @@
+/*
+ *  Copyright (c) 2020 Eoin O'Neill <eoinoneill1991@gmail.com>
+ *  Copyright (c) 2020 Emmet O'Neill <emmetoneill.pdx@gmail.com>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
 #include "kis_layer_filter_widget.h"
 
 #include <QVBoxLayout>
@@ -38,13 +56,12 @@ KisLayerFilterWidget::KisLayerFilterWidget(QWidget *parent) : QWidget(parent)
         subLayout->setContentsMargins(0,0,0,0);
         buttonGroup = new KisColorLabelButtonGroup(buttonContainer);
         buttonGroup->setExclusive(false);
-        foreach (const QColor &color, colorScheme.allColorLabels()) {
+        Q_FOREACH (const QColor &color, colorScheme.allColorLabels()) {
             KisColorLabelButton* btn = new KisColorLabelButton(color, buttonContainer);
             buttonGroup->addButton(btn);
             btn->setVisible(false);
             btn->installEventFilter(buttonEventFilter);
             subLayout->addWidget(btn);
-            colorLabelButtons.append(btn);
         }
 
         connect(buttonGroup, SIGNAL(buttonToggled(int,bool)), this, SIGNAL(filteringOptionsChanged()));
@@ -52,8 +69,7 @@ KisLayerFilterWidget::KisLayerFilterWidget(QWidget *parent) : QWidget(parent)
 
     QPushButton *resetButton = new QPushButton("Reset Filters", this);
     connect(resetButton, &QPushButton::clicked, [this](){
-       textFilter->clear();
-       buttonGroup->reset();
+       this->reset();
     });
 
 
@@ -62,8 +78,8 @@ KisLayerFilterWidget::KisLayerFilterWidget(QWidget *parent) : QWidget(parent)
     layout->addWidget(resetButton);
 }
 
-void KisLayerFilterWidget::scanUsedColorLabels(KisNodeSP node, QSet<int> &colorLabels) {
-
+void KisLayerFilterWidget::scanUsedColorLabels(KisNodeSP node, QSet<int> &colorLabels)
+{
     if (node->parent()) {
         colorLabels.insert(node->colorLabelIndex());
     }
@@ -75,10 +91,12 @@ void KisLayerFilterWidget::scanUsedColorLabels(KisNodeSP node, QSet<int> &colorL
     }
 }
 
-void KisLayerFilterWidget::updateColorLabels(KisNodeSP root) {
+void KisLayerFilterWidget::updateColorLabels(KisNodeSP root)
+{
     QSet<int> colorLabels;
 
     scanUsedColorLabels(root, colorLabels);
+    QList<QAbstractButton*> colorLabelButtons = buttonGroup->buttons();
 
     if (colorLabels.size() > 1) {
         colorLabelButtons[0]->parentWidget()->setVisible(true);
@@ -99,13 +117,7 @@ void KisLayerFilterWidget::updateColorLabels(KisNodeSP root) {
 bool KisLayerFilterWidget::isCurrentlyFiltering()
 {
     const bool isFilteringText = !textFilter->text().isEmpty();
-
-    bool isFilteringColors = false;
-    for (int index = 0; index < colorLabelButtons.size(); index++) {
-        if (colorLabelButtons[index]->isVisible() && !colorLabelButtons[index]->isChecked()) {
-            isFilteringColors = true;
-        }
-    }
+    const bool isFilteringColors = buttonGroup->colorFilterDesired();
 
     return isFilteringText || isFilteringColors;
 }
@@ -114,9 +126,12 @@ QList<int> KisLayerFilterWidget::getActiveColors()
 {
     QList<int> activeColors;
 
-    for (int index = 0; index < colorLabelButtons.size(); index++) {
-        if (!colorLabelButtons[index]->isVisible() || colorLabelButtons[index]->isChecked()) {
-            activeColors.append(index);
+    if (buttonGroup->colorFilterDesired()) {
+        QList<QAbstractButton*> colorLabelButtons = buttonGroup->buttons();
+        for (int index = 0; index < colorLabelButtons.size(); index++) {
+            if (!colorLabelButtons[index]->isVisible() || colorLabelButtons[index]->isChecked()) {
+                activeColors.append(index);
+            }
         }
     }
 
@@ -131,14 +146,12 @@ QString KisLayerFilterWidget::getTextFilter()
 void KisLayerFilterWidget::reset()
 {
     textFilter->clear();
-
-    for (int index = 0; index < colorLabelButtons.size(); index++) {
-        colorLabelButtons[index]->setChecked(true);
-    }
+    buttonGroup->reset();
     filteringOptionsChanged();
 }
 
-KisLayerFilterWidget::EventFilter::EventFilter(QWidget *buttonContainer, QObject* parent) : QObject(parent) {
+KisLayerFilterWidget::EventFilter::EventFilter(QWidget *buttonContainer, QObject* parent) : QObject(parent)
+{
     m_buttonContainer = buttonContainer;
     lastKnownMousePosition = QPoint(0,0);
     currentState = Idle;
@@ -152,7 +165,6 @@ bool KisLayerFilterWidget::EventFilter::eventFilter(QObject *obj, QEvent *event)
         currentState = WaitingForDragLeave;
         lastKnownMousePosition = mouseEvent->globalPos();
 
-
         return true;
 
     } else if (event->type() == QEvent::MouseButtonRelease) {
@@ -164,9 +176,11 @@ bool KisLayerFilterWidget::EventFilter::eventFilter(QObject *obj, QEvent *event)
             if ( startingButton->group() && (mouseEvent->modifiers() & Qt::SHIFT)) {
                 KisColorLabelButtonGroup* const group = static_cast<KisColorLabelButtonGroup*>(startingButton->group());
                 const QList<QAbstractButton*> viableCheckedButtons = group->checkedViableButtons();
+
                 const int buttonsEnabled = viableCheckedButtons.count();
                 const bool shouldChangeIsolation = (buttonsEnabled == 1) && (viableCheckedButtons.first() == startingButton);
                 const bool shouldIsolate = (buttonsEnabled != 1) || !shouldChangeIsolation;
+
                 Q_FOREACH(QAbstractButton* otherBtn, group->viableButtons()) {
                     if (otherBtn == startingButton){
                         startingButton->setChecked(true);
@@ -174,6 +188,7 @@ bool KisLayerFilterWidget::EventFilter::eventFilter(QObject *obj, QEvent *event)
                         otherBtn->setChecked(!shouldIsolate);
                     }
                 }
+
             } else {
                 startingButton->click();
             }
@@ -184,7 +199,7 @@ bool KisLayerFilterWidget::EventFilter::eventFilter(QObject *obj, QEvent *event)
 
         return true;
 
-    } else if (event->type() == QEvent::MouseMove ) {
+    } else if (event->type() == QEvent::MouseMove) {
 
         if (currentState == WaitingForDragLeave) {
             QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);

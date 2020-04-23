@@ -80,8 +80,9 @@ bool KisNodeFilterProxyModel::Private::checkIndexAllowedRecursively(QModelIndex 
     KisNodeSP node = nodeModel->nodeFromIndex(srcIndex);
     const bool nodeTextFilterMatch = (!activeTextFilter.has_value() || node->name().contains(activeTextFilter.get(), Qt::CaseInsensitive));
     const bool directParentTextFilterMatch =  (!activeTextFilter.has_value() || (node->parent() && node->parent()->name().contains(activeTextFilter.get(), Qt::CaseInsensitive)));
+    const bool nodeColorMatch = (acceptedColorLabels.count() == 0 || acceptedColorLabels.contains(node->colorLabelIndex()));
     if ( node == activeNode ||
-         (acceptedColorLabels.contains(node->colorLabelIndex()) && (nodeTextFilterMatch || directParentTextFilterMatch) )) {
+         ( nodeColorMatch && (nodeTextFilterMatch || directParentTextFilterMatch) )) {
         return true;
     }
 

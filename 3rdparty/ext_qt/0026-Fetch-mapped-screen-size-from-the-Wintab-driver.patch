@@ -1,4 +1,4 @@
-From d042118b8c1ede384cd8f6f8d339118bbfc44a27 Mon Sep 17 00:00:00 2001
+From 266f6239f6d753b6f1218542041d316184cda596 Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Sat, 13 Apr 2019 23:24:01 +0300
 Subject: [PATCH 07/22] Fetch mapped screen size from the Wintab driver

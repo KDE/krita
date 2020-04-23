@@ -1,4 +1,4 @@
-From 19ff8c4b3906aa31db9381edbcfc16c7393a7dc4 Mon Sep 17 00:00:00 2001
+From af749499bc36d6c630b83fa6756515a90e797940 Mon Sep 17 00:00:00 2001
 From: Agata Cacko <tamtamy.tymona@gmail.com>
 Date: Mon, 10 Feb 2020 17:03:26 +0300
 Subject: [PATCH 22/22] Make jp(e)g default extensions context-aware

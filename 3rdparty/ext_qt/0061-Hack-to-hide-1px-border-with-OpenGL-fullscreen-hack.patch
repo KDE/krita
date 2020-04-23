@@ -1,4 +1,4 @@
-From a0d2342fc649752d2b66b6f0e74459949bb4f261 Mon Sep 17 00:00:00 2001
+From 713c94632d62a25d7575ba2ff6225d96e0e7fd3d Mon Sep 17 00:00:00 2001
 From: Alvin Wong <alvin@alvinhc.com>
 Date: Thu, 18 Apr 2019 18:59:58 +0800
 Subject: [PATCH 19/22] Hack to hide 1px border with OpenGL fullscreen hack

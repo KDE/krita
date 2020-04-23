@@ -135,7 +135,7 @@ void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection,
             if (m_view->selection()->selectedExactRect().isEmpty()) {
                 KisCommandUtils::CompositeCommand *cmd = new KisCommandUtils::CompositeCommand();
                 cmd->addCommand(savedCommand);
-                cmd->addCommand(new KisDeselectGlobalSelectionCommand(m_view->image()));
+                cmd->addCommand(new KisDeselectActiveSelectionCommand(m_view->selection(), m_view->image()));
                 savedCommand = cmd;
             }
 
@@ -251,6 +251,13 @@ void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes, Select
                         m_view->canvasBase()->shapeController()->removeShape(currentShape, parentCommand);
                         m_view->canvasBase()->shapeController()->addShape(newShape, 0, parentCommand);
 
+                        if (path.isEmpty()) {
+                            KisCommandUtils::CompositeCommand *cmd = new KisCommandUtils::CompositeCommand();
+                            cmd->addCommand(parentCommand);
+                            cmd->addCommand(new KisDeselectActiveSelectionCommand(m_view->selection(), m_view->image()));
+                            parentCommand = cmd;
+                        }
+
                         resultCommand = parentCommand;
                     }
                 }
@@ -267,7 +274,6 @@ void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes, Select
 
                 resultCommand = m_view->canvasBase()->shapeController()->addShape(m_shape, 0);
             }
-
             return resultCommand;
         }
     };

@@ -28,6 +28,8 @@
 #include <kis_image.h>
 #include <kis_transaction.h>
 #include <kis_selection_manager.h>
+#include <kis_command_utils.h>
+#include "commands/KisDeselectActiveSelectionCommand.h"
 
 void KisFilterSelectionOperation::runFilter(KisSelectionFilter* filter, KisViewManager* view, const KisOperationConfiguration& config)
 {
@@ -47,8 +49,16 @@ void KisFilterSelectionOperation::runFilter(KisSelectionFilter* filter, KisViewM
             KisTransaction transaction(mergedSelection);
             QRect processingRect = m_filter->changeRect(mergedSelection->selectedExactRect(), mergedSelection->defaultBounds());
             m_filter->process(mergedSelection, processingRect);
+            KUndo2Command *savedCommand = transaction.endAndTake();
             mergedSelection->setDirty(processingRect);
-            return transaction.endAndTake();
+            if (m_sel->selectedExactRect().isEmpty() || m_sel->pixelSelection()->outline().isEmpty()) {
+                KisCommandUtils::CompositeCommand *cmd = new KisCommandUtils::CompositeCommand();
+                cmd->addCommand(savedCommand);
+                cmd->addCommand(new KisDeselectActiveSelectionCommand(m_sel, m_image));
+                savedCommand = cmd;
+            }
+
+            return savedCommand;
         }
     };
 

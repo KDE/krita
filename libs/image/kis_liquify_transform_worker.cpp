@@ -99,15 +99,9 @@ bool KisLiquifyTransformWorker::operator==(const KisLiquifyTransformWorker &othe
 
     const qreal eps = 1e-6;
 
-    for (int i = 0; i < m_d->originalPoints.size(); i++) {
-        result = KisAlgebra2D::fuzzyPointCompare(m_d->originalPoints[i], other.m_d->originalPoints[i], eps);
-        if (!result) return false;
-    }
-
-    for (int i = 0; i < m_d->transformedPoints.size(); i++) {
-        result = KisAlgebra2D::fuzzyPointCompare(m_d->transformedPoints[i], other.m_d->transformedPoints[i], eps);
-        if (!result) return false;
-    }
+    result =
+        KisAlgebra2D::fuzzyPointCompare(m_d->originalPoints, other.m_d->originalPoints, eps) &&
+        KisAlgebra2D::fuzzyPointCompare(m_d->transformedPoints, other.m_d->transformedPoints, eps);
 
     return result;
 }
@@ -458,8 +452,8 @@ QRect KisLiquifyTransformWorker::approxChangeRect(const QRect &rc)
     const int step = qMax(minStep, m_d->transformedPoints.size() / maxSamplePoints);
 
     QVector<QPoint> samplePoints;
-    for (int i = 0; i < m_d->transformedPoints.size(); i += step) {
-        samplePoints << m_d->transformedPoints[i].toPoint();
+    for (auto it = m_d->transformedPoints.constBegin(); it != m_d->transformedPoints.constEnd(); ++it) {
+        samplePoints << it->toPoint();
     }
 
     QRect resultRect = KisAlgebra2D::approximateRectFromPoints(samplePoints);

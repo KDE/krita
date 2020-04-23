@@ -566,6 +566,25 @@ bool KRITAGLOBAL_EXPORT fuzzyPointCompare(const QPointF &p1, const QPointF &p2);
 bool KRITAGLOBAL_EXPORT fuzzyPointCompare(const QPointF &p1, const QPointF &p2, qreal delta);
 
 /**
+ * Returns true if points in two containers are equal with specified tolerance
+ */
+template <template<typename> class Cont, class Point>
+bool fuzzyPointCompare(const Cont<Point> &c1, const Cont<Point> &c2, qreal delta)
+{
+    if (c1.size() != c2.size()) return false;
+
+    const qreal eps = delta;
+
+    return std::mismatch(c1.cbegin(),
+                         c1.cend(),
+                         c2.cbegin(),
+                         [eps] (const QPointF &pt1, const QPointF &pt2) {
+                               return fuzzyPointCompare(pt1, pt2, eps);
+                         })
+            .first == c1.cend();
+}
+
+/**
  * Compare two rectangles with tolerance \p tolerance. The tolerance means that the
  * coordinates of top left and bottom right corners should not differ more than \p tolerance
  * pixels.

@@ -49,7 +49,7 @@
 #include "kis_canvas_widget_base.h"
 #include "kis_layer_projection_plane.h"
 #include "kis_node_graph_listener.h"
-
+#include "kis_transaction.h"
 
 class KisScratchPadNodeListener : public KisNodeGraphListener
 {
@@ -420,7 +420,9 @@ void KisScratchPad::paintCustomImage(const QImage& loadedImage)
     device->convertFromQImage(scaledImage, 0);
 
     KisPainter painter(paintDevice);
+    painter.beginTransaction();
     painter.bitBlt(overlayRect.topLeft(), device, imageRect);
+    painter.deleteTransaction();
     update();
 }
 
@@ -440,7 +442,9 @@ void KisScratchPad::paintPresetImage()
     device->convertFromQImage(scaledImage, 0);
 
     KisPainter painter(paintDevice);
+    painter.beginTransaction();
     painter.bitBlt(overlayRect.topLeft(), device, imageRect);
+    painter.deleteTransaction();
     update();
 }
 
@@ -457,8 +461,10 @@ void KisScratchPad::fillDefault()
     if(!m_paintLayer) return;
     KisPaintDeviceSP paintDevice = m_paintLayer->paintDevice();
 
+    KisTransaction t(paintDevice);
     paintDevice->setDefaultPixel(m_defaultColor);
     paintDevice->clear();
+    t.end();
     update();
 }
 
@@ -470,8 +476,10 @@ void KisScratchPad::fillTransparent() {
     KoColor transparentColor(transQColor, KoColorSpaceRegistry::instance()->rgb8());
     transparentColor.setOpacity(0.0);
 
+    KisTransaction t(paintDevice);
     paintDevice->setDefaultPixel(transparentColor);
     paintDevice->clear();
+    t.end();
     update();
 }
 
@@ -483,10 +491,11 @@ void KisScratchPad::fillGradient()
     KoAbstractGradient* gradient = m_resourceProvider->currentGradient();
     QRect gradientRect = widgetToDocument().mapRect(rect());
 
+    KisTransaction t(paintDevice);
+
     paintDevice->clear();
 
     KisGradientPainter painter(paintDevice);
-
     painter.setGradient(gradient);
     painter.setGradientShape(KisGradientPainter::GradientShapeLinear);
     painter.paintGradient(gradientRect.topLeft(),
@@ -496,6 +505,7 @@ void KisScratchPad::fillGradient()
                           gradientRect.left(), gradientRect.top(),
                           gradientRect.width(), gradientRect.height());
 
+    t.end();
     update();
 }
 
@@ -504,8 +514,10 @@ void KisScratchPad::fillBackground()
     if(!m_paintLayer) return;
     KisPaintDeviceSP paintDevice = m_paintLayer->paintDevice();
 
+    KisTransaction t(paintDevice);
     paintDevice->setDefaultPixel(m_resourceProvider->bgColor());
     paintDevice->clear();
+    t.end();
     update();
 }
 
@@ -514,8 +526,11 @@ void KisScratchPad::fillLayer()
     if(!m_paintLayer) return;
     KisPaintDeviceSP paintDevice = m_paintLayer->paintDevice();
 
-    KisPainter painter(paintDevice);
     QRect sourceRect(0, 0, paintDevice->exactBounds().width(), paintDevice->exactBounds().height());
+
+    KisPainter painter(paintDevice);
+    painter.beginTransaction();
     painter.bitBlt(QPoint(0, 0), m_resourceProvider->currentImage()->projection(), sourceRect);
+    painter.deleteTransaction();
     update();
 }

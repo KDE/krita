@@ -25,6 +25,7 @@
 #include <strokes/KisFreehandStrokeInfo.h>
 #include "KisAsyncronousStrokeUpdateHelper.h"
 #include <kis_brush.h>
+#include "kis_transaction.h"
 
 KisPresetLivePreviewView::KisPresetLivePreviewView(QWidget *parent)
     : QGraphicsView(parent),
@@ -148,7 +149,10 @@ void KisPresetLivePreviewView::paintBackground()
                                  0,
                                  m_layer->image()->width()*(sectionPercent*i +sectionPercent),
                                  m_layer->image()->height());
+
+            KisTransaction t(m_layer->paintDevice());
             m_layer->paintDevice()->fill(fillRect, fillColor);
+            t.end();
         }
 
         m_paintColor = KoColor(Qt::white, m_colorSpace);
@@ -180,7 +184,10 @@ void KisPresetLivePreviewView::paintBackground()
     else {
 
         // fill with gray first to clear out what existed from previous preview
+        KisTransaction t(m_layer->paintDevice());
         m_layer->paintDevice()->fill(m_image->bounds(), KoColor(palette().color(QPalette::Background) , m_colorSpace));
+        t.end();
+
         m_paintColor = KoColor(palette().color(QPalette::Text), m_colorSpace);
     }
 }

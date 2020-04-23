@@ -18,6 +18,7 @@
 
 #include "kis_imagepipe_brush_test.h"
 
+#include <sdk/tests/kistest.h>
 #include <QTest>
 #include <QPainter>
 
@@ -261,4 +262,4 @@ void KisImagePipeBrushTest::testTextBrushPiped()
     checkIncrementalPainting(brush.data(), "text_incremental");
 }
 
-QTEST_MAIN(KisImagePipeBrushTest)
+KISTEST_MAIN(KisImagePipeBrushTest)

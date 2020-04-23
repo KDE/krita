@@ -192,6 +192,10 @@ protected:
      * the returned image is expected to be QImage::Format_Alpha8
      */
     virtual QImage renderAlphaMask() const;
+    /**
+     * @brief default implementation just calls convertWidgetCoordinateToShapeCoordinate(pos)
+    */
+    virtual QPointF mousePositionToShapeCoordinate(const QPointF &pos, const QPointF &dragStart) const;
 
     void mousePressEvent(QMouseEvent *e) override;
     void mouseMoveEvent(QMouseEvent *e) override;

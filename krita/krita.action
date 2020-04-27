@@ -2068,7 +2068,7 @@
   <Actions category="Animation">
     <text>Animation</text>
     <Action name="previous_frame">
-      <icon></icon>
+      <icon>prevframe</icon>
       <text>Previous frame</text>
       <whatsThis></whatsThis>
       <toolTip>Move to previous frame</toolTip>
@@ -2080,7 +2080,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="next_frame">
-      <icon></icon>
+      <icon>nextframe</icon>
       <text>Next frame</text>
       <whatsThis></whatsThis>
       <toolTip>Move to next frame</toolTip>
@@ -2092,7 +2092,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="toggle_playback">
-      <icon></icon>
+      <icon>animation_play</icon>
       <text>Play / pause animation</text>
       <whatsThis></whatsThis>
       <toolTip>Play / pause animation</toolTip>
@@ -2102,6 +2102,18 @@
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
+    </Action>
+    <Action name="stop_playback">
+      <icon>animation_stop</icon>
+      <text>Stop animation</text>
+      <whatsThis></whatsThis>
+      <toolTip>Stop animation</toolTip>
+      <iconText>Stop animation</iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+       <statusTip></statusTip>
     </Action>
     <Action name="add_blank_frame">
       <icon>addblankframe</icon>

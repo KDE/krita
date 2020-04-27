@@ -1,5 +1,7 @@
 /*
  *  Copyright (c) 2015 Jouni Pentikäinen <joupent@gmail.com>
+ *  Copyright (c) 2020 Emmet O'Neill <emmetoneill.pdx@gmail.com>
+ *  Copyright (c) 2020 Eoin O'Neill <eoinoneill1991@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,6 +31,30 @@
 class KisCanvas2;
 class KisAction;
 
+class TimelineDockerTitlebar : public QWidget
+{
+    Q_OBJECT
+
+public:
+    TimelineDockerTitlebar(QWidget *parent = nullptr);
+    ~TimelineDockerTitlebar();
+
+    virtual QSize sizeHint() const {return QSize(32,32);}
+    virtual QSize minimumSizeHint() const {return QSize(32,32);}
+
+    class QToolButton* btnAddKeyframe;
+    class QToolButton* btnDuplicateKeyframe;
+    class QToolButton* btnRemoveKeyframe;
+    class KisTransportControls* transport;
+    class QSpinBox *frameCounter;
+
+private:
+    const u_int SPACING_UNIT = 8;
+    const u_int MAX_FRAMES = 9999;
+
+
+};
+
 class TimelineDocker : public QDockWidget, public KisMainwindowObserver
 {
     Q_OBJECT
@@ -42,8 +68,14 @@ public:
     void setViewManager(KisViewManager *kisview) override;
 
 public Q_SLOTS:
-    void slotUpdateIcons();
-    void slotUpdateFrameCache();
+    void playPause();
+    void stop();
+    void previousFrame();
+    void nextFrame();
+    void goToFrame(int frameIndex);
+
+    void handleThemeChange();
+    void updateFrameCache();
 
 private:
     struct Private;

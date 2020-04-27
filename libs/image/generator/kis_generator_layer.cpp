@@ -74,7 +74,7 @@ void KisGeneratorLayer::setFilter(KisFilterConfigurationSP filterConfig)
 {
     KisSelectionBasedLayer::setFilter(filterConfig);
     m_d->preparedRect = QRect();
-    update();
+    slotDelayedStaticUpdate();
 }
 
 void KisGeneratorLayer::slotDelayedStaticUpdate()

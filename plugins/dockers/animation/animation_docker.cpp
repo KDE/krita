@@ -148,7 +148,7 @@ void AnimationDocker::setViewManager(KisViewManager *view)
     m_mainWindow = view->mainWindow();
 }
 
-void AnimationDocker::slotAddOpacityKeyframe()
+/*void AnimationDocker::slotAddOpacityKeyframe()
 {
     // remember current node's opacity and set it once we create a new opacity keyframe
     KisNodeSP node = m_canvas->viewManager()->activeNode();
@@ -181,7 +181,7 @@ void AnimationDocker::slotAddTransformKeyframe()
 void AnimationDocker::slotDeleteTransformKeyframe()
 {
     deleteKeyframe(KisKeyframeChannel::TransformArguments.id());
-}
+}*/
 
 void AnimationDocker::slotUIRangeChanged()
 {
@@ -213,7 +213,7 @@ void AnimationDocker::slotOnionSkinOptions()
 void AnimationDocker::slotGlobalTimeChanged()
 {
     int time = m_canvas->animationPlayer()->isPlaying() ?
-                m_canvas->animationPlayer()->currentTime() :
+                m_canvas->animationPlayer()->visibleFrame() :
                 m_canvas->image()->animationInterface()->currentUITime();
 
     m_animationWidget->intCurrentTime->setValue(time);
@@ -243,134 +243,134 @@ void AnimationDocker::slotFrameRateChanged()
 
 void AnimationDocker::slotTimeSpinBoxChanged()
 {
-    if (!m_canvas || !m_canvas->image()) return;
+//    if (!m_canvas || !m_canvas->image()) return;
 
-    int newTime = m_animationWidget->intCurrentTime->value();
-    KisImageAnimationInterface *animation = m_canvas->image()->animationInterface();
+//    int newTime = m_animationWidget->intCurrentTime->value();
+//    KisImageAnimationInterface *animation = m_canvas->image()->animationInterface();
 
-    if (m_canvas->animationPlayer()->isPlaying() ||
-        newTime == animation->currentUITime()) {
+//    if (m_canvas->animationPlayer()->isPlaying() ||
+//        newTime == animation->currentUITime()) {
 
-        return;
-    }
+//        return;
+//    }
 
-    animation->requestTimeSwitchWithUndo(newTime);
+//    animation->requestTimeSwitchWithUndo(newTime);
 }
 
 void AnimationDocker::slotPreviousFrame()
 {
-    if (!m_canvas) return;
-    KisImageAnimationInterface *animation = m_canvas->image()->animationInterface();
+//    if (!m_canvas) return;
+//    KisImageAnimationInterface *animation = m_canvas->image()->animationInterface();
 
-    int time = animation->currentUITime() - 1;
-    if (time >= 0) {
-        animation->requestTimeSwitchWithUndo(time);
-    }
+//    int time = animation->currentUITime() - 1;
+//    if (time >= 0) {
+//        animation->requestTimeSwitchWithUndo(time);
+//    }
 }
 
 void AnimationDocker::slotNextFrame()
 {
-    if (!m_canvas) return;
-    KisImageAnimationInterface *animation = m_canvas->image()->animationInterface();
+//    if (!m_canvas) return;
+//    KisImageAnimationInterface *animation = m_canvas->image()->animationInterface();
 
-    int time = animation->currentUITime() + 1;
-    animation->requestTimeSwitchWithUndo(time);
+//    int time = animation->currentUITime() + 1;
+//    animation->requestTimeSwitchWithUndo(time);
 }
 
 void AnimationDocker::slotPreviousKeyFrame()
 {
-    if (!m_canvas) return;
+//    if (!m_canvas) return;
 
-    KisNodeSP node = m_canvas->viewManager()->activeNode();
-    if (!node) return;
+//    KisNodeSP node = m_canvas->viewManager()->activeNode();
+//    if (!node) return;
 
-    KisImageAnimationInterface *animation = m_canvas->image()->animationInterface();
-    int time = animation->currentUITime();
+//    KisImageAnimationInterface *animation = m_canvas->image()->animationInterface();
+//    int time = animation->currentUITime();
 
-    KisKeyframeChannel *content =
-        node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+//    KisKeyframeChannel *content =
+//        node->getKeyframeChannel(KisKeyframeChannel::Content.id());
 
-    if (!content) return;
+//    if (!content) return;
 
-    KisKeyframeSP dstKeyframe;
-    KisKeyframeSP keyframe = content->keyframeAt(time);
+//    KisKeyframeSP dstKeyframe;
+//    KisKeyframeSP keyframe = content->keyframeAt(time);
 
-    if (!keyframe) {
-        dstKeyframe = content->activeKeyframeAt(time);
-    } else {
-        dstKeyframe = content->previousKeyframe(keyframe);
-    }
+//    if (!keyframe) {
+//        dstKeyframe = content->activeKeyframeAt(time);
+//    } else {
+//        dstKeyframe = content->previousKeyframe(keyframe);
+//    }
 
-    if (dstKeyframe) {
-        animation->requestTimeSwitchWithUndo(dstKeyframe->time());
-    }
+//    if (dstKeyframe) {
+//        animation->requestTimeSwitchWithUndo(dstKeyframe->time());
+//    }
 }
 
 void AnimationDocker::slotNextKeyFrame()
 {
-    if (!m_canvas) return;
+//    if (!m_canvas) return;
 
-    KisNodeSP node = m_canvas->viewManager()->activeNode();
-    if (!node) return;
+//    KisNodeSP node = m_canvas->viewManager()->activeNode();
+//    if (!node) return;
 
-    KisImageAnimationInterface *animation = m_canvas->image()->animationInterface();
-    int time = animation->currentUITime();
+//    KisImageAnimationInterface *animation = m_canvas->image()->animationInterface();
+//    int time = animation->currentUITime();
 
-    KisKeyframeChannel *content =
-        node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+//    KisKeyframeChannel *content =
+//        node->getKeyframeChannel(KisKeyframeChannel::Content.id());
 
-    if (!content) return;
+//    if (!content) return;
 
-    KisKeyframeSP dstKeyframe;
-    KisKeyframeSP keyframe = content->activeKeyframeAt(time);
+//    KisKeyframeSP dstKeyframe;
+//    KisKeyframeSP keyframe = content->activeKeyframeAt(time);
 
-    if (keyframe) {
-        dstKeyframe = content->nextKeyframe(keyframe);
-    }
+//    if (keyframe) {
+//        dstKeyframe = content->nextKeyframe(keyframe);
+//    }
 
-    if (dstKeyframe) {
-        animation->requestTimeSwitchWithUndo(dstKeyframe->time());
-    }
+//    if (dstKeyframe) {
+//        animation->requestTimeSwitchWithUndo(dstKeyframe->time());
+//    }
 }
 
 
 void AnimationDocker::slotFirstFrame()
 {
-    if (!m_canvas) return;
+//    if (!m_canvas) return;
 
-    KisImageAnimationInterface *animation = m_canvas->image()->animationInterface();
-    animation->requestTimeSwitchWithUndo(0);
+//    KisImageAnimationInterface *animation = m_canvas->image()->animationInterface();
+//    animation->requestTimeSwitchWithUndo(0);
 }
 
 void AnimationDocker::slotLastFrame()
 {
-    if (!m_canvas) return;
+//    if (!m_canvas) return;
 
-    KisImageAnimationInterface *animation = m_canvas->image()->animationInterface();
-    animation->requestTimeSwitchWithUndo(animation->totalLength() - 1);
+//    KisImageAnimationInterface *animation = m_canvas->image()->animationInterface();
+//    animation->requestTimeSwitchWithUndo(animation->totalLength() - 1);
 }
 
 
 void AnimationDocker::slotPlayPause()
 {
-    if (!m_canvas) return;
+//    if (!m_canvas) return;
 
-    if (m_canvas->animationPlayer()->isPlaying()) {
-        m_canvas->animationPlayer()->stop();
-    } else {
-        m_canvas->animationPlayer()->play();
-    }
+//    if (m_canvas->animationPlayer()->isPlaying()) {
+//        m_canvas->animationPlayer()->stop();
+//    } else {
+//        m_canvas->animationPlayer()->play();
+//    }
 
-    updatePlayPauseIcon();
+//    updatePlayPauseIcon();
 }
 
 void AnimationDocker::updatePlayPauseIcon()
 {
     bool isPlaying = m_canvas && m_canvas->animationPlayer() && m_canvas->animationPlayer()->isPlaying();
 
-    m_playPauseAction->setIcon(isPlaying ?
-                               KisIconUtils::loadIcon("animation_stop") :
-                               KisIconUtils::loadIcon("animation_play"));
+//    m_playPauseAction->setIcon(isPlaying ?
+//                               KisIconUtils::loadIcon("animation_stop") :
+//                               KisIconUtils::loadIcon("animation_play"));
 }
 
 void AnimationDocker::updateLazyFrameIcon()
@@ -529,7 +529,7 @@ void AnimationDocker::updateClipRange()
     m_animationWidget->spinToFrame->setValue(m_canvas->image()->animationInterface()->fullClipRange().end());
 }
 
-void AnimationDocker::addKeyframe(const QString &channel, bool copy)
+/*void AnimationDocker::addKeyframe(const QString &channel, bool copy)
 {
     if (!m_canvas) return;
 
@@ -549,7 +549,7 @@ void AnimationDocker::deleteKeyframe(const QString &channel)
 
     const int time = m_canvas->image()->animationInterface()->currentTime();
     KisAnimationUtils::removeKeyframe(m_canvas->image(), node, channel, time);
-}
+}*/
 
 void AnimationDocker::setActions(KisActionManager *actionMan)
 {
@@ -580,10 +580,9 @@ void AnimationDocker::setActions(KisActionManager *actionMan)
     m_lastFrameAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
     m_animationWidget->btnLastFrame->setDefaultAction(m_lastFrameAction);
 
-
-    m_playPauseAction = new KisAction(i18n("Play / Stop"), m_animationWidget->btnPlay);
-    m_playPauseAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    m_animationWidget->btnPlay->setDefaultAction(m_playPauseAction);
+//    m_playPauseAction = new KisAction(i18n("Play / Stop"), m_animationWidget->btnPlay);
+//    m_playPauseAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
+//    m_animationWidget->btnPlay->setDefaultAction(m_playPauseAction);
 
     KisAction *action = 0;
 
@@ -647,7 +646,7 @@ void AnimationDocker::setActions(KisActionManager *actionMan)
      m_actionManager->addAction("lazy_frame", m_lazyFrameAction);
      m_actionManager->addAction("drop_frames", m_dropFramesAction);
 
-     m_actionManager->addAction("toggle_playback", m_playPauseAction);
+     //m_actionManager->addAction("toggle_playback", m_playPauseAction);
 
     QFont font;
     font.setPointSize(1.7 * font.pointSize());

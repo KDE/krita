@@ -53,11 +53,11 @@ private Q_SLOTS:
 
     void slotPlayPause();
 
-    void slotAddOpacityKeyframe();
+    /*void slotAddOpacityKeyframe();
     void slotDeleteOpacityKeyframe();
 
     void slotAddTransformKeyframe();
-    void slotDeleteTransformKeyframe();
+    void slotDeleteTransformKeyframe();*/
 
     void slotUIRangeChanged();
     void slotUIFramerateChanged();

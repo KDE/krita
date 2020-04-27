@@ -63,6 +63,8 @@ public:
 
     void setPlaybackRange(const KisTimeRange &range);
     bool isPlaybackActive() const;
+    bool isPlaybackPaused() const;
+    void stopPlayback() const;
     int currentTime() const;
 
     enum ItemDataRole
@@ -97,7 +99,6 @@ private Q_SLOTS:
 
     void slotPlaybackFrameChanged();
     void slotPlaybackStopped();
-
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

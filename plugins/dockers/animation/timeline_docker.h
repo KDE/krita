@@ -1,5 +1,7 @@
 /*
  *  Copyright (c) 2015 Jouni Pentikäinen <joupent@gmail.com>
+ *  Copyright (c) 2020 Emmet O'Neill <emmetoneill.pdx@gmail.com>
+ *  Copyright (c) 2020 Eoin O'Neill <eoinoneill1991@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,13 +23,42 @@
 
 #include "kritaimage_export.h"
 
-#include <QDockWidget>
-#include <kis_mainwindow_observer.h>
-
 #include <QScopedPointer>
+#include <QDockWidget>
+
+#include <kis_mainwindow_observer.h>
+#include <kis_utility_title_bar.h>
+
+class QPushButton;
+class QToolButton;
+class QSpinBox;
+class KisTransportControls;
 
 class KisCanvas2;
 class KisAction;
+
+class TimelineDockerTitleBar : public KisUtilityTitleBar
+{
+    Q_OBJECT
+
+public:
+    TimelineDockerTitleBar(QWidget *parent = nullptr);
+
+    KisTransportControls* transport;
+
+    QSpinBox *frameCounter;
+
+    QToolButton *btnAddKeyframe;
+    QToolButton *btnDuplicateKeyframe;
+    QToolButton *btnRemoveKeyframe;
+
+    QPushButton *btnOnionSkinsMenu;
+    QPushButton *btnAudioMenu;
+    QPushButton *btnSettingsMenu;
+
+private:
+    const u_int MAX_FRAMES = 9999;
+};
 
 class TimelineDocker : public QDockWidget, public KisMainwindowObserver
 {
@@ -42,8 +73,16 @@ public:
     void setViewManager(KisViewManager *kisview) override;
 
 public Q_SLOTS:
-    void slotUpdateIcons();
-    void slotUpdateFrameCache();
+    void playPause();
+    void stop();
+    void previousFrame();
+    void nextFrame();
+    void goToFrame(int frameIndex);
+
+    void updateFrameCache();
+    void updateFrameCounter();
+
+    void handleThemeChange();
 
 private:
     struct Private;

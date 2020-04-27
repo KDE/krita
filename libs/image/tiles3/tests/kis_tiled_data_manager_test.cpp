@@ -942,6 +942,54 @@ void KisTiledDataManagerTest::stressTestLazyCopying()
     pool.waitForDone();
 }
 
+void KisTiledDataManagerTest::stressTestExtentsColumn()
+{
+    KisTiledExtentManager::Data column;
+
+    struct Job : public QRunnable
+    {
+        Job(KisTiledExtentManager::Data &column, int index, int numCycles)
+            : m_column(column), m_index(index), m_numCycles(numCycles) {}
+
+        void run() override {
+            for(qint32 i = 0; i < m_numCycles; i++) {
+                if (!m_isCreated) {
+                    m_column.add(m_index);
+                } else {
+                    m_column.remove(m_index);
+                }
+
+                m_isCreated = !m_isCreated;
+            }
+        }
+
+        KisTiledExtentManager::Data &m_column;
+        const int m_index;
+        const int m_numCycles;
+        bool m_isCreated = false;
+    };
+
+
+#ifdef LIMIT_LONG_TESTS
+    const int numThreads = 8;
+    const int numWorkers = 16;
+    const int numCycles = 10000;
+#else
+    const int numThreads = 16;
+    const int numWorkers = 32;
+    const int numCycles = 100000;
+#endif
+
+    QThreadPool pool;
+    pool.setMaxThreadCount(numThreads);
+
+    for(qint32 i = 0; i < numWorkers; i++) {
+        const int index = 18 + i / 13;
+        pool.start(new Job(column, index, numCycles));
+    }
+    pool.waitForDone();
+}
+
 void KisTiledDataManagerTest::benchmaskQRegion()
 {
     QVector<QRect> rects;

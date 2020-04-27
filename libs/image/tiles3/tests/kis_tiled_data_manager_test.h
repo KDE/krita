@@ -63,6 +63,8 @@ private Q_SLOTS:
 
     void stressTestLazyCopying();
 
+    void stressTestExtentsColumn();
+
     void benchmaskQRegion();
     void benchmaskKisRegion();
 };

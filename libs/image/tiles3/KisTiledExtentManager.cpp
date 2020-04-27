@@ -41,7 +41,7 @@ KisTiledExtentManager::Data::~Data()
     delete[] m_buffer;
 }
 
-inline bool KisTiledExtentManager::Data::add(qint32 index)
+bool KisTiledExtentManager::Data::add(qint32 index)
 {
     QReadLocker lock(&m_migrationLock);
     qint32 currentIndex = m_offset + index;
@@ -79,7 +79,7 @@ inline bool KisTiledExtentManager::Data::add(qint32 index)
     return needsUpdateExtent;
 }
 
-inline bool KisTiledExtentManager::Data::remove(qint32 index)
+bool KisTiledExtentManager::Data::remove(qint32 index)
 {
     QReadLocker lock(&m_migrationLock);
     qint32 currentIndex = m_offset + index;
@@ -104,7 +104,18 @@ inline bool KisTiledExtentManager::Data::remove(qint32 index)
             m_buffer[currentIndex].deref();
         }
     } else {
-        m_buffer[currentIndex].deref();
+        const bool nonZero = m_buffer[currentIndex].deref();
+
+        /**
+         * BUG: since we are not holding the write lock, it might happen
+         * that two threads failed the original 'if' and entered this
+         * branch. It means that the device will report unexistent
+         * extent... See KisTiledDataManagerTest::stressTestExtentsColumn()
+         * for reproduction.
+         *
+         * The same bug is present in KisTiledExtentManager::Data::add()
+         */
+        KIS_SAFE_ASSERT_RECOVER_NOOP(nonZero);
     }
 
     return needsUpdateExtent;

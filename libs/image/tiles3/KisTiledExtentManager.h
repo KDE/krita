@@ -31,14 +31,14 @@ class KRITAIMAGE_EXPORT KisTiledExtentManager
 {
     static const qint32 InitialBufferSize = 256;
 
-    class Data
+    class KRITAIMAGE_EXPORT Data
     {
     public:
         Data();
         ~Data();
 
-        inline bool add(qint32 index);
-        inline bool remove(qint32 index);
+        bool add(qint32 index);
+        bool remove(qint32 index);
         void replace(const QVector<qint32> &indexes);
         void clear();
         bool isEmpty();
@@ -76,6 +76,7 @@ public:
 
 private:
     void updateExtent();
+    friend class KisTiledDataManagerTest;
 
 private:
     mutable QReadWriteLock m_extentLock;

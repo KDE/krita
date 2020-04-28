@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=Krita/PythonPlugin
+X-KDE-Library=channels2layers
+X-Python-2-Compatible=false
+X-Krita-Manual=Manual.html
+Name=Channels to layers
+Comment=Extract channels as color layers

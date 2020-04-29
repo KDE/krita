@@ -34,6 +34,7 @@ private:
     bool catchTeleportCorrection = false;
     qreal scrollAccumulator;
     qreal zoomAccumulator;
+    qreal zoomDeadzone;
 
 public:
     KisZoomableScrollbar(QWidget* parent = 0);

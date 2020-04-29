@@ -25,6 +25,7 @@
 KisZoomableScrollbar::KisZoomableScrollbar(QWidget *parent)
     : QScrollBar(parent)
     , scrollAccumulator(0.0f)
+    , zoomDeadzone(0.90f)
 {
 }
 
@@ -46,9 +47,9 @@ void KisZoomableScrollbar::mousePressEvent(QMouseEvent *event)
 
     if( isSliderDown() && !wasSliderDownBefore ){
         previousPosition = mapToGlobal(event->pos());
-        setCursor(Qt::BlankCursor);
+        //setCursor(Qt::BlankCursor);
     } else {
-        setCursor(Qt::ArrowCursor);
+        //setCursor(Qt::ArrowCursor);
     }
 
 }
@@ -91,7 +92,7 @@ void KisZoomableScrollbar::mouseMoveEvent(QMouseEvent *event)
                 previousPosition = QPoint(x, y) - accel;
 
                 //Important -- teleportation needs to caught to prevent high-acceleration
-                //values from being read in this event.
+                //values from QCursor::setPos being read in this event.
                 catchTeleportCorrection = true;
             }
         } else {
@@ -117,8 +118,11 @@ void KisZoomableScrollbar::mouseMoveEvent(QMouseEvent *event)
             scrollAccumulator -= floor(abs(scrollAccumulator)) * sign;
         }
 
-        if (zoomMovementPix != 0) {
-            zoom(qreal(zoomMovementPix) / (widgetThickness * 10));
+        const QVector2D perpendicularDirection = (orientation() == Qt::Horizontal) ? QVector2D(0, 1) : QVector2D(1, 0);
+        const float perpendicularity = QVector2D::dotProduct(perpendicularDirection.normalized(), QVector2D(accel).normalized());
+
+        if (abs(perpendicularity) > zoomDeadzone && zoomMovementPix != 0) {
+            zoom(qreal(zoomMovementPix) / (widgetThickness * 5));
         }
 
 
@@ -134,11 +138,11 @@ void KisZoomableScrollbar::mouseReleaseEvent(QMouseEvent *event)
     const qreal documentLength = maximum() - minimum() + pageStep();
     const qreal widgetLengthOffsetPix = (sliderPosition() / documentLength) * widgetLength;
 
-    setCursor(Qt::ArrowCursor);
+    //setCursor(Qt::ArrowCursor);
 
-    if (isSliderDown()) {
-        QCursor::setPos(mapToGlobal(pos()) + cursorTranslationNormal * widgetLengthOffsetPix);
-    }
+//    if (isSliderDown()) {
+//        QCursor::setPos(mapToGlobal(pos()) + cursorTranslationNormal * widgetLengthOffsetPix);
+//    }
 
     QScrollBar::mouseReleaseEvent(event);
 

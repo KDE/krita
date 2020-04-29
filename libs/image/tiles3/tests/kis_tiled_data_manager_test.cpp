@@ -955,6 +955,8 @@ void KisTiledDataManagerTest::stressTestExtentsColumn()
             for(qint32 i = 0; i < m_numCycles; i++) {
                 if (!m_isCreated) {
                     m_column.add(m_index);
+                    KIS_SAFE_ASSERT_RECOVER_NOOP(m_column.max() >= m_index);
+                    KIS_SAFE_ASSERT_RECOVER_NOOP(m_column.min() <= m_index);
                 } else {
                     m_column.remove(m_index);
                 }
@@ -972,7 +974,7 @@ void KisTiledDataManagerTest::stressTestExtentsColumn()
 
 #ifdef LIMIT_LONG_TESTS
     const int numThreads = 8;
-    const int numWorkers = 16;
+    const int numWorkers = 32;
     const int numCycles = 10000;
 #else
     const int numThreads = 16;
@@ -988,6 +990,9 @@ void KisTiledDataManagerTest::stressTestExtentsColumn()
         pool.start(new Job(column, index, numCycles));
     }
     pool.waitForDone();
+
+    QVERIFY(column.isEmpty());
+    QVERIFY(column.max() < column.min()); // really empty :)
 }
 
 void KisTiledDataManagerTest::benchmaskQRegion()

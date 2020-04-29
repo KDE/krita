@@ -235,7 +235,16 @@ KisMementoSP KisMementoManager::getMemento()
      * We do not allow nested transactions
      */
     KIS_SAFE_ASSERT_RECOVER_NOOP(!namedTransactionInProgress());
-    KIS_SAFE_ASSERT_RECOVER_NOOP(m_index.isEmpty());
+
+    /**
+     * The following assert is useful for testing if some code creates a
+     * transaction on a device with "inconsistent history". We cannot keep
+     * this sanity check enabled all the time, because in some places
+     * (e.g. projection in KisAsyncMerger) such usecase is considered legit.
+     * But in places with "consistent history", e.g. in layer's paint
+     * device, such usage will cause undo corruption.
+     */
+    // KIS_SAFE_ASSERT_RECOVER_NOOP(m_index.isEmpty());
 
     // Clear redo() information
     m_cancelledRevisions.clear();

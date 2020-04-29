@@ -50,34 +50,22 @@
 
 #include <QPointer>
 
-TimelineDockerTitlebar::TimelineDockerTitlebar(QWidget* parent) :
-    QWidget(parent)
+TimelineDockerTitleBar::TimelineDockerTitleBar(QWidget* parent) :
+    KisUtilityTitleBar(new QLabel(i18n("Animation Timeline"), parent), parent)
 {
-    QDockWidget *dockWidget = qobject_cast<QDockWidget*>(parentWidget());
-
-    QHBoxLayout *mainLayout = new QHBoxLayout(this);
-    QMargins margins = mainLayout->contentsMargins();
-    margins.setTop(0);
-    margins.setBottom(0);
-    mainLayout->setContentsMargins(margins);
-
-    mainLayout->addWidget(new QLabel("Animation Timeline", this));
-
-    mainLayout->addSpacing(SPACING_UNIT);
-
     // Transport Controls...
     transport = new KisTransportControls(this);
-    mainLayout->addWidget(transport);
+    widgetArea->addWidget(transport);
 
-    mainLayout->addSpacing(SPACING_UNIT);
+    widgetArea->addSpacing(SPACING_UNIT);
 
     // Frame Counter...
     frameCounter = new QSpinBox(this);
     frameCounter->setPrefix("#  ");
     frameCounter->setRange(0, MAX_FRAMES);
-    mainLayout->addWidget(frameCounter);
+    widgetArea->addWidget(frameCounter);
 
-    mainLayout->addSpacing(SPACING_UNIT);
+    widgetArea->addSpacing(SPACING_UNIT);
 
     {   // Frame ops...
         QHBoxLayout *layout = new QHBoxLayout(this);
@@ -98,89 +86,77 @@ TimelineDockerTitlebar::TimelineDockerTitlebar(QWidget* parent) :
         QWidget *widget = new QWidget();
         widget->setLayout(layout);
 
-        mainLayout->addWidget(widget);
+        widgetArea->addWidget(widget);
     }
 
-    mainLayout->addStretch();
+    widgetArea->addStretch();
 
-    {   // Menus...
+    {   // Menus..
         QHBoxLayout *layout = new QHBoxLayout(this);
         layout->setSpacing(0);
         layout->setContentsMargins(0,0,0,0);
 
-        layout->addWidget(new QPushButton(KisIconUtils::loadIcon("onion_skin_options"), "", this)); //onion skins menu.
-        layout->addWidget(new QPushButton(KisIconUtils::loadIcon("audio-none"), "", this)); //audio menu.
-        layout->addWidget(new QPushButton(KisIconUtils::loadIcon("configure"),"", this)); //settings menu.
+        // Onion skins menu.
+        btnOnionSkinsMenu = new QPushButton(KisIconUtils::loadIcon("onion_skin_options"), "", this);
+        layout->addWidget(btnOnionSkinsMenu);
+
+        // Audio menu..
+        btnAudioMenu = new QPushButton(KisIconUtils::loadIcon("audio-none"), "", this);
+        layout->addWidget(btnAudioMenu);
+
+        // Settings menu..
+        btnSettingsMenu = new QPushButton(KisIconUtils::loadIcon("configure"),"", this);
+        layout->addWidget(btnSettingsMenu);
 
         QWidget *widget = new QWidget();
         widget->setLayout(layout);
-
-        mainLayout->addWidget(widget);
+        widgetArea->addWidget(widget);
     }
-
-    mainLayout->addSpacing(SPACING_UNIT);
-
-    {   //Docker Controls...
-        QHBoxLayout *layout = new QHBoxLayout(this);
-        layout->setSpacing(0);
-        layout->setContentsMargins(0,0,0,0);
-
-        {   // Float button...
-            QPushButton *button = new QPushButton(style()->standardIcon(QStyle::SP_TitleBarNormalButton), "", this); //TODO: Style-correct float icon.
-            button->setFlat(true);
-            connect(button, &QPushButton::clicked, [this, dockWidget](){
-                dockWidget->setFloating(!dockWidget->isFloating());
-            } );
-
-            layout->addWidget(button);
-        }
-
-        {   // Close button...
-            QPushButton *button = new QPushButton(style()->standardIcon(QStyle::SP_DockWidgetCloseButton), "", this); //TODO: Style-correct close icon.
-            button->setFlat(true);
-            connect(button, SIGNAL(clicked(bool)), dockWidget, SLOT(close()));
-            layout->addWidget(button);
-        }
-
-        QWidget *widget = new QWidget();
-        widget->setLayout(layout);
-
-        mainLayout->addWidget(widget);
-    }
-
-    setLayout(mainLayout);
-}
-
-TimelineDockerTitlebar::~TimelineDockerTitlebar()
-{
-
 }
 
 struct TimelineDocker::Private
 {
     Private(QWidget *parent)
-        : model(new TimelineFramesModel(parent)),
-          view(new TimelineFramesView(parent)),
-          titlebar(new TimelineDockerTitlebar(parent))
+        : framesModel(new TimelineFramesModel(parent)),
+          framesView(new TimelineFramesView(parent)),
+          titlebar(new TimelineDockerTitleBar(parent)),
+          mainWindow(nullptr)
     {
-        view->setModel(model);
+        framesView->setModel(framesModel);
     }
 
-    TimelineFramesModel *model;
-    TimelineFramesView *view;
-    TimelineDockerTitlebar *titlebar;
+    TimelineFramesModel *framesModel;
+    TimelineFramesView *framesView;
+    TimelineDockerTitleBar *titlebar;
 
     QPointer<KisCanvas2> canvas;
 
     KisSignalAutoConnectionsStore canvasConnections;
+    KisMainWindow *mainWindow;
 };
 
 TimelineDocker::TimelineDocker()
     : QDockWidget(i18n("Timeline"))
     , m_d(new Private(this))
 {
-    setWidget(m_d->view);
+    setWidget(m_d->framesView);
     setTitleBarWidget(m_d->titlebar);
+
+    connect(m_d->titlebar->transport, SIGNAL(back()), this, SLOT(previousFrame()));
+    connect(m_d->titlebar->transport, SIGNAL(stop()), this, SLOT(stop()));
+    connect(m_d->titlebar->transport, SIGNAL(playPause()), this, SLOT(playPause()));
+    connect(m_d->titlebar->transport, SIGNAL(forward()), this, SLOT(nextFrame()));
+
+    connect(m_d->titlebar->frameCounter, SIGNAL(valueChanged(int)), SLOT(goToFrame(int)));
+
+    connect(m_d->titlebar->btnOnionSkinsMenu, &QPushButton::released, [this](){
+        if (m_d->mainWindow) {
+            QDockWidget *docker = m_d->mainWindow->dockWidget("OnionSkinsDocker");
+            if (docker) {
+                docker->setVisible(!docker->isVisible());
+            }
+        }
+    });
 }
 
 TimelineDocker::~TimelineDocker()
@@ -212,12 +188,12 @@ void TimelineDocker::setCanvas(KoCanvasBase * canvas)
 {
     if (m_d->canvas == canvas) return;
 
-    if (m_d->model->hasConnectionToCanvas()) {
+    if (m_d->framesModel->hasConnectionToCanvas()) {
         m_d->canvasConnections.clear();
-        m_d->model->setDummiesFacade(0, 0, 0);
-        m_d->model->setFrameCache(0);
-        m_d->model->setAnimationPlayer(0);
-        m_d->model->setNodeManipulationInterface(0);
+        m_d->framesModel->setDummiesFacade(0, 0, 0);
+        m_d->framesModel->setFrameCache(0);
+        m_d->framesModel->setAnimationPlayer(0);
+        m_d->framesModel->setNodeManipulationInterface(0);
     }
 
     if (m_d->canvas) {
@@ -232,25 +208,25 @@ void TimelineDocker::setCanvas(KoCanvasBase * canvas)
     if(m_d->canvas) {
         KisDocument *doc = static_cast<KisDocument*>(m_d->canvas->imageView()->document());
         KisShapeController *kritaShapeController = dynamic_cast<KisShapeController*>(doc->shapeController());
-        m_d->model->setDummiesFacade(kritaShapeController,
+        m_d->framesModel->setDummiesFacade(kritaShapeController,
                                      m_d->canvas->image(),
                                      m_d->canvas->viewManager()->nodeManager()->nodeDisplayModeAdapter());
 
         updateFrameCache();
-        m_d->model->setAnimationPlayer(m_d->canvas->animationPlayer());
+        m_d->framesModel->setAnimationPlayer(m_d->canvas->animationPlayer());
 
-        m_d->model->setNodeManipulationInterface(
+        m_d->framesModel->setNodeManipulationInterface(
             new NodeManagerInterface(m_d->canvas->viewManager()->nodeManager()));
 
         m_d->canvasConnections.addConnection(
             m_d->canvas->viewManager()->nodeManager(), SIGNAL(sigNodeActivated(KisNodeSP)),
-            m_d->model, SLOT(slotCurrentNodeChanged(KisNodeSP)));
+            m_d->framesModel, SLOT(slotCurrentNodeChanged(KisNodeSP)));
 
         m_d->canvasConnections.addConnection(
-            m_d->model, SIGNAL(requestCurrentNodeChanged(KisNodeSP)),
+            m_d->framesModel, SIGNAL(requestCurrentNodeChanged(KisNodeSP)),
             m_d->canvas->viewManager()->nodeManager(), SLOT(slotNonUiActivatedNode(KisNodeSP)));
 
-        m_d->model->slotCurrentNodeChanged(m_d->canvas->viewManager()->activeNode());
+        m_d->framesModel->slotCurrentNodeChanged(m_d->canvas->viewManager()->activeNode());
 
         m_d->canvasConnections.addConnection(
                     m_d->canvas->viewManager()->mainWindow(), SIGNAL(themeChanged()),
@@ -260,25 +236,43 @@ void TimelineDocker::setCanvas(KoCanvasBase * canvas)
                     m_d->canvas, SIGNAL(sigCanvasEngineChanged()),
                     this, SLOT(updateFrameCache()));
 
-        //connect(m_d->canvas->animationPlayer(), SIGNAL(sigFrameChanged()), this, SLOT(slotGlobalTimeChanged()));
-        //connect(m_d->canvas->animationPlayer(), SIGNAL(sigPlaybackStopped()), this, SLOT(slotGlobalTimeChanged()));
+
+        connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigUiTimeChanged(int)), this, SLOT(updateFrameCounter()));
+        connect(m_d->canvas->animationPlayer(), SIGNAL(sigFrameChanged()), this, SLOT(updateFrameCounter()));
+        connect(m_d->canvas->animationPlayer(), SIGNAL(sigPlaybackStopped()), this, SLOT(updateFrameCounter()));
+
+        connect(m_d->canvas->animationPlayer(), SIGNAL(sigPlaybackStateChanged(bool)), m_d->titlebar->frameCounter, SLOT(setDisabled(bool)));
+        connect(m_d->canvas->animationPlayer(), SIGNAL(sigPlaybackStateChanged(bool)), m_d->titlebar->transport, SLOT(setPlaying(bool)));
+
         //connect(m_d->canvas->animationPlayer(), SIGNAL(sigPlaybackStopped()), this, SLOT(updatePlayPauseIcon()));
         //connect(m_d->canvas->animationPlayer(), SIGNAL(sigPlaybackStarted()), this, SLOT(updatePlayPauseIcon()));
         //connect(m_d->canvas->animationPlayer(), SIGNAL(sigPlaybackStatisticsUpdated()), this, SLOT(updateDropFramesIcon()));
     }
-
 }
 
 void TimelineDocker::handleThemeChange()
 {
-    if (m_d->view) {
-        m_d->view->slotUpdateIcons();
+    if (m_d->framesView) {
+        m_d->framesView->slotUpdateIcons();
     }
 }
 
 void TimelineDocker::updateFrameCache()
 {
-    m_d->model->setFrameCache(m_d->canvas->frameCache());
+    m_d->framesModel->setFrameCache(m_d->canvas->frameCache());
+}
+
+void TimelineDocker::updateFrameCounter()
+{
+    if (!m_d->canvas && !m_d->canvas->image()) {
+        return;
+    }
+
+    const int frame = m_d->canvas->animationPlayer()->isPlaying() ?
+                      m_d->canvas->animationPlayer()->visibleFrame() :
+                      m_d->canvas->image()->animationInterface()->currentUITime();
+
+    m_d->titlebar->frameCounter->setValue(frame);
 }
 
 void TimelineDocker::unsetCanvas()
@@ -288,76 +282,60 @@ void TimelineDocker::unsetCanvas()
 
 void TimelineDocker::setViewManager(KisViewManager *view)
 {
+    m_d->mainWindow = view->mainWindow();
+
     KisActionManager *actionManager = view->actionManager();
-    m_d->view->setActionManager(actionManager);
-    m_d->view->setPinToTimeline(actionManager->actionByName("pin_to_timeline"));
+    m_d->framesView->setActionManager(actionManager);
 
     KisAction *action = 0;
 
-    TimelineDockerTitlebar* titleBar = static_cast<TimelineDockerTitlebar*>(titleBarWidget());
+    TimelineDockerTitleBar* titleBar = static_cast<TimelineDockerTitleBar*>(titleBarWidget());
 
-    action = actionManager->createAction("add_blank_frame");
+    action = actionManager->actionByName("add_blank_frame");
     titleBar->btnAddKeyframe->setDefaultAction(action);
 
-    action = actionManager->createAction("add_duplicate_frame");
+    action = actionManager->actionByName("add_duplicate_frame");
     titleBar->btnDuplicateKeyframe->setDefaultAction(action);
 
-    action = actionManager->createAction("remove_frames");
+    action = actionManager->actionByName("remove_frames");
     titleBar->btnRemoveKeyframe->setDefaultAction(action);
 
     action = actionManager->createAction("toggle_playback");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    titleBar->transport->btnPlayPause->setDefaultAction(action);
     connect(action, SIGNAL(triggered(bool)), SLOT(playPause()));
 
     action = actionManager->createAction("stop_playback");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    titleBar->transport->btnStop->setDefaultAction(action);
     connect(action, SIGNAL(triggered(bool)), SLOT(stop()));
 
     action = actionManager->createAction("previous_frame");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    titleBar->transport->btnBack->setDefaultAction(action);
     connect(action, SIGNAL(triggered(bool)), SLOT(previousFrame()));
 
     action = actionManager->createAction("next_frame");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    titleBar->transport->btnForward->setDefaultAction(action);
     connect(action, SIGNAL(triggered(bool)), SLOT(nextFrame()));
-
-    connect(titleBar->frameCounter, SIGNAL(valueChanged(int)), SLOT(goToFrame(int)));
-
-//    action = actionManager->createAction("stop");
-//    titleBar->getTransport()->btnStop->setDefaultAction(action);
 }
 
 void TimelineDocker::playPause()
 {
     if (!m_d->canvas) return;
-    ENTER_FUNCTION();
 
     if (m_d->canvas->animationPlayer()->isPlaying()) {
-        m_d->canvas->animationPlayer()->stop();
+        m_d->canvas->animationPlayer()->pause();
     } else {
         m_d->canvas->animationPlayer()->play();
     }
-
-    //updatePlayPauseIcon();
 }
 
 void TimelineDocker::stop()
 {
-    ENTER_FUNCTION();
     if (!m_d->canvas) return;
-
-    if (m_d->canvas->animationPlayer()->isPlaying()) {
-        m_d->canvas->animationPlayer()->stop();
-    }
+    m_d->canvas->animationPlayer()->stop();
 }
 
 void TimelineDocker::previousFrame()
 {
-    ENTER_FUNCTION();
     if (!m_d->canvas) return;
     KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
 
@@ -369,7 +347,6 @@ void TimelineDocker::previousFrame()
 
 void TimelineDocker::nextFrame()
 {
-    ENTER_FUNCTION();
     if (!m_d->canvas) return;
     KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
 
@@ -379,7 +356,6 @@ void TimelineDocker::nextFrame()
 
 void TimelineDocker::goToFrame(int frameIndex)
 {
-    ENTER_FUNCTION();
     if (!m_d->canvas || !m_d->canvas->image())  return;
 
     KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();

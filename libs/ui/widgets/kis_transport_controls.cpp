@@ -19,10 +19,10 @@
 
 #include "kis_transport_controls.h"
 
-#include "kis_icon.h"
-
 #include <QHBoxLayout>
-#include <QToolButton>
+#include <QPushButton>
+
+#include "kis_icon.h"
 
 KisTransportControls::KisTransportControls(QWidget* parent)
     : QWidget(parent)
@@ -31,23 +31,21 @@ KisTransportControls::KisTransportControls(QWidget* parent)
     layout->setContentsMargins(0,0,0,0);
     layout->setSpacing(0);
 
-    {
-        //KisIconUtils::loadIcon("prevframe")
-        btnBack = new QToolButton(this);
-        layout->addWidget(btnBack);
+    buttonBack = new QPushButton(KisIconUtils::loadIcon("prevframe"), "", this);
+    layout->addWidget(buttonBack);
+    connect(buttonBack, SIGNAL(released()), this, SIGNAL(back()));
 
-        //KisIconUtils::loadIcon("animation_stop")
-        btnStop = new QToolButton(this);
-        layout->addWidget(btnStop);
+    buttonStop = new QPushButton(KisIconUtils::loadIcon("animation_stop"), "", this);
+    layout->addWidget(buttonStop);
+    connect(buttonStop, SIGNAL(released()), this, SIGNAL(stop()));
 
-        //KisIconUtils::loadIcon("animation_play")
-        btnPlayPause = new QToolButton(this);
-        layout->addWidget(btnPlayPause);
+    buttonPlayPause = new QPushButton(KisIconUtils::loadIcon("animation_play"), "", this);
+    layout->addWidget(buttonPlayPause);
+    connect(buttonPlayPause, SIGNAL(released()), this, SIGNAL(playPause()));
 
-        //KisIconUtils::loadIcon("nextframe")
-        btnForward = new QToolButton(this);
-        layout->addWidget(btnForward);
-    }
+    buttonForward = new QPushButton(KisIconUtils::loadIcon("nextframe"), "", this);
+    layout->addWidget(buttonForward);
+    connect(buttonForward, SIGNAL(released()), this, SIGNAL(forward()));
 
     setLayout(layout);
 }
@@ -59,4 +57,13 @@ KisTransportControls::~KisTransportControls()
 QSize KisTransportControls::sizeHint() const
 {
     return QSize(32, 32);
+}
+
+void KisTransportControls::setPlaying(bool playing)
+{
+    if (playing) {
+        buttonPlayPause->setIcon(KisIconUtils::loadIcon("warning"));
+    } else {
+        buttonPlayPause->setIcon(KisIconUtils::loadIcon("animation_play"));
+    }
 }

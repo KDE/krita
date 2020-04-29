@@ -97,7 +97,6 @@ private Q_SLOTS:
 
     void slotPlaybackFrameChanged();
     void slotPlaybackStopped();
-
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

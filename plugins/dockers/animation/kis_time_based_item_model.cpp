@@ -490,7 +490,7 @@ void KisTimeBasedItemModel::slotCacheChanged()
 void KisTimeBasedItemModel::slotPlaybackFrameChanged()
 {
     if (!m_d->animationPlayer->isPlaying()) return;
-    setData(index(0, m_d->animationPlayer->currentTime()), true, ActiveFrameRole);
+    setData(index(0, m_d->animationPlayer->visibleFrame()), true, ActiveFrameRole);
 }
 
 void KisTimeBasedItemModel::slotPlaybackStopped()

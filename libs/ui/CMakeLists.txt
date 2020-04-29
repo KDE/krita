@@ -228,6 +228,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_cie_tongue_widget.cpp
     widgets/kis_tone_curve_widget.cpp
     widgets/kis_transport_controls.cpp
+    widgets/kis_utility_title_bar.cpp
     widgets/kis_curve_widget.cpp
     widgets/kis_custom_image_widget.cc
     widgets/kis_image_from_clipboard_widget.cpp

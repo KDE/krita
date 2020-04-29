@@ -23,36 +23,41 @@
 
 #include "kritaimage_export.h"
 
-#include <QDockWidget>
-#include <kis_mainwindow_observer.h>
-
 #include <QScopedPointer>
+#include <QDockWidget>
+
+#include <kis_mainwindow_observer.h>
+#include <kis_utility_title_bar.h>
+
+class QPushButton;
+class QToolButton;
+class QSpinBox;
+class KisTransportControls;
 
 class KisCanvas2;
 class KisAction;
 
-class TimelineDockerTitlebar : public QWidget
+class TimelineDockerTitleBar : public KisUtilityTitleBar
 {
     Q_OBJECT
 
 public:
-    TimelineDockerTitlebar(QWidget *parent = nullptr);
-    ~TimelineDockerTitlebar();
+    TimelineDockerTitleBar(QWidget *parent = nullptr);
 
-    virtual QSize sizeHint() const {return QSize(32,32);}
-    virtual QSize minimumSizeHint() const {return QSize(32,32);}
+    KisTransportControls* transport;
 
-    class QToolButton* btnAddKeyframe;
-    class QToolButton* btnDuplicateKeyframe;
-    class QToolButton* btnRemoveKeyframe;
-    class KisTransportControls* transport;
-    class QSpinBox *frameCounter;
+    QSpinBox *frameCounter;
+
+    QToolButton *btnAddKeyframe;
+    QToolButton *btnDuplicateKeyframe;
+    QToolButton *btnRemoveKeyframe;
+
+    QPushButton *btnOnionSkinsMenu;
+    QPushButton *btnAudioMenu;
+    QPushButton *btnSettingsMenu;
 
 private:
-    const u_int SPACING_UNIT = 8;
     const u_int MAX_FRAMES = 9999;
-
-
 };
 
 class TimelineDocker : public QDockWidget, public KisMainwindowObserver
@@ -74,8 +79,10 @@ public Q_SLOTS:
     void nextFrame();
     void goToFrame(int frameIndex);
 
-    void handleThemeChange();
     void updateFrameCache();
+    void updateFrameCounter();
+
+    void handleThemeChange();
 
 private:
     struct Private;

@@ -300,17 +300,10 @@ TimelineFramesView::~TimelineFramesView()
 {
 }
 
-void TimelineFramesView::setPinToTimeline(KisAction *action)
-{
-    m_d->pinLayerToTimelineAction = action;
-    m_d->layerEditingMenu->addAction(m_d->pinLayerToTimelineAction);
-}
-
 void TimelineFramesView::setActionManager(KisActionManager *actionManager)
 {
     m_d->actionMan = actionManager;
     m_d->horizontalRuler->setActionManager(actionManager);
-
 
     if (actionManager) {
         KisAction *action = 0;
@@ -368,6 +361,10 @@ void TimelineFramesView::setActionManager(KisActionManager *actionManager)
 
         action = m_d->actionMan->createAction("update_playback_range");
         connect(action, SIGNAL(triggered()), SLOT(slotUpdatePlackbackRange()));
+
+        action = m_d->actionMan->actionByName("pin_to_timeline");
+        m_d->pinLayerToTimelineAction = action;
+        m_d->layerEditingMenu->addAction(action);
     }
 }
 
@@ -1301,6 +1298,7 @@ void TimelineFramesView::slotRemoveLayer()
 
 void TimelineFramesView::slotAddBlankFrame()
 {
+    ENTER_FUNCTION();
     QModelIndex index = currentIndex();
     if (!index.isValid() ||
         !m_d->model->data(index, TimelineFramesModel::FrameEditableRole).toBool()) {

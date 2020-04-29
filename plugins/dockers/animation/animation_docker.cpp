@@ -148,7 +148,7 @@ void AnimationDocker::setViewManager(KisViewManager *view)
     m_mainWindow = view->mainWindow();
 }
 
-void AnimationDocker::slotAddOpacityKeyframe()
+/*void AnimationDocker::slotAddOpacityKeyframe()
 {
     // remember current node's opacity and set it once we create a new opacity keyframe
     KisNodeSP node = m_canvas->viewManager()->activeNode();
@@ -181,7 +181,7 @@ void AnimationDocker::slotAddTransformKeyframe()
 void AnimationDocker::slotDeleteTransformKeyframe()
 {
     deleteKeyframe(KisKeyframeChannel::TransformArguments.id());
-}
+}*/
 
 void AnimationDocker::slotUIRangeChanged()
 {
@@ -213,7 +213,7 @@ void AnimationDocker::slotOnionSkinOptions()
 void AnimationDocker::slotGlobalTimeChanged()
 {
     int time = m_canvas->animationPlayer()->isPlaying() ?
-                m_canvas->animationPlayer()->currentTime() :
+                m_canvas->animationPlayer()->visibleFrame() :
                 m_canvas->image()->animationInterface()->currentUITime();
 
     m_animationWidget->intCurrentTime->setValue(time);
@@ -243,7 +243,6 @@ void AnimationDocker::slotFrameRateChanged()
 
 void AnimationDocker::slotTimeSpinBoxChanged()
 {
-    ENTER_FUNCTION();
 //    if (!m_canvas || !m_canvas->image()) return;
 
 //    int newTime = m_animationWidget->intCurrentTime->value();
@@ -260,7 +259,6 @@ void AnimationDocker::slotTimeSpinBoxChanged()
 
 void AnimationDocker::slotPreviousFrame()
 {
-    ENTER_FUNCTION();
 //    if (!m_canvas) return;
 //    KisImageAnimationInterface *animation = m_canvas->image()->animationInterface();
 
@@ -272,7 +270,6 @@ void AnimationDocker::slotPreviousFrame()
 
 void AnimationDocker::slotNextFrame()
 {
-    ENTER_FUNCTION();
 //    if (!m_canvas) return;
 //    KisImageAnimationInterface *animation = m_canvas->image()->animationInterface();
 
@@ -282,7 +279,6 @@ void AnimationDocker::slotNextFrame()
 
 void AnimationDocker::slotPreviousKeyFrame()
 {
-    ENTER_FUNCTION();
 //    if (!m_canvas) return;
 
 //    KisNodeSP node = m_canvas->viewManager()->activeNode();
@@ -312,7 +308,6 @@ void AnimationDocker::slotPreviousKeyFrame()
 
 void AnimationDocker::slotNextKeyFrame()
 {
-    ENTER_FUNCTION();
 //    if (!m_canvas) return;
 
 //    KisNodeSP node = m_canvas->viewManager()->activeNode();
@@ -341,7 +336,6 @@ void AnimationDocker::slotNextKeyFrame()
 
 void AnimationDocker::slotFirstFrame()
 {
-    ENTER_FUNCTION();
 //    if (!m_canvas) return;
 
 //    KisImageAnimationInterface *animation = m_canvas->image()->animationInterface();
@@ -350,7 +344,6 @@ void AnimationDocker::slotFirstFrame()
 
 void AnimationDocker::slotLastFrame()
 {
-    ENTER_FUNCTION();
 //    if (!m_canvas) return;
 
 //    KisImageAnimationInterface *animation = m_canvas->image()->animationInterface();
@@ -360,7 +353,6 @@ void AnimationDocker::slotLastFrame()
 
 void AnimationDocker::slotPlayPause()
 {
-    ENTER_FUNCTION();
 //    if (!m_canvas) return;
 
 //    if (m_canvas->animationPlayer()->isPlaying()) {
@@ -537,7 +529,7 @@ void AnimationDocker::updateClipRange()
     m_animationWidget->spinToFrame->setValue(m_canvas->image()->animationInterface()->fullClipRange().end());
 }
 
-void AnimationDocker::addKeyframe(const QString &channel, bool copy)
+/*void AnimationDocker::addKeyframe(const QString &channel, bool copy)
 {
     if (!m_canvas) return;
 
@@ -557,7 +549,7 @@ void AnimationDocker::deleteKeyframe(const QString &channel)
 
     const int time = m_canvas->image()->animationInterface()->currentTime();
     KisAnimationUtils::removeKeyframe(m_canvas->image(), node, channel, time);
-}
+}*/
 
 void AnimationDocker::setActions(KisActionManager *actionMan)
 {

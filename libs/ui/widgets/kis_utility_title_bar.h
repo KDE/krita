@@ -17,37 +17,37 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KISTRANSPORTCONTROLS_H
-#define KISTRANSPORTCONTROLS_H
+#ifndef KISUTILITYTITLEBAR_H
+#define KISUTILITYTITLEBAR_H
 
 #include <QWidget>
 
 #include "kritaui_export.h"
 
-class KRITAUI_EXPORT KisTransportControls : public QWidget
+class QLabel;
+class QHBoxLayout;
+class QPushButton;
+
+class KRITAUI_EXPORT KisUtilityTitleBar : public QWidget
 {
     Q_OBJECT
 
 public:
-    KisTransportControls(QWidget* parent = nullptr);
-    ~KisTransportControls();
+    KisUtilityTitleBar(QWidget *parent = nullptr);
+    KisUtilityTitleBar(QLabel *title, QWidget *parent = nullptr);
 
-    QSize sizeHint() const override;
+    virtual QSize sizeHint() const {return QSize(32,32);}
+    virtual QSize minimumSizeHint() const {return QSize(32,32);}
 
-public Q_SLOTS:
-    void setPlaying(bool playing);
+protected:
+    QLabel *title;
+    QHBoxLayout *widgetArea;
 
-Q_SIGNALS:
-    void playPause();
-    void stop();
-    void forward();
-    void back();
+    const u_int SPACING_UNIT = 16;
 
 private:
-    class QPushButton* buttonBack;
-    class QPushButton* buttonStop;
-    class QPushButton* buttonPlayPause;
-    class QPushButton* buttonForward;
+    QPushButton *floatButton;
+    QPushButton *closeButton;
 };
 
-#endif // KISTRANSPORTCONTROLS_H
+#endif // KISUTILITYTITLEBAR_H

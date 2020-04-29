@@ -81,6 +81,9 @@ public:
     void setDecorationsVisible(bool value, bool update) override;
     using KisDecoratedNodeInterface::setDecorationsVisible;
 
+    void setDirty(const QVector<QRect> &rects) override;
+    using KisEffectMask::setDirty;
+
 protected:
     void flattenSelectionProjection(KisSelectionSP selection, const QRect &dirtyRect) const override;
 

@@ -84,7 +84,15 @@ bool KisTiledExtentManager::Data::remove(qint32 index)
     QReadLocker lock(&m_migrationLock);
     qint32 currentIndex = m_offset + index;
 
+    /**
+     * That is not the droid you're looking for. If you see this assert
+     * in the backtrace, most probably, the bug is not here. The crash
+     * happens because two threads are trying to do device->clear(rc)
+     * concurrently for the overlapping rects. That is, they are trying
+     * to remove the same tile. Look higher!
+     */
     KIS_ASSERT_RECOVER_NOOP(m_buffer[currentIndex].loadAcquire() > 0);
+
     bool needsUpdateExtent = false;
     QReadLocker rl(&m_extentLock);
 

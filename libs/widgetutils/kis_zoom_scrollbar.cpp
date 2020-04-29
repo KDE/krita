@@ -24,8 +24,11 @@
 
 KisZoomableScrollbar::KisZoomableScrollbar(QWidget *parent)
     : QScrollBar(parent)
+    , previousPosition(0,0)
+    , accelAccumulator(0,0)
     , scrollAccumulator(0.0f)
     , zoomDeadzone(0.90f)
+    , catchTeleportCorrection(false)
 {
 }
 
@@ -47,9 +50,10 @@ void KisZoomableScrollbar::mousePressEvent(QMouseEvent *event)
 
     if( isSliderDown() && !wasSliderDownBefore ){
         previousPosition = mapToGlobal(event->pos());
-        //setCursor(Qt::BlankCursor);
+        accelAccumulator = QVector2D(0,0);
+        setCursor(Qt::BlankCursor);
     } else {
-        //setCursor(Qt::ArrowCursor);
+        setCursor(Qt::ArrowCursor);
     }
 
 }
@@ -66,25 +70,48 @@ void KisZoomableScrollbar::mouseMoveEvent(QMouseEvent *event)
 
         QPoint globalMouseCoord = mapToGlobal(event->pos());
         QPoint accel = globalMouseCoord - previousPosition;
+        accelAccumulator += QVector2D(accel);
+
+        if( accelAccumulator.length() > 10 ) {
+            accelAccumulator = accelAccumulator.normalized() * 10;
+        }
 
         //Window-space wrapping for mouse dragging. Allows for blender-like
         //infinite mouse scrolls.
         QRect windowRect = window()->geometry();
         windowRect = kisGrowRect(windowRect, -2);
+        const bool xWrap = true;
+        const bool yWrap = true;
         if (!windowRect.contains(globalMouseCoord)) {
             int x = globalMouseCoord.x();
             int y = globalMouseCoord.y();
 
             if (x < windowRect.x() ) {
-                x += windowRect.width();
+                if (xWrap) {
+                    x += windowRect.width();
+                } else {
+                    x = (windowRect.x() + 2);
+                }
             } else if (x > (windowRect.x() + windowRect.width()) ) {
-                x -= windowRect.width();
+                if (xWrap) {
+                    x -= windowRect.width();
+                } else {
+                    x = windowRect.x() + (windowRect.width() - 2);
+                }
             }
 
             if (y < windowRect.y()) {
-                y += windowRect.height();
+                if (yWrap) {
+                    y += windowRect.height();
+                } else {
+                    y = (windowRect.y() + 2);
+                }
             } else if (y > (windowRect.y() + windowRect.height())) {
-                y -= windowRect.height();
+                if (yWrap){
+                    y -= windowRect.height();
+                } else {
+                    y = windowRect.y() + (windowRect.height() - 2);
+                }
             }
 
             if (globalMouseCoord.x() != x || globalMouseCoord.y() != y) {
@@ -105,7 +132,14 @@ void KisZoomableScrollbar::mouseMoveEvent(QMouseEvent *event)
         const qreal widgetLength = (orientation() == Qt::Horizontal) ? width() : height();
         const qreal widgetThickness = (orientation() == Qt::Horizontal) ? height() : width();
 
-        if (sliderMovementPix != 0) {
+
+        const QVector2D perpendicularDirection = (orientation() == Qt::Horizontal) ? QVector2D(0, 1) : QVector2D(1, 0);
+        const float perpendicularity = QVector2D::dotProduct(perpendicularDirection.normalized(), accelAccumulator.normalized());
+
+        if (abs(perpendicularity) > zoomDeadzone && zoomMovementPix != 0) {
+            zoom(qreal(zoomMovementPix) / (widgetThickness * 5));
+        } else if (sliderMovementPix != 0) {
+
             const int currentPosition = sliderPosition();
             scrollAccumulator += (documentLength) * (sliderMovementPix / widgetLength);
 
@@ -116,13 +150,7 @@ void KisZoomableScrollbar::mouseMoveEvent(QMouseEvent *event)
 
             const int sign = (scrollAccumulator > 0) - (scrollAccumulator < 0);
             scrollAccumulator -= floor(abs(scrollAccumulator)) * sign;
-        }
 
-        const QVector2D perpendicularDirection = (orientation() == Qt::Horizontal) ? QVector2D(0, 1) : QVector2D(1, 0);
-        const float perpendicularity = QVector2D::dotProduct(perpendicularDirection.normalized(), QVector2D(accel).normalized());
-
-        if (abs(perpendicularity) > zoomDeadzone && zoomMovementPix != 0) {
-            zoom(qreal(zoomMovementPix) / (widgetThickness * 5));
         }
 
 
@@ -138,11 +166,7 @@ void KisZoomableScrollbar::mouseReleaseEvent(QMouseEvent *event)
     const qreal documentLength = maximum() - minimum() + pageStep();
     const qreal widgetLengthOffsetPix = (sliderPosition() / documentLength) * widgetLength;
 
-    //setCursor(Qt::ArrowCursor);
-
-//    if (isSliderDown()) {
-//        QCursor::setPos(mapToGlobal(pos()) + cursorTranslationNormal * widgetLengthOffsetPix);
-//    }
+    setCursor(Qt::ArrowCursor);
 
     QScrollBar::mouseReleaseEvent(event);
 
@@ -157,4 +181,9 @@ void KisZoomableScrollbar::wheelEvent(QWheelEvent *event) {
     }
 
     QScrollBar::wheelEvent(event);
+}
+
+void KisZoomableScrollbar::setZoomDeadzone(float value)
+{
+    zoomDeadzone = value;
 }

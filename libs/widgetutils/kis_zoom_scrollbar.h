@@ -22,6 +22,7 @@
 #define KIS_ZOOM_SCROLLBAR_H
 
 #include <QScrollBar>
+#include <QVector2D>
 
 #include <kritawidgetutils_export.h>
 
@@ -31,10 +32,10 @@ class KRITAWIDGETUTILS_EXPORT KisZoomableScrollbar : public QScrollBar
 
 private:
     QPoint previousPosition;
-    bool catchTeleportCorrection = false;
+    QVector2D accelAccumulator;
     qreal scrollAccumulator;
-    qreal zoomAccumulator;
     qreal zoomDeadzone;
+    bool catchTeleportCorrection = false;
 
 public:
     KisZoomableScrollbar(QWidget* parent = 0);
@@ -46,6 +47,8 @@ public:
     virtual void mouseReleaseEvent(QMouseEvent *event) override;
 
     virtual void wheelEvent(QWheelEvent *event) override;
+
+    void setZoomDeadzone(float value);
 
 Q_SIGNALS:
     void zoom(qreal delta);

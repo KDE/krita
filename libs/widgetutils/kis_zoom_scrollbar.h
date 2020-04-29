@@ -22,6 +22,7 @@
 #define KIS_ZOOM_SCROLLBAR_H
 
 #include <QScrollBar>
+
 #include <kritawidgetutils_export.h>
 
 class KRITAWIDGETUTILS_EXPORT KisZoomableScrollbar : public QScrollBar
@@ -42,6 +43,8 @@ public:
     virtual void mousePressEvent(QMouseEvent *event) override;
     virtual void mouseMoveEvent(QMouseEvent *event) override;
     virtual void mouseReleaseEvent(QMouseEvent *event) override;
+
+    virtual void wheelEvent(QWheelEvent *event) override;
 
 Q_SIGNALS:
     void zoom(qreal delta);

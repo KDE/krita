@@ -26,6 +26,7 @@
 
 #include <KoResource.h>
 #include <KoID.h>
+#include "kis_signal_auto_connection.h"
 
 class KoAbstractResourceServerAdapter;
 class KisPresetDelegate;
@@ -85,6 +86,8 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void notifyConfigChanged();
+    void slotResourceWasSelected(KoResourceSP resource);
+    void slotCurrentPresetChanged();
 
 protected:
     void resizeEvent(QResizeEvent* event) override;
@@ -97,6 +100,7 @@ private:
     class PaintOpFilterModel;
     QPointer<PaintOpFilterModel> m_paintOpFilterModel;
 
+    KisSignalAutoConnectionsStore m_currentPresetConnections;
 };
 
 #endif // KIS_ITEM_CHOOSER_H_

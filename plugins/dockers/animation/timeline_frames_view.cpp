@@ -69,8 +69,6 @@ struct TimelineFramesView::Private
     Private(TimelineFramesView *_q)
         : q(_q),
           fps(1),
-          zoomStillPointIndex(-1),
-          zoomStillPointOriginalOffset(0),
           dragInProgress(false),
           dragWasSuccessful(false),
           modifiersCatcher(0),
@@ -87,8 +85,6 @@ struct TimelineFramesView::Private
     TimelineRulerHeader *horizontalRuler;
     TimelineLayersHeader *layersHeader;
     int fps;
-    int zoomStillPointIndex;
-    int zoomStillPointOriginalOffset;
     QPoint initialDragPanValue;
     QPoint initialDragPanPos;
 
@@ -297,7 +293,6 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     m_d->zoomDragButton->setToolTip(i18nc("@info:tooltip", "Zoom Timeline. Hold down and drag left or right."));
     m_d->zoomDragButton->setPopupMode(QToolButton::InstantPopup);
     connect(m_d->zoomDragButton, SIGNAL(zoomLevelChanged(qreal)), SLOT(slotZoomButtonChanged(qreal)));
-    connect(m_d->zoomDragButton, SIGNAL(zoomStarted(qreal)), SLOT(slotZoomButtonPressed(qreal)));
 
     setFramesPerSecond(12);
     setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
@@ -471,32 +466,33 @@ void TimelineFramesView::setFramesPerSecond(int fps)
     m_d->horizontalRuler->setFramePerSecond(fps);
 }
 
-void TimelineFramesView::slotZoomButtonPressed(qreal staticPoint)
-{
-    m_d->zoomStillPointIndex =
-            qIsNaN(staticPoint) ? currentIndex().column() : staticPoint;
-
-    const int w = m_d->horizontalRuler->defaultSectionSize();
-
-    m_d->zoomStillPointOriginalOffset =
-            w * m_d->zoomStillPointIndex -
-            horizontalScrollBar()->value();
-}
-
 void TimelineFramesView::slotZoomButtonChanged(qreal zoomLevel)
 {
+    const int originalFirstColumn = estimateFirstVisibleColumn();
     if (m_d->horizontalRuler->setZoom(zoomLevel)) {
-        slotUpdateInfiniteFramesCount();
+        m_d->zoomDragButton->setZoomLevel(m_d->horizontalRuler->zoom());
+
+        if (estimateLastVisibleColumn() >= m_d->model->columnCount()) {
+            slotUpdateInfiniteFramesCount();
+        }
 
         viewport()->update();
+        horizontalScrollBar()->setValue(scrollPositionFromColumn(originalFirstColumn));
     }
 }
 
 void TimelineFramesView::slotScrollbarZoom(qreal zoom)
 {
+    const int originalFirstColumn = estimateFirstVisibleColumn();
     if (m_d->horizontalRuler->setZoom(m_d->horizontalRuler->zoom() + zoom)) {
         m_d->zoomDragButton->setZoomLevel(m_d->horizontalRuler->zoom());
+
+        if (estimateLastVisibleColumn() >= m_d->model->columnCount()) {
+            slotUpdateInfiniteFramesCount();
+        }
+
         viewport()->update();
+        horizontalScrollBar()->setValue(scrollPositionFromColumn(originalFirstColumn));
     }
 }
 
@@ -591,12 +587,9 @@ void TimelineFramesView::slotAudioVolumeChanged(int value)
 
 void TimelineFramesView::slotUpdateInfiniteFramesCount()
 {
-    const int sectionWidth = m_d->horizontalRuler->defaultSectionSize();
-    const int calculatedIndex =
-            (horizontalScrollBar()->value() +
-             m_d->horizontalRuler->width() - 1) / sectionWidth;
+    const int lastVisibleFrame = estimateLastVisibleColumn();
 
-    m_d->model->setLastVisibleFrame(calculatedIndex);
+    m_d->model->setLastVisibleFrame(lastVisibleFrame);
 
 }
 
@@ -1206,6 +1199,11 @@ void TimelineFramesView::mouseMoveEvent(QMouseEvent *e)
 
             const int height = m_d->layersHeader->defaultSectionSize();
 
+            if (m_d->initialDragPanValue.x() - diff.x() > horizontalScrollBar()->maximum() || m_d->initialDragPanValue.x() - diff.x() > horizontalScrollBar()->minimum() ){
+                KisZoomableScrollbar* zoombar = static_cast<KisZoomableScrollbar*>(horizontalScrollBar());
+                zoombar->overscroll(-diff.x());
+            }
+
             horizontalScrollBar()->setValue(offset.x());
             verticalScrollBar()->setValue(offset.y() / height);
         }
@@ -1484,6 +1482,27 @@ QModelIndexList TimelineFramesView::calculateSelectionSpan(bool entireColumn, bo
     }
 
     return indexes;
+}
+
+int TimelineFramesView::estimateLastVisibleColumn()
+{
+    const int sectionWidth = m_d->horizontalRuler->defaultSectionSize();
+    const int calculatedIndex =
+            (horizontalScrollBar()->value() +
+             m_d->horizontalRuler->width() - 1) / sectionWidth;
+    return calculatedIndex;
+}
+
+int TimelineFramesView::estimateFirstVisibleColumn()
+{
+    const int sectionWidth = m_d->horizontalRuler->defaultSectionSize();
+    const int calculatedIndex = ceil( qreal(horizontalScrollBar()->value()) / sectionWidth );
+    return calculatedIndex;
+}
+
+int TimelineFramesView::scrollPositionFromColumn(int column) {
+    const int sectionWidth = m_d->horizontalRuler->defaultSectionSize();
+    return sectionWidth * column;
 }
 
 void TimelineFramesView::slotRemoveSelectedFrames(bool entireColumn, bool pull)

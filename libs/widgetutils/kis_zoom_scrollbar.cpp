@@ -19,6 +19,7 @@
 #include "kis_zoom_scrollbar.h"
 
 #include "kis_global.h"
+#include "kis_debug.h"
 #include <QMouseEvent>
 
 KisZoomableScrollbar::KisZoomableScrollbar(QWidget *parent)
@@ -141,4 +142,15 @@ void KisZoomableScrollbar::mouseReleaseEvent(QMouseEvent *event)
 
     QScrollBar::mouseReleaseEvent(event);
 
+}
+
+void KisZoomableScrollbar::wheelEvent(QWheelEvent *event) {
+    const int delta = (event->angleDelta().y() / 8) * singleStep() * -1;
+    const int currentPosition = sliderPosition();
+
+    if (currentPosition + delta > maximum() || currentPosition + delta < minimum()){
+        overscroll(delta);
+    }
+
+    QScrollBar::wheelEvent(event);
 }

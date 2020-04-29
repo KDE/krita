@@ -50,7 +50,7 @@ static const unsigned int ANT_ADVANCE_WIDTH = ANT_LENGTH + ANT_SPACE;
 
 KisSelectionDecoration::KisSelectionDecoration(QPointer<KisView>view)
     : KisCanvasDecoration("selection", view),
-      m_signalCompressor(500 /*ms*/, KisSignalCompressor::FIRST_INACTIVE),
+      m_signalCompressor(40 /*ms*/, KisSignalCompressor::FIRST_ACTIVE),
       m_offset(0),
       m_mode(Ants)
 {

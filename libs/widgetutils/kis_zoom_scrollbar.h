@@ -22,6 +22,7 @@
 #define KIS_ZOOM_SCROLLBAR_H
 
 #include <QScrollBar>
+#include <QVector2D>
 
 #include <kritawidgetutils_export.h>
 
@@ -30,21 +31,35 @@ class KRITAWIDGETUTILS_EXPORT KisZoomableScrollbar : public QScrollBar
     Q_OBJECT
 
 private:
-    QPoint previousPosition;
+    QPoint lastKnownPosition;
+    QVector2D accelerationAccumulator;
+    qreal scrollSubPixelAccumulator;
+    qreal zoomPerpendicularityThreshold;
     bool catchTeleportCorrection = false;
-    qreal scrollAccumulator;
-    qreal zoomAccumulator;
 
 public:
     KisZoomableScrollbar(QWidget* parent = 0);
     KisZoomableScrollbar(Qt::Orientation orientation, QWidget * parent = 0);
     ~KisZoomableScrollbar();
 
+    //Catch for teleportation from one side of the screen to the other.
+    bool catchTeleports(QMouseEvent* event);
+
+    //Window-space wrapping for mouse dragging. Allows for blender-like
+    //infinite mouse scrolls.
+    void handleWrap(const QPoint &accel, const QPoint &globalMouseCoord);
+
+    //Scroll based on a mouse acceleration value.
+    void handleScroll(const QPoint &accel);
+
+    void tabletEvent(QTabletEvent *event) override;
     virtual void mousePressEvent(QMouseEvent *event) override;
     virtual void mouseMoveEvent(QMouseEvent *event) override;
     virtual void mouseReleaseEvent(QMouseEvent *event) override;
 
     virtual void wheelEvent(QWheelEvent *event) override;
+
+    void setZoomDeadzone(float value);
 
 Q_SIGNALS:
     void zoom(qreal delta);

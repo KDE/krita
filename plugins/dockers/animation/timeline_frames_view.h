@@ -124,7 +124,6 @@ private Q_SLOTS:
 
     void slotHeaderDataChanged(Qt::Orientation orientation, int first, int last);
 
-    void slotZoomButtonPressed(qreal staticPoint);
     void slotZoomButtonChanged(qreal value);
 
     void slotScrollbarZoom(qreal zoom);
@@ -169,6 +168,10 @@ private:
     void createFrameEditingMenuActions(QMenu *menu, bool addFrameCreationActions);
 
     QModelIndexList calculateSelectionSpan(bool entireColumn, bool editableOnly = true) const;
+
+    int estimateLastVisibleColumn();
+    int estimateFirstVisibleColumn();
+    int scrollPositionFromColumn( int column );
 
 protected:
     QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index,

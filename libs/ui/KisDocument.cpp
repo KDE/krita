@@ -1122,7 +1122,7 @@ void KisDocument::slotChildCompletedSavingInBackground(KisImportExportErrorCode 
                         .arg(QString::fromLatin1(job.mimeType))
                         .arg(!status.isOk() ? exportErrorToUserMessage(status, errorMessage) : "OK")
                         .arg(fi.size())
-                        .arg(QString::fromLatin1(KoMD5Generator().generateHash(job.filePath).toHex())));
+                        .arg(fi.size() > 10000000 ? "FILE_BIGGER_10MB" : QString::fromLatin1(KoMD5Generator().generateHash(job.filePath).toHex())));
 
     emit sigCompleteBackgroundSaving(job, status, errorMessage);
 }

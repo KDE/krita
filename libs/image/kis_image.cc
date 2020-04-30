@@ -1177,8 +1177,7 @@ void KisImage::convertLayerColorSpace(KisNodeSP node,
     emitSignals << ModifiedSignal;
 
     KisProcessingApplicator applicator(this, node,
-                                       KisProcessingApplicator::RECURSIVE |
-                                       KisProcessingApplicator::NO_UI_UPDATES,
+                                       KisProcessingApplicator::RECURSIVE,
                                        emitSignals, actionName);
 
     applicator.applyVisitor(

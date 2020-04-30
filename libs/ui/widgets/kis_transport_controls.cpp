@@ -62,7 +62,7 @@ QSize KisTransportControls::sizeHint() const
 void KisTransportControls::setPlaying(bool playing)
 {
     if (playing) {
-        buttonPlayPause->setIcon(KisIconUtils::loadIcon("warning"));
+        buttonPlayPause->setIcon(KisIconUtils::loadIcon("animation_pause"));
     } else {
         buttonPlayPause->setIcon(KisIconUtils::loadIcon("animation_play"));
     }

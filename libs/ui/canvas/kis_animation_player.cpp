@@ -439,15 +439,28 @@ void KisAnimationPlayer::stop()
 
     m_d->playbackState = STOPPED;
 
+    emit sigPlaybackStateChanged(isPlaying());
+    emit sigPlaybackStopped();
+}
+
+void KisAnimationPlayer::goToPlaybackOrigin()
+{
     KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
     if (animation->currentUITime() == m_d->playbackOriginFrame) {
         m_d->canvas->refetchDataFromImage();
     } else {
         animation->switchCurrentTimeAsync(m_d->playbackOriginFrame);
     }
+}
 
-    emit sigPlaybackStateChanged(isPlaying());
-    emit sigPlaybackStopped();
+void KisAnimationPlayer::goToStartFrame()
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->canvas);
+
+    KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
+    const int startFrame = animation->playbackRange().start();
+
+    animation->switchCurrentTimeAsync(startFrame);
 }
 
 void KisAnimationPlayer::forcedStopOnExit()
@@ -469,6 +482,16 @@ void KisAnimationPlayer::Private::stopImpl()
 bool KisAnimationPlayer::isPlaying()
 {
     return m_d->playbackState == PLAYING;
+}
+
+bool KisAnimationPlayer::isPaused()
+{
+    return m_d->playbackState == PAUSED;
+}
+
+bool KisAnimationPlayer::isStopped()
+{
+    return m_d->playbackState == STOPPED;
 }
 
 int KisAnimationPlayer::visibleFrame()

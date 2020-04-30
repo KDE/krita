@@ -331,7 +331,13 @@ void TimelineDocker::playPause()
 void TimelineDocker::stop()
 {
     if (!m_d->canvas) return;
-    m_d->canvas->animationPlayer()->stop();
+
+    if( m_d->canvas->animationPlayer()->isStopped()) {
+        m_d->canvas->animationPlayer()->goToStartFrame();
+    } else {
+        m_d->canvas->animationPlayer()->stop();
+        m_d->canvas->animationPlayer()->goToPlaybackOrigin();
+    }
 }
 
 void TimelineDocker::previousFrame()

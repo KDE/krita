@@ -38,9 +38,13 @@ public:
     void play();
     void pause();
     void stop();
+    void goToPlaybackOrigin();
+    void goToStartFrame();
     void displayFrame(int time);
 
     bool isPlaying();
+    bool isPaused();
+    bool isStopped();
     int visibleFrame();
 
     qreal playbackSpeed();

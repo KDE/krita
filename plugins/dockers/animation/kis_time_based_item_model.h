@@ -63,6 +63,8 @@ public:
 
     void setPlaybackRange(const KisTimeRange &range);
     bool isPlaybackActive() const;
+    bool isPlaybackPaused() const;
+    void stopPlayback() const;
     int currentTime() const;
 
     enum ItemDataRole

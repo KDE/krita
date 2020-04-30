@@ -511,6 +511,16 @@ bool KisTimeBasedItemModel::isPlaybackActive() const
     return m_d->animationPlayer && m_d->animationPlayer->isPlaying();
 }
 
+bool KisTimeBasedItemModel::isPlaybackPaused() const
+{
+    return m_d->animationPlayer && m_d->animationPlayer->isPaused();
+}
+
+void KisTimeBasedItemModel::stopPlayback() const {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->animationPlayer);
+    m_d->animationPlayer->stop();
+}
+
 int KisTimeBasedItemModel::currentTime() const
 {
     return m_d->image->animationInterface()->currentUITime();

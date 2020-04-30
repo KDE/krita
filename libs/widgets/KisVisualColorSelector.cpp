@@ -107,9 +107,19 @@ void KisVisualColorSelector::slotSetColor(const KoColor &c)
 
 void KisVisualColorSelector::slotSetColorSpace(const KoColorSpace *cs)
 {
-    if (m_d->currentCS != cs) {
-        m_d->currentCS = cs;
-        m_d->currentcolor = KoColor(cs);
+    if (!m_d->currentCS || *m_d->currentCS != *cs) {
+        const KoColorSpace *csNew = cs;
+
+        // PQ color space is not very suitable for color picking, substitute with linear one
+        if (cs->colorModelId() == RGBAColorModelID &&
+            cs->profile()->uniqueId() == KoColorSpaceRegistry::instance()->p2020PQProfile()->uniqueId()) {
+
+            csNew = KoColorSpaceRegistry::instance()->
+                    colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(),
+                               KoColorSpaceRegistry::instance()->p2020G10Profile());
+        }
+        m_d->currentCS = csNew;
+        m_d->currentcolor = KoColor(csNew);
         slotRebuildSelectors();
     }
 }

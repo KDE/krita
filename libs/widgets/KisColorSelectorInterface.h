@@ -26,6 +26,7 @@
 #include <KoColor.h>
 
 class KoColorDisplayRendererInterface;
+class KoColorSpace;
 
 class KRITAWIDGETS_EXPORT KisColorSelectorInterface : public QWidget {
     Q_OBJECT
@@ -51,6 +52,16 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     virtual void slotSetColor(const KoColor &c) = 0;
+    /**
+     * @brief slotSetColorSpace
+     * Set the color space the selector should cover
+     *
+     * This is mostly a hint to decide visual presentation.
+     * Internal processing may be in a different color space and
+     * input conversion shall be handled by the selector itself.
+     * Calling this voids the currently selected color.
+     */
+    virtual void slotSetColorSpace(const KoColorSpace *cs);
 };
 
 #endif // KISCOLORSELECTORINTERFACE_H

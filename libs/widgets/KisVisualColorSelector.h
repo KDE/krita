@@ -68,7 +68,7 @@ public:
 public Q_SLOTS:
 
     void slotSetColor(const KoColor &c) override;
-    void slotsetColorSpace(const KoColorSpace *cs);
+    void slotSetColorSpace(const KoColorSpace *cs) override;
     void slotSetHSX(const QVector3D &hsx);
     void configurationChanged();
     void setDisplayRenderer (const KoColorDisplayRendererInterface *displayRenderer) override;

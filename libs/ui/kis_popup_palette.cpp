@@ -159,6 +159,7 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
             SLOT(slotEmitColorChanged()));
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), m_triangleColorSelector, SLOT(configurationChanged()));
+    connect(m_displayRenderer,  SIGNAL(displayConfigurationChanged()), this, SLOT(slotDisplayConfigurationChanged()));
 
     m_acyclicConnector->connectForwardKoColor(m_resourceManager, SIGNAL(sigChangeFGColorSelector(KoColor)),
                                               this, SLOT(slotExternalFgColorChanged(KoColor)));
@@ -274,16 +275,22 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     setAttribute(Qt::WA_NoMousePropagation, true);
 }
 
+void KisPopupPalette::slotDisplayConfigurationChanged()
+{
+    // Visual Color Selector picks up color space from input
+    KoColor col = m_viewManager->canvasResourceProvider()->fgColor();
+    const KoColorSpace *paintingCS = m_displayRenderer->getPaintingColorSpace();
+    //hack to get around cmyk for now.
+    if (paintingCS->colorChannelCount()>3) {
+        paintingCS = KoColorSpaceRegistry::instance()->rgb8();
+    }
+    m_triangleColorSelector->slotSetColorSpace(paintingCS);
+    m_triangleColorSelector->slotSetColor(col);
+}
+
 void KisPopupPalette::slotExternalFgColorChanged(const KoColor &color)
 {
-    //hack to get around cmyk for now.
-    if (color.colorSpace()->colorChannelCount()>3) {
-        KoColor c(KoColorSpaceRegistry::instance()->rgb8());
-        c.fromKoColor(color);
-        m_triangleColorSelector->slotSetColor(c);
-    } else {
-        m_triangleColorSelector->slotSetColor(color);
-    }
+    m_triangleColorSelector->slotSetColor(color);
 }
 
 void KisPopupPalette::slotEmitColorChanged()

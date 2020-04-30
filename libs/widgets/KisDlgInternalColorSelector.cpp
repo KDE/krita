@@ -197,10 +197,10 @@ void KisDlgInternalColorSelector::slotColorUpdated(KoColor newColor)
 
         if (m_d->lockUsedCS){
             newColor.convertTo(m_d->currentColorSpace);
-            m_d->currentColor = newColor;
         } else {
-            m_d->currentColor = newColor;
+            colorSpaceChanged(newColor.colorSpace());
         }
+        m_d->currentColor = newColor;
         updateAllElements(QObject::sender());
     }
 }
@@ -218,7 +218,7 @@ void KisDlgInternalColorSelector::colorSpaceChanged(const KoColorSpace *cs)
 
     m_d->currentColorSpace = KoColorSpaceRegistry::instance()->colorSpace(cs->colorModelId().id(), cs->colorDepthId().id(), cs->profile());
     m_ui->spinboxselector->slotSetColorSpace(m_d->currentColorSpace);
-    m_ui->visualSelector->slotsetColorSpace(m_d->currentColorSpace);
+    m_ui->visualSelector->slotSetColorSpace(m_d->currentColorSpace);
 
 }
 
@@ -228,6 +228,7 @@ void KisDlgInternalColorSelector::lockUsedColorSpace(const KoColorSpace *cs)
     if (m_d->currentColor.colorSpace() != m_d->currentColorSpace) {
         m_d->currentColor.convertTo(m_d->currentColorSpace);
         m_ui->spinboxselector->slotSetColor(m_d->currentColor);
+        m_ui->visualSelector->slotSetColor(m_d->currentColor);
     }
     m_d->lockUsedCS = true;
 }

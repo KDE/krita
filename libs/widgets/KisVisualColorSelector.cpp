@@ -89,11 +89,12 @@ KisVisualColorSelector::~KisVisualColorSelector()
 
 void KisVisualColorSelector::slotSetColor(const KoColor &c)
 {
-    m_d->currentcolor = c;
-    if (m_d->currentCS != c.colorSpace()) {
-        slotsetColorSpace(c.colorSpace());
+    if (!m_d->currentCS) {
+        m_d->currentcolor = c;
+        slotSetColorSpace(c.colorSpace());
     }
     else {
+        m_d->currentcolor = c.convertedTo(m_d->currentCS);
         m_d->channelValues = convertKoColorToShapeCoordinates(m_d->currentcolor);
         Q_FOREACH (KisVisualColorSelectorShape *shape, m_d->widgetlist) {
             shape->setChannelValues(m_d->channelValues, true);
@@ -104,10 +105,11 @@ void KisVisualColorSelector::slotSetColor(const KoColor &c)
     }
 }
 
-void KisVisualColorSelector::slotsetColorSpace(const KoColorSpace *cs)
+void KisVisualColorSelector::slotSetColorSpace(const KoColorSpace *cs)
 {
     if (m_d->currentCS != cs) {
         m_d->currentCS = cs;
+        m_d->currentcolor = KoColor(cs);
         slotRebuildSelectors();
     }
 }
@@ -612,7 +614,7 @@ void KisVisualColorSelector::resizeEvent(QResizeEvent *) {
     int borderWidth = qMax(sizeValue*0.1, 20.0);
     QRect newrect(0,0, this->geometry().width(), this->geometry().height());
     if (!m_d->currentCS) {
-        slotsetColorSpace(m_d->currentcolor.colorSpace());
+        slotSetColorSpace(m_d->currentcolor.colorSpace());
     }
     if (m_d->currentCS->colorChannelCount()==3) {
         // set border width first, else the resized painting may have happened already, and we'd have to re-render

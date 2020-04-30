@@ -124,7 +124,15 @@ void KisRotateCanvasAction::cursorMovedAbsolute(const QPointF &startPos, const Q
 
     if (d->mode == DiscreteRotateModeShortcut) {
         const qreal angleStep = 15;
-        newRotation = qRound(newRotation / angleStep) * angleStep;
+
+        // avoid jumps at the beginning of the rotation action
+        if (qAbs(newRotation) > 0.5 * angleStep) {
+            const qreal currentCanvasRotation = converter->rotationAngle();
+            const qreal desiredOffset = newRotation - d->previousRotation;
+            newRotation = qRound((currentCanvasRotation + desiredOffset) / angleStep) * angleStep - currentCanvasRotation + d->previousRotation;
+        } else {
+            newRotation = d->previousRotation;
+        }
     }
 
     KisCanvasController *canvasController =

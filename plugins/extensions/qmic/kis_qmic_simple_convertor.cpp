@@ -307,7 +307,7 @@ void KisQmicSimpleConvertor::convertFromGmicFast(gmic_image<float>& gmicImage, K
 
     const qint32 floatPixelSize = rgbaFloat32bitcolorSpace->pixelSize();
 
-    KisRandomAccessorSP it = dst->createRandomAccessorNG(dst->x(), dst->y()); // 0,0
+    KisRandomAccessorSP it = dst->createRandomAccessorNG();
     int tileWidth = it->numContiguousColumns(dst->x());
     int tileHeight = it->numContiguousRows(dst->y());
     Q_ASSERT(tileWidth == 64);
@@ -431,7 +431,7 @@ void KisQmicSimpleConvertor::convertToGmicImageFast(KisPaintDeviceSP dev, gmic_i
     planes.append(gmicImage->_data + blueOffset);
     planes.append(gmicImage->_data + alphaOffset);
 
-    KisRandomConstAccessorSP it = dev->createRandomConstAccessorNG(dev->x(), dev->y());
+    KisRandomConstAccessorSP it = dev->createRandomConstAccessorNG();
     int tileWidth = it->numContiguousColumns(dev->x());
     int tileHeight = it->numContiguousRows(dev->y());
 
@@ -558,7 +558,7 @@ void KisQmicSimpleConvertor::convertToGmicImage(KisPaintDeviceSP dev, gmic_image
     KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags();
 
     const KoColorSpace * colorSpace = dev->colorSpace();
-    KisRandomConstAccessorSP it = dev->createRandomConstAccessorNG(0,0);
+    KisRandomConstAccessorSP it = dev->createRandomConstAccessorNG();
 
     int optimalBufferSize = 64; // most common numContiguousColumns, tile size?
     QScopedArrayPointer<quint8> floatRGBApixelStorage(new quint8[rgbaFloat32bitcolorSpace->pixelSize() * optimalBufferSize]);
@@ -609,7 +609,7 @@ void KisQmicSimpleConvertor::convertFromGmicImage(gmic_image<float>& gmicImage, 
     int alphaOffset = greenOffset * 3;
     QRect rc(0,0,gmicImage._width, gmicImage._height);
 
-    KisRandomAccessorSP it = dev->createRandomAccessorNG(0,0);
+    KisRandomAccessorSP it = dev->createRandomAccessorNG();
     int pos;
     float r,g,b,a;
 

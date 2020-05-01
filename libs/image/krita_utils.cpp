@@ -444,7 +444,7 @@ namespace KritaUtils
         int numTransparentPixels = 0;
         int numPixels = 0;
 
-        KisRandomConstAccessorSP it = dev->createRandomConstAccessorNG(rect.x(), rect.y());
+        KisRandomConstAccessorSP it = dev->createRandomConstAccessorNG();
         for (int y = rect.y(); y <= rect.bottom(); y += yStep) {
             for (int x = rect.x(); x <= rect.right(); x += xStep) {
                 it->moveTo(x, y);

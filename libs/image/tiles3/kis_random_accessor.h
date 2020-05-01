@@ -40,7 +40,7 @@ class KisRandomAccessor2 : public KisRandomAccessorNG
 
 public:
 
-    KisRandomAccessor2(KisTiledDataManager *ktm, qint32 x, qint32 y, qint32 offsetX, qint32 offsetY, bool writable, KisIteratorCompleteListener *completeListener);
+    KisRandomAccessor2(KisTiledDataManager *ktm, qint32 offsetX, qint32 offsetY, bool writable, KisIteratorCompleteListener *completeListener);
     KisRandomAccessor2(const KisTiledRandomAccessor& lhs);
     ~KisRandomAccessor2() override;
 

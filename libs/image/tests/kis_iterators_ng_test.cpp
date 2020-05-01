@@ -385,7 +385,7 @@ void KisIteratorNGTest::randomAccessor(const KoColorSpace * colorSpace)
 
     QCOMPARE(dev.extent(), QRect());
 
-    KisRandomConstAccessorSP acc = dev.createRandomConstAccessorNG(0, 0);
+    KisRandomConstAccessorSP acc = dev.createRandomConstAccessorNG();
     for (int y = 0; y < 128; ++y) {
         for (int x = 0; x < 128; ++x) {
             acc->moveTo(x, y);
@@ -393,7 +393,7 @@ void KisIteratorNGTest::randomAccessor(const KoColorSpace * colorSpace)
     }
     QCOMPARE(dev.extent(), QRect());
 
-    KisRandomAccessorSP ac = dev.createRandomAccessorNG(0, 0);
+    KisRandomAccessorSP ac = dev.createRandomAccessorNG();
     for (int y = 0; y < 128; ++y) {
         for (int x = 0; x < 128; ++x) {
             ac->moveTo(x, y);
@@ -407,7 +407,7 @@ void KisIteratorNGTest::randomAccessor(const KoColorSpace * colorSpace)
     dev.setX(10);
     dev.setY(-15);
 
-    ac = dev.createRandomAccessorNG(0, 0);
+    ac = dev.createRandomAccessorNG();
     for (int y = 0; y < 128; ++y) {
         for (int x = 0; x < 128; ++x) {
             ac->moveTo(x, y);

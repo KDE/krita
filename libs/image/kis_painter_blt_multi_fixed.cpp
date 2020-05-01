@@ -177,8 +177,8 @@ void KisPainter::bltFixed(const QRect &applyRect, const QList<KisRenderedDab> al
     if (devices.isEmpty() || rc.isEmpty()) return;
 
     KoCompositeOp::ParameterInfo localParamInfo = d->paramInfo;
-    KisRandomAccessorSP dstIt = d->device->createRandomAccessorNG(rc.left(), rc.top());
-    KisRandomConstAccessorSP maskIt = d->selection ? d->selection->projection()->createRandomConstAccessorNG(rc.left(), rc.top()) : 0;
+    KisRandomAccessorSP dstIt = d->device->createRandomAccessorNG();
+    KisRandomConstAccessorSP maskIt = d->selection ? d->selection->projection()->createRandomConstAccessorNG() : 0;
 
     if (maskIt) {
         Q_FOREACH (const KisRenderedDab &dab, devices) {

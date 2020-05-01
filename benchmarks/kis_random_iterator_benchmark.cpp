@@ -49,13 +49,13 @@ void KisRandomIteratorBenchmark::cleanupTestCase()
 void KisRandomIteratorBenchmark::benchmarkCreation()
 {
     QBENCHMARK{
-        KisRandomAccessorSP it = m_device->createRandomAccessorNG(0,0);
+        KisRandomAccessorSP it = m_device->createRandomAccessorNG();
     }
 }
 
 void KisRandomIteratorBenchmark::benchmarkWriteBytes()
 {
-    KisRandomAccessorSP it = m_device->createRandomAccessorNG(0,0);
+    KisRandomAccessorSP it = m_device->createRandomAccessorNG();
     
     QBENCHMARK{
         for (int i = 0; i < TEST_IMAGE_HEIGHT; i++){
@@ -70,7 +70,7 @@ void KisRandomIteratorBenchmark::benchmarkWriteBytes()
 
 void KisRandomIteratorBenchmark::benchmarkReadBytes()
 {
-    KisRandomAccessorSP it = m_device->createRandomAccessorNG(0,0);
+    KisRandomAccessorSP it = m_device->createRandomAccessorNG();
 
     QBENCHMARK{
         for (int i = 0; i < TEST_IMAGE_HEIGHT; i++){
@@ -85,7 +85,7 @@ void KisRandomIteratorBenchmark::benchmarkReadBytes()
 
 void KisRandomIteratorBenchmark::benchmarkConstReadBytes()
 {
-    KisRandomConstAccessorSP it = m_device->createRandomConstAccessorNG(0,0);
+    KisRandomConstAccessorSP it = m_device->createRandomConstAccessorNG();
 
     QBENCHMARK{
         for (int i = 0; i < TEST_IMAGE_HEIGHT; i++){
@@ -103,8 +103,8 @@ void KisRandomIteratorBenchmark::benchmarkReadWriteBytes(){
     KisPaintDevice dab(m_colorSpace);
     dab.fill(0,0,TEST_IMAGE_WIDTH,TEST_IMAGE_HEIGHT, c.data());
     
-    KisRandomAccessorSP writeIterator = m_device->createRandomAccessorNG(0,0);
-    KisRandomConstAccessorSP constReadIterator = dab.createRandomConstAccessorNG(0,0);
+    KisRandomAccessorSP writeIterator = m_device->createRandomAccessorNG();
+    KisRandomConstAccessorSP constReadIterator = dab.createRandomConstAccessorNG();
 
     QBENCHMARK{
         for (int i = 0; i < TEST_IMAGE_HEIGHT; i++){
@@ -121,7 +121,7 @@ void KisRandomIteratorBenchmark::benchmarkReadWriteBytes(){
 
 void KisRandomIteratorBenchmark::benchmarkTotalRandom()
 {
-    KisRandomAccessorSP it = m_device->createRandomAccessorNG(0,0);
+    KisRandomAccessorSP it = m_device->createRandomAccessorNG();
     // set the seed so that we always go in the same permutation over the device
     srand(123456);
    
@@ -138,7 +138,7 @@ void KisRandomIteratorBenchmark::benchmarkTotalRandom()
 
 void KisRandomIteratorBenchmark::benchmarkTotalRandomConst()
 {
-    KisRandomConstAccessorSP it = m_device->createRandomConstAccessorNG(0,0);
+    KisRandomConstAccessorSP it = m_device->createRandomConstAccessorNG();
     // set the seed so that we always go in the same permutation over the device
     srand(123456);
    
@@ -157,7 +157,7 @@ void KisRandomIteratorBenchmark::benchmarkTotalRandomConst()
 
 void KisRandomIteratorBenchmark::benchmarkNoMemCpy()
 {
-    KisRandomAccessorSP it = m_device->createRandomAccessorNG(0,0);
+    KisRandomAccessorSP it = m_device->createRandomAccessorNG();
     
     QBENCHMARK{
         for (int i = 0; i < TEST_IMAGE_HEIGHT; i++){
@@ -171,7 +171,7 @@ void KisRandomIteratorBenchmark::benchmarkNoMemCpy()
 
 void KisRandomIteratorBenchmark::benchmarkConstNoMemCpy()
 {
-    KisRandomConstAccessorSP it = m_device->createRandomConstAccessorNG(0,0);
+    KisRandomConstAccessorSP it = m_device->createRandomConstAccessorNG();
 
     QBENCHMARK{
         for (int i = 0; i < TEST_IMAGE_HEIGHT; i++){
@@ -196,7 +196,7 @@ void KisRandomIteratorBenchmark::benchmarkTileByTileWrite()
         dbgKrita << "There will be some unprocessed pixels! Test area differs from the image size";
     }
     
-    KisRandomAccessorSP it = m_device->createRandomAccessorNG(0,0);
+    KisRandomAccessorSP it = m_device->createRandomAccessorNG();
     QBENCHMARK{
         for (int yTile = 0; yTile < yTiles; yTile++){
             for (int xTile = 0; xTile < xTiles; xTile++){
@@ -221,8 +221,8 @@ void KisRandomIteratorBenchmark::benchmarkTwoIteratorsNoMemCpy()
     KisPaintDevice dab(m_colorSpace);
     dab.fill(0,0,TEST_IMAGE_WIDTH,TEST_IMAGE_HEIGHT, c.data());
     
-    KisRandomAccessorSP writeIterator = m_device->createRandomAccessorNG(0,0);
-    KisRandomConstAccessorSP constReadIterator = dab.createRandomConstAccessorNG(0,0);
+    KisRandomAccessorSP writeIterator = m_device->createRandomAccessorNG();
+    KisRandomConstAccessorSP constReadIterator = dab.createRandomConstAccessorNG();
 
     QBENCHMARK{
         for (int i = 0; i < TEST_IMAGE_HEIGHT; i++){

@@ -146,6 +146,9 @@ void KisSelectionToolHelper::selectPixelSelection(KisProcessingApplicator& appli
                 savedCommand = transaction.endAndTake();
                 pixelSelection->setDirty(dirtyRect);
 
+                // release resources: transaction will care about
+                // undo/redo, we don't need the selection anymore
+                m_selection.clear();
             }
 
             if (m_view->selection()->selectedExactRect().isEmpty()) {

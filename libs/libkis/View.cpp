@@ -142,10 +142,10 @@ void View::activateResource(Resource *resource)
 
 }
 
-Scratchpad *View::createScratchpad(QString bgColor)
+Scratchpad *View::createScratchpad(QColor bgColor)
 {
     if(view()) {
-        d->scratchpads.append(new Scratchpad(this->canvas()->view(), "white"));
+        d->scratchpads.append(new Scratchpad(this->canvas()->view(), bgColor));
     }
     return d->scratchpads.last();
 }

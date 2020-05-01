@@ -27,14 +27,10 @@
 
 #include <QColor>
 
-Scratchpad::Scratchpad(View *view, const QString & defaultColor, QWidget *parent)
+Scratchpad::Scratchpad(View *view, const QColor & defaultColor, QWidget *parent)
     : KisScratchPad(parent)
-{    
-
-    // todo hook this up later to override
-    const QColor backgroundColor = QColor(Qt::white);
-
-    KisScratchPad::setupScratchPad(view->view()->resourceProvider(), backgroundColor);
+{
+    KisScratchPad::setupScratchPad(view->view()->resourceProvider(), defaultColor);
     KisScratchPad::setMinimumSize(50, 50);
 }
 
@@ -54,5 +50,11 @@ void Scratchpad::setMode(QString modeType)
 
 void Scratchpad::clear()
 {
+    // need ability to set color
     KisScratchPad::fillDefault();
+}
+
+void Scratchpad::setFillColor(QColor color)
+{
+    KisScratchPad::setFillColor(color);
 }

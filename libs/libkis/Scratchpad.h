@@ -40,16 +40,18 @@ class KRITALIBKIS_EXPORT Scratchpad: public KisScratchPad
 {
     Q_OBJECT
 public:
-    Scratchpad(View *view, const QString & defaultColor, QWidget *parent = 0);
+    Scratchpad(View *view, const QColor & defaultColor, QWidget *parent = 0);
     ~Scratchpad();
 
 
 public Q_SLOTS:
 
     /**
-     * clears out scratchpad with whatever default color was set during setup
+     * clears out scratchpad with color specfified set during setup
      */
     void clear();
+
+    void setFillColor(QColor color);
 
     /** Switches between a GUI controlling the current mode and when mouse clicks control mode
      * Setting to true allows GUI to control the mode with explicity setting mode

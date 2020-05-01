@@ -88,7 +88,7 @@ public Q_SLOTS:
      * @brief creates a scratchpad widget to draw on.
      *  It is stored in the scratchpad list for reference
      */
-    Scratchpad *createScratchpad(QString bgColor);
+    Scratchpad *createScratchpad(QColor bgColor);
 
     /**
      * @brief foregroundColor allows access to the currently active color.

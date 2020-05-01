@@ -245,7 +245,11 @@ void KisFillPainter::genericFillStart(int startX, int startY, KisPaintDeviceSP s
     Q_ASSERT(m_height > 0);
 
     // Create a selection from the surrounding area
-    m_fillSelection = createFloodSelection(startX, startY, sourceDevice);
+
+    KisPixelSelectionSP pixelSelection = createFloodSelection(startX, startY, sourceDevice);
+    KisSelectionSP newSelection = new KisSelection(pixelSelection->defaultBounds());
+    newSelection->pixelSelection()->applySelection(pixelSelection, SELECTION_REPLACE);
+    m_fillSelection = newSelection;
 }
 
 void KisFillPainter::genericFillEnd(KisPaintDeviceSP filled)
@@ -280,8 +284,15 @@ void KisFillPainter::genericFillEnd(KisPaintDeviceSP filled)
     m_width = m_height = -1;
 }
 
-KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisPaintDeviceSP sourceDevice)
+KisPixelSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisPaintDeviceSP sourceDevice)
 {
+    KisPixelSelectionSP newSelection = new KisPixelSelection(new KisSelectionDefaultBounds(device()));
+    return createFloodSelection(newSelection, startX, startY, sourceDevice);
+}
+
+KisPixelSelectionSP KisFillPainter::createFloodSelection(KisPixelSelectionSP pixelSelection, int startX, int startY, KisPaintDeviceSP sourceDevice)
+{
+
     if (m_width < 0 || m_height < 0) {
         if (selection() && m_careForSelection) {
             QRect rc = selection()->selectedExactRect();
@@ -296,11 +307,8 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
     QRect fillBoundsRect(0, 0, m_width, m_height);
     QPoint startPoint(startX, startY);
 
-    KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(device()));
-    KisPixelSelectionSP pixelSelection = selection->pixelSelection();
-
     if (!fillBoundsRect.contains(startPoint)) {
-        return selection;
+        return pixelSelection;
     }
 
     KisScanlineFill gc(sourceDevice, startPoint, fillBoundsRect);
@@ -309,16 +317,16 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
 
     if (m_sizemod > 0) {
         KisGrowSelectionFilter biggy(m_sizemod, m_sizemod);
-        biggy.process(pixelSelection, selection->selectedRect().adjusted(-m_sizemod, -m_sizemod, m_sizemod, m_sizemod));
+        biggy.process(pixelSelection, pixelSelection->selectedRect().adjusted(-m_sizemod, -m_sizemod, m_sizemod, m_sizemod));
     }
     else if (m_sizemod < 0) {
         KisShrinkSelectionFilter tiny(-m_sizemod, -m_sizemod, false);
-        tiny.process(pixelSelection, selection->selectedRect());
+        tiny.process(pixelSelection, pixelSelection->selectedRect());
     }
     if (m_feather > 0) {
         KisFeatherSelectionFilter feathery(m_feather);
-        feathery.process(pixelSelection, selection->selectedRect().adjusted(-m_feather, -m_feather, m_feather, m_feather));
+        feathery.process(pixelSelection, pixelSelection->selectedRect().adjusted(-m_feather, -m_feather, m_feather, m_feather));
     }
 
-    return selection;
+    return pixelSelection;
 }

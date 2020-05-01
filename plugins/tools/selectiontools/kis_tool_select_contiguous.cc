@@ -52,6 +52,11 @@
 #include "commands_new/KisMergeLabeledLayersCommand.h"
 #include "kis_image.h"
 #include "kis_undo_stores.h"
+#include "kis_resources_snapshot.h"
+#include "kis_processing_applicator.h"
+#include <processing/fill_processing_visitor.h>
+
+#include "kis_command_utils.h"
 
 
 KisToolSelectContiguous::KisToolSelectContiguous(KoCanvasBase *canvas)
@@ -81,7 +86,7 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
     KisPaintDeviceSP dev;
 
     if (!currentNode() ||
-        !(dev = currentNode()->projection()) ||
+        !(dev = currentNode()->paintDevice()) ||
         !currentNode()->visible() ||
         !selectionEditable()) {
         event->ignore();
@@ -94,15 +99,16 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
 
     QApplication::setOverrideCursor(KisCursor::waitCursor());
 
+    // -------------------------------
+
+    KisProcessingApplicator applicator(currentImage(), currentNode(),
+                                       KisProcessingApplicator::NONE,
+                                       KisImageSignalVector() << ModifiedSignal,
+                                       kundo2_i18n("Select Contiguous Area"));
 
     QPoint pos = convertToImagePixelCoordFloored(event);
     QRect rc = currentImage()->bounds();
-    KisFillPainter fillpainter(dev);
-    fillpainter.setHeight(rc.height());
-    fillpainter.setWidth(rc.width());
-    fillpainter.setFillThreshold(m_fuzziness);
-    fillpainter.setFeather(m_feather);
-    fillpainter.setSizemod(m_sizemod);
+
 
     KisImageSP image = currentImage();
     KisPaintDeviceSP sourceDevice;
@@ -114,44 +120,67 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
                     image, "Contiguous Selection Tool Reference Result Paint Device");
 
         KisMergeLabeledLayersCommand* command = new KisMergeLabeledLayersCommand(refImage, sourceDevice, image->root(), colorLabelsSelected());
-        image->barrierLock();
-        command->redo();
-        image->unlock();
-        delete command;
+        applicator.applyCommand(command,
+                                KisStrokeJobData::SEQUENTIAL,
+                                KisStrokeJobData::EXCLUSIVE);
+
     } else { // Sample Current Layer
         sourceDevice = dev;
     }
 
-    image->barrierLock();
-    KisSelectionSP selection = fillpainter.createFloodSelection(pos.x(), pos.y(), sourceDevice);
-    image->unlock();
+    KisPixelSelectionSP selection = KisPixelSelectionSP(new KisPixelSelection(new KisSelectionDefaultBounds(dev)));
+    bool antiAlias = antiAliasSelection();
 
-    // If we're not antialiasing, threshold the entire selection
-    if (!antiAliasSelection()) {
-        QRect r = selection->selectedExactRect();
-        if (r.isValid()) {
-            KisHLineIteratorSP selectionIt = selection->pixelSelection()->createHLineIteratorNG(r.x(), r.y(), r.width());
-            for (qint32 y = 0; y < r.height(); y++) {
-                do {
-                    if (selectionIt->rawData()[0] > 0) {
-                        selection->pixelSelection()->colorSpace()->setOpacity(selectionIt->rawData(), OPACITY_OPAQUE_U8, 1);
+    int fuzziness = m_fuzziness;
+    int feather = m_feather;
+    int sizemod = m_sizemod;
+
+    KUndo2Command* cmd = new KisCommandUtils::LambdaCommand(
+                [dev, rc, fuzziness, feather, sizemod, selection, pos, sourceDevice, antiAlias] () mutable -> KUndo2Command* {
+
+                    KisFillPainter fillpainter(dev);
+                    fillpainter.setHeight(rc.height());
+                    fillpainter.setWidth(rc.width());
+                    fillpainter.setFillThreshold(fuzziness);
+                    fillpainter.setFeather(feather);
+                    fillpainter.setSizemod(sizemod);
+
+                    fillpainter.createFloodSelection(selection, pos.x(), pos.y(), sourceDevice);
+
+                    // If we're not antialiasing, threshold the entire selection
+                    if (!antiAlias) {
+                        QRect r = selection->selectedExactRect();
+                        if (r.isValid()) {
+                            KisHLineIteratorSP selectionIt = selection->createHLineIteratorNG(r.x(), r.y(), r.width());
+                            for (qint32 y = 0; y < r.height(); y++) {
+                                do {
+                                    if (selectionIt->rawData()[0] > 0) {
+                                        selection->colorSpace()->setOpacity(selectionIt->rawData(), OPACITY_OPAQUE_U8, 1);
+                                    }
+                                } while (selectionIt->nextPixel());
+                                selectionIt->nextRow();
+                            }
+                        }
                     }
-                } while (selectionIt->nextPixel());
-                selectionIt->nextRow();
-            }
-        }
-    }
 
+                    selection->invalidateOutlineCache();
+
+                    return 0;
+    });
+    applicator.applyCommand(cmd, KisStrokeJobData::SEQUENTIAL);
 
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    if (!kisCanvas || !selection->pixelSelection()) {
+    KIS_SAFE_ASSERT_RECOVER(kisCanvas) {
+        applicator.cancel();
         QApplication::restoreOverrideCursor();
         return;
-    }
+    };
 
-    selection->pixelSelection()->invalidateOutlineCache();
     KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select Contiguous Area"));
-    helper.selectPixelSelection(selection->pixelSelection(), selectionAction());
+
+    helper.selectPixelSelection(applicator, selection, selectionAction());
+
+    applicator.end();
     QApplication::restoreOverrideCursor();
 
 }

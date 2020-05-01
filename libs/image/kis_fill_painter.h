@@ -149,13 +149,29 @@ public:
 
     /**
      * Returns a selection mask for the floodfill starting at the specified position.
+     * This variant basically creates a new selection object and passes it down
+     *   to the other variant of the function.
      *
      * @param startX the X position where the floodfill starts
      * @param startY the Y position where the floodfill starts
      * @param sourceDevice the sourceDevice that determines the area that
      * is floodfilled if sampleMerged is on
      */
-    KisSelectionSP createFloodSelection(int startX, int startY, KisPaintDeviceSP sourceDevice);
+    KisPixelSelectionSP createFloodSelection(int startX, int startY, KisPaintDeviceSP sourceDevice);
+
+    /**
+     * Returns a selection mask for the floodfill starting at the specified position.
+     * This variant requires an empty selection object. It is used in cases where the pointer
+     *    to the selection must be known beforehand, for example when the selection is filled
+     *    in a stroke and then the pointer to the pixel selection is needed later.
+     *
+     * @param selection empty new selection object
+     * @param startX the X position where the floodfill starts
+     * @param startY the Y position where the floodfill starts
+     * @param sourceDevice the sourceDevice that determines the area that
+     * is floodfilled if sampleMerged is on
+     */
+    KisPixelSelectionSP createFloodSelection(KisPixelSelectionSP newSelection, int startX, int startY, KisPaintDeviceSP sourceDevice);
 
     /**
      * Set the threshold for floodfill. The range is 0-255: 0 means the fill will only

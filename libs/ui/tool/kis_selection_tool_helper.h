@@ -26,6 +26,7 @@
 #include "kis_layer.h"
 #include "kis_selection.h"
 #include "kis_canvas2.h"
+#include "kis_processing_applicator.h"
 
 class KoShape;
 
@@ -39,7 +40,9 @@ public:
     KisSelectionToolHelper(KisCanvas2* canvas, const KUndo2MagicString& name);
     virtual ~KisSelectionToolHelper();
 
+    void selectPixelSelection(KisProcessingApplicator& applicator, KisPixelSelectionSP selection, SelectionAction action);
     void selectPixelSelection(KisPixelSelectionSP selection, SelectionAction action);
+
     void addSelectionShape(KoShape* shape, SelectionAction action = SELECTION_DEFAULT);
     void addSelectionShapes(QList<KoShape*> shapes, SelectionAction action = SELECTION_DEFAULT);
 

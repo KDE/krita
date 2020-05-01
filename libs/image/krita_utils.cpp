@@ -461,19 +461,23 @@ namespace KritaUtils
         return qreal(numTransparentPixels) / numPixels;
     }
 
-    void mirrorDab(Qt::Orientation dir, const QPoint &center, KisRenderedDab *dab)
+    void mirrorDab(Qt::Orientation dir, const QPoint &center, KisRenderedDab *dab, bool skipMirrorPixels)
     {
         const QRect rc = dab->realBounds();
 
         if (dir == Qt::Horizontal) {
             const int mirrorX = -((rc.x() + rc.width()) - center.x()) + center.x();
 
-            dab->device->mirror(true, false);
+            if (!skipMirrorPixels) {
+                dab->device->mirror(true, false);
+            }
             dab->offset.rx() = mirrorX;
         } else /* if (dir == Qt::Vertical) */ {
             const int mirrorY = -((rc.y() + rc.height()) - center.y()) + center.y();
 
-            dab->device->mirror(false, true);
+            if (!skipMirrorPixels) {
+                dab->device->mirror(false, true);
+            }
             dab->offset.ry() = mirrorY;
         }
     }

@@ -25,7 +25,7 @@
 #include "kis_image.h"
 #include "kis_painter.h"
 #include "kis_layer.h"
-
+#include "KisDeleteLaterWrapper.h"
 
 
 
@@ -50,7 +50,9 @@ void KisMergeLabeledLayersCommand::undo()
 
 void KisMergeLabeledLayersCommand::redo()
 {
-    mergeLabeledLayers();
+    if (m_refImage) {
+        mergeLabeledLayers();
+    }
     KUndo2Command::redo();
 }
 
@@ -107,6 +109,16 @@ void KisMergeLabeledLayersCommand::mergeLabeledLayers()
     m_refImage->waitForDone();
 
     KisPainter::copyAreaOptimized(QPoint(), m_refImage->projection(), m_refPaintDevice, m_refImage->bounds());
+
+    // release resources: they are still owned by the caller
+    // (or by some other object the caller passed them to)
+    m_refPaintDevice.clear();
+    m_currentRoot.clear();
+
+    // KisImage should be deleted only in the GUI thread (it has timers)
+    makeKisDeleteLaterWrapper(m_refImage)->deleteLater();
+    m_refImage.clear();
+
 }
 
 bool KisMergeLabeledLayersCommand::acceptNode(KisNodeSP node)

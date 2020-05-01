@@ -25,6 +25,7 @@
 
 class ManagedColor;
 class Resource;
+class Scratchpad;
 class Node;
 class KisView;
 
@@ -82,6 +83,12 @@ public Q_SLOTS:
      * @param resource: a pattern, gradient or paintop preset
      */
     void activateResource(Resource *resource);
+
+    /**
+     * @brief creates a scratchpad widget to draw on.
+     *  It is stored in the scratchpad list for reference
+     */
+    Scratchpad *createScratchpad(QString bgColor);
 
     /**
      * @brief foregroundColor allows access to the currently active color.
@@ -146,9 +153,16 @@ print(selected_nodes)
      */
     QList<Node *> selectedNodes() const;
 
+
+    /**
+     * @brief Stores scratchpad widgets to draw on
+     */
+    QList<Scratchpad *> scratchpads() const;
+
 private:
 
     friend class Window;
+    friend class Scratchpad;
     KisView *view();
 
     struct Private;

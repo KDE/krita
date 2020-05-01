@@ -27,12 +27,6 @@
 
 #include <QColor>
 
-struct Scratchpad::Private {
-    Private() {}
-   // View *view = 0;
-};
-
-
 Scratchpad::Scratchpad(View *view, const QString & defaultColor, QWidget *parent)
     : KisScratchPad(parent)
 {    
@@ -46,5 +40,19 @@ Scratchpad::Scratchpad(View *view, const QString & defaultColor, QWidget *parent
 
 Scratchpad::~Scratchpad()
 {
-    delete d;
+}
+
+void Scratchpad::setModeManually(bool value)
+{
+    KisScratchPad::setModeManually(value);
+}
+
+void Scratchpad::setMode(QString modeType)
+{
+    KisScratchPad::setModeType(modeType);
+}
+
+void Scratchpad::clear()
+{
+    KisScratchPad::fillDefault();
 }

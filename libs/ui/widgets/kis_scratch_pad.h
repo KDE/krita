@@ -66,6 +66,19 @@ public:
     /// set the specified rect as the area taken for @see cutoutOverlay
     void setCutoutOverlayRect(const QRect&rc);
 
+    /**
+     * keep track of if our scratchpad is in paint, pan, or color pick mode
+     * Set to true if there is a GUI controlling current mode
+     * If this is false, the modes are only changed with various mouse click shortcuts
+     */
+    void setModeManually(bool value);
+
+    /**
+     * @brief change the mode explicitly to paint, mix, or pan
+     * @param what mode to change it to
+     */
+    void setModeType(QString modeName);
+
     /// return the contents of the area under the cutoutOverlay rect
     QImage cutoutOverlay() const;
 
@@ -153,9 +166,12 @@ private:
 
     KoColor m_defaultColor;
     Mode m_toolMode;
+    bool isModeManuallySet = false;
+    bool isMouseDown = false;
     KisPaintLayerSP m_paintLayer;
     const KoColorProfile* m_displayProfile;
     QCursor m_cursor;
+    QCursor m_colorPickerCursor;
     QRect m_cutoutOverlay;
     QBrush m_checkBrush;
     KisCanvasResourceProvider* m_resourceProvider;

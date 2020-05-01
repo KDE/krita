@@ -43,9 +43,22 @@ public:
     Scratchpad(View *view, const QString & defaultColor, QWidget *parent = 0);
     ~Scratchpad();
 
-private:
-    struct Private;
-    Private *d;
+
+public Q_SLOTS:
+
+    /**
+     * clears out scratchpad with whatever default color was set during setup
+     */
+    void clear();
+
+    /** Switches between a GUI controlling the current mode and when mouse clicks control mode
+     * Setting to true allows GUI to control the mode with explicity setting mode
+     */
+    void setModeManually(bool value);
+
+
+    /// Manually set what mode scratchpad is in. Ignored if "setModeManually is set to false
+    void setMode(QString modeName);
 };
 
 #endif // LIBKIS_SCRATCHPAD_H

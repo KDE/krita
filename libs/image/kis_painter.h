@@ -672,7 +672,7 @@ public:
      * Mirror \p dab in the requested direction around the center point defined
      * in the painter. The dab's offset is adjusted automatically.
      */
-    void mirrorDab(Qt::Orientation direction, KisRenderedDab *dab) const;
+    void mirrorDab(Qt::Orientation direction, KisRenderedDab *dab, bool skipMirrorPixels = false) const;
 
     /**
      * Calculate the list of the mirrored rects that will be painted on the

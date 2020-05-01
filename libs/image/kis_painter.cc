@@ -2975,12 +2975,12 @@ void KisPainter::mirrorRect(Qt::Orientation direction, QRect *rc) const
     KritaUtils::mirrorRect(direction, effectiveAxesCenter, rc);
 }
 
-void KisPainter::mirrorDab(Qt::Orientation direction, KisRenderedDab *dab) const
+void KisPainter::mirrorDab(Qt::Orientation direction, KisRenderedDab *dab, bool skipMirrorPixels) const
 {
     KisLodTransform t(d->device);
     QPoint effectiveAxesCenter = t.map(d->axesCenter).toPoint();
 
-    KritaUtils::mirrorDab(direction, effectiveAxesCenter, dab);
+    KritaUtils::mirrorDab(direction, effectiveAxesCenter, dab, skipMirrorPixels);
 }
 
 namespace {

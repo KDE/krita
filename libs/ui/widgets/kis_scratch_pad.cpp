@@ -413,7 +413,7 @@ void KisScratchPad::setupScratchPad(KisCanvasResourceProvider* resourceProvider,
 
     m_helper.reset(new KisToolFreehandHelper(m_infoBuilder, m_resourceProvider->resourceManager()));
 
-    m_defaultColor = KoColor(defaultColor, KoColorSpaceRegistry::instance()->rgb8());
+    setFillColor(defaultColor);
 
     KisPaintDeviceSP paintDevice =
         new KisPaintDevice(m_defaultColor.colorSpace(), "scratchpad");
@@ -553,6 +553,11 @@ void KisScratchPad::fillTransparent() {
     paintDevice->clear();
     t.end();
     update();
+}
+
+void KisScratchPad::setFillColor(QColor newColor)
+{
+    m_defaultColor = KoColor(newColor, KoColorSpaceRegistry::instance()->rgb8());
 }
 
 void KisScratchPad::fillGradient()

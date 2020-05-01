@@ -100,6 +100,8 @@ public Q_SLOTS:
     void fillBackground();
     void fillTransparent();
 
+    void setFillColor(QColor newColor);
+
     /// Fill the area with what is on your current canvas
     void fillLayer();
 

@@ -1236,15 +1236,6 @@ void TimelineFramesView::slotUpdateFrameActions()
 
     enableAction("copy_frames_to_clipboard", true);
     enableAction("cut_frames_to_clipboard", hasEditableFrames);
-
-    enableAction("insert_opacity_keyframe", hasEditableFrames);
-    enableAction("remove_opacity_keyframe", hasEditableFrames);
-
-    //QClipboard *cp = QApplication::clipboard();
-    //const QMimeData *data = cp->mimeData();
-
-
-    //TODO: update column actions!
 }
 
 void TimelineFramesView::slotSetStartTimeToCurrentPosition()

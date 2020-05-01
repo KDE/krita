@@ -29,10 +29,15 @@
 #include <kis_mainwindow_observer.h>
 #include <kis_utility_title_bar.h>
 
+#ifdef Q_OS_MACOS
+#include <sys/types.h>
+#endif
+
 class QPushButton;
 class QToolButton;
-class QSpinBox;
 class KisTransportControls;
+class KisIntParseSpinBox;
+class KisSliderSpinBox;
 
 class KisCanvas2;
 class KisAction;
@@ -46,7 +51,7 @@ public:
 
     KisTransportControls* transport;
 
-    QSpinBox *frameCounter;
+    KisIntParseSpinBox *frameRegister;
 
     QToolButton *btnAddKeyframe;
     QToolButton *btnDuplicateKeyframe;
@@ -54,7 +59,14 @@ public:
 
     QPushButton *btnOnionSkinsMenu;
     QPushButton *btnAudioMenu;
-    QPushButton *btnSettingsMenu;
+    QToolButton *btnSettingsMenu;
+
+    KisIntParseSpinBox *sbStartFrame;
+    KisIntParseSpinBox *sbEndFrame;
+    KisIntParseSpinBox *sbFrameRate;
+    KisSliderSpinBox *sbSpeed;
+    QToolButton *btnAutoFrame;
+    QToolButton *btnDropFrames;
 
 private:
     const u_int MAX_FRAMES = 9999;
@@ -67,7 +79,7 @@ public:
     TimelineDocker();
     ~TimelineDocker() override;
 
-    QString observerName() override { return "TimelineDocker"; }
+    QString observerName() override { return "AnimationTimelineDocker"; }
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
     void setViewManager(KisViewManager *kisview) override;
@@ -77,10 +89,20 @@ public Q_SLOTS:
     void stop();
     void previousFrame();
     void nextFrame();
+
     void goToFrame(int frameIndex);
+    void setStartFrame(int frame);
+    void setEndFrame(int frame);
+    void setFrameRate(int frmaerate);
+    void setPlaybackSpeed(int playbackSpeed);
+    void setDropFrames(bool dropFrames);
+
+    void handleClipRangeChange();
+    void handleFrameRateChange();
 
     void updateFrameCache();
-    void updateFrameCounter();
+    void updateFrameRegister();
+    void updatePlaybackStatistics();
 
     void handleThemeChange();
 

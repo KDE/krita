@@ -70,7 +70,7 @@ public:
 
     QString id() const override
     {
-        return QString( "TimelineDocker" );
+        return QString( "AnimationTimelineDocker" );
     }
 
     virtual Qt::DockWidgetArea defaultDockWidgetArea() const

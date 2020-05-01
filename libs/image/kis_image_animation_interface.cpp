@@ -221,6 +221,8 @@ void KisImageAnimationInterface::setAudioVolume(qreal value)
 
 void KisImageAnimationInterface::setFramerate(int fps)
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(fps > 0);
+
     m_d->framerate = fps;
     emit sigFramerateChanged();
 }

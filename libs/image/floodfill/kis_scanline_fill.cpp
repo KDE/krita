@@ -37,14 +37,14 @@ class CopyToSelection : public BaseClass
 public:
     typedef KisRandomConstAccessorSP SourceAccessorType;
 
-    SourceAccessorType createSourceDeviceAccessor(KisPaintDeviceSP device) {
-        return device->createRandomConstAccessorNG(0, 0);
+    SourceAccessorType createSourceDeviceAccessor(KisPaintDeviceSP device, const QPoint &startPoint) {
+        return device->createRandomConstAccessorNG(startPoint.x(), startPoint.y());
     }
 
 public:
-    void setDestinationSelection(KisPaintDeviceSP pixelSelection) {
+    void setDestinationSelection(KisPaintDeviceSP pixelSelection, const QPoint &startPoint) {
         m_pixelSelection = pixelSelection;
-        m_it = m_pixelSelection->createRandomAccessorNG(0,0);
+        m_it = m_pixelSelection->createRandomAccessorNG(startPoint.x(), startPoint.y());
     }
 
     ALWAYS_INLINE void fillPixel(quint8 *dstPtr, quint8 opacity, int x, int y) {
@@ -64,8 +64,8 @@ class FillWithColor : public BaseClass
 public:
     typedef KisRandomAccessorSP SourceAccessorType;
 
-    SourceAccessorType createSourceDeviceAccessor(KisPaintDeviceSP device) {
-        return device->createRandomAccessorNG(0, 0);
+    SourceAccessorType createSourceDeviceAccessor(KisPaintDeviceSP device, const QPoint &startPoint) {
+        return device->createRandomAccessorNG(startPoint.x(), startPoint.y());
     }
 
 public:
@@ -98,14 +98,14 @@ class FillWithColorExternal : public BaseClass
 public:
     typedef KisRandomConstAccessorSP SourceAccessorType;
 
-    SourceAccessorType createSourceDeviceAccessor(KisPaintDeviceSP device) {
-        return device->createRandomConstAccessorNG(0, 0);
+    SourceAccessorType createSourceDeviceAccessor(KisPaintDeviceSP device, const QPoint &startPoint) {
+        return device->createRandomConstAccessorNG(startPoint.x(), startPoint.y());
     }
 
 public:
-    void setDestinationDevice(KisPaintDeviceSP device) {
+    void setDestinationDevice(KisPaintDeviceSP device, const QPoint &startPoint) {
         m_externalDevice = device;
-        m_it = m_externalDevice->createRandomAccessorNG(0,0);
+        m_it = m_externalDevice->createRandomAccessorNG(startPoint.x(), startPoint.y());
     }
 
     void setFillColor(const KoColor &sourceColor) {
@@ -220,11 +220,11 @@ public:
     typename PixelFiller<DifferencePolicy>::SourceAccessorType m_srcIt;
 
 public:
-    SelectionPolicy(KisPaintDeviceSP device, const KoColor &srcPixel, int threshold)
+    SelectionPolicy(KisPaintDeviceSP device, const QPoint &startPoint, const KoColor &srcPixel, int threshold)
         : m_threshold(threshold)
     {
         this->initDifferences(device, srcPixel, threshold);
-        m_srcIt = this->createSourceDeviceAccessor(device);
+        m_srcIt = this->createSourceDeviceAccessor(device, startPoint);
     }
 
     ALWAYS_INLINE quint8 calculateOpacity(quint8* pixelPtr) {
@@ -290,12 +290,13 @@ public:
 class GroupSplitPolicy
 {
 public:
-    typedef KisRandomAccessorSP SourceAccessorType;
+    typedef KisRandomConstAccessorSP SourceAccessorType;
     SourceAccessorType m_srcIt;
 
 public:
     GroupSplitPolicy(KisPaintDeviceSP scribbleDevice,
                      KisPaintDeviceSP groupMapDevice,
+                     const QPoint &startPoint,
                      qint32 groupIndex,
                      quint8 referenceValue, int threshold)
         : m_threshold(threshold),
@@ -304,8 +305,8 @@ public:
     {
         KIS_SAFE_ASSERT_RECOVER_NOOP(m_groupIndex > 0);
 
-        m_srcIt = scribbleDevice->createRandomAccessorNG(0,0);
-        m_groupMapIt = groupMapDevice->createRandomAccessorNG(0,0);
+        m_srcIt = scribbleDevice->createRandomConstAccessorNG(startPoint.x(), startPoint.y());
+        m_groupMapIt = groupMapDevice->createRandomAccessorNG(startPoint.x(), startPoint.y());
     }
 
     ALWAYS_INLINE quint8 calculateOpacity(quint8* pixelPtr) {
@@ -560,27 +561,27 @@ void KisScanlineFill::fillColor(const KoColor &originalFillColor)
 
     if (pixelSize == 1) {
         SelectionPolicy<false, DifferencePolicyOptimized<quint8>, FillWithColor>
-            policy(m_d->device, srcColor, m_d->threshold);
+            policy(m_d->device, m_d->startPoint, srcColor, m_d->threshold);
         policy.setFillColor(fillColor);
         runImpl(policy);
     } else if (pixelSize == 2) {
         SelectionPolicy<false, DifferencePolicyOptimized<quint16>, FillWithColor>
-            policy(m_d->device, srcColor, m_d->threshold);
+            policy(m_d->device, m_d->startPoint, srcColor, m_d->threshold);
         policy.setFillColor(fillColor);
         runImpl(policy);
     } else if (pixelSize == 4) {
         SelectionPolicy<false, DifferencePolicyOptimized<quint32>, FillWithColor>
-            policy(m_d->device, srcColor, m_d->threshold);
+            policy(m_d->device, m_d->startPoint, srcColor, m_d->threshold);
         policy.setFillColor(fillColor);
         runImpl(policy);
     } else if (pixelSize == 8) {
         SelectionPolicy<false, DifferencePolicyOptimized<quint64>, FillWithColor>
-              policy(m_d->device, srcColor, m_d->threshold);
+              policy(m_d->device, m_d->startPoint, srcColor, m_d->threshold);
         policy.setFillColor(fillColor);
         runImpl(policy);
     } else {
         SelectionPolicy<false, DifferencePolicySlow, FillWithColor>
-              policy(m_d->device, srcColor, m_d->threshold);
+              policy(m_d->device, m_d->startPoint, srcColor, m_d->threshold);
         policy.setFillColor(fillColor);
         runImpl(policy);
     }
@@ -597,32 +598,32 @@ void KisScanlineFill::fillColor(const KoColor &originalFillColor, KisPaintDevice
 
     if (pixelSize == 1) {
         SelectionPolicy<false, DifferencePolicyOptimized<quint8>, FillWithColorExternal>
-            policy(m_d->device, srcColor, m_d->threshold);
-        policy.setDestinationDevice(externalDevice);
+            policy(m_d->device, m_d->startPoint, srcColor, m_d->threshold);
+        policy.setDestinationDevice(externalDevice, m_d->startPoint);
         policy.setFillColor(fillColor);
         runImpl(policy);
     } else if (pixelSize == 2) {
         SelectionPolicy<false, DifferencePolicyOptimized<quint16>, FillWithColorExternal>
-            policy(m_d->device, srcColor, m_d->threshold);
-        policy.setDestinationDevice(externalDevice);
+            policy(m_d->device, m_d->startPoint, srcColor, m_d->threshold);
+        policy.setDestinationDevice(externalDevice, m_d->startPoint);
         policy.setFillColor(fillColor);
         runImpl(policy);
     } else if (pixelSize == 4) {
         SelectionPolicy<false, DifferencePolicyOptimized<quint32>, FillWithColorExternal>
-            policy(m_d->device, srcColor, m_d->threshold);
-        policy.setDestinationDevice(externalDevice);
+            policy(m_d->device, m_d->startPoint, srcColor, m_d->threshold);
+        policy.setDestinationDevice(externalDevice, m_d->startPoint);
         policy.setFillColor(fillColor);
         runImpl(policy);
     } else if (pixelSize == 8) {
         SelectionPolicy<false, DifferencePolicyOptimized<quint64>, FillWithColorExternal>
-            policy(m_d->device, srcColor, m_d->threshold);
-        policy.setDestinationDevice(externalDevice);
+            policy(m_d->device, m_d->startPoint, srcColor, m_d->threshold);
+        policy.setDestinationDevice(externalDevice, m_d->startPoint);
         policy.setFillColor(fillColor);
         runImpl(policy);
     } else {
         SelectionPolicy<false, DifferencePolicySlow, FillWithColorExternal>
-            policy(m_d->device, srcColor, m_d->threshold);
-        policy.setDestinationDevice(externalDevice);
+            policy(m_d->device, m_d->startPoint, srcColor, m_d->threshold);
+        policy.setDestinationDevice(externalDevice, m_d->startPoint);
         policy.setFillColor(fillColor);
         runImpl(policy);
     }
@@ -637,28 +638,28 @@ void KisScanlineFill::fillSelection(KisPixelSelectionSP pixelSelection)
 
     if (pixelSize == 1) {
         SelectionPolicy<true, DifferencePolicyOptimized<quint8>, CopyToSelection>
-            policy(m_d->device, srcColor, m_d->threshold);
-        policy.setDestinationSelection(pixelSelection);
+            policy(m_d->device, m_d->startPoint, srcColor, m_d->threshold);
+        policy.setDestinationSelection(pixelSelection, m_d->startPoint);
         runImpl(policy);
     } else if (pixelSize == 2) {
         SelectionPolicy<true, DifferencePolicyOptimized<quint16>, CopyToSelection>
-            policy(m_d->device, srcColor, m_d->threshold);
-        policy.setDestinationSelection(pixelSelection);
+            policy(m_d->device, m_d->startPoint, srcColor, m_d->threshold);
+        policy.setDestinationSelection(pixelSelection, m_d->startPoint);
         runImpl(policy);
     } else if (pixelSize == 4) {
         SelectionPolicy<true, DifferencePolicyOptimized<quint32>, CopyToSelection>
-            policy(m_d->device, srcColor, m_d->threshold);
-        policy.setDestinationSelection(pixelSelection);
+            policy(m_d->device, m_d->startPoint, srcColor, m_d->threshold);
+        policy.setDestinationSelection(pixelSelection, m_d->startPoint);
         runImpl(policy);
     } else if (pixelSize == 8) {
         SelectionPolicy<true, DifferencePolicyOptimized<quint64>, CopyToSelection>
-              policy(m_d->device, srcColor, m_d->threshold);
-        policy.setDestinationSelection(pixelSelection);
+              policy(m_d->device, m_d->startPoint, srcColor, m_d->threshold);
+        policy.setDestinationSelection(pixelSelection, m_d->startPoint);
         runImpl(policy);
     } else {
         SelectionPolicy<true, DifferencePolicySlow, CopyToSelection>
-              policy(m_d->device, srcColor, m_d->threshold);
-        policy.setDestinationSelection(pixelSelection);
+              policy(m_d->device, m_d->startPoint, srcColor, m_d->threshold);
+        policy.setDestinationSelection(pixelSelection, m_d->startPoint);
         runImpl(policy);
     }
 }
@@ -670,27 +671,27 @@ void KisScanlineFill::clearNonZeroComponent()
 
     if (pixelSize == 1) {
         SelectionPolicy<false, IsNonNullPolicyOptimized<quint8>, FillWithColor>
-            policy(m_d->device, srcColor, m_d->threshold);
+            policy(m_d->device, m_d->startPoint, srcColor, m_d->threshold);
         policy.setFillColor(srcColor);
         runImpl(policy);
     } else if (pixelSize == 2) {
         SelectionPolicy<false, IsNonNullPolicyOptimized<quint16>, FillWithColor>
-            policy(m_d->device, srcColor, m_d->threshold);
+            policy(m_d->device, m_d->startPoint, srcColor, m_d->threshold);
         policy.setFillColor(srcColor);
         runImpl(policy);
     } else if (pixelSize == 4) {
         SelectionPolicy<false, IsNonNullPolicyOptimized<quint32>, FillWithColor>
-            policy(m_d->device, srcColor, m_d->threshold);
+            policy(m_d->device, m_d->startPoint, srcColor, m_d->threshold);
         policy.setFillColor(srcColor);
         runImpl(policy);
     } else if (pixelSize == 8) {
         SelectionPolicy<false, IsNonNullPolicyOptimized<quint64>, FillWithColor>
-              policy(m_d->device, srcColor, m_d->threshold);
+              policy(m_d->device, m_d->startPoint, srcColor, m_d->threshold);
         policy.setFillColor(srcColor);
         runImpl(policy);
     } else {
         SelectionPolicy<false, IsNonNullPolicySlow, FillWithColor>
-              policy(m_d->device, srcColor, m_d->threshold);
+              policy(m_d->device, m_d->startPoint, srcColor, m_d->threshold);
         policy.setFillColor(srcColor);
         runImpl(policy);
     }
@@ -704,7 +705,7 @@ void KisScanlineFill::fillContiguousGroup(KisPaintDeviceSP groupMapDevice, qint3
     KisRandomConstAccessorSP it = m_d->device->createRandomConstAccessorNG(m_d->startPoint.x(), m_d->startPoint.y());
     const quint8 referenceValue = *it->rawDataConst();
 
-    GroupSplitPolicy policy(m_d->device, groupMapDevice, groupIndex, referenceValue, m_d->threshold);
+    GroupSplitPolicy policy(m_d->device, groupMapDevice, m_d->startPoint, groupIndex, referenceValue, m_d->threshold);
     runImpl(policy);
 }
 
@@ -714,7 +715,7 @@ void KisScanlineFill::testingProcessLine(const KisFillInterval &processInterval)
     KoColor fillColor(QColor(200,200,200,200), m_d->device->colorSpace());
 
     SelectionPolicy<false, DifferencePolicyOptimized<quint32>, FillWithColor>
-        policy(m_d->device, srcColor, m_d->threshold);
+        policy(m_d->device, m_d->startPoint, srcColor, m_d->threshold);
 
     policy.setFillColor(fillColor);
 

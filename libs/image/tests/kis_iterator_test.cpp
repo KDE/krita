@@ -251,7 +251,7 @@ void KisIteratorTest::randomAccessor(const KoColorSpace * colorSpace)
 
     QCOMPARE(dev.extent(), QRect());
 
-    KisRandomConstAccessorSP acc = dev.createRandomConstAccessorNG(0, 0);
+    KisRandomConstAccessorSP acc = dev.createRandomConstAccessorNG();
     for (int y = 0; y < 128; ++y) {
         for (int x = 0; x < 128; ++x) {
             acc->moveTo(x, y);
@@ -259,7 +259,7 @@ void KisIteratorTest::randomAccessor(const KoColorSpace * colorSpace)
     }
     QCOMPARE(dev.extent(), QRect());
 
-    KisRandomAccessorSP ac = dev.createRandomAccessorNG(0, 0);
+    KisRandomAccessorSP ac = dev.createRandomAccessorNG();
     for (int y = 0; y < 128; ++y) {
         for (int x = 0; x < 128; ++x) {
             ac->moveTo(x, y);
@@ -274,7 +274,7 @@ void KisIteratorTest::randomAccessor(const KoColorSpace * colorSpace)
     dev.setY(-15);
 
     {
-        KisRandomAccessorSP ac = dev.createRandomAccessorNG(0, 0);
+        KisRandomAccessorSP ac = dev.createRandomAccessorNG();
         for (int y = 0; y < 128; ++y) {
             for (int x = 0; x < 128; ++x) {
                 ac->moveTo(x, y);
@@ -366,7 +366,7 @@ public:
     void run() override {
         for(int i = 0; i < NUM_CYCLES; i++) {
             KisRandomAccessorSP iter =
-                m_device->createRandomAccessorNG(m_rect.x(), m_rect.y());
+                m_device->createRandomAccessorNG();
 
             qint32 rowsRemaining = m_rect.height();
             qint32 y = m_rect.y();

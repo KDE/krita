@@ -66,11 +66,11 @@ public:
     PaintDeviceStorage(const KisPaintDevice *device, int /*width*/, int /*height*/, int /*pixelSize*/)
         : m_device(device)
     {
-        m_deviceIt = m_device->createRandomConstAccessorNG(0, 0);
+        m_deviceIt = m_device->createRandomConstAccessorNG();
 
         const KoColorSpace *alphaCs = KoColorSpaceRegistry::instance()->alpha8();
         m_marks = new KisPaintDevice(alphaCs);
-        m_marksIt = m_marks->createRandomAccessorNG(0, 0);
+        m_marksIt = m_marks->createRandomAccessorNG();
     }
 
     const quint8* pickPixel(int x, int y) {

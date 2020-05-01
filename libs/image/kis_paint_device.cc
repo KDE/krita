@@ -1319,7 +1319,7 @@ QRect calculateExactBoundsImpl(const KisPaintDevice *device, const QRect &startR
     // XXX: a small optimization is possible by using H/V line iterators in the first
     //      and third cases, at the cost of making the code a bit more complex
 
-    KisRandomConstAccessorSP accessor = device->createRandomConstAccessorNG(x, y);
+    KisRandomConstAccessorSP accessor = device->createRandomConstAccessorNG();
 
     bool found = false;
     {
@@ -1651,8 +1651,8 @@ static KisPaintDeviceSP createThumbnailDeviceInternal(const KisPaintDevice* srcD
     KisPaintDeviceSP thumbnail = new KisPaintDevice(srcDev->colorSpace());
     qint32 pixelSize = srcDev->pixelSize();
 
-    KisRandomConstAccessorSP srcIter = srcDev->createRandomConstAccessorNG(0, 0);
-    KisRandomAccessorSP dstIter = thumbnail->createRandomAccessorNG(0, 0);
+    KisRandomConstAccessorSP srcIter = srcDev->createRandomConstAccessorNG();
+    KisRandomAccessorSP dstIter = thumbnail->createRandomAccessorNG();
 
     for (qint32 y = outputRect.y(); y < outputRect.y() + outputRect.height(); ++y) {
         qint32 iY = srcY0 + (y * srcHeight) / h;
@@ -1802,15 +1802,15 @@ KisRepeatVLineConstIteratorSP KisPaintDevice::createRepeatVLineConstIterator(qin
     return new KisRepeatVLineConstIteratorNG(m_d->dataManager().data(), x, y, h, m_d->x(), m_d->y(), _dataWidth, m_d->cacheInvalidator());
 }
 
-KisRandomAccessorSP KisPaintDevice::createRandomAccessorNG(qint32 x, qint32 y)
+KisRandomAccessorSP KisPaintDevice::createRandomAccessorNG()
 {
     m_d->cache()->invalidate();
-    return m_d->currentStrategy()->createRandomAccessorNG(x, y);
+    return m_d->currentStrategy()->createRandomAccessorNG();
 }
 
-KisRandomConstAccessorSP KisPaintDevice::createRandomConstAccessorNG(qint32 x, qint32 y) const
+KisRandomConstAccessorSP KisPaintDevice::createRandomConstAccessorNG() const
 {
-    return m_d->currentStrategy()->createRandomConstAccessorNG(x, y);
+    return m_d->currentStrategy()->createRandomConstAccessorNG();
 }
 
 KisRandomSubAccessorSP KisPaintDevice::createRandomSubAccessor() const
@@ -1878,6 +1878,12 @@ bool KisPaintDevice::pixel(qint32 x, qint32 y, KoColor * kc) const
     kc->setColor(pix, m_d->colorSpace());
 
     return true;
+}
+
+KoColor KisPaintDevice::pixel(const QPoint &pos) const
+{
+    KisHLineConstIteratorSP iter = createHLineConstIteratorNG(pos.x(), pos.y(), 1);
+    return KoColor(iter->rawDataConst(), m_d->colorSpace());
 }
 
 bool KisPaintDevice::setPixel(qint32 x, qint32 y, const QColor& c)

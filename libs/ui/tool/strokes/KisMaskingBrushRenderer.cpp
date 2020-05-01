@@ -88,8 +88,8 @@ void KisMaskingBrushRenderer::updateProjection(const QRect &rc)
 
     KisPainter::copyAreaOptimized(rc.topLeft(), m_strokeDevice, m_dstDevice, rc);
 
-    KisRandomAccessorSP dstIt = m_dstDevice->createRandomAccessorNG(rc.left(), rc.top());
-    KisRandomConstAccessorSP maskIt = m_maskDevice->createRandomConstAccessorNG(rc.left(), rc.top());
+    KisRandomAccessorSP dstIt = m_dstDevice->createRandomAccessorNG();
+    KisRandomConstAccessorSP maskIt = m_maskDevice->createRandomConstAccessorNG();
 
     qint32 dstY = rc.y();
     qint32 rowsRemaining = rc.height();

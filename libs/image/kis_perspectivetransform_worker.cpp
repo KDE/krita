@@ -127,7 +127,7 @@ void KisPerspectiveTransformWorker::run()
     KisProgressUpdateHelper progressHelper(m_progressUpdater, 100, m_dstRegion.rectCount());
 
     KisRandomSubAccessorSP srcAcc = cloneDevice->createRandomSubAccessor();
-    KisRandomAccessorSP accessor = m_dev->createRandomAccessorNG(0, 0);
+    KisRandomAccessorSP accessor = m_dev->createRandomAccessorNG();
 
     Q_FOREACH (const QRect &rect, m_dstRegion.rects()) {
         for (int y = rect.y(); y < rect.y() + rect.height(); ++y) {
@@ -162,7 +162,7 @@ void KisPerspectiveTransformWorker::runPartialDst(KisPaintDeviceSP srcDev,
     KisProgressUpdateHelper progressHelper(m_progressUpdater, 100, dstRect.height());
 
     KisRandomSubAccessorSP srcAcc = srcDev->createRandomSubAccessor();
-    KisRandomAccessorSP accessor = dstDev->createRandomAccessorNG(dstRect.x(), dstRect.y());
+    KisRandomAccessorSP accessor = dstDev->createRandomAccessorNG();
 
     for (int y = dstRect.y(); y < dstRect.y() + dstRect.height(); ++y) {
         for (int x = dstRect.x(); x < dstRect.x() + dstRect.width(); ++x) {

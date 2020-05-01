@@ -104,7 +104,7 @@ void KisEmbossFilter::processImpl(KisPaintDeviceSP device,
     KisSequentialIteratorProgress it(device, applyRect, progressUpdater);
     QColor color1;
     QColor color2;
-    KisRandomConstAccessorSP acc = device->createRandomAccessorNG(srcTopLeft.x(), srcTopLeft.y());
+    KisRandomConstAccessorSP acc = device->createRandomAccessorNG();
     while (it.nextPixel()) {
 
         // XXX: COLORSPACE_INDEPENDENCE or at least work IN RGB16A

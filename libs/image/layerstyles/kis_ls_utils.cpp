@@ -261,7 +261,7 @@ namespace KisLsUtils
 
         KisSequentialConstIterator noiseIt(randomSelection, overlayRect);
         KisSequentialConstIterator srcIt(selection, overlayRect);
-        KisRandomAccessorSP dstIt = randomOverlay->createRandomAccessorNG(overlayRect.x(), overlayRect.y());
+        KisRandomAccessorSP dstIt = randomOverlay->createRandomAccessorNG();
 
         while (noiseIt.nextPixel() && srcIt.nextPixel()) {
             int itX = noiseIt.x();

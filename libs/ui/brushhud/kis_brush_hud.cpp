@@ -286,6 +286,10 @@ bool KisBrushHud::event(QEvent *event)
     case QEvent::Wheel:
         event->accept();
         return true;
+    case QEvent::LayoutRequest:
+        // resize when our layout determined a new recommended size
+        resize(sizeHint());
+        return true;
     default:
         break;
     }
@@ -299,8 +303,8 @@ bool KisBrushHud::eventFilter(QObject *watched, QEvent *event)
     // when size requirements have been determined, i.e. sizeHint is available
     if (watched == m_d->wdgProperties && event->type() == QEvent::LayoutRequest)
     {
-        int totalMargin = 2 * m_d->wdgPropertiesArea->frameWidth() + layout()->margin();
-        resize(m_d->wdgProperties->sizeHint().width() + totalMargin, height());
+        int totalMargin = 2 * m_d->wdgPropertiesArea->frameWidth();
+        m_d->wdgPropertiesArea->setMinimumWidth(m_d->wdgProperties->sizeHint().width() + totalMargin);
     }
     return false;
 }

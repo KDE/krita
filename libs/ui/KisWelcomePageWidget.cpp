@@ -66,6 +66,20 @@
 #include <KritaVersionWrapper.h>
 
 #include <KisUsageLogger.h>
+#include <kritaversion.h>
+#include <QSysInfo>
+#include <kis_config.h>
+#include <kis_image_config.h>
+#include "opengl/kis_opengl.h"
+
+#ifdef Q_OS_ANDROID
+#include <QtAndroid>
+
+
+QPushButton* KisWelcomePageWidget::donationLink;
+QLabel* KisWelcomePageWidget::donationBannerImage;
+#endif
+
 
 KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     : QWidget(parent)
@@ -137,22 +151,35 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     helpTitleLabel_2->hide();
     chkShowNews->hide();
 
-    donationLink = new QLabel(dropFrameBorder);
-    donationLink->setOpenExternalLinks(true);
-    donationLink->setTextInteractionFlags(Qt::TextBrowserInteraction);
-
+    donationLink = new QPushButton(dropFrameBorder);
+    donationLink->setFlat(true);
     QFont f = font();
     f.setPointSize(15);
+    f.setUnderline(true);
     donationLink->setFont(f);
 
+    connect(donationLink, SIGNAL(clicked(bool)), this, SLOT(slotStartDonationFlow()));
+
     verticalLayout_3->addWidget(donationLink);
+    verticalLayout_3->setAlignment(donationLink, Qt::AlignTop);
     verticalLayout_3->setSpacing(20);
 
-    QLabel *donationBannerImage = new QLabel(dropFrameBorder);
+    donationBannerImage = new QLabel(dropFrameBorder);
     QString bannerPath = QStandardPaths::locate(QStandardPaths::AppDataLocation, "share/krita/donation/banner.png");
     donationBannerImage->setPixmap(QPixmap(bannerPath));
 
     verticalLayout_3->addWidget(donationBannerImage);
+
+    jboolean bannerPurchased = QAndroidJniObject::callStaticMethod<jboolean>("org/krita/android/DonationHelper", "isBadgePurchased", "()Z");
+    if (bannerPurchased) {
+        donationLink->hide();
+        donationBannerImage->show();
+        QAndroidJniObject::callStaticMethod<void>("org/krita/android/DonationHelper", "endConnection", "()V");
+    } else {
+        donationLink->show();
+        donationBannerImage->hide();
+    }
+
 #endif
 
     // configure the News area
@@ -339,8 +366,8 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
 
 
 #ifdef Q_OS_ANDROID
-    donationLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://krita.org/en/support-us/donations?" + analyticsString + "donations" + "\">")
-                              .append(i18n("Krita is free and open source.")).append("<br>").append(i18n("Support Krita's Development!")).append("</a>"));
+    donationLink->setStyleSheet(blendedStyle);
+    donationLink->setText(QString(i18n("Get your Krita Supporter Badge here!")));
 #endif
     // re-populate recent files since they might have themed icons
     populateRecentDocuments();
@@ -403,6 +430,13 @@ void KisWelcomePageWidget::populateRecentDocuments()
 }
 
 
+
+#ifdef Q_OS_ANDROID
+void KisWelcomePageWidget::slotStartDonationFlow()
+{
+    QAndroidJniObject::callStaticMethod<void>("org/krita/android/DonationHelper", "startBillingFlow", "()V");
+}
+#endif
 
 void KisWelcomePageWidget::dragEnterEvent(QDragEnterEvent *event)
 {
@@ -606,5 +640,15 @@ void KisWelcomePageWidget::updateVersionUpdaterFrame()
     if (!blendedStyle.isNull()) {
         versionNotificationLabel->setStyleSheet(blendedStyle);
     }
+}
+#endif
+#ifdef Q_OS_ANDROID
+extern "C" JNIEXPORT void JNICALL
+Java_org_krita_android_JNIWrappers_donationSuccessful(JNIEnv* /*env*/,
+                                                      jobject /*obj*/,
+                                                      jint    /*n*/)
+{
+    KisWelcomePageWidget::donationLink->hide();
+    KisWelcomePageWidget::donationBannerImage->show();
 }
 #endif

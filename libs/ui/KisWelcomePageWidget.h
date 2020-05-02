@@ -59,6 +59,10 @@ public Q_SLOTS:
     void slotShowUpdaterErrorDetails();
 #endif
 
+#ifdef Q_OS_ANDROID
+    void slotStartDonationFlow();
+#endif
+
 protected:
 
     // QWidget overrides
@@ -100,7 +104,11 @@ private:
 #endif
     bool m_checkUpdates {false};
 
-    QLabel* donationLink;
+#ifdef Q_OS_ANDROID
+public:
+    static QPushButton* donationLink;
+    static QLabel* donationBannerImage;
+#endif
 
 private Q_SLOTS:
     void slotNewFileClicked();

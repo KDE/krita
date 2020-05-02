@@ -136,3 +136,8 @@ android {
     preBuild.dependsOn(copyAssets)
     preBuild.dependsOn(removeDuplicateAssets)
 }
+
+dependencies {
+    implementation 'com.android.billingclient:billing:2.2.0'
+}
+

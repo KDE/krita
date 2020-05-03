@@ -564,6 +564,9 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     connect(window, SIGNAL(screenChanged(QScreen *)), this, SLOT(windowScreenChanged(QScreen *)));
 
 #ifdef Q_OS_ANDROID
+    connect(d->fileManager, SIGNAL(sigFileSelected(QString)), this, SLOT(slotFileSelected(QString)));
+    connect(d->fileManager, SIGNAL(sigEmptyFilePath()), this, SLOT(slotEmptyFilePath()));
+
     QScreen *s = QGuiApplication::primaryScreen();
     s->setOrientationUpdateMask(Qt::LandscapeOrientation|Qt::InvertedLandscapeOrientation|Qt::PortraitOrientation|Qt::InvertedPortraitOrientation);
     connect(s, SIGNAL(orientationChanged(Qt::ScreenOrientation)), this, SLOT(orientationChanged()));
@@ -1622,8 +1625,6 @@ void KisMainWindow::slotFileOpen(bool isImporting)
     Q_UNUSED(isImporting)
 
     d->fileManager->openImportFile();
-    connect(d->fileManager, SIGNAL(sigFileSelected(QString)), this, SLOT(slotFileSelected(QString)));
-    connect(d->fileManager, SIGNAL(sigEmptyFilePath()), this, SLOT(slotEmptyFilePath()));
 #endif
 }
 

@@ -31,7 +31,7 @@ Plugin::Plugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     KoToolRegistry::instance()->add(new DefaultToolFactory());
-    KoToolRegistry::instance()->add(new ConnectionToolFactory());
+//    KoToolRegistry::instance()->add(new ConnectionToolFactory());
     KoToolRegistry::instance()->add(new ToolReferenceImagesFactory());
 }
 

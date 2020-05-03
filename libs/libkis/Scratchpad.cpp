@@ -48,6 +48,16 @@ void Scratchpad::setMode(QString modeType)
     KisScratchPad::setModeType(modeType);
 }
 
+void Scratchpad::loadScratchpad(QImage image)
+{
+    KisScratchPad::loadScratchpadImage(image);
+}
+
+QImage Scratchpad::copyScratchPadImage()
+{
+    return KisScratchPad::copyScratchpadImageData();
+}
+
 void Scratchpad::clear()
 {
     // need ability to set color

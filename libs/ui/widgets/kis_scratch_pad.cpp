@@ -498,6 +498,36 @@ void KisScratchPad::paintCustomImage(const QImage& loadedImage)
     update();
 }
 
+void KisScratchPad::loadScratchpadImage(QImage& image)
+{
+    if(!m_paintLayer) return;
+
+    fillDefault(); // wipes out whatever was there before
+
+    QRect imageSize = image.rect();
+    KisPaintDeviceSP paintDevice = m_paintLayer->paintDevice();
+
+    KisPaintDeviceSP device = new KisPaintDevice(paintDevice->colorSpace());
+    device->convertFromQImage(image, 0);
+
+    KisPainter painter(paintDevice);
+    painter.beginTransaction();
+    painter.bitBlt(imageSize.topLeft(), device, imageSize);
+    painter.deleteTransaction();
+    update();
+}
+
+QImage KisScratchPad::copyScratchpadImageData()
+{
+    // we can get the image data by resizing the "cut overlay" area to the image bounds and using that as the image
+    QRect original_cutOverlay_rect = cutoutOverlay().rect();
+    setCutoutOverlayRect(imageBounds());
+    QImage fullImage = cutoutOverlay();
+    KisScratchPad::setCutoutOverlayRect(original_cutOverlay_rect); // return overlay size back to original
+
+    return fullImage;
+}
+
 void KisScratchPad::paintPresetImage()
 {
     if(!m_paintLayer) return;

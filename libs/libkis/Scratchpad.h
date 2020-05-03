@@ -61,6 +61,13 @@ public Q_SLOTS:
 
     /// Manually set what mode scratchpad is in. Ignored if "setModeManually is set to false
     void setMode(QString modeName);
+
+    /// load scratchpad
+    void loadScratchpad(QImage image);
+
+    /// take what is on scratchpad area and grab image
+    QImage copyScratchPadImage();
+
 };
 
 #endif // LIBKIS_SCRATCHPAD_H

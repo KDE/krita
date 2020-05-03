@@ -125,6 +125,11 @@ public Q_SLOTS:
      */
     void paintCustomImage(const QImage& loadedImage);
 
+
+    void loadScratchpadImage(QImage& image);
+
+    QImage copyScratchpadImageData();
+
 private Q_SLOTS:
     void setOnScreenResolution(qreal scaleX, qreal scaleY);
     void setDisplayProfile(const KoColorProfile* colorProfile);

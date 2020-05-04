@@ -522,18 +522,11 @@ void KisScratchPad::loadScratchpadImage(QImage image)
 
 QImage KisScratchPad::copyScratchpadImageData()
 {
-    // we can get the image data by resizing the "cut overlay" area to the image bounds and using that as the image
-    QRect original_cutOverlay_rect = cutoutOverlay().rect();
-
-    // calculate what the area of the scratchpad was used
-    //setCutoutOverlayRect(m_paintLayer->extent()); // this needs to capture everything that has been painted on
-    setCutoutOverlayRect(m_paintLayer->projection()->extent());
-
-
-    QImage fullImage = cutoutOverlay();
-    KisScratchPad::setCutoutOverlayRect(original_cutOverlay_rect); // return overlay size back to original
-
-    return fullImage;
+    const QRect paintingBounds = m_paintLayer.data()->exactBounds();
+    QImage imageData = m_paintLayer->paintDevice()->convertToQImage(0, paintingBounds.x(), paintingBounds.y(), paintingBounds.width(), paintingBounds.height(),
+                            KoColorConversionTransformation::internalRenderingIntent(),
+                            KoColorConversionTransformation::internalConversionFlags());
+    return imageData;
 }
 
 void KisScratchPad::paintPresetImage()

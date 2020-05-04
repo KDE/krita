@@ -23,6 +23,7 @@
 #include <QImage>
 #include <QWidget>
 #include <QRect>
+#include <QTimer>
 
 #include <KoColor.h>
 
@@ -123,10 +124,10 @@ public Q_SLOTS:
      * Paint the icon of a custom image that is being loaded
      *
      */
-    void paintCustomImage(const QImage& loadedImage);
+    void paintCustomImage(const QImage & loadedImage);
 
 
-    void loadScratchpadImage(QImage& image);
+    void loadScratchpadImage(QImage image);
 
     QImage copyScratchpadImageData();
 
@@ -134,6 +135,7 @@ private Q_SLOTS:
     void setOnScreenResolution(qreal scaleX, qreal scaleY);
     void setDisplayProfile(const KoColorProfile* colorProfile);
     void slotUpdateCanvas(const QRect &rect);
+    void slotUpdatingPaintingBounds();
 
 Q_SIGNALS:
     void colorSelected(const KoColor& color);
@@ -199,6 +201,12 @@ private:
     int m_scaleBorderWidth;
 
     QImage m_presetImage;
+
+    // settings used for loading and saving scratchpads
+    QPointF currentCursorPosition;
+    QPoint startingPaintBounds;
+    QPoint endingPaintBounds;
+    QTimer *updatePaintingBoundsTimer;
 };
 
 #endif // KIS_SCRATCH_PAD_H

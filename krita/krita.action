@@ -1656,10 +1656,10 @@
     </Action>
     <Action name="PathTool">
       <icon></icon>
-      <text>Path editing</text>
+      <text>Edit Shapes Tool</text>
       <whatsThis></whatsThis>
-      <toolTip>Path editing</toolTip>
-      <iconText>Path editing</iconText>
+      <toolTip>Edit Shapes Tool</toolTip>
+      <iconText>Edit Shapes Tool</iconText>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>

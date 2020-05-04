@@ -136,14 +136,6 @@ KisScratchPad::KisScratchPad(QWidget *parent)
     m_infoBuilder = new KisPaintingInformationBuilder();
 
     m_scaleBorderWidth = 1;
-
-    // helps with calculating bounds of painted on area
-    startingPaintBounds = QPoint(0,0);
-    endingPaintBounds = QPoint(imageBounds().width(), imageBounds().height());
-
-    updatePaintingBoundsTimer = new QTimer(this);
-    updatePaintingBoundsTimer->setInterval(100);
-    connect(updatePaintingBoundsTimer, SIGNAL(timeout()), this, SLOT(slotUpdatingPaintingBounds()));
 }
 
 KisScratchPad::~KisScratchPad()
@@ -188,7 +180,6 @@ void KisScratchPad::pointerPress(KoPointerEvent *event)
     if(isMouseDown) {
         if (m_toolMode == PAINTING) {
             beginStroke(event);
-            updatePaintingBoundsTimer->start();
             event->accept();
         }
         else if (m_toolMode == PANNING) {
@@ -211,7 +202,6 @@ void KisScratchPad::pointerRelease(KoPointerEvent *event)
         if (modeFromButton(event->button()) != m_toolMode) return;
 
         if (m_toolMode == PAINTING) {
-            updatePaintingBoundsTimer->stop();
             endStroke(event);
             m_toolMode = HOVERING;
             event->accept();
@@ -228,7 +218,6 @@ void KisScratchPad::pointerRelease(KoPointerEvent *event)
 
     } else {
         if (m_toolMode == PAINTING) {
-            updatePaintingBoundsTimer->stop();
             endStroke(event);
         }
         else if (m_toolMode == PANNING) {
@@ -251,7 +240,6 @@ void KisScratchPad::pointerMove(KoPointerEvent *event)
     if (isMouseDown) {
         if (m_toolMode == PAINTING) {
             doStroke(event);
-            currentCursorPosition = event->point;
             event->accept();
         }
         else if (m_toolMode == PANNING) {
@@ -363,41 +351,6 @@ void KisScratchPad::imageUpdated(const QRect &rect)
 void KisScratchPad::slotUpdateCanvas(const QRect &rect)
 {
     update(rect);
-}
-
-void KisScratchPad::slotUpdatingPaintingBounds()
-{
-    int brushSizePadding = int(m_resourceProvider->size() * 0.75); // gets radius to expand position
-
-    // QPointF adjustedCursorPosition = documentToWidget().map(currentCursorPosition);   // widgetToDocument().map(currentCursorPosition);
-    QPointF adjustTransformPosition = widgetToDocument().map(QPointF(m_translateTransform.dx(), m_translateTransform.dy() ));
-
-    // update the cursor position depending on how much we panned/transformed
-    QPointF adjustedCursorPosition = QPointF(currentCursorPosition.x() + adjustTransformPosition.x(),
-                                             currentCursorPosition.y() + adjustTransformPosition.y() );
-
-    // increase painted on bounds size
-    if(startingPaintBounds.x() > (adjustedCursorPosition.x() - brushSizePadding) ) {
-       startingPaintBounds.setX( (adjustedCursorPosition.x() - brushSizePadding)  );
-    }
-    if(startingPaintBounds.y() > (adjustedCursorPosition.y() - brushSizePadding)  ) {
-       startingPaintBounds.setY( (adjustedCursorPosition.y() - brushSizePadding)  );
-    }
-
-    if(endingPaintBounds.x() < (adjustedCursorPosition.x() + brushSizePadding) ) {
-       endingPaintBounds.setX(adjustedCursorPosition.x());
-    }
-    if(endingPaintBounds.y() < (adjustedCursorPosition.y() + brushSizePadding) ) {
-       endingPaintBounds.setY(adjustedCursorPosition.y());
-    }
-
-    //qDebug() << "starting point bounds";
-    //qDebug() << QString::number(startingPaintBounds.x()) << " " << QString::number(startingPaintBounds.y());
-    //qDebug() << "cursor position: " << QString::number(adjustedCursorPosition.x()) << " " << QString::number(adjustedCursorPosition.y());
-
-
-    qDebug() << "translated: " << QString::number(m_translateTransform.dx()) << " " << QString::number(m_translateTransform.dy());
-
 }
 
 void KisScratchPad::paintEvent ( QPaintEvent * event ) {

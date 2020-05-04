@@ -54,11 +54,13 @@ KisLayerFilterWidget::KisLayerFilterWidget(QWidget *parent) : QWidget(parent)
         QHBoxLayout *subLayout = new QHBoxLayout(buttonContainer);
         buttonContainer->setLayout(subLayout);
         subLayout->setContentsMargins(0,0,0,0);
-        buttonGroup = new KisColorLabelButtonGroup(buttonContainer);
+        buttonGroup = new KisColorLabelFilterGroup(buttonContainer);
         buttonGroup->setExclusive(false);
-        Q_FOREACH (const QColor &color, colorScheme.allColorLabels()) {
-            KisColorLabelButton* btn = new KisColorLabelButton(color, buttonContainer);
-            buttonGroup->addButton(btn);
+        QVector<QColor> colors = colorScheme.allColorLabels();
+
+        for (int id = 0; id < colors.count(); id++) {
+            KisColorLabelButton* btn = new KisColorLabelButton(colors[id], buttonContainer);
+            buttonGroup->addButton(btn, id);
             btn->setVisible(false);
             btn->installEventFilter(buttonEventFilter);
             subLayout->addWidget(btn);
@@ -67,7 +69,7 @@ KisLayerFilterWidget::KisLayerFilterWidget(QWidget *parent) : QWidget(parent)
         connect(buttonGroup, SIGNAL(buttonToggled(int,bool)), this, SIGNAL(filteringOptionsChanged()));
     }
 
-    QPushButton *resetButton = new QPushButton("Reset Filters", this);
+    resetButton = new QPushButton("Reset Filters", this);
     connect(resetButton, &QPushButton::clicked, [this](){
        this->reset();
     });
@@ -96,49 +98,25 @@ void KisLayerFilterWidget::updateColorLabels(KisNodeSP root)
     QSet<int> colorLabels;
 
     scanUsedColorLabels(root, colorLabels);
-    QList<QAbstractButton*> colorLabelButtons = buttonGroup->buttons();
-
-    if (colorLabels.size() > 1) {
-        colorLabelButtons[0]->parentWidget()->setVisible(true);
-
-        for (int index = 0; index < colorLabelButtons.size(); index++) {
-            if (colorLabels.contains(index)) {
-                colorLabelButtons[index]->setVisible(true);
-            } else {
-                colorLabelButtons[index]->setVisible(false);
-                colorLabelButtons[index]->setChecked(true);
-            }
-        }
-    } else {
-        colorLabelButtons[0]->parentWidget()->setVisible(false);
-    }
+    buttonGroup->setViableLabels(colorLabels);
 }
 
-bool KisLayerFilterWidget::isCurrentlyFiltering()
+bool KisLayerFilterWidget::isCurrentlyFiltering() const
 {
     const bool isFilteringText = !textFilter->text().isEmpty();
-    const bool isFilteringColors = buttonGroup->colorFilterDesired();
+    const bool isFilteringColors = buttonGroup->getActiveLabels().count() > 0;
 
     return isFilteringText || isFilteringColors;
 }
 
-QList<int> KisLayerFilterWidget::getActiveColors()
+QSet<int> KisLayerFilterWidget::getActiveColors() const
 {
-    QList<int> activeColors;
-
-    if (buttonGroup->colorFilterDesired()) {
-        QList<QAbstractButton*> colorLabelButtons = buttonGroup->buttons();
-        for (int index = 0; index < colorLabelButtons.size(); index++) {
-            if (!colorLabelButtons[index]->isVisible() || colorLabelButtons[index]->isChecked()) {
-                activeColors.append(index);
-            }
-        }
-    }
+    QSet<int> activeColors = buttonGroup->getActiveLabels();
 
     return activeColors;
 }
 
-QString KisLayerFilterWidget::getTextFilter()
+QString KisLayerFilterWidget::getTextFilter() const
 {
     return textFilter->text();
 }
@@ -174,7 +152,7 @@ bool KisLayerFilterWidget::EventFilter::eventFilter(QObject *obj, QEvent *event)
         //If we never left, toggle the original button.
         if( currentState == WaitingForDragLeave ) {
             if ( startingButton->group() && (mouseEvent->modifiers() & Qt::SHIFT)) {
-                KisColorLabelButtonGroup* const group = static_cast<KisColorLabelButtonGroup*>(startingButton->group());
+                KisColorLabelFilterGroup* const group = static_cast<KisColorLabelFilterGroup*>(startingButton->group());
                 const QList<QAbstractButton*> viableCheckedButtons = group->checkedViableButtons();
 
                 const int buttonsEnabled = viableCheckedButtons.count();

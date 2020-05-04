@@ -21,6 +21,7 @@
 
 #include <QButtonGroup>
 #include <QAbstractButton>
+#include <QSet>
 
 #include "kritaui_export.h"
 
@@ -36,30 +37,32 @@ public:
 
     virtual void nextCheckState() override;
 
-Q_SIGNALS:
-    void visibilityChanged(QAbstractButton* btn, bool isVisible);
-
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
 };
 
 
-class KRITAUI_EXPORT KisColorLabelButtonGroup : public QButtonGroup {
+class KRITAUI_EXPORT KisColorLabelFilterGroup : public QButtonGroup {
     Q_OBJECT
 public:
-    KisColorLabelButtonGroup(QObject* parent);
-    ~KisColorLabelButtonGroup();
+    KisColorLabelFilterGroup(QObject* parent);
+    ~KisColorLabelFilterGroup();
 
-    QList<QAbstractButton*> viableButtons();
-    QList<QAbstractButton*> checkedViableButtons();
-    bool colorFilterDesired();
-    int countCheckedViableButtons();
-    int countViableButtons();
+    QList<QAbstractButton*> viableButtons() const;
+    void setViableLabels(QSet<int> &buttons);
+    QSet<int> getActiveLabels() const;
+
+    QList<QAbstractButton*> checkedViableButtons() const;
+    int countCheckedViableButtons() const;
+    int countViableButtons() const;
+
     void reset();
 
 private:
-    static bool isButtonViable(QAbstractButton* button);
+    void hideAll();
+
+    QSet<int> viableColorLabels;
 
 };
 

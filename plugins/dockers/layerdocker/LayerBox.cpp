@@ -277,15 +277,15 @@ LayerBox::LayerBox()
 
     //Workaround to resize the QMenu for layerFilterMenu
     connect(layerFilterMenu, &QMenu::aboutToShow, [this, layerFilterMenu](){
-        QResizeEvent resizeEvent(this->layerFilterWidget->size(), layerFilterMenu->size());
+        QResizeEvent resizeEvent(layerFilterWidget->size(), layerFilterMenu->size());
         qApp->sendEvent(layerFilterMenu, &resizeEvent);
     });
-
 
     setEnabled(false);
 
     connect(&m_thumbnailCompressor, SIGNAL(timeout()), SLOT(updateThumbnail()));
     connect(&m_colorLabelCompressor, SIGNAL(timeout()), SLOT(updateAvailableLabels()));
+
 
     // set up the configure menu for changing thumbnail size
     QMenu* configureMenu = new QMenu(this);

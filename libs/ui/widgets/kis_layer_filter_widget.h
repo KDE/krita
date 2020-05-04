@@ -53,7 +53,8 @@ private:
 
     EventFilter *buttonEventFilter;
     class QLineEdit *textFilter;
-    class KisColorLabelButtonGroup *buttonGroup;
+    class KisColorLabelFilterGroup *buttonGroup;
+    class QPushButton *resetButton;
 
 public:
     KisLayerFilterWidget(QWidget *parent = nullptr);
@@ -61,9 +62,9 @@ public:
     static void scanUsedColorLabels(KisNodeSP node, QSet<int> &colorLabels);
     void updateColorLabels(KisNodeSP root);
 
-    bool isCurrentlyFiltering();
-    QList<int> getActiveColors();
-    QString getTextFilter();
+    bool isCurrentlyFiltering() const;
+    QSet<int> getActiveColors() const;
+    QString getTextFilter() const;
 
     void reset();
 

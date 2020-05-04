@@ -35,6 +35,7 @@ KisColorLabelButton::KisColorLabelButton(QColor color, QWidget *parent) : QAbstr
 {
     setCheckable(true);
     setChecked(true);
+    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_d->color = color;
 }
 
@@ -87,12 +88,12 @@ void KisColorLabelButton::paintEvent(QPaintEvent *event)
 
 QSize KisColorLabelButton::sizeHint() const
 {
-    return QSize(16,32);
+    return QSize(32,32);
 }
 
 void KisColorLabelButton::nextCheckState()
 {
-    KisColorLabelButtonGroup* colorLabelButtonGroup = dynamic_cast<KisColorLabelButtonGroup*>(group());
+    KisColorLabelFilterGroup* colorLabelButtonGroup = dynamic_cast<KisColorLabelFilterGroup*>(group());
     if (colorLabelButtonGroup && (colorLabelButtonGroup->countCheckedViableButtons() > 1 || !isChecked())) {
         setChecked(!isChecked());
     } else {
@@ -100,68 +101,82 @@ void KisColorLabelButton::nextCheckState()
     }
 }
 
-KisColorLabelButtonGroup::KisColorLabelButtonGroup(QObject *parent)
+KisColorLabelFilterGroup::KisColorLabelFilterGroup(QObject *parent)
     : QButtonGroup(parent)
 {
 }
 
-KisColorLabelButtonGroup::~KisColorLabelButtonGroup()
+KisColorLabelFilterGroup::~KisColorLabelFilterGroup()
 {
 }
 
-QList<QAbstractButton *> KisColorLabelButtonGroup::viableButtons()
-{
-    QList<QAbstractButton*> viableButtons = buttons();
+QList<QAbstractButton *> KisColorLabelFilterGroup::viableButtons() const {
+    QList<QAbstractButton*> viableButtons;
 
-    KritaUtils::filterContainer(viableButtons, [](QAbstractButton* btn){
-        return KisColorLabelButtonGroup::isButtonViable(btn);
-    });
+    Q_FOREACH( int index, viableColorLabels ) {
+        viableButtons.append(button(index));
+    }
 
     return viableButtons;
 }
 
-QList<QAbstractButton *> KisColorLabelButtonGroup::checkedViableButtons()
-{
-    QList<QAbstractButton*> checkedButtons = buttons();
+void KisColorLabelFilterGroup::setViableLabels(QSet<int> &labels) {
+    hideAll();
+    QSet<int> removed = viableColorLabels.subtract(labels);
+
+    viableColorLabels = labels;
+
+    if (viableColorLabels.count() > 1) {
+        Q_FOREACH( int index, viableColorLabels) {
+            if (button(index)) {
+                button(index)->setVisible(true);
+            }
+        }
+    }
+
+    Q_FOREACH( int index, removed ) {
+        button(index)->setChecked(true);
+    }
+}
+
+QSet<int> KisColorLabelFilterGroup::getActiveLabels() const {
+    QSet<int> checkedLabels = QSet<int>();
+
+    Q_FOREACH( int index, viableColorLabels ) {
+        if (button(index)->isChecked()) {
+            checkedLabels.insert(index);
+        }
+    }
+
+    return checkedLabels.count() == viableColorLabels.count() ? QSet<int>() : checkedLabels;
+}
+
+QList<QAbstractButton *> KisColorLabelFilterGroup::checkedViableButtons() const {
+    QList<QAbstractButton*> checkedButtons = viableButtons();
 
     KritaUtils::filterContainer(checkedButtons, [](QAbstractButton* btn){
-       return (btn->isChecked() && KisColorLabelButtonGroup::isButtonViable(btn));
+       return (btn->isChecked());
     });
 
     return checkedButtons;
 }
 
-bool KisColorLabelButtonGroup::colorFilterDesired()
-{
-    QList<QAbstractButton*> btns = viableButtons();
-
-    Q_FOREACH(QAbstractButton* btn, btns) {
-        if (KisColorLabelButtonGroup::isButtonViable(btn) && !btn->isChecked()) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-int KisColorLabelButtonGroup::countCheckedViableButtons()
-{
+int KisColorLabelFilterGroup::countCheckedViableButtons() const {
     return checkedViableButtons().count();
 }
 
-int KisColorLabelButtonGroup::countViableButtons()
-{
-    return viableButtons().count();
+int KisColorLabelFilterGroup::countViableButtons() const {
+    return viableColorLabels.count();
 }
 
-void KisColorLabelButtonGroup::reset()
-{
-    Q_FOREACH( QAbstractButton* btn, buttons()) {
+void KisColorLabelFilterGroup::reset() {
+    Q_FOREACH( QAbstractButton* btn, viableButtons() ) {
         btn->setChecked(true);
     }
 }
 
-bool KisColorLabelButtonGroup::isButtonViable(QAbstractButton* button)
-{
-    return button->isVisible();
+void KisColorLabelFilterGroup::hideAll() {
+    Q_FOREACH( QAbstractButton* btn, buttons() ) {
+        btn->setVisible(false);
+    }
 }

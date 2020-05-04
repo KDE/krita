@@ -130,9 +130,9 @@ QModelIndex KisNodeFilterProxyModel::indexFromNode(KisNodeSP node) const
     return mapFromSource(srcIndex);
 }
 
-void KisNodeFilterProxyModel::setAcceptedLabels(const QList<int> &value)
+void KisNodeFilterProxyModel::setAcceptedLabels(const QSet<int> &value)
 {
-    m_d->acceptedColorLabels = QSet<int>::fromList(value);
+    m_d->acceptedColorLabels = value;
     invalidateFilter();
 }
 

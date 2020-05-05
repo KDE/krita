@@ -265,7 +265,9 @@ QWidget* KisToolFill::createOptionWidget()
     m_cmbSampleLayersMode->addItem(sampleLayerModeToUserString(SAMPLE_LAYERS_MODE_COLOR_LABELED), SAMPLE_LAYERS_MODE_COLOR_LABELED);
     m_cmbSampleLayersMode->setEditable(false);
 
-    QLabel *lbl_cmbLabel = new QLabel(i18n("Label used:"), widget);
+    QLabel *lbl_cmbLabel = new QLabel(i18nc("This is a string in tool options for Fill Tool to describe a combobox about "
+                                            "a choice of color labels that a layer can be marked with. Those color labels "
+                                            "will be used for calculating the area to fill.", "Labels used:"), widget);
     m_cmbSelectedLabels = new KisColorFilterCombo(widget);
     m_cmbSelectedLabels->updateAvailableLabels(currentImage().isNull() ? KisNodeSP() : currentImage()->root());
 

@@ -75,9 +75,7 @@ void AnimaterionRenderer::slotRenderAnimation()
     KisDocument *doc = viewManager()->document();
 
     DlgAnimationRenderer dlgAnimationRenderer(doc, viewManager()->mainWindow());
-
     dlgAnimationRenderer.setCaption(i18n("Render Animation"));
-
     if (dlgAnimationRenderer.exec() == QDialog::Accepted) {
         KisAnimationRenderingOptions encoderOptions = dlgAnimationRenderer.getEncoderOptions();
         renderAnimationImpl(doc, encoderOptions);
@@ -109,41 +107,27 @@ void AnimaterionRenderer::renderAnimationImpl(KisDocument *doc, KisAnimationRend
     const QString framesDirectory = encoderOptions.resolveAbsoluteFramesDirectory();
     const QString extension = KisMimeDatabase::suffixesForMimeType(frameMimeType).first();
     const QString baseFileName = QString("%1/%2.%3").arg(framesDirectory)
-            .arg(encoderOptions.basename)
-            .arg(extension);
+                                                    .arg(encoderOptions.basename)
+                                                    .arg(extension);
 
-
-    /**
-     * The dialog should ensure that the size of the video is even
-     */
-    KIS_SAFE_ASSERT_RECOVER(
-        !((encoderOptions.width & 0x1 || encoderOptions.height & 0x1)
-          && (encoderOptions.videoMimeType == "video/mp4" ||
-              encoderOptions.videoMimeType == "video/x-matroska") && !(encoderOptions.renderMode() == encoderOptions.RENDER_FRAMES_ONLY))) {
-
-        encoderOptions.width = encoderOptions.width + (encoderOptions.width & 0x1);
-        encoderOptions.height = encoderOptions.height + (encoderOptions.height & 0x1);
-    }
-
-    const QSize scaledSize =
-        doc->image()->bounds().size().scaled(
-            encoderOptions.width, encoderOptions.height,
-            Qt::KeepAspectRatio);
-
-
-    if ((scaledSize.width() & 0x1 || scaledSize.height() & 0x1)
-            && (encoderOptions.videoMimeType == "video/mp4" ||
-                encoderOptions.videoMimeType == "video/x-matroska") && !(encoderOptions.renderMode() == encoderOptions.RENDER_FRAMES_ONLY)) {
-        QString m = "Mastroska (.mkv)";
-        if (encoderOptions.videoMimeType == "video/mp4") {
-            m = "Mpeg4 (.mp4)";
+    if (mustHaveEvenDimensions(encoderOptions.videoMimeType, encoderOptions.renderMode())) {
+        if (hasEvenDimensions(encoderOptions.width, encoderOptions.height) != true) {
+            encoderOptions.width = encoderOptions.width + (encoderOptions.width & 0x1);
+            encoderOptions.height = encoderOptions.height + (encoderOptions.height & 0x1);
         }
-        qWarning() << m <<"requires width and height to be even, resize and try again!";
-        doc->setErrorMessage(i18n("%1 requires width and height to be even numbers.  Please resize or crop the image before exporting.", m));
-        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not render animation:\n%1", doc->errorMessage()));
-        return;
     }
 
+    const QSize scaledSize = doc->image()->bounds().size().scaled(encoderOptions.width, encoderOptions.height, Qt::IgnoreAspectRatio);
+
+    if (mustHaveEvenDimensions(encoderOptions.videoMimeType, encoderOptions.renderMode())) {
+        if (hasEvenDimensions(scaledSize.width(), scaledSize.height()) != true) {
+            QString type = encoderOptions.videoMimeType == "video/mp4" ? "Mpeg4 (.mp4) " : "Mastroska (.mkv) ";
+            qWarning() << type <<"requires width and height to be even, resize and try again!";
+            doc->setErrorMessage(i18n("%1 requires width and height to be even numbers.  Please resize or crop the image before exporting.", type));
+            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not render animation:\n%1", doc->errorMessage()));
+            return;
+        }
+    }
 
     const bool batchMode = false; // TODO: fetch correctly!
     KisAsyncAnimationFramesSaveDialog exporter(doc->image(),
@@ -239,6 +223,16 @@ QStringList AnimaterionRenderer::getNamesForFrames(QString basename, QString ext
         list.append(getNameForFrame(basename, extension, sequenceStart, i));
     }
     return list;
+}
+
+const bool AnimaterionRenderer::mustHaveEvenDimensions(QString mimeType, KisAnimationRenderingOptions::RenderMode renderMode)
+{
+    return (mimeType == "video/mp4" || mimeType == "video/x-matroska") && renderMode != KisAnimationRenderingOptions::RENDER_FRAMES_ONLY;
+}
+
+const bool AnimaterionRenderer::hasEvenDimensions(int width, int height)
+{
+    return !((width & 0x1) || (height & 0x1));
 }
 
 #include "AnimationRenderer.moc"

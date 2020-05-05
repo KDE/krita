@@ -73,8 +73,6 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
     m_page->intStart->setValue(doc->image()->animationInterface()->playbackRange().start());
 
     m_page->intEnd->setMinimum(doc->image()->animationInterface()->fullClipRange().start());
-    // animators sometimes want to export after end frame
-    //m_page->intEnd->setMaximum(doc->image()->animationInterface()->fullClipRange().end());
     m_page->intEnd->setValue(doc->image()->animationInterface()->playbackRange().end());
 
     m_page->intHeight->setMinimum(1);
@@ -154,8 +152,6 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
 
         loadAnimationOptions(options);
     }
-
-
 }
 
 DlgAnimationRenderer::~DlgAnimationRenderer()

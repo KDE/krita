@@ -223,9 +223,8 @@ KisImportExportErrorCode VideoSaver::encode(const QString &savedFilesMask, const
         QString("scale=w=")
             .append(QString::number(options.width))
             .append(":h=")
-            .append(QString::number(options.height))
-            .append(":force_original_aspect_ratio=decrease");
-
+            .append(QString::number(options.height));
+            //.append(":force_original_aspect_ratio=decrease"); HOTFIX for even:odd dimension images.
 
     const QString resultFile = options.resolveAbsoluteVideoFilePath();
     const QDir videoDir(QFileInfo(resultFile).absolutePath());
@@ -301,7 +300,6 @@ KisImportExportErrorCode VideoSaver::encode(const QString &savedFilesMask, const
 
             args << "-i" << audioFileInfo.absoluteFilePath();
         }
-
 
         // if we are exporting out at a different image size, we apply scaling filter
         // export options HAVE to go after input options, so make sure this is after the audio import

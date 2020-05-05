@@ -109,7 +109,7 @@ public:
      */
     int documentCount() const;
 
-    void removeDocument(KisDocument *document);
+    void removeDocument(KisDocument *document, bool deleteDocument = true);
 
     // ----------------- MainWindow management -----------------
 

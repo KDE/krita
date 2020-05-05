@@ -66,7 +66,17 @@ public:
     QSet<int> getActiveColors() const;
     QString getTextFilter() const;
 
+    int getDesiredMinimumWidth() const;
+    int getDesiredMinimumHeight() const;
+
     void reset();
+
+    QSize sizeHint() const override;
+
+    /* Show Event has to be overridden to
+     * correct for issues where QMenu isn't
+     * correctly resizing. */
+    void showEvent(QShowEvent *show) override;
 
 Q_SIGNALS:
     void filteringOptionsChanged();

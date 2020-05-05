@@ -18,6 +18,7 @@
  */
 #include "kis_layer_filter_widget.h"
 
+#include <QApplication>
 #include <QVBoxLayout>
 #include <QLineEdit>
 #include <QCompleter>
@@ -25,9 +26,12 @@
 #include <QMouseEvent>
 #include <QButtonGroup>
 #include <QPushButton>
+#include <QMenu>
+#include <QScreen>
 
 #include "kis_debug.h"
 #include "kis_node.h"
+#include "kis_global.h"
 #include "kis_color_label_button.h"
 #include "kis_color_label_selector_widget.h"
 #include "kis_node_view_color_scheme.h"
@@ -36,10 +40,11 @@ KisLayerFilterWidget::KisLayerFilterWidget(QWidget *parent) : QWidget(parent)
 {
     QVBoxLayout *layout = new QVBoxLayout(this);
     setLayout(layout);
+    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     textFilter = new QLineEdit(this);
-    textFilter->setPlaceholderText("Filter by name...");
-    textFilter->setMinimumWidth(256);
+    textFilter->setPlaceholderText(i18n("Filter by name..."));
+    textFilter->setMinimumWidth(192);
     textFilter->setMinimumHeight(32);
     textFilter->setClearButtonEnabled(true);
 
@@ -48,12 +53,14 @@ KisLayerFilterWidget::KisLayerFilterWidget(QWidget *parent) : QWidget(parent)
     KisNodeViewColorScheme colorScheme;
 
     QWidget *buttonContainer = new QWidget(this);
-    buttonContainer->setToolTip("Filter by color label...");
+    buttonContainer->setToolTip(i18n("Filter by color label..."));
     buttonEventFilter = new EventFilter(buttonContainer);
     {
         QHBoxLayout *subLayout = new QHBoxLayout(buttonContainer);
         buttonContainer->setLayout(subLayout);
         subLayout->setContentsMargins(0,0,0,0);
+        //subLayout->setAlignment(Qt::AlignLeft);
+        ENTER_FUNCTION() << ppVar(subLayout->alignment());
         buttonGroup = new KisColorLabelFilterGroup(buttonContainer);
         buttonGroup->setExclusive(false);
         QVector<QColor> colors = colorScheme.allColorLabels();
@@ -69,7 +76,8 @@ KisLayerFilterWidget::KisLayerFilterWidget(QWidget *parent) : QWidget(parent)
         connect(buttonGroup, SIGNAL(buttonToggled(int,bool)), this, SIGNAL(filteringOptionsChanged()));
     }
 
-    resetButton = new QPushButton("Reset Filters", this);
+    resetButton = new QPushButton(i18n("Reset Filters"), this);
+    resetButton->setMinimumHeight(32);
     connect(resetButton, &QPushButton::clicked, [this](){
        this->reset();
     });
@@ -121,11 +129,64 @@ QString KisLayerFilterWidget::getTextFilter() const
     return textFilter->text();
 }
 
+int KisLayerFilterWidget::getDesiredMinimumWidth() const {
+    return qMax(textFilter->minimumWidth(), buttonGroup->countViableButtons() * 32);
+}
+
+int KisLayerFilterWidget::getDesiredMinimumHeight() const {
+    QList<QAbstractButton*> viableButtons = buttonGroup->viableButtons();
+    if (viableButtons.count() > 1) {
+        return viableButtons[0]->sizeHint().height() + textFilter->minimumHeight() + resetButton->minimumHeight();
+    } else {
+        return textFilter->minimumHeight() + resetButton->minimumHeight();
+    }
+}
+
 void KisLayerFilterWidget::reset()
 {
     textFilter->clear();
     buttonGroup->reset();
     filteringOptionsChanged();
+}
+
+QSize KisLayerFilterWidget::sizeHint() const
+{
+    return QSize(getDesiredMinimumWidth(), getDesiredMinimumHeight());
+}
+
+void KisLayerFilterWidget::showEvent(QShowEvent *show)
+{
+    QMenu *parentMenu = dynamic_cast<QMenu*>(parentWidget());
+
+    if (parentMenu) {
+        const int widthBefore = parentMenu->width();
+        const int rightEdgeThreshold = 5;
+        const bool onRightEdge = (parentMenu->pos().x() + parentMenu->width() + rightEdgeThreshold) > parentMenu->screen()->geometry().width();
+        ENTER_FUNCTION() << ppVar(onRightEdge);
+        adjustSize();
+        QResizeEvent event = QResizeEvent(size(), parentMenu->size());
+
+        parentMenu->resize(size());
+        parentMenu->adjustSize();
+        qApp->sendEvent(parentMenu, &event);
+
+        const int widthAfter = parentMenu->width();
+
+
+        if (onRightEdge) {
+            if (widthAfter > widthBefore) {
+                const QRect newGeo = kisEnsureInRect( parentMenu->geometry(), parentMenu->screen()->geometry() );
+                const int xShift = newGeo.x() - parentMenu->pos().x();
+                parentMenu->move(parentMenu->pos().x() + xShift, parentMenu->pos().y() + 0);
+            } else {
+                const int xShift = widthBefore - widthAfter;
+                parentMenu->move(parentMenu->pos().x() + xShift, parentMenu->pos().y() + 0);
+            }
+        }
+
+        ENTER_FUNCTION() << ppVar(parentMenu->parent());
+    }
+    QWidget::showEvent(show);
 }
 
 KisLayerFilterWidget::EventFilter::EventFilter(QWidget *buttonContainer, QObject* parent) : QObject(parent)

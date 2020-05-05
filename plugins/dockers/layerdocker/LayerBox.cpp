@@ -157,7 +157,7 @@ LayerBox::LayerBox()
     , m_canvas(0)
     , m_wdgLayerBox(new Ui_WdgLayerBox)
     , m_thumbnailCompressor(500, KisSignalCompressor::FIRST_INACTIVE)
-    , m_colorLabelCompressor(900, KisSignalCompressor::FIRST_INACTIVE)
+    , m_colorLabelCompressor(500, KisSignalCompressor::FIRST_INACTIVE)
     , m_thumbnailSizeCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
 {
     KisConfig cfg(false);
@@ -274,12 +274,6 @@ LayerBox::LayerBox()
     QWidgetAction *layerFilterMenuAction = new QWidgetAction(this);
     layerFilterMenuAction->setDefaultWidget(layerFilterWidget);
     layerFilterMenu->addAction(layerFilterMenuAction);
-
-    //Workaround to resize the QMenu for layerFilterMenu
-    connect(layerFilterMenu, &QMenu::aboutToShow, [this, layerFilterMenu](){
-        QResizeEvent resizeEvent(layerFilterWidget->size(), layerFilterMenu->size());
-        qApp->sendEvent(layerFilterMenu, &resizeEvent);
-    });
 
     setEnabled(false);
 

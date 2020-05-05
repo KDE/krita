@@ -245,9 +245,9 @@ KoColorConversionTransformation* KoColorConversionSystem::createColorConverter(c
                 nodeFor(dstColorSpace));
     Q_ASSERT(path.length() > 0);
     KoColorConversionTransformation* transfo = createTransformationFromPath(path, srcColorSpace, dstColorSpace, renderingIntent, conversionFlags);
+    Q_ASSERT(transfo);
     Q_ASSERT(*transfo->srcColorSpace() == *srcColorSpace);
     Q_ASSERT(*transfo->dstColorSpace() == *dstColorSpace);
-    Q_ASSERT(transfo);
     return transfo;
 }
 

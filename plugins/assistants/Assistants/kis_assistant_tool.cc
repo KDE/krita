@@ -719,8 +719,14 @@ void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
 
 void KisAssistantTool::removeAllAssistants()
 {
+    m_origAssistantList = m_canvas->paintingAssistantsDecoration()->assistants();
+
     m_canvas->viewManager()->canvasResourceProvider()->clearPerspectiveGrids();
     m_canvas->paintingAssistantsDecoration()->removeAll();
+
+    KUndo2Command *removeAssistantCmd = new EditAssistantsCommand(m_canvas, m_origAssistantList, KisPaintingAssistant::cloneAssistantList(m_canvas->paintingAssistantsDecoration()->assistants()));
+    m_canvas->viewManager()->undoAdapter()->addCommand(removeAssistantCmd);
+
     m_handles = m_canvas->paintingAssistantsDecoration()->handles();
     m_canvas->updateCanvas();
 
@@ -961,10 +967,7 @@ QWidget *KisAssistantTool::createOptionWidget()
         connect(m_options.assistantsColor, SIGNAL(changed(QColor)), SLOT(slotGlobalAssistantsColorChanged(QColor)));
         connect(m_options.assistantsGlobalOpacitySlider, SIGNAL(valueChanged(int)), SLOT(slotGlobalAssistantOpacityChanged()));
 
-
         connect(m_options.vanishingPointAngleSpinbox, SIGNAL(valueChanged(double)), this, SLOT(slotChangeVanishingPointAngle(double)));
-
-        //ENTER_FUNCTION() << ppVar(m_canvas) << ppVar(m_canvas && m_canvas->paintingAssistantsDecoration());
 
         // initialize UI elements with existing data if possible
         if (m_canvas && m_canvas->paintingAssistantsDecoration()) {
@@ -972,8 +975,6 @@ QWidget *KisAssistantTool::createOptionWidget()
 
             QColor opaqueColor = color;
             opaqueColor.setAlpha(255);
-
-            //ENTER_FUNCTION() << ppVar(opaqueColor);
 
             m_options.assistantsColor->setColor(opaqueColor);
             m_options.customAssistantColorButton->setColor(opaqueColor);

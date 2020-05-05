@@ -233,11 +233,11 @@ QList<KoColorConversionSystem::Node*> KoColorConversionSystem::nodesFor(const QS
 
 KoColorConversionTransformation* KoColorConversionSystem::createColorConverter(const KoColorSpace * srcColorSpace, const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) const
 {
+    Q_ASSERT(srcColorSpace);
+    Q_ASSERT(dstColorSpace);
     if (*srcColorSpace == *dstColorSpace) {
         return new KoCopyColorConversionTransformation(srcColorSpace);
     }
-    Q_ASSERT(srcColorSpace);
-    Q_ASSERT(dstColorSpace);
     dbgPigmentCCS << srcColorSpace->id() << (srcColorSpace->profile() ? srcColorSpace->profile()->name() : "default");
     dbgPigmentCCS << dstColorSpace->id() << (dstColorSpace->profile() ? dstColorSpace->profile()->name() : "default");
     Path path = findBestPath(

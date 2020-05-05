@@ -18,6 +18,8 @@
 
 #include "kis_liquify_paint_helper.h"
 
+#include <QPainterPath>
+
 #include "kis_algebra_2d.h"
 #include "KoPointerEvent.h"
 #include <brushengine/kis_paint_information.h>

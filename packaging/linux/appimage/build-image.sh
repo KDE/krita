@@ -124,13 +124,13 @@ sed -e "s|<release version=\"\" date=\"\" />|<release version=\"$VERSION\" date=
 
 # set zsync url for linuxdeployqt
 if [ "$CHANNEL" = "Next" ]; then
-	ZSYNC_URL="zsync|https://binary-factory.kde.org/job/Krita_Nightly_Appimage_Build/lastSuccessfulBuild/artifact/Krita-${CHANNEL}-x86_64.AppImage.zsync"
+	ZSYNC_URL="zsync|https://binary-factory.kde.org/job/Krita_Nightly_Appimage_Build/lastSuccessfulBuild/artifact/krita-${CHANNEL}-x86_64.appimage.zsync"
 elif [ "$CHANNEL" = "Plus" ]; then
-	ZSYNC_URL="zsync|https://binary-factory.kde.org/job/Krita_Stable_Appimage_Build/lastSuccessfulBuild/artifact/Krita-${CHANNEL}-x86_64.AppImage.zsync"
+	ZSYNC_URL="zsync|https://binary-factory.kde.org/job/Krita_Stable_Appimage_Build/lastSuccessfulBuild/artifact/krita-${CHANNEL}-x86_64.appimage.zsync"
 elif [ "$CHANNEL" = "Stable" ]; then
-	ZSYNC_URL="zsync|https://download.kde.org/stable/krita/updates/Krita-${CHANNEL}-x86_64.AppImage.zsync"
+	ZSYNC_URL="zsync|https://download.kde.org/stable/krita/updates/krita-${CHANNEL}-x86_64.appimage.zsync"
 elif [ "$CHANNEL" = "Beta" ]; then
-	ZSYNC_URL="zsync|https://download.kde.org/unstable/krita/updates/Krita-${CHANNEL}-x86_64.AppImage.zsync"
+	ZSYNC_URL="zsync|https://download.kde.org/unstable/krita/updates/krita-${CHANNEL}-x86_64.appimage.zsync"
 fi
 # Return to our build root
 cd $BUILD_PREFIX
@@ -150,6 +150,10 @@ linuxdeployqt $APPDIR/usr/share/applications/org.kde.krita.desktop \
   -updateinformation="${ZSYNC_URL}" \
   -appimage
 
+
+OLD_APPIMAGE_NAME="Krita-${VERSION}-x86_64.AppImage"
+NEW_APPIMAGE_NAME="krita-${VERSION}-x86_64.appimage"
+mv ${OLD_APPIMAGE_NAME} ${NEW_APPIMAGE_NAME}
 
 # the zsync will be regenerated after signing
 rm Krita-${VERSION}-x86_64.AppImage.zsync

@@ -30,25 +30,34 @@
 class KoColorSpace;
 class KoColorPopupAction;
 
-enum class linePosition
+enum LinePosition
 {
-    OUTSIDE, INSIDE, CENTER
+    Outside, Inside, Center
 };
 
-enum class drawType{
-    brushDraw, lineDraw
+enum class DrawType
+{
+    CurrentBrush, Line
 };
-enum class colorFillSource {
+
+enum class ColorLineSource
+{
+    FGColor, BGColor, CustomColor
+};
+
+enum class ColorFillSource {
     None, PaintColor, BGColor, CustomColor, FGColor
 };
 
-struct StrokeSelectionOptions {
+struct StrokeSelectionOptions
+{
     StrokeSelectionOptions ();
-    int lineSize;
-    bool brushSelected;
-    int _colorFillSource;
-    int lineColorSource;
-    int lineDimension;
+
+    int lineSize {1};
+    bool brushSelected {false};
+    ColorFillSource colorFillSource {ColorFillSource::None};
+    ColorLineSource colorLineSource {ColorLineSource::FGColor};
+    int lineDimension {1};
     KoColor color;
     KoColor fillColor;
     KoColor customColor;
@@ -92,7 +101,7 @@ public:
     ~KisDlgStrokeSelection() override;
 
     int getLineSize() const;
-    linePosition getLinePosition() const;
+    LinePosition getLinePosition() const;
     KoColor getSelectedColor() const;
     bool isBrushSelected() const;
     KoColor getFillSelectedColor() const;
@@ -102,7 +111,7 @@ private:
     WdgStrokeSelection *m_page {0};
     KisImageWSP m_image;
     KoCanvasResourceProvider *m_resourceManager {0};
-    KisDisplayColorConverter *converter {0};
+    KisDisplayColorConverter *m_converter {0};
     bool m_isVectorLayer {false};
 
 private Q_SLOTS:

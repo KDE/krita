@@ -69,7 +69,7 @@ public:
             mergedControlPoint1 = mergePosition + (p1->controlPoint1() - p1->point());
         }
 
-        if (p1->activeControlPoint1()) {
+        if (p2->activeControlPoint2()) {
             mergedControlPoint2 = mergePosition + (p2->controlPoint2() - p2->point());
         }
 

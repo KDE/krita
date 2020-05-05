@@ -296,7 +296,7 @@ bool KisImagePipeBrush::initFromData(const QByteArray &data)
 
     qint32 i = 0;
 
-    while (data[i] != '\n' && i < data.size()) {
+    while (i < data.size() && data[i] != '\n') {
         line1.append(data[i]);
         i++;
     }
@@ -308,7 +308,7 @@ bool KisImagePipeBrush::initFromData(const QByteArray &data)
 
     // XXX: This stuff is in utf-8, too.
     QByteArray line2;
-    while (data[i] != '\n' && i < data.size()) {
+    while (i < data.size() && data[i] != '\n') {
         line2.append(data[i]);
         i++;
     }

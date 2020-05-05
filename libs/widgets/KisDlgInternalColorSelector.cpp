@@ -136,7 +136,7 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
     if (config.prevNextButtons) {
         m_ui->currentColor->setColor(m_d->currentColor);
         m_ui->currentColor->setDisplayRenderer(displayRenderer);
-        m_ui->previousColor->setColor(m_d->currentColor);
+        m_ui->previousColor->setColor(m_d->previousColor);
         m_ui->previousColor->setDisplayRenderer(displayRenderer);
         connect(m_ui->previousColor, SIGNAL(triggered(KoColorPatch*)), SLOT(slotSetColorFromPatch(KoColorPatch*)));
     } else {

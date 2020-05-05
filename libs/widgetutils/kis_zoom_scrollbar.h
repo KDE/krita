@@ -31,10 +31,10 @@ class KRITAWIDGETUTILS_EXPORT KisZoomableScrollbar : public QScrollBar
     Q_OBJECT
 
 private:
-    QPoint previousPosition;
-    QVector2D accelAccumulator;
-    qreal scrollAccumulator;
-    qreal zoomDeadzone;
+    QPoint lastKnownPosition;
+    QVector2D accelerationAccumulator;
+    qreal scrollSubPixelAccumulator;
+    qreal zoomPerpendicularityThreshold;
     bool catchTeleportCorrection = false;
 
 public:
@@ -42,6 +42,17 @@ public:
     KisZoomableScrollbar(Qt::Orientation orientation, QWidget * parent = 0);
     ~KisZoomableScrollbar();
 
+    //Catch for teleportation from one side of the screen to the other.
+    bool catchTeleports(QMouseEvent* event);
+
+    //Window-space wrapping for mouse dragging. Allows for blender-like
+    //infinite mouse scrolls.
+    void handleWrap(const QPoint &accel, const QPoint &globalMouseCoord);
+
+    //Scroll based on a mouse acceleration value.
+    void handleScroll(const QPoint &accel);
+
+    void tabletEvent(QTabletEvent *event) override;
     virtual void mousePressEvent(QMouseEvent *event) override;
     virtual void mouseMoveEvent(QMouseEvent *event) override;
     virtual void mouseReleaseEvent(QMouseEvent *event) override;

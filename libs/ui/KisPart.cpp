@@ -222,13 +222,15 @@ int KisPart::documentCount() const
     return d->documents.size();
 }
 
-void KisPart::removeDocument(KisDocument *document)
+void KisPart::removeDocument(KisDocument *document, bool deleteDocument)
 {
     if (document) {
         d->documents.removeAll(document);
         emit documentClosed('/' + objectName());
         emit sigDocumentRemoved(document->url().toLocalFile());
-        document->deleteLater();
+        if (deleteDocument) {
+            document->deleteLater();
+        }
     }
 }
 

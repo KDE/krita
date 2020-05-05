@@ -92,6 +92,7 @@ Document::~Document()
 {
     if (d->ownsDocument && d->document) {
         KisPart::instance()->removeDocument(d->document);
+        delete d->document;
     }
     delete d;
 }
@@ -451,6 +452,7 @@ QByteArray Document::pixelData(int x, int y, int w, int h) const
 bool Document::close()
 {
     bool retval = d->document->closeUrl(false);
+
     Q_FOREACH(KisView *view, KisPart::instance()->views()) {
         if (view->document() == d->document) {
             view->close();
@@ -459,7 +461,11 @@ bool Document::close()
         }
     }
 
-    KisPart::instance()->removeDocument(d->document);
+    KisPart::instance()->removeDocument(d->document, !d->ownsDocument);
+    if (d->ownsDocument) {
+        delete d->document;
+    }
+
     d->document = 0;
     return retval;
 }

@@ -1483,9 +1483,6 @@ void KisPainter::drawPainterPath(const QPainterPath& path, const QPen& pen)
 
 void KisPainter::drawPainterPath(const QPainterPath& path, const QPen& _pen, const QRect &requestedRect)
 {
-    // we are drawing mask, it has to be white
-    // color of the path is given by paintColor()
-    KIS_SAFE_ASSERT_RECOVER_NOOP(_pen.color() == Qt::white);
     QPen pen(_pen);
     pen.setColor(Qt::white);
 

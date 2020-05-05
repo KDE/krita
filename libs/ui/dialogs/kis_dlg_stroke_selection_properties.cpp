@@ -248,20 +248,13 @@ void KisDlgStrokeSelection::colorChanged(const QColor &newColor)
     KoColor BGColor = m_resourceManager->resource(KoCanvasResourceProvider::BackgroundColor).value<KoColor>();
     KoColor tempColor = m_converter->approximateFromRenderedQColor(newColor);
 
-    qDebug() << "fg " << FGColor.toQColor();
-    qDebug() << "bg " << BGColor.toQColor();
-    qDebug() << "tmp" << tempColor.toQColor();
-
     if (tempColor.toQColor() == FGColor.toQColor()) {
-        qDebug() << "1";
         m_page->lineColorBox->setCurrentIndex(static_cast<int>(ColorLineSource::FGColor));
     }
     else if (tempColor.toQColor() == BGColor.toQColor()) {
-        qDebug() << "2";
         m_page->lineColorBox->setCurrentIndex(static_cast<int>(ColorLineSource::BGColor));
     }
     else {
-        qDebug() << "3";
         m_page->lineColorBox->setCurrentIndex((int)ColorLineSource::CustomColor);
     }
     m_page->m_options.color = tempColor;

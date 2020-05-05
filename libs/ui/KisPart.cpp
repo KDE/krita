@@ -190,14 +190,16 @@ void KisPart::updateIdleWatcherConnections()
     d->idleWatcher.setTrackedImages(images);
 }
 
-void KisPart::addDocument(KisDocument *document)
+void KisPart::addDocument(KisDocument *document, bool notify)
 {
     //dbgUI << "Adding document to part list" << document;
     Q_ASSERT(document);
     if (!d->documents.contains(document)) {
         d->documents.append(document);
-        emit documentOpened('/'+objectName());
-        emit sigDocumentAdded(document);
+        if (notify){
+            emit documentOpened('/'+ objectName());
+            emit sigDocumentAdded(document);
+        }
         connect(document, SIGNAL(sigSavingFinished()), SLOT(slotDocumentSaved()));
     }
 }

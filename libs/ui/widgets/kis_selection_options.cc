@@ -257,16 +257,18 @@ void KisSelectionOptions::slotSampleLayersModeChanged(int index)
 
 QString KisSelectionOptions::sampleLayerModeToUserString(QString sampleLayersModeId)
 {
+    QString currentLayer = i18nc("Option in selection tool: take only the current layer into account when calculating the selection", "Current Layer");
     if (sampleLayersModeId == SAMPLE_LAYERS_MODE_CURRENT) {
-        return i18n("Current Layer");
+        return currentLayer;
     } else if (sampleLayersModeId == SAMPLE_LAYERS_MODE_ALL) {
-        return i18n("All Layers");
+        return i18nc("Option in selection tool: take all layers (merged) into account when calculating the selection", "All Layers");
     } else if (sampleLayersModeId == SAMPLE_LAYERS_MODE_COLOR_LABELED) {
-        return i18n("Color Labeled Layers");
+        return i18nc("Option in selection tool: take all layers that were marked with specific color labels (more precisely, all of them merged) "
+                     "into account when calculating the selection", "Color Labeled Layers");
     }
 
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(false, i18n("Current Layer"));
-    return i18n("Current Layer");
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(false, currentLayer);
+    return currentLayer;
 }
 
 void KisSelectionOptions::setCmbSampleLayersMode(QString sampleLayersModeId)

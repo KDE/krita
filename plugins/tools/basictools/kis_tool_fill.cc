@@ -334,7 +334,9 @@ void KisToolFill::updateGUI()
     m_checkUsePattern->setEnabled(useAdvancedMode);
 
     m_cmbSampleLayersMode->setEnabled(!selectionOnly && useAdvancedMode);
-    m_cmbSelectedLabels->setEnabled(!selectionOnly && useAdvancedMode);
+
+    bool sampleLayersModeIsColorLabeledLayers = m_cmbSampleLayersMode->currentData().toString() == SAMPLE_LAYERS_MODE_COLOR_LABELED;
+    m_cmbSelectedLabels->setEnabled(!selectionOnly && useAdvancedMode && sampleLayersModeIsColorLabeledLayers);
 }
 
 QString KisToolFill::sampleLayerModeToUserString(QString sampleLayersModeId)
@@ -363,7 +365,7 @@ void KisToolFill::setCmbSampleLayersMode(QString sampleLayersModeId)
         }
     }
     m_sampleLayersMode = sampleLayersModeId;
-    m_cmbSelectedLabels->setEnabled(sampleLayersModeId == SAMPLE_LAYERS_MODE_COLOR_LABELED);
+    updateGUI();
 }
 
 void KisToolFill::activateConnectionsToImage()
@@ -412,7 +414,7 @@ void KisToolFill::slotSetSampleLayers(int index)
 {
     Q_UNUSED(index);
     m_sampleLayersMode = m_cmbSampleLayersMode->currentData(Qt::UserRole).toString();
-    m_cmbSelectedLabels->setEnabled(m_sampleLayersMode == SAMPLE_LAYERS_MODE_COLOR_LABELED);
+    updateGUI();
     m_configGroup.writeEntry("sampleLayersMode", m_sampleLayersMode);
 }
 

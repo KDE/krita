@@ -119,9 +119,17 @@ android {
     lintOptions {
         abortOnError false
     }
+
+    project.ext.versionCodes = ['armeabi-v7a': 1, 'arm64-v8a': 2, 'x86': 3, 'x86_64': 4]
+
+    def versionMajor    = 4
+    def versionMinor    = 9
+    def versionRelease  = 10
+
 	defaultConfig {
         targetSdkVersion 26
         minSdkVersion 21
+        versionCode project.ext.versionCodes[abi] * 100000 + versionMajor * 1000 + versionMinor * 100 + versionRelease
     }
 
     preBuild.dependsOn(copyLibs)

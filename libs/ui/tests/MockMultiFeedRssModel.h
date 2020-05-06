@@ -4,9 +4,8 @@
 #include <QObject>
 
 #include <KisMultiFeedRSSModel.h>
-#include "kritaui_export.h"
 
-class KRITAUI_EXPORT MockMultiFeedRssModel : public MultiFeedRssModel
+class MockMultiFeedRssModel : public MultiFeedRssModel
 {
     Q_OBJECT
 

@@ -62,7 +62,7 @@ private:
     QBuffer m_data;
 };
 
-class KRITAUI_EXPORT MockNetworkAccessManager : public KisNetworkAccessManager
+class MockNetworkAccessManager : public KisNetworkAccessManager
 {
     Q_OBJECT
 

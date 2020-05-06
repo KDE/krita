@@ -47,7 +47,7 @@ KisImportExportErrorCode OraImport::convert(KisDocument *document, QIODevice *io
         }
     }
 
-    qDebug() << ">>>>>>>>>" << result;
+    //qDebug() << ">>>>>>>>>" << result;
 
     return result;
 }

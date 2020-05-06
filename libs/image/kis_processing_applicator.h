@@ -105,6 +105,7 @@ private:
     KisImageSignalVector m_emitSignals;
     KisStrokeId m_strokeId;
     bool m_finalSignalsEmitted;
+    bool m_appliedVisitorToAllFrames;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KisProcessingApplicator::ProcessingFlags)

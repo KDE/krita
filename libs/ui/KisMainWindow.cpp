@@ -512,9 +512,8 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     QList<QAction *> toolbarList;
     Q_FOREACH (QWidget* it, guiFactory()->containers("ToolBar")) {
         KToolBar * toolBar = ::qobject_cast<KToolBar *>(it);
-        toolBar->setMovable(KisConfig(true).readEntry<bool>("LockAllDockerPanels", false));
-
         if (toolBar) {
+            toolBar->setMovable(KisConfig(true).readEntry<bool>("LockAllDockerPanels", false));
             if (toolBar->objectName() == "BrushesAndStuff") {
                 toolBar->setEnabled(false);
             }

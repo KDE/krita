@@ -120,6 +120,7 @@ public Q_SLOTS:
 
     void slotColorSpaceChanged(const KoColorSpace* colorSpace);
     void slotInputDeviceChanged(const KoInputDevice & inputDevice);
+    void slotCanvasResourceChangeAttempted(int key, const QVariant &value);
     void slotCanvasResourceChanged(int key, const QVariant& v);
     void resourceSelected(KoResource* resource);
 

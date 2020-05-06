@@ -676,10 +676,6 @@ void KoTableCellStyle::loadOdfProperties(KoShapeLoadingContext &context, KoStyle
         setRepeatContent(styleStack.property(KoXmlNS::style, "repeat-content") == "true");
     }
 
-    if (styleStack.hasProperty(KoXmlNS::style, "repeat-content")) {
-        setRepeatContent(styleStack.property(KoXmlNS::style, "repeat-content") == "true");
-    }
-
     if (styleStack.hasProperty(KoXmlNS::style, "decimal-places")) {
         bool ok;
         int value = styleStack.property(KoXmlNS::style, "decimal-places").toInt(&ok);

@@ -330,10 +330,6 @@ void NodeDelegate::drawThumbnail(QPainter *p, const QStyleOptionViewItem &option
         p->setOpacity(0.35);
     }
 
-    QRect fitRect = thumbnailClickRect(option, index);
-    // Shrink to icon rect
-    fitRect = kisGrowRect(fitRect, -(scm.thumbnailMargin()+scm.border()));
-
     // paint in a checkerboard pattern behind the layer contents to represent transparent
     const int step = scm.thumbnailSize() / 6;
     QImage checkers(2 * step, 2 * step, QImage::Format_ARGB32);
@@ -343,13 +339,24 @@ void NodeDelegate::drawThumbnail(QPainter *p, const QStyleOptionViewItem &option
     gc.fillRect(QRect(step, step, step, step), d->checkersColor1);
     gc.fillRect(QRect(0, step, step, step), d->checkersColor2);
 
-    QBrush brush(checkers);
-    p->fillRect(fitRect, brush);
 
-    p->drawImage(fitRect, img);
+    QRect fitRect = thumbnailClickRect(option, index);
+    // Shrink to icon rect
+    fitRect = kisGrowRect(fitRect, -(scm.thumbnailMargin()+scm.border()));
+
+    QPoint offset;
+    offset.setX((fitRect.width() - img.width()) / 2);
+    offset.setY((fitRect.height() - img.height()) / 2);
+    offset += fitRect.topLeft();
+
+    QBrush brush(checkers);
+    p->setBrushOrigin(offset);
+    p->fillRect(img.rect().translated(offset), brush);
+
+    p->drawImage(offset, img);
     p->setOpacity(oldOpacity); // restore old opacity
 
-    QRect borderRect = kisGrowRect(fitRect, 1);
+    QRect borderRect = kisGrowRect(img.rect(), 1).translated(offset);
     KritaUtils::renderExactRect(p, borderRect, scm.gridColor(option, d->view));
 }
 

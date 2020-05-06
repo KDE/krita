@@ -103,12 +103,14 @@ void KisSqueezedComboBox::insertSqueezedItem(const QString& newItem, int index, 
 {
     m_originalItems[index] = newItem;
     QComboBox::insertItem(index, squeezeText(newItem, this), userData);
+    setItemData(index, newItem, Qt::ToolTipRole);
 }
 
 void KisSqueezedComboBox::insertSqueezedItem(const QIcon &icon, const QString &newItem, int index, QVariant userData)
 {
     m_originalItems[index] = newItem;
     QComboBox::insertItem(index, icon, squeezeText(newItem, this), userData);
+    setItemData(index, newItem, Qt::ToolTipRole);
 }
 
 void KisSqueezedComboBox::addSqueezedItem(const QString& newItem, QVariant userData)

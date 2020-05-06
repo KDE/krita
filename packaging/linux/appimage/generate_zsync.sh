@@ -36,6 +36,6 @@ fi
 zsyncmake -u "${URL}/$(basename ${APPIMAGE_PATH})" -o $APPIMAGE_PATH.zsync.new $APPIMAGE_PATH
 ret=$?
 if [ $ret -eq 0 ]; then
-  mv $APPIMAGE_PATH.zsync.new krita-${CHANNEL}-x86_64.appimage.zsync
+  mv $APPIMAGE_PATH.zsync.new Krita-${CHANNEL}-x86_64.appimage.zsync
 fi
  

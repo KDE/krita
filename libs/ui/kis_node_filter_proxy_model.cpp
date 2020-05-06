@@ -78,8 +78,8 @@ bool KisNodeFilterProxyModel::Private::checkIndexAllowedRecursively(QModelIndex 
     if (!srcIndex.isValid()) return false;
 
     KisNodeSP node = nodeModel->nodeFromIndex(srcIndex);
-    const bool nodeTextFilterMatch = (!activeTextFilter.has_value() || node->name().contains(activeTextFilter.get(), Qt::CaseInsensitive));
-    const bool directParentTextFilterMatch =  (!activeTextFilter.has_value() || (node->parent() && node->parent()->name().contains(activeTextFilter.get(), Qt::CaseInsensitive)));
+    const bool nodeTextFilterMatch = (!activeTextFilter || node->name().contains(activeTextFilter.get(), Qt::CaseInsensitive));
+    const bool directParentTextFilterMatch =  (!activeTextFilter || (node->parent() && node->parent()->name().contains(activeTextFilter.get(), Qt::CaseInsensitive)));
     const bool nodeColorMatch = (acceptedColorLabels.count() == 0 || acceptedColorLabels.contains(node->colorLabelIndex()));
     if ( node == activeNode ||
          ( nodeColorMatch && (nodeTextFilterMatch || directParentTextFilterMatch) )) {
@@ -110,7 +110,7 @@ bool KisNodeFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex
     KisNodeSP node = m_d->nodeModel->nodeFromIndex(index);
 
     return !node ||
-        (m_d->acceptedColorLabels.isEmpty() && !m_d->activeTextFilter.has_value()) ||
+        (m_d->acceptedColorLabels.isEmpty() && !m_d->activeTextFilter) ||
         m_d->checkIndexAllowedRecursively(index);
 }
 

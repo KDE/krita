@@ -12,5 +12,6 @@ ecm_add_tests(
     zoomhandler_test.cpp
     zoomcontroller_test.cpp
     KoAnchorSelectionWidgetTest.cpp
+    TestKoZoomAction.cpp
     NAME_PREFIX "libs-widgets-"
     LINK_LIBRARIES kritawidgets Qt5::Test)

@@ -52,7 +52,16 @@ DlgLayerSplit::DlgLayerSplit()
 
     connect(m_colorSetChooser, SIGNAL(sigPaletteSelected(KoColorSet*)), this, SLOT(slotSetPalette(KoColorSet*)));
 
-    KisDialogStateSaver::restoreState(m_page, "krita/layer_split");
+    QMap<QString, QVariant> defaults;
+    defaults[ m_page->intFuzziness->objectName() ] = QVariant::fromValue<int>(20);
+    defaults[ m_page->chkCreateGroupLayer->objectName() ] = QVariant::fromValue<bool>(true);
+    defaults[ m_page->chkSeparateGroupLayers->objectName() ] = QVariant::fromValue<bool>(false);
+    defaults[ m_page->chkAlphaLock->objectName() ] = QVariant::fromValue<bool>(true);
+    defaults[ m_page->chkHideOriginal->objectName() ] = QVariant::fromValue<bool>(false);
+    defaults[ m_page->chkSortLayers->objectName() ] = QVariant::fromValue<bool>(true);
+    defaults[ m_page->chkDisregardOpacity->objectName() ] = QVariant::fromValue<bool>(true);
+
+    KisDialogStateSaver::restoreState(m_page, "krita/layer_split", defaults);
 
     connect(m_page->cmbMode, SIGNAL(currentIndexChanged(int)), this, SLOT(slotChangeMode(int)));
 

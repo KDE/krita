@@ -291,6 +291,7 @@ void TimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade,
     if (m_d->dummiesFacade) {
         emit sigInfiniteTimelineUpdateNeeded();
         emit sigAudioChannelChanged();
+        slotCurrentTimeChanged(m_d->image->animationInterface()->currentUITime());
     }
 }
 

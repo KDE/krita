@@ -80,10 +80,16 @@ KisInputManager::KisInputManager(QObject *parent)
 
     QApplication::instance()->
             installEventFilter(new Private::ProximityNotifier(d, this));
+#ifdef Q_OS_MACOS
+    KisExtendedModifiersMapper::setGlobalMonitor(true);
+#endif
 }
 
 KisInputManager::~KisInputManager()
 {
+#ifdef Q_OS_MACOS
+    KisExtendedModifiersMapper::setGlobalMonitor(false);
+#endif
     delete d;
 }
 

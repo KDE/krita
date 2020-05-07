@@ -41,6 +41,11 @@ public:
 
     static Qt::Key workaroundShiftAltMetaHell(const QKeyEvent *keyEvent);
 
+#ifdef Q_OS_MACOS
+    static void setLocalMonitor(bool activate);
+    static void setGlobalMonitor(bool activate);
+#endif
+
 private:
     struct Private;
     QScopedPointer<Private> m_d;

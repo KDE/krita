@@ -1401,6 +1401,7 @@ bool KisDocument::openUrl(const QUrl &_url, OpenFlags flags)
     }
 
     QUrl url(_url);
+    QString original  = "";
     bool autosaveOpened = false;
     if (url.isLocalFile() && !fileBatchMode()) {
         QString file = url.toLocalFile();
@@ -1416,6 +1417,7 @@ bool KisDocument::openUrl(const QUrl &_url, OpenFlags flags)
                                            QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Yes);
             switch (res) {
             case QMessageBox::Yes :
+                original = file;
                 url.setPath(asf);
                 autosaveOpened = true;
                 break;
@@ -1435,6 +1437,9 @@ bool KisDocument::openUrl(const QUrl &_url, OpenFlags flags)
         setReadWrite(true); // enable save button
         setModified(true);
         setRecovered(true);
+
+        setUrl(QUrl::fromLocalFile(original)); // since it was an autosave, it will be a local file
+        setLocalFilePath(original);
     }
     else {
         if (ret) {

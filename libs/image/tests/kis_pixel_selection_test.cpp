@@ -378,5 +378,217 @@ void KisPixelSelectionTest::testOutlineCacheTransactions()
     }
 }
 
-QTEST_MAIN(KisPixelSelectionTest)
+#include "kis_paint_device_debug_utils.h"
+#include <sdk/tests/testing_timed_default_bounds.h>
+
+bool compareRect(KisPixelSelectionSP psel, const QRect &rc)
+{
+    QPolygon poly;
+    poly << rc.topLeft();
+    poly << QPoint(rc.x(), rc.bottom() + 1);
+    poly << QPoint(rc.right() + 1, rc.bottom() + 1);
+    poly << QPoint(rc.right() + 1, rc.top());
+    poly << rc.topLeft();
+
+    psel->select(rc);
+    //KIS_DUMP_DEVICE_2(psel, psel->defaultBounds()->bounds(), "selection_rect", "dd");
+
+    const QVector<QPolygon> outline = psel->outline();
+    const QVector<QPolygon> ref({poly});
+
+    const bool result = outline == ref;
+
+    if (!result) {
+        qDebug() << "Failed rect" << rc;
+        qDebug() << "Exp: " << ref;
+        qDebug() << "Act: " << outline;
+    }
+
+    psel->clear();
+
+    return result;
+}
+
+bool compareRegion(KisPixelSelectionSP psel,
+                   const QVector<QRect> &rects,
+                   const QVector<QPolygon> &ref)
+{
+    Q_FOREACH(const QRect &rc, rects) {
+        psel->select(rc);
+    }
+
+    //KIS_DUMP_DEVICE_2(psel, psel->defaultBounds()->bounds(), "selection_poly", "dd");
+
+    const QVector<QPolygon> outline = psel->outline();
+
+    const bool result = outline == ref;
+
+    if (!result) {
+        qDebug() << "Failed rect" << rects;
+        qDebug() << "Exp: " << ref;
+        qDebug() << "Act: " << outline;
+    }
+
+    psel->clear();
+
+    return result;
+}
+
+void KisPixelSelectionTest::testOutlineArtifacts()
+{
+    KisDefaultBoundsBaseSP bounds = new TestUtil::TestingTimedDefaultBounds(QRect(0,0,20,22));
+    KisPixelSelectionSP psel = new KisPixelSelection();
+    psel->setDefaultBounds(bounds);
+
+    QVERIFY(compareRect(psel, QRect(10,10,1,4)));
+    QVERIFY(compareRect(psel, QRect(10,10,2,4)));
+    QVERIFY(compareRect(psel, QRect(10,10,4,1)));
+    QVERIFY(compareRect(psel, QRect(10,10,4,2)));
+    QVERIFY(compareRect(psel, QRect(10,10,1,1)));
+
+
+    QVERIFY(compareRegion(psel,
+        {QRect(10,10,5,4), QRect(10,15,5,4), QRect(13,14,1,1)},
+        {QPolygon({QPoint(10,10),
+                   QPoint(10,14),
+                   QPoint(13,14),
+                   QPoint(13,15),
+                   QPoint(10,15),
+                   QPoint(10,19),
+                   QPoint(15,19),
+                   QPoint(15,15),
+                   QPoint(14,15),
+                   QPoint(14,14),
+                   QPoint(15,14),
+                   QPoint(15,10),
+                   QPoint(10,10)})}));
+
+    QVERIFY(compareRegion(psel,
+        {QRect(10,10,5,4), QRect(10,16,5,4), QRect(12,14,2,2)},
+        {QPolygon({QPoint(10,10),
+                   QPoint(10,14),
+                   QPoint(12,14),
+                   QPoint(12,16),
+                   QPoint(10,16),
+                   QPoint(10,20),
+                   QPoint(15,20),
+                   QPoint(15,16),
+                   QPoint(14,16),
+                   QPoint(14,14),
+                   QPoint(15,14),
+                   QPoint(15,10),
+                   QPoint(10,10)})}));
+
+    QVERIFY(compareRegion(psel,
+        {QRect(10,10,4,5), QRect(15,10,4,5), QRect(14,13,1,1)},
+        {QPolygon({QPoint(10,10),
+                   QPoint(10,15),
+                   QPoint(14,15),
+                   QPoint(14,14),
+                   QPoint(15,14),
+                   QPoint(15,15),
+                   QPoint(19,15),
+                   QPoint(19,10),
+                   QPoint(15,10),
+                   QPoint(15,13),
+                   QPoint(14,13),
+                   QPoint(14,10),
+                   QPoint(10,10)})}));
+
+    QVERIFY(compareRegion(psel,
+        {QRect(10,10,3,5), QRect(15,10,4,5), QRect(13,13,2,1)},
+        {QPolygon({QPoint(10,10),
+                   QPoint(10,15),
+                   QPoint(13,15),
+                   QPoint(13,14),
+                   QPoint(15,14),
+                   QPoint(15,15),
+                   QPoint(19,15),
+                   QPoint(19,10),
+                   QPoint(15,10),
+                   QPoint(15,13),
+                   QPoint(13,13),
+                   QPoint(13,10),
+                   QPoint(10,10)})}));
+
+    QVERIFY(compareRegion(psel,
+        {QRect(10,10,1,4), QRect(15,10,1,4)},
+        {QPolygon({QPoint(10,10),
+                   QPoint(10,14),
+                   QPoint(11,14),
+                   QPoint(11,10),
+                   QPoint(10,10)}),
+         QPolygon({QPoint(15,10),
+                   QPoint(15,14),
+                   QPoint(16,14),
+                   QPoint(16,10),
+                   QPoint(15,10)})}));
+
+    QVERIFY(compareRegion(psel,
+        {QRect(10,10,4,1), QRect(15,10,4,1)},
+        {QPolygon({QPoint(10,10),
+                            QPoint(10,11),
+                            QPoint(14,11),
+                            QPoint(14,10),
+                            QPoint(10,10)}),
+         QPolygon({QPoint(15,10),
+                            QPoint(15,11),
+                            QPoint(19,11),
+                            QPoint(19,10),
+                            QPoint(15,10)})}));
+
+    QVERIFY(compareRegion(psel,
+        {QRect(10,10,4,1), QRect(14,11,4,1)},
+        {QPolygon({QPoint(10,10),
+                   QPoint(10,11),
+                   QPoint(14,11),
+                   QPoint(14,12),
+                   QPoint(18,12),
+                   QPoint(18,11),
+                   QPoint(14,11),
+                   QPoint(14,10),
+                   QPoint(10,10)})}));
+
+    QVERIFY(compareRegion(psel,
+        {QRect(0,0,10,22), QRect(15,0,5,22),
+         QRect(10,0,5,10), QRect(10,15,5,7)},
+        {QPolygon({QPoint(0,0),
+                   QPoint(0,22),
+                   QPoint(20,22),
+                   QPoint(20,0),
+                   QPoint(0,0)}),
+         QPolygon({QPoint(10,10),
+                   QPoint(15,10),
+                   QPoint(15,15),
+                   QPoint(10,15),
+                   QPoint(10,10)})}));
+
+    QVERIFY(compareRegion(psel,
+        {QRect(0,0,20,5), QRect(0,10,20,12),
+         QRect(5,5,15,5)},
+        {QPolygon({QPoint(0,0),
+                   QPoint(0,5),
+                   QPoint(5,5),
+                   QPoint(5,10),
+                   QPoint(0,10),
+                   QPoint(0,22),
+                   QPoint(20,22),
+                   QPoint(20,0),
+                   QPoint(0,0)})}));
+
+    QVERIFY(compareRegion(psel,
+        {QRect(0,0,20,5), QRect(0,10,20,12),
+         QRect(0,5,15,5)},
+        {QPolygon({QPoint(0,0),
+                   QPoint(0,22),
+                   QPoint(20,22),
+                   QPoint(20,10),
+                   QPoint(15,10),
+                   QPoint(15,5),
+                   QPoint(20,5),
+                   QPoint(20,0),
+                   QPoint(0,0)})}));
+}
+
+KISTEST_MAIN(KisPixelSelectionTest)
 

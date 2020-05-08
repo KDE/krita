@@ -64,7 +64,7 @@ from PyQt5.QtWidgets import (
     )
 
 
-PLUGIN_VERSION = '1.0.0'
+PLUGIN_VERSION = '1.1.0'
 
 EXTENSION_ID = 'pykrita_channels2layers'
 PLUGIN_MENU_ENTRY = i18n('Channels to layers')
@@ -904,6 +904,29 @@ class ChannelsToLayers(Extension):
         return True
 
 
+
+    def toQImage(self, layerNode, rect=None):
+        """Return `layerNode` content as a QImage (as ARGB32)
+
+        The `rect` value can be:
+        - None, in this case will return all `layerNode` content
+        - A QRect() object, in this case return `layerNode` content reduced to given rectangle bounds
+        """
+        srcRect = layerNode.bounds()
+
+        if len(layerNode.childNodes()) == 0:
+            projectionMode = False
+        else:
+            projectionMode = True
+
+        if projectionMode == True:
+            img = QImage(layerNode.projectionPixelData(srcRect.left(), srcRect.top(), srcRect.width(), srcRect.height()), srcRect.width(), srcRect.height(), QImage.Format_ARGB32)
+        else:
+            img = QImage(layerNode.pixelData(srcRect.left(), srcRect.top(), srcRect.width(), srcRect.height()), srcRect.width(), srcRect.height(), QImage.Format_ARGB32)
+
+        return img.scaled(rect.width(), rect.height(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation)
+
+
     def openDialogOptions(self):
         """Open dialog box to let user define channel extraction options"""
 
@@ -940,6 +963,7 @@ class ChannelsToLayers(Extension):
 
             # create a temporary document to work
             tmpDocument = Application.createDocument(imgThumbSrc.width(), imgThumbSrc.height(), "tmp", "RGBA", "U8", "", 120.0)
+
             # create a layer used as original layer
             originalLayer = tmpDocument.createNode("Original", "paintlayer")
             tmpDocument.rootNode().addChildNode(originalLayer, None)
@@ -959,13 +983,11 @@ class ChannelsToLayers(Extension):
                 layer.setVisible(False)
             tmpDocument.refreshProjection()
 
-
             index = 0
             for layer in groupLayer.childNodes():
                 layer.setVisible(True)
                 tmpDocument.refreshProjection()
 
-                print(index, len(lblPreview))
                 lblPreview[index].setPixmap(QPixmap.fromImage(tmpDocument.projection(0, 0, tmpDocument.width(), tmpDocument.height())))
                 lblPreviewLbl[index].setText("<i>{0}</i>".format(layer.name()))
                 layer.setVisible(False)
@@ -1080,15 +1102,17 @@ class ChannelsToLayers(Extension):
 
 
         imageRatio = self.__sourceDocument.width() / self.__sourceDocument.height()
+        rect = QRect(0, 0, OUTPUT_PREVIEW_MAXSIZE, OUTPUT_PREVIEW_MAXSIZE)
 
-        # alwayd ensure that final preview width and/or height is lower or equal than OUTPUT_PREVIEW_MAXSIZE
+        # always ensure that final preview width and/or height is lower or equal than OUTPUT_PREVIEW_MAXSIZE
         if imageRatio < 1:
             # width < height
-            imgThumbSrc = self.__sourceLayer.thumbnail(int(imageRatio * OUTPUT_PREVIEW_MAXSIZE), OUTPUT_PREVIEW_MAXSIZE)
+            rect.setWidth(int(imageRatio * OUTPUT_PREVIEW_MAXSIZE))
         else:
             # width >= height
-            imgThumbSrc = self.__sourceLayer.thumbnail(OUTPUT_PREVIEW_MAXSIZE, int(OUTPUT_PREVIEW_MAXSIZE / imageRatio))
+            rect.setHeight(int(OUTPUT_PREVIEW_MAXSIZE / imageRatio))
 
+        imgThumbSrc = self.toQImage(self.__sourceLayer, rect)
 
         previewBaSrc.resize(imgThumbSrc.byteCount())
         ptr = imgThumbSrc.bits()
@@ -1160,7 +1184,7 @@ class ChannelsToLayers(Extension):
         vbxPreviewLblContainer.addStretch()
         vbxPreviewContainer.addStretch()
 
-        #buildPreview()
+        buildPreview()
 
         returned = dlgMain.exec_()
 
@@ -1288,10 +1312,6 @@ class ChannelsToLayers(Extension):
             """Merge current layer with layer below"""
             if currentProcessedLayer is None:
                 return None
-            print(currentProcessedLayer.name())
-            print(currentProcessedLayer.parentNode().name())
-            for l in currentProcessedLayer.parentNode().childNodes():
-                print(l, l.name())
 
             newLayer = currentProcessedLayer.mergeDown()
             # note:
@@ -1303,6 +1323,8 @@ class ChannelsToLayers(Extension):
             #   but the only solution to be able to work on merged layer (with current script) is to consider that from
             #   parent node, last child match to last added layer and then, to our merged layer
             currentProcessedLayer = parentGroupLayer.childNodes()[-1]
+            # for an unknown reason, merged layer bounds are not corrects... :'-(
+            currentProcessedLayer.cropNode(0, 0, document.width(), document.height())
             return currentProcessedLayer
 
 

@@ -21,6 +21,7 @@
 #include <KoColorSpace.h>
 
 #include "kis_layer.h"
+#include "kis_image.h"
 #include "kis_mask.h"
 #include "kis_group_layer.h"
 #include "kis_selection_mask.h"
@@ -297,7 +298,7 @@ bool KisProjectionLeaf::visible() const
         node = node->parent();
     }
 
-    return m_d->node->visible(false) &&
+    return (m_d->node->visible(false) || m_d->node->isIsolatedRoot()) &&
         !m_d->checkThisPassThrough() &&
         !hiddenByParentPassThrough;
 }

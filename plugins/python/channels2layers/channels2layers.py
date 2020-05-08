@@ -1268,15 +1268,17 @@ class ChannelsToLayers(Extension):
 
                 newLayer = document.createFillLayer(value['color'].name(), "color", infoObject, selection)
 
-                # Need to force generator otherwise, information provided when creating layer seems to not be taken in
-                # account
-                newLayer.setGenerator("color", infoObject)
 
             if newLayer:
                 self.layerNum+=1
                 newLayer.setName("c2l-w{0}".format(self.layerNum))
 
                 parentGroupLayer.addChildNode(newLayer, currentProcessedLayer)
+
+                # Need to force generator otherwise, information provided when creating layer seems to not be taken in
+                # account
+                newLayer.setGenerator("color", infoObject)
+
                 return newLayer
             else:
                 return None

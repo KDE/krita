@@ -12,8 +12,7 @@ public Q_SLOTS:
     void clear();
     void setModeManually(bool value);
     void setMode(QString modeName);
-		void setFillColor(QColor color);
-
+    void setFillColor(QColor color);
     void loadScratchpadImage(QImage image);
     QImage copyScratchpadImageData();
 

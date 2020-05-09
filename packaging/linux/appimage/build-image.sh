@@ -173,6 +173,3 @@ linuxdeployqt $APPDIR/usr/share/applications/org.kde.krita.desktop \
 OLD_APPIMAGE_NAME="Krita-${VERSION}-x86_64.AppImage"
 NEW_APPIMAGE_NAME="krita-${VERSION}-x86_64.appimage"
 mv ${OLD_APPIMAGE_NAME} ${NEW_APPIMAGE_NAME}
-
-# the zsync will be regenerated after signing
-rm Krita-${VERSION}-x86_64.AppImage.zsync

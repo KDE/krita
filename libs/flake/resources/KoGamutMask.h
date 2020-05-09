@@ -73,8 +73,8 @@ public:
     void paint(QPainter &painter, bool preview);
     void paintStroke(QPainter &painter, bool preview);
 
-    QTransform maskToViewTransform(quint8 viewSize);
-    QTransform viewToMaskTransform(quint8 viewSize);
+    QTransform maskToViewTransform(qreal viewSize);
+    QTransform viewToMaskTransform(qreal viewSize);
 
     QString title();
     void setTitle(QString title);

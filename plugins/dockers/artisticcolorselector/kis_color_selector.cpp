@@ -443,6 +443,10 @@ void KisColorSelector::recalculateAreas(quint8 numLightPieces)
 
     m_numLightPieces = numLightPieces;
 
+    if (m_currentGamutMask) {
+        m_gamutMaskViewTransform = m_currentGamutMask->maskToViewTransform(m_renderArea.width());
+    }
+
     m_isDirtyGamutMask = true;
     m_isDirtyLightStrip = true;
     m_isDirtyWheel = true;

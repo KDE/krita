@@ -111,7 +111,8 @@ void KisToolProxy::forwardHoverEvent(QEvent *event)
     }
 
     default: {
-        qWarning() << "forwardHoverEvent encountered unknown event type.";
+        qWarning() << "forwardHoverEvent encountered unknown event type:"
+            << event->type();
         return;
     }
     }

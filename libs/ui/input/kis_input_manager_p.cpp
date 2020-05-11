@@ -321,9 +321,6 @@ bool KisInputManager::Private::CanvasSwitcher::eventFilter(QObject* object, QEve
         }
         case QEvent::Leave: {
             focusSwitchThreshold.stop();
-#ifdef Q_OS_MACOS
-            KisExtendedModifiersMapper::setLocalMonitor(false);
-#endif
             break;
         }
         case QEvent::Wheel: {
@@ -336,9 +333,6 @@ bool KisInputManager::Private::CanvasSwitcher::eventFilter(QObject* object, QEve
         case QEvent::TabletPress:
         case QEvent::TabletRelease:
             focusSwitchThreshold.forceDone();
-#ifdef Q_OS_MACOS
-            KisExtendedModifiersMapper::setLocalMonitor(false);
-#endif
 
             if (eatOneMouseStroke) {
                 eatOneMouseStroke--;
@@ -347,9 +341,6 @@ bool KisInputManager::Private::CanvasSwitcher::eventFilter(QObject* object, QEve
             break;
         case QEvent::MouseButtonDblClick:
             focusSwitchThreshold.forceDone();
-#ifdef Q_OS_MACOS
-            KisExtendedModifiersMapper::setLocalMonitor(false);
-#endif
             if (eatOneMouseStroke) {
                 return true;
             }
@@ -365,9 +356,6 @@ bool KisInputManager::Private::CanvasSwitcher::eventFilter(QObject* object, QEve
 
                 focusSwitchThreshold.setDelayThreshold(delay);
                 focusSwitchThreshold.start();
-#ifdef Q_OS_MACOS
-            KisExtendedModifiersMapper::setLocalMonitor(true);
-#endif
             }
         }
             break;

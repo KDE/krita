@@ -22,6 +22,7 @@
 #include <QApplication>
 #include <QKeyEvent>
 
+#include "kis_shortcut_matcher.h"
 
 /*
  * global Monitor captures events when other
@@ -30,7 +31,7 @@
  * */
 void activateGlobalMonitor(bool activate);
 
-void activateLocalMonitor(bool activate);
+void activateLocalMonitor(bool activate, KisShortcutMatcher &matcher);
 
 QVector<Qt::Key> queryPressedKeysMac();
 

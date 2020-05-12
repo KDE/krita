@@ -44,6 +44,7 @@
 #include <kis_image.h>
 #include <kis_paint_device.h>
 #include <KisPart.h>
+#include <utils/KisFileIconCreator.h>
 
 #include <utils/KisUpdaterBase.h>
 
@@ -329,6 +330,7 @@ void KisWelcomePageWidget::populateRecentDocuments()
 
     // grab recent files data
     int numRecentFiles = m_mainWindow->recentFilesUrls().length() > 5 ? 5 : m_mainWindow->recentFilesUrls().length(); // grab at most 5
+    KisFileIconCreator iconCreator;
 
     for (int i = 0; i < numRecentFiles; i++ ) {
 
@@ -341,69 +343,19 @@ void KisWelcomePageWidget::populateRecentDocuments()
 
         QList<QUrl> brokenUrls;
 
+
         if (m_thumbnailMap.contains(recentFileUrlPath)) {
             recentItem->setIcon(m_thumbnailMap[recentFileUrlPath]);
-        }
-        else {
-            QFileInfo fi(recentFileUrlPath);
-            if (fi.exists()) {
-                QString mimeType = KisMimeDatabase::mimeTypeForFile(recentFileUrlPath);
-                if (mimeType == KisDocument::nativeFormatMimeType()
-                       || mimeType == "image/openraster") {
-
-                    QScopedPointer<KoStore> store(KoStore::createStore(recentFileUrlPath, KoStore::Read));
-                    if (store) {
-                        QString thumbnailpath;
-                        if (store->hasFile(QString("Thumbnails/thumbnail.png"))){
-                            thumbnailpath = QString("Thumbnails/thumbnail.png");
-                        } else if (store->hasFile(QString("preview.png"))) {
-                            thumbnailpath = QString("preview.png");
-                        }
-                        if (!thumbnailpath.isEmpty()) {
-                            if (store->open(thumbnailpath)) {
-
-                                QByteArray bytes = store->read(store->size());
-                                store->close();
-                                QImage img;
-                                img.loadFromData(bytes);
-                                img.setDevicePixelRatio(devicePixelRatioF());
-                                recentItem->setIcon(QIcon(QPixmap::fromImage(img)));
-                            }
-                        }
-                    }
-                    else {
-                        brokenUrls << m_mainWindow->recentFilesUrls().at(i);
-                    }
-                }
-                else if (mimeType == "image/tiff" || mimeType == "image/x-tiff") {
-                    // Workaround for a bug in Qt tiff QImageIO plugin
-                    QScopedPointer<KisDocument> doc;
-                    doc.reset(KisPart::instance()->createTemporaryDocument());
-                    doc->setFileBatchMode(true);
-                    bool r = doc->openUrl(QUrl::fromLocalFile(recentFileUrlPath), KisDocument::DontAddToRecent);
-                    if (r) {
-                        KisPaintDeviceSP projection = doc->image()->projection();
-                        recentItem->setIcon(QIcon(QPixmap::fromImage(projection->createThumbnail(48, 48, projection->exactBounds()))));
-                    }
-                    else {
-                        brokenUrls << m_mainWindow->recentFilesUrls().at(i);
-                    }
-                }
-                else {
-                    QImage img;
-                    img.setDevicePixelRatio(devicePixelRatioF());
-                    img.load(recentFileUrlPath);
-                    if (!img.isNull()) {
-                        recentItem->setIcon(QIcon(QPixmap::fromImage(img.scaledToWidth(48))));
-                    }
-                    else {
-                        brokenUrls << m_mainWindow->recentFilesUrls().at(i);
-                    }
-                }
-                if (brokenUrls.size() == 0 || brokenUrls.last().toLocalFile() != recentFileUrlPath) {
-                    m_thumbnailMap[recentFileUrlPath] = recentItem->icon();
-                }
+        } else {
+            QIcon icon;
+            bool success = iconCreator.createFileIcon(recentFileUrlPath, icon, devicePixelRatioF());
+            if (success) {
+                recentItem->setIcon(icon);
+                m_thumbnailMap[recentFileUrlPath] = recentItem->icon();
+            } else {
+                brokenUrls << m_mainWindow->recentFilesUrls().at(i);
             }
+
         }
         Q_FOREACH(const QUrl &url, brokenUrls) {
             m_mainWindow->removeRecentUrl(url);

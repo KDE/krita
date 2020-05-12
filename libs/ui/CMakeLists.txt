@@ -283,6 +283,8 @@ set(kritaui_LIB_SRCS
     utils/KisSpinBoxSplineUnitConverter.cpp
     utils/KisClipboardUtil.cpp
     utils/KisDitherUtil.cpp
+    utils/KisFileIconCreator.cpp
+
     input/kis_input_manager.cpp
     input/kis_input_manager_p.cpp
     input/kis_extended_modifiers_mapper.cpp

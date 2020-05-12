@@ -277,18 +277,26 @@ bool KisShapeSelection::outlineCacheValid() const
 
 void KisShapeSelection::recalculateOutlineCache()
 {
+    QTransform resolutionMatrix;
+    resolutionMatrix.scale(m_image->xRes(), m_image->yRes());
+
     QList<KoShape*> shapesList = shapes();
 
     QPainterPath outline;
     Q_FOREACH (KoShape * shape, shapesList) {
+        /**
+         * WARNING: we should unite all the shapes in image coordinates,
+         * not in points. Boolean operations inside the QPainterPath
+         * linearize the curves into lines and they use absolute values
+         * for thresholds.
+         *
+         * See KritaUtils::pathShapeBooleanSpaceWorkaround() for more info
+         */
         QTransform shapeMatrix = shape->absoluteTransformation();
-        outline = outline.united(shapeMatrix.map(shape->outline()));
+        outline = outline.united(resolutionMatrix.map(shapeMatrix.map(shape->outline())));
     }
 
-    QTransform resolutionMatrix;
-    resolutionMatrix.scale(m_image->xRes(), m_image->yRes());
-
-    m_outline = resolutionMatrix.map(outline);
+    m_outline = outline;
 }
 
 void KisShapeSelection::paintComponent(QPainter& painter, KoShapePaintingContext &) const

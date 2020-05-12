@@ -119,6 +119,7 @@
 #include "kis_guides_config.h"
 #include "kis_image_barrier_lock_adapter.h"
 #include "KisReferenceImagesLayer.h"
+#include "dialogs/KisRecoverNamedAutosaveDialog.h"
 
 #include <mutex>
 #include "kis_config_notifier.h"
@@ -1411,17 +1412,17 @@ bool KisDocument::openUrl(const QUrl &_url, OpenFlags flags)
             kisApp->hideSplashScreen();
             //qDebug() <<"asf=" << asf;
             // ## TODO compare timestamps ?
-            int res = QMessageBox::warning(0,
-                                           i18nc("@title:window", "Krita"),
-                                           i18n("An autosaved file exists for this document.\nDo you want to open the autosaved file instead?"),
-                                           QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Yes);
+            KisRecoverNamedAutosaveDialog dlg(0, file, asf);
+            dlg.exec();
+            int res = dlg.result();
+
             switch (res) {
-            case QMessageBox::Yes :
+            case KisRecoverNamedAutosaveDialog::OpenAutosave :
                 original = file;
                 url.setPath(asf);
                 autosaveOpened = true;
                 break;
-            case QMessageBox::No :
+            case KisRecoverNamedAutosaveDialog::OpenMainFile :
                 KisUsageLogger::log(QString("Removing autosave file: %1").arg(asf));
                 QFile::remove(asf);
                 break;

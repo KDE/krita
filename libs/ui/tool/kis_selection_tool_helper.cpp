@@ -177,7 +177,7 @@ void KisSelectionToolHelper::addSelectionShape(KoShape* shape, SelectionAction a
     shapes.append(shape);
     addSelectionShapes(shapes, action);
 }
-
+#include "krita_utils.h"
 void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes, SelectionAction action)
 {
     KisView *view = m_canvas->imageView();
@@ -243,6 +243,12 @@ void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes, Select
                         QPainterPath path1 = currentShape->absoluteTransformation().map(currentShape->outline());
                         QPainterPath path2 = m_shape->absoluteTransformation().map(m_shape->outline());
 
+                        const QTransform booleanWorkaroundTransform =
+                            KritaUtils::pathShapeBooleanSpaceWorkaround(m_view->image());
+
+                        path1 = booleanWorkaroundTransform.map(path1);
+                        path2 = booleanWorkaroundTransform.map(path2);
+
                         QPainterPath path = path2;
 
                         switch (m_action) {
@@ -266,6 +272,8 @@ void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes, Select
                             path = (path1 | path2) - (path1 & path2);
                             break;
                         }
+
+                        path = booleanWorkaroundTransform.inverted().map(path);
 
                         KoShape *newShape = KoPathShape::createShapeFromPainterPath(path);
                         newShape->setUserData(new KisShapeSelectionMarker);

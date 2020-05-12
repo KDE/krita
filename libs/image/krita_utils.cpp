@@ -31,6 +31,7 @@
 
 #include <KoColorSpaceRegistry.h>
 
+#include "kis_image.h"
 #include "kis_image_config.h"
 #include "kis_debug.h"
 #include "kis_node.h"
@@ -530,4 +531,10 @@ namespace KritaUtils
             *color = newColor;
         }
     }
+
+    QTransform pathShapeBooleanSpaceWorkaround(KisImageSP image)
+    {
+        return QTransform::fromScale(image->xRes(), image->yRes());
+    }
+
 }

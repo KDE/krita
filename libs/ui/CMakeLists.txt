@@ -69,6 +69,7 @@ set(kritaui_LIB_SRCS
     dialogs/KisSessionManagerDialog.cpp
     dialogs/KisNewWindowLayoutDialog.cpp
     dialogs/KisDlgChangeCloneSource.cpp
+    dialogs/KisRecoverNamedAutosaveDialog.cpp
     flake/kis_node_dummies_graph.cpp
     flake/kis_dummies_facade_base.cpp
     flake/kis_dummies_facade.cpp
@@ -539,6 +540,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
 
     brushhud/kis_dlg_brush_hud_config.ui
     dialogs/kis_delayed_save_dialog.ui
+    dialogs/KisRecoverNamedAutosaveDialog.ui
     input/config/kis_input_configuration_page.ui
     input/config/kis_edit_profiles_dialog.ui
     input/config/kis_input_configuration_page_item.ui

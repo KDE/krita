@@ -65,7 +65,6 @@ void HistogramDockerDock::setCanvas(KoCanvasBase * canvas)
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     if (m_canvas) {
-        m_histogramWidget->setPaintDevice(m_canvas);
 
         m_imageIdleWatcher->setTrackedImage(m_canvas->image());
 
@@ -79,7 +78,6 @@ void HistogramDockerDock::unsetCanvas()
 {
     setEnabled(false);
     m_canvas = 0;
-    m_histogramWidget->setPaintDevice(m_canvas);
     m_imageIdleWatcher->startCountdown();
 }
 
@@ -107,6 +105,6 @@ void HistogramDockerDock::sigColorSpaceChanged(const KoColorSpace */*cs*/)
 void HistogramDockerDock::updateHistogram()
 {
     if (isVisible()) {
-        m_histogramWidget->updateHistogram();
+        m_histogramWidget->updateHistogram(m_canvas);
     }
 }

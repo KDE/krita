@@ -43,8 +43,7 @@ KisManualUpdater::KisManualUpdater(MultiFeedRssModel* rssModel, QString &current
 
 void KisManualUpdater::checkForUpdate()
 {
-//    m_rssModel->addFeed(QLatin1String("https://krita.org/en/feed/"));
-    m_rssModel->addFeed(QLatin1String("http://localhost/feed.xml"));
+    m_rssModel->addFeed(QLatin1String("https://krita.org/en/feed/"));
     connect(m_rssModel.data(), SIGNAL(feedDataChanged()), this, SLOT(rssDataChanged()));
 }
 

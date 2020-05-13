@@ -105,12 +105,10 @@ void KisNewsWidget::toggleNews(bool toggle)
     cfg.writeEntry<bool>("FetchNews", toggle);
 
     if (toggle) {
-//        m_rssModel->addFeed(QLatin1String("https://krita.org/en/feed/"));
-        m_rssModel->addFeed(QLatin1String("http://localhost/feed.xml"));
+       m_rssModel->addFeed(QLatin1String("https://krita.org/en/feed/"));
     }
     else {
-//        m_rssModel->removeFeed(QLatin1String("https://krita.org/en/feed/"));
-        m_rssModel->removeFeed(QLatin1String("http://localhost/feed.xml"));
+       m_rssModel->removeFeed(QLatin1String("https://krita.org/en/feed/"));
     }
 }
 

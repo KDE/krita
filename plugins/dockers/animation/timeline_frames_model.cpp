@@ -500,7 +500,7 @@ QVariant TimelineFramesModel::headerData(int section, Qt::Orientation orientatio
 
             return QVariant::fromValue(list);
         }
-        case LayerUsedInTimelineRole: {
+        case PinnedToTimelineRole: {
             KisNodeDummy *dummy = m_d->converter->dummyFromRow(section);
             if (!dummy) return QVariant();
             return dummy->node()->isPinnedToTimeline();
@@ -540,7 +540,7 @@ bool TimelineFramesModel::setHeaderData(int section, Qt::Orientation orientation
             emit headerDataChanged (Qt::Vertical, section, section);
             return result;
         }
-        case LayerUsedInTimelineRole: {
+        case PinnedToTimelineRole: {
             KisNodeDummy *dummy = m_d->converter->dummyFromRow(section);
             if (!dummy) return false;
             dummy->node()->setPinnedToTimeline(value.toBool());

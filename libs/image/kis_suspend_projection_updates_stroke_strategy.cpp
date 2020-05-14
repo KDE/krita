@@ -136,13 +136,15 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
                     QHash<QRect, QVector<QRect>> fullRefreshRequests;
 
                     Q_FOREACH (const FullRefreshRequest &req, it.value()) {
-                        fullRefreshRequests[req.cropRect] += alignRect(req.rect, step);
+                        fullRefreshRequests[req.cropRect] += req.rect;
                     }
 
                     auto reqIt = fullRefreshRequests.begin();
                     for (; reqIt != fullRefreshRequests.end(); ++reqIt) {
+                        const QVector<QRect> simplifiedRects = KisRegion::fromOverlappingRects(reqIt.value(), step).rects();
+
                         // FIXME: constness: port rPU to SP
-                        image->refreshGraphAsync(const_cast<KisNode*>(node.data()), reqIt.value(), reqIt.key());
+                        image->refreshGraphAsync(const_cast<KisNode*>(node.data()), simplifiedRects, reqIt.key());
                     }
                 }
             }
@@ -158,12 +160,14 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
 
                     bool resetAnimationCache = false;
                     Q_FOREACH (const Request &req, it.value()) {
-                        dirtyRects += alignRect(req.rect, step);
+                        dirtyRects += req.rect;
                         resetAnimationCache |= req.resetAnimationCache;
                     }
 
+                    const QVector<QRect> simplifiedRects = KisRegion::fromOverlappingRects(dirtyRects, step).rects();
+
                     // FIXME: constness: port rPU to SP
-                    image->requestProjectionUpdate(const_cast<KisNode*>(node.data()), dirtyRects, resetAnimationCache);
+                    image->requestProjectionUpdate(const_cast<KisNode*>(node.data()), simplifiedRects, resetAnimationCache);
                 }
             }
         }

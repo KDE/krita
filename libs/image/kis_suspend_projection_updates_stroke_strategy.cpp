@@ -63,7 +63,19 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
             bool resetAnimationCache;
         };
 
-        typedef QHash<KisNodeSP, QVector<Request> > RectsHash;
+        struct FullRefreshRequest {
+            FullRefreshRequest() {}
+            FullRefreshRequest(const QRect &_rect, const QRect &_cropRect)
+                : rect(_rect), cropRect(_cropRect)
+            {
+            }
+
+            QRect rect;
+            QRect cropRect;
+        };
+
+        typedef QHash<KisNodeSP, QVector<Request> > UpdatesHash;
+        typedef QHash<KisNodeSP, QVector<FullRefreshRequest> > RefreshesHash;
     public:
         SuspendLod0Updates()
         {
@@ -76,6 +88,18 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
 
             Q_FOREACH(const QRect &rc, rects) {
                 m_requestsHash[KisNodeSP(node)].append(Request(rc, resetAnimationCache));
+            }
+
+            return true;
+        }
+
+        bool filterRefreshGraph(KisImage *image, KisNode *node, const QVector<QRect> &rects, const QRect &cropRect) override {
+            if (image->currentLevelOfDetail() > 0) return false;
+
+            QMutexLocker l(&m_mutex);
+
+            Q_FOREACH(const QRect &rc, rects) {
+                m_refreshesHash[KisNodeSP(node)].append(FullRefreshRequest(rc, cropRect));
             }
 
             return true;
@@ -98,30 +122,55 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
             return result;
         }
 
-        void notifyUpdates(KisNodeGraphListener *listener) {
-            RectsHash::const_iterator it = m_requestsHash.constBegin();
-            RectsHash::const_iterator end = m_requestsHash.constEnd();
-
+        void notifyUpdates(KisImageSP image) {
             const int step = 64;
 
-            for (; it != end; ++it) {
-                KisNodeSP node = it.key();
+            {
+                RefreshesHash::const_iterator it = m_refreshesHash.constBegin();
+                RefreshesHash::const_iterator end = m_refreshesHash.constEnd();
 
-                QVector<QRect> dirtyRects;
 
-                bool resetAnimationCache = false;
-                Q_FOREACH (const Request &req, it.value()) {
-                    dirtyRects += alignRect(req.rect, step);
-                    resetAnimationCache |= req.resetAnimationCache;
+                for (; it != end; ++it) {
+                    KisNodeSP node = it.key();
+
+                    QHash<QRect, QVector<QRect>> fullRefreshRequests;
+
+                    Q_FOREACH (const FullRefreshRequest &req, it.value()) {
+                        fullRefreshRequests[req.cropRect] += alignRect(req.rect, step);
+                    }
+
+                    auto reqIt = fullRefreshRequests.begin();
+                    for (; reqIt != fullRefreshRequests.end(); ++reqIt) {
+                        // FIXME: constness: port rPU to SP
+                        image->refreshGraphAsync(const_cast<KisNode*>(node.data()), reqIt.value(), reqIt.key());
+                    }
                 }
+            }
 
-                // FIXME: constness: port rPU to SP
-                listener->requestProjectionUpdate(const_cast<KisNode*>(node.data()), KisRegion(dirtyRects).rects(), resetAnimationCache);
+            {
+                UpdatesHash::const_iterator it = m_requestsHash.constBegin();
+                UpdatesHash::const_iterator end = m_requestsHash.constEnd();
+
+                for (; it != end; ++it) {
+                    KisNodeSP node = it.key();
+
+                    QVector<QRect> dirtyRects;
+
+                    bool resetAnimationCache = false;
+                    Q_FOREACH (const Request &req, it.value()) {
+                        dirtyRects += alignRect(req.rect, step);
+                        resetAnimationCache |= req.resetAnimationCache;
+                    }
+
+                    // FIXME: constness: port rPU to SP
+                    image->requestProjectionUpdate(const_cast<KisNode*>(node.data()), dirtyRects, resetAnimationCache);
+                }
             }
         }
 
     private:
-        RectsHash m_requestsHash;
+        UpdatesHash m_requestsHash;
+        RefreshesHash m_refreshesHash;
         QMutex m_mutex;
     };
 

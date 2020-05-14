@@ -165,8 +165,8 @@ void TimelineLayersHeader::paintSection(QPainter *painter, const QRect &areaRect
 
     // Paint pushpin icon..
     const bool isPinned = model()->headerData(layerIndex, orientation(), TimelineFramesModel::PinnedToTimelineRole).toBool();
+    const uint pinWidth = areaRect.height() - 4;
     if (isPinned) {
-        const uint pinWidth = areaRect.height() - 4;
         QRect pinArea = kisTrimLeft(pinWidth, remainingArea);
         const uint difference = pinArea.height() - pinWidth;
         pinArea.setHeight(pinWidth); // Square to width.
@@ -177,7 +177,7 @@ void TimelineLayersHeader::paintSection(QPainter *painter, const QRect &areaRect
         icon.paint(painter, iconRect);
     } else {
         // Trim off margin..
-        kisTrimLeft(4, remainingArea);
+        kisTrimLeft(pinWidth, remainingArea);
     }
 
     // Paint layer name..

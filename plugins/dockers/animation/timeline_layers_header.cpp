@@ -1,5 +1,7 @@
 /*
  *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2020 Emmet O'Neill <emmetoneill.pdx@gmail.com>
+ *  Copyright (c) 2020 Eoin O'Neill <eoinoneill1991@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,6 +21,8 @@
 #include "timeline_layers_header.h"
 
 #include "kis_debug.h"
+#include "kis_icon_utils.h"
+#include "kis_global.h"
 
 #include <QPainter>
 #include <QHelpEvent>
@@ -35,6 +39,7 @@ struct TimelineLayersHeader::Private
     TimelineLayersHeader *q;
 
     int numIcons(int logicalIndex) const;
+    int iconSectionWidth(int layerIndex) const;
     QRect iconRect(int logicalIndex, int iconIndex) const;
     int iconAt(int logicalIndex, const QPoint &pt);
 
@@ -87,12 +92,21 @@ int TimelineLayersHeader::Private::numIcons(int logicalIndex) const
     return result;
 }
 
-QSize TimelineLayersHeader::sectionSizeFromContents(int logicalIndex) const
+int TimelineLayersHeader::Private::iconSectionWidth(int layerIndex) const
 {
-    QSize baseSize = QHeaderView::sectionSizeFromContents(logicalIndex);
+    const int iconSize = 16;
+    const int iconPadding = 2;
+    return (iconSize + iconPadding) * numIcons(layerIndex);
+}
 
-    baseSize.setWidth(baseSize.width() + 6 + (2 + 16) * m_d->numIcons(logicalIndex));
+QSize TimelineLayersHeader::sectionSizeFromContents(int layerIndex) const
+{
+    QSize baseSize = QHeaderView::sectionSizeFromContents(layerIndex);
+    const int pinSpace = baseSize.height() - 4;
+    const int padding = 8;
 
+    baseSize.setWidth(baseSize.width() + pinSpace
+                      + m_d->iconSectionWidth(layerIndex) + padding);
     return baseSize;
 }
 
@@ -107,58 +121,87 @@ QRect TimelineLayersHeader::Private::iconRect(int logicalIndex, int iconIndex) c
     const int x = sectionSize.width() -
         (numIcons(logicalIndex) - iconIndex) * (iconWidth + 2);
 
-
     return QRect(x, y, iconWidth, iconHeight);
 }
 
-void TimelineLayersHeader::paintSection(QPainter *painter, const QRect &rect, int logicalIndex) const
+void TimelineLayersHeader::paintSection(QPainter *painter, const QRect &areaRect, int layerIndex) const
 {
-    painter->save();
-    QHeaderView::paintSection(painter, rect, logicalIndex);
-    painter->restore();
+    QRect remainingArea = areaRect;
 
-    bool isLayerActive = model()->headerData(logicalIndex, orientation(), TimelineFramesModel::ActiveLayerRole).toBool();
+    {   // Paint background..
+        QColor bgFillColor = palette().color(QPalette::Base);
+
+        QVariant variant = model()->headerData(layerIndex, orientation(), Qt::BackgroundRole);
+        if (variant.canConvert<QBrush>()) {
+            QBrush brush = qvariant_cast<QBrush>(variant);
+            painter->setBrush(brush);
+            painter->setPen(Qt::NoPen);
+            painter->drawRect(areaRect);
+
+            bgFillColor = brush.color();
+        }
+
+        QColor rimlight = bgFillColor.lighter(115);
+        painter->setPen(QPen(rimlight, 2));
+        painter->setBrush(rimlight);
+        painter->drawLine(areaRect.topLeft(), areaRect.topRight());
+    }
+
+    // Paint active highlight..
+    const bool isLayerActive = model()->headerData(layerIndex, orientation(), TimelineFramesModel::ActiveLayerRole).toBool();
 
     if (isLayerActive) {
         QColor lineColor = TimelineColorScheme::instance()->activeLayerBackground();
         const int lineWidth = 2;
 
-        QPen oldPen = painter->pen();
-        QBrush oldBrush(painter->brush());
-
         painter->setPen(QPen(lineColor, lineWidth));
         painter->setBrush(lineColor);
 
-        const int x0 = rect.x();
-        const int y0 = rect.y();
-        const int x1 = rect.right();
-        const int y1 = rect.bottom();
-
         QVector<QLine> lines;
-        lines << QLine(x0, y0 + lineWidth / 2, x1, y0 + lineWidth / 2);
-        lines << QLine(x0, y1 - lineWidth / 2, x1, y1 - lineWidth / 2);
-
+        lines << QLine(areaRect.topLeft(), areaRect.topRight()).translated(0,1);
+        lines << QLine(areaRect.bottomLeft(), areaRect.bottomRight()).translated(0,-1);
         painter->drawLines(lines);
-
-        painter->setBrush(oldBrush);
-        painter->setPen(oldPen);
     }
 
-    QVariant value =  model()->headerData(logicalIndex, orientation(), TimelineFramesModel::TimelinePropertiesRole);
+    // Paint pushpin icon..
+    const bool isPinned = model()->headerData(layerIndex, orientation(), TimelineFramesModel::PinnedToTimelineRole).toBool();
+    if (isPinned) {
+        const uint pinWidth = areaRect.height() - 4;
+        QRect pinArea = kisTrimLeft(pinWidth, remainingArea);
+        const uint difference = pinArea.height() - pinWidth;
+        pinArea.setHeight(pinWidth); // Square to width.
+        pinArea.translate(0, difference / 2); // Center.
+
+        QIcon icon = KisIconUtils::loadIcon("krita_tool_reference_images");
+        QRect iconRect = pinArea - QMargins(4,4,4,4);
+        icon.paint(painter, iconRect);
+    } else {
+        // Trim off margin..
+        kisTrimLeft(4, remainingArea);
+    }
+
+    // Paint layer name..
+    const int textSpace = remainingArea.width() - m_d->iconSectionWidth(layerIndex);
+    const QRect textArea = kisTrimLeft(textSpace, remainingArea);
+    QString text = model()->headerData(layerIndex, orientation(), Qt::DisplayRole).toString();
+    text = fontMetrics().elidedText(text, textElideMode(), textArea.width());
+    style()->drawItemText(painter, textArea, Qt::AlignLeft | Qt::AlignVCenter, palette(), isEnabled(), text, QPalette::ButtonText);
+
+    // Paint property (hidden, alpha inherit, etc.) icons..
+    QVariant value =  model()->headerData(layerIndex, orientation(), TimelineFramesModel::TimelinePropertiesRole);
     TimelineFramesModel::PropertyList props = value.value<TimelineFramesModel::PropertyList>();
 
-    const int numIcons = m_d->numIcons(logicalIndex);
+    const int numIcons = m_d->numIcons(layerIndex);
     for (int i = 0; i < numIcons; i++) {
-        TimelineFramesModel::Property *p =
-            m_d->getPropertyAt(props, i);
+        TimelineFramesModel::Property *prop = m_d->getPropertyAt(props, i);
 
-        const bool isActive = p->state.toBool();
-        QIcon icon = isActive ? p->onIcon : p->offIcon;
+        const bool isActive = prop->state.toBool();
+        QIcon icon = isActive ? prop->onIcon : prop->offIcon;
         if (!isActive) {
             painter->setOpacity(0.35);
         }
-        QRect rc = m_d->iconRect(logicalIndex, i).translated(rect.topLeft());
-        icon.paint(painter, rc);
+        QRect iconRect = m_d->iconRect(layerIndex, i).translated(areaRect.topLeft());
+        icon.paint(painter, iconRect);
         painter->setOpacity(1.0);
     }
 }
@@ -250,5 +293,3 @@ void TimelineLayersHeader::mousePressEvent(QMouseEvent *e)
 
     QHeaderView::mousePressEvent(e);
 }
-
-

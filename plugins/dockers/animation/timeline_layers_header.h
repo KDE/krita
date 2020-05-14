@@ -1,5 +1,7 @@
 /*
  *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2020 Emmet O'Neill <emmetoneill.pdx@gmail.com>
+ *  Copyright (c) 2020 Eoin O'Neill <eoinoneill1991@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,8 +22,10 @@
 #define __TIMELINE_LAYERS_HEADER_H
 
 #include <QHeaderView>
+#include <QProxyStyle>
 
 #include <QScopedPointer>
+
 
 class TimelineLayersHeader : public QHeaderView
 {
@@ -29,11 +33,12 @@ class TimelineLayersHeader : public QHeaderView
 
 public:
     TimelineLayersHeader(QWidget *parent);
+    TimelineLayersHeader();
     ~TimelineLayersHeader() override;
 
 protected:
-    QSize sectionSizeFromContents(int logicalIndex) const override;
-    void paintSection(QPainter *painter, const QRect &rect, int logicalIndex) const override;
+    QSize sectionSizeFromContents(int layerIndex) const override;
+    void paintSection(QPainter *painter, const QRect &rect, int layerIndex) const override;
     bool viewportEvent(QEvent *e) override;
     void mousePressEvent(QMouseEvent *e) override;
 

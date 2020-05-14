@@ -227,6 +227,12 @@ void KisAppimageUpdater::slotAppendUpdateOutput()
     m_updateOutput.append(m_updateProcess->readAllStandardOutput());
 }
 
+#if (QT_VERSION < QT_VERSION_CHECK(5, 10, 0))
+QString qEnvironmentVariable(const char *varName) {
+    return qgetenv(varName);
+}
+#endif
+
 void KisAppimageUpdater::initialize(QString& updaterPath)
 {
     m_appimagePath = qEnvironmentVariable("APPIMAGE");

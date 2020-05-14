@@ -79,6 +79,9 @@ public:
 
     bool stasisIsDirty(const QModelIndex &root, const OptionalProperty &clickedProperty, bool on = false, bool off = false);
     void resetPropertyStateRecursive(const QModelIndex &root, const OptionalProperty &clickedProperty);
+    void restorePropertyInStasisRecursive(const QModelIndex &root, const OptionalProperty &clickedProperty);
+
+    bool checkImmediateStasis(const QModelIndex &root, const OptionalProperty &clickedProperty);
 
     void getParentsIndex(QList<QModelIndex> &items, const QModelIndex &index);
     void getChildrenIndex(QList<QModelIndex> &items, const QModelIndex &index);
@@ -535,11 +538,21 @@ void NodeDelegate::Private::toggleProperty(KisBaseNode::PropertyList &props, Opt
         togglePropertyRecursive(root, clickedProperty, items, record, mode);
 
     } else {
-        shiftClickedIndexes.clear();
-        resetPropertyStateRecursive(root, clickedProperty);
-        clickedProperty->state = !clickedProperty->state.toBool();
-        clickedProperty->isInStasis = false;
-        view->model()->setData(index, QVariant::fromValue(props), KisNodeModel::PropertiesRole);
+        // If we have properties in stasis, we need to cancel stasis to avoid overriding
+        // values in stasis.
+        // IMPORTANT -- we also need to check the first row of nodes to determine
+        // if a stasis is currently active in some cases.
+        const bool hasPropInStasis = (shiftClickedIndexes.count() > 0 || checkImmediateStasis(root, clickedProperty));
+        if (clickedProperty->canHaveStasis && hasPropInStasis) {
+            shiftClickedIndexes.clear();
+            restorePropertyInStasisRecursive(root, clickedProperty);
+        } else {
+            shiftClickedIndexes.clear();
+            resetPropertyStateRecursive(root, clickedProperty);
+            clickedProperty->state = !clickedProperty->state.toBool();
+            clickedProperty->isInStasis = false;
+            view->model()->setData(index, QVariant::fromValue(props), KisNodeModel::PropertiesRole);
+        }
     }
 }
 
@@ -562,7 +575,7 @@ void NodeDelegate::Private::togglePropertyRecursive(const QModelIndex &root, con
         if (record == StasisOperation::Review || record ==  StasisOperation::Record) {
             prop->isInStasis = true;
             if(mode) { //include mode
-                prop->state = (items.contains(idx))? QVariant(true) : QVariant(false);
+                prop->state = (items.contains(idx)) ? QVariant(true) : QVariant(false);
             } else { // exclude
                 prop->state = (!items.contains(idx))? prop->state :
                               (items.at(0) == idx)? QVariant(true) : QVariant(false);
@@ -624,6 +637,45 @@ void NodeDelegate::Private::resetPropertyStateRecursive(const QModelIndex &root,
 
         resetPropertyStateRecursive(idx,clickedProperty);
     }
+}
+
+void NodeDelegate::Private::restorePropertyInStasisRecursive(const QModelIndex &root, const OptionalProperty &clickedProperty)
+{
+    if (!clickedProperty->canHaveStasis) return;
+    int rowCount = view->model()->rowCount(root);
+
+    for (int i = 0; i < rowCount; i++) {
+        QModelIndex idx = view->model()->index(i, 0, root);
+        KisBaseNode::PropertyList props = idx.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
+        OptionalProperty prop = findProperty(props, clickedProperty);
+
+        if (prop->isInStasis) {
+            prop->isInStasis = false;
+            prop->state = QVariant(prop->stateInStasis);
+        }
+
+        view->model()->setData(idx, QVariant::fromValue(props), KisNodeModel::PropertiesRole);
+
+        restorePropertyInStasisRecursive(idx, clickedProperty);
+    }
+}
+
+bool NodeDelegate::Private::checkImmediateStasis(const QModelIndex &root, const OptionalProperty &clickedProperty)
+{
+    if (!clickedProperty->canHaveStasis) return false;
+
+    const int rowCount = view->model()->rowCount(root);
+    for (int i = 0; i < rowCount; i++){
+        QModelIndex idx = view->model()->index(i, 0, root);
+        KisBaseNode::PropertyList props = idx.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
+        OptionalProperty prop = findProperty(props, clickedProperty);
+
+        if (prop->isInStasis) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 void NodeDelegate::Private::getParentsIndex(QList<QModelIndex> &items, const QModelIndex &index)

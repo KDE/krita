@@ -67,6 +67,7 @@ private Q_SLOTS:
 
     void benchmaskQRegion();
     void benchmaskKisRegion();
+    void benchmaskOverlappedKisRegion();
 };
 
 #endif /* KIS_TILED_DATA_MANAGER_TEST_H */

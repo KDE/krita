@@ -90,11 +90,13 @@ void kis_assert_common(const char *assertion, const char *file, int line, bool t
 
     if (button == QMessageBox::Abort) {
         qFatal("%s", shortMessage.toLatin1().data());
-    } else if (isIgnorable) {
+    } else {
         // Assert is a bug! Please don't change this line to warnKrita,
         // the user must see it!
         qWarning("%s", shortMessage.toLatin1().data());
-    } else if (throwException) {
+    }
+
+    if (throwException) {
         throw KisAssertException(shortMessage.toLatin1().data());
     }
 }
@@ -102,7 +104,7 @@ void kis_assert_common(const char *assertion, const char *file, int line, bool t
 
 void kis_assert_recoverable(const char *assertion, const char *file, int line)
 {
-    kis_assert_common(assertion, file, line, false, true);
+    kis_assert_common(assertion, file, line, false, false);
 }
 
 void kis_safe_assert_recoverable(const char *assertion, const char *file, int line)

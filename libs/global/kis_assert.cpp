@@ -78,8 +78,7 @@ void kis_assert_common(const char *assertion, const char *file, int line, bool t
 
     disableAssertMsg |= shouldIgnoreAsserts;
 
-    QMessageBox::StandardButton button =
-        isIgnorable ? QMessageBox::Ignore : QMessageBox::Abort;
+    QMessageBox::StandardButton button = QMessageBox::NoButton;
 
     if (!disableAssertMsg) {
         button =
@@ -103,7 +102,7 @@ void kis_assert_common(const char *assertion, const char *file, int line, bool t
 
 void kis_assert_recoverable(const char *assertion, const char *file, int line)
 {
-    kis_assert_common(assertion, file, line, false, false);
+    kis_assert_common(assertion, file, line, false, true);
 }
 
 void kis_safe_assert_recoverable(const char *assertion, const char *file, int line)

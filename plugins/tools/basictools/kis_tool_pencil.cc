@@ -39,14 +39,36 @@ void KisToolPencil::resetCursorStyle()
 
 void KisToolPencil::updatePencilCursor(bool value)
 {
-    setCursor(value ? Qt::ArrowCursor : Qt::ForbiddenCursor);
-    resetCursorStyle();
+    if (mode() == HOVER_MODE || mode() == PAINT_MODE) {
+        setCursor(value ? Qt::ArrowCursor : Qt::ForbiddenCursor);
+        resetCursorStyle();
+    }
 }
 
 void KisToolPencil::mousePressEvent(KoPointerEvent *event)
 {
+    Q_UNUSED(event);
+}
+
+void KisToolPencil::mouseDoubleClickEvent(KoPointerEvent *event)
+{
+    Q_UNUSED(event)
+}
+
+void KisToolPencil::beginPrimaryAction(KoPointerEvent *event)
+{
     if (!nodeEditable()) return;
     DelegatedPencilTool::mousePressEvent(event);
+}
+
+void KisToolPencil::continuePrimaryAction(KoPointerEvent *event)
+{
+    mouseMoveEvent(event);
+}
+
+void KisToolPencil::endPrimaryAction(KoPointerEvent *event)
+{
+    mouseReleaseEvent(event);
 }
 
 QList<QPointer<QWidget> > KisToolPencil::createOptionWidgets()

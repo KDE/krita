@@ -88,7 +88,7 @@ void kis_assert_common(const char *assertion, const char *file, int line, bool t
                                   QMessageBox::Ignore);
     }
 
-    if (button == QMessageBox::Abort) {
+    if (button == QMessageBox::Abort  || (!throwException && !isIgnorable)) {
         qFatal("%s", shortMessage.toLatin1().data());
     } else {
         // Assert is a bug! Please don't change this line to warnKrita,

@@ -90,11 +90,12 @@ void kis_assert_common(const char *assertion, const char *file, int line, bool t
 
     if (button == QMessageBox::Abort  || (!throwException && !isIgnorable)) {
         qFatal("%s", shortMessage.toLatin1().data());
-    } else {
-        // Assert is a bug! Please don't change this line to warnKrita,
-        // the user must see it!
-        qWarning("%s", shortMessage.toLatin1().data());
     }
+
+    // Assert is a bug! Please don't change this line to warnKrita,
+    // the user must see it!
+    qWarning("%s", shortMessage.toLatin1().data());
+
 
     if (throwException) {
         throw KisAssertException(shortMessage.toLatin1().data());

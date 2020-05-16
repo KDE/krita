@@ -112,6 +112,12 @@ KisAsyncAnimationRenderDialogBase::Result KisAsyncAnimationFramesSaveDialog::reg
                 filesWithinRange.append(filename);
             }
         }
+
+        //if no files are within range don't issue warning
+        if (filesWithinRange.isEmpty()){
+            return KisAsyncAnimationRenderDialogBase::regenerateRange(viewManager);
+        }
+
         filesList = filesWithinRange;
 
         QStringList truncatedList = filesList;

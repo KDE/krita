@@ -305,7 +305,7 @@ public Q_SLOTS:
     void reloadRecentFileList();
 
 
-
+    void slotEmptyFilePath();
     void slotFileSelected(QString path);
 
     /**

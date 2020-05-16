@@ -781,6 +781,12 @@ void KisMainWindow::slotFileSelected(QString path)
         }
     }
 }
+
+void KisMainWindow::slotEmptyFilePath()
+{
+	QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("The chosen file's location could not be found. Does it exist?"));
+}
+
 void KisMainWindow::updateReloadFileAction(KisDocument *doc)
 {
     Q_UNUSED(doc);

@@ -97,7 +97,7 @@ inline void KisImagePipeBrushTest::checkConsistency(KisImagePipeBrushSP brush)
 
 void KisImagePipeBrushTest::testLoading()
 {
-    QSharedPointer<KisImagePipeBrush> brush(new KisImagePipeBrush(QString(FILES_DATA_DIR) + QDir::separator() + "C_Dirty_Spot.gih"));
+    QSharedPointer<KisImagePipeBrush> brush(new KisImagePipeBrush(QString(FILES_DATA_DIR) + '/' + "C_Dirty_Spot.gih"));
     brush->load(KisGlobalResourcesInterface::instance());
     QVERIFY(brush->valid());
 
@@ -106,7 +106,7 @@ void KisImagePipeBrushTest::testLoading()
 
 void KisImagePipeBrushTest::testChangingBrushes()
 {
-    QSharedPointer<KisImagePipeBrush> brush(new KisImagePipeBrush(QString(FILES_DATA_DIR) + QDir::separator() + "C_Dirty_Spot.gih"));
+    QSharedPointer<KisImagePipeBrush> brush(new KisImagePipeBrush(QString(FILES_DATA_DIR) + '/' + "C_Dirty_Spot.gih"));
     brush->load(KisGlobalResourcesInterface::instance());
     QVERIFY(brush->valid());
 
@@ -152,7 +152,7 @@ void checkIncrementalPainting(KisBrushSP brush, const QString &prefix)
 
 void KisImagePipeBrushTest::testSimpleDabApplication()
 {
-    QSharedPointer<KisImagePipeBrush> brush(new KisImagePipeBrush(QString(FILES_DATA_DIR) + QDir::separator() + "C_Dirty_Spot.gih"));
+    QSharedPointer<KisImagePipeBrush> brush(new KisImagePipeBrush(QString(FILES_DATA_DIR) + '/' + "C_Dirty_Spot.gih"));
     brush->load(KisGlobalResourcesInterface::instance());
     QVERIFY(brush->valid());
 
@@ -162,7 +162,7 @@ void KisImagePipeBrushTest::testSimpleDabApplication()
 
 void KisImagePipeBrushTest::testColoredDab()
 {
-    QSharedPointer<KisImagePipeBrush> brush(new KisImagePipeBrush(QString(FILES_DATA_DIR) + QDir::separator() + "G_Sparks.gih"));
+    QSharedPointer<KisImagePipeBrush> brush(new KisImagePipeBrush(QString(FILES_DATA_DIR) + '/' + "G_Sparks.gih"));
     brush->load(KisGlobalResourcesInterface::instance());
     QVERIFY(brush->valid());
 
@@ -198,7 +198,7 @@ void KisImagePipeBrushTest::testColoredDab()
 
 void KisImagePipeBrushTest::testColoredDabWash()
 {
-    QSharedPointer<KisImagePipeBrush> brush(new KisImagePipeBrush(QString(FILES_DATA_DIR) + QDir::separator() + "G_Sparks.gih"));
+    QSharedPointer<KisImagePipeBrush> brush(new KisImagePipeBrush(QString(FILES_DATA_DIR) + '/' + "G_Sparks.gih"));
     brush->load(KisGlobalResourcesInterface::instance());
     QVERIFY(brush->valid());
 

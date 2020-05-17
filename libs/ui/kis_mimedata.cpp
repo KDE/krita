@@ -162,7 +162,7 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
         QByteArray ba = serializeToByteArray(m_nodes, m_image);
 
         QString temporaryPath =
-                QDir::tempPath() + QDir::separator() +
+                QDir::tempPath() + '/' +
                 QString("krita_tmp_dnd_layer_%1_%2.kra")
                 .arg(QApplication::applicationPid())
                 .arg(qrand());

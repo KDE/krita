@@ -50,7 +50,7 @@ struct KRITAUI_NO_EXPORT KisFrameDataSerializer::Private
     QString filePathForFrame(int frameId)
     {
         return framesDirObject.filePath(
-                    subfolderNameForFrame(frameId) + QDir::separator() +
+                    subfolderNameForFrame(frameId) + '/' +
                     fileNameForFrame(frameId));
     }
 
@@ -99,7 +99,7 @@ int KisFrameDataSerializer::saveFrame(const KisFrameDataSerializer::Frame &frame
         m_d->framesDirObject.mkpath(frameSubfolder);
     }
 
-    const QString frameRelativePath = frameSubfolder + QDir::separator() + m_d->fileNameForFrame(frameId);
+    const QString frameRelativePath = frameSubfolder + '/' + m_d->fileNameForFrame(frameId);
 
     if (m_d->framesDirObject.exists(frameRelativePath)) {
         qWarning() << "WARNING: overwriting existing frame file!" << frameRelativePath;

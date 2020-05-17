@@ -113,7 +113,7 @@ public:
                 << "logPath" << logPath
                 << "totalFrames" << totalFrames;
 
-        QTemporaryFile progressFile(QDir::tempPath() + QDir::separator() + "KritaFFmpegProgress.XXXXXX");
+        QTemporaryFile progressFile(QDir::tempPath() + '/' + "KritaFFmpegProgress.XXXXXX");
         progressFile.open();
 
         m_process.setStandardOutputFile(logPath);

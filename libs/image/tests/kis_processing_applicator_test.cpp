@@ -83,15 +83,15 @@ bool checkLayers(KisImageWSP image,
 
     bool valid = true;
     for(int i = 0; i < 3; i++) {
-        QImage ref(QString(FILES_DATA_DIR) + QDir::separator() +
-                   "applicator" + QDir::separator() + names[i]);
+        QImage ref(QString(FILES_DATA_DIR) + '/' +
+                   "applicator" + '/' + names[i]);
 
         QPoint temp;
 
         if(!TestUtil::compareQImages(temp, ref, images[i], 1)) {
             dbgKrita << "--- Wrong image:" << names[i];
             valid = false;
-            images[i].save(QString(FILES_OUTPUT_DIR) + QDir::separator() + names[i]);
+            images[i].save(QString(FILES_OUTPUT_DIR) + '/' + names[i]);
         }
     }
 

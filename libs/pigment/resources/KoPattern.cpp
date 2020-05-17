@@ -66,11 +66,11 @@ KoPattern::KoPattern(const QImage &image, const QString &name, const QString &fo
     setPatternImage(image);
     setName(name);
 
-    QFileInfo fileInfo(folderName + QDir::separator() + name + defaultFileExtension());
+    QFileInfo fileInfo(folderName + '/' + name + defaultFileExtension());
 
     int i = 1;
     while (fileInfo.exists()) {
-        fileInfo.setFile(folderName + QDir::separator() +
+        fileInfo.setFile(folderName + '/' +
                          name + QString::number(i) + defaultFileExtension());
         i++;
     }

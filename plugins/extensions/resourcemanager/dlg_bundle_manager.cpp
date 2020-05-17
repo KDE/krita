@@ -185,7 +185,7 @@ void DlgBundleManager::updateBundleInformation(QModelIndex currentInProxy)
 
 QString createNewBundlePath(QString resourceFolder, QString filename)
 {
-    return resourceFolder + QDir::separator() + "bundles" + QDir::separator() + filename;
+    return resourceFolder + '/' + "bundles" + '/' + filename;
 }
 
 void DlgBundleManager::addBundleToActiveResources(QString filename)

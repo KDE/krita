@@ -141,7 +141,7 @@ void KisFilterSelectionsBenchmark::testAll()
     initSelection();
 
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    QImage image(QString(FILES_DATA_DIR) + '/' + "hakonepa.png");
     m_device = new KisPaintDevice(cs);
     m_device->convertFromQImage(image, 0, 0, 0);
 

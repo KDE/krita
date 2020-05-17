@@ -171,7 +171,7 @@ bool GamutMaskDock::openMaskEditor()
     m_maskDocument->setInfiniteAutoSaveInterval();
     QString maskPath = QString("%1%2%3_%4.kra")
             .arg(QDir::tempPath())
-            .arg(QDir::separator())
+            .arg('/')
             .arg("GamutMaskTemplate")
             .arg(std::time(nullptr));
     m_maskDocument->setUrl(QUrl::fromLocalFile(maskPath));

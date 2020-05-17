@@ -196,7 +196,7 @@ void SvgParser::setXmlBaseDir(const QString &baseDir)
 
     setFileFetcher(
         [this](const QString &name) {
-            const QString fileName = m_context.xmlBaseDir() + QDir::separator() + name;
+            const QString fileName = m_context.xmlBaseDir() + '/' + name;
             QFile file(fileName);
             if (!file.exists()) {
                 return QByteArray();

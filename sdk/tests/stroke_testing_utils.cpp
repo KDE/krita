@@ -235,8 +235,8 @@ QString utils::StrokeTester::formatTestName(const QString &baseName,
 QString utils::StrokeTester::referenceFile(const QString &testName)
 {
     QString path =
-        QString(FILES_DATA_DIR) + QDir::separator() +
-        m_name + QDir::separator();
+        QString(FILES_DATA_DIR) + '/' +
+        m_name + '/';
 
     path += testName;
     path += ".png";
@@ -245,7 +245,7 @@ QString utils::StrokeTester::referenceFile(const QString &testName)
 
 QString utils::StrokeTester::dumpReferenceFile(const QString &testName)
 {
-    QString path = QString(FILES_OUTPUT_DIR) + QDir::separator();
+    QString path = QString(FILES_OUTPUT_DIR) + '/';
     path += testName;
     path += "_expected";
     path += ".png";
@@ -254,7 +254,7 @@ QString utils::StrokeTester::dumpReferenceFile(const QString &testName)
 
 QString utils::StrokeTester::resultFile(const QString &testName)
 {
-    QString path = QString(FILES_OUTPUT_DIR) + QDir::separator();
+    QString path = QString(FILES_OUTPUT_DIR) + '/';
     path += testName;
     path += ".png";
     return path;

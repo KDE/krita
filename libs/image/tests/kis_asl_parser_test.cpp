@@ -287,7 +287,7 @@ void KisAslParserTest::testASLWriter()
 
 void KisAslParserTest::testParserWithPatterns()
 {
-    QDir dir(QString(FILES_DATA_DIR) + QDir::separator() + "testset");
+    QDir dir(QString(FILES_DATA_DIR) + '/' + "testset");
 
     QFileInfoList files = dir.entryInfoList(QStringList() << "*.asl", QDir::Files);
 

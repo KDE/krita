@@ -45,8 +45,8 @@ void KisFilterMaskTest::testProjectionNotSelected()
     KisPaintLayerSP layer = p.layer;
     KisPaintDeviceSP projection = layer->paintDevice();
 
-    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
-    QImage inverted(QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png");
+    QImage qimage(QString(FILES_DATA_DIR) + '/' + "hakonepa.png");
+    QImage inverted(QString(FILES_DATA_DIR) + '/' + "inverted_hakonepa.png");
     projection->convertFromQImage(qimage, 0, 0, 0);
 
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
@@ -80,8 +80,8 @@ void KisFilterMaskTest::testProjectionSelected()
     KisPaintLayerSP layer = p.layer;
     KisPaintDeviceSP projection = layer->paintDevice();
 
-    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
-    QImage inverted(QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png");
+    QImage qimage(QString(FILES_DATA_DIR) + '/' + "hakonepa.png");
+    QImage inverted(QString(FILES_DATA_DIR) + '/' + "inverted_hakonepa.png");
     projection->convertFromQImage(qimage, 0, 0, 0);
 
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");

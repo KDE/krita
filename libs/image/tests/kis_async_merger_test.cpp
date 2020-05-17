@@ -64,9 +64,9 @@ void KisAsyncMergerTest::testMerger()
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 640, 441, colorSpace, "merger test");
 
-    QImage sourceImage1(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
-    QImage sourceImage2(QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png");
-    QImage referenceProjection(QString(FILES_DATA_DIR) + QDir::separator() + "merged_hakonepa.png");
+    QImage sourceImage1(QString(FILES_DATA_DIR) + '/' + "hakonepa.png");
+    QImage sourceImage2(QString(FILES_DATA_DIR) + '/' + "inverted_hakonepa.png");
+    QImage referenceProjection(QString(FILES_DATA_DIR) + '/' + "merged_hakonepa.png");
 
     KisPaintDeviceSP device1 = new KisPaintDevice(colorSpace);
     KisPaintDeviceSP device2 = new KisPaintDevice(colorSpace);
@@ -127,7 +127,7 @@ void KisAsyncMergerTest::testMerger()
     QVERIFY(rootLayer->exactBounds() == image->bounds());
 
     QImage resultProjection = rootLayer->projection()->convertToQImage(0);
-    resultProjection.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + "actual_merge_result.png");
+    resultProjection.save(QString(FILES_OUTPUT_DIR) + '/' + "actual_merge_result.png");
     QPoint pt;
     QVERIFY(TestUtil::compareQImages(pt, resultProjection, referenceProjection, 5, 0, 0));
 }
@@ -153,7 +153,7 @@ void KisAsyncMergerTest::debugObligeChild()
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 640, 441, colorSpace, "merger test");
 
-    QImage sourceImage1(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    QImage sourceImage1(QString(FILES_DATA_DIR) + '/' + "hakonepa.png");
     KisPaintDeviceSP device1 = new KisPaintDevice(colorSpace);
     device1->convertFromQImage(sourceImage1, 0, 0, 0);
 
@@ -276,7 +276,7 @@ void KisAsyncMergerTest::testSubgraphingWithoutUpdatingParent()
 
     image->initialRefreshGraph();
 
-    QImage refImage(QString(FILES_DATA_DIR) + QDir::separator() + "subgraphing_without_updating.png");
+    QImage refImage(QString(FILES_DATA_DIR) + '/' + "subgraphing_without_updating.png");
 
     {
         QImage resultImage = image->projection()->convertToQImage(0);

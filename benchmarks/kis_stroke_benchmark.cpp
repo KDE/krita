@@ -58,8 +58,8 @@ const QString OUTPUT_FORMAT = ".png";
 
 void KisStrokeBenchmark::initTestCase()
 {
-    m_dataPath = QString(FILES_DATA_DIR) + QDir::separator();
-    m_outputPath = QString(FILES_OUTPUT_DIR) + QDir::separator();
+    m_dataPath = QString(FILES_DATA_DIR) + '/';
+    m_outputPath = QString(FILES_OUTPUT_DIR) + '/';
 
     m_colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     m_color = KoColor(m_colorSpace);

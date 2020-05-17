@@ -561,7 +561,7 @@ void StylesSelector::loadCollection(const QString &fileName)
     collection->load();
 
     KoResourceServer<KisPSDLayerStyleCollectionResource> *server = KisResourceServerProvider::instance()->layerStyleCollectionServer();
-    collection->setFilename(server->saveLocation() + QDir::separator() + collection->name());
+    collection->setFilename(server->saveLocation() + '/' + collection->name());
     server->addResource(collection);
 
     refillCollections();

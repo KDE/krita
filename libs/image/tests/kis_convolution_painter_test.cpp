@@ -112,7 +112,7 @@ void printPixel(QString prefix, int pixelSize, quint8 *data) {
 
 void KisConvolutionPainterTest::testIdentityConvolution()
 {
-    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    QImage qimage(QString(FILES_DATA_DIR) + '/' + "hakonepa.png");
 
     KisDefaultBoundsBaseSP bounds = new TestUtil::TestingTimedDefaultBounds(qimage.rect());
 
@@ -281,7 +281,7 @@ void KisConvolutionPainterTest::testAsymmSkipAlpha()
 // #include <valgrind/callgrind.h>
 void KisConvolutionPainterTest::benchmarkConvolution()
 {
-    QImage referenceImage(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    QImage referenceImage(QString(FILES_DATA_DIR) + '/' + "hakonepa.png");
     QRect imageRect(QPoint(), referenceImage.size());
 
     KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());

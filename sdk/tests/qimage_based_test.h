@@ -249,18 +249,18 @@ private:
 
         bool valid = true;
 
-        QString fullPath = fetchDataFileLazy(m_directoryName + QDir::separator() +
-                                             prefix + QDir::separator() + realName);
+        QString fullPath = fetchDataFileLazy(m_directoryName + '/' +
+                                             prefix + '/' + realName);
 
         if (fullPath.isEmpty()) {
             // Try without the testname subdirectory
-            fullPath = fetchDataFileLazy(prefix + QDir::separator() +
+            fullPath = fetchDataFileLazy(prefix + '/' +
                                          realName);
         }
 
         if (fullPath.isEmpty()) {
             // Try without the prefix subdirectory
-            fullPath = fetchDataFileLazy(m_directoryName + QDir::separator() +
+            fullPath = fetchDataFileLazy(m_directoryName + '/' +
                                          realName);
         }
 
@@ -286,8 +286,8 @@ private:
             dbgKrita << "--- Wrong image:" << realName;
             valid = false;
 
-            image.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + realName);
-            ref.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + expectedName);
+            image.save(QString(FILES_OUTPUT_DIR) + '/' + realName);
+            ref.save(QString(FILES_OUTPUT_DIR) + '/' + expectedName);
         }
 
         return valid;

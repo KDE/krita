@@ -77,7 +77,7 @@ void KisLevelFilterBenchmark::benchmarkFilter()
     kfc->setProperty("outblackvalue", 0);
     kfc->setProperty("outwhitevalue", 255);
     // Get the predefined configuration from a file
-    QFile file(QString(FILES_DATA_DIR) + QDir::separator() + filter->id() + ".cfg");
+    QFile file(QString(FILES_DATA_DIR) + '/' + filter->id() + ".cfg");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         file.open(QIODevice::WriteOnly | QIODevice::Text);
         QTextStream out(&file);

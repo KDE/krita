@@ -161,7 +161,7 @@ void KisTemplateTree::readGroups()
                 defaultTab = dg.readEntry("X-KDE-DefaultTab");
                 sortingWeight = dg.readEntry("X-KDE-SortingWeight", 1000);
             }
-            KisTemplateGroup *g = new KisTemplateGroup(name, templateDir.absolutePath() + QDir::separator(), sortingWeight);
+            KisTemplateGroup *g = new KisTemplateGroup(name, templateDir.absolutePath() + '/', sortingWeight);
             if (add(g)) {
                 if (defaultTab == "true") {
                     m_defaultGroup = g;

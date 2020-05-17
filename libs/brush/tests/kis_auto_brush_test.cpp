@@ -54,7 +54,7 @@ void KisAutoBrushTest::testMaskGeneration()
     cs->setOpacity(fdev->data(), OPACITY_OPAQUE_U8, 100 * 100);
 
     QPoint errpoint;
-    QImage result(QString(FILES_DATA_DIR) + QDir::separator() + "result_autobrush_1.png");
+    QImage result(QString(FILES_DATA_DIR) + '/' + "result_autobrush_1.png");
     QImage image = fdev->convertToQImage(0);
 
     if (!TestUtil::compareQImages(errpoint, image, result)) {
@@ -66,7 +66,7 @@ void KisAutoBrushTest::testMaskGeneration()
     fdev = new KisFixedPaintDevice(cs);
     a->mask(fdev, KoColor(Qt::black, cs), KisDabShape(), info);
 
-    result = QImage(QString(FILES_DATA_DIR) + QDir::separator() + "result_autobrush_3.png");
+    result = QImage(QString(FILES_DATA_DIR) + '/' + "result_autobrush_3.png");
     image = fdev->convertToQImage(0);
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("kis_autobrush_test_3.png");
@@ -82,7 +82,7 @@ void KisAutoBrushTest::testMaskGeneration()
     fdev = new KisFixedPaintDevice(cs);
     a->mask(fdev, dev, KisDabShape(), info);
 
-    result = QImage(QString(FILES_DATA_DIR) + QDir::separator() + "result_autobrush_4.png");
+    result = QImage(QString(FILES_DATA_DIR) + '/' + "result_autobrush_4.png");
     image = fdev->convertToQImage(0);
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("kis_autobrush_test_4.png");

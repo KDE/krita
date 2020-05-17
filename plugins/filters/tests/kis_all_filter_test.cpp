@@ -33,8 +33,8 @@ bool testFilterSrcNotIsDev(KisFilterSP f)
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
-    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "carrot.png");
-    QImage result(QString(FILES_DATA_DIR) + QDir::separator() + "carrot_" + f->id() + ".png");
+    QImage qimage(QString(FILES_DATA_DIR) + '/' + "carrot.png");
+    QImage result(QString(FILES_DATA_DIR) + '/' + "carrot_" + f->id() + ".png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->setDefaultBounds(new TestUtil::TestingTimedDefaultBounds(qimage.rect()));
 
@@ -46,7 +46,7 @@ bool testFilterSrcNotIsDev(KisFilterSP f)
     // Get the predefined configuration from a file
     KisFilterConfigurationSP  kfc = f->defaultConfiguration();
 
-    QFile file(QString(FILES_DATA_DIR) + QDir::separator() + f->id() + ".cfg");
+    QFile file(QString(FILES_DATA_DIR) + '/' + f->id() + ".cfg");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         //qDebug() << "creating new file for " << f->id();
         file.open(QIODevice::WriteOnly | QIODevice::Text);
@@ -83,8 +83,8 @@ bool testFilter(KisFilterSP f)
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
-    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "carrot.png");
-    QString resultFileName = QString(FILES_DATA_DIR) + QDir::separator() + "carrot_" + f->id() + ".png";
+    QImage qimage(QString(FILES_DATA_DIR) + '/' + "carrot.png");
+    QString resultFileName = QString(FILES_DATA_DIR) + '/' + "carrot_" + f->id() + ".png";
     QImage result(resultFileName);
 
     //if (!f->id().contains("hsv")) return true;
@@ -97,7 +97,7 @@ bool testFilter(KisFilterSP f)
     // Get the predefined configuration from a file
     KisFilterConfigurationSP  kfc = f->defaultConfiguration();
 
-    QFile file(QString(FILES_DATA_DIR) + QDir::separator() + f->id() + ".cfg");
+    QFile file(QString(FILES_DATA_DIR) + '/' + f->id() + ".cfg");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         //qDebug() << "creating new file for " << f->id();
         file.open(QIODevice::WriteOnly | QIODevice::Text);
@@ -143,8 +143,8 @@ bool testFilterWithSelections(KisFilterSP f)
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
-    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "carrot.png");
-    QImage result(QString(FILES_DATA_DIR) + QDir::separator() + "carrot_" + f->id() + ".png");
+    QImage qimage(QString(FILES_DATA_DIR) + '/' + "carrot.png");
+    QImage result(QString(FILES_DATA_DIR) + '/' + "carrot_" + f->id() + ".png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->setDefaultBounds(new TestUtil::TestingTimedDefaultBounds(qimage.rect()));
     dev->convertFromQImage(qimage, 0, 0, 0);
@@ -152,7 +152,7 @@ bool testFilterWithSelections(KisFilterSP f)
     // Get the predefined configuration from a file
     KisFilterConfigurationSP  kfc = f->defaultConfiguration();
 
-    QFile file(QString(FILES_DATA_DIR) + QDir::separator() + f->id() + ".cfg");
+    QFile file(QString(FILES_DATA_DIR) + '/' + f->id() + ".cfg");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         //qDebug() << "creating new file for " << f->id();
         file.open(QIODevice::WriteOnly | QIODevice::Text);

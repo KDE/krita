@@ -41,7 +41,7 @@ inline QString fetchExternalDataFileName(const QString relativeFileName)
 
     QString filename  =
         path +
-        QDir::separator() +
+        '/' +
         relativeFileName;
 
     return filename;
@@ -54,7 +54,7 @@ inline QString fetchDataFileLazy(const QString relativeFileName, bool externalTe
     } else {
         QString filename  =
             QString(FILES_DATA_DIR) +
-            QDir::separator() +
+            '/' +
             relativeFileName;
 
         if (QFileInfo(filename).exists()) {
@@ -63,7 +63,7 @@ inline QString fetchDataFileLazy(const QString relativeFileName, bool externalTe
 
         filename  =
             QString(FILES_DEFAULT_DATA_DIR) +
-            QDir::separator() +
+            '/' +
             relativeFileName;
 
         if (QFileInfo(filename).exists()) {
@@ -182,21 +182,21 @@ inline bool checkQImageImpl(bool externalTest,
     QString dumpName(prefix + "_" + name + "_expected.png");
 
     const QString standardPath =
-        testName + QDir::separator() +
-        prefix + QDir::separator() + filename;
+        testName + '/' +
+        prefix + '/' + filename;
 
     QString fullPath = fetchDataFileLazy(standardPath, externalTest);
 
     if (fullPath.isEmpty() || !QFileInfo(fullPath).exists()) {
         // Try without the testname subdirectory
-        fullPath = fetchDataFileLazy(prefix + QDir::separator() +
+        fullPath = fetchDataFileLazy(prefix + '/' +
                                      filename,
                                      externalTest);
     }
 
     if (fullPath.isEmpty() || !QFileInfo(fullPath).exists()) {
         // Try without the prefix subdirectory
-        fullPath = fetchDataFileLazy(testName + QDir::separator() +
+        fullPath = fetchDataFileLazy(testName + '/' +
                                      filename,
                                      externalTest);
     }
@@ -238,8 +238,8 @@ inline bool checkQImageImpl(bool externalTest,
         }
 
         if (saveStandardResults) {
-            image.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + filename);
-            ref.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + dumpName);
+            image.save(QString(FILES_OUTPUT_DIR) + '/' + filename);
+            ref.save(QString(FILES_OUTPUT_DIR) + '/' + dumpName);
         }
     }
 

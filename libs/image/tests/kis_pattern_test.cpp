@@ -28,12 +28,12 @@
 
 void KoPatternTest::testCreation()
 {
-    KoPattern test(QString(FILES_DATA_DIR) + QDir::separator() + "pattern.pat");
+    KoPattern test(QString(FILES_DATA_DIR) + '/' + "pattern.pat");
 }
 
 void KoPatternTest::testRoundTripMd5()
 {
-    QString filename(QString(FILES_DATA_DIR) + QDir::separator() + "test_pattern.png");
+    QString filename(QString(FILES_DATA_DIR) + '/' + "test_pattern.png");
     QString patFilename("test_pattern.pat");
 
     KoPattern pngPattern(filename);

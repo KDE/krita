@@ -48,7 +48,7 @@ void KisPSDTest::testFiles()
 
 void KisPSDTest::testOpening()
 {
-    QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + QDir::separator() + "testing_psd_ls.psd");
+    QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + '/' + "testing_psd_ls.psd");
 
     QScopedPointer<KisDocument> doc(qobject_cast<KisDocument*>(KisPart::instance()->createDocument()));
 
@@ -76,7 +76,7 @@ QSharedPointer<KisDocument> openPsdDocument(const QFileInfo &fileInfo)
 
 void KisPSDTest::testTransparencyMask()
 {
-    QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + QDir::separator() + "sources/masks.psd");
+    QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + '/' + "sources/masks.psd");
 
     Q_ASSERT(sourceFileInfo.exists());
 
@@ -90,7 +90,7 @@ void KisPSDTest::testTransparencyMask()
     doc->setFileBatchMode(true);
     doc->setMimeType("image/vnd.adobe.photoshop");
 
-    QFileInfo dstFileInfo(QDir::currentPath() + QDir::separator() + "test_tmask.psd");
+    QFileInfo dstFileInfo(QDir::currentPath() + '/' + "test_tmask.psd");
     bool retval = doc->exportDocumentSync(QUrl::fromLocalFile(dstFileInfo.absoluteFilePath()), "image/vnd.adobe.photoshop");
     QVERIFY(retval);
 
@@ -109,8 +109,8 @@ void KisPSDTest::testTransparencyMask()
 
 void KisPSDTest::testOpenGrayscaleMultilayered()
 {
-    QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + QDir::separator() + "sources/gray.psd");
-    //QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + QDir::separator() + "sources/100x100gray8.psd");
+    QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + '/' + "sources/gray.psd");
+    //QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + '/' + "sources/100x100gray8.psd");
 
     Q_ASSERT(sourceFileInfo.exists());
 
@@ -120,7 +120,7 @@ void KisPSDTest::testOpenGrayscaleMultilayered()
 
 void KisPSDTest::testOpenGroupLayers()
 {
-    QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + QDir::separator() + "group_layers.psd");
+    QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + '/' + "group_layers.psd");
 
     Q_ASSERT(sourceFileInfo.exists());
 
@@ -136,7 +136,7 @@ void KisPSDTest::testOpenGroupLayers()
 
 void KisPSDTest::testOpenLayerStyles()
 {
-    QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + QDir::separator() + "testing_psd_ls.psd");
+    QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + '/' + "testing_psd_ls.psd");
 
     Q_ASSERT(sourceFileInfo.exists());
 
@@ -151,7 +151,7 @@ void KisPSDTest::testOpenLayerStyles()
 
 void KisPSDTest::testOpenLayerStylesWithPattern()
 {
-    QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + QDir::separator() + "test_ls_pattern.psd");
+    QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + '/' + "test_ls_pattern.psd");
 
     Q_ASSERT(sourceFileInfo.exists());
 
@@ -168,7 +168,7 @@ void KisPSDTest::testOpenLayerStylesWithPattern()
 
 void KisPSDTest::testOpenLayerStylesWithPatternMulti()
 {
-    QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + QDir::separator() + "test_ls_pattern_multi.psd");
+    QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + '/' + "test_ls_pattern_multi.psd");
 
     Q_ASSERT(sourceFileInfo.exists());
 
@@ -191,7 +191,7 @@ void KisPSDTest::testOpenLayerStylesWithPatternMulti()
 
 void KisPSDTest::testSaveLayerStylesWithPatternMulti()
 {
-    QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + QDir::separator() + "test_ls_pattern_multi.psd");
+    QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + '/' + "test_ls_pattern_multi.psd");
 
     Q_ASSERT(sourceFileInfo.exists());
 
@@ -213,7 +213,7 @@ void KisPSDTest::testSaveLayerStylesWithPatternMulti()
 
     doc->setFileBatchMode(true);
     const QByteArray mimeType("image/vnd.adobe.photoshop");
-    QFileInfo dstFileInfo(QDir::currentPath() + QDir::separator() + "test_save_styles.psd");
+    QFileInfo dstFileInfo(QDir::currentPath() + '/' + "test_save_styles.psd");
     bool retval = doc->exportDocumentSync(QUrl::fromLocalFile(dstFileInfo.absoluteFilePath()), mimeType);
     QVERIFY(retval);
 
@@ -242,7 +242,7 @@ void KisPSDTest::testSaveLayerStylesWithPatternMulti()
 
 void KisPSDTest::testOpeningFromOpenCanvas()
 {
-    QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + QDir::separator() + "test_krita_psd_from_opencanvas.psd");
+    QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + '/' + "test_krita_psd_from_opencanvas.psd");
 
     Q_ASSERT(sourceFileInfo.exists());
 
@@ -341,7 +341,7 @@ void KisPSDTest::testSavingAllFormats()
         doc->setFileBatchMode(true);
         doc->setMimeType("image/vnd.adobe.photoshop");
 
-        QFileInfo dstFileInfo(QDir::currentPath() + QDir::separator() + tempPsdName);
+        QFileInfo dstFileInfo(QDir::currentPath() + '/' + tempPsdName);
 
         dbgKrita << "Saving" << ppVar(dstFileInfo.fileName());
 

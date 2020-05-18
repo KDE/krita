@@ -21,8 +21,6 @@ Boston, MA 02110-1301, USA.
 #ifndef KIS_IMPORT_EXPORT_FILTER_H
 #define KIS_IMPORT_EXPORT_FILTER_H
 
-#include "KisImageBuilderResult.h"
-
 #include <QObject>
 #include <QIODevice>
 #include <QMap>
@@ -72,30 +70,6 @@ public:
     static const QString ColorDepthIDTag;
     static const QString sRGBTag;
 public:
-    /**
-     * This enum is used to signal the return state of your filter.
-     * Return OK in @ref convert() in case everything worked as expected.
-     * Feel free to add some more error conditions @em before the last item
-     * if it's needed.
-     */
-    enum ConversionStatus { OK,
-                            UsageError,
-                            CreationError,
-                            FileNotFound,
-                            StorageCreationError,
-                            BadMimeType,
-                            BadConversionGraph,
-                            WrongFormat,
-                            NotImplemented,
-                            ParsingError,
-                            InternalError,
-                            UserCancelled,
-                            InvalidFormat,
-                            FilterCreationError,
-                            ProgressCancelled,
-                            UnsupportedVersion,
-                            JustInCaseSomeBrokenCompilerUsesLessThanAByte = 255
-                          };
 
     ~KisImportExportFilter() override;
 
@@ -116,11 +90,6 @@ public:
      *         KisImportExportFilter::OK means that everything is alright.
      */
     virtual KisImportExportErrorCode convert(KisDocument *document, QIODevice *io, KisPropertiesConfigurationSP configuration = 0) = 0;
-
-    /**
-     * Get the text version of the status value
-     */
-    static QString conversionStatusString(ConversionStatus status);
 
     /**
      * @brief defaultConfiguration defines the default settings for the given import export filter

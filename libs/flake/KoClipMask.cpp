@@ -22,10 +22,10 @@
 #include <QTransform>
 #include <QPainter>
 #include <QSharedData>
+#include <QPainterPath>
 #include <KoShape.h>
 #include "kis_algebra_2d.h"
 
-#include <KoViewConverter.h>
 #include <KoShapePainter.h>
 
 struct Q_DECL_HIDDEN KoClipMask::Private : public QSharedData
@@ -168,10 +168,9 @@ void KoClipMask::drawMask(QPainter *painter, KoShape *shape)
         painter->setTransform(m_d->extraShapeTransform, true);
     }
 
-    KoViewConverter converter;
     KoShapePainter p;
     p.setShapes(m_d->shapes);
-    p.paint(*painter, converter);
+    p.paint(*painter);
 
     painter->restore();
 }

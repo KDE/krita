@@ -39,6 +39,7 @@
 #include "kis_config.h"
 #include "KisPart.h"
 #include "KisOpenGLModeProber.h"
+#include "kis_fixed_paint_device.h"
 
 #ifdef HAVE_OPENEXR
 #include <half.h>
@@ -285,6 +286,9 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info, bool blockMi
 
 void KisOpenGLImageTextures::generateCheckerTexture(const QImage &checkImage)
 {
+    if (!m_initialized) {
+        return;
+    }
 
     QOpenGLContext *ctx = QOpenGLContext::currentContext();
     if (ctx) {
@@ -303,21 +307,27 @@ void KisOpenGLImageTextures::generateCheckerTexture(const QImage &checkImage)
         if (checkImage.width() != BACKGROUND_TEXTURE_SIZE || checkImage.height() != BACKGROUND_TEXTURE_SIZE) {
             img = checkImage.scaled(BACKGROUND_TEXTURE_SIZE, BACKGROUND_TEXTURE_SIZE);
         }
-#ifdef HAS_ONLY_OPENGL_ES
-        GLint format = GL_RGBA, internalFormat = GL_RGBA8;
-#else
-        GLint format = GL_BGRA, internalFormat = GL_RGBA8;
-        if (KisOpenGL::hasOpenGLES()) {
-            if (ctx->hasExtension(QByteArrayLiteral("GL_EXT_texture_format_BGRA8888"))) {
-                format = GL_BGRA_EXT;
-                internalFormat = GL_BGRA8_EXT;
-            } else {
-                format = GL_RGBA;
-            }
-        }
-#endif
+
+        // convert from sRGB to display format, potentially HDR
+        const KoColorSpace *temporaryColorSpace = KoColorSpaceRegistry::instance()->rgb8();
+        const KoColorSpace *finalColorSpace =
+               KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(),
+                                                            m_updateInfoBuilder.destinationColorSpace()->colorDepthId().id(),
+                                                            m_monitorProfile);
+
+        KisFixedPaintDevice checkers(temporaryColorSpace);
+        checkers.convertFromQImage(img, temporaryColorSpace->profile()->name());
+        checkers.convertTo(finalColorSpace);
+
+        KIS_ASSERT(checkers.bounds().width() == BACKGROUND_TEXTURE_SIZE);
+        KIS_ASSERT(checkers.bounds().height() == BACKGROUND_TEXTURE_SIZE);
+
+        GLint format = m_texturesInfo.format;
+        GLint internalFormat = m_texturesInfo.internalFormat;
+        GLint type = m_texturesInfo.type;
+
         f->glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, BACKGROUND_TEXTURE_SIZE, BACKGROUND_TEXTURE_SIZE,
-                        0, format, GL_UNSIGNED_BYTE, img.constBits());
+                        0, format, type, checkers.data());
     }
     else {
         dbgUI << "OpenGL: Tried to generate checker texture before OpenGL was initialized.";
@@ -357,6 +367,11 @@ void KisOpenGLImageTextures::slotImageSizeChanged(qint32 /*w*/, qint32 /*h*/)
 KisOpenGLUpdateInfoBuilder &KisOpenGLImageTextures::updateInfoBuilder()
 {
     return m_updateInfoBuilder;
+}
+
+const KoColorProfile *KisOpenGLImageTextures::monitorProfile()
+{
+    return m_monitorProfile;
 }
 
 void KisOpenGLImageTextures::setMonitorProfile(const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)

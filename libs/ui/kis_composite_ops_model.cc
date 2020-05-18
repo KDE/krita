@@ -49,6 +49,21 @@ void KisCompositeOpListModel::initialize()
     readFavoriteCompositeOpsFromConfig();
 }
 
+void KisCompositeOpListModel::initializeForLayerStyles()
+{
+    QMap<KoID, KoID> ops = KoCompositeOpRegistry::instance().getLayerStylesCompositeOps();
+    QMapIterator<KoID, KoID> it(ops);
+
+    while (it.hasNext()) {
+        KoID op = *it.next();
+        KoID category = it.key();
+        BaseKoIDCategorizedListModel::DataItem *item = categoriesMapper()->addEntry(category.name(), op);
+        item->setCheckable(false);
+    }
+
+   categoriesMapper()->expandAllCategories();
+}
+
 KisCompositeOpListModel* KisCompositeOpListModel::sharedInstance()
 {
     static KisCompositeOpListModel *model = 0;

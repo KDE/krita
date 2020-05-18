@@ -28,11 +28,11 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <QScopedPointer>
-#include "kis_global.h"
-#include "kis_types.h"
-#include "KoToolFactoryBase.h"
-#include "flake/kis_node_shape.h"
-#include "kis_signal_compressor.h"
+#include <kis_global.h>
+#include <kis_types.h>
+#include <KisToolPaintFactoryBase.h>
+#include <flake/kis_node_shape.h>
+#include <kis_signal_compressor.h>
 #include <kis_icon.h>
 #include <KoIcon.h>
 
@@ -106,13 +106,13 @@ private:
 };
 
 
-class KisToolLineFactory : public KoToolFactoryBase
+class KisToolLineFactory : public KisToolPaintFactoryBase
 {
 
 public:
 
     KisToolLineFactory()
-            : KoToolFactoryBase("KritaShape/KisToolLine") {
+            : KisToolPaintFactoryBase("KritaShape/KisToolLine") {
         setToolTip(i18n("Line Tool"));
         // Temporarily
         setSection(TOOL_TYPE_SHAPE);

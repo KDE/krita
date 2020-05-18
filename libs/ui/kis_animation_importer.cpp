@@ -64,7 +64,6 @@ KisImportExportErrorCode KisAnimationImporter::import(QStringList files, int fir
 {
     Q_ASSERT(step > 0);
 
-    m_d->image->lock();
     KisUndoAdapter *undo = m_d->image->undoAdapter();
     undo->beginMacro(kundo2_i18n("Import animation"));
 
@@ -119,7 +118,6 @@ KisImportExportErrorCode KisAnimationImporter::import(QStringList files, int fir
     }
 
     undo->endMacro();
-    m_d->image->unlock();
 
     return status;
 }

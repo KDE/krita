@@ -62,14 +62,19 @@ void KisToolPolygon::finishPolyline(const QVector<QPointF>& points)
                                            fillStyle());
         helper.paintPolygon(points);
     } else {
+        // remove the last point if it overlaps with the first
+        QVector<QPointF> newPoints = points;
+        if (newPoints.size() > 1 && newPoints.first() == newPoints.last()) {
+            newPoints.removeLast();
+        }
         KoPathShape* path = new KoPathShape();
         path->setShapeId(KoPathShapeId);
 
         QTransform resolutionMatrix;
         resolutionMatrix.scale(1 / currentImage()->xRes(), 1 / currentImage()->yRes());
-        path->moveTo(resolutionMatrix.map(points[0]));
-        for (int i = 1; i < points.count(); i++)
-            path->lineTo(resolutionMatrix.map(points[i]));
+        path->moveTo(resolutionMatrix.map(newPoints[0]));
+        for (int i = 1; i < newPoints.size(); i++)
+            path->lineTo(resolutionMatrix.map(newPoints[i]));
         path->close();
         path->normalize();
 

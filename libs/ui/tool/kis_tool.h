@@ -87,7 +87,7 @@ public:
     /**
      * Called by KisToolProxy when the primary is no longer possible
      * to be started now, e.g. when its modifiers and released. The
-     * tool is supposed revert all the preparetions it has doen in
+     * tool is supposed to revert all the preparations it has done in
      * activatePrimaryAction().
      */
     virtual void deactivatePrimaryAction();
@@ -211,6 +211,8 @@ protected:
     /// coordinates.
     QPointF convertToPixelCoord(KoPointerEvent *e);
     QPointF convertToPixelCoord(const QPointF& pt);
+
+    QPointF convertToPixelCoordAndAlignOnWidget(const QPointF& pt);
 
     QPointF convertToPixelCoordAndSnap(KoPointerEvent *e, const QPointF &offset = QPointF(), bool useModifiers = true);
     QPointF convertToPixelCoordAndSnap(const QPointF& pt, const QPointF &offset = QPointF());

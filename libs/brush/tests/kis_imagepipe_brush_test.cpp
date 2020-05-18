@@ -18,6 +18,7 @@
 
 #include "kis_imagepipe_brush_test.h"
 
+#include <sdk/tests/kistest.h>
 #include <QTest>
 #include <QPainter>
 
@@ -185,9 +186,9 @@ void KisImagePipeBrushTest::testColoredDab()
     QCOMPARE(brush->brushType(), PIPE_IMAGE);
 
     // convert to the mask (irreversible)
-    brush->makeMaskImage();
+    brush->makeMaskImage(false);
 
-    QCOMPARE(brush->useColorAsMask(), false);
+    QCOMPARE(brush->useColorAsMask(), true);
     QCOMPARE(brush->hasColor(), false);
     QCOMPARE(brush->brushType(), PIPE_MASK);
 
@@ -261,4 +262,4 @@ void KisImagePipeBrushTest::testTextBrushPiped()
     checkIncrementalPainting(brush.data(), "text_incremental");
 }
 
-QTEST_MAIN(KisImagePipeBrushTest)
+KISTEST_MAIN(KisImagePipeBrushTest)

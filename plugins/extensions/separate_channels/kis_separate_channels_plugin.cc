@@ -86,9 +86,9 @@ void KisSeparateChannelsPlugin::slotSeparate()
         separator.separate(viewManager()->createUnthreadedUpdater(i18n("Separate Image")),
                            dlgSeparate->getAlphaOptions(),
                            dlgSeparate->getSource(),
-                           dlgSeparate->getOutput(),
                            dlgSeparate->getDownscale(),
-                           dlgSeparate->getToColor());
+                           dlgSeparate->getToColor(),
+                           dlgSeparate->getActivateCurrentChannel());
         QApplication::restoreOverrideCursor();
     }
 

@@ -50,6 +50,7 @@ public:
     static KoID favoriteCategory();
 
     void initialize();
+    void initializeForLayerStyles();
 
 private:
     void addFavoriteEntry(const KoID &entry);
@@ -65,10 +66,15 @@ private:
 class KRITAUI_EXPORT KisSortedCompositeOpListModel : public KisSortedCategorizedListModel<KisCompositeOpListModel>
 {
 public:
-    KisSortedCompositeOpListModel(QObject *parent)
+    KisSortedCompositeOpListModel(bool limitToLayerStyles, QObject *parent)
         : KisSortedCategorizedListModel<KisCompositeOpListModel>(parent)
     {
-        m_model.initialize();
+        if (limitToLayerStyles) {
+            m_model.initializeForLayerStyles();
+        } else {
+            m_model.initialize();
+        }
+
         initializeModel(&m_model);
     }
 

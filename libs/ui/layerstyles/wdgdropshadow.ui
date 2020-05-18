@@ -110,7 +110,7 @@
         </property>
         <layout class="QGridLayout" name="gridLayout_3">
          <item row="0" column="1">
-          <widget class="KisCompositeOpComboBox" name="cmbCompositeOp">
+          <widget class="KisLayerStyleCompositeOpComboBox" name="cmbCompositeOp">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -261,7 +261,7 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KisCompositeOpComboBox</class>
+   <class>KisLayerStyleCompositeOpComboBox</class>
    <extends>QComboBox</extends>
    <header location="global">kis_cmb_composite.h</header>
   </customwidget>

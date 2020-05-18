@@ -8,13 +8,17 @@ set(kritaselectiontools_SOURCES
     kis_tool_select_path.cc
     kis_tool_select_similar.cc
     kis_selection_modifier_mapper.cc
+    KisMagneticWorker.cc
+    KisToolSelectMagnetic.cc
 )
 
 qt5_add_resources(kritaselectiontools_SOURCES selectiontools.qrc)
 
 add_library(kritaselectiontools MODULE ${kritaselectiontools_SOURCES})
 
-target_link_libraries(kritaselectiontools kritaui kritabasicflakes)
+generate_export_header(kritaselectiontools BASE_NAME kritaselectiontools)
+
+target_link_libraries(kritaselectiontools kritaui kritabasicflakes kritaimage)
 
 install(TARGETS kritaselectiontools  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
@@ -26,5 +30,6 @@ install( FILES
         KisToolSelectRectangular.action
         KisToolSelectOutline.action
         KisToolSelectPath.action
+        KisToolSelectMagnetic.action
     DESTINATION  ${DATA_INSTALL_DIR}/krita/actions
 )

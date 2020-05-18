@@ -528,7 +528,7 @@
          <item row="0" column="0">
           <widget class="QCheckBox" name="hideScrollbars">
            <property name="text">
-            <string>Hide Window Scrollbars</string>
+            <string>Hide Canvas Scrollbars</string>
            </property>
            <property name="checked">
             <bool>false</bool>
@@ -618,6 +618,12 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>KisDoubleSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>KisIntParseSpinBox</class>
    <extends>QSpinBox</extends>
    <header>kis_int_parse_spin_box.h</header>
@@ -626,12 +632,6 @@
    <class>KisColorButton</class>
    <extends>QPushButton</extends>
    <header>kis_color_button.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KisDoubleSliderSpinBox</class>
-   <extends>QWidget</extends>
-   <header>kis_slider_spin_box.h</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

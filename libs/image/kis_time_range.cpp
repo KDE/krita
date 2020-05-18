@@ -314,7 +314,6 @@ KisFrameSet calculateNodeAffectedFrames(const KisNode *node, int time)
 
     if (channels.isEmpty() ||
         !channels.contains(KisKeyframeChannel::Content.id())) {
-
         range = KisFrameSet::infiniteFrom(0);
         return range;
     }

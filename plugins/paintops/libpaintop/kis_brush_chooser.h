@@ -57,19 +57,29 @@ public:
     void setBrushSize(qreal xPixels, qreal yPixels);
     void setImage(KisImageWSP image);
 
+    void setHSLBrusTipEnabled(bool value);
+    bool hslBrushTipEnabled() const;
+
 private Q_SLOTS:
 
     void slotResetBrush();
+    void slotResetAdjustments();
     void slotSetItemSize(qreal);
     void slotSetItemRotation(qreal);
     void slotSpacingChanged();
-    void slotSetItemUseColorAsMask(bool);
     void slotOpenStampBrush();
     void slotOpenClipboardBrush();
     void slotImportNewBrushResource();
     void slotDeleteBrushResource();
     void slotNewPredefinedBrush(KoResource *);
     void updateBrushTip(KoResource *, bool isChangingBrushPresets = false);
+    void slotUpdateBrushModeButtonsState();
+    void slotUpdateResetBrushAdjustmentsButtonState();
+    void slotUpdateBrushAdjustmentsState();
+
+    void slotWriteBrushMode();
+    void slotWriteBrushAdjustments();
+
 
 Q_SIGNALS:
 
@@ -81,6 +91,8 @@ private:
     KisImageWSP m_image;
     KisCustomBrushWidget* m_stampBrushWidget;
     KisClipboardBrushWidget* m_clipboardBrushWidget;
+
+    bool m_hslBrushTipEnabled = false;
 };
 
 #endif // KIS_PREDEFINED_BRUSH_CHOOSER_H_

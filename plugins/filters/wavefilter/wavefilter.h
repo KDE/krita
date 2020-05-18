@@ -51,7 +51,7 @@ public:
         return KoID("wave", i18n("Wave"));
     }
 
-    KisFilterConfigurationSP factoryConfiguration() const override;
+    KisFilterConfigurationSP defaultConfiguration() const override;
 public:
     QRect neededRect(const QRect& rect, const KisFilterConfigurationSP config = 0, int lod = 0) const override;
 

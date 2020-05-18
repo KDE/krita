@@ -47,6 +47,11 @@ KisCompositeOpOption::KisCompositeOpOption(bool createConfigWidget):
         m_list     = ui.list;
         m_bnEraser = ui.bnEraser;
 
+       // show current compositeOp on UI at the start
+       KoID compositeOp = KoCompositeOpRegistry::instance().getKoID(m_currCompositeOpID);
+       m_label->setText(compositeOp.name());
+
+
         setConfigurationPage(widget);
 
         connect(ui.list    , SIGNAL(clicked(QModelIndex)), this, SLOT(slotCompositeOpChanged(QModelIndex)));

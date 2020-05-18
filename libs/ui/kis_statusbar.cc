@@ -89,15 +89,17 @@ void KisStatusBar::setup()
     addStatusBarItem(m_selectionStatus);
     m_selectionStatus->setVisible(false);
 
-    m_resetAngleButton = new QToolButton;
-    m_resetAngleButton->setObjectName("Reset Rotation");
-    m_resetAngleButton->setCheckable(false);
-    m_resetAngleButton->setToolTip(i18n("Reset Rotation"));
-    m_resetAngleButton->setAutoRaise(true);
-    m_resetAngleButton->setIcon(KisIconUtils::loadIcon("rotate-canvas-left"));
-    addStatusBarItem(m_resetAngleButton);
-
-    connect(m_resetAngleButton, SIGNAL(clicked()), m_viewManager, SLOT(slotResetRotation()));
+#ifdef Q_OS_ANDROID
+    m_fullscreenToggle = new QToolButton;
+    m_fullscreenToggle->setObjectName("Toggle Fullscreen");
+    m_fullscreenToggle->setCheckable(false);
+    m_fullscreenToggle->setToolTip(i18n("Toggle Fullscreen"));
+    m_fullscreenToggle->setAutoRaise(true);
+    m_fullscreenToggle->setIcon(KisIconUtils::loadIcon("zoom-horizontal"));
+    addStatusBarItem(m_fullscreenToggle);
+    m_fullscreenToggle->setVisible(true);
+    connect(m_fullscreenToggle, SIGNAL(clicked()), m_viewManager, SLOT(slotToggleFullscreen()));
+#endif
 
     m_statusBarStatusLabel = new KSqueezedTextLabel();
     m_statusBarStatusLabel->setObjectName("statsBarStatusLabel");
@@ -145,6 +147,18 @@ void KisStatusBar::setup()
     connect(KisMemoryStatisticsServer::instance(),
             SIGNAL(sigUpdateMemoryStatistics()),
             SLOT(imageSizeChanged()));
+
+    m_resetAngleButton = new QToolButton;
+    m_resetAngleButton->setObjectName("Reset Rotation");
+    m_resetAngleButton->setCheckable(false);
+    m_resetAngleButton->setToolTip(i18n("Reset Rotation"));
+    m_resetAngleButton->setAutoRaise(true);
+    m_resetAngleButton->setIcon(KisIconUtils::loadIcon("rotate-canvas-left"));
+    addStatusBarItem(m_resetAngleButton);
+
+    connect(m_resetAngleButton, SIGNAL(clicked()), m_viewManager, SLOT(slotResetRotation()));
+    m_resetAngleButton->setVisible(false);
+
 }
 
 KisStatusBar::~KisStatusBar()
@@ -165,7 +179,7 @@ void KisStatusBar::setView(QPointer<KisView> imageView)
 
     if (imageView) {
         m_imageView = imageView;
-
+        m_resetAngleButton->setVisible(true);
         connect(m_imageView, SIGNAL(sigColorSpaceChanged(const KoColorSpace*)),
                 this, SLOT(updateStatusBarProfileLabel()));
         connect(m_imageView, SIGNAL(sigProfileChanged(const KoColorProfile*)),
@@ -174,6 +188,9 @@ void KisStatusBar::setView(QPointer<KisView> imageView)
                 this, SLOT(imageSizeChanged()));
         updateStatusBarProfileLabel();
         addStatusBarItem(m_imageView->zoomManager()->zoomActionWidget());
+    }
+    else {
+        m_resetAngleButton->setVisible(false);
     }
 
     imageSizeChanged();

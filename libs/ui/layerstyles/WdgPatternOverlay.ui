@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>461</height>
+    <width>408</width>
+    <height>487</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -37,7 +37,7 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="KisCompositeOpComboBox" name="cmbCompositeOp">
+          <widget class="KisLayerStyleCompositeOpComboBox" name="cmbCompositeOp">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -168,15 +168,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisCompositeOpComboBox</class>
-   <extends>QComboBox</extends>
-   <header location="global">kis_cmb_composite.h</header>
-  </customwidget>
-  <customwidget>
    <class>KisSliderSpinBox</class>
    <extends>QWidget</extends>
    <header location="global">kis_slider_spin_box.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisLayerStyleCompositeOpComboBox</class>
+   <extends>QComboBox</extends>
+   <header location="global">kis_cmb_composite.h</header>
   </customwidget>
   <customwidget>
    <class>KisPatternChooser</class>

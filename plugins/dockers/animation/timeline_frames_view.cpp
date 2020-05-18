@@ -192,6 +192,9 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     m_d->addLayersButton->setPopupMode(QToolButton::InstantPopup);
 
     m_d->layerEditingMenu = new QMenu(this);
+    m_d->layerEditingMenu->addSection(i18n("Edit Layers:"));
+    m_d->layerEditingMenu->addSeparator();
+
     m_d->layerEditingMenu->addAction(KisAnimationUtils::newLayerActionName, this, SLOT(slotAddNewLayer()));
     m_d->existingLayersMenu = m_d->layerEditingMenu->addMenu(KisAnimationUtils::addExistingLayerActionName);
     m_d->layerEditingMenu->addSeparator();
@@ -214,6 +217,8 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     m_d->audioOptionsButton->setPopupMode(QToolButton::InstantPopup);
 
     m_d->audioOptionsMenu = new QMenu(this);
+    m_d->audioOptionsMenu->addSection(i18n("Edit Audio:"));
+    m_d->audioOptionsMenu->addSeparator();
 
 #ifndef HAVE_QT_MULTIMEDIA
     m_d->audioOptionsMenu->addSection(i18nc("@item:inmenu", "Audio playback is not supported in this build!"));
@@ -702,6 +707,7 @@ void TimelineFramesView::slotDataChanged(const QModelIndex &topLeft, const QMode
         int row= index.isValid() ? index.row() : 0;
         selectionModel()->setCurrentIndex(m_d->model->index(row, selectedColumn), QItemSelectionModel::ClearAndSelect);
     }
+
 }
 
 void TimelineFramesView::slotHeaderDataChanged(Qt::Orientation orientation, int first, int last)
@@ -950,9 +956,10 @@ void TimelineFramesView::createFrameEditingMenuActions(QMenu *menu, bool addFram
     int minColumn = 0;
     int maxColumn = 0;
     calculateSelectionMetrics(minColumn, maxColumn, rows);
-
     bool selectionExists = minColumn != maxColumn;
 
+    menu->addSection(i18n("Edit Frames:"));
+    menu->addSeparator();
 
     if (selectionExists) {
         KisActionManager::safePopulateMenu(menu, "update_playback_range", m_d->actionMan);
@@ -969,6 +976,19 @@ void TimelineFramesView::createFrameEditingMenuActions(QMenu *menu, bool addFram
     KisActionManager::safePopulateMenu(menu, "paste_frames_from_clipboard", m_d->actionMan);
 
     menu->addSeparator();
+
+    {   // Tween submenu.
+        QMenu *frames = menu->addMenu(i18nc("@item:inmenu", "Tweening"));
+
+        KisActionManager::safePopulateMenu(frames, "insert_opacity_keyframe", m_d->actionMan);
+        KisActionManager::safePopulateMenu(frames, "remove_opacity_keyframe", m_d->actionMan);
+
+        // only allow to add an opacity keyframe if one doesn't exist
+        bool opacityKeyframeExists = model()->data(currentIndex(), TimelineFramesModel::SpecialKeyframeExists).toBool();
+        m_d->actionMan->actionByName("insert_opacity_keyframe")->setEnabled(!opacityKeyframeExists);
+        m_d->actionMan->actionByName("remove_opacity_keyframe")->setEnabled(opacityKeyframeExists);
+    }
+
 
     {   //Frames submenu.
         QMenu *frames = menu->addMenu(i18nc("@item:inmenu", "Keyframes"));
@@ -1035,6 +1055,7 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
             model()->setData(index, true, TimelineFramesModel::ActiveLayerRole);
             model()->setData(index, true, TimelineFramesModel::ActiveFrameRole);
             setCurrentIndex(index);
+
 
             if (model()->data(index, TimelineFramesModel::FrameExistsRole).toBool() ||
                 model()->data(index, TimelineFramesModel::SpecialKeyframeExists).toBool()) {
@@ -1251,10 +1272,12 @@ void TimelineFramesView::slotUpdateFrameActions()
     enableAction("copy_frames_to_clipboard", true);
     enableAction("cut_frames_to_clipboard", hasEditableFrames);
 
+    enableAction("insert_opacity_keyframe", hasEditableFrames);
+    enableAction("remove_opacity_keyframe", hasEditableFrames);
+
     QClipboard *cp = QApplication::clipboard();
     const QMimeData *data = cp->mimeData();
 
-    enableAction("paste_frames_from_clipboard", data && data->hasFormat("application/x-krita-frame"));
 
     //TODO: update column actions!
 }

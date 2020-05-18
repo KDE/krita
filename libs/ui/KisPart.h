@@ -90,7 +90,7 @@ public:
     /**
      * Add the specified document to the list of documents this KisPart manages.
      */
-    void addDocument(KisDocument *document);
+    void addDocument(KisDocument *document, bool notify = true);
 
     /**
      * @return a list of all documents this part manages
@@ -102,7 +102,7 @@ public:
      */
     int documentCount() const;
 
-    void removeDocument(KisDocument *document);
+    void removeDocument(KisDocument *document, bool deleteDocument = true);
 
     // ----------------- MainWindow management -----------------
 
@@ -111,6 +111,13 @@ public:
      * Create a new main window.
      */
     KisMainWindow *createMainWindow(QUuid id = QUuid());
+
+    /**
+     * @brief notifyMainWindowIsBeingCreated emits the sigMainWindowCreated signal
+     * @param mainWindow
+     */
+    void notifyMainWindowIsBeingCreated(KisMainWindow *mainWindow);
+
 
     /**
      * Removes a main window from the list of managed windows.
@@ -129,7 +136,7 @@ public:
      */
     int mainwindowCount() const;
 
-    void addRecentURLToAllMainWindows(QUrl url);
+    void addRecentURLToAllMainWindows(QUrl url, QUrl oldUrl = QUrl());
 
     /**
      * @return the currently active main window.
@@ -143,10 +150,19 @@ public:
      */
     KisIdleWatcher *idleWatcher() const;
 
+    // ----------------- Cache Populator Management -----------------
     /**
      * @return the application-wide AnimationCachePopulator.
      */
     KisAnimationCachePopulator *cachePopulator() const;
+
+    /**
+     * Adds a frame time index to a priority stack, which should be
+     * cached immediately and irregardless of whether it is the
+     * the currently occupied frame. The process of regeneration is
+     * started immediately.
+     */
+    void prioritizeFrameForCache(KisImageSP image, int frame);
 
 public Q_SLOTS:
 
@@ -192,7 +208,7 @@ Q_SIGNALS:
     void sigDocumentAdded(KisDocument *document);
     void sigDocumentSaved(const QString &url);
     void sigDocumentRemoved(const QString &filename);
-    void sigWindowAdded(KisMainWindow *window);
+    void sigMainWindowIsBeingCreated(KisMainWindow *window);
 
 public:
 

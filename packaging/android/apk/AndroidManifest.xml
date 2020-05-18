@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<manifest package="org.krita" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.0" android:versionCode="1" android:installLocation="auto">
+<manifest package="org.krita" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="4.2.8" android:versionCode="4280" android:installLocation="auto">
     <application android:hardwareAccelerated="true"
                  android:name="org.qtproject.qt5.android.bindings.QtApplication"
                  android:label="Krita"
@@ -12,7 +12,14 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
+			</intent-filter>
+            <intent-filter>
+                <action android:name="com.samsung.android.support.REMOTE_ACTION" />
             </intent-filter>
+            <meta-data
+                android:name="com.samsung.android.support.REMOTE_ACTION"
+                android:resource="@xml/remote_action"/>
+
 
             <!-- Application arguments -->
             <!-- meta-data android:name="android.app.arguments" android:value="arg1 arg2 arg3"/ -->

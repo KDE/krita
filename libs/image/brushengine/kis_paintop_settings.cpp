@@ -21,6 +21,7 @@
 
 #include <QImage>
 #include <QColor>
+#include <QPainterPath>
 #include <QPointer>
 
 #include <KoPointerEvent.h>
@@ -46,6 +47,7 @@
 #include <brushengine/kis_locked_properties_proxy.h>
 
 #include "KisPaintopSettingsIds.h"
+#include "kis_algebra_2d.h"
 
 
 struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
@@ -392,7 +394,7 @@ bool KisPaintOpSettings::needsAsynchronousUpdates() const
     return false;
 }
 
-QPainterPath KisPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode)
+QPainterPath KisPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
 {
     QPainterPath path;
     if (mode.isVisible) {
@@ -402,7 +404,7 @@ QPainterPath KisPaintOpSettings::brushOutline(const KisPaintInformation &info, c
             path.addPath(makeTiltIndicator(info, QPointF(0.0, 0.0), 0.0, 2.0));
         }
 
-        path.translate(info.pos());
+        path.translate(KisAlgebra2D::alignForZoom(info.pos(), alignForZoom));
     }
 
     return path;

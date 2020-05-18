@@ -21,7 +21,7 @@
 #include <kis_icon.h>
 #include "rotation_icons.h"
 #include "kis_canvas2.h"
-#include <QSignalMapper>
+#include <KisSignalMapper.h>
 #include "kis_liquify_properties.h"
 
 #include "KisMainWindow.h"
@@ -44,7 +44,6 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
       m_configChanged(false)
 {
     setupUi(this);
-    showDecorationsBox->setIcon(KisIconUtils::loadIcon("krita_tool_transform"));
     chkWorkRecursively->setIcon(KisIconUtils::loadIcon("krita_tool_transform_recursive"));
     flipXButton->setIcon(KisIconUtils::loadIcon("transform_icons_mirror_x"));
     flipYButton->setIcon(KisIconUtils::loadIcon("transform_icons_mirror_y"));
@@ -247,7 +246,7 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     connect(liquifyReverseDirectionChk, SIGNAL(toggled(bool)), this, SLOT(liquifyReverseDirectionChanged(bool)));
     liquifyReverseDirectionChk->setToolTip(i18nc("@info:tooltip", "Reverse direction of the current deformation tool"));
 
-    QSignalMapper *liquifyModeMapper = new QSignalMapper(this);
+    KisSignalMapper *liquifyModeMapper = new KisSignalMapper(this);
     connect(liquifyMove, SIGNAL(toggled(bool)), liquifyModeMapper, SLOT(map()));
     connect(liquifyScale, SIGNAL(toggled(bool)), liquifyModeMapper, SLOT(map()));
     connect(liquifyRotate, SIGNAL(toggled(bool)), liquifyModeMapper, SLOT(map()));
@@ -299,9 +298,6 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     connect(cageButton, SIGNAL(clicked(bool)), this, SLOT(slotSetCageModeButtonClicked(bool)));
     connect(perspectiveTransformButton, SIGNAL(clicked(bool)), this, SLOT(slotSetPerspectiveModeButtonClicked(bool)));
     connect(liquifyButton, SIGNAL(clicked(bool)), this, SLOT(slotSetLiquifyModeButtonClicked(bool)));
-
-    // Connect Decorations switcher
-    connect(showDecorationsBox, SIGNAL(toggled(bool)), canvas, SLOT(updateCanvas()));
 
     tooBigLabelWidget->hide();
 
@@ -705,11 +701,6 @@ void KisToolTransformConfigWidget::setTooBigLabelVisible(bool value)
     tooBigLabelWidget->setVisible(value);
 }
 
-bool KisToolTransformConfigWidget::showDecorations() const
-{
-    return showDecorationsBox->isChecked();
-}
-
 void KisToolTransformConfigWidget::blockNotifications()
 {
     m_notificationsBlocked++;
@@ -975,7 +966,7 @@ void KisToolTransformConfigWidget::slotSetTranslateX(int value)
     const QPointF anchorPointView = m.finalTransform().map(anchorPoint);
     const QPointF newAnchorPointView(value, anchorPointView.y());
     config->setTransformedCenter(config->transformedCenter() + newAnchorPointView - anchorPointView);
-
+    translateXBox->setValue(value);
     notifyConfigChanged();
 }
 
@@ -991,7 +982,7 @@ void KisToolTransformConfigWidget::slotSetTranslateY(int value)
     const QPointF anchorPointView = m.finalTransform().map(anchorPoint);
     const QPointF newAnchorPointView(anchorPointView.x(), value);
     config->setTransformedCenter(config->transformedCenter() + newAnchorPointView - anchorPointView);
-
+    translateYBox->setValue(value);
     notifyConfigChanged();
 }
 

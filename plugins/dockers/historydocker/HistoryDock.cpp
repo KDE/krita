@@ -44,7 +44,6 @@ HistoryDock::HistoryDock()
     m_bnConfigure->setIcon(KisIconUtils::loadIcon("configure"));
     connect(m_bnConfigure, SIGNAL(clicked(bool)), SLOT(configure()));
     hl->addWidget(m_bnConfigure);
-    vl->addItem(hl);
     vl->addLayout(hl);
 
     setWidget(page);

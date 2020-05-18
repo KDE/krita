@@ -96,7 +96,7 @@ public:
     /**
      * @brief renameGroup
      * @param oldName
-     * @return new name if change accpeted, empty string if cancelled
+     * @return new name if change accepted, empty string if cancelled
      */
     QString renameGroup(const QString &oldName);
     void changeGroupRowCount(const QString &name, int newRowCount);

@@ -25,6 +25,7 @@
 #include <strokes/KisFreehandStrokeInfo.h>
 #include "KisAsyncronousStrokeUpdateHelper.h"
 #include <kis_brush.h>
+#include "kis_transaction.h"
 
 KisPresetLivePreviewView::KisPresetLivePreviewView(QWidget *parent)
     : QGraphicsView(parent),
@@ -148,7 +149,10 @@ void KisPresetLivePreviewView::paintBackground()
                                  0,
                                  m_layer->image()->width()*(sectionPercent*i +sectionPercent),
                                  m_layer->image()->height());
+
+            KisTransaction t(m_layer->paintDevice());
             m_layer->paintDevice()->fill(fillRect, fillColor);
+            t.end();
         }
 
         m_paintColor = KoColor(Qt::white, m_colorSpace);
@@ -180,7 +184,10 @@ void KisPresetLivePreviewView::paintBackground()
     else {
 
         // fill with gray first to clear out what existed from previous preview
+        KisTransaction t(m_layer->paintDevice());
         m_layer->paintDevice()->fill(m_image->bounds(), KoColor(palette().color(QPalette::Background) , m_colorSpace));
+        t.end();
+
         m_paintColor = KoColor(palette().color(QPalette::Text), m_colorSpace);
     }
 }
@@ -190,6 +197,7 @@ class NotificationStroke : public QObject, public KisSimpleStrokeStrategy
   Q_OBJECT
 public:
     NotificationStroke()
+        : KisSimpleStrokeStrategy(QLatin1String("NotificationStroke"))
     {
         setClearsRedoOnStart(false);
         this->enableJob(JOB_INIT, true, KisStrokeJobData::BARRIER);
@@ -214,7 +222,6 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
     // limit the brush stroke size. larger brush strokes just don't look good and are CPU intensive
     // we are making a proxy preset and setting it to the painter...otherwise setting the brush size of the original preset
     // will fire off signals that make this run in an infinite loop
-    qreal originalPresetSize = m_currentPreset->settings()->paintOpSize();
     qreal previewSize = qBound(3.0, m_currentPreset->settings()->paintOpSize(), 25.0 ); // constrain live preview brush size
     //Except for the sketchbrush where it determine sthe history.
     if (m_currentPreset->paintOp().id() == "sketchbrush" ||
@@ -226,6 +233,7 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
     KisPaintOpPresetSP proxy_preset = m_currentPreset->clone();
     KisPaintOpSettingsSP settings = proxy_preset->settings();
     settings->setPaintOpSize(previewSize);
+
     int maxTextureSize = 200;
     int textureOffsetX = settings->getInt("Texture/Pattern/MaximumOffsetX")*2;
     int textureOffsetY = settings->getInt("Texture/Pattern/MaximumOffsetY")*2;
@@ -287,6 +295,7 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
     KisResourcesSnapshotSP resources =
             new KisResourcesSnapshot(m_image,
                                      m_layer);
+    resources->setOpacity(settings->paintOpOpacity());
 
     resources->setBrush(proxy_preset);
     resources->setFGColorOverride(m_paintColor);

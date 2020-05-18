@@ -36,12 +36,14 @@
 #include <kis_paint_device.h>
 #include <kis_selection.h>
 #include <KisSequentialIteratorProgress.h>
+#include "kis_lod_transform.h"
 
 
 KisSimpleNoiseReducer::KisSimpleNoiseReducer()
     : KisFilter(id(), FiltersCategoryEnhanceId, i18n("&Gaussian Noise Reduction..."))
 {
     setSupportsPainting(false);
+    setSupportsLevelOfDetail(true);
 }
 
 KisSimpleNoiseReducer::~KisSimpleNoiseReducer()
@@ -57,9 +59,9 @@ KisConfigWidget * KisSimpleNoiseReducer::createConfigurationWidget(QWidget* pare
     return new KisMultiIntegerFilterWidget(id().id(), parent, id().id(), param);
 }
 
-KisFilterConfigurationSP  KisSimpleNoiseReducer::factoryConfiguration() const
+KisFilterConfigurationSP  KisSimpleNoiseReducer::defaultConfiguration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration(id().id(), 0);
+    KisFilterConfigurationSP config = factoryConfiguration();
     config->setProperty("threshold", 15);
     config->setProperty("windowsize", 1);
     return config;
@@ -111,3 +113,16 @@ void KisSimpleNoiseReducer::processImpl(KisPaintDeviceSP device,
     }
 }
 
+QRect KisSimpleNoiseReducer::neededRect(const QRect & rect, const KisFilterConfigurationSP _config, int lod) const
+{
+    KisLodTransformScalar t(lod);
+
+    const int windowsize = _config->getInt("windowsize", 1);
+    const int margin  = qCeil(t.scale(qreal(windowsize))) + 1;
+    return kisGrowRect(rect, margin);
+}
+
+QRect KisSimpleNoiseReducer::changedRect(const QRect & rect, const KisFilterConfigurationSP _config, int lod) const
+{
+    return neededRect(rect, _config, lod);
+}

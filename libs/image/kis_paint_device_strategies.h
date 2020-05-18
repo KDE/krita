@@ -60,7 +60,7 @@ public:
         return extent;
     }
 
-    virtual QRegion region() const {
+    virtual KisRegion region() const {
         return m_d->cache()->region().translated(m_d->x(), m_d->y());
     }
 
@@ -227,7 +227,9 @@ public:
 
         const int pixelSize = m_device->pixelSize();
 
-        Q_FOREACH (const QRect &rc, borderRegion.rects()) {
+        auto rectIter = borderRegion.begin();
+        while (rectIter != borderRegion.end()) {
+            QRect rc = *rectIter;
             KisRandomConstAccessorSP srcIt = KisPaintDeviceStrategy::createRandomConstAccessorNG(rc.x(), rc.y());
             KisRandomAccessorSP dstIt = createRandomAccessorNG(rc.x(), rc.y());
 
@@ -257,6 +259,7 @@ public:
                     }
                 }
             }
+            rectIter++;
         }
     }
 
@@ -264,7 +267,7 @@ public:
         return KisPaintDeviceStrategy::extent() & m_wrapRect;
     }
 
-    QRegion region() const override {
+    KisRegion region() const override {
         return KisPaintDeviceStrategy::region() & m_wrapRect;
     }
 

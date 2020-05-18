@@ -27,6 +27,7 @@
 #include "kis_signals_blocker.h"
 #include "kis_brush_option.h"
 #include <KisPaintopSettingsIds.h>
+#include <brushengine/kis_paintop_preset.h>
 
 struct BrushReader {
     BrushReader(const KisBrushBasedPaintOpSettings *parent)
@@ -66,7 +67,9 @@ struct BrushWriter {
 KisBrushBasedPaintOpSettings::KisBrushBasedPaintOpSettings()
     : KisOutlineGenerationPolicy<KisPaintOpSettings>(KisCurrentOutlineFetcher::SIZE_OPTION |
             KisCurrentOutlineFetcher::ROTATION_OPTION |
-            KisCurrentOutlineFetcher::MIRROR_OPTION)
+            KisCurrentOutlineFetcher::MIRROR_OPTION |
+            KisCurrentOutlineFetcher::SHARPNESS_OPTION)
+
 {
 }
 
@@ -101,6 +104,7 @@ KisBrushSP KisBrushBasedPaintOpSettings::brush() const
 
 QPainterPath KisBrushBasedPaintOpSettings::brushOutlineImpl(const KisPaintInformation &info,
                                                             const OutlineMode &mode,
+                                                            qreal alignForZoom,
                                                             qreal additionalScale)
 {
     QPainterPath path;
@@ -119,23 +123,23 @@ QPainterPath KisBrushBasedPaintOpSettings::brushOutlineImpl(const KisPaintInform
             realOutline = ellipse;
         }
 
-        path = outlineFetcher()->fetchOutline(info, this, realOutline, mode, finalScale, brush->angle());
+        path = outlineFetcher()->fetchOutline(info, this, realOutline, mode, alignForZoom, finalScale, brush->angle());
 
         if (mode.showTiltDecoration) {
             const QPainterPath tiltLine = makeTiltIndicator(info,
                 realOutline.boundingRect().center(),
                 realOutline.boundingRect().width() * 0.5,
                 3.0);
-            path.addPath(outlineFetcher()->fetchOutline(info, this, tiltLine, mode, finalScale, 0.0, true, realOutline.boundingRect().center().x(), realOutline.boundingRect().center().y()));
+            path.addPath(outlineFetcher()->fetchOutline(info, this, tiltLine, mode, alignForZoom, finalScale, 0.0, true, realOutline.boundingRect().center().x(), realOutline.boundingRect().center().y()));
         }
     }
 
     return path;
 }
 
-QPainterPath KisBrushBasedPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode)
+QPainterPath KisBrushBasedPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
 {
-    return brushOutlineImpl(info, mode, 1.0);
+    return brushOutlineImpl(info, mode, alignForZoom, 1.0);
 }
 
 bool KisBrushBasedPaintOpSettings::isValid() const

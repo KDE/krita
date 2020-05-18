@@ -198,10 +198,10 @@ void CompositeOpModel::setView(QObject* newView)
             connect(d->view->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
                     this, SLOT(resourceChanged(int,QVariant)));
         }
-        if (d->view->nodeManager()) {
-            connect(d->view->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)),
-                    this, SLOT(currentNodeChanged(KisLayerSP)));
-        }
+//        if (d->view->nodeManager()) {
+//            connect(d->view->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)),
+//                    this, SLOT(currentNodeChanged(KisLayerSP)));
+//        }
         slotToolChanged(0, 0);
     }
     emit viewChanged();

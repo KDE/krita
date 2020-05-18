@@ -46,7 +46,7 @@ public:
         return KoID("desaturate", i18n("Desaturate"));
     }
 
-    KisFilterConfigurationSP factoryConfiguration() const override;
+    KisFilterConfigurationSP defaultConfiguration() const override;
 
 };
 

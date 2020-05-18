@@ -78,7 +78,7 @@ Krita::Krita(QObject *parent)
     , d(new Private)
 {
     qRegisterMetaType<Notifier*>();
-    connect(KisPart::instance(), SIGNAL(sigWindowAdded(KisMainWindow*)), SLOT(mainWindowAdded(KisMainWindow*)));
+    connect(KisPart::instance(), SIGNAL(sigMainWindowIsBeingCreated(KisMainWindow*)), SLOT(mainWindowIsBeingCreated(KisMainWindow*)));
 }
 
 Krita::~Krita()
@@ -120,7 +120,8 @@ Document* Krita::activeDocument() const
         return 0;
     }
     KisDocument *document = view->document();
-    return new Document(document);
+    Document *d = new Document(document, false);
+    return d;
 }
 
 void Krita::setActiveDocument(Document* value)
@@ -148,7 +149,7 @@ QList<Document *> Krita::documents() const
 {
     QList<Document *> ret;
     foreach(QPointer<KisDocument> doc, KisPart::instance()->documents()) {
-        ret << new Document(doc);
+        ret << new Document(doc, false);
     }
     return ret;
 }
@@ -312,7 +313,9 @@ QStringList Krita::recentDocuments() const
 Document* Krita::createDocument(int width, int height, const QString &name, const QString &colorModel, const QString &colorDepth, const QString &profile, double resolution)
 {
     KisDocument *document = KisPart::instance()->createDocument();
-    KisPart::instance()->addDocument(document);
+    document->setObjectName(name);
+
+    KisPart::instance()->addDocument(document, false);
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(colorModel, colorDepth, profile);
     Q_ASSERT(cs);
 
@@ -325,7 +328,9 @@ Document* Krita::createDocument(int width, int height, const QString &name, cons
     }
 
     Q_ASSERT(document->image());
-    return new Document(document);
+    Document *doc = new Document(document, true);
+
+    return doc;
 }
 
 Document* Krita::openDocument(const QString &filename)
@@ -335,7 +340,7 @@ Document* Krita::openDocument(const QString &filename)
     KisPart::instance()->addDocument(document);
     document->openUrl(QUrl::fromLocalFile(filename), KisDocument::DontAddToRecent);
     document->setFileBatchMode(false);
-    return new Document(document);
+    return new Document(document, true);
 }
 
 Window* Krita::openWindow()
@@ -414,7 +419,7 @@ QString Krita::krita_i18n(const QString &text)
     return i18n(text.toUtf8().constData());
 }
 
-void Krita::mainWindowAdded(KisMainWindow *kisWindow)
+void Krita::mainWindowIsBeingCreated(KisMainWindow *kisWindow)
 {
     Q_FOREACH(Extension *extension, d->extensions) {
         Window window(kisWindow);

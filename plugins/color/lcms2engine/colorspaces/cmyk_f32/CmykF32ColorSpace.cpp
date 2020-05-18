@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2020 L. E. Segovia <amy@amyspark.me>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -43,6 +44,12 @@ CmykF32ColorSpace::CmykF32ColorSpace(const QString &name, KoColorProfile *p)
 
     init();
 
+    dbgPlugins << "CMYK (float) profile bounds for: " << icc_p->name();
+    dbgPlugins << "C: " << uiRanges[0].minVal << uiRanges[0].maxVal;
+    dbgPlugins << "M: " << uiRanges[1].minVal << uiRanges[1].maxVal;
+    dbgPlugins << "Y: " << uiRanges[2].minVal << uiRanges[2].maxVal;
+    dbgPlugins << "K: " << uiRanges[3].minVal << uiRanges[3].maxVal;
+
     addStandardCompositeOps<KoCmykF32Traits>(this);
 }
 
@@ -64,10 +71,13 @@ void CmykF32ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomE
 {
     const KoCmykF32Traits::Pixel *p = reinterpret_cast<const KoCmykF32Traits::Pixel *>(pixel);
     QDomElement labElt = doc.createElement("CMYK");
-    labElt.setAttribute("c", KisDomUtils::toString(KoColorSpaceMaths<  KoCmykF32Traits::channels_type, qreal>::scaleToA(p->cyan)));
-    labElt.setAttribute("m", KisDomUtils::toString(KoColorSpaceMaths< KoCmykF32Traits::channels_type, qreal>::scaleToA(p->magenta)));
-    labElt.setAttribute("y", KisDomUtils::toString(KoColorSpaceMaths< KoCmykF32Traits::channels_type, qreal>::scaleToA(p->yellow)));
-    labElt.setAttribute("k", KisDomUtils::toString(KoColorSpaceMaths< KoCmykF32Traits::channels_type, qreal>::scaleToA(p->black)));
+
+    // XML expects 0-1, we need 0-100
+    // Get the bounds from the channels and adjust the calculations
+    labElt.setAttribute("c", KisDomUtils::toString(KoColorSpaceMaths< KoCmykF32Traits::channels_type, qreal>::scaleToA(1.f / this->channels()[0]->getUIUnitValue() * (p->cyan - this->channels()[0]->getUIMin()))));
+    labElt.setAttribute("m", KisDomUtils::toString(KoColorSpaceMaths< KoCmykF32Traits::channels_type, qreal>::scaleToA(1.f / this->channels()[1]->getUIUnitValue() * (p->magenta - this->channels()[1]->getUIMin()))));
+    labElt.setAttribute("y", KisDomUtils::toString(KoColorSpaceMaths< KoCmykF32Traits::channels_type, qreal>::scaleToA(1.f / this->channels()[2]->getUIUnitValue() * (p->yellow - this->channels()[2]->getUIMin()))));
+    labElt.setAttribute("k", KisDomUtils::toString(KoColorSpaceMaths< KoCmykF32Traits::channels_type, qreal>::scaleToA(1.f / this->channels()[3]->getUIUnitValue() * (p->black - this->channels()[3]->getUIMin()))));
     labElt.setAttribute("space", profile()->name());
     colorElt.appendChild(labElt);
 }
@@ -75,10 +85,10 @@ void CmykF32ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomE
 void CmykF32ColorSpace::colorFromXML(quint8 *pixel, const QDomElement &elt) const
 {
     KoCmykF32Traits::Pixel *p = reinterpret_cast<KoCmykF32Traits::Pixel *>(pixel);
-    p->cyan = KoColorSpaceMaths< qreal, KoCmykF32Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("c")));
-    p->magenta = KoColorSpaceMaths< qreal, KoCmykF32Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("m")));
-    p->yellow = KoColorSpaceMaths< qreal, KoCmykF32Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("y")));
-    p->black = KoColorSpaceMaths< qreal, KoCmykF32Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("k")));
+    p->cyan = this->channels()[0]->getUIMin() + KoColorSpaceMaths< qreal, KoCmykF32Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("c"))) * this->channels()[0]->getUIUnitValue();
+    p->magenta = this->channels()[1]->getUIMin() + KoColorSpaceMaths< qreal, KoCmykF32Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("m"))) * this->channels()[1]->getUIUnitValue();
+    p->yellow = this->channels()[2]->getUIMin() + KoColorSpaceMaths< qreal, KoCmykF32Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("y"))) * this->channels()[2]->getUIUnitValue();
+    p->black = this->channels()[3]->getUIMin() + KoColorSpaceMaths< qreal, KoCmykF32Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("k"))) * this->channels()[3]->getUIUnitValue();
     p->alpha = 1.0;
 }
 

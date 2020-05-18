@@ -273,6 +273,27 @@ KisPaintDeviceSP KisPainter::convertToAlphaAsGray(KisPaintDeviceSP src)
     return dst;
 }
 
+KisPaintDeviceSP KisPainter::convertToAlphaAsPureAlpha(KisPaintDeviceSP src)
+{
+    const KoColorSpace *srcCS = src->colorSpace();
+    const QRect processRect = src->extent();
+    KisPaintDeviceSP dst(new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8()));
+
+    if (processRect.isEmpty()) return dst;
+
+    KisSequentialConstIterator srcIt(src, processRect);
+    KisSequentialIterator dstIt(dst, processRect);
+
+    while (srcIt.nextPixel() && dstIt.nextPixel()) {
+        const quint8 *srcPtr = srcIt.rawDataConst();
+        quint8 *alpha8Ptr = dstIt.rawData();
+
+        *alpha8Ptr = srcCS->opacityU8(srcPtr);
+    }
+
+    return dst;
+}
+
 bool KisPainter::checkDeviceHasTransparency(KisPaintDeviceSP dev)
 {
     const QRect deviceBounds = dev->exactBounds();
@@ -1464,9 +1485,6 @@ void KisPainter::drawPainterPath(const QPainterPath& path, const QPen& pen)
 
 void KisPainter::drawPainterPath(const QPainterPath& path, const QPen& _pen, const QRect &requestedRect)
 {
-    // we are drawing mask, it has to be white
-    // color of the path is given by paintColor()
-    KIS_SAFE_ASSERT_RECOVER_NOOP(_pen.color() == Qt::white);
     QPen pen(_pen);
     pen.setColor(Qt::white);
 
@@ -1655,7 +1673,15 @@ void KisPainter::drawDDALine(const QPointF & start, const QPointF & end)
     int xd = x2 - x;
     int yd = y2 - y;
 
-    float m = (float)yd / (float)xd;
+    float m = 0;
+    bool lockAxis = true;
+
+    if (xd == 0) {
+        m = 2.0;
+    } else if ( yd != 0) {
+        lockAxis = false;
+        m = (float)yd / (float)xd;
+    }
 
     float fx = x;
     float fy = y;
@@ -1677,7 +1703,7 @@ void KisPainter::drawDDALine(const QPointF & start, const QPointF & end)
 
     if (fabs(m) > 1.0f) {
         inc = (yd > 0) ? 1 : -1;
-        m = 1.0f / m;
+        m = (lockAxis)? 0 : 1.0f / m;
         m *= inc;
         while (y != y2) {
             y = y + inc;
@@ -2946,12 +2972,12 @@ void KisPainter::mirrorRect(Qt::Orientation direction, QRect *rc) const
     KritaUtils::mirrorRect(direction, effectiveAxesCenter, rc);
 }
 
-void KisPainter::mirrorDab(Qt::Orientation direction, KisRenderedDab *dab) const
+void KisPainter::mirrorDab(Qt::Orientation direction, KisRenderedDab *dab, bool skipMirrorPixels) const
 {
     KisLodTransform t(d->device);
     QPoint effectiveAxesCenter = t.map(d->axesCenter).toPoint();
 
-    KritaUtils::mirrorDab(direction, effectiveAxesCenter, dab);
+    KritaUtils::mirrorDab(direction, effectiveAxesCenter, dab, skipMirrorPixels);
 }
 
 namespace {

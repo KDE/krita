@@ -346,8 +346,7 @@ int KisStopGradientSliderWidget::minimalHeight() const
     const int h = fm.height();
 
     QStyleOptionToolButton opt;
-    QSize sz = (style()->sizeFromContents(QStyle::CT_ToolButton, &opt, QSize(h, h), this).
-                      expandedTo(QApplication::globalStrut()));
+    QSize sz = style()->sizeFromContents(QStyle::CT_ToolButton, &opt, QSize(h, h), this);
 
     return sz.height() + m_handleSize.height();
 }

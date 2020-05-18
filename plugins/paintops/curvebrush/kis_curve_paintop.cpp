@@ -20,6 +20,7 @@
 
 #include <cmath>
 
+#include <QPainterPath>
 #include <QRect>
 
 #include <kis_image.h>

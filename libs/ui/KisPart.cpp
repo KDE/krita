@@ -46,6 +46,9 @@
 #include <KoDialog.h>
 #include <kdesktopfile.h>
 #include <QMessageBox>
+#include <QMenu>
+
+#include <QMenuBar>
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
 #include <kconfig.h>
@@ -64,6 +67,8 @@
 #include "kis_shape_controller.h"
 #include "KisResourceServerProvider.h"
 #include "kis_animation_cache_populator.h"
+#include "kis_image_animation_interface.h"
+#include "kis_time_range.h"
 #include "kis_idle_watcher.h"
 #include "kis_image.h"
 #include "KisOpenPane.h"
@@ -73,6 +78,8 @@
 #include "kis_action.h"
 #include "kis_action_registry.h"
 #include "KisSessionResource.h"
+#include "KisBusyWaitBroker.h"
+#include "dialogs/kis_delayed_save_dialog.h"
 
 Q_GLOBAL_STATIC(KisPart, s_instance)
 
@@ -121,6 +128,14 @@ KisPart* KisPart::instance()
     return s_instance;
 }
 
+namespace {
+void busyWaitWithFeedback(KisImageSP image)
+{
+    const int busyWaitDelay = 1000;
+    KisDelayedSaveDialog dialog(image, KisDelayedSaveDialog::ForcedDialog, busyWaitDelay, KisPart::instance()->currentMainwindow());
+    dialog.blockIfImageIsBusy();
+}
+}
 
 KisPart::KisPart()
     : d(new Private(this))
@@ -143,6 +158,7 @@ KisPart::KisPart()
 
 
     d->animationCachePopulator.slotRequestRegeneration();
+    KisBusyWaitBroker::instance()->setFeedbackCallback(&busyWaitWithFeedback);
 }
 
 KisPart::~KisPart()
@@ -175,14 +191,16 @@ void KisPart::updateIdleWatcherConnections()
     d->idleWatcher.setTrackedImages(images);
 }
 
-void KisPart::addDocument(KisDocument *document)
+void KisPart::addDocument(KisDocument *document, bool notify)
 {
     //dbgUI << "Adding document to part list" << document;
     Q_ASSERT(document);
     if (!d->documents.contains(document)) {
         d->documents.append(document);
-        emit documentOpened('/'+objectName());
-        emit sigDocumentAdded(document);
+        if (notify){
+            emit documentOpened('/'+ objectName());
+            emit sigDocumentAdded(document);
+        }
         connect(document, SIGNAL(sigSavingFinished()), SLOT(slotDocumentSaved()));
     }
 }
@@ -204,12 +222,16 @@ int KisPart::documentCount() const
     return d->documents.size();
 }
 
-void KisPart::removeDocument(KisDocument *document)
+void KisPart::removeDocument(KisDocument *document, bool deleteDocument)
 {
-    d->documents.removeAll(document);
-    emit documentClosed('/'+objectName());
-    emit sigDocumentRemoved(document->url().toLocalFile());
-    document->deleteLater();
+    if (document) {
+        d->documents.removeAll(document);
+        emit documentClosed('/' + objectName());
+        emit sigDocumentRemoved(document->url().toLocalFile());
+        if (deleteDocument) {
+            document->deleteLater();
+        }
+    }
 }
 
 KisMainWindow *KisPart::createMainWindow(QUuid id)
@@ -217,8 +239,39 @@ KisMainWindow *KisPart::createMainWindow(QUuid id)
     KisMainWindow *mw = new KisMainWindow(id);
     dbgUI <<"mainWindow" << (void*)mw << "added to view" << this;
     d->mainWindows.append(mw);
-    emit sigWindowAdded(mw);
+
+    // Add all actions with a menu property to the main window
+    Q_FOREACH(QAction *action, mw->actionCollection()->actions()) {
+        QString menuLocation = action->property("menulocation").toString();
+        if (!menuLocation.isEmpty()) {
+            QAction *found = 0;
+            QList<QAction *> candidates = mw->menuBar()->actions();
+            Q_FOREACH(const QString &name, menuLocation.split("/")) {
+                Q_FOREACH(QAction *candidate, candidates) {
+                    if (candidate->objectName().toLower() == name.toLower()) {
+                        found = candidate;
+                        candidates = candidate->menu()->actions();
+                        break;
+                    }
+                }
+                if (candidates.isEmpty()) {
+                    break;
+                }
+            }
+
+            if (found && found->menu()) {
+                found->menu()->addAction(action);
+            }
+        }
+    }
+
+
     return mw;
+}
+
+void KisPart::notifyMainWindowIsBeingCreated(KisMainWindow *mainWindow)
+{
+    emit sigMainWindowIsBeingCreated(mainWindow);
 }
 
 KisView *KisPart::createView(KisDocument *document,
@@ -425,6 +478,14 @@ KisAnimationCachePopulator* KisPart::cachePopulator() const
     return &d->animationCachePopulator;
 }
 
+void KisPart::prioritizeFrameForCache(KisImageSP image, int frame) {
+    KisImageAnimationInterface* animInterface = image->animationInterface();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(animInterface->fullClipRange().contains(frame));
+
+    d->animationCachePopulator.requestRegenerationWithPriorityFrame(image, frame);
+
+}
+
 void KisPart::openExistingFile(const QUrl &url)
 {
     // TODO: refactor out this method!
@@ -503,11 +564,11 @@ void KisPart::openTemplate(const QUrl &url)
     qApp->restoreOverrideCursor();
 }
 
-void KisPart::addRecentURLToAllMainWindows(QUrl url)
+void KisPart::addRecentURLToAllMainWindows(QUrl url, QUrl oldUrl)
 {
     // Add to recent actions list in our mainWindows
     Q_FOREACH (KisMainWindow *mainWindow, d->mainWindows) {
-        mainWindow->addRecentURL(url);
+        mainWindow->addRecentURL(url, oldUrl);
     }
 }
 

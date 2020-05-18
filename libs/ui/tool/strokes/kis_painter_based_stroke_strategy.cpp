@@ -36,7 +36,7 @@
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings.h"
 
-KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QString &id,
+KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QLatin1String &id,
                                                              const KUndo2MagicString &name,
                                                              KisResourcesSnapshotSP resources,
                                                              QVector<KisFreehandStrokeInfo*> strokeInfos,bool useMergeID)
@@ -51,7 +51,7 @@ KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QString &id,
     init();
 }
 
-KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QString &id,
+KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QLatin1String &id,
                                                              const KUndo2MagicString &name,
                                                              KisResourcesSnapshotSP resources,
                                                              KisFreehandStrokeInfo *strokeInfo,bool useMergeID)
@@ -352,7 +352,7 @@ void KisPainterBasedStrokeStrategy::cancelStrokeCallback()
             delete m_transaction;
             deletePainters();
 
-            QRegion region = t->region();
+            KisRegion region = t->region();
             indirect->setTemporaryTarget(0);
             node->setDirty(region);
             revert = false;

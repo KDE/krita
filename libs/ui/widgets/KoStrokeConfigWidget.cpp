@@ -38,7 +38,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QSizePolicy>
-#include <QSignalMapper>
+#include <KisSignalMapper.h>
 
 // KDE
 #include <klocalizedstring.h>
@@ -301,7 +301,7 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(KoCanvasBase *canvas, QWidget * paren
     connect(d->capNJoinMenu->miterLimit, SIGNAL(valueChangedPt(qreal)),    this, SLOT(applyJoinCapChanges()));
 
     { // Map the marker signals correctly
-        QSignalMapper *mapper = new QSignalMapper(this);
+        KisSignalMapper *mapper = new KisSignalMapper(this);
         connect(mapper, SIGNAL(mapped(int)), SLOT(applyMarkerChanges(int)));
 
         connect(d->startMarkerSelector,  SIGNAL(currentIndexChanged(int)), mapper, SLOT(map()));
@@ -323,8 +323,9 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(KoCanvasBase *canvas, QWidget * paren
 
     d->selectionChangedCompressor.start();
 
-    d->fillConfigWidget->activate();
-    deactivate();
+    // initialize deactivation locks
+    d->deactivationLocks.push_back(KisAcyclicSignalConnector::Blocker(d->shapeChangedAcyclicConnector));
+    d->deactivationLocks.push_back(KisAcyclicSignalConnector::Blocker(d->resourceManagerAcyclicConnector));
 }
 
 KoStrokeConfigWidget::~KoStrokeConfigWidget()
@@ -428,7 +429,7 @@ void KoStrokeConfigWidget::setUnit(const KoUnit &unit, KoShape *representativeSh
      */
     KoUnit newUnit(unit);
     if (representativeShape) {
-        newUnit.adjustByPixelTransform(representativeShape->absoluteTransformation(0));
+        newUnit.adjustByPixelTransform(representativeShape->absoluteTransformation());
     }
 
     d->ui->lineWidth->setUnit(newUnit);
@@ -459,12 +460,11 @@ void KoStrokeConfigWidget::updateMarkers(const QList<KoMarker*> &markers)
 
 void KoStrokeConfigWidget::activate()
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN(!d->deactivationLocks.empty());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!d->deactivationLocks.empty());
     d->deactivationLocks.clear();
     d->fillConfigWidget->activate();
 
     if (!d->noSelectionTrackingMode) {
-        // selectionChanged();
         d->selectionChangedCompressor.start();
     } else {
         loadCurrentStrokeFillFromResourceServer();
@@ -473,7 +473,7 @@ void KoStrokeConfigWidget::activate()
 
 void KoStrokeConfigWidget::deactivate()
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN(d->deactivationLocks.empty());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(d->deactivationLocks.empty());
 
     d->deactivationLocks.push_back(KisAcyclicSignalConnector::Blocker(d->shapeChangedAcyclicConnector));
     d->deactivationLocks.push_back(KisAcyclicSignalConnector::Blocker(d->resourceManagerAcyclicConnector));

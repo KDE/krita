@@ -39,13 +39,13 @@ struct KisKeyframeBase::Private
     Private(KisKeyframeChannel *channel, int time)
         : channel(channel), time(time)
     {}
+
+    virtual ~KisKeyframeBase() = default;
 };
 
 KisKeyframeBase::KisKeyframeBase(KisKeyframeChannel *channel, int time)
     : m_d(new Private(channel, time))
 {}
-
-KisKeyframeBase::~KisKeyframeBase() = default;
 
 KisKeyframeChannel *KisKeyframeBase::channel() const
 {
@@ -72,11 +72,16 @@ int KisKeyframeBase::duration() const
 
 struct KisKeyframe::Private
 {
-    InterpolationMode interpolationMode{Constant};
-    InterpolationTangentsMode tangentsMode{Smooth};
+    InterpolationMode interpolationMode {InterpolationMode::Constant};
+    InterpolationTangentsMode tangentsMode {InterpolationTangentsMode::Smooth};
     QPointF leftTangent;
     QPointF rightTangent;
     int colorLabel{0};
+
+    Private(KisKeyframeChannel *channel, int time)
+        : channel(channel)
+        , time(time)
+    {}
 };
 
 KisKeyframe::KisKeyframe(KisKeyframeChannel *channel, int time)

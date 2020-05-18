@@ -43,6 +43,10 @@
 
 #include "kis_ls_utils.h"
 #include "kis_multiple_projection.h"
+#include "kis_cached_paint_device.h"
+#include "krita_utils.h"
+#include "KisLayerStyleKnockoutBlower.h"
+
 
 namespace {
 
@@ -52,10 +56,10 @@ int borderSize(psd_stroke_position position, int size)
 
     switch (position) {
     case psd_stroke_outside:
-        border = 2 * size + 1;
+        border = size + 1;
         break;
     case psd_stroke_center:
-        border = size + 1;
+        border = qCeil(0.5 * size) + 1;
         break;
     case psd_stroke_inside:
         border = 1;
@@ -85,6 +89,7 @@ KisLayerStyleFilter *KisLsStrokeFilter::clone() const
 
 void KisLsStrokeFilter::applyStroke(KisPaintDeviceSP srcDevice,
                                     KisMultipleProjection *dst,
+                                    KisLayerStyleKnockoutBlower *blower,
                                     const QRect &applyRect,
                                     const psd_layer_effects_stroke *config,
                                     KisLayerStyleFilterEnvironment *env) const
@@ -93,20 +98,29 @@ void KisLsStrokeFilter::applyStroke(KisPaintDeviceSP srcDevice,
 
     const QRect needRect = kisGrowRect(applyRect, borderSize(config->position(), config->size()));
 
-    KisSelectionSP baseSelection = KisLsUtils::selectionFromAlphaChannel(srcDevice, needRect);
+    KisSelectionSP baseSelection = blower->knockoutSelectionLazy();
+
+    KisLsUtils::selectionFromAlphaChannel(srcDevice, baseSelection, needRect);
     KisPixelSelectionSP selection = baseSelection->pixelSelection();
 
+//    KritaUtils::filterAlpha8Device(selection, needRect,
+//                                   [](quint8 pixel) {
+//                                       return pixel > 0 ? 255 : 0;
+//                                   });
+//    KisGaussianKernel::applyGaussian(selection, needRect, 1.0, 1.0, QBitArray(), 0);
+
     {
-        KisPixelSelectionSP knockOutSelection = new KisPixelSelection(new KisSelectionEmptyBounds(0));
+        KisCachedSelection::Guard s2(*env->cachedSelection());
+        KisPixelSelectionSP knockOutSelection = s2.selection()->pixelSelection();
         knockOutSelection->makeCloneFromRough(selection, needRect);
 
         if (config->position() == psd_stroke_outside) {
-            KisGaussianKernel::applyDilate(selection, needRect, 2 * config->size(), QBitArray(), 0, true);
-        } else if (config->position() == psd_stroke_inside) {
-            KisGaussianKernel::applyErodeU8(knockOutSelection, needRect, 2 * config->size(), QBitArray(), 0, true);
-        } else if (config->position() == psd_stroke_center) {
             KisGaussianKernel::applyDilate(selection, needRect, config->size(), QBitArray(), 0, true);
+        } else if (config->position() == psd_stroke_inside) {
             KisGaussianKernel::applyErodeU8(knockOutSelection, needRect, config->size(), QBitArray(), 0, true);
+        } else if (config->position() == psd_stroke_center) {
+            KisGaussianKernel::applyDilate(selection, needRect, 0.5 * config->size(), QBitArray(), 0, true);
+            KisGaussianKernel::applyErodeU8(knockOutSelection, needRect, 0.5 * config->size(), QBitArray(), 0, true);
         }
 
         KisPainter gc(selection);
@@ -115,26 +129,22 @@ void KisLsStrokeFilter::applyStroke(KisPaintDeviceSP srcDevice,
         gc.end();
     }
 
-    KisPaintDeviceSP fillDevice = new KisPaintDevice(srcDevice->colorSpace());
-    KisLsUtils::fillOverlayDevice(fillDevice, applyRect, config, env);
-
-
     const QString compositeOp = config->blendMode();
-    const quint8 opacityU8 = 255.0 / 100.0 * config->opacity();
+    const quint8 opacityU8 = quint8(qRound(255.0 / 100.0 * config->opacity()));
     KisPaintDeviceSP dstDevice = dst->getProjection(KisMultipleProjection::defaultProjectionId(),
                                                     compositeOp,
                                                     opacityU8,
                                                     QBitArray(),
                                                     srcDevice);
-
-    KisPainter::copyAreaOptimized(applyRect.topLeft(), fillDevice, dstDevice, applyRect, baseSelection);
+    KisLsUtils::fillOverlayDevice(dstDevice, applyRect, config, env);
 }
 
 void KisLsStrokeFilter::processDirectly(KisPaintDeviceSP src,
                                         KisMultipleProjection *dst,
-                                         const QRect &applyRect,
-                                         KisPSDLayerStyleSP style,
-                                         KisLayerStyleFilterEnvironment *env) const
+                                        KisLayerStyleKnockoutBlower *blower,
+                                        const QRect &applyRect,
+                                        KisPSDLayerStyleSP style,
+                                        KisLayerStyleFilterEnvironment *env) const
 {
     Q_UNUSED(env);
     KIS_ASSERT_RECOVER_RETURN(style);
@@ -143,7 +153,7 @@ void KisLsStrokeFilter::processDirectly(KisPaintDeviceSP src,
     if (!KisLsUtils::checkEffectEnabled(config, dst)) return;
 
     KisLsUtils::LodWrapper<psd_layer_effects_stroke> w(env->currentLevelOfDetail(), config);
-    applyStroke(src, dst, applyRect, w.config, env);
+    applyStroke(src, dst, blower, applyRect, w.config, env);
 }
 
 QRect KisLsStrokeFilter::neededRect(const QRect &rect, KisPSDLayerStyleSP style, KisLayerStyleFilterEnvironment *env) const

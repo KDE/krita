@@ -78,7 +78,7 @@ public:
     void capturedShortcut(const QVariant &, const QModelIndex &);
 
     /**
-     * Add @p action at hierchy level @p level.
+     * Add @p action at hierarchy level @p level.
      *
      * Filters out QActions (TODO: hmm) and unnamed actions before adding.
      *

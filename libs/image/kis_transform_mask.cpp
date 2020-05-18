@@ -98,8 +98,8 @@ struct Q_DECL_HIDDEN KisTransformMask::Private
 };
 
 
-KisTransformMask::KisTransformMask()
-    : KisEffectMask(),
+KisTransformMask::KisTransformMask(const QString &name)
+    : KisEffectMask(name),
       m_d(new Private())
 {
     setTransformParams(
@@ -197,7 +197,9 @@ void KisTransformMask::recaclulateStaticImage()
     KisLayerSP parentLayer = qobject_cast<KisLayer*>(parent().data());
     KIS_ASSERT_RECOVER_RETURN(parentLayer);
 
-    if (!m_d->staticCacheDevice) {
+    if (!m_d->staticCacheDevice ||
+        *m_d->staticCacheDevice->colorSpace() != *parentLayer->original()->colorSpace()) {
+
         m_d->staticCacheDevice =
             new KisPaintDevice(parentLayer->original()->colorSpace());
     }
@@ -372,6 +374,13 @@ QRect KisTransformMask::needRect(const QRect& rect, PositionToFilthy pos) const
         KisSafeTransform transform(m_d->worker.forwardTransform(), limitingRect, interestRect);
         needRect = transform.mapRectBackward(rect);
 
+        /**
+         * When sampling affine transformations we use KisRandomSubAccessor,
+         * which uses bilinear interpolation for calculating pixels. Therefore,
+         * we need to extend the sides of the need rect by one pixel.
+         */
+        needRect = kisGrowRect(needRect, 1);
+
     } else {
         needRect = m_d->params->nonAffineNeedRect(rect, interestRect);
     }
@@ -480,7 +489,7 @@ KisKeyframeChannel *KisTransformMask::requestKeyframeChannel(const QString &id)
             animatedParams = dynamic_cast<KisAnimatedTransformParamsInterface*>(converted.data());
         }
 
-        KisKeyframeChannel *channel = animatedParams->getKeyframeChannel(id, parent()->original()->defaultBounds());
+        KisKeyframeChannel *channel = animatedParams->getKeyframeChannel(id, parent());
         if (channel) return channel;
     }
 

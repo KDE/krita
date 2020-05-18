@@ -18,6 +18,8 @@
 
 #include "kis_liquify_paint_helper.h"
 
+#include <QPainterPath>
+
 #include "kis_algebra_2d.h"
 #include "KoPointerEvent.h"
 #include <brushengine/kis_paint_information.h>
@@ -65,7 +67,7 @@ KisLiquifyPaintHelper::~KisLiquifyPaintHelper()
 
 void KisLiquifyPaintHelper::Private::updatePreviousPaintInfo(const KisPaintInformation &info)
 {
-    QPointF prevPos = lastOutlinePos.pushThroughHistory(info.pos());
+    QPointF prevPos = lastOutlinePos.pushThroughHistory(info.pos(), converter->effectiveZoom());
     qreal angle = KisAlgebra2D::directionBetweenPoints(prevPos, info.pos(), 0);
 
     previousDistanceInfo =

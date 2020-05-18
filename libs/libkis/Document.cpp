@@ -23,7 +23,6 @@
 #include <KoColorSpaceConstants.h>
 #include <KoXmlReader.h>
 #include <KisDocument.h>
-#include <kis_colorspace_convert_visitor.h>
 #include <kis_image.h>
 #include <KisPart.h>
 #include <kis_paint_device.h>
@@ -54,6 +53,7 @@
 #include <kis_coordinates_converter.h>
 #include <kis_time_range.h>
 #include <KisImportExportErrorCode.h>
+#include <KisPart.h>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
@@ -77,17 +77,23 @@
 struct Document::Private {
     Private() {}
     QPointer<KisDocument> document;
+    bool ownsDocument {false};
 };
 
-Document::Document(KisDocument *document, QObject *parent)
+Document::Document(KisDocument *document, bool ownsDocument, QObject *parent)
     : QObject(parent)
     , d(new Private)
 {
     d->document = document;
+    d->ownsDocument = ownsDocument;
 }
 
 Document::~Document()
 {
+    if (d->ownsDocument && d->document) {
+        KisPart::instance()->removeDocument(d->document);
+        delete d->document;
+    }
     delete d;
 }
 
@@ -188,8 +194,7 @@ bool Document::setColorProfile(const QString &value)
     const KoColorProfile *profile = KoColorSpaceRegistry::instance()->profileByName(value);
     if (!profile) return false;
     bool retval = d->document->image()->assignImageProfile(profile);
-    d->document->image()->setModified();
-    d->document->image()->initialRefreshGraph();
+    d->document->image()->waitForDone();
     return retval;
 }
 
@@ -204,8 +209,7 @@ bool Document::setColorSpace(const QString &colorModel, const QString &colorDept
                                                  KoColorConversionTransformation::IntentPerceptual,
                                                  KoColorConversionTransformation::HighQuality | KoColorConversionTransformation::NoOptimization);
 
-    d->document->image()->setModified();
-    d->document->image()->initialRefreshGraph();
+    d->document->image()->waitForDone();
     return true;
 }
 
@@ -448,6 +452,7 @@ QByteArray Document::pixelData(int x, int y, int w, int h) const
 bool Document::close()
 {
     bool retval = d->document->closeUrl(false);
+
     Q_FOREACH(KisView *view, KisPart::instance()->views()) {
         if (view->document() == d->document) {
             view->close();
@@ -456,7 +461,11 @@ bool Document::close()
         }
     }
 
-    KisPart::instance()->removeDocument(d->document);
+    KisPart::instance()->removeDocument(d->document, !d->ownsDocument);
+    if (d->ownsDocument) {
+        delete d->document;
+    }
+
     d->document = 0;
     return retval;
 }
@@ -588,17 +597,18 @@ Node* Document::createNode(const QString &name, const QString &nodeType)
         node = new Node(image, new KisShapeLayer(d->document->shapeController(), image, name, OPACITY_OPAQUE_U8));
     }
     else if (nodeType.toLower()  == "transparencymask") {
-        node = new Node(image, new KisTransparencyMask());
+        node = new Node(image, new KisTransparencyMask(name));
     }
     else if (nodeType.toLower()  == "filtermask") {
-        node = new Node(image, new KisFilterMask());
+        node = new Node(image, new KisFilterMask(name));
     }
     else if (nodeType.toLower()  == "transformmask") {
-        node = new Node(image, new KisTransformMask());
+        node = new Node(image, new KisTransformMask(name));
     }
     else if (nodeType.toLower()  == "selectionmask") {
-        node = new Node(image, new KisSelectionMask(image));
+        node = new Node(image, new KisSelectionMask(image, name));
     }
+
     return node;
 }
 
@@ -638,7 +648,7 @@ FillLayer *Document::createFillLayer(const QString &name, const QString generato
     KisGeneratorSP generator = KisGeneratorRegistry::instance()->value(generatorName);
     if (generator) {
 
-        KisFilterConfigurationSP config = generator->defaultConfiguration();
+        KisFilterConfigurationSP config = generator->factoryConfiguration();
         Q_FOREACH(const QString property, configuration.properties().keys()) {
             config->setProperty(property, configuration.property(property));
         }
@@ -807,9 +817,9 @@ Document *Document::clone() const
 {
     if (!d->document) return 0;
     QPointer<KisDocument> clone = d->document->clone();
-    Document * d = new Document(clone);
-    clone->setParent(d); // It's owned by the document, not KisPart
-    return d;
+    Document * newDocument = new Document(clone, d->ownsDocument);
+    clone->setParent(newDocument); // It's owned by the document, not KisPart
+    return newDocument;
 }
 
 void Document::setHorizontalGuides(const QList<qreal> &lines)
@@ -875,6 +885,11 @@ QRect Document::bounds() const
 QPointer<KisDocument> Document::document() const
 {
     return d->document;
+}
+
+void Document::setOwnsDocument(bool ownsDocument)
+{
+    d->ownsDocument = ownsDocument;
 }
 
 /* Animation related function */

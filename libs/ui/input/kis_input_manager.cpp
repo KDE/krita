@@ -453,6 +453,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         retval = !wasScrolled;
         break;
     }
+#ifndef Q_OS_ANDROID
     case QEvent::Enter:
         d->debugEvent<QEvent, false>(event);
         //Make sure the input actions know we are active.
@@ -479,6 +480,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 
         d->matcher.leaveEvent();
         break;
+#endif
     case QEvent::FocusIn:
         d->debugEvent<QEvent, false>(event);
         KisAbstractInputAction::setInputManager(this);
@@ -516,6 +518,15 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         if (d->tryHidePopupPalette()) {
             retval = true;
         } else {
+#ifdef Q_OS_ANDROID
+            // this means S-Pen has entered the proximity. Hence the TouchEvents
+            // will be disabled by the OS, but we won't receive TouchEnd event.
+            if (d->touchHasBlockedPressEvents)
+            {
+                QTouchEvent *touchEvent = new QTouchEvent(QEvent::Type::TouchEnd);
+                retval = d->matcher.touchEndEvent(touchEvent);
+            }
+#endif
             //Make sure the input actions know we are active.
             KisAbstractInputAction::setInputManager(this);
             retval = d->matcher.buttonPressed(tabletEvent->button(), tabletEvent);

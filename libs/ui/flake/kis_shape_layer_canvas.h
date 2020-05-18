@@ -27,6 +27,7 @@
 #include <KoSelectedShapesProxy.h>
 #include <KoShapeManager.h>
 #include <kis_image_view_converter.h>
+#include <KisSafeBlockingQueueConnectionProxy.h>
 
 class KoShapeManager;
 class KoToolProxy;
@@ -68,16 +69,12 @@ public:
     void updateInputMethodInfo() override {}
     void setCursor(const QCursor &) override {}
 
-    void setUpdatesBlocked(bool value);
-    bool updatesBlocked() const;
-
 protected:
     QScopedPointer<KisImageViewConverter> m_viewConverter;
     QScopedPointer<KoShapeManager> m_shapeManager;
     QScopedPointer<KoSelectedShapesProxy> m_selectedShapesProxy;
     bool m_hasChangedWhileBeingInvisible {false};
     bool m_isDestroying {false};
-    bool m_updatesBlocked {false};
 };
 
 /**
@@ -115,27 +112,20 @@ private Q_SLOTS:
     friend class KisRepaintShapeLayerLayerJob;
     void repaint();
     void slotStartAsyncRepaint();
-    void slotStartDirectSyncRepaint();
     void slotImageSizeChanged();
-
-Q_SIGNALS:
-    void forwardRepaint();
-
-private:
-    void updateUpdateCompressorDelay();
 
 private:
     KisPaintDeviceSP m_projection;
     KisShapeLayer *m_parentLayer {0};
-    KisThreadSafeSignalCompressor m_canvasUpdateCompressor;
 
     KisThreadSafeSignalCompressor m_asyncUpdateSignalCompressor;
     volatile bool m_hasUpdateInCompressor = false;
-    volatile bool m_hasDirectSyncRepaintInitiated = false;
+    KisSafeBlockingQueueConnectionProxy<void> m_safeForcedConnection;
 
     bool m_forceUpdateHiddenAreasOnly = false;
     QRegion m_dirtyRegion;
     QMutex m_dirtyRegionMutex;
+    KoShapeManager::PaintJobsOrder m_paintJobsOrder;
 
     QRect m_cachedImageRect;
 

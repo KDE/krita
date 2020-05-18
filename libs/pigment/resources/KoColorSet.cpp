@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project
    Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
-   Copyright (c) 2016 L. E. Segovia <leo.segovia@siggraph.org>
+   Copyright (c) 2016 L. E. Segovia <amy@amyspark.me>
 
 
     This library is free software; you can redistribute it and/or
@@ -290,11 +290,13 @@ void KoColorSet::clear()
 
 KisSwatch KoColorSet::getColorGlobal(quint32 x, quint32 y) const
 {
-    for (const QString &groupName : d->groupNames) {
-        if ((int)y < d->groups[groupName].rowCount()) {
-            return d->groups[groupName].getEntry(x, y);
-        } else {
-            y -= d->groups[groupName].rowCount();
+    for (const QString &groupName : getGroupNames()) {
+        if (d->groups.contains(groupName)) {
+            if ((int)y < d->groups[groupName].rowCount()) {
+                return d->groups[groupName].getEntry(x, y);
+            } else {
+                y -= d->groups[groupName].rowCount();
+            }
         }
     }
     return KisSwatch();
@@ -311,7 +313,7 @@ KisSwatch KoColorSet::getColorGroup(quint32 x, quint32 y, QString groupName)
     return e;
 }
 
-QStringList KoColorSet::getGroupNames()
+QStringList KoColorSet::getGroupNames() const
 {
     if (d->groupNames.size() != d->groups.size()) {
         warnPigment << "mismatch between groups and the groupnames list.";
@@ -362,7 +364,7 @@ void KoColorSet::setComment(QString comment)
 
 bool KoColorSet::addGroup(const QString &groupName)
 {
-    if (d->groups.contains(groupName) || d->groupNames.contains(groupName)) {
+    if (d->groups.contains(groupName) || getGroupNames().contains(groupName)) {
         return false;
     }
     d->groupNames.append(groupName);
@@ -373,7 +375,7 @@ bool KoColorSet::addGroup(const QString &groupName)
 
 bool KoColorSet::moveGroup(const QString &groupName, const QString &groupNameInsertBefore)
 {
-    if (d->groupNames.contains(groupName)==false || d->groupNames.contains(groupNameInsertBefore)==false) {
+    if (!d->groupNames.contains(groupName) || d->groupNames.contains(groupNameInsertBefore)==false) {
         return false;
     }
     if (groupNameInsertBefore != GLOBAL_GROUP_NAME && groupName != GLOBAL_GROUP_NAME) {
@@ -418,7 +420,7 @@ QString KoColorSet::defaultFileExtension() const
 int KoColorSet::rowCount() const
 {
     int res = 0;
-    for (const QString &name : d->groupNames) {
+    for (const QString &name : getGroupNames()) {
         res += d->groups[name].rowCount();
     }
     return res;
@@ -854,7 +856,7 @@ bool KoColorSet::Private::loadAct()
 
 bool KoColorSet::Private::loadRiff()
 {
-    // http://worms2d.info/Palette_file
+    // https://worms2d.info/Palette_file
     QFileInfo info(colorSet->filename());
     colorSet->setName(info.completeBaseName());
     KisSwatch e;

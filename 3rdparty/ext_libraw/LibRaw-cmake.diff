@@ -1,0 +1,1700 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+new file mode 100644
+index 0000000..b24ad45
+--- /dev/null
++++ b/CMakeLists.txt
+@@ -0,0 +1,690 @@
++# ===========================================================
++#
++# This file is a part of Libraw project
++# <a href="http://www.libraw.org">http://www.libraw.org</a>
++#
++# @date   2013-09-07
++# @brief  Library for reading and processing of RAW images
++#
++# @author Copyright (C) 2013 by Gilles Caulier
++#         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
++#
++# This program is free software; you can redistribute it
++# and/or modify it under the terms of the GNU General
++# Public License as published by the Free Software Foundation;
++# either version 2, or (at your option)
++# any later version.
++#
++# This program is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
++# GNU General Public License for more details.
++#
++# ============================================================
++
++CMAKE_MINIMUM_REQUIRED(VERSION 2.6.3)
++
++PROJECT(libraw)
++
++# ==================================================================================================
++# Library version info extraction
++
++FILE(READ ${CMAKE_CURRENT_SOURCE_DIR}/libraw/libraw_version.h _libraw_version_content)
++
++# API version strings
++STRING(REGEX MATCH "#define LIBRAW_MAJOR_VERSION[ \t]*([0-9]*)\n" _version_major_match ${_libraw_version_content})
++SET(RAW_LIB_MAJOR_VERSION "${CMAKE_MATCH_1}")
++
++STRING(REGEX MATCH "#define LIBRAW_MINOR_VERSION[ \t]*([0-9]*)\n" _version_minor_match ${_libraw_version_content})
++SET(RAW_LIB_MINOR_VERSION "${CMAKE_MATCH_1}")
++
++STRING(REGEX MATCH "#define LIBRAW_PATCH_VERSION[ \t]*([0-9]*)\n" _version_patch_match ${_libraw_version_content})
++SET(RAW_LIB_PATCH_VERSION "${CMAKE_MATCH_1}")
++
++# ABI version strings
++
++STRING(REGEX MATCH "#define LIBRAW_SHLIB_CURRENT[ \t]*([0-9]*)\n" _version_socur_match ${_libraw_version_content})
++SET(RAW_LIB_SO_CUR_VERSION "${CMAKE_MATCH_1}")
++
++STRING(REGEX MATCH "#define LIBRAW_SHLIB_REVISION[ \t]*([0-9]*)\n" _version_sorev_match ${_libraw_version_content})
++SET(RAW_LIB_SO_REV_VERSION "${CMAKE_MATCH_1}")
++
++STRING(REGEX MATCH "#define LIBRAW_SHLIB_AGE[ \t]*([0-9]*)\n" _version_soage_match ${_libraw_version_content})
++SET(RAW_LIB_SO_AGE_VERSION "${CMAKE_MATCH_1}")
++
++# Set env. variables accordinly.
++SET(RAW_LIB_VERSION_STRING    "${RAW_LIB_MAJOR_VERSION}.${RAW_LIB_MINOR_VERSION}.${RAW_LIB_PATCH_VERSION}")
++SET(RAW_LIB_VERSION_ID        "0x${RAW_LIB_MAJOR_VERSION}${RAW_LIB_MINOR_VERSION}${RAW_LIB_PATCH_VERSION}")
++SET(RAW_LIB_SO_VERSION_STRING "${RAW_LIB_SO_CUR_VERSION}.${RAW_LIB_SO_REV_VERSION}.${RAW_LIB_SO_AGE_VERSION}")
++
++MESSAGE(STATUS "LibRaw string version: ${RAW_LIB_VERSION_STRING}")
++MESSAGE(STATUS "LibRaw ID version:     ${RAW_LIB_VERSION_ID}")
++MESSAGE(STATUS "LibRaw SO version:     ${RAW_LIB_SO_VERSION_STRING}")
++
++# ==================================================================================================
++# Project Options
++OPTION(BUILD_SHARED_LIBS           "Build library as shared library                 (default=ON)"                 ON)
++OPTION(ENABLE_OPENMP               "Build library with OpenMP support               (default=ON)"                 ON)
++OPTION(ENABLE_LCMS                 "Build library with LCMS support                 (default=ON)"                 ON)
++OPTION(ENABLE_EXAMPLES             "Build library with sample command-line programs (default=ON)"                 ON)
++OPTION(ENABLE_RAWSPEED             "Build library with extra RawSpeed codec support (default=OFF)"                OFF)
++OPTION(ENABLE_DEMOSAIC_PACK_GPL2   "Build library with extra Demosaic pack GPL2     (default=OFF)"                OFF)
++OPTION(ENABLE_DEMOSAIC_PACK_GPL3   "Build library with extra Demosaic pack GPL3     (default=OFF)"                OFF)
++OPTION(ENABLE_DCRAW_DEBUG          "Build library with debug message from dcraw     (default=OFF)"                OFF)
++
++SET(DEMOSAIC_PACK_GPL2_RPATH "LibRaw-demosaic-pack-GPL2" CACHE STRING
++    "Relavive path to extra Demosaic pack GPL2 (default=LibRaw-demosaic-pack-GPL2)")
++
++SET(DEMOSAIC_PACK_GPL3_RPATH "LibRaw-demosaic-pack-GPL3" CACHE STRING 
++    "Relavive path to extra Demosaic pack GPL3 (default=LibRaw-demosaic-pack-GPL3)")
++
++SET(RAWSPEED_RPATH           "RawSpeed"           CACHE STRING 
++    "Relavive path to extra RawSpeed codec     (default=RawSpeed)")
++
++SET(DEMOSAIC_PACK_GPL2_PATH "${CMAKE_CURRENT_SOURCE_DIR}/${DEMOSAIC_PACK_GPL2_RPATH}")
++SET(DEMOSAIC_PACK_GPL3_PATH "${CMAKE_CURRENT_SOURCE_DIR}/${DEMOSAIC_PACK_GPL3_RPATH}")
++SET(RAWSPEED_PATH           "${CMAKE_CURRENT_SOURCE_DIR}/${RAWSPEED_RPATH}")
++
++SET(INSTALL_CMAKE_MODULE_PATH  "${CMAKE_ROOT}/Modules"  CACHE STRING
++    "Path to install cmake module              (default=${CMAKE_ROOT}/Modules)")
++
++# ==================================================================================================
++# General definitions rules
++
++SET(LIB_SUFFIX "" CACHE STRING "Define suffix of lib directory name (32/64)" )
++
++IF(WIN32 AND NOT DEFINED CMAKE_DEBUG_POSTFIX)
++    SET(CMAKE_DEBUG_POSTFIX "d")
++ENDIF()
++
++# To prevent warnings from M$ compiler
++IF(WIN32 AND MSVC)
++    ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
++    ADD_DEFINITIONS(-D_ATL_SECURE_NO_WARNINGS)
++    ADD_DEFINITIONS(-D_AFX_SECURE_NO_WARNINGS)
++ENDIF()
++
++# Under Windows, use specific flag to compile.
++IF(WIN32)
++    ADD_DEFINITIONS(-DDJGPP)
++ENDIF()
++
++# -- Check dependencies --------------------------------------------------------------------------------
++
++SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH} )
++
++INCLUDE(MacroBoolTo01)
++INCLUDE(MacroLogFeature)
++INCLUDE(MacroOptionalFindPackage)
++INCLUDE(MacroJPEG)
++
++# Math library check
++
++IF(NOT WIN32)
++    FIND_LIBRARY(MATH_LIBRARY m)
++ENDIF()
++
++# LCMS version 1 and 2 library check
++
++SET(LCMS_SUPPORT_CAN_BE_COMPILED false)
++
++IF (ENABLE_LCMS)
++    MESSAGE(STATUS "Check for LCMS1 availability...")
++    FIND_PACKAGE(LCMS)
++    IF (LCMS_FOUND)
++        MESSAGE(STATUS "Found LCMS1: ${LCMS_LIBRARIES} ${LCMS_INCLUDE_DIR}")
++        INCLUDE_DIRECTORIES(${LCMS_INCLUDE_DIR})
++        MACRO_LOG_FEATURE(LCMS_FOUND "LCMS1" "A small-footprint color management engine" "http://www.littlecms.com" TRUE "" "Needed by libkdcraw")
++        # Flag to compile Little CMS version 1 with LibRaw
++        ADD_DEFINITIONS(-DUSE_LCMS)
++        # For compatibility
++        SET(LCMS2_LIBRARIES ${LCMS_LIBRARIES})
++        SET(LCMS_SUPPORT_CAN_BE_COMPILED true)
++    ELSE ()
++        MESSAGE(STATUS "Check for LCMS2 availability instead LCMS1...")
++        FIND_PACKAGE(LCMS2)
++        IF (LCMS2_FOUND AND (LCMS2_VERSION VERSION_EQUAL 2.1 OR LCMS2_VERSION VERSION_GREATER 2.1))
++            MESSAGE(STATUS "Found LCMS2 instead LCMS1: ${LCMS2_LIBRARIES} ${LCMS2_INCLUDE_DIR}")
++            INCLUDE_DIRECTORIES(${LCMS2_INCLUDE_DIR})
++            MACRO_LOG_FEATURE(LCMS2_FOUND "LCMS2" "A small-footprint color management engine" "http://www.littlecms.com" FALSE "" "Needed by libkdcraw")
++            # Flag to compile Little CMS version 2 with LibRaw
++            ADD_DEFINITIONS(-DUSE_LCMS2)
++            SET(LCMS_SUPPORT_CAN_BE_COMPILED true)
++        ENDIF ()
++    ENDIF ()
++ENDIF()
++
++# For registration to libraw_config.h
++MACRO_BOOL_TO_01(LCMS_SUPPORT_CAN_BE_COMPILED LIBRAW_USE_LCMS)
++
++# zlib library check
++
++FIND_PACKAGE(ZLIB)
++
++# Flag to use zlib with LibRaw DNG deflate codec
++IF(ZLIB_FOUND)
++    ADD_DEFINITIONS(-DUSE_ZLIB)
++    INCLUDE_DIRECTORIES(${ZLIB_INCLUDE_DIRS})
++ENDIF()
++
++# For registration to libraw_config.h
++MACRO_BOOL_TO_01(ZLIB_FOUND LIBRAW_USE_DNGDEFLATECODEC)
++
++# JPEG library check
++
++DETECT_JPEG()
++IF(JPEG_FOUND)
++    if (${JPEG_LIB_VERSION} LESS 80)
++        set(JPEG8_FOUND FALSE)
++    else()
++        set(JPEG8_FOUND TRUE)
++    endif()
++ENDIF()
++
++MACRO_LOG_FEATURE(JPEG8_FOUND "libjpeg" "JPEG image format support" "http://www.ijg.org" FALSE "80" "needed for the LibRaw DNG lossy codec")
++
++# Flag to use libjpeg with LibRaw DNG lossy codec
++IF(JPEG8_FOUND)
++    ADD_DEFINITIONS(-DUSE_JPEG)
++    ADD_DEFINITIONS(-DUSE_JPEG8)
++    INCLUDE_DIRECTORIES(${JPEG_INCLUDE_DIR})
++ENDIF()
++
++# For registration to libraw_config.h
++MACRO_BOOL_TO_01(JPEG8_FOUND LIBRAW_USE_DNGLOSSYCODEC)
++
++# OpenMP library check
++
++SET(OPENMP_FOUND false)
++
++IF(ENABLE_OPENMP)
++    # OpenMP library detection (requires CMake >= 2.6.3)
++    MACRO_OPTIONAL_FIND_PACKAGE(OpenMP)
++
++    IF(OPENMP_FOUND)
++        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
++        IF("${OpenMP_CXX_FLAGS}" STREQUAL "-fopenmp")
++            SET(OPENMP_LDFLAGS "-lgomp")
++        ENDIF()
++        IF("${OpenMP_CXX_FLAGS}" STREQUAL "-xopenmp")
++            SET(OPENMP_LDFLAGS "-xopenmp")
++        ENDIF()
++    ENDIF()
++ENDIF()
++
++# For registration to libraw_config.h
++MACRO_BOOL_TO_01(OPENMP_FOUND LIBRAW_USE_OPENMP)
++
++# Jasper library check
++
++FIND_PACKAGE(Jasper)
++
++# Flag to use libjasper with LibRaw RedCine codec
++IF(JASPER_FOUND)
++    ADD_DEFINITIONS(-DUSE_JASPER)
++    INCLUDE_DIRECTORIES(${JASPER_INCLUDE_DIR})
++ENDIF()
++
++# For registration to libraw_config.h
++MACRO_BOOL_TO_01(JASPER_FOUND LIBRAW_USE_REDCINECODEC)
++
++# For RawSpeed Codec Support
++
++SET(RAWSPEED_FOUND false)
++SET(RAWSPEED_SUPPORT_CAN_BE_COMPILED false)
++
++IF(ENABLE_RAWSPEED)
++
++    FIND_PACKAGE(LibXml2)
++    FIND_PACKAGE(Pthreads)
++
++    MESSAGE(STATUS "RawSpeed codec path: ${RAWSPEED_PATH}")
++
++    IF(EXISTS "${RAWSPEED_PATH}/Common.cpp")
++        SET(RAWSPEED_FOUND true)
++    ELSE()
++        MESSAGE(STATUS "RawSpeed source code not found. Please checkout source code from RawStudio project website.")
++    ENDIF()
++
++    IF(ENABLE_RAWSPEED AND RAWSPEED_FOUND AND JPEG8_FOUND AND LIBXML2_FOUND AND PTHREADS_FOUND)
++
++        SET(RAWSPEED_SUPPORT_CAN_BE_COMPILED true)
++
++    ELSE()
++        IF (NOT JPEG8_FOUND)
++            MESSAGE(STATUS "LibJPEG dependency not resolved. LibRaw cannot be compiled with RawSpeed codec")
++        ENDIF()
++
++        IF (NOT LIBXML2_FOUND)
++            MESSAGE(STATUS "LibXML2 dependency not resolved. LibRaw cannot be compiled with RawSpeed codec")
++        ENDIF()
++
++        IF (NOT PTHREADS_FOUND)
++            MESSAGE(STATUS "Pthreads dependency not resolved. LibRaw cannot be compiled with RawSpeed codec")
++        ENDIF()
++
++    ENDIF()
++ENDIF()
++
++# For registration to libraw_config.h
++MACRO_BOOL_TO_01(RAWSPEED_SUPPORT_CAN_BE_COMPILED LIBRAW_USE_RAWSPEED)
++
++# -- Compilation rules for RawSpeed library -------------------------------------------------------------
++
++IF(RAWSPEED_SUPPORT_CAN_BE_COMPILED)
++
++    INCLUDE_DIRECTORIES(${RAWSPEED_PATH})
++
++    INCLUDE_DIRECTORIES(${LIBXML2_INCLUDE_DIR} ${PTHREADS_INCLUDE_DIR})
++
++    # Flag to include RawSpeed codec with Libraw
++    ADD_DEFINITIONS(-DUSE_RAWSPEED)
++
++    ADD_DEFINITIONS(${LIBXML2_DEFINITIONS} ${PTHREADS_DEFINITIONS})
++
++    SET(librawspeed_LIB_SRCS ${RAWSPEED_PATH}/ArwDecoder.cpp
++                             ${RAWSPEED_PATH}/BitPumpJPEG.cpp
++                             ${RAWSPEED_PATH}/BitPumpMSB.cpp
++                             ${RAWSPEED_PATH}/BitPumpMSB32.cpp
++                             ${RAWSPEED_PATH}/BitPumpPlain.cpp
++                             ${RAWSPEED_PATH}/BlackArea.cpp
++                             ${RAWSPEED_PATH}/ByteStream.cpp
++                             ${RAWSPEED_PATH}/ByteStreamSwap.cpp
++                             ${RAWSPEED_PATH}/Camera.cpp
++                             ${RAWSPEED_PATH}/CameraMetaData.cpp
++                             ${RAWSPEED_PATH}/CameraMetadataException.cpp
++                             ${RAWSPEED_PATH}/CameraSensorInfo.cpp
++                             ${RAWSPEED_PATH}/ColorFilterArray.cpp
++                             ${RAWSPEED_PATH}/Common.cpp
++                             ${RAWSPEED_PATH}/Cr2Decoder.cpp
++                             ${RAWSPEED_PATH}/DngDecoder.cpp
++                             ${RAWSPEED_PATH}/DngDecoderSlices.cpp
++                             ${RAWSPEED_PATH}/DngOpcodes.cpp
++                             ${RAWSPEED_PATH}/FileIOException.cpp
++                             ${RAWSPEED_PATH}/FileMap.cpp
++                             ${RAWSPEED_PATH}/IOException.cpp
++                             ${RAWSPEED_PATH}/LJpegDecompressor.cpp
++                             ${RAWSPEED_PATH}/LJpegPlain.cpp
++                             ${RAWSPEED_PATH}/NefDecoder.cpp
++                             ${RAWSPEED_PATH}/NikonDecompressor.cpp
++                             ${RAWSPEED_PATH}/OrfDecoder.cpp
++                             ${RAWSPEED_PATH}/PefDecoder.cpp
++                             ${RAWSPEED_PATH}/PentaxDecompressor.cpp
++                             ${RAWSPEED_PATH}/RawDecoder.cpp
++                             ${RAWSPEED_PATH}/RawDecoderException.cpp
++                             ${RAWSPEED_PATH}/RawImage.cpp
++                             ${RAWSPEED_PATH}/RawImageDataFloat.cpp
++                             ${RAWSPEED_PATH}/RawImageDataU16.cpp
++                             ${RAWSPEED_PATH}/RawParser.cpp
++                             ${RAWSPEED_PATH}/Rw2Decoder.cpp
++                             ${RAWSPEED_PATH}/SrwDecoder.cpp
++                             ${RAWSPEED_PATH}/TiffEntry.cpp
++                             ${RAWSPEED_PATH}/TiffEntryBE.cpp
++                             ${RAWSPEED_PATH}/TiffIFD.cpp
++                             ${RAWSPEED_PATH}/TiffIFDBE.cpp
++                             ${RAWSPEED_PATH}/TiffParser.cpp
++                             ${RAWSPEED_PATH}/TiffParserException.cpp
++                             ${RAWSPEED_PATH}/TiffParserHeaderless.cpp
++                             ${RAWSPEED_PATH}/TiffParserOlympus.cpp
++    )
++
++ENDIF()
++
++# -- Common LibRaw library compilation rules ------------------------------------------------------------------
++
++SET(DEMOSAIC_PACK_GPL2_SUPPORT_CAN_BE_COMPILED false)
++
++IF(ENABLE_DEMOSAIC_PACK_GPL2)
++    MESSAGE(STATUS "Demosaic pack GPL2 path: ${DEMOSAIC_PACK_GPL2_PATH}")
++
++    IF(EXISTS "${DEMOSAIC_PACK_GPL2_PATH}/dcraw_foveon.c")
++        INCLUDE_DIRECTORIES(${DEMOSAIC_PACK_GPL2_PATH})
++        # Flag to include demosaic pack GPL2
++        ADD_DEFINITIONS(-DLIBRAW_DEMOSAIC_PACK_GPL2)
++        SET(DEMOSAIC_PACK_GPL2_SUPPORT_CAN_BE_COMPILED true)
++    ELSE()
++        MESSAGE(STATUS "Demosaic pack GPL2 source code not found. Please checkout source code from Libraw project website.")
++    ENDIF()
++ENDIF()
++
++# For registration to libraw_config.h
++MACRO_BOOL_TO_01(DEMOSAIC_PACK_GPL2_SUPPORT_CAN_BE_COMPILED LIBRAW_USE_DEMOSAIC_PACK_GPL2)
++
++SET(DEMOSAIC_PACK_GPL3_SUPPORT_CAN_BE_COMPILED false)
++
++IF(ENABLE_DEMOSAIC_PACK_GPL3)
++    MESSAGE(STATUS "Demosaic pack GPL3 path: ${DEMOSAIC_PACK_GPL3_PATH}")
++
++    IF(EXISTS "${DEMOSAIC_PACK_GPL3_PATH}/green_equi.c")
++        INCLUDE_DIRECTORIES(${DEMOSAIC_PACK_GPL3_PATH})
++        # Flag to include demosaic pack GPL3
++        ADD_DEFINITIONS(-DLIBRAW_DEMOSAIC_PACK_GPL3)
++        SET(DEMOSAIC_PACK_GPL3_SUPPORT_CAN_BE_COMPILED true)
++    ELSE()
++        MESSAGE(STATUS "Demosaic pack GPL3 source code not found. Please checkout source code from Libraw project website.")
++    ENDIF()
++ENDIF()
++
++# For registration to libraw_config.h
++MACRO_BOOL_TO_01(DEMOSAIC_PACK_GPL3_SUPPORT_CAN_BE_COMPILED LIBRAW_USE_DEMOSAIC_PACK_GPL3)
++
++# Flag to add debug print on the console 
++IF(ENABLE_DCRAW_DEBUG)
++    ADD_DEFINITIONS(-DDCRAW_VERBOSE)
++ENDIF()
++
++# For registration to libraw_config.h
++MACRO_BOOL_TO_01(ENABLE_DCRAW_DEBUG LIBRAW_USE_DCRAW_DEBUG)
++
++# Flag to export library symbols
++IF (WIN32)
++    ADD_DEFINITIONS(-DLIBRAW_BUILDLIB)
++ENDIF()
++
++# Create a config header for client application.
++CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/data/libraw_config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/libraw_config.h)
++
++# Put the include dirs which are in the source or build tree
++# before all other include dirs, so the headers in the sources
++# are preferred over the already installed ones
++SET(CMAKE_INCLUDE_DIRECTORIES_PROJECT_BEFORE ON)
++
++INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/
++                    ${CMAKE_CURRENT_SOURCE_DIR}/
++                   )
++
++# -- Log messages about configuration ------------------------------------------------------------------
++
++MESSAGE(STATUS "")
++MESSAGE(STATUS "----------------------------------------------------------------------------------")
++MESSAGE(STATUS " Libraw ${RAW_LIB_VERSION_STRING} configuration            <http://www.libraw.org>")
++MESSAGE(STATUS "")
++
++IF(OPENMP_FOUND)
++    MESSAGE(STATUS " Libraw will be compiled with OpenMP support .................. YES")
++ELSE()
++    MESSAGE(STATUS " Libraw will be compiled with OpenMP support .................. NO")
++ENDIF()
++
++IF(LCMS_SUPPORT_CAN_BE_COMPILED)
++    MESSAGE(STATUS " Libraw will be compiled with LCMS support .................... YES")
++ELSE()
++    MESSAGE(STATUS " Libraw will be compiled with LCMS support .................... NO")
++ENDIF()
++
++IF(ENABLE_EXAMPLES)
++    MESSAGE(STATUS " Libraw will be compiled with example command-line programs ... YES")
++ELSE()
++    MESSAGE(STATUS " Libraw will be compiled with example command-line programs ... NO")
++ENDIF()
++
++IF(JASPER_FOUND)
++    MESSAGE(STATUS " Libraw will be compiled with RedCine codec support ........... YES")
++ELSE()
++    MESSAGE(STATUS " Libraw will be compiled with RedCine codec support ........... NO")
++ENDIF()
++
++IF(ZLIB_FOUND)
++    MESSAGE(STATUS " Libraw will be compiled with DNG deflate codec support ....... YES")
++ELSE()
++    MESSAGE(STATUS " Libraw will be compiled with DNG deflate codec support ....... NO")
++ENDIF()
++
++IF(JPEG8_FOUND)
++    MESSAGE(STATUS " Libraw will be compiled with DNG lossy codec support ......... YES")
++ELSE()
++    MESSAGE(STATUS " Libraw will be compiled with DNG lossy codec support ......... NO")
++ENDIF()
++
++IF(DEMOSAIC_PACK_GPL2_SUPPORT_CAN_BE_COMPILED)
++    MESSAGE(STATUS " Libraw will be compiled with Demosaic Pack GPL2 support ...... YES")
++ELSE()
++    MESSAGE(STATUS " Libraw will be compiled with Demosaic Pack GPL2 support ...... NO")
++ENDIF()
++
++IF(DEMOSAIC_PACK_GPL3_SUPPORT_CAN_BE_COMPILED)
++    MESSAGE(STATUS " Libraw will be compiled with Demosaic Pack GPL3 support ...... YES")
++ELSE()
++    MESSAGE(STATUS " Libraw will be compiled with Demosaic Pack GPL3 support ...... NO")
++ENDIF()
++
++IF(RAWSPEED_SUPPORT_CAN_BE_COMPILED)
++    MESSAGE(STATUS " Libraw will be compiled with RawSpeed support ................ YES")
++ELSE()
++    MESSAGE(STATUS " Libraw will be compiled with RawSpeed support ................ NO")
++ENDIF()
++
++IF(ENABLE_DCRAW_DEBUG)
++    MESSAGE(STATUS " Libraw will be compiled with debug message from dcraw ........ YES")
++ELSE()
++    MESSAGE(STATUS " Libraw will be compiled with debug message from dcraw ........ NO")
++ENDIF()
++
++MESSAGE(STATUS "----------------------------------------------------------------------------------")
++MESSAGE(STATUS "")
++
++# -- Dedicated libraw target which not support multi-threading ---------------------------------------
++
++SET(libraw_LIB_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/internal/dcraw_common.cpp
++                    ${CMAKE_CURRENT_SOURCE_DIR}/internal/dcraw_fileio.cpp
++                    ${CMAKE_CURRENT_SOURCE_DIR}/internal/demosaic_packs.cpp
++                    ${CMAKE_CURRENT_SOURCE_DIR}/src/libraw_cxx.cpp
++                    ${CMAKE_CURRENT_SOURCE_DIR}/src/libraw_c_api.cpp
++                    ${CMAKE_CURRENT_SOURCE_DIR}/src/libraw_datastream.cpp
++   )
++
++IF(RAWSPEED_SUPPORT_CAN_BE_COMPILED)
++    SET(libraw_LIB_SRCS ${libraw_LIB_SRCS} ${librawspeed_LIB_SRCS})
++ENDIF()
++
++# Disable compilation warnings from LibRaw. Just to be clear on the console.
++# Add flag to not support re-entrancy. Faster but cannot be used in multi-threading.
++# Adjust flag for static lib and 64 bits computers using -fPIC for GCC compiler
++# Use O4 GCC compilation option to prevent artifacts with OpenMP
++FOREACH(_curentfile ${libraw_LIB_SRCS})
++    IF(WIN32 AND MSVC)
++        SET_SOURCE_FILES_PROPERTIES(${_curentfile} PROPERTIES COMPILE_FLAGS "-w -DLIBRAW_NOTHREADS")
++    ELSE()
++        SET_SOURCE_FILES_PROPERTIES(${_curentfile} PROPERTIES COMPILE_FLAGS "-w -DLIBRAW_NOTHREADS -fPIC -O4 ")
++    ENDIF()
++ENDFOREACH(_curentfile ${libraw_LIB_SRCS})
++
++ADD_LIBRARY(raw ${libraw_LIB_SRCS})
++
++TARGET_LINK_LIBRARIES(raw ${MATH_LIBRARY})
++
++IF(MINGW)
++    TARGET_LINK_LIBRARIES(raw ws2_32)
++ENDIF()
++
++IF(OPENMP_FOUND)
++    TARGET_LINK_LIBRARIES(raw ${OPENMP_LDFLAGS})
++ENDIF()
++
++IF(LCMS_SUPPORT_CAN_BE_COMPILED)
++    TARGET_LINK_LIBRARIES(raw ${LCMS2_LIBRARIES})
++ENDIF()
++
++IF(ZLIB_FOUND)
++    TARGET_LINK_LIBRARIES(raw ${ZLIB_LIBRARIES})
++ENDIF()
++
++IF(JPEG8_FOUND)
++    TARGET_LINK_LIBRARIES(raw ${JPEG_LIBRARIES})
++ENDIF()
++
++IF(JASPER_FOUND)
++    TARGET_LINK_LIBRARIES(raw ${JASPER_LIBRARIES})
++ENDIF()
++
++IF(RAWSPEED_SUPPORT_CAN_BE_COMPILED)
++    TARGET_LINK_LIBRARIES(raw ${LIBXML2_LIBRARIES})
++ENDIF()
++
++SET_TARGET_PROPERTIES(raw PROPERTIES VERSION     ${RAW_LIB_SO_VERSION_STRING})
++SET_TARGET_PROPERTIES(raw PROPERTIES SOVERSION   ${RAW_LIB_SO_CUR_VERSION})
++SET_TARGET_PROPERTIES(raw PROPERTIES OUTPUT_NAME "raw")
++
++# -- Dedicated libraw target to support multi-threading ---------------------------------------------
++
++SET(libraw_r_LIB_SRCS ${libraw_LIB_SRCS})
++
++FOREACH(_curentfile ${libraw_r_LIB_SRCS})
++    IF(WIN32 AND MSVC)
++        SET_SOURCE_FILES_PROPERTIES(${_curentfile} PROPERTIES COMPILE_FLAGS "-w")
++    ELSE()
++        SET_SOURCE_FILES_PROPERTIES(${_curentfile} PROPERTIES COMPILE_FLAGS "-w -fPIC -O4")
++    ENDIF()
++ENDFOREACH(_curentfile ${libraw_r_LIB_SRCS})
++
++ADD_LIBRARY(raw_r ${libraw_r_LIB_SRCS})
++
++TARGET_LINK_LIBRARIES(raw_r ${MATH_LIBRARY})
++
++IF(MINGW)
++    TARGET_LINK_LIBRARIES(raw_r ws2_32)
++ENDIF()
++
++IF(OPENMP_FOUND)
++    TARGET_LINK_LIBRARIES(raw_r ${OPENMP_LDFLAGS})
++ENDIF()
++
++IF(LCMS_SUPPORT_CAN_BE_COMPILED)
++    TARGET_LINK_LIBRARIES(raw_r ${LCMS2_LIBRARIES})
++ENDIF()
++
++IF(ZLIB_FOUND)
++    TARGET_LINK_LIBRARIES(raw_r ${ZLIB_LIBRARIES})
++ENDIF()
++
++IF(JPEG8_FOUND)
++    TARGET_LINK_LIBRARIES(raw_r ${JPEG_LIBRARIES})
++ENDIF()
++
++IF(JASPER_FOUND)
++    TARGET_LINK_LIBRARIES(raw_r ${JASPER_LIBRARIES})
++ENDIF()
++
++IF(RAWSPEED_SUPPORT_CAN_BE_COMPILED)
++    TARGET_LINK_LIBRARIES(raw_r ${LIBXML2_LIBRARIES} ${PTHREADS_LIBRARY})
++ENDIF()
++
++SET_TARGET_PROPERTIES(raw_r PROPERTIES VERSION     ${RAW_LIB_SO_VERSION_STRING})
++SET_TARGET_PROPERTIES(raw_r PROPERTIES SOVERSION   ${RAW_LIB_SO_CUR_VERSION})
++SET_TARGET_PROPERTIES(raw_r PROPERTIES OUTPUT_NAME "raw_r")
++
++# -- Files to install -------------------------------------------------------------------------------------
++
++# Configure and install data file for packaging.
++IF(NOT WIN32)
++    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/data/libraw.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/libraw.pc @ONLY)
++    INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/libraw.pc DESTINATION lib${LIB_SUFFIX}/pkgconfig)
++
++    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/data/libraw_r.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/libraw_r.pc @ONLY)
++    INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/libraw_r.pc DESTINATION lib${LIB_SUFFIX}/pkgconfig)
++
++    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/data/libraw.lsm.cmake ${CMAKE_CURRENT_BINARY_DIR}/libraw.lsm)
++ENDIF()
++
++# Install Shared header files.
++INSTALL(FILES       ${CMAKE_CURRENT_SOURCE_DIR}/libraw/libraw.h
++                    ${CMAKE_CURRENT_SOURCE_DIR}/libraw/libraw_alloc.h
++                    ${CMAKE_CURRENT_SOURCE_DIR}/libraw/libraw_const.h
++                    ${CMAKE_CURRENT_SOURCE_DIR}/libraw/libraw_datastream.h
++                    ${CMAKE_CURRENT_SOURCE_DIR}/libraw/libraw_internal.h
++                    ${CMAKE_CURRENT_SOURCE_DIR}/libraw/libraw_types.h
++                    ${CMAKE_CURRENT_SOURCE_DIR}/libraw/libraw_version.h
++                    ${CMAKE_CURRENT_BINARY_DIR}/libraw_config.h
++        DESTINATION include/libraw
++        COMPONENT   Devel
++       )
++
++# Install Shared binary files.
++INSTALL(TARGETS raw
++        RUNTIME DESTINATION bin
++        LIBRARY DESTINATION lib${LIB_SUFFIX}
++        ARCHIVE DESTINATION lib${LIB_SUFFIX}
++       )
++
++INSTALL(TARGETS raw_r
++        RUNTIME DESTINATION bin
++        LIBRARY DESTINATION lib${LIB_SUFFIX}
++        ARCHIVE DESTINATION lib${LIB_SUFFIX}
++       )
++
++# Install find cmake script to the system for client applications.
++INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/FindLibRaw.cmake
++        DESTINATION ${INSTALL_CMAKE_MODULE_PATH})
++
++# Install doc data files.
++IF(NOT WIN32)
++    INSTALL(FILES       ${CMAKE_CURRENT_SOURCE_DIR}/COPYRIGHT
++                        ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.CDDL
++                        ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.LGPL
++                        ${CMAKE_CURRENT_SOURCE_DIR}/Changelog.txt
++            DESTINATION share/libraw
++            COMPONENT main
++           )
++ENDIF()
++
++# Uninstall rules
++CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/Uninstall.cmake ${CMAKE_BINARY_DIR}/cmake_uninstall.cmake COPYONLY)
++ADD_CUSTOM_TARGET(uninstall "${CMAKE_COMMAND}" -P "${CMAKE_BINARY_DIR}/cmake_uninstall.cmake")
++
++# -- Compile LibRaw Examples --------------------------------------------------------------------------------
++
++# add a small macro so that this is a bit cleaner
++MACRO(LIBRAW_BUILD_SAMPLES)
++
++    SET(_filename ${ARGV0})
++    SET(_rawlib ${ARGV1})
++    STRING(REPLACE "." ";" _temp ${_filename})
++    LIST(GET _temp 0 _target)
++
++    SET(${_target}_SRCS samples/${_filename})
++    SET_SOURCE_FILES_PROPERTIES(${${_target}_SRCS} PROPERTIES COMPILE_FLAGS -w)
++
++    ADD_EXECUTABLE(${_target} ${${_target}_SRCS})
++
++    TARGET_LINK_LIBRARIES(${_target} ${_rawlib})
++
++    IF(OPENMP_FOUND)
++        TARGET_LINK_LIBRARIES(${_target} ${OPENMP_LDFLAGS})
++    ENDIF()
++
++    IF (${_rawlib} MATCHES "raw_r")
++        TARGET_LINK_LIBRARIES(${_target} ${PTHREADS_LIBRARY})
++    ENDIF()
++
++    IF(WIN32)
++        TARGET_LINK_LIBRARIES(${_target} ws2_32)
++    ENDIF()
++
++    INSTALL(TARGETS ${_target}
++            RUNTIME DESTINATION bin
++            LIBRARY DESTINATION lib${LIB_SUFFIX}
++            ARCHIVE DESTINATION lib${LIB_SUFFIX}
++    )
++
++ENDMACRO(LIBRAW_BUILD_SAMPLES)
++
++IF(ENABLE_EXAMPLES)
++
++    LIBRAW_BUILD_SAMPLES(simple_dcraw.cpp raw)
++    LIBRAW_BUILD_SAMPLES(mem_image.cpp raw)
++    LIBRAW_BUILD_SAMPLES(dcraw_emu.cpp raw)
++    LIBRAW_BUILD_SAMPLES(4channels.cpp raw)
++    LIBRAW_BUILD_SAMPLES(unprocessed_raw.cpp raw)
++    LIBRAW_BUILD_SAMPLES(raw-identify.cpp raw)
++    LIBRAW_BUILD_SAMPLES(multirender_test.cpp raw)
++    LIBRAW_BUILD_SAMPLES(postprocessing_benchmark.cpp raw)
++
++    IF (PTHREADS_FOUND)
++        IF(WIN32)
++            LIBRAW_BUILD_SAMPLES(half_mt_win32.c raw_r)
++        ELSE()
++            LIBRAW_BUILD_SAMPLES(dcraw_half.c raw_r)
++            LIBRAW_BUILD_SAMPLES(half_mt.c raw_r)
++        ENDIF()
++    ENDIF()
++ENDIF()
+diff --git a/INSTALL.CMAKE b/INSTALL.CMAKE
+new file mode 100644
+index 0000000..19f3ba2
+--- /dev/null
++++ b/INSTALL.CMAKE
+@@ -0,0 +1,95 @@
++
++=========  Installing LibRaw (CMake version) ==========
++
++I. Installation steps
++
++1. Unpack the distribution file:
++
++ $  tar xzvf LibRaw-0.xx.yy.tar.gz
++
++2. If you wish to use LibRaw demosaic pack(s), unpack them in the same folder:
++
++ $  tar xzvf LibRaw-demosaic-pack-GPL2-0.xx.yy.tar.gz
++ $  tar xzvf LibRaw-demosaic-pack-GPL3-0.xx.yy.tar.gz
++
++3. Copy this LibRaw-cmake scripts in LibRaw-... folder
++
++4. Go to LibRaw folder and run ./configure and make:
++
++ $ cd LibRaw-0.xx.yy
++ $ ./cmake  [...optional args...] .
++ $ make
++
++4. install by run make install as root:
++ 
++ $ sudo make install  
++
++
++II. ./cmake options
++
++-DENABLE_OPENMP=ON/OFF
++
++  Enable/disable OpenMP support if compiler supports it.
++  OpenMP is enabled by default.
++
++
++-DENABLE_LCMS=ON/OFF
++
++  Enable/disable LCMS color engine support. If enabled, ./cmake will try to 
++  find lcms library.  Both LCMS-1.x and LCMS-2.x are supported
++  LCMS support is enabled by default
++
++
++-DENABLE_EXAMPLES=ON/OFF
++
++  Enables/disables examples compilation and installation. Enabled by default
++
++
++-DENABLE_DEMOSAIC_PACK_GPL2=ON/OFF
++-DDEMOSAIC_PACK_GPL2_RPATH=FOLDERNAME
++-DCHECKOUT_DEMOSAIC_PACK_GPL2=ON/OFF
++
++  Enables/disables support of additional demosaic methods licensed under GPL2
++  You need to download and unpack LibRaw-demosaic-pack-GPL2 archive to use 
++  this feature.
++  ./cmake will try to find demosaic pack in:
++     
++     a) If folder is specified via  -DDDEMOSAIC_PACK_GPL2_RPATH=FOLDERNAME 
++        command-line option, then only this folder will be checked.
++        
++     b) If no folder is specified in -DDENABLE_DEMOSAIC_PACK_GPL2 switch:
++
++          ./LibRaw-demosaic-pack-GPL2 (in LibRaw folder)
++
++  If DCHECKOUT_DEMOSAIC_PACK_GPL2 is enabled, code wil be checkout from remote repository
++
++-DENABLE_DEMOSAIC_PACK_GPL3=ON/OFF
++-DDEMOSAIC_PACK_GPL3_RPATH=FOLDERNAME
++-DCHECKOUT_DEMOSAIC_PACK_GPL3=ON/OFF
++        Same as above, but for GPL3-licensed demosaic pack.
++
++
++-DENABLE_RAWSPEED=ON/OFF
++-DRAWSPEED_RPATH=FOLDERNAME
++
++  Enables/disables support of additional code from RawStudio project
++  You need to download RawSpeed source code to use this feature.
++  See README.RawSpeed.txt for details.
++  ./cmake will try to find RawSpeed code in:
++     
++     a) If folder is specified via  -DRAWSPEED_RPATH=FOLDERNAME 
++        command-line option, then only this folder will be checked.
++        
++     b) If no folder is specified in -DENABLE_RAWSPEED switch:
++
++          ./RawSpeed (in LibRaw folder)
++<<<<<<< HEAD
++          
++=======
++
++  If CHECKOUT_RAWSPEED is enabled, code wil be checkout from remote repository
++
++>>>>>>> 0eeff91... polish
++-DENABLE_DCRAW_DEBUG=ON/OFF
++
++  Enables/disables support of additional debug traces from dcraw operations. Disabled by default
+diff --git a/LICENSE b/LICENSE
+new file mode 100644
+index 0000000..4b41776
+--- /dev/null
++++ b/LICENSE
+@@ -0,0 +1,22 @@
++Redistribution and use in source and binary forms, with or without
++modification, are permitted provided that the following conditions
++are met:
++
++1. Redistributions of source code must retain the copyright
++   notice, this list of conditions and the following disclaimer.
++2. Redistributions in binary form must reproduce the copyright
++   notice, this list of conditions and the following disclaimer in the
++   documentation and/or other materials provided with the distribution.
++3. The name of the author may not be used to endorse or promote products 
++   derived from this software without specific prior written permission.
++
++THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
++IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
++OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
++IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
++INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
++NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
++DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
++THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
++(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
++THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+diff --git a/README.md b/README.md
+index e1d38e6..dbb0fe2 100644
+--- a/README.md
++++ b/README.md
+@@ -1,27 +1,17 @@
+-# LibRaw
+-### Library for reading and processing of RAW digicam images
++LibRaw-cmake
++============
+ 
+-LibRaw is a library for reading RAW files from digital photo cameras 
+-(CRW/CR2, NEF, RAF, DNG, MOS, KDC, DCR, etc, virtually all RAW formats are 
+-supported). 
++[![Build Status](https://travis-ci.org/LibRaw/LibRaw-cmake.svg?branch=master)](https://travis-ci.org/LibRaw/LibRaw-cmake)
+ 
+-It pays special attention to correct retrieval of data required for subsequent 
+-RAW conversion.
+-    
+-The library is intended for embedding in RAW converters, data analyzers, and 
+-other programs using RAW files as the initial data.
++This is a separate repository for LibRaw CMake support scripts.
++It is [unmaintained](https://github.com/LibRaw/LibRaw/issues/44#issuecomment-60344793) by the authors of LibRaw and relies solely on user contributions.
++The current community-maintainer of this repository is [Maik Riechert](https://github.com/neothemachine).
+ 
+-LibRaw library, Copyright &copy; 2008-2019 LibRaw LLC (info@libraw.org)
+-The library includes source code from
+-      
+-     dcraw.c, Dave Coffin's raw photo decoder
+-     Copyright 1997-2016 by Dave Coffin, dcoffin a cybercom o net
+-      
+-LibRaw is distributed for free under two different licenses:
+- *  GNU Lesser General Public License, version 2.1
+- *  COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
+-    
+-You may use one of these licensing modes and switch between them.
++If you wish to contribute to it, please open an issue or submit a pull request in this repository. Do *not* submit issues or pull requests regarding CMake to the main [LibRaw repository](https://github.com/LibRaw/LibRaw). Also, try to keep CMake related discussions out of the [main forum](http://www.libraw.org/forum), instead use the issues for that.
+ 
+-If you modify LibRaw source and made your changes public, you should accept
+-both two licensing modes for your changes/additions.
++If you like to become a direct contributor with write permissions to this repository, please contact the [LibRaw authors](https://github.com/LibRaw).
++
++How to use
++----------
++
++Just copy the contents of this repository into the root LibRaw folder and run cmake as usual.
+\ No newline at end of file
+diff --git a/cmake/data/libraw.lsm.cmake b/cmake/data/libraw.lsm.cmake
+new file mode 100644
+index 0000000..45dfb45
+--- /dev/null
++++ b/cmake/data/libraw.lsm.cmake
+@@ -0,0 +1,13 @@
++Begin4
++Title:          ${PROJECT_NAME}
++Version:        ${RAW_LIB_VERSION_STRING}
++Entered-date:   2013-09-08
++Description:    Raw image decoder library
++Keywords:       Raw image digital camera demosaicing decoding
++Author:         Copyright 2008-2013 LibRaw LLC (info@libraw.org)
++Maintained-by:
++Primary-site:   http://www.libraw.org
++Original-site:
++Platforms:      Linux and other Unices, MacOs-X, Win32
++Copying-policy: GPL
++End
+diff --git a/cmake/data/libraw.pc.cmake b/cmake/data/libraw.pc.cmake
+new file mode 100644
+index 0000000..aede5f2
+--- /dev/null
++++ b/cmake/data/libraw.pc.cmake
+@@ -0,0 +1,12 @@
++prefix=@CMAKE_INSTALL_PREFIX@
++exec_prefix=${prefix}
++libdir=${prefix}/lib@LIB_SUFFIX@
++includedir=${prefix}/include/libraw
++
++Name: @PROJECT_NAME@
++Description: @PROJECT_NAME@ - Raw image decoder library (non-thread-safe)
++URL: http://www.libraw.org
++Requires:
++Version: @RAW_LIB_VERSION_STRING@
++Libs: -L${libdir} -lraw
++Cflags: -I${includedir}
+diff --git a/cmake/data/libraw_config.h.cmake b/cmake/data/libraw_config.h.cmake
+new file mode 100644
+index 0000000..e1f8d0c
+--- /dev/null
++++ b/cmake/data/libraw_config.h.cmake
+@@ -0,0 +1,50 @@
++/* -*- C++ -*-
++ * File: libraw_version.h
++ * Copyright 2008-2013 LibRaw LLC (info@libraw.org)
++ * Created: Mon Sept  8, 2008 
++ *
++ * LibRaw C++ interface
++ *
++
++LibRaw is free software; you can redistribute it and/or modify
++it under the terms of the one of two licenses as you choose:
++
++1. GNU LESSER GENERAL PUBLIC LICENSE version 2.1
++(See the file LICENSE.LGPL provided in LibRaw distribution archive for details).
++
++2. COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
++(See the file LICENSE.CDDL provided in LibRaw distribution archive for details).
++
++ */
++
++#ifndef __LIBRAW_CONFIG_H
++#define __LIBRAW_CONFIG_H
++
++/* Define to 1 if LibRaw have been compiled with DNG deflate codec support */
++#cmakedefine LIBRAW_USE_DNGDEFLATECODEC 1
++
++/* Define to 1 if LibRaw have been compiled with DNG lossy codec support */
++#cmakedefine LIBRAW_USE_DNGLOSSYCODEC 1
++
++/* Define to 1 if LibRaw have been compiled with OpenMP support */
++#cmakedefine LIBRAW_USE_OPENMP 1
++
++/* Define to 1 if LibRaw have been compiled with LCMS support */
++#cmakedefine LIBRAW_USE_LCMS 1
++
++/* Define to 1 if LibRaw have been compiled with RedCine codec support */
++#cmakedefine LIBRAW_USE_REDCINECODEC 1
++
++/* Define to 1 if LibRaw have been compiled with RawSpeed codec support */
++#cmakedefine LIBRAW_USE_RAWSPEED 1
++
++/* Define to 1 if LibRaw have been compiled with Demosaic pack GPL2 support */
++#cmakedefine LIBRAW_USE_DEMOSAIC_PACK_GPL2 1
++
++/* Define to 1 if LibRaw have been compiled with Demosaic pack GPL3 support */
++#cmakedefine LIBRAW_USE_DEMOSAIC_PACK_GPL3 1
++
++/* Define to 1 if LibRaw have been compiled with debug message from dcraw */
++#cmakedefine LIBRAW_USE_DCRAW_DEBUG 1
++
++#endif
+diff --git a/cmake/data/libraw_r.pc.cmake b/cmake/data/libraw_r.pc.cmake
+new file mode 100644
+index 0000000..16134e8
+--- /dev/null
++++ b/cmake/data/libraw_r.pc.cmake
+@@ -0,0 +1,12 @@
++prefix=@CMAKE_INSTALL_PREFIX@
++exec_prefix=${prefix}
++libdir=${prefix}/lib@LIB_SUFFIX@
++includedir=${prefix}/include/libraw
++
++Name: @PROJECT_NAME@
++Description: @PROJECT_NAME@ - Raw image decoder library (thread-safe)
++URL: http://www.libraw.org
++Requires:
++Version: @RAW_LIB_VERSION_STRING@
++Libs: -L${libdir} -lraw_r
++Cflags: -I${includedir}
+diff --git a/cmake/modules/FindLCMS.cmake b/cmake/modules/FindLCMS.cmake
+new file mode 100644
+index 0000000..d82d82e
+--- /dev/null
++++ b/cmake/modules/FindLCMS.cmake
+@@ -0,0 +1,60 @@
++# - Find LCMS
++# Find the LCMS (Little Color Management System) library and includes and
++# This module defines
++#  LCMS_INCLUDE_DIR, where to find lcms.h
++#  LCMS_LIBRARIES, the libraries needed to use LCMS.
++#  LCMS_DOT_VERSION, The version number of the LCMS library, e.g. "1.19"
++#  LCMS_VERSION, Similar to LCMS_DOT_VERSION, but without the dots, e.g. "119"
++#  LCMS_FOUND, If false, do not try to use LCMS.
++#
++# The minimum required version of LCMS can be specified using the
++# standard syntax, e.g. find_package(LCMS 1.10)
++
++# Copyright (c) 2008, Adrian Page, <adrian@pagenet.plus.com>
++# Copyright (c) 2009, Cyrille Berger, <cberger@cberger.net>
++#
++# Redistribution and use is allowed according to the terms of the BSD license.
++# For details see the accompanying LICENSE file.
++
++
++# use pkg-config to get the directories and then use these values
++# in the FIND_PATH() and FIND_LIBRARY() calls
++if(NOT WIN32)
++   find_package(PkgConfig)
++   pkg_check_modules(PC_LCMS lcms)
++   set(LCMS_DEFINITIONS ${PC_LCMS_CFLAGS_OTHER})
++endif(NOT WIN32)
++
++find_path(LCMS_INCLUDE_DIR lcms.h
++   HINTS
++   ${PC_LCMS_INCLUDEDIR}
++   ${PC_LCMS_INCLUDE_DIRS}
++   PATH_SUFFIXES lcms liblcms1
++)
++
++find_library(LCMS_LIBRARIES NAMES lcms liblcms lcms-1 liblcms-1
++   HINTS
++   ${PC_LCMS_LIBDIR}
++   ${PC_LCMS_LIBRARY_DIRS}
++   PATH_SUFFIXES lcms
++)
++
++# Store the LCMS version number in the cache, so we don't have to search every time again
++if(LCMS_INCLUDE_DIR  AND NOT  LCMS_VERSION)
++   file(READ ${LCMS_INCLUDE_DIR}/lcms.h LCMS_VERSION_CONTENT)
++   string(REGEX MATCH "#define LCMS_VERSION[ ]*[0-9]*\n" LCMS_VERSION_MATCH ${LCMS_VERSION_CONTENT})
++   if(LCMS_VERSION_MATCH)
++      string(REGEX REPLACE "#define LCMS_VERSION[ ]*([0-9]*)\n" "\\1" _LCMS_VERSION ${LCMS_VERSION_MATCH})
++      string(SUBSTRING ${_LCMS_VERSION} 0 1 LCMS_MAJOR_VERSION)
++      string(SUBSTRING ${_LCMS_VERSION} 1 2 LCMS_MINOR_VERSION)
++   endif(LCMS_VERSION_MATCH)
++   set(LCMS_VERSION "${LCMS_MAJOR_VERSION}${LCMS_MINOR_VERSION}" CACHE STRING "Version number of lcms" FORCE)
++   set(LCMS_DOT_VERSION "${LCMS_MAJOR_VERSION}.${LCMS_MINOR_VERSION}" CACHE STRING "Version number of lcms split into components" FORCE)
++endif(LCMS_INCLUDE_DIR  AND NOT  LCMS_VERSION)
++
++include(FindPackageHandleStandardArgs)
++find_package_handle_standard_args(LCMS REQUIRED_VARS LCMS_LIBRARIES LCMS_INCLUDE_DIR
++                                       VERSION_VAR LCMS_DOT_VERSION )
++
++mark_as_advanced(LCMS_INCLUDE_DIR LCMS_LIBRARIES LCMS_VERSION)
++
+diff --git a/cmake/modules/FindLCMS2.cmake b/cmake/modules/FindLCMS2.cmake
+new file mode 100644
+index 0000000..4e3e482
+--- /dev/null
++++ b/cmake/modules/FindLCMS2.cmake
+@@ -0,0 +1,72 @@
++# - Find LCMS2
++# Find the LCMS2 includes and library
++# This module defines
++#  LCMS2_INCLUDE_DIR, where to find lcms.h
++#  LCMS2_LIBRARIES, the libraries needed to use LCMS2.
++#  LCMS2_VERSION, The value of LCMS_VERSION defined in lcms.h
++#  LCMS2_FOUND, If false, do not try to use LCMS2.
++
++
++# Copyright (c) 2008, Adrian Page, <adrian@pagenet.plus.com>
++# Copyright (c) 2009, Cyrille Berger, <cberger@cberger.net>
++#
++# Redistribution and use is allowed according to the terms of the BSD license.
++# For details see the accompanying LICENSE file.
++
++
++# use pkg-config to get the directories and then use these values
++# in the FIND_PATH() and FIND_LIBRARY() calls
++if(NOT WIN32)
++   find_package(PkgConfig)
++   pkg_check_modules(PC_LCMS2 lcms2)
++   set(LCMS2_DEFINITIONS ${PC_LCMS2_CFLAGS_OTHER})
++endif(NOT WIN32)
++
++find_path(LCMS2_INCLUDE_DIR lcms2.h
++   PATHS
++   ${PC_LCMS2_INCLUDEDIR}
++   ${PC_LCMS2_INCLUDE_DIRS}
++   PATH_SUFFIXES lcms2 liblcms2
++)
++
++find_library(LCMS2_LIBRARIES NAMES lcms2 liblcms2 lcms-2 liblcms-2
++   PATHS     
++   ${PC_LCMS2_LIBDIR}
++   ${PC_LCMS2_LIBRARY_DIRS}
++   PATH_SUFFIXES lcms2
++)
++
++if(LCMS2_INCLUDE_DIR AND LCMS2_LIBRARIES)
++   set(LCMS2_FOUND TRUE)
++else(LCMS2_INCLUDE_DIR AND LCMS2_LIBRARIES)
++   set(LCMS2_FOUND FALSE)
++endif(LCMS2_INCLUDE_DIR AND LCMS2_LIBRARIES)
++
++if(LCMS2_FOUND)
++   file(READ ${LCMS2_INCLUDE_DIR}/lcms2.h LCMS2_VERSION_CONTENT)
++   string(REGEX MATCH "#define LCMS_VERSION[ ]*[0-9]*\n" LCMS2_VERSION_MATCH ${LCMS2_VERSION_CONTENT})
++   if(LCMS2_VERSION_MATCH)
++      string(REGEX REPLACE "#define LCMS_VERSION[ ]*([0-9]*)\n" "\\1" LCMS2_VERSION ${LCMS2_VERSION_MATCH})
++      if(NOT LCMS2_FIND_QUIETLY)
++         string(SUBSTRING ${LCMS2_VERSION} 0 1 LCMS2_MAJOR_VERSION)
++         string(SUBSTRING ${LCMS2_VERSION} 1 2 LCMS2_MINOR_VERSION)
++         message(STATUS "Found lcms version ${LCMS2_MAJOR_VERSION}.${LCMS2_MINOR_VERSION}, ${LCMS2_LIBRARIES}")
++      endif(NOT LCMS2_FIND_QUIETLY)
++   else(LCMS2_VERSION_MATCH)
++      if(NOT LCMS2_FIND_QUIETLY)
++         message(STATUS "Found lcms2 but failed to find version ${LCMS2_LIBRARIES}")
++      endif(NOT LCMS2_FIND_QUIETLY)
++      set(LCMS2_VERSION NOTFOUND)
++   endif(LCMS2_VERSION_MATCH)
++else(LCMS2_FOUND)
++   if(NOT LCMS2_FIND_QUIETLY)
++      if(LCMS2_FIND_REQUIRED)
++         message(FATAL_ERROR "Required package lcms2 NOT found")
++      else(LCMS2_FIND_REQUIRED)
++         message(STATUS "lcms2 NOT found")
++      endif(LCMS2_FIND_REQUIRED)
++   endif(NOT LCMS2_FIND_QUIETLY)
++endif(LCMS2_FOUND)
++
++mark_as_advanced(LCMS2_INCLUDE_DIR LCMS2_LIBRARIES LCMS2_VERSION)
++
+diff --git a/cmake/modules/FindLibRaw.cmake b/cmake/modules/FindLibRaw.cmake
+new file mode 100644
+index 0000000..2ce7140
+--- /dev/null
++++ b/cmake/modules/FindLibRaw.cmake
+@@ -0,0 +1,96 @@
++# - Find LibRaw
++# Find the LibRaw library <http://www.libraw.org>
++# This module defines
++#  LibRaw_VERSION_STRING, the version string of LibRaw
++#  LibRaw_INCLUDE_DIR, where to find libraw.h
++#  LibRaw_LIBRARIES, the libraries needed to use LibRaw (non-thread-safe)
++#  LibRaw_r_LIBRARIES, the libraries needed to use LibRaw (thread-safe)
++#  LibRaw_DEFINITIONS, the definitions needed to use LibRaw (non-thread-safe)
++#  LibRaw_r_DEFINITIONS, the definitions needed to use LibRaw (thread-safe)
++#
++# Copyright (c) 2013, Pino Toscano <pino at kde dot org>
++# Copyright (c) 2013, Gilles Caulier <caulier dot gilles at gmail dot com>
++#
++# Redistribution and use is allowed according to the terms of the BSD license.
++# For details see the accompanying LICENSE file.
++
++FIND_PACKAGE(PkgConfig)
++
++IF(PKG_CONFIG_FOUND)
++   PKG_CHECK_MODULES(PC_LIBRAW libraw)
++   SET(LibRaw_DEFINITIONS ${PC_LIBRAW_CFLAGS_OTHER})
++
++   PKG_CHECK_MODULES(PC_LIBRAW_R libraw_r)
++   SET(LibRaw_r_DEFINITIONS ${PC_LIBRAW_R_CFLAGS_OTHER})   
++ENDIF()
++
++FIND_PATH(LibRaw_INCLUDE_DIR libraw.h
++          HINTS
++          ${PC_LIBRAW_INCLUDEDIR}
++          ${PC_LibRaw_INCLUDE_DIRS}
++          PATH_SUFFIXES libraw
++         )
++
++FIND_LIBRARY(LibRaw_LIBRARY_RELEASE NAMES raw
++             HINTS
++             ${PC_LIBRAW_LIBDIR}
++             ${PC_LIBRAW_LIBRARY_DIRS}
++            )
++
++FIND_LIBRARY(LibRaw_LIBRARY_DEBUG NAMES rawd
++             HINTS
++             ${PC_LIBRAW_LIBDIR}
++             ${PC_LIBRAW_LIBRARY_DIRS}
++            )
++
++include(SelectLibraryConfigurations)
++select_library_configurations(LibRaw)
++
++FIND_LIBRARY(LibRaw_r_LIBRARY_RELEASE NAMES raw_r
++             HINTS
++             ${PC_LIBRAW_R_LIBDIR}
++             ${PC_LIBRAW_R_LIBRARY_DIRS}
++            )
++
++FIND_LIBRARY(LibRaw_r_LIBRARY_DEBUG NAMES raw_rd
++             HINTS
++             ${PC_LIBRAW_R_LIBDIR}
++             ${PC_LIBRAW_R_LIBRARY_DIRS}
++            )
++
++select_library_configurations(LibRaw_r)
++
++IF(LibRaw_INCLUDE_DIR)
++   FILE(READ ${LibRaw_INCLUDE_DIR}/libraw_version.h _libraw_version_content)
++   
++   STRING(REGEX MATCH "#define LIBRAW_MAJOR_VERSION[ \t]*([0-9]*)\n" _version_major_match ${_libraw_version_content})
++   SET(_libraw_version_major "${CMAKE_MATCH_1}")
++   
++   STRING(REGEX MATCH "#define LIBRAW_MINOR_VERSION[ \t]*([0-9]*)\n" _version_minor_match ${_libraw_version_content})
++   SET(_libraw_version_minor "${CMAKE_MATCH_1}")
++   
++   STRING(REGEX MATCH "#define LIBRAW_PATCH_VERSION[ \t]*([0-9]*)\n" _version_patch_match ${_libraw_version_content})
++   SET(_libraw_version_patch "${CMAKE_MATCH_1}")
++   
++   IF(_version_major_match AND _version_minor_match AND _version_patch_match)
++      SET(LibRaw_VERSION_STRING "${_libraw_version_major}.${_libraw_version_minor}.${_libraw_version_patch}")
++   ELSE()
++      IF(NOT LibRaw_FIND_QUIETLY)
++         MESSAGE(STATUS "Failed to get version information from ${LibRaw_INCLUDE_DIR}/libraw_version.h")
++      ENDIF()
++   ENDIF()
++ENDIF()
++
++INCLUDE(FindPackageHandleStandardArgs)
++FIND_PACKAGE_HANDLE_STANDARD_ARGS(LibRaw
++                                  REQUIRED_VARS LibRaw_LIBRARIES LibRaw_INCLUDE_DIR
++                                  VERSION_VAR LibRaw_VERSION_STRING
++                                 )
++
++MARK_AS_ADVANCED(LibRaw_VERSION_STRING
++                 LibRaw_INCLUDE_DIR
++                 LibRaw_LIBRARIES
++                 LibRaw_r_LIBRARIES
++                 LibRaw_DEFINITIONS
++                 LibRaw_r_DEFINITIONS
++                 )
+diff --git a/cmake/modules/FindPthreads.cmake b/cmake/modules/FindPthreads.cmake
+new file mode 100644
+index 0000000..c7d844a
+--- /dev/null
++++ b/cmake/modules/FindPthreads.cmake
+@@ -0,0 +1,98 @@
++# - Find the Pthreads library
++# This module searches for the Pthreads library (including the
++# pthreads-win32 port).
++#
++# This module defines these variables:
++#
++#  PTHREADS_FOUND
++#      True if the Pthreads library was found
++#  PTHREADS_LIBRARY
++#      The location of the Pthreads library
++#  PTHREADS_INCLUDE_DIR
++#      The include path of the Pthreads library
++#  PTHREADS_DEFINITIONS
++#      Preprocessor definitions to define
++#
++# This module responds to the PTHREADS_EXCEPTION_SCHEME
++# variable on Win32 to allow the user to control the
++# library linked against.  The Pthreads-win32 port
++# provides the ability to link against a version of the
++# library with exception handling.  IT IS NOT RECOMMENDED
++# THAT YOU USE THIS because most POSIX thread implementations
++# do not support stack unwinding.
++#
++#  PTHREADS_EXCEPTION_SCHEME
++#      C  = no exceptions (default)
++#         (NOTE: This is the default scheme on most POSIX thread
++#          implementations and what you should probably be using)
++#      CE = C++ Exception Handling
++#      SE = Structure Exception Handling (MSVC only)
++#
++
++#
++# Define a default exception scheme to link against
++# and validate user choice.
++#
++IF(NOT DEFINED PTHREADS_EXCEPTION_SCHEME)
++    # Assign default if needed
++    SET(PTHREADS_EXCEPTION_SCHEME "C")
++ELSE(NOT DEFINED PTHREADS_EXCEPTION_SCHEME)
++    # Validate
++    IF(NOT PTHREADS_EXCEPTION_SCHEME STREQUAL "C" AND
++       NOT PTHREADS_EXCEPTION_SCHEME STREQUAL "CE" AND
++       NOT PTHREADS_EXCEPTION_SCHEME STREQUAL "SE")
++
++    MESSAGE(FATAL_ERROR "See documentation for FindPthreads.cmake, only C, CE, and SE modes are allowed")
++
++    ENDIF(NOT PTHREADS_EXCEPTION_SCHEME STREQUAL "C" AND
++          NOT PTHREADS_EXCEPTION_SCHEME STREQUAL "CE" AND
++          NOT PTHREADS_EXCEPTION_SCHEME STREQUAL "SE")
++
++     IF(NOT MSVC AND PTHREADS_EXCEPTION_SCHEME STREQUAL "SE")
++         MESSAGE(FATAL_ERROR "Structured Exception Handling is only allowed for MSVC")
++     ENDIF(NOT MSVC AND PTHREADS_EXCEPTION_SCHEME STREQUAL "SE")
++
++ENDIF(NOT DEFINED PTHREADS_EXCEPTION_SCHEME)
++
++#
++# Find the header file
++#
++FIND_PATH(PTHREADS_INCLUDE_DIR pthread.h)
++
++#
++# Find the library
++#
++SET(names)
++IF(MSVC)
++    SET(names
++            pthreadV${PTHREADS_EXCEPTION_SCHEME}2
++            pthread
++    )
++ELSEIF(MINGW)
++    SET(names
++            pthreadG${PTHREADS_EXCEPTION_SCHEME}2
++            pthread
++    )
++ELSE(MSVC) # Unix / Cygwin / Apple
++    SET(names pthread)
++ENDIF(MSVC)
++
++FIND_LIBRARY(PTHREADS_LIBRARY ${names}
++    DOC "The Portable Threads Library")
++
++IF(PTHREADS_INCLUDE_DIR AND PTHREADS_LIBRARY)
++    SET(PTHREADS_FOUND true)
++    SET(PTHREADS_DEFINITIONS -DHAVE_PTHREAD_H)
++    SET(PTHREADS_INCLUDE_DIRS ${PTHREADS_INCLUDE_DIR})
++    SET(PTHREADS_LIBRARIES    ${PTHREADS_LIBRARY})
++ENDIF(PTHREADS_INCLUDE_DIR AND PTHREADS_LIBRARY)
++
++IF(PTHREADS_FOUND)
++    IF(NOT PTHREADS_FIND_QUIETLY)
++        MESSAGE(STATUS "Found Pthreads: ${PTHREADS_LIBRARY}")
++    ENDIF(NOT PTHREADS_FIND_QUIETLY)
++ELSE(PTHREADS_FOUND) 
++    IF(PTHREADS_FIND_REQUIRED)
++        MESSAGE(FATAL_ERROR "Could not find the Pthreads Library")
++    ENDIF(PTHREADS_FIND_REQUIRED)
++ENDIF(PTHREADS_FOUND)
+diff --git a/cmake/modules/MacroBoolTo01.cmake b/cmake/modules/MacroBoolTo01.cmake
+new file mode 100644
+index 0000000..a6f2fd8
+--- /dev/null
++++ b/cmake/modules/MacroBoolTo01.cmake
+@@ -0,0 +1,20 @@
++# MACRO_BOOL_TO_01( VAR RESULT0 ... RESULTN )
++# This macro evaluates its first argument
++# and sets all the given vaiables either to 0 or 1
++# depending on the value of the first one
++
++# Copyright (c) 2006, Alexander Neundorf, <neundorf@kde.org>
++#
++# Redistribution and use is allowed according to the terms of the BSD license.
++# For details see the accompanying LICENSE file.
++
++
++MACRO(MACRO_BOOL_TO_01 FOUND_VAR )
++   FOREACH (_current_VAR ${ARGN})
++      IF(${FOUND_VAR})
++         SET(${_current_VAR} 1)
++      ELSE(${FOUND_VAR})
++         SET(${_current_VAR} 0)
++      ENDIF(${FOUND_VAR})
++   ENDFOREACH(_current_VAR)
++ENDMACRO(MACRO_BOOL_TO_01)
+diff --git a/cmake/modules/MacroJPEG.cmake b/cmake/modules/MacroJPEG.cmake
+new file mode 100644
+index 0000000..fee3735
+--- /dev/null
++++ b/cmake/modules/MacroJPEG.cmake
+@@ -0,0 +1,91 @@
++# A macro wrapper to find JPEG library version
++#
++# Syntax: DETECT_JPEG()
++# JPEG_LIB_VERSION is set to version ID depending of libjpeg version detected.
++#
++# Copyright (c) 2010-2015, Gilles Caulier, <caulier dot gilles at gmail dot com>
++# Copyright (c) 2015, Maik Riechert, <maik dot riechert at arcor dot de>
++#
++# Redistribution and use is allowed according to the terms of the BSD license.
++# For details see the accompanying LICENSE file.
++#
++# check version of libjpeg so that we can use the appropriate dir
++# See bug #227313 for details
++#
++# 2015-11-24 Changed DETECT_JPEG() so that JPEG library is optional (Maik Riechert)
++
++function(CompileToCheckVersion LibId Ret)
++
++    set(_jpeglib_version_source "
++    #include <stddef.h>
++    #include <stdio.h>
++    #include <jpeglib.h>
++    int main()
++    {
++    #if (JPEG_LIB_VERSION >= ${LibId})
++    #error JPEG_LIB_VERSION >= ${LibId}
++    #endif
++    }
++    ")
++
++    set(_jpeglib_version_source_file ${CMAKE_BINARY_DIR}/CMakeTmp/cmake_jpeglib_version_check.cpp)
++    file(WRITE "${_jpeglib_version_source_file}" "${_jpeglib_version_source}")
++    set(_jpeglib_version_include_dirs "-DINCLUDE_DIRECTORIES:STRING=${JPEG_INCLUDE_DIR}")
++
++    try_compile(_jpeglib_version_compile_result ${CMAKE_BINARY_DIR} ${_jpeglib_version_source_file}
++                CMAKE_FLAGS "${_jpeglib_version_include_dirs}"
++                COMPILE_OUTPUT_VARIABLE _jpeglib_version_compile_output_var)
++
++    set(${Ret} ${_jpeglib_version_compile_result} PARENT_SCOPE)
++
++endfunction()
++
++macro(DETECT_JPEG)
++
++    find_package(JPEG)
++
++    if(JPEG_FOUND)
++
++        CompileToCheckVersion(90 _CompileResult)
++
++        if(_CompileResult)
++
++            # Compile sucessfuly. It's not libjpeg 90. We check previous version.
++
++            CompileToCheckVersion(80 _CompileResult)
++
++            if(_CompileResult)
++
++                # Compile sucessfuly. It's not libjpeg 90. We check previous version.
++
++                CompileToCheckVersion(70 _CompileResult)
++
++                if(_CompileResult)
++
++                    # Compile sucessfuly. It's not libjpeg 70.
++                    set(JPEG_LIB_VERSION 62)
++
++                else()
++
++                    set(JPEG_LIB_VERSION 70)
++
++                endif()
++
++            else()
++
++                set(JPEG_LIB_VERSION 84)
++
++            endif()
++
++        else()
++
++            set(JPEG_LIB_VERSION 91)
++
++        endif()
++
++        message(STATUS "Libjpeg version: ${JPEG_LIB_VERSION}")
++
++    endif()
++
++endmacro()
++
+diff --git a/cmake/modules/MacroLogFeature.cmake b/cmake/modules/MacroLogFeature.cmake
+new file mode 100644
+index 0000000..0fadeba
+--- /dev/null
++++ b/cmake/modules/MacroLogFeature.cmake
+@@ -0,0 +1,157 @@
++# This file defines the Feature Logging macros.
++#
++# MACRO_LOG_FEATURE(VAR FEATURE DESCRIPTION URL [REQUIRED [MIN_VERSION [COMMENTS]]])
++#   Logs the information so that it can be displayed at the end
++#   of the configure run
++#   VAR : TRUE or FALSE, indicating whether the feature is supported
++#   FEATURE: name of the feature, e.g. "libjpeg"
++#   DESCRIPTION: description what this feature provides
++#   URL: home page
++#   REQUIRED: TRUE or FALSE, indicating whether the feature is required
++#   MIN_VERSION: minimum version number. empty string if unneeded
++#   COMMENTS: More info you may want to provide.  empty string if unnecessary
++#
++# MACRO_DISPLAY_FEATURE_LOG()
++#   Call this to display the collected results.
++#   Exits CMake with a FATAL error message if a required feature is missing
++#
++# Example:
++#
++# INCLUDE(MacroLogFeature)
++#
++# FIND_PACKAGE(JPEG)
++# MACRO_LOG_FEATURE(JPEG_FOUND "libjpeg" "Support JPEG images" "http://www.ijg.org" TRUE "3.2a" "")
++# ...
++# MACRO_DISPLAY_FEATURE_LOG()
++
++# Copyright (c) 2006, Alexander Neundorf, <neundorf@kde.org>
++# Copyright (c) 2006, Allen Winter, <winter@kde.org>
++# Copyright (c) 2009, Sebastian Trueg, <trueg@kde.org>
++#
++# Redistribution and use is allowed according to the terms of the BSD license.
++# For details see the accompanying LICENSE file.
++
++IF (NOT _macroLogFeatureAlreadyIncluded)
++   SET(_file ${CMAKE_BINARY_DIR}/MissingRequirements.txt)
++   IF (EXISTS ${_file})
++      FILE(REMOVE ${_file})
++   ENDIF (EXISTS ${_file})
++
++   SET(_file ${CMAKE_BINARY_DIR}/EnabledFeatures.txt)
++   IF (EXISTS ${_file})
++      FILE(REMOVE ${_file})
++   ENDIF (EXISTS ${_file})
++
++   SET(_file ${CMAKE_BINARY_DIR}/DisabledFeatures.txt)
++   IF (EXISTS ${_file})
++      FILE(REMOVE ${_file})
++  ENDIF (EXISTS ${_file})
++
++  SET(_macroLogFeatureAlreadyIncluded TRUE)
++
++  INCLUDE(FeatureSummary)
++
++ENDIF (NOT _macroLogFeatureAlreadyIncluded)
++
++
++MACRO(MACRO_LOG_FEATURE _var _package _description _url ) # _required _minvers _comments)
++
++   STRING(TOUPPER "${ARGV4}" _required)
++   SET(_minvers "${ARGV5}")
++   SET(_comments "${ARGV6}")
++
++   IF (${_var})
++     SET(_LOGFILENAME ${CMAKE_BINARY_DIR}/EnabledFeatures.txt)
++   ELSE (${_var})
++     IF ("${_required}" STREQUAL "TRUE")
++       SET(_LOGFILENAME ${CMAKE_BINARY_DIR}/MissingRequirements.txt)
++     ELSE ("${_required}" STREQUAL "TRUE")
++       SET(_LOGFILENAME ${CMAKE_BINARY_DIR}/DisabledFeatures.txt)
++     ENDIF ("${_required}" STREQUAL "TRUE")
++   ENDIF (${_var})
++
++   SET(_logtext "   * ${_package}")
++
++   IF (NOT ${_var})
++      IF (${_minvers} MATCHES ".*")
++        SET(_logtext "${_logtext} (${_minvers} or higher)")
++      ENDIF (${_minvers} MATCHES ".*")
++      SET(_logtext "${_logtext}  <${_url}>\n     ")
++   ELSE (NOT ${_var})
++     SET(_logtext "${_logtext} - ")
++   ENDIF (NOT ${_var})
++
++   SET(_logtext "${_logtext}${_description}")
++
++   IF (NOT ${_var})
++      IF (${_comments} MATCHES ".*")
++        SET(_logtext "${_logtext}\n     ${_comments}")
++      ENDIF (${_comments} MATCHES ".*")
++#      SET(_logtext "${_logtext}\n") #double-space missing features?
++   ENDIF (NOT ${_var})
++
++   FILE(APPEND "${_LOGFILENAME}" "${_logtext}\n")
++
++   IF(COMMAND SET_PACKAGE_INFO)  # in FeatureSummary.cmake since CMake 2.8.3
++     SET_PACKAGE_INFO("${_package}" "\"${_description}\"" "${_url}" "\"${_comments}\"")
++   ENDIF(COMMAND SET_PACKAGE_INFO)
++
++ENDMACRO(MACRO_LOG_FEATURE)
++
++
++MACRO(MACRO_DISPLAY_FEATURE_LOG)
++   IF(COMMAND FEATURE_SUMMARY) # in FeatureSummary.cmake since CMake 2.8.3
++      FEATURE_SUMMARY(FILENAME ${CMAKE_CURRENT_BINARY_DIR}/FindPackageLog.txt
++                      WHAT ALL)
++   ENDIF(COMMAND FEATURE_SUMMARY)
++
++   SET(_missingFile ${CMAKE_BINARY_DIR}/MissingRequirements.txt)
++   SET(_enabledFile ${CMAKE_BINARY_DIR}/EnabledFeatures.txt)
++   SET(_disabledFile ${CMAKE_BINARY_DIR}/DisabledFeatures.txt)
++
++   IF (EXISTS ${_missingFile} OR EXISTS ${_enabledFile} OR EXISTS ${_disabledFile})
++     SET(_printSummary TRUE)
++   ENDIF (EXISTS ${_missingFile} OR EXISTS ${_enabledFile} OR EXISTS ${_disabledFile})
++
++   IF(_printSummary)
++     SET(_missingDeps 0)
++     IF (EXISTS ${_enabledFile})
++       FILE(READ ${_enabledFile} _enabled)
++       FILE(REMOVE ${_enabledFile})
++       SET(_summary "${_summary}\n-----------------------------------------------------------------------------\n-- The following external packages were located on your system.\n-- This installation will have the extra features provided by these packages.\n-----------------------------------------------------------------------------\n${_enabled}")
++     ENDIF (EXISTS ${_enabledFile})
++
++
++     IF (EXISTS ${_disabledFile})
++       SET(_missingDeps 1)
++       FILE(READ ${_disabledFile} _disabled)
++       FILE(REMOVE ${_disabledFile})
++       SET(_summary "${_summary}\n-----------------------------------------------------------------------------\n-- The following OPTIONAL packages could NOT be located on your system.\n-- Consider installing them to enable more features from this software.\n-----------------------------------------------------------------------------\n${_disabled}")
++     ENDIF (EXISTS ${_disabledFile})
++
++
++     IF (EXISTS ${_missingFile})
++       SET(_missingDeps 1)
++       FILE(READ ${_missingFile} _requirements)
++       SET(_summary "${_summary}\n-----------------------------------------------------------------------------\n-- The following REQUIRED packages could NOT be located on your system.\n-- You must install these packages before continuing.\n-----------------------------------------------------------------------------\n${_requirements}")
++       FILE(REMOVE ${_missingFile})
++       SET(_haveMissingReq 1)
++     ENDIF (EXISTS ${_missingFile})
++
++
++     IF (NOT ${_missingDeps})
++       SET(_summary "${_summary}\n-----------------------------------------------------------------------------\n-- Congratulations! All external packages have been found.")
++     ENDIF (NOT ${_missingDeps})
++
++
++     MESSAGE(${_summary})
++     MESSAGE("-----------------------------------------------------------------------------\n")
++
++
++     IF(_haveMissingReq)
++       MESSAGE(FATAL_ERROR "Exiting: Missing Requirements")
++     ENDIF(_haveMissingReq)
++
++   ENDIF(_printSummary)
++
++ENDMACRO(MACRO_DISPLAY_FEATURE_LOG)
+diff --git a/cmake/modules/MacroOptionalFindPackage.cmake b/cmake/modules/MacroOptionalFindPackage.cmake
+new file mode 100644
+index 0000000..05fa139
+--- /dev/null
++++ b/cmake/modules/MacroOptionalFindPackage.cmake
+@@ -0,0 +1,48 @@
++# - MACRO_OPTIONAL_FIND_PACKAGE() combines FIND_PACKAGE() with an OPTION()
++# MACRO_OPTIONAL_FIND_PACKAGE( <name> [QUIT] )
++# This macro is a combination of OPTION() and FIND_PACKAGE(), it
++# works like FIND_PACKAGE(), but additionally it automatically creates
++# an option name WITH_<name>, which can be disabled via the cmake GUI.
++# or via -DWITH_<name>=OFF
++# The standard <name>_FOUND variables can be used in the same way
++# as when using the normal FIND_PACKAGE()
++
++# Copyright (c) 2006-2010 Alexander Neundorf, <neundorf@kde.org>
++#
++# Redistribution and use is allowed according to the terms of the BSD license.
++# For details see the accompanying LICENSE file.
++
++# This is just a helper macro to set a bunch of variables empty.
++# We don't know whether the package uses UPPERCASENAME or CamelCaseName, so we try both:
++macro(_MOFP_SET_EMPTY_IF_DEFINED _name _var)
++   if(DEFINED ${_name}_${_var})
++      set(${_name}_${_var} "")
++   endif(DEFINED ${_name}_${_var})
++
++   string(TOUPPER ${_name} _nameUpper)
++   if(DEFINED ${_nameUpper}_${_var})
++      set(${_nameUpper}_${_var}  "")
++   endif(DEFINED ${_nameUpper}_${_var})
++endmacro(_MOFP_SET_EMPTY_IF_DEFINED _package _var)
++
++
++macro (MACRO_OPTIONAL_FIND_PACKAGE _name )
++   option(WITH_${_name} "Search for ${_name} package" ON)
++   if (WITH_${_name})
++      find_package(${_name} ${ARGN})
++   else (WITH_${_name})
++      string(TOUPPER ${_name} _nameUpper)
++      set(${_name}_FOUND FALSE)
++      set(${_nameUpper}_FOUND FALSE)
++
++      _mofp_set_empty_if_defined(${_name} INCLUDE_DIRS)
++      _mofp_set_empty_if_defined(${_name} INCLUDE_DIR)
++      _mofp_set_empty_if_defined(${_name} INCLUDES)
++      _mofp_set_empty_if_defined(${_name} LIBRARY)
++      _mofp_set_empty_if_defined(${_name} LIBRARIES)
++      _mofp_set_empty_if_defined(${_name} LIBS)
++      _mofp_set_empty_if_defined(${_name} FLAGS)
++      _mofp_set_empty_if_defined(${_name} DEFINITIONS)
++   endif (WITH_${_name})
++endmacro (MACRO_OPTIONAL_FIND_PACKAGE)
++
+diff --git a/cmake/modules/Uninstall.cmake b/cmake/modules/Uninstall.cmake
+new file mode 100644
+index 0000000..36dd9ba
+--- /dev/null
++++ b/cmake/modules/Uninstall.cmake
+@@ -0,0 +1,22 @@
++IF(NOT EXISTS "@CMAKE_BINARY_DIR@/install_manifest.txt")
++  MESSAGE(FATAL_ERROR "Cannot find install manifest: \"@CMAKE_BINARY_DIR@/install_manifest.txt\"")
++ENDIF(NOT EXISTS "@CMAKE_BINARY_DIR@/install_manifest.txt")
++
++FILE(READ "@CMAKE_BINARY_DIR@/install_manifest.txt" files)
++STRING(REGEX REPLACE "\n" ";" files "${files}")
++FOREACH(file ${files})
++  MESSAGE(STATUS "Uninstalling \"${file}\"")
++  IF(EXISTS "${file}")
++    EXEC_PROGRAM(
++      "@CMAKE_COMMAND@" ARGS "-E remove \"${file}\""
++      OUTPUT_VARIABLE rm_out
++      RETURN_VALUE rm_retval
++      )
++    IF("${rm_retval}" STREQUAL 0)
++    ELSE("${rm_retval}" STREQUAL 0)
++      MESSAGE(FATAL_ERROR "Problem when removing \"${file}\"")
++    ENDIF("${rm_retval}" STREQUAL 0)
++  ELSE(EXISTS "${file}")
++    MESSAGE(STATUS "File \"${file}\" does not exist.")
++  ENDIF(EXISTS "${file}")
++ENDFOREACH(file)

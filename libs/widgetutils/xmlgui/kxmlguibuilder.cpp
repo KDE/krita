@@ -49,10 +49,10 @@ using namespace KDEPrivate;
 class KXMLGUIBuilderPrivate
 {
 public:
-    KXMLGUIBuilderPrivate() : m_client(0L)  {}
+    KXMLGUIBuilderPrivate() { }
     ~KXMLGUIBuilderPrivate() { }
 
-    QWidget *m_widget;
+    QWidget *m_widget {0};
 
     QString tagMainWindow;
     QString tagMenuBar;
@@ -74,9 +74,9 @@ public:
 
     QString attrIcon;
 
-    KXMLGUIClient *m_client;
+    KXMLGUIClient *m_client {0};
 
-    KMenuMenuHandler *m_menumenuhandler;
+    KMenuMenuHandler *m_menumenuhandler {0};
 };
 
 KXMLGUIBuilder::KXMLGUIBuilder(QWidget *widget)

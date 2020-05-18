@@ -633,3 +633,9 @@ void KisImageConfig::setSelectionOverlayMaskColor(const QColor &color)
 {
     m_config.writeEntry("selectionOverlayMaskColor", color);
 }
+
+void KisImageConfig::resetConfig()
+{
+    KConfigGroup config = KSharedConfig::openConfig()->group(QString());
+    config.deleteGroup();
+}

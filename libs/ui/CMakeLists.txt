@@ -70,6 +70,7 @@ set(kritaui_LIB_SRCS
     dialogs/KisSessionManagerDialog.cpp
     dialogs/KisNewWindowLayoutDialog.cpp
     dialogs/KisDlgChangeCloneSource.cpp
+    dialogs/KisRecoverNamedAutosaveDialog.cpp
     flake/kis_node_dummies_graph.cpp
     flake/kis_dummies_facade_base.cpp
     flake/kis_dummies_facade.cpp
@@ -106,8 +107,6 @@ set(kritaui_LIB_SRCS
     kis_control_frame.cpp
     kis_composite_ops_model.cc
     kis_paint_ops_model.cpp
-    kis_cursor.cc
-    kis_cursor_cache.cpp
     kis_custom_pattern.cc
     kis_file_layer.cpp
     kis_change_file_layer_command.h
@@ -254,7 +253,6 @@ set(kritaui_LIB_SRCS
     widgets/kis_scratch_pad.cpp
     widgets/kis_scratch_pad_event_filter.cpp
     widgets/kis_preset_selector_strip.cpp
-    widgets/kis_slider_spin_box.cpp
     widgets/KisSelectionPropertySlider.cpp
     widgets/kis_size_group.cpp
     widgets/kis_size_group_p.cpp
@@ -288,6 +286,7 @@ set(kritaui_LIB_SRCS
     utils/KisSpinBoxSplineUnitConverter.cpp
     utils/KisClipboardUtil.cpp
     utils/KisDitherUtil.cpp
+    utils/KisFileIconCreator.cpp
 
     input/kis_input_manager.cpp
     input/kis_input_manager_p.cpp
@@ -532,6 +531,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
 
     brushhud/kis_dlg_brush_hud_config.ui
     dialogs/kis_delayed_save_dialog.ui
+    dialogs/KisRecoverNamedAutosaveDialog.ui
     input/config/kis_input_configuration_page.ui
     input/config/kis_edit_profiles_dialog.ui
     input/config/kis_input_configuration_page_item.ui

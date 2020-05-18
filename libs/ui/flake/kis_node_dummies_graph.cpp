@@ -18,6 +18,7 @@
 
 #include "kis_node_dummies_graph.h"
 #include "kis_node_shape.h"
+#include "kis_selection_mask.h"
 
 
 /********************************************************************/
@@ -81,6 +82,18 @@ KisNodeShape* KisNodeDummy::nodeShape() const
 KisNodeSP KisNodeDummy::node() const
 {
     return m_node;
+}
+
+bool KisNodeDummy::isGUIVisible(bool showGlobalSelection) const
+{
+    if (!showGlobalSelection &&
+        parent() && !parent()->parent() &&
+        dynamic_cast<const KisSelectionMask*>(m_node.data())) {
+
+        return false;
+    }
+
+    return parent() && !m_node->isFakeNode();
 }
 
 KisNodeDummy* KisNodeDummy::at(int index) const

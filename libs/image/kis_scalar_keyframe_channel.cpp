@@ -84,14 +84,14 @@ public:
     struct SetInterpolationModeCommand;
 };
 
-KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KoID &id, qreal minValue, qreal maxValue, KisDefaultBoundsBaseSP defaultBounds, KisKeyframe::InterpolationMode defaultInterpolation)
-    : KisKeyframeChannel(id, defaultBounds),
+KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KoID& id, qreal minValue, qreal maxValue, KisNodeWSP parent, KisKeyframe::InterpolationMode defaultInterpolation)
+    : KisKeyframeChannel(id, parent),
       m_d(new Private(minValue, maxValue, defaultInterpolation))
 {
 }
 
-KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KisScalarKeyframeChannel &rhs, KisNode *newParentNode)
-    : KisKeyframeChannel(rhs, newParentNode),
+KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KisScalarKeyframeChannel &rhs, KisNodeWSP newParent)
+    : KisKeyframeChannel(rhs, newParent),
       m_d(new Private(*rhs.m_d))
 {
 }

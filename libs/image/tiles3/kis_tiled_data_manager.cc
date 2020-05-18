@@ -667,18 +667,19 @@ QRect KisTiledDataManager::extent() const
     return m_extentManager.extent();
 }
 
-QRegion KisTiledDataManager::region() const
+KisRegion KisTiledDataManager::region() const
 {
-    QRegion region;
+    QVector<QRect> rects;
 
     KisTileHashTableConstIterator iter(m_hashTable);
     KisTileSP tile;
 
     while ((tile = iter.tile())) {
-        region += tile->extent();
+        rects << tile->extent();
         iter.next();
     }
-    return region;
+
+    return KisRegion(std::move(rects));
 }
 
 void KisTiledDataManager::setPixel(qint32 x, qint32 y, const quint8 * data)

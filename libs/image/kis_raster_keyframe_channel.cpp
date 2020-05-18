@@ -103,14 +103,20 @@ public:
 
 };
 
-KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KoID &id, const KisPaintDeviceWSP paintDevice, KisDefaultBoundsBaseSP defaultBounds)
-    : KisKeyframeChannel(id, defaultBounds),
+KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KoID &id, const KisPaintDeviceWSP paintDevice, KisNodeWSP parent)
+    : KisKeyframeChannel(id, parent),
       m_d(new Private(paintDevice, QString()))
 {
 }
 
-KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KisRasterKeyframeChannel &rhs, KisNode *newParentNode, const KisPaintDeviceWSP newPaintDevice)
-    : KisKeyframeChannel(rhs, newParentNode),
+KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KoID &id, const KisPaintDeviceWSP paintDevice, const KisDefaultBoundsBaseSP bounds)
+    : KisKeyframeChannel(id, bounds ),
+      m_d(new Private(paintDevice, QString()))
+{
+}
+
+KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KisRasterKeyframeChannel &rhs, KisNodeWSP newParent, const KisPaintDeviceWSP newPaintDevice)
+    : KisKeyframeChannel(rhs, newParent),
       m_d(new Private(newPaintDevice, rhs.m_d->filenameSuffix))
 {
     KIS_ASSERT_RECOVER_NOOP(&rhs != this);
@@ -213,11 +219,12 @@ KisKeyframeSP KisRasterKeyframeChannel::createKeyframe(int time, const KisKeyfra
 {
     KisRasterKeyframe *keyframe;
 
-    const bool copy = !copySrc.isNull();
     const int srcFrameId = copy ? frameId(copySrc) : 0;
     const int frameId = m_d->paintDevice->framesInterface()->createFrame(copy, srcFrameId, QPoint(), parentCommand);
 
-    if (!copy) {
+    KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->paintDevice->defaultBounds()->currentTime() == this->currentTime());
+
+    if (!copySrc) {
         keyframe = new KisRasterKeyframe(this, time, frameId);
     } else {
         const KisRasterKeyframe *srcKeyframe = dynamic_cast<KisRasterKeyframe*>(copySrc.data());

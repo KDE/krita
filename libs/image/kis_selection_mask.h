@@ -24,13 +24,14 @@
 
 #include "kis_types.h"
 #include "kis_effect_mask.h"
+#include "KisDecoratedNodeInterface.h"
 
 /**
  * An selection mask is a single channel mask that applies a
  * particular selection to the layer the mask belongs to. A selection
  * can contain both vector and pixel selection components.
 */
-class KRITAIMAGE_EXPORT KisSelectionMask : public KisEffectMask
+class KRITAIMAGE_EXPORT KisSelectionMask : public KisEffectMask, public KisDecoratedNodeInterface
 {
     Q_OBJECT
 public:
@@ -39,7 +40,7 @@ public:
      * Create an empty selection mask. There is filter and no layer
      * associated with this mask.
      */
-    KisSelectionMask(KisImageWSP image);
+    KisSelectionMask(KisImageWSP image, const QString &name = QString());
 
     ~KisSelectionMask() override;
     KisSelectionMask(const KisSelectionMask& rhs);
@@ -75,6 +76,13 @@ public:
      * them separately.
      */
     void notifySelectionChangedCompressed();
+
+    bool decorationsVisible() const override;
+    void setDecorationsVisible(bool value, bool update) override;
+    using KisDecoratedNodeInterface::setDecorationsVisible;
+
+    void setDirty(const QVector<QRect> &rects) override;
+    using KisEffectMask::setDirty;
 
 protected:
     void flattenSelectionProjection(KisSelectionSP selection, const QRect &dirtyRect) const override;

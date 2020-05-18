@@ -47,7 +47,6 @@
 #include <KoTextPage.h>
 #include <KoTextShapeContainerModel.h>
 #include <KoPageProvider.h>
-#include <KoViewConverter.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
@@ -57,6 +56,7 @@
 #include <QApplication>
 #include <QFont>
 #include <QPainter>
+#include <QPainterPath>
 #include <QPen>
 #include <QTextLayout>
 
@@ -83,7 +83,9 @@ TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager, KoTextR
     m_layout = new KoTextDocumentLayout(m_textShapeData->document(), provider);
     m_textShapeData->document()->setDocumentLayout(m_layout);
 
-    setCollisionDetection(true);
+    /// FIXME: collision detection was dropped in Krita
+    /// due to performance reasons
+    // setCollisionDetection(true);
 
     QObject::connect(m_layout, SIGNAL(layoutIsDirty()), m_layout, SLOT(scheduleLayout()));
 }
@@ -111,7 +113,10 @@ TextShape::TextShape(const TextShape &rhs)
     m_layout = new KoTextDocumentLayout(m_textShapeData->document(), provider);
     m_textShapeData->document()->setDocumentLayout(m_layout);
 
-    setCollisionDetection(true);
+    /// FIXME: collision detection was dropped in Krita
+    /// due to performance reasons
+    // setCollisionDetection(true);
+
     QObject::connect(m_layout, SIGNAL(layoutIsDirty()), m_layout, SLOT(scheduleLayout()));
 
     updateDocumentData();
@@ -128,26 +133,27 @@ KoShape *TextShape::cloneShape() const
     return new TextShape(*this);
 }
 
-void TextShape::paintComponent(QPainter &painter, const KoViewConverter &converter,
-                               KoShapePaintingContext &paintContext)
+void TextShape::paintComponent(QPainter &painter,
+                               KoShapePaintingContext &paintContext) const
 {
     painter.save();
-    applyConversion(painter, converter);
     KoBorder *border = this->border();
 
     if (border) {
-        paintBorder(painter, converter);
+        const QRectF borderRect = QRectF(QPointF(0, 0), size());
+        border->paint(painter, borderRect, KoBorder::PaintInsideLine);
     } else if (paintContext.showTextShapeOutlines) {
         // No need to paint the outlines if there is a real border.
         if (qAbs(rotation()) > 1) {
             painter.setRenderHint(QPainter::Antialiasing);
         }
 
-        QPen pen(QColor(210, 210, 210)); // use cosmetic pen
-        QPointF onePixel = converter.viewToDocument(QPointF(1.0, 1.0));
-        QRectF rect(QPointF(0.0, 0.0), size() - QSizeF(onePixel.x(), onePixel.y()));
-        painter.setPen(pen);
-        painter.drawRect(rect);
+        // disabled, due to refactoring out of \p converter
+//        QPen pen(QColor(210, 210, 210)); // use cosmetic pen
+//        QPointF onePixel = converter.viewToDocument(QPointF(1.0, 1.0));
+//        QRectF rect(QPointF(0.0, 0.0), size() - QSizeF(onePixel.x(), onePixel.y()));
+//        painter.setPen(pen);
+//        painter.drawRect(rect);
     }
     painter.restore();
 
@@ -161,12 +167,10 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     Q_ASSERT(lay);
     lay->showInlineObjectVisualization(paintContext.showInlineObjectVisualization);
 
-    applyConversion(painter, converter);
-
     if (background()) {
         QPainterPath p;
         p.addRect(QRectF(QPointF(), size()));
-        background()->paint(painter, converter, paintContext, p);
+        background()->paint(painter, paintContext, p);
     }
 
     // this enables to use the same shapes on different pages showing different page numbers
@@ -174,7 +178,6 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
         KoTextPage *page = m_pageProvider->page(this);
         if (page) {
             // this is used to not trigger repaints if layout during the painting is done
-            m_paintRegion = KisPaintingTweaks::safeClipRegion(painter);
             if (!m_textShapeData->rootArea()->page() || page->pageNumber() != m_textShapeData->rootArea()->page()->pageNumber()) {
                 m_textShapeData->rootArea()->setPage(page); // takes over ownership of the page
             } else {
@@ -194,7 +197,6 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     pc.textContext.selections.append(selection);
 
     pc.textContext.selections += KoTextDocument(doc).selections();
-    pc.viewConverter = &converter;
     pc.imageCollection = m_imageCollection;
     pc.showFormattingCharacters = paintContext.showFormattingCharacters;
     pc.showTableBorders = paintContext.showTableBorders;
@@ -217,12 +219,11 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     m_textShapeData->rootArea()->paint(&painter, pc); // only need to draw ourselves
     painter.restore();
 
-    m_paintRegion = QRegion();
 }
 
 QPointF TextShape::convertScreenPos(const QPointF &point) const
 {
-    QPointF p = absoluteTransformation(0).inverted().map(point);
+    QPointF p = absoluteTransformation().inverted().map(point);
     return p + QPointF(0.0, m_textShapeData->documentOffset());
 }
 
@@ -250,7 +251,7 @@ void TextShape::shapeChanged(ChangeType type, KoShape *shape)
 {
     Q_UNUSED(shape);
     KoShapeContainer::shapeChanged(type, shape);
-    if (type == PositionChanged || type == SizeChanged || type == CollisionDetected) {
+    if (type == PositionChanged || type == SizeChanged /* || type == CollisionDetected*/) {
         m_textShapeData->setDirty();
     }
 }
@@ -443,7 +444,7 @@ void TextShape::updateAbsolute(const QRectF &shape) const
     KoShape::updateAbsolute(shape);
 }
 
-void TextShape::waitUntilReady(const KoViewConverter &, bool asynchronous) const
+void TextShape::waitUntilReady(bool asynchronous) const
 {
     Q_UNUSED(asynchronous);
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout *>(m_textShapeData->document()->documentLayout());

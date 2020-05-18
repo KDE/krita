@@ -217,7 +217,7 @@ qreal KoCharacterStyle::Private::calculateFontYStretch(const QString &fontFamily
     int error = 0;
     QByteArray fontName = fontFamily.toLatin1();
 
-    //TODO http://freedesktop.org/software/fontconfig/fontconfig-devel/x19.html
+    //TODO https://freedesktop.org/software/fontconfig/fontconfig-devel/x19.html
     // we should specify slant and weight too
     FcPattern *font = FcPatternBuild (0, FC_FAMILY, FcTypeString,fontName.data(), FC_SIZE, FcTypeDouble, (qreal)11, 0);
     if (font == 0) {

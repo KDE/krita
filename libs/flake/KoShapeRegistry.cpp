@@ -78,13 +78,13 @@ void KoShapeRegistry::Private::init(KoShapeRegistry *q)
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "FlakePlugins";
     config.blacklist = "FlakePluginsDisabled";
-    config.group = "calligra";
-    KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Flake"),
+    config.group = "krita";
+    KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Flake"),
                                      QString::fromLatin1("[X-Flake-PluginVersion] == 28"),
                                      config);
     config.whiteList = "ShapePlugins";
     config.blacklist = "ShapePluginsDisabled";
-    KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Shape"),
+    KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Shape"),
                                      QString::fromLatin1("[X-Flake-PluginVersion] == 28"),
                                      config);
 
@@ -433,7 +433,7 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
                                 // NOTE: here we are expected to stretch the internal to the bounds of
                                 //       the frame! Sounds weird, but it is what Krita 3.x did.
 
-                                const QRectF shapeRect = shape->absoluteOutlineRect(0);
+                                const QRectF shapeRect = shape->absoluteOutlineRect();
                                 const QPointF offset = shapeRect.topLeft();
                                 const QSizeF fragmentSize = shapeRect.size();
 

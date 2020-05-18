@@ -59,25 +59,30 @@ public:
         Data(KUndo2CommandSP _command,
              bool _undo = false,
              Sequentiality _sequentiality = SEQUENTIAL,
-             Exclusivity _exclusivity = NORMAL)
+             Exclusivity _exclusivity = NORMAL,
+             bool _shouldGoToHistory = true)
             : KisStrokeJobData(_sequentiality, _exclusivity),
               command(_command),
-              undo(_undo)
+              undo(_undo),
+              shouldGoToHistory(_shouldGoToHistory)
         {
         }
 
         Data(KUndo2Command *_command,
              bool _undo = false,
              Sequentiality _sequentiality = SEQUENTIAL,
-             Exclusivity _exclusivity = NORMAL)
+             Exclusivity _exclusivity = NORMAL,
+             bool _shouldGoToHistory = true)
             : KisStrokeJobData(_sequentiality, _exclusivity),
               command(_command),
-              undo(_undo)
+              undo(_undo),
+              shouldGoToHistory(_shouldGoToHistory)
         {
         }
 
         KUndo2CommandSP command;
         bool undo;
+        bool shouldGoToHistory = true;
     };
 
 public:

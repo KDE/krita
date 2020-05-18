@@ -25,6 +25,7 @@
 #include <klocalizedstring.h>
 
 #include <QPainter>
+#include <QPainterPath>
 #include <QLinearGradient>
 #include <QTransform>
 

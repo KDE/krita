@@ -640,14 +640,22 @@ void KisPaintingAssistant::findPerspectiveAssistantHandleLocation() {
              sort handles on the basis of X-coordinate
              */
             while(hHole > 0 && hHandlesList.at(hHole -1).data()->x() > handle.data()->x()) {
-                hHandlesList.swap(hHole-1, hHole);
+#if QT_VERSION >= QT_VERSION_CHECK(5,13,0)
+                hHandlesList.swapItemsAt(hHole - 1, hHole);
+#else
+                hHandlesList.swap(hHole - 1, hHole);
+#endif
                 hHole = hHole - 1;
             }
             /*
              sort handles on the basis of Y-coordinate
              */
             while(vHole > 0 && vHandlesList.at(vHole -1).data()->y() > handle.data()->y()) {
+#if QT_VERSION >= QT_VERSION_CHECK(5,13,0)
+                vHandlesList.swapItemsAt(vHole-1, vHole);
+#else
                 vHandlesList.swap(vHole-1, vHole);
+#endif
                 vHole = vHole - 1;
             }
         }

@@ -30,7 +30,7 @@
     <number>0</number>
    </property>
    <item row="0" column="0">
-    <widget class="KoFontComboBox" name="fontFamily">
+    <widget class="QFontComboBox" name="fontFamily">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -149,11 +149,6 @@
    <class>KisIntParseSpinBox</class>
    <extends>QSpinBox</extends>
    <header>kis_int_parse_spin_box.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KoFontComboBox</class>
-   <extends>QComboBox</extends>
-   <header>KoFontComboBox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

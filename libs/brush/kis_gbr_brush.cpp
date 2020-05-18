@@ -72,8 +72,6 @@ struct KisGbrBrush::Private {
     QByteArray data;
     bool ownData;         /* seems to indicate that @ref data is owned by the brush, but in Qt4.x this is already guaranteed... so in reality it seems more to indicate whether the data is loaded from file (ownData = true) or memory (ownData = false) */
 
-    bool useColorAsMask;
-
     quint32 header_size;  /*  header_size = sizeof (BrushHeader) + brush name  */
     quint32 version;      /*  brush file version #  */
     quint32 bytes;        /*  depth of brush in bytes */
@@ -84,11 +82,10 @@ struct KisGbrBrush::Private {
 #define DEFAULT_SPACING 0.25
 
 KisGbrBrush::KisGbrBrush(const QString& filename)
-    : KisScalingSizeBrush(filename)
+    : KisColorfulBrush(filename)
     , d(new Private)
 {
     d->ownData = true;
-    d->useColorAsMask = false;
     setHasColor(false);
     setSpacing(DEFAULT_SPACING);
 }
@@ -96,11 +93,10 @@ KisGbrBrush::KisGbrBrush(const QString& filename)
 KisGbrBrush::KisGbrBrush(const QString& filename,
                          const QByteArray& data,
                          qint32 & dataPos)
-    : KisScalingSizeBrush(filename)
+    : KisColorfulBrush(filename)
     , d(new Private)
 {
     d->ownData = false;
-    d->useColorAsMask = false;
     setHasColor(false);
     setSpacing(DEFAULT_SPACING);
 
@@ -111,22 +107,20 @@ KisGbrBrush::KisGbrBrush(const QString& filename,
 }
 
 KisGbrBrush::KisGbrBrush(KisPaintDeviceSP image, int x, int y, int w, int h)
-    : KisScalingSizeBrush()
+    : KisColorfulBrush()
     , d(new Private)
 {
     d->ownData = true;
-    d->useColorAsMask = false;
     setHasColor(false);
     setSpacing(DEFAULT_SPACING);
     initFromPaintDev(image, x, y, w, h);
 }
 
 KisGbrBrush::KisGbrBrush(const QImage& image, const QString& name)
-    : KisScalingSizeBrush()
+    : KisColorfulBrush()
     , d(new Private)
 {
     d->ownData = false;
-    d->useColorAsMask = false;
     setHasColor(false);
     setSpacing(DEFAULT_SPACING);
 
@@ -135,7 +129,7 @@ KisGbrBrush::KisGbrBrush(const QImage& image, const QString& name)
 }
 
 KisGbrBrush::KisGbrBrush(const KisGbrBrush& rhs)
-    : KisScalingSizeBrush(rhs)
+    : KisColorfulBrush(rhs)
     , d(new Private(*rhs.d))
 {
     d->data = QByteArray();
@@ -272,6 +266,7 @@ bool KisGbrBrush::init()
         }
 
         setHasColor(true);
+        setPreserveLightness(false);
 
         for (quint32 y = 0; y < bh.height; y++) {
             QRgb *pixel = reinterpret_cast<QRgb *>(image.scanLine(y));
@@ -304,6 +299,7 @@ bool KisGbrBrush::initFromPaintDev(KisPaintDeviceSP image, int x, int y, int w, 
     setName(image->objectName());
 
     setHasColor(true);
+    setPreserveLightness(false);
 
     return true;
 }
@@ -390,23 +386,6 @@ bool KisGbrBrush::saveToDevice(QIODevice* dev) const
     return true;
 }
 
-QImage KisGbrBrush::brushTipImage() const
-{
-    QImage image = KisBrush::brushTipImage();
-    if (hasColor() && useColorAsMask()) {
-        for (int y = 0; y < image.height(); y++) {
-            QRgb *pixel = reinterpret_cast<QRgb *>(image.scanLine(y));
-            for (int x = 0; x < image.width(); x++) {
-                QRgb c = pixel[x];
-                int a = qGray(c);
-                pixel[x] = qRgba(a, a, a, qAlpha(c));
-            }
-        }
-    }
-    return image;
-}
-
-
 enumBrushType KisGbrBrush::brushType() const
 {
     return !hasColor() || useColorAsMask() ? MASK : IMAGE;
@@ -424,14 +403,14 @@ void KisGbrBrush::setBrushTipImage(const QImage& image)
     setValid(true);
 }
 
-void KisGbrBrush::makeMaskImage()
+void KisGbrBrush::makeMaskImage(bool preserveAlpha)
 {
     if (!hasColor()) {
         return;
     }
     QImage brushTip = brushTipImage();
 
-    if (brushTip.width() == width() && brushTip.height() == height()) {
+    if (!preserveAlpha && brushTip.width() == width() && brushTip.height() == height()) {
         int imageWidth = width();
         int imageHeight = height();
         QImage image(imageWidth, imageHeight, QImage::Format_Indexed8);
@@ -456,9 +435,12 @@ void KisGbrBrush::makeMaskImage()
         }
         setBrushTipImage(image);
     }
+    else {
+        setBrushTipImage(brushTip);
+    }
 
-    setHasColor(false);
-    setUseColorAsMask(false);
+    setHasColor(preserveAlpha);
+    setUseColorAsMask(preserveAlpha);
     resetBoundary();
     clearBrushPyramid();
 }
@@ -471,33 +453,7 @@ KisBrush* KisGbrBrush::clone() const
 void KisGbrBrush::toXML(QDomDocument& d, QDomElement& e) const
 {
     predefinedBrushToXML("gbr_brush", e);
-    e.setAttribute("ColorAsMask", QString::number((int)useColorAsMask()));
-    KisBrush::toXML(d, e);
-}
-
-void KisGbrBrush::setUseColorAsMask(bool useColorAsMask)
-{
-    /**
-     * WARNING: There is a problem in the brush server, since it
-     * returns not copies of brushes, but direct pointers to them. It
-     * means that the brushes are shared among all the currently
-     * present paintops, which might be a problem for e.g. Multihand
-     * Brush Tool.
-     *
-     * Right now, all the instances of Multihand Brush Tool share the
-     * same brush, so there is no problem in this sharing, unless we
-     * reset the internal state of the brush on our way.
-     */
-
-    if (useColorAsMask != d->useColorAsMask) {
-        d->useColorAsMask = useColorAsMask;
-        resetBoundary();
-        clearBrushPyramid();
-    }
-}
-bool KisGbrBrush::useColorAsMask() const
-{
-    return d->useColorAsMask;
+    KisColorfulBrush::toXML(d, e);
 }
 
 QString KisGbrBrush::defaultFileExtension() const

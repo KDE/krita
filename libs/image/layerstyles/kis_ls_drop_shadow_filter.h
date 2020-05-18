@@ -44,6 +44,7 @@ public:
 
     void processDirectly(KisPaintDeviceSP src,
                          KisMultipleProjection *dst,
+                         KisLayerStyleKnockoutBlower *blower,
                          const QRect &applyRect,
                          KisPSDLayerStyleSP style,
                          KisLayerStyleFilterEnvironment *env) const override;
@@ -54,6 +55,13 @@ public:
 private:
     KisLsDropShadowFilter(const KisLsDropShadowFilter &rhs);
     const psd_layer_effects_shadow_base* getShadowStruct(KisPSDLayerStyleSP style) const;
+
+    void applyDropShadow(KisPaintDeviceSP srcDevice,
+                         KisMultipleProjection *dst,
+                         const QRect &applyRect,
+                         const psd_layer_effects_context *context,
+                         const psd_layer_effects_shadow_base *shadow,
+                         KisLayerStyleFilterEnvironment *env) const;
 
 private:
     const Mode m_mode;

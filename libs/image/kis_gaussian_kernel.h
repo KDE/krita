@@ -21,6 +21,7 @@
 
 #include "kritaimage_export.h"
 #include "kis_types.h"
+#include "kis_convolution_painter.h"
 
 #include <Eigen/Core>
 
@@ -52,9 +53,10 @@ public:
                               qreal xRadius, qreal yRadius,
                               const QBitArray &channelFlags,
                               KoUpdater *updater,
-                              bool createTransaction = false);
+                              bool createTransaction = false,
+                              KisConvolutionBorderOp borderOp = BORDER_REPEAT);
 
-    static Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> createLoGMatrix(qreal radius, qreal coeff = 1.0);
+    static Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> createLoGMatrix(qreal radius, qreal coeff, bool zeroCentered, bool includeWrappedArea);
 
     static void applyLoG(KisPaintDeviceSP device,
                          const QRect& rect,
@@ -62,6 +64,13 @@ public:
                          qreal coeff,
                          const QBitArray &channelFlags,
                          KoUpdater *progressUpdater);
+
+    static void applyTightLoG(KisPaintDeviceSP device,
+                              const QRect& rect,
+                              qreal radius, qreal coeff,
+                              const QBitArray &channelFlags,
+                              KoUpdater *progressUpdater);
+
 
     static Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> createDilateMatrix(qreal radius);
 

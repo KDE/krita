@@ -19,6 +19,7 @@
 #include "KisHandlePainterHelper.h"
 
 #include <QPainter>
+#include <QPainterPath>
 #include "kis_algebra_2d.h"
 #include "kis_painting_tweaks.h"
 

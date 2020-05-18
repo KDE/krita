@@ -114,47 +114,55 @@ QVector<QPolygon> KisOutlineGenerator::outlineImpl(typename StorageStrategy::Sto
                 if (m_cs->opacityU8(storage.pickPixel(x, y)) == m_defaultOpacity)
                     continue;
 
-                EdgeType startEdge = TopEdge;
+                const EdgeType initialEdge = TopEdge;
 
-                EdgeType edge = startEdge;
-                while (edge != NoEdge &&
-                       (*storage.pickMark(x, y) & (1 << edge) ||
-                        !isOutlineEdge(storage, edge, x, y, width, height))) {
+                EdgeType startEdge = initialEdge;
+                while (startEdge != NoEdge &&
+                       (*storage.pickMark(x, y) & (1 << startEdge) ||
+                        !isOutlineEdge(storage, startEdge, x, y, width, height))) {
 
-                    edge = nextEdge(edge);
-                    if (edge == startEdge)
-                        edge = NoEdge;
+                    startEdge = nextEdge(startEdge);
+                    if (startEdge == initialEdge)
+                        startEdge = NoEdge;
                 }
 
-                if (edge != NoEdge) {
+                if (startEdge != NoEdge) {
                     QPolygon path;
-                    path << QPoint(x + xOffset, y + yOffset);
-
-                    bool clockwise = edge == BottomEdge;
+                    const bool clockwise = startEdge == BottomEdge;
 
                     qint32 row = y, col = x;
-                    EdgeType currentEdge = edge;
-                    EdgeType lastEdge = currentEdge;
+                    EdgeType currentEdge = startEdge;
+                    EdgeType lastEdge = NoEdge;
+
+                    if (currentEdge == BottomEdge) {
+                        appendCoordinate(&path, col + xOffset, row + yOffset, currentEdge, lastEdge);
+                        lastEdge = BottomEdge;
+                    }
 
                     forever {
-                        //While following a straight line no points need to be added
-                        if (lastEdge != currentEdge) {
-                            appendCoordinate(&path, col + xOffset, row + yOffset, currentEdge);
-                            lastEdge = currentEdge;
-                        }
+                        //qDebug() << "visit" << xOffset + col << yOffset + row << ppVar(currentEdge) << ppVar(lastEdge);
 
                         *storage.pickMark(col, row) |= 1 << currentEdge;
                         nextOutlineEdge(storage, &currentEdge, &row, &col, width, height);
 
-                        if (row == y && col == x && currentEdge == edge) {
-                            // add last point of the polygon
-                            appendCoordinate(&path, col + xOffset, row + yOffset, currentEdge);
+                        //While following a straight line no points need to be added
+                        if (lastEdge != currentEdge) {
+                            appendCoordinate(&path, col + xOffset, row + yOffset, currentEdge, lastEdge);
+                            lastEdge = currentEdge;
+                        }
+
+                        if (row == y && col == x && currentEdge == startEdge) {
+                            if (startEdge != BottomEdge) {
+                                // add last point of the polygon
+                                appendCoordinate(&path, col + xOffset, row + yOffset, NoEdge, NoEdge);
+                            }
                             break;
                         }
                     }
 
-                    if(!m_simple || !clockwise)
+                    if(!m_simple || !clockwise) {
                         paths.push_back(path);
+                    }
                 }
             }
         }
@@ -247,24 +255,22 @@ void KisOutlineGenerator::nextOutlineEdge(StorageStrategy &storage, EdgeType *ed
         *edge = nextEdge(*edge);
 }
 
-void KisOutlineGenerator::appendCoordinate(QPolygon * path, int x, int y, EdgeType edge)
+void KisOutlineGenerator::appendCoordinate(QPolygon * path, int x, int y, EdgeType edge, EdgeType prevEdge)
 {
-    switch (edge) {
-    case TopEdge:
-        x++;
-        break;
-    case RightEdge:
-        x++;
-        y++;
-        break;
-    case BottomEdge:
-        y++;
-        break;
-    case LeftEdge:
-    case NoEdge:
-        break;
+    Q_UNUSED(prevEdge);
 
+    //const QPoint origPt(x, y);
+
+    if (edge == TopEdge) {
+        x++;
+    } else if (edge == BottomEdge) {
+        y++;
+    } else if (edge == RightEdge) {
+        x++;
+        y++;
     }
+
+    //qDebug() <<"add" << ppVar(origPt) << ppVar(edge) << ppVar(prevEdge) << "-->" << QPoint(x, y);
 
     *path << QPoint(x, y);
 }

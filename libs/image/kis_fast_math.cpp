@@ -15,7 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- *  adopted from here http://www.snippetcenter.org/en/a-fast-atan2-function-s1868.aspx
+ *  adopted from here http://web.archive.org/web/20090728150504/http://www.snippetcenter.org/en/a-fast-atan2-function-s1868.aspx
  */
 
 #include "kis_fast_math.h"
@@ -26,7 +26,7 @@
 #include <QtGlobal>
 #include <QGlobalStatic>
 
-// Algorithm from http://www.snippetcenter.org/en/a-fast-atan2-function-s1868.aspx
+// Algorithm from http://web.archive.org/web/20090728150504/http://www.snippetcenter.org/en/a-fast-atan2-function-s1868.aspx
 const qreal MAX_SECOND_DERIV_IN_RANGE = 0.6495;
 
 /// precision

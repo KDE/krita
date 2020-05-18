@@ -19,6 +19,7 @@
 #include "kis_processing_applicator.h"
 
 #include "kis_image.h"
+#include "kis_paint_layer.h"
 #include "kis_node.h"
 #include "kis_clone_layer.h"
 #include "kis_processing_visitor.h"
@@ -56,11 +57,12 @@ class UpdateCommand : public KisCommandUtils::FlipFlopCommand
 public:
     UpdateCommand(KisImageWSP image, KisNodeSP node,
                   KisProcessingApplicator::ProcessingFlags flags,
-                  bool finalUpdate)
+                  bool finalUpdate, bool multiframeApplication)
         : FlipFlopCommand(finalUpdate),
           m_image(image),
           m_node(node),
-          m_flags(flags)
+          m_flags(flags),
+          m_multiframeApplication(multiframeApplication)
     {
     }
 
@@ -73,20 +75,30 @@ private:
          * If you still need third-party updates work, please add a
          * flag to the applicator.
          */
-
         m_image->disableDirtyRequests();
     }
 
     void partB() override {
         m_image->enableDirtyRequests();
 
-        if(m_flags.testFlag(KisProcessingApplicator::RECURSIVE)) {
-            m_image->refreshGraphAsync(m_node);
+        if (m_multiframeApplication) {
+            KisLayerUtils::recursiveApplyNodes(m_image->root(), [](KisNodeSP node){
+                KisPaintLayer* paintLayer = qobject_cast<KisPaintLayer*>(node.data());
+                if (paintLayer && paintLayer->onionSkinEnabled()) {
+                    paintLayer->flushOnionSkinCache();
+                }
+            });
         }
 
-        m_node->setDirty(m_image->bounds());
+        if (!m_flags.testFlag(KisProcessingApplicator::NO_IMAGE_UPDATES)) {
+            if(m_flags.testFlag(KisProcessingApplicator::RECURSIVE)) {
+                m_image->refreshGraphAsync(m_node);
+            }
 
-        updateClones(m_node);
+            m_node->setDirty(m_image->bounds());
+
+            updateClones(m_node);
+        }
     }
 
     void updateClones(KisNodeSP node) {
@@ -107,7 +119,7 @@ private:
                 QRegion dirtyRegion(m_image->bounds());
                 dirtyRegion -= m_image->bounds().translated(offset);
 
-                clone->setDirty(dirtyRegion);
+                clone->setDirty(KisRegion::fromQRegion(dirtyRegion));
             }
         }
     }
@@ -116,6 +128,7 @@ private:
     KisImageWSP m_image;
     KisNodeSP m_node;
     KisProcessingApplicator::ProcessingFlags m_flags;
+    bool m_multiframeApplication;
 };
 
 class EmitImageSignalsCommand : public KisCommandUtils::FlipFlopCommand
@@ -170,7 +183,8 @@ KisProcessingApplicator::KisProcessingApplicator(KisImageWSP image,
       m_node(node),
       m_flags(flags),
       m_emitSignals(emitSignals),
-      m_finalSignalsEmitted(false)
+      m_finalSignalsEmitted(false),
+      m_appliedVisitorToAllFrames(false)
 {
     KisStrokeStrategyUndoCommandBased *strategy =
             new KisStrokeStrategyUndoCommandBased(name, false, m_image.data());
@@ -195,7 +209,7 @@ KisProcessingApplicator::KisProcessingApplicator(KisImageWSP image,
     }
 
     if (m_node) {
-        applyCommand(new UpdateCommand(m_image, m_node, m_flags, false));
+        applyCommand(new UpdateCommand(m_image, m_node, m_flags, false, true));
     }
 }
 
@@ -227,6 +241,8 @@ void KisProcessingApplicator::applyVisitorAllFrames(KisProcessingVisitorSP visit
                                                     KisStrokeJobData::Sequentiality sequentiality,
                                                     KisStrokeJobData::Exclusivity exclusivity)
 {
+    m_appliedVisitorToAllFrames = true;
+
     KUndo2Command *initCommand = visitor->createInitCommand();
     if (initCommand) {
         applyCommand(initCommand,
@@ -306,7 +322,7 @@ void KisProcessingApplicator::explicitlyEmitFinalSignals()
     KIS_ASSERT_RECOVER_RETURN(!m_finalSignalsEmitted);
 
     if (m_node) {
-        applyCommand(new UpdateCommand(m_image, m_node, m_flags, true));
+        applyCommand(new UpdateCommand(m_image, m_node, m_flags, true, m_appliedVisitorToAllFrames));
     }
 
     if(m_flags.testFlag(NO_UI_UPDATES)) {

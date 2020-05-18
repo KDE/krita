@@ -82,10 +82,8 @@ typename QMap<int, T>::const_iterator findNext(const QMap<int, T> &map, int curr
 struct KisKeyframeChannel::Private
 {
     Private() {}
-    Private(const Private &rhs, KisNodeWSP newParentNode) {
-        node = newParentNode;
+    Private(const Private &rhs) {
         id = rhs.id;
-        defaultBounds = rhs.defaultBounds;
         haveBrokenFrameTimeBug = rhs.haveBrokenFrameTimeBug;
     }
 
@@ -123,18 +121,29 @@ struct KisKeyframeChannel::Private
     }
 };
 
-KisKeyframeChannel::KisKeyframeChannel(const KoID &id, KisDefaultBoundsBaseSP defaultBounds)
+KisKeyframeChannel::KisKeyframeChannel(const KoID &id, KisNodeWSP parent)
     : m_d(new Private)
 {
     m_d->id = id;
-    m_d->node = 0;
-    m_d->defaultBounds = defaultBounds;
+    m_d->node = parent;
+    m_d->defaultBounds = KisDefaultBoundsNodeWrapperSP( new KisDefaultBoundsNodeWrapper( parent ));
 }
 
-KisKeyframeChannel::KisKeyframeChannel(const KisKeyframeChannel &rhs, KisNode *newParentNode)
-    : m_d(new Private(*rhs.m_d, newParentNode))
+KisKeyframeChannel::KisKeyframeChannel(const KoID &id, KisDefaultBoundsBaseSP bounds)
+    : m_d(new Private)
+{
+    m_d->id = id;
+    m_d->node = nullptr;
+    m_d->defaultBounds = bounds;
+}
+
+KisKeyframeChannel::KisKeyframeChannel(const KisKeyframeChannel &rhs, KisNodeWSP newParent)
+    : m_d(new Private(*rhs.m_d))
 {
     KIS_ASSERT_RECOVER_NOOP(&rhs != this);
+
+    m_d->node = newParent;
+    m_d->defaultBounds = KisDefaultBoundsNodeWrapperSP( new KisDefaultBoundsNodeWrapper( newParent ));
 
     Q_FOREACH(KisKeyframeSP keyframe, rhs.m_d->keys) {
         const KisKeyframeSP clone = keyframe->cloneFor(this);
@@ -163,6 +172,7 @@ QString KisKeyframeChannel::name() const
 void KisKeyframeChannel::setNode(KisNodeWSP node)
 {
     m_d->node = node;
+    m_d->defaultBounds = KisDefaultBoundsNodeWrapperSP( new KisDefaultBoundsNodeWrapper( node ));
 }
 
 KisNodeWSP KisKeyframeChannel::node() const
@@ -610,10 +620,12 @@ KisFrameSet KisKeyframeChannel::affectedFrames(int time) const
     KeyframesMap::const_iterator active = KisCollectionUtils::lastBeforeOrAt(m_d->keys, time);
     KeyframesMap::const_iterator next;
 
+    // ie. time is before the first keyframe
+    const bool noActiveKeyframe = (active == m_d->keys.constEnd());
+
     int from;
 
-    if (active == m_d->keys.constEnd()) {
-        // No active keyframe, ie. time is before the first keyframe
+    if (noActiveKeyframe) {
         from = 0;
         next = m_d->keys.constBegin();
     } else {
@@ -633,7 +645,14 @@ KisFrameSet KisKeyframeChannel::affectedFrames(int time) const
     if (next == m_d->keys.constEnd()) {
         frames |= KisFrameSet::infiniteFrom(from);
     } else {
-        frames |= KisFrameSet::between(from, next.key() - 1);
+        const KisKeyframe::InterpolationMode activeMode = noActiveKeyframe ? KisKeyframe::Constant :
+                                                                active->data()->interpolationMode();
+
+        if (activeMode == KisKeyframe::Constant) {
+            return KisFrameSet::fromTime(from, next.key() - 1);
+        } else {
+            return KisFrameSet::fromTime(from, from);
+        }
     }
 
     Q_FOREACH(QSharedPointer<KisRepeatFrame> repeat, m_d->repeats) {

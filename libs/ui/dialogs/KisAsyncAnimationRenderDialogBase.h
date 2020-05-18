@@ -25,6 +25,7 @@
 
 class KisAsyncAnimationRendererBase;
 class KisViewManager;
+class KisRegion;
 
 /**
  * @brief KisAsyncAnimationRenderDialogBase is a special class for rendering multiple
@@ -89,12 +90,12 @@ public:
      * Set area of image that will be regenerated. If \p roi is empty,
      * full area of the image is regenerated.
      */
-    void setRegionOfInterest(const QRegion &roi);
+    void setRegionOfInterest(const KisRegion &roi);
 
     /**
      * @see setRegionOfInterest()
      */
-    QRegion regionOfInterest() const;
+    KisRegion regionOfInterest() const;
 
     /**
      * @brief setting batch mode to true will prevent any dialogs or message boxes from

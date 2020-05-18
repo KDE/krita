@@ -51,11 +51,12 @@ public:
     QString workspace() const;
     QString windowLayout() const;
     QString session() const;
+    QString fileLayer() const;
     bool canvasOnly() const;
     bool noSplash() const;
     bool fullScreen() const;
     bool doNewImage() const;
-    KisDocument *image() const;
+    KisDocument *createDocumentFromArguments() const;
 
 private:
 

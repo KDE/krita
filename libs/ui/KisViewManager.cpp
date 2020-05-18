@@ -8,7 +8,7 @@
  *                2003-2011 Boudewijn Rempt <boud@valdyas.org>
  *                2004 Clarence Dang <dang@kde.org>
  *                2011 José Luis Vergara <pentalis@gmail.com>
- *                2017 L. E. Segovia <leo.segovia@siggraph.org>
+ *                2017 L. E. Segovia <amy@amyspark.me>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -986,9 +986,11 @@ void KisViewManager::slotSaveIncremental()
         QMessageBox::critical(mainWindow(), i18nc("@title:window", "Couldn't save incremental version"), i18n("Alternative names exhausted, try manually saving with a higher number"));
         return;
     }
+    QUrl newUrl = QUrl::fromUserInput(fileName);
     document()->setFileBatchMode(true);
-    document()->saveAs(QUrl::fromUserInput(fileName), document()->mimeType(), true);
+    document()->saveAs(newUrl, document()->mimeType(), true);
     document()->setFileBatchMode(false);
+    KisPart::instance()->addRecentURLToAllMainWindows(newUrl, document()->url());
 
     if (mainWindow()) {
         mainWindow()->updateCaption();
@@ -1290,7 +1292,7 @@ void KisViewManager::guiUpdateTimeout()
     d->selectionManager.updateGUI();
     d->filterManager.updateGUI();
     if (zoomManager()) {
-        zoomManager()->updateGUI();
+        zoomManager()->updateGuiAfterDocumentSize();
     }
     d->gridManager.updateGUI();
     d->actionManager.updateGUI();
@@ -1444,4 +1446,12 @@ void KisViewManager::slotResetRotation()
 {
     KisCanvasController *canvasController = d->currentImageView->canvasController();
     canvasController->resetCanvasRotation();
+}
+
+void KisViewManager::slotToggleFullscreen()
+{
+    KisConfig cfg(false);
+    KisMainWindow *main = mainWindow();
+    main->viewFullscreen(!main->isFullScreen());
+    cfg.fullscreenMode(main->isFullScreen());
 }

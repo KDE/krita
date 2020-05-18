@@ -24,12 +24,9 @@
 
 #include "kis_types.h"
 
-#include "KisImageBuilderResult.h"
 #include <KisImportExportFilter.h>
 
 class KisFFMpegRunner;
-
-/* The KisImageBuilder_Result definitions come from kis_png_converter.h here */
 
 class KisDocument;
 class KisAnimationRenderingOptions;

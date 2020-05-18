@@ -24,7 +24,8 @@
 
 TimelineFramesIndexConverter::TimelineFramesIndexConverter(KisDummiesFacadeBase *dummiesFacade)
     : m_dummiesFacade(dummiesFacade),
-      m_activeDummy(0)
+      m_activeDummy(0),
+      m_showGlobalSelectionMask(false)
 {
 }
 
@@ -133,7 +134,19 @@ void TimelineFramesIndexConverter::notifyDummyRemoved(KisNodeDummy *dummy)
     }
 }
 
+void TimelineFramesIndexConverter::setShowGlobalSelectionMask(bool value)
+{
+    m_showGlobalSelectionMask = value;
+}
+
+bool TimelineFramesIndexConverter::isDummyAvailableForTimeline(KisNodeDummy *dummy) const
+{
+    return dummy->isGUIVisible(m_showGlobalSelectionMask);
+}
+
 bool TimelineFramesIndexConverter::isDummyVisible(KisNodeDummy *dummy) const
 {
-    return (dummy->node()->useInTimeline() && dummy->parent()) || dummy == m_activeDummy;
+    return (isDummyAvailableForTimeline(dummy) &&
+            dummy->node()->useInTimeline()) ||
+            dummy == m_activeDummy;
 }

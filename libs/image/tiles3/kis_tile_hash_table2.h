@@ -130,7 +130,7 @@ private:
     inline quint32 calculateHash(qint32 col, qint32 row)
     {
 #ifdef SANITY_CHECK
-        KIS_ASSERT_RECOVER_NOOP(row < 0x7FFF && col < 0x7FFF)
+        KIS_ASSERT_RECOVER_NOOP(row < 0x7FFF && col < 0x7FFF);
 #endif // SANITY_CHECK
 
         if (col == 0 && row == 0) {
@@ -318,7 +318,7 @@ typename KisTileHashTableTraits2<T>::TileTypeSP KisTileHashTableTraits2<T>::getT
     TileTypeSP tile = m_map.get(idx);
 
     while (!tile) {
-        // we shouldn't try to aquire **any** lock with
+        // we shouldn't try to acquire **any** lock with
         // raw-pointer lock held
         m_map.getGC().unlockRawPointerAccess();
 

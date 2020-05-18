@@ -8,7 +8,7 @@ include_directories(SYSTEM
 add_subdirectory( dtd )
 add_subdirectory( data )
 add_subdirectory( integration )
-# Install the application icons following the the freedesktop icon theme spec
+# Install the application icons following the freedesktop icon theme spec
 add_subdirectory( pics/app )
 
 if (ANDROID)

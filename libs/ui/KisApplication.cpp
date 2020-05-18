@@ -49,6 +49,8 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 
+#include <KoDockRegistry.h>
+#include <KoToolRegistry.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoPluginLoader.h>
 #include <KoShapeRegistry.h>
@@ -88,6 +90,7 @@
 #include "kis_document_aware_spin_box_unit_manager.h"
 #include "KisViewManager.h"
 #include "kis_workspace_resource.h"
+#include <KisUsageLogger.h>
 
 #include <KritaVersionWrapper.h>
 #include <dialogs/KisSessionManagerDialog.h>
@@ -97,6 +100,9 @@
 
 #include <dialogs/KisAsyncAnimationFramesSaveDialog.h>
 #include <kis_image_animation_interface.h>
+#include "kis_file_layer.h"
+#include "kis_group_layer.h"
+#include "kis_node_commands_adapter.h"
 
 namespace {
 const QTime appStartTime(QTime::currentTime());
@@ -110,6 +116,7 @@ public:
     KisAutoSaveRecoveryDialog *autosaveDialog {0};
     QPointer<KisMainWindow> mainWindow; // The first mainwindow we create on startup
     bool batchRun {false};
+    QVector<QByteArray> earlyRemoteArguments;
 
 };
 
@@ -155,7 +162,7 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     setWindowIcon(KisIconUtils::loadIcon("krita"));
 
     if (qgetenv("KRITA_NO_STYLE_OVERRIDE").isEmpty()) {
-        QStringList styles = QStringList() /*<< "breeze"*/ << "fusion" << "plastique";
+        QStringList styles = QStringList() << "breeze" << "fusion" << "plastique";
         if (!styles.contains(style()->objectName().toLower())) {
             Q_FOREACH (const QString & style, styles) {
                 if (!setStyle(style)) {
@@ -171,8 +178,6 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     else {
         qDebug() << "Style override disabled, using" << style()->objectName();
     }
-
-    KisOpenGL::initialize();
 }
 
 #if defined(Q_OS_WIN) && defined(ENV32BIT)
@@ -236,6 +241,7 @@ void KisApplication::addResourceTypes()
     KoResourcePaths::addResourceType("ko_palettes", "data", "/palettes/", true);
     KoResourcePaths::addResourceType("kis_shortcuts", "data", "/shortcuts/");
     KoResourcePaths::addResourceType("kis_actions", "data", "/actions");
+    KoResourcePaths::addResourceType("kis_actions", "data", "/pykrita");
     KoResourcePaths::addResourceType("icc_profiles", "data", "/color/icc");
     KoResourcePaths::addResourceType("icc_profiles", "data", "/profiles/");
     KoResourcePaths::addResourceType("ko_effects", "data", "/effects/");
@@ -322,32 +328,17 @@ void KisApplication::loadPlugins()
 
     KoShapeRegistry* r = KoShapeRegistry::instance();
     r->add(new KisShapeSelectionFactory());
-
+    KoColorSpaceRegistry::instance();
     KisActionRegistry::instance();
     KisFilterRegistry::instance();
     KisGeneratorRegistry::instance();
     KisPaintOpRegistry::instance();
-    KoColorSpaceRegistry::instance();
+    KoToolRegistry::instance();
+    KoDockRegistry::instance();
 }
 
 void KisApplication::loadGuiPlugins()
 {
-    //    qDebug() << "loadGuiPlugins();";
-    // Load the krita-specific tools
-    setSplashScreenLoadingText(i18n("Loading Plugins for Krita/Tool..."));
-    processEvents();
-    //    qDebug() << "loading tools";
-    KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Tool"),
-                                     QString::fromLatin1("[X-Krita-Version] == 28"));
-
-
-    // Load dockers
-    setSplashScreenLoadingText(i18n("Loading Plugins for Krita/Dock..."));
-    processEvents();
-    //    qDebug() << "loading dockers";
-    KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Dock"),
-                                     QString::fromLatin1("[X-Krita-Version] == 28"));
-
     // XXX_EXIV: make the exiv io backends real plugins
     setSplashScreenLoadingText(i18n("Loading Plugins Exiv/IO..."));
     processEvents();
@@ -502,10 +493,9 @@ bool KisApplication::start(const KisApplicationArguments &args)
     connect(this, &KisApplication::aboutToQuit, &KisSpinBoxUnitManagerFactory::clearUnitManagerBuilder); //ensure the builder is destroyed when the application leave.
     //the new syntax slot syntax allow to connect to a non q_object static method.
 
-
     // Create a new image, if needed
     if (doNewImage) {
-        KisDocument *doc = args.image();
+        KisDocument *doc = args.createDocumentFromArguments();
         if (doc) {
             kisPart->addDocument(doc);
             d->mainWindow->addViewAndNotifyLoadingCompleted(doc);
@@ -581,6 +571,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                                                doc->image()->animationInterface()->fullClipRange(),
                                                exportFileName,
                                                sequenceStart,
+                                               false,
                                                0);
                     exporter.setBatchMode(d->batchRun);
                     KisAsyncAnimationFramesSaveDialog::Result result =
@@ -608,12 +599,48 @@ bool KisApplication::start(const KisApplicationArguments &args)
         }
     }
 
+    //add an image as file-layer
+    if (!args.fileLayer().isEmpty()){
+        if (d->mainWindow->viewManager()->image()){
+            KisFileLayer *fileLayer = new KisFileLayer(d->mainWindow->viewManager()->image(), "",
+                                                    args.fileLayer(), KisFileLayer::None,
+                                                    d->mainWindow->viewManager()->image()->nextLayerName(), OPACITY_OPAQUE_U8);
+            QFileInfo fi(fileLayer->path());
+            if (fi.exists()){
+                KisNodeCommandsAdapter adapter(d->mainWindow->viewManager());
+                adapter.addNode(fileLayer, d->mainWindow->viewManager()->activeNode()->parent(),
+                                    d->mainWindow->viewManager()->activeNode());
+            }
+            else{
+                QMessageBox::warning(nullptr, i18nc("@title:window", "Krita:Warning"),
+                                            i18n("Cannot add %1 as a file layer: the file does not exist.", fileLayer->path()));
+            }
+        }
+        else if (this->isRunning()){
+            QMessageBox::warning(nullptr, i18nc("@title:window", "Krita:Warning"),
+                                i18n("Cannot add the file layer: no document is open.\n\n"
+"You can create a new document using the --new-image option, or you can open an existing file.\n\n"
+"If you instead want to add the file layer to a document in an already running instance of Krita, check the \"Allow only one instance of Krita\" checkbox in the settings (Settings -> General -> Window)."));
+        }
+        else {
+            QMessageBox::warning(nullptr, i18nc("@title:window", "Krita: Warning"),
+                                i18n("Cannot add the file layer: no document is open.\n"
+                                     "You can either create a new file using the --new-image option, or you can open an existing file."));
+        }
+    }
+
     // fixes BUG:369308  - Krita crashing on splash screen when loading.
     // trying to open a file before Krita has loaded can cause it to hang and crash
     if (d->splashScreen) {
         d->splashScreen->displayLinks(true);
         d->splashScreen->displayRecentFiles(true);
     }
+
+    Q_FOREACH(const QByteArray &message, d->earlyRemoteArguments) {
+        executeRemoteArguments(message, d->mainWindow);
+    }
+
+    KisUsageLogger::writeSysInfo(KisUsageLogger::screenInformation());
 
 
     // not calling this before since the program will quit there.
@@ -662,38 +689,83 @@ bool KisApplication::notify(QObject *receiver, QEvent *event)
 }
 
 
-void KisApplication::remoteArguments(QByteArray message, QObject *socket)
+void KisApplication::executeRemoteArguments(QByteArray message, KisMainWindow *mainWindow)
 {
-    Q_UNUSED(socket);
-
-    // check if we have any mainwindow
-    KisMainWindow *mw = qobject_cast<KisMainWindow*>(qApp->activeWindow());
-    if (!mw) {
-        mw = KisPart::instance()->mainWindows().first();
-    }
-
-    if (!mw) {
-        return;
-    }
-
     KisApplicationArguments args = KisApplicationArguments::deserialize(message);
     const bool doTemplate = args.doTemplate();
+    const bool doNewImage = args.doNewImage();
     const int argsCount = args.filenames().count();
+    bool documentCreated = false;
 
+    // Create a new image, if needed
+    if (doNewImage) {
+        KisDocument *doc = args.createDocumentFromArguments();
+        if (doc) {
+            KisPart::instance()->addDocument(doc);
+            d->mainWindow->addViewAndNotifyLoadingCompleted(doc);
+        }
+    }
     if (argsCount > 0) {
         // Loop through arguments
         for (int argNumber = 0; argNumber < argsCount; ++argNumber) {
             QString filename = args.filenames().at(argNumber);
             // are we just trying to open a template?
             if (doTemplate) {
-                createNewDocFromTemplate(filename, mw);
+                documentCreated |= createNewDocFromTemplate(filename, mainWindow);
             }
             else if (QFile(filename).exists()) {
                 KisMainWindow::OpenFlags flags = d->batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
-                mw->openDocument(QUrl::fromLocalFile(filename), flags);
+                documentCreated |= mainWindow->openDocument(QUrl::fromLocalFile(filename), flags);
             }
         }
     }
+
+    //add an image as file-layer if called in another process and singleApplication is enabled
+    if (!args.fileLayer().isEmpty()){
+        if (argsCount > 0  && !documentCreated){
+            //arg was passed but document was not created so don't add the file layer.
+            QMessageBox::warning(mainWindow, i18nc("@title:window", "Krita:Warning"),
+                                            i18n("Couldn't open file %1",args.filenames().at(argsCount - 1)));
+        }
+        else if (mainWindow->viewManager()->image()){
+            KisFileLayer *fileLayer = new KisFileLayer(mainWindow->viewManager()->image(), "",
+                                                    args.fileLayer(), KisFileLayer::None,
+                                                    mainWindow->viewManager()->image()->nextLayerName(), OPACITY_OPAQUE_U8);
+            QFileInfo fi(fileLayer->path());
+            if (fi.exists()){
+                KisNodeCommandsAdapter adapter(d->mainWindow->viewManager());
+                adapter.addNode(fileLayer, d->mainWindow->viewManager()->activeNode()->parent(),
+                                    d->mainWindow->viewManager()->activeNode());
+            }
+            else{
+                QMessageBox::warning(mainWindow, i18nc("@title:window", "Krita:Warning"),
+                                            i18n("Cannot add %1 as a file layer: the file does not exist.", fileLayer->path()));
+            }
+        }
+        else {
+            QMessageBox::warning(mainWindow, i18nc("@title:window", "Krita:Warning"),
+                                            i18n("Cannot add the file layer: no document is open."));
+        }
+    }
+}
+
+
+void KisApplication::remoteArguments(QByteArray message, QObject *socket)
+{
+    Q_UNUSED(socket);
+
+    // check if we have any mainwindow
+    KisMainWindow *mw = qobject_cast<KisMainWindow*>(qApp->activeWindow());
+
+    if (!mw && KisPart::instance()->mainWindows().size() > 0) {
+        mw = KisPart::instance()->mainWindows().first();
+    }
+
+    if (!mw) {
+        d->earlyRemoteArguments << message;
+        return;
+    }
+    executeRemoteArguments(message, mw);
 }
 
 void KisApplication::fileOpenRequested(const QString &url)
@@ -725,7 +797,7 @@ void KisApplication::checkAutosaveFiles()
     // all autosave files for our application
     QStringList autosaveFiles = dir.entryList(filters, QDir::Files | QDir::Hidden);
 
-    // Visibile autosave files
+    // Visible autosave files
     filters = QStringList() << QString("krita-*-*-autosave.kra");
     autosaveFiles += dir.entryList(filters, QDir::Files);
 
@@ -742,6 +814,7 @@ void KisApplication::checkAutosaveFiles()
             QStringList filesToRecover = d->autosaveDialog->recoverableFiles();
             Q_FOREACH (const QString &autosaveFile, autosaveFiles) {
                 if (!filesToRecover.contains(autosaveFile)) {
+                    KisUsageLogger::log(QString("Removing autosave file %1").arg(dir.absolutePath() + "/" + autosaveFile));
                     QFile::remove(dir.absolutePath() + "/" + autosaveFile);
                 }
             }
@@ -824,21 +897,41 @@ bool KisApplication::createNewDocFromTemplate(const QString &fileName, KisMainWi
     return false;
 }
 
-void KisApplication::clearConfig()
+void KisApplication::resetConfig()
 {
     KIS_ASSERT_RECOVER_RETURN(qApp->thread() == QThread::currentThread());
 
     KSharedConfigPtr config =  KSharedConfig::openConfig();
-
+    config->markAsClean();
+    
     // find user settings file
-    bool createDir = false;
-    QString kritarcPath = KoResourcePaths::locateLocal("config", "kritarc", createDir);
+    const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+    QString kritarcPath = configPath + QStringLiteral("/kritarc");
+    
+    QFile kritarcFile(kritarcPath);
+    
+    if (kritarcFile.exists()) {
+        if (kritarcFile.open(QFile::ReadWrite)) {
+            QString backupKritarcPath = kritarcPath + QStringLiteral(".backup");
+    
+            QFile backupKritarcFile(backupKritarcPath);
+    
+            if (backupKritarcFile.exists()) {
+                backupKritarcFile.remove();
+            }
 
-    QFile configFile(kritarcPath);
-    if (configFile.exists()) {
-        // clear file
-        if (configFile.open(QFile::WriteOnly)) {
-            configFile.close();
+            QMessageBox::information(0,
+                                 i18nc("@title:window", "Krita"),
+                                 i18n("Krita configurations reset!\n\n"
+                                      "Backup file was created at: %1\n\n"
+                                      "Restart Krita for changes to take effect.",
+                                      backupKritarcPath),
+                                 QMessageBox::Ok, QMessageBox::Ok);
+
+            // clear file
+            kritarcFile.rename(backupKritarcPath);
+
+            kritarcFile.close();
         }
         else {
             QMessageBox::warning(0,
@@ -854,20 +947,26 @@ void KisApplication::clearConfig()
     // this should load any default configuration files shipping with the program
     config->reparseConfiguration();
     config->sync();
+
+    // Restore to default workspace
+    KConfigGroup cfg = KSharedConfig::openConfig()->group("MainWindow");
+
+    QString currentWorkspace = cfg.readEntry<QString>("CurrentWorkspace", "Default");
+    KoResourceServer<KisWorkspaceResource> *rserver = KisResourceServerProvider::instance()->workspaceServer();
+    KisWorkspaceResource *workspace = rserver->resourceByName(currentWorkspace);
+
+    if (workspace) {
+        d->mainWindow->restoreWorkspace(workspace);
+    }
 }
 
-void KisApplication::askClearConfig()
+void KisApplication::askresetConfig()
 {
-    Qt::KeyboardModifiers mods = QApplication::queryKeyboardModifiers();
-    bool askClearConfig = (mods & Qt::ControlModifier) && (mods & Qt::ShiftModifier) && (mods & Qt::AltModifier);
-
-    if (askClearConfig) {
-        bool ok = QMessageBox::question(0,
-                                        i18nc("@title:window", "Krita"),
-                                        i18n("Do you want to clear the settings file?"),
-                                        QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes;
-        if (ok) {
-            clearConfig();
-        }
+    bool ok = QMessageBox::question(0,
+                                    i18nc("@title:window", "Krita"),
+                                    i18n("Do you want to clear the settings file?"),
+                                    QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes;
+    if (ok) {
+        resetConfig();
     }
 }

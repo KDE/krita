@@ -60,15 +60,17 @@ QSize KisCmbGradient::sizeHint() const
 {
     ensurePolished();
     QFontMetrics fm = fontMetrics();
-
+#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
+    int maxW = 7 * fm.horizontalAdvance(QChar('x')) + 18;
+#else
     int maxW = 7 * fm.width(QChar('x')) + 18;
+#endif
     int maxH = qMax(fm.lineSpacing(), 14) + 2;
 
     QStyleOptionComboBox options;
     options.initFrom(this);
 
-    return style()->sizeFromContents(QStyle::CT_ComboBox, &options,
-                                     QSize(maxW, maxH), this).expandedTo(QApplication::globalStrut());
+    return style()->sizeFromContents(QStyle::CT_ComboBox, &options, QSize(maxW, maxH), this);
 }
 
 void KisCmbGradient::resizeEvent(QResizeEvent *event)

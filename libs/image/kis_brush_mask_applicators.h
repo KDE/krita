@@ -134,9 +134,16 @@ void KisBrushMaskVectorApplicator<MaskGenerator, _impl>::processVector(const QRe
                     }
                 }
 
+                if (m_d->color) {
+                    memcpy(dabPointer, m_d->color, m_d->pixelSize);
+                }
+
                 m_d->colorSpace->applyAlphaU8Mask(dabPointer, &alphaValue, 1);
                 dabPointer += m_d->pixelSize;
             }
+        } else if (m_d->color) {
+            m_d->colorSpace->fillInverseAlphaNormedFloatMaskWithColor(dabPointer, buffer, m_d->color, width);
+            dabPointer += width * m_d->pixelSize;
         } else {
             m_d->colorSpace->applyInverseNormedFloatMask(dabPointer, buffer, width);
             dabPointer += width * m_d->pixelSize;
@@ -190,6 +197,10 @@ void KisBrushMaskScalarApplicator<MaskGenerator, _impl>::processScalar(const QRe
                         alphaValue = OPACITY_TRANSPARENT_U8;
                     }
                 }
+            }
+
+            if (m_d->color) {
+                memcpy(dabPointer, m_d->color, m_d->pixelSize);
             }
 
             m_d->colorSpace->applyAlphaU8Mask(dabPointer, &alphaValue, 1);

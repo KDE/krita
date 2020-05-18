@@ -186,7 +186,7 @@ class PluginImporterTestCase(TestCase):
 
         self.zip_plugin('success_simple')
 
-        # Create an existing python module in the the resources directory:
+        # Create an existing python module in the resources directory:
         plugin_dir = os.path.join(self.resources_dir.name, 'pykrita', 'foo')
         os.makedirs(plugin_dir)
         init_file = os.path.join(plugin_dir, '__init__.py')
@@ -212,7 +212,7 @@ class PluginImporterTestCase(TestCase):
 
         self.zip_plugin('success_simple')
 
-        # Create an existing python module in the the resources directory:
+        # Create an existing python module in the resources directory:
         plugin_dir = os.path.join(self.resources_dir.name, 'pykrita', 'foo')
         os.makedirs(plugin_dir)
         init_file = os.path.join(plugin_dir, '__init__.py')

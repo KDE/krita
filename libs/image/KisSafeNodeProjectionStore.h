@@ -40,7 +40,7 @@ public:
     ~KisSafeNodeProjectionStoreBase();
 
     /**
-     * Notify the the store that current projection device can be
+     * Notify the store that current projection device can be
      * safely dropped. The store will try to recycle the device
      * (taking ABA problem into account).
      */

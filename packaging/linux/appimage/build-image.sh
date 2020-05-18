@@ -26,7 +26,7 @@ export LD_LIBRARY_PATH=$DEPS_INSTALL_PREFIX/lib/:$DEPS_INSTALL_PREFIX/lib/x86_64
 export PATH=$DEPS_INSTALL_PREFIX/bin/:$PATH
 export PKG_CONFIG_PATH=$DEPS_INSTALL_PREFIX/share/pkgconfig/:$DEPS_INSTALL_PREFIX/lib/pkgconfig/:/usr/lib/pkgconfig/:$PKG_CONFIG_PATH
 export CMAKE_PREFIX_PATH=$DEPS_INSTALL_PREFIX:$CMAKE_PREFIX_PATH
-export PYTHONPATH=$DEPS_INSTALL_PREFIX/sip/:$DEPS_INSTALL_PREFIX/lib/python3.5/site-packages/:$DEPS_INSTALL_PREFIX/lib/python3.5/
+export PYTHONPATH=$DEPS_INSTALL_PREFIX/sip/:$DEPS_INSTALL_PREFIX/lib/python3.8/site-packages/:$DEPS_INSTALL_PREFIX/lib/python3.8/
 export PYTHONHOME=$DEPS_INSTALL_PREFIX
 
 # Switch over to our build prefix
@@ -45,7 +45,7 @@ fi
 cp -r $DEPS_INSTALL_PREFIX/share/locale $APPDIR/usr/share/krita
 cp -r $DEPS_INSTALL_PREFIX/share/kf5 $APPDIR/usr/share
 cp -r $DEPS_INSTALL_PREFIX/share/mime $APPDIR/usr/share
-cp -r $DEPS_INSTALL_PREFIX/lib/python3.5 $APPDIR/usr/lib
+cp -r $DEPS_INSTALL_PREFIX/lib/python3.8 $APPDIR/usr/lib
 cp -r $DEPS_INSTALL_PREFIX/share/sip $APPDIR/usr/share
 cp -r $DEPS_INSTALL_PREFIX/translations $APPDIR/usr/
 
@@ -58,18 +58,18 @@ for lib in $PLUGINS/*.so*; do
   patchelf --set-rpath '$ORIGIN/..' $lib; 
 done
 
-for lib in $APPDIR/usr/lib/python3.5/site-packages/PyQt5/*.so*; do
+for lib in $APPDIR/usr/lib/python3.8/site-packages/PyQt5/*.so*; do
   patchelf --set-rpath '$ORIGIN/../..' $lib; 
 done
 
-for lib in $APPDIR/usr/lib/python3.5/lib-dynload/*.so*; do
+for lib in $APPDIR/usr/lib/python3.8/lib-dynload/*.so*; do
   patchelf --set-rpath '$ORIGIN/../..' $lib; 
 done
 
 patchelf --set-rpath '$ORIGIN/../../../..' $APPDIR/usr/lib/qml/org/krita/draganddrop/libdraganddropplugin.so
 patchelf --set-rpath '$ORIGIN/../../../..' $APPDIR/usr/lib/qml/org/krita/sketch/libkritasketchplugin.so
 patchelf --set-rpath '$ORIGIN/../..' $APPDIR/usr/lib/krita-python-libs/PyKrita/krita.so
-patchelf --set-rpath '$ORIGIN/../..' $APPDIR/usr/lib/python3.5/site-packages/PyQt5/sip.so
+patchelf --set-rpath '$ORIGIN/../..' $APPDIR/usr/lib/python3.8/site-packages/PyQt5/sip.so
 
 # Step 5: Find out what version of Krita we built and give the Appimage a proper name
 cd $BUILD_PREFIX/krita-build
@@ -91,7 +91,7 @@ cd $BUILD_PREFIX
 
 # place the icon where linuxdeployqt seems to expect it
 find $APPDIR -name krita.png
-cp /home/appimage//appimage-workspace/krita.appdir/usr/share/icons/hicolor/256x256/apps/krita.png $APPDIR
+cp $APPDIR/usr/share/icons/hicolor/256x256/apps/krita.png $APPDIR
 ls $APPDIR
 
 # Step 4: Build the image!!!

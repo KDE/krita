@@ -19,6 +19,7 @@
 #include "kis_transform_utils.h"
 
 #include <cmath>
+#include <QPainterPath>
 #include <QTransform>
 #include <KoUnit.h>
 #include "tool_transform_args.h"
@@ -292,7 +293,7 @@ void KisTransformUtils::transformDevice(const ToolTransformArgs &config,
         worker.prepareTransform();
         worker.setTransformedCage(config.transfPoints());
         worker.run();
-    } else if (config.mode() == ToolTransformArgs::LIQUIFY) {
+    } else if (config.mode() == ToolTransformArgs::LIQUIFY && config.liquifyWorker()) {
         KoUpdaterPtr updater = helper->updater();
         //FIXME:
         Q_UNUSED(updater);

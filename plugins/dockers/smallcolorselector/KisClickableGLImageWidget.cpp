@@ -125,11 +125,11 @@ QPointF KisClickableGLImageWidget::normalizePoint(const QPointF &pos) const
 
 namespace {
 QPen outerHandlePen(bool useOpacity) {
-    // opacity works inexpectedly in HDR mode, so let the user switch it off
+    // opacity works unexpectedly in HDR mode, so let the user switch it off
     return QPen(QColor(0, 0, 0, useOpacity ? 180 : 255), 0);
 }
 QPen innerHandlePen(bool useOpacity) {
-    // opacity works inexpectedly in HDR mode, so let the user switch it off
+    // opacity works unexpectedly in HDR mode, so let the user switch it off
     return QPen(QColor(255, 255, 255, useOpacity ? 180 : 255), 0);
 }
 }

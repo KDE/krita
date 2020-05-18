@@ -70,7 +70,7 @@ struct KisFilterStrokeStrategy::Private {
 KisFilterStrokeStrategy::KisFilterStrokeStrategy(KisFilterSP filter,
                                                  KisFilterConfigurationSP filterConfig,
                                                  KisResourcesSnapshotSP resources)
-    : KisPainterBasedStrokeStrategy("FILTER_STROKE",
+    : KisPainterBasedStrokeStrategy(QLatin1String("FILTER_STROKE"),
                                     kundo2_i18n("Filter \"%1\"", filter->name()),
                                     resources,
                                     QVector<KisFreehandStrokeInfo*>(),false),
@@ -166,17 +166,7 @@ void KisFilterStrokeStrategy::cancelStrokeCallback()
     delete m_d->secondaryTransaction;
     m_d->filterDevice = 0;
 
-    KisProjectionUpdatesFilterSP prevUpdatesFilter;
-
     if (m_d->cancelSilently) {
-        /**
-         * TODO: Projection updates filter is not recursive, please
-         *       redesign this part
-         */
-        prevUpdatesFilter = m_d->updatesFacade->projectionUpdatesFilter();
-        if (prevUpdatesFilter) {
-            m_d->updatesFacade->setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP());
-        }
         m_d->updatesFacade->disableDirtyRequests();
     }
 
@@ -184,10 +174,6 @@ void KisFilterStrokeStrategy::cancelStrokeCallback()
 
     if (m_d->cancelSilently) {
         m_d->updatesFacade->enableDirtyRequests();
-        if (prevUpdatesFilter) {
-            m_d->updatesFacade->setProjectionUpdatesFilter(prevUpdatesFilter);
-            prevUpdatesFilter.clear();
-        }
     }
 }
 

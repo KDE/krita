@@ -39,7 +39,6 @@
 #include "KoIntegerMaths.h"
 #include <KisDocument.h>
 #include <KisMainWindow.h>
-#include <KoViewConverter.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoSelectedShapesProxy.h>
@@ -95,27 +94,8 @@
 #include "kis_tool_shape.h"
 
 KisSelectionManager::KisSelectionManager(KisViewManager * view)
-        : m_view(view),
-          m_doc(0),
-          m_imageView(0),
-          m_adapter(new KisNodeCommandsAdapter(view)),
-          m_copy(0),
-          m_copyMerged(0),
-          m_cut(0),
-          m_paste(0),
-          m_pasteNew(0),
-          m_cutToNewLayer(0),
-          m_selectAll(0),
-          m_deselect(0),
-          m_clear(0),
-          m_reselect(0),
-          m_invert(0),
-          m_copyToNewLayer(0),
-          m_fillForegroundColor(0),
-          m_fillBackgroundColor(0),
-          m_fillPattern(0),
-          m_imageResizeToSelection(0),
-          m_selectionDecoration(0)
+        : m_view(view)
+        , m_adapter(new KisNodeCommandsAdapter(view))
 {
     m_clipboard = KisClipboard::instance();
 }
@@ -624,7 +604,7 @@ void KisSelectionManager::paintSelectedShapes()
                                        KisToolShapeUtils::FillStyleNone);
 
     Q_FOREACH (KoShape* shape, shapes) {
-        QTransform matrix = shape->absoluteTransformation(0) * QTransform::fromScale(image->xRes(), image->yRes());
+        QTransform matrix = shape->absoluteTransformation() * QTransform::fromScale(image->xRes(), image->yRes());
         QPainterPath mapedOutline = matrix.map(shape->outline());
         helper.paintPainterPath(mapedOutline);
     }

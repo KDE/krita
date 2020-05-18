@@ -30,6 +30,8 @@
 #include "kis_async_merger.h"
 #include "kis_updater_context.h"
 
+//#define DEBUG_JOBS_SEQUENCE
+
 
 class KisUpdateJobItem :  public QObject, public QRunnable
 {
@@ -45,9 +47,7 @@ public:
 
 public:
     KisUpdateJobItem(KisUpdaterContext *updaterContext)
-        : m_updaterContext(updaterContext),
-          m_atomicType(Type::EMPTY),
-          m_runnableJob(0)
+        : m_updaterContext(updaterContext)
     {
         setAutoDelete(false);
         KIS_SAFE_ASSERT_RECOVER_NOOP(m_atomicType.is_lock_free());
@@ -88,7 +88,19 @@ public:
                 KIS_ASSERT(m_atomicType == Type::STROKE ||
                            m_atomicType == Type::SPONTANEOUS);
 
-                if (m_runnableJob) m_runnableJob->run();
+                if (m_runnableJob) {
+#ifdef DEBUG_JOBS_SEQUENCE
+                    if (m_atomicType == Type::STROKE) {
+                        qDebug() << "running: stroke" << m_runnableJob->debugName();
+                    } else if (m_atomicType == Type::SPONTANEOUS) {
+                        qDebug() << "running: spont " << m_runnableJob->debugName();
+                    } else {
+                        qDebug() << "running: unkn. " << m_runnableJob->debugName();
+                    }
+#endif
+
+                    m_runnableJob->run();
+                }
             }
 
             setDone();
@@ -114,6 +126,12 @@ public:
         KIS_SAFE_ASSERT_RECOVER_RETURN(m_walker);
         // dbgKrita << "Executing merge job" << m_walker->changeRect()
         //          << "on thread" << QThread::currentThreadId();
+
+#ifdef DEBUG_JOBS_SEQUENCE
+        qDebug() << "running: merge " << m_walker->startNode() << m_walker->changeRect();
+
+#endif
+
         m_merger.startMerge(*m_walker);
 
         QRect changeRect = m_walker->changeRect();
@@ -218,24 +236,20 @@ private:
     }
 
 private:
-    KisUpdaterContext *m_updaterContext;
-
-    bool m_exclusive;
-
-    std::atomic<Type> m_atomicType;
-
+    KisUpdaterContext *m_updaterContext {0};
+    bool m_exclusive {false};
+    std::atomic<Type> m_atomicType {Type::EMPTY};
     volatile KisStrokeJobData::Sequentiality m_strokeJobSequentiality;
 
     /**
      * Runnable jobs part
      * The job is owned by the context and deleted after completion
      */
-    KisRunnable *m_runnableJob;
+    KisRunnableWithDebugName *m_runnableJob {0};
 
     /**
      * Merge jobs part
      */
-
     KisBaseRectsWalkerSP m_walker;
     KisAsyncMerger m_merger;
 

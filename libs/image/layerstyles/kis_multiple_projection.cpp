@@ -176,3 +176,8 @@ KisPaintDeviceList KisMultipleProjection::getLodCapableDevices() const
     return list;
 }
 
+bool KisMultipleProjection::isEmpty() const
+{
+    return m_d->planes.isEmpty();
+}
+

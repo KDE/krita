@@ -20,6 +20,7 @@
 
 #include <QPointF>
 #include <QRectF>
+#include <QTransform>
 
 KoViewConverter::KoViewConverter()
     : m_zoomLevel(1.0)
@@ -94,6 +95,8 @@ qreal KoViewConverter::viewToDocumentY(qreal viewY) const
     return viewY / m_zoomLevel;
 }
 
+
+
 void KoViewConverter::setZoom(qreal zoom)
 {
     if (qFuzzyCompare(zoom, qreal(0.0)) || qFuzzyCompare(zoom, qreal(1.0))) {
@@ -105,4 +108,18 @@ void KoViewConverter::setZoom(qreal zoom)
 qreal KoViewConverter::zoom() const
 {
     return m_zoomLevel;
+}
+
+QTransform KoViewConverter::documentToView() const
+{
+    qreal zoomX, zoomY;
+    zoom(&zoomX, &zoomY);
+    return QTransform::fromScale(zoomX, zoomY);
+}
+
+QTransform KoViewConverter::viewToDocument() const
+{
+    qreal zoomX, zoomY;
+    zoom(&zoomX, &zoomY);
+    return QTransform::fromScale(1.0 / zoomX, 1.0 / zoomY);
 }

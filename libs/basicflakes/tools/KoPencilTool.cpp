@@ -78,16 +78,18 @@ void KoPencilTool::paint(QPainter &painter, const KoViewConverter &converter)
     if (m_shape) {
         painter.save();
 
-        painter.setTransform(m_shape->absoluteTransformation(&converter) * painter.transform());
+        painter.setTransform(m_shape->absoluteTransformation() *
+                             converter.documentToView() *
+                             painter.transform());
 
         painter.save();
         KoShapePaintingContext paintContext; //FIXME
-        m_shape->paint(painter, converter, paintContext);
+        m_shape->paint(painter, paintContext);
         painter.restore();
 
         if (m_shape->stroke()) {
             painter.save();
-            m_shape->stroke()->paint(m_shape, painter, converter);
+            m_shape->stroke()->paint(m_shape, painter);
             painter.restore();
         }
 
@@ -96,7 +98,7 @@ void KoPencilTool::paint(QPainter &painter, const KoViewConverter &converter)
 
     if (m_hoveredPoint) {
         KisHandlePainterHelper helper =
-            KoShape::createHandlePainterHelper(&painter, m_hoveredPoint->parent(), converter, handleRadius());
+            KoShape::createHandlePainterHelperView(&painter, m_hoveredPoint->parent(), converter, handleRadius());
 
         helper.setHandleStyle(KisHandleStyle::primarySelection());
         m_hoveredPoint->paint(helper, KoPathPoint::Node);

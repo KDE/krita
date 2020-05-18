@@ -34,6 +34,8 @@
 
 #include "KoConvolutionOpImpl.h"
 #include "KoInvertColorTransformation.h"
+#include "KoAlphaMaskApplicatorFactory.h"
+#include "KoColorModelStandardIdsUtils.h"
 
 /**
  * This in an implementation of KoColorSpace which can be used as a base for colorspaces with as many
@@ -52,8 +54,10 @@ public:
     typedef _CSTrait ColorSpaceTraits;
 
 public:
-    KoColorSpaceAbstract(const QString &id, const QString &name) :
-        KoColorSpace(id, name, new KoMixColorsOpImpl< _CSTrait>(), new KoConvolutionOpImpl< _CSTrait>()) {
+    KoColorSpaceAbstract(const QString &id, const QString &name)
+        : KoColorSpace(id, name, new KoMixColorsOpImpl< _CSTrait>(), new KoConvolutionOpImpl< _CSTrait>()),
+          m_alphaMaskApplicator(KoAlphaMaskApplicatorFactory::create(colorDepthIdForChannelType<typename _CSTrait::channels_type>(), _CSTrait::channels_nb, _CSTrait::alpha_pos))
+    {
     }
 
     quint32 colorChannelCount() const override {
@@ -134,7 +138,15 @@ public:
     }
 
     void applyInverseNormedFloatMask(quint8 * pixels, const float * alpha, qint32 nPixels) const override {
-        _CSTrait::applyInverseAlphaNormedFloatMask(pixels, alpha, nPixels);
+        m_alphaMaskApplicator->applyInverseNormedFloatMask(pixels, alpha, nPixels);
+    }
+
+    void fillInverseAlphaNormedFloatMaskWithColor(quint8 * pixels, const float * alpha, const quint8 *brushColor, qint32 nPixels) const override {
+        m_alphaMaskApplicator->fillInverseAlphaNormedFloatMaskWithColor(pixels, alpha, brushColor, nPixels);
+    }
+
+    void fillGrayBrushWithColor(quint8 *dst, const QRgb *brush, quint8 *brushColor, qint32 nPixels) const override {
+        m_alphaMaskApplicator->fillGrayBrushWithColor(dst, brush, brushColor, nPixels);
     }
 
     quint8 intensity8(const quint8 * src) const override {
@@ -198,6 +210,37 @@ public:
         return KoColorSpace::convertPixelsTo(src, dst, dstColorSpace, numPixels, renderingIntent, conversionFlags);
     }
 
+    void convertChannelToVisualRepresentation(const quint8 *src, quint8 *dst, quint32 nPixels, const qint32 selectedChannelIndex) const override
+    {
+        qint32 selectedChannelPos = this->channels()[selectedChannelIndex]->pos();
+        for (uint pixelIndex = 0; pixelIndex < nPixels; ++pixelIndex) {
+            for (uint channelIndex = 0; channelIndex < this->channelCount(); ++channelIndex) {
+                KoChannelInfo *channel = this->channels().at(channelIndex);
+                qint32 channelSize = channel->size();
+                if (channel->channelType() == KoChannelInfo::COLOR) {
+                    memcpy(dst + (pixelIndex * _CSTrait::pixelSize) + (channelIndex * channelSize), src + (pixelIndex * _CSTrait::pixelSize) + selectedChannelPos, channelSize);
+                } else if (channel->channelType() == KoChannelInfo::ALPHA) {
+                    memcpy(dst + (pixelIndex * _CSTrait::pixelSize) + (channelIndex * channelSize), src + (pixelIndex * _CSTrait::pixelSize) + (channelIndex * channelSize), channelSize);
+                }
+            }
+        }
+    }
+
+    void convertChannelToVisualRepresentation(const quint8 *src, quint8 *dst, quint32 nPixels, const QBitArray selectedChannels) const override
+    {
+        for (uint pixelIndex = 0; pixelIndex < nPixels; ++pixelIndex) {
+            for (uint channelIndex = 0; channelIndex < this->channelCount(); ++channelIndex) {
+                KoChannelInfo *channel = this->channels().at(channelIndex);
+                qint32 channelSize = channel->size();
+                if (selectedChannels.testBit(channelIndex)) {
+                    memcpy(dst + (pixelIndex * _CSTrait::pixelSize) + (channelIndex * channelSize), src + (pixelIndex * _CSTrait::pixelSize) + (channelIndex * channelSize), channelSize);
+                } else {
+                    reinterpret_cast<typename _CSTrait::channels_type *>(dst + (pixelIndex * _CSTrait::pixelSize) + (channelIndex * channelSize))[0] = _CSTrait::math_trait::zeroValue;
+                }
+            }
+        }
+    }
+
 private:
     template<int srcPixelSize, int dstChannelSize, class TSrcChannel, class TDstChannel>
     void scalePixels(const quint8* src, quint8* dst, quint32 numPixels) const {
@@ -211,6 +254,9 @@ private:
                 dstPixel[c] = Arithmetic::scale<TDstChannel>(srcPixel[c]);
         }
     }
+
+private:
+    QScopedPointer<KoAlphaMaskApplicatorBase> m_alphaMaskApplicator;
 };
 
 #endif // KOCOLORSPACEABSTRACT_H

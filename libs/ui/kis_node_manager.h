@@ -62,9 +62,6 @@ Q_SIGNALS:
     /// emitted whenever a node is selected.
     void sigNodeActivated(KisNodeSP node);
 
-    /// emitted whenever a different layer is selected.
-    void sigLayerActivated(KisLayerSP layer);
-
     /// for the layer box: this sets the current node in the layerbox
     /// without telling the node manager that the node is activated,
     /// preventing loops (I think...)
@@ -198,8 +195,10 @@ public Q_SLOTS:
     void mirrorNode(KisNodeSP node, const KUndo2MagicString& commandName, Qt::Orientation orientation, KisSelectionSP selection);
 
 
-    void activateNextNode();
-    void activatePreviousNode();
+    void activateNextNode(bool siblingsOnly = false);
+    void activateNextSiblingNode();
+    void activatePreviousNode(bool siblingsOnly = false);
+    void activatePreviousSiblingNode();
     void switchToPreviouslyActiveNode();
 
     /**

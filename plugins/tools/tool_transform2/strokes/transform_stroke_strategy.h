@@ -27,11 +27,13 @@
 #include "tool_transform_args.h"
 #include <kis_processing_visitor.h>
 #include <kritatooltransform_export.h>
+#include <boost/optional.hpp>
 
 
 class KisPostExecutionUndoAdapter;
 class TransformTransactionProperties;
 class KisUpdatesFacade;
+class KisDecoratedNodeInterface;
 
 
 class TransformStrokeStrategy : public QObject, public KisStrokeStrategyUndoCommandBased
@@ -105,8 +107,8 @@ public:
     static bool fetchArgsFromCommand(const KUndo2Command *command, ToolTransformArgs *args, KisNodeSP *rootNode, KisNodeList *transformedNodes);
 
 Q_SIGNALS:
-    void sigTransactionGenerated(TransformTransactionProperties transaction, ToolTransformArgs args);
-    void sigPreviewDeviceReady(KisPaintDeviceSP device, const QPainterPath &selectionOutline);
+    void sigTransactionGenerated(TransformTransactionProperties transaction, ToolTransformArgs args, void *cookie);
+    void sigPreviewDeviceReady(KisPaintDeviceSP device);
 
 protected:
     void postProcessToplevelCommand(KUndo2Command *command) override;
@@ -143,6 +145,8 @@ private:
                                         KisNodeSP currentNode,
                                         KisNodeList selectedNodes, QVector<KisStrokeJobData *> *undoJobs);
 
+    void finishStrokeImpl(bool applyTransform,
+                          const ToolTransformArgs &args);
 
 private:
     KisUpdatesFacade *m_updatesFacade;
@@ -158,14 +162,19 @@ private:
 
     KisTransformMaskSP writeToTransformMask;
 
-    ToolTransformArgs m_savedTransformArgs;
+    ToolTransformArgs m_initialTransformArgs;
+    boost::optional<ToolTransformArgs> m_savedTransformArgs;
     KisNodeSP m_rootNode;
     KisNodeList m_processedNodes;
     QList<KisSelectionSP> m_deactivatedSelections;
     QList<KisNodeSP> m_hiddenProjectionLeaves;
+    KisSelectionMaskSP m_deactivatedOverlaySelectionMask;
+    QVector<KisDecoratedNodeInterface*> m_disabledDecoratedNodes;
 
     const KisSavedMacroCommand *m_overriddenCommand = 0;
     QVector<const KUndo2Command*> m_skippedWhileMergeCommands;
+
+    bool m_finalizingActionsStarted = false;
 };
 
 #endif /* __TRANSFORM_STROKE_STRATEGY_H */

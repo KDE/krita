@@ -39,7 +39,7 @@
 
 #include "dlg_colorrange.h"
 #include <KoColorSpace.h>
-#include <QSignalMapper>
+#include <KisSignalMapper.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(ColorRangeFactory, "kritacolorrange.json", registerPlugin<ColorRange>();)
 
@@ -51,7 +51,7 @@ ColorRange::ColorRange(QObject *parent, const QVariantList &)
     connect(action, SIGNAL(triggered()), this, SLOT(slotActivated()));
 
 
-    QSignalMapper *mapper = new QSignalMapper(this);
+    KisSignalMapper *mapper = new KisSignalMapper(this);
     connect(mapper, SIGNAL(mapped(int)), SLOT(selectOpaque(int)));
 
     action  = createAction("selectopaque");

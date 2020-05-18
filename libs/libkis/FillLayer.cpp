@@ -63,7 +63,7 @@ bool FillLayer::setGenerator(const QString &generatorName, InfoObject *config)
     //getting the default configuration here avoids trouble with versioning.
     KisGeneratorSP generator = KisGeneratorRegistry::instance()->value(generatorName);
     if (generator) {
-        KisFilterConfigurationSP cfg = generator->defaultConfiguration();
+        KisFilterConfigurationSP cfg = generator->factoryConfiguration();
         Q_FOREACH(const QString property, config->properties().keys()) {
             cfg->setProperty(property, config->property(property));
         }

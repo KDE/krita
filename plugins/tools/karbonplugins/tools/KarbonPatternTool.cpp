@@ -38,6 +38,7 @@
 #include <KoResourceServerAdapter.h>
 
 #include <klocalizedstring.h>
+#include <KoViewConverter.h>
 
 #include <QPainter>
 #include <QWidget>
@@ -58,6 +59,7 @@ void KarbonPatternTool::paint(QPainter &painter, const KoViewConverter &converte
 {
     painter.setBrush(Qt::green);   //TODO make configurable
     painter.setPen(Qt::blue);   //TODO make configurable
+    painter.setTransform(converter.documentToView(), true);
 
     // paint all the strategies
     Q_FOREACH (KarbonPatternEditStrategyBase *strategy, m_strategies) {

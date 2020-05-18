@@ -23,6 +23,7 @@
 #include "SvgTextChangeCommand.h"
 
 #include <QLabel>
+#include <QPainterPath>
 #include <QToolButton>
 #include <QGridLayout>
 #include <QVBoxLayout>
@@ -285,7 +286,7 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
 {
     if (!isActivated()) return;
 
-    KoShape::applyConversion(gc, converter);
+    gc.setTransform(converter.documentToView(), true);
 
     KisHandlePainterHelper handlePainter(&gc);
 

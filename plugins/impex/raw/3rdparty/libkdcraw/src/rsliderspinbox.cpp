@@ -2,7 +2,7 @@
  * @file
  *
  * This file is a part of digiKam project
- * <a href="http://www.digikam.org">http://www.digikam.org</a>
+ * <a href="https://www.digikam.org">https://www.digikam.org</a>
  *
  * @date   2014-11-30
  * @brief  Save space slider widget
@@ -363,7 +363,11 @@ QSize RAbstractSliderSpinBox::sizeHint() const
     QFontMetrics fm(font());
 
     // We need at least 50 pixels or things start to look bad
+#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
+    int w = qMax(fm.horizontalAdvance(QString::number(d->maximum)), 50);
+#else
     int w = qMax(fm.width(QString::number(d->maximum)), 50);
+#endif
     QSize hint(w, d->edit->sizeHint().height() + 3);
 
     // Getting the size of the buttons is a pain as the calcs require a rect
@@ -382,8 +386,7 @@ QSize RAbstractSliderSpinBox::sizeHint() const
 
     spinOpts.rect = rect();
 
-    return style()->sizeFromContents(QStyle::CT_SpinBox, &spinOpts, hint, 0)
-                   .expandedTo(QApplication::globalStrut());
+    return style()->sizeFromContents(QStyle::CT_SpinBox, &spinOpts, hint, 0);
 }
 
 QSize RAbstractSliderSpinBox::minimumSizeHint() const

@@ -140,6 +140,10 @@ void KisOnionSkinCompositor::composite(const KisPaintDeviceSP sourceDevice, KisP
 {
     KisRasterKeyframeChannel *keyframes = sourceDevice->keyframeChannel();
 
+    if (!keyframes) { // it happens when you try to show onion skins on non-animated layer with opacity keyframes
+        return;
+    }
+
     KisPaintDeviceSP frameDevice = new KisPaintDevice(sourceDevice->colorSpace());
     KisPainter gcFrame(frameDevice);
     QBitArray channelFlags = targetDevice->colorSpace()->channelFlags(true, false);
@@ -155,6 +159,10 @@ void KisOnionSkinCompositor::composite(const KisPaintDeviceSP sourceDevice, KisP
     const int time = sourceDevice->defaultBounds()->currentTime();
     KisVisibleKeyframeIterator backward = keyframes->visibleKeyframesFrom(time);
     KisVisibleKeyframeIterator forward = backward;
+
+    int time = sourceDevice->defaultBounds()->currentTime();
+
+    keyframeBck = keyframeFwd = keyframes->activeKeyframeAt(time);
 
     for (int offset = 1; offset <= m_d->numberOfSkins; offset++) {
         backward = m_d->getNextFrameToComposite(backward, true);
@@ -195,6 +203,11 @@ QRect KisOnionSkinCompositor::calculateExtent(const KisPaintDeviceSP device)
     KisKeyframeSP keyframeFwd;
 
     KisRasterKeyframeChannel *channel = device->keyframeChannel();
+
+    if (!channel) { // it happens when you try to show onion skins on non-animated layer with opacity keyframes
+        return rect;
+    }
+
     KisVisibleKeyframeIterator forward = channel->visibleKeyframesFrom(device->defaultBounds()->currentTime());
     KisVisibleKeyframeIterator backward = forward;
 

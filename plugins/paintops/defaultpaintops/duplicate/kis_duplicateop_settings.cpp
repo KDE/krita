@@ -144,7 +144,7 @@ KisPaintOpSettingsSP KisDuplicateOpSettings::clone() const
     return setting;
 }
 
-QPainterPath KisDuplicateOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode)
+QPainterPath KisDuplicateOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
 {
     QPainterPath path;
 
@@ -156,7 +156,7 @@ QPainterPath KisDuplicateOpSettings::brushOutline(const KisPaintInformation &inf
     }
 
     // clone tool should always show an outline
-    path = KisBrushBasedPaintOpSettings::brushOutlineImpl(info, forcedMode, 1.0);
+    path = KisBrushBasedPaintOpSettings::brushOutlineImpl(info, forcedMode, alignForZoom, 1.0);
 
     QPainterPath copy(path);
     QRectF rect2 = copy.boundingRect();

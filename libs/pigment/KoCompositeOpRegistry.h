@@ -201,6 +201,7 @@ public:
     KoID     getDefaultCompositeOp() const;
     KoID     getKoID(const QString& compositeOpID) const;
     KoIDMap  getCompositeOps() const;
+    KoIDMap  getLayerStylesCompositeOps() const;
     KoIDList getCategories() const;
     KoIDList getCompositeOps(const KoColorSpace* colorSpace) const;
     KoIDList getCompositeOps(const KoID& category, const KoColorSpace* colorSpace=0) const;

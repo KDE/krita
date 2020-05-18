@@ -170,9 +170,9 @@ void KisPrescaledProjection::viewportMoved(const QPointF &offset)
     }
 
     QPainter gc(&newImage);
-    QVector<QRect> rects = updateRegion.rects();
-
-    Q_FOREACH (const QRect &rect, rects) {
+    auto rc = updateRegion.begin();
+    while (rc != updateRegion.end()) {
+        QRect rect = *rc;
         QRect imageRect =
             m_d->coordinatesConverter->viewportToImage(rect).toAlignedRect();
         QVector<QRect> patches =
@@ -186,6 +186,7 @@ void KisPrescaledProjection::viewportMoved(const QPointF &offset)
             fillInUpdateInformation(viewportPatch, info);
             drawUsingBackend(gc, info);
         }
+        rc++;
     }
 
     m_d->prescaledQImage = newImage;
@@ -208,7 +209,7 @@ KisUpdateInfoSP KisPrescaledProjection::updateCache(const QRect &dirtyImageRect)
     }
 
     /**
-     * We needn't this stuff ouside KisImage's area. We're not displaying
+     * We needn't this stuff outside KisImage's area. We're not displaying
      * anything painted outside the image anyway.
      */
     QRect croppedImageRect = dirtyImageRect & m_d->image->bounds();

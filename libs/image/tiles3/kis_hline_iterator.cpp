@@ -57,7 +57,7 @@ KisHLineIterator2::KisHLineIterator2(KisDataManager *dataManager, qint32 x, qint
 
     m_tileWidth = m_pixelSize * KisTileData::HEIGHT;
 
-    // let's prealocate first row
+    // let's preallocate first row
     for (quint32 i = 0; i < m_tilesCacheSize; i++){
         fetchTileDataForCache(m_tilesCache[i], m_leftCol + i, m_row);
     }

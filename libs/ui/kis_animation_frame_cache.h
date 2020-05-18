@@ -30,6 +30,7 @@ class KisImage;
 class KisImageAnimationInterface;
 class KisTimeSpan;
 class KisFrameSet;
+class KisRegion;
 
 class KisOpenGLImageTextures;
 typedef KisSharedPtr<KisOpenGLImageTextures> KisOpenGLImageTexturesSP;
@@ -45,6 +46,7 @@ public:
 
     static KisAnimationFrameCacheSP getFrameCache(KisOpenGLImageTexturesSP textures);
     static const QList<KisAnimationFrameCache*> caches();
+    static const KisAnimationFrameCacheSP cacheForImage(KisImageWSP image);
 
     KisAnimationFrameCache(KisOpenGLImageTexturesSP textures);
     ~KisAnimationFrameCache() override;
@@ -65,7 +67,7 @@ public:
 
     KisImageWSP image();
 
-    KisOpenGLUpdateInfoSP fetchFrameData(int time, KisImageSP image, const QRegion &requestedRegion) const;
+    KisOpenGLUpdateInfoSP fetchFrameData(int time, KisImageSP image, const KisRegion &requestedRegion) const;
     void addConvertedFrameData(KisOpenGLUpdateInfoSP info, int time);
 
     /**

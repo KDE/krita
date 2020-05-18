@@ -1,5 +1,5 @@
 #
-# Helper function for extracting translatable messages from Calligra/Krita/Kexi source code.
+# Helper function for extracting translatable messages from Krita source code.
 # Usage: kundo2_aware_xgettext <pot-filename-without-path> <source-files-list>
 # If there are no messages or the <source-files-list> is empty, the pot file is deleted.
 #

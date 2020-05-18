@@ -32,6 +32,7 @@ private Q_SLOTS:
     void benchmarkCreation();
     void testBlockLevelOfDetail();
     void testConvertImageColorSpace();
+    void testAssignImageProfile();
     void testGlobalSelection();
     void testCloneImage();
     void testLayerComposition();

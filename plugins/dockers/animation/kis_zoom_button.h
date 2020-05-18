@@ -44,8 +44,8 @@ private Q_SLOTS:
     void slotValueChanged(int value);
 
 private:
-    qreal m_zoomLevel;
-    qreal m_initialDragZoomLevel;
+    qreal m_zoomLevel {1.0};
+    qreal m_initialDragZoomLevel {1.0};
 };
 
 #endif

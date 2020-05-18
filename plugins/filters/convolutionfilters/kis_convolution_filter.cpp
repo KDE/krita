@@ -31,11 +31,13 @@
 #include <kis_selection.h>
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
+#include "kis_lod_transform.h"
 
 KisConvolutionFilter::KisConvolutionFilter(const KoID& id, const KoID & category, const QString & entry)
         : KisFilter(id, category, entry)
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
+    setSupportsLevelOfDetail(true);
 }
 
 
@@ -63,6 +65,22 @@ void KisConvolutionFilter::processImpl(KisPaintDeviceSP device,
     painter.setProgress(progressUpdater);
     painter.applyMatrix(m_matrix, device, srcTopLeft, srcTopLeft, applyRect.size(), BORDER_REPEAT);
 
+}
+
+QRect KisConvolutionFilter::neededRect(const QRect &rect, const KisFilterConfigurationSP _config, int lod) const
+{
+    Q_UNUSED(_config);
+
+    KisLodTransformScalar t(lod);
+
+    const int windowsize = qMax(m_matrix->width(), m_matrix->height());
+    const int margin  = qCeil(t.scale(0.5 * windowsize)) + 1;
+    return kisGrowRect(rect, margin);
+}
+
+QRect KisConvolutionFilter::changedRect(const QRect &rect, const KisFilterConfigurationSP _config, int lod) const
+{
+    return neededRect(rect, _config, lod);
 }
 
 void KisConvolutionFilter::setIgnoreAlpha(bool v)

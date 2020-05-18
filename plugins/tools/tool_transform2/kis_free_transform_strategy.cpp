@@ -20,6 +20,7 @@
 
 #include <QPointF>
 #include <QPainter>
+#include <QPainterPath>
 #include <QMatrix4x4>
 
 #include <KoResourcePaths.h>
@@ -63,7 +64,8 @@ struct KisFreeTransformStrategy::Private
           converter(_converter),
           currentArgs(_currentArgs),
           transaction(_transaction),
-          imageTooBig(false)
+          imageTooBig(false),
+          isTransforming(false)
     {
         scaleCursors[0] = KisCursor::sizeHorCursor();
         scaleCursors[1] = KisCursor::sizeFDiagCursor();
@@ -125,6 +127,7 @@ struct KisFreeTransformStrategy::Private
 
     ToolTransformArgs clickArgs;
     QPointF clickPos;
+    bool isTransforming;
 
     QCursor getScaleCursor(const QPointF &handlePt);
     QCursor getShearCursor(const QPointF &start, const QPointF &end);
@@ -354,6 +357,10 @@ void KisFreeTransformStrategy::paint(QPainter &gc)
 
     gc.save();
 
+    if (m_d->isTransforming) {
+        gc.setOpacity(0.1);
+    }
+
     //gc.setTransform(m_d->handlesTransform, true); <-- don't do like this!
     QPainterPath mappedHandles = m_d->handlesTransform.map(handles);
 
@@ -390,6 +397,7 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
     // Note: "shiftModifierActive" just tells us if the shift key is being pressed
     // Note: "altModifierActive" just tells us if the alt key is being pressed
 
+    m_d->isTransforming = true;
     const QPointF anchorPoint = m_d->clickArgs.originalCenter() + m_d->clickArgs.rotationCenterOffset();
 
     switch (m_d->function) {
@@ -684,6 +692,7 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
 bool KisFreeTransformStrategy::endPrimaryAction()
 {
     bool shouldSave = !m_d->imageTooBig;
+    m_d->isTransforming = false;
 
     if (m_d->imageTooBig) {
         m_d->currentArgs = m_d->clickArgs;

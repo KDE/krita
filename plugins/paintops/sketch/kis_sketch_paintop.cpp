@@ -46,7 +46,7 @@
 #include <QtGlobal>
 
 /*
-* Based on Harmony project http://github.com/mrdoob/harmony/
+* Based on Harmony project https://github.com/mrdoob/harmony/
 */
 // chrome : diff 0.2, sketchy : 0.3, fur: 0.5
 // fur : distance / thresholdDistance

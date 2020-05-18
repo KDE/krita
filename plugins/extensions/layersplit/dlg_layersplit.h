@@ -48,11 +48,13 @@ public:
     bool disregardOpacity() const;
     int fuzziness() const;
     KoColorSet* palette() const;
+    bool modeToMask;
 
 private Q_SLOTS:
 
-    void applyClicked();
+    void slotApplyClicked();
     void slotSetPalette(KoColorSet *pal);
+    void slotChangeMode(int);
 
 private:
     WdgLayerSplit *m_page {0};

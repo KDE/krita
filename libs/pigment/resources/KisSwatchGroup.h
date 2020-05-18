@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project
     Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
-    Copyright (c) 2016 L. E. Segovia <leo.segovia@siggraph.org>
+    Copyright (c) 2016 L. E. Segovia <amy@amyspark.me>
     Copyright (c) 2018 Michael Zhou <simerixh@gmail.com>
 
     This library is free software; you can redistribute it and/or
@@ -68,6 +68,10 @@ public /* methods */:
 
     int colorCount() const;
 
+    /**
+     * @brief getColors
+     * @return the list of colors in this SwatchGroup, in no specific order.
+     */
     QList<SwatchInfo> infoList() const;
 
     /**

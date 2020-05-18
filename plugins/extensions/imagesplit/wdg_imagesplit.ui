@@ -6,23 +6,65 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>258</width>
+    <width>514</width>
     <height>339</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Image Size</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QHBoxLayout" name="horizontalLayout_3">
    <item>
     <layout class="QFormLayout" name="formLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="lblHorizontalSplitLines">
+       <property name="text">
+        <string>Horizontal Lines</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="KisIntParseSpinBox" name="intHorizontalSplitLines"/>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="chkGuidesHorizontal">
+         <property name="text">
+          <string>Use guides</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="lblVerticalSplitLines">
+       <property name="text">
+        <string>Vertical Lines</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
      <item row="1" column="1">
-      <widget class="KisIntParseSpinBox" name="intHorizontalSplitLines"/>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="KisIntParseSpinBox" name="intVerticalSplitLines"/>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="chkGuidesVertical">
+         <property name="text">
+          <string>Use guides</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
-     <item row="3" column="1">
-      <widget class="KisIntParseSpinBox" name="intVerticalSplitLines"/>
-     </item>
-     <item row="4" column="0" colspan="2">
+     <item row="2" column="0" colspan="2">
       <widget class="QGroupBox" name="groupBox">
        <property name="title">
         <string>Sort Direction:</string>
@@ -32,7 +74,7 @@
          <widget class="QRadioButton" name="chkHorizontal">
           <property name="font">
            <font>
-            <pointsize>10</pointsize>
+            <pointsize>12</pointsize>
            </font>
           </property>
           <property name="text">
@@ -44,7 +86,7 @@
          <widget class="QRadioButton" name="chkVertical">
           <property name="font">
            <font>
-            <pointsize>10</pointsize>
+            <pointsize>12</pointsize>
            </font>
           </property>
           <property name="text">
@@ -55,7 +97,7 @@
        </layout>
       </widget>
      </item>
-     <item row="5" column="0">
+     <item row="3" column="0">
       <widget class="QLabel" name="lblSuffix">
        <property name="text">
         <string>Prefix</string>
@@ -65,7 +107,7 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="1">
+     <item row="3" column="1">
       <widget class="QLineEdit" name="lineEdit">
        <property name="enabled">
         <bool>true</bool>
@@ -75,7 +117,7 @@
        </property>
       </widget>
      </item>
-     <item row="7" column="0">
+     <item row="4" column="0">
       <widget class="QLabel" name="lblFileType">
        <property name="text">
         <string>File Type</string>
@@ -85,7 +127,7 @@
        </property>
       </widget>
      </item>
-     <item row="7" column="1">
+     <item row="4" column="1">
       <widget class="QComboBox" name="cmbFileType">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -95,11 +137,11 @@
        </property>
       </widget>
      </item>
-     <item row="9" column="0" colspan="2">
+     <item row="5" column="0" colspan="2">
       <widget class="QCheckBox" name="chkAutoSave">
        <property name="font">
         <font>
-         <pointsize>10</pointsize>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="text">
@@ -107,40 +149,33 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="lblHorizontalSplitLines">
-       <property name="text">
-        <string>Horizontal Lines</string>
+     <item row="6" column="0">
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
        </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>13</height>
+        </size>
        </property>
-      </widget>
-     </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="lblVerticalSplitLines">
-       <property name="text">
-        <string>Vertical Lines</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
+      </spacer>
      </item>
     </layout>
    </item>
    <item>
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
+    <widget class="QLabel" name="imagePreviewLabel">
+     <property name="minimumSize">
       <size>
-       <width>20</width>
-       <height>2</height>
+       <width>200</width>
+       <height>200</height>
       </size>
      </property>
-    </spacer>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

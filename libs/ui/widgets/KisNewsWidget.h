@@ -57,18 +57,22 @@ private Q_SLOTS:
     void toggleNews(bool toggle);
     void itemSelected(const QModelIndex &idx);
     void rssDataChanged();
+
 private:
-    bool m_getNews {false};
-    MultiFeedRssModel *m_rssModel {0};
-    QString analyticsTrackingParameters;
+    // do version compare to see if there is a new version available
+    void calculateVersionUpdateStatus();
+
+private:
+    bool m_getNews;
+    MultiFeedRssModel *m_rssModel;
+    QString m_analyticsTrackingParameters;
 
     /// for new Krita version notification
-    QString newVersionNumber;
-    QString newVersionLink;
+    QString m_newVersionNumber;
+    QString m_newVersionLink;
 
     // version checking logic tells us we need to update our Krita
-    void calculateVersionUpdateStatus();
-    bool needsVersionUpdate = false;
+    bool m_needsVersionUpdate;
 
 };
 

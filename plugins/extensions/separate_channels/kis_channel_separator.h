@@ -37,11 +37,6 @@ enum enumSepSource {
     VISIBLE_LAYERS = 2
 };
 
-enum enumSepOutput {
-    TO_LAYERS = 0,
-    TO_IMAGES = 1
-};
-
 class KisChannelSeparator
 {
 
@@ -50,7 +45,7 @@ public:
     KisChannelSeparator(KisViewManager * view);
     virtual ~KisChannelSeparator() {}
 
-    void separate(KoUpdater * progress, enumSepAlphaOptions alphaOps, enumSepSource sourceOps, enumSepOutput outputOps, bool downscale, bool toColor);
+    void separate(KoUpdater * progress, enumSepAlphaOptions alphaOps, enumSepSource sourceOps, bool downscale, bool toColor, bool activateCurrentChannel);
 
 private:
 

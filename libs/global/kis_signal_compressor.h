@@ -69,9 +69,15 @@ public:
         UNDEFINED /* KisSignalCompressor is created without an explicit mode */
     };
 
+    enum SlowHandlerMode {
+        PRECISE_INTERVAL, /* Interval of timeout is forced to \p delay ms, whatever time the handler of timeout() takes */
+        ADDITIVE_INTERVAL /* When the handler of timeout() is slow, the timeout delay is increased to the (delay + handler_time) */
+    };
+
 public:
     KisSignalCompressor();
     KisSignalCompressor(int delay, Mode mode, QObject *parent = 0);
+    KisSignalCompressor(int delay, Mode mode, SlowHandlerMode slowHandlerMode, QObject *parent = 0);
     bool isActive() const;
     void setMode(Mode mode);
 
@@ -94,6 +100,7 @@ private:
 private:
     QTimer *m_timer = 0;
     Mode m_mode = UNDEFINED;
+    SlowHandlerMode m_slowHandlerMode = PRECISE_INTERVAL;
     bool m_signalsPending = false;
     QElapsedTimer m_lastEmittedTimer;
     int m_isEmitting = 0;

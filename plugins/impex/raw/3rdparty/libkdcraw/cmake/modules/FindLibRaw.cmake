@@ -1,5 +1,5 @@
 # - Find LibRaw
-# Find the LibRaw library <http://www.libraw.org>
+# Find the LibRaw library <https://www.libraw.org>
 # This module defines
 #  LibRaw_VERSION_STRING, the version string of LibRaw
 #  LibRaw_INCLUDE_DIR, where to find libraw.h

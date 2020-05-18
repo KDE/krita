@@ -35,9 +35,9 @@ class KRITAIMAGE_EXPORT KisTransformMask : public KisEffectMask, public KisDelay
 public:
 
     /**
-     * Create an empty filter mask.
+     * Create an empty transform mask.
      */
-    KisTransformMask();
+    KisTransformMask(const QString &name = QString());
 
     ~KisTransformMask() override;
 

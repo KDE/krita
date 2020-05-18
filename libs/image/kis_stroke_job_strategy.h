@@ -20,6 +20,7 @@
 #define __KIS_STROKE_JOB_STRATEGY_H
 
 #include "kritaimage_export.h"
+#include <QLatin1String>
 
 
 class KRITAIMAGE_EXPORT KisStrokeJobData
@@ -51,12 +52,16 @@ public:
 
     virtual KisStrokeJobData* createLodClone(int levelOfDetail);
 
+    bool isCancellable() const;
+    void setCancellable(bool value);
+
 protected:
     KisStrokeJobData(const KisStrokeJobData &rhs);
 
 private:
     Sequentiality m_sequentiality;
     Exclusivity m_exclusivity;
+    bool m_isCancellable;
 };
 
 
@@ -67,6 +72,7 @@ public:
     virtual ~KisStrokeJobStrategy();
 
     virtual void run(KisStrokeJobData *data) = 0;
+    virtual QString debugId() const = 0;
 
 
 private:

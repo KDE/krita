@@ -57,12 +57,12 @@ struct KisAnimatedTransformMaskParameters::Private
         return rawArgsChannel->transformArgs(keyframe);
     }
 
-    KisScalarKeyframeChannel *getChannel(KisScalarKeyframeChannel * Private::*field, const KoID &channelId, KisDefaultBoundsBaseSP defaultBounds)
+    KisScalarKeyframeChannel *getChannel(KisScalarKeyframeChannel * Private::*field, const KoID &channelId, KisNodeSP parent)
     {
         KisScalarKeyframeChannel *channel = this->*field;
 
         if (!channel) {
-            channel = this->*field = new KisScalarKeyframeChannel(channelId, -qInf(), qInf(), defaultBounds, KisKeyframe::Linear);
+            channel = this->*field = new KisScalarKeyframeChannel(channelId, -qInf(), qInf(), parent, KisKeyframe::Linear);
         }
 
         return channel;
@@ -164,11 +164,11 @@ void KisAnimatedTransformMaskParameters::translate(const QPointF &offset)
     args.translate(offset);
 }
 
-KisKeyframeChannel *KisAnimatedTransformMaskParameters::getKeyframeChannel(const QString &id, KisDefaultBoundsBaseSP defaultBounds)
+KisKeyframeChannel *KisAnimatedTransformMaskParameters::getKeyframeChannel(const QString &id, KisNodeSP parent)
 {
     if (id == KisKeyframeChannel::TransformArguments.id()) {
         if (!m_d->rawArgsChannel) {
-            m_d->rawArgsChannel = new KisTransformArgsKeyframeChannel(KisKeyframeChannel::TransformArguments, defaultBounds, m_d->currentRawArgs());
+            m_d->rawArgsChannel = new KisTransformArgsKeyframeChannel(KisKeyframeChannel::TransformArguments, parent, m_d->currentRawArgs());
         }
         return m_d->rawArgsChannel;
     } else {
@@ -205,7 +205,7 @@ KisKeyframeChannel *KisAnimatedTransformMaskParameters::getKeyframeChannel(const
         }
 
         if (field) {
-            return m_d->getChannel(field, channelId, defaultBounds);
+            return m_d->getChannel(field, channelId, parent);
         }
     }
 

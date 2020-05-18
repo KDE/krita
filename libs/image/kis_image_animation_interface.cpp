@@ -291,13 +291,14 @@ void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId, bool useUnd
             KisStrokeId strokeId = m_d->image->startStroke(strategy);
             m_d->image->endStroke(strokeId);
         }
+
     }
 
     m_d->setCurrentUITime(frameId);
     emit sigUiTimeChanged(frameId);
 }
 
-void KisImageAnimationInterface::requestFrameRegeneration(int frameId, const QRegion &dirtyRegion)
+void KisImageAnimationInterface::requestFrameRegeneration(int frameId, const KisRegion &dirtyRegion)
 {
     KisStrokeStrategy *strategy =
         new KisRegenerateFrameStrokeStrategy(frameId,

@@ -56,7 +56,7 @@ KisSelection::KisSelection(KisDefaultBoundsBaseSP defaultBounds)
     : m_d(new Private(this))
 {
     if (!defaultBounds) {
-        defaultBounds = new KisSelectionDefaultBounds(KisPaintDeviceSP());
+        defaultBounds = new KisSelectionEmptyBounds(0);
     }
     m_d->defaultBounds = defaultBounds;
 
@@ -75,7 +75,7 @@ KisSelection::KisSelection(const KisPaintDeviceSP source, KritaUtils::DeviceCopy
     : m_d(new Private(this))
 {
     if (!defaultBounds) {
-        defaultBounds = new KisSelectionDefaultBounds(KisPaintDeviceSP());
+        defaultBounds = new KisSelectionEmptyBounds(0);
     }
 
     m_d->defaultBounds = defaultBounds;
@@ -344,6 +344,11 @@ void KisSelection::notifySelectionChanged()
 void KisSelection::requestCompressedProjectionUpdate(const QRect &rc)
 {
     m_d->updateCompressor->requestUpdate(rc);
+}
+
+void KisSelection::notifyShapeSelectionBecameEmpty()
+{
+    m_d->pixelSelection->clear();
 }
 
 quint8 KisSelection::selected(qint32 x, qint32 y) const

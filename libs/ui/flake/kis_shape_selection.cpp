@@ -100,13 +100,21 @@ KisShapeSelection::KisShapeSelection(const KisShapeSelection& rhs, KisSelection*
     m_shapeControllerBase = rhs.m_shapeControllerBase;
     m_converter = new KisImageViewConverter(m_image);
     m_canvas = new KisShapeSelectionCanvas(m_shapeControllerBase);
-    m_canvas->shapeManager()->addShape(this);
 
+    // TODO: refactor shape selection to pass signals
+    //       via KoShapeManager, not via the model
+    m_canvas->shapeManager()->setUpdatesBlocked(true);
+    m_model->setUpdatesEnabled(false);
+
+    m_canvas->shapeManager()->addShape(this);
     Q_FOREACH (KoShape *shape, rhs.shapes()) {
         KoShape *clonedShape = shape->cloneShape();
         KIS_SAFE_ASSERT_RECOVER(clonedShape) { continue; }
         this->addShape(clonedShape);
     }
+
+    m_canvas->shapeManager()->setUpdatesBlocked(false);
+    m_model->setUpdatesEnabled(true);
 }
 
 KisSelectionComponent* KisShapeSelection::clone(KisSelection* selection)
@@ -249,7 +257,7 @@ bool KisShapeSelection::updatesEnabled() const
 
 KUndo2Command* KisShapeSelection::resetToEmpty()
 {
-    return new KisTakeAllShapesCommand(this, true);
+    return new KisTakeAllShapesCommand(this, true, false);
 }
 
 bool KisShapeSelection::isEmpty() const
@@ -273,7 +281,7 @@ void KisShapeSelection::recalculateOutlineCache()
 
     QPainterPath outline;
     Q_FOREACH (KoShape * shape, shapesList) {
-        QTransform shapeMatrix = shape->absoluteTransformation(0);
+        QTransform shapeMatrix = shape->absoluteTransformation();
         outline = outline.united(shapeMatrix.map(shape->outline()));
     }
 
@@ -283,10 +291,9 @@ void KisShapeSelection::recalculateOutlineCache()
     m_outline = resolutionMatrix.map(outline);
 }
 
-void KisShapeSelection::paintComponent(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &)
+void KisShapeSelection::paintComponent(QPainter& painter, KoShapePaintingContext &) const
 {
     Q_UNUSED(painter);
-    Q_UNUSED(converter);
 }
 
 void KisShapeSelection::renderToProjection(KisPaintDeviceSP projection)
@@ -398,7 +405,7 @@ KUndo2Command* KisShapeSelection::transform(const QTransform &transform) {
         if (dynamic_cast<const KoShapeGroup*>(shape)) {
             newTransformations.append(oldTransform);
         } else {
-            QTransform globalTransform = shape->absoluteTransformation(0);
+            QTransform globalTransform = shape->absoluteTransformation();
             QTransform localTransform = globalTransform * realTransform * globalTransform.inverted();
             newTransformations.append(localTransform*oldTransform);
         }

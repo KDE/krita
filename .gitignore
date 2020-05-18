@@ -1,4 +1,6 @@
+compile_commands.json
 *.orig
+*.rej
 __pycache__
 *.egg-info
 *.trace

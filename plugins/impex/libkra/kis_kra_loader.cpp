@@ -396,13 +396,15 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP image, const QStri
             if (res) {
                 const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(image->colorSpace()->colorModelId().id(), image->colorSpace()->colorDepthId().id(), data);
                 if (profile && profile->valid()) {
-                    res = image->assignImageProfile(profile);
+                    res = image->assignImageProfile(profile, true);
+                    image->waitForDone();
                 }
                 if (!res) {
                     const QString defaultProfileId = KoColorSpaceRegistry::instance()->defaultProfileForColorSpace(image->colorSpace()->id());
                     profile = KoColorSpaceRegistry::instance()->profileByName(defaultProfileId);
                     Q_ASSERT(profile && profile->valid());
-                    image->assignImageProfile(profile);
+                    image->assignImageProfile(profile, true);
+                    image->waitForDone();
                 }
             }
         }
@@ -611,16 +613,28 @@ KisNodeSP KisKraLoader::loadNodes(const KoXmlElement& element, KisImageSP image,
 
         if (node.isElement()) {
 
+            // See https://bugs.kde.org/show_bug.cgi?id=408963, where there is a selection mask that is a child of the
+            // the projection. That needs to be treated as a global selection, so we keep track of those.
+            vKisNodeSP topLevelSelectionMasks;
             if (node.nodeName().toUpper() == LAYERS.toUpper() || node.nodeName().toUpper() == MASKS.toUpper()) {
                 for (child = node.lastChild(); !child.isNull(); child = child.previousSibling()) {
                     KisNodeSP node = loadNode(child.toElement(), image);
-                    if (node) {
+
+                    if (node && parent.data() == image->rootLayer().data() && node->inherits("KisSelectionMask") && image->rootLayer()->childCount() > 0) {
+                        topLevelSelectionMasks << node;
+                        continue;
+                    }
+
+                    if (node ) {
                         image->nextLayerName(); // Make sure the nameserver is current with the number of nodes.
                         image->addNode(node, parent);
                         if (node->inherits("KisLayer") && KoXml::childNodesCount(child) > 0) {
                             loadNodes(child.toElement(), image, node);
                         }
                     }
+                }
+                if (!topLevelSelectionMasks.isEmpty()) {
+                    image->addNode(topLevelSelectionMasks.first(), parent);
                 }
             }
         }
@@ -933,7 +947,7 @@ KisNodeSP KisKraLoader::loadAdjustmentLayer(const KoXmlElement& element, KisImag
         return 0; // XXX: We don't have this filter. We should warn about it!
     }
 
-    KisFilterConfigurationSP  kfc = f->defaultConfiguration();
+    KisFilterConfigurationSP  kfc = f->factoryConfiguration();
     kfc->setProperty("legacy", legacy);
     if (legacy=="brightnesscontrast") {
         kfc->setProperty("colorModel", cs->colorModelId().id());
@@ -990,7 +1004,7 @@ KisNodeSP KisKraLoader::loadGeneratorLayer(const KoXmlElement& element, KisImage
         return 0; // XXX: We don't have this generator. We should warn about it!
     }
 
-    KisFilterConfigurationSP  kgc = generator->defaultConfiguration();
+    KisFilterConfigurationSP  kgc = generator->factoryConfiguration();
 
     // We'll load the configuration and the selection later.
     layer = new KisGeneratorLayer(image, name, kgc, 0);
@@ -1051,7 +1065,7 @@ KisNodeSP KisKraLoader::loadFilterMask(const KoXmlElement& element)
         return 0; // XXX: We don't have this filter. We should warn about it!
     }
 
-    KisFilterConfigurationSP  kfc = f->defaultConfiguration();
+    KisFilterConfigurationSP  kfc = f->factoryConfiguration();
 
     // We'll load the configuration and the selection later.
     mask = new KisFilterMask();

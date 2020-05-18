@@ -52,7 +52,9 @@
 #include "compositionmodel.h"
 
 
-CompositionDockerDock::CompositionDockerDock( ) : QDockWidget(i18n("Compositions")), m_canvas(0)
+CompositionDockerDock::CompositionDockerDock( )
+    : QDockWidget(i18n("Compositions"))
+    , m_canvas(0)
 {
     QWidget* widget = new QWidget(this);
     setupUi(widget);
@@ -201,24 +203,25 @@ void CompositionDockerDock::exportClicked()
             path.append('/');
         }
 
-        KisImageWSP image = m_canvas->viewManager()->image();
+        KisImageSP image = m_canvas->viewManager()->image();
         QString filename = m_canvas->viewManager()->document()->localFilePath();
         if (!filename.isEmpty()) {
             QFileInfo info(filename);
             path += info.completeBaseName() + '_';
         }
 
-        Q_FOREACH (KisLayerCompositionSP composition, m_canvas->viewManager()->image()->compositions()) {
+        KisLayerCompositionSP currentComposition = toQShared(new KisLayerComposition(image, "temp"));
+        currentComposition->store();
+
+        Q_FOREACH (KisLayerCompositionSP composition, image->compositions()) {
             if (!composition->isExportEnabled()) {
                 continue;
             }
 
             composition->apply();
+            image->waitForDone();
             image->refreshGraph();
-            image->lock();
-#if 0
-            image->rootLayer()->projection()->convertToQImage(0, 0, 0, image->width(), image->height()).save(path + composition->name() + ".png");
-#else
+
             QRect r = image->bounds();
 
             KisDocument *d = KisPart::instance()->createDocument();
@@ -232,18 +235,20 @@ void CompositionDockerDock::exportClicked()
             dst->addNode(paintLayer, dst->rootLayer(), KisLayerSP(0));
 
             dst->refreshGraph();
+            dst->waitForDone();
 
             d->setFileBatchMode(true);
 
-            const QByteArray outputFormat("image/png");
-            d->exportDocumentSync(QUrl::fromLocalFile(path + composition->name() + ".png"), outputFormat);
 
-            delete d;
+            d->exportDocumentSync(QUrl::fromLocalFile(path + composition->name() + ".png"), "image/png");
+            d->deleteLater();
 
-#endif
-            image->unlock();
         }
+        currentComposition->apply();
+        image->waitForDone();
+        image->refreshGraph();
     }
+
 }
 
 bool CompositionDockerDock::eventFilter(QObject* obj, QEvent* event)

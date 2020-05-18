@@ -198,16 +198,14 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     }
     wdgTab->addTab(lblThirdParty, i18n("Third-party libraries"));
 
-
     QPushButton *bnClose = new QPushButton(i18n("Close"));
+    bnClose->setIcon(QIcon::fromTheme(QStringLiteral("dialog-close")));
     connect(bnClose, SIGNAL(clicked()), SLOT(close()));
 
     QHBoxLayout *hlayout = new QHBoxLayout;
     hlayout->setMargin(10);
     hlayout->addStretch(10);
     hlayout->addWidget(bnClose);
-
-
 
     vlayout->addLayout(hlayout);
 

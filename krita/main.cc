@@ -157,9 +157,18 @@ Java_org_krita_android_JNIWrappers_saveState(JNIEnv* /*env*/,
     QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
     kritarc.setValue("canvasState", "OPENGL_SUCCESS");
 }
-#endif
 
-#ifdef Q_OS_ANDROID
+extern "C" JNIEXPORT void JNICALL
+Java_org_krita_android_JNIWrappers_exitFullScreen(JNIEnv* /*env*/,
+                                                  jobject /*obj*/,
+                                                  jint    /*n*/)
+{
+    if (!KisPart::exists()) return;
+
+    KisMainWindow *mainWindow = KisPart::instance()->currentMainwindow();
+    mainWindow->viewFullscreen(false);
+}
+
 __attribute__ ((visibility ("default")))
 #endif
 extern "C" int main(int argc, char **argv)
@@ -314,10 +323,16 @@ extern "C" int main(int argc, char **argv)
     bool rightToLeft = false;
     if (!language.isEmpty()) {
         KLocalizedString::setLanguages(language.split(":"));
+
         // And override Qt's locale, too
-        qputenv("LANG", language.split(":").first().toLocal8Bit());
         QLocale locale(language.split(":").first());
         QLocale::setDefault(locale);
+#ifdef Q_OS_MAC
+        // prevents python >=3.7 nl_langinfo(CODESET) fail bug 417312.
+        qputenv("LANG", (locale.name() + ".UTF-8").toLocal8Bit());
+#else
+        qputenv("LANG", locale.name().toLocal8Bit());
+#endif
 
         const QStringList rtlLanguages = QStringList()
                 << "ar" << "dv" << "he" << "ha" << "ku" << "fa" << "ps" << "ur" << "yi";
@@ -350,24 +365,30 @@ extern "C" int main(int argc, char **argv)
                 }
             }
 
-            for (int i = 0; i < uiLanguages.size(); i++) {
-                QString uiLanguage = uiLanguages[i];
-                // Strip the country code
-                int idx = uiLanguage.indexOf(QChar('-'));
+            if (uiLanguages.size() > 0 ) {
+                QString envLanguage = uiLanguages.first();
+                envLanguage.replace(QChar('-'), QChar('_'));
 
-                if (idx != -1) {
-                    uiLanguage = uiLanguage.left(idx);
-                    uiLanguages.replace(i, uiLanguage);
+                for (int i = 0; i < uiLanguages.size(); i++) {
+                    QString uiLanguage = uiLanguages[i];
+                    // Strip the country code
+                    int idx = uiLanguage.indexOf(QChar('-'));
+
+                    if (idx != -1) {
+                        uiLanguage = uiLanguage.left(idx);
+                        uiLanguages.replace(i, uiLanguage);
+                    }
                 }
-            }
-            dbgKrita << "Converted ui languages:" << uiLanguages;
-            qputenv("LANG", uiLanguages.first().toLocal8Bit());
+                dbgKrita << "Converted ui languages:" << uiLanguages;
 #ifdef Q_OS_MAC
-            // See https://bugs.kde.org/show_bug.cgi?id=396370
-            KLocalizedString::setLanguages(QStringList() << uiLanguages.first());
+                // See https://bugs.kde.org/show_bug.cgi?id=396370
+                KLocalizedString::setLanguages(QStringList() << uiLanguages.first());
+                qputenv("LANG", (envLanguage + ".UTF-8").toLocal8Bit());
 #else
-            KLocalizedString::setLanguages(QStringList() << uiLanguages);
+                KLocalizedString::setLanguages(QStringList() << uiLanguages);
+                qputenv("LANG", envLanguage.toLocal8Bit());
 #endif
+            }
         }
     }
 
@@ -387,6 +408,8 @@ extern "C" int main(int argc, char **argv)
 
     // first create the application so we can create a pixmap
     KisApplication app(key, argc, argv);
+    KisUsageLogger::writeHeader();
+    KisOpenGL::initialize();
 
 #ifdef HAVE_SET_HAS_BORDER_IN_FULL_SCREEN_DEFAULT
     if (QCoreApplication::testAttribute(Qt::AA_UseDesktopOpenGL)) {
@@ -394,7 +417,6 @@ extern "C" int main(int argc, char **argv)
     }
 #endif
 
-    KisUsageLogger::writeHeader();
 
     if (!language.isEmpty()) {
         if (rightToLeft) {
@@ -433,11 +455,6 @@ extern "C" int main(int argc, char **argv)
     tryInitDrMingw();
 #endif
 
-    // If we should clear the config, it has to be done as soon as possible after
-    // KisApplication has been created. Otherwise the config file may have been read
-    // and stored in a KConfig object we have no control over.
-    app.askClearConfig();
-
     KisApplicationArguments args(app);
 
     if (singleApplication && app.isRunning()) {
@@ -457,7 +474,9 @@ extern "C" int main(int argc, char **argv)
         // Icons in menus are ugly and distracting
         app.setAttribute(Qt::AA_DontShowIconsInMenus);
     }
-
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+    app.setAttribute(Qt::AA_DisableWindowContextHelpButton);
+#endif
     app.installEventFilter(KisQtWidgetsTweaker::instance());
 
     if (!args.noSplash()) {
@@ -548,11 +567,6 @@ extern "C" int main(int argc, char **argv)
 
 #endif
 #endif
-
-    if (!app.start(args)) {
-        return 1;
-    }
-
     app.setAttribute(Qt::AA_CompressHighFrequencyEvents, false);
 
     // Set up remote arguments.
@@ -563,11 +577,18 @@ extern "C" int main(int argc, char **argv)
                      &app, SLOT(fileOpenRequested(QString)));
 
     // Hardware information
-    KisUsageLogger::write("\nHardware Information\n");
-    KisUsageLogger::write(QString("  GPU Acceleration: %1").arg(kritarc.value("OpenGLRenderer", "auto").toString()));
-    KisUsageLogger::write(QString("  Memory: %1 Mb").arg(KisImageConfig(true).totalRAM()));
-    KisUsageLogger::write(QString("  Number of Cores: %1").arg(QThread::idealThreadCount()));
-    KisUsageLogger::write(QString("  Swap Location: %1\n").arg(KisImageConfig(true).swapDir()));
+    KisUsageLogger::writeSysInfo("\nHardware Information\n");
+    KisUsageLogger::writeSysInfo(QString("  GPU Acceleration: %1").arg(kritarc.value("OpenGLRenderer", "auto").toString()));
+    KisUsageLogger::writeSysInfo(QString("  Memory: %1 Mb").arg(KisImageConfig(true).totalRAM()));
+    KisUsageLogger::writeSysInfo(QString("  Number of Cores: %1").arg(QThread::idealThreadCount()));
+    KisUsageLogger::writeSysInfo(QString("  Swap Location: %1\n").arg(KisImageConfig(true).swapDir()));
+
+    KisConfig(true).logImportantSettings();
+
+    if (!app.start(args)) {
+        KisUsageLogger::log("Could not start Krita Application");
+        return 1;
+    }
 
     int state = app.exec();
 

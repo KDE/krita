@@ -102,7 +102,7 @@
        to KAction properties.
  -->
 <!ELEMENT Action EMPTY>
-<!-- We defined only a few standard KAction properties here. Theoritically we can have
+<!-- We defined only a few standard KAction properties here. Theoretically we can have
      any property here -->
 <!ATTLIST Action
   name CDATA #REQUIRED

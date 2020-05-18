@@ -137,7 +137,7 @@ protected:
     void addGlobalSelection(KisImageSP image) {
         QRect selectionRect(40,40,300,300);
 
-        KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(0, image));
+        KisSelectionSP selection = new KisSelection(new KisDefaultBounds(image));
         KisPixelSelectionSP pixelSelection = selection->pixelSelection();
         pixelSelection->select(selectionRect);
 

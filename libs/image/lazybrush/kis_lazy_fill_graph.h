@@ -28,7 +28,7 @@
 #include <boost/iterator/counting_iterator.hpp>
 #include <boost/iterator/transform_iterator.hpp>
 
-#include <QRegion>
+#include <KisRegion.h>
 
 //#define USE_LAZY_FILL_SANITY_CHECKS 1
 
@@ -265,7 +265,6 @@ public:
             LABEL_B
         };
 
-
         vertices_size_type x;
         vertices_size_type y;
         VertexType type;
@@ -273,6 +272,7 @@ public:
         VertexDescriptor(vertices_size_type _x, vertices_size_type _y, VertexType _type = NORMAL)
             : x(_x), y(_y), type(_type) {}
 
+        // TODO: Extra constructors look unnecessary, ask Dmitry before removing
         VertexDescriptor(VertexType _type)
             : x(0), y(0), type(_type) {}
 
@@ -332,8 +332,8 @@ public:
     KisLazyFillGraph() {}
 
     KisLazyFillGraph(const QRect &mainRect,
-                     const QRegion &aLabelRegion,
-                     const QRegion &bLabelRegion)
+                     const KisRegion &aLabelRegion,
+                     const KisRegion &bLabelRegion)
         : m_x(mainRect.x()),
           m_y(mainRect.y()),
           m_width(mainRect.width()),
@@ -342,6 +342,7 @@ public:
         m_mainArea = mainRect;
         m_aLabelArea = aLabelRegion.boundingRect();
         m_bLabelArea = bLabelRegion.boundingRect();
+
         m_aLabelRects = aLabelRegion.rects();
         m_bLabelRects = bLabelRegion.rects();
 

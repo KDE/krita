@@ -35,7 +35,8 @@ public:
         NONE = 0x0,
         RECURSIVE = 0x1,
         NO_UI_UPDATES = 0x2,
-        SUPPORTS_WRAPAROUND_MODE = 0x4
+        SUPPORTS_WRAPAROUND_MODE = 0x4,
+        NO_IMAGE_UPDATES = 0x8
     };
 
     Q_DECLARE_FLAGS(ProcessingFlags, ProcessingFlag)
@@ -104,6 +105,7 @@ private:
     KisImageSignalVector m_emitSignals;
     KisStrokeId m_strokeId;
     bool m_finalSignalsEmitted;
+    bool m_appliedVisitorToAllFrames;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KisProcessingApplicator::ProcessingFlags)

@@ -51,6 +51,7 @@
 #include "psd_layer_section.h"
 #include "psd_resource_block.h"
 #include "psd_image_data.h"
+#include "kis_image_barrier_locker.h"
 
 PSDLoader::PSDLoader(KisDocument *doc)
     : m_image(0)
@@ -135,7 +136,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice *io)
     QString name = file ? file->fileName() : "Imported";
     m_image = new KisImage(m_doc->createUndoStore(),  header.width, header.height, cs, name);
     Q_CHECK_PTR(m_image);
-    m_image->lock();
+    KisImageBarrierLocker locker(m_image);
 
     // set the correct resolution
     if (resourceSection.resources.contains(PSDImageResourceSection::RESN_INFO)) {
@@ -166,7 +167,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice *io)
     // Read the projection into our single layer. Since we only read the projection when
     // we have just one layer, we don't need to later on apply the alpha channel of the
     // first layer to the projection if the number of layers is negative/
-    // See http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/#50577409_16000.
+    // See https://www.adobe.com/devnet-apps/photoshop/fileformatashtml/#50577409_16000.
     if (layerSection.nLayers == 0) {
         dbgFile << "Position" << io->pos() << "Going to read the projection into the first layer, which Photoshop calls 'Background'";
 
@@ -178,7 +179,6 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice *io)
         m_image->addNode(layer, m_image->rootLayer());
 
         // Only one layer, the background layer, so we're done.
-        m_image->unlock();
         return ImportExportCodes::OK;
     }
 
@@ -356,8 +356,6 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice *io)
         server->addResource(collection, false);
     }
 
-
-    m_image->unlock();
     return ImportExportCodes::OK;
 }
 

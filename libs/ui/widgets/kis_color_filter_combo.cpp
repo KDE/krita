@@ -22,12 +22,14 @@
 #include <QStylePainter>
 #include <QtCore/qmath.h>
 #include <QApplication>
+#include <QProxyStyle>
 #include <QStyleOption>
 #include <QSortFilterProxyModel>
 #include <QStandardItemModel>
 #include <QListView>
 #include <QMouseEvent>
 
+#include <QStyleFactory>
 
 
 
@@ -159,6 +161,24 @@ public:
     }
 };
 
+class PopupComboBoxStyle : public QProxyStyle
+{
+public:
+    PopupComboBoxStyle(QStyle *baseStyle = nullptr) : QProxyStyle(baseStyle) {}
+
+    int styleHint(QStyle::StyleHint hint, const QStyleOption *option, const QWidget *widget, QStyleHintReturn *returnData) const override
+    {
+        // This flag makes ComboBox popup float ontop of its parent ComboBox, like in Fusion style.
+        // Only when this hint is set will Qt respect combobox popup size hints, otherwise the popup
+        // can never exceed the width of its parent ComboBox, like in Breeze style.
+        if (hint == QStyle::SH_ComboBox_Popup) {
+            return true;
+        }
+
+        return QProxyStyle::styleHint(hint, option, widget, returnData);
+    }
+};
+
 struct KisColorFilterCombo::Private
 {
     LabelFilteringModel *filteringModel;
@@ -170,6 +190,13 @@ KisColorFilterCombo::KisColorFilterCombo(QWidget *parent)
 {
     QStandardItemModel *newModel = new QStandardItemModel(this);
     setModel(newModel);
+
+    QStyle* newStyle = QStyleFactory::create(style()->objectName());
+    // proxy style steals the ownership of the style and deletes it later
+    PopupComboBoxStyle *proxyStyle = new PopupComboBoxStyle(newStyle);
+
+    proxyStyle->setParent(this);
+    setStyle(proxyStyle);
 
     setView(new FullSizedListView);
     m_eventFilters.append(new ComboEventFilter(this));
@@ -230,7 +257,9 @@ void collectAvailableLabels(KisNodeSP root, QSet<int> *labels)
 void KisColorFilterCombo::updateAvailableLabels(KisNodeSP rootNode)
 {
     QSet<int> labels;
-    collectAvailableLabels(rootNode, &labels);
+    if (!rootNode.isNull()) {
+        collectAvailableLabels(rootNode, &labels);
+    }
 
     updateAvailableLabels(labels);
 }
@@ -344,5 +373,5 @@ QSize KisColorFilterCombo::sizeHint() const
     const QSize originalHint = QComboBox::sizeHint();
     QSize sh(3 * arrowSize, originalHint.height());
 
-    return sh.expandedTo(QApplication::globalStrut());
+    return sh;
 }

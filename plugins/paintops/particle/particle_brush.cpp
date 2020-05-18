@@ -138,9 +138,20 @@ void ParticleBrush::draw(KisPaintDeviceSP dab, const KoColor& color, const QPoin
              * Generally, the effect of instability might be quite
              * interesting for the painters.
              */
-            if (boundingRect.isEmpty() ||
-                    boundingRect.contains(m_particlePos[j].toPoint())) {
 
+            // If scale is negative, position can easily jump into infinity
+            //  and then it won't be caught by contains();
+            //  and then it will be passed to the lockless hashtable
+            //  and then it will crash.
+            // Hence better to catch infinity here and just not paint anything.
+            QPointF pointF = m_particlePos[j];
+
+            const qint32 max = 2147483600;
+            const qint32 min = -max;
+            bool nearInfinity = pointF.x() < min || pointF.x () > max || pointF.y() < min || pointF.y() > max;
+            bool inside = boundingRect.contains(m_particlePos[j].toPoint());
+
+            if (boundingRect.isEmpty() || (inside && !nearInfinity)) {
                 paintParticle(accessor, cs, m_particlePos[j], color, m_properties->weight, true);
             }
 

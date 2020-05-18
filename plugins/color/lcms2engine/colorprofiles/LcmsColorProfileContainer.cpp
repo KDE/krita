@@ -153,7 +153,8 @@ bool LcmsColorProfileContainer::init()
 
         cmsProfileClassSignature profile_class;
         profile_class = cmsGetDeviceClass(d->profile);
-        d->valid = (profile_class != cmsSigNamedColorClass);
+        d->valid = (   profile_class != cmsSigNamedColorClass
+                    && profile_class != cmsSigLinkClass);
 
         //This is where obtain the whitepoint, and convert it to the actual white point of the profile in the case a Chromatic adaption tag is
         //present. This is necessary for profiles following the v4 spec.
@@ -170,7 +171,7 @@ bool LcmsColorProfileContainer::init()
                 double d3dummy [3] = {d->mediaWhitePoint.X, d->mediaWhitePoint.Y, d->mediaWhitePoint.Z};
                 QGenericMatrix<1, 3, double> whitePointMatrix(d3dummy);
                 QTransform invertDummy(CAM1[0].X, CAM1[0].Y, CAM1[0].Z, CAM1[1].X, CAM1[1].Y, CAM1[1].Z, CAM1[2].X, CAM1[2].Y, CAM1[2].Z);
-                //we then abuse QTransform's invert function because it probably does matrix invertion 20 times better than I can program.
+                //we then abuse QTransform's invert function because it probably does matrix inversion 20 times better than I can program.
                 //if the matrix is uninvertable, invertedDummy will be an identity matrix, which for us means that it won't give any noticeble
                 //effect when we start multiplying.
                 QTransform invertedDummy = invertDummy.inverted();
@@ -478,22 +479,18 @@ void LcmsColorProfileContainer::LinearizeFloatValueFast(QVector <double> & Value
 
     if (d->hasColorants) {
         //we can only reliably delinearise in the 0-1.0 range, outside of that leave the value alone.
-        QVector <quint16> TRCtriplet(3);
-        TRCtriplet[0] = Value[0] * scale;
-        TRCtriplet[1] = Value[1] * scale;
-        TRCtriplet[2] = Value[2] * scale;
 
         if (!cmsIsToneCurveLinear(d->redTRC) && Value[0]<1.0) {
-            TRCtriplet[0] = cmsEvalToneCurve16(d->redTRC, TRCtriplet[0]);
-            Value[0] = TRCtriplet[0] * invScale;
+            quint16 newValue = cmsEvalToneCurve16(d->redTRC, Value[0] * scale);
+            Value[0] = newValue * invScale;
         }
         if (!cmsIsToneCurveLinear(d->greenTRC) && Value[1]<1.0) {
-            TRCtriplet[1] = cmsEvalToneCurve16(d->greenTRC, TRCtriplet[1]);
-            Value[1] = TRCtriplet[1] * invScale;
+            quint16 newValue = cmsEvalToneCurve16(d->greenTRC, Value[1] * scale);
+            Value[1] = newValue * invScale;
         }
         if (!cmsIsToneCurveLinear(d->blueTRC) && Value[2]<1.0) {
-            TRCtriplet[2] = cmsEvalToneCurve16(d->blueTRC, TRCtriplet[2]);
-            Value[2] = TRCtriplet[2] * invScale;
+            quint16 newValue = cmsEvalToneCurve16(d->blueTRC, Value[2] * scale);
+            Value[2] = newValue * invScale;
         }
     } else {
         if (cmsIsTag(d->profile, cmsSigGrayTRCTag) && Value[0]<1.0) {
@@ -509,22 +506,18 @@ void LcmsColorProfileContainer::DelinearizeFloatValueFast(QVector <double> & Val
 
     if (d->hasColorants) {
         //we can only reliably delinearise in the 0-1.0 range, outside of that leave the value alone.
-        QVector <quint16> TRCtriplet(3);
-        TRCtriplet[0] = Value[0] * scale;
-        TRCtriplet[1] = Value[1] * scale;
-        TRCtriplet[2] = Value[2] * scale;
 
         if (!cmsIsToneCurveLinear(d->redTRC) && Value[0]<1.0) {
-            TRCtriplet[0] = cmsEvalToneCurve16(d->redTRCReverse, TRCtriplet[0]);
-            Value[0] = TRCtriplet[0] * invScale;
+            quint16 newValue = cmsEvalToneCurve16(d->redTRCReverse, Value[0] * scale);
+            Value[0] = newValue * invScale;
         }
         if (!cmsIsToneCurveLinear(d->greenTRC) && Value[1]<1.0) {
-            TRCtriplet[1] = cmsEvalToneCurve16(d->greenTRCReverse, TRCtriplet[1]);
-            Value[1] = TRCtriplet[1] * invScale;
+            quint16 newValue = cmsEvalToneCurve16(d->greenTRCReverse, Value[1] * scale);
+            Value[1] = newValue * invScale;
         }
         if (!cmsIsToneCurveLinear(d->blueTRC) && Value[2]<1.0) {
-            TRCtriplet[2] = cmsEvalToneCurve16(d->blueTRCReverse, TRCtriplet[2]);
-            Value[2] = TRCtriplet[2] * invScale;
+            quint16 newValue = cmsEvalToneCurve16(d->blueTRCReverse, Value[2] * scale);
+            Value[2] = newValue * invScale;
         }
     } else {
         if (cmsIsTag(d->profile, cmsSigGrayTRCTag) && Value[0]<1.0) {

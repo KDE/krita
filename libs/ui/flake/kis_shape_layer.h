@@ -130,6 +130,11 @@ public:
 
     KUndo2Command* crop(const QRect & rect) override;
     KUndo2Command* transform(const QTransform &transform) override;
+    KUndo2Command* setProfile(const KoColorProfile *profile) override;
+    KUndo2Command* convertTo(const KoColorSpace * dstColorSpace,
+                                 KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),
+                                 KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags()) override;
+
 
     bool visible(bool recursive = false) const override;
     void setVisible(bool visible, bool isLoading = false) override;
@@ -168,6 +173,8 @@ protected:
 
     KoShapeControllerBase *shapeController() const;
 
+    friend class TransformShapeLayerDeferred;
+
 Q_SIGNALS:
     /**
      * These signals are forwarded from the local shape manager
@@ -190,6 +197,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void slotMoveShapes(const QPointF &diff);
+    void slotTransformShapes(const QTransform &transform);
 
 private:
     QList<KoShape*> shapesToBeTransformed();

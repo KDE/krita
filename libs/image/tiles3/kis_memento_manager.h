@@ -93,8 +93,8 @@ public:
      * When calling them, INDEX list should be empty, so to say, "working
      * copy should be clean".
      */
-    void rollback(KisTileHashTable *ht);
-    void rollforward(KisTileHashTable *ht);
+    void rollback(KisTileHashTable *ht, KisMementoSP memento);
+    void rollforward(KisTileHashTable *ht, KisMementoSP memento);
 
     /**
      * Get old tile, whose memento is in the HEAD revision.
@@ -118,7 +118,7 @@ public:
 
 
     /**
-     * Removes all the history that preceds the revision
+     * Removes all the history that precedes the revision
      * pointed by oldestMemento. That is after calling to
      * purgeHistory(someMemento) you won't be able to do
      * rollback(someMemento) anymore.

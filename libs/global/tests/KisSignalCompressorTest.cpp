@@ -33,12 +33,23 @@
 struct CompressorTester : public QObject
 {
     Q_OBJECT
+
+public:
+    CompressorTester(int handlerDelay)
+        : m_handlerDelay(handlerDelay)
+    {
+    }
+
 public Q_SLOTS:
     void start() {
         if (!m_timer.isValid()) {
             m_timer.start();
         } else {
             m_acc(m_timer.restart());
+        }
+
+        if (m_handlerDelay > 0) {
+            QTest::qSleep(m_handlerDelay);
         }
     }
 public:
@@ -60,12 +71,17 @@ private:
 
     boost::accumulators::accumulator_set<qreal, stats> m_acc;
     QElapsedTimer m_timer;
+    int m_handlerDelay;
 };
 
-void testCompression(int timerInterval, int compressorInterval)
+void testCompression(int timerInterval, int compressorInterval,
+                     int handlerDelay = 0,
+                     KisSignalCompressor::SlowHandlerMode slowHandlerMode = KisSignalCompressor::PRECISE_INTERVAL)
 {
-    CompressorTester tester;
-    KisSignalCompressor compressor(compressorInterval, KisSignalCompressor::FIRST_ACTIVE);
+    CompressorTester tester(handlerDelay);
+    KisSignalCompressor compressor(compressorInterval,
+                                   KisSignalCompressor::FIRST_ACTIVE,
+                                   slowHandlerMode);
     QTimer timer;
     timer.setInterval(timerInterval);
     timer.setTimerType(Qt::PreciseTimer);
@@ -83,7 +99,8 @@ void testCompression(int timerInterval, int compressorInterval)
     QTest::qWait(compressorInterval * 2);
     compressor.stop();
 
-    tester.dump(QString("timer %1 compressor %2").arg(timerInterval).arg(compressorInterval));
+    tester.dump(QString("timer %1 compressor %2 handler delay %3")
+                .arg(timerInterval).arg(compressorInterval).arg(handlerDelay));
 
     QTest::qWait(compressorInterval * 10);
 }
@@ -95,6 +112,21 @@ void KisSignalCompressorTest::test()
     }
     //testCompression(10, 25);
 }
+
+void KisSignalCompressorTest::testSlowHandlerPrecise()
+{
+    for (int i = 0; i < 31; i++) {
+        testCompression(6, 10, i, KisSignalCompressor::PRECISE_INTERVAL);
+    }
+}
+
+void KisSignalCompressorTest::testSlowHandlerAdditive()
+{
+    for (int i = 0; i < 31; i++) {
+        testCompression(6, 10, i, KisSignalCompressor::ADDITIVE_INTERVAL);
+    }
+}
+
 
 QTEST_MAIN(KisSignalCompressorTest)
 

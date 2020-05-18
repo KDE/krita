@@ -22,6 +22,7 @@
 #include <KoColorSpace.h>
 #include <KoColor.h>
 
+#include "KisRegion.h"
 #include "kis_paint_device.h"
 #include "kis_painter.h"
 #include "kis_lazy_fill_tools.h"
@@ -69,7 +70,7 @@ void KisMultiwayCut::Private::maskOutKeyStroke(KisPaintDeviceSP keyStrokeDevice,
     KIS_ASSERT_RECOVER_RETURN(keyStrokeDevice->pixelSize() == 1);
     KIS_ASSERT_RECOVER_RETURN(mask->pixelSize() == 1);
 
-    QRegion region =
+    KisRegion region =
         keyStrokeDevice->region() &
         mask->exactBounds() & boundingRect;
 

@@ -57,11 +57,12 @@ public:
     KoColor maskColor;
 
     void slotSelectionChangedCompressed();
+    void slotConfigChangedImpl(bool blockUpdates);
     void slotConfigChanged();
 };
 
-KisSelectionMask::KisSelectionMask(KisImageWSP image)
-    : KisEffectMask()
+KisSelectionMask::KisSelectionMask(KisImageWSP image, const QString &name)
+    : KisEffectMask(name)
     , m_d(new Private(this))
 {
     setName("selection");
@@ -77,7 +78,7 @@ KisSelectionMask::KisSelectionMask(KisImageWSP image)
     this->moveToThread(image->thread());
 
     connect(KisImageConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
-    m_d->slotConfigChanged();
+    m_d->slotConfigChangedImpl(false);
 }
 
 KisSelectionMask::KisSelectionMask(const KisSelectionMask& rhs)
@@ -92,7 +93,7 @@ KisSelectionMask::KisSelectionMask(const KisSelectionMask& rhs)
     this->moveToThread(m_d->image->thread());
 
     connect(KisImageConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
-    m_d->slotConfigChanged();
+    m_d->slotConfigChangedImpl(false);
 }
 
 KisSelectionMask::~KisSelectionMask()
@@ -125,13 +126,15 @@ void KisSelectionMask::mergeInMaskInternal(KisPaintDeviceSP projection,
         }
     }
 
-    KisPaintDeviceSP fillDevice = m_d->paintDeviceCache.getDevice(projection);
+    KisCachedPaintDevice::Guard d1(projection, m_d->paintDeviceCache);
+    KisPaintDeviceSP fillDevice = d1.device();
     fillDevice->setDefaultPixel(m_d->maskColor);
 
     const QRect selectionExtent = effectiveSelection->selectedRect();
 
     if (selectionExtent.contains(applyRect) || selectionExtent.intersects(applyRect)) {
-        KisSelectionSP invertedSelection = m_d->cachedSelection.getSelection();
+        KisCachedSelection::Guard s1(m_d->cachedSelection);
+        KisSelectionSP invertedSelection = s1.selection();
 
         invertedSelection->pixelSelection()->makeCloneFromRough(effectiveSelection->pixelSelection(), applyRect);
         invertedSelection->pixelSelection()->invert();
@@ -140,14 +143,10 @@ void KisSelectionMask::mergeInMaskInternal(KisPaintDeviceSP projection,
         gc.setSelection(invertedSelection);
         gc.bitBlt(applyRect.topLeft(), fillDevice, applyRect);
 
-        m_d->cachedSelection.putSelection(invertedSelection);
-
     } else {
         KisPainter gc(projection);
         gc.bitBlt(applyRect.topLeft(), fillDevice, applyRect);
     }
-
-    m_d->paintDeviceCache.putDevice(fillDevice);
 }
 
 bool KisSelectionMask::paintsOutsideSelection() const
@@ -291,6 +290,31 @@ void KisSelectionMask::notifySelectionChangedCompressed()
     m_d->updatesCompressor->start();
 }
 
+bool KisSelectionMask::decorationsVisible() const
+{
+    return selection()->isVisible();
+}
+
+void KisSelectionMask::setDecorationsVisible(bool value, bool update)
+{
+    if (value == decorationsVisible()) return;
+
+    const QRect oldExtent = extent();
+
+    selection()->setVisible(value);
+
+    if (update) {
+        setDirty(oldExtent | extent());
+    }
+}
+
+void KisSelectionMask::setDirty(const QVector<QRect> &rects)
+{
+    if (m_d->image && m_d->image->overlaySelectionMask() == this) {
+        KisEffectMask::setDirty(rects);
+    }
+}
+
 void KisSelectionMask::flattenSelectionProjection(KisSelectionSP selection, const QRect &dirtyRect) const
 {
     Q_UNUSED(selection);
@@ -305,7 +329,7 @@ void KisSelectionMask::Private::slotSelectionChangedCompressed()
     currentSelection->notifySelectionChanged();
 }
 
-void KisSelectionMask::Private::slotConfigChanged()
+void KisSelectionMask::Private::slotConfigChangedImpl(bool doUpdates)
 {
     const KoColorSpace *cs = image ?
         image->colorSpace() :
@@ -315,9 +339,14 @@ void KisSelectionMask::Private::slotConfigChanged()
 
     maskColor = KoColor(cfg.selectionOverlayMaskColor(), cs);
 
-    if (image && image->overlaySelectionMask() == q) {
+    if (doUpdates && image && image->overlaySelectionMask() == q) {
         q->setDirty();
     }
+}
+
+void KisSelectionMask::Private::slotConfigChanged()
+{
+    slotConfigChangedImpl(true);
 }
 
 #include "moc_kis_selection_mask.cpp"

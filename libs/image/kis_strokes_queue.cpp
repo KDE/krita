@@ -97,8 +97,7 @@ struct Q_DECL_HIDDEN KisStrokesQueue::Private {
     int nextDesiredLevelOfDetail;
     QMutex mutex;
     KisLodSyncStrokeStrategyFactory lod0ToNStrokeStrategyFactory;
-    KisSuspendResumeStrategyFactory suspendUpdatesStrokeStrategyFactory;
-    KisSuspendResumeStrategyFactory resumeUpdatesStrokeStrategyFactory;
+    KisSuspendResumeStrategyPairFactory suspendResumeUpdatesStrokeStrategyFactory;
     KisSurrogateUndoStore lodNUndoStore;
     LodNUndoStrokesFacade lodNStrokesFacade;
     KisPostExecutionUndoAdapter lodNPostExecutionUndoAdapter;
@@ -138,8 +137,7 @@ executeStrokePair(const StrokePair &pair, StrokesQueue &queue, typename StrokesQ
     QList<KisStrokeJobData*> jobsData = pair.second;
 
     KisStrokeSP stroke(new KisStroke(strategy, type, levelOfDetail));
-    strategy->setCancelStrokeId(stroke);
-    strategy->setMutatedJobsInterface(mutatedJobsInterface);
+    strategy->setMutatedJobsInterface(mutatedJobsInterface, stroke);
     it = queue.insert(it, stroke);
     Q_FOREACH (KisStrokeJobData *jobData, jobsData) {
         stroke->addJob(jobData);
@@ -251,8 +249,7 @@ KisStrokeId KisStrokesQueue::startLodNUndoStroke(KisStrokeStrategy *strokeStrate
     KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->desiredLevelOfDetail > 0);
 
     KisStrokeSP buddy(new KisStroke(strokeStrategy, KisStroke::LODN, m_d->desiredLevelOfDetail));
-    strokeStrategy->setCancelStrokeId(buddy);
-    strokeStrategy->setMutatedJobsInterface(this);
+    strokeStrategy->setMutatedJobsInterface(this, buddy);
     m_d->strokesQueue.insert(m_d->findNewLodNPos(buddy), buddy);
 
     KisStrokeId id(buddy);
@@ -268,7 +265,10 @@ KisStrokeId KisStrokesQueue::startStroke(KisStrokeStrategy *strokeStrategy)
     KisStrokeSP stroke;
     KisStrokeStrategy* lodBuddyStrategy;
 
-    m_d->cancelForgettableStrokes();
+    // we should let forgettable strokes to queue up
+    if (!strokeStrategy->canForgetAboutMe()) {
+        m_d->cancelForgettableStrokes();
+    }
 
     if (m_d->desiredLevelOfDetail &&
         m_d->canUseLodN() &&
@@ -282,15 +282,15 @@ KisStrokeId KisStrokesQueue::startStroke(KisStrokeStrategy *strokeStrategy)
         stroke = KisStrokeSP(new KisStroke(strokeStrategy, KisStroke::LOD0, 0));
 
         KisStrokeSP buddy(new KisStroke(lodBuddyStrategy, KisStroke::LODN, m_d->desiredLevelOfDetail));
-        lodBuddyStrategy->setCancelStrokeId(buddy);
-        lodBuddyStrategy->setMutatedJobsInterface(this);
+        lodBuddyStrategy->setMutatedJobsInterface(this, buddy);
         stroke->setLodBuddy(buddy);
         m_d->strokesQueue.insert(m_d->findNewLodNPos(buddy), buddy);
 
         if (m_d->shouldWrapInSuspendUpdatesStroke()) {
 
-            KisSuspendResumePair suspendPair = m_d->suspendUpdatesStrokeStrategyFactory();
-            KisSuspendResumePair resumePair = m_d->resumeUpdatesStrokeStrategyFactory();
+            KisSuspendResumePair suspendPair;
+            KisSuspendResumePair resumePair;
+            std::tie(suspendPair, resumePair) = m_d->suspendResumeUpdatesStrokeStrategyFactory();
 
             StrokesQueueIterator it = m_d->findNewLod0Pos();
 
@@ -308,8 +308,7 @@ KisStrokeId KisStrokesQueue::startStroke(KisStrokeStrategy *strokeStrategy)
     }
 
     KisStrokeId id(stroke);
-    strokeStrategy->setCancelStrokeId(id);
-    strokeStrategy->setMutatedJobsInterface(this);
+    strokeStrategy->setMutatedJobsInterface(this, id);
 
     m_d->openedStrokesCounter++;
 
@@ -633,14 +632,9 @@ void KisStrokesQueue::setLod0ToNStrokeStrategyFactory(const KisLodSyncStrokeStra
     m_d->lod0ToNStrokeStrategyFactory = factory;
 }
 
-void KisStrokesQueue::setSuspendUpdatesStrokeStrategyFactory(const KisSuspendResumeStrategyFactory &factory)
+void KisStrokesQueue::setSuspendResumeUpdatesStrokeStrategyFactory(const KisSuspendResumeStrategyPairFactory &factory)
 {
-    m_d->suspendUpdatesStrokeStrategyFactory = factory;
-}
-
-void KisStrokesQueue::setResumeUpdatesStrokeStrategyFactory(const KisSuspendResumeStrategyFactory &factory)
-{
-    m_d->resumeUpdatesStrokeStrategyFactory = factory;
+    m_d->suspendResumeUpdatesStrokeStrategyFactory = factory;
 }
 
 KisPostExecutionUndoAdapter *KisStrokesQueue::lodNPostExecutionUndoAdapter() const

@@ -520,8 +520,7 @@ void LayerBox::updateUI()
     m_wdgLayerBox->cmbComposite->validate(m_image->colorSpace());
 
     if (activeNode) {
-        if (activeNode->inherits("KisColorizeMask") ||
-                activeNode->inherits("KisLayer")) {
+        if (activeNode->inherits("KisColorizeMask") || activeNode->inherits("KisLayer")) {
 
             m_wdgLayerBox->doubleOpacity->setEnabled(true);
 
@@ -695,7 +694,7 @@ void LayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &in
             if (singleLayer) {
                 KisNodeSP node = m_filteringModel->nodeFromIndex(index);
                 if (node && !node->inherits("KisTransformMask")) {
-                    addActionToMenu(&menu, "isolate_layer");
+                    addActionToMenu(&menu, "isolate_active_layer");
                 }
 
                 addActionToMenu(&menu, "selectopaque");

@@ -55,7 +55,7 @@ void KisKraLoaderTest::testLoading()
     QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
     doc->loadNativeFormat(QString(FILES_DATA_DIR) + QDir::separator() + "load_test.kra");
     KisImageSP image = doc->image();
-    image->lock();
+    image->waitForDone();
     QCOMPARE(image->nlayers(), 12);
     QCOMPARE(doc->documentInfo()->aboutInfo("title"), QString("test image for loading"));
     QCOMPARE(image->height(), 753);

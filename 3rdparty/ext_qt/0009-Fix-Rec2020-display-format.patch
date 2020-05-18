@@ -1,0 +1,64 @@
+From 5c98e57a2c96334e00bb8775e9d1c8a617d408cf Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Mon, 10 Feb 2020 16:37:43 +0300
+Subject: [PATCH 17/22] Fix Rec2020 display format
+
+This commit contains changes to smpte shader to fix the black screen
+in Rec2020 display format on Windows.
+Before this commit it was broken because of two things:
+- r=pow(x, y) in ANGLE is compiled into t=log(x); t=t*y; r=e^t
+which in case of 0 resulted in undefined behaviour, in this case...
+alpha = 1.0, even though the line was: pow(0, 1), qhich means
+the correct result should be 0.0, not 1.0.
+- changed order of painting UI and canvas; before it was first UI,
+then canvas. After the order was reversed, so the 0.0 alpha started
+to be crucial for canvas to be shown from underneath the UI.
+
+Change-Id: Ia46c36d16680ea1f03aca102565a9b181e6f5eb4
+---
+ src/gui/opengl/qopengltextureblitter.cpp | 22 +++++++++++++---------
+ 1 file changed, 13 insertions(+), 9 deletions(-)
+
+diff --git a/src/gui/opengl/qopengltextureblitter.cpp b/src/gui/opengl/qopengltextureblitter.cpp
+index 8b9142a0ef..15d4a6e0af 100644
+--- a/src/gui/opengl/qopengltextureblitter.cpp
++++ b/src/gui/opengl/qopengltextureblitter.cpp
+@@ -164,14 +164,16 @@ static const char fragment_shader[] =
+     "#if defined SRGB_TO_BT2020PQ || defined SCRGB_TO_BT2020PQ\n"
+     "highp vec4 applySmpte2084Curve(highp vec4 L)\n"
+     "{"
+-    "   const highp vec2 m1 = vec2(2610.0 / 4096.0 / 4.0, 1.0);\n"
+-    "   const highp vec2 m2 = vec2(2523.0 / 4096.0 * 128.0, 1.0);\n"
+-    "   const highp vec2 a1 = vec2(3424.0 / 4096.0, 0.0);\n"
+-    "   const highp vec2 c2 = vec2(2413.0 / 4096.0 * 32.0, 1.0);\n"
+-    "   const highp vec2 c3 = vec2(2392.0 / 4096.0 * 32.0, 1.0);\n"
+-    "   const highp vec2 a4 = vec2(1.0, 0.0);\n"
+-    "   highp vec4 Lp = pow(L, m1.xxxy);\n"
+-    "   highp vec4 res = pow((a1.xxxy + c2.xxxy * Lp) / (a4.xxxy + c3.xxxy * Lp), m2.xxxy);\n"
++	"   highp float oldAlpha = L.a;\n"
++	"   const highp vec4 m1 = vec4(2610.0 / 4096.0 / 4.0);\n"
++    "   const highp vec4 m2 = vec4(2523.0 / 4096.0 * 128.0);\n"
++    "   const highp vec4 a1 = vec4(3424.0 / 4096.0);\n"
++    "   const highp vec4 c2 = vec4(2413.0 / 4096.0 * 32.0);\n"
++    "   const highp vec4 c3 = vec4(2392.0 / 4096.0 * 32.0);\n"
++    "   const highp vec4 a4 = vec4(1.0);\n"
++    "   highp vec4 Lp = pow(L, m1);\n"
++    "   highp vec4 res = pow((a1 + c2 * Lp) / (a4 + c3 * Lp), m2);\n"
++	"   res.a = oldAlpha;\n"
+     "   return res;"
+     "}\n"
+     "#endif\n"
+@@ -185,7 +187,9 @@ static const char fragment_shader[] =
+     "           0.0,      0.0,      0.0,      1.0);"
+     ""
+     "   value = convMat * value;\n"
+-    "   return applySmpte2084Curve(0.008 * value);"
++	"   const highp vec4 whitePointScale = vec4(0.008, 0.008, 0.008, 1.0);\n"
++	"   highp vec4 result = applySmpte2084Curve(whitePointScale * value);\n"
++	"   return result;\n"
+     "}\n"
+     "#endif\n"
+     "#if defined SRGB_TO_BT2020PQ\n"
+-- 
+2.20.1.windows.1
+

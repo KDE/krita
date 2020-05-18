@@ -79,7 +79,7 @@ Window* View::window() const
 Document* View::document() const
 {
     if (!d->view) return 0;
-    Document *doc = new Document(d->view->document());
+    Document *doc = new Document(d->view->document(), false);
     return doc;
 }
 

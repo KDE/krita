@@ -28,7 +28,7 @@
 #include <QImage>
 #include <QList>
 #include <QSharedPointer>
-#include <QSignalMapper>
+#include <KisSignalMapper.h>
 #include <QCollator>
 
 #include <klocalizedstring.h>
@@ -39,7 +39,7 @@ StylesModel::StylesModel(KoStyleManager *manager, AbstractStylesModel::Type mode
     , m_styleManager(0)
     , m_currentParagraphStyle(0)
     , m_defaultCharacterStyle(0)
-    , m_styleMapper(new QSignalMapper(this))
+    , m_styleMapper(new KisSignalMapper(this))
     , m_provideStyleNone(false)
 {
     m_modelType = modelType;

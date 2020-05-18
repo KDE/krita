@@ -2,8 +2,8 @@ SET(PREFIX_ext_jpeg "${EXTPREFIX}" )
 if (MINGW)
 ExternalProject_Add( ext_jpeg
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/libjpeg-turbo/libjpeg-turbo/archive/2.0.2.tar.gz
-    URL_MD5 8badea1368f489ac4c520f01b1bc045b
+    URL https://files.kde.org/krita/build/dependencies/libjpeg-turbo-2.0.3.tar.gz
+    URL_MD5 295e61ffad804251471393c3de80d76e
         
     INSTALL_DIR ${PREFIX_ext_jpeg}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_jpeg} -DWITH_SIMD=OFF -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
@@ -13,8 +13,8 @@ ExternalProject_Add( ext_jpeg
 elseif (ANDROID)
 ExternalProject_Add( ext_jpeg
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/libjpeg-turbo/libjpeg-turbo/archive/2.0.2.tar.gz
-    URL_MD5 8badea1368f489ac4c520f01b1bc045b
+    URL https://files.kde.org/krita/build/dependencies/libjpeg-turbo-2.0.3.tar.gz
+    URL_MD5 295e61ffad804251471393c3de80d76e
 
     CMAKE_ARGS -DANDROID_ARM_MODE=arm -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_jpeg} -DENABLE_SHARED=ON -DWITH_SIMD=OFF -DENABLE_STATIC=OFF _DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
 
@@ -23,12 +23,12 @@ ExternalProject_Add( ext_jpeg
 else()
 ExternalProject_Add( ext_jpeg
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/libjpeg-turbo/libjpeg-turbo/archive/2.0.2.tar.gz
-    URL_MD5 8badea1368f489ac4c520f01b1bc045b
+    URL https://files.kde.org/krita/build/dependencies/libjpeg-turbo-2.0.3.tar.gz
+    URL_MD5 295e61ffad804251471393c3de80d76e
   
-    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_jpeg}  ${GLOBAL_AUTOMAKE_PROFILE} --without-simd
-    BUILD_COMMAND make
-    INSTALL_COMMAND make install      
+    INSTALL_DIR ${PREFIX_ext_jpeg}
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_jpeg} -DWITH_SIMD=OFF _DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
+
 
     UPDATE_COMMAND ""
 )

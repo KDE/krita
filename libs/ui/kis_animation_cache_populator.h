@@ -38,6 +38,7 @@ public:
      * @return true if generation requested, false if busy
      */
     bool regenerate(KisAnimationFrameCacheSP cache, int frame);
+    void requestRegenerationWithPriorityFrame(KisImageSP image, int frameIndex);
 
 public Q_SLOTS:
     void slotRequestRegeneration();

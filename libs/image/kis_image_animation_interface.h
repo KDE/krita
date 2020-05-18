@@ -29,6 +29,7 @@ class KisUpdatesFacade;
 class KisFrameSet;
 class KisTimeSpan;
 class KoColor;
+class KisRegion;
 
 namespace KisLayerUtils {
     struct SwitchFrameCommand;
@@ -99,7 +100,7 @@ public:
      *    frameProjection().  After the signal handler is exited, the
      *    data will no longer be available.
      */
-    void requestFrameRegeneration(int frameId, const QRegion &dirtyRegion);
+    void requestFrameRegeneration(int frameId, const KisRegion &dirtyRegion);
 
 
     void notifyNodeChanged(const KisNode *node, const QRect &rect, bool recursive);

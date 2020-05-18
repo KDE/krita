@@ -768,6 +768,7 @@ void TestSvgText::testRightToLeft()
 
 #include <QTextLayout>
 #include <QPainter>
+#include <QPainterPath>
 
 void TestSvgText::testQtBidi()
 {

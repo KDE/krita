@@ -942,5 +942,57 @@ void KisTiledDataManagerTest::stressTestLazyCopying()
     pool.waitForDone();
 }
 
+void KisTiledDataManagerTest::benchmaskQRegion()
+{
+    QVector<QRect> rects;
+
+    int poison = 0;
+    for (int y = 0; y < 8000; y += 64) {
+        for (int x = 0; x < 8000; x += 64) {
+            if (poison++ % 7 == 0) continue;
+            rects << QRect(x, y, 64, 64);
+        }
+    }
+
+    std::random_shuffle(rects.begin(), rects.end());
+
+    QElapsedTimer timer;
+    timer.start();
+
+    QRegion region;
+
+    Q_FOREACH (const QRect &rc, rects) {
+        region += rc;
+    }
+
+    qDebug() << "compressed rects:" << ppVar(rects.size()) << "-->" << ppVar(region.rectCount());
+    qDebug() << "compression time:" << timer.elapsed() << "ms";
+}
+
+#include "KisRegion.h"
+void KisTiledDataManagerTest::benchmaskKisRegion()
+{
+    QVector<QRect> rects;
+
+    int poison = 0;
+
+    for (int y = 0; y < 8000; y += 64) {
+        for (int x = 0; x < 8000; x += 64) {
+            if (poison++ % 7 == 0) continue;
+            rects << QRect(x, y, 64, 64);
+        }
+    }
+
+    std::random_shuffle(rects.begin(), rects.end());
+
+    QElapsedTimer timer;
+    timer.start();
+
+    auto endIt = KisRegion::mergeSparseRects(rects.begin(), rects.end());
+
+    qDebug() << "compressed rects:" << ppVar(rects.size()) << "-->" << ppVar(std::distance(rects.begin(), endIt));
+    qDebug() << "compression time:" << timer.elapsed() << "ms";
+}
+
 QTEST_MAIN(KisTiledDataManagerTest)
 

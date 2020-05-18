@@ -70,7 +70,7 @@ public:
     void setSortByPosition(bool enable);
 
     /**
-     * Numberred entries
+     * Numbered entries
      * If text:numbered-entries attribute is true then bibliography entries or citations will be numbered.
      */
     bool numberedEntries() const;

@@ -103,8 +103,9 @@ public:
 
     /**
      * The document opened a URL -> store into recent documents list.
+     * @param oldUrl if not empty, @p url will replace @p oldUrl if present
      */
-    void addRecentURL(const QUrl &url);
+    void addRecentURL(const QUrl &url, const QUrl &oldUrl = QUrl());
 
     /**
      * get list of URL strings for recent files
@@ -316,6 +317,12 @@ public Q_SLOTS:
 
     void slotFileSelected(QString path);
     void slotEmptyFilePath();
+
+    /**
+     * Toggle full screen on/off.
+     */
+    void viewFullscreen(bool fullScreen);
+
 private Q_SLOTS:
     /**
      * Save the list of recent files.
@@ -379,14 +386,14 @@ private Q_SLOTS:
     void slotNewToolbarConfig();
 
     /**
+     * Reset User Configurations.
+     */
+    void slotResetConfigurations();
+
+    /**
      *  Shows or hides a toolbar
      */
     void slotToolbarToggled(bool toggle);
-
-    /**
-     * Toggle full screen on/off.
-     */
-    void viewFullscreen(bool fullScreen);
 
     /**
      * Reload file
@@ -421,6 +428,7 @@ private Q_SLOTS:
     void undo();
     void redo();
     void updateWindowMenu();
+    void updateSubwindowFlags();
     void setActiveSubWindow(QWidget *window);
     void configChanged();
 

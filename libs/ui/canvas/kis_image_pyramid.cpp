@@ -283,43 +283,13 @@ void KisImagePyramid::retrieveImageData(const QRect &rect)
         if (!m_channelFlags.isEmpty() && !m_allChannelsSelected) {
             QScopedArrayPointer<quint8> dst(new quint8[projectionCs->pixelSize() * numPixels]);
 
-            int channelSize = channelInfo[m_selectedChannelIndex]->size();
-            int pixelSize = projectionCs->pixelSize();
-
             KisConfig cfg(true);
 
             if (m_onlyOneChannelSelected && !cfg.showSingleChannelAsColor()) {
-                int selectedChannelPos = channelInfo[m_selectedChannelIndex]->pos();
-                for (uint pixelIndex = 0; pixelIndex < numPixels; ++pixelIndex) {
-                    for (uint channelIndex = 0; channelIndex < projectionCs->channelCount(); ++channelIndex) {
-
-                        if (channelInfo[channelIndex]->channelType() == KoChannelInfo::COLOR) {
-                            memcpy(dst.data() + (pixelIndex * pixelSize) + (channelIndex * channelSize),
-                                   originalBytes.data() + (pixelIndex * pixelSize) + selectedChannelPos,
-                                   channelSize);
-                        }
-                        else if (channelInfo[channelIndex]->channelType() == KoChannelInfo::ALPHA) {
-                            memcpy(dst.data() + (pixelIndex * pixelSize) + (channelIndex * channelSize),
-                                   originalBytes.data()  + (pixelIndex * pixelSize) + (channelIndex * channelSize),
-                                   channelSize);
-                        }
-                    }
-                }
+                projectionCs->convertChannelToVisualRepresentation(originalBytes.data(), dst.data(), numPixels, m_selectedChannelIndex);
             }
             else {
-                for (uint pixelIndex = 0; pixelIndex < numPixels; ++pixelIndex) {
-                    for (uint channelIndex = 0; channelIndex < projectionCs->channelCount(); ++channelIndex) {
-                        if (m_channelFlags.testBit(channelIndex)) {
-                            memcpy(dst.data() + (pixelIndex * pixelSize) + (channelIndex * channelSize),
-                                   originalBytes.data()  + (pixelIndex * pixelSize) + (channelIndex * channelSize),
-                                   channelSize);
-                        }
-                        else {
-                            memset(dst.data() + (pixelIndex * pixelSize) + (channelIndex * channelSize), 0, channelSize);
-                        }
-                    }
-                }
-
+                projectionCs->convertChannelToVisualRepresentation(originalBytes.data(), dst.data(), numPixels, m_channelFlags);
             }
             originalBytes.swap(dst);
         }

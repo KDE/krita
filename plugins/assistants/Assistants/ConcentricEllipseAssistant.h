@@ -36,7 +36,7 @@ public:
     int numHandles() const override { return 3; }
     bool isAssistantComplete() const override;
 
-    void transform(const QTransform &transform);
+    void transform(const QTransform &transform) override;
 
 
 protected:

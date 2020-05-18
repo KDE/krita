@@ -265,7 +265,7 @@ bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)
         return false;
     }
 
-    loadFilterConfiguration(layer->filter(), getLocation(layer, DOT_FILTERCONFIG));
+    loadFilterConfiguration(layer, getLocation(layer, DOT_FILTERCONFIG));
     fixOldFilterConfigurations(layer->filter());
 
     result = visitAll(layer);
@@ -284,9 +284,8 @@ bool KisKraLoadVisitor::visit(KisGeneratorLayer *layer)
 
     // HACK ALERT: we set the same filter again to ensure the layer
     // is correctly updated
-    KisFilterConfigurationSP filter = layer->filter();
-    result = loadFilterConfiguration(filter.data(), getLocation(layer, DOT_FILTERCONFIG));
-    layer->setFilter(filter);
+    result = loadFilterConfiguration(layer, getLocation(layer, DOT_FILTERCONFIG));
+    layer->setFilter(layer->filter());
 
     result = visitAll(layer);
     return result;
@@ -305,10 +304,15 @@ bool KisKraLoadVisitor::visit(KisCloneLayer *layer)
     }
 
     KisNodeSP srcNode = layer->copyFromInfo().findNode(m_image->rootLayer());
-    KisLayerSP srcLayer = qobject_cast<KisLayer*>(srcNode.data());
-    Q_ASSERT(srcLayer);
+    if (!srcNode.isNull()) {
+        KisLayerSP srcLayer = qobject_cast<KisLayer*>(srcNode.data());
+        Q_ASSERT(srcLayer);
 
-    layer->setCopyFrom(srcLayer);
+        layer->setCopyFrom(srcLayer);
+    } else {
+        m_warningMessages.append(i18nc("Loading a .kra file", "The file contains a clone layer that has an incorrect source node id. "
+                                                              "This layer will be converted into a paint layer."));
+    }
 
     // Clone layers have no data except for their masks
     bool result = visitAll(layer);
@@ -339,7 +343,7 @@ bool KisKraLoadVisitor::visit(KisFilterMask *mask)
 
     bool result = true;
     result = loadSelection(getLocation(mask), mask->selection());
-    result = loadFilterConfiguration(mask->filter(), getLocation(mask, DOT_FILTERCONFIG));
+    result = loadFilterConfiguration(mask, getLocation(mask, DOT_FILTERCONFIG));
     fixOldFilterConfigurations(mask->filter());
     return result;
 }
@@ -567,7 +571,7 @@ bool KisKraLoadVisitor::loadProfile(KisPaintDeviceSP device, const QString& loca
         QByteArray hash = hashGenerator->generateHash(data);
 
         if (m_profileCache.contains(hash)) {
-            if (device->setProfile(m_profileCache[hash])) {
+            if (device->setProfile(m_profileCache[hash], 0)) {
                 return true;
             }
         }
@@ -575,7 +579,7 @@ bool KisKraLoadVisitor::loadProfile(KisPaintDeviceSP device, const QString& loca
             // Create a colorspace with the embedded profile
             const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(device->colorSpace()->colorModelId().id(), device->colorSpace()->colorDepthId().id(), data);
             m_profileCache[hash] = profile;
-            if (device->setProfile(profile)) {
+            if (device->setProfile(profile, 0)) {
                 return true;
             }
 
@@ -585,8 +589,10 @@ bool KisKraLoadVisitor::loadProfile(KisPaintDeviceSP device, const QString& loca
     return true;
 }
 
-bool KisKraLoadVisitor::loadFilterConfiguration(KisFilterConfigurationSP kfc, const QString& location)
+bool KisKraLoadVisitor::loadFilterConfiguration(KisNodeFilterInterface *nodeInterface, const QString& location)
 {
+    KisFilterConfigurationSP kfc = nodeInterface->filter();
+
     if (m_store->hasFile(location)) {
         QByteArray data;
         m_store->open(location);

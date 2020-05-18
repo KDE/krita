@@ -275,7 +275,7 @@
          <item row="3" column="1">
           <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
-            <widget class="KisCompositeOpComboBox" name="cmbHighlightMode">
+            <widget class="KisLayerStyleCompositeOpComboBox" name="cmbHighlightMode">
              <property name="toolTip">
               <string>Set the blend mode for the layer</string>
              </property>
@@ -335,7 +335,7 @@
          <item row="5" column="1">
           <layout class="QHBoxLayout" name="horizontalLayout_3">
            <item>
-            <widget class="KisCompositeOpComboBox" name="cmbShadowMode">
+            <widget class="KisLayerStyleCompositeOpComboBox" name="cmbShadowMode">
              <property name="toolTip">
               <string>Set the blend mode for the layer</string>
              </property>
@@ -405,11 +405,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisIntParseSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>kis_int_parse_spin_box.h</header>
-  </customwidget>
-  <customwidget>
    <class>KisColorButton</class>
    <extends>QPushButton</extends>
    <header>kis_color_button.h</header>
@@ -421,7 +416,7 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KisCompositeOpComboBox</class>
+   <class>KisLayerStyleCompositeOpComboBox</class>
    <extends>QComboBox</extends>
    <header location="global">kis_cmb_composite.h</header>
   </customwidget>
@@ -430,6 +425,11 @@
    <extends>QWidget</extends>
    <header>KisLayerStyleAngleSelector.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_int_parse_spin_box.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

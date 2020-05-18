@@ -25,11 +25,10 @@
 #include "KoSelectedShapesProxySimple.h"
 #include "KoShapeManager.h"
 #include "KoShape.h"
-#include "KoViewConverter.h"
 #include "KoShapeStrokeModel.h"
 #include "KoShapeGroup.h"
 #include "KoShapeContainer.h"
-
+#include <KoViewConverter.h>
 #include <KoUnit.h>
 
 #include <QPainter>
@@ -139,13 +138,13 @@ void KoShapePainter::setShapes(const QList<KoShape*> &shapes)
     d->canvas->shapeManager()->setShapes(shapes, KoShapeManager::AddWithoutRepaint);
 }
 
-void KoShapePainter::paint(QPainter &painter, KoViewConverter &converter)
+void KoShapePainter::paint(QPainter &painter)
 {
     foreach (KoShape *shape, d->canvas->shapeManager()->shapes()) {
-        shape->waitUntilReady(converter, false);
+        shape->waitUntilReady(false);
     }
 
-    d->canvas->shapeManager()->paint(painter, converter, true);
+    d->canvas->shapeManager()->paint(painter, true);
 }
 
 void KoShapePainter::paint(QPainter &painter, const QRect &painterRect, const QRectF &documentRect)
@@ -180,9 +179,10 @@ void KoShapePainter::paint(QPainter &painter, const QRect &painterRect, const QR
     QPointF offset = QRectF(painterRect).center() - zoomedBound.center();
     // center content in painter rectangle
     painter.translate(offset.x(), offset.y());
+    painter.setTransform(converter.documentToView(), true);
 
     // finally paint the shapes
-    paint(painter, converter);
+    paint(painter);
 
     painter.restore();
 }

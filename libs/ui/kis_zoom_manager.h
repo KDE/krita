@@ -28,6 +28,7 @@
 #include <KoZoomHandler.h>
 #include <KoZoomController.h>
 #include "kis_signal_auto_connection.h"
+#include "kis_signal_compressor.h"
 
 #include "KisView.h"
 
@@ -58,7 +59,7 @@ public:
     void updateScreenResolution(QWidget *parentWidget);
 
     void setup(KActionCollection * actionCollection);
-    void updateGUI();
+    void updateGuiAfterDocumentSize();
     KoZoomController * zoomController() const {
         return m_zoomController;
     }
@@ -87,6 +88,9 @@ public Q_SLOTS:
     void setRulersPixelMultiple2(bool enabled);
 
 
+private Q_SLOTS:
+    void slotUpdateGuiAfterZoomChange();
+
 private:
     void updateMouseTrackingConnections();
 
@@ -106,6 +110,7 @@ private:
     qreal m_physicalDpiY;
     qreal m_devicePixelRatio;
     bool m_aspectMode {false};
+    KisSignalCompressor m_guiUpdateCompressor;
 };
 
 

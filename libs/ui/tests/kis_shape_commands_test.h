@@ -30,6 +30,12 @@ private Q_SLOTS:
     void testGrouping();
     void testResizeShape();
     void testResizeShapeNormalized();
+
+    void testResizeNullShape();
+    void testResizeNullShapeGlobal();
+    void testScaleNullShape();
+    void testScaleNullShapeCovered();
+    void testScaleNullShapeGlobal();
 };
 
 #endif /* __KIS_SHAPE_COMMANDS_TEST_H */

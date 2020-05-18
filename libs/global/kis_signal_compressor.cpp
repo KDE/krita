@@ -55,14 +55,21 @@ KisSignalCompressor::KisSignalCompressor()
 }
 
 KisSignalCompressor::KisSignalCompressor(int delay, Mode mode, QObject *parent)
+    : KisSignalCompressor(delay, mode, PRECISE_INTERVAL, parent)
+{
+}
+
+KisSignalCompressor::KisSignalCompressor(int delay, Mode mode, SlowHandlerMode slowHandlerMode, QObject *parent)
     : QObject(parent),
       m_timer(new QTimer(this)),
-      m_mode(mode)
+      m_mode(mode),
+      m_slowHandlerMode(slowHandlerMode)
 {
     m_timer->setSingleShot(false);
     m_timer->setInterval(delay);
     connect(m_timer, SIGNAL(timeout()), SLOT(slotTimerExpired()));
 }
+
 
 void KisSignalCompressor::setDelay(int delay)
 {
@@ -99,10 +106,15 @@ void KisSignalCompressor::start()
     case FIRST_ACTIVE:
         if (isFirstStart) {
             m_timer->start();
-            m_lastEmittedTimer.restart();
+            if (m_slowHandlerMode == PRECISE_INTERVAL) {
+                m_lastEmittedTimer.restart();
+            }
             m_signalsPending = false;
             if (!tryEmitSignalSafely()) {
                 m_signalsPending = true;
+            }
+            if (m_slowHandlerMode == ADDITIVE_INTERVAL) {
+                m_lastEmittedTimer.restart();
             }
         } else {
             if (m_mode == FIRST_ACTIVE) {
@@ -147,11 +159,19 @@ bool KisSignalCompressor::tryEmitOnTick(bool isFromTimer)
     if (m_signalsPending && m_lastEmittedTimer.elapsed() >= minInterval) {
         KIS_SAFE_ASSERT_RECOVER_NOOP(!isFromTimer || !m_isEmitting);
 
-        m_lastEmittedTimer.start();
+        if (m_slowHandlerMode == PRECISE_INTERVAL) {
+            m_lastEmittedTimer.start();
+        }
+
         m_signalsPending = false;
         if (!tryEmitSignalSafely()) {
             m_signalsPending = true;
         }
+
+        if (m_slowHandlerMode == ADDITIVE_INTERVAL) {
+            m_lastEmittedTimer.start();
+        }
+
         wasEmitted = true;
     } else if (!isFromTimer) {
         m_signalsPending = true;

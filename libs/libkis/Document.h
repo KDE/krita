@@ -45,7 +45,7 @@ class KRITALIBKIS_EXPORT Document : public QObject
     Q_DISABLE_COPY(Document)
 
 public:
-    explicit Document(KisDocument *document, QObject *parent = 0);
+    explicit Document(KisDocument *document, bool ownsDocument, QObject *parent = 0);
     ~Document() override;
 
     bool operator==(const Document &other) const;
@@ -765,15 +765,9 @@ print(root.childNodes())
      */
     QRect bounds() const;
 
-
-
-
-
-
-
     /****
      * Animation Related API
-    *****/
+     *****/
 
 
     /**
@@ -860,7 +854,7 @@ private:
     friend class Filter;
     friend class View;
     QPointer<KisDocument> document() const;
-
+    void setOwnsDocument(bool ownsDocument);
 
 private:
     struct Private;

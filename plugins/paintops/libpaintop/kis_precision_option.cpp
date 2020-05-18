@@ -25,16 +25,31 @@ void KisPrecisionOption::writeOptionSetting(KisPropertiesConfigurationSP setting
 {
     settings->setProperty(PRECISION_LEVEL, m_precisionLevel);
     settings->setProperty(AUTO_PRECISION_ENABLED,m_autoPrecisionEnabled);
-    settings->setProperty(STARTING_SIZE,m_sizeToStartFrom);
-    settings->setProperty(DELTA_VALUE,m_deltaValue);
 }
 
 void KisPrecisionOption::readOptionSetting(const KisPropertiesConfigurationSP settings)
 {
     m_precisionLevel = settings->getInt(PRECISION_LEVEL, 5);
     m_autoPrecisionEnabled = settings->getBool(AUTO_PRECISION_ENABLED,false);
-    m_deltaValue = settings->getDouble(DELTA_VALUE,15.00);
-    m_sizeToStartFrom = settings ->getDouble(STARTING_SIZE,0);
+}
+
+int KisPrecisionOption::effectivePrecisionLevel(qreal effectiveDabSize) const
+{
+    if (!m_autoPrecisionEnabled) {
+        return m_precisionLevel;
+    } else {
+        return effectiveDabSize < 30.0 || !m_hasImprecisePositionOptions ? 5 : 3;
+    }
+}
+
+void KisPrecisionOption::setHasImprecisePositionOptions(bool value)
+{
+    m_hasImprecisePositionOptions = value;
+}
+
+bool KisPrecisionOption::hasImprecisePositionOptions() const
+{
+    return m_hasImprecisePositionOptions;
 }
 
 int KisPrecisionOption::precisionLevel() const
@@ -46,56 +61,13 @@ void KisPrecisionOption::setPrecisionLevel(int precisionLevel)
 {
     m_precisionLevel = precisionLevel;
 }
+
 void KisPrecisionOption::setAutoPrecisionEnabled(int value)
 {
     m_autoPrecisionEnabled = value;
 }
 
-void KisPrecisionOption::setDeltaValue(double value)
-{
-    m_deltaValue = value;
-}
-
-void KisPrecisionOption::setSizeToStartFrom(double value)
-{
-    m_sizeToStartFrom = value;
-}
 bool KisPrecisionOption::autoPrecisionEnabled()
 {
     return m_autoPrecisionEnabled;
-}
-
-double KisPrecisionOption::deltaValue()
-{
-    return m_deltaValue;
-}
-
-double KisPrecisionOption::sizeToStartFrom()
-{
-    return m_sizeToStartFrom;
-}
-void KisPrecisionOption::setAutoPrecision(double brushSize)
-{
-    double deltaValue = this->deltaValue();
-    double sizeToStartFrom = this ->sizeToStartFrom();
-    if (brushSize < sizeToStartFrom + deltaValue)
-    {
-        this->setPrecisionLevel(5);
-    }
-    else if (brushSize >= sizeToStartFrom + deltaValue && brushSize < sizeToStartFrom + deltaValue*2)
-    {
-        this->setPrecisionLevel(4);
-    }
-    else if (brushSize >= sizeToStartFrom + deltaValue*2 && brushSize < sizeToStartFrom + deltaValue*3)
-    {
-        this->setPrecisionLevel(3);
-    }
-    else if (brushSize >= sizeToStartFrom + deltaValue*3 && brushSize < sizeToStartFrom + deltaValue*4)
-    {
-        this->setPrecisionLevel(2);
-    }
-    else if (brushSize >= sizeToStartFrom + deltaValue*4)
-    {
-        this->setPrecisionLevel(1);
-    }
 }

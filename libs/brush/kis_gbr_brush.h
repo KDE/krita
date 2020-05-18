@@ -23,7 +23,7 @@
 #include <QImage>
 #include <QVector>
 
-#include "kis_scaling_size_brush.h"
+#include "KisColorfulBrush.h"
 #include <kis_types.h>
 #include <kis_shared.h>
 #include <brushengine/kis_paint_information.h>
@@ -36,7 +36,7 @@ typedef KisSharedPtr<KisQImagemask> KisQImagemaskSP;
 class QString;
 class QIODevice;
 
-class BRUSH_EXPORT KisGbrBrush : public KisScalingSizeBrush
+class BRUSH_EXPORT KisGbrBrush : public KisColorfulBrush
 {
 
 protected:
@@ -67,23 +67,14 @@ public:
     bool saveToDevice(QIODevice* dev) const override;
 
     /**
-     * @return a preview of the brush
-     */
-    QImage brushTipImage() const override;
-    /**
-     * If the brush image data are colorful (e.g. you created the brush from the canvas with custom brush)
-     * and you want to paint with it as with masks, set to true.
-     */
-    virtual void setUseColorAsMask(bool useColorAsMask);
-
-    virtual bool useColorAsMask() const;
-
-    /**
      * Convert the mask to inverted gray scale, so it is alpha mask.
-     * It can be used as MASK brush type. This operates on the date of the brush,
-     * so it destruct the original brush data
+     * It can be used as MASK brush type. This operates on the data of the brush,
+     * so it destruct the original brush data.
+     *
+     * @param preserveAlpha convert to grayscale, but save as full RGBA format, to allow
+     *                      preserving lightness option
      */
-    virtual void makeMaskImage();
+    virtual void makeMaskImage(bool preserveAlpha);
 
     enumBrushType brushType() const override;
 

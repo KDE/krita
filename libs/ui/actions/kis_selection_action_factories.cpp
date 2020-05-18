@@ -223,7 +223,8 @@ void KisFillActionFactory::run(const QString &fillSource, KisViewManager *view)
     }
 
     KisProcessingVisitorSP visitor =
-        new FillProcessingVisitor(QPoint(0, 0), // start position
+        new FillProcessingVisitor(resources->image()->projection(),
+                                  QPoint(0, 0), // start position
                                   selection,
                                   resources,
                                   false, // fast mode
@@ -232,7 +233,7 @@ void KisFillActionFactory::run(const QString &fillSource, KisViewManager *view)
                                   0, // feathering radius
                                   0, // sizemod
                                   80, // threshold,
-                                  false, // unmerged
+                                  false, // use unmerged
                                   useBgColor);
 
     applicator.applyVisitor(visitor,

@@ -23,6 +23,8 @@
 
 #include <QScopedPointer>
 
+class KisRegion;
+
 class KisImageAnimationInterface;
 
 
@@ -41,7 +43,7 @@ public:
      * background without ending/cancelling any running actions
      */
     KisRegenerateFrameStrokeStrategy(int frameId,
-                                     const QRegion &dirtyRegion,
+                                     const KisRegion &dirtyRegion,
                                      KisImageAnimationInterface *interface);
 
     /**

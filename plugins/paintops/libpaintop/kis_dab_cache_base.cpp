@@ -36,15 +36,16 @@ struct PrecisionValues {
     qreal sizeFrac;
     qreal subPixel;
     qreal softnessFactor;
+    qreal ratio;
 };
 
 const qreal eps = 1e-6;
 static const PrecisionValues precisionLevels[] = {
-    {M_PI / 180, 0.05,   1, 0.01},
-    {M_PI / 180, 0.01,   1, 0.01},
-    {M_PI / 180,    0,   1, 0.01},
-    {M_PI / 180,    0, 0.5, 0.01},
-    {eps,         0, eps,  eps}
+    {M_PI / 180, 0.05,   1, 0.01, 0.05},
+    {M_PI / 180, 0.01,   1, 0.01, 0.01},
+    {M_PI / 180,    0,   1, 0.01,  eps},
+    {M_PI / 180,    0, 0.5, 0.01,  eps},
+    {       eps,    0, eps,  eps,  eps}
 };
 
 struct KisDabCacheBase::SavedDabParameters {
@@ -55,6 +56,7 @@ struct KisDabCacheBase::SavedDabParameters {
     qreal subPixelX;
     qreal subPixelY;
     qreal softnessFactor;
+    qreal ratio;
     int index;
     MirrorProperties mirrorProperties;
 
@@ -68,6 +70,7 @@ struct KisDabCacheBase::SavedDabParameters {
                qAbs(subPixelX - rhs.subPixelX) <= prec.subPixel &&
                qAbs(subPixelY - rhs.subPixelY) <= prec.subPixel &&
                qAbs(softnessFactor - rhs.softnessFactor) <= prec.softnessFactor &&
+               qAbs(ratio - rhs.ratio) <= prec.ratio &&
                index == rhs.index &&
                mirrorProperties.horizontalMirror == rhs.mirrorProperties.horizontalMirror &&
                mirrorProperties.verticalMirror == rhs.mirrorProperties.verticalMirror;
@@ -138,6 +141,7 @@ KisDabCacheBase::getDabParameters(KisBrushSP brush,
     params.softnessFactor = softnessFactor;
     params.index = brush->brushIndex(info);
     params.mirrorProperties = mirrorProperties;
+    params.ratio = shape.ratio();
 
     return params;
 }
@@ -267,12 +271,10 @@ void KisDabCacheBase::fetchDabGenerationInfo(bool hasDabInCache,
                                                     di->softnessFactor,
                                                     di->mirrorProperties);
 
-    int precisionLevel = 3;
+    int precisionLevel = 4;
     if (m_d->precisionOption) {
-        if (m_d->precisionOption->autoPrecisionEnabled()) {
-            m_d->precisionOption->setAutoPrecision(resources->brush->userEffectiveSize());
-        }
-        precisionLevel = m_d->precisionOption->precisionLevel() - 1;
+        const int effectiveDabSize = qMin(newParams.width, newParams.height);
+        precisionLevel = m_d->precisionOption->effectivePrecisionLevel(effectiveDabSize) - 1;
     }
     *shouldUseCache = hasDabInCache && di->solidColorFill &&
             newParams.compare(m_d->lastSavedDabParameters, precisionLevel);

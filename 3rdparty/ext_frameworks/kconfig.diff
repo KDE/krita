@@ -1,51 +1,33 @@
 diff --git a/docs/options.md b/docs/options.md
-index c634c00..5e59219 100644
+index 4a6e9bc..caca9f8 100644
 --- a/docs/options.md
 +++ b/docs/options.md
-@@ -96,4 +96,4 @@ They are:
+@@ -93,4 +93,4 @@ They are:
  
  * `$QT_CACHE_HOME` - QStandardPaths::GenericCacheLocation
  * `$QT_CONFIG_HOME` - QStandardPaths::GenericConfigLocation
 -* `$QT_DATA_HOME` - QStandardPaths::GenericDataLocation
 +* `$QT_DATA_HOME` - QStandardPaths::AppDataLocation
-diff --git a/src/core/kconfig.cpp b/src/core/kconfig.cpp
-index e1b11ed..e3511cf 100644
---- a/src/core/kconfig.cpp
-+++ b/src/core/kconfig.cpp
-@@ -237,7 +237,7 @@ QString KConfigPrivate::expandString(const QString &value)
-                         env = QString::fromLocal8Bit(pEnv.constData());
-                     } else {
-                         if (aVarName == QStringLiteral("QT_DATA_HOME")) {
--                            env = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
-+                            env = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-                         } else if (aVarName == QStringLiteral("QT_CONFIG_HOME")) {
-                             env = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
-                         } else if (aVarName == QStringLiteral("QT_CACHE_HOME")) {
 diff --git a/src/core/kdesktopfile.cpp b/src/core/kdesktopfile.cpp
-index d9283ce..f869fb0 100644
+index 18ef852..c9691a0 100644
 --- a/src/core/kdesktopfile.cpp
 +++ b/src/core/kdesktopfile.cpp
-@@ -89,8 +89,8 @@ QString KDesktopFile::locateLocal(const QString &path)
-         }
-     }
-     // Relative to xdg data dir? (much more common)
--    const QStringList lstGenericDataLocation = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
--    for (const QString &dir : lstGenericDataLocation) {
+@@ -82,11 +82,11 @@ QString KDesktopFile::locateLocal(const QString &path)
+     QString relativePath;
+     QChar plus(QLatin1Char('/'));
+     // Relative to config? (e.g. for autostart)
+-    const QStringList lstGenericConfigLocation = QStandardPaths::standardLocations(QStandardPaths::GenericConfigLocation);
+-    for (const QString &dir : lstGenericConfigLocation) {
 +    const QStringList lstAppDataLocation = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation);
 +    for (const QString &dir : lstAppDataLocation) {
          if (path.startsWith(dir + plus)) {
              relativePath = path.mid(dir.length() + 1);
+-            return QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QLatin1Char('/') + relativePath;
++            return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1Char('/') + relativePath;
          }
-@@ -99,7 +99,7 @@ QString KDesktopFile::locateLocal(const QString &path)
-         // What now? The desktop file doesn't come from XDG_DATA_DIRS. Use filename only and hope for the best.
-         relativePath = path.mid(path.lastIndexOf(QLatin1Char('/')) + 1);
      }
--    return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1Char('/') + relativePath;
-+    return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1Char('/') + relativePath;
- }
- 
- bool KDesktopFile::isDesktopFile(const QString &path)
-@@ -136,8 +136,8 @@ bool KDesktopFile::isAuthorizedDesktopFile(const QString &path)
+     // Relative to xdg data dir? (much more common)
+@@ -137,8 +137,8 @@ bool KDesktopFile::isAuthorizedDesktopFile(const QString &path)
          }
      }
      const QString servicesDir = QStringLiteral("kservices5/"); // KGlobal::dirs()->xdgDataRelativePath("services")
@@ -57,7 +39,7 @@ index d9283ce..f869fb0 100644
              const QString prefix = QFileInfo(xdgDataPrefix).canonicalFilePath();
              if (realPath.startsWith(prefix + QLatin1Char('/') + servicesDir, sensitivity)) {
 diff --git a/src/kconf_update/kconf_update.cpp b/src/kconf_update/kconf_update.cpp
-index f6c7653..f9b83ac 100644
+index 2c48fa3..580d89c 100644
 --- a/src/kconf_update/kconf_update.cpp
 +++ b/src/kconf_update/kconf_update.cpp
 @@ -145,7 +145,7 @@ KonfUpdate::KonfUpdate(QCommandLineParser *parser)
@@ -78,11 +60,11 @@ index f6c7653..f9b83ac 100644
      for (const QString &d : dirs) {
          const QDir dir(d);
  
-@@ -751,7 +751,7 @@ void KonfUpdate::gotScript(const QString &_script)
+@@ -754,7 +754,7 @@ void KonfUpdate::gotScript(const QString &_script)
          return;
      }
  
--    QString path = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("kconf_update/") + script);
+-    QString path = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("kconf_update/") + script);
 +    QString path = QStandardPaths::locate(QStandardPaths::AppDataLocation, QStringLiteral("kconf_update/") + script);
      if (path.isEmpty()) {
          if (interpreter.isEmpty()) {

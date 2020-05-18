@@ -36,6 +36,7 @@
 #include "kis_tool_select_elliptical.h"
 #include "kis_tool_select_path.h"
 #include "kis_tool_select_similar.h"
+#include "KisToolSelectMagnetic.h"
 
 K_PLUGIN_FACTORY_WITH_JSON(SelectionToolsFactory, "kritaselectiontools.json", registerPlugin<SelectionTools>();)
 
@@ -50,6 +51,7 @@ SelectionTools::SelectionTools(QObject *parent, const QVariantList &)
     KoToolRegistry::instance()->add(new KisToolSelectContiguousFactory());
     KoToolRegistry::instance()->add(new KisToolSelectPathFactory());
     KoToolRegistry::instance()->add(new KisToolSelectSimilarFactory());
+    KoToolRegistry::instance()->add(new KisToolSelectMagneticFactory());
 }
 
 SelectionTools::~SelectionTools()

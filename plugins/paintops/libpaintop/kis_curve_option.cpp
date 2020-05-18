@@ -42,15 +42,8 @@ KisCurveOption::KisCurveOption(const QString& name, KisPaintOpOption::PaintopCat
     setValueRange(min, max);
     setValue(value);
 
-    QList<QPointF> points;
-    // needs to be set to something, weird curve is better for debugging
-    // it will be reset to the curve from the preset anyway though
-    points.push_back(QPointF(0,0));
-    points.push_back(QPointF(0.25,0.9));
-    points.push_back(QPointF(0.5,0));
-    points.push_back(QPointF(0.75,0.6));
-    points.push_back(QPointF(1,0));
-    m_commonCurve = KisCubicCurve(points);
+
+    m_commonCurve = defaultCurve();
 }
 
 KisCurveOption::~KisCurveOption()
@@ -212,6 +205,8 @@ void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisProp
                 s->setCurve(setting->getCubicCurve("Curve" + prefix));
                 commonCurve = s->curve();
             }
+        } else {
+            commonCurve = emptyCurve();
         }
     }
 
@@ -447,6 +442,27 @@ qreal KisCurveOption::computeRotationLikeValue(const KisPaintInformation& info, 
 {
     const ValueComponents components = computeValueComponents(info);
     return components.rotationLikeValue(baseValue, absoluteAxesFlipped);
+}
+
+KisCubicCurve KisCurveOption::defaultCurve()
+{
+    QList<QPointF> points;
+    // needs to be set to something, weird curve is better for debugging
+    // it will be reset to the curve from the preset anyway though
+    points.push_back(QPointF(0,0));
+    points.push_back(QPointF(0.25,0.9));
+    points.push_back(QPointF(0.5,0));
+    points.push_back(QPointF(0.75,0.6));
+    points.push_back(QPointF(1,0));
+    return KisCubicCurve(points);
+}
+
+KisCubicCurve KisCurveOption::emptyCurve()
+{
+    QList<QPointF> points;
+    points.push_back(QPointF(0,0));
+    points.push_back(QPointF(1,1));
+    return KisCubicCurve(points);
 }
 
 QList<KisDynamicSensorSP> KisCurveOption::sensors()

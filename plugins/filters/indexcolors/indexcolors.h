@@ -50,7 +50,7 @@ public:
         return KoID("indexcolors", i18n("Index Colors"));
     }
 protected:
-    KisFilterConfigurationSP factoryConfiguration() const override;
+    KisFilterConfigurationSP defaultConfiguration() const override;
 };
 
 class KisIndexColorTransformation : public KoColorTransformation

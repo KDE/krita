@@ -31,7 +31,17 @@
 bool KoSvgPaste::hasShapes()
 {
     const QMimeData *mimeData = QApplication::clipboard()->mimeData();
-    return mimeData && mimeData->hasFormat("image/svg+xml");
+    bool hasSvg = false;
+    if (mimeData) {
+        Q_FOREACH(const QString &format, mimeData->formats()) {
+            if (format.toLower().contains("svg")) {
+                hasSvg = true;
+                break;
+            }
+        }
+    }
+
+    return hasSvg;
 }
 
 QList<KoShape*> KoSvgPaste::fetchShapes(const QRectF viewportInPx, qreal resolutionPPI, QSizeF *fragmentSize)
@@ -41,7 +51,15 @@ QList<KoShape*> KoSvgPaste::fetchShapes(const QRectF viewportInPx, qreal resolut
     const QMimeData *mimeData = QApplication::clipboard()->mimeData();
     if (!mimeData) return shapes;
 
-    QByteArray data = mimeData->data("image/svg+xml");
+    QByteArray data;
+
+    Q_FOREACH(const QString &format, mimeData->formats()) {
+        if (format.toLower().contains("svg")) {
+            data = mimeData->data(format);
+            break;
+        }
+    }
+
     if (data.isEmpty()) {
         return shapes;
     }

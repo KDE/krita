@@ -70,6 +70,8 @@
 
 #include <KoShapeTransformCommand.h>
 
+#include "kis_action_registry.h"
+
 #include "widgets/kis_progress_widget.h"
 
 #include "kis_transform_utils.h"
@@ -212,13 +214,6 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
         m_refRect = newRefRect;
         currentStrategy()->externalConfigChanged();
     }
-
-    gc.save();
-    if (m_optionsWidget && m_optionsWidget->showDecorations()) {
-        gc.setOpacity(0.3);
-        gc.fillPath(m_selectionPath, Qt::black);
-    }
-    gc.restore();
 
     currentStrategy()->paint(gc);
 
@@ -651,16 +646,6 @@ void KisToolTransform::initGuiAfterTransformMode()
     setFunctionalCursor();
 }
 
-void KisToolTransform::updateSelectionPath(const QPainterPath &selectionOutline)
-{
-    m_selectionPath = selectionOutline;
-
-    const KisCoordinatesConverter *converter = m_canvas->coordinatesConverter();
-    QTransform i2f = converter->imageToDocumentTransform() * converter->documentToFlakeTransform();
-
-    m_selectionPath = i2f.map(selectionOutline);
-}
-
 void KisToolTransform::initThumbnailImage(KisPaintDeviceSP previewDevice)
 {
     QImage origImg;
@@ -709,6 +694,22 @@ void KisToolTransform::initThumbnailImage(KisPaintDeviceSP previewDevice)
 void KisToolTransform::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     KisTool::activate(toolActivation, shapes);
+    m_actionConnections.addConnection(action("movetool-move-up"), SIGNAL(triggered(bool)),
+                                      this, SLOT(slotMoveDiscreteUp()));
+    m_actionConnections.addConnection(action("movetool-move-up-more"), SIGNAL(triggered(bool)),
+                                      this, SLOT(slotMoveDiscreteUpMore()));
+    m_actionConnections.addConnection(action("movetool-move-down"), SIGNAL(triggered(bool)),
+                                      this, SLOT(slotMoveDiscreteDown()));
+    m_actionConnections.addConnection(action("movetool-move-down-more"), SIGNAL(triggered(bool)),
+                                      this, SLOT(slotMoveDiscreteDownMore()));
+    m_actionConnections.addConnection(action("movetool-move-left"), SIGNAL(triggered(bool)),
+                                      this, SLOT(slotMoveDiscreteLeft()));
+    m_actionConnections.addConnection(action("movetool-move-left-more"), SIGNAL(triggered(bool)),
+                                      this, SLOT(slotMoveDiscreteLeftMore()));
+    m_actionConnections.addConnection(action("movetool-move-right"), SIGNAL(triggered(bool)),
+                                      this, SLOT(slotMoveDiscreteRight()));
+    m_actionConnections.addConnection(action("movetool-move-right-more"), SIGNAL(triggered(bool)),
+                                      this, SLOT(slotMoveDiscreteRightMore()));
 
     if (currentNode()) {
         m_transaction = TransformTransactionProperties(QRectF(), &m_currentArgs, KisNodeSP(), {});
@@ -721,12 +722,13 @@ void KisToolTransform::deactivate()
 {
     endStroke();
     m_canvas->updateCanvas();
+    m_actionConnections.clear();
     KisTool::deactivate();
 }
 
 void KisToolTransform::requestUndoDuringStroke()
 {
-    if (!m_strokeId) return;
+    if (!m_strokeId || !m_transaction.rootNode()) return;
 
     if (m_changesTracker.isEmpty()) {
         cancelStroke();
@@ -742,7 +744,7 @@ void KisToolTransform::requestStrokeEnd()
 
 void KisToolTransform::requestStrokeCancellation()
 {
-    if (m_currentArgs.isIdentity()) {
+    if (!m_transaction.rootNode() || m_currentArgs.isIdentity()) {
         cancelStroke();
     } else {
         slotResetTransform();
@@ -768,12 +770,21 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
         currentNode->inherits("KisCloneLayer")) {
 
         KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-        kisCanvas->viewManager()->
-            showFloatingMessage(
-                i18nc("floating message in transformation tool",
-                      "Layer type cannot use the transform tool"),
-                 koIcon("object-locked"), 4000, KisFloatingMessage::High);
 
+        if(currentNode->inherits("KisColorizeMask")){
+            kisCanvas->viewManager()->
+                showFloatingMessage(
+                    i18nc("floating message in transformation tool",
+                          "Layer type cannot use the transform tool"),
+                    koIcon("object-locked"), 4000, KisFloatingMessage::High);
+        }
+        else{
+            kisCanvas->viewManager()->
+                showFloatingMessage(
+                    i18nc("floating message in transformation tool",
+                          "Layer type cannot use the transform tool. Use transform mask instead."),
+                    koIcon("object-locked"), 4000, KisFloatingMessage::High);
+        }
         return;
     }
 
@@ -800,36 +811,42 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
     }
 
     TransformStrokeStrategy *strategy = new TransformStrokeStrategy(mode, m_workRecursively, m_currentArgs.filterId(), forceReset, currentNode, selection, image().data(), image().data());
-    connect(strategy, SIGNAL(sigPreviewDeviceReady(KisPaintDeviceSP, QPainterPath)), SLOT(slotPreviewDeviceGenerated(KisPaintDeviceSP, QPainterPath)));
-    connect(strategy, SIGNAL(sigTransactionGenerated(TransformTransactionProperties, ToolTransformArgs)), SLOT(slotTransactionGenerated(TransformTransactionProperties, ToolTransformArgs)));
+    connect(strategy, SIGNAL(sigPreviewDeviceReady(KisPaintDeviceSP)), SLOT(slotPreviewDeviceGenerated(KisPaintDeviceSP)));
+    connect(strategy, SIGNAL(sigTransactionGenerated(TransformTransactionProperties, ToolTransformArgs, void*)), SLOT(slotTransactionGenerated(TransformTransactionProperties, ToolTransformArgs, void*)));
 
+    // save unique identifier of the stroke so we could
+    // recognize it when sigTransactionGenerated() is
+    // received (theoretically, the user can start two
+    // strokes at the same time, if he is quick enough)
+    m_strokeStrategyCookie = strategy;
     m_strokeId = image()->startStroke(strategy);
 
     KIS_SAFE_ASSERT_RECOVER_NOOP(m_changesTracker.isEmpty());
 
-    slotPreviewDeviceGenerated(0, QPainterPath());
+    slotPreviewDeviceGenerated(0);
 }
 
 void KisToolTransform::endStroke()
 {
     if (!m_strokeId) return;
 
-    if (!m_currentArgs.isIdentity()) {
+    if (m_transaction.rootNode() && !m_currentArgs.isIdentity()) {
         image()->addJob(m_strokeId,
                         new TransformStrokeStrategy::TransformAllData(m_currentArgs));
-        image()->endStroke(m_strokeId);
-    } else {
-        image()->cancelStroke(m_strokeId);
     }
+    image()->endStroke(m_strokeId);
 
+    m_strokeStrategyCookie = 0;
     m_strokeId.clear();
     m_changesTracker.reset();
     m_transaction = TransformTransactionProperties(QRectF(), &m_currentArgs, KisNodeSP(), {});
     outlineChanged();
 }
 
-void KisToolTransform::slotTransactionGenerated(TransformTransactionProperties transaction, ToolTransformArgs args)
+void KisToolTransform::slotTransactionGenerated(TransformTransactionProperties transaction, ToolTransformArgs args, void *strokeStrategyCookie)
 {
+    if (!m_strokeId || strokeStrategyCookie != m_strokeStrategyCookie) return;
+
     if (transaction.transformedNodes().isEmpty()) {
         KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
         kisCanvas->viewManager()->
@@ -861,7 +878,7 @@ void KisToolTransform::slotTransactionGenerated(TransformTransactionProperties t
     }
 }
 
-void KisToolTransform::slotPreviewDeviceGenerated(KisPaintDeviceSP device, const QPainterPath &selectionOutline)
+void KisToolTransform::slotPreviewDeviceGenerated(KisPaintDeviceSP device)
 {
     if (device && device->exactBounds().isEmpty()) {
         KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
@@ -874,7 +891,6 @@ void KisToolTransform::slotPreviewDeviceGenerated(KisPaintDeviceSP device, const
         cancelStroke();
     } else {
         initThumbnailImage(device);
-        updateSelectionPath(selectionOutline);
         initGuiAfterTransformMode();
     }
 }
@@ -883,21 +899,17 @@ void KisToolTransform::cancelStroke()
 {
     if (!m_strokeId) return;
 
-    if (m_currentArgs.continuedTransform()) {
-        m_currentArgs.restoreContinuedState();
-        endStroke();
-    } else {
-        image()->cancelStroke(m_strokeId);
-        m_strokeId.clear();
-        m_changesTracker.reset();
-        m_transaction = TransformTransactionProperties(QRectF(), &m_currentArgs, KisNodeSP(), {});
-        outlineChanged();
-    }
+    image()->cancelStroke(m_strokeId);
+    m_strokeStrategyCookie = 0;
+    m_strokeId.clear();
+    m_changesTracker.reset();
+    m_transaction = TransformTransactionProperties(QRectF(), &m_currentArgs, KisNodeSP(), {});
+    outlineChanged();
 }
 
 void KisToolTransform::commitChanges()
 {
-    if (!m_strokeId) return;
+    if (!m_strokeId || !m_transaction.rootNode()) return;
 
     m_changesTracker.commitConfig(toQShared(m_currentArgs.clone()));
 }
@@ -1033,6 +1045,8 @@ void KisToolTransform::slotApplyTransform()
 
 void KisToolTransform::slotResetTransform()
 {
+    if (!m_strokeId || !m_transaction.rootNode()) return;
+
     if (m_currentArgs.continuedTransform()) {
         ToolTransformArgs::TransformMode savedMode = m_currentArgs.mode();
 
@@ -1068,7 +1082,7 @@ void KisToolTransform::slotResetTransform()
 
 void KisToolTransform::slotRestartTransform()
 {
-    if (!m_strokeId) return;
+    if (!m_strokeId || !m_transaction.rootNode()) return;
 
     KisNodeSP root = m_transaction.rootNode();
     KIS_ASSERT_RECOVER_RETURN(root); // the stroke is guaranteed to be started by an 'if' above
@@ -1081,6 +1095,46 @@ void KisToolTransform::slotRestartTransform()
 void KisToolTransform::slotEditingFinished()
 {
     commitChanges();
+}
+
+void KisToolTransform::slotMoveDiscreteUp()
+{
+    setTranslateY(translateY()-1.0);
+}
+
+void KisToolTransform::slotMoveDiscreteUpMore()
+{
+    setTranslateY(translateY()-10.0);
+}
+
+void KisToolTransform::slotMoveDiscreteDown()
+{
+    setTranslateY(translateY()+1.0);
+}
+
+void KisToolTransform::slotMoveDiscreteDownMore()
+{
+    setTranslateY(translateY()+10.0);
+}
+
+void KisToolTransform::slotMoveDiscreteLeft()
+{
+    setTranslateX(translateX()-1.0);
+}
+
+void KisToolTransform::slotMoveDiscreteLeftMore()
+{
+    setTranslateX(translateX()-10.0);
+}
+
+void KisToolTransform::slotMoveDiscreteRight()
+{
+    setTranslateX(translateX()+1.0);
+}
+
+void KisToolTransform::slotMoveDiscreteRightMore()
+{
+    setTranslateX(translateX()+10.0);
 }
 
 void KisToolTransform::slotUpdateToWarpType()
@@ -1136,4 +1190,21 @@ void KisToolTransform::setTranslateY(double translation)
 void KisToolTransform::setTranslateX(double translation)
 {
     m_optionsWidget->slotSetTranslateX(translation);
+}
+
+QList<QAction *> KisToolTransformFactory::createActionsImpl()
+{
+    KisActionRegistry *actionRegistry = KisActionRegistry::instance();
+    QList<QAction *> actions = KisToolPaintFactoryBase::createActionsImpl();
+
+    actions << actionRegistry->makeQAction("movetool-move-up");
+    actions << actionRegistry->makeQAction("movetool-move-down");
+    actions << actionRegistry->makeQAction("movetool-move-left");
+    actions << actionRegistry->makeQAction("movetool-move-right");
+    actions << actionRegistry->makeQAction("movetool-move-up-more");
+    actions << actionRegistry->makeQAction("movetool-move-down-more");
+    actions << actionRegistry->makeQAction("movetool-move-left-more");
+    actions << actionRegistry->makeQAction("movetool-move-right-more");
+
+    return actions;
 }

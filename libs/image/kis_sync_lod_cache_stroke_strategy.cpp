@@ -67,7 +67,7 @@ struct KisSyncLodCacheStrokeStrategy::Private
 };
 
 KisSyncLodCacheStrokeStrategy::KisSyncLodCacheStrokeStrategy(KisImageWSP image, bool forgettable)
-    : KisSimpleStrokeStrategy("SyncLodCacheStroke", kundo2_i18n("Instant Preview")),
+    : KisSimpleStrokeStrategy(QLatin1String("SyncLodCacheStroke"), kundo2_i18n("Instant Preview")),
       m_d(new Private)
 {
     m_d->image = image;
@@ -154,7 +154,7 @@ QList<KisStrokeJobData*> KisSyncLodCacheStrokeStrategy::createJobsData(KisImageW
     }
 
     Q_FOREACH (KisPaintDeviceSP device, deviceList) {
-        QRegion region = device->regionForLodSyncing();
+        KisRegion region = device->regionForLodSyncing();
         QVector<QRect> rects = splitRegionIntoPatches(region, optimalPatchSize());
 
         Q_FOREACH (const QRect &rc, rects) {

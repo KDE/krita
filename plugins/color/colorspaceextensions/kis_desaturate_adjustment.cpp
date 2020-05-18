@@ -58,7 +58,7 @@ public:
             g = SCALE_TO_FLOAT(src->green);
             b = SCALE_TO_FLOAT(src->blue);
 
-            // http://www.tannerhelland.com/3643/grayscale-image-algorithm-vb6/
+            // https://www.tannerhelland.com/3643/grayscale-image-algorithm-vb6/
             switch(m_type) {
             case 0: // lightness
             {
@@ -143,7 +143,7 @@ public:
 
 private:
 
-    int m_type;
+    int m_type {0};
 
 };
 

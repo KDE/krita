@@ -49,7 +49,6 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
     void updateSettings();
-    void reactOnLayerChange();
 
 protected:
     void resizeEvent(QResizeEvent *) override;

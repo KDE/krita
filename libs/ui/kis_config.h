@@ -22,6 +22,7 @@
 #include <QStringList>
 #include <QList>
 #include <QColor>
+#include <QObject>
 
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
@@ -48,12 +49,18 @@ public:
 
     ~KisConfig();
 
+public Q_SLOTS:
+    /// Log the most interesting settings to the usage log
+    void logImportantSettings() const;
+public:
+
     bool disableTouchOnCanvas(bool defaultValue = false) const;
     void setDisableTouchOnCanvas(bool value) const;
 
     bool disableTouchRotation(bool defaultValue = false) const;
     void setDisableTouchRotation(bool value) const;
 
+    // XXX Unused?
     bool useProjections(bool defaultValue = false) const;
     void setUseProjections(bool useProj) const;
 
@@ -189,6 +196,7 @@ public:
     bool useOpenGLTextureBuffer(bool defaultValue = false) const;
     void setUseOpenGLTextureBuffer(bool useBuffer);
 
+    // XXX Unused?
     bool disableVSync(bool defaultValue = false) const;
     void setDisableVSync(bool disableVSync);
 
@@ -519,6 +527,9 @@ public:
     bool compressKra(bool defaultValue = false) const;
     void setCompressKra(bool compress);
 
+    bool trimKra(bool defaultValue = false) const;
+    void setTrimKra(bool trim);
+
     bool toolOptionsInDocker(bool defaultValue = false) const;
     void setToolOptionsInDocker(bool inDocker);
 
@@ -601,6 +612,9 @@ public:
 
     bool useZip64(bool defaultValue = false) const;
     void setUseZip64(bool value);
+
+    bool convertLayerColorSpaceInProperties(bool defaultValue = false) const;
+    void setConvertLayerColorSpaceInProperties(bool value);
 
     template<class T>
     void writeEntry(const QString& name, const T& value) {

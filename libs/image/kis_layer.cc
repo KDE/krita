@@ -184,7 +184,7 @@ struct Q_DECL_HIDDEN KisLayer::Private
     KisPSDLayerStyleSP layerStyle;
     KisLayerStyleProjectionPlaneSP layerStyleProjectionPlane;
 
-    KisAbstractProjectionPlaneSP projectionPlane;
+    KisLayerProjectionPlaneSP projectionPlane;
     KisSafeNodeProjectionStoreSP safeProjection;
 
     KisLayerMasksCache masksCache;
@@ -734,7 +734,7 @@ QRect KisLayer::updateProjection(const QRect& rect, KisNodeSP filthyNode)
     QRect updatedRect = rect;
     KisPaintDeviceSP originalDevice = original();
     if (!rect.isValid() ||
-        (!visible() && !hasClones()) ||
+        (!visible() && !isIsolatedRoot() && !hasClones()) ||
         !originalDevice) return QRect();
 
     if (!needProjection() && !hasEffectMasks()) {
@@ -793,10 +793,11 @@ void KisLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
 KisAbstractProjectionPlaneSP KisLayer::projectionPlane() const
 {
     return m_d->layerStyleProjectionPlane ?
-        KisAbstractProjectionPlaneSP(m_d->layerStyleProjectionPlane) : m_d->projectionPlane;
+        KisAbstractProjectionPlaneSP(m_d->layerStyleProjectionPlane) :
+        KisAbstractProjectionPlaneSP(m_d->projectionPlane);
 }
 
-KisAbstractProjectionPlaneSP KisLayer::internalProjectionPlane() const
+KisLayerProjectionPlaneSP KisLayer::internalProjectionPlane() const
 {
     return m_d->projectionPlane;
 }
@@ -807,6 +808,21 @@ KisPaintDeviceSP KisLayer::projection() const
 
     return needProjection() || hasEffectMasks() ?
         m_d->safeProjection->getDeviceLazy(originalDevice) : originalDevice;
+}
+
+QRect KisLayer::tightUserVisibleBounds() const
+{
+    QRect changeRect = exactBounds();
+
+    /// we do not use incomingChangeRect() here, because
+    /// exactBounds() already takes it into account (it
+    /// was used while preparing original())
+
+    bool changeRectVaries;
+    changeRect = outgoingChangeRect(changeRect);
+    changeRect = masksChangeRect(effectMasks(), changeRect, changeRectVaries);
+
+    return changeRect;
 }
 
 QRect KisLayer::changeRect(const QRect &rect, PositionToFilthy pos) const

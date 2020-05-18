@@ -25,6 +25,7 @@
         <file>dark_tool_contiguous_selection.svg</file>
         <file>dark_tool_crop.svg</file>
         <file>dark_tool_elliptical_selection.svg</file>
+        <file>dark_tool_magnetic_selection.svg</file>
         <file>dark_tool_outline_selection.svg</file>
         <file>dark_tool_pan.svg</file>
         <file>dark_tool_path_selection.svg</file>
@@ -59,6 +60,7 @@
         <file>light_tool_crop.svg</file>
         <file>light_tool_elliptical_selection.svg</file>
         <file>light_tool_outline_selection.svg</file>
+        <file>light_tool_magnetic_selection.svg</file>
         <file>light_tool_pan.svg</file>
         <file>light_tool_path_selection.svg</file>
         <file>light_tool_perspectivegrid.svg</file>

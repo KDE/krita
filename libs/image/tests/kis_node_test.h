@@ -83,7 +83,6 @@ private Q_SLOTS:
     void testOrdering();
     void testSetDirty();
     void testChildNodes();
-    void testDirtyRegion();
 
     void propertiesStressTest();
     void graphStressTest();

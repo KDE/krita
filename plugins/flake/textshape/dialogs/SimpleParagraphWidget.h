@@ -36,7 +36,7 @@ class StylesModel;
 class DockerStylesComboModel;
 class StylesDelegate;
 
-class QSignalMapper;
+class KisSignalMapper;
 
 class SimpleParagraphWidget : public QWidget
 {
@@ -85,7 +85,7 @@ private:
     TextTool *m_tool;
     DirectionButtonState m_directionButtonState;
     KoStyleThumbnailer *m_thumbnailer;
-    QSignalMapper *m_mapper;
+    KisSignalMapper *m_mapper;
 
     StylesModel *m_stylesModel;
     DockerStylesComboModel *m_sortedStylesModel;

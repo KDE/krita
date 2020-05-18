@@ -1,6 +1,6 @@
 LibRaw C++ interface for KDE
 
-This library is a part of digiKam project (http://www.digikam.org)
+This library is a part of digiKam project (https://www.digikam.org)
 
 -- AUTHORS -----------------------------------------------------------
 
@@ -9,7 +9,7 @@ See AUTHORS file for details.
 -- ABOUT -------------------------------------------------------------
 
 Libkdcraw is a C++ interface around LibRaw library used to decode RAW
-picture files. More information about LibRaw can be found at http://www.libraw.org.
+picture files. More information about LibRaw can be found at https://www.libraw.org.
 
 This library is used by kipi-plugins, digiKam and others kipi host programs.
 
@@ -17,11 +17,11 @@ The library documentation is available on header files.
 
 -- DEPENDENCIES -------------------------------------------------------
 
-CMake      >= 2.8.12                   http://www.cmake.org
+CMake      >= 2.8.12                   https://www.cmake.org
 ECM        >= 1.1.0                    https://projects.kde.org/projects/kdesupport/extra-cmake-modules
-libqt      >= 5.2.0                    http://qt-project.org
-libkde     >= 5.0.0                    http://www.kde.org
-libraw     >= 0.16.x                   http://www.libraw.org
+libqt      >= 5.2.0                    https://qt.io
+libkde     >= 5.0.0                    https://www.kde.org
+libraw     >= 0.16.x                   https://www.libraw.org
 
 Note: all library dependencies require development and binary packages installed on your
 computer to compile digiKam.
@@ -58,4 +58,4 @@ or a devel wish.
 The current digiKam bugs and devel wish reported to the Kde bugs report can be seen 
 at this url:
 
-http://bugs.kde.org/buglist.cgi?product=digikam&component=libkdcraw&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED
+https://bugs.kde.org/buglist.cgi?product=digikam&component=libkdcraw&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED

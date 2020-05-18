@@ -34,6 +34,7 @@ void KisProcessingCommand::redo()
     if(!m_visitorExecuted) {
         m_node->accept(*m_visitor, &m_undoAdapter);
         m_visitorExecuted = true;
+        m_visitor = 0;
     }
     else {
         m_undoAdapter.redoAll();

@@ -301,10 +301,12 @@ void KoResourceTaggingManager::updateTaggedResourceView()
 
 void KoResourceTaggingManager::tagChooserIndexChanged(const QString& lineEditText)
 {
-    if (!d->tagChooser->selectedTagIsReadOnly()) {
-        d->currentTag = lineEditText;
+    // HACK This allows tag "All" to be written in kritarc BUG:
+    if (lineEditText == "All" || !d->tagChooser->selectedTagIsReadOnly()) {
         d->tagFilter->allowSave(true);
-        d->model->enableResourceFiltering(true);
+        d->currentTag = lineEditText;
+        d->model->enableResourceFiltering( (lineEditText == "All")? false : true);
+
     } else {
         d->model->enableResourceFiltering(false);
         d->tagFilter->allowSave(false);

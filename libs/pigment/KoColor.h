@@ -84,15 +84,7 @@ public:
         return *this;
     }
 
-    bool operator==(const KoColor &other) const {
-        if (*colorSpace() != *other.colorSpace()) {
-            return false;
-        }
-        if (m_size != other.m_size) {
-            return false;
-        }
-        return memcmp(m_data, other.m_data, m_size) == 0;
-    }
+    bool operator==(const KoColor &other) const;
 
     /// return the current colorSpace
     const KoColorSpace * colorSpace() const {
@@ -201,7 +193,7 @@ public:
 
     /**
      * Serialize this color following Create's swatch color specification available
-     * at http://create.freedesktop.org/wiki/index.php/Swatches_-_colour_file_format
+     * at https://web.archive.org/web/20110826002520/http://create.freedesktop.org/wiki/Swatches_-_colour_file_format/Draft
      *
      * This function doesn't create the \<color /\> element but rather the \<CMYK /\>,
      * \<sRGB /\>, \<RGB /\> ... elements. It is assumed that colorElt is the \<color /\>
@@ -215,7 +207,7 @@ public:
 
     /**
      * Unserialize a color following Create's swatch color specification available
-     * at http://create.freedesktop.org/wiki/index.php/Swatches_-_colour_file_format
+     * at https://web.archive.org/web/20110826002520/http://create.freedesktop.org/wiki/Swatches_-_colour_file_format/Draft
      *
      * @param elt the element to unserialize (\<CMYK /\>, \<sRGB /\>, \<RGB /\>)
      * @param channelDepthId the bit depth is unspecified by the spec, this allow to select
@@ -229,7 +221,7 @@ public:
 
     /**
      * Unserialize a color following Create's swatch color specification available
-     * at http://create.freedesktop.org/wiki/index.php/Swatches_-_colour_file_format
+     * at https://web.archive.org/web/20110826002520/http://create.freedesktop.org/wiki/Swatches_-_colour_file_format/Draft
      *
      * @param elt the element to unserialize (\<CMYK /\>, \<sRGB /\>, \<RGB /\>)
      * @param channelDepthId the bit depth is unspecified by the spec, this allow to select

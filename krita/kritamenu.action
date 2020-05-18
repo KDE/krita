@@ -1656,6 +1656,16 @@
       <isCheckable></isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="reset_configurations">
+      <icon></icon>
+      <text>Reset Krita Configurations</text>
+      <whatsThis></whatsThis>
+      <toolTip>Reset Krita Configurations</toolTip>
+      <iconText>Reset Krita Configurations</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="options_configure_keybinding">
       <icon>configure-shortcuts</icon>
       <text>Configure S&amp;hortcuts...</text>

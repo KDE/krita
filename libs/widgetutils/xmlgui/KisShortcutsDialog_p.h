@@ -93,8 +93,7 @@ public:
 
     QHash<QString, KActionCollection *> m_collections;
     KisShortcutsDialog *q;
-    KisShortcutsEditor *m_shortcutsEditor;
-
+    KisShortcutsEditor *m_shortcutsEditor {0};
     KShortcutSchemesEditor *m_schemeEditor{0};
 };
 

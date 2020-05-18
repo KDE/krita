@@ -55,7 +55,7 @@ struct KisColorizeMask::Private
         : q(_q),
           coloringProjection(new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8())),
           fakePaintDevice(new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8())),
-          filteredSource(new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8())),
+          filteredSource(new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8())),
           needAddCurrentKeyStroke(false),
           showKeyStrokes(true),
           showColoring(true),
@@ -110,7 +110,6 @@ struct KisColorizeMask::Private
     bool showColoring;
 
     KisCachedSelection cachedSelection;
-    KisCachedSelection cachedConversionSelection;
 
     bool needsUpdate;
     int originalSequenceNumber;
@@ -138,8 +137,9 @@ struct KisColorizeMask::Private
     bool shouldShowColoring() const;
 };
 
-KisColorizeMask::KisColorizeMask()
-    : m_d(new Private(this))
+KisColorizeMask::KisColorizeMask(const QString name)
+    : KisEffectMask(name)
+    , m_d(new Private(this))
 {
     connect(&m_d->updateCompressor,
             SIGNAL(timeout()),
@@ -224,6 +224,7 @@ struct SetKeyStrokesColorSpaceCommand : public KUndo2Command {
         }
 
         m_node->setNeedsUpdate(true);
+        emit m_node->sigKeyStrokesListChanged();
     }
 
     void redo() override {
@@ -242,6 +243,7 @@ struct SetKeyStrokesColorSpaceCommand : public KUndo2Command {
         }
 
         m_node->setNeedsUpdate(true);
+        emit m_node->sigKeyStrokesListChanged();
     }
 
 private:
@@ -256,12 +258,10 @@ private:
 };
 
 
-void KisColorizeMask::setProfile(const KoColorProfile *profile)
+void KisColorizeMask::setProfile(const KoColorProfile *profile, KUndo2Command *parentCommand)
 {
-    // WARNING: there is no undo information, used only while loading!
-
-    m_d->fakePaintDevice->setProfile(profile);
-    m_d->coloringProjection->setProfile(profile);
+    m_d->fakePaintDevice->setProfile(profile, parentCommand);
+    m_d->coloringProjection->setProfile(profile, parentCommand);
 
     for (auto stroke : m_d->keyStrokes) {
         stroke.color.setProfile(profile);
@@ -553,9 +553,11 @@ QRect KisColorizeMask::decorateRect(KisPaintDeviceSP &src,
     if (m_d->showKeyStrokes) {
         KisIndirectPaintingSupport::ReadLocker locker(this);
 
-        KisSelectionSP selection = m_d->cachedSelection.getSelection();
-        KisSelectionSP conversionSelection = m_d->cachedConversionSelection.getSelection();
-        KisPixelSelectionSP tempSelection = conversionSelection->pixelSelection();
+        KisCachedSelection::Guard s1(m_d->cachedSelection);
+        KisCachedSelection::Guard s2(m_d->cachedSelection);
+
+        KisSelectionSP selection = s1.selection();
+        KisPixelSelectionSP tempSelection = s2.selection()->pixelSelection();
 
         KisPaintDeviceSP temporaryTarget = this->temporaryTarget();
         const bool isTemporaryTargetErasing = temporaryCompositeOp() == COMPOSITE_ERASE;
@@ -592,9 +594,6 @@ QRect KisColorizeMask::decorateRect(KisPaintDeviceSP &src,
 
             gc.fillSelection(rect, stroke.color);
         }
-
-        m_d->cachedSelection.putSelection(selection);
-        m_d->cachedSelection.putSelection(conversionSelection);
     }
 
     return rect;
@@ -823,14 +822,13 @@ void KisColorizeMask::writeMergeData(KisPainter *painter, KisPaintDeviceSP src)
             painter->bitBlt(rc.topLeft(), src, rc);
         }
     } else {
-        KisSelectionSP conversionSelection = m_d->cachedConversionSelection.getSelection();
-        KisPixelSelectionSP tempSelection = conversionSelection->pixelSelection();
+        KisCachedSelection::Guard s1(m_d->cachedSelection);
+        KisPixelSelectionSP tempSelection = s1.selection()->pixelSelection();
 
         Q_FOREACH (const QRect &rc, src->region().rects()) {
             tempSelection->copyAlphaFrom(src, rc);
             painter->bitBlt(rc.topLeft(), tempSelection, rc);
         }
-        m_d->cachedSelection.putSelection(conversionSelection);
     }
 }
 
@@ -1066,7 +1064,8 @@ void KisColorizeMask::rerenderFakePaintDevice()
     m_d->fakePaintDevice->clear();
     KisFillPainter gc(m_d->fakePaintDevice);
 
-    KisSelectionSP selection = m_d->cachedSelection.getSelection();
+    KisCachedSelection::Guard s1(m_d->cachedSelection);
+    KisSelectionSP selection = s1.selection();
 
     Q_FOREACH (const KeyStroke &stroke, m_d->keyStrokes) {
         const QRect rect = stroke.dev->extent();
@@ -1075,8 +1074,6 @@ void KisColorizeMask::rerenderFakePaintDevice()
         gc.setSelection(selection);
         gc.fillSelection(rect, stroke.color);
     }
-
-    m_d->cachedSelection.putSelection(selection);
 }
 
 void KisColorizeMask::testingAddKeyStroke(KisPaintDeviceSP dev, const KoColor &color, bool isTransparent)

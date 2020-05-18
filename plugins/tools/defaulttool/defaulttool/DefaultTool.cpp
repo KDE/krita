@@ -67,10 +67,11 @@
 
 #include <KoIcon.h>
 
+#include <QPainterPath>
 #include <QPointer>
 #include <QAction>
 #include <QKeyEvent>
-#include <QSignalMapper>
+#include <KisSignalMapper.h>
 #include <KoResourcePaths.h>
 
 #include <KoCanvasController.h>
@@ -213,9 +214,10 @@ public:
     bool tryUseCustomCursor() override {
         if (m_currentHandle.type != KoShapeGradientHandles::Handle::None) {
             q->useCursor(Qt::OpenHandCursor);
+            return true;
         }
 
-        return m_currentHandle.type != KoShapeGradientHandles::Handle::None;
+        return false;
     }
 
 private:
@@ -378,7 +380,7 @@ bool DefaultTool::wantsAutoScroll() const
     return true;
 }
 
-void DefaultTool::addMappedAction(QSignalMapper *mapper, const QString &actionId, int commandType)
+void DefaultTool::addMappedAction(KisSignalMapper *mapper, const QString &actionId, int commandType)
 {
     QAction *a =action(actionId);
     connect(a, SIGNAL(triggered()), mapper, SLOT(map()));
@@ -387,7 +389,7 @@ void DefaultTool::addMappedAction(QSignalMapper *mapper, const QString &actionId
 
 void DefaultTool::setupActions()
 {
-    m_alignSignalsMapper = new QSignalMapper(this);
+    m_alignSignalsMapper = new KisSignalMapper(this);
 
     addMappedAction(m_alignSignalsMapper, "object_align_horizontal_left", KoShapeAlignCommand::HorizontalLeftAlignment);
     addMappedAction(m_alignSignalsMapper, "object_align_horizontal_center", KoShapeAlignCommand::HorizontalCenterAlignment);
@@ -396,7 +398,7 @@ void DefaultTool::setupActions()
     addMappedAction(m_alignSignalsMapper, "object_align_vertical_center", KoShapeAlignCommand::VerticalCenterAlignment);
     addMappedAction(m_alignSignalsMapper, "object_align_vertical_bottom", KoShapeAlignCommand::VerticalBottomAlignment);
 
-    m_distributeSignalsMapper = new QSignalMapper(this);
+    m_distributeSignalsMapper = new KisSignalMapper(this);
 
     addMappedAction(m_distributeSignalsMapper, "object_distribute_horizontal_left", KoShapeDistributeCommand::HorizontalLeftDistribution);
     addMappedAction(m_distributeSignalsMapper, "object_distribute_horizontal_center", KoShapeDistributeCommand::HorizontalCenterDistribution);
@@ -408,7 +410,7 @@ void DefaultTool::setupActions()
     addMappedAction(m_distributeSignalsMapper, "object_distribute_vertical_bottom", KoShapeDistributeCommand::VerticalBottomDistribution);
     addMappedAction(m_distributeSignalsMapper, "object_distribute_vertical_gaps", KoShapeDistributeCommand::VerticalGapsDistribution);
 
-    m_transformSignalsMapper = new QSignalMapper(this);
+    m_transformSignalsMapper = new KisSignalMapper(this);
 
     addMappedAction(m_transformSignalsMapper, "object_transform_rotate_90_cw", TransformRotate90CW);
     addMappedAction(m_transformSignalsMapper, "object_transform_rotate_90_ccw", TransformRotate90CCW);
@@ -417,7 +419,7 @@ void DefaultTool::setupActions()
     addMappedAction(m_transformSignalsMapper, "object_transform_mirror_vertically", TransformMirrorY);
     addMappedAction(m_transformSignalsMapper, "object_transform_reset", TransformReset);
 
-    m_booleanSignalsMapper = new QSignalMapper(this);
+    m_booleanSignalsMapper = new KisSignalMapper(this);
 
     addMappedAction(m_booleanSignalsMapper, "object_unite", BooleanUnion);
     addMappedAction(m_booleanSignalsMapper, "object_intersect", BooleanIntersection);
@@ -691,7 +693,7 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
     KoInteractionTool::paint(painter, converter);
 
     painter.save();
-    KoShape::applyConversion(painter, converter);
+    painter.setTransform(converter.documentToView(), true);
     canvas()->snapGuide()->paint(painter, converter);
     painter.restore();
 }
@@ -966,7 +968,7 @@ void DefaultTool::recalcSelectionBox(KoSelection *selection)
 {
     KIS_ASSERT_RECOVER_RETURN(selection->count());
 
-    QTransform matrix = selection->absoluteTransformation(0);
+    QTransform matrix = selection->absoluteTransformation();
     m_selectionOutline = matrix.map(QPolygonF(selection->outlineRect()));
     m_angle = 0.0;
 
@@ -1194,7 +1196,7 @@ void DefaultTool::selectionTransform(int transformAction)
         QTransform t;
 
         if (!shouldReset) {
-            const QTransform world = shape->absoluteTransformation(0);
+            const QTransform world = shape->absoluteTransformation();
             t =  world * centerTransInv * applyTransform * centerTrans * world.inverted() * shape->transformation();
         } else {
             const QPointF center = shape->outlineRect().center();
@@ -1229,7 +1231,7 @@ void DefaultTool::selectionBooleanOp(int booleanOp)
     KoShape *referenceShape = editableShapes[referenceShapeIndex];
 
     Q_FOREACH (KoShape *shape, editableShapes) {
-        srcOutlines << shape->absoluteTransformation(0).map(shape->outline());
+        srcOutlines << shape->absoluteTransformation().map(shape->outline());
     }
 
     if (booleanOp == BooleanUnion) {

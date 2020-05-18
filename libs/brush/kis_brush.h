@@ -293,6 +293,15 @@ public:
 
     virtual bool hasColor() const;
 
+    virtual bool preserveLightness() const;
+
+    /**
+    * If the brush image data are colorful (e.g. you created the brush from the canvas with custom brush)
+    * and you want to paint with it as with masks, but preserve Lightness (Value), set to true.
+    */
+    virtual void setPreserveLightness(bool preserveLightness);
+
+
     /**
      * Create a mask and either mask dst (that is, change all alpha values of the
      * existing pixels to those of the mask) or, if coloringInfo is present, clear

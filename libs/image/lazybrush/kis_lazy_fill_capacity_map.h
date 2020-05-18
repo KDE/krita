@@ -27,6 +27,7 @@
 #include "kis_painter.h"
 #include "kis_random_accessor_ng.h"
 #include "kis_global.h"
+#include <KisRegion.h>
 
 
 class KisLazyFillCapacityMap

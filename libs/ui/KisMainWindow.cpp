@@ -46,7 +46,7 @@
 #include <QPrinter>
 #include <QPrintPreviewDialog>
 #include <QToolButton>
-#include <QSignalMapper>
+#include <KisSignalMapper.h>
 #include <QTabBar>
 #include <QMoveEvent>
 #include <QUrl>
@@ -110,6 +110,7 @@
 #include <KisAndroidFileManager.h>
 #endif
 
+#include <KisUsageLogger.h>
 #include <brushengine/kis_paintop_settings.h>
 #include "dialogs/kis_about_application.h"
 #include "dialogs/kis_delayed_save_dialog.h"
@@ -187,8 +188,8 @@ public:
         , welcomePage(new KisWelcomePageWidget(parent))
         , widgetStack(new QStackedWidget(parent))
         , mdiArea(new QMdiArea(parent))
-        , windowMapper(new QSignalMapper(parent))
-        , documentMapper(new QSignalMapper(parent))
+        , windowMapper(new KisSignalMapper(parent))
+        , documentMapper(new KisSignalMapper(parent))
     #ifdef Q_OS_ANDROID
         , fileManager(new KisAndroidFileManager(parent))
     #endif
@@ -245,6 +246,7 @@ public:
     KisAction *mdiNextWindow {0};
     KisAction *mdiPreviousWindow {0};
     KisAction *toggleDockers {0};
+    KisAction *resetConfigurations {0};
     KisAction *toggleDockerTitleBars {0};
     KisAction *toggleDetachCanvas {0};
     KisAction *fullScreenMode {0};
@@ -282,8 +284,8 @@ public:
 
     QMdiArea *mdiArea;
     QMdiSubWindow *activeSubWindow  {0};
-    QSignalMapper *windowMapper;
-    QSignalMapper *documentMapper;
+    KisSignalMapper *windowMapper;
+    KisSignalMapper *documentMapper;
     KisCanvasWindow *canvasWindow {0};
 
     QByteArray lastExportedFormat;
@@ -494,6 +496,9 @@ KisMainWindow::KisMainWindow(QUuid uuid)
 
     configChanged();
 
+    // Make sure the python plugins create their actions in time
+    KisPart::instance()->notifyMainWindowIsBeingCreated(this);
+
     // If we have customized the toolbars, load that first
     setLocalXMLFile(KoResourcePaths::locateLocal("data", "krita4.xmlgui"));
     setXMLFile(":/kxmlgui5/krita4.xmlgui");
@@ -505,9 +510,8 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     QList<QAction *> toolbarList;
     Q_FOREACH (QWidget* it, guiFactory()->containers("ToolBar")) {
         KToolBar * toolBar = ::qobject_cast<KToolBar *>(it);
-        toolBar->setMovable(KisConfig(true).readEntry<bool>("LockAllDockerPanels", false));
-
         if (toolBar) {
+            toolBar->setMovable(KisConfig(true).readEntry<bool>("LockAllDockerPanels", false));
             if (toolBar->objectName() == "BrushesAndStuff") {
                 toolBar->setEnabled(false);
             }
@@ -620,7 +624,7 @@ void KisMainWindow::notifyChildViewDestroyed(KisView *view)
 {
     /**
      * If we are the last view of the window, Qt will not activate another tab
-     * before destroying tab/window. In ths case we should clear oll the dangling
+     * before destroying tab/window. In this case we should clear all the dangling
      * pointers manually by setting the current view to null
      */
     viewManager()->inputManager()->removeTrackedCanvas(view->canvasBase());
@@ -653,6 +657,18 @@ void KisMainWindow::showView(KisView *imageView, QMdiSubWindow *subwin)
         subwin->setOption(QMdiSubWindow::RubberBandResize, cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
         subwin->setWindowIcon(qApp->windowIcon());
 
+#ifdef Q_OS_MACOS
+        connect(subwin, SIGNAL(destroyed()), SLOT(updateSubwindowFlags()));
+        updateSubwindowFlags();
+#endif
+
+        if (d->mdiArea->subWindowList().size() == 1) {
+            imageView->showMaximized();
+        }
+        else {
+            imageView->show();
+        }
+
         /**
          * Hack alert!
          *
@@ -675,13 +691,6 @@ void KisMainWindow::showView(KisView *imageView, QMdiSubWindow *subwin)
 
         KoToolManager::instance()->initializeCurrentToolForCanvas();
 
-        if (d->mdiArea->subWindowList().size() == 1) {
-            imageView->showMaximized();
-        }
-        else {
-            imageView->show();
-        }
-
         // No, no, no: do not try to call this _before_ the show() has
         // been called on the view; only when that has happened is the
         // opengl context active, and very bad things happen if we tell
@@ -696,7 +705,9 @@ void KisMainWindow::showView(KisView *imageView, QMdiSubWindow *subwin)
 
 void KisMainWindow::slotPreferences()
 {
-    if (KisDlgPreferences::editPreferences()) {
+    QScopedPointer<KisDlgPreferences> dlgPreferences(new KisDlgPreferences(this));
+
+    if (dlgPreferences->editPreferences()) {
         KisConfigNotifier::instance()->notifyConfigChanged();
         KisConfigNotifier::instance()->notifyPixelGridModeChanged();
         KisImageConfigNotifier::instance()->notifyConfigChanged();
@@ -806,7 +817,7 @@ void KisMainWindow::setReadWrite(bool readwrite)
     updateCaption();
 }
 
-void KisMainWindow::addRecentURL(const QUrl &url)
+void KisMainWindow::addRecentURL(const QUrl &url, const QUrl &oldUrl)
 {
     // Add entry to recent documents list
     // (call coming from KisDocument because it must work with cmd line, template dlg, file/open, etc.)
@@ -830,6 +841,9 @@ void KisMainWindow::addRecentURL(const QUrl &url)
             }
         }
         if (ok) {
+            if (!oldUrl.isEmpty()) {
+                d->recentFiles->removeUrl(oldUrl);
+            }
             d->recentFiles->addUrl(url);
         }
         saveRecentFiles();
@@ -984,12 +998,12 @@ bool KisMainWindow::openDocumentInternal(const QUrl &url, OpenFlags flags)
     connect(newdoc, SIGNAL(canceled(QString)), this, SLOT(slotLoadCanceled(QString)));
 
     KisDocument::OpenFlags openFlags = KisDocument::None;
+    // XXX: Why this duplication of of OpenFlags...
     if (flags & RecoveryFile) {
         openFlags |= KisDocument::RecoveryFile;
     }
 
     bool openRet = !(flags & Import) ? newdoc->openUrl(url, openFlags) : newdoc->importDocument(url);
-
 
     if (!openRet) {
         delete newdoc;
@@ -1002,6 +1016,15 @@ bool KisMainWindow::openDocumentInternal(const QUrl &url, OpenFlags flags)
     if (!QFileInfo(url.toLocalFile()).isWritable()) {
         setReadWrite(false);
     }
+
+    if (flags & RecoveryFile &&
+            (   url.toLocalFile().startsWith(QDir::tempPath())
+             || url.toLocalFile().startsWith(QDir::homePath()))
+            ) {
+        newdoc->setUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation) + "/" + QFileInfo(url.toLocalFile()).fileName()));
+        newdoc->save(false, 0);
+    }
+
     return true;
 }
 
@@ -1060,7 +1083,7 @@ void KisMainWindow::slotLoadCompleted()
 
 void KisMainWindow::slotLoadCanceled(const QString & errMsg)
 {
-    dbgUI << "KisMainWindow::slotLoadCanceled";
+    KisUsageLogger::log(QString("Loading canceled. Error:").arg(errMsg));
     if (!errMsg.isEmpty())   // empty when canceled by user
         QMessageBox::critical(this, i18nc("@title:window", "Krita"), errMsg);
     // ... can't delete the document, it's the one who emitted the signal...
@@ -1073,15 +1096,16 @@ void KisMainWindow::slotLoadCanceled(const QString & errMsg)
 
 void KisMainWindow::slotSaveCanceled(const QString &errMsg)
 {
-    dbgUI << "KisMainWindow::slotSaveCanceled";
-    if (!errMsg.isEmpty())   // empty when canceled by user
+    KisUsageLogger::log(QString("Saving canceled. Error:").arg(errMsg));
+    if (!errMsg.isEmpty()) {   // empty when canceled by user
         QMessageBox::critical(this, i18nc("@title:window", "Krita"), errMsg);
+    }
     slotSaveCompleted();
 }
 
 void KisMainWindow::slotSaveCompleted()
 {
-    dbgUI << "KisMainWindow::slotSaveCompleted";
+    KisUsageLogger::log(QString("Saving Completed"));
     KisDocument* doc = qobject_cast<KisDocument*>(sender());
     Q_ASSERT(doc);
     disconnect(doc, SIGNAL(completed()), this, SLOT(slotSaveCompleted()));
@@ -1945,6 +1969,12 @@ void KisMainWindow::slotConfigureToolbars()
     applyToolBarLayout();
 }
 
+void KisMainWindow::slotResetConfigurations()
+{
+    KisApplication *kisApp = static_cast<KisApplication*>(qApp);
+    kisApp->askresetConfig();
+}
+
 void KisMainWindow::slotNewToolbarConfig()
 {
     applyMainWindowSettings(d->windowStateConfig);
@@ -1990,6 +2020,7 @@ void KisMainWindow::viewFullscreen(bool fullScreen)
     } else {
         setWindowState(windowState() & ~Qt::WindowFullScreen);   // reset
     }
+    d->fullScreenMode->setChecked(isFullScreen());
 }
 
 void KisMainWindow::setMaxRecentItems(uint _number)
@@ -2247,8 +2278,18 @@ void KisMainWindow::updateWindowMenu()
     docMenu->clear();
 
     QFontMetrics fontMetrics = docMenu->fontMetrics();
-    int fileStringWidth = int(QApplication::desktop()->screenGeometry(this).width() * .40f);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+    QRect geom = this->geometry();
+    QPoint p(geom.width() / 2 + geom.left(), geom.height() / 2 + geom.top());
+    QScreen *screen = qApp->screenAt(p);
 
+    int fileStringWidth = 300;
+    if (screen) {
+        fileStringWidth = int(screen->availableGeometry().width() * .40f);
+    }
+#else
+    int fileStringWidth = int(QApplication::desktop()->screenGeometry(this).width() * .40f);
+#endif
     Q_FOREACH (QPointer<KisDocument> doc, KisPart::instance()->documents()) {
         if (doc) {
             QString title = fontMetrics.elidedText(doc->url().toDisplayString(QUrl::PreferLocalFile), Qt::ElideMiddle, fileStringWidth);
@@ -2386,6 +2427,22 @@ void KisMainWindow::updateWindowMenu()
     updateCaption();
 }
 
+void KisMainWindow::updateSubwindowFlags()
+{
+    bool onlyOne = false;
+    if (d->mdiArea->subWindowList().size() == 1 && d->mdiArea->viewMode() == QMdiArea::SubWindowView) {
+        onlyOne = true;
+    }
+    Q_FOREACH (QMdiSubWindow *subwin, d->mdiArea->subWindowList()) {
+        if (onlyOne) {
+            subwin->setWindowFlags(subwin->windowFlags() | Qt::FramelessWindowHint);
+            subwin->showMaximized();
+        } else {
+            subwin->setWindowFlags((subwin->windowFlags() | Qt::FramelessWindowHint) ^ Qt::FramelessWindowHint);
+        }
+    }
+}
+
 void KisMainWindow::setActiveSubWindow(QWidget *window)
 {
     if (!window) return;
@@ -2418,7 +2475,7 @@ void KisMainWindow::configChanged()
          * Dirty workaround for a bug in Qt (checked on Qt 5.6.1):
          *
          * If you make a window "Show on top" and then switch to the tabbed mode
-         * the window will contiue to be painted in its initial "mid-screen"
+         * the window will continue to be painted in its initial "mid-screen"
          * position. It will persist here until you explicitly switch to its tab.
          */
         if (viewMode == QMdiArea::TabbedView) {
@@ -2433,8 +2490,10 @@ void KisMainWindow::configChanged()
                 subwin->showMaximized();
             }
         }
-
     }
+#ifdef Q_OS_MACOS
+    updateSubwindowFlags();
+#endif
 
     KConfigGroup group( KSharedConfig::openConfig(), "theme");
     d->themeManager->setCurrentTheme(group.readEntry("Theme", "Krita dark"));
@@ -2642,6 +2701,9 @@ void KisMainWindow::createActions()
     KisConfig(true).showDockers(true);
     d->toggleDockers->setChecked(true);
     connect(d->toggleDockers, SIGNAL(toggled(bool)), SLOT(toggleDockersVisibility(bool)));
+
+    d->resetConfigurations  = actionManager->createAction("reset_configurations");
+    connect(d->resetConfigurations, SIGNAL(triggered()), this, SLOT(slotResetConfigurations()));
 
     d->toggleDetachCanvas = actionManager->createAction("view_detached_canvas");
     d->toggleDetachCanvas->setChecked(false);

@@ -86,13 +86,12 @@ KoShape *ArtisticTextShape::cloneShape() const
     return clone;
 }
 
-void ArtisticTextShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
+void ArtisticTextShape::paint(QPainter &painter, KoShapePaintingContext &paintContext) const
 {
     KisQPainterStateSaver saver(&painter);
 
-    applyConversion(painter, converter);
     if (background()) {
-        background()->paint(painter, converter, paintContext, outline());
+        background()->paint(painter, paintContext, outline());
     }
 }
 
@@ -594,7 +593,7 @@ bool ArtisticTextShape::putOnPath(KoPathShape *path)
     m_path = path;
 
     // use the paths outline converted to document coordinates as the baseline
-    m_baseline = m_path->absoluteTransformation(0).map(m_path->outline());
+    m_baseline = m_path->absoluteTransformation().map(m_path->outline());
 
     // reset transformation
     setTransformation(QTransform());
@@ -912,7 +911,12 @@ QRectF ArtisticTextShape::charExtentsAt(int charIndex) const
     if (charPos.first < m_ranges.size()) {
         const ArtisticTextRange &range = m_ranges.at(charPos.first);
         QFontMetrics metrics(range.font());
+#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
+        QChar c = range.text().at(charPos.second);
+        int w = metrics.horizontalAdvance(c);
+#else
         int w = metrics.charWidth(range.text(), charPos.second);
+#endif
         return QRectF(0, 0, w, metrics.height());
     }
 
@@ -921,7 +925,7 @@ QRectF ArtisticTextShape::charExtentsAt(int charIndex) const
 
 void ArtisticTextShape::updateSizeAndPosition(bool global)
 {
-    QTransform shapeTransform = absoluteTransformation(0);
+    QTransform shapeTransform = absoluteTransformation();
 
     // determine baseline position in document coordinates
     QPointF oldBaselinePosition = shapeTransform.map(QPointF(0, baselineOffset()));
@@ -995,7 +999,7 @@ void ArtisticTextShape::shapeChanged(ChangeType type, KoShape *shape)
         } else {
             update();
             // use the paths outline converted to document coordinates as the baseline
-            m_baseline = m_path->absoluteTransformation(0).map(m_path->outline());
+            m_baseline = m_path->absoluteTransformation().map(m_path->outline());
             updateSizeAndPosition(true);
             update();
         }
@@ -1084,7 +1088,7 @@ bool ArtisticTextShape::saveSvg(SvgSavingContext &context)
         QString id = context.createUID("baseline");
         context.styleWriter().startElement("path");
         context.styleWriter().addAttribute("id", id);
-        context.styleWriter().addAttribute("d", baselineShape->toString(baselineShape->absoluteTransformation(0) * context.userSpaceTransform()));
+        context.styleWriter().addAttribute("d", baselineShape->toString(baselineShape->absoluteTransformation() * context.userSpaceTransform()));
         context.styleWriter().endElement();
 
         context.shapeWriter().startElement("textPath");
@@ -1284,7 +1288,7 @@ bool ArtisticTextShape::loadSvg(const KoXmlElement &textElement, SvgLoadingConte
             if (pathInDocument) {
                 putOnPath(path);
             } else {
-                putOnPath(path->absoluteTransformation(0).map(path->outline()));
+                putOnPath(path->absoluteTransformation().map(path->outline()));
                 delete path;
             }
 

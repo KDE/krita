@@ -96,7 +96,7 @@ protected:
     }
 
     /**
-     * Re-implement this to set te widgets with the values in @p setting.
+     * Re-implement this to set the widgets with the values in @p setting.
      */
     virtual void readOptionSetting(const KisPropertiesConfigurationSP setting) {
         Q_UNUSED(setting);

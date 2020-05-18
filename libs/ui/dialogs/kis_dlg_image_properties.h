@@ -45,13 +45,16 @@ public:
                           const char *name = 0);
     ~KisDlgImageProperties() override;
 
-    const KoColorSpace * colorSpace();
+    bool convertLayerPixels() const;
+    const KoColorSpace * colorSpace() const;
 
 private Q_SLOTS:
 
     void setAnnotation(const QString& type);
     void setCurrentColor();
     void setProofingConfig();
+
+    void slotSaveDialogState();
 private:
 
     WdgImageProperties *m_page;

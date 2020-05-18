@@ -29,6 +29,7 @@
 #include "kis_keyframe.h"
 #include "kis_default_bounds.h"
 #include "kis_time_range.h"
+#include "kis_default_bounds_node_wrapper.h"
 
 class KisFrameSet;
 class KisTimeSpan;
@@ -58,8 +59,9 @@ public:
     static const KoID TransformRotationY;
     static const KoID TransformRotationZ;
 public:
-    KisKeyframeChannel(const KoID& id, KisDefaultBoundsBaseSP defaultBounds);
-    KisKeyframeChannel(const KisKeyframeChannel &rhs, KisNode *newParentNode);
+    KisKeyframeChannel(const KoID& id, KisNodeWSP parent = 0);
+    KisKeyframeChannel(const KoID& id, KisDefaultBoundsBaseSP bounds );
+    KisKeyframeChannel(const KisKeyframeChannel &rhs, KisNodeWSP newParent);
     ~KisKeyframeChannel() override;
 
     QString id() const;

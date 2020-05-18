@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>504</width>
+    <width>545</width>
     <height>270</height>
    </rect>
   </property>
@@ -90,53 +90,6 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="label">
-       <property name="toolTip">
-        <string>Use to set the size from which the Automatic Precision Setting should begin. The Precision will remain 5 before this value.</string>
-       </property>
-       <property name="text">
-        <string>Starting Brush Size:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="KisDoubleParseSpinBox" name="sizeToStartFromSpinBox">
-       <property name="suffix">
-        <string> px</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_2">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="toolTip">
-        <string>This determines every interval after which the precision should change. For example: if the delta value is set to be 15.00, after every 15 pts change in the size of brush, the precision will change.</string>
-       </property>
-       <property name="text">
-        <string>Delta :</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="KisDoubleParseSpinBox" name="deltaValueSpinBox">
-       <property name="suffix">
-        <string> px</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="lblPrecisionValue">
-       <property name="text">
-        <string>0</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QLabel" name="lblPrecision">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -167,11 +120,6 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>KisDoubleParseSpinBox</class>
-   <extends>QDoubleSpinBox</extends>
-   <header>kis_double_parse_spin_box.h</header>
-  </customwidget>
   <customwidget>
    <class>KisSliderSpinBox</class>
    <extends>QWidget</extends>

@@ -170,6 +170,19 @@
 
     <Action name="buginfo">
       <icon></icon>
+      <text>Show Krita log for bug reports.</text>
+      <whatsThis></whatsThis>
+      <toolTip>Show Krita log for bug reports.</toolTip>
+      <iconText>Show Krita log for bug reports.</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="sysinfo">
+      <icon></icon>
+
+
       <text>Show system information for bug reports.</text>
       <whatsThis></whatsThis>
       <toolTip>Show system information for bug reports.</toolTip>
@@ -708,9 +721,9 @@
     </Action>
     <Action name="toggle_assistant">
       <icon></icon>
-      <text>Toggle Assistant</text>
+      <text>Toggle Snap To Assistants</text>
       <whatsThis></whatsThis>
-      <toolTip>Toggle Assistant</toolTip>
+      <toolTip>Toggle Snap to Assistants</toolTip>
       <iconText>ToggleAssistant</iconText>
       <shortcut>Ctrl+Shift+L</shortcut>
       <isCheckable>true</isCheckable>
@@ -1643,10 +1656,10 @@
     </Action>
     <Action name="PathTool">
       <icon></icon>
-      <text>Path editing</text>
+      <text>Edit Shapes Tool</text>
       <whatsThis></whatsThis>
-      <toolTip>Path editing</toolTip>
-      <iconText>Path editing</iconText>
+      <toolTip>Edit Shapes Tool</toolTip>
+      <iconText>Edit Shapes Tool</iconText>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
@@ -2431,6 +2444,35 @@
       <statusTip></statusTip>
     </Action>
 
+
+    <Action name="insert_opacity_keyframe">
+      <icon></icon>
+      <text>Add opacity keyframe</text>
+      <whatsThis></whatsThis>
+      <toolTip>Adds keyframe to control layer opacity</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+
+    <Action name="remove_opacity_keyframe">
+      <icon></icon>
+      <text>Remove opacity keyframe</text>
+      <whatsThis></whatsThis>
+      <toolTip>Removes keyframe to control layer opacity</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+
     <Action name="mirror_frames">
       <icon></icon>
       <text>Mirror Frames</text>
@@ -2607,6 +2649,18 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="activateNextSiblingLayer">
+      <icon></icon>
+      <text>Activate next sibling layer, skipping over groups.</text>
+      <whatsThis></whatsThis>
+      <toolTip>Activate next sibling layer</toolTip>
+      <iconText>Activate next sibling layer</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="activatePreviousLayer">
       <icon></icon>
       <text>Activate previous layer</text>
@@ -2616,6 +2670,18 @@
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>PgDown</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="activatePreviousSiblingLayer">
+      <icon></icon>
+      <text>Activate previous sibling layer, skipping over groups.</text>
+      <whatsThis></whatsThis>
+      <toolTip>Activate previous sibling layer</toolTip>
+      <iconText>Activate previous sibling layer</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2763,12 +2829,12 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="isolate_layer">
+    <Action name="isolate_active_layer">
       <icon>view-filter</icon>
-      <text>&amp;Isolate Layer</text>
+      <text>&amp;Isolate Active Layer</text>
       <whatsThis></whatsThis>
-      <toolTip>Isolate Layer</toolTip>
-      <iconText>Isolate Layer</iconText>
+      <toolTip>Isolate Active Layer</toolTip>
+      <iconText>Isolate Active Layer</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>

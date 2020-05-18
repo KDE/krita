@@ -36,6 +36,7 @@ public:
 
     void processDirectly(KisPaintDeviceSP src,
                          KisMultipleProjection *dst,
+                         KisLayerStyleKnockoutBlower *blower,
                          const QRect &applyRect,
                          KisPSDLayerStyleSP style,
                          KisLayerStyleFilterEnvironment *env) const override;

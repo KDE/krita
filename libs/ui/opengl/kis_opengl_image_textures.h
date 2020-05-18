@@ -152,6 +152,7 @@ public:
     void slotImageSizeChanged(qint32 w, qint32 h);
 
     KisOpenGLUpdateInfoBuilder& updateInfoBuilder();
+    const KoColorProfile* monitorProfile();
 
 Q_SIGNALS:
     void sigShowFloatingMessage(const QString &message, int timeout, bool priority);

@@ -96,7 +96,7 @@ private:
                                                     KisPainter *painter,
                                                     KoUpdater *progress);
 
-     bool useFFTImplemenation(const KisConvolutionKernelSP kernel) const;
+     bool useFFTImplementation(const KisConvolutionKernelSP kernel) const;
 
 private:
     TestingEnginePreference m_enginePreference;

@@ -36,6 +36,7 @@
 #include <math.h>
 #include <QDebug>
 #include <klocalizedstring.h>
+#include "kis_algebra_2d.h"
 
 ShapeShearStrategy::ShapeShearStrategy(KoToolBase *tool, KoSelection *selection, const QPointF &clicked, KoFlake::SelectionHandle direction)
     : KoInteractionStrategy(tool)
@@ -87,7 +88,7 @@ ShapeShearStrategy::ShapeShearStrategy(KoToolBase *tool, KoSelection *selection,
         m_solidPoint -= QPointF(m_initialSize.width() / 2, 0);
     }
 
-    m_solidPoint = selection->absoluteTransformation(0).map(selection->outlineRect().topLeft() + m_solidPoint);
+    m_solidPoint = selection->absoluteTransformation().map(selection->outlineRect().topLeft() + m_solidPoint);
 
     QPointF edge;
     qreal angle = 0.0;
@@ -129,16 +130,24 @@ void ShapeShearStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModif
         shearVector = - shearVector;
     }
     if (m_top || m_bottom) {
-        shearX = shearVector.x() / m_initialSize.height();
+        shearX = m_initialSize.height() > 0 ? shearVector.x() / m_initialSize.height() : 0;
     }
     if (m_left || m_right) {
-        shearY = shearVector.y() / m_initialSize.width();
+        shearY = m_initialSize.width() > 0 ? shearVector.y() / m_initialSize.width() : 0;
     }
 
     // if selection is mirrored invert the shear values
     if (m_isMirrored) {
         shearX *= -1.0;
         shearY *= -1.0;
+    }
+
+    const qreal maxSaneShear = 1e6;
+    if ((qAbs(shearX) == 0.0 && qAbs(shearY) == 0.0) ||
+        qAbs(shearX) > maxSaneShear ||
+        qAbs(shearY) > maxSaneShear) {
+
+        return;
     }
 
     QTransform matrix;
@@ -170,7 +179,17 @@ KUndo2Command *ShapeShearStrategy::createCommand()
     Q_FOREACH (KoShape *shape, m_transformedShapesAndSelection) {
         newTransforms << shape->transformation();
     }
-    KoShapeTransformCommand *cmd = new KoShapeTransformCommand(m_transformedShapesAndSelection, m_oldTransforms, newTransforms);
-    cmd->setText(kundo2_i18n("Shear"));
+    const bool nothingChanged =
+        std::equal(m_oldTransforms.begin(), m_oldTransforms.end(),
+                   newTransforms.begin(),
+                   [] (const QTransform &t1, const QTransform &t2) {
+                       return KisAlgebra2D::fuzzyMatrixCompare(t1, t2, 1e-6);
+                   });
+
+    KoShapeTransformCommand *cmd = 0;
+    if (!nothingChanged) {
+        cmd = new KoShapeTransformCommand(m_transformedShapesAndSelection, m_oldTransforms, newTransforms);
+        cmd->setText(kundo2_i18n("Shear"));
+    }
     return cmd;
 }

@@ -38,7 +38,6 @@
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 #include <KoMixColorsOp.h>
-#include <kis_paint_device.h>
 #include "kis_lod_transform.h"
 #include <KoCompositeOpRegistry.h>
 
@@ -62,9 +61,9 @@ KisConfigWidget * KisGaussianHighPassFilter::createConfigurationWidget(QWidget* 
     return new KisWdgGaussianHighPass(parent);
 }
 
-KisFilterConfigurationSP KisGaussianHighPassFilter::factoryConfiguration() const
+KisFilterConfigurationSP KisGaussianHighPassFilter::defaultConfiguration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration(id().id(), 1);
+    KisFilterConfigurationSP config = factoryConfiguration();
     config->setProperty("blurAmount", 1);
     return config;
 }
@@ -86,20 +85,19 @@ void KisGaussianHighPassFilter::processImpl(KisPaintDeviceSP device,
 
     const QRect gaussNeedRect = this->neededRect(applyRect, config, device->defaultBounds()->currentLevelOfDetail());
 
-    KisPaintDeviceSP blur = m_cachedPaintDevice.getDevice(device);
+    KisCachedPaintDevice::Guard d1(device, m_cachedPaintDevice);
+    KisPaintDeviceSP blur = d1.device();
     KisPainter::copyAreaOptimizedOldData(gaussNeedRect.topLeft(), device, blur, gaussNeedRect);
     KisGaussianKernel::applyGaussian(blur, applyRect,
                                      blurAmount, blurAmount,
                                      channelFlags,
                                      convolutionUpdater,
-                                     true); // make sure we cerate an internal transaction on temp device
+                                     true); // make sure we craate an internal transaction on temp device
     
     KisPainter painter(device);
     painter.setCompositeOp(blur->colorSpace()->compositeOp(COMPOSITE_GRAIN_EXTRACT));
     painter.bitBlt(applyRect.topLeft(), blur, applyRect);
     painter.end();
-
-    m_cachedPaintDevice.putDevice(blur);
 }
 
 

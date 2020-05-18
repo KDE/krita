@@ -39,7 +39,7 @@ public:
     };
 
 public:
-    KisSimpleStrokeStrategy(QString id = QString(), const KUndo2MagicString &name = KUndo2MagicString());
+    KisSimpleStrokeStrategy(const QLatin1String &id, const KUndo2MagicString &name = KUndo2MagicString());
 
     KisStrokeJobStrategy* createInitStrategy() override;
     KisStrokeJobStrategy* createFinishStrategy() override;
@@ -60,6 +60,8 @@ public:
     virtual void doStrokeCallback(KisStrokeJobData *data);
     virtual void suspendStrokeCallback();
     virtual void resumeStrokeCallback();
+
+    static QLatin1String jobTypeToString(JobType type);
 
 protected:
     void enableJob(JobType type, bool enable = true,

@@ -60,6 +60,10 @@ private:
             return m_parent;
         }
 
+        void * sourceCookie() const override {
+            return 0;
+        }
+
     private:
         int m_lod;
         KisDefaultBoundsBaseSP m_parent;

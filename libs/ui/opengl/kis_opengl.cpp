@@ -166,14 +166,14 @@ void KisOpenGL::initialize()
     debugOut << "\n  supportsOpenGLES:" << bool(g_supportedRenderers & RendererOpenGLES);
     debugOut << "\n  isQtPreferOpenGLES:" << bool(g_rendererPreferredByQt == RendererOpenGLES);
 #endif
-    debugOut << "\n== log ==\n";
-    debugOut.noquote();
-    debugOut << g_surfaceFormatDetectionLog;
-    debugOut.resetFormat();
-    debugOut << "\n== end log ==";
+//    debugOut << "\n== log ==\n";
+//    debugOut.noquote();
+//    debugOut << g_surfaceFormatDetectionLog;
+//    debugOut.resetFormat();
+//    debugOut << "\n== end log ==";
 
     dbgOpenGL.noquote().nospace() << g_debugText;
-    KisUsageLogger::write(g_debugText);
+    KisUsageLogger::writeSysInfo(g_debugText);
 
     if (!openGLCheckResult) {
         return;
@@ -706,7 +706,9 @@ KisOpenGL::RendererConfig KisOpenGL::selectSurfaceConfig(KisOpenGL::OpenGLRender
     using Info = boost::optional<KisOpenGLModeProber::Result>;
 
     QHash<OpenGLRenderer, Info> renderersToTest;
+#ifndef Q_OS_ANDROID
     renderersToTest.insert(RendererDesktopGL, Info());
+#endif
     renderersToTest.insert(RendererOpenGLES, Info());
 
 #ifdef Q_OS_WIN

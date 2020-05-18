@@ -22,7 +22,6 @@
 #define KIS_LAYER_H_
 
 #include <QRect>
-#include <QRegion>
 #include <QMetaType>
 #include <QObject>
 
@@ -41,6 +40,8 @@ class QBitArray;
 class KisCloneLayer;
 class KisPSDLayerStyle;
 class KisAbstractProjectionPlane;
+class KisLayerProjectionPlane;
+typedef QSharedPointer<KisLayerProjectionPlane> KisLayerProjectionPlaneSP;
 
 
 namespace KisMetaData
@@ -94,7 +95,7 @@ public:
      * styles or anything else. It is used by the layer styles projection
      * plane to stack up the planes.
      */
-    virtual KisAbstractProjectionPlaneSP internalProjectionPlane() const;
+    virtual KisLayerProjectionPlaneSP internalProjectionPlane() const;
 
     QRect partialChangeRect(KisNodeSP lastNode, const QRect& rect);
     void buildProjectionUpToNode(KisPaintDeviceSP projection, KisNodeSP lastNode, const QRect& rect);
@@ -248,6 +249,14 @@ public:
     QImage createThumbnail(qint32 w, qint32 h) override;
 
     QImage createThumbnailForFrame(qint32 w, qint32 h, int time) override;
+
+    /**
+     * Return a tight rectange, where the contents of the layer
+     * is placed from user's point of view. This rectangle includes
+     * all the masks and effects the layer has (excluding layer
+     * styles, they report their bounds via projection plane).
+     */
+    QRect tightUserVisibleBounds() const;
 
 public:
     /**

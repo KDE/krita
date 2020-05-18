@@ -23,7 +23,6 @@
 #include <QString>
 #include <QPainter>
 #include <QRect>
-#include <QRegion>
 #include <QBitArray>
 
 #include <KoColorConversionTransformation.h>
@@ -265,6 +264,14 @@ public:
      */
     void cropImage(const QRect& newRect);
 
+    /**
+     * @brief purge all pixels that have default pixel to free up memory
+     * @param isCancellable if true, the scheduler is allower to stop and
+     * cancel purging operation as soon as the user starts any action.
+     * If \p isCancellable is false, then the user will not be allowed to do
+     * anything until purging operation is completed.
+     */
+    void purgeUnusedData(bool isCancellable);
 
     /**
      * @brief start asynchronous operation on cropping a subtree of nodes starting at \p node
@@ -367,6 +374,11 @@ public:
     void shearNode(KisNodeSP node, double angleX, double angleY, KisSelectionSP selection);
 
     /**
+     * Convert image projection to \p dstColorSpace, keeping all the layers intouched.
+     */
+    void convertImageProjectionColorSpace(const KoColorSpace *dstColorSpace);
+
+    /**
      * Convert the image and all its layers to the dstColorSpace
      */
     void convertImageColorSpace(const KoColorSpace *dstColorSpace,
@@ -374,16 +386,27 @@ public:
                                 KoColorConversionTransformation::ConversionFlags conversionFlags);
 
     /**
-     * Set the color space of  the projection (and the root layer)
-     * to dstColorSpace. No conversion is done for other layers,
-     * their colorspace can differ.
-     * @note No conversion is done, only regeneration, so no rendering
-     * intent needed
+     * Convert layer and all its child layers to dstColorSpace
      */
-    void convertProjectionColorSpace(const KoColorSpace *dstColorSpace);
+    void convertLayerColorSpace(KisNodeSP node,
+                                const KoColorSpace *dstColorSpace,
+                                KoColorConversionTransformation::Intent renderingIntent,
+                                KoColorConversionTransformation::ConversionFlags conversionFlags);
+
 
     // Get the profile associated with this image
     const KoColorProfile *  profile() const;
+
+    /**
+     * Set the profile of the layer and all its children to the new profile.
+     * It doesn't do any pixel conversion.
+     *
+     * This is essential if you have loaded an image that didn't
+     * have an embedded profile to which you want to attach the right profile.
+     *
+     * @returns false if the profile could not be assigned
+     */
+    bool assignLayerProfile(KisNodeSP node, const KoColorProfile *profile);
 
     /**
      * Set the profile of the image to the new profile and do the same for
@@ -393,12 +416,9 @@ public:
      * This is essential if you have loaded an image that didn't
      * have an embedded profile to which you want to attach the right profile.
      *
-     * This does not create an undo action; only call it when creating or
-     * loading an image.
-     *
      * @returns false if the profile could not be assigned
      */
-    bool assignImageProfile(const KoColorProfile *profile);
+    bool assignImageProfile(const KoColorProfile *profile, bool blockAllUpdates = false);
 
     /**
      * Returns the current undo adapter. You can add new commands to the
@@ -972,7 +992,7 @@ public Q_SLOTS:
      * image will be reloaded into UI by sigSizeChanged(), so there is
      * no need to inform the UI about individual dirty rects.
      *
-     * The last call to enableUIUpdates() will return the list of udpates
+     * The last call to enableUIUpdates() will return the list of updates
      * that were requested while they were blocked.
      */
     void disableUIUpdates() override;
@@ -1016,9 +1036,11 @@ public Q_SLOTS:
      * node, it can ask for an update itself. This method is a way of
      * blocking such intermediate (and excessive) requests.
      *
-     * NOTE: this is a convenience function for setProjectionUpdatesFilter()
+     * NOTE: this is a convenience function for addProjectionUpdatesFilter()
      *       that installs a predefined filter that eats everything. Please
-     *       note that these calls are *not* recursive
+     *       note that these calls are *not* recursive.
+     *
+     * WARNING: The calls to enable/disable must be balanced.
      */
     void disableDirtyRequests() override;
 
@@ -1031,14 +1053,49 @@ public Q_SLOTS:
      * Installs a filter object that will filter all the incoming projection update
      * requests. If the filter return true, the incoming update is dropped.
      *
-     * NOTE: you cannot set filters recursively!
+     * NOTE: you can add multiple filters to the image, **but** the calls to add/remove
+     *       must be nested and balanced. E.g.
+     *
+     *       \code{.cpp}
+     *
+     *       auto cookie1 = image->addProjectionUpdatesFilter(filter1);
+     *       auto cookie2 = image->addProjectionUpdatesFilter(filter2);
+     *
+     *       /// ...do something...
+     *
+     *       /// correct:
+     *       image->removeProjectionUpdatesFilter(cookie2)
+     *       image->removeProjectionUpdatesFilter(cookie1)
+     *
+     *       /// incorrect:
+     *       // image->removeProjectionUpdatesFilter(cookie1)
+     *       // image->removeProjectionUpdatesFilter(cookie2)
+     *       \endcode
      */
-    void setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP filter) override;
+    KisProjectionUpdatesFilterCookie addProjectionUpdatesFilter(KisProjectionUpdatesFilterSP filter) override;
 
     /**
-     * \see setProjectionUpdatesFilter()
+     * @brief removes already installed filter from the stack of updates filers
+     * @param cookie a cookie object returned by addProjectionUpdatesFilter() on intallation
+     * @return the installed filter. If the cookie is invalid, or nesting rule has been
+     *         broken, then removeProjectionUpdatesFilter() may safe-assert and return nullptr.
+     *
+     * NOTE: some weird code (e.g. KisRegenerateFrameStrokeStrategy) needs to temporary remove
+     * all the filters and then install them back. Current implementation ensures that after removal
+     * and the following installation, cookies will be preserved. So this operation is considered
+     * safe.
+     *
+     * \see addProjectionUpdatesFilter()
      */
-    KisProjectionUpdatesFilterSP projectionUpdatesFilter() const override;
+    KisProjectionUpdatesFilterSP removeProjectionUpdatesFilter(KisProjectionUpdatesFilterCookie cookie) override;
+
+    /**
+     * Return the cookie of the lastly-installed filter
+     *
+     * \see addProjectionUpdatesFilter()
+     */
+    KisProjectionUpdatesFilterCookie currentProjectionUpdatesFilter() const override;
+
 
     void refreshGraphAsync(KisNodeSP root = KisNodeSP()) override;
     void refreshGraphAsync(KisNodeSP root, const QRect &rc) override;
@@ -1061,6 +1118,8 @@ public Q_SLOTS:
      * cyclic dependencies.
      */
     void requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QRect &rc, const QRect &cropRect);
+
+    void requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QRect &rc, const QRect &cropRect, const bool notifyFrameChange );
 
     /**
      * Adds a spontaneous job to the updates queue.
@@ -1152,7 +1211,6 @@ private:
     friend class KisImageResizeCommand;
     void setSize(const QSize& size);
 
-    friend class KisImageSetProjectionColorSpaceCommand;
     void setProjectionColorSpace(const KoColorSpace * colorSpace);
 
 

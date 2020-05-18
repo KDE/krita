@@ -116,15 +116,18 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     const int borderWidth = 3;
 
     if (KisConfig(true).readEntry<bool>("popuppalette/usevisualcolorselector", false)) {
-        m_triangleColorSelector = new KisVisualColorSelector(this);
+        KisVisualColorSelector *selector = new KisVisualColorSelector(this);
+        selector->setAcceptTabletEvents(true);
+        m_triangleColorSelector = selector;
     }
     else {
         m_triangleColorSelector  = new PopupColorTriangle(displayRenderer, this);
+        connect(m_triangleColorSelector, SIGNAL(requestCloseContainer()), this, SLOT(slotHide()));
     }
     m_triangleColorSelector->setDisplayRenderer(displayRenderer);
     m_triangleColorSelector->setConfig(true,false);
     m_triangleColorSelector->move(m_popupPaletteSize/2-m_colorHistoryInnerRadius+borderWidth, m_popupPaletteSize/2-m_colorHistoryInnerRadius+borderWidth);
-    m_triangleColorSelector->resize(m_colorHistoryInnerRadius*2-borderWidth*2, m_colorHistoryInnerRadius*2-borderWidth*2);
+    m_triangleColorSelector->resize(m_popupPaletteSize - 2*m_triangleColorSelector->x(), m_popupPaletteSize - 2*m_triangleColorSelector->y());
     m_triangleColorSelector->setVisible(true);
     KoColor fgcolor(Qt::black, KoColorSpaceRegistry::instance()->rgb8());
     if (m_resourceManager) {
@@ -151,9 +154,8 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     connect(m_colorChangeCompressor.data(), SIGNAL(timeout()),
             SLOT(slotEmitColorChanged()));
 
-    connect(m_triangleColorSelector, SIGNAL(requestCloseContainer()), this, SLOT(slotHide()));
-
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), m_triangleColorSelector, SLOT(configurationChanged()));
+    connect(m_displayRenderer,  SIGNAL(displayConfigurationChanged()), this, SLOT(slotDisplayConfigurationChanged()));
 
     m_acyclicConnector->connectForwardKoColor(m_resourceManager, SIGNAL(sigChangeFGColorSelector(KoColor)),
                                               this, SLOT(slotExternalFgColorChanged(KoColor)));
@@ -269,16 +271,22 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     setAttribute(Qt::WA_NoMousePropagation, true);
 }
 
+void KisPopupPalette::slotDisplayConfigurationChanged()
+{
+    // Visual Color Selector picks up color space from input
+    KoColor col = m_viewManager->canvasResourceProvider()->fgColor();
+    const KoColorSpace *paintingCS = m_displayRenderer->getPaintingColorSpace();
+    //hack to get around cmyk for now.
+    if (paintingCS->colorChannelCount()>3) {
+        paintingCS = KoColorSpaceRegistry::instance()->rgb8();
+    }
+    m_triangleColorSelector->slotSetColorSpace(paintingCS);
+    m_triangleColorSelector->slotSetColor(col);
+}
+
 void KisPopupPalette::slotExternalFgColorChanged(const KoColor &color)
 {
-    //hack to get around cmyk for now.
-    if (color.colorSpace()->colorChannelCount()>3) {
-        KoColor c(KoColorSpaceRegistry::instance()->rgb8());
-        c.fromKoColor(color);
-        m_triangleColorSelector->slotSetColor(c);
-    } else {
-        m_triangleColorSelector->slotSetColor(color);
-    }
+    m_triangleColorSelector->slotSetColor(color);
 }
 
 void KisPopupPalette::slotEmitColorChanged()

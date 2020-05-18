@@ -19,6 +19,7 @@
 
 #include "KisImportExportManager.h"
 
+#include <QDir>
 #include <QFile>
 #include <QLabel>
 #include <QVBoxLayout>
@@ -269,7 +270,7 @@ QString KisImportExportManager::askForAudioFileName(const QString &defaultDir, Q
     mimeTypes << "audio/flac";
 
     dialog.setMimeTypeFilters(mimeTypes);
-    dialog.setCaption(i18nc("@titile:window", "Open Audio"));
+    dialog.setCaption(i18nc("@title:window", "Open Audio"));
 
     return dialog.filename();
 }
@@ -354,12 +355,35 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
         // async importing is not yet supported!
         KIS_SAFE_ASSERT_RECOVER_NOOP(!isAsync);
 
+        // FIXME: Dmitry says "this progress reporting code never worked. Initial idea was to implement it his way, but I stopped and didn't finish it"
         if (0 && !batchMode()) {
             KisAsyncActionFeedback f(i18n("Opening document..."), 0);
             result = f.runAction(std::bind(&KisImportExportManager::doImport, this, location, filter));
         } else {
             result = doImport(location, filter);
         }
+        if (result.status().isOk()) {
+            KisImageSP image = m_document->image().toStrongRef();
+            if (image) {
+                KisUsageLogger::log(QString("Loaded image from %1. Size: %2 * %3 pixels, %4 dpi. Color model: %6 %5 (%7). Layers: %8")
+                                    .arg(QString::fromLatin1(from))
+                                    .arg(image->width())
+                                    .arg(image->height())
+                                    .arg(image->xRes())
+                                    .arg(image->colorSpace()->colorModelId().name())
+                                    .arg(image->colorSpace()->colorDepthId().name())
+                                    .arg(image->colorSpace()->profile()->name())
+                                    .arg(image->nlayers()));
+            }
+            else {
+                qWarning() << "The filter returned OK, but there is no image";
+            }
+
+        }
+        else {
+            KisUsageLogger::log(QString("Failed to load image from %1").arg(QString::fromLatin1(from)));
+        }
+
     }
     else /* if (direction == Export) */ {
         if (!exportConfiguration) {
@@ -404,7 +428,7 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
             result = doExport(location, filter, exportConfiguration, alsoAsKra);
         }
 
-        if (exportConfiguration && !batchMode() && showWarnings) {
+        if (exportConfiguration && !batchMode()) {
             KisConfig(false).setExportConfiguration(typeName, exportConfiguration);
         }
     }
@@ -636,6 +660,10 @@ KisImportExportErrorCode KisImportExportManager::doExport(const QString &locatio
 }
 
 // Temporary workaround until QTBUG-57299 is fixed.
+// 02-10-2019 update: the bug is closed, but we've still seen this issue.
+//                    and without using QSaveFile the issue can still occur
+//                    when QFile::copy fails because Dropbox/Google/OneDrive
+//                    locks the target file.
 #ifndef Q_OS_WIN
 #define USE_QSAVEFILE
 #endif
@@ -648,7 +676,7 @@ KisImportExportErrorCode KisImportExportManager::doExportImpl(const QString &loc
     if (filter->supportsIO() && !file.open(QFile::WriteOnly)) {
 #else
     QFileInfo fi(location);
-    QTemporaryFile file(fi.absolutePath() + ".XXXXXX.kra");
+    QTemporaryFile file(QDir::tempPath() + "/.XXXXXX.kra");
     if (filter->supportsIO() && !file.open()) {
 #endif
         KisImportExportErrorCannotWrite result(file.error());

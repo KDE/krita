@@ -256,10 +256,14 @@ void KoToolBase::setStatusText(const QString &statusText)
 uint KoToolBase::handleRadius() const
 {
     Q_D(const KoToolBase);
-    if(d->canvas->shapeController()->resourceManager())
+    if (d->canvas
+            && d->canvas->shapeController()
+            && d->canvas->shapeController()->resourceManager()
+       )
     {
         return d->canvas->shapeController()->resourceManager()->handleRadius();
-    } else {
+    }
+    else {
         return 3;
     }
 }

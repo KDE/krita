@@ -74,7 +74,7 @@ void KisGeneratorLayer::setFilter(KisFilterConfigurationSP filterConfig)
 {
     KisSelectionBasedLayer::setFilter(filterConfig);
     m_d->preparedRect = QRect();
-    update();
+    slotDelayedStaticUpdate();
 }
 
 void KisGeneratorLayer::slotDelayedStaticUpdate()
@@ -115,15 +115,15 @@ void KisGeneratorLayer::update()
 
     QVector<QRect> dirtyRegion;
 
-    Q_FOREACH (const QRect &rc, processRegion.rects()) {
+    auto rc = processRegion.begin();
+    while (rc != processRegion.end()) {
         KisProcessingInformation dstCfg(originalDevice,
-                                        rc.topLeft(),
+                                        rc->topLeft(),
                                         KisSelectionSP());
 
-        f->generate(dstCfg, rc.size(), filterConfig.data());
-
-        dirtyRegion << rc;
-
+        f->generate(dstCfg, rc->size(), filterConfig.data());
+        dirtyRegion << *rc;
+        rc++;
     }
 
     m_d->preparedRect = updateRect;

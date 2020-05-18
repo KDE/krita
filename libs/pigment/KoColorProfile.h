@@ -20,6 +20,7 @@
 #ifndef _KO_COLOR_PROFILE_H_
 #define _KO_COLOR_PROFILE_H_
 
+#include <boost/operators.hpp>
 #include <QString>
 #include <QVector>
 #include <QVariant>
@@ -29,7 +30,7 @@
 /**
  * Contains information needed for color transformation.
  */
-class KRITAPIGMENT_EXPORT KoColorProfile
+class KRITAPIGMENT_EXPORT KoColorProfile : public boost::equality_comparable<KoColorProfile>
 {
 
 public:

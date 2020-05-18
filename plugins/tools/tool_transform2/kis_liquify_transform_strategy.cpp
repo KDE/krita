@@ -22,6 +22,7 @@
 
 #include <QPointF>
 #include <QPainter>
+#include <QPainterPath>
 
 #include "KoPointerEvent.h"
 

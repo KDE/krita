@@ -98,6 +98,7 @@ KisDlgFilter::KisDlgFilter(KisViewManager *view, KisNodeSP node, KisFilterManage
     connect(d->uiFilterDialog.filterSelection, SIGNAL(configurationChanged()), SLOT(filterSelectionChanged()));
 
     connect(this, SIGNAL(accepted()), SLOT(slotOnAccept()));
+    connect(this, SIGNAL(accepted()), d->uiFilterDialog.filterSelection, SLOT(slotBookMarkCurrentFilter()));
     connect(this, SIGNAL(rejected()), SLOT(slotOnReject()));
 
     KConfigGroup group( KSharedConfig::openConfig(), "filterdialog");
@@ -197,7 +198,7 @@ void KisDlgFilter::createMask()
     }
 
     KisLayer *layer = qobject_cast<KisLayer*>(d->node.data());
-    KisFilterMaskSP mask = new KisFilterMask();
+    KisFilterMaskSP mask = new KisFilterMask(i18n("Filter Mask"));
     mask->setName(d->currentFilter->name());
     mask->initSelection(d->view->selection(), layer);
     mask->setFilter(d->uiFilterDialog.filterSelection->configuration());

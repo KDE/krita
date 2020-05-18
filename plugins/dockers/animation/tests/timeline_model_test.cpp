@@ -29,6 +29,7 @@
 
 #include "kis_image_animation_interface.h"
 #include "KisDocument.h"
+#include "KisNodeDisplayModeAdapter.h"
 #include "KisPart.h"
 #include "kis_name_server.h"
 #include "flake/kis_shape_controller.h"
@@ -54,6 +55,7 @@ void TimelineModelTest::init()
 
     m_nameServer = new KisNameServer();
     m_shapeController = new KisShapeController(m_doc, m_nameServer);
+    m_displayModeAdapter = new KisNodeDisplayModeAdapter();
     //m_nodeModel = new KisNodeModel(0);
 
     initBase();
@@ -69,6 +71,7 @@ void TimelineModelTest::cleanup()
     delete m_shapeController;
     delete m_nameServer;
     delete m_doc;
+    delete m_displayModeAdapter;
 }
 
 #include "timeline_frames_index_converter.h"
@@ -96,7 +99,7 @@ void TimelineModelTest::testConverter()
     QCOMPARE(converter.dummyFromRow(1), m_shapeController->dummyForNode(m_layer2));
     QCOMPARE(converter.dummyFromRow(0), m_shapeController->dummyForNode(m_sel3));
 
-    TimelineNodeListKeeper keeper(0, m_shapeController);
+    TimelineNodeListKeeper keeper(0, m_shapeController, m_displayModeAdapter);
 
     QCOMPARE(keeper.rowCount(), 3);
     QCOMPARE(keeper.rowForDummy(m_shapeController->dummyForNode(m_layer1)), 2);
@@ -193,7 +196,7 @@ void TimelineModelTest::testView()
 
     framesTable->setModel(model);
 
-    model->setDummiesFacade(m_shapeController, m_image);
+    model->setDummiesFacade(m_shapeController, m_image, m_displayModeAdapter);
     model->setNodeManipulationInterface(new TestingInterface(m_image));
 
     m_layer1->enableAnimation();

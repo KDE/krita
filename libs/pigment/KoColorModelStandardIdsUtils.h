@@ -52,6 +52,26 @@ template<> inline KoID colorDepthIdForChannelType<double>() {
     return Float64BitsColorDepthID;
 }
 
+template <template <typename T> class Functor,
+          typename... Args,
+          typename Result = decltype(std::declval<Functor<quint8>>()(std::declval<Args>()...))>
+Result channelTypeForColorDepthId(const KoID &depthId, Args... args)
+{
+    if (depthId == Integer8BitsColorDepthID) {
+        return Functor<quint8>()(args...);
+    } else if (depthId == Integer16BitsColorDepthID) {
+        return Functor<quint16>()(args...);
+#ifdef HAVE_OPENEXR
+    } else if (depthId == Float16BitsColorDepthID) {
+        return Functor<half>()(args...);
+#endif
+    } else if (depthId == Float32BitsColorDepthID) {
+        return Functor<float>()(args...);
+    }
+
+    throw std::runtime_error("Invalid bit depth!");
+}
+
 
 #endif // KOCOLORMODELSTANDARDIDSUTILS_H
 

@@ -32,6 +32,9 @@ private Q_SLOTS:
     void testSerialization();
     void testConversion();
     void testSimpleSerialization();
+
+    void testComparison();
+    void testComparisonQVariant();
 };
 
 #endif

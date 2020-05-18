@@ -130,7 +130,6 @@ void KisToolBrush::slotSetSmoothingType(int index)
 
     switch (index) {
     case 0:
-        KisUsageLogger::log("Disabled smoothing.");
         smoothingOptions()->setSmoothingType(KisSmoothingOptions::NO_SMOOTHING);
         showControl(m_sliderSmoothnessDistance, false);
         showControl(m_sliderTailAggressiveness, false);
@@ -141,7 +140,6 @@ void KisToolBrush::slotSetSmoothingType(int index)
         showControl(m_chkStabilizeSensors, false);
         break;
     case 1:
-        KisUsageLogger::log("Enabled simple smoothing.");
         smoothingOptions()->setSmoothingType(KisSmoothingOptions::SIMPLE_SMOOTHING);
         showControl(m_sliderSmoothnessDistance, false);
         showControl(m_sliderTailAggressiveness, false);
@@ -152,7 +150,6 @@ void KisToolBrush::slotSetSmoothingType(int index)
         showControl(m_chkStabilizeSensors, false);
         break;
     case 2:
-        KisUsageLogger::log("Enabled weighted smoothing.");
         smoothingOptions()->setSmoothingType(KisSmoothingOptions::WEIGHTED_SMOOTHING);
         showControl(m_sliderSmoothnessDistance, true);
         showControl(m_sliderTailAggressiveness, true);
@@ -164,7 +161,6 @@ void KisToolBrush::slotSetSmoothingType(int index)
         break;
     case 3:
     default:
-        KisUsageLogger::log("Enabled stabilizer.");
         smoothingOptions()->setSmoothingType(KisSmoothingOptions::STABILIZER);
         showControl(m_sliderSmoothnessDistance, true);
         showControl(m_sliderTailAggressiveness, false);

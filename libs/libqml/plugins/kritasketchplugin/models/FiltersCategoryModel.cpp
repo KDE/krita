@@ -188,7 +188,7 @@ void FiltersCategoryModel::setView(QObject* newView)
     if (d->view)
     {
         d->refreshContents();
-        connect(d->view->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)), this, SLOT(activeLayerChanged(KisLayerSP)));
+//        connect(d->view->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)), this, SLOT(activeLayerChanged(KisLayerSP)));
         connect(d->view->selectionManager(), SIGNAL(currentSelectionChanged()), this, SLOT(activeSelectionChanged()));
     }
     emit viewChanged();

@@ -26,6 +26,7 @@
 #include <QHash>
 #include <QIODevice>
 #include <qmath.h>
+#include <KisRegion.h>
 
 #include <klocalizedstring.h>
 
@@ -91,6 +92,9 @@ public:
     class KisPaintDeviceStrategy;
     class KisPaintDeviceWrappedStrategy;
 
+    class DeviceChangeProfileCommand;
+    class DeviceChangeColorSpaceCommand;
+
     Private(KisPaintDevice *paintDevice);
     ~Private();
 
@@ -109,7 +113,7 @@ public:
 
     void init(const KoColorSpace *cs, const quint8 *defaultPixel);
     void convertColorSpace(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags, KUndo2Command *parentCommand);
-    bool assignProfile(const KoColorProfile * profile);
+    bool assignProfile(const KoColorProfile * profile, KUndo2Command *parentCommand);
 
     inline const KoColorSpace* colorSpace() const
     {
@@ -192,7 +196,7 @@ public:
     void prepareClone(KisPaintDeviceSP src)
     {
         prepareCloneImpl(src, src->m_d->currentData());
-        Q_ASSERT(fastBitBltPossible(src));
+        KIS_SAFE_ASSERT_RECOVER_NOOP(fastBitBltPossible(src));
     }
 
     bool fastBitBltPossible(KisPaintDeviceSP src)
@@ -405,7 +409,7 @@ public:
     LodDataStruct* createLodDataStruct(int lod);
     void updateLodDataStruct(LodDataStruct *dst, const QRect &srcRect);
     void uploadLodDataStruct(LodDataStruct *dst);
-    QRegion regionForLodSyncing() const;
+    KisRegion regionForLodSyncing() const;
 
     void updateLodDataManager(KisDataManager *srcDataManager,
                               KisDataManager *dstDataManager, const QPoint &srcOffset, const QPoint &dstOffset,
@@ -448,8 +452,6 @@ public:
 
 
 private:
-
-    QRegion syncWholeDevice(Data *srcData);
 
     inline DataSP currentFrameData() const
     {
@@ -524,10 +526,17 @@ private:
 
     void prepareCloneImpl(KisPaintDeviceSP src, Data *srcData)
     {
-        currentData()->prepareClone(srcData);
-
+        /**
+         * The result of currentData() depends on the current
+         * level of detail and animation frame index. So we
+         * should first connect the device to the new
+         * default bounds object, and only after that ask
+         * currentData() to start cloning.
+         */
         q->setDefaultPixel(KoColor(srcData->dataManager()->defaultPixel(), colorSpace()));
         q->setDefaultBounds(src->defaultBounds());
+
+        currentData()->prepareClone(srcData);
     }
 
     bool fastBitBltPossibleImpl(Data *srcData)
@@ -648,7 +657,7 @@ struct KisPaintDevice::Private::LodDataStructImpl : public KisPaintDevice::LodDa
     QScopedPointer<Data> lodData;
 };
 
-QRegion KisPaintDevice::Private::regionForLodSyncing() const
+KisRegion KisPaintDevice::Private::regionForLodSyncing() const
 {
     Data *srcData = currentNonLodData();
     return srcData->dataManager()->region().translated(srcData->x(), srcData->y());
@@ -685,7 +694,6 @@ KisPaintDevice::LodDataStruct* KisPaintDevice::Private::createLodDataStruct(int 
         // FIXME: different kind of synchronization
     }
 
-    //QRegion dirtyRegion = syncWholeDevice(srcData);
     lodData->cache()->invalidate();
 
     return lodStruct;
@@ -897,49 +905,60 @@ void KisPaintDevice::Private::tesingFetchLodDevice(KisPaintDeviceSP targetDevice
     transferFromData(data, targetDevice);
 }
 
+class KisPaintDevice::Private::DeviceChangeProfileCommand : public KUndo2Command
+{
+public:
+    DeviceChangeProfileCommand(KisPaintDeviceSP device, KUndo2Command *parent = 0)
+        : KUndo2Command(parent),
+          m_device(device)
+    {
+    }
+
+    virtual void emitNotifications()
+    {
+        m_device->emitProfileChanged();
+    }
+
+    void redo() override
+    {
+        if (m_firstRun) {
+            m_firstRun = false;
+            return;
+        }
+
+        KUndo2Command::redo();
+        emitNotifications();
+    }
+
+    void undo() override
+    {
+        KUndo2Command::undo();
+        emitNotifications();
+    }
+
+protected:
+    KisPaintDeviceSP m_device;
+
+private:
+    bool m_firstRun {true};
+};
+
+class KisPaintDevice::Private::DeviceChangeColorSpaceCommand : public DeviceChangeProfileCommand
+{
+public:
+    DeviceChangeColorSpaceCommand(KisPaintDeviceSP device, KUndo2Command *parent = 0)
+        : DeviceChangeProfileCommand(device, parent)
+    {
+    }
+
+    void emitNotifications() override
+    {
+        m_device->emitColorSpaceChanged();
+    }
+};
+
 void KisPaintDevice::Private::convertColorSpace(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags, KUndo2Command *parentCommand)
 {
-
-    class DeviceChangeColorSpaceCommand : public KUndo2Command
-    {
-    public:
-        DeviceChangeColorSpaceCommand(KisPaintDeviceSP device, KUndo2Command *parent = 0)
-            : KUndo2Command(parent),
-              m_firstRun(true),
-              m_device(device)
-        {
-        }
-
-        void emitNotifications()
-        {
-            m_device->emitColorSpaceChanged();
-            m_device->setDirty();
-        }
-
-        void redo() override
-        {
-            KUndo2Command::redo();
-
-            if (!m_firstRun) {
-                m_firstRun = false;
-                return;
-            }
-
-            emitNotifications();
-        }
-
-        void undo() override
-        {
-            KUndo2Command::undo();
-            emitNotifications();
-        }
-
-    private:
-        bool m_firstRun;
-        KisPaintDeviceSP m_device;
-    };
-
-
     QList<Data*> dataObjects = allDataObjects();
     if (dataObjects.isEmpty()) return;
 
@@ -955,7 +974,7 @@ void KisPaintDevice::Private::convertColorSpace(const KoColorSpace * dstColorSpa
     q->emitColorSpaceChanged();
 }
 
-bool KisPaintDevice::Private::assignProfile(const KoColorProfile * profile)
+bool KisPaintDevice::Private::assignProfile(const KoColorProfile * profile, KUndo2Command *parentCommand)
 {
     if (!profile) return false;
 
@@ -963,10 +982,14 @@ bool KisPaintDevice::Private::assignProfile(const KoColorProfile * profile)
         KoColorSpaceRegistry::instance()->colorSpace(colorSpace()->colorModelId().id(), colorSpace()->colorDepthId().id(), profile);
     if (!dstColorSpace) return false;
 
+    KUndo2Command *mainCommand =
+        parentCommand ? new DeviceChangeColorSpaceCommand(q, parentCommand) : 0;
+
+
     QList<Data*> dataObjects = allDataObjects();
     Q_FOREACH (Data *data, dataObjects) {
         if (!data) continue;
-        data->assignColorSpace(dstColorSpace);
+        data->assignColorSpace(dstColorSpace, mainCommand);
     }
     q->emitProfileChanged();
 
@@ -1067,7 +1090,6 @@ void KisPaintDevice::setProjectionDevice(bool value)
 void KisPaintDevice::prepareClone(KisPaintDeviceSP src)
 {
     m_d->prepareClone(src);
-    Q_ASSERT(fastBitBltPossible(src));
 }
 
 void KisPaintDevice::makeCloneFrom(KisPaintDeviceSP src, const QRect &rect)
@@ -1106,14 +1128,14 @@ void KisPaintDevice::setDirty(const QRect & rc)
         m_d->parent->setDirty(rc);
 }
 
-void KisPaintDevice::setDirty(const QRegion & region)
+void KisPaintDevice::setDirty(const KisRegion &region)
 {
     m_d->cache()->invalidate();
     if (m_d->parent.isValid())
         m_d->parent->setDirty(region);
 }
 
-void KisPaintDevice::setDirty(const QVector<QRect> rects)
+void KisPaintDevice::setDirty(const QVector<QRect> &rects)
 {
     m_d->cache()->invalidate();
     if (m_d->parent.isValid())
@@ -1209,7 +1231,7 @@ QRect KisPaintDevice::extent() const
     return m_d->currentStrategy()->extent();
 }
 
-QRegion KisPaintDevice::region() const
+KisRegion KisPaintDevice::region() const
 {
     return m_d->currentStrategy()->region();
 }
@@ -1410,15 +1432,15 @@ QRect KisPaintDevice::calculateExactBounds(bool nonDefaultOnly) const
     return endRect;
 }
 
-QRegion KisPaintDevice::regionExact() const
+KisRegion KisPaintDevice::regionExact() const
 {
-    QRegion resultRegion;
-    QVector<QRect> rects = region().rects();
+    QVector<QRect> sourceRects = region().rects();
+    QVector<QRect> resultRects;
 
     const KoColor defaultPixel = this->defaultPixel();
     Impl::CheckNonDefault compareOp(pixelSize(), defaultPixel.data());
 
-    Q_FOREACH (const QRect &rc1, rects) {
+    Q_FOREACH (const QRect &rc1, sourceRects) {
         const int patchSize = 64;
         QVector<QRect> smallerRects = KritaUtils::splitRectIntoPatches(rc1, QSize(patchSize, patchSize));
         Q_FOREACH (const QRect &rc2, smallerRects) {
@@ -1427,11 +1449,11 @@ QRegion KisPaintDevice::regionExact() const
                 Impl::calculateExactBoundsImpl(this, rc2, QRect(), compareOp);
 
             if (!result.isEmpty()) {
-                resultRegion += result;
+                resultRects << result;
             }
         }
     }
-    return resultRegion;
+    return KisRegion(std::move(resultRects));
 }
 
 void KisPaintDevice::crop(qint32 x, qint32 y, qint32 w, qint32 h)
@@ -1518,9 +1540,9 @@ void KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoColorConver
     m_d->convertColorSpace(dstColorSpace, renderingIntent, conversionFlags, parentCommand);
 }
 
-bool KisPaintDevice::setProfile(const KoColorProfile * profile)
+bool KisPaintDevice::setProfile(const KoColorProfile * profile, KUndo2Command *parentCommand)
 {
-    return m_d->assignProfile(profile);
+    return m_d->assignProfile(profile, parentCommand);
 }
 
 KisDataManagerSP KisPaintDevice::dataManager() const
@@ -1959,7 +1981,13 @@ KisRasterKeyframeChannel *KisPaintDevice::createKeyframeChannel(const KoID &id)
     m_d->framesInterface.reset(new KisPaintDeviceFramesInterface(this));
 
     Q_ASSERT(!m_d->contentChannel);
-    m_d->contentChannel.reset(new KisRasterKeyframeChannel(id, this, m_d->defaultBounds));
+    if (m_d->parent.isValid()) {
+        m_d->contentChannel.reset(new KisRasterKeyframeChannel(id, this, m_d->parent));
+    } else {
+        //fallback when paint device is isolated / does not belong to a node.
+        ENTER_FUNCTION() << ppVar(this) << ppVar(m_d->defaultBounds);
+        m_d->contentChannel.reset(new KisRasterKeyframeChannel(id, this, m_d->defaultBounds));
+    }
 
     // Raster channels always have at least one frame (representing a static image)
     KUndo2Command tempParentCommand;
@@ -2046,7 +2074,7 @@ KisPaintDevice::LodDataStruct::~LodDataStruct()
 {
 }
 
-QRegion KisPaintDevice::regionForLodSyncing() const
+KisRegion KisPaintDevice::regionForLodSyncing() const
 {
     return m_d->regionForLodSyncing();
 }

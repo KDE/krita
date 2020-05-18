@@ -33,6 +33,7 @@
 #include <QSpinBox>
 
 #include <kis_config.h>
+#include <KisDialogStateSaver.h>
 
 DlgLayerSplit::DlgLayerSplit()
     : KoDialog()
@@ -48,20 +49,28 @@ DlgLayerSplit::DlgLayerSplit()
 
     m_colorSetChooser = new KisPaletteListWidget();
     m_page->paletteChooser->setPopupWidget(m_colorSetChooser);
+
     connect(m_colorSetChooser, SIGNAL(sigPaletteSelected(KoColorSet*)), this, SLOT(slotSetPalette(KoColorSet*)));
 
-    KisConfig cfg(true);
-    m_page->intFuzziness->setValue(cfg.readEntry<int>("layersplit/fuzziness", 20));
-    m_page->chkCreateGroupLayer->setChecked(cfg.readEntry<bool>("layerspit/createmastergroup", true));
-    m_page->chkSeparateGroupLayers->setChecked(cfg.readEntry<bool>("layerspit/separategrouplayers", false));
-    m_page->chkAlphaLock->setChecked(cfg.readEntry<bool>("layerspit/alphalock", true));
-    m_page->chkHideOriginal->setChecked(cfg.readEntry<bool>("layerspit/hideoriginal", false));
-    m_page->chkSortLayers->setChecked(cfg.readEntry<bool>("layerspit/sortlayers", true));
-    m_page->chkDisregardOpacity->setChecked(cfg.readEntry<bool>("layerspit/disregardopacity", true));
+    QMap<QString, QVariant> defaults;
+    defaults[ m_page->intFuzziness->objectName() ] = QVariant::fromValue<int>(20);
+    defaults[ m_page->chkCreateGroupLayer->objectName() ] = QVariant::fromValue<bool>(true);
+    defaults[ m_page->chkSeparateGroupLayers->objectName() ] = QVariant::fromValue<bool>(false);
+    defaults[ m_page->chkAlphaLock->objectName() ] = QVariant::fromValue<bool>(true);
+    defaults[ m_page->chkHideOriginal->objectName() ] = QVariant::fromValue<bool>(false);
+    defaults[ m_page->chkSortLayers->objectName() ] = QVariant::fromValue<bool>(true);
+    defaults[ m_page->chkDisregardOpacity->objectName() ] = QVariant::fromValue<bool>(true);
 
+    KisDialogStateSaver::restoreState(m_page, "krita/layer_split", defaults);
+
+    connect(m_page->cmbMode, SIGNAL(currentIndexChanged(int)), this, SLOT(slotChangeMode(int)));
+
+    KisConfig cfg(true);
     QString paletteName = cfg.readEntry<QString>("layersplit/paletteName", i18n("Default"));
     KoResourceServer<KoColorSet> *pserver = KoResourceServerProvider::instance()->paletteServer();
     KoColorSet *pal = pserver->resourceByName(paletteName);
+    modeToMask = m_page->cmbMode->currentIndex();
+    slotChangeMode(modeToMask);
     if (pal) {
         m_palette = pal;
         m_page->paletteChooser->setText(pal->name());
@@ -70,7 +79,7 @@ DlgLayerSplit::DlgLayerSplit()
     }
 
 
-    connect(this, SIGNAL(applyClicked()), this, SLOT(applyClicked()));
+    connect(this, SIGNAL(applyClicked()), this, SLOT(slotApplyClicked()));
 
     setMainWidget(m_page);
 }
@@ -79,16 +88,12 @@ DlgLayerSplit::~DlgLayerSplit()
 {
 }
 
-void DlgLayerSplit::applyClicked()
+void DlgLayerSplit::slotApplyClicked()
 {
+    
+    KisDialogStateSaver::saveState(m_page, "krita/layer_split");
+
     KisConfig cfg(false);
-    cfg.writeEntry("layersplit/fuzziness", m_page->intFuzziness->value());
-    cfg.writeEntry("layerspit/createmastergroup", m_page->chkCreateGroupLayer->isChecked());
-    cfg.writeEntry("layerspit/separategrouplayers", m_page->chkSeparateGroupLayers->isChecked());
-    cfg.writeEntry("layerspit/alphalock", m_page->chkAlphaLock->isChecked());
-    cfg.writeEntry("layerspit/hideoriginal", m_page->chkHideOriginal->isChecked());
-    cfg.writeEntry("layerspit/sortlayers", m_page->chkSortLayers->isChecked());
-    cfg.writeEntry("layerspit/disregardopacity", m_page->chkDisregardOpacity->isChecked());
     if (m_palette) {
         cfg.writeEntry("layersplit/paletteName", m_palette->name());
     }
@@ -144,5 +149,21 @@ void DlgLayerSplit::slotSetPalette(KoColorSet *pal)
         m_page->paletteChooser->setText(pal->name());
         QIcon icon(QPixmap::fromImage(pal->image()));
         m_page->paletteChooser->setIcon(icon);
+    }
+}
+
+void DlgLayerSplit::slotChangeMode(int idx){
+    modeToMask = idx;
+    if( modeToMask){
+        m_page->chkCreateGroupLayer->hide();
+        m_page->chkSeparateGroupLayers->hide();
+        m_page->chkAlphaLock->hide();
+        m_page->chkHideOriginal->hide();
+    }
+    else{
+        m_page->chkCreateGroupLayer->show();
+        m_page->chkSeparateGroupLayers->show();
+        m_page->chkAlphaLock->show();
+        m_page->chkHideOriginal->show();
     }
 }

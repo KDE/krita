@@ -51,19 +51,19 @@ public:
 
     enumSepAlphaOptions getAlphaOptions();
     enumSepSource getSource();
-    enumSepOutput getOutput();
 
     bool getDownscale();
     void enableDownscale(bool enable);
 
     bool getToColor();
+    bool getActivateCurrentChannel();
 
 
 private Q_SLOTS:
 
     void slotSetColorSpaceLabel();
     void okClicked();
-    void disableDownScaleIfPossible(bool disable);
+    void separateToColorActivated(bool disable);
 
 private:
 

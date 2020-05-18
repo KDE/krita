@@ -36,6 +36,10 @@ KisASCCDLConfigWidget::KisASCCDLConfigWidget(QWidget *parent, const KoColorSpace
     m_page->btnOffset->setColor(black);
     m_page->btnPower->setColor(black);
 
+    m_page->slopeSelector->slotSetColorSpace(m_cs);
+    m_page->offsetSelector->slotSetColorSpace(m_cs);
+    m_page->powerSelector->slotSetColorSpace(m_cs);
+
     connect(m_page->btnSlope , SIGNAL(changed(KoColor)), this,  SLOT(slopeColorChanged(KoColor)));
     connect(m_page->btnOffset, SIGNAL(changed(KoColor)), this,  SLOT(offsetColorChanged(KoColor)));
     connect(m_page->btnPower , SIGNAL(changed(KoColor)), this,  SLOT(powerColorChanged(KoColor)));

@@ -1423,7 +1423,7 @@ namespace KisLayerUtils {
                     mask->selection()->pixelSelection(), SELECTION_ADD);
             }
 
-            KisSelectionMaskSP mergedMask = new KisSelectionMask(m_info->image);
+            KisSelectionMaskSP mergedMask = new KisSelectionMask(m_info->image, i18n("Selection Mask"));
             mergedMask->initSelection(parentLayer);
             mergedMask->setSelection(selection);
 
@@ -1629,17 +1629,19 @@ namespace KisLayerUtils {
             QRegion dirtyRegion = realNodeRect;
             dirtyRegion -= preparedArea;
 
-            Q_FOREACH (const QRect &rc, dirtyRegion.rects()) {
-                image->refreshGraphAsync(rootNode, rc, realNodeRect);
+            auto rc = dirtyRegion.begin();
+            while (rc != dirtyRegion.end()) {
+                image->refreshGraphAsync(rootNode, *rc, realNodeRect);
+                rc++;
             }
         }
     }
 
-    QRect recursiveNodeExactBounds(KisNodeSP rootNode)
+    QRect recursiveTightNodeVisibleBounds(KisNodeSP rootNode)
     {
         QRect exactBounds;
         recursiveApplyNodes(rootNode, [&exactBounds] (KisNodeSP node) {
-            exactBounds |= node->exactBounds();
+            exactBounds |= node->projectionPlane()->tightUserVisibleBounds();
         });
         return exactBounds;
     }

@@ -269,12 +269,7 @@ void KisSavedMacroCommand::addCommand(KUndo2CommandSP command,
     m_d->commands.append(item);
 }
 
-void KisSavedMacroCommand::performCancel(KisStrokeId id, bool strokeUndo)
-{
-    addCommands(id, !strokeUndo);
-}
-
-void KisSavedMacroCommand::getCommandExecutionJobs(QVector<KisStrokeJobData *> *jobs, bool undo) const
+void KisSavedMacroCommand::getCommandExecutionJobs(QVector<KisStrokeJobData *> *jobs, bool undo, bool shouldGoToHistory) const
 {
     QVector<Private::SavedCommand>::iterator it;
 
@@ -284,7 +279,8 @@ void KisSavedMacroCommand::getCommandExecutionJobs(QVector<KisStrokeJobData *> *
                        Data(it->command,
                             undo,
                             it->sequentiality,
-                            it->exclusivity);
+                            it->exclusivity,
+                            shouldGoToHistory);
         }
     }
     else {
@@ -295,7 +291,8 @@ void KisSavedMacroCommand::getCommandExecutionJobs(QVector<KisStrokeJobData *> *
                      Data(it->command,
                           undo,
                           it->sequentiality,
-                          it->exclusivity);
+                          it->exclusivity,
+                          shouldGoToHistory);
         }
     }
 }

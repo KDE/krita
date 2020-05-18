@@ -123,7 +123,7 @@ LutDockerDock::LutDockerDock()
     connect(m_bnSelectLut, SIGNAL(clicked()), SLOT(selectLut()));
     connect(m_bnClearLut, SIGNAL(clicked()), SLOT(clearLut()));
 
-    // See http://groups.google.com/group/ocio-dev/browse_thread/thread/ec95c5f54a74af65 -- maybe need to be reinstated
+    // See https://groups.google.com/group/ocio-dev/browse_thread/thread/ec95c5f54a74af65 -- maybe need to be reinstated
     // when people ask for it.
     m_lblLut->hide();
     m_txtLut->hide();

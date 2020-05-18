@@ -77,6 +77,7 @@ set(kritawidgets_LIB_SRCS
 
     # classes used by internal color selector
     kis_spinbox_color_selector.cpp
+    KisSpinboxHSXSelector.cpp
     KisVisualColorSelector.cpp
     KisVisualColorSelectorShape.cpp
     KisVisualEllipticalSelectorShape.cpp

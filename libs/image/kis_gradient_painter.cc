@@ -38,6 +38,7 @@
 #include "kis_polygonal_gradient_shape_strategy.h"
 #include "kis_cached_gradient_shape_strategy.h"
 #include "krita_utils.h"
+#include "KoMixColorsOp.h"
 
 
 class CachedGradient : public KoEphemeralResource<KoAbstractGradient>
@@ -867,6 +868,199 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
     const KoColorSpace * colorSpace = dev->colorSpace();
     const qint32 pixelSize = colorSpace->pixelSize();
 
+    // The following combinations of options have aliasing artifacts
+    // where the first color meets the last color of the gradient.
+    // so antialias threshold is used to compute if the pixel is in
+    // the smothing area. Then linear interpolation is used to blend
+    // between the first and last colors
+    if (antiAliasThreshold > DBL_EPSILON) {
+        if ((m_d->shape == GradientShapeLinear || m_d->shape == GradientShapeRadial ||
+            m_d->shape == GradientShapeSquare || m_d->shape == GradientShapeSpiral ||
+            m_d->shape == GradientShapeReverseSpiral)
+            && repeat == GradientRepeatForwards) {
+            double dx = gradientVectorEnd.x() - gradientVectorStart.x();
+            double dy = gradientVectorEnd.y() - gradientVectorStart.y();
+            double distanceInPixels = sqrt(dx * dx + dy * dy);
+            double antiAliasThresholdNormalized = antiAliasThreshold / distanceInPixels;
+            double antiAliasThresholdNormalizedRev = 1. - antiAliasThresholdNormalized;
+            double antiAliasThresholdNormalizedDbl = 2. * antiAliasThresholdNormalized;
+            Q_FOREACH (const Private::ProcessRegion &r, m_d->processRegions) {
+                QRect processRect = r.processRect;
+                QSharedPointer<KisGradientShapeStrategy> shapeStrategy = r.precalculatedShapeStrategy;
+
+                CachedGradient cachedGradient(gradient(), qMax(processRect.width(), processRect.height()), colorSpace);
+
+                KisSequentialIteratorProgress it(dev, processRect, progressUpdater());
+
+                const quint8 *colors[2];
+                colors[0] = cachedGradient.cachedAt(1.);
+                colors[1] = cachedGradient.cachedAt(0.);
+
+                while (it.nextPixel()) {
+                    double realT = shapeStrategy->valueAt(it.x(), it.y());
+                    double t = realT; 
+                    t = repeatStrategy->valueAt(t);
+
+                    if (reverseGradient) {
+                        t = 1 - t;
+                    }
+
+                    if ((m_d->shape == GradientShapeRadial || m_d->shape == GradientShapeSquare)
+                        && realT < antiAliasThresholdNormalized) {
+                        memcpy(it.rawData(), cachedGradient.cachedAt(t), pixelSize);
+                    } else if (t <= antiAliasThresholdNormalized || t >= antiAliasThresholdNormalizedRev) {
+                        double s;
+                        if (t <= antiAliasThresholdNormalized) {
+                            s = .5 + t / antiAliasThresholdNormalizedDbl;
+                        } else {
+                            s = (t - antiAliasThresholdNormalizedRev) / antiAliasThresholdNormalizedDbl;
+                        }
+                        KoColor mixedColor(colorSpace);
+                        qint16 colorWeights[2];
+                        colorWeights[0] = static_cast<quint8>((1.0 - s) * 255 + 0.5);
+                        colorWeights[1] = 255 - colorWeights[0];
+                        colorSpace->mixColorsOp()->mixColors(colors, colorWeights, 2, mixedColor.data());
+                        memcpy(it.rawData(), mixedColor.data(), pixelSize);
+                    } else {
+                        memcpy(it.rawData(), cachedGradient.cachedAt(t), pixelSize);
+                    }
+                }
+
+                bitBlt(processRect.topLeft(), dev, processRect);
+            }
+            return true;
+
+        } else if (m_d->shape == GradientShapeConical) {
+            Q_FOREACH (const Private::ProcessRegion &r, m_d->processRegions) {
+                QRect processRect = r.processRect;
+                QSharedPointer<KisGradientShapeStrategy> shapeStrategy = r.precalculatedShapeStrategy;
+
+                CachedGradient cachedGradient(gradient(), qMax(processRect.width(), processRect.height()), colorSpace);
+
+                KisSequentialIteratorProgress it(dev, processRect, progressUpdater());
+
+                const quint8 *colors[2];
+                colors[0] = cachedGradient.cachedAt(1.);
+                colors[1] = cachedGradient.cachedAt(0.);
+
+                while (it.nextPixel()) {
+                    double dx = it.x() - gradientVectorStart.x();
+                    double dy = it.y() - gradientVectorStart.y();
+                    double distance = sqrt(dx * dx + dy * dy);
+                    double perimeter = 2. * M_PI * distance;
+                    double antiAliasThresholdNormalized = antiAliasThreshold / perimeter;
+                    double antiAliasThresholdNormalizedRev = 1. - antiAliasThresholdNormalized;
+                    double antiAliasThresholdNormalizedDbl = 2. * antiAliasThresholdNormalized;
+
+                    double t = shapeStrategy->valueAt(it.x(), it.y()); 
+                    t = repeatStrategy->valueAt(t);
+
+                    if (reverseGradient) {
+                        t = 1 - t;
+                    }
+
+                    if (t <= antiAliasThresholdNormalized || t >= antiAliasThresholdNormalizedRev) {
+                        double s;
+                        if (t <= antiAliasThresholdNormalized) {
+                            s = .5 + t / antiAliasThresholdNormalizedDbl;
+                        } else {
+                            s = (t - antiAliasThresholdNormalizedRev) / antiAliasThresholdNormalizedDbl;
+                        }
+                        KoColor mixedColor(colorSpace);
+                        qint16 colorWeights[2];
+                        colorWeights[0] = static_cast<quint8>((1.0 - s) * 255 + 0.5);
+                        colorWeights[1] = 255 - colorWeights[0];
+                        colorSpace->mixColorsOp()->mixColors(colors, colorWeights, 2, mixedColor.data());
+                        memcpy(it.rawData(), mixedColor.data(), pixelSize);
+                    } else {
+                        memcpy(it.rawData(), cachedGradient.cachedAt(t), pixelSize);
+                    }
+                }
+
+                bitBlt(processRect.topLeft(), dev, processRect);
+
+            }
+            return true;
+
+        } else if ((m_d->shape == GradientShapeSpiral || m_d->shape == GradientShapeReverseSpiral) &&
+                   repeat == GradientRepeatNone) {
+            double dx1 = gradientVectorEnd.x() - gradientVectorStart.x();
+            double dy1 = gradientVectorEnd.y() - gradientVectorStart.y();
+            double lengthInPixels = sqrt(dx1 * dx1 + dy1 * dy1);
+            double angle = atan2(dy1, dx1) + M_PI;
+            Q_FOREACH (const Private::ProcessRegion &r, m_d->processRegions) {
+                QRect processRect = r.processRect;
+                QSharedPointer<KisGradientShapeStrategy> shapeStrategy = r.precalculatedShapeStrategy;
+
+                CachedGradient cachedGradient(gradient(), qMax(processRect.width(), processRect.height()), colorSpace);
+
+                KisSequentialIteratorProgress it(dev, processRect, progressUpdater());
+
+                const quint8 *colors[2];
+
+                while (it.nextPixel()) {
+                    double dx2 = it.x() - gradientVectorStart.x();
+                    double dy2 = it.y() - gradientVectorStart.y();
+                    double distance = sqrt(dx2 * dx2 + dy2 * dy2);
+                    double perimeter = 2. * M_PI * distance;
+                    double antiAliasThresholdNormalized = antiAliasThreshold / perimeter;
+                    double antiAliasThresholdNormalizedRev = 1. - antiAliasThresholdNormalized;
+                    double antiAliasThresholdNormalizedDbl = 2. * antiAliasThresholdNormalized;
+
+                    double t = shapeStrategy->valueAt(it.x(), it.y()); 
+                    t = repeatStrategy->valueAt(t);
+                    if (reverseGradient) {
+                        t = 1 - t;
+                        colors[0] = cachedGradient.cachedAt(0.);
+                    } else {
+                        colors[0] = cachedGradient.cachedAt(1.);
+                    }
+
+                    double r = atan2(dy2, dx2) + M_PI;
+                    r -= angle;
+                    if (r < 0.) {
+                        r += 2. * M_PI;
+                    }
+                    r /= (2. * M_PI);
+                    
+                    r = repeatStrategy->valueAt(r);
+
+                    if (distance < lengthInPixels && (r <= antiAliasThresholdNormalized || r >= antiAliasThresholdNormalizedRev)) {
+                        double s;
+                        if (r <= antiAliasThresholdNormalized) {
+                            s = .5 + r / antiAliasThresholdNormalizedDbl;
+                        } else {
+                            s = (r - antiAliasThresholdNormalizedRev) / antiAliasThresholdNormalizedDbl;
+                        }
+                        if (reverseGradient) {
+                            distance = lengthInPixels - distance;
+                        }
+                        if (m_d->shape == GradientShapeReverseSpiral) {
+                            colors[1] = colors[0];
+                            colors[0] = (cachedGradient.cachedAt(distance / lengthInPixels));
+                        } else {
+                            colors[1] = (cachedGradient.cachedAt(distance / lengthInPixels));
+                        }
+                        KoColor mixedColor(colorSpace);
+                        qint16 colorWeights[2];
+                        colorWeights[0] = static_cast<quint8>((1.0 - s) * 255 + 0.5);
+                        colorWeights[1] = 255 - colorWeights[0];
+                        colorSpace->mixColorsOp()->mixColors(colors, colorWeights, 2, mixedColor.data());
+                        memcpy(it.rawData(), mixedColor.data(), pixelSize);
+                    } else {
+                        memcpy(it.rawData(), cachedGradient.cachedAt(t), pixelSize);
+                    }
+                }
+
+                bitBlt(processRect.topLeft(), dev, processRect);
+
+            }
+            return true;
+
+        }
+    }
+
+    // Default behavior: no antialiasing required
     Q_FOREACH (const Private::ProcessRegion &r, m_d->processRegions) {
         QRect processRect = r.processRect;
         QSharedPointer<KisGradientShapeStrategy> shapeStrategy = r.precalculatedShapeStrategy;

@@ -878,12 +878,12 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
             m_d->shape == GradientShapeSquare || m_d->shape == GradientShapeSpiral ||
             m_d->shape == GradientShapeReverseSpiral)
             && repeat == GradientRepeatForwards) {
-            double dx = gradientVectorEnd.x() - gradientVectorStart.x();
-            double dy = gradientVectorEnd.y() - gradientVectorStart.y();
-            double distanceInPixels = sqrt(dx * dx + dy * dy);
-            double antiAliasThresholdNormalized = antiAliasThreshold / distanceInPixels;
-            double antiAliasThresholdNormalizedRev = 1. - antiAliasThresholdNormalized;
-            double antiAliasThresholdNormalizedDbl = 2. * antiAliasThresholdNormalized;
+            qreal dx = gradientVectorEnd.x() - gradientVectorStart.x();
+            qreal dy = gradientVectorEnd.y() - gradientVectorStart.y();
+            qreal distanceInPixels = sqrt(dx * dx + dy * dy);
+            qreal antiAliasThresholdNormalized = antiAliasThreshold / distanceInPixels;
+            qreal antiAliasThresholdNormalizedRev = 1. - antiAliasThresholdNormalized;
+            qreal antiAliasThresholdNormalizedDbl = 2. * antiAliasThresholdNormalized;
             Q_FOREACH (const Private::ProcessRegion &r, m_d->processRegions) {
                 QRect processRect = r.processRect;
                 QSharedPointer<KisGradientShapeStrategy> shapeStrategy = r.precalculatedShapeStrategy;
@@ -897,8 +897,8 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                 colors[1] = cachedGradient.cachedAt(0.);
 
                 while (it.nextPixel()) {
-                    double realT = shapeStrategy->valueAt(it.x(), it.y());
-                    double t = realT; 
+                    qreal realT = shapeStrategy->valueAt(it.x(), it.y());
+                    qreal t = realT; 
                     t = repeatStrategy->valueAt(t);
 
                     if (reverseGradient) {
@@ -909,7 +909,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                         && realT < antiAliasThresholdNormalized) {
                         memcpy(it.rawData(), cachedGradient.cachedAt(t), pixelSize);
                     } else if (t <= antiAliasThresholdNormalized || t >= antiAliasThresholdNormalizedRev) {
-                        double s;
+                        qreal s;
                         if (t <= antiAliasThresholdNormalized) {
                             s = .5 + t / antiAliasThresholdNormalizedDbl;
                         } else {
@@ -944,15 +944,15 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                 colors[1] = cachedGradient.cachedAt(0.);
 
                 while (it.nextPixel()) {
-                    double dx = it.x() - gradientVectorStart.x();
-                    double dy = it.y() - gradientVectorStart.y();
-                    double distance = sqrt(dx * dx + dy * dy);
-                    double perimeter = 2. * M_PI * distance;
-                    double antiAliasThresholdNormalized = antiAliasThreshold / perimeter;
-                    double antiAliasThresholdNormalizedRev = 1. - antiAliasThresholdNormalized;
-                    double antiAliasThresholdNormalizedDbl = 2. * antiAliasThresholdNormalized;
+                    qreal dx = it.x() - gradientVectorStart.x();
+                    qreal dy = it.y() - gradientVectorStart.y();
+                    qreal distance = sqrt(dx * dx + dy * dy);
+                    qreal perimeter = 2. * M_PI * distance;
+                    qreal antiAliasThresholdNormalized = antiAliasThreshold / perimeter;
+                    qreal antiAliasThresholdNormalizedRev = 1. - antiAliasThresholdNormalized;
+                    qreal antiAliasThresholdNormalizedDbl = 2. * antiAliasThresholdNormalized;
 
-                    double t = shapeStrategy->valueAt(it.x(), it.y()); 
+                    qreal t = shapeStrategy->valueAt(it.x(), it.y()); 
                     t = repeatStrategy->valueAt(t);
 
                     if (reverseGradient) {
@@ -960,7 +960,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                     }
 
                     if (t <= antiAliasThresholdNormalized || t >= antiAliasThresholdNormalizedRev) {
-                        double s;
+                        qreal s;
                         if (t <= antiAliasThresholdNormalized) {
                             s = .5 + t / antiAliasThresholdNormalizedDbl;
                         } else {
@@ -984,10 +984,10 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
 
         } else if ((m_d->shape == GradientShapeSpiral || m_d->shape == GradientShapeReverseSpiral) &&
                    repeat == GradientRepeatNone) {
-            double dx1 = gradientVectorEnd.x() - gradientVectorStart.x();
-            double dy1 = gradientVectorEnd.y() - gradientVectorStart.y();
-            double lengthInPixels = sqrt(dx1 * dx1 + dy1 * dy1);
-            double angle = atan2(dy1, dx1) + M_PI;
+            qreal dx1 = gradientVectorEnd.x() - gradientVectorStart.x();
+            qreal dy1 = gradientVectorEnd.y() - gradientVectorStart.y();
+            qreal lengthInPixels = sqrt(dx1 * dx1 + dy1 * dy1);
+            qreal angle = atan2(dy1, dx1) + M_PI;
             Q_FOREACH (const Private::ProcessRegion &r, m_d->processRegions) {
                 QRect processRect = r.processRect;
                 QSharedPointer<KisGradientShapeStrategy> shapeStrategy = r.precalculatedShapeStrategy;
@@ -999,15 +999,15 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                 const quint8 *colors[2];
 
                 while (it.nextPixel()) {
-                    double dx2 = it.x() - gradientVectorStart.x();
-                    double dy2 = it.y() - gradientVectorStart.y();
-                    double distance = sqrt(dx2 * dx2 + dy2 * dy2);
-                    double perimeter = 2. * M_PI * distance;
-                    double antiAliasThresholdNormalized = antiAliasThreshold / perimeter;
-                    double antiAliasThresholdNormalizedRev = 1. - antiAliasThresholdNormalized;
-                    double antiAliasThresholdNormalizedDbl = 2. * antiAliasThresholdNormalized;
+                    qreal dx2 = it.x() - gradientVectorStart.x();
+                    qreal dy2 = it.y() - gradientVectorStart.y();
+                    qreal distance = sqrt(dx2 * dx2 + dy2 * dy2);
+                    qreal perimeter = 2. * M_PI * distance;
+                    qreal antiAliasThresholdNormalized = antiAliasThreshold / perimeter;
+                    qreal antiAliasThresholdNormalizedRev = 1. - antiAliasThresholdNormalized;
+                    qreal antiAliasThresholdNormalizedDbl = 2. * antiAliasThresholdNormalized;
 
-                    double t = shapeStrategy->valueAt(it.x(), it.y()); 
+                    qreal t = shapeStrategy->valueAt(it.x(), it.y()); 
                     t = repeatStrategy->valueAt(t);
                     if (reverseGradient) {
                         t = 1 - t;
@@ -1016,7 +1016,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                         colors[0] = cachedGradient.cachedAt(1.);
                     }
 
-                    double r = atan2(dy2, dx2) + M_PI;
+                    qreal r = atan2(dy2, dx2) + M_PI;
                     r -= angle;
                     if (r < 0.) {
                         r += 2. * M_PI;
@@ -1026,7 +1026,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                     r = repeatStrategy->valueAt(r);
 
                     if (distance < lengthInPixels && (r <= antiAliasThresholdNormalized || r >= antiAliasThresholdNormalizedRev)) {
-                        double s;
+                        qreal s;
                         if (r <= antiAliasThresholdNormalized) {
                             s = .5 + r / antiAliasThresholdNormalizedDbl;
                         } else {
@@ -1070,7 +1070,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
         KisSequentialIteratorProgress it(dev, processRect, progressUpdater());
 
         while (it.nextPixel()) {
-            double t = shapeStrategy->valueAt(it.x(), it.y());
+            qreal t = shapeStrategy->valueAt(it.x(), it.y());
             t = repeatStrategy->valueAt(t);
 
             if (reverseGradient) {

@@ -127,7 +127,7 @@ android {
     def versionRelease  = 10
 
 	defaultConfig {
-        targetSdkVersion 26
+        targetSdkVersion 28
         minSdkVersion 21
         versionCode project.ext.versionCodes[abi] * 100000 + versionMajor * 1000 + versionMinor * 100 + versionRelease
     }

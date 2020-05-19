@@ -26,29 +26,52 @@
 #include <QThread>
 #include "kis_types.h"
 #include <vector>
+#include <kis_simple_stroke_strategy.h>
 
 class KisCanvas2;
 class KoColorSpace;
 
+
 typedef std::vector<std::vector<quint32> > HistVector; //Don't use QVector here - it's too slow for this purpose
 
+struct HistogramData
+{
+    HistogramData() {}
+    ~HistogramData() {}
 
-class HistogramComputationThread : public QThread
+    HistVector bins;
+    const KoColorSpace* colorSpace;
+};
+typedef QSharedPointer<HistogramData> HistogramDataSP;
+Q_DECLARE_METATYPE(HistogramData)
+
+
+class HistogramComputationStrokeStrategy : public QObject, public KisSimpleStrokeStrategy
 {
     Q_OBJECT
 public:
-    HistogramComputationThread(KisPaintDeviceSP _dev, const QRect& _bounds) : m_dev(_dev), m_bounds(_bounds)
-    {}
+    HistogramComputationStrokeStrategy(KisImageWSP image);
+    ~HistogramComputationStrokeStrategy() override;
 
-    void run() override;
-
-Q_SIGNALS:
-    void resultReady(HistVector*);
 
 private:
-    KisPaintDeviceSP m_dev;
-    QRect m_bounds;
-    HistVector bins;
+    void initStrokeCallback() override;
+    void doStrokeCallback(KisStrokeJobData *data) override;
+    void finishStrokeCallback() override;
+    void cancelStrokeCallback() override;
+
+    void initiateVector(HistVector &vec, const KoColorSpace* colorSpace);
+
+Q_SIGNALS:
+    //Emitted when thumbnail is updated and overviewImage is fully generated.
+    void computationResultReady(HistogramData data);
+
+
+private:
+    struct Private;
+    const QScopedPointer<Private> m_d;
+    KisImageSP m_image;
+    std::vector<HistVector> m_results;
 };
 
 
@@ -72,6 +95,8 @@ public Q_SLOTS:
      */
     void updateHistogram(KisCanvas2* canvas);
     void receiveNewHistogram(HistVector*);
+    void receiveNewHistogram(HistogramData data);
+
 
 private:
     HistVector m_histogramData;

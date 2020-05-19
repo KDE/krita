@@ -477,6 +477,7 @@ void Document::crop(int x, int y, int w, int h)
     if (!image) return;
     QRect rc(x, y, w, h);
     image->cropImage(rc);
+    image->waitForDone();
 }
 
 bool Document::exportImage(const QString &filename, const InfoObject &exportConfiguration)
@@ -494,6 +495,7 @@ void Document::flatten()
     if (!d->document) return;
     if (!d->document->image()) return;
     d->document->image()->flatten(0);
+    d->document->image()->waitForDone();
 }
 
 void Document::resizeImage(int x, int y, int w, int h)
@@ -508,6 +510,7 @@ void Document::resizeImage(int x, int y, int w, int h)
     rc.setHeight(h);
 
     image->resizeImage(rc);
+    image->waitForDone();
 }
 
 void Document::scaleImage(int w, int h, int xres, int yres, QString strategy)
@@ -523,6 +526,7 @@ void Document::scaleImage(int w, int h, int xres, int yres, QString strategy)
     if (!actualStrategy) actualStrategy = KisFilterStrategyRegistry::instance()->get("Bicubic");
 
     image->scaleImage(rc.size(), xres/72, yres/72, actualStrategy);
+    image->waitForDone();
 }
 
 void Document::rotateImage(double radians)
@@ -531,6 +535,7 @@ void Document::rotateImage(double radians)
     KisImageSP image = d->document->image();
     if (!image) return;
     image->rotateImage(radians);
+    image->waitForDone();
 }
 
 void Document::shearImage(double angleX, double angleY)
@@ -539,6 +544,7 @@ void Document::shearImage(double angleX, double angleY)
     KisImageSP image = d->document->image();
     if (!image) return;
     image->shear(angleX, angleY);
+    image->waitForDone();
 }
 
 bool Document::save()
@@ -759,12 +765,6 @@ bool Document::tryBarrierLock()
 {
     if (!d->document || !d->document->image()) return false;
     return d->document->image()->tryBarrierLock();
-}
-
-bool Document::isIdle()
-{
-    if (!d->document || !d->document->image()) return false;
-    return d->document->image()->isIdle();
 }
 
 void Document::refreshProjection()

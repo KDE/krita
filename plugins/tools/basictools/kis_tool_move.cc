@@ -170,13 +170,21 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
             !selection->selectedExactRect().isEmpty();
 
     if (pos) {
+        // finish stroke by clicking outside image bounds
+        if (m_strokeId && !image->bounds().contains(*pos)) {
+            endStroke();
+            return false;
+        }
+
+        // restart stroke when the mode has changed or the user tried to
+        // pick another layer in "layer under cursor" mode.
         if (m_strokeId &&
                 (m_currentMode != mode ||
                  m_currentlyUsingSelection != canUseSelectionMode ||
-                 (mode != MoveSelectedLayer &&
+                 (!m_currentlyUsingSelection &&
+                  mode != MoveSelectedLayer &&
                   !m_handlesRect.translated(currentOffset()).contains(*pos)))) {
 
-            selection = 0;
             endStroke();
         }
     }
@@ -189,6 +197,7 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
 
     bool isMoveSelection = false;
     if (canUseSelectionMode) {
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(selection, false);
 
         MoveSelectionStrokeStrategy *moveStrategy =
             new MoveSelectionStrokeStrategy(paintLayer,

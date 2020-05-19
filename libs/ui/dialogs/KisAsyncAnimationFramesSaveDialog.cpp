@@ -162,14 +162,14 @@ QList<int> KisAsyncAnimationFramesSaveDialog::calcDirtyFrames() const
 {
     QList<int> result;
     for (int frame = m_d->range.start(); frame <= m_d->range.end(); frame++) {
-        KisTimeRange heldFrameTimeRange = KisTimeRange::calculateIdenticalFramesRecursive(m_d->originalImage->root(), frame);
+        KisFrameSet heldFrameTimeRange = calculateIdenticalFramesRecursive(m_d->originalImage->root(), frame, m_d->range);
 
         if (!m_d->onlyNeedsUniqueFrames) {
             // Clamp holds that begin before the rendered range onto it
-            heldFrameTimeRange &= m_d->range;
+            heldFrameTimeRange &= KisFrameSet(m_d->range);
         }
 
-        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(heldFrameTimeRange.isValid(), result);
+        //KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(heldFrameTimeRange, result);
 
         result.append(heldFrameTimeRange.start());
 

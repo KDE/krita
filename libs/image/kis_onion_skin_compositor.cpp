@@ -160,10 +160,6 @@ void KisOnionSkinCompositor::composite(const KisPaintDeviceSP sourceDevice, KisP
     KisVisibleKeyframeIterator backward = keyframes->visibleKeyframesFrom(time);
     KisVisibleKeyframeIterator forward = backward;
 
-    int time = sourceDevice->defaultBounds()->currentTime();
-
-    keyframeBck = keyframeFwd = keyframes->activeKeyframeAt(time);
-
     for (int offset = 1; offset <= m_d->numberOfSkins; offset++) {
         backward = m_d->getNextFrameToComposite(backward, true);
         forward = m_d->getNextFrameToComposite(forward, false);

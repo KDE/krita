@@ -98,7 +98,7 @@ void KisConvertColorSpaceProcessingVisitor::visitNodeWithPaintDevice(KisNode *no
     }
 
     undoAdapter->addCommand(parentConversionCommand);
-    layer->invalidateFrames(KisTimeRange::infinite(0), layer->extent());
+    layer->invalidateFrames(KisFrameSet::infiniteFrom(0), layer->extent());
 }
 
 void KisConvertColorSpaceProcessingVisitor::visit(KisTransformMask *node, KisUndoAdapter *undoAdapter)
@@ -110,5 +110,5 @@ void KisConvertColorSpaceProcessingVisitor::visit(KisTransformMask *node, KisUnd
 void KisConvertColorSpaceProcessingVisitor::visitColorizeMask(KisColorizeMask *node, KisUndoAdapter *undoAdapter)
 {
     undoAdapter->addCommand(node->setColorSpace(m_dstColorSpace, m_renderingIntent, m_conversionFlags));
-    node->invalidateFrames(KisTimeRange::infinite(0), node->extent());
+    node->invalidateFrames(KisFrameSet::infiniteFrom(0), node->extent());
 }

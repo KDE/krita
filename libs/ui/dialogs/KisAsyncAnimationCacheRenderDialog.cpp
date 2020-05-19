@@ -76,6 +76,40 @@ KisAsyncAnimationCacheRenderDialog::~KisAsyncAnimationCacheRenderDialog()
 
 }
 
+int KisAsyncAnimationCacheRenderDialog::calcFirstDirtyFrame(KisAnimationFrameCacheSP cache, const KisTimeSpan &playbackRange, const KisTimeSpan &skipRange)
+{
+    int result = -1;
+
+    KisImageSP image = cache->image();
+    if (!image) return result;
+
+    KisImageAnimationInterface *animation = image->animationInterface();
+    if (!animation->hasAnimation()) return result;
+
+    if (playbackRange.isValid()) {
+        //KIS_ASSERT_RECOVER_RETURN_VALUE(!playbackRange.isInfinite(), result);
+
+        // TODO: optimize check for fully-cached case
+        for (int frame = playbackRange.start(); frame <= playbackRange.end(); frame++) {
+            if (skipRange.contains(frame)) {
+                if (!skipRange.isValid()) {
+                    break;
+                } else {
+                    frame = skipRange.end();
+                    continue;
+                }
+            }
+
+            if (cache->frameStatus(frame) != KisAnimationFrameCache::Cached) {
+                result = frame;
+                break;
+            }
+        }
+    }
+
+    return result;
+}
+
 QList<int> KisAsyncAnimationCacheRenderDialog::calcDirtyFrames() const
 {
     return calcDirtyFramesList(m_d->cache, m_d->range);

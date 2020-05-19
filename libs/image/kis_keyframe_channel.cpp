@@ -649,9 +649,9 @@ KisFrameSet KisKeyframeChannel::affectedFrames(int time) const
                                                                 active->data()->interpolationMode();
 
         if (activeMode == KisKeyframe::Constant) {
-            return KisFrameSet::fromTime(from, next.key() - 1);
+            return KisFrameSet::between(from, next.key() - 1);
         } else {
-            return KisFrameSet::fromTime(from, from);
+            return KisFrameSet::between(from, from);
         }
     }
 

@@ -219,12 +219,13 @@ KisKeyframeSP KisRasterKeyframeChannel::createKeyframe(int time, const KisKeyfra
 {
     KisRasterKeyframe *keyframe;
 
+    const bool copy = !copySrc.isNull();
     const int srcFrameId = copy ? frameId(copySrc) : 0;
     const int frameId = m_d->paintDevice->framesInterface()->createFrame(copy, srcFrameId, QPoint(), parentCommand);
 
     KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->paintDevice->defaultBounds()->currentTime() == this->currentTime());
 
-    if (!copySrc) {
+    if (!copy) {
         keyframe = new KisRasterKeyframe(this, time, frameId);
     } else {
         const KisRasterKeyframe *srcKeyframe = dynamic_cast<KisRasterKeyframe*>(copySrc.data());

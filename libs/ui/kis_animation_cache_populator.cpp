@@ -135,7 +135,7 @@ struct KisAnimationCachePopulator::Private
             KisAnimationFrameCacheSP cache = KisAnimationFrameCache::cacheForImage(image);
             KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(cache, false);
 
-            bool requested = tryRequestGeneration(cache, KisTimeRange(), priorityFrame);
+            bool requested = tryRequestGeneration(cache, KisTimeSpan(), priorityFrame);
             if (requested) return true;
         }
 
@@ -178,14 +178,23 @@ struct KisAnimationCachePopulator::Private
                 continue;
             }
 
-            bool requested = tryRequestGeneration(cache, KisFrameSet(), -1);
+            bool requested = tryRequestGeneration(cache, KisTimeSpan(), -1);
             if (requested) return true;
         }
 
         return false;
     }
 
-    bool tryRequestGeneration(KisAnimationFrameCacheSP cache, KisFrameSet skipRange, int priorityFrame)
+    bool tryRequestGeneration(KisAnimationFrameCacheSP cache, KisFrameSet skipSet, int priorityFrame) {
+        bool requested = false;
+        for (int i = 0; i < skipSet.finiteSpans().count(); i++){
+            requested |= tryRequestGeneration(cache, skipSet.finiteSpans()[i], priorityFrame);
+        }
+
+        return requested;
+    }
+
+    bool tryRequestGeneration(KisAnimationFrameCacheSP cache, KisTimeSpan skipRange, int priorityFrame)
     {
         KisImageSP image = cache->image();
         if (!image) return false;
@@ -202,6 +211,8 @@ struct KisAnimationCachePopulator::Private
 
         return false;
     }
+
+
 
     bool regenerate(KisAnimationFrameCacheSP cache, int frame)
     {

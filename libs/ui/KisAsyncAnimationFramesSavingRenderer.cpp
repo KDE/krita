@@ -117,8 +117,8 @@ void KisAsyncAnimationFramesSavingRenderer::frameCompletedCallback(int frame, co
     }
 
     //Get all identical frames to this one and either copy or symlink based on settings.
-    KisTimeRange identicals = KisTimeRange::calculateIdenticalFramesRecursive(image->root(), frame);
-    identicals &= m_d->range;
+    KisFrameSet identicals = calculateIdenticalFramesRecursive(image->root(), frame, m_d->range);
+    identicals &= KisFrameSet(m_d->range);
     if( !m_d->onlyNeedsUniqueFrames && identicals.start() < identicals.end() ) {
         for (int identicalFrame = (identicals.start() + 1); identicalFrame <= identicals.end(); identicalFrame++) {
             QString identicalFrameNumber = QString("%1").arg(identicalFrame + m_d->sequenceNumberingOffset, 4, 10, QChar('0'));

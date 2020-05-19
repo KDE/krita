@@ -39,9 +39,9 @@ struct KisKeyframeBase::Private
     Private(KisKeyframeChannel *channel, int time)
         : channel(channel), time(time)
     {}
-
-    virtual ~KisKeyframeBase() = default;
 };
+
+KisKeyframeBase::~KisKeyframeBase() = default;
 
 KisKeyframeBase::KisKeyframeBase(KisKeyframeChannel *channel, int time)
     : m_d(new Private(channel, time))
@@ -78,9 +78,7 @@ struct KisKeyframe::Private
     QPointF rightTangent;
     int colorLabel{0};
 
-    Private(KisKeyframeChannel *channel, int time)
-        : channel(channel)
-        , time(time)
+    Private()
     {}
 };
 

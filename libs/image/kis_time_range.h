@@ -173,6 +173,11 @@ public:
         return m_spans.first().start();
     }
 
+    int end() const {
+        if (m_spans.isEmpty()) return -1;
+        return m_spans.last().end();
+    }
+
     /**
      * List of the finite, continuous spans this set consists of.
      * Note: this list does not contain the tail of infinite sets. See firstFrameOfInfinity().

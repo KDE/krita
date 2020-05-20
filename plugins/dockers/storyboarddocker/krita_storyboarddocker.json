@@ -1,0 +1,9 @@
+{
+    "Id": "Storyboard Docker",
+    "Type": "Service",
+    "X-KDE-Library": "kritastoryboarddocker",
+    "X-KDE-ServiceTypes": [
+        "Krita/Dock"
+    ],
+    "X-Krita-Version": "28"
+}

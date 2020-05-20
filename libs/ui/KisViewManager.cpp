@@ -910,7 +910,8 @@ void KisViewManager::slotSaveIncremental()
     QString version = "000";
     QString newVersion;
     QString letter;
-    QString fileName = document()->localFilePath();
+    QString path = QFileInfo(document()->localFilePath()).canonicalPath();
+    QString fileName = QFileInfo(document()->localFilePath()).fileName();
 
     // Find current version filenames
     // v v Regexp to find incremental versions in the filename, taking our backup scheme into account as well
@@ -986,7 +987,7 @@ void KisViewManager::slotSaveIncremental()
         QMessageBox::critical(mainWindow(), i18nc("@title:window", "Couldn't save incremental version"), i18n("Alternative names exhausted, try manually saving with a higher number"));
         return;
     }
-    QUrl newUrl = QUrl::fromUserInput(fileName);
+    QUrl newUrl = QUrl::fromUserInput(path + '/' + fileName);
     document()->setFileBatchMode(true);
     document()->saveAs(newUrl, document()->mimeType(), true);
     document()->setFileBatchMode(false);
@@ -1013,7 +1014,8 @@ void KisViewManager::slotSaveIncrementalBackup()
     QString version = "000";
     QString newVersion;
     QString letter;
-    QString fileName = document()->localFilePath();
+    QString path = QFileInfo(document()->localFilePath()).canonicalPath();
+    QString fileName = QFileInfo(document()->localFilePath()).fileName();
 
     // First, discover if working on a backup file, or a normal file
     QRegExp regex("~\\d{1,4}[.]|~\\d{1,4}[a-z][.]");
@@ -1065,8 +1067,8 @@ void KisViewManager::slotSaveIncrementalBackup()
             QMessageBox::critical(mainWindow(), i18nc("@title:window", "Couldn't save incremental backup"), i18n("Alternative names exhausted, try manually saving with a higher number"));
             return;
         }
-        QFile::copy(fileName, backupFileName);
-        document()->saveAs(QUrl::fromUserInput(fileName), document()->mimeType(), true);
+        QFile::copy(path + '/' + fileName, path + '/' + backupFileName);
+        document()->saveAs(QUrl::fromUserInput(path + '/' + fileName), document()->mimeType(), true);
 
         if (mainWindow()) mainWindow()->updateCaption();
     }
@@ -1074,7 +1076,7 @@ void KisViewManager::slotSaveIncrementalBackup()
         // Navigate directory searching for latest backup version, ignore letters
         const quint8 HARDCODED_DIGIT_COUNT = 3;
         QString baseNewVersion = "000";
-        QString backupFileName = document()->localFilePath();
+        QString backupFileName = QFileInfo(document()->localFilePath()).fileName();
         QRegExp regex2("[.][a-z]{2,4}$");  //  Heuristic to find file extension
         regex2.indexIn(backupFileName);
         QStringList matches2 = regex2.capturedTexts();
@@ -1103,8 +1105,8 @@ void KisViewManager::slotSaveIncrementalBackup()
 
         // Save both as backup and on current file for interapplication workflow
         document()->setFileBatchMode(true);
-        QFile::copy(fileName, backupFileName);
-        document()->saveAs(QUrl::fromUserInput(fileName), document()->mimeType(), true);
+        QFile::copy(path + '/' + fileName, path + '/' + backupFileName);
+        document()->saveAs(QUrl::fromUserInput(path + '/' + fileName), document()->mimeType(), true);
         document()->setFileBatchMode(false);
 
         if (mainWindow()) mainWindow()->updateCaption();

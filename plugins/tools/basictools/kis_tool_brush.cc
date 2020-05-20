@@ -165,10 +165,12 @@ void KisToolBrush::slotSetSmoothingType(int index)
         showControl(m_sliderSmoothnessDistance, true);
         showControl(m_sliderTailAggressiveness, false);
         showControl(m_chkSmoothPressure, false);
-        showControl(m_chkUseScalableDistance, true);
         showControl(m_sliderDelayDistance, true);
         showControl(m_chkFinishStabilizedCurve, true);
         showControl(m_chkStabilizeSensors, true);
+
+        // scalable distance option is disabled due to bug 421314
+        showControl(m_chkUseScalableDistance, false);
     }
 
     emit smoothingTypeChanged();

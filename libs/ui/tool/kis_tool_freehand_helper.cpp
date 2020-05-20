@@ -427,12 +427,18 @@ void KisToolFreehandHelper::paintBezierSegment(KisPaintInformation pi1, KisPaint
 
 qreal KisToolFreehandHelper::Private::effectiveSmoothnessDistance() const
 {
-    const qreal effectiveSmoothnessDistance =
-        !smoothingOptions->useScalableDistance() ?
-        smoothingOptions->smoothnessDistance() :
-        smoothingOptions->smoothnessDistance() / resources->effectiveZoom();
+    qreal zoomingCoeff = 1.0;
 
-    return effectiveSmoothnessDistance;
+    /// stabilizer has inverted meaning of the "scalable distance", because
+    /// it measures "samples", but not "distance"
+
+    if ((smoothingOptions->smoothingType() == KisSmoothingOptions::STABILIZER) ^
+         smoothingOptions->useScalableDistance()) {
+
+        zoomingCoeff = 1.0 / resources->effectiveZoom();
+    }
+
+    return smoothingOptions->smoothnessDistance() * zoomingCoeff;
 }
 
 void KisToolFreehandHelper::paintEvent(KoPointerEvent *event)

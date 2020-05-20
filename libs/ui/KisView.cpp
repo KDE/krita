@@ -807,7 +807,8 @@ void KisView::resetImageSizeAndScroll(bool changeCentering,
 
     QSizeF size(image()->width() / image()->xRes(), image()->height() / image()->yRes());
     KoZoomController *zc = d->zoomManager.zoomController();
-    zc->setZoom(KoZoomMode::ZOOM_CONSTANT, zc->zoomAction()->effectiveZoom());
+    zc->setZoom(KoZoomMode::ZOOM_CONSTANT, zc->zoomAction()->effectiveZoom(),
+                d->zoomManager.resolutionX(), d->zoomManager.resolutionY());
     zc->setPageSize(size);
     zc->setDocumentSize(size, true);
 

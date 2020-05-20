@@ -172,8 +172,35 @@ void KisToolBrush::slotSetSmoothingType(int index)
         // scalable distance option is disabled due to bug 421314
         showControl(m_chkUseScalableDistance, false);
     }
+    updateSmoothnessDistanceLabel();
 
     emit smoothingTypeChanged();
+}
+
+void KisToolBrush::updateSmoothnessDistanceLabel()
+{
+    const qreal oldValue = m_sliderSmoothnessDistance->value();
+
+    if (smoothingType() == KisSmoothingOptions::STABILIZER) {
+        m_lblSmoothnessDistance->setText(i18n("Sample count:"));
+        m_sliderSmoothnessDistance->setRange(3.0, MAXIMUM_SMOOTHNESS_DISTANCE, 0);
+        m_sliderSmoothnessDistance->setExponentRatio(3.0); // help pick smaller values
+
+        if (!qFuzzyCompare(m_sliderSmoothnessDistance->value(), oldValue)) {
+            // the slider will emit the change signal automatically
+            m_sliderSmoothnessDistance->setValue(qRound(oldValue));
+        }
+
+    } else {
+        m_lblSmoothnessDistance->setText(i18n("Distance:"));
+        m_sliderSmoothnessDistance->setRange(3.0, MAXIMUM_SMOOTHNESS_DISTANCE, 1);
+        m_sliderSmoothnessDistance->setExponentRatio(3.0); // help pick smaller values
+
+        if (!qFuzzyCompare(m_sliderSmoothnessDistance->value(), oldValue)) {
+            // the slider will emit the change signal automatically
+            m_sliderSmoothnessDistance->setValue(oldValue);
+        }
+    }
 }
 
 void KisToolBrush::slotSetSmoothnessDistance(qreal distance)
@@ -329,14 +356,13 @@ QWidget * KisToolBrush::createOptionWidget()
     addOptionWidgetOption(m_cmbSmoothingType, new QLabel(i18n("Brush Smoothing:")));
 
     m_sliderSmoothnessDistance = new KisDoubleSliderSpinBox(optionsWidget);
-    m_sliderSmoothnessDistance->setRange(3.0, MAXIMUM_SMOOTHNESS_DISTANCE, 1);
-    m_sliderSmoothnessDistance->setExponentRatio(3.0); // help pick smaller values
-
-
     m_sliderSmoothnessDistance->setEnabled(true);
     connect(m_sliderSmoothnessDistance, SIGNAL(valueChanged(qreal)), SLOT(slotSetSmoothnessDistance(qreal)));
     m_sliderSmoothnessDistance->setValue(smoothingOptions()->smoothnessDistance());
-    addOptionWidgetOption(m_sliderSmoothnessDistance, new QLabel(i18n("Distance:")));
+    m_lblSmoothnessDistance = new QLabel();
+    updateSmoothnessDistanceLabel();
+
+    addOptionWidgetOption(m_sliderSmoothnessDistance, m_lblSmoothnessDistance);
 
     // Finish stabilizer curve
     m_chkFinishStabilizedCurve = new QCheckBox(optionsWidget);

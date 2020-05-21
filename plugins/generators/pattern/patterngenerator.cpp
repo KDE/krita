@@ -91,6 +91,13 @@ public:
         return pattern(resourcesInterface());
     }
 
+    QTransform transform() const {
+        int rotation = this->getProperty("transform").toInt();
+        QTransform transform;
+        transform.rotate(rotation);
+        return transform;
+    }
+
     QList<KoResourceSP> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const override
     {
         KoPatternSP pattern = this->pattern(globalResourcesInterface);
@@ -128,6 +135,7 @@ KisFilterConfigurationSP KoPatternGenerator::defaultConfiguration(KisResourcesIn
 
     auto source = resourcesInterface->source<KoPattern>(ResourceType::Patterns);
     config->setProperty("pattern", QVariant::fromValue(source.fallbackResource()->name()));
+    config->setProperty("transform", QVariant::fromValue(0));
 
     return config;
 }
@@ -152,6 +160,7 @@ void KoPatternGenerator::generate(KisProcessingInformation dstInfo,
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(config);
     KoPatternSP pattern = config->pattern();
+    QTransform transform = config->transform();
 
     KisFillPainter gc(dst);
     gc.setPattern(pattern);
@@ -162,7 +171,7 @@ void KoPatternGenerator::generate(KisProcessingInformation dstInfo,
     gc.setWidth(size.width());
     gc.setHeight(size.height());
     gc.setFillStyle(KisFillPainter::FillStylePattern);
-    gc.fillRect(QRect(dstInfo.topLeft(), size), pattern);
+    gc.fillRect(QRect(dstInfo.topLeft(), size), pattern, transform);
     gc.end();
 
 }

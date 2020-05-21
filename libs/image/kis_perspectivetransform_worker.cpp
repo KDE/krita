@@ -170,7 +170,7 @@ void KisPerspectiveTransformWorker::runPartialDst(KisPaintDeviceSP srcDev,
             QPointF dstPoint(x, y);
             QPointF srcPoint = m_backwardTransform.map(dstPoint);
 
-            if (srcClipRect.contains(srcPoint)) {
+            if (srcClipRect.contains(srcPoint) || srcDev->defaultBounds()->wrapAroundMode()) {
                 accessor->moveTo(dstPoint.x(), dstPoint.y());
                 srcAcc->moveTo(srcPoint.x(), srcPoint.y());
                 srcAcc->sampledOldRawData(accessor->rawData());

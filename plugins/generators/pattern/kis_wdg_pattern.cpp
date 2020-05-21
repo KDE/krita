@@ -22,6 +22,7 @@
 
 #include <QLayout>
 #include <QLabel>
+#include <QSlider>
 
 #include <KoColor.h>
 #include <KoResourceServer.h>
@@ -41,6 +42,7 @@ KisWdgPattern::KisWdgPattern(QWidget* parent)
     m_widget->lblColor->setVisible(false);
     m_widget->bnColor->setVisible(false);
     connect(m_widget->patternChooser, SIGNAL(resourceSelected(KoResource*)), this, SIGNAL(sigConfigurationUpdated()));
+    connect(m_widget->sldRotation, SIGNAL(valueChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
 }
 
 KisWdgPattern::~KisWdgPattern()
@@ -56,15 +58,19 @@ void KisWdgPattern::setConfiguration(const KisPropertiesConfigurationSP config)
     if (pattern) {
        widget()->patternChooser->setCurrentPattern(pattern);
     }
-
+    int rotation = config->getProperty("transform").toInt();
+    widget()->sldRotation->setValue(rotation);
 }
 
 KisPropertiesConfigurationSP KisWdgPattern::configuration() const
 {
     KisFilterConfigurationSP config = new KisFilterConfiguration("pattern", 1);
     QVariant v;
-    v.setValue(widget()->patternChooser->currentResource()->name());
-    config->setProperty("pattern", v);
+    if (widget()->patternChooser->currentResource()) {
+        v.setValue(widget()->patternChooser->currentResource()->name());
+        config->setProperty("pattern", v);
+    }
+    config->setProperty("transform", widget()->sldRotation->value());
 
     return config;
 }

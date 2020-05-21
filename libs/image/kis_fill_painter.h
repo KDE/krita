@@ -107,6 +107,8 @@ public:
     /**
      * Fill a rectangle with a certain pattern. The pattern is repeated if it does not fit the
      * entire rectangle.
+     *
+     * This one uses blitting and thus makes use of proper composition.
      */
     void fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisPaintDeviceSP device, const QRect& deviceRect);
 
@@ -114,6 +116,24 @@ public:
      * Overloaded version of the above function.
      */
     void fillRect(const QRect& rc, const KoPattern * pattern, const QPoint &offset = QPoint());
+
+    /**
+     * @brief fillRect
+     * Fill a rectangle with a certain pattern. The pattern is repeated if it does not fit the
+     * entire rectangle. Differs from other functions that it uses a transform, does not support
+     * composite ops in turn.
+     * @param rc rectangle to fill.
+     * @param pattern pattern to use.
+     * @param transform transformation to apply to the pattern.
+     */
+    void fillRect(const QRect& rc, const KoPattern *pattern, const QTransform transform);
+    /**
+     * Fill a rectangle with a certain pattern. The pattern is repeated if it does not fit the
+     * entire rectangle.
+     *
+     * This one supports transforms, but does not use blitting.
+     */
+    void fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisPaintDeviceSP device, const QRect& deviceRect, const QTransform transform);
 
     /**
      * Fill the specified area with the output of the generator plugin that is configured

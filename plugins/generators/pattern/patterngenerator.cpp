@@ -61,6 +61,7 @@ KritaPatternGenerator::~KritaPatternGenerator()
 }
 
 KoPatternGenerator::KoPatternGenerator() : KisGenerator(id(), KoID("basic"), i18n("&Pattern..."))
+
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);
@@ -73,9 +74,7 @@ KisFilterConfigurationSP KoPatternGenerator::defaultConfiguration() const
     QVariant v;
     v.setValue(QString("Grid01.pat"));
     config->setProperty("pattern", v);
-
-//    v.setValue(KoColor());
-//    config->setProperty("color", v);
+    config->setProperty("transform", QVariant::fromValue(0));
 
     return config;
 }
@@ -101,11 +100,12 @@ void KoPatternGenerator::generate(KisProcessingInformation dstInfo,
     KoResourceServer<KoPattern> *rserver = KoResourceServerProvider::instance()->patternServer();
     KoPattern *pattern = rserver->resourceByName(patternName);
 
-//    KoColor c = config->getColor("color");
+    int rotation = config->getProperty("transform").toInt();
+    QTransform transform;
+    transform.rotate(rotation);
 
     KisFillPainter gc(dst);
     gc.setPattern(pattern);
-//    gc.setPaintColor(c);
     gc.setProgress(progressUpdater);
     gc.setChannelFlags(config->channelFlags());
     gc.setOpacity(OPACITY_OPAQUE_U8);
@@ -113,7 +113,7 @@ void KoPatternGenerator::generate(KisProcessingInformation dstInfo,
     gc.setWidth(size.width());
     gc.setHeight(size.height());
     gc.setFillStyle(KisFillPainter::FillStylePattern);
-    gc.fillRect(QRect(dstInfo.topLeft(), size), pattern);
+    gc.fillRect(QRect(dstInfo.topLeft(), size), pattern, transform);
     gc.end();
 
 }

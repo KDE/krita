@@ -33,6 +33,8 @@ if test -z $BUILDROOT; then
     echo "\t Must point to the root of the buildfiles as stated in 3rdparty Readme"
     exit
 fi
+
+BUILDROOT="${BUILDROOT%/}"
 echo "BUILDROOT set to ${BUILDROOT}"
 
 # Set some global variables.

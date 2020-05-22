@@ -44,6 +44,8 @@ if test -z ${BUILDROOT}; then
     exit
 fi
 
+BUILDROOT="${BUILDROOT%/}"
+
 # print status messages
 print_msg() {
     printf "\e[32m${1}\e[0m\n" "${@:2}"
@@ -372,21 +374,21 @@ strip_python_dmginstall() {
     rm -rf Python.app
 }
 
-# Some libraries require r_path to be removed
-# we must not apply delete rpath globally
-delete_install_rpath() {
-    xargs -P4 -I FILE install_name_tool -delete_rpath "${BUILDROOT}/i/lib" FILE 2> "${BUILDROOT}/deploy_error.log"
-}
-
 # Remove any missing rpath poiting to BUILDROOT
 libs_clean_rpath () {
     for libFile in ${@}; do
-        rpath=$(otool -l "${libFile}" | grep "${BUILDROOT}/i/lib" | awk '{$1=$1;print $2}')
+        rpath=$(otool -l "${libFile}" | grep "path ${BUILDROOT}" | awk '{$1=$1;print $2}')
         if [[ -n "${rpath}" ]]; then
             echo "removed rpath _${rpath}_ from ${libFile}"
             install_name_tool -delete_rpath "${rpath}" "${libFile}"
         fi
     done
+}
+
+# Multhread version
+# of libs_clean_rpath, but makes assumptions
+delete_install_rpath() {
+    xargs -P4 -I FILE install_name_tool -delete_rpath "${BUILDROOT}/i/lib" FILE 2> "${BUILDROOT}/deploy_error.log"
 }
 
 fix_python_framework() {
@@ -580,7 +582,7 @@ krita_deploy () {
 
     printf "clean any left over rpath\n"
     libs_clean_rpath $(find "${KRITA_DMG}/krita.app/Contents" -type f -perm 755 -or -name "*.dylib" -or -name "*.so")
-    find "${KRITA_DMG}/krita.app/Contents/Frameworks/" -type f -name "lib*" | delete_install_rpath
+#    libs_clean_rpath $(find "${KRITA_DMG}/krita.app/Contents/" -type f -name "lib*")
 
     echo "Done!"
 

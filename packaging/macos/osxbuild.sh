@@ -177,7 +177,7 @@ cmake_3rdparty () {
             continue
         fi
         print_msg "Building ${package}"
-        log_cmd cmake --build . --config RelWithDebInfo --target ${package}
+        log_cmd cmake --build . --config RelWithDebInfo --target ${package} --quiet
         
         print_if_error "Failed build ${package}"
         if [[ ! ${osxbuild_error} -ne 0 ]]; then
@@ -474,7 +474,7 @@ build_krita () {
         -DPYTHON_INCLUDE_DIR=${KIS_INSTALL_DIR}/lib/Python.framework/Headers
 
     # copiling phase
-    make -j${MAKE_THREADS}
+    cmake --build . --target all -- -j${MAKE_THREADS} --quiet
 
     # compile integrations
     if test ${OSTYPE} == "darwin*"; then

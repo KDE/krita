@@ -171,7 +171,7 @@ struct tileDimensions {
   unsigned ntiles ;
 };
 /* computeDimensions assumes that width, height, c.l, and c.t are set */
-void computeDimensions(struct tileDimensions *);
+int computeDimensions(struct tileDimensions *);
 
 struct xcfTiles {
   const struct _convertParams *params ;

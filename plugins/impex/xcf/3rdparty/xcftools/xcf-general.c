@@ -19,6 +19,7 @@
 #include "xcftools.h"
 #include <string.h>
 #include <errno.h>
+#include <limits.h>
 #ifdef HAVE_ICONV
 # include <iconv.h>
 #elif !defined(ICONV_CONST)
@@ -216,14 +217,29 @@ xcfString(uint32_t ptr,uint32_t *after)
 
 /* ****************************************************************** */
 
-void
-computeDimensions(struct tileDimensions *d)
+int computeDimensions(struct tileDimensions *d)
 {
+  // [ CVE-2019-5086 and CVE-2019-5087 ]
+  // This part of code is the check to prevent integer overflow, see CVE-2019-5086 and CVE-2019-5087
+
+  if ((d->c.l + d->width) * 4 > INT_MAX) {
+    FatalBadXCF(("Width is too large (%d)! Stopping execution...\n"), (d->c.l + d->width));
+    return XCF_ERROR;
+  }
+
+  if ((d->c.t + d->height) * 4 > INT_MAX) {
+    FatalBadXCF(("Height is too large (%d)! Stopping execution...\n"), (d->c.t + d->height));
+    return XCF_ERROR;
+  }
+  // [ CVE-2019-5086 and CVE-2019-5087 ]
+
   d->c.r = d->c.l + d->width ;
   d->c.b = d->c.t + d->height ;
   d->tilesx = (d->width+TILE_WIDTH-1)/TILE_WIDTH ;
   d->tilesy = (d->height+TILE_HEIGHT-1)/TILE_HEIGHT ;
   d->ntiles = d->tilesx * d->tilesy ;
+
+  return XCF_OK;
 }
 
 struct xcfImage XCF ;
@@ -380,8 +396,9 @@ getBasicXcfInfo(void)
         return XCF_ERROR;
     }
 
-    computeDimensions(&L->dim);
-
+    if (computeDimensions(&L->dim) != XCF_OK) {
+        return XCF_ERROR;
+    }
   }
   return XCF_OK;
 }

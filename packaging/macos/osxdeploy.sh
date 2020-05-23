@@ -428,7 +428,7 @@ macdeployqt_exists() {
         printf "Not Found!\n"
         printf "Attempting to install macdeployqt\n"
 
-        cd ${BUILDROOT}/depbuild/ext_qt/ext_qt-prefix/src/ext_qt/qttools/src
+        cd "${BUILDROOT}/depbuild/ext_qt/ext_qt-prefix/src/ext_qt/qttools/src"
         make sub-macdeployqt-all
         make sub-macdeployqt-install_subtargets
         make install

@@ -644,6 +644,412 @@ double GradientRepeatModuloDivisiveContinuousHalfStrategy::valueAt(double t) con
 
     return value*2;
 }
+
+class RepeatForwardsPaintPolicy
+{
+public:
+    RepeatForwardsPaintPolicy(KisGradientPainter::enumGradientShape shape);
+
+    void setup(const QPointF& gradientVectorStart,
+               const QPointF& gradientVectorEnd,
+               const QSharedPointer<KisGradientShapeStrategy> &shapeStrategy,
+               const GradientRepeatStrategy *repeatStrategy,
+               qreal antiAliasThreshold,
+               bool reverseGradient,
+               const CachedGradient * cachedGradient);
+
+    const quint8 *colorAt(qreal x, qreal y) const;
+
+private:
+    KisGradientPainter::enumGradientShape m_shape;
+    qreal m_antiAliasThresholdNormalized;
+    qreal m_antiAliasThresholdNormalizedRev;
+    qreal m_antiAliasThresholdNormalizedDbl;
+    QSharedPointer<KisGradientShapeStrategy> m_shapeStrategy;
+    const GradientRepeatStrategy *m_repeatStrategy;
+    bool m_reverseGradient;
+    const CachedGradient *m_cachedGradient;
+    const quint8 *m_extremeColors[2];
+    const KoColorSpace *m_colorSpace;
+    mutable QVector<quint8> m_resultColor;
+};
+
+RepeatForwardsPaintPolicy::RepeatForwardsPaintPolicy(KisGradientPainter::enumGradientShape shape)
+    : m_shape(shape)
+{}
+
+void RepeatForwardsPaintPolicy::setup(const QPointF& gradientVectorStart,
+                                      const QPointF& gradientVectorEnd,
+                                      const QSharedPointer<KisGradientShapeStrategy> &shapeStrategy,
+                                      const GradientRepeatStrategy *repeatStrategy,
+                                      qreal antiAliasThreshold,
+                                      bool reverseGradient,
+                                      const CachedGradient * cachedGradient)
+{
+    qreal dx = gradientVectorEnd.x() - gradientVectorStart.x();
+    qreal dy = gradientVectorEnd.y() - gradientVectorStart.y();
+    qreal distanceInPixels = sqrt(dx * dx + dy * dy);
+    // Compute the area to be be smoothed
+    // based on the length of the gradient
+    m_antiAliasThresholdNormalized = antiAliasThreshold / distanceInPixels;
+    m_antiAliasThresholdNormalizedRev = 1. - m_antiAliasThresholdNormalized;
+    m_antiAliasThresholdNormalizedDbl = 2. * m_antiAliasThresholdNormalized;
+    
+    m_shapeStrategy = shapeStrategy;
+    m_repeatStrategy = repeatStrategy;
+
+    m_reverseGradient = reverseGradient;
+
+    m_cachedGradient = cachedGradient;
+    m_extremeColors[0] = m_cachedGradient->cachedAt(1.);
+    m_extremeColors[1] = m_cachedGradient->cachedAt(0.);
+
+    m_colorSpace = m_cachedGradient->colorSpace();
+
+    m_resultColor = QVector<quint8>(m_colorSpace->pixelSize());
+}
+
+const quint8 *RepeatForwardsPaintPolicy::colorAt(qreal x, qreal y) const
+{
+    qreal t = m_shapeStrategy->valueAt(x, y);
+    // Early return if the pixel is near the center of the gradient if
+    // the shape is radial or square.
+    // This prevents applying smoothing since there are
+    // no aliasing artifacts in these gradient shapes at the center
+    if (t <= m_antiAliasThresholdNormalized &&
+        (m_shape == KisGradientPainter::GradientShapeRadial ||
+         m_shape == KisGradientPainter::GradientShapeSquare)) {
+        if (m_reverseGradient) {
+            t = 1 - t;
+        }
+        return m_cachedGradient->cachedAt(t);
+    }
+
+    t = m_repeatStrategy->valueAt(t);
+
+    if (m_reverseGradient) {
+        t = 1 - t;
+    }
+
+    // If this pixel is in the area of the smoothing,
+    // then perform bilinear interpolation between the extreme colors.
+    if (t <= m_antiAliasThresholdNormalized || t >= m_antiAliasThresholdNormalizedRev) {
+        qreal s;
+        if (t <= m_antiAliasThresholdNormalized) {
+            s = .5 + t / m_antiAliasThresholdNormalizedDbl;
+        } else {
+            s = (t - m_antiAliasThresholdNormalizedRev) / m_antiAliasThresholdNormalizedDbl;
+        }
+
+        qint16 colorWeights[2];
+        colorWeights[0] = static_cast<quint8>((1.0 - s) * 255 + 0.5);
+        colorWeights[1] = 255 - colorWeights[0];
+
+        m_colorSpace->mixColorsOp()->mixColors(m_extremeColors, colorWeights, 2, m_resultColor.data());
+        
+        return m_resultColor.data();
+    }
+
+    return m_cachedGradient->cachedAt(t);
+}
+
+class ConicalGradientPaintPolicy
+{
+public:
+    void setup(const QPointF& gradientVectorStart,
+               const QPointF& gradientVectorEnd,
+               const QSharedPointer<KisGradientShapeStrategy> &shapeStrategy,
+               const GradientRepeatStrategy *repeatStrategy,
+               qreal antiAliasThreshold,
+               bool reverseGradient,
+               const CachedGradient * cachedGradient);
+
+    const quint8 *colorAt(qreal x, qreal y) const;
+
+private:
+    QPointF m_gradientVectorStart;
+    QSharedPointer<KisGradientShapeStrategy> m_shapeStrategy;
+    const GradientRepeatStrategy *m_repeatStrategy;
+    qreal m_singularityThreshold;
+    qreal m_antiAliasThreshold;
+    bool m_reverseGradient;
+    const CachedGradient *m_cachedGradient;
+    const quint8 *m_extremeColors[2];
+    const KoColorSpace *m_colorSpace;
+    mutable QVector<quint8> m_resultColor;
+};
+
+void ConicalGradientPaintPolicy::setup(const QPointF& gradientVectorStart,
+                                       const QPointF& gradientVectorEnd,
+                                       const QSharedPointer<KisGradientShapeStrategy> &shapeStrategy,
+                                       const GradientRepeatStrategy *repeatStrategy,
+                                       qreal antiAliasThreshold,
+                                       bool reverseGradient,
+                                       const CachedGradient * cachedGradient)
+{
+    Q_UNUSED(gradientVectorEnd);
+
+    m_gradientVectorStart = gradientVectorStart;
+    
+    m_shapeStrategy = shapeStrategy;
+    m_repeatStrategy = repeatStrategy;
+
+    m_singularityThreshold = 8.;
+    m_antiAliasThreshold = antiAliasThreshold;
+
+    m_reverseGradient = reverseGradient;
+
+    m_cachedGradient = cachedGradient;
+    m_extremeColors[0] = m_cachedGradient->cachedAt(1.);
+    m_extremeColors[1] = m_cachedGradient->cachedAt(0.);
+
+    m_colorSpace = m_cachedGradient->colorSpace();
+
+    m_resultColor = QVector<quint8>(m_colorSpace->pixelSize());
+}
+
+const quint8 *ConicalGradientPaintPolicy::colorAt(qreal x, qreal y) const
+{
+    // Compute the distance from the center of the gradient to thecurrent pixel
+    qreal dx = x - m_gradientVectorStart.x();
+    qreal dy = y - m_gradientVectorStart.y();
+    qreal distanceInPixels = sqrt(dx * dx + dy * dy);
+    // Compute the perimeter for this distance
+    qreal perimeter = 2. * M_PI * distanceInPixels;
+    // The smoothing is applied in the vicinity of the aliased border.
+    // The width of the vicinity is an area antiAliasThreshold pixels wide
+    // to each side of the border, but in this case the area is scaled down
+    // if it is too close to the center
+    qreal antiAliasThresholdNormalized;
+    if (distanceInPixels < m_singularityThreshold){
+        antiAliasThresholdNormalized = distanceInPixels * m_antiAliasThreshold / m_singularityThreshold;
+    } else {
+        antiAliasThresholdNormalized = m_antiAliasThreshold;
+    }
+    antiAliasThresholdNormalized = antiAliasThresholdNormalized / perimeter;
+    qreal antiAliasThresholdNormalizedRev = 1. - antiAliasThresholdNormalized;
+    qreal antiAliasThresholdNormalizedDbl = 2. * antiAliasThresholdNormalized;
+
+    qreal t = m_shapeStrategy->valueAt(x, y); 
+    t = m_repeatStrategy->valueAt(t);
+
+    if (m_reverseGradient) {
+        t = 1 - t;
+    }
+
+    // If this pixel is in the area of the smoothing,
+    // then perform bilinear interpolation between the extreme colors.
+    if (t <= antiAliasThresholdNormalized || t >= antiAliasThresholdNormalizedRev) {
+        qreal s;
+        if (t <= antiAliasThresholdNormalized) {
+            s = .5 + t / antiAliasThresholdNormalizedDbl;
+        } else {
+            s = (t - antiAliasThresholdNormalizedRev) / antiAliasThresholdNormalizedDbl;
+        }
+        
+        qint16 colorWeights[2];
+        colorWeights[0] = static_cast<quint8>((1.0 - s) * 255 + 0.5);
+        colorWeights[1] = 255 - colorWeights[0];
+
+        m_colorSpace->mixColorsOp()->mixColors(m_extremeColors, colorWeights, 2, m_resultColor.data());
+
+        return m_resultColor.data();
+    }
+
+    return m_cachedGradient->cachedAt(t);
+}
+
+class SpyralGradientRepeatNonePaintPolicy
+{
+public:
+    SpyralGradientRepeatNonePaintPolicy(bool isReverseSpiral = false);
+
+    void setup(const QPointF& gradientVectorStart,
+               const QPointF& gradientVectorEnd,
+               const QSharedPointer<KisGradientShapeStrategy> &shapeStrategy,
+               const GradientRepeatStrategy *repeatStrategy,
+               qreal antiAliasThreshold,
+               bool reverseGradient,
+               const CachedGradient * cachedGradient);
+
+    const quint8 *colorAt(qreal x, qreal y) const;
+
+private:
+    QPointF m_gradientVectorStart;
+    qreal m_distanceInPixels;
+    qreal m_singularityThreshold;
+    qreal m_angle;
+    QSharedPointer<KisGradientShapeStrategy> m_shapeStrategy;
+    const GradientRepeatStrategy *m_repeatStrategy;
+    qreal m_antiAliasThreshold;
+    bool m_reverseGradient;
+    const CachedGradient *m_cachedGradient;
+    mutable const quint8 *m_extremeColors[2];
+    const KoColorSpace *m_colorSpace;
+    mutable QVector<quint8> m_resultColor;
+    bool m_isReverseSpiral;
+};
+
+SpyralGradientRepeatNonePaintPolicy::SpyralGradientRepeatNonePaintPolicy(bool isReverseSpiral)
+    : m_isReverseSpiral(isReverseSpiral)
+{
+}
+
+void SpyralGradientRepeatNonePaintPolicy::setup(const QPointF& gradientVectorStart,
+                                                const QPointF& gradientVectorEnd,
+                                                const QSharedPointer<KisGradientShapeStrategy> &shapeStrategy,
+                                                const GradientRepeatStrategy *repeatStrategy,
+                                                qreal antiAliasThreshold,
+                                                bool reverseGradient,
+                                                const CachedGradient * cachedGradient)
+{
+    m_gradientVectorStart = gradientVectorStart;
+
+    qreal dx = gradientVectorEnd.x() - gradientVectorStart.x();
+    qreal dy = gradientVectorEnd.y() - gradientVectorStart.y();
+    m_distanceInPixels = sqrt(dx * dx + dy * dy);
+    m_singularityThreshold = m_distanceInPixels / 32.;
+    m_angle = atan2(dy, dx) + M_PI;
+    
+    m_shapeStrategy = shapeStrategy;
+    m_repeatStrategy = repeatStrategy;
+
+    m_antiAliasThreshold = antiAliasThreshold;
+
+    m_reverseGradient = reverseGradient;
+
+    m_cachedGradient = cachedGradient;
+
+    m_colorSpace = m_cachedGradient->colorSpace();
+
+    m_resultColor = QVector<quint8>(m_colorSpace->pixelSize());
+}
+
+const quint8 *SpyralGradientRepeatNonePaintPolicy::colorAt(qreal x, qreal y) const
+{
+    // Compute the distance from the center of the gradient to thecurrent pixel
+    qreal dx = x - m_gradientVectorStart.x();
+    qreal dy = y - m_gradientVectorStart.y();
+    qreal distanceInPixels = sqrt(dx * dx + dy * dy);
+    // Compute the perimeter for this distance
+    qreal perimeter = 2. * M_PI * distanceInPixels;
+    // The smoothing is applied in the vicinity of the aliased border.
+    // The width of the vicinity is an area antiAliasThreshold pixels wide
+    // to each side of the border, but in this case the area is scaled down
+    // if it is too close to the center
+    qreal antiAliasThresholdNormalized;
+    if (distanceInPixels < m_singularityThreshold) {
+        antiAliasThresholdNormalized = distanceInPixels * m_antiAliasThreshold / m_singularityThreshold;
+    } else {
+        antiAliasThresholdNormalized = m_antiAliasThreshold;
+    }
+    antiAliasThresholdNormalized = antiAliasThresholdNormalized / perimeter;
+    qreal antiAliasThresholdNormalizedRev = 1. - antiAliasThresholdNormalized;
+    qreal antiAliasThresholdNormalizedDbl = 2. * antiAliasThresholdNormalized;
+
+    qreal t = m_shapeStrategy->valueAt(x, y); 
+    t = m_repeatStrategy->valueAt(t);
+
+    if (m_reverseGradient) {
+        t = 1 - t;
+    }
+
+    // Compute the area to be be smoothed based on the angle of the gradient
+    // and the angle of the current pixel to the center of the gradient
+    qreal angle = atan2(dy, dx) + M_PI;
+    angle -= m_angle;
+    if (angle < 0.) {
+        angle += 2. * M_PI;
+    }
+    angle /= (2. * M_PI);
+    
+    angle = m_repeatStrategy->valueAt(angle);
+
+    // If this pixel is in the area of the smoothing,
+    // then perform bilinear interpolation between the extreme colors.
+    if (distanceInPixels < m_distanceInPixels && (angle <= antiAliasThresholdNormalized || angle >= antiAliasThresholdNormalizedRev)) {
+        qreal s;
+        if (angle <= antiAliasThresholdNormalized) {
+            s = .5 + angle / antiAliasThresholdNormalizedDbl;
+        } else {
+            s = (angle - antiAliasThresholdNormalizedRev) / antiAliasThresholdNormalizedDbl;
+        }
+
+        if (m_reverseGradient) {
+            distanceInPixels = m_distanceInPixels - distanceInPixels;
+            m_extremeColors[0] = m_cachedGradient->cachedAt(0.);
+        } else {
+            m_extremeColors[0] = m_cachedGradient->cachedAt(1.);
+        }
+
+        if (m_isReverseSpiral) {
+            m_extremeColors[1] = m_extremeColors[0];
+            m_extremeColors[0] = (m_cachedGradient->cachedAt(distanceInPixels / m_distanceInPixels));
+        } else {
+            m_extremeColors[1] = (m_cachedGradient->cachedAt(distanceInPixels / m_distanceInPixels));
+        }
+        
+        qint16 colorWeights[2];
+        colorWeights[0] = static_cast<quint8>((1.0 - s) * 255 + 0.5);
+        colorWeights[1] = 255 - colorWeights[0];
+
+        m_colorSpace->mixColorsOp()->mixColors(m_extremeColors, colorWeights, 2, m_resultColor.data());
+
+        return m_resultColor.data();
+    }
+
+    return m_cachedGradient->cachedAt(t);
+}
+
+class NoAntialiasPaintPolicy
+{
+public:
+    void setup(const QPointF& gradientVectorStart,
+               const QPointF& gradientVectorEnd,
+               const QSharedPointer<KisGradientShapeStrategy> &shapeStrategy,
+               const GradientRepeatStrategy *repeatStrategy,
+               qreal antiAliasThreshold,
+               bool reverseGradient,
+               const CachedGradient * cachedGradient);
+
+    const quint8 *colorAt(qreal x, qreal y) const;
+
+private:
+    QSharedPointer<KisGradientShapeStrategy> m_shapeStrategy;
+    const GradientRepeatStrategy *m_repeatStrategy;
+    bool m_reverseGradient;
+    const CachedGradient *m_cachedGradient;
+};
+
+void NoAntialiasPaintPolicy::setup(const QPointF& gradientVectorStart,
+                                   const QPointF& gradientVectorEnd,
+                                   const QSharedPointer<KisGradientShapeStrategy> &shapeStrategy,
+                                   const GradientRepeatStrategy *repeatStrategy,
+                                   qreal antiAliasThreshold,
+                                   bool reverseGradient,
+                                   const CachedGradient * cachedGradient)
+{
+    Q_UNUSED(gradientVectorStart);
+    Q_UNUSED(gradientVectorEnd);
+    Q_UNUSED(antiAliasThreshold);
+    m_shapeStrategy = shapeStrategy;
+    m_repeatStrategy = repeatStrategy;
+    m_reverseGradient = reverseGradient;
+    m_cachedGradient = cachedGradient;
+}
+
+const quint8 *NoAntialiasPaintPolicy::colorAt(qreal x, qreal y) const
+{
+    qreal t = m_shapeStrategy->valueAt(x, y);
+    t = m_repeatStrategy->valueAt(t);
+
+    if (m_reverseGradient) {
+        t = 1 - t;
+    }
+
+    return m_cachedGradient->cachedAt(t);
+}
+
 }
 
 struct Q_DECL_HIDDEN KisGradientPainter::Private
@@ -768,8 +1174,68 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                                        bool reverseGradient,
                                        const QRect &applyRect)
 {
-    Q_UNUSED(antiAliasThreshold);
+    // The following combinations of options have aliasing artifacts
+    // where the first color meets the last color of the gradient.
+    // so antialias threshold is used to compute if the pixel is in
+    // the smothing area. Then linear interpolation is used to blend
+    // between the first and last colors
+    if (antiAliasThreshold > DBL_EPSILON) {
+        if ((m_d->shape == GradientShapeLinear || m_d->shape == GradientShapeRadial ||
+            m_d->shape == GradientShapeSquare || m_d->shape == GradientShapeSpiral ||
+            m_d->shape == GradientShapeReverseSpiral)
+            && repeat == GradientRepeatForwards) {
+            RepeatForwardsPaintPolicy paintPolicy(m_d->shape);
+            return paintGradient(gradientVectorStart,
+                                 gradientVectorEnd,
+                                 repeat,
+                                 antiAliasThreshold,
+                                 reverseGradient,
+                                 applyRect,
+                                 paintPolicy);
 
+        } else if (m_d->shape == GradientShapeConical) {
+            ConicalGradientPaintPolicy paintPolicy;
+            return paintGradient(gradientVectorStart,
+                                 gradientVectorEnd,
+                                 repeat,
+                                 antiAliasThreshold,
+                                 reverseGradient,
+                                 applyRect,
+                                 paintPolicy);
+
+        } else if ((m_d->shape == GradientShapeSpiral || m_d->shape == GradientShapeReverseSpiral) &&
+                   repeat == GradientRepeatNone) {
+            SpyralGradientRepeatNonePaintPolicy paintPolicy(m_d->shape == GradientShapeReverseSpiral);
+            return paintGradient(gradientVectorStart,
+                                 gradientVectorEnd,
+                                 repeat,
+                                 antiAliasThreshold,
+                                 reverseGradient,
+                                 applyRect,
+                                 paintPolicy);
+        }
+    }
+
+    // Default behavior: no antialiasing required
+    NoAntialiasPaintPolicy paintPolicy;
+    return paintGradient(gradientVectorStart,
+                         gradientVectorEnd,
+                         repeat,
+                         antiAliasThreshold,
+                         reverseGradient,
+                         applyRect,
+                         paintPolicy);
+}
+
+template <class T> 
+bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
+                                       const QPointF& gradientVectorEnd,
+                                       enumGradientRepeat repeat,
+                                       double antiAliasThreshold,
+                                       bool reverseGradient,
+                                       const QRect &applyRect,
+                                       T & paintPolicy)
+{
     if (!gradient()) return false;
 
     QRect requestedRect = applyRect;
@@ -866,199 +1332,6 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
     const KoColorSpace * colorSpace = dev->colorSpace();
     const qint32 pixelSize = colorSpace->pixelSize();
 
-    // The following combinations of options have aliasing artifacts
-    // where the first color meets the last color of the gradient.
-    // so antialias threshold is used to compute if the pixel is in
-    // the smothing area. Then linear interpolation is used to blend
-    // between the first and last colors
-    if (antiAliasThreshold > DBL_EPSILON) {
-        if ((m_d->shape == GradientShapeLinear || m_d->shape == GradientShapeRadial ||
-            m_d->shape == GradientShapeSquare || m_d->shape == GradientShapeSpiral ||
-            m_d->shape == GradientShapeReverseSpiral)
-            && repeat == GradientRepeatForwards) {
-            qreal dx = gradientVectorEnd.x() - gradientVectorStart.x();
-            qreal dy = gradientVectorEnd.y() - gradientVectorStart.y();
-            qreal distanceInPixels = sqrt(dx * dx + dy * dy);
-            qreal antiAliasThresholdNormalized = antiAliasThreshold / distanceInPixels;
-            qreal antiAliasThresholdNormalizedRev = 1. - antiAliasThresholdNormalized;
-            qreal antiAliasThresholdNormalizedDbl = 2. * antiAliasThresholdNormalized;
-            Q_FOREACH (const Private::ProcessRegion &r, m_d->processRegions) {
-                QRect processRect = r.processRect;
-                QSharedPointer<KisGradientShapeStrategy> shapeStrategy = r.precalculatedShapeStrategy;
-
-                CachedGradient cachedGradient(gradient(), qMax(processRect.width(), processRect.height()), colorSpace);
-
-                KisSequentialIteratorProgress it(dev, processRect, progressUpdater());
-
-                const quint8 *colors[2];
-                colors[0] = cachedGradient.cachedAt(1.);
-                colors[1] = cachedGradient.cachedAt(0.);
-
-                while (it.nextPixel()) {
-                    qreal realT = shapeStrategy->valueAt(it.x(), it.y());
-                    qreal t = realT; 
-                    t = repeatStrategy->valueAt(t);
-
-                    if (reverseGradient) {
-                        t = 1 - t;
-                    }
-
-                    if ((m_d->shape == GradientShapeRadial || m_d->shape == GradientShapeSquare)
-                        && realT < antiAliasThresholdNormalized) {
-                        memcpy(it.rawData(), cachedGradient.cachedAt(t), pixelSize);
-                    } else if (t <= antiAliasThresholdNormalized || t >= antiAliasThresholdNormalizedRev) {
-                        qreal s;
-                        if (t <= antiAliasThresholdNormalized) {
-                            s = .5 + t / antiAliasThresholdNormalizedDbl;
-                        } else {
-                            s = (t - antiAliasThresholdNormalizedRev) / antiAliasThresholdNormalizedDbl;
-                        }
-                        KoColor mixedColor(colorSpace);
-                        qint16 colorWeights[2];
-                        colorWeights[0] = static_cast<quint8>((1.0 - s) * 255 + 0.5);
-                        colorWeights[1] = 255 - colorWeights[0];
-                        colorSpace->mixColorsOp()->mixColors(colors, colorWeights, 2, mixedColor.data());
-                        memcpy(it.rawData(), mixedColor.data(), pixelSize);
-                    } else {
-                        memcpy(it.rawData(), cachedGradient.cachedAt(t), pixelSize);
-                    }
-                }
-
-                bitBlt(processRect.topLeft(), dev, processRect);
-            }
-            return true;
-
-        } else if (m_d->shape == GradientShapeConical) {
-            Q_FOREACH (const Private::ProcessRegion &r, m_d->processRegions) {
-                QRect processRect = r.processRect;
-                QSharedPointer<KisGradientShapeStrategy> shapeStrategy = r.precalculatedShapeStrategy;
-
-                CachedGradient cachedGradient(gradient(), qMax(processRect.width(), processRect.height()), colorSpace);
-
-                KisSequentialIteratorProgress it(dev, processRect, progressUpdater());
-
-                const quint8 *colors[2];
-                colors[0] = cachedGradient.cachedAt(1.);
-                colors[1] = cachedGradient.cachedAt(0.);
-
-                while (it.nextPixel()) {
-                    qreal dx = it.x() - gradientVectorStart.x();
-                    qreal dy = it.y() - gradientVectorStart.y();
-                    qreal distance = sqrt(dx * dx + dy * dy);
-                    qreal perimeter = 2. * M_PI * distance;
-                    qreal antiAliasThresholdNormalized = antiAliasThreshold / perimeter;
-                    qreal antiAliasThresholdNormalizedRev = 1. - antiAliasThresholdNormalized;
-                    qreal antiAliasThresholdNormalizedDbl = 2. * antiAliasThresholdNormalized;
-
-                    qreal t = shapeStrategy->valueAt(it.x(), it.y()); 
-                    t = repeatStrategy->valueAt(t);
-
-                    if (reverseGradient) {
-                        t = 1 - t;
-                    }
-
-                    if (t <= antiAliasThresholdNormalized || t >= antiAliasThresholdNormalizedRev) {
-                        qreal s;
-                        if (t <= antiAliasThresholdNormalized) {
-                            s = .5 + t / antiAliasThresholdNormalizedDbl;
-                        } else {
-                            s = (t - antiAliasThresholdNormalizedRev) / antiAliasThresholdNormalizedDbl;
-                        }
-                        KoColor mixedColor(colorSpace);
-                        qint16 colorWeights[2];
-                        colorWeights[0] = static_cast<quint8>((1.0 - s) * 255 + 0.5);
-                        colorWeights[1] = 255 - colorWeights[0];
-                        colorSpace->mixColorsOp()->mixColors(colors, colorWeights, 2, mixedColor.data());
-                        memcpy(it.rawData(), mixedColor.data(), pixelSize);
-                    } else {
-                        memcpy(it.rawData(), cachedGradient.cachedAt(t), pixelSize);
-                    }
-                }
-
-                bitBlt(processRect.topLeft(), dev, processRect);
-
-            }
-            return true;
-
-        } else if ((m_d->shape == GradientShapeSpiral || m_d->shape == GradientShapeReverseSpiral) &&
-                   repeat == GradientRepeatNone) {
-            qreal dx1 = gradientVectorEnd.x() - gradientVectorStart.x();
-            qreal dy1 = gradientVectorEnd.y() - gradientVectorStart.y();
-            qreal lengthInPixels = sqrt(dx1 * dx1 + dy1 * dy1);
-            qreal angle = atan2(dy1, dx1) + M_PI;
-            Q_FOREACH (const Private::ProcessRegion &r, m_d->processRegions) {
-                QRect processRect = r.processRect;
-                QSharedPointer<KisGradientShapeStrategy> shapeStrategy = r.precalculatedShapeStrategy;
-
-                CachedGradient cachedGradient(gradient(), qMax(processRect.width(), processRect.height()), colorSpace);
-
-                KisSequentialIteratorProgress it(dev, processRect, progressUpdater());
-
-                const quint8 *colors[2];
-
-                while (it.nextPixel()) {
-                    qreal dx2 = it.x() - gradientVectorStart.x();
-                    qreal dy2 = it.y() - gradientVectorStart.y();
-                    qreal distance = sqrt(dx2 * dx2 + dy2 * dy2);
-                    qreal perimeter = 2. * M_PI * distance;
-                    qreal antiAliasThresholdNormalized = antiAliasThreshold / perimeter;
-                    qreal antiAliasThresholdNormalizedRev = 1. - antiAliasThresholdNormalized;
-                    qreal antiAliasThresholdNormalizedDbl = 2. * antiAliasThresholdNormalized;
-
-                    qreal t = shapeStrategy->valueAt(it.x(), it.y()); 
-                    t = repeatStrategy->valueAt(t);
-                    if (reverseGradient) {
-                        t = 1 - t;
-                        colors[0] = cachedGradient.cachedAt(0.);
-                    } else {
-                        colors[0] = cachedGradient.cachedAt(1.);
-                    }
-
-                    qreal r = atan2(dy2, dx2) + M_PI;
-                    r -= angle;
-                    if (r < 0.) {
-                        r += 2. * M_PI;
-                    }
-                    r /= (2. * M_PI);
-                    
-                    r = repeatStrategy->valueAt(r);
-
-                    if (distance < lengthInPixels && (r <= antiAliasThresholdNormalized || r >= antiAliasThresholdNormalizedRev)) {
-                        qreal s;
-                        if (r <= antiAliasThresholdNormalized) {
-                            s = .5 + r / antiAliasThresholdNormalizedDbl;
-                        } else {
-                            s = (r - antiAliasThresholdNormalizedRev) / antiAliasThresholdNormalizedDbl;
-                        }
-                        if (reverseGradient) {
-                            distance = lengthInPixels - distance;
-                        }
-                        if (m_d->shape == GradientShapeReverseSpiral) {
-                            colors[1] = colors[0];
-                            colors[0] = (cachedGradient.cachedAt(distance / lengthInPixels));
-                        } else {
-                            colors[1] = (cachedGradient.cachedAt(distance / lengthInPixels));
-                        }
-                        KoColor mixedColor(colorSpace);
-                        qint16 colorWeights[2];
-                        colorWeights[0] = static_cast<quint8>((1.0 - s) * 255 + 0.5);
-                        colorWeights[1] = 255 - colorWeights[0];
-                        colorSpace->mixColorsOp()->mixColors(colors, colorWeights, 2, mixedColor.data());
-                        memcpy(it.rawData(), mixedColor.data(), pixelSize);
-                    } else {
-                        memcpy(it.rawData(), cachedGradient.cachedAt(t), pixelSize);
-                    }
-                }
-
-                bitBlt(processRect.topLeft(), dev, processRect);
-
-            }
-            return true;
-
-        }
-    }
-
-    // Default behavior: no antialiasing required
     Q_FOREACH (const Private::ProcessRegion &r, m_d->processRegions) {
         QRect processRect = r.processRect;
         QSharedPointer<KisGradientShapeStrategy> shapeStrategy = r.precalculatedShapeStrategy;
@@ -1067,15 +1340,16 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
 
         KisSequentialIteratorProgress it(dev, processRect, progressUpdater());
 
+        paintPolicy.setup(gradientVectorStart,
+                          gradientVectorEnd,
+                          shapeStrategy,
+                          repeatStrategy,
+                          antiAliasThreshold,
+                          reverseGradient,
+                          &cachedGradient);
+
         while (it.nextPixel()) {
-            qreal t = shapeStrategy->valueAt(it.x(), it.y());
-            t = repeatStrategy->valueAt(t);
-
-            if (reverseGradient) {
-                t = 1 - t;
-            }
-
-            memcpy(it.rawData(), cachedGradient.cachedAt(t), pixelSize);
+            memcpy(it.rawData(), paintPolicy.colorAt(it.x(), it.y()), pixelSize);
         }
 
         bitBlt(processRect.topLeft(), dev, processRect);

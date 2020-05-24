@@ -86,3 +86,4 @@ cmake --build . --config RelWithDebInfo --target ext_gmic
 cmake --build . --config RelWithDebInfo --target ext_sip
 cmake --build . --config RelWithDebInfo --target ext_pyqt
 cmake --build . --config RelWithDebInfo --target ext_quazip
+cmake --build . --config RelWithDebInfo --target ext_seexpr

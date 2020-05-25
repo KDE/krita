@@ -45,11 +45,11 @@ OSXBUILD_TESTING="OFF"
 for arg in "${@}"; do
     if [[ "${arg}" = --dirty ]]; then
         OSXBUILD_CLEAN="keep dirty"
-    fi
-
-    if [[ "${arg}" = --debug ]]; then
+    elif [[ "${arg}" = --debug ]]; then
         OSXBUILD_TYPE="Debug"
         OSXBUILD_TESTING="ON"
+    else
+        parsed_args="${parsed_args} ${arg}"
     fi
 done
 
@@ -611,74 +611,76 @@ print_usage () {
     printf "\n"
 }
 
-if [[ ${#} -eq 0 ]]; then
-    echo "ERROR: No option given!"
-    print_usage
-    exit 1
-fi
+script_run() {
+    if [[ ${#} -eq 0 ]]; then
+        echo "ERROR: No option given!"
+        print_usage
+        exit 1
+    fi
 
-if [[ ${1} = "builddeps" ]]; then
-    if [[ -z ${OSXBUILD_CLEAN} ]]; then
-        dir_clean "${KIS_INSTALL_DIR}"
+    if [[ ${1} = "builddeps" ]]; then
+        if [[ -z ${OSXBUILD_CLEAN} ]]; then
+            dir_clean "${KIS_INSTALL_DIR}"
+            dir_clean "${KIS_TBUILD_DIR}"
+        fi
+        build_3rdparty "${@:2}"
+        exit
+
+    elif [[ ${1} = "rebuilddeps" ]]; then
+        rebuild_3rdparty "${@:2}"
+        exit
+
+    elif [[ ${1} = "fixboost" ]]; then
+        if [[ -d ${1} ]]; then
+            KIS_BUILD_DIR="${1}"
+        fi
+        fix_boost_rpath
+
+    elif [[ ${1} = "build" ]]; then
+        OSXBUILD_DIR=$(get_directory_fromargs "${@}")
+
+        build_krita "${OSXBUILD_DIR}"
+        exit
+
+    elif [[ ${1} = "buildtarball" ]]; then
+        # uncomment line to optionally change
+        # install directory providing a third argument
+        # This is not on by default as build success requires all
+        # deps installed in the given dir beforehand.
+        # KIS_INSTALL_DIR=${3}
+        OSXBUILD_DIR=$(get_directory_fromargs "${@}")
+
+        build_krita_tarball "${OSXBUILD_DIR}"
+
+    elif [[ ${1} = "clean" ]]; then
+        # remove all build and install directories to start
+        # a fresh install. this no different than using rm directly
         dir_clean "${KIS_TBUILD_DIR}"
+        dir_clean "${$KIS_BUILD_DIR}"
+        dir_clean "${KIS_INSTALL_DIR}"
+        exit
+
+    elif [[ ${1} = "install" ]]; then
+        OSXBUILD_DIR=$(get_directory_fromargs "${@}")
+
+        install_krita "${OSXBUILD_DIR}"
+        fix_boost_rpath
+
+    elif [[ ${1} = "buildinstall" ]]; then
+        OSXBUILD_DIR=$(get_directory_fromargs "${@}")
+
+        build_krita "${OSXBUILD_DIR}"
+        install_krita "${OSXBUILD_DIR}"
+        fix_boost_rpath "${OSXBUILD_DIR}"
+
+    elif [[ ${1} = "test" ]]; then
+        ${KIS_INSTALL_DIR}/bin/krita.app/Contents/MacOS/krita
+
+    else
+        echo "Option ${1} not supported"
+        print_usage
+        exit 1
     fi
-    build_3rdparty "${@:2}"
-    exit
+}
 
-elif [[ ${1} = "rebuilddeps" ]]; then
-    rebuild_3rdparty "${@:2}"
-    exit
-
-elif [[ ${1} = "fixboost" ]]; then
-    if [[ -d ${1} ]]; then
-        KIS_BUILD_DIR="${1}"
-    fi
-    fix_boost_rpath
-
-elif [[ ${1} = "build" ]]; then
-    OSXBUILD_DIR=$(get_directory_fromargs "${@}")
-
-    build_krita "${OSXBUILD_DIR}"
-    exit
-
-elif [[ ${1} = "buildtarball" ]]; then
-    # uncomment line to optionally change
-    # install directory providing a third argument
-    # This is not on by default as build success requires all
-    # deps installed in the given dir beforehand.
-    # KIS_INSTALL_DIR=${3}
-    OSXBUILD_DIR=$(get_directory_fromargs "${@}")
-
-    build_krita_tarball "${OSXBUILD_DIR}"
-
-elif [[ ${1} = "clean" ]]; then
-    # remove all build and install directories to start
-    # a fresh install. this no different than using rm directly
-    dir_clean "${KIS_TBUILD_DIR}"
-    dir_clean "${$KIS_BUILD_DIR}"
-    dir_clean "${KIS_INSTALL_DIR}"
-    exit
-
-elif [[ ${1} = "install" ]]; then
-    OSXBUILD_DIR=$(get_directory_fromargs "${@}")
-
-    install_krita "${OSXBUILD_DIR}"
-    fix_boost_rpath
-
-elif [[ ${1} = "buildinstall" ]]; then
-    OSXBUILD_DIR=$(get_directory_fromargs "${@}")
-
-    build_krita "${OSXBUILD_DIR}"
-    install_krita "${OSXBUILD_DIR}"
-    fix_boost_rpath "${OSXBUILD_DIR}"
-
-elif [[ ${1} = "test" ]]; then
-    ${KIS_INSTALL_DIR}/bin/krita.app/Contents/MacOS/krita
-
-else
-    echo "Option ${1} not supported"
-    print_usage
-    exit 1
-fi
-
-# after finishig sometimes it complains about missing matching quotes.
+script_run ${parsed_args}

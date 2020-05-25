@@ -1023,12 +1023,21 @@ bool KisMainWindow::openDocumentInternal(const QUrl &url, OpenFlags flags)
         setReadWrite(false);
     }
 
+    // Try to determine whether this was an unnamed autosave
     if (flags & RecoveryFile &&
             (   url.toLocalFile().startsWith(QDir::tempPath())
-             || url.toLocalFile().startsWith(QDir::homePath()))
-            ) {
-        newdoc->setUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation) + "/" + QFileInfo(url.toLocalFile()).fileName()));
-        newdoc->save(false, 0);
+                || url.toLocalFile().startsWith(QDir::homePath())
+                ) &&
+            (      QFileInfo(url.toLocalFile()).fileName().startsWith(".krita")
+                   || QFileInfo(url.toLocalFile()).fileName().startsWith("krita")
+                   )
+            )
+    {
+        QString path = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
+        if (!QFileInfo(path).exists()) {
+            path = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+        }
+        newdoc->setUrl(QUrl::fromLocalFile( path + "/" + newdoc->objectName() + ".kra"));
     }
 
     return true;

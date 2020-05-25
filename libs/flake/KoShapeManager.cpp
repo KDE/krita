@@ -431,7 +431,7 @@ void KoShapeManager::remove(KoShape *shape)
         QMutexLocker l1(&d->shapesMutex);
         QMutexLocker l2(&d->treeMutex);
 
-        dirtyRect = shape->absoluteOutlineRect();
+        dirtyRect = shape->boundingRect();
 
         shape->removeShapeManager(this);
         d->selection->deselect(shape);

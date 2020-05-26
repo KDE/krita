@@ -5,7 +5,6 @@ include(KritaAddBrokenUnitTest)
 
 ecm_add_tests(
     TestKoGenStyles.cpp
-    TestOdfSettings.cpp
     TestKoOdfLoadingContext.cpp
     TestStorage.cpp
     NAME_PREFIX "libs-odf-"

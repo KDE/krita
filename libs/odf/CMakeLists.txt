@@ -20,7 +20,6 @@ set(kritaodf_LIB_SRCS
     KoPageLayout.cpp
     KoPageFormat.cpp
     KoUnit.cpp
-    KoOdfNotesConfiguration.cpp
     KoOdfNumberDefinition.cpp
     KoElementReference.cpp
 

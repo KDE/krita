@@ -28,7 +28,6 @@
 
 #include "kritaodf_export.h"
 #include "KoOdfNumberStyles.h"
-#include "KoOdfNotesConfiguration.h"
 
 /**
  * Repository of styles used during loading of OASIS/OOo file
@@ -139,14 +138,6 @@ public:
     /// Value (date/time/number...) formats found while parsing styles. Used e.g. for fields.
     /// Key: format name. Value:
     DataFormatsMap dataFormats() const;
-
-    /**
-     * Return the notes configuration for the given note class (footnote or endnote).
-     *
-     * Note that ODF supports different notes configurations for sections, but we don't
-     * support that yet.
-     */
-    KoOdfNotesConfiguration globalNotesConfiguration(KoOdfNotesConfiguration::NoteClass noteClass) const;
 
 private:
     enum TypeAndLocation {

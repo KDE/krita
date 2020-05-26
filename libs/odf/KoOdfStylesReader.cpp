@@ -21,7 +21,6 @@
 #include "KoOdfStylesReader.h"
 
 #include "KoXmlNS.h"
-#include "KoOdfNotesConfiguration.h"
 #include "KoOdfNumberDefinition.h"
 #include "KoXmlReader.h"
 
@@ -32,8 +31,6 @@ class Q_DECL_HIDDEN KoOdfStylesReader::Private
 public:
 
     Private()
-        : globalFootnoteConfiguration(KoOdfNotesConfiguration::Footnote)
-        , globalEndnoteConfiguration(KoOdfNotesConfiguration::Endnote)
     {
     }
 
@@ -55,10 +52,6 @@ public:
     KoXmlElement           layerSet;
 
     DataFormatsMap         dataFormats;
-
-    // XXX: there can also be notes configuration objects _per_ section.
-    KoOdfNotesConfiguration globalFootnoteConfiguration;
-    KoOdfNotesConfiguration globalEndnoteConfiguration;
 
 };
 
@@ -160,17 +153,6 @@ QHash<QString, KoXmlElement*> KoOdfStylesReader::autoStyles(const QString& famil
 KoOdfStylesReader::DataFormatsMap KoOdfStylesReader::dataFormats() const
 {
     return d->dataFormats;
-}
-
-KoOdfNotesConfiguration KoOdfStylesReader::globalNotesConfiguration(KoOdfNotesConfiguration::NoteClass noteClass) const
-{
-    switch (noteClass) {
-    case (KoOdfNotesConfiguration::Endnote):
-        return d->globalEndnoteConfiguration;
-    case (KoOdfNotesConfiguration::Footnote):
-    default:
-        return d->globalFootnoteConfiguration;
-    }
 }
 
 void KoOdfStylesReader::insertOfficeStyles(const KoXmlElement& styles)
@@ -279,12 +261,6 @@ void KoOdfStylesReader::insertStyle(const KoXmlElement& e, TypeAndLocation typeA
                    || localName == "time-style")) {
         QPair<QString, KoOdfNumberStyles::NumericStyleFormat> numberStyle = KoOdfNumberStyles::loadOdfNumberStyle(e);
         d->dataFormats.insert(numberStyle.first, qMakePair(numberStyle.second, new KoXmlElement(e)));
-    } else if (ns == KoXmlNS::text && localName == "notes-configuration") {
-        if (e.attributeNS(KoXmlNS::text, "note-class", "footnote") == "footnote") {
-            d->globalFootnoteConfiguration.loadOdf(e);
-        } else  {
-            d->globalEndnoteConfiguration.loadOdf(e);
-        }
     }
 }
 

@@ -93,8 +93,6 @@
 #include "KoDocumentInfo.h"
 #include "KoFileDialog.h"
 #include <kis_icon.h>
-#include <KoPageLayoutDialog.h>
-#include <KoPageLayoutWidget.h>
 #include <KoToolManager.h>
 #include <KoZoomController.h>
 #include "KoToolDocker.h"

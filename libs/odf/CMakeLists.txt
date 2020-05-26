@@ -23,7 +23,6 @@ set(kritaodf_LIB_SRCS
     KoShadowStyle.cpp
     KoPageLayout.cpp
     KoPageFormat.cpp
-    KoColumns.cpp
     KoUnit.cpp
     KoOdfNotesConfiguration.cpp
     KoOdfBibliographyConfiguration.cpp

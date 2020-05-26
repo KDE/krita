@@ -402,11 +402,6 @@ private Q_SLOTS:
      */
     void slotToolbarToggled(bool toggle);
 
-    /**
-     * Reload file
-     */
-    void slotReloadFile();
-
 
     /**
      * File --> Import
@@ -494,7 +489,6 @@ private:
      * Updates the window caption based on the document info and path.
      */
     void updateCaption(const QString & caption, bool modified);
-    void updateReloadFileAction(KisDocument *doc);
 
     void saveWindowSettings();
 

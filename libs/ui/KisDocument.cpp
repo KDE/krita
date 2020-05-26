@@ -614,12 +614,6 @@ QString KisDocument::uniqueID() const
     return d->documentStorageID;
 }
 
-bool KisDocument::reload()
-{
-    // XXX: reimplement!
-    return false;
-}
-
 KisDocument *KisDocument::clone()
 {
     return new KisDocument(*this);

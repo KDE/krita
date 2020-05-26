@@ -62,20 +62,6 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-<!-- commented out in the code right now
-    <Action name="file_reload_file">
-      <icon></icon>
-      <text>Reload</text>
-      <whatsThis></whatsThis>
-      <toolTip>Reload</toolTip>
-      <iconText>Reload</iconText>
-      <activationFlags>1</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
--->
     <Action name="file_sessions">
       <icon></icon>
       <text>Sessions...</text>

@@ -120,13 +120,6 @@ public:
     QString uniqueID() const;
 
     /**
-     * @brief reload Reloads the document from the original url
-     * @return the result of loading the document
-     */
-    bool reload();
-
-
-    /**
      * @brief creates a clone of the document and returns it. Please make sure that you
      * hold all the necessary locks on the image before asking for a clone!
      */

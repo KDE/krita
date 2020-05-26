@@ -239,7 +239,6 @@ public:
     //    KisAction *exportPdf {0};
     KisAction *importAnimation {0};
     KisAction *closeAll {0};
-    //    KisAction *reloadFile;
     KisAction *importFile {0};
     KisAction *exportFile {0};
     KisAction *undo {0};
@@ -805,12 +804,6 @@ QWidget * KisMainWindow::canvasWindow() const
     return d->canvasWindow;
 }
 
-void KisMainWindow::updateReloadFileAction(KisDocument *doc)
-{
-    Q_UNUSED(doc);
-    //    d->reloadFile->setEnabled(doc && !doc->url().isEmpty());
-}
-
 void KisMainWindow::setReadWrite(bool readwrite)
 {
     d->saveAction->setEnabled(readwrite);
@@ -1017,7 +1010,6 @@ bool KisMainWindow::openDocumentInternal(const QUrl &url, OpenFlags flags)
     }
 
     KisPart::instance()->addDocument(newdoc);
-    updateReloadFileAction(newdoc);
 
     if (!QFileInfo(url.toLocalFile()).isWritable()) {
         setReadWrite(false);
@@ -1397,7 +1389,6 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
         }
     }
 
-    updateReloadFileAction(document);
     updateCaption();
 
     return ret;
@@ -2082,33 +2073,6 @@ void KisMainWindow::setMaxRecentItems(uint _number)
     d->recentFiles->setMaxItems(_number);
 }
 
-void KisMainWindow::slotReloadFile()
-{
-    KisDocument* document = d->activeView->document();
-    if (!document || document->url().isEmpty())
-        return;
-
-    if (document->isModified()) {
-        bool ok = QMessageBox::question(this,
-                                        i18nc("@title:window", "Krita"),
-                                        i18n("You will lose all changes made since your last save\n"
-                                             "Do you want to continue?"),
-                                        QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes;
-        if (!ok)
-            return;
-    }
-
-    QUrl url = document->url();
-
-    saveWindowSettings();
-    if (!document->reload()) {
-        QMessageBox::critical(this, i18nc("@title:window", "Krita"), i18n("Error: Could not reload this document"));
-    }
-
-    return;
-
-}
-
 QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
 {
     QDockWidget* dockWidget = 0;
@@ -2241,7 +2205,6 @@ void KisMainWindow::toggleDockersVisibility(bool visible)
 void KisMainWindow::slotDocumentTitleModified()
 {
     updateCaption();
-    updateReloadFileAction(d->activeView ? d->activeView->document() : 0);
 }
 
 
@@ -2729,10 +2692,6 @@ void KisMainWindow::createActions()
 
     d->closeAll = actionManager->createAction("file_close_all");
     connect(d->closeAll, SIGNAL(triggered()), this, SLOT(slotFileCloseAll()));
-
-    //    d->reloadFile  = actionManager->createAction("file_reload_file");
-    //    d->reloadFile->setActivationFlags(KisAction::CURRENT_IMAGE_MODIFIED);
-    //    connect(d->reloadFile, SIGNAL(triggered(bool)), this, SLOT(slotReloadFile()));
 
     d->importFile  = actionManager->createAction("file_import_file");
     connect(d->importFile, SIGNAL(triggered(bool)), this, SLOT(slotImportFile()));

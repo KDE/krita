@@ -112,12 +112,6 @@ KisShapeSelection::KisShapeSelection(const KisShapeSelection& rhs, KisSelection*
 
 KisSelectionComponent* KisShapeSelection::clone(KisSelection* selection)
 {
-    /**
-     * TODO: make cloning of vector selections safe! Right now it crashes
-     * on Windows because of manipulations with timers from non-gui thread.
-     */
-    KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
-
     return new KisShapeSelection(*this, selection);
 }
 

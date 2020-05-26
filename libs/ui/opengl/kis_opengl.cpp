@@ -341,7 +341,11 @@ KisOpenGL::OpenGLRenderer KisOpenGL::getUserPreferredOpenGLRendererConfig()
 {
     const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
     QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
+#ifdef Q_OS_WIN
+    return convertConfigToOpenGLRenderer(kritarc.value("OpenGLRenderer", "angle").toString());
+#else
     return convertConfigToOpenGLRenderer(kritarc.value("OpenGLRenderer", "auto").toString());
+#endif
 }
 
 void KisOpenGL::setUserPreferredOpenGLRendererConfig(KisOpenGL::OpenGLRenderer renderer)

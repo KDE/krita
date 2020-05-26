@@ -713,8 +713,11 @@ bool KisConfig::useOpenGL(bool defaultValue) const
 
     const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
     QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
-
+#ifdef Q_OS_WIN
+    return kritarc.value("OpenGLRenderer", "angle").toString() != "none";
+#else
     return kritarc.value("OpenGLRenderer", "auto").toString() != "none";
+#endif
 }
 
 void KisConfig::disableOpenGL() const

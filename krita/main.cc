@@ -257,13 +257,15 @@ extern "C" int main(int argc, char **argv)
         }
 
         KisConfig::RootSurfaceFormat rootSurfaceFormat = KisConfig::rootSurfaceFormat(&kritarc);
-        KisOpenGL::OpenGLRenderer preferredRenderer = KisOpenGL::RendererAuto;
+
 
         logUsage = kritarc.value("LogUsage", true).toBool();
 
 #ifdef Q_OS_WIN
+        KisOpenGL::OpenGLRenderer preferredRenderer = KisOpenGL::RendererOpenGLES;
         const QString preferredRendererString = kritarc.value("OpenGLRenderer", "angle").toString();
 #else
+        KisOpenGL::OpenGLRenderer preferredRenderer = KisOpenGL::RendererAuto;
         const QString preferredRendererString = kritarc.value("OpenGLRenderer", "auto").toString();
 #endif
         preferredRenderer = KisOpenGL::convertConfigToOpenGLRenderer(preferredRendererString);

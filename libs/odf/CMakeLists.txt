@@ -8,7 +8,6 @@ set(kritaodf_LIB_SRCS
     KoFontFace.cpp
     KoOdfLoadingContext.cpp
     KoOdfStylesReader.cpp
-    KoOdfNumberStyles.cpp
     KoOdfReadStore.cpp
     KoOdfWriteStore.cpp
     KoStyleStack.cpp

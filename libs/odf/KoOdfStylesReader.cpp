@@ -50,8 +50,6 @@ public:
     KoXmlElement           officeStyle;
     KoXmlElement           layerSet;
 
-    DataFormatsMap         dataFormats;
-
 };
 
 KoOdfStylesReader::KoOdfStylesReader()
@@ -68,8 +66,6 @@ KoOdfStylesReader::~KoOdfStylesReader()
         qDeleteAll(map);
     Q_FOREACH (const AutoStylesMap& map, d->stylesAutoStyles)
         qDeleteAll(map);
-    Q_FOREACH (const DataFormatsMap::mapped_type& dataFormat, d->dataFormats)
-        delete dataFormat.second;
     qDeleteAll(d->defaultStyles);
     qDeleteAll(d->styles);
     qDeleteAll(d->masterPages);
@@ -147,11 +143,6 @@ QHash<QString, KoXmlElement*> KoOdfStylesReader::autoStyles(const QString& famil
     if (family.isNull())
         return QHash<QString, KoXmlElement*>();
     return stylesDotXml ? d->stylesAutoStyles.value(family) : d->contentAutoStyles.value(family);
-}
-
-KoOdfStylesReader::DataFormatsMap KoOdfStylesReader::dataFormats() const
-{
-    return d->dataFormats;
 }
 
 void KoOdfStylesReader::insertOfficeStyles(const KoXmlElement& styles)
@@ -250,16 +241,6 @@ void KoOdfStylesReader::insertStyle(const KoXmlElement& e, TypeAndLocation typeA
         const QString family = e.attributeNS(KoXmlNS::style, "family", QString());
         if (!family.isEmpty())
             d->defaultStyles.insert(family, new KoXmlElement(e));
-    } else if (ns == KoXmlNS::number && (
-                   localName == "number-style"
-                   || localName == "currency-style"
-                   || localName == "percentage-style"
-                   || localName == "boolean-style"
-                   || localName == "text-style"
-                   || localName == "date-style"
-                   || localName == "time-style")) {
-        QPair<QString, KoOdfNumberStyles::NumericStyleFormat> numberStyle = KoOdfNumberStyles::loadOdfNumberStyle(e);
-        d->dataFormats.insert(numberStyle.first, qMakePair(numberStyle.second, new KoXmlElement(e)));
     }
 }
 

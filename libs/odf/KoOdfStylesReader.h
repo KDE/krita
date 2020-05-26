@@ -27,7 +27,6 @@
 #include <KoXmlReaderForward.h>
 
 #include "kritaodf_export.h"
-#include "KoOdfNumberStyles.h"
 
 /**
  * Repository of styles used during loading of OASIS/OOo file
@@ -133,11 +132,6 @@ public:
      * \return all auto-styles ("style:style" elements) for a given family, hashed by name
      */
     QHash<QString, KoXmlElement*> autoStyles(const QString& family, bool stylesDotXml = false) const;
-
-    typedef QHash<QString, QPair<KoOdfNumberStyles::NumericStyleFormat, KoXmlElement*> > DataFormatsMap;
-    /// Value (date/time/number...) formats found while parsing styles. Used e.g. for fields.
-    /// Key: format name. Value:
-    DataFormatsMap dataFormats() const;
 
 private:
     enum TypeAndLocation {

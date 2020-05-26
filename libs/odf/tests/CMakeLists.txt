@@ -18,12 +18,3 @@ ecm_add_tests(
     NAME_PREFIX "libs-odf-"
     LINK_LIBRARIES kritaodf Qt5::Test)
 
-
-include(KritaAddBrokenUnitTest)
-
-krita_add_broken_unit_test(
-    TestNumberStyle.cpp
-    TEST_NAME TestNumberStyle
-    LINK_LIBRARIES kritaodf Qt5::Test
-    NAME_PREFIX "libs-odf-")
-

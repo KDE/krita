@@ -186,12 +186,8 @@ KoShapeContainer *KisShapeController::createParentForShapes(const QList<KoShape 
             KisSelectionComponent* shapeSelectionComponent = selection->shapeSelection();
 
             if (!shapeSelectionComponent) {
-                // TODO: this change will land in the next patch only!
-                // shapeSelectionComponent = new KisShapeSelection(this, image(), selection);
-                // resultCommand->addCommand(selection->convertToVectorSelection(shapeSelectionComponent));
-
-                // TODO: now, the old implementation for the patch "compilability" rule
-                selection->setShapeSelection(new KisShapeSelection(this, image(), selection));
+                shapeSelectionComponent = new KisShapeSelection(this, image(), selection);
+                resultCommand->addCommand(selection->convertToVectorSelection(shapeSelectionComponent));
             }
 
             KisShapeSelection * shapeSelection = static_cast<KisShapeSelection*>(shapeSelectionComponent);

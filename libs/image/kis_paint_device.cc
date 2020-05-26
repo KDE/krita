@@ -115,6 +115,9 @@ public:
     void convertColorSpace(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags, KUndo2Command *parentCommand);
     bool assignProfile(const KoColorProfile * profile, KUndo2Command *parentCommand);
 
+    KUndo2Command* reincarnateWithDetachedHistory(bool copyContent);
+
+
     inline const KoColorSpace* colorSpace() const
     {
         return currentData()->colorSpace();
@@ -997,6 +1000,13 @@ bool KisPaintDevice::Private::assignProfile(const KoColorProfile * profile, KUnd
     return true;
 }
 
+KUndo2Command *KisPaintDevice::Private::reincarnateWithDetachedHistory(bool copyContent)
+{
+    KUndo2Command *mainCommand = new KUndo2Command();
+    currentData()->reincarnateWithDetachedHistory(copyContent, mainCommand);
+    return mainCommand;
+}
+
 void KisPaintDevice::Private::init(const KoColorSpace *cs, const quint8 *defaultPixel)
 {
     QList<Data*> dataObjects = allDataObjects();
@@ -1543,6 +1553,11 @@ void KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoColorConver
 bool KisPaintDevice::setProfile(const KoColorProfile * profile, KUndo2Command *parentCommand)
 {
     return m_d->assignProfile(profile, parentCommand);
+}
+
+KUndo2Command *KisPaintDevice::reincarnateWithDetachedHistory(bool copyContent)
+{
+    return m_d->reincarnateWithDetachedHistory(copyContent);
 }
 
 KisDataManagerSP KisPaintDevice::dataManager() const

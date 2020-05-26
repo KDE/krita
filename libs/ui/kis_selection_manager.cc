@@ -272,19 +272,19 @@ bool KisSelectionManager::haveShapesInClipboard()
 bool KisSelectionManager::haveAnySelectionWithPixels()
 {
     KisSelectionSP selection = m_view->selection();
-    return selection && selection->hasPixelSelection();
+    return selection && selection->hasNonEmptyPixelSelection();
 }
 
 bool KisSelectionManager::haveShapeSelectionWithShapes()
 {
     KisSelectionSP selection = m_view->selection();
-    return selection && selection->hasShapeSelection();
+    return selection && selection->hasNonEmptyShapeSelection();
 }
 
 bool KisSelectionManager::haveRasterSelectionWithPixels()
 {
     KisSelectionSP selection = m_view->selection();
-    return selection && selection->hasPixelSelection() && !selection->hasShapeSelection();
+    return selection && selection->hasNonEmptyPixelSelection() && !selection->hasNonEmptyShapeSelection();
 }
 
 void KisSelectionManager::updateGUI()

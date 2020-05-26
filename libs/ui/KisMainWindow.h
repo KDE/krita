@@ -37,7 +37,6 @@
 class QCloseEvent;
 class QMoveEvent;
 
-struct KoPageLayout;
 class KoCanvasResourceProvider;
 
 class KisDocument;

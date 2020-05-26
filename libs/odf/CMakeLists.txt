@@ -16,8 +16,6 @@ set(kritaodf_LIB_SRCS
     KoEmbeddedDocumentSaver.cpp
     KoBorder.cpp
     KoShadowStyle.cpp
-    KoPageLayout.cpp
-    KoPageFormat.cpp
     KoUnit.cpp
     KoElementReference.cpp
 

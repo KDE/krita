@@ -27,7 +27,6 @@
 
 #include <klocalizedstring.h>
 
-#include <KoPageLayout.h>
 #include <KoDocumentBase.h>
 #include <kundo2stack.h>
 #include <KoColorSet.h>

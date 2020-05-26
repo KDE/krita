@@ -42,7 +42,6 @@
 #include <KoOdfReadStore.h>
 #include <KoOdfStylesReader.h>
 #include <KoOdfLoadingContext.h>
-#include <KoPageLayout.h>
 #include <KoShapeContainer.h>
 #include <KoShapeLayer.h>
 #include <KoShapeGroup.h>
@@ -637,13 +636,6 @@ bool KisShapeLayer::loadLayer(KoStore* store)
     else if (! odfStore.styles().masterPages().empty())
         master = odfStore.styles().masterPages().begin().value();
 
-    if (master) {
-        const KoXmlElement *style = odfStore.styles().findStyle(
-                                        master->attributeNS(KoXmlNS::style, "page-layout-name", QString()));
-        KoPageLayout pageLayout;
-        pageLayout.loadOdf(*style);
-        setSize(QSizeF(pageLayout.width, pageLayout.height));
-    }
     // We work fine without a master page
 
     KoOdfLoadingContext context(odfStore.styles(), odfStore.store());

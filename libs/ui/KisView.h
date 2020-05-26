@@ -44,7 +44,6 @@ class KisInputManager;
 
 class KoZoomController;
 class KoZoomController;
-struct KoPageLayout;
 class KoCanvasResourceProvider;
 
 // KDE classes

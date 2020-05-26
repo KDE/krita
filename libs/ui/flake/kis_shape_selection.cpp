@@ -212,17 +212,6 @@ bool KisShapeSelection::loadSelection(KoStore* store)
     else if (! odfStore.styles().masterPages().empty())
         master = odfStore.styles().masterPages().begin().value();
 
-    if (master) {
-        const KoXmlElement *style = odfStore.styles().findStyle(
-                    master->attributeNS(KoXmlNS::style, "page-layout-name", QString()));
-        KoPageLayout pageLayout;
-        pageLayout.loadOdf(*style);
-        setSize(QSizeF(pageLayout.width, pageLayout.height));
-    } else {
-        dbgKrita << "No master page found!";
-        return false;
-    }
-
     KoOdfLoadingContext context(odfStore.styles(), odfStore.store());
     KoShapeLoadingContext shapeContext(context, 0);
 

@@ -21,7 +21,6 @@
 #include "KoOdfStylesReader.h"
 
 #include "KoXmlNS.h"
-#include "KoOdfNumberDefinition.h"
 #include "KoXmlReader.h"
 
 #include <OdfDebug.h>

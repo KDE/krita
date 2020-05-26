@@ -91,7 +91,7 @@ bool KisSelectionDecoration::selectionIsActive()
 {
     KisSelectionSP selection = view()->selection();
     return visible() && selection &&
-        (selection->hasPixelSelection() || selection->hasShapeSelection()) &&
+        (selection->hasNonEmptyPixelSelection() || selection->hasNonEmptyShapeSelection()) &&
         selection->isVisible();
 }
 

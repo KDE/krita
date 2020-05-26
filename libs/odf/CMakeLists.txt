@@ -15,8 +15,6 @@ set(kritaodf_LIB_SRCS
     KoOdfWriteStore.cpp
     KoStyleStack.cpp
     KoOdfGraphicStyles.cpp
-    KoGenChange.cpp
-    KoGenChanges.cpp
     KoDocumentBase.cpp
     KoEmbeddedDocumentSaver.cpp
     KoBorder.cpp

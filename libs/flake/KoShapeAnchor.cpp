@@ -35,8 +35,6 @@
 #include <QTransform>
 #include <FlakeDebug.h>
 
-#include <KoGenChanges.h>
-
 class Q_DECL_HIDDEN KoShapeAnchor::Private
 {
 public:

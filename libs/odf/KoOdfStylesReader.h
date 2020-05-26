@@ -30,9 +30,6 @@
 #include "KoOdfNumberStyles.h"
 #include "KoOdfNotesConfiguration.h"
 
-class KoOdfLineNumberingConfiguration;
-class KoOdfBibliographyConfiguration;
-
 /**
  * Repository of styles used during loading of OASIS/OOo file
  */
@@ -150,11 +147,6 @@ public:
      * support that yet.
      */
     KoOdfNotesConfiguration globalNotesConfiguration(KoOdfNotesConfiguration::NoteClass noteClass) const;
-
-    /**
-     * return the line numbering configuration for this document.
-     */
-    KoOdfLineNumberingConfiguration lineNumberingConfiguration() const;
 
 private:
     enum TypeAndLocation {

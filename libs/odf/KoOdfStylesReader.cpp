@@ -23,7 +23,6 @@
 #include "KoXmlNS.h"
 #include "KoOdfNotesConfiguration.h"
 #include "KoOdfNumberDefinition.h"
-#include "KoOdfLineNumberingConfiguration.h"
 #include "KoXmlReader.h"
 
 #include <OdfDebug.h>
@@ -60,8 +59,6 @@ public:
     // XXX: there can also be notes configuration objects _per_ section.
     KoOdfNotesConfiguration globalFootnoteConfiguration;
     KoOdfNotesConfiguration globalEndnoteConfiguration;
-
-    KoOdfLineNumberingConfiguration lineNumberingConfiguration;
 
 };
 
@@ -176,13 +173,6 @@ KoOdfNotesConfiguration KoOdfStylesReader::globalNotesConfiguration(KoOdfNotesCo
     }
 }
 
-
-KoOdfLineNumberingConfiguration KoOdfStylesReader::lineNumberingConfiguration() const
-{
-    return d->lineNumberingConfiguration;
-}
-
-
 void KoOdfStylesReader::insertOfficeStyles(const KoXmlElement& styles)
 {
     KoXmlElement e;
@@ -295,8 +285,6 @@ void KoOdfStylesReader::insertStyle(const KoXmlElement& e, TypeAndLocation typeA
         } else  {
             d->globalEndnoteConfiguration.loadOdf(e);
         }
-    } else if (ns == KoXmlNS::text && localName == "linenumbering-configuration") {
-        d->lineNumberingConfiguration.loadOdf(e);
     }
 }
 

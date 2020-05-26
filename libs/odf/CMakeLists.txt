@@ -22,7 +22,6 @@ set(kritaodf_LIB_SRCS
     KoUnit.cpp
     KoOdfNotesConfiguration.cpp
     KoOdfNumberDefinition.cpp
-    KoOdfLineNumberingConfiguration.cpp
     KoElementReference.cpp
 
     OdfDebug.cpp

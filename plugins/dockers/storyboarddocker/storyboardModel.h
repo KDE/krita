@@ -19,19 +19,36 @@
 #define STORYBOARD_MODEL
 
 #include <QAbstractListModel>
+#include <QStringList>
 
-class KisNodeModel : public QAbstractListModel
+class StoryboardModel : public QAbstractListModel
 {
 
     Q_OBJECT
 
 public:
+//if we don't need this constructor change it
+    StoryboardModel(const QStringList &strings, QObject *parent);
+
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+
+    //for editing data
     Qt::ItemFlags flags(const QModelIndex &index) const override;
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
     
+    //for removing and inserting rows
+    bool insertRows(int position, int rows, const QModelIndex &index = QModelIndex());
+    bool removeRows(int position, int rows, const QModelIndex &index = QModelIndex());
 
-}
+    //for drag and drop
+    Qt::DropActions supportedDropActions() const override;
+    Qt::DropActions supportedDragActions() const override;
+private:
+    QStringList stringList;
+
+//signals:
+//    void editCompleted(const QString &);
+};
 
 #endif

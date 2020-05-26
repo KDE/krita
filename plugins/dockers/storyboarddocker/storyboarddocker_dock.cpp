@@ -17,11 +17,14 @@
  */
 
 #include "storyboarddocker_dock.h"
+#include "commentDelegate.h"
+#include "storyboardModel.h"
 
 #include <QMenu>
 #include <QButtonGroup>
 #include <QDebug>
 #include <QStringListModel>
+#include <QListView>
 
 #include <klocalizedstring.h>
 
@@ -41,19 +44,27 @@ public:
     CommentMenu(QWidget *parent, QStringList fieldList)
         : QMenu(parent)
         , m_menuUI(new Ui_WdgCommentMenu())
-        , visibilityGroup(new QButtonGroup(this))
-        , deleteGroup(new QButtonGroup(this))
-        , model(new QStringListModel(fieldList, this))
+        , model(new StoryboardModel(fieldList, this))
+        , delegate(new CommentDelegate(this))
     {
         QWidget* commentWidget = new QWidget(this);
         m_menuUI->setupUi(commentWidget);
 
+        m_menuUI->fieldListView->setDragEnabled(true);
+        m_menuUI->fieldListView->setAcceptDrops(true);
+        m_menuUI->fieldListView->setDropIndicatorShown(true);
+        m_menuUI->fieldListView->setDragDropMode(QAbstractItemView::InternalMove);
+
         m_menuUI->fieldListView->setModel(model);
+        m_menuUI->fieldListView->setItemDelegate(delegate);
 
         m_menuUI->fieldListView->setEditTriggers(QAbstractItemView::AnyKeyPressed |
                                                     QAbstractItemView::DoubleClicked  );
 
-
+        m_menuUI->btnAddField->setIcon(KisIconUtils::loadIcon("list-add"));
+        m_menuUI->btnDeleteField->setIcon(KisIconUtils::loadIcon("deletelayer"));
+        m_menuUI->btnAddField->setIconSize(QSize(22, 22));
+        m_menuUI->btnDeleteField->setIconSize(QSize(22, 22));
         connect(m_menuUI->btnAddField, SIGNAL(clicked()), this, SLOT(slotaddItem()));
         connect(m_menuUI->btnDeleteField, SIGNAL(clicked()), this, SLOT(slotdeleteItem()));
 
@@ -61,9 +72,6 @@ public:
         commentAction->setDefaultWidget(commentWidget);
         this->addAction(commentAction);
     }
-
-    QButtonGroup* getvisibilityGroup(){ return visibilityGroup;}
-    QButtonGroup* getdeleteGroup(){ return deleteGroup;}
 
 private Q_SLOTS:
     void slotaddItem()
@@ -83,7 +91,8 @@ private Q_SLOTS:
 
 private:
     QScopedPointer<Ui_WdgCommentMenu> m_menuUI;
-    QStringListModel *model;
+    StoryboardModel *model;
+    CommentDelegate *delegate;
 };
 
 class ArrangeMenu: public QMenu
@@ -115,9 +124,9 @@ public:
     QButtonGroup* getViewGroup(){ return viewGroup;}
 
 private:
+    QScopedPointer<Ui_WdgArrangeMenu> m_menuUI;
     QButtonGroup *modeGroup;
     QButtonGroup *viewGroup;
-    QScopedPointer<Ui_WdgArrangeMenu> m_menuUI;
 };
 
 StoryboardDockerDock::StoryboardDockerDock( )

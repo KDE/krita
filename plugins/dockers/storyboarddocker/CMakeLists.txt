@@ -1,5 +1,5 @@
 set(KRITA_STORYBOARDDOCKER_SOURCES
-    storyboarddocker.cpp storyboarddocker_dock.cpp
+    storyboarddocker.cpp storyboarddocker_dock.cpp commentDelegate.cpp storyboardModel.cpp
     )
 
 ki18n_wrap_ui(KRITA_STORYBOARDDOCKER_SOURCES

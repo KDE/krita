@@ -18,11 +18,17 @@
 
 #include "commentDelegate.h"
 
-#include "kis_node_view_color_scheme.h"
+#include <QLineEdit>
+#include <QDebug>
+#include <QStyle>
+#include <QPainter>
+#include <QApplication>
+#include <QSize>
 
+#include <kis_icon.h>
 
 CommentDelegate::CommentDelegate(QObject *parent)
-    : QAbstractItemDelegate(parent)
+    : QStyledItemDelegate(parent)
 {
 }
 
@@ -30,23 +36,74 @@ CommentDelegate::~CommentDelegate()
 {
 }
 
-void CommentDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void CommentDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    painter->save();
+    p->save();
+    {
+        QStyle *style = option.widget ? option.widget->style() : QApplication::style();
+        style->drawPrimitive(QStyle::PE_PanelItemViewItem, &option, p, option.widget);
 
-    QVariant v = index.data(Qt::FontRole);
-    if(v.isValid()) {
-        option.font = v.value<QFont>();
-        option.fontMetrics = QFontMetrics(option.font);
+        p->setFont(option.font);
+
+        //make it conditional depending on the state of the comment field
+        {
+            QIcon icon = KisIconUtils::loadIcon("visible");
+            QRect r = option.rect;
+            r.setSize(QSize(22, 22));
+            icon.paint(p, r);
+        }
+        {
+            QRect r = option.rect;
+            r.translate(25, 0);
+            QString value = index.model()->data(index, Qt::DisplayRole).toString();
+
+            p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter, value);
+        }
     }
-    
-
+    p->restore();
 }
 
-QSize NodeViewVisibilityDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+QSize CommentDelegate::sizeHint(const QStyleOptionViewItem &option,
+                                const QModelIndex &index) const
 {
     Q_UNUSED(index);
+    return QSize(option.rect.width(), 22);
+}
 
-    KisNodeViewColorScheme scm;
-    return QSize(option.rect.width(), scm.rowHeight());
+
+QWidget *CommentDelegate::createEditor(QWidget *parent,
+    const QStyleOptionViewItem &option ,
+    const QModelIndex &index) const
+{
+    QLineEdit *editor = new QLineEdit(parent);
+    return editor;
+}
+
+//set the existing data in the editor
+void CommentDelegate::setEditorData(QWidget *editor,
+                                    const QModelIndex &index) const
+{
+    QString value = index.model()->data(index, Qt::EditRole).toString();
+
+    QLineEdit *lineEdit = static_cast<QLineEdit*>(editor);
+    lineEdit->setText(value);
+}
+
+void CommentDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
+                                   const QModelIndex &index) const
+{
+    QLineEdit *lineEdit = static_cast<QLineEdit*>(editor);
+    QString value = lineEdit->text();
+
+    //don't add empty string
+    model->setData(index, value, Qt::EditRole);
+
+    //do we need to emit closeEditor() ???
+}
+
+void CommentDelegate::updateEditorGeometry(QWidget *editor,
+    const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    editor->setGeometry(option.rect);
+    qDebug()<<"setting geometry";
 }

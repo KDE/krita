@@ -61,7 +61,6 @@ KritaPatternGenerator::~KritaPatternGenerator()
 }
 
 KoPatternGenerator::KoPatternGenerator() : KisGenerator(id(), KoID("basic"), i18n("&Pattern..."))
-
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);
@@ -74,7 +73,21 @@ KisFilterConfigurationSP KoPatternGenerator::defaultConfiguration() const
     QVariant v;
     v.setValue(QString("Grid01.pat"));
     config->setProperty("pattern", v);
-    config->setProperty("transform", QVariant::fromValue(0));
+
+    config->setProperty("transform_shear_x", QVariant::fromValue(0.0));
+    config->setProperty("transform_shear_y", QVariant::fromValue(0.0));
+
+    config->setProperty("transform_scale_x", QVariant::fromValue(1.0));
+    config->setProperty("transform_scale_y", QVariant::fromValue(1.0));
+
+    config->setProperty("transform_rotation_x", QVariant::fromValue(0.0));
+    config->setProperty("transform_rotation_y", QVariant::fromValue(0.0));
+    config->setProperty("transform_rotation_z", QVariant::fromValue(0.0));
+
+    config->setProperty("transform_offset_x", QVariant::fromValue(0));
+    config->setProperty("transform_offset_y", QVariant::fromValue(0));
+
+    config->setProperty("transform_keep_scale_aspect", QVariant::fromValue(true));
 
     return config;
 }
@@ -99,10 +112,16 @@ void KoPatternGenerator::generate(KisProcessingInformation dstInfo,
     QString patternName = config->getString("pattern", "Grid01.pat");
     KoResourceServer<KoPattern> *rserver = KoResourceServerProvider::instance()->patternServer();
     KoPattern *pattern = rserver->resourceByName(patternName);
-
-    int rotation = config->getProperty("transform").toInt();
     QTransform transform;
-    transform.rotate(rotation);
+
+    transform.shear(config->getDouble("transform_shear_x", 0.0), config->getDouble("transform_shear_y", 0.0));
+
+    transform.scale(config->getDouble("transform_scale_x", 1.0), config->getDouble("transform_scale_y", 1.0));
+    transform.rotate(config->getDouble("transform_rotation_x", 0.0), Qt::XAxis);
+    transform.rotate(config->getDouble("transform_rotation_y", 0.0), Qt::YAxis);
+    transform.rotate(config->getDouble("transform_rotation_z", 0.0), Qt::ZAxis);
+
+    transform.translate(config->getInt("transform_offset_x", 0), config->getInt("transform_offset_y", 0));
 
     KisFillPainter gc(dst);
     gc.setPattern(pattern);

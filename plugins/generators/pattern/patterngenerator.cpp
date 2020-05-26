@@ -92,9 +92,16 @@ public:
     }
 
     QTransform transform() const {
-        int rotation = this->getProperty("transform").toInt();
         QTransform transform;
-        transform.rotate(rotation);
+
+        transform.shear(this->getDouble("transform_shear_x", 0.0), this->getDouble("transform_shear_y", 0.0));
+
+        transform.scale(this->getDouble("transform_scale_x", 1.0), this->getDouble("transform_scale_y", 1.0));
+        transform.rotate(this->getDouble("transform_rotation_x", 0.0), Qt::XAxis);
+        transform.rotate(this->getDouble("transform_rotation_y", 0.0), Qt::YAxis);
+        transform.rotate(this->getDouble("transform_rotation_z", 0.0), Qt::ZAxis);
+
+        transform.translate(this->getInt("transform_offset_x", 0), this->getInt("transform_offset_y", 0));
         return transform;
     }
 
@@ -135,7 +142,22 @@ KisFilterConfigurationSP KoPatternGenerator::defaultConfiguration(KisResourcesIn
 
     auto source = resourcesInterface->source<KoPattern>(ResourceType::Patterns);
     config->setProperty("pattern", QVariant::fromValue(source.fallbackResource()->name()));
-    config->setProperty("transform", QVariant::fromValue(0));
+
+
+    config->setProperty("transform_shear_x", QVariant::fromValue(0.0));
+    config->setProperty("transform_shear_y", QVariant::fromValue(0.0));
+
+    config->setProperty("transform_scale_x", QVariant::fromValue(1.0));
+    config->setProperty("transform_scale_y", QVariant::fromValue(1.0));
+
+    config->setProperty("transform_rotation_x", QVariant::fromValue(0.0));
+    config->setProperty("transform_rotation_y", QVariant::fromValue(0.0));
+    config->setProperty("transform_rotation_z", QVariant::fromValue(0.0));
+
+    config->setProperty("transform_offset_x", QVariant::fromValue(0));
+    config->setProperty("transform_offset_y", QVariant::fromValue(0));
+
+    config->setProperty("transform_keep_scale_aspect", QVariant::fromValue(true));
 
     return config;
 }

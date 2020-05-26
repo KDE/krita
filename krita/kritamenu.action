@@ -183,30 +183,6 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="file_print">
-      <icon>document-print</icon>
-      <text>&amp;Print...</text>
-      <whatsThis></whatsThis>
-      <toolTip>Print document</toolTip>
-      <iconText>Print</iconText>
-      <activationFlags>1</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut>Ctrl+P</shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="file_print_preview">
-      <icon>document-print-preview</icon>
-      <text>Print Previe&amp;w</text>
-      <whatsThis></whatsThis>
-      <toolTip>Show a print preview of document</toolTip>
-      <iconText>Print Preview</iconText>
-      <activationFlags>1</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="file_documentinfo">
       <icon>configure</icon>
       <text>&amp;Document Information</text>

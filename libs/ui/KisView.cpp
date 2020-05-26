@@ -72,7 +72,6 @@
 #include "kis_node_commands_adapter.h"
 #include "kis_node_manager.h"
 #include "KisPart.h"
-#include "KisPrintJob.h"
 #include "kis_shape_controller.h"
 #include "kis_tool_freehand.h"
 #include "KisViewManager.h"
@@ -631,16 +630,6 @@ KisView *KisView::replaceBy(KisDocument *document)
     return window->newView(document, subWindow);
 }
 
-QPrintDialog *KisView::createPrintDialog(KisPrintJob *printJob, QWidget *parent)
-{
-    Q_UNUSED(parent);
-    QPrintDialog *printDialog = new QPrintDialog(&printJob->printer(), this);
-    printDialog->setMinMax(printJob->printer().fromPage(), printJob->printer().toPage());
-    printDialog->setEnabledOptions(printJob->printDialogOptions());
-    return printDialog;
-}
-
-
 KisMainWindow * KisView::mainWindow() const
 {
     return d->viewManager->mainWindow();
@@ -1012,11 +1001,6 @@ void KisView::slotSavingFinished()
     if (d->viewManager && d->viewManager->mainWindow()) {
         d->viewManager->mainWindow()->updateCaption();
     }
-}
-
-KisPrintJob * KisView::createPrintJob()
-{
-    return new KisPrintJob(image());
 }
 
 void KisView::slotImageResolutionChanged()

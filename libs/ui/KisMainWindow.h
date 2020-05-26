@@ -41,7 +41,6 @@ struct KoPageLayout;
 class KoCanvasResourceProvider;
 
 class KisDocument;
-class KisPrintJob;
 class KoDockFactoryBase;
 class QDockWidget;
 class KisView;
@@ -293,9 +292,6 @@ public Q_SLOTS:
 
     void slotShowSessionManager();
 
-    // XXX: disabled
-    KisPrintJob* exportToPdf(QString pdfFileName = QString());
-
     /**
      * Update the option widgets to the argument ones, removing the currently set widgets.
      */
@@ -348,16 +344,9 @@ private Q_SLOTS:
     void slotDocumentTitleModified();
 
     /**
-     *  Prints the actual document.
-     */
-    void slotFilePrint();
-
-    /**
      *  Saves the current document with a new name.
      */
     void slotFileSaveAs();
-
-    void slotFilePrintPreview();
 
     void importAnimation();
 
@@ -493,8 +482,6 @@ private:
     void saveWindowSettings();
 
     QPointer<KisView> activeKisView();
-
-    void applyDefaultSettings(QPrinter &printer);
 
     void createActions();
 

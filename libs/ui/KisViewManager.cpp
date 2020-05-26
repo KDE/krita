@@ -107,7 +107,6 @@
 #include "kis_paintop_box.h"
 #include <brushengine/kis_paintop_preset.h>
 #include "KisPart.h"
-#include "KisPrintJob.h"
 #include <KoUpdater.h>
 #include "KisResourceServerProvider.h"
 #include "kis_selection.h"

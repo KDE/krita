@@ -156,11 +156,6 @@ public:
      */
     KoOdfLineNumberingConfiguration lineNumberingConfiguration() const;
 
-    /**
-     * return the bibliography configuration for this document.
-     */
-    KoOdfBibliographyConfiguration globalBibliographyConfiguration() const;
-
 private:
     enum TypeAndLocation {
         CustomInStyles,     ///< custom style located in styles.xml

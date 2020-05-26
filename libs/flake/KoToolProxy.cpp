@@ -45,7 +45,6 @@
 #include "KoShapeLayer.h"
 #include "KoShapeRegistry.h"
 #include "KoShapeController.h"
-#include "KoOdf.h"
 #include "KoViewConverter.h"
 #include "KoShapeFactoryBase.h"
 

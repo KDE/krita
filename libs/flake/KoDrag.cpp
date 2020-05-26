@@ -19,7 +19,6 @@
  */
 
 #include "KoDrag.h"
-#include "KoDragOdfSaveHelper.h"
 
 #include <QApplication>
 #include <QBuffer>

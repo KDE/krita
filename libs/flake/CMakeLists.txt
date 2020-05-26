@@ -84,8 +84,6 @@ set(kritaflake_SRCS
     KoShapeConfigWidgetBase.cpp
     KoDrag.cpp
     KoSvgPaste.cpp
-    KoDragOdfSaveHelper.cpp
-    KoShapeOdfSaveHelper.cpp
     KoSnapGuide.cpp
     KoSnapProxy.cpp
     KoSnapStrategy.cpp

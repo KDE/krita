@@ -39,7 +39,6 @@
 #include <KoCompositeOp.h>
 #include <KisDocument.h>
 #include <KoUnit.h>
-#include <KoOdf.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfStylesReader.h>
 #include <KoOdfLoadingContext.h>

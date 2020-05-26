@@ -254,7 +254,14 @@ void TestShapePainting::testPaintOrder()
 #include "kis_debug.h"
 void TestShapePainting::testGroupUngroup()
 {
-    QScopedPointer<MockContainer> shapesFakeLayer(new MockContainer);
+    MockShapeController controller;
+    MockCanvas canvas(&controller);
+
+    KoShapeManager *manager = canvas.shapeManager();
+
+    QScopedPointer<MockContainer> shapesFakeLayer(new MockContainer());
+    shapesFakeLayer->setAssociatedRootShapeManager(manager);
+
     MockShape *shape1(new MockShape());
     MockShape *shape2(new MockShape());
     shape1->setName("shape1");
@@ -264,27 +271,18 @@ void TestShapePainting::testGroupUngroup()
 
     QList<KoShape*> groupedShapes = {shape1, shape2};
 
-
-    MockShapeController controller;
-    MockCanvas canvas(&controller);
-    KoShapeManager *manager = canvas.shapeManager();
-
-    controller.addShape(shape1);
-    controller.addShape(shape2);
-
     QImage image(100, 100,  QImage::Format_Mono);
     QPainter painter(&image);
     painter.setClipRect(image.rect());
 
     for (int i = 0; i < 3; i++) {
         KoShapeGroup *group = new KoShapeGroup();
-        group->setParent(shapesFakeLayer.data());
 
         {
             group->setName("group");
 
             KUndo2Command groupingCommand;
-            canvas.shapeController()->addShapeDirect(group, 0, &groupingCommand);
+            canvas.shapeController()->addShapeDirect(group, shapesFakeLayer.data(), &groupingCommand);
             new KoShapeGroupCommand(group, groupedShapes, true, &groupingCommand);
 
             groupingCommand.redo();

@@ -58,6 +58,8 @@
 #include "KoSelectedShapesProxy.h"
 #include "kis_signal_auto_connection.h"
 
+#include "KoAddRemoveShapeCommands.h"
+
 
 struct KisShapeController::Private
 {
@@ -151,77 +153,71 @@ int KisShapeController::dummiesCount() const
 {
     return m_d->shapesGraph.shapesCount();
 }
-
 static inline bool belongsToShapeSelection(KoShape* shape) {
     return dynamic_cast<KisShapeSelectionMarker*>(shape->userData());
 }
 
-void KisShapeController::addShapes(const QList<KoShape*> shapes)
+KoShapeContainer *KisShapeController::createParentForShapes(const QList<KoShape *> shapes, KUndo2Command *parentCommand)
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN(!shapes.isEmpty());
+    KoShapeContainer *resultParent = 0;
+    KisCommandUtils::CompositeCommand *resultCommand =
+        new KisCommandUtils::CompositeCommand(parentCommand);
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!shapes.isEmpty(), resultParent);
+    Q_FOREACH (KoShape *shape, shapes) {
+        KIS_SAFE_ASSERT_RECOVER_BREAK(!shape->parent());
+    }
 
     KisCanvas2 *canvas = dynamic_cast<KisCanvas2*>(KoToolManager::instance()->activeCanvasController()->canvas());
-    KIS_SAFE_ASSERT_RECOVER_RETURN(canvas);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(canvas, resultParent);
 
-    const KoShape *baseShapeParent = shapes.first()->parent();
     const bool baseBelongsToSelection = belongsToShapeSelection(shapes.first());
-    bool allSameParent = true;
     bool allSameBelongsToShapeSelection = true;
-    bool hasNullParent = false;
 
     Q_FOREACH (KoShape *shape, shapes) {
-        hasNullParent |= !shape->parent();
-        allSameParent &= shape->parent() == baseShapeParent;
         allSameBelongsToShapeSelection &= belongsToShapeSelection(shape) == baseBelongsToSelection;
     }
 
-    KIS_SAFE_ASSERT_RECOVER_RETURN(!baseBelongsToSelection || allSameBelongsToShapeSelection);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!baseBelongsToSelection || allSameBelongsToShapeSelection, resultParent);
 
-    if (!allSameParent || hasNullParent) {
-        if (baseBelongsToSelection && allSameBelongsToShapeSelection) {
-            KisSelectionSP selection = canvas->viewManager()->selection();
-            if (selection) {
-                if (!selection->shapeSelection()) {
-                    selection->setShapeSelection(new KisShapeSelection(this, image(), selection));
-                }
-                KisShapeSelection * shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());
+    if (baseBelongsToSelection && allSameBelongsToShapeSelection) {
+        KisSelectionSP selection = canvas->viewManager()->selection();
+        if (selection) {
+            KisSelectionComponent* shapeSelectionComponent = selection->shapeSelection();
 
-                Q_FOREACH(KoShape *shape, shapes) {
-                    shapeSelection->addShape(shape);
-                }
+            if (!shapeSelectionComponent) {
+                // TODO: this change will land in the next patch only!
+                // shapeSelectionComponent = new KisShapeSelection(this, image(), selection);
+                // resultCommand->addCommand(selection->convertToVectorSelection(shapeSelectionComponent));
+
+                // TODO: now, the old implementation for the patch "compilability" rule
+                selection->setShapeSelection(new KisShapeSelection(this, image(), selection));
             }
-        } else {
-            KisShapeLayer *shapeLayer =
+
+            KisShapeSelection * shapeSelection = static_cast<KisShapeSelection*>(shapeSelectionComponent);
+            resultParent = shapeSelection;
+        }
+    } else {
+        KisShapeLayer *shapeLayer =
                 dynamic_cast<KisShapeLayer*>(
                     canvas->selectedShapesProxy()->selection()->activeLayer());
 
-            if (!shapeLayer) {
-                shapeLayer = new KisShapeLayer(this, image(),
-                                               i18n("Vector Layer %1", m_d->nameServer->number()),
-                                               OPACITY_OPAQUE_U8);
+        if (!shapeLayer) {
+            shapeLayer = new KisShapeLayer(this, image(),
+                                           i18n("Vector Layer %1", m_d->nameServer->number()),
+                                           OPACITY_OPAQUE_U8);
 
-                image()->undoAdapter()->addCommand(new KisImageLayerAddCommand(image(), shapeLayer, image()->rootLayer(), image()->rootLayer()->childCount()));
-            }
-
-            Q_FOREACH(KoShape *shape, shapes) {
-                shapeLayer->addShape(shape);
-            }
+            resultCommand->addCommand(
+                        new KisImageLayerAddCommand(image(),
+                                                    shapeLayer,
+                                                    image()->rootLayer(),
+                                                    image()->rootLayer()->childCount()));
         }
+
+        resultParent = shapeLayer;
     }
 
-    m_d->doc->setModified(true);
-}
-
-void KisShapeController::removeShape(KoShape* shape)
-{
-    /**
-     * Krita layers have their own destruction path.
-     * It goes through slotRemoveNode()
-     */
-    Q_ASSERT(shape->shapeId() != KIS_NODE_SHAPE_ID  &&
-             shape->shapeId() != KIS_SHAPE_LAYER_ID);
-
-    shape->setParent(0);
+    return resultParent;
 }
 
 QRectF KisShapeController::documentRectInPixels() const

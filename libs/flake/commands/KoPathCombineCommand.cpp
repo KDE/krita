@@ -98,11 +98,9 @@ void KoPathCombineCommand::redo()
 
     if (d->controller) {
         Q_FOREACH (KoPathShape* p, d->paths) {
-            d->controller->removeShape(p);
             p->setParent(0);
         }
         d->combinedPath->setParent(d->combinedPathParent);
-        d->controller->addShape(d->combinedPath);
     }
 }
 
@@ -114,13 +112,11 @@ void KoPathCombineCommand::undo()
     d->isCombined = false;
 
     if (d->controller) {
-        d->controller->removeShape(d->combinedPath);
         d->combinedPath->setParent(0);
 
         auto parentIt = d->oldParents.begin();
         Q_FOREACH (KoPathShape* p, d->paths) {
             p->setParent(*parentIt);
-            d->controller->addShape(p);
             ++parentIt;
         }
     }

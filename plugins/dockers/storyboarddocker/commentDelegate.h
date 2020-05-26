@@ -19,19 +19,32 @@
 #ifndef __COMMENT_DELEGATE_H
 #define __COMMENT_DELEGATE_H
 
-#include <QAbstractItemDelegate>
+#include <QStyledItemDelegate>
 
 
-class CommentDelegate : public CommentDelegate
+class CommentDelegate : public QStyledItemDelegate
 {
 public:
     CommentDelegate(QObject *parent);
     ~CommentDelegate() override;
 
+    //display functions
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
-    bool editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index) override;
     
+
+    //bool editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index) override;  //this won't be needed.
+
+    //editor functions.
+    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
+                          const QModelIndex &index) const;
+
+    void setEditorData(QWidget *editor, const QModelIndex &index) const;
+    void setModelData(QWidget *editor, QAbstractItemModel *model,
+                      const QModelIndex &index) const;
+
+    void updateEditorGeometry(QWidget *editor,
+    const QStyleOptionViewItem &option, const QModelIndex &index) const;
 };
 
 #endif

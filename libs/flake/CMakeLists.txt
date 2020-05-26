@@ -86,11 +86,6 @@ set(kritaflake_SRCS
     KoSvgPaste.cpp
     KoDragOdfSaveHelper.cpp
     KoShapeOdfSaveHelper.cpp
-    KoConnectionPoint.cpp
-    KoConnectionShape.cpp
-    KoConnectionShapeLoadingUpdater.cpp
-    KoConnectionShapeFactory.cpp
-    KoConnectionShapeConfigWidget.cpp
     KoSnapGuide.cpp
     KoSnapProxy.cpp
     KoSnapStrategy.cpp
@@ -152,7 +147,6 @@ set(kritaflake_SRCS
     commands/KoParameterToPathCommand.cpp
     commands/KoShapeTransformCommand.cpp
     commands/KoPathFillRuleCommand.cpp
-    commands/KoConnectionShapeTypeCommand.cpp
     commands/KoShapeShadowCommand.cpp
     commands/KoPathReverseCommand.cpp
     commands/KoShapeRenameCommand.cpp
@@ -162,7 +156,6 @@ set(kritaflake_SRCS
     commands/KoShapeClipCommand.cpp
     commands/KoShapeUnclipCommand.cpp
     commands/KoPathShapeMarkerCommand.cpp
-    commands/KoShapeConnectionChangeCommand.cpp
     commands/KoMultiPathPointMergeCommand.cpp
     commands/KoMultiPathPointJoinCommand.cpp
     commands/KoKeepShapesSelectedCommand.cpp
@@ -178,7 +171,6 @@ set(kritaflake_SRCS
     tools/PathToolOptionWidget.cpp
     tools/KoPathPointRubberSelectStrategy.cpp
     tools/KoPathPointMoveStrategy.cpp
-    tools/KoPathConnectionPointStrategy.cpp
     tools/KoPathControlPointMoveStrategy.cpp
     tools/KoParameterChangeStrategy.cpp
     tools/KoZoomTool.cpp
@@ -223,7 +215,6 @@ set(kritaflake_SRCS
 
 ki18n_wrap_ui(kritaflake_SRCS
     tools/PathToolOptionWidgetBase.ui
-    KoConnectionShapeConfigWidget.ui
     tools/KoZoomToolWidget.ui
 )
 

@@ -63,8 +63,6 @@ public:
 
     QTransform localMatrix; ///< the shapes local transformation matrix
 
-    KoConnectionPoints connectors; ///< glue point id to data mapping
-
     QScopedPointer<KoShapeUserData> userData;
     QSharedPointer<KoShapeStrokeModel> stroke; ///< points to a stroke, or 0 if there is no stroke
     QSharedPointer<KoShapeBackground> fill; ///< Stands for the background color / fill etc.
@@ -97,15 +95,6 @@ public:
     qreal textRunAroundDistanceBottom;
     qreal textRunAroundThreshold;
     KoShape::TextRunAroundContour textRunAroundContour;
-
-public:
-    /// Connection point converters
-
-    /// Convert connection point position from shape coordinates, taking alignment into account
-    void convertFromShapeCoordinates(KoConnectionPoint &point, const QSizeF &shapeSize) const;
-
-    /// Convert connection point position to shape coordinates, taking alignment into account
-    void convertToShapeCoordinates(KoConnectionPoint &point, const QSizeF &shapeSize) const;
 };
 
 class KoShape::Private

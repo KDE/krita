@@ -193,8 +193,6 @@ void KoPathShape::saveOdf(KoShapeSavingContext & context) const
 
     context.xmlWriter().addAttribute("svg:d", toString());
     context.xmlWriter().addAttribute("calligra:nodeTypes", d->nodeTypes());
-
-    saveOdfCommonChildElements(context);
     saveText(context);
     context.xmlWriter().endElement();
 }
@@ -252,7 +250,7 @@ bool KoPathShape::loadContourOdf(const KoXmlElement &element, KoShapeLoadingCont
 
 bool KoPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
-    loadOdfAttributes(element, context, OdfMandatories | OdfAdditionalAttributes | OdfCommonChildElements);
+    loadOdfAttributes(element, context, OdfMandatories | OdfAdditionalAttributes );
 
     // first clear the path data from the default path
     clear();

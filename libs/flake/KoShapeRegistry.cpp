@@ -26,7 +26,6 @@
 
 #include "KoSvgTextShape.h"
 #include "KoPathShapeFactory.h"
-#include "KoConnectionShapeFactory.h"
 #include "KoShapeLoadingContext.h"
 #include "KoShapeSavingContext.h"
 #include "KoShapeGroup.h"
@@ -91,7 +90,6 @@ void KoShapeRegistry::Private::init(KoShapeRegistry *q)
     // Also add our hard-coded basic shapes
     q->add(new KoSvgTextShapeFactory());
     q->add(new KoPathShapeFactory(QStringList()));
-    q->add(new KoConnectionShapeFactory());
     // As long as there is no shape dealing with embedded svg images
     // we add the svg shape factory here by default
     q->add(new SvgShapeFactory);

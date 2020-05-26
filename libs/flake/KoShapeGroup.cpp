@@ -204,14 +204,12 @@ void KoShapeGroup::saveOdf(KoShapeSavingContext & context) const
     Q_FOREACH (KoShape* shape, shapes) {
         shape->saveOdf(context);
     }
-
-    saveOdfCommonChildElements(context);
     context.xmlWriter().endElement();
 }
 
 bool KoShapeGroup::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
-    loadOdfAttributes(element, context, OdfMandatories | OdfStyle | OdfAdditionalAttributes | OdfCommonChildElements);
+    loadOdfAttributes(element, context, OdfMandatories | OdfStyle | OdfAdditionalAttributes);
 
     KoXmlElement child;
     QMap<KoShapeLayer*, int> usedLayers;

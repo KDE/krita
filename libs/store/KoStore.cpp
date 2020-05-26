@@ -424,21 +424,6 @@ void KoStore::setSubstitution(const QString &name, const QString &substitution)
     d->substituteWith = substitution;
 }
 
-bool KoStore::isEncrypted()
-{
-    return false;
-}
-
-bool KoStore::setPassword(const QString& /*password*/)
-{
-    return false;
-}
-
-QString KoStore::password()
-{
-    return QString();
-}
-
 bool KoStore::bad() const
 {
     Q_D(const KoStore);

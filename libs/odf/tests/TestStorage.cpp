@@ -22,7 +22,6 @@
 #include <QDir>
 
 #include <KoStore.h>
-#include <KoEncryptionChecker.h>
 #include <OdfDebug.h>
 #include <stdlib.h>
 
@@ -92,9 +91,6 @@ void TestStorage::storage()
     QVERIFY(store);
     QVERIFY(store->bad() == false);
 
-    if (store->isEncrypted())
-        store->setPassword("password");
-
     QVERIFY(store->open("test1/with/a/relative/dir.txt"));
     for (int i = 0; i < 100; ++i)
         store->write(test1, strlen(test1));
@@ -125,9 +121,6 @@ void TestStorage::storage()
 
     store = KoStore::createStore(testFile, KoStore::Read, "", backend);
     QVERIFY(store->bad() == false);
-
-    if (store->isEncrypted())
-        store->setPassword("password");
 
     QVERIFY (store->open("test1/with/a/relative/dir.txt"));
     QIODevice* dev = store->device();

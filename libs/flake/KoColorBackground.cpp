@@ -19,9 +19,7 @@
 
 #include "KoColorBackground.h"
 #include "KoShapeSavingContext.h"
-#include <KoOdfGraphicStyles.h>
 #include <KoXmlNS.h>
-#include <KoStyleStack.h>
 
 #include <QColor>
 #include <QPainter>

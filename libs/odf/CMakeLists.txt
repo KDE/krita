@@ -7,9 +7,6 @@ set(kritaodf_LIB_SRCS
     KoOdfStylesReader.cpp
     KoOdfReadStore.cpp
     KoOdfWriteStore.cpp
-    KoStyleStack.cpp
-    KoOdfGraphicStyles.cpp
-    KoShadowStyle.cpp
 
     OdfDebug.cpp
 )

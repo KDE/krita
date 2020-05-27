@@ -56,7 +56,6 @@
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include <KoUnit.h>
-#include <KoStyleStack.h>
 
 #include <QPainter>
 #include <QVariant>

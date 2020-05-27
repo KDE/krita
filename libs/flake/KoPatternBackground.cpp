@@ -21,11 +21,9 @@
 #include "KoShapeSavingContext.h"
 #include "KoImageData.h"
 #include "KoImageCollection.h"
-#include <KoStyleStack.h>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include <KoXmlNS.h>
-#include <KoOdfGraphicStyles.h>
 #include <KoOdfStylesReader.h>
 #include <KoUnit.h>
 #include <KoXmlReader.h>

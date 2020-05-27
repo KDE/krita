@@ -19,9 +19,7 @@
 
 #include "KoGradientBackground.h"
 #include "KoFlake.h"
-#include <KoStyleStack.h>
 #include <KoXmlNS.h>
-#include <KoOdfGraphicStyles.h>
 #include <KoShapeSavingContext.h>
 
 #include <FlakeDebug.h>

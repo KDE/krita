@@ -30,7 +30,6 @@
 #include "KoShapeLoadingContext.h"
 
 #include <KoProperties.h>
-#include <KoStyleStack.h>
 #include <KoJsonTrader.h>
 
 #include <KPluginFactory>

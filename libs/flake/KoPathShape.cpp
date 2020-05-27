@@ -42,7 +42,6 @@
 #include <KoXmlNS.h>
 #include <KoUnit.h>
 #include <KoGenStyle.h>
-#include <KoStyleStack.h>
 #include "KisQPainterStateSaver.h"
 
 #include <FlakeDebug.h>

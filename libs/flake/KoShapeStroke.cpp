@@ -33,7 +33,6 @@
 
 // Calligra
 #include <KoGenStyles.h>
-#include <KoOdfGraphicStyles.h>
 
 // Flake
 #include "KoShape.h"

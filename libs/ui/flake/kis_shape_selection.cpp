@@ -34,7 +34,6 @@
 #include <KoShapeManager.h>
 #include <KisDocument.h>
 
-#include <KoEmbeddedDocumentSaver.h>
 #include <KoXmlNS.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeLoadingContext.h>

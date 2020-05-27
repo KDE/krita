@@ -34,7 +34,6 @@
 #include <KoGenStyles.h>
 #include <KoOdfWriteStore.h>
 #include <KoXmlWriter.h>
-#include <KoEmbeddedDocumentSaver.h>
 #include "KoShapeSavingContext.h"
 
 #include <KoShapeContainer.h>

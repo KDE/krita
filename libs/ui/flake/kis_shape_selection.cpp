@@ -43,7 +43,6 @@
 #include <KoShapeSavingContext.h>
 #include <KoStoreDevice.h>
 #include <KoShapeTransformCommand.h>
-#include <KoElementReference.h>
 
 #include <kis_painter.h>
 #include <kis_paint_device.h>

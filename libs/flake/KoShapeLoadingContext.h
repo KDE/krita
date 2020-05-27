@@ -99,6 +99,7 @@ public:
 
     /// register the id for a specific shape
     void addShapeId(KoShape *shape, const QString &id);
+
     /// return the shape formerly registered using addShapeId()
     KoShape *shapeById(const QString &id);
 

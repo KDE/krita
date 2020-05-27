@@ -10,7 +10,6 @@ set(kritaodf_LIB_SRCS
     KoStyleStack.cpp
     KoOdfGraphicStyles.cpp
     KoShadowStyle.cpp
-    KoElementReference.cpp
 
     OdfDebug.cpp
 )

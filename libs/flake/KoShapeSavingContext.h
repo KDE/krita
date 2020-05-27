@@ -25,7 +25,6 @@
 
 #include "kritaflake_export.h"
 
-#include <KoElementReference.h>
 #include <QMap>
 
 class KoShape;
@@ -136,33 +135,6 @@ public:
      * @return options used
      */
     ShapeSavingOptions options() const;
-
-
-    /**
-     * @brief xmlid returns an element reference that can be related to the given referent. If there is a
-     *   prefix given, this prefix will be used in addition to either the counter or the uuid.
-     * @param referent the object we are referring to
-     * @param prefix a prefix for the xml:id string
-     * @param counter if counter is true, shapesavingcontext will use a counter to create the xml:id
-     * @return a KoElementReference; if insert is false and referent doesn't exist yet in the list, the elementreference will be invalid.
-     */
-    KoElementReference xmlid(const void *referent, const QString& prefix = QString(), KoElementReference::GenerationOption counter = KoElementReference::UUID);
-
-    /**
-     * @brief existingXmlid retrieve an existing xml id or invalid xml id if the referent object doesn't exist
-     */
-    KoElementReference existingXmlid(const void *referent);
-
-    /**
-     * @brief Clear out all given draw ids
-     * @param prefix: removes all xml:id's that have the given prefix.
-     *
-     * This is needed for checking if master pages are the same. In normal saving
-     * this should not be called.
-     *
-     * @see KoPAPastePage::process
-     */
-    void clearXmlIds(const QString &prefix);
 
     /**
      * Adds a layer to save into a layer-set in styles.xml according to 9.1.2/9.1.3 odf spec

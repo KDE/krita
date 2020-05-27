@@ -31,8 +31,6 @@
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 #include <KoSharedSavingData.h>
-#include <KoElementReference.h>
-
 
 #include <FlakeDebug.h>
 #include <QUuid>
@@ -60,7 +58,6 @@ public:
 
     KoGenStyles& mainStyles;
 
-    QMap<const void*, KoElementReference> references;
     QMap<QString, int> referenceCounters;
     QMap<QString, QList<const void*> > prefixedReferences;
 
@@ -133,66 +130,6 @@ void KoShapeSavingContext::removeOption(ShapeSavingOption option)
 {
     if (isSet(option))
         d->savingOptions = d->savingOptions ^ option; // xor to remove it.
-}
-
-KoElementReference KoShapeSavingContext::xmlid(const void *referent, const QString& prefix, KoElementReference::GenerationOption counter)
-{
-    Q_ASSERT(counter == KoElementReference::UUID || (counter == KoElementReference::Counter && !prefix.isEmpty()));
-
-    if (d->references.contains(referent)) {
-        return d->references[referent];
-    }
-
-    KoElementReference ref;
-
-    if (counter == KoElementReference::Counter) {
-        int referenceCounter = d->referenceCounters[prefix];
-        referenceCounter++;
-        ref = KoElementReference(prefix, referenceCounter);
-        d->references.insert(referent, ref);
-        d->referenceCounters[prefix] = referenceCounter;
-    }
-    else {
-        if (!prefix.isEmpty()) {
-            ref = KoElementReference(prefix);
-            d->references.insert(referent, ref);
-        }
-        else {
-            d->references.insert(referent, ref);
-        }
-    }
-
-    if (!prefix.isNull()) {
-        d->prefixedReferences[prefix].append(referent);
-    }
-    return ref;
-}
-
-KoElementReference KoShapeSavingContext::existingXmlid(const void *referent)
-{
-    if (d->references.contains(referent)) {
-        return d->references[referent];
-    }
-    else {
-        KoElementReference ref;
-        ref.invalidate();
-        return ref;
-    }
-}
-
-void KoShapeSavingContext::clearXmlIds(const QString &prefix)
-{
-
-    if (d->prefixedReferences.contains(prefix)) {
-        Q_FOREACH (const void* ptr, d->prefixedReferences[prefix]) {
-            d->references.remove(ptr);
-        }
-        d->prefixedReferences.remove(prefix);
-    }
-
-    if (d->referenceCounters.contains(prefix)) {
-        d->referenceCounters[prefix] = 0;
-    }
 }
 
 void KoShapeSavingContext::addLayerForSaving(const KoShapeLayer *layer)

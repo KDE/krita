@@ -49,7 +49,6 @@
 #include "KoPathShape.h"
 #include "KoFilterEffectStack.h"
 #include <KoSnapData.h>
-#include <KoElementReference.h>
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>

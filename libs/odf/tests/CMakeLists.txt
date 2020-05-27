@@ -13,7 +13,6 @@ ecm_add_tests(
     TestXmlWriter.cpp
     kodomtest.cpp
     TestKoUnit.cpp
-    TestKoElementReference.cpp
     NAME_PREFIX "libs-odf-"
     LINK_LIBRARIES kritaodf Qt5::Test)
 

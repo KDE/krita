@@ -749,10 +749,19 @@ KisOpenGL::RendererConfig KisOpenGL::selectSurfaceConfig(KisOpenGL::OpenGLRender
 
     const OpenGLRenderer defaultRenderer = getRendererFromProbeResult(*info);
 
+    /**
+     * On Windows we always prefer Angle, not what Qt suggests us
+     */
+#ifdef Q_OS_WIN
+    const OpenGLRenderer preferredAutoRenderer = RendererOpenGLES;
+#else
+    const OpenGLRenderer preferredAutoRenderer = defaultRenderer;
+#endif
+
     OpenGLRenderers supportedRenderers = RendererNone;
 
     FormatPositionLess compareOp;
-    compareOp.setPreferredRendererByQt(defaultRenderer);
+    compareOp.setPreferredRendererByQt(preferredAutoRenderer);
 
 #ifdef HAVE_HDR
     compareOp.setPreferredColorSpace(
@@ -794,7 +803,7 @@ KisOpenGL::RendererConfig KisOpenGL::selectSurfaceConfig(KisOpenGL::OpenGLRender
         }
     }
 
-    OpenGLRenderer preferredByQt = defaultRenderer;
+    OpenGLRenderer preferredByQt = preferredAutoRenderer;
 
     if (preferredByQt == RendererDesktopGL &&
         supportedRenderers & RendererDesktopGL &&

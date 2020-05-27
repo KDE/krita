@@ -85,6 +85,15 @@ public:
                        bool reverseGradient,
                        const QRect &applyRect);
 
+    template <class T> 
+    bool paintGradient(const QPointF& gradientVectorStart,
+                       const QPointF& gradientVectorEnd,
+                       enumGradientRepeat repeat,
+                       double antiAliasThreshold,
+                       bool reverseGradient,
+                       const QRect &applyRect,
+                       T & paintPolicy);
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

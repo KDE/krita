@@ -84,7 +84,7 @@ ki18n_wrap_ui( kritawidgets_LIB_SRCS
 add_library(kritawidgets SHARED ${kritawidgets_LIB_SRCS})
 generate_export_header(kritawidgets BASE_NAME kritawidgets)
 target_link_libraries(kritawidgets
-    kritaodf
+    
     kritaglobal
     kritaflake
     kritapigment

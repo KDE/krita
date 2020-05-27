@@ -21,8 +21,6 @@
 
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
-#include <KoGenStyle.h>
-#include <KoGenStyles.h>
 #include "KoPathShape.h"
 #include "KoPathShapeLoader.h"
 #include "KoShapeLoadingContext.h"

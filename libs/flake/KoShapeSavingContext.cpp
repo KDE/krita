@@ -39,7 +39,7 @@
 
 class KoShapeSavingContextPrivate {
 public:
-    KoShapeSavingContextPrivate(KoXmlWriter&, KoGenStyles&);
+    KoShapeSavingContextPrivate(KoXmlWriter&);
     ~KoShapeSavingContextPrivate();
 
     KoXmlWriter *xmlWriter;
@@ -56,19 +56,15 @@ public:
     QHash<const KoShape *, QTransform> shapeOffsets;
     QMap<const KoMarker *, QString> markerRefs;
 
-    KoGenStyles& mainStyles;
-
     QMap<QString, int> referenceCounters;
     QMap<QString, QList<const void*> > prefixedReferences;
 
 };
 
-KoShapeSavingContextPrivate::KoShapeSavingContextPrivate(KoXmlWriter &w,
-        KoGenStyles &s)
-        : xmlWriter(&w),
-        savingOptions(0),
-        imageId(0),
-        mainStyles(s)
+KoShapeSavingContextPrivate::KoShapeSavingContextPrivate(KoXmlWriter &w)
+        : xmlWriter(&w)
+        , savingOptions(0)
+        , imageId(0)
 {
 }
 
@@ -79,8 +75,8 @@ KoShapeSavingContextPrivate::~KoShapeSavingContextPrivate()
     }
 }
 
-KoShapeSavingContext::KoShapeSavingContext(KoXmlWriter &xmlWriter, KoGenStyles &mainStyles)
-    : d(new KoShapeSavingContextPrivate(xmlWriter, mainStyles))
+KoShapeSavingContext::KoShapeSavingContext(KoXmlWriter &xmlWriter)
+    : d(new KoShapeSavingContextPrivate(xmlWriter))
 {
     // by default allow saving of draw:id + xml:id
     addOption(KoShapeSavingContext::DrawId);
@@ -99,11 +95,6 @@ KoXmlWriter & KoShapeSavingContext::xmlWriter()
 void KoShapeSavingContext::setXmlWriter(KoXmlWriter &xmlWriter)
 {
     d->xmlWriter = &xmlWriter;
-}
-
-KoGenStyles & KoShapeSavingContext::mainStyles()
-{
-    return d->mainStyles;
 }
 
 bool KoShapeSavingContext::isSet(ShapeSavingOption option) const

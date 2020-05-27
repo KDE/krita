@@ -26,8 +26,6 @@
 #include <QTextStream>
 #include <QtXml>
 
-#include <KoOdfStylesReader.h>
-
 #include "KoShapeRegistry.h"
 #include "KoShape.h"
 #include "KoPathShape.h"

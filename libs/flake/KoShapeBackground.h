@@ -27,7 +27,6 @@
 class QSizeF;
 class QPainter;
 class QPainterPath;
-class KoGenStyle;
 class KoShapeSavingContext;
 class KoShapePaintingContext;
 

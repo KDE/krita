@@ -21,7 +21,6 @@
 #include <QTest>
 #include <QBuffer>
 
-#include <KoOdfStylesReader.h>
 #include <KoShapeLoadingContext.h>
 #include <KoPathShapeFactory.h>
 #include <KoShape.h>

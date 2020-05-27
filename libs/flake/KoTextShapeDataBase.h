@@ -28,7 +28,6 @@ class KoTextShapeDataBasePrivate;
 #include <KoXmlReaderForward.h>
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
-class KoGenStyle;
 struct KoInsets;
 
 class QTextDocument;

@@ -32,7 +32,6 @@
 #include <QPainter>
 
 // Calligra
-#include <KoGenStyles.h>
 
 // Flake
 #include "KoShape.h"

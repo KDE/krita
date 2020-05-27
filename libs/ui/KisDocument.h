@@ -54,7 +54,6 @@ class KoColorSpace;
 class KoShapeControllerBase;
 class KoShapeLayer;
 class KoStore;
-class KoOdfReadStore;
 class KoDocumentInfo;
 class KoDocumentInfoDlg;
 class KisImportExportManager;

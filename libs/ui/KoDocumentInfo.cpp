@@ -21,7 +21,6 @@
 #include "KoDocumentInfo.h"
 
 #include "KisDocument.h"
-#include "KoOdfWriteStore.h"
 #include "KoXmlNS.h"
 
 #include <QDateTime>
@@ -33,7 +32,6 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <OdfDebug.h>
 #include <klocalizedstring.h>
 #include <kuser.h>
 #include <kemailsettings.h>

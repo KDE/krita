@@ -28,7 +28,6 @@
 #include "KoTextShapeDataBase.h"
 #include "KoTosContainerModel.h"
 #include "KoXmlNS.h"
-#include "KoGenStyle.h"
 
 #include <FlakeDebug.h>
 

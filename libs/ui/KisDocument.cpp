@@ -34,7 +34,6 @@
 #include <KoDpi.h>
 #include <KoUnit.h>
 #include <KoID.h>
-#include <KoOdfReadStore.h>
 #include <KoProgressProxy.h>
 #include <KoProgressUpdater.h>
 #include <KoSelection.h>

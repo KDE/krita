@@ -29,7 +29,6 @@
 
 class KoShape;
 class KoXmlWriter;
-class KoGenStyles;
 class KoDataCenterBase;
 class KoImageData;
 class KoMarker;
@@ -82,7 +81,7 @@ public:
      * @param mainStyles for saving the styles
      * @param embeddedSaver for saving embedded documents
      */
-    KoShapeSavingContext(KoXmlWriter &xmlWriter, KoGenStyles &mainStyles);
+    KoShapeSavingContext(KoXmlWriter &xmlWriter);
     virtual ~KoShapeSavingContext();
 
     /**
@@ -101,13 +100,6 @@ public:
      * @param xmlWriter to use
      */
     void setXmlWriter(KoXmlWriter &xmlWriter);
-
-    /**
-     * @brief Get the main styles
-     *
-     * @return main styles
-     */
-    KoGenStyles &mainStyles();
 
     /**
      * @brief Check if an option is set

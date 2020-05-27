@@ -48,7 +48,6 @@ class KoViewConverter;
 class KoShapeApplicationData;
 class KoShapeSavingContext;
 class KoShapeLoadingContext;
-class KoGenStyle;
 class KoShapeShadow;
 class KoFilterEffectStack;
 class KoSnapData;

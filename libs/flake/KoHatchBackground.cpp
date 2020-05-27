@@ -21,11 +21,9 @@
 #include "KoHatchBackground.h"
 
 #include <KoShapeSavingContext.h>
-#include <KoGenStyles.h>
-#include <KoGenStyle.h>
+
 #include <KoXmlNS.h>
 #include <KoUnit.h>
-#include <KoOdfStylesReader.h>
 #include <KoXmlReader.h>
 
 #include <FlakeDebug.h>

@@ -53,8 +53,6 @@
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
-#include <KoGenStyle.h>
-#include <KoGenStyles.h>
 #include <KoUnit.h>
 
 #include <QPainter>

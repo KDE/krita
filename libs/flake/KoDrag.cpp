@@ -31,8 +31,6 @@
 #include <FlakeDebug.h>
 
 #include <KoStore.h>
-#include <KoGenStyles.h>
-#include <KoOdfWriteStore.h>
 #include <KoXmlWriter.h>
 #include "KoShapeSavingContext.h"
 

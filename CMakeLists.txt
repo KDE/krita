@@ -728,6 +728,15 @@ set_package_properties(PyQt5 PROPERTIES
     PURPOSE "Required by the Krita PyQt plugin")
 macro_bool_to_01(PYQT5_FOUND HAVE_PYQT5)
 
+find_package(LibMyPaint)
+set_package_properties(LibMyPaint PROPERTIES
+    DESCRIPTION "MyPaint brush engine API for C/C++"
+    TYPE OPTIONAL
+    PURPOSE "Required for the mypaint brush engine")
+if(LIBMYPAINT_VERSION VERSION_LESS "1.4.0")
+    message(WARNING "Please update libmypaint to version above 1.4.0 as lower versions are known to crash")
+endif()
+
 ##
 ## Look for OpenGL
 ##

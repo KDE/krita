@@ -719,7 +719,8 @@ const quint8 *RepeatForwardsPaintPolicy::colorAt(qreal x, qreal y) const
     // This prevents applying smoothing since there are
     // no aliasing artifacts in these gradient shapes at the center
     if (t <= m_antiAliasThresholdNormalized &&
-        (m_shape == KisGradientPainter::GradientShapeRadial ||
+        (m_shape == KisGradientPainter::GradientShapeBiLinear ||
+         m_shape == KisGradientPainter::GradientShapeRadial ||
          m_shape == KisGradientPainter::GradientShapeSquare)) {
         if (m_reverseGradient) {
             t = 1 - t;
@@ -1182,9 +1183,9 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
     // the smothing area. Then linear interpolation is used to blend
     // between the first and last colors
     if (antiAliasThreshold > DBL_EPSILON) {
-        if ((m_d->shape == GradientShapeLinear || m_d->shape == GradientShapeRadial ||
-            m_d->shape == GradientShapeSquare || m_d->shape == GradientShapeSpiral ||
-            m_d->shape == GradientShapeReverseSpiral)
+        if ((m_d->shape == GradientShapeLinear || m_d->shape == GradientShapeBiLinear ||
+            m_d->shape == GradientShapeRadial || m_d->shape == GradientShapeSquare ||
+            m_d->shape == GradientShapeSpiral || m_d->shape == GradientShapeReverseSpiral)
             && repeat == GradientRepeatForwards) {
             RepeatForwardsPaintPolicy paintPolicy(m_d->shape);
             return paintGradient(gradientVectorStart,

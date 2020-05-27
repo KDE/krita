@@ -56,7 +56,6 @@ class KoClipPath;
 class KoClipMask;
 class KoShapePaintingContext;
 class KoShapeAnchor;
-class KoBorder;
 struct KoInsets;
 class KoShapeBackground;
 class KisHandlePainterHelper;
@@ -735,12 +734,6 @@ public:
 
     /// Returns the currently set shadow or 0 if there is no shadow set
     KoShapeShadow *shadow() const;
-
-    /// Sets the new border, removing the old one.
-    void setBorder(KoBorder *border);
-
-    /// Returns the currently set border or 0 if there is no border set
-    KoBorder *border() const;
 
     /// Sets a new clip path, removing the old one
     void setClipPath(KoClipPath *clipPath);

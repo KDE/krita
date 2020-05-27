@@ -30,7 +30,6 @@
 
 #include <KoClipMask.h>
 
-class KoBorder;
 class KoShapeManager;
 
 
@@ -58,7 +57,6 @@ public:
     bool inheritBackground = false;
     bool inheritStroke = false;
     KoShapeShadow * shadow; ///< the current shape shadow
-    KoBorder *border; ///< the current shape border
     // XXX: change this to instance instead of pointer
     QScopedPointer<KoClipPath> clipPath; ///< the current clip path
     QScopedPointer<KoClipMask> clipMask; ///< the current clip mask

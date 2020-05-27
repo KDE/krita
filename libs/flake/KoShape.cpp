@@ -58,7 +58,6 @@
 #include <KoGenStyles.h>
 #include <KoUnit.h>
 #include <KoStyleStack.h>
-#include <KoBorder.h>
 
 #include <QPainter>
 #include <QVariant>
@@ -78,7 +77,6 @@ KoShape::SharedData::SharedData()
     : QSharedData()
     , size(50, 50)
     , shadow(0)
-    , border(0)
     , filterEffectStack(0)
     , transparency(0.0)
     , zIndex(0)
@@ -110,7 +108,6 @@ KoShape::SharedData::SharedData(const SharedData &rhs)
     , inheritBackground(rhs.inheritBackground)
     , inheritStroke(rhs.inheritStroke)
     , shadow(0) // WARNING: not implemented in Krita
-    , border(0) // WARNING: not implemented in Krita
     , clipPath(rhs.clipPath ? rhs.clipPath->clone() : 0)
     , clipMask(rhs.clipMask ? rhs.clipMask->clone() : 0)
     , additionalAttributes(rhs.additionalAttributes)
@@ -1062,22 +1059,6 @@ void KoShape::setShadow(KoShapeShadow *shadow)
 KoShapeShadow *KoShape::shadow() const
 {
     return s->shadow;
-}
-
-void KoShape::setBorder(KoBorder *border)
-{
-    if (s->border) {
-        // The shape owns the border.
-        delete s->border;
-    }
-    s->border = border;
-    shapeChangedPriv(BorderChanged);
-    notifyChanged();
-}
-
-KoBorder *KoShape::border() const
-{
-    return s->border;
 }
 
 void KoShape::setClipPath(KoClipPath *clipPath)

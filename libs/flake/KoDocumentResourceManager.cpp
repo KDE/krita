@@ -172,20 +172,6 @@ void KoDocumentResourceManager::setImageCollection(KoImageCollection *ic)
     setResource(ImageCollection, variant);
 }
 
-KoDocumentBase *KoDocumentResourceManager::odfDocument() const
-{
-    if (!hasResource(OdfDocument))
-        return 0;
-    return static_cast<KoDocumentBase*>(resource(OdfDocument).value<void*>());
-}
-
-void KoDocumentResourceManager::setOdfDocument(KoDocumentBase *currentDocument)
-{
-    QVariant variant;
-    variant.setValue<void*>(currentDocument);
-    setResource(OdfDocument, variant);
-}
-
 qreal KoDocumentResourceManager::documentResolution() const
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(hasResource(DocumentResolution), 72.0);

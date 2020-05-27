@@ -27,7 +27,7 @@ class KoDocumentInfo;
 class KPageWidgetItem;
 class KoPageWidgetItem;
 
-#include "kritawidgets_export.h"
+#include "kritaui_export.h"
 
 /**
  * @short The dialog that shows information about the document
@@ -47,7 +47,7 @@ class KoPageWidgetItem;
  * KPageDialog and uses the face type Tabbed.
  */
 
-class KRITAWIDGETS_EXPORT KoDocumentInfoDlg : public KPageDialog
+class KRITAUI_EXPORT KoDocumentInfoDlg : public KPageDialog
 {
     Q_OBJECT
 

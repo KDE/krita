@@ -31,7 +31,6 @@
 #include <KoXmlWriter.h>
 #include <KoOdfWriteStore.h>
 
-#include "KoDocumentBase.h"
 #include <KoOdfManifestEntry.h>
 
 
@@ -139,51 +138,4 @@ void KoEmbeddedDocumentSaver::saveManifestEntry(const QString &fullPath, const Q
                                                 const QString &version)
 {
     d->manifestEntries.append(new KoOdfManifestEntry(fullPath, mediaType, version));
-}
-
-
-bool KoEmbeddedDocumentSaver::saveEmbeddedDocuments(KoDocumentBase::SavingContext & documentContext)
-{
-     KoStore *store = documentContext.odfStore.store();
-
-    // Write the embedded files.
-    Q_FOREACH (FileEntry *entry, d->files) {
-        QString path = entry->path;
-        debugOdf << "saving" << path;
-
-        // To make the children happy cd to the correct directory
-        store->pushDirectory();
-
-        int index = path.lastIndexOf('/');
-        const QString dirPath = path.left(index);
-        const QString fileName = path.right(path.size() - index - 1);
-        store->enterDirectory(dirPath);
-
-        if (!store->open(fileName)) {
-            return false;
-        }
-        store->write(entry->contents);
-        store->close();
-
-        // Now that we're done leave the directory again
-        store->popDirectory();
-
-        // Create the manifest entry.
-        if (path.startsWith(QLatin1String("./"))) {
-            path.remove(0, 2);   // remove leading './', not wanted in manifest
-        }
-        documentContext.odfStore.manifestWriter()->addManifestEntry(path, entry->mimeType);
-    }
-
-    // Write the manifest entries.
-    KoXmlWriter *manifestWriter = documentContext.odfStore.manifestWriter();
-    Q_FOREACH (KoOdfManifestEntry *entry, d->manifestEntries) {
-        manifestWriter->startElement("manifest:file-entry");
-        manifestWriter->addAttribute("manifest:version", entry->version());
-        manifestWriter->addAttribute("manifest:media-type", entry->mediaType());
-        manifestWriter->addAttribute("manifest:full-path", entry->fullPath());
-        manifestWriter->endElement(); // manifest:file-entry
-    }
-
-    return true;
 }

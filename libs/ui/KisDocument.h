@@ -27,7 +27,6 @@
 
 #include <klocalizedstring.h>
 
-#include <KoDocumentBase.h>
 #include <kundo2stack.h>
 #include <KoColorSet.h>
 
@@ -76,7 +75,7 @@ class KisReferenceImagesLayer;
  *
  *  @short The %Calligra document class
  */
-class KRITAUI_EXPORT KisDocument : public QObject, public KoDocumentBase
+class KRITAUI_EXPORT KisDocument : public QObject
 {
     Q_OBJECT
 
@@ -107,7 +106,7 @@ public:
      * The destructor does not delete any attached KisView objects and it does not
      * delete the attached widget as returned by widget().
      */
-    ~KisDocument() override;
+    ~KisDocument();
 
     /**
      * @brief uniqueID is a temporary unique ID that identifies the document. It is
@@ -190,7 +189,7 @@ public:
     /**
      * Returns the actual mimetype of the document
      */
-    QByteArray mimeType() const override;
+    QByteArray mimeType() const;
 
     /**
      * @brief Sets the mime type for the document.
@@ -198,7 +197,7 @@ public:
      * When choosing "save as" this is also the mime type
      * selected by default.
      */
-    void setMimeType(const QByteArray & mimeType) override;
+    void setMimeType(const QByteArray & mimeType);
 
     /**
      * @return true if file operations should inhibit the option dialog
@@ -315,7 +314,7 @@ public:
     /**
      * Returns true if this document or any of its internal child documents are modified.
      */
-    bool isModified() const override;
+    bool isModified() const;
 
     /**
      * @return caption of the document
@@ -544,19 +543,19 @@ private:
 
 public:
 
-    bool isAutosaving() const override;
+    bool isAutosaving() const;
 
 public:
 
-    QString localFilePath() const override;
+    QString localFilePath() const;
     void setLocalFilePath( const QString &localFilePath );
 
     KoDocumentInfoDlg* createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const;
 
     bool isReadWrite() const;
 
-    QUrl url() const override;
-    void setUrl(const QUrl &url) override;
+    QUrl url() const;
+    void setUrl(const QUrl &url);
 
     bool closeUrl(bool promptToSave = true);
 

@@ -41,8 +41,6 @@ set(kritawidgets_LIB_SRCS
     KoMarkerModel.cpp
     KoMarkerItemDelegate.cpp
 
-    KoDocumentInfoDlg.cpp
-
     WidgetsDebug.cpp
 
     kis_file_name_requester.cpp
@@ -77,8 +75,6 @@ set(kritawidgets_LIB_SRCS
 
 ki18n_wrap_ui( kritawidgets_LIB_SRCS
     KoConfigAuthorPage.ui
-    koDocumentInfoAboutWidget.ui
-    koDocumentInfoAuthorWidget.ui
     wdg_file_name_requester.ui
     KoShadowConfigWidget.ui
     WdgDlgInternalColorSelector.ui

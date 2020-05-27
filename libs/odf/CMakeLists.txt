@@ -2,7 +2,6 @@ add_subdirectory( tests )
 
 set(kritaodf_LIB_SRCS
     KoOdfManifestEntry.cpp
-    KoDocumentInfo.cpp
     KoGenStyle.cpp
     KoGenStyles.cpp
     KoFontFace.cpp
@@ -12,7 +11,6 @@ set(kritaodf_LIB_SRCS
     KoOdfWriteStore.cpp
     KoStyleStack.cpp
     KoOdfGraphicStyles.cpp
-    KoDocumentBase.cpp
     KoEmbeddedDocumentSaver.cpp
     KoBorder.cpp
     KoShadowStyle.cpp

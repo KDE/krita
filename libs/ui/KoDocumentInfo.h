@@ -27,7 +27,7 @@
 #include <QString>
 #include <QStringList>
 
-#include "kritaodf_export.h"
+#include "kritaui_export.h"
 #include <KoXmlReaderForward.h>
 
 class QDomDocument;
@@ -47,7 +47,7 @@ class KoXmlWriter;
  * stored in two QMap and can be accessed through aboutInfo() and authorInfo().
  * The about info can be changed with setAboutInfo() and setAuthorInfo()
  */
-class KRITAODF_EXPORT KoDocumentInfo : public QObject
+class KRITAUI_EXPORT KoDocumentInfo : public QObject
 {
     Q_OBJECT
 

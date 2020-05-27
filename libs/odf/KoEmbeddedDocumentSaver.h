@@ -21,7 +21,6 @@
 #ifndef KOEMBEDDEDDOCUMENTSAVER_H
 #define KOEMBEDDEDDOCUMENTSAVER_H
 
-#include "KoDocumentBase.h"
 #include "kritaodf_export.h"
 
 #include <QString>
@@ -77,10 +76,6 @@ public:
     void saveManifestEntry(const QString &fullPath, const QString &mediaType,
                            const QString &version = QString());
 
-    /**
-     * Save all embedded documents to the store.
-     */
-    bool saveEmbeddedDocuments(KoDocumentBase::SavingContext &documentContext);
 
 private:
     class Private;

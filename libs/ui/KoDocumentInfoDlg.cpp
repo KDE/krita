@@ -24,7 +24,7 @@
 #include "ui_koDocumentInfoAuthorWidget.h"
 
 #include "KoDocumentInfo.h"
-#include "KoDocumentBase.h"
+#include "KisDocument.h"
 #include "KoPageWidgetItem.h"
 #include <KoIcon.h>
 
@@ -101,7 +101,7 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo)
     page->setHeader(i18n("General"));
 
     // Ugly hack, the mimetype should be a parameter, instead
-    KoDocumentBase* doc = dynamic_cast< KoDocumentBase* >(d->info->parent());
+    KisDocument* doc = dynamic_cast< KisDocument* >(d->info->parent());
     if (doc) {
         page->setIcon(KisIconUtils::loadIcon(KisMimeDatabase::iconNameForMimeType(doc->mimeType())));
     } else {
@@ -167,7 +167,7 @@ bool KoDocumentInfoDlg::isDocumentSaved()
 
 void KoDocumentInfoDlg::initAboutTab()
 {
-    KoDocumentBase* doc = dynamic_cast< KoDocumentBase* >(d->info->parent());
+    KisDocument* doc = dynamic_cast< KisDocument* >(d->info->parent());
 
     if (doc) {
         d->aboutUi->filePathLabel->setText(doc->localFilePath());

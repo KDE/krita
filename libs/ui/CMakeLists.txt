@@ -399,6 +399,9 @@ set(kritaui_LIB_SRCS
     KisMouseClickEater.cpp
 
     KisDecorationsWrapperLayer.cpp
+
+    KoDocumentInfoDlg.cpp
+    KoDocumentInfo.cpp
 )
 
 if(WIN32)
@@ -538,6 +541,9 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/KisNewsPage.ui
     forms/wdgGamutMaskToolbar.ui
     forms/wdgchangeclonesource.ui
+    forms/koDocumentInfoAboutWidget.ui
+    forms/koDocumentInfoAuthorWidget.ui
+
 
     brushhud/kis_dlg_brush_hud_config.ui
     dialogs/kis_delayed_save_dialog.ui

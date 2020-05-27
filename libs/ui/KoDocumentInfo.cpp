@@ -20,7 +20,7 @@
 
 #include "KoDocumentInfo.h"
 
-#include "KoDocumentBase.h"
+#include "KisDocument.h"
 #include "KoOdfWriteStore.h"
 #include "KoXmlNS.h"
 
@@ -359,7 +359,7 @@ QDomElement KoDocumentInfo::saveAboutInfo(QDomDocument &doc)
 
 void KoDocumentInfo::updateParametersAndBumpNumCycles()
 {
-    KoDocumentBase *doc = dynamic_cast< KoDocumentBase *>(parent());
+    KisDocument *doc = dynamic_cast< KisDocument *>(parent());
     if (doc && doc->isAutosaving()) {
         return;
     }
@@ -372,7 +372,7 @@ void KoDocumentInfo::updateParametersAndBumpNumCycles()
 
 void KoDocumentInfo::updateParameters()
 {
-    KoDocumentBase *doc = dynamic_cast< KoDocumentBase *>(parent());
+    KisDocument *doc = dynamic_cast< KisDocument *>(parent());
     if (doc && (!doc->isModified())) {
         return;
     }

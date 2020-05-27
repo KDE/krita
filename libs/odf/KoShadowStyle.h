@@ -64,20 +64,6 @@ public:
     bool operator!=(const KoShadowStyle &other) const;
 
     /**
-     * Loads the given OpenDocument-defined shadow
-     * in this KoShadow object.
-     * @param shadow the shadow to parse
-     * @return true when the parsing was successful
-     */
-    bool loadOdf(const QString &shadow);
-
-    /**
-     * Returns this shadow as a string formatted like an
-     * OpenDocument-defined shadow.
-     */
-    QString saveOdf() const;
-
-    /**
      * Returns the number of shadows that are contained in this shadow
      */
     int shadowCount() const;

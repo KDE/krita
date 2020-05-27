@@ -66,7 +66,7 @@ bool SvgShapeFactory::supports(const KoXmlElement &element, KoShapeLoadingContex
     return false;
 }
 
-KoShape *SvgShapeFactory::createShapeFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
+KoShape *SvgShapeFactory::createShapeFromXML(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     const KoXmlElement & imageElement(KoXml::namedItemNS(element, KoXmlNS::draw, "image"));
     if (imageElement.isNull()) {

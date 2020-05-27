@@ -35,19 +35,6 @@ public:
     {
     }
 
-    void saveOdf(KoXmlWriter* xmlWriter) const
-    {
-        xmlWriter->startElement("style:font-face");
-        xmlWriter->addAttribute("style:name", name);
-        xmlWriter->addAttribute("svg:font-family", family.isEmpty() ? name : family);
-        if (!familyGeneric.isEmpty())
-            xmlWriter->addAttribute("style:font-family-generic", familyGeneric);
-        if (!style.isEmpty())
-            xmlWriter->addAttribute("svg:font-style", style);
-        xmlWriter->addAttribute("style:font-pitch", pitch == KoFontFace::FixedPitch ? "fixed" : "variable");
-        xmlWriter->endElement(); // style:font-face
-    }
-
     QString name;            //!< for style:name attribute
     QString family;          //!< for svg:font-family attribute
     QString familyGeneric;   //!< for style:font-family-generic attribute
@@ -142,12 +129,3 @@ void KoFontFace::setPitch(KoFontFace::Pitch pitch)
     d->pitch = pitch;
 }
 
-void KoFontFace::saveOdf(KoXmlWriter* xmlWriter) const
-{
-    Q_ASSERT(!isNull());
-    if (isNull()) {
-        warnOdf << "This font face is null and will not be saved: set at least the name";
-        return;
-    }
-    d->saveOdf(xmlWriter);
-}

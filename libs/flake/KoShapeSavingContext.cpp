@@ -261,12 +261,6 @@ QMap<qint64, QString> KoShapeSavingContext::imagesToSave()
 
 QString KoShapeSavingContext::markerRef(const KoMarker */*marker*/)
 {
-//    QMap<const KoMarker *, QString>::iterator it = d->markerRefs.find(marker);
-//    if (it == d->markerRefs.end()) {
-//        it = d->markerRefs.insert(marker, marker->saveOdf(*this));
-//    }
-//    return it.value();
-
     return QString();
 }
 

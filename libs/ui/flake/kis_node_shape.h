@@ -47,8 +47,6 @@ public:
     QRectF boundingRect() const override;
     void setPosition(const QPointF &) override;
     void paint(QPainter &painter, KoShapePaintingContext &paintcontext) const override;
-    void saveOdf(KoShapeSavingContext & context) const override;
-    bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context) override;
 
 private Q_SLOTS:
     void editabilityChanged();

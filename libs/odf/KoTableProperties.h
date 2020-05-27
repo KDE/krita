@@ -48,7 +48,6 @@ public:
     void setPlainPassword(QString password, QString uri = "http://www.w3.org/2000/09/xmldsig#sha1");
 
 private:
-    void saveOdf(KoXmlWriter* writer, KoGenStyles* styles);
 
     TableStyle* m_style;
     TableTemplate* m_template;

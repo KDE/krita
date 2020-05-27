@@ -75,7 +75,6 @@ set(kritaflake_SRCS
     KoShapeBackground.cpp
     KoColorBackground.cpp
     KoGradientBackground.cpp
-    KoOdfGradientBackground.cpp
     KoHatchBackground.cpp
     KoPatternBackground.cpp
     KoVectorPatternBackground.cpp
@@ -98,7 +97,6 @@ set(kritaflake_SRCS
     KoImageData.cpp
     KoImageData_p.cpp
     KoImageCollection.cpp
-    KoOdfWorkaround.cpp
     KoFilterEffect.cpp
     KoFilterEffectStack.cpp
     KoFilterEffectFactoryBase.cpp

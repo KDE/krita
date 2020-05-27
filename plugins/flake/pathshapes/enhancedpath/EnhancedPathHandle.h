@@ -115,10 +115,6 @@ public:
      */
     void setRadiusRange(EnhancedPathParameter *minRadius, EnhancedPathParameter *maxRadius);
 
-    /// save to the given shape saving context
-    void saveOdf(KoShapeSavingContext &context) const;
-    /// load handle from given element
-    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 private:
     /// Returns if handle is polar
     bool isPolar() const;

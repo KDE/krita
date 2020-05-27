@@ -84,10 +84,6 @@ public:
     KoFontFace::Pitch pitch() const;
     void setPitch(KoFontFace::Pitch pitch);
 
-    /** Saves font face definition into @a xmlWriter as a style:font-face element.
-     */
-    void saveOdf(KoXmlWriter *xmlWriter) const;
-
 private:
     QSharedDataPointer<KoFontFacePrivate> d;
 };

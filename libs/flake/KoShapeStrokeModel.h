@@ -49,14 +49,6 @@ public:
     virtual ~KoShapeStrokeModel();
 
     /**
-     * @brief Fill the style object (aka save)
-     *
-     * @param style object
-     * @param context used for saving
-     */
-    virtual void fillStyle(KoGenStyle &style, KoShapeSavingContext &context) const = 0;
-
-    /**
      * Return a strokeInsets object filled with the size inside the shape that this stroke takes.
      * @param shape the shape the insets will be calculated for
      * @param insets the insets object that will be filled and returned.

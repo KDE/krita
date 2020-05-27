@@ -92,23 +92,6 @@ public:
     bool isValid() const;
 
     /**
-     * @brief loadOdf creates a new KoElementReference from the given element. If the element
-     *   does not have an xml:id, draw:id or text:id attribute, and invalid element reference
-     *   is returned.
-     * @param element the element that may contain xml:id, text:id or draw:id. xml:id has
-     *    priority.
-     * @return a new element reference
-     */
-    KoElementReference loadOdf(const KoXmlElement &element);
-
-    /**
-     * @brief saveOdf saves this element reference into the currently open element in the xml writer.
-     * @param writer the writer we save to
-     * @param saveOption determines which attributes we save. We always save the xml:id.
-     */
-    void saveOdf(KoXmlWriter *writer, SaveOption saveOption = XmlId) const;
-
-    /**
      * @brief toString creates a QString from the element reference
      * @return a string that represents the element. Can be used in maps etc.
      */

@@ -27,7 +27,6 @@
 #include "KoPathShapeLoader.h"
 #include "KoShapeLoadingContext.h"
 #include "KoShapeSavingContext.h"
-#include "KoOdfWorkaround.h"
 #include "KoShapePainter.h"
 #include <KoShapeStroke.h>
 #include <KoGradientBackground.h>

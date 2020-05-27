@@ -58,7 +58,7 @@ class QString;
  * @see KoAnchorTextRange
  * which are both implemented as subclasses of TextLocation
  *
- * The position of the shape relative to the anchor is called the offset. It's loaded by loadOdf().
+ * The position of the shape relative to the anchor is called the offset.
  * @see PlacementStrategy for more information about the layout of anchors/shapes.
  */
 class KRITAFLAKE_EXPORT KoShapeAnchor
@@ -230,15 +230,6 @@ public:
 
     /// set the new offset of the shape. Causes a new layout soon.
     void setOffset(const QPointF &offset);
-
-    /// Load the additional attributes.
-    /// This will also make the shape invisible so it doesn't mess up any layout
-    /// before it's ready to be placed where it belongs
-    /// The textlayout should make it visible again
-    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
-
-    /// Save the additional attributes.
-    void saveOdf(KoShapeSavingContext &context) const;
 
     /// Get extra data structure that is what is actually inside a text document
     TextLocation *textLocation() const;

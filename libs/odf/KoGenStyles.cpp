@@ -264,7 +264,6 @@ void KoGenStyles::Private::saveOdfFontFaceDecls(KoXmlWriter* xmlWriter) const
     for (QMap<QString, KoFontFace>::ConstIterator it(fontFaces.constBegin());
          it != fontFaces.constEnd(); ++it)
     {
-        it.value().saveOdf(xmlWriter);
     }
 
     if (!rawOdfFontFaceDecls.isEmpty()) {

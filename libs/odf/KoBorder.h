@@ -146,16 +146,6 @@ public:
     void paint(QPainter &painter, const QRectF &borderRect,
                BorderPaintArea whereToPaint = PaintInsideLine) const;
 
-    /**
-     * Load the style from the element
-     *
-     * @param style  the element containing the style to read from
-     * @return true when border attributes were found
-     */
-    bool loadOdf(const KoXmlElement &style);
-    bool loadOdf(const KoStyleStack &styleStack);
-    void saveOdf(KoGenStyle &style, KoGenStyle::PropertyType type = KoGenStyle::DefaultType) const;
-
 
     // Some public functions used in other places where borders are handled.
     // Example: KoParagraphStyle
@@ -169,11 +159,6 @@ public:
                          BorderData *borderData, bool isVertical,
                          BorderData *neighbour1, BorderData *neighbor2,
                          int inwardsAcross) const;
-
-    void parseAndSetBorder(const QString &border,
-                           bool hasSpecialBorder, const QString &specialBorderString);
-    void parseAndSetBorder(const BorderSide borderSide, const QString &border,
-                           bool hasSpecialBorder, const QString &specialBorderString);
 
 private:
     QSharedDataPointer<KoBorderPrivate> d;

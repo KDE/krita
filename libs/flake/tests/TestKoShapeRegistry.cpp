@@ -84,11 +84,11 @@ void TestKoShapeRegistry::testCreateShapes()
     KoOdfLoadingContext odfContext(stylesReader, 0);
     KoShapeLoadingContext shapeContext(odfContext, 0);
 
-    KoShape * shape = registry->createShapeFromOdf(bodyElement, shapeContext);
+    KoShape * shape = registry->createShapeFromXML(bodyElement, shapeContext);
     QVERIFY(shape == 0);
 
     KoXmlElement pathElement = bodyElement.firstChild().firstChild().toElement();
-    shape = registry->createShapeFromOdf(pathElement, shapeContext);
+    shape = registry->createShapeFromXML(pathElement, shapeContext);
     QVERIFY(shape != 0);
     QVERIFY(shape->shapeId() == KoPathShapeId);
 }
@@ -132,11 +132,11 @@ void TestKoShapeRegistry::testCreateFramedShapes()
     KoOdfLoadingContext odfContext(stylesReader, 0);
     KoShapeLoadingContext shapeContext(odfContext, 0);
 
-    KoShape * shape = registry->createShapeFromOdf(bodyElement, shapeContext);
+    KoShape * shape = registry->createShapeFromXML(bodyElement, shapeContext);
     QVERIFY(shape == 0);
 
     KoXmlElement pathElement = bodyElement.firstChild().firstChild().toElement();
-    shape = registry->createShapeFromOdf(pathElement, shapeContext);
+    shape = registry->createShapeFromXML(pathElement, shapeContext);
     QVERIFY(shape != 0);
     QVERIFY(shape->shapeId() == KoPathShapeId);
 }
@@ -205,7 +205,7 @@ void TestKoShapeRegistry::testFramedSvgShapes()
 
     QCOMPARE(frameElement.tagName(), QString("frame"));
 
-    KoShape *shape = registry->createShapeFromOdf(frameElement, shapeContext);
+    KoShape *shape = registry->createShapeFromXML(frameElement, shapeContext);
 
     QVERIFY(shape);
     QCOMPARE(shape->absoluteOutlineRect(), QRectF(83, 41, 226,141));

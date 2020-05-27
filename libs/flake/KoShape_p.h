@@ -42,17 +42,6 @@ public:
 
     explicit SharedData(const SharedData &rhs);
 
-    /**
-     * Fills the style stack and returns the value of the given style property (e.g fill, stroke).
-     */
-    static QString getStyleProperty(const char *property, KoShapeLoadingContext &context);
-
-    /// Loads the shadow style
-    KoShapeShadow *loadOdfShadow(KoShapeLoadingContext &context) const;
-
-    // Loads the border style.
-    KoBorder *loadOdfBorder(KoShapeLoadingContext &context) const;
-
 
 public:
     // Members

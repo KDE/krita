@@ -123,10 +123,6 @@ public:
     EnhancedPathParameter *parameter(const QString &text);
 
 protected:
-    // from KoShape
-    void saveOdf(KoShapeSavingContext &context) const override;
-    // from KoShape
-    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
     //from KoShape
     void shapeChanged(ChangeType type, KoShape *shape = 0) override;
     // from KoParameterShape

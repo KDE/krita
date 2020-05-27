@@ -45,7 +45,6 @@ public:
             : context(c)
             , zIndex(0)
             , documentResources(resourceManager)
-            , documentRdf(0)
             , sectionModel(0)
     {
     }
@@ -65,19 +64,11 @@ public:
     QMap<QString, KoLoadingShapeUpdater*> updaterById;
     QMap<KoShape *, KoLoadingShapeUpdater*> updaterByShape;
     KoDocumentResourceManager *documentResources;
-    QObject *documentRdf;
-    KoSectionModel *sectionModel;
-};
+    KoSectionModel *sectionModel; };
 
 KoShapeLoadingContext::KoShapeLoadingContext(KoOdfLoadingContext & context, KoDocumentResourceManager *documentResources)
         : d(new Private(context, documentResources))
 {
-    if (d->documentResources) {
-        KoMarkerCollection *markerCollection = d->documentResources->resource(KoDocumentResourceManager::MarkerCollection).value<KoMarkerCollection*>();
-        if (markerCollection) {
-            //markerCollection->loadOdf(*this);
-        }
-    }
 }
 
 KoShapeLoadingContext::~KoShapeLoadingContext()
@@ -197,17 +188,6 @@ QSet<KoShapeLoadingContext::AdditionalAttributeData> KoShapeLoadingContext::addi
 KoDocumentResourceManager *KoShapeLoadingContext::documentResourceManager() const
 {
     return d->documentResources;
-}
-
-QObject *KoShapeLoadingContext::documentRdf() const
-{
-    return d->documentRdf;
-}
-
-
-void KoShapeLoadingContext::setDocumentRdf(QObject *documentRdf)
-{
-    d->documentRdf = documentRdf;
 }
 
 KoSectionModel *KoShapeLoadingContext::sectionModel()

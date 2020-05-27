@@ -35,11 +35,6 @@
 #include <KisDocument.h>
 
 #include <KoEmbeddedDocumentSaver.h>
-#include <KoGenStyles.h>
-#include <KoOdfLoadingContext.h>
-#include <KoOdfReadStore.h>
-#include <KoOdfStylesReader.h>
-#include <KoOdfWriteStore.h>
 #include <KoXmlNS.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeLoadingContext.h>
@@ -164,74 +159,7 @@ bool KisShapeSelection::loadSelection(KoStore* store)
         return true;
     }
 
-
-    KoOdfReadStore odfStore(store);
-    QString errorMessage;
-
-    odfStore.loadAndParse(errorMessage);
-
-    if (!errorMessage.isEmpty()) {
-        dbgKrita << errorMessage;
-        return false;
-    }
-
-    KoXmlElement contents = odfStore.contentDoc().documentElement();
-
-    //    dbgKrita <<"Start loading OASIS document..." << contents.text();
-    //    dbgKrita <<"Start loading OASIS contents..." << contents.lastChild().localName();
-    //    dbgKrita <<"Start loading OASIS contents..." << contents.lastChild().namespaceURI();
-    //    dbgKrita <<"Start loading OASIS contents..." << contents.lastChild().isElement();
-
-    KoXmlElement body(KoXml::namedItemNS(contents, KoXmlNS::office, "body"));
-
-    if (body.isNull()) {
-        dbgKrita << "No office:body found!";
-        //setErrorMessage( i18n( "Invalid OASIS document. No office:body tag found." ) );
-        return false;
-    }
-
-    body = KoXml::namedItemNS(body, KoXmlNS::office, "drawing");
-    if (body.isNull()) {
-        dbgKrita << "No office:drawing found!";
-        //setErrorMessage( i18n( "Invalid OASIS document. No office:drawing tag found." ) );
-        return false;
-    }
-
-    KoXmlElement page(KoXml::namedItemNS(body, KoXmlNS::draw, "page"));
-    if (page.isNull()) {
-        dbgKrita << "No office:drawing found!";
-        //setErrorMessage( i18n( "Invalid OASIS document. No draw:page tag found." ) );
-        return false;
-    }
-
-    KoXmlElement * master = 0;
-    if (odfStore.styles().masterPages().contains("Standard"))
-        master = odfStore.styles().masterPages().value("Standard");
-    else if (odfStore.styles().masterPages().contains("Default"))
-        master = odfStore.styles().masterPages().value("Default");
-    else if (! odfStore.styles().masterPages().empty())
-        master = odfStore.styles().masterPages().begin().value();
-
-    KoOdfLoadingContext context(odfStore.styles(), odfStore.store());
-    KoShapeLoadingContext shapeContext(context, 0);
-
-    KoXmlElement layerElement;
-    forEachElement(layerElement, context.stylesReader().layerSet()) {
-        if (!loadOdf(layerElement, shapeContext)) {
-            dbgKrita << "Could not load vector layer!";
-            return false;
-        }
-    }
-
-    KoXmlElement child;
-    forEachElement(child, page) {
-        KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(child, shapeContext);
-        if (shape) {
-            addShape(shape);
-        }
-    }
-
-    return true;
+    return false;
 }
 
 void KisShapeSelection::setUpdatesEnabled(bool enabled)

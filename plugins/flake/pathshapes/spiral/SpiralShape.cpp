@@ -69,20 +69,6 @@ KoShape *SpiralShape::cloneShape() const
     return new SpiralShape(*this);
 }
 
-void SpiralShape::saveOdf(KoShapeSavingContext &context) const
-{
-    // TODO?
-    KoPathShape::saveOdf(context);
-}
-
-bool SpiralShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &/*context*/)
-{
-    Q_UNUSED(element);
-
-    // TODO?
-    return true;
-}
-
 void SpiralShape::setSize(const QSizeF &newSize)
 {
     QTransform matrix(resizeMatrix(newSize));

@@ -207,7 +207,7 @@ KoShape *KoShapeFactoryBase::createShape(const KoProperties* properties,
     return createDefaultShape(documentResources);
 }
 
-KoShape *KoShapeFactoryBase::createShapeFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
+KoShape *KoShapeFactoryBase::createShapeFromXML(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     KoShape *shape = createDefaultShape(context.documentResourceManager());
     if (!shape)
@@ -215,15 +215,6 @@ KoShape *KoShapeFactoryBase::createShapeFromOdf(const KoXmlElement &element, KoS
 
     if (shape->shapeId().isEmpty())
         shape->setShapeId(id());
-
-    context.odfLoadingContext().styleStack().save();
-    bool loaded = shape->loadOdf(element, context);
-    context.odfLoadingContext().styleStack().restore();
-
-    if (!loaded) {
-        delete shape;
-        return 0;
-    }
 
     return shape;
 }

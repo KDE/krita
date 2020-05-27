@@ -35,7 +35,6 @@
 #include <KoPluginLoader.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
-#include <KoOdfLoadingContext.h>
 #include <KoStyleStack.h>
 
 #include <QString>
@@ -197,7 +196,7 @@ QByteArray loadFile(const QString &fileName, KoShapeLoadingContext &context)
     if (fileName.endsWith('/'))
         return QByteArray();
 
-    KoStore *store = context.odfLoadingContext().store();
+    KoStore *store = context.store();
     QByteArray fileContent;
 
     if (!store->open(fileName)) {
@@ -229,7 +228,7 @@ boost::optional<FileEntry> storeFile(const QString &fileName, KoShapeLoadingCont
         if (entry.path.startsWith(QLatin1String("./"))) {
             entry.path.remove(0, 2);
         }
-        entry.mimeType = context.odfLoadingContext().mimeTypeForPath(entry.path);
+        entry.mimeType = context.mimeTypeForPath(entry.path);
         entry.isDir = false;
         entry.contents = fileContent;
 

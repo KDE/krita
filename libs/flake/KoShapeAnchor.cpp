@@ -22,7 +22,6 @@
 
 #include "KoShapeAnchor.h"
 #include "KoStyleStack.h"
-#include "KoOdfLoadingContext.h"
 
 #include <KoShapeContainer.h>
 #include <KoXmlWriter.h>

@@ -41,8 +41,8 @@ static QSet<KoShapeLoadingContext::AdditionalAttributeData> s_additionlAttribute
 class Q_DECL_HIDDEN KoShapeLoadingContext::Private
 {
 public:
-    Private(KoOdfLoadingContext &c, KoDocumentResourceManager *resourceManager)
-            : context(c)
+    Private(KoStore *store, KoDocumentResourceManager *resourceManager)
+            : store(store)
             , zIndex(0)
             , documentResources(resourceManager)
             , sectionModel(0)
@@ -55,7 +55,8 @@ public:
         }
     }
 
-    KoOdfLoadingContext &context;
+    KoStore *store;
+
     QMap<QString, KoShapeLayer*> layers;
     QMap<QString, KoShape*> drawIds;
     QMap<QString, QPair<KoShape *, QVariant> > subIds;
@@ -66,8 +67,8 @@ public:
     KoDocumentResourceManager *documentResources;
     KoSectionModel *sectionModel; };
 
-KoShapeLoadingContext::KoShapeLoadingContext(KoOdfLoadingContext & context, KoDocumentResourceManager *documentResources)
-        : d(new Private(context, documentResources))
+KoShapeLoadingContext::KoShapeLoadingContext(KoStore *store, KoDocumentResourceManager *documentResources)
+        : d(new Private(store, documentResources))
 {
 }
 
@@ -76,9 +77,14 @@ KoShapeLoadingContext::~KoShapeLoadingContext()
     delete d;
 }
 
-KoOdfLoadingContext & KoShapeLoadingContext::odfLoadingContext()
+KoStore *KoShapeLoadingContext::store() const
 {
-    return d->context;
+    return d->store;
+}
+
+QString KoShapeLoadingContext::mimeTypeForPath(const QString &href, bool b)
+{
+    return "image/svg+xml";
 }
 
 KoShapeLayer * KoShapeLoadingContext::layer(const QString & layerName)

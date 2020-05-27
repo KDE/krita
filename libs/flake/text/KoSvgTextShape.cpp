@@ -34,7 +34,6 @@
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 #include <KoShapeLoadingContext.h>
-#include <KoOdfLoadingContext.h>
 #include <KoIcon.h>
 #include <KoProperties.h>
 #include <KoColorBackground.h>

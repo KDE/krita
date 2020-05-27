@@ -28,7 +28,6 @@
 
 #include "kritaflake_export.h"
 
-class KoOdfLoadingContext;
 class KoShapeLayer;
 class KoShape;
 class KoShapeControllerBase;
@@ -39,6 +38,7 @@ class KoDocumentResourceManager;
 class KoSectionModel;
 class QVariant;
 class QObject;
+class KoStore;
 
 /**
  * Context passed to shapes during loading.
@@ -77,13 +77,13 @@ public:
      * @param context the context created for generic ODF loading.
      * @param documentResources the data of the shape controller.
      */
-    KoShapeLoadingContext(KoOdfLoadingContext &context, KoDocumentResourceManager *documentResources);
+    KoShapeLoadingContext(KoStore *store, KoDocumentResourceManager *documentResources);
 
     /// destructor
     ~KoShapeLoadingContext();
 
-    /// return the embedded loading context
-    KoOdfLoadingContext &odfLoadingContext();
+    KoStore *store() const;
+    QString mimeTypeForPath(const QString &href, bool b = true);
 
     /// Returns layer referenced by given name
     KoShapeLayer *layer(const QString &layerName);

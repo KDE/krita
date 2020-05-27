@@ -21,7 +21,6 @@
 #include "KoFlake.h"
 #include <KoStyleStack.h>
 #include <KoXmlNS.h>
-#include <KoOdfLoadingContext.h>
 #include <KoOdfGraphicStyles.h>
 #include <KoShapeSavingContext.h>
 

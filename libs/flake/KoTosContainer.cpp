@@ -28,7 +28,6 @@
 #include "KoTextShapeDataBase.h"
 #include "KoTosContainerModel.h"
 #include "KoStyleStack.h"
-#include "KoOdfLoadingContext.h"
 #include "KoXmlNS.h"
 #include "KoGenStyle.h"
 

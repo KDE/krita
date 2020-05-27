@@ -20,7 +20,6 @@
 
 #include "KoHatchBackground.h"
 
-#include <KoOdfLoadingContext.h>
 #include <KoStyleStack.h>
 #include <KoShapeSavingContext.h>
 #include <KoGenStyles.h>

@@ -29,7 +29,6 @@
 #include "KoShape.h"
 #include "KoShapeLoadingContext.h"
 
-#include <KoOdfLoadingContext.h>
 #include <KoProperties.h>
 #include <KoStyleStack.h>
 #include <KoJsonTrader.h>

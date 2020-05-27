@@ -5,7 +5,6 @@ include(KritaAddBrokenUnitTest)
 
 ecm_add_tests(
     TestKoGenStyles.cpp
-    TestKoOdfLoadingContext.cpp
     TestStorage.cpp
     NAME_PREFIX "libs-odf-"
     LINK_LIBRARIES kritaodf KF5::I18n Qt5::Test)

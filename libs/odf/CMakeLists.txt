@@ -1,11 +1,9 @@
 add_subdirectory( tests )
 
 set(kritaodf_LIB_SRCS
-    KoOdfManifestEntry.cpp
     KoGenStyle.cpp
     KoGenStyles.cpp
     KoFontFace.cpp
-    KoOdfLoadingContext.cpp
     KoOdfStylesReader.cpp
     KoOdfReadStore.cpp
     KoOdfWriteStore.cpp

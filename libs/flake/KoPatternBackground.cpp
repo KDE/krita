@@ -25,7 +25,6 @@
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include <KoXmlNS.h>
-#include <KoOdfLoadingContext.h>
 #include <KoOdfGraphicStyles.h>
 #include <KoOdfStylesReader.h>
 #include <KoUnit.h>

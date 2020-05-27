@@ -20,7 +20,6 @@
 #include "KoColorBackground.h"
 #include "KoShapeSavingContext.h"
 #include <KoOdfGraphicStyles.h>
-#include <KoOdfLoadingContext.h>
 #include <KoXmlNS.h>
 #include <KoStyleStack.h>
 

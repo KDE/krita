@@ -26,7 +26,6 @@
 #include <QSharedDataPointer>
 
 class KoImageCollection;
-class KoOdfLoadingContext;
 class KoPatternBackgroundPrivate;
 class KoImageData;
 

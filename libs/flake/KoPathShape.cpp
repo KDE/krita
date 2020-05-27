@@ -43,7 +43,6 @@
 #include <KoUnit.h>
 #include <KoGenStyle.h>
 #include <KoStyleStack.h>
-#include <KoOdfLoadingContext.h>
 #include "KisQPainterStateSaver.h"
 
 #include <FlakeDebug.h>

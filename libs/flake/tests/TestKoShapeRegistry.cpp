@@ -26,7 +26,6 @@
 #include <QTextStream>
 #include <QtXml>
 
-#include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
 
 #include "KoShapeRegistry.h"
@@ -78,11 +77,7 @@ void TestKoShapeRegistry::testCreateShapes()
 
     KoShapeRegistry * registry = KoShapeRegistry::instance();
 
-    // XXX: When loading is implemented, these no doubt have to be
-    // sensibly filled.
-    KoOdfStylesReader stylesReader;
-    KoOdfLoadingContext odfContext(stylesReader, 0);
-    KoShapeLoadingContext shapeContext(odfContext, 0);
+    KoShapeLoadingContext shapeContext(0, 0);
 
     KoShape * shape = registry->createShapeFromXML(bodyElement, shapeContext);
     QVERIFY(shape == 0);
@@ -126,11 +121,7 @@ void TestKoShapeRegistry::testCreateFramedShapes()
 
     KoShapeRegistry * registry = KoShapeRegistry::instance();
 
-    // XXX: When loading is implemented, these no doubt have to be
-    // sensibly filled.
-    KoOdfStylesReader stylesReader;
-    KoOdfLoadingContext odfContext(stylesReader, 0);
-    KoShapeLoadingContext shapeContext(odfContext, 0);
+    KoShapeLoadingContext shapeContext(0, 0);
 
     KoShape * shape = registry->createShapeFromXML(bodyElement, shapeContext);
     QVERIFY(shape == 0);
@@ -181,10 +172,6 @@ void TestKoShapeRegistry::testFramedSvgShapes()
 
     KoShapeRegistry * registry = KoShapeRegistry::instance();
 
-    // XXX: When loading is implemented, these no doubt have to be
-    // sensibly filled.
-    KoOdfStylesReader stylesReader;
-
     const QString resourcesBlob = TestUtil::fetchDataFileLazy("odf_frame_resource_store.zip");
     QScopedPointer<KoStore> store(KoStore::createStore(resourcesBlob, KoStore::Read, "krita", KoStore::Zip));
     QScopedPointer<KoDocumentResourceManager> resourceManager(new KoDocumentResourceManager());
@@ -197,9 +184,7 @@ void TestKoShapeRegistry::testFramedSvgShapes()
     QScopedPointer<KoShapeController> shapeController(new KoShapeController(canvas.data(), document.data()));
     resourceManager->setGlobalShapeController(shapeController.data());
 
-
-    KoOdfLoadingContext odfContext(stylesReader, store.data());
-    KoShapeLoadingContext shapeContext(odfContext, resourceManager.data());
+    KoShapeLoadingContext shapeContext(store.data(), resourceManager.data());
 
     KoXmlElement frameElement = bodyElement.firstChild().firstChild().toElement();
 

@@ -25,7 +25,7 @@
 #define KOUNIT_H
 
 // Calligra
-#include "kritaodf_export.h"
+#include "kritaglobal_export.h"
 // Qt
 #include <QString>
 #include <QDebug>
@@ -80,7 +80,7 @@ static const qreal CC_ROUNDING {100000.0}; // cicero
  * bound to the order in the enum (so ABI-compatible extension is possible) and
  * with the order and scope of listed types controlled by the @c ListOptions parameter.
  */
-class KRITAODF_EXPORT KoUnit
+class KRITAGLOBAL_EXPORT KoUnit
 {
 public:
     /** Length units supported by Calligra. */
@@ -231,7 +231,7 @@ private:
 };
 
 #ifndef QT_NO_DEBUG_STREAM
-KRITAODF_EXPORT QDebug operator<<(QDebug, const KoUnit &);
+KRITAGLOBAL_EXPORT QDebug operator<<(QDebug, const KoUnit &);
 #endif
 
 Q_DECLARE_METATYPE(KoUnit)

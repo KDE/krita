@@ -16,7 +16,6 @@ set(kritaodf_LIB_SRCS
     KoEmbeddedDocumentSaver.cpp
     KoBorder.cpp
     KoShadowStyle.cpp
-    KoUnit.cpp
     KoElementReference.cpp
 
     OdfDebug.cpp
@@ -25,7 +24,7 @@ set(kritaodf_LIB_SRCS
 add_library(kritaodf SHARED ${kritaodf_LIB_SRCS})
 generate_export_header(kritaodf BASE_NAME kritaodf)
 
-target_link_libraries(kritaodf kritaversion kritaplugin kritastore KF5::CoreAddons KF5::ConfigCore KF5::I18n Qt5::PrintSupport Qt5::Gui Qt5::Xml)
+target_link_libraries(kritaodf kritaglobal kritaversion kritaplugin kritastore KF5::CoreAddons KF5::ConfigCore KF5::I18n Qt5::PrintSupport Qt5::Gui Qt5::Xml)
 
 set_target_properties(kritaodf PROPERTIES
     VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}

@@ -62,7 +62,6 @@
 #include <KoResourcePaths.h>
 #include <KisMimeDatabase.h>
 #include "thememanager.h"
-#include "KisPrintJob.h"
 #include "KisDocument.h"
 #include "KisMainWindow.h"
 #include "KisAutoSaveRecoveryDialog.h"

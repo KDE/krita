@@ -43,10 +43,6 @@ public:
         //qDebug() << "Shape" << kBacktrace( 10 );
         paintedCount++;
     }
-    void saveOdf(KoShapeSavingContext &) const override {}
-    bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) override {
-        return true;
-    }
     mutable int paintedCount;
 };
 
@@ -60,10 +56,6 @@ public:
         paintedCount++;
     }
 
-    void saveOdf(KoShapeSavingContext &) const override {}
-    bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) override {
-        return true;
-    }
     mutable int paintedCount;
 };
 

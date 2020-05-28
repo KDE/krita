@@ -216,7 +216,7 @@ public:
      * One example is creating different shapes depending on the content of the passed
      * xml element.
      */
-    virtual KoShape *createShapeFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    virtual KoShape *createShapeFromXML(const KoXmlElement &element, KoShapeLoadingContext &context);
 
 protected:
 

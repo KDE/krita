@@ -29,12 +29,10 @@
 #include "KoSelection.h"
 #include "commands/KoShapeCreateCommand.h"
 #include "commands/KoShapeDeleteCommand.h"
-#include "commands/KoShapeConnectionChangeCommand.h"
 #include "KoCanvasBase.h"
 #include "KoShapeConfigWidgetBase.h"
 #include "KoShapeFactoryBase.h"
 #include "KoShape.h"
-#include "KoConnectionShape.h"
 #include <KoUnit.h>
 
 #include <QObject>
@@ -106,21 +104,6 @@ public:
     {
         return new KoShapeCreateCommand(shapeController, shapes, parentShape, parent);
     }
-
-    void handleAttachedConnections(KoShape *shape, KUndo2Command *parentCmd) {
-        foreach (KoShape *dependee, shape->dependees()) {
-            KoConnectionShape *connection = dynamic_cast<KoConnectionShape*>(dependee);
-            if (connection) {
-                if (shape == connection->firstShape()) {
-                    new KoShapeConnectionChangeCommand(connection, KoConnectionShape::StartHandle,
-                                                       shape, connection->firstConnectionId(), 0, -1, parentCmd);
-                } else if (shape == connection->secondShape()) {
-                    new KoShapeConnectionChangeCommand(connection, KoConnectionShape::EndHandle,
-                                                       shape, connection->secondConnectionId(), 0, -1, parentCmd);
-                }
-            }
-        }
-    }
 };
 
 KoShapeController::KoShapeController(KoCanvasBase *canvas, KoShapeControllerBase *shapeController)
@@ -162,8 +145,6 @@ KUndo2Command* KoShapeController::removeShape(KoShape *shape, KUndo2Command *par
     QList<KoShape*> shapes;
     shapes.append(shape);
     d->shapeController->shapesRemoved(shapes, cmd);
-    // detach shape from any attached connection shapes
-    d->handleAttachedConnections(shape, cmd);
     return cmd;
 }
 
@@ -171,9 +152,6 @@ KUndo2Command* KoShapeController::removeShapes(const QList<KoShape*> &shapes, KU
 {
     KUndo2Command *cmd = new KoShapeDeleteCommand(d->shapeController, shapes, parent);
     d->shapeController->shapesRemoved(shapes, cmd);
-    foreach (KoShape *shape, shapes) {
-        d->handleAttachedConnections(shape, cmd);
-    }
     return cmd;
 }
 

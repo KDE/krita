@@ -28,7 +28,6 @@ class KoTextShapeDataBasePrivate;
 #include <KoXmlReaderForward.h>
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
-class KoGenStyle;
 struct KoInsets;
 
 class QTextDocument;
@@ -59,34 +58,9 @@ public:
      */
     KoInsets shapeMargins() const;
 
-    /**
-    * Load the text from ODF.
-    */
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) = 0;
-
-    /**
-    * Save the text to ODF.
-    */
-    virtual void saveOdf(KoShapeSavingContext &context, int from = 0, int to  = -1) const = 0;
-
-    /**
-     * Load the style of the element
-     *
-     * This method is used to load the style in case the TextShape is used as TOS. In this case
-     * the paragraph style of the shape e.g. a custom-shape needs to be applied before we load the
-     * text so all looks as it should look.
-     */
-    virtual void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context) = 0;
-    /**
-     * Save the style of the element
-     *
-     * This method save the style in case the TextShape is used as TOS. In this case the paragraph
-     * style of the shape e.g. a custom-shape needs to be saved with the style of the shape.
-     */
-    virtual void saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const = 0;
-
     /** Sets the vertical alignment of all the text inside the shape. */
     void setVerticalAlignment(Qt::Alignment alignment);
+
     /** Returns the vertical alignment of all the text in the shape */
     Qt::Alignment verticalAlignment() const;
 

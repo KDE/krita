@@ -112,10 +112,6 @@ public:
     /// reimplemented
     void setSize(const QSizeF &newSize) override;
     /// reimplemented
-    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
-    /// reimplemented
-    void saveOdf(KoShapeSavingContext &context) const override;
-    /// reimplemented
     QString pathShapeId() const override;
 
 protected:

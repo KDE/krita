@@ -39,7 +39,6 @@
 #include <KoSelectedShapesProxy.h>
 #include <KoShapeGroup.h>
 #include <KoShapeLayer.h>
-#include <KoShapeOdfSaveHelper.h>
 #include <KoPathShape.h>
 #include <KoDrag.h>
 #include <KoCanvasBase.h>

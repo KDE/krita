@@ -25,10 +25,10 @@
 
 #include "KoFlake.h"
 #include "KoFlakeTypes.h"
-#include "KoConnectionPoint.h"
 
 #include <QSharedPointer>
 #include <QSet>
+#include <QMap>
 #include <QMetaType>
 #include <QSharedDataPointer>
 
@@ -48,7 +48,6 @@ class KoViewConverter;
 class KoShapeApplicationData;
 class KoShapeSavingContext;
 class KoShapeLoadingContext;
-class KoGenStyle;
 class KoShapeShadow;
 class KoFilterEffectStack;
 class KoSnapData;
@@ -56,7 +55,6 @@ class KoClipPath;
 class KoClipMask;
 class KoShapePaintingContext;
 class KoShapeAnchor;
-class KoBorder;
 struct KoInsets;
 class KoShapeBackground;
 class KisHandlePainterHelper;
@@ -169,7 +167,7 @@ public:
     virtual ~KoShape();
 
     /**
-     * @brief creates a deep copy of the shape or shape's subtree 
+     * @brief creates a deep copy of the shape or shape's subtree
      * @return a cloned shape
      */
     virtual KoShape* cloneShape() const;
@@ -191,51 +189,6 @@ public:
      * @param paintcontext the painting context.
      */
     virtual void paintStroke(QPainter &painter, KoShapePaintingContext &paintcontext) const;
-
-    /**
-     * Load a shape from odf
-     *
-     * @param context the KoShapeLoadingContext used for loading
-     * @param element element which represents the shape in odf
-     *
-     * @return false if loading failed
-     */
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) = 0;
-
-    /**
-     * @brief store the shape data as ODF XML.
-     * This is the method that will be called when saving a shape as a described in
-     * OpenDocument 9.2 Drawing Shapes.
-     * @see saveOdfAttributes
-     */
-    virtual void saveOdf(KoShapeSavingContext &context) const = 0;
-
-    /**
-     * This method can be used while saving the shape as ODF to add the data
-     * stored on this shape to the current element.
-     *
-     * @param context the context for the current save.
-     * @param attributes a number of OdfAttribute items to state which attributes to save.
-     * @see saveOdf
-     */
-    void saveOdfAttributes(KoShapeSavingContext &context, int attributes) const;
-
-    /**
-     * This method can be used while saving the shape as Odf to add common child elements
-     *
-     * The office:event-listeners and draw:glue-point are saved.
-     * @param context the context for the current save.
-     */
-    void saveOdfCommonChildElements(KoShapeSavingContext &context) const;
-
-    /**
-     * This method can be used to save contour data from the clipPath()
-     *
-     * The draw:contour-polygon or draw:contour-path elements are saved.
-     * @param context the context for the current save.
-     * @param originalSize the original size of the unscaled image.
-     */
-    void saveOdfClipContour(KoShapeSavingContext &context, const QSizeF &originalSize) const;
 
     /**
      * @brief Scale the shape using the zero-point which is the top-left corner.
@@ -340,51 +293,6 @@ public:
      * united rect.
      */
     static QRectF absoluteOutlineRect(const QList<KoShape*> &shapes);
-
-    /**
-     * @brief Add a connector point to the shape
-     *
-     * A connector is a place on the shape that allows a graphical connection to be made
-     * using a line, for example.
-     *
-     * @param point the connection point to add
-     * @return the id of the new connection point
-     */
-    int addConnectionPoint(const KoConnectionPoint &point);
-
-    /**
-     * Sets data of connection point with specified id.
-     *
-     * The position of the connector is restricted to the bounding rectangle of the shape.
-     * When setting a default connection point, the new position is ignored, as these
-     * are fixed at their default position.
-     * The function will insert a new connection point if the specified id was not used
-     * before.
-     *
-     * @param connectionPointId the id of the connection point to set
-     * @param point the connection point data
-     * @return false if specified connection point id is invalid, else true
-     */
-    bool setConnectionPoint(int connectionPointId, const KoConnectionPoint &point);
-
-    /// Checks if a connection point with the specified id exists
-    bool hasConnectionPoint(int connectionPointId) const;
-
-    /// Returns connection point with specified connection point id
-    KoConnectionPoint connectionPoint(int connectionPointId) const;
-
-    /**
-     * Return a list of the connection points that have been added to this shape.
-     * All the points are relative to the shape position, see absolutePosition().
-     * @return a list of the connectors that have been added to this shape.
-     */
-    KoConnectionPoints connectionPoints() const;
-
-    /// Removes connection point with specified id
-    void removeConnectionPoint(int connectionPointId);
-
-    /// Removes all connection points
-    void clearConnectionPoints();
 
     /**
      * Return the side text should flow around this shape. This implements the ODF style:wrap
@@ -783,7 +691,7 @@ public:
      * Normally this would be the same as outline() if there is a fill (background) set on the
      * shape and empty if not.  However, a shape could reimplement this to return an outline
      * even if no fill is defined. A typical example of this would be the picture shape
-     * which has a picture but almost never a background. 
+     * which has a picture but almost never a background.
      *
      * @returns the outline of the shape in the form of a path.
      */
@@ -825,12 +733,6 @@ public:
 
     /// Returns the currently set shadow or 0 if there is no shadow set
     KoShapeShadow *shadow() const;
-
-    /// Sets the new border, removing the old one.
-    void setBorder(KoBorder *border);
-
-    /// Returns the currently set border or 0 if there is no border set
-    KoBorder *border() const;
 
     /// Sets a new clip path, removing the old one
     void setClipPath(KoClipPath *clipPath);
@@ -1162,81 +1064,7 @@ public:
 protected:
     KoShape(const KoShape &rhs);
 
-    /* ** loading saving helper methods */
-    /// attributes from ODF 1.1 chapter 9.2.15 Common Drawing Shape Attributes
-    enum OdfAttribute {
-        OdfTransformation = 1,       ///< Store transformation information
-        OdfSize = 2,                 ///< Store size information
-        OdfPosition = 8,             ///< Store position
-        OdfAdditionalAttributes = 4, ///< Store additional attributes of the shape
-        OdfCommonChildElements = 16, ///< Event actions and connection points
-        OdfLayer = 64,               ///< Store layer name
-        OdfStyle = 128,              ///< Store the style
-        OdfId = 256,                 ///< Store the unique ID
-        OdfName = 512,               ///< Store the name of the shape
-        OdfZIndex = 1024,            ///< Store the z-index
-        OdfViewbox = 2048,           ///< Store the viewbox
-
-        /// A mask for all mandatory attributes
-        OdfMandatories = OdfLayer | OdfStyle | OdfId | OdfName | OdfZIndex,
-        /// A mask for geometry attributes
-        OdfGeometry = OdfPosition | OdfSize,
-        /// A mask for all the attributes
-        OdfAllAttributes = OdfTransformation | OdfGeometry | OdfAdditionalAttributes | OdfMandatories | OdfCommonChildElements
-    };
-
-    /**
-     * This method is used during loading of the shape to load common attributes
-     *
-     * @param context the KoShapeLoadingContext used for loading
-     * @param element element which represents the shape in odf
-     * @param attributes a number of OdfAttribute items to state which attributes to load.
-     */
-    bool loadOdfAttributes(const KoXmlElement &element, KoShapeLoadingContext &context, int attributes);
-
-    /**
-     * Parses the transformation attribute from the given string
-     * @param transform the transform attribute string
-     * @return the resulting transformation matrix
-     */
-    QTransform parseOdfTransform(const QString &transform);
-
-    /**
-     * @brief Saves the style used for the shape
-     *
-     * This method fills the given style object with the stroke and
-     * background properties and then adds the style to the context.
-     *
-     * @param style the style object to fill
-     * @param context used for saving
-     * @return the name of the style
-     * @see saveOdf
-     */
-    virtual QString saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const;
-
-    /**
-     * Loads the stroke and fill style from the given element.
-     *
-     * @param element the xml element to  load the style from
-     * @param context the loading context used for loading
-     */
-    virtual void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context);
-
-    /// Loads the stroke style
-    KoShapeStrokeModelSP loadOdfStroke(const KoXmlElement &element, KoShapeLoadingContext &context) const;
-
-    /// Loads the fill style
-    QSharedPointer<KoShapeBackground> loadOdfFill(KoShapeLoadingContext &context) const;
-
-    /// Loads the connection points
-    void loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingContext &context);
-
-    /// Loads the clip contour
-    void loadOdfClipContour(const KoXmlElement &element, KoShapeLoadingContext &context, const QSizeF &scaleFactor);
-
-    /* ** end loading saving */
-
-    /**
+     /**
      * A hook that allows inheriting classes to do something after a KoShape property changed
      * This is called whenever the shape, position rotation or scale properties were altered.
      * @param type an indicator which type was changed.

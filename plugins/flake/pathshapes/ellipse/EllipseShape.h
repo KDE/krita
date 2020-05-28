@@ -87,10 +87,6 @@ public:
     bool loadSvg(const KoXmlElement &element, SvgLoadingContext &context) override;
 
 protected:
-    // reimplemented
-    void saveOdf(KoShapeSavingContext &context) const override;
-    // reimplemented
-    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
     void moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers = Qt::NoModifier) override;
     void updatePath(const QSizeF &size) override;

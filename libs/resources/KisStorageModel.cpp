@@ -39,7 +39,8 @@ KisStorageModel::KisStorageModel(QObject *parent)
     QSqlQuery query;
 
     bool r = query.prepare("SELECT location\n"
-                           "FROM   storages\n");
+                           "FROM   storages\n"
+                           "ORDER BY id");
     if (!r) {
         qWarning() << "Could not prepare KisStorageModel query" << query.lastError();
     }

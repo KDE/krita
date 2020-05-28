@@ -24,7 +24,6 @@
 #include "KoShapeLoadingContext.h"
 #include "KoShapeRegistry.h"
 #include "FlakeDebug.h"
-#include <KoOdfLoadingContext.h>
 #include <KoXmlNS.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
@@ -59,14 +58,14 @@ bool SvgShapeFactory::supports(const KoXmlElement &element, KoShapeLoadingContex
             href.remove(0,2);
         }
 
-        QString mimetype = context.odfLoadingContext().mimeTypeForPath(href, true);
+        QString mimetype = context.mimeTypeForPath(href, true);
         return (mimetype == "image/svg+xml");
     }
 
     return false;
 }
 
-KoShape *SvgShapeFactory::createShapeFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
+KoShape *SvgShapeFactory::createShapeFromXML(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     const KoXmlElement & imageElement(KoXml::namedItemNS(element, KoXmlNS::draw, "image"));
     if (imageElement.isNull()) {
@@ -84,15 +83,15 @@ KoShape *SvgShapeFactory::createShapeFromOdf(const KoXmlElement &element, KoShap
         if (href.startsWith(QLatin1String("./"))) {
             href.remove(0,2);
         }
-        QString mimetype = context.odfLoadingContext().mimeTypeForPath(href);
+        QString mimetype = context.mimeTypeForPath(href);
         debugFlake << mimetype;
         if (mimetype != "image/svg+xml")
             return 0;
 
-        if (!context.odfLoadingContext().store()->open(href))
+        if (!context.store()->open(href))
             return 0;
 
-        KoStoreDevice dev(context.odfLoadingContext().store());
+        KoStoreDevice dev(context.store());
         KoXmlDocument xmlDoc;
 
         int line, col;
@@ -100,7 +99,7 @@ KoShape *SvgShapeFactory::createShapeFromOdf(const KoXmlElement &element, KoShap
 
         const bool parsed = xmlDoc.setContent(&dev, &errormessage, &line, &col);
 
-        context.odfLoadingContext().store()->close();
+        context.store()->close();
 
         if (! parsed) {
             errorFlake << "Error while parsing file: "

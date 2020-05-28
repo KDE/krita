@@ -479,22 +479,18 @@ void LcmsColorProfileContainer::LinearizeFloatValueFast(QVector <double> & Value
 
     if (d->hasColorants) {
         //we can only reliably delinearise in the 0-1.0 range, outside of that leave the value alone.
-        QVector <quint16> TRCtriplet(3);
-        TRCtriplet[0] = Value[0] * scale;
-        TRCtriplet[1] = Value[1] * scale;
-        TRCtriplet[2] = Value[2] * scale;
 
         if (!cmsIsToneCurveLinear(d->redTRC) && Value[0]<1.0) {
-            TRCtriplet[0] = cmsEvalToneCurve16(d->redTRC, TRCtriplet[0]);
-            Value[0] = TRCtriplet[0] * invScale;
+            quint16 newValue = cmsEvalToneCurve16(d->redTRC, Value[0] * scale);
+            Value[0] = newValue * invScale;
         }
         if (!cmsIsToneCurveLinear(d->greenTRC) && Value[1]<1.0) {
-            TRCtriplet[1] = cmsEvalToneCurve16(d->greenTRC, TRCtriplet[1]);
-            Value[1] = TRCtriplet[1] * invScale;
+            quint16 newValue = cmsEvalToneCurve16(d->greenTRC, Value[1] * scale);
+            Value[1] = newValue * invScale;
         }
         if (!cmsIsToneCurveLinear(d->blueTRC) && Value[2]<1.0) {
-            TRCtriplet[2] = cmsEvalToneCurve16(d->blueTRC, TRCtriplet[2]);
-            Value[2] = TRCtriplet[2] * invScale;
+            quint16 newValue = cmsEvalToneCurve16(d->blueTRC, Value[2] * scale);
+            Value[2] = newValue * invScale;
         }
     } else {
         if (cmsIsTag(d->profile, cmsSigGrayTRCTag) && Value[0]<1.0) {
@@ -510,22 +506,18 @@ void LcmsColorProfileContainer::DelinearizeFloatValueFast(QVector <double> & Val
 
     if (d->hasColorants) {
         //we can only reliably delinearise in the 0-1.0 range, outside of that leave the value alone.
-        QVector <quint16> TRCtriplet(3);
-        TRCtriplet[0] = Value[0] * scale;
-        TRCtriplet[1] = Value[1] * scale;
-        TRCtriplet[2] = Value[2] * scale;
 
         if (!cmsIsToneCurveLinear(d->redTRC) && Value[0]<1.0) {
-            TRCtriplet[0] = cmsEvalToneCurve16(d->redTRCReverse, TRCtriplet[0]);
-            Value[0] = TRCtriplet[0] * invScale;
+            quint16 newValue = cmsEvalToneCurve16(d->redTRCReverse, Value[0] * scale);
+            Value[0] = newValue * invScale;
         }
         if (!cmsIsToneCurveLinear(d->greenTRC) && Value[1]<1.0) {
-            TRCtriplet[1] = cmsEvalToneCurve16(d->greenTRCReverse, TRCtriplet[1]);
-            Value[1] = TRCtriplet[1] * invScale;
+            quint16 newValue = cmsEvalToneCurve16(d->greenTRCReverse, Value[1] * scale);
+            Value[1] = newValue * invScale;
         }
         if (!cmsIsToneCurveLinear(d->blueTRC) && Value[2]<1.0) {
-            TRCtriplet[2] = cmsEvalToneCurve16(d->blueTRCReverse, TRCtriplet[2]);
-            Value[2] = TRCtriplet[2] * invScale;
+            quint16 newValue = cmsEvalToneCurve16(d->blueTRCReverse, Value[2] * scale);
+            Value[2] = newValue * invScale;
         }
     } else {
         if (cmsIsTag(d->profile, cmsSigGrayTRCTag) && Value[0]<1.0) {

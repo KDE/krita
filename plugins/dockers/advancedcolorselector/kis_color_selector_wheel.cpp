@@ -216,8 +216,8 @@ void KisColorSelectorWheel::paint(QPainter* painter)
         maskPainter.setRenderHint(QPainter::Antialiasing, true);
 
         maskPainter.resetTransform();
-        maskPainter.translate(rect.width()/2, rect.height()/2);
-        maskPainter.scale(rect.width()/2, rect.height()/2);
+        maskPainter.translate(rect.width()*0.5, rect.height()*0.5);
+        maskPainter.scale(rect.width()*0.5, rect.height()*0.5);
 
         maskPainter.setPen(QPen(QBrush(Qt::white), 0.002));
         maskPainter.setBrush(QColor(128,128,128,255)); // middle gray

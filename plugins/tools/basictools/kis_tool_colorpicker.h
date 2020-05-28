@@ -105,7 +105,7 @@ private:
     // Configuration
     QScopedPointer<KisToolUtils::ColorPickerConfig> m_config;
 
-    ToolActivation m_toolActivationSource;
+    ToolActivation m_toolActivationSource {ToolActivation::DefaultActivation};
     bool m_isActivated;
 
     KoColor m_pickedColor;

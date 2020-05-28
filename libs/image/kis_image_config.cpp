@@ -247,7 +247,7 @@ QString KisImageConfig::safelyGetWritableTempLocation(const QString &suffix, con
     // furthermore, this is just a default and swapDir can always be configured
     // to another location.
 
-    QString swap = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation) + QDir::separator() + suffix;
+    QString swap = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation) + '/' + suffix;
 #else
     Q_UNUSED(suffix);
     QString swap = QDir::tempPath();
@@ -275,7 +275,7 @@ QString KisImageConfig::safelyGetWritableTempLocation(const QString &suffix, con
          * (yes, there is a hacky-global-variable workaround, but let's be safe)
          */
         QTemporaryFile tempFile;
-        tempFile.setFileTemplate(location + QDir::separator() + "krita_test_swap_location");
+        tempFile.setFileTemplate(location + '/' + "krita_test_swap_location");
         if (tempFile.open() && !tempFile.fileName().isEmpty()) {
             chosenLocation = location;
             break;

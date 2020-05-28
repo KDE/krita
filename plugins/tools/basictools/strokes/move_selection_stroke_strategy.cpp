@@ -26,6 +26,7 @@
 #include "kis_painter.h"
 #include "kis_transaction.h"
 #include <commands_new/kis_selection_move_command2.h>
+#include "kis_lod_transform.h"
 
 
 MoveSelectionStrokeStrategy::MoveSelectionStrokeStrategy(KisPaintLayerSP paintLayer,
@@ -86,7 +87,13 @@ void MoveSelectionStrokeStrategy::initStrokeCallback()
 
     m_selection->setVisible(false);
 
-    emit sigHandlesRectCalculated(movedDevice->exactBounds());
+    {
+        QRect handlesRect = movedDevice->exactBounds();
+        KisLodTransform t(paintDevice);
+        handlesRect = t.mapInverted(handlesRect);
+
+        emit this->sigHandlesRectCalculated(handlesRect);
+    }
 }
 
 void MoveSelectionStrokeStrategy::finishStrokeCallback()
@@ -175,6 +182,10 @@ KisStrokeStrategy* MoveSelectionStrokeStrategy::createLodClone(int levelOfDetail
 {
     Q_UNUSED(levelOfDetail);
 
+    // Vector selections don't support lod-moves
+    if (m_selection->hasShapeSelection()) return 0;
+
     MoveSelectionStrokeStrategy *clone = new MoveSelectionStrokeStrategy(*this);
+    connect(clone, SIGNAL(sigHandlesRectCalculated(QRect)), this, SIGNAL(sigHandlesRectCalculated(QRect)));
     return clone;
 }

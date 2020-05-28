@@ -291,11 +291,10 @@ bool KisBaseNode::belongsToIsolatedGroup() const
         return false;
     }
 
-    const KisBaseNode* isolatedRoot = m_d->image->isolatedModeRoot().data();
     const KisBaseNode* element = this;
 
     while (element) {
-        if (element == isolatedRoot) {
+        if (element->isIsolatedRoot()) {
             return true;
         } else {
             element = element->parentCallback().data();
@@ -303,6 +302,17 @@ bool KisBaseNode::belongsToIsolatedGroup() const
     }
 
     return false;
+}
+
+bool KisBaseNode::isIsolatedRoot() const
+{
+    if (!m_d->image) {
+        return false;
+    }
+
+    const KisBaseNode* isolatedRoot = m_d->image->isolatedModeRoot().data();
+
+    return (this == isolatedRoot);
 }
 
 void KisBaseNode::setUserLocked(bool locked)

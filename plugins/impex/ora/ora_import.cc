@@ -46,9 +46,6 @@ KisImportExportErrorCode OraImport::convert(KisDocument *document, QIODevice *io
             document->setPreActivatedNode(oraConverter.activeNodes()[0]);
         }
     }
-
-    qDebug() << ">>>>>>>>>" << result;
-
     return result;
 }
 

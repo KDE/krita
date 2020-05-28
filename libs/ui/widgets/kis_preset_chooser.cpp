@@ -327,6 +327,10 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
                     this, SLOT(slotScrollerStateChanged(QScroller::State)));
         }
     }
+
+    connect(m_chooser, SIGNAL(resourceSelected(KoResourceSP )),
+            this, SLOT(slotResourceWasSelected(KoResourceSP )));
+
     connect(m_chooser, SIGNAL(resourceSelected(KoResourceSP )),
             this, SIGNAL(resourceSelected(KoResourceSP )));
     connect(m_chooser, SIGNAL(resourceClicked(KoResourceSP )),
@@ -369,6 +373,30 @@ void KisPresetChooser::notifyConfigChanged()
     setIconSize(cfg.presetIconSize());
 
     updateViewSettings();
+}
+
+void KisPresetChooser::slotResourceWasSelected(KoResourceSP resource)
+{
+    m_currentPresetConnections.clear();
+    if (!resource) return;
+
+    KisPaintOpPresetSP preset = resource.dynamicCast<KisPaintOpPreset>();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(preset);
+
+    m_currentPresetConnections.addUniqueConnection(
+        preset->updateProxy(), SIGNAL(sigSettingsChanged()),
+        this, SLOT(slotCurrentPresetChanged()));
+}
+
+void KisPresetChooser::slotCurrentPresetChanged()
+{
+    KoResourceSP currentResource = m_chooser->currentResource();
+    if (!currentResource) return;
+
+    QModelIndex index = m_paintOpFilterModel->indexFromResource(currentResource);
+    emit m_paintOpFilterModel->dataChanged(index,
+                                           index,
+                                           {Qt::UserRole + KisResourceModel::Thumbnail});
 }
 
 void KisPresetChooser::updateViewSettings()

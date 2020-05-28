@@ -1,0 +1,661 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>Krita</title>
+	<atom:link href="https://krita.org/en/feed/" rel="self" type="application/rss+xml" />
+	<link>https://krita.org</link>
+	<description>Digital Painting. Creative Freedom.</description>
+	<lastBuildDate>Fri, 04 Oct 2019 13:43:35 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=5.2.3</generator>
+	<item>
+		<title>Krita 4.2.7 Released</title>
+		<link>https://krita.org/en/item/krita-4-2-7-released/</link>
+				<pubDate>Thu, 03 Oct 2019 08:42:40 +0000</pubDate>
+		<dc:creator><![CDATA[Boudewijn Rempt]]></dc:creator>
+				<category><![CDATA[Official Release]]></category>
+
+		<guid isPermaLink="false">https://krita.org/?p=9790</guid>
+				<description><![CDATA[Today, we&#8217;re releasing the sixth bug fix release of Krita 4.2. As discussed in our development update, we intend to release a few more monthly 4.2 bug fix releases before releasing Krita 4.3. There are a lot of bug fixes! And to celebrate the release, we have a new video by Ramon Miranda which comes [&#8230;]]]></description>
+								<content:encoded><![CDATA[<p>Today, we&#8217;re releasing the sixth bug fix release of Krita 4.2. As discussed in our development update, we intend to release a few more monthly 4.2 bug fix releases before releasing Krita 4.3. There are a lot of bug fixes!</p>
+<p>And to celebrate the release, we have a new video by Ramon Miranda which comes with a very nice present: a <a href="https://files.kde.org/krita/extras/RM_Sketch_V1.bundle">free new bundle of six sketching brush presets</a>!</p>
+<p><iframe title="Improve your Sketches with Krita" width="500" height="281" src="https://www.youtube.com/embed/HtBzzXulIr0?feature=oembed" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></p>
+<h3>Bugs Fixed in 4.2.7</h3>
+<ul>
+<li>Improve the layout and functionality of the color selector dialog and make it perform much better. (<a href="https://bugs.kde.org/show_bug.cgi?id=381529">BUG:381529</a>). Patches by Mathias Wein.</li>
+<li>Do not crash when trying to merge an invisible group layer (<a href="https://bugs.kde.org/show_bug.cgi?id=411124">BUG:411124</a>)</li>
+<li>Make it possible to save group layers to file layers even if they are empty (<a href="https://bugs.kde.org/show_bug.cgi?id=411101">BUG:411101</a>)</li>
+<li>Make the initial location of the OCIO profile selector sensible</li>
+<li>Fix possible crashes when a broken file ends up in the Recent Documents List (<a href="https://bugs.kde.org/show_bug.cgi?id=411416">BUG:411416</a>)</li>
+<li>Use locale-based formatting of numbers in the measure tool and other places. Patch by Karl Ove Lufthammer.</li>
+<li>Make HTML markup in the Search Field tooltips work. Patch by Karl Ove Lufthammer.</li>
+<li>Fix a crash when moving multiple vector shapes (<a href="https://bugs.kde.org/show_bug.cgi?id=409872">BUG:409872</a>)</li>
+<li>Fix the sort order of images imported as frames if they are not numbered with prefix 0&#8217;s (<a href="https://bugs.kde.org/show_bug.cgi?id=375885">BUG:375885</a>)</li>
+<li>Make it possible again to run the Python Scripting Debugger on Linux (BUG:410807) Patch by Rebecca Breu.</li>
+<li>Cache ICC profiles when loading layers: this speeds up loading images with thousands of layers (<a href="https://bugs.kde.org/show_bug.cgi?id=411532">BUG:411532</a>)</li>
+<li>Fix file layer and comics manager page updating on Windows (<a href="https://bugs.kde.org/show_bug.cgi?id=410409">BUG:410409</a>, <a href="https://bugs.kde.org/show_bug.cgi?id=389544">BUG:389544</a>)</li>
+<li>Use LittleCMS&#8217; copy alpha channel flag to speed up color transformations</li>
+<li>Fix outline move mode (<a href="https://bugs.kde.org/show_bug.cgi?id=411057">BUG:411057</a>)</li>
+<li>Fix a hang in the text shape if an UTF-8 Line Break character is used (<a href="https://bugs.kde.org/show_bug.cgi?id=410402">BUG:410402</a>)</li>
+<li>Fix a random crash if there is not enough space in the swapfile location for AMD Ryzen 3500 CPU&#8217;s (<a href="https://bugs.kde.org/show_bug.cgi?id=411081">BUG:411081</a>)</li>
+<li>Fix checking whether the swapfile location is actually writable on Windows (<a href="https://bugs.kde.org/show_bug.cgi?id=411129">BUG:411129</a>, <a href="https://bugs.kde.org/show_bug.cgi?id=411081">BUG:411081</a>)</li>
+<li>Fix another random crash when painting (<a href="https://bugs.kde.org/show_bug.cgi?id=411280">BUG:411280</a>)</li>
+<li>Fix artifacts when moving control points of a path shape (<a href="https://bugs.kde.org/show_bug.cgi?id=411334">BUG:411334</a>)</li>
+<li>Fix a crash when cropping a particular image (<a href="https://bugs.kde.org/show_bug.cgi?id=411536">BUG:411536</a>)</li>
+<li>Fix move action in the bezier selection tool (<a href="https://bugs.kde.org/show_bug.cgi?id=398294">BUG:398294</a>)</li>
+<li>Fix artifacts in Gaussian Blur on transparent layers (<a href="https://bugs.kde.org/show_bug.cgi?id=411719">BUG:411719</a>)</li>
+<li>Fix a crash when the Liquify Transform is started too quickly (<a href="https://bugs.kde.org/show_bug.cgi?id=411703">BUG:411703</a>)</li>
+<li>Fix a bad memory leak in the jpeg converter (<a href="https://bugs.kde.org/show_bug.cgi?id=410864">BUG:410864</a>)</li>
+<li>Fix a crash when loading a JPEG image with a broken color profile (<a href="https://bugs.kde.org/show_bug.cgi?id=410864">BUG:410864</a>)</li>
+<li>Fix problems when zooming with a touchpad (<a href="https://bugs.kde.org/show_bug.cgi?id=410940">BUG:410940</a>)</li>
+<li>Fix issues when using the calculation capabilities of the specific color selector&#8217;s spin boxes (<a href="https://bugs.kde.org/show_bug.cgi?id=409818">BUG:409818</a>). Patch by Jasper Hartog</li>
+<li>Make sure all layers are shown in the animation timeline by default</li>
+<li>Fix a crash when the colorize tool is active on closing Krita</li>
+<li>Fix a crash when converting a colorspace with OCIO enabled (<a href="https://bugs.kde.org/show_bug.cgi?id=411045">BUG:411045</a>)</li>
+<li>Fix the Strength parameter not being used in Rotation &#8211; Fuzzy Dab (<a href="https://bugs.kde.org/show_bug.cgi?id=376179">BUG:376179</a>)</li>
+<li>Fix a crash when using the mouse wheel while an image is opening</li>
+<li>Re-add error messages lost when refactoring the error messages for loading images</li>
+<li>Do not crash if libjpeg encounters any kind of error (<a href="https://bugs.kde.org/show_bug.cgi?id=364350">BUG:364350</a>)</li>
+<li>Fix presets with random offset of texture being marked dirty all the time (<a href="https://bugs.kde.org/show_bug.cgi?id=406427">BUG:406427</a>)</li>
+<li>Fix curves changing randomly with sensors with Use Same Curve enabled (<a href="https://bugs.kde.org/show_bug.cgi?id=383909">BUG:383909</a>)</li>
+<li>Add a simple progress bar when saving .kra files</li>
+<li>Ensure that the temporary folder isn&#8217;t suggested as a save-location as this can result in lost work.</li>
+<li>Make sure toolbars don&#8217;t get enabled after editing the toolbar buttons (<a href="https://bugs.kde.org/show_bug.cgi?id=402679">BUG:402679</a>)</li>
+<li>Do not crash when loading a tiled TIFF file with planar color data. (<a href="https://bugs.kde.org/show_bug.cgi?id=407171">BUG:407171</a>)</li>
+<li>Fix freezes when changing some brush properties or curves (<a href="https://bugs.kde.org/show_bug.cgi?id=410158">BUG:410158</a>)</li>
+<li>Fix wrong borders in the Edge Detection and Height To Normal Map Filters (<a href="https://bugs.kde.org/show_bug.cgi?id=411922">BUG:411922</a>)</li>
+<li>Fix outline of Group Layers in Move Tool and Transform Tool (<a href="https://bugs.kde.org/show_bug.cgi?id=392717">BUG:392717</a>)</li>
+<li>Fix preview of shape layers in Transform Tool and Move Tool (<a href="https://bugs.kde.org/show_bug.cgi?id=392717">BUG:392717</a>)</li>
+<li>Raise the maximum FPS limit to 300 fps from 100 fps</li>
+<li>Do not allow clone layers from pass-through group layers (<a href="https://bugs.kde.org/show_bug.cgi?id=409949">BUG:409949</a>)</li>
+<li>Fix the color of a selected shape being synchronized with the color selectors (<a href="https://bugs.kde.org/show_bug.cgi?id=381784">BUG:381784</a>)</li>
+<li>Fix updating the current shape color when doing undo/redo (<a href="https://bugs.kde.org/show_bug.cgi?id=404975">BUG:404975</a>)</li>
+<li>Fix the broken TestKisSwatchGroup test (<a href="https://bugs.kde.org/show_bug.cgi?id=410387">BUG:410387</a>) Patch by Krysztof Kurek.</li>
+<li>Make the splash render pixel-perfect on fractionally scaled displays. Patch by Guo Yunhe.</li>
+<li>Fix a crash in Feather Selection, Wavelets, Blur and Edge Detection (<a href="https://bugs.kde.org/show_bug.cgi?id=412057">BUG:412057</a>)</li>
+<li>Include reference images in the screen color picker (<a href="https://bugs.kde.org/show_bug.cgi?id=411816">BUG:411816</a>) Patch by Matthias Wein.</li>
+<li>Clean up the SVG files used for icons and license the SVG files properly. Patch by Raghavendra Kamath.</li>
+<li>Fix updating the assistants when moving the handles. Patch by Matthias Wein.</li>
+<li>Fix a bad memory corruption error color handling. Patch by Matthias Wein.</li>
+</ul>
+<h2>Download</h2>
+<h3>Windows</h3>
+<ul>
+<li>64 bits Windows: <a href="https://download.kde.org/stable/krita/4.2.7.1/krita-x64-4.2.7.1-setup.exe">krita-x64-4.2.7.1-setup.exe</a></li>
+<li>Portable 64 bits Windows: <a href="https://download.kde.org/stable/krita/4.2.7.1/krita-x64-4.2.7.1.zip">krita-x64-4.2.7.1.zip</a></li>
+<li><a href="https://download.kde.org/stable/krita/4.2.7.1/krita-x64-4.2.7.1-dbg.zip">Debug symbols. (Unpack in the Krita installation folder)</a></li>
+</ul>
+<ul>
+<li>32 bits Windows: <a href="https://download.kde.org/stable/krita/4.2.7.1/krita-x86-4.2.7.1-setup.exe">krita-x86-4.2.7.1-setup.exe</a></li>
+<li>Portable 32 bits Windows: <a href="https://download.kde.org/stable/krita/4.2.7.1/krita-x86-4.2.7.1.zip">krita-x86-4.2.7.1.zip</a></li>
+<li><a href="https://download.kde.org/stable/krita/4.2.7.1/krita-x86-4.2.7.1-dbg.zip">Debug symbols. (Unpack in the Krita installation folder)</a></li>
+</ul>
+<h3>Linux</h3>
+<ul>
+<li>64 bits Linux: <a href="https://download.kde.org/stable/krita/4.2.7.1/krita-4.2.7.1-x86_64.appimage">krita-4.2.7.1-x86_64.appimage</a></li>
+<li>64 bits Linux <a href="https://download.kde.org/stable/krita/4.2.7.1/gmic_krita_qt-x86_64.appimage">G&#8217;Mic-Qt plugin appimage</a>.</li>
+</ul>
+<p>(If, for some reason, Firefox thinks it needs to load this as text: to download, right-click on the link.)</p>
+<h3>OSX</h3>
+<ul>
+<li>OSX disk image: <a href="https://download.kde.org/stable/krita/4.2.7.1/krita-4.2.7.1.dmg">krita-4.2.7.1.dmg</a></li>
+</ul>
+<p>Note: the gmic-qt is not available on OSX.</p>
+<h3>Source code</h3>
+<p>Note: Linux distributions building Krita against Qt 5.13 have to be aware that a regression in Qt crashes Krita on exit. There&#8217;s a workaround for that, but that was not ready for this release.</p>
+<ul>
+<li><a href="https://download.kde.org/stable/krita/4.2.7.1/krita-4.2.7.1.tar.gz">krita-4.2.7.1.tar.gz</a></li>
+<li><a href="https://download.kde.org/stable/krita/4.2.7.1/krita-4.2.7.1.tar.xz">krita-4.2.7.1.tar.xz</a></li>
+</ul>
+<h3>md5sum</h3>
+<p>For all downloads:</p>
+<ul>
+<li><a href="https://download.kde.org/stable/krita/4.2.7.1/md5sum.txt">md5sum.txt</a></li>
+</ul>
+<h2>Support Krita</h2>
+<p>Krita is a free and open source project. Please consider supporting the project with <a href="https://krita.org/en/support-us/donations/">donations</a> or by <a href="https://krita.org/en/support-us/shop">buying training videos or the artbook!</a> With your support, we can keep the core team working on Krita full-time.</p>
+<p>&nbsp;</p>
+]]></content:encoded>
+										</item>
+		<item>
+		<title>September Development Update</title>
+		<link>https://krita.org/en/item/september-development-update/</link>
+				<pubDate>Mon, 30 Sep 2019 13:50:22 +0000</pubDate>
+		<dc:creator><![CDATA[Boudewijn Rempt]]></dc:creator>
+				<category><![CDATA[Uncategorized]]></category>
+
+		<guid isPermaLink="false">https://krita.org/?p=9779</guid>
+				<description><![CDATA[We&#8217;re about to do another bug-fix release of Krita: that&#8217;ll be 4.2.7. We&#8217;re seeing that the number of new bug reports is dropping a bit, week over week: even though most bug reports can be closed instantly as duplicates or not bugs at all, that&#8217;s probably a sign that our stable releases are getting more [&#8230;]]]></description>
+								<content:encoded><![CDATA[<p>We&#8217;re about to do another bug-fix release of Krita: that&#8217;ll be 4.2.7. We&#8217;re seeing that the number of new bug reports is dropping a bit, week over week: even though most bug reports can be closed instantly as duplicates or not bugs at all, that&#8217;s probably a sign that our stable releases are getting more and more stable. (See <strong><a href="https://docs.krita.org/en/untranslatable_pages/reporting_bugs.html">here</a></strong> to learn how to make good bug reports.) Though the total number of open bugs remains high, we worked really hard all September to make Krita better:</p>
+<p><a href="https://krita.org/wp-content/uploads/2019/09/bugs_september.png"><img class="aligncenter size-full wp-image-9780" src="https://krita.org/wp-content/uploads/2019/09/bugs_september.png" alt="" width="636" height="99" srcset="https://krita.org/wp-content/uploads/2019/09/bugs_september.png 636w, https://krita.org/wp-content/uploads/2019/09/bugs_september-300x47.png 300w" sizes="(max-width: 636px) 100vw, 636px" /></a></p>
+<p>We also managed make 538 changes to the code in September with 23 developers &#8212; and that excludes translations, since those aren&#8217;t in our code repository.</p>
+<p>We also went back to the <a href="https://scan.coverity.com/projects/krita?tab=overview">Coverity Static Code analyzer</a> and started analyzing Krita again. That was good for at least a hundred potential bug fixes, and it&#8217;s something that&#8217;s ongoing. We hadn&#8217;t done that for quite some time! There is still plenty to do, but the average defect density for projects the size of Krita is 0.7, so we&#8217;re not <em>that</em> bad.</p>
+<p><a href="https://krita.org/wp-content/uploads/2019/09/Screenshot_20190930_154506.png"><img class="aligncenter size-full wp-image-9783" src="https://krita.org/wp-content/uploads/2019/09/Screenshot_20190930_154506.png" alt="" width="878" height="676" srcset="https://krita.org/wp-content/uploads/2019/09/Screenshot_20190930_154506.png 878w, https://krita.org/wp-content/uploads/2019/09/Screenshot_20190930_154506-300x231.png 300w, https://krita.org/wp-content/uploads/2019/09/Screenshot_20190930_154506-768x591.png 768w" sizes="(max-width: 878px) 100vw, 878px" /></a></p>
+<p>Of course, focus on fixing bugs means that there&#8217;s less time for cool new features, or extending existing features. We did merge Sharaf Zaman&#8217;s Android port, though, which means that pretty soon we should have signed nightly Android APK&#8217;s!</p>
+<p>Today during our weekly contributors meeting (notes are <strong><a href="https://docs.google.com/document/d/1_GLkMJTtr5o-ruFRkA-14EQLPVvvoF7hILYyLuYoips/edit#">here</a></strong>), we decided we wanted to continue and do another couple of montly bug fix releases in the 4.2 series. In what&#8217;s currently our master branch, there are quite a few nice new features we&#8217;d like to share, though, and we&#8217;ll start making alpha builds of master in October, and invite everyone to help test what will become Krita 4.3.0.</p>
+<p>We had originally wanted to release 4.3.0 in October, and have a fundraiser to celebrate the release. Part of the reason we&#8217;re postponing 4.3.0 is that we&#8217;d like to continue for a while with the stable 4.2 releases. Another reason is that we want 4.3.0 to have a completely reworked system for loading, handling and saving things like brush presets. We&#8217;ve been working on that for a long time now, and things are coming together, but there&#8217;s still a lot that needs to be done.</p>
+]]></content:encoded>
+										</item>
+		<item>
+		<title>Interview with Samantha Skoros</title>
+		<link>https://krita.org/en/item/interview-with-samantha-skoros/</link>
+				<pubDate>Mon, 30 Sep 2019 07:22:39 +0000</pubDate>
+		<dc:creator><![CDATA[Irina Rempt]]></dc:creator>
+				<category><![CDATA[Artist Interview]]></category>
+
+		<guid isPermaLink="false">https://krita.org/?p=9758</guid>
+				<description><![CDATA[Could you tell us something about yourself? Oh I’m terrible at talking about myself. I guess the easiest thing would be that I’m 26 years old and a mother. I identify as genderfluid and pansexual, I freaking love Dungeons and Dragons, and I also am a super avid knitter/fiber artist. I mainly just love doing [&#8230;]]]></description>
+								<content:encoded><![CDATA[<h3><img class="aligncenter size-full wp-image-9776" src="https://krita.org/wp-content/uploads/2019/09/weatherwitch-800.png" alt="" width="800" height="977" srcset="https://krita.org/wp-content/uploads/2019/09/weatherwitch-800.png 800w, https://krita.org/wp-content/uploads/2019/09/weatherwitch-800-246x300.png 246w, https://krita.org/wp-content/uploads/2019/09/weatherwitch-800-768x938.png 768w" sizes="(max-width: 800px) 100vw, 800px" /></h3>
+<h3>Could you tell us something about yourself?</h3>
+<p>Oh I’m terrible at talking about myself. I guess the easiest thing would be that I’m 26 years old and a mother. I identify as genderfluid and pansexual, I freaking love Dungeons and Dragons, and I also am a super avid knitter/fiber artist. I mainly just love doing things with my hands and gravitate to any hobby or craft that lets me do that.</p>
+<h3>Do you paint professionally, as a hobby artist, or both?</h3>
+<p>A complete hobbyist. I actually only started drawing maybe a year ago, so I’m still learning a lot and growing. I’d love to do this professionally some day, but right now I just really enjoy drawing for my own self.</p>
+<h3>What genre(s) do you work in?</h3>
+<p>I’m so new to this I don’t even know if I know how to answer this. I mean I guess I mostly work in portraits? I’m trying to get better at drawing buildings and scenes. I’d love to get into comics at some point but my skill level just isn’t quite there yet.</p>
+<p><img class="aligncenter size-full wp-image-9770" src="https://krita.org/wp-content/uploads/2019/09/Leather-jacket-800.png" alt="" width="800" height="977" srcset="https://krita.org/wp-content/uploads/2019/09/Leather-jacket-800.png 800w, https://krita.org/wp-content/uploads/2019/09/Leather-jacket-800-246x300.png 246w, https://krita.org/wp-content/uploads/2019/09/Leather-jacket-800-768x938.png 768w" sizes="(max-width: 800px) 100vw, 800px" /></p>
+<h3>Whose work inspires you most &#8212; who are your role models as an artist?</h3>
+<p>I love seeing all sorts of art on twitter, I follow a lot of digital and traditional artists and a lot of them draw Dungeons and Dragons characters and I just love seeing people’s imaginations come to life in that way. I also love Jen Bartel and This Is Angle (This Is Angle writes a comic that I absolutely love the art style of, The Devil Is A Handsome Man) But both of them are just amazing artists and if I could draw half as well as them I would feel accomplished.</p>
+<h3>How and when did you get to try digital painting for the first time?</h3>
+<p>About a year ago I decided I really wanted to get into drawing. It was always something I wanted to do but just never took that leap. But the time I got there, I realized doing traditional art would be hard simply because we don’t have a lot of space in our home. The house is filled with yarn, fabric, leather, pets, and kid toys. There just wasn&#8217;t space for another hobby so I realized digital art would be the only way for me to do this thing. So my partner found me a refurbished Wacom pen tablet and I just fell in love with it.</p>
+<p><img class="aligncenter size-full wp-image-9772" src="https://krita.org/wp-content/uploads/2019/09/demon-knight-800.png" alt="" width="800" height="1066" srcset="https://krita.org/wp-content/uploads/2019/09/demon-knight-800.png 800w, https://krita.org/wp-content/uploads/2019/09/demon-knight-800-225x300.png 225w, https://krita.org/wp-content/uploads/2019/09/demon-knight-800-768x1024.png 768w" sizes="(max-width: 800px) 100vw, 800px" /></p>
+<h3>What makes you choose digital over traditional painting?</h3>
+<p>The biggest thing for me is the space it saves. But also, boy, do I absolutely love the undo function. I make a LOT of mistakes and so having the ability to just ctrl+z a bad stroke is phenomenal. I also love the freedom it gives, you can do so much with it that I feel like you just can&#8217;t accomplish with traditional. I guess another thing too would be how easy it is to share, I can just upload the finished work to wherever and don’t have to worry about trying to scan traditional art into the computer in order to show people.</p>
+<h3></h3>
+<h3>How did you find out about Krita?</h3>
+<p>So when I first got my pen tablet, I was looking at a few programs. I knew I wasn’t going to mess with anything expensive like PS, but I still wanted a good program. Krita was actually the first thing that I found and it just worked perfectly for everything I needed and it was super user friendly. I had people recommend other programs but honestly I just fell in love with Krita and didn’t even bother looking at anything else.</p>
+<p><img class="aligncenter size-full wp-image-9771" src="https://krita.org/wp-content/uploads/2019/09/Lucas-800.jpg" alt="" width="800" height="960" srcset="https://krita.org/wp-content/uploads/2019/09/Lucas-800.jpg 800w, https://krita.org/wp-content/uploads/2019/09/Lucas-800-250x300.jpg 250w, https://krita.org/wp-content/uploads/2019/09/Lucas-800-768x922.jpg 768w" sizes="(max-width: 800px) 100vw, 800px" /></p>
+<h3>What was your first impression?</h3>
+<p>Sheer joy. It was the first thing I found and it was just perfect, everything I wanted in a drawing program.</p>
+<h3>What do you love about Krita?</h3>
+<p>I love the quality of it, It’s just as good as the pricier programs and it’s free. It’s also got an amazing community of people around it.</p>
+<h3>What do you think needs improvement in Krita? Is there anything that really annoys you?</h3>
+<p>I think the biggest issue I run into is just wanting to undo more than the allotted undo’s. Sometimes I just zone out and do a bunch of strokes and then realize I’m on the wrong layer and I can’t undo all of my mistakes. But I suppose that’s more of a user error.</p>
+<h3>What sets Krita apart from the other tools that you use?</h3>
+<p>It’s layout is very user friendly and intuitive. I never have to look long for something, it’s always right where I expected it would be. So I didn’t have to waste a bunch of time learning some complicated program, it’s just so well designed and supported that even if I couldn&#8217;t figure something out, there’s a great community that is prepared to help.</p>
+<h3>If you had to pick one favourite of all your work done in Krita so far, what would it be, and why?</h3>
+<p><img class="aligncenter size-full wp-image-9773" src="https://krita.org/wp-content/uploads/2019/09/demonic-800.png" alt="" width="800" height="1066" srcset="https://krita.org/wp-content/uploads/2019/09/demonic-800.png 800w, https://krita.org/wp-content/uploads/2019/09/demonic-800-225x300.png 225w, https://krita.org/wp-content/uploads/2019/09/demonic-800-768x1024.png 768w" sizes="(max-width: 800px) 100vw, 800px" /></p>
+<p>Oh that’s a hard one. I don’t know that I have a favorite one, per say, but I do love all of the demons I draw. I think I just like drawing horns on people and blacking out their eyes. My body of work though is small so it’s hard to pick a favorite when my style keeps changing and evolving.</p>
+<h3>What techniques and brushes did you use in it?</h3>
+<p>I like using the sketch tools and then going over the sketch with the basic paint brush. I also have some of David Revoy’s brushes and I love using them for fun backgrounds and effects. But honestly I mainly use the basic brushes, they can accomplish so much.</p>
+<h3>Where can people see more of your work?</h3>
+<p>I’m on twitter: <a href="https://twitter.com/@moderbjorn_">@moderbjorn_</a><br />
+and I am also on Instagram: <a href="https://www.instagram.com/moderbjorn/">@moderbjorn</a><br />
+I also occasionally draw on Twitch: <a href="https://www.twitch.tv/ModerBjorn">ModerBjorn</a></p>
+<h3>Anything else you&#8217;d like to share?</h3>
+<p>I think I’d like to just say that it’s never too late for you to do the art thing. You don’t have to be one of those people that drew constantly in high school to be someone who’s good at art later in life. Even if it isn’t drawing, maybe it’s writing or wood carving, maybe you really want to try sewing. I’m telling you to do it, it’s so rewarding and you get to watch yourself get better with everything that you do. Don’t let anyone stop you from doing the thing that you want to do, especially yourself. I’m a stay at home mom with no time and sometimes no energy to do it. But just take a breath and understand that it’s okay to go at your own pace, you don’t owe anyone anything and you’re doing this for you. Yeah, I think that’s it. Just do the thing and you’ll be so proud of yourself, I believe in you.</p>
+]]></content:encoded>
+										</item>
+		<item>
+		<title>Let&#8217;s Test Krita 4.2.7 Beta!</title>
+		<link>https://krita.org/en/item/lets-test-krita-4-2-7-beta/</link>
+				<pubDate>Wed, 25 Sep 2019 10:52:21 +0000</pubDate>
+		<dc:creator><![CDATA[Boudewijn Rempt]]></dc:creator>
+				<category><![CDATA[Official Release]]></category>
+
+		<guid isPermaLink="false">https://krita.org/?p=9751</guid>
+				<description><![CDATA[We&#8217;re almost ready for a new release of Krita, with lots of bug fixes! So, please help with testing. As with 4.2.6, there&#8217;s a link on the welcome screen to a survey. Filling out the survey helps us figure out regressions and other problems. You can safely use any beta build on any operating system [&#8230;]]]></description>
+								<content:encoded><![CDATA[<p>We&#8217;re almost ready for a new release of Krita, with lots of bug fixes! So, please help with testing. As with 4.2.6, there&#8217;s a link on the welcome screen to a survey. Filling out the survey helps us figure out regressions and other problems. You can safely use any beta build on any operating system next to your production version of Krita. Settings and resources will be shared, but you won&#8217;t overwrite you existing installation by using one of the portable beta downloads.</p>
+<p>In addition to reported bugs, this release fixes a lot of issues found by the <a href="https://scan.coverity.com/projects/krita">Coverity Static Code checker</a>.</p>
+<p>We also have a bunch of great patches by new Krita hackers: Karl Ove Lufthammer, Rebecca Breu, Matthias Wein, Jasper Hartog, Krysztof Kurek and Guo Yunhe. Yay!</p>
+<p>If all is well, we will release 4.2.7 in a week.</p>
+<h3>Bugs Fixed in 4.2.7</h3>
+<ul>
+<li>Improve the layout and functionality of the color selector dialog and make it perform much better. (<a href="https://bugs.kde.org/show_bug.cgi?id=381529">BUG:381529</a>). Patches by Mathias Wein.</li>
+<li>Do not crash when trying to merge an invisible group layer (<a href="https://bugs.kde.org/show_bug.cgi?id=411124">BUG:411124</a>)</li>
+<li>Make it possible to save group layers to file layers even if they are empty (<a href="https://bugs.kde.org/show_bug.cgi?id=411101">BUG:411101</a>)</li>
+<li>Make the initial location of the OCIO profile selector sensible</li>
+<li>Fix possible crashes when a broken file ends up in the Recent Documents List (<a href="https://bugs.kde.org/show_bug.cgi?id=411416">BUG:411416</a>)</li>
+<li>Use locale-based formatting of numbers in the measure tool and other places. Patch by Karl Ove Lufthammer.</li>
+<li>Make HTML markup in the Search Field tooltips work. Patch by Karl Ove Lufthammer.</li>
+<li>Fix a crash when moving multiple vector shapes (<a href="https://bugs.kde.org/show_bug.cgi?id=409872">BUG:409872</a>)</li>
+<li>Fix the sort order of images imported as frames if they are not numbered with prefix 0&#8217;s (<a href="https://bugs.kde.org/show_bug.cgi?id=375885">BUG:375885</a>)</li>
+<li>Make it possible again to run the Python Scripting Debugger on Linux (BUG:410807) Patch by Rebecca Breu.</li>
+<li>Cache ICC profiles when loading layers: this speeds up loading images with thousands of layers (<a href="https://bugs.kde.org/show_bug.cgi?id=411532">BUG:411532</a>)</li>
+<li>Fix file layer and comics manager page updating on Windows (<a href="https://bugs.kde.org/show_bug.cgi?id=410409">BUG:410409</a>, <a href="https://bugs.kde.org/show_bug.cgi?id=389544">BUG:389544</a>)</li>
+<li>Use LittleCMS&#8217; copy alpha channel flag to speed up color transformations</li>
+<li>Fix outline move mode (<a href="https://bugs.kde.org/show_bug.cgi?id=411057">BUG:411057</a>)</li>
+<li>Fix a hang in the text shape if an UTF-8 Line Break character is used (<a href="https://bugs.kde.org/show_bug.cgi?id=410402">BUG:410402</a>)</li>
+<li>Fix a random crash if there is not enough space in the swapfile location for AMD Ryzen 3500 CPU&#8217;s (<a href="https://bugs.kde.org/show_bug.cgi?id=411081">BUG:411081</a>)</li>
+<li>Fix checking whether the swapfile location is actually writable on Windows (<a href="https://bugs.kde.org/show_bug.cgi?id=411129">BUG:411129</a>, <a href="https://bugs.kde.org/show_bug.cgi?id=411081">BUG:411081</a>)</li>
+<li>Fix another random crash when painting (<a href="https://bugs.kde.org/show_bug.cgi?id=411280">BUG:411280</a>)</li>
+<li>Fix artifacts when moving control points of a path shape (<a href="https://bugs.kde.org/show_bug.cgi?id=411334">BUG:411334</a>)</li>
+<li>Fix a crash when cropping a particular image (<a href="https://bugs.kde.org/show_bug.cgi?id=411536">BUG:411536</a>)</li>
+<li>Fix move action in the bezier selection tool (<a href="https://bugs.kde.org/show_bug.cgi?id=398294">BUG:398294</a>)</li>
+<li>Fix artifacts in Gaussian Blur on transparent layers (<a href="https://bugs.kde.org/show_bug.cgi?id=411719">BUG:411719</a>)</li>
+<li>Fix a crash when the Liquify Transform is started too quickly (<a href="https://bugs.kde.org/show_bug.cgi?id=411703">BUG:411703</a>)</li>
+<li>Fix a bad memory leak in the jpeg converter (<a href="https://bugs.kde.org/show_bug.cgi?id=410864">BUG:410864</a>)</li>
+<li>Fix a crash when loading a JPEG image with a broken color profile (<a href="https://bugs.kde.org/show_bug.cgi?id=410864">BUG:410864</a>)</li>
+<li>Fix problems when zooming with a touchpad (<a href="https://bugs.kde.org/show_bug.cgi?id=410940">BUG:410940</a>)</li>
+<li>Fix issues when using the calculation capabilities of the specific color selector&#8217;s spin boxes (<a href="https://bugs.kde.org/show_bug.cgi?id=409818">BUG:409818</a>). Patch by Jasper Hartog</li>
+<li>Make sure all layers are shown in the animation timeline by default</li>
+<li>Fix a crash when the colorize tool is active on closing Krita</li>
+<li>Fix a crash when converting a colorspace with OCIO enabled (<a href="https://bugs.kde.org/show_bug.cgi?id=411045">BUG:411045</a>)</li>
+<li>Fix the Strength parameter not being used in Rotation &#8211; Fuzzy Dab (<a href="https://bugs.kde.org/show_bug.cgi?id=376179">BUG:376179</a>)</li>
+<li>Fix a crash when using the mouse wheel while an image is opening</li>
+<li>Re-add error messages lost when refactoring the error messages for loading images</li>
+<li>Do not crash if libjpeg encounters any kind of error (<a href="https://bugs.kde.org/show_bug.cgi?id=364350">BUG:364350</a>)</li>
+<li>Fix presets with random offset of texture being marked dirty all the time (<a href="https://bugs.kde.org/show_bug.cgi?id=406427">BUG:406427</a>)</li>
+<li>Fix curves changing randomly with sensors with Use Same Curve enabled (<a href="https://bugs.kde.org/show_bug.cgi?id=383909">BUG:383909</a>)</li>
+<li>Add a simple progress bar when saving .kra files</li>
+<li>Ensure that the temporary folder isn&#8217;t suggested as a save-location as this can result in lost work.</li>
+<li>Make sure toolbars don&#8217;t get enabled after editing the toolbar buttons (<a href="https://bugs.kde.org/show_bug.cgi?id=402679">BUG:402679</a>)</li>
+<li>Do not crash when loading a tiled TIFF file with planar color data. (<a href="https://bugs.kde.org/show_bug.cgi?id=407171">BUG:407171</a>)</li>
+<li>Fix freezes when changing some brush properties or curves (<a href="https://bugs.kde.org/show_bug.cgi?id=410158">BUG:410158</a>)</li>
+<li>Fix wrong borders in the Edge Detection and Height To Normal Map Filters (<a href="https://bugs.kde.org/show_bug.cgi?id=411922">BUG:411922</a>)</li>
+<li>Fix outline of Group Layers in Move Tool and Transform Tool (<a href="https://bugs.kde.org/show_bug.cgi?id=392717">BUG:392717</a>)</li>
+<li>Fix preview of shape layers in Transform Tool and Move Tool (<a href="https://bugs.kde.org/show_bug.cgi?id=392717">BUG:392717</a>)</li>
+<li>Raise the maximum FPS limit to 300 fps from 100 fps</li>
+<li>Do not allow clone layers from pass-through group layers (<a href="https://bugs.kde.org/show_bug.cgi?id=409949">BUG:409949</a>)</li>
+<li>Fix the color of a selected shape being synchronized with the color selectors (<a href="https://bugs.kde.org/show_bug.cgi?id=381784">BUG:381784</a>)</li>
+<li>Fix updating the current shape color when doing undo/redo (<a href="https://bugs.kde.org/show_bug.cgi?id=404975">BUG:404975</a>)</li>
+<li>Fix the broken TestKisSwatchGroup test (<a href="https://bugs.kde.org/show_bug.cgi?id=410387">BUG:410387</a>) Patch by Krysztof Kurek.</li>
+<li>Make the splash render pixel-perfect on fractionally scaled displays. Patch by Guo Yunhe.</li>
+<li>Fix a crash in Feather Selection, Wavelets, Blur and Edge Detection (<a href="https://bugs.kde.org/show_bug.cgi?id=412057">BUG:412057</a>)</li>
+<li>Include reference images in the screen color picker (<a href="https://bugs.kde.org/show_bug.cgi?id=411816">BUG:411816</a>) Patch by Matthias Wein.</li>
+<li>Clean up the SVG files used for icons and license the SVG files properly. Patch by Raghavendra Kamath.</li>
+<li>Fix updating the assistants when moving the handles. Patch by Matthias Wein.</li>
+<li>Fix a bad memory corruption error color handling. Patch by Matthias Wein.</li>
+</ul>
+<h2>Download</h2>
+<h3>Windows</h3>
+<p>For the beta, you should only only use the portable zip files. Just open the zip file in Explorer and drag the folder somewhere convenient, then double-click on the krita icon in the folder. This will not impact an installed version of Krita, though it will share your settings and custom resources with your regular installed version of Krita. For reporting crashes, also get the debug symbols folder.</p>
+<ul>
+<li>Portable 64 bits Windows: <a href="https://download.kde.org/unstable/krita/4.2.7-beta1/krita-x64-4.2.7-beta1.zip">krita-x64-4.2.7-beta1.zip</a></li>
+<li><a href="https://download.kde.org/unstable/krita/4.2.7-beta1/krita-x64-4.2.7-beta1-dbg.zip">Debug symbols. (Unpack in the Krita installation folder)</a></li>
+</ul>
+<ul>
+<li>Portable 32 bits Windows: <a href="https://download.kde.org/unstable/krita/4.2.7-beta1/krita-x86-4.2.7-beta1.zip">krita-x86-4.2.7-beta1.zip</a></li>
+<li><a href="https://download.kde.org/unstable/krita/4.2.7-beta1/krita-x86-4.2.7-beta1-dbg.zip">Debug symbols. (Unpack in the Krita installation folder)</a></li>
+</ul>
+<h3>Linux</h3>
+<ul>
+<li>64 bits Linux: <a href="https://download.kde.org/unstable/krita/4.2.7-beta1/krita-4.2.7-beta1-x86_64.appimage">krita-4.2.7-beta1-x86_64.appimage</a></li>
+<li>64 bits Linux <a href="https://download.kde.org/unstable/krita/4.2.7-beta1/gmic_krita_qt-x86_64.appimage">G&#8217;Mic-Qt plugin appimage</a>.</li>
+</ul>
+<p>(If, for some reason, Firefox thinks it needs to load this as text: to download, right-click on the link.)</p>
+<h3>OSX</h3>
+<ul>
+<li>OSX disk image: <a href="https://download.kde.org/unstable/krita/4.2.7-beta1/krita-4.2.7-beta1.dmg">krita-4.2.7-beta1.dmg</a></li>
+</ul>
+<p>Note: the gmic-qt is not available on OSX.</p>
+<h3>Source code</h3>
+<ul>
+<li><a href="https://download.kde.org/unstable/krita/4.2.7-beta1/krita-4.2.7-beta1.tar.gz">krita-4.2.7-beta1.tar.gz</a></li>
+<li><a href="https://download.kde.org/unstable/krita/4.2.7-beta1/krita-4.2.7-beta1.tar.xz">krita-4.2.7-beta1.tar.xz</a></li>
+</ul>
+<h3>md5sum</h3>
+<p>For all downloads:</p>
+<ul>
+<li><a href="https://download.kde.org/unstable/krita/4.2.7-beta1/md5sum.txt">md5sum.txt</a></li>
+</ul>
+<h2>Support Krita</h2>
+<p>Krita is a free and open source project. Please consider supporting the project with <a href="https://krita.org/en/support-us/donations/">donations</a> or by <a href="https://krita.org/en/support-us/shop">buying training videos or the artbook!</a> With your support, we can keep the core team working on Krita full-time.</p>
+<p>&nbsp;</p>
+]]></content:encoded>
+										</item>
+		<item>
+		<title>Interview with Julius Grels</title>
+		<link>https://krita.org/en/item/interview-with-julius-grels/</link>
+				<pubDate>Mon, 16 Sep 2019 08:00:25 +0000</pubDate>
+		<dc:creator><![CDATA[Irina Rempt]]></dc:creator>
+				<category><![CDATA[Artist Interview]]></category>
+
+		<guid isPermaLink="false">https://krita.org/?p=9727</guid>
+				<description><![CDATA[Could you tell us something about yourself? Sure. I&#8217;m Julius Grels, and &#8220;I like to call myself an artist whenever I&#8217;m wasted enough&#8221;. In all seriousness though, I think I&#8217;d describe myself more as a self-taught caricaturist or illustrator. I usually like to take some existing premise from real life or history, e.g. painting a [&#8230;]]]></description>
+								<content:encoded><![CDATA[<h3><img class="aligncenter size-full wp-image-9729" src="https://krita.org/wp-content/uploads/2019/09/ForbiddenFruit-800.jpg" alt="" width="800" height="579" srcset="https://krita.org/wp-content/uploads/2019/09/ForbiddenFruit-800.jpg 800w, https://krita.org/wp-content/uploads/2019/09/ForbiddenFruit-800-300x217.jpg 300w, https://krita.org/wp-content/uploads/2019/09/ForbiddenFruit-800-768x556.jpg 768w" sizes="(max-width: 800px) 100vw, 800px" /></h3>
+<h3>Could you tell us something about yourself?</h3>
+<p>Sure. I&#8217;m Julius Grels, and &#8220;I like to call myself an artist whenever I&#8217;m wasted enough&#8221;. In all seriousness though, I think I&#8217;d describe myself more as a self-taught caricaturist or illustrator. I usually like to take some existing premise from real life or history, e.g. painting a picture of a (famous) person, depicting wildlife, et cetera. I&#8217;m also very fond of making comics, music and video games whenever I have the time (if only?).</p>
+<h3>Do you paint professionally, as a hobby artist, or both?</h3>
+<p>I&#8217;m most definitely a hobbyist, since I haven&#8217;t done any professional commissions (apart from some miniscule design work in the past), and what I do for living right now isn&#8217;t even remotely connected to art! That said, I&#8217;d most certainly would love to work as an illustrator, comic artist, or anything alike! My biggest wish would be to illustrate (and/or write) a children&#8217;s book someday.</p>
+<h3></h3>
+<h3>What genre(s) do you work in?</h3>
+<p>I&#8217;m most comfortable when doing caricatures and comics; in the latter I can also infuse my story-telling abilities, the little there are. I prefer to illustrate living things; people, animals and nature itself. I&#8217;m not exactly keen on drawing in-animate objects, though I&#8217;m learning to force myself out of this comfort zone. I like to keep things simple and clean, or at least I try my best not to get lost in time-consuming detailing. Guess that&#8217;s one argument I can use as to why I prefer using simple black background on most of my works&#8230;</p>
+<h3><img class="aligncenter size-full wp-image-9730" src="https://krita.org/wp-content/uploads/2019/09/amadeus-800.jpg" alt="" width="800" height="600" srcset="https://krita.org/wp-content/uploads/2019/09/amadeus-800.jpg 800w, https://krita.org/wp-content/uploads/2019/09/amadeus-800-300x225.jpg 300w, https://krita.org/wp-content/uploads/2019/09/amadeus-800-768x576.jpg 768w" sizes="(max-width: 800px) 100vw, 800px" />Whose work inspires you most &#8212; who are your role models as an artist?</h3>
+<p>I mostly draw (clever, eh?) influence and inspiration from animation, comics and video game art. I&#8217;m hesitant to drop any names because I don&#8217;t really have role models per se, and I tend to find pretty much any artist&#8217;s work interesting and inspiring. I guess as a Finn I could mention Tove Jansson and Mauri Kunnas. Jansson is of course famous for creating the Moomins, but she was also an accomplished artist and writer in her own right. Kunnas is a well-loved artist best known for his children&#8217;s books &#8211; pretty much every child in Finland has read at least one of his stories. In my opinion he&#8217;s also one of the greatest illustrators this country has to offer.</p>
+<p>In addition to the aforementioned, I basically inhaled Franco-Belgian comics as a child; I loved reading Astérix, Lucky Luke, Iznogoud and the rest, so artists like Uderzo, Tabary and Tardi have also had a huge influence on me. Whenever possible, I browse through concept art of different video games. Video games are an interesting subject anyway because they not only combine art, design and technology but have to make all three work together even-handedly to create an enjoyable interactive experience.</p>
+<p>&nbsp;</p>
+<h3>How and when did you get to try digital painting for the first time?</h3>
+<p>If we don&#8217;t count MS Paint doodles, I think my first real try at digital painting was at elementary school somewhere around the late 90&#8217;s where we were introduced to Paint Shop Pro as a part of some &#8220;build your own website&#8221; -course. We were only able to use mouse for drawing, which was extremely clunky and made me think the whole idea of drawing and painting with a computer was just insane; I&#8217;d rather stick to my pencils and brushes, thank you very much. It wasn&#8217;t until later when I realised there are equipment specifically made for digital artwork, and once I got my hands on a Wacom tablet, I was sold.</p>
+<h3>What makes you choose digital over traditional painting?</h3>
+<p>Nothing? I mean, they are completely different working methods, and I still paint traditionally. Nevertheless, I&#8217;ve started to slowly leer towards digital painting, since it&#8217;s much easier to control your work and you can experiment more without the fear of ruining something irreversibly (especially when it comes to inking comics and other drawings). While it&#8217;s arguable whether digital painting is more cost-efficient than traditional methods in the long run, I think it&#8217;s at least less painful to start working with; you only need to set up your computer and programs ready, while with traditional painting you need to take out easel, canvas, gesso, colours, brushes, pencils? you get the idea. Furthermore, in my case where I don&#8217;t have a separate studio I have to find and clear a space in my apartment to set all that stuff up. Hassle, hassle!</p>
+<p><img class="aligncenter size-full wp-image-9731" src="https://krita.org/wp-content/uploads/2019/09/buccaneer-800.jpg" alt="" width="800" height="1122" srcset="https://krita.org/wp-content/uploads/2019/09/buccaneer-800.jpg 800w, https://krita.org/wp-content/uploads/2019/09/buccaneer-800-214x300.jpg 214w, https://krita.org/wp-content/uploads/2019/09/buccaneer-800-768x1077.jpg 768w, https://krita.org/wp-content/uploads/2019/09/buccaneer-800-730x1024.jpg 730w" sizes="(max-width: 800px) 100vw, 800px" /></p>
+<h3>How did you find out about Krita?</h3>
+<p>At one point I started to search for open source alternatives for the myriad number of programs I was using, and Krita was a recommendation somewhere to replace Photoshop, with high ratings from users.</p>
+<h3>What was your first impression?</h3>
+<p>I guess I&#8217;m still languishing in my first impression, because I haven&#8217;t been able to use Krita as much as I have wanted. In any case, my very first impression upon opening the program was a relieved &#8220;this looks familiar&#8221; sigh, and it was incredibly easy to start using Krita from there on.</p>
+<h3>What do you love about Krita?</h3>
+<p>Like I mentioned above, I find the interface very easy to use. I also love the fact the community is so alive, and you can find answers to just about any dilemma. All in all, Krita is a magnificent tool for making 2d artwork.</p>
+<h3><img class="aligncenter size-full wp-image-9728" src="https://krita.org/wp-content/uploads/2019/09/BLF_Jotunn-800.jpg" alt="" width="800" height="1000" srcset="https://krita.org/wp-content/uploads/2019/09/BLF_Jotunn-800.jpg 800w, https://krita.org/wp-content/uploads/2019/09/BLF_Jotunn-800-240x300.jpg 240w, https://krita.org/wp-content/uploads/2019/09/BLF_Jotunn-800-768x960.jpg 768w" sizes="(max-width: 800px) 100vw, 800px" /></h3>
+<h3>What do you think needs improvement in Krita? Is there anything that really annoys you?</h3>
+<p>Majority of my problems with Krita are due to the fact I&#8217;ve yet to learn most of its nuances, so I can&#8217;t really say about improvements that much. Krita seems to be quite a memory-hog, which can cause lot of lag and freezing especially when working with bigger canvases. That, and I&#8217;m not too happy with the text tool/editor either and prefer not to use it at all. It&#8217;s the one thing in Krita that&#8217;s needlessly complicated in my opinion.</p>
+<h3>What sets Krita apart from the other tools that you use?</h3>
+<p>Krita is the only digital painting software I use. Being open source is probably what makes it stand out the most. I use other open source programs as well, e.g. Blender, OpenToonz and Aseprite, but they obviously aren&#8217;t that much similar to Krita?</p>
+<h3>If you had to pick one favourite of all your work done in Krita so far, what would it be, and why?</h3>
+<p><img class="aligncenter size-full wp-image-9732" src="https://krita.org/wp-content/uploads/2019/09/megantereon-800.jpg" alt="" width="800" height="492" srcset="https://krita.org/wp-content/uploads/2019/09/megantereon-800.jpg 800w, https://krita.org/wp-content/uploads/2019/09/megantereon-800-300x185.jpg 300w, https://krita.org/wp-content/uploads/2019/09/megantereon-800-768x472.jpg 768w" sizes="(max-width: 800px) 100vw, 800px" /></p>
+<p>Not much to choose from, but nevertheless, I&#8217;d say Megantereon, which was my first serious Krita artwork that I actually managed to finish. The main reason why I like it so much is simply because I had no initial planning; I took my Wacom, opened Krita and started doodling &#8220;something tiger-like&#8221;. After an hour or so, I began to realise there might be more to it, and continued working. The first version had plain fur, simplistic ear and lifeless green eye. I published it on deviantart.com, but wasn&#8217;t happy with the result, and later on decided to tweak the cat a bit. The fur got more detailed with stripes and spots, and I completely overhauled both the ear and the eye. The final result is what you see here, and I quickly replaced my previous attempt with this better version. I also like Megantereon as it neatly represents my interests (wildlife, history) and my preferred style (stylized, semi-realistic).</p>
+<h3>What techniques and brushes did you use in it?</h3>
+<p>Every brush I used is a Krita default. I used Basic and Fill Circle for outlining and some detail, Bristle Texture and Square for texturing and Inkpens for smaller detailing. There might be some Smudge tool I used too, but I honestly can&#8217;t remember.<br />
+I made a rough outlining on one layer against a black background and constructed the beast from bones to muscles to fur et cetera from there on. In the end I had laid out 23 layers with such genius descriptions as &#8220;skull&#8221;, &#8220;Layer 17&#8221;, &#8220;BLOOD SALIVA&#8221;, &#8220;hideTheBeard&#8221; and &#8220;washing&#8221;. In retrospect, I highly recommend people to use layers more scarcely if possible &#8211; they slow down the program, and the whole working process ends up confusing. At least name your layers better than I did!<br />
+I have two versions of the final work; with and without Noise Effect, which I used to achieve a more horror-esque vibe. I send the noiseless version here so the details aren&#8217;t obstructed too much.</p>
+<h3>Where can people see more of your work?</h3>
+<p>At the moment, my most recent work will be published at https://www.deviantart.com/jgrels . Don&#8217;t hold your breath, though; I publish work at a snail&#8217;s pace. You can also follow me on Twitter @JuliusGrels if you so desire, where I&#8217;m giving more information about my possible future projects, like a couple of webcomics I&#8217;ve planned to do.</p>
+<h3>Anything else you&#8217;d like to share?</h3>
+<p>Maybe just some general advice to any aspiring artist: never stop honing your skills, get out of your comfort zone, don&#8217;t fear experimenting, and most importantly; have confidence. Believe in yourself. Even if you don&#8217;t think you&#8217;re that great of an artist but love doing art, just keep working and publishing your work for everyone to see. You can doubt your talent, but never doubt your passion.</p>
+<p>Finally, I want to send my thanks to the Krita Foundation and give my highest appreciation for the great work you&#8217;ve done. Thank you!</p>
+]]></content:encoded>
+										</item>
+		<item>
+		<title>Krita 4.2.6 released</title>
+		<link>https://krita.org/en/item/krita-4-2-6-released/</link>
+				<pubDate>Tue, 10 Sep 2019 10:55:39 +0000</pubDate>
+		<dc:creator><![CDATA[Boudewijn Rempt]]></dc:creator>
+				<category><![CDATA[News]]></category>
+		<category><![CDATA[Official Release]]></category>
+
+		<guid isPermaLink="false">https://krita.org/?p=9735</guid>
+				<description><![CDATA[A bit later than expected, because of a regression found during beta testing, we&#8217;re releasing Krita 4.2.6. Over 120 people have participated in the beta test survey, so this is something we&#8217;ll repeat for the next release. This release also contains an important workaround for users with an AMD Ryzen 5 3500 CPU. This CPU [&#8230;]]]></description>
+								<content:encoded><![CDATA[<p>A bit later than expected, because of a regression found during <a href="https://krita.org/en/item/help-beta-test-krita-4-2-6/">beta testing</a>, we&#8217;re releasing Krita 4.2.6. Over 120 people have participated in the beta test survey, so this is something we&#8217;ll repeat for the next release.</p>
+<p>This release also contains an important workaround for users with an AMD Ryzen 5 3500 CPU. This CPU has a bug in its hardware random generator that caused crashes.</p>
+<h3>New features:</h3>
+<ul>
+<li>Add new layer from visible to layer right-click context menu.</li>
+<li>When running Krita for the first time on Windows, Angle is now the default renderer. <strong>Note</strong> that if you have an NVidia GPU and Krita&#8217;s window is transparent, you need to select Angle manually in Krita&#8217;s settings; if you have another GPU and you have problems with the canvas not updating, you might need to manually select OpenGL in the same window.</li>
+</ul>
+<p>We want to especially thank Karl Ove Hufthammer for his extensive work on polishing the translatable string.</p>
+<h3>Bugs fixed</h3>
+<ul>
+<li>Allow selection overlay to be reset to default. (<a href="https://bugs.kde.org/show_bug.cgi?id=410470">BUG:410470</a>)</li>
+<li>Set date for bundle creation to use ISO-Date. (<a href="https://bugs.kde.org/show_bug.cgi?id=410490">BUG:410490</a>)</li>
+<li>Fix freeze with 32bit float tiff by using our own tiff reader for the thumbnails. (<a href="https://bugs.kde.org/show_bug.cgi?id=408731">BUG:408731</a>)</li>
+<li>Ensure filter mask button is disabled appropriately depending on whether the filter supports it. (<a href="https://bugs.kde.org/show_bug.cgi?id=410374">BUG:410374</a>)</li>
+<li>Enable the small color selector if opengles is available as well (<a href="https://bugs.kde.org/show_bug.cgi?id=410602">BUG:410602</a>)</li>
+<li>Fix mixed Zoom, Pan, Rotate on macOS (<a href="https://bugs.kde.org/show_bug.cgi?id=410698">BUG:410698</a>)</li>
+<li>Ensure that checkboxes are shown in menus even when using the fusion theme</li>
+<li>Isolate Layer Crash (<a href="https://bugs.kde.org/show_bug.cgi?id=408785">BUG:408785</a>)</li>
+<li>Properly fix font resetting when all the text in the editor removed (<a href="https://bugs.kde.org/show_bug.cgi?id=409243">BUG:409243</a>)</li>
+<li>Fix lags in Move Tool when using tablet device (<a href="https://bugs.kde.org/show_bug.cgi?id=410838">BUG:410838</a>)</li>
+<li>Fix Shift and Alt modifiers in Outline Selection Tool (<a href="https://bugs.kde.org/show_bug.cgi?id=410532">BUG:410532</a>)</li>
+<li>Ensure Convert group to Animated Layer shows text in the toolbar. (<a href="https://bugs.kde.org/show_bug.cgi?id=410500">BUG:410500</a>)</li>
+<li>Allow &#8216;Add Clone Layer&#8217; to Work on Multiple Layers (<a href="https://bugs.kde.org/show_bug.cgi?id=373338">BUG:373338</a>)</li>
+<li>Fix saving animated transparency masks created through conversion (<a href="https://bugs.kde.org/show_bug.cgi?id=409895">BUG:409895</a>)</li>
+<li>Partially fix the curve change despite &#8216;Share curve across all settings&#8217; checked (<a href="https://bugs.kde.org/show_bug.cgi?id=383909">BUG:383909</a>)</li>
+<li>Try harder to make sure that the swap location is writable</li>
+<li>Properly handle timezones in bundles</li>
+<li>Make sure all the settings dialogs pages are always shown in the same order</li>
+<li>Make the settings dialog fit in low-res screens (<a href="https://bugs.kde.org/show_bug.cgi?id=410793">BUG:410793</a>)</li>
+<li>Remove misleading ‘px’ suffix for ‘move amount’ shortcut setting</li>
+<li>Make string for reasons for image export problems translatable (<a href="https://bugs.kde.org/show_bug.cgi?id=406973">BUG:406973</a>)</li>
+<li>Fix crash when creating a bezier curve (<a href="https://bugs.kde.org/show_bug.cgi?id=410572">BUG:410572</a>)</li>
+<li>Fix deadlocks in KoShapeManager (<a href="https://bugs.kde.org/show_bug.cgi?id=410909">BUG:410909</a>, <a href="https://bugs.kde.org/show_bug.cgi?id=410572">BUG:410572</a>)</li>
+<li>Fix a deadlock when using broken Wacom drivers on Linux (<a href="https://bugs.kde.org/show_bug.cgi?id=410797">BUG:410797</a>)</li>
+<li>Fix absolute brush rotation on rotated canvas (<a href="https://bugs.kde.org/show_bug.cgi?id=292726">BUG:292726</a>)</li>
+<li>Fix deadlock when removing reference image (<a href="https://bugs.kde.org/show_bug.cgi?id=411212">BUG:411212</a>)</li>
+<li>Fix a deadlock in handling of vector objects (<a href="https://bugs.kde.org/show_bug.cgi?id=411365">BUG:411365</a>)</li>
+<li>Fix autosave saving only once (<a href="https://bugs.kde.org/show_bug.cgi?id=411631">BUG:411631</a>)</li>
+</ul>
+<h2>Download</h2>
+<h3>Windows</h3>
+<p>Note for Windows users: if you encounter crashes, please follow <a href="https://docs.krita.org/en/reference_manual/dr_minw_debugger.html#dr-minw">these instructions</a> to use the debug symbols so we can figure out where Krita crashes.</p>
+<ul>
+<li>64 bits Windows: <a href="https://download.kde.org/stable/krita/4.2.6/krita-x64-4.2.6-setup.exe">krita-x64-4.2.6-setup.exe</a></li>
+<li>Portable 64 bits Windows: <a href="https://download.kde.org/stable/krita/4.2.6/krita-x64-4.2.6.zip">krita-x64-4.2.6.zip</a></li>
+<li><a href="https://download.kde.org/stable/krita/4.2.6/krita-x64-4.2.6-dbg.zip">Debug symbols. (Unpack in the Krita installation folder)</a></li>
+</ul>
+<ul>
+<li>32 bits Windows: <a href="https://download.kde.org/stable/krita/4.2.6/krita-x86-4.2.6-setup.exe">krita-x86-4.2.6-setup.exe</a></li>
+<li>Portable 32 bits Windows: <a href="https://download.kde.org/stable/krita/4.2.6/krita-x86-4.2.6.zip">krita-x86-4.2.6.zip</a></li>
+<li><a href="https://download.kde.org/stable/krita/4.2.6/krita-x86-4.2.6-dbg.zip">Debug symbols. (Unpack in the Krita installation folder)</a></li>
+</ul>
+<h3>Linux</h3>
+<ul>
+<li>64 bits Linux: <a href="https://download.kde.org/stable/krita/4.2.6/krita-4.2.6-x86_64.appimage">krita-4.2.6-x86_64.appimage</a></li>
+<li>64 bits Linux <a href="https://download.kde.org/stable/krita/4.2.6/gmic_krita_qt-x86_64.appimage">G&#8217;Mic-Qt plugin appimage</a>.</li>
+</ul>
+<p>(If, for some reason, Firefox thinks it needs to load this as text: to download, right-click on the link.)</p>
+<h3>OSX</h3>
+<ul>
+<li>OSX disk image: <a href="https://download.kde.org/stable/krita/4.2.6/krita-4.2.6.dmg">krita-4.2.6.dmg</a></li>
+</ul>
+<p>Note: the gmic-qt is not available on OSX.</p>
+<h3>Source code</h3>
+<ul>
+<li><a href="https://download.kde.org/stable/krita/4.2.6/krita-4.2.6.tar.gz">krita-4.2.6.tar.gz</a></li>
+<li><a href="https://download.kde.org/stable/krita/4.2.6/krita-4.2.6.tar.xz">krita-4.2.6.tar.xz</a></li>
+</ul>
+<h3>md5sum</h3>
+<p>For all downloads:</p>
+<ul>
+<li><a href="https://download.kde.org/stable/krita/4.2.6/md5sum.txt">md5sum.txt</a></li>
+</ul>
+<h3>Key</h3>
+<p>The Linux appimage and the source .tar.gz and .tar.xz tarballs are signed. You can retrieve the public key over https here: <a href="https://share.kde.org/index.php/s/fJ99V5mZvuyD0z8"> 0x58b9596c722ea3bd.asc</a>. The signatures are <a href="http://download.kde.org/unstable/krita/4.2.0-beta2/">here</a> (filenames ending in .sig).</p>
+<h2>Support Krita</h2>
+<p>Krita is a free and open source project. Please consider supporting the project with <a href="https://krita.org/en/support-us/donations/">donations</a> or by <a href="https://krita.org/en/support-us/shop">buying training videos or the artbook!</a> With your support, we can keep the core team working on Krita full-time.</p>
+]]></content:encoded>
+										</item>
+		<item>
+		<title>Interview with Wojtek Trybus</title>
+		<link>https://krita.org/en/item/interview-with-wojtek-trybus/</link>
+				<pubDate>Mon, 02 Sep 2019 08:00:37 +0000</pubDate>
+		<dc:creator><![CDATA[Irina Rempt]]></dc:creator>
+				<category><![CDATA[Artist Interview]]></category>
+
+		<guid isPermaLink="false">https://krita.org/?p=9692</guid>
+				<description><![CDATA[Could you tell us something about yourself? My name is Wojtek Trybus and I publish artworks as wojtryb. I&#8217;m in the last year of Computer Science studies in Poland. I&#8217;m also a pianist since 6, and happen to be a hobbyist and self-taught illustrator for something like 8 years now. Do you paint professionally, as [&#8230;]]]></description>
+								<content:encoded><![CDATA[<p><img class="aligncenter size-full wp-image-9716" src="https://krita.org/wp-content/uploads/2019/09/the_storm_is_coming800.png" alt="" width="800" height="333" srcset="https://krita.org/wp-content/uploads/2019/09/the_storm_is_coming800.png 800w, https://krita.org/wp-content/uploads/2019/09/the_storm_is_coming800-300x125.png 300w, https://krita.org/wp-content/uploads/2019/09/the_storm_is_coming800-768x320.png 768w" sizes="(max-width: 800px) 100vw, 800px" /></p>
+<h3>Could you tell us something about yourself?</h3>
+<p>My name is Wojtek Trybus and I publish artworks as wojtryb. I&#8217;m in the last year of Computer Science studies in Poland. I&#8217;m also a pianist since 6, and happen to be a hobbyist and self-taught illustrator for something like 8 years now.</p>
+<h3>Do you paint professionally, as a hobby artist, or both?</h3>
+<p>Drawing was always something that, despite being quite hard to learn, was making me happy and fulfilled. I guess this counts as a hobby then. I don&#8217;t make any money from it right now and I still haven&#8217;t decided if I will be more of a programmer or a graphic designer in the nearest future.</p>
+<p><img class="aligncenter size-full wp-image-9715" src="https://krita.org/wp-content/uploads/2019/09/lighttown800.png" alt="" width="800" height="1333" srcset="https://krita.org/wp-content/uploads/2019/09/lighttown800.png 800w, https://krita.org/wp-content/uploads/2019/09/lighttown800-180x300.png 180w, https://krita.org/wp-content/uploads/2019/09/lighttown800-768x1280.png 768w, https://krita.org/wp-content/uploads/2019/09/lighttown800-615x1024.png 615w" sizes="(max-width: 800px) 100vw, 800px" /></p>
+<h3>What genre(s) do you work in?</h3>
+<p>My artistic journey started with some simple and minimalistic illustrations &#8211; by keeping them so simple, I never got discouraged, as most beginners do, jumping straight into complex artworks. As my knowledge and experience grew, it all became more and more complicated, though the need to keep this feeling of simplicity in my artworks still remains.</p>
+<h3>Whose work inspires you most &#8212; who are your role models as an artist?</h3>
+<p>Vlad Gerasimov, founder of <a href="https://vlad.studio">Vladstudio</a>, was my first great inspiration &#8211; my minimalistic illustrations originated from his way of seeing the world. I think it is still a bit visible in my artworks, even though our ways parted long time ago, as I switched to a much different approach. Currently, I guess I&#8217;m more into <a href="https://www.davidrevoy.com/">David Revoy</a> &#8211; his open source ideology &#8211; and <a href="http://www.nathanfowkesart.com/">Nathan Fowkes</a> http://www.nathanfowkesart.com/, whose work, especially for the &#8220;How to train your dragon&#8221; movie, is for me the absolute level cap that an artist can achieve. <a href="https://juliablattman.com/illustrations/">Julia Blattman</a> is also worth mentioning, as her artworks full of imagination remind me of what I felt looking at those Vladstudio illustrations long time ago.</p>
+<h3>How and when did you get to try digital painting for the first time?</h3>
+<p>As a kid, as many other kids, I used to love computer games &#8211; when I grew up a bit, I noticed that it was not the games I liked that much, but the worlds they took me to. When in 2011 I found out how you can use GIMP and a digital tablet to create something similar, it all began.</p>
+<p><img class="aligncenter size-full wp-image-9713" src="https://krita.org/wp-content/uploads/2019/09/fishy_business800.png" alt="" width="800" height="450" srcset="https://krita.org/wp-content/uploads/2019/09/fishy_business800.png 800w, https://krita.org/wp-content/uploads/2019/09/fishy_business800-300x169.png 300w, https://krita.org/wp-content/uploads/2019/09/fishy_business800-768x432.png 768w" sizes="(max-width: 800px) 100vw, 800px" /></p>
+<h3>What makes you choose digital over traditional painting?</h3>
+<p>Making a lot of mess was always something that bothered me. I still remember how I hated art classes in primary school with kids covering every single thing in the room with paint. In digital painting you can always elegantly save and quit with your hands clean. While I still really enjoy sketching with pencil and pen, I&#8217;m afraid I will have a tough job to convince myself to use real paint again (as I know traditional media can give you a lot).</p>
+<h3>How did you find out about Krita?</h3>
+<p>It was 2015, I guess, when I read about it on David Revoy&#8217;s blog for the first time &#8211; I suppose many artists switched from GIMP to Krita somewhere in that time because of his support to the program.</p>
+<h3>What was your first impression?</h3>
+<p>Insanely laggy <img src="https://s.w.org/images/core/emoji/12.0.0-1/72x72/1f600.png" alt="😀" class="wp-smiley" style="height: 1em; max-height: 1em;" /> It took me one year to accidentally switch something in settings, that suddenly made it work normally. Luckily, with each update, it&#8217;s less likely for someone to have such a problem again. After I made my first artwork in 2016, Krita happened to exceed GIMP in any way possible. I fell in love instantly.</p>
+<p><img class="aligncenter size-full wp-image-9714" src="https://krita.org/wp-content/uploads/2019/09/grapevine800.png" alt="" width="800" height="1137" srcset="https://krita.org/wp-content/uploads/2019/09/grapevine800.png 800w, https://krita.org/wp-content/uploads/2019/09/grapevine800-211x300.png 211w, https://krita.org/wp-content/uploads/2019/09/grapevine800-768x1092.png 768w, https://krita.org/wp-content/uploads/2019/09/grapevine800-720x1024.png 720w" sizes="(max-width: 800px) 100vw, 800px" /></p>
+<h3>What do you love about Krita?</h3>
+<p>I love how Krita makes it possible for everyone to learn how to draw, while not wanting anything in exchange. It kind of restores my faith in humanity every time I think about it. It&#8217;s even harder to believe that developers manage to constantly update and improve it, while their budget and human resources are hard to compare with those that other art programs have.</p>
+<h3>What do you think needs improvement in Krita? Is there anything that really annoys you?</h3>
+<p>I don&#8217;t think there are too many flaws right now in the program itself. All the bugs I noticed in 2016 have been fixed by now. It also seems really stable on Kubuntu &#8211; the crashes are happening less often than in the past. Developers did a gorgeous job again and I guess, and with this whole &#8220;squash the bugs&#8221; campaign they really meant it.</p>
+<p>The thing that bothers me though, is how Krita is sometimes perceived across the internet &#8211; some people think it is still laggy or full of bugs &#8211; maybe it used to be that way, but in my opinion changed a lot in recent years. Some others may underappreciate it, as Photoshop is still the standard required in the industry.</p>
+<p>I&#8217;m really grateful for each and every artist who already helps to promote the program on social media and art-related websites, but I believe it still deserves more &#8211; more recognition, professional users, more mind-blowing, &#8220;Made in Krita&#8221; artworks that would inspire beginners, finally maybe even more donations for further development.</p>
+<p>I try to promote it the best I can and it even encourages me to practice and improve as an artist, but I still think we lack some PR &#8211; come on guys. Let&#8217;s show what we can do with Krita <img src="https://s.w.org/images/core/emoji/12.0.0-1/72x72/1f642.png" alt="🙂" class="wp-smiley" style="height: 1em; max-height: 1em;" /></p>
+<h3>What sets Krita apart from the other tools that you use?</h3>
+<p>Actually I don&#8217;t use any other drawing application as I simply don&#8217;t need one. I think that says a lot about it. Krita still allows me to constantly develop, and I&#8217;m sure that the only thing now that limits me is my current lack of skills. But I&#8217;m constantly working on that.</p>
+<h3>If you had to pick one favourite of all your work done in Krita so far, what would it be, and why?</h3>
+<p><img class="aligncenter size-full wp-image-9712" src="https://krita.org/wp-content/uploads/2019/09/festival_preparation800.png" alt="" width="800" height="1080" srcset="https://krita.org/wp-content/uploads/2019/09/festival_preparation800.png 800w, https://krita.org/wp-content/uploads/2019/09/festival_preparation800-222x300.png 222w, https://krita.org/wp-content/uploads/2019/09/festival_preparation800-768x1037.png 768w, https://krita.org/wp-content/uploads/2019/09/festival_preparation800-759x1024.png 759w" sizes="(max-width: 800px) 100vw, 800px" /></p>
+<p>One of my most recent illustrations is &#8220;festival preparation&#8221; &#8211; it indicates the direction I want to go with my art &#8211; to improve in art foundations, while keeping it fun and full of imagination. A lot of things I studied recently were used here, and it seems it all went particularly well.</p>
+<h3>What techniques and brushes did you use in it?</h3>
+<p>By coincidence, this artwork was actually a final test of brushes I use, that recently had some serious modifications to them. As I like things simple, they don&#8217;t mess that much with brush tips and textures as most of presets available on the internet do, but are quite tricky in terms of dynamics &#8211; they can randomize rotation and colors to differentiate the strokes. You can actually check them out, as I made them available to use freely some time ago: [<a href="https://www.dropbox.com/sh/tbpkifi2ogou65j/AADniEBp-kBAAqlU4svq4RxWa?dl=0&amp;fbclid=IwAR0waTTBtap3bZPZTljXrUDFNMXDns-8rw4EKbU6k4U4-tPMF_Hs4z9AX1Y">Link to brushes</a>]</p>
+<h3>Where can people see more of your work?</h3>
+<p>I use artstation as my more refined portfolio and facebook for loose updates. Some of my older artworks can still be found on deviantArt.</p>
+<p><a href="https://www.facebook.com/trybus.wojciech">https://www.facebook.com/trybus.wojciech</a><br />
+<a href="https://www.artstation.com/wojtryb">https://www.artstation.com/wojtryb</a><br />
+<a href="https://www.deviantart.com/wojtryb">https://www.deviantart.com/wojtryb</a></p>
+<h3>Anything else you&#8217;d like to share?</h3>
+<p>Soon I&#8217;ll be graduating from college and there are lots of changes and decisions ahead of me for sure &#8211; keep your fingers crossed in case I need them to still make progress at the current pace and create the art I love <img src="https://s.w.org/images/core/emoji/12.0.0-1/72x72/1f642.png" alt="🙂" class="wp-smiley" style="height: 1em; max-height: 1em;" /></p>
+]]></content:encoded>
+										</item>
+		<item>
+		<title>Help Beta Test Krita 4.2.6!</title>
+		<link>https://krita.org/en/item/help-beta-test-krita-4-2-6/</link>
+				<pubDate>Sat, 31 Aug 2019 10:00:56 +0000</pubDate>
+		<dc:creator><![CDATA[Wolthera van Hövell]]></dc:creator>
+				<category><![CDATA[Uncategorized]]></category>
+
+		<guid isPermaLink="false">https://krita.org/?p=9667</guid>
+				<description><![CDATA[This will be the first Krita release since the big sprint. We&#8217;re aiming to do monthly bugfix releases again from now on! But we also want to cut down on the regressions that come with rapid development so we&#8217;re making beta releases again. Please help the team out and check these beta releases for bugs [&#8230;]]]></description>
+								<content:encoded><![CDATA[<p>This will be the first Krita release since <a href="https://krita.org/en/item/krita-2019-sprint/">the big sprint</a>. We&#8217;re aiming to do monthly bugfix releases again from now on! But we also want to cut down on the regressions that come with rapid development so we&#8217;re making beta releases again. Please help the team out and check these beta releases for bugs and regressions. Right there in the welcome screen is a link to a survey where you can give your feedback:</p>
+<p><a href="https://krita.org/wp-content/uploads/2019/08/survey.png"><img class="aligncenter size-large wp-image-9701" src="https://krita.org/wp-content/uploads/2019/08/survey-1024x587.png" alt="" width="1024" height="587" srcset="https://krita.org/wp-content/uploads/2019/08/survey-1024x587.png 1024w, https://krita.org/wp-content/uploads/2019/08/survey-300x172.png 300w, https://krita.org/wp-content/uploads/2019/08/survey-768x440.png 768w" sizes="(max-width: 1024px) 100vw, 1024px" /></a>The survey idea is new &#8212; we want to get your impressions of what we&#8217;re about to release. If it works, we&#8217;ll be refining the surveys.</p>
+<p>What&#8217;s new in 4.2.6?</p>
+<h3>New features:</h3>
+<ul>
+<li>Add new layer from visible to layer right-click context menu.</li>
+<li>When running Krita for the first time on Windows, Angle is now the default renderer. <strong>Note</strong> that if you have an NVidia GPU and Krita&#8217;s window is transparent, you need to select Angle manually in Krita&#8217;s settings; if you have another GPU and you have problems with the canvas not updating, you might need to manually select OpenGL in the same window.</li>
+</ul>
+<p>We want to especially thank Karl Ove Hufthammer for his extensive work on polishing the translatable string.</p>
+<h3>Bugs fixed</h3>
+<ul>
+<li>Allow selection overlay to be reset to default. (<a href="https://bugs.kde.org/show_bug.cgi?id=410470">BUG:410470</a>)</li>
+<li>Set date for bundle creation to use ISO-Date. (<a href="https://bugs.kde.org/show_bug.cgi?id=410490">BUG:410490</a>)</li>
+<li>Fix freeze with 32bit float tiff by using our own tiff reader for the thumbnails. (<a href="https://bugs.kde.org/show_bug.cgi?id=408731">BUG:408731</a>)</li>
+<li>Ensure filter mask button is disabled appropriately depending on whether the filter supports it. (<a href="https://bugs.kde.org/show_bug.cgi?id=410374">BUG:410374</a>)</li>
+<li>Enable the small color selector if opengles is available as well (<a href="https://bugs.kde.org/show_bug.cgi?id=410602">BUG:410602</a>)</li>
+<li>Fix mixed Zoom, Pan, Rotate on macOS (<a href="https://bugs.kde.org/show_bug.cgi?id=410698">BUG:410698</a>)</li>
+<li>Ensure that checkboxes are shown in menus even when using the fusion theme</li>
+<li>Isolate Layer Crash (<a href="https://bugs.kde.org/show_bug.cgi?id=408785">BUG:408785</a>)</li>
+<li>Properly fix font resetting when all the text in the editor removed (<a href="https://bugs.kde.org/show_bug.cgi?id=409243">BUG:409243</a>)</li>
+<li>Fix lags in Move Tool when using tablet device (<a href="https://bugs.kde.org/show_bug.cgi?id=410838">BUG:410838</a>)</li>
+<li>Fix Shift and Alt modifiers in Outline Selection Tool (<a href="https://bugs.kde.org/show_bug.cgi?id=410532">BUG:410532</a>)</li>
+<li>Ensure Convert group to Animated Layer shows text in the toolbar. (<a href="https://bugs.kde.org/show_bug.cgi?id=410500">BUG:410500</a>)</li>
+<li>Allow &#8216;Add Clone Layer&#8217; to Work on Multiple Layers (<a href="https://bugs.kde.org/show_bug.cgi?id=373338">BUG:373338</a>)</li>
+<li>Fix saving animated transparency masks created through conversion (<a href="https://bugs.kde.org/show_bug.cgi?id=409895">BUG:409895</a>)</li>
+<li>Fix curve change despite &#8216;Use same curve&#8217; checked (<a href="https://bugs.kde.org/show_bug.cgi?id=383909">BUG:383909</a>)</li>
+<li>Try harder to make sure that the swap location is writable</li>
+<li>Properly handle timezones in bundles</li>
+<li>Allow &#8216;Add Clone Layer&#8217; to Work on Multiple Layers (<a href="https://bugs.kde.org/show_bug.cgi?id=373338">BUG:373338</a>)</li>
+<li>Fix saving animated transparency masks created through conversion (<a href="https://bugs.kde.org/show_bug.cgi?id=409895">BUG:409895</a>)</li>
+<li>Make sure all the settings dialogs pages are always shown in the same order</li>
+<li>Make the settings dialog fit in low-res screens (<a href="https://bugs.kde.org/show_bug.cgi?id=410793">BUG:410793</a>)</li>
+<li>Remove misleading ‘px’ suffix for ‘move amount’ shortcut setting</li>
+<li>Make string for reasons for image export problems translatable (<a href="https://bugs.kde.org/show_bug.cgi?id=406973">BUG:406973</a>)</li>
+<li>Fix crash when creating a bezier curve (<a href="https://bugs.kde.org/show_bug.cgi?id=410572">BUG:410572</a>)</li>
+<li>Fix deadlocks in KoShapeManager (<a href="https://bugs.kde.org/show_bug.cgi?id=410909">BUG:410909</a>, <a href="https://bugs.kde.org/show_bug.cgi?id=410572">BUG:410572</a>)</li>
+<li>Fix a deadlock when using broken Wacom drivers on Linux (<a href="https://bugs.kde.org/show_bug.cgi?id=410797">BUG:410797</a>)</li>
+<li>Fix absolute brush rotation on rotated canvas (<a href="https://bugs.kde.org/show_bug.cgi?id=292726">BUG:292726</a>)</li>
+<li>Fix deadlock when removing reference image (<a href="https://bugs.kde.org/show_bug.cgi?id=411212">BUG:411212</a>)</li>
+<li>Fix a deadlock in handling of vector objects (<a href="https://bugs.kde.org/show_bug.cgi?id=411365">BUG:411365</a>)</li>
+</ul>
+<h2>Download</h2>
+<h3>Windows</h3>
+<p>For the beta, only portable zip files are available. Just open the zip file in Explorer and drag the folder somewhere convenient, then double-click on the krita icon in the folder. This will not impact an installed version of Krita, though it will share your settings and custom resources with your regular installed version of Krita. For reporting crashes, also get the debug symbols folder.</p>
+<ul>
+<li>Portable 64 bits Windows: <a href="https://download.kde.org/unstable/krita/4.2.6-beta1/krita-x64-4.2.6-beta1.zip">krita-x64-4.2.6-beta1.zip</a></li>
+<li><a href="https://download.kde.org/unstable/krita/4.2.6-beta1/krita-x64-4.2.6-beta1-dbg.zip">Debug symbols. (Unpack in the Krita installation folder)</a></li>
+</ul>
+<ul>
+<li>Portable 32 bits Windows: <a href="https://download.kde.org/unstable/krita/4.2.6-beta1/krita-x86-4.2.6-beta1.zip">krita-x86-4.2.6-beta1.zip</a></li>
+<li><a href="https://download.kde.org/unstable/krita/4.2.6-beta1/krita-x86-4.2.6-beta1-dbg.zip">Debug symbols. (Unpack in the Krita installation folder)</a></li>
+</ul>
+<h3>Linux</h3>
+<ul>
+<li>64 bits Linux: <a href="https://download.kde.org/unstable/krita/4.2.6-beta1/krita-4.2.6-beta1-x86_64.appimage">krita-4.2.6-beta1-x86_64.appimage</a></li>
+<li>64 bits Linux <a href="https://download.kde.org/unstable/krita/4.2.6-beta1/gmic_krita_qt-x86_64.appimage">G&#8217;Mic-Qt plugin appimage</a>.</li>
+</ul>
+<p>(If, for some reason, Firefox thinks it needs to load this as text: to download, right-click on the link.)</p>
+<h3>OSX</h3>
+<ul>
+<li>OSX disk image: <a href="https://download.kde.org/unstable/krita/4.2.6-beta1/krita-4.2.6-beta1.dmg">krita-4.2.6-beta1.dmg</a></li>
+</ul>
+<p>Note: the gmic-qt is not available on OSX.</p>
+<h3>Source code</h3>
+<ul>
+<li><a href="https://download.kde.org/unstable/krita/4.2.6-beta1/krita-4.2.6-beta1.tar.gz">krita-4.2.6-beta1.tar.gz</a></li>
+<li><a href="https://download.kde.org/unstable/krita/4.2.6-beta1/krita-4.2.6-beta1.tar.xz">krita-4.2.6-beta1.tar.xz</a></li>
+</ul>
+<h3>md5sum</h3>
+<p>For all downloads:</p>
+<ul>
+<li><a href="https://download.kde.org/unstable/krita/4.2.6-beta1/md5sum.txt">md5sum.txt</a></li>
+</ul>
+<h2>Support Krita</h2>
+<p>Krita is a free and open source project. Please consider supporting the project with <a href="https://krita.org/en/support-us/donations/">donations</a> or by <a href="https://krita.org/en/support-us/shop">buying training videos or the artbook!</a> With your support, we can keep the core team working on Krita full-time.</p>
+<p>&nbsp;</p>
+]]></content:encoded>
+										</item>
+		<item>
+		<title>Mounamnamat Médias Teaches Animation using Krita</title>
+		<link>https://krita.org/en/item/mounamnamat-medias-teaches-animation-using-krita/</link>
+				<pubDate>Thu, 29 Aug 2019 09:20:27 +0000</pubDate>
+		<dc:creator><![CDATA[Boudewijn Rempt]]></dc:creator>
+				<category><![CDATA[Uncategorized]]></category>
+
+		<guid isPermaLink="false">https://krita.org/?p=9689</guid>
+				<description><![CDATA[Amine Sossi Alaoui and Sonia Didier write to tell us about their experience teaching children 2D animation using Krita, with some very cool results: We&#8217;re a Moroccan animation studio, created 6 months ago and based in Rabat, Morocco. Before that we worked in animation studios in France during 10 years. Our goal now is to [&#8230;]]]></description>
+								<content:encoded><![CDATA[<p>Amine Sossi Alaoui and Sonia Didier write to tell us about their experience teaching children 2D animation using Krita, with some very cool results:</p>
+<p>We&#8217;re a Moroccan animation studio, created 6 months ago and based in Rabat, Morocco. Before that we worked in animation studios in France during 10 years. Our goal now is to develop animation industry in Morocco and Africa. It&#8217;s a long way to go, and for the moment, we&#8217;re just beginning with 2d animation. Krita is a great tool for that, and we&#8217;re very happy to use it, and to share the knowledge we have about it.</p>
+<p>So, this summer, we wanted children to learn about 2D animation, so we created an one-week animation course for children from 8 to 14 years old. It was 2 hours per day during 5 days, for a group of 8 to 12 children. The goal was to create an one-minute animated shortfilm in 2D, from the writing of the story, storyboard, background, animation, colorisation and compositing.</p>
+<p>For that we chose to use Krita (and <a href="https://shotcut.com/">Shotcut</a> for the final compositing and sound). It&#8217;s great software, very complete and fun to work with. And as it&#8217;s free, we&#8217;re sure that the children could use it at home if they like, to make their own projects.</p>
+<p>Finally, four groups of children have worked on Krita this summer, and the result is on Youtube for anyone to watch <a href="https://www.youtube.com/channel/UCkq0PVBUCTCZCWHUO1qXfLw">on our youtube channel</a>. Here are the first three films; the fourth film is not yet on youtube. Should be shortly, when it&#8217;s finalized.</p>
+<p>We hope you&#8217;ll all like it !</p>
+<p><iframe title="&quot;Le temps, ça consomme&quot;, dessin animé réalisé en atelier d&#039;initiation à la 2d" width="500" height="281" src="https://www.youtube.com/embed/4CVMfeG_9tw?start=4&#038;feature=oembed" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></p>
+<p><iframe title="&quot;Sauvetage&quot;, dessin animé réalisé en atelier d&#039;initiation à la 2d" width="500" height="281" src="https://www.youtube.com/embed/1OFYqIh7izk?feature=oembed" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></p>
+<p><iframe title="&quot;Du vert au rouge&quot;, dessin animé réalisé en atelier d&#039;initiation à la 2d" width="500" height="281" src="https://www.youtube.com/embed/7sTIJm_uu0U?start=4&#038;feature=oembed" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></p>
+<p>Now we hope that we&#8217;ll have others projects with Krita, and we&#8217;ll be happy<br />
+to share them with you.</p>
+]]></content:encoded>
+										</item>
+		<item>
+		<title>Interview with Chayse Goodall</title>
+		<link>https://krita.org/en/item/interview-with-chayse-goodall/</link>
+				<pubDate>Mon, 19 Aug 2019 08:00:17 +0000</pubDate>
+		<dc:creator><![CDATA[Irina Rempt]]></dc:creator>
+				<category><![CDATA[Artist Interview]]></category>
+
+		<guid isPermaLink="false">https://krita.org/?p=9642</guid>
+				<description><![CDATA[Could you tell us something about yourself? Hi, my name is Chayse Goodall. I am 14 years old. I just draw for fun! Do you paint professionally, as a hobby artist, or both? I do animate and draw for a hobby. My artwork improves little by little, but I don&#8217;t think it&#8217;ll be good enough [&#8230;]]]></description>
+								<content:encoded><![CDATA[<h3><img class="aligncenter size-full wp-image-9643" src="https://krita.org/wp-content/uploads/2019/08/Cute-Thicc-Girl-800.png" alt="" width="800" height="600" srcset="https://krita.org/wp-content/uploads/2019/08/Cute-Thicc-Girl-800.png 800w, https://krita.org/wp-content/uploads/2019/08/Cute-Thicc-Girl-800-300x225.png 300w, https://krita.org/wp-content/uploads/2019/08/Cute-Thicc-Girl-800-768x576.png 768w" sizes="(max-width: 800px) 100vw, 800px" /></h3>
+<h3>Could you tell us something about yourself?</h3>
+<p>Hi, my name is Chayse Goodall. I am 14 years old. I just draw for fun!</p>
+<h3>Do you paint professionally, as a hobby artist, or both?</h3>
+<p>I do animate and draw for a hobby. My artwork improves little by little, but I don&#8217;t think it&#8217;ll be good enough for a profession!</p>
+<h3>What genre(s) do you work in?</h3>
+<p>I don&#8217;t know what my style is, but people tell me that I have an anime style.</p>
+<h3>Whose work inspires you most &#8212; who are your role models as an artist?</h3>
+<p>I have many inspirers, two of which was my art teachers, and one of which was my math tutor. They both motivate me to keep going with my progress.</p>
+<h3>How and when did you get to try digital painting for the first time?</h3>
+<p>I tried digital art in 2015. I only had a phone at the time, so it was hard at first. It&#8217;s a million times better now, and I have a touch screen computer, so I&#8217;ve been trying different art programs!</p>
+<h3>What makes you choose digital over traditional painting?</h3>
+<p>There are more tools, and there is an undo button!</p>
+<h3>How did you find out about Krita?</h3>
+<p>I was looking up free art programs, and stumbled across this program.</p>
+<h3>What was your first impression?</h3>
+<p>My experience was great! It was easy to follow once you get the hang of it!</p>
+<h3>What do you love about Krita?</h3>
+<p>All the brushes and how easy it is to save.</p>
+<h3>What do you think needs improvement in Krita? Is there anything that really annoys you?</h3>
+<p>It is a bit confusing and it looks complex to newcomers.</p>
+<h3>What sets Krita apart from the other tools that you use?</h3>
+<p>It has amazing features and it doesn&#8217;t require me to &#8220;sign up&#8221; or pay for anything!</p>
+<h3>If you had to pick one favourite of all your work done in Krita so far, what would it be, and why?</h3>
+<p>I only made one picture. She doesn&#8217;t have a name, she was just a test character to see how good the program was. (It came out great!)</p>
+<h3>What techniques and brushes did you use in it?</h3>
+<p>I normally draw the sketch first in a dark red color. Then I draw the plain body in a light green. I sketch the clothes, hair, and accessories on in a neon color.</p>
+<p>I just use the pen for coloring and shading.</p>
+<h3>Where can people see more of your work?</h3>
+<p>My instagram- <a href="https://www.instagram.com/panstables/">panstables</a><br />
+My youtube- <a href="https://www.youtube.com/channel/UCvG6O0WytnvqceDPeDHWirw">Nubbins</a></p>
+]]></content:encoded>
+										</item>
+	</channel>
+</rss>
+
+<!--
+Performance optimized by W3 Total Cache. Learn more: https://www.w3-edge.com/products/
+
+Object Caching 0/0 objects using memcached
+Page Caching using memcached 
+Minified using memcached
+
+Served from: krita.org @ 2019-10-08 06:54:48 by W3 Total Cache
+-->

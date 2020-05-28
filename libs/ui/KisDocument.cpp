@@ -34,7 +34,6 @@
 #include <KoDpi.h>
 #include <KoUnit.h>
 #include <KoID.h>
-#include <KoOdfReadStore.h>
 #include <KoProgressProxy.h>
 #include <KoProgressUpdater.h>
 #include <KoSelection.h>
@@ -124,6 +123,7 @@
 #include "kis_guides_config.h"
 #include "kis_image_barrier_lock_adapter.h"
 #include "KisReferenceImagesLayer.h"
+#include "dialogs/KisRecoverNamedAutosaveDialog.h"
 
 #include <mutex>
 #include "kis_config_notifier.h"
@@ -611,12 +611,6 @@ KisDocument::~KisDocument()
 QString KisDocument::uniqueID() const
 {
     return d->documentStorageID;
-}
-
-bool KisDocument::reload()
-{
-    // XXX: reimplement!
-    return false;
 }
 
 KisDocument *KisDocument::clone()
@@ -1122,7 +1116,7 @@ void KisDocument::slotChildCompletedSavingInBackground(KisImportExportErrorCode 
                         .arg(QString::fromLatin1(job.mimeType))
                         .arg(!status.isOk() ? exportErrorToUserMessage(status, errorMessage) : "OK")
                         .arg(fi.size())
-                        .arg(QString::fromLatin1(KoMD5Generator().generateHash(job.filePath).toHex())));
+                        .arg(fi.size() > 10000000 ? "FILE_BIGGER_10MB" : QString::fromLatin1(KoMD5Generator().generateHash(job.filePath).toHex())));
 
     emit sigCompleteBackgroundSaving(job, status, errorMessage);
 }
@@ -1180,7 +1174,13 @@ void KisDocument::slotInitiateAsyncAutosaving(KisDocument *clonedDocument)
 void KisDocument::slotPerformIdleRoutines()
 {
     d->image->explicitRegenerateLevelOfDetail();
-    d->image->purgeUnusedData(true);
+
+
+    /// TODO: automatical purging is disabled for now: it modifies
+    ///       data managers without creating a transaction, which breaks
+    ///       undo.
+
+    // d->image->purgeUnusedData(true);
 }
 
 void KisDocument::slotCompleteAutoSaving(const KritaUtils::ExportFileJob &job, KisImportExportErrorCode status, const QString &errorMessage)
@@ -1364,13 +1364,13 @@ QString KisDocument::generateAutoSaveFileName(const QString & path) const
         // Never saved?
 #ifdef Q_OS_WIN
         // On Windows, use the temp location (https://bugs.kde.org/show_bug.cgi?id=314921)
-        retval = QString("%1%2%7%3-%4-%5-autosave%6").arg(QDir::tempPath()).arg(QDir::separator()).arg("krita").arg(qApp->applicationPid()).arg(objectName()).arg(extension).arg(prefix);
+        retval = QString("%1%2%7%3-%4-%5-autosave%6").arg(QDir::tempPath()).arg('/').arg("krita").arg(qApp->applicationPid()).arg(objectName()).arg(extension).arg(prefix);
 #else
         // On Linux, use a temp file in $HOME then. Mark it with the pid so two instances don't overwrite each other's autosave file
-        retval = QString("%1%2%7%3-%4-%5-autosave%6").arg(QDir::homePath()).arg(QDir::separator()).arg("krita").arg(qApp->applicationPid()).arg(objectName()).arg(extension).arg(prefix);
+        retval = QString("%1%2%7%3-%4-%5-autosave%6").arg(QDir::homePath()).arg('/').arg("krita").arg(qApp->applicationPid()).arg(objectName()).arg(extension).arg(prefix);
 #endif
     } else {
-        retval = QString("%1%2%5%3-autosave%4").arg(dir).arg(QDir::separator()).arg(filename).arg(extension).arg(prefix);
+        retval = QString("%1%2%5%3-autosave%4").arg(dir).arg('/').arg(filename).arg(extension).arg(prefix);
     }
 
     //qDebug() << "generateAutoSaveFileName() for path" << path << ":" << retval;
@@ -1413,6 +1413,7 @@ bool KisDocument::openUrl(const QUrl &_url, OpenFlags flags)
     }
 
     QUrl url(_url);
+    QString original  = "";
     bool autosaveOpened = false;
     if (url.isLocalFile() && !fileBatchMode()) {
         QString file = url.toLocalFile();
@@ -1422,16 +1423,17 @@ bool KisDocument::openUrl(const QUrl &_url, OpenFlags flags)
             kisApp->hideSplashScreen();
             //qDebug() <<"asf=" << asf;
             // ## TODO compare timestamps ?
-            int res = QMessageBox::warning(0,
-                                           i18nc("@title:window", "Krita"),
-                                           i18n("An autosaved file exists for this document.\nDo you want to open the autosaved file instead?"),
-                                           QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Yes);
+            KisRecoverNamedAutosaveDialog dlg(0, file, asf);
+            dlg.exec();
+            int res = dlg.result();
+
             switch (res) {
-            case QMessageBox::Yes :
+            case KisRecoverNamedAutosaveDialog::OpenAutosave :
+                original = file;
                 url.setPath(asf);
                 autosaveOpened = true;
                 break;
-            case QMessageBox::No :
+            case KisRecoverNamedAutosaveDialog::OpenMainFile :
                 KisUsageLogger::log(QString("Removing autosave file: %1").arg(asf));
                 QFile::remove(asf);
                 break;
@@ -1447,6 +1449,9 @@ bool KisDocument::openUrl(const QUrl &_url, OpenFlags flags)
         setReadWrite(true); // enable save button
         setModified(true);
         setRecovered(true);
+
+        setUrl(QUrl::fromLocalFile(original)); // since it was an autosave, it will be a local file
+        setLocalFilePath(original);
     }
     else {
         if (ret) {

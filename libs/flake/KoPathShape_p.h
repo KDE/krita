@@ -31,8 +31,6 @@ public:
     explicit Private(const Private &rhs);
 
     QRectF handleRect(const QPointF &p, qreal radius) const;
-    /// Applies the viewbox transformation defined in the given element
-    void applyViewboxTransformation(const KoXmlElement &element);
 
     void map(const QTransform &matrix);
 

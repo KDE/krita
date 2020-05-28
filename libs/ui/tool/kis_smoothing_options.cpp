@@ -107,11 +107,15 @@ void KisSmoothingOptions::setSmoothPressure(bool value)
 
 bool KisSmoothingOptions::useScalableDistance() const
 {
-    return m_d->useScalableDistance;
+    return m_d->smoothingType != STABILIZER ? m_d->useScalableDistance : true;
 }
 
 void KisSmoothingOptions::setUseScalableDistance(bool value)
 {
+    // stabilizer mush always have scalable distance on
+    // see bug 421314
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->smoothingType != STABILIZER);
+
     m_d->useScalableDistance = value;
     m_d->writeCompressor.start();
 }

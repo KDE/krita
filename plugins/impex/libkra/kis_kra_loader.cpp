@@ -630,16 +630,28 @@ KisNodeSP KisKraLoader::loadNodes(const KoXmlElement& element, KisImageSP image,
 
         if (node.isElement()) {
 
+            // See https://bugs.kde.org/show_bug.cgi?id=408963, where there is a selection mask that is a child of the
+            // the projection. That needs to be treated as a global selection, so we keep track of those.
+            vKisNodeSP topLevelSelectionMasks;
             if (node.nodeName().toUpper() == LAYERS.toUpper() || node.nodeName().toUpper() == MASKS.toUpper()) {
                 for (child = node.lastChild(); !child.isNull(); child = child.previousSibling()) {
                     KisNodeSP node = loadNode(child.toElement(), image);
-                    if (node) {
+
+                    if (node && parent.data() == image->rootLayer().data() && node->inherits("KisSelectionMask") && image->rootLayer()->childCount() > 0) {
+                        topLevelSelectionMasks << node;
+                        continue;
+                    }
+
+                    if (node ) {
                         image->nextLayerName(); // Make sure the nameserver is current with the number of nodes.
                         image->addNode(node, parent);
                         if (node->inherits("KisLayer") && KoXml::childNodesCount(child) > 0) {
                             loadNodes(child.toElement(), image, node);
                         }
                     }
+                }
+                if (!topLevelSelectionMasks.isEmpty()) {
+                    image->addNode(topLevelSelectionMasks.first(), parent);
                 }
             }
         }

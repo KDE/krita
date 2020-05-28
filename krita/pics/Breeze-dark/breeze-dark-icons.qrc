@@ -1,6 +1,5 @@
-<!DOCTYPE RCC>
-<RCC version="1.0">
-    <qresource>
+<RCC>
+    <qresource prefix="/">
         <file>dark_application-exit.svg</file>
         <file>dark_application-pdf.svg</file>
         <file>dark_applications-system.svg</file>
@@ -27,7 +26,7 @@
         <file>dark_document-open-recent.svg</file>
         <file>dark_document-open.svg</file>
         <file>dark_document-print-preview.svg</file>
-        <file alias="dark_document-properties.svg">dark_configure.svg</file>        
+        <file alias="dark_document-properties.svg">dark_configure.svg</file>
         <file>dark_document-save-as.svg</file>
         <file>dark_document-save.svg</file>
         <file>dark_download.svg</file>
@@ -85,6 +84,6 @@
         <file>dark_zoom-in.svg</file>
         <file>dark_zoom-original.svg</file>
         <file>dark_zoom-out.svg</file>
+        <file>dark_update-medium.svg</file>
     </qresource>
 </RCC>
-

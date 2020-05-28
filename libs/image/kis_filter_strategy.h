@@ -60,8 +60,8 @@ public:
     }
 
 protected:
-    qreal supportVal;
-    qint32 intSupportVal;
+    qreal supportVal {0.0};
+    qint32 intSupportVal {0};
     KoID m_id;
 };
 

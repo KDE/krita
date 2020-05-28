@@ -50,7 +50,7 @@ static QStringList cleanup(const QStringList &pathList)
 
 static QString cleanupDirs(const QString &path)
 {
-    return QDir::cleanPath(path) + QDir::separator();
+    return QDir::cleanPath(path) + '/';
 }
 
 static QStringList cleanupDirs(const QStringList &pathList)

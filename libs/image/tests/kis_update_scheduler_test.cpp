@@ -42,8 +42,8 @@
 
 KisImageSP KisUpdateSchedulerTest::buildTestingImage()
 {
-    QImage sourceImage1(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
-    QImage sourceImage2(QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png");
+    QImage sourceImage1(QString(FILES_DATA_DIR) + '/' + "hakonepa.png");
+    QImage sourceImage2(QString(FILES_DATA_DIR) + '/' + "inverted_hakonepa.png");
 
     QRect imageRect = QRect(QPoint(0,0), sourceImage1.size());
 
@@ -91,7 +91,7 @@ void KisUpdateSchedulerTest::testMerge()
     QCOMPARE(rootLayer->exactBounds(), image->bounds());
 
     QImage resultFRProjection = rootLayer->projection()->convertToQImage(0);
-    resultFRProjection.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + "scheduler_fr_merge_result.png");
+    resultFRProjection.save(QString(FILES_OUTPUT_DIR) + '/' + "scheduler_fr_merge_result.png");
 
     /**
      * Test incremental updates
@@ -123,7 +123,7 @@ void KisUpdateSchedulerTest::testMerge()
     QCOMPARE(rootLayer->exactBounds(), image->bounds());
 
     QImage resultDirtyProjection = rootLayer->projection()->convertToQImage(0);
-    resultDirtyProjection.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + "scheduler_dp_merge_result.png");
+    resultDirtyProjection.save(QString(FILES_OUTPUT_DIR) + '/' + "scheduler_dp_merge_result.png");
 
     QPoint pt;
     QVERIFY(TestUtil::compareQImages(pt, resultFRProjection, resultDirtyProjection));

@@ -734,7 +734,7 @@ QRect KisLayer::updateProjection(const QRect& rect, KisNodeSP filthyNode)
     QRect updatedRect = rect;
     KisPaintDeviceSP originalDevice = original();
     if (!rect.isValid() ||
-        (!visible() && !hasClones()) ||
+        (!visible() && !isIsolatedRoot() && !hasClones()) ||
         !originalDevice) return QRect();
 
     if (!needProjection() && !hasEffectMasks()) {

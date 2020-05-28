@@ -259,6 +259,18 @@ qreal KisZoomManager::zoom() const
     return zoomX;
 }
 
+qreal KisZoomManager::resolutionX() const
+{
+    KisImageSP image = m_view->image();
+    return m_aspectMode ? image->xRes() / m_devicePixelRatio : POINT_TO_INCH(m_physicalDpiX);
+}
+
+qreal KisZoomManager::resolutionY() const
+{
+    KisImageSP image = m_view->image();
+    return m_aspectMode ? image->yRes() / m_devicePixelRatio : POINT_TO_INCH(m_physicalDpiY);
+}
+
 void KisZoomManager::mousePositionChanged(const QPoint &viewPos)
 {
     QPoint pt = viewPos - m_rulersOffset;
@@ -369,7 +381,7 @@ void KisZoomManager::slotScrollAreaSizeChanged()
 
 void KisZoomManager::changeAspectMode(bool aspectMode)
 {
-    KisImageWSP image = m_view->image();
+    KisImageSP image = m_view->image();
 
     // changeAspectMode is called with the same aspectMode when the window is
     // moved across screens. Preserve the old zoomMode if this is the case.
@@ -377,14 +389,8 @@ void KisZoomManager::changeAspectMode(bool aspectMode)
             aspectMode == m_aspectMode ? m_zoomHandler->zoomMode() : KoZoomMode::ZOOM_CONSTANT;
     const qreal newZoom = m_zoomHandler->zoom();
 
-    const qreal resolutionX =
-        aspectMode ? image->xRes() / m_devicePixelRatio : POINT_TO_INCH(m_physicalDpiX);
-
-    const qreal resolutionY =
-        aspectMode ? image->yRes() / m_devicePixelRatio : POINT_TO_INCH(m_physicalDpiY);
-
     m_aspectMode = aspectMode;
-    m_zoomController->setZoom(newMode, newZoom, resolutionX, resolutionY);
+    m_zoomController->setZoom(newMode, newZoom, resolutionX(), resolutionY());
     m_view->canvasBase()->notifyZoomChanged();
 }
 

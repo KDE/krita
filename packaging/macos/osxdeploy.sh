@@ -44,6 +44,8 @@ if test -z ${BUILDROOT}; then
     exit
 fi
 
+BUILDROOT="${BUILDROOT%/}"
+
 # print status messages
 print_msg() {
     printf "\e[32m${1}\e[0m\n" "${@:2}"
@@ -372,21 +374,21 @@ strip_python_dmginstall() {
     rm -rf Python.app
 }
 
-# Some libraries require r_path to be removed
-# we must not apply delete rpath globally
-delete_install_rpath() {
-    xargs -P4 -I FILE install_name_tool -delete_rpath "${BUILDROOT}/i/lib" FILE 2> "${BUILDROOT}/deploy_error.log"
-}
-
 # Remove any missing rpath poiting to BUILDROOT
 libs_clean_rpath () {
     for libFile in ${@}; do
-        rpath=$(otool -l "${libFile}" | grep "${BUILDROOT}/i/lib" | awk '{$1=$1;print $2}')
+        rpath=$(otool -l "${libFile}" | grep "path ${BUILDROOT}" | awk '{$1=$1;print $2}')
         if [[ -n "${rpath}" ]]; then
             echo "removed rpath _${rpath}_ from ${libFile}"
             install_name_tool -delete_rpath "${rpath}" "${libFile}"
         fi
     done
+}
+
+# Multhread version
+# of libs_clean_rpath, but makes assumptions
+delete_install_rpath() {
+    xargs -P4 -I FILE install_name_tool -delete_rpath "${BUILDROOT}/i/lib" FILE 2> "${BUILDROOT}/deploy_error.log"
 }
 
 fix_python_framework() {
@@ -426,7 +428,7 @@ macdeployqt_exists() {
         printf "Not Found!\n"
         printf "Attempting to install macdeployqt\n"
 
-        cd ${BUILDROOT}/depbuild/ext_qt/ext_qt-prefix/src/ext_qt/qttools/src
+        cd "${BUILDROOT}/depbuild/ext_qt/ext_qt-prefix/src/ext_qt/qttools/src"
         make sub-macdeployqt-all
         make sub-macdeployqt-install_subtargets
         make install
@@ -580,7 +582,7 @@ krita_deploy () {
 
     printf "clean any left over rpath\n"
     libs_clean_rpath $(find "${KRITA_DMG}/krita.app/Contents" -type f -perm 755 -or -name "*.dylib" -or -name "*.so")
-    find "${KRITA_DMG}/krita.app/Contents/Frameworks/" -type f -name "lib*" | delete_install_rpath
+#    libs_clean_rpath $(find "${KRITA_DMG}/krita.app/Contents/" -type f -name "lib*")
 
     echo "Done!"
 
@@ -651,7 +653,7 @@ notarize_build() {
         local uuid="$(grep 'RequestUUID' <<< ${altoolResponse} | awk '{ print $NF }')"
         echo "RequestUUID = ${uuid}" # Display identifier string
 
-        waiting_fixed "Waiting to retrieve notarize status" 30
+        waiting_fixed "Waiting to retrieve notarize status" 60
 
         while true ; do
             fullstatus=$(xcrun altool --notarization-info "${uuid}" --username "${NOTARIZE_ACC}" --password "${NOTARIZE_PASS}" ${ASC_PROVIDER_OP} 2>&1)  # get the status
@@ -663,7 +665,7 @@ notarize_build() {
                 print_msg "Notarization success!"
                 break
             elif [[ "${notarize_status}" = "in" ]]; then
-                waiting_fixed "Notarization still in progress, sleeping for 20 seconds and trying again" 20
+                waiting_fixed "Notarization still in progress, sleeping for 60 seconds and trying again" 60
             else
                 echo "Notarization failed! full status below"
                 echo "${fullstatus}"

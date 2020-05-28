@@ -57,8 +57,6 @@ public:
 
     void paint(QPainter &painter, KoShapePaintingContext &context_Unused, const QPainterPath &fillPath) const override;
     bool hasTransparency() const override;
-    void fillStyle(KoGenStyle &style, KoShapeSavingContext &context) override;
-    bool loadStyle(KoOdfLoadingContext &context, const QSizeF &shapeSize) override;
 private:
     class Private;
     QSharedDataPointer<Private> d;

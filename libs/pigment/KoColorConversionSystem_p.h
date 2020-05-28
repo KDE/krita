@@ -126,8 +126,8 @@ struct KoColorConversionSystem::Vertex {
     Node* srcNode;
     Node* dstNode;
 
-    bool conserveColorInformation;
-    bool conserveDynamicRange;
+    bool conserveColorInformation {true};
+    bool conserveDynamicRange {true};
 
 private:
 

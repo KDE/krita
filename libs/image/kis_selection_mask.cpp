@@ -308,6 +308,13 @@ void KisSelectionMask::setDecorationsVisible(bool value, bool update)
     }
 }
 
+void KisSelectionMask::setDirty(const QVector<QRect> &rects)
+{
+    if (m_d->image && m_d->image->overlaySelectionMask() == this) {
+        KisEffectMask::setDirty(rects);
+    }
+}
+
 void KisSelectionMask::flattenSelectionProjection(KisSelectionSP selection, const QRect &dirtyRect) const
 {
     Q_UNUSED(selection);

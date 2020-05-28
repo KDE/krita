@@ -41,11 +41,10 @@ static QSet<KoShapeLoadingContext::AdditionalAttributeData> s_additionlAttribute
 class Q_DECL_HIDDEN KoShapeLoadingContext::Private
 {
 public:
-    Private(KoOdfLoadingContext &c, KoDocumentResourceManager *resourceManager)
-            : context(c)
+    Private(KoStore *store, KoDocumentResourceManager *resourceManager)
+            : store(store)
             , zIndex(0)
             , documentResources(resourceManager)
-            , documentRdf(0)
             , sectionModel(0)
     {
     }
@@ -56,7 +55,8 @@ public:
         }
     }
 
-    KoOdfLoadingContext &context;
+    KoStore *store;
+
     QMap<QString, KoShapeLayer*> layers;
     QMap<QString, KoShape*> drawIds;
     QMap<QString, QPair<KoShape *, QVariant> > subIds;
@@ -65,19 +65,11 @@ public:
     QMap<QString, KoLoadingShapeUpdater*> updaterById;
     QMap<KoShape *, KoLoadingShapeUpdater*> updaterByShape;
     KoDocumentResourceManager *documentResources;
-    QObject *documentRdf;
-    KoSectionModel *sectionModel;
-};
+    KoSectionModel *sectionModel; };
 
-KoShapeLoadingContext::KoShapeLoadingContext(KoOdfLoadingContext & context, KoDocumentResourceManager *documentResources)
-        : d(new Private(context, documentResources))
+KoShapeLoadingContext::KoShapeLoadingContext(KoStore *store, KoDocumentResourceManager *documentResources)
+        : d(new Private(store, documentResources))
 {
-    if (d->documentResources) {
-        KoMarkerCollection *markerCollection = d->documentResources->resource(KoDocumentResourceManager::MarkerCollection).value<KoMarkerCollection*>();
-        if (markerCollection) {
-            //markerCollection->loadOdf(*this);
-        }
-    }
 }
 
 KoShapeLoadingContext::~KoShapeLoadingContext()
@@ -85,9 +77,14 @@ KoShapeLoadingContext::~KoShapeLoadingContext()
     delete d;
 }
 
-KoOdfLoadingContext & KoShapeLoadingContext::odfLoadingContext()
+KoStore *KoShapeLoadingContext::store() const
 {
-    return d->context;
+    return d->store;
+}
+
+QString KoShapeLoadingContext::mimeTypeForPath(const QString &href, bool b)
+{
+    return "image/svg+xml";
 }
 
 KoShapeLayer * KoShapeLoadingContext::layer(const QString & layerName)
@@ -197,17 +194,6 @@ QSet<KoShapeLoadingContext::AdditionalAttributeData> KoShapeLoadingContext::addi
 KoDocumentResourceManager *KoShapeLoadingContext::documentResourceManager() const
 {
     return d->documentResources;
-}
-
-QObject *KoShapeLoadingContext::documentRdf() const
-{
-    return d->documentRdf;
-}
-
-
-void KoShapeLoadingContext::setDocumentRdf(QObject *documentRdf)
-{
-    d->documentRdf = documentRdf;
 }
 
 KoSectionModel *KoShapeLoadingContext::sectionModel()

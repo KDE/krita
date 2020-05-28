@@ -44,7 +44,7 @@ struct PickerTraitInt {
     typedef int coord_type;
     typedef KisRandomConstAccessorSP accessor_type;
     static inline accessor_type createAccessor(KisPaintDeviceSP dev) {
-        return dev->createRandomConstAccessorNG(0,0);
+        return dev->createRandomConstAccessorNG();
     }
 
     template <bool useOldData>

@@ -27,7 +27,6 @@
 class QMimeData;
 class QString;
 class QByteArray;
-class KoDragOdfSaveHelper;
 class KoDragPrivate;
 class KoShape;
 

@@ -57,11 +57,11 @@ public:
     QRect getSpaceForTriangle(QRect geom) override;
 protected:
     QImage renderAlphaMask() const override;
+    QPointF mousePositionToShapeCoordinate(const QPointF &pos, const QPointF &dragStart) const override;
 
 private:
     QPointF convertShapeCoordinateToWidgetCoordinate(QPointF coordinate) const override;
     QPointF convertWidgetCoordinateToShapeCoordinate(QPointF coordinate) const override;
-
 
     singelDTypes m_type;
     int m_barWidth;

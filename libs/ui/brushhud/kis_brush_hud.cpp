@@ -111,6 +111,11 @@ KisBrushHud::KisBrushHud(KisCanvasResourceProvider *provider, QWidget *parent)
     m_d->wdgPropertiesArea->setWidget(m_d->wdgProperties);
     layout->addWidget(m_d->wdgPropertiesArea);
 
+    // unfortunately the sizeHint() function of QScrollArea is pretty broken
+    // and it would add another event loop iteration to react to it anyway,
+    // so let's just catch LayoutRequest events from the properties widget directly
+    m_d->wdgProperties->installEventFilter(this);
+
     updateIcons();
 
     setLayout(layout);
@@ -225,7 +230,6 @@ void KisBrushHud::updateProperties()
     }
 
     m_d->propertiesLayout->addStretch();
-    resize(sizeHint());
 }
 
 void KisBrushHud::showEvent(QShowEvent *event)
@@ -282,11 +286,27 @@ bool KisBrushHud::event(QEvent *event)
     case QEvent::Wheel:
         event->accept();
         return true;
+    case QEvent::LayoutRequest:
+        // resize when our layout determined a new recommended size
+        resize(sizeHint());
+        return true;
     default:
         break;
     }
 
     return QWidget::event(event);
+}
+
+bool KisBrushHud::eventFilter(QObject *watched, QEvent *event)
+{
+    // LayoutRequest event is sent from a layout to its parent widget
+    // when size requirements have been determined, i.e. sizeHint is available
+    if (watched == m_d->wdgProperties && event->type() == QEvent::LayoutRequest)
+    {
+        int totalMargin = 2 * m_d->wdgPropertiesArea->frameWidth();
+        m_d->wdgPropertiesArea->setMinimumWidth(m_d->wdgProperties->sizeHint().width() + totalMargin);
+    }
+    return false;
 }
 
 void KisBrushHud::slotConfigBrushHud()

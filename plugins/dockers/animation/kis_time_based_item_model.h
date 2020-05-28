@@ -87,9 +87,11 @@ protected:
                                              KUndo2Command *parentCommand = 0);
 
 
+protected Q_SLOTS:
+    void slotCurrentTimeChanged(int time);
+
 private Q_SLOTS:
     void slotFramerateChanged();
-    void slotCurrentTimeChanged(int time);
     void slotCacheChanged();
     void slotInternalScrubPreviewRequested(int time);
 

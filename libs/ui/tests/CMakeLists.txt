@@ -26,10 +26,32 @@ ecm_add_tests(
     kis_animation_importer_test.cpp
     KisSpinBoxSplineUnitConverterTest.cpp
     KisDocumentReplaceTest.cpp
+    KisRssReaderTest.cpp
 
     LINK_LIBRARIES kritaui Qt5::Test
     NAME_PREFIX "libs-ui-"
 )
+
+if (ENABLE_UPDATERS)
+if (UNIX)
+    ecm_add_test( KisAppimageUpdaterTest.cpp
+        TEST_NAME KisAppimageUpdaterTest
+        LINK_LIBRARIES kritaui Qt5::Test
+        NAME_PREFIX "libs-ui-")
+endif()
+
+ecm_add_test( KisManualUpdaterTest.cpp ../../../sdk/tests/testutil.cpp MockMultiFeedRssModel.cpp
+    TEST_NAME KisManualUpdaterTest
+    LINK_LIBRARIES kritaui Qt5::Test
+    NAME_PREFIX "libs-ui-")
+endif()
+
+
+ecm_add_test( KisMultiFeedRssModelTest.cpp ../../../sdk/tests/testutil.cpp MockNetworkAccessManager.cpp
+    TEST_NAME KisMultiFeedRssModelTest
+    LINK_LIBRARIES kritaui Qt5::Test
+    NAME_PREFIX "libs-ui-")
+
 
 ecm_add_test( kis_selection_decoration_test.cpp ../../../sdk/tests/stroke_testing_utils.cpp
     TEST_NAME KisSelectionDecorationTest

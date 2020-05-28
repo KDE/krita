@@ -62,50 +62,6 @@ KoShape *RectangleShape::cloneShape() const
     return new RectangleShape(*this);
 }
 
-bool RectangleShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
-{
-    loadOdfAttributes(element, context, OdfMandatories | OdfGeometry | OdfAdditionalAttributes | OdfCommonChildElements);
-
-    if (element.hasAttributeNS(KoXmlNS::svg, "rx") && element.hasAttributeNS(KoXmlNS::svg, "ry")) {
-        qreal rx = KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "rx", "0"));
-        qreal ry = KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "ry", "0"));
-        m_cornerRadiusX = rx / (0.5 * size().width()) * 100;
-        m_cornerRadiusY = ry / (0.5 * size().height()) * 100;
-    } else {
-        QString cornerRadius = element.attributeNS(KoXmlNS::draw, "corner-radius", "");
-        if (!cornerRadius.isEmpty()) {
-            qreal radius = KoUnit::parseValue(cornerRadius);
-            m_cornerRadiusX = qMin<qreal>(radius / (0.5 * size().width()) * 100, qreal(100));
-            m_cornerRadiusY = qMin<qreal>(radius / (0.5 * size().height()) * 100, qreal(100));
-        }
-    }
-
-    updatePath(size());
-    updateHandles();
-
-    loadOdfAttributes(element, context, OdfTransformation);
-    loadText(element, context);
-
-    return true;
-}
-
-void RectangleShape::saveOdf(KoShapeSavingContext &context) const
-{
-    if (isParametricShape()) {
-        context.xmlWriter().startElement("draw:rect");
-        saveOdfAttributes(context, OdfAllAttributes);
-        if (m_cornerRadiusX > 0 && m_cornerRadiusY > 0) {
-            context.xmlWriter().addAttribute("svg:rx", m_cornerRadiusX * (0.5 * size().width()) / 100.0);
-            context.xmlWriter().addAttribute("svg:ry", m_cornerRadiusY * (0.5 * size().height()) / 100.0);
-        }
-        saveOdfCommonChildElements(context);
-        saveText(context);
-        context.xmlWriter().endElement();
-    } else {
-        KoPathShape::saveOdf(context);
-    }
-}
-
 void RectangleShape::moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers)
 {
     Q_UNUSED(modifiers);

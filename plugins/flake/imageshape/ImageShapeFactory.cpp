@@ -28,7 +28,6 @@
 // Calligra
 #include <KoXmlNS.h>
 #include <KoShapeLoadingContext.h>
-#include <KoOdfLoadingContext.h>
 #include <KoIcon.h>
 
 // KDE

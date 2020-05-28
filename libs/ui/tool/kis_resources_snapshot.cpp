@@ -314,17 +314,23 @@ KisSelectionSP KisResourcesSnapshot::activeSelection() const
 
 bool KisResourcesSnapshot::needsAirbrushing() const
 {
-    return m_d->currentPaintOpPreset->settings()->isAirbrushing();
+    return (   m_d->currentPaintOpPreset
+            && m_d->currentPaintOpPreset->settings()
+            && m_d->currentPaintOpPreset->settings()->isAirbrushing());
 }
 
 qreal KisResourcesSnapshot::airbrushingInterval() const
 {
-    return m_d->currentPaintOpPreset->settings()->airbrushInterval();
+    return (   m_d->currentPaintOpPreset
+            && m_d->currentPaintOpPreset->settings()
+            && m_d->currentPaintOpPreset->settings()->airbrushInterval());
 }
 
 bool KisResourcesSnapshot::needsSpacingUpdates() const
 {
-    return m_d->currentPaintOpPreset->settings()->useSpacingUpdates();
+    return (   m_d->currentPaintOpPreset
+            && m_d->currentPaintOpPreset->settings()
+            && m_d->currentPaintOpPreset->settings()->useSpacingUpdates());
 }
 
 void KisResourcesSnapshot::setOpacity(qreal opacity)

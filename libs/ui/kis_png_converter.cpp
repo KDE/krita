@@ -872,7 +872,7 @@ bool KisPNGConverter::saveDeviceToStore(const QString &filename, const QRect &im
             metaDataStore = new KisMetaData::Store(*metaData);
         }
         KisPNGOptions options;
-        options.compression = 0;
+        options.compression = 3;
         options.interlace = false;
         options.tryToSaveAsIndexed = false;
         options.alpha = true;

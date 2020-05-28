@@ -53,8 +53,12 @@ public:
     void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
     void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
+    bool getSmearAlpha() const;
+    void setSmearAlpha(bool smearAlpha);
+
 private:
     Mode m_mode;
+    bool m_smearAlpha = true;
 };
 
 #endif // KIS_SMUDGE_OPTION_H

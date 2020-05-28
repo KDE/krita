@@ -21,7 +21,7 @@
 #include <QVariant>
 
 #include <KisActionPlugin.h>
-class KisAnimationRenderingOptions;
+#include <KisAnimationRenderingOptions.h>
 class KisDocument;
 
 class AnimaterionRenderer : public KisActionPlugin
@@ -59,6 +59,8 @@ private:
 
     QStringList getNamesForFrames(QString basename, QString extension, int sequenceStart, const QList<int> &frames);
 
+    const bool mustHaveEvenDimensions(QString mimeType, KisAnimationRenderingOptions::RenderMode renderMode);
+    const bool hasEvenDimensions(int width, int height);
 };
 
 #endif // ANIMATIONRENDERERIMAGE_H

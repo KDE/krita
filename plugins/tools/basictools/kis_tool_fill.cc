@@ -32,6 +32,7 @@
 #include <QVector>
 #include <QRect>
 #include <QColor>
+#include <QSharedPointer>
 
 #include <ksharedconfig.h>
 
@@ -50,21 +51,37 @@
 #include <widgets/kis_slider_spin_box.h>
 #include <kis_cursor.h>
 #include "kis_resources_snapshot.h"
+#include "commands_new/KisMergeLabeledLayersCommand.h"
+#include <kis_color_filter_combo.h>
+
 
 #include <processing/fill_processing_visitor.h>
 #include <kis_processing_applicator.h>
+#include <kis_command_utils.h>
+#include <functional>
+#include <kis_group_layer.h>
+#include <kis_layer_utils.h>
+
+#include <KisPart.h>
+#include <KisDocument.h>
+#include <kis_dummies_facade.h>
+#include <KoShapeControllerBase.h>
+#include <kis_shape_controller.h>
+
+#include "KoCompositeOpRegistry.h"
 
 
 KisToolFill::KisToolFill(KoCanvasBase * canvas)
         : KisToolPaint(canvas, KisCursor::load("tool_fill_cursor.png", 6, 6))
+        , m_colorLabelCompressor(900, KisSignalCompressor::FIRST_INACTIVE)
 {
     setObjectName("tool_fill");
     m_feather = 0;
     m_sizemod = 0;
     m_threshold = 80;
     m_usePattern = false;
-    m_unmerged = false;
     m_fillOnlySelection = false;
+    connect(&m_colorLabelCompressor, SIGNAL(timeout()), SLOT(slotUpdateAvailableColorLabels()));
 }
 
 KisToolFill::~KisToolFill()
@@ -78,10 +95,26 @@ void KisToolFill::resetCursorStyle()
     overrideCursorIfNotEditable();
 }
 
+void KisToolFill::slotUpdateAvailableColorLabels()
+{
+    if (m_widgetsInitialized && m_cmbSelectedLabels) {
+        m_cmbSelectedLabels->updateAvailableLabels(currentImage()->root());
+    }
+}
+
 void KisToolFill::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     KisToolPaint::activate(toolActivation, shapes);
     m_configGroup =  KSharedConfig::openConfig()->group(toolId());
+    if (m_widgetsInitialized && m_imageConnections.isEmpty()) {
+        activateConnectionsToImage();
+    }
+}
+
+void KisToolFill::deactivate()
+{
+    KisToolPaint::deactivate();
+    m_imageConnections.clear();
 }
 
 
@@ -141,8 +174,30 @@ void KisToolFill::endPrimaryAction(KoPointerEvent *event)
     KisResourcesSnapshotSP resources =
         new KisResourcesSnapshot(image(), currentNode(), this->canvas()->resourceManager());
 
+    KisPaintDeviceSP refPaintDevice = 0;
+
+    KisImageWSP currentImageWSP = currentImage();
+    KisNodeSP currentRoot = currentImageWSP->root();
+
+    KisImageSP refImage = KisMergeLabeledLayersCommand::createRefImage(image(), "Fill Tool Reference Image");
+
+    if (m_sampleLayersMode == SAMPLE_LAYERS_MODE_ALL) {
+        refPaintDevice = currentImage()->projection();
+    } else if (m_sampleLayersMode == SAMPLE_LAYERS_MODE_CURRENT) {
+        refPaintDevice = currentNode()->paintDevice();
+    } else if (m_sampleLayersMode == SAMPLE_LAYERS_MODE_COLOR_LABELED) {
+
+        refPaintDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(image(), "Fill Tool Reference Result Paint Device");
+
+        applicator.applyCommand(new KisMergeLabeledLayersCommand(refImage, refPaintDevice, currentRoot, m_selectedColors),
+                                KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
+    }
+
+    KIS_ASSERT(refPaintDevice);
+
     KisProcessingVisitorSP visitor =
-        new FillProcessingVisitor(m_startPos,
+        new FillProcessingVisitor(refPaintDevice,
+                                  m_startPos,
                                   resources->activeSelection(),
                                   resources,
                                   useFastMode,
@@ -151,7 +206,7 @@ void KisToolFill::endPrimaryAction(KoPointerEvent *event)
                                   m_feather,
                                   m_sizemod,
                                   m_threshold,
-                                  m_unmerged,
+                                  false, /* use the current device (unmerged) */
                                   false);
 
     applicator.applyVisitor(visitor,
@@ -200,9 +255,21 @@ QWidget* KisToolFill::createOptionWidget()
     m_checkUsePattern = new QCheckBox(QString(), widget);
     m_checkUsePattern->setToolTip(i18n("When checked do not use the foreground color, but the pattern selected to fill with"));
 
-    QLabel *lbl_sampleMerged = new QLabel(i18n("Limit to current layer:"), widget);
-    m_checkSampleMerged = new QCheckBox(QString(), widget);
+    QLabel *lbl_sampleLayers = new QLabel(i18nc("This is a label before a combobox with different choices regarding which layers "
+                                                "to take into considerationg when calculating the area to fill. "
+                                                "Options together with the label are: /Sample current layer/ /Sample all layers/ "
+                                                "/Sample color labeled layers/. Sample is a verb here and means something akin to 'take into account'.", "Sample:"), widget);
+    m_cmbSampleLayersMode = new QComboBox(widget);
+    m_cmbSampleLayersMode->addItem(sampleLayerModeToUserString(SAMPLE_LAYERS_MODE_CURRENT), SAMPLE_LAYERS_MODE_CURRENT);
+    m_cmbSampleLayersMode->addItem(sampleLayerModeToUserString(SAMPLE_LAYERS_MODE_ALL), SAMPLE_LAYERS_MODE_ALL);
+    m_cmbSampleLayersMode->addItem(sampleLayerModeToUserString(SAMPLE_LAYERS_MODE_COLOR_LABELED), SAMPLE_LAYERS_MODE_COLOR_LABELED);
+    m_cmbSampleLayersMode->setEditable(false);
 
+    QLabel *lbl_cmbLabel = new QLabel(i18nc("This is a string in tool options for Fill Tool to describe a combobox about "
+                                            "a choice of color labels that a layer can be marked with. Those color labels "
+                                            "will be used for calculating the area to fill.", "Labels used:"), widget);
+    m_cmbSelectedLabels = new KisColorFilterCombo(widget, false, false);
+    m_cmbSelectedLabels->updateAvailableLabels(currentImage().isNull() ? KisNodeSP() : currentImage()->root());
 
     QLabel *lbl_fillSelection = new QLabel(i18n("Fill entire selection:"), widget);
     m_checkFillSelection = new QCheckBox(QString(), widget);
@@ -213,8 +280,9 @@ QWidget* KisToolFill::createOptionWidget()
     connect (m_sizemodWidget     , SIGNAL(valueChanged(int)), this, SLOT(slotSetSizemod(int)));
     connect (m_featherWidget     , SIGNAL(valueChanged(int)), this, SLOT(slotSetFeather(int)));
     connect (m_checkUsePattern   , SIGNAL(toggled(bool))    , this, SLOT(slotSetUsePattern(bool)));
-    connect (m_checkSampleMerged , SIGNAL(toggled(bool))    , this, SLOT(slotSetSampleMerged(bool)));
     connect (m_checkFillSelection, SIGNAL(toggled(bool))    , this, SLOT(slotSetFillSelection(bool)));
+    connect (m_cmbSampleLayersMode   , SIGNAL(currentIndexChanged(int)), this, SLOT(slotSetSampleLayers(int)));
+    connect (m_cmbSelectedLabels          , SIGNAL(selectedColorsChanged()), this, SLOT(slotSetSelectedColorLabels()));
 
     addOptionWidgetOption(m_useFastMode, lbl_fastMode);
     addOptionWidgetOption(m_slThreshold, lbl_threshold);
@@ -222,7 +290,8 @@ QWidget* KisToolFill::createOptionWidget()
     addOptionWidgetOption(m_featherWidget      , lbl_feather);
 
     addOptionWidgetOption(m_checkFillSelection, lbl_fillSelection);
-    addOptionWidgetOption(m_checkSampleMerged, lbl_sampleMerged);
+    addOptionWidgetOption(m_cmbSampleLayersMode, lbl_sampleLayers);
+    addOptionWidgetOption(m_cmbSelectedLabels, lbl_cmbLabel);
     addOptionWidgetOption(m_checkUsePattern, lbl_usePattern);
 
     updateGUI();
@@ -238,9 +307,19 @@ QWidget* KisToolFill::createOptionWidget()
 
     m_featherWidget->setValue(m_configGroup.readEntry("featherAmount", 0));
     m_checkUsePattern->setChecked(m_configGroup.readEntry("usePattern", false));
-    m_checkSampleMerged->setChecked(m_configGroup.readEntry("sampleMerged", false));
+    if (m_configGroup.hasKey("sampleLayersMode")) {
+        m_sampleLayersMode = m_configGroup.readEntry("sampleLayersMode", SAMPLE_LAYERS_MODE_CURRENT);
+        setCmbSampleLayersMode(m_sampleLayersMode);
+    } else { // if neither option is present in the configuration, it will fall back to CURRENT
+        bool sampleMerged = m_configGroup.readEntry("sampleMerged", false);
+        m_sampleLayersMode = sampleMerged ? SAMPLE_LAYERS_MODE_ALL : SAMPLE_LAYERS_MODE_CURRENT;
+        setCmbSampleLayersMode(m_sampleLayersMode);
+    }
     m_checkFillSelection->setChecked(m_configGroup.readEntry("fillSelection", false));
 
+    activateConnectionsToImage();
+
+    m_widgetsInitialized = true;
     return widget;
 }
 
@@ -254,8 +333,65 @@ void KisToolFill::updateGUI()
 
     m_sizemodWidget->setEnabled(!selectionOnly && useAdvancedMode);
     m_featherWidget->setEnabled(!selectionOnly && useAdvancedMode);
-    m_checkSampleMerged->setEnabled(!selectionOnly && useAdvancedMode);
     m_checkUsePattern->setEnabled(useAdvancedMode);
+
+    m_cmbSampleLayersMode->setEnabled(!selectionOnly && useAdvancedMode);
+
+    bool sampleLayersModeIsColorLabeledLayers = m_cmbSampleLayersMode->currentData().toString() == SAMPLE_LAYERS_MODE_COLOR_LABELED;
+    m_cmbSelectedLabels->setEnabled(!selectionOnly && useAdvancedMode && sampleLayersModeIsColorLabeledLayers);
+}
+
+QString KisToolFill::sampleLayerModeToUserString(QString sampleLayersModeId)
+{
+    QString currentLayer = i18nc("Option in fill tool: take only the current layer into account when calculating the area to fill", "Current Layer");
+    if (sampleLayersModeId == SAMPLE_LAYERS_MODE_CURRENT) {
+        return currentLayer;
+    } else if (sampleLayersModeId == SAMPLE_LAYERS_MODE_ALL) {
+        return i18nc("Option in fill tool: take all layers (merged) into account when calculating the area to fill", "All Layers");
+    } else if (sampleLayersModeId == SAMPLE_LAYERS_MODE_COLOR_LABELED) {
+        return i18nc("Option in fill tool: take all layers that were labeled with a color label (more precisely: all those layers merged)"
+                     " into account when calculating the area to fill", "Color Labeled Layers");
+    }
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(false, currentLayer);
+    return currentLayer;
+}
+
+void KisToolFill::setCmbSampleLayersMode(QString sampleLayersModeId)
+{
+    for (int i = 0; i < m_cmbSampleLayersMode->count(); i++) {
+        if (m_cmbSampleLayersMode->itemData(i).toString() == sampleLayersModeId)
+        {
+            m_cmbSampleLayersMode->setCurrentIndex(i);
+            break;
+        }
+    }
+    m_sampleLayersMode = sampleLayersModeId;
+    updateGUI();
+}
+
+void KisToolFill::activateConnectionsToImage()
+{
+    auto *kisCanvas = dynamic_cast<KisCanvas2 *>(canvas());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(kisCanvas);
+    KisDocument *doc = kisCanvas->imageView()->document();
+
+    KisShapeController *kritaShapeController =
+            dynamic_cast<KisShapeController*>(doc->shapeController());
+    m_dummiesFacade = static_cast<KisDummiesFacadeBase*>(kritaShapeController);
+    if (m_dummiesFacade) {
+        m_imageConnections.addConnection(m_dummiesFacade, SIGNAL(sigEndInsertDummy(KisNodeDummy*)),
+                                                     &m_colorLabelCompressor, SLOT(start()));
+        m_imageConnections.addConnection(m_dummiesFacade, SIGNAL(sigEndRemoveDummy()),
+                                                     &m_colorLabelCompressor, SLOT(start()));
+        m_imageConnections.addConnection(m_dummiesFacade, SIGNAL(sigDummyChanged(KisNodeDummy*)),
+                                                     &m_colorLabelCompressor, SLOT(start()));
+    }
+}
+
+void KisToolFill::deactivateConnectionsToImage()
+{
+    m_imageConnections.clear();
 }
 
 void KisToolFill::slotSetUseFastMode(bool value)
@@ -276,10 +412,17 @@ void KisToolFill::slotSetUsePattern(bool state)
     m_configGroup.writeEntry("usePattern", state);
 }
 
-void KisToolFill::slotSetSampleMerged(bool state)
+void KisToolFill::slotSetSampleLayers(int index)
 {
-    m_unmerged = state;
-    m_configGroup.writeEntry("sampleMerged", state);
+    Q_UNUSED(index);
+    m_sampleLayersMode = m_cmbSampleLayersMode->currentData(Qt::UserRole).toString();
+    updateGUI();
+    m_configGroup.writeEntry("sampleLayersMode", m_sampleLayersMode);
+}
+
+void KisToolFill::slotSetSelectedColorLabels()
+{
+    m_selectedColors = m_cmbSelectedLabels->selectedColors();
 }
 
 void KisToolFill::slotSetFillSelection(bool state)

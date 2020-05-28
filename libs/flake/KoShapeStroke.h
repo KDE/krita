@@ -100,7 +100,6 @@ public:
     QBrush lineBrush() const;
 
     // pure virtuals from KoShapeStrokeModel implemented here.
-    void fillStyle(KoGenStyle &style, KoShapeSavingContext &context) const override;
     void strokeInsets(const KoShape *shape, KoInsets &insets) const override;
     qreal strokeMaxMarkersInset(const KoShape *shape) const override;
     bool hasTransparency() const override;

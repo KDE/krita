@@ -1,4 +1,4 @@
-From 7fe4c80654124447400c54a6dc998783c8ca66f2 Mon Sep 17 00:00:00 2001
+From 5db1fae47446055321994e4c8cff5ece14d94cf8 Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Wed, 13 Feb 2019 16:56:11 +0300
 Subject: [PATCH 12/22] Implement color space selection for QSurfaceFormat

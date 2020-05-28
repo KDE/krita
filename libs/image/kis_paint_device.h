@@ -602,6 +602,12 @@ public:
     bool pixel(qint32 x, qint32 y, KoColor * kc) const;
 
     /**
+     * Return pixel value in a form of KoColor. Please don't use this method
+     * for iteration, it is highly inefficient. Use iterators instead.
+     */
+    KoColor pixel(const QPoint &pos) const;
+
+    /**
      * Set the specified pixel to the specified color. Note that this
      * bypasses KisPainter. the PaintDevice is here used as an equivalent
      * to QImage, not QPixmap. This means that this is not undoable; also,
@@ -786,8 +792,8 @@ public:
     KisVLineIteratorSP createVLineIteratorNG(qint32 x, qint32 y, qint32 h);
     KisVLineConstIteratorSP createVLineConstIteratorNG(qint32 x, qint32 y, qint32 h) const;
 
-    KisRandomAccessorSP createRandomAccessorNG(qint32 x, qint32 y);
-    KisRandomConstAccessorSP createRandomConstAccessorNG(qint32 x, qint32 y) const;
+    KisRandomAccessorSP createRandomAccessorNG();
+    KisRandomConstAccessorSP createRandomConstAccessorNG() const;
 
     /**
      * Create an iterator that will "artificially" extend the paint device with the

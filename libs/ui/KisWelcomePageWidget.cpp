@@ -18,12 +18,12 @@
  */
 
 #include "KisWelcomePageWidget.h"
-#include <QDebug>
 #include <QDesktopServices>
 #include <QFileInfo>
 #include <QMimeData>
 #include <QPixmap>
 #include <QImage>
+#include <QMessageBox>
 
 #include <KisMimeDatabase.h>
 #include "kis_action_manager.h"
@@ -44,7 +44,28 @@
 #include <kis_image.h>
 #include <kis_paint_device.h>
 #include <KisPart.h>
+#include <utils/KisFileIconCreator.h>
 
+#include <utils/KisUpdaterBase.h>
+
+#include <QCoreApplication>
+#include <kis_debug.h>
+#include <QDir>
+
+#include "config-updaters.h"
+
+#ifdef ENABLE_UPDATERS
+#ifdef Q_OS_LINUX
+#include <utils/KisAppimageUpdater.h>
+#endif
+
+#include <utils/KisManualUpdater.h>
+#endif
+
+#include <klocalizedstring.h>
+#include <KritaVersionWrapper.h>
+
+#include <KisUsageLogger.h>
 
 KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     : QWidget(parent)
@@ -92,9 +113,23 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     versionNotificationLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
     versionNotificationLabel->setOpenExternalLinks(true);
 
+    devBuildIcon->setIcon(KisIconUtils::loadIcon("warning"));
+
+    devBuildLabel->setTextFormat(Qt::RichText);
+    devBuildLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
+    devBuildLabel->setOpenExternalLinks(true);
+    devBuildLabel->setVisible(false);
+
+    updaterFrame->setVisible(false);
+    versionNotificationLabel->setVisible(false);
+    bnVersionUpdate->setVisible(false);
+    bnErrorDetails->setVisible(false);
+
     connect(chkShowNews, SIGNAL(toggled(bool)), newsWidget, SLOT(toggleNews(bool)));
 
-    connect(newsWidget, SIGNAL(newsDataChanged()), this, SLOT(slotUpdateVersionMessage()));
+#ifdef ENABLE_UPDATERS
+    connect(chkShowNews, SIGNAL(toggled(bool)), this, SLOT(slotToggleUpdateChecks(bool)));
+#endif
 
 #ifdef Q_OS_ANDROID
     // checking this widgets crashes the app, so it is better for it to be hidden for now
@@ -103,14 +138,60 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     chkShowNews->hide();
 #endif
 
-
     // configure the News area
     KisConfig cfg(true);
-    bool m_getNews = cfg.readEntry<bool>("FetchNews", false);
-    chkShowNews->setChecked(m_getNews);
+    m_checkUpdates = cfg.readEntry<bool>("FetchNews", false);
+
+
+#ifdef ENABLE_UPDATERS
+#ifndef Q_OS_ANDROID
+    // Setup version updater, but do not check for them, unless the user explicitely
+    // wants to check for updates.
+    // * No updater is created for Linux/Steam, Windows/Steam and Windows/Store distributions,
+    // as those stores have their own updating mechanism.
+    // * STEAMAPPID(Windows)/SteamAppId(Linux) environment variable is set when Krita is run from Steam.
+    // The environment variables are not public API.
+    // * AppxManifest.xml file in the installation directory indicates MS Store version
+#if defined Q_OS_LINUX
+    if (!qEnvironmentVariableIsSet("SteamAppId")) { // do not create updater for linux/steam
+        if (qEnvironmentVariableIsSet("APPIMAGE")) {
+            m_versionUpdater.reset(new KisAppimageUpdater());
+        } else {
+            m_versionUpdater.reset(new KisManualUpdater());
+        }
+    }
+#elif defined Q_OS_WIN
+    QString appxManifestFilePath = QString("%1/../AppxManifest.xml").arg(QCoreApplication::applicationDirPath());
+	QFileInfo appxManifestFileInfo(appxManifestFilePath);
+
+    if (!appxManifestFileInfo.exists() && !qEnvironmentVariableIsSet("STEAMAPPID")) {
+ 		m_versionUpdater.reset(new KisManualUpdater());
+        KisUsageLogger::log("Non-store package - creating updater");
+    } else {
+        KisUsageLogger::log("detected appx or steam package - not creating the updater");
+    }
+
+#else
+	// always create updater for MacOS
+    m_versionUpdater.reset(new KisManualUpdater());
+#endif // Q_OS_*
+
+	if (!m_versionUpdater.isNull()) {
+		connect(bnVersionUpdate, SIGNAL(clicked()), this, SLOT(slotRunVersionUpdate()));
+		connect(bnErrorDetails, SIGNAL(clicked()), this, SLOT(slotShowUpdaterErrorDetails()));
+		connect(m_versionUpdater.data(), SIGNAL(sigUpdateCheckStateChange(KisUpdaterStatus)),
+				this, SLOT(slotSetUpdateStatus(const KisUpdaterStatus&)));
+
+		if (m_checkUpdates) { // only if the user wants them
+			m_versionUpdater->checkForUpdate();
+		}
+	}
+#endif // ifndef Q_OS_ANDROID
+#endif // ENABLE_UPDATERS
+
+    chkShowNews->setChecked(m_checkUpdates);
 
     setAcceptDrops(true);
-
 }
 
 KisWelcomePageWidget::~KisWelcomePageWidget()
@@ -223,14 +304,19 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     kritaWebsiteLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://www.krita.org?" + analyticsString + "marketing-site" + "\">")
                               .append(i18n("Krita Website")).append("</a>"));
 
-    sourceCodeLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://invent.kde.org/kde/krita?" + analyticsString + "source-code" + "\">")
+    sourceCodeLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://invent.kde.org/graphics/krita.git?" + analyticsString + "source-code" + "\">")
                             .append(i18n("Source Code")).append("</a>"));
 
     poweredByKDELink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://userbase.kde.org/What_is_KDE?" + analyticsString + "what-is-kde" + "\">")
                               .append(i18n("Powered by KDE")).append("</a>"));
 
 
-    slotUpdateVersionMessage(); // text set from RSS feed
+    // show the dev version labels, if dev version is detected
+    showDevVersionHighlight();
+
+#ifdef ENABLE_UPDATERS
+    updateVersionUpdaterFrame(); // updater frame
+#endif
 
     // re-populate recent files since they might have themed icons
     populateRecentDocuments();
@@ -244,6 +330,7 @@ void KisWelcomePageWidget::populateRecentDocuments()
 
     // grab recent files data
     int numRecentFiles = m_mainWindow->recentFilesUrls().length() > 5 ? 5 : m_mainWindow->recentFilesUrls().length(); // grab at most 5
+    KisFileIconCreator iconCreator;
 
     for (int i = 0; i < numRecentFiles; i++ ) {
 
@@ -256,69 +343,19 @@ void KisWelcomePageWidget::populateRecentDocuments()
 
         QList<QUrl> brokenUrls;
 
+
         if (m_thumbnailMap.contains(recentFileUrlPath)) {
             recentItem->setIcon(m_thumbnailMap[recentFileUrlPath]);
-        }
-        else {
-            QFileInfo fi(recentFileUrlPath);
-            if (fi.exists()) {
-                QString mimeType = KisMimeDatabase::mimeTypeForFile(recentFileUrlPath);
-                if (mimeType == KisDocument::nativeFormatMimeType()
-                       || mimeType == "image/openraster") {
-
-                    QScopedPointer<KoStore> store(KoStore::createStore(recentFileUrlPath, KoStore::Read));
-                    if (store) {
-                        QString thumbnailpath;
-                        if (store->hasFile(QString("Thumbnails/thumbnail.png"))){
-                            thumbnailpath = QString("Thumbnails/thumbnail.png");
-                        } else if (store->hasFile(QString("preview.png"))) {
-                            thumbnailpath = QString("preview.png");
-                        }
-                        if (!thumbnailpath.isEmpty()) {
-                            if (store->open(thumbnailpath)) {
-
-                                QByteArray bytes = store->read(store->size());
-                                store->close();
-                                QImage img;
-                                img.loadFromData(bytes);
-                                img.setDevicePixelRatio(devicePixelRatioF());
-                                recentItem->setIcon(QIcon(QPixmap::fromImage(img)));
-                            }
-                        }
-                    }
-                    else {
-                        brokenUrls << m_mainWindow->recentFilesUrls().at(i);
-                    }
-                }
-                else if (mimeType == "image/tiff" || mimeType == "image/x-tiff") {
-                    // Workaround for a bug in Qt tiff QImageIO plugin
-                    QScopedPointer<KisDocument> doc;
-                    doc.reset(KisPart::instance()->createTemporaryDocument());
-                    doc->setFileBatchMode(true);
-                    bool r = doc->openUrl(QUrl::fromLocalFile(recentFileUrlPath), KisDocument::DontAddToRecent);
-                    if (r) {
-                        KisPaintDeviceSP projection = doc->image()->projection();
-                        recentItem->setIcon(QIcon(QPixmap::fromImage(projection->createThumbnail(48, 48, projection->exactBounds()))));
-                    }
-                    else {
-                        brokenUrls << m_mainWindow->recentFilesUrls().at(i);
-                    }
-                }
-                else {
-                    QImage img;
-                    img.setDevicePixelRatio(devicePixelRatioF());
-                    img.load(recentFileUrlPath);
-                    if (!img.isNull()) {
-                        recentItem->setIcon(QIcon(QPixmap::fromImage(img.scaledToWidth(48))));
-                    }
-                    else {
-                        brokenUrls << m_mainWindow->recentFilesUrls().at(i);
-                    }
-                }
-                if (brokenUrls.size() == 0 || brokenUrls.last().toLocalFile() != recentFileUrlPath) {
-                    m_thumbnailMap[recentFileUrlPath] = recentItem->icon();
-                }
+        } else {
+            QIcon icon;
+            bool success = iconCreator.createFileIcon(recentFileUrlPath, icon, devicePixelRatioF());
+            if (success) {
+                recentItem->setIcon(icon);
+                m_thumbnailMap[recentFileUrlPath] = recentItem->icon();
+            } else {
+                brokenUrls << m_mainWindow->recentFilesUrls().at(i);
             }
+
         }
         Q_FOREACH(const QUrl &url, brokenUrls) {
             m_mainWindow->removeRecentUrl(url);
@@ -341,52 +378,7 @@ void KisWelcomePageWidget::populateRecentDocuments()
     recentDocumentsListView->setModel(&m_recentFilesModel);
 }
 
-void KisWelcomePageWidget::slotUpdateVersionMessage()
-{
 
-    alertIcon->setIcon(KisIconUtils::loadIcon("warning"));
-    alertIcon->setVisible(false);
-
-    // find out if we need an update...or if this is a development version:
-    // dev builds contain GIT hash in it and the word git
-    // stable versions do not contain this.
-    if (qApp->applicationVersion().contains("git")) {
-        // Development build
-        QString versionLabelText = QString("<a style=\"color: " +
-                                           blendedColor.name() +
-                                           " \" href=\"https://docs.krita.org/en/untranslatable_pages/triaging_bugs.html?"
-                                           + analyticsString + "dev-build" + "\">")
-                                  .append(i18n("DEV BUILD")).append("</a>");
-
-        versionNotificationLabel->setText(versionLabelText);
-        alertIcon->setVisible(true);
-        versionNotificationLabel->setVisible(true);
-
-    } else if (newsWidget->hasUpdateAvailable()) {
-
-        // build URL for label
-        QString versionLabelText = QString("<a style=\"color: " +
-                                           blendedColor.name() +
-                                           " \" href=\"" +
-                                           newsWidget->versionLink() + "?" +
-                                           analyticsString + "version-update" + "\">")
-                           .append(i18n("New Version Available!")).append("</a>");
-
-        versionNotificationLabel->setVisible(true);
-        versionNotificationLabel->setText(versionLabelText);
-        alertIcon->setVisible(true);
-
-    } else {
-        // no message needed... exit
-        versionNotificationLabel->setVisible(false);
-        return;
-    }
-
-    if (!blendedStyle.isNull()) {
-        versionNotificationLabel->setStyleSheet(blendedStyle);
-    }
-
-}
 
 void KisWelcomePageWidget::dragEnterEvent(QDragEnterEvent *event)
 {
@@ -441,12 +433,42 @@ void KisWelcomePageWidget::dragLeaveEvent(QDragLeaveEvent */*event*/)
     m_mainWindow->dragLeave();
 }
 
+void KisWelcomePageWidget::showDevVersionHighlight()
+{
+    // always flag developement version
+    if (isDevelopmentBuild()) {
+        QString devBuildLabelText = QString("<a style=\"color: " +
+                                           blendedColor.name() +
+                                           " \" href=\"https://docs.krita.org/en/untranslatable_pages/triaging_bugs.html?"
+                                           + analyticsString + "dev-build" + "\">")
+                                  .append(i18n("DEV BUILD")).append("</a>");
+
+        devBuildLabel->setText(devBuildLabelText);
+        devBuildIcon->setVisible(true);
+        devBuildLabel->setVisible(true);
+    } else {
+        devBuildIcon->setVisible(false);
+        devBuildLabel->setVisible(false);
+    }
+}
+
 void KisWelcomePageWidget::recentDocumentClicked(QModelIndex index)
 {
     QString fileUrl = index.data(Qt::ToolTipRole).toString();
     m_mainWindow->openDocument(QUrl::fromLocalFile(fileUrl), KisMainWindow::None );
 }
 
+
+bool KisWelcomePageWidget::isDevelopmentBuild()
+{
+    QString versionString = KritaVersionWrapper::versionString(true);
+
+    if (versionString.contains("git")) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 void KisWelcomePageWidget::slotNewFileClicked()
 {
@@ -458,3 +480,107 @@ void KisWelcomePageWidget::slotOpenFileClicked()
     m_mainWindow->slotFileOpen();
 }
 
+#ifdef ENABLE_UPDATERS
+void KisWelcomePageWidget::slotToggleUpdateChecks(bool state)
+{
+	if (m_versionUpdater.isNull()) {
+		return;
+	}
+
+	m_checkUpdates = state;
+
+    if (m_checkUpdates) {
+        m_versionUpdater->checkForUpdate();
+    }
+
+    updateVersionUpdaterFrame();
+}
+
+void KisWelcomePageWidget::slotRunVersionUpdate()
+{
+	if (m_versionUpdater.isNull()) {
+		return;
+	}
+
+	if (m_checkUpdates) {
+		m_versionUpdater->doUpdate();
+	}
+}
+
+void KisWelcomePageWidget::slotSetUpdateStatus(KisUpdaterStatus updateStatus)
+{
+    m_updaterStatus = updateStatus;
+    updateVersionUpdaterFrame();
+}
+
+void KisWelcomePageWidget::slotShowUpdaterErrorDetails()
+{
+    QMessageBox::warning(0, i18nc("@title:window", "Krita"), m_updaterStatus.updaterOutput());
+}
+
+void KisWelcomePageWidget::updateVersionUpdaterFrame()
+{
+    updaterFrame->setVisible(false);
+    versionNotificationLabel->setVisible(false);
+    bnVersionUpdate->setVisible(false);
+    bnErrorDetails->setVisible(false);
+
+    if (!m_checkUpdates || m_versionUpdater.isNull()) {
+        return;
+    }
+
+    QString versionLabelText;
+
+    if (m_updaterStatus.status() == UpdaterStatus::StatusID::UPDATE_AVAILABLE) {
+        updaterFrame->setVisible(true);
+        updaterFrame->setEnabled(true);
+        versionLabelText = i18n("New version of Krita is available.");
+        versionNotificationLabel->setVisible(true);
+        updateIcon->setIcon(KisIconUtils::loadIcon("update-medium"));
+
+        if (m_versionUpdater->hasUpdateCapability()) {
+            bnVersionUpdate->setVisible(true);
+//            bnVersionUpdate->setEnabled(true);
+        } else {
+            // build URL for label
+            QString downloadLink = QString(" <a style=\"color: %1; text-decoration: underline\" href=\"%2?%3\">Download Krita %4</a>")
+                    .arg(blendedColor.name())
+                    .arg(m_updaterStatus.downloadLink())
+                    .arg(analyticsString + "version-update")
+                    .arg(m_updaterStatus.availableVersion());
+
+            versionLabelText.append(downloadLink);
+        }
+
+    } else if (
+               (m_updaterStatus.status() == UpdaterStatus::StatusID::UPTODATE)
+               || (m_updaterStatus.status() == UpdaterStatus::StatusID::CHECK_ERROR)
+               || (m_updaterStatus.status() == UpdaterStatus::StatusID::IN_PROGRESS)
+               ){
+        // no notifications, if uptodate
+        // also, stay silent on check error - we do not want to generate lots of user support issues
+        // because of failing wifis and proxies over the world
+        updaterFrame->setVisible(false);
+
+    } else if (m_updaterStatus.status() == UpdaterStatus::StatusID::UPDATE_ERROR) {
+        updaterFrame->setVisible(true);
+        versionLabelText = i18n("An error occurred during the update");
+        versionNotificationLabel->setVisible(true);
+        bnErrorDetails->setVisible(true);
+        updateIcon->setIcon(KisIconUtils::loadIcon("warning"));
+
+//        bnErrorDetails->setEnabled(true);
+
+    } else if (m_updaterStatus.status() == UpdaterStatus::StatusID::RESTART_REQUIRED) {
+        updaterFrame->setVisible(true);
+        versionLabelText = QString("<b>%1</b> %2").arg(i18n("Restart is required.")).arg(m_updaterStatus.details());
+        versionNotificationLabel->setVisible(true);
+        updateIcon->setIcon(KisIconUtils::loadIcon("view-refresh"));
+    }
+
+    versionNotificationLabel->setText(versionLabelText);
+    if (!blendedStyle.isNull()) {
+        versionNotificationLabel->setStyleSheet(blendedStyle);
+    }
+}
+#endif

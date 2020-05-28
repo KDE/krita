@@ -40,7 +40,7 @@ KisMemoryWindow::KisMemoryWindow(const QString &swapDir, quint64 writeWindowSize
         m_valid = d.mkpath(swapDir);
     }
 
-    const QString swapFileTemplate = swapDir + QDir::separator() + SWP_PREFIX;
+    const QString swapFileTemplate = swapDir + '/' + SWP_PREFIX;
 
     if (m_valid) {
         m_file.setFileTemplate(swapFileTemplate);

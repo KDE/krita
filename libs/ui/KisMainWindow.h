@@ -37,11 +37,9 @@
 class QCloseEvent;
 class QMoveEvent;
 
-struct KoPageLayout;
 class KoCanvasResourceProvider;
 
 class KisDocument;
-class KisPrintJob;
 class KoDockFactoryBase;
 class QDockWidget;
 class KisView;
@@ -293,9 +291,6 @@ public Q_SLOTS:
 
     void slotShowSessionManager();
 
-    // XXX: disabled
-    KisPrintJob* exportToPdf(QString pdfFileName = QString());
-
     /**
      * Update the option widgets to the argument ones, removing the currently set widgets.
      */
@@ -348,16 +343,9 @@ private Q_SLOTS:
     void slotDocumentTitleModified();
 
     /**
-     *  Prints the actual document.
-     */
-    void slotFilePrint();
-
-    /**
      *  Saves the current document with a new name.
      */
     void slotFileSaveAs();
-
-    void slotFilePrintPreview();
 
     void importAnimation();
 
@@ -401,11 +389,6 @@ private Q_SLOTS:
      *  Shows or hides a toolbar
      */
     void slotToolbarToggled(bool toggle);
-
-    /**
-     * Reload file
-     */
-    void slotReloadFile();
 
 
     /**
@@ -494,13 +477,10 @@ private:
      * Updates the window caption based on the document info and path.
      */
     void updateCaption(const QString & caption, bool modified);
-    void updateReloadFileAction(KisDocument *doc);
 
     void saveWindowSettings();
 
     QPointer<KisView> activeKisView();
-
-    void applyDefaultSettings(QPrinter &printer);
 
     void createActions();
 

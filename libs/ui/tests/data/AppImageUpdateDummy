@@ -1,0 +1,57 @@
+#!/usr/bin/env python3
+
+import sys
+import os
+import argparse
+import os.path
+
+EXIT_RUNTIME_ERROR = 255
+EXIT_OK = 0
+EXIT_ERROR = 1
+
+EXIT_CHECK_UPTODATE = 0
+EXIT_CHECK_ERROR = 2
+EXIT_CHECK_UPDATE_AVAIL = 1
+
+EXIT_INVALID_USAGE = 100
+
+# files that govern the output of this dummy
+states = {
+  "check_uptodate": EXIT_CHECK_UPTODATE,
+  "check_update_avail": EXIT_CHECK_UPDATE_AVAIL,
+  "check_error": EXIT_CHECK_ERROR,
+  "check_updinfo_empty": EXIT_RUNTIME_ERROR,
+  "update_ok": EXIT_OK,
+  "update_error": EXIT_ERROR,
+  "runtime_error": EXIT_RUNTIME_ERROR
+}
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--check-for-update', dest='check_for_update', action='store_true',
+                    help='only check if updates are available')
+parser.add_argument('appimage_path', metavar='APPIMAGE_PATH', type=str, help='path to the appimage')
+
+args = parser.parse_args()
+
+
+if "APPIMAGEUPDATE_DUMMY_STATE" not in os.environ.keys():
+    sys.exit(EXIT_INVALID_USAGE)
+
+state_string = str(os.environ["APPIMAGEUPDATE_DUMMY_STATE"])
+
+# if we want to test the update, return update available for --check-for-update
+if (args.check_for_update):
+    if state_string in [ 'update_ok', 'update_error', 'runtime_error' ]:
+        sys.exit(EXIT_CHECK_UPDATE_AVAIL)
+
+# else lookup the state in the dict
+if (state_string in states.keys()):
+    state = states[state_string]
+
+    if state_string in ['update_error', 'runtime_error']:
+        print("DUMMY: an error occured")
+
+    sys.exit(states[state_string])
+
+else:
+    sys.exit(EXIT_INVALID_USAGE)

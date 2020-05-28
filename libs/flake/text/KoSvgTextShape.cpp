@@ -34,7 +34,6 @@
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 #include <KoShapeLoadingContext.h>
-#include <KoOdfLoadingContext.h>
 #include <KoIcon.h>
 #include <KoProperties.h>
 #include <KoColorBackground.h>
@@ -601,7 +600,7 @@ KoShape *KoSvgTextShapeFactory::createDefaultShape(KoDocumentResourceManager *do
     shape->setShapeId(KoSvgTextShape_SHAPEID);
 
     KoSvgTextShapeMarkupConverter converter(shape);
-    converter.convertFromSvg("<text>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</text>",
+    converter.convertFromSvg(i18nc("Default text for the text shape", "<text>Placeholder Text</text>"),
                              "<defs/>",
                              QRectF(0, 0, 200, 60),
                              documentResources->documentResolution());

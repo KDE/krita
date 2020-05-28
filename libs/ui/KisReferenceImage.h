@@ -78,9 +78,6 @@ public:
 
     void paint(QPainter &gc, KoShapePaintingContext &paintcontext) const override;
 
-    bool loadOdf(const KoXmlElement &/*element*/, KoShapeLoadingContext &/*context*/) override { return false; }
-    void saveOdf(KoShapeSavingContext &/*context*/) const override {}
-
     QColor getPixel(QPointF position);
 
     void saveXml(QDomDocument &document, QDomElement &parentElement, int id);

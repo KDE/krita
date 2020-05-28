@@ -50,13 +50,15 @@
 #include "KoUnit.h"
 #include "kis_display_color_converter.h"
 
+#include <kis_signals_blocker.h>
+
 KisDlgStrokeSelection::KisDlgStrokeSelection(KisImageWSP image, KisViewManager *view, bool isVectorLayer)
     : KoDialog(view->mainWindow())
 {
     m_resourceManager = view->mainWindow()->resourceManager();
     KisPropertiesConfigurationSP cfg = KisConfig(true).exportConfiguration("StrokeSelection");
 
-    converter = view->canvasBase()->displayColorConverter();
+    m_converter = view->canvasBase()->displayColorConverter();
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
     setCaption(i18nc("@title:window", "Stroke Selection Properties"));
@@ -70,19 +72,19 @@ KisDlgStrokeSelection::KisDlgStrokeSelection(KisImageWSP image, KisViewManager *
 
     StrokeSelectionOptions &m_options = m_page->m_options;
     m_options.color = cfg->getColor("color");
-    m_options.lineColorSource = cfg->getInt("lineColorSource");
-    m_page->lineColorBox->setCurrentIndex(m_options.lineColorSource);
+    m_options.colorLineSource = static_cast<ColorLineSource>(cfg->getInt("lineColorSource"));
+    m_page->lineColorBox->setCurrentIndex(static_cast<int>(m_options.colorLineSource));
 
     m_page->colorSelector->setColor(getSelectedColor().toQColor());
 
     m_options.brushSelected = cfg->getBool("useBrush", 0);
     m_page->typeBox->setCurrentIndex(m_options.brushSelected? 0 : 1);
 
-    m_options._colorFillSource = cfg->getInt("colorFillSource", 0);
-    m_page->fillBox->setCurrentIndex(m_options._colorFillSource);
+    m_options.colorFillSource = static_cast<ColorFillSource>(cfg->getInt("colorFillSource", 0));
+    m_page->fillBox->setCurrentIndex(static_cast<int>(m_options.colorFillSource));
     m_options.customColor = cfg->getColor("customColor");
 
-    if (m_options._colorFillSource == static_cast<int>(colorFillSource::CustomColor)) {
+    if (m_options.colorFillSource == ColorFillSource::CustomColor) {
         m_page->colorFillSelector->setColor(m_options.customColor.toQColor());
     }
     else {
@@ -110,26 +112,24 @@ KisDlgStrokeSelection::~KisDlgStrokeSelection()
     m_options.lineSize = m_page->lineSize->value();
 
     m_options.lineDimension = m_page->sizeBox->currentIndex();
-    m_options.lineColorSource = m_page->lineColorBox->currentIndex();
+    m_options.colorLineSource = static_cast<ColorLineSource>(m_page->lineColorBox->currentIndex());
 
     KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
     cfg->setProperty("lineSize", m_options.lineSize);
-    cfg->setProperty("colorFillSource", m_options._colorFillSource);
+    cfg->setProperty("colorFillSource", static_cast<int>(m_options.colorFillSource));
     cfg->setProperty("useBrush", m_options.brushSelected);
     cfg->setProperty("lineDimension", m_options.lineDimension);
-    cfg->setProperty("lineColorSource", m_options.lineColorSource);
+    cfg->setProperty("lineColorSource", static_cast<int>(m_options.colorLineSource));
 
-    QVariant colorVariant("KoColor");
+    QVariant colorVariant;
     colorVariant.setValue(m_options.customColor);
     cfg->setProperty("customColor", colorVariant);
 
-    QVariant  _colorVariant("KoColor");
-    _colorVariant.setValue(m_options.color);
-    cfg->setProperty("color", _colorVariant);
+    colorVariant.setValue(m_options.color);
+    cfg->setProperty("color", colorVariant);
 
-    QVariant _cVariant("KoColor");
-    _cVariant.setValue(m_options.fillColor);
-    cfg->setProperty("fillColor", _cVariant);
+    colorVariant.setValue(m_options.fillColor);
+    cfg->setProperty("fillColor", colorVariant);
 
     KisConfig(false).setExportConfiguration("StrokeSelection", cfg);
 
@@ -140,52 +140,39 @@ KoColor KisDlgStrokeSelection::getSelectedColor() const
 {
     KoColor color;
 
-    QString currentSource = m_page->lineColorBox->currentText();
-
-    if (currentSource == "Foreground color") {
-        color = m_resourceManager->resource(KoCanvasResourceProvider::ForegroundColor).value<KoColor>();
+    ColorLineSource currentSource = static_cast<ColorLineSource>(m_page->lineColorBox->currentIndex());
+    switch(currentSource) {
+    case ColorLineSource::FGColor:
+        return m_resourceManager->resource(KoCanvasResourceProvider::ForegroundColor).value<KoColor>();
+    case ColorLineSource::BGColor:
+        return m_resourceManager->resource(KoCanvasResourceProvider::BackgroundColor).value<KoColor>();
+    default:
+        return m_page->m_options.color;
     }
-    else  if (currentSource == "Background color") {
-        color = m_resourceManager->resource(KoCanvasResourceProvider::BackgroundColor).value<KoColor>();
-    }
-    else  {
-        color = m_page->m_options.color;
-    }
-
-    return color;
 }
 
 KoColor KisDlgStrokeSelection::getFillSelectedColor() const
 {
     KoColor color;
 
-    colorFillSource currentSource = static_cast<colorFillSource>(m_page->fillBox->currentIndex());
-
-    if (currentSource == colorFillSource::FGColor) {
-        color = m_resourceManager->resource(KoCanvasResourceProvider::ForegroundColor).value<KoColor>();
-    }
-    else  if (currentSource == colorFillSource::BGColor) {
-        color = m_resourceManager->resource(KoCanvasResourceProvider::BackgroundColor).value<KoColor>();
-    }
-    else  if (currentSource == colorFillSource::PaintColor) {
-        color = converter->approximateFromRenderedQColor(m_page->colorSelector->color());
-    }
-    else  {
-        color = m_page->m_options.customColor;
+    ColorFillSource currentSource = static_cast<ColorFillSource>(m_page->fillBox->currentIndex());
+    switch (currentSource) {
+    case ColorFillSource::FGColor:
+        return m_resourceManager->resource(KoCanvasResourceProvider::ForegroundColor).value<KoColor>();
+    case ColorFillSource::BGColor:
+        return m_resourceManager->resource(KoCanvasResourceProvider::BackgroundColor).value<KoColor>();
+    case ColorFillSource::PaintColor:
+        return m_converter->approximateFromRenderedQColor(m_page->colorSelector->color());
+    default:
+        return m_page->m_options.customColor;
     }
 
-    return color;
 }
 
 
 bool KisDlgStrokeSelection::isBrushSelected() const
 {
-    if (static_cast<drawType>(m_page->typeBox->currentIndex()) == drawType::brushDraw){
-        return true;
-    }
-    else {
-        return false;
-    }
+    return (static_cast<DrawType>(m_page->typeBox->currentIndex()) == DrawType::CurrentBrush);
 }
 
 StrokeSelectionOptions KisDlgStrokeSelection::getParams() const
@@ -193,14 +180,17 @@ StrokeSelectionOptions KisDlgStrokeSelection::getParams() const
     StrokeSelectionOptions params;
 
     params.lineSize = getLineSize();
-    params.color = getSelectedColor();
     params.brushSelected = isBrushSelected();
+    params.colorFillSource = m_page->m_options.colorFillSource;
+    params.colorLineSource = m_page->m_options.colorLineSource;
+    params.lineDimension = m_page->m_options.lineDimension;
+    params.color = getSelectedColor();
     params.fillColor = getFillSelectedColor();
-    params._colorFillSource = m_page->m_options._colorFillSource;
+    params.customColor = m_page->m_options.customColor;
+
     return params;
 
 }
-
 
 void KisDlgStrokeSelection::setColorFillButton()
 {
@@ -212,15 +202,14 @@ void KisDlgStrokeSelection::setColorButton()
     m_page->colorSelector->setColor(getSelectedColor().toQColor());
 }
 
-
 int KisDlgStrokeSelection::getLineSize() const
 {
     int value = m_page->lineSize->value();
 
-    if (m_page->sizeBox->currentText() == i18n("px")) {
+    if (m_page->sizeBox->currentIndex() == 0) {
         return value;
     }
-    else if (m_page->sizeBox->currentText() == i18n("mm")) {
+    else if (m_page->sizeBox->currentIndex() == 1) {
         int pixels =  static_cast<int>(KoUnit::convertFromUnitToUnit(value,KoUnit(KoUnit::Millimeter), KoUnit(KoUnit::Pixel)));
         return pixels;
     }
@@ -230,7 +219,7 @@ int KisDlgStrokeSelection::getLineSize() const
     }
 }
 
-linePosition KisDlgStrokeSelection::getLinePosition() const
+LinePosition KisDlgStrokeSelection::getLinePosition() const
 {/* TODO
    int index = m_page->linePosition->currentIndex();
    switch(index)
@@ -244,36 +233,54 @@ linePosition KisDlgStrokeSelection::getLinePosition() const
    default:
        return linePosition::CENTER;
    }*/
-    return linePosition::CENTER;
+    return LinePosition::Center;
 }
 
 void KisDlgStrokeSelection::colorChanged(const QColor &newColor)
 {
-    if (m_page->fillBox->currentText() == "Paint color") {
+    KisSignalsBlocker blocker(m_page->fillBox, m_page->lineColorBox);
+
+    if (m_page->fillBox->currentIndex() == static_cast<int>(ColorFillSource::PaintColor)) {
         m_page->colorFillSelector->setColor(newColor);
     }
-    QColor BGColor = m_resourceManager->resource(KoCanvasResourceProvider::BackgroundColor).value<KoColor>().toQColor();
-    QColor FGColor = m_resourceManager->resource(KoCanvasResourceProvider::ForegroundColor).value<KoColor>().toQColor();
-    KoColor tempColor= converter->approximateFromRenderedQColor(newColor);
 
+    KoColor FGColor = m_resourceManager->resource(KoCanvasResourceProvider::ForegroundColor).value<KoColor>();
+    KoColor BGColor = m_resourceManager->resource(KoCanvasResourceProvider::BackgroundColor).value<KoColor>();
+    KoColor tempColor = m_converter->approximateFromRenderedQColor(newColor);
 
-    if (!(newColor == BGColor) && !(newColor == FGColor)) {
-        m_page->m_options.color = tempColor;
-        m_page->lineColorBox->setCurrentIndex(2);  //custom color
+    if (tempColor.toQColor() == FGColor.toQColor()) {
+        m_page->lineColorBox->setCurrentIndex(static_cast<int>(ColorLineSource::FGColor));
     }
+    else if (tempColor.toQColor() == BGColor.toQColor()) {
+        m_page->lineColorBox->setCurrentIndex(static_cast<int>(ColorLineSource::BGColor));
+    }
+    else {
+        m_page->lineColorBox->setCurrentIndex((int)ColorLineSource::CustomColor);
+    }
+    m_page->m_options.color = tempColor;
 }
 
 void KisDlgStrokeSelection::colorFillChanged(const QColor &newColor)
 {
-    QColor PaintColor = m_page->colorSelector->color();
-    QColor BGcolor = m_resourceManager->resource(KoCanvasResourceProvider::BackgroundColor).value<KoColor>().toQColor();
-    QColor FGColor = m_resourceManager->resource(KoCanvasResourceProvider::ForegroundColor).value<KoColor>().toQColor();
-    KoColor tempColor= converter->approximateFromRenderedQColor(newColor);
+    KisSignalsBlocker blocker(m_page->fillBox);
 
-    if (!(newColor == FGColor) && !(newColor == BGcolor) && !(newColor == PaintColor)) {
-        m_page->m_options.customColor = tempColor;
-        m_page->fillBox->setCurrentIndex(static_cast<int>(colorFillSource::CustomColor));
+    KoColor PaintColor = m_converter->approximateFromRenderedQColor(m_page->colorSelector->color());
+    KoColor FGColor = m_resourceManager->resource(KoCanvasResourceProvider::ForegroundColor).value<KoColor>();
+    KoColor BGColor = m_resourceManager->resource(KoCanvasResourceProvider::BackgroundColor).value<KoColor>();
+    KoColor tempColor= m_converter->approximateFromRenderedQColor(newColor);
+
+    if (tempColor.toQColor() == FGColor.toQColor()) {
+        m_page->fillBox->setCurrentIndex(static_cast<int>(ColorFillSource::FGColor));
+
     }
+    else if (tempColor.toQColor() == BGColor.toQColor()) {
+        m_page->fillBox->setCurrentIndex(static_cast<int>(ColorFillSource::BGColor));
+    }
+    else if (PaintColor.toQColor() != tempColor.toQColor() ) {
+        m_page->fillBox->setCurrentIndex((int)ColorFillSource::CustomColor);
+        m_page->m_options.customColor = tempColor;
+    }
+
     m_page->m_options.fillColor = tempColor;
 }
 
@@ -287,7 +294,7 @@ WdgStrokeSelection::WdgStrokeSelection(QWidget *parent) : QWidget(parent)
 void WdgStrokeSelection::enableControls()
 {
     m_options.fillColor = m_cfg->getColor("fillColor");
-    if (m_options._colorFillSource == static_cast<int>(colorFillSource::None)) {
+    if (m_options.colorFillSource == ColorFillSource::None) {
         colorFillSelector->setEnabled(false);
     }
     else {
@@ -307,14 +314,14 @@ void WdgStrokeSelection::enableControls()
 
 void WdgStrokeSelection::on_fillBox_currentIndexChanged(int index)
 {
-    if (index == static_cast<int>(colorFillSource::None)) {
+    if (index == static_cast<int>(ColorFillSource::None)) {
         colorFillSelector->setDisabled(true);
     }
     else {
         colorFillSelector->setDisabled(false);
         emit colorFillSelectorChanged();
     }
-    m_options._colorFillSource = index;
+    m_options.colorFillSource = static_cast<ColorFillSource>(index);
 }
 
 void WdgStrokeSelection::on_typeBox_currentIndexChanged(int arg1)
@@ -341,12 +348,7 @@ void WdgStrokeSelection::on_lineColorBox_currentIndexChanged(int/*arg1*/)
 }
 
 
-StrokeSelectionOptions ::StrokeSelectionOptions():
-    lineSize(1),
-    brushSelected(false),
-    _colorFillSource(0),
-    lineColorSource(0),
-    lineDimension(0)
+StrokeSelectionOptions ::StrokeSelectionOptions()
 {
     color.fromQColor(Qt::black);
     fillColor.fromQColor(Qt::black);
@@ -357,23 +359,23 @@ KisToolShapeUtils::FillStyle StrokeSelectionOptions::fillStyle() const
 {
     using namespace KisToolShapeUtils;
 
-    colorFillSource tempColor = static_cast<colorFillSource>(_colorFillSource);
+    ColorFillSource tempColor = static_cast<ColorFillSource>(colorFillSource);
     FillStyle style = FillStyleNone;
 
     switch (tempColor) {
-    case colorFillSource::PaintColor:
+    case ColorFillSource::PaintColor:
         style = FillStyleForegroundColor;
         break;
-    case colorFillSource::BGColor:
+    case ColorFillSource::BGColor:
         style = FillStyleBackgroundColor;
         break;
-    case colorFillSource::CustomColor:
+    case ColorFillSource::CustomColor:
         style = FillStyleBackgroundColor;
         break;
-    case colorFillSource::None:
+    case ColorFillSource::None:
         style = FillStyleNone;
         break;
-    case colorFillSource::FGColor:
+    case ColorFillSource::FGColor:
         style = FillStyleBackgroundColor;
         break;
     }

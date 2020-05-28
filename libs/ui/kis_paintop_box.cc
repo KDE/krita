@@ -462,10 +462,6 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     connect(m_sliderChooser[2]->getWidget<KisDoubleSliderSpinBox>("flow")   , SIGNAL(valueChanged(qreal)), SLOT(slotSlider3Changed()));
     connect(m_sliderChooser[2]->getWidget<KisDoubleSliderSpinBox>("size")   , SIGNAL(valueChanged(qreal)), SLOT(slotSlider3Changed()));
 
-    //Needed to connect canvas to favorite resource manager
-    connect(m_viewManager->canvasResourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), SLOT(slotUnsetEraseMode()));
-
-
     connect(m_resourceProvider, SIGNAL(sigFGColorUsed(KoColor)), m_favoriteResourceManager, SLOT(slotAddRecentColor(KoColor)));
 
     connect(m_resourceProvider, SIGNAL(sigFGColorChanged(KoColor)), m_favoriteResourceManager, SLOT(slotChangeFGColorSelector(KoColor)));
@@ -481,6 +477,8 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     connect(view->mainWindow(), SIGNAL(themeChanged()), this, SLOT(slotUpdateSelectionIcon()));
     connect(m_resourceProvider->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
             this, SLOT(slotCanvasResourceChanged(int,QVariant)));
+    connect(m_resourceProvider->resourceManager(), SIGNAL(canvasResourceChangeAttempted(int,QVariant)),
+            this, SLOT(slotCanvasResourceChangeAttempted(int,QVariant)));
 
     slotInputDeviceChanged(KoToolManager::instance()->currentInputDevice());
 
@@ -829,6 +827,15 @@ void KisPaintopBox::slotCreatePresetFromScratch(QString paintop)
     m_presetsPopup->resourceSelected(preset);  // this helps update the UI on the brush editor
 }
 
+void KisPaintopBox::slotCanvasResourceChangeAttempted(int key, const QVariant &value)
+{
+    Q_UNUSED(value);
+
+    if (key == KoCanvasResourceProvider::ForegroundColor) {
+        slotUnsetEraseMode();
+    }
+}
+
 void KisPaintopBox::slotCanvasResourceChanged(int key, const QVariant &value)
 {
     if (m_viewManager) {
@@ -840,12 +847,13 @@ void KisPaintopBox::slotCanvasResourceChanged(int key, const QVariant &value)
             resourceSelected(preset);
         }
 
-        /**
-         * Update currently selected preset in both the popup widgets
-         */
-        m_presetsChooserPopup->canvasResourceChanged(preset);
-
-        m_presetsPopup->currentPresetChanged(preset);
+        if (key == KisCanvasResourceProvider::CurrentPaintOpPreset) {
+            /**
+             * Update currently selected preset in both the popup widgets
+             */
+            m_presetsChooserPopup->canvasResourceChanged(preset);
+            m_presetsPopup->currentPresetChanged(preset);
+        }
 
         if (key == KisCanvasResourceProvider::CurrentCompositeOp) {
             if (m_resourceProvider->currentCompositeOp() != m_currCompositeOpID) {

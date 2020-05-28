@@ -1,0 +1,33 @@
+diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
+index 1d2b70ab5f..d55f546eab 100644
+--- a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
++++ b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
+@@ -486,7 +486,7 @@ public class QtNative
+             break;
+         }
+ 
+-        if (event.getToolType(0) == MotionEvent.TOOL_TYPE_MOUSE) {
++        if (event.getSource() == InputDevice.SOURCE_MOUSE) {
+             sendMouseEvent(event, id);
+         } else if (m_tabletEventSupported && pointerType != 0) {
+             tabletEvent(id, event.getDeviceId(), event.getEventTime(), event.getAction(), pointerType,
+@@ -528,6 +528,9 @@ public class QtNative
+ 
+     static public boolean sendGenericMotionEvent(MotionEvent event, int id)
+     {
++        if (event.isFromSource(InputDevice.SOURCE_TOUCHPAD)) {
++            return sendMouseEvent(event, id);
++        }
+         if (((event.getAction() & (MotionEvent.ACTION_SCROLL | MotionEvent.ACTION_HOVER_MOVE)) == 0)
+                 || (event.getSource() & InputDevice.SOURCE_CLASS_POINTER) != InputDevice.SOURCE_CLASS_POINTER) {
+             return false;
+@@ -550,7 +553,8 @@ public class QtNative
+                 break;
+             case MotionEvent.ACTION_HOVER_MOVE:
+             case MotionEvent.ACTION_MOVE:
+-                if (event.getToolType(0) == MotionEvent.TOOL_TYPE_MOUSE) {
++                if (event.isFromSource(InputDevice.SOURCE_MOUSE) || 
++                    event.isFromSource(InputDevice.SOURCE_TOUCHPAD)) {
+                     mouseMove(id, (int) event.getX(), (int) event.getY());
+                 } else {
+                     int dx = (int) (event.getX() - m_oldx);

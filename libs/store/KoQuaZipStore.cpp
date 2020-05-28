@@ -90,7 +90,7 @@ void KoQuaZipStore::setCompressionEnabled(bool enabled)
 {
 
     if (enabled) {
-        dd->compressionLevel = Z_BEST_COMPRESSION;
+        dd->compressionLevel = Z_DEFAULT_COMPRESSION;
     }
     else {
         dd->compressionLevel = Z_NO_COMPRESSION;

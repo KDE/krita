@@ -22,7 +22,11 @@
 #include <QKeyEvent>
 #include "kis_debug.h"
 
+#ifdef Q_OS_MACOS
 
+#include "kis_extended_modifiers_mapper_osx.h"
+
+#endif /* Q_OS_MACOS */
 
 #ifdef Q_OS_WIN
 
@@ -170,6 +174,20 @@ KisExtendedModifiersMapper::~KisExtendedModifiersMapper()
 {
 }
 
+#ifdef Q_OS_MACOS
+void KisExtendedModifiersMapper::setLocalMonitor(bool activate, KisShortcutMatcher *matcher)
+{
+    if (matcher) {
+        activateLocalMonitor(activate, *matcher);
+    }
+}
+
+void KisExtendedModifiersMapper::setGlobalMonitor(bool activate)
+{
+    activateGlobalMonitor(activate);
+}
+#endif
+
 KisExtendedModifiersMapper::ExtendedModifiers
 KisExtendedModifiersMapper::queryExtendedModifiers()
 {
@@ -187,6 +205,8 @@ KisExtendedModifiersMapper::queryExtendedModifiers()
 
     modifiers = queryPressedKeysWin();
 
+#elif defined Q_OS_MACOS
+    modifiers = queryPressedKeysMac();
 #else
 
     Qt::KeyboardModifiers standardModifiers = queryStandardModifiers();

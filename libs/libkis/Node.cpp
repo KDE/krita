@@ -628,6 +628,7 @@ void Node::scaleNode(QPointF origin, int width, int height, QString strategy)
                         qreal(width) / bounds.width(),
                         qreal(height) / bounds.height(),
                         actualStrategy, 0);
+    d->image->waitForDone();
 }
 
 void Node::rotateNode(double radians)
@@ -637,6 +638,7 @@ void Node::rotateNode(double radians)
     if (!d->node->parent()) return;
 
     d->image->rotateNode(d->node, radians, 0);
+    d->image->waitForDone();
 }
 
 void Node::cropNode(int x, int y, int w, int h)
@@ -647,6 +649,7 @@ void Node::cropNode(int x, int y, int w, int h)
 
     QRect rect = QRect(x, y, w, h);
     d->image->cropNode(d->node, rect);
+    d->image->waitForDone();
 }
 
 void Node::shearNode(double angleX, double angleY)
@@ -656,6 +659,7 @@ void Node::shearNode(double angleX, double angleY)
     if (!d->node->parent()) return;
 
     d->image->shearNode(d->node, angleX, angleY, 0);
+    d->image->waitForDone();
 }
 
 QImage Node::thumbnail(int w, int h)

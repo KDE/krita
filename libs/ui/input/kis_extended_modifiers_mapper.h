@@ -26,7 +26,7 @@
 #include <kritaui_export.h>
 
 class QKeyEvent;
-
+class KisShortcutMatcher;
 
 class KRITAUI_EXPORT KisExtendedModifiersMapper
 {
@@ -40,6 +40,11 @@ public:
     Qt::KeyboardModifiers queryStandardModifiers();
 
     static Qt::Key workaroundShiftAltMetaHell(const QKeyEvent *keyEvent);
+
+#ifdef Q_OS_MACOS
+    static void setLocalMonitor(bool activate, KisShortcutMatcher *matcher = 0);
+    static void setGlobalMonitor(bool activate);
+#endif
 
 private:
     struct Private;

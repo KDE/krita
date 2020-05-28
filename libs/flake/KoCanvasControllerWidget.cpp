@@ -572,6 +572,17 @@ bool KoCanvasControllerWidget::focusNextPrevChild(bool)
     return false;
 }
 
+bool KoCanvasControllerWidget::viewportEvent(QEvent *event) {
+    // Workaround: Don't let QAbstractScrollArea handle Gesture events. Because
+    // Qt's detection of touch point positions is a bit buggy, it is handled
+    // with custom algorithms in the KisInputManager. But we must also not let
+    // the corresponding event propagate to the parent QAbstractScrollArea.
+    if (event->type() == QEvent::Gesture) {
+        return false;
+    }
+    return QAbstractScrollArea::viewportEvent(event);
+}
+
 void KoCanvasControllerWidget::setMargin(int margin)
 {
     KoCanvasController::setMargin(margin);

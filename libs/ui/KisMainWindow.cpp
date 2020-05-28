@@ -563,6 +563,20 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     QWindow *window = this->windowHandle();
     connect(window, SIGNAL(screenChanged(QScreen *)), this, SLOT(windowScreenChanged(QScreen *)));
 
+#ifdef Q_OS_ANDROID
+    connect(d->fileManager, SIGNAL(sigFileSelected(QString)), this, SLOT(slotFileSelected(QString)));
+    connect(d->fileManager, SIGNAL(sigEmptyFilePath()), this, SLOT(slotEmptyFilePath()));
+
+    QScreen *s = QGuiApplication::primaryScreen();
+    s->setOrientationUpdateMask(Qt::LandscapeOrientation|Qt::InvertedLandscapeOrientation|Qt::PortraitOrientation|Qt::InvertedPortraitOrientation);
+    connect(s, SIGNAL(orientationChanged(Qt::ScreenOrientation)), this, SLOT(orientationChanged()));
+
+    // When Krita starts, Java side sends an event to set applicationState() to active. But, before
+    // the event could reach KisApplication's platform integration, it is cleared by KisOpenGLModeProber::probeFomat.
+    // So, we send it manually when MainWindow shows up.
+    QAndroidJniObject::callStaticMethod<void>("org/qtproject/qt5/android/QtNative", "setApplicationState", "(I)V", Qt::ApplicationActive);
+#endif
+
 }
 
 KisMainWindow::~KisMainWindow()
@@ -700,6 +714,15 @@ void KisMainWindow::showView(KisView *imageView, QMdiSubWindow *subwin)
 
         updateWindowMenu();
         updateCaption();
+
+#ifdef Q_OS_ANDROID
+        // HACK! When loading a new document, Krita wouldn't refresh the screen,
+        // even though it has been successfully created in background. So, When
+        // appliction is hidden and made active QPA Android force-requests a
+        // redraw call. So, this workaround fixes that.
+        QAndroidJniObject::callStaticMethod<void>("org/qtproject/qt5/android/QtNative", "setApplicationState", "(I)V", Qt::ApplicationHidden);
+        QAndroidJniObject::callStaticMethod<void>("org/qtproject/qt5/android/QtNative", "setApplicationState", "(I)V", Qt::ApplicationActive);
+#endif
     }
 }
 
@@ -1017,12 +1040,21 @@ bool KisMainWindow::openDocumentInternal(const QUrl &url, OpenFlags flags)
         setReadWrite(false);
     }
 
+    // Try to determine whether this was an unnamed autosave
     if (flags & RecoveryFile &&
             (   url.toLocalFile().startsWith(QDir::tempPath())
-             || url.toLocalFile().startsWith(QDir::homePath()))
-            ) {
-        newdoc->setUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation) + "/" + QFileInfo(url.toLocalFile()).fileName()));
-        newdoc->save(false, 0);
+                || url.toLocalFile().startsWith(QDir::homePath())
+                ) &&
+            (      QFileInfo(url.toLocalFile()).fileName().startsWith(".krita")
+                   || QFileInfo(url.toLocalFile()).fileName().startsWith("krita")
+                   )
+            )
+    {
+        QString path = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
+        if (!QFileInfo(path).exists()) {
+            path = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+        }
+        newdoc->setUrl(QUrl::fromLocalFile( path + "/" + newdoc->objectName() + ".kra"));
     }
 
     return true;
@@ -1602,8 +1634,6 @@ void KisMainWindow::slotFileOpen(bool isImporting)
     Q_UNUSED(isImporting)
 
     d->fileManager->openImportFile();
-    connect(d->fileManager, SIGNAL(sigFileSelected(QString)), this, SLOT(slotFileSelected(QString)));
-    connect(d->fileManager, SIGNAL(sigEmptyFilePath()), this, SLOT(slotEmptyFilePath()));
 #endif
 }
 
@@ -2817,6 +2847,42 @@ void KisMainWindow::slotXmlGuiMakingChanges(bool finished)
 {
     if (finished) {
         subWindowActivated();
+    }
+}
+
+void KisMainWindow::orientationChanged()
+{
+    QScreen *screen = QGuiApplication::primaryScreen();
+
+    for (QWindow* window: QGuiApplication::topLevelWindows()) {
+        if (window->geometry().topLeft() != QPoint(0, 0)) {
+            // We are using reversed values. Because geometry returned is not the updated one,
+            // but the previous one.
+            int screenHeight = screen->geometry().width();
+            int screenWidth = screen->geometry().height();
+
+            // scaling
+            int new_x = (window->position().x() * screenWidth) / screenHeight;
+            int new_y = (window->position().y() * screenHeight) / screenWidth;
+
+            // window width or height shouldn't change
+            int winWidth = window->geometry().width();
+            int winHeight = window->geometry().height();
+
+            // Try best to not let the window go beyond screen.
+            if (new_x > screenWidth - winWidth) {
+                new_x = screenWidth - winWidth;
+                if (new_x < 0)
+                    new_x = 0;
+            }
+            if (new_y > screenHeight - winHeight) {
+                new_y = screenHeight - winHeight;
+                if (new_y < 0)
+                    new_y = 0;
+            }
+
+            window->setPosition(QPoint(new_x, new_y));
+        }
     }
 }
 

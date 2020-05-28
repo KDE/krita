@@ -466,6 +466,7 @@ endif()
 if(APPLE)
     set(kritaui_LIB_SRCS
         ${kritaui_LIB_SRCS}
+        input/kis_extended_modifiers_mapper_osx.mm
         osx.mm
     )
 endif()

@@ -160,20 +160,49 @@ void KisRotateCanvasAction::inputEvent(QEvent* event)
             if (touchEvent->touchPoints().count() != 2)
                 break;
 
-            QPointF p0 = touchEvent->touchPoints().at(0).pos();
-            QPointF p1 = touchEvent->touchPoints().at(1).pos();
+            QTouchEvent::TouchPoint tp0 = touchEvent->touchPoints().at(0);
+            QTouchEvent::TouchPoint tp1 = touchEvent->touchPoints().at(1);
+
+            if (tp0.state() == Qt::TouchPointReleased ||
+                tp1.state() == Qt::TouchPointReleased)
+            {
+                // Workaround: on some devices, the coordinates of TouchPoints
+                // in state TouchPointReleased are not reliable, and can
+                // "jump" by a significant distance. So we just stop handling
+                // the rotation as soon as the user's finger leaves the tablet.
+                break;
+            }
+
+            QPointF p0 = tp0.pos();
+            QPointF p1 = tp1.pos();
+
+            if ((p0-p1).manhattanLength() < 10)
+            {
+                // The TouchPoints are too close together. Don't update the
+                // rotation as the angle will likely be off. This also deals
+                // with a glitch where a newly pressed TouchPoint incorrectly
+                // reports the existing TouchPoint's coordinates instead of its
+                // own.
+                break;
+            }
 
             // high school (y2 - y1) / (x2 - x1)
             QPointF slope = p1 - p0;
             qreal newAngle = atan2(slope.y(), slope.x());
-
-            if (!d->previousAngle)
-            {
-                d->previousAngle = newAngle;
-                return;
-            }
-
             qreal delta = (180 / M_PI) * (newAngle - d->previousAngle);
+
+            // Workaround: So, TouchPoint coordinates are not 100% reliable.
+            // Freshly pressed TouchPoints are sometimes not accurate for
+            // multiple events. So if the computed rotation angle is out of
+            // whack, we just ignore it: it probably means the previous
+            // position was off.
+            if (qAbs(delta) > 15) {
+                // TouchPoint coordinates tend to converge toward correct
+                // values, so assume the previous angle was off but this one is
+                // better and should be the new basis for the next event.
+                d->previousAngle = newAngle;
+                break;
+            }
 
             KisCanvas2 *canvas = inputManager()->canvas();
             KisCanvasController *controller = static_cast<KisCanvasController*>(canvas->canvasController());

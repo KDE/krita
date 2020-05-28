@@ -60,10 +60,23 @@ task copyLibs(type: Copy) {
     rename ('^krita(.*).so$', 'lib_krita$1.so')
 }
 
+/*
+ * androiddeployqt doesn't fully copy the directories. Hidden directories
+ * to be specific. That's why we copy manually and then delete the partial
+ * one it creates
+ */
 task copyAssets(type: Copy) {
     from "$installPrefix/share/"
     into 'assets/'
     include '**'
+}
+
+/*
+ * Remove "share" folder in assets. It is copied both manually and by
+ * androiddeployqt(reason in copyAssets task).
+ */
+task removeDuplicateAssets(type: Delete) {
+    delete "assets/share"
 }
 
 copyLibs.dependsOn configure
@@ -106,11 +119,20 @@ android {
     lintOptions {
         abortOnError false
     }
+
+    project.ext.versionCodes = ['armeabi-v7a': 1, 'arm64-v8a': 2, 'x86': 3, 'x86_64': 4]
+
+    def versionMajor    = 4
+    def versionMinor    = 9
+    def versionRelease  = 10
+
 	defaultConfig {
-        targetSdkVersion 26
+        targetSdkVersion 28
         minSdkVersion 21
+        versionCode project.ext.versionCodes[abi] * 100000 + versionMajor * 1000 + versionMinor * 100 + versionRelease
     }
 
     preBuild.dependsOn(copyLibs)
     preBuild.dependsOn(copyAssets)
+    preBuild.dependsOn(removeDuplicateAssets)
 }

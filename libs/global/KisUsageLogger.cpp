@@ -32,6 +32,8 @@
 #include <klocalizedstring.h>
 #include <KritaVersionWrapper.h>
 #include <QGuiApplication>
+#include <QStyle>
+#include <QStyleFactory>
 
 Q_GLOBAL_STATIC(KisUsageLogger, s_instance)
 
@@ -171,6 +173,10 @@ void KisUsageLogger::writeHeader()
     KritaAndQtVersion.append("-- -- -- -- -- -- -- --\n");
     s_instance->d->logFile.write(KritaAndQtVersion.toUtf8());
     s_instance->d->logFile.flush();
+    log(QString("Style: %1. Available styles: %2")
+        .arg(qApp->style()->objectName(),
+             QStyleFactory::keys().join(", ")));
+
 }
 
 QString KisUsageLogger::screenInformation()

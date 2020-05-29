@@ -314,7 +314,7 @@ void KisCanvas2::setCanvasWidget(KisAbstractCanvasWidget *widget)
     m_d->canvasWidget = widget;
 
     // Either tmp was null or we are being called by KisCanvas2 constructor that is called by KisView
-    // constructor, so the view manager still doesn't exists.
+    // constructor, so the view manager still doesn't exist.
     if(m_d->canvasWidget != 0 && viewManager() != 0)
         viewManager()->inputManager()->addTrackedCanvas(this);
 

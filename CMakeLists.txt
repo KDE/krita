@@ -584,6 +584,22 @@ endif()
 ############################
 ###########################
 
+##
+## Test for SeExpr
+##
+find_package(SeExpr2)
+set_package_properties(SeExpr2 PROPERTIES
+    URL "https://wdas.github.io/SeExpr/"
+    TYPE OPTIONAL
+    PURPOSE "Required by the SeExpr generator layer"
+)
+macro_bool_to_01(SeExpr2_FOUND HAVE_SEEXPR)
+set(LINK_SEEXPR_LIB)
+if(SeExpr2_FOUND)
+    include_directories(SYSTEM ${SeExpr2_INCLUDE_DIRS})
+    set(LINK_SEEXPR_LIB ${SeExpr2_LIBRARY_DIRS})
+endif()
+
 find_package(ZLIB)
 set_package_properties(ZLIB PROPERTIES
     DESCRIPTION "Compression library"

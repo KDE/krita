@@ -21,6 +21,7 @@
 
 #include <QStyledItemDelegate>
 
+class CommentModel;
 
 class CommentDelegate : public QStyledItemDelegate
 {
@@ -33,7 +34,7 @@ public:
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
     
 
-    //bool editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index) override;  //this won't be needed.
+    bool editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index);
 
     //editor functions.
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,

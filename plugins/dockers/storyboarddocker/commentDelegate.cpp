@@ -24,8 +24,10 @@
 #include <QPainter>
 #include <QApplication>
 #include <QSize>
+#include <QMouseEvent>
 
 #include <kis_icon.h>
+#include "commentModel.h"
 
 CommentDelegate::CommentDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
@@ -45,9 +47,8 @@ void CommentDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, con
 
         p->setFont(option.font);
 
-        //make it conditional depending on the state of the comment field
         {
-            QIcon icon = KisIconUtils::loadIcon("visible");
+            QIcon icon =index.model()->data(index, Qt::DecorationRole).value<QIcon>();
             QRect r = option.rect;
             r.setSize(QSize(22, 22));
             icon.paint(p, r);
@@ -77,6 +78,30 @@ QWidget *CommentDelegate::createEditor(QWidget *parent,
 {
     QLineEdit *editor = new QLineEdit(parent);
     return editor;
+}
+
+bool CommentDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)
+{
+    QStyleOptionViewItem newOption = option;
+
+    if ((event->type() == QEvent::MouseButtonPress || event->type() == QEvent::MouseButtonDblClick)
+        && (index.flags() & Qt::ItemIsEnabled))
+    {
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+
+        QRect visibilityRect = option.rect;
+        visibilityRect.setSize(QSize(22, 22));
+        const bool visibilityClicked = visibilityRect.isValid() &&
+            visibilityRect.contains(mouseEvent->pos());
+
+        const bool leftButton = mouseEvent->buttons() & Qt::LeftButton;
+
+        if (leftButton && visibilityClicked) {
+            model->setData(index, true, CommentModel::VisibilityRole);
+            return true;
+        }
+    }
+    return false;
 }
 
 //set the existing data in the editor

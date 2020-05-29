@@ -15,49 +15,49 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef STORYBOARD_MODEL
-#define STORYBOARD_MODEL
+#ifndef COMMENT_MODEL
+#define COMMENT_MODEL
 
 #include <QAbstractListModel>
-#include <QStringList>
+
+struct Comment 
+{
+    QString name; 
+    bool visibility;
+};
 
 /*
-    The main storyboard model. 
+    This model manages the comment data of StoryboardModel
 */
-class StoryboardModel : public QAbstractListModel
+class CommentModel : public QAbstractListModel
 {
 
     Q_OBJECT
 
 public:
-//if we don't need this constructor change it
-    StoryboardModel(QObject *parent = 0);
+
+    enum ItemDataRole
+    {
+        VisibilityRole = Qt::UserRole + 1,
+    };
+
+    CommentModel(QObject *parent = 0);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
     Qt::ItemFlags flags(const QModelIndex &index) const override;
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
-    bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role) override;
     
-    //for removing and inserting rows
     bool insertRows(int position, int rows, const QModelIndex &index = QModelIndex());
     bool removeRows(int position, int rows, const QModelIndex &index = QModelIndex());
 
-    //for removing and inserting column
-    bool insertColumns(int position, int Columns, const QModelIndex &index = QModelIndex());
-    bool removeColumns(int position, int Columns, const QModelIndex &index = QModelIndex());
-
-    //for drag and drop
     Qt::DropActions supportedDropActions() const override;
     Qt::DropActions supportedDragActions() const override;
 
 private:
-    struct Private;
-    const QScopedPointer<Private> m_d;
+    QVector<Comment> m_commentList;
 
 };
 

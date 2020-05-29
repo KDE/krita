@@ -18,7 +18,7 @@
 
 #include "storyboarddocker_dock.h"
 #include "commentDelegate.h"
-#include "storyboardModel.h"
+#include "commentModel.h"
 
 #include <QMenu>
 #include <QButtonGroup>
@@ -41,10 +41,10 @@ class CommentMenu: public QMenu
 {
     Q_OBJECT
 public:
-    CommentMenu(QWidget *parent, QStringList fieldList)
+    CommentMenu(QWidget *parent)
         : QMenu(parent)
         , m_menuUI(new Ui_WdgCommentMenu())
-        , model(new StoryboardModel(fieldList, this))
+        , model(new CommentModel(this))
         , delegate(new CommentDelegate(this))
     {
         QWidget* commentWidget = new QWidget(this);
@@ -62,7 +62,7 @@ public:
                                                     QAbstractItemView::DoubleClicked  );
 
         m_menuUI->btnAddField->setIcon(KisIconUtils::loadIcon("list-add"));
-        m_menuUI->btnDeleteField->setIcon(KisIconUtils::loadIcon("deletelayer"));
+        m_menuUI->btnDeleteField->setIcon(KisIconUtils::loadIcon("trash-empty"));
         m_menuUI->btnAddField->setIconSize(QSize(22, 22));
         m_menuUI->btnDeleteField->setIconSize(QSize(22, 22));
         connect(m_menuUI->btnAddField, SIGNAL(clicked()), this, SLOT(slotaddItem()));
@@ -91,7 +91,7 @@ private Q_SLOTS:
 
 private:
     QScopedPointer<Ui_WdgCommentMenu> m_menuUI;
-    StoryboardModel *model;
+    CommentModel *model;
     CommentDelegate *delegate;
 };
 
@@ -150,10 +150,7 @@ StoryboardDockerDock::StoryboardDockerDock( )
     connect(m_exportAsPdfAction, SIGNAL(triggered()), this, SLOT(slotExportAsPdf()));
     connect(m_exportAsSvgAction, SIGNAL(triggered()), this, SLOT(slotExportAsSvg()));
 
-
-    QStringList list;
-    list<<"cats"<<"dogs"<<"birds";
-    m_commentMenu = new CommentMenu(this, list);
+    m_commentMenu = new CommentMenu(this);
 
     m_ui->btnComment->setMenu(m_commentMenu);
     m_ui->btnComment->setPopupMode(QToolButton::MenuButtonPopup);

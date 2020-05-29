@@ -20,52 +20,133 @@
 
 #include <QDebug>
 
-StoryboardModel::StoryboardModel(const QStringList &strings, QObject *parent = 0)
-        : QAbstractListModel(parent), stringList(strings) {}
+#include <kis_icon.h>
+
+struct CommentHeader 
+{
+    QString name; 
+    bool visiblity;
+};
+
+struct StoryboardItem
+{
+    int startFrame;
+    QString name;
+    int duration;
+    QStringList comments;
+
+    StoryboardItem(int _startFrame = 0, QString _name = "", int _duration = 0)
+        : startFrame(_startFrame)
+        , name(_name)
+        , duration(std::max(0, _duration)
+};
+
+struct StoryboardModel::Private
+{
+    Private()
+        //initialize
+    {}
+
+    //KisImageWSP image;
+    
+    QVector<StoryboardItem> items;
+    QVector<CommentHeader> commentHeader;
+
+    //functions
+};
+
+StoryboardModel::StoryboardModel(const QStringList &strings, QObject *parent)
+        : QAbstractTableModel(parent)
+        , m_d(new Private()) 
+{
+    //initialize variables
+}
 
 int StoryboardModel::rowCount(const QModelIndex &parent) const
 {
-   return stringList.count();
+   return m_d->items.count();
+}
+
+int StoryboardModel::rowCount(const QModelIndex &parent) const
+{
+   return m_d->commentHeader.count() + 3;
 }
 
 QVariant StoryboardModel::data(const QModelIndex &index, int role) const
 {
-
-    //use Qt::DecorationRole to specify the icon
+    /*
     if(!index.isValid())
         return QVariant();
-    if(index.row() >= stringList.size())
+    if(index.row() >= m_d->item.size())
         return QVariant();
 
     if (role == Qt::DisplayRole || role == Qt::EditRole)
     {
-       return stringList.at(index.row());
+       return m_d->items.at(index.row());
+    }
+    */
+    return QVariant();
+    
+}
+
+QVariant KisMetaDataModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    if (orientation == Qt::Horizontal && 
+        (role == Qt::DisplayRole || role == Qt::EditRole || role == Qt::DecorationRole) 
+    {
+        if(section > 3) {
+            switch (role) {
+            case Qt::DecorationRole:
+                if (m_d->commentHeader[section-3].visibility){
+                    //return no-visible icon
+                }
+                else{
+                    //return visible icon
+                }
+            case (Qt::DisplayRole||Qt::EditRole):
+                return m_d->commentHeader[section-3].name;
+            }
+        }
     }
     return QVariant();
 }
 
 bool StoryboardModel::setData(const QModelIndex & index, const QVariant & value, int role)
 {
+    /*
     qDebug()<<"attempting data set"<<role;
 
     if (index.isValid() && (role == Qt::EditRole || role == Qt::DisplayRole))
     {
-        //save value from editor to member m_gridData
-        qDebug()<<"data set";
+        if( value.toInt)
         stringList.replace(index.row(), value.toString());
         emit dataChanged(index, index);
         return true;
     }
+    */
     return false;
+}
+
+bool KisMetaDataModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role)
+{
+    if (orientation == Qt::Horizontal && 
+        (role == Qt::DisplayRole || role == Qt::EditRole) 
+    {
+        if(section > 3) {
+            m_d->commentHeader.replace(section -3, (CommentHeader)value);
+            return true;
+        }
+    }
+    return false
 }
 
 Qt::ItemFlags StoryboardModel::flags(const QModelIndex & index) const
 {
     //qDebug()<<"flags requested";
     if(!index.isValid())
-        return Qt::ItemIsEnabled | Qt::ItemIsDropEnabled;
+        return Qt::ItemIsDropEnabled;
 
-    return Qt::ItemIsDragEnabled | Qt::ItemIsSelectable |
+    return Qt::ItemIsDragEnabled | Qt::ItemIsSelectable | Qt::ItemIsDropEnabled|
            Qt::ItemIsEditable | Qt::ItemIsEnabled ;
 }
 
@@ -75,6 +156,8 @@ bool StoryboardModel::insertRows(int position, int rows, const QModelIndex &pare
     beginInsertRows(QModelIndex(), position, position+rows-1);
 
     for (int row = 0; row < rows; ++row) {
+        StoryboardItem item()
+        
         stringList.insert(position, "");               //maybe set a default name like comment 1
     }
 
@@ -88,7 +171,7 @@ bool StoryboardModel::removeRows(int position, int rows, const QModelIndex &pare
     beginRemoveRows(QModelIndex(), position, position+rows-1);
 
     for (int row = 0; row < rows; ++row) {
-        stringList.removeAt(position);
+       stringList.removeAt(position);
     }
 
     endRemoveRows();

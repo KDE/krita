@@ -188,22 +188,6 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     chkUsageLogging->setChecked(kritarc.value("LogUsage", true).toBool());
 
 
-    m_widgetStylesCombobox->addItem(i18n("None")); // preferred widget style. None is default
-    QStringList availableWidgetStyles = QStyleFactory::keys();
-
-    QStringList::iterator it = availableWidgetStyles.begin();
-    while (it != availableWidgetStyles.end()) {
-        m_widgetStylesCombobox->addItem(*it);
-        ++it;
-    }
-
-    int foundIndex = m_widgetStylesCombobox->findText(cfg.themeColor()); // set the widget style value from the config
-    if(foundIndex) {
-        m_widgetStylesCombobox->setCurrentIndex(foundIndex);
-    }
-
-
-
     //
     // Tools tab
     //
@@ -1691,9 +1675,6 @@ bool KisDlgPreferences::editPreferences()
         cfg.writeEntry("backupfilesuffix", m_general->txtBackupFileSuffix->text());
         cfg.writeEntry("numberofbackupfiles", m_general->intNumBackupFiles->value());
 
-
-
-        cfg.setThemeColor(m_general->m_widgetStylesCombobox->currentText() ); // current widget style name
 
         cfg.setShowCanvasMessages(m_general->showCanvasMessages());
         cfg.setCompressKra(m_general->compressKra());

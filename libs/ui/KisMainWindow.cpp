@@ -397,7 +397,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
 
 
     // select the config value, or the current style if that does not exist
-    QString styleFromConfig = cfg.themeColor().toLower();
+    QString styleFromConfig = cfg.widgetStyle().toLower();
     QString styleToSelect = styleFromConfig == "" ? style()->objectName().toLower() : styleFromConfig;
 
     Q_FOREACH (auto key, d->actionMap.keys()) {
@@ -2054,11 +2054,11 @@ void KisMainWindow::forceDockTabFonts()
 void KisMainWindow::slotUpdateWidgetStyle()
 {
      KisConfig cfg(true);
-     QString themeFromConfig = cfg.themeColor();
+     QString themeFromConfig = cfg.widgetStyle();
 
      Q_FOREACH (auto key, d->actionMap.keys()) { // find checked style to save to config
          if(d->actionMap.value(key)->isChecked()) {
-            cfg.setThemeColor(key);
+            cfg.setWidgetStyle(key);
          }
      }
 

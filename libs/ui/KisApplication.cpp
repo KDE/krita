@@ -196,17 +196,15 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
 
         // if style is set from config, try to load that
         KisConfig cfg(true);
-        QString themeFromConfig = cfg.themeColor();
-        if(themeFromConfig != "") {
-            qApp->setStyle(themeFromConfig);
+        QString widgetStyleFromConfig = cfg.widgetStyle();
+        if(widgetStyleFromConfig != "") {
+            qApp->setStyle(widgetStyleFromConfig);
         }
 
     }
     else {
         qDebug() << "Style override disabled, using" << style()->objectName();
     }
-
-
 
 
 }

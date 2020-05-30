@@ -293,23 +293,13 @@
         </widget>
        </item>
        <item row="3" column="0">
-        <widget class="QLabel" name="preferredStyleLabel">
-         <property name="text">
-          <string>Preferred Widget Style:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QComboBox" name="m_widgetStylesCombobox"/>
-       </item>
-       <item row="4" column="0">
         <widget class="QLabel" name="lbl_window_general">
          <property name="text">
           <string>General:</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="1">
+       <item row="3" column="1">
         <widget class="QCheckBox" name="m_chkRubberBand">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -322,28 +312,28 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="1">
+       <item row="4" column="1">
         <widget class="QCheckBox" name="m_chkCanvasMessages">
          <property name="text">
           <string>Show on-canvas popup messages</string>
          </property>
         </widget>
        </item>
-       <item row="6" column="1">
+       <item row="5" column="1">
         <widget class="QCheckBox" name="m_chkHiDPI">
          <property name="text">
           <string>Enable Hi-DPI support</string>
          </property>
         </widget>
        </item>
-       <item row="7" column="1">
+       <item row="6" column="1">
         <widget class="QCheckBox" name="m_chkHiDPIFractionalScaling">
          <property name="text">
           <string>(Hi-DPI) Enable fractional scale factor</string>
          </property>
         </widget>
        </item>
-       <item row="8" column="0" colspan="2">
+       <item row="7" column="0" colspan="2">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>

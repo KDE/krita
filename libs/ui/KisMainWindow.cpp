@@ -406,8 +406,6 @@ KisMainWindow::KisMainWindow(QUuid uuid)
         }
     }
 
-
-    // TODO: make connection to trigger saving value
     connect(d->styleActions, SIGNAL(triggered(QAction*)),
             this, SLOT(slotUpdateWidgetStyle()));
 

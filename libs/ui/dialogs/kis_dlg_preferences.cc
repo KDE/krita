@@ -26,6 +26,7 @@
 
 #include <QBitmap>
 #include <QCheckBox>
+#include <QComboBox>
 #include <QCursor>
 #include <QDesktopWidget>
 #include <QFileDialog>
@@ -44,6 +45,7 @@
 #include <QStandardPaths>
 #include <QThread>
 #include <QToolButton>
+#include <QStyleFactory>
 
 #include <KisApplication.h>
 #include <KisDocument.h>
@@ -184,6 +186,22 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_chkHiDPIFractionalScaling->setVisible(false);
 #endif
     chkUsageLogging->setChecked(kritarc.value("LogUsage", true).toBool());
+
+
+    m_widgetStylesCombobox->addItem(i18n("None")); // preferred widget style. None is default
+    QStringList availableWidgetStyles = QStyleFactory::keys();
+
+    QStringList::iterator it = availableWidgetStyles.begin();
+    while (it != availableWidgetStyles.end()) {
+        m_widgetStylesCombobox->addItem(*it);
+        ++it;
+    }
+
+    int foundIndex = m_widgetStylesCombobox->findText(cfg.themeColor()); // set the widget style value from the config
+    if(foundIndex) {
+        m_widgetStylesCombobox->setCurrentIndex(foundIndex);
+    }
+
 
 
     //
@@ -1672,6 +1690,10 @@ bool KisDlgPreferences::editPreferences()
         cfg.writeEntry("backupfilelocation", m_general->cmbBackupFileLocation->currentIndex());
         cfg.writeEntry("backupfilesuffix", m_general->txtBackupFileSuffix->text());
         cfg.writeEntry("numberofbackupfiles", m_general->intNumBackupFiles->value());
+
+
+
+        cfg.setThemeColor(m_general->m_widgetStylesCombobox->currentText() ); // current widget style name
 
         cfg.setShowCanvasMessages(m_general->showCanvasMessages());
         cfg.setCompressKra(m_general->compressKra());

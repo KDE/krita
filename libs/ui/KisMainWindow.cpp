@@ -495,8 +495,8 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     KisPart::instance()->notifyMainWindowIsBeingCreated(this);
 
     // If we have customized the toolbars, load that first
-    setLocalXMLFile(KoResourcePaths::locateLocal("data", "krita4.xmlgui"));
-    setXMLFile(":/kxmlgui5/krita4.xmlgui");
+    setLocalXMLFile(KoResourcePaths::locateLocal("data", "krita5.xmlgui"));
+    setXMLFile(":/kxmlgui5/krita5.xmlgui");
 
     guiFactory()->addClient(this);
     connect(guiFactory(), SIGNAL(makingChanges(bool)), SLOT(slotXmlGuiMakingChanges(bool)));

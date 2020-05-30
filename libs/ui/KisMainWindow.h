@@ -337,6 +337,8 @@ private Q_SLOTS:
     void slotSaveCanceled(const QString &);
     void forceDockTabFonts();
 
+    void slotUpdateWidgetStyle();
+
     /**
      * @internal
      */

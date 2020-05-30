@@ -1608,6 +1608,16 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="style_menu">
+      <icon></icon>
+      <text>&amp;Styles</text>
+      <whatsThis></whatsThis>
+      <toolTip>Styles</toolTip>
+      <iconText>Styles</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="settings_active_author">
       <icon>im-user</icon>
       <text>Active Author Profile</text>

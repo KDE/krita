@@ -55,6 +55,7 @@ public:
     Qt::DropActions supportedDropActions() const override;
     Qt::DropActions supportedDragActions() const override;
 
+    int commentCount();
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

@@ -21,21 +21,105 @@
 #include <QTest>
 #include <QWidget>
 #include "storyboardModel.h"
-#include "modeltest.h"
+#include "commentModel.h"
 
-void StoryboardModelTest::testModel()
+void StoryboardModelTest::init()
 {
-    QStringList list;
-    list<<"cats"<<"dogs"<<"birds";
-    QCOMPARE(1,1);
+    m_commentModel = new CommentModel(0);
+    m_storyboardModel = new StoryboardModel(0);
 
+    QCOMPARE(m_storyboardModel->columnCount(), 1);
+    m_commentModel->insertRows(m_storyboardModel->rowCount(),1);
+    QCOMPARE(m_commentModel->rowCount(), 1);
+}
 
-    StoryboardModel *model = new StoryboardModel(list, this);
-    //new ModelTest(model, this);
-    auto tester = new QAbstractItemModelTester(model, 0);
+void StoryboardModelTest::cleanup()
+{
+    delete m_storyboardModel;
+    delete m_commentModel;
+}
 
-    delete model;
+void StoryboardModelTest::testAddComment()
+{
+    int commentStoryboard = m_storyboardModel->commentCount();
+    int rowsComment = m_commentModel->rowCount();
 
+    QCOMPARE(commentStoryboard, rowsComment);
+
+    m_commentModel->insertRows(m_commentModel->rowCount(),1);
+    auto tester = new QAbstractItemModelTester(m_storyboardModel, 0);
+    auto tester = new QAbstractItemModelTester(m_commentModel, 0);
+
+    QCOMPARE(rowsComment + 1, m_commentModel->rowCount());
+
+    QCOMPARE(m_storyboardModel->commentCount(), m_commentModel->rowCount());
+}
+
+void StoryboardModelTest::testRemoveComment()
+{
+    int commentStoryboard = m_storyboardModel->commentCount();
+    int rowsComment = m_commentModel->rowCount();
+
+    QCOMPARE(commentStoryboard, rowsComment);
+
+    m_commentModel->removeRows(m_commentModel->rowCount(),1);
+
+    auto tester = new QAbstractItemModelTester(m_storyboardModel, 0);
+    auto tester = new QAbstractItemModelTester(m_commentModel, 0);
+
+    QCOMPARE(rowsComment - 1, m_commentModel->rowCount());
+    QCOMPARE(m_storyboardModel->commentCount(), m_commentModel->rowCount());
+}
+
+void StoryboardModelTest::testCommentNameChanged()
+{
+    QModelIndex index = m_commentModel->createIndex(m_commentModel->rowCount(),m_commentModel->columnCount());
+    QVariant value = QVariant(QString("newValue"));
+    m_commentModel->setData(index, value);
+    auto tester = new QAbstractItemModelTester(m_commentModel, 0);
+}
+
+void StoryboardModelTest::testCommentVisibilityChanged()
+{
+
+}
+
+void StoryboardModelTest::testFrameAdded()
+{
+    m_storyboardModel->insertRows(m_storyboardModel->rowCount(),1);
+    auto tester = new QAbstractItemModelTester(m_storyboardModel, 0);
+}
+
+void StoryboardModelTest::testFrameRemoved()
+{
+    m_storyboardModel->removeRows(m_storyboardModel->rowCount(),1);
+    auto tester = new QAbstractItemModelTester(m_storyboardModel, 0);
+}
+
+void StoryboardModelTest::testFrameChanged()
+{
+    QModelIndex index = m_commentModel->createIndex(m_storyboardModel->rowCount(),m_storyboardModel->columnCount());
+    QVariant value = QVariant(100);
+    m_stroyboardModel->setData(index, value, StoryboardModel::FrameRole);
+    auto tester = new QAbstractItemModelTester(m_storyboardModel, 0);
+    //should we have multiple custom roles to differentiate between what data is coming in??
+}
+
+void StoryboardModelTest::testDurationChanged()
+{
+    QModelIndex index = m_commentModel->createIndex(m_storyboardModel->rowCount(),m_storyboardModel->columnCount());
+    QVariant value = QVariant(100);
+    m_stroyboardModel->setData(index, value, StoryboardModel::DurationRole);
+    auto tester = new QAbstractItemModelTester(m_storyboardModel, 0);
+}
+
+void StoryboardModelTest::testCommentChanged()
+{
+    QModelIndex index = m_commentModel->createIndex(m_storyboardModel->rowCount(),m_storyboardModel->columnCount());
+    QVariant value = QVariant(100);
+    m_stroyboardModel->setData(index, value, StoryboardModel::CommentRole);
+    auto tester = new QAbstractItemModelTester(m_storyboardModel, 0);
+    //should we store different comments in different columns??
 }
 
 QTEST_MAIN(StoryboardModelTest)

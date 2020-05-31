@@ -21,12 +21,33 @@
 
 #include <QtTest>
 
+class CommentModel;
+class StoryboardModel;
+
 class StoryboardModelTest : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
-    //list of test functions
-    void testModel();
+    void init();
+    void cleanup();
+
+    //interaction with comment model
+    void testAddComment()
+    void testRemoveComment();
+    void testCommentNameChanged();
+    void testCommentVisibilityChanged();
+
+    //"storyboard model only" tests
+    void testFrameAdded();
+    void testFrameRemoved();
+    void testFrameChanged();
+    void testDurationChanged();
+    void testCommentChanged();
+
+private:
+    CommentModel *m_commentModel;
+    StoryboardModel *m_storyboardModel;
+
 };
 
 #endif /* __STORYBOARD_MODEL_TEST_H */

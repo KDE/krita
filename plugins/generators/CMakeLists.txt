@@ -1,3 +1,6 @@
 add_subdirectory(solid)
 add_subdirectory(pattern)
 add_subdirectory(simplexnoise)
+if(SeExpr2_FOUND)
+  add_subdirectory(seexpr)
+endif()

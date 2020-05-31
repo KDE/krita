@@ -2057,9 +2057,9 @@ void KisMainWindow::slotUpdateWidgetStyle()
      Q_FOREACH (auto key, d->actionMap.keys()) { // find checked style to save to config
          if(d->actionMap.value(key)->isChecked()) {
             cfg.setWidgetStyle(key);
+            qApp->setStyle(key);
          }
      }
-
 }
 
 QList<QDockWidget*> KisMainWindow::dockWidgets() const

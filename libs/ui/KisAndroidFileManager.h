@@ -20,6 +20,7 @@
 #ifndef KISANDROIDFILEMANAGER_H
 #define KISANDROIDFILEMANAGER_H
 
+#include <QUrl>
 #include <QtAndroid>
 #include <QtAndroidExtras/QAndroidActivityResultReceiver>
 
@@ -35,11 +36,13 @@ public:
     void openImportFile();
 
 Q_SIGNALS:
-    void sigFileSelected(QString path);
+    void sigFileSelected(QUrl path);
     void sigEmptyFilePath();
     void cancelled();
 
 private:
+    void takePersistableUriPermission(const QAndroidJniObject &uri);
+
     // Request codes
     const static int FILE_PICK_RC = 1;   /// to import a file
     const static int FILE_SAVE_RC = 2;   /// to save/export a file

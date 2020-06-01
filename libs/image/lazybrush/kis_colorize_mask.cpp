@@ -382,7 +382,7 @@ void KisColorizeMask::slotUpdateOnDirtyParent()
         // the update is performed for all the layers,
         // so the invisible areas around the canvas are included in the merged layer.
         // Colorize Mask gets the info that its parent is "dirty" (needs updating),
-        // but when it arrives, the parent doesn't exists anymore and is set to null.
+        // but when it arrives, the parent doesn't exist anymore and is set to null.
         // Colorize Mask doesn't work outside of the canvas anyway (at least in time of writing).
         return;
     }

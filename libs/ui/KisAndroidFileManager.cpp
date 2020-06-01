@@ -18,6 +18,7 @@
   */
 
 #include "KisAndroidFileManager.h"
+#include <QUrl>
 
 #include <kis_debug.h>
 
@@ -68,6 +69,25 @@ void KisAndroidFileManager::openImportFile()
     }
 }
 
+void KisAndroidFileManager::takePersistableUriPermission(const QAndroidJniObject& uri)
+{
+    int mode = QAndroidJniObject::getStaticField<jint>("android/content/Intent",
+                                                       "FLAG_GRANT_WRITE_URI_PERMISSION");
+
+    mode |= QAndroidJniObject::getStaticField<jint>("android/content/Intent",
+                                                    "FLAG_GRANT_READ_URI_PERMISSION");
+
+    QAndroidJniObject contentResolver = QtAndroid::androidActivity()
+            .callObjectMethod("getContentResolver",
+                              "()Landroid/content/ContentResolver;");
+
+    // This protects us SecurityException, which might be hard to figure out in future..
+    contentResolver.callMethod<void>("takePersistableUriPermission",
+                                     "(Landroid/net/Uri;I)V",
+                                     uri.object(),
+                                     mode);
+}
+
 void KisAndroidFileManager::ActivityResultReceiver::handleActivityResult(int requestCode, int resultCode, const QAndroidJniObject &data)
 {
     if (requestCode == FILE_PICK_RC)
@@ -85,12 +105,14 @@ void KisAndroidFileManager::ActivityResultReceiver::handleActivityResult(int req
                                                                   uri.object());
                 QString path = pathObject.toString();
                 dbgAndroid << path;
+                _manager->takePersistableUriPermission(uri);
+
                 if (path.isEmpty())
                 {
                     emit _manager->sigEmptyFilePath();
                     return;
                 }
-                emit _manager->sigFileSelected(path);
+                emit _manager->sigFileSelected(QUrl(path));
             }
             else
             {

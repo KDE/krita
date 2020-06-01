@@ -5,4 +5,6 @@ X-KDE-Library=batch_exporter
 X-Krita-Manual=Manual.html
 X-Python-2-Compatible=false
 Name=Batch Exporter
+Name[x-test]=xxBatch Exporterxx
 Comment=Smart export tool that uses layer names to scale and (re-)export art assets in batches fast
+Comment[x-test]=xxSmart export tool that uses layer names to scale and (re-)export art assets in batches fastxx

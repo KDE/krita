@@ -52,15 +52,14 @@ KisLayerFilterWidget::KisLayerFilterWidget(QWidget *parent) : QWidget(parent)
 
     KisNodeViewColorScheme colorScheme;
 
-    QWidget *buttonContainer = new QWidget(this);
+    QWidget* buttonContainer = new QWidget(this);
     buttonContainer->setToolTip(i18n("Filter by color label..."));
     buttonEventFilter = new EventFilter(buttonContainer);
     {
         QHBoxLayout *subLayout = new QHBoxLayout(buttonContainer);
         buttonContainer->setLayout(subLayout);
         subLayout->setContentsMargins(0,0,0,0);
-        //subLayout->setAlignment(Qt::AlignLeft);
-        ENTER_FUNCTION() << ppVar(subLayout->alignment());
+        subLayout->setAlignment(Qt::AlignLeft);
         buttonGroup = new KisColorLabelFilterGroup(buttonContainer);
         buttonGroup->setExclusive(false);
         QVector<QColor> colors = colorScheme.allColorLabels();
@@ -157,12 +156,11 @@ QSize KisLayerFilterWidget::sizeHint() const
 void KisLayerFilterWidget::showEvent(QShowEvent *show)
 {
     QMenu *parentMenu = dynamic_cast<QMenu*>(parentWidget());
-
-    if (parentMenu) {
+    QScreen *screen = QGuiApplication::screenAt(parentMenu->mapToGlobal(parentMenu->pos()));
+    if (parentMenu && screen) {
         const int widthBefore = parentMenu->width();
         const int rightEdgeThreshold = 5;
-        const bool onRightEdge = (parentMenu->pos().x() + parentMenu->width() + rightEdgeThreshold) > parentMenu->screen()->geometry().width();
-        ENTER_FUNCTION() << ppVar(onRightEdge);
+        const bool onRightEdge = (parentMenu->pos().x() + parentMenu->width() + rightEdgeThreshold) > screen->geometry().width();
         adjustSize();
         QResizeEvent event = QResizeEvent(size(), parentMenu->size());
 
@@ -172,10 +170,9 @@ void KisLayerFilterWidget::showEvent(QShowEvent *show)
 
         const int widthAfter = parentMenu->width();
 
-
         if (onRightEdge) {
             if (widthAfter > widthBefore) {
-                const QRect newGeo = kisEnsureInRect( parentMenu->geometry(), parentMenu->screen()->geometry() );
+                const QRect newGeo = kisEnsureInRect( parentMenu->geometry(), screen->geometry() );
                 const int xShift = newGeo.x() - parentMenu->pos().x();
                 parentMenu->move(parentMenu->pos().x() + xShift, parentMenu->pos().y() + 0);
             } else {
@@ -183,8 +180,6 @@ void KisLayerFilterWidget::showEvent(QShowEvent *show)
                 parentMenu->move(parentMenu->pos().x() + xShift, parentMenu->pos().y() + 0);
             }
         }
-
-        ENTER_FUNCTION() << ppVar(parentMenu->parent());
     }
     QWidget::showEvent(show);
 }

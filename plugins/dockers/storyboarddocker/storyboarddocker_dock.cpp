@@ -76,7 +76,7 @@ public:
 private Q_SLOTS:
     void slotaddItem()
     {
-        int row = model->rowCount();
+        int row = m_menuUI->fieldListView->currentIndex().row()+1;
         model->insertRows(row, 1);
 
         QModelIndex index = model->index(row);

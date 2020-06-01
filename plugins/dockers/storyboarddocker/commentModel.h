@@ -35,12 +35,6 @@ class CommentModel : public QAbstractListModel
     Q_OBJECT
 
 public:
-
-    enum ItemDataRole
-    {
-        VisibilityRole = Qt::UserRole + 1,
-    };
-
     CommentModel(QObject *parent = 0);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;

@@ -27,7 +27,6 @@
 #include <QMouseEvent>
 
 #include <kis_icon.h>
-#include "commentModel.h"
 
 CommentDelegate::CommentDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
@@ -97,7 +96,7 @@ bool CommentDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, cons
         const bool leftButton = mouseEvent->buttons() & Qt::LeftButton;
 
         if (leftButton && visibilityClicked) {
-            model->setData(index, true, CommentModel::VisibilityRole);
+            model->setData(index, true, Qt::DecorationRole);
             return true;
         }
     }

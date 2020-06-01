@@ -597,7 +597,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     connect(window, SIGNAL(screenChanged(QScreen *)), this, SLOT(windowScreenChanged(QScreen *)));
 
 #ifdef Q_OS_ANDROID
-    connect(d->fileManager, SIGNAL(sigFileSelected(QString)), this, SLOT(slotFileSelected(QString)));
+    connect(d->fileManager, SIGNAL(sigFileSelected(QUrl)), this, SLOT(slotFileSelected(QUrl)));
     connect(d->fileManager, SIGNAL(sigEmptyFilePath()), this, SLOT(slotEmptyFilePath()));
 
     QScreen *s = QGuiApplication::primaryScreen();
@@ -838,15 +838,9 @@ void KisMainWindow::setCanvasDetached(bool detach)
     }
 }
 
-void KisMainWindow::slotFileSelected(QString path)
+void KisMainWindow::slotFileSelected(QUrl url)
 {
-    QString url = path;
-    if (!url.isEmpty()) {
-        bool res = openDocument(QUrl::fromLocalFile(url), Import);
-        if (!res) {
-            warnKrita << "Loading" << url << "failed";
-        }
-    }
+    openDocumentInternal(url);
 }
 
 void KisMainWindow::slotEmptyFilePath()
@@ -1016,10 +1010,17 @@ bool KisMainWindow::openDocument(const QUrl &url, OpenFlags flags)
 
 bool KisMainWindow::openDocumentInternal(const QUrl &url, OpenFlags flags)
 {
+#ifndef Q_OS_ANDROID
     if (!url.isLocalFile()) {
         qWarning() << "KisMainWindow::openDocumentInternal. Not a local file:" << url;
         return false;
     }
+#else
+    if (!QFile(url.toString()).exists()) {
+        qWarning() << "KisMainWindow::openDocumentInternal. Could not open:" << url;
+        return false;
+    }
+#endif
 
     KisDocument *newdoc = KisPart::instance()->createDocument();
 
@@ -1045,10 +1046,6 @@ bool KisMainWindow::openDocumentInternal(const QUrl &url, OpenFlags flags)
     }
 
     KisPart::instance()->addDocument(newdoc);
-
-    if (!QFileInfo(url.toLocalFile()).isWritable()) {
-        setReadWrite(false);
-    }
 
     // Try to determine whether this was an unnamed autosave
     if (flags & RecoveryFile &&

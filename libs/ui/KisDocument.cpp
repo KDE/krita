@@ -646,6 +646,12 @@ bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPr
             backupDir = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
             break;
         default:
+#ifdef Q_OS_ANDROID
+            // We deal with URIs, there may or may not be a "directory"
+            backupDir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation).append("/krita-backup");
+            QDir().mkpath(backupDir);
+#endif
+
             // Do nothing: the empty string is user file location
             break;
         }
@@ -719,11 +725,11 @@ bool KisDocument::exportDocument(const QUrl &url, const QByteArray &mimeType, bo
                         .arg(d->image->animationInterface()->framerate())
                         .arg(exportConfiguration ? exportConfiguration->toXML() : "No configuration"));
 
-    return exportDocumentImpl(KritaUtils::ExportFileJob(url.toLocalFile(),
+
+    return exportDocumentImpl(KritaUtils::ExportFileJob(toPath(url),
                                                         mimeType,
                                                         flags),
                               exportConfiguration);
-
 }
 
 bool KisDocument::saveAs(const QUrl &_url, const QByteArray &mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)
@@ -742,7 +748,7 @@ bool KisDocument::saveAs(const QUrl &_url, const QByteArray &mimeType, bool show
                         .arg(url().toLocalFile()));
 
 
-    return exportDocumentImpl(ExportFileJob(_url.toLocalFile(),
+    return exportDocumentImpl(ExportFileJob(toPath(_url),
                                             mimeType,
                                             showWarnings ? SaveShowWarnings : SaveNone),
                               exportConfiguration);
@@ -1377,6 +1383,15 @@ QString KisDocument::generateAutoSaveFileName(const QString & path) const
 
     QFileInfo fi(path);
     QString dir = fi.absolutePath();
+
+#ifdef Q_OS_ANDROID
+    // URIs may or may not have a directory backing them, so we save to our default autosave location
+    if (path.startsWith("content://")) {
+        dir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation).append("/krita-backup");
+        QDir().mkpath(dir);
+    }
+#endif
+
     QString filename = fi.fileName();
 
     if (path.isEmpty() || autosavePattern1.match(filename).hasMatch() || autosavePattern2.match(filename).hasMatch() || !fi.isWritable()) {
@@ -1419,9 +1434,11 @@ bool KisDocument::importDocument(const QUrl &_url)
 
 bool KisDocument::openUrl(const QUrl &_url, OpenFlags flags)
 {
+#ifndef Q_OS_ANDROID
     if (!_url.isLocalFile()) {
         return false;
     }
+#endif
     dbgUI << "url=" << _url.url();
     d->lastErrorMessage.clear();
 
@@ -1479,8 +1496,7 @@ bool KisDocument::openUrl(const QUrl &_url, OpenFlags flags)
                 KisPart::instance()->addRecentURLToAllMainWindows(_url);
             }
 
-            // Detect readonly local-files; remote files are assumed to be writable
-            QFileInfo fi(url.toLocalFile());
+            QFileInfo fi(toPath(url));
             setReadWrite(fi.isWritable());
         }
 
@@ -1530,10 +1546,12 @@ public:
 bool KisDocument::openFile()
 {
     //dbgUI <<"for" << localFilePath();
+#ifndef Q_OS_ANDROID
     if (!QFile::exists(localFilePath()) && !fileBatchMode()) {
         QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("File %1 does not exist.", localFilePath()));
         return false;
     }
+#endif
 
     QString filename = localFilePath();
     QString typeName = mimeType();
@@ -1541,8 +1559,6 @@ bool KisDocument::openFile()
     if (typeName.isEmpty()) {
         typeName = KisMimeDatabase::mimeTypeForFile(filename);
     }
-
-    //qDebug() << "mimetypes 4:" << typeName;
 
     // Allow to open backup files, don't keep the mimetype application/x-trash.
     if (typeName == "application/x-trash") {
@@ -1617,6 +1633,15 @@ void KisDocument::autoSaveOnPause()
     {
         qWarning() << "Could not auto-save when paused";
     }
+}
+
+QString KisDocument::toPath(const QUrl &url) const
+{
+#ifdef Q_OS_ANDROID
+    return (url.toLocalFile().isEmpty()) ? url.toString() : url.toLocalFile();
+#else
+    return url.toLocalFile();
+#endif
 }
 
 // shared between openFile and koMainWindow's "create new empty document" code
@@ -2056,8 +2081,13 @@ bool KisDocument::openUrlInternal(const QUrl &url)
 
     d->m_file.clear();
 
+#ifndef Q_OS_ANDROID
     if (d->m_url.isLocalFile()) {
         d->m_file = d->m_url.toLocalFile();
+#else
+        d->m_file = toPath(d->m_url);
+#endif
+
         bool ret;
         // set the mimetype only if it was not already set (for example, by the host application)
         if (d->mimeType.isEmpty()) {
@@ -2077,8 +2107,10 @@ bool KisDocument::openUrlInternal(const QUrl &url)
             emit canceled(QString());
         }
         return ret;
+#ifndef Q_OS_ANDROID
     }
     return false;
+#endif
 }
 
 bool KisDocument::newImage(const QString& name,

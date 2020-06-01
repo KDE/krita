@@ -321,7 +321,12 @@ public Q_SLOTS:
      */
     void setCanvasDetached(bool detached);
 
-    void slotFileSelected(QString path);
+    /**
+     * @brief Called when a file is picked using Android's Storage Access Framework
+     * @param url
+     */
+    void slotFileSelected(QUrl url);
+
     void slotEmptyFilePath();
 
     /**

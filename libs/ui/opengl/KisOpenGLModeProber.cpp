@@ -330,4 +330,5 @@ KisOpenGLModeProber::Result::Result(QOpenGLContext &context) {
     m_supportsDeprecatedFunctions = (context.format().options() & QSurfaceFormat::DeprecatedFunctions);
     m_isOpenGLES = context.isOpenGLES();
     m_format = context.format();
+    m_supportsFBO = context.functions()->hasOpenGLFeature(QOpenGLFunctions::Framebuffers);
 }

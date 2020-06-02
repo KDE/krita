@@ -102,6 +102,15 @@ TimelineDockerTitleBar::TimelineDockerTitleBar(QWidget* parent) :
     btnDropFrames->setDisabled(true);
     widgetArea->addWidget(btnDropFrames);
 
+    sbSpeed = new KisSliderSpinBox(this);
+    sbSpeed->setRange(25, 200);
+    sbSpeed->setSingleStep(25);
+    sbSpeed->setValue(100);
+    sbSpeed->setPrefix("Speed: ");
+    sbSpeed->setSuffix(" %");
+    sbSpeed->setToolTip(i18n("Preview playback speed."));
+    widgetArea->addWidget(sbSpeed);
+
     widgetArea->addStretch();
 
     {   // Menus..
@@ -142,13 +151,6 @@ TimelineDockerTitleBar::TimelineDockerTitleBar(QWidget* parent) :
             sbFrameRate->setMinimum(0);
             sbFrameRate->setMaximum(180);
             fieldsLayout->addRow(i18n("Frame Rate: "), sbFrameRate);
-
-            sbSpeed = new KisDoubleSliderSpinBox(settingsMenuWidget);
-            sbSpeed->setRange(0.01f, 2.0f, 2);
-            sbSpeed->setSingleStep(0.25f);
-            sbSpeed->setFastSliderStep(0.25f);
-            sbSpeed->setValue(1.0f);
-            fieldsLayout->addRow(i18n("Play Speed: "), sbSpeed);
 
             QWidget *buttons = new QWidget(settingsMenuWidget);
             buttons->setLayout(new QVBoxLayout(settingsMenuWidget));
@@ -214,7 +216,7 @@ TimelineDocker::TimelineDocker()
     connect(m_d->titlebar->sbStartFrame, SIGNAL(valueChanged(int)), SLOT(setStartFrame(int)));
     connect(m_d->titlebar->sbEndFrame, SIGNAL(valueChanged(int)), SLOT(setEndFrame(int)));
     connect(m_d->titlebar->sbFrameRate, SIGNAL(valueChanged(int)), SLOT(setFrameRate(int)));
-    connect(m_d->titlebar->sbSpeed, SIGNAL(valueChanged(double)), SLOT(setPlaybackSpeed(double)));
+    connect(m_d->titlebar->sbSpeed, SIGNAL(valueChanged(int)), SLOT(setPlaybackSpeed(int)));
 
     connect(m_d->titlebar->btnOnionSkinsMenu, &QPushButton::released, [this](){
         if (m_d->mainWindow) {
@@ -294,7 +296,7 @@ void TimelineDocker::setCanvas(KoCanvasBase * canvas)
             m_d->titlebar->sbStartFrame->setValue(animinterface->fullClipRange().start());
             m_d->titlebar->sbEndFrame->setValue(animinterface->fullClipRange().end());
             m_d->titlebar->sbFrameRate->setValue(animinterface->framerate());
-            m_d->titlebar->sbSpeed->setValue(1.0f);
+            m_d->titlebar->sbSpeed->setValue(100);
             m_d->titlebar->frameCounter->setValue(animinterface->currentTime());
         }
 
@@ -490,11 +492,12 @@ void TimelineDocker::setFrameRate(int framerate)
     animInterface->setFramerate(framerate);
 }
 
-void TimelineDocker::setPlaybackSpeed(double playbackSpeed)
+void TimelineDocker::setPlaybackSpeed(int playbackSpeed)
 {
     if (!m_d->canvas || !m_d->canvas->image()) return;
 
-    m_d->canvas->animationPlayer()->slotUpdatePlaybackSpeed(playbackSpeed);
+    const float normalizedSpeed = playbackSpeed / 100.0;
+    m_d->canvas->animationPlayer()->slotUpdatePlaybackSpeed(normalizedSpeed);
 }
 
 void TimelineDocker::handleClipRangeChange()

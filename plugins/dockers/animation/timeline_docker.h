@@ -34,7 +34,7 @@ class QPushButton;
 class QToolButton;
 class KisTransportControls;
 class KisIntParseSpinBox;
-class KisDoubleSliderSpinBox;
+class KisSliderSpinBox;
 
 class KisCanvas2;
 class KisAction;
@@ -61,7 +61,7 @@ public:
     KisIntParseSpinBox *sbStartFrame;
     KisIntParseSpinBox *sbEndFrame;
     KisIntParseSpinBox *sbFrameRate;
-    KisDoubleSliderSpinBox *sbSpeed;
+    KisSliderSpinBox *sbSpeed;
     QToolButton *btnAutoFrame;
 
 private:
@@ -90,7 +90,7 @@ public Q_SLOTS:
     void setStartFrame(int frame);
     void setEndFrame(int frame);
     void setFrameRate(int frmaerate);
-    void setPlaybackSpeed(double playbackSpeed);
+    void setPlaybackSpeed(int playbackSpeed);
 
     void handleClipRangeChange();
     void handleFrameRateChange();

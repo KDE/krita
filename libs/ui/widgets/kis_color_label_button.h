@@ -29,11 +29,17 @@ class KRITAUI_EXPORT KisColorLabelButton : public QAbstractButton
 {
     Q_OBJECT
 public:
+    enum SelectionIndicationType {
+        FillIn,
+        Outline
+    };
+
     KisColorLabelButton(QColor color, uint sizeSquared = 32, QWidget *parent = nullptr);
     ~KisColorLabelButton();
 
     void paintEvent(QPaintEvent* event) override;
     QSize sizeHint() const override;
+    void setSelectionVisType( SelectionIndicationType type );
 
     virtual void nextCheckState() override;
 

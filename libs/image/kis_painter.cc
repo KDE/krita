@@ -463,6 +463,8 @@ inline bool KisPainter::Private::tryReduceSourceRect(const KisPaintDevice *srcDe
                                                      qint32 *dstX,
                                                      qint32 *dstY)
 {
+    bool needsReadjustParams = false;
+
     /**
      * In case of COMPOSITE_COPY and Wrap Around Mode even the pixels
      * outside the device extent matter, because they will be either
@@ -484,7 +486,21 @@ inline bool KisPainter::Private::tryReduceSourceRect(const KisPaintDevice *srcDe
         *srcRect &= srcDev->extent();
 
         if (srcRect->isEmpty()) return true;
+        needsReadjustParams = true;
+    }
 
+    if (selection) {
+        /**
+         * We should also crop the blitted area by the selected region,
+         * because we cannot paint outside the selection.
+         */
+        *srcRect &= selection->selectedRect();
+
+        if (srcRect->isEmpty()) return true;
+        needsReadjustParams = true;
+    }
+
+    if (needsReadjustParams) {
         // Readjust the function paramenters to the new dimensions.
         *dstX += srcRect->x() - *srcX;    // This will only add, not subtract
         *dstY += srcRect->y() - *srcY;    // Idem

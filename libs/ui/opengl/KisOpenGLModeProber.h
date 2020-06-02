@@ -110,6 +110,10 @@ public:
         return m_glMajorVersion >= 3;
     }
 
+    bool supportsFBO() const {
+        return m_supportsFBO;
+    }
+
 #ifdef Q_OS_WIN
     // This is only for detecting whether ANGLE is being used.
     // For detecting generic OpenGL ES please check isOpenGLES
@@ -138,6 +142,7 @@ private:
     int m_glMinorVersion = 0;
     bool m_supportsDeprecatedFunctions = false;
     bool m_isOpenGLES = false;
+    bool m_supportsFBO = false;
     QString m_rendererString;
     QString m_driverVersionString;
     QString m_vendorString;

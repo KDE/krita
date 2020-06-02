@@ -1785,6 +1785,17 @@ QImage KisPaintDevice::createThumbnail(qint32 w, qint32 h, qreal oversample, KoC
     return m_d->cache()->createThumbnail(size.width(), size.height(), oversample, renderingIntent, conversionFlags);
 }
 
+QImage KisPaintDevice::createThumbnail(qint32 maxw, qint32 maxh,
+                                       Qt::AspectRatioMode aspectRatioMode,
+                                       qreal oversample, KoColorConversionTransformation::Intent renderingIntent,
+                                       KoColorConversionTransformation::ConversionFlags conversionFlags)
+{
+    const QRect deviceExtent = extent();
+    const QSize thumbnailSize = deviceExtent.size().scaled(maxw, maxh, aspectRatioMode);
+    return createThumbnail(thumbnailSize.width(), thumbnailSize.height(),
+                           oversample, renderingIntent, conversionFlags);
+}
+
 KisHLineIteratorSP KisPaintDevice::createHLineIteratorNG(qint32 x, qint32 y, qint32 w)
 {
     m_d->cache()->invalidate();

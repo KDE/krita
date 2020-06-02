@@ -413,15 +413,16 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setRenderHint(QPainter::SmoothPixmapTransform);
 
+    QPointF edgePoint = QPointF(0.14645, 0.14645) * m_popupPaletteSize;
     // painting background color indicator
     QPainterPath bgColor;
-    bgColor.addEllipse(QPoint( 50, 80), 30, 30);
+    bgColor.addEllipse(edgePoint + QPointF(-6, 24), 30, 30);
     painter.fillPath(bgColor, m_displayRenderer->toQColor(m_resourceManager->bgColor()));
     painter.drawPath(bgColor);
 
     // painting foreground color indicator
     QPainterPath fgColor;
-    fgColor.addEllipse(QPoint( 60, 50), 30, 30);
+    fgColor.addEllipse(edgePoint + QPointF(4, -6), 30, 30);
     painter.fillPath(fgColor, m_displayRenderer->toQColor(m_colorSelector->getCurrentColor()));
     painter.drawPath(fgColor);
 

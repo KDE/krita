@@ -29,7 +29,7 @@ class KRITAUI_EXPORT KisColorLabelButton : public QAbstractButton
 {
     Q_OBJECT
 public:
-    KisColorLabelButton(QColor color, QWidget *parent = nullptr);
+    KisColorLabelButton(QColor color, uint sizeSquared = 32, QWidget *parent = nullptr);
     ~KisColorLabelButton();
 
     void paintEvent(QPaintEvent* event) override;
@@ -60,8 +60,8 @@ public:
     void reset();
 
 private:
-    void hideAll();
-
+    void disableAll();
+    void setAllVisibility(const bool vis);
     QSet<int> viableColorLabels;
 
 };

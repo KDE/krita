@@ -28,15 +28,29 @@
 
 struct KisColorLabelButton::Private
 {
-    QColor color;
+    const QColor m_color;
+    const uint m_sizeSquared;
+
+    Private(QColor color, uint sizeSquared)
+        : m_color(color)
+        , m_sizeSquared(sizeSquared)
+    {
+
+    }
+
+    Private(const Private& rhs)
+        : m_color(rhs.m_color)
+        , m_sizeSquared(rhs.m_sizeSquared)
+    {
+
+    }
 };
 
-KisColorLabelButton::KisColorLabelButton(QColor color, QWidget *parent) : QAbstractButton(parent), m_d(new Private())
+KisColorLabelButton::KisColorLabelButton(QColor color, uint sizeSquared, QWidget *parent) : QAbstractButton(parent), m_d(new Private(color, sizeSquared))
 {
     setCheckable(true);
     setChecked(true);
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    m_d->color = color;
 }
 
 KisColorLabelButton::~KisColorLabelButton() {}
@@ -55,18 +69,34 @@ void KisColorLabelButton::paintEvent(QPaintEvent *event)
 
     // Draw fill..
     QRect fillRect = kisGrowRect(rect(), -2);
-    fillRect.width();
-    if (m_d->color.alpha() > 0) {
-        QColor fillColor = m_d->color;
+    QRect outlineRect = kisGrowRect(fillRect, -1);
 
-        if (!isChecked()) {
+    if (!isEnabled()) {
+        fillRect -= QMargins(sizeHint().width() / 4, sizeHint().height() / 4, sizeHint().width() / 4, sizeHint().height() / 4);
+    } else {
+        fillRect = kisGrowRect(fillRect, -3);
+    }
+
+
+    fillRect.width();
+    if (m_d->m_color.alpha() > 0) {
+        QColor fillColor = m_d->m_color;
+
+        if (!isChecked() || !isEnabled()) {
             fillColor.setAlpha(32);
         }
 
-        painter.fillRect(fillRect, fillColor);
+        QBrush brush = QBrush(fillColor);
+        painter.fillRect(fillRect, brush);
+
+        if (isEnabled()) {
+            painter.setPen(QPen(m_d->m_color, 2));
+            painter.drawRect(outlineRect);
+        }
+
     } else {
         // draw an X for no color for the first item
-        const int shortestEdge = std::min(fillRect.width(), fillRect.height());
+        /*const int shortestEdge = std::min(fillRect.width(), fillRect.height());
         const int longestEdge = std::max(fillRect.width(), fillRect.height());
         bool horizontalIsShortest = (shortestEdge == fillRect.width());
         QRect srcRect = horizontalIsShortest ?
@@ -75,20 +105,46 @@ void KisColorLabelButton::paintEvent(QPaintEvent *event)
         QRect crossRect = kisGrowRect(srcRect, -1);
 
         QColor shade = styleOption.palette.text().color();
-
-        if (!isChecked()) {
+        if (!isChecked() || !isEnabled()) {
             shade.setAlpha(64);
         }
 
-        painter.setPen(QPen(shade, 2));
+        QPen pen = QPen(shade, 2);
+
+        painter.setPen(pen);
         painter.drawLine(crossRect.topLeft(), crossRect.bottomRight());
-        painter.drawLine(crossRect.bottomLeft(), crossRect.topRight());
+        painter.drawLine(crossRect.bottomLeft(), crossRect.topRight());*/
+
+        QColor white = QColor(255,255,255);
+        QColor grey = QColor(220,220,220);
+        QColor outlineColor = grey;
+
+
+        if (!isChecked() || !isEnabled()) {
+            white.setAlpha(32);
+            grey.setAlpha(32);
+        }
+
+        QBrush whiteBrush = QBrush(white);
+        QBrush greyBrush = QBrush(grey);
+
+        QRect upperLeftGrey = fillRect - QMargins(0, 0, fillRect.size().width() / 2, fillRect.size().height() /2);
+        QRect lowerRightGrey = fillRect - QMargins(fillRect.size().width() / 2, fillRect.size().height() / 2, 0, 0);
+        painter.fillRect(fillRect, whiteBrush);
+        painter.fillRect(upperLeftGrey, greyBrush);
+        painter.fillRect(lowerRightGrey, greyBrush);
+
+        if (isEnabled()) {
+            painter.setPen(QPen(outlineColor, 2));
+            painter.drawRect(outlineRect);
+        }
+
     }
 }
 
 QSize KisColorLabelButton::sizeHint() const
 {
-    return QSize(32,32);
+    return QSize(m_d->m_sizeSquared,m_d->m_sizeSquared);
 }
 
 void KisColorLabelButton::nextCheckState()
@@ -121,15 +177,17 @@ QList<QAbstractButton *> KisColorLabelFilterGroup::viableButtons() const {
 }
 
 void KisColorLabelFilterGroup::setViableLabels(QSet<int> &labels) {
-    hideAll();
+    setAllVisibility(false);
+    disableAll();
     QSet<int> removed = viableColorLabels.subtract(labels);
 
     viableColorLabels = labels;
 
     if (viableColorLabels.count() > 1) {
+        setAllVisibility(true);
         Q_FOREACH( int index, viableColorLabels) {
             if (button(index)) {
-                button(index)->setVisible(true);
+                button(index)->setEnabled(true);
             }
         }
     }
@@ -175,8 +233,15 @@ void KisColorLabelFilterGroup::reset() {
     }
 }
 
-void KisColorLabelFilterGroup::hideAll() {
+void KisColorLabelFilterGroup::disableAll() {
     Q_FOREACH( QAbstractButton* btn, buttons() ) {
-        btn->setVisible(false);
+        btn->setDisabled(true);
+    }
+}
+
+void KisColorLabelFilterGroup::setAllVisibility(const bool vis)
+{
+    Q_FOREACH( QAbstractButton* btn, buttons() ) {
+        btn->setVisible(vis);
     }
 }

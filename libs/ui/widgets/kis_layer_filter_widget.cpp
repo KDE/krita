@@ -65,9 +65,8 @@ KisLayerFilterWidget::KisLayerFilterWidget(QWidget *parent) : QWidget(parent)
         QVector<QColor> colors = colorScheme.allColorLabels();
 
         for (int id = 0; id < colors.count(); id++) {
-            KisColorLabelButton* btn = new KisColorLabelButton(colors[id], buttonContainer);
+            KisColorLabelButton* btn = new KisColorLabelButton(colors[id], 32, buttonContainer);
             buttonGroup->addButton(btn, id);
-            btn->setVisible(false);
             btn->installEventFilter(buttonEventFilter);
             subLayout->addWidget(btn);
         }

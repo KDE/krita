@@ -22,90 +22,96 @@
 
 #include <kis_icon.h>
 
-struct CommentHeader 
-{
-    QString name; 
-    bool visiblity;
-};
-
-struct StoryboardItem
-{
-    int startFrame;
-    QString name;
-    int duration;
-    QStringList comments;
-
-    StoryboardItem(int _startFrame = 0, QString _name = "", int _duration = 0)
-        : startFrame(_startFrame)
-        , name(_name)
-        , duration(std::max(0, _duration)
-};
-
-struct StoryboardModel::Private
-{
-    Private()
-        //initialize
-    {}
-
-    //KisImageWSP image;
-    
-    QVector<StoryboardItem> items;
-    QVector<CommentHeader> commentHeader;
-
-    //functions
-};
-
-StoryboardModel::StoryboardModel(const QStringList &strings, QObject *parent)
+StoryboardModel::StoryboardModel(QObject *parent)
         : QAbstractTableModel(parent)
-        , m_d(new Private()) 
+{}
+
+QModelIndex StoryboardModel::index(int row, int column, const QModelIndex &parent) const
 {
-    //initialize variables
+    if (!hasIndex(row, column, parent))
+        return QModelIndex();
+    if (row < 0 || row >= rowCount())
+        return QModelIndex();
+    if (column !=0)
+        return QModelIndex();
+    
+    //top level node has invalid parent
+    if (!parent.isValid)
+        return createIndex(row, column, m_items.at(row));
+    else
+        StoryboardItem *parentItem = static_cast<StoryboardItem*>(parent.internalPointer());
+
+    TreeItem *childItem = parentItem->child(row);
+    if (childItem)
+        return createIndex(row, column, childItem);
+    return QModelIndex();
+}
+
+QModelIndex StoryboardModel::parent(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return QModelIndex();
+
+    //return parent only for 2nd level nodes
+    StoryboardChild *childItem = dynamic_cast<StoryboardChild*>(index.internalPointer());
+    if(childItem){
+        StoryboardItem *parentItem = childItem->parent();
+        int indexOfParent = m_items.indexOf(const_cast<StoryboardItem*>(parentItem));
+        return createIndex(indexOfParent, 0, parentItem);
+    }
+    return QModelIndex();
 }
 
 int StoryboardModel::rowCount(const QModelIndex &parent) const
 {
-   return m_d->items.count();
+    if (!parent.isValid())
+        return m_items.count();
+    else if (dynamic_cast<StoryboardItem*>(parent.internalPointer())){
+        StoryboardItem parentItem = dynamic_cast<StoryboardItem*>(parent.internalPointer());
+        return parentItem->childCount();
+    }
+    return 0;   //2nd level nodes have no child
 }
 
-int StoryboardModel::rowCount(const QModelIndex &parent) const
+int StoryboardModel::columnCount(const QModelIndex &parent) const
 {
-   return m_d->commentHeader.count() + 3;
+   //2nd level nodes have no child
+   if (dynamic_cast<StoryboardChild*>(parent.internalPointer())){
+       return 0;
+   }
+   return 1;
 }
 
 QVariant StoryboardModel::data(const QModelIndex &index, int role) const
 {
-    /*
-    if(!index.isValid())
+
+    if (!index.isValid())
         return QVariant();
-    if(index.row() >= m_d->item.size())
+    if (index.row() >= m_items.size())
+        return QVariant();
+
+    //return data only for the storyboardChild i.e. 2nd level nodes
+    if (dynamic_cast<StoryboardItem*>(index.internalPointer()))
         return QVariant();
 
     if (role == Qt::DisplayRole || role == Qt::EditRole)
     {
-       return m_d->items.at(index.row());
-    }
-    */
-    return QVariant();
-    
-}
-
-QVariant KisMetaDataModel::headerData(int section, Qt::Orientation orientation, int role) const
-{
-    if (orientation == Qt::Horizontal && 
-        (role == Qt::DisplayRole || role == Qt::EditRole || role == Qt::DecorationRole) 
-    {
-        if(section > 3) {
-            switch (role) {
-            case Qt::DecorationRole:
-                if (m_d->commentHeader[section-3].visibility){
-                    //return no-visible icon
-                }
-                else{
-                    //return visible icon
-                }
-            case (Qt::DisplayRole||Qt::EditRole):
-                return m_d->commentHeader[section-3].name;
-            }
+        StoryboardChild *child = static_cast<StoryboardChild*>(index.internalPointer());
+        child->data().toS
+        if (child){
+            switch (index.row()):
+            case 0:
+                //frame number
+                return child->data().toInt();
+            case 1:
+                //item name
+                return child->data().toString();
+            case 2:
+                //duration
+                return child->data().toInt();
+            default:
+                //comment(would it be string or a custom struct)
+                return child->data().toInt();
         }
     }
     return QVariant();
@@ -113,31 +119,20 @@ QVariant KisMetaDataModel::headerData(int section, Qt::Orientation orientation, 
 
 bool StoryboardModel::setData(const QModelIndex & index, const QVariant & value, int role)
 {
-    /*
-    qDebug()<<"attempting data set"<<role;
+    //qDebug()<<"attempting data set"<<role;
+    if (dynamic_cast<StoryboardItem*>(index.internalPointer()))
+        return false;
 
     if (index.isValid() && (role == Qt::EditRole || role == Qt::DisplayRole))
     {
-        if( value.toInt)
-        stringList.replace(index.row(), value.toString());
-        emit dataChanged(index, index);
-        return true;
-    }
-    */
-    return false;
-}
-
-bool KisMetaDataModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role)
-{
-    if (orientation == Qt::Horizontal && 
-        (role == Qt::DisplayRole || role == Qt::EditRole) 
-    {
-        if(section > 3) {
-            m_d->commentHeader.replace(section -3, (CommentHeader)value);
+        StoryboardChild *child = static_cast<StoryboardChild*>(index.internalPointer());
+        if (child){
+            child->setData(value);
+            emit dataChanged(index, index);
             return true;
         }
     }
-    return false
+    return false;
 }
 
 Qt::ItemFlags StoryboardModel::flags(const QModelIndex & index) const
@@ -146,36 +141,73 @@ Qt::ItemFlags StoryboardModel::flags(const QModelIndex & index) const
     if(!index.isValid())
         return Qt::ItemIsDropEnabled;
 
-    return Qt::ItemIsDragEnabled | Qt::ItemIsSelectable | Qt::ItemIsDropEnabled|
-           Qt::ItemIsEditable | Qt::ItemIsEnabled ;
+    //1st level nodes
+    if (dynamic_cast<StoryboardItem*>(index.internalPointer()))
+        return Qt::ItemIsDragEnabled | Qt::ItemIsSelectable ;
+
+    //2nd level nodes
+    return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled;
 }
 
 bool StoryboardModel::insertRows(int position, int rows, const QModelIndex &parent)
 {
-    qDebug()<<"row inserted";
-    beginInsertRows(QModelIndex(), position, position+rows-1);
-
-    for (int row = 0; row < rows; ++row) {
-        StoryboardItem item()
-        
-        stringList.insert(position, "");               //maybe set a default name like comment 1
+    //we can't insert to 2nd level nodes as they are leaf nodes
+    if (dynamic_cast<StoryboardChild*>(parent.internalPointer())){
+       return false;
+    }
+    //insert 1st level nodes
+    if (!parent.isValid()){
+        beginInsertRows(QModelIndex(), position, position+rows-1);
+        for (int row = 0; row < rows; ++row) {
+            StoryboardItem newItem = new StoryboardItem();
+            m_items.insert(position, newItem);
+        }
+        endInsertRows();
+        return true;
     }
 
-    endInsertRows();
-    return true;
+    //insert 2nd level nodes
+    StoryboardItem *item = dynamic_cast<StoryboardItem*>(index.internalPointer());
+    if (item){
+        beginInsertRows(QModelIndex(), position, position+rows-1);
+        for (int row = 0; row < rows; ++row) {
+            item->insertChild(position, QVariant());
+        }
+        endInsertRows();
+        return true;
+    }
+    return false;
 }
 
 bool StoryboardModel::removeRows(int position, int rows, const QModelIndex &parent)
 {
     qDebug()<<"row removed";
-    beginRemoveRows(QModelIndex(), position, position+rows-1);
-
-    for (int row = 0; row < rows; ++row) {
-       stringList.removeAt(position);
+    //2nd level node has no child
+    if (dynamic_cast<StoryboardChild*>(parent.internalPointer())){
+       return false;
+    }
+    //remove 1st level nodes
+    if (!parent.isValid()){
+        beginRemoveRows(QModelIndex(), position, position+rows-1);
+        for (int row = 0; row < rows; ++row) {
+            delete m_items.at(row);
+            m_items.removeAt(position);
+        }
+        endRemoveRows();
+        return true;
     }
 
-    endRemoveRows();
-    return true;
+    //remove 2nd level nodes
+    StoryboardItem *item = dynamic_cast<StoryboardItem*>(index.internalPointer());
+    if (item){
+        beginRemoveRows(QModelIndex(), position, position+rows-1);
+        for (int row = 0; row < rows; ++row) {
+            item->removeChild(position);
+        }
+        endRemoveRows();
+        return true;
+    }
+    return false;
 }
 
 Qt::DropActions StoryboardModel::supportedDropActions() const

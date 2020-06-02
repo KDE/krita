@@ -663,6 +663,7 @@ void LayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &in
                 KisSignalsBlocker b(m_colorSelector);
                 m_colorSelector->setCurrentIndex(singleLayer ? activeNode->colorLabelIndex() : -1);
             }
+
             menu.addAction(m_colorSelectorAction);
 
             menu.addSeparator();

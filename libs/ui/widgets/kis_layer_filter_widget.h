@@ -29,29 +29,7 @@ class KRITAUI_EXPORT KisLayerFilterWidget : public QWidget
 {
     Q_OBJECT
 private:
-
-    class EventFilter : public QObject {
-    private:
-        QWidget* m_buttonContainer;
-
-        enum State{
-            Idle,
-            WaitingForDragLeave, //Waiting for mouse to exit first clicked while the mouse button is down.
-            WaitingForDragEnter //Waiting for mouse to slide across buttons within the same button group.
-        };
-
-        State currentState;
-        QPoint lastKnownMousePosition;
-
-    public:
-        EventFilter(QWidget *buttonContainer, QObject *parent = nullptr);
-
-    protected:
-        bool eventFilter(QObject *obj, QEvent *event);
-        void checkSlideOverNeighborButtons(QMouseEvent* mouseEvent, class QAbstractButton* startingButton);
-    };
-
-    EventFilter *buttonEventFilter;
+    class KisColorLabelMouseDragFilter *buttonEventFilter;
     class QLineEdit *textFilter;
     class KisColorLabelFilterGroup *buttonGroup;
     class QPushButton *resetButton;

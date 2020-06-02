@@ -21,6 +21,8 @@
 #include <QStylePainter>
 #include <QStyleOption>
 #include <QMimeData>
+#include <QMouseEvent>
+
 
 #include "kis_global.h"
 #include "kis_debug.h"
@@ -86,6 +88,8 @@ void KisColorLabelButton::paintEvent(QPaintEvent *event)
 
         if ((!isChecked() || !isEnabled()) && (m_d->selectionVis == FillIn)) {
             fillColor.setAlpha(32);
+        } else if ((!isChecked() || !isEnabled()) && (m_d->selectionVis == Outline)) {
+            fillColor.setAlpha(192);
         }
 
         QBrush brush = QBrush(fillColor);
@@ -126,6 +130,9 @@ void KisColorLabelButton::paintEvent(QPaintEvent *event)
         if ((!isChecked() || !isEnabled()) && (m_d->selectionVis == FillIn)) {
             white.setAlpha(32);
             grey.setAlpha(32);
+        } else if ((!isChecked() || !isEnabled()) && (m_d->selectionVis == Outline)) {
+            white.setAlpha(192);
+            grey = QColor(125,125,125,192);
         }
 
         QBrush whiteBrush = QBrush(white);
@@ -186,7 +193,7 @@ QList<QAbstractButton *> KisColorLabelFilterGroup::viableButtons() const {
     return viableButtons;
 }
 
-void KisColorLabelFilterGroup::setViableLabels(QSet<int> &labels) {
+void KisColorLabelFilterGroup::setViableLabels(const QSet<int> &labels) {
     setAllVisibility(false);
     disableAll();
     QSet<int> removed = viableColorLabels.subtract(labels);
@@ -205,6 +212,10 @@ void KisColorLabelFilterGroup::setViableLabels(QSet<int> &labels) {
     Q_FOREACH( int index, removed ) {
         button(index)->setChecked(true);
     }
+}
+
+void KisColorLabelFilterGroup::setViableLabels(const QList<int> &viableLabels) {
+    setViableLabels(QSet<int>::fromList(viableLabels));
 }
 
 QSet<int> KisColorLabelFilterGroup::getActiveLabels() const {
@@ -253,5 +264,109 @@ void KisColorLabelFilterGroup::setAllVisibility(const bool vis)
 {
     Q_FOREACH( QAbstractButton* btn, buttons() ) {
         btn->setVisible(vis);
+    }
+}
+
+KisColorLabelMouseDragFilter::KisColorLabelMouseDragFilter(QObject* parent) : QObject(parent)
+{
+    lastKnownMousePosition = QPoint(0,0);
+    currentState = Idle;
+}
+
+bool KisColorLabelMouseDragFilter::eventFilter(QObject *obj, QEvent *event)
+{
+    if (event->type() == QEvent::MouseButtonPress) {
+        QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
+
+        currentState = WaitingForDragLeave;
+        lastKnownMousePosition = mouseEvent->globalPos();
+
+        return true;
+
+    } else if (event->type() == QEvent::MouseButtonRelease) {
+        QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
+        QAbstractButton* startingButton = static_cast<QAbstractButton*>(obj);
+
+        //If we never left, toggle the original button.
+        if( currentState == WaitingForDragLeave ) {
+            if ( startingButton->group() && (mouseEvent->modifiers() & Qt::SHIFT)) {
+                KisColorLabelFilterGroup* const group = static_cast<KisColorLabelFilterGroup*>(startingButton->group());
+                const QList<QAbstractButton*> viableCheckedButtons = group->checkedViableButtons();
+
+                const int buttonsEnabled = viableCheckedButtons.count();
+                const bool shouldChangeIsolation = (buttonsEnabled == 1) && (viableCheckedButtons.first() == startingButton);
+                const bool shouldIsolate = (buttonsEnabled != 1) || !shouldChangeIsolation;
+
+                Q_FOREACH(QAbstractButton* otherBtn, group->viableButtons()) {
+                    if (otherBtn == startingButton){
+                        startingButton->setChecked(true);
+                    } else {
+                        otherBtn->setChecked(!shouldIsolate);
+                    }
+                }
+
+            } else {
+                startingButton->click();
+            }
+        }
+
+        currentState = Idle;
+        lastKnownMousePosition = mouseEvent->globalPos();
+
+        return true;
+
+    } else if (event->type() == QEvent::MouseMove) {
+
+        if (currentState == WaitingForDragLeave) {
+            QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
+            QWidget* firstClicked = static_cast<QWidget*>(obj);
+            const QPointF localPosition = mouseEvent->localPos();
+
+            if (!firstClicked->rect().contains(localPosition.x(), localPosition.y())) {
+                QAbstractButton* btn = static_cast<QAbstractButton*>(obj);
+                btn->click();
+
+                checkSlideOverNeighborButtons(mouseEvent, btn);
+
+                currentState = WaitingForDragEnter;
+            }
+
+            lastKnownMousePosition = mouseEvent->globalPos();
+
+            return true;
+
+        } else if (currentState == WaitingForDragEnter) {
+            QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
+            QAbstractButton* startingButton = static_cast<QAbstractButton*>(obj);
+            const QPoint currentPosition = mouseEvent->globalPos();
+
+            checkSlideOverNeighborButtons(mouseEvent, startingButton);
+
+            lastKnownMousePosition = currentPosition;
+
+            return true;
+        }
+
+    }
+
+    return false;
+}
+
+void KisColorLabelMouseDragFilter::checkSlideOverNeighborButtons(QMouseEvent* mouseEvent, QAbstractButton* startingButton)
+{
+    const QPoint currentPosition = mouseEvent->globalPos();
+
+    if (startingButton->group()) {
+        QList<QAbstractButton*> allButtons = startingButton->group()->buttons();
+
+        Q_FOREACH(QAbstractButton* button, allButtons) {
+            const QRect bounds = QRect(button->mapToGlobal(QPoint(0,0)), button->size());
+            const QPoint upperLeft = QPoint(qMin(lastKnownMousePosition.x(), currentPosition.x()), qMin(lastKnownMousePosition.y(), currentPosition.y()));
+            const QPoint lowerRight = QPoint(qMax(lastKnownMousePosition.x(), currentPosition.x()), qMax(lastKnownMousePosition.y(), currentPosition.y()));
+            const QRect mouseMovement = QRect(upperLeft, lowerRight);
+            if( bounds.intersects(mouseMovement) && !bounds.contains(lastKnownMousePosition)) {
+                button->click();
+            }
+        }
     }
 }

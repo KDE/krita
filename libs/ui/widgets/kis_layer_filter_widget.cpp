@@ -54,7 +54,7 @@ KisLayerFilterWidget::KisLayerFilterWidget(QWidget *parent) : QWidget(parent)
 
     QWidget *buttonContainer = new QWidget(this);
     buttonContainer->setToolTip(i18n("Filter by color label..."));
-    buttonEventFilter = new EventFilter(buttonContainer);
+    buttonEventFilter = new KisColorLabelMouseDragFilter(buttonContainer);
     {
         QHBoxLayout *subLayout = new QHBoxLayout(buttonContainer);
         buttonContainer->setLayout(subLayout);
@@ -191,109 +191,4 @@ void KisLayerFilterWidget::showEvent(QShowEvent *show)
         }
     }
     QWidget::showEvent(show);
-}
-
-KisLayerFilterWidget::EventFilter::EventFilter(QWidget *buttonContainer, QObject* parent) : QObject(parent)
-{
-    m_buttonContainer = buttonContainer;
-    lastKnownMousePosition = QPoint(0,0);
-    currentState = Idle;
-}
-
-bool KisLayerFilterWidget::EventFilter::eventFilter(QObject *obj, QEvent *event)
-{
-    if (event->type() == QEvent::MouseButtonPress) {
-        QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
-
-        currentState = WaitingForDragLeave;
-        lastKnownMousePosition = mouseEvent->globalPos();
-
-        return true;
-
-    } else if (event->type() == QEvent::MouseButtonRelease) {
-        QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
-        QAbstractButton* startingButton = static_cast<QAbstractButton*>(obj);
-
-        //If we never left, toggle the original button.
-        if( currentState == WaitingForDragLeave ) {
-            if ( startingButton->group() && (mouseEvent->modifiers() & Qt::SHIFT)) {
-                KisColorLabelFilterGroup* const group = static_cast<KisColorLabelFilterGroup*>(startingButton->group());
-                const QList<QAbstractButton*> viableCheckedButtons = group->checkedViableButtons();
-
-                const int buttonsEnabled = viableCheckedButtons.count();
-                const bool shouldChangeIsolation = (buttonsEnabled == 1) && (viableCheckedButtons.first() == startingButton);
-                const bool shouldIsolate = (buttonsEnabled != 1) || !shouldChangeIsolation;
-
-                Q_FOREACH(QAbstractButton* otherBtn, group->viableButtons()) {
-                    if (otherBtn == startingButton){
-                        startingButton->setChecked(true);
-                    } else {
-                        otherBtn->setChecked(!shouldIsolate);
-                    }
-                }
-
-            } else {
-                startingButton->click();
-            }
-        }
-
-        currentState = Idle;
-        lastKnownMousePosition = mouseEvent->globalPos();
-
-        return true;
-
-    } else if (event->type() == QEvent::MouseMove) {
-
-        if (currentState == WaitingForDragLeave) {
-            QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
-            QWidget* firstClicked = static_cast<QWidget*>(obj);
-            const QPointF localPosition = mouseEvent->localPos();
-
-            if (!firstClicked->rect().contains(localPosition.x(), localPosition.y())) {
-                QAbstractButton* btn = static_cast<QAbstractButton*>(obj);
-                btn->click();
-
-                checkSlideOverNeighborButtons(mouseEvent, btn);
-
-                currentState = WaitingForDragEnter;
-            }
-
-            lastKnownMousePosition = mouseEvent->globalPos();
-
-            return true;
-
-        } else if (currentState == WaitingForDragEnter) {
-            QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
-            QAbstractButton* startingButton = static_cast<QAbstractButton*>(obj);
-            const QPoint currentPosition = mouseEvent->globalPos();
-
-            checkSlideOverNeighborButtons(mouseEvent, startingButton);
-
-            lastKnownMousePosition = currentPosition;
-
-            return true;
-        }
-
-    }
-
-    return false;
-}
-
-void KisLayerFilterWidget::EventFilter::checkSlideOverNeighborButtons(QMouseEvent* mouseEvent, QAbstractButton* startingButton)
-{
-    const QPoint currentPosition = mouseEvent->globalPos();
-
-    if (startingButton->group()) {
-        QList<QAbstractButton*> allButtons = startingButton->group()->buttons();
-
-        Q_FOREACH(QAbstractButton* button, allButtons) {
-            const QRect bounds = QRect(button->mapToGlobal(QPoint(0,0)), button->size());
-            const QPoint upperLeft = QPoint(qMin(lastKnownMousePosition.x(), currentPosition.x()), qMin(lastKnownMousePosition.y(), currentPosition.y()));
-            const QPoint lowerRight = QPoint(qMax(lastKnownMousePosition.x(), currentPosition.x()), qMax(lastKnownMousePosition.y(), currentPosition.y()));
-            const QRect mouseMovement = QRect(upperLeft, lowerRight);
-            if( bounds.intersects(mouseMovement) && !bounds.contains(lastKnownMousePosition)) {
-                button->click();
-            }
-        }
-    }
 }

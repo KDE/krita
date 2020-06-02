@@ -56,20 +56,41 @@ public:
     ~KisColorLabelFilterGroup();
 
     QList<QAbstractButton*> viableButtons() const;
-    void setViableLabels(QSet<int> &buttons);
+    void setViableLabels(const QSet<int> &buttons);
+    void setViableLabels(const QList<int> &viableLabels);
     QSet<int> getActiveLabels() const;
 
     QList<QAbstractButton*> checkedViableButtons() const;
     int countCheckedViableButtons() const;
     int countViableButtons() const;
 
+public Q_SLOTS:
     void reset();
+    void setAllVisibility(const bool vis);
 
 private:
     void disableAll();
-    void setAllVisibility(const bool vis);
     QSet<int> viableColorLabels;
 
 };
+
+class KRITAUI_EXPORT KisColorLabelMouseDragFilter : public QObject {
+    enum State{
+        Idle,
+        WaitingForDragLeave, //Waiting for mouse to exit first clicked while the mouse button is down.
+        WaitingForDragEnter //Waiting for mouse to slide across buttons within the same button group.
+    };
+
+    State currentState;
+    QPoint lastKnownMousePosition;
+
+public:
+    KisColorLabelMouseDragFilter(QObject *parent = nullptr);
+
+protected:
+    bool eventFilter(QObject *obj, QEvent *event);
+    void checkSlideOverNeighborButtons(QMouseEvent* mouseEvent, class QAbstractButton* startingButton);
+};
+
 
 #endif // KISCOLORLABELBUTTON_H

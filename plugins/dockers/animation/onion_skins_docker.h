@@ -52,6 +52,8 @@ private:
     KisEqualizerWidget *m_equalizerWidget;
     KisAction *m_toggleOnionSkinsAction;
 
+    class KisColorLabelFilterGroup *m_filterButtonGroup;
+
 private:
     void loadSettings();
 

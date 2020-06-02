@@ -56,7 +56,8 @@ public:
     ~KisColorLabelFilterGroup();
 
     QList<QAbstractButton*> viableButtons() const;
-    void setViableLabels(QSet<int> &buttons);
+    void setViableLabels(const QSet<int> &buttons);
+    void setViableLabels(const QList<int> &viableLabels);
     QSet<int> getActiveLabels() const;
 
     QList<QAbstractButton*> checkedViableButtons() const;
@@ -64,10 +65,9 @@ public:
     int countViableButtons() const;
 
     void reset();
-
+    void setAllVisibility(const bool vis);
 private:
     void disableAll();
-    void setAllVisibility(const bool vis);
     QSet<int> viableColorLabels;
 
 };

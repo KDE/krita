@@ -186,7 +186,7 @@ QList<QAbstractButton *> KisColorLabelFilterGroup::viableButtons() const {
     return viableButtons;
 }
 
-void KisColorLabelFilterGroup::setViableLabels(QSet<int> &labels) {
+void KisColorLabelFilterGroup::setViableLabels(const QSet<int> &labels) {
     setAllVisibility(false);
     disableAll();
     QSet<int> removed = viableColorLabels.subtract(labels);
@@ -205,6 +205,10 @@ void KisColorLabelFilterGroup::setViableLabels(QSet<int> &labels) {
     Q_FOREACH( int index, removed ) {
         button(index)->setChecked(true);
     }
+}
+
+void KisColorLabelFilterGroup::setViableLabels(const QList<int> &viableLabels) {
+    setViableLabels(QSet<int>::fromList(viableLabels));
 }
 
 QSet<int> KisColorLabelFilterGroup::getActiveLabels() const {

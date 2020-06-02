@@ -190,9 +190,8 @@ void KisLayerFilterWidget::showEvent(QShowEvent *show)
     QWidget::showEvent(show);
 }
 
-KisLayerFilterWidget::EventFilter::EventFilter(QWidget *buttonContainer, QObject* parent) : QObject(parent)
+KisLayerFilterWidget::EventFilter::EventFilter(QObject* parent) : QObject(parent)
 {
-    m_buttonContainer = buttonContainer;
     lastKnownMousePosition = QPoint(0,0);
     currentState = Idle;
 }

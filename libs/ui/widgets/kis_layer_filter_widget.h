@@ -31,9 +31,6 @@ class KRITAUI_EXPORT KisLayerFilterWidget : public QWidget
 private:
 
     class EventFilter : public QObject {
-    private:
-        QWidget* m_buttonContainer;
-
         enum State{
             Idle,
             WaitingForDragLeave, //Waiting for mouse to exit first clicked while the mouse button is down.
@@ -44,7 +41,7 @@ private:
         QPoint lastKnownMousePosition;
 
     public:
-        EventFilter(QWidget *buttonContainer, QObject *parent = nullptr);
+        EventFilter(QObject *parent = nullptr);
 
     protected:
         bool eventFilter(QObject *obj, QEvent *event);

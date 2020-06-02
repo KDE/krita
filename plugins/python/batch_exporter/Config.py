@@ -4,7 +4,7 @@ from collections import OrderedDict
 
 CONFIG = {
     "outDir": "export",
-    "rootPat": r"^root",
+    "rootPat": "root",
     "sym": r"[^a-zA-Z0-9_-]",
     "error": {"msg": "ERROR: {}", "timeout": 8000},
     "done": {"msg": "DONE: {}", "timeout": 5000},

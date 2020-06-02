@@ -1,19 +1,27 @@
-import os
 import re
+from pathlib import Path
+
 from ..Config import CONFIG
 
 
 def exportPath(cfg, path, dirname=""):
-    return os.path.join(dirname, subRoot(cfg, path))
+    return dirname / subRoot(cfg, path)
 
 
 def subRoot(cfg, path):
     patF, patR = cfg["rootPat"], CONFIG["outDir"]
-    return re.sub(patF, patR, path, count=1)
+    original = Path(path)
+    rootless = (
+        original.relateive_to(patF)
+        if original.parents and original.parents[0] == patF
+        else original
+    )
+    return patR / rootless
+
+
+_sanitizer_re = re.compile(CONFIG["sym"])
 
 
 def sanitize(path):
-    ps = path.split(os.path.sep)
-    ps = map(lambda p: re.sub(CONFIG["sym"], "_", p), ps)
-    ps = os.path.sep.join(ps)
-    return ps
+    ps = map(lambda p: _sanitizer_re.sub("_", p), Path(path).parts)
+    return str(Path(*ps))

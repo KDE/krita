@@ -180,9 +180,6 @@ void KisMask::Private::initSelectionImpl(KisSelectionSP copyFrom, KisLayerSP par
          */
         selection = new KisSelection(*copyFrom);
         selection->setDefaultBounds(new KisSelectionDefaultBounds(parentPaintDevice));
-        if (copyFrom->hasShapeSelection()) {
-            delete selection->flatten();
-        }
     } else if (copyFromDevice) {
         KritaUtils::DeviceCopyMode copyMode =
             q->inherits("KisFilterMask") || q->inherits("KisTransparencyMask") ?

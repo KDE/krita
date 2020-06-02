@@ -30,10 +30,12 @@ struct KisColorLabelButton::Private
 {
     const QColor m_color;
     const uint m_sizeSquared;
+    KisColorLabelButton::SelectionIndicationType selectionVis;
 
     Private(QColor color, uint sizeSquared)
         : m_color(color)
         , m_sizeSquared(sizeSquared)
+        , selectionVis(KisColorLabelButton::FillIn)
     {
 
     }
@@ -82,14 +84,15 @@ void KisColorLabelButton::paintEvent(QPaintEvent *event)
     if (m_d->m_color.alpha() > 0) {
         QColor fillColor = m_d->m_color;
 
-        if (!isChecked() || !isEnabled()) {
+        if ((!isChecked() || !isEnabled()) && (m_d->selectionVis == FillIn)) {
             fillColor.setAlpha(32);
         }
 
         QBrush brush = QBrush(fillColor);
         painter.fillRect(fillRect, brush);
 
-        if (isEnabled()) {
+        if ((isEnabled() && (m_d->selectionVis == FillIn)) ||
+            (isChecked() && (m_d->selectionVis == Outline))) {
             painter.setPen(QPen(m_d->m_color, 2));
             painter.drawRect(outlineRect);
         }
@@ -116,11 +119,11 @@ void KisColorLabelButton::paintEvent(QPaintEvent *event)
         painter.drawLine(crossRect.bottomLeft(), crossRect.topRight());*/
 
         QColor white = QColor(255,255,255);
-        QColor grey = QColor(220,220,220);
+        QColor grey = QColor(200,200,200);
         QColor outlineColor = grey;
 
 
-        if (!isChecked() || !isEnabled()) {
+        if ((!isChecked() || !isEnabled()) && (m_d->selectionVis == FillIn)) {
             white.setAlpha(32);
             grey.setAlpha(32);
         }
@@ -134,7 +137,8 @@ void KisColorLabelButton::paintEvent(QPaintEvent *event)
         painter.fillRect(upperLeftGrey, greyBrush);
         painter.fillRect(lowerRightGrey, greyBrush);
 
-        if (isEnabled()) {
+        if ((isEnabled() && (m_d->selectionVis == FillIn)) ||
+            (isChecked() && (m_d->selectionVis == Outline))) {
             painter.setPen(QPen(outlineColor, 2));
             painter.drawRect(outlineRect);
         }
@@ -147,10 +151,16 @@ QSize KisColorLabelButton::sizeHint() const
     return QSize(m_d->m_sizeSquared,m_d->m_sizeSquared);
 }
 
+void KisColorLabelButton::setSelectionVisType(KisColorLabelButton::SelectionIndicationType type)
+{
+    m_d->selectionVis = type;
+}
+
 void KisColorLabelButton::nextCheckState()
 {
-    KisColorLabelFilterGroup* colorLabelButtonGroup = dynamic_cast<KisColorLabelFilterGroup*>(group());
-    if (colorLabelButtonGroup && (colorLabelButtonGroup->countCheckedViableButtons() > 1 || !isChecked())) {
+    KisColorLabelFilterGroup* colorLabelFilterGroup = dynamic_cast<KisColorLabelFilterGroup*>(group());
+
+    if (!colorLabelFilterGroup || (colorLabelFilterGroup->countCheckedViableButtons() > 1 || !isChecked())) {
         setChecked(!isChecked());
     } else {
         setChecked(isChecked());

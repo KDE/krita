@@ -21,45 +21,44 @@
 #include <QAbstractListModel>
 #include <QStringList>
 
+#include "storyboardItem.h"
+
 /*
     The main storyboard model. 
 */
-class StoryboardModel : public QAbstractListModel
+class StoryboardModel : public QAbstractItemModel
 {
-
     Q_OBJECT
 
 public:
 //if we don't need this constructor change it
-    StoryboardModel(QObject *parent = 0);
+    StoryboardModel(QObject *parent = nullptr);
+
+    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
+    QModelIndex StoryboardModel::parent(const QModelIndex &index) const override;
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
 
     Qt::ItemFlags flags(const QModelIndex &index) const override;
-    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
-    bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role) override;
     
     //for removing and inserting rows
     bool insertRows(int position, int rows, const QModelIndex &index = QModelIndex());
     bool removeRows(int position, int rows, const QModelIndex &index = QModelIndex());
 
-    //for removing and inserting column
-    bool insertColumns(int position, int Columns, const QModelIndex &index = QModelIndex());
-    bool removeColumns(int position, int Columns, const QModelIndex &index = QModelIndex());
-
     //for drag and drop
     Qt::DropActions supportedDropActions() const override;
     Qt::DropActions supportedDragActions() const override;
 
+
+    //this function accesses the value from the comment model
     int commentCount();
 private:
-    struct Private;
-    const QScopedPointer<Private> m_d;
-
+    QVector<StoryboardItem*> m_items;
+    int commentCount = 0;
 };
 
 #endif

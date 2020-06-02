@@ -581,6 +581,16 @@ public:
                            KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags());
 
     /**
+     * Cached version of createThumbnail that also adjusts aspect ratio of the
+     * thumbnail to fit the extents of the paint device.
+     */
+    QImage createThumbnail(qint32 maxw, qint32 maxh,
+                           Qt::AspectRatioMode aspectRatioMode,
+                           qreal oversample = 1,
+                           KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),
+                           KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags());
+
+    /**
      * Fill c and opacity with the values found at x and y.
      *
      * The color values will be transformed from the profile of

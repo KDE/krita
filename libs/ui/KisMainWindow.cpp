@@ -1016,7 +1016,7 @@ bool KisMainWindow::openDocumentInternal(const QUrl &url, OpenFlags flags)
         return false;
     }
 #else
-    if (!QFile(url.toString()).exists()) {
+    if (!QFile(url.toString()).exists() && !url.isLocalFile()) {
         qWarning() << "KisMainWindow::openDocumentInternal. Could not open:" << url;
         return false;
     }

@@ -16,7 +16,8 @@
 !endif
 
 Unicode true
-ManifestDPIAware true
+# Enabling DPI awareness creates awful CJK text in some sizes, so don't enable it.
+ManifestDPIAware false
 
 # Krita constants (can be overridden in command line params)
 !define /ifndef KRITA_VERSION "0.0.0.0"
@@ -82,7 +83,7 @@ Var CreateDesktopIcon
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_COMPONENTS
 !define MUI_PAGE_CUSTOMFUNCTION_PRE  func_ShellExLicensePage_Init
-!define MUI_PAGE_HEADER_TEXT "License Agreement (Krita Shell Extension)"
+!define MUI_PAGE_HEADER_TEXT "$(ShellExLicensePageHeader)"
 !insertmacro MUI_PAGE_LICENSE "license.rtf"
 !define MUI_STARTMENUPAGE_DEFAULTFOLDER "Krita"
 !define MUI_STARTMENUPAGE_REGISTRY_ROOT HKLM
@@ -99,6 +100,7 @@ Page Custom func_BeforeInstallPage_Init
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MUI_UNPAGE_INSTFILES
 
+# Languages
 !insertmacro MUI_LANGUAGE "English"
 
 !include Sections.nsh
@@ -131,46 +133,46 @@ Section "-Remove_shellex" SEC_remove_shellex
 	${AndIf} $KritaNsisVersion == ""
 	${AndIf} ${FileExists} "$PrevShellExInstallLocation\uninstall.exe"
 		push $R0
-		DetailPrint "Removing Krita Shell Integration..."
+		DetailPrint "$(RemovingShellEx)"
 		SetDetailsPrint listonly
 		ExecWait "$PrevShellExInstallLocation\uninstall.exe /S _?=$PrevShellExInstallLocation" $R0
 		${If} $R0 != 0
 			${IfNot} ${Silent}
-				MessageBox MB_OK|MB_ICONSTOP "Failed to remove Krita Shell Integration."
+				MessageBox MB_OK|MB_ICONSTOP "$(RemoveShellExFailed)"
 			${EndIf}
 			SetDetailsPrint both
-			DetailPrint "Failed to remove Krita Shell Integration."
+			DetailPrint "$(RemoveShellExFailed)"
 			Abort
 		${EndIf}
 		Delete "$PrevShellExInstallLocation\uninstall.exe"
 		RMDir /REBOOTOK "$PrevShellExInstallLocation"
 		SetRebootFlag false
 		SetDetailsPrint lastused
-		DetailPrint "Krita Shell Integration removed."
+		DetailPrint "$(RemoveShellExDone)"
 		pop $R0
 	${EndIf}
 SectionEnd
 
-Section "Remove Old Version" SEC_remove_old_version
+Section "$(SectionRemoveOldVer)" SEC_remove_old_version
 	${If} $KritaNsisInstallLocation != ""
 	${AndIf} ${FileExists} "$KritaNsisInstallLocation\uninstall.exe"
 		push $R0
-		DetailPrint "Removing previous version..."
+		DetailPrint "$(RemovingOldVer)"
 		SetDetailsPrint listonly
 		ExecWait "$KritaNsisInstallLocation\uninstall.exe /S _?=$KritaNsisInstallLocation" $R0
 		${If} $R0 != 0
 			${IfNot} ${Silent}
-				MessageBox MB_OK|MB_ICONSTOP "Failed to remove previous version of Krita."
+				MessageBox MB_OK|MB_ICONSTOP "$(RemoveOldVerFailed)"
 			${EndIf}
 			SetDetailsPrint both
-			DetailPrint "Failed to remove previous version of Krita."
+			DetailPrint "$(RemoveOldVerFailed)"
 			Abort
 		${EndIf}
 		Delete "$KritaNsisInstallLocation\uninstall.exe"
 		RMDir /REBOOTOK "$KritaNsisInstallLocation"
 		SetRebootFlag false
 		SetDetailsPrint lastused
-		DetailPrint "Previous version removed."
+		DetailPrint "$(RemoveOldVerDone)"
 		pop $R0
 	${EndIf}
 SectionEnd
@@ -239,7 +241,7 @@ Section "-Main_Shortcuts"
 		CreateDirectory "$SMPROGRAMS\$KritaStartMenuFolder"
 		CreateShortcut "$SMPROGRAMS\$KritaStartMenuFolder\${KRITA_PRODUCTNAME}.lnk" "$INSTDIR\bin\krita.exe" "" "$INSTDIR\shellex\krita.ico" 0
 		CreateDirectory "$SMPROGRAMS\$KritaStartMenuFolder\Tools"
-		CreateShortcut "$SMPROGRAMS\$KritaStartMenuFolder\Tools\Uninstall ${KRITA_PRODUCTNAME}.lnk" "$INSTDIR\Uninstall.exe"
+		CreateShortcut "$SMPROGRAMS\$KritaStartMenuFolder\Tools\$(UninstallKritaLnkFileName).lnk" "$INSTDIR\Uninstall.exe"
 	!insertmacro MUI_STARTMENU_WRITE_END
 	${If} $CreateDesktopIcon == 1
 		# For the desktop icon, keep the name short and omit version info
@@ -247,7 +249,7 @@ Section "-Main_Shortcuts"
 	${EndIf}
 SectionEnd
 
-Section "Shell Integration" SEC_shellex
+Section "$(SectionShellEx)" SEC_shellex
 	${If} ${RunningX64}
 		${Krita_RegisterComComonents} 64
 	${EndIf}
@@ -277,7 +279,7 @@ Section "Shell Integration" SEC_shellex
 SectionEnd
 
 !ifdef HAS_FFMPEG
-Section "Bundled FFmpeg" SEC_ffmpeg
+Section "$(SectionBundledFfmpeg)" SEC_ffmpeg
 	File /oname=bin\ffmpeg.exe ${KRITA_PACKAGE_ROOT}\bin\ffmpeg.exe
 	File /oname=bin\ffmpeg_LICENSE.txt ${KRITA_PACKAGE_ROOT}\bin\ffmpeg_LICENSE.txt
 	File /oname=bin\ffmpeg_README.txt ${KRITA_PACKAGE_ROOT}\bin\ffmpeg_README.txt
@@ -289,33 +291,33 @@ Section "-Main_refreshShell"
 SectionEnd
 
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-	!insertmacro MUI_DESCRIPTION_TEXT ${SEC_remove_shellex} "Remove previously installed Krita Shell Integration."
-	!insertmacro MUI_DESCRIPTION_TEXT ${SEC_remove_old_version} "Remove previously installed Krita $KritaNsisVersion ($KritaNsisBitness-bit)."
-	!insertmacro MUI_DESCRIPTION_TEXT ${SEC_product_main} "${KRITA_PRODUCTNAME} ${KRITA_VERSION_DISPLAY}$\r$\n$\r$\nVersion: ${KRITA_VERSION}"
-	!insertmacro MUI_DESCRIPTION_TEXT ${SEC_shellex} "Shell Extension component to provide thumbnails and file properties display for Krita files.$\r$\n$\r$\nVersion: ${KRITASHELLEX_VERSION}"
+	#!insertmacro MUI_DESCRIPTION_TEXT ${SEC_remove_shellex} "Remove previously installed Krita Shell Integration."
+	!insertmacro MUI_DESCRIPTION_TEXT ${SEC_remove_old_version} "$(SectionRemoveOldVerDesc)"
+	!insertmacro MUI_DESCRIPTION_TEXT ${SEC_product_main} "$(SectionMainDesc)"
+	!insertmacro MUI_DESCRIPTION_TEXT ${SEC_shellex} "$(SectionShellExDesc)"
 !ifdef HAS_FFMPEG
-	!insertmacro MUI_DESCRIPTION_TEXT ${SEC_ffmpeg} "Install a bundled version of FFmpeg for exporting animations."
+	!insertmacro MUI_DESCRIPTION_TEXT ${SEC_ffmpeg} "$(SectionBundledFfmpegDesc)"
 !endif
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
-Section "un.Shell Integration"
+Section "un.$(SectionShellEx)"
 	${If} $UninstallShellExStandalone == 1
 		push $R0
-		DetailPrint "Removing Krita Shell Integration..."
+		DetailPrint "$(RemovingShellEx)"
 		SetDetailsPrint listonly
 		ExecWait "$INSTDIR\shellex\uninstall.exe /S _?=$INSTDIR\shellex" $R0
 		${If} $R0 != 0
 			${IfNot} ${Silent}
-				MessageBox MB_OK|MB_ICONSTOP "Failed to remove Krita Shell Integration. Please report this bug!"
+				MessageBox MB_OK|MB_ICONSTOP "$(RemoveShellExFailed)"
 			${EndIf}
 			SetDetailsPrint lastused
 			SetDetailsPrint both
-			DetailPrint "Failed to remove Krita Shell Integration."
+			DetailPrint "$(RemoveShellExFailed)"
 		${EndIf}
 		Delete "$INSTDIR\shellex\uninstall.exe"
 		RMDir /REBOOTOK "$INSTDIR\shellex"
 		SetDetailsPrint lastused
-		DetailPrint "Krita Shell Integration removed."
+		DetailPrint "$(RemoveShellExDone)"
 		pop $R0
 	${Else}
 		${Krita_UnregisterShellExtension}
@@ -374,16 +376,29 @@ Function .onInit
 	StrCpy $CreateDesktopIcon 1 # Create desktop icon by default
 	${IfNot} ${AtLeastWin7}
 		${IfNot} ${Silent}
-			MessageBox MB_OK|MB_ICONSTOP "${KRITA_PRODUCTNAME} ${KRITA_VERSION_DISPLAY} requires Windows 7 or above."
+			MessageBox MB_OK|MB_ICONSTOP "$(MsgRequireWin7)"
 		${EndIf}
 		Abort
 	${EndIf}
+
+	# Language selection, seems that the order is predefined.
+	Push "" # This value is for languages auto count
+	Push ${LANG_ENGLISH}
+	Push English
+	Push A # = auto count languages
+	LangDLL::LangDialog "$(^SetupCaption)" "$(SetupLangPrompt)"
+	Pop $LANGUAGE
+	${If} $LANGUAGE == "cancel"
+		Abort
+	${Endif}
+	# ---
+
 !ifdef KRITA_INSTALLER_64
 	${If} ${RunningX64}
 		SetRegView 64
 	${Else}
 		${IfNot} ${Silent}
-			MessageBox MB_OK|MB_ICONSTOP "You are running 32-bit Windows, but this installer installs Krita 64-bit which can only be installed on 64-bit Windows. Please download the 32-bit version on https://krita.org/"
+			MessageBox MB_OK|MB_ICONSTOP "$(Msg64bitOn32bit)"
 		${EndIf}
 		Abort
 	${Endif}
@@ -391,7 +406,7 @@ Function .onInit
 	${If} ${RunningX64}
 		SetRegView 64
 		${IfNot} ${Silent}
-			MessageBox MB_YESNO|MB_ICONEXCLAMATION "You are trying to install 32-bit Krita on 64-bit Windows. You are strongly recommended to install the 64-bit version of Krita instead since it offers better performance.$\nIf you want to use the 32-bit version for testing, you should consider using the zip package instead.$\n$\nDo you still wish to install the 32-bit version of Krita?" \
+			MessageBox MB_YESNO|MB_ICONEXCLAMATION "$(Msg32bitOn64bit)" \
 			           /SD IDYES \
 			           IDYES lbl_allow32on64
 			Abort
@@ -405,7 +420,7 @@ Function .onInit
 		${DetectKritaMsi64bit} $KritaMsiProductX64
 		${IfKritaMsi3Alpha} $KritaMsiProductX64
 			${IfNot} ${Silent}
-				MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2 "Krita 3.0 Alpha 1 is installed. It must be removed before ${KRITA_PRODUCTNAME} ${KRITA_VERSION_DISPLAY} can be installed.$\nDo you wish to remove it now?" \
+				MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2 "$(MsgKrita3alpha1)" \
 				           /SD IDYES \
 				           IDYES lbl_removeKrita3alpha
 				Abort
@@ -415,7 +430,7 @@ Function .onInit
 			${MsiUninstall} $KritaMsiProductX64 $R0
 			${If} $R0 != 0
 				${IfNot} ${Silent}
-					MessageBox MB_OK|MB_ICONSTOP "Failed to remove Krita 3.0 Alpha 1."
+					MessageBox MB_OK|MB_ICONSTOP "$(MsgKrita3alpha1RemoveFailed)"
 				${EndIf}
 				Abort
 			${EndIf}
@@ -424,7 +439,7 @@ Function .onInit
 		${ElseIf} $KritaMsiProductX64 != ""
 			${If} $KritaMsiProductX86 != ""
 				${IfNot} ${Silent}
-					MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2 "Both 32-bit and 64-bit editions of Krita 2.9 or below are installed.$\nBoth must be removed before ${KRITA_PRODUCTNAME} ${KRITA_VERSION_DISPLAY} can be installed.$\nDo you want to remove them now?" \
+					MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2 "$(MsgKrita2msiBoth)" \
 					           /SD IDYES \
 					           IDYES lbl_removeKritaBoth
 					Abort
@@ -434,14 +449,14 @@ Function .onInit
 				${MsiUninstall} $KritaMsiProductX86 $R0
 				${If} $R0 != 0
 					${IfNot} ${Silent}
-						MessageBox MB_OK|MB_ICONSTOP "Failed to remove Krita (32-bit)."
+						MessageBox MB_OK|MB_ICONSTOP "$(MsgKrita2msi32bitRemoveFailed)"
 					${EndIf}
 					Abort
 				${EndIf}
 				${MsiUninstall} $KritaMsiProductX64 $R0
 				${If} $R0 != 0
 					${IfNot} ${Silent}
-						MessageBox MB_OK|MB_ICONSTOP "Failed to remove Krita (64-bit)."
+						MessageBox MB_OK|MB_ICONSTOP "$(MsgKrita2msi64bitRemoveFailed)"
 					${EndIf}
 					Abort
 				${EndIf}
@@ -450,7 +465,7 @@ Function .onInit
 				StrCpy $KritaMsiProductX64 ""
 			${Else}
 				${IfNot} ${Silent}
-					MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2 "Krita (64-bit) 2.9 or below is installed.$\nIt must be removed before ${KRITA_PRODUCTNAME} ${KRITA_VERSION_DISPLAY} can be installed.$\nDo you wish to remove it now?" \
+					MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2 "$(MsgKrita2msi64bit)" \
 					           /SD IDYES \
 					           IDYES lbl_removeKritaX64
 					Abort
@@ -460,7 +475,7 @@ Function .onInit
 				${MsiUninstall} $KritaMsiProductX64 $R0
 				${If} $R0 != 0
 					${IfNot} ${Silent}
-						MessageBox MB_OK|MB_ICONSTOP "Failed to remove Krita (64-bit)."
+						MessageBox MB_OK|MB_ICONSTOP "$(MsgKrita2msi64bitRemoveFailed)"
 					${EndIf}
 					Abort
 				${EndIf}
@@ -471,7 +486,7 @@ Function .onInit
 	${Endif}
 	${If} $KritaMsiProductX86 != ""
 		${IfNot} ${Silent}
-			MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2 "Krita (32-bit) 2.9 or below is installed.$\nIt must be removed before ${KRITA_PRODUCTNAME} ${KRITA_VERSION_DISPLAY} can be installed.$\nDo you wish to remove it now?" \
+			MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2 "$(MsgKrita2msi32bit)" \
 			           /SD IDYES \
 			           IDYES lbl_removeKritaX86
 			Abort
@@ -481,7 +496,7 @@ Function .onInit
 		${MsiUninstall} $KritaMsiProductX86 $R0
 		${If} $R0 != 0
 			${IfNot} ${Silent}
-				MessageBox MB_OK|MB_ICONSTOP "Failed to remove Krita (32-bit)."
+				MessageBox MB_OK|MB_ICONSTOP "$(MsgKrita2msi32bitRemoveFailed)"
 			${EndIf}
 			Abort
 		${EndIf}
@@ -498,15 +513,15 @@ Function .onInit
 			${If} $KritaNsisBitness == ${KRITA_INSTALLER_BITNESS}
 				# Very likely the same version
 				${IfNot} ${Silent}
-					MessageBox MB_OK|MB_ICONINFORMATION "It appears that ${KRITA_PRODUCTNAME} ${KRITA_VERSION_DISPLAY} is already installed.$\nThis setup will reinstall it."
+					MessageBox MB_OK|MB_ICONINFORMATION "$(MsgKritaSameVerReinstall)"
 				${EndIf}
 			${Else}
 				# Very likely the same version but different arch
 				${IfNot} ${Silent}
 !ifdef KRITA_INSTALLER_64
-					MessageBox MB_OK|MB_ICONINFORMATION "It appears that Krita 32-bit ${KRITA_VERSION_DISPLAY} is currently installed. This setup will replace it with the 64-bit version."
+					MessageBox MB_OK|MB_ICONINFORMATION "$(MsgKritaSameVer32bitReplaceWith64bit)"
 !else
-					MessageBox MB_OK|MB_ICONEXCLAMATION "It appears that Krita 64-bit ${KRITA_VERSION_DISPLAY} is currently installed. This setup will replace it with the 32-bit version."
+					MessageBox MB_OK|MB_ICONEXCLAMATION "$(MsgKritaSameVer64bitReplaceWith32bit)"
 !endif
 				${EndIf}
 			${EndIf}
@@ -518,20 +533,20 @@ Function .onInit
 				# Upgrade but different arch
 				${IfNot} ${Silent}
 !ifdef KRITA_INSTALLER_64
-					MessageBox MB_OK|MB_ICONINFORMATION "It appears that Krita 32-bit ($KritaNsisVersion) is currently installed. This setup will replace it with the 64-bit version of Krita ${KRITA_VERSION_DISPLAY}."
+					MessageBox MB_OK|MB_ICONINFORMATION "$(MsgKritaDiffVer32bitReplaceWith64bit)"
 !else
-					MessageBox MB_OK|MB_ICONEXCLAMATION "It appears that Krita 64-bit ($KritaNsisVersion) is currently installed. This setup will replace it with the 32-bit version of Krita ${KRITA_VERSION_DISPLAY}."
+					MessageBox MB_OK|MB_ICONEXCLAMATION "$(MsgKritaDiffVer64bitReplaceWith32bit)"
 !endif
 				${EndIf}
 			${EndIf}
 		${ElseIf} $R0 == 2
 			${IfNot} ${Silent}
-				MessageBox MB_OK|MB_ICONSTOP "It appears that a newer version of Krita $KritaNsisBitness-bit ($KritaNsisVersion) is currently installed. If you want to downgrade Krita to ${KRITA_VERSION_DISPLAY}, please uninstall the newer version manually before running this setup."
+				MessageBox MB_OK|MB_ICONSTOP "$(MsgKritaNewerAlreadyInstalled)"
 			${EndIf}
 			Abort
 		${Else}
 			${IfNot} ${Silent}
-				MessageBox MB_OK|MB_ICONSTOP "Unexpected state"
+				MessageBox MB_OK|MB_ICONSTOP "Error: Unexpected state"
 			${EndIf}
 			Abort
 		${EndIf}
@@ -539,7 +554,7 @@ Function .onInit
 		# Detect if Krita is running...
 		${If} ${IsFileinUse} "$KritaNsisInstallLocation\bin\krita.exe"
 			${IfNot} ${Silent}
-				MessageBox MB_OK|MB_ICONEXCLAMATION "Krita appears to be running. Please close Krita before running this installer."
+				MessageBox MB_OK|MB_ICONEXCLAMATION "$(MsgKritaRunning)"
 			${EndIf}
 			Abort
 		${EndIf}
@@ -561,7 +576,7 @@ Function .onInit
 	${EndIf}
 	${If} $PrevShellExStandalone == 1
 		${IfNot} ${Silent}
-			MessageBox MB_YESNO|MB_ICONQUESTION "Krita Shell Integration was installed separately. It will be uninstalled automatically when installing Krita.$\nDo you want to continue?" \
+			MessageBox MB_YESNO|MB_ICONQUESTION "$(MsgKritaShellExOverwrite)" \
 			           /SD IDYES \
 			           IDYES lbl_allowremoveshellex
 			Abort
@@ -590,7 +605,7 @@ Function un.onInit
 	ReadRegDWORD $UninstallShellExStandalone HKLM "Software\Krita\ShellExtension" "Standalone"
 	${If} ${IsFileinUse} "$INSTDIR\bin\krita.exe"
 		${IfNot} ${Silent}
-			MessageBox MB_OK|MB_ICONEXCLAMATION "Krita appears to be running. Please close Krita before uninstalling."
+			MessageBox MB_OK|MB_ICONEXCLAMATION "$(MsgUninstallKritaRunning)"
 		${EndIf}
 		Abort
 	${EndIf}
@@ -613,12 +628,12 @@ Function func_DesktopShortcutPage_Init
 	${If} $R0 == error
 		Abort
 	${EndIf}
-	!insertmacro MUI_HEADER_TEXT "Desktop Icon" "Configure desktop shortcut icon."
+	!insertmacro MUI_HEADER_TEXT "$(DesktopIconPageHeader)" "$(DesktopIconPageDesc)"
 
-	${NSD_CreateLabel} 0u 0u 300u 20u "You can choose to create a shortcut icon on the desktop for launching Krita."
+	${NSD_CreateLabel} 0u 0u 300u 20u "$(DesktopIconPageDesc2)"
 	pop $R0
 
-	${NSD_CreateCheckbox} 0u 20u 300u 10u "Create a desktop icon"
+	${NSD_CreateCheckbox} 0u 20u 300u 10u "$(DesktopIconPageCheckbox)"
 	pop $hwndChkDesktopIcon
 	${If} $CreateDesktopIcon == 1
 		${NSD_Check} $hwndChkDesktopIcon
@@ -649,9 +664,9 @@ Function func_BeforeInstallPage_Init
 	${If} $R0 == error
 		Abort
 	${EndIf}
-	!insertmacro MUI_HEADER_TEXT "Confirm Installation" "Confirm installation of ${KRITA_PRODUCTNAME} ${KRITA_VERSION_DISPLAY}."
+	!insertmacro MUI_HEADER_TEXT "$(ConfirmInstallPageHeader)" "$(ConfirmInstallPageDesc)"
 
-	${NSD_CreateLabel} 0u 0u 300u 140u "Setup is ready to install ${KRITA_PRODUCTNAME} ${KRITA_VERSION_DISPLAY}. You may review the install options before you continue.$\r$\n$\r$\n$_CLICK"
+	${NSD_CreateLabel} 0u 0u 300u 140u "$(ConfirmInstallPageDesc2)"
 	pop $R0
 
 	# TODO: Add install option summary for review?
@@ -660,3 +675,59 @@ Function func_BeforeInstallPage_Init
 
 	pop $R0
 FunctionEnd
+
+
+# Strings
+!define CURRENT_LANG ${LANG_ENGLISH}
+
+# Strings to show in the installation log:
+LangString RemovingShellEx ${CURRENT_LANG} "Removing Krita Shell Integration..."
+LangString RemoveShellExFailed ${CURRENT_LANG} "Failed to remove Krita Shell Integration."
+LangString RemoveShellExDone ${CURRENT_LANG} "Krita Shell Integration removed."
+LangString RemovingOldVer ${CURRENT_LANG} "Removing previous version..."
+LangString RemoveOldVerFailed ${CURRENT_LANG} "Failed to remove previous version of Krita."
+LangString RemoveOldVerDone ${CURRENT_LANG} "Previous version removed."
+
+# Strings for the component selection dialog:
+LangString SectionRemoveOldVer ${CURRENT_LANG} "Remove Old Version"
+LangString SectionRemoveOldVerDesc ${CURRENT_LANG} "Remove previously installed Krita $KritaNsisVersion ($KritaNsisBitness-bit)."
+LangString SectionShellEx ${CURRENT_LANG} "Shell Integration"
+LangString SectionShellExDesc ${CURRENT_LANG} "Shell Extension component to provide thumbnails and file properties display for Krita files.$\r$\n$\r$\nVersion: ${KRITASHELLEX_VERSION}"
+LangString SectionMainDesc ${CURRENT_LANG} "${KRITA_PRODUCTNAME} ${KRITA_VERSION_DISPLAY}$\r$\n$\r$\nVersion: ${KRITA_VERSION}"
+# We don't actually bundle FFmpeg so these are not shown.
+LangString SectionBundledFfmpeg ${CURRENT_LANG} "Bundled FFmpeg"
+LangString SectionBundledFfmpegDesc ${CURRENT_LANG} "Install a bundled version of FFmpeg for exporting animations."
+
+# Main dialog strings:
+LangString SetupLangPrompt ${CURRENT_LANG} "Please select the language to be used for the setup process:"
+LangString ShellExLicensePageHeader ${CURRENT_LANG} "License Agreement (Krita Shell Extension)"
+LangString DesktopIconPageHeader ${CURRENT_LANG} "Desktop Icon"
+LangString DesktopIconPageDesc ${CURRENT_LANG} "Configure desktop shortcut icon."
+LangString DesktopIconPageDesc2 ${CURRENT_LANG} "You can choose to create a shortcut icon on the desktop for launching Krita."
+LangString DesktopIconPageCheckbox ${CURRENT_LANG} "Create a desktop icon"
+LangString ConfirmInstallPageHeader ${CURRENT_LANG} "Confirm Installation"
+LangString ConfirmInstallPageDesc ${CURRENT_LANG} "Confirm installation of ${KRITA_PRODUCTNAME} ${KRITA_VERSION_DISPLAY}."
+LangString ConfirmInstallPageDesc2 ${CURRENT_LANG} "Setup is ready to install ${KRITA_PRODUCTNAME} ${KRITA_VERSION_DISPLAY}. You may review the install options before you continue.$\r$\n$\r$\n$_CLICK"
+LangString UninstallKritaLnkFileName ${CURRENT_LANG} "Uninstall ${KRITA_PRODUCTNAME}"
+
+# Misc. message prompts:
+LangString MsgRequireWin7 ${CURRENT_LANG} "${KRITA_PRODUCTNAME} ${KRITA_VERSION_DISPLAY} requires Windows 7 or above."
+LangString Msg64bitOn32bit ${CURRENT_LANG} "You are running 32-bit Windows, but this installer installs Krita 64-bit which can only be installed on 64-bit Windows. Please download the 32-bit version on https://krita.org/"
+LangString Msg32bitOn64bit ${CURRENT_LANG} "You are trying to install 32-bit Krita on 64-bit Windows. You are strongly recommended to install the 64-bit version of Krita instead since it offers better performance.$\nIf you want to use the 32-bit version for testing, you should consider using the zip package instead.$\n$\nDo you still wish to install the 32-bit version of Krita?"
+LangString MsgKrita3alpha1 ${CURRENT_LANG} "Krita 3.0 Alpha 1 is installed. It must be removed before ${KRITA_PRODUCTNAME} ${KRITA_VERSION_DISPLAY} can be installed.$\nDo you wish to remove it now?"
+LangString MsgKrita3alpha1RemoveFailed ${CURRENT_LANG} "Failed to remove Krita 3.0 Alpha 1."
+LangString MsgKrita2msiBoth ${CURRENT_LANG} "Both 32-bit and 64-bit editions of Krita 2.9 or below are installed.$\nBoth must be removed before ${KRITA_PRODUCTNAME} ${KRITA_VERSION_DISPLAY} can be installed.$\nDo you want to remove them now?"
+LangString MsgKrita2msi32bitRemoveFailed ${CURRENT_LANG} "Failed to remove Krita (32-bit)."
+LangString MsgKrita2msi64bitRemoveFailed ${CURRENT_LANG} "Failed to remove Krita (64-bit)."
+LangString MsgKrita2msi64bit ${CURRENT_LANG} "Krita (64-bit) 2.9 or below is installed.$\nIt must be removed before ${KRITA_PRODUCTNAME} ${KRITA_VERSION_DISPLAY} can be installed.$\nDo you wish to remove it now?"
+LangString MsgKrita2msi32bit ${CURRENT_LANG} "Krita (32-bit) 2.9 or below is installed.$\nIt must be removed before ${KRITA_PRODUCTNAME} ${KRITA_VERSION_DISPLAY} can be installed.$\nDo you wish to remove it now?"
+LangString MsgKritaSameVerReinstall ${CURRENT_LANG} "It appears that ${KRITA_PRODUCTNAME} ${KRITA_VERSION_DISPLAY} is already installed.$\nThis setup will reinstall it."
+LangString MsgKritaSameVer32bitReplaceWith64bit ${CURRENT_LANG} "It appears that Krita 32-bit ${KRITA_VERSION_DISPLAY} is currently installed. This setup will replace it with the 64-bit version."
+LangString MsgKritaSameVer64bitReplaceWith32bit ${CURRENT_LANG} "It appears that Krita 64-bit ${KRITA_VERSION_DISPLAY} is currently installed. This setup will replace it with the 32-bit version."
+LangString MsgKritaDiffVer32bitReplaceWith64bit ${CURRENT_LANG} "It appears that Krita 32-bit ($KritaNsisVersion) is currently installed. This setup will replace it with the 64-bit version of Krita ${KRITA_VERSION_DISPLAY}."
+LangString MsgKritaDiffVer64bitReplaceWith32bit ${CURRENT_LANG} "It appears that Krita 64-bit ($KritaNsisVersion) is currently installed. This setup will replace it with the 32-bit version of Krita ${KRITA_VERSION_DISPLAY}."
+LangString MsgKritaNewerAlreadyInstalled ${CURRENT_LANG} "It appears that a newer version of Krita $KritaNsisBitness-bit ($KritaNsisVersion) is currently installed. If you want to downgrade Krita to ${KRITA_VERSION_DISPLAY}, please uninstall the newer version manually before running this setup."
+LangString MsgKritaRunning ${CURRENT_LANG} "Krita appears to be running. Please close Krita before running this installer."
+LangString MsgKritaShellExOverwrite ${CURRENT_LANG} "Krita Shell Integration was installed separately. It will be uninstalled automatically when installing Krita.$\nDo you want to continue?"
+LangString MsgUninstallKritaRunning ${CURRENT_LANG} "Krita appears to be running. Please close Krita before uninstalling."
+!undef CURRENT_LANG

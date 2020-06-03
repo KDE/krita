@@ -35,6 +35,11 @@ public:
 
     int currentIndex() const;
 
+    QSize sizeHint() const;
+    void resizeEvent(QResizeEvent* e) override;
+
+    int calculateMenuOffset() const;
+
 public Q_SLOTS:
     void groupButtonChecked(int index, bool state);
     void setCurrentIndex(int index);

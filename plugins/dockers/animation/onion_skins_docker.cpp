@@ -22,6 +22,7 @@
 #include <QSlider>
 #include <QFrame>
 #include <QGridLayout>
+#include <QEvent>
 
 #include "kis_icon_utils.h"
 #include "kis_image_config.h"
@@ -84,6 +85,7 @@ OnionSkinsDocker::OnionSkinsDocker(QWidget *parent) :
     {
         KisNodeViewColorScheme scm;
         m_filterButtonGroup = new KisColorLabelFilterGroup(this);
+        m_dragFilter = new KisColorLabelMouseDragFilter(this);
         m_filterButtonGroup->setExclusive(false);
         QWidget* filterButtonContainer = ui->colorFilterGroupbox;
         QLayout* filterButtonLayout = ui->filterButtons;
@@ -93,6 +95,7 @@ OnionSkinsDocker::OnionSkinsDocker(QWidget *parent) :
             KisColorLabelButton* colorLabelButton = new KisColorLabelButton(availableColors[i], 24, filterButtonContainer);
             filterButtonLayout->addWidget(colorLabelButton);
             m_filterButtonGroup->addButton(colorLabelButton, i);
+            colorLabelButton->installEventFilter(m_dragFilter);
             viableColors << i;
         }
 
@@ -100,6 +103,7 @@ OnionSkinsDocker::OnionSkinsDocker(QWidget *parent) :
 
         connect(m_filterButtonGroup, SIGNAL(buttonToggled(int,bool)), this, SLOT(slotFilteredColorsChanged()));
         connect(ui->colorFilterGroupbox, SIGNAL(toggled(bool)), this, SLOT(slotFilteredColorsChanged()));
+        connect(ui->resetFilter, SIGNAL(pressed()), m_filterButtonGroup, SLOT(reset()) );
     }
 
     loadSettings();

@@ -53,6 +53,7 @@ private:
     KisAction *m_toggleOnionSkinsAction;
 
     class KisColorLabelFilterGroup *m_filterButtonGroup;
+    class KisColorLabelMouseDragFilter *m_dragFilter;
 
 private:
     void loadSettings();

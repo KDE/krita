@@ -29,6 +29,7 @@
 #include "KisRunnableStrokeJobData.h"
 #include "KisRunnableStrokeJobUtils.h"
 #include "KisRunnableStrokeJobsInterface.h"
+#include "kis_abstract_projection_plane.h"
 
 
 MoveStrokeStrategy::MoveStrokeStrategy(KisNodeSelectionRecipe nodeSelection,
@@ -275,7 +276,7 @@ QRect MoveStrokeStrategy::moveNode(KisNodeSP node, QPoint offset)
     QRect dirtyRect;
 
     if (!m_blacklistedNodes.contains(node)) {
-        dirtyRect = node->extent();
+        dirtyRect = node->projectionPlane()->tightUserVisibleBounds();
         QPoint newOffset = m_initialNodeOffsets[node] + offset;
 
         /**

@@ -29,6 +29,9 @@
 #include <kis_mainwindow_observer.h>
 #include <kis_utility_title_bar.h>
 
+#ifdef Q_OS_MACOS
+#include <sys/types.h>
+#endif
 
 class QPushButton;
 class QToolButton;

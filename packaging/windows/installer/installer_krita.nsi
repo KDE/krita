@@ -474,9 +474,9 @@ Function .onInit
 				# Very likely the same version but different arch
 				${IfNot} ${Silent}
 !ifdef KRITA_INSTALLER_64
-					MessageBox MB_OK|MB_ICONINFORMATION "$(MsgKritaSameVer32bitReplaceWith64bit)"
+					MessageBox MB_OK|MB_ICONINFORMATION "$(MsgKrita3264bitSwap)"
 !else
-					MessageBox MB_OK|MB_ICONEXCLAMATION "$(MsgKritaSameVer64bitReplaceWith32bit)"
+					MessageBox MB_OK|MB_ICONEXCLAMATION "$(MsgKrita3264bitSwap)"
 !endif
 				${EndIf}
 			${EndIf}
@@ -488,9 +488,9 @@ Function .onInit
 				# Upgrade but different arch
 				${IfNot} ${Silent}
 !ifdef KRITA_INSTALLER_64
-					MessageBox MB_OK|MB_ICONINFORMATION "$(MsgKritaDiffVer32bitReplaceWith64bit)"
+					MessageBox MB_OK|MB_ICONINFORMATION "$(MsgKrita3264bitSwap)"
 !else
-					MessageBox MB_OK|MB_ICONEXCLAMATION "$(MsgKritaDiffVer64bitReplaceWith32bit)"
+					MessageBox MB_OK|MB_ICONEXCLAMATION "$(MsgKrita3264bitSwap)"
 !endif
 				${EndIf}
 			${EndIf}
@@ -676,10 +676,7 @@ LangString MsgKrita2msi32bitRemoveFailed ${CURRENT_LANG} "Failed to remove old K
 LangString MsgKrita2msi64bitRemoveFailed ${CURRENT_LANG} "Failed to remove old Krita (64-bit)."
 #
 LangString MsgKritaSameVerReinstall ${CURRENT_LANG} "It appears that ${KRITA_PRODUCTNAME} ${KRITA_VERSION_DISPLAY} is already installed.$\nThis setup will reinstall it."
-LangString MsgKritaSameVer32bitReplaceWith64bit ${CURRENT_LANG} "It appears that Krita 32-bit ${KRITA_VERSION_DISPLAY} is currently installed. This setup will replace it with the 64-bit version."
-LangString MsgKritaSameVer64bitReplaceWith32bit ${CURRENT_LANG} "It appears that Krita 64-bit ${KRITA_VERSION_DISPLAY} is currently installed. This setup will replace it with the 32-bit version."
-LangString MsgKritaDiffVer32bitReplaceWith64bit ${CURRENT_LANG} "It appears that Krita 32-bit ($KritaNsisVersion) is currently installed. This setup will replace it with the 64-bit version of Krita ${KRITA_VERSION_DISPLAY}."
-LangString MsgKritaDiffVer64bitReplaceWith32bit ${CURRENT_LANG} "It appears that Krita 64-bit ($KritaNsisVersion) is currently installed. This setup will replace it with the 32-bit version of Krita ${KRITA_VERSION_DISPLAY}."
+LangString MsgKrita3264bitSwap ${CURRENT_LANG} "It appears that Krita $KritaNsisBitness-bit ($KritaNsisVersion) is currently installed. This setup will replace it with the ${KRITA_INSTALLER_BITNESS}-bit version of Krita ${KRITA_VERSION_DISPLAY}."
 LangString MsgKritaNewerAlreadyInstalled ${CURRENT_LANG} "It appears that a newer version of Krita $KritaNsisBitness-bit ($KritaNsisVersion) is currently installed. If you want to downgrade Krita to ${KRITA_VERSION_DISPLAY}, please uninstall the newer version manually before running this setup."
 LangString MsgKritaRunning ${CURRENT_LANG} "Krita appears to be running. Please close Krita before running this installer."
 LangString MsgKritaShellExOverwrite ${CURRENT_LANG} "Krita Shell Integration was installed separately. It will be uninstalled automatically when installing Krita.$\nDo you want to continue?"

@@ -12,6 +12,18 @@ ExternalProject_Add( ext_lcms2
     UPDATE_COMMAND ""
 	DEPENDS ext_patch
 )
+elseif (ANDROID)
+ExternalProject_Add( ext_lcms2
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    URL http://files.kde.org/krita/build/dependencies/lcms2-2.10.tar.gz
+    URL_MD5 c5f915d681325e0767e40187799f23b1
+
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/lcms2-10.diff
+    INSTALL_DIR ${PREFIX_ext_lcms2}
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_lcms2} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} -DBUILD_TESTS=FALSE -DBUILD_UTILS=FALSE -DBUILD_STATIC=FALSE -DBUILD_PLUGINS=FALSE
+
+    UPDATE_COMMAND ""
+)
 else ()
 ExternalProject_Add( ext_lcms2
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}

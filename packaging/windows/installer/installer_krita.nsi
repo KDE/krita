@@ -91,7 +91,6 @@ Var CreateDesktopIcon
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "StartMenuFolder"
 !define MUI_STARTMENUPAGE_NODISABLE
 !insertmacro MUI_PAGE_STARTMENU Krita $KritaStartMenuFolder
-Page Custom func_DesktopShortcutPage_Init
 Page Custom func_BeforeInstallPage_Init
 !insertmacro MUI_PAGE_INSTFILES
 !insertmacro MUI_PAGE_FINISH
@@ -579,33 +578,6 @@ FunctionEnd
 
 Var hwndChkDesktopIcon
 
-Function func_DesktopShortcutPage_Init
-	push $R0
-
-	nsDialogs::Create 1018
-	pop $R0
-	${If} $R0 == error
-		Abort
-	${EndIf}
-	!insertmacro MUI_HEADER_TEXT "$(DesktopIconPageHeader)" "$(DesktopIconPageDesc)"
-
-	${NSD_CreateLabel} 0u 0u 300u 20u "$(DesktopIconPageDesc2)"
-	pop $R0
-
-	${NSD_CreateCheckbox} 0u 20u 300u 10u "$(DesktopIconPageCheckbox)"
-	pop $hwndChkDesktopIcon
-	${If} $CreateDesktopIcon == 1
-		${NSD_Check} $hwndChkDesktopIcon
-	${Else}
-		${NSD_Uncheck} $hwndChkDesktopIcon
-	${EndIf}
-	${NSD_OnClick} $hwndChkDesktopIcon func_DesktopShortcutPage_CheckChange
-
-	nsDialogs::Show
-
-	pop $R0
-FunctionEnd
-
 Function func_DesktopShortcutPage_CheckChange
 	${NSD_GetState} $hwndChkDesktopIcon $CreateDesktopIcon
 	${If} $CreateDesktopIcon == ${BST_CHECKED}
@@ -625,7 +597,19 @@ Function func_BeforeInstallPage_Init
 	${EndIf}
 	!insertmacro MUI_HEADER_TEXT "$(ConfirmInstallPageHeader)" "$(ConfirmInstallPageDesc)"
 
-	${NSD_CreateLabel} 0u 0u 300u 140u "$(ConfirmInstallPageDesc2)"
+	${NSD_CreateLabel} 0u 0u 300u 20u "$(DesktopIconPageDesc2)"
+	pop $R0
+
+	${NSD_CreateCheckbox} 0u 20u 300u 10u "$(DesktopIconPageCheckbox)"
+	pop $hwndChkDesktopIcon
+	${If} $CreateDesktopIcon == 1
+		${NSD_Check} $hwndChkDesktopIcon
+	${Else}
+		${NSD_Uncheck} $hwndChkDesktopIcon
+	${EndIf}
+	${NSD_OnClick} $hwndChkDesktopIcon func_DesktopShortcutPage_CheckChange
+
+	${NSD_CreateLabel} 0u 40u 300u 140u "$(ConfirmInstallPageDesc2)"
 	pop $R0
 
 	# TODO: Add install option summary for review?
@@ -660,13 +644,11 @@ LangString SectionBundledFfmpegDesc ${CURRENT_LANG} "Install a bundled version o
 # Main dialog strings:
 LangString SetupLangPrompt ${CURRENT_LANG} "Please select the language to be used for the setup process:"
 LangString ShellExLicensePageHeader ${CURRENT_LANG} "License Agreement (Krita Shell Extension)"
-LangString DesktopIconPageHeader ${CURRENT_LANG} "Desktop Icon"
-LangString DesktopIconPageDesc ${CURRENT_LANG} "Configure desktop shortcut icon."
-LangString DesktopIconPageDesc2 ${CURRENT_LANG} "You can choose to create a shortcut icon on the desktop for launching Krita."
-LangString DesktopIconPageCheckbox ${CURRENT_LANG} "Create a desktop icon"
 LangString ConfirmInstallPageHeader ${CURRENT_LANG} "Confirm Installation"
 LangString ConfirmInstallPageDesc ${CURRENT_LANG} "Confirm installation of ${KRITA_PRODUCTNAME} ${KRITA_VERSION_DISPLAY}."
-LangString ConfirmInstallPageDesc2 ${CURRENT_LANG} "Setup is ready to install ${KRITA_PRODUCTNAME} ${KRITA_VERSION_DISPLAY}. You may review the install options before you continue.$\r$\n$\r$\n$_CLICK"
+LangString DesktopIconPageDesc2 ${CURRENT_LANG} "You can choose whether to create a shortcut icon on the desktop for launching Krita:"
+LangString DesktopIconPageCheckbox ${CURRENT_LANG} "Create a desktop icon"
+LangString ConfirmInstallPageDesc2 ${CURRENT_LANG} "Setup is ready to install ${KRITA_PRODUCTNAME} ${KRITA_VERSION_DISPLAY}. You may go back to review the install options before you continue.$\r$\n$\r$\n$_CLICK"
 LangString UninstallKritaLnkFileName ${CURRENT_LANG} "Uninstall ${KRITA_PRODUCTNAME}"
 
 # Misc. message prompts:

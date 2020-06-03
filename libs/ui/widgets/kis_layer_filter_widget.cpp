@@ -28,10 +28,13 @@
 #include <QPushButton>
 #include <QMenu>
 #include <QScreen>
+#include <QStylePainter>
 
 #include "kis_debug.h"
 #include "kis_node.h"
 #include "kis_global.h"
+
+#include "kis_color_filter_combo.h"
 #include "kis_color_label_button.h"
 #include "kis_color_label_selector_widget.h"
 #include "kis_node_view_color_scheme.h"
@@ -188,4 +191,47 @@ void KisLayerFilterWidget::showEvent(QShowEvent *show)
         }
     }
     QWidget::showEvent(show);
+}
+
+KisLayerFilterWidgetToolButton::KisLayerFilterWidgetToolButton(QWidget *parent)
+    : QToolButton(parent)
+{
+    m_textFilter = false;
+    m_selectedColors = QList<int>();
+    ENTER_FUNCTION();
+}
+
+KisLayerFilterWidgetToolButton::KisLayerFilterWidgetToolButton(const KisLayerFilterWidgetToolButton &rhs)
+    : QToolButton(rhs.parentWidget())
+    , m_textFilter(rhs.m_textFilter)
+    , m_selectedColors(rhs.m_selectedColors)
+{
+
+}
+
+void KisLayerFilterWidgetToolButton::setSelectedColors(QList<int> colors)
+{
+    m_selectedColors = colors;
+}
+
+void KisLayerFilterWidgetToolButton::paintEvent(QPaintEvent *paintEvent)
+{
+    KisNodeViewColorScheme colorScheme;
+    if (m_textFilter == false &&
+       ((m_selectedColors.count() == 0) || (m_selectedColors.count() == colorScheme.allColorLabels().count())))
+    {
+        QToolButton::paintEvent(paintEvent);
+    }
+    else
+    {
+        QStylePainter paint(this);
+        QStyleOptionToolButton opt;
+        initStyleOption(&opt);
+        paint.drawComplexControl(QStyle::CC_ToolButton, opt);
+        const QSize halfIconSize = this->iconSize() / 2;
+        const QSize halfButtonSize = this->size() / 2;
+        const QRect editRect = kisGrowRect(QRect(QPoint(halfButtonSize.width() - halfIconSize.width(), halfButtonSize.height() - halfIconSize.height()),this->iconSize()), -1);
+        const int size = qMin(editRect.width(), editRect.height());
+        KisColorFilterCombo::paintColorPie(paint, opt.palette, m_selectedColors, editRect, size );
+    }
 }

@@ -285,6 +285,54 @@ QList<int> KisColorFilterCombo::selectedColors() const
     return colors;
 }
 
+void KisColorFilterCombo::paintColorPie(QStylePainter &painter, const QPalette& palette, const QList<int> &selectedColors, const QRect &rect, const int &baseSize)
+{
+    KisNodeViewColorScheme scm;
+
+    if (selectedColors.size() == 1) {
+        const int currentLabel = selectedColors.first();
+        QColor currentColor = scm.colorLabel(currentLabel);
+
+        if (currentColor.alpha() > 0) {
+            painter.fillRect(rect, currentColor);
+        } else if (currentLabel == 0) {
+            QPen oldPen = painter.pen();
+
+            const int border = 4;
+            QRect crossRect(0, 0, baseSize - 2 * border, baseSize - 2 * border);
+            crossRect.moveCenter(rect.center());
+
+            QColor shade = palette.dark().color();
+            painter.setPen(QPen(shade, 2));
+            painter.drawLine(crossRect.topLeft(), crossRect.bottomRight());
+            painter.drawLine(crossRect.bottomLeft(), crossRect.topRight());
+        }
+    } else {
+        const int border = 0;
+        QRect pieRect(0, 0, baseSize - 2 * border, baseSize - 2 * border);
+        pieRect.moveCenter(rect.center());
+
+        const int numColors = selectedColors.size();
+        const int step = 16 * 360 / numColors;
+
+        int currentAngle = 0;
+
+        //painter.save(); // optimize out!
+        painter.setRenderHint(QPainter::Antialiasing);
+
+        for (int i = 0; i < numColors; i++) {
+            QColor color = scm.colorLabel(selectedColors[i]);
+            QBrush brush = color.alpha() > 0 ? QBrush(color) : QBrush(Qt::black, Qt::Dense4Pattern);
+            painter.setPen(color);
+            painter.setBrush(brush);
+
+            painter.drawPie(pieRect, currentAngle, step);
+            currentAngle += step;
+        }
+    }
+}
+
+
 void KisColorFilterCombo::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
@@ -297,8 +345,8 @@ void KisColorFilterCombo::paintEvent(QPaintEvent *event)
     initStyleOption(&opt);
     painter.drawComplexControl(QStyle::CC_ComboBox, opt);
 
+
     {
-        KisNodeViewColorScheme scm;
         const QRect editRect = style()->subControlRect(QStyle::CC_ComboBox, &opt, QStyle::SC_ComboBoxEditField, this);
         const int size = qMin(editRect.width(), editRect.height());
 
@@ -309,47 +357,8 @@ void KisColorFilterCombo::paintEvent(QPaintEvent *event)
             QPixmap pixmap = icon.pixmap(QSize(size, size), !isEnabled() ? QIcon::Disabled : QIcon::Normal);
             painter.drawPixmap(editRect.right() - size, editRect.top(), pixmap);
 
-        } else if (selectedColors.size() == 1) {
-            const int currentLabel = selectedColors.first();
-            QColor currentColor = scm.colorLabel(currentLabel);
-
-            if (currentColor.alpha() > 0) {
-                painter.fillRect(editRect, currentColor);
-            } else if (currentLabel == 0) {
-                QPen oldPen = painter.pen();
-
-                const int border = 4;
-                QRect crossRect(0, 0, size - 2 * border, size - 2 * border);
-                crossRect.moveCenter(editRect.center());
-
-                QColor shade = opt.palette.dark().color();
-                painter.setPen(QPen(shade, 2));
-                painter.drawLine(crossRect.topLeft(), crossRect.bottomRight());
-                painter.drawLine(crossRect.bottomLeft(), crossRect.topRight());
-            }
         } else {
-            const int border = 0;
-            QRect pieRect(0, 0, size - 2 * border, size - 2 * border);
-            pieRect.moveCenter(editRect.center());
-
-            const int numColors = selectedColors.size();
-            const int step = 16 * 360 / numColors;
-
-            int currentAngle = 0;
-
-            //painter.save(); // optimize out!
-            painter.setRenderHint(QPainter::Antialiasing);
-
-            for (int i = 0; i < numColors; i++) {
-                QColor color = scm.colorLabel(selectedColors[i]);
-                QBrush brush = color.alpha() > 0 ? QBrush(color) : QBrush(Qt::black, Qt::Dense4Pattern);
-                painter.setPen(color);
-                painter.setBrush(brush);
-
-                painter.drawPie(pieRect, currentAngle, step);
-                currentAngle += step;
-            }
-            //painter.restore(); // optimize out!
+            KisColorFilterCombo::paintColorPie(painter, opt.palette, selectedColors, editRect, size );
         }
     }
 

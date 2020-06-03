@@ -63,7 +63,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="bnLayerFilters">
+      <widget class="KisLayerFilterWidgetToolButton" name="bnLayerFilters">
        <property name="minimumSize">
         <size>
          <width>32</width>
@@ -338,14 +338,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisCompositeOpComboBox</class>
-   <extends>QComboBox</extends>
-   <header>widgets/kis_cmb_composite.h</header>
-  </customwidget>
-  <customwidget>
    <class>KisDoubleSliderSpinBox</class>
    <extends>QWidget</extends>
    <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisCompositeOpComboBox</class>
+   <extends>QComboBox</extends>
+   <header>widgets/kis_cmb_composite.h</header>
   </customwidget>
   <customwidget>
    <class>NodeView</class>
@@ -356,6 +357,11 @@
    <class>KisToolButton</class>
    <extends>QToolButton</extends>
    <header>kis_tool_button.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisLayerFilterWidgetToolButton</class>
+   <extends>QToolButton</extends>
+   <header>libs/ui/widgets/kis_layer_filter_widget.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

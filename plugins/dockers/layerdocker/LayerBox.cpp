@@ -269,6 +269,8 @@ LayerBox::LayerBox()
         } else {
             m_wdgLayerBox->bnLayerFilters->setIcon(filterIcon);
         }
+
+        m_wdgLayerBox->bnLayerFilters->setSelectedColors(QList<int>::fromSet(layerFilterWidget->getActiveColors()));
     });
 
     QWidgetAction *layerFilterMenuAction = new QWidgetAction(this);

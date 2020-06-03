@@ -75,12 +75,12 @@
        <widget class="QPushButton" name="resetFilter">
         <property name="maximumSize">
          <size>
-          <width>80</width>
+          <width>55</width>
           <height>16777215</height>
          </size>
         </property>
         <property name="text">
-         <string>Reset Filter</string>
+         <string>Reset</string>
         </property>
        </widget>
       </item>

@@ -20,6 +20,7 @@
 #define KISLAYERFILTERWIDGET_H
 
 #include <QWidget>
+#include <QToolButton>
 #include "kis_types.h"
 
 #include "kritaui_export.h"
@@ -59,6 +60,25 @@ public:
 Q_SIGNALS:
     void filteringOptionsChanged();
 
+};
+
+class KRITAUI_EXPORT KisLayerFilterWidgetToolButton : public QToolButton
+{
+    Q_OBJECT
+public:
+    explicit KisLayerFilterWidgetToolButton(QWidget *parent = nullptr);
+    KisLayerFilterWidgetToolButton(const KisLayerFilterWidgetToolButton& rhs);
+    ~KisLayerFilterWidgetToolButton(){}
+
+    void setSelectedColors(QList<int> colors);
+
+
+private:
+    void paintEvent(QPaintEvent *paintEvent) override;
+
+private:
+    bool m_textFilter;
+    QList<int> m_selectedColors;
 };
 
 #endif // KISLAYERFILTERWIDGET_H

@@ -156,6 +156,7 @@ execute_process(COMMAND "${TOOL_MAKENSIS}"
     "${ARG_HAS_FFMPEG}"
     "/XSetCompressor /SOLID lzma"
     "/V3"
+    "/INPUTCHARSET UTF8"
     "${CMAKE_CURRENT_BINARY_DIR}/krita-nsis/installer_krita.nsi"
     RESULT_VARIABLE result_makensis
 )

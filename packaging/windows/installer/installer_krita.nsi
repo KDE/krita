@@ -101,6 +101,7 @@ Page Custom func_BeforeInstallPage_Init
 
 # Languages
 !insertmacro MUI_LANGUAGE "English"
+!insertmacro MUI_LANGUAGE "TradChinese"
 
 !include Sections.nsh
 !include LogicLib.nsh
@@ -388,6 +389,8 @@ Function .onInit
 	Push "" # This value is for languages auto count
 	Push ${LANG_ENGLISH}
 	Push English
+	Push ${LANG_TRADCHINESE}
+	Push "繁體中文"
 	Push A # = auto count languages
 	LangDLL::LangDialog "$(^SetupCaption)" "$(SetupLangPrompt)"
 	Pop $LANGUAGE
@@ -615,3 +618,4 @@ FunctionEnd
 
 # Strings
 !include "translations\English.nsh"
+!include "translations\TradChinese.nsh"

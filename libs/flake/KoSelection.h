@@ -154,10 +154,6 @@ Q_SIGNALS:
     /// emitted when the current layer is changed
     void currentLayerChanged(const KoShapeLayer *layer);
 
-private:
-    void saveOdf(KoShapeSavingContext &) const override;
-    bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) override;
-
 protected:
     KoSelection(const KoSelection &rhs);
 

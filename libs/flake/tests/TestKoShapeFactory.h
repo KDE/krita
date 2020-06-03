@@ -32,7 +32,6 @@ private Q_SLOTS:
     void testPriority();
     void testCreateDefaultShape();
     void testCreateShape();
-    void testOdfElement();
 
 };
 

@@ -115,6 +115,9 @@ public:
     void convertColorSpace(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags, KUndo2Command *parentCommand);
     bool assignProfile(const KoColorProfile * profile, KUndo2Command *parentCommand);
 
+    KUndo2Command* reincarnateWithDetachedHistory(bool copyContent);
+
+
     inline const KoColorSpace* colorSpace() const
     {
         return currentData()->colorSpace();
@@ -997,6 +1000,13 @@ bool KisPaintDevice::Private::assignProfile(const KoColorProfile * profile, KUnd
     return true;
 }
 
+KUndo2Command *KisPaintDevice::Private::reincarnateWithDetachedHistory(bool copyContent)
+{
+    KUndo2Command *mainCommand = new KUndo2Command();
+    currentData()->reincarnateWithDetachedHistory(copyContent, mainCommand);
+    return mainCommand;
+}
+
 void KisPaintDevice::Private::init(const KoColorSpace *cs, const quint8 *defaultPixel)
 {
     QList<Data*> dataObjects = allDataObjects();
@@ -1545,6 +1555,11 @@ bool KisPaintDevice::setProfile(const KoColorProfile * profile, KUndo2Command *p
     return m_d->assignProfile(profile, parentCommand);
 }
 
+KUndo2Command *KisPaintDevice::reincarnateWithDetachedHistory(bool copyContent)
+{
+    return m_d->reincarnateWithDetachedHistory(copyContent);
+}
+
 KisDataManagerSP KisPaintDevice::dataManager() const
 {
     return m_d->dataManager();
@@ -1768,6 +1783,17 @@ QImage KisPaintDevice::createThumbnail(qint32 w, qint32 h, qreal oversample, KoC
     QSize size = fixThumbnailSize(QSize(w, h));
 
     return m_d->cache()->createThumbnail(size.width(), size.height(), oversample, renderingIntent, conversionFlags);
+}
+
+QImage KisPaintDevice::createThumbnail(qint32 maxw, qint32 maxh,
+                                       Qt::AspectRatioMode aspectRatioMode,
+                                       qreal oversample, KoColorConversionTransformation::Intent renderingIntent,
+                                       KoColorConversionTransformation::ConversionFlags conversionFlags)
+{
+    const QRect deviceExtent = extent();
+    const QSize thumbnailSize = deviceExtent.size().scaled(maxw, maxh, aspectRatioMode);
+    return createThumbnail(thumbnailSize.width(), thumbnailSize.height(),
+                           oversample, renderingIntent, conversionFlags);
 }
 
 KisHLineIteratorSP KisPaintDevice::createHLineIteratorNG(qint32 x, qint32 y, qint32 w)

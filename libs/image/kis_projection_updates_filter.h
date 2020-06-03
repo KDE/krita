@@ -35,6 +35,7 @@ public:
      * \return true if an update should be dropped by the image
      */
     virtual bool filter(KisImage *image, KisNode *node, const QVector<QRect> &rects, bool resetAnimationCache) = 0;
+    virtual bool filterRefreshGraph(KisImage *image, KisNode *node, const QVector<QRect> &rect, const QRect &cropRect) = 0;
 };
 
 
@@ -46,6 +47,7 @@ class KRITAIMAGE_EXPORT KisDropAllProjectionUpdatesFilter : public KisProjection
 {
 public:
     bool filter(KisImage *image, KisNode *node, const QVector<QRect> &rects, bool resetAnimationCache) override;
+    bool filterRefreshGraph(KisImage *image, KisNode *node, const QVector<QRect> &rects, const QRect &cropRect) override;
 };
 
 #endif /* __KIS_PROJECTION_UPDATES_FILTER_H */

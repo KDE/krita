@@ -141,12 +141,4 @@ void KisNodeShape::paint(QPainter &, KoShapePaintingContext &) const
 {
 }
 
-void KisNodeShape::saveOdf(KoShapeSavingContext &) const
-{
-}
-
-bool KisNodeShape::loadOdf(const KoXmlElement &, KoShapeLoadingContext &)
-{
-    return false;
-}
 

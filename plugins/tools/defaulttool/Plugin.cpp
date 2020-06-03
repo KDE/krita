@@ -18,7 +18,6 @@
  */
 #include "Plugin.h"
 #include "defaulttool/DefaultToolFactory.h"
-#include "connectionTool/ConnectionToolFactory.h"
 #include "referenceimagestool/ToolReferenceImages.h"
 
 #include <KoToolRegistry.h>
@@ -31,7 +30,6 @@ Plugin::Plugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     KoToolRegistry::instance()->add(new DefaultToolFactory());
-    KoToolRegistry::instance()->add(new ConnectionToolFactory());
     KoToolRegistry::instance()->add(new ToolReferenceImagesFactory());
 }
 

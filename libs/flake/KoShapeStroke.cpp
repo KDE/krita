@@ -32,8 +32,6 @@
 #include <QPainter>
 
 // Calligra
-#include <KoGenStyles.h>
-#include <KoOdfGraphicStyles.h>
 
 // Flake
 #include "KoShape.h"
@@ -210,16 +208,6 @@ KoShapeStroke &KoShapeStroke::operator = (const KoShapeStroke &rhs)
     d->brush = rhs.d->brush;
 
     return *this;
-}
-
-void KoShapeStroke::fillStyle(KoGenStyle &style, KoShapeSavingContext &context) const
-{
-    QPen pen = d->pen;
-    if (d->brush.gradient())
-        pen.setBrush(d->brush);
-    else
-        pen.setColor(d->color);
-    KoOdfGraphicStyles::saveOdfStrokeStyle(style, context.mainStyles(), pen);
 }
 
 void KoShapeStroke::strokeInsets(const KoShape *shape, KoInsets &insets) const

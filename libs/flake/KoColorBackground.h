@@ -55,10 +55,7 @@ public:
 
     // reimplemented from KoShapeBackground
     void paint(QPainter &painter, KoShapePaintingContext &context, const QPainterPath &fillPath) const override;
-    // reimplemented from KoShapeBackground
-    void fillStyle(KoGenStyle &style, KoShapeSavingContext &context) override;
-    // reimplemented from KoShapeBackground
-    bool loadStyle(KoOdfLoadingContext & context, const QSizeF &shapeSize) override;
+
 private:
     class Private;
     QSharedDataPointer<Private> d;

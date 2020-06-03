@@ -89,19 +89,6 @@ void ImageShape::setSize(const QSizeF &size)
     KoTosContainer::setSize(size);
 }
 
-void ImageShape::saveOdf(KoShapeSavingContext &context) const
-{
-    Q_UNUSED(context);
-}
-
-bool ImageShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
-{
-    Q_UNUSED(element);
-    Q_UNUSED(context);
-
-    return false;
-}
-
 bool ImageShape::saveSvg(SvgSavingContext &context)
 {
     const QString uid = context.createUID("image");

@@ -107,7 +107,6 @@
 #include "kis_paintop_box.h"
 #include <brushengine/kis_paintop_preset.h>
 #include "KisPart.h"
-#include "KisPrintJob.h"
 #include <KoUpdater.h>
 #include "KisResourceServerProvider.h"
 #include "kis_selection.h"
@@ -965,7 +964,7 @@ void KisViewManager::slotSaveIncremental()
             newVersion.append(".");
         }
         fileName.replace(regex, newVersion);
-        fileAlreadyExists = QFile(fileName).exists();
+        bool fileAlreadyExists = QFileInfo(path + '/' + fileName).exists();
         if (fileAlreadyExists) {
             if (!letter.isNull()) {
                 char letterCh = letter.at(0).toLatin1();

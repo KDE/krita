@@ -34,7 +34,6 @@
 #include <KoDpi.h>
 #include <KoUnit.h>
 #include <KoID.h>
-#include <KoOdfReadStore.h>
 #include <KoProgressProxy.h>
 #include <KoProgressUpdater.h>
 #include <KoSelection.h>
@@ -612,12 +611,6 @@ KisDocument::~KisDocument()
 QString KisDocument::uniqueID() const
 {
     return d->documentStorageID;
-}
-
-bool KisDocument::reload()
-{
-    // XXX: reimplement!
-    return false;
 }
 
 KisDocument *KisDocument::clone()

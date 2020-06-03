@@ -7,7 +7,6 @@ set(kritawidgets_LIB_SRCS
     KoDialog.cpp
     KoZoomWidget.cpp
     KoAspectButton.cpp
-    KoPagePreviewWidget.cpp
     KoSliderCombo.cpp
     KoColorPopupButton.cpp
     KoConfigAuthorPage.cpp
@@ -37,14 +36,10 @@ set(kritawidgets_LIB_SRCS
     KoToolBoxFactory.cpp
     KoToolDocker.cpp
     
-    KoPageLayoutWidget.cpp
-    KoPageLayoutDialog.cpp
     KoShadowConfigWidget.cpp
     KoMarkerSelector.cpp
     KoMarkerModel.cpp
     KoMarkerItemDelegate.cpp
-
-    KoDocumentInfoDlg.cpp
 
     WidgetsDebug.cpp
 
@@ -80,10 +75,7 @@ set(kritawidgets_LIB_SRCS
 
 ki18n_wrap_ui( kritawidgets_LIB_SRCS
     KoConfigAuthorPage.ui
-    koDocumentInfoAboutWidget.ui
-    koDocumentInfoAuthorWidget.ui
     wdg_file_name_requester.ui
-    KoPageLayoutWidget.ui
     KoShadowConfigWidget.ui
     WdgDlgInternalColorSelector.ui
     WdgPaletteListWidget.ui
@@ -92,7 +84,7 @@ ki18n_wrap_ui( kritawidgets_LIB_SRCS
 add_library(kritawidgets SHARED ${kritawidgets_LIB_SRCS})
 generate_export_header(kritawidgets BASE_NAME kritawidgets)
 target_link_libraries(kritawidgets
-    kritaodf
+    
     kritaglobal
     kritaflake
     kritapigment

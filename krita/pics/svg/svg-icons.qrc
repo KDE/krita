@@ -155,5 +155,7 @@
         <file>light_ratio.svg</file>
         <file>dark_bundle_archive.svg</file>
         <file>light_bundle_archive.svg</file>
+        <file>dark_python.svg</file>
+        <file>light_python.svg</file>
     </qresource>
 </RCC>

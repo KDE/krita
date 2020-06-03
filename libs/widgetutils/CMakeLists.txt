@@ -132,7 +132,7 @@ target_link_libraries(kritawidgetutils
         KF5::WidgetsAddons
         KF5::WindowSystem
         kritaplugin
-        kritaodf
+        
         ${KRITA_WIDGET_UTILS_EXTRA_LIBS}
 )
 

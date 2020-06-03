@@ -29,12 +29,10 @@
 #include "KoSelection.h"
 #include "commands/KoShapeCreateCommand.h"
 #include "commands/KoShapeDeleteCommand.h"
-#include "commands/KoShapeConnectionChangeCommand.h"
 #include "KoCanvasBase.h"
 #include "KoShapeConfigWidgetBase.h"
 #include "KoShapeFactoryBase.h"
 #include "KoShape.h"
-#include "KoConnectionShape.h"
 #include <KoUnit.h>
 
 #include <QObject>
@@ -104,22 +102,18 @@ public:
 
     KUndo2Command* addShapesDirect(const QList<KoShape*> shapes, KoShapeContainer *parentShape, KUndo2Command *parent)
     {
-        return new KoShapeCreateCommand(shapeController, shapes, parentShape, parent);
-    }
+        KUndo2Command *resultCommand = 0;
 
-    void handleAttachedConnections(KoShape *shape, KUndo2Command *parentCmd) {
-        foreach (KoShape *dependee, shape->dependees()) {
-            KoConnectionShape *connection = dynamic_cast<KoConnectionShape*>(dependee);
-            if (connection) {
-                if (shape == connection->firstShape()) {
-                    new KoShapeConnectionChangeCommand(connection, KoConnectionShape::StartHandle,
-                                                       shape, connection->firstConnectionId(), 0, -1, parentCmd);
-                } else if (shape == connection->secondShape()) {
-                    new KoShapeConnectionChangeCommand(connection, KoConnectionShape::EndHandle,
-                                                       shape, connection->secondConnectionId(), 0, -1, parentCmd);
-                }
-            }
+        if (!parentShape) {
+            resultCommand = new KUndo2Command(parent);
+            parentShape = shapeController->createParentForShapes(shapes, resultCommand);
+            KUndo2Command *addShapeCommand = new KoShapeCreateCommand(shapeController, shapes, parentShape, resultCommand);
+            resultCommand->setText(addShapeCommand->text());
+        } else {
+            resultCommand = new KoShapeCreateCommand(shapeController, shapes, parentShape, parent);
         }
+
+        return resultCommand;
     }
 };
 
@@ -158,22 +152,12 @@ KUndo2Command *KoShapeController::addShapesDirect(const QList<KoShape *> shapes,
 
 KUndo2Command* KoShapeController::removeShape(KoShape *shape, KUndo2Command *parent)
 {
-    KUndo2Command *cmd = new KoShapeDeleteCommand(d->shapeController, shape, parent);
-    QList<KoShape*> shapes;
-    shapes.append(shape);
-    d->shapeController->shapesRemoved(shapes, cmd);
-    // detach shape from any attached connection shapes
-    d->handleAttachedConnections(shape, cmd);
-    return cmd;
+    return removeShapes({shape}, parent);
 }
 
 KUndo2Command* KoShapeController::removeShapes(const QList<KoShape*> &shapes, KUndo2Command *parent)
 {
     KUndo2Command *cmd = new KoShapeDeleteCommand(d->shapeController, shapes, parent);
-    d->shapeController->shapesRemoved(shapes, cmd);
-    foreach (KoShape *shape, shapes) {
-        d->handleAttachedConnections(shape, cmd);
-    }
     return cmd;
 }
 

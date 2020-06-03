@@ -342,7 +342,7 @@ target_link_libraries(kritaimage
         kritawidgets 
         kritaglobal 
         kritapsd 
-        kritaodf 
+         
         kritapigment 
         kritacommand
         kritawidgetutils 

@@ -227,6 +227,13 @@ void KisInputManager::Private::CanvasSwitcher::addCanvas(KisCanvas2 *canvas)
 
     if (!canvasResolver.contains(canvasWidget)) {
         canvasResolver.insert(canvasWidget, canvas);
+    } else {
+        // just a sanity cheeck to find out if we are
+        // trying to add two canvases concurrently.
+        KIS_SAFE_ASSERT_RECOVER_NOOP(d->canvas == canvas);
+    }
+
+    if (canvas != d->canvas) {
         d->q->setupAsEventFilter(canvasWidget);
         canvasWidget->installEventFilter(this);
 
@@ -235,8 +242,6 @@ void KisInputManager::Private::CanvasSwitcher::addCanvas(KisCanvas2 *canvas)
 
         d->canvas = canvas;
         d->toolProxy = qobject_cast<KisToolProxy*>(canvas->toolProxy());
-    } else {
-        KIS_ASSERT_RECOVER_RETURN(d->canvas == canvas);
     }
 }
 

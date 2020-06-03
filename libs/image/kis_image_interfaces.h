@@ -63,6 +63,7 @@ public:
     virtual void refreshGraphAsync(KisNodeSP root) = 0;
     virtual void refreshGraphAsync(KisNodeSP root, const QRect &rc) = 0;
     virtual void refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &cropRect) = 0;
+    virtual void refreshGraphAsync(KisNodeSP root, const QVector<QRect> &rc, const QRect &cropRect) = 0;
 
     virtual KisProjectionUpdatesFilterCookie addProjectionUpdatesFilter(KisProjectionUpdatesFilterSP filter) = 0;
     virtual KisProjectionUpdatesFilterSP removeProjectionUpdatesFilter(KisProjectionUpdatesFilterCookie cookie) = 0;

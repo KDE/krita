@@ -32,8 +32,6 @@ class KoFontFacePrivate;
 /**
  * @brief Represents font style.
  * Font style is defined by the style:font-face element.
- * @todo add more parameters.
- * @todo add class KoFontFaceDeclarations instead of adding methods to KoGenStyle?
  */
 class KRITAODF_EXPORT KoFontFace
 {
@@ -83,10 +81,6 @@ public:
     void setStyle(const QString &style);
     KoFontFace::Pitch pitch() const;
     void setPitch(KoFontFace::Pitch pitch);
-
-    /** Saves font face definition into @a xmlWriter as a style:font-face element.
-     */
-    void saveOdf(KoXmlWriter *xmlWriter) const;
 
 private:
     QSharedDataPointer<KoFontFacePrivate> d;

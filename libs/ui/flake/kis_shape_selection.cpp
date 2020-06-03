@@ -34,12 +34,6 @@
 #include <KoShapeManager.h>
 #include <KisDocument.h>
 
-#include <KoEmbeddedDocumentSaver.h>
-#include <KoGenStyles.h>
-#include <KoOdfLoadingContext.h>
-#include <KoOdfReadStore.h>
-#include <KoOdfStylesReader.h>
-#include <KoOdfWriteStore.h>
 #include <KoXmlNS.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeLoadingContext.h>
@@ -49,7 +43,6 @@
 #include <KoShapeSavingContext.h>
 #include <KoStoreDevice.h>
 #include <KoShapeTransformCommand.h>
-#include <KoElementReference.h>
 
 #include <kis_painter.h>
 #include <kis_paint_device.h>
@@ -68,22 +61,8 @@
 
 KisShapeSelection::KisShapeSelection(KoShapeControllerBase *shapeControllerBase, KisImageWSP image, KisSelectionWSP selection)
     : KoShapeLayer(m_model = new KisShapeSelectionModel(image, selection, this))
-    , m_image(image)
-    , m_shapeControllerBase(shapeControllerBase)
 {
-    Q_ASSERT(m_image);
-    setShapeId("KisShapeSelection");
-    setSelectable(false);
-    m_converter = new KisImageViewConverter(image);
-    m_canvas = new KisShapeSelectionCanvas(shapeControllerBase);
-    m_canvas->shapeManager()->addShape(this);
-
-    m_model->setObjectName("KisShapeSelectionModel");
-    m_model->moveToThread(image->thread());
-    m_canvas->setObjectName("KisShapeSelectionCanvas");
-    m_canvas->moveToThread(image->thread());
-
-    connect(this, SIGNAL(sigMoveShapes(QPointF)), SLOT(slotMoveShapes(QPointF)));
+    init(image, shapeControllerBase);
 }
 
 KisShapeSelection::~KisShapeSelection()
@@ -96,10 +75,7 @@ KisShapeSelection::~KisShapeSelection()
 KisShapeSelection::KisShapeSelection(const KisShapeSelection& rhs, KisSelection* selection)
     : KoShapeLayer(m_model = new KisShapeSelectionModel(rhs.m_image, selection, this))
 {
-    m_image = rhs.m_image;
-    m_shapeControllerBase = rhs.m_shapeControllerBase;
-    m_converter = new KisImageViewConverter(m_image);
-    m_canvas = new KisShapeSelectionCanvas(m_shapeControllerBase);
+    init(rhs.m_image, rhs.m_shapeControllerBase);
 
     // TODO: refactor shape selection to pass signals
     //       via KoShapeManager, not via the model
@@ -117,14 +93,30 @@ KisShapeSelection::KisShapeSelection(const KisShapeSelection& rhs, KisSelection*
     m_model->setUpdatesEnabled(true);
 }
 
+void KisShapeSelection::init(KisImageSP image, KoShapeControllerBase *shapeControllerBase)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(image);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(shapeControllerBase);
+
+    m_image = image;
+    m_shapeControllerBase = shapeControllerBase;
+
+    setShapeId("KisShapeSelection");
+    setSelectable(false);
+    m_converter = new KisImageViewConverter(image);
+    m_canvas = new KisShapeSelectionCanvas(shapeControllerBase);
+    m_canvas->shapeManager()->addShape(this);
+
+    m_model->setObjectName("KisShapeSelectionModel");
+    m_model->moveToThread(image->thread());
+    m_canvas->setObjectName("KisShapeSelectionCanvas");
+    m_canvas->moveToThread(image->thread());
+
+    connect(this, SIGNAL(sigMoveShapes(QPointF)), SLOT(slotMoveShapes(QPointF)));
+}
+
 KisSelectionComponent* KisShapeSelection::clone(KisSelection* selection)
 {
-    /**
-     * TODO: make cloning of vector selections safe! Right now it crashes
-     * on Windows because of manipulations with timers from non-gui thread.
-     */
-    KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
-
     return new KisShapeSelection(*this, selection);
 }
 
@@ -164,85 +156,7 @@ bool KisShapeSelection::loadSelection(KoStore* store)
         return true;
     }
 
-
-    KoOdfReadStore odfStore(store);
-    QString errorMessage;
-
-    odfStore.loadAndParse(errorMessage);
-
-    if (!errorMessage.isEmpty()) {
-        dbgKrita << errorMessage;
-        return false;
-    }
-
-    KoXmlElement contents = odfStore.contentDoc().documentElement();
-
-    //    dbgKrita <<"Start loading OASIS document..." << contents.text();
-    //    dbgKrita <<"Start loading OASIS contents..." << contents.lastChild().localName();
-    //    dbgKrita <<"Start loading OASIS contents..." << contents.lastChild().namespaceURI();
-    //    dbgKrita <<"Start loading OASIS contents..." << contents.lastChild().isElement();
-
-    KoXmlElement body(KoXml::namedItemNS(contents, KoXmlNS::office, "body"));
-
-    if (body.isNull()) {
-        dbgKrita << "No office:body found!";
-        //setErrorMessage( i18n( "Invalid OASIS document. No office:body tag found." ) );
-        return false;
-    }
-
-    body = KoXml::namedItemNS(body, KoXmlNS::office, "drawing");
-    if (body.isNull()) {
-        dbgKrita << "No office:drawing found!";
-        //setErrorMessage( i18n( "Invalid OASIS document. No office:drawing tag found." ) );
-        return false;
-    }
-
-    KoXmlElement page(KoXml::namedItemNS(body, KoXmlNS::draw, "page"));
-    if (page.isNull()) {
-        dbgKrita << "No office:drawing found!";
-        //setErrorMessage( i18n( "Invalid OASIS document. No draw:page tag found." ) );
-        return false;
-    }
-
-    KoXmlElement * master = 0;
-    if (odfStore.styles().masterPages().contains("Standard"))
-        master = odfStore.styles().masterPages().value("Standard");
-    else if (odfStore.styles().masterPages().contains("Default"))
-        master = odfStore.styles().masterPages().value("Default");
-    else if (! odfStore.styles().masterPages().empty())
-        master = odfStore.styles().masterPages().begin().value();
-
-    if (master) {
-        const KoXmlElement *style = odfStore.styles().findStyle(
-                    master->attributeNS(KoXmlNS::style, "page-layout-name", QString()));
-        KoPageLayout pageLayout;
-        pageLayout.loadOdf(*style);
-        setSize(QSizeF(pageLayout.width, pageLayout.height));
-    } else {
-        dbgKrita << "No master page found!";
-        return false;
-    }
-
-    KoOdfLoadingContext context(odfStore.styles(), odfStore.store());
-    KoShapeLoadingContext shapeContext(context, 0);
-
-    KoXmlElement layerElement;
-    forEachElement(layerElement, context.stylesReader().layerSet()) {
-        if (!loadOdf(layerElement, shapeContext)) {
-            dbgKrita << "Could not load vector layer!";
-            return false;
-        }
-    }
-
-    KoXmlElement child;
-    forEachElement(child, page) {
-        KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(child, shapeContext);
-        if (shape) {
-            addShape(shape);
-        }
-    }
-
-    return true;
+    return false;
 }
 
 void KisShapeSelection::setUpdatesEnabled(bool enabled)

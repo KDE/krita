@@ -109,6 +109,15 @@ public:
     static bool supportsFenceSync();
 
     /**
+     * @brief supportsRenderToFBO
+     * @return True if OpenGL can render to FBO, used
+     * currently for rendering cursor with image overlay
+     * fx.
+     */
+    static bool supportsRenderToFBO();
+
+
+    /**
      * Returns true if we have a driver that has bugged support to sync objects (a fence)
      * and false otherwise.
      */

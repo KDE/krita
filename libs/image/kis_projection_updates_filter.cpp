@@ -34,3 +34,12 @@ bool KisDropAllProjectionUpdatesFilter::filter(KisImage *image, KisNode *node, c
     Q_UNUSED(resetAnimationCache);
     return true;
 }
+
+bool KisDropAllProjectionUpdatesFilter::filterRefreshGraph(KisImage *image, KisNode *node, const QVector<QRect> &rects, const QRect &cropRect)
+{
+    Q_UNUSED(image);
+    Q_UNUSED(node);
+    Q_UNUSED(rects);
+    Q_UNUSED(cropRect);
+    return true;
+}

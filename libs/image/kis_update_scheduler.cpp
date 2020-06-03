@@ -168,9 +168,9 @@ void KisUpdateScheduler::updateProjectionNoFilthy(KisNodeSP node, const QRect& r
     processQueues();
 }
 
-void KisUpdateScheduler::fullRefreshAsync(KisNodeSP root, const QRect& rc, const QRect &cropRect)
+void KisUpdateScheduler::fullRefreshAsync(KisNodeSP root, const QVector<QRect>& rects, const QRect &cropRect)
 {
-    m_d->updatesQueue.addFullRefreshJob(root, rc, cropRect, currentLevelOfDetail());
+    m_d->updatesQueue.addFullRefreshJob(root, rects, cropRect, currentLevelOfDetail());
     processQueues();
 }
 

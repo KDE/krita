@@ -253,12 +253,3 @@ void KoSelection::notifyShapeChanged(KoShape::ChangeType type, KoShape *shape)
         shape->addShapeChangeListener(this);
     }
 }
-
-void KoSelection::saveOdf(KoShapeSavingContext &) const
-{
-}
-
-bool KoSelection::loadOdf(const KoXmlElement &, KoShapeLoadingContext &)
-{
-    return true;
-}

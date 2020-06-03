@@ -34,7 +34,6 @@
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 #include <KoShapeLoadingContext.h>
-#include <KoOdfLoadingContext.h>
 #include <KoIcon.h>
 #include <KoProperties.h>
 #include <KoColorBackground.h>
@@ -616,7 +615,7 @@ KoShape *KoSvgTextShapeFactory::createShape(const KoProperties *params, KoDocume
     KoSvgTextShape *shape = new KoSvgTextShape();
     shape->setShapeId(KoSvgTextShape_SHAPEID);
 
-    QString svgText = params->stringProperty("svgText", "<text>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</text>");
+    QString svgText = params->stringProperty("svgText", i18nc("Default text for the text shape", "<text>Placeholder Text</text>"));
     QString defs = params->stringProperty("defs" , "<defs/>");
     QRectF shapeRect = QRectF(0, 0, 200, 60);
     QVariant rect = params->property("shapeRect");

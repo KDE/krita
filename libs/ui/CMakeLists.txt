@@ -213,6 +213,7 @@ set(kritaui_LIB_SRCS
     tool/strokes/KisMaskingBrushRenderer.cpp
     tool/strokes/KisMaskingBrushCompositeOpFactory.cpp
     tool/strokes/move_stroke_strategy.cpp
+    tool/strokes/KisNodeSelectionRecipe.cpp
     tool/KisSelectionToolFactoryBase.cpp
     tool/KisToolPaintFactoryBase.cpp
 
@@ -356,7 +357,6 @@ set(kritaui_LIB_SRCS
     KisMainWindow.cpp
     KisOpenPane.cpp
     KisPart.cpp
-    KisPrintJob.cpp
     KisTemplate.cpp
     KisTemplateCreateDia.cpp
     KisTemplateGroup.cpp
@@ -399,6 +399,9 @@ set(kritaui_LIB_SRCS
     KisMouseClickEater.cpp
 
     KisDecorationsWrapperLayer.cpp
+
+    KoDocumentInfoDlg.cpp
+    KoDocumentInfo.cpp
 )
 
 if(WIN32)
@@ -538,6 +541,9 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/KisNewsPage.ui
     forms/wdgGamutMaskToolbar.ui
     forms/wdgchangeclonesource.ui
+    forms/koDocumentInfoAboutWidget.ui
+    forms/koDocumentInfoAuthorWidget.ui
+
 
     brushhud/kis_dlg_brush_hud_config.ui
     dialogs/kis_delayed_save_dialog.ui

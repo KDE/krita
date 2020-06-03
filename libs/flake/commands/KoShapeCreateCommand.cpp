@@ -32,29 +32,26 @@
 #include <vector>
 #include <memory>
 
+#include <kis_undo_stores.h>
+#include <KoAddRemoveShapeCommands.h>
+
 class Q_DECL_HIDDEN KoShapeCreateCommand::Private
 {
 public:
     Private(KoShapeControllerBase *_document, const QList<KoShape*> &_shapes, KoShapeContainer *_parentShape)
             : shapesDocument(_document),
             shapes(_shapes),
-            explicitParentShape(_parentShape),
-            deleteShapes(true)
+            explicitParentShape(_parentShape)
     {
-    }
-
-    ~Private() {
-        if (deleteShapes) {
-            qDeleteAll(shapes);
-        }
     }
 
     KoShapeControllerBase *shapesDocument;
     QList<KoShape*> shapes;
     KoShapeContainer *explicitParentShape;
-    bool deleteShapes;
 
-    std::vector<std::unique_ptr<KUndo2Command>> reorderingCommands;
+    KisSurrogateUndoStore undoStore;
+    bool firstRedo = true;
+
 };
 
 KoShapeCreateCommand::KoShapeCreateCommand(KoShapeControllerBase *controller, KoShape *shape, KoShapeContainer *parentShape, KUndo2Command *parent)
@@ -81,49 +78,29 @@ KoShapeCreateCommand::~KoShapeCreateCommand()
 void KoShapeCreateCommand::redo()
 {
     KUndo2Command::redo();
-    KIS_ASSERT(d->shapesDocument);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(d->explicitParentShape);
 
-    d->deleteShapes = false;
-    d->reorderingCommands.clear();
+    if (d->firstRedo) {
+        Q_FOREACH(KoShape *shape, d->shapes) {
 
-    Q_FOREACH(KoShape *shape, d->shapes) {
-        if (d->explicitParentShape) {
-            shape->setParent(d->explicitParentShape);
-        }
+            d->undoStore.addCommand(new KoAddShapeCommand(shape, d->explicitParentShape));
 
-        d->shapesDocument->addShape(shape);
+            KoShapeContainer *shapeParent = shape->parent();
+            KIS_SAFE_ASSERT_RECOVER_NOOP(shape->parent() ||
+                                         dynamic_cast<KoShapeLayer*>(shape));
 
-        KoShapeContainer *shapeParent = shape->parent();
-
-        KIS_SAFE_ASSERT_RECOVER_NOOP(shape->parent() ||
-                                     dynamic_cast<KoShapeLayer*>(shape));
-
-        if (shapeParent) {
-            KUndo2Command *cmd = KoShapeReorderCommand::mergeInShape(shapeParent->shapes(), shape);
-
-            if (cmd) {
-                cmd->redo();
-                d->reorderingCommands.push_back(
-                    std::unique_ptr<KUndo2Command>(cmd));
+            if (shapeParent) {
+                d->undoStore.addCommand(KoShapeReorderCommand::mergeInShape(shapeParent->shapes(), shape));
             }
         }
+        d->firstRedo = false;
+    } else {
+        d->undoStore.redoAll();
     }
 }
 
 void KoShapeCreateCommand::undo()
 {
+    d->undoStore.undoAll();
     KUndo2Command::undo();
-    KIS_ASSERT(d->shapesDocument);
-
-    while (!d->reorderingCommands.empty()) {
-        std::unique_ptr<KUndo2Command> cmd = std::move(d->reorderingCommands.back());
-        cmd->undo();
-        d->reorderingCommands.pop_back();
-    }
-
-    Q_FOREACH(KoShape *shape, d->shapes) {
-        d->shapesDocument->removeShape(shape);
-    }
-
-    d->deleteShapes = true;
 }

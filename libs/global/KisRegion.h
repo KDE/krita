@@ -55,6 +55,15 @@ public:
      */
     static QVector<QRect>::iterator mergeSparseRects(QVector<QRect>::iterator beginIt, QVector<QRect>::iterator endIt);
 
+
+    /**
+     * Simplifies \p rects in a way that they don't overlap anymore. The actual
+     * resulting area may be larger than original \p rects, but not more than
+     * \p gridSize in any dimension.
+     */
+    static void approximateOverlappingRects(QVector<QRect> &rects, int gridSize);
+
+
 public:
     KisRegion() = default;
     KisRegion(const KisRegion &rhs) = default;
@@ -84,6 +93,13 @@ public:
     KisRegion translated(int x, int y) const;
 
     static KisRegion fromQRegion(const QRegion &region);
+
+    /**
+     * Approximates a KisRegion from \p rects, which may overlap. The resulting
+     * KisRegion may be larger than the original set of rects, but it is guaranteed
+     * to cover it completely.
+     */
+    static KisRegion fromOverlappingRects(const QVector<QRect> &rects, int gridSize);
 
 private:
     void mergeAllRects();

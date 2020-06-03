@@ -26,7 +26,6 @@
 #include <QSharedDataPointer>
 
 class KoImageCollection;
-class KoOdfLoadingContext;
 class KoPatternBackgroundPrivate;
 class KoImageData;
 
@@ -115,10 +114,6 @@ public:
 
     /// reimplemented from KoShapeBackground
     void paint(QPainter &painter, KoShapePaintingContext &context, const QPainterPath &fillPath) const override;
-    /// reimplemented from KoShapeBackground
-    void fillStyle(KoGenStyle &style, KoShapeSavingContext &context) override;
-    /// reimplemented from KoShapeBackground
-    bool loadStyle(KoOdfLoadingContext &context, const QSizeF &shapeSize) override;
 
     /// Returns the bounding rect of the pattern image based on the given fill size
     QRectF patternRectFromFillSize(const QSizeF &size);

@@ -26,7 +26,6 @@ LangString ConfirmInstallPageDesc ${CURRENT_LANG} "Confirm installation of ${KRI
 LangString DesktopIconPageDesc2 ${CURRENT_LANG} "You can choose whether to create a shortcut icon on the desktop for launching Krita:"
 LangString DesktopIconPageCheckbox ${CURRENT_LANG} "Create a desktop icon"
 LangString ConfirmInstallPageDesc2 ${CURRENT_LANG} "Setup is ready to install ${KRITA_PRODUCTNAME} ${KRITA_VERSION_DISPLAY}. You may go back to review the install options before you continue.$\r$\n$\r$\n$_CLICK"
-LangString UninstallKritaLnkFileName ${CURRENT_LANG} "Uninstall ${KRITA_PRODUCTNAME}"
 
 # Misc. message prompts:
 LangString MsgRequireWin7 ${CURRENT_LANG} "${KRITA_PRODUCTNAME} ${KRITA_VERSION_DISPLAY} requires Windows 7 or above."

@@ -126,7 +126,6 @@ Var PrevShellExInstallLocation
 Var PrevShellExStandalone
 
 Var UninstallShellExStandalone
-Var UninstallKritaLnkFileName
 
 Section "-Remove_shellex" SEC_remove_shellex
 	${If} $PrevShellExInstallLocation != ""
@@ -241,11 +240,7 @@ Section "-Main_Shortcuts"
 	!insertmacro MUI_STARTMENU_WRITE_BEGIN Krita
 		CreateDirectory "$SMPROGRAMS\$KritaStartMenuFolder"
 		CreateShortcut "$SMPROGRAMS\$KritaStartMenuFolder\${KRITA_PRODUCTNAME}.lnk" "$INSTDIR\bin\krita.exe" "" "$INSTDIR\shellex\krita.ico" 0
-		CreateDirectory "$SMPROGRAMS\$KritaStartMenuFolder\Tools"
-		CreateShortcut "$SMPROGRAMS\$KritaStartMenuFolder\Tools\$(UninstallKritaLnkFileName).lnk" "$INSTDIR\Uninstall.exe"
 	!insertmacro MUI_STARTMENU_WRITE_END
-	WriteRegStr HKLM "Software\Krita" \
-	                 "UninstallKritaLnkFileName" "$(UninstallKritaLnkFileName)"
 	${If} $CreateDesktopIcon == 1
 		# For the desktop icon, keep the name short and omit version info
 		CreateShortcut "$DESKTOP\Krita.lnk" "$INSTDIR\bin\krita.exe" "" "$INSTDIR\shellex\krita.ico" 0
@@ -342,9 +337,6 @@ SectionEnd
 Section "un.Main_Shortcuts"
 	Delete "$DESKTOP\Krita.lnk"
 	!insertmacro MUI_STARTMENU_GETFOLDER Krita $KritaStartMenuFolder
-	ReadRegStr $UninstallKritaLnkFileName HKLM "Software\Krita" "UninstallKritaLnkFileName"
-	Delete "$SMPROGRAMS\$KritaStartMenuFolder\Tools\$UninstallKritaLnkFileName.lnk"
-	RMDir "$SMPROGRAMS\$KritaStartMenuFolder\Tools"
 	Delete "$SMPROGRAMS\$KritaStartMenuFolder\${KRITA_PRODUCTNAME}.lnk"
 	RMDir "$SMPROGRAMS\$KritaStartMenuFolder"
 SectionEnd

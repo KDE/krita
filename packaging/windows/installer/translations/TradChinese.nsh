@@ -26,7 +26,6 @@ LangString ConfirmInstallPageDesc ${CURRENT_LANG} "確認安裝 ${KRITA_PRODUCTN
 LangString DesktopIconPageDesc2 ${CURRENT_LANG} "你可以選擇要否在桌面上建立開啟 Krita 的捷徑:"
 LangString DesktopIconPageCheckbox ${CURRENT_LANG} "在桌面建立捷徑"
 LangString ConfirmInstallPageDesc2 ${CURRENT_LANG} "本安裝程式已準備好在電腦安裝 ${KRITA_PRODUCTNAME} ${KRITA_VERSION_DISPLAY}。如有需要，你可以返回先前的頁面檢查安裝選項。$\r$\n$\r$\n$_CLICK"
-LangString UninstallKritaLnkFileName ${CURRENT_LANG} "解除安裝 ${KRITA_PRODUCTNAME}"
 
 # Misc. message prompts:
 LangString MsgRequireWin7 ${CURRENT_LANG} "${KRITA_PRODUCTNAME} ${KRITA_VERSION_DISPLAY} 只支援 Windows 7 或以上版本。"

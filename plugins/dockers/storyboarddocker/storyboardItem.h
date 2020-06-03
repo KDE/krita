@@ -28,26 +28,27 @@ class StoryboardItem;
 class StoryboardChild
 {
 public:
-    StoryboardChild(QVariant &data, StoryboardItem *parent)
+    StoryboardChild(QVariant data, StoryboardItem *parent)
         : m_data(data)
         , m_parentItem(parent)
     {}
-    StoryboardItem parent(){ return *m_parentItem;}
+    StoryboardItem *parent(){ return m_parentItem;}
     QVariant data(){ return m_data;}
     //returns the row number of this child relative to its parent
-    int row() const{
+    /*int row() const{
         if (m_parentItem)
             return m_parentItem->m_childData.indexOf(const_cast<StoryboardChild*>(this));
 
         return 0;
     }
-    void setData(QVariant &value){
+    */
+    void setData(QVariant value){
         m_data = value;
     }
 
 private:
-    StoryboardItem *m_parentItem;
     QVariant m_data;
+    StoryboardItem *m_parentItem;
 };
 
 class StoryboardItem
@@ -57,15 +58,14 @@ public:
     explicit StoryboardItem(/*const QVector<QVariant> &data*/);
     ~StoryboardItem();
 
-    void appendChild(int row, QVariant &data);
-    void insertChild(int row, QVariant &data);
+    void appendChild(QVariant data);
+    void insertChild(int row, QVariant data);
     void removeChild(int row);
-    void childCount() const;
+    int childCount() const;
     StoryboardChild *child(int row);
-    QPointer parent(){
-        return nullptr;
-    }
 
 private:
     QVector<StoryboardChild*> m_childData;
 };
+
+#endif

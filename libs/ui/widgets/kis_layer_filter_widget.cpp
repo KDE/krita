@@ -28,10 +28,13 @@
 #include <QPushButton>
 #include <QMenu>
 #include <QScreen>
+#include <QStylePainter>
 
 #include "kis_debug.h"
 #include "kis_node.h"
 #include "kis_global.h"
+
+#include "kis_color_filter_combo.h"
 #include "kis_color_label_button.h"
 #include "kis_color_label_selector_widget.h"
 #include "kis_node_view_color_scheme.h"
@@ -45,7 +48,7 @@ KisLayerFilterWidget::KisLayerFilterWidget(QWidget *parent) : QWidget(parent)
     textFilter = new QLineEdit(this);
     textFilter->setPlaceholderText(i18n("Filter by name..."));
     textFilter->setMinimumWidth(192);
-    textFilter->setMinimumHeight(32);
+    textFilter->setMinimumHeight(28);
     textFilter->setClearButtonEnabled(true);
 
     connect(textFilter, SIGNAL(textChanged(QString)), this, SIGNAL(filteringOptionsChanged()));
@@ -66,7 +69,7 @@ KisLayerFilterWidget::KisLayerFilterWidget(QWidget *parent) : QWidget(parent)
         QVector<QColor> colors = colorScheme.allColorLabels();
 
         for (int id = 0; id < colors.count(); id++) {
-            KisColorLabelButton* btn = new KisColorLabelButton(colors[id], 32, buttonContainer);
+            KisColorLabelButton* btn = new KisColorLabelButton(colors[id], 28, buttonContainer);
             buttonGroup->addButton(btn, id);
             btn->installEventFilter(buttonEventFilter);
             subLayout->addWidget(btn);
@@ -76,7 +79,7 @@ KisLayerFilterWidget::KisLayerFilterWidget(QWidget *parent) : QWidget(parent)
     }
 
     resetButton = new QPushButton(i18n("Reset Filters"), this);
-    resetButton->setMinimumHeight(32);
+    resetButton->setMinimumHeight(28);
     connect(resetButton, &QPushButton::clicked, [this](){
        this->reset();
     });
@@ -191,4 +194,47 @@ void KisLayerFilterWidget::showEvent(QShowEvent *show)
         }
     }
     QWidget::showEvent(show);
+}
+
+KisLayerFilterWidgetToolButton::KisLayerFilterWidgetToolButton(QWidget *parent)
+    : QToolButton(parent)
+{
+    m_textFilter = false;
+    m_selectedColors = QList<int>();
+    ENTER_FUNCTION();
+}
+
+KisLayerFilterWidgetToolButton::KisLayerFilterWidgetToolButton(const KisLayerFilterWidgetToolButton &rhs)
+    : QToolButton(rhs.parentWidget())
+    , m_textFilter(rhs.m_textFilter)
+    , m_selectedColors(rhs.m_selectedColors)
+{
+
+}
+
+void KisLayerFilterWidgetToolButton::setSelectedColors(QList<int> colors)
+{
+    m_selectedColors = colors;
+}
+
+void KisLayerFilterWidgetToolButton::paintEvent(QPaintEvent *paintEvent)
+{
+    KisNodeViewColorScheme colorScheme;
+    if (m_textFilter == false &&
+       ((m_selectedColors.count() == 0) || (m_selectedColors.count() == colorScheme.allColorLabels().count())))
+    {
+        QToolButton::paintEvent(paintEvent);
+    }
+    else
+    {
+        QStylePainter paint(this);
+        QStyleOptionToolButton opt;
+        initStyleOption(&opt);
+        paint.drawComplexControl(QStyle::CC_ToolButton, opt);
+        const QSize halfIconSize = this->iconSize() / 2;
+        const QSize halfButtonSize = this->size() / 2;
+        const QRect editRect = kisGrowRect(QRect(QPoint(halfButtonSize.width() - halfIconSize.width(), halfButtonSize.height() - halfIconSize.height()),this->iconSize()), -1);
+        const int size = qMin(editRect.width(), editRect.height());
+        KisColorFilterCombo::paintColorPie(paint, opt.palette, m_selectedColors, editRect, size );
+    }
 }

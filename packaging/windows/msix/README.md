@@ -5,6 +5,7 @@ Documentation sources:
 - https://docs.microsoft.com/en-us/windows/msix/desktop/desktop-to-uwp-manual-conversion
 - https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/appx-package-manifest
 - https://docs.microsoft.com/en-us/previous-versions/windows/dn934795%28v%3dwin.10%29
+- https://docs.microsoft.com/en-us/windows/uwp/design/style/app-icons-and-logos
 
 
 Assets
@@ -26,6 +27,8 @@ makepri.exe createconfig /cf priconfig.xml /dq en-us
 ```
 
 ... however I also commented out the `packaging` section.
+
+Read more about the app icons on https://docs.microsoft.com/en-us/windows/uwp/design/style/app-icons-and-logos
 
 TODO: On editing the assets...
 

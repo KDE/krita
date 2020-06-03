@@ -19,6 +19,7 @@
 #include "storyboarddocker_dock.h"
 #include "commentDelegate.h"
 #include "commentModel.h"
+#include "storyboardModel.h"
 
 #include <QMenu>
 #include <QButtonGroup>
@@ -174,6 +175,10 @@ StoryboardDockerDock::StoryboardDockerDock( )
 
     connect(m_modeGroup, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(slotModeChanged(QAbstractButton*)));
     connect(m_viewGroup, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(slotViewChanged(QAbstractButton*)));
+
+    StoryboardModel *model = new StoryboardModel(this);
+    m_ui->treeView->setModel(model);
+    model->insertRows(0, 10);
 }
 
 StoryboardDockerDock::~StoryboardDockerDock()

@@ -35,7 +35,7 @@ public:
     StoryboardModel(QObject *parent = nullptr);
 
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
-    QModelIndex StoryboardModel::parent(const QModelIndex &index) const override;
+    QModelIndex parent(const QModelIndex &index) const override;
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -58,7 +58,7 @@ public:
     int commentCount();
 private:
     QVector<StoryboardItem*> m_items;
-    int commentCount = 0;
+    int m_commentCount = 0;
 };
 
 #endif

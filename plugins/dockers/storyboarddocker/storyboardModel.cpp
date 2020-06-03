@@ -23,7 +23,7 @@
 #include <kis_icon.h>
 
 StoryboardModel::StoryboardModel(QObject *parent)
-        : QAbstractTableModel(parent)
+        : QAbstractItemModel(parent)
 {}
 
 QModelIndex StoryboardModel::index(int row, int column, const QModelIndex &parent) const
@@ -35,15 +35,16 @@ QModelIndex StoryboardModel::index(int row, int column, const QModelIndex &paren
     if (column !=0)
         return QModelIndex();
     
-    //top level node has invalid parent
-    if (!parent.isValid)
+    //1st level node has invalid parent
+    if (!parent.isValid()){
         return createIndex(row, column, m_items.at(row));
-    else
+    }
+    else if (!parent.parent().isValid()){
         StoryboardItem *parentItem = static_cast<StoryboardItem*>(parent.internalPointer());
-
-    TreeItem *childItem = parentItem->child(row);
-    if (childItem)
-        return createIndex(row, column, childItem);
+        StoryboardChild *childItem = parentItem->child(row);
+        if (childItem)
+            return createIndex(row, column, childItem);
+    }
     return QModelIndex();
 }
 
@@ -52,22 +53,27 @@ QModelIndex StoryboardModel::parent(const QModelIndex &index) const
     if (!index.isValid())
         return QModelIndex();
 
-    //return parent only for 2nd level nodes
-    StoryboardChild *childItem = dynamic_cast<StoryboardChild*>(index.internalPointer());
-    if(childItem){
-        StoryboardItem *parentItem = childItem->parent();
-        int indexOfParent = m_items.indexOf(const_cast<StoryboardItem*>(parentItem));
-        return createIndex(indexOfParent, 0, parentItem);
+    {
+        //no parent for 1st level node
+        StoryboardItem *childItem = static_cast<StoryboardItem*>(index.internalPointer());
+        if (m_items.contains(childItem)){
+            return QModelIndex();
+        }
     }
-    return QModelIndex();
+
+    //return parent only for 2nd level nodes
+    StoryboardChild *childItem = static_cast<StoryboardChild*>(index.internalPointer());
+    StoryboardItem *parentItem = childItem->parent();
+    int indexOfParent = m_items.indexOf(const_cast<StoryboardItem*>(parentItem));
+    return createIndex(indexOfParent, 0, parentItem);
 }
 
 int StoryboardModel::rowCount(const QModelIndex &parent) const
 {
     if (!parent.isValid())
         return m_items.count();
-    else if (dynamic_cast<StoryboardItem*>(parent.internalPointer())){
-        StoryboardItem parentItem = dynamic_cast<StoryboardItem*>(parent.internalPointer());
+    else if (!parent.parent().isValid()){
+        StoryboardItem *parentItem = static_cast<StoryboardItem*>(parent.internalPointer());
         return parentItem->childCount();
     }
     return 0;   //2nd level nodes have no child
@@ -75,11 +81,15 @@ int StoryboardModel::rowCount(const QModelIndex &parent) const
 
 int StoryboardModel::columnCount(const QModelIndex &parent) const
 {
-   //2nd level nodes have no child
-   if (dynamic_cast<StoryboardChild*>(parent.internalPointer())){
-       return 0;
+   if (!parent.isValid()){
+       return 1;
    }
-   return 1;
+   //1st level nodes have 1 column
+   if (!parent.parent().isValid()){
+       return 1;
+   }
+   //end level nodes have no child
+   return 0;
 }
 
 QVariant StoryboardModel::data(const QModelIndex &index, int role) const
@@ -91,15 +101,13 @@ QVariant StoryboardModel::data(const QModelIndex &index, int role) const
         return QVariant();
 
     //return data only for the storyboardChild i.e. 2nd level nodes
-    if (dynamic_cast<StoryboardItem*>(index.internalPointer()))
+    if (!index.parent().isValid())
         return QVariant();
 
     if (role == Qt::DisplayRole || role == Qt::EditRole)
     {
         StoryboardChild *child = static_cast<StoryboardChild*>(index.internalPointer());
-        child->data().toS
-        if (child){
-            switch (index.row()):
+        switch (index.row()){
             case 0:
                 //frame number
                 return child->data().toInt();
@@ -120,11 +128,11 @@ QVariant StoryboardModel::data(const QModelIndex &index, int role) const
 bool StoryboardModel::setData(const QModelIndex & index, const QVariant & value, int role)
 {
     //qDebug()<<"attempting data set"<<role;
-    if (dynamic_cast<StoryboardItem*>(index.internalPointer()))
-        return false;
-
     if (index.isValid() && (role == Qt::EditRole || role == Qt::DisplayRole))
     {
+        if (!index.parent().isValid())
+        return false;
+
         StoryboardChild *child = static_cast<StoryboardChild*>(index.internalPointer());
         if (child){
             child->setData(value);
@@ -142,8 +150,8 @@ Qt::ItemFlags StoryboardModel::flags(const QModelIndex & index) const
         return Qt::ItemIsDropEnabled;
 
     //1st level nodes
-    if (dynamic_cast<StoryboardItem*>(index.internalPointer()))
-        return Qt::ItemIsDragEnabled | Qt::ItemIsSelectable ;
+    if (!index.parent().isValid())
+        return Qt::ItemIsDragEnabled | Qt::ItemIsSelectable | Qt::ItemIsEnabled;
 
     //2nd level nodes
     return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled;
@@ -151,15 +159,11 @@ Qt::ItemFlags StoryboardModel::flags(const QModelIndex & index) const
 
 bool StoryboardModel::insertRows(int position, int rows, const QModelIndex &parent)
 {
-    //we can't insert to 2nd level nodes as they are leaf nodes
-    if (dynamic_cast<StoryboardChild*>(parent.internalPointer())){
-       return false;
-    }
-    //insert 1st level nodes
+    qDebug()<<"row inserted";
     if (!parent.isValid()){
         beginInsertRows(QModelIndex(), position, position+rows-1);
         for (int row = 0; row < rows; ++row) {
-            StoryboardItem newItem = new StoryboardItem();
+            StoryboardItem *newItem = new StoryboardItem();
             m_items.insert(position, newItem);
         }
         endInsertRows();
@@ -167,8 +171,8 @@ bool StoryboardModel::insertRows(int position, int rows, const QModelIndex &pare
     }
 
     //insert 2nd level nodes
-    StoryboardItem *item = dynamic_cast<StoryboardItem*>(index.internalPointer());
-    if (item){
+    if (!parent.parent().isValid()){
+        StoryboardItem *item = static_cast<StoryboardItem*>(parent.internalPointer());
         beginInsertRows(QModelIndex(), position, position+rows-1);
         for (int row = 0; row < rows; ++row) {
             item->insertChild(position, QVariant());
@@ -176,16 +180,13 @@ bool StoryboardModel::insertRows(int position, int rows, const QModelIndex &pare
         endInsertRows();
         return true;
     }
+    //we can't insert to 2nd level nodes as they are leaf nodes
     return false;
 }
 
 bool StoryboardModel::removeRows(int position, int rows, const QModelIndex &parent)
 {
     qDebug()<<"row removed";
-    //2nd level node has no child
-    if (dynamic_cast<StoryboardChild*>(parent.internalPointer())){
-       return false;
-    }
     //remove 1st level nodes
     if (!parent.isValid()){
         beginRemoveRows(QModelIndex(), position, position+rows-1);
@@ -198,15 +199,18 @@ bool StoryboardModel::removeRows(int position, int rows, const QModelIndex &pare
     }
 
     //remove 2nd level nodes
-    StoryboardItem *item = dynamic_cast<StoryboardItem*>(index.internalPointer());
-    if (item){
-        beginRemoveRows(QModelIndex(), position, position+rows-1);
-        for (int row = 0; row < rows; ++row) {
-            item->removeChild(position);
+    if (!parent.parent().isValid()){
+        StoryboardItem *item = static_cast<StoryboardItem*>(parent.internalPointer());
+        if (m_items.contains(item)){
+            beginRemoveRows(QModelIndex(), position, position+rows-1);
+            for (int row = 0; row < rows; ++row) {
+                item->removeChild(position);
+            }
+            endRemoveRows();
+            return true;
         }
-        endRemoveRows();
-        return true;
     }
+    //2nd level node has no child
     return false;
 }
 

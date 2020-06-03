@@ -20,20 +20,24 @@
 
 //create 3 rows by default
 StoryboardItem::StoryboardItem()
-{}
+{
+    insertChild(childCount(), 1);
+    insertChild(childCount(), QString("scene 1"));
+    insertChild(childCount(), 100);
+}
 
 StoryboardItem::~StoryboardItem()
 {
     qDeleteAll(m_childData);
 }
 
-void StoryboardItem::appendChild(QVariant &data)
+void StoryboardItem::appendChild(QVariant data)
 {
     StoryboardChild* child = new StoryboardChild(data, this);
     m_childData.append(child);
 }
 
-void StoryboardItem::insertChild(int row, QVariant &data)
+void StoryboardItem::insertChild(int row, QVariant data)
 {
     StoryboardChild* child = new StoryboardChild(data, this);
     m_childData.insert(row, child);

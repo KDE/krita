@@ -533,13 +533,6 @@ Function .onInit
 		# TODO: Assume no previous version installed or what?
 	${EndIf}
 	${If} $PrevShellExStandalone == 1
-		${IfNot} ${Silent}
-			MessageBox MB_YESNO|MB_ICONQUESTION "$(MsgKritaShellExOverwrite)" \
-			           /SD IDYES \
-			           IDYES lbl_allowremoveshellex
-			Abort
-		${EndIf}
-		lbl_allowremoveshellex:
 		#!insertmacro SetSectionFlag ${SEC_remove_shellex} ${SF_SELECTED}
 	${Else}
 		#!insertmacro ClearSectionFlag ${SEC_remove_shellex} ${SF_SELECTED}
@@ -665,6 +658,5 @@ LangString MsgKritaSameVerReinstall ${CURRENT_LANG} "It appears that ${KRITA_PRO
 LangString MsgKrita3264bitSwap ${CURRENT_LANG} "It appears that Krita $KritaNsisBitness-bit ($KritaNsisVersion) is currently installed. This setup will replace it with the ${KRITA_INSTALLER_BITNESS}-bit version of Krita ${KRITA_VERSION_DISPLAY}."
 LangString MsgKritaNewerAlreadyInstalled ${CURRENT_LANG} "It appears that a newer version of Krita $KritaNsisBitness-bit ($KritaNsisVersion) is currently installed. If you want to downgrade Krita to ${KRITA_VERSION_DISPLAY}, please uninstall the newer version manually before running this setup."
 LangString MsgKritaRunning ${CURRENT_LANG} "Krita appears to be running. Please close Krita before running this installer."
-LangString MsgKritaShellExOverwrite ${CURRENT_LANG} "Krita Shell Integration was installed separately. It will be uninstalled automatically when installing Krita.$\nDo you want to continue?"
 LangString MsgUninstallKritaRunning ${CURRENT_LANG} "Krita appears to be running. Please close Krita before uninstalling."
 !undef CURRENT_LANG

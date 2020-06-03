@@ -23,6 +23,7 @@
 #include <QPushButton>
 
 #include "kis_icon.h"
+#include "klocalizedstring.h"
 
 KisTransportControls::KisTransportControls(QWidget* parent)
     : QWidget(parent)
@@ -32,18 +33,22 @@ KisTransportControls::KisTransportControls(QWidget* parent)
     layout->setSpacing(0);
 
     buttonBack = new QPushButton(KisIconUtils::loadIcon("prevframe"), "", this);
+    buttonBack->setToolTip(i18n("Back"));
     layout->addWidget(buttonBack);
     connect(buttonBack, SIGNAL(released()), this, SIGNAL(back()));
 
     buttonStop = new QPushButton(KisIconUtils::loadIcon("animation_stop"), "", this);
+    buttonStop->setToolTip(i18n("Stop"));
     layout->addWidget(buttonStop);
     connect(buttonStop, SIGNAL(released()), this, SIGNAL(stop()));
 
     buttonPlayPause = new QPushButton(KisIconUtils::loadIcon("animation_play"), "", this);
+    buttonPlayPause->setToolTip(i18n("Play/Pause"));
     layout->addWidget(buttonPlayPause);
     connect(buttonPlayPause, SIGNAL(released()), this, SIGNAL(playPause()));
 
     buttonForward = new QPushButton(KisIconUtils::loadIcon("nextframe"), "", this);
+    buttonForward->setToolTip(i18n("Forward"));
     layout->addWidget(buttonForward);
     connect(buttonForward, SIGNAL(released()), this, SIGNAL(forward()));
 

@@ -67,6 +67,7 @@ TimelineDockerTitleBar::TimelineDockerTitleBar(QWidget* parent) :
 
     // Frame Counter...
     frameCounter = new KisIntParseSpinBox(this);
+    frameCounter->setToolTip(i18n("Frame counter"));
     frameCounter->setPrefix("#  ");
     frameCounter->setRange(0, MAX_FRAMES);
     widgetArea->addWidget(frameCounter);
@@ -78,14 +79,12 @@ TimelineDockerTitleBar::TimelineDockerTitleBar(QWidget* parent) :
         layout->setSpacing(0);
         layout->setContentsMargins(0,0,0,0);
 
-        //add keyframe..
         btnAddKeyframe = new QToolButton(this);
         layout->addWidget(btnAddKeyframe);
 
         btnDuplicateKeyframe = new QToolButton(this);
         layout->addWidget(btnDuplicateKeyframe);
 
-        //remove keyframe..
         btnRemoveKeyframe = new QToolButton(this);
         layout->addWidget(btnRemoveKeyframe);
 
@@ -98,7 +97,7 @@ TimelineDockerTitleBar::TimelineDockerTitleBar(QWidget* parent) :
     widgetArea->addSpacing(SPACING_UNIT);
 
     QPushButton *btnDropFrames = new QPushButton(KisIconUtils::loadIcon("dropframe"), "", this);
-    btnDropFrames->setToolTip("TODO: drop frames button"); //todo
+    btnDropFrames->setToolTip(i18n("Drop frames to preserve preview timing"));
     btnDropFrames->setDisabled(true);
     widgetArea->addWidget(btnDropFrames);
 
@@ -108,7 +107,7 @@ TimelineDockerTitleBar::TimelineDockerTitleBar(QWidget* parent) :
     sbSpeed->setValue(100);
     sbSpeed->setPrefix("Speed: ");
     sbSpeed->setSuffix(" %");
-    sbSpeed->setToolTip(i18n("Preview playback speed."));
+    sbSpeed->setToolTip(i18n("Preview playback speed"));
     widgetArea->addWidget(sbSpeed);
 
     widgetArea->addStretch();
@@ -120,17 +119,19 @@ TimelineDockerTitleBar::TimelineDockerTitleBar(QWidget* parent) :
 
         // Onion skins menu.
         btnOnionSkinsMenu = new QPushButton(KisIconUtils::loadIcon("onion_skin_options"), "", this);
+        btnOnionSkinsMenu->setToolTip(i18n("Onion skins menu"));
         layout->addWidget(btnOnionSkinsMenu);
 
         // Audio menu..
         btnAudioMenu = new QPushButton(KisIconUtils::loadIcon("audio-none"), "", this);
+        btnOnionSkinsMenu->setToolTip(i18n("Audio menu"));
         btnAudioMenu->setDisabled(true);
         layout->addWidget(btnAudioMenu);
 
-        {    // Settings menu..
-            //KisIconUtils::loadIcon("configure"),
+        {   // Settings menu..
             btnSettingsMenu = new QToolButton(this);
             btnSettingsMenu->setIcon(KisIconUtils::loadIcon("configure"));
+            btnSettingsMenu->setToolTip(i18n("Animation settings menu"));
 
             QWidget *settingsMenuWidget = new QWidget(this);
             settingsMenuWidget->setLayout(new QHBoxLayout(settingsMenuWidget));

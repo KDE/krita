@@ -148,7 +148,14 @@ void KisColorLabelSelectorWidget::groupButtonChecked(int index, bool state)
 
 void KisColorLabelSelectorWidget::setCurrentIndex(int index)
 {
-    if (index != m_d->colorButtonGroup->checkedId()) {
+    if (index == -1) {
+        QAbstractButton* btn = m_d->colorButtonGroup->checkedButton();
+        if (btn) {
+            btn->group()->setExclusive(false);
+            btn->setChecked(false);
+            btn->group()->setExclusive(true);
+        }
+    } else if (index != m_d->colorButtonGroup->checkedId()) {
         QAbstractButton* btn = m_d->colorButtonGroup->button(index);
         if (btn) {
             btn->setChecked(true);

@@ -414,94 +414,49 @@ Function .onInit
 		lbl_allow32on64:
 	${Endif}
 !endif
-	# Detect other Krita versions
+
+	# Detect ancient Krita versions
 	${DetectKritaMsi32bit} $KritaMsiProductX86
 	${If} ${RunningX64}
 		${DetectKritaMsi64bit} $KritaMsiProductX64
-		${IfKritaMsi3Alpha} $KritaMsiProductX64
-			${IfNot} ${Silent}
-				MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2 "$(MsgKrita3alpha1)" \
-				           /SD IDYES \
-				           IDYES lbl_removeKrita3alpha
-				Abort
-			${EndIf}
-			lbl_removeKrita3alpha:
+	${EndIf}
+	${If} $KritaMsiProductX86 != ""
+	${OrIf} $KritaMsiProductX64 != ""
+		${IfNot} ${Silent}
+			MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON1 "$(MsgAncientVerMustBeRemoved)" \
+						/SD IDYES \
+						IDYES lbl_removeAncientVer
+			Abort
+		${EndIf}
+		lbl_removeAncientVer:
+		${If} $KritaMsiProductX64 != ""
 			push $R0
 			${MsiUninstall} $KritaMsiProductX64 $R0
 			${If} $R0 != 0
 				${IfNot} ${Silent}
-					MessageBox MB_OK|MB_ICONSTOP "$(MsgKrita3alpha1RemoveFailed)"
+					${IfKritaMsi3Alpha} $KritaMsiProductX64
+						MessageBox MB_OK|MB_ICONSTOP "$(MsgKrita3alpha1RemoveFailed)"
+					${Else}
+						MessageBox MB_OK|MB_ICONSTOP "$(MsgKrita2msi64bitRemoveFailed)"
+					${EndIf}
 				${EndIf}
 				Abort
 			${EndIf}
 			pop $R0
 			StrCpy $KritaMsiProductX64 ""
-		${ElseIf} $KritaMsiProductX64 != ""
-			${If} $KritaMsiProductX86 != ""
+		${EndIf}
+		${If} $KritaMsiProductX86 != ""
+			push $R0
+			${MsiUninstall} $KritaMsiProductX86 $R0
+			${If} $R0 != 0
 				${IfNot} ${Silent}
-					MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2 "$(MsgKrita2msiBoth)" \
-					           /SD IDYES \
-					           IDYES lbl_removeKritaBoth
-					Abort
+					MessageBox MB_OK|MB_ICONSTOP "$(MsgKrita2msi32bitRemoveFailed)"
 				${EndIf}
-				lbl_removeKritaBoth:
-				push $R0
-				${MsiUninstall} $KritaMsiProductX86 $R0
-				${If} $R0 != 0
-					${IfNot} ${Silent}
-						MessageBox MB_OK|MB_ICONSTOP "$(MsgKrita2msi32bitRemoveFailed)"
-					${EndIf}
-					Abort
-				${EndIf}
-				${MsiUninstall} $KritaMsiProductX64 $R0
-				${If} $R0 != 0
-					${IfNot} ${Silent}
-						MessageBox MB_OK|MB_ICONSTOP "$(MsgKrita2msi64bitRemoveFailed)"
-					${EndIf}
-					Abort
-				${EndIf}
-				pop $R0
-				StrCpy $KritaMsiProductX86 ""
-				StrCpy $KritaMsiProductX64 ""
-			${Else}
-				${IfNot} ${Silent}
-					MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2 "$(MsgKrita2msi64bit)" \
-					           /SD IDYES \
-					           IDYES lbl_removeKritaX64
-					Abort
-				${EndIf}
-				lbl_removeKritaX64:
-				push $R0
-				${MsiUninstall} $KritaMsiProductX64 $R0
-				${If} $R0 != 0
-					${IfNot} ${Silent}
-						MessageBox MB_OK|MB_ICONSTOP "$(MsgKrita2msi64bitRemoveFailed)"
-					${EndIf}
-					Abort
-				${EndIf}
-				pop $R0
-				StrCpy $KritaMsiProductX64 ""
+				Abort
 			${EndIf}
+			pop $R0
+			StrCpy $KritaMsiProductX86 ""
 		${EndIf}
-	${Endif}
-	${If} $KritaMsiProductX86 != ""
-		${IfNot} ${Silent}
-			MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2 "$(MsgKrita2msi32bit)" \
-			           /SD IDYES \
-			           IDYES lbl_removeKritaX86
-			Abort
-		${EndIf}
-		lbl_removeKritaX86:
-		push $R0
-		${MsiUninstall} $KritaMsiProductX86 $R0
-		${If} $R0 != 0
-			${IfNot} ${Silent}
-				MessageBox MB_OK|MB_ICONSTOP "$(MsgKrita2msi32bitRemoveFailed)"
-			${EndIf}
-			Abort
-		${EndIf}
-		pop $R0
-		StrCpy $KritaMsiProductX86 ""
 	${EndIf}
 
 	${DetectKritaNsis} $KritaNsisVersion $KritaNsisBitness $KritaNsisInstallLocation
@@ -714,13 +669,12 @@ LangString UninstallKritaLnkFileName ${CURRENT_LANG} "Uninstall ${KRITA_PRODUCTN
 LangString MsgRequireWin7 ${CURRENT_LANG} "${KRITA_PRODUCTNAME} ${KRITA_VERSION_DISPLAY} requires Windows 7 or above."
 LangString Msg64bitOn32bit ${CURRENT_LANG} "You are running 32-bit Windows, but this installer installs Krita 64-bit which can only be installed on 64-bit Windows. Please download the 32-bit version on https://krita.org/"
 LangString Msg32bitOn64bit ${CURRENT_LANG} "You are trying to install 32-bit Krita on 64-bit Windows. You are strongly recommended to install the 64-bit version of Krita instead since it offers better performance.$\nIf you want to use the 32-bit version for testing, you should consider using the zip package instead.$\n$\nDo you still wish to install the 32-bit version of Krita?"
-LangString MsgKrita3alpha1 ${CURRENT_LANG} "Krita 3.0 Alpha 1 is installed. It must be removed before ${KRITA_PRODUCTNAME} ${KRITA_VERSION_DISPLAY} can be installed.$\nDo you wish to remove it now?"
+# These prompts are used for when Krita 2.9 or earlier, or the 3.0 alpha 1 MSI version is installed.
+LangString MsgAncientVerMustBeRemoved ${CURRENT_LANG} "An ancient version of Krita is detected. This program will now attempt to remove any old versions of Krita.$\nDo you wish to continue?"
 LangString MsgKrita3alpha1RemoveFailed ${CURRENT_LANG} "Failed to remove Krita 3.0 Alpha 1."
-LangString MsgKrita2msiBoth ${CURRENT_LANG} "Both 32-bit and 64-bit editions of Krita 2.9 or below are installed.$\nBoth must be removed before ${KRITA_PRODUCTNAME} ${KRITA_VERSION_DISPLAY} can be installed.$\nDo you want to remove them now?"
-LangString MsgKrita2msi32bitRemoveFailed ${CURRENT_LANG} "Failed to remove Krita (32-bit)."
-LangString MsgKrita2msi64bitRemoveFailed ${CURRENT_LANG} "Failed to remove Krita (64-bit)."
-LangString MsgKrita2msi64bit ${CURRENT_LANG} "Krita (64-bit) 2.9 or below is installed.$\nIt must be removed before ${KRITA_PRODUCTNAME} ${KRITA_VERSION_DISPLAY} can be installed.$\nDo you wish to remove it now?"
-LangString MsgKrita2msi32bit ${CURRENT_LANG} "Krita (32-bit) 2.9 or below is installed.$\nIt must be removed before ${KRITA_PRODUCTNAME} ${KRITA_VERSION_DISPLAY} can be installed.$\nDo you wish to remove it now?"
+LangString MsgKrita2msi32bitRemoveFailed ${CURRENT_LANG} "Failed to remove old Krita (32-bit)."
+LangString MsgKrita2msi64bitRemoveFailed ${CURRENT_LANG} "Failed to remove old Krita (64-bit)."
+#
 LangString MsgKritaSameVerReinstall ${CURRENT_LANG} "It appears that ${KRITA_PRODUCTNAME} ${KRITA_VERSION_DISPLAY} is already installed.$\nThis setup will reinstall it."
 LangString MsgKritaSameVer32bitReplaceWith64bit ${CURRENT_LANG} "It appears that Krita 32-bit ${KRITA_VERSION_DISPLAY} is currently installed. This setup will replace it with the 64-bit version."
 LangString MsgKritaSameVer64bitReplaceWith32bit ${CURRENT_LANG} "It appears that Krita 64-bit ${KRITA_VERSION_DISPLAY} is currently installed. This setup will replace it with the 32-bit version."

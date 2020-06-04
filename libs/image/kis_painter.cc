@@ -1456,7 +1456,7 @@ void KisPainter::Private::fillPainterPathImpl(const QPainterPath& path, const QR
         break;
     case FillStylePattern:
         if (pattern) { // if the user hasn't got any patterns installed, we shouldn't crash...
-            fillPainter->fillRect(fillRect, pattern);
+            fillPainter->fillRect(fillRect, pattern, QTransform());
         }
         break;
     case FillStyleGenerator:

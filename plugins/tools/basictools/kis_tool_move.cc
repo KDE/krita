@@ -208,6 +208,9 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
         connect(moveStrategy,
                 SIGNAL(sigHandlesRectCalculated(const QRect&)),
                 SLOT(slotHandlesRectCalculated(const QRect&)));
+        connect(moveStrategy,
+                SIGNAL(sigStrokeStartedEmpty()),
+                SLOT(slotStrokeStartedEmpty()));
 
         strategy = moveStrategy;
         isMoveSelection = true;

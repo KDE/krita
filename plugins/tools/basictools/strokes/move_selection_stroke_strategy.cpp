@@ -92,7 +92,12 @@ void MoveSelectionStrokeStrategy::initStrokeCallback()
         KisLodTransform t(paintDevice);
         handlesRect = t.mapInverted(handlesRect);
 
-        emit this->sigHandlesRectCalculated(handlesRect);
+        if (!handlesRect.isEmpty()) {
+            emit this->sigHandlesRectCalculated(handlesRect);
+        } else {
+            emit this->sigStrokeStartedEmpty();
+        }
+
     }
 }
 

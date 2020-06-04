@@ -279,6 +279,7 @@ LayerBox::LayerBox()
         }
 
         m_wdgLayerBox->bnLayerFilters->setSelectedColors(QList<int>::fromSet(layerFilterWidget->getActiveColors()));
+        m_wdgLayerBox->bnLayerFilters->setTextFilter(layerFilterWidget->hasTextFilter());
     });
 
     QWidgetAction *layerFilterMenuAction = new QWidgetAction(this);

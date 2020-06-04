@@ -314,6 +314,8 @@ void KisColorFilterCombo::paintColorPie(QStylePainter &painter, const QPalette& 
     const QPen oldPen = painter.pen();
     const QBrush oldBrush = painter.brush();
     const int border = 0;
+    QColor shadowColor = palette.shadow().color();
+    shadowColor.setAlpha(64);
 
     QRect pieRect(0, 0, baseSize - 2 * border, baseSize - 2 * border);
     pieRect.moveCenter(rect.center());
@@ -323,14 +325,14 @@ void KisColorFilterCombo::paintColorPie(QStylePainter &painter, const QPalette& 
         const QColor currentColor = scm.colorLabel(currentLabel);
         const QBrush brush = QBrush(currentColor);
         painter.setBrush(brush);
-        painter.setPen(QPen(palette.light().color(), 1));
+        painter.setPen(QPen(shadowColor, 1));
 
         if (currentColor.alpha() > 0) {
             painter.drawEllipse(rect);
         } else if (currentLabel == 0) {
             QColor white = QColorConstants::White;
             QColor grey = QColor(220,220,220);
-            painter.setBrush(QBrush(palette.light().color()));
+            painter.setBrush(QBrush(shadowColor));
             painter.setRenderHint(QPainter::Antialiasing);
             painter.drawEllipse(rect);
             const int step = 16 * 360 / 4;
@@ -348,7 +350,7 @@ void KisColorFilterCombo::paintColorPie(QStylePainter &painter, const QPalette& 
         const int numColors = selectedColors.size();
         const int step = 16 * 360 / numColors;
 
-        painter.setPen(QPen(palette.light().color(), 1));
+        painter.setPen(QPen(shadowColor, 1));
         painter.setBrush(QColor(0,0,0,0));
         painter.setRenderHint(QPainter::Antialiasing);
         painter.drawEllipse(rect);
@@ -397,6 +399,7 @@ void KisColorFilterCombo::paintEvent(QPaintEvent *event)
                 KisColorFilterCombo::paintColorPie(painter, opt.palette, selectedColors, editRect, size );
             } else {
                 // show all colors in a rectangle
+                KisNodeViewColorScheme scm;
 
                 int oneColorWidth = editRect.width()/numColors;
                 int currentWidth = 0;

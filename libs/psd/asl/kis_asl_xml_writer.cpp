@@ -359,7 +359,8 @@ void KisAslXmlWriter::writeSegmentGradient(const QString &key, const KoSegmentGr
     }
 
     // last segment
-    {
+
+    if (!segments.isEmpty()) {
         const KoGradientSegment *lastSeg = segments.last();
 
         QColor color = lastSeg->endColor().toQColor();

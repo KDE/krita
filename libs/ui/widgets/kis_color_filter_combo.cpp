@@ -288,48 +288,59 @@ QList<int> KisColorFilterCombo::selectedColors() const
 void KisColorFilterCombo::paintColorPie(QStylePainter &painter, const QPalette& palette, const QList<int> &selectedColors, const QRect &rect, const int &baseSize)
 {
     KisNodeViewColorScheme scm;
+    const QPen oldPen = painter.pen();
+    const QBrush oldBrush = painter.brush();
+    const int border = 0;
+
+    QRect pieRect(0, 0, baseSize - 2 * border, baseSize - 2 * border);
+    pieRect.moveCenter(rect.center());
 
     if (selectedColors.size() == 1) {
         const int currentLabel = selectedColors.first();
-        QColor currentColor = scm.colorLabel(currentLabel);
+        const QColor currentColor = scm.colorLabel(currentLabel);
+        const QBrush brush = QBrush(currentColor);
+        painter.setBrush(brush);
+        painter.setPen(QPen(palette.light().color(), 1));
 
         if (currentColor.alpha() > 0) {
-            painter.fillRect(rect, currentColor);
+            painter.drawEllipse(rect);
         } else if (currentLabel == 0) {
-            QPen oldPen = painter.pen();
+            QColor white = QColorConstants::White;
+            QColor grey = QColor(220,220,220);
+            painter.setBrush(QBrush(palette.light().color()));
+            painter.setRenderHint(QPainter::Antialiasing);
+            painter.drawEllipse(rect);
+            const int step = 16 * 360 / 4;
+            const int checkerSteps = 4;
 
-            const int border = 4;
-            QRect crossRect(0, 0, baseSize - 2 * border, baseSize - 2 * border);
-            crossRect.moveCenter(rect.center());
+            for (int i = 0; i < checkerSteps; i++) {
+                QBrush checkerBrush = QBrush((i % 2) ? grey : white);
+                painter.setPen(Qt::NoPen);
+                painter.setBrush(checkerBrush);
+                painter.drawPie(pieRect, step * i, step);
+            }
 
-            QColor shade = palette.dark().color();
-            painter.setPen(QPen(shade, 2));
-            painter.drawLine(crossRect.topLeft(), crossRect.bottomRight());
-            painter.drawLine(crossRect.bottomLeft(), crossRect.topRight());
         }
     } else {
-        const int border = 0;
-        QRect pieRect(0, 0, baseSize - 2 * border, baseSize - 2 * border);
-        pieRect.moveCenter(rect.center());
-
         const int numColors = selectedColors.size();
         const int step = 16 * 360 / numColors;
 
-        int currentAngle = 0;
-
-        //painter.save(); // optimize out!
+        painter.setPen(QPen(palette.light().color(), 1));
+        painter.setBrush(QColor(0,0,0,0));
         painter.setRenderHint(QPainter::Antialiasing);
-
+        painter.drawEllipse(rect);
         for (int i = 0; i < numColors; i++) {
             QColor color = scm.colorLabel(selectedColors[i]);
             QBrush brush = color.alpha() > 0 ? QBrush(color) : QBrush(Qt::black, Qt::Dense4Pattern);
-            painter.setPen(color);
+            painter.setPen(Qt::NoPen);
             painter.setBrush(brush);
 
-            painter.drawPie(pieRect, currentAngle, step);
-            currentAngle += step;
+            painter.drawPie(pieRect, step * i, step);
         }
     }
+
+    painter.setPen(oldPen);
+    painter.setBrush(oldBrush);
 }
 
 

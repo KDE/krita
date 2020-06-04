@@ -20,6 +20,7 @@
 #include "commentDelegate.h"
 #include "commentModel.h"
 #include "storyboardModel.h"
+#include "storyboardDelegate.h"
 
 #include <QMenu>
 #include <QButtonGroup>
@@ -177,8 +178,19 @@ StoryboardDockerDock::StoryboardDockerDock( )
     connect(m_viewGroup, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(slotViewChanged(QAbstractButton*)));
 
     StoryboardModel *model = new StoryboardModel(this);
-    m_ui->treeView->setModel(model);
+    StoryboardDelegate *delegate = new StoryboardDelegate(this);
+    delegate->setView(m_ui->listView);
+    m_ui->listView->setModel(model);
+    m_ui->listView->setItemDelegate(delegate);
+    delegate->setView(m_ui->listView);
+
     model->insertRows(0, 10);
+
+    m_ui->listView->setWrapping(true);
+    m_ui->listView->setFlow(QListView::LeftToRight);
+    m_ui->listView->setResizeMode(QListView::Adjust);
+    m_ui->listView->setUniformItemSizes(true);
+    m_ui->listView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
 }
 
 StoryboardDockerDock::~StoryboardDockerDock()

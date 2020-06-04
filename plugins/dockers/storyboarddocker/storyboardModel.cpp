@@ -100,27 +100,18 @@ QVariant StoryboardModel::data(const QModelIndex &index, int role) const
     if (index.row() >= m_items.size())
         return QVariant();
 
+    if(role == Qt::SizeHintRole){
+            return QSize(200,200);
+    }
     //return data only for the storyboardChild i.e. 2nd level nodes
-    if (!index.parent().isValid())
+    if (!index.parent().isValid()){
         return QVariant();
+    }
 
     if (role == Qt::DisplayRole || role == Qt::EditRole)
     {
         StoryboardChild *child = static_cast<StoryboardChild*>(index.internalPointer());
-        switch (index.row()){
-            case 0:
-                //frame number
-                return child->data().toInt();
-            case 1:
-                //item name
-                return child->data().toString();
-            case 2:
-                //duration
-                return child->data().toInt();
-            default:
-                //comment(would it be string or a custom struct)
-                return child->data().toInt();
-        }
+        return child->data();
     }
     return QVariant();
 }

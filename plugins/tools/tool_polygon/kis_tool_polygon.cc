@@ -59,7 +59,8 @@ void KisToolPolygon::finishPolyline(const QVector<QPointF>& points)
                                            currentNode(),
                                            canvas()->resourceManager(),
                                            strokeStyle(),
-                                           fillStyle());
+                                           fillStyle(),
+                                           fillTransform());
         helper.paintPolygon(points);
     } else {
         // remove the last point if it overlaps with the first

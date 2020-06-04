@@ -81,4 +81,12 @@ private:
     QList<int> m_selectedColors;
 };
 
+class KRITAUI_EXPORT MouseClickIgnore : public QWidget {
+    Q_OBJECT
+public:
+    MouseClickIgnore(QWidget *parent = nullptr);
+    bool eventFilter(QObject *obj, QEvent *event);
+
+};
+
 #endif // KISLAYERFILTERWIDGET_H

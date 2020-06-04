@@ -80,9 +80,7 @@ KisColorLabelSelectorWidget::KisColorLabelSelectorWidget(QWidget *parent)
     }
 }
 
-KisColorLabelSelectorWidget::~KisColorLabelSelectorWidget()
-{
-    delete m_d->menuAlignmentOffset;
+KisColorLabelSelectorWidget::~KisColorLabelSelectorWidget(){
 }
 
 int KisColorLabelSelectorWidget::currentIndex() const

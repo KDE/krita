@@ -240,6 +240,8 @@ LayerBox::LayerBox()
     showGlobalSelectionMask->setChecked(cfg.showGlobalSelection());
 
     m_colorSelector = new KisColorLabelSelectorWidget(this);
+    MouseClickIgnore* mouseEater = new MouseClickIgnore(this);
+    m_colorSelector->installEventFilter(mouseEater);
     connect(m_colorSelector, SIGNAL(currentIndexChanged(int)), SLOT(slotColorLabelChanged(int)));
     m_colorSelectorAction = new QWidgetAction(this);
     m_colorSelectorAction->setDefaultWidget(m_colorSelector);

@@ -39,6 +39,8 @@
 #include "kis_color_label_selector_widget.h"
 #include "kis_node_view_color_scheme.h"
 
+#include "KisMouseClickEater.h"
+
 KisLayerFilterWidget::KisLayerFilterWidget(QWidget *parent) : QWidget(parent)
 {
     QVBoxLayout *layout = new QVBoxLayout(this);
@@ -55,8 +57,10 @@ KisLayerFilterWidget::KisLayerFilterWidget(QWidget *parent) : QWidget(parent)
 
     KisNodeViewColorScheme colorScheme;
 
-    QWidget *buttonContainer = new QWidget(this);
+    QWidget* buttonContainer = new QWidget(this);
+    MouseClickIgnore* mouseEater = new MouseClickIgnore(this);
     buttonContainer->setToolTip(i18n("Filter by color label..."));
+    buttonContainer->installEventFilter(mouseEater);
     buttonEventFilter = new KisColorLabelMouseDragFilter(buttonContainer);
     {
         QHBoxLayout *subLayout = new QHBoxLayout(buttonContainer);
@@ -236,5 +240,23 @@ void KisLayerFilterWidgetToolButton::paintEvent(QPaintEvent *paintEvent)
         const QRect editRect = kisGrowRect(QRect(QPoint(halfButtonSize.width() - halfIconSize.width(), halfButtonSize.height() - halfIconSize.height()),this->iconSize()), -1);
         const int size = qMin(editRect.width(), editRect.height());
         KisColorFilterCombo::paintColorPie(paint, opt.palette, m_selectedColors, editRect, size );
+    }
+}
+
+MouseClickIgnore::MouseClickIgnore(QWidget *parent)
+    : QWidget(parent)
+{
+}
+
+bool MouseClickIgnore::eventFilter(QObject *obj, QEvent *event)
+{
+    if (obj &&
+            (event->type() == QEvent::MouseButtonPress ||
+             event->type() == QEvent::MouseButtonDblClick ||
+             event->type() == QEvent::MouseButtonRelease)) {
+        event->setAccepted(true);
+        return true;
+    } else {
+        return false;
     }
 }

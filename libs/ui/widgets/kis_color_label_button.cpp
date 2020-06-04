@@ -275,7 +275,7 @@ KisColorLabelMouseDragFilter::KisColorLabelMouseDragFilter(QObject* parent) : QO
 
 bool KisColorLabelMouseDragFilter::eventFilter(QObject *obj, QEvent *event)
 {
-    if (event->type() == QEvent::MouseButtonPress) {
+    if (event->type() == QEvent::MouseButtonPress || event->type() == QEvent::MouseButtonDblClick) {
         QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
 
         currentState = WaitingForDragLeave;

@@ -49,6 +49,7 @@
 #include "kis_signal_compressor.h"
 #include "kis_time_range.h"
 #include "kis_color_label_selector_widget.h"
+#include "kis_layer_filter_widget.h"
 #include "kis_keyframe_channel.h"
 #include "kis_slider_spin_box.h"
 #include "kis_signals_blocker.h"
@@ -268,11 +269,14 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     /********** Frame Editing Context Menu ***********************************************/
 
     m_d->colorSelector = new KisColorLabelSelectorWidget(this);
+    MouseClickIgnore* clickIgnore = new MouseClickIgnore(this);
+    m_d->colorSelector->installEventFilter(clickIgnore);
     m_d->colorSelectorAction = new QWidgetAction(this);
     m_d->colorSelectorAction->setDefaultWidget(m_d->colorSelector);
     connect(m_d->colorSelector, &KisColorLabelSelectorWidget::currentIndexChanged, this, &TimelineFramesView::slotColorLabelChanged);
 
     m_d->multiframeColorSelector = new KisColorLabelSelectorWidget(this);
+    m_d->multiframeColorSelector->installEventFilter(clickIgnore);
     m_d->multiframeColorSelectorAction = new QWidgetAction(this);
     m_d->multiframeColorSelectorAction->setDefaultWidget(m_d->multiframeColorSelector);
     connect(m_d->multiframeColorSelector, &KisColorLabelSelectorWidget::currentIndexChanged, this, &TimelineFramesView::slotColorLabelChanged);

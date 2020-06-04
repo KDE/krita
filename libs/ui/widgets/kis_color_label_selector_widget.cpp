@@ -112,14 +112,24 @@ int KisColorLabelSelectorWidget::calculateMenuOffset() const
 {
     bool hasWideItems = false;
     QMenu *menu = qobject_cast<QMenu*>(parent());
+    bool hasCheckable = false;
+    bool hasIcon = false;
+
     int menuOffset = 0;
 
     if (menu) {
         Q_FOREACH(QAction *action, menu->actions()) {
-            if (action->isCheckable() ||
-                !action->icon().isNull()) {
+            hasCheckable |= action->isCheckable();
+            hasIcon |= action->icon().isNull();
+            hasWideItems |= (hasCheckable || hasIcon);
 
-                hasWideItems = true;
+            // Ideally, we would early terminate,
+            // but we don't know if we need both icons
+            // and checkbox space until we traverse
+            // the whole menu. Previous behavior caused
+            // a bug on KDE systems which provide icons
+            // and checkboxes.
+            if (hasCheckable && hasIcon) {
                 break;
             }
         }
@@ -131,7 +141,7 @@ int KisColorLabelSelectorWidget::calculateMenuOffset() const
         // some copy-pasted code from QFusionStyle style
         const int hmargin = style()->pixelMetric(QStyle::PM_MenuHMargin, &opt, this);
         const int icone = style()->pixelMetric(QStyle::PM_SmallIconSize, &opt, this);
-        menuOffset = hmargin + icone + 6;
+        menuOffset = (hmargin + icone + 6) * (hasCheckable + hasIcon);
     }
 
     return menuOffset;

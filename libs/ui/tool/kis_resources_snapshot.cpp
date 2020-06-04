@@ -382,6 +382,11 @@ KoAbstractGradient* KisResourcesSnapshot::currentGradient() const
     return m_d->currentGradient;
 }
 
+QTransform KisResourcesSnapshot::fillTransform() const
+{
+    return m_d->fillTransform;
+}
+
 QBitArray KisResourcesSnapshot::channelLockFlags() const
 {
     QBitArray channelFlags;

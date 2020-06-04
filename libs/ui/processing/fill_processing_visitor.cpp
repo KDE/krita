@@ -84,7 +84,7 @@ void FillProcessingVisitor::fillPaintDevice(KisPaintDeviceSP device, KisUndoAdap
         fillPainter.setProgress(helper.updater());
 
         if (m_usePattern) {
-            fillPainter.fillRect(fillRect, m_resources->currentPattern(), QTransform());
+            fillPainter.fillRect(fillRect, m_resources->currentPattern(), m_resources->fillTransform());
         } else if (m_useBgColor) {
             fillPainter.fillRect(fillRect,
                                  m_resources->currentBgColor(),
@@ -133,7 +133,7 @@ void FillProcessingVisitor::fillPaintDevice(KisPaintDeviceSP device, KisUndoAdap
         KisPaintDeviceSP sourceDevice = m_unmerged ? device : m_refPaintDevice;
 
         if (m_usePattern) {
-            fillPainter.fillPattern(startPoint.x(), startPoint.y(), sourceDevice);
+            fillPainter.fillPattern(startPoint.x(), startPoint.y(), sourceDevice, m_resources->fillTransform());
         } else {
             fillPainter.fillColor(startPoint.x(), startPoint.y(), sourceDevice);
         }

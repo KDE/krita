@@ -29,6 +29,7 @@
 #include <QLayout>
 #include <QCheckBox>
 #include <QComboBox>
+#include <QGroupBox>
 #include <QVector>
 #include <QRect>
 #include <QColor>
@@ -195,6 +196,12 @@ void KisToolFill::endPrimaryAction(KoPointerEvent *event)
 
     KIS_ASSERT(refPaintDevice);
 
+    QTransform transform;
+
+    transform.rotate(m_patternRotation);
+    transform.scale(m_patternScale, m_patternScale);
+    resources->setFillTransform(transform);
+
     KisProcessingVisitorSP visitor =
         new FillProcessingVisitor(refPaintDevice,
                                   m_startPos,
@@ -256,6 +263,20 @@ QWidget* KisToolFill::createOptionWidget()
     m_checkUsePattern = new QCheckBox(QString(), widget);
     m_checkUsePattern->setToolTip(i18n("When checked do not use the foreground color, but the pattern selected to fill with"));
 
+    QLabel *lbl_patternRotation = new QLabel(i18n("Rotate:"), widget);
+    m_sldPatternRotate = new KisDoubleSliderSpinBox(widget);
+    m_sldPatternRotate->setObjectName("patternrotate");
+    m_sldPatternRotate->setRange(0, 360, 2);
+    m_sldPatternRotate->setSingleStep(1.0);
+    m_sldPatternRotate->setSuffix(QChar(Qt::Key_degree));
+
+    QLabel *lbl_patternScale = new QLabel(i18n("Scale:"), widget);
+    m_sldPatternScale = new KisDoubleSliderSpinBox(widget);
+    m_sldPatternScale->setObjectName("patternscale");
+    m_sldPatternScale->setRange(0, 500, 2);
+    m_sldPatternScale->setSingleStep(1.0);
+    m_sldPatternScale->setSuffix(QChar(Qt::Key_Percent));
+
     QLabel *lbl_sampleLayers = new QLabel(i18nc("This is a label before a combobox with different choices regarding which layers "
                                                 "to take into considerationg when calculating the area to fill. "
                                                 "Options together with the label are: /Sample current layer/ /Sample all layers/ "
@@ -292,6 +313,8 @@ QWidget* KisToolFill::createOptionWidget()
 
     connect (m_cmbSampleLayersMode   , SIGNAL(currentIndexChanged(int)), this, SLOT(slotSetSampleLayers(int)));
     connect (m_cmbSelectedLabels          , SIGNAL(selectedColorsChanged()), this, SLOT(slotSetSelectedColorLabels()));
+    connect (m_sldPatternRotate  , SIGNAL(valueChanged(qreal)), this, SLOT(slotSetPatternRotation(qreal)));
+    connect (m_sldPatternScale   , SIGNAL(valueChanged(qreal)), this, SLOT(slotSetPatternScale(qreal)));
 
     addOptionWidgetOption(m_checkUseFastMode, lbl_fastMode);
     addOptionWidgetOption(m_slThreshold, lbl_threshold);
@@ -303,6 +326,9 @@ QWidget* KisToolFill::createOptionWidget()
     addOptionWidgetOption(m_cmbSampleLayersMode, lbl_sampleLayers);
     addOptionWidgetOption(m_cmbSelectedLabels, lbl_cmbLabel);
     addOptionWidgetOption(m_checkUsePattern, lbl_usePattern);
+
+    addOptionWidgetOption(m_sldPatternRotate, lbl_patternRotation);
+    addOptionWidgetOption(m_sldPatternScale, lbl_patternScale);
 
     updateGUI();
 
@@ -339,6 +365,9 @@ QWidget* KisToolFill::createOptionWidget()
     // m_sampleLayersMode is set manually above
     // selectedColors are also set manually
 
+    m_sldPatternRotate->setValue(m_configGroup.readEntry("patternRotate", 0.0));
+    m_sldPatternScale->setValue(m_configGroup.readEntry("patternScale", 100.0));
+
     activateConnectionsToImage();
 
     m_widgetsInitialized = true;
@@ -356,6 +385,8 @@ void KisToolFill::updateGUI()
     m_sizemodWidget->setEnabled(!selectionOnly && useAdvancedMode);
     m_featherWidget->setEnabled(!selectionOnly && useAdvancedMode);
     m_checkUsePattern->setEnabled(useAdvancedMode);
+    m_sldPatternRotate->setEnabled((m_checkUsePattern->isChecked() && useAdvancedMode));
+    m_sldPatternScale->setEnabled((m_checkUsePattern->isChecked() && useAdvancedMode));
 
     m_cmbSampleLayersMode->setEnabled(!selectionOnly && useAdvancedMode);
 
@@ -434,6 +465,8 @@ void KisToolFill::slotSetThreshold(int threshold)
 void KisToolFill::slotSetUsePattern(bool state)
 {
     m_usePattern = state;
+    m_sldPatternScale->setEnabled(state);
+    m_sldPatternRotate->setEnabled(state);
     m_configGroup.writeEntry("usePattern", state);
 }
 
@@ -448,6 +481,18 @@ void KisToolFill::slotSetSampleLayers(int index)
 void KisToolFill::slotSetSelectedColorLabels()
 {
     m_selectedColors = m_cmbSelectedLabels->selectedColors();
+}
+
+void KisToolFill::slotSetPatternScale(qreal scale)
+{
+    m_patternScale = scale*0.01;
+    m_configGroup.writeEntry("patternScale", scale);
+}
+
+void KisToolFill::slotSetPatternRotation(qreal rotate)
+{
+    m_patternRotation = rotate;
+    m_configGroup.writeEntry("patternRotate", rotate);
 }
 
 void KisToolFill::slotSetFillSelection(bool state)

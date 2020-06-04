@@ -205,6 +205,11 @@ Q_SIGNALS:
     void beforeResourcesLayoutReset(QModelIndex activateAfterReformat);
     void afterResourcesLayoutReset();
 
+private Q_SLOTS:
+
+    void addStorage(const QString &location);
+    void removeStorage(const QString &location);
+
 private:
 
     bool resetQuery();

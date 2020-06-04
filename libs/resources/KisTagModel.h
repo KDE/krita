@@ -77,8 +77,6 @@ public:
 
     KisTagSP tagByUrl(const QString& tagUrl) const;
 
-
-
 private:
 
     friend class DlgDbExplorer;

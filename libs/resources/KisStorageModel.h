@@ -64,8 +64,6 @@ public:
 
 private Q_SLOTS:
 
-    friend class KisResourceLocator;
-
     void addStorage(const QString &location);
     void removeStorage(const QString &location);
 

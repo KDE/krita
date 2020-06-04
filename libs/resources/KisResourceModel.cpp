@@ -49,6 +49,9 @@ KisResourceModel::KisResourceModel(const QString &resourceType, QObject *parent)
 {
     //qDebug() << "ResourceModel" << s_i << resourceType; s_i++;
 
+    connect(KisResourceLocator::instance(), SIGNAL(storageAdded(const QString&)), this, SLOT(addStorage(const QString&)));
+    connect(KisResourceLocator::instance(), SIGNAL(storageRemoved(const QString&)), this, SLOT(removeStorage(const QString&)));
+
     d->resourceType = resourceType;
     
     bool r = d->resourcesQuery.prepare("SELECT resources.id\n"
@@ -568,4 +571,16 @@ int KisResourceModel::rowCount(const QModelIndex &) const
     }
     
     return d->cachedRowCount;
+}
+
+
+void KisResourceModel::addStorage(const QString &location)
+{
+
+}
+
+
+void KisResourceModel::removeStorage(const QString &location)
+{
+
 }

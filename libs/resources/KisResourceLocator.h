@@ -224,14 +224,6 @@ private:
     void setMetaDataForStorage(const QString &storageLocation, QMap<QString, QVariant> map) const;
 
     /**
-     * @brief storageContainsResourceByFile
-     * @param storageLocation
-     * @param filename
-     * @return
-     */
-    bool storageContainsResourceByFile(const QString &storageLocation, const QString &resourceType, const QString &filename) const;
-
-    /**
      * Loads all the resources required by \p resource into the cache
      *
      * loadRequiredResources() also loads embedded resources and adds them

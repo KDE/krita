@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (C) 2020 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,31 +16,30 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-
-#ifndef KISTAGFILTERRESOURCEPROXYMODEL_H
-#define KISTAGFILTERRESOURCEPROXYMODEL_H
+#ifndef KISACTIVEFILTERMODEL_H
+#define KISACTIVEFILTERMODEL_H
 
 #include <QSortFilterProxyModel>
-#include <QObject>
 #include <KoResource.h>
 #include <KisResourceModel.h>
-#include <KisTag.h>
-#include <KisTagModel.h>
 
 #include "kritaresources_export.h"
 
 /**
- * @brief The KisTagFilterResourceProxyModel class filters the resources by tag or resource name
+ * @brief The KisActiveFilterModel class filters the source model by checking whether
+ * the given column id is true or not.
  */
-class KRITARESOURCES_EXPORT KisTagFilterResourceProxyModel : public QSortFilterProxyModel, public KisAbstractResourceModel
+class KRITARESOURCES_EXPORT KisActiveFilterModel : public QSortFilterProxyModel, public KisAbstractResourceModel
 {
     Q_OBJECT
 public:
-    KisTagFilterResourceProxyModel(KisTagModel* model = 0, QObject *parent = 0);
-    ~KisTagFilterResourceProxyModel() override;
+    KisActiveFilterModel(int column, QObject *parent);
+    ~KisActiveFilterModel() override;
 
-    // KisAbstractResourceModel interface
+    void setCheck(bool check);
+
 public:
+
     KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const override;
     QModelIndex indexFromResource(KoResourceSP resource) const override;
     bool removeResource(const QModelIndex &index) override;
@@ -51,31 +50,19 @@ public:
     bool removeResource(KoResourceSP resource) override;
     bool setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata) override;
 
-    /**
-     * @brief setTag
-     * @param tag
-     */
-    void setTag(const KisTagSP tag);
-    void setSearchBoxText(const QString& seatchBoxText);
-    void setFilterByCurrentTag(bool filterInCurrentTag);
-
 protected:
 
     bool filterAcceptsColumn(int source_column, const QModelIndex &source_parent) const override;
     bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
     bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;
 
-    bool resourceHasCurrentTag(KisTagSP currentTag, QVector<KisTagSP> tagsForResource) const;
-
-private Q_SLOTS:
-    void slotModelReset();
-
-
 private:
+
     struct Private;
     Private *const d;
 
-    Q_DISABLE_COPY(KisTagFilterResourceProxyModel)
+    Q_DISABLE_COPY(KisActiveFilterModel)
+
 };
 
-#endif // KISTAGFILTERRESOURCEPROXYMODEL_H
+#endif // KISACTIVEFILTERMODEL_H

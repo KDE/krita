@@ -48,7 +48,7 @@ KisLayerFilterWidget::KisLayerFilterWidget(QWidget *parent) : QWidget(parent)
     textFilter = new QLineEdit(this);
     textFilter->setPlaceholderText(i18n("Filter by name..."));
     textFilter->setMinimumWidth(192);
-    textFilter->setMinimumHeight(32);
+    textFilter->setMinimumHeight(28);
     textFilter->setClearButtonEnabled(true);
 
     connect(textFilter, SIGNAL(textChanged(QString)), this, SIGNAL(filteringOptionsChanged()));
@@ -68,7 +68,7 @@ KisLayerFilterWidget::KisLayerFilterWidget(QWidget *parent) : QWidget(parent)
         QVector<QColor> colors = colorScheme.allColorLabels();
 
         for (int id = 0; id < colors.count(); id++) {
-            KisColorLabelButton* btn = new KisColorLabelButton(colors[id], 32, buttonContainer);
+            KisColorLabelButton* btn = new KisColorLabelButton(colors[id], 28, buttonContainer);
             buttonGroup->addButton(btn, id);
             btn->installEventFilter(buttonEventFilter);
             subLayout->addWidget(btn);
@@ -78,7 +78,7 @@ KisLayerFilterWidget::KisLayerFilterWidget(QWidget *parent) : QWidget(parent)
     }
 
     resetButton = new QPushButton(i18n("Reset Filters"), this);
-    resetButton->setMinimumHeight(32);
+    resetButton->setMinimumHeight(28);
     connect(resetButton, &QPushButton::clicked, [this](){
        this->reset();
     });

@@ -75,6 +75,7 @@ struct Q_DECL_HIDDEN KisPainter::Private {
     KoColorConversionTransformation::ConversionFlags conversionFlags;
     KisRunnableStrokeJobsInterface *runnableStrokeJobsInterface = 0;
     QScopedPointer<KisRunnableStrokeJobsInterface> fakeRunnableStrokeJobsInterface;
+    QTransform                  patternTransform;
 
     bool tryReduceSourceRect(const KisPaintDevice *srcDev,
                              QRect *srcRect,

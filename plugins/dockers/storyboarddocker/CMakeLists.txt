@@ -7,6 +7,7 @@ set(KRITA_STORYBOARDDOCKER_SOURCES
     commentDelegate.cpp
     storyboardModel.cpp
     storyboardItem.cpp
+    storyboardDelegate.cpp
     )
 
 set(KRITA_STORYBOARDDOCKER_PART_HEADERS
@@ -16,6 +17,7 @@ set(KRITA_STORYBOARDDOCKER_PART_HEADERS
     commentDelegate.h
     storyboardModel.h
     storyboardItem.h
+    storyboardDelegate.h
 )
 
 ki18n_wrap_ui(KRITA_STORYBOARDDOCKER_SOURCES

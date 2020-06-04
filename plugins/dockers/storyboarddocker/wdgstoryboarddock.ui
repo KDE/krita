@@ -91,7 +91,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
-        <widget class="QTreeView" name="treeView"/>
+        <widget class="QListView" name="listView"/>
        </item>
       </layout>
      </item>

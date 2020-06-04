@@ -414,7 +414,7 @@ void KisToolMove::paint(QPainter& gc, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
 
-    if (m_strokeId && !m_handlesRect.isEmpty()) {
+    if (m_strokeId && !m_handlesRect.isEmpty() && !m_currentlyUsingSelection) {
         QPainterPath handles;
         handles.addRect(m_handlesRect.translated(currentOffset()));
 
@@ -521,6 +521,13 @@ void KisToolMove::startAction(KoPointerEvent *event, MoveToolMode mode)
 
     if (startStrokeImpl(mode, &pos)) {
         setMode(KisTool::PAINT_MODE);
+
+        if (m_currentlyUsingSelection) {
+            KisImageSP image = currentImage();
+            image->addJob(m_strokeId,
+                          new MoveSelectionStrokeStrategy::ShowSelectionData(false));
+        }
+
     } else {
         event->ignore();
         m_dragPos = QPoint();
@@ -560,6 +567,12 @@ void KisToolMove::endAction(KoPointerEvent *event)
     m_dragPos = QPoint();
     commitChanges();
 
+    if (m_currentlyUsingSelection) {
+        KisImageSP image = currentImage();
+        image->addJob(m_strokeId,
+                      new MoveSelectionStrokeStrategy::ShowSelectionData(true));
+    }
+
     notifyGuiAfterMove();
 
     qobject_cast<KisCanvas2*>(canvas())->updateCanvas();
@@ -567,7 +580,7 @@ void KisToolMove::endAction(KoPointerEvent *event)
 
 void KisToolMove::drag(const QPoint& newPos)
 {
-    KisImageWSP image = currentImage();
+    KisImageSP image = currentImage();
 
     QPoint offset = m_accumulatedOffset + newPos - m_dragStart;
 

@@ -24,14 +24,14 @@ endif()
 
 # Download and find NSIS
 if(NOT DEFINED NO_DOWNLOAD_NSIS)
-    set(DOWNLOAD_NSIS_VERSION "3.02.1")
+    set(DOWNLOAD_NSIS_VERSION "3.05")
     message(STATUS "Downloading NSIS...")
     if(EXISTS "${CMAKE_CURRENT_BINARY_DIR}/nsis-${DOWNLOAD_NSIS_VERSION}")
         file(REMOVE_RECURSE "${CMAKE_CURRENT_BINARY_DIR}/nsis-${DOWNLOAD_NSIS_VERSION}")
     endif()
     file(DOWNLOAD "https://files.kde.org/krita/build/dependencies/nsis-${DOWNLOAD_NSIS_VERSION}.zip"
         "${DOWNLOAD_DIR}/nsis-${DOWNLOAD_NSIS_VERSION}.zip"
-        EXPECTED_HASH SHA1=06c791f9cf668d945564316c9c947ebb4cc469e9
+        EXPECTED_HASH SHA1=68f9c7025110b95c20431bbce28f3bf2d0ddb1ff
     )
     execute_process(COMMAND ${CMAKE_COMMAND} -E tar xfz "${DOWNLOAD_DIR}/nsis-${DOWNLOAD_NSIS_VERSION}.zip"
         WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
@@ -156,6 +156,7 @@ execute_process(COMMAND "${TOOL_MAKENSIS}"
     "${ARG_HAS_FFMPEG}"
     "/XSetCompressor /SOLID lzma"
     "/V3"
+    "/INPUTCHARSET UTF8"
     "${CMAKE_CURRENT_BINARY_DIR}/krita-nsis/installer_krita.nsi"
     RESULT_VARIABLE result_makensis
 )

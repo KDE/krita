@@ -85,6 +85,8 @@ public:
     KisPaintOpPresetSP currentPaintOpPreset() const;
     KoAbstractGradient* currentGradient() const;
 
+    QTransform fillTransform() const;
+
     /// @return the channel lock flags of the current node with the global override applied
     QBitArray channelLockFlags() const;
 

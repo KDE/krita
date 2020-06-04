@@ -176,4 +176,7 @@ void KisIndirectPaintingSupport::releaseResources()
 {
     d->temporaryTarget = 0;
     d->selection = 0;
+    d->compositeOp = COMPOSITE_OVER;
+    d->compositeOpacity = OPACITY_OPAQUE_U8;
+    d->channelFlags.clear();
 }

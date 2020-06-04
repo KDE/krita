@@ -82,6 +82,8 @@ void MoveSelectionStrokeStrategy::initStrokeCallback()
     indirect->setTemporaryTarget(movedDevice);
     indirect->setTemporaryCompositeOp(COMPOSITE_OVER);
     indirect->setTemporaryOpacity(OPACITY_OPAQUE_U8);
+    indirect->setTemporarySelection(0);
+    indirect->setTemporaryChannelFlags(QBitArray());
 
     m_initialDeviceOffset = QPoint(movedDevice->x(), movedDevice->y());
 

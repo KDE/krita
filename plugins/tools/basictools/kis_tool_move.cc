@@ -327,6 +327,18 @@ void KisToolMove::slotHandlesRectCalculated(const QRect &handlesRect)
 void KisToolMove::slotStrokeStartedEmpty()
 {
     /**
+     * Notify that move-selection stroke ended unexpectedly
+     */
+    if (m_currentlyUsingSelection) {
+        KisCanvas2 *kisCanvas = static_cast<KisCanvas2*>(canvas());
+        kisCanvas->viewManager()->
+            showFloatingMessage(
+                i18nc("floating message in move tool",
+                      "Selected area has no pixels"),
+                QIcon(), 1000, KisFloatingMessage::High);
+    }
+
+    /**
      * Since the choice of nodes for the operation happens in the
      * stroke itself, it may happen that there are no nodes at all.
      * In such a case, we should just cancel already started stroke.

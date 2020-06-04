@@ -165,8 +165,9 @@ public:
      * @param startY the Y position where the floodfill starts
      * @param sourceDevice the sourceDevice that determines the area that
      * is floodfilled if sampleMerged is on
+     * @param patternTransform transform applied to the pattern;
      */
-    void fillPattern(int startX, int startY, KisPaintDeviceSP sourceDevice);
+    void fillPattern(int startX, int startY, KisPaintDeviceSP sourceDevice, QTransform patternTransform = QTransform());
 
     /**
      * Returns a selection mask for the floodfill starting at the specified position.

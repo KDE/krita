@@ -251,7 +251,7 @@ void KisFillPainter::fillColor(int startX, int startY, KisPaintDeviceSP sourceDe
     }
 }
 
-void KisFillPainter::fillPattern(int startX, int startY, KisPaintDeviceSP sourceDevice)
+void KisFillPainter::fillPattern(int startX, int startY, KisPaintDeviceSP sourceDevice, QTransform patternTransform)
 {
     genericFillStart(startX, startY, sourceDevice);
 
@@ -259,7 +259,7 @@ void KisFillPainter::fillPattern(int startX, int startY, KisPaintDeviceSP source
     KisPaintDeviceSP filled = device()->createCompositionSourceDevice();
     Q_CHECK_PTR(filled);
     KisFillPainter painter(filled);
-    painter.fillRect(QRect(0, 0, m_width, m_height), pattern(), QTransform());
+    painter.fillRect(QRect(0, 0, m_width, m_height), pattern(), patternTransform);
     painter.end();
 
     genericFillEnd(filled);

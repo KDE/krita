@@ -381,6 +381,11 @@ KisPaintOpPresetSP KisResourcesSnapshot::currentPaintOpPreset() const
     return m_d->currentPaintOpPreset;
 }
 
+QTransform KisResourcesSnapshot::fillTransform() const
+{
+    return m_d->fillTransform;
+}
+
 
 QBitArray KisResourcesSnapshot::channelLockFlags() const
 {

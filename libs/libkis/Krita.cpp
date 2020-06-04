@@ -122,7 +122,8 @@ Document* Krita::activeDocument() const
         return 0;
     }
     KisDocument *document = view->document();
-    return new Document(document, false);
+    Document *d = new Document(document, false);
+    return d;
 }
 
 void Krita::setActiveDocument(Document* value)
@@ -301,7 +302,9 @@ QStringList Krita::recentDocuments() const
 Document* Krita::createDocument(int width, int height, const QString &name, const QString &colorModel, const QString &colorDepth, const QString &profile, double resolution)
 {
     KisDocument *document = KisPart::instance()->createDocument();
-    KisPart::instance()->addDocument(document);
+    document->setObjectName(name);
+
+    KisPart::instance()->addDocument(document, false);
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(colorModel, colorDepth, profile);
     Q_ASSERT(cs);
 
@@ -314,7 +317,9 @@ Document* Krita::createDocument(int width, int height, const QString &name, cons
     }
 
     Q_ASSERT(document->image());
-    return new Document(document, true);
+    Document *doc = new Document(document, true);
+
+    return doc;
 }
 
 Document* Krita::openDocument(const QString &filename)

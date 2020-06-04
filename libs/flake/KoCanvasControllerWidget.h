@@ -183,6 +183,8 @@ protected:
     void wheelEvent(QWheelEvent *event) override;
     /// reimplemented from QWidget
     bool focusNextPrevChild(bool next) override;
+    /// reimplemented from QAbstractScrollArea
+    bool viewportEvent(QEvent *event) override;
 
 private:
     Q_PRIVATE_SLOT(d, void activate())

@@ -498,7 +498,7 @@ void KisKraSaverTest::testRoundTripShapeSelection()
     KisSelectionSP selection = new KisSelection(p.layer->paintDevice()->defaultBounds());
 
     KisShapeSelection *shapeSelection = new KisShapeSelection(doc->shapeController(), p.image, selection);
-    selection->setShapeSelection(shapeSelection);
+    selection->convertToVectorSelectionNoUndo(shapeSelection);
 
     KoPathShape* path = new KoPathShape();
     path->setShapeId(KoPathShapeId);
@@ -539,7 +539,7 @@ void KisKraSaverTest::testRoundTripShapeSelection()
     KisTransparencyMask *newMask = dynamic_cast<KisTransparencyMask*>(node.data());
     QVERIFY(newMask);
 
-    QVERIFY(newMask->selection()->hasShapeSelection());
+    QVERIFY(newMask->selection()->hasNonEmptyShapeSelection());
 
     QVERIFY(chk.testPassed());
 }

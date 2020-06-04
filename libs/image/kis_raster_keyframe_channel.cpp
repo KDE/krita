@@ -74,6 +74,12 @@ KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KoID &id, const KisPain
 {
 }
 
+KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KoID &id, const KisPaintDeviceWSP paintDevice, const KisDefaultBoundsBaseSP bounds)
+    : KisKeyframeChannel(id, bounds ),
+      m_d(new Private(paintDevice, QString()))
+{
+}
+
 KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KisRasterKeyframeChannel &rhs, KisNodeWSP newParent, const KisPaintDeviceWSP newPaintDevice)
     : KisKeyframeChannel(rhs, newParent),
       m_d(new Private(newPaintDevice, rhs.m_d->filenameSuffix))

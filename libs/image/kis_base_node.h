@@ -334,7 +334,7 @@ public:
      * type cannot generate a thumbnail. If the requested size is too
      * big, return a null QImage.
      */
-    virtual QImage createThumbnail(qint32 w, qint32 h);
+    virtual QImage createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio);
 
     /**
      * @return a thumbnail in requested size for the defined timestamp.
@@ -343,7 +343,7 @@ public:
      * current node type cannot generate a thumbnail. If the requested
      * size is too big, return a null QImage.
      */
-    virtual QImage createThumbnailForFrame(qint32 w, qint32 h, int time);
+    virtual QImage createThumbnailForFrame(qint32 w, qint32 h, int time, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio);
 
     /**
      * Ask this node to re-read the pertinent settings from the krita
@@ -388,6 +388,12 @@ public:
      * Return whether or not the given node is isolated.
      */
     bool belongsToIsolatedGroup() const;
+
+    /**
+     * Return whether or not the given node is the root of
+     * isolation.
+     */
+    bool isIsolatedRoot() const;
 
     /**
      * Set the locked status of this node. Locked nodes cannot be

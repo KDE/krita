@@ -108,8 +108,6 @@ void KisTimeBasedItemModel::setImage(KisImageWSP image)
     if (image) {
         KisImageAnimationInterface *ai = image->animationInterface();
 
-        slotCurrentTimeChanged(ai->currentUITime());
-
         connect(ai, SIGNAL(sigFramerateChanged()), SLOT(slotFramerateChanged()));
         connect(ai, SIGNAL(sigUiTimeChanged(int)), SLOT(slotCurrentTimeChanged(int)));
     }
@@ -463,16 +461,16 @@ void KisTimeBasedItemModel::scrubTo(int time, bool preview)
     }
 }
 
-void KisTimeBasedItemModel::slotFramerateChanged()
-{
-    emit headerDataChanged(Qt::Horizontal, 0, columnCount() - 1);
-}
-
 void KisTimeBasedItemModel::slotCurrentTimeChanged(int time)
 {
     if (time != m_d->activeFrameIndex) {
         setHeaderData(time, Qt::Horizontal, true, ActiveFrameRole);
     }
+}
+
+void KisTimeBasedItemModel::slotFramerateChanged()
+{
+    emit headerDataChanged(Qt::Horizontal, 0, columnCount() - 1);
 }
 
 void KisTimeBasedItemModel::slotCacheChanged()

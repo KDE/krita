@@ -182,7 +182,7 @@ void KisIteratorBenchmark::randomAccessor(const KoColorSpace * colorSpace)
     t.start();
 
     for (int i = 0; i < 3; i++) {
-        KisRandomAccessorSP ac = dev.createRandomAccessorNG(0, 0);
+        KisRandomAccessorSP ac = dev.createRandomAccessorNG();
         for (int y = 0; y < TEST_HEIGHT; ++y) {
             for (int x = 0; x < TEST_WIDTH; ++x) {
                 ac->moveTo(x, y);
@@ -195,7 +195,7 @@ void KisIteratorBenchmark::randomAccessor(const KoColorSpace * colorSpace)
     }
 
     for (int i = 0; i < 3; i++) {
-        KisRandomAccessorSP ac = dev.createRandomAccessorNG(0, 0);
+        KisRandomAccessorSP ac = dev.createRandomAccessorNG();
         for (int y = 0; y < TEST_HEIGHT; ) {
             int numContiguousRows = qMin(ac->numContiguousRows(y), TEST_HEIGHT - y);
 
@@ -221,7 +221,7 @@ void KisIteratorBenchmark::randomAccessor(const KoColorSpace * colorSpace)
         t.restart();
     }
 
-    KisRandomConstAccessorSP cac = dev.createRandomConstAccessorNG(0, 0);
+    KisRandomConstAccessorSP cac = dev.createRandomConstAccessorNG();
     for (int y = 0; y < TEST_HEIGHT; ++y) {
         for (int x = 0; x < TEST_WIDTH; ++x) {
             cac->moveTo(x, y);

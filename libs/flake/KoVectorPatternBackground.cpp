@@ -148,15 +148,3 @@ bool KoVectorPatternBackground::hasTransparency() const
 {
     return true;
 }
-
-void KoVectorPatternBackground::fillStyle(KoGenStyle &, KoShapeSavingContext &)
-{
-    // noop
-}
-
-bool KoVectorPatternBackground::loadStyle(KoOdfLoadingContext &, const QSizeF &Size)
-{
-    Q_UNUSED(Size);
-    return true;
-}
-

@@ -113,7 +113,7 @@ public:
                 << "logPath" << logPath
                 << "totalFrames" << totalFrames;
 
-        QTemporaryFile progressFile(QDir::tempPath() + QDir::separator() + "KritaFFmpegProgress.XXXXXX");
+        QTemporaryFile progressFile(QDir::tempPath() + '/' + "KritaFFmpegProgress.XXXXXX");
         progressFile.open();
 
         m_process.setStandardOutputFile(logPath);
@@ -223,9 +223,8 @@ KisImportExportErrorCode VideoSaver::encode(const QString &savedFilesMask, const
         QString("scale=w=")
             .append(QString::number(options.width))
             .append(":h=")
-            .append(QString::number(options.height))
-            .append(":force_original_aspect_ratio=decrease");
-
+            .append(QString::number(options.height));
+            //.append(":force_original_aspect_ratio=decrease"); HOTFIX for even:odd dimension images.
 
     const QString resultFile = options.resolveAbsoluteVideoFilePath();
     const QDir videoDir(QFileInfo(resultFile).absolutePath());
@@ -261,13 +260,17 @@ KisImportExportErrorCode VideoSaver::encode(const QString &savedFilesMask, const
                  << "-start_number" << QString::number(clipRange.start())
                  << "-i" << savedFilesMask
                  << "-i" << palettePath
-                 << "-lavfi" << "[0:v][1:v] paletteuse"
-                 << "-y" << resultFile;
+                 << "-lavfi";
+
+            QString filterArgs;
 
             // if we are exporting out at a different image size, we apply scaling filter
             if (m_image->width() != options.width || m_image->height() != options.height) {
-                args << "-vf" << exportDimensions;
+                filterArgs.append(exportDimensions + "[0:v];");
             }
+
+            args << filterArgs.append("[0:v][1:v] paletteuse")
+                 << "-y" << resultFile;
 
 
             dbgFile << "savedFilesMask" << savedFilesMask << "start" << QString::number(clipRange.start()) << "duration" << clipRange.duration();
@@ -301,7 +304,6 @@ KisImportExportErrorCode VideoSaver::encode(const QString &savedFilesMask, const
 
             args << "-i" << audioFileInfo.absoluteFilePath();
         }
-
 
         // if we are exporting out at a different image size, we apply scaling filter
         // export options HAVE to go after input options, so make sure this is after the audio import

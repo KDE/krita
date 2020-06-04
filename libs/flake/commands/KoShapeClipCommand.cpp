@@ -100,9 +100,9 @@ void KoShapeClipCommand::redo()
 
     const uint clipPathCount = d->clipPathShapes.count();
     for (uint i = 0; i < clipPathCount; ++i) {
-        d->controller->removeShape(d->clipPathShapes[i]);
-        if (d->oldParents.at(i))
+        if (d->oldParents.at(i)) {
             d->oldParents.at(i)->removeShape(d->clipPathShapes[i]);
+        }
     }
 
     d->executed = true;
@@ -122,10 +122,9 @@ void KoShapeClipCommand::undo()
 
     const uint clipPathCount = d->clipPathShapes.count();
     for (uint i = 0; i < clipPathCount; ++i) {
-        if (d->oldParents.at(i))
+        if (d->oldParents.at(i)) {
             d->oldParents.at(i)->addShape(d->clipPathShapes[i]);
-        // the parent has to be there when it is added to the KoShapeControllerBase
-        d->controller->addShape(d->clipPathShapes[i]);
+        }
     }
 
     d->executed = false;

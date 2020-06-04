@@ -37,6 +37,7 @@
 #include "kis_action.h"
 #include "kis_signal_auto_connection.h"
 #include "kis_selection_tool_helper.h"
+#include "kis_assert.h"
 
 /**
  * This is a basic template to create selection tools from basic path based drawing tools.
@@ -98,6 +99,13 @@ public:
         KisSelectionModifierMapper::instance();
     }
 
+    enum SampleLayersMode
+    {
+        SampleAllLayers,
+        SampleCurrentLayer,
+        SampleColorLabeledLayers,
+    };
+
     void updateActionShortcutToolTips() {
         KisSelectionOptions *widget = m_widgetHelper.optionWidget();
         if (widget) {
@@ -138,8 +146,14 @@ public:
 
         updateActionShortcutToolTips();
 
-        if (isPixelOnly() && m_widgetHelper.optionWidget()) {
-            m_widgetHelper.optionWidget()->enablePixelOnlySelectionMode();
+        if (m_widgetHelper.optionWidget()) {
+
+            m_widgetHelper.optionWidget()->activateConnectionToImage();
+
+            if (isPixelOnly()) {
+                m_widgetHelper.optionWidget()->enablePixelOnlySelectionMode();
+            }
+            m_widgetHelper.optionWidget()->setColorLabelsEnabled(usesColorLabels());
         }
     }
 
@@ -147,6 +161,9 @@ public:
     {
         BaseClass::deactivate();
         m_modeConnections.clear();
+        if (m_widgetHelper.optionWidget()) {
+            m_widgetHelper.optionWidget()->deactivateConnectionToImage();
+        }
     }
 
     QWidget* createOptionWidget()
@@ -159,8 +176,11 @@ public:
         this->connect(&m_widgetHelper, SIGNAL(selectionActionChanged(int)), this, SLOT(resetCursorStyle()));
 
         updateActionShortcutToolTips();
-        if (isPixelOnly() && m_widgetHelper.optionWidget()) {
-            m_widgetHelper.optionWidget()->enablePixelOnlySelectionMode();
+        if (m_widgetHelper.optionWidget()) {
+            if (isPixelOnly()) {
+                m_widgetHelper.optionWidget()->enablePixelOnlySelectionMode();
+            }
+            m_widgetHelper.optionWidget()->setColorLabelsEnabled(usesColorLabels());
         }
 
         return m_widgetHelper.optionWidget();
@@ -182,6 +202,25 @@ public:
     bool antiAliasSelection() const
     {
         return m_widgetHelper.antiAliasSelection();
+    }
+
+    QList<int> colorLabelsSelected() const
+    {
+        return m_widgetHelper.colorLabelsSelected();
+    }
+
+    SampleLayersMode sampleLayersMode() const
+    {
+        QString layersMode = m_widgetHelper.sampleLayersMode();
+        if (layersMode == m_widgetHelper.optionWidget()->SAMPLE_LAYERS_MODE_ALL) {
+            return SampleAllLayers;
+        } else if (layersMode == m_widgetHelper.optionWidget()->SAMPLE_LAYERS_MODE_CURRENT) {
+            return SampleCurrentLayer;
+        } else if (layersMode == m_widgetHelper.optionWidget()->SAMPLE_LAYERS_MODE_COLOR_LABELED) {
+            return SampleColorLabeledLayers;
+        }
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(true, SampleAllLayers);
+        return SampleAllLayers;
     }
 
     SelectionAction alternateSelectionAction() const
@@ -374,6 +413,10 @@ protected:
     SelectionAction m_selectionActionAlternate;
 
     virtual bool isPixelOnly() const {
+        return false;
+    }
+
+    virtual bool usesColorLabels() const {
         return false;
     }
 

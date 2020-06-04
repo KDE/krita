@@ -1646,4 +1646,14 @@ namespace KisLayerUtils {
         return exactBounds;
     }
 
+    KisNodeSP findRoot(KisNodeSP node)
+    {
+        if (!node) return node;
+
+        while (node->parent()) {
+            node = node->parent();
+        }
+        return node;
+    }
+
 }

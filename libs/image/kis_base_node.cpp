@@ -239,8 +239,10 @@ bool KisBaseNode::check(const KoProperties & properties) const
 }
 
 
-QImage KisBaseNode::createThumbnail(qint32 w, qint32 h)
+QImage KisBaseNode::createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspectRatioMode)
 {
+    Q_UNUSED(aspectRatioMode);
+
     try {
         QImage image(w, h, QImage::Format_ARGB32);
         image.fill(0);
@@ -251,9 +253,10 @@ QImage KisBaseNode::createThumbnail(qint32 w, qint32 h)
 
 }
 
-QImage KisBaseNode::createThumbnailForFrame(qint32 w, qint32 h, int time)
+QImage KisBaseNode::createThumbnailForFrame(qint32 w, qint32 h, int time, Qt::AspectRatioMode aspectRatioMode)
 {
     Q_UNUSED(time)
+    Q_UNUSED(aspectRatioMode);
     return createThumbnail(w, h);
 }
 
@@ -291,11 +294,10 @@ bool KisBaseNode::belongsToIsolatedGroup() const
         return false;
     }
 
-    const KisBaseNode* isolatedRoot = m_d->image->isolatedModeRoot().data();
     const KisBaseNode* element = this;
 
     while (element) {
-        if (element == isolatedRoot) {
+        if (element->isIsolatedRoot()) {
             return true;
         } else {
             element = element->parentCallback().data();
@@ -303,6 +305,17 @@ bool KisBaseNode::belongsToIsolatedGroup() const
     }
 
     return false;
+}
+
+bool KisBaseNode::isIsolatedRoot() const
+{
+    if (!m_d->image) {
+        return false;
+    }
+
+    const KisBaseNode* isolatedRoot = m_d->image->isolatedModeRoot().data();
+
+    return (this == isolatedRoot);
 }
 
 void KisBaseNode::setUserLocked(bool locked)

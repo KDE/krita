@@ -39,8 +39,9 @@ QByteArray KoMD5Generator::generateHash(const QString &filename)
 
     QFile f(filename);
     if (f.exists() && f.open(QIODevice::ReadOnly)) {
-        QByteArray ba = f.readAll();
-        result = generateHash(ba);
+        QCryptographicHash md5(QCryptographicHash::Md5);
+        md5.addData(&f);
+        result = md5.result();
     }
 
     return result;

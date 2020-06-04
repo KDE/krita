@@ -133,7 +133,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
 
     qreal x = info.pos().x();
     qreal y = info.pos().y();
-    KisRandomAccessorSP accessor = dab->createRandomAccessorNG(qRound(x), qRound(y));
+    KisRandomAccessorSP accessor = dab->createRandomAccessorNG();
 
     Q_ASSERT(color.colorSpace()->pixelSize() == dab->pixelSize());
     m_inkColor = color;
@@ -314,7 +314,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
                     }
                     m_transformed = m_brushQImage.transformed(m, Qt::SmoothTransformation);
                     m_imageDevice->convertFromQImage(m_transformed, 0);
-                    KisRandomAccessorSP ac = m_imageDevice->createRandomAccessorNG(0, 0);
+                    KisRandomAccessorSP ac = m_imageDevice->createRandomAccessorNG();
                     QRect rc = m_transformed.rect();
 
                     if (m_colorProperties->useRandomHSV && m_transfo) {
@@ -451,7 +451,7 @@ void SprayBrush::paintRectangle(KisPainter* painter, qreal x, qreal y, qreal wid
 void SprayBrush::paintOutline(KisPaintDeviceSP dev , const KoColor &outlineColor, qreal posX, qreal posY, qreal radius)
 {
     QList<QPointF> antiPixels;
-    KisRandomAccessorSP accessor = dev->createRandomAccessorNG(qRound(posX), qRound(posY));
+    KisRandomAccessorSP accessor = dev->createRandomAccessorNG();
 
     for (int y = -radius + posY; y <= radius + posY; y++) {
         for (int x = -radius + posX; x <= radius + posX; x++) {

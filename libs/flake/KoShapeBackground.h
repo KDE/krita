@@ -27,9 +27,7 @@
 class QSizeF;
 class QPainter;
 class QPainterPath;
-class KoGenStyle;
 class KoShapeSavingContext;
-class KoOdfLoadingContext;
 class KoShapePaintingContext;
 
 /**
@@ -50,16 +48,6 @@ public:
     virtual bool hasTransparency() const;
 
     virtual bool compareTo(const KoShapeBackground *other) const = 0;
-
-    /**
-     * Fills the style object
-     * @param style object
-     * @param context used for saving
-     */
-    virtual void fillStyle(KoGenStyle &style, KoShapeSavingContext &context) = 0;
-
-    /// load background from odf styles
-    virtual bool loadStyle(KoOdfLoadingContext &context, const QSizeF &shapeSize) = 0;
 
     virtual explicit operator bool() const { return true; }
 

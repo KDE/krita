@@ -63,8 +63,11 @@ private Q_SLOTS:
 
     void stressTestLazyCopying();
 
+    void stressTestExtentsColumn();
+
     void benchmaskQRegion();
     void benchmaskKisRegion();
+    void benchmaskOverlappedKisRegion();
 };
 
 #endif /* KIS_TILED_DATA_MANAGER_TEST_H */

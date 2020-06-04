@@ -64,13 +64,6 @@ public:
      * @param radius the new corner radius in y-direction
      */
     void setCornerRadiusY(qreal radius);
-
-    /// reimplemented
-    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
-
-    /// reimplemented
-    void saveOdf(KoShapeSavingContext &context) const override;
-
     /// reimplemented
     QString pathShapeId() const override;
 

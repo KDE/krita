@@ -365,18 +365,6 @@ void KoSvgTextChunkShape::paintComponent(QPainter &painter, KoShapePaintingConte
     Q_UNUSED(paintContext);
 }
 
-void KoSvgTextChunkShape::saveOdf(KoShapeSavingContext &context) const
-{
-    Q_UNUSED(context);
-}
-
-bool KoSvgTextChunkShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
-{
-    Q_UNUSED(element);
-    Q_UNUSED(context);
-    return false;
-}
-
 bool KoSvgTextChunkShape::saveHtml(HtmlSavingContext &context)
 {
     // Should we add a newline? Check for vertical movement if we're using rtl or ltr text

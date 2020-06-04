@@ -33,7 +33,7 @@ public:
     // reimplemented from KoShapeFactoryBase
     bool supports(const KoXmlElement &element, KoShapeLoadingContext &context) const override;
     // reimplemented from KoShapeFactoryBase
-    KoShape *createShapeFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
+    KoShape *createShapeFromXML(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
     static int calculateZIndex(const KoXmlElement &element, KoShapeLoadingContext &context);
     static KoShape *createShapeFromSvgDirect(const KoXmlElement &root, const QRectF &boundsInPixels, const qreal pixelsPerInch, const qreal forcedFontSizeResolution, int zIndex, KoShapeLoadingContext &context, QSizeF *fragmentSize = 0);

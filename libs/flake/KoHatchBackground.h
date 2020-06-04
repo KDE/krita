@@ -41,15 +41,6 @@ public:
     // reimplemented
     void paint(QPainter &painter, KoShapePaintingContext &context, const QPainterPath &fillPath) const override;
 
-    // reimplemented
-    void fillStyle(KoGenStyle &style, KoShapeSavingContext &context) override;
-
-    // reimplemented
-    bool loadStyle(KoOdfLoadingContext &context, const QSizeF &shapeSize) override;
-
-private:
-    QString saveHatchStyle(KoShapeSavingContext &context) const;
-
 private:
     class Private;
     QSharedDataPointer<Private> d;

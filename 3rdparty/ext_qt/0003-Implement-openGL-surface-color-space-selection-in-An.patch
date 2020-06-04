@@ -1,4 +1,4 @@
-From 85d0852f0f9858e8779a8159acfce71923209d75 Mon Sep 17 00:00:00 2001
+From b52fd0efaf0f159b2a62ee5fadfca58ddd182997 Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Sat, 8 Dec 2018 15:35:43 +0300
 Subject: [PATCH 11/22] Implement openGL surface color space selection in Angle

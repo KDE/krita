@@ -157,7 +157,7 @@ void KisPrescaledProjectionTest::testCreation()
 void KisPrescaledProjectionTest::testScalingUndeferredSmoothingPixelForPixel()
 {
     // Set up a nice image
-    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "carrot.png");
+    QImage qimage(QString(FILES_DATA_DIR) + '/' + "carrot.png");
 
     // Undo adapter not necessary
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
@@ -192,7 +192,7 @@ void KisPrescaledProjectionTest::testScalingUndeferredSmoothingPixelForPixel()
 void KisPrescaledProjectionTest::testScalingUndeferredSmoothing()
 {
     // Set up a nice image
-    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "carrot.png");
+    QImage qimage(QString(FILES_DATA_DIR) + '/' + "carrot.png");
 
     // Undo adapter not necessary
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
@@ -224,7 +224,7 @@ void KisPrescaledProjectionTest::testScalingUndeferredSmoothing()
 
 void KisPrescaledProjectionTest::benchmarkUpdate()
 {
-    QImage referenceImage(QString(FILES_DATA_DIR) + QDir::separator() + "carrot.png");
+    QImage referenceImage(QString(FILES_DATA_DIR) + '/' + "carrot.png");
     QRect imageRect = QRect(QPoint(0,0), referenceImage.size());
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
@@ -283,7 +283,7 @@ class PrescaledProjectionTester
 {
 public:
     PrescaledProjectionTester() {
-        sourceImage = QImage(QString(FILES_DATA_DIR) + QDir::separator() + "carrot.png");
+        sourceImage = QImage(QString(FILES_DATA_DIR) + '/' + "carrot.png");
 
         const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
         image = new KisImage(0, sourceImage.width(), sourceImage.height(), cs, "projection test");

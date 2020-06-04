@@ -73,8 +73,6 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
     m_page->intStart->setValue(doc->image()->animationInterface()->playbackRange().start());
 
     m_page->intEnd->setMinimum(doc->image()->animationInterface()->fullClipRange().start());
-    // animators sometimes want to export after end frame
-    //m_page->intEnd->setMaximum(doc->image()->animationInterface()->fullClipRange().end());
     m_page->intEnd->setValue(doc->image()->animationInterface()->playbackRange().end());
 
     m_page->intHeight->setMinimum(1);
@@ -154,8 +152,6 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
 
         loadAnimationOptions(options);
     }
-
-
 }
 
 DlgAnimationRenderer::~DlgAnimationRenderer()
@@ -319,7 +315,7 @@ void DlgAnimationRenderer::selectRenderType(int index)
         const QString path = info.path();
 
         videoFileName =
-            QString("%1%2%3.%4").arg(path).arg(QDir::separator()).arg(baseName).arg(KisMimeDatabase::suffixesForMimeType(mimeType).first());
+            QString("%1%2%3.%4").arg(path).arg('/').arg(baseName).arg(KisMimeDatabase::suffixesForMimeType(mimeType).first());
 
     }
     m_page->videoFilename->setMimeTypeFilters(QStringList() << mimeType, mimeType);
@@ -530,11 +526,11 @@ QString DlgAnimationRenderer::findFFMpeg(const QString &customLocation)
 
     if (!customLocation.isEmpty()) {
         proposedPaths << customLocation;
-        proposedPaths << customLocation + QDir::separator() + "ffmpeg";
+        proposedPaths << customLocation + '/' + "ffmpeg";
     }
 
     proposedPaths << KoResourcePaths::getApplicationRoot() +
-        QDir::separator() + "bin" + QDir::separator() + "ffmpeg";
+        '/' + "bin" + '/' + "ffmpeg";
 
 #ifndef Q_OS_WIN
     proposedPaths << QDir::homePath() + "/bin/ffmpeg";
@@ -547,7 +543,7 @@ QString DlgAnimationRenderer::findFFMpeg(const QString &customLocation)
 
 #ifdef Q_OS_WIN
         path = QDir::toNativeSeparators(QDir::cleanPath(path));
-        if (path.endsWith(QDir::separator())) {
+        if (path.endsWith('/')) {
             continue;
         }
         if (!path.endsWith(".exe")) {

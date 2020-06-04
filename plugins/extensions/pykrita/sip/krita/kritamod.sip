@@ -42,6 +42,7 @@
 %Include Selection.sip
 %Include Extension.sip
 %Include PresetChooser.sip
+%Include Scratchpad.sip
 %Include Palette.sip
 %Include PaletteView.sip
 %Include ManagedColor.sip

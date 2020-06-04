@@ -45,6 +45,7 @@ public:
 
 Q_SIGNALS:
     void sigHandlesRectCalculated(const QRect &handlesRect);
+    void sigStrokeStartedEmpty();
 
 private:
     MoveSelectionStrokeStrategy(const MoveSelectionStrokeStrategy &rhs);

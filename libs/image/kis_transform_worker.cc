@@ -101,8 +101,8 @@ QRect rotateWithTf(int rotation, KisPaintDeviceSP dev,
     KisPaintDeviceSP tmp = new KisPaintDevice(dev->colorSpace());
     tmp->prepareClone(dev);
 
-    KisRandomAccessorSP devAcc = dev->createRandomAccessorNG(0, 0);
-    KisRandomAccessorSP tmpAcc = tmp->createRandomAccessorNG(0, 0);
+    KisRandomAccessorSP devAcc = dev->createRandomAccessorNG();
+    KisRandomAccessorSP tmpAcc = tmp->createRandomAccessorNG();
     KisProgressUpdateHelper progressHelper(progressUpdater, portion, r.height());
 
     QTransform tf;
@@ -481,8 +481,8 @@ void mirror_impl(KisPaintDeviceSP dev, qreal axis, bool isHorizontal)
     int initialRightCol = rightCenterPoint + maxDistanceToAxis - 1;
 
 
-    KisRandomAccessorSP leftIt = dev->createRandomAccessorNG(mirrorRect.x(), mirrorRect.y());
-    KisRandomAccessorSP rightIt = dev->createRandomAccessorNG(mirrorRect.x(), mirrorRect.y());
+    KisRandomAccessorSP leftIt = dev->createRandomAccessorNG();
+    KisRandomAccessorSP rightIt = dev->createRandomAccessorNG();
     const KoColor defaultPixelObject = dev->defaultPixel();
     const quint8 *defaultPixel = defaultPixelObject.data();
 

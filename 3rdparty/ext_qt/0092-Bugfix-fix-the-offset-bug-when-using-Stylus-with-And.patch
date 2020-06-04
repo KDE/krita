@@ -1,7 +1,7 @@
-From 6a819c142573b07f00a7203da3e4ee9ae077c743 Mon Sep 17 00:00:00 2001
+From 125f5531d420005cbc1198df4a7daef6bd9e42d6 Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <sharafzaz121@gmail.com>
 Date: Tue, 11 Feb 2020 18:12:20 +0300
-Subject: [PATCH 2/2] Bugfix: fix the offset bug when using Stylus with Android
+Subject: [PATCH 2/3] Bugfix: fix the offset bug when using Stylus with Android
 
 Platform plugin for Android calculated the local coordinates of the
 tabletEvent by using QWindow::position(), which returned High-DPI

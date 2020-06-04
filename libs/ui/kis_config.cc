@@ -735,6 +735,16 @@ void KisConfig::setOpenGLFilteringMode(int filteringMode)
     m_cfg.writeEntry("OpenGLFilterMode", filteringMode);
 }
 
+void KisConfig::setWidgetStyle(QString name)
+{
+    m_cfg.writeEntry("widgetStyle", name);
+}
+
+QString KisConfig::widgetStyle(bool defaultValue)
+{
+    return (defaultValue ? "" : m_cfg.readEntry("widgetStyle", ""));
+}
+
 bool KisConfig::useOpenGLTextureBuffer(bool defaultValue) const
 {
     return (defaultValue ? true : m_cfg.readEntry("useOpenGLTextureBuffer", true));

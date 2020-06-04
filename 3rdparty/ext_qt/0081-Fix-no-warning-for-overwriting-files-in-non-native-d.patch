@@ -1,4 +1,4 @@
-From 128936020988205fd52f4006a6e05d4ee19e3997 Mon Sep 17 00:00:00 2001
+From f8395f13762bc69815547b169b1bb708835510bf Mon Sep 17 00:00:00 2001
 From: Friedemann Kleint <Friedemann.Kleint@theqtcompany.com>
 Date: Mon, 10 Feb 2020 16:58:17 +0300
 Subject: [PATCH 21/22] Fix no warning for overwriting files in non-native

@@ -28,6 +28,7 @@
 #include <vector>
 
 class KisCanvas2;
+class KoColorSpace;
 
 typedef std::vector<std::vector<quint32> > HistVector; //Don't use QVector here - it's too slow for this purpose
 
@@ -58,17 +59,23 @@ class HistogramDockerWidget : public QLabel
 public:
     HistogramDockerWidget(QWidget *parent = 0, const char *name = 0, Qt::WindowFlags f = 0);
     ~HistogramDockerWidget() override;
-    void setPaintDevice(KisCanvas2* canvas);
     void paintEvent(QPaintEvent *event) override;
 
 public Q_SLOTS:
-    void updateHistogram();
+    /**
+     * @brief updateHistogram starts calculation of the histogram
+     * @param canvas canvas that the calculations must be based on
+     *
+     * Note: don't try to save the paint device of the projection of the image.
+     * Paint device of the projection changes in multiple cases, for example
+     * Isolate Mode or when opening an image with a single layer.
+     */
+    void updateHistogram(KisCanvas2* canvas);
     void receiveNewHistogram(HistVector*);
 
 private:
-    KisPaintDeviceSP m_paintDevice;
     HistVector m_histogramData;
-    QRect m_bounds;
+    const KoColorSpace* m_colorSpace;
     bool m_smoothHistogram;
 };
 

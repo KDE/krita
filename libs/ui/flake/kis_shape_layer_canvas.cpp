@@ -374,28 +374,54 @@ void KisShapeLayerCanvas::repaint()
             continue;
         }
 
+        KIS_SAFE_ASSERT_RECOVER(job.viewUpdateRect.width() <= MASK_IMAGE_WIDTH &&
+                                job.viewUpdateRect.height() <= MASK_IMAGE_HEIGHT) {
+            continue;
+        }
+
         image.fill(0);
 
         tempPainter.setTransform(QTransform());
-        tempPainter.setClipRect(QRect(0,0,MASK_IMAGE_WIDTH,MASK_IMAGE_HEIGHT));
+        tempPainter.setClipRect(QRect(0,0,job.viewUpdateRect.width(), job.viewUpdateRect.height()));
         tempPainter.setTransform(m_viewConverter->documentToView() *
                                  QTransform::fromTranslate(-job.viewUpdateRect.x(), -job.viewUpdateRect.y()));
 
         m_shapeManager->paintJob(tempPainter, job, false);
 
-        KoColorSpaceRegistry::instance()->rgb8()
-        ->convertPixelsTo(image.constBits(), dstData, m_projection->colorSpace(),
-                          MASK_IMAGE_WIDTH * MASK_IMAGE_HEIGHT,
-                          KoColorConversionTransformation::internalRenderingIntent(),
-                          KoColorConversionTransformation::internalConversionFlags());
+        if (image.size() != job.viewUpdateRect.size()) {
+            const quint8 *imagePtr = image.constBits();
+            const int imageRowStride = 4 * image.width();
 
-        // TODO: use job.viewUpdateRect instead of MASK_IMAGE_WIDTH/HEIGHT
-        m_projection->writeBytes(dstData,
-                                 job.viewUpdateRect.x(),
-                                 job.viewUpdateRect.y(),
-                                 MASK_IMAGE_WIDTH,
-                                 MASK_IMAGE_HEIGHT);
+            for (int y = 0; y < job.viewUpdateRect.height(); y++) {
 
+                KoColorSpaceRegistry::instance()->rgb8()
+                        ->convertPixelsTo(imagePtr, dstData, m_projection->colorSpace(),
+                                          job.viewUpdateRect.width(),
+                                          KoColorConversionTransformation::internalRenderingIntent(),
+                                          KoColorConversionTransformation::internalConversionFlags());
+
+                m_projection->writeBytes(dstData,
+                                         job.viewUpdateRect.x(),
+                                         job.viewUpdateRect.y() + y,
+                                         job.viewUpdateRect.width(),
+                                         1);
+
+                imagePtr += imageRowStride;
+            }
+        } else {
+            KoColorSpaceRegistry::instance()->rgb8()
+                    ->convertPixelsTo(image.constBits(), dstData, m_projection->colorSpace(),
+                                      MASK_IMAGE_WIDTH * MASK_IMAGE_HEIGHT,
+                                      KoColorConversionTransformation::internalRenderingIntent(),
+                                      KoColorConversionTransformation::internalConversionFlags());
+
+            m_projection->writeBytes(dstData,
+                                     job.viewUpdateRect.x(),
+                                     job.viewUpdateRect.y(),
+                                     MASK_IMAGE_WIDTH,
+                                     MASK_IMAGE_HEIGHT);
+
+        }
         repaintRect |= job.viewUpdateRect;
     }
 

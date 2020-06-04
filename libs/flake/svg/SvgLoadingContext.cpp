@@ -178,9 +178,9 @@ QString SvgLoadingContext::relativeFilePath(const QString &href)
     QString result = href;
 
     if (!gc->xmlBaseDir.isEmpty()) {
-        result = gc->xmlBaseDir + QDir::separator() + href;
+        result = gc->xmlBaseDir + '/' + href;
     } else if (!d->initialXmlBaseDir.isEmpty()) {
-        result = d->initialXmlBaseDir + QDir::separator() + href;
+        result = d->initialXmlBaseDir + '/' + href;
     }
 
     return QDir::cleanPath(result);

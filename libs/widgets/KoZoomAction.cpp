@@ -232,8 +232,9 @@ qreal KoZoomAction::nextZoomLevel() const
 {
     const qreal eps = 1e-5;
     int i = 0;
-    while (d->effectiveZoom > d->sliderLookup[i] - eps &&
-           i < d->sliderLookup.size() - 1) i++;
+    while (i < d->sliderLookup.size() - 1 && d->effectiveZoom > d->sliderLookup[i] - eps) {
+        i++;
+    }
 
     return qMax(d->effectiveZoom, d->sliderLookup[i]);
 }
@@ -242,7 +243,7 @@ qreal KoZoomAction::prevZoomLevel() const
 {
     const qreal eps = 1e-5;
     int i = d->sliderLookup.size() - 1;
-    while (d->effectiveZoom < d->sliderLookup[i] + eps && i > 0) i--;
+    while (i > 0 && d->effectiveZoom < d->sliderLookup[i] + eps) i--;
 
     return qMin(d->effectiveZoom, d->sliderLookup[i]);
 }

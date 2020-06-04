@@ -22,6 +22,7 @@
 
 #include "KoShapeContainerModel.h"
 #include <kis_debug.h>
+#include <KoShapeManager.h>
 
 /// \internal
 class SimpleShapeContainerModel: public KoShapeContainerModel
@@ -111,6 +112,45 @@ public:
         }
     }
 
+    void shapeHasBeenAddedToHierarchy(KoShape *shape, KoShapeContainer *addedToSubtree) override {
+        if (m_associatedRootShapeManager) {
+            m_associatedRootShapeManager->addShape(shape);
+        }
+        KoShapeContainerModel::shapeHasBeenAddedToHierarchy(shape, addedToSubtree);
+    }
+
+    void shapeToBeRemovedFromHierarchy(KoShape *shape, KoShapeContainer *removedFromSubtree) override {
+        if (m_associatedRootShapeManager) {
+            m_associatedRootShapeManager->remove(shape);
+        }
+        KoShapeContainerModel::shapeToBeRemovedFromHierarchy(shape, removedFromSubtree);
+    }
+
+    KoShapeManager *associatedRootShapeManager() const {
+        return m_associatedRootShapeManager;
+    }
+
+    /**
+     * If the container is the root of shapes hierarchy, it should also track the content
+     * of the shape manager. Add all added/removed shapes should be also
+     * added to \p shapeManager.
+     */
+    void setAssociatedRootShapeManager(KoShapeManager *manager) {
+        if (m_associatedRootShapeManager) {
+            Q_FOREACH(KoShape *shape, this->shapes()) {
+                m_associatedRootShapeManager->remove(shape);
+            }
+        }
+
+        m_associatedRootShapeManager = manager;
+
+        if (m_associatedRootShapeManager) {
+            Q_FOREACH(KoShape *shape, this->shapes()) {
+                m_associatedRootShapeManager->addShape(shape);
+            }
+        }
+    }
+
 private:
     int indexOf(const KoShape *shape) const {
         // workaround indexOf constness!
@@ -121,6 +161,7 @@ private: // members
     QList <KoShape *> m_members;
     QList <bool> m_inheritsTransform;
     QList <bool> m_clipped;
+    KoShapeManager *m_associatedRootShapeManager = 0;
 };
 
 #endif

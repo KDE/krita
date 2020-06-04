@@ -336,7 +336,9 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageSP image, const QString
 
     if (!autosave) {
         KisPaintDeviceSP dev = image->projection();
+        store->setCompressionEnabled(false);
         KisPNGConverter::saveDeviceToStore("mergedimage.png", image->bounds(), image->xRes(), image->yRes(), dev, store);
+        store->setCompressionEnabled(KisConfig(true).compressKra());
     }
 
     saveAssistants(store, uri,external);

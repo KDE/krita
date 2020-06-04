@@ -34,7 +34,7 @@ struct PathElement {
     }
     PathElement(int _i) : type(Index), index(_i) {}
     Type type;
-    unsigned int index;
+    unsigned int index {0};
 };
 
 struct Q_DECL_HIDDEN KisNodeQueryPath::Private {

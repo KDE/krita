@@ -113,23 +113,9 @@ public:
      * @see resizeMatrix()
      */
     void setSize(const QSizeF &size) override;
+
     /// reimplemented
     bool hitTest(const QPointF &position) const override;
-
-    // reimplemented
-    void saveOdf(KoShapeSavingContext &context) const override;
-    // reimplemented
-    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
-
-    // basically the same as loadOdf but adapted to the contour cases
-    // tag needs to be either contour-polygon or contour-path from another shape
-    bool loadContourOdf(const KoXmlElement & element, KoShapeLoadingContext &context, const QSizeF &scaleFactor);
-
-    /** basically the equivalent saveOdf but adapted to the contour cases
-     * @param context the saving context
-     * @param originalSize the original size of the unscaled image.
-     */
-    void saveContourOdf(KoShapeSavingContext &context, const QSizeF &originalSize) const;
 
     /// Removes all subpaths and their points from the path
     void clear();
@@ -453,9 +439,6 @@ public:
     /// Creates path shape from given QPainterPath
     static KoPathShape *createShapeFromPainterPath(const QPainterPath &path);
 
-    /// Returns the viewbox from the given xml element.
-    static QRect loadOdfViewbox(const KoXmlElement &element);
-
     void setMarker(KoMarker *marker, KoFlake::MarkerPosition pos);
     KoMarker* marker(KoFlake::MarkerPosition pos) const;
     bool hasMarkers() const;
@@ -482,10 +465,6 @@ protected:
     KoPathShape(const KoPathShape &rhs);
 
 protected:
-    /// reimplemented
-    QString saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const override;
-    /// reimplemented
-    void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
     /**
      * @brief Add an arc.

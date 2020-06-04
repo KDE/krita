@@ -47,10 +47,8 @@
 #include "KoPathPoint.h"
 #include "KoPathPointRubberSelectStrategy.h"
 #include "KoPathSegmentChangeStrategy.h"
-#include "KoPathConnectionPointStrategy.h"
 #include "KoParameterChangeStrategy.h"
 #include "PathToolOptionWidget.h"
-#include "KoConnectionShape.h"
 #include "KoSnapGuide.h"
 #include "KoShapeController.h"
 #include "kis_action_registry.h"
@@ -644,20 +642,11 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
                 if (m_activeHandle)
                     m_activeHandle->repaint();
                 delete m_activeHandle;
-
-                if (KoConnectionShape * connectionShape = dynamic_cast<KoConnectionShape*>(parameterShape)) {
-                    //debugFlake << "handleId" << handleId;
-                    m_activeHandle = new ConnectionHandle(this, connectionShape, handleId);
-                    m_activeHandle->repaint();
-                    return;
-                } else {
-                    //debugFlake << "handleId" << handleId;
-                    m_activeHandle = new ParameterHandle(this, parameterShape, handleId);
-                    m_activeHandle->repaint();
-                    return;
-                }
+                //debugFlake << "handleId" << handleId;
+                m_activeHandle = new ParameterHandle(this, parameterShape, handleId);
+                m_activeHandle->repaint();
+                return;
             }
-
         } else {
             QList<KoPathPoint*> points = shape->pointsAt(roi);
             if (! points.empty()) {

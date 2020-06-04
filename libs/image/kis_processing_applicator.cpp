@@ -19,6 +19,7 @@
 #include "kis_processing_applicator.h"
 
 #include "kis_image.h"
+#include "kis_paint_layer.h"
 #include "kis_node.h"
 #include "kis_clone_layer.h"
 #include "kis_processing_visitor.h"
@@ -56,11 +57,12 @@ class UpdateCommand : public KisCommandUtils::FlipFlopCommand
 public:
     UpdateCommand(KisImageWSP image, KisNodeSP node,
                   KisProcessingApplicator::ProcessingFlags flags,
-                  bool finalUpdate)
-        : FlipFlopCommand(finalUpdate),
+                  State initialState, QSharedPointer<bool> sharedAllFramesToken)
+        : FlipFlopCommand(initialState),
           m_image(image),
           m_node(node),
-          m_flags(flags)
+          m_flags(flags),
+          m_sharedAllFramesToken(sharedAllFramesToken)
     {
     }
 
@@ -73,12 +75,20 @@ private:
          * If you still need third-party updates work, please add a
          * flag to the applicator.
          */
-
         m_image->disableDirtyRequests();
     }
 
     void partB() override {
         m_image->enableDirtyRequests();
+
+        if (*m_sharedAllFramesToken) {
+            KisLayerUtils::recursiveApplyNodes(m_image->root(), [](KisNodeSP node){
+                KisPaintLayer* paintLayer = qobject_cast<KisPaintLayer*>(node.data());
+                if (paintLayer && paintLayer->onionSkinEnabled()) {
+                    paintLayer->flushOnionSkinCache();
+                }
+            });
+        }
 
         if (!m_flags.testFlag(KisProcessingApplicator::NO_IMAGE_UPDATES)) {
             if(m_flags.testFlag(KisProcessingApplicator::RECURSIVE)) {
@@ -118,6 +128,7 @@ private:
     KisImageWSP m_image;
     KisNodeSP m_node;
     KisProcessingApplicator::ProcessingFlags m_flags;
+    QSharedPointer<bool> m_sharedAllFramesToken;
 };
 
 class EmitImageSignalsCommand : public KisCommandUtils::FlipFlopCommand
@@ -172,7 +183,8 @@ KisProcessingApplicator::KisProcessingApplicator(KisImageWSP image,
       m_node(node),
       m_flags(flags),
       m_emitSignals(emitSignals),
-      m_finalSignalsEmitted(false)
+      m_finalSignalsEmitted(false),
+      m_sharedAllFramesToken(new bool(false))
 {
     KisStrokeStrategyUndoCommandBased *strategy =
             new KisStrokeStrategyUndoCommandBased(name, false, m_image.data());
@@ -197,7 +209,9 @@ KisProcessingApplicator::KisProcessingApplicator(KisImageWSP image,
     }
 
     if (m_node) {
-        applyCommand(new UpdateCommand(m_image, m_node, m_flags, false));
+        applyCommand(new UpdateCommand(m_image, m_node, m_flags,
+                                       UpdateCommand::INITIALIZING,
+                                       m_sharedAllFramesToken));
     }
 }
 
@@ -229,6 +243,8 @@ void KisProcessingApplicator::applyVisitorAllFrames(KisProcessingVisitorSP visit
                                                     KisStrokeJobData::Sequentiality sequentiality,
                                                     KisStrokeJobData::Exclusivity exclusivity)
 {
+    *m_sharedAllFramesToken = true;
+
     KUndo2Command *initCommand = visitor->createInitCommand();
     if (initCommand) {
         applyCommand(initCommand,
@@ -308,7 +324,9 @@ void KisProcessingApplicator::explicitlyEmitFinalSignals()
     KIS_ASSERT_RECOVER_RETURN(!m_finalSignalsEmitted);
 
     if (m_node) {
-        applyCommand(new UpdateCommand(m_image, m_node, m_flags, true));
+        applyCommand(new UpdateCommand(m_image, m_node, m_flags,
+                                       UpdateCommand::FINALIZING,
+                                       m_sharedAllFramesToken));
     }
 
     if(m_flags.testFlag(NO_UI_UPDATES)) {

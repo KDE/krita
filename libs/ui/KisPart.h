@@ -97,7 +97,7 @@ public:
     /**
      * Add the specified document to the list of documents this KisPart manages.
      */
-    void addDocument(KisDocument *document);
+    void addDocument(KisDocument *document, bool notify = true);
 
     /**
      * @return a list of all documents this part manages
@@ -109,7 +109,7 @@ public:
      */
     int documentCount() const;
 
-    void removeDocument(KisDocument *document);
+    void removeDocument(KisDocument *document, bool deleteDocument = true);
 
     // ----------------- MainWindow management -----------------
 

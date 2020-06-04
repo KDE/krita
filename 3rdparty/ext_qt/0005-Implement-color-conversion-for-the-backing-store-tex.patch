@@ -1,4 +1,4 @@
-From 82a6f368e1a0757061f4f0d5764dc492f687eb7d Mon Sep 17 00:00:00 2001
+From e209df3bf65ed4294e65c6b1a5cbf18d3102527c Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Thu, 22 Nov 2018 15:47:48 +0300
 Subject: [PATCH 13/22] Implement color conversion for the backing store

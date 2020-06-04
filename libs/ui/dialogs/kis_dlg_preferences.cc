@@ -26,6 +26,7 @@
 
 #include <QBitmap>
 #include <QCheckBox>
+#include <QComboBox>
 #include <QCursor>
 #include <QDesktopWidget>
 #include <QFileDialog>
@@ -44,6 +45,7 @@
 #include <QStandardPaths>
 #include <QThread>
 #include <QToolButton>
+#include <QStyleFactory>
 
 #include <KisApplication.h>
 #include <KisDocument.h>
@@ -1672,6 +1674,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.writeEntry("backupfilelocation", m_general->cmbBackupFileLocation->currentIndex());
         cfg.writeEntry("backupfilesuffix", m_general->txtBackupFileSuffix->text());
         cfg.writeEntry("numberofbackupfiles", m_general->intNumBackupFiles->value());
+
 
         cfg.setShowCanvasMessages(m_general->showCanvasMessages());
         cfg.setCompressKra(m_general->compressKra());

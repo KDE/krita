@@ -1644,10 +1644,10 @@
     </Action>
     <Action name="PathTool">
       <icon></icon>
-      <text>Path editing</text>
+      <text>Edit Shapes Tool</text>
       <whatsThis></whatsThis>
-      <toolTip>Path editing</toolTip>
-      <iconText>Path editing</iconText>
+      <toolTip>Edit Shapes Tool</toolTip>
+      <iconText>Edit Shapes Tool</iconText>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
@@ -2806,12 +2806,12 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="isolate_layer">
+    <Action name="isolate_active_layer">
       <icon>view-filter</icon>
-      <text>&amp;Isolate Layer</text>
+      <text>&amp;Isolate Active Layer</text>
       <whatsThis></whatsThis>
-      <toolTip>Isolate Layer</toolTip>
-      <iconText>Isolate Layer</iconText>
+      <toolTip>Isolate Active Layer</toolTip>
+      <iconText>Isolate Active Layer</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>

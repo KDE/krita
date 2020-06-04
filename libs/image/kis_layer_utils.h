@@ -234,6 +234,8 @@ namespace KisLayerUtils
         }).data());
     }
 
+
+    KisNodeSP KRITAIMAGE_EXPORT findRoot(KisNodeSP node);
 }
 
 #endif /* __KIS_LAYER_UTILS_H */

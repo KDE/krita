@@ -202,10 +202,14 @@ public:
 
 Q_SIGNALS:
     void resourceChanged(int key, const QVariant &value);
+    void resourceChangeAttempted(int key, const QVariant &value);
 
 private:
     void notifyResourceChanged(int key, const QVariant &value);
     void notifyDerivedResourcesChanged(int key, const QVariant &value);
+
+    void notifyResourceChangeAttempted(int key, const QVariant &value);
+    void notifyDerivedResourcesChangeAttempted(int key, const QVariant &value);
 
 private Q_SLOTS:
     void slotResourceInternalsChanged(int key);

@@ -86,7 +86,7 @@ int Selection::x() const
 {
     if (!d->selection) return 0;
     int xPos = d->selection->x();
-    if (d->selection->hasPixelSelection()) {
+    if (d->selection->hasNonEmptyPixelSelection()) {
         xPos = d->selection->selectedExactRect().x();
     }
     return xPos;
@@ -96,7 +96,7 @@ int Selection::y() const
 {
     if (!d->selection) return 0;
     int yPos = d->selection->y();
-    if (d->selection->hasPixelSelection()) {
+    if (d->selection->hasNonEmptyPixelSelection()) {
         yPos = d->selection->selectedExactRect().y();
     }
     return yPos;

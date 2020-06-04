@@ -41,7 +41,13 @@ Note: on all operating systems the entire procedure is done in a terminal window
 4. On Windows, you will also need a release of Python 3.9: https://www.python.org. Make sure to have that version of python.exe in your path. This version of Python will be used for two things: to configure Qt and to build the Python scripting module.  Make sure that this version of Python comes first in your path. Do not set PYTHONHOME or PYTHONPATH.
     * Make sure that your Python will have the correct architecture for the version you are trying to build. If building for 32-bit target, you need the 32-bit release of Python.
 
-5. On Windows, if you want to compile Qt with ANGLE support, you will need to install Windows 10 SDK and have the environment variable `WindowsSdkDir` set to it (typically `C:\Program Files (x86)\Windows Kits\10`)
+5. On Windows, if you want to compile Qt with ANGLE support, you will need to install Windows 10 SDK and have 2 environment variables set:
+    * `WindowsSdkDir` (typically set to `C:\Program Files (x86)\Windows Kits\10`)
+    * `WindowsSdkVerBinPath` (typically set to `C:\Program Files (x86)\Windows Kits\10\bin\10.0.18362.0`) where 10.0.18362.0 is the version of the Window 10 SDK.
+
+    * Example:
+        set "WindowsSdkDir=%ProgramFiles(x86)%\Windows Kits\10"
+        set "WindowsSdkVerBinPath=%ProgramFiles(x86)%\Windows Kits\10\bin\10.0.18362.0"
 
 THIS IS ALSO NEEDED IF YOU USE THE build.cmd script.
 

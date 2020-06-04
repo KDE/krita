@@ -1,4 +1,4 @@
-From 563a582f67d3dfa7c8028fa0449b6038bb7fe034 Mon Sep 17 00:00:00 2001
+From ae0c27ed434fb73bec40bea7a8dac74c5da9f96e Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Tue, 4 Dec 2018 20:11:34 +0300
 Subject: [PATCH 14/22] Return QScreen's HMONITOR handle via

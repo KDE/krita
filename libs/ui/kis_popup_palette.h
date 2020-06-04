@@ -170,6 +170,7 @@ public Q_SLOTS:
     void slotUpdateIcons();
 
 private Q_SLOTS:
+    void slotDisplayConfigurationChanged();
     void slotExternalFgColorChanged(const KoColor &color);
     void slotEmitColorChanged();
     void slotSetSelectedColor(int x) { setSelectedColor(x); update(); }

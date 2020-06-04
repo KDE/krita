@@ -39,18 +39,6 @@ class QString;
  *   <draw:image xlink:href="Pictures/imagename.jpg" />
  * </draw:frame>
  * @endcode
- *
- * The loading code of the shape gets passed the draw:frame element. Out of this element the
- * odf attributes can be loaded. Then it calls loadOdfFrame which loads the correct frame element
- * the object supports. The loading of the frame element is done in the loadOdfFrameElement.
- *
- * @code
- * bool PictureShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
- * {
- *     loadOdfAttributes( element, context, OdfAllAttributes );
- *     return loadOdfFrame( element, context );
- * }
- * @endcode
  */
 class KRITAFLAKE_EXPORT KoFrameShape
 {

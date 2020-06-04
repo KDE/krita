@@ -76,7 +76,7 @@ if (WIN32)
         COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0080-Sync-buffers-of-the-destination-file-after-QFile-cop.patch
         COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0081-Fix-no-warning-for-overwriting-files-in-non-native-d.patch
         COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0082-Make-jp-e-g-default-extensions-context-aware.patch
-        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0100-Fix-qt5_make_output_file-macro-for-paths-containing-.patch
+        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0100-Fix-artifacts-when-rendering-multisubpath-dashed-QPa.patch
 #        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0031-Compute-logical-DPI-on-a-per-screen-basis.patch
 #        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0032-Update-Dpi-and-scale-factor-computation.patch
 #        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0033-Move-QT_FONT_DPI-to-cross-platform-code.patch
@@ -88,8 +88,8 @@ if (WIN32)
   ExternalProject_Add(
       ext_qt
       DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-      URL https://download.qt.io/official_releases/qt/5.12/5.12.7/single/qt-everywhere-src-5.12.7.zip
-      URL_MD5 753e0147d5e32d61c30d6a1b498bed3e
+      URL https://download.qt.io/official_releases/qt/5.12/5.12.8/single/qt-everywhere-src-5.12.8.zip
+      URL_MD5 3bfe0d92ce856109caae7e323fed2a1a
 
       PATCH_COMMAND ${ext_qt_PATCH_COMMAND}
 
@@ -108,12 +108,13 @@ elseif (ANDROID)
   ExternalProject_Add(
       ext_qt
       DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-      URL https://download.qt.io/archive/qt/5.12/5.12.7/single/qt-everywhere-src-5.12.7.tar.xz
-      URL_MD5 ce2c5661c028b9de6183245982d7c120
+      URL https://download.qt.io/official_releases/qt/5.12/5.12.8/single/qt-everywhere-src-5.12.8.tar.xz
+      URL_MD5 8ec2a0458f3b8e9c995b03df05e006e4
 
       PATCH_COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0091-Add-support-for-pen-tilt-rotation-for-Android.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0092-Bugfix-fix-the-offset-bug-when-using-Stylus-with-And.patch
-            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/fix-locale-android.patch
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0093-Fix-QLocale-system-and-uiLanguages-for-the-mobile-pl.patch
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0100-Fix-artifacts-when-rendering-multisubpath-dashed-QPa.patch
 
       CONFIGURE_COMMAND <SOURCE_DIR>/configure -prefix ${EXTPREFIX_qt} -opensource -confirm-license -verbose -nomake examples -nomake tests -nomake tools -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtgraphicaleffects -skip qtlocation -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview -skip qtserialport -skip qtdatavis3d -skip qtvirtualkeyboard -skip qtspeech -skip qtsensors -skip qtgamepad -skip qtscxml -skip qtremoteobjects -skip qtxmlpatterns -skip qtnetworkauth  -skip qtcharts -skip qtdatavis3d -skip qtgamepad -skip qtpurchasing -skip qtscxml -skip qtserialbus -skip qtspeech -skip qtvirtualkeyboard -skip qtmultimedia -android-sdk ${ANDROID_SDK_ROOT} -android-ndk ${CMAKE_ANDROID_NDK} -android-arch ${ANDROID_ABI} -xplatform android-clang -android-ndk-platform android-21 -make libs -qt-sqlite
       INSTALL_DIR ${EXTPREFIX_qt}
@@ -127,13 +128,14 @@ elseif (NOT APPLE)
   ExternalProject_Add(
       ext_qt
       DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-      URL https://download.qt.io/official_releases/qt/5.12/5.12.7/single/qt-everywhere-src-5.12.7.tar.xz
-      URL_MD5 ce2c5661c028b9de6183245982d7c120
+      URL https://download.qt.io/official_releases/qt/5.12/5.12.8/single/qt-everywhere-src-5.12.8.tar.xz
+      URL_MD5 8ec2a0458f3b8e9c995b03df05e006e4
 
       PATCH_COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0012-Synthesize-Enter-LeaveEvent-for-accepted-QTabletEven.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0013-Poison-Qt-s-headers-with-a-mark-about-presence-of-En.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0081-Fix-no-warning-for-overwriting-files-in-non-native-d.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0082-Make-jp-e-g-default-extensions-context-aware.patch
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0100-Fix-artifacts-when-rendering-multisubpath-dashed-QPa.patch
 
       CMAKE_ARGS -DOPENSSL_LIBS='-L${EXTPREFIX_qt}/lib -lssl -lcrypto'
 
@@ -241,6 +243,7 @@ else( APPLE )
                 COMMAND ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0013-Poison-Qt-s-headers-with-a-mark-about-presence-of-En.patch
                 COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0081-Fix-no-warning-for-overwriting-files-in-non-native-d.patch
                 COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0082-Make-jp-e-g-default-extensions-context-aware.patch
+                COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0100-Fix-artifacts-when-rendering-multisubpath-dashed-QPa.patch
 
                 #COMMAND ${PATCH_COMMAND} -p1 -b -d <SOURCE_DIR>/qtbase/mkspecs/features/mac -i ${CMAKE_CURRENT_SOURCE_DIR}/mac-default.patch
             )
@@ -252,6 +255,7 @@ else( APPLE )
         set(ext_qt_PATCH_COMMAND ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0012-Synthesize-Enter-LeaveEvent-for-accepted-QTabletEven.patch
                 COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0081-Fix-no-warning-for-overwriting-files-in-non-native-d.patch
                 COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0082-Make-jp-e-g-default-extensions-context-aware.patch
+                COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0100-Fix-artifacts-when-rendering-multisubpath-dashed-QPa.patch
             )
       endif()
 
@@ -282,8 +286,8 @@ else( APPLE )
         LOG_INSTALL         ON
         BUILD_IN_SOURCE     ON
 
-        URL https://download.qt.io/official_releases/qt/5.12/5.12.7/single/qt-everywhere-src-5.12.7.tar.xz
-        URL_MD5 ce2c5661c028b9de6183245982d7c120
+        URL https://download.qt.io/official_releases/qt/5.12/5.12.8/single/qt-everywhere-src-5.12.8.tar.xz
+        URL_MD5 8ec2a0458f3b8e9c995b03df05e006e4
 
         CMAKE_ARGS -DOPENSSL_LIBS='-L${EXTPREFIX_qt}/lib -lssl -lcrypto'
 

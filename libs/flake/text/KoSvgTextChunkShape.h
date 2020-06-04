@@ -68,8 +68,6 @@ public:
     QPainterPath outline() const override;
 
     void paintComponent(QPainter &painter, KoShapePaintingContext &paintContext) const override;
-    void saveOdf(KoShapeSavingContext &Context) const override;
-    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &Context) override;
 
     bool saveHtml(HtmlSavingContext &context);
     /**

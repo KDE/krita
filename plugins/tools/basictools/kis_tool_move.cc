@@ -100,43 +100,56 @@ KisToolMove::~KisToolMove()
 
 void KisToolMove::resetCursorStyle()
 {
-    KisTool::resetCursorStyle();
-
     if (!isActive()) return;
-    KisImageSP image = this->image();
-    KisResourcesSnapshotSP resources =
-        new KisResourcesSnapshot(image, currentNode(), canvas()->resourceManager());
-    KisSelectionSP selection = resources->activeSelection();
-    KisNodeList nodes = fetchSelectedNodes(moveToolMode(), &m_lastCursorPos, selection);
 
-    if (nodes.isEmpty()) {
-        canvas()->setCursor(Qt::ForbiddenCursor);
-    }
-}
+    bool canMove = true;
 
-KisNodeList KisToolMove::fetchSelectedNodes(MoveToolMode mode, const QPoint *pixelPoint, KisSelectionSP selection)
-{
-    KisNodeList nodes;
+    if (m_strokeId && m_currentlyUsingSelection) {
+        /// noop; whatever the cursor position, we always show move
+        /// cursor, because we don't use 'layer under cursor' mode
+        /// for moving selections
+    } else if (m_strokeId && !m_currentlyUsingSelection) {
+        /// we cannot pick layer's pixel data while the stroke is running,
+        /// because it may run in lodN mode; therefore, we delegate this
+        /// work to the stroke itself
+        if (m_currentMode != MoveSelectedLayer &&
+            (m_handlesRect.isEmpty() ||
+             !m_handlesRect.translated(currentOffset()).contains(m_lastCursorPos))) {
 
-    KisImageSP image = this->image();
-    if (mode != MoveSelectedLayer && pixelPoint) {
-        const bool wholeGroup = !selection &&  mode == MoveGroup;
-        KisNodeSP node = KisToolUtils::findNode(image->root(), *pixelPoint, wholeGroup);
-        if (node) {
-            nodes = {node};
+            image()->addJob(m_strokeId, new MoveStrokeStrategy::PickLayerData(m_lastCursorPos));
+            return;
+        }
+    } else {
+        KisResourcesSnapshotSP resources =
+            new KisResourcesSnapshot(this->image(), currentNode(), canvas()->resourceManager());
+        KisSelectionSP selection = resources->activeSelection();
+
+        KisPaintLayerSP paintLayer =
+            dynamic_cast<KisPaintLayer*>(this->currentNode().data());
+
+        const bool canUseSelectionMode =
+                paintLayer && selection &&
+                !selection->selectedRect().isEmpty() &&
+                !selection->selectedExactRect().isEmpty();
+
+        if (!canUseSelectionMode) {
+            KisNodeSelectionRecipe nodeSelection =
+                    KisNodeSelectionRecipe(
+                        this->selectedNodes(),
+                        (KisNodeSelectionRecipe::SelectionMode)moveToolMode(),
+                        m_lastCursorPos);
+
+            if (nodeSelection.selectNodesToProcess().isEmpty()) {
+                canMove = false;
+            }
         }
     }
 
-    if (nodes.isEmpty()) {
-        nodes = this->selectedNodes();
-
-        KritaUtils::filterContainer<KisNodeList>(nodes,
-                                                 [](KisNodeSP node) {
-                                                     return node->isEditable();
-                                                 });
+    if (canMove) {
+        KisTool::resetCursorStyle();
+    } else {
+       useCursor(Qt::ForbiddenCursor);
     }
-
-    return nodes;
 }
 
 bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
@@ -148,34 +161,43 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
         new KisResourcesSnapshot(image, currentNode(), canvas()->resourceManager());
     KisSelectionSP selection = resources->activeSelection();
 
-    KisNodeList nodes = fetchSelectedNodes(mode, pos, selection);
+    KisPaintLayerSP paintLayer =
+        dynamic_cast<KisPaintLayer*>(this->currentNode().data());
 
-    if (nodes.size() == 1) {
-        node = nodes.first();
+    const bool canUseSelectionMode =
+            paintLayer && selection &&
+            !selection->selectedRect().isEmpty() &&
+            !selection->selectedExactRect().isEmpty();
+
+    if (pos) {
+        // finish stroke by clicking outside image bounds
+        if (m_strokeId && !image->bounds().contains(*pos)) {
+            endStroke();
+            return false;
+        }
+
+        // restart stroke when the mode has changed or the user tried to
+        // pick another layer in "layer under cursor" mode.
+        if (m_strokeId &&
+                (m_currentMode != mode ||
+                 m_currentlyUsingSelection != canUseSelectionMode ||
+                 (!m_currentlyUsingSelection &&
+                  mode != MoveSelectedLayer &&
+                  !m_handlesRect.translated(currentOffset()).contains(*pos)))) {
+
+            endStroke();
+        }
     }
 
-    if (nodes.isEmpty()) {
-        return false;
-    }
+    if (m_strokeId) return true;
 
-    /**
-     * If the target node has changed, the stroke should be
-     * restarted. Otherwise just continue processing current node.
-     */
-    if (m_strokeId && !tryEndPreviousStroke(nodes)) {
-        return true;
-    }
+    KisNodeList nodes;
 
     KisStrokeStrategy *strategy;
 
-    KisPaintLayerSP paintLayer = node ?
-        dynamic_cast<KisPaintLayer*>(node.data()) : 0;
-
     bool isMoveSelection = false;
-
-    if (paintLayer && selection &&
-        (!selection->selectedRect().isEmpty() &&
-         !selection->selectedExactRect().isEmpty())) {
+    if (canUseSelectionMode) {
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(selection, false);
 
         MoveSelectionStrokeStrategy *moveStrategy =
             new MoveSelectionStrokeStrategy(paintLayer,
@@ -186,19 +208,38 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
         connect(moveStrategy,
                 SIGNAL(sigHandlesRectCalculated(const QRect&)),
                 SLOT(slotHandlesRectCalculated(const QRect&)));
+        connect(moveStrategy,
+                SIGNAL(sigStrokeStartedEmpty()),
+                SLOT(slotStrokeStartedEmpty()));
 
         strategy = moveStrategy;
         isMoveSelection = true;
+        nodes = {paintLayer};
 
     } else {
+        KisNodeSelectionRecipe nodeSelection =
+            pos ?
+                KisNodeSelectionRecipe(
+                        this->selectedNodes(),
+                        (KisNodeSelectionRecipe::SelectionMode)mode,
+                        *pos) :
+                KisNodeSelectionRecipe(this->selectedNodes());
+
 
         MoveStrokeStrategy *moveStrategy =
-            new MoveStrokeStrategy(nodes, image.data(), image.data());
+            new MoveStrokeStrategy(nodeSelection, image.data(), image.data());
         connect(moveStrategy,
                 SIGNAL(sigHandlesRectCalculated(const QRect&)),
                 SLOT(slotHandlesRectCalculated(const QRect&)));
+        connect(moveStrategy,
+                SIGNAL(sigStrokeStartedEmpty()),
+                SLOT(slotStrokeStartedEmpty()));
+        connect(moveStrategy,
+                SIGNAL(sigLayersPicked(const KisNodeList&)),
+                SLOT(slotStrokePickedLayers(const KisNodeList&)));
 
         strategy = moveStrategy;
+        nodes = nodeSelection.selectedNodes;
     }
 
     // disable outline feedback until the stroke calcualtes
@@ -206,6 +247,8 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
     m_handlesRect = QRect();
     m_strokeId = image->startStroke(strategy);
     m_currentlyProcessingNodes = nodes;
+    m_currentlyUsingSelection = isMoveSelection;
+    m_currentMode = mode;
     m_accumulatedOffset = QPoint();
 
     if (!isMoveSelection) {
@@ -279,6 +322,37 @@ void KisToolMove::slotHandlesRectCalculated(const QRect &handlesRect)
 {
     m_handlesRect = handlesRect;
     notifyGuiAfterMove(false);
+}
+
+void KisToolMove::slotStrokeStartedEmpty()
+{
+    /**
+     * Notify that move-selection stroke ended unexpectedly
+     */
+    if (m_currentlyUsingSelection) {
+        KisCanvas2 *kisCanvas = static_cast<KisCanvas2*>(canvas());
+        kisCanvas->viewManager()->
+            showFloatingMessage(
+                i18nc("floating message in move tool",
+                      "Selected area has no pixels"),
+                QIcon(), 1000, KisFloatingMessage::High);
+    }
+
+    /**
+     * Since the choice of nodes for the operation happens in the
+     * stroke itself, it may happen that there are no nodes at all.
+     * In such a case, we should just cancel already started stroke.
+     */
+    cancelStroke();
+}
+
+void KisToolMove::slotStrokePickedLayers(const KisNodeList &nodes)
+{
+    if (nodes.isEmpty()) {
+        useCursor(Qt::ForbiddenCursor);
+    } else {
+        KisTool::resetCursorStyle();
+    }
 }
 
 void KisToolMove::moveDiscrete(MoveDirection direction, bool big)
@@ -444,7 +518,9 @@ void KisToolMove::mouseMoveEvent(KoPointerEvent *event)
     m_lastCursorPos = convertToPixelCoord(event).toPoint();
     KisTool::mouseMoveEvent(event);
 
-    if (moveToolMode() == MoveFirstLayer) {
+    if (moveToolMode() != MoveSelectedLayer ||
+            (m_strokeId && m_currentMode != MoveSelectedLayer)) {
+
         m_updateCursorCompressor.start();
     }
 }
@@ -524,6 +600,8 @@ void KisToolMove::endStroke()
     m_strokeId.clear();
     m_changesTracker.reset();
     m_currentlyProcessingNodes.clear();
+    m_currentlyUsingSelection = false;
+    m_currentMode = MoveSelectedLayer;
     m_accumulatedOffset = QPoint();
     qobject_cast<KisCanvas2*>(canvas())->updateCanvas();
 }
@@ -594,6 +672,8 @@ void KisToolMove::cancelStroke()
     m_strokeId.clear();
     m_changesTracker.reset();
     m_currentlyProcessingNodes.clear();
+    m_currentlyUsingSelection = false;
+    m_currentMode = MoveSelectedLayer;
     m_accumulatedOffset = QPoint();
     notifyGuiAfterMove();
     qobject_cast<KisCanvas2*>(canvas())->updateCanvas();

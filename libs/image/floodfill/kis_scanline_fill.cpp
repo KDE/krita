@@ -38,13 +38,13 @@ public:
     typedef KisRandomConstAccessorSP SourceAccessorType;
 
     SourceAccessorType createSourceDeviceAccessor(KisPaintDeviceSP device) {
-        return device->createRandomConstAccessorNG(0, 0);
+        return device->createRandomConstAccessorNG();
     }
 
 public:
     void setDestinationSelection(KisPaintDeviceSP pixelSelection) {
         m_pixelSelection = pixelSelection;
-        m_it = m_pixelSelection->createRandomAccessorNG(0,0);
+        m_it = m_pixelSelection->createRandomAccessorNG();
     }
 
     ALWAYS_INLINE void fillPixel(quint8 *dstPtr, quint8 opacity, int x, int y) {
@@ -65,7 +65,7 @@ public:
     typedef KisRandomAccessorSP SourceAccessorType;
 
     SourceAccessorType createSourceDeviceAccessor(KisPaintDeviceSP device) {
-        return device->createRandomAccessorNG(0, 0);
+        return device->createRandomAccessorNG();
     }
 
 public:
@@ -99,13 +99,13 @@ public:
     typedef KisRandomConstAccessorSP SourceAccessorType;
 
     SourceAccessorType createSourceDeviceAccessor(KisPaintDeviceSP device) {
-        return device->createRandomConstAccessorNG(0, 0);
+        return device->createRandomConstAccessorNG();
     }
 
 public:
     void setDestinationDevice(KisPaintDeviceSP device) {
         m_externalDevice = device;
-        m_it = m_externalDevice->createRandomAccessorNG(0,0);
+        m_it = m_externalDevice->createRandomAccessorNG();
     }
 
     void setFillColor(const KoColor &sourceColor) {
@@ -290,7 +290,7 @@ public:
 class GroupSplitPolicy
 {
 public:
-    typedef KisRandomAccessorSP SourceAccessorType;
+    typedef KisRandomConstAccessorSP SourceAccessorType;
     SourceAccessorType m_srcIt;
 
 public:
@@ -304,8 +304,8 @@ public:
     {
         KIS_SAFE_ASSERT_RECOVER_NOOP(m_groupIndex > 0);
 
-        m_srcIt = scribbleDevice->createRandomAccessorNG(0,0);
-        m_groupMapIt = groupMapDevice->createRandomAccessorNG(0,0);
+        m_srcIt = scribbleDevice->createRandomConstAccessorNG();
+        m_groupMapIt = groupMapDevice->createRandomAccessorNG();
     }
 
     ALWAYS_INLINE quint8 calculateOpacity(quint8* pixelPtr) {
@@ -348,7 +348,6 @@ private:
 struct Q_DECL_HIDDEN KisScanlineFill::Private
 {
     KisPaintDeviceSP device;
-    KisRandomAccessorSP it;
     QPoint startPoint;
     QRect boundingRect;
     int threshold;
@@ -374,7 +373,6 @@ KisScanlineFill::KisScanlineFill(KisPaintDeviceSP device, const QPoint &startPoi
     : m_d(new Private)
 {
     m_d->device = device;
-    m_d->it = device->createRandomAccessorNG(startPoint.x(), startPoint.y());
     m_d->startPoint = startPoint;
     m_d->boundingRect = boundingRect;
 
@@ -551,8 +549,7 @@ void KisScanlineFill::runImpl(T &pixelPolicy)
 
 void KisScanlineFill::fillColor(const KoColor &originalFillColor)
 {
-    KisRandomConstAccessorSP it = m_d->device->createRandomConstAccessorNG(m_d->startPoint.x(), m_d->startPoint.y());
-    KoColor srcColor(it->rawDataConst(), m_d->device->colorSpace());
+    KoColor srcColor(m_d->device->pixel(m_d->startPoint));
     KoColor fillColor(originalFillColor);
     fillColor.convertTo(m_d->device->colorSpace());
 
@@ -588,8 +585,7 @@ void KisScanlineFill::fillColor(const KoColor &originalFillColor)
 
 void KisScanlineFill::fillColor(const KoColor &originalFillColor, KisPaintDeviceSP externalDevice)
 {
-    KisRandomConstAccessorSP it = m_d->device->createRandomConstAccessorNG(m_d->startPoint.x(), m_d->startPoint.y());
-    KoColor srcColor(it->rawDataConst(), m_d->device->colorSpace());
+    KoColor srcColor(m_d->device->pixel(m_d->startPoint));
     KoColor fillColor(originalFillColor);
     fillColor.convertTo(m_d->device->colorSpace());
 
@@ -630,8 +626,7 @@ void KisScanlineFill::fillColor(const KoColor &originalFillColor, KisPaintDevice
 
 void KisScanlineFill::fillSelection(KisPixelSelectionSP pixelSelection)
 {
-    KisRandomConstAccessorSP it = m_d->device->createRandomConstAccessorNG(m_d->startPoint.x(), m_d->startPoint.y());
-    KoColor srcColor(it->rawDataConst(), m_d->device->colorSpace());
+    KoColor srcColor(m_d->device->pixel(m_d->startPoint));
 
     const int pixelSize = m_d->device->pixelSize();
 
@@ -701,8 +696,7 @@ void KisScanlineFill::fillContiguousGroup(KisPaintDeviceSP groupMapDevice, qint3
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->device->pixelSize() == 1);
     KIS_SAFE_ASSERT_RECOVER_RETURN(groupMapDevice->pixelSize() == 4);
 
-    KisRandomConstAccessorSP it = m_d->device->createRandomConstAccessorNG(m_d->startPoint.x(), m_d->startPoint.y());
-    const quint8 referenceValue = *it->rawDataConst();
+    const quint8 referenceValue = *m_d->device->pixel(m_d->startPoint).data();
 
     GroupSplitPolicy policy(m_d->device, groupMapDevice, groupIndex, referenceValue, m_d->threshold);
     runImpl(policy);

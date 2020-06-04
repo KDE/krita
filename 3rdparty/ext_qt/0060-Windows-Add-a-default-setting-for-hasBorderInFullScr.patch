@@ -1,4 +1,4 @@
-From 59ba5f9f4ecfe7f8f5b650e5765b55bf2ecbd904 Mon Sep 17 00:00:00 2001
+From 216b88c9c2e44a55e4954767b1c0c4c8317b58a1 Mon Sep 17 00:00:00 2001
 From: Friedemann Kleint <Friedemann.Kleint@qt.io>
 Date: Wed, 21 Nov 2018 09:06:50 +0100
 Subject: [PATCH 18/22] Windows: Add a default setting for

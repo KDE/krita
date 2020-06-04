@@ -35,6 +35,7 @@
 #include <KoDocumentResourceManager.h>
 #include <KoShapeStroke.h>
 #include <KoDocumentInfo.h>
+#include <KoCanvasBase.h>
 
 #include "KisViewManager.h"
 #include "kis_canvas_resource_provider.h"
@@ -223,7 +224,8 @@ void KisFillActionFactory::run(const QString &fillSource, KisViewManager *view)
     }
 
     KisProcessingVisitorSP visitor =
-        new FillProcessingVisitor(QPoint(0, 0), // start position
+        new FillProcessingVisitor(resources->image()->projection(),
+                                  QPoint(0, 0), // start position
                                   selection,
                                   resources,
                                   false, // fast mode
@@ -232,7 +234,7 @@ void KisFillActionFactory::run(const QString &fillSource, KisViewManager *view)
                                   0, // feathering radius
                                   0, // sizemod
                                   80, // threshold,
-                                  false, // unmerged
+                                  false, // use unmerged
                                   useBgColor);
 
     applicator.applyVisitor(visitor,
@@ -516,7 +518,8 @@ void KisSelectionToShapeActionFactory::run(KisViewManager *view)
     KoShapeStrokeSP border(new KoShapeStroke(1.0, fgColor.toQColor()));
     shape->setStroke(border);
 
-    view->document()->shapeController()->addShape(shape);
+    KUndo2Command *cmd = view->canvasBase()->shapeController()->addShapeDirect(shape, 0);
+    KisProcessingApplicator::runSingleCommandStroke(view->image(), cmd);
 }
 
 void KisStrokeSelectionActionFactory::run(KisViewManager *view, StrokeSelectionOptions params)
@@ -575,10 +578,10 @@ void KisStrokeSelectionActionFactory::run(KisViewManager *view, StrokeSelectionO
         KoShapeStrokeSP border(new KoShapeStroke(size, color));
         shape->setStroke(border);
 
-        view->document()->shapeController()->addShape(shape);
+        KUndo2Command *cmd = view->canvasBase()->shapeController()->addShapeDirect(shape, 0);
+        KisProcessingApplicator::runSingleCommandStroke(view->image(), cmd);
     }
     image->setModified();
-
 }
 
 void KisStrokeBrushSelectionActionFactory::run(KisViewManager *view, StrokeSelectionOptions params)

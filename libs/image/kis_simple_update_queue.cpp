@@ -171,9 +171,14 @@ void KisSimpleUpdateQueue::addUpdateNoFilthyJob(KisNodeSP node, const QRect& rc,
     addJob(node, {rc}, cropRect, levelOfDetail, KisBaseRectsWalker::UPDATE_NO_FILTHY);
 }
 
-void KisSimpleUpdateQueue::addFullRefreshJob(KisNodeSP node, const QRect& rc, const QRect& cropRect, int levelOfDetail)
+void KisSimpleUpdateQueue::addFullRefreshJob(KisNodeSP node, const QRect &rc, const QRect& cropRect, int levelOfDetail)
 {
     addJob(node, {rc}, cropRect, levelOfDetail, KisBaseRectsWalker::FULL_REFRESH);
+}
+
+void KisSimpleUpdateQueue::addFullRefreshJob(KisNodeSP node, const QVector<QRect>& rects, const QRect& cropRect, int levelOfDetail)
+{
+    addJob(node, rects, cropRect, levelOfDetail, KisBaseRectsWalker::FULL_REFRESH);
 }
 
 void KisSimpleUpdateQueue::addJob(KisNodeSP node, const QVector<QRect> &rects,

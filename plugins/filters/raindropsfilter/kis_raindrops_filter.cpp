@@ -134,7 +134,7 @@ void KisRainDropsFilter::processImpl(KisPaintDeviceSP device,
     }
 
     progressUpdater->setRange(0, number);
-    KisRandomAccessorSP dstAccessor = device->createRandomAccessorNG(srcTopLeft.x(), srcTopLeft.y());
+    KisRandomAccessorSP dstAccessor = device->createRandomAccessorNG();
     
     for (uint NumBlurs = 0; NumBlurs <= number; ++NumBlurs) {
         NewSize = (int)(qrand() * ((double)(DropSize - 5) / RAND_MAX) + 5);

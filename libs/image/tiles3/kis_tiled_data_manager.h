@@ -168,7 +168,7 @@ public:
         commit();
 
         QWriteLocker locker(&m_lock);
-        m_mementoManager->rollback(m_hashTable);
+        m_mementoManager->rollback(m_hashTable, memento);
         const quint8 *defaultPixel = memento->oldDefaultPixel();
         if(memcmp(m_defaultPixel, defaultPixel, m_pixelSize)) {
             setDefaultPixelImpl(defaultPixel);
@@ -179,7 +179,7 @@ public:
         commit();
 
         QWriteLocker locker(&m_lock);
-        m_mementoManager->rollforward(m_hashTable);
+        m_mementoManager->rollforward(m_hashTable, memento);
         const quint8 *defaultPixel = memento->newDefaultPixel();
         if(memcmp(m_defaultPixel, defaultPixel, m_pixelSize)) {
             setDefaultPixelImpl(defaultPixel);

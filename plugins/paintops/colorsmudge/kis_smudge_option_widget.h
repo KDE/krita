@@ -22,6 +22,7 @@
 
 
 class QComboBox;
+class QCheckBox;
 
 class KisSmudgeOptionWidget: public KisCurveOptionWidget
 {
@@ -36,9 +37,11 @@ public:
 
 private Q_SLOTS:
     void slotCurrentIndexChanged(int index);
+    void slotSmearAlphaChanged(bool value);
 
 private:
     QComboBox* mCbSmudgeMode;
+    QCheckBox *mChkSmearAlpha;
 };
 
 #endif // KIS_SMUDGE_OPTION_WIDGET_H

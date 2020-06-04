@@ -19,7 +19,6 @@
  */
 
 #include "KoDrag.h"
-#include "KoDragOdfSaveHelper.h"
 
 #include <QApplication>
 #include <QBuffer>
@@ -32,11 +31,7 @@
 #include <FlakeDebug.h>
 
 #include <KoStore.h>
-#include <KoGenStyles.h>
-#include <KoOdfWriteStore.h>
 #include <KoXmlWriter.h>
-#include <KoDocumentBase.h>
-#include <KoEmbeddedDocumentSaver.h>
 #include "KoShapeSavingContext.h"
 
 #include <KoShapeContainer.h>

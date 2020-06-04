@@ -18,6 +18,7 @@
 #include "KisRegion.h"
 
 #include <QRegion>
+#include "kis_debug.h"
 
 namespace detail {
 
@@ -88,6 +89,157 @@ QVector<QRect>::iterator mergeRects(QVector<QRect>::iterator beginIt,
 
     return std::next(resultIt);
 }
+
+struct VerticalSplitPolicy
+{
+    static int rowStart(const QRect &rc) {
+        return rc.y();
+    }
+    static int rowEnd(const QRect &rc) {
+        return rc.bottom();
+    }
+    static int rowHeight(const QRect &rc) {
+        return rc.height();
+    }
+    static void setRowEnd(QRect &rc, int rowEnd) {
+        return rc.setBottom(rowEnd);
+    }
+    static bool rowIsLess(const QRect &lhs, const QRect &rhs) {
+        return lhs.y() < rhs.y();
+    }
+    static QRect splitRectHi(const QRect &rc, int rowEnd) {
+        return QRect(rc.x(), rc.y(),
+                     rc.width(), rowEnd - rc.y() + 1);
+    }
+    static QRect splitRectLo(const QRect &rc, int rowEnd) {
+        return QRect(rc.x(), rowEnd + 1,
+                     rc.width(), rc.height() - (rowEnd - rc.y() + 1));
+    }
+};
+
+struct HorizontalSplitPolicy
+{
+    static int rowStart(const QRect &rc) {
+        return rc.x();
+    }
+    static int rowEnd(const QRect &rc) {
+        return rc.right();
+    }
+    static int rowHeight(const QRect &rc) {
+        return rc.width();
+    }
+    static void setRowEnd(QRect &rc, int rowEnd) {
+        return rc.setRight(rowEnd);
+    }
+    static bool rowIsLess(const QRect &lhs, const QRect &rhs) {
+        return lhs.x() < rhs.x();
+    }
+    static QRect splitRectHi(const QRect &rc, int rowEnd) {
+        return QRect(rc.x(), rc.y(),
+                     rowEnd - rc.x() + 1, rc.height());
+    }
+    static QRect splitRectLo(const QRect &rc, int rowEnd) {
+        return QRect(rowEnd + 1, rc.y(),
+                     rc.width() - (rowEnd - rc.x() + 1), rc.height());
+    }
+};
+
+
+struct VoidNoOp {
+    void operator()() const { };
+    template<typename P1, typename... Params>
+    void operator()(P1 p1, Params... parameters) {
+        Q_UNUSED(p1);
+        operator()(parameters...);
+    }
+};
+
+struct MergeRectsOp
+{
+    MergeRectsOp(QVector<QRect> &source, QVector<QRect> &destination)
+        : m_source(source),
+          m_destination(destination)
+    {
+    }
+
+    void operator()() {
+        m_destination.append(std::accumulate(m_source.begin(), m_source.end(),
+                                             QRect(), std::bit_or<QRect>()));
+        m_source.clear();
+    }
+
+private:
+    QVector<QRect> &m_source;
+    QVector<QRect> &m_destination;
+};
+
+template <typename Policy, typename RowMergeOp, typename OutIt>
+void splitRects(QVector<QRect>::iterator beginIt, QVector<QRect>::iterator endIt,
+                OutIt resultIt,
+                QVector<QRect> tempBuf[2],
+                int gridSize,
+                 RowMergeOp rowMergeOp)
+{
+    if (beginIt == endIt) return;
+
+    QVector<QRect> &nextRowExtra = tempBuf[0];
+    QVector<QRect> &nextRowExtraTmp = tempBuf[1];
+
+    std::sort(beginIt, endIt, Policy::rowIsLess);
+    int rowStart = Policy::rowStart(*beginIt);
+    int rowEnd = rowStart + gridSize - 1;
+
+    auto it = beginIt;
+    while (1) {
+        bool switchToNextRow = false;
+
+        if (it == endIt) {
+            if (nextRowExtra.isEmpty()) {
+                rowMergeOp();
+                break;
+            } else {
+                switchToNextRow = true;
+            }
+        } else if (Policy::rowStart(*it) > rowEnd) {
+            switchToNextRow = true;
+        }
+
+        if (switchToNextRow) {
+            rowMergeOp();
+
+            if (!nextRowExtra.isEmpty()) {
+                rowStart = Policy::rowStart(nextRowExtra.first());
+                rowEnd = rowStart + gridSize - 1;
+
+                for (auto nextIt = nextRowExtra.begin(); nextIt != nextRowExtra.end(); ++nextIt) {
+                    if (Policy::rowEnd(*nextIt) > rowEnd) {
+                        nextRowExtraTmp.append(Policy::splitRectLo(*nextIt, rowEnd));
+                        *resultIt++ = Policy::splitRectHi(*nextIt, rowEnd);
+                    } else {
+                        *resultIt++ = *nextIt;
+                    }
+                }
+                nextRowExtra.clear();
+                std::swap(nextRowExtra, nextRowExtraTmp);
+
+                continue;
+            } else {
+                rowStart = Policy::rowStart(*it);
+                rowEnd = rowStart + gridSize - 1;
+            }
+        }
+
+        if (Policy::rowEnd(*it) > rowEnd) {
+            nextRowExtra.append(Policy::splitRectLo(*it, rowEnd));
+            *resultIt++ = Policy::splitRectHi(*it, rowEnd);
+        } else {
+            *resultIt++ = *it;
+        }
+
+        ++it;
+    }
+}
+
 }
 
 QVector<QRect>::iterator KisRegion::mergeSparseRects(QVector<QRect>::iterator beginIt, QVector<QRect>::iterator endIt)
@@ -95,6 +247,44 @@ QVector<QRect>::iterator KisRegion::mergeSparseRects(QVector<QRect>::iterator be
     endIt = detail::mergeRects(beginIt, endIt, detail::HorizontalMergePolicy());
     endIt = detail::mergeRects(beginIt, endIt, detail::VerticalMergePolicy());
     return endIt;
+}
+
+void KisRegion::approximateOverlappingRects(QVector<QRect> &rects, int gridSize)
+{
+    using namespace detail;
+
+    if (rects.isEmpty()) return;
+
+    QVector<QRect> rowsBuf;
+    QVector<QRect> intermediate;
+    QVector<QRect> tempBuf[2];
+
+    splitRects<VerticalSplitPolicy>(rects.begin(), rects.end(),
+                                    std::back_inserter(rowsBuf),
+                                    tempBuf, gridSize, VoidNoOp());
+
+    rects.clear();
+    KIS_SAFE_ASSERT_RECOVER_NOOP(tempBuf[0].isEmpty());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(tempBuf[1].isEmpty());
+
+    auto rowBegin = rowsBuf.begin();
+    while (rowBegin != rowsBuf.end()) {
+        auto rowEnd = std::upper_bound(rowBegin, rowsBuf.end(),
+                                       QRect(rowBegin->x(),
+                                             rowBegin->y() + gridSize - 1,
+                                             1,1),
+                                       VerticalSplitPolicy::rowIsLess);
+
+        splitRects<HorizontalSplitPolicy>(rowBegin, rowEnd,
+                                          std::back_inserter(intermediate),
+                                          tempBuf, gridSize,
+                                          MergeRectsOp(intermediate, rects));
+        rowBegin = rowEnd;
+
+        KIS_SAFE_ASSERT_RECOVER_NOOP(intermediate.isEmpty());
+        KIS_SAFE_ASSERT_RECOVER_NOOP(tempBuf[0].isEmpty());
+        KIS_SAFE_ASSERT_RECOVER_NOOP(tempBuf[1].isEmpty());
+    }
 }
 
 KisRegion::KisRegion(const QRect &rect)
@@ -195,6 +385,13 @@ KisRegion KisRegion::fromQRegion(const QRegion &region)
         begin++;
     }
     return result;
+}
+
+KisRegion KisRegion::fromOverlappingRects(const QVector<QRect> &rects, int gridSize)
+{
+    QVector<QRect> tmp = rects;
+    approximateOverlappingRects(tmp, gridSize);
+    return KisRegion(tmp);
 }
 
 void KisRegion::mergeAllRects()

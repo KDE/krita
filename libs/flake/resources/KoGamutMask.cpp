@@ -186,7 +186,7 @@ void KoGamutMask::paintStroke(QPainter &painter, bool preview)
     }
 }
 
-QTransform KoGamutMask::maskToViewTransform(quint8 viewSize)
+QTransform KoGamutMask::maskToViewTransform(qreal viewSize)
 {
     // apply mask rotation before drawing
     QPointF centerPoint(viewSize*0.5, viewSize*0.5);
@@ -202,7 +202,7 @@ QTransform KoGamutMask::maskToViewTransform(quint8 viewSize)
     return transform;
 }
 
-QTransform KoGamutMask::viewToMaskTransform(quint8 viewSize)
+QTransform KoGamutMask::viewToMaskTransform(qreal viewSize)
 {
     QPointF centerPoint(viewSize*0.5, viewSize*0.5);
 

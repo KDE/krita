@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>185</width>
-    <height>46</height>
+    <width>287</width>
+    <height>167</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -35,38 +35,6 @@
    <property name="bottomMargin">
     <number>0</number>
    </property>
-   <item row="2" column="0">
-    <widget class="QLabel" name="textLabelOutline">
-     <property name="text">
-      <string>Outline:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1">
-    <widget class="QComboBox" name="cmbOutline">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <item>
-      <property name="text">
-       <string>No Outline</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Brush</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Brush (Background Color)</string>
-      </property>
-     </item>
-    </widget>
-   </item>
    <item row="1" column="0">
     <widget class="QLabel" name="textLabelFill">
      <property name="text">
@@ -102,6 +70,67 @@
        <string>Pattern</string>
       </property>
      </item>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="textLabelOutline">
+     <property name="text">
+      <string>Outline:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QComboBox" name="cmbOutline">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <item>
+      <property name="text">
+       <string>No Outline</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Brush</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Brush (Background Color)</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="2">
+    <widget class="QGroupBox" name="gbPatternTransform">
+     <property name="title">
+      <string>Pattern Transform</string>
+     </property>
+     <layout class="QFormLayout" name="formLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Rotate:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Scale:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="KisDoubleSliderSpinBox" name="sldRotation" native="true"/>
+      </item>
+      <item row="1" column="1">
+       <widget class="KisDoubleSliderSpinBox" name="sldScale" native="true"/>
+      </item>
+     </layout>
     </widget>
    </item>
   </layout>

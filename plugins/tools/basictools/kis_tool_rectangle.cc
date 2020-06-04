@@ -67,7 +67,8 @@ void KisToolRectangle::finishRect(const QRectF &rect, qreal roundCornersX, qreal
                                            currentNode(),
                                            canvas()->resourceManager(),
                                            strokeStyle(),
-                                           fillStyle());
+                                           fillStyle(),
+                                           fillTransform());
 
         QPainterPath path;
 

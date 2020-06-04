@@ -52,6 +52,7 @@ public:
     void setCurrentNode(KisNodeSP node);
     void setStrokeStyle(KisPainter::StrokeStyle strokeStyle);
     void setFillStyle(KisPainter::FillStyle fillStyle);
+    void setFillTransform(QTransform transform);
 
     KisNodeSP currentNode() const;
     KisImageSP image() const;

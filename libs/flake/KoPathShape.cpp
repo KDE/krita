@@ -1327,6 +1327,9 @@ void KoPathShape::setMarker(KoMarker *marker, KoFlake::MarkerPosition pos)
     } else {
         d->markersNew[pos] = marker;
     }
+
+    notifyChanged();
+    shapeChangedPriv(StrokeChanged);
 }
 
 KoMarker *KoPathShape::marker(KoFlake::MarkerPosition pos) const

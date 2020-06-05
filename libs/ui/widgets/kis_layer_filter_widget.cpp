@@ -29,10 +29,12 @@
 #include <QMenu>
 #include <QScreen>
 #include <QStylePainter>
+#include <QGraphicsDropShadowEffect>
 
 #include "kis_debug.h"
 #include "kis_node.h"
 #include "kis_global.h"
+#include "kis_icon_utils.h"
 
 #include "kis_color_filter_combo.h"
 #include "kis_color_label_button.h"
@@ -116,10 +118,15 @@ void KisLayerFilterWidget::updateColorLabels(KisNodeSP root)
 
 bool KisLayerFilterWidget::isCurrentlyFiltering() const
 {
-    const bool isFilteringText = !textFilter->text().isEmpty();
+    const bool isFilteringText = hasTextFilter();
     const bool isFilteringColors = buttonGroup->getActiveLabels().count() > 0;
 
     return isFilteringText || isFilteringColors;
+}
+
+bool KisLayerFilterWidget::hasTextFilter() const
+{
+    return !textFilter->text().isEmpty();
 }
 
 QSet<int> KisLayerFilterWidget::getActiveColors() const
@@ -202,7 +209,6 @@ KisLayerFilterWidgetToolButton::KisLayerFilterWidgetToolButton(QWidget *parent)
 {
     m_textFilter = false;
     m_selectedColors = QList<int>();
-    ENTER_FUNCTION();
 }
 
 KisLayerFilterWidgetToolButton::KisLayerFilterWidgetToolButton(const KisLayerFilterWidgetToolButton &rhs)
@@ -218,11 +224,17 @@ void KisLayerFilterWidgetToolButton::setSelectedColors(QList<int> colors)
     m_selectedColors = colors;
 }
 
+void KisLayerFilterWidgetToolButton::setTextFilter(bool isTextFiltering)
+{
+    m_textFilter = isTextFiltering;
+}
+
 void KisLayerFilterWidgetToolButton::paintEvent(QPaintEvent *paintEvent)
 {
     KisNodeViewColorScheme colorScheme;
-    if (m_textFilter == false &&
-       ((m_selectedColors.count() == 0) || (m_selectedColors.count() == colorScheme.allColorLabels().count())))
+    const bool validColorFilter = !(m_selectedColors.count() == 0 || m_selectedColors.count() == colorScheme.allColorLabels().count());
+
+    if (m_textFilter == false && !validColorFilter)
     {
         QToolButton::paintEvent(paintEvent);
     }
@@ -231,12 +243,31 @@ void KisLayerFilterWidgetToolButton::paintEvent(QPaintEvent *paintEvent)
         QStylePainter paint(this);
         QStyleOptionToolButton opt;
         initStyleOption(&opt);
+        opt.icon = m_textFilter ? KisIconUtils::loadIcon("format-text-bold") : icon();
         paint.drawComplexControl(QStyle::CC_ToolButton, opt);
         const QSize halfIconSize = this->iconSize() / 2;
         const QSize halfButtonSize = this->size() / 2;
         const QRect editRect = kisGrowRect(QRect(QPoint(halfButtonSize.width() - halfIconSize.width(), halfButtonSize.height() - halfIconSize.height()),this->iconSize()), -1);
         const int size = qMin(editRect.width(), editRect.height());
-        KisColorFilterCombo::paintColorPie(paint, opt.palette, m_selectedColors, editRect, size );
+
+        if( validColorFilter )
+        {
+            KisColorFilterCombo::paintColorPie(paint, opt.palette, m_selectedColors, editRect, size );
+            if (m_textFilter) {
+                if (!opt.icon.isNull()) {
+                    QRadialGradient radGradient = QRadialGradient(editRect.center(), size);
+                    QColor shadowTransparent = palette().shadow().color();
+                    shadowTransparent.setAlpha(96);
+                    radGradient.setColorAt(0.0f, shadowTransparent);
+                    shadowTransparent.setAlpha(0);
+                    radGradient.setColorAt(1.0f, shadowTransparent);
+                    paint.setBrush(radGradient);
+                    paint.setPen(Qt::NoPen);
+                    paint.drawEllipse(editRect.center(), size, size);
+                    opt.icon.paint(&paint, editRect);
+                }
+            }
+        }
     }
 }
 

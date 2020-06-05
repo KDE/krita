@@ -42,6 +42,7 @@ public:
     void updateColorLabels(KisNodeSP root);
 
     bool isCurrentlyFiltering() const;
+    bool hasTextFilter() const;
     QSet<int> getActiveColors() const;
     QString getTextFilter() const;
 
@@ -71,6 +72,7 @@ public:
     ~KisLayerFilterWidgetToolButton(){}
 
     void setSelectedColors(QList<int> colors);
+    void setTextFilter(bool isTextFiltering);
 
 
 private:

@@ -218,6 +218,10 @@ Section "-Thing"
 !else
 	DeleteRegValue HKLM "Software\Krita" "x64"
 !endif
+	#   InstallerLanguage:
+	#     Language used by the installer (to be re-used for the uninstaller)
+	WriteRegStr HKLM "Software\Krita" \
+	                 "InstallerLanguage" "$LANGUAGE"
 	#   StartMenuFolder:
 	#     Start Menu Folder
 	#     Handled by Modern UI 2.0 MUI_PAGE_STARTMENU
@@ -551,6 +555,15 @@ Function un.onInit
 		SetRegView 64
 	${Endif}
 !endif
+
+	# Get and use installer language:
+	Push $0
+	ReadRegStr $0 HKLM "Software\Krita" "InstallerLanguage"
+	${If} $0 != ""
+		StrCpy $LANGUAGE $0
+	${EndIf}
+	Pop $0
+
 	ReadRegDWORD $UninstallShellExStandalone HKLM "Software\Krita\ShellExtension" "Standalone"
 	${If} ${IsFileinUse} "$INSTDIR\bin\krita.exe"
 		${IfNot} ${Silent}

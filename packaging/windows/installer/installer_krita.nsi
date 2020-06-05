@@ -382,21 +382,22 @@ Function .onInit
 		Abort
 	${EndIf}
 
-	# Language selection, seems that the order is predefined.
-	Push "" # This value is for languages auto count
-	Push ${LANG_ENGLISH}
-	Push English
-	Push ${LANG_TRADCHINESE}
-	Push "繁體中文"
-	Push ${LANG_SIMPCHINESE}
-	Push "简体中文"
-	Push A # = auto count languages
-	LangDLL::LangDialog "$(^SetupCaption)" "$(SetupLangPrompt)"
-	Pop $LANGUAGE
-	${If} $LANGUAGE == "cancel"
-		Abort
-	${Endif}
-	# ---
+	${IfNot} ${Silent}
+		# Language selection, seems that the order is predefined.
+		Push "" # This value is for languages auto count
+		Push ${LANG_ENGLISH}
+		Push English
+		Push ${LANG_TRADCHINESE}
+		Push "繁體中文"
+		Push ${LANG_SIMPCHINESE}
+		Push "简体中文"
+		Push A # = auto count languages
+		LangDLL::LangDialog "$(^SetupCaption)" "$(SetupLangPrompt)"
+		Pop $LANGUAGE
+		${If} $LANGUAGE == "cancel"
+			Abort
+		${Endif}
+	${EndIf}
 
 !ifdef KRITA_INSTALLER_64
 	${If} ${RunningX64}

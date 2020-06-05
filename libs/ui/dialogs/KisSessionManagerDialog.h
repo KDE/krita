@@ -46,8 +46,10 @@ private Q_SLOTS:
     void slotModelAboutToBeReset(QModelIndex);
     void slotModelReset();
 
+    void slotModelSelectionChanged(QItemSelection selected, QItemSelection deselected);
 
 private:
+    void updateButtons();
 
     KisSessionResourceSP getSelectedSession() const;
 

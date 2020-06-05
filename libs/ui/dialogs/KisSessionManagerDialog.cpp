@@ -33,7 +33,6 @@ KisSessionManagerDialog::KisSessionManagerDialog(QWidget *parent)
     connect(btnDelete, SIGNAL(clicked()), this, SLOT(slotDeleteSession()));
     connect(btnClose, SIGNAL(clicked()), this, SLOT(slotClose()));
 
-
     m_model = KisResourceModelProvider::resourceModel(ResourceType::Sessions);
     lstSessions->setModel(m_model);
     lstSessions->setModelColumn(KisResourceModel::Name);
@@ -43,8 +42,18 @@ KisSessionManagerDialog::KisSessionManagerDialog(QWidget *parent)
     connect(m_model, SIGNAL(afterResourcesLayoutReset()), this, SLOT(slotModelReset()));
 
     connect(lstSessions, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(slotSessionDoubleClicked(QModelIndex)));
+    
+    connect(lstSessions->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)), this, SLOT(slotModelSelectionChanged(QItemSelection, QItemSelection)));
 
+    updateButtons();
+}
 
+void KisSessionManagerDialog::updateButtons()
+{
+    bool hasSelectedSession = getSelectedSession() != nullptr;
+    btnDelete->setEnabled(hasSelectedSession);
+    btnSwitchTo->setEnabled(hasSelectedSession);
+    btnRename->setEnabled(hasSelectedSession);
 }
 
 void KisSessionManagerDialog::slotNewSession()
@@ -161,4 +170,14 @@ void KisSessionManagerDialog::slotModelReset()
             lstSessions->setCurrentIndex(idx);
         }
     }
+    
+    updateButtons();
+}
+
+void KisSessionManagerDialog::slotModelSelectionChanged(QItemSelection selected, QItemSelection deselected)
+{
+    (void) selected;
+    (void) deselected;
+    
+    updateButtons();
 }

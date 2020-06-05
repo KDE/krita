@@ -59,13 +59,13 @@ void KoPathShapeMarkerCommand::redo()
 {
     KUndo2Command::redo();
     Q_FOREACH (KoPathShape *shape, m_d->shapes) {
-        shape->update();
+        const QRectF oldDirtyRect = shape->boundingRect();
         shape->setMarker(m_d->marker.data(), m_d->position);
 
         // we have no GUI for selection auto-filling yet! So just enable it!
         shape->setAutoFillMarkers(true);
 
-        shape->update();
+        shape->updateAbsolute(oldDirtyRect | shape->boundingRect());
     }
 }
 
@@ -75,11 +75,12 @@ void KoPathShapeMarkerCommand::undo()
     auto markerIt = m_d->oldMarkers.begin();
     auto autoFillIt = m_d->oldAutoFillMarkers.begin();
     Q_FOREACH (KoPathShape *shape, m_d->shapes) {
-        shape->update();
+        const QRectF oldDirtyRect = shape->boundingRect();
         shape->setMarker((*markerIt).data(), m_d->position);
         shape->setAutoFillMarkers(*autoFillIt);
-        shape->update();
+        shape->updateAbsolute(oldDirtyRect | shape->boundingRect());
         ++markerIt;
+        ++autoFillIt;
     }
 }
 

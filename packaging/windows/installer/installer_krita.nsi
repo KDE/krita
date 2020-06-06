@@ -96,6 +96,7 @@ Page Custom func_BeforeInstallPage_Init
 !insertmacro MUI_PAGE_FINISH
 
 # Uninstaller Pages
+!define MUI_PAGE_CUSTOMFUNCTION_PRE un.func_UnintallFirstpage_Init
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MUI_UNPAGE_INSTFILES
 
@@ -218,6 +219,10 @@ Section "-Thing"
 !else
 	DeleteRegValue HKLM "Software\Krita" "x64"
 !endif
+	#   InstallerLanguage:
+	#     Language used by the installer (to be re-used for the uninstaller)
+	WriteRegStr HKLM "Software\Krita" \
+	                 "InstallerLanguage" "$LANGUAGE"
 	#   StartMenuFolder:
 	#     Start Menu Folder
 	#     Handled by Modern UI 2.0 MUI_PAGE_STARTMENU
@@ -378,21 +383,22 @@ Function .onInit
 		Abort
 	${EndIf}
 
-	# Language selection, seems that the order is predefined.
-	Push "" # This value is for languages auto count
-	Push ${LANG_ENGLISH}
-	Push English
-	Push ${LANG_TRADCHINESE}
-	Push "繁體中文"
-	Push ${LANG_SIMPCHINESE}
-	Push "简体中文"
-	Push A # = auto count languages
-	LangDLL::LangDialog "$(^SetupCaption)" "$(SetupLangPrompt)"
-	Pop $LANGUAGE
-	${If} $LANGUAGE == "cancel"
-		Abort
-	${Endif}
-	# ---
+	${IfNot} ${Silent}
+		# Language selection, seems that the order is predefined.
+		Push "" # This value is for languages auto count
+		Push ${LANG_ENGLISH}
+		Push English
+		Push ${LANG_TRADCHINESE}
+		Push "繁體中文"
+		Push ${LANG_SIMPCHINESE}
+		Push "简体中文"
+		Push A # = auto count languages
+		LangDLL::LangDialog "$(^SetupCaption)" "$(SetupLangPrompt)"
+		Pop $LANGUAGE
+		${If} $LANGUAGE == "cancel"
+			Abort
+		${Endif}
+	${EndIf}
 
 !ifdef KRITA_INSTALLER_64
 	${If} ${RunningX64}
@@ -512,6 +518,7 @@ Function .onInit
 			${IfNot} ${Silent}
 				MessageBox MB_OK|MB_ICONEXCLAMATION "$(MsgKritaRunning)"
 			${EndIf}
+			SetErrorLevel 10
 			Abort
 		${EndIf}
 		pop $R0
@@ -551,12 +558,34 @@ Function un.onInit
 		SetRegView 64
 	${Endif}
 !endif
+
+	# Get and use installer language:
+	Push $0
+	ReadRegStr $0 HKLM "Software\Krita" "InstallerLanguage"
+	${If} $0 != ""
+		StrCpy $LANGUAGE $0
+	${EndIf}
+	Pop $0
+
 	ReadRegDWORD $UninstallShellExStandalone HKLM "Software\Krita\ShellExtension" "Standalone"
+	${If} ${Silent}
+		# Only check here if running in silent mode. It's otherwise checked in
+		# un.func_UnintallFirstpage_Init in order to display a prompt in the
+		# correct language.
+		${If} ${IsFileinUse} "$INSTDIR\bin\krita.exe"
+			SetErrorLevel 10
+			Abort
+		${EndIf}
+	${EndIf}
+FunctionEnd
+
+Function un.func_UnintallFirstpage_Init
 	${If} ${IsFileinUse} "$INSTDIR\bin\krita.exe"
 		${IfNot} ${Silent}
 			MessageBox MB_OK|MB_ICONEXCLAMATION "$(MsgUninstallKritaRunning)"
 		${EndIf}
-		Abort
+		SetErrorLevel 10
+		Quit
 	${EndIf}
 FunctionEnd
 

@@ -33,6 +33,7 @@ if sys.version_info[0] > 2:
 else:
     import __builtin__ as builtins
 builtins.i18n = Krita.krita_i18n
+builtins.i18nc = Krita.krita_i18nc
 builtins.Scripter = Krita.instance()
 builtins.Application = Krita.instance()
 builtins.Krita = Krita.instance()

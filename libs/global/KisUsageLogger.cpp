@@ -152,7 +152,7 @@ void KisUsageLogger::writeSysInfo(const QString &message)
 
 void KisUsageLogger::writeHeader()
 {
-    Q_ASSERT(s_instance->d->sysInfoFile.isOpen());
+//    Q_ASSERT(s_instance->d->sysInfoFile.isOpen());
     s_instance->d->logFile.write(s_sectionHeader.toUtf8());
 
     QString sessionHeader = QString("SESSION: %1. Executing %2\n\n")

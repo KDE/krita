@@ -33,5 +33,6 @@
         <file>light_sketchbrush.svg</file>
         <file>light_spraybrush.svg</file>
         <file>light_tangentnormal.svg</file>
+        <file>mypaintbrush.png</file>
     </qresource>
 </RCC>

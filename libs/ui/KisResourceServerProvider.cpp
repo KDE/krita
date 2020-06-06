@@ -54,7 +54,7 @@ KisResourceServerProvider::KisResourceServerProvider()
 {
     KisBrushServer *brushServer = KisBrushServer::instance();
 
-    m_paintOpPresetServer = new KisPaintOpPresetResourceServer("kis_paintoppresets", "*.kpp");
+    m_paintOpPresetServer = new KisPaintOpPresetResourceServer("kis_paintoppresets", "*.kpp:*.myb");
     m_paintOpPresetServer->loadResources(KoResourceServerProvider::blacklistFileNames(m_paintOpPresetServer->fileNames(), m_paintOpPresetServer->blackListedFiles()));
 
     m_workspaceServer = new KoResourceServerSimpleConstruction<KisWorkspaceResource>("kis_workspaces", "*.kws");

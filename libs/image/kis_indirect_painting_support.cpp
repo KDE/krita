@@ -141,8 +141,8 @@ void KisIndirectPaintingSupport::mergeToLayer(KisNodeSP layer, KisPostExecutionU
 void KisIndirectPaintingSupport::mergeToLayerImpl(KisPaintDeviceSP dst, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText, int timedID, bool cleanResources)
 {
     /**
-     * We do not apply selection here, because it has already
-     * been taken into account in a tool code
+     * Brushes don't apply the selection, we apply that during the indirect
+     * painting merge operation. It is cheaper calculation-wise.
      */
     KisPainter gc(dst);
     setupTemporaryPainter(&gc);
@@ -176,4 +176,7 @@ void KisIndirectPaintingSupport::releaseResources()
 {
     d->temporaryTarget = 0;
     d->selection = 0;
+    d->compositeOp = COMPOSITE_OVER;
+    d->compositeOpacity = OPACITY_OPAQUE_U8;
+    d->channelFlags.clear();
 }

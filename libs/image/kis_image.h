@@ -1099,6 +1099,7 @@ public Q_SLOTS:
     void refreshGraphAsync(KisNodeSP root = KisNodeSP()) override;
     void refreshGraphAsync(KisNodeSP root, const QRect &rc) override;
     void refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &cropRect) override;
+    void refreshGraphAsync(KisNodeSP root, const QVector<QRect> &rects, const QRect &cropRect) override;
 
     /**
      * Triggers synchronous recomposition of the projection

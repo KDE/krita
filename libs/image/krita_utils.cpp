@@ -31,6 +31,7 @@
 
 #include <KoColorSpaceRegistry.h>
 
+#include "kis_image.h"
 #include "kis_image_config.h"
 #include "kis_debug.h"
 #include "kis_node.h"
@@ -444,7 +445,7 @@ namespace KritaUtils
         int numTransparentPixels = 0;
         int numPixels = 0;
 
-        KisRandomConstAccessorSP it = dev->createRandomConstAccessorNG(rect.x(), rect.y());
+        KisRandomConstAccessorSP it = dev->createRandomConstAccessorNG();
         for (int y = rect.y(); y <= rect.bottom(); y += yStep) {
             for (int x = rect.x(); x <= rect.right(); x += xStep) {
                 it->moveTo(x, y);
@@ -530,4 +531,10 @@ namespace KritaUtils
             *color = newColor;
         }
     }
+
+    QTransform pathShapeBooleanSpaceWorkaround(KisImageSP image)
+    {
+        return QTransform::fromScale(image->xRes(), image->yRes());
+    }
+
 }

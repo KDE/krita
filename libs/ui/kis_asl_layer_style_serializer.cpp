@@ -381,14 +381,13 @@ QDomDocument KisAslLayerStyleSerializer::formXmlDocument() const
             w.writeBoolean("enab", outerGlow->effectEnabled());
             w.writeEnum("Md  ", "BlnM", compositeOpToBlendMode(outerGlow->blendMode()));
 
-
             if (outerGlow->fillType() == psd_fill_gradient && outerGlow->gradient()) {
                 KoSegmentGradient *segmentGradient = dynamic_cast<KoSegmentGradient*>(outerGlow->gradient().data());
                 KoStopGradient *stopGradient = dynamic_cast<KoStopGradient*>(outerGlow->gradient().data());
 
-                if (segmentGradient) {
+                if (segmentGradient && segmentGradient->valid()) {
                     w.writeSegmentGradient("Grad", segmentGradient);
-                } else if (stopGradient) {
+                } else if (stopGradient  && stopGradient->valid()) {
                     w.writeStopGradient("Grad", stopGradient);
                 } else {
                     warnKrita << "WARNING: OG: Unknown gradient type!";
@@ -429,14 +428,13 @@ QDomDocument KisAslLayerStyleSerializer::formXmlDocument() const
             w.writeBoolean("enab", innerGlow->effectEnabled());
             w.writeEnum("Md  ", "BlnM", compositeOpToBlendMode(innerGlow->blendMode()));
 
-
             if (innerGlow->fillType() == psd_fill_gradient && innerGlow->gradient()) {
                 KoSegmentGradient *segmentGradient = dynamic_cast<KoSegmentGradient*>(innerGlow->gradient().data());
                 KoStopGradient *stopGradient = dynamic_cast<KoStopGradient*>(innerGlow->gradient().data());
 
-                if (segmentGradient) {
+                if (segmentGradient  && innerGlow->gradient()->valid()) {
                     w.writeSegmentGradient("Grad", segmentGradient);
-                } else if (stopGradient) {
+                } else if (stopGradient  && innerGlow->gradient()->valid()) {
                     w.writeStopGradient("Grad", stopGradient);
                 } else {
                     warnKrita << "WARNING: IG: Unknown gradient type!";
@@ -574,7 +572,7 @@ QDomDocument KisAslLayerStyleSerializer::formXmlDocument() const
         KoSegmentGradient *segmentGradient = dynamic_cast<KoSegmentGradient*>(gradientOverlay->gradient().data());
         KoStopGradient *stopGradient = dynamic_cast<KoStopGradient*>(gradientOverlay->gradient().data());
 
-        if (gradientOverlay->effectEnabled() && (segmentGradient || stopGradient)) {
+        if (gradientOverlay->effectEnabled() && ((segmentGradient && segmentGradient->valid()) || (stopGradient && stopGradient->valid()))) {
             w.enterDescriptor("GrFl", "", "GrFl");
 
             w.writeBoolean("enab", gradientOverlay->effectEnabled());
@@ -637,13 +635,14 @@ QDomDocument KisAslLayerStyleSerializer::formXmlDocument() const
 
             if (stroke->fillType() == psd_fill_solid_color) {
                 w.writeColor("Clr ", stroke->color());
-            } else if (stroke->fillType() == psd_fill_gradient) {
+            }
+            else if (stroke->fillType() == psd_fill_gradient) {
                 KoSegmentGradient *segmentGradient = dynamic_cast<KoSegmentGradient*>(stroke->gradient().data());
                 KoStopGradient *stopGradient = dynamic_cast<KoStopGradient*>(stroke->gradient().data());
 
-                if (segmentGradient) {
+                if (segmentGradient && segmentGradient->valid()) {
                     w.writeSegmentGradient("Grad", segmentGradient);
-                } else if (stopGradient) {
+                } else if (stopGradient && stopGradient->valid()) {
                     w.writeStopGradient("Grad", stopGradient);
                 } else {
                     warnKrita << "WARNING: Stroke: Unknown gradient type!";

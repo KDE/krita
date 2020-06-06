@@ -446,14 +446,14 @@ bool KisKraSaveVisitor::saveSelection(KisNode* node)
 
     bool retval = true;
 
-    if (selection->hasPixelSelection()) {
+    if (selection->hasNonEmptyPixelSelection()) {
         KisPaintDeviceSP dev = selection->pixelSelection();
         if (!savePaintDevice(dev, getLocation(node, DOT_PIXEL_SELECTION))) {
             m_errorMessages << i18n("Failed to save the pixel selection data for layer %1.", node->name());
             retval = false;
         }
     }
-    if (selection->hasShapeSelection()) {
+    if (selection->hasNonEmptyShapeSelection()) {
         m_store->pushDirectory();
         retval = m_store->enterDirectory(getLocation(node, DOT_SHAPE_SELECTION));
         if (retval) {

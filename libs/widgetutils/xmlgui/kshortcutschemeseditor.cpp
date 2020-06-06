@@ -69,7 +69,7 @@ KShortcutSchemesEditor::KShortcutSchemesEditor(KisShortcutsDialog *parent)
     schemesLabel->setBuddy(m_schemesList);
     addWidget(m_schemesList);
 
-    m_newScheme = new QPushButton(i18n("New..."));
+    m_newScheme = new QPushButton(i18nc("New shortcut scheme", "New..."));
     addWidget(m_newScheme);
 
     m_deleteScheme = new QPushButton(i18n("Delete"));

@@ -100,7 +100,7 @@ void KisFilterRandomPick::processImpl(KisPaintDeviceSP device,
     KisRandomGenerator randV(seedV);
 
     KisSequentialIteratorProgress dstIt(device, applyRect, progressUpdater);
-    KisRandomConstAccessorSP srcRA = device->createRandomConstAccessorNG(0, 0);
+    KisRandomConstAccessorSP srcRA = device->createRandomConstAccessorNG();
 
     double threshold = (100 - level) / 100.0;
 

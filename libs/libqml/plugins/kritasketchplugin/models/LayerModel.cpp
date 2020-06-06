@@ -597,7 +597,7 @@ QImage LayerModel::layerThumbnail(QString layerID) const
     QImage thumb;
     if (index > -1 && index < d->layers.count()) {
         if (d->thumbProvider)
-            thumb = d->layers[index]->createThumbnail(120, 120);
+            thumb = d->layers[index]->createThumbnail(120, 120, Qt::KeepAspectRatio);
     }
     return thumb;
 }

@@ -167,6 +167,7 @@ set(kritaflake_SRCS
     commands/KoMultiPathPointJoinCommand.cpp
     commands/KoKeepShapesSelectedCommand.cpp
     commands/KoPathMergeUtils.cpp
+    commands/KoAddRemoveShapeCommands.cpp
 
     html/HtmlSavingContext.cpp
     html/HtmlWriter.cpp

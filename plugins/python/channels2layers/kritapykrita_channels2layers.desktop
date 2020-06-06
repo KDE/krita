@@ -1,0 +1,26 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=Krita/PythonPlugin
+X-KDE-Library=channels2layers
+X-Python-2-Compatible=false
+X-Krita-Manual=Manual.html
+Name=Channels to layers
+Name[ca]=Canals a capes
+Name[es]=Canales a capas
+Name[et]=Kanalid kihtideks
+Name[nl]=Kanalen naar lagen
+Name[nn]=Kanalar til lag
+Name[pt_BR]=Canais para camadas
+Name[sv]=Kanaler till lager
+Name[uk]=Канали у шари
+Name[x-test]=xxChannels to layersxx
+Comment=Extract channels as color layers
+Comment[ca]=Extreu canals com a capes de color
+Comment[es]=Extraer canales como capas de color
+Comment[et]=Kanalite ekstraktimine värvikihtidena
+Comment[nl]=Kanalen als kleurlagen extraheren
+Comment[nn]=Hent ut kanalar som fargelag
+Comment[pt_BR]=Extraia canais como camadas de cores
+Comment[sv]=Extrahera kanaler som färglager
+Comment[uk]=Видобування каналів як колірних шарів
+Comment[x-test]=xxExtract channels as color layersxx

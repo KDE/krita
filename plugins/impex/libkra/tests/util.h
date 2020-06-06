@@ -65,7 +65,7 @@ KisSelectionSP createPixelSelection(KisPaintDeviceSP paintDevice)
 
 KisSelectionSP createVectorSelection(KisPaintDeviceSP paintDevice, KisImageSP image, KoShapeControllerBase *shapeController)
 {
-    KisSelectionSP vectorSelection = new KisSelection(new KisSelectionDefaultBounds(paintDevice));
+    KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(paintDevice));
     KoPathShape* path = new KoPathShape();
     path->setShapeId(KoPathShapeId);
     path->moveTo(QPointF(10, 10));
@@ -74,11 +74,11 @@ KisSelectionSP createVectorSelection(KisPaintDeviceSP paintDevice, KisImageSP im
     path->lineTo(QPointF(10, 10) + QPointF(0, 100));
     path->close();
     path->normalize();
-    KisShapeSelection* shapeSelection = new KisShapeSelection(shapeController, image, vectorSelection);
+    KisShapeSelection* shapeSelection = new KisShapeSelection(shapeController, image, selection);
     shapeSelection->addShape(path);
-    vectorSelection->setShapeSelection(shapeSelection);
+    selection->convertToVectorSelectionNoUndo(shapeSelection);
 
-    return vectorSelection;
+    return selection;
 }
 
 QTransform createTestingTransform() {

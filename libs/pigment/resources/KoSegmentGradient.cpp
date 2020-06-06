@@ -250,8 +250,6 @@ KoGradientSegment *KoSegmentGradient::segmentAt(qreal t) const
 void KoSegmentGradient::colorAt(KoColor& dst, qreal t) const
 {
     const KoGradientSegment *segment = segmentAt(t);
-    Q_ASSERT(segment != 0);
-
     if (segment) {
         segment->colorAt(dst, t);
     }

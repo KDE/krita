@@ -102,6 +102,7 @@
 #include "kis_layer_utils.h"
 #include "lazybrush/kis_colorize_mask.h"
 #include "kis_processing_applicator.h"
+#include "kis_projection_leaf.h"
 
 #include "KisSaveGroupVisitor.h"
 
@@ -391,7 +392,11 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
             source->paintDevice() ? source->projection() : source->original();
 
     bool putBehind = false;
-    QString newCompositeOp = source->compositeOpId();
+
+    QString newCompositeOp =
+        source->projectionLeaf()->isLayer() ?
+            source->compositeOpId() : COMPOSITE_OVER;
+
     KisColorizeMask *colorizeMask = dynamic_cast<KisColorizeMask*>(source.data());
     if (colorizeMask) {
         srcDevice = colorizeMask->coloringProjection();
@@ -409,6 +414,9 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
             *srcDevice->compositionSourceColorSpace()) {
 
         clone = new KisPaintDevice(srcDevice->compositionSourceColorSpace());
+        clone->setDefaultPixel(
+            srcDevice->defaultPixel().convertedTo(
+                srcDevice->compositionSourceColorSpace()));
 
         QRect rc(srcDevice->extent());
         KisPainter::copyAreaOptimized(rc.topLeft(), srcDevice, clone, rc);

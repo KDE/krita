@@ -77,7 +77,7 @@ KisSelectionSP createVectorSelection(KisPaintDeviceSP paintDevice, KisImageWSP i
     path->normalize();
     KisShapeSelection* shapeSelection = new KisShapeSelection(shapeController, image, vectorSelection);
     shapeSelection->addShape(path);
-    vectorSelection->setShapeSelection(shapeSelection);
+    vectorSelection->convertToVectorSelectionNoUndo(shapeSelection);
 
     return vectorSelection;
 }

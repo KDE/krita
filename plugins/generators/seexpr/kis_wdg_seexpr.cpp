@@ -49,13 +49,15 @@ void KisWdgSeExpr::setConfiguration(const KisPropertiesConfigurationSP config)
     Q_ASSERT(!config->getString("script").isEmpty());
     QString script = config->getString("script");
 
-    widget()->txtEditor->setPlainText(script);
+    //widget()->txtEditor->setPlainText(script);
+    widget()->txtEditor->setExpr(script.toStdString(), false);
 }
 
 KisPropertiesConfigurationSP KisWdgSeExpr::configuration() const
 {
     KisFilterConfigurationSP config = new KisFilterConfiguration("seexpr", 1);
-    QVariant v(widget()->txtEditor->toPlainText());
+    //QVariant v(widget()->txtEditor->toPlainText());
+    QVariant v(QString::fromStdString(widget()->txtEditor->getExpr()));
 
     config->setProperty("script", v);
 

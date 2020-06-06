@@ -15,6 +15,6 @@ ki18n_wrap_ui(kritaseexprgenerator_SOURCES
 add_library(kritaseexprgenerator MODULE ${kritaseexprgenerator_SOURCES})
 
 target_link_directories(kritaseexprgenerator PRIVATE ${SeExpr2_LIBRARY_DIRS})
-target_link_libraries(kritaseexprgenerator kritaui SeExpr2)
+target_link_libraries(kritaseexprgenerator kritaui SeExpr2 SeExpr2Editor)
 
 install(TARGETS kritaseexprgenerator  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

@@ -185,12 +185,6 @@ StoryboardDockerDock::StoryboardDockerDock( )
     delegate->setView(m_ui->listView);
 
     model->insertRows(0, 10);
-
-    m_ui->listView->setWrapping(true);
-    m_ui->listView->setFlow(QListView::LeftToRight);
-    m_ui->listView->setResizeMode(QListView::Adjust);
-    m_ui->listView->setUniformItemSizes(true);
-    m_ui->listView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
 }
 
 StoryboardDockerDock::~StoryboardDockerDock()

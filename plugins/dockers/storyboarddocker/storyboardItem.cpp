@@ -23,7 +23,8 @@ StoryboardItem::StoryboardItem()
 {
     insertChild(childCount(), 1);
     insertChild(childCount(), QString("scene 1"));
-    insertChild(childCount(), 100);
+    insertChild(childCount(), 100);                  //duration-seconds
+    insertChild(childCount(), 23);                 //duration-frames
 }
 
 StoryboardItem::~StoryboardItem()

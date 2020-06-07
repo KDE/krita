@@ -56,7 +56,9 @@ public:
 
 
     //this function accesses the value from the comment model
-    int commentCount();
+    int commentCount() const {
+        return m_commentCount;
+    }
 private:
     QVector<StoryboardItem*> m_items;
     int m_commentCount = 0;

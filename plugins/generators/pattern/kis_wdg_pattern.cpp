@@ -40,12 +40,12 @@ KisWdgPattern::KisWdgPattern(QWidget* parent)
     m_widget->setupUi(this);
     m_widget->lblPattern->setVisible(false);
 
-    m_widget->sldShearX->setSuffix(i18n(" px"));
-    m_widget->sldShearY->setSuffix(i18n(" px"));
-    m_widget->sldShearX->setRange(-5.0, 5.0, 2);
-    m_widget->sldShearY->setRange(-5.0, 5.0, 2);
-    m_widget->sldShearX->setSingleStep(0.01);
-    m_widget->sldShearY->setSingleStep(0.01);
+    m_widget->sldShearX->setSuffix(QChar(Qt::Key_Percent));
+    m_widget->sldShearY->setSuffix(QChar(Qt::Key_Percent));
+    m_widget->sldShearX->setRange(-500, 500, 2);
+    m_widget->sldShearY->setRange(-500, 500, 2);
+    m_widget->sldShearX->setSingleStep(1);
+    m_widget->sldShearY->setSingleStep(1);
     m_widget->sldShearX->setValue(0.0);
     m_widget->sldShearY->setValue(0.0);
 
@@ -100,12 +100,12 @@ void KisWdgPattern::setConfiguration(const KisPropertiesConfigurationSP config)
     m_widget->spbOffsetX->setValue(config->getInt("transform_offset_x", 0));
     m_widget->spbOffsetY->setValue(config->getInt("transform_offset_y", 0));
 
-    m_widget->spbScaleWidth->setValue(config->getInt("transform_scale_x", 1.0)*100);
-    m_widget->spbScaleHeight->setValue(config->getInt("transform_scale_y", 1.0)*100);
+    m_widget->spbScaleWidth->setValue(config->getInt("transform_scale_x", 1.0) * 100);
+    m_widget->spbScaleHeight->setValue(config->getInt("transform_scale_y", 1.0) * 100);
     m_widget->btnLockAspectRatio->setKeepAspectRatio(config->getBool("transform_keep_scale_aspect", true));
 
-    m_widget->sldShearX->setValue(config->getDouble("transform_shear_x", 0.0));
-    m_widget->sldShearY->setValue(config->getDouble("transform_shear_y", 0.0));
+    m_widget->sldShearX->setValue(config->getDouble("transform_shear_x", 0.0) * 100);
+    m_widget->sldShearY->setValue(config->getDouble("transform_shear_y", 0.0) * 100);
 
     widget()->sldRotationX->setValue(config->getDouble("transform_rotation_x", 0.0));
     widget()->sldRotationY->setValue(config->getDouble("transform_rotation_y", 0.0));
@@ -126,13 +126,13 @@ KisPropertiesConfigurationSP KisWdgPattern::configuration() const
     config->setProperty("transform_offset_x", m_widget->spbOffsetX->value());
     config->setProperty("transform_offset_y", m_widget->spbOffsetY->value());
 
-    config->setProperty("transform_scale_x", m_widget->spbScaleWidth->value()/100);
-    config->setProperty("transform_scale_y", m_widget->spbScaleHeight->value()/100);
+    config->setProperty("transform_scale_x", m_widget->spbScaleWidth->value()  / 100);
+    config->setProperty("transform_scale_y", m_widget->spbScaleHeight->value() / 100);
 
     config->setProperty("transform_keep_scale_aspect", m_widget->btnLockAspectRatio->keepAspectRatio());
 
-    config->setProperty("transform_shear_x", widget()->sldShearX->value());
-    config->setProperty("transform_shear_y", widget()->sldShearY->value());
+    config->setProperty("transform_shear_x", widget()->sldShearX->value() / 100);
+    config->setProperty("transform_shear_y", widget()->sldShearY->value() / 100);
 
     config->setProperty("transform_rotation_x", widget()->sldRotationX->value());
     config->setProperty("transform_rotation_y", widget()->sldRotationY->value());

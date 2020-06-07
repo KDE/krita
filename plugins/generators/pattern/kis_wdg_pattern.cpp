@@ -39,8 +39,6 @@ KisWdgPattern::KisWdgPattern(QWidget* parent)
     m_widget = new Ui_WdgPatternOptions();
     m_widget->setupUi(this);
     m_widget->lblPattern->setVisible(false);
-    m_widget->lblColor->setVisible(false);
-    m_widget->bnColor->setVisible(false);
 
     m_widget->sldShearX->setSuffix(i18n(" px"));
     m_widget->sldShearY->setSuffix(i18n(" px"));
@@ -69,6 +67,8 @@ KisWdgPattern::KisWdgPattern(QWidget* parent)
     m_widget->sldRotationX->setSingleStep(1.0);
     m_widget->sldRotationY->setSingleStep(1.0);
     m_widget->sldRotationZ->setSingleStep(1.0);
+
+    m_widget->gb3dRotation->setVisible(false);
     connect(m_widget->patternChooser, SIGNAL(resourceSelected(KoResource*)), this, SIGNAL(sigConfigurationUpdated()));
 
     connect(m_widget->sldShearX, SIGNAL(valueChanged(double)), this, SIGNAL(sigConfigurationUpdated()));

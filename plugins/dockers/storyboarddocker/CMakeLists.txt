@@ -8,6 +8,7 @@ set(KRITA_STORYBOARDDOCKER_SOURCES
     storyboardModel.cpp
     storyboardItem.cpp
     storyboardDelegate.cpp
+    storyboardView.cpp
     )
 
 set(KRITA_STORYBOARDDOCKER_PART_HEADERS
@@ -18,6 +19,7 @@ set(KRITA_STORYBOARDDOCKER_PART_HEADERS
     storyboardModel.h
     storyboardItem.h
     storyboardDelegate.h
+    storyboardView.h
 )
 
 ki18n_wrap_ui(KRITA_STORYBOARDDOCKER_SOURCES

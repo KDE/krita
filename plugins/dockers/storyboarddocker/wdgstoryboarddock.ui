@@ -91,7 +91,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
-        <widget class="QListView" name="listView"/>
+        <widget class="StoryboardView" name="listView"/>
        </item>
       </layout>
      </item>
@@ -99,6 +99,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>StoryboardView</class>
+   <extends>QListView</extends>
+   <header>storyboardView.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

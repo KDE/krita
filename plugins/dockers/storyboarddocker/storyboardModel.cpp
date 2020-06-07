@@ -24,6 +24,7 @@
 
 StoryboardModel::StoryboardModel(QObject *parent)
         : QAbstractItemModel(parent)
+        , m_commentCount(1)                   //dummy value
 {}
 
 QModelIndex StoryboardModel::index(int row, int column, const QModelIndex &parent) const
@@ -126,6 +127,14 @@ bool StoryboardModel::setData(const QModelIndex & index, const QVariant & value,
 
         StoryboardChild *child = static_cast<StoryboardChild*>(index.internalPointer());
         if (child){
+            int fps = 24;
+            if(index.row() == 3 && value.toInt() >= fps){         //TODO : set fps
+                setData(index.siblingAtRow(2), value.toInt() / fps, role);
+                child->setData(value.toInt() % fps);
+            }
+            else {
+                child->setData(value);
+            }
             child->setData(value);
             emit dataChanged(index, index);
             return true;

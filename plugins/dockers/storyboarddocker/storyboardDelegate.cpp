@@ -52,85 +52,66 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
             return;
         }
         if (!index.parent().isValid()){
-
             QRect parentRect = option.rect;
 
             QSize cellSize = sizeHint(option, index);
             parentRect.setSize(cellSize);
             p->drawRect(parentRect);
 
-            QSize itemSize = QSize(190, 240);
-            parentRect.translate(5 + (cellSize.width() - itemSize.width())/2, 5);
-            parentRect.setSize(itemSize);
+            //draw frame number rect
+            parentRect.setTopLeft(parentRect.topLeft() + QPoint(5, 5));
+        }
+        else{
+            //paint Child index (the indices that hold data)
+            QModelIndex parent = index.parent();
 
             //draw the child items
-            const QAbstractItemModel *model = index.model();
-            for (int row = 0; row < model->rowCount(); row++){
-                QModelIndex childIndex = model->index(row, 0, index);
-                switch (row)
+            int rowNum = index.model()->rowCount(parent);
+            int childNum = index.row();
+            QString data = index.model()->data(index, Qt::DisplayRole).toString();
+
+            switch (childNum)
+            {
+                case 0:
                 {
-                    case 0:
-                    {
-                        int frameNum = model->data(childIndex, Qt::DisplayRole).toInt();
-                        QString value = QString::number(frameNum);
+                    QRect frameNumRect = option.rect;
+                    frameNumRect.setHeight(m_view->fontMetrics().height()+3);
+                    frameNumRect.setWidth(3 * m_view->fontMetrics().width("0")+2);
+                    frameNumRect.moveBottom(option.rect.top()-1);
+                    p->drawRect(frameNumRect);
+                    p->drawText(frameNumRect, Qt::AlignHCenter | Qt::AlignVCenter, data);
 
-                        QRect frameRect = parentRect;
-
-                        frameRect.setHeight(20);
-                        p->drawRect(frameRect);
-                        frameRect.setWidth(20);
-                        p->drawRect(frameRect);
-
-                        frameRect.translate(5,5);
-                        frameRect.setSize(QSize(10,15));
-                        p->drawText(frameRect, Qt::AlignLeft | Qt::AlignVCenter, value);
-
-                        //drawImage rect
-                        QRect imageRect = parentRect;
-                        imageRect.translate(0,20);
-                        imageRect.setHeight(115);
-                        p->drawRect(imageRect);
-
-                        //draw image(placeholder for now)
-                        QIcon icon = KisIconUtils::loadIcon("krita-base");
-                        icon.paint(p, imageRect);
-                        break;
-                        //drawFrame(p, option, index, parentRect);
-
-                    }
-                    case 1:
-                    {
-                        QString itemName = model->data(childIndex, Qt::DisplayRole).toString();
-                        QRect nameRect = parentRect;
-
-                        nameRect.setSize(QSize(120, 20));
-                        nameRect.translate(20, 0);
-                        p->drawRect(nameRect);
-                        nameRect.setWidth(110);
-                        p->drawText(nameRect, Qt::AlignRight | Qt::AlignVCenter, itemName);
-
-                        break;
-                        //drawItemName(p, option, index);
-                    }
-                    case 2:
-                    {
-                        int duration = model->data(childIndex, Qt::DisplayRole).toInt();
-                        QRect durationRect = parentRect;
-
-                        durationRect.setSize(QSize(50, 20));
-                        durationRect.translate(140, 0);
-
-                        QStyleOptionSpinBox opt;
-                        opt.rect = durationRect;
-                        opt.state = option.state;
-                        style->drawComplexControl(QStyle::CC_SpinBox, &opt, p, option.widget);
-                        break;
-                    }    //drawDuration()
-                    default:
-                    {
-                        QString comment = model->data(childIndex, Qt::DisplayRole).toString();
-                        //should we use Qt::TextWordWrap ??
-                    }
+                    QIcon icon = KisIconUtils::loadIcon("krita-base");
+                    icon.paint(p, option.rect);
+                    p->drawRect(option.rect);
+                    break;
+                }
+                case 1:
+                {
+                    QRect itemNameRect = option.rect;
+                    itemNameRect.setLeft(option.rect.left() + 5);
+                    p->drawText(itemNameRect, Qt::AlignLeft | Qt::AlignVCenter, data);
+                    p->drawRect(option.rect);
+                    break;
+                }
+                case 2:
+                {
+                    p->drawText(option.rect, Qt::AlignHCenter | Qt::AlignVCenter, data);
+                    //TODO: draw spin boxes
+                    p->drawRect(option.rect);
+                    break;
+                }
+                case 3:    //frame duration
+                {
+                    p->drawText(option.rect, Qt::AlignHCenter | Qt::AlignVCenter, data);
+                    //TODO: draw spin boxes.
+                    p->drawRect(option.rect);
+                    break;
+                }
+                default:
+                {
+                    p->drawRect(option.rect);
+                    break;
                 }
             }
         }
@@ -144,19 +125,18 @@ QSize StoryboardDelegate::sizeHint(const QStyleOptionViewItem &option,
 {
     if (!index.parent().isValid()){
         int width = option.widget->width() - 17;
+        const StoryboardModel* model = dynamic_cast<const StoryboardModel*>(index.model());
+        int numComments = model->commentCount();
         int numItem = width/200;
-        int spacingItem = (width - numItem*200) / (numItem + 1);
-        if (option.Middle){
-            return QSize(200 + spacingItem, 250);
+        if(numItem <=0){
+            return QSize(0, 0);
         }
-        else{
-            return QSize(200 + (3 * spacingItem)/2, 250);
-        }
+        return QSize(width / numItem, 140 + numComments*100);
+        //return QSize(200,250);
     }
-    /*
-    else if (!index.parent().parent().isValid()){
-
-    }*/
+    else {
+        return option.rect.size();
+    }
     return QSize(0,0);
 }
 
@@ -165,8 +145,24 @@ QWidget *StoryboardDelegate::createEditor(QWidget *parent,
     const QStyleOptionViewItem &option ,
     const QModelIndex &index) const
 {
-    //QLineEdit *editor = new QLineEdit(parent);
-    //return editor;
+    //only create editor for children
+    if (index.parent().isValid()){
+        int row = index.row();
+        switch (row)
+        {
+            case 0:
+            case 2:            //we handle spinbox edit event separately
+            {
+                return nullptr;
+            }
+            default:             // for itemName and comments
+            {
+                QLineEdit *editor = new QLineEdit(parent);
+                return editor;
+            }
+        }
+    }
+    return nullptr;
 }
 
 bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)
@@ -178,6 +174,9 @@ bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
     {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
 
+        //handle the duration edit event
+        if (index.row() == 2){
+        }
         QRect visibilityRect = option.rect;
         visibilityRect.setSize(QSize(22, 22));
         const bool visibilityClicked = visibilityRect.isValid() &&
@@ -222,7 +221,6 @@ void StoryboardDelegate::updateEditorGeometry(QWidget *editor,
     qDebug()<<"setting geometry";
 }
 */
-
 void StoryboardDelegate::setView(QListView *view){
     m_view = view;
 }

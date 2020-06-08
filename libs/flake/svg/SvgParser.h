@@ -38,6 +38,7 @@
 #include "SvgStyleParser.h"
 #include "KoClipMask.h"
 #include <resources/KoSvgSymbolCollectionResource.h>
+#include "SvgMeshPatch.h"
 
 class KoShape;
 class KoShapeGroup;
@@ -113,6 +114,12 @@ protected:
 
     /// Parses a gradient element
     SvgGradientHelper *parseGradient(const KoXmlElement &);
+
+    /// Parses mesh gradient element
+    SvgGradientHelper* parseMeshGradient(const KoXmlElement&);
+    
+    /// Parses a single meshpatch and returns the pointer
+    SvgMeshPatch* parseMeshPatch(const KoXmlNode& meshpatch, const SvgMeshStop& startingStop, const int row, const int col);
 
     /// Parses a pattern element
     QSharedPointer<KoVectorPatternBackground> parsePattern(const KoXmlElement &e, const KoShape *__shape);

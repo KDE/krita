@@ -57,6 +57,8 @@
 #include <KoXmlNS.h>
 #include <QXmlSimpleReader>
 
+#include "SvgMeshGradient.h"
+#include "SvgMeshPatch.h"
 #include "SvgUtil.h"
 #include "SvgShape.h"
 #include "SvgGraphicContext.h"
@@ -248,6 +250,8 @@ SvgGradientHelper* SvgParser::findGradient(const QString &id)
         const KoXmlElement &e = m_context.definition(id);
         if (e.tagName().contains("Gradient")) {
             result = parseGradient(m_context.definition(id));
+        } else if (e.tagName() == "meshgradient") {
+            result = parseMeshGradient(m_context.definition(id));
         }
     }
 
@@ -449,6 +453,92 @@ SvgGradientHelper* SvgParser::parseGradient(const KoXmlElement &e)
     m_gradients.insert(gradientId, gradHelper);
 
     return &m_gradients[gradientId];
+}
+
+SvgGradientHelper* SvgParser::parseMeshGradient(const KoXmlElement &e)
+{
+    SvgGradientHelper gradHelper;
+    QString gradientId = e.attribute("id");
+    SvgMeshGradient *g = new SvgMeshGradient;
+
+    // TODO handle attributes
+
+    QString type = e.attribute("type");
+    g->setType(SvgMeshGradient::BILINEAR);
+    if (!type.isEmpty() && type == "bicubic") {
+        g->setType(SvgMeshGradient::BICUBIC);
+    }
+
+    int irow = 0, icols;
+    for (int i = 0; i < e.childNodes().size(); ++i) {
+        KoXmlNode node = e.childNodes().at(i);
+
+        if (node.nodeName() == "meshrow") {
+
+            SvgMeshStop startingNode;
+            if (irow == 0) {
+                startingNode.point = QPointF(
+                            parseUnitX(e.attribute("x")),
+                            parseUnitY(e.attribute(("y"))));
+                startingNode.color = QColor();
+            }
+
+            icols = 0;
+            for (int j = 0; j < node.childNodes().size() ; ++j) {
+                KoXmlNode meshpatchNode = node.childNodes().at(j);
+
+                if (meshpatchNode.nodeName() == "meshpatch") {
+                    if (irow > 0) {
+                        // Starting point for this would be the bottom (right) corner of the above patch
+                        startingNode = g->getMeshArray()->getStop(SvgMeshPatch::Bottom, irow - 1, icols);
+                    } else if (icols != 0) {
+                        // Starting point for this would be the right (top) corner of the previous patch
+                        startingNode = g->getMeshArray()->getStop(SvgMeshPatch::Right, irow, icols - 1);
+                    }
+
+                    SvgMeshPatch *meshpatch = parseMeshPatch(meshpatchNode, startingNode, irow, icols);
+                    g->getMeshArray()->addPatch(meshpatch);
+                    icols++;
+                }
+            }
+            g->getMeshArray()->newRow();
+            irow++;
+        }
+    }
+    // gradHelper.setGradient(g);
+    m_gradients.insert(gradientId, gradHelper);
+
+    return &m_gradients[gradientId];
+}
+
+SvgMeshPatch* SvgParser::parseMeshPatch(const KoXmlNode& meshpatchNode, const SvgMeshStop& startingStop, const int row, const int col)
+{
+    SvgGraphicsContext *gc = m_context.currentGC();
+    if (!gc) return nullptr;
+
+    SvgMeshPatch *meshpatch = new SvgMeshPatch(startingStop.point);
+
+    KoXmlElement e = meshpatchNode.toElement();
+
+    KoXmlElement stop;
+    forEachElement(stop, e) {
+        qreal X;    // don't care..
+        QColor color;
+
+        // Use color from the previous stop
+        if (stop.attribute("stop-color").isNull()) {
+            color = startingStop.color;
+        } else {
+            color = m_context.styleParser().parseColorStop(stop, gc, X).second;
+        }
+
+        QString pathStr = stop.attribute("path");
+        // qDebug() << pathStr;
+
+        meshpatch->parseStop(pathStr, color, row, col);
+    }
+
+    return meshpatch;
 }
 
 inline QPointF bakeShapeOffset(const QTransform &patternTransform, const QPointF &shapeOffset)

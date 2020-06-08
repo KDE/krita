@@ -197,6 +197,10 @@ set(kritaflake_SRCS
     svg/SvgLoadingContext.cpp
     svg/SvgShapeFactory.cpp
     svg/parsers/SvgTransformParser.cpp
+    svg/SvgMeshGradient.cpp
+    svg/SvgMeshPatch.cpp
+    svg/SvgMeshStop.cpp
+    svg/SvgMeshArray.cpp
 
     text/KoSvgText.cpp
     text/KoSvgTextProperties.cpp

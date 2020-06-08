@@ -56,9 +56,16 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
             QRect parentRect = option.rect;
             p->drawRect(parentRect);
 
-            parentRect.setTopLeft(parentRect.topLeft() + QPoint(5, 5));
-            parentRect.setBottomRight(parentRect.bottomRight() - QPoint(5, 5));
+            parentRect.setTopLeft(parentRect.topLeft() + QPoint(4, 4));
+            parentRect.setBottomRight(parentRect.bottomRight() - QPoint(4, 4));
             //TODO: change highlight color and the area that is highlighted
+            if (option.state & QStyle::State_Selected){
+                p->fillRect(option.rect, option.palette.foreground());
+            }
+            else {
+                p->fillRect(option.rect, option.palette.background());
+            }
+            p->eraseRect(parentRect);
         }
         else{
             //paint Child index (the indices that hold data)
@@ -77,11 +84,14 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
                     frameNumRect.setHeight(m_view->fontMetrics().height()+3);
                     frameNumRect.setWidth(3 * m_view->fontMetrics().width("0")+2);
                     frameNumRect.moveBottom(option.rect.top()-1);
+                    p->setPen(QPen(option.palette.dark(), 2));
                     p->drawRect(frameNumRect);
+                    p->setPen(QPen(option.palette.text(), 1));
                     p->drawText(frameNumRect, Qt::AlignHCenter | Qt::AlignVCenter, data);
 
                     QIcon icon = KisIconUtils::loadIcon("krita-base");
                     icon.paint(p, option.rect);
+                    p->setPen(QPen(option.palette.dark(), 2));
                     p->drawRect(option.rect);
                     break;
                 }
@@ -89,7 +99,9 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
                 {
                     QRect itemNameRect = option.rect;
                     itemNameRect.setLeft(option.rect.left() + 5);
+                    p->setPen(QPen(option.palette.text(), 1));
                     p->drawText(itemNameRect, Qt::AlignLeft | Qt::AlignVCenter, data);
+                    p->setPen(QPen(option.palette.dark(), 2));
                     p->drawRect(option.rect);
                     break;
                 }
@@ -101,6 +113,7 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
                 }
                 default:
                 {
+                    p->setPen(QPen(option.palette.dark(), 2));
                     p->drawRect(option.rect);
                     break;
                 }
@@ -117,11 +130,14 @@ void StoryboardDelegate::drawSpinBox(QPainter *p, const QStyleOptionViewItem &op
     spinBoxOption.stepEnabled = QAbstractSpinBox::StepDownEnabled | QAbstractSpinBox::StepUpEnabled;
     spinBoxOption.subControls = QStyle::SC_SpinBoxUp | QStyle::SC_SpinBoxDown;
     spinBoxOption.rect = option.rect;
+    p->setPen(QPen(option.palette.dark(), 2));
+    p->drawRect(option.rect);
     style->drawComplexControl(QStyle::CC_SpinBox, &spinBoxOption, p, option.widget);
 
     QRect rect = style->subControlRect(QStyle::CC_SpinBox, &spinBoxOption,
                     QStyle::QStyle::SC_SpinBoxEditField);
     rect.moveTopLeft(option.rect.topLeft());
+    p->setPen(QPen(option.palette.text(), 1));
     p->drawText(rect, Qt::AlignHCenter | Qt::AlignVCenter, data);
 }
 

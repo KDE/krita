@@ -64,13 +64,12 @@ void StoryboardView::paintEvent(QPaintEvent *event)
             QStyleOptionViewItem option;
             //TO DO: check if the childIndex is in focus
             //TO DO: set proper options for spinbox type indices
-            if (selectionModel()->isSelected(index)) {
+            if (selectionModel()->isSelected(childIndex)) {
                 option.state |= QStyle::State_Selected;
             }
-            if (index == selectionModel()->currentIndex()) {
+            if (childIndex == selectionModel()->currentIndex()) {
                 option.state |= QStyle::State_HasFocus;
             }
-
             option.rect = visualRect(childIndex);
             itemDelegate()->paint(&painter, option, childIndex);
         }
@@ -80,7 +79,7 @@ void StoryboardView::paintEvent(QPaintEvent *event)
 
 QRect StoryboardView::visualRect(const QModelIndex &index) const
 {
-    if (!index.isValid() || !index.parent().isValid()){
+    if (!index.isValid() || !index.parent().isValid()) {
         return QListView::visualRect(index);
     }
     else {
@@ -104,21 +103,21 @@ QRect StoryboardView::visualRect(const QModelIndex &index) const
             case 1:
             {
                 QRect itemNameRect = parentRect;
-                itemNameRect.setSize(QSize(width - (10 * numericFontWidth + 6), fontHeight));
+                itemNameRect.setSize(QSize(width - (10 * numericFontWidth + 22), fontHeight));
                 itemNameRect.moveLeft(parentRect.left() + 3*numericFontWidth + 2);
                 return itemNameRect;
             }
             case 2:
             {
                 QRect secondRect = parentRect;
-                secondRect.setSize(QSize(4 * numericFontWidth + 2, fontHeight));
-                secondRect.moveRight(parentRect.right() - 3*numericFontWidth -2);
+                secondRect.setSize(QSize(4 * numericFontWidth + 10, fontHeight));
+                secondRect.moveRight(parentRect.right() - 3*numericFontWidth -10);
                 return secondRect;
             }
             case 3:
             {
                 QRect frameRect = parentRect;
-                frameRect.setSize(QSize(3 * numericFontWidth + 2, fontHeight));
+                frameRect.setSize(QSize(3 * numericFontWidth + 10, fontHeight));
                 frameRect.moveRight(parentRect.right());
                 return frameRect;
             }
@@ -131,4 +130,20 @@ QRect StoryboardView::visualRect(const QModelIndex &index) const
         }
     }
     return QRect();
+}
+
+QModelIndex StoryboardView::indexAt(const QPoint &point) const
+{
+    QModelIndex index = QListView::indexAt(point);
+    if (index.isValid()) {
+        //look for the index in children of the current index
+        int numChild = model()->rowCount(index);
+        for (int row = 0; row < numChild; row++) {
+            QRect childRect = visualRect(model()->index(row, 0, index));
+            if (childRect.contains(point)) {
+                return model()->index(row, 0, index);
+            }
+        }
+    }
+    return index;
 }

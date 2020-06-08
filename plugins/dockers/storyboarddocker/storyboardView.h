@@ -41,6 +41,7 @@ public:
 
     void paintEvent(QPaintEvent *event) override;
     QRect visualRect(const QModelIndex &index) const override;
+    QModelIndex indexAt(const QPoint &point) const override;
 
 };
 

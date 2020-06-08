@@ -26,6 +26,7 @@
 #include <QSize>
 #include <QMouseEvent>
 #include <QListView>
+#include <QSpinBox>
 
 #include <kis_icon.h>
 #include "storyboardModel.h"
@@ -53,13 +54,11 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
         }
         if (!index.parent().isValid()){
             QRect parentRect = option.rect;
-
-            QSize cellSize = sizeHint(option, index);
-            parentRect.setSize(cellSize);
             p->drawRect(parentRect);
 
-            //draw frame number rect
             parentRect.setTopLeft(parentRect.topLeft() + QPoint(5, 5));
+            parentRect.setBottomRight(parentRect.bottomRight() - QPoint(5, 5));
+            //TODO: change highlight color and the area that is highlighted
         }
         else{
             //paint Child index (the indices that hold data)
@@ -94,18 +93,10 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
                     p->drawRect(option.rect);
                     break;
                 }
-                case 2:
-                {
-                    p->drawText(option.rect, Qt::AlignHCenter | Qt::AlignVCenter, data);
-                    //TODO: draw spin boxes
-                    p->drawRect(option.rect);
-                    break;
-                }
+                case 2:    //time duration
                 case 3:    //frame duration
                 {
-                    p->drawText(option.rect, Qt::AlignHCenter | Qt::AlignVCenter, data);
-                    //TODO: draw spin boxes.
-                    p->drawRect(option.rect);
+                    drawSpinBox(p, option, data);
                     break;
                 }
                 default:
@@ -119,6 +110,20 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
     p->restore();
 }
 
+void StoryboardDelegate::drawSpinBox(QPainter *p, const QStyleOptionViewItem &option, QString data) const
+{
+    QStyle *style = option.widget ? option.widget->style() : QApplication::style();
+    QStyleOptionSpinBox spinBoxOption;
+    spinBoxOption.stepEnabled = QAbstractSpinBox::StepDownEnabled | QAbstractSpinBox::StepUpEnabled;
+    spinBoxOption.subControls = QStyle::SC_SpinBoxUp | QStyle::SC_SpinBoxDown;
+    spinBoxOption.rect = option.rect;
+    style->drawComplexControl(QStyle::CC_SpinBox, &spinBoxOption, p, option.widget);
+
+    QRect rect = style->subControlRect(QStyle::CC_SpinBox, &spinBoxOption,
+                    QStyle::QStyle::SC_SpinBoxEditField);
+    rect.moveTopLeft(option.rect.topLeft());
+    p->drawText(rect, Qt::AlignHCenter | Qt::AlignVCenter, data);
+}
 
 QSize StoryboardDelegate::sizeHint(const QStyleOptionViewItem &option,
                                 const QModelIndex &index) const
@@ -127,12 +132,11 @@ QSize StoryboardDelegate::sizeHint(const QStyleOptionViewItem &option,
         int width = option.widget->width() - 17;
         const StoryboardModel* model = dynamic_cast<const StoryboardModel*>(index.model());
         int numComments = model->commentCount();
-        int numItem = width/200;
+        int numItem = width/250;
         if(numItem <=0){
             return QSize(0, 0);
         }
         return QSize(width / numItem, 140 + numComments*100);
-        //return QSize(200,250);
     }
     else {
         return option.rect.size();
@@ -140,7 +144,7 @@ QSize StoryboardDelegate::sizeHint(const QStyleOptionViewItem &option,
     return QSize(0,0);
 }
 
-/*
+
 QWidget *StoryboardDelegate::createEditor(QWidget *parent,
     const QStyleOptionViewItem &option ,
     const QModelIndex &index) const
@@ -150,10 +154,13 @@ QWidget *StoryboardDelegate::createEditor(QWidget *parent,
         int row = index.row();
         switch (row)
         {
-            case 0:
-            case 2:            //we handle spinbox edit event separately
+            case 0:             //frame thumbnail is uneditable
+            return nullptr;
+            case 2:            //second and frame spin box
+            case 3:
             {
-                return nullptr;
+                QSpinBox *spinbox = new QSpinBox(parent);
+                return spinbox;
             }
             default:             // for itemName and comments
             {
@@ -167,26 +174,28 @@ QWidget *StoryboardDelegate::createEditor(QWidget *parent,
 
 bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)
 {
-    QStyleOptionViewItem newOption = option;
-
     if ((event->type() == QEvent::MouseButtonPress || event->type() == QEvent::MouseButtonDblClick)
         && (index.flags() & Qt::ItemIsEnabled))
     {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
 
         //handle the duration edit event
-        if (index.row() == 2){
-        }
-        QRect visibilityRect = option.rect;
-        visibilityRect.setSize(QSize(22, 22));
-        const bool visibilityClicked = visibilityRect.isValid() &&
-            visibilityRect.contains(mouseEvent->pos());
+        if (index.parent().isValid() && (index.row() == 2 || index.row() == 3)){
+            QRect upButton = spinBoxUpButton(option);
+            QRect downButton = spinBoxDownButton(option);
 
-        const bool leftButton = mouseEvent->buttons() & Qt::LeftButton;
+            bool upButtonClicked = upButton.isValid() && upButton.contains(mouseEvent->pos());
+            bool downButtonClicked = downButton.isValid() && downButton.contains(mouseEvent->pos());
+            const bool leftButton = mouseEvent->buttons() & Qt::LeftButton;
 
-        if (leftButton && visibilityClicked) {
-            model->setData(index, true, Qt::DecorationRole);
-            return true;
+            if (leftButton && upButtonClicked){
+                model->setData(index, index.data().toInt() + 1);
+                return true;
+            }
+            else if (leftButton && downButtonClicked){
+                model->setData(index, std::max(0,index.data().toInt() - 1));
+                return true;
+            }
         }
     }
     return false;
@@ -196,22 +205,57 @@ bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
 void StoryboardDelegate::setEditorData(QWidget *editor,
                                     const QModelIndex &index) const
 {
-    QString value = index.model()->data(index, Qt::EditRole).toString();
-
-    QLineEdit *lineEdit = static_cast<QLineEdit*>(editor);
-    lineEdit->setText(value);
+    QVariant value = index.data();
+    if (index.parent().isValid()){
+        int row = index.row();
+        switch (row)
+        {
+            case 0:             //frame thumbnail is uneditable
+                return;
+            case 2:            //second and frame spin box
+            case 3:
+            {
+                QSpinBox *spinbox = static_cast<QSpinBox*>(editor);
+                spinbox->setValue(value.toInt());
+                return;
+            }
+            default:             // for itemName and comments
+            {
+                QLineEdit *lineEdit = static_cast<QLineEdit*>(editor);
+                lineEdit->setText(value.toString());
+                return;
+            }
+        }
+    }
 }
 
 void StoryboardDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
                                    const QModelIndex &index) const
 {
-    QLineEdit *lineEdit = static_cast<QLineEdit*>(editor);
-    QString value = lineEdit->text();
-
-    //don't add empty string
-    model->setData(index, value, Qt::EditRole);
-
-    //do we need to emit closeEditor() ???
+    QVariant value = index.data();
+    if (index.parent().isValid()){
+        int row = index.row();
+        switch (row)
+        {
+            case 0:             //frame thumbnail is uneditable
+                return;
+            case 2:            //second and frame spin box
+            case 3:
+            {
+                QSpinBox *spinbox = static_cast<QSpinBox*>(editor);
+                int value = spinbox->value();
+                model->setData(index, value, Qt::EditRole);
+                return;
+            }
+            default:             // for itemName and comments
+            {
+                QLineEdit *lineEdit = static_cast<QLineEdit*>(editor);
+                QString value = lineEdit->text();
+                model->setData(index, value, Qt::EditRole);
+                return;
+            }
+        }
+    }
 }
 
 void StoryboardDelegate::updateEditorGeometry(QWidget *editor,
@@ -220,7 +264,41 @@ void StoryboardDelegate::updateEditorGeometry(QWidget *editor,
     editor->setGeometry(option.rect);
     qDebug()<<"setting geometry";
 }
-*/
-void StoryboardDelegate::setView(QListView *view){
+
+void StoryboardDelegate::setView(QListView *view)
+{
     m_view = view;
+}
+
+QRect StoryboardDelegate::spinBoxUpButton(const QStyleOptionViewItem &option)
+{
+    QStyle *style = option.widget ? option.widget->style() : QApplication::style();
+    QStyleOptionSpinBox spinOption;
+    spinOption.rect = option.rect;
+    QRect rect = style->subControlRect(QStyle::CC_SpinBox, &spinOption,
+                    QStyle::QStyle::SC_SpinBoxUp);
+    rect.moveTopRight(option.rect.topRight());
+    return rect;
+}
+
+QRect StoryboardDelegate::spinBoxDownButton(const QStyleOptionViewItem &option)
+{
+    QStyle *style = option.widget ? option.widget->style() : QApplication::style();
+    QStyleOptionSpinBox spinOption;
+    spinOption.rect = option.rect;
+    QRect rect = style->subControlRect(QStyle::CC_SpinBox, &spinOption,
+                    QStyle::QStyle::SC_SpinBoxDown);
+    rect.moveBottomRight(option.rect.bottomRight());
+    return rect;
+}
+
+QRect StoryboardDelegate::spinBoxEditField(const QStyleOptionViewItem &option)
+{
+    QStyle *style = option.widget ? option.widget->style() : QApplication::style();
+    QStyleOptionSpinBox spinOption;
+    spinOption.rect = option.rect;
+    QRect rect = style->subControlRect(QStyle::CC_SpinBox, &spinOption,
+                    QStyle::QStyle::SC_SpinBoxEditField);
+    rect.moveTopLeft(option.rect.topLeft());
+    return rect;
 }

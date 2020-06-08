@@ -32,7 +32,7 @@ public:
 
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
-/*
+
     bool editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index);
 
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
@@ -43,10 +43,13 @@ public:
                       const QModelIndex &index) const;
 
     void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-*/
+
     void setView(QListView *view);
+    void drawSpinBox(QPainter *p, const QStyleOptionViewItem &option, QString data) const;
 
-
+    QRect spinBoxUpButton(const QStyleOptionViewItem &option);
+    QRect spinBoxDownButton(const QStyleOptionViewItem &option);
+    QRect spinBoxEditField(const QStyleOptionViewItem &option);
 private:
     QListView *m_view;
 };

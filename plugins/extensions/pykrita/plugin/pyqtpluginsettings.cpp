@@ -25,9 +25,9 @@
 #include <kconfiggroup.h>
 #include <QTreeView>
 
-#include <KoIcon.h>
 
 #include "kis_config.h"
+#include "kis_icon_utils.h"
 #include "PythonPluginManager.h"
 
 PyQtPluginSettings::PyQtPluginSettings(PythonPluginManager *pluginManager, QWidget *parent)
@@ -75,7 +75,7 @@ QString PyQtPluginSettings::header()
 
 QIcon PyQtPluginSettings::icon()
 {
-    return koIcon("applications-development");
+    return KisIconUtils::loadIcon("python");
 }
 
 

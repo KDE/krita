@@ -43,6 +43,7 @@
 #include "kis_action_manager.h"
 #include "kis_animation_player.h"
 #include "kis_animation_utils.h"
+#include "kis_image_config.h"
 #include "kis_keyframe_channel.h"
 #include "kis_image.h"
 
@@ -98,12 +99,14 @@ TimelineDockerTitleBar::TimelineDockerTitleBar(QWidget* parent) :
 
     widgetArea->addSpacing(SPACING_UNIT);
 
+    // Drop Frames..
     btnDropFrames = new QToolButton(this);
     widgetArea->addWidget(btnDropFrames);
 
+    // Playback Speed..
     sbSpeed = new KisSliderSpinBox(this);
     sbSpeed->setRange(25, 200);
-    sbSpeed->setSingleStep(25);
+    sbSpeed->setSingleStep(5);
     sbSpeed->setValue(100);
     sbSpeed->setPrefix("Speed: ");
     sbSpeed->setSuffix(" %");
@@ -115,7 +118,7 @@ TimelineDockerTitleBar::TimelineDockerTitleBar(QWidget* parent) :
     {   // Menus..
         QHBoxLayout *layout = new QHBoxLayout(this);
         layout->setSpacing(0);
-        layout->setContentsMargins(0,0,0,0);
+        layout->setContentsMargins(SPACING_UNIT,0,0,0);
 
         // Onion skins menu.
         btnOnionSkinsMenu = new QPushButton(KisIconUtils::loadIcon("onion_skin_options"), "", this);
@@ -125,7 +128,7 @@ TimelineDockerTitleBar::TimelineDockerTitleBar(QWidget* parent) :
         // Audio menu..
         btnAudioMenu = new QPushButton(KisIconUtils::loadIcon("audio-none"), "", this);
         btnOnionSkinsMenu->setToolTip(i18n("Audio menu"));
-        btnAudioMenu->setDisabled(true);
+        btnAudioMenu->hide(); // (NOTE: Hidden for now while audio features develop.)
         layout->addWidget(btnAudioMenu);
 
         {   // Settings menu..
@@ -274,7 +277,6 @@ void TimelineDocker::setCanvas(KoCanvasBase * canvas)
             m_d->canvas->image()->animationInterface()->disconnect(this);
         }
     }
-
 
     m_d->canvas = dynamic_cast<KisCanvas2*>(canvas);
     setEnabled(m_d->canvas != 0);
@@ -447,8 +449,15 @@ void TimelineDocker::setViewManager(KisViewManager *view)
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(action, SIGNAL(triggered(bool)), SLOT(nextFrame()));
 
-    action = actionManager->createAction("lazy_frame");
+    action = actionManager->createAction("auto_key");
     m_d->titlebar->btnAutoFrame->setDefaultAction(action);
+    connect(action, SIGNAL(triggered(bool)), SLOT(setAutoKey(bool)));
+
+    {
+        KisImageConfig config(true);
+        action->setChecked(config.autoKeyEnabled());
+        action->setIcon(config.autoKeyEnabled() ? KisIconUtils::loadIcon("auto-key-on") : KisIconUtils::loadIcon("auto-key-off"));
+    }
 
     action = actionManager->createAction("drop_frames");
     m_d->titlebar->btnDropFrames->setDefaultAction(action);
@@ -555,8 +564,21 @@ void TimelineDocker::setPlaybackSpeed(int playbackSpeed)
 void TimelineDocker::setDropFrames(bool dropFrames)
 {
     KisConfig cfg(false);
-    cfg.setAnimationDropFrames(dropFrames);
-    updatePlaybackStatistics();
+    if (dropFrames != cfg.animationDropFrames()) {
+        cfg.setAnimationDropFrames(dropFrames);
+        updatePlaybackStatistics();
+    }
+}
+
+void TimelineDocker::setAutoKey(bool autoKey)
+{
+    KisImageConfig cfg(false);
+    if (autoKey != cfg.autoKeyEnabled()) {
+        cfg.setAutoKeyEnabled(autoKey);
+        const QIcon icon = cfg.autoKeyEnabled() ? KisIconUtils::loadIcon("auto-key-on") : KisIconUtils::loadIcon("auto-key-off");
+        QAction* action = m_d->titlebar->btnAutoFrame->defaultAction();
+        action->setIcon(icon);
+    }
 }
 
 void TimelineDocker::handleClipRangeChange()

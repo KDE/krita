@@ -2058,7 +2058,7 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="lazy_frame">
+    <Action name="auto_key">
       <icon></icon>
       <text>Auto Frame Mode</text>
       <whatsThis></whatsThis>

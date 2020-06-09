@@ -41,13 +41,12 @@ public:
     KisUtilityTitleBar(QLabel *title, QWidget *parent = nullptr);
 
     virtual QSize sizeHint() const {return QSize(32,32);}
-    virtual QSize minimumSizeHint() const {return QSize(32,32);}
 
 protected:
     QLabel *title;
     QHBoxLayout *widgetArea;
 
-    const u_int SPACING_UNIT = 16;
+    const int SPACING_UNIT = 16;
 
 private:
     QPushButton *floatButton;

@@ -87,7 +87,7 @@ void KisTransactionData::Private::tryCreateNewFrame(KisPaintDeviceSP device, int
     if (!device->framesInterface()) return;
 
     KisImageConfig cfg(true);
-    if (!cfg.lazyFrameCreationEnabled()) return;
+    if (!cfg.autoKeyEnabled()) return;
 
     KisRasterKeyframeChannel *channel = device->keyframeChannel();
     KIS_ASSERT_RECOVER(channel) { return; }

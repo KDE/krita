@@ -79,10 +79,15 @@ bool KisNodeFilterProxyModel::Private::checkIndexAllowedRecursively(QModelIndex 
 
     KisNodeSP node = nodeModel->nodeFromIndex(srcIndex);
     const bool nodeTextFilterMatch = (!activeTextFilter || node->name().contains(activeTextFilter.get(), Qt::CaseInsensitive));
+
+    // directParentTextFilterMatch -- There's an argument to be made that searching for a parent name should show
+    // all of the direct children of said text-search. For now, it will remain unused.
     const bool directParentTextFilterMatch =  (!activeTextFilter || (node->parent() && node->parent()->name().contains(activeTextFilter.get(), Qt::CaseInsensitive)));
+    Q_UNUSED(directParentTextFilterMatch);
+
     const bool nodeColorMatch = (acceptedColorLabels.count() == 0 || acceptedColorLabels.contains(node->colorLabelIndex()));
     if ( node == activeNode ||
-         ( nodeColorMatch && (nodeTextFilterMatch || directParentTextFilterMatch) )) {
+         ( nodeColorMatch && nodeTextFilterMatch )) {
         return true;
     }
 
@@ -132,11 +137,6 @@ QModelIndex KisNodeFilterProxyModel::indexFromNode(KisNodeSP node) const
 
 void KisNodeFilterProxyModel::setAcceptedLabels(const QSet<int> &value)
 {
-//#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
-//    m_d->acceptedColorLabels = QSet<int>(value.begin(), value.end());
-//#else
-//    m_d->acceptedColorLabels = QSet<int>::fromList(value);
-//#endif
     m_d->acceptedColorLabels = value;
     invalidateFilter();
 }

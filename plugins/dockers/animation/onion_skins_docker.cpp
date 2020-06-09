@@ -87,6 +87,7 @@ OnionSkinsDocker::OnionSkinsDocker(QWidget *parent) :
         m_filterButtonGroup = new KisColorLabelFilterGroup(this);
         m_dragFilter = new KisColorLabelMouseDragFilter(this);
         m_filterButtonGroup->setExclusive(false);
+        m_filterButtonGroup->setMinimumRequiredChecked(0);
         QWidget* filterButtonContainer = ui->colorFilterGroupbox;
         QLayout* filterButtonLayout = ui->filterButtons;
         filterButtonLayout->setSpacing(0);

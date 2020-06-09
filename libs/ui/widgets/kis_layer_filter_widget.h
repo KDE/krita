@@ -54,8 +54,8 @@ public:
     QSize sizeHint() const override;
 
     /* Show Event has to be overridden to
-     * correct for issues where QMenu isn't
-     * correctly resizing. */
+     * correct for parent QMenu to properly
+     * resize. */
     void showEvent(QShowEvent *show) override;
 
 Q_SIGNALS:
@@ -83,10 +83,10 @@ private:
     QList<int> m_selectedColors;
 };
 
-class KRITAUI_EXPORT MouseClickIgnore : public QWidget {
+class KRITAUI_EXPORT MouseClickIgnore : public QObject {
     Q_OBJECT
 public:
-    MouseClickIgnore(QWidget *parent = nullptr);
+    MouseClickIgnore(QObject *parent = nullptr);
     bool eventFilter(QObject *obj, QEvent *event);
 
 };

@@ -67,7 +67,7 @@ void KisColorLabelButton::paintEvent(QPaintEvent *event)
     QStyleOptionButton styleOption;
     styleOption.initFrom(this);
 
-    const bool darkTheme = styleOption.palette.background().color().value() < 128;
+    const bool darkTheme = styleOption.palette.window().color().value() < 128;
 
     if (isDown() || isChecked()){
         styleOption.state |= QStyle::State_On;
@@ -76,9 +76,9 @@ void KisColorLabelButton::paintEvent(QPaintEvent *event)
     QRect fillRect = kisGrowRect(rect(), -2);
     QRect outlineRect = kisGrowRect(fillRect, -1);
 
-    const QColor shadowColor = styleOption.palette.background().color().darker(128);
+    const QColor shadowColor = styleOption.palette.window().color().darker(darkTheme ? 128 : 200);
     const QBrush shadowBrush = QBrush(shadowColor);
-    const QBrush bgBrush = QBrush(styleOption.palette.background().color());
+    const QBrush bgBrush = QBrush(styleOption.palette.window().color());
 
     if (!isEnabled()) {
         fillRect -= QMargins(sizeHint().width() / 4, sizeHint().height() / 4, sizeHint().width() / 4, sizeHint().height() / 4);
@@ -122,15 +122,29 @@ void KisColorLabelButton::paintEvent(QPaintEvent *event)
     } else {
         QColor white = QColor(255,255,255);
         QColor grey = QColor(200,200,200);
+        QColor xOverlayColor = QColor(100,100,100);
         QColor outlineColor = grey;
 
         if ((!isChecked() || !isEnabled()) && (m_d->selectionVis == FillIn)) {
             white.setAlpha(32);
             grey.setAlpha(32);
+
+            if (darkTheme) {
+                xOverlayColor = styleOption.palette.window().color().lighter(130);
+            } else {
+                xOverlayColor = xOverlayColor.lighter(190);
+            }
+
         } else if ((!isChecked() || !isEnabled()) && (m_d->selectionVis == Outline)) {
             if ((styleOption.state & QStyle::State_MouseOver) == 0) {
                 white.setAlpha(192);
-                grey = QColor(125,125,125,192);
+                xOverlayColor.setAlpha(192);
+                if (darkTheme) {
+                    grey = grey.darker(110);
+                } else {
+                    grey = grey.lighter(110);
+                }
+                grey.setAlpha(192);
             }
         }
 
@@ -139,10 +153,11 @@ void KisColorLabelButton::paintEvent(QPaintEvent *event)
 
         QRect upperLeftGrey = fillRect - QMargins(0, 0, fillRect.size().width() / 2, fillRect.size().height() /2);
         QRect lowerRightGrey = fillRect - QMargins(fillRect.size().width() / 2, fillRect.size().height() / 2, 0, 0);
+        QRect xOverlay = kisGrowRect(fillRect, (m_d->m_sizeSquared / 8) * -1);
 
-        if ((isEnabled() && isChecked() && m_d->selectionVis == FillIn) ||
-                m_d->selectionVis == Outline) {
-            painter.fillRect(fillRect.translated(1,1), shadowBrush);
+        if (isEnabled() && ((isChecked() && m_d->selectionVis == FillIn) ||
+                m_d->selectionVis == Outline)) {
+            painter.fillRect(kisGrowRect(fillRect, 1), shadowBrush);
             painter.fillRect(fillRect, bgBrush);
         }
 
@@ -150,6 +165,10 @@ void KisColorLabelButton::paintEvent(QPaintEvent *event)
 
         painter.fillRect(upperLeftGrey, greyBrush);
         painter.fillRect(lowerRightGrey, greyBrush);
+
+        painter.setPen(QPen(xOverlayColor, 2));
+        painter.drawLine(xOverlay.topLeft(), xOverlay.bottomRight());
+        painter.drawLine(xOverlay.bottomLeft(), xOverlay.topRight());
 
         if ((isEnabled() && (m_d->selectionVis == FillIn)) ||
             (isChecked() && (m_d->selectionVis == Outline))) {
@@ -168,10 +187,12 @@ void KisColorLabelButton::paintEvent(QPaintEvent *event)
 }
 
 void KisColorLabelButton::enterEvent(QEvent *event) {
+    Q_UNUSED(event);
     update();
 }
 
 void KisColorLabelButton::leaveEvent(QEvent *event) {
+    Q_UNUSED(event);
     update();
 }
 
@@ -189,7 +210,7 @@ void KisColorLabelButton::nextCheckState()
 {
     KisColorLabelFilterGroup* colorLabelFilterGroup = dynamic_cast<KisColorLabelFilterGroup*>(group());
 
-    if (!colorLabelFilterGroup || (colorLabelFilterGroup->countCheckedViableButtons() > 1 || !isChecked())) {
+    if (!colorLabelFilterGroup || (colorLabelFilterGroup->countCheckedViableButtons() > colorLabelFilterGroup->minimumRequiredChecked() || !isChecked())) {
         setChecked(!isChecked());
     } else {
         setChecked(isChecked());
@@ -198,6 +219,7 @@ void KisColorLabelButton::nextCheckState()
 
 KisColorLabelFilterGroup::KisColorLabelFilterGroup(QObject *parent)
     : QButtonGroup(parent)
+    , minimumCheckedButtons(1)
 {
 }
 
@@ -268,6 +290,16 @@ int KisColorLabelFilterGroup::countCheckedViableButtons() const {
 
 int KisColorLabelFilterGroup::countViableButtons() const {
     return viableColorLabels.count();
+}
+
+void KisColorLabelFilterGroup::setMinimumRequiredChecked(int checkedBtns)
+{
+    minimumCheckedButtons = checkedBtns;
+}
+
+int KisColorLabelFilterGroup::minimumRequiredChecked()
+{
+    return minimumCheckedButtons;
 }
 
 void KisColorLabelFilterGroup::reset() {

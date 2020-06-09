@@ -66,6 +66,9 @@ public:
     int countCheckedViableButtons() const;
     int countViableButtons() const;
 
+    void setMinimumRequiredChecked( int checkedBtns );
+    int minimumRequiredChecked();
+
 public Q_SLOTS:
     void reset();
     void setAllVisibility(const bool vis);
@@ -73,6 +76,7 @@ public Q_SLOTS:
 private:
     void disableAll();
     QSet<int> viableColorLabels;
+    int minimumCheckedButtons;
 
 };
 

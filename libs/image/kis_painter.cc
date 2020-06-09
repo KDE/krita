@@ -2848,6 +2848,17 @@ void KisPainter::renderMirrorMaskSafe(QRect rc, KisFixedPaintDeviceSP dab, bool 
     renderMirrorMask(rc, dabToProcess);
 }
 
+void KisPainter::renderMirrorMaskSafe(QRect rc, KisFixedPaintDeviceSP dab, KisFixedPaintDeviceSP mask, bool preserveDab)
+{
+    if (!d->mirrorHorizontally && !d->mirrorVertically) return;
+
+    KisFixedPaintDeviceSP dabToProcess = dab;
+    if (preserveDab) {
+        dabToProcess = new KisFixedPaintDevice(*dab);
+    }
+    renderMirrorMask(rc, dabToProcess, mask);
+}
+
 void KisPainter::renderMirrorMaskSafe(QRect rc, KisPaintDeviceSP dab, int sx, int sy, KisFixedPaintDeviceSP mask, bool preserveMask)
 {
     if (!d->mirrorHorizontally && !d->mirrorVertically) return;

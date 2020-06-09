@@ -8,6 +8,7 @@
 #define KIS_COLORSMUDGEOP_SETTINGS_WIDGET_H_
 
 #include <kis_brush_based_paintop_options_widget.h>
+#include <kis_curve_option_widget.h>
 
 class KisSmudgeOptionWidget;
 
@@ -26,6 +27,7 @@ protected:
 
 private:
     KisSmudgeOptionWidget *m_smudgeOptionWidget;
+    KisCurveOptionWidget* m_lightnessStrengthOptionWidget;
 };
 
 

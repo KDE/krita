@@ -395,10 +395,12 @@ public:
      *
      * @param rc rectangle area covered by dab
      * @param dab the device to render
+     * @param mask mask to use for rendering
      * @param preserveDab states whether a temporary device should be
      *                    created to do the transformations
      */
     void renderMirrorMaskSafe(QRect rc, KisFixedPaintDeviceSP dab, bool preserveDab);
+    void renderMirrorMaskSafe(QRect rc, KisFixedPaintDeviceSP dab, KisFixedPaintDeviceSP mask, bool preserveDab);
 
     /**
      * Convenience method for renderMirrorMask(), allows to choose whether

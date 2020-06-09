@@ -16,6 +16,8 @@
 #include <kis_pressure_size_option.h>
 #include <kis_pressure_ratio_option.h>
 #include <kis_curve_option_widget.h>
+#include <kis_pressure_lightness_strength_option.h>
+#include <kis_pressure_lightness_strength_option_widget.h>
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_scatter_option_widget.h>
 #include <kis_pressure_opacity_option.h>
@@ -36,10 +38,7 @@ KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
 {
     setObjectName("brush option widget");
     setPrecisionEnabled(true);
-
-    // ColorSmudge paintoip doesn't support colorful
-    // HSL brushes yet. Though it would be nice feature to have.
-    setHSLBrushTipEnabled(false);
+    setHSLBrushTipEnabled(true);
 
     addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")), i18n("Opacity"));
@@ -53,6 +52,8 @@ KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
     addPaintOpOption(m_smudgeOptionWidget, i18n("Smudge Length"));
     addPaintOpOption(new KisCurveOptionWidget(new KisSmudgeRadiusOption(), i18n("0.0"), i18n("1.0")), i18n("Smudge Radius"));
     addPaintOpOption(new KisCurveOptionWidget(new KisRateOption("ColorRate", KisPaintOpOption::GENERAL, false), i18n("0.0"), i18n("1.0")), i18n("Color Rate"));
+    m_lightnessStrengthOptionWidget = new KisPressureLightnessStrengthOptionWidget();
+    addPaintOpOption(m_lightnessStrengthOptionWidget, i18n("Lightness Strength"));
 
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°")), i18n("Rotation"));
     addPaintOpOption(new KisPressureScatterOptionWidget(), i18n("Scatter"));
@@ -85,4 +86,5 @@ void KisColorSmudgeOpSettingsWidget::notifyPageChanged()
     KisBrushSP brush = this->brush();
     bool pierced =  brush ? brush->isPiercedApprox() : false;
     m_smudgeOptionWidget->updateBrushPierced(pierced);
+    m_lightnessStrengthOptionWidget->setEnabled(brush->preserveLightness());
 }

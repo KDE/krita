@@ -30,6 +30,7 @@
 #include "QMenu"
 #include "QWidgetAction"
 
+#include "krita_utils.h"
 #include "kis_canvas2.h"
 #include "kis_image.h"
 #include <KoIcon.h>
@@ -41,6 +42,7 @@
 #include "kis_action.h"
 #include "kis_action_manager.h"
 #include "kis_animation_player.h"
+#include "kis_animation_utils.h"
 #include "kis_keyframe_channel.h"
 #include "kis_image.h"
 
@@ -65,12 +67,12 @@ TimelineDockerTitleBar::TimelineDockerTitleBar(QWidget* parent) :
 
     widgetArea->addSpacing(SPACING_UNIT);
 
-    // Frame Counter...
-    frameCounter = new KisIntParseSpinBox(this);
-    frameCounter->setToolTip(i18n("Frame counter"));
-    frameCounter->setPrefix("#  ");
-    frameCounter->setRange(0, MAX_FRAMES);
-    widgetArea->addWidget(frameCounter);
+    // Frame Register...
+    frameRegister = new KisIntParseSpinBox(this);
+    frameRegister->setToolTip(i18n("Frame register"));
+    frameRegister->setPrefix("#  ");
+    frameRegister->setRange(0, MAX_FRAMES);
+    widgetArea->addWidget(frameRegister);
 
     widgetArea->addSpacing(SPACING_UNIT);
 
@@ -96,9 +98,7 @@ TimelineDockerTitleBar::TimelineDockerTitleBar(QWidget* parent) :
 
     widgetArea->addSpacing(SPACING_UNIT);
 
-    QPushButton *btnDropFrames = new QPushButton(KisIconUtils::loadIcon("dropframe"), "", this);
-    btnDropFrames->setToolTip(i18n("Drop frames to preserve preview timing"));
-    btnDropFrames->setDisabled(true);
+    btnDropFrames = new QToolButton(this);
     widgetArea->addWidget(btnDropFrames);
 
     sbSpeed = new KisSliderSpinBox(this);
@@ -213,7 +213,7 @@ TimelineDocker::TimelineDocker()
     connect(m_d->titlebar->transport, SIGNAL(playPause()), this, SLOT(playPause()));
     connect(m_d->titlebar->transport, SIGNAL(forward()), this, SLOT(nextFrame()));
 
-    connect(m_d->titlebar->frameCounter, SIGNAL(valueChanged(int)), SLOT(goToFrame(int)));
+    connect(m_d->titlebar->frameRegister, SIGNAL(valueChanged(int)), SLOT(goToFrame(int)));
     connect(m_d->titlebar->sbStartFrame, SIGNAL(valueChanged(int)), SLOT(setStartFrame(int)));
     connect(m_d->titlebar->sbEndFrame, SIGNAL(valueChanged(int)), SLOT(setEndFrame(int)));
     connect(m_d->titlebar->sbFrameRate, SIGNAL(valueChanged(int)), SLOT(setFrameRate(int)));
@@ -298,7 +298,7 @@ void TimelineDocker::setCanvas(KoCanvasBase * canvas)
             m_d->titlebar->sbEndFrame->setValue(animinterface->fullClipRange().end());
             m_d->titlebar->sbFrameRate->setValue(animinterface->framerate());
             m_d->titlebar->sbSpeed->setValue(100);
-            m_d->titlebar->frameCounter->setValue(animinterface->currentTime());
+            m_d->titlebar->frameRegister->setValue(animinterface->currentTime());
         }
 
 
@@ -326,16 +326,16 @@ void TimelineDocker::setCanvas(KoCanvasBase * canvas)
                     this, SLOT(updateFrameCache()));
 
 
-        connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigUiTimeChanged(int)), this, SLOT(updateFrameCounter()));
-        connect(m_d->canvas->animationPlayer(), SIGNAL(sigFrameChanged()), this, SLOT(updateFrameCounter()));
-        connect(m_d->canvas->animationPlayer(), SIGNAL(sigPlaybackStopped()), this, SLOT(updateFrameCounter()));
+        connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigUiTimeChanged(int)), this, SLOT(updateFrameRegister()));
+        connect(m_d->canvas->animationPlayer(), SIGNAL(sigFrameChanged()), this, SLOT(updateFrameRegister()));
+        connect(m_d->canvas->animationPlayer(), SIGNAL(sigPlaybackStopped()), this, SLOT(updateFrameRegister()));
 
-        connect(m_d->canvas->animationPlayer(), SIGNAL(sigPlaybackStateChanged(bool)), m_d->titlebar->frameCounter, SLOT(setDisabled(bool)));
+        connect(m_d->canvas->animationPlayer(), SIGNAL(sigPlaybackStateChanged(bool)), m_d->titlebar->frameRegister, SLOT(setDisabled(bool)));
         connect(m_d->canvas->animationPlayer(), SIGNAL(sigPlaybackStateChanged(bool)), m_d->titlebar->transport, SLOT(setPlaying(bool)));
+        connect(m_d->canvas->animationPlayer(), SIGNAL(sigPlaybackStatisticsUpdated()), this, SLOT(updatePlaybackStatistics()));
 
-        connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigFullClipRangeChanged()), SLOT(handleClipRangeChange())); // TODO animationplayer seems to be missing emit for ClipRangeChanged
+        connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigFullClipRangeChanged()), SLOT(handleClipRangeChange()));
         connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigFramerateChanged()), SLOT(handleFrameRateChange()));
-        //connect(m_d->canvas->animationPlayer(), SIGNAL(sigPlaybackStatisticsUpdated()), this, SLOT(updateDropFramesIcon()));
     }
 }
 
@@ -351,7 +351,7 @@ void TimelineDocker::updateFrameCache()
     m_d->framesModel->setFrameCache(m_d->canvas->frameCache());
 }
 
-void TimelineDocker::updateFrameCounter()
+void TimelineDocker::updateFrameRegister()
 {
     if (!m_d->canvas && !m_d->canvas->image()) {
         return;
@@ -361,7 +361,49 @@ void TimelineDocker::updateFrameCounter()
                       m_d->canvas->animationPlayer()->visibleFrame() :
                       m_d->canvas->image()->animationInterface()->currentUITime();
 
-    m_d->titlebar->frameCounter->setValue(frame);
+    m_d->titlebar->frameRegister->setValue(frame);
+}
+
+void TimelineDocker::updatePlaybackStatistics()
+{
+    qreal effectiveFps = 0.0;
+    qreal realFps = 0.0;
+    qreal framesDropped = 0.0;
+    bool isPlaying = false;
+
+    KisAnimationPlayer *player = m_d->canvas &&  m_d->canvas->animationPlayer() ?  m_d->canvas->animationPlayer() : 0;
+    if (player) {
+        effectiveFps = player->effectiveFps();
+        realFps = player->realFps();
+        framesDropped = player->framesDroppedPortion();
+        isPlaying = player->isPlaying();
+    }
+
+    KisConfig cfg(true);
+    const bool shouldDropFrames = cfg.animationDropFrames();
+
+    QAction *action = m_d->titlebar->btnDropFrames->defaultAction();
+    const bool droppingFrames = shouldDropFrames && framesDropped > 0.05;
+    action->setIcon(KisIconUtils::loadIcon(droppingFrames ? "droppedframes" : "dropframe"));
+
+    QString actionText;
+    if (!isPlaying) {
+        actionText = QString("%1 (%2) \n%3")
+            .arg(KisAnimationUtils::dropFramesActionName)
+            .arg(KritaUtils::toLocalizedOnOff(shouldDropFrames))
+            .arg(i18n("Enable to preserve playback timing."));
+    } else {
+        actionText = QString("%1 (%2)\n"
+                       "%3\n"
+                       "%4\n"
+                       "%5")
+            .arg(KisAnimationUtils::dropFramesActionName)
+            .arg(KritaUtils::toLocalizedOnOff(shouldDropFrames))
+            .arg(i18n("Effective FPS:\t%1", effectiveFps))
+            .arg(i18n("Real FPS:\t%1", realFps))
+            .arg(i18n("Frames dropped:\t%1\%", framesDropped * 100));
+    }
+    action->setText(actionText);
 }
 
 void TimelineDocker::unsetCanvas()
@@ -407,6 +449,15 @@ void TimelineDocker::setViewManager(KisViewManager *view)
 
     action = actionManager->createAction("lazy_frame");
     m_d->titlebar->btnAutoFrame->setDefaultAction(action);
+
+    action = actionManager->createAction("drop_frames");
+    m_d->titlebar->btnDropFrames->setDefaultAction(action);
+    connect(action, SIGNAL(triggered(bool)), SLOT(setDropFrames(bool)));
+
+    {
+        KisConfig config(true);
+        action->setChecked(config.animationDropFrames());
+    }
 }
 
 void TimelineDocker::playPause()
@@ -501,9 +552,15 @@ void TimelineDocker::setPlaybackSpeed(int playbackSpeed)
     m_d->canvas->animationPlayer()->slotUpdatePlaybackSpeed(normalizedSpeed);
 }
 
+void TimelineDocker::setDropFrames(bool dropFrames)
+{
+    KisConfig cfg(false);
+    cfg.setAnimationDropFrames(dropFrames);
+    updatePlaybackStatistics();
+}
+
 void TimelineDocker::handleClipRangeChange()
 {
-    ENTER_FUNCTION() << "FULL CLIP CHANGE";
     if (!m_d->canvas || !m_d->canvas->image()) return;
 
     KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();

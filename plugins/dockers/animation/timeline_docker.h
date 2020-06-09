@@ -51,7 +51,7 @@ public:
 
     KisTransportControls* transport;
 
-    KisIntParseSpinBox *frameCounter;
+    KisIntParseSpinBox *frameRegister;
 
     QToolButton *btnAddKeyframe;
     QToolButton *btnDuplicateKeyframe;
@@ -66,6 +66,7 @@ public:
     KisIntParseSpinBox *sbFrameRate;
     KisSliderSpinBox *sbSpeed;
     QToolButton *btnAutoFrame;
+    QToolButton *btnDropFrames;
 
 private:
     const u_int MAX_FRAMES = 9999;
@@ -94,12 +95,14 @@ public Q_SLOTS:
     void setEndFrame(int frame);
     void setFrameRate(int frmaerate);
     void setPlaybackSpeed(int playbackSpeed);
+    void setDropFrames(bool dropFrames);
 
     void handleClipRangeChange();
     void handleFrameRateChange();
 
     void updateFrameCache();
-    void updateFrameCounter();
+    void updateFrameRegister();
+    void updatePlaybackStatistics();
 
     void handleThemeChange();
 

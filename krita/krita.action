@@ -2202,8 +2202,9 @@
       <statusTip></statusTip>
     </Action>
     <Action name="drop_frames">
-      <icon></icon>
-      <text></text>
+      <icon>dropframe</icon>
+      <text>Drop Frames
+Enable to preserve playback timing.</text>
       <whatsThis></whatsThis>
       <toolTip></toolTip>
       <iconText></iconText>

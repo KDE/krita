@@ -275,7 +275,6 @@ void TimelineDocker::setCanvas(KoCanvasBase * canvas)
         }
     }
 
-
     m_d->canvas = dynamic_cast<KisCanvas2*>(canvas);
     setEnabled(m_d->canvas != 0);
 

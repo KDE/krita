@@ -40,8 +40,8 @@ public:
     KisUtilityTitleBar(QWidget *parent = nullptr);
     KisUtilityTitleBar(QLabel *title, QWidget *parent = nullptr);
 
-    virtual QSize sizeHint() const {return QSize(32,32);}
-    virtual QSize minimumSizeHint() const {return QSize(32,32);}
+    //virtual QSize sizeHint() const {return QSize(32,32);}
+    //virtual QSize minimumSizeHint() const {return QSize(32,32);}
 
 protected:
     QLabel *title;

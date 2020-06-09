@@ -28,12 +28,12 @@
 /**
  * @brief The KisActiveResourcesModel class
  */
-class KRITARESOURCES_EXPORT KisResourcesActiveFilterModel : public QSortFilterProxyModel, public KisAbstractResourceModel
+class KRITARESOURCES_EXPORT KisResourceModel : public QSortFilterProxyModel, public KisAbstractResourceModel
 {
     Q_OBJECT
 public:
-    KisResourcesActiveFilterModel(int column, QObject *parent);
-    ~KisResourcesActiveFilterModel() override;
+    KisResourceModel(int column, QObject *parent);
+    ~KisResourceModel() override;
 
     enum ResourceFilter {
         ShowInactiveResources = 0,

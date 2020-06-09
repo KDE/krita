@@ -108,7 +108,7 @@ void TestTagFilterResourceProxyModel::testData()
                                       << "test1.kpp"
                                       << "test2.kpp";
     for (int i = 0; i < proxyModel.rowCount(); ++i)  {
-        QVariant v = resourceModel->data(proxyModel.mapToSource(proxyModel.index(i, 0)), Qt::UserRole + KisResourceModel::Name);
+        QVariant v = resourceModel->data(proxyModel.mapToSource(proxyModel.index(i, 0)), Qt::UserRole + KisAbstractResourceModel::Name);
         QVERIFY(names.contains(v.toString()));
     }
 }

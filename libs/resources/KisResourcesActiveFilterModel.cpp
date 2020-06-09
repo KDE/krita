@@ -18,36 +18,36 @@
  */
 #include "KisResourcesActiveFilterModel.h"
 
-struct KisResourcesActiveFilterModel::Private
+struct KisResourceModel::Private
 {
     int column {-1};
     ResourceFilter resourceFilter {ShowActiveResources};
     StorageFilter storageFilter {ShowActiveStorages};
 };
 
-KisResourcesActiveFilterModel::KisResourcesActiveFilterModel(int column, QObject *parent)
+KisResourceModel::KisResourceModel(int column, QObject *parent)
     : QSortFilterProxyModel(parent)
     , d(new Private)
 {
     d->column = column;
 }
 
-KisResourcesActiveFilterModel::~KisResourcesActiveFilterModel()
+KisResourceModel::~KisResourceModel()
 {
     delete d;
 }
 
-void KisResourcesActiveFilterModel::setResourceFilter(ResourceFilter filter)
+void KisResourceModel::setResourceFilter(ResourceFilter filter)
 {
     d->resourceFilter = filter;
 }
 
-void KisResourcesActiveFilterModel::setStorageFilter(StorageFilter filter)
+void KisResourceModel::setStorageFilter(StorageFilter filter)
 {
     d->storageFilter = filter;
 }
 
-KoResourceSP KisResourcesActiveFilterModel::resourceForIndex(QModelIndex index) const
+KoResourceSP KisResourceModel::resourceForIndex(QModelIndex index) const
 {
     KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
     if (source) {
@@ -56,7 +56,7 @@ KoResourceSP KisResourcesActiveFilterModel::resourceForIndex(QModelIndex index) 
     return 0;
 }
 
-QModelIndex KisResourcesActiveFilterModel::indexFromResource(KoResourceSP resource) const
+QModelIndex KisResourceModel::indexFromResource(KoResourceSP resource) const
 {
     KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
     if (source) {
@@ -65,7 +65,7 @@ QModelIndex KisResourcesActiveFilterModel::indexFromResource(KoResourceSP resour
     return QModelIndex();
 }
 
-bool KisResourcesActiveFilterModel::removeResource(const QModelIndex &index)
+bool KisResourceModel::removeResource(const QModelIndex &index)
 {
     KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
     if (source) {
@@ -74,7 +74,7 @@ bool KisResourcesActiveFilterModel::removeResource(const QModelIndex &index)
     return false;
 }
 
-bool KisResourcesActiveFilterModel::importResourceFile(const QString &filename)
+bool KisResourceModel::importResourceFile(const QString &filename)
 {
     KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
     if (source) {
@@ -83,7 +83,7 @@ bool KisResourcesActiveFilterModel::importResourceFile(const QString &filename)
     return false;
 }
 
-bool KisResourcesActiveFilterModel::addResource(KoResourceSP resource, const QString &storageId)
+bool KisResourceModel::addResource(KoResourceSP resource, const QString &storageId)
 {
     KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
     if (source) {
@@ -92,7 +92,7 @@ bool KisResourcesActiveFilterModel::addResource(KoResourceSP resource, const QSt
     return false;
 }
 
-bool KisResourcesActiveFilterModel::updateResource(KoResourceSP resource)
+bool KisResourceModel::updateResource(KoResourceSP resource)
 {
     KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
     if (source) {
@@ -101,7 +101,7 @@ bool KisResourcesActiveFilterModel::updateResource(KoResourceSP resource)
     return false;
 }
 
-bool KisResourcesActiveFilterModel::renameResource(KoResourceSP resource, const QString &name)
+bool KisResourceModel::renameResource(KoResourceSP resource, const QString &name)
 {
     KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
     if (source) {
@@ -110,7 +110,7 @@ bool KisResourcesActiveFilterModel::renameResource(KoResourceSP resource, const 
     return false;
 }
 
-bool KisResourcesActiveFilterModel::removeResource(KoResourceSP resource)
+bool KisResourceModel::removeResource(KoResourceSP resource)
 {
     KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
     if (source) {
@@ -119,7 +119,7 @@ bool KisResourcesActiveFilterModel::removeResource(KoResourceSP resource)
     return false;
 }
 
-bool KisResourcesActiveFilterModel::setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata)
+bool KisResourceModel::setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata)
 {
     KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
     if (source) {
@@ -129,12 +129,12 @@ bool KisResourcesActiveFilterModel::setResourceMetaData(KoResourceSP resource, Q
 }
 
 
-bool KisResourcesActiveFilterModel::filterAcceptsColumn(int /*source_column*/, const QModelIndex &/*source_parent*/) const
+bool KisResourceModel::filterAcceptsColumn(int /*source_column*/, const QModelIndex &/*source_parent*/) const
 {
     return true;
 }
 
-bool KisResourcesActiveFilterModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
+bool KisResourceModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
     if (d->resourceFilter == ShowAllResources && d->storageFilter == ShowAllStorages) {
         return true;
@@ -155,7 +155,7 @@ bool KisResourcesActiveFilterModel::filterAcceptsRow(int source_row, const QMode
     return ((storageActive == d->storageFilter) && (resourceActive == d->resourceFilter));
 }
 
-bool KisResourcesActiveFilterModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const
+bool KisResourceModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const
 {
     QString nameLeft = sourceModel()->data(source_left, Qt::UserRole + KisResourceModel::Name).toString();
     QString nameRight = sourceModel()->data(source_right, Qt::UserRole + KisResourceModel::Name).toString();

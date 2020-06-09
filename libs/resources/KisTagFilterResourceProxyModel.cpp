@@ -194,9 +194,9 @@ bool KisTagFilterResourceProxyModel::filterAcceptsRow(int source_row, const QMod
         return true;
     }
 
-    QModelIndex idx = sourceModel()->index(source_row, KisResourceModel::Name, source_parent);
-    int resourceId = sourceModel()->data(idx, Qt::UserRole + KisResourceModel::Id).toInt();
-    QString resourceName = sourceModel()->data(idx, Qt::UserRole + KisResourceModel::Name).toString();
+    QModelIndex idx = sourceModel()->index(source_row, KisAbstractResourceModel::Name, source_parent);
+    int resourceId = sourceModel()->data(idx, Qt::UserRole + KisAbstractResourceModel::Id).toInt();
+    QString resourceName = sourceModel()->data(idx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
 
     QVector<KisTagSP> tagsForResource = d->tagModel->tagsForResource(resourceId);
     KisTagSP tag = d->tags.isEmpty() ? KisTagSP() : d->tags.first();
@@ -213,8 +213,8 @@ bool KisTagFilterResourceProxyModel::filterAcceptsRow(int source_row, const QMod
 
 bool KisTagFilterResourceProxyModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const
 {
-    QString nameLeft = sourceModel()->data(source_left, Qt::UserRole + KisResourceModel::Name).toString();
-    QString nameRight = sourceModel()->data(source_right, Qt::UserRole + KisResourceModel::Name).toString();
+    QString nameLeft = sourceModel()->data(source_left, Qt::UserRole + KisAbstractResourceModel::Name).toString();
+    QString nameRight = sourceModel()->data(source_right, Qt::UserRole + KisAbstractResourceModel::Name).toString();
     return nameLeft < nameRight;
 }
 

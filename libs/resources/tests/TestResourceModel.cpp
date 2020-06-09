@@ -103,7 +103,7 @@ void TestResourceModel::testData()
     QStringList resourceNames;
 
     for (int i = 0; i < resourceModel.rowCount(); ++i)  {
-        QVariant v = resourceModel.data(resourceModel.index(i, KisResourceModel::Name), Qt::DisplayRole);
+        QVariant v = resourceModel.data(resourceModel.index(i, KisAbstractResourceModel::Name), Qt::DisplayRole);
         resourceNames << v.toString();
     }
     QVERIFY(resourceNames.contains("test0.kpp"));

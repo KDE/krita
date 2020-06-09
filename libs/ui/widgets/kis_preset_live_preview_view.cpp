@@ -27,6 +27,7 @@
 #include <kis_brush.h>
 #include <KisGlobalResourcesInterface.h>
 #include "kis_transaction.h"
+#include <KoCanvasResourceProvider.h>
 
 KisPresetLivePreviewView::KisPresetLivePreviewView(QWidget *parent)
     : QGraphicsView(parent),
@@ -41,8 +42,10 @@ KisPresetLivePreviewView::~KisPresetLivePreviewView()
     delete m_brushPreviewScene;
 }
 
-void KisPresetLivePreviewView::setup()
+void KisPresetLivePreviewView::setup(KoCanvasResourceProvider* resourceManager)
 {
+    m_resourceManager = resourceManager;
+
     // initializing to 0 helps check later if they actually have something in them
     m_noPreviewText = 0;
     m_sceneImageItem = 0;
@@ -280,22 +283,12 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
         }
     }
 
-    // Preset preview cannot display gradient color source: there is
-    // no resource manager for KisResourcesSnapshot, therefore gradient is nullptr.
-    // BUG: 385521 (Selecting "Gradient" in brush editor crashes krita)
-    if (proxy_preset->paintOp().id() == "paintbrush") {
-        QString colorSourceType = settings->getString("ColorSource/Type", "plain");
-        if (colorSourceType == "gradient") {
-            settings->setProperty("ColorSource/Type", "plain");
-        }
-    }
-
     proxy_preset->setSettings(settings);
 
 
     KisResourcesSnapshotSP resources =
             new KisResourcesSnapshot(m_image,
-                                     m_layer);
+                                     m_layer, m_resourceManager);
     resources->setOpacity(settings->paintOpOpacity());
 
     resources->setBrush(proxy_preset);

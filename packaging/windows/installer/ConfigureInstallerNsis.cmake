@@ -27,5 +27,7 @@ install(FILES ${CMAKE_CURRENT_LIST_DIR}/include/FileExists2.nsh
 install(
     FILES
         ${CMAKE_CURRENT_LIST_DIR}/translations/English.nsh
+        ${CMAKE_CURRENT_LIST_DIR}/translations/TradChinese.nsh
+        ${CMAKE_CURRENT_LIST_DIR}/translations/SimpChinese.nsh
     DESTINATION ${CMAKE_INSTALL_PREFIX}/installer/translations
 )

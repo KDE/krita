@@ -91,6 +91,20 @@ public:
         return pattern(resourcesInterface());
     }
 
+    QTransform transform() const {
+        QTransform transform;
+
+        transform.shear(this->getDouble("transform_shear_x", 0.0), this->getDouble("transform_shear_y", 0.0));
+
+        transform.scale(this->getDouble("transform_scale_x", 1.0), this->getDouble("transform_scale_y", 1.0));
+        transform.rotate(this->getDouble("transform_rotation_x", 0.0), Qt::XAxis);
+        transform.rotate(this->getDouble("transform_rotation_y", 0.0), Qt::YAxis);
+        transform.rotate(this->getDouble("transform_rotation_z", 0.0), Qt::ZAxis);
+
+        transform.translate(this->getInt("transform_offset_x", 0), this->getInt("transform_offset_y", 0));
+        return transform;
+    }
+
     QList<KoResourceSP> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const override
     {
         KoPatternSP pattern = this->pattern(globalResourcesInterface);
@@ -129,6 +143,22 @@ KisFilterConfigurationSP KoPatternGenerator::defaultConfiguration(KisResourcesIn
     auto source = resourcesInterface->source<KoPattern>(ResourceType::Patterns);
     config->setProperty("pattern", QVariant::fromValue(source.fallbackResource()->name()));
 
+
+    config->setProperty("transform_shear_x", QVariant::fromValue(0.0));
+    config->setProperty("transform_shear_y", QVariant::fromValue(0.0));
+
+    config->setProperty("transform_scale_x", QVariant::fromValue(1.0));
+    config->setProperty("transform_scale_y", QVariant::fromValue(1.0));
+
+    config->setProperty("transform_rotation_x", QVariant::fromValue(0.0));
+    config->setProperty("transform_rotation_y", QVariant::fromValue(0.0));
+    config->setProperty("transform_rotation_z", QVariant::fromValue(0.0));
+
+    config->setProperty("transform_offset_x", QVariant::fromValue(0));
+    config->setProperty("transform_offset_y", QVariant::fromValue(0));
+
+    config->setProperty("transform_keep_scale_aspect", QVariant::fromValue(true));
+
     return config;
 }
 
@@ -152,6 +182,7 @@ void KoPatternGenerator::generate(KisProcessingInformation dstInfo,
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(config);
     KoPatternSP pattern = config->pattern();
+    QTransform transform = config->transform();
 
     KisFillPainter gc(dst);
     gc.setPattern(pattern);
@@ -162,7 +193,7 @@ void KoPatternGenerator::generate(KisProcessingInformation dstInfo,
     gc.setWidth(size.width());
     gc.setHeight(size.height());
     gc.setFillStyle(KisFillPainter::FillStylePattern);
-    gc.fillRect(QRect(dstInfo.topLeft(), size), pattern);
+    gc.fillRect(QRect(dstInfo.topLeft(), size), pattern, transform);
     gc.end();
 
 }

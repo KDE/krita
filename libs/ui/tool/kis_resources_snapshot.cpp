@@ -66,6 +66,7 @@ struct KisResourcesSnapshot::Private {
 
     KisPainter::StrokeStyle strokeStyle = KisPainter::StrokeStyleBrush;
     KisPainter::FillStyle fillStyle = KisPainter::FillStyleForegroundColor;
+    QTransform fillTransform = QTransform();
 
     bool globalAlphaLock = false;
     qreal effectiveZoom = 1.0;
@@ -198,6 +199,8 @@ void KisResourcesSnapshot::setupPainter(KisPainter* painter)
 
     painter->setStrokeStyle(m_d->strokeStyle);
     painter->setFillStyle(m_d->fillStyle);
+    painter->setPatternTransform(m_d->fillTransform);
+
 
     /**
      * The paintOp should be initialized the last, because it may
@@ -258,6 +261,11 @@ void KisResourcesSnapshot::setStrokeStyle(KisPainter::StrokeStyle strokeStyle)
 void KisResourcesSnapshot::setFillStyle(KisPainter::FillStyle fillStyle)
 {
     m_d->fillStyle = fillStyle;
+}
+
+void KisResourcesSnapshot::setFillTransform(QTransform transform)
+{
+    m_d->fillTransform = transform;
 }
 
 KisNodeSP KisResourcesSnapshot::currentNode() const
@@ -371,6 +379,11 @@ KoColor KisResourcesSnapshot::currentBgColor() const
 KisPaintOpPresetSP KisResourcesSnapshot::currentPaintOpPreset() const
 {
     return m_d->currentPaintOpPreset;
+}
+
+QTransform KisResourcesSnapshot::fillTransform() const
+{
+    return m_d->fillTransform;
 }
 
 

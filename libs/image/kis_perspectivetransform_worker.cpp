@@ -151,13 +151,26 @@ void KisPerspectiveTransformWorker::runPartialDst(KisPaintDeviceSP srcDev,
                                                   KisPaintDeviceSP dstDev,
                                                   const QRect &dstRect)
 {
-    if (m_isIdentity) {
-        KisPainter::copyAreaOptimizedOldData(dstRect.topLeft(), srcDev, dstDev, dstRect);
-        return;
-    }
 
     QRectF srcClipRect = srcDev->exactBounds();
     if (srcClipRect.isEmpty()) return;
+
+    if (m_isIdentity) {
+
+        if (srcDev->defaultBounds()->wrapAroundMode()) {
+            KisProgressUpdateHelper progressHelper(m_progressUpdater, 100, dstRect.height()/ srcClipRect.height());
+            for (int y = dstRect.y(); y < dstRect.y() + dstRect.height(); y+=srcClipRect.height()) {
+                for (int x = dstRect.x(); x < dstRect.x() + dstRect.width(); x+=srcClipRect.width()) {
+                    KisPainter::copyAreaOptimizedOldData(QPoint(x, y), srcDev, dstDev, srcClipRect.toRect());
+                }
+                progressHelper.step();
+            }
+            return;
+        } else {
+            KisPainter::copyAreaOptimizedOldData(dstRect.topLeft(), srcDev, dstDev, dstRect);
+            return;
+        }
+    }
 
     KisProgressUpdateHelper progressHelper(m_progressUpdater, 100, dstRect.height());
 
@@ -170,7 +183,7 @@ void KisPerspectiveTransformWorker::runPartialDst(KisPaintDeviceSP srcDev,
             QPointF dstPoint(x, y);
             QPointF srcPoint = m_backwardTransform.map(dstPoint);
 
-            if (srcClipRect.contains(srcPoint)) {
+            if (srcClipRect.contains(srcPoint) || srcDev->defaultBounds()->wrapAroundMode()) {
                 accessor->moveTo(dstPoint.x(), dstPoint.y());
                 srcAcc->moveTo(srcPoint.x(), srcPoint.y());
                 srcAcc->sampledOldRawData(accessor->rawData());

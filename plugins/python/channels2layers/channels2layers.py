@@ -1051,12 +1051,12 @@ class ChannelsToLayers(Extension):
         ledLayerGroupName = QLineEdit()
         ledLayerGroupName.setText(self.__outputOptions['layerGroupName'])
         ledLayerGroupName.textChanged.connect(ledLayerGroupName_Changed)
-        flLayersMgt.addRow(i18n('New layer group name'), ledLayerGroupName)
+        flLayersMgt.addRow(i18nc('The name for a new group layer; the generated layers will be placed in this group.', 'New layer group name'), ledLayerGroupName)
 
         ledLayerColorName = QLineEdit()
         ledLayerColorName.setText(self.__outputOptions['layerColorName'])
         ledLayerColorName.textChanged.connect(ledLayerColorName_Changed)
-        flLayersMgt.addRow(i18n('New layers color name'), ledLayerColorName)
+        flLayersMgt.addRow(i18nc('Defines how the name for each layer created from the channel is generated.', 'New layers color name'), ledLayerColorName)
 
         cmbOriginalLayerAction = QComboBox()
         cmbOriginalLayerAction.addItems([

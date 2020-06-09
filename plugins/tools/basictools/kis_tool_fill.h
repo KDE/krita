@@ -36,6 +36,7 @@
 class QWidget;
 class QCheckBox;
 class KisSliderSpinBox;
+class KisDoubleSliderSpinBox;
 class KoCanvasBase;
 class KisColorFilterCombo;
 class KisDummiesFacadeBase;
@@ -66,6 +67,8 @@ public Q_SLOTS:
     void slotSetFeather(int);
     void slotSetSampleLayers(int index);
     void slotSetSelectedColorLabels();
+    void slotSetPatternScale(qreal scale);
+    void slotSetPatternRotation(qreal rotate);
 
 protected Q_SLOTS:
     void resetCursorStyle() override;
@@ -99,6 +102,8 @@ private:
     bool m_fillOnlySelection;
     QString m_sampleLayersMode;
     QList<int> m_selectedColors;
+    qreal m_patternRotation;
+    qreal m_patternScale;
 
     bool m_widgetsInitialized {false};
 
@@ -106,6 +111,8 @@ private:
     KisSliderSpinBox *m_slThreshold;
     KisSliderSpinBox *m_sizemodWidget;
     KisSliderSpinBox *m_featherWidget;
+    KisDoubleSliderSpinBox *m_sldPatternRotate;
+    KisDoubleSliderSpinBox *m_sldPatternScale;
     QCheckBox *m_checkUsePattern;
     QCheckBox *m_checkFillSelection;
     QComboBox *m_cmbSampleLayersMode;

@@ -52,6 +52,7 @@
 #include <QUrl>
 #include <QMessageBox>
 #include <QStatusBar>
+#include <QStyleFactory>
 #include <QMenu>
 #include <QMenuBar>
 #include <KisMimeDatabase.h>
@@ -183,6 +184,7 @@ public:
     Private(KisMainWindow *parent, QUuid id)
         : q(parent)
         , id(id)
+        , styleMenu(new KActionMenu(i18nc("@action:inmenu", "Styles"), parent))
         , dockWidgetMenu(new KActionMenu(i18nc("@action:inmenu", "&Dockers"), parent))
         , windowMenu(new KActionMenu(i18nc("@action:inmenu", "&Window"), parent))
         , documentMenu(new KActionMenu(i18nc("@action:inmenu", "New &View"), parent))
@@ -251,6 +253,10 @@ public:
     KisAction *showSessionManager {0};
 
     KisAction *expandingSpacers[2];
+
+    KActionMenu *styleMenu;
+    QActionGroup* styleActions;
+    QMap<QString, QAction*> actionMap;
 
     KActionMenu *dockWidgetMenu;
     KActionMenu *windowMenu;
@@ -378,6 +384,34 @@ KisMainWindow::KisMainWindow(QUuid uuid)
         d->dockWidgetMenu->addAction(dockwidgetActions[title]);
     }
 
+
+    // Style menu actions
+    d->styleActions = new QActionGroup(this);
+    QAction * action;
+    Q_FOREACH (QString styleName, QStyleFactory::keys()) {
+        action = new QAction(styleName, d->styleActions);
+        action->setCheckable(true);
+        d->actionMap.insert(styleName, action);
+        d->styleMenu->addAction(d->actionMap.value(styleName));
+    }
+
+
+    // select the config value, or the current style if that does not exist
+    QString styleFromConfig = cfg.widgetStyle().toLower();
+    QString styleToSelect = styleFromConfig == "" ? style()->objectName().toLower() : styleFromConfig;
+
+    Q_FOREACH (auto key, d->actionMap.keys()) {
+        if(key.toLower() == styleToSelect) { // does the key match selection
+            d->actionMap.value(key)->setChecked(true);
+        }
+    }
+
+    connect(d->styleActions, SIGNAL(triggered(QAction*)),
+            this, SLOT(slotUpdateWidgetStyle()));
+
+
+
+
     Q_FOREACH (QDockWidget *wdg, dockWidgets()) {
         if ((wdg->features() & QDockWidget::DockWidgetClosable) == 0) {
             wdg->setVisible(true);
@@ -495,8 +529,8 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     KisPart::instance()->notifyMainWindowIsBeingCreated(this);
 
     // If we have customized the toolbars, load that first
-    setLocalXMLFile(KoResourcePaths::locateLocal("data", "krita4.xmlgui"));
-    setXMLFile(":/kxmlgui5/krita4.xmlgui");
+    setLocalXMLFile(KoResourcePaths::locateLocal("data", "krita5.xmlgui"));
+    setXMLFile(":/kxmlgui5/krita5.xmlgui");
 
     guiFactory()->addClient(this);
     connect(guiFactory(), SIGNAL(makingChanges(bool)), SLOT(slotXmlGuiMakingChanges(bool)));
@@ -2015,6 +2049,19 @@ void KisMainWindow::forceDockTabFonts()
     }
 }
 
+void KisMainWindow::slotUpdateWidgetStyle()
+{
+     KisConfig cfg(true);
+     QString themeFromConfig = cfg.widgetStyle();
+
+     Q_FOREACH (auto key, d->actionMap.keys()) { // find checked style to save to config
+         if(d->actionMap.value(key)->isChecked()) {
+            cfg.setWidgetStyle(key);
+            qApp->setStyle(key);
+         }
+     }
+}
+
 QList<QDockWidget*> KisMainWindow::dockWidgets() const
 {
     return d->dockWidgetsMap.values();
@@ -2560,6 +2607,8 @@ void KisMainWindow::createActions()
 
     actionCollection()->addAction("settings_dockers_menu", d->dockWidgetMenu);
     actionCollection()->addAction("window", d->windowMenu);
+
+    actionCollection()->addAction("style_menu", d->styleMenu); // for widget styles: breeze, fusion, etc
 
     d->mdiCascade = actionManager->createAction("windows_cascade");
     connect(d->mdiCascade, SIGNAL(triggered()), d->mdiArea, SLOT(cascadeSubWindows()));

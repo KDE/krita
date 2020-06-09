@@ -114,6 +114,7 @@ void KisPainter::init()
     d->paramInfo = KoCompositeOp::ParameterInfo();
     d->renderingIntent = KoColorConversionTransformation::internalRenderingIntent();
     d->conversionFlags = KoColorConversionTransformation::internalConversionFlags();
+    d->patternTransform = QTransform();
 }
 
 KisPainter::~KisPainter()
@@ -461,6 +462,8 @@ inline bool KisPainter::Private::tryReduceSourceRect(const KisPaintDevice *srcDe
                                                      qint32 *dstX,
                                                      qint32 *dstY)
 {
+    bool needsReadjustParams = false;
+
     /**
      * In case of COMPOSITE_COPY and Wrap Around Mode even the pixels
      * outside the device extent matter, because they will be either
@@ -482,7 +485,34 @@ inline bool KisPainter::Private::tryReduceSourceRect(const KisPaintDevice *srcDe
         *srcRect &= srcDev->extent();
 
         if (srcRect->isEmpty()) return true;
+        needsReadjustParams = true;
+    }
 
+    if (selection) {
+        /**
+         * We should also crop the blitted area by the selected region,
+         * because we cannot paint outside the selection.
+         */
+        *srcRect &= selection->selectedRect();
+
+        if (srcRect->isEmpty()) return true;
+        needsReadjustParams = true;
+    }
+
+    if (!paramInfo.channelFlags.isEmpty()) {
+        const QBitArray onlyColor = colorSpace->channelFlags(true, false);
+        KIS_SAFE_ASSERT_RECOVER_NOOP(onlyColor.size() == paramInfo.channelFlags.size());
+
+        // check if we have alpha channel locked
+        if ((paramInfo.channelFlags & onlyColor) == paramInfo.channelFlags) {
+            *srcRect &= device->extent();
+
+            if (srcRect->isEmpty()) return true;
+            needsReadjustParams = true;
+        }
+    }
+
+    if (needsReadjustParams) {
         // Readjust the function paramenters to the new dimensions.
         *dstX += srcRect->x() - *srcX;    // This will only add, not subtract
         *dstY += srcRect->y() - *srcY;    // Idem
@@ -1427,7 +1457,7 @@ void KisPainter::Private::fillPainterPathImpl(const QPainterPath& path, const QR
         break;
     case FillStylePattern:
         if (pattern) { // if the user hasn't got any patterns installed, we shouldn't crash...
-            fillPainter->fillRect(fillRect, pattern);
+            fillPainter->fillRect(fillRect, pattern, patternTransform);
         }
         break;
     case FillStyleGenerator:
@@ -2566,6 +2596,16 @@ void KisPainter::setFillStyle(FillStyle fillStyle)
 KisPainter::FillStyle KisPainter::fillStyle() const
 {
     return d->fillStyle;
+}
+
+void KisPainter::setPatternTransform(QTransform transform)
+{
+    d->patternTransform = transform;
+}
+
+QTransform KisPainter::patternTransform()
+{
+    return d->patternTransform;
 }
 
 void KisPainter::setAntiAliasPolygonFill(bool antiAliasPolygonFill)

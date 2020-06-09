@@ -354,6 +354,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="settings_dockers_menu"/>
       <Separator/>
       <Action name="theme_menu"/>
+      <Action name="style_menu"/>
       <Separator/>
       <!-- `Configure Shortcuts` was moved into main configuration menu -->
       <!-- <Action name="options_configure_keybinding"/> -->

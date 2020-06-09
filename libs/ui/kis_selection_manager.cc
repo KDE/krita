@@ -272,19 +272,19 @@ bool KisSelectionManager::haveShapesInClipboard()
 bool KisSelectionManager::haveAnySelectionWithPixels()
 {
     KisSelectionSP selection = m_view->selection();
-    return selection && selection->hasPixelSelection();
+    return selection && selection->hasNonEmptyPixelSelection();
 }
 
 bool KisSelectionManager::haveShapeSelectionWithShapes()
 {
     KisSelectionSP selection = m_view->selection();
-    return selection && selection->hasShapeSelection();
+    return selection && selection->hasNonEmptyShapeSelection();
 }
 
 bool KisSelectionManager::haveRasterSelectionWithPixels()
 {
     KisSelectionSP selection = m_view->selection();
-    return selection && selection->hasPixelSelection() && !selection->hasShapeSelection();
+    return selection && selection->hasNonEmptyPixelSelection() && !selection->hasNonEmptyShapeSelection();
 }
 
 void KisSelectionManager::updateGUI()
@@ -688,7 +688,15 @@ void KisSelectionManager::selectOpaqueOnNode(KisNodeSP node, SelectionAction act
         if (!device) return;
 
         QRect rc = device->exactBounds();
-        if (rc.isEmpty()) return;
+        if (rc.isEmpty()) {
+
+            if (action == SELECTION_REPLACE || action == SELECTION_INTERSECT) {
+                KUndo2Command *deselectCommand = new KisDeselectActiveSelectionCommand(m_view->selection(), m_view->image());
+                KisProcessingApplicator::runSingleCommandStroke(m_view->image(), deselectCommand);
+            }
+
+            return;
+        }
 
         KIS_ASSERT_RECOVER_RETURN(canvas);
 

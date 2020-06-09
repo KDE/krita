@@ -596,7 +596,7 @@ void KoShape::update() const
 {
 
     if (!d->shapeManagers.empty()) {
-        QRectF rect(boundingRect());
+        const QRectF rect(boundingRect());
         Q_FOREACH (KoShapeManager * manager, d->shapeManagers) {
             manager->update(rect, this, true);
         }

@@ -702,7 +702,7 @@ bool KisKraLoadVisitor::loadSelection(const QString& location, KisSelectionSP ds
         m_store->enterDirectory(shapeSelectionLocation) ;
 
         KisShapeSelection* shapeSelection = new KisShapeSelection(m_shapeController, m_image, dstSelection);
-        dstSelection->setShapeSelection(shapeSelection);
+        dstSelection->convertToVectorSelectionNoUndo(shapeSelection);
         result = shapeSelection->loadSelection(m_store);
         m_store->popDirectory();
         if (!result) {

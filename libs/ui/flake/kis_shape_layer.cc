@@ -86,7 +86,8 @@ class ShapeLayerContainerModel : public SimpleShapeContainerModel
 public:
     ShapeLayerContainerModel(KisShapeLayer *parent)
         : q(parent)
-{}
+    {
+    }
 
     void add(KoShape *child) override {
         SimpleShapeContainerModel::add(child);
@@ -110,16 +111,6 @@ public:
         }
 
         SimpleShapeContainerModel::remove(child);
-    }
-
-    void shapeHasBeenAddedToHierarchy(KoShape *shape, KoShapeContainer *addedToSubtree) override {
-        q->shapeManager()->addShape(shape);
-        SimpleShapeContainerModel::shapeHasBeenAddedToHierarchy(shape, addedToSubtree);
-    }
-
-    void shapeToBeRemovedFromHierarchy(KoShape *shape, KoShapeContainer *removedFromSubtree) override {
-        q->shapeManager()->remove(shape);
-        SimpleShapeContainerModel::shapeToBeRemovedFromHierarchy(shape, removedFromSubtree);
     }
 
 private:
@@ -293,6 +284,10 @@ void KisShapeLayer::initShapeLayer(KoShapeControllerBase* controller, KisPaintDe
             this, SIGNAL(currentLayerChanged(const KoShapeLayer*)));
 
     connect(this, SIGNAL(sigMoveShapes(QPointF)), SLOT(slotMoveShapes(QPointF)));
+
+    ShapeLayerContainerModel *model = dynamic_cast<ShapeLayerContainerModel*>(this->model());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(model);
+    model->setAssociatedRootShapeManager(m_d->canvas->shapeManager());
 }
 
 bool KisShapeLayer::allowAsChild(KisNodeSP node) const

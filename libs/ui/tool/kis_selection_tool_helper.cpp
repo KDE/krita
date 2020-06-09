@@ -218,13 +218,13 @@ void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes, Select
     }
 
     struct AddSelectionShape : public KisTransactionBasedCommand {
-        AddSelectionShape(KisView *view, KoShape* shape, SelectionAction action)
+        AddSelectionShape(KisView *view, QList<KoShape*> shapes, SelectionAction action)
             : m_view(view),
-              m_shape(shape),
+              m_shapes(shapes),
               m_action(action) {}
 
         KisView *m_view;
-        KoShape* m_shape;
+        QList<KoShape*> m_shapes;
         SelectionAction m_action;
 
         KUndo2Command* paint() override {
@@ -238,82 +238,88 @@ void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes, Select
                 if (shapeSelection) {
                     QList<KoShape*> existingShapes = shapeSelection->shapes();
 
-                    if (existingShapes.size() == 1) {
-                        KoShape *currentShape = existingShapes.first();
-                        QPainterPath path1 = currentShape->absoluteTransformation().map(currentShape->outline());
-                        QPainterPath path2 = m_shape->absoluteTransformation().map(m_shape->outline());
-
-                        const QTransform booleanWorkaroundTransform =
-                            KritaUtils::pathShapeBooleanSpaceWorkaround(m_view->image());
-
-                        path1 = booleanWorkaroundTransform.map(path1);
-                        path2 = booleanWorkaroundTransform.map(path2);
-
-                        QPainterPath path = path2;
-
-                        switch (m_action) {
-                        case SELECTION_DEFAULT:
-                        case SELECTION_REPLACE:
-                            path = path2;
-                            break;
-
-                        case SELECTION_INTERSECT:
-                            path = path1 & path2;
-                            break;
-
-                        case SELECTION_ADD:
-                            path = path1 | path2;
-                            break;
-
-                        case SELECTION_SUBTRACT:
-                            path = path1 - path2;
-                            break;
-                        case SELECTION_SYMMETRICDIFFERENCE:
-                            path = (path1 | path2) - (path1 & path2);
-                            break;
-                        }
-
-                        path = booleanWorkaroundTransform.inverted().map(path);
-
-                        KoShape *newShape = KoPathShape::createShapeFromPainterPath(path);
-                        newShape->setUserData(new KisShapeSelectionMarker);
-
-                        KUndo2Command *parentCommand = new KUndo2Command();
-
-                        m_view->canvasBase()->shapeController()->removeShape(currentShape, parentCommand);
-                        m_view->canvasBase()->shapeController()->addShape(newShape, 0, parentCommand);
-
-                        if (path.isEmpty()) {
-                            KisCommandUtils::CompositeCommand *cmd = new KisCommandUtils::CompositeCommand();
-                            cmd->addCommand(parentCommand);
-                            cmd->addCommand(new KisDeselectActiveSelectionCommand(m_view->selection(), m_view->image()));
-                            parentCommand = cmd;
-                        }
-
-                        resultCommand = parentCommand;
+                    QPainterPath path1;
+                    path1.setFillRule(Qt::WindingFill);
+                    Q_FOREACH(KoShape *shape, existingShapes) {
+                        path1 += shape->absoluteTransformation().map(shape->outline());
                     }
+
+                    QPainterPath path2;
+                    path2.setFillRule(Qt::WindingFill);
+                    Q_FOREACH(KoShape *shape, m_shapes) {
+                        path2 += shape->absoluteTransformation().map(shape->outline());
+                    }
+
+                    const QTransform booleanWorkaroundTransform =
+                        KritaUtils::pathShapeBooleanSpaceWorkaround(m_view->image());
+
+                    path1 = booleanWorkaroundTransform.map(path1);
+                    path2 = booleanWorkaroundTransform.map(path2);
+
+                    QPainterPath path = path2;
+
+                    switch (m_action) {
+                    case SELECTION_DEFAULT:
+                    case SELECTION_REPLACE:
+                        path = path2;
+                        break;
+
+                    case SELECTION_INTERSECT:
+                        path = path1 & path2;
+                        break;
+
+                    case SELECTION_ADD:
+                        path = path1 | path2;
+                        break;
+
+                    case SELECTION_SUBTRACT:
+                        path = path1 - path2;
+                        break;
+                    case SELECTION_SYMMETRICDIFFERENCE:
+                        path = (path1 | path2) - (path1 & path2);
+                        break;
+                    }
+
+                    path = booleanWorkaroundTransform.inverted().map(path);
+
+                    KoShape *newShape = KoPathShape::createShapeFromPainterPath(path);
+                    newShape->setUserData(new KisShapeSelectionMarker);
+
+                    KUndo2Command *parentCommand = new KUndo2Command();
+
+                    m_view->canvasBase()->shapeController()->removeShapes(existingShapes, parentCommand);
+                    m_view->canvasBase()->shapeController()->addShape(newShape, 0, parentCommand);
+
+                    if (path.isEmpty()) {
+                        KisCommandUtils::CompositeCommand *cmd = new KisCommandUtils::CompositeCommand();
+                        cmd->addCommand(parentCommand);
+                        cmd->addCommand(new KisDeselectActiveSelectionCommand(m_view->selection(), m_view->image()));
+                        parentCommand = cmd;
+                    }
+
+                    resultCommand = parentCommand;
                 }
             }
 
 
             if (!resultCommand) {
                 /**
-                 * Mark a shape that it belongs to a shape selection
+                 * Mark the shapes that they belong to a shape selection
                  */
-                if(!m_shape->userData()) {
-                    m_shape->setUserData(new KisShapeSelectionMarker);
+                Q_FOREACH(KoShape *shape, m_shapes) {
+                    if(!shape->userData()) {
+                        shape->setUserData(new KisShapeSelectionMarker);
+                    }
                 }
 
-                resultCommand = m_view->canvasBase()->shapeController()->addShape(m_shape, 0);
+                resultCommand = m_view->canvasBase()->shapeController()->addShapesDirect(m_shapes, 0);
             }
             return resultCommand;
         }
     };
 
-    Q_FOREACH (KoShape* shape, shapes) {
-        applicator.applyCommand(
-            new KisGuiContextCommand(new AddSelectionShape(view, shape, action), view));
-    }
+    applicator.applyCommand(
+        new KisGuiContextCommand(new AddSelectionShape(view, shapes, action), view));
     applicator.end();
 }
 

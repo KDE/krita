@@ -61,22 +61,8 @@
 
 KisShapeSelection::KisShapeSelection(KoShapeControllerBase *shapeControllerBase, KisImageWSP image, KisSelectionWSP selection)
     : KoShapeLayer(m_model = new KisShapeSelectionModel(image, selection, this))
-    , m_image(image)
-    , m_shapeControllerBase(shapeControllerBase)
 {
-    Q_ASSERT(m_image);
-    setShapeId("KisShapeSelection");
-    setSelectable(false);
-    m_converter = new KisImageViewConverter(image);
-    m_canvas = new KisShapeSelectionCanvas(shapeControllerBase);
-    m_canvas->shapeManager()->addShape(this);
-
-    m_model->setObjectName("KisShapeSelectionModel");
-    m_model->moveToThread(image->thread());
-    m_canvas->setObjectName("KisShapeSelectionCanvas");
-    m_canvas->moveToThread(image->thread());
-
-    connect(this, SIGNAL(sigMoveShapes(QPointF)), SLOT(slotMoveShapes(QPointF)));
+    init(image, shapeControllerBase);
 }
 
 KisShapeSelection::~KisShapeSelection()
@@ -89,10 +75,7 @@ KisShapeSelection::~KisShapeSelection()
 KisShapeSelection::KisShapeSelection(const KisShapeSelection& rhs, KisSelection* selection)
     : KoShapeLayer(m_model = new KisShapeSelectionModel(rhs.m_image, selection, this))
 {
-    m_image = rhs.m_image;
-    m_shapeControllerBase = rhs.m_shapeControllerBase;
-    m_converter = new KisImageViewConverter(m_image);
-    m_canvas = new KisShapeSelectionCanvas(m_shapeControllerBase);
+    init(rhs.m_image, rhs.m_shapeControllerBase);
 
     // TODO: refactor shape selection to pass signals
     //       via KoShapeManager, not via the model
@@ -110,14 +93,30 @@ KisShapeSelection::KisShapeSelection(const KisShapeSelection& rhs, KisSelection*
     m_model->setUpdatesEnabled(true);
 }
 
+void KisShapeSelection::init(KisImageSP image, KoShapeControllerBase *shapeControllerBase)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(image);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(shapeControllerBase);
+
+    m_image = image;
+    m_shapeControllerBase = shapeControllerBase;
+
+    setShapeId("KisShapeSelection");
+    setSelectable(false);
+    m_converter = new KisImageViewConverter(image);
+    m_canvas = new KisShapeSelectionCanvas(shapeControllerBase);
+    m_canvas->shapeManager()->addShape(this);
+
+    m_model->setObjectName("KisShapeSelectionModel");
+    m_model->moveToThread(image->thread());
+    m_canvas->setObjectName("KisShapeSelectionCanvas");
+    m_canvas->moveToThread(image->thread());
+
+    connect(this, SIGNAL(sigMoveShapes(QPointF)), SLOT(slotMoveShapes(QPointF)));
+}
+
 KisSelectionComponent* KisShapeSelection::clone(KisSelection* selection)
 {
-    /**
-     * TODO: make cloning of vector selections safe! Right now it crashes
-     * on Windows because of manipulations with timers from non-gui thread.
-     */
-    KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
-
     return new KisShapeSelection(*this, selection);
 }
 

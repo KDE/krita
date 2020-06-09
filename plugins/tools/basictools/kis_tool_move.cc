@@ -208,6 +208,9 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
         connect(moveStrategy,
                 SIGNAL(sigHandlesRectCalculated(const QRect&)),
                 SLOT(slotHandlesRectCalculated(const QRect&)));
+        connect(moveStrategy,
+                SIGNAL(sigStrokeStartedEmpty()),
+                SLOT(slotStrokeStartedEmpty()));
 
         strategy = moveStrategy;
         isMoveSelection = true;
@@ -324,6 +327,18 @@ void KisToolMove::slotHandlesRectCalculated(const QRect &handlesRect)
 void KisToolMove::slotStrokeStartedEmpty()
 {
     /**
+     * Notify that move-selection stroke ended unexpectedly
+     */
+    if (m_currentlyUsingSelection) {
+        KisCanvas2 *kisCanvas = static_cast<KisCanvas2*>(canvas());
+        kisCanvas->viewManager()->
+            showFloatingMessage(
+                i18nc("floating message in move tool",
+                      "Selected area has no pixels"),
+                QIcon(), 1000, KisFloatingMessage::High);
+    }
+
+    /**
      * Since the choice of nodes for the operation happens in the
      * stroke itself, it may happen that there are no nodes at all.
      * In such a case, we should just cancel already started stroke.
@@ -411,7 +426,7 @@ void KisToolMove::paint(QPainter& gc, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
 
-    if (m_strokeId && !m_handlesRect.isEmpty()) {
+    if (m_strokeId && !m_handlesRect.isEmpty() && !m_currentlyUsingSelection) {
         QPainterPath handles;
         handles.addRect(m_handlesRect.translated(currentOffset()));
 
@@ -518,6 +533,13 @@ void KisToolMove::startAction(KoPointerEvent *event, MoveToolMode mode)
 
     if (startStrokeImpl(mode, &pos)) {
         setMode(KisTool::PAINT_MODE);
+
+        if (m_currentlyUsingSelection) {
+            KisImageSP image = currentImage();
+            image->addJob(m_strokeId,
+                          new MoveSelectionStrokeStrategy::ShowSelectionData(false));
+        }
+
     } else {
         event->ignore();
         m_dragPos = QPoint();
@@ -557,6 +579,12 @@ void KisToolMove::endAction(KoPointerEvent *event)
     m_dragPos = QPoint();
     commitChanges();
 
+    if (m_currentlyUsingSelection) {
+        KisImageSP image = currentImage();
+        image->addJob(m_strokeId,
+                      new MoveSelectionStrokeStrategy::ShowSelectionData(true));
+    }
+
     notifyGuiAfterMove();
 
     qobject_cast<KisCanvas2*>(canvas())->updateCanvas();
@@ -564,7 +592,7 @@ void KisToolMove::endAction(KoPointerEvent *event)
 
 void KisToolMove::drag(const QPoint& newPos)
 {
-    KisImageWSP image = currentImage();
+    KisImageSP image = currentImage();
 
     QPoint offset = m_accumulatedOffset + newPos - m_dragStart;
 

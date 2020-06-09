@@ -193,6 +193,9 @@ public:
     int openGLFilteringMode(bool defaultValue = false) const;
     void setOpenGLFilteringMode(int filteringMode);
 
+    void setWidgetStyle(QString name);
+    QString widgetStyle(bool defaultValue = false);
+
     bool useOpenGLTextureBuffer(bool defaultValue = false) const;
     void setUseOpenGLTextureBuffer(bool useBuffer);
 

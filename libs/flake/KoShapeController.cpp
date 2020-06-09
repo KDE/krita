@@ -102,7 +102,18 @@ public:
 
     KUndo2Command* addShapesDirect(const QList<KoShape*> shapes, KoShapeContainer *parentShape, KUndo2Command *parent)
     {
-        return new KoShapeCreateCommand(shapeController, shapes, parentShape, parent);
+        KUndo2Command *resultCommand = 0;
+
+        if (!parentShape) {
+            resultCommand = new KUndo2Command(parent);
+            parentShape = shapeController->createParentForShapes(shapes, resultCommand);
+            KUndo2Command *addShapeCommand = new KoShapeCreateCommand(shapeController, shapes, parentShape, resultCommand);
+            resultCommand->setText(addShapeCommand->text());
+        } else {
+            resultCommand = new KoShapeCreateCommand(shapeController, shapes, parentShape, parent);
+        }
+
+        return resultCommand;
     }
 };
 
@@ -141,17 +152,12 @@ KUndo2Command *KoShapeController::addShapesDirect(const QList<KoShape *> shapes,
 
 KUndo2Command* KoShapeController::removeShape(KoShape *shape, KUndo2Command *parent)
 {
-    KUndo2Command *cmd = new KoShapeDeleteCommand(d->shapeController, shape, parent);
-    QList<KoShape*> shapes;
-    shapes.append(shape);
-    d->shapeController->shapesRemoved(shapes, cmd);
-    return cmd;
+    return removeShapes({shape}, parent);
 }
 
 KUndo2Command* KoShapeController::removeShapes(const QList<KoShape*> &shapes, KUndo2Command *parent)
 {
     KUndo2Command *cmd = new KoShapeDeleteCommand(d->shapeController, shapes, parent);
-    d->shapeController->shapesRemoved(shapes, cmd);
     return cmd;
 }
 

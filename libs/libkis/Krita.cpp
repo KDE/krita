@@ -408,6 +408,11 @@ QString Krita::krita_i18n(const QString &text)
     return i18n(text.toUtf8().constData());
 }
 
+QString Krita::krita_i18nc(const QString &context, const QString &text)
+{
+    return i18nc(context.toUtf8().constData(), text.toUtf8().constData());
+}
+
 void Krita::mainWindowIsBeingCreated(KisMainWindow *kisWindow)
 {
     Q_FOREACH(Extension *extension, d->extensions) {

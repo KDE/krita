@@ -1,20 +1,21 @@
-commit e346c86dea71e995623f3a1702ff4ade847c16c7
+commit 5f0c7d33243388e0fc840c5e2aba49e1c6147a21
 Author: Boudewijn Rempt <boud@valdyas.org>
-Date:   Thu Jan 4 11:49:42 2018 +0100
+Date:   Tue Jun 2 12:49:24 2020 +0200
 
-    Add cmake build system to lcms 2.9
+    Add cmake build system
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 new file mode 100644
-index 0000000..735dd7a
+index 0000000..213c808
 --- /dev/null
 +++ b/CMakeLists.txt
-@@ -0,0 +1,22 @@
+@@ -0,0 +1,25 @@
 +project(lcms2)
 +
 +option(BUILD_TESTS "build the test executable" OFF)
 +option(BUILD_STATIC "build the static library" OFF)
 +option(BUILD_UTILS "build the utilities executables" OFF)
++option(BUILD_PLUGINS "build the plugins" ON)
 +
 +set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 +
@@ -26,17 +27,19 @@ index 0000000..735dd7a
 +)
 +
 +add_subdirectory(src)
++
 +if(BUILD_TESTS)
 +    add_subdirectory(testbed)
 +endif(BUILD_TESTS)
++
 +if(BUILD_UTILS)
 +    add_subdirectory(utils)
 +endif(BUILD_UTILS)
 diff --git a/include/lcms2.h b/include/lcms2.h
-index 9e7ee4c..4ee1b7b 100644
+index 99e0308..3056533 100644
 --- a/include/lcms2.h
 +++ b/include/lcms2.h
-@@ -215,15 +215,14 @@ typedef int                  cmsBool;
+@@ -225,15 +225,14 @@ typedef int                  cmsBool;
  
  #endif  // CMS_USE_BIG_ENDIAN
  
@@ -56,10 +59,10 @@ index 9e7ee4c..4ee1b7b 100644
  #        else
 diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
 new file mode 100644
-index 0000000..ac575c7
+index 0000000..a8a0640
 --- /dev/null
 +++ b/src/CMakeLists.txt
-@@ -0,0 +1,64 @@
+@@ -0,0 +1,82 @@
 +# some configure checks:
 +if(WIN32)
 +    if(MSVC)
@@ -108,7 +111,25 @@ index 0000000..ac575c7
 +    cmsalpha.c
 +)
 +
-+include_directories(${CMAKE_BINARY_DIR})
++if (BUILD_PLUGINS)
++    set(lcms_SRCS ${lcms_SRCS}
++    ../plugins/fast_float/src/fast_16_tethra.c
++    ../plugins/fast_float/src/fast_8_curves.c
++    ../plugins/fast_float/src/fast_8_matsh.c
++    ../plugins/fast_float/src/fast_8_matsh_sse.c
++    ../plugins/fast_float/src/fast_8_tethra.c
++    ../plugins/fast_float/src/fast_float_15bits.c
++    ../plugins/fast_float/src/fast_float_15mats.c
++    ../plugins/fast_float/src/fast_float_cmyk.c
++    ../plugins/fast_float/src/fast_float_curves.c
++    ../plugins/fast_float/src/fast_float_matsh.c
++    ../plugins/fast_float/src/fast_float_separate.c
++    ../plugins/fast_float/src/fast_float_sup.c
++    ../plugins/fast_float/src/fast_float_tethra.c
++    )
++endif()
++
++include_directories(${CMAKE_BINARY_DIR} ../plugins/fast_float/include)
 +
 +add_library(lcms SHARED ${lcms_SRCS})
 +set_target_properties(lcms PROPERTIES OUTPUT_NAME "lcms2"
@@ -135,21 +156,8 @@ index 0000000..ca9008b
 +add_executable(testcms testcms2.c testplugin.c zoo_icc.c)
 +target_link_libraries(testcms lcms_static)
 +set_target_properties(testcms PROPERTIES COMPILE_FLAGS -DCMS_STATIC)
-diff --git a/testbed/testcms2.c b/testbed/testcms2.c
-index 5bd5447..ff650f2 100644
---- a/testbed/testcms2.c
-+++ b/testbed/testcms2.c
-@@ -28,7 +28,7 @@
- #include "testcms2.h"
- 
- // On Visual Studio, use debug CRT
--#ifdef _MSC_VER
-+#ifdef _WIN32
- #     include "crtdbg.h"
- #     include <io.h>
- #endif
 diff --git a/testbed/zoo_icc.c b/testbed/zoo_icc.c
-index f68861c..fdd0b7c 100755
+index a220db7..b5e253a 100755
 --- a/testbed/zoo_icc.c
 +++ b/testbed/zoo_icc.c
 @@ -27,6 +27,11 @@

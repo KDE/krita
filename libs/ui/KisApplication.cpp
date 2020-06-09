@@ -178,6 +178,8 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     setApplicationVersion(version);
     setWindowIcon(KisIconUtils::loadIcon("krita"));
 
+
+
     if (qgetenv("KRITA_NO_STYLE_OVERRIDE").isEmpty()) {
         QStringList styles = QStringList() << "breeze" << "fusion" << "plastique";
         if (!styles.contains(style()->objectName().toLower())) {
@@ -191,10 +193,20 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
                 }
             }
         }
+
+        // if style is set from config, try to load that
+        KisConfig cfg(true);
+        QString widgetStyleFromConfig = cfg.widgetStyle();
+        if(widgetStyleFromConfig != "") {
+            qApp->setStyle(widgetStyleFromConfig);
+        }
+
     }
     else {
         qDebug() << "Style override disabled, using" << style()->objectName();
     }
+
+
 }
 
 #if defined(Q_OS_WIN) && defined(ENV32BIT)

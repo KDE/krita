@@ -560,7 +560,7 @@ void KisPredefinedBrushChooser::setImage(KisImageWSP image)
     m_image = image;
 }
 
-void KisPredefinedBrushChooser::setHSLBrusTipEnabled(bool value)
+void KisPredefinedBrushChooser::setHSLBrushTipEnabled(bool value)
 {
     m_hslBrushTipEnabled = value;
 }

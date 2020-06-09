@@ -46,8 +46,8 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0" colspan="2">
-      <widget class="QLabel" name="textLabel1">
+     <item row="4" column="0">
+      <widget class="QLabel" name="labelRightColor">
        <property name="font">
         <font>
          <family>Sans Serif</family>
@@ -60,11 +60,74 @@
         </font>
        </property>
        <property name="text">
-        <string>Segment Color</string>
+        <string>Right:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>
-     <item row="0" column="2">
+     <item row="4" column="2">
+      <widget class="KisColorButton" name="rightColorButton">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Sans Serif</family>
+         <pointsize>9</pointsize>
+         <weight>50</weight>
+         <italic>false</italic>
+         <bold>false</bold>
+         <underline>false</underline>
+         <strikeout>false</strikeout>
+        </font>
+       </property>
+       <property name="focusPolicy">
+        <enum>Qt::ClickFocus</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="3">
+      <widget class="KisIntParseSpinBox" name="intNumInputLeftOpacity">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <family>Sans Serif</family>
+         <pointsize>9</pointsize>
+         <weight>50</weight>
+         <italic>false</italic>
+         <bold>false</bold>
+         <underline>false</underline>
+         <strikeout>false</strikeout>
+        </font>
+       </property>
+       <property name="focusPolicy">
+        <enum>Qt::ClickFocus</enum>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+       <property name="value">
+        <number>100</number>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3">
       <widget class="QLabel" name="textLabel2">
        <property name="font">
         <font>
@@ -103,7 +166,27 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
+     <item row="2" column="1">
+      <widget class="QRadioButton" name="leftForegroundRadioButton">
+       <property name="text">
+        <string>Foreground</string>
+       </property>
+       <attribute name="buttonGroup">
+        <string notr="true">leftBtnGroup</string>
+       </attribute>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QRadioButton" name="rightForegroundRadioButton">
+       <property name="text">
+        <string>Foreground</string>
+       </property>
+       <attribute name="buttonGroup">
+        <string notr="true">rightBtnGroup</string>
+       </attribute>
+      </widget>
+     </item>
+     <item row="1" column="2">
       <widget class="KisColorButton" name="leftColorButton">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -133,38 +216,8 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="2">
-      <widget class="KisIntParseSpinBox" name="intNumInputLeftOpacity">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Sans Serif</family>
-         <pointsize>9</pointsize>
-         <weight>50</weight>
-         <italic>false</italic>
-         <bold>false</bold>
-         <underline>false</underline>
-         <strikeout>false</strikeout>
-        </font>
-       </property>
-       <property name="focusPolicy">
-        <enum>Qt::ClickFocus</enum>
-       </property>
-       <property name="maximum">
-        <number>100</number>
-       </property>
-       <property name="value">
-        <number>100</number>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="labelRightColor">
+     <item row="0" column="0" colspan="3">
+      <widget class="QLabel" name="textLabel1">
        <property name="font">
         <font>
          <family>Sans Serif</family>
@@ -177,44 +230,47 @@
         </font>
        </property>
        <property name="text">
-        <string>Right:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        <string>Segment Color</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="KisColorButton" name="rightColorButton">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
+     <item row="3" column="1">
+      <widget class="QRadioButton" name="leftBackgroundRadioButton">
+       <property name="text">
+        <string>Background</string>
        </property>
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>30</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Sans Serif</family>
-         <pointsize>9</pointsize>
-         <weight>50</weight>
-         <italic>false</italic>
-         <bold>false</bold>
-         <underline>false</underline>
-         <strikeout>false</strikeout>
-        </font>
-       </property>
-       <property name="focusPolicy">
-        <enum>Qt::ClickFocus</enum>
-       </property>
+       <attribute name="buttonGroup">
+        <string notr="true">leftBtnGroup</string>
+       </attribute>
       </widget>
      </item>
-     <item row="2" column="2">
+     <item row="1" column="1">
+      <widget class="QRadioButton" name="leftColorRadioButton">
+       <property name="text">
+        <string>Color</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+       <attribute name="buttonGroup">
+        <string notr="true">leftBtnGroup</string>
+       </attribute>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QRadioButton" name="rightColorRadioButton">
+       <property name="text">
+        <string>Color</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+       <attribute name="buttonGroup">
+        <string notr="true">rightBtnGroup</string>
+       </attribute>
+      </widget>
+     </item>
+     <item row="4" column="3">
       <widget class="KisIntParseSpinBox" name="intNumInputRightOpacity">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Ignored">
@@ -242,6 +298,16 @@
        <property name="value">
         <number>100</number>
        </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="QRadioButton" name="rightBackgroundRadioButton">
+       <property name="text">
+        <string>Background</string>
+       </property>
+       <attribute name="buttonGroup">
+        <string notr="true">rightBtnGroup</string>
+       </attribute>
       </widget>
      </item>
     </layout>
@@ -355,14 +421,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisIntParseSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>kis_int_parse_spin_box.h</header>
-  </customwidget>
-  <customwidget>
    <class>KisColorButton</class>
    <extends>QPushButton</extends>
    <header>kis_color_button.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_int_parse_spin_box.h</header>
   </customwidget>
   <customwidget>
    <class>KisGradientSliderWidget</class>
@@ -372,4 +438,8 @@
  </customwidgets>
  <resources/>
  <connections/>
+ <buttongroups>
+  <buttongroup name="rightBtnGroup"/>
+  <buttongroup name="leftBtnGroup"/>
+ </buttongroups>
 </ui>

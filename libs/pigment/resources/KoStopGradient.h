@@ -20,6 +20,7 @@
 
 #include <QPair>
 #include <QGradient>
+#include <QtAlgorithms>
 
 #include "KoColor.h"
 #include <resources/KoAbstractGradient.h>
@@ -27,12 +28,21 @@
 #include <kritapigment_export.h>
 #include <boost/operators.hpp>
 
-typedef QPair<qreal, KoColor> KoGradientStop;
+enum KoGradientStopType 
+{
+    COLORSTOP,
+    FOREGROUNDSTOP,
+    BACKGROUNDSTOP
+};
+
+typedef QPair<KoColor, KoGradientStopType> KoGradientStopInfo;
+
+typedef QPair<qreal, KoGradientStopInfo> KoGradientStop;
 
 struct KoGradientStopValueSort
 {
     inline bool operator() (const KoGradientStop& a, const KoGradientStop& b) {
-        return (a.second.toQColor().valueF() < b.second.toQColor().valueF());
+        return (a.second.first.toQColor().valueF() < b.second.first.toQColor().valueF());
     }
 };
 
@@ -43,6 +53,7 @@ class KRITAPIGMENT_EXPORT KoStopGradient : public KoAbstractGradient, public boo
 {
 
 public:
+    
     explicit KoStopGradient(const QString &filename = QString());
     ~KoStopGradient() override;
 
@@ -69,7 +80,12 @@ public:
 
     /// Sets the gradient stops
     void setStops(QList<KoGradientStop> stops);
-    QList<KoGradientStop> stops() const;
+    QList<KoGradientStop> stops() const;    
+
+    /// reimplemented
+    bool hasVariableColors() const override;
+    /// reimplemented
+    void setVariableColors(const KoColor& foreground, const KoColor& background) override;
 
     /// reimplemented
     QString defaultFileExtension() const override;
@@ -89,6 +105,7 @@ public:
 protected:
 
     QList<KoGradientStop> m_stops;
+    bool m_hasVariableStops = false;
     QPointF m_start;
     QPointF m_stop;
     QPointF m_focalPoint;

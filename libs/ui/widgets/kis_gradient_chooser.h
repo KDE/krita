@@ -19,6 +19,7 @@
 #define KIS_GRADIENT_CHOOSER_H_
 
 #include <KoDialog.h>
+#include <KoColor.h>
 
 #include <QFrame>
 #include <QToolButton>
@@ -40,7 +41,7 @@ class KisCustomGradientDialog : public KoDialog
 
 public:
 
-    KisCustomGradientDialog(KoAbstractGradient* gradient, QWidget *parent, const char *name);
+    KisCustomGradientDialog(KoAbstractGradient* gradient, QWidget *parent, const char *name, KoColor fgColor, KoColor bgColor);
 
 private:
 
@@ -70,6 +71,8 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     void slotUpdateIcons();
+    void setForegroundColor(KoColor);
+    void setBackgroundColor(KoColor);
 
 private Q_SLOTS:
     virtual void update(KoResource * resource);
@@ -82,6 +85,8 @@ private:
 private:
     QLabel *m_lbName;
     KoResourceItemChooser * m_itemChooser;
+
+    KoColor m_foregroundColor, m_backgroundColor;
 
     QToolButton* m_addGradient;
     QPushButton* m_editGradient;

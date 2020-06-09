@@ -39,7 +39,7 @@ public:
 
 
     KisStopGradientEditor(QWidget *parent);
-    KisStopGradientEditor(KoStopGradient* gradient, QWidget *parent, const char* name, const QString& caption);
+    KisStopGradientEditor(KoStopGradient* gradient, QWidget *parent, const char* name, const QString& caption, KoColor fgColor, KoColor bgColor);
 
     void setCompactMode(bool value);
 
@@ -54,8 +54,11 @@ Q_SIGNALS:
 
 private:
      KoStopGradient* m_gradient;
+     KoColor m_fgColor, m_bgColor;
+
 private Q_SLOTS:
     void stopChanged(int stop);
+    void stopTypeChanged();
     void colorChanged(const KoColor& color);
     void opacityChanged(qreal value);
     void nameChanged();

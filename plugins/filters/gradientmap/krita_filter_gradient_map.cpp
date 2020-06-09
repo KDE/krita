@@ -85,10 +85,10 @@ void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
             KoGradientStop leftStop, rightStop;
             if (!gradient.stopsAt(leftStop, rightStop, grey)) continue;
             if (std::abs(grey - leftStop.first) < std::abs(grey - rightStop.first)) {
-                outColor = leftStop.second;
+                outColor = leftStop.second.first;
             }
             else {
-                outColor = rightStop.second;
+                outColor = rightStop.second.first;
             }
         }
         else if (colorMode == ColorMode::Dither) {
@@ -96,10 +96,10 @@ void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
             if (!gradient.stopsAt(leftStop, rightStop, grey)) continue;
             qreal localT = (grey - leftStop.first) / (rightStop.first - leftStop.first);
             if (localT < ditherUtil.threshold(QPoint(it.x(), it.y()))) {
-                outColor = leftStop.second;
+                outColor = leftStop.second.first;
             }
             else {
-                outColor = rightStop.second;
+                outColor = rightStop.second.first;
             }
         }
         else {

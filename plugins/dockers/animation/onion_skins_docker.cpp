@@ -89,6 +89,7 @@ OnionSkinsDocker::OnionSkinsDocker(QWidget *parent) :
         m_filterButtonGroup->setExclusive(false);
         QWidget* filterButtonContainer = ui->colorFilterGroupbox;
         QLayout* filterButtonLayout = ui->filterButtons;
+        filterButtonLayout->setSpacing(0);
         QVector<QColor> availableColors = scm.allColorLabels();
         QSet<int> viableColors;
         for (int i = 0; i < availableColors.count(); i++) {

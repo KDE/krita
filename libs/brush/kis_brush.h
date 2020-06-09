@@ -49,6 +49,7 @@ enum enumBrushType {
 };
 
 static const qreal DEFAULT_SOFTNESS_FACTOR = 1.0;
+static const qreal DEFAULT_LIGHTNESS_STRENGTH = 1.0;
 
 class KisBrush;
 typedef QSharedPointer<KisBrush> KisBrushSP;
@@ -266,7 +267,8 @@ public:
               const KoColor& color,
               KisDabShape const& shape,
               const KisPaintInformation& info,
-              double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
+              double subPixelX = 0, double subPixelY = 0, 
+              qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR, qreal lightnessStrength = DEFAULT_LIGHTNESS_STRENGTH) const;
 
     /**
      * clear dst and fill it with a mask colored with the corresponding colors of src
@@ -275,7 +277,8 @@ public:
               const KisPaintDeviceSP src,
               KisDabShape const& shape,
               const KisPaintInformation& info,
-              double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
+              double subPixelX = 0, double subPixelY = 0, 
+              qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR, qreal lightnessStrength = DEFAULT_LIGHTNESS_STRENGTH) const;
 
 
     virtual bool hasColor() const;
@@ -313,7 +316,15 @@ public:
             ColoringInformation* coloringInfo,
             KisDabShape const&,
             const KisPaintInformation& info,
-            double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
+            double subPixelX, double subPixelY,
+            qreal softnessFactor, qreal lightnessStrength) const;
+
+    virtual void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
+        ColoringInformation* coloringInfo,
+        KisDabShape const&,
+        const KisPaintInformation& info,
+        double subPixelX = 0, double subPixelY = 0,
+        qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
 
     /**

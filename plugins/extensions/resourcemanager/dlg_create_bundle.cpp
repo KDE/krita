@@ -407,8 +407,8 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
     KisResourceModel* model = KisResourceModelProvider::resourceModel(standarizedResourceType);
     for (int i = 0; i < model->rowCount(); i++) {
         QModelIndex idx = model->index(i, 0);
-        QString filename = model->data(idx, Qt::UserRole + KisResourceModel::Filename).toString();
-        int id = model->data(idx, Qt::UserRole + KisResourceModel::Id).toInt();
+        QString filename = model->data(idx, Qt::UserRole + KisAbstractResourceModel::Filename).toString();
+        int id = model->data(idx, Qt::UserRole + KisAbstractResourceModel::Id).toInt();
 
         if (resourceType == ResourceType::Gradients) {
             if (filename == "Foreground to Transparent" || filename == "Foreground to Background") {
@@ -416,8 +416,8 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
             }
         }
 
-        QImage image = (model->data(idx, Qt::UserRole + KisResourceModel::Thumbnail)).value<QImage>();
-        QString name = model->data(idx, Qt::UserRole + KisResourceModel::Name).toString();
+        QImage image = (model->data(idx, Qt::UserRole + KisAbstractResourceModel::Thumbnail)).value<QImage>();
+        QString name = model->data(idx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
 
         // Function imageToIcon(QImage()) returns a square white pixmap and a warning "QImage::scaled: Image is a null image"
         //  while QPixmap() returns an empty pixmap.

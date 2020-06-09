@@ -43,13 +43,13 @@ void KisResourceItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
 
     QRect innerRect = option.rect.adjusted(2, 2, -2, -2);
 
-    QImage thumbnail = index.data(Qt::UserRole + KisResourceModel::Thumbnail).value<QImage>();
+    QImage thumbnail = index.data(Qt::UserRole + KisAbstractResourceModel::Thumbnail).value<QImage>();
 
     QSize imageSize = thumbnail.size();
 
     painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
-    QString resourceType = index.data(Qt::UserRole + KisResourceModel::ResourceType).toString();
+    QString resourceType = index.data(Qt::UserRole + KisAbstractResourceModel::ResourceType).toString();
     // XXX: don't use a hardcoded string here to identify the resource type
     if (resourceType == ResourceType::Gradients) {
         m_checkerPainter.paint(*painter, innerRect);
@@ -66,7 +66,7 @@ void KisResourceItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
     else if (resourceType == ResourceType::Workspaces || resourceType == ResourceType::WindowLayouts) {
         // TODO: thumbnails for workspaces and window layouts?
         painter->fillRect(innerRect, Qt::white);
-        QString name = index.data(Qt::UserRole + KisResourceModel::Name).toString();
+        QString name = index.data(Qt::UserRole + KisAbstractResourceModel::Name).toString();
         QPen before = painter->pen();
         painter->setPen(Qt::black);
         painter->drawText(innerRect, Qt::TextWordWrap, name.split("_").join(" "));

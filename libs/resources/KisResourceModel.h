@@ -84,11 +84,11 @@ public:
     virtual QModelIndex indexFromResource(KoResourceSP resource) const = 0;
 
     /**
-     * @brief removeResource
+     * @brief setResourceInactive deactivates the specified resource
      * @param index
      * @return
      */
-    virtual bool removeResource(const QModelIndex &index) = 0;
+    virtual bool setResourceInactive(const QModelIndex &index) = 0;
 
     /**
      * @brief importResourceFile
@@ -125,11 +125,11 @@ public:
     virtual bool renameResource(KoResourceSP resource, const QString &name) = 0;
 
     /**
-     * @brief removeResource
+     * @brief setResourceInactive sets the specified resource's status to inactive
      * @param resource
      * @return
      */
-    virtual bool removeResource(KoResourceSP resource) = 0;
+    virtual bool setResourceInactive(KoResourceSP resource) = 0;
 
     /**
      * @brief setResourceMetaData
@@ -172,19 +172,13 @@ public:
      */
     KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const override;
     QModelIndex indexFromResource(KoResourceSP resource) const override;
-    bool removeResource(const QModelIndex &index) override;
-    bool removeResource(KoResourceSP resource) override;
+    bool setResourceInactive(const QModelIndex &index) override;
+    bool setResourceInactive(KoResourceSP resource) override;
     bool importResourceFile(const QString &filename) override;
     bool addResource(KoResourceSP resource, const QString &storageId = QString()) override;
     bool updateResource(KoResourceSP resource) override;
     bool renameResource(KoResourceSP resource, const QString &name) override;
     bool setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata) override;
-
-Q_SIGNALS:
-
-    // XXX: emit these signals
-    void beforeResourcesLayoutReset(QModelIndex activateAfterReformat);
-    void afterResourcesLayoutReset();
 
 private Q_SLOTS:
 
@@ -259,12 +253,12 @@ public:
 
     KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const override;
     QModelIndex indexFromResource(KoResourceSP resource) const override;
-    bool removeResource(const QModelIndex &index) override;
+    bool setResourceInactive(const QModelIndex &index) override;
     bool importResourceFile(const QString &filename) override;
     bool addResource(KoResourceSP resource, const QString &storageId = QString()) override;
     bool updateResource(KoResourceSP resource) override;
     bool renameResource(KoResourceSP resource, const QString &name) override;
-    bool removeResource(KoResourceSP resource) override;
+    bool setResourceInactive(KoResourceSP resource) override;
     bool setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata) override;
 
 

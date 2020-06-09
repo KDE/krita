@@ -68,11 +68,11 @@ QModelIndex KisTagFilterResourceProxyModel::indexFromResource(KoResourceSP resou
     return QModelIndex();
 }
 
-bool KisTagFilterResourceProxyModel::removeResource(const QModelIndex &index)
+bool KisTagFilterResourceProxyModel::setResourceInactive(const QModelIndex &index)
 {
     KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
     if (source) {
-        return source->removeResource(mapToSource(index));
+        return source->setResourceInactive(mapToSource(index));
     }
     return false;
 }
@@ -113,11 +113,11 @@ bool KisTagFilterResourceProxyModel::renameResource(KoResourceSP resource, const
     return false;
 }
 
-bool KisTagFilterResourceProxyModel::removeResource(KoResourceSP resource)
+bool KisTagFilterResourceProxyModel::setResourceInactive(KoResourceSP resource)
 {
     KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
     if (source) {
-        return source->removeResource(resource);
+        return source->setResourceInactive(resource);
     }
     return false;
 }

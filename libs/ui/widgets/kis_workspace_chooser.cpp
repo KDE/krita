@@ -77,7 +77,7 @@ void KisWorkspaceDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
         painter->fillRect(option.rect, option.palette.base());
     }
 
-    QString name = index.data(Qt::UserRole + KisResourceModel::Name).toString();
+    QString name = index.data(Qt::UserRole + KisAbstractResourceModel::Name).toString();
     painter->drawText(option.rect.x() + 5, option.rect.y() + painter->fontMetrics().ascent() + 5, name);
 }
 

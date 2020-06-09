@@ -162,8 +162,8 @@ void KisPaletteChooserPrivate::Delegate::paint(QPainter *painter,
     if (!index.isValid())
         return;
 
-    QImage preview = index.data(Qt::UserRole + KisResourceModel::Thumbnail).value<QImage>();
-    QString name = index.data(Qt::UserRole + KisResourceModel::Name).toString();
+    QImage preview = index.data(Qt::UserRole + KisAbstractResourceModel::Thumbnail).value<QImage>();
+    QString name = index.data(Qt::UserRole + KisAbstractResourceModel::Name).toString();
 
     QRect previewRect(option.rect.x() + 2,
                       option.rect.y() + 2,

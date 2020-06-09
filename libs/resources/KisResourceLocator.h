@@ -166,7 +166,7 @@ private:
      * @param optional: the storage that contains the given resource
      * @return
      */
-    bool removeResource(int resourceId, const QString &storageLocation = QString());
+    bool setResourceInactive(int resourceId, const QString &storageLocation = QString());
 
     /**
      * @brief importResourceFromFile

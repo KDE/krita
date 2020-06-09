@@ -196,7 +196,7 @@ QVector<QString> KisFavoriteResourceManager::favoritePresetNamesList()
     for (int i = 0; i < m_maxPresets; i++) {
         QModelIndex index = m_resourcesProxyModel->index(i, 0);
         if (index.isValid()) {
-            QString name = m_resourcesProxyModel->data(index, Qt::UserRole + KisResourceModel::Name).toString();
+            QString name = m_resourcesProxyModel->data(index, Qt::UserRole + KisAbstractResourceModel::Name).toString();
             names << name;
         }  else {
             break; // no more valid indices
@@ -213,7 +213,7 @@ QList<QImage> KisFavoriteResourceManager::favoritePresetImages()
     for (int i = 0; i < m_maxPresets; i++) {
         QModelIndex index = m_resourcesProxyModel->index(i, 0);
         if (index.isValid()) {
-            QVariant tmp = m_resourcesProxyModel->data(index, Qt::UserRole + KisResourceModel::Thumbnail);
+            QVariant tmp = m_resourcesProxyModel->data(index, Qt::UserRole + KisAbstractResourceModel::Thumbnail);
             QImage image = tmp.value<QImage>();
             images << image;
         } else {

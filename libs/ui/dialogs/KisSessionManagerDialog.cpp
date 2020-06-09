@@ -36,7 +36,7 @@ KisSessionManagerDialog::KisSessionManagerDialog(QWidget *parent)
 
     m_model = KisResourceModelProvider::resourceModel(ResourceType::Sessions);
     lstSessions->setModel(m_model);
-    lstSessions->setModelColumn(KisResourceModel::Name);
+    lstSessions->setModelColumn(KisAbstractResourceModel::Name);
 
 
     connect(m_model, SIGNAL(beforeResourcesLayoutReset(QModelIndex)), this, SLOT(slotModelAboutToBeReset(QModelIndex)));
@@ -125,7 +125,7 @@ KisSessionResourceSP KisSessionManagerDialog::getSelectedSession() const
     QModelIndex idx = lstSessions->currentIndex();
     if (idx.isValid()) {
         KoResourceServer<KisSessionResource> *server = KisResourceServerProvider::instance()->sessionServer();
-        QString name = m_model->data(idx, Qt::UserRole + KisResourceModel::Name).toString();
+        QString name = m_model->data(idx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
         return server->resourceByName(name);
     }
     return nullptr;
@@ -135,7 +135,7 @@ void KisSessionManagerDialog::slotDeleteSession()
 {
     QModelIndex idx = lstSessions->currentIndex();
     if (idx.isValid()) {
-        m_model->removeResource(lstSessions->currentIndex());
+        m_model->setResourceInactive(lstSessions->currentIndex());
     }
 }
 
@@ -148,7 +148,7 @@ void KisSessionManagerDialog::slotModelAboutToBeReset(QModelIndex)
 {
     QModelIndex idx = lstSessions->currentIndex();
     if (idx.isValid()) {
-        m_lastSessionId = m_model->data(idx, Qt::UserRole + KisResourceModel::Id).toInt();
+        m_lastSessionId = m_model->data(idx, Qt::UserRole + KisAbstractResourceModel::Id).toInt();
     }
 }
 
@@ -156,7 +156,7 @@ void KisSessionManagerDialog::slotModelReset()
 {
     for (int i = 0; i < m_model->rowCount(); i++) {
         QModelIndex idx = m_model->index(i, 0);
-        int id = m_model->data(idx, Qt::UserRole + KisResourceModel::Id).toInt();
+        int id = m_model->data(idx, Qt::UserRole + KisAbstractResourceModel::Id).toInt();
         if (id == m_lastSessionId) {
             lstSessions->setCurrentIndex(idx);
         }

@@ -124,9 +124,6 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
         d->tagFilterProxyModel->setSourceModel(d->resourceModel);
     }
 
-    connect(d->resourceModel, SIGNAL(beforeResourcesLayoutReset(QModelIndex)), SLOT(slotBeforeResourcesLayoutReset(QModelIndex)));
-    connect(d->resourceModel, SIGNAL(afterResourcesLayoutReset()), SLOT(slotAfterResourcesLayoutReset()));
-
     d->view = new KisResourceItemListView(this);
     d->view->setObjectName("ResourceItemview");
 
@@ -135,7 +132,7 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
     d->view->setSelectionMode(QAbstractItemView::SingleSelection);
     d->view->viewport()->installEventFilter(this);
 
-    connect(d->view, SIGNAL(currentResourceChanged(QModelIndex)), this, SLOT(activated(QModelIndex)));
+    connect(d->view, SIGNAL(crrentResourceChanged(QModelIndex)), this, SLOT(activated(QModelIndex)));
     connect(d->view, SIGNAL(currentResourceClicked(QModelIndex)), this, SLOT(clicked(QModelIndex)));
     connect(d->view, SIGNAL(contextMenuRequested(QPoint)), this, SLOT(contextMenuRequested(QPoint)));
     connect(d->view, SIGNAL(sigSizeChanged()), this, SLOT(updateView()));
@@ -240,7 +237,7 @@ void KisResourceItemChooser::slotButtonClicked(int button)
     else if (button == Button_Remove) {
         QModelIndex index = d->view->currentIndex();
         if (index.isValid()) {
-            d->tagFilterProxyModel->removeResource(index);
+            d->tagFilterProxyModel->setResourceInactive(index);
         }
         int row = index.row();
         int rowMin = --row;
@@ -313,22 +310,6 @@ void KisResourceItemChooser::setCurrentResource(KoResourceSP resource)
     QModelIndex index = d->resourceModel->indexFromResource(resource);
     d->view->setCurrentIndex(index);
     updatePreview(index);
-}
-
-void KisResourceItemChooser::slotBeforeResourcesLayoutReset(QModelIndex activateAfterReset)
-{
-    QModelIndex proxyIndex = d->tagFilterProxyModel->mapFromSource(d->tagFilterProxyModel->mapFromSource(activateAfterReset));
-    d->savedResourceWhileReset = proxyIndex.isValid() ? proxyIndex : d->view->currentIndex();
-}
-
-void KisResourceItemChooser::slotAfterResourcesLayoutReset()
-{
-    if (d->savedResourceWhileReset.isValid()) {
-        this->blockSignals(true);
-        setCurrentItem(d->savedResourceWhileReset.row());
-        this->blockSignals(false);
-    }
-    d->savedResourceWhileReset = QModelIndex();
 }
 
 void KisResourceItemChooser::setPreviewOrientation(Qt::Orientation orientation)
@@ -410,7 +391,7 @@ void KisResourceItemChooser::updatePreview(const QModelIndex &idx)
         return;
     }
 
-    QImage image = idx.data(Qt::UserRole + KisResourceModel::Thumbnail).value<QImage>();
+    QImage image = idx.data(Qt::UserRole + KisAbstractResourceModel::Thumbnail).value<QImage>();
 
     if (image.format() != QImage::Format_RGB32 &&
         image.format() != QImage::Format_ARGB32 &&

@@ -435,18 +435,18 @@ QModelIndex KisAllResourcesModel::indexFromResource(KoResourceSP resource) const
 
 //static int s_i4 {0};
 
-bool KisAllResourcesModel::removeResource(const QModelIndex &index)
+bool KisAllResourcesModel::setResourceInactive(const QModelIndex &index)
 {
     if (index.row() > rowCount()) return false;
     if (index.column() > d->columnCount) return false;
     
-    //qDebug() << "KisAllResourcesModel::removeResource" << s_i4 << d->resourceType; s_i4++;
+    //qDebug() << "KisAllResourcesModel::setResourceInactive" << s_i4 << d->resourceType; s_i4++;
 
     bool pos = d->resourcesQuery.seek(index.row());
     if (!pos) return false;
     
     int resourceId = d->resourcesQuery.value("id").toInt();
-    if (!KisResourceLocator::instance()->removeResource(resourceId)) {
+    if (!KisResourceLocator::instance()->setResourceInactive(resourceId)) {
         qWarning() << "Failed to remove resource" << resourceId;
         return false;
     }
@@ -455,13 +455,13 @@ bool KisAllResourcesModel::removeResource(const QModelIndex &index)
 
 //static int s_i5 {0};
 
-bool KisAllResourcesModel::removeResource(KoResourceSP resource)
+bool KisAllResourcesModel::setResourceInactive(KoResourceSP resource)
 {
     if (!resource || !resource->valid()) return false;
 
     //qDebug() << "KisAllResourcesModel::remvoeResource 2" << s_i5 << d->resourceType; s_i5++;
 
-    if (!KisResourceLocator::instance()->removeResource(resource->resourceId())) {
+    if (!KisResourceLocator::instance()->setResourceInactive(resource->resourceId())) {
         qWarning() << "Failed to remove resource" << resource->resourceId();
         return false;
     }
@@ -545,8 +545,6 @@ bool KisAllResourcesModel::resetQuery()
     QElapsedTimer t;
     t.start();
 
-    emit beforeResourcesLayoutReset(QModelIndex());
-
     beginResetModel();
     bool r = d->resourcesQuery.exec();
     if (!r) {
@@ -555,7 +553,6 @@ bool KisAllResourcesModel::resetQuery()
     d->cachedRowCount = -1;
 
     endResetModel();
-    emit afterResourcesLayoutReset();
 
     qDebug() << "KisAllResourcesModel::resetQuery for" << d->resourceType << "took" << t.elapsed() << "ms";
 
@@ -646,11 +643,11 @@ QModelIndex KisResourceModel::indexFromResource(KoResourceSP resource) const
     return QModelIndex();
 }
 
-bool KisResourceModel::removeResource(const QModelIndex &index)
+bool KisResourceModel::setResourceInactive(const QModelIndex &index)
 {
     KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
     if (source) {
-        return source->removeResource(mapToSource(index));
+        return source->setResourceInactive(mapToSource(index));
     }
     return false;
 }
@@ -691,11 +688,11 @@ bool KisResourceModel::renameResource(KoResourceSP resource, const QString &name
     return false;
 }
 
-bool KisResourceModel::removeResource(KoResourceSP resource)
+bool KisResourceModel::setResourceInactive(KoResourceSP resource)
 {
     KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
     if (source) {
-        return source->removeResource(resource);
+        return source->setResourceInactive(resource);
     }
     return false;
 }

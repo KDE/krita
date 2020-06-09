@@ -43,12 +43,12 @@ public:
 public:
     KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const override;
     QModelIndex indexFromResource(KoResourceSP resource) const override;
-    bool removeResource(const QModelIndex &index) override;
+    bool setResourceInactive(const QModelIndex &index) override;
     bool importResourceFile(const QString &filename) override;
     bool addResource(KoResourceSP resource, const QString &storageId = QString()) override;
     bool updateResource(KoResourceSP resource) override;
     bool renameResource(KoResourceSP resource, const QString &name) override;
-    bool removeResource(KoResourceSP resource) override;
+    bool setResourceInactive(KoResourceSP resource) override;
     bool setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata) override;
 
     /**

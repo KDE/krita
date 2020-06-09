@@ -85,9 +85,9 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
         return;
     }
 
-    bool dirty = index.data(Qt::UserRole + KisResourceModel::Dirty).toBool();
+    bool dirty = index.data(Qt::UserRole + KisAbstractResourceModel::Dirty).toBool();
 
-    QImage preview = index.data(Qt::UserRole + KisResourceModel::Thumbnail).value<QImage>();
+    QImage preview = index.data(Qt::UserRole + KisAbstractResourceModel::Thumbnail).value<QImage>();
 
     if (preview.isNull()) {
         qDebug() << "KisPresetDelegate::paint:  Preview is null";
@@ -95,7 +95,7 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
         return;
     }
 
-    QMap<QString, QVariant> metaData = index.data(Qt::UserRole + KisResourceModel::MetaData).value<QMap<QString, QVariant>>();
+    QMap<QString, QVariant> metaData = index.data(Qt::UserRole + KisAbstractResourceModel::MetaData).value<QMap<QString, QVariant>>();
 
     QRect paintRect = option.rect.adjusted(1, 1, -1, -1);
     if (!m_showText) {
@@ -126,7 +126,7 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
 
 //        painter->drawText(pixSize.width() + 10, option.rect.y() + option.rect.height() - 10, brushSizeText); // brush size
 
-        QString presetDisplayName = index.data(Qt::UserRole + KisResourceModel::Name).toString().replace("_", " "); // don't need underscores that might be part of the file name
+        QString presetDisplayName = index.data(Qt::UserRole + KisAbstractResourceModel::Name).toString().replace("_", " "); // don't need underscores that might be part of the file name
         painter->drawText(pixSize.width() + 40, option.rect.y() + option.rect.height() - 10, presetDisplayName.append(dirtyPresetIndicator));
 
     }
@@ -201,11 +201,11 @@ public:
         return QModelIndex();
     }
 
-    bool removeResource(const QModelIndex &index) override
+    bool setResourceInactive(const QModelIndex &index) override
     {
         KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
         if (source) {
-            return source->removeResource(mapToSource(index));
+            return source->setResourceInactive(mapToSource(index));
         }
         return false;
     }
@@ -246,11 +246,11 @@ public:
         return false;
     }
 
-    bool removeResource(KoResourceSP resource) override
+    bool setResourceInactive(KoResourceSP resource) override
     {
         KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
         if (source) {
-            return source->removeResource(resource);
+            return source->setResourceInactive(resource);
         }
         return false;
     }
@@ -278,7 +278,7 @@ protected:
         if (m_id.isEmpty()) return true;
 
         QModelIndex idx = sourceModel()->index(source_row, 0, source_parent);
-        QMap<QString, QVariant> metadata = sourceModel()->data(idx, Qt::UserRole + KisResourceModel::MetaData).toMap();
+        QMap<QString, QVariant> metadata = sourceModel()->data(idx, Qt::UserRole + KisAbstractResourceModel::MetaData).toMap();
         if (metadata.contains("paintopid")) {
             return (metadata["paintopid"].toString() == m_id);
         }
@@ -293,8 +293,8 @@ protected:
 
     bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override
     {
-        QString nameLeft = sourceModel()->data(source_left, Qt::UserRole + KisResourceModel::Name).toString();
-        QString nameRight = sourceModel()->data(source_right, Qt::UserRole + KisResourceModel::Name).toString();
+        QString nameLeft = sourceModel()->data(source_left, Qt::UserRole + KisAbstractResourceModel::Name).toString();
+        QString nameRight = sourceModel()->data(source_right, Qt::UserRole + KisAbstractResourceModel::Name).toString();
         return nameLeft < nameRight;
     }
 
@@ -396,7 +396,7 @@ void KisPresetChooser::slotCurrentPresetChanged()
     QModelIndex index = m_paintOpFilterModel->indexFromResource(currentResource);
     emit m_paintOpFilterModel->dataChanged(index,
                                            index,
-                                           {Qt::UserRole + KisResourceModel::Thumbnail});
+                                           {Qt::UserRole + KisAbstractResourceModel::Thumbnail});
 }
 
 void KisPresetChooser::updateViewSettings()

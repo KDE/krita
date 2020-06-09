@@ -188,7 +188,7 @@ void DlgDbExplorer::slotTbResourceItemSelected()
 {
     QModelIndex idx = m_page->tableResources->selectionModel()->selectedIndexes().first();
 
-    QImage thumb = idx.data(Qt::UserRole + KisResourceModel::Thumbnail).value<QImage>();
+    QImage thumb = idx.data(Qt::UserRole + KisAbstractResourceModel::Thumbnail).value<QImage>();
     Qt::TransformationMode mode = Qt::SmoothTransformation;
     if (thumb.size().width() < 100 && thumb.size().height() < 100) {
         mode = Qt::FastTransformation;

@@ -392,7 +392,7 @@ QVariant TimelineFramesModel::data(const QModelIndex &index, int role) const
     case Qt::TextAlignmentRole: {
         return QVariant(Qt::AlignHCenter | Qt::AlignVCenter);
     }
-    case Qt::UserRole + KisResourceModel::LargeThumbnail: {
+    case Qt::UserRole + KisAbstractResourceModel::LargeThumbnail: {
         KisNodeDummy *dummy = m_d->converter->dummyFromRow(index.row());
         if (!dummy) {
             return  QVariant();

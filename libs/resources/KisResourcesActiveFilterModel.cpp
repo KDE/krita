@@ -65,11 +65,11 @@ QModelIndex KisResourceModel::indexFromResource(KoResourceSP resource) const
     return QModelIndex();
 }
 
-bool KisResourceModel::removeResource(const QModelIndex &index)
+bool KisResourceModel::setResourceInactive(const QModelIndex &index)
 {
     KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
     if (source) {
-        return source->removeResource(mapToSource(index));
+        return source->setResourceInactive(mapToSource(index));
     }
     return false;
 }
@@ -110,11 +110,11 @@ bool KisResourceModel::renameResource(KoResourceSP resource, const QString &name
     return false;
 }
 
-bool KisResourceModel::removeResource(KoResourceSP resource)
+bool KisResourceModel::setResourceInactive(KoResourceSP resource)
 {
     KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
     if (source) {
-        return source->removeResource(resource);
+        return source->setResourceInactive(resource);
     }
     return false;
 }

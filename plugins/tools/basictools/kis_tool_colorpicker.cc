@@ -299,7 +299,7 @@ QWidget* KisToolColorPicker::createOptionWidget()
     }
 
     m_optionsWidget->cmbPalette->setModel(srv->resourceModel());
-    m_optionsWidget->cmbPalette->setModelColumn(KisResourceModel::Name);
+    m_optionsWidget->cmbPalette->setModelColumn(KisAbstractResourceModel::Name);
 
     return m_optionsWidget;
 }

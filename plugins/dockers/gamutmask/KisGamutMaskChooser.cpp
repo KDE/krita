@@ -66,8 +66,8 @@ void KisGamutMaskDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
     if (!index.isValid())
         return;
 
-    QImage preview = index.data(Qt::UserRole + KisResourceModel::Thumbnail).value<QImage>();
-    QString name = index.data(Qt::UserRole + KisResourceModel::Name).value<QString>();
+    QImage preview = index.data(Qt::UserRole + KisAbstractResourceModel::Thumbnail).value<QImage>();
+    QString name = index.data(Qt::UserRole + KisAbstractResourceModel::Name).value<QString>();
 
     if(preview.isNull()) {
         return;

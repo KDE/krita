@@ -549,7 +549,7 @@ bool KisResourceCacheDb::addResources(KisResourceStorageSP storage, QString reso
     return true;
 }
 
-bool KisResourceCacheDb::removeResource(int resourceId)
+bool KisResourceCacheDb::setResourceInActive(int resourceId)
 {
     if (resourceId < 0) {
         qWarning() << "Invalid resource id; cannot remove resource";

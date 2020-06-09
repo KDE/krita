@@ -263,7 +263,7 @@ KoResourceSP KisResourceLocator::resourceForId(int resourceId)
     return r;
 }
 
-bool KisResourceLocator::removeResource(int resourceId, const QString &/*storageLocation*/)
+bool KisResourceLocator::setResourceInactive(int resourceId, const QString &/*storageLocation*/)
 {
     // First remove the resource from the cache
     ResourceStorage rs = getResourceStorage(resourceId);
@@ -271,7 +271,7 @@ bool KisResourceLocator::removeResource(int resourceId, const QString &/*storage
 
     d->resourceCache.remove(key);
 
-    return KisResourceCacheDb::removeResource(resourceId);
+    return KisResourceCacheDb::setResourceInActive(resourceId);
 }
 
 bool KisResourceLocator::importResourceFromFile(const QString &resourceType, const QString &fileName, const QString &storageLocation)

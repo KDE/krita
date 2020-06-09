@@ -37,6 +37,9 @@
 #include <kis_slider_spin_box.h>
 #include <kis_multipliers_double_slider_spinbox.h>
 #include <resources/KoPattern.h>
+#include <resources/KoAbstractGradient.h>
+#include <resources/KoResource.h>
+#include <KoResourceServerProvider.h>
 #include <kis_paint_device.h>
 #include <kis_fill_painter.h>
 #include <kis_painter.h>
@@ -46,6 +49,7 @@
 #include "kis_embedded_pattern_manager.h"
 #include <brushengine/kis_paintop_lod_limitations.h>
 #include "kis_texture_chooser.h"
+#include "KoMixColorsOp.h"
 #include <time.h>
 #include "kis_signals_blocker.h"
 #include <KisGlobalResourcesInterface.h>
@@ -62,6 +66,7 @@ KisTextureOption::KisTextureOption()
     connect(m_textureOptions->scaleSlider, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_textureOptions->brightnessSlider, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_textureOptions->contrastSlider, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_textureOptions->neutralPointSlider, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_textureOptions->offsetSliderX, SIGNAL(valueChanged(int)), SLOT(emitSettingChanged()));
     connect(m_textureOptions->randomOffsetX, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
     connect(m_textureOptions->randomOffsetY, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
@@ -104,6 +109,8 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfigurationSP setting) 
 
     qreal contrast = m_textureOptions->contrastSlider->value();
 
+    qreal neutralPoint = m_textureOptions->neutralPointSlider->value();
+
     int offsetX = m_textureOptions->offsetSliderX->value();
     if (m_textureOptions ->randomOffsetX->isChecked()) {
 
@@ -129,11 +136,12 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfigurationSP setting) 
     }
 
     int texturingMode = m_textureOptions->cmbTexturingMode->currentIndex();
-    bool invert = (m_textureOptions->chkInvert->checkState() == Qt::Checked);
+    bool invert = (m_textureOptions->chkInvert->checkState() == Qt::Checked);   
 
     setting->setProperty("Texture/Pattern/Scale", scale);
     setting->setProperty("Texture/Pattern/Brightness", brightness);
     setting->setProperty("Texture/Pattern/Contrast", contrast);
+    setting->setProperty("Texture/Pattern/NeutralPoint", neutralPoint);
     setting->setProperty("Texture/Pattern/OffsetX", offsetX);
     setting->setProperty("Texture/Pattern/OffsetY", offsetY);
     setting->setProperty("Texture/Pattern/TexturingMode", texturingMode);
@@ -168,6 +176,7 @@ void KisTextureOption::readOptionSetting(const KisPropertiesConfigurationSP sett
     m_textureOptions->scaleSlider->setValue(setting->getDouble("Texture/Pattern/Scale", 1.0));
     m_textureOptions->brightnessSlider->setValue(setting->getDouble("Texture/Pattern/Brightness"));
     m_textureOptions->contrastSlider->setValue(setting->getDouble("Texture/Pattern/Contrast", 1.0));
+    m_textureOptions->neutralPointSlider->setValue(setting->getDouble("Texture/Pattern/NeutralPoint", 0.5));
     m_textureOptions->offsetSliderX->setValue(setting->getInt("Texture/Pattern/OffsetX"));
     m_textureOptions->offsetSliderY->setValue(setting->getInt("Texture/Pattern/OffsetY"));
     m_textureOptions->randomOffsetX->setChecked(setting->getBool("Texture/Pattern/isRandomOffsetX"));
@@ -176,7 +185,7 @@ void KisTextureOption::readOptionSetting(const KisPropertiesConfigurationSP sett
     m_textureOptions->cmbCutoffPolicy->setCurrentIndex(setting->getInt("Texture/Pattern/CutoffPolicy"));
     m_textureOptions->cutoffSlider->slotModifyBlack(setting->getInt("Texture/Pattern/CutoffLeft", 0));
     m_textureOptions->cutoffSlider->slotModifyWhite(setting->getInt("Texture/Pattern/CutoffRight", 255));
-    m_textureOptions->chkInvert->setChecked(setting->getBool("Texture/Pattern/Invert"));
+    m_textureOptions->chkInvert->setChecked(setting->getBool("Texture/Pattern/Invert")); 
 
 }
 
@@ -203,6 +212,10 @@ void KisTextureOption::resetGUI(KoResourceSP res)
 KisTextureProperties::KisTextureProperties(int levelOfDetail)
     : m_levelOfDetail(levelOfDetail)
 {
+    QString gradientName = "Foreground to Background";
+    KoResourceServer<KoAbstractGradient>* rserver = KoResourceServerProvider::instance()->gradientServer();
+    KoResource* gradient = rserver->resourceByName(gradientName);
+    m_gradient = dynamic_cast<KoAbstractGradient*>(gradient);
 }
 
 void KisTextureProperties::fillProperties(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface)
@@ -242,11 +255,40 @@ QList<KoResourceSP> KisTextureProperties::prepareEmbeddedResources(const KisProp
     return resources;
 }
 
+void KisTextureProperties::setTextureGradient(KoAbstractGradientSP gradient) {
+    if (gradient) {
+        m_gradient = gradient;
+    }
+}
+
+//Convert a pixel to a QColor.  We need this instead of calling ColorSpace::toQColor() because toQColor() is extremely slow,
+//even though it works pretty much exactly the same way...
+void KisTextureProperties::createQColorFromPixel(QColor& dest, const quint8* pixel, const KoColorSpace *cs) {
+    QVector <float> channelValuesF(4);
+
+    //Probably doesn't need to check for RGBA, because the only time we call it is for
+    //the mask, which we explicitly set as rbg8 colorspace before calling this.  It's here from previous testing
+    //where it was necessary, and left in just in case it's needed in the future.
+    QString csid = cs->id();
+    if (csid.contains("RGBA")) {
+        cs->normalisedChannelsValue(pixel, channelValuesF);
+    }
+    else {
+        const int rgbPixelSize = sizeof(KoBgrU16Traits::Pixel);
+        quint8* pixelRGBA = new quint8[rgbPixelSize];
+        cs->toRgbA16(pixel, pixelRGBA, 1);
+        KoColorSpaceTrait<quint16, 4, 3>::normalisedChannelsValue(pixelRGBA, channelValuesF);
+        delete pixelRGBA;
+    }
+    dest.setRgbF(channelValuesF[2], channelValuesF[1], channelValuesF[0], channelValuesF[3]);
+}
+
 void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset, const KisPaintInformation & info)
 {
     if (!m_enabled) return;
 
-    KisPaintDeviceSP fillDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
+    KisPaintDeviceSP fillAlphaDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
+    KisPaintDeviceSP fillMaskDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
     QRect rect = dab->bounds();
 
     KisPaintDeviceSP mask = m_maskInfo->mask();
@@ -258,20 +300,32 @@ void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset
     int y = offset.y() % maskBounds.height() - m_offsetY;
 
 
-    KisFillPainter fillPainter(fillDevice);
-    fillPainter.fillRect(x - 1, y - 1, rect.width() + 2, rect.height() + 2, mask, maskBounds);
-    fillPainter.end();
+    if (m_texturingMode == LIGHTNESS) {
+        KisFillPainter fillMaskPainter(fillMaskDevice);
+        fillMaskPainter.fillRect(x - 1, y - 1, rect.width() + 2, rect.height() + 2, mask, maskBounds);
+        fillMaskPainter.end();
+    }
+
+    KisFillPainter fillAlphaPainter(fillAlphaDevice);
+    fillAlphaPainter.fillRect(x - 1, y - 1, rect.width() + 2, rect.height() + 2, mask, maskBounds);
+    fillAlphaPainter.end();
 
     qreal pressure = m_strengthOption.apply(info);
     quint8 *dabData = dab->data();
 
-    KisHLineIteratorSP iter = fillDevice->createHLineIteratorNG(x, y, rect.width());
+    //for gradient textures...
+    KoMixColorsOp *colorMix = dab->colorSpace()->mixColorsOp();
+    qint16 colorWeights[2];
+    quint8* colors[2];
+
+    KisHLineIteratorSP iter = fillAlphaDevice->createHLineIteratorNG(x, y, rect.width());
+    KisHLineIteratorSP lightIter = fillMaskDevice->createHLineIteratorNG(x, y, rect.width());
     for (int row = 0; row < rect.height(); ++row) {
         for (int col = 0; col < rect.width(); ++col) {
             if (m_texturingMode == MULTIPLY) {
                 dab->colorSpace()->multiplyAlpha(dabData, quint8(*iter->oldRawData() * pressure), 1);
             }
-            else {
+            else if (m_texturingMode == SUBTRACT) {
                 int pressureOffset = (1.0 - pressure) * 255;
 
                 qint16 maskA = *iter->oldRawData() + pressureOffset;
@@ -280,10 +334,43 @@ void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset
                 dabA = qMax(0, (qint16)dabA - maskA);
                 dab->colorSpace()->setOpacity(dabData, dabA, 1);
             }
+            else if (m_texturingMode == LIGHTNESS) {
+                //int pressureOffset = (1.0 - pressure) * 255;
+                const quint8* maskData = lightIter->oldRawData(); // +pressureOffset;
+                QColor maskColor;
+                createQColorFromPixel(maskColor, maskData, mask->colorSpace());
 
+                QRgb maskQRgb = maskColor.rgba();
+                dab->colorSpace()->fillGrayBrushWithColorAndLightnessWithStrength(dabData, &maskQRgb, dabData, pressure, 1);
+            }
+            else {
+                if (m_gradient && m_gradient->valid()) {
+                    KoColor paintcolor(m_gradient->colorSpace());                    
+                    qreal gradientvalue = qreal(*iter->oldRawData()) / 255.0;
+                    m_gradient->colorAt(paintcolor, gradientvalue);
+                    paintcolor.setOpacity(qMin(paintcolor.opacityF(), dab->colorSpace()->opacityF(dabData)));
+                    paintcolor.convertTo(dab->colorSpace(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+                    colorWeights[0] = pressure * 255;
+                    colorWeights[1] = (1.0 - pressure) * 255;
+                    colors[0] = paintcolor.data();
+                    KoColor dabColor(dabData, dab->colorSpace());
+                    colors[1] = dabColor.data();
+                    colorMix->mixColors(colors, colorWeights, 2, dabData);
+                    
+                    /*paintcolor.colorSpace()->convertPixelsTo(paintcolor.data(), finalColor->data(), dab->colorSpace(), 1,
+                        KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());*/
+
+
+                    //for (int i = 0; i < dab->pixelSize(); i++) {
+                    //    dabData[i] = paintcolor.data()[i]; //should be fine, since they use the same color space...
+                    //}
+                }
+            }
+            lightIter->nextPixel();
             iter->nextPixel();
             dabData += dab->pixelSize();
         }
+        lightIter->nextRow();
         iter->nextRow();
     }
 }

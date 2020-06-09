@@ -59,6 +59,16 @@ public:
     void setType(QGradient::Type repeatType);
     QGradient::Type type() const;
 
+    ///tell whether there are any foreground or background color stops
+    virtual bool hasVariableColors() const {
+        return false;
+    }
+    ///Set the colors for stops that use the foreground or background color.
+    virtual void setVariableColors(const KoColor& foreground, const KoColor& background) {
+        //Do nothing... Override if gradient type supports variable colors.
+        Q_UNUSED(foreground); Q_UNUSED(background);
+    }
+
     void updatePreview();
 
     QImage generatePreview(int width, int height) const;

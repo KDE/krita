@@ -385,7 +385,7 @@ void KisAslXmlWriter::writeStopGradient(const QString &key, const KoStopGradient
     QVector<qreal> middleOffsets;
 
     Q_FOREACH (const KoGradientStop &stop, gradient->stops()) {
-        QColor color = stop.second.toQColor();
+        QColor color = stop.second.first.toQColor();
         qreal transparency = color.alphaF();
         color.setAlphaF(1.0);
 

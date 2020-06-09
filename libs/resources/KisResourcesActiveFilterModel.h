@@ -26,17 +26,30 @@
 #include "kritaresources_export.h"
 
 /**
- * @brief The KisActiveFilterModel class filters the source model by checking whether
- * the given column id is true or not.
+ * @brief The KisActiveResourcesModel class
  */
-class KRITARESOURCES_EXPORT KisActiveFilterModel : public QSortFilterProxyModel, public KisAbstractResourceModel
+class KRITARESOURCES_EXPORT KisResourcesActiveFilterModel : public QSortFilterProxyModel, public KisAbstractResourceModel
 {
     Q_OBJECT
 public:
-    KisActiveFilterModel(int column, QObject *parent);
-    ~KisActiveFilterModel() override;
+    KisResourcesActiveFilterModel(int column, QObject *parent);
+    ~KisResourcesActiveFilterModel() override;
 
-    void setCheck(bool check);
+    enum ResourceFilter {
+        ShowInactiveResources = 0,
+        ShowActiveResources,
+        ShowAllResources
+    };
+
+    void setResourceFilter(ResourceFilter filter);
+
+    enum StorageFilter {
+        ShowInactiveStorages = 0,
+        ShowActiveStorages,
+        ShowAllStorages
+    };
+
+    void setStorageFilter(StorageFilter filter);
 
 public:
 
@@ -61,7 +74,7 @@ private:
     struct Private;
     Private *const d;
 
-    Q_DISABLE_COPY(KisActiveFilterModel)
+    Q_DISABLE_COPY(KisResourcesActiveFilterModel)
 
 };
 

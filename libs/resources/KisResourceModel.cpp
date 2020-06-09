@@ -36,7 +36,7 @@ struct KisResourceModel::Private {
     QSqlQuery resourcesQuery;
     QSqlQuery tagQuery;
     QString resourceType;
-    int columnCount {9};
+    int columnCount {10};
     int cachedRowCount {-1};
 };
 
@@ -64,14 +64,15 @@ KisResourceModel::KisResourceModel(const QString &resourceType, QObject *parent)
                                        ",      storages.location\n"
                                        ",      resources.version\n"
                                        ",      resource_types.name as resource_type\n"
+                                       ",      resources.status as resource_active\n"
+                                       ",      storages.active as storage_active\n"
                                        "FROM   resources\n"
                                        ",      resource_types\n"
                                        ",      storages\n"
                                        "WHERE  resources.resource_type_id = resource_types.id\n"
                                        "AND    resources.storage_id = storages.id\n"
                                        "AND    resource_types.name = :resource_type\n"
-                                       "AND    resources.status = 1\n"
-                                       "AND    storages.active = 1");
+                                       "ORDER BY resources.id");
     if (!r) {
         qWarning() << "Could not prepare KisResourceModel query" << d->resourcesQuery.lastError();
     }
@@ -87,7 +88,8 @@ KisResourceModel::KisResourceModel(const QString &resourceType, QObject *parent)
                             ",      resource_tags\n"
                             "WHERE  tags.active > 0\n"                               // make sure the tag is active
                             "AND    tags.id = resource_tags.tag_id\n"                // join tags + resource_tags by tag_id
-                            "AND    resource_tags.resource_id = :resource_id\n");    // make sure we're looking for tags for a specific resource
+                            "AND    resource_tags.resource_id = :resource_id\n"
+                            "ORDER BY tags.id");    // make sure we're looking for tags for a specific resource
     if (!r)  {
         qWarning() << "Could not prepare TagsForResource query" << d->tagQuery.lastError();
     }
@@ -145,6 +147,10 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
                 return d->resourcesQuery.value("location");
             case ResourceType:
                 return d->resourcesQuery.value("resource_type");
+            case ResourceActive:
+                return d->resourcesQuery.value("resource_active");
+            case StorageActive:
+                return d->resourcesQuery.value("storage_active");
             default:
                 ;
             };
@@ -229,7 +235,14 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
             response.setValue(tag);
             return response;
         }
-            
+        case Qt::UserRole + ResourceActive:
+        {
+            return d->resourcesQuery.value("resource_active");
+        }
+        case Qt::UserRole + StorageActive:
+        {
+              return d->resourcesQuery.value("storage_active");
+        }
         default:
             ;
         }
@@ -272,6 +285,10 @@ QVariant KisResourceModel::headerData(int section, Qt::Orientation orientation, 
         case ResourceType:
             v = i18n("Resource Type");
             break;
+        case ResourceActive:
+            v = i18n("Active");
+        case StorageActive:
+            v = i18n("Storage Active");
         default:
             v = QString::number(section);
         }
@@ -560,9 +577,7 @@ int KisResourceModel::rowCount(const QModelIndex &) const
                   ",      storages\n"
                   "WHERE  resources.resource_type_id = resource_types.id\n"
                   "AND    resource_types.name = :resource_type\n"
-                  "AND    resources.storage_id = storages.id\n"
-                  "AND    resources.status = 1\n"
-                  "AND    storages.active = 1");
+                  "AND    resources.storage_id = storages.id\n");
         q.bindValue(":resource_type", d->resourceType);
         q.exec();
         q.first();

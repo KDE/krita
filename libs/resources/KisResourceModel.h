@@ -113,7 +113,7 @@ public:
  * @brief The KisResourceModel class provides access to the cache database
  * for a particular resource type. Instances should be retrieved using
  * KisResourceModelProvider. All resources are part of this model, active and
- * inactive.
+ * inactive, from all storages, active and inactive.
  */
 class KRITARESOURCES_EXPORT KisResourceModel : public QAbstractTableModel, public KisAbstractResourceModel
 {
@@ -142,7 +142,12 @@ public:
         Dirty,
         /// MetaData is a map of key, value pairs that is associated with this resource
         MetaData,
-        KoResourceRole
+        /// XXX: what is this used for, again?
+        KoResourceRole,
+        /// Whether the current resource is active
+        ResourceActive,
+        /// Whether the current resource's storage isa ctive
+        StorageActive
     };
 
 private:

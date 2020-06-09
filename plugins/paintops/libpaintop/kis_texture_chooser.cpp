@@ -19,6 +19,8 @@
 #include "kis_texture_chooser.h"
 #include "kis_texture_option.h"
 
+#include "widgets/kis_gradient_chooser.h"
+
 KisTextureChooser::KisTextureChooser(QWidget *parent)
     : QWidget(parent)
 {
@@ -40,13 +42,17 @@ KisTextureChooser::KisTextureChooser(QWidget *parent)
     contrastSlider->setRange(0.0, 2.0, 2);
     contrastSlider->setValue(1.0);
 
+    neutralPointSlider->setRange(0.0, 1.0, 2);
+    neutralPointSlider->setValue(0.5);
+    neutralPointSlider->setToolTip(i18n("Set gray value to be considered neutral for lightness mode"));
+
     offsetSliderX->setSuffix(i18n(" px"));
 
     offsetSliderY->setSuffix(i18n(" px"));
 
 
     QStringList texturingModes;
-    texturingModes << i18n("Multiply") << i18n("Subtract");
+    texturingModes << i18n("Multiply Alpha") << i18n("Subtract Alpha") << i18n("Lightness Map") << i18n("Gradient Map");
     cmbTexturingMode->addItems(texturingModes);
     cmbTexturingMode->setCurrentIndex(KisTextureProperties::SUBTRACT);
 
@@ -61,6 +67,7 @@ KisTextureChooser::KisTextureChooser(QWidget *parent)
                                   " by the slider, the cut-off policy will be applied."));
 
     chkInvert->setChecked(false);
+
 }
 
 KisTextureChooser::~KisTextureChooser()

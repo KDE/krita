@@ -118,5 +118,10 @@ QVector <double> RgbF32ColorSpace::fromYUV(qreal *y, qreal *u, qreal *v) const
 
 void RgbF32ColorSpace::fillGrayBrushWithColorAndLightnessOverlay(quint8 *dst, const QRgb *brush, quint8 *brushColor, qint32 nPixels) const
 {
-    fillGrayBrushWithColorPreserveLightnessRGB<KoBgrF32Traits>(dst, brush, brushColor, nPixels);
+    fillGrayBrushWithColorPreserveLightnessRGB<KoRgbF32Traits>(dst, brush, brushColor, 1.0, nPixels);
+}
+
+void RgbF32ColorSpace::fillGrayBrushWithColorAndLightnessWithStrength(quint8* dst, const QRgb* brush, quint8* brushColor, qreal strength, qint32 nPixels) const
+{
+    fillGrayBrushWithColorPreserveLightnessRGB<KoRgbF32Traits>(dst, brush, brushColor, strength, nPixels);
 }

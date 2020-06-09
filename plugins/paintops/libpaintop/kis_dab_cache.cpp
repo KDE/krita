@@ -78,7 +78,8 @@ KisFixedPaintDeviceSP KisDabCache::fetchDab(const KoColorSpace *cs,
         KisDabShape const& shape,
         const KisPaintInformation& info,
         qreal softnessFactor,
-        QRect *dstDabRect)
+        QRect *dstDabRect,
+        qreal lightnessStrength)
 {
     return fetchDabCommon(cs, colorSource, KoColor(),
                           cursorPoint,
@@ -94,14 +95,16 @@ KisFixedPaintDeviceSP KisDabCache::fetchDab(const KoColorSpace *cs,
         KisDabShape const& shape,
         const KisPaintInformation& info,
         qreal softnessFactor,
-        QRect *dstDabRect)
+        QRect *dstDabRect,
+        qreal lightnessStrength)
 {
     return fetchDabCommon(cs, 0, color,
                           cursorPoint,
                           shape,
                           info,
                           softnessFactor,
-                          dstDabRect);
+                          dstDabRect,
+                          lightnessStrength);
 }
 
 inline
@@ -145,7 +148,8 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
         KisDabShape shape,
         const KisPaintInformation& info,
         qreal softnessFactor,
-        QRect *dstDabRect)
+        QRect *dstDabRect,
+        qreal lightnessStrength)
 {
     Q_ASSERT(dstDabRect);
 

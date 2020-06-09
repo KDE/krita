@@ -29,6 +29,7 @@ set(kritalibpaintop_LIB_SRCS
     kis_precision_option.cpp
     kis_pressure_darken_option.cpp
     kis_pressure_hsv_option.cpp
+    kis_pressure_lightness_strength_option.cpp
     kis_pressure_opacity_option.cpp
     kis_pressure_flow_option.cpp
     kis_pressure_mirror_option.cpp

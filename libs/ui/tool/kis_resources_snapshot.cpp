@@ -369,6 +369,10 @@ KisPaintOpPresetSP KisResourcesSnapshot::currentPaintOpPreset() const
     return m_d->currentPaintOpPreset;
 }
 
+KoAbstractGradient* KisResourcesSnapshot::currentGradient() const
+{
+    return m_d->currentGradient;
+}
 
 QBitArray KisResourcesSnapshot::channelLockFlags() const
 {

@@ -134,8 +134,8 @@ QGradient* KoStopGradient::toQGradient() const
     }
     QColor color;
     for (QList<KoGradientStop>::const_iterator i = m_stops.begin(); i != m_stops.end(); ++i) {
-        i->second.first.toQColor(&color);
-        gradient->setColorAt(i->first, color);
+        i->color.toQColor(&color);
+        gradient->setColorAt(i->position, color);
     }
 
     gradient->setCoordinateMode(QGradient::ObjectBoundingMode);
@@ -148,23 +148,23 @@ bool KoStopGradient::stopsAt(KoGradientStop& leftStop, KoGradientStop& rightStop
 {
     if (!m_stops.count())
         return false;
-    if (t <= m_stops.first().first || m_stops.count() == 1) {
+    if (t <= m_stops.first().position || m_stops.count() == 1) {
         // we have only one stop or t is before the first stop
         leftStop = m_stops.first();
-        rightStop = KoGradientStop(-std::numeric_limits<double>::infinity(), leftStop.second);
+        rightStop = KoGradientStop(-std::numeric_limits<double>::infinity(), leftStop.color, leftStop.type);
         return true;
     }
-    else if (t >= m_stops.last().first) {
+    else if (t >= m_stops.last().position) {
         // t is after the last stop
         rightStop = m_stops.last();
-        leftStop = KoGradientStop(std::numeric_limits<double>::infinity(), rightStop.second);
+        leftStop = KoGradientStop(std::numeric_limits<double>::infinity(), rightStop.color, rightStop.type);
         return true;
     }
     else {
         // we have at least two color stops
         // -> find the two stops which frame our t
-        auto it = std::lower_bound(m_stops.begin(), m_stops.end(), KoGradientStop(t, KoGradientStopInfo(KoColor(), COLORSTOP)), [](const KoGradientStop& a, const KoGradientStop& b) {
-            return a.first < b.first;
+        auto it = std::lower_bound(m_stops.begin(), m_stops.end(), KoGradientStop(t, KoColor(), COLORSTOP), [](const KoGradientStop& a, const KoGradientStop& b) {
+            return a.position < b.position;
             });
         leftStop = *(it - 1);
         rightStop = *(it);
@@ -183,24 +183,24 @@ void KoStopGradient::colorAt(KoColor& dst, qreal t) const
 
     KoColor startDummy, endDummy;
     if (mixSpace) {
-        startDummy = KoColor(leftStop.second.first, mixSpace);
-        endDummy = KoColor(rightStop.second.first, mixSpace);
+        startDummy = KoColor(leftStop.color, mixSpace);
+        endDummy = KoColor(rightStop.color, mixSpace);
     }
     else {
-        startDummy = leftStop.second.first;
-        endDummy = rightStop.second.first;
+        startDummy = leftStop.color;
+        endDummy = rightStop.color;
     }
     const quint8* colors[2];
     colors[0] = startDummy.data();
     colors[1] = endDummy.data();
 
     qreal localT;
-    qreal stopDistance = rightStop.first - leftStop.first;
+    qreal stopDistance = rightStop.position - leftStop.position;
     if (stopDistance < DBL_EPSILON) {
         localT = 0.5;
     }
     else {
-        localT = (t - leftStop.first) / stopDistance;
+        localT = (t - leftStop.position) / stopDistance;
     }
     qint16 colorWeights[2];
     colorWeights[0] = static_cast<quint8>((1.0 - localT) * 255 + 0.5);
@@ -261,7 +261,7 @@ KoStopGradient* KoStopGradient::fromQGradient(const QGradient* gradient)
     Q_FOREACH(const QGradientStop & stop, gradient->stops()) {
         KoColor color(newGradient->colorSpace());
         color.fromQColor(stop.second);
-        newGradient->m_stops.append(KoGradientStop(stop.first, KoGradientStopInfo(color, COLORSTOP)));
+        newGradient->m_stops.append(KoGradientStop(stop.first, color, COLORSTOP));
     }
 
     newGradient->setValid(true);
@@ -275,11 +275,11 @@ void KoStopGradient::setStops(QList< KoGradientStop > stops)
     m_hasVariableStops = false;
     KoColor color;
     Q_FOREACH(const KoGradientStop & stop, stops) {
-        color = stop.second.first;
+        color = stop.color;
         color.convertTo(colorSpace());
-        m_stops.append(KoGradientStop(stop.first, KoGradientStopInfo(color, stop.second.second)));
-        qDebug() << "KoStopGradient::setStops, stoptype: " << stop.second.second;
-        if (stop.second.second != COLORSTOP) {
+        m_stops.append(KoGradientStop(stop.position, color, stop.type));
+        qDebug() << "KoStopGradient::setStops, stoptype: " << stop.type;
+        if (stop.type != COLORSTOP) {
             m_hasVariableStops = true;
         }
     }
@@ -298,15 +298,15 @@ bool KoStopGradient::hasVariableColors() const {
 void KoStopGradient::setVariableColors(const KoColor& foreground, const KoColor& background) {
     KoColor color;
     for (int i = 0; i < m_stops.count(); i++){
-        if (m_stops[i].second.second == FOREGROUNDSTOP) {
+        if (m_stops[i].type == FOREGROUNDSTOP) {
             color = foreground;
         }
-        else if (m_stops[i].second.second == BACKGROUNDSTOP) {
+        else if (m_stops[i].type == BACKGROUNDSTOP) {
             color = background;
         }
         else continue;
         color.convertTo(colorSpace());
-        m_stops[i].second.first = color;
+        m_stops[i].color = color;
     }
     updatePreview();
 }
@@ -519,10 +519,10 @@ void KoStopGradient::parseSvgGradient(const QDomElement& element)
             }
             //According to the SVG spec each gradient offset has to be equal to or greater than the previous one
             //if not it needs to be adjusted to be equal
-            if (m_stops.count() > 0 && m_stops.last().first >= off) {
-                off = m_stops.last().first;
+            if (m_stops.count() > 0 && m_stops.last().position >= off) {
+                off = m_stops.last().position;
             }
-            m_stops.append(KoGradientStop(off, KoGradientStopInfo(color, stopType)));
+            m_stops.append(KoGradientStop(off, color, stopType));
         }
     }
 }
@@ -576,11 +576,11 @@ void KoStopGradient::toXML(QDomDocument& doc, QDomElement& gradientElt) const
     for (int s = 0; s < m_stops.size(); s++) {
         KoGradientStop stop = m_stops.at(s);
         QDomElement stopElt = doc.createElement("stop");
-        stopElt.setAttribute("offset", KisDomUtils::toString(stop.first));
-        stopElt.setAttribute("bitdepth", stop.second.first.colorSpace()->colorDepthId().id());
-        stopElt.setAttribute("alpha", KisDomUtils::toString(stop.second.first.opacityF()));
-        stopElt.setAttribute("stoptype", KisDomUtils::toString(stop.second.second));
-        stop.second.first.toXML(doc, stopElt);
+        stopElt.setAttribute("offset", KisDomUtils::toString(stop.position));
+        stopElt.setAttribute("bitdepth", stop.color.colorSpace()->colorDepthId().id());
+        stopElt.setAttribute("alpha", KisDomUtils::toString(stop.color.opacityF()));
+        stopElt.setAttribute("stoptype", KisDomUtils::toString(stop.type));
+        stop.color.toXML(doc, stopElt);
         gradientElt.appendChild(stopElt);
     }
 }
@@ -596,7 +596,7 @@ KoStopGradient KoStopGradient::fromXML(const QDomElement& elt)
         KoColor color = KoColor::fromXML(stopElt.firstChildElement(), bitDepth);
         color.setOpacity(KisDomUtils::toDouble(stopElt.attribute("alpha", "1.0")));
         KoGradientStopType stoptype = static_cast<KoGradientStopType>(KisDomUtils::toInt(stopElt.attribute("stoptype", "0")));
-        stops.append(KoGradientStop(offset, KoGradientStopInfo(color, stoptype)));
+        stops.append(KoGradientStop(offset, color, stoptype));
         stopElt = stopElt.nextSiblingElement("stop");
     }
     gradient.setStops(stops);
@@ -627,13 +627,13 @@ bool KoStopGradient::saveToDevice(QIODevice* dev) const
 
     // color stops
     Q_FOREACH(const KoGradientStop & stop, m_stops) {
-        stop.second.first.toQColor(&color);
+        stop.color.toQColor(&color);
         stream << indent << indent;
         stream << "<stop stop-color=\"";
         stream << color.name();
-        stream << "\" offset=\"" << QString().setNum(stop.first);
+        stream << "\" offset=\"" << QString().setNum(stop.position);
         stream << "\" stop-opacity=\"" << static_cast<float>(color.alpha()) / 255.0f;
-        stream << "\" krita-stop-type=\"" << QString().setNum(stop.second.second) << "\"";
+        stream << "\" krita-stop-type=\"" << QString().setNum(stop.type) << "\"";
             
         stream << " />" << endl;
     }

@@ -274,14 +274,10 @@ private:
     InterpolationStrategy *m_interpolator;
     ColorInterpolationStrategy *m_colorInterpolator;
 
-    //qreal m_startOffset;
     qreal m_middleOffset;
-    //qreal m_endOffset;
     qreal m_length;
     qreal m_middleT;
 
-    //KoColor m_startColor;
-    //KoColor m_endColor;
     KoGradientSegmentEndpoint m_start, m_end;
     bool m_hasVariableColors = false;
 

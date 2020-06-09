@@ -35,14 +35,27 @@ enum KoGradientStopType
     BACKGROUNDSTOP
 };
 
-typedef QPair<KoColor, KoGradientStopType> KoGradientStopInfo;
+struct KoGradientStop {
+    KoGradientStopType type;
+    KoColor color;
+    qreal position;
 
-typedef QPair<qreal, KoGradientStopInfo> KoGradientStop;
+    KoGradientStop(qreal _position = 0.0, KoColor _color = KoColor(), KoGradientStopType _type = COLORSTOP) {
+        type = _type;
+        color = _color;
+        position = _position;
+    }
+
+    bool operator == (const KoGradientStop& other) { 
+        return this->type == other.type && this->color == other.color && this->position == other.position;
+    }
+};
+
 
 struct KoGradientStopValueSort
 {
     inline bool operator() (const KoGradientStop& a, const KoGradientStop& b) {
-        return (a.second.first.toQColor().valueF() < b.second.first.toQColor().valueF());
+        return (a.color.toQColor().valueF() < b.color.toQColor().valueF());
     }
 };
 

@@ -44,7 +44,6 @@ public:
 
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;
-    void setSelectedStopType(KoGradientStopType type);
 
 Q_SIGNALS:
      void sigSelectedStop(int stop);

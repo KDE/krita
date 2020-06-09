@@ -272,8 +272,8 @@ void KisLayerFilterWidgetToolButton::paintEvent(QPaintEvent *paintEvent)
     }
 }
 
-MouseClickIgnore::MouseClickIgnore(QWidget *parent)
-    : QWidget(parent)
+MouseClickIgnore::MouseClickIgnore(QObject *parent)
+    : QObject(parent)
 {
 }
 

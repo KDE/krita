@@ -111,6 +111,8 @@ private:
     static bool addTags(KisResourceStorageSP storage, QString resourceType);
 
     static bool addStorage(KisResourceStorageSP storage, bool preinstalled);
+
+    /// Actually delete the storage and all its resources from the database (i.e., nothing is set to inactive, it's deleted)
     static bool deleteStorage(KisResourceStorageSP storage);
     static bool synchronizeStorage(KisResourceStorageSP storage);
 

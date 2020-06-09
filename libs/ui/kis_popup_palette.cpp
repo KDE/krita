@@ -174,16 +174,6 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     connect(m_resourceManager, SIGNAL(updatePalettes()), SLOT(slotUpdate()));
     connect(m_resourceManager, SIGNAL(hidePalettes()), SLOT(slotHide()));
 
-    // This is used to handle a bug:
-    // If pop up palette is visible and a new colour is selected, the new colour
-    // will be added when the user clicks on the canvas to hide the palette
-    // In general, we want to be able to store recent color if the pop up palette
-    // is not visible
-    m_timer.setSingleShot(true);
-    connect(this, SIGNAL(sigTriggerTimer()), this, SLOT(slotTriggerTimer()));
-    connect(&m_timer, SIGNAL(timeout()), this, SLOT(slotEnableChangeFGColor()));
-    connect(this, SIGNAL(sigEnableChangeFGColor(bool)), m_resourceManager, SIGNAL(sigEnableChangeColor(bool)));
-
     setCursor(Qt::ArrowCursor);
     setMouseTracking(true);
     setHoveredPreset(-1);
@@ -332,16 +322,6 @@ void KisPopupPalette::setSelectedColor(int x)
     m_selectedColor = x;
 }
 
-void KisPopupPalette::slotTriggerTimer()
-{
-    m_timer.start(750);
-}
-
-void KisPopupPalette::slotEnableChangeFGColor()
-{
-    emit sigEnableChangeFGColor(true);
-}
-
 void KisPopupPalette::slotZoomSliderChanged(int zoom) {
     emit zoomLevelChanged(zoom);
 }
@@ -428,9 +408,6 @@ void KisPopupPalette::showPopupPalette(bool show)
             KisSignalsBlocker b(zoomCanvasSlider);
             zoomCanvasSlider->setValue(m_coordinatesConverter->zoomInPercent()); // sync the zoom slider
         }
-        emit sigEnableChangeFGColor(!show);
-    } else {
-        emit sigTriggerTimer();
     }
     setVisible(show);
     m_brushHud->setVisible(show && m_brushHudButton->isChecked());

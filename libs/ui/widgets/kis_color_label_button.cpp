@@ -64,16 +64,21 @@ void KisColorLabelButton::paintEvent(QPaintEvent *event)
     QWidget::paintEvent(event);
 
     QStylePainter painter(this);
-    QStyleOption styleOption;
+    QStyleOptionButton styleOption;
     styleOption.initFrom(this);
+
+    const bool darkTheme = styleOption.palette.background().color().value() < 128;
 
     if (isDown() || isChecked()){
         styleOption.state |= QStyle::State_On;
     }
 
-    // Draw fill..
     QRect fillRect = kisGrowRect(rect(), -2);
     QRect outlineRect = kisGrowRect(fillRect, -1);
+
+    const QColor shadowColor = styleOption.palette.background().color().darker(128);
+    const QBrush shadowBrush = QBrush(shadowColor);
+    const QBrush bgBrush = QBrush(styleOption.palette.background().color());
 
     if (!isEnabled()) {
         fillRect -= QMargins(sizeHint().width() / 4, sizeHint().height() / 4, sizeHint().width() / 4, sizeHint().height() / 4);
@@ -81,15 +86,21 @@ void KisColorLabelButton::paintEvent(QPaintEvent *event)
         fillRect = kisGrowRect(fillRect, -3);
     }
 
-
-    fillRect.width();
     if (m_d->m_color.alpha() > 0) {
         QColor fillColor = m_d->m_color;
 
         if ((!isChecked() || !isEnabled()) && (m_d->selectionVis == FillIn)) {
             fillColor.setAlpha(32);
         } else if ((!isChecked() || !isEnabled()) && (m_d->selectionVis == Outline)) {
-            fillColor.setAlpha(192);
+            if ((styleOption.state & QStyle::State_MouseOver) == 0) {
+                fillColor.setAlpha(192);
+            }
+        }
+
+        if ((isEnabled() && isChecked() && m_d->selectionVis == FillIn) ||
+                m_d->selectionVis == Outline) {
+            painter.fillRect(kisGrowRect(fillRect, 1), shadowBrush);
+            painter.fillRect(fillRect, bgBrush);
         }
 
         QBrush brush = QBrush(fillColor);
@@ -97,42 +108,30 @@ void KisColorLabelButton::paintEvent(QPaintEvent *event)
 
         if ((isEnabled() && (m_d->selectionVis == FillIn)) ||
             (isChecked() && (m_d->selectionVis == Outline))) {
+            const QRect& shadowRect = outlineRect;
+            painter.setPen(QPen(shadowColor, 4));
+            painter.drawRect(shadowRect);
+
+            painter.setPen(QPen(bgBrush.color(), 2));
+            painter.drawRect(outlineRect);
+
             painter.setPen(QPen(m_d->m_color, 2));
             painter.drawRect(outlineRect);
         }
 
     } else {
-        // draw an X for no color for the first item
-        /*const int shortestEdge = std::min(fillRect.width(), fillRect.height());
-        const int longestEdge = std::max(fillRect.width(), fillRect.height());
-        bool horizontalIsShortest = (shortestEdge == fillRect.width());
-        QRect srcRect = horizontalIsShortest ?
-                    fillRect.adjusted(0, (longestEdge / 2) - (shortestEdge / 2), 0, (shortestEdge / 2) - (longestEdge / 2)) :
-                    fillRect.adjusted((longestEdge / 2) - (shortestEdge / 2), 0, (shortestEdge / 2) - (longestEdge / 2), 0);
-        QRect crossRect = kisGrowRect(srcRect, -1);
-
-        QColor shade = styleOption.palette.text().color();
-        if (!isChecked() || !isEnabled()) {
-            shade.setAlpha(64);
-        }
-
-        QPen pen = QPen(shade, 2);
-
-        painter.setPen(pen);
-        painter.drawLine(crossRect.topLeft(), crossRect.bottomRight());
-        painter.drawLine(crossRect.bottomLeft(), crossRect.topRight());*/
-
         QColor white = QColor(255,255,255);
         QColor grey = QColor(200,200,200);
         QColor outlineColor = grey;
-
 
         if ((!isChecked() || !isEnabled()) && (m_d->selectionVis == FillIn)) {
             white.setAlpha(32);
             grey.setAlpha(32);
         } else if ((!isChecked() || !isEnabled()) && (m_d->selectionVis == Outline)) {
-            white.setAlpha(192);
-            grey = QColor(125,125,125,192);
+            if ((styleOption.state & QStyle::State_MouseOver) == 0) {
+                white.setAlpha(192);
+                grey = QColor(125,125,125,192);
+            }
         }
 
         QBrush whiteBrush = QBrush(white);
@@ -140,17 +139,40 @@ void KisColorLabelButton::paintEvent(QPaintEvent *event)
 
         QRect upperLeftGrey = fillRect - QMargins(0, 0, fillRect.size().width() / 2, fillRect.size().height() /2);
         QRect lowerRightGrey = fillRect - QMargins(fillRect.size().width() / 2, fillRect.size().height() / 2, 0, 0);
+
+        if ((isEnabled() && isChecked() && m_d->selectionVis == FillIn) ||
+                m_d->selectionVis == Outline) {
+            painter.fillRect(fillRect.translated(1,1), shadowBrush);
+            painter.fillRect(fillRect, bgBrush);
+        }
+
         painter.fillRect(fillRect, whiteBrush);
+
         painter.fillRect(upperLeftGrey, greyBrush);
         painter.fillRect(lowerRightGrey, greyBrush);
 
         if ((isEnabled() && (m_d->selectionVis == FillIn)) ||
             (isChecked() && (m_d->selectionVis == Outline))) {
+            const QRect& shadowRect = outlineRect;
+            painter.setPen(QPen(shadowColor, 4));
+            painter.drawRect(shadowRect);
+
+            painter.setPen(QPen(bgBrush.color(), 2));
+            painter.drawRect(outlineRect);
+
             painter.setPen(QPen(outlineColor, 2));
             painter.drawRect(outlineRect);
         }
 
     }
+}
+
+void KisColorLabelButton::enterEvent(QEvent *event) {
+    update();
+}
+
+void KisColorLabelButton::leaveEvent(QEvent *event) {
+    update();
 }
 
 QSize KisColorLabelButton::sizeHint() const

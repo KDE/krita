@@ -60,6 +60,7 @@ KisColorLabelSelectorWidget::KisColorLabelSelectorWidget(QWidget *parent)
 
     this->setLayout(layout);
     layout->setContentsMargins(0,0,0,0);
+    layout->setSpacing(0);
     layout->setAlignment(Qt::AlignLeft);
     m_d->menuAlignmentOffset = new QSpacerItem(0,0);
     layout->addItem(m_d->menuAlignmentOffset);

@@ -51,7 +51,7 @@ KisLayerFilterWidget::KisLayerFilterWidget(QWidget *parent) : QWidget(parent)
 
     textFilter = new QLineEdit(this);
     textFilter->setPlaceholderText(i18n("Filter by name..."));
-    textFilter->setMinimumWidth(192);
+    textFilter->setMinimumWidth(255);
     textFilter->setMinimumHeight(28);
     textFilter->setClearButtonEnabled(true);
 
@@ -68,6 +68,7 @@ KisLayerFilterWidget::KisLayerFilterWidget(QWidget *parent) : QWidget(parent)
         QHBoxLayout *subLayout = new QHBoxLayout(buttonContainer);
         buttonContainer->setLayout(subLayout);
         subLayout->setContentsMargins(0,0,0,0);
+        subLayout->setSpacing(0);
         subLayout->setAlignment(Qt::AlignLeft);
         buttonGroup = new KisColorLabelFilterGroup(buttonContainer);
         buttonGroup->setExclusive(false);

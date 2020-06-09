@@ -108,34 +108,33 @@ void KisZoomableScrollbar::handleScroll(const QPoint &accel)
     const qreal sliderMovementPix = (orientation() == Qt::Horizontal) ? accel.x() : accel.y();
     const qreal zoomMovementPix = (orientation() == Qt::Horizontal) ? -accel.y() : -accel.x();
     const qreal documentLength = maximum() - minimum() + pageStep();
-    const qreal widgetLength = (orientation() == Qt::Horizontal) ? width() : height();
-    const qreal widgetThickness = (orientation() == Qt::Horizontal) ? height() : width();
+    const qreal widgetLength = (orientation() == Qt::Horizontal) ? width() * devicePixelRatio(): height() * devicePixelRatio();
+    const qreal widgetThickness = (orientation() == Qt::Horizontal) ? height() * devicePixelRatio() : width() * devicePixelRatio();
 
     const QVector2D perpendicularDirection = (orientation() == Qt::Horizontal) ? QVector2D(0, 1) : QVector2D(1, 0);
     const float perpendicularity = QVector2D::dotProduct(perpendicularDirection.normalized(), accelerationAccumulator.normalized());
 
     if (abs(perpendicularity) > zoomPerpendicularityThreshold && zoomMovementPix != 0) {
-        zoom(qreal(zoomMovementPix) / (widgetThickness * 5));
+        zoom(qreal(zoomMovementPix) / (widgetThickness * 2));
     } else if (sliderMovementPix != 0) {
-
         const int currentPosition = sliderPosition();
         scrollSubPixelAccumulator += (documentLength) * (sliderMovementPix / widgetLength);
 
         setSliderPosition(currentPosition + scrollSubPixelAccumulator);
-        if (currentPosition + scrollSubPixelAccumulator > maximum() || currentPosition + scrollSubPixelAccumulator <  minimum() ) {
+        if (currentPosition + scrollSubPixelAccumulator > maximum() ||
+            currentPosition + scrollSubPixelAccumulator <  minimum()) {
             overscroll(scrollSubPixelAccumulator);
         }
 
         const int sign = (scrollSubPixelAccumulator > 0) - (scrollSubPixelAccumulator < 0);
         scrollSubPixelAccumulator -= floor(abs(scrollSubPixelAccumulator)) * sign;
-
     }
 }
 
 void KisZoomableScrollbar::tabletEvent(QTabletEvent *event) {
     if ( event->type() == QTabletEvent::TabletMove && isSliderDown() ) {
 
-        QPoint globalMouseCoord = mapToGlobal(event->pos());
+        QPoint globalMouseCoord = mapToGlobal(event->pos()) * devicePixelRatio();
         QPoint accel = globalMouseCoord - lastKnownPosition;
         accelerationAccumulator += QVector2D(accel);
 
@@ -149,7 +148,7 @@ void KisZoomableScrollbar::tabletEvent(QTabletEvent *event) {
     } else {
 
         if (event->type() == QTabletEvent::TabletPress) {
-            QPoint globalMouseCoord = mapToGlobal(event->pos());
+            QPoint globalMouseCoord = mapToGlobal(event->pos()) * devicePixelRatio();
             lastKnownPosition = globalMouseCoord;
         }
 
@@ -163,7 +162,7 @@ void KisZoomableScrollbar::mousePressEvent(QMouseEvent *event)
     QScrollBar::mousePressEvent(event);
 
     if( isSliderDown() && !wasSliderDownBefore ){
-        lastKnownPosition = mapToGlobal(event->pos());
+        lastKnownPosition = mapToGlobal(event->pos()) * devicePixelRatio();
         accelerationAccumulator = QVector2D(0,0);
         setCursor(Qt::BlankCursor);
     } else {
@@ -177,8 +176,7 @@ void KisZoomableScrollbar::mouseMoveEvent(QMouseEvent *event)
 {
     if (isSliderDown()) {
 
-
-        QPoint globalMouseCoord = mapToGlobal(event->pos());
+        QPoint globalMouseCoord = mapToGlobal(event->pos()) * devicePixelRatio();
         QPoint accel = globalMouseCoord - lastKnownPosition;
         accelerationAccumulator += QVector2D(accel);
 

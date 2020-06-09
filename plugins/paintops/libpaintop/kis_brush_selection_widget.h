@@ -73,7 +73,7 @@ public:
 
     void hideOptions(const QStringList &options);
 
-    void setHSLBrusTipEnabled(bool value);
+    void setHSLBrushTipEnabled(bool value);
     bool hslBrushTipEnabled() const;
 
 

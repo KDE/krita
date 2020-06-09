@@ -139,19 +139,19 @@ void KisStopGradientEditor::stopChanged(int stop)
 
     if (hasStopSelected) {
         KoColor color;
-        KoGradientStopType type = m_gradient->stops()[stop].second.second;
+        KoGradientStopType type = m_gradient->stops()[stop].type;
         qDebug() << "GradientEditor::stopChanged: stop " << stop << " type: " << type;
         if (type == FOREGROUNDSTOP) {
             foregroundRadioButton->setChecked(true);
-            color = m_fgColor;// KoColor(m_fgColor, m_gradient->stops()[stop].second.first.colorSpace());
+            color = m_fgColor;
         }
         else if (type == BACKGROUNDSTOP) {
             backgroundRadioButton->setChecked(true);
-            color = m_bgColor; // KoColor(m_bgColor, m_gradient->stops()[stop].second.first.colorSpace());
+            color = m_bgColor;
         }
         else {
             colorRadioButton->setChecked(true);
-            color = m_gradient->stops()[stop].second.first;
+            color = m_gradient->stops()[stop].color;
         }
 
         opacitySlider->setValue(color.opacityF());
@@ -167,8 +167,8 @@ void KisStopGradientEditor::stopChanged(int stop)
 void KisStopGradientEditor::stopTypeChanged() {
     QList<KoGradientStop> stops = m_gradient->stops();
     int currentStop = gradientSlider->selectedStop();
-    double t = stops[currentStop].first;
-    KoColor color = stops[currentStop].second.first;
+    double t = stops[currentStop].position;
+    KoColor color = stops[currentStop].color;
 
     KoGradientStopType type;    
     if (foregroundRadioButton->isChecked()) {
@@ -183,7 +183,7 @@ void KisStopGradientEditor::stopTypeChanged() {
     }
 
     stops.removeAt(currentStop);
-    stops.insert(currentStop, KoGradientStop(t, KoGradientStopInfo(color, type)));
+    stops.insert(currentStop, KoGradientStop(t, color, type));
     m_gradient->setStops(stops);
     gradientSlider->update(); //setSelectedStopType(type);
     emit sigGradientChanged();
@@ -196,16 +196,16 @@ void KisStopGradientEditor::colorChanged(const KoColor& color)
     QList<KoGradientStop> stops = m_gradient->stops();
 
     int currentStop = gradientSlider->selectedStop();
-    double t = stops[currentStop].first;
+    double t = stops[currentStop].position;
     
-    KoColor c(color, stops[currentStop].second.first.colorSpace());
-    c.setOpacity(stops[currentStop].second.first.opacityU8());
+    KoColor c(color, stops[currentStop].color.colorSpace());
+    c.setOpacity(stops[currentStop].color.opacityU8());
 
-    KoGradientStopType type = stops[currentStop].second.second;
+    KoGradientStopType type = stops[currentStop].type;
     
     stops.removeAt(currentStop);
-    stops.insert(currentStop, KoGradientStop(t, KoGradientStopInfo(c, type)));
-    qDebug() << "GradientEditor::colorChanged: stop " << currentStop << " type: " << stops[currentStop].second.second;
+    stops.insert(currentStop, KoGradientStop(t, c, type));
+    qDebug() << "GradientEditor::colorChanged: stop " << currentStop << " type: " << stops[currentStop].type;
     m_gradient->setStops(stops);
     gradientSlider->update();
 
@@ -219,16 +219,16 @@ void KisStopGradientEditor::opacityChanged(qreal value)
     QList<KoGradientStop> stops = m_gradient->stops();
 
     int currentStop = gradientSlider->selectedStop();
-    double t = stops[currentStop].first;
+    double t = stops[currentStop].position;
     
-    KoColor c = stops[currentStop].second.first;
+    KoColor c = stops[currentStop].color;
     c.setOpacity(value);
     
-    KoGradientStopType type = stops[currentStop].second.second;
+    KoGradientStopType type = stops[currentStop].type;
 
     stops.removeAt(currentStop);
-    stops.insert(currentStop, KoGradientStop(t, KoGradientStopInfo(c, type)));
-    qDebug() << "GradientEditor::opacityChanged: stop " << currentStop << " type: " << stops[currentStop].second.second;
+    stops.insert(currentStop, KoGradientStop(t, c, type));
+    qDebug() << "GradientEditor::opacityChanged: stop " << currentStop << " type: " << stops[currentStop].type;
     m_gradient->setStops(stops);
     gradientSlider->update();
 
@@ -251,7 +251,7 @@ void KisStopGradientEditor::reverse()
     QList<KoGradientStop> stops = m_gradient->stops();
     QList<KoGradientStop> reversedStops;
     for(const KoGradientStop& stop : stops) {
-        reversedStops.push_front(KoGradientStop(1 - stop.first, stop.second));
+        reversedStops.push_front(KoGradientStop(1 - stop.position, stop.color, stop.type));
     }
     m_gradient->setStops(reversedStops);
     gradientSlider->setSelectedStop(stops.size() - 1 - gradientSlider->selectedStop());
@@ -274,13 +274,13 @@ void KisStopGradientEditor::sortByValue( SortFlags flags = SORT_ASCENDING )
 
     int stopIndex = 0;
     for (const KoGradientStop& stop : stops) {
-        const float value = evenDistribution ? (float)stopIndex / (float)(stopCount - 1) : stop.second.first.toQColor().valueF();
+        const float value = evenDistribution ? (float)stopIndex / (float)(stopCount - 1) : stop.color.toQColor().valueF();
         const float position = ascending ? value : 1.f - value;
 
         if (ascending) {
-            sortedStops.push_back(KoGradientStop(position, stop.second));
+            sortedStops.push_back(KoGradientStop(position, stop.color, stop.type));
         } else {
-            sortedStops.push_front(KoGradientStop(position, stop.second));
+            sortedStops.push_front(KoGradientStop(position, stop.color, stop.type));
         }
 
         stopIndex++;

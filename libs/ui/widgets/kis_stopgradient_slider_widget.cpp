@@ -79,16 +79,6 @@ void KisStopGradientSliderWidget::setGradientResource(KoStopGradientSP gradient)
 
 }
 
-void KisStopGradientSliderWidget::setSelectedStopType(KoGradientStopType type) {
-    if (m_gradient && m_selectedStop >= 0) {
-        //QList<KoGradientStop> stops = m_gradient->stops();
-        //stops[m_selectedStop].second.second = type;
-        //m_gradient->setStops(stops);
-        //qDebug() << "GradientSliderWidget: selected stop set to: " << type;
-        //update();
-    }
-}
-
 void KisStopGradientSliderWidget::paintHandle(qreal position, const QColor &color, bool isSelected, QString text, QPainter *painter)
 {
     const QRect handlesRect = this->handlesStripeRect();
@@ -137,23 +127,16 @@ void KisStopGradientSliderWidget::paintEvent(QPaintEvent* pe)
 
         QList<KoGradientStop> handlePositions = m_gradient->stops();
         for (int i = 0; i < handlePositions.count(); i++) {
-            //if (i == m_selectedStop) continue;
             QString text = "";
-            if (handlePositions[i].second.second == FOREGROUNDSTOP) {
+            if (handlePositions[i].type == FOREGROUNDSTOP) {
                 text = "FG";
-            } else if (handlePositions[i].second.second == BACKGROUNDSTOP) {
+            } else if (handlePositions[i].type == BACKGROUNDSTOP) {
                 text = "BG";
             }
-            paintHandle(handlePositions[i].first,
-                        handlePositions[i].second.first.toQColor(),
+            paintHandle(handlePositions[i].position,
+                        handlePositions[i].color.toQColor(),
                         i == m_selectedStop, text, &painter);
         }
-
-        //if (m_selectedStop >= 0) {
-        //    paintHandle(handlePositions[m_selectedStop].first,
-        //                handlePositions[m_selectedStop].second.first.toQColor(),
-        //                true, &painter);
-        //}
     }
 }
 
@@ -165,7 +148,7 @@ int findNearestHandle(qreal t, const qreal tolerance, const QList<KoGradientStop
     for (int i = 0; i < stops.size(); i++) {
         const KoGradientStop &stop = stops[i];
 
-        const qreal distance = qAbs(t - stop.first);
+        const qreal distance = qAbs(t - stop.position);
         if (distance < minDistance) {
             minDistance = distance;
             result = i;
@@ -221,7 +204,7 @@ int getNewInsertPosition(const KoGradientStop &stop, const QList<KoGradientStop>
     int result = 0;
 
     for (int i = 0; i < stops.size(); i++) {
-        if (stop.first <= stops[i].first) break;
+        if (stop.position <= stops[i].position) break;
 
         result = i + 1;
     }
@@ -247,13 +230,13 @@ void KisStopGradientSliderWidget::mouseMoveEvent(QMouseEvent * e)
             }
         } else {
             if (m_selectedStop < 0) {
-                m_removedStop.first = qBound(0.0, t, 1.0);
+                m_removedStop.position = qBound(0.0, t, 1.0);
                 const int newPos = getNewInsertPosition(m_removedStop, stops);
                 stops.insert(newPos, m_removedStop);
                 m_selectedStop = newPos;
             } else {
                 KoGradientStop draggedStop = stops[m_selectedStop];
-                draggedStop.first = qBound(0.0, t, 1.0);
+                draggedStop.position = qBound(0.0, t, 1.0);
 
                 stops.removeAt(m_selectedStop);
                 const int newPos = getNewInsertPosition(draggedStop, stops);
@@ -311,7 +294,7 @@ void KisStopGradientSliderWidget::insertStop(double t)
     KoColor color;
     m_gradient->colorAt(color, t);
 
-    const KoGradientStop stop(t, KoGradientStopInfo(color, COLORSTOP));
+    const KoGradientStop stop(t, color, COLORSTOP);
     const int newPos = getNewInsertPosition(stop, stops);
 
     stops.insert(newPos, stop);

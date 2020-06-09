@@ -180,8 +180,8 @@ void KisGradientChooser::addStopGradient()
     KoStopGradientSP gradient(new KoStopGradient(""));
 
     QList<KoGradientStop> stops;
-    stops << KoGradientStop(0.0, KoGradientStopInfo(KoColor(QColor(250, 250, 0), KoColorSpaceRegistry::instance()->rgb8()), COLORSTOP)) 
-        << KoGradientStop(1.0, KoGradientStopInfo(KoColor(QColor(255, 0, 0, 255), KoColorSpaceRegistry::instance()->rgb8()), COLORSTOP));
+    stops << KoGradientStop(0.0, KoColor(QColor(250, 250, 0), KoColorSpaceRegistry::instance()->rgb8()), COLORSTOP) 
+        << KoGradientStop(1.0, KoColor(QColor(255, 0, 0, 255), KoColorSpaceRegistry::instance()->rgb8()), COLORSTOP);
     gradient->setType(QGradient::LinearGradient);
     gradient->setName(i18n("unnamed"));
     gradient->setStops(stops);

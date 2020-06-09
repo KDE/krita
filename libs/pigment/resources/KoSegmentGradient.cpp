@@ -992,22 +992,6 @@ void KoSegmentGradient::mirrorSegment(KoGradientSegment* segment)
     Q_ASSERT(segment != 0);
 
     segment->mirrorSegment();
-
-    //KoColor tmpColor = segment->startColor();
-    //segment->setStartColor(segment->endColor());
-    //segment->setEndColor(tmpColor);
-    //
-    //segment->setMiddleOffset(segment->endOffset() - (segment->middleOffset() - segment->startOffset()));
-
-    //if (segment->interpolation() == INTERP_SPHERE_INCREASING)
-    //    segment->setInterpolation(INTERP_SPHERE_DECREASING);
-    //else if (segment->interpolation() == INTERP_SPHERE_DECREASING)
-    //    segment->setInterpolation(INTERP_SPHERE_INCREASING);
-
-    //if (segment->colorInterpolation() == COLOR_INTERP_HSV_CW)
-    //    segment->setColorInterpolation(COLOR_INTERP_HSV_CCW);
-    //else if (segment->colorInterpolation() == COLOR_INTERP_HSV_CCW)
-    //    segment->setColorInterpolation(COLOR_INTERP_HSV_CW);
 }
 
 KoGradientSegment* KoSegmentGradient::removeSegment(KoGradientSegment* segment)

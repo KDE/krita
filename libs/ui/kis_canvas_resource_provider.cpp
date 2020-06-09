@@ -303,7 +303,7 @@ void KisCanvasResourceProvider::slotCanvasResourceChanged(int key, const QVarian
             KoStopGradientSP stopGradient = resource.dynamicCast<KoStopGradient>();
             if (stopGradient) {
                 QList<KoGradientStop> stops;
-                stops << KoGradientStop(0.0, KoGradientStopInfo(fgColor(), FOREGROUNDSTOP)) << KoGradientStop(1.0, KoGradientStopInfo(bgColor(), BACKGROUNDSTOP));
+                stops << KoGradientStop(0.0, fgColor(), FOREGROUNDSTOP) << KoGradientStop(1.0, bgColor(), BACKGROUNDSTOP);
                 stopGradient->setStops(stops);
                 KoResourceServerProvider::instance()->gradientServer()->updateResource(resource);
             }
@@ -314,7 +314,7 @@ void KisCanvasResourceProvider::slotCanvasResourceChanged(int key, const QVarian
             KoStopGradientSP stopGradient = resource.dynamicCast<KoStopGradient>();
             if (stopGradient) {
                 QList<KoGradientStop> stops;
-                stops << KoGradientStop(0.0, KoGradientStopInfo(fgColor(), FOREGROUNDSTOP)) << KoGradientStop(1.0, KoGradientStopInfo(KoColor(Qt::transparent, fgColor().colorSpace()), COLORSTOP));
+                stops << KoGradientStop(0.0, fgColor(), FOREGROUNDSTOP) << KoGradientStop(1.0, KoColor(Qt::transparent, fgColor().colorSpace()), COLORSTOP);
                 stopGradient->setStops(stops);
                 KoResourceServerProvider::instance()->gradientServer()->updateResource(resource);
             }
@@ -326,23 +326,11 @@ void KisCanvasResourceProvider::slotCanvasResourceChanged(int key, const QVarian
         QList<KoAbstractGradient*> resources = KoResourceServerProvider::instance()->gradientServer()->resources();
         for (int i = 0; i < resources.count(); i++) {
             KoAbstractGradient* gradient = resources[i];
-            //KoStopGradient* stopGradient = dynamic_cast<KoStopGradient*>(resource);
-            //if (stopGradient && stopGradient->hasVariableStops()) {
-                //convert all foreground and background stops to the new colors
-                //stops << KoGradientStop(0.0, fgColor()) << KoGradientStop(1.0, KoColor(QColor(0, 0, 0, 0), fgColor().colorSpace()));
             if(gradient->hasVariableColors()){
                 gradient->setVariableColors(fgColor(), bgColor());
                 KoResourceServerProvider::instance()->gradientServer()->updateResource(gradient);
             }
         }
-        //resource = KoResourceServerProvider::instance()->gradientServer()->resources()[1];
-        //stopGradient = dynamic_cast<KoStopGradient*>(resource);
-        //if(stopGradient) {
-        //    QList<KoGradientStop> stops;
-        //    stops << KoGradientStop(0.0, fgColor()) << KoGradientStop(1.0, bgColor());
-        //    stopGradient->setStops(stops);
-        //    KoResourceServerProvider::instance()->gradientServer()->updateResource(resource);
-        //}
 
 #endif
 

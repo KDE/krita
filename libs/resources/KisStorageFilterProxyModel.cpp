@@ -72,15 +72,19 @@ bool KisStorageFilterProxyModel::filterAcceptsRow(int source_row, const QModelIn
     switch (d->filterType) {
     case ByFileName:
     {
-        QMap<QString, QVariant> v = d->filter.toMap();
-        return KisResourceLocator::instance()->storageContainsResourceByFile(sourceModel()->data(idx, Qt::UserRole + KisStorageModel::Location).toString()
-                                                                             , v["resourcetype"].toString()
-                                                                             , v["filename"].toString());
+        QString filename = d->filter.toString();
+        return (sourceModel()->data(idx, Qt::UserRole + KisStorageModel::Location).toString().contains(filename));
     }
     case ByStorageType:
     {
         QString storageType = sourceModel()->data(idx, Qt::UserRole + KisStorageModel::StorageType).toString();
         return (d->filter.toStringList().contains(storageType));
+    }
+    case ByActive:
+    {
+        bool active = d->filter.toBool();
+        bool isActive = sourceModel()->data(idx, Qt::UserRole + KisStorageModel::Active).toBool();
+        return (active == isActive);
     }
     default:
         ;

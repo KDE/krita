@@ -43,8 +43,11 @@ public:
     ~KisStorageFilterProxyModel() override;
 
     enum FilterType {
-        ByFileName = 0,
-        ByStorageType
+        ByFileName = 0, ///< Pass a string: all storages whose name contains the
+                        /// string will be returned.
+        ByStorageType,  ///< Pass a string list of storage types
+        ByActive        ///< Pass a boolean, false to filter out active bundles,
+                        ///  true to filter out inactive bundles
     };
 
     KisResourceStorageSP storageForIndex(QModelIndex index = QModelIndex()) const;

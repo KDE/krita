@@ -407,35 +407,6 @@ void KisResourceLocator::setMetaDataForStorage(const QString &storageLocation, Q
     }
 }
 
-bool KisResourceLocator::storageContainsResourceByFile(const QString &storageLocation, const QString &resourceType, const QString &filename) const
-{
-    QSqlQuery q;
-    if (!q.prepare("SELECT *\n"
-                   "FROM   storages\n"
-                   ",      resources\n"
-                   ",      resource_types\n"
-                   "WHERE  resources.filename = :filename\n"
-                   "AND    resources.storage_id = storages.id\n"
-                   "AND    storages.location = :storage_location\n"
-                   "AND    resources.resource_type_id = resource_types.id\n"
-                   "AND    resource_types.name = :resource_type"))
-    {
-        qWarning() << "Could not prepare storageCOntainsResourceByFile query" << q.lastError();
-        return false;
-    }
-
-    q.bindValue(":filename", filename);
-    q.bindValue(":storage_location", storageLocation);
-    q.bindValue(":resource_type", resourceType);
-
-    if (!q.exec()) {
-        qWarning() << "Could not execute storageCOntainsResourceByFile query" << q.lastError() << q.boundValues();
-        return false;
-    }
-
-    return q.first();
-}
-
 void KisResourceLocator::purge()
 {
     d->resourceCache.clear();

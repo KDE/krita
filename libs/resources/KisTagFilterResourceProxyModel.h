@@ -29,6 +29,9 @@
 
 #include "kritaresources_export.h"
 
+/**
+ * @brief The KisTagFilterResourceProxyModel class filters the resources by tag or resource name
+ */
 class KRITARESOURCES_EXPORT KisTagFilterResourceProxyModel : public QSortFilterProxyModel, public KisAbstractResourceModel
 {
     Q_OBJECT

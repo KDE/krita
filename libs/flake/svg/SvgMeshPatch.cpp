@@ -21,10 +21,12 @@
 #include <math.h>
 #include <QDebug>
 #include <KoPathPoint.h>
+#include <KoPathSegment.h>
 
 
 SvgMeshPatch::SvgMeshPatch(QPointF startingPoint)
-    : m_startingPoint(startingPoint)
+    : m_newPath(true)
+    , m_startingPoint(startingPoint)
     , m_path(new KoPathShape)
 {
 }
@@ -44,27 +46,39 @@ SvgMeshStop* SvgMeshPatch::getStop(SvgMeshPatch::Type type) const
     return *m_nodes.find(type);
 }
 
-void SvgMeshPatch::parseStop(const QString& pathStr, QColor color, int row, int col)
+KoPathSegment SvgMeshPatch::getPath(Type type) const
+{
+    KoPathPointIndex index(0, type - 1);
+    return m_path->segmentByIndex(index);
+}
+
+void SvgMeshPatch::addStop(const QString& pathStr, QColor color, Type edge)
 {
     SvgMeshStop *node = new SvgMeshStop(color, m_startingPoint);
+    m_nodes.insert(edge, node);
 
-    // If row is 0, then the patch start from Top, otherwise from Right
-    if (row == 0) {
-        m_nodes.insert(static_cast<Type>(countPoints() + SvgMeshPatch::Top), node);
-    } else {
-        m_nodes.insert(static_cast<Type>(countPoints() + SvgMeshPatch::Right), node);
+    m_startingPoint = parseMeshPath(pathStr, edge == SvgMeshPatch::Left);
+}
+
+void SvgMeshPatch::addStop(const QList<QPointF>& pathPoints, QColor color, Type edge)
+{
+    SvgMeshStop *stop = new SvgMeshStop(color, pathPoints.first());
+    m_nodes.insert(edge, stop);
+
+    if (edge == SvgMeshPatch::Top) {
+        m_path->moveTo(pathPoints.first());
+        m_newPath = false;
+    }
+    
+    // if path is a line
+    if (pathPoints.size() == 2) {
+        m_path->lineTo(pathPoints.last());
+    } else if (pathPoints.size() == 4) {
+        // if path is a Bezier curve
+        m_path->curveTo(pathPoints[1], pathPoints[2], pathPoints[3]);
     }
 
-    // if this is the last point for the patch
-    if ((row == 0 && col == 0 && countPoints() == 4)
-     || (row == 0 && col  > 0 && countPoints() == 3)
-     || (row  > 0 && col == 0 && countPoints() == 3)
-     || (row  > 0 && col  > 0 && countPoints() == 2)) {
-
-        parseMeshPath(pathStr, true);
-    } else {
-        parseMeshPath(pathStr);
-    }
+    m_startingPoint = pathPoints.last();
 }
 
 int SvgMeshPatch::countPoints() const
@@ -72,7 +86,7 @@ int SvgMeshPatch::countPoints() const
     return m_nodes.size();
 }
 
-void SvgMeshPatch::parseMeshPath(const QString s, bool close)
+QPointF SvgMeshPatch::parseMeshPath(const QString& s, bool close)
 {
     // bits and pieces from KoPathShapeLoader, see the copyright above
     if (!s.isEmpty()) {
@@ -82,11 +96,10 @@ void SvgMeshPatch::parseMeshPath(const QString s, bool close)
 
         const QByteArray buffer = d.toLatin1();
         const char *ptr = buffer.constData();
-        const char *end = buffer.constData() + buffer.length() + 1;
         qreal curx = m_startingPoint.x();
         qreal cury = m_startingPoint.y();
         qreal tox, toy, x1, y1, x2, y2;
-        bool relative;
+        bool relative = false;
         char command = *(ptr++);
 
         if (m_newPath) {
@@ -94,67 +107,63 @@ void SvgMeshPatch::parseMeshPath(const QString s, bool close)
             m_newPath = false;
         }
 
-        while (ptr < end) {
-            if (*ptr == ' ')
-                ++ptr;
+       while (*ptr == ' ')
+           ++ptr;
 
-            relative = false;
+       switch (command) {
+       case 'l':
+           relative = true;
+           Q_FALLTHROUGH();
+       case 'L': {
+           ptr = getCoord(ptr, tox);
+           ptr = getCoord(ptr, toy);
 
-            switch (command) {
-            case 'l':
-                relative = true;
-                Q_FALLTHROUGH();
-            case 'L': {
-                ptr = getCoord(ptr, tox);
-                ptr = getCoord(ptr, toy);
+           if (relative) {
+               tox = curx + tox;
+               toy = cury + toy;
+           }
 
-                if (relative) {
-                    tox = curx + tox;
-                    toy = cury + toy;
-                }
+           m_path->lineTo(QPointF(tox, toy));
+           break;
+       }
+       case 'c':
+           relative = true;
+           Q_FALLTHROUGH();
+       case 'C': {
+           ptr = getCoord(ptr, x1);
+           ptr = getCoord(ptr, y1);
+           ptr = getCoord(ptr, x2);
+           ptr = getCoord(ptr, y2);
+           ptr = getCoord(ptr, tox);
+           ptr = getCoord(ptr, toy);
 
-                m_path->lineTo(QPointF(tox, toy));
-                break;
-            }
-            case 'c':
-                relative = true;
-                Q_FALLTHROUGH();
-            case 'C': {
-                ptr = getCoord(ptr, x1);
-                ptr = getCoord(ptr, y1);
-                ptr = getCoord(ptr, x2);
-                ptr = getCoord(ptr, y2);
-                ptr = getCoord(ptr, tox);
-                ptr = getCoord(ptr, toy);
+           if (relative) {
+               x1  = curx + x1;
+               y1  = cury + y1;
+               x2  = curx + x2;
+               y2  = cury + y2;
+               tox = curx + tox;
+               toy = cury + toy;
+           }
 
-                if (relative) {
-                    x1  = curx + x1;
-                    y1  = cury + y1;
-                    x2  = curx + x2;
-                    y2  = cury + y2;
-                    tox = curx + tox;
-                    toy = cury + toy;
-                }
+           if (close) {
+               QPointF start = m_path->pointByIndex(KoPathPointIndex(0, 0))->point();
+               tox = start.x();
+               toy = start.y();
+           }
 
-                if (close) {
-                    QPointF start = m_path->pointByIndex(KoPathPointIndex(0, 0))->point();
-                    tox = start.x();
-                    toy = start.y();
-                }
+           m_path->curveTo(QPointF(x1, y1), QPointF(x2, y2), QPointF(tox, toy));
+           break;
+       }
 
-                m_path->curveTo(QPointF(x1, y1), QPointF(x2, y2), QPointF(tox, toy));
-                break;
-            }
-
-            default: {
-                qWarning() << "SvgMeshPatch::parseMeshPath: Bad command \"" << command << "\"";
-                return;
-            }
-            }
-            command = *(ptr++);
-            m_startingPoint = {tox, toy};
-        }
+       default: {
+           qWarning() << "SvgMeshPatch::parseMeshPath: Bad command \"" << command << "\"";
+           return QPointF();
+       }
+       }
+       return {tox, toy};
     }
+    return QPointF();
 }
 
 const char* SvgMeshPatch::getCoord(const char* ptr, qreal& number)

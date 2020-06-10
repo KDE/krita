@@ -29,10 +29,15 @@ public:
     ~SvgMeshArray();
 
     void newRow();
-    void addPatch(SvgMeshPatch* patch);
+
+    bool addPatch(QList<QPair<QString, QColor>>& stops, const QPointF initialPoint);
 
     /// Get the point of a node in mesharray
     SvgMeshStop getStop(const SvgMeshPatch::Type edge, const int row, const int col) const;
+    
+    /// Get the Path Points for a segment of the meshpatch
+    QList<QPointF> getPath(const SvgMeshPatch::Type edge, const int row, const int col) const;
+
 
 private:
     /// where each vector is a meshrow

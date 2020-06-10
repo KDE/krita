@@ -496,8 +496,9 @@ SvgGradientHelper* SvgParser::parseMeshGradient(const KoXmlElement &e)
                         startingNode = g->getMeshArray()->getStop(SvgMeshPatch::Right, irow, icols - 1);
                     }
 
-                    SvgMeshPatch *meshpatch = parseMeshPatch(meshpatchNode, startingNode, irow, icols);
-                    g->getMeshArray()->addPatch(meshpatch);
+                    QList<QPair<QString, QColor>> rawStops = parseMeshPatch(meshpatchNode);
+                    // TODO handle the false result
+                    g->getMeshArray()->addPatch(rawStops, startingNode.point);
                     icols++;
                 }
             }
@@ -511,34 +512,34 @@ SvgGradientHelper* SvgParser::parseMeshGradient(const KoXmlElement &e)
     return &m_gradients[gradientId];
 }
 
-SvgMeshPatch* SvgParser::parseMeshPatch(const KoXmlNode& meshpatchNode, const SvgMeshStop& startingStop, const int row, const int col)
+QList<QPair<QString, QColor>> SvgParser::parseMeshPatch(const KoXmlNode& meshpatchNode)
 {
-    SvgGraphicsContext *gc = m_context.currentGC();
-    if (!gc) return nullptr;
+    // path and its associated color
+    QList<QPair<QString, QColor>> rawstops;
 
-    SvgMeshPatch *meshpatch = new SvgMeshPatch(startingStop.point);
+    SvgGraphicsContext *gc = m_context.currentGC();
+    if (!gc) return rawstops;
 
     KoXmlElement e = meshpatchNode.toElement();
 
     KoXmlElement stop;
     forEachElement(stop, e) {
-        qreal X;    // don't care..
         QColor color;
 
-        // Use color from the previous stop
+        // keep the default (Invalid Color), incase none is provided
         if (stop.attribute("stop-color").isNull()) {
-            color = startingStop.color;
+            color = QColor();
         } else {
+            qreal X;    // don't care..
             color = m_context.styleParser().parseColorStop(stop, gc, X).second;
         }
 
         QString pathStr = stop.attribute("path");
-        // qDebug() << pathStr;
 
-        meshpatch->parseStop(pathStr, color, row, col);
+        rawstops.append({pathStr, color});
     }
 
-    return meshpatch;
+    return rawstops;
 }
 
 inline QPointF bakeShapeOffset(const QTransform &patternTransform, const QPointF &shapeOffset)

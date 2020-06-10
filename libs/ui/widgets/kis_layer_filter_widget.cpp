@@ -56,6 +56,12 @@ KisLayerFilterWidget::KisLayerFilterWidget(QWidget *parent) : QWidget(parent)
     textFilter->setClearButtonEnabled(true);
 
     connect(textFilter, SIGNAL(textChanged(QString)), this, SIGNAL(filteringOptionsChanged()));
+    connect(textFilter, &QLineEdit::returnPressed, [this]() {
+        QMenu* menu = dynamic_cast<QMenu*>(parentWidget());
+        if (menu) {
+            menu->close();
+        }
+    });
 
     KisNodeViewColorScheme colorScheme;
 

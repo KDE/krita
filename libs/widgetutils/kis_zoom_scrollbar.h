@@ -26,7 +26,7 @@
 
 #include <kritawidgetutils_export.h>
 
-class KRITAWIDGETUTILS_EXPORT KisZoomableScrollbar : public QScrollBar
+class KRITAWIDGETUTILS_EXPORT KisZoomableScrollBar : public QScrollBar
 {
     Q_OBJECT
 
@@ -38,9 +38,9 @@ private:
     bool catchTeleportCorrection = false;
 
 public:
-    KisZoomableScrollbar(QWidget* parent = 0);
-    KisZoomableScrollbar(Qt::Orientation orientation, QWidget * parent = 0);
-    ~KisZoomableScrollbar();
+    KisZoomableScrollBar(QWidget* parent = 0);
+    KisZoomableScrollBar(Qt::Orientation orientation, QWidget * parent = 0);
+    ~KisZoomableScrollBar();
 
     //Catch for teleportation from one side of the screen to the other.
     bool catchTeleports(QMouseEvent* event);

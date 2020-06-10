@@ -151,10 +151,11 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     m_d->horizontalRuler = new TimelineRulerHeader(this);
     this->setHorizontalHeader(m_d->horizontalRuler);
 
-    KisZoomableScrollbar* hZoomableBar = new KisZoomableScrollbar(this);
+    KisZoomableScrollBar* hZoomableBar = new KisZoomableScrollBar(this);
     setHorizontalScrollBar(hZoomableBar);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    setVerticalScrollBar(new KisZoomableScrollbar(this));
+    hZoomableBar->setEnabled(false);
+    setVerticalScrollBar(new KisZoomableScrollBar(this));
 
     connect(hZoomableBar, SIGNAL(zoom(qreal)), this, SLOT(slotScrollbarZoom(qreal)));
 
@@ -432,6 +433,8 @@ void TimelineFramesView::setModel(QAbstractItemModel *model)
 {
     TimelineFramesModel *framesModel = qobject_cast<TimelineFramesModel*>(model);
     m_d->model = framesModel;
+
+    horizontalScrollBar()->setEnabled((framesModel != nullptr));
 
     QTableView::setModel(model);
 
@@ -1184,7 +1187,7 @@ void TimelineFramesView::mouseMoveEvent(QMouseEvent *e)
             const int height = m_d->layersHeader->defaultSectionSize();
 
             if (m_d->initialDragPanValue.x() - diff.x() > horizontalScrollBar()->maximum() || m_d->initialDragPanValue.x() - diff.x() > horizontalScrollBar()->minimum() ){
-                KisZoomableScrollbar* zoombar = static_cast<KisZoomableScrollbar*>(horizontalScrollBar());
+                KisZoomableScrollBar* zoombar = static_cast<KisZoomableScrollBar*>(horizontalScrollBar());
                 zoombar->overscroll(-diff.x());
             }
 
@@ -1234,6 +1237,12 @@ void TimelineFramesView::wheelEvent(QWheelEvent *e)
     if (column >= 0 && !m_d->dragInProgress) {
         setCurrentIndex(m_d->model->index(index.row(), column));
     }
+}
+
+void TimelineFramesView::resizeEvent(QResizeEvent *e)
+{
+    updateGeometries();
+    slotUpdateInfiniteFramesCount();
 }
 
 void TimelineFramesView::slotUpdateLayersMenu()

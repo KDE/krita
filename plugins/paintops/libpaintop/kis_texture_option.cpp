@@ -208,7 +208,7 @@ KisTextureProperties::KisTextureProperties(int levelOfDetail)
     : m_levelOfDetail(levelOfDetail)
 {
     KoResourceServer<KoAbstractGradient>* rserver = KoResourceServerProvider::instance()->gradientServer();
-    m_gradient = dynamic_cast<KoAbstractGradient*>(rserver.resources().first());
+    m_gradient = dynamic_cast<KoAbstractGradient*>(rserver->resources().first());
 }
 
 void KisTextureProperties::fillProperties(const KisPropertiesConfigurationSP setting)

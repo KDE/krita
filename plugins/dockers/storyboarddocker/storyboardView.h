@@ -42,7 +42,10 @@ public:
     void paintEvent(QPaintEvent *event) override;
     QRect visualRect(const QModelIndex &index) const override;
     QModelIndex indexAt(const QPoint &point) const override;
+    void mouseMoveEvent(QMouseEvent *event) override;
 
+private:
+    QModelIndex m_hoverIndex;
 };
 
 #endif

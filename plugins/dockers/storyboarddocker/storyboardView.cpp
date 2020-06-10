@@ -39,8 +39,8 @@ StoryboardView::StoryboardView(QWidget *parent)
     setResizeMode(QListView::Adjust);
     setUniformItemSizes(true);
     setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
-    
-    qDebug()<<"storyview created";
+    QWidget::setMouseTracking(true);
+    viewport()->setAttribute( Qt::WA_Hover );
 }
 
 StoryboardView::~StoryboardView()
@@ -69,6 +69,9 @@ void StoryboardView::paintEvent(QPaintEvent *event)
             }
             if (childIndex == selectionModel()->currentIndex()) {
                 option.state |= QStyle::State_HasFocus;
+            }
+            if (childIndex == m_hoverIndex){
+                option.state |= QStyle::State_MouseOver;
             }
             option.rect = visualRect(childIndex);
             itemDelegate()->paint(&painter, option, childIndex);
@@ -146,4 +149,12 @@ QModelIndex StoryboardView::indexAt(const QPoint &point) const
         }
     }
     return index;
+}
+
+void StoryboardView::mouseMoveEvent(QMouseEvent *event)
+{
+    event->accept();
+    QListView::mouseMoveEvent(event);
+
+    m_hoverIndex = indexAt(event->pos());
 }

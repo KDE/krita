@@ -129,5 +129,4 @@ void CommentDelegate::updateEditorGeometry(QWidget *editor,
     const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     editor->setGeometry(option.rect);
-    qDebug()<<"setting geometry";
 }

@@ -43,10 +43,10 @@ class CommentMenu: public QMenu
 {
     Q_OBJECT
 public:
-    CommentMenu(QWidget *parent)
+    CommentMenu(QWidget *parent, CommentModel *m_model)
         : QMenu(parent)
         , m_menuUI(new Ui_WdgCommentMenu())
-        , model(new CommentModel(this))
+        , model(m_model)
         , delegate(new CommentDelegate(this))
     {
         QWidget* commentWidget = new QWidget(this);
@@ -152,7 +152,8 @@ StoryboardDockerDock::StoryboardDockerDock( )
     connect(m_exportAsPdfAction, SIGNAL(triggered()), this, SLOT(slotExportAsPdf()));
     connect(m_exportAsSvgAction, SIGNAL(triggered()), this, SLOT(slotExportAsSvg()));
 
-    m_commentMenu = new CommentMenu(this);
+    m_commentModel = new CommentModel(this);
+    m_commentMenu = new CommentMenu(this, m_commentModel);
 
     m_ui->btnComment->setMenu(m_commentMenu);
     m_ui->btnComment->setPopupMode(QToolButton::MenuButtonPopup);
@@ -177,14 +178,15 @@ StoryboardDockerDock::StoryboardDockerDock( )
     connect(m_modeGroup, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(slotModeChanged(QAbstractButton*)));
     connect(m_viewGroup, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(slotViewChanged(QAbstractButton*)));
 
-    StoryboardModel *model = new StoryboardModel(this);
+    m_storyboardModel = new StoryboardModel(this);
     StoryboardDelegate *delegate = new StoryboardDelegate(this);
     delegate->setView(m_ui->listView);
-    m_ui->listView->setModel(model);
+    m_ui->listView->setModel(m_storyboardModel);
     m_ui->listView->setItemDelegate(delegate);
     delegate->setView(m_ui->listView);
 
-    model->insertRows(0, 10);
+    m_storyboardModel->insertRows(0, 10);
+    m_storyboardModel->setCommentModel(m_commentModel);
 }
 
 StoryboardDockerDock::~StoryboardDockerDock()

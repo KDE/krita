@@ -1126,7 +1126,7 @@ class ChannelsToLayers(Extension):
         lblPreviewSrc.setFixedWidth(imgThumbSrc.width() + 4)
         vbxPreviewContainer.addWidget(lblPreviewSrc)
 
-        lblPreviewLblSrc = QLabel(i18n("Original"))
+        lblPreviewLblSrc = QLabel(i18nc("the original layer", "Original"))
         lblPreviewLblSrc.setFixedWidth(imgThumbSrc.width() + 4)
         vbxPreviewLblContainer.addWidget(lblPreviewLblSrc)
 

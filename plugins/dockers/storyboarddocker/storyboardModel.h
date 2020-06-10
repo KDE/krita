@@ -59,6 +59,7 @@ public:
     //this function accesses the value from the comment model
     int commentCount() const;
     void setCommentModel(CommentModel *commentModel);
+    Comment getComment(int row) const;
 
 private Q_SLOTS:
     void slotCommentDataChanged();

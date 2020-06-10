@@ -41,6 +41,13 @@ StoryboardView::StoryboardView(QWidget *parent)
     setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     QWidget::setMouseTracking(true);
     viewport()->setAttribute( Qt::WA_Hover );
+    //make drag and drop work as expected
+    /* 
+    setDragEnabled(true);
+    setAcceptDrops(true);
+    setDropIndicatorShown(true);
+    setDragDropMode(QAbstractItemView::InternalMove);
+    */
 }
 
 StoryboardView::~StoryboardView()
@@ -77,7 +84,6 @@ void StoryboardView::paintEvent(QPaintEvent *event)
             itemDelegate()->paint(&painter, option, childIndex);
         }
     }
-
 }
 
 QRect StoryboardView::visualRect(const QModelIndex &index) const
@@ -127,7 +133,8 @@ QRect StoryboardView::visualRect(const QModelIndex &index) const
             default:
             {
                 //comment rect
-                parentRect.setTop(parentRect.top() + 120+fontHeight);
+                parentRect.setTop(parentRect.top() + 120 + fontHeight + (index.row() - 4) * 100);
+                parentRect.setHeight(100);
                 return parentRect;
             }
         }

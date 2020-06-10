@@ -19,6 +19,7 @@
 #include "storyboardDelegate.h"
 
 #include <QLineEdit>
+#include <QTextEdit>
 #include <QDebug>
 #include <QStyle>
 #include <QPainter>
@@ -129,7 +130,8 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
                 default:
                 {
                     p->setPen(QPen(option.palette.dark(), 2));
-                    p->drawRect(option.rect);
+                    //p->drawRect(option.rect);
+                    drawComment(p, option, data, index);
                     break;
                 }
             }
@@ -156,10 +158,25 @@ void StoryboardDelegate::drawSpinBox(QPainter *p, const QStyleOptionViewItem &op
     p->drawText(rect, Qt::AlignHCenter | Qt::AlignVCenter, data);
 }
 
-/*void StoryboardDelegate::drawScrollbar(QPainter *p, const QStyleOptionViewItem &option, QString data)
+void StoryboardDelegate::drawComment(QPainter *p, const QStyleOptionViewItem &option, QString data, const QModelIndex &index) const
 {
-    //draw comments box
-}*/
+    QStyle *style = option.widget ? option.widget->style() : QApplication::style();
+    const StoryboardModel* model = dynamic_cast<const StoryboardModel*>(index.model());
+
+    QRect titleRect = option.rect;
+    titleRect.setHeight(option.fontMetrics.height() + 3);
+    p->setPen(QPen(option.palette.text(), 1));
+    p->drawText(titleRect, Qt::AlignLeft | Qt::AlignVCenter, model->getComment(index.row() - 4).name);
+
+    QRect contentRect = option.rect;
+    contentRect.setTop(option.rect.top() + option.fontMetrics.height() + 3);
+    p->setPen(QPen(option.palette.dark(), 2));
+    p->drawRect(contentRect);
+    contentRect.setTopLeft(contentRect.topLeft() + QPoint(5, 5));
+    contentRect.setBottomRight(contentRect.bottomRight() - QPoint(5, 5));
+    p->setPen(QPen(option.palette.text(), 1));
+    p->drawText(contentRect, Qt::AlignLeft | Qt::AlignTop | Qt::TextWordWrap, data);
+}
 
 QSize StoryboardDelegate::sizeHint(const QStyleOptionViewItem &option,
                                 const QModelIndex &index) const
@@ -172,7 +189,7 @@ QSize StoryboardDelegate::sizeHint(const QStyleOptionViewItem &option,
         if(numItem <=0){
             return QSize(0, 0);
         }
-        return QSize(width / numItem, 140 + numComments*100);
+        return QSize(width / numItem, 120 + option.fontMetrics.height() + 3 + numComments*100 + 10);
     }
     else {
         return option.rect.size();
@@ -192,16 +209,21 @@ QWidget *StoryboardDelegate::createEditor(QWidget *parent,
         {
             case 0:             //frame thumbnail is uneditable
             return nullptr;
+            case 1:
+            {
+                QLineEdit *editor = new QLineEdit(parent);
+                return editor;
+            }
             case 2:            //second and frame spin box
             case 3:
             {
                 QSpinBox *spinbox = new QSpinBox(parent);
-                spinbox->setRange(0,999);
+                spinbox->setRange(0, 999);
                 return spinbox;
             }
             default:             // for itemName and comments
             {
-                QLineEdit *editor = new QLineEdit(parent);
+                QTextEdit *editor = new QTextEdit(parent);
                 return editor;
             }
         }
@@ -249,6 +271,12 @@ void StoryboardDelegate::setEditorData(QWidget *editor,
         {
             case 0:             //frame thumbnail is uneditable
                 return;
+            case 1:
+            {
+                QLineEdit *lineEdit = static_cast<QLineEdit*>(editor);
+                lineEdit->setText(value.toString());
+                return;
+            }
             case 2:            //second and frame spin box
             case 3:
             {
@@ -258,8 +286,8 @@ void StoryboardDelegate::setEditorData(QWidget *editor,
             }
             default:             // for itemName and comments
             {
-                QLineEdit *lineEdit = static_cast<QLineEdit*>(editor);
-                lineEdit->setText(value.toString());
+                QTextEdit *textEdit = static_cast<QTextEdit*>(editor);
+                textEdit->setText(value.toString());
                 return;
             }
         }
@@ -276,6 +304,13 @@ void StoryboardDelegate::setModelData(QWidget *editor, QAbstractItemModel *model
         {
             case 0:             //frame thumbnail is uneditable
                 return;
+            case 1:              // for itemName
+            {
+                QLineEdit *lineEdit = static_cast<QLineEdit*>(editor);
+                QString value = lineEdit->text();
+                model->setData(index, value, Qt::EditRole);
+                return;
+            }
             case 2:            //second and frame spin box
             case 3:
             {
@@ -284,10 +319,10 @@ void StoryboardDelegate::setModelData(QWidget *editor, QAbstractItemModel *model
                 model->setData(index, value, Qt::EditRole);
                 return;
             }
-            default:             // for itemName and comments
+            default:             // for comments
             {
-                QLineEdit *lineEdit = static_cast<QLineEdit*>(editor);
-                QString value = lineEdit->text();
+                QTextEdit *textEdit = static_cast<QTextEdit*>(editor);
+                QString value = textEdit->toPlainText();
                 model->setData(index, value, Qt::EditRole);
                 return;
             }
@@ -298,8 +333,14 @@ void StoryboardDelegate::setModelData(QWidget *editor, QAbstractItemModel *model
 void StoryboardDelegate::updateEditorGeometry(QWidget *editor,
     const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    editor->setGeometry(option.rect);
-    qDebug()<<"setting geometry";
+    if (index.row() < 4){
+        editor->setGeometry(option.rect);
+    }
+    else {                                                //for comment textedits
+        QRect commentRect = option.rect;
+        commentRect.setTop(option.rect.top() + option.fontMetrics.height() + 3);
+        editor->setGeometry(commentRect);
+    }
 }
 
 void StoryboardDelegate::setView(QListView *view)

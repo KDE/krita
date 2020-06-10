@@ -46,6 +46,7 @@ public:
 
     void setView(QListView *view);
     void drawSpinBox(QPainter *p, const QStyleOptionViewItem &option, QString data) const;
+    void drawComment(QPainter *p, const QStyleOptionViewItem &option, QString data, const QModelIndex &index) const;
 
     QRect spinBoxUpButton(const QStyleOptionViewItem &option);
     QRect spinBoxDownButton(const QStyleOptionViewItem &option);

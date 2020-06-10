@@ -18,9 +18,8 @@ code repository is provided by KDE: https://invent.kde.org/graphics/krita.git
 https://docs.krita.org/en/user_manual.html
 
 ### Development Notes and Build Instructions
-If you're building on Windows or OSX you'll need to build some third-party dependencies first. You should look at the README in the 3rdparty folder for directions. 
 
-If you're building on Linux, please follow [the online documentation](https://docs.krita.org/en/untranslatable_pages/building_krita.html).
+Please follow [the online documentation](https://docs.krita.org/en/untranslatable_pages/building_krita.html) in order to learn how to build Krita on Linux, Windows, MacOS and Android.
 
 Other developer guides, notes and wiki:
 

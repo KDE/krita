@@ -22,10 +22,17 @@
 #include <KisPart.h>
 #include "KisSessionManagerDialog.h"
 
+int KisSessionManagerDialog::refreshEventType = -1;
+
 KisSessionManagerDialog::KisSessionManagerDialog(QWidget *parent)
     : QDialog(parent)
 {
     setupUi(this);
+    
+    // Register the custom event type that is used to defer UI updates
+    if (refreshEventType == -1) {
+        refreshEventType = QEvent::registerEventType();
+    }
 
     connect(btnNew, SIGNAL(clicked()), this, SLOT(slotNewSession()));
     connect(btnRename, SIGNAL(clicked()), this, SLOT(slotRenameSession()));
@@ -48,12 +55,25 @@ KisSessionManagerDialog::KisSessionManagerDialog(QWidget *parent)
     updateButtons();
 }
 
+bool KisSessionManagerDialog::event(QEvent *event)
+{
+    if (event->type() == (QEvent::Type) refreshEventType) {
+        // Do the actual work of updating the button state when receiving a custom event
+        bool hasSelectedSession = getSelectedSession() != nullptr;
+        btnDelete->setEnabled(hasSelectedSession);
+        btnSwitchTo->setEnabled(hasSelectedSession);
+        btnRename->setEnabled(hasSelectedSession);
+        return true;
+    } else {
+        return QDialog::event(event);
+    }
+}
+
 void KisSessionManagerDialog::updateButtons()
 {
-    bool hasSelectedSession = getSelectedSession() != nullptr;
-    btnDelete->setEnabled(hasSelectedSession);
-    btnSwitchTo->setEnabled(hasSelectedSession);
-    btnRename->setEnabled(hasSelectedSession);
+    // Defer updating the buttons by posting a custom event with low priority to avoid locking against
+    // a non-recursive session lock that may be already held by the thread
+    QApplication::postEvent(this, new QEvent((QEvent::Type) refreshEventType), Qt::LowEventPriority);
 }
 
 void KisSessionManagerDialog::slotNewSession()

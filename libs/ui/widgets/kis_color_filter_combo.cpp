@@ -307,7 +307,7 @@ void KisColorFilterCombo::paintColorPie(QStylePainter &painter, const QPalette& 
         if (currentColor.alpha() > 0) {
             painter.drawEllipse(rect);
         } else if (currentLabel == 0) {
-            QColor white = QColorConstants::White;
+            QColor white = Qt::white;
             QColor grey = QColor(220,220,220);
             painter.setBrush(QBrush(shadowColor));
             painter.setRenderHint(QPainter::Antialiasing);

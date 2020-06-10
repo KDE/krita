@@ -126,7 +126,7 @@ TimelineDockerTitleBar::TimelineDockerTitleBar(QWidget* parent) :
         // Audio menu..
         btnAudioMenu = new QPushButton(KisIconUtils::loadIcon("audio-none"), "", this);
         btnOnionSkinsMenu->setToolTip(i18n("Audio menu"));
-        btnAudioMenu->setDisabled(true);
+        btnAudioMenu->hide(); // (NOTE: Hidden for now while audio features develop.)
         layout->addWidget(btnAudioMenu);
 
         {   // Settings menu..

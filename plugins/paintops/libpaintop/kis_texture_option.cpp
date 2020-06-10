@@ -131,7 +131,7 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfigurationSP setting) 
     }
 
     int texturingMode = m_textureOptions->cmbTexturingMode->currentIndex();
-    bool invert = (m_textureOptions->chkInvert->checkState() == Qt::Checked);   
+    bool invert = (m_textureOptions->chkInvert->checkState() == Qt::Checked);
 
     setting->setProperty("Texture/Pattern/Scale", scale);
     setting->setProperty("Texture/Pattern/Brightness", brightness);
@@ -180,7 +180,7 @@ void KisTextureOption::readOptionSetting(const KisPropertiesConfigurationSP sett
     m_textureOptions->cmbCutoffPolicy->setCurrentIndex(setting->getInt("Texture/Pattern/CutoffPolicy"));
     m_textureOptions->cutoffSlider->slotModifyBlack(setting->getInt("Texture/Pattern/CutoffLeft", 0));
     m_textureOptions->cutoffSlider->slotModifyWhite(setting->getInt("Texture/Pattern/CutoffRight", 255));
-    m_textureOptions->chkInvert->setChecked(setting->getBool("Texture/Pattern/Invert")); 
+    m_textureOptions->chkInvert->setChecked(setting->getBool("Texture/Pattern/Invert"));
 
 }
 
@@ -207,10 +207,8 @@ void KisTextureOption::resetGUI(KoResource* res)
 KisTextureProperties::KisTextureProperties(int levelOfDetail)
     : m_levelOfDetail(levelOfDetail)
 {
-    QString gradientName = "Foreground to Background";
     KoResourceServer<KoAbstractGradient>* rserver = KoResourceServerProvider::instance()->gradientServer();
-    KoResource* gradient = rserver->resourceByName(gradientName);
-    m_gradient = dynamic_cast<KoAbstractGradient*>(gradient);
+    m_gradient = dynamic_cast<KoAbstractGradient*>(rserver.resources().first());
 }
 
 void KisTextureProperties::fillProperties(const KisPropertiesConfigurationSP setting)
@@ -319,8 +317,7 @@ void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset
                 dab->colorSpace()->setOpacity(dabData, dabA, 1);
             }
             else if (m_texturingMode == LIGHTNESS) {
-                //int pressureOffset = (1.0 - pressure) * 255;
-                const quint8* maskData = lightIter->oldRawData(); // +pressureOffset;
+                const quint8* maskData = lightIter->oldRawData();
                 QColor maskColor;
                 createQColorFromPixel(maskColor, maskData, mask->colorSpace());
 
@@ -340,14 +337,6 @@ void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset
                     KoColor dabColor(dabData, dab->colorSpace());
                     colors[1] = dabColor.data();
                     colorMix->mixColors(colors, colorWeights, 2, dabData);
-                    
-                    /*paintcolor.colorSpace()->convertPixelsTo(paintcolor.data(), finalColor->data(), dab->colorSpace(), 1,
-                        KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());*/
-
-
-                    //for (int i = 0; i < dab->pixelSize(); i++) {
-                    //    dabData[i] = paintcolor.data()[i]; //should be fine, since they use the same color space...
-                    //}
                 }
             }
             lightIter->nextPixel();

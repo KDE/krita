@@ -43,6 +43,7 @@
 #include "kis_action_manager.h"
 #include "kis_animation_player.h"
 #include "kis_animation_utils.h"
+#include "kis_image_config.h"
 #include "kis_keyframe_channel.h"
 #include "kis_image.h"
 
@@ -446,8 +447,15 @@ void TimelineDocker::setViewManager(KisViewManager *view)
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(action, SIGNAL(triggered(bool)), SLOT(nextFrame()));
 
-    action = actionManager->createAction("lazy_frame");
+    action = actionManager->createAction("auto_key");
     m_d->titlebar->btnAutoFrame->setDefaultAction(action);
+    connect(action, SIGNAL(triggered(bool)), SLOT(setAutoKey(bool)));
+
+    {
+        KisImageConfig config(true);
+        action->setChecked(config.autoKeyEnabled());
+        action->setIcon(config.autoKeyEnabled() ? KisIconUtils::loadIcon("auto-key-on") : KisIconUtils::loadIcon("auto-key-off"));
+    }
 
     action = actionManager->createAction("drop_frames");
     m_d->titlebar->btnDropFrames->setDefaultAction(action);
@@ -554,8 +562,21 @@ void TimelineDocker::setPlaybackSpeed(int playbackSpeed)
 void TimelineDocker::setDropFrames(bool dropFrames)
 {
     KisConfig cfg(false);
-    cfg.setAnimationDropFrames(dropFrames);
-    updatePlaybackStatistics();
+    if (dropFrames != cfg.animationDropFrames()) {
+        cfg.setAnimationDropFrames(dropFrames);
+        updatePlaybackStatistics();
+    }
+}
+
+void TimelineDocker::setAutoKey(bool autoKey)
+{
+    KisImageConfig cfg(false);
+    if (autoKey != cfg.autoKeyEnabled()) {
+        cfg.setAutoKeyEnabled(autoKey);
+        const QIcon icon = cfg.autoKeyEnabled() ? KisIconUtils::loadIcon("auto-key-on") : KisIconUtils::loadIcon("auto-key-off");
+        QAction* action = m_d->titlebar->btnAutoFrame->defaultAction();
+        action->setIcon(icon);
+    }
 }
 
 void TimelineDocker::handleClipRangeChange()

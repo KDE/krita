@@ -96,8 +96,8 @@ public:
     QColor onionSkinTintColorForward() const;
     void setOnionSkinTintColorForward(const QColor &value);
 
-    bool lazyFrameCreationEnabled(bool requestDefault = false) const;
-    void setLazyFrameCreationEnabled(bool value);
+    bool autoKeyEnabled(bool requestDefault = false) const;
+    void setAutoKeyEnabled(bool value);
 
     bool showAdditionalOnionSkinsSettings(bool requestDefault = false) const;
     void setShowAdditionalOnionSkinsSettings(bool value);

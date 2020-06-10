@@ -115,6 +115,7 @@ public Q_SLOTS:
     void setFrameRate(int frmaerate);
     void setPlaybackSpeed(int playbackSpeed);
     void setDropFrames(bool dropFrames);
+    void setAutoKey(bool autoKey);
 
     void handleClipRangeChange();
     void handleFrameRateChange();

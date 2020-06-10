@@ -187,6 +187,7 @@ protected:
     void mouseMoveEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;
     void wheelEvent(QWheelEvent *e) override;
+    void resizeEvent(QResizeEvent *e) override;
     void rowsInserted(const QModelIndex &parent, int start, int end) override;
     bool viewportEvent(QEvent *event) override;
 

@@ -1243,6 +1243,12 @@ void TimelineFramesView::wheelEvent(QWheelEvent *e)
     }
 }
 
+void TimelineFramesView::resizeEvent(QResizeEvent *e)
+{
+    updateGeometries();
+    slotUpdateInfiniteFramesCount();
+}
+
 void TimelineFramesView::slotUpdateLayersMenu()
 {
     QAction *action = 0;

@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ActionCollection version="2" name="Tools">
-  <Actions category="Path Selection Tool">
-    <text>Path Selection Tool</text>
+  <Actions category="tool-shortcuts">
+      <text>Tool Shortcuts</text>
+    <Action name="KisToolSelectPath">
+      <icon></icon>
+      <text>Bezier Curve Selection Tool</text>
+      <whatsThis></whatsThis>
+      <toolTip>Bezier Curve Selection Tool</toolTip>
+      <iconText>Bezier Curve Selection Tool</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
   </Actions>
 </ActionCollection>

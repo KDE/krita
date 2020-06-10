@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ActionCollection version="2" name="Tools">
-  <Actions category="Transform Tool">
-    <text>Transform Tool</text>
+    <text>Tool Shortcuts</text>
+  <Actions category="tool-shortcuts">
+    <Action name="KisToolTransform">
+      <icon></icon>
+      <text>Transform Tool</text>
+      <whatsThis></whatsThis>
+      <toolTip>Transform a layer or a selection</toolTip>
+      <iconText>Transform a layer or a selection</iconText>
+      <shortcut>Ctrl+T</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
   </Actions>
 </ActionCollection>

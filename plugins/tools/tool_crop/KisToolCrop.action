@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ActionCollection version="2" name="Tools">
-  <Actions category="Crop Tool">
-    <text>Crop Tool</text>
+  <Actions category="tool-shortcuts">
+      <text>Tool Shortcuts</text>
+    <Action name="KisToolCrop">
+      <icon></icon>
+      <text>Crop Tool</text>
+      <whatsThis></whatsThis>
+      <toolTip>Crop the image to an area</toolTip>
+      <iconText>Crop the image to an area</iconText>
+      <shortcut>C</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
   </Actions>
 </ActionCollection>

@@ -1344,7 +1344,6 @@
       <statusTip></statusTip>
     </Action>
   </Actions>
-
   <Actions category="tool-shortcuts">
     <text>Tool Shortcuts</text>
     <Action name="KritaShape/KisToolDyna">
@@ -1353,26 +1352,6 @@
       <whatsThis></whatsThis>
       <toolTip>Dynamic Brush Tool</toolTip>
       <iconText>Dynamic Brush Tool</iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="KisToolCrop">
-      <icon></icon>
-      <text>Crop Tool</text>
-      <whatsThis></whatsThis>
-      <toolTip>Crop the image to an area</toolTip>
-      <iconText>Crop the image to an area</iconText>
-      <shortcut>C</shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="KisToolPolygon">
-      <icon></icon>
-      <text>Polygon Tool</text>
-      <whatsThis></whatsThis>
-      <toolTip>Polygon Tool. Shift-mouseclick ends the polygon.</toolTip>
-      <iconText>Polygon Tool. Shift-mouseclick ends the polygon.</iconText>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
@@ -1454,26 +1433,6 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="KisToolSelectPath">
-      <icon></icon>
-      <text>Bezier Curve Selection Tool</text>
-      <whatsThis></whatsThis>
-      <toolTip>Bezier Curve Selection Tool</toolTip>
-      <iconText>Bezier Curve Selection Tool</iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="KisToolSelectSimilar">
-      <icon></icon>
-      <text>Similar Color Selection Tool</text>
-      <whatsThis></whatsThis>
-      <toolTip>Similar Color Selection Tool</toolTip>
-      <iconText>Similar Color Selection Tool</iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="KritaFill/KisToolFill">
       <icon></icon>
       <text>Fill Tool</text>
@@ -1490,26 +1449,6 @@
       <whatsThis></whatsThis>
       <toolTip>Line Tool</toolTip>
       <iconText>Line Tool</iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="KisToolPencil">
-      <icon></icon>
-      <text>Freehand Path Tool</text>
-      <whatsThis></whatsThis>
-      <toolTip>Freehand Path Tool</toolTip>
-      <iconText>Freehand Path Tool</iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="KisToolPath">
-      <icon></icon>
-      <text>Bezier Curve Tool</text>
-      <whatsThis></whatsThis>
-      <toolTip>Bezier Curve Tool. Shift-mouseclick or double-click ends the curve.</toolTip>
-      <iconText>Bezier Curve Tool. Shift-mouseclick or double-click ends the curve.</iconText>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
@@ -1544,26 +1483,6 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="KisToolSelectElliptical">
-      <icon></icon>
-      <text>Elliptical Selection Tool</text>
-      <whatsThis></whatsThis>
-      <toolTip>Elliptical Selection Tool</toolTip>
-      <iconText>Elliptical Selection Tool</iconText>
-      <shortcut>J</shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="KisToolSelectContiguous">
-      <icon></icon>
-      <text>Contiguous Selection Tool</text>
-      <whatsThis></whatsThis>
-      <toolTip>Contiguous Selection Tool</toolTip>
-      <iconText>Contiguous Selection Tool</iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="KarbonPatternTool">
       <icon></icon>
       <text>Pattern editing</text>
@@ -1594,16 +1513,6 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="KisToolSelectPolygonal">
-      <icon></icon>
-      <text>Polygonal Selection Tool</text>
-      <whatsThis></whatsThis>
-      <toolTip>Polygonal Selection Tool</toolTip>
-      <iconText>Polygonal Selection Tool</iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="KritaShape/KisToolMeasure">
       <icon></icon>
       <text>Measurement Tool</text>
@@ -1611,16 +1520,6 @@
       <toolTip>Measure the distance between two points</toolTip>
       <iconText>Measure the distance between two points</iconText>
       <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="KisToolSelectRectangular">
-      <icon></icon>
-      <text>Rectangular Selection Tool</text>
-      <whatsThis></whatsThis>
-      <toolTip>Rectangular Selection Tool</toolTip>
-      <iconText>Rectangular Selection Tool</iconText>
-      <shortcut>Ctrl+R</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1671,26 +1570,6 @@
       <toolTip>Zoom Tool</toolTip>
       <iconText>Zoom Tool</iconText>
       <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="KisToolPolyline">
-      <icon></icon>
-      <text>Polyline Tool</text>
-      <whatsThis></whatsThis>
-      <toolTip>Polyline Tool. Shift-mouseclick ends the polyline.</toolTip>
-      <iconText>Polyline Tool. Shift-mouseclick ends the polyline.</iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="KisToolTransform">
-      <icon></icon>
-      <text>Transform Tool</text>
-      <whatsThis></whatsThis>
-      <toolTip>Transform a layer or a selection</toolTip>
-      <iconText>Transform a layer or a selection</iconText>
-      <shortcut>Ctrl+T</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>

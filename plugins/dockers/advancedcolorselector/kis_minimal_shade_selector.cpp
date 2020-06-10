@@ -22,6 +22,7 @@
 #include <QVBoxLayout>
 #include <QPainter>
 #include <QMouseEvent>
+#include <QApplication>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -171,8 +172,14 @@ void KisMinimalShadeSelector::canvasResourceChanged(int key, const QVariant &v)
 
 void KisMinimalShadeSelector::paintEvent(QPaintEvent *)
 {
-    QPainter painter(this);
-    painter.fillRect(0,0,width(), height(), QColor(128,128,128));
+    QPainter p(this);
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
+
+    if (cfg.readEntry("useCustomColorForBackground", false)) {
+        p.fillRect(0,0,width(), height(), cfg.readEntry("customSelectorBackgroundColor", QColor(Qt::gray)));
+    } else {
+        p.fillRect(0,0,width(), height(), qApp->palette().window().color());
+    }
 }
 
 KisColorSelectorBase* KisMinimalShadeSelector::createPopup() const

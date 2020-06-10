@@ -217,6 +217,9 @@ void KisColorSelectorSettings::savePreferences() const
     cfg.writeEntry("shadeSelectorUpdateOnLeftClick", ui->shadeSelectorUpdateOnLeftClick->isChecked());
     cfg.writeEntry("shadeSelectorUpdateOnBackground", ui->shadeSelectorUpdateOnBackground->isChecked());
     cfg.writeEntry("hidePopupOnClickCheck", ui->hidePopupOnClickCheck->isChecked());
+    cfg.writeEntry("useCustomColorForBackground", ui->useCustomColorForBackground->isChecked());
+
+    cfg.writeEntry("customSelectorBackgroundColor", ui->customColorBackgroundSelector->color().toQColor());
 
     //mypaint model
 
@@ -384,6 +387,11 @@ void KisColorSelectorSettings::useDifferentColorSpaceChecked(bool enabled)
     ui->colorSpace->setEnabled(enabled);
 }
 
+void KisColorSelectorSettings::useCustomColorForSelector(bool enabled) 
+{
+    ui->customColorBackgroundSelector->setEnabled(enabled);
+}
+
 void KisColorSelectorSettings::loadPreferences()
 {
     //read cfg
@@ -455,6 +463,16 @@ void KisColorSelectorSettings::loadPreferences()
     ui->shadeSelectorUpdateOnForeground->setChecked(cfg.readEntry("shadeSelectorUpdateOnForeground", true));
     ui->shadeSelectorUpdateOnBackground->setChecked(cfg.readEntry("shadeSelectorUpdateOnBackground", true));
     ui->hidePopupOnClickCheck->setChecked(cfg.readEntry("hidePopupOnClickCheck", false));
+    ui->useCustomColorForBackground->setChecked(cfg.readEntry("useCustomColorForBackground", false));
+    connect(ui->useCustomColorForBackground, SIGNAL(clicked(bool)), this, SLOT(useCustomColorForSelector(bool)));
+
+    
+    QColor storedColor = cfg.readEntry("customSelectorBackgroundColor", QColor(Qt::gray));
+    KoColor c;
+    c.fromQColor(storedColor);
+    ui->customColorBackgroundSelector->setColor(c);
+
+    ui->customColorBackgroundSelector->setEnabled(cfg.readEntry("useCustomColorForBackground", false));
 
     QString shadeMyPaintType = cfg.readEntry("shadeMyPaintType", "HSV");
 

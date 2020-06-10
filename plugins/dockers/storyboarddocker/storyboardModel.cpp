@@ -152,7 +152,7 @@ Qt::ItemFlags StoryboardModel::flags(const QModelIndex & index) const
         return Qt::ItemIsDragEnabled | Qt::ItemIsSelectable | Qt::ItemIsEnabled;
 
     //2nd level nodes
-    return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled;
+    return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled | Qt::ItemNeverHasChildren;
 }
 
 bool StoryboardModel::insertRows(int position, int rows, const QModelIndex &parent)
@@ -212,6 +212,7 @@ bool StoryboardModel::removeRows(int position, int rows, const QModelIndex &pare
 
 Qt::DropActions StoryboardModel::supportedDropActions() const
 {
+
     return Qt::CopyAction | Qt::MoveAction;
 }
 
@@ -235,6 +236,11 @@ void StoryboardModel::setCommentModel(CommentModel *commentModel)
     connect(m_commentModel, SIGNAL(rowsInserted(const QModelIndex, int, int)),
                 this, SLOT(slotCommentRowInserted(const QModelIndex, int, int)));
     //TODO: handle move events
+}
+
+Comment StoryboardModel::getComment(int row) const
+{
+    return m_commentList.at(row);
 }
 
 void StoryboardModel::slotCommentDataChanged()

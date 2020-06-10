@@ -56,12 +56,18 @@ public:
 
     SvgMeshStop* getStop(Type type) const;
 
+    KoPathSegment getPath(Type type) const;
+
     int countPoints() const;
 
-    void parseStop(const QString& pathStr, QColor color, int row, int col);
+    /// Parses raw pathstr and adds path to the shape
+    void addStop(const QString& pathStr, QColor color, Type edge);
+
+    /// Adds path to the shape
+    void addStop(const QList<QPointF>& pathPoints, QColor color, Type edge);
 
 private:
-    void parseMeshPath(const QString path, bool close = false);
+    QPointF parseMeshPath(const QString& path, bool close = false);
     const char* getCoord(const char* ptr, qreal& number);
 
 private:

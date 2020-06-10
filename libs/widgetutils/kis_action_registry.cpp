@@ -345,11 +345,15 @@ void KisActionRegistry::Private::loadActionFiles()
             // <action></action> tags
             QDomElement actionXml  = categoryTextNode.nextSiblingElement();
 
+            if (actionXml.isNull()) {
+                qWarning() << actionDefinition << "does not contain any valid actios! (Or the text element was left empty...)";
+            }
+
             // Loop over individual actions
             while (!actionXml.isNull()) {
                 if (actionXml.tagName() == "Action") {
                     // Read name from format <Action name="save">
-                    QString name = actionXml.attribute("name");
+                    QString name      = actionXml.attribute("name");
                     qDebug() << "\t\tloading xml data for action" << name;
 
                     // Bad things
@@ -373,10 +377,6 @@ void KisActionRegistry::Private::loadActionFiles()
 
                         info.categoryName    = categoryName;
                         info.collectionName  = collectionName;
-
-                        if (name == "KisToolSelectMagnetic") {
-                            qDebug() << categoryName << collectionName;
-                        }
 
                         actionInfoList.insert(name,info);
                     }

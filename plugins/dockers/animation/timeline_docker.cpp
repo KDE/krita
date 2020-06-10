@@ -115,7 +115,7 @@ TimelineDockerTitleBar::TimelineDockerTitleBar(QWidget* parent) :
     {   // Menus..
         QHBoxLayout *layout = new QHBoxLayout(this);
         layout->setSpacing(0);
-        layout->setContentsMargins(0,0,0,0);
+        layout->setContentsMargins(SPACING_UNIT,0,0,0);
 
         // Onion skins menu.
         btnOnionSkinsMenu = new QPushButton(KisIconUtils::loadIcon("onion_skin_options"), "", this);

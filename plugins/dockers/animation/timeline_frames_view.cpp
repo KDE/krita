@@ -1281,7 +1281,6 @@ void TimelineFramesView::slotRemoveLayer()
 
 void TimelineFramesView::slotAddBlankFrame()
 {
-    ENTER_FUNCTION();
     QModelIndex index = currentIndex();
     if (!index.isValid() ||
         !m_d->model->data(index, TimelineFramesModel::FrameEditableRole).toBool()) {

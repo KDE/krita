@@ -24,7 +24,7 @@
 
 StoryboardModel::StoryboardModel(QObject *parent)
         : QAbstractItemModel(parent)
-        , m_commentCount(1)                   //dummy value
+        , m_commentCount(0)
 {}
 
 QModelIndex StoryboardModel::index(int row, int column, const QModelIndex &parent) const
@@ -119,7 +119,6 @@ QVariant StoryboardModel::data(const QModelIndex &index, int role) const
 
 bool StoryboardModel::setData(const QModelIndex & index, const QVariant & value, int role)
 {
-    //qDebug()<<"attempting data set"<<role;
     if (index.isValid() && (role == Qt::EditRole || role == Qt::DisplayRole))
     {
         if (!index.parent().isValid())
@@ -145,7 +144,6 @@ bool StoryboardModel::setData(const QModelIndex & index, const QVariant & value,
 
 Qt::ItemFlags StoryboardModel::flags(const QModelIndex & index) const
 {
-    //qDebug()<<"flags requested";
     if(!index.isValid())
         return Qt::ItemIsDropEnabled;
 
@@ -159,7 +157,6 @@ Qt::ItemFlags StoryboardModel::flags(const QModelIndex & index) const
 
 bool StoryboardModel::insertRows(int position, int rows, const QModelIndex &parent)
 {
-    qDebug()<<"row inserted";
     if (!parent.isValid()){
         beginInsertRows(QModelIndex(), position, position+rows-1);
         for (int row = 0; row < rows; ++row) {
@@ -186,7 +183,6 @@ bool StoryboardModel::insertRows(int position, int rows, const QModelIndex &pare
 
 bool StoryboardModel::removeRows(int position, int rows, const QModelIndex &parent)
 {
-    qDebug()<<"row removed";
     //remove 1st level nodes
     if (!parent.isValid()){
         beginRemoveRows(QModelIndex(), position, position+rows-1);
@@ -223,3 +219,53 @@ Qt::DropActions StoryboardModel::supportedDragActions() const
 {
     return Qt::CopyAction | Qt::MoveAction;
 }
+
+int StoryboardModel::commentCount() const
+{
+    return m_commentList.count();
+}
+
+void StoryboardModel::setCommentModel(CommentModel *commentModel)
+{
+    m_commentModel = commentModel;
+    connect(m_commentModel, SIGNAL(dataChanged(const QModelIndex ,const QModelIndex)),
+                this, SLOT(slotCommentDataChanged()));
+    connect(m_commentModel, SIGNAL(rowsRemoved(const QModelIndex ,int, int)),
+                this, SLOT(slotCommentRowRemoved(const QModelIndex ,int, int)));
+    connect(m_commentModel, SIGNAL(rowsInserted(const QModelIndex, int, int)),
+                this, SLOT(slotCommentRowInserted(const QModelIndex, int, int)));
+    //TODO: handle move events
+}
+
+void StoryboardModel::slotCommentDataChanged()
+{
+    m_commentList = m_commentModel->m_commentList;
+    emit(dataChanged(QModelIndex(), QModelIndex()));
+}
+
+void StoryboardModel::slotCommentRowInserted(const QModelIndex parent, int first, int last)
+{
+    int numItems = rowCount();
+    for(int row = 0; row < numItems; row++){
+        QModelIndex parentIndex = index(row, 0);
+        insertRows(4 + first, last - first + 1, parentIndex);       //four indices are already there
+    }
+    slotCommentDataChanged();
+}
+
+void StoryboardModel::slotCommentRowRemoved(const QModelIndex parent, int first, int last)
+{
+    int numItems = rowCount();
+    for(int row = 0; row < numItems; row++){
+        QModelIndex parentIndex = index(row, 0);
+        removeRows(4 + first, last - first + 1, parentIndex);
+    }
+    slotCommentDataChanged();
+}
+
+/*
+void StoryboardModel::slotCommentRowsMoved()
+{
+    qDebug()<<"comment row moved";
+}
+*/

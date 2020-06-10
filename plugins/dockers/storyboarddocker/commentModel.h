@@ -20,6 +20,7 @@
 
 #include <QAbstractListModel>
 
+class StoryboardModel;
 struct Comment 
 {
     QString name; 
@@ -52,7 +53,7 @@ public:
 
 private:
     QVector<Comment> m_commentList;
-
+    friend class StoryboardModel;
 };
 
 #endif

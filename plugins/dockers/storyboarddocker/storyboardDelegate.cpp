@@ -93,6 +93,21 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
                     icon.paint(p, option.rect);
                     p->setPen(QPen(option.palette.dark(), 2));
                     p->drawRect(option.rect);
+
+                    if (option.state & QStyle::State_MouseOver){
+                        QRect buttonsRect = option.rect;
+                        buttonsRect.setTop(option.rect.bottom() - 22);
+                        p->fillRect(buttonsRect, option.palette.background());
+
+                        buttonsRect.setWidth(22);
+                        buttonsRect.moveBottomLeft(option.rect.bottomLeft());
+                        QIcon addIcon = KisIconUtils::loadIcon("list-add");
+                        addIcon.paint(p, buttonsRect);
+
+                        buttonsRect.moveBottomRight(option.rect.bottomRight());
+                        QIcon deleteIcon = KisIconUtils::loadIcon("trash-empty");
+                        deleteIcon.paint(p, buttonsRect);
+                    }
                     break;
                 }
                 case 1:
@@ -141,6 +156,11 @@ void StoryboardDelegate::drawSpinBox(QPainter *p, const QStyleOptionViewItem &op
     p->drawText(rect, Qt::AlignHCenter | Qt::AlignVCenter, data);
 }
 
+/*void StoryboardDelegate::drawScrollbar(QPainter *p, const QStyleOptionViewItem &option, QString data)
+{
+    //draw comments box
+}*/
+
 QSize StoryboardDelegate::sizeHint(const QStyleOptionViewItem &option,
                                 const QModelIndex &index) const
 {
@@ -176,6 +196,7 @@ QWidget *StoryboardDelegate::createEditor(QWidget *parent,
             case 3:
             {
                 QSpinBox *spinbox = new QSpinBox(parent);
+                spinbox->setRange(0,999);
                 return spinbox;
             }
             default:             // for itemName and comments

@@ -22,6 +22,7 @@
 #include <QStringList>
 
 #include "storyboardItem.h"
+#include "commentModel.h"
 
 /*
     The main storyboard model. 
@@ -56,12 +57,19 @@ public:
 
 
     //this function accesses the value from the comment model
-    int commentCount() const {
-        return m_commentCount;
-    }
+    int commentCount() const;
+    void setCommentModel(CommentModel *commentModel);
+
+private Q_SLOTS:
+    void slotCommentDataChanged();
+    void slotCommentRowInserted(const QModelIndex, int, int);
+    void slotCommentRowRemoved(const QModelIndex, int, int);
+
 private:
     QVector<StoryboardItem*> m_items;
     int m_commentCount = 0;
+    QVector<Comment> m_commentList;
+    CommentModel *m_commentModel;
 };
 
 #endif

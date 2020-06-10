@@ -58,8 +58,6 @@ QVariant CommentModel::data(const QModelIndex &index, int role) const
 
 bool CommentModel::setData(const QModelIndex & index, const QVariant & value, int role)
 {
-    qDebug()<<"attempting data set"<<role;
-
     if (index.isValid() && (role == Qt::EditRole || role == Qt::DisplayRole))
     {
         
@@ -78,7 +76,6 @@ bool CommentModel::setData(const QModelIndex & index, const QVariant & value, in
 
 Qt::ItemFlags CommentModel::flags(const QModelIndex & index) const
 {
-    //qDebug()<<"flags requested";
     if(!index.isValid())
         return Qt::ItemIsDropEnabled;
 
@@ -88,7 +85,6 @@ Qt::ItemFlags CommentModel::flags(const QModelIndex & index) const
 
 bool CommentModel::insertRows(int position, int rows, const QModelIndex &parent)
 {
-    qDebug()<<"row inserted";
     beginInsertRows(QModelIndex(), position, position+rows-1);
 
     for (int row = 0; row < rows; ++row) {
@@ -106,11 +102,10 @@ bool CommentModel::insertRows(int position, int rows, const QModelIndex &parent)
 
 bool CommentModel::removeRows(int position, int rows, const QModelIndex &parent)
 {
-    qDebug()<<"row removed";
     beginRemoveRows(QModelIndex(), position, position+rows-1);
 
     for (int row = 0; row < rows; ++row) {
-        if (position < 0 && position>=m_commentList.size()) return false;
+        if (position < 0 || position >= m_commentList.size()) return false;
         m_commentList.removeAt(position);
     }
 

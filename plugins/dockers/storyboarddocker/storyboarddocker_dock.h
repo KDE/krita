@@ -29,6 +29,8 @@
 class Ui_WdgStoryboardDock;
 class CommentMenu;
 class ArrangeMenu;
+class CommentModel;
+class StoryboardModel;
 
 class StoryboardDockerDock : public QDockWidget, public KisMainwindowObserver{
     Q_OBJECT
@@ -42,19 +44,22 @@ public:
 
 private:
     QScopedPointer<Ui_WdgStoryboardDock> m_ui;
-    
+
     QMenu *m_exportMenu;
     KisAction *m_exportAsPdfAction;
     KisAction *m_exportAsSvgAction;
 
+    QPointer<CommentModel> m_commentModel;
     CommentMenu *m_commentMenu;
-    
+
     KisAction *m_lockAction;
-    
+
     ArrangeMenu *m_arrangeMenu;
 
     QButtonGroup *m_modeGroup;
     QButtonGroup *m_viewGroup;
+
+    QPointer<StoryboardModel> m_storyboardModel;
 
 private Q_SLOTS:
     void slotExportAsPdf();

@@ -78,7 +78,7 @@ public:
     QToolButton *btnDropFrames;
 
 private:
-    const u_int MAX_FRAMES = 9999;
+    const int MAX_FRAMES = 9999;
 };
 
 

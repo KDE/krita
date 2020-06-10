@@ -46,7 +46,7 @@ protected:
     QLabel *title;
     QHBoxLayout *widgetArea;
 
-    const u_int SPACING_UNIT = 16;
+    const int SPACING_UNIT = 16;
 
 private:
     QPushButton *floatButton;

@@ -99,12 +99,14 @@ TimelineDockerTitleBar::TimelineDockerTitleBar(QWidget* parent) :
 
     widgetArea->addSpacing(SPACING_UNIT);
 
+    // Drop Frames..
     btnDropFrames = new QToolButton(this);
     widgetArea->addWidget(btnDropFrames);
 
+    // Playback Speed..
     sbSpeed = new KisSliderSpinBox(this);
     sbSpeed->setRange(25, 200);
-    sbSpeed->setSingleStep(25);
+    sbSpeed->setSingleStep(5);
     sbSpeed->setValue(100);
     sbSpeed->setPrefix("Speed: ");
     sbSpeed->setSuffix(" %");

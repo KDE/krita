@@ -378,12 +378,12 @@ void KisImageConfig::setOnionSkinTintColorForward(const QColor &value)
 bool KisImageConfig::autoKeyEnabled(bool requestDefault) const
 {
     return !requestDefault ?
-        m_config.readEntry("autoKeyEnabled", true) : true;
+        m_config.readEntry("lazyFrameCreationEnabled", true) : true;
 }
 
 void KisImageConfig::setAutoKeyEnabled(bool value)
 {
-    m_config.writeEntry("autoKeyEnabled", value);
+    m_config.writeEntry("lazyFrameCreationEnabled", value);
 }
 
 

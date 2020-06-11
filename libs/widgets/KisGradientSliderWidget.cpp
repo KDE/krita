@@ -119,25 +119,6 @@ void KisGradientSliderWidget::paintEvent(QPaintEvent* pe)
             painter.setBrush(QBrush(Qt::white));
             paintSegmentHandle(position, "", textPos, painter);
         }
-        //QList<double> handlePositions = m_autogradientResource->getHandlePositions();
-        //int position;
-        //painter.setBrush(QBrush(Qt::black));
-        //for (int i = 0; i < handlePositions.count(); i++) {
-        //    position = qRound(handlePositions[i] * (double)(width() - 12)) + 6;
-        //    triangle[0] = QPoint(position, height() - HANDLE_SIZE - MARGIN);
-        //    triangle[1] = QPoint(position + (HANDLE_SIZE / 2 - 1), height() - MARGIN);
-        //    triangle[2] = QPoint(position - (HANDLE_SIZE / 2 - 1), height() - MARGIN);
-        //    painter.drawPolygon(triangle);
-        //}
-        //painter.setBrush(QBrush(Qt::white));
-        //QList<double> middleHandlePositions = m_autogradientResource->getMiddleHandlePositions();
-        //for (int i = 0; i < middleHandlePositions.count(); i++) {
-        //    position = qRound(middleHandlePositions[i] * (double)(width() - 12)) + 6;
-        //    triangle[0] = QPoint(position, height() - HANDLE_SIZE - MARGIN);
-        //    triangle[1] = QPoint(position + (HANDLE_SIZE / 2 - 2), height() - MARGIN);
-        //    triangle[2] = QPoint(position - (HANDLE_SIZE / 2 - 2), height() - MARGIN);
-        //    painter.drawPolygon(triangle);
-        //}
     }
 }
 

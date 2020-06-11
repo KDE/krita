@@ -1411,16 +1411,6 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="KisToolSelectOutline">
-      <icon></icon>
-      <text>Outline Selection Tool</text>
-      <whatsThis></whatsThis>
-      <toolTip>Outline Selection Tool</toolTip>
-      <iconText>Outline Selection Tool</iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="KritaFill/KisToolFill">
       <icon></icon>
       <text>Fill Tool</text>
@@ -1557,16 +1547,6 @@
       <whatsThis></whatsThis>
       <toolTip>Zoom Tool</toolTip>
       <iconText>Zoom Tool</iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="KisAssistantTool">
-      <icon></icon>
-      <text>Assistant Tool</text>
-      <whatsThis></whatsThis>
-      <toolTip>Assistant Tool</toolTip>
-      <iconText>Assistant Tool</iconText>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>

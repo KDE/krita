@@ -261,7 +261,6 @@ public:
     bool setResourceInactive(KoResourceSP resource) override;
     bool setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata) override;
 
-
 public:
 
     KoResourceSP resourceForId(int id) const;

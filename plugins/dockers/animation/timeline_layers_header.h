@@ -37,10 +37,11 @@ public:
     ~TimelineLayersHeader() override;
 
 protected:
-    QSize sectionSizeFromContents(int layerIndex) const override;
     void paintSection(QPainter *painter, const QRect &rect, int layerIndex) const override;
-    bool viewportEvent(QEvent *e) override;
-    void mousePressEvent(QMouseEvent *e) override;
+    QSize sectionSizeFromContents(int layerIndex) const override;
+    bool viewportEvent(QEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseDoubleClickEvent(QMouseEvent *event) override {mousePressEvent(event);}
 
 Q_SIGNALS:
     void sigRequestContextMenu(const QPoint &pos);
@@ -48,6 +49,8 @@ Q_SIGNALS:
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
+
+
 };
 
 #endif /* __TIMELINE_LAYERS_HEADER_H */

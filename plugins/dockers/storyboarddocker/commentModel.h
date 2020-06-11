@@ -47,6 +47,10 @@ public:
     
     bool insertRows(int position, int rows, const QModelIndex &index = QModelIndex());
     bool removeRows(int position, int rows, const QModelIndex &index = QModelIndex());
+    bool moveRows(const QModelIndex &sourceParent, int sourceRow, int count,
+                    const QModelIndex &destinationParent, int destinationChild);
+    QMimeData *mimeData(const QModelIndexList &indexes) const;
+    bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
 
     Qt::DropActions supportedDropActions() const override;
     Qt::DropActions supportedDragActions() const override;

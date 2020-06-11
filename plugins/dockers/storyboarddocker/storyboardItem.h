@@ -61,6 +61,7 @@ public:
     void appendChild(QVariant data);
     void insertChild(int row, QVariant data);
     void removeChild(int row);
+    void moveChild(int from, int to);
     int childCount() const;
     StoryboardChild *child(int row);
 

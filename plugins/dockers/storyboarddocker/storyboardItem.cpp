@@ -49,6 +49,11 @@ void StoryboardItem::removeChild(int row)
     m_childData.removeAt(row);
 }
 
+void StoryboardItem::moveChild(int from, int to)
+{
+    m_childData.move(from, to);
+}
+
 int StoryboardItem::childCount() const
 {
     return m_childData.count();

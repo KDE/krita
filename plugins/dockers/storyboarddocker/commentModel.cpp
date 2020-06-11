@@ -19,6 +19,7 @@
 #include "commentModel.h"
 
 #include <QDebug>
+#include <QMimeData>
 
 #include <kis_icon.h>
 
@@ -108,9 +109,78 @@ bool CommentModel::removeRows(int position, int rows, const QModelIndex &parent)
         if (position < 0 || position >= m_commentList.size()) return false;
         m_commentList.removeAt(position);
     }
-
     endRemoveRows();
     return true;
+}
+
+bool CommentModel::moveRows(const QModelIndex &sourceParent, int sourceRow, int count,
+                            const QModelIndex &destinationParent, int destinationChild)
+{
+    if (destinationChild == sourceRow || destinationChild == sourceRow + 1){
+        return false;
+    }
+    if (destinationChild > sourceRow + count - 1){
+        //we adjust for the upward shift, see qt doc for why this is needed
+        beginMoveRows(sourceParent, sourceRow, sourceRow + count - 1, destinationParent, destinationChild + count - 1);
+        destinationChild = destinationChild - count;
+    }
+    else {
+        beginMoveRows(sourceParent, sourceRow, sourceRow + count - 1, destinationParent, destinationChild);
+    }
+    for (int row = 0; row < count; row++){
+        if (sourceRow < 0 || sourceRow >= m_commentList.size()) return false;
+        if (destinationChild + row < 0 || destinationChild + row >= m_commentList.size()) return false;
+        m_commentList.move(sourceRow, destinationChild + row);
+    }
+    endMoveRows();
+    return true;
+}
+
+QMimeData *CommentModel::mimeData(const QModelIndexList &indexes) const
+{
+    QMimeData *mimeData = new QMimeData();
+    QByteArray encodeData;
+
+    QDataStream stream(&encodeData, QIODevice::WriteOnly);
+
+    //take the row number of the index where drag started
+    foreach (QModelIndex index, indexes){
+        if (index.isValid()) {
+            int row = index.row();
+            stream << row;
+        }
+    }
+
+    mimeData->setData("application/x-qabstractitemmodeldatalist", encodeData); //default mimetype
+    return mimeData;
+}
+
+bool CommentModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
+                                int row, int column, const QModelIndex &parent)
+{
+    if (action == Qt::IgnoreAction)
+        return false;
+
+    if (action == Qt::MoveAction && data->hasFormat("application/x-qabstractitemmodeldatalist")){
+        QByteArray bytes = data->data("application/x-qabstractitemmodeldatalist");
+        QDataStream stream(&bytes, QIODevice::ReadOnly);
+
+        if (parent.isValid()){
+            return false;
+        }
+        int sourceRow;
+        QModelIndexList moveRowIndexes;
+        while (!stream.atEnd()) {
+            stream >> sourceRow;
+            QModelIndex index = createIndex(sourceRow, 0);
+            moveRowIndexes.append(index);
+        }
+        moveRows(QModelIndex(), moveRowIndexes.at(0).row(), moveRowIndexes.count(), parent, row);
+
+        //returning true deletes the source row
+        return false;
+    }
+    return false;
 }
 
 Qt::DropActions CommentModel::supportedDropActions() const

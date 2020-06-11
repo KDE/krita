@@ -129,9 +129,11 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
                 }
                 default:
                 {
-                    p->setPen(QPen(option.palette.dark(), 2));
-                    //p->drawRect(option.rect);
-                    drawComment(p, option, data, index);
+                    const StoryboardModel* model = dynamic_cast<const StoryboardModel*>(index.model());
+                    if (model->getComment(index.row() - 4).visibility){
+                        p->setPen(QPen(option.palette.dark(), 2));
+                        drawComment(p, option, data, index);
+                    }
                     break;
                 }
             }
@@ -184,7 +186,7 @@ QSize StoryboardDelegate::sizeHint(const QStyleOptionViewItem &option,
     if (!index.parent().isValid()){
         int width = option.widget->width() - 17;
         const StoryboardModel* model = dynamic_cast<const StoryboardModel*>(index.model());
-        int numComments = model->commentCount();
+        int numComments = model->visibleCommentCount();
         int numItem = width/250;
         if(numItem <=0){
             return QSize(0, 0);

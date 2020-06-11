@@ -59,7 +59,8 @@ public:
 
 
     //this function accesses the value from the comment model
-    int commentCount() const;
+    int visibleCommentCount() const;
+    int visibleCommentsUpto(QModelIndex index) const;
     void setCommentModel(CommentModel *commentModel);
     Comment getComment(int row) const;
 

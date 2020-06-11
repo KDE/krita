@@ -333,7 +333,7 @@ bool KisResourceLocator::updateResource(const QString &resourceType, const KoRes
 {
     QString storageLocation = makeStorageLocationAbsolute(resource->storageLocation());
 
-    qDebug() << ">>>>>>>>>>>>>>>> storageLocation"<< storageLocation << "resource storage location" << resource->storageLocation();
+    //qDebug() << ">>>>>>>>>>>>>>>> storageLocation"<< storageLocation << "resource storage location" << resource->storageLocation();
 
     Q_ASSERT(d->storages.contains(storageLocation));
     Q_ASSERT(resource->resourceId() > -1);

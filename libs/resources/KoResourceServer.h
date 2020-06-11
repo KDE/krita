@@ -255,7 +255,7 @@ public:
         }
 
         QMutexLocker l(&m_mutex);
-        qDebug() << "resourceByFilename" << filename;
+        //qDebug() << "resourceByFilename" << filename;
         if (filename.isEmpty() || filename.isNull()) {
             return 0;
         }
@@ -273,7 +273,7 @@ public:
         }
 
         QMutexLocker l(&m_mutex);
-        qDebug() << "resourceByName" << name;
+        //qDebug() << "resourceByName" << name;
         if (name.isEmpty() || name.isNull()) {
             return 0;
         }
@@ -291,7 +291,7 @@ public:
         }
 
         QMutexLocker l(&m_mutex);
-        qDebug() << "resourceByMD5" << md5.toHex();
+        //qDebug() << "resourceByMD5" << md5.toHex();
         if (md5.isEmpty() || md5.isNull()) {
             return 0;
         }

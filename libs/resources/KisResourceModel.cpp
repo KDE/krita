@@ -466,11 +466,13 @@ bool KisAllResourcesModel::setResourceInactive(KoResourceSP resource)
 bool KisAllResourcesModel::importResourceFile(const QString &filename)
 {
     //qDebug() << "KisAllResourcesModel::importResource" << s_i6 << d->resourceType; s_i6++;
+    bool r = true;
     beginInsertRows(QModelIndex(), rowCount(), 1);
     if (!KisResourceLocator::instance()->importResourceFromFile(d->resourceType, filename)) {
+        r = false;
         qWarning() << "Failed to import resource" << filename;
     }
-    bool r = resetQuery();
+    resetQuery();
     endInsertRows();
     return r;
 }
@@ -485,11 +487,13 @@ bool KisAllResourcesModel::addResource(KoResourceSP resource, const QString &sto
     }
 
     //qDebug() << "KisAllResourcesModel::addResource" << s_i7 << d->resourceType; s_i7++;
+    bool r = true;
     beginInsertRows(QModelIndex(), rowCount(), 1);
     if (!KisResourceLocator::instance()->addResource(d->resourceType, resource, storageId)) {
         qWarning() << "Failed to add resource" << resource->name();
+        r = false;
     }
-    bool r = resetQuery();
+    resetQuery();
     endInsertRows();
     return r;
 }

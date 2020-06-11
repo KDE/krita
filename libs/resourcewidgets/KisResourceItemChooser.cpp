@@ -132,7 +132,7 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
     d->view->setSelectionMode(QAbstractItemView::SingleSelection);
     d->view->viewport()->installEventFilter(this);
 
-    connect(d->view, SIGNAL(crrentResourceChanged(QModelIndex)), this, SLOT(activated(QModelIndex)));
+    connect(d->view, SIGNAL(currentResourceChanged(QModelIndex)), this, SLOT(activated(QModelIndex)));
     connect(d->view, SIGNAL(currentResourceClicked(QModelIndex)), this, SLOT(clicked(QModelIndex)));
     connect(d->view, SIGNAL(contextMenuRequested(QPoint)), this, SLOT(contextMenuRequested(QPoint)));
     connect(d->view, SIGNAL(sigSizeChanged()), this, SLOT(updateView()));

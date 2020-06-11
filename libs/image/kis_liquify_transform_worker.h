@@ -44,6 +44,8 @@ public:
     ~KisLiquifyTransformWorker();
 
     bool operator==(const KisLiquifyTransformWorker &other) const;
+    bool isIdentity() const;
+
 
     int pointToIndex(const QPoint &cellPt);
     QSize gridSize() const;

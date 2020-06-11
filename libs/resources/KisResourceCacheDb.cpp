@@ -446,7 +446,7 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
         if (resourceNeedsUpdating(resourceId, timestamp)) {
             r = addResourceVersion(resourceId, timestamp, storage, resource);
         }
-        return true;
+        return (r == true);
     }
 
     QSqlQuery q;
@@ -494,6 +494,7 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     }
 
     resourceId = resourceIdForResource(resource->name(), resourceType, KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
+    resource->setResourceId(resourceId);
 
     // Then add a new version
     r = q.prepare("INSERT INTO versioned_resources\n"

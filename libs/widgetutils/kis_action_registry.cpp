@@ -355,7 +355,6 @@ void KisActionRegistry::Private::loadActionFiles()
                 if (actionXml.tagName() == "Action") {
                     // Read name from format <Action name="save">
                     QString name      = actionXml.attribute("name");
-                    qDebug() << "\t\tloading xml data for action" << name;
 
                     // Bad things
                     if (name.isEmpty()) {

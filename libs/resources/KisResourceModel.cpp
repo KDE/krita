@@ -542,8 +542,8 @@ bool KisAllResourcesModel::setResourceMetaData(KoResourceSP resource, QMap<QStri
 
 bool KisAllResourcesModel::resetQuery()
 {
-    QElapsedTimer t;
-    t.start();
+//    QElapsedTimer t;
+//    t.start();
 
     beginResetModel();
     bool r = d->resourcesQuery.exec();
@@ -554,7 +554,7 @@ bool KisAllResourcesModel::resetQuery()
 
     endResetModel();
 
-    qDebug() << "KisAllResourcesModel::resetQuery for" << d->resourceType << "took" << t.elapsed() << "ms";
+//    qDebug() << "KisAllResourcesModel::resetQuery for" << d->resourceType << "took" << t.elapsed() << "ms";
 
     return r;
 }

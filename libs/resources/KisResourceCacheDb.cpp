@@ -997,7 +997,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
             QSharedPointer<KisResourceStorage::ResourceIterator> iter = storage->resources(resourceType);
             while (iter->hasNext()) {
                 iter->next();
-                qDebug() << "\tadding resources" << iter->url();
+                // qDebug() << "\tadding resources" << iter->url();
                 KoResourceSP resource = iter->resource();
                 resourcesOnDisk << QFileInfo(iter->url()).fileName();
                 if (resource) {
@@ -1008,7 +1008,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
                 }
             }
 
-            qDebug() << "Checking for" << resourceType << ":" << resourcesOnDisk;
+            // qDebug() << "Checking for" << resourceType << ":" << resourcesOnDisk;
 
             QSqlQuery q;
             q.setForwardOnly(true);

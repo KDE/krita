@@ -31,7 +31,7 @@ if(NOT DEFINED NO_DOWNLOAD_NSIS)
     endif()
     file(DOWNLOAD "https://files.kde.org/krita/build/dependencies/nsis-${DOWNLOAD_NSIS_VERSION}.zip"
         "${DOWNLOAD_DIR}/nsis-${DOWNLOAD_NSIS_VERSION}.zip"
-        EXPECTED_HASH SHA1=68f9c7025110b95c20431bbce28f3bf2d0ddb1ff
+        EXPECTED_HASH SHA1=d0cf5c1397d3ffb5cf6643fbff46457e05a48312
     )
     execute_process(COMMAND ${CMAKE_COMMAND} -E tar xfz "${DOWNLOAD_DIR}/nsis-${DOWNLOAD_NSIS_VERSION}.zip"
         WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"

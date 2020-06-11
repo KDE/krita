@@ -118,32 +118,60 @@ QVariant KisStorageModel::data(const QModelIndex &index, int role) const
         return v;
     }
 
-    switch(role) {
-    case Qt::DisplayRole:
+    if ((role == Qt::DisplayRole || role == Qt::EditRole) && index.column() == Active) {
+        return query.value("active");
+    }
+    else
     {
-        switch(index.column()) {
-        case Id:
-            return query.value("id");
-        case StorageType:
-            return query.value("storage_type");
-        case Location:
-            return query.value("location");
-        case TimeStamp:
-            return query.value("timestamp");
-        case PreInstalled:
-            return query.value("pre_installed");
-        case Active:
-            return query.value("active");
-        case Thumbnail:
+        switch(role) {
+        case Qt::DisplayRole:
         {
-            QByteArray ba = query.value("thumbnail").toByteArray();
-            QBuffer buf(&ba);
-            buf.open(QBuffer::ReadOnly);
-            QImage img;
-            img.load(&buf, "PNG");
-            return QVariant::fromValue<QImage>(img);
+            switch(index.column()) {
+            case Id:
+                return query.value("id");
+            case StorageType:
+                return query.value("storage_type");
+            case Location:
+                return query.value("location");
+            case TimeStamp:
+                return query.value("timestamp");
+            case PreInstalled:
+                return query.value("pre_installed");
+            case Active:
+                return query.value("active");
+            case Thumbnail:
+            {
+                QByteArray ba = query.value("thumbnail").toByteArray();
+                QBuffer buf(&ba);
+                buf.open(QBuffer::ReadOnly);
+                QImage img;
+                img.load(&buf, "PNG");
+                return QVariant::fromValue<QImage>(img);
+            }
+            case DisplayName:
+            {
+                QMap<QString, QVariant> r = KisResourceLocator::instance()->metaDataForStorage(query.value("location").toString());
+                QVariant name = query.value("location");
+                if (r.contains(KisResourceStorage::s_meta_name) && !r[KisResourceStorage::s_meta_name].isNull()) {
+                    name = r[KisResourceStorage::s_meta_name];
+                }
+                else if (r.contains(KisResourceStorage::s_meta_title) && !r[KisResourceStorage::s_meta_title].isNull()) {
+                    name = r[KisResourceStorage::s_meta_title];
+                }
+                return name;
+            }
+            case Qt::UserRole + MetaData:
+            {
+                QMap<QString, QVariant> r = KisResourceLocator::instance()->metaDataForStorage(query.value("location").toString());
+                return r;
+            }
+            default:
+                return v;
+            }
         }
-        case DisplayName:
+        case Qt::UserRole + Id:
+            return query.value("id");
+        case Qt::UserRole + DisplayName:
         {
             QMap<QString, QVariant> r = KisResourceLocator::instance()->metaDataForStorage(query.value("location").toString());
             QVariant name = query.value("location");
@@ -155,56 +183,34 @@ QVariant KisStorageModel::data(const QModelIndex &index, int role) const
             }
             return name;
         }
+        case Qt::UserRole + StorageType:
+            return query.value("storage_type");
+        case Qt::UserRole + Location:
+            return query.value("location");
+        case Qt::UserRole + TimeStamp:
+            return query.value("timestamp");
+        case Qt::UserRole + PreInstalled:
+            return query.value("pre_installed");
+        case Qt::UserRole + Active:
+            return query.value("active");
+        case Qt::UserRole + Thumbnail:
+        {
+            QByteArray ba = query.value("thumbnail").toByteArray();
+            QBuffer buf(&ba);
+            buf.open(QBuffer::ReadOnly);
+            QImage img;
+            img.load(&buf, "PNG");
+            return QVariant::fromValue<QImage>(img);
+        }
         case Qt::UserRole + MetaData:
         {
             QMap<QString, QVariant> r = KisResourceLocator::instance()->metaDataForStorage(query.value("location").toString());
             return r;
         }
-        default:
-            return v;
-        }
-    }
-    case Qt::UserRole + Id:
-        return query.value("id");
-    case Qt::UserRole + DisplayName:
-    {
-        QMap<QString, QVariant> r = KisResourceLocator::instance()->metaDataForStorage(query.value("location").toString());
-        QVariant name = query.value("location");
-        if (r.contains(KisResourceStorage::s_meta_name) && !r[KisResourceStorage::s_meta_name].isNull()) {
-            name = r[KisResourceStorage::s_meta_name];
-        }
-        else if (r.contains(KisResourceStorage::s_meta_title) && !r[KisResourceStorage::s_meta_title].isNull()) {
-            name = r[KisResourceStorage::s_meta_title];
-        }
-        return name;
-    }
-    case Qt::UserRole + StorageType:
-        return query.value("storage_type");
-    case Qt::UserRole + Location:
-        return query.value("location");
-    case Qt::UserRole + TimeStamp:
-        return query.value("timestamp");
-    case Qt::UserRole + PreInstalled:
-        return query.value("pre_installed");
-    case Qt::UserRole + Active:
-        return query.value("active");
-    case Qt::UserRole + Thumbnail:
-    {
-        QByteArray ba = query.value("thumbnail").toByteArray();
-        QBuffer buf(&ba);
-        buf.open(QBuffer::ReadOnly);
-        QImage img;
-        img.load(&buf, "PNG");
-        return QVariant::fromValue<QImage>(img);
-    }
-    case Qt::UserRole + MetaData:
-    {
-        QMap<QString, QVariant> r = KisResourceLocator::instance()->metaDataForStorage(query.value("location").toString());
-        return r;
-    }
 
-    default:
-        ;
+        default:
+            ;
+        }
     }
 
     return v;
@@ -235,12 +241,15 @@ bool KisStorageModel::setData(const QModelIndex &index, const QVariant &value, i
 
         }
     }
-
+    emit dataChanged(index, index, {role});
     return true;
 }
 
 Qt::ItemFlags KisStorageModel::flags(const QModelIndex &index) const
 {
+    if (!index.isValid()) {
+        return Qt::ItemIsEnabled;
+    }
     return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
 }
 
@@ -264,30 +273,22 @@ QVariant KisStorageModel::headerData(int section, Qt::Orientation orientation, i
     }
     if (orientation == Qt::Horizontal) {
         switch(section) {
-        case 0:
-            v = i18n("Id");
-            break;
-        case 1:
-            v = i18n("Type");
-            break;
-        case 2:
-            v = i18n("Location");
-            break;
-        case 3:
-            v = i18n("Creation Date");
-            break;
-        case 4:
-            v = i18n("Preinstalled");
-            break;
-        case 5:
-            v = i18n("Active");
-            break;
-        case 6:
-            v = i18n("Thumbnail");
-            break;
-        case 7:
-            v = i18n("Name");
-            break;
+        case Id:
+            return i18n("Id");
+        case StorageType:
+            return i18n("Type");
+        case Location:
+            return i18n("Location");
+        case TimeStamp:
+            return i18n("Creation Date");
+        case PreInstalled:
+            return i18n("Preinstalled");
+        case Active:
+            return i18n("Active");
+        case Thumbnail:
+            return i18n("Thumbnail");
+        case DisplayName:
+            return i18n("Name");
         default:
             v = QString::number(section);
         }

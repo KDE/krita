@@ -83,6 +83,7 @@ public:
     KoColor currentFgColor() const;
     KoColor currentBgColor() const;
     KisPaintOpPresetSP currentPaintOpPreset() const;
+    KoAbstractGradientSP currentGradient() const;
 
     QTransform fillTransform() const;
 

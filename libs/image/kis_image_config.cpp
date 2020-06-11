@@ -375,13 +375,13 @@ void KisImageConfig::setOnionSkinTintColorForward(const QColor &value)
     m_config.writeEntry("oninSkinTintColorForward", value);
 }
 
-bool KisImageConfig::lazyFrameCreationEnabled(bool requestDefault) const
+bool KisImageConfig::autoKeyEnabled(bool requestDefault) const
 {
     return !requestDefault ?
         m_config.readEntry("lazyFrameCreationEnabled", true) : true;
 }
 
-void KisImageConfig::setLazyFrameCreationEnabled(bool value)
+void KisImageConfig::setAutoKeyEnabled(bool value)
 {
     m_config.writeEntry("lazyFrameCreationEnabled", value);
 }

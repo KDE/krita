@@ -74,13 +74,6 @@ Q_SIGNALS:
     void sigSetFGColor(const KoColor& c);
     void sigSetBGColor(const KoColor& c);
 
-    // This is a flag to handle a bug:
-    // If pop up palette is visible and a new colour is selected, the new colour
-    // will be added when the user clicks on the canvas to hide the palette
-    // In general, we want to be able to store recent colours if the pop up palette
-    // is not visible
-    void sigEnableChangeColor(bool b);
-
     void sigChangeFGColorSelector(const KoColor&);
 
     void setSelectedColor(int);

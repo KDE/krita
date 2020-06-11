@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ActionCollection version="2" name="Tools">
-  <Actions category="Outline Selection Tool">
-    <text>Outline Selection Tool</text>
+  <Actions category="tool-shortcuts">
+<text>Tool Shortcuts</text>
+<Action name="KisToolSelectOutline">
+      <icon></icon>
+      <text>Outline Selection Tool</text>
+      <whatsThis></whatsThis>
+      <toolTip>Outline Selection Tool</toolTip>
+      <iconText>Outline Selection Tool</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
   </Actions>
 </ActionCollection>

@@ -300,17 +300,10 @@ TimelineFramesView::~TimelineFramesView()
 {
 }
 
-void TimelineFramesView::setPinToTimeline(KisAction *action)
-{
-    m_d->pinLayerToTimelineAction = action;
-    m_d->layerEditingMenu->addAction(m_d->pinLayerToTimelineAction);
-}
-
 void TimelineFramesView::setActionManager(KisActionManager *actionManager)
 {
     m_d->actionMan = actionManager;
     m_d->horizontalRuler->setActionManager(actionManager);
-
 
     if (actionManager) {
         KisAction *action = 0;
@@ -368,6 +361,10 @@ void TimelineFramesView::setActionManager(KisActionManager *actionManager)
 
         action = m_d->actionMan->createAction("update_playback_range");
         connect(action, SIGNAL(triggered()), SLOT(slotUpdatePlackbackRange()));
+
+        action = m_d->actionMan->actionByName("pin_to_timeline");
+        m_d->pinLayerToTimelineAction = action;
+        m_d->layerEditingMenu->addAction(action);
     }
 }
 
@@ -645,6 +642,11 @@ void TimelineFramesView::slotSelectionChanged()
     if (maxColumn > minColumn) {
         range = KisTimeRange(minColumn, maxColumn - minColumn + 1);
     }
+
+    if (m_d->model->isPlaybackPaused()) {
+        m_d->model->stopPlayback();
+    }
+
     m_d->model->setPlaybackRange(range);
 }
 
@@ -960,19 +962,6 @@ void TimelineFramesView::createFrameEditingMenuActions(QMenu *menu, bool addFram
 
     menu->addSeparator();
 
-    {   // Tween submenu.
-        QMenu *frames = menu->addMenu(i18nc("@item:inmenu", "Tweening"));
-
-        KisActionManager::safePopulateMenu(frames, "insert_opacity_keyframe", m_d->actionMan);
-        KisActionManager::safePopulateMenu(frames, "remove_opacity_keyframe", m_d->actionMan);
-
-        // only allow to add an opacity keyframe if one doesn't exist
-        bool opacityKeyframeExists = model()->data(currentIndex(), TimelineFramesModel::SpecialKeyframeExists).toBool();
-        m_d->actionMan->actionByName("insert_opacity_keyframe")->setEnabled(!opacityKeyframeExists);
-        m_d->actionMan->actionByName("remove_opacity_keyframe")->setEnabled(opacityKeyframeExists);
-    }
-
-
     {   //Frames submenu.
         QMenu *frames = menu->addMenu(i18nc("@item:inmenu", "Keyframes"));
         KisActionManager::safePopulateMenu(frames, "insert_keyframe_left", m_d->actionMan);
@@ -1234,15 +1223,6 @@ void TimelineFramesView::slotUpdateFrameActions()
 
     enableAction("copy_frames_to_clipboard", true);
     enableAction("cut_frames_to_clipboard", hasEditableFrames);
-
-    enableAction("insert_opacity_keyframe", hasEditableFrames);
-    enableAction("remove_opacity_keyframe", hasEditableFrames);
-
-    //QClipboard *cp = QApplication::clipboard();
-    //const QMimeData *data = cp->mimeData();
-
-
-    //TODO: update column actions!
 }
 
 void TimelineFramesView::slotSetStartTimeToCurrentPosition()

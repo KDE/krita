@@ -397,6 +397,11 @@ void KisToolSelectMagnetic::deleteSelectedAnchor()
 
 void KisToolSelectMagnetic::updateSelectedAnchor()
 {
+    //the only anchor
+    if (m_anchorPoints.count() == 1) {
+        return;
+    }
+
     // initial
     if (m_selectedAnchor == 0 && m_anchorPoints.count() > 1) {
         m_pointCollection[m_selectedAnchor] = computeEdgeWrapper(m_anchorPoints[0], m_anchorPoints[1]);

@@ -117,6 +117,9 @@ bool KisColorSelectorContainer::doesAtleastOneDocumentExist()
 void KisColorSelectorContainer::slotUpdateIcons()
 {
     m_colorSelector->updateIcons();
+    m_colorSelector->updateSettings();
+    m_minimalShadeSelector->updateSettings();
+    m_myPaintShadeSelector->updateSettings();
 }
 
 void KisColorSelectorContainer::setCanvas(KisCanvas2* canvas)

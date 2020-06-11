@@ -50,6 +50,8 @@ public:
     //for removing and inserting rows
     bool insertRows(int position, int rows, const QModelIndex &index = QModelIndex());
     bool removeRows(int position, int rows, const QModelIndex &index = QModelIndex());
+    bool moveRows(const QModelIndex &sourceParent, int sourceRow, int count,
+                    const QModelIndex &destinationParent, int destinationChild);
 
     //for drag and drop
     Qt::DropActions supportedDropActions() const override;
@@ -65,6 +67,8 @@ private Q_SLOTS:
     void slotCommentDataChanged();
     void slotCommentRowInserted(const QModelIndex, int, int);
     void slotCommentRowRemoved(const QModelIndex, int, int);
+    void slotCommentRowMoved(const QModelIndex &sourceParent, int sourceRow, int count,
+                            const QModelIndex &destinationParent, int destinationChild);
 
 private:
     QVector<StoryboardItem*> m_items;

@@ -210,9 +210,44 @@ bool StoryboardModel::removeRows(int position, int rows, const QModelIndex &pare
     return false;
 }
 
+bool StoryboardModel::moveRows(const QModelIndex &sourceParent, int sourceRow, int count,
+                                const QModelIndex &destinationParent, int destinationChild)
+{
+    if (sourceParent != destinationParent){
+        return false;
+    }
+    if (destinationChild == sourceRow || destinationChild == sourceRow + 1){
+        return false;
+    }
+    if (destinationChild > sourceRow + count - 1){
+        //we adjust for the upward shift, see qt doc for why this is needed
+        beginMoveRows(sourceParent, sourceRow, sourceRow + count - 1, destinationParent, destinationChild + count - 1);
+        destinationChild = destinationChild - count;
+    }
+    else {
+        beginMoveRows(sourceParent, sourceRow, sourceRow + count - 1, destinationParent, destinationChild);
+    }
+
+    //only implementing for moves within the 1st level nodes for comment nodes
+    if (sourceParent == destinationParent && !sourceParent.parent().isValid()){
+        const QModelIndex parent = sourceParent;
+        for (int row = 0; row < count; row++){
+            if (sourceRow < 4 || sourceRow >= rowCount(parent)) return false;
+            if (destinationChild + row < 4 || destinationChild + row >= rowCount(parent)) return false;
+
+            StoryboardItem *item = static_cast<StoryboardItem*>(parent.internalPointer());
+            item->moveChild(sourceRow, destinationChild + row);
+        }
+        endMoveRows();
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
 Qt::DropActions StoryboardModel::supportedDropActions() const
 {
-
     return Qt::CopyAction | Qt::MoveAction;
 }
 
@@ -235,7 +270,8 @@ void StoryboardModel::setCommentModel(CommentModel *commentModel)
                 this, SLOT(slotCommentRowRemoved(const QModelIndex ,int, int)));
     connect(m_commentModel, SIGNAL(rowsInserted(const QModelIndex, int, int)),
                 this, SLOT(slotCommentRowInserted(const QModelIndex, int, int)));
-    //TODO: handle move events
+    connect(m_commentModel, SIGNAL(rowsMoved(const QModelIndex, int, int, const QModelIndex, int)),
+                this, SLOT(slotCommentRowMoved(const QModelIndex, int, int, const QModelIndex, int)));
 }
 
 Comment StoryboardModel::getComment(int row) const
@@ -269,9 +305,13 @@ void StoryboardModel::slotCommentRowRemoved(const QModelIndex parent, int first,
     slotCommentDataChanged();
 }
 
-/*
-void StoryboardModel::slotCommentRowsMoved()
+void StoryboardModel::slotCommentRowMoved(const QModelIndex &sourceParent, int start, int end,
+                            const QModelIndex &destinationParent, int destinationRow)
 {
-    qDebug()<<"comment row moved";
+    int numItems = rowCount();
+    for(int row = 0; row < numItems; row++){
+        QModelIndex parentIndex = index(row, 0);
+        moveRows(parentIndex, start + 4, end - start + 1, parentIndex, destinationRow + 4);
+    }
+    slotCommentDataChanged();
 }
-*/

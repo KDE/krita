@@ -74,7 +74,7 @@ struct TimelineFramesView::Private
           dragWasSuccessful(false),
           modifiersCatcher(0),
           selectionChangedCompressor(300, KisSignalCompressor::FIRST_INACTIVE),
-          geometryChangedCompressor(300, KisSignalCompressor::FIRST_INACTIVE),
+          geometryChangedCompressor(150, KisSignalCompressor::FIRST_INACTIVE),
           kineticScrollInfiniteFrameUpdater()
     {
         kineticScrollInfiniteFrameUpdater.setTimerType(Qt::CoarseTimer);
@@ -629,7 +629,6 @@ void TimelineFramesView::slotRealignScrollBars() {
     hBar->parentWidget()->layout()->setAlignment(Qt::AlignRight);
     hBar->setMaximumWidth(desiredScrollArea.width());
     hBar->setMinimumWidth(desiredScrollArea.width());
-
 
     vBar->parentWidget()->layout()->setAlignment(Qt::AlignBottom);
     vBar->setMaximumHeight(desiredScrollArea.height());
@@ -1366,7 +1365,6 @@ void TimelineFramesView::slotRemoveLayer()
 
 void TimelineFramesView::slotAddBlankFrame()
 {
-    ENTER_FUNCTION();
     QModelIndex index = currentIndex();
     if (!index.isValid() ||
         !m_d->model->data(index, TimelineFramesModel::FrameEditableRole).toBool()) {

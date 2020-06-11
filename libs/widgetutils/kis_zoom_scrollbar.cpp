@@ -22,6 +22,9 @@
 #include "kis_debug.h"
 #include <QMouseEvent>
 #include <QTabletEvent>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QtMath>
 
 KisZoomableScrollbar::KisZoomableScrollbar(QWidget *parent)
     : QScrollBar(parent)
@@ -114,8 +117,8 @@ void KisZoomableScrollbar::handleScroll(const QPoint &accel)
     const QVector2D perpendicularDirection = (orientation() == Qt::Horizontal) ? QVector2D(0, 1) : QVector2D(1, 0);
     const float perpendicularity = QVector2D::dotProduct(perpendicularDirection.normalized(), accelerationAccumulator.normalized());
 
-    if (abs(perpendicularity) > zoomPerpendicularityThreshold && zoomMovementPix != 0) {
-        zoom(qreal(zoomMovementPix) / (widgetThickness * 2));
+    if (qFabs(perpendicularity) > zoomPerpendicularityThreshold && zoomMovementPix != 0) {
+        zoom(qreal(zoomMovementPix) / qreal(widgetThickness * 2));
     } else if (sliderMovementPix != 0) {
         const int currentPosition = sliderPosition();
         scrollSubPixelAccumulator += (documentLength) * (sliderMovementPix / widgetLength);
@@ -133,7 +136,6 @@ void KisZoomableScrollbar::handleScroll(const QPoint &accel)
 
 void KisZoomableScrollbar::tabletEvent(QTabletEvent *event) {
     if ( event->type() == QTabletEvent::TabletMove && isSliderDown() ) {
-
         QPoint globalMouseCoord = mapToGlobal(event->pos()) * devicePixelRatio();
         QPoint accel = globalMouseCoord - lastKnownPosition;
         accelerationAccumulator += QVector2D(accel);
@@ -150,6 +152,7 @@ void KisZoomableScrollbar::tabletEvent(QTabletEvent *event) {
         if (event->type() == QTabletEvent::TabletPress) {
             QPoint globalMouseCoord = mapToGlobal(event->pos()) * devicePixelRatio();
             lastKnownPosition = globalMouseCoord;
+            event->accept();
         }
 
         QScrollBar::tabletEvent(event);
@@ -168,14 +171,12 @@ void KisZoomableScrollbar::mousePressEvent(QMouseEvent *event)
     } else {
         setCursor(Qt::ArrowCursor);
     }
-
 }
 
 
 void KisZoomableScrollbar::mouseMoveEvent(QMouseEvent *event)
 {
     if (isSliderDown()) {
-
         QPoint globalMouseCoord = mapToGlobal(event->pos()) * devicePixelRatio();
         QPoint accel = globalMouseCoord - lastKnownPosition;
         accelerationAccumulator += QVector2D(accel);
@@ -225,3 +226,5 @@ void KisZoomableScrollbar::setZoomDeadzone(float value)
 {
     zoomPerpendicularityThreshold = value;
 }
+
+

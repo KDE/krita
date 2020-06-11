@@ -256,9 +256,27 @@ Qt::DropActions StoryboardModel::supportedDragActions() const
     return Qt::CopyAction | Qt::MoveAction;
 }
 
-int StoryboardModel::commentCount() const
+int StoryboardModel::visibleCommentCount() const
 {
-    return m_commentList.count();
+    int visibleComments = 0;
+    foreach(Comment comment, m_commentList){
+        if (comment.visibility){
+            visibleComments++;
+        }
+    }
+    return visibleComments;
+}
+
+int StoryboardModel::visibleCommentsUpto(QModelIndex index) const
+{
+    int commentRow = index.row() - 4;
+    int visibleComments = 0;
+    for (int row = 0; row < commentRow; row++){
+        if (m_commentList.at(row).visibility){
+            visibleComments++;
+        }
+    }
+    return visibleComments;
 }
 
 void StoryboardModel::setCommentModel(CommentModel *commentModel)

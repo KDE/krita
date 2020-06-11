@@ -133,7 +133,8 @@ QRect StoryboardView::visualRect(const QModelIndex &index) const
             default:
             {
                 //comment rect
-                parentRect.setTop(parentRect.top() + 120 + fontHeight + (index.row() - 4) * 100);
+                const StoryboardModel* Model = dynamic_cast<const StoryboardModel*>(model());
+                parentRect.setTop(parentRect.top() + 120 + fontHeight + Model->visibleCommentsUpto(index) * 100);
                 parentRect.setHeight(100);
                 return parentRect;
             }

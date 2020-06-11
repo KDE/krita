@@ -259,42 +259,32 @@ QVariant KisAllResourcesModel::headerData(int section, Qt::Orientation orientati
     if (orientation == Qt::Horizontal) {
         switch(section) {
         case Id:
-            v = i18n("Id");
-            break;
+            return i18n("Id");
         case StorageId:
-            v = i18n("Storage ID");
-            break;
+            return i18n("Storage ID");
         case Name:
-            v = i18n("Name");
-            break;
+            return i18n("Name");
         case Filename:
-            v = i18n("File Name");
-            break;
+            return i18n("File Name");
         case Tooltip:
-            v = i18n("Tooltip");
-            break;
+            return i18n("Tooltip");
         case Thumbnail:
-            v = i18n("Image");
-            break;
+            return i18n("Image");
         case Status:
-            v = i18n("Status");
-            break;
+            return i18n("Status");
         case Location:
-            v = i18n("Location");
-            break;
+            return i18n("Location");
         case ResourceType:
-            v = i18n("Resource Type");
-            break;
+            return i18n("Resource Type");
         case ResourceActive:
-            v = i18n("Active");
+            return i18n("Active");
         case StorageActive:
-            v = i18n("Storage Active");
+            return i18n("Storage Active");
         default:
-            v = QString::number(section);
+            return QString::number(section);
         }
-        return v;
     }
-    return QAbstractItemModel::headerData(section, orientation, role);
+    return v;
 }
 
 //static int s_i2 {0};
@@ -450,9 +440,9 @@ bool KisAllResourcesModel::setResourceInactive(const QModelIndex &index)
         qWarning() << "Failed to remove resource" << resourceId;
         return false;
     }
-    return resetQuery();
+    emit dataChanged(index, index, {Qt::EditRole});
+    return true;
 }
-
 //static int s_i5 {0};
 
 bool KisAllResourcesModel::setResourceInactive(KoResourceSP resource)
@@ -465,7 +455,10 @@ bool KisAllResourcesModel::setResourceInactive(KoResourceSP resource)
         qWarning() << "Failed to remove resource" << resource->resourceId();
         return false;
     }
-    return resetQuery();
+
+    QModelIndex index = indexFromResource(resource);
+    emit dataChanged(index, index, {Qt::EditRole});
+    return true;
 }
 
 //static int s_i6 {0};
@@ -473,12 +466,13 @@ bool KisAllResourcesModel::setResourceInactive(KoResourceSP resource)
 bool KisAllResourcesModel::importResourceFile(const QString &filename)
 {
     //qDebug() << "KisAllResourcesModel::importResource" << s_i6 << d->resourceType; s_i6++;
-
+    beginInsertRows(QModelIndex(), rowCount(), 1);
     if (!KisResourceLocator::instance()->importResourceFromFile(d->resourceType, filename)) {
         qWarning() << "Failed to import resource" << filename;
-        return false;
     }
-    return resetQuery();
+    bool r = resetQuery();
+    endInsertRows();
+    return r;
 }
 
 //static int s_i7 {0};
@@ -491,12 +485,13 @@ bool KisAllResourcesModel::addResource(KoResourceSP resource, const QString &sto
     }
 
     //qDebug() << "KisAllResourcesModel::addResource" << s_i7 << d->resourceType; s_i7++;
-
+    beginInsertRows(QModelIndex(), rowCount(), 1);
     if (!KisResourceLocator::instance()->addResource(d->resourceType, resource, storageId)) {
         qWarning() << "Failed to add resource" << resource->name();
-        return false;
     }
-    return resetQuery();
+    bool r = resetQuery();
+    endInsertRows();
+    return r;
 }
 
 //static int s_i8 {0};
@@ -514,7 +509,10 @@ bool KisAllResourcesModel::updateResource(KoResourceSP resource)
         qWarning() << "Failed to update resource" << resource;
         return false;
     }
-    return resetQuery();
+    bool r = resetQuery();
+    QModelIndex index = indexFromResource(resource);
+    emit dataChanged(index, index, {Qt::EditRole});
+    return r;
 }
 
 bool KisAllResourcesModel::renameResource(KoResourceSP resource, const QString &name)
@@ -528,7 +526,10 @@ bool KisAllResourcesModel::renameResource(KoResourceSP resource, const QString &
         qWarning() << "Failed to rename resource" << resource << name;
         return false;
     }
-    return resetQuery();
+    bool r = resetQuery();
+    QModelIndex index = indexFromResource(resource);
+    emit dataChanged(index, index, {Qt::EditRole});
+    return r;
 }
 
 //static int s_i9 {0};
@@ -544,16 +545,11 @@ bool KisAllResourcesModel::resetQuery()
 {
 //    QElapsedTimer t;
 //    t.start();
-
-    beginResetModel();
     bool r = d->resourcesQuery.exec();
     if (!r) {
         qWarning() << "Could not select" << d->resourceType << "resources" << d->resourcesQuery.lastError() << d->resourcesQuery.boundValues();
     }
     d->cachedRowCount = -1;
-
-    endResetModel();
-
 //    qDebug() << "KisAllResourcesModel::resetQuery for" << d->resourceType << "took" << t.elapsed() << "ms";
 
     return r;

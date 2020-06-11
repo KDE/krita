@@ -320,7 +320,6 @@ void KisActionRegistry::Private::loadActionFiles()
 
     // Extract actions all XML .action files.
     Q_FOREACH (const QString &actionDefinition, actionDefinitions)  {
-        qDebug() << "\tLoading Action File" << actionDefinition;
         QDomDocument doc;
         QFile f(actionDefinition);
         f.open(QFile::ReadOnly);
@@ -330,7 +329,7 @@ void KisActionRegistry::Private::loadActionFiles()
         QString collectionName = base.attribute("name");
         QString version        = base.attribute("version");
         if (version != "2") {
-            qDebug() << ".action XML file" << actionDefinition << "has incorrect version; skipping.";
+            qWarning() << ".action XML file" << actionDefinition << "has incorrect version; skipping.";
             continue;
         }
 
@@ -358,7 +357,7 @@ void KisActionRegistry::Private::loadActionFiles()
 
                     // Bad things
                     if (name.isEmpty()) {
-                        qDebug() << "Unnamed action in definitions file " << actionDefinition;
+                        qWarning() << "Unnamed action in definitions file " << actionDefinition;
                     }
 
                     else if (actionInfoList.contains(name)) {

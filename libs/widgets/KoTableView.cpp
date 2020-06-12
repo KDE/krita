@@ -79,7 +79,7 @@ void KoTableView::updateView()
             setColumnWidth(i, columnWidth);
         }
         // keep aspect ratio always square.
-        if (columnCount > 1) {
+        if (columnCount >= 1) {
             for (int i = 0; i < rowCount; ++i) {
                 setRowHeight(i, columnWidth);
             }

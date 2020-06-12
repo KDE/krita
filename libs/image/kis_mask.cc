@@ -180,9 +180,6 @@ void KisMask::Private::initSelectionImpl(KisSelectionSP copyFrom, KisLayerSP par
          */
         selection = new KisSelection(*copyFrom);
         selection->setDefaultBounds(new KisSelectionDefaultBounds(parentPaintDevice));
-        if (copyFrom->hasShapeSelection()) {
-            delete selection->flatten();
-        }
     } else if (copyFromDevice) {
         KritaUtils::DeviceCopyMode copyMode =
             q->inherits("KisFilterMask") || q->inherits("KisTransparencyMask") ?
@@ -464,13 +461,13 @@ QRect KisMask::nonDependentExtent() const
     return QRect();
 }
 
-QImage KisMask::createThumbnail(qint32 w, qint32 h)
+QImage KisMask::createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspectRatioMode)
 {
     KisPaintDeviceSP originalDevice =
         selection() ? selection()->projection() : 0;
 
     return originalDevice ?
-           originalDevice->createThumbnail(w, h, 1,
+           originalDevice->createThumbnail(w, h, aspectRatioMode, 1,
                                            KoColorConversionTransformation::internalRenderingIntent(),
                                            KoColorConversionTransformation::internalConversionFlags()) : QImage();
 }

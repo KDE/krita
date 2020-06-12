@@ -1057,7 +1057,7 @@ void KisPaintDeviceTest::testWrappedRandomAccessor()
 
     x = 3;
     y = 3;
-    KisRandomAccessorSP dstIt = dev->createRandomAccessorNG(x, y);
+    KisRandomAccessorSP dstIt = dev->createRandomAccessorNG();
 
     QVERIFY(!memcmp(dstIt->rawData(), c1.data(), pixelSize));
     QCOMPARE(dstIt->numContiguousColumns(x), 17);
@@ -1254,7 +1254,7 @@ void testWrappedLineIteratorReadMoreThanBounds(QString testName)
 
     // test rect doesn't fit the wrap rect in both dimensions
     const QRect &rect(bounds.adjusted(-6,-6,8,8));
-    KisRandomAccessorSP dstIt = dst->createRandomAccessorNG(rect.x(), rect.y());
+    KisRandomAccessorSP dstIt = dst->createRandomAccessorNG();
     IteratorSP it = createIterator<IteratorSP>(dev, rect);
 
     for (int y = rect.y(); y < rect.y() + rect.height(); y++) {

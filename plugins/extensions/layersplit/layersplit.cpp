@@ -116,7 +116,7 @@ void LayerSplit::slotLayerSplit()
 
         updater->setProgress(0);
 
-        KisRandomConstAccessorSP acc = projection->createRandomConstAccessorNG(rc.x(), rc.y());
+        KisRandomConstAccessorSP acc = projection->createRandomConstAccessorNG();
 
         for (int row = rc.y(); row < rc.height(); ++row) {
 
@@ -166,7 +166,7 @@ void LayerSplit::slotLayerSplit()
                     Layer l;
                     l.color = c;
                     l.device = new KisPaintDevice(cs, name);
-                    l.accessor = l.device->createRandomAccessorNG(col, row);
+                    l.accessor = l.device->createRandomAccessorNG();
                     l.accessor->moveTo(col, row);
                     memcpy(l.accessor->rawData(), acc->rawDataConst(), cs->pixelSize());
                     l.pixelsWritten = 1;

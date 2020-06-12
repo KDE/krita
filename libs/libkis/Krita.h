@@ -328,6 +328,7 @@ add_document_to_window()
     static QObject *fromVariant(const QVariant& v);
 
     static QString krita_i18n(const QString &text);
+    static QString krita_i18nc(const QString &context, const QString &text);
 
 private Q_SLOTS:
 

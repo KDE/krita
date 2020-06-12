@@ -28,6 +28,7 @@
 
 // HACK! please refactor out!
 #include "kis_simple_stroke_strategy.h"
+#include "kis_abstract_projection_plane.h"
 
 
 KisNodePropertyListCommand::KisNodePropertyListCommand(KisNodeSP node, KisBaseNode::PropertyList newPropertyList)
@@ -45,17 +46,17 @@ KisNodePropertyListCommand::KisNodePropertyListCommand(KisNodeSP node, KisBaseNo
 void KisNodePropertyListCommand::redo()
 {
     const KisBaseNode::PropertyList propsBefore = m_node->sectionModelProperties();
-    const QRect oldExtent = m_node->extent();
+    const QRect oldExtent = m_node->projectionPlane()->tightUserVisibleBounds();
     m_node->setSectionModelProperties(m_newPropertyList);
-    doUpdate(propsBefore, m_node->sectionModelProperties(), oldExtent | m_node->extent());
+    doUpdate(propsBefore, m_node->sectionModelProperties(), oldExtent | m_node->projectionPlane()->tightUserVisibleBounds());
 }
 
 void KisNodePropertyListCommand::undo()
 {
     const KisBaseNode::PropertyList propsBefore = m_node->sectionModelProperties();
-    const QRect oldExtent = m_node->extent();
+    const QRect oldExtent = m_node->projectionPlane()->tightUserVisibleBounds();
     m_node->setSectionModelProperties(m_oldPropertyList);
-    doUpdate(propsBefore, m_node->sectionModelProperties(), oldExtent | m_node->extent());
+    doUpdate(propsBefore, m_node->sectionModelProperties(), oldExtent | m_node->projectionPlane()->tightUserVisibleBounds());
 }
 
 bool checkOnionSkinChanged(const KisBaseNode::PropertyList &oldPropertyList,

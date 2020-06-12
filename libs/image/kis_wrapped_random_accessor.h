@@ -26,7 +26,6 @@ class KisWrappedRandomAccessor : public KisRandomAccessor2
 {
 public:
     KisWrappedRandomAccessor(KisTiledDataManager *ktm,
-                             qint32 x, qint32 y,
                              qint32 offsetX, qint32 offsetY,
                              bool writable,
                              KisIteratorCompleteListener *completeListener,

@@ -41,7 +41,7 @@ KisTiledExtentManager::Data::~Data()
     delete[] m_buffer;
 }
 
-inline bool KisTiledExtentManager::Data::add(qint32 index)
+bool KisTiledExtentManager::Data::add(qint32 index)
 {
     QReadLocker lock(&m_migrationLock);
     qint32 currentIndex = m_offset + index;
@@ -55,56 +55,68 @@ inline bool KisTiledExtentManager::Data::add(qint32 index)
 
     KIS_ASSERT_RECOVER_NOOP(m_buffer[currentIndex].loadAcquire() >= 0);
     bool needsUpdateExtent = false;
-    QReadLocker rl(&m_extentLock);
 
-    if (!m_buffer[currentIndex].loadAcquire()) {
-        rl.unlock();
-        QWriteLocker wl(&m_extentLock);
+    while (true) {
+        QReadLocker rl(&m_extentLock);
 
-        if (!m_buffer[currentIndex].load()) {
-            m_buffer[currentIndex].store(1);
+        int oldValue = m_buffer[currentIndex].loadAcquire();
+        if (oldValue == 0) {
+            rl.unlock();
+            QWriteLocker wl(&m_extentLock);
 
-            if (m_min > index) m_min = index;
-            if (m_max < index) m_max = index;
+            if ((oldValue = m_buffer[currentIndex].loadAcquire()) == 0) {
 
-            ++m_count;
-            needsUpdateExtent = true;
-        } else {
-            m_buffer[currentIndex].ref();
+                if (m_min > index) m_min = index;
+                if (m_max < index) m_max = index;
+
+                ++m_count;
+                needsUpdateExtent = true;
+
+                m_buffer[currentIndex].storeRelease(1);
+            } else {
+                m_buffer[currentIndex].storeRelease(oldValue + 1);
+            }
+
+            break;
+        } else if (m_buffer[currentIndex].testAndSetOrdered(oldValue, oldValue + 1)) {
+            break;
         }
-    } else {
-        m_buffer[currentIndex].ref();
     }
 
     return needsUpdateExtent;
 }
 
-inline bool KisTiledExtentManager::Data::remove(qint32 index)
+bool KisTiledExtentManager::Data::remove(qint32 index)
 {
     QReadLocker lock(&m_migrationLock);
     qint32 currentIndex = m_offset + index;
 
-    KIS_ASSERT_RECOVER_NOOP(m_buffer[currentIndex].loadAcquire() > 0);
     bool needsUpdateExtent = false;
     QReadLocker rl(&m_extentLock);
 
-    if (m_buffer[currentIndex].loadAcquire() == 1) {
+    const int oldValue = m_buffer[currentIndex].fetchAndAddAcquire(-1);
+
+    /**
+     * That is not the droid you're looking for. If you see this assert
+     * in the backtrace, most probably, the bug is not here. The crash
+     * happens because two threads are trying to do device->clear(rc)
+     * concurrently for the overlapping rects. That is, they are trying
+     * to remove the same tile. Look higher!
+     */
+    KIS_SAFE_ASSERT_RECOVER(oldValue > 0) {
+        m_buffer[currentIndex].store(0);
+        return false;
+    }
+
+    if (oldValue == 1) {
         rl.unlock();
         QWriteLocker wl(&m_extentLock);
 
-        if (m_buffer[currentIndex].load() == 1) {
-            m_buffer[currentIndex].store(0);
+        if (m_min == index) updateMin();
+        if (m_max == index) updateMax();
 
-            if (m_min == index) updateMin();
-            if (m_max == index) updateMax();
-
-            --m_count;
-            needsUpdateExtent = true;
-        } else {
-            m_buffer[currentIndex].deref();
-        }
-    } else {
-        m_buffer[currentIndex].deref();
+        --m_count;
+        needsUpdateExtent = true;
     }
 
     return needsUpdateExtent;
@@ -209,6 +221,8 @@ void KisTiledExtentManager::Data::migrate(qint32 index)
 
 void KisTiledExtentManager::Data::updateMin()
 {
+    KIS_SAFE_ASSERT_RECOVER_NOOP(m_min != qint32_MAX);
+
     qint32 start = m_min + m_offset;
 
     for (qint32 i = start; i < m_capacity; ++i) {
@@ -216,13 +230,17 @@ void KisTiledExtentManager::Data::updateMin()
 
         if (current > 0) {
             m_min = i - m_offset;
-            break;
+            return;
         }
     }
+
+    m_min = qint32_MAX;
 }
 
 void KisTiledExtentManager::Data::updateMax()
 {
+    KIS_SAFE_ASSERT_RECOVER_NOOP(m_min != qint32_MIN);
+
     qint32 start = m_max + m_offset;
 
     for (qint32 i = start; i >= 0; --i) {
@@ -230,9 +248,11 @@ void KisTiledExtentManager::Data::updateMax()
 
         if (current > 0) {
             m_max = i - m_offset;
-            break;
+            return;
         }
     }
+
+    m_max = qint32_MIN;
 }
 
 KisTiledExtentManager::KisTiledExtentManager()

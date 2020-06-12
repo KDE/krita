@@ -34,6 +34,7 @@
 
 #include "Document.h"
 #include "Canvas.h"
+#include "Scratchpad.h"
 #include "Window.h"
 #include "Resource.h"
 #include "ManagedColor.h"
@@ -43,6 +44,8 @@
 struct View::Private {
     Private() {}
     QPointer<KisView> view;
+
+    QList<Scratchpad *> scratchpads;
 };
 
 View::View(KisView* view, QObject *parent)
@@ -137,6 +140,14 @@ void View::activateResource(Resource *resource)
         d->view->viewManager()->paintOpBox()->resourceSelected(r);
     }
 
+}
+
+Scratchpad *View::createScratchpad(QColor bgColor)
+{
+    if(view()) {
+        d->scratchpads.append(new Scratchpad(this->canvas()->view(), bgColor));
+    }
+    return d->scratchpads.last();
 }
 
 ManagedColor *View::foregroundColor() const
@@ -276,4 +287,12 @@ QList<Node *> View::selectedNodes() const
 
     KisNodeList selectedNodes = d->view->viewManager()->nodeManager()->selectedNodes();
     return LibKisUtils::createNodeList(selectedNodes, d->view->image());
+}
+
+QList<Scratchpad *> View::scratchpads() const
+{
+    if (!d->view) return QList<Scratchpad *>();
+    if (!d->view->viewManager()) return QList<Scratchpad *>();
+
+    return d->scratchpads;
 }

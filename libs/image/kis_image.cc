@@ -1402,7 +1402,6 @@ void KisImage::setResolution(double xres, double yres)
 {
     m_d->xres = xres;
     m_d->yres = yres;
-    m_d->signalRouter.emitNotification(ResolutionChangedSignal);
 }
 
 QPointF KisImage::documentToPixel(const QPointF &documentCoord) const
@@ -1969,11 +1968,33 @@ void KisImage::refreshGraphAsync(KisNodeSP root, const QRect &rc)
 
 void KisImage::refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &cropRect)
 {
+    refreshGraphAsync(root, QVector<QRect>({rc}), cropRect);
+}
+
+void KisImage::refreshGraphAsync(KisNodeSP root, const QVector<QRect> &rects, const QRect &cropRect)
+{
     if (!root) root = m_d->rootLayer;
 
-    m_d->animationInterface->notifyNodeChanged(root.data(), rc, true);
-    m_d->scheduler.fullRefreshAsync(root, rc, cropRect);
+    /**
+     * We iterate through the filters in a reversed way. It makes the most nested filters
+     * to execute first.
+     */
+    for (auto it = m_d->projectionUpdatesFilters.rbegin();
+         it != m_d->projectionUpdatesFilters.rend();
+         ++it) {
+
+        KIS_SAFE_ASSERT_RECOVER(*it) { continue; }
+
+        if ((*it)->filterRefreshGraph(this, root.data(), rects, cropRect)) {
+            return;
+        }
+    }
+
+
+    m_d->animationInterface->notifyNodeChanged(root.data(), rects, true);
+    m_d->scheduler.fullRefreshAsync(root, rects, cropRect);
 }
+
 
 void KisImage::requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QRect &rc, const QRect &cropRect)
 {

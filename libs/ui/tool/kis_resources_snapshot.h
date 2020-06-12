@@ -82,6 +82,7 @@ public:
     KoColor currentFgColor() const;
     KoColor currentBgColor() const;
     KisPaintOpPresetSP currentPaintOpPreset() const;
+    KoAbstractGradient* currentGradient() const;
 
     /// @return the channel lock flags of the current node with the global override applied
     QBitArray channelLockFlags() const;

@@ -30,6 +30,8 @@ private Q_SLOTS:
     void testAddChild();
 
     void testUndoFlattening();
+
+    void testHistoryOnFlattening();
 };
 
 #endif

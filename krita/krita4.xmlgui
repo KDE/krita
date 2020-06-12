@@ -175,7 +175,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="paste_layer_from_clipboard"/>
       <Separator/>
       <Menu name="LayerNew">
-        <text>New</text>
+        <text context="New layer">&amp;New</text>
         <Action name="add_new_paint_layer"/>
         <Action name="add_new_clone_layer"/>
         <Action name="new_from_visible"/>

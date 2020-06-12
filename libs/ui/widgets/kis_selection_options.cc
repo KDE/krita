@@ -85,6 +85,7 @@ KisSelectionOptions::KisSelectionOptions(KisCanvas2 * /*canvas*/)
     m_page->cmbSampleLayersMode->addItem(sampleLayerModeToUserString(SAMPLE_LAYERS_MODE_COLOR_LABELED), SAMPLE_LAYERS_MODE_COLOR_LABELED);
     m_page->cmbSampleLayersMode->setEditable(false);
 
+    m_page->cmbColorLabels->setModes(false, false);
 
     connect(m_mode, SIGNAL(buttonClicked(int)), this, SIGNAL(modeChanged(int)));
     connect(m_action, SIGNAL(buttonClicked(int)), this, SIGNAL(actionChanged(int)));

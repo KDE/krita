@@ -59,6 +59,12 @@ ecm_add_test(
 set_property(TARGET TestSvgParserRoundTrip
              PROPERTY COMPILE_DEFINITIONS USE_ROUND_TRIP)
 
+ecm_add_test(
+    TestMeshArray.cpp
+    TEST_NAME TestMeshArray
+    LINK_LIBRARIES kritaflake Qt5::Test
+    NAME_PREFIX "libs-flake-")
+
 ############## broken tests ###############
 
 krita_add_broken_unit_test(TestPointMergeCommand.cpp

@@ -150,7 +150,7 @@ public:
             return quint8_MAX;
         }
         else {
-            return m_colorSpace->difference(m_srcPixelPtr, pixelPtr);
+            return m_colorSpace->differenceA(m_srcPixelPtr, pixelPtr);
         }
     }
 
@@ -194,7 +194,7 @@ public:
                 }
             }
             else {
-                result = m_colorSpace->difference(m_srcPixelPtr, pixelPtr);
+                result = m_colorSpace->differenceA(m_srcPixelPtr, pixelPtr);
             }
             m_differences.insert(key, result);
         }

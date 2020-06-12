@@ -396,7 +396,10 @@ public:
 
         if (this->opacityU8(src1) == OPACITY_TRANSPARENT_U8
                 || this->opacityU8(src2) == OPACITY_TRANSPARENT_U8) {
-            return (this->opacityU8(src1) == this->opacityU8(src2) ? 0 : 255);
+
+
+            const qreal alphaScale = 100.0 / 255.0;
+            return qRound(alphaScale * qAbs(this->opacityU8(src1) - this->opacityU8(src2)));
         }
         Q_ASSERT(this->toLabA16Converter());
         this->toLabA16Converter()->transform(src1, lab1, 1);

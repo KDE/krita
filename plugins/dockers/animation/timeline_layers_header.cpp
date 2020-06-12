@@ -111,6 +111,7 @@ void TimelineLayersHeader::paintSection(QPainter *painter, const QRect &areaRect
     QRect iconRect = pinArea - QMargins(5,5,5,5);
 
     if (!isPinned) {
+        iconRect = pinArea - QMargins(6,4,4,6);
         painter->setOpacity(0.35);
     }
 

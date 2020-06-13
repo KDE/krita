@@ -772,7 +772,7 @@ set EXT_TARGETS=%EXT_TARGETS% seexpr
 
 for %%a in (%EXT_TARGETS%) do (
     echo Building ext_%%a...
-    "%CMAKE_EXE%" --build . --config %CMAKE_BUILD_TYPE% --target ext_%%a
+    "%CMAKE_EXE%" --build . --config %CMAKE_BUILD_TYPE% --target ext_%%a -- -j%PARALLEL_JOBS%
     if errorlevel 1 (
         echo ERROR: Building of ext_%%a failed! 1>&2
         exit /b 105

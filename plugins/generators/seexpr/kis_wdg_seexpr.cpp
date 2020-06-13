@@ -32,6 +32,14 @@ KisWdgSeExpr::KisWdgSeExpr(QWidget* parent)
 {
     m_widget = new Ui_WdgSeExpr();
     m_widget->setupUi(this);
+
+    m_widget->txtEditor->registerExtraVariable("$u", i18nc("SeExpr variable", "Normalized X axis coordinate of the image from its top-left corner").toStdString());
+    m_widget->txtEditor->registerExtraVariable("$v", i18nc("SeExpr variable", "Normalized Y axis coordinate of the image from its top-left corner").toStdString());
+    m_widget->txtEditor->registerExtraVariable("$w", i18nc("SeExpr variable", "Image width").toStdString());
+    m_widget->txtEditor->registerExtraVariable("$h", i18nc("SeExpr variable", "Image height").toStdString());
+
+    m_widget->txtEditor->updateCompleter();
+
     connect(m_widget->btnUpdate, SIGNAL(clicked()), this, SIGNAL(sigConfigurationUpdated()));
 }
 
@@ -49,14 +57,12 @@ void KisWdgSeExpr::setConfiguration(const KisPropertiesConfigurationSP config)
     Q_ASSERT(!config->getString("script").isEmpty());
     QString script = config->getString("script");
 
-    //widget()->txtEditor->setPlainText(script);
     widget()->txtEditor->setExpr(script.toStdString(), false);
 }
 
 KisPropertiesConfigurationSP KisWdgSeExpr::configuration() const
 {
     KisFilterConfigurationSP config = new KisFilterConfiguration("seexpr", 1);
-    //QVariant v(widget()->txtEditor->toPlainText());
     QVariant v(QString::fromStdString(widget()->txtEditor->getExpr()));
 
     config->setProperty("script", v);

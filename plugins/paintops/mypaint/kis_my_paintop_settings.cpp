@@ -29,7 +29,7 @@ void KisMyPaintOpSettings::setPaintOpSize(qreal value)
 
 qreal KisMyPaintOpSettings::paintOpSize() const
 {
-    return 2;
+    return 40;
 }
 
 bool KisMyPaintOpSettings::paintIncremental()

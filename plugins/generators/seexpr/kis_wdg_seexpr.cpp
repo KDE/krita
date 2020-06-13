@@ -18,6 +18,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <KisDialogStateSaver.h>
 #include <KoColor.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
@@ -32,6 +33,9 @@ KisWdgSeExpr::KisWdgSeExpr(QWidget* parent)
 {
     m_widget = new Ui_WdgSeExpr();
     m_widget->setupUi(this);
+    QMap<QString, QVariant> defaults;
+    defaults[m_widget->txtEditor->objectName()] = QVariant::fromValue<QString>(BASE_SCRIPT);
+    KisDialogStateSaver::restoreState(m_widget->txtEditor, "krita/generators/seexpr", defaults);
 
     m_widget->txtEditor->registerExtraVariable("$u", i18nc("SeExpr variable", "Normalized X axis coordinate of the image from its top-left corner").toStdString());
     m_widget->txtEditor->registerExtraVariable("$v", i18nc("SeExpr variable", "Normalized Y axis coordinate of the image from its top-left corner").toStdString());
@@ -45,6 +49,7 @@ KisWdgSeExpr::KisWdgSeExpr(QWidget* parent)
 
 KisWdgSeExpr::~KisWdgSeExpr()
 {
+    KisDialogStateSaver::saveState(m_widget->txtEditor, "krita/generators/seexpr");
     delete m_widget;
 }
 

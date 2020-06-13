@@ -41,6 +41,26 @@ bool KisMyPaintOpSettings::paintIncremental()
 QPainterPath KisMyPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
 {
     QPainterPath path;
+
+    if (mode.isVisible) {
+        qreal finalScale = 1.0;
+
+        const qreal radius = 0.5 * 40;
+
+        QPainterPath realOutline;
+        realOutline.addEllipse(QPointF(), radius, radius);
+
+        path = outlineFetcher()->fetchOutline(info, this, realOutline, mode, alignForZoom, finalScale);
+
+        if (mode.showTiltDecoration) {
+            QPainterPath tiltLine = makeTiltIndicator(info,
+                realOutline.boundingRect().center(),
+                realOutline.boundingRect().width() * 0.5,
+                3.0);
+            path.addPath(outlineFetcher()->fetchOutline(info, this, tiltLine, mode, alignForZoom, finalScale, 0.0, true, realOutline.boundingRect().center().x(), realOutline.boundingRect().center().y()));
+        }
+    }
+
     return path;
 }
 

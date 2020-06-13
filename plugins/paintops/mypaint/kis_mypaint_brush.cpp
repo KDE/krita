@@ -70,7 +70,7 @@ void KisMyPaintBrush::apply(KisPaintOpSettingsSP settings) {
 //    mypaint_brush_set_base_value(m_brush, MYPAINT_BRUSH_SETTING_OFFSET_BY_SPEED_SLOWNESS, 1.0);
 //    mypaint_brush_set_base_value(m_brush, MYPAINT_BRUSH_SETTING_STROKE_DURATION_LOGARITHMIC, 4.0);
 
-    QIODevice *dev = new QFile("/usr/share/mypaint-data/1.0/brushes/deevad/sponge_smudging.myb");
+    QIODevice *dev = new QFile("/usr/share/mypaint-data/1.0/brushes/experimental/bubble.myb");
 
     if (!dev->open(QIODevice::ReadOnly)) {
         qDebug() << "Can't open file ";

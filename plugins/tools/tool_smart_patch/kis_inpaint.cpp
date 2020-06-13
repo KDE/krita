@@ -250,9 +250,18 @@ private:
 public:
     std::function< float(const MaskedImage&, int, int, const MaskedImage& , int , int ) > distance;
 
-    void toPaintDevice(KisPaintDeviceSP imageDev, QRect rect)
+    void toPaintDevice(KisPaintDeviceSP imageDev, QRect rect, KisSelectionSP selection)
     {
-        imageData.saveToDevice(imageDev, rect);
+        if (!selection) {
+            imageData.saveToDevice(imageDev, rect);
+        } else {
+            KisPaintDeviceSP dev = new KisPaintDevice(imageDev->colorSpace());
+            dev->setDefaultBounds(imageDev->defaultBounds());
+
+            imageData.saveToDevice(dev, rect);
+
+            KisPainter::copyAreaOptimized(rect.topLeft(), dev, imageDev, rect, selection);
+        }
     }
 
     void DebugDump(const QString& name)
@@ -972,7 +981,7 @@ QRect getMaskBoundingBox(KisPaintDeviceSP maskDev)
 }
 
 
-QRect patchImage(const KisPaintDeviceSP imageDev, const KisPaintDeviceSP maskDev, int patchRadius, int accuracy)
+QRect patchImage(const KisPaintDeviceSP imageDev, const KisPaintDeviceSP maskDev, int patchRadius, int accuracy, KisSelectionSP selection)
 {
     QRect maskRect = getMaskBoundingBox(maskDev);
     QRect imageRect = imageDev->exactBounds();
@@ -986,7 +995,7 @@ QRect patchImage(const KisPaintDeviceSP imageDev, const KisPaintDeviceSP maskDev
     if (!maskRect.isEmpty()) {
         Inpaint inpaint(imageDev, maskDev, patchRadius, maskRect);
         MaskedImageSP output = inpaint.patch();
-        output->toPaintDevice(imageDev, maskRect);
+        output->toPaintDevice(imageDev, maskRect, selection);
     }
 
     return maskRect;

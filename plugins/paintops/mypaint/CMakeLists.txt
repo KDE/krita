@@ -9,6 +9,8 @@ set(kritamypaintop_SOURCES
     #kis_myop_option.cpp
     kis_my_paintop_settings.cpp
     kis_my_paintop_settings_widget.cpp
+    kis_mypaint_surface.cpp
+    kis_mypaint_brush.cpp
 )
 
 #ki18n_wrap_ui(kritasketchpaintop_SOURCES wdgsketchoptions.ui )

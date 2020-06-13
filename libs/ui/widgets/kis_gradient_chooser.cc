@@ -80,6 +80,7 @@ KisGradientChooser::KisGradientChooser(QWidget *parent, const char *name)
     m_itemChooser->showTaggingBar(true);
     m_itemChooser->setFixedSize(250, 250);
     m_itemChooser->setColumnCount(1);
+    m_itemChooser->itemView()->keepAspectRatio(false);
 
     connect(m_itemChooser, SIGNAL(resourceSelected(KoResource*)),
             this, SLOT(update(KoResource*)));

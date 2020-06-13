@@ -125,7 +125,7 @@ KisOpacityResourceConverter::KisOpacityResourceConverter()
 QVariant KisOpacityResourceConverter::fromSource(const QVariant &value)
 {
     KisPaintOpPresetSP preset = value.value<KisPaintOpPresetSP>();
-    return preset ? preset->settings()->paintOpOpacity() : QVariant();
+    return preset ? preset->settings()->paintOpOpacity() : QVariant(1.0);
 }
 
 QVariant KisOpacityResourceConverter::toSource(const QVariant &value, const QVariant &sourceValue)

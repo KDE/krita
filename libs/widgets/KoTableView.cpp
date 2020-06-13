@@ -31,6 +31,7 @@ KoTableView::KoTableView(QWidget *parent)
     verticalHeader()->setDefaultSectionSize(20);
     setContextMenuPolicy(Qt::DefaultContextMenu);
     setViewMode(FIXED_COLUMNS);
+    keepAspectRatio();
 
     QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(this);
     if (scroller) {
@@ -66,6 +67,10 @@ void KoTableView::setViewMode(KoTableView::ViewMode mode)
 
 }
 
+void KoTableView::keepAspectRatio(bool keepRatio) {
+    m_keepRatio = keepRatio;
+}
+
 void KoTableView::updateView()
 {
     int columnCount = model()->columnCount(QModelIndex());
@@ -79,7 +84,7 @@ void KoTableView::updateView()
             setColumnWidth(i, columnWidth);
         }
         // keep aspect ratio always square.
-        if (columnCount >= 1) {
+        if (m_keepRatio) {
             for (int i = 0; i < rowCount; ++i) {
                 setRowHeight(i, columnWidth);
             }

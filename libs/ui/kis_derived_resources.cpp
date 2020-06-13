@@ -188,6 +188,31 @@ QVariant KisSizeResourceConverter::toSource(const QVariant &value, const QVarian
 }
 
 /*********************************************************************/
+/*          KisPatternSizeResourceConverter                                 */
+/*********************************************************************/
+
+KisPatternSizeResourceConverter::KisPatternSizeResourceConverter()
+    : KoDerivedResourceConverter(KisCanvasResourceProvider::Size,
+        KisCanvasResourceProvider::CurrentPaintOpPreset)
+{
+}
+
+QVariant KisPatternSizeResourceConverter::fromSource(const QVariant& value)
+{
+    KisPaintOpPresetSP preset = value.value<KisPaintOpPresetSP>();
+    return preset ? preset->settings()->paintOpPatternSize() : QVariant();
+}
+
+QVariant KisPatternSizeResourceConverter::toSource(const QVariant& value, const QVariant& sourceValue)
+{
+    KisPaintOpPresetSP preset = sourceValue.value<KisPaintOpPresetSP>();
+    if (!preset) return sourceValue;
+
+    preset->settings()->setPaintOpPatternSize(value.toReal());
+    return QVariant::fromValue(preset);
+}
+
+/*********************************************************************/
 /*          KisLodAvailabilityResourceConverter                      */
 /*********************************************************************/
 

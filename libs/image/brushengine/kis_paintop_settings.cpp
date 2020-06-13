@@ -245,6 +245,14 @@ void KisPaintOpSettings::setPaintOpFlow(qreal value)
     proxy->setProperty("FlowValue", value);
 }
 
+void KisPaintOpSettings::setPaintOpPatternSize(qreal value)
+{
+    KisLockedPropertiesProxySP proxy(
+        KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
+
+    proxy->setProperty("Texture/Pattern/Scale", value);
+}
+
 void KisPaintOpSettings::setPaintOpCompositeOp(const QString &value)
 {
     KisLockedPropertiesProxySP proxy(
@@ -266,6 +274,14 @@ qreal KisPaintOpSettings::paintOpFlow()
                 KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
 
     return proxy->getDouble("FlowValue", 1.0);
+}
+
+qreal KisPaintOpSettings::paintOpPatternSize()
+{
+    KisLockedPropertiesProxySP proxy(
+        KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
+
+    return proxy->getDouble("Texture/Pattern/Scale", 0.5);
 }
 
 QString KisPaintOpSettings::paintOpCompositeOp()

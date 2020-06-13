@@ -228,24 +228,28 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
         sliderWidth = 120 * logicalDpiX() / 96;
     }
 
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < 4; ++i) {
         m_sliderChooser[i] = new KisWidgetChooser(i + 1);
 
         KisDoubleSliderSpinBox* slOpacity;
         KisDoubleSliderSpinBox* slFlow;
         KisDoubleSliderSpinBox* slSize;
+        KisDoubleSliderSpinBox* slPatternSize;
         if (sliderLabels) {
-            slOpacity = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("opacity");
-            slFlow    = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("flow");
-            slSize    = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("size");
+            slOpacity     = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("opacity");
+            slFlow        = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("flow");
+            slSize        = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("size");
+            slPatternSize = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("patternsize");
             slOpacity->setPrefix(QString("%1 ").arg(i18n("Opacity:")));
             slFlow->setPrefix(QString("%1 ").arg(i18n("Flow:")));
             slSize->setPrefix(QString("%1 ").arg(i18n("Size:")));
+            slPatternSize->setPrefix(QString("%1 ").arg(i18n("Pattern Scale:")));
         }
         else {
             slOpacity = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("opacity", i18n("Opacity:"));
             slFlow    = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("flow", i18n("Flow:"));
             slSize    = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("size", i18n("Size:"));
+            slPatternSize = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("patternsize", i18n("Pattern Scale:"));
         }
 
         slOpacity->setRange(0, 100, 0);
@@ -273,6 +277,16 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
         slSize->setMinimumWidth(qMax(sliderWidth, slSize->sizeHint().width()));
         slSize->setFixedHeight(iconsize);
         slSize->setBlockUpdateSignalOnDrag(true);
+
+        slPatternSize->setRange(0.01, 20, 2);
+        slPatternSize->setValue(0.5);
+
+        slPatternSize->setSingleStep(.1);
+        //slPatternSize->setExponentRatio(3.0);
+        slPatternSize->setSuffix(i18n("x"));
+        slPatternSize->setMinimumWidth(qMax(sliderWidth, slSize->sizeHint().width()));
+        slPatternSize->setFixedHeight(iconsize);
+        slPatternSize->setBlockUpdateSignalOnDrag(true);
 
         m_sliderChooser[i]->chooseWidget(cfg.toolbarSlider(i + 1));
     }
@@ -452,15 +466,22 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     connect(m_vMirrorAction        , SIGNAL(toggled(bool))                    , SLOT(slotVerticalMirrorChanged(bool)));
     connect(m_reloadAction         , SIGNAL(triggered())                        , SLOT(slotReloadPreset()));
 
-    connect(m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("opacity"), SIGNAL(valueChanged(qreal)), SLOT(slotSlider1Changed()));
-    connect(m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("flow")   , SIGNAL(valueChanged(qreal)), SLOT(slotSlider1Changed()));
-    connect(m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("size")   , SIGNAL(valueChanged(qreal)), SLOT(slotSlider1Changed()));
-    connect(m_sliderChooser[1]->getWidget<KisDoubleSliderSpinBox>("opacity"), SIGNAL(valueChanged(qreal)), SLOT(slotSlider2Changed()));
-    connect(m_sliderChooser[1]->getWidget<KisDoubleSliderSpinBox>("flow")   , SIGNAL(valueChanged(qreal)), SLOT(slotSlider2Changed()));
-    connect(m_sliderChooser[1]->getWidget<KisDoubleSliderSpinBox>("size")   , SIGNAL(valueChanged(qreal)), SLOT(slotSlider2Changed()));
-    connect(m_sliderChooser[2]->getWidget<KisDoubleSliderSpinBox>("opacity"), SIGNAL(valueChanged(qreal)), SLOT(slotSlider3Changed()));
-    connect(m_sliderChooser[2]->getWidget<KisDoubleSliderSpinBox>("flow")   , SIGNAL(valueChanged(qreal)), SLOT(slotSlider3Changed()));
-    connect(m_sliderChooser[2]->getWidget<KisDoubleSliderSpinBox>("size")   , SIGNAL(valueChanged(qreal)), SLOT(slotSlider3Changed()));
+    connect(m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("opacity")    , SIGNAL(valueChanged(qreal)), SLOT(slotSlider1Changed()));
+    connect(m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("flow")       , SIGNAL(valueChanged(qreal)), SLOT(slotSlider1Changed()));
+    connect(m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("size")       , SIGNAL(valueChanged(qreal)), SLOT(slotSlider1Changed()));
+    connect(m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("patternsize"), SIGNAL(valueChanged(qreal)), SLOT(slotSlider1Changed()));
+    connect(m_sliderChooser[1]->getWidget<KisDoubleSliderSpinBox>("opacity")    , SIGNAL(valueChanged(qreal)), SLOT(slotSlider2Changed()));
+    connect(m_sliderChooser[1]->getWidget<KisDoubleSliderSpinBox>("flow")       , SIGNAL(valueChanged(qreal)), SLOT(slotSlider2Changed()));
+    connect(m_sliderChooser[1]->getWidget<KisDoubleSliderSpinBox>("size")       , SIGNAL(valueChanged(qreal)), SLOT(slotSlider2Changed()));
+    connect(m_sliderChooser[1]->getWidget<KisDoubleSliderSpinBox>("patternsize"), SIGNAL(valueChanged(qreal)), SLOT(slotSlider2Changed()));
+    connect(m_sliderChooser[2]->getWidget<KisDoubleSliderSpinBox>("opacity")    , SIGNAL(valueChanged(qreal)), SLOT(slotSlider3Changed()));
+    connect(m_sliderChooser[2]->getWidget<KisDoubleSliderSpinBox>("flow")       , SIGNAL(valueChanged(qreal)), SLOT(slotSlider3Changed()));
+    connect(m_sliderChooser[2]->getWidget<KisDoubleSliderSpinBox>("size")       , SIGNAL(valueChanged(qreal)), SLOT(slotSlider3Changed()));
+    connect(m_sliderChooser[2]->getWidget<KisDoubleSliderSpinBox>("patternsize"), SIGNAL(valueChanged(qreal)), SLOT(slotSlider3Changed()));
+    connect(m_sliderChooser[3]->getWidget<KisDoubleSliderSpinBox>("opacity")    , SIGNAL(valueChanged(qreal)), SLOT(slotSlider4Changed()));
+    connect(m_sliderChooser[3]->getWidget<KisDoubleSliderSpinBox>("flow")       , SIGNAL(valueChanged(qreal)), SLOT(slotSlider4Changed()));
+    connect(m_sliderChooser[3]->getWidget<KisDoubleSliderSpinBox>("size")       , SIGNAL(valueChanged(qreal)), SLOT(slotSlider4Changed()));
+    connect(m_sliderChooser[3]->getWidget<KisDoubleSliderSpinBox>("patternsize"), SIGNAL(valueChanged(qreal)), SLOT(slotSlider4Changed()));
 
     connect(m_resourceProvider, SIGNAL(sigFGColorUsed(KoColor)), m_favoriteResourceManager, SLOT(slotAddRecentColor(KoColor)));
 
@@ -728,7 +749,7 @@ void KisPaintopBox::setWidgetState(int flags)
         m_brushEditorPopupButton->setEnabled(flags & ENABLE_PRESETS);
     }
 
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < 4; ++i) {
         if (flags & (ENABLE_OPACITY | DISABLE_OPACITY))
             m_sliderChooser[i]->getWidget("opacity")->setEnabled(flags & ENABLE_OPACITY);
 
@@ -737,12 +758,15 @@ void KisPaintopBox::setWidgetState(int flags)
 
         if (flags & (ENABLE_SIZE | DISABLE_SIZE))
             m_sliderChooser[i]->getWidget("size")->setEnabled(flags & ENABLE_SIZE);
+
+        if (flags & (ENABLE_PATTERNSIZE | DISABLE_PATTERNSIZE))
+            m_sliderChooser[i]->getWidget("size")->setEnabled(flags & ENABLE_PATTERNSIZE);
     }
 }
 
 void KisPaintopBox::setSliderValue(const QString& sliderID, qreal value)
 {
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < 4; ++i) {
         KisDoubleSliderSpinBox* slider = m_sliderChooser[i]->getWidget<KisDoubleSliderSpinBox>(sliderID);
         KisSignalsBlocker b(slider);
 
@@ -862,6 +886,10 @@ void KisPaintopBox::slotCanvasResourceChanged(int key, const QVariant &value)
 
         if (key == KisCanvasResourceProvider::Size) {
             setSliderValue("size", m_resourceProvider->size());
+        }
+
+        if (key == KisCanvasResourceProvider::PatternSize) {
+            setSliderValue("patternsize", m_resourceProvider->patternSize());
         }
 
         if (key == KisCanvasResourceProvider::Opacity) {
@@ -1007,11 +1035,13 @@ void KisPaintopBox::sliderChanged(int n)
     qreal opacity = m_sliderChooser[n]->getWidget<KisDoubleSliderSpinBox>("opacity")->value()/100;
     qreal flow    = m_sliderChooser[n]->getWidget<KisDoubleSliderSpinBox>("flow")->value()/100;
     qreal size    = m_sliderChooser[n]->getWidget<KisDoubleSliderSpinBox>("size")->value();
+    qreal patternsize = m_sliderChooser[n]->getWidget<KisDoubleSliderSpinBox>("patternsize")->value();
 
 
     setSliderValue("opacity", opacity);
     setSliderValue("flow"   , flow);
     setSliderValue("size"   , size);
+    setSliderValue("patternsize", patternsize);
 
     if (m_presetsEnabled) {
         // IMPORTANT: set the PaintOp size before setting the other properties
@@ -1019,6 +1049,7 @@ void KisPaintopBox::sliderChanged(int n)
         // TODO: why?!
 
         m_resourceProvider->setSize(size);
+        m_resourceProvider->setPatternSize(patternsize);
         m_resourceProvider->setOpacity(opacity);
         m_resourceProvider->setFlow(flow);
 
@@ -1026,6 +1057,7 @@ void KisPaintopBox::sliderChanged(int n)
         KisLockedPropertiesProxySP propertiesProxy = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(m_resourceProvider->currentPreset()->settings());
         propertiesProxy->setProperty("OpacityValue", opacity);
         propertiesProxy->setProperty("FlowValue", flow);
+        propertiesProxy->setProperty("Texture/Pattern/Scale", patternsize);
         m_optionWidget->setConfigurationSafe(m_resourceProvider->currentPreset()->settings().data());
     } else {
         m_resourceProvider->setOpacity(opacity);
@@ -1047,6 +1079,11 @@ void KisPaintopBox::slotSlider2Changed()
 void KisPaintopBox::slotSlider3Changed()
 {
     sliderChanged(2);
+}
+
+void KisPaintopBox::slotSlider4Changed()
+{
+    sliderChanged(3);
 }
 
 void KisPaintopBox::slotToolChanged(KoCanvasController* canvas, int toolId)
@@ -1087,6 +1124,11 @@ void KisPaintopBox::slotToolChanged(KoCanvasController* canvas, int toolId)
             {
                 setSliderValue("flow", m_resourceProvider->currentPreset()->settings()->paintOpFlow());
                 setWidgetState(ENABLE_FLOW);
+            }
+
+            {
+                setSliderValue("patternsize", m_resourceProvider->currentPreset()->settings()->paintOpPatternSize());
+                setWidgetState(ENABLE_PATTERNSIZE);
             }
 
             {

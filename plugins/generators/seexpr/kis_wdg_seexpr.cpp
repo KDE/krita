@@ -45,6 +45,8 @@ KisWdgSeExpr::KisWdgSeExpr(QWidget* parent)
     m_widget->txtEditor->updateCompleter();
 
     connect(m_widget->btnUpdate, SIGNAL(clicked()), this, SIGNAL(sigConfigurationUpdated()));
+    connect(m_widget->txtEditor, SIGNAL(apply()), this, SIGNAL(sigConfigurationUpdated()));
+    connect(m_widget->txtEditor, SIGNAL(preview()), this, SIGNAL(sigConfigurationUpdated()));
 }
 
 KisWdgSeExpr::~KisWdgSeExpr()

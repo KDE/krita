@@ -525,6 +525,16 @@ qreal KisCanvasResourceProvider::size() const
     return m_resourceManager->resource(Size).toReal();
 }
 
+void KisCanvasResourceProvider::setPatternSize(qreal size)
+{
+    m_resourceManager->setResource(PatternSize, size);
+}
+
+qreal KisCanvasResourceProvider::patternSize() const
+{
+    return m_resourceManager->resource(PatternSize).toReal();
+}
+
 void KisCanvasResourceProvider::setGlobalAlphaLock(bool lock)
 {
     m_resourceManager->setResource(GlobalAlphaLock, lock);

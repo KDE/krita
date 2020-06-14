@@ -26,7 +26,8 @@ KisProofingConfiguration::KisProofingConfiguration()
       proofingProfile("Chemical proof"),
       proofingModel("CMYKA"),
       proofingDepth("U8"),
-      adaptationState(1.0)
+      adaptationState(1.0),
+      storeSoftproofingInsideImage(false)
 {
 }
 

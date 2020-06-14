@@ -283,6 +283,7 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
         KisProofingConfigurationSP proofingConfig = KisImageConfig(true).defaultProofingconfiguration();
         if (!(attr = element.attribute(PROOFINGPROFILENAME)).isNull()) {
             proofingConfig->proofingProfile = attr;
+            proofingConfig->storeSoftproofingInsideImage = true;
         }
         if (!(attr = element.attribute(PROOFINGMODEL)).isNull()) {
             proofingConfig->proofingModel = attr;

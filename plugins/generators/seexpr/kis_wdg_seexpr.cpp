@@ -37,10 +37,10 @@ KisWdgSeExpr::KisWdgSeExpr(QWidget* parent)
     defaults[m_widget->txtEditor->objectName()] = QVariant::fromValue<QString>(BASE_SCRIPT);
     KisDialogStateSaver::restoreState(m_widget->txtEditor, "krita/generators/seexpr", defaults);
 
-    m_widget->txtEditor->registerExtraVariable("$u", i18nc("SeExpr variable", "Normalized X axis coordinate of the image from its top-left corner").toStdString());
-    m_widget->txtEditor->registerExtraVariable("$v", i18nc("SeExpr variable", "Normalized Y axis coordinate of the image from its top-left corner").toStdString());
-    m_widget->txtEditor->registerExtraVariable("$w", i18nc("SeExpr variable", "Image width").toStdString());
-    m_widget->txtEditor->registerExtraVariable("$h", i18nc("SeExpr variable", "Image height").toStdString());
+    m_widget->txtEditor->registerExtraVariable("$u", i18nc("SeExpr variable", "Normalized X axis coordinate of the image from its top-left corner"));
+    m_widget->txtEditor->registerExtraVariable("$v", i18nc("SeExpr variable", "Normalized Y axis coordinate of the image from its top-left corner"));
+    m_widget->txtEditor->registerExtraVariable("$w", i18nc("SeExpr variable", "Image width"));
+    m_widget->txtEditor->registerExtraVariable("$h", i18nc("SeExpr variable", "Image height"));
 
     m_widget->txtEditor->updateCompleter();
 
@@ -64,13 +64,13 @@ void KisWdgSeExpr::setConfiguration(const KisPropertiesConfigurationSP config)
     Q_ASSERT(!config->getString("script").isEmpty());
     QString script = config->getString("script");
 
-    widget()->txtEditor->setExpr(script.toStdString(), false);
+    widget()->txtEditor->setExpr(script, true);
 }
 
 KisPropertiesConfigurationSP KisWdgSeExpr::configuration() const
 {
     KisFilterConfigurationSP config = new KisFilterConfiguration("seexpr", 1);
-    QVariant v(QString::fromStdString(widget()->txtEditor->getExpr()));
+    QVariant v(widget()->txtEditor->getExpr());
 
     config->setProperty("script", v);
 

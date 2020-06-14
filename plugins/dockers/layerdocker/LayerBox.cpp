@@ -68,7 +68,7 @@
 #include <kis_action.h>
 #include "kis_action_manager.h"
 #include "widgets/kis_cmb_composite.h"
-#include "widgets/kis_slider_spin_box.h"
+#include "kis_slider_spin_box.h"
 #include "KisViewManager.h"
 #include "kis_node_manager.h"
 #include "kis_node_model.h"

@@ -392,7 +392,7 @@ void KisColorSelectorBase::lazyCreatePopup()
 #ifdef Q_OS_MACOS
                                 Qt::Popup |
 #else
-                                Qt::Tool |
+                                Qt::Window |
 #endif
                                 Qt::NoDropShadowWindowHint |
                                 Qt::BypassWindowManagerHint);

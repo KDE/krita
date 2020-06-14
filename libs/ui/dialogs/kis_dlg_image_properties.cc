@@ -93,7 +93,7 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent,
         m_proofingConfig = KisImageConfig(true).defaultProofingconfiguration();
     }
     else {
-        m_page->chkSaveProofing->setChecked(true);
+        m_page->chkSaveProofing->setChecked(m_proofingConfig->storeSoftproofingInsideImage);
     }
 
     m_page->proofSpaceSelector->setCurrentColorSpace(KoColorSpaceRegistry::instance()->colorSpace(m_proofingConfig->proofingModel, m_proofingConfig->proofingDepth, m_proofingConfig->proofingProfile));
@@ -108,6 +108,7 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent,
 
     KisSignalCompressor *softProofConfigCompressor = new KisSignalCompressor(500, KisSignalCompressor::POSTPONE,this);
 
+    connect(m_page->chkSaveProofing, SIGNAL(toggled(bool)), softProofConfigCompressor, SLOT(start()));
     connect(m_page->gamutAlarm, SIGNAL(changed(KoColor)), softProofConfigCompressor, SLOT(start()));
     connect(m_page->proofSpaceSelector, SIGNAL(colorSpaceChanged(const KoColorSpace*)), softProofConfigCompressor, SLOT(start()));
     connect(m_page->cmbIntent, SIGNAL(currentIndexChanged(int)), softProofConfigCompressor, SLOT(start()));
@@ -162,7 +163,9 @@ void KisDlgImageProperties::setCurrentColor()
 void KisDlgImageProperties::setProofingConfig()
 {
     if (m_firstProofingConfigChange) {
-        m_page->chkSaveProofing->setChecked(true);
+        if (!m_proofingConfig->storeSoftproofingInsideImage) {
+            m_page->chkSaveProofing->setChecked(true);
+        }
         m_firstProofingConfigChange = false;
     }
     if (m_page->chkSaveProofing->isChecked()) {
@@ -176,6 +179,7 @@ void KisDlgImageProperties::setProofingConfig()
         m_proofingConfig->proofingDepth = "U8";//default to this
         m_proofingConfig->warningColor = m_page->gamutAlarm->color();
         m_proofingConfig->adaptationState = (double)m_page->sldAdaptationState->value()/20.0;
+        m_proofingConfig->storeSoftproofingInsideImage = true;
 
         m_image->setProofingConfiguration(m_proofingConfig);
     }
@@ -186,6 +190,8 @@ void KisDlgImageProperties::setProofingConfig()
 
 void KisDlgImageProperties::slotSaveDialogState()
 {
+    setProofingConfig();
+
     KisConfig cfg(false);
     cfg.setConvertLayerColorSpaceInProperties(m_page->chkConvertLayers->isChecked());
 }

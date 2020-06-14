@@ -53,7 +53,7 @@
 #include <KisViewManager.h>
 #include <widgets/kis_cmb_composite.h>
 #include <widgets/kis_double_widget.h>
-#include <widgets/kis_slider_spin_box.h>
+#include <kis_slider_spin_box.h>
 #include <kis_cursor.h>
 #include <kis_config.h>
 #include "kis_resources_snapshot.h"

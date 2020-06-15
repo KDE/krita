@@ -35,6 +35,7 @@ public:
 private Q_SLOTS:
     void testSinglePatch();
     void test_2_by_2_Patch();
+    void test_linear_path();
 
 private:
     const QList<QPair<QString, QColor>> patch0 = {
@@ -56,6 +57,27 @@ private:
     const QList<QPair<QString, QColor>> patch3 = {
         { "c  25, 25 -25, 75  0,100" ,  QColor("#000000") },
         { "c -25, 25 -75,-25"        ,  QColor("#000000") },
+    };
+
+    const QList<QPair<QString, QColor>> linearPath0 {
+        { "l 100,0"  ,  QColor("#000000")  },
+        { "l  0,100" ,  QColor("#800080")  },
+        { "l -100,0" ,  QColor("#ff0000")  },
+        { "l"        ,  QColor("#800080")  },
+    };
+    const QList<QPair<QString, QColor>> linearPath1 {
+        { "l 100,0"  ,  QColor("#000000")  },
+        { "l 0,100"  ,  QColor("#000000")  },
+        { "l"        ,  QColor("#800080")  },
+    };
+    const QList<QPair<QString, QColor>> linearPath2 {
+        { "l  0,100" ,  QColor("#000000")  },
+        { "l -100,0" ,  QColor("#ffff00")  },
+        { "l"        ,  QColor("#008000")  },
+    };
+    const QList<QPair<QString, QColor>> linearPath3 {
+        { "l  0,100" ,  QColor("#000000")  },
+        { "l"        ,  QColor("#000000")  },
     };
 };
 

@@ -108,7 +108,13 @@ KisSelectionDefaultBounds::~KisSelectionDefaultBounds()
 QRect KisSelectionDefaultBounds::bounds() const
 {
     return m_d->parentDevice ?
-        m_d->parentDevice->extent() | m_d->parentDevice->defaultBounds()->bounds() : QRect();
+                m_d->parentDevice->extent() | m_d->parentDevice->defaultBounds()->bounds() : QRect();
+}
+
+QRect KisSelectionDefaultBounds::imageBorderRect() const
+{
+    return m_d->parentDevice ?
+                m_d->parentDevice->defaultBounds()->bounds() : QRect();
 }
 
 bool KisSelectionDefaultBounds::wrapAroundMode() const

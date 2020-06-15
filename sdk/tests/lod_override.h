@@ -40,6 +40,10 @@ private:
             return m_parent->bounds();
         }
 
+        virtual QRect imageBorderRect() const override {
+            return m_parent->imageBorderRect();
+        }
+
         bool wrapAroundMode() const override {
             return m_parent->wrapAroundMode();
         }

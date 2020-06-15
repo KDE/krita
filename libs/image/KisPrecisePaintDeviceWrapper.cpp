@@ -176,7 +176,7 @@ void KisPrecisePaintDeviceWrapper::readRects(const QVector<QRect> &rects)
     QRegion requestedRects;
     Q_FOREACH (const QRect &rc, rects) {
         if (m_d->srcDevice->defaultBounds()->wrapAroundMode()) {
-            const QRect wrapRect = m_d->srcDevice->defaultBounds()->bounds();
+            const QRect wrapRect = m_d->srcDevice->defaultBounds()->imageBorderRect();
             KisWrappedRect wrappedRect(rc, wrapRect);
             Q_FOREACH (const QRect &wrc, wrappedRect) {
                 const QRect croppedRect = wrc & srcExtent;

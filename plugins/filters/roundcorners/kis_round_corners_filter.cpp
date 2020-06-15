@@ -92,7 +92,7 @@ void KisRoundCornersFilter::processImpl(KisPaintDeviceSP device,
         return;
     }
 
-    const QRect bounds = device->defaultBounds()->bounds();
+    const QRect bounds = device->defaultBounds()->imageBorderRect();
 
     const qint32 radius = qMin(KisAlgebra2D::minDimension(bounds) / 2, qMax(1, config->getInt("radius" , 30)));
     const qreal radiusSq = pow2(radius);

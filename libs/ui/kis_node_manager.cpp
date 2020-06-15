@@ -476,75 +476,56 @@ void KisNodeManager::addNodesDirect(KisNodeList nodes, KisNodeSP parent, KisNode
 
 void KisNodeManager::toggleIsolateActiveNode()
 {
+    /*
     KisImageWSP image = m_d->view->image();
     KisNodeSP activeNode = this->activeNode();
-    KIS_ASSERT_RECOVER_RETURN(activeNode);
+    KIS_ASSERT_RECOVER_RETURN(activeNode);*/
 
-    if (image->isolationRootNode()) {
-        changeIsolationMode(KisImage::IsolationMode::ISOLATE_OFF);
-        reinitializeIsolationActionGroup();
-    } else {
-        changeIsolationMode(KisImage::IsolationMode::ISOLATE_LAYER);
-        m_d->view->actionManager()->actionByName("isolate_active_layer")->setChecked(true);
-    }
+//    const bool groupIsolationStatus = image->isIsolatingGroup();
+//    if (image->isolationRootNode()) {
+//        changeIsolationMode(false, groupIsolationStatus);
+//        reinitializeIsolationActionGroup();
+//    } else {
+//        changeIsolationMode(true, groupIsolationStatus);
+//    }
+    QAction* action = m_d->view->actionManager()->actionByName("isolate_active_layer");
+    action->toggle();
+    action->triggered(action->isChecked());
+
 }
 
-/*
- * Slots for handling 3-state isolation mode actions.
- * Post Qt5.14 this can be replaced with QActionGroup + ExclusionPolicy::ExclusiveOptional.
- */
 void KisNodeManager::setIsolateActiveLayerMode(bool checked)
 {
-    if (checked) {
-        changeIsolationMode(KisImage::IsolationMode::ISOLATE_LAYER);
-    } else {
-        changeIsolationMode(KisImage::IsolationMode::ISOLATE_OFF);
-    }
+    KisImageWSP image = m_d->view->image();
+    KIS_ASSERT_RECOVER_RETURN(image);
+
+    const bool groupIsolationState = image->isIsolatingGroup();
+    changeIsolationMode(checked, groupIsolationState);
 }
+
 void KisNodeManager::setIsolateActiveGroupMode(bool checked)
 {
-    if (checked) {
-        changeIsolationMode(KisImage::IsolationMode::ISOLATE_GROUP);
-    } else {
-        changeIsolationMode(KisImage::IsolationMode::ISOLATE_OFF);
-    }
+    KisImageWSP image = m_d->view->image();
+    KIS_ASSERT_RECOVER_RETURN(image);
+
+    const bool layerIsolationState = image->isIsolatingLayer();
+    changeIsolationMode(layerIsolationState, checked);
 }
 
-void KisNodeManager::changeIsolationMode(KisImage::IsolationMode mode)
+void KisNodeManager::changeIsolationMode(bool isolateActiveLayer, bool isolateActiveGroup)
 {
-    ENTER_FUNCTION() << ppVar(mode);
-
     KisImageWSP image = m_d->view->image();
     KisNodeSP activeNode = this->activeNode();
     KIS_ASSERT_RECOVER_RETURN(image && activeNode);
 
-    switch (mode) {
-    case KisImage::IsolationMode::ISOLATE_LAYER:
-        // Transform and colorize masks don't have pixel data...
-        if (activeNode->inherits("KisTransformMask") ||
-                activeNode->inherits("KisColorizeMask")) return;
+    ENTER_FUNCTION() << ppVar(isolateActiveLayer) << ppVar(isolateActiveGroup);
 
-        if (image->startIsolatedMode(activeNode, mode)) {
-            // Post Qt5.14 this can be replaced with QActionGroup + ExclusionPolicy::ExclusiveOptional.
-            m_d->view->actionManager()->actionByName("isolate_active_group")->setChecked(false);
-        } else {
+    if (isolateActiveLayer || isolateActiveGroup) {
+        if (image->startIsolatedMode(activeNode, isolateActiveLayer, isolateActiveGroup) == false) {
             reinitializeIsolationActionGroup();
         }
-        break;
-
-    case KisImage::IsolationMode::ISOLATE_GROUP:
-        if (image->startIsolatedMode(activeNode, mode)) {
-            // Post Qt5.14 this can be replaced with QActionGroup + ExclusionPolicy::ExclusiveOptional.
-            m_d->view->actionManager()->actionByName("isolate_active_layer")->setChecked(false);
-        } else {
-            reinitializeIsolationActionGroup();
-        }
-        break;
-
-    case KisImage::IsolationMode::ISOLATE_OFF:
+    } else {
         image->stopIsolatedMode();
-        reinitializeIsolationActionGroup();
-        break;
     }
 }
 
@@ -557,7 +538,10 @@ void KisNodeManager::updateIsolationMode()
     KisImageWSP image = m_d->view->image();
     KisNodeSP activeNode = this->activeNode();
 
-    if (!image->startIsolatedMode(activeNode, image->currentIsolationMode())) {
+    const bool isIsolatingLayer = image->isIsolatingLayer();
+    const bool isIsolatingGroup = image->isIsolatingGroup();
+
+    if (!image->startIsolatedMode(activeNode, isIsolatingLayer, isIsolatingGroup)) {
         reinitializeIsolationActionGroup();
     }
 }

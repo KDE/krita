@@ -145,7 +145,8 @@ public:
         , width(w)
         , height(h)
         , colorSpace(c ? c : KoColorSpaceRegistry::instance()->rgb8())
-        , currentIsolationMode(IsolationMode::ISOLATE_OFF)
+        , isolateLayer(false)
+        , isolateGroup(false)
         , nserver(1)
         , undoStore(undo ? undo : new KisDumbUndoStore())
         , legacyUndoAdapter(undoStore.data(), _q)
@@ -219,7 +220,8 @@ public:
     QList<KisLayerCompositionSP> compositions;
 
     KisNodeSP isolationRootNode;
-    IsolationMode currentIsolationMode;
+    bool isolateLayer;
+    bool isolateGroup;
 
     bool wrapAroundModePermitted = false;
 
@@ -415,7 +417,8 @@ void KisImage::copyFromImageImpl(const KisImage &rhs, int policy)
     bool exactCopy = policy & EXACT_COPY;
 
     if (exactCopy || rhs.m_d->isolationRootNode || rhs.m_d->overlaySelectionMask) {
-        m_d->currentIsolationMode = rhs.m_d->currentIsolationMode;
+        m_d->isolateLayer = rhs.m_d->isolateLayer;
+        m_d->isolateGroup = rhs.m_d->isolateGroup;
 
         QQueue<KisNodeSP> linearizedNodes;
         KisLayerUtils::recursiveApplyNodes(rhs.root(),
@@ -1770,19 +1773,21 @@ void KisImage::KisImagePrivate::notifyProjectionUpdatedInPatches(const QRect &rc
     }
 }
 
-bool KisImage::startIsolatedMode(KisNodeSP node, IsolationMode mode)
+bool KisImage::startIsolatedMode(KisNodeSP node, bool isolateLayer, bool isolateGroup)
 {
-    m_d->currentIsolationMode = mode;
-    if (mode == ISOLATE_OFF) return false;
+    m_d->isolateLayer = isolateLayer;
+    m_d->isolateGroup = isolateGroup;
+    if ((isolateLayer || isolateGroup) == false) return false;
 
     struct StartIsolatedModeStroke : public KisRunnableBasedStrokeStrategy {
-        StartIsolatedModeStroke(KisNodeSP node, KisImageSP image, IsolationMode mode)
+        StartIsolatedModeStroke(KisNodeSP node, KisImageSP image, bool isolateLayer, bool isolateGroup)
             : KisRunnableBasedStrokeStrategy(QLatin1String("start-isolated-mode"),
                                              kundo2_noi18n("start-isolated-mode")),
               m_node(node),
               m_image(image),
               m_needsFullRefresh(false),
-              m_mode(mode)
+              m_isolateLayer(isolateLayer),
+              m_isolateGroup(isolateGroup)
         {
             this->enableJob(JOB_INIT, true, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
             this->enableJob(JOB_DOSTROKE, true);
@@ -1791,7 +1796,7 @@ bool KisImage::startIsolatedMode(KisNodeSP node, IsolationMode mode)
         }
 
         void initStrokeCallback() override {
-            if (m_mode == ISOLATE_GROUP) {
+            if (m_isolateLayer == false && m_isolateGroup == true) {
                 m_node = m_node->parent();
             }
             // pass-though node don't have any projection prepared, so we should
@@ -1825,10 +1830,11 @@ bool KisImage::startIsolatedMode(KisNodeSP node, IsolationMode mode)
         KisNodeSP m_node;
         KisImageSP m_image;
         bool m_needsFullRefresh;
-        IsolationMode m_mode;
+        bool m_isolateLayer;
+        bool m_isolateGroup;
     };
 
-    KisStrokeId id = startStroke(new StartIsolatedModeStroke(node, this, mode));
+    KisStrokeId id = startStroke(new StartIsolatedModeStroke(node, this, isolateLayer, isolateGroup));
     endStroke(id);
 
     return true;
@@ -1858,7 +1864,8 @@ void KisImage::stopIsolatedMode()
 
             const bool beforeVisibility = m_oldRootNode->projectionLeaf()->visible();
             m_image->m_d->isolationRootNode = 0;
-            m_image->m_d->currentIsolationMode = ISOLATE_OFF;
+            m_image->m_d->isolateLayer = false;
+            m_image->m_d->isolateGroup = false;
             emit m_image->sigIsolatedModeChanged();
             const bool afterVisibility = m_oldRootNode->projectionLeaf()->visible();
 
@@ -1894,14 +1901,18 @@ void KisImage::stopIsolatedMode()
     endStroke(id);
 }
 
-KisNodeSP KisImage::isolationRootNode() const
-{
+KisNodeSP KisImage::isolationRootNode() const {
     return m_d->isolationRootNode;
 }
 
-KisImage::IsolationMode KisImage::currentIsolationMode() const
+bool KisImage::isIsolatingLayer() const
 {
-    return m_d->currentIsolationMode;
+    return m_d->isolateLayer;
+}
+
+bool KisImage::isIsolatingGroup() const
+{
+     return m_d->isolateGroup;
 }
 
 void KisImage::addJob(KisStrokeId id, KisStrokeJobData *data)

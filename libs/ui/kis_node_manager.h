@@ -176,7 +176,7 @@ public Q_SLOTS:
     void toggleIsolateActiveNode();
     void setIsolateActiveLayerMode(bool checked);
     void setIsolateActiveGroupMode(bool checked);
-    void changeIsolationMode(KisImage::IsolationMode mode);
+    void changeIsolationMode(bool isolateActiveLayer, bool isolateActiveGroup);
 
     /**
      * Updates the isolation mode as active node context changes.

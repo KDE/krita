@@ -52,12 +52,12 @@ KoPathSegment SvgMeshPatch::getPath(Type type) const
     return m_path->segmentByIndex(index);
 }
 
-void SvgMeshPatch::addStop(const QString& pathStr, QColor color, Type edge)
+void SvgMeshPatch::addStop(const QString& pathStr, QColor color, Type edge, bool pathIncomplete, QPointF lastPoint)
 {
     SvgMeshStop *node = new SvgMeshStop(color, m_startingPoint);
     m_nodes.insert(edge, node);
 
-    m_startingPoint = parseMeshPath(pathStr, edge == SvgMeshPatch::Left);
+    m_startingPoint = parseMeshPath(pathStr, pathIncomplete, lastPoint);
 }
 
 void SvgMeshPatch::addStop(const QList<QPointF>& pathPoints, QColor color, Type edge)
@@ -69,7 +69,7 @@ void SvgMeshPatch::addStop(const QList<QPointF>& pathPoints, QColor color, Type 
         m_path->moveTo(pathPoints.first());
         m_newPath = false;
     }
-    
+
     // if path is a line
     if (pathPoints.size() == 2) {
         m_path->lineTo(pathPoints.last());
@@ -86,7 +86,7 @@ int SvgMeshPatch::countPoints() const
     return m_nodes.size();
 }
 
-QPointF SvgMeshPatch::parseMeshPath(const QString& s, bool close)
+QPointF SvgMeshPatch::parseMeshPath(const QString& s, bool pathIncomplete, const QPointF lastPoint)
 {
     // bits and pieces from KoPathShapeLoader, see the copyright above
     if (!s.isEmpty()) {
@@ -146,10 +146,9 @@ QPointF SvgMeshPatch::parseMeshPath(const QString& s, bool close)
                toy = cury + toy;
            }
 
-           if (close) {
-               QPointF start = m_path->pointByIndex(KoPathPointIndex(0, 0))->point();
-               tox = start.x();
-               toy = start.y();
+           if (pathIncomplete) {
+               tox = lastPoint.x();
+               toy = lastPoint.y();
            }
 
            m_path->curveTo(QPointF(x1, y1), QPointF(x2, y2), QPointF(tox, toy));

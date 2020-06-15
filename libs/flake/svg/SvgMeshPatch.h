@@ -34,7 +34,7 @@ struct SvgMeshStop {
     {}
 
     SvgMeshStop(QColor color, QPointF point)
-        : color(color), point(point) 
+        : color(color), point(point)
     {}
 };
 
@@ -60,14 +60,20 @@ public:
 
     int countPoints() const;
 
-    /// Parses raw pathstr and adds path to the shape
-    void addStop(const QString& pathStr, QColor color, Type edge);
+    /* Parses raw pathstr and adds path to the shape, if the path isn't
+     * complete, it will have to be computed and given with pathIncomplete = true
+     * (Ideal case for std::optional)
+     */
+    void addStop(const QString& pathStr, QColor color, Type edge, bool pathIncomplete = false, QPointF lastPoint = QPointF());
 
     /// Adds path to the shape
     void addStop(const QList<QPointF>& pathPoints, QColor color, Type edge);
 
 private:
-    QPointF parseMeshPath(const QString& path, bool close = false);
+    /* Parses path and adds it to m_path and returns the last point of the curve/line
+     * see also: SvgMeshPatch::addStop
+     */
+    QPointF parseMeshPath(const QString& path, bool pathIncomplete = false, const QPointF lastPoint = QPointF());
     const char* getCoord(const char* ptr, qreal& number);
 
 private:

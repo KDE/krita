@@ -98,5 +98,59 @@ void TestMeshArray::test_2_by_2_Patch()
     QCOMPARE(mesharray.getPath(SvgMeshPatch::Right, 1, 1), path);
 }
 
+void TestMeshArray::test_linear_path()
+{
+    SvgMeshArray mesharray;
+    QPointF point(50, 50);
+    mesharray.addPatch(linearPath0, point);
+
+    point = mesharray.getStop(SvgMeshPatch::Right, 0, 0).point;
+    mesharray.addPatch(linearPath1, point);
+
+    mesharray.newRow();
+    point = mesharray.getStop(SvgMeshPatch::Bottom, 0, 0).point;
+    mesharray.addPatch(linearPath2, point);
+
+    point = mesharray.getStop(SvgMeshPatch::Bottom, 0, 1).point;
+    mesharray.addPatch(linearPath3, point);
+
+    QList<QPointF> path = {QPointF(50,50), QPointF(150,50)};
+    QCOMPARE(mesharray.getPath(SvgMeshPatch::Top, 0, 0), path);
+
+    // compare the common side Top Bottom, col = 0
+    path = {QPointF(50,150), QPointF(150,150)};
+    QCOMPARE(mesharray.getPath(SvgMeshPatch::Top, 1, 0), path);
+    std::reverse(path.begin(), path.end());
+    QCOMPARE(mesharray.getPath(SvgMeshPatch::Bottom, 0, 0), path);
+
+    // compare the common side Top Bottom, col = 1
+    path = {QPointF(150,150), QPointF(250,150)};
+    QCOMPARE(mesharray.getPath(SvgMeshPatch::Top, 1, 1), path);
+    std::reverse(path.begin(), path.end());
+    QCOMPARE(mesharray.getPath(SvgMeshPatch::Bottom, 0, 1), path);
+
+    // compare the common side Right-Left, row = 0
+    path = {QPointF(150,150), QPointF(150,50)};
+    QCOMPARE(mesharray.getPath(SvgMeshPatch::Left, 0, 1), path);
+    path = {QPointF(150,150), QPointF(150,50)};
+    std::reverse(path.begin(), path.end());
+    QCOMPARE(mesharray.getPath(SvgMeshPatch::Right, 0, 0), path);
+
+    // compare the common side Right-Left, row = 1
+    path = {QPointF(150,150), QPointF(150,250)};
+    QCOMPARE(mesharray.getPath(SvgMeshPatch::Right, 1, 0), path);
+    std::reverse(path.begin(), path.end());
+    QCOMPARE(mesharray.getPath(SvgMeshPatch::Left, 1, 1), path);
+
+    path = {QPointF(50,250), QPointF(50,150)};
+    QCOMPARE(mesharray.getPath(SvgMeshPatch::Left, 1, 0), path);
+
+    path = {QPointF(250,250), QPointF(150,250)};
+    QCOMPARE(mesharray.getPath(SvgMeshPatch::Bottom, 1, 1), path);
+
+    path = {QPointF(250,150), QPointF(250,250)};
+    QCOMPARE(mesharray.getPath(SvgMeshPatch::Right, 1, 1), path);
+}
+
 QTEST_MAIN(TestMeshArray)
 

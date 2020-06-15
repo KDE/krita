@@ -38,6 +38,7 @@ public:
     KisPropertiesConfigurationSP configuration() const override;
 private:
     Ui_WdgLensBlur* m_widget;
+    QMap<QString, QString> m_shapeTranslations;
 };
 
 #endif

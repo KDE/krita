@@ -290,7 +290,7 @@ std::pair<int, bool> KisBrushOp::doAsyncronousUpdate(QVector<KisRunnableStrokeJo
              *    we paint only the parts intersecting the wrap rect.
              */
 
-            const QRect wrapRect = painter()->device()->defaultBounds()->bounds();
+            const QRect wrapRect = painter()->device()->defaultBounds()->imageBorderRect();
 
             QList<KisRenderedDab> wrappedDabs;
 

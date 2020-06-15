@@ -657,8 +657,7 @@ KUndo2MagicString KisShrinkSelectionFilter::name()
 
 QRect KisShrinkSelectionFilter::changeRect(const QRect& rect, KisDefaultBoundsBaseSP defaultBounds)
 {
-    Q_UNUSED(defaultBounds);
-    return rect.adjusted(-m_xRadius, -m_yRadius, m_xRadius, m_yRadius);
+    return m_edgeLock ? defaultBounds->imageBorderRect() : rect;
 }
 
 void KisShrinkSelectionFilter::process(KisPixelSelectionSP pixelSelection, const QRect& rect)

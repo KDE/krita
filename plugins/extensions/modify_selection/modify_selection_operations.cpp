@@ -41,7 +41,8 @@ void BorderSelectionOperation::runFromXML(KisViewManager* view, const KisOperati
 {
     int xradius = config.getInt("x-radius", 1);
     int yradius = config.getInt("y-radius", 1);
-    KisSelectionFilter* filter = new KisBorderSelectionFilter(xradius, yradius);
+    bool antialiasing = config.getInt("antialiasing", false);
+    KisSelectionFilter* filter = new KisBorderSelectionFilter(xradius, yradius, antialiasing);
     runFilter(filter, view, config);
 }
 

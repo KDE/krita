@@ -73,7 +73,7 @@ public:
 class KRITAIMAGE_EXPORT KisBorderSelectionFilter : public KisSelectionFilter
 {
 public:
-    KisBorderSelectionFilter(qint32 xRadius, qint32 yRadius);
+    KisBorderSelectionFilter(qint32 xRadius, qint32 yRadius, bool fade);
 
     KUndo2MagicString name() override;
 
@@ -84,6 +84,7 @@ public:
 private:
     qint32 m_xRadius;
     qint32 m_yRadius;
+    bool m_antialiasing;
 };
 
 class KRITAIMAGE_EXPORT KisFeatherSelectionFilter : public KisSelectionFilter

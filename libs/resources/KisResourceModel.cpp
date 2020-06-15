@@ -467,7 +467,7 @@ bool KisAllResourcesModel::importResourceFile(const QString &filename)
 {
     //qDebug() << "KisAllResourcesModel::importResource" << s_i6 << d->resourceType; s_i6++;
     bool r = true;
-    beginInsertRows(QModelIndex(), rowCount(), 1);
+    beginInsertRows(QModelIndex(), rowCount(), rowCount() + 1);
     if (!KisResourceLocator::instance()->importResourceFromFile(d->resourceType, filename)) {
         r = false;
         qWarning() << "Failed to import resource" << filename;
@@ -488,7 +488,7 @@ bool KisAllResourcesModel::addResource(KoResourceSP resource, const QString &sto
 
     //qDebug() << "KisAllResourcesModel::addResource" << s_i7 << d->resourceType; s_i7++;
     bool r = true;
-    beginInsertRows(QModelIndex(), rowCount(), 1);
+    beginInsertRows(QModelIndex(), rowCount(), rowCount() + 1);
     if (!KisResourceLocator::instance()->addResource(d->resourceType, resource, storageId)) {
         qWarning() << "Failed to add resource" << resource->name();
         r = false;
@@ -588,13 +588,17 @@ int KisAllResourcesModel::rowCount(const QModelIndex &) const
 
 void KisAllResourcesModel::addStorage(const QString &location)
 {
-
+    beginResetModel();
+    resetQuery();
+    endResetModel();
 }
 
 
 void KisAllResourcesModel::removeStorage(const QString &location)
 {
-
+    beginResetModel();
+    resetQuery();
+    endResetModel();
 }
 
 struct KisResourceModel::Private
@@ -706,9 +710,6 @@ bool KisResourceModel::setResourceMetaData(KoResourceSP resource, QMap<QString, 
     return false;
 }
 
-
-
-
 bool KisResourceModel::filterAcceptsColumn(int /*source_column*/, const QModelIndex &/*source_parent*/) const
 {
     return true;
@@ -767,8 +768,6 @@ QVector<KisTagSP> KisResourceModel::tagsForResource(int resourceId) const
 {
     return static_cast<KisAllResourcesModel*>(sourceModel())->tagsForResource(resourceId);
 }
-
-
 
 bool KisResourceModel::resetQuery()
 {

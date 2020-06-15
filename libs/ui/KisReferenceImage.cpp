@@ -85,7 +85,7 @@ struct KisReferenceImage::Private : public QSharedData
         }
 
         if (image.isNull()) {
-            KisDocument * doc = KisPart::instance()->createTemporaryDocument();
+            KisDocument * doc = KisPart::instance()->createDocument();
             doc->openUrl(QUrl::fromLocalFile(externalFilename), KisDocument::DontAddToRecent);
             image = doc->image()->convertToQImage(doc->image()->bounds(), 0);
         }

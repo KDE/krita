@@ -39,6 +39,13 @@ KisWdgLensBlur::KisWdgLensBlur(QWidget * parent) : KisConfigWidget(parent)
     m_widget = new Ui_WdgLensBlur();
     m_widget->setupUi(this);
 
+    m_shapeTranslations[i18n("Triangle")] = "Triangle";
+    m_shapeTranslations[i18n("Quadrilateral (4)")] = "Quadrilateral (4)";
+    m_shapeTranslations[i18n("Pentagon (5)")] = "Pentagon (5)";
+    m_shapeTranslations[i18n("Hexagon (6)")] = "Hexagon (6)";
+    m_shapeTranslations[i18n("Heptagon (7)")] = "Heptagon (7)";
+    m_shapeTranslations[i18n("Octagon (8)")] = "Octagon (8)";
+
     connect(m_widget->irisShapeCombo, SIGNAL(currentIndexChanged(int)), SIGNAL(sigConfigurationItemChanged()));
     connect(m_widget->irisRadiusSlider, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
     connect(m_widget->irisRotationSlider, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
@@ -52,7 +59,7 @@ KisWdgLensBlur::~KisWdgLensBlur()
 KisPropertiesConfigurationSP KisWdgLensBlur::configuration() const
 {
     KisFilterConfigurationSP config = new KisFilterConfiguration("lens blur", 1, KisGlobalResourcesInterface::instance());
-    config->setProperty("irisShape", m_widget->irisShapeCombo->currentText());
+    config->setProperty("irisShape", m_shapeTranslations[m_widget->irisShapeCombo->currentText()]);
     config->setProperty("irisRadius", m_widget->irisRadiusSlider->value());
     config->setProperty("irisRotation", m_widget->irisRotationSlider->value());
 
@@ -68,7 +75,7 @@ void KisWdgLensBlur::setConfiguration(const KisPropertiesConfigurationSP config)
     QVariant value;
     if (config->getProperty("irisShape", value)) {
         for (int i = 0; i < m_widget->irisShapeCombo->count(); ++i) {
-            if (value.toString() == m_widget->irisShapeCombo->itemText(i)) {
+            if (m_shapeTranslations[value.toString()] == m_widget->irisShapeCombo->itemText(i)) {
                 m_widget->irisShapeCombo->setCurrentIndex(i);
             }
         }

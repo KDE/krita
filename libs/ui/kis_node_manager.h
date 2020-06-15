@@ -176,12 +176,14 @@ public Q_SLOTS:
     void toggleIsolateActiveNode();
     void setIsolateActiveLayerMode(bool checked);
     void setIsolateActiveGroupMode(bool checked);
-    void changeIsolationMode(KisImage::IsolationMode mode);
+
+    void changeIsolationMode(bool isolateActiveLayer, bool isolateActiveGroup);
+    void changeIsolationRoot(KisNodeSP isolationRoot);
 
     /**
-     * Updates the isolation mode as active node context changes.
+     * Responds to external changes in isolation mode (i.e. from KisImage).
      */
-    void updateIsolationMode();
+    void handleExternalIsolationChange();
     void reinitializeIsolationActionGroup();
 
     // General Node Management..
@@ -202,9 +204,7 @@ public Q_SLOTS:
     void mirrorAllNodesX();
     void mirrorAllNodesY();
 
-
     void mirrorNode(KisNodeSP node, const KUndo2MagicString& commandName, Qt::Orientation orientation, KisSelectionSP selection);
-
 
     void activateNextNode(bool siblingsOnly = false);
     void activateNextSiblingNode();

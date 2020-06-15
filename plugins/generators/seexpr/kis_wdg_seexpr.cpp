@@ -33,9 +33,9 @@ KisWdgSeExpr::KisWdgSeExpr(QWidget* parent)
 {
     m_widget = new Ui_WdgSeExpr();
     m_widget->setupUi(this);
-    QMap<QString, QVariant> defaults;
-    defaults[m_widget->txtEditor->objectName()] = QVariant::fromValue<QString>(BASE_SCRIPT);
-    KisDialogStateSaver::restoreState(m_widget->txtEditor, "krita/generators/seexpr", defaults);
+    KisDialogStateSaver::restoreState(m_widget->txtEditor, "krita/generators/seexpr");
+    // Manually restore SeExpr state. KisDialogStateSaver uses setPlainText, not text itself
+    m_widget->txtEditor->setExpr(m_widget->txtEditor->exprTe->toPlainText());
 
     m_widget->txtEditor->registerExtraVariable("$u", i18nc("SeExpr variable", "Normalized X axis coordinate of the image from its top-left corner"));
     m_widget->txtEditor->registerExtraVariable("$v", i18nc("SeExpr variable", "Normalized Y axis coordinate of the image from its top-left corner"));

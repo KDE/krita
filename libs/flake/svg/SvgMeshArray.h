@@ -22,7 +22,7 @@
 
 #include "SvgMeshPatch.h"
 
-class SvgMeshArray
+class KRITAFLAKE_EXPORT SvgMeshArray
 {
 public:
     SvgMeshArray();
@@ -30,7 +30,7 @@ public:
 
     void newRow();
 
-    bool addPatch(QList<QPair<QString, QColor>>& stops, const QPointF initialPoint);
+    bool addPatch(QList<QPair<QString, QColor>> stops, const QPointF initialPoint);
 
     /// Get the point of a node in mesharray
     SvgMeshStop getStop(const SvgMeshPatch::Type edge, const int row, const int col) const;

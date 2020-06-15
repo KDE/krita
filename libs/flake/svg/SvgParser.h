@@ -38,7 +38,6 @@
 #include "SvgStyleParser.h"
 #include "KoClipMask.h"
 #include <resources/KoSvgSymbolCollectionResource.h>
-#include "SvgMeshPatch.h"
 
 class KoShape;
 class KoShapeGroup;

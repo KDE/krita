@@ -37,9 +37,10 @@ void SvgMeshArray::newRow()
 {
     m_array << QVector<SvgMeshPatch*>();
 }
- 
-bool SvgMeshArray::addPatch(QList<QPair<QString, QColor>>& stops, const QPointF initialPoint)
+
+bool SvgMeshArray::addPatch(QList<QPair<QString, QColor>> stops, const QPointF initialPoint)
 {
+    // This is function is full of edge-case landmines, please run TestMeshArray after any changes
     if (stops.size() > 4 || stops.size() < 2)
         return false;
 
@@ -73,16 +74,30 @@ bool SvgMeshArray::addPatch(QList<QPair<QString, QColor>>& stops, const QPointF 
         }
     }
 
-    // Right and Bottom, will always be independent
-    for (int i = 1; i <= 2; ++i) {
-        patch->addStop(stops[0].first, stops[0].second, static_cast<SvgMeshPatch::Type>(SvgMeshPatch::Top + i));
+    // Right will always be independent
+    patch->addStop(stops[0].first, stops[0].second, SvgMeshPatch::Right);
+    stops.removeFirst();
+
+    if (icol > 0) {
+        patch->addStop(
+                stops[0].first,
+                stops[0].second,
+                SvgMeshPatch::Bottom,
+                true, getStop(SvgMeshPatch::Bottom, irow, icol - 1).point);
+        stops.removeFirst();
+    } else {
+        patch->addStop(stops[0].first, stops[0].second, SvgMeshPatch::Bottom);
         stops.removeFirst();
     }
 
     // last stop
     if (icol == 0) {
         // if stop is in the 0th column, parse path
-        patch->addStop(stops[0].first, stops[0].second, SvgMeshPatch::Left);
+        patch->addStop(
+                stops[0].first,
+                stops[0].second,
+                SvgMeshPatch::Left,
+                true, getStop(SvgMeshPatch::Top, irow, icol).point);
         stops.removeFirst();
     } else {
         QColor color = getStop(SvgMeshPatch::Bottom, irow, icol - 1).color;

@@ -66,7 +66,7 @@
 #include "kis_config_notifier.h"
 #include "kis_cursor.h"
 #include "widgets/kis_cmb_composite.h"
-#include "widgets/kis_slider_spin_box.h"
+#include "kis_slider_spin_box.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_tool_utils.h"
 #include <brushengine/kis_paintop.h>

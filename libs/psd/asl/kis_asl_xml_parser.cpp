@@ -439,16 +439,35 @@ bool tryParseDescriptor(const QDomElement &el,
             child = child.nextSibling();
         }
 
-        if (colors.size() < 2) {
-            warnKrita << "WARNING: ASL gradient has too few stops" << ppVar(colors.size());
+
+        if (colors.size() < transparencies.size()) {
+            const QColor lastColor = !colors.isEmpty() ? colors.last() : QColor(Qt::black);
+            while (colors.size() != transparencies.size()) {
+                const int index = colors.size();
+                colors.append(lastColor);
+                startLocations.append(transpStartLocations[index]);
+                middleOffsets.append(transpMiddleOffsets[index]);
+            }
         }
 
-        if (colors.size() != transparencies.size()) {
-            warnKrita << "WARNING: ASL gradient has inconsistent number of transparency stops. Dropping transparency..." << ppVar(colors.size()) << ppVar(transparencies.size());
-            transparencies.resize(colors.size());
-            for (int i = 0; i < colors.size(); i++) {
-                transparencies[i] = 1.0;
+        if (colors.size() > transparencies.size()) {
+            const qreal lastTransparency = !transparencies.isEmpty() ? transparencies.last() : 1.0;
+            while (colors.size() != transparencies.size()) {
+                const int index = transparencies.size();
+                transparencies.append(lastTransparency);
+                transpStartLocations.append(startLocations[index]);
+                transpMiddleOffsets.append(middleOffsets[index]);
             }
+        }
+
+        if (colors.size() == 1) {
+            colors.append(colors.last());
+            startLocations.append(1.0);
+            middleOffsets.append(0.5);
+
+            transparencies.append(transparencies.last());
+            transpStartLocations.append(1.0);
+            transpMiddleOffsets.append(0.5);
         }
 
         QString fileName = gradientName + ".ggr";
@@ -456,23 +475,26 @@ bool tryParseDescriptor(const QDomElement &el,
         Q_UNUSED(gradientSmoothness);
         gradient->setName(gradientName);
 
-        for (int i = 1; i < colors.size(); i++) {
-            QColor startColor = colors[i-1];
-            QColor endColor = colors[i];
-            startColor.setAlphaF(transparencies[i-1]);
-            endColor.setAlphaF(transparencies[i]);
+        if (colors.size() >= 2) {
+            for (int i = 1; i < colors.size(); i++) {
+                QColor startColor = colors[i-1];
+                QColor endColor = colors[i];
+                startColor.setAlphaF(transparencies[i-1]);
+                endColor.setAlphaF(transparencies[i]);
 
-            qreal start = startLocations[i-1];
-            qreal end = startLocations[i];
-            qreal middle = start + middleOffsets[i-1] * (end - start);
+                qreal start = startLocations[i-1];
+                qreal end = startLocations[i];
+                qreal middle = start + middleOffsets[i-1] * (end - start);
 
-            gradient->createSegment(INTERP_LINEAR, COLOR_INTERP_RGB,
-                                    start, end, middle,
-                                    startColor,
-                                    endColor);
+                gradient->createSegment(INTERP_LINEAR, COLOR_INTERP_RGB,
+                                        start, end, middle,
+                                        startColor,
+                                        endColor);
+            }
+            gradient->setValid(true);
+        } else {
+            gradient->setValid(false);
         }
-
-        gradient->setValid(true);
 
         catcher.addGradient(path, gradient);
     } else {

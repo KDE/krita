@@ -36,6 +36,8 @@
 #include <KoColor.h>
 #include "kis_signal_compressor.h"
 
+class KoCanvasResourceProvider;
+
 /**
  * Widget for displaying a live brush preview of your
  * selected brush. It listens for signalsetting changes
@@ -58,7 +60,7 @@ public:
      * This live preview might be in a UI file, so make sure to
      * call this before starting to use it
      */
-    void setup();
+    void setup(KoCanvasResourceProvider* resourceManager);
 
     /**
      * @brief set the current preset from resource manager for the live preview to use.
@@ -73,6 +75,9 @@ private Q_SLOTS:
     void slotPreviewGenerationCompleted();
 
 private:
+
+    ///internally sets the Resource Provider for brush preview (allowing gradients in preview)
+    KoCanvasResourceProvider* m_resourceManager;
 
     /// internally sets the image area for brush preview
     KisImageSP m_image;

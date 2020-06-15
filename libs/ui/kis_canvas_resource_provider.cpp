@@ -47,7 +47,6 @@ KisCanvasResourceProvider::KisCanvasResourceProvider(KisViewManager * view)
     : m_view(view)
 {
     m_fGChanged = true;
-    m_enablefGChange = true;    // default to true, so that colour history is working without popup palette
 }
 
 KisCanvasResourceProvider::~KisCanvasResourceProvider()
@@ -365,7 +364,7 @@ void KisCanvasResourceProvider::setEraserMode(bool value)
 
 void KisCanvasResourceProvider::slotPainting()
 {
-    if (m_fGChanged && m_enablefGChange) {
+    if (m_fGChanged) {
         emit sigFGColorUsed(fgColor());
         m_fGChanged = false;
     }
@@ -398,11 +397,6 @@ void KisCanvasResourceProvider::slotGamutMaskDeactivate()
 {
     m_resourceManager->setResource(GamutMaskActive, QVariant::fromValue(false));
     emit sigGamutMaskDeactivated();
-}
-
-void KisCanvasResourceProvider::slotResetEnableFGChange(bool b)
-{
-    m_enablefGChange = b;
 }
 
 QList<QPointer<KisAbstractPerspectiveGrid> > KisCanvasResourceProvider::perspectiveGrids() const

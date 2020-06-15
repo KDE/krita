@@ -337,6 +337,7 @@ void KisAslXmlWriter::writeGradientImpl(const QString &key,
 void KisAslXmlWriter::writeSegmentGradient(const QString &key, const KoSegmentGradient *gradient)
 {
     const QList<KoGradientSegment *>&segments = gradient->segments();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!segments.isEmpty());
 
     QVector<QColor> colors;
     QVector<qreal> transparencies;

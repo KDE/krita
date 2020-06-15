@@ -210,7 +210,7 @@ void Selection::dilate()
 void Selection::border(int xRadius, int yRadius)
 {
     if (!d->selection) return;
-    KisBorderSelectionFilter sf(xRadius, yRadius);
+    KisBorderSelectionFilter sf(xRadius, yRadius, true);
     QRect rc = sf.changeRect(d->selection->selectedExactRect(), d->selection->pixelSelection()->defaultBounds());
     sf.process(d->selection->pixelSelection(), rc);
 }

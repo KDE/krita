@@ -38,12 +38,16 @@ private Q_SLOTS:
     void slotWidthChanged(int width);
     void slotWidthChanged(double width);
     void slotUnitChanged(int index);
+    void slotAntialiasingChanged(bool value);
+    void slotUpdateAntialiasingAvailability();
 
 private:
     void updateWidthUIValue(double value);
 
     double m_resolution;
     int m_width;
+    bool m_antialiasing = false;
+    bool m_savedAntialiasing = false;
 };
 
 #endif // DLG_BORDER_SELECTION_H

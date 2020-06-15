@@ -116,11 +116,13 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageSP image)
     imageElement.setAttribute(Y_RESOLUTION, KisDomUtils::toString(image->yRes()*72.0));
     //now the proofing options:
     if (image->proofingConfiguration()) {
-        imageElement.setAttribute(PROOFINGPROFILENAME, KisDomUtils::toString(image->proofingConfiguration()->proofingProfile));
-        imageElement.setAttribute(PROOFINGMODEL, KisDomUtils::toString(image->proofingConfiguration()->proofingModel));
-        imageElement.setAttribute(PROOFINGDEPTH, KisDomUtils::toString(image->proofingConfiguration()->proofingDepth));
-        imageElement.setAttribute(PROOFINGINTENT, KisDomUtils::toString(image->proofingConfiguration()->intent));
-        imageElement.setAttribute(PROOFINGADAPTATIONSTATE, KisDomUtils::toString(image->proofingConfiguration()->adaptationState));
+        if (image->proofingConfiguration()->storeSoftproofingInsideImage) {
+            imageElement.setAttribute(PROOFINGPROFILENAME, KisDomUtils::toString(image->proofingConfiguration()->proofingProfile));
+            imageElement.setAttribute(PROOFINGMODEL, KisDomUtils::toString(image->proofingConfiguration()->proofingModel));
+            imageElement.setAttribute(PROOFINGDEPTH, KisDomUtils::toString(image->proofingConfiguration()->proofingDepth));
+            imageElement.setAttribute(PROOFINGINTENT, KisDomUtils::toString(image->proofingConfiguration()->intent));
+            imageElement.setAttribute(PROOFINGADAPTATIONSTATE, KisDomUtils::toString(image->proofingConfiguration()->adaptationState));
+        }
     }
 
     quint32 count = 1; // We don't save the root layer, but it does count
@@ -293,22 +295,23 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageSP image, const QString
 
     //This'll embed the profile used for proofing into the kra file.
     if (image->proofingConfiguration()) {
-        const KoColorProfile *proofingProfile = KoColorSpaceRegistry::instance()->profileByName(image->proofingConfiguration()->proofingProfile);
-        if (proofingProfile && proofingProfile->valid()) {
-            QByteArray proofingProfileRaw = proofingProfile->rawData();
-            if (!proofingProfileRaw.isEmpty()) {
-                annotation = new KisAnnotation(ICCPROOFINGPROFILE, proofingProfile->name(), proofingProfile->rawData());
+        if (image->proofingConfiguration()->storeSoftproofingInsideImage) {
+            const KoColorProfile *proofingProfile = KoColorSpaceRegistry::instance()->profileByName(image->proofingConfiguration()->proofingProfile);
+            if (proofingProfile && proofingProfile->valid()) {
+                QByteArray proofingProfileRaw = proofingProfile->rawData();
+                if (!proofingProfileRaw.isEmpty()) {
+                    annotation = new KisAnnotation(ICCPROOFINGPROFILE, proofingProfile->name(), proofingProfile->rawData());
+                }
+            }
+            if (annotation) {
+                location = external ? QString() : uri;
+                location += m_d->imageName + ICC_PROOFING_PATH;
+                if (store->open(location)) {
+                    store->write(annotation->annotation());
+                    store->close();
+                }
             }
         }
-        if (annotation) {
-            location = external ? QString() : uri;
-            location += m_d->imageName + ICC_PROOFING_PATH;
-            if (store->open(location)) {
-                store->write(annotation->annotation());
-                store->close();
-            }
-        }
-
     }
 
     {
@@ -367,10 +370,12 @@ void KisKraSaver::saveAssistantsGlobalColor(QDomDocument& doc, QDomElement& elem
 void KisKraSaver::saveWarningColor(QDomDocument& doc, QDomElement& element, KisImageSP image)
 {
     if (image->proofingConfiguration()) {
-        QDomElement e = doc.createElement(PROOFINGWARNINGCOLOR);
-        KoColor color = image->proofingConfiguration()->warningColor;
-        color.toXML(doc, e);
-        element.appendChild(e);
+        if (image->proofingConfiguration()->storeSoftproofingInsideImage) {
+            QDomElement e = doc.createElement(PROOFINGWARNINGCOLOR);
+            KoColor color = image->proofingConfiguration()->warningColor;
+            color.toXML(doc, e);
+            element.appendChild(e);
+        }
     }
 }
 

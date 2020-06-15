@@ -27,6 +27,7 @@
 #include <QSharedData>
 #include <QFileInfo>
 #include <QImageReader>
+#include <QUrl>
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 #include <QColorSpace>
@@ -44,6 +45,8 @@
 #include <libs/brush/kis_qimage_pyramid.h>
 #include <utils/KisClipboardUtil.h>
 
+#include <KisDocument.h>
+#include <KisPart.h>
 
 struct KisReferenceImage::Private : public QSharedData
 {
@@ -65,10 +68,27 @@ struct KisReferenceImage::Private : public QSharedData
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!externalFilename.isEmpty(), false);
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(QFileInfo(externalFilename).exists(), false);
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(QFileInfo(externalFilename).isReadable(), false);
+        {
+            QImageReader reader(externalFilename);
+            reader.setDecideFormatFromContent(true);
+            image = reader.read();
 
-        QImageReader reader(externalFilename);
-        reader.setDecideFormatFromContent(true);
-        image = reader.read();
+            if (image.isNull()) {
+                reader.setAutoDetectImageFormat(true);
+                image = reader.read();
+            }
+
+        }
+
+        if (image.isNull()) {
+            image.load(externalFilename);
+        }
+
+        if (image.isNull()) {
+            KisDocument * doc = KisPart::instance()->createDocument();
+            doc->openUrl(QUrl::fromLocalFile(externalFilename), KisDocument::DontAddToRecent);
+            image = doc->image()->convertToQImage(doc->image()->bounds(), 0);
+        }
 
         // See https://bugs.kde.org/show_bug.cgi?id=416515 -- a jpeg image
         // loaded into a qimage cannot be saved to png unless we explicitly
@@ -76,6 +96,7 @@ struct KisReferenceImage::Private : public QSharedData
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
         image.convertToColorSpace(QColorSpace(QColorSpace::SRgb));
 #endif
+
         return (!image.isNull());
     }
 

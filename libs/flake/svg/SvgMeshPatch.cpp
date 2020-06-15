@@ -123,6 +123,11 @@ QPointF SvgMeshPatch::parseMeshPath(const QString& s, bool pathIncomplete, const
                toy = cury + toy;
            }
 
+           if (pathIncomplete) {
+               tox = lastPoint.x();
+               toy = lastPoint.y();
+           }
+
            m_path->lineTo(QPointF(tox, toy));
            break;
        }

@@ -106,6 +106,12 @@ bool KisLiquifyTransformWorker::operator==(const KisLiquifyTransformWorker &othe
     return result;
 }
 
+bool KisLiquifyTransformWorker::isIdentity() const
+{
+    const qreal eps = 1e-6;
+    return KisAlgebra2D::fuzzyPointCompare(m_d->originalPoints, m_d->transformedPoints, eps);
+}
+
 int KisLiquifyTransformWorker::pointToIndex(const QPoint &cellPt)
 {
     return GridIterationTools::pointToIndex(cellPt, m_d->gridSize);

@@ -48,6 +48,7 @@ KisLensBlurFilter::KisLensBlurFilter() : KisFilter(id(), FiltersCategoryBlurId, 
     setSupportsAdjustmentLayers(true);
     setSupportsLevelOfDetail(true);
     setColorSpaceIndependence(FULLY_INDEPENDENT);
+
 }
 
 KisConfigWidget * KisLensBlurFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, bool) const

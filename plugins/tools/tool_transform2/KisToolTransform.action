@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ActionCollection version="2" name="Tools">
-    <text>Tool Shortcuts</text>
   <Actions category="tool-shortcuts">
+  <text>Tool Shortcuts</text>
     <Action name="KisToolTransform">
       <icon></icon>
       <text>Transform Tool</text>

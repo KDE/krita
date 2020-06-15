@@ -599,9 +599,9 @@ QDomDocument KisAslLayerStyleSerializer::formXmlDocument() const
             w.writeEnum("Md  ", "BlnM", compositeOpToBlendMode(gradientOverlay->blendMode()));
             w.writeUnitFloat("Opct", "#Prc", gradientOverlay->opacity());
 
-            if (segmentGradient) {
+            if (segmentGradient && segmentGradient->valid()) {
                 w.writeSegmentGradient("Grad", segmentGradient);
-            } else if (stopGradient) {
+            } else if (stopGradient && stopGradient->valid()) {
                 w.writeStopGradient("Grad", stopGradient);
             }
 

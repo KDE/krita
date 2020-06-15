@@ -24,6 +24,7 @@ public:
     QString proofingModel;
     QString proofingDepth;
     double adaptationState;
+    bool storeSoftproofingInsideImage;
 
 };
 

@@ -110,7 +110,7 @@ void FillProcessingVisitor::fillPaintDevice(KisPaintDeviceSP device, KisUndoAdap
 
         QPoint startPoint = m_startPoint;
         if (device->defaultBounds()->wrapAroundMode()) {
-            startPoint = KisWrappedRect::ptToWrappedPt(startPoint, device->defaultBounds()->bounds());
+            startPoint = KisWrappedRect::ptToWrappedPt(startPoint, device->defaultBounds()->imageBorderRect());
         }
 
         KisFillPainter fillPainter(device, m_selection);

@@ -30,6 +30,11 @@ QRect KisDefaultBoundsNodeWrapper::bounds() const
     return m_d->node->original() ? m_d->node->original()->defaultBounds()->bounds() : KisDefaultBoundsNodeWrapper::infiniteRect;
 }
 
+QRect KisDefaultBoundsNodeWrapper::imageBorderRect() const
+{
+    return m_d->node->original() ? m_d->node->original()->defaultBounds()->imageBorderRect() : KisDefaultBoundsNodeWrapper::infiniteRect;
+}
+
 bool KisDefaultBoundsNodeWrapper::wrapAroundMode() const
 {
     return m_d->node->original() ? m_d->node->original()->defaultBounds()->wrapAroundMode() : false;

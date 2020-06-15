@@ -420,6 +420,7 @@ bool KisResourceCacheDb::addResourceVersion(int resourceId, QDateTime timestamp,
         if (!r) {
             qWarning() << "Could not update resource" << q.boundValues() << q.lastError();
         }
+
     }
     return r;
 }
@@ -444,9 +445,12 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     int resourceId = resourceIdForResource(resource->name(), resourceType, KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
     if (resourceId > -1) {
         if (resourceNeedsUpdating(resourceId, timestamp)) {
-            r = addResourceVersion(resourceId, timestamp, storage, resource);
+            if (addResourceVersion(resourceId, timestamp, storage, resource)) {
+                return true;
+            }
+            return false;
         }
-        return (r == true);
+        return true;
     }
 
     QSqlQuery q;

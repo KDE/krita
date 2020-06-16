@@ -244,7 +244,6 @@ public:
     KisUpdateScheduler scheduler;
     QAtomicInt disableDirtyRequests;
 
-
     KisCompositeProgressProxy compositeProgressProxy;
 
     bool blockLevelOfDetail = false;

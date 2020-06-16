@@ -378,7 +378,7 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
     // Isolation Modes...
     // Post Qt5.14 this can be replaced with QActionGroup + ExclusionPolicy::ExclusiveOptional.
     action = actionManager->createAction("isolate_active_layer");
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(setIsolateActiveLayerMode(bool)));
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(setIsolateActiveLayerMode(bool)));
     action = actionManager->createAction("isolate_active_group");
     connect(action, SIGNAL(triggered(bool)), this, SLOT(setIsolateActiveGroupMode(bool)));
     connect(this, SIGNAL(sigNodeActivated(KisNodeSP)), SLOT(updateIsolationMode()));
@@ -476,22 +476,8 @@ void KisNodeManager::addNodesDirect(KisNodeList nodes, KisNodeSP parent, KisNode
 
 void KisNodeManager::toggleIsolateActiveNode()
 {
-    /*
-    KisImageWSP image = m_d->view->image();
-    KisNodeSP activeNode = this->activeNode();
-    KIS_ASSERT_RECOVER_RETURN(activeNode);*/
-
-//    const bool groupIsolationStatus = image->isIsolatingGroup();
-//    if (image->isolationRootNode()) {
-//        changeIsolationMode(false, groupIsolationStatus);
-//        reinitializeIsolationActionGroup();
-//    } else {
-//        changeIsolationMode(true, groupIsolationStatus);
-//    }
     QAction* action = m_d->view->actionManager()->actionByName("isolate_active_layer");
     action->toggle();
-    action->triggered(action->isChecked());
-
 }
 
 void KisNodeManager::setIsolateActiveLayerMode(bool checked)
@@ -517,8 +503,6 @@ void KisNodeManager::changeIsolationMode(bool isolateActiveLayer, bool isolateAc
     KisImageWSP image = m_d->view->image();
     KisNodeSP activeNode = this->activeNode();
     KIS_ASSERT_RECOVER_RETURN(image && activeNode);
-
-    ENTER_FUNCTION() << ppVar(isolateActiveLayer) << ppVar(isolateActiveGroup);
 
     if (isolateActiveLayer || isolateActiveGroup) {
         if (image->startIsolatedMode(activeNode, isolateActiveLayer, isolateActiveGroup) == false) {

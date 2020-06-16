@@ -158,6 +158,7 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     KisZoomableScrollbar* hZoomableBar = new KisZoomableScrollbar(this);
     setHorizontalScrollBar(hZoomableBar);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    hZoomableBar->setEnabled(false);
     setVerticalScrollBar(new KisZoomableScrollbar(this));
 
     connect(hZoomableBar, SIGNAL(zoom(qreal)), this, SLOT(slotScrollbarZoom(qreal)));
@@ -439,6 +440,8 @@ void TimelineFramesView::setModel(QAbstractItemModel *model)
 {
     TimelineFramesModel *framesModel = qobject_cast<TimelineFramesModel*>(model);
     m_d->model = framesModel;
+
+    horizontalScrollBar()->setEnabled((framesModel != nullptr));
 
     QTableView::setModel(model);
 

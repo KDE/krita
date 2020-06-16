@@ -141,7 +141,7 @@ build_kf5() {
 
     if [[ ! -d extragear/kdesrc-build ]]; then 
         mkdir -p extragear/kdesrc-build
-        git clone git://anongit.kde.org/kdesrc-build extragear/kdesrc-build
+        git clone http://invent.kde.org/sdk/kdesrc-build extragear/kdesrc-build
     fi
     if [[ ! -e  $BUILD_ROOT/kf5/kdesrc-build ]]; then 
         ln -s extragear/kdesrc-build/kdesrc-build kdesrc-build

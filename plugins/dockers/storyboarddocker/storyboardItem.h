@@ -34,14 +34,6 @@ public:
     {}
     StoryboardItem *parent(){ return m_parentItem;}
     QVariant data(){ return m_data;}
-    //returns the row number of this child relative to its parent
-    /*int row() const{
-        if (m_parentItem)
-            return m_parentItem->m_childData.indexOf(const_cast<StoryboardChild*>(this));
-
-        return 0;
-    }
-    */
     void setData(QVariant value){
         m_data = value;
     }

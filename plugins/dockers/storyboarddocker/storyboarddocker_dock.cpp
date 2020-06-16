@@ -230,6 +230,19 @@ void StoryboardDockerDock::slotLockClicked(bool isLocked){
 void StoryboardDockerDock::slotModeChanged(QAbstractButton* button)
 {
     qDebug()<<"Mode changed to "<<button->text();
+    QString mode = button->text();
+    if (mode == "Row"){
+        m_ui->listView->setFlow(QListView::LeftToRight);
+        m_ui->listView->setWrapping(false);
+    }
+    else if (mode == "Column"){
+        m_ui->listView->setFlow(QListView::TopToBottom);
+        m_ui->listView->setWrapping(false);
+    }
+    else if (mode == "Grid"){
+        m_ui->listView->setFlow(QListView::LeftToRight);
+        m_ui->listView->setWrapping(true);
+    }
 }
 
 void StoryboardDockerDock::slotViewChanged(QAbstractButton* button)

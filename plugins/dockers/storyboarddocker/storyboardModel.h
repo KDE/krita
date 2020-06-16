@@ -27,6 +27,25 @@
 /*
     The main storyboard model. 
 */
+
+class CommentBox
+{
+public:
+    CommentBox()
+    : content("")
+    , scrollValue(0)
+    {}
+    CommentBox(const CommentBox& other)
+    : content(other.content)
+    , scrollValue(other.scrollValue)
+    {}
+    ~CommentBox()
+    {}
+    QVariant content;
+    QVariant scrollValue;
+};
+Q_DECLARE_METATYPE(CommentBox)
+
 class StoryboardModel : public QAbstractItemModel
 {
     Q_OBJECT
@@ -43,7 +62,7 @@ public:
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
-
+    bool setCommentScrollData(const QModelIndex & index, const QVariant & value);
     //QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;
     

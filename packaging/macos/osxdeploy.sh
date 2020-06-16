@@ -428,7 +428,7 @@ macdeployqt_exists() {
         printf "Not Found!\n"
         printf "Attempting to install macdeployqt\n"
 
-        cd ${BUILDROOT}/depbuild/ext_qt/ext_qt-prefix/src/ext_qt/qttools/src
+        cd "${BUILDROOT}/depbuild/ext_qt/ext_qt-prefix/src/ext_qt/qttools/src"
         make sub-macdeployqt-all
         make sub-macdeployqt-install_subtargets
         make install
@@ -653,7 +653,7 @@ notarize_build() {
         local uuid="$(grep 'RequestUUID' <<< ${altoolResponse} | awk '{ print $NF }')"
         echo "RequestUUID = ${uuid}" # Display identifier string
 
-        waiting_fixed "Waiting to retrieve notarize status" 30
+        waiting_fixed "Waiting to retrieve notarize status" 60
 
         while true ; do
             fullstatus=$(xcrun altool --notarization-info "${uuid}" --username "${NOTARIZE_ACC}" --password "${NOTARIZE_PASS}" ${ASC_PROVIDER_OP} 2>&1)  # get the status
@@ -665,7 +665,7 @@ notarize_build() {
                 print_msg "Notarization success!"
                 break
             elif [[ "${notarize_status}" = "in" ]]; then
-                waiting_fixed "Notarization still in progress, sleeping for 20 seconds and trying again" 20
+                waiting_fixed "Notarization still in progress, sleeping for 60 seconds and trying again" 60
             else
                 echo "Notarization failed! full status below"
                 echo "${fullstatus}"

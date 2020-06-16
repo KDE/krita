@@ -1701,7 +1701,7 @@
          <item>
           <widget class="QLabel" name="previewGranularity">
            <property name="text">
-            <string>Preview</string>
+            <string comment="preview the transformation of the current layer">Preview</string>
            </property>
           </widget>
          </item>

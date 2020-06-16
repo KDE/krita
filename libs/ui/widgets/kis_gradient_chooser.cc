@@ -46,7 +46,7 @@
 #include "kis_stopgradient_editor.h"
 
 KisCustomGradientDialog::KisCustomGradientDialog(KoAbstractGradientSP gradient, QWidget *parent, const char *name,
-    KoColor fgColor, KoColor bgColor)
+    const KoColor &fgColor, const KoColor &bgColor)
     : KoDialog(parent, Qt::Dialog)
 {
     setButtons(Ok|Cancel);

@@ -425,7 +425,7 @@ const KoGradientSegmentEndpointType KoGradientSegment::endType() const
 
 void KoGradientSegment::setStartType(KoGradientSegmentEndpointType type) {
     m_start.type = type;
-    if (type == FOREGROUND_ENDPOINT || type == BACKGROUND_ENDPOINT) {
+    if (type != COLOR_ENDPOINT) {
         m_hasVariableColors = true;
     }
     else if (m_end.type == COLOR_ENDPOINT) {
@@ -435,7 +435,7 @@ void KoGradientSegment::setStartType(KoGradientSegmentEndpointType type) {
 
 void KoGradientSegment::setEndType(KoGradientSegmentEndpointType type) {
     m_end.type = type;
-    if (type == FOREGROUND_ENDPOINT || type == BACKGROUND_ENDPOINT) {
+    if (type != COLOR_ENDPOINT) {
         m_hasVariableColors = true;
     }
     else if (m_start.type == COLOR_ENDPOINT) {
@@ -478,17 +478,42 @@ void KoGradientSegment::setEndOffset(qreal t)
 }
 
 void KoGradientSegment::setVariableColors(const KoColor& foreground, const KoColor& background) {
-    if (m_start.type == FOREGROUND_ENDPOINT) {
+    switch (m_start.type) {
+    case COLOR_ENDPOINT:
+        break;
+    case FOREGROUND_ENDPOINT:
         m_start.color = foreground;
-    }
-    if (m_end.type == FOREGROUND_ENDPOINT) {
-        m_end.color = foreground;
-    }
-    if (m_start.type == BACKGROUND_ENDPOINT) {
+        break;
+    case FOREGROUND_TRANSPARENT_ENDPOINT: //TODO: add Transparent options to gradient editor...
+        m_start.color = foreground;
+        m_start.color.setOpacity(quint8(0));
+        break;
+    case BACKGROUND_ENDPOINT:
         m_start.color = background;
+        break;
+    case BACKGROUND_TRANSPARENT_ENDPOINT:
+        m_start.color = background;
+        m_start.color.setOpacity(quint8(0));
+        break;
     }
-    if (m_end.type == BACKGROUND_ENDPOINT) {
+
+    switch (m_end.type) {
+    case COLOR_ENDPOINT:
+        break;
+    case FOREGROUND_ENDPOINT:
+        m_end.color = foreground;
+        break;
+    case FOREGROUND_TRANSPARENT_ENDPOINT:
+        m_end.color = foreground;
+        m_end.color.setOpacity(quint8(0));
+        break;
+    case BACKGROUND_ENDPOINT:
         m_end.color = background;
+        break;
+    case BACKGROUND_TRANSPARENT_ENDPOINT:
+        m_end.color = background;
+        m_end.color.setOpacity(quint8(0));
+        break;
     }
 }
 
@@ -571,15 +596,18 @@ void KoGradientSegment::mirrorSegment()
 
     setMiddleOffset(endOffset() - (middleOffset() - startOffset()));
 
-    if (interpolation() == INTERP_SPHERE_INCREASING)
+    if (interpolation() == INTERP_SPHERE_INCREASING) {
         setInterpolation(INTERP_SPHERE_DECREASING);
-    else if (interpolation() == INTERP_SPHERE_DECREASING)
+    }
+    else if (interpolation() == INTERP_SPHERE_DECREASING) {
         setInterpolation(INTERP_SPHERE_INCREASING);
-
-    if (colorInterpolation() == COLOR_INTERP_HSV_CW)
+    }
+    if (colorInterpolation() == COLOR_INTERP_HSV_CW) {
         setColorInterpolation(COLOR_INTERP_HSV_CCW);
-    else if (colorInterpolation() == COLOR_INTERP_HSV_CCW)
+    }
+    else if (colorInterpolation() == COLOR_INTERP_HSV_CCW) {
         setColorInterpolation(COLOR_INTERP_HSV_CW);
+    }
 }
 
 bool KoGradientSegment::isValid() const

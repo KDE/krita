@@ -38,7 +38,7 @@ public:
 
 
     KisStopGradientEditor(QWidget *parent);
-    KisStopGradientEditor(KoStopGradientSP gradient, QWidget *parent, const char* name, const QString& caption, KoColor fgColor, KoColor bgColor);
+    KisStopGradientEditor(KoStopGradientSP gradient, QWidget *parent, const char* name, const QString& caption, const KoColor &fgColor, const KoColor &bgColor);
 
     void setCompactMode(bool value);
 

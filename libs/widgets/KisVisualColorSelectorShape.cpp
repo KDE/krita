@@ -125,9 +125,6 @@ void KisVisualColorSelectorShape::setAcceptTabletEvents(bool on)
 void KisVisualColorSelectorShape::setDisplayRenderer (const KoColorDisplayRendererInterface *displayRenderer)
 {
     if (displayRenderer) {
-        if (m_d->displayRenderer) {
-            m_d->displayRenderer->disconnect(this);
-        }
         m_d->displayRenderer = displayRenderer;
     } else {
         m_d->displayRenderer = KoDumbColorDisplayRenderer::instance();

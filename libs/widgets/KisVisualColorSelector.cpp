@@ -578,7 +578,11 @@ void KisVisualColorSelector::slotRebuildSelectors()
     }
 }
 
-void KisVisualColorSelector::setDisplayRenderer (const KoColorDisplayRendererInterface *displayRenderer) {
+void KisVisualColorSelector::setDisplayRenderer (const KoColorDisplayRendererInterface *displayRenderer)
+{
+    if (m_d->displayRenderer) {
+        m_d->displayRenderer->disconnect(this);
+    }
     m_d->displayRenderer = displayRenderer;
     if (m_d->widgetlist.size()>0) {
         Q_FOREACH (KisVisualColorSelectorShape *shape, m_d->widgetlist) {

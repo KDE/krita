@@ -43,9 +43,12 @@ public:
     QRect visualRect(const QModelIndex &index) const override;
     QModelIndex indexAt(const QPoint &point) const override;
     void mouseMoveEvent(QMouseEvent *event) override;
+    void setItemOrientation(Qt::Orientation orientation);
+    Qt::Orientation itemOrientation();
 
 private:
     QModelIndex m_hoverIndex;
+    Qt::Orientation m_itemOrientation;
 };
 
 #endif

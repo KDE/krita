@@ -92,6 +92,9 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
                     p->drawText(frameNumRect, Qt::AlignHCenter | Qt::AlignVCenter, data);
 
                     QIcon icon = KisIconUtils::loadIcon("krita-base");
+
+                    QRect thumbnailRect = option.rect;
+                    //TO DO make thumbnail keep aspect ratio
                     icon.paint(p, option.rect);
                     p->setPen(QPen(option.palette.dark(), 2));
                     p->drawRect(option.rect);
@@ -172,6 +175,8 @@ QStyleOptionSlider StoryboardDelegate::drawComment(QPainter *p, const QStyleOpti
     if (p){
         p->setPen(QPen(option.palette.text(), 1));
         p->drawText(titleRect, Qt::AlignLeft | Qt::AlignVCenter, model->getComment(index.row() - 4).name);
+        p->setPen(QPen(option.palette.dark(), 2));
+        p->drawRect(titleRect);
     }
 
     QRect contentRect = option.rect;
@@ -221,7 +226,6 @@ QStyleOptionSlider StoryboardDelegate::drawComment(QPainter *p, const QStyleOpti
         p->save();
         p->setPen(QPen(option.palette.dark(), 2));
         p->translate(scrollRect.topLeft());
-        p->drawRect(scrollRect);
         style->drawComplexControl(QStyle::CC_ScrollBar, &scrollbarOption, p, option.widget);
         p->restore();
     }
@@ -232,21 +236,32 @@ QSize StoryboardDelegate::sizeHint(const QStyleOptionViewItem &option,
                                 const QModelIndex &index) const
 {
     if (!index.parent().isValid()){
-        int width = option.widget->width() - 17;
-        const StoryboardModel* model = dynamic_cast<const StoryboardModel*>(index.model());
-        int numComments = model->visibleCommentCount();
-        int numItem = width/250;
-        if(numItem <=0){
-            return QSize(0, 0);
+        if (m_view->itemOrientation() == Qt::Vertical){
+            int width = m_view->viewport()->width();
+            const StoryboardModel* model = dynamic_cast<const StoryboardModel*>(index.model());
+            int numComments = model->visibleCommentCount();
+            int numItem = width/250;
+            if(numItem <=0){
+                return QSize(0, 0);
+            }
+            return QSize(width / numItem, 120 + option.fontMetrics.height() + 3 + numComments*100 + 10);
         }
-        return QSize(width / numItem, 120 + option.fontMetrics.height() + 3 + numComments*100 + 10);
+        else{
+            const StoryboardModel* model = dynamic_cast<const StoryboardModel*>(index.model());
+            int numComments = model->visibleCommentCount();
+            int commentWidth = 200;
+            if (numComments){
+                commentWidth = qMax(200, (m_view->viewport()->width() - 250) / numComments);
+            }
+            int width = 250 + numComments * commentWidth;
+            return QSize(width + 10, 120 + option.fontMetrics.height() + 3 + 10);
+        }
     }
     else {
         return option.rect.size();
     }
     return QSize(0,0);
 }
-
 
 QWidget *StoryboardDelegate::createEditor(QWidget *parent,
     const QStyleOptionViewItem &option ,
@@ -387,6 +402,7 @@ void StoryboardDelegate::setEditorData(QWidget *editor,
             {
                 QTextEdit *textEdit = static_cast<QTextEdit*>(editor);
                 textEdit->setText(value.toString());
+                textEdit->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
                 textEdit->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
                 textEdit->verticalScrollBar()->setProperty("index", index);
                 connect(textEdit->verticalScrollBar(), SIGNAL(sliderMoved(int)), this, SLOT(slotCommentScrolledTo(int)));
@@ -445,7 +461,7 @@ void StoryboardDelegate::updateEditorGeometry(QWidget *editor,
     }
 }
 
-void StoryboardDelegate::setView(QListView *view)
+void StoryboardDelegate::setView(StoryboardView *view)
 {
     m_view = view;
 }
@@ -510,7 +526,6 @@ QRect StoryboardDelegate::scrollDownButton(const QStyleOptionViewItem &option, Q
 
 QRect StoryboardDelegate::scrollUpButton(const QStyleOptionViewItem &option, QStyleOptionSlider &scrollBarOption)
 {
-
     QStyle *style = option.widget ? option.widget->style() : QApplication::style();
     QRect rect = style->subControlRect(QStyle::CC_ScrollBar, &scrollBarOption,
                     QStyle::QStyle::SC_ScrollBarSubLine);

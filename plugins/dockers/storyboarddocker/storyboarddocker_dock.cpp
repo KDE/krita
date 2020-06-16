@@ -109,13 +109,13 @@ public:
         QWidget* arrangeWidget = new QWidget(this);
         m_menuUI->setupUi(arrangeWidget);
 
-        modeGroup->addButton(m_menuUI->btnColumnMode, Qt::FlatCap);
-        modeGroup->addButton(m_menuUI->btnRowMode, Qt::FlatCap);
-        modeGroup->addButton(m_menuUI->btnGridMode, Qt::FlatCap);
+        modeGroup->addButton(m_menuUI->btnColumnMode, 0);
+        modeGroup->addButton(m_menuUI->btnRowMode, 1);
+        modeGroup->addButton(m_menuUI->btnGridMode, 2);
 
-        viewGroup->addButton(m_menuUI->btnAllView, Qt::FlatCap);
-        viewGroup->addButton(m_menuUI->btnThumbnailsView, Qt::FlatCap);
-        viewGroup->addButton(m_menuUI->btnCommentsView, Qt::FlatCap);
+        viewGroup->addButton(m_menuUI->btnAllView, 0);
+        viewGroup->addButton(m_menuUI->btnThumbnailsView, 1);
+        viewGroup->addButton(m_menuUI->btnCommentsView, 2);
 
         KisAction *arrangeAction = new KisAction(arrangeWidget);
         arrangeAction->setDefaultWidget(arrangeWidget);
@@ -178,6 +178,9 @@ StoryboardDockerDock::StoryboardDockerDock( )
     connect(m_modeGroup, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(slotModeChanged(QAbstractButton*)));
     connect(m_viewGroup, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(slotViewChanged(QAbstractButton*)));
 
+    m_modeGroup->button(0)->click();
+    m_viewGroup->button(0)->click();
+
     m_storyboardModel = new StoryboardModel(this);
     StoryboardDelegate *delegate = new StoryboardDelegate(this);
     delegate->setView(m_ui->listView);
@@ -206,6 +209,7 @@ void StoryboardDockerDock::slotExportAsPdf()
     qDebug()<<"export as pdf";
     slotExport("pdf");
 }
+
 void StoryboardDockerDock::slotExportAsSvg()
 {
     qDebug()<<"export as svg";
@@ -216,7 +220,6 @@ void StoryboardDockerDock::slotExport(QString mode)
 {
     qDebug()<<"mode is "<<mode;
 }
-
 
 void StoryboardDockerDock::slotLockClicked(bool isLocked){
     if (isLocked){
@@ -231,17 +234,21 @@ void StoryboardDockerDock::slotModeChanged(QAbstractButton* button)
 {
     qDebug()<<"Mode changed to "<<button->text();
     QString mode = button->text();
-    if (mode == "Row"){
+    if (mode == "Column"){
         m_ui->listView->setFlow(QListView::LeftToRight);
         m_ui->listView->setWrapping(false);
+        m_ui->listView->setItemOrientation(Qt::Vertical);
     }
-    else if (mode == "Column"){
+    else if (mode == "Row"){
         m_ui->listView->setFlow(QListView::TopToBottom);
         m_ui->listView->setWrapping(false);
+        //TO DO: change item orientation.
+        m_ui->listView->setItemOrientation(Qt::Horizontal);
     }
     else if (mode == "Grid"){
         m_ui->listView->setFlow(QListView::LeftToRight);
         m_ui->listView->setWrapping(true);
+        m_ui->listView->setItemOrientation(Qt::Vertical);
     }
 }
 

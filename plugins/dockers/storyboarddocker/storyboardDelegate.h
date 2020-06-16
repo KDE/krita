@@ -20,6 +20,7 @@
 #define __STORYBOARD_DELEGATE_H
 
 #include <QStyledItemDelegate>
+#include "storyboardView.h"
 
 class QListView;
 class StoryboardModel;
@@ -45,7 +46,7 @@ public:
 
     void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
-    void setView(QListView *view);
+    void setView(StoryboardView *view);
     void drawSpinBox(QPainter *p, const QStyleOptionViewItem &option, QString data) const;
     QStyleOptionSlider drawComment(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
@@ -61,7 +62,7 @@ private Q_SLOTS:
     void slotCommentScrolledTo(int value) const;
 
 private:
-    QListView *m_view;
+    StoryboardView *m_view;
     QPoint m_lastDragPos = QPoint(0, 0);
 };
 

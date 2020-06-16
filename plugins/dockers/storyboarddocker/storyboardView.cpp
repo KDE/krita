@@ -33,7 +33,6 @@
 StoryboardView::StoryboardView(QWidget *parent)
     :QListView(parent)
 {
-
     setWrapping(true);
     setFlow(QListView::LeftToRight);
     setResizeMode(QListView::Adjust);
@@ -47,7 +46,7 @@ StoryboardView::StoryboardView(QWidget *parent)
     setAcceptDrops(true);
     setDropIndicatorShown(true);
     setDragDropMode(QAbstractItemView::InternalMove);
-    */
+*/
 }
 
 StoryboardView::~StoryboardView()
@@ -69,8 +68,6 @@ void StoryboardView::paintEvent(QPaintEvent *event)
             QModelIndex childIndex = model()->index(childRow, 0, index);
 
             QStyleOptionViewItem option;
-            //TO DO: check if the childIndex is in focus
-            //TO DO: set proper options for spinbox type indices
             if (selectionModel()->isSelected(childIndex)) {
                 option.state |= QStyle::State_Selected;
             }
@@ -100,21 +97,26 @@ QRect StoryboardView::visualRect(const QModelIndex &index) const
         int fontHeight = fontMetrics().height() + 3;
         int numericFontWidth = fontMetrics().width("0");
         int height = parentRect.height();
-        int width = parentRect.width();
+        int parentWidth = parentRect.width();
         int childRow = index.row();
+
+        int thumbnailWidth = parentWidth;
+        if (m_itemOrientation == Qt::Horizontal){
+            thumbnailWidth = 250;
+        }
         switch (childRow)
         {
             case 0:
             {   
                 //the frame thumbnail rect
-                parentRect.setSize(QSize(width, 120));
+                parentRect.setSize(QSize(thumbnailWidth, 120));
                 parentRect.translate(0, fontHeight);
                 return parentRect;
             }
             case 1:
             {
                 QRect itemNameRect = parentRect;
-                itemNameRect.setSize(QSize(width - (10 * numericFontWidth + 22), fontHeight));
+                itemNameRect.setSize(QSize(thumbnailWidth - (10 * numericFontWidth + 22), fontHeight));
                 itemNameRect.moveLeft(parentRect.left() + 3*numericFontWidth + 2);
                 return itemNameRect;
             }
@@ -122,7 +124,8 @@ QRect StoryboardView::visualRect(const QModelIndex &index) const
             {
                 QRect secondRect = parentRect;
                 secondRect.setSize(QSize(4 * numericFontWidth + 10, fontHeight));
-                secondRect.moveRight(parentRect.right() - 3*numericFontWidth -10);
+                //secondRect.moveRight(parentRect.right() - 3*numericFontWidth -10);
+                secondRect.moveLeft(parentRect.left() - 7*numericFontWidth + thumbnailWidth -20);
                 return secondRect;
             }
             case 3:
@@ -130,15 +133,30 @@ QRect StoryboardView::visualRect(const QModelIndex &index) const
                 QRect frameRect = parentRect;
                 frameRect.setSize(QSize(3 * numericFontWidth + 10, fontHeight));
                 frameRect.moveRight(parentRect.right());
+                frameRect.moveLeft(parentRect.left() - 3*numericFontWidth + thumbnailWidth - 10);
                 return frameRect;
             }
             default:
             {
                 //comment rect
-                const StoryboardModel* Model = dynamic_cast<const StoryboardModel*>(model());
-                parentRect.setTop(parentRect.top() + 120 + fontHeight + Model->visibleCommentsUpto(index) * 100);
-                parentRect.setHeight(100);
-                return parentRect;
+                if (m_itemOrientation == Qt::Vertical){
+                    const StoryboardModel* Model = dynamic_cast<const StoryboardModel*>(model());
+                    parentRect.setTop(parentRect.top() + 120 + fontHeight + Model->visibleCommentsUpto(index) * 100);
+                    parentRect.setHeight(100);
+                    return parentRect;
+                }
+                else {
+                    const StoryboardModel* Model = dynamic_cast<const StoryboardModel*>(model());
+                    //TODO: dynamically set commentrect's size
+                    int numVisibleComments = Model->visibleCommentCount();
+                    int commentWidth = 200;
+                    if (numVisibleComments){
+                        commentWidth = qMax(200, (viewport()->width() - 250) / numVisibleComments);
+                    }
+                    parentRect.setSize(QSize(commentWidth, 120 + fontHeight));
+                    parentRect.moveLeft(parentRect.left() + thumbnailWidth + Model->visibleCommentsUpto(index) * commentWidth);
+                    return parentRect;
+                }
             }
         }
     }
@@ -168,3 +186,14 @@ void StoryboardView::mouseMoveEvent(QMouseEvent *event)
 
     m_hoverIndex = indexAt(event->pos());
 }
+
+void StoryboardView::setItemOrientation(Qt::Orientation orientation)
+{
+    m_itemOrientation = orientation;
+}
+
+Qt::Orientation StoryboardView::itemOrientation()
+{
+    return m_itemOrientation;
+}
+

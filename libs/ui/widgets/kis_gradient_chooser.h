@@ -41,7 +41,7 @@ class KisCustomGradientDialog : public KoDialog
 
 public:
 
-    KisCustomGradientDialog(KoAbstractGradient* gradient, QWidget *parent, const char *name, KoColor fgColor, KoColor bgColor);
+    KisCustomGradientDialog(KoAbstractGradient* gradient, QWidget *parent, const char *name, const KoColor &fgColor, const KoColor &bgColor);
 
 private:
 

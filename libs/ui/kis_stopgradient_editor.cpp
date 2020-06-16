@@ -76,7 +76,7 @@ KisStopGradientEditor::KisStopGradientEditor(QWidget *parent)
 }
 
 KisStopGradientEditor::KisStopGradientEditor(KoStopGradient* gradient, QWidget *parent, const char* name, const QString& caption, 
-      KoColor fgColor, KoColor bgColor)
+      const KoColor &fgColor, const KoColor &bgColor)
     : KisStopGradientEditor(parent)
 {
     m_fgColor = fgColor;
@@ -140,7 +140,6 @@ void KisStopGradientEditor::stopChanged(int stop)
     if (hasStopSelected) {
         KoColor color;
         KoGradientStopType type = m_gradient->stops()[stop].type;
-        qDebug() << "GradientEditor::stopChanged: stop " << stop << " type: " << type;
         if (type == FOREGROUNDSTOP) {
             foregroundRadioButton->setChecked(true);
             color = m_fgColor;
@@ -205,7 +204,6 @@ void KisStopGradientEditor::colorChanged(const KoColor& color)
     
     stops.removeAt(currentStop);
     stops.insert(currentStop, KoGradientStop(t, c, type));
-    qDebug() << "GradientEditor::colorChanged: stop " << currentStop << " type: " << stops[currentStop].type;
     m_gradient->setStops(stops);
     gradientSlider->update();
 
@@ -228,7 +226,6 @@ void KisStopGradientEditor::opacityChanged(qreal value)
 
     stops.removeAt(currentStop);
     stops.insert(currentStop, KoGradientStop(t, c, type));
-    qDebug() << "GradientEditor::opacityChanged: stop " << currentStop << " type: " << stops[currentStop].type;
     m_gradient->setStops(stops);
     gradientSlider->update();
 

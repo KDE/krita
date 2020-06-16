@@ -35,19 +35,48 @@ enum KoGradientStopType
     BACKGROUNDSTOP
 };
 
-struct KoGradientStop {
+struct KoGradientStop : public boost::equality_comparable<KoGradientStop>
+{
     KoGradientStopType type;
     KoColor color;
     qreal position;
 
-    KoGradientStop(qreal _position = 0.0, KoColor _color = KoColor(), KoGradientStopType _type = COLORSTOP) {
+    KoGradientStop(qreal _position = 0.0, KoColor _color = KoColor(), KoGradientStopType _type = COLORSTOP) 
+    {
         type = _type;
         color = _color;
         position = _position;
     }
 
-    bool operator == (const KoGradientStop& other) { 
+    bool operator == (const KoGradientStop& other) 
+    { 
         return this->type == other.type && this->color == other.color && this->position == other.position;
+    }
+
+
+
+    QString typeString() const 
+    {
+        switch (type) {
+        case COLORSTOP:
+            return "color-stop";
+        case FOREGROUNDSTOP:
+            return "foreground-stop";
+        case BACKGROUNDSTOP:
+            return "background-stop";
+        default:
+            return "color-stop";
+        }
+    }
+
+    static KoGradientStopType typeFromString(QString typestring) {
+        if (typestring == "foreground-stop") {
+            return FOREGROUNDSTOP;
+        } else if (typestring == "background-stop") {
+            return BACKGROUNDSTOP;
+        } else {
+            return COLORSTOP;
+        }
     }
 };
 

@@ -109,9 +109,19 @@ QVariant StoryboardModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
 
-    if (role == Qt::DisplayRole || role == Qt::EditRole)
+    if (role == Qt::DisplayRole || role == Qt::EditRole || role == Qt::UserRole)
     {
         StoryboardChild *child = static_cast<StoryboardChild*>(index.internalPointer());
+        if (index.row() > 3){
+            if (role == Qt::UserRole){         //scroll bar position
+                CommentBox commentBox = qvariant_cast<CommentBox>(child->data());
+                return commentBox.scrollValue;
+            }
+            else {
+                CommentBox commentBox = qvariant_cast<CommentBox>(child->data());
+                return commentBox.content;
+            }
+        }
         return child->data();
     }
     return QVariant();
@@ -132,12 +142,29 @@ bool StoryboardModel::setData(const QModelIndex & index, const QVariant & value,
                 setData(secondIndex, secondIndex.data().toInt() + value.toInt() / fps, role);
                 child->setData(value.toInt() % fps);
             }
+            else if (index.row() > 3){
+                CommentBox commentBox = qvariant_cast<CommentBox>(child->data());
+                commentBox.content = value.toString();
+                child->setData(QVariant::fromValue<CommentBox>(commentBox));
+            }
             else {
                 child->setData(value);
             }
             emit dataChanged(index, index);
             return true;
         }
+    }
+    return false;
+}
+
+bool StoryboardModel::setCommentScrollData(const QModelIndex & index, const QVariant & value)
+{
+    StoryboardChild *child = static_cast<StoryboardChild*>(index.internalPointer());
+    if (child){
+        CommentBox commentBox = qvariant_cast<CommentBox>(child->data());
+        commentBox.scrollValue = value.toInt();
+        child->setData(QVariant::fromValue<CommentBox>(commentBox));
+        return true;
     }
     return false;
 }

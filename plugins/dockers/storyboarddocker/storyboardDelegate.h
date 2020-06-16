@@ -26,6 +26,7 @@ class StoryboardModel;
 
 class StoryboardDelegate : public QStyledItemDelegate
 {
+    Q_OBJECT
 public:
     StoryboardDelegate(QObject *parent);
     ~StoryboardDelegate() override;
@@ -46,13 +47,22 @@ public:
 
     void setView(QListView *view);
     void drawSpinBox(QPainter *p, const QStyleOptionViewItem &option, QString data) const;
-    void drawComment(QPainter *p, const QStyleOptionViewItem &option, QString data, const QModelIndex &index) const;
+    QStyleOptionSlider drawComment(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
     QRect spinBoxUpButton(const QStyleOptionViewItem &option);
     QRect spinBoxDownButton(const QStyleOptionViewItem &option);
     QRect spinBoxEditField(const QStyleOptionViewItem &option);
+
+    QRect scrollBar(const QStyleOptionViewItem &option, QStyleOptionSlider &scrollBarOption) const;
+    QRect scrollDownButton(const QStyleOptionViewItem &option, QStyleOptionSlider &scrollBarOption);
+    QRect scrollUpButton(const QStyleOptionViewItem &option, QStyleOptionSlider &scrollBarOption);
+
+private Q_SLOTS:
+    void slotCommentScrolledTo(int value) const;
+
 private:
     QListView *m_view;
+    QPoint m_lastDragPos = QPoint(0, 0);
 };
 
 #endif

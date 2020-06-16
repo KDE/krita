@@ -40,9 +40,9 @@ StoryboardView::StoryboardView(QWidget *parent)
     setUniformItemSizes(true);
     setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     QWidget::setMouseTracking(true);
-    viewport()->setAttribute( Qt::WA_Hover );
+
     //make drag and drop work as expected
-    /* 
+/*
     setDragEnabled(true);
     setAcceptDrops(true);
     setDropIndicatorShown(true);
@@ -80,6 +80,8 @@ void StoryboardView::paintEvent(QPaintEvent *event)
             if (childIndex == m_hoverIndex){
                 option.state |= QStyle::State_MouseOver;
             }
+            option.font = font();
+            option.fontMetrics = fontMetrics();
             option.rect = visualRect(childIndex);
             itemDelegate()->paint(&painter, option, childIndex);
         }

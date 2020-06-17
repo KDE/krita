@@ -1,0 +1,9 @@
+{
+    "Id": "WGColorSelector",
+    "Type": "Service",
+    "X-KDE-Library": "kritawgcolorselector",
+    "X-KDE-ServiceTypes": [
+        "Krita/Dock"
+    ],
+    "X-Krita-Version": "28"
+}

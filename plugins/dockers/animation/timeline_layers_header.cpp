@@ -286,6 +286,7 @@ void TimelineLayersHeader::mousePressEvent(QMouseEvent *e)
         if (pinArea.contains(e->pos())) {
             const bool isPinned = model()->headerData(layerIndex, orientation(), TimelineFramesModel::PinnedToTimelineRole).toBool();
             model()->setHeaderData(layerIndex, orientation(), !isPinned, TimelineFramesModel::PinnedToTimelineRole);
+            return;
         }
 
         // Handle property click..

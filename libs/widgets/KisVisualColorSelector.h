@@ -35,6 +35,7 @@ public:
     explicit KisVisualColorSelector(QWidget *parent = 0);
     ~KisVisualColorSelector() override;
 
+    QSize minimumSizeHint() const override;
     /**
      * @brief setConfig
      * @param forceCircular

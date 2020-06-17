@@ -9,7 +9,6 @@
 #include <QVector>
 #include <QVector3D>
 #include <QVector4D>
-#include <QVBoxLayout>
 #include <QList>
 #include <QtMath>
 
@@ -68,6 +67,11 @@ KisVisualColorSelector::KisVisualColorSelector(QWidget *parent)
 KisVisualColorSelector::~KisVisualColorSelector()
 {
     delete m_d->updateTimer;
+}
+
+QSize KisVisualColorSelector::minimumSizeHint() const
+{
+    return QSize(75, 75);
 }
 
 void KisVisualColorSelector::slotSetColor(const KoColor &c)
@@ -358,8 +362,6 @@ void KisVisualColorSelector::slotRebuildSelectors()
 
     qDeleteAll(children());
     m_d->widgetlist.clear();
-    // TODO: Layout only used for monochrome selector currently, but always present
-    QLayout *layout = new QHBoxLayout(this);
     //recreate all the widgets.
     m_d->model = KisVisualColorSelector::Channel;
 
@@ -369,16 +371,12 @@ void KisVisualColorSelector::slotRebuildSelectors()
 
         if (m_d->circular==false) {
             bar = new KisVisualRectangleSelectorShape(this, KisVisualColorSelectorShape::onedimensional, m_d->currentCS, 0, 0,m_d->displayRenderer, 20);
-            bar->setMaximumWidth(width()*0.1);
-            bar->setMaximumHeight(height());
         }
         else {
             bar = new KisVisualEllipticalSelectorShape(this, KisVisualColorSelectorShape::onedimensional, m_d->currentCS, 0, 0,m_d->displayRenderer, 20, KisVisualEllipticalSelectorShape::borderMirrored);
-            layout->setMargin(0);
         }
 
         connect(bar, SIGNAL(sigCursorMoved(QPointF)), SLOT(slotCursorMoved(QPointF)));
-        layout->addWidget(bar);
         m_d->widgetlist.append(bar);
     }
     else if (m_d->currentCS->colorChannelCount() == 3) {
@@ -615,7 +613,19 @@ void KisVisualColorSelector::resizeEvent(QResizeEvent *) {
     if (!m_d->currentCS) {
         slotSetColorSpace(m_d->currentcolor.colorSpace());
     }
-    if (m_d->currentCS->colorChannelCount()==3) {
+    if (m_d->currentCS->colorChannelCount() == 1) {
+        if (m_d->circular) {
+            m_d->widgetlist.at(0)->resize(sizeValue, sizeValue);
+        }
+        else {
+            // vertical only currently
+            int sliderWidth = qMax(height()/10, 20);
+            sliderWidth = qMin(sliderWidth, width());
+            int x = (width() - sliderWidth)/2;
+            m_d->widgetlist.at(0)->setGeometry(x, 0, sliderWidth, height());
+        }
+    }
+    else if (m_d->currentCS->colorChannelCount() == 3) {
         // set border width first, else the resized painting may have happened already, and we'd have to re-render
         m_d->widgetlist.at(0)->setBorderWidth(borderWidth);
         if (m_d->acs_config.subType == KisColorSelectorConfiguration::Ring) {

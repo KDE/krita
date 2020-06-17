@@ -1,4 +1,6 @@
-if(LIBMYPAINT_FOUND)   
+add_subdirectory(tests)
+
+if(LIBMYPAINT_FOUND)
     include_directories(${LIBMYPAINT_INCLUDE_DIR})
     link_directories(${LIBMYPAINT_LIBRARIES})
 endif()
@@ -25,5 +27,3 @@ install(TARGETS kritamypaintop  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  krita-mypaint.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)
-
-

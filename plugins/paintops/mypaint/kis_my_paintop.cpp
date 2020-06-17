@@ -66,7 +66,7 @@ KisSpacingInformation KisMyPaintOp::paintAt(const KisPaintInformation& info) {
 
 KisSpacingInformation KisMyPaintOp::updateSpacingImpl(const KisPaintInformation &info) const
 {
-    KisSpacingInformation spacingInfo = computeSpacing(info, KisLodTransform::lodToScale(painter()->device()));
+    KisSpacingInformation spacingInfo = computeSpacing(info, m_radius*KisLodTransform::lodToScale(painter()->device()));
     return spacingInfo;
 }
 

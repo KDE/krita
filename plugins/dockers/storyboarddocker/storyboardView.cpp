@@ -44,12 +44,10 @@ StoryboardView::StoryboardView(QWidget *parent)
     QWidget::setMouseTracking(true);
 
     //make drag and drop work as expected
-/*
     setDragEnabled(true);
-    setAcceptDrops(true);
+    viewport()->setAcceptDrops(true);
     setDropIndicatorShown(true);
     setDragDropMode(QAbstractItemView::InternalMove);
-*/
 }
 
 StoryboardView::~StoryboardView()

@@ -188,7 +188,7 @@ StoryboardDockerDock::StoryboardDockerDock( )
     m_storyboardModel->insertRows(0, 10);
     m_storyboardModel->setCommentModel(m_commentModel);
 
-    m_modeGroup->button(0)->click();
+    m_modeGroup->button(2)->click();
     m_viewGroup->button(0)->click();
 }
 

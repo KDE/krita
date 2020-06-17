@@ -27,6 +27,7 @@
 #include "kis_paintop_option.h"
 #include "kis_pressure_texture_strength_option.h"
 #include <resources/KoAbstractGradient.h>
+#include <resources/KoCachedGradient.h>
 
 #include "KisTextureMaskInfo.h"
 
@@ -90,6 +91,8 @@ public:
 private:
 
     void createQColorFromPixel(QColor& dest, const quint8* pixel, const KoColorSpace *cs);
+    void applyLightness(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation& info);
+    void applyGradient(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation& info);
 
 private:
 
@@ -97,6 +100,8 @@ private:
     int m_offsetY;
     TexturingMode m_texturingMode;
     const KoAbstractGradient* m_gradient;
+    KoCachedGradient m_cachedGradient;
+    bool m_useCachedGradient = true;
 
     int m_levelOfDetail;
 

@@ -72,8 +72,8 @@ QRect KisVisualRectangleSelectorShape::getSpaceForTriangle(QRect geom)
 QPointF KisVisualRectangleSelectorShape::convertShapeCoordinateToWidgetCoordinate(QPointF coordinate) const
 {
     // Reminder: in Qt widget space, origin is top-left, but we want zero y to be at the bottom
-    qreal x = 0.5 * m_barWidth;
-    qreal y = 0.5 * m_barWidth;
+    qreal x = 0.5 * width();
+    qreal y = 0.5 * height();
     qreal offset = 5.0;
     KisVisualColorSelectorShape::Dimensions dimension = getDimensions();
     if (dimension == KisVisualColorSelectorShape::onedimensional) {
@@ -293,37 +293,33 @@ void KisVisualRectangleSelectorShape::drawCursor()
     QPainter painter;
     painter.begin(&fullSelector);
     painter.setRenderHint(QPainter::Antialiasing);
-    //QPainterPath path;
     QBrush fill;
     fill.setStyle(Qt::SolidPattern);
 
     int cursorwidth = 5;
-    QRect rect(cursorPoint.toPoint().x()-cursorwidth,cursorPoint.toPoint().y()-cursorwidth,
-               cursorwidth*2,cursorwidth*2);
-    if (m_type==KisVisualRectangleSelectorShape::vertical){
-        int x = ( cursorPoint.x()-(width()/2)+1 );
-        int y = ( cursorPoint.y()-cursorwidth );
-        rect.setCoords(x, y, x+width()-2, y+(cursorwidth*2));
-    } else {
-        int x = cursorPoint.x()-cursorwidth;
-        int y = cursorPoint.y()-(height()/2)+1;
-        rect.setCoords(x, y, x+(cursorwidth*2), y+cursorwidth-2);
-    }
-    QRectF innerRect(m_barWidth, m_barWidth, width()-(m_barWidth*2), height()-(m_barWidth*2));
-    if (getDimensions() == KisVisualColorSelectorShape::onedimensional && m_type!=KisVisualRectangleSelectorShape::border && m_type!=KisVisualRectangleSelectorShape::borderMirrored) {
+
+    if (getDimensions() == KisVisualColorSelectorShape::onedimensional
+            && m_type != KisVisualRectangleSelectorShape::border
+            && m_type != KisVisualRectangleSelectorShape::borderMirrored) {
+        QRectF rect;
+        if (m_type==KisVisualRectangleSelectorShape::vertical) {
+            qreal y = qRound(cursorPoint.y());
+            rect.setCoords(1.5, y - cursorwidth + 0.5, width() - 1.5, y + cursorwidth - 0.5);
+        } else {
+            qreal x = qRound(cursorPoint.x());
+            rect.setCoords(x - cursorwidth  + 0.5, 1.5, x + cursorwidth - 0.5, height() - 1.5);
+        }
         painter.setPen(Qt::white);
         fill.setColor(Qt::white);
         painter.setBrush(fill);
         painter.drawRect(rect);
-        //set filter conversion!
         fill.setColor(col);
         painter.setPen(Qt::black);
         painter.setBrush(fill);
-        rect.setCoords(rect.topLeft().x()+1, rect.topLeft().y()+1,
-                       rect.topLeft().x()+rect.width()-2, rect.topLeft().y()+rect.height()-2);
-        painter.drawRect(rect);
+        painter.drawRect(rect.adjusted(1, 1, -1, -1));
 
     }else if(m_type==KisVisualRectangleSelectorShape::borderMirrored){
+        QRectF innerRect(m_barWidth, m_barWidth, width()-(m_barWidth*2), height()-(m_barWidth*2));
         painter.setPen(Qt::white);
         fill.setColor(Qt::white);
         painter.setBrush(fill);

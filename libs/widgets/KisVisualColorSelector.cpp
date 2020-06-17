@@ -17,17 +17,12 @@
  */
 #include "KisVisualColorSelector.h"
 
-#include <QColor>
-#include <QPixmap>
-#include <QPainter>
-#include <QPainterPath>
 #include <QRect>
 #include <QVector>
 #include <QVector3D>
 #include <QVector4D>
 #include <QVBoxLayout>
 #include <QList>
-#include <QPolygon>
 #include <QtMath>
 
 #include <KSharedConfig>

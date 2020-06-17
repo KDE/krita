@@ -18,15 +18,13 @@
 #include "KisVisualColorSelectorShape.h"
 
 #include <QColor>
-#include <QPixmap>
+#include <QImage>
 #include <QPainter>
-#include <QPainterPath>
 #include <QRect>
 #include <QVector>
 #include <QVector4D>
 #include <QVBoxLayout>
 #include <QList>
-#include <QPolygon>
 #include <QtMath>
 
 #include <KSharedConfig>
@@ -38,7 +36,6 @@
 #include <KoColorModelStandardIds.h>
 #include <QPointer>
 
-#include "kis_signal_compressor.h"
 #include "kis_debug.h"
 
 struct KisVisualColorSelectorShape::Private

@@ -116,15 +116,45 @@ if [ -n "$STRIP_APPIMAGE" ]; then
     rm -f $TEMPFILE
 fi
 
+# GStreamer + QTMultimedia Support
+
+export GSTREAMER_TARGET=$APPDIR/usr/lib/gstreamer-1.0
+
+# First, lets get the GSTREAMER plugins installed.
+# For now, I'm just going to install all plugins. Once it's working, I'll start picking individual libs that Krita actually needs.
+mkdir -p $GSTREAMER_TARGET
+install -Dm 755 /usr/lib/x86_64-linux-gnu/gstreamer-1.0/*.so $GSTREAMER_TARGET/
+install -Dm 755 /usr/lib/x86_64-linux-gnu/gstreamer1.0/gstreamer-1.0/gst-plugin-scanner $GSTREAMER_TARGET/gst-plugin-scanner
+install -Dm 755 /usr/lib/x86_64-linux-gnu/libgstreamer-1.0.so $APPDIR/usr/lib/
+
+GSTREAMER_BINARIES="-executable=${GSTREAMER_TARGET}/gst-plugin-scanner -executable=${APPDIR}/usr/lib/libgstreamer-1.0.so"
+for plugin in alsa app audioconvert audioparsers audioresample autodetect \
+              coreelements id3demux jack mpg123 mulaw playback pulse \
+              typefindfunctions wavparse; do
+	GSTREAMER_BINARIES="${GSTREAMER_BINARIES} -executable=${GSTREAMER_TARGET}/libgst${plugin}.so"
+done
+
+# Second, we need the mediaservice QT plugins to be installed.
+
+mkdir -p $APPDIR/usr/plugins/mediaservice
+install -Dm 755 $DEPS_INSTALL_PREFIX/plugins/mediaservice/*.so $APPDIR/usr/plugins/mediaservice/
+QT_MEDIA_SERVICES=""
+for plugin in audiodecoder mediaplayer mediacapture; do
+     QT_MEDIA_SERVICES="${QT_MEDIA_SERVICES} -executable=${APPDIR}/usr/plugins/mediaservice/libgst${plugin}.so"
+done
+
 # Step 4: Build the image!!!
 linuxdeployqt $APPDIR/usr/share/applications/org.kde.krita.desktop \
-  -executable=$APPDIR/usr/bin/krita \
-  -qmldir=$DEPS_INSTALL_PREFIX/qml \
-  -verbose=2 \
-  -bundle-non-qt-libs \
-  -extra-plugins=$PLUGINS,$APPDIR/usr/lib/krita-python-libs/PyKrita/krita.so,$APPDIR/usr/lib//qml/org/krita/sketch/libkritasketchplugin.so,$APPDIR/usr/lib/qml/org/krita/draganddrop/libdraganddropplugin.so  \
-  -appimage 
-  
+ -executable=$APPDIR/usr/bin/krita \
+ $GSTREAMER_BINARIES \
+ $QT_MEDIA_SERVICES \
+ -qmldir=$DEPS_INSTALL_PREFIX/qml \
+ -verbose=2 \
+ -bundle-non-qt-libs \
+ -extra-plugins=mediaservice,$PLUGINS,$APPDIR/usr/lib/krita-python-libs/PyKrita/krita.so,$APPDIR/usr/lib//qml/org/krita/sketch/libkritasketchplugin.so,$APPDIR/usr/lib/qml/org/krita/draganddrop/libdraganddropplugin.so  \
+
+appimagetool $APPDIR
+
 # Generate a new name for the Appimage file and rename it accordingly
 APPIMAGE=krita-"$VERSION"-x86_64.appimage
 

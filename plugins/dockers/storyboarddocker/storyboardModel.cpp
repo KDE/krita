@@ -19,6 +19,7 @@
 #include "storyboardModel.h"
 
 #include <QDebug>
+#include <QMimeData>
 
 #include <kis_icon.h>
 
@@ -254,9 +255,8 @@ bool StoryboardModel::moveRows(const QModelIndex &sourceParent, int sourceRow, i
     else {
         beginMoveRows(sourceParent, sourceRow, sourceRow + count - 1, destinationParent, destinationChild);
     }
-
-    //only implementing for moves within the 1st level nodes for comment nodes
-    if (sourceParent == destinationParent && !sourceParent.parent().isValid()){
+    //for moves within the 1st level nodes for comment nodes
+    if (sourceParent == destinationParent && sourceParent.isValid() && !sourceParent.parent().isValid()){
         const QModelIndex parent = sourceParent;
         for (int row = 0; row < count; row++){
             if (sourceRow < 4 || sourceRow >= rowCount(parent)) return false;
@@ -268,9 +268,66 @@ bool StoryboardModel::moveRows(const QModelIndex &sourceParent, int sourceRow, i
         endMoveRows();
         return true;
     }
+    else if (!sourceParent.isValid()){                  //for moves of 1st level nodes
+        for (int row = 0; row < count; row++){
+            if (sourceRow < 0 || sourceRow >= rowCount()) return false;
+            if (destinationChild + row < 0 || destinationChild + row >= rowCount()) return false;
+
+            m_items.move(sourceRow, destinationChild + row);
+        }
+        endMoveRows();
+        return true;
+    }
     else {
         return false;
     }
+}
+
+QMimeData *StoryboardModel::mimeData(const QModelIndexList &indexes) const
+{
+    QMimeData *mimeData = new QMimeData();
+    QByteArray encodeData;
+
+    QDataStream stream(&encodeData, QIODevice::WriteOnly);
+
+    //take the row number of the index where drag started
+    foreach (QModelIndex index, indexes){
+        if (index.isValid()) {
+            int row = index.row();
+            stream << row;
+        }
+    }
+
+    mimeData->setData("application/x-qabstractitemmodeldatalist", encodeData); //default mimetype
+    return mimeData;
+}
+
+bool StoryboardModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
+                                int row, int column, const QModelIndex &parent)
+{
+    if (action == Qt::IgnoreAction)
+        return false;
+
+    if (action == Qt::MoveAction && data->hasFormat("application/x-qabstractitemmodeldatalist")){
+        QByteArray bytes = data->data("application/x-qabstractitemmodeldatalist");
+        QDataStream stream(&bytes, QIODevice::ReadOnly);
+
+        if (parent.isValid()){
+            return false;
+        }
+        int sourceRow;
+        QModelIndexList moveRowIndexes;
+        while (!stream.atEnd()) {
+            stream >> sourceRow;
+            QModelIndex index = createIndex(sourceRow, 0);
+            moveRowIndexes.append(index);
+        }
+        moveRows(QModelIndex(), moveRowIndexes.at(0).row(), moveRowIndexes.count(), parent, row);
+
+        //returning true deletes the source row
+        return false;
+    }
+    return false;
 }
 
 Qt::DropActions StoryboardModel::supportedDropActions() const
@@ -317,11 +374,6 @@ void StoryboardModel::setCommentModel(CommentModel *commentModel)
                 this, SLOT(slotCommentRowInserted(const QModelIndex, int, int)));
     connect(m_commentModel, SIGNAL(rowsMoved(const QModelIndex, int, int, const QModelIndex, int)),
                 this, SLOT(slotCommentRowMoved(const QModelIndex, int, int, const QModelIndex, int)));
-}
-
-void StoryboardModel::optionsChanged()
-{
-    emit(layoutChanged());
 }
 
 Comment StoryboardModel::getComment(int row) const

@@ -63,7 +63,6 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
     bool setCommentScrollData(const QModelIndex & index, const QVariant & value);
-    //QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;
     
     //for removing and inserting rows
@@ -73,14 +72,15 @@ public:
                     const QModelIndex &destinationParent, int destinationChild);
 
     //for drag and drop
+    QMimeData *mimeData(const QModelIndexList &indexes) const;
+    bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
     Qt::DropActions supportedDropActions() const override;
     Qt::DropActions supportedDragActions() const override;
 
-    //this function accesses the value from the comment model
+    //these function access the value from the comment model
     int visibleCommentCount() const;
     int visibleCommentsUpto(QModelIndex index) const;
     void setCommentModel(CommentModel *commentModel);
-    void optionsChanged();
     Comment getComment(int row) const;
 
 private Q_SLOTS:

@@ -178,9 +178,6 @@ StoryboardDockerDock::StoryboardDockerDock( )
     connect(m_modeGroup, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(slotModeChanged(QAbstractButton*)));
     connect(m_viewGroup, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(slotViewChanged(QAbstractButton*)));
 
-    m_modeGroup->button(0)->click();
-    m_viewGroup->button(0)->click();
-
     m_storyboardModel = new StoryboardModel(this);
     StoryboardDelegate *delegate = new StoryboardDelegate(this);
     delegate->setView(m_ui->listView);
@@ -190,6 +187,9 @@ StoryboardDockerDock::StoryboardDockerDock( )
 
     m_storyboardModel->insertRows(0, 10);
     m_storyboardModel->setCommentModel(m_commentModel);
+
+    m_modeGroup->button(0)->click();
+    m_viewGroup->button(0)->click();
 }
 
 StoryboardDockerDock::~StoryboardDockerDock()
@@ -232,29 +232,48 @@ void StoryboardDockerDock::slotLockClicked(bool isLocked){
 
 void StoryboardDockerDock::slotModeChanged(QAbstractButton* button)
 {
-    qDebug()<<"Mode changed to "<<button->text();
     QString mode = button->text();
     if (mode == "Column"){
         m_ui->listView->setFlow(QListView::LeftToRight);
         m_ui->listView->setWrapping(false);
         m_ui->listView->setItemOrientation(Qt::Vertical);
+        m_viewGroup->button(2)->setEnabled(true);
     }
     else if (mode == "Row"){
         m_ui->listView->setFlow(QListView::TopToBottom);
         m_ui->listView->setWrapping(false);
-        //TO DO: change item orientation.
         m_ui->listView->setItemOrientation(Qt::Horizontal);
+        m_viewGroup->button(2)->setEnabled(false);           //disable the comments only view
     }
     else if (mode == "Grid"){
         m_ui->listView->setFlow(QListView::LeftToRight);
         m_ui->listView->setWrapping(true);
         m_ui->listView->setItemOrientation(Qt::Vertical);
+        m_viewGroup->button(2)->setEnabled(true);
     }
+    m_storyboardModel->layoutChanged();
 }
 
 void StoryboardDockerDock::slotViewChanged(QAbstractButton* button)
 {
-    qDebug()<<"View changed to "<<button->text();
+    QString view = button->text();
+    if (view == "All"){
+        m_ui->listView->setCommentVisibility(true);
+        m_ui->listView->setThumbnailVisibility(true);
+        m_modeGroup->button(1)->setEnabled(true);
+    }
+    else if (view == "Thumbnails Only"){
+        m_ui->listView->setCommentVisibility(false);
+        m_ui->listView->setThumbnailVisibility(true);
+        m_modeGroup->button(1)->setEnabled(true);
+    }
+
+    else if (view == "Comments Only"){
+        m_ui->listView->setCommentVisibility(true);
+        m_ui->listView->setThumbnailVisibility(false);
+        m_modeGroup->button(1)->setEnabled(false);               //disable the row mode
+    }
+    m_storyboardModel->layoutChanged();
 }
 
 #include "storyboarddocker_dock.moc"

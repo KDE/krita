@@ -319,6 +319,11 @@ void StoryboardModel::setCommentModel(CommentModel *commentModel)
                 this, SLOT(slotCommentRowMoved(const QModelIndex, int, int, const QModelIndex, int)));
 }
 
+void StoryboardModel::optionsChanged()
+{
+    emit(layoutChanged());
+}
+
 Comment StoryboardModel::getComment(int row) const
 {
     return m_commentList.at(row);

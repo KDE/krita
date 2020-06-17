@@ -76,11 +76,11 @@ public:
     Qt::DropActions supportedDropActions() const override;
     Qt::DropActions supportedDragActions() const override;
 
-
     //this function accesses the value from the comment model
     int visibleCommentCount() const;
     int visibleCommentsUpto(QModelIndex index) const;
     void setCommentModel(CommentModel *commentModel);
+    void optionsChanged();
     Comment getComment(int row) const;
 
 private Q_SLOTS:

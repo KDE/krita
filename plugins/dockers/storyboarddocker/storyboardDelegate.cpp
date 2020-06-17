@@ -82,36 +82,44 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
             {
                 case 0:
                 {
-                    QRect frameNumRect = option.rect;
-                    frameNumRect.setHeight(m_view->fontMetrics().height()+3);
-                    frameNumRect.setWidth(3 * m_view->fontMetrics().width("0")+2);
-                    frameNumRect.moveBottom(option.rect.top()-1);
-                    p->setPen(QPen(option.palette.dark(), 2));
-                    p->drawRect(frameNumRect);
-                    p->setPen(QPen(option.palette.text(), 1));
-                    p->drawText(frameNumRect, Qt::AlignHCenter | Qt::AlignVCenter, data);
+                    if (m_view->thumbnailIsVisible()){
+                        QRect frameNumRect = option.rect;
+                        frameNumRect.setHeight(m_view->fontMetrics().height()+3);
+                        frameNumRect.setWidth(3 * m_view->fontMetrics().width("0")+2);
+                        frameNumRect.moveBottom(option.rect.top()-1);
+                        p->setPen(QPen(option.palette.dark(), 2));
+                        p->drawRect(frameNumRect);
+                        p->setPen(QPen(option.palette.text(), 1));
+                        p->drawText(frameNumRect, Qt::AlignHCenter | Qt::AlignVCenter, data);
 
-                    QIcon icon = KisIconUtils::loadIcon("krita-base");
+                        QIcon icon = KisIconUtils::loadIcon("krita-base");
+                        QRect thumbnailRect = option.rect;
+                        //TO DO make thumbnail keep aspect ratio
+                        icon.paint(p, option.rect);
+                        p->setPen(QPen(option.palette.dark(), 2));
+                        p->drawRect(option.rect);
 
-                    QRect thumbnailRect = option.rect;
-                    //TO DO make thumbnail keep aspect ratio
-                    icon.paint(p, option.rect);
-                    p->setPen(QPen(option.palette.dark(), 2));
-                    p->drawRect(option.rect);
+                        if (option.state & QStyle::State_MouseOver){
+                            QRect buttonsRect = option.rect;
+                            buttonsRect.setTop(option.rect.bottom() - 22);
+                            p->fillRect(buttonsRect, option.palette.background());
 
-                    if (option.state & QStyle::State_MouseOver){
-                        QRect buttonsRect = option.rect;
-                        buttonsRect.setTop(option.rect.bottom() - 22);
-                        p->fillRect(buttonsRect, option.palette.background());
+                            buttonsRect.setWidth(22);
+                            buttonsRect.moveBottomLeft(option.rect.bottomLeft());
+                            QIcon addIcon = KisIconUtils::loadIcon("list-add");
+                            addIcon.paint(p, buttonsRect);
 
-                        buttonsRect.setWidth(22);
-                        buttonsRect.moveBottomLeft(option.rect.bottomLeft());
-                        QIcon addIcon = KisIconUtils::loadIcon("list-add");
-                        addIcon.paint(p, buttonsRect);
-
-                        buttonsRect.moveBottomRight(option.rect.bottomRight());
-                        QIcon deleteIcon = KisIconUtils::loadIcon("trash-empty");
-                        deleteIcon.paint(p, buttonsRect);
+                            buttonsRect.moveBottomRight(option.rect.bottomRight());
+                            QIcon deleteIcon = KisIconUtils::loadIcon("trash-empty");
+                            deleteIcon.paint(p, buttonsRect);
+                        }
+                    }
+                    else {
+                        QRect frameNumRect = option.rect;
+                        p->setPen(QPen(option.palette.dark(), 2));
+                        p->drawRect(frameNumRect);
+                        p->setPen(QPen(option.palette.text(), 1));
+                        p->drawText(frameNumRect, Qt::AlignHCenter | Qt::AlignVCenter, data);
                     }
                     break;
                 }
@@ -134,7 +142,7 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
                 default:
                 {
                     const StoryboardModel* model = dynamic_cast<const StoryboardModel*>(index.model());
-                    if (model->getComment(index.row() - 4).visibility){
+                    if (m_view->commentIsVisible() && model->getComment(index.row() - 4).visibility){
                         p->setPen(QPen(option.palette.dark(), 2));
                         drawComment(p, option, index);
                     }
@@ -218,14 +226,14 @@ QStyleOptionSlider StoryboardDelegate::drawComment(QPainter *p, const QStyleOpti
     scrollbarOption.orientation = Qt::Vertical;
 
     QRect scrollRect = option.rect;
-    scrollRect.setTop(option.rect.top() + option.fontMetrics.height() + 3);
-    scrollRect.setLeft(option.rect.right()-15);
+    scrollRect.setSize(QSize(15, option.rect.height() - option.fontMetrics.height() - 3));
+    scrollRect.moveTopLeft(QPoint(0, 0));
     scrollbarOption.rect = scrollRect;
 
     if (p){
         p->save();
         p->setPen(QPen(option.palette.dark(), 2));
-        p->translate(scrollRect.topLeft());
+        p->translate(QPoint( option.rect.right()-15, option.rect.top() + option.fontMetrics.height() + 3));
         style->drawComplexControl(QStyle::CC_ScrollBar, &scrollbarOption, p, option.widget);
         p->restore();
     }
@@ -237,20 +245,23 @@ QSize StoryboardDelegate::sizeHint(const QStyleOptionViewItem &option,
 {
     if (!index.parent().isValid()){
         if (m_view->itemOrientation() == Qt::Vertical){
-            int width = m_view->viewport()->width();
+            int width = option.widget->width() - 17;
             const StoryboardModel* model = dynamic_cast<const StoryboardModel*>(index.model());
             int numComments = model->visibleCommentCount();
             int numItem = width/250;
             if(numItem <=0){
                 return QSize(0, 0);
             }
-            return QSize(width / numItem, 120 + option.fontMetrics.height() + 3 + numComments*100 + 10);
+
+            int thumbnailheight = m_view->thumbnailIsVisible() ? 120 : 0;
+            int commentHeight = m_view->commentIsVisible() ? numComments*100 : 0;
+            return QSize(width / numItem, thumbnailheight  + option.fontMetrics.height() + 3 + commentHeight + 10);
         }
         else{
             const StoryboardModel* model = dynamic_cast<const StoryboardModel*>(index.model());
             int numComments = model->visibleCommentCount();
-            int commentWidth = 200;
-            if (numComments){
+            int commentWidth = 0;
+            if (numComments && m_view->commentIsVisible()){
                 commentWidth = qMax(200, (m_view->viewport()->width() - 250) / numComments);
             }
             int width = 250 + numComments * commentWidth;

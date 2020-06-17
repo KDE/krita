@@ -45,10 +45,16 @@ public:
     void mouseMoveEvent(QMouseEvent *event) override;
     void setItemOrientation(Qt::Orientation orientation);
     Qt::Orientation itemOrientation();
+    bool commentIsVisible() const;
+    bool thumbnailIsVisible() const;
+    void setCommentVisibility(bool value);
+    void setThumbnailVisibility(bool value);
 
 private:
     QModelIndex m_hoverIndex;
     Qt::Orientation m_itemOrientation;
+    bool m_commentIsVisible;
+    bool m_thumbnailIsVisible;
 };
 
 #endif

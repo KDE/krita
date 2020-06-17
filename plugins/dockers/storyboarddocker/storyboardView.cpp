@@ -31,13 +31,16 @@
  * */
 
 StoryboardView::StoryboardView(QWidget *parent)
-    :QListView(parent)
+    : QListView(parent)
+    , m_commentIsVisible(true)
+    , m_thumbnailIsVisible(true)
 {
     setWrapping(true);
     setFlow(QListView::LeftToRight);
     setResizeMode(QListView::Adjust);
     setUniformItemSizes(true);
     setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+    setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
     QWidget::setMouseTracking(true);
 
     //make drag and drop work as expected
@@ -109,6 +112,11 @@ QRect StoryboardView::visualRect(const QModelIndex &index) const
             case 0:
             {   
                 //the frame thumbnail rect
+                if (!thumbnailIsVisible()){
+                    parentRect.setSize(QSize(3*numericFontWidth + 2, fontHeight));
+                    return parentRect;
+                }
+
                 parentRect.setSize(QSize(thumbnailWidth, 120));
                 parentRect.translate(0, fontHeight);
                 return parentRect;
@@ -139,21 +147,23 @@ QRect StoryboardView::visualRect(const QModelIndex &index) const
             default:
             {
                 //comment rect
+                if (!commentIsVisible()) return QRect();
+
+                int thumbnailheight = thumbnailIsVisible() ? 120 : 0;
                 if (m_itemOrientation == Qt::Vertical){
                     const StoryboardModel* Model = dynamic_cast<const StoryboardModel*>(model());
-                    parentRect.setTop(parentRect.top() + 120 + fontHeight + Model->visibleCommentsUpto(index) * 100);
+                    parentRect.setTop(parentRect.top() + thumbnailheight + fontHeight + Model->visibleCommentsUpto(index) * 100);
                     parentRect.setHeight(100);
                     return parentRect;
                 }
                 else {
                     const StoryboardModel* Model = dynamic_cast<const StoryboardModel*>(model());
-                    //TODO: dynamically set commentrect's size
                     int numVisibleComments = Model->visibleCommentCount();
                     int commentWidth = 200;
                     if (numVisibleComments){
                         commentWidth = qMax(200, (viewport()->width() - 250) / numVisibleComments);
                     }
-                    parentRect.setSize(QSize(commentWidth, 120 + fontHeight));
+                    parentRect.setSize(QSize(commentWidth, thumbnailheight + fontHeight));
                     parentRect.moveLeft(parentRect.left() + thumbnailWidth + Model->visibleCommentsUpto(index) * commentWidth);
                     return parentRect;
                 }
@@ -197,3 +207,22 @@ Qt::Orientation StoryboardView::itemOrientation()
     return m_itemOrientation;
 }
 
+bool StoryboardView::commentIsVisible() const
+{
+    return m_commentIsVisible;
+}
+
+bool StoryboardView::thumbnailIsVisible() const
+{
+    return m_thumbnailIsVisible;
+}
+
+void StoryboardView::setCommentVisibility(bool value)
+{
+    m_commentIsVisible = value;
+}
+
+void StoryboardView::setThumbnailVisibility(bool value)
+{
+    m_thumbnailIsVisible = value;
+}

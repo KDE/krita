@@ -13,7 +13,9 @@ if (ANDROID)
     include_directories (${Qt5AndroidExtras_INCLUDE_DIRS})
 endif()
 
-add_subdirectory( tests )
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
 
 if (APPLE)
     find_library(FOUNDATION_LIBRARY Foundation)

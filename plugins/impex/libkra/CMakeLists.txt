@@ -1,4 +1,6 @@
-add_subdirectory(tests)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
 
 set(kritalibkra_LIB_SRCS
     kis_colorize_dom_utils.cpp

@@ -1,4 +1,6 @@
-add_subdirectory(brush/tests)
+if(BUILD_TESTING)
+    add_subdirectory(brush/tests)
+endif()
 
 include_directories(brush
                     duplicate

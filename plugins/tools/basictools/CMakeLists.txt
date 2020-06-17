@@ -1,6 +1,6 @@
-if (NOT APPLE)
+if(BUILD_TESTING AND NOT APPLE)
     add_subdirectory(tests)
-endif ()
+endif()
 
 set(kritadefaulttools_SOURCES
     default_tools.cc

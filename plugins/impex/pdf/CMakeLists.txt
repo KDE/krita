@@ -1,4 +1,6 @@
-add_subdirectory(tests)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
 
 set(kritapdfimport_SOURCES kis_pdf_import.cpp kis_pdf_import_widget.cpp )
 

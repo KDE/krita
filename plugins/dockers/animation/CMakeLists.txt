@@ -1,4 +1,4 @@
-if (NOT WIN32 AND NOT APPLE)
+if(BUILD_TESTING AND NOT WIN32 AND NOT APPLE)
     add_subdirectory(tests)
 endif()
 

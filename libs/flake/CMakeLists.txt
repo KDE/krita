@@ -9,8 +9,10 @@ include_directories(
 )
 
 add_subdirectory(styles)
-add_subdirectory(tests)
-add_subdirectory(resources/tests)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+    add_subdirectory(resources/tests)
+endif()
 
 set(kritaflake_SRCS
     KoGradientHelper.cpp

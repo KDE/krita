@@ -1,4 +1,4 @@
-if (NOT MSVC AND NOT APPLE)
+if(BUILD_TESTING AND NOT MSVC AND NOT APPLE)
     add_subdirectory(tests)
 endif()
 

@@ -33,8 +33,10 @@ else()
     set(__per_arch_alpha_applicator_factory_objs KoAlphaMaskApplicatorFactoryImpl.cpp)
 endif()
 
-add_subdirectory(tests)
-add_subdirectory(benchmarks)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+    add_subdirectory(benchmarks)
+endif()
 
 set(kritapigment_SRCS
     DebugPigment.cpp

@@ -1,4 +1,6 @@
-add_subdirectory(tests)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
 
 if(OPENEXR_FOUND)
 	include_directories(${OPENEXR_INCLUDE_DIRS})

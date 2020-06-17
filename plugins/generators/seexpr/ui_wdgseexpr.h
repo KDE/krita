@@ -41,23 +41,30 @@ public:
     QVBoxLayout *rightLayout;
     ExprEditor *txtEditor;
     ExprControlCollection *wdgControls;
+    QScrollArea *scrollArea;
     QPushButton *btnUpdate;
 
     void setupUi(QWidget *WdgSeExpr)
     {
         if (WdgSeExpr->objectName().isEmpty())
             WdgSeExpr->setObjectName(QString::fromUtf8("WdgSeExpr"));
-        WdgSeExpr->resize(538, 274);
+        WdgSeExpr->resize(500, 480);
+        WdgSeExpr->setMinimumSize(500, 0);
         rightLayout = new QVBoxLayout(WdgSeExpr);
         rightLayout->setContentsMargins(0, 0, 0, 0);
         rightLayout->setObjectName(QString::fromUtf8("rightLayout"));
         wdgControls = new ExprControlCollection(WdgSeExpr);
         wdgControls->setObjectName(QString::fromUtf8("wdgControls"));
+        wdgControls->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::MinimumExpanding);
         txtEditor = new ExprEditor(WdgSeExpr, wdgControls);
         txtEditor->setObjectName(QString::fromUtf8("txtEditor"));
+        scrollArea = new QScrollArea(WdgSeExpr);
+        scrollArea->setObjectName(QString::fromUtf8("scrollArea"));
+        scrollArea->setWidgetResizable(true);
+        scrollArea->setWidget(wdgControls);
 
-        rightLayout->addWidget(wdgControls);
-        rightLayout->addWidget(txtEditor);
+        rightLayout->addWidget(scrollArea, 2);
+        rightLayout->addWidget(txtEditor, 1);
 
         btnUpdate = new QPushButton(WdgSeExpr);
         btnUpdate->setObjectName(QString::fromUtf8("btnUpdate"));

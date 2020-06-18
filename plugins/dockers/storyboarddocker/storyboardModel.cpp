@@ -32,7 +32,7 @@ QModelIndex StoryboardModel::index(int row, int column, const QModelIndex &paren
 {
     if (!hasIndex(row, column, parent))
         return QModelIndex();
-    if (row < 0 || row >= rowCount())
+    if (row < 0 || row >= rowCount(parent))
         return QModelIndex();
     if (column !=0)
         return QModelIndex();
@@ -99,12 +99,7 @@ QVariant StoryboardModel::data(const QModelIndex &index, int role) const
 
     if (!index.isValid())
         return QVariant();
-    if (index.row() >= m_items.size())
-        return QVariant();
 
-    if(role == Qt::SizeHintRole){
-            return QSize(200,200);
-    }
     //return data only for the storyboardChild i.e. 2nd level nodes
     if (!index.parent().isValid()){
         return QVariant();

@@ -23,6 +23,7 @@
 #include <QVector>
 
 #include <KoPattern.h>
+#include <KoSegmentGradient.h>
 
 #include "kritapsd_export.h"
 
@@ -66,11 +67,13 @@ public:
     void writeStopGradient(const QString &key, const KoStopGradient *gradient);
 
 private:
+    QString getSegmentEndpointTypeString(KoGradientSegmentEndpointType segtype);
     void writeGradientImpl(const QString &key,
                            const QString &name,
                            QVector<QColor> colors,
                            QVector<qreal> transparencies,
                            QVector<qreal> positions,
+                           QVector<QString> types,
                            QVector<qreal> middleOffsets);
 
 private:

@@ -26,7 +26,10 @@
 StoryboardModel::StoryboardModel(QObject *parent)
         : QAbstractItemModel(parent)
         , m_commentCount(0)
-{}
+{
+    connect(this, SIGNAL(rowsInserted(const QModelIndex, int, int)),
+                this, SLOT(slotInsertCommentRows(const QModelIndex, int, int)));
+}
 
 QModelIndex StoryboardModel::index(int row, int column, const QModelIndex &parent) const
 {
@@ -54,7 +57,6 @@ QModelIndex StoryboardModel::parent(const QModelIndex &index) const
 {
     if (!index.isValid())
         return QModelIndex();
-
     {
         //no parent for 1st level node
         StoryboardItem *childItem = static_cast<StoryboardItem*>(index.internalPointer());
@@ -187,9 +189,6 @@ bool StoryboardModel::insertRows(int position, int rows, const QModelIndex &pare
             m_items.insert(position, newItem);
         }
         endInsertRows();
-        for (int row = 0; row < rows; ++row) {
-            insertRows(rowCount(index(position + row, 0)), m_commentList.count(), index(position + row, 0));
-        }
         return true;
     }
     else if (!parent.parent().isValid()){              //insert 2nd level nodes
@@ -211,8 +210,11 @@ bool StoryboardModel::removeRows(int position, int rows, const QModelIndex &pare
     if (!parent.isValid()){
         beginRemoveRows(QModelIndex(), position, position+rows-1);
         for (int row = 0; row < rows; ++row){
+            //deleting all the child nodes
             QModelIndex currentIndex = index(position, 0);
             removeRows(0, rowCount(currentIndex), currentIndex);
+
+            //deleting the actual parent node
             delete m_items.at(position);
             m_items.removeAt(position);
         }
@@ -412,4 +414,25 @@ void StoryboardModel::slotCommentRowMoved(const QModelIndex &sourceParent, int s
         moveRows(parentIndex, start + 4, end - start + 1, parentIndex, destinationRow + 4);
     }
     slotCommentDataChanged();
+}
+
+void StoryboardModel::slotInsertCommentRows(const QModelIndex parent, int first, int last)
+{
+    if (!parent.isValid()){
+        int rows = last - first + 1;
+        for (int row = 0; row < rows; ++row) {
+            QModelIndex parentIndex = index(first + row, 0);
+            insertRows(0, 4 + m_commentList.count(), parentIndex);
+
+            setData (index (0, 0, parentIndex), m_lastFrame);
+            m_lastFrame++;
+
+            QString sceneName = "scene " + QString::number(m_lastScene);
+            setData (index (1, 0, parentIndex), sceneName);
+            m_lastScene++;
+
+            setData (index (2, 0, parentIndex), 20);
+            setData (index (3, 0, parentIndex), 20);
+        }
+    }
 }

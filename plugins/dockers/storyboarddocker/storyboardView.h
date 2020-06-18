@@ -50,6 +50,9 @@ public:
     void setCommentVisibility(bool value);
     void setThumbnailVisibility(bool value);
 
+private Q_SLOTS:
+    void slotContextMenuRequested(const QPoint &);
+
 private:
     QModelIndex m_hoverIndex;
     Qt::Orientation m_itemOrientation;

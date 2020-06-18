@@ -244,12 +244,12 @@ public:
     virtual qreal paintOpSize() const = 0;
 
     /**
-     * Set paintop size directly in the properties
+     * Set paintop pattern size directly in the properties
      */
-    virtual void setPaintOpPatternSize(qreal value);
+    //virtual void setPaintOpPatternSize(qreal value);
 
     /**
-     * @return size saved in the properties
+     * @return pattern size saved in the properties
      */
     virtual qreal paintOpPatternSize();
 
@@ -340,6 +340,8 @@ public:
      * darken mode, but the final result is combined with this composite op.
      */
     QString maskingBrushCompositeOp() const;
+
+    virtual bool hasPatternSettings() const;
 
 protected:
 

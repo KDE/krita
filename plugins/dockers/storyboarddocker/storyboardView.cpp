@@ -35,15 +35,14 @@ StoryboardView::StoryboardView(QWidget *parent)
     , m_commentIsVisible(true)
     , m_thumbnailIsVisible(true)
 {
-    setWrapping(true);
-    setFlow(QListView::LeftToRight);
+    setSelectionBehavior(SelectRows);
+    setDefaultDropAction(Qt::MoveAction);
     setResizeMode(QListView::Adjust);
     setUniformItemSizes(true);
     setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
     QWidget::setMouseTracking(true);
 
-    //make drag and drop work as expected
     setDragEnabled(true);
     viewport()->setAcceptDrops(true);
     setDropIndicatorShown(true);

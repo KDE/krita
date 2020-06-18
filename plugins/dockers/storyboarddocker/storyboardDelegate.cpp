@@ -60,7 +60,7 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
 
             parentRect.setTopLeft(parentRect.topLeft() + QPoint(4, 4));
             parentRect.setBottomRight(parentRect.bottomRight() - QPoint(4, 4));
-            //TODO: change highlight color and the area that is highlighted
+
             if (option.state & QStyle::State_Selected){
                 p->fillRect(option.rect, option.palette.foreground());
             }
@@ -74,7 +74,6 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
             QModelIndex parent = index.parent();
 
             //draw the child items
-            int rowNum = index.model()->rowCount(parent);
             int childNum = index.row();
             QString data = index.model()->data(index, Qt::DisplayRole).toString();
 
@@ -332,7 +331,7 @@ bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
                 return true;
             }
         }
-        else if (index.parent().isValid() && index.row() > 3){
+        else if (index.parent().isValid() && index.row() > 3){                      //comment box scroll events
             QStyleOptionSlider scrollBarOption = drawComment(nullptr, option, index);
             QRect upButton = scrollUpButton(option, scrollBarOption);
             QRect downButton = scrollDownButton(option, scrollBarOption);
@@ -352,6 +351,26 @@ bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
                 int value = lastValue + option.fontMetrics.height();
                 StoryboardModel* modelSB = dynamic_cast<StoryboardModel*>(model);
                 modelSB->setCommentScrollData(index, qMin(scrollBarOption.maximum, value));
+                return true;
+            }
+        }
+
+        else if (index.parent().isValid() && index.row() == 0 && m_view->thumbnailIsVisible()){     //thumbnail add/delete events
+            QRect addItemButton(QPoint(0, 0), QSize(22, 22));
+            addItemButton.moveBottomLeft(option.rect.bottomLeft());
+
+            QRect deleteItemButton(QPoint(0, 0), QSize(22, 22));
+            deleteItemButton.moveBottomRight(option.rect.bottomRight());
+
+            bool addItemButtonClicked = addItemButton.isValid() && addItemButton.contains(mouseEvent->pos());
+            bool deleteItemButtonClicked = deleteItemButton.isValid() && deleteItemButton.contains(mouseEvent->pos());
+
+            if (leftButton && addItemButtonClicked){
+                model->insertRows(index.parent().row() + 1, 1);
+                return true;
+            }
+            else if (leftButton && deleteItemButtonClicked){
+                model->removeRows(index.parent().row(), 1);
                 return true;
             }
         }

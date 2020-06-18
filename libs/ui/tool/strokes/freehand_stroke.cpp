@@ -301,7 +301,7 @@ void FreehandStrokeStrategy::issueSetDirtySignals()
         //               to the wrapping rect
         const KisDefaultBoundsBaseSP defaultBounds = targetNode()->projection()->defaultBounds();
         if (defaultBounds->wrapAroundMode()) {
-            const QRect wrapRect = defaultBounds->bounds();
+            const QRect wrapRect = defaultBounds->imageBorderRect();
             for (auto it = dirtyRects.begin(); it != dirtyRects.end(); ++it) {
                 KIS_SAFE_ASSERT_RECOVER(wrapRect.contains(*it)) {
                     ENTER_FUNCTION() << ppVar(*it) << ppVar(wrapRect);

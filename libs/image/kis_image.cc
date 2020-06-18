@@ -145,6 +145,8 @@ public:
         , width(w)
         , height(h)
         , colorSpace(c ? c : KoColorSpaceRegistry::instance()->rgb8())
+        , isolateLayer(false)
+        , isolateGroup(false)
         , nserver(1)
         , undoStore(undo ? undo : new KisDumbUndoStore())
         , legacyUndoAdapter(undoStore.data(), _q)
@@ -216,7 +218,11 @@ public:
     KisSelectionMaskSP targetOverlaySelectionMask; // the overlay switching stroke will try to switch into this mask
     KisSelectionMaskSP overlaySelectionMask;
     QList<KisLayerCompositionSP> compositions;
-    KisNodeSP isolatedRootNode;
+
+    KisNodeSP isolationRootNode;
+    bool isolateLayer;
+    bool isolateGroup;
+
     bool wrapAroundModePermitted = false;
 
     KisNameServer nserver;
@@ -237,7 +243,6 @@ public:
     KisImageAnimationInterface *animationInterface;
     KisUpdateScheduler scheduler;
     QAtomicInt disableDirtyRequests;
-
 
     KisCompositeProgressProxy compositeProgressProxy;
 
@@ -410,7 +415,10 @@ void KisImage::copyFromImageImpl(const KisImage &rhs, int policy)
 
     bool exactCopy = policy & EXACT_COPY;
 
-    if (exactCopy || rhs.m_d->isolatedRootNode || rhs.m_d->overlaySelectionMask) {
+    if (exactCopy || rhs.m_d->isolationRootNode || rhs.m_d->overlaySelectionMask) {
+        m_d->isolateLayer = rhs.m_d->isolateLayer;
+        m_d->isolateGroup = rhs.m_d->isolateGroup;
+
         QQueue<KisNodeSP> linearizedNodes;
         KisLayerUtils::recursiveApplyNodes(rhs.root(),
                                            [&linearizedNodes](KisNodeSP node) {
@@ -424,9 +432,9 @@ void KisImage::copyFromImageImpl(const KisImage &rhs, int policy)
                                                    node->setUuid(refNode->uuid());
                                                }
 
-                                               if (rhs.m_d->isolatedRootNode &&
-                                                   rhs.m_d->isolatedRootNode == refNode) {
-                                                   m_d->isolatedRootNode = node;
+                                               if (rhs.m_d->isolationRootNode &&
+                                                   rhs.m_d->isolationRootNode == refNode) {
+                                                   m_d->isolationRootNode = node;
                                                }
 
                                                if (rhs.m_d->overlaySelectionMask &&
@@ -503,7 +511,7 @@ void KisImage::aboutToRemoveANode(KisNode *parent, int index)
 {
     KisNodeSP deletedNode = parent->at(index);
     if (!dynamic_cast<KisSelectionMask*>(deletedNode.data()) &&
-        deletedNode == m_d->isolatedRootNode) {
+        deletedNode == m_d->isolationRootNode) {
 
         emit sigInternalStopIsolatedModeRequested();
     }
@@ -1453,10 +1461,9 @@ KisGroupLayerSP KisImage::rootLayer() const
 
 KisPaintDeviceSP KisImage::projection() const
 {
-    if (m_d->isolatedRootNode) {
-        return m_d->isolatedRootNode->projection();
+    if (m_d->isolationRootNode) {
+        return m_d->isolationRootNode->projection();
     }
-
 
     Q_ASSERT(m_d->rootLayer);
     KisPaintDeviceSP projection = m_d->rootLayer->projection();
@@ -1764,15 +1771,21 @@ void KisImage::KisImagePrivate::notifyProjectionUpdatedInPatches(const QRect &rc
     }
 }
 
-bool KisImage::startIsolatedMode(KisNodeSP node)
+bool KisImage::startIsolatedMode(KisNodeSP node, bool isolateLayer, bool isolateGroup)
 {
+    m_d->isolateLayer = isolateLayer;
+    m_d->isolateGroup = isolateGroup;
+    if ((isolateLayer || isolateGroup) == false) return false;
+
     struct StartIsolatedModeStroke : public KisRunnableBasedStrokeStrategy {
-        StartIsolatedModeStroke(KisNodeSP node, KisImageSP image)
+        StartIsolatedModeStroke(KisNodeSP node, KisImageSP image, bool isolateLayer, bool isolateGroup)
             : KisRunnableBasedStrokeStrategy(QLatin1String("start-isolated-mode"),
                                              kundo2_noi18n("start-isolated-mode")),
               m_node(node),
               m_image(image),
-              m_needsFullRefresh(false)
+              m_needsFullRefresh(false),
+              m_isolateLayer(isolateLayer),
+              m_isolateGroup(isolateGroup)
         {
             this->enableJob(JOB_INIT, true, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
             this->enableJob(JOB_DOSTROKE, true);
@@ -1781,12 +1794,16 @@ bool KisImage::startIsolatedMode(KisNodeSP node)
         }
 
         void initStrokeCallback() override {
+            if (m_isolateLayer == false && m_isolateGroup == true) {
+                // Isolate parent node unless node is the root note.
+                m_node = m_node->parent() ? m_node->parent() : m_node;
+            }
             // pass-though node don't have any projection prepared, so we should
             // explicitly regenerate it before activating isolated mode.
             m_node->projectionLeaf()->explicitlyRegeneratePassThroughProjection();
 
             const bool beforeVisibility = m_node->projectionLeaf()->visible();
-            m_image->m_d->isolatedRootNode = m_node;
+            m_image->m_d->isolationRootNode = m_node;
             emit m_image->sigIsolatedModeChanged();
             const bool afterVisibility = m_node->projectionLeaf()->visible();
 
@@ -1812,9 +1829,11 @@ bool KisImage::startIsolatedMode(KisNodeSP node)
         KisNodeSP m_node;
         KisImageSP m_image;
         bool m_needsFullRefresh;
+        bool m_isolateLayer;
+        bool m_isolateGroup;
     };
 
-    KisStrokeId id = startStroke(new StartIsolatedModeStroke(node, this));
+    KisStrokeId id = startStroke(new StartIsolatedModeStroke(node, this, isolateLayer, isolateGroup));
     endStroke(id);
 
     return true;
@@ -1822,7 +1841,7 @@ bool KisImage::startIsolatedMode(KisNodeSP node)
 
 void KisImage::stopIsolatedMode()
 {
-    if (!m_d->isolatedRootNode)  return;
+    if (!m_d->isolationRootNode)  return;
 
     struct StopIsolatedModeStroke : public KisRunnableBasedStrokeStrategy {
         StopIsolatedModeStroke(KisImageSP image)
@@ -1838,11 +1857,14 @@ void KisImage::stopIsolatedMode()
         }
 
         void initStrokeCallback() {
-            if (!m_image->m_d->isolatedRootNode)  return;
+            if (!m_image->m_d->isolationRootNode)  return;
 
-            m_oldRootNode = m_image->m_d->isolatedRootNode;
+            m_oldRootNode = m_image->m_d->isolationRootNode;
+
             const bool beforeVisibility = m_oldRootNode->projectionLeaf()->visible();
-            m_image->m_d->isolatedRootNode = 0;
+            m_image->m_d->isolationRootNode = 0;
+            m_image->m_d->isolateLayer = false;
+            m_image->m_d->isolateGroup = false;
             emit m_image->sigIsolatedModeChanged();
             const bool afterVisibility = m_oldRootNode->projectionLeaf()->visible();
 
@@ -1878,9 +1900,18 @@ void KisImage::stopIsolatedMode()
     endStroke(id);
 }
 
-KisNodeSP KisImage::isolatedModeRoot() const
+KisNodeSP KisImage::isolationRootNode() const {
+    return m_d->isolationRootNode;
+}
+
+bool KisImage::isIsolatingLayer() const
 {
-    return m_d->isolatedRootNode;
+    return m_d->isolateLayer;
+}
+
+bool KisImage::isIsolatingGroup() const
+{
+     return m_d->isolateGroup;
 }
 
 void KisImage::addJob(KisStrokeId id, KisStrokeJobData *data)
@@ -2138,8 +2169,8 @@ void KisImage::notifySelectionChanged()
      * setDirty() call, so in the end of the stroke we need to request
      * direct update of the UI's cache.
      */
-    if (m_d->isolatedRootNode &&
-        dynamic_cast<KisSelectionMask*>(m_d->isolatedRootNode.data())) {
+    if (m_d->isolationRootNode &&
+        dynamic_cast<KisSelectionMask*>(m_d->isolationRootNode.data())) {
 
         notifyProjectionUpdated(bounds());
     }

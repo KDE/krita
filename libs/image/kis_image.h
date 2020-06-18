@@ -75,8 +75,7 @@ class KRITAIMAGE_EXPORT KisImage : public QObject,
 
     Q_OBJECT
 
-public:
-
+public:    
     /// @p colorSpace can be null. In that case, it will be initialised to a default color space.
     KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace *colorSpace, const QString& name);
     ~KisImage() override;
@@ -769,11 +768,13 @@ public:
     KisProofingConfigurationSP proofingConfiguration() const;
 
 public Q_SLOTS:
-    bool startIsolatedMode(KisNodeSP node);
+    bool startIsolatedMode(KisNodeSP node, bool isolateLayer, bool isolateGroup);
     void stopIsolatedMode();
 
 public:
-    KisNodeSP isolatedModeRoot() const;
+    KisNodeSP isolationRootNode() const;
+    bool isIsolatingLayer() const;
+    bool isIsolatingGroup() const;
 
 Q_SIGNALS:
 

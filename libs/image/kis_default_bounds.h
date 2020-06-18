@@ -63,6 +63,7 @@ public:
     ~KisSelectionDefaultBounds() override;
 
     QRect bounds() const override;
+    QRect imageBorderRect() const override;
     bool wrapAroundMode() const override;
     int currentLevelOfDetail() const override;
     int currentTime() const override;

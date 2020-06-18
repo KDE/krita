@@ -476,7 +476,7 @@ QVariant TimelineFramesModel::headerData(int section, Qt::Orientation orientatio
             QFont baseFont;
             if (node->projectionLeaf()->isDroppedNode()) {
                 baseFont.setStrikeOut(true);
-            } else if (m_d->image && m_d->image->isolatedModeRoot() &&
+            } else if (m_d->image && m_d->image->isolationRootNode() &&
                        KisNodeModel::belongsToIsolatedGroup(m_d->image, node, m_d->dummiesFacade)) {
                 baseFont.setBold(true);
             }
@@ -494,7 +494,7 @@ QVariant TimelineFramesModel::headerData(int section, Qt::Orientation orientatio
 
             return QVariant::fromValue(list);
         }
-        case LayerUsedInTimelineRole: {
+        case PinnedToTimelineRole: {
             KisNodeDummy *dummy = m_d->converter->dummyFromRow(section);
             if (!dummy) return QVariant();
             return dummy->node()->isPinnedToTimeline();
@@ -534,7 +534,7 @@ bool TimelineFramesModel::setHeaderData(int section, Qt::Orientation orientation
             emit headerDataChanged (Qt::Vertical, section, section);
             return result;
         }
-        case LayerUsedInTimelineRole: {
+        case PinnedToTimelineRole: {
             KisNodeDummy *dummy = m_d->converter->dummyFromRow(section);
             if (!dummy) return false;
             dummy->node()->setPinnedToTimeline(value.toBool());

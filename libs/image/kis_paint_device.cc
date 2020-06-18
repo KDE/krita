@@ -608,7 +608,7 @@ KisPaintDevice::Private::KisPaintDeviceStrategy* KisPaintDevice::Private::curren
         return basicStrategy.data();
     }
 
-    const QRect wrapRect = defaultBounds->bounds();
+    const QRect wrapRect = defaultBounds->imageBorderRect();
 
     if (!wrappedStrategy || wrappedStrategy->wrapRect() != wrapRect) {
         QMutexLocker locker(&m_wrappedStrategyMutex);

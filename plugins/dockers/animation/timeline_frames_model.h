@@ -106,7 +106,7 @@ public:
         ActiveLayerRole = KisTimeBasedItemModel::UserRole,
         TimelinePropertiesRole,
         OtherLayersRole,
-        LayerUsedInTimelineRole,
+        PinnedToTimelineRole,
         FrameColorLabelIndexRole
     };
 

@@ -221,9 +221,9 @@ void KisNodeManager::setView(QPointer<KisView>imageView)
         KisShapeController *shapeController = dynamic_cast<KisShapeController*>(m_d->imageView->document()->shapeController());
         Q_ASSERT(shapeController);
         connect(shapeController, SIGNAL(sigActivateNode(KisNodeSP)), SLOT(slotNonUiActivatedNode(KisNodeSP)));
-        connect(m_d->imageView->image(), SIGNAL(sigIsolatedModeChanged()),this, SLOT(slotUpdateIsolateModeActionImageStatusChange()));
         connect(m_d->imageView->image(), SIGNAL(sigRequestNodeReselection(KisNodeSP,KisNodeList)),this, SLOT(slotImageRequestNodeReselection(KisNodeSP,KisNodeList)));
         m_d->imageView->resourceProvider()->slotNodeActivated(m_d->imageView->currentNode());
+        connect(m_d->imageView->image(), SIGNAL(sigIsolatedModeChanged()), this, SLOT(handleExternalIsolationChange()));
     }
 
 }
@@ -376,8 +376,13 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
     connect(&m_d->nodeConversionSignalMapper, SIGNAL(mapped(QString)),
             this, SLOT(convertNode(QString)));
 
+    // Isolation Modes...
+    // Post Qt5.14 this can be replaced with QActionGroup + ExclusionPolicy::ExclusiveOptional.
     action = actionManager->createAction("isolate_active_layer");
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(toggleIsolateMode(bool)));
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(setIsolateActiveLayerMode(bool)));
+    action = actionManager->createAction("isolate_active_group");
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(setIsolateActiveGroupMode(bool)));
+    connect(this, SIGNAL(sigNodeActivated(KisNodeSP)), SLOT(changeIsolationRoot(KisNodeSP)));
 
     action = actionManager->createAction("toggle_layer_visibility");
     connect(action, SIGNAL(triggered()), this, SLOT(toggleVisibility()));
@@ -400,9 +405,6 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
     // HINT: we can save even when the nodes are not editable
     action  = actionManager->createAction("split_alpha_save_merged");
     connect(action, SIGNAL(triggered()), this, SLOT(slotSplitAlphaSaveMerged()));
-
-    connect(this, SIGNAL(sigNodeActivated(KisNodeSP)), SLOT(slotUpdateIsolateModeAction()));
-    connect(this, SIGNAL(sigNodeActivated(KisNodeSP)), SLOT(slotTryRestartIsolatedMode()));
 }
 
 void KisNodeManager::updateGUI()
@@ -475,74 +477,77 @@ void KisNodeManager::addNodesDirect(KisNodeList nodes, KisNodeSP parent, KisNode
 
 void KisNodeManager::toggleIsolateActiveNode()
 {
-    KisImageWSP image = m_d->view->image();
-    KisNodeSP activeNode = this->activeNode();
-    KIS_ASSERT_RECOVER_RETURN(activeNode);
-
-    if (activeNode == image->isolatedModeRoot()) {
-        toggleIsolateMode(false);
-    } else {
-        toggleIsolateMode(true);
-    }
+    QAction* action = m_d->view->actionManager()->actionByName("isolate_active_layer");
+    action->toggle();
 }
 
-void KisNodeManager::toggleIsolateMode(bool checked)
+void KisNodeManager::setIsolateActiveLayerMode(bool checked)
 {
     KisImageWSP image = m_d->view->image();
+    KIS_ASSERT_RECOVER_RETURN(image);
 
+    const bool groupIsolationState = image->isIsolatingGroup();
+    changeIsolationMode(checked, groupIsolationState);
+}
+
+void KisNodeManager::setIsolateActiveGroupMode(bool checked)
+{
+    KisImageWSP image = m_d->view->image();
+    KIS_ASSERT_RECOVER_RETURN(image);
+
+    const bool layerIsolationState = image->isIsolatingLayer();
+    changeIsolationMode(layerIsolationState, checked);
+}
+
+void KisNodeManager::changeIsolationMode(bool isolateActiveLayer, bool isolateActiveGroup)
+{
+    KisImageWSP image = m_d->view->image();
     KisNodeSP activeNode = this->activeNode();
-    if (checked && activeNode) {
+    KIS_ASSERT_RECOVER_RETURN(image && activeNode);
 
-        // Transform and colorize masks don't have pixel data...
-        if (activeNode->inherits("KisTransformMask") ||
-                activeNode->inherits("KisColorizeMask")) return;
-
-        if (!image->startIsolatedMode(activeNode)) {
-            KisAction *action = m_d->view->actionManager()->actionByName("isolate_active_layer");
-            action->setChecked(false);
+    if (isolateActiveLayer || isolateActiveGroup) {
+        if (image->startIsolatedMode(activeNode, isolateActiveLayer, isolateActiveGroup) == false) {
+            reinitializeIsolationActionGroup();
         }
     } else {
         image->stopIsolatedMode();
     }
-
-    m_d->lastRequestedIsolatedModeStatus = checked;
 }
 
-void KisNodeManager::slotUpdateIsolateModeActionImageStatusChange()
+void KisNodeManager::changeIsolationRoot(KisNodeSP isolationRoot)
 {
-    slotUpdateIsolateModeAction();
+    KisImageWSP image = m_d->view->image();
+    if (!image || !isolationRoot) return;
 
-    KisNodeSP isolatedRootNode = m_d->view->image()->isolatedModeRoot();
-    if (this->activeNode() &&
-            bool(isolatedRootNode) != m_d->lastRequestedIsolatedModeStatus) {
+    const bool isIsolatingLayer = image->isIsolatingLayer();
+    const bool isIsolatingGroup = image->isIsolatingGroup();
 
-        slotTryRestartIsolatedMode();
+    // Restart isolation with a new root node and the same settings.
+    if (image->startIsolatedMode(isolationRoot, isIsolatingLayer, isIsolatingGroup) == false) {
+        reinitializeIsolationActionGroup();
     }
 }
 
-void KisNodeManager::slotUpdateIsolateModeAction()
+void KisNodeManager::handleExternalIsolationChange()
 {
-    KisAction *action = m_d->view->actionManager()->actionByName("isolate_active_layer");
-    Q_ASSERT(action);
-
-    KisNodeSP activeNode = this->activeNode();
-    KisNodeSP isolatedRootNode = m_d->view->image()->isolatedModeRoot();
-
-    action->setChecked(isolatedRootNode && isolatedRootNode == activeNode);
-}
-
-void KisNodeManager::slotTryRestartIsolatedMode()
-{
-    /**
-     * It might be that we have multiple Krita windows open. In such a case
-     * only the currently active one should restart isolated mode
-     */
+    // It might be that we have multiple Krita windows open. In such a case
+    // only the currently active one should restart isolated mode
     if (!m_d->view->mainWindow()->isActiveWindow()) return;
 
-    KisNodeSP isolatedRootNode = m_d->view->image()->isolatedModeRoot();
-    if (!isolatedRootNode && !m_d->lastRequestedIsolatedModeStatus) return;
+    KisImageWSP image = m_d->view->image();
+    KisNodeSP activeNode = this->activeNode();
 
-    this->toggleIsolateMode(true);
+    const bool isIsolatingLayer = image->isIsolatingLayer();
+    const bool isIsolatingGroup = image->isIsolatingGroup();
+
+    m_d->view->actionManager()->actionByName("isolate_active_layer")->setChecked(isIsolatingLayer);
+    m_d->view->actionManager()->actionByName("isolate_active_group")->setChecked(isIsolatingGroup);
+}
+
+void KisNodeManager::reinitializeIsolationActionGroup()
+{
+    m_d->view->actionManager()->actionByName("isolate_active_layer")->setChecked(false);
+    m_d->view->actionManager()->actionByName("isolate_active_group")->setChecked(false);
 }
 
 KisNodeSP  KisNodeManager::createNode(const QString & nodeType, bool quiet, KisPaintDeviceSP copyFrom)

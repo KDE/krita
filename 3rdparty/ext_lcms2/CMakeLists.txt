@@ -2,8 +2,8 @@ SET(PREFIX_ext_lcms2 "${EXTPREFIX}" )
 if (MINGW)
 ExternalProject_Add( ext_lcms2
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-	URL http://files.kde.org/krita/build/dependencies/lcms2-2.10.tar.gz
-    URL_MD5 c5f915d681325e0767e40187799f23b1
+	URL http://files.kde.org/krita/build/dependencies/lcms2-2.11.tar.gz
+    URL_MD5 598dae499e58f877ff6788254320f43e
 
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/lcms2-10.diff
 	INSTALL_DIR ${PREFIX_ext_lcms2}
@@ -15,8 +15,8 @@ ExternalProject_Add( ext_lcms2
 elseif (ANDROID)
 ExternalProject_Add( ext_lcms2
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL http://files.kde.org/krita/build/dependencies/lcms2-2.10.tar.gz
-    URL_MD5 c5f915d681325e0767e40187799f23b1
+    URL http://files.kde.org/krita/build/dependencies/lcms2-2.11.tar.gz
+    URL_MD5 598dae499e58f877ff6788254320f43e
 
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/lcms2-10.diff
     INSTALL_DIR ${PREFIX_ext_lcms2}
@@ -27,8 +27,8 @@ ExternalProject_Add( ext_lcms2
 else ()
 ExternalProject_Add( ext_lcms2
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-	URL http://files.kde.org/krita/build/dependencies/lcms2-2.10.tar.gz
-    URL_MD5 c5f915d681325e0767e40187799f23b1
+	URL http://files.kde.org/krita/build/dependencies/lcms2-2.11.tar.gz
+    URL_MD5 598dae499e58f877ff6788254320f43e 
 
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/lcms2-10.diff
 	INSTALL_DIR ${PREFIX_ext_lcms2}

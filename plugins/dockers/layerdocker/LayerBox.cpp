@@ -705,6 +705,7 @@ void LayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &in
                 KisNodeSP node = m_filteringModel->nodeFromIndex(index);
                 if (node && !node->inherits("KisTransformMask")) {
                     addActionToMenu(&menu, "isolate_active_layer");
+                    addActionToMenu(&menu, "isolate_active_group");
                 }
 
                 addActionToMenu(&menu, "selectopaque");

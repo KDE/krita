@@ -461,7 +461,35 @@ SvgGradientHelper* SvgParser::parseMeshGradient(const KoXmlElement &e)
     QString gradientId = e.attribute("id");
     SvgMeshGradient *g = new SvgMeshGradient;
 
-    // TODO handle attributes
+    // check if we have this gradient already parsed
+    // copy existing gradient if it exists
+    if (m_gradients.contains(gradientId)) {
+        return &m_gradients[gradientId];
+    }
+
+    if (e.hasAttribute("xlink:href")) {
+        // strip the '#' symbol
+        QString href = e.attribute("xlink:href").mid(1);
+
+        if (!href.isEmpty()) {
+            // copy the referenced gradient if found
+            SvgGradientHelper *pGrad = findGradient(href);
+            if (pGrad) {
+                gradHelper = *pGrad;
+            }
+        }
+    }
+
+    if (e.attribute("gradientUnits") == "userSpaceOnUse") {
+        gradHelper.setGradientUnits(KoFlake::UserSpaceOnUse);
+    }
+
+    if (e.hasAttribute("transform")) {
+        SvgTransformParser p(e.attribute("transform"));
+        if (p.isValid()) {
+            gradHelper.setTransform(p.transform());
+        }
+    }
 
     QString type = e.attribute("type");
     g->setType(SvgMeshGradient::BILINEAR);

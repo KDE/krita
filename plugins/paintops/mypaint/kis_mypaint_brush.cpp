@@ -2,12 +2,21 @@
 
 #include <KoColorConversions.h>
 #include <QFile>
+#include <QFileInfo>
 
-KisMyPaintBrush::KisMyPaintBrush(KisPainter *painter, QObject *parent) : QObject(parent)
-{
-    m_painter = painter;
-    m_brush = mypaint_brush_new();
-    mypaint_brush_from_defaults(m_brush);
+class KisMyPaintBrush::Private {
+
+public:
+    MyPaintBrush *m_brush;
+    QImage m_icon;
+    QByteArray m_json;
+};
+
+KisMyPaintBrush::KisMyPaintBrush(const QString &fileName)
+    : KoResource (fileName), m_d(new Private) {
+
+    m_d->m_brush = mypaint_brush_new();
+    mypaint_brush_from_defaults(m_d->m_brush);
 }
 
 void KisMyPaintBrush::setColor(const KoColor color) {
@@ -18,9 +27,9 @@ void KisMyPaintBrush::setColor(const KoColor color) {
     color.toQColor().getRgbF(&r ,&g ,&b);
     RGBToHSV(r , g, b, &hue, &saturation, &value);
 
-    mypaint_brush_set_base_value(m_brush, MYPAINT_BRUSH_SETTING_COLOR_H, (hue)/360);
-    mypaint_brush_set_base_value(m_brush, MYPAINT_BRUSH_SETTING_COLOR_S, (saturation));
-    mypaint_brush_set_base_value(m_brush, MYPAINT_BRUSH_SETTING_COLOR_V, (value));
+    mypaint_brush_set_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_COLOR_H, (hue)/360);
+    mypaint_brush_set_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_COLOR_S, (saturation));
+    mypaint_brush_set_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_COLOR_V, (value));
 }
 
 void KisMyPaintBrush::apply(KisPaintOpSettingsSP settings) {
@@ -70,21 +79,79 @@ void KisMyPaintBrush::apply(KisPaintOpSettingsSP settings) {
 //    mypaint_brush_set_base_value(m_brush, MYPAINT_BRUSH_SETTING_OFFSET_BY_SPEED_SLOWNESS, 1.0);
 //    mypaint_brush_set_base_value(m_brush, MYPAINT_BRUSH_SETTING_STROKE_DURATION_LOGARITHMIC, 4.0);
 
-    QIODevice *dev = new QFile("/usr/share/mypaint-data/1.0/brushes/experimental/bubble.myb");
-
-    if (!dev->open(QIODevice::ReadOnly)) {
-        qDebug() << "Can't open file ";
-        delete dev;
+    if(settings->getProperty("json_string").isNull()) {
+        mypaint_brush_from_defaults(m_d->m_brush);
     }
     else {
-        QByteArray ba = dev->readAll();
-        mypaint_brush_from_string(m_brush, ba);
+
+        QByteArray ba = settings->getProperty("json_string").toByteArray();
+        mypaint_brush_from_string(m_d->m_brush, ba);
     }
-    mypaint_brush_new_stroke(m_brush);
+
+    mypaint_brush_new_stroke(m_d->m_brush);
 
 }
 
 MyPaintBrush* KisMyPaintBrush::brush() {
 
-    return m_brush;
+    return m_d->m_brush;
+}
+
+bool KisMyPaintBrush::load() {
+
+    dbgImage << "Load MyPaint Brush " << filename();
+    setValid(false);
+
+    if (filename().isEmpty()) {
+        return false;
+    }
+
+    QIODevice *dev = 0;
+    QByteArray ba;
+
+    dev = new QFile(filename());
+
+    if (dev->size() == 0)
+    {
+        delete dev;
+        return false;
+    }
+
+    if (!dev->open(QIODevice::ReadOnly)) {
+        warnKrita << "Can't open file " << filename();
+        delete dev;
+        return false;
+    }
+
+    bool res = false;
+    res = loadFromDevice(dev);
+
+    delete dev;
+    setValid(res);
+
+    return res;
+}
+
+bool KisMyPaintBrush::loadFromDevice(QIODevice *dev) {
+
+    QFileInfo fileInfo(filename());
+    m_d->m_icon.load(fileInfo.path() + '/' + fileInfo.baseName() + "_prev.png");
+
+    setImage(m_d->m_icon);
+
+    QByteArray ba = dev->readAll();
+    m_d->m_json = ba;
+    mypaint_brush_from_string(m_d->m_brush, ba);
+
+    return true;
+}
+
+bool KisMyPaintBrush::save() {
+
+    return false;
+}
+
+QByteArray KisMyPaintBrush::getJsonData() {
+
+    return m_d->m_json;
 }

@@ -13,6 +13,7 @@ set(kritamypaintop_SOURCES
     kis_my_paintop_settings_widget.cpp
     kis_mypaint_surface.cpp
     kis_mypaint_brush.cpp
+    kis_my_paintop_factory.cpp
 )
 
 #ki18n_wrap_ui(kritasketchpaintop_SOURCES wdgsketchoptions.ui )

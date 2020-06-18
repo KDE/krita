@@ -11,6 +11,7 @@
 #include "kis_my_paintop_settings.h"
 #include "kis_my_paintop_settings_widget.h"
 #include "kis_simple_paintop_factory.h"
+#include <kis_my_paintop_factory.h>
 
 #include "kis_global.h"
 
@@ -21,8 +22,8 @@ MyPaintOpPlugin::MyPaintOpPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisSimplePaintOpFactory<KisMyPaintOp, KisMyPaintOpSettings, KisMyPaintOpSettingsWidget>("mypaintbrush", i18n("MyPaint"), KisPaintOpFactory::categoryStable() , "krita-mypaint.png", QString(), QStringList(), 6));
-
+    //r->add(new KisSimplePaintOpFactory<KisMyPaintOp, KisMyPaintOpSettings, KisMyPaintOpSettingsWidget>("mypaintbrush", i18n("MyPaint"), KisPaintOpFactory::categoryStable() , "krita-mypaint.png", QString(), QStringList(), 6));
+    r->add(new KisMyPaintOpFactory());
 }
 
 MyPaintOpPlugin::~MyPaintOpPlugin()

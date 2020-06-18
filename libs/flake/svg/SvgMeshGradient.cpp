@@ -22,6 +22,12 @@ SvgMeshGradient::SvgMeshGradient()
 {
 }
 
+SvgMeshGradient::SvgMeshGradient(const SvgMeshGradient& other)
+    : m_type(other.m_type)
+    , m_mesharray(new SvgMeshArray(*other.m_mesharray))
+{
+}
+
 SvgMeshGradient::~SvgMeshGradient()
 {
     delete m_mesharray;
@@ -30,6 +36,16 @@ SvgMeshGradient::~SvgMeshGradient()
 void SvgMeshGradient::setType(SvgMeshGradient::Type type)
 {
     m_type = type;
+}
+
+SvgMeshGradient::Type SvgMeshGradient::type() const
+{
+    return m_type;
+}
+
+bool SvgMeshGradient::isValid() const
+{
+    return m_mesharray->numRows() != 0;
 }
 
 SvgMeshArray* SvgMeshGradient::getMeshArray() const

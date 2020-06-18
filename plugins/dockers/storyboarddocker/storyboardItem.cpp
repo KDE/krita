@@ -46,6 +46,7 @@ void StoryboardItem::insertChild(int row, QVariant data)
 
 void StoryboardItem::removeChild(int row)
 {
+    delete m_childData.at(row);
     m_childData.removeAt(row);
 }
 

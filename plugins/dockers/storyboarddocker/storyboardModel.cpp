@@ -192,13 +192,14 @@ bool StoryboardModel::insertRows(int position, int rows, const QModelIndex &pare
             m_items.insert(position, newItem);
         }
         endInsertRows();
+        for (int row = 0; row < rows; ++row) {
+            insertRows(rowCount(index(position + row, 0)), m_commentList.count(), index(position + row, 0));
+        }
         return true;
     }
-
-    //insert 2nd level nodes
-    if (!parent.parent().isValid()){
+    else if (!parent.parent().isValid()){              //insert 2nd level nodes
         StoryboardItem *item = static_cast<StoryboardItem*>(parent.internalPointer());
-        beginInsertRows(QModelIndex(), position, position+rows-1);
+        beginInsertRows(parent, position, position+rows-1);
         for (int row = 0; row < rows; ++row) {
             item->insertChild(position, QVariant());
         }
@@ -214,19 +215,19 @@ bool StoryboardModel::removeRows(int position, int rows, const QModelIndex &pare
     //remove 1st level nodes
     if (!parent.isValid()){
         beginRemoveRows(QModelIndex(), position, position+rows-1);
-        for (int row = 0; row < rows; ++row) {
-            delete m_items.at(row);
+        for (int row = 0; row < rows; ++row){
+            QModelIndex currentIndex = index(position, 0);
+            removeRows(0, rowCount(currentIndex), currentIndex);
+            delete m_items.at(position);
             m_items.removeAt(position);
         }
         endRemoveRows();
         return true;
     }
-
-    //remove 2nd level nodes
-    if (!parent.parent().isValid()){
+    else if (!parent.parent().isValid()){                     //remove 2nd level nodes
         StoryboardItem *item = static_cast<StoryboardItem*>(parent.internalPointer());
         if (m_items.contains(item)){
-            beginRemoveRows(QModelIndex(), position, position+rows-1);
+            beginRemoveRows(parent, position, position+rows-1);
             for (int row = 0; row < rows; ++row) {
                 item->removeChild(position);
             }

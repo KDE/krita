@@ -162,7 +162,7 @@ void KisWdgGenerator::slotGeneratorActivated(int row)
             connect( widget, SIGNAL(sigConfigurationUpdated()), this, SIGNAL(previewConfiguration()));
 
             widget->setView(d->view);
-            widget->setConfiguration(configuration());
+            widget->setConfiguration(d->currentGenerator->defaultConfiguration());
         }
     }
     d->widgetLayout->addWidget(d->centralWidget, 0 , 0);

@@ -26,6 +26,10 @@ class KRITAFLAKE_EXPORT SvgMeshArray
 {
 public:
     SvgMeshArray();
+
+    // MOVES the elements of m_array from other to this
+    SvgMeshArray(SvgMeshArray& other);
+
     ~SvgMeshArray();
 
     void newRow();
@@ -34,9 +38,13 @@ public:
 
     /// Get the point of a node in mesharray
     SvgMeshStop getStop(const SvgMeshPatch::Type edge, const int row, const int col) const;
-    
+
     /// Get the Path Points for a segment of the meshpatch
     QList<QPointF> getPath(const SvgMeshPatch::Type edge, const int row, const int col) const;
+
+
+    int numRows() const;
+    int numColumns() const;
 
 
 private:

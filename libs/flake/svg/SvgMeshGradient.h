@@ -32,10 +32,13 @@ public:
     };
 
     SvgMeshGradient();
-
+    SvgMeshGradient(const SvgMeshGradient& other);
     ~SvgMeshGradient();
 
     void setType(Type type);
+    SvgMeshGradient::Type type() const;
+
+    bool isValid() const;
 
     SvgMeshArray* getMeshArray() const;
 

@@ -24,6 +24,14 @@ SvgMeshArray::SvgMeshArray()
 {
 }
 
+SvgMeshArray::SvgMeshArray(SvgMeshArray& other)
+{
+    // FIXME The way SvgParser works with gradients is, it frequently destroys the objects holding reference to
+    // SvgMeshGradients, so rather than copying we move it. This certainly needs a design refactor.
+    m_array = std::move(other.m_array);
+
+}
+
 SvgMeshArray::~SvgMeshArray()
 {
     for (auto& row: m_array) {
@@ -142,3 +150,14 @@ QList<QPointF> SvgMeshArray::getPath(const SvgMeshPatch::Type edge, const int ro
     return m_array[row][col]->getPath(edge).controlPoints();
 }
 
+int SvgMeshArray::numRows() const
+{
+    return m_array.size();
+}
+
+int SvgMeshArray::numColumns() const
+{
+    if (m_array.isEmpty())
+        return 0;
+    return m_array.first().size();
+}

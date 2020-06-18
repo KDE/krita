@@ -412,15 +412,14 @@ void KoCanvasControllerWidget::zoomOut(const QPoint &center)
     zoomBy(center, sqrt(0.5));
 }
 
+
 void KoCanvasControllerWidget::zoomBy(const QPoint &center, qreal zoom)
 {
-    setPreferredCenterFractionX(1.0 * center.x() / documentSize().width());
-    setPreferredCenterFractionY(1.0 * center.y() / documentSize().height());
+    const QPointF oldCenter = preferredCenter();
+    const QPointF newCenter = center + scrollBarValue();
+    const QPointF stillPoint = (zoom * newCenter - oldCenter) / (zoom - 1.0);
 
-    const bool oldIgnoreScrollSignals = d->ignoreScrollSignals;
-    d->ignoreScrollSignals = true;
-    proxyObject->emitZoomRelative(zoom, preferredCenter());
-    d->ignoreScrollSignals = oldIgnoreScrollSignals;
+    proxyObject->emitZoomRelative(zoom, stillPoint);
 }
 
 void KoCanvasControllerWidget::zoomTo(const QRect &viewRect)

@@ -42,7 +42,6 @@ StoryboardView::StoryboardView(QWidget *parent)
     setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
     QWidget::setMouseTracking(true);
-
     setDragEnabled(true);
     viewport()->setAcceptDrops(true);
     setDropIndicatorShown(true);

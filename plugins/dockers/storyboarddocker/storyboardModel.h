@@ -89,12 +89,16 @@ private Q_SLOTS:
     void slotCommentRowRemoved(const QModelIndex, int, int);
     void slotCommentRowMoved(const QModelIndex &sourceParent, int sourceRow, int count,
                             const QModelIndex &destinationParent, int destinationChild);
+    void slotInsertCommentRows(const QModelIndex parent, int first, int last);
 
 private:
     QVector<StoryboardItem*> m_items;
     int m_commentCount = 0;
     QVector<Comment> m_commentList;
     CommentModel *m_commentModel;
+
+    int m_lastFrame = 0;
+    int m_lastScene = 0;
 };
 
 #endif

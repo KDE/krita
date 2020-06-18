@@ -18,14 +18,8 @@
 
 #include "storyboardItem.h"
 
-//create 3 rows by default
 StoryboardItem::StoryboardItem()
-{
-    insertChild(childCount(), 1);
-    insertChild(childCount(), QString("scene 1"));
-    insertChild(childCount(), 100);                  //duration-seconds
-    insertChild(childCount(), 23);                 //duration-frames
-}
+{}
 
 StoryboardItem::~StoryboardItem()
 {

@@ -20,6 +20,7 @@
 #include <QDebug>
 #include <QPainter>
 #include <QPaintEvent>
+#include <QMenu>
 
 #include "storyboardView.h"
 #include "storyboardModel.h"
@@ -42,10 +43,14 @@ StoryboardView::StoryboardView(QWidget *parent)
     setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
     QWidget::setMouseTracking(true);
+    setContextMenuPolicy(Qt::CustomContextMenu);
     setDragEnabled(true);
     viewport()->setAcceptDrops(true);
     setDropIndicatorShown(true);
     setDragDropMode(QAbstractItemView::InternalMove);
+
+    connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
+                this, SLOT(slotContextMenuRequested(const QPoint &)));
 }
 
 StoryboardView::~StoryboardView()
@@ -95,7 +100,6 @@ QRect StoryboardView::visualRect(const QModelIndex &index) const
         parentRect.setBottomRight(parentRect.bottomRight() - QPoint(5, 5));
         int fontHeight = fontMetrics().height() + 3;
         int numericFontWidth = fontMetrics().width("0");
-        int height = parentRect.height();
         int parentWidth = parentRect.width();
         int childRow = index.row();
 
@@ -221,4 +225,23 @@ void StoryboardView::setCommentVisibility(bool value)
 void StoryboardView::setThumbnailVisibility(bool value)
 {
     m_thumbnailIsVisible = value;
+}
+
+void StoryboardView::slotContextMenuRequested(const QPoint &point)
+{
+    QMenu contextMenu;
+    QModelIndex index = indexAt(point);
+    if (!index.isValid()) {
+        contextMenu.addAction("Add Stroyboard Item", [this, index] {model()->insertRows(model()->rowCount(), 1); });
+    }
+    else if (index.parent().isValid()){
+        index = index.parent();
+        contextMenu.addAction("Add Stroyboard Item After", [this, index] {model()->insertRows(index.row() + 1, 1); });
+    }
+
+    if (index.isValid()){
+        contextMenu.addAction("Add Stroyboard Item Before", [this, index] {model()->insertRows(index.row(), 1); });
+        contextMenu.addAction("Remove Stroyboard Item", [this, index] {model()->removeRows(index.row(), 1); });
+    }
+    contextMenu.exec(viewport()->mapToGlobal(point));
 }

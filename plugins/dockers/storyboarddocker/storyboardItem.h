@@ -46,12 +46,11 @@ private:
 class StoryboardItem
 {
 public:
-    //see later if the constructor needs data
-    explicit StoryboardItem(/*const QVector<QVariant> &data*/);
+    explicit StoryboardItem();
     ~StoryboardItem();
 
-    void appendChild(QVariant data);
-    void insertChild(int row, QVariant data);
+    void appendChild(QVariant data = QVariant());
+    void insertChild(int row, QVariant data = QVariant());
     void removeChild(int row);
     void moveChild(int from, int to);
     int childCount() const;

@@ -39,6 +39,8 @@ public class MainActivity extends QtActivity {
 		super.onCreate(savedInstanceState);
 
 		new ConfigsManager().handleAssets(this);
+
+        DonationHelper.getInstance();
 	}
 
 	@Override

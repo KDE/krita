@@ -354,11 +354,10 @@ void KisActionRegistry::Private::loadActionFiles()
                 if (actionXml.tagName() == "Action") {
                     // Read name from format <Action name="save">
                     QString name      = actionXml.attribute("name");
-                    qDebug() << "\t\tloading xml data for action" << name;
 
                     // Bad things
                     if (name.isEmpty()) {
-                        qDebug() << "Unnamed action in definitions file " << actionDefinition;
+                        qWarning() << "Unnamed action in definitions file " << actionDefinition;
                     }
 
                     else if (actionInfoList.contains(name)) {

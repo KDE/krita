@@ -597,14 +597,11 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop)
 {
     KisPaintOpPresetSP preset = activePreset(paintop);
     Q_ASSERT(preset && preset->settings());
-    //qDebug() << "setCurrentPaintop();" << paintop << preset;
     setCurrentPaintop(preset);
 }
 
 void KisPaintopBox::setCurrentPaintop(KisPaintOpPresetSP preset)
 {
-
-    //qDebug() << "setCurrentPaintop(); " << preset->name();
 
     if (preset == m_resourceProvider->currentPreset()) {
 
@@ -668,6 +665,14 @@ void KisPaintopBox::setCurrentPaintop(KisPaintOpPresetSP preset)
 
     m_currCompositeOpID = preset->settings()->paintOpCompositeOp();
     updateCompositeOp(m_currCompositeOpID);
+
+    if (preset->settings()->hasPatternSettings()) {
+        setMultiplierSliderValue("patternsize", preset->settings()->paintOpPatternSize());
+        setWidgetState(ENABLE_PATTERNSIZE);
+    }
+    else {
+        setWidgetState(DISABLE_PATTERNSIZE);
+    }
 }
 
 void KisPaintopBox::slotUpdateOptionsWidgetPopup()
@@ -1123,9 +1128,9 @@ void KisPaintopBox::slotToolChanged(KoCanvasController* canvas, int toolId)
         int flags = tool->flags();
 
         if (flags & KisTool::FLAG_USES_CUSTOM_COMPOSITEOP) {
-            setWidgetState(ENABLE_COMPOSITEOP | ENABLE_OPACITY);
+            setWidgetState(ENABLE_COMPOSITEOP | ENABLE_OPACITY | ENABLE_PATTERNSIZE);
         } else                                              {
-            setWidgetState(DISABLE_COMPOSITEOP | DISABLE_OPACITY);
+            setWidgetState(DISABLE_COMPOSITEOP | DISABLE_OPACITY | DISABLE_PATTERNSIZE);
         }
 
         if (flags & KisTool::FLAG_USES_CUSTOM_PRESET) {
@@ -1168,9 +1173,9 @@ void KisPaintopBox::slotToolChanged(KoCanvasController* canvas, int toolId)
         }
 
         if (flags & KisTool::FLAG_USES_CUSTOM_SIZE) {
-            setWidgetState(ENABLE_SIZE | ENABLE_FLOW);
+            setWidgetState(ENABLE_SIZE | ENABLE_FLOW | ENABLE_PATTERNSIZE);
         } else {
-            setWidgetState(DISABLE_SIZE | DISABLE_FLOW);
+            setWidgetState(DISABLE_SIZE | DISABLE_FLOW| DISABLE_PATTERNSIZE);
         }
 
     } else setWidgetState(DISABLE_ALL);
@@ -1227,7 +1232,6 @@ void KisPaintopBox::slotNextFavoritePreset()
 void KisPaintopBox::slotSwitchToPreviousPreset()
 {
     if (m_resourceProvider->previousPreset()) {
-        //qDebug() << "slotSwitchToPreviousPreset();" << m_resourceProvider->previousPreset();
         setCurrentPaintop(m_resourceProvider->previousPreset());
         m_viewManager->showFloatingMessage(
                     i18n("%1\nselected",

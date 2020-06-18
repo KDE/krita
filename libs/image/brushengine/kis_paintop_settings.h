@@ -246,12 +246,12 @@ public:
     virtual qreal paintOpSize() const = 0;
 
     /**
-     * Set paintop size directly in the properties
+     * Set paintop pattern size directly in the properties
      */
-    virtual void setPaintOpPatternSize(qreal value);
+    //virtual void setPaintOpPatternSize(qreal value);
 
     /**
-     * @return size saved in the properties
+     * @return pattern size saved in the properties
      */
     virtual qreal paintOpPatternSize();
 
@@ -347,6 +347,9 @@ public:
      * Set resource interface that will be used for loading linked resources
      */
     void setResourcesInterface(KisResourcesInterfaceSP resourcesInterface);
+
+
+    virtual bool hasPatternSettings() const;
 
 protected:
 

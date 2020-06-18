@@ -11,9 +11,11 @@
 #include <QDockWidget>
 #include <KoCanvasObserverBase.h>
 
+#include <KoColor.h>
+
 class KisCanvas2;
+class KisSignalCompressor;
 class KisVisualColorSelector;
-class KoColor;
 class QVariant;
 
 class WGColorSelectorDock : public QDockWidget, public KoCanvasObserverBase // public KisMainwindowObserver ?
@@ -30,10 +32,16 @@ protected:
 private Q_SLOTS:
     void slotDisplayConfigurationChanged();
     void slotColorSelected(const KoColor &color);
+    void slotSetNewColors();
     void slotCanvasResourceChanged(int key, const QVariant &value);
 private:
     QPointer<KisCanvas2> m_canvas;
     KisVisualColorSelector *m_selector {0};
+    KisSignalCompressor *m_colorChangeCompressor;
+    bool m_pendingFgUpdate {false};
+    bool m_pendingBgUpdate {false};
+    KoColor m_fgColor;
+    KoColor m_bgColor;
 };
 
 #endif // WG_COLOR_SELECTOR_DOCKER_H

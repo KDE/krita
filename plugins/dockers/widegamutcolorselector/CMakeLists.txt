@@ -1,6 +1,7 @@
 set(KRITA_WGCOLORSELECTOR_SOURCES
     WGColorSelectorPlugin.cpp
     WGColorSelectorDock.cpp
+    KisColorSourceToggle.cpp
 )
 
 add_library(kritawgcolorselector MODULE ${KRITA_WGCOLORSELECTOR_SOURCES})

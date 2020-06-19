@@ -422,8 +422,6 @@ bool KisResourceLocator::addStorage(const QString &storageLocation, KisResourceS
         d->errorMessages.append(i18n("Could not add %1 to the database", storage->location()));
         return false;
     }
-    KisResourceModelProvider::resetAllModels();
-
     emit storageAdded(storage->location());
 
     return true;
@@ -441,8 +439,6 @@ bool KisResourceLocator::removeStorage(const QString &document)
         d->errorMessages.append(i18n("Could not remove storage %1 from the database", storage->location()));
         return false;
     }
-    KisResourceModelProvider::resetAllModels();
-
     emit storageRemoved(storage->location());
 
     return true;

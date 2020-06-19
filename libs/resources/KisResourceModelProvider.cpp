@@ -50,13 +50,6 @@ KisResourceModel *KisResourceModelProvider::resourceModel(const QString &resourc
     return s_instance->d->resourceModels[resourceType];
 }
 
-void KisResourceModelProvider::resetAllModels()
-{
-    Q_FOREACH(KisResourceModel *model, s_instance->d->resourceModels.values()) {
-        model->resetQuery();
-    }
-}
-
 void KisResourceModelProvider::resetModel(const QString& resourceType)
 {
     QMap<QString, KisResourceModel*>::iterator found

@@ -147,11 +147,6 @@ void DlgDbExplorer::updateTagModel(const QString& resourceType)
     qDebug() << "number of tags in " << resourceType << " tag model: " << m_tagModel->rowCount();
 }
 
-void DlgDbExplorer::slotResetTagModel(QModelIndex topLeft, QModelIndex bottomRight)
-{
-    KisTagModelProvider::resetModels();
-}
-
 void DlgDbExplorer::slotRvResourceTypeSelected(int index)
 {
     QModelIndex idx = m_page->cmbResourceTypes->model()->index(index, KisResourceTypeModel::ResourceType);

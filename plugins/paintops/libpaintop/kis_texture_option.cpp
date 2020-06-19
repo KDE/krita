@@ -269,11 +269,12 @@ void KisTextureProperties::createQColorFromPixel(QColor& dest, const quint8* pix
 void KisTextureProperties::applyLightness(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation& info) {
     if (!m_enabled) return;
 
-    KisPaintDeviceSP fillMaskDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
-    QRect rect = dab->bounds();
-
     KisPaintDeviceSP mask = m_maskInfo->mask();
+    bool maskHasAlpha = m_maskInfo->hasAlpha();
     const QRect maskBounds = m_maskInfo->maskBounds();
+
+    KisPaintDeviceSP fillMaskDevice = new KisPaintDevice(mask->colorSpace());
+    QRect rect = dab->bounds();
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(mask);
 
@@ -287,20 +288,24 @@ void KisTextureProperties::applyLightness(KisFixedPaintDeviceSP dab, const QPoin
     qreal pressure = m_strengthOption.apply(info);
     quint8* dabData = dab->data();
 
-    KisHLineIteratorSP lightIter = fillMaskDevice->createHLineIteratorNG(x, y, rect.width());
+    KisHLineIteratorSP iter = fillMaskDevice->createHLineIteratorNG(x, y, rect.width());
     for (int row = 0; row < rect.height(); ++row) {
         for (int col = 0; col < rect.width(); ++col) {
-            const quint8* maskData = lightIter->oldRawData();
+            const quint8* maskData = iter->oldRawData();
             QColor maskColor;
-            createQColorFromPixel(maskColor, maskData, mask->colorSpace());
-
+            if (maskHasAlpha) {
+                createQColorFromPixel(maskColor, maskData, mask->colorSpace());
+            } else {
+                quint8 gray = *maskData;
+                maskColor = QColor::fromRgb(gray, gray, gray);
+            }
             QRgb maskQRgb = maskColor.rgba();
             dab->colorSpace()->fillGrayBrushWithColorAndLightnessWithStrength(dabData, &maskQRgb, dabData, pressure, 1);
 
-            lightIter->nextPixel();
+            iter->nextPixel();
             dabData += dab->pixelSize();
         }
-        lightIter->nextRow();
+        iter->nextRow();
     }
 }
 

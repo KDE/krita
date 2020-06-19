@@ -64,13 +64,17 @@ public:
      */
     QImage pattern() const;
 
+    bool hasAlpha();
+
 private:
 
     bool init(QByteArray& data);
     void setPatternImage(const QImage& image);
+    void checkForAlpha(const QImage& image);
 
 private:
     QImage m_pattern;
+    bool m_hasAlpha = false;
     mutable QByteArray m_md5;
 };
 

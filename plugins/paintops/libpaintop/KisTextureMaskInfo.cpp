@@ -138,8 +138,14 @@ void KisTextureMaskInfo::recalculateMask()
 {
     if (!m_pattern) return;
 
-    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace* cs;
+    bool hasAlpha = m_pattern->hasAlpha();
 
+    if (hasAlpha) {
+        cs = KoColorSpaceRegistry::instance()->rgb8();
+    } else {
+        cs = KoColorSpaceRegistry::instance()->alpha8();
+    }
     if (!m_mask) {
         m_mask = new KisPaintDevice(cs);
     }
@@ -219,6 +225,10 @@ void KisTextureMaskInfo::recalculateMask()
 
     m_mask->convertFromQImage(mask, 0);
     m_maskBounds = QRect(0, 0, width, height);
+}
+
+bool KisTextureMaskInfo::hasAlpha() {
+    return m_pattern->hasAlpha();
 }
 
 /**********************************************************************/

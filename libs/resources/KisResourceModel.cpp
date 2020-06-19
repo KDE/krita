@@ -621,12 +621,18 @@ KisResourceModel::~KisResourceModel()
 
 void KisResourceModel::setResourceFilter(ResourceFilter filter)
 {
-    d->resourceFilter = filter;
+    if (d->resourceFilter != filter) {
+        d->resourceFilter = filter;
+        invalidateFilter();
+    }
 }
 
 void KisResourceModel::setStorageFilter(StorageFilter filter)
 {
-    d->storageFilter = filter;
+    if (d->storageFilter != filter) {
+        d->storageFilter = filter;
+        invalidateFilter();
+    }
 }
 
 KoResourceSP KisResourceModel::resourceForIndex(QModelIndex index) const

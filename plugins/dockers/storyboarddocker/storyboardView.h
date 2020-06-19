@@ -42,7 +42,6 @@ public:
     void paintEvent(QPaintEvent *event) override;
     QRect visualRect(const QModelIndex &index) const override;
     QModelIndex indexAt(const QPoint &point) const override;
-    void mouseMoveEvent(QMouseEvent *event) override;
     void setItemOrientation(Qt::Orientation orientation);
     Qt::Orientation itemOrientation();
     bool commentIsVisible() const;
@@ -54,7 +53,6 @@ private Q_SLOTS:
     void slotContextMenuRequested(const QPoint &);
 
 private:
-    QModelIndex m_hoverIndex;
     Qt::Orientation m_itemOrientation;
     bool m_commentIsVisible;
     bool m_thumbnailIsVisible;

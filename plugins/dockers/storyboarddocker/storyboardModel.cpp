@@ -28,7 +28,7 @@ StoryboardModel::StoryboardModel(QObject *parent)
         , m_commentCount(0)
 {
     connect(this, SIGNAL(rowsInserted(const QModelIndex, int, int)),
-                this, SLOT(slotInsertCommentRows(const QModelIndex, int, int)));
+                this, SLOT(slotInsertChildRows(const QModelIndex, int, int)));
 }
 
 QModelIndex StoryboardModel::index(int row, int column, const QModelIndex &parent) const
@@ -209,14 +209,14 @@ bool StoryboardModel::removeRows(int position, int rows, const QModelIndex &pare
     //remove 1st level nodes
     if (!parent.isValid()){
         beginRemoveRows(QModelIndex(), position, position+rows-1);
-        for (int row = 0; row < rows; ++row){
+        for (int row = position + rows - 1; row >= position; row--){
             //deleting all the child nodes
-            QModelIndex currentIndex = index(position, 0);
+            QModelIndex currentIndex = index(row, 0);
             removeRows(0, rowCount(currentIndex), currentIndex);
 
             //deleting the actual parent node
-            delete m_items.at(position);
-            m_items.removeAt(position);
+            delete m_items.at(row);
+            m_items.removeAt(row);
         }
         endRemoveRows();
         return true;
@@ -382,7 +382,7 @@ Comment StoryboardModel::getComment(int row) const
 void StoryboardModel::slotCommentDataChanged()
 {
     m_commentList = m_commentModel->m_commentList;
-    emit(dataChanged(QModelIndex(), QModelIndex()));
+    emit(layoutChanged());
 }
 
 void StoryboardModel::slotCommentRowInserted(const QModelIndex parent, int first, int last)
@@ -416,7 +416,7 @@ void StoryboardModel::slotCommentRowMoved(const QModelIndex &sourceParent, int s
     slotCommentDataChanged();
 }
 
-void StoryboardModel::slotInsertCommentRows(const QModelIndex parent, int first, int last)
+void StoryboardModel::slotInsertChildRows(const QModelIndex parent, int first, int last)
 {
     if (!parent.isValid()){
         int rows = last - first + 1;

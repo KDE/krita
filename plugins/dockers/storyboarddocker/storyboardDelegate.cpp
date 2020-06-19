@@ -70,9 +70,6 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
             p->eraseRect(parentRect);
         }
         else{
-            //paint Child index (the indices that hold data)
-            QModelIndex parent = index.parent();
-
             //draw the child items
             int childNum = index.row();
             QString data = index.model()->data(index, Qt::DisplayRole).toString();
@@ -98,20 +95,19 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
                         p->setPen(QPen(option.palette.dark(), 2));
                         p->drawRect(option.rect);
 
-                        if (option.state & QStyle::State_MouseOver){
-                            QRect buttonsRect = option.rect;
-                            buttonsRect.setTop(option.rect.bottom() - 22);
-                            p->fillRect(buttonsRect, option.palette.background());
+                        QRect buttonsRect = option.rect;
+                        buttonsRect.setTop(option.rect.bottom() - 22);
 
-                            buttonsRect.setWidth(22);
-                            buttonsRect.moveBottomLeft(option.rect.bottomLeft());
-                            QIcon addIcon = KisIconUtils::loadIcon("list-add");
-                            addIcon.paint(p, buttonsRect);
+                        buttonsRect.setWidth(22);
+                        buttonsRect.moveBottomLeft(option.rect.bottomLeft());
+                        QIcon addIcon = KisIconUtils::loadIcon("list-add");
+                        p->fillRect(buttonsRect, option.palette.background());
+                        addIcon.paint(p, buttonsRect);
 
-                            buttonsRect.moveBottomRight(option.rect.bottomRight());
-                            QIcon deleteIcon = KisIconUtils::loadIcon("trash-empty");
-                            deleteIcon.paint(p, buttonsRect);
-                        }
+                        buttonsRect.moveBottomRight(option.rect.bottomRight());
+                        QIcon deleteIcon = KisIconUtils::loadIcon("trash-empty");
+                        p->fillRect(buttonsRect, option.palette.background());
+                        deleteIcon.paint(p, buttonsRect);
                     }
                     else {
                         QRect frameNumRect = option.rect;

@@ -78,9 +78,6 @@ void StoryboardView::paintEvent(QPaintEvent *event)
             if (childIndex == selectionModel()->currentIndex()) {
                 option.state |= QStyle::State_HasFocus;
             }
-            if (childIndex == m_hoverIndex){
-                option.state |= QStyle::State_MouseOver;
-            }
             option.font = font();
             option.fontMetrics = fontMetrics();
             option.rect = visualRect(childIndex);
@@ -187,14 +184,6 @@ QModelIndex StoryboardView::indexAt(const QPoint &point) const
         }
     }
     return index;
-}
-
-void StoryboardView::mouseMoveEvent(QMouseEvent *event)
-{
-    event->accept();
-    QListView::mouseMoveEvent(event);
-
-    m_hoverIndex = indexAt(event->pos());
 }
 
 void StoryboardView::setItemOrientation(Qt::Orientation orientation)

@@ -31,6 +31,10 @@ SvgMeshPatch::SvgMeshPatch(QPointF startingPoint)
 {
 }
 
+SvgMeshPatch::SvgMeshPatch(const SvgMeshPatch& other)
+{
+}
+
 SvgMeshPatch::~SvgMeshPatch()
 {
     for (auto &node: m_nodes.values()) {

@@ -76,6 +76,7 @@ set(kritaflake_SRCS
     KoShapeBackground.cpp
     KoColorBackground.cpp
     KoGradientBackground.cpp
+    KoMeshGradientBackground.cpp
     KoHatchBackground.cpp
     KoPatternBackground.cpp
     KoVectorPatternBackground.cpp

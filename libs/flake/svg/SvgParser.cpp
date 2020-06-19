@@ -47,6 +47,7 @@
 #include <KoImageCollection.h>
 #include <KoColorBackground.h>
 #include <KoGradientBackground.h>
+#include <KoMeshGradientBackground.h>
 #include <KoPatternBackground.h>
 #include <KoFilterEffectRegistry.h>
 #include <KoFilterEffect.h>
@@ -534,7 +535,7 @@ SvgGradientHelper* SvgParser::parseMeshGradient(const KoXmlElement &e)
             irow++;
         }
     }
-    // gradHelper.setGradient(g);
+    gradHelper.setMeshGradient(g);
     m_gradients.insert(gradientId, gradHelper);
 
     return &m_gradients[gradientId];
@@ -1118,12 +1119,23 @@ void SvgParser::applyFillStyle(KoShape *shape)
         SvgGradientHelper *gradient = findGradient(gc->fillId);
         if (gradient) {
             QTransform transform;
-            QGradient *result = prepareGradientForShape(gradient, shape, gc, &transform);
-            if (result) {
-                QSharedPointer<KoGradientBackground> bg;
-                bg = toQShared(new KoGradientBackground(result));
-                bg->setTransform(transform);
+
+            if (gradient->isMeshGradient()) {
+                QSharedPointer<KoMeshGradientBackground> bg;
+                // NOTE: this will MOVE SvgMeshPatch elements in mesharray
+                SvgMeshGradient *result = new SvgMeshGradient(*gradient->meshgradient());
+
+                // TODO handle transform
+                bg = toQShared(new KoMeshGradientBackground(result, transform));
                 shape->setBackground(bg);
+            } else {
+                QGradient *result = prepareGradientForShape(gradient, shape, gc, &transform);
+                if (result) {
+                    QSharedPointer<KoGradientBackground> bg;
+                    bg = toQShared(new KoGradientBackground(result));
+                    bg->setTransform(transform);
+                    shape->setBackground(bg);
+                }
             }
         } else {
             QSharedPointer<KoVectorPatternBackground> pattern =

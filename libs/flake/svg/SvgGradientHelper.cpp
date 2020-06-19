@@ -28,17 +28,21 @@
 #include <KoFlake.h>
 
 SvgGradientHelper::SvgGradientHelper()
-    : m_gradient(new QGradient()), m_gradientUnits(KoFlake::ObjectBoundingBox)
+    : m_gradient(new QGradient())
+    , m_meshgradient(new SvgMeshGradient)
+    , m_gradientUnits(KoFlake::ObjectBoundingBox)
 {
 }
 
 SvgGradientHelper::~SvgGradientHelper()
 {
     delete m_gradient;
+    delete m_meshgradient;
 }
 
 SvgGradientHelper::SvgGradientHelper(const SvgGradientHelper &other)
     : m_gradient(KoFlake::cloneGradient(other.m_gradient))
+    , m_meshgradient(new SvgMeshGradient(*other.m_meshgradient))
     , m_gradientUnits(other.m_gradientUnits)
     , m_gradientTransform(other.m_gradientTransform)
 {
@@ -52,6 +56,7 @@ SvgGradientHelper & SvgGradientHelper::operator = (const SvgGradientHelper & rhs
     m_gradientUnits = rhs.m_gradientUnits;
     m_gradientTransform = rhs.m_gradientTransform;
     m_gradient = KoFlake::cloneGradient(rhs.m_gradient);
+    m_meshgradient = new SvgMeshGradient(*rhs.m_meshgradient);
 
     return *this;
 }
@@ -75,6 +80,22 @@ void SvgGradientHelper::setGradient(QGradient * g)
 {
     delete m_gradient;
     m_gradient = g;
+}
+
+void SvgGradientHelper::setMeshGradient(SvgMeshGradient *g)
+{
+    delete m_meshgradient;
+    m_meshgradient = g;
+}
+
+SvgMeshGradient* SvgGradientHelper::meshgradient() const
+{
+    return m_meshgradient;
+}
+
+bool SvgGradientHelper::isMeshGradient() const
+{
+    return m_meshgradient->isValid();
 }
 
 QTransform SvgGradientHelper::transform() const

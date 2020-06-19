@@ -52,6 +52,7 @@ public:
     };
 
     SvgMeshPatch(QPointF startingPoint);
+    SvgMeshPatch(const SvgMeshPatch& other);
     ~SvgMeshPatch();
 
     SvgMeshStop* getStop(Type type) const;

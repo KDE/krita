@@ -93,7 +93,7 @@ bool CommentModel::insertRows(int position, int rows, const QModelIndex &parent)
         newcomment.name = "";
         newcomment.visibility = true;
 
-        if (position < 0 && position>=m_commentList.size()) return false;
+        if (position < 0 || position > m_commentList.size()) return false;
         m_commentList.insert(position, newcomment);
     }
 

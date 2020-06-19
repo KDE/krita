@@ -19,6 +19,7 @@
 #define COMMENT_MODEL
 
 #include <QAbstractListModel>
+#include <kritaui_export.h>
 
 class StoryboardModel;
 struct Comment 
@@ -30,7 +31,7 @@ struct Comment
 /*
     This model manages the comment data of StoryboardModel
 */
-class CommentModel : public QAbstractListModel
+class KRITAUI_EXPORT CommentModel : public QAbstractListModel
 {
 
     Q_OBJECT

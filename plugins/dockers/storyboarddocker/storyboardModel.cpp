@@ -135,7 +135,8 @@ bool StoryboardModel::setData(const QModelIndex & index, const QVariant & value,
         StoryboardChild *child = static_cast<StoryboardChild*>(index.internalPointer());
         if (child){
             int fps = 24;
-            if(index.row() == 3 && value.toInt() >= fps){         //TODO : set fps
+            if ((index.row() <= 3  && index.row() != 1) && value.toInt() < 0) return false;
+            if (index.row() == 3 && value.toInt() >= fps){         //TODO : set fps
                 QModelIndex secondIndex = index.siblingAtRow(2);
                 setData(secondIndex, secondIndex.data().toInt() + value.toInt() / fps, role);
                 child->setData(value.toInt() % fps);
@@ -183,6 +184,7 @@ Qt::ItemFlags StoryboardModel::flags(const QModelIndex & index) const
 bool StoryboardModel::insertRows(int position, int rows, const QModelIndex &parent)
 {
     if (!parent.isValid()){
+        if (position < 0 || position > m_items.count()) return false;
         beginInsertRows(QModelIndex(), position, position+rows-1);
         for (int row = 0; row < rows; ++row) {
             StoryboardItem *newItem = new StoryboardItem();
@@ -193,6 +195,8 @@ bool StoryboardModel::insertRows(int position, int rows, const QModelIndex &pare
     }
     else if (!parent.parent().isValid()){              //insert 2nd level nodes
         StoryboardItem *item = static_cast<StoryboardItem*>(parent.internalPointer());
+
+        if (position < 0 || position > item->childCount()) return false;
         beginInsertRows(parent, position, position+rows-1);
         for (int row = 0; row < rows; ++row) {
             item->insertChild(position, QVariant());
@@ -208,6 +212,8 @@ bool StoryboardModel::removeRows(int position, int rows, const QModelIndex &pare
 {
     //remove 1st level nodes
     if (!parent.isValid()){
+
+        if (position < 0 || position >= m_items.count()) return false;
         beginRemoveRows(QModelIndex(), position, position+rows-1);
         for (int row = position + rows - 1; row >= position; row--){
             //deleting all the child nodes
@@ -223,6 +229,8 @@ bool StoryboardModel::removeRows(int position, int rows, const QModelIndex &pare
     }
     else if (!parent.parent().isValid()){                     //remove 2nd level nodes
         StoryboardItem *item = static_cast<StoryboardItem*>(parent.internalPointer());
+
+        if (position < 0 || position >= item->childCount()) return false;
         if (m_items.contains(item)){
             beginRemoveRows(parent, position, position+rows-1);
             for (int row = 0; row < rows; ++row) {

@@ -23,6 +23,7 @@
 
 #include "storyboardItem.h"
 #include "commentModel.h"
+#include <kritaui_export.h>
 
 /*
     The main storyboard model. 
@@ -46,7 +47,7 @@ public:
 };
 Q_DECLARE_METATYPE(CommentBox)
 
-class StoryboardModel : public QAbstractItemModel
+class KRITAUI_EXPORT StoryboardModel : public QAbstractItemModel
 {
     Q_OBJECT
 

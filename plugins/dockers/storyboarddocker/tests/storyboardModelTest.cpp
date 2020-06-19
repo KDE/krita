@@ -20,103 +20,107 @@
 
 #include <QTest>
 #include <QWidget>
-#include "storyboardModel.h"
-#include "commentModel.h"
+#include <storyboardModel.h>
+#include <commentModel.h>
 
 void StoryboardModelTest::init()
 {
-    m_commentModel = new CommentModel(0);
-    m_storyboardModel = new StoryboardModel(0);
+    m_commentModel = new CommentModel(this);
+    m_storyboardModel = new StoryboardModel(this);
+    m_storyboardModel->setCommentModel(m_commentModel);
 
     m_commentModel->insertRows(m_commentModel->rowCount(),1);
+    m_storyboardModel->insertRows(m_storyboardModel->rowCount(),1);
     QCOMPARE(m_commentModel->rowCount(), 1);
 }
 
 void StoryboardModelTest::cleanup()
 {
+    m_storyboardModel->removeRows(0, m_storyboardModel->rowCount());
+    m_commentModel->removeRows(0, m_commentModel->rowCount());
+
     delete m_storyboardModel;
     delete m_commentModel;
 }
 
+
 void StoryboardModelTest::testAddComment()
 {
 
-    auto tester = new QAbstractItemModelTester(m_storyboardModel, 0);
-    auto tester = new QAbstractItemModelTester(m_commentModel, 0);
+    auto sbTester = new QAbstractItemModelTester(m_storyboardModel, this);
+    auto commentTester = new QAbstractItemModelTester(m_commentModel, this);
+    Q_UNUSED(sbTester);
+    Q_UNUSED(commentTester);
 
-    int commentStoryboard = m_storyboardModel->commentCount();
+    int rowStoryboard = m_storyboardModel->rowCount(m_storyboardModel->index(0,0));
     int rowsComment = m_commentModel->rowCount();
 
-    QCOMPARE(commentStoryboard, rowsComment);
+    QCOMPARE(rowStoryboard, rowsComment + 4);
 
     m_commentModel->insertRows(m_commentModel->rowCount(),1);
 
     QCOMPARE(rowsComment + 1, m_commentModel->rowCount());
-    QCOMPARE(m_storyboardModel->commentCount(), m_commentModel->rowCount());
+    QCOMPARE(m_storyboardModel->rowCount(m_storyboardModel->index(0,0)), m_commentModel->rowCount() + 4);
 
     //add at an invalid position
     m_commentModel->insertRows(-1, 1);
 
     QCOMPARE(rowsComment + 1, m_commentModel->rowCount());
-    QCOMPARE(m_storyboardModel->commentCount(), m_commentModel->rowCount());
-
+    QCOMPARE(m_storyboardModel->rowCount(m_storyboardModel->index(0,0)), m_commentModel->rowCount() + 4);
 }
 
 void StoryboardModelTest::testRemoveComment()
 {
 
-    auto tester = new QAbstractItemModelTester(m_storyboardModel, 0);
-    auto tester = new QAbstractItemModelTester(m_commentModel, 0);
-    int commentStoryboard = m_storyboardModel->commentCount();
+    auto sbTester = new QAbstractItemModelTester(m_storyboardModel, this);
+    auto commentTester = new QAbstractItemModelTester(m_commentModel, this);
+    Q_UNUSED(sbTester);
+    Q_UNUSED(commentTester);
+
+    int rowStoryboard = m_storyboardModel->rowCount(m_storyboardModel->index(0,0));
     int rowsComment = m_commentModel->rowCount();
 
-    QCOMPARE(commentStoryboard, rowsComment);
+    QCOMPARE(rowStoryboard, rowsComment + 4);
 
-    m_commentModel->removeRows(m_commentModel->rowCount(),1);
+    m_commentModel->removeRows(m_commentModel->rowCount() - 1,1);
 
     QCOMPARE(rowsComment - 1, m_commentModel->rowCount());
-    QCOMPARE(m_storyboardModel->commentCount(), m_commentModel->rowCount());
+    QCOMPARE(m_storyboardModel->rowCount(m_storyboardModel->index(0,0)), m_commentModel->rowCount() + 4);
 
     m_commentModel->removeRows(-1,1);
 
     QCOMPARE(rowsComment - 1, m_commentModel->rowCount());
-    QCOMPARE(m_storyboardModel->commentCount(), m_commentModel->rowCount());
+    QCOMPARE(m_storyboardModel->rowCount(m_storyboardModel->index(0,0)), m_commentModel->rowCount() + 4);
 }
 
 void StoryboardModelTest::testCommentNameChanged()
 {
-    auto tester = new QAbstractItemModelTester(m_commentModel, 0);
-    QModelIndex index = m_commentModel->createIndex(m_commentModel->rowCount(),m_commentModel->columnCount());
+    auto tester = new QAbstractItemModelTester(m_commentModel, this);
+    Q_UNUSED(tester);
+    QModelIndex index = m_commentModel->index(m_commentModel->rowCount() - 1, 0);
     QVariant value = QVariant(QString("newValue"));
     m_commentModel->setData(index, value);
 
     QCOMPARE(QString("newValue"), m_commentModel->data(index));
 }
 
-void StoryboardModelTest::testCommentVisibilityChanged()
-{
-    QModelIndex index = m_commentModel->createIndex(m_commentModel->rowCount(),m_commentModel->columnCount());
-    QIcon prevIcon = m_commentModel->data(index, Qt::DecorationRole);
-    m_commentModel->setData(index, true, Qt::DecorationRole);
-    QIcon currIcon = m_commentModel->data(index, Qt::DecorationRole);
-
-    QVERIFY(prevIcon != currIcon);
-}
-
 void StoryboardModelTest::testFrameAdded()
 {
     int rows = m_storyboardModel->rowCount();
     auto tester = new QAbstractItemModelTester(m_storyboardModel, 0);
+    Q_UNUSED(tester);
     m_storyboardModel->insertRows(m_storyboardModel->rowCount(),1);
 
     QCOMPARE(rows + 1, m_storyboardModel->rowCount());
 }
 
+
 void StoryboardModelTest::testFrameRemoved()
 {
     int rows = m_storyboardModel->rowCount();
     auto tester = new QAbstractItemModelTester(m_storyboardModel, 0);
-    m_storyboardModel->removeRows(m_storyboardModel->rowCount(),1);
+    Q_UNUSED(tester);
+    m_storyboardModel->removeRows(m_storyboardModel->rowCount() - 1,1);
 
     QCOMPARE(rows-1, m_storyboardModel->rowCount());
 }
@@ -125,45 +129,49 @@ void StoryboardModelTest::testFrameChanged()
 {
 
     auto tester = new QAbstractItemModelTester(m_storyboardModel, 0);
-    QModelIndex index = m_commentModel->createIndex(m_storyboardModel->rowCount(), 1);
+    Q_UNUSED(tester);
+    QModelIndex parentIndex = m_storyboardModel->index(m_storyboardModel->rowCount() - 1, 0);
+    QModelIndex frameIndex = m_storyboardModel->index(0, 0, parentIndex);
     QVariant value = QVariant(100);
-    m_stroyboardModel->setData(index, value, Qt::EditRole);
+    m_storyboardModel->setData(frameIndex, value, Qt::EditRole);
 
-    QCOMPARE(m_stroyboardModel->data(index), 100);
+    QCOMPARE(m_storyboardModel->data(frameIndex).toInt(), 100);
 
     //invalid value shouldn't change anything
-    QVariant value = QVariant(-100);
-    m_stroyboardModel->setData(index, value, Qt::EditRole);
+    QVariant invalidValue = QVariant(-100);
+    m_storyboardModel->setData(frameIndex, invalidValue, Qt::EditRole);
 
-    QVERIFY(m_stroyboardModel->data(index), 100);
-
-
+    QCOMPARE(m_storyboardModel->data(frameIndex).toInt(), 100);
 }
 
 void StoryboardModelTest::testDurationChanged()
 {
     auto tester = new QAbstractItemModelTester(m_storyboardModel, 0);
-    QModelIndex index = m_commentModel->createIndex(m_storyboardModel->rowCount(), 2);
+    Q_UNUSED(tester);
+    QModelIndex parentIndex = m_storyboardModel->index(m_storyboardModel->rowCount() - 1, 0);
+    QModelIndex secIndex = m_storyboardModel->index(2, 0, parentIndex);
     QVariant value = QVariant(100);
-    m_stroyboardModel->setData(index, value, Qt::EditRole);
+    m_storyboardModel->setData(secIndex, value, Qt::EditRole);
 
-    QCOMPARE(m_stroyboardModel->data(index), 100);
+    QCOMPARE(m_storyboardModel->data(secIndex).toInt(), 100);
 
     //invalid value shouldn't change anything
-    QVariant value = QVariant(-1);
-    m_stroyboardModel->setData(index, value, Qt::EditRole);
+    QVariant invalidValue = QVariant(-100);
+    m_storyboardModel->setData(secIndex, invalidValue, Qt::EditRole);
 
-    QVERIFY(m_stroyboardModel->data(index), 100);
+    QCOMPARE(m_storyboardModel->data(secIndex).toInt(), 100);
 }
 
 void StoryboardModelTest::testCommentChanged()
 {
     auto tester = new QAbstractItemModelTester(m_storyboardModel, 0);
-    QModelIndex index = m_commentModel->createIndex(m_storyboardModel->rowCount(),4);
+    Q_UNUSED(tester);
+    QModelIndex parentIndex = m_storyboardModel->index(m_storyboardModel->rowCount() - 1, 0);
+    QModelIndex commentIndex = m_storyboardModel->index(4, 0, parentIndex);
     QVariant value = QVariant(QString("newComment"));
-    m_stroyboardModel->setData(index, value, Qt::EditRole);
+    m_storyboardModel->setData(commentIndex, value, Qt::EditRole);
 
-    QCOMPARE(m_stroyboardModel->data(index,Qt::EditRole), QString("newComment"));
+    QCOMPARE(m_storyboardModel->data(commentIndex).toString(), "newComment");
 }
 
 QTEST_MAIN(StoryboardModelTest)

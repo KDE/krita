@@ -32,10 +32,9 @@ private Q_SLOTS:
     void cleanup();
 
     //interaction with comment model
-    void testAddComment()
+    void testAddComment();
     void testRemoveComment();
     void testCommentNameChanged();
-    void testCommentVisibilityChanged();
 
     //"storyboard model only" tests
     void testFrameAdded();

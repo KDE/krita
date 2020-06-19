@@ -56,6 +56,8 @@ public:
 
     void recalculateMask();
 
+    bool hasAlpha();
+
 private:
     int m_levelOfDetail = 0;
 

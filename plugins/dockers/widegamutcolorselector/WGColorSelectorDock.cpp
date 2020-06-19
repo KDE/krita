@@ -6,6 +6,7 @@
 
 #include "WGColorSelectorDock.h"
 #include "KisVisualColorSelector.h"
+#include "KisColorSourceToggle.h"
 
 #include <klocalizedstring.h>
 
@@ -29,9 +30,12 @@ WGColorSelectorDock::WGColorSelectorDock()
     QWidget *mainWidget = new QWidget();
     mainWidget->setLayout(new QVBoxLayout());
     m_selector = new KisVisualColorSelector(mainWidget);
-    connect(m_selector, SIGNAL(sigNewColor(KoColor)), this, SLOT(slotColorSelected(KoColor)));
+    connect(m_selector, SIGNAL(sigNewColor(KoColor)), SLOT(slotColorSelected(KoColor)));
     connect(m_colorChangeCompressor, SIGNAL(timeout()), SLOT(slotSetNewColors()));
     mainWidget->layout()->addWidget(m_selector);
+    m_toggle = new KisColorSourceToggle(mainWidget);
+    connect(m_toggle, SIGNAL(toggled(bool)), SLOT(slotColorSourceToggled(bool)));
+    mainWidget->layout()->addWidget(m_toggle);
     setWidget(mainWidget);
     setEnabled(false);
 }
@@ -49,6 +53,7 @@ void WGColorSelectorDock::setCanvas(KoCanvasBase *canvas)
     m_canvas = qobject_cast<KisCanvas2*>(canvas);
     if (m_canvas) {
         KoColorDisplayRendererInterface *dri = m_canvas->displayColorConverter()->displayRendererInterface();
+        //m_toggle->setBackgroundColor(dri->toQColor(color));
         connect(dri, SIGNAL(displayConfigurationChanged()), this, SLOT(slotDisplayConfigurationChanged()));
         connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
                 this, SLOT(slotCanvasResourceChanged(int,QVariant)));
@@ -71,23 +76,41 @@ void WGColorSelectorDock::disconnectFromCanvas()
 
 void WGColorSelectorDock::slotDisplayConfigurationChanged()
 {
+    bool selectingBg = m_toggle->isChecked();
     m_selector->slotSetColorSpace(m_canvas->displayColorConverter()->paintingColorSpace());
     // TODO: use m_viewManager->canvasResourceProvider()->fgColor();
-    m_selector->slotSetColor(m_canvas->resourceManager()->foregroundColor());
+    KoColor fgColor = m_canvas->resourceManager()->foregroundColor();
+    KoColor bgColor = m_canvas->resourceManager()->backgroundColor();
+    // TODO: use painting color space?
+    m_toggle->setForegroundColor(m_canvas->displayColorConverter()->toQColor(fgColor));
+    m_toggle->setBackgroundColor(m_canvas->displayColorConverter()->toQColor(bgColor));
+    m_selector->slotSetColor(selectingBg ? bgColor : fgColor);
 }
 
 void WGColorSelectorDock::slotColorSelected(const KoColor &color)
 {
-    bool selectingBg = false;
+    bool selectingBg = m_toggle->isChecked();
     if (selectingBg) {
+        m_toggle->setBackgroundColor(m_canvas->displayColorConverter()->toQColor(color));
         m_pendingBgUpdate = true;
         m_bgColor = color;
         m_colorChangeCompressor->start();
     }
     else {
+        m_toggle->setForegroundColor(m_canvas->displayColorConverter()->toQColor(color));
         m_pendingFgUpdate = true;
         m_fgColor = color;
         m_colorChangeCompressor->start();
+    }
+}
+
+void WGColorSelectorDock::slotColorSourceToggled(bool selectingBg)
+{
+    if (selectingBg) {
+        m_selector->slotSetColor(m_canvas->resourceManager()->backgroundColor());
+    }
+    else {
+        m_selector->slotSetColor(m_canvas->resourceManager()->foregroundColor());
     }
 }
 
@@ -106,22 +129,24 @@ void WGColorSelectorDock::slotSetNewColors()
 
 void WGColorSelectorDock::slotCanvasResourceChanged(int key, const QVariant &value)
 {
-    bool selectingBg = false;
+    bool selectingBg = m_toggle->isChecked();
     switch (key) {
     case KoCanvasResource::ForegroundColor:
-        if (m_pendingFgUpdate) {
-            break;
-        }
-        if (!selectingBg) {
-            m_selector->slotSetColor(value.value<KoColor>());
+        if (!m_pendingFgUpdate) {
+            KoColor color = value.value<KoColor>();
+            m_toggle->setForegroundColor(m_canvas->displayColorConverter()->toQColor(color));
+            if (!selectingBg) {
+                m_selector->slotSetColor(color);
+            }
         }
         break;
     case KoCanvasResource::BackgroundColor:
-        if (m_pendingBgUpdate) {
-            break;
-        }
-        if (selectingBg) {
-            m_selector->slotSetColor(value.value<KoColor>());
+        if (!m_pendingBgUpdate) {
+            KoColor color = value.value<KoColor>();
+            m_toggle->setBackgroundColor(m_canvas->displayColorConverter()->toQColor(color));
+            if (selectingBg) {
+                m_selector->slotSetColor(color);
+            }
         }
     default:
         break;

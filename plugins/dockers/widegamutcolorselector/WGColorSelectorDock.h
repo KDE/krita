@@ -14,6 +14,7 @@
 #include <KoColor.h>
 
 class KisCanvas2;
+class KisColorSourceToggle;
 class KisSignalCompressor;
 class KisVisualColorSelector;
 class QVariant;
@@ -32,11 +33,13 @@ protected:
 private Q_SLOTS:
     void slotDisplayConfigurationChanged();
     void slotColorSelected(const KoColor &color);
+    void slotColorSourceToggled(bool selectingBg);
     void slotSetNewColors();
     void slotCanvasResourceChanged(int key, const QVariant &value);
 private:
     QPointer<KisCanvas2> m_canvas;
     KisVisualColorSelector *m_selector {0};
+    KisColorSourceToggle *m_toggle {0};
     KisSignalCompressor *m_colorChangeCompressor;
     bool m_pendingFgUpdate {false};
     bool m_pendingBgUpdate {false};

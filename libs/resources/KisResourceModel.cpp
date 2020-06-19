@@ -774,9 +774,3 @@ QVector<KisTagSP> KisResourceModel::tagsForResource(int resourceId) const
 {
     return static_cast<KisAllResourcesModel*>(sourceModel())->tagsForResource(resourceId);
 }
-
-bool KisResourceModel::resetQuery()
-{
-    return static_cast<KisAllResourcesModel*>(sourceModel())->resetQuery();
-}
-

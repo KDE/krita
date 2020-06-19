@@ -287,8 +287,6 @@ public:
     KoResourceSP resourceForMD5(const QByteArray md5sum) const;
     QVector<KisTagSP> tagsForResource(int resourceId) const;
 
-
-
 protected:
 
     bool filterAcceptsColumn(int source_column, const QModelIndex &source_parent) const override;
@@ -296,8 +294,6 @@ protected:
     bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;
 
 private:
-
-    bool resetQuery();
 
     struct Private;
     Private *const d;

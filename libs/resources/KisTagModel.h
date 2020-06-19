@@ -75,8 +75,6 @@ public:
     bool changeTagActive(const KisTagSP tag, bool active);
     QVector<KisTagSP> tagsForResource(int resourceId) const;
 
-    KisTagSP tagByUrl(const QString& tagUrl) const;
-
 
 
 private:
@@ -90,6 +88,7 @@ private:
     bool tagResourceByUrl(const QString& tagUrl, const int resourceId);
     bool tagResourceById(const int tagId, const int resource);
 
+    KisTagSP tagByUrl(const QString& tagUrl) const;
 
 
     bool prepareQuery();

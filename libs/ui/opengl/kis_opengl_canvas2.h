@@ -81,6 +81,7 @@ public:
     void renderDecorations(QPainter *painter);
     void paintToolOutline(const QPainterPath &path);
 
+
 public: // Implement kis_abstract_canvas_widget interface
     void setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter) override;
     void notifyImageColorSpaceChanged(const KoColorSpace *cs) override;

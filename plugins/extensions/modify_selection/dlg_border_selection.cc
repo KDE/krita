@@ -54,6 +54,8 @@ WdgBorderSelection::WdgBorderSelection(QWidget* parent, KisViewManager *view)
     connect(spbWidth, SIGNAL(valueChanged(int)), this, SLOT(slotWidthChanged(int)));
     connect(spbWidthDouble, SIGNAL(valueChanged(double)), this, SLOT(slotWidthChanged(double)));
     connect(cmbUnit, SIGNAL(currentIndexChanged(int)), this, SLOT(slotUnitChanged(int)));
+    connect(chkAntialiasing, SIGNAL(toggled(bool)), this, SLOT(slotAntialiasingChanged(bool)));
+    slotUpdateAntialiasingAvailability();
 }
 
 void WdgBorderSelection::slotWidthChanged(int width)
@@ -66,6 +68,7 @@ void WdgBorderSelection::slotWidthChanged(double width)
     const KoUnit selectedUnit = KoUnit::fromListForUi(cmbUnit->currentIndex());
     const double resWidth = (selectedUnit == KoUnit(KoUnit::Pixel)) ? width : (width * m_resolution);
     m_width = qRound(selectedUnit.fromUserValue(resWidth));
+    slotUpdateAntialiasingAvailability();
 }
 
 void WdgBorderSelection::slotUnitChanged(int index)
@@ -80,6 +83,26 @@ void WdgBorderSelection::slotUnitChanged(int index)
         spbWidth->setVisible(true);
         spbWidthDouble->setVisible(false);
     }
+}
+
+void WdgBorderSelection::slotAntialiasingChanged(bool value)
+{
+    m_antialiasing = value;
+}
+
+void WdgBorderSelection::slotUpdateAntialiasingAvailability()
+{
+    const bool antialiasingEnabled = m_width > 1;
+
+    if (antialiasingEnabled && !chkAntialiasing->isEnabled()) {
+        chkAntialiasing->setChecked(m_savedAntialiasing);
+    } else if (!antialiasingEnabled && chkAntialiasing->isEnabled()) {
+        m_savedAntialiasing = chkAntialiasing->isChecked();
+        chkAntialiasing->setChecked(false);
+    }
+
+    chkAntialiasing->setEnabled(antialiasingEnabled);
+    slotAntialiasingChanged(chkAntialiasing->isChecked());
 }
 
 void WdgBorderSelection::updateWidthUIValue(double value)
@@ -101,5 +124,6 @@ void WdgBorderSelection::getConfiguration(KisOperationConfigurationSP config)
 {
     config->setProperty("x-radius", m_width);
     config->setProperty("y-radius", m_width);
+    config->setProperty("antialiasing", m_antialiasing);
 }
 

@@ -241,7 +241,7 @@
       <statusTip/>
       <isCheckable>false</isCheckable>
       <text>Settings...</text>
-    </Action></Actions>
+    </Action>
     <Action name="svg_pick_color">
       <iconText>Colorpicker</iconText>
       <shortcut></shortcut>
@@ -251,5 +251,6 @@
       <statusTip/>
       <isCheckable>false</isCheckable>
       <text>Color Picker</text>
-    </Action></Actions>
+    </Action>
+    </Actions>
 </ActionCollection>

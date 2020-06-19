@@ -30,11 +30,12 @@ class KRITAUI_EXPORT KisColorFilterCombo : public QComboBox
 {
     Q_OBJECT
 public:
-    KisColorFilterCombo(QWidget *parent);
+    KisColorFilterCombo(QWidget *parent, bool filterMode = true, bool circleMode = true);
     ~KisColorFilterCombo() override;
 
     void updateAvailableLabels(KisNodeSP rootNode);
     void updateAvailableLabels(const QSet<int> &labels);
+    void setModes(bool filterMode, bool circleMode);
 
     QSize minimumSizeHint() const override;
     QSize sizeHint() const override;

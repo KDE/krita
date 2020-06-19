@@ -95,7 +95,7 @@ void KisSmudgeRadiusOption::apply(KoColor *resultColor,
         int k = 0;
         int j = 0;
 
-        KisRandomConstAccessorSP accessor = dev->createRandomConstAccessorNG(0, 0);
+        KisRandomConstAccessorSP accessor = dev->createRandomConstAccessorNG();
         accessor->moveTo(posx, posy);
         memcpy(color.data(), accessor->rawDataConst(), pixelSize);
 

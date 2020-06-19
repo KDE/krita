@@ -29,6 +29,7 @@
 
 class QRectF;
 class KoShape;
+class KoShapeContainer;
 class KoshapeControllerBasePrivate;
 class KoDocumentResourceManager;
 class KUndo2Command;
@@ -45,39 +46,16 @@ public:
     virtual ~KoShapeControllerBase();
 
     /**
-     * Add a shape to the shape controller, allowing it to be seen and saved.
-     * The controller should add the shape to the ShapeManager instance(s) manually
-     * if the shape is one that should be currently shown on screen.
-     * @param shape the new shape
-     */
-    void addShape(KoShape *shape);
-
-    /**
-     * Add shapes to the shape controller, allowing it to be seen and saved.
-     * The controller should add the shape to the ShapeManager instance(s) manually
-     * if the shape is one that should be currently shown on screen.
-     * @param shapes the shapes to add
-     */
-    virtual void addShapes(const QList<KoShape*> shapes) = 0;
-
-    /**
-     * Remove a shape from the shape controllers control, allowing it to be deleted shortly after
-     * The controller should remove the shape from all the ShapeManager instance(s) manually
-     * @param shape the shape to remove
-     */
-    virtual void removeShape(KoShape *shape) = 0;
-
-    /**
-     * This method gets called after the KoShapeDeleteCommand is executed
+     * When shapes are dropped to the canvas, the document should decide, where to
+     * which parent to put them. In some cases the document should even create a
+     * special layer for the new \p shapes.
      *
-     * This passes the KoShapeDeleteCommand as the command parameter. This makes it possible
-     * for applications that need to do something after the KoShapeDeleteCommand is done, e.g.
-     * adding one commands that need to be executed when a shape was deleted.
-     * The default implementation is empty.
-     * @param shapes The list of shapes that got removed.
-     * @param command The command that was used to remove the shapes from the document.
+     * \return the proposed parent for \p shapes
+     * \param parentCommand the command, which should be executed before the
+     *                      proposed parent will be added to the document (if
+     *                      new layer should be created)
      */
-    virtual void shapesRemoved(const QList<KoShape*> &shapes, KUndo2Command *command);
+    virtual KoShapeContainer* createParentForShapes(const QList<KoShape*> shapes, KUndo2Command *parentCommand);
 
     /**
      * Return a pointer to the resource manager associated with the

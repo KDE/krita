@@ -176,7 +176,7 @@ void KisPrecisePaintDeviceWrapper::readRects(const QVector<QRect> &rects)
     QRegion requestedRects;
     Q_FOREACH (const QRect &rc, rects) {
         if (m_d->srcDevice->defaultBounds()->wrapAroundMode()) {
-            const QRect wrapRect = m_d->srcDevice->defaultBounds()->bounds();
+            const QRect wrapRect = m_d->srcDevice->defaultBounds()->imageBorderRect();
             KisWrappedRect wrappedRect(rc, wrapRect);
             Q_FOREACH (const QRect &wrc, wrappedRect) {
                 const QRect croppedRect = wrc & srcExtent;
@@ -194,11 +194,10 @@ void KisPrecisePaintDeviceWrapper::readRects(const QVector<QRect> &rects)
     diff -= m_d->preparedRegion;
 
     if (rects.isEmpty()) return;
-    const QPoint firstPoint = rects.first().topLeft();
     const int channelCount = m_d->precColorSpace->channelCount();
 
-    KisRandomConstAccessorSP srcIt = m_d->srcDevice->createRandomConstAccessorNG(firstPoint.x(), firstPoint.y());
-    KisRandomAccessorSP dstIt = m_d->precDevice->createRandomAccessorNG(firstPoint.x(), firstPoint.y());
+    KisRandomConstAccessorSP srcIt = m_d->srcDevice->createRandomConstAccessorNG();
+    KisRandomAccessorSP dstIt = m_d->precDevice->createRandomAccessorNG();
 
     auto rectIter = diff.begin();
     while (rectIter != diff.end()) {
@@ -226,11 +225,10 @@ void KisPrecisePaintDeviceWrapper::writeRects(const QVector<QRect> &rects)
     if (m_d->precDevice == m_d->srcDevice) return;
 
     if (rects.isEmpty()) return;
-    const QPoint firstPoint = rects.first().topLeft();
     const int channelCount = m_d->precColorSpace->channelCount();
 
-    KisRandomConstAccessorSP srcIt = m_d->precDevice->createRandomConstAccessorNG(firstPoint.x(), firstPoint.y());
-    KisRandomAccessorSP dstIt = m_d->srcDevice->createRandomAccessorNG(firstPoint.x(), firstPoint.y());
+    KisRandomConstAccessorSP srcIt = m_d->precDevice->createRandomConstAccessorNG();
+    KisRandomAccessorSP dstIt = m_d->srcDevice->createRandomAccessorNG();
 
     Q_FOREACH (const QRect &rc, rects) {
         KritaUtils::processTwoDevices(rc,

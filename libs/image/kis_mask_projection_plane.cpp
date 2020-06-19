@@ -86,6 +86,8 @@ QRect KisMaskProjectionPlane::needRectForOriginal(const QRect &rect) const
 
 QRect KisMaskProjectionPlane::tightUserVisibleBounds() const
 {
-    return QRect();
+    // masks don't have any internal rendering subtrees,
+    // so just return the extent of the mask
+    return m_d->mask->extent();
 }
 

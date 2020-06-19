@@ -109,6 +109,9 @@ void KisFilterStrokeStrategy::initStrokeCallback()
     KisPaintDeviceSP dev = targetDevice();
     m_d->filterDeviceBounds = dev->extent();
 
+    if (m_d->filter->needsTransparentPixels(m_d->filterConfig.data(), dev->colorSpace())) {
+        m_d->filterDeviceBounds |= dev->defaultBounds()->bounds();
+    }
 
     if (activeSelection() ||
         (dev->colorSpace() != dev->compositionSourceColorSpace() &&

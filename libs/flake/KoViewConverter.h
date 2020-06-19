@@ -132,6 +132,8 @@ public:
     QTransform documentToView() const;
     QTransform viewToDocument() const;
 
+    virtual QTransform viewToWidget() const;
+    virtual QTransform widgetToView() const;
 
 private:
     qreal m_zoomLevel; // 1.0 is 100%

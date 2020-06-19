@@ -110,7 +110,7 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
     if (m_d->image) {
         relativeAxesCenter = m_d->image->mirrorAxesCenter();
     }
-    m_d->axesCenter = KisAlgebra2D::relativeToAbsolute(relativeAxesCenter, m_d->bounds->bounds());
+    m_d->axesCenter = KisAlgebra2D::relativeToAbsolute(relativeAxesCenter, m_d->bounds->imageBorderRect());
 
     m_d->mirrorMaskHorizontal = resourceManager->resource(KisCanvasResourceProvider::MirrorHorizontal).toBool();
     m_d->mirrorMaskVertical = resourceManager->resource(KisCanvasResourceProvider::MirrorVertical).toBool();
@@ -154,7 +154,7 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
     if (m_d->image) {
         relativeAxesCenter = m_d->image->mirrorAxesCenter();
     }
-    m_d->axesCenter = KisAlgebra2D::relativeToAbsolute(relativeAxesCenter, m_d->bounds->bounds());
+    m_d->axesCenter = KisAlgebra2D::relativeToAbsolute(relativeAxesCenter, m_d->bounds->imageBorderRect());
     m_d->opacity = OPACITY_OPAQUE_U8;
 
     setCurrentNode(currentNode);
@@ -369,6 +369,10 @@ KisPaintOpPresetSP KisResourcesSnapshot::currentPaintOpPreset() const
     return m_d->currentPaintOpPreset;
 }
 
+KoAbstractGradient* KisResourcesSnapshot::currentGradient() const
+{
+    return m_d->currentGradient;
+}
 
 QBitArray KisResourcesSnapshot::channelLockFlags() const
 {

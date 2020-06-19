@@ -166,7 +166,7 @@ public:
     /**
      * @brief zooms in around the center.
      *
-     * The center must be specified in view coordinates (pixels). The scrollbar positions
+     * The center must be specified in **widget** coordinates. The scrollbar positions
      * are changed so that the center becomes center if possible.
      *
      * @param center the position to zoom in on
@@ -176,7 +176,7 @@ public:
     /**
      * @brief zooms out around the center.
      *
-     * The center must be specified in view coordinates (pixels). The scrollbar positions
+     * The center must be specified in **widget** coordinates. The scrollbar positions
      * are changed so that the center becomes center if possible.
      *
      * @param center the position to zoom out around
@@ -186,7 +186,7 @@ public:
     /**
      * @brief zooms around the center.
      *
-     * The center must be specified in view coordinates (pixels). The scrollbar positions
+     * The center must be specified in **widget** coordinates. The scrollbar positions
      * are changed so that the center becomes center if possible.
      *
      * @param center the position to zoom around
@@ -197,10 +197,10 @@ public:
     /**
      * @brief zoom so that rect is exactly visible (as close as possible)
      *
-     * The rect must be specified in view coordinates (pixels). The scrollbar positions
+     * The rect must be specified in **widget** coordinates. The scrollbar positions
      * are changed so that the center of the rect becomes center if possible.
      *
-     * @param rect the rect in view coordinates (pixels) that should fit the view afterwards
+     * @param rect the rect in **widget** coordinates that should fit the view afterwards
      */
     virtual void zoomTo(const QRect &rect) = 0;
 

@@ -4,7 +4,7 @@
     <text>File</text>
     <Action name="file_new">
       <icon>document-new</icon>
-      <text>&amp;New</text>
+      <text context="New document">&amp;New...</text>
       <whatsThis></whatsThis>
       <toolTip>Create new document</toolTip>
       <iconText>New</iconText>

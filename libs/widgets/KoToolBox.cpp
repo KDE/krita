@@ -128,9 +128,14 @@ void KoToolBox::addButton(KoToolAction *toolAction)
 
     d->buttons << button;
 
-    int toolbuttonSize = buttonSize(qApp->desktop()->screenNumber(this));
+    // Get screen the widget exists in, but fall back to primary screen if invalid.
+    const int widgetsScreen = qApp->desktop()->screenNumber(this);
+    const int primaryScreen = 0; //In QT, primary screen should always be the first index of QGuiApplication::screens()
+    const int screen = (widgetsScreen >= 0 && widgetsScreen < QGuiApplication::screens().size()) ? widgetsScreen : primaryScreen;
+    const int toolbuttonSize = buttonSize(screen);
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("KoToolBox");
-    int iconSize = cfg.readEntry("iconSize", toolbuttonSize);
+    const int iconSize = cfg.readEntry("iconSize", toolbuttonSize);
+
 
    button->setIconSize(QSize(iconSize, iconSize));
     foreach (Section *section, d->sections.values())  {

@@ -288,8 +288,8 @@ bool ToolTransformArgs::isIdentity() const
 
         return true;
     } else if (m_mode == LIQUIFY) {
-        // Not implemented!
-        return false;
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_liquifyWorker, false);
+        return m_liquifyWorker->isIdentity();
     } else {
         KIS_ASSERT_RECOVER_NOOP(0 && "unknown transform mode");
         return true;

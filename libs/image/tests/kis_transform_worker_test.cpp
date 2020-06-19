@@ -57,7 +57,7 @@ void testMirror(const QRect &imageRect, const QRect &mirrorRect, Qt::Orientation
 
     qreal axis = QRectF(mirrorRect).center().x();
 
-    KisRandomAccessorSP it = dev->createRandomAccessorNG(imageRect.x(), imageRect.y());
+    KisRandomAccessorSP it = dev->createRandomAccessorNG();
 
     int i = 0;
     for (int y = imageRect.y(); y < imageRect.y() + imageRect.height(); y++) {

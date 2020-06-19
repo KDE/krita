@@ -155,6 +155,11 @@ public:
 
     QPointF snapToDevicePixel(const QPointF &point) const;
 
+public:
+    // overrides from KoViewConverter
+    QTransform viewToWidget() const override;
+    QTransform widgetToView() const override;
+
 private:
     friend class KisZoomAndPanTest;
 

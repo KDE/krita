@@ -94,6 +94,28 @@ find $APPDIR -name krita.png
 cp $APPDIR/usr/share/icons/hicolor/256x256/apps/krita.png $APPDIR
 ls $APPDIR
 
+if [ -n "$STRIP_APPIMAGE" ]; then
+    # strip debugging information
+    function find-elf-files {
+        # python libraries are not strippable (strip fails with error)
+        find $1 -type f -name "*" -not -name "*.o" -not -path "*/python3.8/*" -exec sh -c '
+            case "$(head -n 1 "$1")" in
+            ?ELF*) exit 0;;
+            esac
+            exit 1
+            ' sh {} \; -print
+    }
+
+    TEMPFILE=`tempfile`
+    find-elf-files $APPDIR > $TEMPFILE
+
+    for i in `cat $TEMPFILE`; do
+        strip -v --strip-unneeded --strip-debug $i
+    done
+
+    rm -f $TEMPFILE
+fi
+
 # Step 4: Build the image!!!
 linuxdeployqt $APPDIR/usr/share/applications/org.kde.krita.desktop \
   -executable=$APPDIR/usr/bin/krita \

@@ -48,7 +48,7 @@
 #include <KisViewManager.h>
 #include <canvas/kis_canvas2.h>
 #include <widgets/kis_cmb_composite.h>
-#include <widgets/kis_slider_spin_box.h>
+#include <kis_slider_spin_box.h>
 #include <kis_cursor.h>
 #include "kis_resources_snapshot.h"
 #include "commands_new/KisMergeLabeledLayersCommand.h"
@@ -268,7 +268,7 @@ QWidget* KisToolFill::createOptionWidget()
     QLabel *lbl_cmbLabel = new QLabel(i18nc("This is a string in tool options for Fill Tool to describe a combobox about "
                                             "a choice of color labels that a layer can be marked with. Those color labels "
                                             "will be used for calculating the area to fill.", "Labels used:"), widget);
-    m_cmbSelectedLabels = new KisColorFilterCombo(widget);
+    m_cmbSelectedLabels = new KisColorFilterCombo(widget, false, false);
     m_cmbSelectedLabels->updateAvailableLabels(currentImage().isNull() ? KisNodeSP() : currentImage()->root());
 
     QLabel *lbl_fillSelection = new QLabel(i18n("Fill entire selection:"), widget);

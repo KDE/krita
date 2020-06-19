@@ -27,7 +27,7 @@
        <item>
         <widget class="QPushButton" name="btnNew">
          <property name="text">
-          <string>New...</string>
+          <string comment="New session">New...</string>
          </property>
         </widget>
        </item>

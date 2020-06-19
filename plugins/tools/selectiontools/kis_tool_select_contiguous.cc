@@ -149,16 +149,11 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
 
                     // If we're not antialiasing, threshold the entire selection
                     if (!antiAlias) {
-                        QRect r = selection->selectedExactRect();
-                        if (r.isValid()) {
-                            KisHLineIteratorSP selectionIt = selection->createHLineIteratorNG(r.x(), r.y(), r.width());
-                            for (qint32 y = 0; y < r.height(); y++) {
-                                do {
-                                    if (selectionIt->rawData()[0] > 0) {
-                                        selection->colorSpace()->setOpacity(selectionIt->rawData(), OPACITY_OPAQUE_U8, 1);
-                                    }
-                                } while (selectionIt->nextPixel());
-                                selectionIt->nextRow();
+                        const QRect r = selection->selectedExactRect();
+                        KisSequentialIterator it (selection, r);
+                        while(it.nextPixel()) {
+                            if (*it.rawData() > 0) {
+                                *it.rawData() = OPACITY_OPAQUE_U8;
                             }
                         }
                     }

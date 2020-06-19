@@ -49,14 +49,3 @@ KisResourceModel *KisResourceModelProvider::resourceModel(const QString &resourc
     }
     return s_instance->d->resourceModels[resourceType];
 }
-
-void KisResourceModelProvider::resetModel(const QString& resourceType)
-{
-    QMap<QString, KisResourceModel*>::iterator found
-            = s_instance->d->resourceModels.find(resourceType);
-
-    if (found != s_instance->d->resourceModels.end())
-    {
-        found.value()->resetQuery();
-    }
-}

@@ -387,8 +387,6 @@ bool KisTagModel::tagResource(const KisTagSP tag, const KoResourceSP resource)
         qWarning() << "Could not execute insert into resource tags statement" << q.boundValues() << q.lastError();
         return false;
     }
-
-    KisResourceModelProvider::resetModel(d->resourceType);
     return true;
 }
 
@@ -421,8 +419,6 @@ bool KisTagModel::untagResource(const KisTagSP tag, const KoResourceSP resource)
     if (!r) {
         qWarning() << "Could not select tags" << query.lastError();
     }
-
-    KisResourceModelProvider::resetModel(d->resourceType);
     return true;
 }
 

@@ -409,7 +409,7 @@ void KisOpenGLCanvas2::resizeGL(int width, int height)
     // The given size is the widget size but here we actually want to give
     // KisCoordinatesConverter the viewport size aligned to device pixels.
     if (KisOpenGL::supportsRenderToFBO()) {
-        d->canvasFBO.reset(new QOpenGLFramebufferObject(QSize(width * devicePixelRatio(), height * devicePixelRatio())));
+        d->canvasFBO.reset(new QOpenGLFramebufferObject(QSize(width * devicePixelRatioF(), height * devicePixelRatioF())));
     }
     coordinatesConverter()->setCanvasWidgetSize(widgetSizeAlignedToDevicePixel());
     paintGL();

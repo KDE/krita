@@ -104,6 +104,9 @@ private:
 KisScratchPad::KisScratchPad(QWidget *parent)
     : QWidget(parent)
     , m_toolMode(HOVERING)
+    , isModeManuallySet(false)
+    , isMouseDown(false)
+    , linkCanvasZoomLevel(false)
     , m_paintLayer(0)
     , m_displayProfile(0)
     , m_resourceProvider(0)
@@ -159,12 +162,10 @@ KisScratchPad::Mode KisScratchPad::modeFromButton(Qt::MouseButton button) const
 
 void KisScratchPad::pointerPress(KoPointerEvent *event)
 {
+    if(!isEnabled()) return;
+
     if (isModeManuallySet == false) {
-
-        if (m_toolMode != HOVERING) return;
-
         m_toolMode = modeFromButton(event->button());
-
     }
 
     // see if we are pressing down with a button
@@ -196,6 +197,7 @@ void KisScratchPad::pointerPress(KoPointerEvent *event)
 
 void KisScratchPad::pointerRelease(KoPointerEvent *event)
 {
+    if(!isEnabled()) return;
     isMouseDown = false;
 
     if (isModeManuallySet == false) {
@@ -232,6 +234,8 @@ void KisScratchPad::pointerRelease(KoPointerEvent *event)
 
 void KisScratchPad::pointerMove(KoPointerEvent *event)
 {
+    if(!isEnabled()) return;
+
     if(event && event->point.isNull() == false) {
         m_helper->cursorMoved(documentToWidget().map(event->point));
     }
@@ -318,7 +322,13 @@ void KisScratchPad::setOnScreenResolution(qreal scaleX, qreal scaleY)
 {
     m_scaleBorderWidth = BORDER_SIZE(qMax(scaleX, scaleY));
 
-    m_scaleTransform = QTransform::fromScale(scaleX, scaleY);
+    // the scratchpad will use the canvas zoom level...or not
+    if(linkCanvasZoomLevel) {
+        m_scaleTransform = QTransform::fromScale(scaleX, scaleY);
+    } else {
+        m_scaleTransform = QTransform::fromScale(1, 1);
+    }
+
     updateTransformations();
     update();
 }
@@ -367,6 +377,8 @@ void KisScratchPad::paintEvent ( QPaintEvent * event ) {
     m_paintLayer->projectionPlane()->recalculate(alignedImageRect, m_paintLayer);
     KisPaintDeviceSP projection = m_paintLayer->projection();
 
+
+
     QImage image = projection->convertToQImage(m_displayProfile,
                                                alignedImageRect.x(),
                                                alignedImageRect.y(),
@@ -374,6 +386,7 @@ void KisScratchPad::paintEvent ( QPaintEvent * event ) {
                                                alignedImageRect.height(),
                                                KoColorConversionTransformation::internalRenderingIntent(),
                                                KoColorConversionTransformation::internalConversionFlags());
+
 
     QPainter gc(this);
     gc.fillRect(event->rect(), m_checkBrush);
@@ -449,6 +462,11 @@ void KisScratchPad::setModeType(QString mode)
         m_toolMode = PICKING;
         setCursor(m_colorPickerCursor);
     }
+}
+
+void KisScratchPad::linkCanvavsToZoomLevel(bool value)
+{
+    linkCanvasZoomLevel = value;
 }
 
 QImage KisScratchPad::cutoutOverlay() const

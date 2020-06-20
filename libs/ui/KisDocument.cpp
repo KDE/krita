@@ -55,12 +55,14 @@
 
 #include <KisUsageLogger.h>
 #include <klocalizedstring.h>
+#include "kis_scratch_pad.h"
 #include <kis_debug.h>
 #include <kis_generator_layer.h>
 #include <kis_generator_registry.h>
 #include <kdesktopfile.h>
 #include <kconfiggroup.h>
 #include <kbackup.h>
+#include <KisView.h>
 
 #include <QTextBrowser>
 #include <QApplication>
@@ -978,6 +980,7 @@ bool KisDocument::exportDocumentSync(const QUrl &url, const QByteArray &mimeType
 
     return status.isOk();
 }
+
 
 bool KisDocument::initiateSavingInBackground(const QString actionName,
                                              const QObject *receiverObject, const char *receiverMethod,

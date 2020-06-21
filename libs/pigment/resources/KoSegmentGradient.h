@@ -86,9 +86,19 @@ public:
 
     void setStartColor(const KoColor& color) {
         m_start.color = color;
+        if (m_start.type == FOREGROUND_TRANSPARENT_ENDPOINT || m_start.type == BACKGROUND_TRANSPARENT_ENDPOINT) {
+            m_start.color.setOpacity(quint8(0));
+        } else if (m_start.type == FOREGROUND_ENDPOINT || m_start.type == BACKGROUND_ENDPOINT) {
+            m_start.color.setOpacity(quint8(255));
+        }
     }
     void setEndColor(const KoColor& color) {
         m_end.color = color;
+        if (m_end.type == FOREGROUND_TRANSPARENT_ENDPOINT || m_end.type == BACKGROUND_TRANSPARENT_ENDPOINT) {
+            m_end.color.setOpacity(quint8(0));
+        } else if (m_end.type == FOREGROUND_ENDPOINT || m_end.type == BACKGROUND_ENDPOINT) {
+            m_end.color.setOpacity(quint8(255));
+        }
     }
 
     void setStartType(KoGradientSegmentEndpointType type);

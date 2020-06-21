@@ -46,6 +46,8 @@ private Q_SLOTS:
     void slotChangedRightOpacity(int value);
     void slotChangedLeftType(QAbstractButton* button, bool checked);
     void slotChangedRightType(QAbstractButton* button, bool checked);
+    void slotChangedLeftTypeTransparent(bool checked);
+    void slotChangedRightTypeTransparent(bool checked);
 
     void slotChangedName();
     void paramChanged();

@@ -139,7 +139,6 @@ StoryboardDockerDock::StoryboardDockerDock( )
     setWidget(mainWidget);
     m_ui->setupUi(mainWidget);
 
-
     m_exportMenu = new QMenu(this);
     m_ui->btnExport->setMenu(m_exportMenu);
     m_ui->btnExport->setPopupMode(QToolButton::MenuButtonPopup);
@@ -158,13 +157,11 @@ StoryboardDockerDock::StoryboardDockerDock( )
     m_ui->btnComment->setMenu(m_commentMenu);
     m_ui->btnComment->setPopupMode(QToolButton::MenuButtonPopup);
 
-
     m_lockAction = new KisAction(KisIconUtils::loadIcon("unlocked"), "Lock", m_ui->btnLock);
     m_lockAction->setCheckable(true);
     m_ui->btnLock->setDefaultAction(m_lockAction);
     m_ui->btnLock->setIconSize(QSize(22, 22));
     connect(m_lockAction, SIGNAL(toggled(bool)), this, SLOT(slotLockClicked(bool)));
-    
 
     m_arrangeMenu = new ArrangeMenu(this);
     m_ui->btnArrange->setMenu(m_arrangeMenu);
@@ -222,10 +219,10 @@ void StoryboardDockerDock::slotExport(QString mode)
 }
 
 void StoryboardDockerDock::slotLockClicked(bool isLocked){
-    if (isLocked){
+    if (isLocked) {
         m_lockAction->setIcon(KisIconUtils::loadIcon("locked"));
     }
-    else{
+    else {
         m_lockAction->setIcon(KisIconUtils::loadIcon("unlocked"));
     }
 }
@@ -233,19 +230,19 @@ void StoryboardDockerDock::slotLockClicked(bool isLocked){
 void StoryboardDockerDock::slotModeChanged(QAbstractButton* button)
 {
     QString mode = button->text();
-    if (mode == "Column"){
+    if (mode == "Column") {
         m_ui->listView->setFlow(QListView::LeftToRight);
         m_ui->listView->setWrapping(false);
         m_ui->listView->setItemOrientation(Qt::Vertical);
         m_viewGroup->button(2)->setEnabled(true);
     }
-    else if (mode == "Row"){
+    else if (mode == "Row") {
         m_ui->listView->setFlow(QListView::TopToBottom);
         m_ui->listView->setWrapping(false);
         m_ui->listView->setItemOrientation(Qt::Horizontal);
         m_viewGroup->button(2)->setEnabled(false);           //disable the comments only view
     }
-    else if (mode == "Grid"){
+    else if (mode == "Grid") {
         m_ui->listView->setFlow(QListView::LeftToRight);
         m_ui->listView->setWrapping(true);
         m_ui->listView->setItemOrientation(Qt::Vertical);
@@ -257,18 +254,18 @@ void StoryboardDockerDock::slotModeChanged(QAbstractButton* button)
 void StoryboardDockerDock::slotViewChanged(QAbstractButton* button)
 {
     QString view = button->text();
-    if (view == "All"){
+    if (view == "All") {
         m_ui->listView->setCommentVisibility(true);
         m_ui->listView->setThumbnailVisibility(true);
         m_modeGroup->button(1)->setEnabled(true);
     }
-    else if (view == "Thumbnails Only"){
+    else if (view == "Thumbnails Only") {
         m_ui->listView->setCommentVisibility(false);
         m_ui->listView->setThumbnailVisibility(true);
         m_modeGroup->button(1)->setEnabled(true);
     }
 
-    else if (view == "Comments Only"){
+    else if (view == "Comments Only") {
         m_ui->listView->setCommentVisibility(true);
         m_ui->listView->setThumbnailVisibility(false);
         m_modeGroup->button(1)->setEnabled(false);               //disable the row mode

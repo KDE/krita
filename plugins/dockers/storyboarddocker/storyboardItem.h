@@ -32,9 +32,16 @@ public:
         : m_data(data)
         , m_parentItem(parent)
     {}
-    StoryboardItem *parent(){ return m_parentItem;}
-    QVariant data(){ return m_data;}
-    void setData(QVariant value){
+    StoryboardItem *parent()
+    {
+        return m_parentItem;
+    }
+    QVariant data()
+    { 
+        return m_data;
+    }
+    void setData(QVariant value)
+    {
         m_data = value;
     }
 

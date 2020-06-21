@@ -37,16 +37,17 @@ int CommentModel::rowCount(const QModelIndex &parent) const
 QVariant CommentModel::data(const QModelIndex &index, int role) const
 {
     
-    if(!index.isValid())
+    if (!index.isValid()) {
         return QVariant();
-    if(index.row() >= m_commentList.size())
+    }
+    if (index.row() >= m_commentList.size()) {
         return QVariant();
-
+    }
     if (role == Qt::DisplayRole || role == Qt::EditRole) {
         return m_commentList.at(index.row()).name;
     }
     if (role == Qt::DecorationRole) {
-        if (m_commentList.at(index.row()).visibility){
+        if (m_commentList.at(index.row()).visibility) {
             return KisIconUtils::loadIcon("visible");
         }
         else {
@@ -61,13 +62,12 @@ bool CommentModel::setData(const QModelIndex & index, const QVariant & value, in
 {
     if (index.isValid() && (role == Qt::EditRole || role == Qt::DisplayRole))
     {
-        
         m_commentList[index.row()].name = value.toString();
         emit dataChanged(index, index);
         return true;
     }
     
-    if (index.isValid() && role == Qt::DecorationRole){
+    if (index.isValid() && role == Qt::DecorationRole) {
         m_commentList[index.row()].visibility = !m_commentList[index.row()].visibility;
         emit dataChanged(index, index);
         return true;
@@ -77,9 +77,9 @@ bool CommentModel::setData(const QModelIndex & index, const QVariant & value, in
 
 Qt::ItemFlags CommentModel::flags(const QModelIndex & index) const
 {
-    if(!index.isValid())
+    if (!index.isValid()) {
         return Qt::ItemIsDropEnabled;
-
+    }
     return Qt::ItemIsDragEnabled | Qt::ItemIsSelectable |
            Qt::ItemIsEditable | Qt::ItemIsEnabled ;
 }
@@ -116,10 +116,10 @@ bool CommentModel::removeRows(int position, int rows, const QModelIndex &parent)
 bool CommentModel::moveRows(const QModelIndex &sourceParent, int sourceRow, int count,
                             const QModelIndex &destinationParent, int destinationChild)
 {
-    if (destinationChild == sourceRow || destinationChild == sourceRow + 1){
+    if (destinationChild == sourceRow || destinationChild == sourceRow + 1) {
         return false;
     }
-    if (destinationChild > sourceRow + count - 1){
+    if (destinationChild > sourceRow + count - 1) {
         //we adjust for the upward shift, see qt doc for why this is needed
         beginMoveRows(sourceParent, sourceRow, sourceRow + count - 1, destinationParent, destinationChild + count - 1);
         destinationChild = destinationChild - count;
@@ -127,9 +127,13 @@ bool CommentModel::moveRows(const QModelIndex &sourceParent, int sourceRow, int 
     else {
         beginMoveRows(sourceParent, sourceRow, sourceRow + count - 1, destinationParent, destinationChild);
     }
-    for (int row = 0; row < count; row++){
-        if (sourceRow < 0 || sourceRow >= m_commentList.size()) return false;
-        if (destinationChild + row < 0 || destinationChild + row >= m_commentList.size()) return false;
+    for (int row = 0; row < count; row++) {
+        if (sourceRow < 0 || sourceRow >= m_commentList.size()) {
+            return false;
+        }
+        if (destinationChild + row < 0 || destinationChild + row >= m_commentList.size()) {
+            return false;
+        }
         m_commentList.move(sourceRow, destinationChild + row);
     }
     endMoveRows();
@@ -144,7 +148,7 @@ QMimeData *CommentModel::mimeData(const QModelIndexList &indexes) const
     QDataStream stream(&encodeData, QIODevice::WriteOnly);
 
     //take the row number of the index where drag started
-    foreach (QModelIndex index, indexes){
+    foreach (QModelIndex index, indexes) {
         if (index.isValid()) {
             int row = index.row();
             stream << row;
@@ -158,14 +162,14 @@ QMimeData *CommentModel::mimeData(const QModelIndexList &indexes) const
 bool CommentModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
                                 int row, int column, const QModelIndex &parent)
 {
-    if (action == Qt::IgnoreAction)
+    if (action == Qt::IgnoreAction) {
         return false;
-
-    if (action == Qt::MoveAction && data->hasFormat("application/x-qabstractitemmodeldatalist")){
+    }
+    if (action == Qt::MoveAction && data->hasFormat("application/x-qabstractitemmodeldatalist")) {
         QByteArray bytes = data->data("application/x-qabstractitemmodeldatalist");
         QDataStream stream(&bytes, QIODevice::ReadOnly);
 
-        if (parent.isValid()){
+        if (parent.isValid()) {
             return false;
         }
         int sourceRow;

@@ -65,7 +65,6 @@ private Q_SLOTS:
     void slotExportAsPdf();
     void slotExportAsSvg();
     void slotExport(QString);
-    //the comment button slots
 
     void slotLockClicked(bool);
     void slotModeChanged(QAbstractButton*);

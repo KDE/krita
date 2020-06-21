@@ -56,7 +56,8 @@ int StoryboardItem::childCount() const
 
 StoryboardChild* StoryboardItem::child(int row)
 {
-    if (row < 0 || row >= m_childData.size())
+    if (row < 0 || row >= m_childData.size()) {
         return nullptr;
+    }
     return m_childData.at(row);
 }

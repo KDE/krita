@@ -34,22 +34,18 @@ public:
 
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
-
     bool editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index);
-
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
                           const QModelIndex &index) const;
-
     void setEditorData(QWidget *editor, const QModelIndex &index) const;
     void setModelData(QWidget *editor, QAbstractItemModel *model,
                       const QModelIndex &index) const;
-
     void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-
+    
     void setView(StoryboardView *view);
     void drawSpinBox(QPainter *p, const QStyleOptionViewItem &option, QString data) const;
     QStyleOptionSlider drawComment(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-
+    
     QRect spinBoxUpButton(const QStyleOptionViewItem &option);
     QRect spinBoxDownButton(const QStyleOptionViewItem &option);
     QRect spinBoxEditField(const QStyleOptionViewItem &option);

@@ -50,18 +50,18 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
         style->drawPrimitive(QStyle::PE_PanelItemViewItem, &option, p, option.widget);
 
         p->setFont(option.font);
-        if (!index.isValid()){
+        if (!index.isValid()) {
             p->restore();
             return;
         }
-        if (!index.parent().isValid()){
+        if (!index.parent().isValid()) {
             QRect parentRect = option.rect;
             p->drawRect(parentRect);
 
             parentRect.setTopLeft(parentRect.topLeft() + QPoint(4, 4));
             parentRect.setBottomRight(parentRect.bottomRight() - QPoint(4, 4));
 
-            if (option.state & QStyle::State_Selected){
+            if (option.state & QStyle::State_Selected) {
                 p->fillRect(option.rect, option.palette.foreground());
             }
             else {
@@ -69,7 +69,7 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
             }
             p->eraseRect(parentRect);
         }
-        else{
+        else {
             //draw the child items
             int childNum = index.row();
             QString data = index.model()->data(index, Qt::DisplayRole).toString();
@@ -78,7 +78,7 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
             {
                 case 0:
                 {
-                    if (m_view->thumbnailIsVisible()){
+                    if (m_view->thumbnailIsVisible()) {
                         QRect frameNumRect = option.rect;
                         frameNumRect.setHeight(m_view->fontMetrics().height()+3);
                         frameNumRect.setWidth(3 * m_view->fontMetrics().width("0")+2);
@@ -137,7 +137,7 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
                 default:
                 {
                     const StoryboardModel* model = dynamic_cast<const StoryboardModel*>(index.model());
-                    if (m_view->commentIsVisible() && model->getComment(index.row() - 4).visibility){
+                    if (m_view->commentIsVisible() && model->getComment(index.row() - 4).visibility) {
                         p->setPen(QPen(option.palette.dark(), 2));
                         drawComment(p, option, index);
                     }
@@ -175,7 +175,7 @@ QStyleOptionSlider StoryboardDelegate::drawComment(QPainter *p, const QStyleOpti
 
     QRect titleRect = option.rect;
     titleRect.setHeight(option.fontMetrics.height() + 3);
-    if (p){
+    if (p) {
         p->setPen(QPen(option.palette.text(), 1));
         p->drawText(titleRect, Qt::AlignLeft | Qt::AlignVCenter, model->getComment(index.row() - 4).name);
         p->setPen(QPen(option.palette.dark(), 2));
@@ -184,7 +184,7 @@ QStyleOptionSlider StoryboardDelegate::drawComment(QPainter *p, const QStyleOpti
 
     QRect contentRect = option.rect;
     contentRect.setTop(option.rect.top() + option.fontMetrics.height() + 3);
-    if (p){
+    if (p) {
         p->setPen(QPen(option.palette.dark(), 2));
         p->drawRect(contentRect);
         p->save();
@@ -205,7 +205,7 @@ QStyleOptionSlider StoryboardDelegate::drawComment(QPainter *p, const QStyleOpti
     doc.setPlainText(data.simplified());
     QRectF clipRect = commentRect;
     clipRect.moveTopLeft(QPoint(0, 0 + scrollValue));
-    if (p){
+    if (p) {
         p->translate(QPoint(commentRect.topLeft().x(), commentRect.topLeft().y() - scrollValue));
         p->setPen(QPen(option.palette.text(), 1));
         doc.drawContents(p, clipRect);
@@ -225,7 +225,7 @@ QStyleOptionSlider StoryboardDelegate::drawComment(QPainter *p, const QStyleOpti
     scrollRect.moveTopLeft(QPoint(0, 0));
     scrollbarOption.rect = scrollRect;
 
-    if (p){
+    if (p) {
         p->save();
         p->setPen(QPen(option.palette.dark(), 2));
         p->translate(QPoint( option.rect.right()-15, option.rect.top() + option.fontMetrics.height() + 3));
@@ -238,13 +238,13 @@ QStyleOptionSlider StoryboardDelegate::drawComment(QPainter *p, const QStyleOpti
 QSize StoryboardDelegate::sizeHint(const QStyleOptionViewItem &option,
                                 const QModelIndex &index) const
 {
-    if (!index.parent().isValid()){
-        if (m_view->itemOrientation() == Qt::Vertical){
+    if (!index.parent().isValid()) {
+        if (m_view->itemOrientation() == Qt::Vertical) {
             int width = option.widget->width() - 17;
             const StoryboardModel* model = dynamic_cast<const StoryboardModel*>(index.model());
             int numComments = model->visibleCommentCount();
             int numItem = width/250;
-            if(numItem <=0){
+            if (numItem <= 0) {
                 return QSize(0, 0);
             }
 
@@ -252,11 +252,11 @@ QSize StoryboardDelegate::sizeHint(const QStyleOptionViewItem &option,
             int commentHeight = m_view->commentIsVisible() ? numComments*100 : 0;
             return QSize(width / numItem, thumbnailheight  + option.fontMetrics.height() + 3 + commentHeight + 10);
         }
-        else{
+        else {
             const StoryboardModel* model = dynamic_cast<const StoryboardModel*>(index.model());
             int numComments = model->visibleCommentCount();
             int commentWidth = 0;
-            if (numComments && m_view->commentIsVisible()){
+            if (numComments && m_view->commentIsVisible()) {
                 commentWidth = qMax(200, (m_view->viewport()->width() - 250) / numComments);
             }
             int width = 250 + numComments * commentWidth;
@@ -274,7 +274,7 @@ QWidget *StoryboardDelegate::createEditor(QWidget *parent,
     const QModelIndex &index) const
 {
     //only create editor for children
-    if (index.parent().isValid()){
+    if (index.parent().isValid()) {
         int row = index.row();
         switch (row)
         {
@@ -311,23 +311,23 @@ bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
         const bool leftButton = mouseEvent->buttons() & Qt::LeftButton;
 
         //handle the duration edit event
-        if (index.parent().isValid() && (index.row() == 2 || index.row() == 3)){
+        if (index.parent().isValid() && (index.row() == 2 || index.row() == 3)) {
             QRect upButton = spinBoxUpButton(option);
             QRect downButton = spinBoxDownButton(option);
 
             bool upButtonClicked = upButton.isValid() && upButton.contains(mouseEvent->pos());
             bool downButtonClicked = downButton.isValid() && downButton.contains(mouseEvent->pos());
 
-            if (leftButton && upButtonClicked){
+            if (leftButton && upButtonClicked) {
                 model->setData(index, index.data().toInt() + 1);
                 return true;
             }
-            else if (leftButton && downButtonClicked){
+            else if (leftButton && downButtonClicked) {
                 model->setData(index, std::max(0,index.data().toInt() - 1));
                 return true;
             }
         }
-        else if (index.parent().isValid() && index.row() > 3){                      //comment box scroll events
+        else if (index.parent().isValid() && index.row() > 3) {                      //comment box scroll events
             QStyleOptionSlider scrollBarOption = drawComment(nullptr, option, index);
             QRect upButton = scrollUpButton(option, scrollBarOption);
             QRect downButton = scrollDownButton(option, scrollBarOption);
@@ -335,14 +335,14 @@ bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
             bool upButtonClicked = upButton.isValid() && upButton.contains(mouseEvent->pos());
             bool downButtonClicked = downButton.isValid() && downButton.contains(mouseEvent->pos());
 
-            if (leftButton && upButtonClicked){
+            if (leftButton && upButtonClicked) {
                 int lastValue = model->data(index, Qt::UserRole).toInt();
                 int value = lastValue - option.fontMetrics.height();
                 StoryboardModel* modelSB = dynamic_cast<StoryboardModel*>(model);
                 modelSB->setCommentScrollData(index, qMax(0, value));
                 return true;
             }
-            else if (leftButton && downButtonClicked){
+            else if (leftButton && downButtonClicked) {
                 int lastValue = model->data(index, Qt::UserRole).toInt();
                 int value = lastValue + option.fontMetrics.height();
                 StoryboardModel* modelSB = dynamic_cast<StoryboardModel*>(model);
@@ -351,7 +351,7 @@ bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
             }
         }
 
-        else if (index.parent().isValid() && index.row() == 0 && m_view->thumbnailIsVisible()){     //thumbnail add/delete events
+        else if (index.parent().isValid() && index.row() == 0 && m_view->thumbnailIsVisible()) {     //thumbnail add/delete events
             QRect addItemButton(QPoint(0, 0), QSize(22, 22));
             addItemButton.moveBottomLeft(option.rect.bottomLeft());
 
@@ -361,11 +361,11 @@ bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
             bool addItemButtonClicked = addItemButton.isValid() && addItemButton.contains(mouseEvent->pos());
             bool deleteItemButtonClicked = deleteItemButton.isValid() && deleteItemButton.contains(mouseEvent->pos());
 
-            if (leftButton && addItemButtonClicked){
+            if (leftButton && addItemButtonClicked) {
                 model->insertRows(index.parent().row() + 1, 1);
                 return true;
             }
-            else if (leftButton && deleteItemButtonClicked){
+            else if (leftButton && deleteItemButtonClicked) {
                 model->removeRows(index.parent().row(), 1);
                 return true;
             }
@@ -383,12 +383,12 @@ bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
         bool lastClickPosInScroll = scrollBarRect.isValid() && scrollBarRect.contains(m_lastDragPos);
         bool currClickPosInScroll = scrollBarRect.isValid() && scrollBarRect.contains(mouseEvent->pos());
 
-        if (leftButton && index.parent().isValid() && index.row() > 3){
-            if (lastClickPosInScroll && currClickPosInScroll){
+        if (leftButton && index.parent().isValid() && index.row() > 3) {
+            if (lastClickPosInScroll && currClickPosInScroll) {
                 int lastValue = model->data(index, Qt::UserRole).toInt();
                 int value = lastValue + mouseEvent->pos().y() - m_lastDragPos.y();
                 StoryboardModel* modelSB = dynamic_cast<StoryboardModel*>(model);
-                if (value >= 0 && value <= scrollBarOption.maximum){
+                if (value >= 0 && value <= scrollBarOption.maximum) {
                     modelSB->setCommentScrollData(index, value);
                     return true;
                 }
@@ -405,7 +405,7 @@ void StoryboardDelegate::setEditorData(QWidget *editor,
                                     const QModelIndex &index) const
 {
     QVariant value = index.data();
-    if (index.parent().isValid()){
+    if (index.parent().isValid()) {
         int row = index.row();
         switch (row)
         {
@@ -442,7 +442,7 @@ void StoryboardDelegate::setModelData(QWidget *editor, QAbstractItemModel *model
                                    const QModelIndex &index) const
 {
     QVariant value = index.data();
-    if (index.parent().isValid()){
+    if (index.parent().isValid()) {
         int row = index.row();
         switch (row)
         {
@@ -477,7 +477,7 @@ void StoryboardDelegate::setModelData(QWidget *editor, QAbstractItemModel *model
 void StoryboardDelegate::updateEditorGeometry(QWidget *editor,
     const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    if (index.row() < 4){
+    if (index.row() < 4) {
         editor->setGeometry(option.rect);
     }
     else {                                                //for comment textedits

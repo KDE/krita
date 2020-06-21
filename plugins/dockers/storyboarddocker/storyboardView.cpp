@@ -64,10 +64,10 @@ void StoryboardView::paintEvent(QPaintEvent *event)
     //ask delegate to draw the child nodes too
     QPainter painter(viewport());
     int itemNum = model()->rowCount();
-    for (int row = 0; row < itemNum; row++){
+    for (int row = 0; row < itemNum; row++) {
         QModelIndex index = model()->index(row, 0);
         int childNum = model()->rowCount(index);
-        for (int childRow = 0; childRow < childNum; childRow++){
+        for (int childRow = 0; childRow < childNum; childRow++) {
 
             QModelIndex childIndex = model()->index(childRow, 0, index);
 
@@ -101,7 +101,7 @@ QRect StoryboardView::visualRect(const QModelIndex &index) const
         int childRow = index.row();
 
         int thumbnailWidth = parentWidth;
-        if (m_itemOrientation == Qt::Horizontal){
+        if (m_itemOrientation == Qt::Horizontal) {
             thumbnailWidth = 250;
         }
         switch (childRow)
@@ -109,7 +109,7 @@ QRect StoryboardView::visualRect(const QModelIndex &index) const
             case 0:
             {   
                 //the frame thumbnail rect
-                if (!thumbnailIsVisible()){
+                if (!thumbnailIsVisible()) {
                     parentRect.setSize(QSize(3*numericFontWidth + 2, fontHeight));
                     return parentRect;
                 }
@@ -144,10 +144,12 @@ QRect StoryboardView::visualRect(const QModelIndex &index) const
             default:
             {
                 //comment rect
-                if (!commentIsVisible()) return QRect();
+                if (!commentIsVisible()) {
+                    return QRect();
+                }
 
                 int thumbnailheight = thumbnailIsVisible() ? 120 : 0;
-                if (m_itemOrientation == Qt::Vertical){
+                if (m_itemOrientation == Qt::Vertical) {
                     const StoryboardModel* Model = dynamic_cast<const StoryboardModel*>(model());
                     parentRect.setTop(parentRect.top() + thumbnailheight + fontHeight + Model->visibleCommentsUpto(index) * 100);
                     parentRect.setHeight(100);
@@ -157,7 +159,7 @@ QRect StoryboardView::visualRect(const QModelIndex &index) const
                     const StoryboardModel* Model = dynamic_cast<const StoryboardModel*>(model());
                     int numVisibleComments = Model->visibleCommentCount();
                     int commentWidth = 200;
-                    if (numVisibleComments){
+                    if (numVisibleComments) {
                         commentWidth = qMax(200, (viewport()->width() - 250) / numVisibleComments);
                     }
                     parentRect.setSize(QSize(commentWidth, thumbnailheight + fontHeight));
@@ -223,12 +225,12 @@ void StoryboardView::slotContextMenuRequested(const QPoint &point)
     if (!index.isValid()) {
         contextMenu.addAction("Add Stroyboard Item", [this, index] {model()->insertRows(model()->rowCount(), 1); });
     }
-    else if (index.parent().isValid()){
+    else if (index.parent().isValid()) {
         index = index.parent();
         contextMenu.addAction("Add Stroyboard Item After", [this, index] {model()->insertRows(index.row() + 1, 1); });
     }
 
-    if (index.isValid()){
+    if (index.isValid()) {
         contextMenu.addAction("Add Stroyboard Item Before", [this, index] {model()->insertRows(index.row(), 1); });
         contextMenu.addAction("Remove Stroyboard Item", [this, index] {model()->removeRows(index.row(), 1); });
     }

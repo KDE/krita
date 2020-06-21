@@ -70,7 +70,6 @@ QSize CommentDelegate::sizeHint(const QStyleOptionViewItem &option,
     return QSize(option.rect.width(), 22);
 }
 
-
 QWidget *CommentDelegate::createEditor(QWidget *parent,
     const QStyleOptionViewItem &option ,
     const QModelIndex &index) const
@@ -119,10 +118,8 @@ void CommentDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
     QLineEdit *lineEdit = static_cast<QLineEdit*>(editor);
     QString value = lineEdit->text();
 
-    //don't add empty string
+    //TO DO: don't add empty string
     model->setData(index, value, Qt::EditRole);
-
-    //do we need to emit closeEditor() ???
 }
 
 void CommentDelegate::updateEditorGeometry(QWidget *editor,

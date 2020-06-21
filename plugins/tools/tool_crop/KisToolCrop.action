@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ActionCollection version="2" name="Tools">
   <Actions category="tool-shortcuts">
-      <text>Tool Shortcuts</text>
+    <text>Tool Shortcuts</text>
     <Action name="KisToolCrop">
-      <icon></icon>
+      <icon>tool_crop</icon>
       <text>Crop Tool</text>
       <whatsThis></whatsThis>
       <toolTip>Crop the image to an area</toolTip>

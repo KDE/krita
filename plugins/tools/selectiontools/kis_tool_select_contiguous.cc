@@ -129,14 +129,30 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
     }
 
     KisPixelSelectionSP selection = KisPixelSelectionSP(new KisPixelSelection(new KisSelectionDefaultBounds(dev)));
+
     bool antiAlias = antiAliasSelection();
 
     int fuzziness = m_fuzziness;
     int feather = m_feather;
     int sizemod = m_sizemod;
+    bool useSelectionAsBoundary = m_useSelectionAsBoundary;
+
+    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    KIS_SAFE_ASSERT_RECOVER(kisCanvas) {
+        applicator.cancel();
+        QApplication::restoreOverrideCursor();
+        return;
+    };
+
+    KisPixelSelectionSP existingSelection;
+    if (kisCanvas->imageView() && kisCanvas->imageView()->selection())
+    {
+        existingSelection = kisCanvas->imageView()->selection()->pixelSelection();
+    }
 
     KUndo2Command* cmd = new KisCommandUtils::LambdaCommand(
-                [dev, rc, fuzziness, feather, sizemod, selection, pos, sourceDevice, antiAlias] () mutable -> KUndo2Command* {
+                [dev, rc, fuzziness, feather, sizemod, useSelectionAsBoundary,
+                selection, pos, sourceDevice, antiAlias, existingSelection] () mutable -> KUndo2Command* {
 
                     KisFillPainter fillpainter(dev);
                     fillpainter.setHeight(rc.height());
@@ -144,8 +160,9 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
                     fillpainter.setFillThreshold(fuzziness);
                     fillpainter.setFeather(feather);
                     fillpainter.setSizemod(sizemod);
+                    fillpainter.setUseSelectionAsBoundary((existingSelection.isNull() || existingSelection->isEmpty()) ? false : useSelectionAsBoundary);
 
-                    fillpainter.createFloodSelection(selection, pos.x(), pos.y(), sourceDevice);
+                    fillpainter.createFloodSelection(selection, pos.x(), pos.y(), sourceDevice, existingSelection);
 
                     // If we're not antialiasing, threshold the entire selection
                     if (!antiAlias) {
@@ -164,12 +181,7 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
     });
     applicator.applyCommand(cmd, KisStrokeJobData::SEQUENTIAL);
 
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    KIS_SAFE_ASSERT_RECOVER(kisCanvas) {
-        applicator.cancel();
-        QApplication::restoreOverrideCursor();
-        return;
-    };
+
 
     KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select Contiguous Area"));
 
@@ -202,6 +214,12 @@ void KisToolSelectContiguous::slotSetFeather(int feather)
 {
     m_feather = feather;
     m_configGroup.writeEntry("feather", feather);
+}
+
+void KisToolSelectContiguous::slotSetUseSelectionAsBoundary(bool useSelectionAsBoundary)
+{
+    m_useSelectionAsBoundary = useSelectionAsBoundary;
+    m_configGroup.writeEntry("useSelectionAsBoundary", useSelectionAsBoundary);
 }
 
 QWidget* KisToolSelectContiguous::createOptionWidget()
@@ -247,9 +265,18 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
         feather->setSingleStep(1);
         gridLayout->addWidget(feather, 2, 1, 1, 1);
 
+        lbl = new QLabel(i18n("Use selection as boundary: "), selectionWidget);
+        gridLayout->addWidget(lbl, 3, 0, 1, 1);
+
+        QCheckBox *useSelectionAsBoundary = new QCheckBox(selectionWidget);
+        Q_CHECK_PTR(useSelectionAsBoundary);
+        gridLayout->addWidget(useSelectionAsBoundary, 3, 1, 1, 1);
+
         connect (input  , SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int)));
         connect (sizemod, SIGNAL(valueChanged(int)), this, SLOT(slotSetSizemod(int)));
         connect (feather, SIGNAL(valueChanged(int)), this, SLOT(slotSetFeather(int)));
+        connect (useSelectionAsBoundary, SIGNAL(toggled(bool)), this, SLOT(slotSetUseSelectionAsBoundary(bool)));
+
 
         selectionWidget->attachToImage(image(), dynamic_cast<KisCanvas2*>(canvas()));
         m_widgetHelper.setConfigGroupForExactTool(toolId());
@@ -261,6 +288,8 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
 
         feather->setValue(m_configGroup.readEntry("feather", 0));
         feather->setSuffix(i18n(" px"));
+
+        useSelectionAsBoundary->setChecked(m_configGroup.readEntry("useSelectionAsBoundary", false));
 
     }
     return selectionWidget;

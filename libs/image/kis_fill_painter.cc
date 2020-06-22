@@ -82,6 +82,7 @@ void KisFillPainter::initFillPainter()
     m_feather = 0;
     m_useCompositioning = false;
     m_threshold = 0;
+    m_useSelectionAsBoundary = false;
 }
 
 void KisFillPainter::fillSelection(const QRect &rc, const KoColor &color)
@@ -272,7 +273,7 @@ void KisFillPainter::genericFillStart(int startX, int startY, KisPaintDeviceSP s
 
     // Create a selection from the surrounding area
 
-    KisPixelSelectionSP pixelSelection = createFloodSelection(startX, startY, sourceDevice);
+    KisPixelSelectionSP pixelSelection = createFloodSelection(startX, startY, sourceDevice, selection()->pixelSelection());
     KisSelectionSP newSelection = new KisSelection(pixelSelection->defaultBounds());
     newSelection->pixelSelection()->applySelection(pixelSelection, SELECTION_REPLACE);
     m_fillSelection = newSelection;
@@ -310,13 +311,15 @@ void KisFillPainter::genericFillEnd(KisPaintDeviceSP filled)
     m_width = m_height = -1;
 }
 
-KisPixelSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisPaintDeviceSP sourceDevice)
+KisPixelSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisPaintDeviceSP sourceDevice,
+                                                         KisPaintDeviceSP existingSelection)
 {
     KisPixelSelectionSP newSelection = new KisPixelSelection(new KisSelectionDefaultBounds(device()));
-    return createFloodSelection(newSelection, startX, startY, sourceDevice);
+    return createFloodSelection(newSelection, startX, startY, sourceDevice, existingSelection);
 }
 
-KisPixelSelectionSP KisFillPainter::createFloodSelection(KisPixelSelectionSP pixelSelection, int startX, int startY, KisPaintDeviceSP sourceDevice)
+KisPixelSelectionSP KisFillPainter::createFloodSelection(KisPixelSelectionSP pixelSelection, int startX, int startY,
+                                                         KisPaintDeviceSP sourceDevice, KisPaintDeviceSP existingSelection)
 {
 
     if (m_width < 0 || m_height < 0) {
@@ -339,7 +342,11 @@ KisPixelSelectionSP KisFillPainter::createFloodSelection(KisPixelSelectionSP pix
 
     KisScanlineFill gc(sourceDevice, startPoint, fillBoundsRect);
     gc.setThreshold(m_threshold);
-    gc.fillSelection(pixelSelection);
+    if (m_useSelectionAsBoundary) {
+        gc.fillSelectionWithBoundary(pixelSelection, existingSelection);
+    } else {
+        gc.fillSelection(pixelSelection);
+    }
 
     if (m_sizemod > 0) {
         KisGrowSelectionFilter biggy(m_sizemod, m_sizemod);

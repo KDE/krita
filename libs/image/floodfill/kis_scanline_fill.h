@@ -46,6 +46,12 @@ public:
     void fillColor(const KoColor &fillColor, KisPaintDeviceSP externalDevice);
 
     /**
+     * Fill \p pixelSelection with the opacity of the contiguous area.
+     * This method uses an existing selection as boundary for the flood fill.
+     */
+    void fillSelectionWithBoundary(KisPixelSelectionSP pixelSelection, KisPaintDeviceSP existingSelection);
+
+    /**
      * Fill \p pixelSelection with the opacity of the contiguous area
      */
     void fillSelection(KisPixelSelectionSP pixelSelection);

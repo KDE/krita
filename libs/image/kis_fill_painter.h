@@ -157,7 +157,8 @@ public:
      * @param sourceDevice the sourceDevice that determines the area that
      * is floodfilled if sampleMerged is on
      */
-    KisPixelSelectionSP createFloodSelection(int startX, int startY, KisPaintDeviceSP sourceDevice);
+    KisPixelSelectionSP createFloodSelection(int startX, int startY,
+                                             KisPaintDeviceSP sourceDevice, KisPaintDeviceSP existingSelection);
 
     /**
      * Returns a selection mask for the floodfill starting at the specified position.
@@ -171,7 +172,8 @@ public:
      * @param sourceDevice the sourceDevice that determines the area that
      * is floodfilled if sampleMerged is on
      */
-    KisPixelSelectionSP createFloodSelection(KisPixelSelectionSP newSelection, int startX, int startY, KisPaintDeviceSP sourceDevice);
+    KisPixelSelectionSP createFloodSelection(KisPixelSelectionSP newSelection, int startX, int startY,
+                                             KisPaintDeviceSP sourceDevice, KisPaintDeviceSP existingSelection);
 
     /**
      * Set the threshold for floodfill. The range is 0-255: 0 means the fill will only
@@ -234,6 +236,16 @@ public:
         return m_feather;
     }
 
+    /** Sets selection borders being treated as boundary */
+    void setUseSelectionAsBoundary(bool useSelectionAsBoundary) {
+        m_useSelectionAsBoundary = useSelectionAsBoundary;
+    }
+
+    /** defines if the selection borders are treated as boundary in flood fill or not */
+    uint useSelectionAsBoundary() {
+        return m_useSelectionAsBoundary;
+    }
+
 private:
     // for floodfill
     void genericFillStart(int startX, int startY, KisPaintDeviceSP sourceDevice);
@@ -248,6 +260,7 @@ private:
     QRect m_rect;
     bool m_careForSelection;
     bool m_useCompositioning;
+    bool m_useSelectionAsBoundary;
 };
 
 

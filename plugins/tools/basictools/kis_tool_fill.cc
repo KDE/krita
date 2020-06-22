@@ -73,7 +73,7 @@
 
 KisToolFill::KisToolFill(KoCanvasBase * canvas)
         : KisToolPaint(canvas, KisCursor::load("tool_fill_cursor.png", 6, 6))
-        , m_colorLabelCompressor(900, KisSignalCompressor::FIRST_INACTIVE)
+        , m_colorLabelCompressor(500, KisSignalCompressor::FIRST_INACTIVE)
 {
     setObjectName("tool_fill");
     m_feather = 0;
@@ -158,7 +158,7 @@ void KisToolFill::endPrimaryAction(KoPointerEvent *event)
         return;
     }
 
-    bool useFastMode = m_useFastMode->isChecked();
+
 
     Qt::KeyboardModifiers fillOnlySelectionModifier = Qt::AltModifier; // Not sure where to keep it
     if (keysAtStart == fillOnlySelectionModifier) {
@@ -200,9 +200,10 @@ void KisToolFill::endPrimaryAction(KoPointerEvent *event)
                                   m_startPos,
                                   resources->activeSelection(),
                                   resources,
-                                  useFastMode,
+                                  m_useFastMode,
                                   m_usePattern,
                                   m_fillOnlySelection,
+                                  m_useSelectionAsBoundary,
                                   m_feather,
                                   m_sizemod,
                                   m_threshold,
@@ -223,8 +224,8 @@ QWidget* KisToolFill::createOptionWidget()
     widget->setObjectName(toolId() + " option widget");
 
     QLabel *lbl_fastMode = new QLabel(i18n("Fast mode: "), widget);
-    m_useFastMode = new QCheckBox(QString(), widget);
-    m_useFastMode->setToolTip(
+    m_checkUseFastMode = new QCheckBox(QString(), widget);
+    m_checkUseFastMode->setToolTip(
         i18n("Fills area faster, but does not take composition "
              "mode into account. Selections and other extended "
              "features will also be disabled."));
@@ -275,21 +276,30 @@ QWidget* KisToolFill::createOptionWidget()
     m_checkFillSelection = new QCheckBox(QString(), widget);
     m_checkFillSelection->setToolTip(i18n("When checked do not look at the current layer colors, but just fill all of the selected area"));
 
-    connect (m_useFastMode       , SIGNAL(toggled(bool))    , this, SLOT(slotSetUseFastMode(bool)));
+    QLabel *lbl_useSelectionAsBoundary = new QLabel(i18nc("Description for a checkbox in a Fill Tool to use selection borders as boundary when filling", "Use selection as boundary:"), widget);
+    m_checkUseSelectionAsBoundary = new QCheckBox(QString(), widget);
+    m_checkUseSelectionAsBoundary->setToolTip(i18nc("Tooltip for 'Use selection as boundary' checkbox", "When checked, use selection borders as boundary when filling"));
+
+
+
+    connect (m_checkUseFastMode       , SIGNAL(toggled(bool))    , this, SLOT(slotSetUseFastMode(bool)));
     connect (m_slThreshold       , SIGNAL(valueChanged(int)), this, SLOT(slotSetThreshold(int)));
     connect (m_sizemodWidget     , SIGNAL(valueChanged(int)), this, SLOT(slotSetSizemod(int)));
     connect (m_featherWidget     , SIGNAL(valueChanged(int)), this, SLOT(slotSetFeather(int)));
     connect (m_checkUsePattern   , SIGNAL(toggled(bool))    , this, SLOT(slotSetUsePattern(bool)));
     connect (m_checkFillSelection, SIGNAL(toggled(bool))    , this, SLOT(slotSetFillSelection(bool)));
+    connect (m_checkUseSelectionAsBoundary, SIGNAL(toggled(bool))    , this, SLOT(slotSetUseSelectionAsBoundary(bool)));
+
     connect (m_cmbSampleLayersMode   , SIGNAL(currentIndexChanged(int)), this, SLOT(slotSetSampleLayers(int)));
     connect (m_cmbSelectedLabels          , SIGNAL(selectedColorsChanged()), this, SLOT(slotSetSelectedColorLabels()));
 
-    addOptionWidgetOption(m_useFastMode, lbl_fastMode);
+    addOptionWidgetOption(m_checkUseFastMode, lbl_fastMode);
     addOptionWidgetOption(m_slThreshold, lbl_threshold);
     addOptionWidgetOption(m_sizemodWidget      , lbl_sizemod);
     addOptionWidgetOption(m_featherWidget      , lbl_feather);
 
     addOptionWidgetOption(m_checkFillSelection, lbl_fillSelection);
+    addOptionWidgetOption(m_checkUseSelectionAsBoundary, lbl_useSelectionAsBoundary);
     addOptionWidgetOption(m_cmbSampleLayersMode, lbl_sampleLayers);
     addOptionWidgetOption(m_cmbSelectedLabels, lbl_cmbLabel);
     addOptionWidgetOption(m_checkUsePattern, lbl_usePattern);
@@ -301,7 +311,7 @@ QWidget* KisToolFill::createOptionWidget()
 
 
     // load configuration options
-    m_useFastMode->setChecked(m_configGroup.readEntry("useFastMode", false));
+    m_checkUseFastMode->setChecked(m_configGroup.readEntry("useFastMode", false));
     m_slThreshold->setValue(m_configGroup.readEntry("thresholdAmount", 80));
     m_sizemodWidget->setValue(m_configGroup.readEntry("growSelection", 0));
 
@@ -316,6 +326,18 @@ QWidget* KisToolFill::createOptionWidget()
         setCmbSampleLayersMode(m_sampleLayersMode);
     }
     m_checkFillSelection->setChecked(m_configGroup.readEntry("fillSelection", false));
+    m_checkUseSelectionAsBoundary->setChecked(m_configGroup.readEntry("useSelectionAsBoundary", false));
+
+    // manually set up all variables in case there were no signals when setting value
+    m_feather = m_featherWidget->value();
+    m_sizemod = m_sizemodWidget->value();
+    m_threshold = m_slThreshold->value();
+    m_useFastMode = m_checkUseFastMode->isChecked();
+    m_fillOnlySelection = m_checkFillSelection->isChecked();
+    m_useSelectionAsBoundary = m_checkUseSelectionAsBoundary->isChecked();
+    m_usePattern = m_checkUsePattern->isChecked();
+    // m_sampleLayersMode is set manually above
+    // selectedColors are also set manually
 
     activateConnectionsToImage();
 
@@ -325,10 +347,10 @@ QWidget* KisToolFill::createOptionWidget()
 
 void KisToolFill::updateGUI()
 {
-    bool useAdvancedMode = !m_useFastMode->isChecked();
+    bool useAdvancedMode = !m_checkUseFastMode->isChecked();
     bool selectionOnly = m_checkFillSelection->isChecked();
 
-    m_useFastMode->setEnabled(!selectionOnly);
+    m_checkUseFastMode->setEnabled(!selectionOnly);
     m_slThreshold->setEnabled(!selectionOnly);
 
     m_sizemodWidget->setEnabled(!selectionOnly && useAdvancedMode);
@@ -336,6 +358,8 @@ void KisToolFill::updateGUI()
     m_checkUsePattern->setEnabled(useAdvancedMode);
 
     m_cmbSampleLayersMode->setEnabled(!selectionOnly && useAdvancedMode);
+
+    m_checkUseSelectionAsBoundary->setEnabled(!selectionOnly && useAdvancedMode);
 
     bool sampleLayersModeIsColorLabeledLayers = m_cmbSampleLayersMode->currentData().toString() == SAMPLE_LAYERS_MODE_COLOR_LABELED;
     m_cmbSelectedLabels->setEnabled(!selectionOnly && useAdvancedMode && sampleLayersModeIsColorLabeledLayers);
@@ -396,6 +420,7 @@ void KisToolFill::deactivateConnectionsToImage()
 
 void KisToolFill::slotSetUseFastMode(bool value)
 {
+    m_useFastMode = value;
     updateGUI();
     m_configGroup.writeEntry("useFastMode", value);
 }
@@ -429,6 +454,13 @@ void KisToolFill::slotSetFillSelection(bool state)
 {
     m_fillOnlySelection = state;
     m_configGroup.writeEntry("fillSelection", state);
+    updateGUI();
+}
+
+void KisToolFill::slotSetUseSelectionAsBoundary(bool state)
+{
+    m_useSelectionAsBoundary = state;
+    m_configGroup.writeEntry("useSelectionAsBoundary", state);
     updateGUI();
 }
 

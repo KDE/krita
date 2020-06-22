@@ -231,6 +231,7 @@ void KisFillActionFactory::run(const QString &fillSource, KisViewManager *view)
                                   false, // fast mode
                                   usePattern,
                                   true, // fill only selection,
+                                  false,
                                   0, // feathering radius
                                   0, // sizemod
                                   80, // threshold,

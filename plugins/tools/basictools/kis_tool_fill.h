@@ -62,6 +62,7 @@ public Q_SLOTS:
     void slotSetThreshold(int);
     void slotSetUsePattern(bool);
     void slotSetFillSelection(bool);
+    void slotSetUseSelectionAsBoundary(bool);
     void slotSetSizemod(int);
     void slotSetFeather(int);
     void slotSetSampleLayers(int index);
@@ -97,17 +98,20 @@ private:
     int m_threshold;
     bool m_usePattern;
     bool m_fillOnlySelection;
+    bool m_useSelectionAsBoundary;
+    bool m_useFastMode;
     QString m_sampleLayersMode;
     QList<int> m_selectedColors;
 
     bool m_widgetsInitialized {false};
 
-    QCheckBox *m_useFastMode;
+    QCheckBox *m_checkUseFastMode;
     KisSliderSpinBox *m_slThreshold;
     KisSliderSpinBox *m_sizemodWidget;
     KisSliderSpinBox *m_featherWidget;
     QCheckBox *m_checkUsePattern;
     QCheckBox *m_checkFillSelection;
+    QCheckBox *m_checkUseSelectionAsBoundary;
     QComboBox *m_cmbSampleLayersMode;
     KisColorFilterCombo *m_cmbSelectedLabels;
     KisSignalCompressor m_colorLabelCompressor;

@@ -47,7 +47,7 @@ QModelIndex StoryboardModel::index(int row, int column, const QModelIndex &paren
         return createIndex(row, column, m_items.at(row));
     }
     else if (!parent.parent().isValid()) {
-        StoryboardItem *parentItem = static_cast<StoryboardItem*>(parent.internalPointer());
+        StoryboardItem *parentItem = m_items.at(parent.row());
         StoryboardChild *childItem = parentItem->child(row);
         if (childItem) {
             return createIndex(row, column, childItem);
@@ -62,12 +62,10 @@ QModelIndex StoryboardModel::parent(const QModelIndex &index) const
         return QModelIndex();
     }
 
-    {
-        //no parent for 1st level node
-        StoryboardItem *childItem = static_cast<StoryboardItem*>(index.internalPointer());
-        if (m_items.contains(childItem)) {
-            return QModelIndex();
-        }
+    //no parent for 1st level node
+    StoryboardItem *childItemFirstLevel = static_cast<StoryboardItem*>(index.internalPointer());
+    if (m_items.contains(childItem)) {
+        return QModelIndex();
     }
 
     //return parent only for 2nd level nodes
@@ -83,7 +81,7 @@ int StoryboardModel::rowCount(const QModelIndex &parent) const
         return m_items.count();
     }
     else if (!parent.parent().isValid()) {
-        StoryboardItem *parentItem = static_cast<StoryboardItem*>(parent.internalPointer());
+        StoryboardItem *parentItem = m_items.at(parent.row());
         return parentItem->childCount();
     }
     return 0;   //2nd level nodes have no child
@@ -115,7 +113,7 @@ QVariant StoryboardModel::data(const QModelIndex &index, int role) const
 
     if (role == Qt::DisplayRole || role == Qt::EditRole || role == Qt::UserRole)
     {
-        StoryboardChild *child = static_cast<StoryboardChild*>(index.internalPointer());
+        StoryboardChild *child = m_items.at(index.parent().row())->child(index.row());
         if (index.row() > 3) {
             if (role == Qt::UserRole) {         //scroll bar position
                 CommentBox commentBox = qvariant_cast<CommentBox>(child->data());
@@ -139,7 +137,7 @@ bool StoryboardModel::setData(const QModelIndex & index, const QVariant & value,
             return false;
         }
 
-        StoryboardChild *child = static_cast<StoryboardChild*>(index.internalPointer());
+        StoryboardChild *child = m_items.at(index.parent().row())->child(index.row());
         if (child) {
             int fps = 24;
             if ((index.row() <= 3  && index.row() != 1) && value.toInt() < 0) {
@@ -167,7 +165,7 @@ bool StoryboardModel::setData(const QModelIndex & index, const QVariant & value,
 
 bool StoryboardModel::setCommentScrollData(const QModelIndex & index, const QVariant & value)
 {
-    StoryboardChild *child = static_cast<StoryboardChild*>(index.internalPointer());
+    StoryboardChild *child = m_items.at(index.parent().row())->child(index.row());
     if (child) {
         CommentBox commentBox = qvariant_cast<CommentBox>(child->data());
         commentBox.scrollValue = value.toInt();
@@ -207,7 +205,7 @@ bool StoryboardModel::insertRows(int position, int rows, const QModelIndex &pare
         return true;
     }
     else if (!parent.parent().isValid()) {              //insert 2nd level nodes
-        StoryboardItem *item = static_cast<StoryboardItem*>(parent.internalPointer());
+        StoryboardItem *item = m_items.at(parent.row());
 
         if (position < 0 || position > item->childCount()) {
             return false;
@@ -233,11 +231,6 @@ bool StoryboardModel::removeRows(int position, int rows, const QModelIndex &pare
         }
         beginRemoveRows(QModelIndex(), position, position+rows-1);
         for (int row = position + rows - 1; row >= position; row--) {
-            //deleting all the child nodes
-            QModelIndex currentIndex = index(row, 0);
-            removeRows(0, rowCount(currentIndex), currentIndex);
-
-            //deleting the actual parent node
             delete m_items.at(row);
             m_items.removeAt(row);
         }
@@ -245,7 +238,7 @@ bool StoryboardModel::removeRows(int position, int rows, const QModelIndex &pare
         return true;
     }
     else if (!parent.parent().isValid()) {                     //remove 2nd level nodes
-        StoryboardItem *item = static_cast<StoryboardItem*>(parent.internalPointer());
+        StoryboardItem *item = m_items.at(parent.row());
 
         if (position < 0 || position >= item->childCount()) {
             return false;
@@ -291,7 +284,7 @@ bool StoryboardModel::moveRows(const QModelIndex &sourceParent, int sourceRow, i
                 return false;
             }
 
-            StoryboardItem *item = static_cast<StoryboardItem*>(parent.internalPointer());
+            StoryboardItem *item = m_items.at(parent.row());
             item->moveChild(sourceRow, destinationChild + row);
         }
         endMoveRows();
@@ -353,7 +346,7 @@ bool StoryboardModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
         QModelIndexList moveRowIndexes;
         while (!stream.atEnd()) {
             stream >> sourceRow;
-            QModelIndex index = createIndex(sourceRow, 0);
+            QModelIndex index = this->index(sourceRow, 0);
             moveRowIndexes.append(index);
         }
         moveRows(QModelIndex(), moveRowIndexes.at(0).row(), moveRowIndexes.count(), parent, row);

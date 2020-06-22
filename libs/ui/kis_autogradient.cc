@@ -73,6 +73,13 @@ void KisAutogradientEditor::activate()
     paramChanged();
 }
 
+void KisAutogradientEditor::disableTransparentCheckboxes() {
+    leftForegroundTransparent->setEnabled(false);
+    leftBackgroundTransparent->setEnabled(false);
+    rightForegroundTransparent->setEnabled(false);
+    rightBackgroundTransparent->setEnabled(false);
+}
+
 void KisAutogradientEditor::slotSelectedSegment(KoGradientSegment* segment)
 {
 
@@ -91,16 +98,19 @@ void KisAutogradientEditor::slotSelectedSegment(KoGradientSegment* segment)
 
     KoGradientSegmentEndpointType leftType = segment->startType();
     KoGradientSegmentEndpointType rightType = segment->endType();
+    disableTransparentCheckboxes(); //disable all of them, then enable the correct ones
     switch (leftType) {
     case COLOR_ENDPOINT:
         leftColorRadioButton->setChecked(true); break;
     case FOREGROUND_TRANSPARENT_ENDPOINT:
         leftForegroundTransparent->setChecked(true);
     case FOREGROUND_ENDPOINT:
+        leftForegroundTransparent->setEnabled(true);
         leftForegroundRadioButton->setChecked(true); break;
     case BACKGROUND_TRANSPARENT_ENDPOINT:
         leftBackgroundTransparent->setChecked(true);
     case BACKGROUND_ENDPOINT:
+        leftBackgroundTransparent->setEnabled(true);
         leftBackgroundRadioButton->setChecked(true); break;
     }
     switch (rightType) {
@@ -109,10 +119,12 @@ void KisAutogradientEditor::slotSelectedSegment(KoGradientSegment* segment)
     case FOREGROUND_TRANSPARENT_ENDPOINT:
         rightForegroundTransparent->setChecked(true);
     case FOREGROUND_ENDPOINT:
+        rightForegroundTransparent->setEnabled(true);
         rightForegroundRadioButton->setChecked(true); break;
     case BACKGROUND_TRANSPARENT_ENDPOINT:
         rightBackgroundTransparent->setChecked(true);
     case BACKGROUND_ENDPOINT:
+        rightBackgroundTransparent->setEnabled(true);
         rightBackgroundRadioButton->setChecked(true); break;
     }
 
@@ -208,6 +220,7 @@ void KisAutogradientEditor::slotChangedLeftType(QAbstractButton* button, bool ch
     if (button == leftForegroundRadioButton) {
         color = KoColor(m_fgColor, colorSpace);
         leftForegroundTransparent->setEnabled(true);
+        leftBackgroundTransparent->setEnabled(false);
         if (leftForegroundTransparent->isChecked()) {
             type = FOREGROUND_TRANSPARENT_ENDPOINT;
         } else {
@@ -216,6 +229,7 @@ void KisAutogradientEditor::slotChangedLeftType(QAbstractButton* button, bool ch
     } else if (button == leftBackgroundRadioButton) {
         color = KoColor(m_bgColor, colorSpace);
         leftBackgroundTransparent->setEnabled(true);
+        leftForegroundTransparent->setEnabled(false);
         if (leftBackgroundTransparent->isChecked()) {
             type = BACKGROUND_TRANSPARENT_ENDPOINT;
         } else {
@@ -247,6 +261,7 @@ void KisAutogradientEditor::slotChangedRightType(QAbstractButton* button, bool c
     if (button == rightForegroundRadioButton) {
         color = KoColor(m_fgColor, colorSpace);
         rightForegroundTransparent->setEnabled(true);
+        rightBackgroundTransparent->setEnabled(false);
         if (rightForegroundTransparent->isChecked()) {
             type = FOREGROUND_TRANSPARENT_ENDPOINT;
         } else {
@@ -255,6 +270,7 @@ void KisAutogradientEditor::slotChangedRightType(QAbstractButton* button, bool c
     } else if (button == rightBackgroundRadioButton) {
         color = KoColor(m_bgColor, colorSpace);
         rightBackgroundTransparent->setEnabled(true);
+        rightForegroundTransparent->setEnabled(false);
         if (rightBackgroundTransparent->isChecked()) {
             type = BACKGROUND_TRANSPARENT_ENDPOINT;
         } else {

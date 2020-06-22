@@ -32,6 +32,10 @@ class KisAutogradientEditor : public QWidget, public Ui::KisWdgAutogradient
 public:
     KisAutogradientEditor(KoSegmentGradient* gradient, QWidget *parent, const char* name, const QString& caption, KoColor fgColor, KoColor bgColor);
     void activate();
+
+private:
+    void disableTransparentCheckboxes();
+
 private:
     KoSegmentGradient* m_autogradientResource;
     KoColor m_fgColor, m_bgColor;

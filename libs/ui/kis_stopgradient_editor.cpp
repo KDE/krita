@@ -142,14 +142,17 @@ void KisStopGradientEditor::stopChanged(int stop)
         KoGradientStopType type = m_gradient->stops()[stop].type;
         if (type == FOREGROUNDSTOP) {
             foregroundRadioButton->setChecked(true);
+            opacitySlider->setEnabled(false);
             color = m_fgColor;
         }
         else if (type == BACKGROUNDSTOP) {
             backgroundRadioButton->setChecked(true);
+            opacitySlider->setEnabled(false);
             color = m_bgColor;
         }
         else {
             colorRadioButton->setChecked(true);
+            opacitySlider->setEnabled(true);
             color = m_gradient->stops()[stop].color;
         }
 
@@ -173,12 +176,15 @@ void KisStopGradientEditor::stopTypeChanged() {
     if (foregroundRadioButton->isChecked()) {
         type = FOREGROUNDSTOP;
         color = KoColor(m_fgColor, color.colorSpace());
+        opacitySlider->setEnabled(false);
     } else if (backgroundRadioButton->isChecked()) {
         type = BACKGROUNDSTOP;
         color = KoColor(m_bgColor, color.colorSpace());
+        opacitySlider->setEnabled(false);
     }
     else {
         type = COLORSTOP;
+        opacitySlider->setEnabled(true);
     }
 
     stops.removeAt(currentStop);

@@ -41,7 +41,7 @@ private:
     QPointF convertWidgetCoordinateToShapeCoordinate(QPointF coordinate) const override;
 
     QRegion getMaskMap() override;
-    void drawCursor() override;
+    void drawCursor(QPainter &painter) override;
 
     int m_margin { 5 };
 };

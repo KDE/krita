@@ -22,12 +22,9 @@
 /**
  * @brief The KisVisualColorSelectorShape class
  * A 2d widget can represent at maximum 2 coordinates.
- * So first decide howmany coordinates you need. (onedimensional, or twodimensional)
- * Then the model, (Channel, HSV, HSL, HSI, YUV). Channel is the raw color channels.
- * When it finds a non-implemented feature it'll return to Channel.
+ * So first decide how many coordinates you need. (onedimensional, or twodimensional)
  * Then, select the channels you wish to be affected. This uses the model, so for cmyk
  * the channel is c=0, m=1, y=2, k=3, but for hsv, hue=0, sat=1, and val=2
- * These can also be set with 'slotsetactive channels'.
  * Then finally, connect the displayrenderer, you can also do this with 'setdisplayrenderer'
  *
  * Either way, this class is made to be subclassed, with a few virtuals so that the geometry
@@ -43,7 +40,6 @@ public:
      * Whether or not the shape is single or two dimensional.
      **/
     enum Dimensions{onedimensional, twodimensional};
-    enum ColorModel{Channel, HSV, HSL, HSI, HSY, YUV};
     explicit KisVisualColorSelectorShape(QWidget *parent,
                                          KisVisualColorSelectorShape::Dimensions dimension,
                                          const KoColorSpace *cs,
@@ -70,12 +66,6 @@ public:
     bool imagesNeedUpdate() const;
     QImage getImageMap();
     const QImage getAlphaMask() const;
-    /**
-     * @brief setFullImage
-     * Set the full widget image to be painted.
-     * @param full this should be the full image.
-     */
-    void setFullImage(QImage full);
     /**
      * @brief getCurrentColor
      * @return the current kocolor
@@ -147,16 +137,8 @@ public:
 Q_SIGNALS:
     void sigCursorMoved(QPointF pos);
 
-public Q_SLOTS:
-    /**
-     * @brief slotSetActiveChannels
-     * Change the active channels if necessary.
-     * @param channel1 used by single and twodimensional widgets.
-     * @param channel2 only used by twodimensional widgets.
-     */
-    void slotSetActiveChannels(int channel1, int channel2);
-
 protected:
+    KisVisualColorSelector* colorSelector() const;
     /**
      * @brief convertImageMap
      * convert image data containing raw KoColor data into a QImage
@@ -214,7 +196,7 @@ private:
      * @return the pixmap of this shape.
      */
     virtual QRegion getMaskMap() = 0;
-    virtual void drawCursor() = 0;
+    virtual void drawCursor(QPainter &painter) = 0;
 };
 
 #endif

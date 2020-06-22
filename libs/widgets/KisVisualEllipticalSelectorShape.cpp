@@ -188,17 +188,12 @@ QImage KisVisualEllipticalSelectorShape::renderAlphaMask() const
     return alphaMask;
 }
 
-void KisVisualEllipticalSelectorShape::drawCursor()
+void KisVisualEllipticalSelectorShape::drawCursor(QPainter &painter)
 {
     //qDebug() << this << "KisVisualEllipticalSelectorShape::drawCursor: image needs update" << imagesNeedUpdate();
     QPointF cursorPoint = convertShapeCoordinateToWidgetCoordinate(getCursorPosition());
-    QImage fullSelector = getImageMap();
     QColor col = getColorFromConverter(getCurrentColor());
-    QPainter painter;
-    painter.begin(&fullSelector);
-    painter.setRenderHint(QPainter::Antialiasing);
-    QBrush fill;
-    fill.setStyle(Qt::SolidPattern);
+    QBrush fill(Qt::SolidPattern);
 
     int cursorwidth = 5;
 
@@ -225,6 +220,4 @@ void KisVisualEllipticalSelectorShape::drawCursor()
         painter.setBrush(fill);
         painter.drawEllipse(cursorPoint, cursorwidth-1.0, cursorwidth-1.0);
     }
-    painter.end();
-    setFullImage(fullSelector);
 }

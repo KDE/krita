@@ -30,7 +30,6 @@ struct KisVisualColorSelectorShape::Private
 {
     QImage gradient;
     QImage alphaMask;
-    QImage fullSelector;
     bool imagesNeedUpdate { true };
     bool alphaNeedsUpdate { true };
     bool acceptTabletEvents { false };
@@ -138,15 +137,9 @@ QColor KisVisualColorSelectorShape::getColorFromConverter(KoColor c){
     return col;
 }
 
-// currently unused?
-void KisVisualColorSelectorShape::slotSetActiveChannels(int channel1, int channel2)
+KisVisualColorSelector* KisVisualColorSelectorShape::colorSelector() const
 {
-    //qDebug() << this  << "slotSetActiveChannels";
-    int maxchannel = m_d->colorSpace->colorChannelCount()-1;
-    m_d->channel1 = qBound(0, channel1, maxchannel);
-    m_d->channel2 = qBound(0, channel2, maxchannel);
-    m_d->imagesNeedUpdate = true;
-    update();
+    return qobject_cast<KisVisualColorSelector*>(parent());
 }
 
 bool KisVisualColorSelectorShape::imagesNeedUpdate() const {
@@ -199,7 +192,7 @@ QImage KisVisualColorSelectorShape::convertImageMap(const quint8 *rawColor, quin
 
 QImage KisVisualColorSelectorShape::renderBackground(const QVector4D &channelValues, quint32 pixelSize) const
 {
-    const KisVisualColorSelector *selector = qobject_cast<KisVisualColorSelector*>(parent());
+    const KisVisualColorSelector *selector = colorSelector();
     Q_ASSERT(selector);
 
     // Hi-DPI aware rendering requires that we determine the device pixel dimension;
@@ -332,8 +325,10 @@ void KisVisualColorSelectorShape::paintEvent(QPaintEvent*)
 {
     QPainter painter(this);
 
-    drawCursor();
-    painter.drawImage(0,0,m_d->fullSelector);
+    QImage fullSelector = getImageMap();
+    painter.drawImage(0, 0, fullSelector);
+    painter.setRenderHint(QPainter::Antialiasing);
+    drawCursor(painter);
 }
 
 void KisVisualColorSelectorShape::resizeEvent(QResizeEvent *)
@@ -347,13 +342,9 @@ KisVisualColorSelectorShape::Dimensions KisVisualColorSelectorShape::getDimensio
     return m_d->dimension;
 }
 
-void KisVisualColorSelectorShape::setFullImage(QImage full)
-{
-    m_d->fullSelector = full;
-}
 KoColor KisVisualColorSelectorShape::getCurrentColor()
 {
-    const KisVisualColorSelector *selector = qobject_cast<KisVisualColorSelector*>(parent());
+    const KisVisualColorSelector *selector = colorSelector();
     if (selector)
     {
         return selector->convertShapeCoordsToKoColor(m_d->currentChannelValues);

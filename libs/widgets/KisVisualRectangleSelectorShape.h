@@ -42,7 +42,7 @@ private:
     singelDTypes m_type;
     int m_barWidth;
     QRegion getMaskMap() override;
-    void drawCursor() override;
+    void drawCursor(QPainter &painter) override;
 };
 
 #endif 

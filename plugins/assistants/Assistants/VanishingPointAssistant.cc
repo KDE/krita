@@ -89,9 +89,8 @@ QPointF VanishingPointAssistant::adjustPosition(const QPointF& pt, const QPointF
 
 void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible, bool previewVisible)
 {
-    // HACK ALERT: side handles aren't saved
+    // HACK ALERT: side handles aren't saved in old krita versions
     // we need to just add a default position for now if we are loading a vanishing point
-    // we will need to look at how we load/save assistants in general to remedy this
     if (sideHandles().isEmpty()) {
         QPointF vpPoint = *handles()[0]; // main vanishing point
         addHandle(new KisPaintingAssistantHandle(vpPoint + QPointF(-70,0)), HandleType::SIDE);

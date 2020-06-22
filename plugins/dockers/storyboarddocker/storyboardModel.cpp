@@ -64,7 +64,7 @@ QModelIndex StoryboardModel::parent(const QModelIndex &index) const
 
     //no parent for 1st level node
     StoryboardItem *childItemFirstLevel = static_cast<StoryboardItem*>(index.internalPointer());
-    if (m_items.contains(childItem)) {
+    if (m_items.contains(childItemFirstLevel)) {
         return QModelIndex();
     }
 

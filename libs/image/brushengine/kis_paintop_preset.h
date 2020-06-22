@@ -73,8 +73,6 @@ public:
 
     void fromXML(const QDomElement& elt);
 
-    bool loadMYB(QIODevice* dev);
-
     bool removable() const {
         return true;
     }

@@ -34,8 +34,8 @@ KisMyPaintOp::KisMyPaintOp(const KisPaintOpSettingsSP settings, KisPainter * pai
 
 KisMyPaintOp::~KisMyPaintOp() {
 
-    free(m_brush->brush());
-    free(m_surface->surface());
+    delete m_brush;
+    delete m_surface;
 }
 
 KisSpacingInformation KisMyPaintOp::paintAt(const KisPaintInformation& info) {

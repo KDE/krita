@@ -34,6 +34,9 @@ public:
     void activate();
 
 private:
+    void disableTransparentCheckboxes();
+
+private:
     KoSegmentGradientSP m_autogradientResource;
     KoColor m_fgColor;
     KoColor m_bgColor;

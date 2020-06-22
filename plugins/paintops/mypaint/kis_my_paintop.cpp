@@ -22,7 +22,15 @@ KisMyPaintOp::KisMyPaintOp(const KisPaintOpSettingsSP settings, KisPainter * pai
     m_surface = new KisMyPaintSurface(this->painter(), m_node);
 
     m_brush->apply(settings);
-    m_brush->setColor(this->painter()->paintColor());
+
+    if(mypaint_brush_get_base_value(m_brush->brush(), MYPAINT_BRUSH_SETTING_ERASER)) {
+
+        m_brush->setColor(this->painter()->backgroundColor());
+        mypaint_brush_set_base_value(m_brush->brush(), MYPAINT_BRUSH_SETTING_ERASER, false);
+    }
+    else {
+        m_brush->setColor(this->painter()->paintColor());
+    }
 
     //mypaint_brush_set_base_value(m_brush->brush(), MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC, 2.0);
 

@@ -9,7 +9,7 @@
 Krita is a free and open source digital painting application. It is for artists who want to create professional work from start to end. Krita is used by comic book artists, illustrators, concept artists, matte and texture painters and in the digital VFX industry.
 
 If you are reading this on Github, be aware that this is just a mirror. Our real
-code repository is provided by KDE: https://invent.kde.org/kde/krita
+code repository is provided by KDE: https://invent.kde.org/graphics/krita.git
 
 ![Picture](https://krita.org/wp-content/uploads/2016/04/krita-30-screenshot.jpg)
 
@@ -35,7 +35,8 @@ https://api.kde.org/extragear-api/graphics-apidocs/krita/html/index.html
 https://bugs.kde.org/buglist.cgi?bug_status=UNCONFIRMED&bug_status=CONFIRMED&bug_status=ASSIGNED&bug_status=REOPENED&list_id=1315444&product=krita&query_format=advanced
 
 ### Discussion Forum
-http://forum.kde.org/viewforum.php?f=136
+* https://krita-artists.org/
+* http://forum.kde.org/viewforum.php?f=136
 
 ### IRC channel
 Most of the developers hang out here. If you are interested in helping with the project this is a great place to start. Many of the developers based in Europe so they may be offline depending on when you join.
@@ -44,7 +45,7 @@ irc.freenode.net, #krita
 
 ### Project Website
 
-  http://www.krita.org
+https://www.krita.org
 
 ### License
 

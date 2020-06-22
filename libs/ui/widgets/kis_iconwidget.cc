@@ -22,18 +22,23 @@
 #include <QPainter>
 #include <QIcon>
 #include <QStyleOption>
-#include <resources/KoResource.h>
-#include <KoResourceServerAdapter.h>
+#include <KoResource.h>
 
 
-KisIconWidget::KisIconWidget(QWidget *parent, const char *name)
+KisIconWidget::KisIconWidget(QWidget *parent, const QString &name)
     : KisPopupButton(parent)
 {
     setObjectName(name);
     m_resource = 0;
 }
 
-void KisIconWidget::setResource(KoResource * resource)
+void KisIconWidget::KisIconWidget::setThumbnail(const QImage &thumbnail)
+{
+    m_thumbnail = thumbnail;
+    update();
+}
+
+void KisIconWidget::setResource(KoResourceSP resource)
 {
     m_resource = resource;
     update();
@@ -63,11 +68,28 @@ void KisIconWidget::paintEvent(QPaintEvent *event)
     p.setClipping(true);
 
     p.setBrush(this->palette().window());
-    p.drawRect(QRect(0, 0, cw, ch));
-    if (m_resource && !m_resource->image().isNull()) {
+    p.drawRect(QRect(0,0,cw,ch));
+
+    if (!m_thumbnail.isNull()) {
         QImage img = QImage(iconWidth, iconHeight, QImage::Format_ARGB32);
         img.fill(Qt::transparent);
-        if (m_resource->image().width() < iconWidth ||  m_resource->image().height() < iconHeight) {
+        if (m_thumbnail.width() < iconWidth || m_thumbnail.height() < iconHeight) {
+            QPainter paint2;
+            paint2.begin(&img);
+            for (int x = 0; x < iconWidth; x += m_thumbnail.width()) {
+                for (int y = 0; y < iconHeight; y+= m_thumbnail.height()) {
+                    paint2.drawImage(x, y, m_thumbnail);
+                }
+            }
+        } else {
+            img = m_thumbnail.scaled(iconWidth, iconHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        }
+        p.drawImage(QRect(border, border, iconWidth, iconHeight), img);
+    }
+    else if (m_resource) {
+        QImage img = QImage(iconWidth, iconHeight, QImage::Format_ARGB32);
+        img.fill(Qt::transparent);
+        if (m_resource->image().width()<iconWidth || m_resource->image().height()<iconHeight) {
             QPainter paint2;
             paint2.begin(&img);
             for (int x = 0; x < iconWidth; x += m_resource->image().width()) {

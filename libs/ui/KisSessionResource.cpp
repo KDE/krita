@@ -56,6 +56,17 @@ KisSessionResource::KisSessionResource(const QString &filename)
 KisSessionResource::~KisSessionResource()
 {}
 
+KisSessionResource::KisSessionResource(const KisSessionResource &rhs)
+    : KisWindowLayoutResource(rhs)
+    , d(new Private(*rhs.d))
+{
+}
+
+KoResourceSP KisSessionResource::clone() const
+{
+    return KoResourceSP(new KisSessionResource(*this));
+}
+
 void KisSessionResource::restore()
 {
     auto *kisPart = KisPart::instance();
@@ -110,7 +121,6 @@ void KisSessionResource::restore()
         view->closeView();
     }
 
-    kisPart->setCurrentSession(this);
 }
 
 

@@ -56,6 +56,18 @@ struct DefaultKoColorInitializer
         qWarning() << "KoColor debug runtime checks are active.";
 #endif
 #endif
+
+        initializeMetatype();
+    }
+
+    void initializeMetatype() {
+        qRegisterMetaType<KoColor>();
+
+        /**
+         * We want KoColor to be comparable inside QVariant,
+         * so we should generate comparators.
+         */
+        QMetaType::registerEqualsComparator<KoColor>();
     }
 
     ~DefaultKoColorInitializer() {
@@ -116,6 +128,16 @@ KoColor::KoColor(const KoColor &src, const KoColorSpace * colorSpace)
     memset(m_data, 0, m_size);
 
     src.colorSpace()->convertPixelsTo(src.m_data, m_data, colorSpace, 1, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+}
+
+bool KoColor::operator==(const KoColor &other) const {
+    if (*colorSpace() != *other.colorSpace()) {
+        return false;
+    }
+    if (m_size != other.m_size) {
+        return false;
+    }
+    return memcmp(m_data, other.m_data, m_size) == 0;
 }
 
 void KoColor::convertTo(const KoColorSpace * cs, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)

@@ -27,7 +27,6 @@
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoUnit.h>
-#include <KoOdfWorkaround.h>
 #include <SvgSavingContext.h>
 #include <SvgLoadingContext.h>
 #include <SvgUtil.h>
@@ -73,99 +72,6 @@ EllipseShape::~EllipseShape()
 KoShape *EllipseShape::cloneShape() const
 {
     return new EllipseShape(*this);
-}
-
-void EllipseShape::saveOdf(KoShapeSavingContext &context) const
-{
-    if (isParametricShape()) {
-        context.xmlWriter().startElement("draw:ellipse");
-        saveOdfAttributes(context, OdfAllAttributes);
-
-        switch (m_type) {
-        case Arc:
-            context.xmlWriter().addAttribute("draw:kind", sweepAngle() == 360 ? "full" : "arc");
-            break;
-        case Pie:
-            context.xmlWriter().addAttribute("draw:kind", "section");
-            break;
-        case Chord:
-            context.xmlWriter().addAttribute("draw:kind", "cut");
-            break;
-        default:
-            context.xmlWriter().addAttribute("draw:kind", "full");
-        }
-        if (m_type != Arc || sweepAngle() != 360) {
-            context.xmlWriter().addAttribute("draw:start-angle", m_startAngle);
-            context.xmlWriter().addAttribute("draw:end-angle", m_endAngle);
-        }
-        saveOdfCommonChildElements(context);
-        saveText(context);
-        context.xmlWriter().endElement();
-    } else {
-        KoPathShape::saveOdf(context);
-    }
-}
-
-bool EllipseShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
-{
-    QSizeF size;
-
-    bool radiusGiven = true;
-
-    QString kind = element.attributeNS(KoXmlNS::draw, "kind", "full");
-
-    if (element.hasAttributeNS(KoXmlNS::svg, "rx") && element.hasAttributeNS(KoXmlNS::svg, "ry")) {
-        qreal rx = KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "rx"));
-        qreal ry = KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "ry"));
-        size = QSizeF(2 * rx, 2 * ry);
-    } else if (element.hasAttributeNS(KoXmlNS::svg, "r")) {
-        qreal r = KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "r"));
-        size = QSizeF(2 * r, 2 * r);
-    } else {
-        size.setWidth(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "width", QString())));
-        size.setHeight(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "height", QString())));
-#ifndef NWORKAROUND_ODF_BUGS
-        radiusGiven = KoOdfWorkaround::fixEllipse(kind, context);
-#else
-        radiusGiven = false;
-#endif
-    }
-    setSize(size);
-
-    QPointF pos;
-
-    if (element.hasAttributeNS(KoXmlNS::svg, "cx") && element.hasAttributeNS(KoXmlNS::svg, "cy")) {
-        qreal cx = KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "cx"));
-        qreal cy = KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "cy"));
-        pos = QPointF(cx - 0.5 * size.width(), cy - 0.5 * size.height());
-    } else {
-        pos.setX(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "x", QString())));
-        pos.setY(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "y", QString())));
-    }
-    setPosition(pos);
-
-    if (kind == "section") {
-        setType(Pie);
-    } else if (kind == "cut") {
-        setType(Chord);
-    } else {
-        setType(Arc);
-    }
-
-    setStartAngle(element.attributeNS(KoXmlNS::draw, "start-angle", "0").toDouble());
-    setEndAngle(element.attributeNS(KoXmlNS::draw, "end-angle", "360").toDouble());
-    if (!radiusGiven) {
-        // is the size was given by width and height we have to reset the data as the size of the
-        // part of the cut/pie is given.
-        setSize(size);
-        setPosition(pos);
-    }
-
-    loadOdfAttributes(element, context, OdfMandatories | OdfTransformation | OdfAdditionalAttributes | OdfCommonChildElements);
-
-    loadText(element, context);
-
-    return true;
 }
 
 void EllipseShape::setSize(const QSizeF &newSize)

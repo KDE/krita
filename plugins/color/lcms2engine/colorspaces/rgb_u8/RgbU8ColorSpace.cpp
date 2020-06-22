@@ -30,6 +30,7 @@
 #include "compositeops/KoCompositeOps.h"
 #include "compositeops/RgbCompositeOps.h"
 #include <kis_dom_utils.h>
+#include <KoColorSpacePreserveLightnessUtils.h>
 
 #define downscale(quantum)  (quantum) //((unsigned char) ((quantum)/257UL))
 #define upscale(value)  (value) // ((quint8) (257UL*(value)))
@@ -109,4 +110,9 @@ QVector <double> RgbU8ColorSpace::fromYUV(qreal *y, qreal *u, qreal *v) const
     YUVToRGB(*y, *u, *v, &channelValues[0],&channelValues[1],&channelValues[2], lumaCoefficients()[0], lumaCoefficients()[1], lumaCoefficients()[2]);
     channelValues[3]=1.0;
     return channelValues;
+}
+
+void RgbU8ColorSpace::fillGrayBrushWithColorAndLightnessOverlay(quint8 *dst, const QRgb *brush, quint8 *brushColor, qint32 nPixels) const
+{
+    fillGrayBrushWithColorPreserveLightnessRGB<KoBgrU8Traits>(dst, brush, brushColor, nPixels);
 }

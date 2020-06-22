@@ -17,7 +17,7 @@
  */
 
 /**
-  \mainpage Krita Scripting and Plugin Wrapper Library: libkis
+  \mainpage libkis: Krita Scripting and Plugin Wrapper Library
 
   Libkis is a QObject-based wrapper around Krita's internal libraries.
   The wrapper can be used from C++ plugins that do not need the

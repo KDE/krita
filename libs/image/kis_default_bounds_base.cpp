@@ -22,3 +22,8 @@ KisDefaultBoundsBase::~KisDefaultBoundsBase()
 {
 }
 
+QRect KisDefaultBoundsBase::imageBorderRect() const
+{
+    return bounds();
+}
+

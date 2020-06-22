@@ -28,14 +28,12 @@
 #include <kis_filter_category_ids.h>
 #include <KoUpdater.h>
 #include <KisSequentialIteratorProgress.h>
-#include <KoResourceServerProvider.h>
-#include <KoResourceServer.h>
-#include <KoResourceServerAdapter.h>
-#include <KoResourceItemChooser.h>
+#include <KisResourceItemChooser.h>
 #include <KoColorSet.h>
 #include <KoPattern.h>
 #include <kis_random_generator.h>
 #include <KisDitherUtil.h>
+#include <KisGlobalResourcesInterface.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(PalettizeFactory, "kritapalettize.json", registerPlugin<Palettize>();)
 
@@ -47,12 +45,58 @@ Palettize::Palettize(QObject *parent, const QVariantList &)
 
 #include "palettize.moc"
 
-KisFilterPalettize::KisFilterPalettize() : KisFilter(id(), FiltersCategoryMapId, i18n("&Palettize..."))
+
+/*******************************************************************************/
+/*                      KisFilterPalettizeConfiguration                        */
+/*******************************************************************************/
+
+class KisFilterPalettizeConfiguration : public KisFilterConfiguration
 {
-    setColorSpaceIndependence(FULLY_INDEPENDENT);
-    setSupportsPainting(true);
-    setShowConfigurationWidget(true);
-}
+public:
+    KisFilterPalettizeConfiguration(const QString & name, qint32 version, KisResourcesInterfaceSP resourcesInterface)
+        : KisFilterConfiguration(name, version, resourcesInterface)
+    {
+    }
+
+    KisFilterPalettizeConfiguration(const KisFilterPalettizeConfiguration &rhs)
+        : KisFilterConfiguration(rhs)
+    {
+    }
+
+    virtual KisFilterConfigurationSP clone() const override {
+        return new KisFilterPalettizeConfiguration(*this);
+    }
+
+    KoColorSetSP palette(KisResourcesInterfaceSP resourcesInterface) const
+    {
+        auto source = resourcesInterface->source<KoColorSet>(ResourceType::Palettes);
+        return source.resourceForName(this->getString("palette"));
+    }
+
+    KoColorSetSP palette() const
+    {
+        return palette(resourcesInterface());
+    }
+
+    QList<KoResourceSP> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const override
+    {
+        KoColorSetSP palette = this->palette(globalResourcesInterface);
+
+        QList<KoResourceSP> resources;
+        if (palette) {
+            resources << palette;
+        }
+
+        resources << KisDitherWidget::prepareLinkedResources(*this, "dither/", globalResourcesInterface);
+        resources << KisDitherWidget::prepareLinkedResources(*this, "alphaDither/", globalResourcesInterface);
+
+        return resources;
+    }
+};
+
+/*******************************************************************************/
+/*                      KisPalettizeWidget                                     */
+/*******************************************************************************/
 
 KisPalettizeWidget::KisPalettizeWidget(QWidget* parent)
     : KisConfigWidget(parent)
@@ -61,12 +105,10 @@ KisPalettizeWidget::KisPalettizeWidget(QWidget* parent)
     setupUi(this);
 
     paletteIconWidget->setFixedSize(32, 32);
-    KoResourceServer<KoColorSet>* paletteServer = KoResourceServerProvider::instance()->paletteServer();
-    QSharedPointer<KoAbstractResourceServerAdapter> paletteAdapter(new KoResourceServerAdapter<KoColorSet>(paletteServer));
-    m_paletteWidget = new KoResourceItemChooser(paletteAdapter, this, false);
+    m_paletteWidget = new KisResourceItemChooser(ResourceType::Palettes, false, this);
     paletteIconWidget->setPopupWidget(m_paletteWidget);
-    QObject::connect(m_paletteWidget, &KoResourceItemChooser::resourceSelected, paletteIconWidget, &KisIconWidget::setResource);
-    QObject::connect(m_paletteWidget, &KoResourceItemChooser::resourceSelected, this, &KisConfigWidget::sigConfigurationItemChanged);
+    QObject::connect(m_paletteWidget, &KisResourceItemChooser::resourceSelected, paletteIconWidget, &KisIconWidget::setResource);
+    QObject::connect(m_paletteWidget, &KisResourceItemChooser::resourceSelected, this, &KisConfigWidget::sigConfigurationItemChanged);
 
     QObject::connect(colorspaceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KisConfigWidget::sigConfigurationItemChanged);
 
@@ -93,8 +135,8 @@ KisPalettizeWidget::KisPalettizeWidget(QWidget* parent)
     alphaIndexSpinBox->setPrefix(QString("%1  ").arg(i18n("Index:")));
     alphaIndexSpinBox->setRange(0, 255);
     QObject::connect(alphaIndexSpinBox, &KisSliderSpinBox::valueChanged, this, &KisConfigWidget::sigConfigurationItemChanged);
-    QObject::connect(m_paletteWidget, &KoResourceItemChooser::resourceSelected, [this](){
-        const KoColorSet* const palette = static_cast<const KoColorSet*>(m_paletteWidget->currentResource());
+    QObject::connect(m_paletteWidget, &KisResourceItemChooser::resourceSelected, [this](){
+        const KoColorSetSP palette = m_paletteWidget->currentResource().staticCast<KoColorSet>();
         alphaIndexSpinBox->setMaximum(palette ? int(palette->colorCount() - 1) : 0);
         alphaIndexSpinBox->setValue(std::min(alphaIndexSpinBox->value(), alphaIndexSpinBox->maximum()));
     });
@@ -102,9 +144,12 @@ KisPalettizeWidget::KisPalettizeWidget(QWidget* parent)
     QObject::connect(alphaDitherWidget, &KisDitherWidget::sigConfigurationItemChanged, this, &KisConfigWidget::sigConfigurationItemChanged);
 }
 
-void KisPalettizeWidget::setConfiguration(const KisPropertiesConfigurationSP config)
+void KisPalettizeWidget::setConfiguration(const KisPropertiesConfigurationSP _config)
 {
-    KoColorSet* palette = KoResourceServerProvider::instance()->paletteServer()->resourceByName(config->getString("palette"));
+    const KisFilterPalettizeConfiguration *config = dynamic_cast<const KisFilterPalettizeConfiguration*>(_config.data());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(config);
+
+    KoColorSetSP palette = config->palette();
     if (palette) m_paletteWidget->setCurrentResource(palette);
     colorspaceComboBox->setCurrentIndex(config->getInt("colorspace"));
     ditherGroupBox->setChecked(config->getBool("ditherEnabled"));
@@ -120,7 +165,8 @@ void KisPalettizeWidget::setConfiguration(const KisPropertiesConfigurationSP con
 
 KisPropertiesConfigurationSP KisPalettizeWidget::configuration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("palettize", 1);
+    KisFilterSP filter = KisFilterRegistry::instance()->get("palettize");
+    KisFilterConfigurationSP config = filter->factoryConfiguration(KisGlobalResourcesInterface::instance());
 
     if (m_paletteWidget->currentResource()) config->setProperty("palette", QVariant(m_paletteWidget->currentResource()->name()));
     config->setProperty("colorspace", colorspaceComboBox->currentIndex());
@@ -145,9 +191,26 @@ KisConfigWidget* KisFilterPalettize::createConfigurationWidget(QWidget *parent, 
     return new KisPalettizeWidget(parent);
 }
 
-KisFilterConfigurationSP KisFilterPalettize::defaultConfiguration() const
+/*******************************************************************************/
+/*                      KisFilterPalettize                                     */
+/*******************************************************************************/
+
+KisFilterPalettize::KisFilterPalettize() : KisFilter(id(), FiltersCategoryMapId, i18n("&Palettize..."))
 {
-    KisFilterConfigurationSP config = factoryConfiguration();
+    setColorSpaceIndependence(FULLY_INDEPENDENT);
+    setSupportsPainting(true);
+    setShowConfigurationWidget(true);
+}
+
+KisFilterConfigurationSP KisFilterPalettize::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
+{
+    return new KisFilterPalettizeConfiguration("palettize", 1, resourcesInterface);
+}
+
+
+KisFilterConfigurationSP KisFilterPalettize::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
+{
+    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
 
     config->setProperty("palette", "Default");
     config->setProperty("colorspace", Colorspace::Lab);
@@ -164,9 +227,14 @@ KisFilterConfigurationSP KisFilterPalettize::defaultConfiguration() const
     return config;
 }
 
-void KisFilterPalettize::processImpl(KisPaintDeviceSP device, const QRect& applyRect, const KisFilterConfigurationSP config, KoUpdater* progressUpdater) const
+void KisFilterPalettize::processImpl(KisPaintDeviceSP device, const QRect& applyRect, const KisFilterConfigurationSP _config, KoUpdater* progressUpdater) const
 {
-    const KoColorSet* palette = KoResourceServerProvider::instance()->paletteServer()->resourceByName(config->getString("palette"));
+    const KisFilterPalettizeConfiguration *config = dynamic_cast<const KisFilterPalettizeConfiguration*>(_config.data());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(config);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(config->hasLocalResourcesSnapshot());
+
+    const KoColorSetSP palette = config->palette();
+
     const int searchColorspace = config->getInt("colorspace");
     const bool ditherEnabled = config->getBool("ditherEnabled");
     const int colorMode = config->getInt("dither/colorMode");

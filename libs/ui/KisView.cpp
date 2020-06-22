@@ -24,7 +24,6 @@
 #include <KoDockFactoryBase.h>
 #include <KoDockRegistry.h>
 #include <KoDocumentInfo.h>
-#include "KoPageLayout.h"
 #include <KoToolManager.h>
 
 #include <kis_icon.h>
@@ -72,7 +71,6 @@
 #include "kis_node_commands_adapter.h"
 #include "kis_node_manager.h"
 #include "KisPart.h"
-#include "KisPrintJob.h"
 #include "kis_shape_controller.h"
 #include "kis_tool_freehand.h"
 #include "KisViewManager.h"
@@ -443,6 +441,7 @@ KisImageWSP KisView::image() const
     return 0;
 }
 
+
 KisCoordinatesConverter *KisView::viewConverter() const
 {
     return &d->viewConverter;
@@ -631,16 +630,6 @@ KisView *KisView::replaceBy(KisDocument *document)
     return window->newView(document, subWindow);
 }
 
-QPrintDialog *KisView::createPrintDialog(KisPrintJob *printJob, QWidget *parent)
-{
-    Q_UNUSED(parent);
-    QPrintDialog *printDialog = new QPrintDialog(&printJob->printer(), this);
-    printDialog->setMinMax(printJob->printer().fromPage(), printJob->printer().toPage());
-    printDialog->setEnabledOptions(printJob->printDialogOptions());
-    return printDialog;
-}
-
-
 KisMainWindow * KisView::mainWindow() const
 {
     return d->viewManager->mainWindow();
@@ -807,7 +796,8 @@ void KisView::resetImageSizeAndScroll(bool changeCentering,
 
     QSizeF size(image()->width() / image()->xRes(), image()->height() / image()->yRes());
     KoZoomController *zc = d->zoomManager.zoomController();
-    zc->setZoom(KoZoomMode::ZOOM_CONSTANT, zc->zoomAction()->effectiveZoom());
+    zc->setZoom(KoZoomMode::ZOOM_CONSTANT, zc->zoomAction()->effectiveZoom(),
+                d->zoomManager.resolutionX(), d->zoomManager.resolutionY());
     zc->setPageSize(size);
     zc->setDocumentSize(size, true);
 
@@ -1013,16 +1003,11 @@ void KisView::slotSavingFinished()
     }
 }
 
-KisPrintJob * KisView::createPrintJob()
-{
-    return new KisPrintJob(image());
-}
-
 void KisView::slotImageResolutionChanged()
 {
     resetImageSizeAndScroll(false);
     zoomManager()->updateImageBoundsSnapping();
-    zoomManager()->updateGUI();
+    zoomManager()->updateGuiAfterDocumentSize();
 
     // update KoUnit value for the document
     if (resourceProvider()) {
@@ -1035,7 +1020,7 @@ void KisView::slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &
 {
     resetImageSizeAndScroll(true, oldStillPoint, newStillPoint);
     zoomManager()->updateImageBoundsSnapping();
-    zoomManager()->updateGUI();
+    zoomManager()->updateGuiAfterDocumentSize();
 }
 
 void KisView::closeView()

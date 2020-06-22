@@ -60,6 +60,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorConversionTransformation.h>
 #include <KoDocumentInfo.h>
+#include <KisGlobalResourcesInterface.h>
 
 #include <InfoObject.h>
 #include <Node.h>
@@ -76,17 +77,23 @@
 struct Document::Private {
     Private() {}
     QPointer<KisDocument> document;
+    bool ownsDocument {false};
 };
 
-Document::Document(KisDocument *document, QObject *parent)
+Document::Document(KisDocument *document, bool ownsDocument, QObject *parent)
     : QObject(parent)
     , d(new Private)
 {
     d->document = document;
+    d->ownsDocument = ownsDocument;
 }
 
 Document::~Document()
 {
+    if (d->ownsDocument && d->document) {
+        KisPart::instance()->removeDocument(d->document);
+        delete d->document;
+    }
     delete d;
 }
 
@@ -308,7 +315,11 @@ void Document::setResolution(int value)
     KisImageSP image = d->document->image();
     if (!image) return;
 
-    d->document->image()->setResolution(value / 72.0, value / 72.0);
+    KisFilterStrategy *strategy = KisFilterStrategyRegistry::instance()->get("Bicubic");
+    KIS_SAFE_ASSERT_RECOVER_RETURN(strategy);
+
+    image->scaleImage(image->size(), value / 72.0, value / 72.0, strategy);
+    image->waitForDone();
 }
 
 
@@ -409,8 +420,14 @@ double Document::xRes() const
 void Document::setXRes(double xRes) const
 {
     if (!d->document) return;
-    if (!d->document->image()) return;
-    d->document->image()->setResolution(xRes/72.0, d->document->image()->yRes());
+    KisImageSP image = d->document->image();
+    if (!image) return;
+
+    KisFilterStrategy *strategy = KisFilterStrategyRegistry::instance()->get("Bicubic");
+    KIS_SAFE_ASSERT_RECOVER_RETURN(strategy);
+
+    image->scaleImage(image->size(), xRes / 72.0, image->yRes(), strategy);
+    image->waitForDone();
 }
 
 double Document::yRes() const
@@ -423,8 +440,14 @@ double Document::yRes() const
 void Document::setYRes(double yRes) const
 {
     if (!d->document) return;
-    if (!d->document->image()) return;
-    d->document->image()->setResolution(d->document->image()->xRes(), yRes/72.0);
+    KisImageSP image = d->document->image();
+    if (!image) return;
+
+    KisFilterStrategy *strategy = KisFilterStrategyRegistry::instance()->get("Bicubic");
+    KIS_SAFE_ASSERT_RECOVER_RETURN(strategy);
+
+    image->scaleImage(image->size(), image->xRes(), yRes / 72.0, strategy);
+    image->waitForDone();
 }
 
 
@@ -445,6 +468,7 @@ QByteArray Document::pixelData(int x, int y, int w, int h) const
 bool Document::close()
 {
     bool retval = d->document->closeUrl(false);
+
     Q_FOREACH(KisView *view, KisPart::instance()->views()) {
         if (view->document() == d->document) {
             view->close();
@@ -453,7 +477,11 @@ bool Document::close()
         }
     }
 
-    KisPart::instance()->removeDocument(d->document);
+    KisPart::instance()->removeDocument(d->document, !d->ownsDocument);
+    if (d->ownsDocument) {
+        delete d->document;
+    }
+
     d->document = 0;
     return retval;
 }
@@ -465,6 +493,7 @@ void Document::crop(int x, int y, int w, int h)
     if (!image) return;
     QRect rc(x, y, w, h);
     image->cropImage(rc);
+    image->waitForDone();
 }
 
 bool Document::exportImage(const QString &filename, const InfoObject &exportConfiguration)
@@ -482,6 +511,7 @@ void Document::flatten()
     if (!d->document) return;
     if (!d->document->image()) return;
     d->document->image()->flatten(0);
+    d->document->image()->waitForDone();
 }
 
 void Document::resizeImage(int x, int y, int w, int h)
@@ -496,6 +526,7 @@ void Document::resizeImage(int x, int y, int w, int h)
     rc.setHeight(h);
 
     image->resizeImage(rc);
+    image->waitForDone();
 }
 
 void Document::scaleImage(int w, int h, int xres, int yres, QString strategy)
@@ -511,6 +542,7 @@ void Document::scaleImage(int w, int h, int xres, int yres, QString strategy)
     if (!actualStrategy) actualStrategy = KisFilterStrategyRegistry::instance()->get("Bicubic");
 
     image->scaleImage(rc.size(), xres/72, yres/72, actualStrategy);
+    image->waitForDone();
 }
 
 void Document::rotateImage(double radians)
@@ -519,6 +551,7 @@ void Document::rotateImage(double radians)
     KisImageSP image = d->document->image();
     if (!image) return;
     image->rotateImage(radians);
+    image->waitForDone();
 }
 
 void Document::shearImage(double angleX, double angleY)
@@ -527,6 +560,7 @@ void Document::shearImage(double angleX, double angleY)
     KisImageSP image = d->document->image();
     if (!image) return;
     image->shear(angleX, angleY);
+    image->waitForDone();
 }
 
 bool Document::save()
@@ -585,17 +619,18 @@ Node* Document::createNode(const QString &name, const QString &nodeType)
         node = new Node(image, new KisShapeLayer(d->document->shapeController(), image, name, OPACITY_OPAQUE_U8));
     }
     else if (nodeType.toLower()  == "transparencymask") {
-        node = new Node(image, new KisTransparencyMask());
+        node = new Node(image, new KisTransparencyMask(name));
     }
     else if (nodeType.toLower()  == "filtermask") {
-        node = new Node(image, new KisFilterMask());
+        node = new Node(image, new KisFilterMask(name));
     }
     else if (nodeType.toLower()  == "transformmask") {
-        node = new Node(image, new KisTransformMask());
+        node = new Node(image, new KisTransformMask(name));
     }
     else if (nodeType.toLower()  == "selectionmask") {
-        node = new Node(image, new KisSelectionMask(image));
+        node = new Node(image, new KisSelectionMask(image, name));
     }
+
     return node;
 }
 
@@ -635,7 +670,7 @@ FillLayer *Document::createFillLayer(const QString &name, const QString generato
     KisGeneratorSP generator = KisGeneratorRegistry::instance()->value(generatorName);
     if (generator) {
 
-        KisFilterConfigurationSP config = generator->factoryConfiguration();
+        KisFilterConfigurationSP config = generator->factoryConfiguration(KisGlobalResourcesInterface::instance());
         Q_FOREACH(const QString property, configuration.properties().keys()) {
             config->setProperty(property, configuration.property(property));
         }
@@ -710,7 +745,6 @@ SelectionMask *Document::createSelectionMask(const QString &name)
     return new SelectionMask(image, name);
 }
 
-
 QImage Document::projection(int x, int y, int w, int h) const
 {
     if (!d->document || !d->document->image()) return QImage();
@@ -746,12 +780,6 @@ bool Document::tryBarrierLock()
 {
     if (!d->document || !d->document->image()) return false;
     return d->document->image()->tryBarrierLock();
-}
-
-bool Document::isIdle()
-{
-    if (!d->document || !d->document->image()) return false;
-    return d->document->image()->isIdle();
 }
 
 void Document::refreshProjection()
@@ -804,9 +832,9 @@ Document *Document::clone() const
 {
     if (!d->document) return 0;
     QPointer<KisDocument> clone = d->document->clone();
-    Document * d = new Document(clone);
-    clone->setParent(d); // It's owned by the document, not KisPart
-    return d;
+    Document * newDocument = new Document(clone, d->ownsDocument);
+    clone->setParent(newDocument); // It's owned by the document, not KisPart
+    return newDocument;
 }
 
 void Document::setHorizontalGuides(const QList<qreal> &lines)
@@ -872,6 +900,11 @@ QRect Document::bounds() const
 QPointer<KisDocument> Document::document() const
 {
     return d->document;
+}
+
+void Document::setOwnsDocument(bool ownsDocument)
+{
+    d->ownsDocument = ownsDocument;
 }
 
 /* Animation related function */

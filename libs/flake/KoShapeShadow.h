@@ -26,7 +26,6 @@
 #include <QtGlobal>
 
 class KoShape;
-class KoGenStyle;
 class KoShapeSavingContext;
 class QPainter;
 class QPointF;
@@ -41,13 +40,6 @@ public:
 
     KoShapeShadow(const KoShapeShadow &rhs);
     KoShapeShadow& operator=(const KoShapeShadow &rhs);
-
-    /**
-     * Fills the style object
-     * @param style object
-     * @param context used for saving
-     */
-    void fillStyle(KoGenStyle &style, KoShapeSavingContext &context);
 
     /**
      * Paints the shadow of the shape.

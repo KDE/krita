@@ -36,7 +36,7 @@ class KRITAUI_EXPORT KisQtWidgetsTweaker : public QObject
 public:
     KisQtWidgetsTweaker(QObject* parent = nullptr);
     ~KisQtWidgetsTweaker();
-    bool eventFilter(QObject *receiver, QEvent* event);
+    bool eventFilter(QObject *receiver, QEvent* event) override;
     static KisQtWidgetsTweaker *instance();
 
 private:

@@ -32,8 +32,9 @@ struct KisHatchingPaintOpSettings::Private
 };
 
 
-KisHatchingPaintOpSettings::KisHatchingPaintOpSettings()
-    : m_d(new Private)
+KisHatchingPaintOpSettings::KisHatchingPaintOpSettings(KisResourcesInterfaceSP resourcesInterface)
+    : KisBrushBasedPaintOpSettings(resourcesInterface),
+      m_d(new Private)
 {
     setProperty(HATCHING_VERSION, "2");
 }
@@ -147,7 +148,7 @@ QList<KisUniformPaintOpPropertySP> KisHatchingPaintOpSettings::uniformProperties
                     option.writeOptionSetting(prop->settings().data());
                 });
 
-            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            QObject::connect(updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
             prop->requestReadValue();
             props << toQShared(prop);
         }
@@ -178,7 +179,7 @@ QList<KisUniformPaintOpPropertySP> KisHatchingPaintOpSettings::uniformProperties
                     option.writeOptionSetting(prop->settings().data());
                 });
 
-            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            QObject::connect(updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
             prop->requestReadValue();
             props << toQShared(prop);
         }
@@ -209,7 +210,7 @@ QList<KisUniformPaintOpPropertySP> KisHatchingPaintOpSettings::uniformProperties
                     option.writeOptionSetting(prop->settings().data());
                 });
 
-            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            QObject::connect(updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
             prop->requestReadValue();
             props << toQShared(prop);
         }

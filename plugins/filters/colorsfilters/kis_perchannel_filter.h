@@ -37,8 +37,11 @@ class KisPerChannelFilterConfiguration
         : public KisMultiChannelFilterConfiguration
 {
 public:
-    KisPerChannelFilterConfiguration(int channelCount);
+    KisPerChannelFilterConfiguration(int channelCount, KisResourcesInterfaceSP resourcesInterface);
+    KisPerChannelFilterConfiguration(const KisPerChannelFilterConfiguration &rhs);
     ~KisPerChannelFilterConfiguration() override;
+
+    KisFilterConfigurationSP clone() const override;
 
     KisCubicCurve getDefaultCurve() override;
 };
@@ -53,7 +56,7 @@ public:
     KisPerChannelFilter();
 
     KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool useForMasks) const override;
-    KisFilterConfigurationSP factoryConfiguration() const override;
+    KisFilterConfigurationSP factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const override;
 
     KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const override;
 

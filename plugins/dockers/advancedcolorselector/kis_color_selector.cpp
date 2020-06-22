@@ -158,7 +158,7 @@ void KisColorSelector::updateSettings()
         bool gamutMaskActive = m_canvas->viewManager()->canvasResourceProvider()->gamutMaskActive();
 
         if (gamutMaskActive) {
-            KoGamutMask* currentMask = m_canvas->viewManager()->canvasResourceProvider()->currentGamutMask();
+            KoGamutMaskSP currentMask = m_canvas->viewManager()->canvasResourceProvider()->currentGamutMask();
             if (currentMask) {
                 slotGamutMaskSet(currentMask);
             }
@@ -168,7 +168,7 @@ void KisColorSelector::updateSettings()
     }
 }
 
-void KisColorSelector::slotGamutMaskSet(KoGamutMask *gamutMask)
+void KisColorSelector::slotGamutMaskSet(KoGamutMaskSP gamutMask)
 {
     m_mainComponent->setGamutMask(gamutMask);
     m_subComponent->setGamutMask(gamutMask);
@@ -229,7 +229,15 @@ void KisColorSelector::paintEvent(QPaintEvent* e)
 {
     Q_UNUSED(e);
     QPainter p(this);
-    p.fillRect(0,0,width(), height(), QColor(128,128,128));
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
+
+    // If checked, use theme colors for background of selector
+    if (cfg.readEntry("useCustomColorForBackground", false)) {
+        p.fillRect(0,0,width(), height(), cfg.readEntry("customSelectorBackgroundColor", QColor(Qt::gray)));
+    } else {
+        p.fillRect(0,0,width(), height(), qApp->palette().window().color());
+    }
+
     p.setRenderHint(QPainter::Antialiasing);
 
     // this variable name isn't entirely accurate to what always happens. see definition in header file to understand it better

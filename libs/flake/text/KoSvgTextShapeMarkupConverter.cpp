@@ -562,6 +562,7 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
         }
     }
 
+    // TODO: check if we should change into to float
     int prevBlockRelativeLineSpacing = mostCommonBlockFormat.lineHeight();
     int prevBlockLineType = mostCommonBlockFormat.lineHeightType();
     qreal prevBlockAscent = 0.0;

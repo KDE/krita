@@ -25,12 +25,13 @@
 #include <QFrame>
 
 #include <KisSwatch.h>
+#include <KoColorSet.h>
+
 #include <KoColorDisplayRendererInterface.h>
 
 #include "kritawidgets_export.h"
 
 class KoColor;
-class KoColorSet;
 class KoColorPatch;
 
 /**
@@ -62,7 +63,7 @@ public:
      * Sets the color set that this widget shows.
      * @param colorSet pointer to the color set
      */
-    void setColorSet(QPointer<KoColorSet> colorSet);
+    void setColorSet(KoColorSetSP colorSet);
 
     /**
      * @brief setDisplayRenderer
@@ -75,7 +76,7 @@ public:
      * Gets the current color set
      * @returns current color set,, 0 if none set
      */
-    KoColorSet* colorSet();
+    KoColorSetSP colorSet();
 
 protected:
     void resizeEvent(QResizeEvent *event) override; ///< reimplemented from QFrame
@@ -109,7 +110,7 @@ private Q_SLOTS:
      * Triggered when a color is choose from the palette view
      */
     void slotColorSelectedByPalette(const KoColor &color);
-    void slotPaletteChoosen(KoColorSet *);
+    void slotPaletteChoosen(KoColorSetSP );
     void slotNameListSelection(const KoColor &);
 
 private:

@@ -22,7 +22,7 @@
 #include <QMetaType>
 
 #include "KoColorSpace.h"
-#include <resources/KoResource.h>
+#include <KoResource.h>
 #include <kritapigment_export.h>
 
 class KoAbstractGradient;
@@ -38,24 +38,6 @@ class KRITAPIGMENT_EXPORT KoAbstractGradient : public KoResource
 public:
     explicit KoAbstractGradient(const QString &filename);
     ~KoAbstractGradient() override;
-
-    virtual KoAbstractGradient* clone() const = 0;
-
-    bool load() override {
-        return false;
-    }
-
-    bool loadFromDevice(QIODevice *) override {
-        return false;
-    }
-
-    bool save() override {
-        return false;
-    }
-
-    bool saveToDevice(QIODevice*) const override {
-        return false;
-    }
 
     /**
     * Creates a QGradient from the gradient.
@@ -89,5 +71,7 @@ private:
 };
 
 Q_DECLARE_METATYPE(KoAbstractGradient*)
+Q_DECLARE_METATYPE(QSharedPointer<KoAbstractGradient>)
+
 
 #endif // KOABSTRACTGRADIENT_H

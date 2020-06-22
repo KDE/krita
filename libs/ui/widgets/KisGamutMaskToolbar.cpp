@@ -51,23 +51,24 @@ KisGamutMaskToolbar::KisGamutMaskToolbar(QWidget* parent) : QWidget(parent)
 
 void KisGamutMaskToolbar::connectMaskSignals(KisCanvasResourceProvider* resourceProvider)
 {
-    connect(resourceProvider, SIGNAL(sigGamutMaskChanged(KoGamutMask*)),
-            this, SLOT(slotGamutMaskSet(KoGamutMask*)), Qt::UniqueConnection);
+    connect(resourceProvider, SIGNAL(sigGamutMaskChanged(KoGamutMaskSP)),
+            this, SLOT(slotGamutMaskSet(KoGamutMaskSP)), Qt::UniqueConnection);
 
     connect(resourceProvider, SIGNAL(sigGamutMaskUnset()),
             this, SLOT(slotGamutMaskUnset()), Qt::UniqueConnection);
 
-    connect(this, SIGNAL(sigGamutMaskChanged(KoGamutMask*)),
-            resourceProvider, SLOT(slotGamutMaskActivated(KoGamutMask*)), Qt::UniqueConnection);
+    connect(this, SIGNAL(sigGamutMaskChanged(KoGamutMaskSP)),
+            resourceProvider, SLOT(slotGamutMaskActivated(KoGamutMaskSP)), Qt::UniqueConnection);
 
     connect(this, SIGNAL(sigGamutMaskDeactivated()),
             resourceProvider, SLOT(slotGamutMaskDeactivate()), Qt::UniqueConnection);
 
     connect(resourceProvider, SIGNAL(sigGamutMaskDeactivated()),
             this, SLOT(slotGamutMaskDeactivate()), Qt::UniqueConnection);
+
 }
 
-void KisGamutMaskToolbar::slotGamutMaskSet(KoGamutMask *mask)
+void KisGamutMaskToolbar::slotGamutMaskSet(KoGamutMaskSP mask)
 {
     if (!mask) {
         return;

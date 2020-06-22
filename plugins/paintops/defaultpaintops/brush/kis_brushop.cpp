@@ -112,7 +112,7 @@ KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter,
         [baseBrush, settings, painter] () {
             KisDabCacheUtils::DabRenderingResources *resources =
                 new KisBrushOpResources(settings, painter);
-            resources->brush = baseBrush->clone();
+            resources->brush = baseBrush->clone().dynamicCast<KisBrush>();
 
             return resources;
         };
@@ -202,13 +202,25 @@ void KisBrushOp::addMirroringJobs(Qt::Orientation direction,
 {
     jobs.append(new KisRunnableStrokeJobData(0, KisStrokeJobData::SEQUENTIAL));
 
+
+    /**
+     * Some KisRenderedDab may share their devices, so we should mirror them
+     * carefully, avoiding doing that twice. KisDabRenderingQueue is implemented in
+     * a way that duplicated dabs can go only sequentially, one after another, so
+     * we don't have to use complex deduplication algorithms here.
+     */
+    KisFixedPaintDeviceSP prevDabDevice = 0;
     for (KisRenderedDab &dab : state->dabsQueue) {
+        const bool skipMirrorPixels = prevDabDevice && prevDabDevice == dab.device;
+
         jobs.append(
             new KisRunnableStrokeJobData(
-                [state, &dab, direction] () {
-                    state->painter->mirrorDab(direction, &dab);
+                [state, &dab, direction, skipMirrorPixels] () {
+                    state->painter->mirrorDab(direction, &dab, skipMirrorPixels);
                 },
                 KisStrokeJobData::CONCURRENT));
+
+        prevDabDevice = dab.device;
     }
 
     jobs.append(new KisRunnableStrokeJobData(0, KisStrokeJobData::SEQUENTIAL));
@@ -278,7 +290,7 @@ std::pair<int, bool> KisBrushOp::doAsyncronousUpdate(QVector<KisRunnableStrokeJo
              *    we paint only the parts intersecting the wrap rect.
              */
 
-            const QRect wrapRect = painter()->device()->defaultBounds()->bounds();
+            const QRect wrapRect = painter()->device()->defaultBounds()->imageBorderRect();
 
             QList<KisRenderedDab> wrappedDabs;
 

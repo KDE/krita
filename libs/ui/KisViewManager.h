@@ -230,7 +230,6 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
-    void slotBlacklistCleanup();
     void slotCreateTemplate();
     void slotCreateCopy();
     void slotDocumentSaved();

@@ -22,8 +22,58 @@
 #include <QKeyEvent>
 #include "kis_debug.h"
 
+#ifdef Q_OS_MACOS
 
-#ifdef HAVE_X11
+#include "kis_extended_modifiers_mapper_osx.h"
+
+#endif /* Q_OS_MACOS */
+
+#ifdef Q_OS_WIN
+
+#include <windows.h>
+#include <commctrl.h>
+#include <winuser.h>
+
+#include "krita_container_utils.h"
+
+
+QVector<Qt::Key> queryPressedKeysWin()
+{
+    QVector<Qt::Key> result;
+    BYTE vkeys[256];
+
+    if (GetKeyboardState(vkeys)) {
+        for (int i = 0; i < 256; i++) {
+            if (vkeys[i] & 0x80) {
+                if (i == VK_SHIFT) {
+                    result << Qt::Key_Shift;
+                } else if (i == VK_CONTROL) {
+                    result << Qt::Key_Control;
+                } else if (i == VK_MENU) {
+                    result << Qt::Key_Menu;
+                } else if (i == VK_LWIN || i == VK_RWIN) {
+                    result << Qt::Key_Meta;
+                } else if (i == VK_SPACE) {
+                    result << Qt::Key_Space;
+                } else if (i >= 0x30 && i <= 0x39) {
+                    result << static_cast<Qt::Key>(Qt::Key_0 + i - 0x30);
+                } else if (i >= 0x41 && i <= 0x5A) {
+                    result << static_cast<Qt::Key>(Qt::Key_A + i - 0x41);
+                } else if (i >= 0x60 && i <= 0x69) {
+                    result << static_cast<Qt::Key>(Qt::Key_0 + i - 0x60);
+                } else if (i >= 0x70 && i <= 0x87) {
+                    result << static_cast<Qt::Key>(Qt::Key_F1 + i - 0x70);
+                }
+            }
+        }
+    }
+
+    KritaUtils::makeContainerUnique(result);
+
+    return result;
+}
+
+#elif defined HAVE_X11
 
 #include <QX11Info>
 #include <X11/X.h>
@@ -124,6 +174,20 @@ KisExtendedModifiersMapper::~KisExtendedModifiersMapper()
 {
 }
 
+#ifdef Q_OS_MACOS
+void KisExtendedModifiersMapper::setLocalMonitor(bool activate, KisShortcutMatcher *matcher)
+{
+    if (matcher) {
+        activateLocalMonitor(activate, *matcher);
+    }
+}
+
+void KisExtendedModifiersMapper::setGlobalMonitor(bool activate)
+{
+    activateGlobalMonitor(activate);
+}
+#endif
+
 KisExtendedModifiersMapper::ExtendedModifiers
 KisExtendedModifiersMapper::queryExtendedModifiers()
 {
@@ -137,7 +201,13 @@ KisExtendedModifiersMapper::queryExtendedModifiers()
         }
     }
 
-#else /* HAVE_X11 */
+#elif defined Q_OS_WIN
+
+    modifiers = queryPressedKeysWin();
+
+#elif defined Q_OS_MACOS
+    modifiers = queryPressedKeysMac();
+#else
 
     Qt::KeyboardModifiers standardModifiers = queryStandardModifiers();
 
@@ -157,7 +227,7 @@ KisExtendedModifiersMapper::queryExtendedModifiers()
         modifiers << Qt::Key_Meta;
     }
 
-#endif /* HAVE_X11 */
+#endif
 
     return modifiers;
 }

@@ -66,7 +66,7 @@
 #include "kis_config_notifier.h"
 #include "kis_cursor.h"
 #include "widgets/kis_cmb_composite.h"
-#include "widgets/kis_slider_spin_box.h"
+#include "kis_slider_spin_box.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_tool_utils.h"
 #include <brushengine/kis_paintop.h>
@@ -756,9 +756,12 @@ QPainterPath KisToolPaint::getOutlinePath(const QPointF &documentPos,
 {
     Q_UNUSED(event);
 
-    QPointF imagePos = currentImage()->documentToPixel(documentPos);
+    KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
+    const KisCoordinatesConverter *converter = canvas2->coordinatesConverter();
+
     QPainterPath path = currentPaintOpPreset()->settings()->
-        brushOutline(KisPaintInformation(imagePos), outlineMode);
+        brushOutline(KisPaintInformation(convertToPixelCoord(documentPos)),
+                     outlineMode, converter->effectiveZoom());
 
     return path;
 }

@@ -17,7 +17,6 @@
  */
 
 #include "animation_dockers.h"
-#include "animation_docker.h"
 #include "timeline_docker.h"
 #include "onion_skins_docker.h"
 #include "kis_animation_curve_docker.h"
@@ -31,37 +30,6 @@
 
 K_PLUGIN_FACTORY_WITH_JSON(AnimationDockersPluginFactory, "krita_animationdocker.json", registerPlugin<AnimationDockersPlugin>();)
 
-class AnimationDockerFactory : public KoDockFactoryBase {
-public:
-    AnimationDockerFactory()
-    {
-    }
-
-    QString id() const override
-    {
-        return QString( "AnimationDocker" );
-    }
-
-    virtual Qt::DockWidgetArea defaultDockWidgetArea() const
-    {
-        return Qt::RightDockWidgetArea;
-    }
-
-    QDockWidget *createDockWidget() override
-    {
-        AnimationDocker *dockWidget = new AnimationDocker();
-        dockWidget->setObjectName(id());
-
-        return dockWidget;
-    }
-
-    DockPosition defaultDockPosition() const override
-    {
-        return DockMinimized;
-    }
-private:
-};
-
 class TimelineDockerFactory : public KoDockFactoryBase {
 public:
     TimelineDockerFactory()
@@ -70,7 +38,7 @@ public:
 
     QString id() const override
     {
-        return QString( "TimelineDocker" );
+        return QString( "AnimationTimelineDocker" );
     }
 
     virtual Qt::DockWidgetArea defaultDockWidgetArea() const
@@ -158,7 +126,6 @@ private:
 AnimationDockersPlugin::AnimationDockersPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
-    KoDockRegistry::instance()->add(new AnimationDockerFactory());
     KoDockRegistry::instance()->add(new TimelineDockerFactory());
     KoDockRegistry::instance()->add(new OnionSkinsDockerFactory());
     KoDockRegistry::instance()->add(new AnimationCurvesDockerFactory());

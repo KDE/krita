@@ -19,6 +19,7 @@
 #include "KoClipMaskPainter.h"
 
 #include <QPainter>
+#include <QPainterPath>
 #include <QRectF>
 
 #include "kis_assert.h"

@@ -4,11 +4,11 @@
     "NoDisplay": "true",
     "Type": "Service",
     
-    "X-KDE-Import": "image/jpeg",
+    "X-KDE-Import": "image/jpeg,jpeg/jfif",
     "X-KDE-Library": "kritajpegimport",
     "X-KDE-ServiceTypes": [
         "Krita/FileFilter"
     ],
     "X-KDE-Weight": "1",
-    "X-KDE-Extensions" : "jpg,jpeg"
+    "X-KDE-Extensions" : "jpg,jpeg,jfif"
 }

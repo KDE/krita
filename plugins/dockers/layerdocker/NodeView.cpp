@@ -537,7 +537,7 @@ void NodeView::dragEnterEvent(QDragEnterEvent *ev)
 {
     DRAG_WHILE_DRAG_WORKAROUND_START();
 
-    QVariant data = qVariantFromValue(
+    QVariant data = QVariant::fromValue(
         static_cast<void*>(const_cast<QMimeData*>(ev->mimeData())));
     model()->setData(QModelIndex(), data, KisNodeModel::DropEnabled);
 

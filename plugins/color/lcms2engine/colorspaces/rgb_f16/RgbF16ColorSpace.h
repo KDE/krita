@@ -61,6 +61,8 @@ public:
     {
         return true;
     }
+
+    void fillGrayBrushWithColorAndLightnessOverlay(quint8 *dst, const QRgb *brush, quint8 *brushColor, qint32 nPixels) const override;
 };
 
 class RgbF16ColorSpaceFactory : public LcmsColorSpaceFactory

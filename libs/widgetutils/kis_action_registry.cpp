@@ -241,7 +241,7 @@ void KisActionRegistry::updateShortcut(const QString &name, QAction *action)
 {
     const ActionInfoItem &info = d->actionInfo(name);
     action->setShortcuts(info.effectiveShortcuts());
-    action->setProperty("defaultShortcuts", qVariantFromValue(info.defaultShortcuts()));
+    action->setProperty("defaultShortcuts", QVariant::fromValue(info.defaultShortcuts()));
 
     d->sanityPropertizedShortcuts.insert(name);
 }
@@ -259,7 +259,7 @@ QList<QString> KisActionRegistry::registeredShortcutIds() const
 bool KisActionRegistry::propertizeAction(const QString &name, QAction * a)
 {
     if (!d->actionInfoList.contains(name)) {
-        warnAction << "No XML data found for action" << name;
+        warnAction << "propertizeAction: No XML data found for action" << name;
         return false;
     }
 
@@ -303,7 +303,7 @@ QString KisActionRegistry::getActionProperty(const QString &name, const QString 
     ActionInfoItem info = d->actionInfo(name);
     QDomElement actionXml = info.xmlData;
     if (actionXml.text().isEmpty()) {
-        dbgAction << "No XML data found for action" << name;
+        dbgAction << "getActionProperty: No XML data found for action" << name;
         return QString();
     }
 
@@ -316,6 +316,7 @@ void KisActionRegistry::Private::loadActionFiles()
 {
     QStringList actionDefinitions =
         KoResourcePaths::findAllResources("kis_actions", "*.action", KoResourcePaths::Recursive);
+    dbgAction << "Action Definitions" << actionDefinitions;
 
     // Extract actions all XML .action files.
     Q_FOREACH (const QString &actionDefinition, actionDefinitions)  {
@@ -328,7 +329,7 @@ void KisActionRegistry::Private::loadActionFiles()
         QString collectionName = base.attribute("name");
         QString version        = base.attribute("version");
         if (version != "2") {
-            errAction << ".action XML file" << actionDefinition << "has incorrect version; skipping.";
+            qWarning() << ".action XML file" << actionDefinition << "has incorrect version; skipping.";
             continue;
         }
 
@@ -344,6 +345,10 @@ void KisActionRegistry::Private::loadActionFiles()
             // <action></action> tags
             QDomElement actionXml  = categoryTextNode.nextSiblingElement();
 
+            if (actionXml.isNull()) {
+                qWarning() << actionDefinition << "does not contain any valid actios! (Or the text element was left empty...)";
+            }
+
             // Loop over individual actions
             while (!actionXml.isNull()) {
                 if (actionXml.tagName() == "Action") {
@@ -352,7 +357,7 @@ void KisActionRegistry::Private::loadActionFiles()
 
                     // Bad things
                     if (name.isEmpty()) {
-                        errAction << "Unnamed action in definitions file " << actionDefinition;
+                        qWarning() << "Unnamed action in definitions file " << actionDefinition;
                     }
 
                     else if (actionInfoList.contains(name)) {

@@ -62,7 +62,7 @@ KisPropertiesConfigurationSP KisPropertiesConfigurationTest::createConfig()
     config->setProperty("v2", v2);
     config->setProperty("v3", v3);
     config->setProperty("v4", v4);
-    config->setProperty("v5", qVariantFromValue(v5));
+    config->setProperty("v5", QVariant::fromValue(v5));
     return config;
 }
 

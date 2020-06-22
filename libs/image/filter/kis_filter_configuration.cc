@@ -30,6 +30,7 @@
 #include "kis_selection.h"
 #include "KoID.h"
 #include "kis_types.h"
+#include <KisRequiredResourcesOperators.h>
 
 #include "kis_config_widget.h"
 
@@ -39,26 +40,44 @@ struct Q_DECL_HIDDEN KisFilterConfiguration::Private {
     QBitArray channelFlags;
     KisCubicCurve curve;
     QList< KisCubicCurve > curves;
+    KisResourcesInterfaceSP resourcesInterface = 0;
+
+    Private(const QString & _name, qint32 _version, KisResourcesInterfaceSP _resourcesInterface)
+        : name(_name),
+          version(_version),
+          resourcesInterface(_resourcesInterface)
+    {
+    }
+
+    Private(const Private &rhs)
+        : name(rhs.name),
+          version(rhs.version),
+          channelFlags(rhs.channelFlags),
+          curve(rhs.curve),
+          curves(rhs.curves),
+          resourcesInterface(rhs.resourcesInterface)
+    {
+    }
 
 #ifdef SANITY_CHECK_FILTER_CONFIGURATION_OWNER
     QAtomicInt sanityUsageCounter;
 #endif /* SANITY_CHECK_FILTER_CONFIGURATION_OWNER */
 };
 
-KisFilterConfiguration::KisFilterConfiguration(const QString & name, qint32 version)
-        : d(new Private)
+KisFilterConfiguration::KisFilterConfiguration(const QString & name, qint32 version, KisResourcesInterfaceSP resourcesInterface)
+        : d(new Private(name, version, resourcesInterface))
 {
-    d->name = name;
-    d->version = version;
-    d->channelFlags = QBitArray();
+}
+
+KisFilterConfigurationSP KisFilterConfiguration::clone() const
+{
+    return new KisFilterConfiguration(*this);
 }
 
 KisFilterConfiguration::KisFilterConfiguration(const KisFilterConfiguration & rhs)
         : KisPropertiesConfiguration(rhs)
-        , d(new Private)
+        , d(new Private(*rhs.d))
 {
-    d->name = rhs.d->name;
-    d->version = rhs.d->version;
 }
 
 KisFilterConfiguration::~KisFilterConfiguration()
@@ -136,6 +155,63 @@ void KisFilterConfiguration::setCurve(const KisCubicCurve& curve)
 const QList< KisCubicCurve >& KisFilterConfiguration::curves() const
 {
     return d->curves;
+}
+
+KisResourcesInterfaceSP KisFilterConfiguration::resourcesInterface() const
+{
+    return d->resourcesInterface;
+}
+
+void KisFilterConfiguration::setResourcesInterface(KisResourcesInterfaceSP resourcesInterface)
+{
+    d->resourcesInterface = resourcesInterface;
+}
+
+namespace KisRequiredResourcesOperators
+{
+template <>
+struct ResourceTraits<KisFilterConfiguration>
+{
+    template <typename T>
+    using SharedPointerType = KisPinnedSharedPtr<T>;
+
+    template <typename D, typename S>
+    static inline SharedPointerType<D> dynamicCastSP(SharedPointerType<S> src) {
+        return SharedPointerType<D>(dynamic_cast<D*>(src.data()));
+    }
+};
+}
+
+void KisFilterConfiguration::createLocalResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface)
+{
+    KisRequiredResourcesOperators::createLocalResourcesSnapshot(this, globalResourcesInterface);
+}
+
+bool KisFilterConfiguration::hasLocalResourcesSnapshot() const
+{
+    return KisRequiredResourcesOperators::hasLocalResourcesSnapshot(this);
+}
+
+KisFilterConfigurationSP KisFilterConfiguration::cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface) const
+{
+    return KisRequiredResourcesOperators::cloneWithResourcesSnapshot(this, globalResourcesInterface);
+}
+
+QList<KoResourceSP> KisFilterConfiguration::requiredResources(KisResourcesInterfaceSP globalResourcesInterface) const
+{
+    return linkedResources(globalResourcesInterface) + embeddedResources(globalResourcesInterface);
+}
+
+QList<KoResourceSP> KisFilterConfiguration::linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const
+{
+    Q_UNUSED(globalResourcesInterface);
+    return {};
+}
+
+QList<KoResourceSP> KisFilterConfiguration::embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const
+{
+    Q_UNUSED(globalResourcesInterface);
+    return {};
 }
 
 void KisFilterConfiguration::setCurves(QList< KisCubicCurve >& curves)

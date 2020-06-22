@@ -54,7 +54,7 @@
 #include <kis_image_config.h>
 
 #include <KoFileDialog.h>
-#include <KoIconToolTip.h>
+#include <KisIconToolTip.h>
 
 typedef QPair<QRect, QModelIndex> QItemViewPaintPair;
 typedef QList<QItemViewPaintPair> QItemViewPaintPairs;
@@ -84,7 +84,7 @@ struct TimelineFramesView::Private
     QPoint initialDragPanPos;
 
     QToolButton *addLayersButton;
-    KisAction *showHideLayerAction;
+    KisAction *pinLayerToTimelineAction;
 
     QToolButton *audioOptionsButton;
 
@@ -117,7 +117,7 @@ struct TimelineFramesView::Private
     QItemViewPaintPairs draggablePaintPairs(const QModelIndexList &indexes, QRect *r) const;
     QPixmap renderToPixmap(const QModelIndexList &indexes, QRect *r) const;
 
-    KoIconToolTip tip;
+    KisIconToolTip tip;
 
     KisActionManager *actionMan = 0;
 };
@@ -178,26 +178,27 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), SLOT(slotUpdateInfiniteFramesCount()));
     connect(horizontalScrollBar(), SIGNAL(sliderReleased()), SLOT(slotUpdateInfiniteFramesCount()));
 
-    /********** New Layer Menu ***********************************************************/
-
-    m_d->addLayersButton = new QToolButton(this);
-    m_d->addLayersButton->setAutoRaise(true);
-    m_d->addLayersButton->setIcon(KisIconUtils::loadIcon("addlayer"));
-    m_d->addLayersButton->setIconSize(QSize(20, 20));
-    m_d->addLayersButton->setPopupMode(QToolButton::InstantPopup);
+    /********** Layer Menu ***********************************************************/
 
     m_d->layerEditingMenu = new QMenu(this);
-    m_d->layerEditingMenu->addAction(KisAnimationUtils::newLayerActionName, this, SLOT(slotAddNewLayer()));
-    m_d->existingLayersMenu = m_d->layerEditingMenu->addMenu(KisAnimationUtils::addExistingLayerActionName);
+    m_d->layerEditingMenu->addSection(i18n("Edit Layers:"));
     m_d->layerEditingMenu->addSeparator();
 
+    m_d->layerEditingMenu->addAction(KisAnimationUtils::newLayerActionName, this, SLOT(slotAddNewLayer()));
     m_d->layerEditingMenu->addAction(KisAnimationUtils::removeLayerActionName, this, SLOT(slotRemoveLayer()));
+    m_d->layerEditingMenu->addSeparator();
+    m_d->existingLayersMenu = m_d->layerEditingMenu->addMenu(KisAnimationUtils::pinExistingLayerActionName);
 
     connect(m_d->existingLayersMenu, SIGNAL(aboutToShow()), SLOT(slotUpdateLayersMenu()));
     connect(m_d->existingLayersMenu, SIGNAL(triggered(QAction*)), SLOT(slotAddExistingLayer(QAction*)));
 
     connect(m_d->layersHeader, SIGNAL(sigRequestContextMenu(QPoint)), SLOT(slotLayerContextMenuRequested(QPoint)));
 
+    m_d->addLayersButton = new QToolButton(this);
+    m_d->addLayersButton->setAutoRaise(true);
+    m_d->addLayersButton->setIcon(KisIconUtils::loadIcon("addlayer"));
+    m_d->addLayersButton->setIconSize(QSize(20, 20));
+    m_d->addLayersButton->setPopupMode(QToolButton::InstantPopup);
     m_d->addLayersButton->setMenu(m_d->layerEditingMenu);
 
     /********** Audio Channel Menu *******************************************************/
@@ -209,6 +210,8 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     m_d->audioOptionsButton->setPopupMode(QToolButton::InstantPopup);
 
     m_d->audioOptionsMenu = new QMenu(this);
+    m_d->audioOptionsMenu->addSection(i18n("Edit Audio:"));
+    m_d->audioOptionsMenu->addSeparator();
 
 #ifndef HAVE_QT_MULTIMEDIA
     m_d->audioOptionsMenu->addSection(i18nc("@item:inmenu", "Audio playback is not supported in this build!"));
@@ -297,17 +300,10 @@ TimelineFramesView::~TimelineFramesView()
 {
 }
 
-void TimelineFramesView::setShowInTimeline(KisAction *action)
-{
-    m_d->showHideLayerAction = action;
-    m_d->layerEditingMenu->addAction(m_d->showHideLayerAction);
-}
-
 void TimelineFramesView::setActionManager(KisActionManager *actionManager)
 {
     m_d->actionMan = actionManager;
     m_d->horizontalRuler->setActionManager(actionManager);
-
 
     if (actionManager) {
         KisAction *action = 0;
@@ -365,6 +361,10 @@ void TimelineFramesView::setActionManager(KisActionManager *actionManager)
 
         action = m_d->actionMan->createAction("update_playback_range");
         connect(action, SIGNAL(triggered()), SLOT(slotUpdatePlackbackRange()));
+
+        action = m_d->actionMan->actionByName("pin_to_timeline");
+        m_d->pinLayerToTimelineAction = action;
+        m_d->layerEditingMenu->addAction(action);
     }
 }
 
@@ -642,6 +642,11 @@ void TimelineFramesView::slotSelectionChanged()
     if (maxColumn > minColumn) {
         range = KisTimeRange(minColumn, maxColumn - minColumn + 1);
     }
+
+    if (m_d->model->isPlaybackPaused()) {
+        m_d->model->stopPlayback();
+    }
+
     m_d->model->setPlaybackRange(range);
 }
 
@@ -692,6 +697,7 @@ void TimelineFramesView::slotDataChanged(const QModelIndex &topLeft, const QMode
         int row= index.isValid() ? index.row() : 0;
         selectionModel()->setCurrentIndex(m_d->model->index(row, selectedColumn), QItemSelectionModel::ClearAndSelect);
     }
+
 }
 
 void TimelineFramesView::slotHeaderDataChanged(Qt::Orientation orientation, int first, int last)
@@ -936,9 +942,10 @@ void TimelineFramesView::createFrameEditingMenuActions(QMenu *menu, bool addFram
     int minColumn = 0;
     int maxColumn = 0;
     calculateSelectionMetrics(minColumn, maxColumn, rows);
-
     bool selectionExists = minColumn != maxColumn;
 
+    menu->addSection(i18n("Edit Frames:"));
+    menu->addSeparator();
 
     if (selectionExists) {
         KisActionManager::safePopulateMenu(menu, "update_playback_range", m_d->actionMan);
@@ -1016,6 +1023,7 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
             model()->setData(index, true, TimelineFramesModel::ActiveLayerRole);
             model()->setData(index, true, TimelineFramesModel::ActiveFrameRole);
             setCurrentIndex(index);
+
 
             if (model()->data(index, TimelineFramesModel::FrameExistsRole).toBool() ||
                     model()->data(index, TimelineFramesModel::SpecialKeyframeExists).toBool()) {
@@ -1215,13 +1223,6 @@ void TimelineFramesView::slotUpdateFrameActions()
 
     enableAction("copy_frames_to_clipboard", true);
     enableAction("cut_frames_to_clipboard", hasEditableFrames);
-
-    QClipboard *cp = QApplication::clipboard();
-    const QMimeData *data = cp->mimeData();
-
-    enableAction("paste_frames_from_clipboard", data && data->hasFormat("application/x-krita-frame"));
-
-    //TODO: update column actions!
 }
 
 void TimelineFramesView::slotSetStartTimeToCurrentPosition()
@@ -1340,7 +1341,11 @@ void TimelineFramesView::insertKeyframes(int count, int timing, TimelineDirectio
     }
 
     if (!rows.isEmpty()) {
-        m_d->model->insertFrames(insertionColumn, rows.toList(), count, timing);
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
+        m_d->model->insertFrames(insertionColumn, QList<int>(rows.begin(), rows.end()), count, timing);
+#else
+        m_d->model->insertFrames(insertionColumn, QList<int>::fromSet(rows), count, timing);
+#endif
     }
 }
 

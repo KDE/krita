@@ -48,6 +48,7 @@
 #include "kis_keyframe_channel.h"
 #include "kis_image_animation_interface.h"
 #include "kis_layer_properties_icons.h"
+#include <KisGlobalResourcesInterface.h>
 
 #include "kis_transform_mask_params_interface.h"
 
@@ -61,7 +62,7 @@ const QString KraMimetype = "application/x-krita";
 
 void KisKraSaverTest::initTestCase()
 {
-    KoResourcePaths::addResourceDir("ko_patterns", QString(SYSTEM_RESOURCES_DATA_DIR) + "/patterns");
+    KoResourcePaths::addResourceDir(ResourceType::Patterns, QString(SYSTEM_RESOURCES_DATA_DIR) + "/patterns");
 
     KisFilterRegistry::instance();
     KisGeneratorRegistry::instance();
@@ -153,7 +154,7 @@ void testRoundTripFillLayerImpl(const QString &testName, KisFilterConfigurationS
     doc->documentInfo()->setAboutInfo("title", p.image->objectName());
 
     KisSelectionSP selection;
-    KisGeneratorLayerSP glayer = new KisGeneratorLayer(p.image, "glayer", config, selection);
+    KisGeneratorLayerSP glayer = new KisGeneratorLayer(p.image, "glayer", config->cloneWithResourcesSnapshot(), selection);
 
     p.image->addNode(glayer, p.image->root(), KisNodeSP());
     glayer->setDirty();
@@ -180,7 +181,7 @@ void KisKraSaverTest::testRoundTripFillLayerColor()
     Q_ASSERT(generator);
 
     // warning: we pass null paint device to the default constructed value
-    KisFilterConfigurationSP config = generator->defaultConfiguration();
+    KisFilterConfigurationSP config = generator->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(config);
 
     QVariant v;
@@ -196,7 +197,7 @@ void KisKraSaverTest::testRoundTripFillLayerPattern()
     QVERIFY(generator);
 
     // warning: we pass null paint device to the default constructed value
-    KisFilterConfigurationSP config = generator->defaultConfiguration();
+    KisFilterConfigurationSP config = generator->defaultConfiguration(KisGlobalResourcesInterface::instance());
     QVERIFY(config);
 
     QVariant v;
@@ -240,15 +241,15 @@ void KisKraSaverTest::testRoundTripLayerStyles()
 
     style->dropShadow()->setAngle(-90);
     style->dropShadow()->setUseGlobalLight(false);
-    layer1->setLayerStyle(style->clone());
+    layer1->setLayerStyle(style->clone().dynamicCast<KisPSDLayerStyle>());
 
     style->dropShadow()->setAngle(180);
     style->dropShadow()->setUseGlobalLight(true);
-    layer2->setLayerStyle(style->clone());
+    layer2->setLayerStyle(style->clone().dynamicCast<KisPSDLayerStyle>());
 
     style->dropShadow()->setAngle(90);
     style->dropShadow()->setUseGlobalLight(false);
-    layer3->setLayerStyle(style->clone());
+    layer3->setLayerStyle(style->clone().dynamicCast<KisPSDLayerStyle>());
 
     image->initialRefreshGraph();
     chk.checkImage(image, "00_initial_layers");
@@ -298,8 +299,8 @@ void KisKraSaverTest::testRoundTripAnimation()
     layer1->paintDevice()->moveTo(100, 50);
     layer1->paintDevice()->setDefaultPixel(KoColor(Qt::blue, cs));
 
-    QVERIFY(!layer1->useInTimeline());
-    layer1->setUseInTimeline(true);
+    QVERIFY(!layer1->isPinnedToTimeline());
+    layer1->setPinnedToTimeline(true);
 
     doc->setCurrentImage(image);
     doc->exportDocumentSync(QUrl::fromLocalFile("roundtrip_animation.kra"), doc->mimeType());
@@ -342,7 +343,7 @@ void KisKraSaverTest::testRoundTripAnimation()
     QCOMPARE(layer2->paintDevice()->y(), 50);
     QCOMPARE(layer2->paintDevice()->defaultPixel(), KoColor(Qt::blue, cs));
 
-    QVERIFY(layer2->useInTimeline());
+    QVERIFY(layer2->isPinnedToTimeline());
 
 }
 
@@ -497,7 +498,7 @@ void KisKraSaverTest::testRoundTripShapeSelection()
     KisSelectionSP selection = new KisSelection(p.layer->paintDevice()->defaultBounds());
 
     KisShapeSelection *shapeSelection = new KisShapeSelection(doc->shapeController(), p.image, selection);
-    selection->setShapeSelection(shapeSelection);
+    selection->convertToVectorSelectionNoUndo(shapeSelection);
 
     KoPathShape* path = new KoPathShape();
     path->setShapeId(KoPathShapeId);
@@ -538,7 +539,7 @@ void KisKraSaverTest::testRoundTripShapeSelection()
     KisTransparencyMask *newMask = dynamic_cast<KisTransparencyMask*>(node.data());
     QVERIFY(newMask);
 
-    QVERIFY(newMask->selection()->hasShapeSelection());
+    QVERIFY(newMask->selection()->hasNonEmptyShapeSelection());
 
     QVERIFY(chk.testPassed());
 }

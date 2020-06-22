@@ -23,6 +23,7 @@
 #include "KoPathPoint.h"
 #include "KoPathPointData.h"
 #include <sdk/tests/kistest.h>
+#include <QPainterPath>
 #include <QTest>
 #include <FlakeDebug.h>
 
@@ -254,6 +255,8 @@ void TestPointMergeCommand::testCombineShapes()
 {
     MockShapeController mockController;
     MockCanvas canvas(&mockController);
+    QScopedPointer<MockContainer> rootContainer(new MockContainer());
+    rootContainer->setAssociatedRootShapeManager(canvas.shapeManager());
 
     QList<KoPathShape*> shapesToCombine;
 
@@ -268,15 +271,15 @@ void TestPointMergeCommand::testCombineShapes()
         QCOMPARE(shape->absoluteOutlineRect(), rect);
 
         shapesToCombine << shape;
-        mockController.addShape(shape);
+        rootContainer->addShape(shape);
     }
 
     KoPathCombineCommand cmd(&mockController, shapesToCombine);
     cmd.redo();
 
-    QCOMPARE(canvas.shapeManager()->shapes().size(), 1);
+    QCOMPARE(rootContainer->shapes().size(), 1);
 
-    KoPathShape *combinedShape = dynamic_cast<KoPathShape*>(canvas.shapeManager()->shapes().first());
+    KoPathShape *combinedShape = dynamic_cast<KoPathShape*>(rootContainer->shapes().first());
     QCOMPARE(combinedShape, cmd.combinedPath());
     QCOMPARE(combinedShape->subpathCount(), 3);
     QCOMPARE(combinedShape->absoluteOutlineRect(), QRectF(5,5,40,40));
@@ -298,12 +301,7 @@ void TestPointMergeCommand::testCombineShapes()
         QCOMPARE(convertedPoint, expPoints[i]);
     }
 
-    Q_FOREACH (KoShape *shape, canvas.shapeManager()->shapes()) {
-        mockController.removeShape(shape);
-        shape->setParent(0);
-        delete shape;
-    }
-
+    rootContainer.reset();
     // 'shapesToCombine' will be deleted by KoPathCombineCommand
 }
 
@@ -334,6 +332,8 @@ void testMultipathMergeShapesImpl(const int srcPointIndex1,
 {
     MockShapeController mockController;
     MockCanvas canvas(&mockController);
+    QScopedPointer<MockContainer> rootContainer(new MockContainer());
+    rootContainer->setAssociatedRootShapeManager(canvas.shapeManager());
 
     QList<KoPathShape*> shapes;
 
@@ -350,9 +350,8 @@ void testMultipathMergeShapesImpl(const int srcPointIndex1,
         QCOMPARE(shape->absoluteOutlineRect(), rect);
 
         shapes << shape;
-        mockController.addShape(shape);
+        rootContainer->addShape(shape);
     }
-
 
     {
         KoPathPointData pd1(shapes[0], KoPathPointIndex(0,srcPointIndex1));
@@ -363,15 +362,15 @@ void testMultipathMergeShapesImpl(const int srcPointIndex1,
         cmd.redo();
 
         const int expectedShapesCount = singleShape ? 3 : 2;
-        QCOMPARE(canvas.shapeManager()->shapes().size(), expectedShapesCount);
+        QCOMPARE(rootContainer->shapes().size(), expectedShapesCount);
 
         KoPathShape *combinedShape = 0;
 
         if (!singleShape) {
-            combinedShape = dynamic_cast<KoPathShape*>(canvas.shapeManager()->shapes()[1]);
+            combinedShape = dynamic_cast<KoPathShape*>(rootContainer->shapes()[1]);
             QCOMPARE(combinedShape, cmd.testingCombinedPath());
         } else {
-            combinedShape = dynamic_cast<KoPathShape*>(canvas.shapeManager()->shapes()[0]);
+            combinedShape = dynamic_cast<KoPathShape*>(rootContainer->shapes()[0]);
             QCOMPARE(combinedShape, shapes[0]);
         }
 
@@ -403,15 +402,10 @@ void testMultipathMergeShapesImpl(const int srcPointIndex1,
         //dumpShape(combinedShape, "tmp_0_seq.png");
         cmd.undo();
 
-        QCOMPARE(canvas.shapeManager()->shapes().size(), 3);
+        QCOMPARE(rootContainer->shapes().size(), 3);
     }
 
-    Q_FOREACH (KoShape *shape, canvas.shapeManager()->shapes()) {
-        mockController.removeShape(shape);
-        shape->setParent(0);
-        delete shape;
-    }
-
+    rootContainer.reset();
     // combined shapes will be deleted by the corresponding commands
 }
 

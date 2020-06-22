@@ -22,6 +22,7 @@
 
 #include <KoToolBase.h>
 #include <KoPathShape.h>
+#include <QPainterPath>
 #include <QPointer>
 
 #include "KarbonCalligraphyOptionWidget.h"

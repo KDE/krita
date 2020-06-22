@@ -40,7 +40,7 @@ void KoFilterEffectRegistry::init()
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "FilterEffectPlugins";
     config.blacklist = "FilterEffectPluginsDisabled";
-    KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/FilterEffect"),
+    KoPluginLoader::instance()->load(QString::fromLatin1("Krita/FilterEffect"),
                                      QString::fromLatin1("[X-Flake-PluginVersion] == 28"),
                                      config);
 }

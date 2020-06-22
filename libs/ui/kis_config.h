@@ -193,6 +193,9 @@ public:
     int openGLFilteringMode(bool defaultValue = false) const;
     void setOpenGLFilteringMode(int filteringMode);
 
+    void setWidgetStyle(QString name);
+    QString widgetStyle(bool defaultValue = false);
+
     bool useOpenGLTextureBuffer(bool defaultValue = false) const;
     void setUseOpenGLTextureBuffer(bool useBuffer);
 
@@ -527,6 +530,9 @@ public:
     bool compressKra(bool defaultValue = false) const;
     void setCompressKra(bool compress);
 
+    bool trimKra(bool defaultValue = false) const;
+    void setTrimKra(bool trim);
+
     bool toolOptionsInDocker(bool defaultValue = false) const;
     void setToolOptionsInDocker(bool inDocker);
 
@@ -556,6 +562,9 @@ public:
 
     bool animationDropFrames(bool defaultValue = false) const;
     void setAnimationDropFrames(bool value);
+
+    bool autoPinLayersToTimeline(bool defaultValue = false) const;
+    void setAutoPinLayersToTimeline(bool value);
 
     int scrubbingUpdatesDelay(bool defaultValue = false) const;
     void setScrubbingUpdatesDelay(int value);

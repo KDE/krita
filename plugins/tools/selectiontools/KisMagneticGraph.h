@@ -130,13 +130,13 @@ struct KisMagneticGraph {
     KisMagneticGraph(KisPaintDeviceSP dev) :
         m_dev(dev)
     {
-        m_randAccess = m_dev->createRandomAccessorNG(m_dev->exactBounds().x(), m_dev->exactBounds().y());
+        m_randAccess = m_dev->createRandomAccessorNG();
     }
 
     KisMagneticGraph(KisPaintDeviceSP dev, QRect graphRect) :
         m_rect(graphRect), m_dev(dev)
     {
-        m_randAccess = m_dev->createRandomAccessorNG(m_dev->exactBounds().x(), m_dev->exactBounds().y());
+        m_randAccess = m_dev->createRandomAccessorNG();
     }
 
     typedef VertexDescriptor vertex_descriptor;

@@ -31,6 +31,7 @@
 #include <kis_image.h>
 #include <KoCompositeOpRegistry.h>
 #include <kis_filter_configuration.h>
+#include <KisGlobalResourcesInterface.h>
 
 #include <kis_paint_layer.h>
 #include <kis_png_converter.h>
@@ -237,7 +238,8 @@ void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisG
                 if (filterTypeSplit[0] == "applications" && filterTypeSplit[1] == "krita") {
                     f = KisFilterRegistry::instance()->value(filterTypeSplit[2]);
                 }
-                KisFilterConfigurationSP  kfc = f->factoryConfiguration();
+                KisFilterConfigurationSP  kfc = f->factoryConfiguration(KisGlobalResourcesInterface::instance());
+                kfc->createLocalResourcesSnapshot();
                 KisAdjustmentLayerSP layer = new KisAdjustmentLayer(groupLayer->image() , "", kfc, KisSelectionSP(0));
                 d->image->addNode(layer.data(), groupLayer.data(), 0);
                 loadAdjustmentLayer(subelem, layer);

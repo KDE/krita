@@ -48,12 +48,14 @@
 
 #include <KisPrefixedPaintOpOptionWrapper.h>
 #include <KisPaintopSettingsIds.h>
+#include <KisGlobalResourcesInterface.h>
 
 KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     : KisBrushBasedPaintopOptionWidget(parent)
 {
     setObjectName("brush option widget");
     setPrecisionEnabled(true);
+    setHSLBrushTipEnabled(true);
 
     // Brush tip options
     addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
@@ -155,7 +157,7 @@ KisBrushOpSettingsWidget::~KisBrushOpSettingsWidget()
 
 KisPropertiesConfigurationSP KisBrushOpSettingsWidget::configuration() const
 {
-    KisBrushBasedPaintOpSettingsSP config = new KisBrushOpSettings();
+    KisBrushBasedPaintOpSettingsSP config = new KisBrushOpSettings(KisGlobalResourcesInterface::instance());
     config->setOptionsWidget(const_cast<KisBrushOpSettingsWidget*>(this));
     config->setProperty("paintop", "paintbrush"); // XXX: make this a const id string
     writeConfiguration(config);

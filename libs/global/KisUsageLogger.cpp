@@ -32,6 +32,8 @@
 #include <klocalizedstring.h>
 #include <KritaVersionWrapper.h>
 #include <QGuiApplication>
+#include <QStyle>
+#include <QStyleFactory>
 
 Q_GLOBAL_STATIC(KisUsageLogger, s_instance)
 
@@ -98,6 +100,9 @@ QString KisUsageLogger::basicSystemInfo()
     systemInfo.append("\n  Pretty Productname: ").append(QSysInfo::prettyProductName());
     systemInfo.append("\n  Product Type: ").append(QSysInfo::productType());
     systemInfo.append("\n  Product Version: ").append(QSysInfo::productVersion());
+#ifdef Q_OS_LINUX
+    systemInfo.append("\n  Desktop: ").append(qgetenv("XDG_CURRENT_DESKTOP"));
+#endif
     systemInfo.append("\n\n");
 
     return systemInfo;
@@ -168,6 +173,10 @@ void KisUsageLogger::writeHeader()
     KritaAndQtVersion.append("-- -- -- -- -- -- -- --\n");
     s_instance->d->logFile.write(KritaAndQtVersion.toUtf8());
     s_instance->d->logFile.flush();
+    log(QString("Style: %1. Available styles: %2")
+        .arg(qApp->style()->objectName(),
+             QStyleFactory::keys().join(", ")));
+
 }
 
 QString KisUsageLogger::screenInformation()

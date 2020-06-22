@@ -33,7 +33,6 @@
 #include <kis_arcs_constants.h>
 #include <resources/KoGamutMask.h>
 //#include <KisGamutMaskViewConverter.h>
-#include <QTransform>
 
 #include "kis_color_selector.h"
 
@@ -221,7 +220,7 @@ void KisColorSelector::setInverseSaturation(bool inverse)
     }
 }
 
-void KisColorSelector::setGamutMask(KoGamutMask* gamutMask)
+void KisColorSelector::setGamutMask(KoGamutMaskSP gamutMask)
 {
     if (!gamutMask) {
         return;
@@ -249,7 +248,7 @@ void KisColorSelector::setDirty()
     update();
 }
 
-KoGamutMask* KisColorSelector::gamutMask()
+KoGamutMaskSP KisColorSelector::gamutMask()
 {
     return m_currentGamutMask;
 }
@@ -443,6 +442,10 @@ void KisColorSelector::recalculateAreas(quint8 numLightPieces)
     m_lightStripBuffer = QImage(stripThick, QWidget::height(), QImage::Format_ARGB32_Premultiplied);
 
     m_numLightPieces = numLightPieces;
+
+    if (m_currentGamutMask) {
+        m_gamutMaskViewTransform = m_currentGamutMask->maskToViewTransform(m_renderArea.width());
+    }
 
     m_isDirtyGamutMask = true;
     m_isDirtyLightStrip = true;

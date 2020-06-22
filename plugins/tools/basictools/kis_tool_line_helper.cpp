@@ -43,8 +43,10 @@ struct KisToolLineHelper::Private
 };
 
 KisToolLineHelper::KisToolLineHelper(KisPaintingInformationBuilder *infoBuilder,
+                                     KoCanvasResourceProvider *resourceManager,
                                      const KUndo2MagicString &transactionText)
     : KisToolFreehandHelper(infoBuilder,
+                            resourceManager,
                             transactionText,
                             new KisSmoothingOptions(false)),
       m_d(new Private(infoBuilder))
@@ -66,8 +68,7 @@ void KisToolLineHelper::setUseSensors(bool value)
     m_d->useSensors = value;
 }
 
-void KisToolLineHelper::repaintLine(KoCanvasResourceProvider *resourceManager,
-                                    KisImageWSP image, KisNodeSP node,
+void KisToolLineHelper::repaintLine(KisImageWSP image, KisNodeSP node,
                                     KisStrokesFacade *strokesFacade)
 {
     if (!m_d->enabled) return;
@@ -83,7 +84,7 @@ void KisToolLineHelper::repaintLine(KoCanvasResourceProvider *resourceManager,
     }
 
 
-    KisPaintOpPresetSP preset = resourceManager->resource(KisCanvasResourceProvider::CurrentPaintOpPreset)
+    KisPaintOpPresetSP preset = resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset)
             .value<KisPaintOpPresetSP>();
 
     if (preset->settings()->paintOpSize() <= 1) {
@@ -92,14 +93,13 @@ void KisToolLineHelper::repaintLine(KoCanvasResourceProvider *resourceManager,
         m_d->linePoints.clear();
         m_d->linePoints.append(begin);
         m_d->linePoints.append(end);
+        adjustPointsToDDA(m_d->linePoints);
     }
-    // Always adjust line sections to avoid jagged sections.
-    adjustPointsToDDA(m_d->linePoints);
 
     QVector<KisPaintInformation>::const_iterator it = m_d->linePoints.constBegin();
     QVector<KisPaintInformation>::const_iterator end = m_d->linePoints.constEnd();
 
-    initPaintImpl(startAngle, *it, resourceManager, image, node, strokesFacade);
+    initPaintImpl(startAngle, *it, resourceManager(), image, node, strokesFacade);
     ++it;
 
     while (it != end) {

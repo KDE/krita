@@ -37,30 +37,14 @@
 #include <QStringList>
 #include <QDateTime>
 
+#include <KisRssReader.h>
+
 #include <kritaui_export.h>
 
-class QThread;
+
 class QNetworkReply;
 class QNetworkAccessManager;
-
-struct RssItem {
-    QString source;
-    QString title;
-    QString link;
-    QString description;
-    QString category;
-    QString blogName;
-    QString blogIcon;
-    QDateTime pubDate;
-
-};
-typedef QList<RssItem> RssItemList;
-
 class KisNetworkAccessManager;
-
-enum RssRoles { TitleRole = Qt::UserRole + 1, DescriptionRole, LinkRole,
-                PubDateRole, CategoryRole, BlogNameRole, BlogIconRole
-              };
 
 class KRITAUI_EXPORT MultiFeedRssModel : public QAbstractListModel
 {
@@ -68,7 +52,9 @@ class KRITAUI_EXPORT MultiFeedRssModel : public QAbstractListModel
     Q_PROPERTY(int articleCount READ articleCount WRITE setArticleCount NOTIFY articleCountChanged)
 public:
     explicit MultiFeedRssModel(QObject *parent = 0);
+    explicit MultiFeedRssModel(KisNetworkAccessManager* nam, QObject *parent = 0);
     ~MultiFeedRssModel() override;
+
     QHash<int, QByteArray> roleNames() const override;
     void addFeed(const QString& feed);
     void removeFeed(const QString& feed);
@@ -99,8 +85,12 @@ private:
     QStringList m_sites;
     RssItemList m_aggregatedFeed;
     QNetworkAccessManager *m_networkAccessManager;
-    QThread *m_namThread;
     int m_articleCount;
+
+    void sortAggregatedFeed();
+    void initialize();
+
+    friend class MockMultiFeedRssModel;
 };
 
 #endif // MULTIFEEDRSSMODEL_H

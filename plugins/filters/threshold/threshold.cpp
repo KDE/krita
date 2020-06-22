@@ -48,6 +48,7 @@
 #include <KoColorSpace.h>
 #include <KoColorTransformation.h>
 #include <KoUpdater.h>
+#include <KisGlobalResourcesInterface.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(KritaThresholdFactory, "kritathreshold.json", registerPlugin<KritaThreshold>();)
 
@@ -102,9 +103,9 @@ void KisFilterThreshold::processImpl(KisPaintDeviceSP device,
 }
 
 
-KisFilterConfigurationSP KisFilterThreshold::defaultConfiguration() const
+KisFilterConfigurationSP KisFilterThreshold::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration();
+    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
     config->setProperty("threshold", 128);
     return config;
 }
@@ -198,7 +199,7 @@ void KisThresholdConfigWidget::slotSetThreshold(int limit)
 
 KisPropertiesConfigurationSP KisThresholdConfigWidget::configuration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("threshold", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("threshold", 1, KisGlobalResourcesInterface::instance());
     config->setProperty("threshold", m_page.intThreshold->value());
     return config;
 }

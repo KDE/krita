@@ -25,6 +25,7 @@
 
 class ManagedColor;
 class Resource;
+class Scratchpad;
 class Node;
 class KisView;
 
@@ -82,6 +83,8 @@ public Q_SLOTS:
      * @param resource: a pattern, gradient or paintop preset
      */
     void activateResource(Resource *resource);
+
+
 
     /**
      * @brief foregroundColor allows access to the currently active color.
@@ -149,6 +152,9 @@ print(selected_nodes)
 private:
 
     friend class Window;
+    friend class Scratchpad;
+
+
     KisView *view();
 
     struct Private;

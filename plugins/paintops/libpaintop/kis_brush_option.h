@@ -25,16 +25,18 @@
 #include <KisPaintopPropertiesBase.h>
 #include <kis_properties_configuration.h>
 #include <kis_threaded_text_rendering_workaround.h>
-
+#include <KisResourcesInterface.h>
 
 #include <kritapaintop_export.h>
 
-class PAINTOP_EXPORT KisBrushOptionProperties : public KisPaintopPropertiesBase
+class PAINTOP_EXPORT KisBrushOptionProperties : public KisPaintopPropertiesResourcesBase
 {
 public:
 
     void writeOptionSettingImpl(KisPropertiesConfiguration *setting) const override;
-    void readOptionSettingImpl(const KisPropertiesConfiguration *setting) override;
+    void readOptionSettingResourceImpl(const KisPropertiesConfiguration *setting, KisResourcesInterfaceSP resourcesInterface) override;
+    QList<KoResourceSP> prepareLinkedResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const override;
+    QList<KoResourceSP> prepareEmbeddedResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const override;
 
     KisBrushSP brush() const;
     void setBrush(KisBrushSP brush);

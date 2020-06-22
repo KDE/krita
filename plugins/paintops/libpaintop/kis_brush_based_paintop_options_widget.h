@@ -33,6 +33,7 @@ public:
     ~KisBrushBasedPaintopOptionWidget() override;
 
     void setPrecisionEnabled(bool value);
+    void setHSLBrushTipEnabled(bool value);
 
     KisBrushSP brush();
 

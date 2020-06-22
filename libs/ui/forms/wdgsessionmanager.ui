@@ -20,14 +20,14 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QListWidget" name="lstSessions"/>
+      <widget class="QListView" name="lstSessions"/>
      </item>
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
         <widget class="QPushButton" name="btnNew">
          <property name="text">
-          <string>New...</string>
+          <string comment="New session">New...</string>
          </property>
         </widget>
        </item>

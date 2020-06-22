@@ -58,6 +58,7 @@ public:
         m_paintDev->initialize(255);
 
         MaskProcessingData data(m_paintDev, m_colorSpace,
+                                nullptr,
                                 0.0, 1.0,
                                 m_bounds.width() / 2.0, m_bounds.height() / 2.0,0);
 

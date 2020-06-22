@@ -30,7 +30,7 @@
 KisRandomSubAccessor::KisRandomSubAccessor(KisPaintDeviceSP device)
         : m_device(device)
         , m_currentPoint(0, 0)
-        , m_randomAccessor(device->createRandomConstAccessorNG(0, 0))
+        , m_randomAccessor(device->createRandomConstAccessorNG())
 {
 }
 

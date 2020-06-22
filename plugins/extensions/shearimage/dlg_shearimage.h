@@ -57,7 +57,7 @@ private Q_SLOTS:
 private:
 
     WdgShearImage * m_page;
-    double m_oldAngle;
+    double m_oldAngle {0.0};
     bool m_lock;
 
 };

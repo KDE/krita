@@ -33,7 +33,7 @@ PatternDockerDock::PatternDockerDock( )
 {
     m_patternChooser = new KisPatternChooser(this);
     m_patternChooser->setPreviewOrientation(Qt::Vertical);
-    m_patternChooser->setCurrentItem(0,0);
+    m_patternChooser->setCurrentItem(0);
     m_patternChooser->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     m_patternChooser->setMinimumHeight(160);
 
@@ -43,11 +43,11 @@ PatternDockerDock::PatternDockerDock( )
 void PatternDockerDock::setViewManager(KisViewManager* kisview)
 {
     KisCanvasResourceProvider* resourceProvider = kisview->canvasResourceProvider();
-    connect(resourceProvider, SIGNAL(sigPatternChanged(KoPattern*)),
-            this, SLOT(patternChanged(KoPattern*)));
+    connect(resourceProvider, SIGNAL(sigPatternChanged(KoPatternSP)),
+            this, SLOT(patternChanged(KoPatternSP)));
 
-    connect(m_patternChooser, SIGNAL(resourceSelected(KoResource*)),
-            resourceProvider, SLOT(slotPatternActivated(KoResource*)));
+    connect(m_patternChooser, SIGNAL(resourceSelected(KoResourceSP )),
+            resourceProvider, SLOT(slotPatternActivated(KoResourceSP )));
 }
 
 
@@ -63,7 +63,7 @@ void PatternDockerDock::unsetCanvas()
 }
 
 
-void PatternDockerDock::patternChanged(KoPattern *pattern)
+void PatternDockerDock::patternChanged(KoPatternSP pattern)
 {
     m_patternChooser->setCurrentPattern(pattern);
 }

@@ -27,6 +27,7 @@
 struct MaskProcessingData {
     MaskProcessingData(KisFixedPaintDeviceSP _device,
                        const KoColorSpace* _colorSpace,
+                       const quint8* _color,
                        qreal _randomness,
                        qreal _density,
                        double _centerX,
@@ -35,6 +36,7 @@ struct MaskProcessingData {
         {
             device = _device;
             colorSpace = _colorSpace;
+            color = _color;
             randomness = _randomness;
             density = _density;
             centerX = _centerX;
@@ -48,6 +50,7 @@ struct MaskProcessingData {
 
     KisFixedPaintDeviceSP device;
     const KoColorSpace* colorSpace;
+    const quint8* color;
     qreal randomness;
     qreal density;
     double centerX;

@@ -115,6 +115,9 @@ public:
     void convertColorSpace(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags, KUndo2Command *parentCommand);
     bool assignProfile(const KoColorProfile * profile, KUndo2Command *parentCommand);
 
+    KUndo2Command* reincarnateWithDetachedHistory(bool copyContent);
+
+
     inline const KoColorSpace* colorSpace() const
     {
         return currentData()->colorSpace();
@@ -605,7 +608,7 @@ KisPaintDevice::Private::KisPaintDeviceStrategy* KisPaintDevice::Private::curren
         return basicStrategy.data();
     }
 
-    const QRect wrapRect = defaultBounds->bounds();
+    const QRect wrapRect = defaultBounds->imageBorderRect();
 
     if (!wrappedStrategy || wrappedStrategy->wrapRect() != wrapRect) {
         QMutexLocker locker(&m_wrappedStrategyMutex);
@@ -997,6 +1000,13 @@ bool KisPaintDevice::Private::assignProfile(const KoColorProfile * profile, KUnd
     return true;
 }
 
+KUndo2Command *KisPaintDevice::Private::reincarnateWithDetachedHistory(bool copyContent)
+{
+    KUndo2Command *mainCommand = new KUndo2Command();
+    currentData()->reincarnateWithDetachedHistory(copyContent, mainCommand);
+    return mainCommand;
+}
+
 void KisPaintDevice::Private::init(const KoColorSpace *cs, const quint8 *defaultPixel)
 {
     QList<Data*> dataObjects = allDataObjects();
@@ -1319,7 +1329,7 @@ QRect calculateExactBoundsImpl(const KisPaintDevice *device, const QRect &startR
     // XXX: a small optimization is possible by using H/V line iterators in the first
     //      and third cases, at the cost of making the code a bit more complex
 
-    KisRandomConstAccessorSP accessor = device->createRandomConstAccessorNG(x, y);
+    KisRandomConstAccessorSP accessor = device->createRandomConstAccessorNG();
 
     bool found = false;
     {
@@ -1545,6 +1555,11 @@ bool KisPaintDevice::setProfile(const KoColorProfile * profile, KUndo2Command *p
     return m_d->assignProfile(profile, parentCommand);
 }
 
+KUndo2Command *KisPaintDevice::reincarnateWithDetachedHistory(bool copyContent)
+{
+    return m_d->reincarnateWithDetachedHistory(copyContent);
+}
+
 KisDataManagerSP KisPaintDevice::dataManager() const
 {
     return m_d->dataManager();
@@ -1651,8 +1666,8 @@ static KisPaintDeviceSP createThumbnailDeviceInternal(const KisPaintDevice* srcD
     KisPaintDeviceSP thumbnail = new KisPaintDevice(srcDev->colorSpace());
     qint32 pixelSize = srcDev->pixelSize();
 
-    KisRandomConstAccessorSP srcIter = srcDev->createRandomConstAccessorNG(0, 0);
-    KisRandomAccessorSP dstIter = thumbnail->createRandomAccessorNG(0, 0);
+    KisRandomConstAccessorSP srcIter = srcDev->createRandomConstAccessorNG();
+    KisRandomAccessorSP dstIter = thumbnail->createRandomAccessorNG();
 
     for (qint32 y = outputRect.y(); y < outputRect.y() + outputRect.height(); ++y) {
         qint32 iY = srcY0 + (y * srcHeight) / h;
@@ -1770,6 +1785,17 @@ QImage KisPaintDevice::createThumbnail(qint32 w, qint32 h, qreal oversample, KoC
     return m_d->cache()->createThumbnail(size.width(), size.height(), oversample, renderingIntent, conversionFlags);
 }
 
+QImage KisPaintDevice::createThumbnail(qint32 maxw, qint32 maxh,
+                                       Qt::AspectRatioMode aspectRatioMode,
+                                       qreal oversample, KoColorConversionTransformation::Intent renderingIntent,
+                                       KoColorConversionTransformation::ConversionFlags conversionFlags)
+{
+    const QRect deviceExtent = extent();
+    const QSize thumbnailSize = deviceExtent.size().scaled(maxw, maxh, aspectRatioMode);
+    return createThumbnail(thumbnailSize.width(), thumbnailSize.height(),
+                           oversample, renderingIntent, conversionFlags);
+}
+
 KisHLineIteratorSP KisPaintDevice::createHLineIteratorNG(qint32 x, qint32 y, qint32 w)
 {
     m_d->cache()->invalidate();
@@ -1802,15 +1828,15 @@ KisRepeatVLineConstIteratorSP KisPaintDevice::createRepeatVLineConstIterator(qin
     return new KisRepeatVLineConstIteratorNG(m_d->dataManager().data(), x, y, h, m_d->x(), m_d->y(), _dataWidth, m_d->cacheInvalidator());
 }
 
-KisRandomAccessorSP KisPaintDevice::createRandomAccessorNG(qint32 x, qint32 y)
+KisRandomAccessorSP KisPaintDevice::createRandomAccessorNG()
 {
     m_d->cache()->invalidate();
-    return m_d->currentStrategy()->createRandomAccessorNG(x, y);
+    return m_d->currentStrategy()->createRandomAccessorNG();
 }
 
-KisRandomConstAccessorSP KisPaintDevice::createRandomConstAccessorNG(qint32 x, qint32 y) const
+KisRandomConstAccessorSP KisPaintDevice::createRandomConstAccessorNG() const
 {
-    return m_d->currentStrategy()->createRandomConstAccessorNG(x, y);
+    return m_d->currentStrategy()->createRandomConstAccessorNG();
 }
 
 KisRandomSubAccessorSP KisPaintDevice::createRandomSubAccessor() const
@@ -1878,6 +1904,12 @@ bool KisPaintDevice::pixel(qint32 x, qint32 y, KoColor * kc) const
     kc->setColor(pix, m_d->colorSpace());
 
     return true;
+}
+
+KoColor KisPaintDevice::pixel(const QPoint &pos) const
+{
+    KisHLineConstIteratorSP iter = createHLineConstIteratorNG(pos.x(), pos.y(), 1);
+    return KoColor(iter->rawDataConst(), m_d->colorSpace());
 }
 
 bool KisPaintDevice::setPixel(qint32 x, qint32 y, const QColor& c)
@@ -1981,7 +2013,13 @@ KisRasterKeyframeChannel *KisPaintDevice::createKeyframeChannel(const KoID &id)
     m_d->framesInterface.reset(new KisPaintDeviceFramesInterface(this));
 
     Q_ASSERT(!m_d->contentChannel);
-    m_d->contentChannel.reset(new KisRasterKeyframeChannel(id, this, m_d->defaultBounds));
+    if (m_d->parent.isValid()) {
+        m_d->contentChannel.reset(new KisRasterKeyframeChannel(id, this, m_d->parent));
+    } else {
+        //fallback when paint device is isolated / does not belong to a node.
+        ENTER_FUNCTION() << ppVar(this) << ppVar(m_d->defaultBounds);
+        m_d->contentChannel.reset(new KisRasterKeyframeChannel(id, this, m_d->defaultBounds));
+    }
 
     // Raster channels always have at least one frame (representing a static image)
     KUndo2Command tempParentCommand;

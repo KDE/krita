@@ -189,7 +189,7 @@ void KisUpdateTimeMonitor::printValues()
     QString prefix;
 
     if (m_d->preset) {
-        KisPaintOpPresetSP preset = m_d->preset->clone();
+        KoResourceSP preset = m_d->preset->clone();
         prefix = QString("%1.").arg(preset->name());
         preset->setFilename(QString("log/%1.kpp").arg(preset->name()));
         preset->save();

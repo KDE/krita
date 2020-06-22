@@ -28,11 +28,14 @@
 
 #include <KoColorSpaceConstants.h>
 #include <KoColorConversionTransformation.h>
+#include <KoPattern.h>
+#include <KoAbstractGradient.h>
 
 #include "kundo2magicstring.h"
 #include "kis_types.h"
 #include <kis_filter_configuration.h>
 #include <kritaimage_export.h>
+
 
 class QPen;
 class KUndo2Command;
@@ -41,7 +44,6 @@ class QRectF;
 class QBitArray;
 class QPainterPath;
 
-class KoAbstractGradient;
 class KoUpdater;
 class KoColor;
 class KoCompositeOp;
@@ -49,7 +51,6 @@ class KoCompositeOp;
 class KisUndoAdapter;
 class KisPostExecutionUndoAdapter;
 class KisTransaction;
-class KoPattern;
 class KisPaintInformation;
 class KisPaintOp;
 class KisDistanceInformation;
@@ -107,6 +108,12 @@ public:
 
     static KisPaintDeviceSP convertToAlphaAsAlpha(KisPaintDeviceSP src);
     static KisPaintDeviceSP convertToAlphaAsGray(KisPaintDeviceSP src);
+
+    /**
+     * creates a paint device with only alpha values from src
+     */
+    static KisPaintDeviceSP convertToAlphaAsPureAlpha(KisPaintDeviceSP src);
+
     static bool checkDeviceHasTransparency(KisPaintDeviceSP dev);
 
     /**
@@ -666,7 +673,7 @@ public:
      * Mirror \p dab in the requested direction around the center point defined
      * in the painter. The dab's offset is adjusted automatically.
      */
-    void mirrorDab(Qt::Orientation direction, KisRenderedDab *dab) const;
+    void mirrorDab(Qt::Orientation direction, KisRenderedDab *dab, bool skipMirrorPixels = false) const;
 
     /**
      * Calculate the list of the mirrored rects that will be painted on the
@@ -687,10 +694,10 @@ public:
     const QVector<QPair<QPointF, QPointF>> calculateAllMirroredPoints(const QPair<QPointF, QPointF> &pair);
 
     /// Set the current pattern
-    void setPattern(const KoPattern * pattern);
+    void setPattern(const KoPatternSP pattern);
 
     /// Returns the currently set pattern
-    const KoPattern * pattern() const;
+    const KoPatternSP pattern() const;
 
     /**
      * Set the color that will be used to paint with, and convert it
@@ -730,6 +737,12 @@ public:
 
     /// Returns the current fill style
     FillStyle fillStyle() const;
+
+    /// Set the transform on the pattern.
+    void setPatternTransform(QTransform transform);
+
+    /// get the current transform on the pattern.
+    QTransform patternTransform();
 
     /// Set whether a polygon's filled area should be anti-aliased or not. The default is true.
     void setAntiAliasPolygonFill(bool antiAliasPolygonFill);
@@ -805,8 +818,8 @@ public:
      */
     KisSelectionSP selection();
 
-    void setGradient(const KoAbstractGradient* gradient);
-    const KoAbstractGradient* gradient() const;
+    void setGradient(const KoAbstractGradientSP gradient);
+    const KoAbstractGradientSP gradient() const;
 
     /**
     * Set the size of the tile in fillPainterPath, useful when optimizing the use of fillPainterPath

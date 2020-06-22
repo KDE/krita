@@ -75,8 +75,7 @@ class KRITAIMAGE_EXPORT KisImage : public QObject,
 
     Q_OBJECT
 
-public:
-
+public:    
     /// @p colorSpace can be null. In that case, it will be initialised to a default color space.
     KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace *colorSpace, const QString& name);
     ~KisImage() override;
@@ -263,6 +262,14 @@ public:
      */
     void cropImage(const QRect& newRect);
 
+    /**
+     * @brief purge all pixels that have default pixel to free up memory
+     * @param isCancellable if true, the scheduler is allower to stop and
+     * cancel purging operation as soon as the user starts any action.
+     * If \p isCancellable is false, then the user will not be allowed to do
+     * anything until purging operation is completed.
+     */
+    void purgeUnusedData(bool isCancellable);
 
     /**
      * @brief start asynchronous operation on cropping a subtree of nodes starting at \p node
@@ -761,11 +768,13 @@ public:
     KisProofingConfigurationSP proofingConfiguration() const;
 
 public Q_SLOTS:
-    bool startIsolatedMode(KisNodeSP node);
+    bool startIsolatedMode(KisNodeSP node, bool isolateLayer, bool isolateGroup);
     void stopIsolatedMode();
 
 public:
-    KisNodeSP isolatedModeRoot() const;
+    KisNodeSP isolationRootNode() const;
+    bool isIsolatingLayer() const;
+    bool isIsolatingGroup() const;
 
 Q_SIGNALS:
 
@@ -1027,9 +1036,11 @@ public Q_SLOTS:
      * node, it can ask for an update itself. This method is a way of
      * blocking such intermediate (and excessive) requests.
      *
-     * NOTE: this is a convenience function for setProjectionUpdatesFilter()
+     * NOTE: this is a convenience function for addProjectionUpdatesFilter()
      *       that installs a predefined filter that eats everything. Please
-     *       note that these calls are *not* recursive
+     *       note that these calls are *not* recursive.
+     *
+     * WARNING: The calls to enable/disable must be balanced.
      */
     void disableDirtyRequests() override;
 
@@ -1042,18 +1053,54 @@ public Q_SLOTS:
      * Installs a filter object that will filter all the incoming projection update
      * requests. If the filter return true, the incoming update is dropped.
      *
-     * NOTE: you cannot set filters recursively!
+     * NOTE: you can add multiple filters to the image, **but** the calls to add/remove
+     *       must be nested and balanced. E.g.
+     *
+     *       \code{.cpp}
+     *
+     *       auto cookie1 = image->addProjectionUpdatesFilter(filter1);
+     *       auto cookie2 = image->addProjectionUpdatesFilter(filter2);
+     *
+     *       /// ...do something...
+     *
+     *       /// correct:
+     *       image->removeProjectionUpdatesFilter(cookie2)
+     *       image->removeProjectionUpdatesFilter(cookie1)
+     *
+     *       /// incorrect:
+     *       // image->removeProjectionUpdatesFilter(cookie1)
+     *       // image->removeProjectionUpdatesFilter(cookie2)
+     *       \endcode
      */
-    void setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP filter) override;
+    KisProjectionUpdatesFilterCookie addProjectionUpdatesFilter(KisProjectionUpdatesFilterSP filter) override;
 
     /**
-     * \see setProjectionUpdatesFilter()
+     * @brief removes already installed filter from the stack of updates filers
+     * @param cookie a cookie object returned by addProjectionUpdatesFilter() on intallation
+     * @return the installed filter. If the cookie is invalid, or nesting rule has been
+     *         broken, then removeProjectionUpdatesFilter() may safe-assert and return nullptr.
+     *
+     * NOTE: some weird code (e.g. KisRegenerateFrameStrokeStrategy) needs to temporary remove
+     * all the filters and then install them back. Current implementation ensures that after removal
+     * and the following installation, cookies will be preserved. So this operation is considered
+     * safe.
+     *
+     * \see addProjectionUpdatesFilter()
      */
-    KisProjectionUpdatesFilterSP projectionUpdatesFilter() const override;
+    KisProjectionUpdatesFilterSP removeProjectionUpdatesFilter(KisProjectionUpdatesFilterCookie cookie) override;
+
+    /**
+     * Return the cookie of the lastly-installed filter
+     *
+     * \see addProjectionUpdatesFilter()
+     */
+    KisProjectionUpdatesFilterCookie currentProjectionUpdatesFilter() const override;
+
 
     void refreshGraphAsync(KisNodeSP root = KisNodeSP()) override;
     void refreshGraphAsync(KisNodeSP root, const QRect &rc) override;
     void refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &cropRect) override;
+    void refreshGraphAsync(KisNodeSP root, const QVector<QRect> &rects, const QRect &cropRect) override;
 
     /**
      * Triggers synchronous recomposition of the projection
@@ -1072,6 +1119,8 @@ public Q_SLOTS:
      * cyclic dependencies.
      */
     void requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QRect &rc, const QRect &cropRect);
+
+    void requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QRect &rc, const QRect &cropRect, const bool notifyFrameChange );
 
     /**
      * Adds a spontaneous job to the updates queue.

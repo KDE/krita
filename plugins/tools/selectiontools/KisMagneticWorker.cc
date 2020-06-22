@@ -25,6 +25,7 @@
 #include <QtCore>
 #include <QPolygon>
 #include <QPainter>
+#include <QPainterPath>
 
 #include <boost/graph/astar_search.hpp>
 #include <krita_utils.h>
@@ -176,7 +177,9 @@ void KisMagneticLazyTiles::filter(qreal radius, QRect &rect)
     for (int i = firstTile.y(); i <= lastTile.y(); i++) {
         for (int j = firstTile.x(); j <= lastTile.x(); j++) {
             int currentTile = i * m_tilesPerRow + j;
-            if (radius != m_radiusRecord[currentTile]) {
+            if (currentTile < m_tiles.size()
+                    && currentTile < m_radiusRecord.size()
+                    && radius != m_radiusRecord[currentTile]) {
                 QRect bounds = m_tiles[currentTile];
                 KisGaussianKernel::applyTightLoG(m_dev, bounds, radius, -1.0, QBitArray(), nullptr);
                 KisLazyFillTools::normalizeAlpha8Device(m_dev, bounds);

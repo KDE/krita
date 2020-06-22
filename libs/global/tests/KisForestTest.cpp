@@ -803,7 +803,7 @@ void KisForestTest::testConversionsFromEnd()
      * but, ideally, we should care about them. Like, it should be possible to get children
      * of the forest by calling childBegin/End(hierarchyEnd(it0)). I (DK) am not sure if
      * it is possible to implement without overhead. So I just added this test to document
-     * "desired" behavior. But for now, noone should rely on this behavior, just consider
+     * "desired" behavior. But for now, no one should rely on this behavior, just consider
      * all operations with end-iterators as UB.
      */
 

@@ -1,0 +1,23 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="create_version_information.sql">sql/create_version_information.sql</file>
+        <file alias="fill_version_information.sql">sql/fill_version_information.sql</file>
+        <file alias="create_storage_types.sql">sql/create_storage_types.sql</file>
+        <file alias="fill_storage_types.sql">sql/fill_storage_types.sql</file>
+        <file alias="create_storages.sql">sql/create_storages.sql</file>
+        <file alias="create_tags.sql">sql/create_tags.sql</file>
+        <file alias="create_resource_types.sql">sql/create_resource_types.sql</file>
+        <file alias="fill_resource_types.sql">sql/fill_resource_types.sql</file>
+        <file alias="create_resources.sql">sql/create_resources.sql</file>
+        <file alias="create_versioned_resources.sql">sql/create_versioned_resources.sql</file>
+        <file alias="create_resource_tags.sql">sql/create_resource_tags.sql</file>
+        <file alias="get_version_information.sql">sql/get_version_information.sql</file>
+        <file alias="create_index_storages.sql">sql/create_index_storages.sql</file>
+        <file alias="create_index_versioned_resources.sql">sql/create_index_versioned_resources.sql</file>
+        <file alias="select_resource_id.sql">sql/select_resource_id.sql</file>
+        <file alias="select_tag.sql">sql/select_tag.sql</file>
+        <file alias="update_from_001.sql">sql/update_from_001.sql</file>
+        <file alias="create_metadata.sql">sql/create_metadata.sql</file>
+        <file alias="create_tags_storages.sql">sql/create_tags_storages.sql</file>
+    </qresource>
+</RCC>

@@ -44,15 +44,18 @@
 struct KisVisualColorSelectorShape::Private
 {
     QImage gradient;
+    QImage alphaMask;
     QImage fullSelector;
-    bool imagesNeedUpdate {true};
+    bool imagesNeedUpdate { true };
+    bool alphaNeedsUpdate { true };
+    bool acceptTabletEvents { false };
     QPointF currentCoordinates; // somewhat redundant?
+    QPointF dragStart;
     QVector4D currentChannelValues;
     Dimensions dimension;
     const KoColorSpace *colorSpace;
     int channel1;
     int channel2;
-    bool mousePressActive = false;
     const KoColorDisplayRendererInterface *displayRenderer = 0;
 };
 
@@ -117,6 +120,11 @@ void KisVisualColorSelectorShape::setChannelValues(QVector4D channelValues, bool
     update();
 }
 
+void KisVisualColorSelectorShape::setAcceptTabletEvents(bool on)
+{
+    m_d->acceptTabletEvents = on;
+}
+
 void KisVisualColorSelectorShape::setDisplayRenderer (const KoColorDisplayRendererInterface *displayRenderer)
 {
     if (displayRenderer) {
@@ -132,6 +140,7 @@ void KisVisualColorSelectorShape::setDisplayRenderer (const KoColorDisplayRender
 void KisVisualColorSelectorShape::forceImageUpdate()
 {
     //qDebug() << this  << "forceImageUpdate";
+    m_d->alphaNeedsUpdate = true;
     m_d->imagesNeedUpdate = true;
 }
 
@@ -174,16 +183,27 @@ QImage KisVisualColorSelectorShape::getImageMap()
     return m_d->gradient;
 }
 
-QImage KisVisualColorSelectorShape::convertImageMap(const quint8 *rawColor, quint32 size) const
+const QImage KisVisualColorSelectorShape::getAlphaMask() const
 {
-    Q_ASSERT(size == width()*height()*m_d->colorSpace->pixelSize());
+    if (m_d->alphaNeedsUpdate) {
+        m_d->alphaMask = renderAlphaMask();
+        m_d->alphaNeedsUpdate = false;
+    }
+    return m_d->alphaMask;
+}
+
+QImage KisVisualColorSelectorShape::convertImageMap(const quint8 *rawColor, quint32 bufferSize, QSize imgSize) const
+{
+    Q_ASSERT(bufferSize == imgSize.width() * imgSize.height() * m_d->colorSpace->pixelSize());
     QImage image;
     // Convert the buffer to a qimage
     if (m_d->displayRenderer) {
-        image = m_d->displayRenderer->convertToQImage(m_d->colorSpace, rawColor, width(), height());
+        image = m_d->displayRenderer->convertToQImage(m_d->colorSpace, rawColor, imgSize.width(), imgSize.height());
     }
     else {
-        image = m_d->colorSpace->convertToQImage(rawColor, width(), height(), 0, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+        image = m_d->colorSpace->convertToQImage(rawColor, imgSize.width(), imgSize.height(), 0,
+                                                 KoColorConversionTransformation::internalRenderingIntent(),
+                                                 KoColorConversionTransformation::internalConversionFlags());
     }
     // safeguard:
     if (image.isNull())
@@ -200,38 +220,83 @@ QImage KisVisualColorSelectorShape::renderBackground(const QVector4D &channelVal
     const KisVisualColorSelector *selector = qobject_cast<KisVisualColorSelector*>(parent());
     Q_ASSERT(selector);
 
-    quint32 imageSize = width() * height() * m_d->colorSpace->pixelSize();
+    // Hi-DPI aware rendering requires that we determine the device pixel dimension;
+    // actual widget size in device pixels is not accessible unfortunately, it might be 1px smaller...
+    const qreal deviceDivider = 1.0 / devicePixelRatioF();
+    const int deviceWidth = qCeil(width() * devicePixelRatioF());
+    const int deviceHeight = qCeil(height() * devicePixelRatioF());
+    quint32 imageSize = deviceWidth * deviceHeight * m_d->colorSpace->pixelSize();
     QScopedArrayPointer<quint8> raw(new quint8[imageSize] {});
     quint8 *dataPtr = raw.data();
     QVector4D coordinates = channelValues;
-    for (int y = 0; y < height(); y++) {
-        for (int x=0; x < width(); x++) {
-            QPointF newcoordinate = convertWidgetCoordinateToShapeCoordinate(QPoint(x, y));
-            coordinates[m_d->channel1] = newcoordinate.x();
-            if (m_d->dimension == Dimensions::twodimensional){
-                coordinates[m_d->channel2] = newcoordinate.y();
+
+    QImage alpha = getAlphaMask();
+    bool checkAlpha = !alpha.isNull() && alpha.valid(deviceWidth - 1, deviceHeight - 1);
+    KIS_SAFE_ASSERT_RECOVER(!checkAlpha || alpha.format() == QImage::Format_Alpha8) {
+        checkAlpha = false;
+    }
+
+    KoColor filler(Qt::white, m_d->colorSpace);
+    for (int y = 0; y < deviceHeight; y++) {
+        const uchar *alphaLine = checkAlpha ? alpha.scanLine(y) : 0;
+        for (int x=0; x < deviceWidth; x++) {
+            if (!checkAlpha || alphaLine[x]) {
+                QPointF newcoordinate = convertWidgetCoordinateToShapeCoordinate(QPointF(x, y) * deviceDivider);
+                coordinates[m_d->channel1] = newcoordinate.x();
+                if (m_d->dimension == Dimensions::twodimensional) {
+                    coordinates[m_d->channel2] = newcoordinate.y();
+                }
+                KoColor c = selector->convertShapeCoordsToKoColor(coordinates);
+                memcpy(dataPtr, c.data(), pixelSize);
             }
-            KoColor c = selector->convertShapeCoordsToKoColor(coordinates);
-            memcpy(dataPtr, c.data(), pixelSize);
+            else {
+                // need to write a color with non-zero alpha, otherwise the display converter
+                // will for some arcane reason crop the final QImage and screw rendering
+                memcpy(dataPtr, filler.data(), pixelSize);
+            }
             dataPtr += pixelSize;
         }
     }
-    return convertImageMap(raw.data(), imageSize);
+    QImage image = convertImageMap(raw.data(), imageSize, QSize(deviceWidth, deviceHeight));
+    image.setDevicePixelRatio(devicePixelRatioF());
+
+    if (!alpha.isNull()) {
+        QPainter painter(&image);
+        // transfer alphaMask to Alpha channel
+        painter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+        painter.drawImage(0, 0, alpha);
+    }
+
+    return image;
+}
+
+QImage KisVisualColorSelectorShape::renderAlphaMask() const
+{
+    return QImage();
+}
+
+QPointF KisVisualColorSelectorShape::mousePositionToShapeCoordinate(const QPointF &pos, const QPointF &dragStart) const
+{
+    Q_UNUSED(dragStart)
+    return convertWidgetCoordinateToShapeCoordinate(pos);
 }
 
 void KisVisualColorSelectorShape::mousePressEvent(QMouseEvent *e)
 {
-    if (e->button()==Qt::LeftButton) {
-        m_d->mousePressActive = true;
-        QPointF coordinates = convertWidgetCoordinateToShapeCoordinate(e->pos());
+    if (e->button() == Qt::LeftButton) {
+        m_d->dragStart = e->localPos();
+        QPointF coordinates = mousePositionToShapeCoordinate(e->localPos(), m_d->dragStart);
         setCursorPosition(coordinates, true);
+    }
+    else {
+        e->ignore();
     }
 }
 
 void KisVisualColorSelectorShape::mouseMoveEvent(QMouseEvent *e)
 {
-    if (m_d->mousePressActive==true) {
-        QPointF coordinates = convertWidgetCoordinateToShapeCoordinate(e->pos());
+    if (e->buttons() & Qt::LeftButton) {
+        QPointF coordinates = mousePositionToShapeCoordinate(e->localPos(), m_d->dragStart);
         setCursorPosition(coordinates, true);
     } else {
         e->ignore();
@@ -240,10 +305,47 @@ void KisVisualColorSelectorShape::mouseMoveEvent(QMouseEvent *e)
 
 void KisVisualColorSelectorShape::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (e->button()==Qt::LeftButton) {
-        m_d->mousePressActive = false;
+    if (e->button() != Qt::LeftButton) {
+        e->ignore();
     }
 }
+
+void KisVisualColorSelectorShape::tabletEvent(QTabletEvent* event)
+{
+    // only accept tablet events that are associated to "left" button
+    // NOTE: QTabletEvent does not have a windowPos() equivalent, but we don't need it
+    if (m_d->acceptTabletEvents &&
+        (event->button() == Qt::LeftButton || (event->buttons() & Qt::LeftButton)))
+    {
+        event->accept();
+        switch (event->type()) {
+        case  QEvent::TabletPress: {
+            QMouseEvent mouseEvent(QEvent::MouseButtonPress, event->posF(), event->posF(),
+                                   event->globalPosF(), event->button(), event->buttons(),
+                                   event->modifiers(), Qt::MouseEventSynthesizedByApplication);
+            mousePressEvent(&mouseEvent);
+            break;
+        }
+        case QEvent::TabletMove: {
+            QMouseEvent mouseEvent(QEvent::MouseMove, event->posF(), event->posF(),
+                                   event->globalPosF(), event->button(), event->buttons(),
+                                   event->modifiers(), Qt::MouseEventSynthesizedByApplication);
+            mouseMoveEvent(&mouseEvent);
+            break;
+        }
+        case QEvent::TabletRelease: {
+            QMouseEvent mouseEvent(QEvent::MouseButtonRelease, event->posF(), event->posF(),
+                                   event->globalPosF(), event->button(), event->buttons(),
+                                   event->modifiers(), Qt::MouseEventSynthesizedByApplication);
+            mouseReleaseEvent(&mouseEvent);
+            break;
+        }
+        default:
+            event->ignore();
+        }
+    }
+}
+
 void KisVisualColorSelectorShape::paintEvent(QPaintEvent*)
 {
     QPainter painter(this);

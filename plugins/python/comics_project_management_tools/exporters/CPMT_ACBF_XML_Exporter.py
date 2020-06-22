@@ -273,7 +273,7 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
 
     if "readingDirection" in configDictionary.keys():
         readingDirection = document.createElement("reading-direction")
-        if configDictionary["readingDirection"] is "rightToLeft":
+        if configDictionary["readingDirection"] == "rightToLeft":
             readingDirection.appendChild(document.createTextNode(str("RTL")))
         else:
             readingDirection.appendChild(document.createTextNode(str("LTR")))

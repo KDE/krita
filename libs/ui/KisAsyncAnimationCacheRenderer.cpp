@@ -31,7 +31,7 @@ struct KisAsyncAnimationCacheRenderer::Private
 KisAsyncAnimationCacheRenderer::KisAsyncAnimationCacheRenderer()
     : m_d(new Private)
 {
-    connect(this, SIGNAL(sigCompleteRegenerationInternal(int)), SLOT(slotCompleteRegenerationInternal(int)));
+    connect(this, SIGNAL(sigCompleteRegenerationInternal(int)), SLOT(slotCompleteRegenerationInternal(int)), Qt::QueuedConnection);
 }
 
 KisAsyncAnimationCacheRenderer::~KisAsyncAnimationCacheRenderer()
@@ -63,7 +63,6 @@ void KisAsyncAnimationCacheRenderer::slotCompleteRegenerationInternal(int frame)
     }
 
     m_d->requestedCache->addConvertedFrameData(m_d->requestInfo, frame);
-
     notifyFrameCompleted(frame);
 }
 

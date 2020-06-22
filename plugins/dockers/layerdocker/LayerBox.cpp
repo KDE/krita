@@ -68,7 +68,7 @@
 #include <kis_action.h>
 #include "kis_action_manager.h"
 #include "widgets/kis_cmb_composite.h"
-#include "widgets/kis_slider_spin_box.h"
+#include "kis_slider_spin_box.h"
 #include "KisViewManager.h"
 #include "kis_node_manager.h"
 #include "kis_node_model.h"
@@ -221,6 +221,12 @@ LayerBox::LayerBox()
     connect(m_nodeModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(updateUI()));
     connect(m_nodeModel, SIGNAL(modelReset()), SLOT(slotModelReset()));
 
+    connect(m_nodeModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(slotForgetAboutSavedNodeBeforeEditSelectionMode()));
+    connect(m_nodeModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SLOT(slotForgetAboutSavedNodeBeforeEditSelectionMode()));
+    connect(m_nodeModel, SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)), SLOT(slotForgetAboutSavedNodeBeforeEditSelectionMode()));
+    connect(m_nodeModel, SIGNAL(modelReset()), SLOT(slotForgetAboutSavedNodeBeforeEditSelectionMode()));
+
+
     KisAction *showGlobalSelectionMask = new KisAction(i18n("&Show Global Selection Mask"), this);
     showGlobalSelectionMask->setObjectName("show-global-selection-mask");
     showGlobalSelectionMask->setActivationFlags(KisAction::ACTIVE_IMAGE);
@@ -333,6 +339,10 @@ void LayerBox::slotAddLayerBnClicked()
 void LayerBox::setViewManager(KisViewManager* kisview)
 {
     m_nodeManager = kisview->nodeManager();
+
+    if (m_nodeManager) {
+        connect(m_nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)), SLOT(slotForgetAboutSavedNodeBeforeEditSelectionMode()));
+    }
 
     Q_FOREACH (KisAction *action, m_actions) {
         kisview->actionManager()->
@@ -520,8 +530,7 @@ void LayerBox::updateUI()
     m_wdgLayerBox->cmbComposite->validate(m_image->colorSpace());
 
     if (activeNode) {
-        if (activeNode->inherits("KisColorizeMask") ||
-                activeNode->inherits("KisLayer")) {
+        if (activeNode->inherits("KisColorizeMask") || activeNode->inherits("KisLayer")) {
 
             m_wdgLayerBox->doubleOpacity->setEnabled(true);
 
@@ -690,12 +699,13 @@ void LayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &in
 
             menu.addSeparator();
 
-            addActionToMenu(&menu, "show_in_timeline");
+            addActionToMenu(&menu, "pin_to_timeline");
 
             if (singleLayer) {
                 KisNodeSP node = m_filteringModel->nodeFromIndex(index);
                 if (node && !node->inherits("KisTransformMask")) {
-                    addActionToMenu(&menu, "isolate_layer");
+                    addActionToMenu(&menu, "isolate_active_layer");
+                    addActionToMenu(&menu, "isolate_active_group");
                 }
 
                 addActionToMenu(&menu, "selectopaque");
@@ -851,7 +861,10 @@ void LayerBox::slotEditGlobalSelection(bool showSelections)
     KisSelectionMaskSP globalSelectionMask;
 
     if (!showSelections) {
-        activateNode = findNonHidableNode(activateNode);
+        activateNode =
+            m_savedNodeBeforeEditSelectionMode ?
+                KisNodeSP(m_savedNodeBeforeEditSelectionMode) :
+                findNonHidableNode(activateNode);
     }
 
     m_nodeModel->setShowGlobalSelection(showSelections);
@@ -920,6 +933,9 @@ void LayerBox::slotEditGlobalSelection(bool showSelections)
         applicator.end();
     }
 
+    if (showSelections) {
+        m_savedNodeBeforeEditSelectionMode = lastActiveNode;
+    }
 }
 
 void LayerBox::selectionChanged(const QModelIndexList selection)
@@ -1081,6 +1097,11 @@ void LayerBox::slotImageTimeChanged(int time)
 {
     Q_UNUSED(time);
     updateUI();
+}
+
+void LayerBox::slotForgetAboutSavedNodeBeforeEditSelectionMode()
+{
+    m_savedNodeBeforeEditSelectionMode = 0;
 }
 
 void LayerBox::slotUpdateIcons() {

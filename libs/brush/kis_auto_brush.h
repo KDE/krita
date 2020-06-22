@@ -20,6 +20,10 @@
 #define _KIS_AUTOBRUSH_RESOURCE_H_
 
 #include "kritabrush_export.h"
+
+#include <KoResource.h>
+#include <KoEphemeralResource.h>
+
 #include "kis_brush.h"
 
 #include <QScopedPointer>
@@ -29,14 +33,15 @@ class KisMaskGenerator;
 /**
  * XXX: docs!
  */
-class BRUSH_EXPORT KisAutoBrush : public KisBrush
+class BRUSH_EXPORT KisAutoBrush : public KoEphemeralResource<KisBrush>
 {
 
 public:
 
-    KisAutoBrush(KisMaskGenerator* as, qreal angle, qreal randomness, qreal density = 1.0);
-    KisAutoBrush(const KisAutoBrush& rhs);
-    KisBrush* clone() const override;
+    KisAutoBrush(KisMaskGenerator *as, qreal angle, qreal randomness, qreal density = 1.0);
+    KisAutoBrush(const KisAutoBrush &rhs);
+    KisAutoBrush &operator=(const KisAutoBrush &rhs) = delete;
+    KoResourceSP clone() const override;
 
     ~KisAutoBrush() override;
 
@@ -68,22 +73,6 @@ public:
     QPainterPath outline() const override;
 
 public:
-
-    bool load() override {
-        return false;
-    }
-
-    bool loadFromDevice(QIODevice *) override {
-        return false;
-    }
-
-    bool save() override {
-        return false;
-    }
-
-    bool saveToDevice(QIODevice*) const override {
-        return false;
-    }
 
     void toXML(QDomDocument& , QDomElement&) const override;
     const KisMaskGenerator* maskGenerator() const;

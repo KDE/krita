@@ -18,6 +18,7 @@
 
 #include "kis_imagepipe_brush_test.h"
 
+#include <sdk/tests/kistest.h>
 #include <QTest>
 #include <QPainter>
 
@@ -31,9 +32,10 @@
 #include "kis_imagepipe_brush.h"
 #include <kis_paint_device.h>
 #include <kis_painter.h>
+#include <KisGlobalResourcesInterface.h>
 
 #define COMPARE_ALL(brush, method)                                      \
-    Q_FOREACH (KisGbrBrush *child, brush->brushes()) {           \
+    Q_FOREACH (KisGbrBrushSP child, brush->brushes()) {           \
         if(brush->method() != child->method()) {                        \
             dbgKrita << "Failing method:" << #method                    \
                      << "brush index:"                                  \
@@ -42,10 +44,10 @@
         }                                                               \
     }
 
-inline void KisImagePipeBrushTest::checkConsistency(KisImagePipeBrush *brush)
+inline void KisImagePipeBrushTest::checkConsistency(KisImagePipeBrushSP brush)
 {
     qreal scale = 0.5; Q_UNUSED(scale);
-    KisGbrBrush *firstBrush = brush->brushes().first();
+    KisGbrBrushSP firstBrush = brush->brushes().first();
 
     /**
      * This set of values is supposed to be constant, so
@@ -70,7 +72,7 @@ inline void KisImagePipeBrushTest::checkConsistency(KisImagePipeBrush *brush)
 
     KisPaintInformation info;
 
-    KisBrush *oldBrush = brush->testingGetCurrentBrush(info);
+    KisBrushSP oldBrush = brush->testingGetCurrentBrush(info);
     QVERIFY(oldBrush);
 
     qreal realScale = 1;
@@ -88,36 +90,36 @@ inline void KisImagePipeBrushTest::checkConsistency(KisImagePipeBrush *brush)
     QCOMPARE(maskWidth, dev->bounds().width());
     QCOMPARE(maskHeight, dev->bounds().height());
 
-    KisBrush *newBrush = brush->testingGetCurrentBrush(info);
+    KisBrushSP newBrush = brush->testingGetCurrentBrush(info);
     QCOMPARE(oldBrush, newBrush);
 }
 
 
 void KisImagePipeBrushTest::testLoading()
 {
-    QScopedPointer<KisImagePipeBrush> brush(new KisImagePipeBrush(QString(FILES_DATA_DIR) + QDir::separator() + "C_Dirty_Spot.gih"));
-    brush->load();
+    QSharedPointer<KisImagePipeBrush> brush(new KisImagePipeBrush(QString(FILES_DATA_DIR) + '/' + "C_Dirty_Spot.gih"));
+    brush->load(KisGlobalResourcesInterface::instance());
     QVERIFY(brush->valid());
 
-    checkConsistency(brush.data());
+    checkConsistency(brush);
 }
 
 void KisImagePipeBrushTest::testChangingBrushes()
 {
-    QScopedPointer<KisImagePipeBrush> brush(new KisImagePipeBrush(QString(FILES_DATA_DIR) + QDir::separator() + "C_Dirty_Spot.gih"));
-    brush->load();
+    QSharedPointer<KisImagePipeBrush> brush(new KisImagePipeBrush(QString(FILES_DATA_DIR) + '/' + "C_Dirty_Spot.gih"));
+    brush->load(KisGlobalResourcesInterface::instance());
     QVERIFY(brush->valid());
 
     qreal rotation = 0;
     KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, rotation);
 
     for (int i = 0; i < 100; i++) {
-        checkConsistency(brush.data());
+        checkConsistency(brush);
         brush->testingSelectNextBrush(info);
     }
 }
 
-void checkIncrementalPainting(KisBrush *brush, const QString &prefix)
+void checkIncrementalPainting(KisBrushSP brush, const QString &prefix)
 {
     qreal realScale = 1;
     qreal realAngle = 0;
@@ -150,21 +152,21 @@ void checkIncrementalPainting(KisBrush *brush, const QString &prefix)
 
 void KisImagePipeBrushTest::testSimpleDabApplication()
 {
-    QScopedPointer<KisImagePipeBrush> brush(new KisImagePipeBrush(QString(FILES_DATA_DIR) + QDir::separator() + "C_Dirty_Spot.gih"));
-    brush->load();
+    QSharedPointer<KisImagePipeBrush> brush(new KisImagePipeBrush(QString(FILES_DATA_DIR) + '/' + "C_Dirty_Spot.gih"));
+    brush->load(KisGlobalResourcesInterface::instance());
     QVERIFY(brush->valid());
 
-    checkConsistency(brush.data());
-    checkIncrementalPainting(brush.data(), "simple");
+    checkConsistency(brush);
+    checkIncrementalPainting(brush, "simple");
 }
 
 void KisImagePipeBrushTest::testColoredDab()
 {
-    QScopedPointer<KisImagePipeBrush> brush(new KisImagePipeBrush(QString(FILES_DATA_DIR) + QDir::separator() + "G_Sparks.gih"));
-    brush->load();
+    QSharedPointer<KisImagePipeBrush> brush(new KisImagePipeBrush(QString(FILES_DATA_DIR) + '/' + "G_Sparks.gih"));
+    brush->load(KisGlobalResourcesInterface::instance());
     QVERIFY(brush->valid());
 
-    checkConsistency(brush.data());
+    checkConsistency(brush);
 
     QCOMPARE(brush->useColorAsMask(), false);
     QCOMPARE(brush->hasColor(), true);
@@ -185,19 +187,19 @@ void KisImagePipeBrushTest::testColoredDab()
     QCOMPARE(brush->brushType(), PIPE_IMAGE);
 
     // convert to the mask (irreversible)
-    brush->makeMaskImage();
+    brush->makeMaskImage(false);
 
-    QCOMPARE(brush->useColorAsMask(), false);
+    QCOMPARE(brush->useColorAsMask(), true);
     QCOMPARE(brush->hasColor(), false);
     QCOMPARE(brush->brushType(), PIPE_MASK);
 
-    checkConsistency(brush.data());
+    checkConsistency(brush);
 }
 
 void KisImagePipeBrushTest::testColoredDabWash()
 {
-    QScopedPointer<KisImagePipeBrush> brush(new KisImagePipeBrush(QString(FILES_DATA_DIR) + QDir::separator() + "G_Sparks.gih"));
-    brush->load();
+    QSharedPointer<KisImagePipeBrush> brush(new KisImagePipeBrush(QString(FILES_DATA_DIR) + '/' + "G_Sparks.gih"));
+    brush->load(KisGlobalResourcesInterface::instance());
     QVERIFY(brush->valid());
 
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
@@ -209,7 +211,7 @@ void KisImagePipeBrushTest::testColoredDabWash()
     KisPainter painter(layer);
     painter.setCompositeOp(COMPOSITE_ALPHA_DARKEN);
 
-    const QVector<KisGbrBrush*> gbrs = brush->brushes();
+    const QVector<KisGbrBrushSP> gbrs = brush->brushes();
 
     KisFixedPaintDeviceSP dab = gbrs.at(0)->paintDevice(cs, KisDabShape(2.0, 1.0, 0.0), info);
     painter.bltFixed(0, 0, dab, 0, 0, dab->bounds().width(), dab->bounds().height());
@@ -239,26 +241,26 @@ void KisImagePipeBrushTest::testColoredDabWash()
 
 void KisImagePipeBrushTest::testTextBrushNoPipes()
 {
-    QScopedPointer<KisTextBrush> brush(new KisTextBrush());
+    QSharedPointer<KisTextBrush> brush(new KisTextBrush());
 
     brush->setPipeMode(false);
     brush->setFont(QApplication::font());
     brush->setText("The_Quick_Brown_Fox_Jumps_Over_The_Lazy_Dog");
     brush->updateBrush();
 
-    checkIncrementalPainting(brush.data(), "text_no_incremental");
+    checkIncrementalPainting(brush, "text_no_incremental");
 }
 
 void KisImagePipeBrushTest::testTextBrushPiped()
 {
-    QScopedPointer<KisTextBrush> brush(new KisTextBrush());
+    QSharedPointer<KisTextBrush> brush(new KisTextBrush());
 
     brush->setPipeMode(true);
     brush->setFont(QApplication::font());
     brush->setText("The_Quick_Brown_Fox_Jumps_Over_The_Lazy_Dog");
     brush->updateBrush();
 
-    checkIncrementalPainting(brush.data(), "text_incremental");
+    checkIncrementalPainting(brush, "text_incremental");
 }
 
-QTEST_MAIN(KisImagePipeBrushTest)
+KISTEST_MAIN(KisImagePipeBrushTest)

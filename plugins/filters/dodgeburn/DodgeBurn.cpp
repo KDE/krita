@@ -20,6 +20,7 @@
 #include <filter/kis_filter_category_ids.h>
 #include <filter/kis_color_transformation_configuration.h>
 #include <kis_paint_device.h>
+#include <KisGlobalResourcesInterface.h>
 
 #include "ui_DodgeBurnConfigurationBaseWidget.h"
 
@@ -76,7 +77,7 @@ KisDodgeBurnConfigWidget::~KisDodgeBurnConfigWidget()
 
 KisPropertiesConfigurationSP  KisDodgeBurnConfigWidget::configuration() const
 {
-    KisColorTransformationConfigurationSP c = new KisColorTransformationConfiguration(m_id, 0);
+    KisColorTransformationConfigurationSP c = new KisColorTransformationConfiguration(m_id, 0, KisGlobalResourcesInterface::instance());
     int type = 0;
     if(m_page->radioButtonHighlights->isChecked())
     {

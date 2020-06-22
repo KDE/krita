@@ -67,7 +67,7 @@ public:
     static const quint8 halfValueL = 0x00FF / 2;
     static const quint8 zeroValueAB = 0;
     static const quint8 unitValueAB = 0x00FF;
-    static const quint8 halfValueAB = 0x00FF / 2;
+    static const quint8 halfValueAB = 0x0080;
 };
 
 template<>
@@ -79,7 +79,7 @@ public:
     static const quint16 halfValueL = 0xFFFF / 2;
     static const quint16 zeroValueAB = 0;
     static const quint16 unitValueAB = 0xFFFF;
-    static const quint16 halfValueAB = 0xFFFF / 2;
+    static const quint16 halfValueAB = 0x8080;
 };
 
 template<>
@@ -91,7 +91,7 @@ public:
     static const qint16 halfValueL = 32767 / 2;
     static const qint16 zeroValueAB = 0;
     static const qint16 unitValueAB = 32767;
-    static const qint16 halfValueAB = 32767 / 2;
+    static const qint16 halfValueAB = 19549;
 };
 
 template<>
@@ -103,7 +103,7 @@ public:
     static const quint32 halfValueL = 0xFFFFFFFF / 2;
     static const quint32 zeroValueAB = 0;
     static const quint32 unitValueAB = 0xFFFFFFFF;
-    static const quint32 halfValueAB = 0xFFFFFFFF / 2;
+    static const quint32 halfValueAB = 0x80808080;
 };
 
 #include <KoConfig.h>

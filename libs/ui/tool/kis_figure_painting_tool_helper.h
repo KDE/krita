@@ -36,7 +36,8 @@ public:
                                 KisNodeSP currentNode,
                                 KoCanvasResourceProvider *resourceManager,
                                 KisToolShapeUtils::StrokeStyle strokeStyle,
-                                KisToolShapeUtils::FillStyle fillStyle);
+                                KisToolShapeUtils::FillStyle fillStyle,
+                                QTransform fillTransform = QTransform());
     ~KisFigurePaintingToolHelper();
 
     void paintLine(const KisPaintInformation &pi0,
@@ -56,7 +57,8 @@ public:
 private:
     void setupPaintStyles(KisResourcesSnapshotSP resources,
                           KisToolShapeUtils::StrokeStyle strokeStyle,
-                          KisToolShapeUtils::FillStyle fillStyle);
+                          KisToolShapeUtils::FillStyle fillStyle,
+                          QTransform fillTransform);
 
 private:
     KisStrokeId m_strokeId;

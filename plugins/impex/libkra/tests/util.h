@@ -49,6 +49,7 @@
 #include "kis_shape_selection.h"
 #include "kis_default_bounds.h"
 #include "kis_transform_mask_params_interface.h"
+#include <KisGlobalResourcesInterface.h>
 
 
 KisSelectionSP createPixelSelection(KisPaintDeviceSP paintDevice)
@@ -65,7 +66,7 @@ KisSelectionSP createPixelSelection(KisPaintDeviceSP paintDevice)
 
 KisSelectionSP createVectorSelection(KisPaintDeviceSP paintDevice, KisImageSP image, KoShapeControllerBase *shapeController)
 {
-    KisSelectionSP vectorSelection = new KisSelection(new KisSelectionDefaultBounds(paintDevice));
+    KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(paintDevice));
     KoPathShape* path = new KoPathShape();
     path->setShapeId(KoPathShapeId);
     path->moveTo(QPointF(10, 10));
@@ -74,11 +75,11 @@ KisSelectionSP createVectorSelection(KisPaintDeviceSP paintDevice, KisImageSP im
     path->lineTo(QPointF(10, 10) + QPointF(0, 100));
     path->close();
     path->normalize();
-    KisShapeSelection* shapeSelection = new KisShapeSelection(shapeController, image, vectorSelection);
+    KisShapeSelection* shapeSelection = new KisShapeSelection(shapeController, image, selection);
     shapeSelection->addShape(path);
-    vectorSelection->setShapeSelection(shapeSelection);
+    selection->convertToVectorSelectionNoUndo(shapeSelection);
 
-    return vectorSelection;
+    return selection;
 }
 
 QTransform createTestingTransform() {
@@ -125,15 +126,12 @@ KisDocument* createCompleteDocument()
     cloneLayer1->setY(100);
 
     KisSelectionSP pixelSelection = createPixelSelection(paintLayer1->paintDevice());
-    KisFilterConfigurationSP kfc = KisFilterRegistry::instance()->get("pixelize")->defaultConfiguration();
+    KisFilterConfigurationSP kfc = KisFilterRegistry::instance()->get("pixelize")->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(kfc);
-    KisAdjustmentLayerSP adjustmentLayer1 = new KisAdjustmentLayer(image, "adjustmentLayer1", kfc, pixelSelection);
-    kfc = 0; // kfc cannot be shared!
+    KisAdjustmentLayerSP adjustmentLayer1 = new KisAdjustmentLayer(image, "adjustmentLayer1", kfc->cloneWithResourcesSnapshot(), pixelSelection);
 
     KisSelectionSP vectorSelection = createVectorSelection(paintLayer2->paintDevice(), image, doc->shapeController());
-    kfc = KisFilterRegistry::instance()->get("pixelize")->defaultConfiguration();
-    KisAdjustmentLayerSP adjustmentLayer2 = new KisAdjustmentLayer(image, "adjustmentLayer2", kfc, vectorSelection);
-    kfc = 0; // kfc cannot be shared!
+    KisAdjustmentLayerSP adjustmentLayer2 = new KisAdjustmentLayer(image, "adjustmentLayer2", kfc->cloneWithResourcesSnapshot(), vectorSelection);
 
     image->addNode(paintLayer1);
     image->addNode(group1);
@@ -161,8 +159,8 @@ KisDocument* createCompleteDocument()
     KisFilterMaskSP filterMask1 = new KisFilterMask();
     filterMask1->setName("filterMask1");
 
-    kfc = KisFilterRegistry::instance()->get("pixelize")->defaultConfiguration();
-    filterMask1->setFilter(kfc);
+    kfc = KisFilterRegistry::instance()->get("pixelize")->defaultConfiguration(KisGlobalResourcesInterface::instance());
+    filterMask1->setFilter(kfc->cloneWithResourcesSnapshot());
     kfc = 0; // kfc cannot be shared!
 
     filterMask1->setSelection(createPixelSelection(paintLayer1->paintDevice()));
@@ -171,7 +169,7 @@ KisDocument* createCompleteDocument()
     KisFilterMaskSP filterMask2 = new KisFilterMask();
     filterMask2->setName("filterMask2");
 
-    kfc = KisFilterRegistry::instance()->get("pixelize")->defaultConfiguration();
+    kfc = KisFilterRegistry::instance()->get("pixelize")->defaultConfiguration(KisGlobalResourcesInterface::instance());
     filterMask2->setFilter(kfc);
     kfc = 0; // kfc cannot be shared!
 

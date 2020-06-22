@@ -93,8 +93,9 @@ struct Q_DECL_HIDDEN KisPSDLayerStyle::Private
     psd_layer_effects_stroke stroke;
 };
 
-KisPSDLayerStyle::KisPSDLayerStyle()
-    : d(new Private())
+KisPSDLayerStyle::KisPSDLayerStyle(const QString &name)
+    : KoEphemeralResource<KoResource>(name)
+    , d(new Private())
 {
     d->name = i18n("Unnamed");
     d->version = 7;
@@ -106,16 +107,10 @@ KisPSDLayerStyle::~KisPSDLayerStyle()
 }
 
 KisPSDLayerStyle::KisPSDLayerStyle(const KisPSDLayerStyle &rhs)
-    : d(new Private(*rhs.d))
+    : KoEphemeralResource<KoResource>(rhs)
+    , d(new Private(*rhs.d))
 {
-}
-
-KisPSDLayerStyle KisPSDLayerStyle::operator=(const KisPSDLayerStyle &rhs)
-{
-    if (this != &rhs) {
-        *d = *rhs.d;
-    }
-    return *this;
+    setValid(valid());
 }
 
 bool KisPSDLayerStyle::isEnabled() const
@@ -128,9 +123,9 @@ void KisPSDLayerStyle::setEnabled(bool value)
     d->effectEnabled = value;
 }
 
-KisPSDLayerStyleSP KisPSDLayerStyle::clone() const
+KoResourceSP KisPSDLayerStyle::clone() const
 {
-    return toQShared(new KisPSDLayerStyle(*this));
+    return toQShared(new KisPSDLayerStyle(*this)).dynamicCast<KoResource>();
 }
 
 void KisPSDLayerStyle::clear()
@@ -160,6 +155,7 @@ QString KisPSDLayerStyle::name() const
 void KisPSDLayerStyle::setName(const QString &value)
 {
     d->name = value;
+    dynamic_cast<KoResource*>(this)->setName(value);
 }
 
 QUuid KisPSDLayerStyle::uuid() const

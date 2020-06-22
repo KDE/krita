@@ -47,7 +47,7 @@ public:
      * object. If this call leads to the creation of a resource, it should be
      * added to the resource provider, too.
      */
-    virtual KisBrushSP createBrush(const QDomElement& element) = 0;
+    virtual KisBrushSP createBrush(const QDomElement& element, KisResourcesInterfaceSP resourcesInterface) = 0;
 
 };
 

@@ -148,3 +148,23 @@ KisSpacingInformation KisFilterOp::updateSpacingImpl(const KisPaintInformation &
     const qreal rotation = m_rotationOption.apply(info);
     return effectiveSpacing(scale, rotation, info);
 }
+
+QList<KoResourceSP> KisFilterOp::prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
+{
+    QList<KoResourceSP> resources = KisBrushBasedPaintOp::prepareLinkedResources(settings, resourcesInterface);
+
+    KisFilterConfigurationSP config = static_cast<const KisFilterOpSettings *>(settings.data())->filterConfig();
+    resources << config->linkedResources(resourcesInterface);
+
+    return resources;
+}
+
+QList<KoResourceSP> KisFilterOp::prepareEmbeddedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
+{
+    QList<KoResourceSP> resources = KisBrushBasedPaintOp::prepareEmbeddedResources(settings, resourcesInterface);
+
+    KisFilterConfigurationSP config = static_cast<const KisFilterOpSettings *>(settings.data())->filterConfig();
+    resources << config->embeddedResources(resourcesInterface);
+
+    return resources;
+}

@@ -25,6 +25,7 @@
 #include "KoColorSpaceConstants.h"
 #include "KoColorSpaceMaths.h"
 #include "DebugPigment.h"
+#include "kis_global.h"
 
 const int MAX_CHANNELS_TYPE_SIZE = sizeof(double);
 const int MAX_CHANNELS_NB = 5;
@@ -64,6 +65,9 @@ struct KoColorSpaceTrait {
 
     /// the number of bit for each channel
     static const int depth = KoColorSpaceMathsTraits<_channels_type_>::bits;
+
+    /// the associated math class
+    typedef KoColorSpaceMathsTraits<_channels_type_> math_trait;
 
     /**
      * @return the size in byte of one pixel
@@ -220,6 +224,31 @@ struct KoColorSpaceTrait {
             channels_type valpha =  channels_type(KoColorSpaceMathsTraits<channels_type>::unitValue * (1.0f - *alpha));
             channels_type* alphapixel = nativeArray(pixels) + alpha_pos;
             *alphapixel = KoColorSpaceMaths<channels_type>::multiply(*alphapixel, valpha);
+        }
+    }
+
+    inline static void fillInverseAlphaNormedFloatMaskWithColor(quint8 * pixels, const float * alpha, const quint8 *brushColor, qint32 nPixels) {
+        if (alpha_pos < 0) return;
+
+        for (; nPixels > 0; --nPixels, pixels += pixelSize, ++alpha) {
+            memcpy(pixels, brushColor, pixelSize);
+            channels_type valpha =  channels_type(KoColorSpaceMathsTraits<channels_type>::unitValue * (1.0f - *alpha));
+            *(nativeArray(pixels) + alpha_pos) = valpha;
+        }
+    }
+
+
+    inline static void fillGrayBrushWithColor(quint8 *pixels, const QRgb *brush, quint8 *brushColor, qint32 nPixels) {
+        if (alpha_pos >= 0) {
+            for (; nPixels > 0; --nPixels, pixels += pixelSize, ++brush) {
+                memcpy(pixels, brushColor, pixelSize);
+                const quint8 opacity = KoColorSpaceMaths<quint8>::multiply(OPACITY_OPAQUE_U8 - quint8(qRed(*brush)), quint8(qAlpha(*brush)));
+                *(nativeArray(pixels) + alpha_pos) = KoColorSpaceMaths<quint8, channels_type>::scaleToA(opacity);
+            }
+        } else {
+            for (; nPixels > 0; --nPixels, pixels += pixelSize) {
+                memcpy(pixels, brushColor, pixelSize);
+            }
         }
     }
 };

@@ -29,7 +29,7 @@ class KRITAGLOBAL_EXPORT KisSharedRunnable : public QRunnable
 {
 public:
     virtual void runShared() = 0;
-    void run() final;
+    void run() override final;
 
 private:
     friend class KisSharedThreadPoolAdapter;

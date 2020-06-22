@@ -55,7 +55,7 @@ KisGradientSliderWidget::KisGradientSliderWidget(QWidget *parent, const char* na
     m_segmentMenu->addAction(m_removeSegmentAction);
 }
 
-void KisGradientSliderWidget::setGradientResource(KoSegmentGradient* agr)
+void KisGradientSliderWidget::setGradientResource(KoSegmentGradientSP agr)
 {
     m_autogradientResource = agr;
     m_selectedSegment = m_autogradientResource->segmentAt(0.0);

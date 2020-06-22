@@ -18,7 +18,8 @@
 
 #include "kis_no_size_paintop_settings.h"
 
-KisNoSizePaintOpSettings::KisNoSizePaintOpSettings()
+KisNoSizePaintOpSettings::KisNoSizePaintOpSettings(KisResourcesInterfaceSP resourcesInterface)
+    : KisPaintOpSettings(resourcesInterface)
 {
 }
 

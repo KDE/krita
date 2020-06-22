@@ -24,6 +24,7 @@
 
 #include <QLayout>
 #include <filter/kis_filter_configuration.h>
+#include <KisGlobalResourcesInterface.h>
 
 KisWdgSimplexNoise::KisWdgSimplexNoise(KisFilter* /*nfilter*/, QWidget* parent)
         : KisConfigWidget(parent),
@@ -77,7 +78,7 @@ void KisWdgSimplexNoise::setConfiguration(const KisPropertiesConfigurationSP con
 
 KisPropertiesConfigurationSP KisWdgSimplexNoise::configuration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("simplex_noise", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("simplex_noise", 1, KisGlobalResourcesInterface::instance());
     config->setProperty("looping", m_widget->cb_looping->isChecked());
     config->setProperty("frequency", m_widget->slider_frequency->value());
     config->setProperty("ratio_x", m_widget->ratiox_slider->value());

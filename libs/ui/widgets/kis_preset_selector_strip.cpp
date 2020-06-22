@@ -18,9 +18,8 @@
 
 #include "kis_preset_selector_strip.h"
 
-#include "KoResourceModel.h"
-#include "KoResourceItemView.h"
-#include "KoResourceItemChooser.h"
+#include <KisResourceItemListView.h>
+#include <KisResourceItemChooser.h>
 #include <brushengine/kis_paintop_registry.h>
 #include "kis_config.h"
 #include <kis_icon.h>

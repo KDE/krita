@@ -18,6 +18,8 @@
 #ifndef KIS_SHAPE_SELECTION_H
 #define KIS_SHAPE_SELECTION_H
 
+#include <QPainterPath>
+
 #include <KoShapeLayer.h>
 #include <KoShapeFactoryBase.h>
 #include <KoShapeUserData.h>
@@ -103,7 +105,7 @@ private:
     friend class KisTakeAllShapesCommand;
     void setUpdatesEnabled(bool enabled);
     bool updatesEnabled() const;
-
+    void init(KisImageSP image, KoShapeControllerBase *shapeControllerBase);
 private:
 
     void renderSelection(KisPaintDeviceSP projection, const QRect& requestedRect);

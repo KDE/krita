@@ -33,12 +33,22 @@
 #include "kis_filter_mask.h"
 #include "kis_selection.h"
 #include "kis_paint_device_debug_utils.h"
+#include <KisGlobalResourcesInterface.h>
 
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter_registry.h"
 
 #include "../../sdk/tests/testutil.h"
+
+#include "kis_image_config.h"
+#include "KisImageConfigNotifier.h"
+
+void KisAsyncMergerTest::init()
+{
+    KisImageConfig::resetConfig();
+}
+
 
     /*
       +-----------+
@@ -55,9 +65,9 @@ void KisAsyncMergerTest::testMerger()
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 640, 441, colorSpace, "merger test");
 
-    QImage sourceImage1(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
-    QImage sourceImage2(QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png");
-    QImage referenceProjection(QString(FILES_DATA_DIR) + QDir::separator() + "merged_hakonepa.png");
+    QImage sourceImage1(QString(FILES_DATA_DIR) + '/' + "hakonepa.png");
+    QImage sourceImage2(QString(FILES_DATA_DIR) + '/' + "inverted_hakonepa.png");
+    QImage referenceProjection(QString(FILES_DATA_DIR) + '/' + "merged_hakonepa.png");
 
     KisPaintDeviceSP device1 = new KisPaintDevice(colorSpace);
     KisPaintDeviceSP device2 = new KisPaintDevice(colorSpace);
@@ -66,13 +76,13 @@ void KisAsyncMergerTest::testMerger()
 
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
     Q_ASSERT(filter);
-    KisFilterConfigurationSP configuration = filter->defaultConfiguration();
+    KisFilterConfigurationSP configuration = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(configuration);
 
     KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8, device1);
     KisLayerSP paintLayer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE_U8, device2);
     KisLayerSP groupLayer = new KisGroupLayer(image, "group", 200/*OPACITY_OPAQUE*/);
-    KisLayerSP blur1 = new KisAdjustmentLayer(image, "blur1", configuration, 0);
+    KisLayerSP blur1 = new KisAdjustmentLayer(image, "blur1", configuration->cloneWithResourcesSnapshot(), 0);
 
     image->addNode(paintLayer1, image->rootLayer());
     image->addNode(groupLayer, image->rootLayer());
@@ -118,7 +128,7 @@ void KisAsyncMergerTest::testMerger()
     QVERIFY(rootLayer->exactBounds() == image->bounds());
 
     QImage resultProjection = rootLayer->projection()->convertToQImage(0);
-    resultProjection.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + "actual_merge_result.png");
+    resultProjection.save(QString(FILES_OUTPUT_DIR) + '/' + "actual_merge_result.png");
     QPoint pt;
     QVERIFY(TestUtil::compareQImages(pt, resultProjection, referenceProjection, 5, 0, 0));
 }
@@ -144,7 +154,7 @@ void KisAsyncMergerTest::debugObligeChild()
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 640, 441, colorSpace, "merger test");
 
-    QImage sourceImage1(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    QImage sourceImage1(QString(FILES_DATA_DIR) + '/' + "hakonepa.png");
     KisPaintDeviceSP device1 = new KisPaintDevice(colorSpace);
     device1->convertFromQImage(sourceImage1, 0, 0, 0);
 
@@ -187,13 +197,13 @@ void KisAsyncMergerTest::testFullRefreshWithClones()
 
     KisFilterSP filter = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(filter);
-    KisFilterConfigurationSP configuration = filter->defaultConfiguration();
+    KisFilterConfigurationSP configuration = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(configuration);
 
     KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8, device1);
     KisFilterMaskSP invertMask1 = new KisFilterMask();
     invertMask1->initSelection(paintLayer1);
-    invertMask1->setFilter(configuration);
+    invertMask1->setFilter(configuration->cloneWithResourcesSnapshot());
 
     KisLayerSP cloneLayer1 = new KisCloneLayer(paintLayer1, image, "clone_of_1", OPACITY_OPAQUE_U8);
     /**
@@ -267,7 +277,7 @@ void KisAsyncMergerTest::testSubgraphingWithoutUpdatingParent()
 
     image->initialRefreshGraph();
 
-    QImage refImage(QString(FILES_DATA_DIR) + QDir::separator() + "subgraphing_without_updating.png");
+    QImage refImage(QString(FILES_DATA_DIR) + '/' + "subgraphing_without_updating.png");
 
     {
         QImage resultImage = image->projection()->convertToQImage(0);
@@ -349,10 +359,10 @@ void testFullRefreshForDependentNodes(const DependentNodeType dependentNode,
     if (dependentNode == ADJUSTMENT_LAYER) {
         KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
         KIS_ASSERT(filter);
-        KisFilterConfigurationSP configuration = filter->defaultConfiguration();
+        KisFilterConfigurationSP configuration = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
         KIS_ASSERT(configuration);
 
-        KisLayerSP blur1 = new KisAdjustmentLayer(image, "blur1", configuration, 0);
+        KisLayerSP blur1 = new KisAdjustmentLayer(image, "blur1", configuration->cloneWithResourcesSnapshot(), 0);
         blur1->setCompositeOpId(COMPOSITE_OVER);
 
         image->addNode(blur1, image->rootLayer());
@@ -361,12 +371,12 @@ void testFullRefreshForDependentNodes(const DependentNodeType dependentNode,
     if (useFilterMask) {
         KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
         KIS_ASSERT(filter);
-        KisFilterConfigurationSP configuration = filter->defaultConfiguration();
+        KisFilterConfigurationSP configuration = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
         KIS_ASSERT(configuration);
 
         KisFilterMaskSP blurMask1 = new KisFilterMask();
         blurMask1->initSelection(groupLayer);
-        blurMask1->setFilter(configuration);
+        blurMask1->setFilter(configuration->cloneWithResourcesSnapshot());
         image->addNode(blurMask1, testingLayer);
     }
 
@@ -444,6 +454,58 @@ void KisAsyncMergerTest::testFullRefreshAdjustmentWithMask()
 void KisAsyncMergerTest::testFullRefreshAdjustmentWithStyle()
 {
     testFullRefreshForDependentNodes(ADJUSTMENT_LAYER, false, true);
+}
+
+/*
+  +---------------------------------+
+  |root                             |
+  | adj 2 (filter 2, color balance) |
+  |  mask 3 (filter 3, blur)        |
+  | paint 1                         |
+  +---------------------------------+
+ */
+
+void KisAsyncMergerTest::testFilterMaskOnFilterLayer()
+{
+    {
+        KisImageConfig cfg(false);
+        cfg.setUpdatePatchWidth(64);
+        cfg.setUpdatePatchHeight(64);
+        cfg.setMaxNumberOfThreads(1);
+    }
+    KisImageConfigNotifier::instance()->notifyConfigChanged();
+
+
+    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, 128, 128, colorSpace, "masks test");
+
+    KisPaintDeviceSP device1 = new KisPaintDevice(colorSpace);
+    device1->fill(image->bounds(), KoColor(Qt::yellow, colorSpace));
+    KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8, device1);
+    image->addNode(paintLayer1, image->rootLayer());
+
+
+    KisFilterSP filter2 = KisFilterRegistry::instance()->value("colorbalance");
+    KIS_ASSERT(filter2);
+    KisFilterConfigurationSP configuration2 = filter2->defaultConfiguration(KisGlobalResourcesInterface::instance());
+    KIS_ASSERT(configuration2);
+    KisLayerSP adjLayer2 = new KisAdjustmentLayer(image, "adj2", configuration2, 0);
+    image->addNode(adjLayer2, image->rootLayer());
+
+
+    KisFilterSP filter3 = KisFilterRegistry::instance()->value("blur");
+    KIS_ASSERT(filter3);
+    KisFilterConfigurationSP configuration3 = filter3->defaultConfiguration(KisGlobalResourcesInterface::instance());
+    KIS_ASSERT(configuration3);
+    KisFilterMaskSP mask3 = new KisFilterMask();
+    mask3->initSelection(adjLayer2);
+    mask3->setFilter(configuration3);
+    image->addNode(mask3, adjLayer2);
+
+    image->initialRefreshGraph();
+
+    QVERIFY(TestUtil::checkQImage(image->projection()->convertToQImage(0),
+                                  "async_merger_test", "mask_on_adj", "initial", 3));
 }
 
 

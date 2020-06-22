@@ -1,0 +1,8 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kritadbexplorer" version="8" translationDomain="krita">
+    <MenuBar>
+        <Menu name="Tools">
+            <Action name="dbexplorer"/>
+        </Menu>
+    </MenuBar>
+</kpartgui>

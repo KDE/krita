@@ -35,6 +35,7 @@
 #include <KisDocument.h>
 #include <KisMimeDatabase.h>
 #include <kis_time_range.h>
+#include <krita_container_utils.h>
 #include <KisImportExportManager.h>
 #include <KisImportExportErrorCode.h>
 
@@ -74,9 +75,7 @@ void AnimaterionRenderer::slotRenderAnimation()
     KisDocument *doc = viewManager()->document();
 
     DlgAnimationRenderer dlgAnimationRenderer(doc, viewManager()->mainWindow());
-
     dlgAnimationRenderer.setCaption(i18n("Render Animation"));
-
     if (dlgAnimationRenderer.exec() == QDialog::Accepted) {
         KisAnimationRenderingOptions encoderOptions = dlgAnimationRenderer.getEncoderOptions();
         renderAnimationImpl(doc, encoderOptions);
@@ -108,41 +107,27 @@ void AnimaterionRenderer::renderAnimationImpl(KisDocument *doc, KisAnimationRend
     const QString framesDirectory = encoderOptions.resolveAbsoluteFramesDirectory();
     const QString extension = KisMimeDatabase::suffixesForMimeType(frameMimeType).first();
     const QString baseFileName = QString("%1/%2.%3").arg(framesDirectory)
-            .arg(encoderOptions.basename)
-            .arg(extension);
+                                                    .arg(encoderOptions.basename)
+                                                    .arg(extension);
 
-
-    /**
-     * The dialog should ensure that the size of the video is even
-     */
-    KIS_SAFE_ASSERT_RECOVER(
-        !((encoderOptions.width & 0x1 || encoderOptions.height & 0x1)
-          && (encoderOptions.videoMimeType == "video/mp4" ||
-              encoderOptions.videoMimeType == "video/x-matroska") && !(encoderOptions.renderMode() == encoderOptions.RENDER_FRAMES_ONLY))) {
-
-        encoderOptions.width = encoderOptions.width + (encoderOptions.width & 0x1);
-        encoderOptions.height = encoderOptions.height + (encoderOptions.height & 0x1);
-    }
-
-    const QSize scaledSize =
-        doc->image()->bounds().size().scaled(
-            encoderOptions.width, encoderOptions.height,
-            Qt::KeepAspectRatio);
-
-
-    if ((scaledSize.width() & 0x1 || scaledSize.height() & 0x1)
-            && (encoderOptions.videoMimeType == "video/mp4" ||
-                encoderOptions.videoMimeType == "video/x-matroska") && !(encoderOptions.renderMode() == encoderOptions.RENDER_FRAMES_ONLY)) {
-        QString m = "Mastroska (.mkv)";
-        if (encoderOptions.videoMimeType == "video/mp4") {
-            m = "Mpeg4 (.mp4)";
+    if (mustHaveEvenDimensions(encoderOptions.videoMimeType, encoderOptions.renderMode())) {
+        if (hasEvenDimensions(encoderOptions.width, encoderOptions.height) != true) {
+            encoderOptions.width = encoderOptions.width + (encoderOptions.width & 0x1);
+            encoderOptions.height = encoderOptions.height + (encoderOptions.height & 0x1);
         }
-        qWarning() << m <<"requires width and height to be even, resize and try again!";
-        doc->setErrorMessage(i18n("%1 requires width and height to be even numbers.  Please resize or crop the image before exporting.", m));
-        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not render animation:\n%1", doc->errorMessage()));
-        return;
     }
 
+    const QSize scaledSize = doc->image()->bounds().size().scaled(encoderOptions.width, encoderOptions.height, Qt::IgnoreAspectRatio);
+
+    if (mustHaveEvenDimensions(encoderOptions.videoMimeType, encoderOptions.renderMode())) {
+        if (hasEvenDimensions(scaledSize.width(), scaledSize.height()) != true) {
+            QString type = encoderOptions.videoMimeType == "video/mp4" ? "Mpeg4 (.mp4) " : "Mastroska (.mkv) ";
+            qWarning() << type <<"requires width and height to be even, resize and try again!";
+            doc->setErrorMessage(i18n("%1 requires width and height to be even numbers.  Please resize or crop the image before exporting.", type));
+            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not render animation:\n%1", doc->errorMessage()));
+            return;
+        }
+    }
 
     const bool batchMode = false; // TODO: fetch correctly!
     KisAsyncAnimationFramesSaveDialog exporter(doc->image(),
@@ -150,6 +135,7 @@ void AnimaterionRenderer::renderAnimationImpl(KisDocument *doc, KisAnimationRend
                                                                       encoderOptions.lastFrame),
                                                baseFileName,
                                                encoderOptions.sequenceStart,
+                                               encoderOptions.wantsOnlyUniqueFrameSequence && !encoderOptions.shouldEncodeVideo,
                                                encoderOptions.frameExportConfig);
     exporter.setBatchMode(batchMode);
 
@@ -158,51 +144,95 @@ void AnimaterionRenderer::renderAnimationImpl(KisDocument *doc, KisAnimationRend
         exporter.regenerateRange(viewManager()->mainWindow()->viewManager());
 
     // the folder could have been read-only or something else could happen
-    if (encoderOptions.shouldEncodeVideo &&
+    if ((encoderOptions.shouldEncodeVideo || encoderOptions.wantsOnlyUniqueFrameSequence) &&
         result == KisAsyncAnimationFramesSaveDialog::RenderComplete) {
 
         const QString savedFilesMask = exporter.savedFilesMask();
 
-        const QString resultFile = encoderOptions.resolveAbsoluteVideoFilePath();
-        KIS_SAFE_ASSERT_RECOVER_NOOP(QFileInfo(resultFile).isAbsolute());
+        if (encoderOptions.shouldEncodeVideo) {
+            const QString resultFile = encoderOptions.resolveAbsoluteVideoFilePath();
+            KIS_SAFE_ASSERT_RECOVER_NOOP(QFileInfo(resultFile).isAbsolute());
 
-        {
-            const QFileInfo info(resultFile);
-            QDir dir(info.absolutePath());
+            {
+                const QFileInfo info(resultFile);
+                QDir dir(info.absolutePath());
 
-            if (!dir.exists()) {
-                dir.mkpath(info.absolutePath());
+                if (!dir.exists()) {
+                    dir.mkpath(info.absolutePath());
+                }
+                KIS_SAFE_ASSERT_RECOVER_NOOP(dir.exists());
             }
-            KIS_SAFE_ASSERT_RECOVER_NOOP(dir.exists());
+
+            KisImportExportErrorCode res;
+            QFile fi(resultFile);
+            if (!fi.open(QIODevice::WriteOnly)) {
+                qWarning() << "Could not open" << fi.fileName() << "for writing!";
+                res = KisImportExportErrorCannotWrite(fi.error());
+            } else {
+                fi.close();
+            }
+
+            QScopedPointer<VideoSaver> encoder(new VideoSaver(doc, batchMode));
+            res = encoder->convert(doc, savedFilesMask, encoderOptions, batchMode);
+
+            if (!res.isOk()) {
+                QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not render animation:\n%1", res.errorMessage()));
+            }
         }
 
-        KisImportExportErrorCode res;
-        QFile fi(resultFile);
-        if (!fi.open(QIODevice::WriteOnly)) {
-            qWarning() << "Could not open" << fi.fileName() << "for writing!";
-            res = KisImportExportErrorCannotWrite(fi.error());
-        } else {
-            fi.close();
-        }
-
-        QScopedPointer<VideoSaver> encoder(new VideoSaver(doc, batchMode));
-        res = encoder->convert(doc, savedFilesMask, encoderOptions, batchMode);
-
-        if (!res.isOk()) {
-            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not render animation:\n%1", res.errorMessage()));
-        }
-
+        //File cleanup
         if (encoderOptions.shouldDeleteSequence) {
             QDir d(framesDirectory);
             QStringList sequenceFiles = d.entryList(QStringList() << encoderOptions.basename + "*." + extension, QDir::Files);
             Q_FOREACH(const QString &f, sequenceFiles) {
                 d.remove(f);
             }
+        } else if(encoderOptions.wantsOnlyUniqueFrameSequence) {
+            QDir d(framesDirectory);
+
+            const QList<int> uniques = exporter.getUniqueFrames();
+            QStringList uniqueFrameNames = getNamesForFrames(encoderOptions.basename, extension, encoderOptions.sequenceStart, uniques);
+            QStringList sequenceFiles = d.entryList(QStringList() << encoderOptions.basename + "*." + extension, QDir::Files);
+
+            //Filter out unique files.
+            KritaUtils::filterContainer(sequenceFiles, [uniqueFrameNames](QString &framename){
+                return !uniqueFrameNames.contains(framename);
+            });
+
+            Q_FOREACH(const QString &f, sequenceFiles) {
+                d.remove(f);
+            }
+
         }
 
     } else if (result == KisAsyncAnimationFramesSaveDialog::RenderFailed) {
         viewManager()->mainWindow()->viewManager()->showFloatingMessage(i18n("Failed to render animation frames!"), QIcon());
     }
+}
+
+QString AnimaterionRenderer::getNameForFrame(QString basename, QString extension, int sequenceStart, int frame)
+{
+    QString frameNumberText = QString("%1").arg(frame + sequenceStart, 4, 10, QChar('0'));
+    return basename + frameNumberText + "." + extension;
+}
+
+QStringList AnimaterionRenderer::getNamesForFrames(QString basename, QString extension, int sequenceStart, const QList<int> &frames)
+{
+    QStringList list;
+    Q_FOREACH(const int &i, frames) {
+        list.append(getNameForFrame(basename, extension, sequenceStart, i));
+    }
+    return list;
+}
+
+const bool AnimaterionRenderer::mustHaveEvenDimensions(QString mimeType, KisAnimationRenderingOptions::RenderMode renderMode)
+{
+    return (mimeType == "video/mp4" || mimeType == "video/x-matroska") && renderMode != KisAnimationRenderingOptions::RENDER_FRAMES_ONLY;
+}
+
+const bool AnimaterionRenderer::hasEvenDimensions(int width, int height)
+{
+    return !((width & 0x1) || (height & 0x1));
 }
 
 #include "AnimationRenderer.moc"

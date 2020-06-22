@@ -124,6 +124,10 @@ public:
         {
         }
 
+        bool isEmpty() const {
+            return shapes.isEmpty();
+        }
+
         QRectF docUpdateRect;
         QRect viewUpdateRect;
 
@@ -131,7 +135,20 @@ public:
         SharedSafeStorage allClonedShapes;
     };
 
-    using PaintJobsList = QList<PaintJob>;
+    struct PaintJobsOrder
+    {
+        QRect uncroppedViewUpdateRect;
+        QList<PaintJob> jobs;
+
+        inline void clear() {
+            jobs.clear();
+            uncroppedViewUpdateRect = QRect();
+        }
+
+        inline bool isEmpty() const {
+            return jobs.isEmpty();
+        }
+    };
 
 
     /**
@@ -147,7 +164,7 @@ public:
      * \see paintJob()
      * \see a comment in KisShapeLayerCanvas::slotStartAsyncRepaint()
      */
-    void preparePaintJobs(PaintJobsList &jobs, KoShape *excludeRoot);
+    void preparePaintJobs(PaintJobsOrder &jobsOrder, KoShape *excludeRoot);
 
     /**
      * Render a \p job on \p painter. No mutable internals of the shape

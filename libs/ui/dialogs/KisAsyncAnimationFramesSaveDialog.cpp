@@ -35,10 +35,12 @@ struct KisAsyncAnimationFramesSaveDialog::Private {
             const KisTimeRange &_range,
             const QString &baseFilename,
             int _sequenceNumberingOffset,
+            bool _onlyNeedsUniqueFrames,
             KisPropertiesConfigurationSP _exportConfiguration)
         : originalImage(_image),
           range(_range),
           sequenceNumberingOffset(_sequenceNumberingOffset),
+          onlyNeedsUniqueFrames(_onlyNeedsUniqueFrames),
           exportConfiguration(_exportConfiguration)
     {
         int baseLength = baseFilename.lastIndexOf(".");
@@ -58,6 +60,7 @@ struct KisAsyncAnimationFramesSaveDialog::Private {
     QString filenamePrefix;
     QString filenameSuffix;
     QByteArray outputMimeType;
+    bool onlyNeedsUniqueFrames;
 
     int sequenceNumberingOffset;
     KisPropertiesConfigurationSP exportConfiguration;
@@ -67,9 +70,10 @@ KisAsyncAnimationFramesSaveDialog::KisAsyncAnimationFramesSaveDialog(KisImageSP 
                                                                      const KisTimeRange &range,
                                                                      const QString &baseFilename,
                                                                      int sequenceNumberingOffset,
+                                                                     bool onlyNeedsUniqeFrames,
                                                                      KisPropertiesConfigurationSP exportConfiguration)
     : KisAsyncAnimationRenderDialogBase(i18n("Saving frames..."), originalImage, 0),
-      m_d(new Private(originalImage, range, baseFilename, sequenceNumberingOffset, exportConfiguration))
+      m_d(new Private(originalImage, range, baseFilename, sequenceNumberingOffset, onlyNeedsUniqeFrames, exportConfiguration))
 {
 
 
@@ -156,10 +160,24 @@ KisAsyncAnimationRenderDialogBase::Result KisAsyncAnimationFramesSaveDialog::reg
 
 QList<int> KisAsyncAnimationFramesSaveDialog::calcDirtyFrames() const
 {
-    // TODO: optimize!
     QList<int> result;
-    for (int i = m_d->range.start(); i <= m_d->range.end(); i++) {
-        result.append(i);
+    for (int frame = m_d->range.start(); frame <= m_d->range.end(); frame++) {
+        KisTimeRange heldFrameTimeRange = KisTimeRange::calculateIdenticalFramesRecursive(m_d->originalImage->root(), frame);
+
+        if (!m_d->onlyNeedsUniqueFrames) {
+            // Clamp holds that begin before the rendered range onto it
+            heldFrameTimeRange &= m_d->range;
+        }
+
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(heldFrameTimeRange.isValid(), result);
+
+        result.append(heldFrameTimeRange.start());
+
+        if (heldFrameTimeRange.isInfinite()) {
+            break;
+        } else {
+            frame = heldFrameTimeRange.end();
+        }
     }
     return result;
 }
@@ -172,6 +190,7 @@ KisAsyncAnimationRendererBase *KisAsyncAnimationFramesSaveDialog::createRenderer
                                                      m_d->outputMimeType,
                                                      m_d->range,
                                                      m_d->sequenceNumberingOffset,
+                                                     m_d->onlyNeedsUniqueFrames,
                                                      m_d->exportConfiguration);
 }
 
@@ -190,4 +209,9 @@ QString KisAsyncAnimationFramesSaveDialog::savedFilesMask() const
 QString KisAsyncAnimationFramesSaveDialog::savedFilesMaskWildcard() const
 {
     return m_d->filenamePrefix + "????" + m_d->filenameSuffix;
+}
+
+QList<int> KisAsyncAnimationFramesSaveDialog::getUniqueFrames() const
+{
+    return this->calcDirtyFrames();
 }

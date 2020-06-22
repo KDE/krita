@@ -592,6 +592,11 @@ QAction *configureToolbars(const QObject *recvr, const char *slot, QObject *pare
     return KStandardAction::create(ConfigureToolbars, recvr, slot, parent);
 }
 
+QAction *resetConfigurations(const QObject *recvr, const char *slot, QObject *parent)
+{
+    return KStandardAction::create(ResetConfigurations, recvr, slot, parent);
+}
+
 QAction *configureNotifications(const QObject *recvr, const char *slot, QObject *parent)
 {
     return KStandardAction::create(ConfigureNotifications, recvr, slot, parent);

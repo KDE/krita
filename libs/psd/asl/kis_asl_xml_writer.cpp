@@ -252,7 +252,7 @@ void KisAslXmlWriter::writeCurve(const QString &key, const QString &name, const 
     leaveDescriptor();
 }
 
-QString KisAslXmlWriter::writePattern(const QString &key, const KoPattern *pattern)
+QString KisAslXmlWriter::writePattern(const QString &key, const KoPatternSP pattern)
 {
     enterDescriptor(key, "", "KisPattern");
 
@@ -281,7 +281,7 @@ QString KisAslXmlWriter::writePattern(const QString &key, const KoPattern *patte
     return uuid;
 }
 
-void KisAslXmlWriter::writePatternRef(const QString &key, const KoPattern *pattern, const QString &uuid)
+void KisAslXmlWriter::writePatternRef(const QString &key, const KoPatternSP pattern, const QString &uuid)
 {
     enterDescriptor(key, "", "Ptrn");
 
@@ -337,6 +337,7 @@ void KisAslXmlWriter::writeGradientImpl(const QString &key,
 void KisAslXmlWriter::writeSegmentGradient(const QString &key, const KoSegmentGradient *gradient)
 {
     const QList<KoGradientSegment *>&segments = gradient->segments();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!segments.isEmpty());
 
     QVector<QColor> colors;
     QVector<qreal> transparencies;
@@ -359,7 +360,8 @@ void KisAslXmlWriter::writeSegmentGradient(const QString &key, const KoSegmentGr
     }
 
     // last segment
-    {
+
+    if (!segments.isEmpty()) {
         const KoGradientSegment *lastSeg = segments.last();
 
         QColor color = lastSeg->endColor().toQColor();

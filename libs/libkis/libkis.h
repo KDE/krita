@@ -20,6 +20,7 @@ class Krita;
 class Node;
 class Notifier;
 class Resource;
+class Scratchpad;
 class Selection;
 class View;
 class Extension;

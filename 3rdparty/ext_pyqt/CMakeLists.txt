@@ -15,12 +15,15 @@ if (UNIX)
     )
     ExternalProject_Add( ext_pyqt
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://www.riverbankcomputing.com/static/Downloads/PyQt5/5.13.1/PyQt5_gpl-5.13.1.tar.gz
+        URL https://files.kde.org/krita/build/dependencies/PyQt5_gpl-5.13.1.tar.gz
         URL_MD5 c77af2f4e230b0053fd22bc2ece2e6c0
         
         CONFIGURE_COMMAND ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/configure.py ${_PYQT_conf}
         BUILD_COMMAND make
-        INSTALL_COMMAND make install
+
+        # force single-threaded installation to avoid
+        # race conditions in post-install .py script
+        INSTALL_COMMAND make -j1 install
         
         BUILD_IN_SOURCE 1
 
@@ -32,7 +35,6 @@ elseif(MINGW)
         --confirm-license
         --target-py-version 3.8
         --bindir ${PREFIX_ext_pyqt}/bin
-        --qt ${PREFIX_ext_pyqt}
         --qmake ${PREFIX_ext_pyqt}/bin/qmake.exe
         --sip ${PREFIX_ext_pyqt}/bin/sip.exe
         --sip-incdir ${PREFIX_ext_pyqt}/include
@@ -47,16 +49,17 @@ elseif(MINGW)
     )
     ExternalProject_Add( ext_pyqt
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        #URL https://files.kde.org/krita/build/dependencies/PyQt5_gpl-5.12.1.zip
-        #URL_MD5 0b2912828a4d59e13d86decdce1687e6
-        URL https://www.riverbankcomputing.com/static/Downloads/PyQt5/5.12.1/PyQt5_gpl-5.12.1.tar.gz
-        URL_MD5 67508b652098d2e05c4c2b5baeb170cc
+        URL https://files.kde.org/krita/build/dependencies/PyQt5_gpl-5.13.1.zip
+        URL_MD5 bf3c8d54d99a6ee355a309925e403c6e
 
         PATCH_COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/pyqt-configure-fix.patch
 
         CONFIGURE_COMMAND ${PYTHON_EXECUTABLE} <SOURCE_DIR>/configure.py ${_PYQT_conf}
         BUILD_COMMAND mingw32-make -j${SUBMAKE_JOBS} CXXFLAGS=-D_hypot=hypot LDFLAGS=${SECURITY_SHARED_LINKER_FLAGS}
-        INSTALL_COMMAND mingw32-make install
+
+        # force single-threaded installation to avoid
+        # race conditions in post-install .py script
+        INSTALL_COMMAND mingw32-make -j1 install
         
         BUILD_IN_SOURCE 1
 

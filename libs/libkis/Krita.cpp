@@ -47,13 +47,15 @@
 #include <kis_filter_configuration.h>
 #include <kis_properties_configuration.h>
 #include <kis_config.h>
-#include <KisResourceServerProvider.h>
 #include <kis_workspace_resource.h>
 #include <brushengine/kis_paintop_preset.h>
-#include <kis_brush_server.h>
-#include <KoResourceServerProvider.h>
+#include <KisBrushServerProvider.h>
 #include <kis_action_registry.h>
 #include <kis_icon_utils.h>
+
+#include <KisResourceModel.h>
+#include <KisResourceModelProvider.h>
+#include <KisGlobalResourcesInterface.h>
 
 #include "View.h"
 #include "Document.h"
@@ -78,7 +80,7 @@ Krita::Krita(QObject *parent)
     , d(new Private)
 {
     qRegisterMetaType<Notifier*>();
-    connect(KisPart::instance(), SIGNAL(sigWindowAdded(KisMainWindow*)), SLOT(mainWindowAdded(KisMainWindow*)));
+    connect(KisPart::instance(), SIGNAL(sigMainWindowIsBeingCreated(KisMainWindow*)), SLOT(mainWindowIsBeingCreated(KisMainWindow*)));
 }
 
 Krita::~Krita()
@@ -120,7 +122,8 @@ Document* Krita::activeDocument() const
         return 0;
     }
     KisDocument *document = view->document();
-    return new Document(document);
+    Document *d = new Document(document, false);
+    return d;
 }
 
 void Krita::setActiveDocument(Document* value)
@@ -148,7 +151,7 @@ QList<Document *> Krita::documents() const
 {
     QList<Document *> ret;
     foreach(QPointer<KisDocument> doc, KisPart::instance()->documents()) {
-        ret << new Document(doc);
+        ret << new Document(doc, false);
     }
     return ret;
 }
@@ -167,7 +170,7 @@ Filter *Krita::filter(const QString &name) const
     Filter *filter = new Filter();
     filter->setName(name);
     KisFilterSP f = KisFilterRegistry::instance()->value(name);
-    KisFilterConfigurationSP fc = f->defaultConfiguration();
+    KisFilterConfigurationSP fc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
     InfoObject *info = new InfoObject(fc);
     filter->setConfiguration(info);
     return filter;
@@ -180,7 +183,11 @@ QStringList Krita::colorModels() const
     Q_FOREACH(KoID id, ids) {
         colorModelsIds << id.id();
     }
-    return colorModelsIds.toList();
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
+    return QStringList(colorModelsIds.begin(), colorModelsIds.end());
+#else
+    return QStringList::fromSet(colorModelsIds);
+#endif
 }
 
 QStringList Krita::colorDepths(const QString &colorModel) const
@@ -190,7 +197,11 @@ QStringList Krita::colorDepths(const QString &colorModel) const
     Q_FOREACH(KoID id, ids) {
         colorDepthsIds << id.id();
     }
-    return colorDepthsIds.toList();
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
+    return QStringList(colorDepthsIds.begin(), colorDepthsIds.end());
+#else
+    return QStringList::fromSet(colorDepthsIds);
+#endif
 }
 
 QStringList Krita::filterStrategies() const
@@ -206,7 +217,11 @@ QStringList Krita::profiles(const QString &colorModel, const QString &colorDepth
     Q_FOREACH(const KoColorProfile *profile, profiles) {
         profileNames << profile->name();
     }
-    QStringList r = profileNames.toList();
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
+    QStringList r(profileNames.begin(), profileNames.end());
+#else
+    QStringList r = QStringList::fromSet(profileNames);
+#endif
     r.sort();
     return r;
 }
@@ -254,46 +269,21 @@ QList<Window*>  Krita::windows() const
     return ret;
 }
 
-QMap<QString, Resource *> Krita::resources(const QString &type) const
+QMap<QString, Resource*> Krita::resources(const QString &type) const
 {
-    QMap<QString, Resource *> resources = QMap<QString, Resource *> ();
+    QMap<QString, Resource*> resources;
+    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(type);
+    for (int i = 0; i < resourceModel->rowCount(); ++i) {
 
-    if (type.toLower() == "pattern") {
-        KoResourceServer<KoPattern>* server = KoResourceServerProvider::instance()->patternServer();
-        Q_FOREACH (KoResource *res, server->resources()) {
-            resources[res->name()] = new Resource(res);
-        }
+        QModelIndex idx = resourceModel->index(i, 0);
+        int id = resourceModel->data(idx, Qt::UserRole + KisResourceModel::Id).toInt();
+        QString name  = resourceModel->data(idx, Qt::UserRole + KisResourceModel::Name).toString();
+        QString filename  = resourceModel->data(idx, Qt::UserRole + KisResourceModel::Filename).toString();
+        QImage image = resourceModel->data(idx, Qt::UserRole + KisResourceModel::Thumbnail).value<QImage>();
+
+        resources[name] = new Resource(id, type, name, filename, image, 0);
     }
-    else if (type.toLower() == "gradient") {
-        KoResourceServer<KoAbstractGradient>* server = KoResourceServerProvider::instance()->gradientServer();
-        Q_FOREACH (KoResource *res, server->resources()) {
-            resources[res->name()] = new Resource(res);
-        }
-    }
-    else if (type.toLower() == "brush") {
-        KisBrushResourceServer* server = KisBrushServer::instance()->brushServer();
-        Q_FOREACH (KisBrushSP res, server->resources()) {
-            resources[res->name()] = new Resource(res.data());
-        }
-    }
-    else if (type.toLower() == "preset") {
-        KisPaintOpPresetResourceServer* server = KisResourceServerProvider::instance()->paintOpPresetServer();
-        Q_FOREACH (KisPaintOpPresetSP res, server->resources()) {
-            resources[res->name()] = new Resource(res.data());
-        }
-    }
-    else if (type.toLower() == "palette") {
-        KoResourceServer<KoColorSet>* server = KoResourceServerProvider::instance()->paletteServer();
-        Q_FOREACH (KoResource *res, server->resources()) {
-            resources[res->name()] = new Resource(res);
-        }
-    }
-    else if (type.toLower() == "workspace") {
-        KoResourceServer< KisWorkspaceResource >* server = KisResourceServerProvider::instance()->workspaceServer();
-        Q_FOREACH (KoResource *res, server->resources()) {
-            resources[res->name()] = new Resource(res);
-        }
-    }
+
     return resources;
 }
 
@@ -312,7 +302,9 @@ QStringList Krita::recentDocuments() const
 Document* Krita::createDocument(int width, int height, const QString &name, const QString &colorModel, const QString &colorDepth, const QString &profile, double resolution)
 {
     KisDocument *document = KisPart::instance()->createDocument();
-    KisPart::instance()->addDocument(document);
+    document->setObjectName(name);
+
+    KisPart::instance()->addDocument(document, false);
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(colorModel, colorDepth, profile);
     Q_ASSERT(cs);
 
@@ -325,7 +317,9 @@ Document* Krita::createDocument(int width, int height, const QString &name, cons
     }
 
     Q_ASSERT(document->image());
-    return new Document(document);
+    Document *doc = new Document(document, true);
+
+    return doc;
 }
 
 Document* Krita::openDocument(const QString &filename)
@@ -335,7 +329,7 @@ Document* Krita::openDocument(const QString &filename)
     KisPart::instance()->addDocument(document);
     document->openUrl(QUrl::fromLocalFile(filename), KisDocument::DontAddToRecent);
     document->setFileBatchMode(false);
-    return new Document(document);
+    return new Document(document, true);
 }
 
 Window* Krita::openWindow()
@@ -414,7 +408,12 @@ QString Krita::krita_i18n(const QString &text)
     return i18n(text.toUtf8().constData());
 }
 
-void Krita::mainWindowAdded(KisMainWindow *kisWindow)
+QString Krita::krita_i18nc(const QString &context, const QString &text)
+{
+    return i18nc(context.toUtf8().constData(), text.toUtf8().constData());
+}
+
+void Krita::mainWindowIsBeingCreated(KisMainWindow *kisWindow)
 {
     Q_FOREACH(Extension *extension, d->extensions) {
         Window window(kisWindow);

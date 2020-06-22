@@ -116,13 +116,13 @@ void TimelineFramesIndexConverter::updateActiveDummy(KisNodeDummy *dummy,
 {
     if (m_activeDummy == dummy) return;
 
-    if (m_activeDummy && !m_activeDummy->node()->useInTimeline()) {
+    if (m_activeDummy && !m_activeDummy->node()->isPinnedToTimeline()) {
         *oldRemoved = true;
     }
 
     m_activeDummy = dummy;
 
-    if (m_activeDummy && !m_activeDummy->node()->useInTimeline()) {
+    if (m_activeDummy && !m_activeDummy->node()->isPinnedToTimeline()) {
         *newAdded = true;
     }
 }
@@ -147,6 +147,6 @@ bool TimelineFramesIndexConverter::isDummyAvailableForTimeline(KisNodeDummy *dum
 bool TimelineFramesIndexConverter::isDummyVisible(KisNodeDummy *dummy) const
 {
     return (isDummyAvailableForTimeline(dummy) &&
-            dummy->node()->useInTimeline()) ||
+            dummy->node()->isPinnedToTimeline()) ||
             dummy == m_activeDummy;
 }

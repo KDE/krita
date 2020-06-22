@@ -41,6 +41,7 @@
     #include <filter/kis_filter_configuration.h>
     #include "kis_default_bounds.h"
     #include <KisKineticScroller.h>
+    #include <KisGlobalResourcesInterface.h>
 
     // From krita/ui
     #include "kis_bookmarked_configurations_editor.h"
@@ -232,7 +233,7 @@
             widget->layout()->setContentsMargins(0,0,0,0);
             d->currentFilterConfigurationWidget->setView(d->view);
             d->currentFilterConfigurationWidget->blockSignals(true);
-            d->currentFilterConfigurationWidget->setConfiguration(d->currentFilter->defaultConfiguration());
+            d->currentFilterConfigurationWidget->setConfiguration(d->currentFilter->defaultConfiguration(KisGlobalResourcesInterface::instance()));
             d->currentFilterConfigurationWidget->blockSignals(false);
             d->uiFilterSelector.scrollArea->setContentsMargins(0,0,0,0);
             d->uiFilterSelector.scrollArea->setMinimumWidth(widget->sizeHint().width() + 18);
@@ -336,7 +337,7 @@
                 return config;
             }
         } else if (d->currentFilter) {
-            return d->currentFilter->defaultConfiguration();
+            return d->currentFilter->defaultConfiguration(KisGlobalResourcesInterface::instance());
         }
         return 0;
 

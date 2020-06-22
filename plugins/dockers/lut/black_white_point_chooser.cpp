@@ -26,7 +26,7 @@
 #include <QDesktopWidget>
 
 #include <QFormLayout>
-#include "widgets/kis_slider_spin_box.h"
+#include "kis_slider_spin_box.h"
 
 
 BlackWhitePointChooser::BlackWhitePointChooser(QWidget* parent)

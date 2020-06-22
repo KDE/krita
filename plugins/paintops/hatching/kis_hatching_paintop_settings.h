@@ -32,7 +32,7 @@ class KisHatchingPaintOpSettings : public KisBrushBasedPaintOpSettings
 {
 
 public:
-    KisHatchingPaintOpSettings();
+    KisHatchingPaintOpSettings(KisResourcesInterfaceSP resourcesInterface);
     ~KisHatchingPaintOpSettings() override;
 
     //Dialogs enabled

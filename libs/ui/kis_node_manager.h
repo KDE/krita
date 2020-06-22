@@ -20,9 +20,11 @@
 
 #include <QObject>
 #include <QList>
+#include <QAction>
 
 #include "kis_types.h"
 #include "kis_base_node.h"
+#include "kis_image.h"
 #include <kritaui_export.h>
 
 class KActionCollection;
@@ -167,13 +169,24 @@ public Q_SLOTS:
      */
     void createFromVisible();
 
-    void slotShowHideTimeline(bool value);
+    void slotPinToTimeline(bool value);
+
+    // Isolation Mode..
 
     void toggleIsolateActiveNode();
-    void toggleIsolateMode(bool checked);
-    void slotUpdateIsolateModeActionImageStatusChange();
-    void slotUpdateIsolateModeAction();
-    void slotTryRestartIsolatedMode();
+    void setIsolateActiveLayerMode(bool checked);
+    void setIsolateActiveGroupMode(bool checked);
+
+    void changeIsolationMode(bool isolateActiveLayer, bool isolateActiveGroup);
+    void changeIsolationRoot(KisNodeSP isolationRoot);
+
+    /**
+     * Responds to external changes in isolation mode (i.e. from KisImage).
+     */
+    void handleExternalIsolationChange();
+    void reinitializeIsolationActionGroup();
+
+    // General Node Management..
 
     void moveNodeAt(KisNodeSP node, KisNodeSP parent, int index);
     KisNodeSP createNode(const QString& nodeType, bool quiet = false, KisPaintDeviceSP copyFrom = 0);
@@ -191,12 +204,12 @@ public Q_SLOTS:
     void mirrorAllNodesX();
     void mirrorAllNodesY();
 
-
     void mirrorNode(KisNodeSP node, const KUndo2MagicString& commandName, Qt::Orientation orientation, KisSelectionSP selection);
 
-
-    void activateNextNode();
-    void activatePreviousNode();
+    void activateNextNode(bool siblingsOnly = false);
+    void activateNextSiblingNode();
+    void activatePreviousNode(bool siblingsOnly = false);
+    void activatePreviousSiblingNode();
     void switchToPreviouslyActiveNode();
 
     /**

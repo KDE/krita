@@ -22,12 +22,13 @@
 #include <QObject>
 #include <QShowEvent>
 
-#include <KoResourceServerAdapter.h>
+#include <KoResourceServer.h>
 
 #include "ui_wdgcustompattern.h"
 
-class KoPattern;
-class KoResource;
+#include <KoPattern.h>
+#include <KoResource.h>
+
 class KisViewManager;
 
 class KisWdgCustomPattern : public QWidget, public Ui::KisWdgCustomPattern
@@ -48,8 +49,8 @@ public:
     ~KisCustomPattern() override;
 
 Q_SIGNALS:
-    void activatedResource(KoResource *);
-    void addPattern(KoPattern*);
+    void activatedResource(KoResourceSP);
+    void addPattern(KoPatternSP);
 
 private Q_SLOTS:
     void slotAddPredefined();
@@ -58,9 +59,9 @@ private Q_SLOTS:
 
 private:
     void createPattern();
-    KisViewManager* m_view;
-    KoPattern* m_pattern;
-    QSharedPointer<KoAbstractResourceServerAdapter> m_rServerAdapter;
+    KisViewManager* m_view {0};
+    KoPatternSP m_pattern;
+    KoResourceServer<KoPattern>* m_rServer {0};
 };
 
 

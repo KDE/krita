@@ -28,9 +28,9 @@
 #include "KoShape.h"
 #include "KoInsets.h"
 #include "KoPathShape.h"
-#include <KoGenStyle.h>
 #include <FlakeDebug.h>
 #include <QPainter>
+#include <QPainterPath>
 #include <QAtomicInt>
 #include <QImage>
 #include <QRectF>
@@ -208,20 +208,6 @@ KoShapeShadow& KoShapeShadow::operator=(const KoShapeShadow &rhs)
     *d = *rhs.d;
     d->refCount = 0;
     return *this;
-}
-
-void KoShapeShadow::fillStyle(KoGenStyle &style, KoShapeSavingContext &context)
-{
-    Q_UNUSED(context);
-
-    style.addProperty("draw:shadow", d->visible ? "visible" : "hidden", KoGenStyle::GraphicType);
-    style.addProperty("draw:shadow-color", d->color.name(), KoGenStyle::GraphicType);
-    if (d->color.alphaF() != 1.0)
-        style.addProperty("draw:shadow-opacity", QString("%1%").arg(d->color.alphaF() * 100.0), KoGenStyle::GraphicType);
-    style.addProperty("draw:shadow-offset-x", QString("%1pt").arg(d->offset.x()), KoGenStyle::GraphicType);
-    style.addProperty("draw:shadow-offset-y", QString("%1pt").arg(d->offset.y()), KoGenStyle::GraphicType);
-    if (d->blur != 0)
-        style.addProperty("calligra:shadow-blur-radius", QString("%1pt").arg(d->blur), KoGenStyle::GraphicType);
 }
 
 void KoShapeShadow::paint(KoShape *shape, QPainter &painter)

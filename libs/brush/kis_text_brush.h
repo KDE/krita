@@ -22,19 +22,26 @@
 
 #include <QFont>
 
+#include <KoEphemeralResource.h>
+
 #include "kis_scaling_size_brush.h"
 #include "kritabrush_export.h"
 
 class KisTextBrushesPipe;
 
 
-class BRUSH_EXPORT KisTextBrush : public KisScalingSizeBrush
+class BRUSH_EXPORT KisTextBrush : public KoEphemeralResource<KisScalingSizeBrush>
 {
 
 public:
     KisTextBrush();
     KisTextBrush(const KisTextBrush &rhs);
     ~KisTextBrush() override;
+
+    KisTextBrush &operator=(const KisTextBrush &rhs) = delete;
+
+    KoResourceSP clone() const override;
+
 
     void notifyStrokeStarted() override;
     void notifyCachedDabPainted(const KisPaintInformation& info) override;
@@ -47,22 +54,6 @@ public:
 
     KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace,
         KisDabShape const&, const KisPaintInformation& info, double subPixelX, double subPixelY) const override;
-
-    bool load() override {
-        return false;
-    }
-
-    bool loadFromDevice(QIODevice *) override {
-        return false;
-    }
-
-    bool save() override {
-        return false;
-    }
-
-    bool saveToDevice(QIODevice* ) const override {
-        return false;
-    }
 
     void setText(const QString& txt);
     QString text(void) const;
@@ -83,8 +74,6 @@ public:
     void setScale(qreal _scale) override;
     void setSpacing(double _spacing) override;
 
-    KisBrush* clone() const override;
-
 private:
     QFont m_font;
     QString m_text;
@@ -92,5 +81,7 @@ private:
 private:
     KisTextBrushesPipe *m_brushesPipe;
 };
+
+typedef QSharedPointer<KisTextBrush> KisTextBrushSP;
 
 #endif

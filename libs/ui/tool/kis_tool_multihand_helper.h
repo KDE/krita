@@ -28,6 +28,7 @@ class KRITAUI_EXPORT KisToolMultihandHelper : public KisToolFreehandHelper
 
 public:
     KisToolMultihandHelper(KisPaintingInformationBuilder *infoBuilder,
+                           KoCanvasResourceProvider *resourceManager,
                            const KUndo2MagicString &transactionText);
     ~KisToolMultihandHelper() override;
 

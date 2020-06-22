@@ -29,7 +29,7 @@ public:
         , view(0)
     {}
 
-    KoColorSet* colorSet;
+    KoColorSetSP colorSet;
     KisViewManager* view;
 };
 
@@ -110,7 +110,9 @@ QVariant PaletteColorsModel::headerData(int section, Qt::Orientation orientation
 
 void PaletteColorsModel::setColorSet(QObject *newColorSet)
 {
-    d->colorSet = qobject_cast<KoColorSet*>(newColorSet);
+    // XXX SharedPtr We need to wrap KoColorSet
+
+    //d->colorSet = qobject_cast<KoColorSet*>(newColorSet);
     beginResetModel();
     endResetModel();
     emit colorSetChanged();
@@ -118,7 +120,9 @@ void PaletteColorsModel::setColorSet(QObject *newColorSet)
 
 QObject* PaletteColorsModel::colorSet() const
 {
-    return d->colorSet;
+    // XXX SharedPtr We need to wrap KoColorSet
+    // return d->colorSet;
+    return 0;
 }
 
 

@@ -792,6 +792,7 @@ KoRTree<T>::Node::Node(int capacity, int level, Node * parent)
         , m_nodeId(nodeIdCnt++)
 #endif
         , m_level(level)
+        , m_place(0)
 {
 }
 

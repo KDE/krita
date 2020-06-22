@@ -2,7 +2,6 @@ SET(EXTPREFIX_frameworks "${EXTPREFIX}" )
 #
 # All needed frameworks:
 #
-#        Archive 
 #        Config 
 #        WidgetsAddons 
 #        Completion
@@ -31,6 +30,22 @@ ExternalProject_Add(
     UPDATE_COMMAND ""
 )
 
+ExternalProject_Add(
+    ext_kconfig
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    URL https://download.kde.org/stable/frameworks/5.64/kconfig-5.64.0.zip
+    URL_MD5 52858f7fdcd17d0c5680acf96dcaae9a
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/kconfig.diff
+    INSTALL_DIR ${EXTPREFIX_frameworks}
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks}
+               -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} 
+               ${GLOBAL_PROFILE}
+               -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX} 
+               -DBUILD_TESTING=false
+               -DKCONFIG_USE_DBUS=off
+    UPDATE_COMMAND ""
+    DEPENDS ext_extra_cmake_modules
+)
 
 ExternalProject_Add(
     ext_karchive
@@ -48,23 +63,6 @@ ExternalProject_Add(
     DEPENDS ext_extra_cmake_modules
 )
 
-
-ExternalProject_Add(
-    ext_kconfig
-    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://download.kde.org/stable/frameworks/5.64/kconfig-5.64.0.zip
-    URL_MD5 52858f7fdcd17d0c5680acf96dcaae9a
-    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/kconfig.diff
-    INSTALL_DIR ${EXTPREFIX_frameworks}
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks}
-               -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} 
-               ${GLOBAL_PROFILE}
-               -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX} 
-               -DBUILD_TESTING=false
-               -DKCONFIG_USE_DBUS=off
-    UPDATE_COMMAND ""
-    DEPENDS ext_karchive
-)
 
 
 ExternalProject_Add(
@@ -210,7 +208,7 @@ ExternalProject_Add(
                 -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX} 
                 -DBUILD_TESTING=false
     UPDATE_COMMAND ""
-    DEPENDS ext_kitemviews
+    DEPENDS ext_karchive ext_kitemviews
 )
 
 ExternalProject_Add(

@@ -22,6 +22,7 @@ class QIODevice;
 class QUuid;
 
 #include <QVector>
+#include <KoEphemeralResource.h>
 
 #include <psd.h>
 
@@ -39,27 +40,34 @@ typedef QSharedPointer<KisPSDLayerStyle> KisPSDLayerStyleSP;
  * See https://www.tonton-pixel.com/Photoshop%20Additional%20File%20Formats/styles-file-format.html
  *
  */
-class KRITAIMAGE_EXPORT KisPSDLayerStyle
+class KRITAIMAGE_EXPORT KisPSDLayerStyle : public KoEphemeralResource<KoResource>
 {
 
 public:
-    explicit KisPSDLayerStyle();
+    KisPSDLayerStyle(const QString& name = QString());
     virtual ~KisPSDLayerStyle();
     KisPSDLayerStyle(const KisPSDLayerStyle& rhs);
-    KisPSDLayerStyle operator=(const KisPSDLayerStyle& rhs);
+    KisPSDLayerStyle operator=(const KisPSDLayerStyle& rhs) = delete;
 
-    KisPSDLayerStyleSP clone() const;
+    KoResourceSP clone() const override;
 
     void clear();
 
     QString name() const;
     void setName(const QString &value);
 
+
+
     QUuid uuid() const;
     void setUuid(const QUuid &value) const;
 
     QString psdUuid() const;
     void setPsdUuid(const QString &value) const;
+
+    QPair<QString, QString> resourceType() const override
+    {
+        return QPair<QString, QString>(ResourceType::LayerStyles, "");
+    }
 
     /**
      * \return true if all the styles are disabled

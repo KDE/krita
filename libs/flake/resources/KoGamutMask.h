@@ -25,7 +25,7 @@
 #include <cmath>
 
 #include <FlakeDebug.h>
-#include <resources/KoResource.h>
+#include <KoResource.h>
 #include <KoShape.h>
 #include <KoShapePaintingContext.h>
 
@@ -62,25 +62,33 @@ public:
     KoGamutMask(const QString &filename);
     KoGamutMask();
     KoGamutMask(KoGamutMask *rhs);
+    KoGamutMask(const KoGamutMask &rhs);
+    KoGamutMask &operator=(const KoGamutMask &rhs) = delete;
+    KoResourceSP clone() const override;
     ~KoGamutMask() override;
 
     bool coordIsClear(const QPointF& coord, bool preview);
-    bool load() override;
-    bool loadFromDevice(QIODevice *dev) override;
-    bool save() override;
+    bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;
     bool saveToDevice(QIODevice* dev) const override;
+
+    QPair<QString, QString> resourceType() const override
+    {
+        return QPair<QString, QString>(ResourceType::GamutMasks, "");
+    }
 
     void paint(QPainter &painter, bool preview);
     void paintStroke(QPainter &painter, bool preview);
 
-    QTransform maskToViewTransform(quint8 viewSize);
-    QTransform viewToMaskTransform(quint8 viewSize);
+    QTransform maskToViewTransform(qreal viewSize);
+    QTransform viewToMaskTransform(qreal viewSize);
 
-    QString title();
+    QString title() const;
     void setTitle(QString title);
 
-    QString description();
+    QString description() const;
     void setDescription(QString description);
+
+    QString defaultFileExtension() const override;
 
     int rotation();
     void setRotation(int rotation);
@@ -100,5 +108,7 @@ private:
     struct Private;
     Private* const d;
 };
+
+typedef QSharedPointer<KoGamutMask> KoGamutMaskSP;
 
 #endif // KOGAMUTMASK_H

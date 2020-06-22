@@ -39,11 +39,6 @@
 #include <KoCompositeOp.h>
 #include <KisDocument.h>
 #include <KoUnit.h>
-#include <KoOdf.h>
-#include <KoOdfReadStore.h>
-#include <KoOdfStylesReader.h>
-#include <KoOdfLoadingContext.h>
-#include <KoPageLayout.h>
 #include <KoShapeContainer.h>
 #include <KoShapeLayer.h>
 #include <KoShapeGroup.h>
@@ -80,6 +75,9 @@
 #include "kis_effect_mask.h"
 #include "commands/KoShapeReorderCommand.h"
 #include "kis_do_something_command.h"
+#include <KisSafeBlockingQueueConnectionProxy.h>
+#include <QThread>
+#include <QApplication>
 
 
 #include <SimpleShapeContainerModel.h>
@@ -88,7 +86,8 @@ class ShapeLayerContainerModel : public SimpleShapeContainerModel
 public:
     ShapeLayerContainerModel(KisShapeLayer *parent)
         : q(parent)
-{}
+    {
+    }
 
     void add(KoShape *child) override {
         SimpleShapeContainerModel::add(child);
@@ -112,16 +111,6 @@ public:
         }
 
         SimpleShapeContainerModel::remove(child);
-    }
-
-    void shapeHasBeenAddedToHierarchy(KoShape *shape, KoShapeContainer *addedToSubtree) override {
-        q->shapeManager()->addShape(shape);
-        SimpleShapeContainerModel::shapeHasBeenAddedToHierarchy(shape, addedToSubtree);
-    }
-
-    void shapeToBeRemovedFromHierarchy(KoShape *shape, KoShapeContainer *removedFromSubtree) override {
-        q->shapeManager()->remove(shape);
-        SimpleShapeContainerModel::shapeToBeRemovedFromHierarchy(shape, removedFromSubtree);
     }
 
 private:
@@ -295,6 +284,10 @@ void KisShapeLayer::initShapeLayer(KoShapeControllerBase* controller, KisPaintDe
             this, SIGNAL(currentLayerChanged(const KoShapeLayer*)));
 
     connect(this, SIGNAL(sigMoveShapes(QPointF)), SLOT(slotMoveShapes(QPointF)));
+
+    ShapeLayerContainerModel *model = dynamic_cast<ShapeLayerContainerModel*>(this->model());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(model);
+    model->setAssociatedRootShapeManager(m_d->canvas->shapeManager());
 }
 
 bool KisShapeLayer::allowAsChild(KisNodeSP node) const
@@ -420,6 +413,12 @@ void KisShapeLayer::slotMoveShapes(const QPointF &diff)
     if (shapes.isEmpty()) return;
 
     KoShapeMoveCommand cmd(shapes, diff);
+    cmd.redo();
+}
+
+void KisShapeLayer::slotTransformShapes(const QTransform &newTransform)
+{
+    KoShapeTransformCommand cmd({this}, {transformation()}, {newTransform});
     cmd.redo();
 }
 
@@ -585,83 +584,7 @@ bool KisShapeLayer::loadLayer(KoStore* store)
         return true;
     }
 
-    KoOdfReadStore odfStore(store);
-    QString errorMessage;
-
-    odfStore.loadAndParse(errorMessage);
-
-    if (!errorMessage.isEmpty()) {
-        warnKrita << errorMessage;
-        return false;
-    }
-
-    KoXmlElement contents = odfStore.contentDoc().documentElement();
-
-    //    dbgKrita <<"Start loading OASIS document..." << contents.text();
-    //    dbgKrita <<"Start loading OASIS contents..." << contents.lastChild().localName();
-    //    dbgKrita <<"Start loading OASIS contents..." << contents.lastChild().namespaceURI();
-    //    dbgKrita <<"Start loading OASIS contents..." << contents.lastChild().isElement();
-
-    KoXmlElement body(KoXml::namedItemNS(contents, KoXmlNS::office, "body"));
-
-    if (body.isNull()) {
-        //setErrorMessage( i18n( "Invalid OASIS document. No office:body tag found." ) );
-        return false;
-    }
-
-    body = KoXml::namedItemNS(body, KoXmlNS::office, "drawing");
-    if (body.isNull()) {
-        //setErrorMessage( i18n( "Invalid OASIS document. No office:drawing tag found." ) );
-        return false;
-    }
-
-    KoXmlElement page(KoXml::namedItemNS(body, KoXmlNS::draw, "page"));
-    if (page.isNull()) {
-        //setErrorMessage( i18n( "Invalid OASIS document. No draw:page tag found." ) );
-        return false;
-    }
-
-    KoXmlElement * master = 0;
-    if (odfStore.styles().masterPages().contains("Standard"))
-        master = odfStore.styles().masterPages().value("Standard");
-    else if (odfStore.styles().masterPages().contains("Default"))
-        master = odfStore.styles().masterPages().value("Default");
-    else if (! odfStore.styles().masterPages().empty())
-        master = odfStore.styles().masterPages().begin().value();
-
-    if (master) {
-        const KoXmlElement *style = odfStore.styles().findStyle(
-                                        master->attributeNS(KoXmlNS::style, "page-layout-name", QString()));
-        KoPageLayout pageLayout;
-        pageLayout.loadOdf(*style);
-        setSize(QSizeF(pageLayout.width, pageLayout.height));
-    }
-    // We work fine without a master page
-
-    KoOdfLoadingContext context(odfStore.styles(), odfStore.store());
-    context.setManifestFile(QString("tar:/") + odfStore.store()->currentPath() + "META-INF/manifest.xml");
-    KoShapeLoadingContext shapeContext(context, m_d->controller->resourceManager());
-
-
-    KoXmlElement layerElement;
-    forEachElement(layerElement, context.stylesReader().layerSet()) {
-        // FIXME: investigate what is this
-        //        KoShapeLayer * l = new KoShapeLayer();
-        if (!loadOdf(layerElement, shapeContext)) {
-            dbgKrita << "Could not load vector layer!";
-            return false;
-        }
-    }
-
-    KoXmlElement child;
-    forEachElement(child, page) {
-        KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(child, shapeContext);
-        if (shape) {
-            addShape(shape);
-        }
-    }
-
-    return true;
+    return false;
 
 }
 
@@ -678,51 +601,56 @@ KUndo2Command* KisShapeLayer::crop(const QRect & rect)
     return new KisNodeMoveCommand2(this, oldPos, newPos);
 }
 
-KUndo2Command* KisShapeLayer::transform(const QTransform &transform) {
-    QList<KoShape*> shapes = shapesToBeTransformed();
-    if (shapes.isEmpty()) return 0;
-
-    KisImageViewConverter *converter = dynamic_cast<KisImageViewConverter*>(this->converter());
-    QTransform realTransform = converter->documentToView() *
-        transform * converter->viewToDocument();
-
-    QList<QTransform> oldTransformations;
-    QList<QTransform> newTransformations;
-
-    QList<KoShapeShadow*> newShadows;
-    const qreal transformBaseScale = KoUnit::approxTransformScale(transform);
-
-    Q_FOREACH (const KoShape* shape, shapes) {
-        QTransform oldTransform = shape->transformation();
-        oldTransformations.append(oldTransform);
-
-        QTransform globalTransform = shape->absoluteTransformation();
-        QTransform localTransform = globalTransform * realTransform * globalTransform.inverted();
-        newTransformations.append(localTransform * oldTransform);
-
-        KoShapeShadow *shadow = 0;
-
-        if (shape->shadow()) {
-            shadow = new KoShapeShadow(*shape->shadow());
-            shadow->setOffset(transformBaseScale * shadow->offset());
-            shadow->setBlur(transformBaseScale * shadow->blur());
-        }
-
-        newShadows.append(shadow);
-
+class TransformShapeLayerDeferred : public KUndo2Command
+{
+public:
+    TransformShapeLayerDeferred(KisShapeLayer *shapeLayer, const QTransform &globalDocTransform)
+        : m_shapeLayer(shapeLayer),
+          m_globalDocTransform(globalDocTransform),
+          m_blockingConnection(std::bind(&KisShapeLayer::slotTransformShapes, shapeLayer, std::placeholders::_1))
+    {
     }
 
-    KUndo2Command *parentCommand = new KUndo2Command();
-    new KoShapeTransformCommand(shapes,
-                                oldTransformations,
-                                newTransformations,
-                                parentCommand);
+    void undo()
+    {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() != qApp->thread());
+        m_blockingConnection.start(m_savedTransform);
+    }
 
-    new KoShapeShadowCommand(shapes,
-                             newShadows,
-                             parentCommand);
+    void redo()
+    {
+        m_savedTransform = m_shapeLayer->transformation();
 
-    return parentCommand;
+        const QTransform globalTransform = m_shapeLayer->absoluteTransformation();
+        const QTransform localTransform = globalTransform * m_globalDocTransform * globalTransform.inverted();
+
+        KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() != qApp->thread());
+        m_blockingConnection.start(localTransform * m_savedTransform);
+    }
+
+private:
+    KisShapeLayer *m_shapeLayer;
+    QTransform m_globalDocTransform;
+    QTransform m_savedTransform;
+    KisSafeBlockingQueueConnectionProxy<QTransform> m_blockingConnection;
+};
+
+
+KUndo2Command* KisShapeLayer::transform(const QTransform &transform)
+{
+    QList<KoShape*> shapes = shapesToBeTransformed();
+    if (shapes.isEmpty()) return 0;
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(shapes.size() == 1 && shapes.first() == this, 0);
+
+    /**
+     * We cannot transform shapes in the worker thread. Therefor we emit blocking-queued
+     * signal to transform them in the GUI thread and then return.
+     */
+    KisImageViewConverter *converter = dynamic_cast<KisImageViewConverter*>(this->converter());
+    QTransform docSpaceTransform = converter->documentToView() *
+        transform * converter->viewToDocument();
+
+    return new TransformShapeLayerDeferred(this, docSpaceTransform);
 }
 
 KUndo2Command *KisShapeLayer::setProfile(const KoColorProfile *profile)

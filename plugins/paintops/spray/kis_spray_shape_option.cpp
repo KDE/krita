@@ -51,7 +51,7 @@ KisSprayShapeOption::KisSprayShapeOption()
 
     m_options = new KisShapeOptionsWidget();
 
-    //initializer slider values
+    //initialize slider values
     m_options->widthSpin->setRange(1, 1000, 0);
     m_options->widthSpin->setValue(6);
     m_options->widthSpin->setSuffix(i18n(" px"));

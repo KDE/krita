@@ -25,7 +25,6 @@
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoShapeLoadingContext.h>
-#include <KoOdfWorkaround.h>
 
 #include <math.h>
 
@@ -156,83 +155,4 @@ void EnhancedPathHandle::setRadiusRange(EnhancedPathParameter *minRadius, Enhanc
 bool EnhancedPathHandle::isPolar() const
 {
     return m_polarX && m_polarY;
-}
-
-void EnhancedPathHandle::saveOdf(KoShapeSavingContext &context) const
-{
-    if (!hasPosition()) {
-        return;
-    }
-    context.xmlWriter().startElement("draw:handle");
-    context.xmlWriter().addAttribute("draw:handle-position", m_positionX->toString() + ' ' + m_positionY->toString());
-    if (isPolar()) {
-        context.xmlWriter().addAttribute("draw:handle-polar", m_polarX->toString() + ' ' + m_polarY->toString());
-        if (m_minRadius) {
-            context.xmlWriter().addAttribute("draw:handle-radius-range-minimum", m_minRadius->toString());
-        }
-        if (m_maxRadius) {
-            context.xmlWriter().addAttribute("draw:handle-radius-range-maximum", m_maxRadius->toString());
-        }
-    } else {
-        if (m_minimumX) {
-            context.xmlWriter().addAttribute("draw:handle-range-x-minimum", m_minimumX->toString());
-        }
-        if (m_maximumX) {
-            context.xmlWriter().addAttribute("draw:handle-range-x-maximum", m_maximumX->toString());
-        }
-        if (m_minimumY) {
-            context.xmlWriter().addAttribute("draw:handle-range-y-minimum", m_minimumY->toString());
-        }
-        if (m_maximumY) {
-            context.xmlWriter().addAttribute("draw:handle-range-y-maximum", m_maximumY->toString());
-        }
-    }
-    context.xmlWriter().endElement(); // draw:handle
-}
-
-bool EnhancedPathHandle::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
-{
-    if (element.localName() != "handle" || element.namespaceURI() != KoXmlNS::draw) {
-        return false;
-    }
-
-    QString position = element.attributeNS(KoXmlNS::draw, "handle-position");
-#ifndef NWORKAROUND_ODF_BUGS
-    KoOdfWorkaround::fixEnhancedPathPolarHandlePosition(position, element, context);
-#endif
-    QStringList tokens = position.simplified().split(' ');
-    if (tokens.count() != 2) {
-        return false;
-    }
-
-    setPosition(m_parent->parameter(tokens[0]), m_parent->parameter(tokens[1]));
-
-    // check if we have a polar handle
-    if (element.hasAttributeNS(KoXmlNS::draw, "handle-polar")) {
-        QString polar = element.attributeNS(KoXmlNS::draw, "handle-polar");
-        QStringList tokens = polar.simplified().split(' ');
-        if (tokens.count() == 2) {
-            setPolarCenter(m_parent->parameter(tokens[0]), m_parent->parameter(tokens[1]));
-
-            QString minRadius = element.attributeNS(KoXmlNS::draw, "handle-radius-range-minimum");
-            QString maxRadius = element.attributeNS(KoXmlNS::draw, "handle-radius-range-maximum");
-            if (!minRadius.isEmpty() && !maxRadius.isEmpty()) {
-                setRadiusRange(m_parent->parameter(minRadius), m_parent->parameter(maxRadius));
-            }
-        }
-    } else {
-        QString minX = element.attributeNS(KoXmlNS::draw, "handle-range-x-minimum");
-        QString maxX = element.attributeNS(KoXmlNS::draw, "handle-range-x-maximum");
-        if (!minX.isEmpty() && ! maxX.isEmpty()) {
-            setRangeX(m_parent->parameter(minX), m_parent->parameter(maxX));
-        }
-
-        QString minY = element.attributeNS(KoXmlNS::draw, "handle-range-y-minimum");
-        QString maxY = element.attributeNS(KoXmlNS::draw, "handle-range-y-maximum");
-        if (!minY.isEmpty() && ! maxY.isEmpty()) {
-            setRangeY(m_parent->parameter(minY), m_parent->parameter(maxY));
-        }
-    }
-
-    return hasPosition();
 }

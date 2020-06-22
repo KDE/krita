@@ -28,6 +28,7 @@
 #include <kis_pressure_size_option.h>
 #include <kis_curve_option_widget.h>
 #include <kis_compositeop_option.h>
+#include <KisGlobalResourcesInterface.h>
 
 KisExperimentPaintOpSettingsWidget:: KisExperimentPaintOpSettingsWidget(QWidget* parent)
     : KisPaintOpSettingsWidget(parent)
@@ -43,7 +44,7 @@ KisExperimentPaintOpSettingsWidget::~ KisExperimentPaintOpSettingsWidget()
 
 KisPropertiesConfigurationSP  KisExperimentPaintOpSettingsWidget::configuration() const
 {
-    KisExperimentPaintOpSettings* config = new KisExperimentPaintOpSettings();
+    KisExperimentPaintOpSettings* config = new KisExperimentPaintOpSettings(KisGlobalResourcesInterface::instance());
     config->setOptionsWidget(const_cast<KisExperimentPaintOpSettingsWidget*>(this));
     config->setProperty("paintop", "experimentbrush"); // XXX: make this a const id string
     writeConfiguration(config);

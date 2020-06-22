@@ -89,7 +89,7 @@ namespace KisLayerUtils {
 
         SwitchFrameCommand::SharedStorageSP storage;
         QSet<int> frames;
-        bool useInTimeline = false;
+        bool pinnedToTimeline = false;
         bool enableOnionSkins = false;
 
         virtual KisNodeList allSrcNodes() = 0;
@@ -111,7 +111,7 @@ namespace KisLayerUtils {
                 fetchLayerFramesRecursive(prevLayer) |
                 fetchLayerFramesRecursive(currLayer);
 
-            useInTimeline = prevLayer->useInTimeline() || currLayer->useInTimeline();
+            pinnedToTimeline = prevLayer->isPinnedToTimeline() || currLayer->isPinnedToTimeline();
 
             const KisPaintLayer *paintLayer = qobject_cast<KisPaintLayer*>(currLayer.data());
             if (paintLayer) enableOnionSkins |= paintLayer->onionSkinEnabled();
@@ -139,7 +139,7 @@ namespace KisLayerUtils {
         {
             foreach (KisNodeSP node, mergedNodes) {
                 frames |= fetchLayerFramesRecursive(node);
-                useInTimeline |= node->useInTimeline();
+                pinnedToTimeline |= node->isPinnedToTimeline();
 
                 const KisPaintLayer *paintLayer = qobject_cast<KisPaintLayer*>(node.data());
                 if (paintLayer) {
@@ -380,7 +380,7 @@ namespace KisLayerUtils {
                 m_info->dstNode->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
             }
 
-            m_info->dstNode->setUseInTimeline(m_info->useInTimeline);
+            m_info->dstNode->setPinnedToTimeline(m_info->pinnedToTimeline);
 
             KisPaintLayer *dstPaintLayer = qobject_cast<KisPaintLayer*>(m_info->dstNode.data());
             if (dstPaintLayer) {
@@ -459,7 +459,7 @@ namespace KisLayerUtils {
 
             m_info->nodesCompositingVaries = compositionVaries;
 
-            m_info->dstNode->setUseInTimeline(m_info->useInTimeline);
+            m_info->dstNode->setPinnedToTimeline(m_info->pinnedToTimeline);
             dstPaintLayer->setOnionSkinEnabled(m_info->enableOnionSkins);
         }
 
@@ -1423,7 +1423,7 @@ namespace KisLayerUtils {
                     mask->selection()->pixelSelection(), SELECTION_ADD);
             }
 
-            KisSelectionMaskSP mergedMask = new KisSelectionMask(m_info->image);
+            KisSelectionMaskSP mergedMask = new KisSelectionMask(m_info->image, i18n("Selection Mask"));
             mergedMask->initSelection(parentLayer);
             mergedMask->setSelection(selection);
 
@@ -1644,6 +1644,16 @@ namespace KisLayerUtils {
             exactBounds |= node->projectionPlane()->tightUserVisibleBounds();
         });
         return exactBounds;
+    }
+
+    KisNodeSP findRoot(KisNodeSP node)
+    {
+        if (!node) return node;
+
+        while (node->parent()) {
+            node = node->parent();
+        }
+        return node;
     }
 
 }

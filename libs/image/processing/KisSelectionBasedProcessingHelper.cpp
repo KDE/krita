@@ -32,7 +32,7 @@ KUndo2Command *KisSelectionBasedProcessingHelper::createInitCommand(Functor func
         {
         }
 
-        KUndo2Command* paint() {
+        KUndo2Command* paint() override {
             m_cutSelection->pixelSelection()->makeCloneFromRough(m_selection->pixelSelection(), m_selection->selectedRect());
 
             KisTransaction t(m_selection->pixelSelection());

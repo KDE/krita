@@ -21,10 +21,11 @@
 
 #include "kritapaintop_export.h"
 #include <kis_types.h>
+#include <kis_brush.h>
 
+class KisResourcesInterface;
+using KisResourcesInterfaceSP = QSharedPointer<KisResourcesInterface>;
 
-class KisBrush;
-typedef KisSharedPtr<KisBrush> KisBrushSP;
 
 struct PAINTOP_EXPORT KisMaskingBrushOptionProperties
 {
@@ -36,7 +37,8 @@ struct PAINTOP_EXPORT KisMaskingBrushOptionProperties
     bool useMasterSize = true;
 
     void write(KisPropertiesConfiguration *setting, qreal masterBrushSize) const;
-    void read(const KisPropertiesConfiguration *setting, qreal masterBrushSize);
+    void read(const KisPropertiesConfiguration *setting, qreal masterBrushSize, KisResourcesInterfaceSP resourcesInterface);
+    QList<KoResourceSP> prepareLinkedResources(const KisPropertiesConfigurationSP settings, KisResourcesInterfaceSP resourcesInterface);
 };
 
 #endif // KISMASKINGBRUSHOPTIONPROPERTIES_H

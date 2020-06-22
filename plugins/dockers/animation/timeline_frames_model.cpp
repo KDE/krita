@@ -22,7 +22,7 @@
 #include <QColor>
 #include <QMimeData>
 #include <QPointer>
-#include <KoResourceModel.h>
+#include <KisResourceModel.h>
 
 #include "kis_layer.h"
 #include "kis_config.h"
@@ -197,7 +197,7 @@ struct TimelineFramesModel::Private
 
         if (nodeInterface) {
             KisLayerSP layer = nodeInterface->addPaintLayer();
-            layer->setUseInTimeline(true);
+            layer->setPinnedToTimeline(true);
         }
 
         return true;
@@ -291,6 +291,7 @@ void TimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade,
     if (m_d->dummiesFacade) {
         emit sigInfiniteTimelineUpdateNeeded();
         emit sigAudioChannelChanged();
+        slotCurrentTimeChanged(m_d->image->animationInterface()->currentUITime());
     }
 }
 
@@ -391,20 +392,14 @@ QVariant TimelineFramesModel::data(const QModelIndex &index, int role) const
     case Qt::TextAlignmentRole: {
         return QVariant(Qt::AlignHCenter | Qt::AlignVCenter);
     }
-    case KoResourceModel::LargeThumbnailRole: {
+    case Qt::UserRole + KisResourceModel::LargeThumbnail: {
         KisNodeDummy *dummy = m_d->converter->dummyFromRow(index.row());
         if (!dummy) {
             return  QVariant();
         }
         const int maxSize = 200;
 
-        QSize size = dummy->node()->extent().size();
-        size.scale(maxSize, maxSize, Qt::KeepAspectRatio);
-        if (size.width() == 0 || size.height() == 0) {
-            // No thumbnail can be shown if there isn't width or height...
-            return QVariant();
-        }
-        QImage image(dummy->node()->createThumbnailForFrame(size.width(), size.height(), index.column()));
+        QImage image(dummy->node()->createThumbnailForFrame(maxSize, maxSize, index.column(), Qt::KeepAspectRatio));
         return image;
     }
     }
@@ -481,7 +476,7 @@ QVariant TimelineFramesModel::headerData(int section, Qt::Orientation orientatio
             QFont baseFont;
             if (node->projectionLeaf()->isDroppedNode()) {
                 baseFont.setStrikeOut(true);
-            } else if (m_d->image && m_d->image->isolatedModeRoot() &&
+            } else if (m_d->image && m_d->image->isolationRootNode() &&
                        KisNodeModel::belongsToIsolatedGroup(m_d->image, node, m_d->dummiesFacade)) {
                 baseFont.setBold(true);
             }
@@ -499,10 +494,10 @@ QVariant TimelineFramesModel::headerData(int section, Qt::Orientation orientatio
 
             return QVariant::fromValue(list);
         }
-        case LayerUsedInTimelineRole: {
+        case PinnedToTimelineRole: {
             KisNodeDummy *dummy = m_d->converter->dummyFromRow(section);
             if (!dummy) return QVariant();
-            return dummy->node()->useInTimeline();
+            return dummy->node()->isPinnedToTimeline();
         }
         case Qt::BackgroundRole: {
             int label = m_d->layerColorLabel(section);
@@ -539,10 +534,10 @@ bool TimelineFramesModel::setHeaderData(int section, Qt::Orientation orientation
             emit headerDataChanged (Qt::Vertical, section, section);
             return result;
         }
-        case LayerUsedInTimelineRole: {
+        case PinnedToTimelineRole: {
             KisNodeDummy *dummy = m_d->converter->dummyFromRow(section);
             if (!dummy) return false;
-            dummy->node()->setUseInTimeline(value.toBool());
+            dummy->node()->setPinnedToTimeline(value.toBool());
             return true;
         }
         }
@@ -808,7 +803,7 @@ bool TimelineFramesModel::insertOtherLayer(int index, int dstRow)
 
     if (index < 0 || index >= list.size()) return false;
 
-    list[index].dummy->node()->setUseInTimeline(true);
+    list[index].dummy->node()->setPinnedToTimeline(true);
     dstRow = m_d->converter->rowForDummy(list[index].dummy);
     setData(this->index(dstRow, 0), true, ActiveLayerRole);
 

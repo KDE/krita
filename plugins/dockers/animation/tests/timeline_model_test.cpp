@@ -84,9 +84,9 @@ void TimelineModelTest::testConverter()
 
     m_layer1->enableAnimation();
 
-    m_layer1->setUseInTimeline(true);
-    m_layer2->setUseInTimeline(true);
-    m_sel3->setUseInTimeline(true);
+    m_layer1->setPinnedToTimeline(true);
+    m_layer2->setPinnedToTimeline(true);
+    m_sel3->setPinnedToTimeline(true);
 
     TimelineFramesIndexConverter converter(m_shapeController);
 
@@ -200,7 +200,7 @@ void TimelineModelTest::testView()
     model->setNodeManipulationInterface(new TestingInterface(m_image));
 
     m_layer1->enableAnimation();
-    m_layer1->setUseInTimeline(true);
+    m_layer1->setPinnedToTimeline(true);
 
     connect(intFps, SIGNAL(valueChanged(int)),
             m_image->animationInterface(), SLOT(setFramerate(int)));

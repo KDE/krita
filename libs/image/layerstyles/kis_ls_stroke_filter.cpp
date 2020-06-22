@@ -98,16 +98,13 @@ void KisLsStrokeFilter::applyStroke(KisPaintDeviceSP srcDevice,
 
     const QRect needRect = kisGrowRect(applyRect, borderSize(config->position(), config->size()));
 
-    KisSelectionSP baseSelection = blower->knockoutSelectionLazy();
+    KisSelectionSP finalBlowerSelection = blower->knockoutSelectionLazy();
+
+    KisCachedSelection::Guard s1(*env->cachedSelection());
+    KisSelectionSP baseSelection = s1.selection();
 
     KisLsUtils::selectionFromAlphaChannel(srcDevice, baseSelection, needRect);
     KisPixelSelectionSP selection = baseSelection->pixelSelection();
-
-//    KritaUtils::filterAlpha8Device(selection, needRect,
-//                                   [](quint8 pixel) {
-//                                       return pixel > 0 ? 255 : 0;
-//                                   });
-//    KisGaussianKernel::applyGaussian(selection, needRect, 1.0, 1.0, QBitArray(), 0);
 
     {
         KisCachedSelection::Guard s2(*env->cachedSelection());
@@ -125,8 +122,10 @@ void KisLsStrokeFilter::applyStroke(KisPaintDeviceSP srcDevice,
 
         KisPainter gc(selection);
         gc.setCompositeOp(COMPOSITE_ERASE);
-        gc.bitBlt(needRect.topLeft(), knockOutSelection, needRect);
+        gc.bitBlt(applyRect.topLeft(), knockOutSelection, applyRect);
         gc.end();
+
+        KisPainter::copyAreaOptimized(applyRect.topLeft(), selection, finalBlowerSelection->pixelSelection(), applyRect);
     }
 
     const QString compositeOp = config->blendMode();

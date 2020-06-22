@@ -37,7 +37,7 @@
 #include <kis_config.h>
 #include "testutil.h"
 #include "opengl/kis_opengl.h"
-
+#include <KisGlobalResourcesInterface.h>
 
 void addResourceTypes()
 {
@@ -46,21 +46,21 @@ void addResourceTypes()
     KoResourcePaths::addResourceType("icc_profiles", "data", "/color/icc");
     KoResourcePaths::addResourceType("icc_profiles", "data", "/profiles/");
     KoResourcePaths::addResourceType("kis_actions", "data", "/actions");
-    KoResourcePaths::addResourceType("kis_brushes", "data", "/brushes/");
+    KoResourcePaths::addResourceType(ResourceType::Brushes, "data", "/brushes/");
     KoResourcePaths::addResourceType("kis_defaultpresets", "data", "/defaultpresets/");
     KoResourcePaths::addResourceType("kis_images", "data", "/images/");
-    KoResourcePaths::addResourceType("kis_paintoppresets", "data", "/paintoppresets/");
+    KoResourcePaths::addResourceType(ResourceType::PaintOpPresets, "data", "/paintoppresets/");
     KoResourcePaths::addResourceType("kis_pics", "data", "/pics/");
     KoResourcePaths::addResourceType("kis_resourcebundles", "data", "/bundles/");
     KoResourcePaths::addResourceType("kis_shortcuts", "data", "/shortcuts/");
     KoResourcePaths::addResourceType("kis_taskset", "data", "/taskset/");
     KoResourcePaths::addResourceType("kis_taskset", "data", "/taskset/");
-    KoResourcePaths::addResourceType("kis_windowlayouts", "data", "/windowlayouts/");
-    KoResourcePaths::addResourceType("kis_workspaces", "data", "/workspaces/");
-    KoResourcePaths::addResourceType("ko_effects", "data", "/effects/");
-    KoResourcePaths::addResourceType("ko_gradients", "data", "/gradients/");
-    KoResourcePaths::addResourceType("ko_palettes", "data", "/palettes/");
-    KoResourcePaths::addResourceType("ko_patterns", "data", "/patterns/");
+    KoResourcePaths::addResourceType(ResourceType::WindowLayouts, "data", "/windowlayouts/");
+    KoResourcePaths::addResourceType(ResourceType::Workspaces, "data", "/workspaces/");
+    KoResourcePaths::addResourceType(ResourceType::FilterEffects, "data", "/effects/");
+    KoResourcePaths::addResourceType(ResourceType::Gradients, "data", "/gradients/");
+    KoResourcePaths::addResourceType(ResourceType::Palettes, "data", "/palettes/");
+    KoResourcePaths::addResourceType(ResourceType::Patterns, "data", "/patterns/");
     KoResourcePaths::addResourceType("metadata_schema", "data", "/metadata/schemas/");
     KoResourcePaths::addResourceType("psd_layer_style_collections", "data", "/asl");
     KoResourcePaths::addResourceType("tags", "data", "/tags/");
@@ -77,8 +77,6 @@ void KisDerivedResourcesTest::test()
 
     KisDocument* doc = createEmptyDocument();
 
-
-
     KisMainWindow* mainWindow = KisPart::instance()->createMainWindow();
     QPointer<KisView> view = new KisView(doc, mainWindow->viewManager(), mainWindow);
     KisViewManager *viewManager = new KisViewManager(mainWindow, mainWindow->actionCollection());
@@ -93,12 +91,11 @@ void KisDerivedResourcesTest::test()
     KisPaintOpPresetSP preset;
     if (!presetFileName.isEmpty()) {
         QString fullFileName = TestUtil::fetchDataFileLazy(presetFileName);
-        preset = new KisPaintOpPreset(fullFileName);
-        bool presetValid = preset->load();
+        preset = KisPaintOpPresetSP(new KisPaintOpPreset(fullFileName));
+        bool presetValid = preset->load(KisGlobalResourcesInterface::instance());
         Q_ASSERT(presetValid); Q_UNUSED(presetValid);
 
         i.setValue(preset);
-
     }
 
     QVERIFY(i.isValid());

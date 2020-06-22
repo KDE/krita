@@ -36,6 +36,7 @@
 #include <math.h>
 
 #include <kis_debug.h>
+#include "kis_algebra_2d.h"
 
 ShapeResizeStrategy::ShapeResizeStrategy(KoToolBase *tool, KoSelection *selection, const QPointF &clicked, KoFlake::SelectionHandle direction, bool forceUniformScalingMode)
     : KoInteractionStrategy(tool),
@@ -180,20 +181,18 @@ void ShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModi
     QSizeF minDocSize = tool()->canvas()->viewConverter()->viewToDocument(minViewSize);
 
     if (qAbs(newWidth) < minDocSize.width()) {
-        int sign = newWidth >= 0.0 ? 1 : -1; // zero -> '1'
-        newWidth = sign * minDocSize.width();
+        newWidth = KisAlgebra2D::signPZ(newWidth) * minDocSize.width();
     }
 
     if (qAbs(newHeight) < minDocSize.height()) {
-        int sign = newHeight >= 0.0 ? 1 : -1; // zero -> '1'
-        newHeight = sign * minDocSize.height();
+        newHeight = KisAlgebra2D::signPZ(newHeight) * minDocSize.height();
     }
 
-    qreal zoomX = newWidth / startWidth;
-    qreal zoomY = newHeight / startHeight;
+    qreal zoomX = qAbs(startWidth) >= minDocSize.width() ? newWidth / startWidth : 1.0;
+    qreal zoomY = qAbs(startHeight) >= minDocSize.height() ? newHeight / startHeight : 1.0;
 
     if (keepAspect) {
-        const bool cornerUsed = ((m_bottom ? 1 : 0) + (m_top ? 1 : 0) + (m_left ? 1 : 0) + (m_right ? 1 : 0)) == 2;
+        const bool cornerUsed = m_bottom + m_top + m_left + m_right == 2;
         if (cornerUsed) {
             if (startWidth < startHeight) {
                 zoomY = zoomX;

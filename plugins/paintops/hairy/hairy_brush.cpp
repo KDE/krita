@@ -136,7 +136,7 @@ void HairyBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const K
     Bristle *bristle = 0;
     KoColor bristleColor(dab->colorSpace());
 
-    m_dabAccessor = dab->createRandomAccessorNG((int)x1, (int)y1);
+    m_dabAccessor = dab->createRandomAccessorNG();
 
     m_dab = dab;
 

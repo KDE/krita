@@ -84,7 +84,7 @@ struct CallbackVerifier {
         m_numCallsHappened++;
     }
 
-    void setPattern(const KoPattern *pattern) {
+    void setPattern(const KoPatternSP pattern) {
         dbgKrita << ppVar(pattern->name());
         dbgKrita << ppVar(pattern->filename());
 
@@ -130,12 +130,12 @@ void KisAslParserTest::testASLXMLWriter()
     KisAslXmlWriter w;
 
     QImage testImage(QSize(16, 16), QImage::Format_ARGB32);
-    KoPattern testPattern1(testImage, "Some very nice name ;)", "");
-    KoPattern testPattern2(testImage, "Another very nice name ;P", "");
+    KoPatternSP testPattern1(new KoPattern(testImage, "Some very nice name ;)", ""));
+    KoPatternSP testPattern2(new KoPattern(testImage, "Another very nice name ;P", ""));
 
-    w.enterList("Patterns");
-    w.writePattern("", &testPattern1);
-    w.writePattern("", &testPattern2);
+    w.enterList(ResourceType::Patterns);
+    w.writePattern("", testPattern1);
+    w.writePattern("", testPattern2);
     w.leaveList();
 
     w.enterDescriptor("", "", "null");
@@ -287,7 +287,7 @@ void KisAslParserTest::testASLWriter()
 
 void KisAslParserTest::testParserWithPatterns()
 {
-    QDir dir(QString(FILES_DATA_DIR) + QDir::separator() + "testset");
+    QDir dir(QString(FILES_DATA_DIR) + '/' + "testset");
 
     QFileInfoList files = dir.entryInfoList(QStringList() << "*.asl", QDir::Files);
 
@@ -317,6 +317,7 @@ void KisAslParserTest::testParserWithPatterns()
         KisAslCallbackObjectCatcher c;
 
         c.subscribePattern("/Patterns/KisPattern", std::bind(&CallbackVerifier::setPattern, &verifier, std::placeholders::_1));
+        c.subscribePattern("/patterns/KisPattern", std::bind(&CallbackVerifier::setPattern, &verifier, std::placeholders::_1));
 
         KisAslXmlParser parser;
         parser.parseXML(doc, c);

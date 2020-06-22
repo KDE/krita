@@ -412,15 +412,14 @@ void KoCanvasControllerWidget::zoomOut(const QPoint &center)
     zoomBy(center, sqrt(0.5));
 }
 
+
 void KoCanvasControllerWidget::zoomBy(const QPoint &center, qreal zoom)
 {
-    setPreferredCenterFractionX(1.0 * center.x() / documentSize().width());
-    setPreferredCenterFractionY(1.0 * center.y() / documentSize().height());
+    const QPointF oldCenter = preferredCenter();
+    const QPointF newCenter = center + scrollBarValue();
+    const QPointF stillPoint = (zoom * newCenter - oldCenter) / (zoom - 1.0);
 
-    const bool oldIgnoreScrollSignals = d->ignoreScrollSignals;
-    d->ignoreScrollSignals = true;
-    proxyObject->emitZoomRelative(zoom, preferredCenter());
-    d->ignoreScrollSignals = oldIgnoreScrollSignals;
+    proxyObject->emitZoomRelative(zoom, stillPoint);
 }
 
 void KoCanvasControllerWidget::zoomTo(const QRect &viewRect)
@@ -570,6 +569,17 @@ bool KoCanvasControllerWidget::focusNextPrevChild(bool)
 {
     // we always return false meaning the canvas takes keyboard focus, but never gives it away.
     return false;
+}
+
+bool KoCanvasControllerWidget::viewportEvent(QEvent *event) {
+    // Workaround: Don't let QAbstractScrollArea handle Gesture events. Because
+    // Qt's detection of touch point positions is a bit buggy, it is handled
+    // with custom algorithms in the KisInputManager. But we must also not let
+    // the corresponding event propagate to the parent QAbstractScrollArea.
+    if (event->type() == QEvent::Gesture) {
+        return false;
+    }
+    return QAbstractScrollArea::viewportEvent(event);
 }
 
 void KoCanvasControllerWidget::setMargin(int margin)

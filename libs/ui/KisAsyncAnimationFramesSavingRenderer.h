@@ -33,7 +33,8 @@ public:
                                           const QString &fileNameSuffix,
                                           const QByteArray &outputMimeType,
                                           const KisTimeRange &range,
-                                          int sequenceNumberingOffset,
+                                          const int sequenceNumberingOffset,
+                                          const bool onlyNeedsUniqueFrames,
                                           KisPropertiesConfigurationSP exportConfiguration);
     ~KisAsyncAnimationFramesSavingRenderer();
 

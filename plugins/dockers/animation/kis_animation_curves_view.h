@@ -85,6 +85,7 @@ private:
     struct Private;
     const QScopedPointer<Private> m_d;
 
+    void paintFrames(QPainter &painter);
     void paintCurves(QPainter &painter, int firstFrame, int lastFrame);
     void paintCurve(int channel, int firstFrame, int lastFrame, QPainter &painter);
     void paintCurveSegment(QPainter &painter, QPointF pos1, QPointF rightTangent, QPointF leftTangent, QPointF pos2);
@@ -93,6 +94,8 @@ private:
 
     void findExtremes(qreal *minimum, qreal *maximum);
     void updateVerticalRange();
+
+
 
     void startPan(QPoint mousePos);
 };

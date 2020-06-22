@@ -480,7 +480,7 @@ class comic_meta_data_editor(QDialog):
                 r = 0
                 for row in ratings:
                     listItem = []
-                    if r is 0:
+                    if r == 0:
                         title = row[1]
                     else:
                         listItem = self.ratingKeysList[title]
@@ -614,7 +614,7 @@ class comic_meta_data_editor(QDialog):
             else:
                 self.cmbLanguage.setEntryToCode(code)
         if "readingDirection" in config.keys():
-            if config["readingDirection"] is "leftToRight":
+            if config["readingDirection"] == "leftToRight":
                 self.cmbReadingMode.setCurrentIndex(int(Qt.LeftToRight))
             else:
                 self.cmbReadingMode.setCurrentIndex(int(Qt.RightToLeft))

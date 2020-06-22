@@ -39,8 +39,10 @@
 #include <kis_paint_action_type_option.h>
 #include <kis_dom_utils.h>
 
-KisDuplicateOpSettings::KisDuplicateOpSettings()
-    : m_isOffsetNotUptodate(false), m_duringPaintingStroke(false)
+KisDuplicateOpSettings::KisDuplicateOpSettings(KisResourcesInterfaceSP resourcesInterface)
+    : KisBrushBasedPaintOpSettings(resourcesInterface),
+      m_isOffsetNotUptodate(false),
+      m_duringPaintingStroke(false)
 {
 }
 
@@ -144,7 +146,7 @@ KisPaintOpSettingsSP KisDuplicateOpSettings::clone() const
     return setting;
 }
 
-QPainterPath KisDuplicateOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode)
+QPainterPath KisDuplicateOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
 {
     QPainterPath path;
 
@@ -156,7 +158,7 @@ QPainterPath KisDuplicateOpSettings::brushOutline(const KisPaintInformation &inf
     }
 
     // clone tool should always show an outline
-    path = KisBrushBasedPaintOpSettings::brushOutlineImpl(info, forcedMode, 1.0);
+    path = KisBrushBasedPaintOpSettings::brushOutlineImpl(info, forcedMode, alignForZoom, 1.0);
 
     QPainterPath copy(path);
     QRectF rect2 = copy.boundingRect();
@@ -196,60 +198,60 @@ QPainterPath KisDuplicateOpSettings::brushOutline(const KisPaintInformation &inf
 QList<KisUniformPaintOpPropertySP> KisDuplicateOpSettings::uniformProperties(KisPaintOpSettingsSP settings)
 {
     QList<KisUniformPaintOpPropertySP> props =
-        listWeakToStrong(m_uniformProperties);
+            listWeakToStrong(m_uniformProperties);
 
     if (props.isEmpty()) {
         {
             KisUniformPaintOpPropertyCallback *prop =
-                new KisUniformPaintOpPropertyCallback(
-                    KisUniformPaintOpPropertyCallback::Bool,
-                    "clone_healing",
-                    i18n("Healing"),
-                    settings, 0);
+                    new KisUniformPaintOpPropertyCallback(
+                        KisUniformPaintOpPropertyCallback::Bool,
+                        "clone_healing",
+                        i18n("Healing"),
+                        settings, 0);
 
             prop->setReadCallback(
-                [](KisUniformPaintOpProperty *prop) {
-                    KisDuplicateOptionProperties option;
-                    option.readOptionSetting(prop->settings().data());
+                        [](KisUniformPaintOpProperty *prop) {
+                KisDuplicateOptionProperties option;
+                option.readOptionSetting(prop->settings().data());
 
-                    prop->setValue(option.duplicate_healing);
-                });
+                prop->setValue(option.duplicate_healing);
+            });
             prop->setWriteCallback(
-                [](KisUniformPaintOpProperty *prop) {
-                    KisDuplicateOptionProperties option;
-                    option.readOptionSetting(prop->settings().data());
-                    option.duplicate_healing = prop->value().toBool();
-                    option.writeOptionSetting(prop->settings().data());
-                });
+                        [](KisUniformPaintOpProperty *prop) {
+                KisDuplicateOptionProperties option;
+                option.readOptionSetting(prop->settings().data());
+                option.duplicate_healing = prop->value().toBool();
+                option.writeOptionSetting(prop->settings().data());
+            });
 
-            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            QObject::connect(updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
             prop->requestReadValue();
             props << toQShared(prop);
         }
         {
             KisUniformPaintOpPropertyCallback *prop =
-                new KisUniformPaintOpPropertyCallback(
-                    KisUniformPaintOpPropertyCallback::Bool,
-                    "clone_movesource",
-                    i18n("Move Source"),
-                    settings, 0);
+                    new KisUniformPaintOpPropertyCallback(
+                        KisUniformPaintOpPropertyCallback::Bool,
+                        "clone_movesource",
+                        i18n("Move Source"),
+                        settings, 0);
 
             prop->setReadCallback(
-                [](KisUniformPaintOpProperty *prop) {
-                    KisDuplicateOptionProperties option;
-                    option.readOptionSetting(prop->settings().data());
+                        [](KisUniformPaintOpProperty *prop) {
+                KisDuplicateOptionProperties option;
+                option.readOptionSetting(prop->settings().data());
 
-                    prop->setValue(option.duplicate_move_source_point);
-                });
+                prop->setValue(option.duplicate_move_source_point);
+            });
             prop->setWriteCallback(
-                [](KisUniformPaintOpProperty *prop) {
-                    KisDuplicateOptionProperties option;
-                    option.readOptionSetting(prop->settings().data());
-                    option.duplicate_move_source_point = prop->value().toBool();
-                    option.writeOptionSetting(prop->settings().data());
-                });
+                        [](KisUniformPaintOpProperty *prop) {
+                KisDuplicateOptionProperties option;
+                option.readOptionSetting(prop->settings().data());
+                option.duplicate_move_source_point = prop->value().toBool();
+                option.writeOptionSetting(prop->settings().data());
+            });
 
-            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            QObject::connect(updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
             prop->requestReadValue();
             props << toQShared(prop);
         }

@@ -21,13 +21,10 @@
 
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
-#include <KoGenStyle.h>
-#include <KoGenStyles.h>
 #include "KoPathShape.h"
 #include "KoPathShapeLoader.h"
 #include "KoShapeLoadingContext.h"
 #include "KoShapeSavingContext.h"
-#include "KoOdfWorkaround.h"
 #include "KoShapePainter.h"
 #include <KoShapeStroke.h>
 #include <KoGradientBackground.h>
@@ -266,10 +263,6 @@ qreal KoMarker::maxInset(qreal strokeWidth) const
     result = qMax(KisAlgebra2D::norm(shapesBounds.topRight()), result);
     result = qMax(KisAlgebra2D::norm(shapesBounds.bottomLeft()), result);
     result = qMax(KisAlgebra2D::norm(shapesBounds.bottomRight()), result);
-
-    if (d->coordinateSystem == StrokeWidth) {
-        result *= strokeWidth;
-    }
 
     return result;
 }

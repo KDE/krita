@@ -250,11 +250,25 @@ QString VideoExportOptionsDialog::customUserOptionsString() const
     return customUserOptions().join(' ');
 }
 
-bool VideoExportOptionsDialog::forceHDRModeForFrames() const
+bool VideoExportOptionsDialog::videoConfiguredForHDR() const
 {
     return currentCodecId() == "libx265" &&
         ui->chkUseHDRMetadata->isEnabled() &&
-        ui->chkUseHDRMetadata->isChecked();
+            ui->chkUseHDRMetadata->isChecked();
+}
+
+void VideoExportOptionsDialog::setHDRConfiguration(bool value) {
+    if (value && currentCodecId() != "libx265") {
+        ui->cmbCodec->setCurrentIndex(m_d->codecs.indexOf(KoID("libx265")));
+        ui->chkUseHDRMetadata->setEnabled(true);
+    }
+
+    //If HDR is enabled && the codec id is correct, we need to use main10.
+    if (value && currentCodecId() == "libx265") {
+        ui->cmbProfileH265->setCurrentIndex(m_d->profilesH265.indexOf(KoID("main10")));
+    }
+
+    ui->chkUseHDRMetadata->setChecked(value);
 }
 
 int findIndexById(const QString &id, const QVector<KoID> &ids)
@@ -373,8 +387,6 @@ QString VideoExportOptionsDialog::currentCodecId() const
 
 void VideoExportOptionsDialog::slotH265ProfileChanged(int index)
 {
-    ENTER_FUNCTION() << ppVar(m_d->profilesH265[index].id());
-
     const bool enableHDR =
         m_d->supportsHDR &&
         index >= 0 &&

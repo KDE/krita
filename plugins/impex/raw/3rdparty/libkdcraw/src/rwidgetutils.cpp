@@ -35,6 +35,7 @@
 #include <QVBoxLayout>
 #include <QApplication>
 #include <QScreen>
+#include <QDesktopWidget>
 #include <QPushButton>
 #include <QFileInfo>
 #include <QPainter>
@@ -258,8 +259,21 @@ QSize RAdjustableLabel::minimumSizeHint() const
 QSize RAdjustableLabel::sizeHint() const
 {
     QFontMetrics fm(fontMetrics());
-    QScreen *s = qApp->screenAt(geometry().topLeft());
-    int maxW     = s->availableGeometry().width() * 3 / 4;
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+    QRect geom = geometry();
+    QPoint p(geom.width() / 2 + geom.left(), geom.height() / 2 + geom.top());
+    QScreen *s = qApp->screenAt(p);
+    int maxW;
+    if (s) {
+         maxW = s->availableGeometry().width() * 3 / 4;
+    }
+    else {
+        maxW = 1024;
+    }
+#else
+    int maxW = QApplication::desktop()->screenGeometry(this).width() * 3 / 4;
+#endif
+
 #if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
     int currentW = fm.horizontalAdvance(d->ajdText);
 #else

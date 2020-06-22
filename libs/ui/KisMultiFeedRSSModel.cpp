@@ -37,104 +37,29 @@
 #include <QXmlStreamReader>
 #include <QCoreApplication>
 #include <QLocale>
+#include <QFile>
 
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <KisNetworkAccessManager.h>
 
-QString shortenHtml(QString html)
-{
-    html.replace(QLatin1String("<a"), QLatin1String("<i"));
-    html.replace(QLatin1String("</a"), QLatin1String("</i"));
-    uint firstParaEndXhtml = (uint) html.indexOf(QLatin1String("</p>"));
-    uint firstParaEndHtml = (uint) html.indexOf(QLatin1String("<p>"), html.indexOf(QLatin1String("<p>"))+1);
-    uint firstParaEndBr = (uint) html.indexOf(QLatin1String("<br"));
-    uint firstParaEnd = qMin(firstParaEndXhtml, firstParaEndHtml);
-    firstParaEnd = qMin(firstParaEnd, firstParaEndBr);
-    return html.left(firstParaEnd);
-}
-
-class RssReader {
-public:
-    RssItem parseItem() {
-        RssItem item;
-        item.source = requestUrl;
-        item.blogIcon = blogIcon;
-        item.blogName = blogName;
-        while (!streamReader.atEnd()) {
-            switch (streamReader.readNext()) {
-            case QXmlStreamReader::StartElement:
-                if (streamReader.name() == QLatin1String("title"))
-                    item.title = streamReader.readElementText();
-                else if (streamReader.name() == QLatin1String("link"))
-                    item.link = streamReader.readElementText();
-                else if (streamReader.name() == QLatin1String("pubDate")) {
-                    QString dateStr = streamReader.readElementText();
-                    item.pubDate = QDateTime::fromString(dateStr, Qt::RFC2822Date);
-                }
-                else if (streamReader.name() == QLatin1String("category"))
-                    item.category = streamReader.readElementText();
-                else if (streamReader.name() == QLatin1String("description"))
-                    item.description = streamReader.readElementText(); //shortenHtml(streamReader.readElementText());
-                break;
-            case QXmlStreamReader::EndElement:
-                if (streamReader.name() == QLatin1String("item"))
-                    return item;
-                break;
-            default:
-                break;
-
-            }
-        }
-        return RssItem();
-    }
-
-    RssItemList parse(QNetworkReply *reply) {
-        QUrl source = reply->request().url();
-        requestUrl = source.toString();
-        streamReader.setDevice(reply);
-        RssItemList list;
-        while (!streamReader.atEnd()) {
-            switch (streamReader.readNext()) {
-            case QXmlStreamReader::StartElement:
-                if (streamReader.name() == QLatin1String("item"))
-                    list.append(parseItem());
-                else if (streamReader.name() == QLatin1String("title"))
-                    blogName = streamReader.readElementText();
-                else if (streamReader.name() == QLatin1String("link")) {
-                    if (!streamReader.namespaceUri().isEmpty())
-                        break;
-                    QString favIconString(streamReader.readElementText());
-                    QUrl favIconUrl(favIconString);
-                    favIconUrl.setPath(QLatin1String("favicon.ico"));
-                    blogIcon = favIconUrl.toString();
-                    blogIcon = QString(); // XXX: fix the favicon on krita.org!
-                }
-                break;
-            default:
-                break;
-            }
-        }
-        return list;
-    }
-
-private:
-    QXmlStreamReader streamReader;
-    QString requestUrl;
-    QString blogIcon;
-    QString blogName;
-};
+#include <KisRssReader.h>
 
 MultiFeedRssModel::MultiFeedRssModel(QObject *parent) :
     QAbstractListModel(parent),
     m_networkAccessManager(new KisNetworkAccessManager),
     m_articleCount(0)
 {
-    connect(m_networkAccessManager, SIGNAL(finished(QNetworkReply*)),
-            SLOT(appendFeedData(QNetworkReply*)), Qt::QueuedConnection);
-
+    initialize();
 }
 
+MultiFeedRssModel::MultiFeedRssModel(KisNetworkAccessManager* nam, QObject* parent)
+    : QAbstractListModel(parent),
+      m_networkAccessManager(nam),
+      m_articleCount(0)
+{
+    initialize();
+}
 
 
 MultiFeedRssModel::~MultiFeedRssModel()
@@ -144,18 +69,24 @@ MultiFeedRssModel::~MultiFeedRssModel()
 QHash<int, QByteArray> MultiFeedRssModel::roleNames() const
 {
     QHash<int, QByteArray> roleNames;
-    roleNames[TitleRole] = "title";
-    roleNames[DescriptionRole] = "description";
-    roleNames[PubDateRole] = "pubDate";
-    roleNames[LinkRole] = "link";
-    roleNames[CategoryRole] = "category";
-    roleNames[BlogNameRole] = "blogName";
-    roleNames[BlogIconRole] = "blogIcon";
+    roleNames[KisRssReader::RssRoles::TitleRole] = "title";
+    roleNames[KisRssReader::RssRoles::DescriptionRole] = "description";
+    roleNames[KisRssReader::RssRoles::PubDateRole] = "pubDate";
+    roleNames[KisRssReader::RssRoles::LinkRole] = "link";
+    roleNames[KisRssReader::RssRoles::CategoryRole] = "category";
+    roleNames[KisRssReader::RssRoles::BlogNameRole] = "blogName";
+    roleNames[KisRssReader::RssRoles::BlogIconRole] = "blogIcon";
     return roleNames;
 }
 
 void MultiFeedRssModel::addFeed(const QString& feed)
 {
+    if (m_sites.contains(feed)) {
+        // do not add the feed twice
+        return;
+    }
+
+    m_sites << feed;
     const QUrl feedUrl(feed);
     QMetaObject::invokeMethod(m_networkAccessManager, "getUrl",
                               Qt::QueuedConnection, Q_ARG(QUrl, feedUrl));
@@ -168,14 +99,25 @@ bool sortForPubDate(const RssItem& item1, const RssItem& item2)
 
 void MultiFeedRssModel::appendFeedData(QNetworkReply *reply)
 {
-    RssReader reader;
+    KisRssReader reader;
     m_aggregatedFeed.append(reader.parse(reply));
-    std::sort(m_aggregatedFeed.begin(), m_aggregatedFeed.end(), sortForPubDate);
+    sortAggregatedFeed();
     setArticleCount(m_aggregatedFeed.size());
     beginResetModel();
     endResetModel();
 
     emit feedDataChanged();
+}
+
+void MultiFeedRssModel::sortAggregatedFeed()
+{
+    std::sort(m_aggregatedFeed.begin(), m_aggregatedFeed.end(), sortForPubDate);
+}
+
+void MultiFeedRssModel::initialize()
+{
+    connect(m_networkAccessManager, SIGNAL(finished(QNetworkReply*)),
+            SLOT(appendFeedData(QNetworkReply*)), Qt::QueuedConnection);
 }
 
 void MultiFeedRssModel::removeFeed(const QString &feed)
@@ -187,6 +129,8 @@ void MultiFeedRssModel::removeFeed(const QString &feed)
             it.remove();
     }
     setArticleCount(m_aggregatedFeed.size());
+
+    m_sites.removeOne(feed);
 }
 
 int MultiFeedRssModel::rowCount(const QModelIndex &) const
@@ -206,19 +150,19 @@ QVariant MultiFeedRssModel::data(const QModelIndex &index, int role) const
                "<br><small>(" + item.pubDate.toLocalTime().toString(Qt::DefaultLocaleShortDate) + ") "
                + item.description.left(90).append("...") + "</small><hr>");
     }
-    case TitleRole:
+    case KisRssReader::RssRoles::TitleRole:
         return item.title;
-    case DescriptionRole:
+    case KisRssReader::RssRoles::DescriptionRole:
         return item.description;
-    case PubDateRole:
+    case KisRssReader::RssRoles::PubDateRole:
         return item.pubDate.toString("dd-MM-yyyy hh:mm");
-    case LinkRole:
+    case KisRssReader::RssRoles::LinkRole:
         return item.link;
-    case CategoryRole:
+    case KisRssReader::RssRoles::CategoryRole:
         return item.category;
-    case BlogNameRole:
+    case KisRssReader::RssRoles::BlogNameRole:
         return item.blogName;
-    case BlogIconRole:
+    case KisRssReader::RssRoles::BlogIconRole:
         return item.blogIcon;
     }
 

@@ -35,7 +35,7 @@ class KisFilterOpSettings : public KisBrushBasedPaintOpSettings
 {
 
 public:
-    KisFilterOpSettings();
+    KisFilterOpSettings(KisResourcesInterfaceSP resourcesInterface);
 
     ~KisFilterOpSettings() override;
     bool paintIncremental() override;

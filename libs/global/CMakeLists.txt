@@ -37,6 +37,7 @@ set(kritaglobal_LIB_SRCS
     KisFileUtils.cpp
     KisSignalMapper.cpp
     KisRegion.cpp
+    KoUnit.cpp
 )
 
 add_library(kritaglobal SHARED ${kritaglobal_LIB_SRCS} )

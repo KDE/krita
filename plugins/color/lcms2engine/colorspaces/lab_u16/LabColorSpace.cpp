@@ -49,27 +49,6 @@ bool LabU16ColorSpace::willDegrade(ColorSpaceIndependence independence) const
     }
 }
 
-QString LabU16ColorSpace::normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const
-{
-    const KoLabU16Traits::channels_type *pix = reinterpret_cast<const  KoLabU16Traits::channels_type *>(pixel);
-    Q_ASSERT(channelIndex < channelCount());
-
-    // These convert from lcms encoded format to standard ranges.
-
-    switch (channelIndex) {
-    case 0:
-        return QString().setNum(100.0 * static_cast<float>(pix[0]) / MAX_CHANNEL_L);
-    case 1:
-        return QString().setNum(100.0 * ((static_cast<float>(pix[1]) - CHANNEL_AB_ZERO_OFFSET) / MAX_CHANNEL_AB));
-    case 2:
-        return QString().setNum(100.0 * ((static_cast<float>(pix[2]) - CHANNEL_AB_ZERO_OFFSET) / MAX_CHANNEL_AB));
-    case 3:
-        return QString().setNum(100.0 * static_cast<float>(pix[3]) / UINT16_MAX);
-    default:
-        return QString("Error");
-    }
-}
-
 KoColorSpace *LabU16ColorSpace::clone() const
 {
     return new LabU16ColorSpace(name(), profile()->clone());
@@ -79,9 +58,30 @@ void LabU16ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomEl
 {
     const KoLabU16Traits::Pixel *p = reinterpret_cast<const KoLabU16Traits::Pixel *>(pixel);
     QDomElement labElt = doc.createElement("Lab");
-    labElt.setAttribute("L", KisDomUtils::toString(KoColorSpaceMaths< KoLabU16Traits::channels_type, qreal>::scaleToA(p->L)));
-    labElt.setAttribute("a", KisDomUtils::toString(KoColorSpaceMaths< KoLabU16Traits::channels_type, qreal>::scaleToA(p->a)));
-    labElt.setAttribute("b", KisDomUtils::toString(KoColorSpaceMaths< KoLabU16Traits::channels_type, qreal>::scaleToA(p->b)));
+
+    qreal a, b;
+
+    if (p->a <= KoLabColorSpaceMathsTraits<KoLabU16Traits::channels_type>::halfValueAB) {
+        a = (p->a - KoLabColorSpaceMathsTraits<KoLabU16Traits::channels_type>::zeroValueAB) /
+            (2.0 * (KoLabColorSpaceMathsTraits<KoLabU16Traits::channels_type>::halfValueAB - KoLabColorSpaceMathsTraits<KoLabU16Traits::channels_type>::zeroValueAB));
+    } else {
+        a = 0.5 +
+            (p->a - KoLabColorSpaceMathsTraits<KoLabU16Traits::channels_type>::halfValueAB) /
+                (2.0 * (KoLabColorSpaceMathsTraits<KoLabU16Traits::channels_type>::unitValueAB - KoLabColorSpaceMathsTraits<KoLabU16Traits::channels_type>::halfValueAB));
+    }
+
+    if (p->b <= KoLabColorSpaceMathsTraits<KoLabU16Traits::channels_type>::halfValueAB) {
+        b = (p->b - KoLabColorSpaceMathsTraits<KoLabU16Traits::channels_type>::zeroValueAB) /
+            (2.0 * (KoLabColorSpaceMathsTraits<KoLabU16Traits::channels_type>::halfValueAB - KoLabColorSpaceMathsTraits<KoLabU16Traits::channels_type>::zeroValueAB));
+    } else {
+        b = 0.5 +
+            (p->b - KoLabColorSpaceMathsTraits<KoLabU16Traits::channels_type>::halfValueAB) /
+                (2.0 * (KoLabColorSpaceMathsTraits<KoLabU16Traits::channels_type>::unitValueAB - KoLabColorSpaceMathsTraits<KoLabU16Traits::channels_type>::halfValueAB));
+    }
+
+    labElt.setAttribute("L", KisDomUtils::toString(KoColorSpaceMaths<KoLabU16Traits::channels_type, qreal>::scaleToA(p->L)));
+    labElt.setAttribute("a", KisDomUtils::toString(a));
+    labElt.setAttribute("b", KisDomUtils::toString(b));
     labElt.setAttribute("space", profile()->name());
     colorElt.appendChild(labElt);
 }
@@ -89,9 +89,28 @@ void LabU16ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomEl
 void LabU16ColorSpace::colorFromXML(quint8 *pixel, const QDomElement &elt) const
 {
     KoLabU16Traits::Pixel *p = reinterpret_cast<KoLabU16Traits::Pixel *>(pixel);
-    p->L = KoColorSpaceMaths< qreal, KoLabU16Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("L")));
-    p->a = KoColorSpaceMaths< qreal, KoLabU16Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("a")));
-    p->b = KoColorSpaceMaths< qreal, KoLabU16Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("b")));
+
+    double a = KisDomUtils::toDouble(elt.attribute("a"));
+    double b = KisDomUtils::toDouble(elt.attribute("b"));
+
+    p->L = KoColorSpaceMaths<qreal, KoLabU16Traits::channels_type>::scaleToA(KisDomUtils::toDouble(elt.attribute("L")));
+
+    if (a <= 0.5) {
+        p->a = KoLabColorSpaceMathsTraits<KoLabU16Traits::channels_type>::zeroValueAB +
+            2.0 * a * (KoLabColorSpaceMathsTraits<KoLabU16Traits::channels_type>::halfValueAB - KoLabColorSpaceMathsTraits<KoLabU16Traits::channels_type>::zeroValueAB);
+    } else {
+        p->a = (KoLabColorSpaceMathsTraits<KoLabU16Traits::channels_type>::halfValueAB +
+                2.0 * (a - 0.5) * (KoLabColorSpaceMathsTraits<KoLabU16Traits::channels_type>::unitValueAB - KoLabColorSpaceMathsTraits<KoLabU16Traits::channels_type>::halfValueAB));
+    }
+
+    if (b <= 0.5) {
+        p->b = KoLabColorSpaceMathsTraits<KoLabU16Traits::channels_type>::zeroValueAB +
+            2.0 * b * (KoLabColorSpaceMathsTraits<KoLabU16Traits::channels_type>::halfValueAB - KoLabColorSpaceMathsTraits<KoLabU16Traits::channels_type>::zeroValueAB);
+    } else {
+        p->b = (KoLabColorSpaceMathsTraits<KoLabU16Traits::channels_type>::halfValueAB +
+                2.0 * (b - 0.5) * (KoLabColorSpaceMathsTraits<KoLabU16Traits::channels_type>::unitValueAB - KoLabColorSpaceMathsTraits<KoLabU16Traits::channels_type>::halfValueAB));
+    }
+
     p->alpha = KoColorSpaceMathsTraits<quint16>::max;
 }
 void LabU16ColorSpace::toHSY(const QVector<double> &channelValues, qreal *hue, qreal *sat, qreal *luma) const
@@ -122,4 +141,92 @@ QVector <double> LabU16ColorSpace::fromYUV(qreal *y, qreal *u, qreal *v) const
     channelValues[2]=*v;
     channelValues[3]=1.0;
     return channelValues;
+}
+
+quint8 LabU16ColorSpace::scaleToU8(const quint8 *srcPixel, qint32 channelIndex) const
+{
+    typename ColorSpaceTraits::channels_type c = ColorSpaceTraits::nativeArray(srcPixel)[channelIndex];
+    qreal b = 0;
+    switch (channelIndex) {
+    case ColorSpaceTraits::L_pos:
+        b = ((qreal)c) / ColorSpaceTraits::math_trait::unitValueL;
+        break;
+    case ColorSpaceTraits::a_pos:
+    case ColorSpaceTraits::b_pos:
+        if (c <= ColorSpaceTraits::math_trait::halfValueAB) {
+            b = ((qreal)c - ColorSpaceTraits::math_trait::zeroValueAB) / (2.0 * (ColorSpaceTraits::math_trait::halfValueAB - ColorSpaceTraits::math_trait::zeroValueAB));
+        } else {
+            b = 0.5 + ((qreal)c - ColorSpaceTraits::math_trait::halfValueAB) / (2.0 * (ColorSpaceTraits::math_trait::unitValueAB - ColorSpaceTraits::math_trait::halfValueAB));
+        }
+        break;
+    default:
+        b = ((qreal)c) / ColorSpaceTraits::math_trait::unitValue;
+        break;
+    }
+
+    return KoColorSpaceMaths<qreal, quint8>::scaleToA(b);
+}
+
+void LabU16ColorSpace::convertChannelToVisualRepresentation(const quint8 *src, quint8 *dst, quint32 nPixels, const qint32 selectedChannelIndex) const
+{
+    for (uint pixelIndex = 0; pixelIndex < nPixels; ++pixelIndex) {
+        for (uint channelIndex = 0; channelIndex < this->channelCount(); ++channelIndex) {
+            KoChannelInfo *channel = this->channels().at(channelIndex);
+            qint32 channelSize = channel->size();
+            if (channel->channelType() == KoChannelInfo::COLOR) {
+                if (channelIndex == ColorSpaceTraits::L_pos) {
+                    ColorSpaceTraits::channels_type c = ColorSpaceTraits::parent::nativeArray((src + (pixelIndex * ColorSpaceTraits::pixelSize)))[selectedChannelIndex];
+                    switch (selectedChannelIndex) {
+                    case ColorSpaceTraits::L_pos:
+                        break;
+                    case ColorSpaceTraits::a_pos:
+                    case ColorSpaceTraits::b_pos:
+                        if (c <= ColorSpaceTraits::math_trait::halfValueAB) {
+                            c = ColorSpaceTraits::math_trait::unitValueL * (((qreal)c - ColorSpaceTraits::math_trait::zeroValueAB) / (2.0 * (ColorSpaceTraits::math_trait::halfValueAB - ColorSpaceTraits::math_trait::zeroValueAB)));
+                        } else {
+                            c = ColorSpaceTraits::math_trait::unitValueL * (0.5 + ((qreal)c - ColorSpaceTraits::math_trait::halfValueAB) / (2.0 * (ColorSpaceTraits::math_trait::unitValueAB - ColorSpaceTraits::math_trait::halfValueAB)));
+                        }
+                        break;
+                    // As per KoChannelInfo alpha channels are [0..1]
+                    default:
+                        c = ColorSpaceTraits::math_trait::unitValueL * (qreal)c / ColorSpaceTraits::math_trait::unitValue;
+                        break;
+                    }
+                    ColorSpaceTraits::parent::nativeArray(dst + (pixelIndex * ColorSpaceTraits::pixelSize))[channelIndex] = c;
+                } else {
+                    ColorSpaceTraits::parent::nativeArray(dst + (pixelIndex * ColorSpaceTraits::pixelSize))[channelIndex] = ColorSpaceTraits::math_trait::halfValueAB;
+                }
+            } else if (channel->channelType() == KoChannelInfo::ALPHA) {
+                memcpy(dst + (pixelIndex * ColorSpaceTraits::pixelSize) + (channelIndex * channelSize), src + (pixelIndex * ColorSpaceTraits::pixelSize) + (channelIndex * channelSize), channelSize);
+            }
+        }
+    }
+}
+
+void LabU16ColorSpace::convertChannelToVisualRepresentation(const quint8 *src, quint8 *dst, quint32 nPixels, const QBitArray selectedChannels) const
+{
+    for (uint pixelIndex = 0; pixelIndex < nPixels; ++pixelIndex) {
+        for (uint channelIndex = 0; channelIndex < this->channelCount(); ++channelIndex) {
+            KoChannelInfo *channel = this->channels().at(channelIndex);
+            qint32 channelSize = channel->size();
+            if (selectedChannels.testBit(channelIndex)) {
+                memcpy(dst + (pixelIndex * ColorSpaceTraits::pixelSize) + (channelIndex * channelSize), src + (pixelIndex * ColorSpaceTraits::pixelSize) + (channelIndex * channelSize), channelSize);
+            } else {
+                ColorSpaceTraits::channels_type v;
+                switch (channelIndex) {
+                case ColorSpaceTraits::L_pos:
+                    v = ColorSpaceTraits::math_trait::halfValueL;
+                    break;
+                case ColorSpaceTraits::a_pos:
+                case ColorSpaceTraits::b_pos:
+                    v = ColorSpaceTraits::math_trait::halfValueAB;
+                    break;
+                default:
+                    v = ColorSpaceTraits::math_trait::zeroValue;
+                    break;
+                }
+                reinterpret_cast<ColorSpaceTraits::channels_type *>(dst + (pixelIndex * ColorSpaceTraits::pixelSize) + (channelIndex * channelSize))[0] = v;
+            }
+        }
+    }
 }

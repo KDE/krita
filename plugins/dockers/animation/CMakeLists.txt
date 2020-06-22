@@ -4,7 +4,6 @@ endif()
 
 set(KRITA_ANIMATIONDOCKER_SOURCES
     animation_dockers.cpp
-    animation_docker.cpp
     timeline_docker.cpp
     onion_skins_docker.cpp
 

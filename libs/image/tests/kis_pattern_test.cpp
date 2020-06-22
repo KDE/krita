@@ -25,19 +25,20 @@
 #include <QByteArray>
 
 #include <kis_debug.h>
+#include <KisGlobalResourcesInterface.h>
 
 void KoPatternTest::testCreation()
 {
-    KoPattern test(QString(FILES_DATA_DIR) + QDir::separator() + "pattern.pat");
+    KoPattern test(QString(FILES_DATA_DIR) + '/' + "pattern.pat");
 }
 
 void KoPatternTest::testRoundTripMd5()
 {
-    QString filename(QString(FILES_DATA_DIR) + QDir::separator() + "test_pattern.png");
+    QString filename(QString(FILES_DATA_DIR) + '/' + "test_pattern.png");
     QString patFilename("test_pattern.pat");
 
     KoPattern pngPattern(filename);
-    QVERIFY(pngPattern.load());
+    QVERIFY(pngPattern.load(KisGlobalResourcesInterface::instance()));
 
     dbgKrita << "PNG Name:" << pngPattern.name();
     dbgKrita << "PNG Filename:" << pngPattern.filename();
@@ -46,7 +47,7 @@ void KoPatternTest::testRoundTripMd5()
     pngPattern.save();
 
     KoPattern patPattern(patFilename);
-    QVERIFY(patPattern.load());
+    QVERIFY(patPattern.load(KisGlobalResourcesInterface::instance()));
 
     dbgKrita << "PAT Name:" << patPattern.name();
     dbgKrita << "PAT Filename:" << patPattern.filename();

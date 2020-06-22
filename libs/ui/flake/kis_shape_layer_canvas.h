@@ -27,6 +27,7 @@
 #include <KoSelectedShapesProxy.h>
 #include <KoShapeManager.h>
 #include <kis_image_view_converter.h>
+#include <KisSafeBlockingQueueConnectionProxy.h>
 
 class KoShapeManager;
 class KoToolProxy;
@@ -113,20 +114,18 @@ private Q_SLOTS:
     void slotStartAsyncRepaint();
     void slotImageSizeChanged();
 
-Q_SIGNALS:
-    void forwardRepaint();
-
 private:
     KisPaintDeviceSP m_projection;
     KisShapeLayer *m_parentLayer {0};
 
     KisThreadSafeSignalCompressor m_asyncUpdateSignalCompressor;
     volatile bool m_hasUpdateInCompressor = false;
+    KisSafeBlockingQueueConnectionProxy<void> m_safeForcedConnection;
 
     bool m_forceUpdateHiddenAreasOnly = false;
     QRegion m_dirtyRegion;
     QMutex m_dirtyRegionMutex;
-    KoShapeManager::PaintJobsList m_paintJobs;
+    KoShapeManager::PaintJobsOrder m_paintJobsOrder;
 
     QRect m_cachedImageRect;
 

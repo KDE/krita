@@ -37,17 +37,18 @@
 #include "kis_cmb_contour.h"
 #include "kis_cmb_gradient.h"
 #include "KisResourceServerProvider.h"
-#include "kis_psd_layer_style_resource.h"
 #include "kis_psd_layer_style.h"
+#include <KisAslStorage.h>
+#include <KisResourceLocator.h>
 
 #include "kis_signals_blocker.h"
 #include "kis_signal_compressor.h"
 #include "kis_canvas_resource_provider.h"
 
 #include <KoFileDialog.h>
+#include <QMessageBox>
 
-
-KoAbstractGradient* fetchGradientLazy(KoAbstractGradient *gradient,
+KoAbstractGradientSP fetchGradientLazy(KoAbstractGradientSP gradient,
                                       KisCanvasResourceProvider *resourceProvider)
 {
     if (!gradient) {
@@ -59,7 +60,7 @@ KoAbstractGradient* fetchGradientLazy(KoAbstractGradient *gradient,
 KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, KisCanvasResourceProvider *resourceProvider, QWidget *parent)
     : KoDialog(parent)
     , m_layerStyle(layerStyle)
-    , m_initialLayerStyle(layerStyle->clone())
+    , m_initialLayerStyle(layerStyle->clone().dynamicCast<KisPSDLayerStyle>())
     , m_isSwitchingPredefinedStyle(false)
     , m_sanityLayerStyleDirty(false)
 {
@@ -247,20 +248,12 @@ bool checkCustomNameAvailable(const QString &name)
 {
     const QString customName = "CustomStyles.asl";
 
-    KoResourceServer<KisPSDLayerStyleCollectionResource> *server = KisResourceServerProvider::instance()->layerStyleCollectionServer();
+    KoResourceServer<KisPSDLayerStyle> *server = KisResourceServerProvider::instance()->layerStyleServer();
 
-    KoResource *resource = server->resourceByName(customName);
-    if (!resource) return true;
+    KoResourceSP resource = server->resourceByName(customName);
 
-    KisPSDLayerStyleCollectionResource *collection = dynamic_cast<KisPSDLayerStyleCollectionResource*>(resource);
+    return !resource;
 
-    Q_FOREACH (KisPSDLayerStyleSP style, collection->layerStyles()) {
-        if (style->name() == name) {
-            return false;
-        }
-    }
-
-    return true;
 }
 
 QString selectAvailableStyleName(const QString &name)
@@ -290,7 +283,12 @@ void KisDlgLayerStyle::slotNewStyle()
     KisPSDLayerStyleSP style = this->style();
     style->setName(selectAvailableStyleName(styleName));
 
-    m_stylesSelector->addNewStyle(style->clone());
+    m_stylesSelector->addNewStyle(style->clone().dynamicCast<KisPSDLayerStyle>());
+}
+
+QString createNewAslPath(QString resourceFolderPath, QString filename)
+{
+    return resourceFolderPath + '/' + "asl" + '/' + filename;
 }
 
 void KisDlgLayerStyle::slotLoadStyle()
@@ -301,13 +299,42 @@ void KisDlgLayerStyle::slotLoadStyle()
     dialog.setCaption(i18n("Select ASL file"));
     dialog.setMimeTypeFilters(QStringList() << "application/x-photoshop-style-library", "application/x-photoshop-style-library");
     filename = dialog.filename();
+    QFileInfo oldFileInfo(filename);
 
-    m_stylesSelector->loadCollection(filename);
-    wdgLayerStyles.lstStyleSelector->setCurrentRow(0);
+    KisConfig cfg(true);
+    QString newDir = cfg.readEntry<QString>(KisResourceLocator::resourceLocationKey,
+                                            QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+    QString newName = oldFileInfo.fileName();
+    QString newLocation = createNewAslPath(newDir, newName);
+
+    QFileInfo newFileInfo(newLocation);
+    if (newFileInfo.exists()) {
+        bool done = false;
+        int i = 0;
+        do {
+            // ask for new filename
+            bool ok;
+            newName = QInputDialog::getText(this, i18n("New name for ASL storage"), i18n("The old filename is taken.\nNew name:"),
+                                                    QLineEdit::Normal, newName, &ok);
+            newLocation = createNewAslPath(newDir, newName);
+            newFileInfo.setFile(newLocation);
+            done = !newFileInfo.exists();
+            i++;
+        } while (!done);
+    }
+
+    QFile::copy(filename, newLocation);
+    KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(newLocation);
+    KIS_ASSERT(!storage.isNull());
+    KisResourceLocator::instance()->addStorage(newLocation, storage);
 }
 
 void KisDlgLayerStyle::slotSaveStyle()
 {
+    // TODO RESOURCES: needs figuring out
+    warnKrita << "Layer style cannot be saved; needs figuring out what to do here";
+
+    /*
     QString filename; // default value?
 
     KoFileDialog dialog(this, KoFileDialog::SaveFile, "layerstyle");
@@ -318,13 +345,14 @@ void KisDlgLayerStyle::slotSaveStyle()
     QScopedPointer<KisPSDLayerStyleCollectionResource> collection(
         new KisPSDLayerStyleCollectionResource(filename));
 
-    KisPSDLayerStyleSP newStyle = style()->clone();
+    KisPSDLayerStyleSP newStyle = style()->clone().dynamicCast<KisPSDLayerStyle>();
     newStyle->setName(QFileInfo(filename).completeBaseName());
 
     KisPSDLayerStyleCollectionResource::StylesVector vector = collection->layerStyles();
     vector << newStyle;
     collection->setLayerStyles(vector);
     collection->save();
+    */
 }
 
 void KisDlgLayerStyle::changePage(QListWidgetItem *current, QListWidgetItem *previous)
@@ -339,7 +367,7 @@ void KisDlgLayerStyle::setStyle(KisPSDLayerStyleSP style)
 {
     // we may self-assign style is some cases
     if (style != m_layerStyle) {
-        *m_layerStyle = *style;
+        m_layerStyle = style->clone().dynamicCast<KisPSDLayerStyle>();
     }
     m_sanityLayerStyleDirty = false;
 
@@ -456,6 +484,40 @@ void KisDlgLayerStyle::syncGlobalAngle(int angle)
 /***** Styles Selector **********************************************/
 /********************************************************************/
 
+StylesSelector::LocationProxyModel::LocationProxyModel(QObject *parent)
+    : QSortFilterProxyModel(parent)
+{
+
+}
+
+void StylesSelector::LocationProxyModel::setEnableFiltering(bool enableFiltering)
+{
+    m_enableFiltering = enableFiltering;
+    invalidateFilter();
+}
+
+void StylesSelector::LocationProxyModel::setLocationToFilterBy(QString location)
+{
+    m_locationToFilter = location;
+    invalidateFilter();
+}
+
+bool StylesSelector::LocationProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
+{
+    if (!m_enableFiltering) {
+        return true;
+    }
+
+    QModelIndex idx = sourceModel()->index(source_row, 0);
+    QString location = sourceModel()->data(idx, Qt::UserRole + KisResourceModel::Location).toString();
+    qDebug() << sourceModel()->data(idx, Qt::UserRole + KisResourceModel::Location).toString()
+             << sourceModel()->data(idx, Qt::UserRole + KisResourceModel::Name).toString();
+    return location == m_locationToFilter;
+}
+
+
+
+
 class StyleItem : public QListWidgetItem {
 public:
     StyleItem(KisPSDLayerStyleSP style)
@@ -474,36 +536,45 @@ StylesSelector::StylesSelector(QWidget *parent)
 {
     ui.setupUi(this);
 
+    //ui.cmbStyleCollections->setModel();
+    m_resourceModel = KisResourceModelProvider::resourceModel(ResourceType::LayerStyles);
+    m_locationsProxyModel = new LocationProxyModel(this);
+    m_locationsProxyModel->setSourceModel(m_resourceModel);
+    m_locationsProxyModel->setEnableFiltering(false);
+
+    ui.listStyles->setModel(m_locationsProxyModel);
+    ui.listStyles->setModelColumn(KisResourceModel::Name);
+
     connect(ui.cmbStyleCollections, SIGNAL(activated(QString)), this, SLOT(loadStyles(QString)));
-    connect(ui.listStyles, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)), this, SLOT(selectStyle(QListWidgetItem*,QListWidgetItem*)));
+    connect(ui.listStyles, SIGNAL(clicked(QModelIndex)), this, SLOT(selectStyle(QModelIndex)));
+    connect(m_resourceModel, SIGNAL(afterResourcesLayoutReset()), this, SLOT(slotResourceModelReset()));
 
     refillCollections();
 
     if (ui.cmbStyleCollections->count()) {
         ui.cmbStyleCollections->setCurrentIndex(0);
+        m_locationsProxyModel->setEnableFiltering(true);
         loadStyles(ui.cmbStyleCollections->currentText());
     }
 }
 
 void StylesSelector::refillCollections()
 {
-    QString previousCollection = ui.cmbStyleCollections->currentText();
-
+    QStringList locationsList;
+    for (int i = 0; i < m_resourceModel->rowCount(); i++) {
+        QModelIndex idx = m_resourceModel->index(i, 0);
+        QString location = m_resourceModel->data(idx, Qt::UserRole + KisResourceModel::Location).toString();
+        if (!locationsList.contains(location)) {
+            locationsList << location;
+        }
+    }
     ui.cmbStyleCollections->clear();
-    Q_FOREACH (KoResource *res, KisResourceServerProvider::instance()->layerStyleCollectionServer()->resources()) {
-        ui.cmbStyleCollections->addItem(res->name());
-    }
-
-    if (!previousCollection.isEmpty()) {
-        KisSignalsBlocker blocker(this);
-
-        int index = ui.cmbStyleCollections->findText(previousCollection);
-        ui.cmbStyleCollections->setCurrentIndex(index);
-    }
+    ui.cmbStyleCollections->addItems(locationsList);
 }
 
 void StylesSelector::notifyExternalStyleChanged(const QString &name, const QUuid &uuid)
 {
+    /*
     int currentIndex = -1;
 
     for (int i = 0; i < ui.listStyles->count(); i++ ) {
@@ -525,43 +596,51 @@ void StylesSelector::notifyExternalStyleChanged(const QString &name, const QUuid
     }
 
     ui.listStyles->setCurrentRow(currentIndex);
+    */
 }
 
 void StylesSelector::loadStyles(const QString &name)
 {
-    ui.listStyles->clear();
-    KoResource *res = KisResourceServerProvider::instance()->layerStyleCollectionServer()->resourceByName(name);
-    KisPSDLayerStyleCollectionResource *collection = dynamic_cast<KisPSDLayerStyleCollectionResource*>(res);
-    if (collection) {
-        Q_FOREACH (KisPSDLayerStyleSP style, collection->layerStyles()) {
-            // XXX: also use the preview image, when we have one
-            ui.listStyles->addItem(new StyleItem(style));
-        }
-    }
+    m_locationsProxyModel->setLocationToFilterBy(name);
 }
 
-void StylesSelector::selectStyle(QListWidgetItem *current, QListWidgetItem* /*previous*/)
+void StylesSelector::selectStyle(QModelIndex current)
 {
+
+    // the index is from the proxy model
+    QModelIndex sourceModelIndex = m_locationsProxyModel->mapToSource(current);
+    KoResourceSP resource = m_resourceModel->resourceForIndex(sourceModelIndex);
+    KisPSDLayerStyleSP layerStyle = resource.dynamicCast<KisPSDLayerStyle>();
+    qDebug() << "StylesSelector::selectStyle" << (resource.isNull() ? "(null)" : resource->name()) << (layerStyle.isNull() ? "(null)" : layerStyle->name());
+    if (layerStyle) {
+        emit styleSelected(layerStyle);
+    }
+
+    /*
     StyleItem *item = dynamic_cast<StyleItem*>(current);
     if (item) {
         emit styleSelected(item->m_style);
     }
+    */
 }
 
 void StylesSelector::loadCollection(const QString &fileName)
 {
+    // TODO: RESOURCES: implement or remove
+    warnKrita << "Collection cannot be loaded, because we do not use collections now; please use KisAslStorage instead.";
+
+    /*
     if (!QFileInfo(fileName).exists()) {
         warnKrita << "Loaded style collection doesn't exist!";
         return;
     }
 
-    KisPSDLayerStyleCollectionResource *collection =
-        new KisPSDLayerStyleCollectionResource(fileName);
+    KisPSDLayerStyleCollectionResourceSP collection = KisPSDLayerStyleCollectionResourceSP(new KisPSDLayerStyleCollectionResource(fileName));
 
     collection->load();
 
     KoResourceServer<KisPSDLayerStyleCollectionResource> *server = KisResourceServerProvider::instance()->layerStyleCollectionServer();
-    collection->setFilename(server->saveLocation() + QDir::separator() + collection->name());
+    collection->setFilename(server->saveLocation() + '/' + collection->name());
     server->addResource(collection);
 
     refillCollections();
@@ -569,22 +648,36 @@ void StylesSelector::loadCollection(const QString &fileName)
     int index = ui.cmbStyleCollections->findText(collection->name());
     ui.cmbStyleCollections->setCurrentIndex(index);
     loadStyles(collection->name());
+    */
+}
+
+void StylesSelector::slotResourceModelReset()
+{
+    ENTER_FUNCTION() << "MODEL RESET!!!";
+    refillCollections();
 }
 
 void StylesSelector::addNewStyle(KisPSDLayerStyleSP style)
 {
-    KoResourceServer<KisPSDLayerStyleCollectionResource> *server = KisResourceServerProvider::instance()->layerStyleCollectionServer();
+    KoResourceServer<KisPSDLayerStyle> *server = KisResourceServerProvider::instance()->layerStyleServer();
+    server->addResource(style);
+
+    // TODO: RESOURCES: what about adding only to CustomStyles.asl
+
+
+    /*
+    //server->resourceByName(style->name())
 
     // NOTE: not translatable, since it is a key!
     const QString customName = "CustomStyles.asl";
     const QString saveLocation = server->saveLocation();
     const QString fullFilename = saveLocation + customName;
 
-    KoResource *resource = server->resourceByName(customName);
-    KisPSDLayerStyleCollectionResource *collection = 0;
+    KoResourceSP resource = server->resourceByName(customName);
+    KisPSDLayerStyleSP style;
 
     if (!resource) {
-        collection = new KisPSDLayerStyleCollectionResource("");
+        collection = KisPSDLayerStyleSP(new KisPSDLayerStyle(""));
         collection->setName(customName);
         collection->setFilename(fullFilename);
 
@@ -593,25 +686,28 @@ void StylesSelector::addNewStyle(KisPSDLayerStyleSP style)
         collection->setLayerStyles(vector);
 
         server->addResource(collection);
-    } else {
-        collection = dynamic_cast<KisPSDLayerStyleCollectionResource*>(resource);
+    }
+    else {
+        collection = resource.dynamicCast<KisPSDLayerStyleCollectionResource>();
 
-        KisPSDLayerStyleCollectionResource::StylesVector vector;
+        //KisPSDLayerStyle::StylesVector vector;
         vector = collection->layerStyles();
         vector << style;
         collection->setLayerStyles(vector);
         collection->save();
     }
+    */
 
     refillCollections();
 
     // select in gui
 
-    int index = ui.cmbStyleCollections->findText(customName);
+    //int index = ui.cmbStyleCollections->findText(customName);
+    int index = 0;
     KIS_ASSERT_RECOVER_RETURN(index >= 0);
     ui.cmbStyleCollections->setCurrentIndex(index);
 
-    loadStyles(customName);
+    loadStyles("");
 
     notifyExternalStyleChanged(style->name(), style->uuid());
 }
@@ -681,7 +777,7 @@ BevelAndEmboss::BevelAndEmboss(Contour *contour, Texture *texture, QWidget *pare
     m_texture->ui.intDepth->setRange(-1000, 1000);
     m_texture->ui.intDepth->setSuffix(i18n(" %"));
 
-    connect(m_texture->ui.patternChooser, SIGNAL(resourceSelected(KoResource*)), SIGNAL(configChanged()));
+    connect(m_texture->ui.patternChooser, SIGNAL(resourceSelected(KoResourceSP )), SIGNAL(configChanged()));
     connect(m_texture->ui.intScale, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
     connect(m_texture->ui.intDepth, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
     connect(m_texture->ui.chkInvert, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
@@ -750,7 +846,7 @@ void BevelAndEmboss::fetchBevelAndEmboss(psd_layer_effects_bevel_emboss *bevelAn
     bevelAndEmboss->setAntiAliased(m_contour->ui.chkAntiAliased->isChecked());
     bevelAndEmboss->setContourRange(m_contour->ui.intRange->value());
 
-    bevelAndEmboss->setTexturePattern(static_cast<KoPattern*>(m_texture->ui.patternChooser->currentResource()));
+    bevelAndEmboss->setTexturePattern(m_texture->ui.patternChooser->currentResource().staticCast<KoPattern>());
     bevelAndEmboss->setTextureScale(m_texture->ui.intScale->value());
     bevelAndEmboss->setTextureDepth(m_texture->ui.intDepth->value());
     bevelAndEmboss->setTextureInvert(m_texture->ui.chkInvert->isChecked());
@@ -941,18 +1037,18 @@ void DropShadow::fetchShadow(psd_layer_effects_shadow_common *shadow) const
 class GradientPointerConverter
 {
 public:
-    static KoAbstractGradientSP resourceToStyle(KoAbstractGradient *gradient) {
-        return gradient ? KoAbstractGradientSP(gradient->clone()) : KoAbstractGradientSP();
+    static KoAbstractGradientSP resourceToStyle(KoAbstractGradientSP gradient) {
+        return gradient ? KoAbstractGradientSP(gradient->clone().dynamicCast<KoAbstractGradient>()) : KoAbstractGradientSP();
     }
 
-    static KoAbstractGradient* styleToResource(KoAbstractGradientSP gradient) {
+    static KoAbstractGradientSP styleToResource(KoAbstractGradientSP gradient) {
         if (!gradient) return 0;
 
         KoResourceServer<KoAbstractGradient> *server = KoResourceServerProvider::instance()->gradientServer();
-        KoAbstractGradient *resource = server->resourceByMD5(gradient->md5());
+        KoAbstractGradientSP resource = server->resourceByMD5(gradient->md5());
 
         if (!resource) {
-            KoAbstractGradient *clone = gradient->clone();
+            KoAbstractGradientSP clone = gradient->clone().dynamicCast<KoAbstractGradient>();
             clone->setName(findAvailableName(gradient->name()));
             server->addResource(clone, false);
             resource = clone;
@@ -1007,8 +1103,7 @@ void GradientOverlay::setGradientOverlay(const psd_layer_effects_gradient_overla
     ui.cmbCompositeOp->selectCompositeOp(KoID(config->blendMode()));
     ui.intOpacity->setValue(config->opacity());
 
-    KoAbstractGradient *gradient = fetchGradientLazy(
-        GradientPointerConverter::styleToResource(config->gradient()), m_resourceProvider);
+    KoAbstractGradientSP gradient = fetchGradientLazy(GradientPointerConverter::styleToResource(config->gradient()), m_resourceProvider);
 
     if (gradient) {
         ui.cmbGradient->setGradient(gradient);
@@ -1103,8 +1198,7 @@ void InnerGlow::setConfig(const psd_layer_effects_glow_common *config)
     ui.bnColor->setColor(color);
     ui.radioGradient->setChecked(config->fillType() == psd_fill_gradient);
 
-    KoAbstractGradient *gradient = fetchGradientLazy(
-        GradientPointerConverter::styleToResource(config->gradient()), m_resourceProvider);
+    KoAbstractGradientSP gradient = fetchGradientLazy(GradientPointerConverter::styleToResource(config->gradient()), m_resourceProvider);
 
     if (gradient) {
         ui.cmbGradient->setGradient(gradient);
@@ -1184,7 +1278,7 @@ PatternOverlay::PatternOverlay(QWidget *parent)
 
     connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.intOpacity, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
-    connect(ui.patternChooser, SIGNAL(resourceSelected(KoResource*)), SIGNAL(configChanged()));
+    connect(ui.patternChooser, SIGNAL(resourceSelected(KoResourceSP )), SIGNAL(configChanged()));
     connect(ui.chkLinkWithLayer, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
     connect(ui.intScale, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
 }
@@ -1202,7 +1296,7 @@ void PatternOverlay::fetchPatternOverlay(psd_layer_effects_pattern_overlay *patt
 {
     pattern->setBlendMode(ui.cmbCompositeOp->selectedCompositeOp().id());
     pattern->setOpacity(ui.intOpacity->value());
-    pattern->setPattern(static_cast<KoPattern*>(ui.patternChooser->currentResource()));
+    pattern->setPattern(ui.patternChooser->currentResource().staticCast<KoPattern>());
     pattern->setAlignWithLayer(ui.chkLinkWithLayer->isChecked());
     pattern->setScale(ui.intScale->value());
 }
@@ -1319,9 +1413,9 @@ Stroke::Stroke(KisCanvasResourceProvider *resourceProvider, QWidget *parent)
     connect(ui.chkAlignWithLayer, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
     connect(ui.intScale, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
 
+    connect(ui.patternChooser, SIGNAL(resourceSelected(KoResourceSP )), SIGNAL(configChanged()));
     connect(ui.angleSelector, SIGNAL(configChanged()), SIGNAL(configChanged()));
 
-    connect(ui.patternChooser, SIGNAL(resourceSelected(KoResource*)), SIGNAL(configChanged()));
     connect(ui.chkLinkWithLayer, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
     connect(ui.intScale_2, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
 
@@ -1331,7 +1425,6 @@ Stroke::Stroke(KisCanvasResourceProvider *resourceProvider, QWidget *parent)
 
 void Stroke::setStroke(const psd_layer_effects_stroke *stroke)
 {
-
     ui.intSize->setValue(stroke->size());
     ui.cmbPosition->setCurrentIndex((int)stroke->position());
     ui.cmbCompositeOp->selectCompositeOp(KoID(stroke->blendMode()));
@@ -1342,8 +1435,7 @@ void Stroke::setStroke(const psd_layer_effects_stroke *stroke)
     color.fromQColor(stroke->color());
     ui.bnColor->setColor(color);
 
-    KoAbstractGradient *gradient =
-        fetchGradientLazy(GradientPointerConverter::styleToResource(stroke->gradient()), m_resourceProvider);
+    KoAbstractGradientSP gradient = fetchGradientLazy(GradientPointerConverter::styleToResource(stroke->gradient()), m_resourceProvider);
 
     if (gradient) {
         ui.cmbGradient->setGradient(gradient);
@@ -1358,7 +1450,6 @@ void Stroke::setStroke(const psd_layer_effects_stroke *stroke)
     ui.patternChooser->setCurrentPattern(stroke->pattern());
     ui.chkLinkWithLayer->setChecked(stroke->alignWithLayer());
     ui.intScale_2->setValue(stroke->scale());
-
 }
 
 void Stroke::fetchStroke(psd_layer_effects_stroke *stroke) const
@@ -1379,7 +1470,7 @@ void Stroke::fetchStroke(psd_layer_effects_stroke *stroke) const
     stroke->setAngle(ui.angleSelector->value());
     stroke->setScale(ui.intScale->value());
 
-    stroke->setPattern(static_cast<KoPattern*>(ui.patternChooser->currentResource()));
+    stroke->setPattern(ui.patternChooser->currentResource().staticCast<KoPattern>());
     stroke->setAlignWithLayer(ui.chkLinkWithLayer->isChecked());
     stroke->setScale(ui.intScale->value());
 }

@@ -44,7 +44,6 @@ public:
     static KisGeneratorRegistry* instance();
     void add(KisGeneratorSP item);
     void add(const QString &id, KisGeneratorSP item);
-    KisFilterConfigurationSP cloneConfiguration(const KisFilterConfigurationSP kfc);
 
 Q_SIGNALS:
 

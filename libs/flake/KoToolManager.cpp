@@ -400,6 +400,11 @@ QPair<QString, KoToolBase*> KoToolManager::createTools(KoCanvasController *contr
 
 void KoToolManager::initializeCurrentToolForCanvas()
 {
+    KIS_ASSERT_RECOVER_RETURN(d->canvasData);
+
+    // make a full reconnect cycle for the currently active tool
+    d->disconnectActiveTool();
+    d->connectActiveTool();
     d->postSwitchTool(false);
 }
 
@@ -585,8 +590,15 @@ void KoToolManager::Private::postSwitchTool(bool temporary)
             && canvasData->activeTool->canvas()->shapeManager()) {
         KoSelection *selection = canvasData->activeTool->canvas()->shapeManager()->selection();
         Q_ASSERT(selection);
-
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
+        QList<KoShape *> shapesDelegatesList = selection->selectedEditableShapesAndDelegates();
+        if (!shapesDelegatesList.isEmpty()) {
+            shapesToOperateOn = QSet<KoShape*>(shapesDelegatesList.begin(),
+                                               shapesDelegatesList.end());
+        }
+#else
         shapesToOperateOn = QSet<KoShape*>::fromList(selection->selectedEditableShapesAndDelegates());
+#endif
     }
 
     if (canvasData->canvas->canvas()) {

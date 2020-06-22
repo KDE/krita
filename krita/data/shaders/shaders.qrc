@@ -13,5 +13,6 @@
         <file>simple_texture_legacy.frag</file>
         <file>solid_color.frag</file>
         <file>solid_color_legacy.frag</file>
+        <file>overlay_inverted.frag</file>
     </qresource>
 </RCC>

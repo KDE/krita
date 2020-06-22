@@ -28,21 +28,22 @@
 #include <KoColorSpaceRegistry.h>
 #include "kis_transaction.h"
 #include <sdk/tests/testing_timed_default_bounds.h>
+#include <KisGlobalResourcesInterface.h>
 
 
 bool KisCrashFilterTest::applyFilter(const KoColorSpace * cs,  KisFilterSP f)
 {
 
-    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "carrot.png");
+    QImage qimage(QString(FILES_DATA_DIR) + '/' + "carrot.png");
 
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->setDefaultBounds(new TestUtil::TestingTimedDefaultBounds(qimage.rect()));
     dev->convertFromQImage(qimage, 0, 0, 0);
 
     // Get the predefined configuration from a file
-    KisFilterConfigurationSP  kfc = f->defaultConfiguration();
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
 
-    QFile file(QString(FILES_DATA_DIR) + QDir::separator() + f->id() + ".cfg");
+    QFile file(QString(FILES_DATA_DIR) + '/' + f->id() + ".cfg");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         dbgKrita << "creating new file for " << f->id();
         file.open(QIODevice::WriteOnly | QIODevice::Text);

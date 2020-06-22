@@ -35,8 +35,8 @@ void KoInputDeviceHandlerRegistry::init()
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "DevicePlugins";
     config.blacklist = "DevicePluginsDisabled";
-    config.group = "calligra";
-    KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Device"),
+    config.group = "krita";
+    KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Device"),
                                      QString::fromLatin1("[X-Flake-PluginVersion] == 28"), config);
 
     Q_FOREACH (const QString & id, keys()) {

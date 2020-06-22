@@ -44,7 +44,6 @@
 #include <QUrl>
 #include <QVBoxLayout>
 #include <QWidgetAction>
-#include <QApplication>
 #include <QDesktopWidget>
 #include <QScreen>
 
@@ -113,8 +112,8 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
         restoreGeometry(QByteArray::fromBase64(ba));
     }
     else {
-        const int scnum = QApplication::desktop()->screenNumber(parentWidget());
-        QRect desk = QGuiApplication::screens().at(scnum)->availableVirtualGeometry();
+        const int scnum = QApplication::desktop()->screenNumber(parent);
+        QRect desk = QGuiApplication::screens().at(scnum)->availableGeometry();
 
         quint32 x = desk.x();
         quint32 y = desk.y();

@@ -65,7 +65,7 @@ public:
      *    set a layer which was previously created and stored in the context.
      * @see KoShapeLoadingContext::layer()
      */
-    KoShape *createShapeFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context) const;
+    KoShape *createShapeFromXML(const KoXmlElement &element, KoShapeLoadingContext &context) const;
 
     /**
      * Returns a list of shape factories supporting the specified xml element.

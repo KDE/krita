@@ -61,10 +61,6 @@
         <file>transparency-locked.svg</file>
         <file>transparency-unlocked.svg</file>
         <file>workspace-chooser.svg</file>
-        <file>light_lazyframeOn.svg</file>
-        <file>light_lazyframeOff.svg</file>
-        <file>dark_lazyframeOn.svg</file>
-        <file>dark_lazyframeOff.svg</file>
         <file>dark_mirror-view.svg</file>
         <file>light_mirror-view.svg</file>
         <file>dark_rotation-reset.svg</file>
@@ -92,10 +88,12 @@
         <file>light_preset-switcher.svg</file>
         <file>dark_preset-switcher.svg</file>
         <file>dark_animation_play.svg</file>
+        <file>dark_animation_pause.svg</file>
         <file>dark_animation_stop.svg</file>
         <file>dark_dropframe.svg</file>
         <file>dark_droppedframes.svg</file>
         <file>light_animation_play.svg</file>
+        <file>light_animation_pause.svg</file>
         <file>light_animation_stop.svg</file>
         <file>light_dropframe.svg</file>
         <file>light_droppedframes.svg</file>
@@ -116,6 +114,8 @@
         <file>dark_audio-none.svg</file>
         <file>dark_audio-volume-high.svg</file>
         <file>dark_audio-volume-mute.svg</file>
+        <file>dark_auto-key-on.svg</file>
+        <file>dark_auto-key-off.svg</file>
         <file>dark_keyframe-add.svg</file>
         <file>dark_keyframe-remove.svg</file>
         <file>dark_zoom-fit.svg</file>
@@ -124,6 +124,8 @@
         <file>light_audio-none.svg</file>
         <file>light_audio-volume-high.svg</file>
         <file>light_audio-volume-mute.svg</file>
+        <file>light_auto-key-on.svg</file>
+        <file>light_auto-key-off.svg</file>
         <file>light_keyframe-add.svg</file>
         <file>light_keyframe-remove.svg</file>
         <file>light_zoom-fit.svg</file>
@@ -153,5 +155,9 @@
         <file>light_gamut-mask-on.svg</file>
         <file>dark_ratio.svg</file>
         <file>light_ratio.svg</file>
+        <file>dark_bundle_archive.svg</file>
+        <file>light_bundle_archive.svg</file>
+        <file>dark_python.svg</file>
+        <file>light_python.svg</file>
     </qresource>
 </RCC>

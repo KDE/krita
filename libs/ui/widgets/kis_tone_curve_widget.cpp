@@ -25,8 +25,10 @@
 #include <QPointF>
 #include <QPolygonF>
 #include <QPainter>
+#include <QPainterPath>
 #include <QPaintEvent>
 #include <QImage>
+#include <QTextStream>
 #include <cmath>
 #include <klocalizedstring.h>
 
@@ -157,11 +159,11 @@ void KisToneCurveWidget::drawGrid()
         int xstart = (y * (d->pxcols - 1)) / 10;
         int ystart = (y * (d->pxrows - 1)) / 10;
  
-        s.sprintf("0.%d", y);
+        QTextStream(&s) << y;
         biasedLine(xstart, d->pxrows - grids(1), xstart,   d->pxrows - grids(4));
         biasedText(xstart - grids(11), d->pxrows + grids(15), s);
  
-        s.sprintf("0.%d", 10 - y);
+        QTextStream(&s) << 10 - y;
         biasedLine(0, ystart, grids(3), ystart);
         biasedText(grids(-25), ystart + grids(5), s);
     }

@@ -19,10 +19,7 @@
 
 #include "KoGradientBackground.h"
 #include "KoFlake.h"
-#include <KoStyleStack.h>
 #include <KoXmlNS.h>
-#include <KoOdfLoadingContext.h>
-#include <KoOdfGraphicStyles.h>
 #include <KoShapeSavingContext.h>
 
 #include <FlakeDebug.h>
@@ -31,6 +28,7 @@
 #include <QBrush>
 #include <QPainter>
 #include <QSharedData>
+#include <QPainterPath>
 
 class KoGradientBackground::Private : public QSharedData
 {
@@ -137,47 +135,4 @@ void KoGradientBackground::paint(QPainter &painter, KoShapePaintingContext &/*co
     }
 
     painter.drawPath(fillPath);
-}
-
-void KoGradientBackground::fillStyle(KoGenStyle &style, KoShapeSavingContext &context)
-{
-    if (!d->gradient) return;
-    QBrush brush(*d->gradient);
-    brush.setTransform(d->matrix);
-    KoOdfGraphicStyles::saveOdfFillStyle(style, context.mainStyles(), brush);
-}
-
-bool KoGradientBackground::loadStyle(KoOdfLoadingContext &context, const QSizeF &shapeSize)
-{
-    KoStyleStack &styleStack = context.styleStack();
-    if (! styleStack.hasProperty(KoXmlNS::draw, "fill"))
-        return false;
-
-    QString fillStyle = styleStack.property(KoXmlNS::draw, "fill");
-    if (fillStyle == "gradient") {
-        QBrush brush = KoOdfGraphicStyles::loadOdfGradientStyle(styleStack, context.stylesReader(), shapeSize);
-        const QGradient * gradient = brush.gradient();
-        if (gradient) {
-            d->gradient = KoFlake::cloneGradient(gradient);
-            d->matrix = brush.transform();
-
-            //Gopalakrishna Bhat: If the brush has transparency then we ignore the draw:opacity property and use the brush transparency.
-            // Brush will have transparency if the svg:linearGradient stop point has stop-opacity property otherwise it is opaque
-            if (brush.isOpaque() && styleStack.hasProperty(KoXmlNS::draw, "opacity")) {
-                QString opacityPercent = styleStack.property(KoXmlNS::draw, "opacity");
-                if (! opacityPercent.isEmpty() && opacityPercent.right(1) == "%") {
-                    float opacity = qMin(opacityPercent.left(opacityPercent.length() - 1).toDouble(), 100.0) / 100;
-                    QGradientStops stops;
-                    Q_FOREACH (QGradientStop stop, d->gradient->stops()) {
-                        stop.second.setAlphaF(opacity);
-                        stops << stop;
-                    }
-                    d->gradient->setStops(stops);
-                }
-            }
-
-            return true;
-        }
-    }
-    return false;
 }

@@ -19,7 +19,7 @@
 #include "kis_paint_device_test.h"
 #include <QTest>
 
-#include <QTime>
+#include <QElapsedTimer>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
@@ -101,7 +101,7 @@ void KisPaintDeviceTest::testStore()
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
 
     KoStore * readStore =
-        KoStore::createStore(QString(FILES_DATA_DIR) + QDir::separator() + "store_test.kra", KoStore::Read);
+        KoStore::createStore(QString(FILES_DATA_DIR) + '/' + "store_test.kra", KoStore::Read);
     readStore->open("built image/layers/layer0");
     QVERIFY(dev->read(readStore->device()));
     readStore->close();
@@ -110,7 +110,7 @@ void KisPaintDeviceTest::testStore()
     QVERIFY(dev->exactBounds() == QRect(0, 0, 100, 100));
 
     KoStore * writeStore =
-        KoStore::createStore(QString(FILES_OUTPUT_DIR) + QDir::separator() + "store_test_out.kra", KoStore::Write);
+        KoStore::createStore(QString(FILES_OUTPUT_DIR) + '/' + "store_test_out.kra", KoStore::Write);
     KisFakePaintDeviceWriter fakeWriter(writeStore);
     writeStore->open("built image/layers/layer0");
     QVERIFY(dev->write(fakeWriter));
@@ -119,7 +119,7 @@ void KisPaintDeviceTest::testStore()
 
     KisPaintDeviceSP dev2 = new KisPaintDevice(cs);
     readStore =
-        KoStore::createStore(QString(FILES_OUTPUT_DIR) + QDir::separator() + "store_test_out.kra", KoStore::Read);
+        KoStore::createStore(QString(FILES_OUTPUT_DIR) + '/' + "store_test_out.kra", KoStore::Read);
     readStore->open("built image/layers/layer0");
     QVERIFY(dev2->read(readStore->device()));
     readStore->close();
@@ -228,7 +228,7 @@ void KisPaintDeviceTest::testRoundtripReadWrite()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "tile.png");
+    QImage image(QString(FILES_DATA_DIR) + '/' + "tile.png");
     dev->convertFromQImage(image, 0);
 
     quint8* bytes = new quint8[cs->pixelSize() * image.width() * image.height()];
@@ -268,7 +268,7 @@ void logFailure(const QString & reason, const KoColorSpace * srcCs, const KoColo
 
 void KisPaintDeviceTest::testColorSpaceConversion()
 {
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "tile.png");
+    QImage image(QString(FILES_DATA_DIR) + '/' + "tile.png");
     const KoColorSpace* srcCs = KoColorSpaceRegistry::instance()->rgb8();
     const KoColorSpace* dstCs = KoColorSpaceRegistry::instance()->lab16();
     KisPaintDeviceSP dev = new KisPaintDevice(srcCs);
@@ -297,7 +297,7 @@ void KisPaintDeviceTest::testColorSpaceConversion()
 
 void KisPaintDeviceTest::testRoundtripConversion()
 {
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    QImage image(QString(FILES_DATA_DIR) + '/' + "hakonepa.png");
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->convertFromQImage(image, 0);
@@ -314,7 +314,7 @@ void KisPaintDeviceTest::testRoundtripConversion()
 
 void KisPaintDeviceTest::testFastBitBlt()
 {
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    QImage image(QString(FILES_DATA_DIR) + '/' + "hakonepa.png");
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dstDev = new KisPaintDevice(cs);
     KisPaintDeviceSP srcDev = new KisPaintDevice(cs);
@@ -355,7 +355,7 @@ void KisPaintDeviceTest::testFastBitBlt()
 
 void KisPaintDeviceTest::testMakeClone()
 {
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    QImage image(QString(FILES_DATA_DIR) + '/' + "hakonepa.png");
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP srcDev = new KisPaintDevice(cs);
@@ -390,7 +390,7 @@ void KisPaintDeviceTest::testMakeClone()
 
 void KisPaintDeviceTest::testThumbnail()
 {
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    QImage image(QString(FILES_DATA_DIR) + '/' + "hakonepa.png");
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->convertFromQImage(image, 0);
@@ -411,7 +411,7 @@ void KisPaintDeviceTest::testThumbnail()
 
 void KisPaintDeviceTest::testThumbnailDeviceWithOffset()
 {
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    QImage image(QString(FILES_DATA_DIR) + '/' + "hakonepa.png");
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->convertFromQImage(image, 0);
@@ -580,7 +580,7 @@ void KisPaintDeviceTest::testPlanarReadWrite()
 
 void KisPaintDeviceTest::testBltPerformance()
 {
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa_transparent.png");
+    QImage image(QString(FILES_DATA_DIR) + '/' + "hakonepa_transparent.png");
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP fdev = new KisPaintDevice(cs);
     fdev->convertFromQImage(image, 0);
@@ -588,7 +588,7 @@ void KisPaintDeviceTest::testBltPerformance()
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->fill(0, 0, 640, 441, KoColor(Qt::white, cs).data());
 
-    QTime t;
+    QElapsedTimer t;
     t.start();
 
     int x;
@@ -671,7 +671,7 @@ void KisPaintDeviceTest::testOpacity()
 {
     // blt a semi-transparent image on a white paint device
 
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa_transparent.png");
+    QImage image(QString(FILES_DATA_DIR) + '/' + "hakonepa_transparent.png");
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP fdev = new KisPaintDevice(cs);
     fdev->convertFromQImage(image, 0);
@@ -682,7 +682,7 @@ void KisPaintDeviceTest::testOpacity()
     gc.bitBlt(QPoint(0, 0), fdev, image.rect());
 
     QImage result = dev->convertToQImage(0, 0, 0, 640, 441);
-    QImage checkResult(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa_transparent_result.png");
+    QImage checkResult(QString(FILES_DATA_DIR) + '/' + "hakonepa_transparent_result.png");
     QPoint errpoint;
 
     if (!TestUtil::compareQImages(errpoint, checkResult, result, 1)) {
@@ -1057,7 +1057,7 @@ void KisPaintDeviceTest::testWrappedRandomAccessor()
 
     x = 3;
     y = 3;
-    KisRandomAccessorSP dstIt = dev->createRandomAccessorNG(x, y);
+    KisRandomAccessorSP dstIt = dev->createRandomAccessorNG();
 
     QVERIFY(!memcmp(dstIt->rawData(), c1.data(), pixelSize));
     QCOMPARE(dstIt->numContiguousColumns(x), 17);
@@ -1254,7 +1254,7 @@ void testWrappedLineIteratorReadMoreThanBounds(QString testName)
 
     // test rect doesn't fit the wrap rect in both dimensions
     const QRect &rect(bounds.adjusted(-6,-6,8,8));
-    KisRandomAccessorSP dstIt = dst->createRandomAccessorNG(rect.x(), rect.y());
+    KisRandomAccessorSP dstIt = dst->createRandomAccessorNG();
     IteratorSP it = createIterator<IteratorSP>(dev, rect);
 
     for (int y = rect.y(); y < rect.y() + rect.height(); y++) {

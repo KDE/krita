@@ -23,7 +23,7 @@
 
 #include "KoColor.h"
 #include <resources/KoAbstractGradient.h>
-#include <resources/KoResource.h>
+#include <KoResource.h>
 #include <kritapigment_export.h>
 #include <boost/operators.hpp>
 
@@ -45,15 +45,17 @@ class KRITAPIGMENT_EXPORT KoStopGradient : public KoAbstractGradient, public boo
 public:
     explicit KoStopGradient(const QString &filename = QString());
     ~KoStopGradient() override;
-
+    KoStopGradient(const KoStopGradient &rhs);
     bool operator==(const KoStopGradient &rhs) const;
+    KoStopGradient &operator=(const KoStopGradient &rhs) = delete;
+    KoResourceSP clone() const override;
 
-    KoAbstractGradient* clone() const override;
-
-    bool load() override;
-    bool loadFromDevice(QIODevice *dev) override;
-    bool save() override;
+    bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;
     bool saveToDevice(QIODevice* dev) const override;
+
+    QPair<QString, QString> resourceType() const override {
+        return QPair<QString, QString>(ResourceType::Gradients, ResourceSubType::StopGradients);
+    }
 
     /// reimplemented
     QGradient* toQGradient() const override;
@@ -65,7 +67,7 @@ public:
     void colorAt(KoColor&, qreal t) const override;
 
     /// Creates KoStopGradient from a QGradient
-    static KoStopGradient * fromQGradient(const QGradient * gradient);
+    static QSharedPointer<KoStopGradient> fromQGradient(const QGradient *gradient);
 
     /// Sets the gradient stops
     void setStops(QList<KoGradientStop> stops);
@@ -99,6 +101,8 @@ private:
     void parseSvgGradient(const QDomElement& element);
     void parseSvgColor(QColor &color, const QString &s);
 };
+
+typedef QSharedPointer<KoStopGradient> KoStopGradientSP;
 
 #endif // KOSTOPGRADIENT_H
 

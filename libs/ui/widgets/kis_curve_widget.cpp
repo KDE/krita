@@ -27,6 +27,7 @@
 
 #include <QPixmap>
 #include <QPainter>
+#include <QPainterPath>
 #include <QPoint>
 #include <QPen>
 #include <QEvent>

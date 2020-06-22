@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ActionCollection version="2" name="Tools">
-  <Actions category="Magnetic Selection Tool">
-    <text>Magnetic Selection Tool</text>
+  <Actions category="tool-shortcuts">
+      <text>Tool Shortcuts</text>
+    <Action name="KisToolSelectMagnetic">
+      <icon></icon>
+      <text>Magnetic Selection Tool</text>
+      <whatsThis></whatsThis>
+      <toolTip>Magnetic Curve Selection Tool</toolTip>
+      <iconText>Magnetic Curve Selection Tool</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
   </Actions>
 </ActionCollection>

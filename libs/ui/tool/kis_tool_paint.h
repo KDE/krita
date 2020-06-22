@@ -22,6 +22,7 @@
 #include "kis_tool.h"
 
 #include <QGridLayout>
+#include <QPainterPath>
 #include <QTimer>
 #include <QCheckBox>
 
@@ -129,7 +130,7 @@ private Q_SLOTS:
 
 protected:
     quint8 m_opacity;
-    bool m_paintOutline;
+    bool m_paintOutline {false};
     QPointF m_outlineDocPoint;
     QPainterPath m_currentOutline;
     QRectF m_oldOutlineRect;
@@ -179,13 +180,13 @@ private:
 
     // used to skip some of the tablet events and don't update the colour that often
     QTimer m_colorPickerDelayTimer;
-    AlternateAction delayedAction;
+    AlternateAction delayedAction {AlternateAction::NONE};
 
     bool m_isOutlineEnabled;
     std::vector<int> m_standardBrushSizes;
 
     KisStrokeId m_pickerStrokeId;
-    int m_pickingResource;
+    int m_pickingResource {0};
     typedef KisSignalCompressorWithParam<PickingJob> PickingCompressor;
     QScopedPointer<PickingCompressor> m_colorPickingCompressor;
 

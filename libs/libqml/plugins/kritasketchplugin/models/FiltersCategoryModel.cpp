@@ -31,6 +31,7 @@
 #include <kis_selection_manager.h>
 #include <kis_canvas2.h>
 #include <kis_filter_manager.h>
+#include <KisGlobalResourcesInterface.h>
 
 #include <QApplication>
 
@@ -227,10 +228,10 @@ void FiltersCategoryModel::filterConfigurationChanged(int index, FiltersModel* m
         if (filter->showConfigurationWidget() && filter->id() != QLatin1String("colortransfer")) {
             KisConfigWidget* wdg = filter->createConfigurationWidget(0, d->view->activeNode()->original(), false);
             wdg->deleteLater();
-            config = KisFilterConfigurationSP(KisFilterRegistry::instance()->cloneConfiguration(dynamic_cast<KisFilterConfiguration*>(wdg->configuration().data())));
+            config = dynamic_cast<KisFilterConfiguration*>(wdg->configuration().data())->clone();
         }
         else {
-            config = KisFilterConfigurationSP(KisFilterRegistry::instance()->cloneConfiguration(filter->defaultConfiguration()));
+            config = filter->defaultConfiguration(KisGlobalResourcesInterface::instance())->clone();
         }
         QObject* configuration = d->categories[d->currentCategory]->configuration(index);
         Q_FOREACH (const QByteArray& propName, configuration->dynamicPropertyNames()) {

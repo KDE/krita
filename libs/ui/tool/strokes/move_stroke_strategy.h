@@ -28,7 +28,7 @@
 #include "kis_lod_transform.h"
 #include <QElapsedTimer>
 #include "KisAsyncronousStrokeUpdateHelper.h"
-
+#include "KisNodeSelectionRecipe.h"
 
 class KisUpdatesFacade;
 class KisPostExecutionUndoAdapter;
@@ -61,6 +61,30 @@ public:
         }
     };
 
+    class PickLayerData : public KisStrokeJobData {
+    public:
+        PickLayerData(QPoint _pos)
+            : KisStrokeJobData(SEQUENTIAL, NORMAL),
+              pos(_pos)
+        {
+        }
+
+        KisStrokeJobData* createLodClone(int levelOfDetail) override {
+            return new PickLayerData(*this, levelOfDetail);
+        }
+
+        QPoint pos;
+
+    private:
+        PickLayerData(const PickLayerData &rhs, int levelOfDetail)
+            : KisStrokeJobData(rhs)
+        {
+            KisLodTransform t(levelOfDetail);
+            pos = t.map(rhs.pos);
+        }
+    };
+
+
     struct BarrierUpdateData : public KisAsyncronousStrokeUpdateHelper::UpdateData
     {
         BarrierUpdateData(bool forceUpdate)
@@ -69,7 +93,12 @@ public:
     };
 
 public:
-    MoveStrokeStrategy(KisNodeList nodes, KisUpdatesFacade *updatesFacade,
+    MoveStrokeStrategy(KisNodeSelectionRecipe nodeSelection,
+                       KisUpdatesFacade *updatesFacade,
+                       KisStrokeUndoFacade *undoFacade);
+
+    MoveStrokeStrategy(KisNodeList nodes,
+                       KisUpdatesFacade *updatesFacade,
                        KisStrokeUndoFacade *undoFacade);
 
     void initStrokeCallback() override;
@@ -81,9 +110,11 @@ public:
 
 Q_SIGNALS:
     void sigHandlesRectCalculated(const QRect &handlesRect);
+    void sigStrokeStartedEmpty();
+    void sigLayersPicked(const KisNodeList &nodes);
 
 private:
-    MoveStrokeStrategy(const MoveStrokeStrategy &rhs);
+    MoveStrokeStrategy(const MoveStrokeStrategy &rhs, int lod);
     void setUndoEnabled(bool value);
     void setUpdatesEnabled(bool value);
 private:
@@ -94,7 +125,9 @@ private:
     void tryPostUpdateJob(bool forceUpdate);
 
 private:
+    KisNodeSelectionRecipe m_requestedNodeSelection;
     KisNodeList m_nodes;
+    QSharedPointer<KisNodeList> m_sharedNodes;
     QSet<KisNodeSP> m_blacklistedNodes;
     KisUpdatesFacade *m_updatesFacade;
     QPoint m_finalOffset;

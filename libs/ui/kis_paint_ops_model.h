@@ -46,7 +46,7 @@ struct KRITAUI_EXPORT KisPaintOpInfo
     QString name;
     QString category;
     QIcon icon;
-    qint32  priority;
+    qint32  priority {0};
 };
 
 struct PaintOpInfoToQStringConverter {

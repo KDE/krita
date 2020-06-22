@@ -37,8 +37,8 @@ struct Q_DECL_HIDDEN KisColorTransformationConfiguration::Private {
     QMutex mutex;
 };
 
-KisColorTransformationConfiguration::KisColorTransformationConfiguration(const QString & name, qint32 version)
-    : KisFilterConfiguration(name, version)
+KisColorTransformationConfiguration::KisColorTransformationConfiguration(const QString & name, qint32 version, KisResourcesInterfaceSP resourcesInterface)
+    : KisFilterConfiguration(name, version, resourcesInterface)
     , d(new Private())
 {
 }
@@ -52,6 +52,11 @@ KisColorTransformationConfiguration::KisColorTransformationConfiguration(const K
 KisColorTransformationConfiguration::~KisColorTransformationConfiguration()
 {
     delete d;
+}
+
+KisFilterConfigurationSP KisColorTransformationConfiguration::clone() const
+{
+    return new KisColorTransformationConfiguration(*this);
 }
 
 KoColorTransformation* KisColorTransformationConfiguration::colorTransformation(const KoColorSpace *cs, const KisColorTransformationFilter *filter) const

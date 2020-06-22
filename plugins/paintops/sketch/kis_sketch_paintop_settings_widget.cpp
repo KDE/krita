@@ -36,6 +36,7 @@
 #include "kis_density_option.h"
 #include "kis_linewidth_option.h"
 #include "kis_offset_scale_option.h"
+#include <KisGlobalResourcesInterface.h>
 
 KisSketchPaintOpSettingsWidget::KisSketchPaintOpSettingsWidget(QWidget* parent)
     : KisBrushBasedPaintopOptionWidget(parent)
@@ -79,7 +80,7 @@ KisSketchPaintOpSettingsWidget::~ KisSketchPaintOpSettingsWidget()
 
 KisPropertiesConfigurationSP  KisSketchPaintOpSettingsWidget::configuration() const
 {
-    KisSketchPaintOpSettingsSP config = new KisSketchPaintOpSettings();
+    KisSketchPaintOpSettingsSP config = new KisSketchPaintOpSettings(KisGlobalResourcesInterface::instance());
     config->setOptionsWidget(const_cast<KisSketchPaintOpSettingsWidget*>(this));
     config->setProperty("paintop", "sketchbrush"); // XXX: make this a const id string
     writeConfiguration(config);

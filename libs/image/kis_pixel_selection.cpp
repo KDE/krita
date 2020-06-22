@@ -97,7 +97,7 @@ KisPixelSelection::KisPixelSelection(const KisPaintDeviceSP copySource, KritaUti
     this->makeFullCopyFrom(*tmpDevice, copyMode, 0);
 
     m_d->parentSelection = parentSelection;
-    m_d->outlineCacheValid = true;
+    m_d->outlineCacheValid = false;
     m_d->invalidateThumbnailImage();
 }
 

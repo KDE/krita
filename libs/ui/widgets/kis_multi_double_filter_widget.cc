@@ -26,6 +26,7 @@
 #include <kis_config_widget.h>
 #include <filter/kis_filter_configuration.h>
 #include <klocalizedstring.h>
+#include <KisGlobalResourcesInterface.h>
 
 KisDelayedActionDoubleInput::KisDelayedActionDoubleInput(QWidget * parent, const QString & name)
     : KisDoubleParseSpinBox(parent)
@@ -113,7 +114,7 @@ void KisMultiDoubleFilterWidget::setConfiguration(const KisPropertiesConfigurati
 
 KisPropertiesConfigurationSP KisMultiDoubleFilterWidget::configuration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration(m_filterid, 0);
+    KisFilterConfigurationSP config = new KisFilterConfiguration(m_filterid, 0, KisGlobalResourcesInterface::instance());
     for (int i = 0; i < nbValues(); ++i) {
         config->setProperty(m_doubleWidgets[i]->objectName(), m_doubleWidgets[i]->value());
     }

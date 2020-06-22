@@ -198,10 +198,10 @@ void KisDlgFilter::createMask()
     }
 
     KisLayer *layer = qobject_cast<KisLayer*>(d->node.data());
-    KisFilterMaskSP mask = new KisFilterMask();
+    KisFilterMaskSP mask = new KisFilterMask(i18n("Filter Mask"));
     mask->setName(d->currentFilter->name());
     mask->initSelection(d->view->selection(), layer);
-    mask->setFilter(d->uiFilterDialog.filterSelection->configuration());
+    mask->setFilter(d->uiFilterDialog.filterSelection->configuration()->cloneWithResourcesSnapshot());
 
     Q_ASSERT(layer->allowAsChild(mask));
 

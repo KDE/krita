@@ -64,10 +64,6 @@ public:
     QRectF outlineRect() const override;
     /// a group's boundingRect
     QRectF boundingRect() const override;
-    /// reimplemented from KoShape
-    void saveOdf(KoShapeSavingContext &context) const override;
-    // reimplemented
-    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
 private:
     friend class ShapeGroupContainerModel;

@@ -20,7 +20,7 @@
 #define KIS_KRA_TAGS
 
 #include <QString>
-
+#include <KisResourceTypes.h>
 
 /**
  * Tag definitions for our xml file format
@@ -136,7 +136,7 @@ const QString CANVASPROJECTIONCOLOR = "ProjectionBackgroundColor";
 const QString COLORBYTEDATA = "ColorData";
 const QString SIMPLECOLORDATA = "SimpleColorData"; // easier 8-bit color data that works well with XML
 const QString GLOBALASSISTANTSCOLOR = "GlobalAssistantsColor";
-const QString PALETTES = "Palettes";
+const QString PALETTES = ResourceType::Palettes;
 const QString MIRROR_AXIS = "MirrorAxis";
 }
 

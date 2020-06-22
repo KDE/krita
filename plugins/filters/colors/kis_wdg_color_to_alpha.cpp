@@ -34,6 +34,7 @@
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
 #include <KoColorSpaceRegistry.h>
+#include <KisGlobalResourcesInterface.h>
 
 #include "ui_wdgcolortoalphabase.h"
 
@@ -102,7 +103,7 @@ void KisWdgColorToAlpha::setConfiguration(const KisPropertiesConfigurationSP con
 
 KisPropertiesConfigurationSP KisWdgColorToAlpha::configuration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("colortoalpha", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("colortoalpha", 1, KisGlobalResourcesInterface::instance());
     config->setProperty("targetcolor", widget()->colorSelector->getCurrentColor().toQColor());
     config->setProperty("threshold", widget()->intThreshold->value());
     return config;

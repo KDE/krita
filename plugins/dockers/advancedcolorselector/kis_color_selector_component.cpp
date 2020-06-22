@@ -97,7 +97,7 @@ void KisColorSelectorComponent::setDirty()
     setColor(m_lastSelectedColor);
 }
 
-void KisColorSelectorComponent::setGamutMask(KoGamutMask *gamutMask)
+void KisColorSelectorComponent::setGamutMask(KoGamutMaskSP gamutMask)
 {
     m_currentGamutMask = gamutMask;
     m_gamutMaskOn = true;

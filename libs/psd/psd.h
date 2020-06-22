@@ -29,10 +29,10 @@
 #include <KoColorModelStandardIds.h>
 #include <KoCompositeOpRegistry.h>
 #include <resources/KoAbstractGradient.h>
-
+#include <KoPattern.h>
 #include "kritapsd_export.h"
 
-class KoPattern;
+
 
 const int MAX_CHANNELS = 56;
 
@@ -792,10 +792,10 @@ struct psd_layer_effects_bevel_emboss : public psd_layer_effects_shadow_base
         m_textureEnabled = value;
     }
 
-    KoPattern* texturePattern() const {
+    KoPatternSP texturePattern() const {
         return m_texturePattern;
     }
-    void setTexturePattern(KoPattern *value) {
+    void setTexturePattern(KoPatternSP value) {
         m_texturePattern = value;
     }
 
@@ -881,7 +881,7 @@ private:
     int m_contourRange;
 
     bool m_textureEnabled;
-    KoPattern *m_texturePattern;
+    KoPatternSP m_texturePattern;
     int m_textureScale;
     int m_textureDepth;
     bool m_textureInvert;
@@ -938,7 +938,7 @@ struct psd_layer_effects_overlay_base : public psd_layer_effects_shadow_base
         return m_gradientYOffset;
     }
 
-    KoPattern* pattern() const {
+    KoPatternSP pattern() const {
         return m_pattern;
     }
 
@@ -978,7 +978,7 @@ public:
         return QPointF(m_gradientXOffset, m_gradientYOffset);
     }
 
-    void setPattern(KoPattern *value) {
+    void setPattern(KoPatternSP value) {
         m_pattern = value;
     }
 
@@ -1009,7 +1009,7 @@ private:
     int m_gradientYOffset; // 0..100%
 
     // Pattern
-    KoPattern *m_pattern;
+    KoPatternSP m_pattern;
     int m_horizontalPhase; // 0..100%
     int m_verticalPhase; // 0..100%
 
@@ -1092,7 +1092,7 @@ private:
     // These are unused
     /*int m_scale;
     bool m_alignWithLayer;
-    KoPattern *m_pattern;
+    KoPatternSP m_pattern;
 
     int m_horizontalPhase;
     int m_verticalPhase;*/

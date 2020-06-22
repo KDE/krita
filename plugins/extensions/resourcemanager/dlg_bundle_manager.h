@@ -20,14 +20,12 @@
 #define DLG_BUNDLE_MANAGER_H
 
 #include <QWidget>
-
 #include <KoDialog.h>
-#include "kis_action_manager.h"
-#include "resourcemanager.h"
+#include <QModelIndex>
+#include <QPersistentModelIndex>
 
-class KisResourceBundle;
-class QListWidget;
-class QListWidgetItem;
+class KisStorageModel;
+class KisStorageFilterProxyModel;
 
 namespace Ui
 {
@@ -38,35 +36,29 @@ class DlgBundleManager : public KoDialog
 {
     Q_OBJECT
 public:
-    explicit DlgBundleManager(ResourceManager *resourceManager, KisActionManager* actionMgr, QWidget *parent = 0);
+    explicit DlgBundleManager(QWidget *parent = 0);
 
 private Q_SLOTS:
 
-    void accept() override;
-    void addSelected();
-    void removeSelected();
-    void itemSelected(QListWidgetItem *current, QListWidgetItem *previous);
-    void itemSelected(QListWidgetItem *current);
-    void editBundle();
-    void slotImportResource();
-    void slotCreateBundle();
-    void slotDeleteBackupFiles();
-    void slotOpenResourceFolder();
+    void addBundle();
+    void createBundle();
+    void deleteBundle();
+
+    void slotModelAboutToBeReset();
+    void slotModelReset();
+    void currentCellSelectedChanged(QModelIndex current, QModelIndex previous);
+
 
 private:
 
+    void updateBundleInformation(QModelIndex current);
+    void addBundleToActiveResources(QString filename);
+
     QWidget *m_page;
     Ui::WdgDlgBundleManager *m_ui;
+    QPersistentModelIndex lastIndex;
+    KisStorageFilterProxyModel* m_proxyModel;
 
-    void fillListWidget(QList<KisResourceBundle*> bundles, QListWidget *w);
-    void refreshListData();
-
-    QMap<QString, KisResourceBundle*> m_blacklistedBundles;
-    QMap<QString, KisResourceBundle*> m_activeBundles;
-
-    KisResourceBundle *m_currentBundle;
-    KisActionManager *m_actionManager;
-    ResourceManager *m_resourceManager;
 };
 
 #endif // DLG_BUNDLE_MANAGER_H

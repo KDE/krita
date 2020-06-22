@@ -31,7 +31,8 @@
 #include <kis_debug.h>
 #include <QString>
 #include <QBuffer>
-
+#include <QFileInfo>
+#include <KoMD5Generator.h>
 #include <klocalizedstring.h>
 
 #include <KoColor.h>
@@ -378,12 +379,12 @@ quint32 KisAbrBrushCollection::abr_brush_load_v6(QDataStream & abr, AbrInfo *abr
     if (width < quint16_MAX && height < quint16_MAX) {
         // filename - filename of the file , e.g. test.abr
         // name - test_number_of_the_brush, e.g test_1, test_2
-        KisAbrBrush* abrBrush = 0;
-        if (m_abrBrushes.contains(name)) {
-            abrBrush = m_abrBrushes[name];
+        KisAbrBrushSP abrBrush;
+        if (m_abrBrushes->contains(name)) {
+            abrBrush = m_abrBrushes.data()->operator[](name);
         }
         else {
-            abrBrush = new KisAbrBrush(name, this);
+            abrBrush = KisAbrBrushSP(new KisAbrBrush(name, this));
             abrBrush->setMD5(md5());
         }
 
@@ -391,7 +392,7 @@ quint32 KisAbrBrushCollection::abr_brush_load_v6(QDataStream & abr, AbrInfo *abr
         // XXX: call extra setters on abrBrush for other options of ABR brushes
         abrBrush->setValid(true);
         abrBrush->setName(name);
-        m_abrBrushes[name] = abrBrush;
+        m_abrBrushes.data()->operator[](name) = abrBrush;
 
     }
 
@@ -477,12 +478,12 @@ qint32 KisAbrBrushCollection::abr_brush_load_v12(QDataStream & abr, AbrInfo *abr
                 rle_decode(abr, buffer, height);
             }
 
-            KisAbrBrush* abrBrush = 0;
-            if (m_abrBrushes.contains(name)) {
-                abrBrush = m_abrBrushes[name];
+            KisAbrBrushSP abrBrush;
+            if (m_abrBrushes->contains(name)) {
+                abrBrush = m_abrBrushes.data()->operator[](name);
             }
             else {
-                abrBrush = new KisAbrBrush(name, this);
+                abrBrush = KisAbrBrushSP(new KisAbrBrush(name, this));
                 abrBrush->setMD5(md5());
             }
 
@@ -490,7 +491,7 @@ qint32 KisAbrBrushCollection::abr_brush_load_v12(QDataStream & abr, AbrInfo *abr
             // XXX: call extra setters on abrBrush for other options of ABR brushes   free (buffer);
             abrBrush->setValid(true);
             abrBrush->setName(name);
-            m_abrBrushes[name] = abrBrush;
+            m_abrBrushes.data()->operator[](name) = abrBrush;
             layer_ID = 1;
         }
     }
@@ -523,29 +524,32 @@ qint32 KisAbrBrushCollection::abr_brush_load(QDataStream & abr, AbrInfo *abr_hdr
 
 
 KisAbrBrushCollection::KisAbrBrushCollection(const QString& filename)
-    : KisScalingSizeBrush(filename)
+    : m_isLoaded(false)
+    , m_lastModified()
+    , m_filename(filename)
+    , m_abrBrushes(new QMap<QString, KisAbrBrushSP>())
 {
 }
 
 KisAbrBrushCollection::KisAbrBrushCollection(const KisAbrBrushCollection& rhs)
-    : KisScalingSizeBrush(rhs)
+    : m_isLoaded(rhs.m_isLoaded)
+    , m_lastModified(rhs.m_lastModified)
 {
-    for (auto it = rhs.m_abrBrushes.begin();
-         it != rhs.m_abrBrushes.end();
+    m_abrBrushes.reset(new QMap<QString, KisAbrBrushSP>());
+    for (auto it = rhs.m_abrBrushes->begin();
+         it != rhs.m_abrBrushes->end();
          ++it) {
 
-        m_abrBrushes.insert(it.key(), new KisAbrBrush(*it.value(), this));
+        m_abrBrushes->insert(it.key(), KisAbrBrushSP(new KisAbrBrush(*it.value(), this)));
     }
-}
-
-KisBrush* KisAbrBrushCollection::clone() const
-{
-    return new KisAbrBrushCollection(*this);
 }
 
 bool KisAbrBrushCollection::load()
 {
+    m_isLoaded = true;
     QFile file(filename());
+    QFileInfo info(file);
+    m_lastModified = info.lastModified();
     // check if the file is open correctly
     if (!file.open(QIODevice::ReadOnly)) {
         warnKrita << "Can't open file " << filename();
@@ -567,6 +571,9 @@ bool KisAbrBrushCollection::loadFromDevice(QIODevice *dev)
     qint32 layer_ID;
 
     QByteArray ba = dev->readAll();
+
+    m_md5 = KoMD5Generator::generateHash(ba);
+
     QBuffer buf(&ba);
     buf.open(QIODevice::ReadOnly);
     QDataStream abr(&buf);
@@ -590,7 +597,7 @@ bool KisAbrBrushCollection::loadFromDevice(QIODevice *dev)
     image_ID = 123456;
 
     for (i = 0; i < abr_hdr.count; i++) {
-        layer_ID = abr_brush_load(abr, &abr_hdr, shortFilename(), image_ID, i + 1);
+        layer_ID = abr_brush_load(abr, &abr_hdr, QFileInfo(filename()).fileName(), image_ID, i + 1);
         if (layer_ID == -1) {
             warnKrita << "Warning: problem loading brush #" << i << " in " << filename();
         }
@@ -608,6 +615,11 @@ bool KisAbrBrushCollection::save()
 bool KisAbrBrushCollection::saveToDevice(QIODevice */*dev*/) const
 {
     return false;
+}
+
+bool KisAbrBrushCollection::isLoaded() const
+{
+    return m_isLoaded;
 }
 
 QImage KisAbrBrushCollection::image() const

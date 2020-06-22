@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>505</width>
-    <height>483</height>
+    <height>490</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -35,13 +35,83 @@
         </widget>
        </item>
        <item>
-        <widget class="KisSpinboxColorSelector" name="spinboxselector" native="true">
+        <widget class="QTabWidget" name="tabWidget">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <property name="tabBarAutoHide">
+          <bool>true</bool>
+         </property>
+         <widget class="QWidget" name="tab_channel">
+          <attribute name="title">
+           <string>Channels</string>
+          </attribute>
+          <layout class="QVBoxLayout" name="verticalLayout_2">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="KisSpinboxColorSelector" name="spinboxselector" native="true">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="tab_hsx">
+          <attribute name="title">
+           <string>Unknown</string>
+          </attribute>
+          <layout class="QVBoxLayout" name="verticalLayout_3">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="KisSpinboxHSXSelector" name="spinboxHSXSelector" native="true">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
         </widget>
        </item>
        <item>
@@ -204,7 +274,7 @@
   <customwidget>
    <class>KisPopupButton</class>
    <extends>QPushButton</extends>
-   <header>kis_popup_button.h</header>
+   <header>KisPopupButton.h</header>
   </customwidget>
   <customwidget>
    <class>KisPaletteView</class>
@@ -233,6 +303,12 @@
    <class>KisPaletteComboBox</class>
    <extends>QComboBox</extends>
    <header>KisPaletteComboBox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisSpinboxHSXSelector</class>
+   <extends>QWidget</extends>
+   <header>KisSpinboxHSXSelector.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

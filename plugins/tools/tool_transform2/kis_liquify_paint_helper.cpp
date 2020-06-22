@@ -15,8 +15,10 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
 #include "kis_liquify_paint_helper.h"
+
+#include <QElapsedTimer>
+#include <QPainterPath>
 
 #include "kis_algebra_2d.h"
 #include "KoPointerEvent.h"
@@ -44,7 +46,7 @@ struct KisLiquifyPaintHelper::Private
     const KisCoordinatesConverter *converter;
     QScopedPointer<KisPaintingInformationBuilder> infoBuilder;
 
-    QTime strokeTime;
+    QElapsedTimer strokeTime;
 
     bool hasPaintedAtLeastOnce;
 
@@ -65,7 +67,7 @@ KisLiquifyPaintHelper::~KisLiquifyPaintHelper()
 
 void KisLiquifyPaintHelper::Private::updatePreviousPaintInfo(const KisPaintInformation &info)
 {
-    QPointF prevPos = lastOutlinePos.pushThroughHistory(info.pos());
+    QPointF prevPos = lastOutlinePos.pushThroughHistory(info.pos(), converter->effectiveZoom());
     qreal angle = KisAlgebra2D::directionBetweenPoints(prevPos, info.pos(), 0);
 
     previousDistanceInfo =

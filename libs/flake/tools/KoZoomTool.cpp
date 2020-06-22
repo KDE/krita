@@ -54,22 +54,20 @@ void KoZoomTool::mouseMoveEvent(KoPointerEvent *event)
 {
     updateCursor(event->modifiers() & Qt::ControlModifier);
 
-    if (currentStrategy()) {
-        currentStrategy()->handleMouseMove(event->point, event->modifiers());
-    }
+    KoInteractionTool::mouseMoveEvent(event);
 }
 
 void KoZoomTool::keyPressEvent(QKeyEvent *event)
 {
     event->ignore();
-
     updateCursor(event->modifiers() & Qt::ControlModifier);
+
+    KoInteractionTool::keyPressEvent(event);
 }
 
 void KoZoomTool::keyReleaseEvent(QKeyEvent *event)
 {
     event->ignore();
-
     updateCursor(event->modifiers() & Qt::ControlModifier);
 
     KoInteractionTool::keyReleaseEvent(event);

@@ -60,6 +60,8 @@ void KisSelectionUpdateCompressor::startUpdateJob()
         return;
     }
 
+    // FIXME: we cannot use parentNode->image() here because masks don't
+    //        have the pointer initialized for some reason.
     KisImageSP image = KisLayerUtils::findImageByHierarchy(parentNode);
     if (!image) {
         m_hasStalledUpdate = true;

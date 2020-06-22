@@ -42,10 +42,10 @@ void KisActionPlugin::addAction(const QString& name, KisAction* action)
 
 KisAction* KisActionPlugin::createAction(const QString& name)
 {
-  if (m_viewManager) {
-    return m_viewManager->actionManager()->createAction(name);
-  }
-  return 0;
+    if (m_viewManager) {
+        return m_viewManager->actionManager()->createAction(name);
+    }
+    return 0;
 }
 
 void KisActionPlugin::addUIFactory(KisOperationUIFactory* factory)

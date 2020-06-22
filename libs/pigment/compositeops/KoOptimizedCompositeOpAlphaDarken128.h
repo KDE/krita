@@ -206,7 +206,7 @@ public:
 
     using KoCompositeOp::composite;
 
-    virtual void composite(const KoCompositeOp::ParameterInfo& params) const
+    virtual void composite(const KoCompositeOp::ParameterInfo& params) const override
     {
         if(params.maskRowStart) {
             KoStreamedMath<_impl>::template genericComposite128<true, true, AlphaDarkenCompositor128<float, quint32, ParamsWrapper> >(params);

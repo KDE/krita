@@ -102,6 +102,7 @@
 #include "kis_layer_utils.h"
 #include "lazybrush/kis_colorize_mask.h"
 #include "kis_processing_applicator.h"
+#include "kis_projection_leaf.h"
 
 #include "KisSaveGroupVisitor.h"
 
@@ -262,11 +263,8 @@ void KisLayerManager::layerProperties()
             if(xmlBefore != xmlAfter) {
                 KisChangeFilterCmd *cmd
                         = new KisChangeFilterCmd(adjustmentLayer,
-                                                 configBefore->name(),
-                                                 xmlBefore,
-                                                 configAfter->name(),
-                                                 xmlAfter,
-                                                 false);
+                                                 configBefore->cloneWithResourcesSnapshot(),
+                                                 configAfter->cloneWithResourcesSnapshot());
                 // FIXME: check whether is needed
                 cmd->redo();
                 m_view->undoAdapter()->addCommand(cmd);
@@ -279,7 +277,7 @@ void KisLayerManager::layerProperties()
             QString xmlAfter = configAfter->toXML();
 
             if(xmlBefore != xmlAfter) {
-                adjustmentLayer->setFilter(KisFilterRegistry::instance()->cloneConfiguration(configBefore.data()));
+                adjustmentLayer->setFilter(configBefore->cloneWithResourcesSnapshot());
                 adjustmentLayer->setDirty();
             }
         }
@@ -287,7 +285,6 @@ void KisLayerManager::layerProperties()
     else if (generatorLayer && !multipleLayersSelected) {
         KisFilterConfigurationSP configBefore(generatorLayer->filter());
         Q_ASSERT(configBefore);
-        QString xmlBefore = configBefore->toXML();
 
         KisDlgGeneratorLayer *dlg = new KisDlgGeneratorLayer(generatorLayer->name(), m_view, m_view->mainWindow(), generatorLayer, configBefore);
         dlg->setCaption(i18n("Fill Layer Properties"));
@@ -391,7 +388,11 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
             source->paintDevice() ? source->projection() : source->original();
 
     bool putBehind = false;
-    QString newCompositeOp = source->compositeOpId();
+
+    QString newCompositeOp =
+        source->projectionLeaf()->isLayer() ?
+            source->compositeOpId() : COMPOSITE_OVER;
+
     KisColorizeMask *colorizeMask = dynamic_cast<KisColorizeMask*>(source.data());
     if (colorizeMask) {
         srcDevice = colorizeMask->coloringProjection();
@@ -409,6 +410,9 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
             *srcDevice->compositionSourceColorSpace()) {
 
         clone = new KisPaintDevice(srcDevice->compositionSourceColorSpace());
+        clone->setDefaultPixel(
+            srcDevice->defaultPixel().convertedTo(
+                srcDevice->compositionSourceColorSpace()));
 
         QRect rc(srcDevice->extent());
         KisPainter::copyAreaOptimized(rc.topLeft(), srcDevice, clone, rc);
@@ -597,6 +601,10 @@ KisLayerSP KisLayerManager::addPaintLayer(KisNodeSP activeNode)
 {
     KisImageWSP image = m_view->image();
     KisLayerSP layer = new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, image->colorSpace());
+
+    KisConfig cfg(true);
+    layer->setPinnedToTimeline(cfg.autoPinLayersToTimeline());
+
     addLayerCommon(activeNode, layer, false, 0);
 
     return layer;
@@ -680,7 +688,7 @@ KisAdjustmentLayerSP KisLayerManager::addAdjustmentLayer(KisNodeSP activeNode, c
                                                          KisProcessingApplicator *applicator)
 {
     KisImageWSP image = m_view->image();
-    KisAdjustmentLayerSP layer = new KisAdjustmentLayer(image, name, filter, selection);
+    KisAdjustmentLayerSP layer = new KisAdjustmentLayer(image, name, filter ? filter->cloneWithResourcesSnapshot() : 0, selection);
     addLayerCommon(activeNode, layer, true, applicator);
 
     return layer;
@@ -703,7 +711,7 @@ KisNodeSP KisLayerManager::addGeneratorLayer(KisNodeSP activeNode)
         KisFilterConfigurationSP  generator = dlg.configuration();
         QString name = dlg.layerName();
 
-        KisNodeSP node = new KisGeneratorLayer(image, name, generator, selection);
+        KisNodeSP node = new KisGeneratorLayer(image, name, generator ? generator->cloneWithResourcesSnapshot() : 0, selection);
 
         addLayerCommon(activeNode, node, true, 0);
 
@@ -956,7 +964,7 @@ KisNodeSP KisLayerManager::addFileLayer(KisNodeSP activeNode)
 
 void updateLayerStyles(KisLayerSP layer, KisDlgLayerStyle *dlg)
 {
-    KisSetLayerStyleCommand::updateLayerStyle(layer, dlg->style()->clone());
+    KisSetLayerStyleCommand::updateLayerStyle(layer, dlg->style()->clone().dynamicCast<KisPSDLayerStyle>());
 }
 
 void KisLayerManager::layerStyle()
@@ -971,13 +979,13 @@ void KisLayerManager::layerStyle()
 
     KisPSDLayerStyleSP oldStyle;
     if (layer->layerStyle()) {
-        oldStyle = layer->layerStyle()->clone();
+        oldStyle = layer->layerStyle()->clone().dynamicCast<KisPSDLayerStyle>();
     }
     else {
         oldStyle = toQShared(new KisPSDLayerStyle());
     }
 
-    KisDlgLayerStyle dlg(oldStyle->clone(), m_view->canvasResourceProvider());
+    KisDlgLayerStyle dlg(oldStyle->clone().dynamicCast<KisPSDLayerStyle>(), m_view->canvasResourceProvider());
 
     std::function<void ()> updateCall(std::bind(updateLayerStyles, layer, &dlg));
     SignalToFunctionProxy proxy(updateCall);

@@ -75,11 +75,11 @@ endif()
 
 # define common versions of Krita applications, used to generate kritaversion.h
 # update these version for every release:
-set(KRITA_VERSION_STRING "4.3.0-prealpha")
+set(KRITA_VERSION_STRING "5.0.0-prealpha")
 # Major version: 3 for 3.x, 4 for 4.x, etc.
-set(KRITA_STABLE_VERSION_MAJOR 4)
+set(KRITA_STABLE_VERSION_MAJOR 5)
 # Minor version: 0 for 4.0, 1 for 4.1, etc.
-set(KRITA_STABLE_VERSION_MINOR 3)
+set(KRITA_STABLE_VERSION_MINOR 0)
 # Bugfix release version, or 0 for before the first stable release
 set(KRITA_VERSION_RELEASE 0)
 # the 4th digit, really only used for the Windows installer:
@@ -101,8 +101,8 @@ message(STATUS "Krita version: ${KRITA_VERSION_STRING}")
 # This makes it easy to advance it when the next Krita release comes.
 # 14 was the last GENERIC_KRITA_LIB_VERSION_MAJOR of the previous Krita series
 # (2.x) so we're starting with 15 in 3.x series, 16 in 4.x series
-if(KRITA_STABLE_VERSION_MAJOR EQUAL 4)
-    math(EXPR GENERIC_KRITA_LIB_VERSION_MAJOR "${KRITA_STABLE_VERSION_MINOR} + 16")
+if(KRITA_STABLE_VERSION_MAJOR EQUAL 5)
+    math(EXPR GENERIC_KRITA_LIB_VERSION_MAJOR "${KRITA_STABLE_VERSION_MINOR} + 17")
 else()
     # let's make sure we won't forget to update the "16"
     message(FATAL_ERROR "Reminder: please update offset == 16 used to compute GENERIC_KRITA_LIB_VERSION_MAJOR to something bigger")
@@ -193,6 +193,16 @@ option(ENABLE_PYTHON_2 "Enables the compiler to look for Python 2.7 instead of P
 option(BUILD_KRITA_QT_DESIGNER_PLUGINS "Build Qt Designer plugins for Krita widgets" OFF)
 add_feature_info("Build Qt Designer plugins" BUILD_KRITA_QT_DESIGNER_PLUGINS "Builds Qt Designer plugins for Krita widgets (use -DBUILD_KRITA_QT_DESIGNER_PLUGINS=ON to enable).")
 
+option(ENABLE_UPDATERS "Enable updaters/update notifications" ON)
+configure_file(config-updaters.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-updaters.h)
+add_feature_info("Enable updaters" ENABLE_UPDATERS "Enable updaters/update notifications.")
+
+# Branding. Available options: default, Beta, Plus, Next. Can be set from command line
+if (NOT DEFINED BRANDING)
+	set(BRANDING "default")
+endif()
+message(STATUS "Branding selected: ${BRANDING}")
+
 include(MacroJPEG)
 
  #########################################################
@@ -280,7 +290,6 @@ find_package(KF5 ${MIN_FRAMEWORKS_VERSION} REQUIRED COMPONENTS
         ItemModels
         ItemViews
         WindowSystem
-        Archive
 )
 
 find_package(Qt5 ${MIN_QT_VERSION}
@@ -294,6 +303,7 @@ find_package(Qt5 ${MIN_QT_VERSION}
         Svg
         Test
         Concurrent
+        Sql
 )
 
 if (ANDROID)
@@ -840,8 +850,7 @@ list (APPEND ANDROID_EXTRA_LIBS ${QUAZIP_LIBRARIES}
                                 ${KF5_LIBRARIES}/libKF5I18n.so
                                 ${KF5_LIBRARIES}/libKF5CoreAddons.so
                                 ${KF5_LIBRARIES}/libKF5ConfigGui.so
-                                ${KF5_LIBRARIES}/libKF5ConfigCore.so
-                                ${KF5_LIBRARIES}/libKF5Archive.so)
+                                ${KF5_LIBRARIES}/libKF5ConfigCore.so)
 
 
 ##

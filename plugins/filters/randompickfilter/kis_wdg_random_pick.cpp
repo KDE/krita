@@ -24,6 +24,7 @@
 #include <QLayout>
 
 #include <filter/kis_filter_configuration.h>
+#include <KisGlobalResourcesInterface.h>
 
 #include "ui_wdgrandompickoptions.h"
 
@@ -63,7 +64,7 @@ void KisWdgRandomPick::setConfiguration(const KisPropertiesConfigurationSP confi
 
 KisPropertiesConfigurationSP KisWdgRandomPick::configuration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("randompick", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("randompick", 1, KisGlobalResourcesInterface::instance());
     config->setProperty("level", this->widget()->intLevel->value());
     config->setProperty("windowsize", this->widget()->intWindowSize->value());
     config->setProperty("opacity", this->widget()->intOpacity->value());

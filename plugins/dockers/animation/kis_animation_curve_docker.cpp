@@ -58,7 +58,7 @@ struct KisAnimationCurveDocker::Private
 };
 
 KisAnimationCurveDocker::KisAnimationCurveDocker()
-    : QDockWidget(i18n("Animation curves"))
+    : QDockWidget(i18n("Animation Curves"))
     , m_d(new Private(this))
 {
     QWidget *mainWidget = new QWidget(this);

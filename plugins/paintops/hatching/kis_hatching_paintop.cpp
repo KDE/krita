@@ -50,7 +50,7 @@ KisHatchingPaintOp::KisHatchingPaintOp(const KisPaintOpSettingsSP settings, KisP
 {
     Q_UNUSED(node);
 
-    m_settings = new KisHatchingPaintOpSettings();
+    m_settings = static_cast<KisHatchingPaintOpSettings*>(settings->clone().data());
     static_cast<const KisHatchingPaintOpSettings*>(settings.data())->initializeTwin(m_settings);
 
     m_hatchingBrush = new HatchingBrush(m_settings);

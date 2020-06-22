@@ -28,6 +28,7 @@
 #include <half.h>
 #endif
 #include <KoChannelInfo.h>
+#include <KoColorModelStandardIds.h>
 #include <KoColorSpaceTraits.h>
 #include <KoColorSpaceMaths.h>
 #include <KoColorSpaceRegistry.h>
@@ -90,7 +91,7 @@ void KisSpinboxColorSelector::slotSetColorSpace(const KoColorSpace *cs)
 
     QList<KoChannelInfo *> channels = KoChannelInfo::displayOrderSorted(m_d->cs->channels());
     Q_FOREACH (KoChannelInfo* channel, channels) {
-        QString inputLabel = channel->name();
+        QString inputLabel = channel->name() + ":";
         QLabel *inlb = new QLabel(this);
         m_d->labels << inlb;
         inlb->setText(inputLabel);
@@ -100,12 +101,14 @@ void KisSpinboxColorSelector::slotSetColorSpace(const KoColorSpace *cs)
             input->setMinimum(0);
             input->setMaximum(0xFF);
             m_d->spinBoxList.append(input);
-            m_d->layout->addRow(inlb, input);
             connect(input, SIGNAL(valueChanged(int)), this,  SLOT(slotUpdateFromSpinBoxes()));
             if (channel->channelType() == KoChannelInfo::ALPHA && m_d->chooseAlpha == false) {
                 inlb->setVisible(false);
                 input->setVisible(false);
                 input->blockSignals(true);
+            }
+            else {
+                m_d->layout->addRow(inlb, input);
             }
         }
             break;
@@ -114,12 +117,14 @@ void KisSpinboxColorSelector::slotSetColorSpace(const KoColorSpace *cs)
             input->setMinimum(0);
             input->setMaximum(0xFFFF);
             m_d->spinBoxList.append(input);
-            m_d->layout->addRow(inlb,input);
             connect(input, SIGNAL(valueChanged(int)), this,  SLOT(slotUpdateFromSpinBoxes()));
             if (channel->channelType() == KoChannelInfo::ALPHA && m_d->chooseAlpha == false) {
                 inlb->setVisible(false);
                 input->setVisible(false);
                 input->blockSignals(true);
+            }
+            else {
+                m_d->layout->addRow(inlb,input);
             }
         }
             break;
@@ -128,44 +133,68 @@ void KisSpinboxColorSelector::slotSetColorSpace(const KoColorSpace *cs)
             input->setMinimum(0);
             input->setMaximum(0xFFFFFFFF);
             m_d->spinBoxList.append(input);
-            m_d->layout->addRow(inlb,input);
             connect(input, SIGNAL(valueChanged(int)), this,  SLOT(slotUpdateFromSpinBoxes()));
             if (channel->channelType() == KoChannelInfo::ALPHA && m_d->chooseAlpha == false) {
                 inlb->setVisible(false);
                 input->setVisible(false);
                 input->blockSignals(true);
             }
+            else {
+                m_d->layout->addRow(inlb,input);
+            }
         }
             break;
 #ifdef HAVE_OPENEXR
         case KoChannelInfo::FLOAT16: {
+            half m_uiMin, m_uiMax;
+            if (cs->colorModelId() == LABAColorModelID || cs->colorModelId() == CMYKAColorModelID) {
+                m_uiMin = channel->getUIMin();
+                m_uiMax = channel->getUIMax();
+            } else {
+                m_uiMin = 0;
+                m_uiMax = KoColorSpaceMathsTraits<half>::max;
+            }
+
             KisDoubleParseSpinBox *input = new KisDoubleParseSpinBox(this);
-            input->setMinimum(channel->getUIMin());
-            input->setMaximum(channel->getUIMax());
+            input->setMinimum(m_uiMin);
+            input->setMaximum(m_uiMax);
             input->setSingleStep(0.1);
             m_d->doubleSpinBoxList.append(input);
-            m_d->layout->addRow(inlb,input);
             connect(input, SIGNAL(valueChanged(double)), this,  SLOT(slotUpdateFromSpinBoxes()));
             if (channel->channelType() == KoChannelInfo::ALPHA && m_d->chooseAlpha == false) {
                 inlb->setVisible(false);
                 input->setVisible(false);
                 input->blockSignals(true);
             }
+            else {
+                m_d->layout->addRow(inlb,input);
+            }
         }
             break;
 #endif
         case KoChannelInfo::FLOAT32: {
+            float m_uiMin, m_uiMax;
+            if (cs->colorModelId() == LABAColorModelID || cs->colorModelId() == CMYKAColorModelID) {
+                m_uiMin = channel->getUIMin();
+                m_uiMax = channel->getUIMax();
+            } else {
+                m_uiMin = 0;
+                m_uiMax = KoColorSpaceMathsTraits<float>::max;
+            }
+
             KisDoubleParseSpinBox *input = new KisDoubleParseSpinBox(this);
-            input->setMinimum(channel->getUIMin());
-            input->setMaximum(channel->getUIMax());
+            input->setMinimum(m_uiMin);
+            input->setMaximum(m_uiMax);
             input->setSingleStep(0.1);
             m_d->doubleSpinBoxList.append(input);
-            m_d->layout->addRow(inlb,input);
             connect(input, SIGNAL(valueChanged(double)), this,  SLOT(slotUpdateFromSpinBoxes()));
             if (channel->channelType() == KoChannelInfo::ALPHA && m_d->chooseAlpha == false) {
                 inlb->setVisible(false);
                 input->setVisible(false);
                 input->blockSignals(true);
+            }
+            else {
+                m_d->layout->addRow(inlb,input);
             }
         }
             break;

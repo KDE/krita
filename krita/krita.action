@@ -14,18 +14,6 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="edit_blacklist_cleanup">
-      <icon></icon>
-      <text>Cleanup removed files...</text>
-      <whatsThis></whatsThis>
-      <toolTip>Cleanup removed files</toolTip>
-      <iconText>Cleanup removed files</iconText>
-      <activationFlags>0</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="windows_cascade">
       <icon></icon>
       <text>C&amp;ascade</text>
@@ -721,9 +709,9 @@
     </Action>
     <Action name="toggle_assistant">
       <icon></icon>
-      <text>Toggle Assistant</text>
+      <text>Toggle Snap To Assistants</text>
       <whatsThis></whatsThis>
-      <toolTip>Toggle Assistant</toolTip>
+      <toolTip>Toggle Snap to Assistants</toolTip>
       <iconText>ToggleAssistant</iconText>
       <shortcut>Ctrl+Shift+L</shortcut>
       <isCheckable>true</isCheckable>
@@ -1344,7 +1332,6 @@
       <statusTip></statusTip>
     </Action>
   </Actions>
-
   <Actions category="tool-shortcuts">
     <text>Tool Shortcuts</text>
     <Action name="KritaShape/KisToolDyna">
@@ -1353,26 +1340,6 @@
       <whatsThis></whatsThis>
       <toolTip>Dynamic Brush Tool</toolTip>
       <iconText>Dynamic Brush Tool</iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="KisToolCrop">
-      <icon></icon>
-      <text>Crop Tool</text>
-      <whatsThis></whatsThis>
-      <toolTip>Crop the image to an area</toolTip>
-      <iconText>Crop the image to an area</iconText>
-      <shortcut>C</shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="KisToolPolygon">
-      <icon></icon>
-      <text>Polygon Tool</text>
-      <whatsThis></whatsThis>
-      <toolTip>Polygon Tool. Shift-mouseclick ends the polygon.</toolTip>
-      <iconText>Polygon Tool. Shift-mouseclick ends the polygon.</iconText>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
@@ -1444,36 +1411,6 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="KisToolSelectOutline">
-      <icon></icon>
-      <text>Outline Selection Tool</text>
-      <whatsThis></whatsThis>
-      <toolTip>Outline Selection Tool</toolTip>
-      <iconText>Outline Selection Tool</iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="KisToolSelectPath">
-      <icon></icon>
-      <text>Bezier Curve Selection Tool</text>
-      <whatsThis></whatsThis>
-      <toolTip>Bezier Curve Selection Tool</toolTip>
-      <iconText>Bezier Curve Selection Tool</iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="KisToolSelectSimilar">
-      <icon></icon>
-      <text>Similar Color Selection Tool</text>
-      <whatsThis></whatsThis>
-      <toolTip>Similar Color Selection Tool</toolTip>
-      <iconText>Similar Color Selection Tool</iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="KritaFill/KisToolFill">
       <icon></icon>
       <text>Fill Tool</text>
@@ -1490,26 +1427,6 @@
       <whatsThis></whatsThis>
       <toolTip>Line Tool</toolTip>
       <iconText>Line Tool</iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="KisToolPencil">
-      <icon></icon>
-      <text>Freehand Path Tool</text>
-      <whatsThis></whatsThis>
-      <toolTip>Freehand Path Tool</toolTip>
-      <iconText>Freehand Path Tool</iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="KisToolPath">
-      <icon></icon>
-      <text>Bezier Curve Tool</text>
-      <whatsThis></whatsThis>
-      <toolTip>Bezier Curve Tool. Shift-mouseclick or double-click ends the curve.</toolTip>
-      <iconText>Bezier Curve Tool. Shift-mouseclick or double-click ends the curve.</iconText>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
@@ -1544,26 +1461,6 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="KisToolSelectElliptical">
-      <icon></icon>
-      <text>Elliptical Selection Tool</text>
-      <whatsThis></whatsThis>
-      <toolTip>Elliptical Selection Tool</toolTip>
-      <iconText>Elliptical Selection Tool</iconText>
-      <shortcut>J</shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="KisToolSelectContiguous">
-      <icon></icon>
-      <text>Contiguous Selection Tool</text>
-      <whatsThis></whatsThis>
-      <toolTip>Contiguous Selection Tool</toolTip>
-      <iconText>Contiguous Selection Tool</iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="KarbonPatternTool">
       <icon></icon>
       <text>Pattern editing</text>
@@ -1594,16 +1491,6 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="KisToolSelectPolygonal">
-      <icon></icon>
-      <text>Polygonal Selection Tool</text>
-      <whatsThis></whatsThis>
-      <toolTip>Polygonal Selection Tool</toolTip>
-      <iconText>Polygonal Selection Tool</iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="KritaShape/KisToolMeasure">
       <icon></icon>
       <text>Measurement Tool</text>
@@ -1611,16 +1498,6 @@
       <toolTip>Measure the distance between two points</toolTip>
       <iconText>Measure the distance between two points</iconText>
       <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="KisToolSelectRectangular">
-      <icon></icon>
-      <text>Rectangular Selection Tool</text>
-      <whatsThis></whatsThis>
-      <toolTip>Rectangular Selection Tool</toolTip>
-      <iconText>Rectangular Selection Tool</iconText>
-      <shortcut>Ctrl+R</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1656,10 +1533,10 @@
     </Action>
     <Action name="PathTool">
       <icon></icon>
-      <text>Path editing</text>
+      <text>Edit Shapes Tool</text>
       <whatsThis></whatsThis>
-      <toolTip>Path editing</toolTip>
-      <iconText>Path editing</iconText>
+      <toolTip>Edit Shapes Tool</toolTip>
+      <iconText>Edit Shapes Tool</iconText>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
@@ -1670,36 +1547,6 @@
       <whatsThis></whatsThis>
       <toolTip>Zoom Tool</toolTip>
       <iconText>Zoom Tool</iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="KisToolPolyline">
-      <icon></icon>
-      <text>Polyline Tool</text>
-      <whatsThis></whatsThis>
-      <toolTip>Polyline Tool. Shift-mouseclick ends the polyline.</toolTip>
-      <iconText>Polyline Tool. Shift-mouseclick ends the polyline.</iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="KisToolTransform">
-      <icon></icon>
-      <text>Transform Tool</text>
-      <whatsThis></whatsThis>
-      <toolTip>Transform a layer or a selection</toolTip>
-      <iconText>Transform a layer or a selection</iconText>
-      <shortcut>Ctrl+T</shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="KisAssistantTool">
-      <icon></icon>
-      <text>Assistant Tool</text>
-      <whatsThis></whatsThis>
-      <toolTip>Assistant Tool</toolTip>
-      <iconText>Assistant Tool</iconText>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
@@ -2068,7 +1915,7 @@
   <Actions category="Animation">
     <text>Animation</text>
     <Action name="previous_frame">
-      <icon></icon>
+      <icon>prevframe</icon>
       <text>Previous frame</text>
       <whatsThis></whatsThis>
       <toolTip>Move to previous frame</toolTip>
@@ -2080,7 +1927,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="next_frame">
-      <icon></icon>
+      <icon>nextframe</icon>
       <text>Next frame</text>
       <whatsThis></whatsThis>
       <toolTip>Move to next frame</toolTip>
@@ -2092,7 +1939,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="toggle_playback">
-      <icon></icon>
+      <icon>animation_play</icon>
       <text>Play / pause animation</text>
       <whatsThis></whatsThis>
       <toolTip>Play / pause animation</toolTip>
@@ -2102,6 +1949,18 @@
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
+    </Action>
+    <Action name="stop_playback">
+      <icon>animation_stop</icon>
+      <text>Stop animation</text>
+      <whatsThis></whatsThis>
+      <toolTip>Stop animation</toolTip>
+      <iconText>Stop animation</iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+       <statusTip></statusTip>
     </Action>
     <Action name="add_blank_frame">
       <icon>addblankframe</icon>
@@ -2179,7 +2038,7 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="lazy_frame">
+    <Action name="auto_key">
       <icon></icon>
       <text>Auto Frame Mode</text>
       <whatsThis></whatsThis>
@@ -2190,8 +2049,9 @@
       <statusTip></statusTip>
     </Action>
     <Action name="drop_frames">
-      <icon></icon>
-      <text></text>
+      <icon>dropframe</icon>
+      <text>Drop Frames
+Enable to preserve playback timing.</text>
       <whatsThis></whatsThis>
       <toolTip></toolTip>
       <iconText></iconText>
@@ -2199,11 +2059,11 @@
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="show_in_timeline">
+    <Action name="pin_to_timeline">
       <icon></icon>
-      <text>Show in Timeline</text>
+      <text>Pin to Timeline</text>
       <whatsThis></whatsThis>
-      <toolTip></toolTip>
+      <toolTip>If checked, layer becomes pinned to the timeline, making it visible even when inactive.</toolTip>
       <iconText></iconText>
       <shortcut></shortcut>
       <isCheckable>true</isCheckable>
@@ -2444,6 +2304,35 @@
       <statusTip></statusTip>
     </Action>
 
+
+    <Action name="insert_opacity_keyframe">
+      <icon></icon>
+      <text>Add opacity keyframe</text>
+      <whatsThis></whatsThis>
+      <toolTip>Adds keyframe to control layer opacity</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+
+    <Action name="remove_opacity_keyframe">
+      <icon></icon>
+      <text>Remove opacity keyframe</text>
+      <whatsThis></whatsThis>
+      <toolTip>Removes keyframe to control layer opacity</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+
     <Action name="mirror_frames">
       <icon></icon>
       <text>Mirror Frames</text>
@@ -2609,6 +2498,18 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="activateNextSiblingLayer">
+      <icon></icon>
+      <text>Activate next sibling layer, skipping over groups.</text>
+      <whatsThis></whatsThis>
+      <toolTip>Activate next sibling layer</toolTip>
+      <iconText>Activate next sibling layer</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="activatePreviousLayer">
       <icon></icon>
       <text>Activate previous layer</text>
@@ -2618,6 +2519,18 @@
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>PgDown</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="activatePreviousSiblingLayer">
+      <icon></icon>
+      <text>Activate previous sibling layer, skipping over groups.</text>
+      <whatsThis></whatsThis>
+      <toolTip>Activate previous sibling layer</toolTip>
+      <iconText>Activate previous sibling layer</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2765,12 +2678,24 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="isolate_layer">
+    <Action name="isolate_active_layer">
       <icon>view-filter</icon>
-      <text>&amp;Isolate Layer</text>
+      <text>&amp;Isolate Active Layer</text>
       <whatsThis></whatsThis>
-      <toolTip>Isolate Layer</toolTip>
-      <iconText>Isolate Layer</iconText>
+      <toolTip>Isolate Active Layer</toolTip>
+      <iconText>Isolate Active Layer</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="isolate_active_group">
+      <icon>view-filter</icon>
+      <text>&amp;Isolate Active Group</text>
+      <whatsThis></whatsThis>
+      <toolTip>Isolate Active Group</toolTip>
+      <iconText>Isolate Active Group</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>

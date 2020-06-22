@@ -40,6 +40,7 @@
 #include "kis_layer_utils.h"
 #include "kis_annotation.h"
 #include "KisProofingConfiguration.h"
+#include <KisGlobalResourcesInterface.h>
 
 #include "kis_undo_stores.h"
 
@@ -168,10 +169,10 @@ void KisImageTest::testConvertImageColorSpace()
 
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
     Q_ASSERT(filter);
-    KisFilterConfigurationSP configuration = filter->defaultConfiguration();
+    KisFilterConfigurationSP configuration = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(configuration);
 
-    KisLayerSP blur1 = new KisAdjustmentLayer(image, "blur1", configuration, 0);
+    KisLayerSP blur1 = new KisAdjustmentLayer(image, "blur1", configuration->cloneWithResourcesSnapshot(), 0);
 
     image->addNode(paint1, image->root());
     image->addNode(blur1, image->root());
@@ -211,10 +212,10 @@ void KisImageTest::testAssignImageProfile()
 
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
     Q_ASSERT(filter);
-    KisFilterConfigurationSP configuration = filter->defaultConfiguration();
+    KisFilterConfigurationSP configuration = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(configuration);
 
-    KisLayerSP blur1 = new KisAdjustmentLayer(image, "blur1", configuration, 0);
+    KisLayerSP blur1 = new KisAdjustmentLayer(image, "blur1", configuration->cloneWithResourcesSnapshot(), 0);
 
     image->addNode(paint1, image->root());
     image->addNode(paint2, image->root());

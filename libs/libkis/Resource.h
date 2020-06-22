@@ -19,11 +19,11 @@
 #define LIBKIS_RESOURCE_H
 
 #include <QObject>
+#include <QScopedPointer>
 #include <kis_types.h>
 #include "kritalibkis_export.h"
 #include "libkis.h"
-
-class KoResource;
+#include <KoResource.h>
 
 /**
  * A Resource represents a gradient, pattern, brush tip, brush preset, palette or 
@@ -44,10 +44,14 @@ class KRITALIBKIS_EXPORT Resource : public QObject
     Q_OBJECT
 
 public:
-    explicit Resource(KoResource *resource, QObject *parent = 0);
+    Resource(int resourceId, const QString &type, const QString &name, const QString &filename, const QImage &image, QObject *parent = 0);
+    Resource(KoResourceSP resource, const QString &type, QObject *parent = 0);
     ~Resource() override;
+    Resource(const Resource &rhs);
+
     bool operator==(const Resource &other) const;
     bool operator!=(const Resource &other) const;
+    Resource operator=(const Resource &rhs);
 
 
 public Q_SLOTS:
@@ -94,27 +98,15 @@ public Q_SLOTS:
      */
     void setImage(QImage image);
 
-    /**
-     * Return the resource as a byte array.
-     */
-    QByteArray data() const;
-    
-    /**
-     * Change the internal data of the resource to the given byte 
-     * array. If the byte array is not valid, setData returns
-     * false, otherwise true.
-     */
-    bool setData(QByteArray data);
-
 private:
 
     friend class PresetChooser;
     friend class View;
     friend class Palette;
-    KoResource *resource() const;
+    KoResourceSP resource() const;
 
     struct Private;
-    const Private *const d;
+    QScopedPointer<Private> d;
 
 };
 

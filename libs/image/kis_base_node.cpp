@@ -42,7 +42,7 @@ struct Q_DECL_HIDDEN KisBaseNode::Private
     bool collapsed;
     bool supportsLodMoves;
     bool animated;
-    bool useInTimeline;
+    bool pinnedToTimeline;
     KisImageWSP image;
 
     Private(KisImageWSP image)
@@ -51,7 +51,7 @@ struct Q_DECL_HIDDEN KisBaseNode::Private
         , collapsed(false)
         , supportsLodMoves(false)
         , animated(false)
-        , useInTimeline(true)
+        , pinnedToTimeline(false)
         , image(image)
     {
     }
@@ -63,7 +63,7 @@ struct Q_DECL_HIDDEN KisBaseNode::Private
           collapsed(rhs.collapsed),
           supportsLodMoves(rhs.supportsLodMoves),
           animated(rhs.animated),
-          useInTimeline(rhs.useInTimeline),
+          pinnedToTimeline(rhs.pinnedToTimeline),
           image(rhs.image)
     {
         QMapIterator<QString, QVariant> iter = rhs.properties.propertyIterator();
@@ -111,9 +111,8 @@ KisBaseNode::KisBaseNode(const KisBaseNode & rhs)
                 KisScalarKeyframeChannel* pchannel = qobject_cast<KisScalarKeyframeChannel*>(channel);
                 KIS_ASSERT_RECOVER(pchannel) { continue; }
 
-                KisScalarKeyframeChannel* channelNew = new KisScalarKeyframeChannel(*pchannel, 0);
+                KisScalarKeyframeChannel* channelNew = new KisScalarKeyframeChannel(*pchannel, nullptr);
                 KIS_ASSERT(channelNew);
-
                 m_d->keyframeChannels.insert(channelNew->id(), channelNew);
 
                 if (KoID(key) == KisKeyframeChannel::Opacity) {
@@ -240,8 +239,10 @@ bool KisBaseNode::check(const KoProperties & properties) const
 }
 
 
-QImage KisBaseNode::createThumbnail(qint32 w, qint32 h)
+QImage KisBaseNode::createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspectRatioMode)
 {
+    Q_UNUSED(aspectRatioMode);
+
     try {
         QImage image(w, h, QImage::Format_ARGB32);
         image.fill(0);
@@ -252,9 +253,10 @@ QImage KisBaseNode::createThumbnail(qint32 w, qint32 h)
 
 }
 
-QImage KisBaseNode::createThumbnailForFrame(qint32 w, qint32 h, int time)
+QImage KisBaseNode::createThumbnailForFrame(qint32 w, qint32 h, int time, Qt::AspectRatioMode aspectRatioMode)
 {
     Q_UNUSED(time)
+    Q_UNUSED(aspectRatioMode);
     return createThumbnail(w, h);
 }
 
@@ -286,6 +288,36 @@ bool KisBaseNode::userLocked() const
     return m_d->properties.boolProperty(KisLayerPropertiesIcons::locked.id(), false);
 }
 
+bool KisBaseNode::belongsToIsolatedGroup() const
+{
+    if (!m_d->image) {
+        return false;
+    }
+
+    const KisBaseNode* element = this;
+
+    while (element) {
+        if (element->isIsolatedRoot()) {
+            return true;
+        } else {
+            element = element->parentCallback().data();
+        }
+    }
+
+    return false;
+}
+
+bool KisBaseNode::isIsolatedRoot() const
+{
+    if (!m_d->image) {
+        return false;
+    }
+
+    const KisBaseNode* isolatedRoot = m_d->image->isolationRootNode().data();
+
+    return (this == isolatedRoot);
+}
+
 void KisBaseNode::setUserLocked(bool locked)
 {
     const bool isLocked = m_d->properties.boolProperty(KisLayerPropertiesIcons::locked.id(), true);
@@ -299,7 +331,7 @@ bool KisBaseNode::isEditable(bool checkVisibility) const
 {
     bool editable = true;
     if (checkVisibility) {
-        editable = (visible(false) && !userLocked());
+        editable = ((visible(false) || belongsToIsolatedGroup()) && !userLocked());
     }
     else {
         editable = (!userLocked());
@@ -401,6 +433,19 @@ KisKeyframeChannel * KisBaseNode::getKeyframeChannel(const QString &id) const
     return i.value();
 }
 
+bool KisBaseNode::isPinnedToTimeline() const
+{
+    return m_d->pinnedToTimeline;
+}
+
+void KisBaseNode::setPinnedToTimeline(bool pinned)
+{
+   if (pinned == m_d->pinnedToTimeline) return;
+
+   m_d->pinnedToTimeline = pinned;
+   baseNodeChangedCallback();
+}
+
 KisKeyframeChannel * KisBaseNode::getKeyframeChannel(const QString &id, bool create)
 {
     KisKeyframeChannel *channel = getKeyframeChannel(id);
@@ -427,19 +472,6 @@ void KisBaseNode::enableAnimation()
     baseNodeChangedCallback();
 }
 
-bool KisBaseNode::useInTimeline() const
-{
-    return m_d->useInTimeline;
-}
-
-void KisBaseNode::setUseInTimeline(bool value)
-{
-    if (value == m_d->useInTimeline) return;
-
-    m_d->useInTimeline = value;
-    baseNodeChangedCallback();
-}
-
 void KisBaseNode::addKeyframeChannel(KisKeyframeChannel *channel)
 {
     m_d->keyframeChannels.insert(channel->id(), channel);
@@ -454,10 +486,11 @@ KisKeyframeChannel *KisBaseNode::requestKeyframeChannel(const QString &id)
         KisPaintDeviceSP device = original();
 
         if (device) {
+            KisNode* node = dynamic_cast<KisNode*>(this);
             KisScalarKeyframeChannel * channel = new KisScalarKeyframeChannel(
                 KisKeyframeChannel::Opacity,
                 0, 255,
-                device->defaultBounds(),
+                KisNodeWSP( node ),
                 KisKeyframe::Linear
             );
 

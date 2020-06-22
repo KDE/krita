@@ -25,6 +25,7 @@
 
 #include <filter/kis_filter_configuration.h>
 #include <klocalizedstring.h>
+#include <KisGlobalResourcesInterface.h>
 
 KisDelayedActionIntegerInput::KisDelayedActionIntegerInput(QWidget * parent, const QString & name)
     : KisIntParseSpinBox(parent)
@@ -67,7 +68,7 @@ KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget(const QString& filterid
                                                          vKisIntegerWidgetParam iwparam)
     : KisConfigWidget(parent)
     , m_filterid(filterid)
-    , m_config(new KisFilterConfiguration(filterid, 0))
+    , m_config(new KisFilterConfiguration(filterid, 0, KisGlobalResourcesInterface::instance()))
 {
     this->setWindowTitle(caption);
 
@@ -107,7 +108,7 @@ void KisMultiIntegerFilterWidget::setConfiguration(const KisPropertiesConfigurat
     if (!config) return;
 
     if (!m_config) {
-        m_config = new KisFilterConfiguration(m_filterid, 0);
+        m_config = new KisFilterConfiguration(m_filterid, 0, KisGlobalResourcesInterface::instance());
     }
 
     m_config->fromXML(config->toXML());
@@ -123,7 +124,7 @@ void KisMultiIntegerFilterWidget::setConfiguration(const KisPropertiesConfigurat
 
 KisPropertiesConfigurationSP KisMultiIntegerFilterWidget::configuration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration(m_filterid, 0);
+    KisFilterConfigurationSP config = new KisFilterConfiguration(m_filterid, 0, KisGlobalResourcesInterface::instance());
     if (m_config) {
         config->fromXML(m_config->toXML());
     }

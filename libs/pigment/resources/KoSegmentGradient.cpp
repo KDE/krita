@@ -74,25 +74,15 @@ KoSegmentGradient::KoSegmentGradient(const KoSegmentGradient &rhs)
     }
 }
 
-KoAbstractGradient* KoSegmentGradient::clone() const
+KoResourceSP KoSegmentGradient::clone() const
 {
-    return new KoSegmentGradient(*this);
+    return KoResourceSP(new KoSegmentGradient(*this));
 }
 
-bool KoSegmentGradient::load()
+bool KoSegmentGradient::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
-    QFile file(filename());
-    if (!file.open(QIODevice::ReadOnly)) {
-        warnPigment << "Can't open file " << filename();
-        return false;
-    }
-    bool res = loadFromDevice(&file);
-    file.close();
-    return res;
-}
+    Q_UNUSED(resourcesInterface);
 
-bool KoSegmentGradient::loadFromDevice(QIODevice *dev)
-{
     QByteArray data = dev->readAll();
 
     QTextStream fileContent(data, QIODevice::ReadOnly);
@@ -192,20 +182,6 @@ bool KoSegmentGradient::loadFromDevice(QIODevice *dev)
 
 }
 
-bool KoSegmentGradient::save()
-{
-    QFile file(filename());
-
-    if (!file.open(QIODevice::WriteOnly)) {
-        return false;
-    }
-
-    saveToDevice(&file);
-    file.close();
-
-    return true;
-}
-
 bool KoSegmentGradient::saveToDevice(QIODevice *dev) const
 {
     QTextStream fileContent(dev);
@@ -250,8 +226,6 @@ KoGradientSegment *KoSegmentGradient::segmentAt(qreal t) const
 void KoSegmentGradient::colorAt(KoColor& dst, qreal t) const
 {
     const KoGradientSegment *segment = segmentAt(t);
-    Q_ASSERT(segment != 0);
-
     if (segment) {
         segment->colorAt(dst, t);
     }

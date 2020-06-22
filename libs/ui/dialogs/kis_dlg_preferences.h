@@ -85,6 +85,7 @@ public:
     int favoritePresets();
     bool showCanvasMessages();
     bool compressKra();
+    bool trimKra();
     bool useZip64();
     bool toolOptionsInDocker();
     bool kineticScrollingEnabled();
@@ -93,6 +94,7 @@ public:
     bool kineticScrollingHiddenScrollbars();
     bool switchSelectionCtrlAlt();
     bool convertToImageColorspaceOnImport();
+    bool autopinLayersToTimeline();
 
 private Q_SLOTS:
     void getBackgroundImage();

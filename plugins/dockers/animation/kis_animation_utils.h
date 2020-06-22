@@ -82,16 +82,11 @@ namespace KisAnimationUtils
 
     bool supportsContentFrames(KisNodeSP node);
 
-    extern const QString addFrameActionName;
-    extern const QString duplicateFrameActionName;
-    extern const QString removeFrameActionName;
-    extern const QString removeFramesActionName;
     extern const QString lazyFrameCreationActionName;
     extern const QString dropFramesActionName;
-    extern const QString showLayerActionName;
 
     extern const QString newLayerActionName;
-    extern const QString addExistingLayerActionName;
+    extern const QString pinExistingLayerActionName;
     extern const QString removeLayerActionName;
 
     extern const QString addOpacityKeyframeActionName;

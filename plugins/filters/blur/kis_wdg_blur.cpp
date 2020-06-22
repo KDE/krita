@@ -28,6 +28,7 @@
 #include <kis_selection.h>
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
+#include <KisGlobalResourcesInterface.h>
 
 #include "ui_wdgblur.h"
 
@@ -53,7 +54,7 @@ KisWdgBlur::~KisWdgBlur()
 
 KisPropertiesConfigurationSP KisWdgBlur::configuration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("blur", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("blur", 1, KisGlobalResourcesInterface::instance());
     config->setProperty("lockAspect", widget()->aspectButton->keepAspectRatio());
     config->setProperty("halfWidth", widget()->intHalfWidth->value());
     config->setProperty("halfHeight", widget()->intHalfHeight->value());

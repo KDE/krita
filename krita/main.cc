@@ -231,13 +231,10 @@ extern "C" int main(int argc, char **argv)
     const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
     QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
 
-    bool singleApplication = true;
     bool enableOpenGLDebug = false;
     bool openGLDebugSynchronous = false;
     bool logUsage = true;
     {
-
-        singleApplication = kritarc.value("EnableSingleApplication", true).toBool();
         if (kritarc.value("EnableHiDPI", true).toBool()) {
             QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
         }
@@ -328,12 +325,11 @@ extern "C" int main(int argc, char **argv)
         QLocale locale(language.split(":").first());
         QLocale::setDefault(locale);
 #ifdef Q_OS_MAC
-        // prevents python >=3.7 nl_langinfo(CODESET) fail.
-        qputenv("LANG", locale.name().split('_').first().toLocal8Bit());
+        // prevents python >=3.7 nl_langinfo(CODESET) fail bug 417312.
+        qputenv("LANG", (locale.name() + ".UTF-8").toLocal8Bit());
 #else
         qputenv("LANG", locale.name().toLocal8Bit());
 #endif
-
 
         const QStringList rtlLanguages = QStringList()
                 << "ar" << "dv" << "he" << "ha" << "ku" << "fa" << "ps" << "ur" << "yi";
@@ -366,24 +362,30 @@ extern "C" int main(int argc, char **argv)
                 }
             }
 
-            for (int i = 0; i < uiLanguages.size(); i++) {
-                QString uiLanguage = uiLanguages[i];
-                // Strip the country code
-                int idx = uiLanguage.indexOf(QChar('-'));
+            if (uiLanguages.size() > 0 ) {
+                QString envLanguage = uiLanguages.first();
+                envLanguage.replace(QChar('-'), QChar('_'));
 
-                if (idx != -1) {
-                    uiLanguage = uiLanguage.left(idx);
-                    uiLanguages.replace(i, uiLanguage);
+                for (int i = 0; i < uiLanguages.size(); i++) {
+                    QString uiLanguage = uiLanguages[i];
+                    // Strip the country code
+                    int idx = uiLanguage.indexOf(QChar('-'));
+
+                    if (idx != -1) {
+                        uiLanguage = uiLanguage.left(idx);
+                        uiLanguages.replace(i, uiLanguage);
+                    }
                 }
-            }
-            dbgKrita << "Converted ui languages:" << uiLanguages;
-            qputenv("LANG", uiLanguages.first().toLocal8Bit());
+                dbgKrita << "Converted ui languages:" << uiLanguages;
 #ifdef Q_OS_MAC
-            // See https://bugs.kde.org/show_bug.cgi?id=396370
-            KLocalizedString::setLanguages(QStringList() << uiLanguages.first());
+                // See https://bugs.kde.org/show_bug.cgi?id=396370
+                KLocalizedString::setLanguages(QStringList() << uiLanguages.first());
+                qputenv("LANG", (envLanguage + ".UTF-8").toLocal8Bit());
 #else
-            KLocalizedString::setLanguages(QStringList() << uiLanguages);
+                KLocalizedString::setLanguages(QStringList() << uiLanguages);
+                qputenv("LANG", envLanguage.toLocal8Bit());
 #endif
+            }
         }
     }
 
@@ -450,14 +452,9 @@ extern "C" int main(int argc, char **argv)
     tryInitDrMingw();
 #endif
 
-    // If we should clear the config, it has to be done as soon as possible after
-    // KisApplication has been created. Otherwise the config file may have been read
-    // and stored in a KConfig object we have no control over.
-    app.askClearConfig();
-
     KisApplicationArguments args(app);
 
-    if (singleApplication && app.isRunning()) {
+    if (app.isRunning()) {
         // only pass arguments to main instance if they are not for batch processing
         // any batch processing would be done in this separate instance
         const bool batchRun = args.exportAs() || args.exportSequence();
@@ -589,6 +586,7 @@ extern "C" int main(int argc, char **argv)
         KisUsageLogger::log("Could not start Krita Application");
         return 1;
     }
+
 
     int state = app.exec();
 

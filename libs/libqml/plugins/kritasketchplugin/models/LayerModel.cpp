@@ -43,6 +43,7 @@
 #include <QQmlEngine>
 #include <kis_base_node.h>
 #include "KisSelectionActionsAdapter.h"
+#include <KisGlobalResourcesInterface.h>
 
 struct LayerModelMetaInfo {
     LayerModelMetaInfo()
@@ -597,7 +598,7 @@ QImage LayerModel::layerThumbnail(QString layerID) const
     QImage thumb;
     if (index > -1 && index < d->layers.count()) {
         if (d->thumbProvider)
-            thumb = d->layers[index]->createThumbnail(120, 120);
+            thumb = d->layers[index]->createThumbnail(120, 120, Qt::KeepAspectRatio);
     }
     return thumb;
 }
@@ -927,7 +928,7 @@ void LayerModel::setActiveFilterConfig(QObject* newConfig)
         return;
 
     //dbgKrita << "Attempting to set new config" << config->name();
-    KisFilterConfigurationSP realConfig = d->filters.value(config->name())->factoryConfiguration();
+    KisFilterConfigurationSP realConfig = d->filters.value(config->name())->factoryConfiguration(KisGlobalResourcesInterface::instance());
     QMap<QString, QVariant>::const_iterator i;
     for(i = realConfig->getProperties().constBegin(); i != realConfig->getProperties().constEnd(); ++i)
     {
@@ -952,22 +953,16 @@ void LayerModel::updateActiveLayerWithNewFilterConfig()
     KisFilterMask* filterMask = qobject_cast<KisFilterMask*>(d->activeNode.data());
     if (filterMask)
     {
-        //dbgKrita << "Filter mask";
-        if (filterMask->filter() == d->newConfig)
-            return;
         //dbgKrita << "Setting filter mask";
-        filterMask->setFilter(d->newConfig);
+        filterMask->setFilter(d->newConfig->cloneWithResourcesSnapshot());
     }
     else
     {
         KisAdjustmentLayer* adjustmentLayer = qobject_cast<KisAdjustmentLayer*>(d->activeNode.data());
         if (adjustmentLayer)
         {
-            //dbgKrita << "Adjustment layer";
-            if (adjustmentLayer->filter() == d->newConfig)
-                return;
             //dbgKrita << "Setting filter on adjustment layer";
-            adjustmentLayer->setFilter(d->newConfig);
+            adjustmentLayer->setFilter(d->newConfig->cloneWithResourcesSnapshot());
         }
         else
         {

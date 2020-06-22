@@ -109,6 +109,9 @@ void KisFilterStrokeStrategy::initStrokeCallback()
     KisPaintDeviceSP dev = targetDevice();
     m_d->filterDeviceBounds = dev->extent();
 
+    if (m_d->filter->needsTransparentPixels(m_d->filterConfig.data(), dev->colorSpace())) {
+        m_d->filterDeviceBounds |= dev->defaultBounds()->bounds();
+    }
 
     if (activeSelection() ||
         (dev->colorSpace() != dev->compositionSourceColorSpace() &&
@@ -166,17 +169,7 @@ void KisFilterStrokeStrategy::cancelStrokeCallback()
     delete m_d->secondaryTransaction;
     m_d->filterDevice = 0;
 
-    KisProjectionUpdatesFilterSP prevUpdatesFilter;
-
     if (m_d->cancelSilently) {
-        /**
-         * TODO: Projection updates filter is not recursive, please
-         *       redesign this part
-         */
-        prevUpdatesFilter = m_d->updatesFacade->projectionUpdatesFilter();
-        if (prevUpdatesFilter) {
-            m_d->updatesFacade->setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP());
-        }
         m_d->updatesFacade->disableDirtyRequests();
     }
 
@@ -184,10 +177,6 @@ void KisFilterStrokeStrategy::cancelStrokeCallback()
 
     if (m_d->cancelSilently) {
         m_d->updatesFacade->enableDirtyRequests();
-        if (prevUpdatesFilter) {
-            m_d->updatesFacade->setProjectionUpdatesFilter(prevUpdatesFilter);
-            prevUpdatesFilter.clear();
-        }
     }
 }
 

@@ -35,6 +35,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <kis_file_name_requester.h>
 #include "ui_wdgfastcolortransfer.h"
+#include <KisGlobalResourcesInterface.h>
 
 KisWdgFastColorTransfer::KisWdgFastColorTransfer(QWidget * parent) : KisConfigWidget(parent)
 {
@@ -61,7 +62,7 @@ void KisWdgFastColorTransfer::setConfiguration(const KisPropertiesConfigurationS
 
 KisPropertiesConfigurationSP KisWdgFastColorTransfer::configuration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("colortransfer", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("colortransfer", 1, KisGlobalResourcesInterface::instance());
     QString fileName = this->widget()->fileNameURLRequester->fileName();
 
     if (fileName.isEmpty()) return config;

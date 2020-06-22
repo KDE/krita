@@ -51,6 +51,7 @@
 #include "kis_node_commands_adapter.h"
 #include "commands/kis_deselect_global_selection_command.h"
 #include "kis_iterator_ng.h"
+#include <KisGlobalResourcesInterface.h>
 
 KisMaskManager::KisMaskManager(KisViewManager * view)
     : m_view(view)
@@ -251,9 +252,9 @@ KisNodeSP KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceS
 
     // If we are supposed to not disturb the user, don't start asking them about things.
     if(quiet) {
-        KisFilterConfigurationSP filter = KisFilterRegistry::instance()->values().first()->defaultConfiguration();
+        KisFilterConfigurationSP filter = KisFilterRegistry::instance()->values().first()->defaultConfiguration(KisGlobalResourcesInterface::instance());
         if (filter) {
-            mask->setFilter(filter);
+            mask->setFilter(filter->cloneWithResourcesSnapshot());
             mask->setName(mask->name());
         }
         return mask;
@@ -263,7 +264,7 @@ KisNodeSP KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceS
         KisFilterConfigurationSP filter = dialog.filterConfiguration();
         if (filter) {
             QString name = dialog.layerName();
-            mask->setFilter(filter);
+            mask->setFilter(filter->cloneWithResourcesSnapshot());
             mask->setName(name);
         }
 
@@ -337,11 +338,8 @@ void KisMaskManager::maskProperties()
             if(xmlBefore != xmlAfter) {
                 KisChangeFilterCmd *cmd
                     = new KisChangeFilterCmd(mask,
-                                             configBefore->name(),
-                                             xmlBefore,
-                                             configAfter->name(),
-                                             xmlAfter,
-                                             false);
+                                             configBefore->cloneWithResourcesSnapshot(),
+                                             configAfter->cloneWithResourcesSnapshot());
 
                 // FIXME: check whether is needed
                 cmd->redo();
@@ -355,7 +353,7 @@ void KisMaskManager::maskProperties()
             QString xmlAfter = configAfter->toXML();
 
             if(xmlBefore != xmlAfter) {
-                mask->setFilter(KisFilterRegistry::instance()->cloneConfiguration(configBefore.data()));
+                mask->setFilter(configBefore->cloneWithResourcesSnapshot());
                 mask->setDirty();
             }
         }

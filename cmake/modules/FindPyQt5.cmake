@@ -31,7 +31,14 @@ ELSE(EXISTS PYQT5_VERSION)
 
 
   if (WIN32)
-    EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E env "PYTHONPATH=${CMAKE_PREFIX_PATH}/lib/krita-python-libs" ${PYTHON_EXECUTABLE} ${_find_pyqt5_py} OUTPUT_VARIABLE pyqt5_config)
+    # python modules need Qt and C++ libraries be added via explicit
+    # calls to os.add_dll_directory(), so we should provide it with
+    # correct paths
+    get_target_property(LIBQT5CORE_PATH Qt5::Core IMPORTED_LOCATION_RELEASE)
+    get_filename_component(LIBQT5CORE_PATH ${LIBQT5CORE_PATH} PATH)
+    get_filename_component(MINGW_PATH ${CMAKE_CXX_COMPILER} PATH)
+
+    EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E env "PYTHONPATH=${CMAKE_PREFIX_PATH}/lib/krita-python-libs" "PYTHONDLLPATH=${LIBQT5CORE_PATH};${MINGW_PATH}" ${PYTHON_EXECUTABLE} ${_find_pyqt5_py} OUTPUT_VARIABLE pyqt5_config)
   else (WIN32)
     EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} ${_find_pyqt5_py} OUTPUT_VARIABLE pyqt5_config)
   endif (WIN32)

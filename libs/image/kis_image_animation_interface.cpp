@@ -221,6 +221,8 @@ void KisImageAnimationInterface::setAudioVolume(qreal value)
 
 void KisImageAnimationInterface::setFramerate(int fps)
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(fps > 0);
+
     m_d->framerate = fps;
     emit sigFramerateChanged();
 }
@@ -294,6 +296,7 @@ void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId, bool useUnd
             KisStrokeId strokeId = m_d->image->startStroke(strategy);
             m_d->image->endStroke(strokeId);
         }
+
     }
 
     m_d->setCurrentUITime(frameId);

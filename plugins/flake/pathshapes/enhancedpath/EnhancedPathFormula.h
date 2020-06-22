@@ -100,9 +100,9 @@ public:
     /// Returns the token as operator
     Operator asOperator() const;
 private:
-    Type m_type;    ///< the token type
+    Type m_type {TypeUnknown};    ///< the token type
     QString m_text; ///< the token text representation
-    int m_position; ///< the tokens position
+    int m_position {-1}; ///< the tokens position
 };
 
 typedef QList<FormulaToken> TokenList;

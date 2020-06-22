@@ -53,10 +53,9 @@ public:
 KisSelectionBasedLayer::KisSelectionBasedLayer(KisImageWSP image,
         const QString &name,
         KisSelectionSP selection,
-        KisFilterConfigurationSP filterConfig,
-        bool useGeneratorRegistry)
+        KisFilterConfigurationSP filterConfig)
         : KisLayer(image.data(), name, OPACITY_OPAQUE_U8),
-          KisNodeFilterInterface(filterConfig, useGeneratorRegistry),
+          KisNodeFilterInterface(filterConfig),
           m_d(new Private())
 {
     if (!selection) {
@@ -345,13 +344,13 @@ QRect KisSelectionBasedLayer::exactBounds() const
     return resultRect;
 }
 
-QImage KisSelectionBasedLayer::createThumbnail(qint32 w, qint32 h)
+QImage KisSelectionBasedLayer::createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspectRatioMode)
 {
     KisSelectionSP originalSelection = internalSelection();
     KisPaintDeviceSP originalDevice = original();
 
     return originalDevice && originalSelection ?
-           originalDevice->createThumbnail(w, h, 1,
+           originalDevice->createThumbnail(w, h, aspectRatioMode, 1,
                                            KoColorConversionTransformation::internalRenderingIntent(),
                                            KoColorConversionTransformation::internalConversionFlags()) :
            QImage();

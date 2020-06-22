@@ -40,6 +40,7 @@ wavelength, and thus define the outline of the CIE "tongue" diagram.
 
 #include <QPointF>
 #include <QPainter>
+#include <QPainterPath>
 #include <QFile>
 #include <QTimer>
 #include <QPaintEvent>
@@ -432,11 +433,11 @@ void KisCIETongueWidget::drawTongueAxis()
         int xstart = (y * (d->pxcols - 1)) / 10;
         int ystart = (y * (d->pxrows - 1)) / 10;
  
-        s.sprintf("0.%d", y);
+        QTextStream(&s) << y;
         biasedLine(xstart, d->pxrows - grids(1), xstart,   d->pxrows - grids(4));
         biasedText(xstart - grids(11), d->pxrows + grids(15), s);
  
-        s.sprintf("0.%d", 10 - y);
+        QTextStream(&s) << 10 - y;
         biasedLine(0, ystart, grids(3), ystart);
         biasedText(grids(-25), ystart + grids(5), s);
     }
@@ -500,7 +501,7 @@ void KisCIETongueWidget::drawLabels()
         QRgb Color = colorByCoord(icx, icy);
         d->painter.setPen(Color);
  
-        wl.sprintf("%d", x);
+        QTextStream(&wl) << x;
         biasedText(icx+bx, icy+by, wl);
     }
 }

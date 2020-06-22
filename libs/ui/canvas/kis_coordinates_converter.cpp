@@ -488,3 +488,13 @@ QPointF KisCoordinatesConverter::snapToDevicePixel(const QPointF &point) const
     // pixel space for pixel-perfect rendering.
     return QPointF(devicePixel) / m_d->devicePixelRatio;
 }
+
+QTransform KisCoordinatesConverter::viewToWidget() const
+{
+    return flakeToWidgetTransform();
+}
+
+QTransform KisCoordinatesConverter::widgetToView() const
+{
+    return flakeToWidgetTransform().inverted();
+}

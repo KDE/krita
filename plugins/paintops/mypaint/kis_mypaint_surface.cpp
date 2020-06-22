@@ -60,7 +60,6 @@ int KisMyPaintSurface::draw_dab(MyPaintSurface *self, float x, float y, float ra
     const QPointF center = QPointF(x, y);
 
     QColor color = QColor(color_r*255, color_g*255, color_b*255, color_a*255);
-    KoColor currentColor(color, colorSpace);
     KisAlgebra2D::OuterCircle outer(center, radius);
 
     KisSequentialIterator it(painter()->device(), dabRectAligned);
@@ -84,16 +83,35 @@ int KisMyPaintSurface::draw_dab(MyPaintSurface *self, float x, float y, float ra
             rr = calculate_rr (it.x(), it.y(), x, y, aspect_ratio, sn, cs, one_over_radius2);
         }
 
-        KoColor dstPixel;
-        QColor dstQColor;
-        colorSpace->toQColor(it.rawData(), &dstQColor);
+        //qDebug() << colorSpace;
+//        KoColor dstPixel(colorSpace);
+//        QColor dstQColor;
+        //colorSpace->toQColor(it.rawData(), &dstQColor);
+
+     //   memcpy(dstPixel.data(), it.rawData(), painter()->device()->pixelSize());
+       // qDebug() << dstPixel;
+        //dstPixel.toQColor(&dstQColor);
+        //qDebug() << dstPixel.data()[0] << " " << dstPixel.data()[1] << " " << dstPixel.data()[2] << " " <<dstPixel.data()[3];
+        //qDebug() << dstPixel;
+        //dstPixel.
+        //qDebug() << dstQColor;
 
         base_alpha = calculate_alpha_for_rr (rr, hardness, segment1_slope, segment2_slope);
         alpha = base_alpha * normal_mode;
 
         //dstPixel.toQColor().getRgbF(&r, &g, &b, &dst_alpha);
-        dstQColor.getRgbF(&r, &g, &b, &dst_alpha);
+        //dstQColor.getRgbF(&r, &g, &b, &dst_alpha);
 
+        b = it.rawData()[0]/(255.0f);
+        g = it.rawData()[1]/(255.0f);
+        r = it.rawData()[2]/(255.0f);
+        dst_alpha = it.rawData()[3]/(255.0f);
+
+        //qDebug() << r << " " << g << "" << b << " " << dst_alpha;
+       // qDebug() << it.rawData()[0] << "" << it.rawData()[1] << "" << it.rawData()[2] << "" << it.rawData()[3];
+        //qDebug() << dstPixel;
+        //dstPixel.toQColor().getRgbF(&r, &g, &b, &dst_alpha);
+        //qDebug() << r << " " << g << "" << b << " " << dst_alpha;
         a = alpha * (color_a - dst_alpha) + dst_alpha;
 
         if (a > 0.0f) {
@@ -132,10 +150,16 @@ int KisMyPaintSurface::draw_dab(MyPaintSurface *self, float x, float y, float ra
             }
         }
 
-        QColor paintColor = QColor(r*255,g*255,b*255,a*255);
-        KoColor paintKolor(paintColor, colorSpace);
+        //QColor paintColor = QColor(r*255,g*255,b*255,a*255);
+       // KoColor paintKolor(colorSpace);
+        it.rawData()[0] = b*255;
+        it.rawData()[1] = g*255;
+        it.rawData()[2] = r*255;
+        it.rawData()[3] = a*255;
 
-        memcpy(it.rawData(), paintKolor.data(), painter()->device()->pixelSize());
+        //paintKolor.fromQColor(paintColor);
+
+        //memcpy(it.rawData(), paintKolor.data(), painter()->device()->pixelSize());
     }
 
     painter()->addDirtyRect(dabRectAligned);
@@ -189,16 +213,23 @@ void KisMyPaintSurface::get_color(MyPaintSurface *self, float x, float y, float 
         if (rr <= 1.0f)
             pixel_weight = 1.0f - rr;
 
-        QColor dstQColor;
+//        QColor dstQColor;
 //        colorSpace->toQColor(it.rawData(), &dstQColor, colorSpace->profile());
 
 //        colorPicker.pickColor(it.x(), it.y(), canvasColor.data());
 
         im->moveTo(it.x(), it.y());
-        colorSpace->toQColor(im->rawData(), &dstQColor);
+//        colorSpace->toQColor(im->rawData(), &dstQColor);
 
         qreal r, g, b, a;
-        dstQColor.getRgbF(&r, &g, &b, &a);
+//        dstQColor.getRgbF(&r, &g, &b, &a);
+
+        b = im->rawData()[0]/(255.0f);
+        g = im->rawData()[1]/(255.0f);
+        r = im->rawData()[2]/(255.0f);
+        a = im->rawData()[3]/(255.0f);
+
+        //qDebug() << r << " " << g << "" << b << " " << a;
 
         sum_r += pixel_weight * r;
         sum_g += pixel_weight * g;

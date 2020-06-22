@@ -32,7 +32,7 @@ parts:
     - "-DBUILD_TESTING=OFF"
     - "-DHIDE_SAFE_ASSERTS=OFF"
     - "-DKDE_SKIP_TEST_SETTINGS=ON"
-    source: https://download.kde.org/unstable/krita/4.3.0-beta2/krita-4.3.0-beta2.tar.xz
+    source: https://download.kde.org/stable/krita/4.3.0/krita-4.3.0.tar.xz
     # # Use these instead to build from the git source
     # source: https://anongit.kde.org/krita.git
     # source-type: git

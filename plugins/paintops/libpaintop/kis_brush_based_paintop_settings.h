@@ -65,6 +65,8 @@ public:
 
     QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings) override;
 
+    virtual bool hasPatternSettings() const override;
+
 protected:
 
     void onPropertyChanged() override;

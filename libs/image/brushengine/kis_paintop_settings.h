@@ -243,6 +243,11 @@ public:
      */
     virtual qreal paintOpSize() const = 0;
 
+    /**
+     * @return pattern size saved in the properties
+     */
+    virtual qreal paintOpPatternSize();
+
     void setEraserMode(bool value);
     bool eraserMode();
 
@@ -330,6 +335,8 @@ public:
      * darken mode, but the final result is combined with this composite op.
      */
     QString maskingBrushCompositeOp() const;
+
+    virtual bool hasPatternSettings() const;
 
 protected:
 

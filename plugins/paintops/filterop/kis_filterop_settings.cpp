@@ -86,3 +86,7 @@ void KisFilterOpSettings::fromXML(const QDomElement& e)
     }
 }
 
+bool KisFilterOpSettings::hasPatternSettings() const
+{
+    return false;
+}

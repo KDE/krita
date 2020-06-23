@@ -53,7 +53,7 @@ public:
         rightLayout->setObjectName(QString::fromUtf8("rightLayout"));
         wdgControls = new ExprControlCollection(WdgSeExpr);
         wdgControls->setObjectName(QString::fromUtf8("wdgControls"));
-        wdgControls->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::MinimumExpanding);
+        wdgControls->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Expanding);
         txtEditor = new ExprEditor(WdgSeExpr, wdgControls);
         txtEditor->setObjectName(QString::fromUtf8("txtEditor"));
         scrollArea = new QScrollArea(WdgSeExpr);

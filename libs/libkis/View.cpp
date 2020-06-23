@@ -296,3 +296,13 @@ QList<Scratchpad *> View::scratchpads() const
 
     return d->scratchpads;
 }
+
+void View::showFloatingMessage(const QString &message, const QIcon& icon, int timeout, int priority)
+{
+    if (!d->view) return;
+
+    KisFloatingMessage::Priority p;
+    p = static_cast<KisFloatingMessage::Priority>(priority);
+
+    d->view->showFloatingMessage(message, icon, timeout, p);
+}

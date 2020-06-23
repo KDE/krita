@@ -52,7 +52,6 @@ class KRITAUI_EXPORT StoryboardModel : public QAbstractItemModel
     Q_OBJECT
 
 public:
-//if we don't need this constructor change it
     StoryboardModel(QObject *parent = nullptr);
 
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
@@ -94,7 +93,6 @@ private Q_SLOTS:
 
 private:
     QVector<StoryboardItem*> m_items;
-    int m_commentCount = 0;
     QVector<Comment> m_commentList;
     CommentModel *m_commentModel;
 

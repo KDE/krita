@@ -150,12 +150,14 @@ void KisFillPainter::fillRect(const QRect &rc, const KoPattern * pattern, const 
 void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisPaintDeviceSP device, const QRect& deviceRect, const QTransform transform)
 {
     KisPaintDeviceSP wrapped = device;
-    wrapped->setDefaultBounds(new KisWrapAroundBoundsWrapper(wrapped->defaultBounds(), deviceRect));
+    KisDefaultBoundsBaseSP oldBounds = wrapped->defaultBounds();
+    wrapped->setDefaultBounds(new KisWrapAroundBoundsWrapper(oldBounds, deviceRect));
 
     KisPerspectiveTransformWorker worker = KisPerspectiveTransformWorker(this->device(), transform, this->progressUpdater());
     worker.runPartialDst(device, this->device(), QRect(x1, y1, w, h));
 
     addDirtyRect(QRect(x1, y1, w, h));
+    wrapped->setDefaultBounds(oldBounds);
 }
 
 void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisPaintDeviceSP device, const QRect& deviceRect)

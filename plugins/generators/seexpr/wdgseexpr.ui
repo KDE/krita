@@ -6,26 +6,84 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>538</width>
-    <height>274</height>
+    <width>500</width>
+    <height>480</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>500</width>
+    <height>0</height>
+   </size>
+  </property>
   <layout class="QVBoxLayout" name="rightLayout">
-   <property name="spacing">
-   <number>0</number>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
    </property>
    <item>
-    <widget class="QPlainTextEdit" name="txtEditor"/>
+    <widget class="QScrollArea" name="scrollArea">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>5</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="ExprControlCollection" name="wdgControls">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>494</width>
+        <height>257</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Ignored" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+     </widget>
+    </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="btnUpdate">
-     <property name="text">
-      <string>Update</string>
+    <widget class="ExprEditor" name="txtEditor" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>4</verstretch>
+      </sizepolicy>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ExprControlCollection</class>
+   <extends>QWidget</extends>
+   <header location="global">SeExpr2/UI/ExprControlCollection.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ExprEditor</class>
+   <extends>QWidget</extends>
+   <header location="global">SeExpr2/UI/ExprEditor.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

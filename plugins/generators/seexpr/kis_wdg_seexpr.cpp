@@ -36,6 +36,7 @@ KisWdgSeExpr::KisWdgSeExpr(QWidget *parent)
 {
     m_widget = new Ui_WdgSeExpr();
     m_widget->setupUi(this);
+    m_widget->txtEditor->setControlCollectionWidget(m_widget->wdgControls);
     KisDialogStateSaver::restoreState(m_widget->txtEditor, "krita/generators/seexpr");
     // Manually restore SeExpr state. KisDialogStateSaver uses setPlainText, not text itself
     m_widget->txtEditor->setExpr(m_widget->txtEditor->exprTe->toPlainText());

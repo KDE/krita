@@ -22,6 +22,7 @@
 #define KIS_WDG_SEEXPR_H
 
 #include <kis_config_widget.h>
+#include <kis_signal_compressor.h>
 
 class Ui_WdgSeExpr;
 
@@ -37,8 +38,12 @@ public:
     void setConfiguration(const KisPropertiesConfigurationSP) override;
     KisPropertiesConfigurationSP configuration() const override;
 
+private Q_SLOTS:
+    void isValid();
+
 private:
     Ui_WdgSeExpr *m_widget;
+    KisSignalCompressor updateCompressor;
 };
 
 #endif

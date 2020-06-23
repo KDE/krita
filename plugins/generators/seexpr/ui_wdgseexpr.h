@@ -26,7 +26,6 @@
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QPlainTextEdit>
-#include <QtWidgets/QPushButton>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
@@ -42,7 +41,6 @@ public:
     ExprEditor *txtEditor;
     ExprControlCollection *wdgControls;
     QScrollArea *scrollArea;
-    QPushButton *btnUpdate;
 
     void setupUi(QWidget *WdgSeExpr)
     {
@@ -63,13 +61,8 @@ public:
         scrollArea->setWidgetResizable(true);
         scrollArea->setWidget(wdgControls);
 
-        rightLayout->addWidget(scrollArea, 2);
-        rightLayout->addWidget(txtEditor, 1);
-
-        btnUpdate = new QPushButton(WdgSeExpr);
-        btnUpdate->setObjectName(QString::fromUtf8("btnUpdate"));
-
-        rightLayout->addWidget(btnUpdate);
+        rightLayout->addWidget(scrollArea, 5);
+        rightLayout->addWidget(txtEditor, 4);
 
 
         retranslateUi(WdgSeExpr);
@@ -79,7 +72,6 @@ public:
 
     void retranslateUi(QWidget *WdgSeExpr)
     {
-        btnUpdate->setText(tr2i18n("Update", nullptr));
         Q_UNUSED(WdgSeExpr);
     } // retranslateUi
 

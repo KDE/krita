@@ -23,13 +23,16 @@
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
 #include <filter/kis_filter_configuration.h>
+#include <SeExpr2/UI/ErrorMessages.h>
 
 #include "generator.h"
 #include "kis_wdg_seexpr.h"
+#include "SeExprExpressionContext.h"
 #include "ui_wdgseexpr.h"
 
-KisWdgSeExpr::KisWdgSeExpr(QWidget* parent)
-        : KisConfigWidget(parent)
+KisWdgSeExpr::KisWdgSeExpr(QWidget *parent)
+    : KisConfigWidget(parent),
+      updateCompressor(1000, KisSignalCompressor::Mode::POSTPONE)
 {
     m_widget = new Ui_WdgSeExpr();
     m_widget->setupUi(this);
@@ -44,9 +47,10 @@ KisWdgSeExpr::KisWdgSeExpr(QWidget* parent)
 
     m_widget->txtEditor->updateCompleter();
 
-    connect(m_widget->btnUpdate, SIGNAL(clicked()), this, SIGNAL(sigConfigurationUpdated()));
-    connect(m_widget->txtEditor, SIGNAL(apply()), this, SIGNAL(sigConfigurationUpdated()));
-    connect(m_widget->txtEditor, SIGNAL(preview()), this, SIGNAL(sigConfigurationUpdated()));
+    connect(m_widget->txtEditor, SIGNAL(apply()), &updateCompressor, SLOT(start()));
+    connect(m_widget->txtEditor, SIGNAL(preview()), &updateCompressor, SLOT(start()));
+
+    connect(&updateCompressor, SIGNAL(timeout()), this, SLOT(isValid()));
 }
 
 KisWdgSeExpr::~KisWdgSeExpr()
@@ -77,3 +81,41 @@ KisPropertiesConfigurationSP KisWdgSeExpr::configuration() const
     return config;
 }
 
+void KisWdgSeExpr::isValid()
+{
+    SeExprExpressionContext expression(widget()->txtEditor->getExpr());
+
+    expression.setDesiredReturnType(SeExpr2::ExprType().FP(3));
+
+    expression.m_vars["u"] = new SeExprVariable();
+    expression.m_vars["v"] = new SeExprVariable();
+    expression.m_vars["w"] = new SeExprVariable();
+    expression.m_vars["h"] = new SeExprVariable();
+
+    widget()->txtEditor->clearErrors();
+
+    if (!expression.isValid())
+    {
+        auto errors = expression.getErrors();
+
+        for (auto occurrence: errors)
+        {
+            QString message = ErrorMessages::message(occurrence.error);
+            for (auto arg : occurrence.ids) {
+                message = message.arg(QString::fromStdString(arg));
+            }
+            widget()->txtEditor->addError(occurrence.startPos, occurrence.endPos, message);
+        }
+    }
+    // Should not happen now, but I've left it for completeness's sake
+    else if (!expression.returnType().isFP(3))
+    {
+        QString type = QString::fromStdString(expression.returnType().toString());
+        widget()->txtEditor->addError(1, 1, tr2i18n("Expected this script to output color, got '%1'").arg(type));
+    }
+    else
+    {
+        widget()->txtEditor->clearErrors();
+        emit sigConfigurationUpdated();
+    }
+}

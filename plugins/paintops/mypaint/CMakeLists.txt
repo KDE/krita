@@ -1,4 +1,5 @@
 add_subdirectory(tests)
+add_subdirectory(brushes)
 
 if(LIBMYPAINT_FOUND)
     include_directories(${LIBMYPAINT_INCLUDE_DIR})

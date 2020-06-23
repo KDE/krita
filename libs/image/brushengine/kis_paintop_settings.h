@@ -246,11 +246,6 @@ public:
     virtual qreal paintOpSize() const = 0;
 
     /**
-     * Set paintop pattern size directly in the properties
-     */
-    //virtual void setPaintOpPatternSize(qreal value);
-
-    /**
      * @return pattern size saved in the properties
      */
     virtual qreal paintOpPatternSize();

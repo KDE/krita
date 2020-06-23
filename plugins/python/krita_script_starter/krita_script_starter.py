@@ -288,14 +288,7 @@ class KritaScriptStarter(EXTENSION):
         # enable script in krita settings (!)
 
         if self.ui.cb_enable_script.isChecked():
-            configPath = QStandardPaths.writableLocation(
-                QStandardPaths.GenericConfigLocation)
-            configPath = os.path.join(configPath, 'kritarc')
-            settings = QSettings(configPath, QSettings.IniFormat)
-            settings.beginGroup(SCRIPT_SETTINGS)
-            settings.setValue('enable_'+self.package_name, 'true')
-            settings.endGroup()
-            settings.sync()
+            Application.writeSetting(SCRIPT_SETTINGS, 'enable_'+self.package_name, 'true')
 
         # notify success
         # Assemble message

@@ -48,6 +48,8 @@ for arg in "${@}"; do
     elif [[ "${arg}" = --debug ]]; then
         OSXBUILD_TYPE="Debug"
         OSXBUILD_TESTING="ON"
+    elif [[ "${arg}" = --install_tarball ]]; then
+        OSXBUILD_TARBALLINSTALL="TRUE"
     else
         parsed_args="${parsed_args} ${arg}"
     fi
@@ -515,9 +517,6 @@ build_krita_tarball () {
     build_krita
 
     print_msg "Build done!"
-    print_msg "to install run
-osxbuild.sh install ${KIS_BUILD_DIR}"
-
 }
 
 install_krita () {
@@ -652,9 +651,23 @@ script_run() {
         # This is not on by default as build success requires all
         # deps installed in the given dir beforehand.
         # KIS_INSTALL_DIR=${3}
-        OSXBUILD_DIR=$(get_directory_fromargs "${@}")
 
-        build_krita_tarball "${OSXBUILD_DIR}"
+        if [[ -f "${2}" && "${2:(-7)}" == ".tar.gz" ]]; then
+            TARBALL_FILE="${2}"
+            build_krita_tarball "${TARBALL_FILE}"
+
+            if [[ -n "${OSXBUILD_TARBALLINSTALL}" ]]; then
+                install_krita "${KIS_BUILD_DIR}"
+            else
+                print_msg "to install run
+osxbuild.sh install ${KIS_BUILD_DIR}"
+            fi
+            exit
+        else
+            log "File not a tarball tar.gz file"
+        fi
+
+        
 
     elif [[ ${1} = "clean" ]]; then
         # remove all build and install directories to start

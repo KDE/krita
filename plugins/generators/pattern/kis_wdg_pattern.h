@@ -37,6 +37,10 @@ public:
     }
     void setConfiguration(const KisPropertiesConfigurationSP) override;
     KisPropertiesConfigurationSP configuration() const override;
+private Q_SLOTS:
+
+    void slotWidthChanged(double w);
+    void slotHeightChanged(double h);
 private:
     Ui_WdgPatternOptions* m_widget;
 };

@@ -76,6 +76,7 @@ public:
                                       false, // useFastMode
                                       usePattern,
                                       selectionOnly,
+                                      false,
                                       10, 10, 10,
                                       true /* use the current device (unmerged) */,
                                       false);

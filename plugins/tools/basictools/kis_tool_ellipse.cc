@@ -66,7 +66,8 @@ void KisToolEllipse::finishRect(const QRectF& rect, qreal roundCornersX, qreal r
                                            currentNode(),
                                            canvas()->resourceManager(),
                                            strokeStyle(),
-                                           fillStyle());
+                                           fillStyle(),
+                                           fillTransform());
         helper.paintEllipse(rect);
     } else {
         QRectF r = convertToPt(rect);

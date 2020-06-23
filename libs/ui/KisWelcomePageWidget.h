@@ -52,6 +52,10 @@ public Q_SLOTS:
 
     void slotUpdateVersionMessage();
 
+#ifdef Q_OS_ANDROID
+    void slotStartDonationFlow();
+#endif
+
 protected:
 
     // QWidget overrides
@@ -81,9 +85,11 @@ private:
     QColor blendedColor;
     QString blendedStyle;
 
-
-
-    QLabel* donationLink;
+#ifdef Q_OS_ANDROID
+public:
+    static QPushButton* donationLink;
+    static QLabel* donationBannerImage;
+#endif
 
 private Q_SLOTS:
     void slotNewFileClicked();

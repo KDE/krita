@@ -41,6 +41,7 @@
 #include <kis_debug.h>
 #include <KisImportExportUtils.h>
 #include <kis_config.h>
+#include "kis_scratch_pad.h"
 
 #include "kritaui_export.h"
 

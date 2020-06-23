@@ -50,6 +50,8 @@ public Q_SLOTS:
     qreal paintingFlow() const;
     void setPaintingFlow(qreal flow);
 
+    void showFloatingMessage(const QString &message, const QIcon& icon, int timeout, int priority);
+
     QList<Node *> selectedNodes() const /Factory/;
 private:
 };

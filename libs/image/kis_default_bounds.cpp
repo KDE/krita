@@ -163,3 +163,55 @@ QRect KisSelectionEmptyBounds::bounds() const
 {
     return QRect(0, 0, 0, 0);
 }
+
+/******************************************************************/
+/*                 KisWrapAroundBoundsWrapper                     */
+/******************************************************************/
+
+
+struct Q_DECL_HIDDEN KisWrapAroundBoundsWrapper::Private
+{
+    KisDefaultBoundsBaseSP base;
+    QRect bounds;
+};
+
+KisWrapAroundBoundsWrapper::KisWrapAroundBoundsWrapper(KisDefaultBoundsBaseSP base, QRect bounds)
+: m_d(new Private())
+{
+    m_d->base = base;
+    m_d->bounds = bounds;
+}
+
+KisWrapAroundBoundsWrapper::~KisWrapAroundBoundsWrapper()
+{
+}
+
+QRect KisWrapAroundBoundsWrapper::bounds() const
+{
+    return m_d->bounds;
+}
+
+bool KisWrapAroundBoundsWrapper::wrapAroundMode() const
+{
+    return true;
+}
+
+int KisWrapAroundBoundsWrapper::currentLevelOfDetail() const
+{
+    return m_d->base->currentLevelOfDetail();
+}
+
+int KisWrapAroundBoundsWrapper::currentTime() const
+{
+    return m_d->base->currentTime();
+}
+
+bool KisWrapAroundBoundsWrapper::externalFrameActive() const
+{
+    return m_d->base->externalFrameActive();
+}
+
+void *KisWrapAroundBoundsWrapper::sourceCookie() const
+{
+    return m_d->base->sourceCookie();
+}

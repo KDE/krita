@@ -52,6 +52,7 @@ public:
     void setCurrentNode(KisNodeSP node);
     void setStrokeStyle(KisPainter::StrokeStyle strokeStyle);
     void setFillStyle(KisPainter::FillStyle fillStyle);
+    void setFillTransform(QTransform transform);
 
     KisNodeSP currentNode() const;
     KisImageSP image() const;
@@ -83,6 +84,8 @@ public:
     KoColor currentBgColor() const;
     KisPaintOpPresetSP currentPaintOpPreset() const;
     KoAbstractGradient* currentGradient() const;
+
+    QTransform fillTransform() const;
 
     /// @return the channel lock flags of the current node with the global override applied
     QBitArray channelLockFlags() const;

@@ -63,7 +63,8 @@ void KisToolPolyline::finishPolyline(const QVector<QPointF>& points)
                                            currentNode(),
                                            canvas()->resourceManager(),
                                            strokeStyle(),
-                                           fillStyle());
+                                           fillStyle(),
+                                           fillTransform());
         helper.paintPolyline(points);
     } else {
         KoPathShape* path = new KoPathShape();

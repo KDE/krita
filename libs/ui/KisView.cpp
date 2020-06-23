@@ -443,6 +443,7 @@ KisImageWSP KisView::image() const
     return 0;
 }
 
+
 KisCoordinatesConverter *KisView::viewConverter() const
 {
     return &d->viewConverter;

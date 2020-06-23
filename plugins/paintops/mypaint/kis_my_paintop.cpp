@@ -23,7 +23,7 @@ KisMyPaintOp::KisMyPaintOp(const KisPaintOpSettingsSP settings, KisPainter * pai
 
     m_brush->apply(settings);
 
-    if(mypaint_brush_get_base_value(m_brush->brush(), MYPAINT_BRUSH_SETTING_ERASER)) {
+    if(qRound(mypaint_brush_get_base_value(m_brush->brush(), MYPAINT_BRUSH_SETTING_ERASER))) {
 
         m_brush->setColor(this->painter()->backgroundColor());
         mypaint_brush_set_base_value(m_brush->brush(), MYPAINT_BRUSH_SETTING_ERASER, false);

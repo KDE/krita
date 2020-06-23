@@ -69,9 +69,9 @@ struct TimelineFramesView::Private
           dragInProgress(false),
           dragWasSuccessful(false),
           modifiersCatcher(0),
+          kineticScrollInfiniteFrameUpdater(),
           selectionChangedCompressor(300, KisSignalCompressor::FIRST_INACTIVE),
-          geometryChangedCompressor(300, KisSignalCompressor::FIRST_INACTIVE),
-          kineticScrollInfiniteFrameUpdater()
+          geometryChangedCompressor(300, KisSignalCompressor::FIRST_INACTIVE)
     {
         kineticScrollInfiniteFrameUpdater.setTimerType(Qt::CoarseTimer);
     }
@@ -154,8 +154,8 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     KisZoomableScrollBar* hZoomableBar = new KisZoomableScrollBar(this);
     setHorizontalScrollBar(hZoomableBar);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    hZoomableBar->setEnabled(false);
     setVerticalScrollBar(new KisZoomableScrollBar(this));
+    hZoomableBar->setEnabled(false);
 
     connect(hZoomableBar, SIGNAL(zoom(qreal)), this, SLOT(slotScrollbarZoom(qreal)));
 
@@ -434,8 +434,6 @@ void TimelineFramesView::setModel(QAbstractItemModel *model)
     TimelineFramesModel *framesModel = qobject_cast<TimelineFramesModel*>(model);
     m_d->model = framesModel;
 
-    horizontalScrollBar()->setEnabled((framesModel != nullptr));
-
     QTableView::setModel(model);
 
     connect(m_d->model, SIGNAL(headerDataChanged(Qt::Orientation,int,int)),
@@ -538,6 +536,11 @@ void TimelineFramesView::slotUpdateIcons()
     m_d->addLayersButton->setIcon(KisIconUtils::loadIcon("addlayer"));
     m_d->audioOptionsButton->setIcon(KisIconUtils::loadIcon("audio-none"));
     m_d->zoomDragButton->setIcon(KisIconUtils::loadIcon("zoom-horizontal"));
+}
+
+void TimelineFramesView::slotCanvasUpdate(KoCanvasBase *canvas)
+{
+    horizontalScrollBar()->setEnabled(canvas != nullptr);
 }
 
 void TimelineFramesView::slotAudioChannelRemove()

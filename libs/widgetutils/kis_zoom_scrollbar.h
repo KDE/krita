@@ -31,16 +31,19 @@ class KRITAWIDGETUTILS_EXPORT KisZoomableScrollBar : public QScrollBar
     Q_OBJECT
 
 private:
+    QPoint initialPositionRelativeToBar;
     QPoint lastKnownPosition;
     QVector2D accelerationAccumulator;
     qreal scrollSubPixelAccumulator;
-    qreal zoomPerpendicularityThreshold;
+    qreal zoomThreshold;
     bool catchTeleportCorrection = false;
 
 public:
     KisZoomableScrollBar(QWidget* parent = 0);
     KisZoomableScrollBar(Qt::Orientation orientation, QWidget * parent = 0);
     ~KisZoomableScrollBar();
+
+    QPoint barPosition();
 
     //Catch for teleportation from one side of the screen to the other.
     bool catchTeleports(QMouseEvent* event);

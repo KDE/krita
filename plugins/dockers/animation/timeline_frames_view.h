@@ -59,6 +59,8 @@ public Q_SLOTS:
     void slotSelectionChanged();
     void slotUpdateIcons();
 
+    void slotCanvasUpdate(class KoCanvasBase* canvas);
+
 private Q_SLOTS:
     void slotUpdateLayersMenu();
     void slotUpdateFrameActions();

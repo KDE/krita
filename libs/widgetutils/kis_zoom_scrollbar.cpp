@@ -28,7 +28,7 @@ KisZoomableScrollBar::KisZoomableScrollBar(QWidget *parent)
     , lastKnownPosition(0,0)
     , accelerationAccumulator(0,0)
     , scrollSubPixelAccumulator(0.0f)
-    , zoomPerpendicularityThreshold(0.75f)
+    , zoomThreshold(0.75f)
     , catchTeleportCorrection(false)
 {
 }
@@ -42,6 +42,17 @@ KisZoomableScrollBar::KisZoomableScrollBar(Qt::Orientation orientation, QWidget 
 KisZoomableScrollBar::~KisZoomableScrollBar()
 {
 
+}
+
+QPoint KisZoomableScrollBar::barPosition()
+{
+
+    float barPositionNormalized = (float)(value() - minimum()) / (float)(maximum() + pageStep() - minimum());
+    QPoint barPosition = orientation() == Qt::Horizontal ?
+                QPoint(barPositionNormalized * width() * devicePixelRatio(), 0) :
+                QPoint(0, barPositionNormalized * height() * devicePixelRatio());
+
+    return mapToGlobal(QPoint(0,0)) + barPosition;
 }
 
 bool KisZoomableScrollBar::catchTeleports(QMouseEvent *event) {
@@ -101,8 +112,8 @@ void KisZoomableScrollBar::handleScroll(const QPoint &accel)
     const QVector2D perpendicularDirection = (orientation() == Qt::Horizontal) ? QVector2D(0, 1) : QVector2D(1, 0);
     const float perpendicularity = QVector2D::dotProduct(perpendicularDirection.normalized(), accelerationAccumulator.normalized());
 
-    if (abs(perpendicularity) > zoomPerpendicularityThreshold && zoomMovementPix != 0) {
-        zoom(qreal(zoomMovementPix) / (widgetThickness * 2));
+    if (qAbs(perpendicularity) > zoomThreshold && zoomMovementPix != 0) {
+        zoom(qreal(zoomMovementPix) / qreal(widgetThickness * 2));
     } else if (sliderMovementPix != 0) {
         const int currentPosition = sliderPosition();
         scrollSubPixelAccumulator += (documentLength) * (sliderMovementPix / widgetLength);
@@ -136,9 +147,11 @@ void KisZoomableScrollBar::tabletEvent(QTabletEvent *event) {
         if (event->type() == QTabletEvent::TabletPress) {
             QPoint globalMouseCoord = mapToGlobal(event->pos());
             lastKnownPosition = globalMouseCoord;
+            setSliderDown(true);
+            event->accept();
+        } else {
+            QScrollBar::tabletEvent(event);
         }
-
-        QScrollBar::tabletEvent(event);
     }
 }
 
@@ -150,6 +163,10 @@ void KisZoomableScrollBar::mousePressEvent(QMouseEvent *event)
     if( isSliderDown() && !wasSliderDownBefore ){
         lastKnownPosition = mapToGlobal(event->pos());
         accelerationAccumulator = QVector2D(0,0);
+        QPoint worldPosition = mapToGlobal(event->pos());
+        QPoint barPosition = this->barPosition();
+        initialPositionRelativeToBar = worldPosition - barPosition;
+        setCursor(Qt::BlankCursor);
     }
 
 }
@@ -182,6 +199,15 @@ void KisZoomableScrollBar::mouseMoveEvent(QMouseEvent *event)
 
 void KisZoomableScrollBar::mouseReleaseEvent(QMouseEvent *event)
 {
+    const QPoint maximumCoordinates = mapToGlobal(QPoint(width() * devicePixelRatio(), height() * devicePixelRatio()));
+    const QPoint minimumCoordinates = mapToGlobal(QPoint(0,0));
+    const QPoint desiredCoordinates = barPosition() + initialPositionRelativeToBar;
+    QPoint cursorPosition = QPoint(
+                qMax(minimumCoordinates.x(), qMin(maximumCoordinates.x(), desiredCoordinates.x())),
+                qMax(minimumCoordinates.y(), qMin(maximumCoordinates.y(), desiredCoordinates.y()))
+                );
+    QCursor::setPos(cursorPosition);
+    setCursor(Qt::ArrowCursor);
     QScrollBar::mouseReleaseEvent(event);
 }
 
@@ -198,5 +224,5 @@ void KisZoomableScrollBar::wheelEvent(QWheelEvent *event) {
 
 void KisZoomableScrollBar::setZoomDeadzone(float value)
 {
-    zoomPerpendicularityThreshold = value;
+    zoomThreshold = value;
 }

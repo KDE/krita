@@ -93,14 +93,18 @@ Name={script_name}
 Comment={script_comment}
 """
 
-INIT_TEMPLATE = """from .{library_name} import {class_name}
+INIT_TEMPLATE_EXTENSION = """from .{library_name} import {class_name}
 
 # And add the extension to Krita's list of extensions:
 app = Krita.instance()
 # Instantiate your class:
-extension = {class_name}(parent=app)
+extension = {class_name}(parent = app)
 app.addExtension(extension)
 """
+
+INIT_TEMPLATE_DOCKER = """from .{library_name} import {class_name}
+"""
+
 
 EXTENSION_TEMPLATE = """# BBD's Krita Script Starter Feb 2018
 
@@ -260,7 +264,11 @@ class KritaScriptStarter(EXTENSION):
 
         fn = full_dir(self.init_name)
         with open(fn, 'w+t') as f:
-            f.write(INIT_TEMPLATE.format(**values))
+            if self.ui.rb_docker.isChecked():
+                f.write(INIT_TEMPLATE_DOCKER.format(**values))
+            else:
+                f.write(INIT_TEMPLATE_EXTENSION.format(**values))
+
 
         # create main package file
         fn = full_dir(self.package_file)

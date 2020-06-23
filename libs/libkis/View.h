@@ -84,11 +84,7 @@ public Q_SLOTS:
      */
     void activateResource(Resource *resource);
 
-    /**
-     * @brief creates a scratchpad widget to draw on.
-     *  It is stored in the scratchpad list for reference
-     */
-    Scratchpad *createScratchpad(QColor bgColor);
+
 
     /**
      * @brief foregroundColor allows access to the currently active color.
@@ -137,6 +133,16 @@ Application.activeWindow().activeView().setForeGroundColor(color)
     void setPaintingFlow(qreal flow);
 
     /**
+     * @brief showFloatingMessage displayes a floating message box on the top-left corner of the canvas
+     * @param message: Message to be displayed inside the floating message box
+     * @param icon: Icon to be displayed inside the message box next to the message string
+     * @param timeout: Milliseconds until the message box disappears
+     * @param priority: 0 = High, 1 = Medium, 2 = Low. Higher priority
+     * messages will be displayed in place of lower priority messages
+     */
+    void showFloatingMessage(const QString &message, const QIcon& icon, int timeout, int priority);
+
+    /**
      * @brief selectedNodes returns a list of Nodes that are selected in this view.
      *
      *
@@ -153,16 +159,12 @@ print(selected_nodes)
      */
     QList<Node *> selectedNodes() const;
 
-
-    /**
-     * @brief Stores scratchpad widgets to draw on
-     */
-    QList<Scratchpad *> scratchpads() const;
-
 private:
 
     friend class Window;
     friend class Scratchpad;
+
+
     KisView *view();
 
     struct Private;

@@ -55,14 +55,12 @@ public:
      */
     Dimensions getDimensions() const;
     /**
-     * @brief getPixmap
-     * @return the pixmap of the gradient, for drawing on with a subclass.
-     * the pixmap will not change unless 'm_d->setPixmap=true' which is toggled by
-     * refresh and update functions.
+     * @brief getImageMap returns  the updated base image
+     * @return the final image of the shape content, before the handle gets drawn.
+     * the pixmap will not change until a redraw is required, which depends on
+     * whether the shape is static or changes depending on other color channels.
      */
-    bool imagesNeedUpdate() const;
-    QImage getImageMap();
-    const QImage getAlphaMask() const;
+    const QImage& getImageMap();
     /**
      * @brief getCurrentColor
      * @return the current kocolor
@@ -148,12 +146,14 @@ protected:
      * in the current color space
      * @param channelValues the normalized channel values of the currently selected color
      */
-    virtual QImage renderBackground(const QVector4D &channelValues, quint32 pixelSize) const;
+    virtual QImage renderBackground(const QVector4D &channelValues, const QImage &alpha) const;
+    virtual QImage compositeBackground() const;
     /**
      * @brief render the alpha mask for the widget background
      * the returned image is expected to be QImage::Format_Alpha8
      */
     virtual QImage renderAlphaMask() const;
+    virtual QImage renderStaticAlphaMask() const;
     /**
      * @brief default implementation just calls convertWidgetCoordinateToShapeCoordinate(pos)
     */

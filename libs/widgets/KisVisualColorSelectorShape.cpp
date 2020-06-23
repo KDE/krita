@@ -27,6 +27,7 @@ struct KisVisualColorSelectorShape::Private
 {
     QImage gradient;
     QImage alphaMask;
+    QImage staticBackground;
     bool imagesNeedUpdate { true };
     bool alphaNeedsUpdate { true };
     bool acceptTabletEvents { false };
@@ -129,29 +130,18 @@ KisVisualColorModel *KisVisualColorSelectorShape::selectorModel() const
     return selectorWidget->selectorModel();
 }
 
-bool KisVisualColorSelectorShape::imagesNeedUpdate() const {
-    return m_d->imagesNeedUpdate;
-}
-
-QImage KisVisualColorSelectorShape::getImageMap()
+const QImage& KisVisualColorSelectorShape::getImageMap()
 {
     //qDebug() << this  << ">>>>>>>>> getImageMap()" << m_d->imagesNeedUpdate;
 
     if (m_d->imagesNeedUpdate) {
-        // Fill a buffer with the right kocolors
-        m_d->gradient = renderBackground(m_d->currentChannelValues, selectorModel()->colorSpace()->pixelSize());
+        // NOTE: pure static backgrounds are currently somewhat implicitly handled,
+        // it would be nicer to avoid re-checking and overwriting m_d->gradient.
+        // But QImage's implicit data sharing allows all this mindless by-value stuff...
+        m_d->gradient = compositeBackground();
         m_d->imagesNeedUpdate = false;
     }
     return m_d->gradient;
-}
-
-const QImage KisVisualColorSelectorShape::getAlphaMask() const
-{
-    if (m_d->alphaNeedsUpdate) {
-        m_d->alphaMask = renderAlphaMask();
-        m_d->alphaNeedsUpdate = false;
-    }
-    return m_d->alphaMask;
 }
 
 QImage KisVisualColorSelectorShape::convertImageMap(const quint8 *rawColor, quint32 bufferSize, QSize imgSize) const
@@ -173,7 +163,7 @@ QImage KisVisualColorSelectorShape::convertImageMap(const quint8 *rawColor, quin
     return image;
 }
 
-QImage KisVisualColorSelectorShape::renderBackground(const QVector4D &channelValues, quint32 pixelSize) const
+QImage KisVisualColorSelectorShape::renderBackground(const QVector4D &channelValues, const QImage &alpha) const
 {
     const KisVisualColorModel *selector = selectorModel();
     Q_ASSERT(selector);
@@ -187,8 +177,8 @@ QImage KisVisualColorSelectorShape::renderBackground(const QVector4D &channelVal
     QScopedArrayPointer<quint8> raw(new quint8[imageSize] {});
     quint8 *dataPtr = raw.data();
     QVector4D coordinates = channelValues;
+    const qsizetype pixelSize = selector->colorSpace()->pixelSize();
 
-    QImage alpha = getAlphaMask();
     bool checkAlpha = !alpha.isNull() && alpha.valid(deviceWidth - 1, deviceHeight - 1);
     KIS_SAFE_ASSERT_RECOVER(!checkAlpha || alpha.format() == QImage::Format_Alpha8) {
         checkAlpha = false;
@@ -228,7 +218,49 @@ QImage KisVisualColorSelectorShape::renderBackground(const QVector4D &channelVal
     return image;
 }
 
+QImage KisVisualColorSelectorShape::compositeBackground() const
+{
+    // Shapes are expect to return a valid alpha mask or a valid
+    // static alpha mask. If they provide both, the rendered backgrounds
+    // get composited.
+    if (m_d->alphaNeedsUpdate) {
+        QImage staticAlpha = renderStaticAlphaMask();
+        if (!staticAlpha.isNull()) {
+            QVector4D neutralValues(1, 1, 1, 1);
+            switch (selectorModel()->colorModel()) {
+            case KisVisualColorModel::HSL:
+            case KisVisualColorModel::HSI:
+            case KisVisualColorModel::HSY:
+                neutralValues.setZ(0.5f);
+            default:
+                break;
+            }
+
+            m_d->staticBackground = renderBackground(neutralValues, staticAlpha);
+        }
+        m_d->alphaMask = renderAlphaMask();
+        m_d->alphaNeedsUpdate = false;
+    }
+    if (m_d->alphaMask.isNull()) {
+        return m_d->staticBackground;
+    }
+
+    QImage bgImage = renderBackground(m_d->currentChannelValues, m_d->alphaMask);
+    if (!m_d->staticBackground.isNull()) {
+        QPainter painter(&bgImage);
+        // composite static and dynamic background parts
+        painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
+        painter.drawImage(0, 0, m_d->staticBackground);
+    }
+    return bgImage;
+}
+
 QImage KisVisualColorSelectorShape::renderAlphaMask() const
+{
+    return QImage();
+}
+
+QImage KisVisualColorSelectorShape::renderStaticAlphaMask() const
 {
     return QImage();
 }
@@ -308,8 +340,10 @@ void KisVisualColorSelectorShape::paintEvent(QPaintEvent*)
 {
     QPainter painter(this);
 
-    QImage fullSelector = getImageMap();
-    painter.drawImage(0, 0, fullSelector);
+    const QImage &fullSelector = getImageMap();
+    if (!fullSelector.isNull()) {
+        painter.drawImage(0, 0, fullSelector);
+    }
     painter.setRenderHint(QPainter::Antialiasing);
     drawCursor(painter);
 }

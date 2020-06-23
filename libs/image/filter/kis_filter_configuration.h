@@ -52,7 +52,7 @@ public:
     /**
      * Create a new filter config.
      */
-    KisFilterConfiguration(const QString & name, qint32 version);
+    KisFilterConfiguration(const QString &name, qint32 version);
 
 protected:
     /**

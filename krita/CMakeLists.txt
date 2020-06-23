@@ -104,7 +104,17 @@ if (APPLE)
     set_target_properties(krita PROPERTIES MACOSX_BUNDLE_COPYRIGHT "GNU Public License, V2 or, at your option, any later version.")
 endif ()
 
+set(KRITAVERSION_SRCS kritaversion.cpp)
+add_executable(krita_version ${KRITAVERSION_SRCS})
+target_link_libraries(krita_version
+    PRIVATE
+        Qt5::Core
+        kritaversion
+)
+
+
 install(TARGETS krita ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS krita_version ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(PROGRAMS org.kde.krita.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install(FILES  krita.action kritamenu.action DESTINATION ${DATA_INSTALL_DIR}/krita/actions)
 install(FILES  org.kde.krita.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR} )

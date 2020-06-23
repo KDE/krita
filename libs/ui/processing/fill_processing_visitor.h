@@ -38,6 +38,7 @@ public:
                    bool useFastMode,
                    bool usePattern,
                    bool selectionOnly,
+                   bool useSelectionAsBoundary,
                    int feather,
                    int sizemod,
                    int fillThreshold,
@@ -57,6 +58,7 @@ private:
     KisSelectionSP m_selection;
     bool m_useFastMode;
     bool m_selectionOnly;
+    bool m_useSelectionAsBoundary;
     bool m_usePattern;
     KisResourcesSnapshotSP m_resources;
 

@@ -110,6 +110,7 @@ void KisTimeBasedItemModel::setImage(KisImageWSP image)
 
         connect(ai, SIGNAL(sigFramerateChanged()), SLOT(slotFramerateChanged()));
         connect(ai, SIGNAL(sigUiTimeChanged(int)), SLOT(slotCurrentTimeChanged(int)));
+        connect(ai, SIGNAL(sigFullClipRangeChanged()), SLOT(slotClipRangeChanged()));
     }
 
     if (image != oldImage) {
@@ -151,12 +152,12 @@ void KisTimeBasedItemModel::setAnimationPlayer(KisAnimationPlayer *player)
 
 void KisTimeBasedItemModel::setLastVisibleFrame(int time)
 {
-    const int growThreshold = m_d->effectiveNumFrames() - 3;
+    const int growThreshold = m_d->effectiveNumFrames() - 1;
     const int growValue = time + 8;
 
-    const int shrinkThreshold = m_d->effectiveNumFrames() - 12;
+    const int shrinkThreshold = m_d->effectiveNumFrames() - 3;
     const int shrinkValue = qMax(m_d->baseNumFrames(), qMin(growValue, shrinkThreshold));
-    const bool canShrink = m_d->effectiveNumFrames() > m_d->baseNumFrames();
+    const bool canShrink = m_d->baseNumFrames() < m_d->effectiveNumFrames();
 
     if (time >= growThreshold) {
         beginInsertColumns(QModelIndex(), m_d->effectiveNumFrames(), growValue - 1);
@@ -446,6 +447,11 @@ void KisTimeBasedItemModel::setScrubState(bool active)
     }
 }
 
+bool KisTimeBasedItemModel::isScrubbing()
+{
+    return m_d->scrubInProgress;
+}
+
 void KisTimeBasedItemModel::scrubTo(int time, bool preview)
 {
     if (m_d->animationPlayer && m_d->animationPlayer->isPlaying()) return;
@@ -471,6 +477,19 @@ void KisTimeBasedItemModel::slotCurrentTimeChanged(int time)
 void KisTimeBasedItemModel::slotFramerateChanged()
 {
     emit headerDataChanged(Qt::Horizontal, 0, columnCount() - 1);
+}
+
+void KisTimeBasedItemModel::slotClipRangeChanged()
+{
+    if (m_d->image && m_d->image->animationInterface() ) {
+        const KisImageAnimationInterface* const interface = m_d->image->animationInterface();
+        const int lastFrame = interface->playbackRange().end();
+        if ( lastFrame > m_d->numFramesOverride) {
+            beginInsertColumns(QModelIndex(), m_d->numFramesOverride, interface->playbackRange().end());
+            m_d->numFramesOverride = interface->playbackRange().end();
+            endInsertColumns();
+        }
+    }
 }
 
 void KisTimeBasedItemModel::slotCacheChanged()

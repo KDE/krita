@@ -33,30 +33,22 @@ public:
     KisColorLabelSelectorWidget(QWidget *parent);
     ~KisColorLabelSelectorWidget() override;
 
-    QSize minimumSizeHint() const override;
-    QSize sizeHint() const override;
-
     int currentIndex() const;
 
+    QSize sizeHint() const;
+    void resizeEvent(QResizeEvent* e) override;
+
+    int calculateMenuOffset() const;
+
 public Q_SLOTS:
+    void groupButtonChecked(int index, bool state);
     void setCurrentIndex(int index);
 
 Q_SIGNALS:
     void currentIndexChanged(int index);
 
-protected:
-
-    void resizeEvent(QResizeEvent *e) override;
-    void paintEvent(QPaintEvent *e) override;
-    void keyPressEvent(QKeyEvent *e) override;
-    void mousePressEvent(QMouseEvent *e) override;
-    void mouseReleaseEvent(QMouseEvent *e) override;
-    void mouseMoveEvent(QMouseEvent *e) override;
-    void leaveEvent(QEvent *e) override;
-
 private:
-    struct Private;
-    const QScopedPointer<Private> m_d;
+    class Private* m_d;
 };
 
 #endif /* __KIS_COLOR_LABEL_SELECTOR_WIDGET_H */

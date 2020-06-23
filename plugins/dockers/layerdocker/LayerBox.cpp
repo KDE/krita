@@ -24,6 +24,7 @@
 
 #include "LayerBox.h"
 
+#include <QApplication>
 #include <QToolButton>
 #include <QLayout>
 #include <QMouseEvent>
@@ -37,6 +38,7 @@
 #include <QCheckBox>
 #include <QVBoxLayout>
 #include <QPixmap>
+#include <QBitmap>
 #include <QList>
 #include <QVector>
 #include <QLabel>
@@ -155,7 +157,7 @@ LayerBox::LayerBox()
     , m_canvas(0)
     , m_wdgLayerBox(new Ui_WdgLayerBox)
     , m_thumbnailCompressor(500, KisSignalCompressor::FIRST_INACTIVE)
-    , m_colorLabelCompressor(900, KisSignalCompressor::FIRST_INACTIVE)
+    , m_colorLabelCompressor(500, KisSignalCompressor::FIRST_INACTIVE)
     , m_thumbnailSizeCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
 {
     KisConfig cfg(false);
@@ -238,6 +240,8 @@ LayerBox::LayerBox()
     showGlobalSelectionMask->setChecked(cfg.showGlobalSelection());
 
     m_colorSelector = new KisColorLabelSelectorWidget(this);
+    MouseClickIgnore* mouseEater = new MouseClickIgnore(this);
+    m_colorSelector->installEventFilter(mouseEater);
     connect(m_colorSelector, SIGNAL(currentIndexChanged(int)), SLOT(slotColorLabelChanged(int)));
     m_colorSelectorAction = new QWidgetAction(this);
     m_colorSelectorAction->setDefaultWidget(m_colorSelector);
@@ -251,13 +255,41 @@ LayerBox::LayerBox()
     connect(m_filteringModel.data(), &KisNodeFilterProxyModel::rowsAboutToBeRemoved,
             this, &LayerBox::slotAboutToRemoveRows);
 
-    connect(m_wdgLayerBox->cmbFilter, SIGNAL(selectedColorsChanged()), SLOT(updateLayerFiltering()));
+
+    //LayerFilter Menu
+    QMenu *layerFilterMenu = new QMenu(this);
+    m_wdgLayerBox->bnLayerFilters->setMenu(layerFilterMenu);
+    m_wdgLayerBox->bnLayerFilters->setPopupMode(QToolButton::InstantPopup);
+
+    const QIcon filterIcon = KisIconUtils::loadIcon("view-filter");
+    m_wdgLayerBox->bnLayerFilters->setIcon(filterIcon);
+    QPixmap filterEnabledPixmap = filterIcon.pixmap(64,64);
+    const QBitmap filterEnabledBitmask = filterEnabledPixmap.mask();
+    filterEnabledPixmap.fill(palette().color(QPalette::Highlight));
+    filterEnabledPixmap.setMask(filterEnabledBitmask);
+    const QIcon filterEnabledIcon = QIcon(filterEnabledPixmap);
+
+    layerFilterWidget = new KisLayerFilterWidget(this);
+    connect(layerFilterWidget, SIGNAL(filteringOptionsChanged()), this, SLOT(updateLayerFiltering()));
+    connect(layerFilterWidget, &KisLayerFilterWidget::filteringOptionsChanged, [this, filterIcon, filterEnabledIcon](){
+        if(layerFilterWidget->isCurrentlyFiltering()) {
+            m_wdgLayerBox->bnLayerFilters->setIcon(filterEnabledIcon);
+        } else {
+            m_wdgLayerBox->bnLayerFilters->setIcon(filterIcon);
+        }
+
+        m_wdgLayerBox->bnLayerFilters->setSelectedColors(QList<int>::fromSet(layerFilterWidget->getActiveColors()));
+        m_wdgLayerBox->bnLayerFilters->setTextFilter(layerFilterWidget->hasTextFilter());
+    });
+
+    QWidgetAction *layerFilterMenuAction = new QWidgetAction(this);
+    layerFilterMenuAction->setDefaultWidget(layerFilterWidget);
+    layerFilterMenu->addAction(layerFilterMenuAction);
 
     setEnabled(false);
 
     connect(&m_thumbnailCompressor, SIGNAL(timeout()), SLOT(updateThumbnail()));
     connect(&m_colorLabelCompressor, SIGNAL(timeout()), SLOT(updateAvailableLabels()));
-
 
 
     // set up the configure menu for changing thumbnail size
@@ -412,6 +444,7 @@ void LayerBox::setCanvas(KoCanvasBase *canvas)
 
     if (m_canvas) {
         m_image = m_canvas->image();
+        emit imageChanged();
         connect(m_image, SIGNAL(sigImageUpdated(QRect)), &m_thumbnailCompressor, SLOT(start()));
 
         KisDocument* doc = static_cast<KisDocument*>(m_canvas->imageView()->document());
@@ -635,6 +668,7 @@ void LayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &in
                 KisSignalsBlocker b(m_colorSelector);
                 m_colorSelector->setCurrentIndex(singleLayer ? activeNode->colorLabelIndex() : -1);
             }
+
             menu.addAction(m_colorSelectorAction);
 
             menu.addSeparator();
@@ -1035,27 +1069,38 @@ void LayerBox::slotRenameCurrentNode()
 
 void LayerBox::slotColorLabelChanged(int label)
 {
-    KisNodeList nodes = m_nodeManager->selectedNodes();
+    KisNodeList selectedNodes = m_nodeManager->selectedNodes();
 
-    Q_FOREACH(KisNodeSP node, nodes) {
+    Q_FOREACH(KisNodeSP selectedNode, selectedNodes) {
+        //Always apply label to selected nodes..
+        selectedNode->setColorLabelIndex(label);
+
+        //Apply label only to unlabelled children..
+        KisNodeList children = selectedNode->childNodes(QStringList(), KoProperties());
+
         auto applyLabelFunc =
-                [label](KisNodeSP node) {
-            node->setColorLabelIndex(label);
+                [label](KisNodeSP child) {
+            if (child->colorLabelIndex() == 0) {
+                child->setColorLabelIndex(label);
+            }
         };
 
-        KisLayerUtils::recursiveApplyNodes(node, applyLabelFunc);
+        Q_FOREACH(KisNodeSP child, children) {
+            KisLayerUtils::recursiveApplyNodes(child, applyLabelFunc);
+        }
     }
 }
 
 void LayerBox::updateAvailableLabels()
 {
     if (!m_image) return;
-    m_wdgLayerBox->cmbFilter->updateAvailableLabels(m_image->root());
+    layerFilterWidget->updateColorLabels(m_image->root());
 }
 
 void LayerBox::updateLayerFiltering()
 {
-    m_filteringModel->setAcceptedLabels(m_wdgLayerBox->cmbFilter->selectedColors());
+    m_filteringModel->setAcceptedLabels(layerFilterWidget->getActiveColors());
+    m_filteringModel->setTextFilter(layerFilterWidget->getTextFilter());
 }
 
 void LayerBox::slotKeyframeChannelAdded(KisKeyframeChannel *channel)

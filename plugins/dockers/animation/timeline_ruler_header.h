@@ -34,6 +34,7 @@ public:
 
     void setFramePerSecond(int fps);
     bool setZoom(qreal zoomLevel);
+    qreal zoom();
 
     void setModel(QAbstractItemModel *model) override;
 

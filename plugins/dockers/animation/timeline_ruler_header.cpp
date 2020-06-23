@@ -47,6 +47,10 @@ struct TimelineRulerHeader::Private
 
     KisActionManager* actionMan = 0;
 
+    const int minSectionSize = 4;
+    const int maxSectionSize = 72;
+    const int unitSectionSize = 18;
+    qreal remainder = 0.0f;
 };
 
 TimelineRulerHeader::TimelineRulerHeader(QWidget *parent)
@@ -366,15 +370,17 @@ void TimelineRulerHeader::setFramePerSecond(int fps)
 
 bool TimelineRulerHeader::setZoom(qreal zoom)
 {
-    const int minSectionSize = 4;
-    const int unitSectionSize = 18;
+    qreal newSectionSize = zoom * m_d->unitSectionSize;
 
-    int newSectionSize = zoom * unitSectionSize;
-
-    if (newSectionSize < minSectionSize) {
-        newSectionSize = minSectionSize;
-        zoom = qreal(newSectionSize) / unitSectionSize;
+    if (newSectionSize < m_d->minSectionSize) {
+        newSectionSize = m_d->minSectionSize;
+        zoom = qreal(newSectionSize) / m_d->unitSectionSize;
+    } else if (newSectionSize > m_d->maxSectionSize) {
+        newSectionSize = m_d->maxSectionSize;
+        zoom = qreal(newSectionSize) / m_d->unitSectionSize;
     }
+
+    m_d->remainder = newSectionSize - floor(newSectionSize);
 
     if (newSectionSize != defaultSectionSize()) {
         setDefaultSectionSize(newSectionSize);
@@ -382,6 +388,10 @@ bool TimelineRulerHeader::setZoom(qreal zoom)
     }
 
     return false;
+}
+
+qreal TimelineRulerHeader::zoom() {
+    return  (qreal(defaultSectionSize() + m_d->remainder) / m_d->unitSectionSize);
 }
 
 void TimelineRulerHeader::updateMinimumSize()

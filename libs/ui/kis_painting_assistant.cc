@@ -489,16 +489,16 @@ QByteArray KisPaintingAssistant::saveXml(QMap<KisPaintingAssistantHandleSP, int>
     }
     xml.writeEndElement();
     if (!d->sideHandles.isEmpty()) { // for vanishing points only
-      xml.writeStartElement("sidehandles");
-      QMap<KisPaintingAssistantHandleSP, int> sideHandleMap;
-      Q_FOREACH (KisPaintingAssistantHandleSP handle, d->sideHandles) {
-	int id = sideHandleMap.size();
-	sideHandleMap.insert(handle, id);
-	xml.writeStartElement("sidehandle");
-	xml.writeAttribute("id", QString::number(id));
-	xml.writeAttribute("x", QString::number(double(handle->x()), 'f', 3));
-	xml.writeAttribute("y", QString::number(double(handle->y()), 'f', 3));
-	xml.writeEndElement();
+	xml.writeStartElement("sidehandles");
+	QMap<KisPaintingAssistantHandleSP, int> sideHandleMap;
+	Q_FOREACH (KisPaintingAssistantHandleSP handle, d->sideHandles) {
+	    int id = sideHandleMap.size();
+	    sideHandleMap.insert(handle, id);
+	    xml.writeStartElement("sidehandle");
+	    xml.writeAttribute("id", QString::number(id));
+	    xml.writeAttribute("x", QString::number(double(handle->x()), 'f', 3));
+	    xml.writeAttribute("y", QString::number(double(handle->y()), 'f', 3));
+	    xml.writeEndElement();
       }
     }
 

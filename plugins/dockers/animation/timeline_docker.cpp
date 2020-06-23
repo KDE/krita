@@ -261,6 +261,10 @@ void TimelineDocker::setCanvas(KoCanvasBase * canvas)
 {
     if (m_d->canvas == canvas) return;
 
+    if (m_d->framesView) {
+        m_d->framesView->slotCanvasUpdate(canvas);
+    }
+
     if (m_d->framesModel->hasConnectionToCanvas()) {
         m_d->canvasConnections.clear();
         m_d->framesModel->setDummiesFacade(0, 0, 0);
@@ -416,7 +420,6 @@ void TimelineDocker::unsetCanvas()
 void TimelineDocker::setViewManager(KisViewManager *view)
 {
     m_d->mainWindow = view->mainWindow();
-
     KisActionManager *actionManager = view->actionManager();
     m_d->framesView->setActionManager(actionManager);
 

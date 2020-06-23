@@ -264,8 +264,10 @@ set(kritaui_LIB_SRCS
     widgets/kis_tool_button.cpp
     widgets/kis_floating_message.cpp
     widgets/kis_lod_availability_widget.cpp
-    widgets/kis_color_label_selector_widget.cpp
     widgets/kis_color_filter_combo.cpp
+    widgets/kis_color_label_selector_widget.cpp
+    widgets/kis_color_label_button.cpp
+    widgets/kis_layer_filter_widget.cpp
     widgets/kis_elided_label.cpp
     widgets/kis_stopgradient_slider_widget.cpp
     widgets/kis_preset_live_preview_view.cpp

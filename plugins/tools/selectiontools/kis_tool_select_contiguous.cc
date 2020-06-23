@@ -86,7 +86,7 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
     KisPaintDeviceSP dev;
 
     if (!currentNode() ||
-        !(dev = currentNode()->paintDevice()) ||
+        !(dev = currentNode()->projection()) ||
         !currentNode()->visible() ||
         !selectionEditable()) {
         event->ignore();

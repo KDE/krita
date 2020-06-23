@@ -192,7 +192,7 @@ QVariant KisSizeResourceConverter::toSource(const QVariant &value, const QVarian
 ///*********************************************************************/
 //
 KisPatternSizeResourceConverter::KisPatternSizeResourceConverter()
-    : KoDerivedResourceConverter(KisCanvasResourceProvider::Size,
+    : KoDerivedResourceConverter(KisCanvasResourceProvider::PatternSize,
         KisCanvasResourceProvider::CurrentPaintOpPreset)
 {
 }

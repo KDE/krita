@@ -139,15 +139,16 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
     resize(m_page->sizeHint());
 
     m_ui->bnAdd->setIcon(KisIconUtils::loadIcon("list-add"));
-    m_ui->bnAdd->setText(i18n("Import"));
+    m_ui->bnAdd->setText(i18nc("In bundle manager; press button to import a bundle", "Import"));
     connect(m_ui->bnAdd, SIGNAL(clicked(bool)), SLOT(addBundle()));
 
     m_ui->bnNew->setIcon(KisIconUtils::loadIcon("document-new"));
-    m_ui->bnNew->setText(i18n("Create"));
+    m_ui->bnNew->setText(i18nc("In bundle manager; press button to create a new bundle", "Create"));
     connect(m_ui->bnNew, SIGNAL(clicked(bool)), SLOT(createBundle()));
 
     m_ui->bnDelete->setIcon(KisIconUtils::loadIcon("edit-delete"));
-    m_ui->bnDelete->setText(i18n("Delete"));
+    m_ui->bnDelete->setText(i18nc("In bundle manager; press button to deactivate the bundle "
+                                  "(remove resources from the bundle from the available resources)","Deactivate"));
     connect(m_ui->bnDelete, SIGNAL(clicked(bool)), SLOT(deleteBundle()));
 
     setButtons(Close);
@@ -233,9 +234,13 @@ void DlgBundleManager::currentCellSelectedChanged(QModelIndex current, QModelInd
     bool active = m_proxyModel->data(idx, Qt::UserRole + KisStorageModel::Active).toBool();
 
     if (active) {
-        m_ui->bnDelete->setText(i18n("Deactivate"));
+        m_ui->bnDelete->setIcon(KisIconUtils::loadIcon("edit-delete"));
+        m_ui->bnDelete->setText(i18nc("In bundle manager; press button to deactivate the bundle "
+                                      "(remove resources from the bundle from the available resources)","Deactivate"));
     } else {
-        m_ui->bnDelete->setText(i18n("Activate"));
+        m_ui->bnDelete->setIcon(QIcon());
+        m_ui->bnDelete->setText(i18nc("In bundle manager; press button to activate the bundle "
+                                      "(add resources from the bundle to the available resources)","Activate"));
     }
     updateBundleInformation(current);
 }

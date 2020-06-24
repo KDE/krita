@@ -193,7 +193,7 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
 
     connect(m_d->layersHeader, SIGNAL(geometriesChanged()), &m_d->geometryChangedCompressor, SLOT(start()));
 
-    connect(&m_d->geometryChangedCompressor, SIGNAL(timeout()), SLOT(slotRealignScrollBars()));
+    //connect(&m_d->geometryChangedCompressor, SIGNAL(timeout()), SLOT(slotRealignScrollBars()));
 
     connect(hZoomableBar, SIGNAL(overscroll(int)), SLOT(slotUpdateInfiniteFramesCount()));
     connect(hZoomableBar, SIGNAL(sliderReleased()), SLOT(slotUpdateInfiniteFramesCount()));

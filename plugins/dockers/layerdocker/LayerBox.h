@@ -124,6 +124,7 @@ private Q_SLOTS:
     void slotNodeManagerChangedSelection(const QList<KisNodeSP> &nodes);
     void slotColorLabelChanged(int index);
     void slotUpdateIcons();
+    void toggleActiveLayerSolo();
 
     void slotAddLayerBnClicked();
 
@@ -169,6 +170,7 @@ private:
     KisAction* m_removeAction;
     KisAction* m_propertiesAction;
     KisAction* m_changeCloneSourceAction;
+    KisAction* m_layerToggleSolo;
     KisSignalCompressor m_thumbnailCompressor;
     KisSignalCompressor m_colorLabelCompressor;
     KisSignalCompressor m_thumbnailSizeCompressor;

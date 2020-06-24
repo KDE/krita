@@ -2774,6 +2774,18 @@ Enable to preserve playback timing.</text>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="toggle_layer_soloing">
+      <icon>visible</icon>
+      <text>Toggle Layer Soloing</text>
+      <whatsThis></whatsThis>
+      <toolTip>Toggle layer soloing, temporarily disabling visibility of all non-child layers.</toolTip>
+      <iconText>Toggle layer soloing</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="toggle_layer_alpha_lock">
       <icon>transparency-locked</icon>
       <text>Toggle layer &amp;alpha</text>

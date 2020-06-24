@@ -36,9 +36,9 @@
 #include <kis_pattern_chooser.h>
 #include <kis_slider_spin_box.h>
 #include <kis_multipliers_double_slider_spinbox.h>
-#include <resources/KoPattern.h>
-#include <resources/KoAbstractGradient.h>
-#include <resources/KoResource.h>
+#include <KoPattern.h>
+#include <KoAbstractGradient.h>
+#include <KoResource.h>
 #include <KoResourceServerProvider.h>
 #include <kis_paint_device.h>
 #include <kis_fill_painter.h>
@@ -212,8 +212,6 @@ void KisTextureOption::resetGUI(KoResourceSP res)
 KisTextureProperties::KisTextureProperties(int levelOfDetail)
     : m_levelOfDetail(levelOfDetail)
 {
-    KoResourceServer<KoAbstractGradient>* rserver = KoResourceServerProvider::instance()->gradientServer();
-    m_gradient = dynamic_cast<KoAbstractGradient*>(rserver->resources().first());
 }
 
 void KisTextureProperties::fillProperties(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface)

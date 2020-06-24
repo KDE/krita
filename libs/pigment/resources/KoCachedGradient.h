@@ -18,8 +18,6 @@
  */
 
 
- //Adapted from CachedGradient in libs/image/kis_gradient_painter.cc. TODO: fix kis_gradient_painter to use this instead
-
 class KoCachedGradient : public KoAbstractGradient
 {
 
@@ -27,7 +25,7 @@ public:
     KoCachedGradient() : KoAbstractGradient("")
     {}
 
-    KoCachedGradient(const KoAbstractGradient* gradient, qint32 steps, const KoColorSpace* cs)
+    KoCachedGradient(const KoAbstractGradientSP gradient, qint32 steps, const KoColorSpace* cs)
         : KoAbstractGradient(gradient->filename())
     {
         setGradient(gradient, steps, cs);
@@ -35,8 +33,8 @@ public:
 
     ~KoCachedGradient() override {}
 
-    KoAbstractGradient* clone() const override {
-        return new KoCachedGradient(m_subject, m_max + 1, m_colorSpace);
+    KoResourceSP clone() const override {
+        return KoResourceSP(new KoCachedGradient(m_subject, m_max + 1, m_colorSpace));
     }
 
     /**
@@ -48,7 +46,7 @@ public:
         return m_subject->toQGradient();
     }
 
-    void setGradient(const KoAbstractGradient* gradient, qint32 steps, const KoColorSpace* cs) {
+    void setGradient(const KoAbstractGradientSP gradient, qint32 steps, const KoColorSpace* cs) {
         m_subject = gradient;
         m_max = steps - 1;
         m_colorSpace = cs;
@@ -62,7 +60,7 @@ public:
         }
     }
 
-    void setGradient(const KoAbstractGradient* gradient, qint32 steps) {
+    void setGradient(const KoAbstractGradientSP gradient, qint32 steps) {
         setGradient(gradient, steps, gradient->colorSpace());
     }
 
@@ -88,9 +86,17 @@ public:
 
     QByteArray generateMD5() const override { return QByteArray(); }
 
+    bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override {
+        return m_subject->loadFromDevice(dev, resourcesInterface);
+    }
+
+    QPair<QString, QString> resourceType() const override {
+        return m_subject->resourceType();
+    }
+
 private:
 
-    const KoAbstractGradient* m_subject;
+    KoAbstractGradientSP m_subject;
     const KoColorSpace* m_colorSpace;
     qint32 m_max;
     QVector<KoColor> m_colors;

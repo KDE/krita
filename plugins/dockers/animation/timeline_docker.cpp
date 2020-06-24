@@ -452,6 +452,14 @@ void TimelineDocker::setViewManager(KisViewManager *view)
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(action, SIGNAL(triggered(bool)), SLOT(nextFrame()));
 
+    action = actionManager->createAction("previous_keyframe");
+    action->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    connect(action, SIGNAL(triggered(bool)), SLOT(previousKeyframe()));
+
+    action = actionManager->createAction("next_keyframe");
+    action->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    connect(action, SIGNAL(triggered(bool)), SLOT(nextKeyframe()));
+
     action = actionManager->createAction("auto_key");
     m_d->titlebar->btnAutoFrame->setDefaultAction(action);
     connect(action, SIGNAL(triggered(bool)), SLOT(setAutoKey(bool)));
@@ -513,6 +521,60 @@ void TimelineDocker::nextFrame()
 
     int time = animInterface->currentUITime() + 1;
     animInterface->requestTimeSwitchWithUndo(time);
+}
+
+void TimelineDocker::previousKeyframe()
+{
+    if (!m_d->canvas) return;
+
+    KisNodeSP node = m_d->canvas->viewManager()->activeNode();
+    if (!node) return;
+
+    KisKeyframeChannel *keyframes =
+        node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    if (!keyframes) return;
+
+    KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
+    int time = animInterface->currentUITime();
+
+    KisKeyframeSP currentKeyframe = keyframes->keyframeAt(time);
+    KisKeyframeSP destinationKeyframe;
+
+    if (!currentKeyframe) {
+        destinationKeyframe = keyframes->activeKeyframeAt(time);
+    } else {
+        destinationKeyframe = keyframes->previousKeyframe(currentKeyframe);
+    }
+
+    if (destinationKeyframe) {
+        animInterface->requestTimeSwitchWithUndo(destinationKeyframe->time());
+    }
+}
+
+void TimelineDocker::nextKeyframe()
+{
+    if (!m_d->canvas) return;
+
+    KisNodeSP node = m_d->canvas->viewManager()->activeNode();
+    if (!node) return;
+
+    KisKeyframeChannel *keyframes =
+        node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    if (!keyframes) return;
+
+    KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
+    int time = animation->currentUITime();
+
+    KisKeyframeSP currentKeyframe = keyframes->activeKeyframeAt(time);
+    KisKeyframeSP destinationKeyframe;
+
+    if (currentKeyframe) {
+        destinationKeyframe = keyframes->nextKeyframe(currentKeyframe);
+    }
+
+    if (destinationKeyframe) {
+        animation->requestTimeSwitchWithUndo(destinationKeyframe->time());
+    }
 }
 
 void TimelineDocker::goToFrame(int frameIndex)

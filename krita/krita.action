@@ -1938,6 +1938,30 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="previous_keyframe">
+      <icon>prevkeyframe</icon>
+      <text>Previous Keyframe</text>
+      <whatsThis></whatsThis>
+      <toolTip>Move to previous keyframe</toolTip>
+      <iconText>Move to previous keyframe</iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="next_keyframe">
+      <icon>nextkeyframe</icon>
+      <text>Next keyframe</text>
+      <whatsThis></whatsThis>
+      <toolTip>Move to next keyframe</toolTip>
+      <iconText>Move to next keyframe</iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="toggle_playback">
       <icon>animation_play</icon>
       <text>Play / pause animation</text>

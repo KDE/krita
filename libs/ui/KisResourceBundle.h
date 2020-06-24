@@ -24,7 +24,7 @@
 #include <QList>
 
 #include <KoXmlWriter.h>
-#include <config-SeExpr.h>
+#include <config-seexpr.h>
 #include <resources/KoResource.h>
 #include "KisResourceBundleManifest.h"
 

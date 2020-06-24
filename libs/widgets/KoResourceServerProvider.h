@@ -34,7 +34,7 @@
 #include <resources/KoColorSet.h>
 #include <resources/KoSvgSymbolCollectionResource.h>
 #include <resources/KoGamutMask.h>
-#include <config-SeExpr.h>
+#include <config-seexpr.h>
 #if defined HAVE_SEEXPR
 #include <resources/KisSeExprScript.h>
 #endif

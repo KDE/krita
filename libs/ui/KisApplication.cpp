@@ -104,7 +104,7 @@
 #include "kis_group_layer.h"
 #include "kis_node_commands_adapter.h"
 
-#include <config-SeExpr.h>
+#include <config-seexpr.h>
 
 namespace {
 const QTime appStartTime(QTime::currentTime());

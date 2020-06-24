@@ -31,8 +31,8 @@ private:
     KisSpacingInformation computeSpacing(const KisPaintInformation &info, qreal lodScale) const;
 
 private:
-    KisMyPaintBrush *m_brush;
-    KisMyPaintSurface *m_surface;
+    QScopedPointer<KisMyPaintBrush> m_brush;
+    QScopedPointer<KisMyPaintSurface> m_surface;
     KisPaintOpSettingsSP m_settings;
     KisNodeSP m_node;
     double dtime, m_radius;

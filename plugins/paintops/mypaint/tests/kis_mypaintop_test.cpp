@@ -11,16 +11,19 @@
 #include <kis_group_layer.h>
 #include <kis_paintop_preset.h>
 #include <kis_random_accessor_ng.h>
+#include <kis_image.h>
+#include <QTest>
+#include <QtTest/QtTest>
 
 class KisMyPaintOpSettings;
-KisMyPaintOpTest::KisMyPaintOpTest(): TestUtil::QImageBasedTest("")
+KisMyPaintOpTest::KisMyPaintOpTest(): TestUtil::QImageBasedTest("MyPaintOp")
 {
+
 }
 
 void KisMyPaintOpTest::testDab() {
 
-    KisSurrogateUndoStore *undoStore = new KisSurrogateUndoStore();
-    KisImageSP image = createTrivialImage(undoStore);
+    KisImageSP image = createTrivialImage(new KisSurrogateUndoStore());
     image->initialRefreshGraph();
 
     KisNodeSP paintNode = findNode(image->root(), "paint1");
@@ -31,7 +34,7 @@ void KisMyPaintOpTest::testDab() {
 
     mypaint_brush_new();
 
-    KisMyPaintSurface *surface = new KisMyPaintSurface(&painter, paintNode);
+    QScopedPointer<KisMyPaintSurface> surface(new KisMyPaintSurface(&painter, paintNode));
 
     surface->draw_dab(surface->surface(), 250, 250, 100, 0, 0, 1, 1, 0.8, 1, 1, 90, 0, 0);
 
@@ -43,8 +46,7 @@ void KisMyPaintOpTest::testDab() {
 
 void KisMyPaintOpTest::testGetColor() {
 
-    KisSurrogateUndoStore *undoStore = new KisSurrogateUndoStore();
-    KisImageSP image = createTrivialImage(undoStore);
+    KisImageSP image = createTrivialImage(new KisSurrogateUndoStore());
     image->initialRefreshGraph();
 
     KisNodeSP paintNode = findNode(image->root(), "paint1");
@@ -55,7 +57,7 @@ void KisMyPaintOpTest::testGetColor() {
 
     mypaint_brush_new();
 
-    KisMyPaintSurface *surface = new KisMyPaintSurface(&painter, paintNode);
+    QScopedPointer<KisMyPaintSurface> surface(new KisMyPaintSurface(&painter, paintNode));
 
     surface->draw_dab(surface->surface(), 250, 250, 100, 0, 0, 1, 1, 0.8, 1, 1, 90, 0, 0);
 

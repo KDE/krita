@@ -101,6 +101,13 @@ void KisVisualColorSelectorShape::setAcceptTabletEvents(bool on)
     m_d->acceptTabletEvents = on;
 }
 
+bool KisVisualColorSelectorShape::isHueControl() const
+{
+    return selectorModel()->isHSXModel()
+            && getDimensions() == KisVisualColorSelectorShape::onedimensional
+            && m_d->channel1 == 0;
+}
+
 void KisVisualColorSelectorShape::forceImageUpdate()
 {
     //qDebug() << this  << "forceImageUpdate";

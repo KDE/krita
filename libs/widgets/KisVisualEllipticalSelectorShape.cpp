@@ -163,7 +163,7 @@ QRegion KisVisualEllipticalSelectorShape::getMaskMap()
     return mask;
 }
 
-QImage KisVisualEllipticalSelectorShape::renderAlphaMask() const
+QImage KisVisualEllipticalSelectorShape::renderAlphaMaskImpl(qreal outerBorder, qreal innerBorder) const
 {
     // Hi-DPI aware rendering requires that we determine the device pixel dimension;
     // actual widget size in device pixels is not accessible unfortunately, it might be 1px smaller...
@@ -177,13 +177,46 @@ QImage KisVisualEllipticalSelectorShape::renderAlphaMask() const
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setBrush(Qt::white);
     painter.setPen(Qt::NoPen);
-    painter.drawEllipse(2, 2, width() - 4, height() - 4);
+    QRectF circle(outerBorder, outerBorder, width() - 2*outerBorder, height() - 2*outerBorder);
+    painter.drawEllipse(circle);
+
     //painter.setBrush(Qt::black);
-    if (getDimensions() == KisVisualColorSelectorShape::onedimensional) {
+    if (innerBorder > outerBorder) {
+        circle = QRectF(innerBorder, innerBorder, width() - 2*innerBorder, height() - 2*innerBorder);
         painter.setCompositionMode(QPainter::CompositionMode_Clear);
-        painter.drawEllipse(m_barWidth - 2, m_barWidth - 2, width() - 2*(m_barWidth-2), height() - 2*(m_barWidth-2));
+        painter.drawEllipse(circle);
     }
     return alphaMask;
+}
+
+QImage KisVisualEllipticalSelectorShape::renderAlphaMask() const
+{
+    KisVisualColorSelector::RenderMode mode = colorSelector()->renderMode();
+    if (isHueControl() && mode == KisVisualColorSelector::StaticBackground) {
+        return QImage();
+    }
+    qreal outerBorder = 2.0;
+    qreal innerBorder = -1;
+    if (mode == KisVisualColorSelector::CompositeBackground && isHueControl()) {
+        outerBorder =  2 + 0.25 * (m_barWidth - 4);
+    }
+    if (getDimensions() == KisVisualColorSelectorShape::onedimensional) {
+        innerBorder = m_barWidth - 2;
+    }
+    return renderAlphaMaskImpl(outerBorder, innerBorder);
+}
+
+QImage KisVisualEllipticalSelectorShape::renderStaticAlphaMask() const
+{
+    KisVisualColorSelector::RenderMode mode = colorSelector()->renderMode();
+    if (!isHueControl() || mode == KisVisualColorSelector::DynamicBackground) {
+        return QImage();
+    }
+    qreal innerBorder = m_barWidth - 2;
+    if (mode == KisVisualColorSelector::CompositeBackground) {
+        innerBorder = 3 + 0.25 * (m_barWidth - 4);
+    }
+    return renderAlphaMaskImpl(2.0, innerBorder);
 }
 
 void KisVisualEllipticalSelectorShape::drawCursor(QPainter &painter)

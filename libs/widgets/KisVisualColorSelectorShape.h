@@ -82,6 +82,7 @@ public:
     virtual QRect getSpaceForCircle(QRect geom) = 0;
     virtual QRect getSpaceForTriangle(QRect geom) = 0;
 
+    bool isHueControl() const;
     /**
      * @brief forceImageUpdate
      * force the image to recache.

@@ -28,6 +28,13 @@ class KRITAWIDGETS_EXPORT KisVisualColorSelector : public KisColorSelectorInterf
 {
     Q_OBJECT
 public:
+
+    enum RenderMode {
+        StaticBackground,
+        DynamicBackground,
+        CompositeBackground
+    };
+
     explicit KisVisualColorSelector(QWidget *parent = 0);
     ~KisVisualColorSelector() override;
 
@@ -44,6 +51,8 @@ public:
     void setConfig(bool forceCircular, bool forceSelfUpdate) override;
     void setAcceptTabletEvents(bool on);
     KoColor getCurrentColor() const override;
+    RenderMode renderMode() const;
+    void setRenderMode(RenderMode mode);
 
 public Q_SLOTS:
     void slotSetColor(const KoColor &c) override;

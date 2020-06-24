@@ -33,6 +33,7 @@ struct KisVisualColorSelector::Private
     bool loadingConfig {false};
     int colorChannelCount {0};
     QVector4D channelValues;
+    KisVisualColorSelector::RenderMode renderMode {RenderMode::DynamicBackground};
     KisColorSelectorConfiguration acs_config;
     KisSignalCompressor *updateTimer {0};
     KisVisualColorModel *selector {0};
@@ -108,6 +109,22 @@ KoColor KisVisualColorSelector::getCurrentColor() const
         return m_d->selector->currentColor();
     }
     return KoColor();
+}
+
+KisVisualColorSelector::RenderMode KisVisualColorSelector::renderMode() const
+{
+    return m_d->renderMode;
+}
+
+void KisVisualColorSelector::setRenderMode(KisVisualColorSelector::RenderMode mode)
+{
+    if (mode != m_d->renderMode) {
+        m_d->renderMode = mode;
+        for (KisVisualColorSelectorShape *shape: m_d->widgetlist) {
+            shape->forceImageUpdate();
+            shape->update();
+        }
+    }
 }
 
 void KisVisualColorSelector::slotSetColor(const KoColor &c)

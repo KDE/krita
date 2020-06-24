@@ -33,9 +33,11 @@ public:
     QRect getSpaceForTriangle(QRect geom) override;
 protected:
     QImage renderAlphaMask() const override;
+    QImage renderStaticAlphaMask() const override;
     QPointF mousePositionToShapeCoordinate(const QPointF &pos, const QPointF &dragStart) const override;
 
 private:
+    QImage renderAlphaMaskImpl(qreal outerBorder, qreal innerBorder) const;
     QPointF convertShapeCoordinateToWidgetCoordinate(QPointF coordinate) const override;
     QPointF convertWidgetCoordinateToShapeCoordinate(QPointF coordinate) const override;
 

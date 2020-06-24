@@ -9,7 +9,7 @@ endif()
 set(kritamypaintop_SOURCES
     my_paintop_plugin.cpp
     kis_my_paintop.cpp
-    #kis_myop_option.cpp
+    kis_my_paintop_option.cpp
     kis_my_paintop_settings.cpp
     kis_my_paintop_settings_widget.cpp
     kis_mypaint_surface.cpp

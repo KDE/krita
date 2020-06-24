@@ -88,6 +88,10 @@ void KisMyPaintBrush::apply(KisPaintOpSettingsSP settings) {
         mypaint_brush_from_string(m_d->m_brush, ba);
     }
 
+    float diameter = settings->getInt("MyPaint/diameter");
+    diameter = qRound(diameter)==0 ? 40 : diameter;
+    mypaint_brush_set_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC, log(diameter/2));
+
     mypaint_brush_new_stroke(m_d->m_brush);
 
 }

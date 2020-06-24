@@ -32,8 +32,6 @@ KisMyPaintOp::KisMyPaintOp(const KisPaintOpSettingsSP settings, KisPainter * pai
         m_brush->setColor(this->painter()->paintColor());
     }
 
-    //mypaint_brush_set_base_value(m_brush->brush(), MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC, 2.0);
-
     m_settings = settings;
 
     dtime = -1;

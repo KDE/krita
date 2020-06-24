@@ -26,8 +26,8 @@ KisMyPaintOpFactory::KisMyPaintOpFactory()
 
 KisMyPaintOpFactory::~KisMyPaintOpFactory() {
 
-    delete m_d->brushServer;
-    delete m_d;
+//    delete m_d->brushServer;
+//    delete m_d;
 }
 
 KisPaintOp* KisMyPaintOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image) {
@@ -72,7 +72,7 @@ QString KisMyPaintOpFactory::category() const {
 
 void KisMyPaintOpFactory::processAfterLoading() {
 
-    KisPaintOpPresetResourceServer* paintOpServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+    KisPaintOpPresetResourceServer *paintOpServer = KisResourceServerProvider::instance()->paintOpPresetServer();
 
     foreach(KisMyPaintBrush* brush, m_d->brushServer->resources()) {
 

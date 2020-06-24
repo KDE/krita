@@ -3,6 +3,7 @@
 #include <KoColorConversions.h>
 #include <QFile>
 #include <QFileInfo>
+#include <libmypaint/mypaint-brush.h>
 
 class KisMyPaintBrush::Private {
 

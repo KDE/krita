@@ -5,6 +5,7 @@
 #include <stroke_testing_utils.h>
 #include <qimage_based_test.h>
 #include <QTest>
+#include <QtTest/QtTest>
 
 class KisMyPaintOpTest: public QObject, public TestUtil::QImageBasedTest
 {
@@ -19,4 +20,5 @@ private Q_SLOTS:
 
 };
 
+#include "kis_mypaintop_test.moc"
 #endif // KIS_MYPAINTOP_TEST_H

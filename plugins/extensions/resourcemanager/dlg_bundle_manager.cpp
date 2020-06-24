@@ -87,11 +87,26 @@ void DlgBundleManager::ItemDelegate::paint(QPainter *painter, const QStyleOption
     painter->setPen(oldPen);
 
 
-
     QRect paintRect = kisGrowRect(option.rect, -minMargin);
     int height = paintRect.height();
 
-    // first the image
+
+    // make border around active ones
+    bool active = KisStorageModel::instance()->data(sourceIndex, Qt::UserRole + KisStorageModel::Active).toBool();
+
+    QColor borderColor = qApp->palette().color(QPalette::Text);
+    painter->setBrush(Qt::NoBrush);
+    painter->setPen(QPen(borderColor));
+
+    QRect borderRect = kisGrowRect(paintRect, -painter->pen().widthF());
+    if (active) {
+        painter->drawRect(borderRect);
+    }
+    painter->setBrush(oldBrush);
+    painter->setPen(oldPen);
+
+
+    // paint the image
     QImage thumbnail = KisStorageModel::instance()->data(sourceIndex, Qt::UserRole + KisStorageModel::Thumbnail).value<QImage>();
 
 
@@ -103,30 +118,10 @@ void DlgBundleManager::ItemDelegate::paint(QPainter *painter, const QStyleOption
     nameRect.setX(paintRect.x() + height + textMargin);
     nameRect.setWidth(paintRect.width() - height - textMargin);
 
-    painter->setBrush(QBrush(Qt::lightGray));
     QTextOption textCenterOption;
     textCenterOption.setAlignment(Qt::AlignVCenter);
     QString name = KisStorageModel::instance()->data(sourceIndex, Qt::UserRole + KisStorageModel::DisplayName).toString();
     painter->drawText(nameRect, name, textCenterOption);
-
-
-    // now the checkbox
-
-    QStyleOptionViewItem optionCheckable = option;
-    QRect checkboxRect = paintRect;
-    painter->setPen(QPen(Qt::lightGray));
-    painter->setBrush(QBrush(Qt::lightGray));
-    checkboxRect.setX(paintRect.x() + paintRect.width() - minMargin - height);
-    checkboxRect.setWidth(height);
-    optionCheckable.rect = checkboxRect;
-    //QFlags flag = QFlags::Zero;
-
-    optionCheckable.features = QStyleOptionViewItem::ViewItemFeatures(0);
-    optionCheckable.features |= QStyleOptionViewItem::HasCheckIndicator;
-
-
-    QModelIndex columnIndex = m_bundleManagerProxyModel->index(index.row(), KisStorageModel::Active);
-    QStyledItemDelegate::paint(painter, optionCheckable, columnIndex);
 
     painter->restore();
 

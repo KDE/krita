@@ -36,13 +36,12 @@ class KisView;
  * with the normal painting devices
  *
  */
-class KRITALIBKIS_EXPORT Scratchpad: public KisScratchPad
+class KRITALIBKIS_EXPORT Scratchpad: public QWidget
 {
     Q_OBJECT
 public:
     Scratchpad(View *view, const QColor & defaultColor, QWidget *parent = 0);
     ~Scratchpad();
-
 
 public Q_SLOTS:
 
@@ -62,11 +61,20 @@ public Q_SLOTS:
     /// Manually set what mode scratchpad is in. Ignored if "setModeManually is set to false
     void setMode(QString modeName);
 
+    /// Should the scratchpad share the zoom level with the canvas?
+    void linkCanvasZoom(bool value);
+
+
     /// load scratchpad
-    void loadScratchpad(QImage image);
+    void loadScratchpadImage(QImage image);
 
     /// take what is on scratchpad area and grab image
-    QImage copyScratchPadImage();
+    QImage copyScratchpadImageData();
+
+
+private:
+    struct Private;
+    const QScopedPointer<Private> d;
 
 };
 

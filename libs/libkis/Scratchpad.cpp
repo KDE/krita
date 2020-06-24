@@ -26,12 +26,24 @@
 #include <kis_canvas2.h>
 
 #include <QColor>
+#include <QVBoxLayout>
+
+
+struct Scratchpad::Private
+{
+    KisScratchPad *scratchpad = 0;
+};
+
 
 Scratchpad::Scratchpad(View *view, const QColor & defaultColor, QWidget *parent)
-    : KisScratchPad(parent)
+    : QWidget(parent), d(new Private)
 {
-    KisScratchPad::setupScratchPad(view->view()->resourceProvider(), defaultColor);
-    KisScratchPad::setMinimumSize(50, 50);
+    d->scratchpad = new KisScratchPad();
+    d->scratchpad->setupScratchPad(view->view()->resourceProvider(), defaultColor);
+    d->scratchpad->setMinimumSize(50, 50);
+
+    setLayout(new QVBoxLayout());
+    layout()->addWidget(d->scratchpad);
 }
 
 Scratchpad::~Scratchpad()
@@ -40,31 +52,36 @@ Scratchpad::~Scratchpad()
 
 void Scratchpad::setModeManually(bool value)
 {
-    KisScratchPad::setModeManually(value);
+    d->scratchpad->setModeManually(value);
 }
 
 void Scratchpad::setMode(QString modeType)
 {
-    KisScratchPad::setModeType(modeType);
+    d->scratchpad->setModeType(modeType);
 }
 
-void Scratchpad::loadScratchpad(QImage image)
+void Scratchpad::linkCanvasZoom(bool value)
 {
-    KisScratchPad::loadScratchpadImage(image);
+    d->scratchpad->linkCanvavsToZoomLevel(value);
 }
 
-QImage Scratchpad::copyScratchPadImage()
+void Scratchpad::loadScratchpadImage(QImage image)
 {
-    return KisScratchPad::copyScratchpadImageData();
+    d->scratchpad->loadScratchpadImage(image);
+}
+
+QImage Scratchpad::copyScratchpadImageData()
+{
+    return d->scratchpad->copyScratchpadImageData();
 }
 
 void Scratchpad::clear()
 {
     // need ability to set color
-    KisScratchPad::fillDefault();
+    d->scratchpad->fillDefault();
 }
 
 void Scratchpad::setFillColor(QColor color)
 {
-    KisScratchPad::setFillColor(color);
+    d->scratchpad->setFillColor(color);
 }

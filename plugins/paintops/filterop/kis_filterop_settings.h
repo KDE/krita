@@ -48,6 +48,7 @@ public:
     using KisPaintOpSettings::fromXML;
     void fromXML(const QDomElement& e) override;
 
+    bool hasPatternSettings() const override;
 };
 
 

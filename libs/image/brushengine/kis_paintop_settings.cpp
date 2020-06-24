@@ -175,6 +175,11 @@ KisPaintOpSettingsSP KisPaintOpSettings::createMaskingSettings() const
     return maskingSettings;
 }
 
+bool KisPaintOpSettings::hasPatternSettings() const
+{
+    return false;
+}
+
 QString KisPaintOpSettings::maskingBrushCompositeOp() const
 {
     return getString(KisPaintOpUtils::MaskingBrushCompositeOpTag, COMPOSITE_MULT);
@@ -266,6 +271,14 @@ qreal KisPaintOpSettings::paintOpFlow()
                 KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
 
     return proxy->getDouble("FlowValue", 1.0);
+}
+
+qreal KisPaintOpSettings::paintOpPatternSize()
+{
+    KisLockedPropertiesProxySP proxy(
+        KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
+
+    return proxy->getDouble("Texture/Pattern/Scale", 0.5);
 }
 
 QString KisPaintOpSettings::paintOpCompositeOp()

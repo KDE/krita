@@ -88,6 +88,9 @@ KisResourceLocator::LocatorError KisResourceLocator::initialize(const QString &i
 
     KConfigGroup cfg(KSharedConfig::openConfig(), "");
     d->resourceLocation = cfg.readEntry(resourceLocationKey, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+    if (d->resourceLocation == "") {
+        d->resourceLocation = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    }
     if (!d->resourceLocation.endsWith('/')) d->resourceLocation += '/';
 
     QFileInfo fi(d->resourceLocation);

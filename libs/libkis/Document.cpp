@@ -745,7 +745,6 @@ SelectionMask *Document::createSelectionMask(const QString &name)
     return new SelectionMask(image, name);
 }
 
-
 QImage Document::projection(int x, int y, int w, int h) const
 {
     if (!d->document || !d->document->image()) return QImage();

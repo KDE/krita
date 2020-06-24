@@ -40,6 +40,7 @@
 #include "KisViewManager.h"
 #include "kis_mainwindow_observer.h"
 #include "kis_signal_compressor.h"
+#include "kis_layer_filter_widget.h"
 #include <QSlider>
 
 class QModelIndex;
@@ -138,8 +139,10 @@ private Q_SLOTS:
     void slotOpacityKeyframeChanged(KisKeyframeSP keyframe);
     void slotOpacityKeyframeMoved(KisKeyframeSP keyframe, int fromTime);
     void slotImageTimeChanged(int time);
-
     void slotForgetAboutSavedNodeBeforeEditSelectionMode();
+
+Q_SIGNALS:
+    void imageChanged();
 
 private:
     inline void connectActionToButton(KisViewManager* view, QAbstractButton *button, const QString &id);
@@ -170,6 +173,7 @@ private:
     KisSignalCompressor m_colorLabelCompressor;
     KisSignalCompressor m_thumbnailSizeCompressor;
 
+    KisLayerFilterWidget* layerFilterWidget;
     QSlider* thumbnailSizeSlider;
 
     KisNodeSP m_activeNode;

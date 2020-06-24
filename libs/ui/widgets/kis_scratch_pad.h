@@ -79,6 +79,13 @@ public:
      */
     void setModeType(QString modeName);
 
+    /**
+     * @brief should the scratchpad zoom level stay in sync with canvas
+     * @param should we link zoom level
+     */
+    void linkCanvavsToZoomLevel(bool value);
+
+
     /// return the contents of the area under the cutoutOverlay rect
     QImage cutoutOverlay() const;
 
@@ -173,8 +180,9 @@ private:
 
     KoColor m_defaultColor;
     Mode m_toolMode;
-    bool isModeManuallySet = false;
-    bool isMouseDown = false;
+    bool isModeManuallySet;
+    bool isMouseDown;
+    bool linkCanvasZoomLevel;
     KisPaintLayerSP m_paintLayer;
     const KoColorProfile* m_displayProfile;
     QCursor m_cursor;

@@ -21,6 +21,7 @@
 
 #include <QScopedPointer>
 #include <QComboBox>
+#include <QStylePainter>
 #include "kritaui_export.h"
 #include "kis_types.h"
 
@@ -44,6 +45,9 @@ public:
 
 Q_SIGNALS:
     void selectedColorsChanged();
+
+public:
+    static void paintColorPie(QStylePainter &painter, const QPalette& palette, const QList<int> &selectedColors, const QRect &rect, const int &baseSize);
 
 private:
     void paintEvent(QPaintEvent *event) override;

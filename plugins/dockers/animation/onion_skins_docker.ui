@@ -47,7 +47,7 @@
       </sizepolicy>
      </property>
      <property name="title">
-      <string>Filter Frames by Color</string>
+      <string>Filter Onion Skins by Frame Color</string>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -72,79 +72,38 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="QCheckBox" name="colorFilter0_checkbox">
+       <widget class="QPushButton" name="resetFilter">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="minimumSize">
+         <size>
+          <width>65</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Reset</string>
+        </property>
+        <property name="iconSize">
          <size>
           <width>0</width>
           <height>0</height>
          </size>
         </property>
-        <property name="text">
-         <string>None</string>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>16</width>
-          <height>16</height>
-         </size>
-        </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="colorFilter1_checkbox">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="colorFilter2_checkbox">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="colorFilter3_checkbox">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="colorFilter4_checkbox">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="colorFilter5_checkbox">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="colorFilter6_checkbox">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="colorFilter7_checkbox">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="colorFilter8_checkbox">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="filterButtons"/>
       </item>
      </layout>
     </widget>

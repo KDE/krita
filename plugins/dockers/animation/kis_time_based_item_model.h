@@ -59,6 +59,7 @@ public:
     bool mirrorFrames(QModelIndexList indexes);
 
     void setScrubState(bool active);
+    bool isScrubbing();
     void scrubTo(int time, bool preview);
 
     void setPlaybackRange(const KisTimeRange &range);
@@ -94,6 +95,7 @@ protected Q_SLOTS:
 
 private Q_SLOTS:
     void slotFramerateChanged();
+    void slotClipRangeChanged();
     void slotCacheChanged();
     void slotInternalScrubPreviewRequested(int time);
 

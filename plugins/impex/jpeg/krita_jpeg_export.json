@@ -3,7 +3,7 @@
     "Id": "Krita JPEG Export Filter",
     "NoDisplay": "true",
     "Type": "Service",
-    "X-KDE-Export": "image/jpeg,jpeg/jfif",
+    "X-KDE-Export": "image/jpeg",
     
     "X-KDE-Library": "kritajpegexport",
     "X-KDE-ServiceTypes": [

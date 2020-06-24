@@ -84,7 +84,8 @@ public:
         GlobalAlphaLock,
         DisablePressure,
         PreviousPaintOpPreset,
-        EffectiveZoom ///<-Used only by painting tools for non-displaying purposes
+        EffectiveZoom, ///<-Used only by painting tools for non-displaying purposes
+        PatternSize
     };
 
 
@@ -165,6 +166,9 @@ public:
 
     void setSize(qreal size);
     qreal size() const;
+
+    void setPatternSize(qreal size);
+    qreal patternSize() const;
 
     void setGlobalAlphaLock(bool lock);
     bool globalAlphaLock() const;

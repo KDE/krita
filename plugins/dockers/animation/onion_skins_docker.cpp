@@ -22,6 +22,7 @@
 #include <QSlider>
 #include <QFrame>
 #include <QGridLayout>
+#include <QEvent>
 
 #include "kis_icon_utils.h"
 #include "kis_image_config.h"
@@ -34,6 +35,7 @@
 #include <KoColorSpaceRegistry.h>
 
 #include "kis_equalizer_widget.h"
+#include "kis_color_label_button.h"
 
 OnionSkinsDocker::OnionSkinsDocker(QWidget *parent) :
     QDockWidget(i18n("Onion Skins"), parent),
@@ -80,50 +82,31 @@ OnionSkinsDocker::OnionSkinsDocker(QWidget *parent) :
         slotShowAdditionalSettings(isShown);
     }
 
-    // create colored checkboxes for onion skin filtering
-    KisNodeViewColorScheme scm;
-    QPalette filterColorPalette;
-    QPixmap iconPixmap(10, 10);
+    {
+        KisNodeViewColorScheme scm;
+        m_filterButtonGroup = new KisColorLabelFilterGroup(this);
+        m_dragFilter = new KisColorLabelMouseDragFilter(this);
+        m_filterButtonGroup->setExclusive(false);
+        m_filterButtonGroup->setMinimumRequiredChecked(0);
+        QWidget* filterButtonContainer = ui->colorFilterGroupbox;
+        QLayout* filterButtonLayout = ui->filterButtons;
+        filterButtonLayout->setSpacing(0);
+        QVector<QColor> availableColors = scm.allColorLabels();
+        QSet<int> viableColors;
+        for (int i = 0; i < availableColors.count(); i++) {
+            KisColorLabelButton* colorLabelButton = new KisColorLabelButton(availableColors[i], 24, filterButtonContainer);
+            filterButtonLayout->addWidget(colorLabelButton);
+            m_filterButtonGroup->addButton(colorLabelButton, i);
+            colorLabelButton->installEventFilter(m_dragFilter);
+            viableColors << i;
+        }
 
-    //iconPixmap.fill(scm.colorLabel(0));
-    //ui->colorFilter0_checkbox->setIcon(iconPixmap); // default(no) color
+        m_filterButtonGroup->setViableLabels(viableColors);
 
-    iconPixmap.fill(scm.colorLabel(1));
-    ui->colorFilter1_checkbox->setIcon(QIcon(iconPixmap));
-
-    iconPixmap.fill(scm.colorLabel(2));
-    ui->colorFilter2_checkbox->setIcon(QIcon(iconPixmap));
-
-    iconPixmap.fill(scm.colorLabel(3));
-    ui->colorFilter3_checkbox->setIcon(QIcon(iconPixmap));
-
-    iconPixmap.fill(scm.colorLabel(4));
-    ui->colorFilter4_checkbox->setIcon(QIcon(iconPixmap));
-
-    iconPixmap.fill(scm.colorLabel(5));
-    ui->colorFilter5_checkbox->setIcon(QIcon(iconPixmap));
-
-    iconPixmap.fill(scm.colorLabel(6));
-    ui->colorFilter6_checkbox->setIcon(QIcon(iconPixmap));
-
-    iconPixmap.fill(scm.colorLabel(7));
-    ui->colorFilter7_checkbox->setIcon(QIcon(iconPixmap));
-
-    iconPixmap.fill(scm.colorLabel(8));
-    ui->colorFilter8_checkbox->setIcon(QIcon(iconPixmap));
-
-
-    // assign click events to color filters and group checkbox
-    connect(ui->colorFilter0_checkbox, SIGNAL(toggled(bool)), this, SLOT(slotFilteredColorsChanged()));
-    connect(ui->colorFilter1_checkbox, SIGNAL(toggled(bool)), this, SLOT(slotFilteredColorsChanged()));
-    connect(ui->colorFilter2_checkbox, SIGNAL(toggled(bool)), this, SLOT(slotFilteredColorsChanged()));
-    connect(ui->colorFilter3_checkbox, SIGNAL(toggled(bool)), this, SLOT(slotFilteredColorsChanged()));
-    connect(ui->colorFilter4_checkbox, SIGNAL(toggled(bool)), this, SLOT(slotFilteredColorsChanged()));
-    connect(ui->colorFilter5_checkbox, SIGNAL(toggled(bool)), this, SLOT(slotFilteredColorsChanged()));
-    connect(ui->colorFilter6_checkbox, SIGNAL(toggled(bool)), this, SLOT(slotFilteredColorsChanged()));
-    connect(ui->colorFilter7_checkbox, SIGNAL(toggled(bool)), this, SLOT(slotFilteredColorsChanged()));
-    connect(ui->colorFilter8_checkbox, SIGNAL(toggled(bool)), this, SLOT(slotFilteredColorsChanged()));
-    connect(ui->colorFilterGroupbox, SIGNAL(toggled(bool)), this, SLOT(slotFilteredColorsChanged()));
+        connect(m_filterButtonGroup, SIGNAL(buttonToggled(int,bool)), this, SLOT(slotFilteredColorsChanged()));
+        connect(ui->colorFilterGroupbox, SIGNAL(toggled(bool)), this, SLOT(slotFilteredColorsChanged()));
+        connect(ui->resetFilter, SIGNAL(pressed()), m_filterButtonGroup, SLOT(reset()) );
+    }
 
     loadSettings();
     KisOnionSkinCompositor::instance()->configChanged();
@@ -168,17 +151,7 @@ void OnionSkinsDocker::slotToggleOnionSkins()
 void OnionSkinsDocker::slotFilteredColorsChanged()
 {
     // what colors are selected to filter??
-    QList<int> selectedFilterColors;
-
-    if (ui->colorFilter0_checkbox->isChecked()) selectedFilterColors << 0;
-    if (ui->colorFilter1_checkbox->isChecked()) selectedFilterColors << 1;
-    if (ui->colorFilter2_checkbox->isChecked()) selectedFilterColors << 2;
-    if (ui->colorFilter3_checkbox->isChecked()) selectedFilterColors << 3;
-    if (ui->colorFilter4_checkbox->isChecked()) selectedFilterColors << 4;
-    if (ui->colorFilter5_checkbox->isChecked()) selectedFilterColors << 5;
-    if (ui->colorFilter6_checkbox->isChecked()) selectedFilterColors << 6;
-    if (ui->colorFilter7_checkbox->isChecked()) selectedFilterColors << 7;
-    if (ui->colorFilter8_checkbox->isChecked()) selectedFilterColors << 8;
+    QSet<int> selectedFilterColors = m_filterButtonGroup->getActiveLabels();
 
     // show all colors if the filter is off and ignore the checkboxes
     if(ui->colorFilterGroupbox->isChecked() == false) {
@@ -186,18 +159,11 @@ void OnionSkinsDocker::slotFilteredColorsChanged()
         selectedFilterColors << 0 << 1 << 2 << 3 << 4 << 5 << 6 << 7 << 8; // show everything
     }
 
-    ui->colorFilter0_checkbox->setVisible(ui->colorFilterGroupbox->isChecked());
-    ui->colorFilter1_checkbox->setVisible(ui->colorFilterGroupbox->isChecked());
-    ui->colorFilter2_checkbox->setVisible(ui->colorFilterGroupbox->isChecked());
-    ui->colorFilter3_checkbox->setVisible(ui->colorFilterGroupbox->isChecked());
-    ui->colorFilter4_checkbox->setVisible(ui->colorFilterGroupbox->isChecked());
-    ui->colorFilter5_checkbox->setVisible(ui->colorFilterGroupbox->isChecked());
-    ui->colorFilter6_checkbox->setVisible(ui->colorFilterGroupbox->isChecked());
-    ui->colorFilter7_checkbox->setVisible(ui->colorFilterGroupbox->isChecked());
-    ui->colorFilter8_checkbox->setVisible(ui->colorFilterGroupbox->isChecked());
+    m_filterButtonGroup->setAllVisibility(ui->colorFilterGroupbox->isChecked());
+    ui->resetFilter->setVisible(ui->colorFilterGroupbox->isChecked());
 
     // existing code
-    KisOnionSkinCompositor::instance()->setColorLabelFilter(selectedFilterColors);
+    KisOnionSkinCompositor::instance()->setColorLabelFilter(QList<int>::fromSet(selectedFilterColors));
     KisOnionSkinCompositor::instance()->configChanged();
 }
 

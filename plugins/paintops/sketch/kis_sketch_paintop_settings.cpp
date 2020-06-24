@@ -61,3 +61,7 @@ QPainterPath KisSketchPaintOpSettings::brushOutline(const KisPaintInformation &i
     return path;
 }
 
+bool KisSketchPaintOpSettings::hasPatternSettings() const
+{
+    return false;
+}

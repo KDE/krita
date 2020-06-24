@@ -110,6 +110,8 @@ public Q_SLOTS:
     void nextFrame();
     void previousKeyframe();
     void nextKeyframe();
+    void previousMatchingKeyframe();
+    void nextMatchingKeyframe();
 
     void goToFrame(int frameIndex);
     void setStartFrame(int frame);

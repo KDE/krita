@@ -174,8 +174,6 @@ void KisTextureMaskInfo::recalculateMask()
     const int width = mask.width();
     const int height = mask.height();
 
-    //KisHLineIteratorSP iter = m_mask->createHLineIteratorNG(0, 0, width);
-
     for (int row = 0; row < height; ++row) {
         for (int col = 0; col < width; ++col) {
             const QRgb currentPixel = pixel[row * width + col];
@@ -213,11 +211,11 @@ void KisTextureMaskInfo::recalculateMask()
             
             //Adjust neutral point in linear fashion.  Uses separate linear equations from 0 to neutralPoint, and neutralPoint to 1,
             //to prevent loss of detail (clipping).
-            if (m_neutralPoint == 1 || (m_neutralPoint !=0 && maskValue <= m_neutralPoint)) {
+            if (m_neutralPoint == 1 || (m_neutralPoint != 0 && maskValue <= m_neutralPoint)) {
                 neutralAdjustedValue = maskValue / (2 * m_neutralPoint);
             }
             else {
-                neutralAdjustedValue = 0.5 +  (maskValue-m_neutralPoint) / (2 - 2 * m_neutralPoint);
+                neutralAdjustedValue = 0.5 +  (maskValue - m_neutralPoint) / (2 - 2 * m_neutralPoint);
             }
 
             int finalValue = neutralAdjustedValue * 255;

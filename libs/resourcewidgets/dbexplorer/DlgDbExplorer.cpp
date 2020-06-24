@@ -121,7 +121,7 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
         m_page->cmbRvResourceTypes->setModelColumn(KisResourceTypeModel::Name);
         connect(m_page->cmbRvResourceTypes, SIGNAL(activated(int)), SLOT(slotRvResourceTypeSelected(int)));
 
-        m_page->cmbRvTags->setModelColumn(KisTagModel::Name);
+        m_page->cmbRvTags->setModelColumn(KisAllTagsModel::Name);
         m_page->cmbRvTags->setModel(m_tagModel);
         connect(m_page->cmbRvTags, SIGNAL(activated(int)), SLOT(slotRvTagSelected(int)));
 
@@ -141,7 +141,7 @@ DlgDbExplorer::~DlgDbExplorer()
 void DlgDbExplorer::updateTagModel(const QString& resourceType)
 {
     m_tagModel = KisTagModelProvider::tagModel(resourceType);
-    m_page->cmbRvTags->setModelColumn(KisTagModel::Name);
+    m_page->cmbRvTags->setModelColumn(KisAllTagsModel::Name);
     m_page->cmbRvTags->setModel(m_tagModel);
     m_page->cmbRvTags->update();
     qDebug() << "number of tags in " << resourceType << " tag model: " << m_tagModel->rowCount();

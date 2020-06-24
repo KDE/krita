@@ -137,7 +137,7 @@ void DlgEmbedTags::resourceTypeSelected(int idx)
 
         QModelIndex idx = model->index(i, 0);
         QString name = model->data(idx, Qt::DisplayRole).toString();
-        int id = model->data(idx, Qt::UserRole + KisTagModel::Id).toInt();
+        int id = model->data(idx, Qt::UserRole + KisAllTagsModel::Id).toInt();
 
         if (id < 0) {
             // skip automated tags

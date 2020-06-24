@@ -4,11 +4,11 @@
 #include <kis_color_option.h>
 
 #include "kis_my_paintop_settings.h"
-///#include "kis_sprayop_option.h"
+#include "kis_my_paintop_option.h"
 
 struct KisMyPaintOpSettings::Private
 {
-    QList<KisUniformPaintOpPropertyWSP> uniformProperties;
+    //QList<KisUniformPaintOpPropertyWSP> uniformProperties;
 };
 
 
@@ -24,28 +24,36 @@ KisMyPaintOpSettings::~KisMyPaintOpSettings()
 }
 
 void KisMyPaintOpSettings::setPaintOpSize(qreal value)
-{
+{    
+    KisMyPaintOptionProperties op;
+    op.readOptionSettingImpl(this);
+    op.diameter = value;
+    op.writeOptionSettingImpl(this);
 }
 
 qreal KisMyPaintOpSettings::paintOpSize() const
 {
-    return 40;
+    KisMyPaintOptionProperties op;
+    op.readOptionSettingImpl(this);
+    return op.diameter;
 }
 
 bool KisMyPaintOpSettings::paintIncremental()
 {
-    return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
+    return false;
 }
 
 
 QPainterPath KisMyPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
-{
+{    
     QPainterPath path;
 
     if (mode.isVisible) {
         qreal finalScale = 1.0;
 
-        const qreal radius = 0.5 * 40;
+        KisMyPaintOptionProperties op;
+        op.readOptionSettingImpl(this);
+        const qreal radius = 0.5 * op.diameter;
 
         QPainterPath realOutline;
         realOutline.addEllipse(QPointF(), radius, radius);
@@ -72,7 +80,7 @@ QPainterPath KisMyPaintOpSettings::brushOutline(const KisPaintInformation &info,
 
 QList<KisUniformPaintOpPropertySP> KisMyPaintOpSettings::uniformProperties(KisPaintOpSettingsSP settings)
 {
-    QList<KisUniformPaintOpPropertySP> props =
-        listWeakToStrong(m_d->uniformProperties);
+    QList<KisUniformPaintOpPropertySP> props;
+        //listWeakToStrong(m_d->uniformProperties);
     return props;
 }

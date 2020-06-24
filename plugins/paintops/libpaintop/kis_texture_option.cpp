@@ -244,37 +244,14 @@ void KisTextureProperties::setTextureGradient(const KoAbstractGradient* gradient
     }
 }
 
-//Convert a pixel to a QColor.  We need this instead of calling ColorSpace::toQColor() because toQColor() is extremely slow,
-//even though it works pretty much exactly the same way...
-void KisTextureProperties::createQColorFromPixel(QColor& dest, const quint8* pixel, const KoColorSpace *cs) {
-    QVector <float> channelValuesF(4);
-
-    //Probably doesn't need to check for RGBA, because the only time we call it is for
-    //the mask, which we explicitly set as rbg8 colorspace before calling this.  It's here from previous testing
-    //where it was necessary, and left in just in case it's needed in the future.
-    QString csid = cs->id();
-    if (csid.contains("RGBA")) {
-        cs->normalisedChannelsValue(pixel, channelValuesF);
-    }
-    else {
-        const int rgbPixelSize = sizeof(KoBgrU16Traits::Pixel);
-        quint8* pixelRGBA = new quint8[rgbPixelSize];
-        cs->toRgbA16(pixel, pixelRGBA, 1);
-        KoColorSpaceTrait<quint16, 4, 3>::normalisedChannelsValue(pixelRGBA, channelValuesF);
-        delete pixelRGBA;
-    }
-    dest.setRgbF(channelValuesF[2], channelValuesF[1], channelValuesF[0], channelValuesF[3]);
-}
-
 void KisTextureProperties::applyLightness(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation& info) {
     if (!m_enabled) return;
 
     KisPaintDeviceSP mask = m_maskInfo->mask();
-    bool maskHasAlpha = m_maskInfo->hasAlpha();
     const QRect maskBounds = m_maskInfo->maskBounds();
 
-    KisPaintDeviceSP fillMaskDevice = new KisPaintDevice(mask->colorSpace());
-    QRect rect = dab->bounds();
+    KisPaintDeviceSP fillMaskDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+    const QRect rect = dab->bounds();
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(mask);
 
@@ -288,29 +265,18 @@ void KisTextureProperties::applyLightness(KisFixedPaintDeviceSP dab, const QPoin
     qreal pressure = m_strengthOption.apply(info);
     quint8* dabData = dab->data();
 
-    KisHLineIteratorSP iter = fillMaskDevice->createHLineIteratorNG(x, y, rect.width());
-    for (int row = 0; row < rect.height(); ++row) {
-        for (int col = 0; col < rect.width(); ++col) {
-            const quint8* maskData = iter->oldRawData();
-            QColor maskColor;
-            if (maskHasAlpha) {
-                createQColorFromPixel(maskColor, maskData, mask->colorSpace());
-            } else {
-                quint8 gray = *maskData;
-                maskColor = QColor::fromRgb(gray, gray, gray);
-            }
-            QRgb maskQRgb = maskColor.rgba();
-            dab->colorSpace()->fillGrayBrushWithColorAndLightnessWithStrength(dabData, &maskQRgb, dabData, pressure, 1);
-
-            iter->nextPixel();
-            dabData += dab->pixelSize();
-        }
-        iter->nextRow();
+    KisSequentialConstIterator it(fillMaskDevice, QRect(x, y, rect.width(), rect.height()));
+    while (it.nextPixel()) {
+        const QRgb *maskQRgb = reinterpret_cast<const QRgb*>(it.oldRawData());
+        dab->colorSpace()->fillGrayBrushWithColorAndLightnessWithStrength(dabData, maskQRgb, dabData, pressure, 1);
+        dabData += dab->pixelSize();
     }
 }
 
 void KisTextureProperties::applyGradient(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation& info) {
     if (!m_enabled) return;
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_gradient && m_gradient->valid());
 
     KisPaintDeviceSP fillDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
     QRect rect = dab->bounds();
@@ -341,23 +307,17 @@ void KisTextureProperties::applyGradient(KisFixedPaintDeviceSP dab, const QPoint
     KisHLineIteratorSP iter = fillDevice->createHLineIteratorNG(x, y, rect.width());
     for (int row = 0; row < rect.height(); ++row) {
         for (int col = 0; col < rect.width(); ++col) {
-            if (m_gradient && m_gradient->valid()) {
-                qreal gradientvalue = qreal(*iter->oldRawData()) / 255.0;
-                KoColor paintcolor;
-                if (m_useCachedGradient) {
-                    paintcolor.setColor(m_cachedGradient.cachedAt(gradientvalue), m_gradient->colorSpace());
-                }
-                else {
-                    paintcolor = KoColor(m_gradient->colorSpace());
-                    m_gradient->colorAt(paintcolor, gradientvalue);
-                }
-                paintcolor.setOpacity(qMin(paintcolor.opacityF(), dab->colorSpace()->opacityF(dabData)));
-                paintcolor.convertTo(dab->colorSpace(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
-                colors[0] = paintcolor.data();
-                KoColor dabColor(dabData, dab->colorSpace());
-                colors[1] = dabColor.data();
-                colorMix->mixColors(colors, colorWeights, 2, dabData);
-            }
+
+            qreal gradientvalue = qreal(*iter->oldRawData()) / 255.0;
+            KoColor paintcolor;
+            paintcolor.setColor(m_cachedGradient.cachedAt(gradientvalue), m_gradient->colorSpace());
+            paintcolor.setOpacity(qMin(paintcolor.opacityF(), dab->colorSpace()->opacityF(dabData)));
+            paintcolor.convertTo(dab->colorSpace(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+            colors[0] = paintcolor.data();
+            KoColor dabColor(dabData, dab->colorSpace());
+            colors[1] = dabColor.data();
+            colorMix->mixColors(colors, colorWeights, 2, dabData);
+
             iter->nextPixel();
             dabData += dab->pixelSize();
         }

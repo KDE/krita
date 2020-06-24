@@ -90,7 +90,6 @@ public:
 
 private:
 
-    void createQColorFromPixel(QColor& dest, const quint8* pixel, const KoColorSpace *cs);
     void applyLightness(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation& info);
     void applyGradient(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation& info);
 
@@ -101,7 +100,6 @@ private:
     TexturingMode m_texturingMode;
     const KoAbstractGradient* m_gradient;
     KoCachedGradient m_cachedGradient;
-    bool m_useCachedGradient = true;
 
     int m_levelOfDetail;
 

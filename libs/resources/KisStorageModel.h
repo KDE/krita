@@ -55,6 +55,8 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role) const override;
+
+    /// Enable and disable the storage represented by index
     bool setData(const QModelIndex &index, const QVariant &value, int role) override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 
@@ -64,7 +66,10 @@ public:
 
 private Q_SLOTS:
 
+    /// Called whenever a storage is added
     void addStorage(const QString &location);
+
+    /// This is called when a storage really is deleted both from database and anywhere else
     void removeStorage(const QString &location);
 
 private:

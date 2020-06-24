@@ -24,6 +24,8 @@
 #include <kis_config_widget.h>
 #include <kis_signal_compressor.h>
 
+#include <resources/KisSeExprScript.h>
+
 class Ui_WdgSeExpr;
 
 class KisWdgSeExpr : public KisConfigWidget
@@ -40,6 +42,7 @@ public:
 
 private Q_SLOTS:
     void isValid();
+    void slotScriptResourceSelected(KoResource* resource);
 
 private:
     Ui_WdgSeExpr *m_widget;

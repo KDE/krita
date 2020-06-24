@@ -397,6 +397,29 @@ bool KisResourceBundle::save()
                 }
             }
         }
+#if defined HAVE_SEEXPR
+        else if (resType == "kis_seexpr_scripts")
+        {
+            KoResourceServer<KisSeExprScript> *seExprScriptServer = KoResourceServerProvider::instance()->seExprScriptServer();
+            Q_FOREACH (const KisResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType))
+            {
+                KoResource *res = seExprScriptServer->resourceByMD5(ref.md5sum);
+                if (!res)
+                    res = seExprScriptServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
+                if (!saveResourceToStore(res, store.data(), "seexpr"))
+                {
+                    if (res)
+                    {
+                        warnKrita << "Could not save resource" << resType << res->name();
+                    }
+                    else
+                    {
+                        warnKrita << "could not find resource for" << QFileInfo(ref.resourcePath).fileName();
+                    }
+                }
+            }
+        }
+#endif
     }
 
     if (!m_thumbnail.isNull()) {
@@ -759,6 +782,65 @@ bool KisResourceBundle::install()
                 }
             }
         }
+#if defined HAVE_SEEXPR
+        else if (resType == "seexpr")
+        {
+            KoResourceServer<KisSeExprScript> *seExprScriptServer = KoResourceServerProvider::instance()->seExprScriptServer();
+            Q_FOREACH (const KisResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType))
+            {
+
+                if (resourceStore->isOpen())
+                    resourceStore->close();
+
+                dbgResources << "\tInstalling" << ref.resourcePath;
+                KisSeExprScript *res = seExprScriptServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath));
+
+                if (!res)
+                {
+                    warnKrita << "Could not create resource for" << ref.resourcePath;
+                    continue;
+                }
+                if (!resourceStore->open(ref.resourcePath))
+                {
+                    warnKrita << "Failed to open" << ref.resourcePath << "from bundle" << filename();
+                    continue;
+                }
+                if (!res->loadFromDevice(resourceStore->device()))
+                {
+                    warnKrita << "Failed to load" << ref.resourcePath << "from bundle" << filename();
+                    continue;
+                }
+                dbgResources << "\t\tresource:" << res->name();
+
+                //find the resource on the server
+                KisSeExprScript *res2 = seExprScriptServer->resourceByName(res->name());
+                if (!res2)
+                {
+                    //if it doesn't exist...
+                    seExprScriptServer->addResource(res, false); //add it!
+
+                    if (!m_seExprScriptsMd5Installed.contains(res->md5()))
+                    {
+                        m_seExprScriptsMd5Installed.append(res->md5());
+                    }
+                    if (ref.md5sum != res->md5())
+                    {
+                        md5Mismatch.append(res->name());
+                    }
+
+                    Q_FOREACH (const QString &tag, ref.tagList)
+                    {
+                        seExprScriptServer->addTag(res, tag);
+                    }
+                    //seExprScriptServer->addTag(res, name());
+                }
+                else
+                {
+                    //warnKrita << "Didn't install" << res->name()<<"It already exists on the server";
+                }
+            }
+        }
+#endif
     }
     m_installed = true;
     if(!md5Mismatch.isEmpty()){
@@ -844,6 +926,19 @@ bool KisResourceBundle::uninstall()
             gamutMaskServer->removeResourceFromServer(res);
         }
     }
+
+#if defined HAVE_SEEXPR
+    KoResourceServer<KisSeExprScript> *seExprScriptServer = KoResourceServerProvider::instance()->seExprScriptServer();
+    //Q_FOREACH (const KisResourceBundleManifest::ResourceReference &ref, m_manifest.files("seexpr")) {
+    Q_FOREACH (const QByteArray md5, m_seExprScriptsMd5Installed)
+    {
+        KisSeExprScript *res = seExprScriptServer->resourceByMD5(md5);
+        if (res)
+        {
+            seExprScriptServer->removeResourceFromServer(res);
+        }
+    }
+#endif
 
     Q_FOREACH(const QString &tag, tags) {
         paintoppresetServer->tagCategoryRemoved(tag);

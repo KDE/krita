@@ -24,7 +24,7 @@
 #include <QList>
 
 #include <KoXmlWriter.h>
-
+#include <config-SeExpr.h>
 #include <resources/KoResource.h>
 #include "KisResourceBundleManifest.h"
 
@@ -156,6 +156,9 @@ private:
     QList<QByteArray> m_workspacesMd5Installed;
     QList<QByteArray> m_presetsMd5Installed;
     QList<QByteArray> m_gamutMasksMd5Installed;
+#if defined HAVE_SEEXPR
+    QList<QByteArray> m_seExprScriptsMd5Installed;
+#endif
     QString m_bundleVersion;
 
 };

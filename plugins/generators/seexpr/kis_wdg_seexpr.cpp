@@ -48,6 +48,7 @@ KisWdgSeExpr::KisWdgSeExpr(QWidget *parent)
 
     m_widget->txtEditor->updateCompleter();
 
+    connect(m_widget->scriptSelectorWidget, SIGNAL(resourceSelected(KoResource*)), SLOT(slotScriptResourceSelected(KoResource*)));
     connect(m_widget->txtEditor, SIGNAL(apply()), &updateCompressor, SLOT(start()));
     connect(m_widget->txtEditor, SIGNAL(preview()), &updateCompressor, SLOT(start()));
 
@@ -80,6 +81,16 @@ KisPropertiesConfigurationSP KisWdgSeExpr::configuration() const
     config->setProperty("script", v);
 
     return config;
+}
+
+void KisWdgSeExpr::slotScriptResourceSelected(KoResource *r)
+{
+    KisSeExprScript *g = static_cast<KisSeExprScript *>(r);
+    if (g)
+    {
+        widget()->txtEditor->setExpr(g->script(), true);
+        updateCompressor.start();
+    }
 }
 
 void KisWdgSeExpr::isValid()

@@ -334,8 +334,8 @@ void KisTextureProperties::applyGradient(KisFixedPaintDeviceSP dab, const QPoint
     //for gradient textures...
     KoMixColorsOp* colorMix = dab->colorSpace()->mixColorsOp();
     qint16 colorWeights[2];
-    colorWeights[0] = pressure * 255;
-    colorWeights[1] = (1.0 - pressure) * 255;
+    colorWeights[0] = qRound(pressure * 255);
+    colorWeights[1] = 255 - colorWeights[0];
     quint8* colors[2];
 
     KisHLineIteratorSP iter = fillDevice->createHLineIteratorNG(x, y, rect.width());

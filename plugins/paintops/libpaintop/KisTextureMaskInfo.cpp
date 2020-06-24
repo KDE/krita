@@ -160,11 +160,14 @@ void KisTextureMaskInfo::recalculateMask()
 
     qreal scale = m_scale * KisLodTransform::lodToScale(m_levelOfDetail);
 
-    if (!qFuzzyCompare(scale, 0.0)) {
+    if (!qFuzzyCompare(scale, 0.0) && !qFuzzyCompare(scale, 1.0)) {
         QTransform tf;
         tf.scale(scale, scale);
         QRect rc = KisAlgebra2D::ensureRectNotSmaller(tf.mapRect(mask.rect()), QSize(2,2));
         mask = mask.scaled(rc.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    } else {
+        // detach the mask from the file loaded from the storage
+        mask = QImage(mask);
     }
 
     QRgb* pixel = reinterpret_cast<QRgb*>(mask.bits());

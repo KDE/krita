@@ -119,7 +119,7 @@ void KoResourcePopupAction::setCurrentBackground(QSharedPointer<KoShapeBackgroun
 
 void KoResourcePopupAction::setCurrentResource(KoResourceSP resource)
 {
-    QModelIndex index = d->model->indexFromResource(resource);
+    QModelIndex index = d->model->indexForResource(resource);
     if (index.isValid()) {
         d->resourceList->setCurrentIndex(index);
         indexChanged(index);

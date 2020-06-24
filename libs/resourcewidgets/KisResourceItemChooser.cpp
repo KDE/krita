@@ -307,7 +307,7 @@ void KisResourceItemChooser::setCurrentResource(KoResourceSP resource)
     if (d->updatesBlocked) {
         return;
     }
-    QModelIndex index = d->resourceModel->indexFromResource(resource);
+    QModelIndex index = d->resourceModel->indexForResource(resource);
     d->view->setCurrentIndex(index);
     updatePreview(index);
 }

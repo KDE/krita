@@ -102,13 +102,13 @@ void TestTagModel::testData()
     QVariant v = tagModel.data(tagModel.index(0, 0), Qt::DisplayRole);
     QCOMPARE(v.toString(), "All");
 
-    v = tagModel.data(tagModel.index(0, 0), Qt::UserRole + KisTagModel::Url);
+    v = tagModel.data(tagModel.index(0, 0), Qt::UserRole + KisAllTagsModel::Url);
     QCOMPARE(v.toString(), "All");
 
     v = tagModel.data(tagModel.index(2, 0), Qt::DisplayRole);
     QCOMPARE(v.toString(), "* Favorites");
 
-    v = tagModel.data(tagModel.index(2, 0), Qt::UserRole + KisTagModel::Url);
+    v = tagModel.data(tagModel.index(2, 0), Qt::UserRole + KisAllTagsModel::Url);
     QCOMPARE(v.toString(), "* Favorites");
 
 }

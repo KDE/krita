@@ -287,6 +287,43 @@ QVariant KisAllResourcesModel::headerData(int section, Qt::Orientation orientati
     return v;
 }
 
+bool KisAllResourcesModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    if (index.isValid()) {
+        if (role == Qt::CheckStateRole) {
+            QSqlQuery query;
+            bool r = query.prepare("UPDATE resources\n"
+                                   "SET    active = :active\n"
+                                   "WHERE  id = :id\n");
+            query.bindValue(":active", value);
+            query.bindValue(":id", index.data(Qt::UserRole + Id));
+
+            if (!r) {
+                qWarning() << "Could not prepare KisResourceModel update query" << query.lastError();
+                return false;
+            }
+
+            r = query.exec();
+
+            if (!r) {
+                qWarning() << "Could not execute KisResourceModel update query" << query.lastError();
+                return false;
+            }
+
+        }
+    }
+    emit dataChanged(index, index, {role});
+    return true;
+}
+
+Qt::ItemFlags KisAllResourcesModel::flags(const QModelIndex &index) const
+{
+    if (!index.isValid()) {
+        return Qt::NoItemFlags;
+    }
+    return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
+}
+
 //static int s_i2 {0};
 
 KoResourceSP KisAllResourcesModel::resourceForIndex(QModelIndex index) const
@@ -406,7 +443,7 @@ KoResourceSP KisAllResourcesModel::resourceForMD5(const QByteArray md5sum) const
 
 //static int s_i3 {0};
 
-QModelIndex KisAllResourcesModel::indexFromResource(KoResourceSP resource) const
+QModelIndex KisAllResourcesModel::indexForResource(KoResourceSP resource) const
 {
     if (!resource || !resource->valid()) return QModelIndex();
 
@@ -430,12 +467,7 @@ bool KisAllResourcesModel::setResourceInactive(const QModelIndex &index)
     if (index.row() > rowCount()) return false;
     if (index.column() > d->columnCount) return false;
     
-    //qDebug() << "KisAllResourcesModel::setResourceInactive" << s_i4 << d->resourceType; s_i4++;
-
-    bool pos = d->resourcesQuery.seek(index.row());
-    if (!pos) return false;
-    
-    int resourceId = d->resourcesQuery.value("id").toInt();
+    int resourceId = index.data(Qt::UserRole + Id).toInt();
     if (!KisResourceLocator::instance()->setResourceInactive(resourceId)) {
         qWarning() << "Failed to remove resource" << resourceId;
         return false;
@@ -456,7 +488,7 @@ bool KisAllResourcesModel::setResourceInactive(KoResourceSP resource)
         return false;
     }
 
-    QModelIndex index = indexFromResource(resource);
+    QModelIndex index = indexForResource(resource);
     emit dataChanged(index, index, {Qt::EditRole});
     return true;
 }
@@ -514,7 +546,7 @@ bool KisAllResourcesModel::updateResource(KoResourceSP resource)
         return false;
     }
     bool r = resetQuery();
-    QModelIndex index = indexFromResource(resource);
+    QModelIndex index = indexForResource(resource);
     emit dataChanged(index, index, {Qt::EditRole});
     return r;
 }
@@ -531,7 +563,7 @@ bool KisAllResourcesModel::renameResource(KoResourceSP resource, const QString &
         return false;
     }
     bool r = resetQuery();
-    QModelIndex index = indexFromResource(resource);
+    QModelIndex index = indexForResource(resource);
     emit dataChanged(index, index, {Qt::EditRole});
     return r;
 }
@@ -586,7 +618,7 @@ int KisAllResourcesModel::rowCount(const QModelIndex &) const
 }
 
 
-void KisAllResourcesModel::addStorage(const QString &location)
+void KisAllResourcesModel::addStorage(const QString &/*location*/)
 {
     beginResetModel();
     resetQuery();
@@ -594,7 +626,7 @@ void KisAllResourcesModel::addStorage(const QString &location)
 }
 
 
-void KisAllResourcesModel::removeStorage(const QString &location)
+void KisAllResourcesModel::removeStorage(const QString &/*location*/)
 {
     beginResetModel();
     resetQuery();
@@ -644,11 +676,11 @@ KoResourceSP KisResourceModel::resourceForIndex(QModelIndex index) const
     return 0;
 }
 
-QModelIndex KisResourceModel::indexFromResource(KoResourceSP resource) const
+QModelIndex KisResourceModel::indexForResource(KoResourceSP resource) const
 {
     KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
     if (source) {
-        return mapFromSource(source->indexFromResource(resource));
+        return mapFromSource(source->indexForResource(resource));
     }
     return QModelIndex();
 }

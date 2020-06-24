@@ -81,7 +81,7 @@ public:
      * @param resource
      * @return
      */
-    virtual QModelIndex indexFromResource(KoResourceSP resource) const = 0;
+    virtual QModelIndex indexForResource(KoResourceSP resource) const = 0;
 
     /**
      * @brief setResourceInactive deactivates the specified resource
@@ -165,13 +165,15 @@ public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role) const override;
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+    bool setData(const QModelIndex &index, const QVariant &value, int role) override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
 
 // Resources API
     /**
      * @brief resourceForIndex returns a properly versioned and id's resource object
      */
     KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const override;
-    QModelIndex indexFromResource(KoResourceSP resource) const override;
+    QModelIndex indexForResource(KoResourceSP resource) const override;
     bool setResourceInactive(const QModelIndex &index) override;
     bool setResourceInactive(KoResourceSP resource) override;
     bool importResourceFile(const QString &filename) override;
@@ -252,7 +254,7 @@ public:
 public:
 
     KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const override;
-    QModelIndex indexFromResource(KoResourceSP resource) const override;
+    QModelIndex indexForResource(KoResourceSP resource) const override;
     bool setResourceInactive(const QModelIndex &index) override;
     bool importResourceFile(const QString &filename) override;
     bool addResource(KoResourceSP resource, const QString &storageId = QString()) override;

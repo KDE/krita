@@ -248,7 +248,7 @@ bool KisStorageModel::setData(const QModelIndex &index, const QVariant &value, i
 Qt::ItemFlags KisStorageModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid()) {
-        return Qt::ItemIsEnabled;
+        return Qt::NoItemFlags;
     }
     return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
 }

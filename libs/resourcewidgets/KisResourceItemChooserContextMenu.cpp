@@ -193,7 +193,7 @@ bool compareWithSpecialTags(KisTagSP tag) {
 
 
 KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceSP resource,
-                                                                   const KisTagSP currentlySelectedTag)
+                                                                     const KisTagSP currentlySelectedTag)
 {
 
     QImage image = resource->image();

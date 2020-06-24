@@ -59,11 +59,11 @@ KoResourceSP KisTagFilterResourceProxyModel::resourceForIndex(QModelIndex index)
     return 0;
 }
 
-QModelIndex KisTagFilterResourceProxyModel::indexFromResource(KoResourceSP resource) const
+QModelIndex KisTagFilterResourceProxyModel::indexForResource(KoResourceSP resource) const
 {
     KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
     if (source) {
-        return mapFromSource(source->indexFromResource(resource));
+        return mapFromSource(source->indexForResource(resource));
     }
     return QModelIndex();
 }
@@ -170,10 +170,10 @@ bool KisTagFilterResourceProxyModel::resourceHasCurrentTag(KisTagSP currentTag, 
         // no tag set; all resources are allowed
         return true;
     } else {
-        if (currentTag->id() == KisTagModel::All) {
+        if (currentTag->id() == KisAllTagsModel::All) {
             // current tag is "All", all resources are allowed
             return true;
-        } else if (currentTag->id() == KisTagModel::AllUntagged) {
+        } else if (currentTag->id() == KisAllTagsModel::AllUntagged) {
             // current tag is "All untagged", all resources without any tags are allowed
             return tagsForResource.size() == 0;
         } else {

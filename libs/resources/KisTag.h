@@ -75,11 +75,9 @@ public:
     bool load(QIODevice &io);
     bool save(QIODevice &io);
 
-    static bool compareNamesAndUrls(KisTagSP left, KisTagSP right);
-
 private:
 
-    friend class KisTagModel;
+    friend class KisAllTagsModel;
     friend class KisResourceModel;
     friend class KisTagChooserWidget;
     void setId(int id);

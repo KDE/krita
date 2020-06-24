@@ -192,11 +192,11 @@ public:
         return 0;
     }
 
-    QModelIndex indexFromResource(KoResourceSP resource) const override
+    QModelIndex indexForResource(KoResourceSP resource) const override
     {
         KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
         if (source) {
-            return mapFromSource(source->indexFromResource(resource));
+            return mapFromSource(source->indexForResource(resource));
         }
         return QModelIndex();
     }
@@ -393,7 +393,7 @@ void KisPresetChooser::slotCurrentPresetChanged()
     KoResourceSP currentResource = m_chooser->currentResource();
     if (!currentResource) return;
 
-    QModelIndex index = m_paintOpFilterModel->indexFromResource(currentResource);
+    QModelIndex index = m_paintOpFilterModel->indexForResource(currentResource);
     emit m_paintOpFilterModel->dataChanged(index,
                                            index,
                                            {Qt::UserRole + KisAbstractResourceModel::Thumbnail});

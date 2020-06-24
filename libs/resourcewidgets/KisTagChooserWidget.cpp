@@ -39,7 +39,6 @@
 #include "KisResourceItemChooserContextMenu.h"
 #include "KisTagToolButton.h"
 #include "kis_debug.h"
-#include <KisActiveFilterTagProxyModel.h>
 
 class Q_DECL_HIDDEN KisTagChooserWidget::Private
 {
@@ -47,26 +46,18 @@ public:
     QComboBox *comboBox;
     KisTagToolButton *tagToolButton;
     KisTagModel* model;
-    QScopedPointer<KisActiveFilterTagProxyModel> activeFilterModel;
     KisTagSP rememberedTag;
-
-    Private(KisTagModel* model)
-        : activeFilterModel(new KisActiveFilterTagProxyModel(0))
-    {
-        activeFilterModel->setSourceModel(model);
-    }
 };
 
 KisTagChooserWidget::KisTagChooserWidget(KisTagModel* model, QWidget* parent)
     : QWidget(parent)
-    , d(new Private(model))
+    , d(new Private)
 {
     d->comboBox = new QComboBox(this);
 
     d->comboBox->setToolTip(i18n("Tag"));
     d->comboBox->setSizePolicy(QSizePolicy::MinimumExpanding , QSizePolicy::Fixed );
-
-    d->comboBox->setModel(d->activeFilterModel.data());
+    d->comboBox->setModel(model);
 
     d->model = model;
 
@@ -96,12 +87,9 @@ KisTagChooserWidget::KisTagChooserWidget(KisTagModel* model, QWidget* parent)
 
     connect(d->tagToolButton, SIGNAL(renamingOfCurrentTagRequested(KisTagSP)),
             this, SLOT(tagToolRenameCurrentTag(KisTagSP)));
+
     connect(d->tagToolButton, SIGNAL(undeletionOfTagRequested(KisTagSP)),
             this, SLOT(tagToolUndeleteLastTag(KisTagSP)));
-
-    connect(d->model, SIGNAL(modelAboutToBeReset()), this, SLOT(slotModelAboutToBeReset()));
-    connect(d->model, SIGNAL(modelReset()), this, SLOT(slotModelReset()));
-
 
 }
 
@@ -221,17 +209,4 @@ void KisTagChooserWidget::tagToolContextMenuAboutToShow()
 {
     /* only enable the save button if the selected tag set is editable */
     d->tagToolButton->readOnlyMode(selectedTagIsReadOnly());
-}
-
-void KisTagChooserWidget::slotModelAboutToBeReset()
-{
-    d->rememberedTag = currentlySelectedTag();
-}
-
-void KisTagChooserWidget::slotModelReset()
-{
-    bool selected = setCurrentItem(d->rememberedTag);
-    if (!selected) {
-        setCurrentIndex(0); // last used tag was most probably removed
-    }
 }

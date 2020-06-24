@@ -124,7 +124,7 @@ void TestResourceModel::testIndexFromResource()
 {
     KisResourceModel resourceModel(m_resourceType);
     KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(1, 0));
-    QModelIndex idx = resourceModel.indexFromResource(resource);
+    QModelIndex idx = resourceModel.indexForResource(resource);
     QVERIFY(idx.row() == 1);
     QVERIFY(idx.column() == 0);
 }
@@ -137,7 +137,7 @@ void TestResourceModel::testRemoveResourceByIndex()
     bool r = resourceModel.setResourceInactive(resourceModel.index(1, 0));
     QVERIFY(r);
     QCOMPARE(resourceCount - 1, resourceModel.rowCount());
-    QVERIFY(!resourceModel.indexFromResource(resource).isValid());
+    QVERIFY(!resourceModel.indexForResource(resource).isValid());
 
 }
 
@@ -152,7 +152,7 @@ void TestResourceModel::testRemoveResource()
     QVERIFY(r);
     QCOMPARE(resourceCount - 1, resourceModel.rowCount());
 
-    QVERIFY(!resourceModel.indexFromResource(resource).isValid());
+    QVERIFY(!resourceModel.indexForResource(resource).isValid());
 }
 
 void TestResourceModel::testImportResourceFile()

@@ -18,8 +18,8 @@ KisMyPaintOp::KisMyPaintOp(const KisPaintOpSettingsSP settings, KisPainter * pai
     : KisPaintOp (painter) {
 
     m_node = node;
-    m_brush = new KisMyPaintBrush();
-    m_surface = new KisMyPaintSurface(this->painter(), m_node);
+    m_brush.reset(new KisMyPaintBrush());
+    m_surface.reset(new KisMyPaintSurface(this->painter(), m_node));
 
     m_brush->apply(settings);
 
@@ -40,8 +40,8 @@ KisMyPaintOp::KisMyPaintOp(const KisPaintOpSettingsSP settings, KisPainter * pai
 
 KisMyPaintOp::~KisMyPaintOp() {
 
-    delete m_brush;
-    delete m_surface;
+//    delete m_brush;
+//    delete m_surface;
 }
 
 KisSpacingInformation KisMyPaintOp::paintAt(const KisPaintInformation& info) {

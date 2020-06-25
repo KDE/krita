@@ -53,8 +53,8 @@ int KisMyPaintSurface::draw_dab(MyPaintSurface *self, float x, float y, float ra
     colorize = opaque * colorize;
 
     const KoColorSpace *colorSpace = painter()->device()->colorSpace();
-    const QPoint pt = QPoint(x - radius, y - radius);
-    const QSize sz = QSize(2 * radius, 2 * radius);
+    const QPoint pt = QPoint(x - radius - 1, y - radius - 1);
+    const QSize sz = QSize(2 * (radius+1), 2 * (radius+1));
 
     const QRect dabRectAligned = QRect(pt, sz);
     const QPointF center = QPointF(x, y);
@@ -68,9 +68,9 @@ int KisMyPaintSurface::draw_dab(MyPaintSurface *self, float x, float y, float ra
 
         QPoint pt(it.x(), it.y());
 
-        qreal value = outer.fadeSq(pt);
+        //qreal value = outer.fadeSq(pt);
 
-        if(value > 1.0)
+        if(outer.value(pt) > 0.0)
             continue;
 
         qreal rr, base_alpha, alpha, dst_alpha, r, g, b, a;

@@ -81,8 +81,8 @@ public:
 
     const KoColor& startColor() const;
     const KoColor& endColor() const;
-    const KoGradientSegmentEndpointType startType() const;
-    const KoGradientSegmentEndpointType endType() const;
+    KoGradientSegmentEndpointType startType() const;
+    KoGradientSegmentEndpointType endType() const;
 
     void setStartColor(const KoColor& color) {
         m_start.color = color;

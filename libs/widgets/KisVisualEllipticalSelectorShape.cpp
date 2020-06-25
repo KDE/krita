@@ -45,43 +45,47 @@ void KisVisualEllipticalSelectorShape::setBorderWidth(int width)
 
 QRect KisVisualEllipticalSelectorShape::getSpaceForSquare(QRect geom)
 {
-    int sizeValue = qMin(width(),height());
-    QRect b(geom.left(), geom.top(), sizeValue, sizeValue);
-    QLineF radius(b.center(), QPointF(b.left()+m_barWidth, b.center().y()) );
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(geom.contains(geometry()), geom);
+    int sizeValue = qMin(width(), height());
+    QRectF b(0, 0, sizeValue, sizeValue);
+    QLineF radius(b.center(), QPointF(b.left() + m_barWidth - 1, b.center().y()) );
     radius.setAngle(135);
-    QPointF tl = radius.p2();
-    radius.setAngle(315);
-    QPointF br = radius.p2();
-    QRect r(tl.toPoint(), br.toPoint());
+    QPointF tl(qFloor(radius.p2().x()), qFloor(radius.p2().y()));
+    QPointF br = b.bottomRight() - tl;
+    // QRect interprets bottomRight differently (unsuitable) for "historical reasons",
+    // so construct a QRectF and convert to QRect
+    QRect r = QRectF(tl, br).toRect();
+    r.translate(pos());
     return r;
 }
 
 QRect KisVisualEllipticalSelectorShape::getSpaceForCircle(QRect geom)
 {
-    int sizeValue = qMin(width(),height());
-    QRect b(geom.left(), geom.top(), sizeValue, sizeValue);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(geom.contains(geometry()), geom);
+    int sizeValue = qMin(width(), height());
+    QRect b(0, 0, sizeValue, sizeValue);
     QPointF tl = QPointF (b.topLeft().x()+m_barWidth, b.topLeft().y()+m_barWidth);
     QPointF br = QPointF (b.bottomRight().x()-m_barWidth, b.bottomRight().y()-m_barWidth);
     QRect r(tl.toPoint(), br.toPoint());
+    r.translate(pos());
     return r;
 }
 
 QRect KisVisualEllipticalSelectorShape::getSpaceForTriangle(QRect geom)
 {
-    int sizeValue = qMin(width(),height());
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(geom.contains(geometry()), geom);
+    int sizeValue = qMin(width(), height());
     QPointF center(0.5 * width(), 0.5 * height());
     qreal radius = 0.5 * sizeValue - (m_barWidth + 4);
     QLineF rLine(center, QPointF(center.x() + radius, center.y()));
     rLine.setAngle(330);
     QPoint br(rLine.p2().toPoint());
-    //QPoint br(qCeil(rLine.p2().x()), qCeil(rLine.p2().y()));
     QPoint tl(width() - br.x(), m_barWidth + 4);
-    QRect bound(tl, br);
-    // adjust with triangle default margin for cursor rendering
-    // it's not +5 because above calculation is for pixel center and ignores
-    // the fact that dimensions are then effectively 1px smaller...
-    bound.adjust(-5, -5, 4, 4);
-    return bound.intersected(geom);
+    // can't use QRect(tl, br) constructor because it interprets br unsuitably for "historical reasons"
+    QRect bound(tl, QSize(br.x() - tl.x(), br.y() - tl.y()));
+    bound.adjust(-5, -5, 5, 5);
+    bound.translate(pos());
+    return bound;
 }
 
 QPointF KisVisualEllipticalSelectorShape::convertShapeCoordinateToWidgetCoordinate(QPointF coordinate) const

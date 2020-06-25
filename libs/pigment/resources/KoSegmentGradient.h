@@ -47,24 +47,62 @@ enum {
     COLOR_INTERP_HSV_CW
 };
 
+//For saving to .ggr to match GIMP format, we also have Foreground (transparent) and Background (transparent) modes, currently unused...
+enum KoGradientSegmentEndpointType {
+    COLOR_ENDPOINT,
+    FOREGROUND_ENDPOINT,
+    FOREGROUND_TRANSPARENT_ENDPOINT,
+    BACKGROUND_ENDPOINT,
+    BACKGROUND_TRANSPARENT_ENDPOINT
+};
+
+struct KoGradientSegmentEndpoint {
+    KoGradientSegmentEndpoint(qreal _off, KoColor _color, KoGradientSegmentEndpointType _type) :
+        offset(_off), color(_color), type(_type)
+    {
+
+    }
+
+    qreal offset;
+    KoColor color;
+    KoGradientSegmentEndpointType type;
+    
+
+};
+
 /// Write API docs here
 class KRITAPIGMENT_EXPORT KoGradientSegment
 {
 public:
-    KoGradientSegment(int interpolationType, int colorInterpolationType, qreal startOffset, qreal middleOffset, qreal endOffset, const KoColor& startColor, const KoColor& endColor);
+    KoGradientSegment(int interpolationType, int colorInterpolationType, KoGradientSegmentEndpoint start, KoGradientSegmentEndpoint end, qreal middleOffset);
 
     // startOffset <= t <= endOffset
     void colorAt(KoColor&, qreal t) const;
 
     const KoColor& startColor() const;
     const KoColor& endColor() const;
+    KoGradientSegmentEndpointType startType() const;
+    KoGradientSegmentEndpointType endType() const;
 
     void setStartColor(const KoColor& color) {
-        m_startColor = color;
+        m_start.color = color;
+        if (m_start.type == FOREGROUND_TRANSPARENT_ENDPOINT || m_start.type == BACKGROUND_TRANSPARENT_ENDPOINT) {
+            m_start.color.setOpacity(quint8(0));
+        } else if (m_start.type == FOREGROUND_ENDPOINT || m_start.type == BACKGROUND_ENDPOINT) {
+            m_start.color.setOpacity(quint8(255));
+        }
     }
     void setEndColor(const KoColor& color) {
-        m_endColor = color;
+        m_end.color = color;
+        if (m_end.type == FOREGROUND_TRANSPARENT_ENDPOINT || m_end.type == BACKGROUND_TRANSPARENT_ENDPOINT) {
+            m_end.color.setOpacity(quint8(0));
+        } else if (m_end.type == FOREGROUND_ENDPOINT || m_end.type == BACKGROUND_ENDPOINT) {
+            m_end.color.setOpacity(quint8(255));
+        }
     }
+
+    void setStartType(KoGradientSegmentEndpointType type);
+    void setEndType(KoGradientSegmentEndpointType type);
 
     qreal startOffset() const;
     qreal middleOffset() const;
@@ -73,6 +111,9 @@ public:
     void setStartOffset(qreal t);
     void setMiddleOffset(qreal t);
     void setEndOffset(qreal t);
+
+    void setVariableColors(const KoColor& foreground, const KoColor& background);
+    bool hasVariableColors();
 
     qreal length() {
         return m_length;
@@ -83,6 +124,8 @@ public:
 
     void setInterpolation(int interpolationType);
     void setColorInterpolation(int colorInterpolationType);
+
+    void mirrorSegment();
 
     bool isValid() const;
 protected:
@@ -241,14 +284,13 @@ private:
     InterpolationStrategy *m_interpolator;
     ColorInterpolationStrategy *m_colorInterpolator;
 
-    qreal m_startOffset;
     qreal m_middleOffset;
-    qreal m_endOffset;
     qreal m_length;
     qreal m_middleT;
 
-    KoColor m_startColor;
-    KoColor m_endColor;
+    KoGradientSegmentEndpoint m_start, m_end;
+    bool m_hasVariableColors = false;
+
 };
 
 /**
@@ -273,6 +315,11 @@ public:
 
     /// reimplemented
     void colorAt(KoColor& dst, qreal t) const override;
+
+    /// reimplemented
+    bool hasVariableColors() const override;
+    /// reimplemented
+    void setVariableColors(const KoColor& foreground, const KoColor& background) override;
 
     /**
      * Returns the segment at a given position
@@ -310,9 +357,13 @@ public:
      * @param middleOffset
      * @param left
      * @param right
+     * @param leftType
+     * @param rightType
      * @return void
      */
-    void createSegment(int interpolation, int colorInterpolation, double startOffset, double endOffset, double middleOffset, const QColor & left, const QColor & right);
+    void createSegment(int interpolation, int colorInterpolation, double startOffset, double endOffset, double middleOffset, 
+                       const QColor & leftColor, const QColor & rightColor, 
+                       KoGradientSegmentEndpointType leftType = COLOR_ENDPOINT, KoGradientSegmentEndpointType rightType = COLOR_ENDPOINT);
 
     /**
      * gets a list of end points of the segments in the gradient

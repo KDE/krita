@@ -260,13 +260,17 @@ KisImportExportErrorCode VideoSaver::encode(const QString &savedFilesMask, const
                  << "-start_number" << QString::number(clipRange.start())
                  << "-i" << savedFilesMask
                  << "-i" << palettePath
-                 << "-lavfi" << "[0:v][1:v] paletteuse"
-                 << "-y" << resultFile;
+                 << "-lavfi";
+
+            QString filterArgs;
 
             // if we are exporting out at a different image size, we apply scaling filter
             if (m_image->width() != options.width || m_image->height() != options.height) {
-                args << "-vf" << exportDimensions;
+                filterArgs.append(exportDimensions + "[0:v];");
             }
+
+            args << filterArgs.append("[0:v][1:v] paletteuse")
+                 << "-y" << resultFile;
 
 
             dbgFile << "savedFilesMask" << savedFilesMask << "start" << QString::number(clipRange.start()) << "duration" << clipRange.duration();

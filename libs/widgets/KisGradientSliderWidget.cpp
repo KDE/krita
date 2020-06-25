@@ -34,6 +34,7 @@
 
 #define MARGIN 5
 #define HANDLE_SIZE 10
+#define MIN_HEIGHT 60
 
 KisGradientSliderWidget::KisGradientSliderWidget(QWidget *parent, const char* name, Qt::WindowFlags f)
         : QWidget(parent, f),
@@ -42,7 +43,7 @@ KisGradientSliderWidget::KisGradientSliderWidget(QWidget *parent, const char* na
         m_drag(0)
 {
     setObjectName(name);
-    setMinimumHeight(30);
+    setMinimumHeight(MIN_HEIGHT);
 
     m_segmentMenu = new QMenu();
     m_segmentMenu->addAction(i18n("Split Segment"), this, SLOT(slotSplitSegment()));
@@ -60,6 +61,18 @@ void KisGradientSliderWidget::setGradientResource(KoSegmentGradient* agr)
     m_autogradientResource = agr;
     m_selectedSegment = m_autogradientResource->segmentAt(0.0);
     emit sigSelectedSegment(m_selectedSegment);
+}
+
+
+
+void KisGradientSliderWidget::paintSegmentHandle(int position, const QString text, const QPoint& textPos, QPainter& painter)
+{
+    QPolygon triangle(3);
+    triangle[0] = QPoint(position, height() - HANDLE_SIZE - MARGIN);
+    triangle[1] = QPoint(position + (HANDLE_SIZE / 2 - 1), height() - MARGIN);
+    triangle[2] = QPoint(position - (HANDLE_SIZE / 2 - 1), height() - MARGIN);
+    painter.drawPolygon(triangle);
+    painter.drawText(textPos, text);
 }
 
 void KisGradientSliderWidget::paintEvent(QPaintEvent* pe)
@@ -85,25 +98,26 @@ void KisGradientSliderWidget::paintEvent(QPaintEvent* pe)
             painter.fillRect(selection, QBrush(palette().highlight()));
         }
 
-        QPolygon triangle(3);
-        QList<double> handlePositions = m_autogradientResource->getHandlePositions();
-        int position;
-        painter.setBrush(QBrush(Qt::black));
-        for (int i = 0; i < handlePositions.count(); i++) {
-            position = qRound(handlePositions[i] * (double)(width() - 12)) + 6;
-            triangle[0] = QPoint(position, height() - HANDLE_SIZE - MARGIN);
-            triangle[1] = QPoint(position + (HANDLE_SIZE / 2 - 1), height() - MARGIN);
-            triangle[2] = QPoint(position - (HANDLE_SIZE / 2 - 1), height() - MARGIN);
-            painter.drawPolygon(triangle);
-        }
-        painter.setBrush(QBrush(Qt::white));
-        QList<double> middleHandlePositions = m_autogradientResource->getMiddleHandlePositions();
-        for (int i = 0; i < middleHandlePositions.count(); i++) {
-            position = qRound(middleHandlePositions[i] * (double)(width() - 12)) + 6;
-            triangle[0] = QPoint(position, height() - HANDLE_SIZE - MARGIN);
-            triangle[1] = QPoint(position + (HANDLE_SIZE / 2 - 2), height() - MARGIN);
-            triangle[2] = QPoint(position - (HANDLE_SIZE / 2 - 2), height() - MARGIN);
-            painter.drawPolygon(triangle);
+        QList<KoGradientSegment*> segments = m_autogradientResource->segments();
+        for (int i = 0; i < segments.count(); i++) {
+            KoGradientSegment* segment = segments[i];
+
+            //paint segment start
+            int position = qRound(segment->startOffset() * (double)(width() - 12)) + 6;
+            QPoint textPos(position, height() - 2 * (HANDLE_SIZE + MARGIN));
+            QString text = segment->startType() == FOREGROUND_ENDPOINT ? "FG" : (segment->startType() == BACKGROUND_ENDPOINT ? "BG" : "");
+            paintSegmentHandle(position, text, textPos, painter);
+
+            //paint segment end
+            position = qRound(segment->endOffset() * (double)(width() - 12)) + 6;
+            textPos.setX(position - HANDLE_SIZE);
+            text = segment->endType() == FOREGROUND_ENDPOINT ? "FG" : (segment->endType() == BACKGROUND_ENDPOINT ? "BG" : "");
+            paintSegmentHandle(position, text, textPos, painter);
+
+            //paint midpoint
+            position = qRound(segment->middleOffset() * (double)(width() - 12)) + 6;
+            painter.setBrush(QBrush(Qt::white));
+            paintSegmentHandle(position, "", textPos, painter);
         }
     }
 }

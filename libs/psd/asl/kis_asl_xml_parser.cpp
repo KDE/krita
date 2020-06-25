@@ -111,7 +111,8 @@ QColor parseRGBColorObject(QDomElement parent)
 void parseColorStopsList(QDomElement parent,
                          QVector<qreal> &startLocations,
                          QVector<qreal> &middleOffsets,
-                         QVector<QColor> &colors)
+                         QVector<QColor> &colors,
+                         QVector<KoGradientSegmentEndpointType> types)
 {
     QDomNode child = parent.firstChild();
     while (!child.isNull()) {
@@ -151,8 +152,12 @@ void parseColorStopsList(QDomElement parent,
                     }
 
                     QString value = childEl.attribute("value", "");
-                    if (value == "BckC" || value == "FrgC") {
-                        warnKrita << "WARNING: Using foreground/background colors in ASL gradients is not yet supported";
+                    if (value == "BckC"){
+                        types.append(BACKGROUND_ENDPOINT);
+                    } else if (value == "FrgC") {
+                        types.append(FOREGROUND_ENDPOINT);
+                    } else {
+                        types.append(COLOR_ENDPOINT);
                     }
                 }
 
@@ -404,10 +409,12 @@ bool tryParseDescriptor(const QDomElement &el,
         QVector<qreal> startLocations;
         QVector<qreal> middleOffsets;
         QVector<QColor> colors;
+        QVector<KoGradientSegmentEndpointType> types;
 
         QVector<qreal> transpStartLocations;
         QVector<qreal> transpMiddleOffsets;
         QVector<qreal> transparencies;
+
 
 
         QDomNode child = el.firstChild();
@@ -431,7 +438,7 @@ bool tryParseDescriptor(const QDomElement &el,
                 double value = KisDomUtils::toDouble(childEl.attribute("value", "4096"));
                 gradientSmoothness = 100.0 * value / 4096.0;
             } else if (type == "List" && key == "Clrs") {
-                parseColorStopsList(childEl, startLocations, middleOffsets, colors);
+                parseColorStopsList(childEl, startLocations, middleOffsets, colors, types);
             } else if (type == "List" && key == "Trns") {
                 parseTransparencyStopsList(childEl, transpStartLocations, transpMiddleOffsets, transparencies);
             }
@@ -464,6 +471,7 @@ bool tryParseDescriptor(const QDomElement &el,
             colors.append(colors.last());
             startLocations.append(1.0);
             middleOffsets.append(0.5);
+            types.append(COLOR_ENDPOINT);
 
             transparencies.append(transparencies.last());
             transpStartLocations.append(1.0);
@@ -486,10 +494,15 @@ bool tryParseDescriptor(const QDomElement &el,
                 qreal end = startLocations[i];
                 qreal middle = start + middleOffsets[i-1] * (end - start);
 
+                KoGradientSegmentEndpointType startType = types[i - 1];
+                KoGradientSegmentEndpointType endType = types[i];
+
+
                 gradient->createSegment(INTERP_LINEAR, COLOR_INTERP_RGB,
                                         start, end, middle,
                                         startColor,
-                                        endColor);
+                                        endColor,
+                                        startType, endType);
             }
             gradient->setValid(true);
         } else {

@@ -3,6 +3,7 @@
 #include <KoColorConversions.h>
 #include <QFile>
 #include <QFileInfo>
+#include <kis_my_paintop_option.h>
 #include <libmypaint/mypaint-brush.h>
 
 class KisMyPaintBrush::Private {
@@ -11,6 +12,7 @@ public:
     MyPaintBrush *m_brush;
     QImage m_icon;
     QByteArray m_json;
+    float diameter;
 };
 
 KisMyPaintBrush::KisMyPaintBrush(const QString &fileName)
@@ -89,7 +91,7 @@ void KisMyPaintBrush::apply(KisPaintOpSettingsSP settings) {
         mypaint_brush_from_string(m_d->m_brush, ba);
     }
 
-    float diameter = settings->getInt("MyPaint/diameter");
+    float diameter = settings->getFloat(MYPAINT_DIAMETER);
     diameter = qRound(diameter)==0 ? 40 : diameter;
     mypaint_brush_set_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC, log(diameter/2));
 
@@ -147,6 +149,7 @@ bool KisMyPaintBrush::loadFromDevice(QIODevice *dev) {
     QByteArray ba = dev->readAll();
     m_d->m_json = ba;
     mypaint_brush_from_string(m_d->m_brush, ba);
+    m_d->diameter = 2*exp(mypaint_brush_get_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC));
 
     return true;
 }
@@ -159,4 +162,9 @@ bool KisMyPaintBrush::save() {
 QByteArray KisMyPaintBrush::getJsonData() {
 
     return m_d->m_json;
+}
+
+float KisMyPaintBrush::getSize() {
+
+    return m_d->diameter;
 }

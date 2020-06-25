@@ -7,6 +7,7 @@
 #include <kis_my_paintop_settings.h>
 #include <kis_my_paintop_settings_widget.h>
 #include <KisResourceServerProvider.h>
+#include <kis_my_paintop_option.h>
 #include <kis_icon.h>
 
 class KisMyPaintOpFactory::Private {
@@ -82,6 +83,7 @@ void KisMyPaintOpFactory::processAfterLoading() {
         s->setProperty("paintop", id());
         s->setProperty("filename", brush->filename());
         s->setProperty("json_string", brush->getJsonData());
+        s->setProperty(MYPAINT_DIAMETER, brush->getSize());
 
         KisPaintOpPresetSP preset = new KisPaintOpPreset();
         preset->setName(fileInfo.baseName());

@@ -26,6 +26,7 @@ public:
     bool save() override;
 
     QByteArray getJsonData();
+    float getSize();
 
 private:
 

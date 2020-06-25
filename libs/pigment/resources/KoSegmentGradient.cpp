@@ -437,12 +437,12 @@ qreal KoGradientSegment::endOffset() const
     return m_end.offset;
 }
 
-const KoGradientSegmentEndpointType KoGradientSegment::startType() const
+KoGradientSegmentEndpointType KoGradientSegment::startType() const
 {
     return m_start.type;
 }
 
-const KoGradientSegmentEndpointType KoGradientSegment::endType() const
+KoGradientSegmentEndpointType KoGradientSegment::endType() const
 {
     return m_end.type;
 }

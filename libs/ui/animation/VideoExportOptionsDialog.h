@@ -22,7 +22,7 @@
 #include <kis_config_widget.h>
 #include <kis_properties_configuration.h>
 
-#include "video_saver.h"
+#include "KisVideoSaver.h"
 
 #include <QScopedPointer>
 
@@ -30,7 +30,7 @@ namespace Ui {
 class VideoExportOptionsDialog;
 }
 
-class VideoExportOptionsDialog : public KisConfigWidget
+class KisVideoExportOptionsDialog : public KisConfigWidget
 {
     Q_OBJECT
 
@@ -47,8 +47,8 @@ public:
     };
 
 public:
-    explicit VideoExportOptionsDialog(ContainerType containerType, QWidget *parent = 0);
-    ~VideoExportOptionsDialog() override;
+    explicit KisVideoExportOptionsDialog(ContainerType containerType, QWidget *parent = 0);
+    ~KisVideoExportOptionsDialog() override;
 
     void setSupportsHDR(bool value);
 

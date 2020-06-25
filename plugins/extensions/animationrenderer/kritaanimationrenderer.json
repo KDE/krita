@@ -1,9 +1,0 @@
-{
-    "Id": "AnimationRenderer Plugin",
-    "Type": "Service",
-    "X-KDE-Library": "kritaanimationrenderer",
-    "X-KDE-ServiceTypes": [
-        "Krita/ViewPlugin"
-    ],
-    "X-Krita-Version": "28"
-}

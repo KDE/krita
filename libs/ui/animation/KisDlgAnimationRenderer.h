@@ -27,11 +27,14 @@
 #include <QScopedPointer>
 #include <kis_types.h>
 
+
+#include "kritaui_export.h"
+
 class KisDocument;
 class KisImportExportFilter;
 class KisConfigWidget;
 class QHBoxLayout;
-class VideoSaver;
+class KisVideoSaver;
 class KisAnimationRenderingOptions;
 
 class WdgAnimationRenderer : public QWidget, public Ui::WdgAnimaterionRenderer
@@ -46,15 +49,15 @@ public:
     }
 };
 
-class DlgAnimationRenderer: public KoDialog
+class KRITAUI_EXPORT KisDlgAnimationRenderer: public KoDialog
 {
 
     Q_OBJECT
 
 public:
 
-    DlgAnimationRenderer(KisDocument *doc, QWidget *parent = 0);
-    ~DlgAnimationRenderer() override;
+    KisDlgAnimationRenderer(KisDocument *doc, QWidget *parent = 0);
+    ~KisDlgAnimationRenderer() override;
 
     KisAnimationRenderingOptions getEncoderOptions() const;
 

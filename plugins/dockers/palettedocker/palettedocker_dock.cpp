@@ -146,7 +146,10 @@ PaletteDockerDock::PaletteDockerDock( )
 }
 
 PaletteDockerDock::~PaletteDockerDock()
-{ }
+{
+    KoResourceServer<KoColorSet> *srv = KoResourceServerProvider::instance()->paletteServer();
+    srv->removeObserver(this);
+}
 
 void PaletteDockerDock::setViewManager(KisViewManager* kisview)
 {

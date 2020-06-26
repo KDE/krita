@@ -16,6 +16,12 @@
 class KisMyPaintSurface
 {
 public:
+
+    struct MyPaintSurfaceInternal: public MyPaintSurface {
+          KisMyPaintSurface *m_owner;
+    };
+
+public:
     KisMyPaintSurface(KisPainter* painter, KisNodeSP node=nullptr);
 
     /**
@@ -31,29 +37,36 @@ public:
     static void get_color(MyPaintSurface *self, float x, float y, float radius,
                             float * color_r, float * color_g, float * color_b, float * color_a);
 
-    static inline float
+    int drawDabImpl(MyPaintSurface *self, float x, float y, float radius, float color_r, float color_g,
+                                    float color_b, float opaque, float hardness, float color_a,
+                                    float aspect_ratio, float angle, float lock_alpha, float colorize);
+
+    void getColorImpl(MyPaintSurface *self, float x, float y, float radius,
+                                float * color_r, float * color_g, float * color_b, float * color_a);
+
+    inline float
     calculate_rr_antialiased (int  xp, int  yp, float x, float y, float aspect_ratio,
                               float sn, float cs, float one_over_radius2, float r_aa_start);
 
-    static inline float
+    inline float
     calculate_alpha_for_rr (float rr, float hardness, float slope1, float slope2);
 
-    static inline float
+    inline float
     calculate_rr (int xp, int yp, float x, float y, float aspect_ratio,
                   float sn, float cs, float one_over_radius2);
 
 
-    static KisPainter* painter();
-    static void paint(KoColor *color, KoColor* bgColor);
-    static qreal calculateOpacity(float angle, float hardness, float opaque, float x, float y,
+    KisPainter* painter();
+    void paint(KoColor *color, KoColor* bgColor);
+    qreal calculateOpacity(float angle, float hardness, float opaque, float x, float y,
                                             float xp, float yp, float aspect_ratio, float radius);
 
     MyPaintSurface* surface();
 
 private:
-    static KisPainter *m_painter;
-    static KisNodeSP m_node;
-    MyPaintSurface *m_surface;
+    KisPainter *m_painter;
+    KisNodeSP m_node;
+    MyPaintSurfaceInternal *m_surface;
 };
 
 #endif // KIS_MYPAINT_SURFACE_H

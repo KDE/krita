@@ -90,7 +90,7 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
 
         //qreal value = outer.fadeSq(pt);
 
-        if(outer.value(pt) > 0.0)
+        if(outer.fadeSq(pt) > 1.0f)
             continue;
 
         qreal rr, base_alpha, alpha, dst_alpha, r, g, b, a;

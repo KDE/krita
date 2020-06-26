@@ -9,27 +9,47 @@
 #include <QtMath>
 #include <qmath.h>
 
-KisPainter* KisMyPaintSurface::m_painter=nullptr;
-KisNodeSP KisMyPaintSurface::m_node=nullptr;
+//KisPainter* KisMyPaintSurface::m_painter=nullptr;
+//KisNodeSP KisMyPaintSurface::m_node=nullptr;
 
 using namespace std;
 
 KisMyPaintSurface::KisMyPaintSurface(KisPainter *painter, KisNodeSP node)
-{    
+{
     m_painter = painter;
     m_node = node;
 
-    m_surface = new MyPaintSurface();
+    m_surface = new MyPaintSurfaceInternal();
     mypaint_surface_init(m_surface);
+    m_surface->m_owner = this;
 
     m_surface->draw_dab = this->draw_dab;
     m_surface->get_color = this->get_color;
 }
 
-/*GIMP's draw_dab and get_color code*/
 int KisMyPaintSurface::draw_dab(MyPaintSurface *self, float x, float y, float radius, float color_r, float color_g,
                                 float color_b, float opaque, float hardness, float color_a,
                                 float aspect_ratio, float angle, float lock_alpha, float colorize) {
+
+    MyPaintSurfaceInternal *surface = static_cast<MyPaintSurfaceInternal*>(self);
+    return surface->m_owner->drawDabImpl(self, x, y, radius, color_r, color_g,
+             color_b, opaque, hardness, color_a,
+            aspect_ratio, angle, lock_alpha,  colorize);
+}
+
+void KisMyPaintSurface::get_color(MyPaintSurface *self, float x, float y, float radius,
+                            float * color_r, float * color_g, float * color_b, float * color_a) {
+
+    MyPaintSurfaceInternal *surface = static_cast<MyPaintSurfaceInternal*>(self);
+    surface->m_owner->getColorImpl(self, x, y, radius, color_r, color_g, color_b, color_a);
+}
+
+
+/*GIMP's draw_dab and get_color code*/
+int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float radius, float color_r, float color_g,
+                                float color_b, float opaque, float hardness, float color_a,
+                                float aspect_ratio, float angle, float lock_alpha, float colorize) {
+
 
     const float one_over_radius2 = 1.0f / (radius * radius);
     const double angle_rad = angle / 360 * 2 * M_PI;
@@ -166,7 +186,7 @@ int KisMyPaintSurface::draw_dab(MyPaintSurface *self, float x, float y, float ra
     return 1;
 }
 
-void KisMyPaintSurface::get_color(MyPaintSurface *self, float x, float y, float radius,
+void KisMyPaintSurface::getColorImpl(MyPaintSurface *self, float x, float y, float radius,
                             float * color_r, float * color_g, float * color_b, float * color_a) {
 
     if (radius < 1.0f)
@@ -253,7 +273,7 @@ void KisMyPaintSurface::get_color(MyPaintSurface *self, float x, float y, float 
         *color_g = CLAMP(sum_g, 0.0f, 1.0f);
         *color_b = CLAMP(sum_b, 0.0f, 1.0f);
         *color_a = CLAMP(sum_a, 0.0f, 1.0f);
-    }    
+    }
 }
 
 KisPainter* KisMyPaintSurface::painter() {

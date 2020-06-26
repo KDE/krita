@@ -236,3 +236,13 @@ void StoryboardView::slotContextMenuRequested(const QPoint &point)
     }
     contextMenu.exec(viewport()->mapToGlobal(point));
 }
+
+void StoryboardView::setCurrentItem(int frame)
+{
+    const StoryboardModel* Model = dynamic_cast<const StoryboardModel*>(model());
+    QModelIndex index = Model->indexFromFrame(frame);
+    if (index.isValid()) {
+        selectionModel()->select(index, QItemSelectionModel::ClearAndSelect);
+        scrollTo(index);
+    }
+}

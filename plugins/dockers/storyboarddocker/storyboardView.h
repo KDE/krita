@@ -48,6 +48,7 @@ public:
     bool thumbnailIsVisible() const;
     void setCommentVisibility(bool value);
     void setThumbnailVisibility(bool value);
+    void setCurrentItem(int frame);
 
 private Q_SLOTS:
     void slotContextMenuRequested(const QPoint &);

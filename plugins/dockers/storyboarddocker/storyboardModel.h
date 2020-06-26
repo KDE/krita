@@ -83,6 +83,8 @@ public:
     void setCommentModel(CommentModel *commentModel);
     Comment getComment(int row) const;
 
+    QModelIndex indexFromFrame(int frame) const;
+
 private Q_SLOTS:
     void slotCommentDataChanged();
     void slotCommentRowInserted(const QModelIndex, int, int);

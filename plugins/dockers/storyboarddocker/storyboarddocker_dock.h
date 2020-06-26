@@ -21,6 +21,7 @@
 
 #include <QDockWidget>
 #include <QButtonGroup>
+#include <QItemSelection>
 
 #include <kis_mainwindow_observer.h>
 #include <kis_canvas2.h>
@@ -39,10 +40,23 @@ public:
     ~StoryboardDockerDock() override;
     QString observerName() override { return "StoryboardDockerDock"; }
     void setCanvas(KoCanvasBase *canvas) override;
-    void unsetCanvas() override {}
+    void unsetCanvas() override;
     void setViewManager(KisViewManager* kisview) override;
 
+private Q_SLOTS:
+    void slotExportAsPdf();
+    void slotExportAsSvg();
+    void slotExport(QString);
+
+    void slotLockClicked(bool);
+    void slotModeChanged(QAbstractButton*);
+    void slotViewChanged(QAbstractButton*);
+
+    void slotFrameChanged(int frameId);
+    void slotChangeFrameGlobal(QItemSelection selected, QItemSelection deselected);
+
 private:
+    KisCanvas2* m_canvas;
     QScopedPointer<Ui_WdgStoryboardDock> m_ui;
 
     QMenu *m_exportMenu;
@@ -61,14 +75,6 @@ private:
 
     QPointer<StoryboardModel> m_storyboardModel;
 
-private Q_SLOTS:
-    void slotExportAsPdf();
-    void slotExportAsSvg();
-    void slotExport(QString);
-
-    void slotLockClicked(bool);
-    void slotModeChanged(QAbstractButton*);
-    void slotViewChanged(QAbstractButton*);
 };
 
 

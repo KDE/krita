@@ -407,6 +407,27 @@ Comment StoryboardModel::getComment(int row) const
     return m_commentList.at(row);
 }
 
+QModelIndex StoryboardModel::indexFromFrame(int frame) const
+{
+    int end = rowCount(), begin = 0;
+    while (end >= begin) {
+        int row = begin + (end - begin) / 2;
+        QModelIndex parentIndex = index(row, 0);
+        QModelIndex childIndex = index(0, 0, parentIndex);
+        if (childIndex.data().toInt() == frame) {
+            return parentIndex;
+        }
+        else if (childIndex.data().toInt() > frame) {
+            end = row - 1;
+        }
+        else if (childIndex.data().toInt() < frame) {
+            begin = row + 1;
+        }
+    }
+    return QModelIndex();
+}
+
+
 void StoryboardModel::slotCommentDataChanged()
 {
     m_commentList = m_commentModel->m_commentList;

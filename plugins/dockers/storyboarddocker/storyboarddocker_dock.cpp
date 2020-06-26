@@ -21,12 +21,14 @@
 #include "commentModel.h"
 #include "storyboardModel.h"
 #include "storyboardDelegate.h"
+#include "storyboardView.h"
 
 #include <QMenu>
 #include <QButtonGroup>
 #include <QDebug>
 #include <QStringListModel>
 #include <QListView>
+#include <QItemSelection>
 
 #include <klocalizedstring.h>
 
@@ -34,6 +36,7 @@
 #include <KisViewManager.h>
 #include <KisDocument.h>
 #include <kis_icon.h>
+#include <kis_image_animation_interface.h>
 
 #include "ui_wdgstoryboarddock.h"
 #include "ui_wdgcommentmenu.h"
@@ -180,7 +183,11 @@ StoryboardDockerDock::StoryboardDockerDock( )
     delegate->setView(m_ui->listView);
     m_ui->listView->setModel(m_storyboardModel);
     m_ui->listView->setItemDelegate(delegate);
-    delegate->setView(m_ui->listView);
+
+    connect(m_ui->listView, SIGNAL(currentItemChanged(int)), this, SLOT(slotChangeFrameGlobal(int)));
+
+    connect(m_ui->listView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
+            this, SLOT(slotChangeFrameGlobal(QItemSelection, QItemSelection)));
 
     m_storyboardModel->insertRows(0, 10);
     m_storyboardModel->setCommentModel(m_commentModel);
@@ -195,6 +202,21 @@ StoryboardDockerDock::~StoryboardDockerDock()
 
 void StoryboardDockerDock::setCanvas(KoCanvasBase *canvas)
 {
+    if (m_canvas == canvas) {
+        return;
+    }
+
+    m_canvas = dynamic_cast<KisCanvas2*>(canvas);
+    setEnabled(m_canvas);
+
+    if (m_canvas) {
+        connect(m_canvas->image()->animationInterface(), SIGNAL(sigUiTimeChanged(int)), this, SLOT(slotFrameChanged(int)));
+    }
+}
+
+void StoryboardDockerDock::unsetCanvas()
+{
+    setCanvas(0);
 }
 
 void StoryboardDockerDock::setViewManager(KisViewManager* kisview)
@@ -271,6 +293,17 @@ void StoryboardDockerDock::slotViewChanged(QAbstractButton* button)
         m_modeGroup->button(1)->setEnabled(false);               //disable the row mode
     }
     m_storyboardModel->layoutChanged();
+}
+
+void StoryboardDockerDock::slotFrameChanged(int frameId)
+{
+    m_ui->listView->setCurrentItem(frameId);
+}
+
+void StoryboardDockerDock::slotChangeFrameGlobal(QItemSelection selected, QItemSelection deselected)
+{
+    int frameId = m_storyboardModel->data(m_storyboardModel->index(0, 0, selected.indexes().at(0))).toInt();
+    m_canvas->image()->animationInterface()->switchCurrentTimeAsync(frameId);
 }
 
 #include "storyboarddocker_dock.moc"

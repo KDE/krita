@@ -45,6 +45,7 @@ struct KisLayerStyleFilterProjectionPlane::Private
           filter(rhs.filter ? rhs.filter->clone() : 0),
           style(clonedStyle),
           environment(new KisLayerStyleFilterEnvironment(_sourceLayer)),
+          knockoutBlower(rhs.knockoutBlower),
           projection(rhs.projection)
     {
         KIS_SAFE_ASSERT_RECOVER_NOOP(_sourceLayer);

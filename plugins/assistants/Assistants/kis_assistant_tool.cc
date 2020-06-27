@@ -149,6 +149,8 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
 	    m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
 	    bar.setLength(length * 0.5);
 	    m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
+
+	    *m_newAssistant->handles()[2] = cov;
 	}
 
         if (m_newAssistant->handles().size() == m_newAssistant->numHandles()) {
@@ -831,7 +833,19 @@ void KisAssistantTool::slotChangeVanishingPointAngle(double value)
 void KisAssistantTool::mouseMoveEvent(KoPointerEvent *event)
 {
     if (m_newAssistant && m_internalMode == MODE_CREATION) {
-        *m_newAssistant->handles().back() = event->point;
+
+	// We want to keep the 3rd handle on the center of vision / horizon line
+	if (m_newAssistant->id() == "conjugate" && m_newAssistant->handles().length() == 3) {
+	    QList<KisPaintingAssistantHandleSP> handles = m_newAssistant->handles();
+	    // One-liners to calculate center of vision, sorry
+	    // It's just finding the point on the horizon line that's closest to event->point
+	    qreal m = (handles[1]->y() - handles[0]->y()) / (handles[1]->x() - handles[0]->x());
+	    qreal px = (m*m*handles[0]->x() + m*event->point.y() - m*handles[0]->y() + event->point.x()) / (m*m + 1); 
+	    qreal py = m*px + handles[0]->y() - m*handles[0]->x();
+	    *m_newAssistant->handles().back() = QPointF(px,py);
+	} else {
+	    *m_newAssistant->handles().back() = event->point;
+	}
 
     } else if (m_newAssistant && m_internalMode == MODE_DRAGGING_TRANSLATING_TWONODES) {
         QPointF translate = event->point - m_dragEnd;

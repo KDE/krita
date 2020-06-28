@@ -46,6 +46,8 @@ public:
     int numRows() const;
     int numColumns() const;
 
+    //  get color of a stop
+    QColor getColor(SvgMeshPatch::Type edge, int row, int col) const;
 
 private:
     /// where each vector is a meshrow

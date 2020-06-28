@@ -57,7 +57,16 @@ public:
 
     SvgMeshStop* getStop(Type type) const;
 
-    KoPathSegment getPath(Type type) const;
+    /// Get a segment of the path in the meshpatch
+    KoPathSegment getPathSegment(Type type) const;
+
+    /// Get full (closed) meshpath
+    KoPathShape* getPath() const;
+
+    /// Gets the curve passing through the middle of meshpatch
+    KoPathSegment getMidCurve(bool isVertical) const;
+
+    void subdivide(QVector<SvgMeshPatch*>& subdivided) const;
 
     int countPoints() const;
 

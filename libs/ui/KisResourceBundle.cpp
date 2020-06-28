@@ -406,7 +406,7 @@ bool KisResourceBundle::save()
                 KoResource *res = seExprScriptServer->resourceByMD5(ref.md5sum);
                 if (!res)
                     res = seExprScriptServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
-                if (!saveResourceToStore(res, store.data(), "seexpr"))
+                if (!saveResourceToStore(res, store.data(), "seexpr_scripts"))
                 {
                     if (res)
                     {
@@ -783,7 +783,7 @@ bool KisResourceBundle::install()
             }
         }
 #if defined HAVE_SEEXPR
-        else if (resType == "seexpr")
+        else if (resType == "seexpr_scripts")
         {
             KoResourceServer<KisSeExprScript> *seExprScriptServer = KoResourceServerProvider::instance()->seExprScriptServer();
             Q_FOREACH (const KisResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType))
@@ -929,7 +929,7 @@ bool KisResourceBundle::uninstall()
 
 #if defined HAVE_SEEXPR
     KoResourceServer<KisSeExprScript> *seExprScriptServer = KoResourceServerProvider::instance()->seExprScriptServer();
-    //Q_FOREACH (const KisResourceBundleManifest::ResourceReference &ref, m_manifest.files("seexpr")) {
+    //Q_FOREACH (const KisResourceBundleManifest::ResourceReference &ref, m_manifest.files("seexpr_scripts")) {
     Q_FOREACH (const QByteArray md5, m_seExprScriptsMd5Installed)
     {
         KisSeExprScript *res = seExprScriptServer->resourceByMD5(md5);
@@ -1032,6 +1032,13 @@ QList<KoResource*> KisResourceBundle::resources(const QString &resType) const
             KoResource *res =  gamutMaskServer->resourceByMD5(ref.md5sum);
             if (res) ret << res;
         }
+#if defined HAVE_SEEXPR
+        else if (resType == "seexpr_scripts") {
+            KoResourceServer<KisSeExprScript> *seExprScriptServer = KoResourceServerProvider::instance()->seExprScriptServer();
+            KoResource *res = seExprScriptServer->resourceByMD5(ref.md5sum);
+            if (res) ret << res;
+        }
+#endif
     }
     return ret;
 }

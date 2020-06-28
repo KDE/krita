@@ -254,7 +254,7 @@ void KisApplication::addResourceTypes()
     KoResourcePaths::addResourceType("preset_icons", "data", "/preset_icons");
     KoResourcePaths::addResourceType("ko_gamutmasks", "data", "/gamutmasks/", true);
 #if defined HAVE_SEEXPR
-    KoResourcePaths::addResourceType("kis_seexpr_scripts", "data", "/seexpr/", true);
+    KoResourcePaths::addResourceType("kis_seexpr_scripts", "data", "/seexpr_scripts/", true);
 #endif
 
     //    // Extra directories to look for create resources. (Does anyone actually use that anymore?)
@@ -288,7 +288,7 @@ void KisApplication::addResourceTypes()
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/preset_icons/emblem_icons/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/gamutmasks/");
 #if defined HAVE_SEEXPR
-    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/seexpr/");
+    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/seexpr_scripts/");
 #endif
 }
 

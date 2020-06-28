@@ -33,6 +33,7 @@ struct KisSeExprScript::Private
 {
     QString script;
     QByteArray data;
+    bool dirtyPreset = false;
 };
 
 KisSeExprScript::KisSeExprScript(const QString &filename)
@@ -142,7 +143,12 @@ bool KisSeExprScript::loadFromDevice(QIODevice *dev)
 
     buf.close();
 
+    QFileInfo fileinfo(filename());
+    // The name of a SeExpr script is its basename
+    // KoResourceServer uses its filename -- amyspark
+    setName(fileinfo.baseName());
     setValid(true);
+    setDirty(false);
 
     return true;
 }
@@ -211,4 +217,26 @@ QString KisSeExprScript::script() const
 void KisSeExprScript::setScript(const QString &script)
 {
     d->script = script;
+}
+
+KisSeExprScript* KisSeExprScript::clone() const
+{
+    KisSeExprScript* scr = new KisSeExprScript(filename());
+    scr->setScript(script());
+    scr->setImage(image());
+    scr->setName(name());
+    scr->setValid(valid());
+    scr->setDirty(isDirty());
+
+    return scr;
+}
+
+void KisSeExprScript::setDirty(bool value)
+{
+    d->dirtyPreset = value;
+}
+
+bool KisSeExprScript::isDirty() const
+{
+    return d->dirtyPreset;
 }

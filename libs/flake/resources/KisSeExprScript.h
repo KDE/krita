@@ -21,15 +21,20 @@
 #ifndef KIS_SEEXPR_SCRIPT_H
 #define KIS_SEEXPR_SCRIPT_H
 
-#include <resources/KoResource.h>
+#include <kis_shared.h>
+#include <kis_shared_ptr.h>
 #include <kritaflake_export.h>
-
 #include <QMetaType>
+#include <resources/KoResource.h>
+
+class KisSeExprScript;
+
+typedef KisSharedPtr<KisSeExprScript> KisSeExprScriptSP;
 
 /**
  * KoResource container for SeExpr scripts.
  */
-class KRITAFLAKE_EXPORT KisSeExprScript : public KoResource
+class KRITAFLAKE_EXPORT KisSeExprScript : public KoResource, public KisShared
 {
 
 public:
@@ -78,8 +83,15 @@ public:
      */
     QString script() const;
 
-private:
+    /**
+     * @brief set SeExpr expression script
+     */
     void setScript(const QString &script);
+
+    KisSeExprScript* clone() const;
+
+    bool isDirty() const;
+    void setDirty(bool value);
 
 private:
     struct Private;
@@ -88,4 +100,4 @@ private:
 
 Q_DECLARE_METATYPE(KisSeExprScript*)
 
-#endif // KO_SEEXPR_SCRIPT_H
+#endif // KIS_SEEXPR_SCRIPT_H

@@ -23,8 +23,9 @@
 
 #include <kis_config_widget.h>
 #include <kis_signal_compressor.h>
-
 #include <resources/KisSeExprScript.h>
+
+#include "kis_wdg_seexpr_presets_save.h"
 
 class Ui_WdgSeExpr;
 
@@ -42,11 +43,24 @@ public:
 
 private Q_SLOTS:
     void isValid();
-    void slotScriptResourceSelected(KoResource* resource);
+    void slotResourceSelected(KoResource* resource);
+    void slotRenamePresetActivated();
+    void slotRenamePresetDeactivated();
+    void slotSaveRenameCurrentPreset();
+    void slotUpdatePresetSettings();
+    void slotSaveBrushPreset();
+    void slotSaveNewBrushPreset();
+    void slotReloadPresetClicked();
 
 private:
     Ui_WdgSeExpr *m_widget;
     KisSignalCompressor updateCompressor;
+    KisSeExprScriptSP m_currentPreset;
+    KisWdgSeExprPresetsSave *m_saveDialog;
+
+    bool m_isCreatingPresetFromScratch;
+
+    void togglePresetRenameUIActive(bool isRenaming);
 };
 
 #endif

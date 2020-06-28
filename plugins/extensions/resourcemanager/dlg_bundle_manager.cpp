@@ -306,6 +306,11 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
                 else if (resType  == "gamutmasks") {
                     toplevel->setText(0, i18n("Gamut Masks"));
                 }
+#if defined HAVE_SEEXPR
+                else if (resType  == "seexpr_scripts") {
+                    toplevel->setText(0, i18n("SeExpr Scripts"));
+                }
+#endif
 
 
                 m_ui->listBundleContents->addTopLevelItem(toplevel);

@@ -3,11 +3,13 @@ set(kritaseexprgenerator_SOURCES
     SeExprExpressionContext.cpp
     generator.cpp
     kis_wdg_seexpr.cpp
+    kis_wdg_seexpr_presets_save.cpp
     )
 
 
 ki18n_wrap_ui(kritaseexprgenerator_SOURCES
     wdgseexpr.ui
+    wdgseexprsavepreset.ui
     )
 
 add_library(kritaseexprgenerator MODULE ${kritaseexprgenerator_SOURCES})

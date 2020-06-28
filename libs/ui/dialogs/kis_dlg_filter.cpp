@@ -89,7 +89,7 @@ KisDlgFilter::KisDlgFilter(KisViewManager *view, KisNodeSP node, KisFilterManage
         d->uiFilterDialog.pushButtonCreateMaskEffect->setVisible(false);
     }
 
-    d->uiFilterDialog.filterSelection->setPaintDevice(true, d->node->original());
+    d->uiFilterDialog.filterSelection->setPaintDevice(true, d->node->paintDevice());
 
     connect(d->uiFilterDialog.buttonBox, SIGNAL(accepted()), SLOT(accept()));
     connect(d->uiFilterDialog.buttonBox, SIGNAL(rejected()), SLOT(reject()));

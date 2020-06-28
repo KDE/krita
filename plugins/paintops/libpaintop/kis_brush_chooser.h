@@ -57,7 +57,7 @@ public:
     void setBrushSize(qreal xPixels, qreal yPixels);
     void setImage(KisImageWSP image);
 
-    void setHSLBrusTipEnabled(bool value);
+    void setHSLBrushTipEnabled(bool value);
     bool hslBrushTipEnabled() const;
 
 private Q_SLOTS:

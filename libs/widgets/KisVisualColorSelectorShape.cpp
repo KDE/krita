@@ -18,15 +18,13 @@
 #include "KisVisualColorSelectorShape.h"
 
 #include <QColor>
-#include <QPixmap>
+#include <QImage>
 #include <QPainter>
-#include <QPainterPath>
 #include <QRect>
 #include <QVector>
 #include <QVector4D>
 #include <QVBoxLayout>
 #include <QList>
-#include <QPolygon>
 #include <QtMath>
 
 #include <KSharedConfig>
@@ -38,7 +36,6 @@
 #include <KoColorModelStandardIds.h>
 #include <QPointer>
 
-#include "kis_signal_compressor.h"
 #include "kis_debug.h"
 
 struct KisVisualColorSelectorShape::Private
@@ -128,9 +125,6 @@ void KisVisualColorSelectorShape::setAcceptTabletEvents(bool on)
 void KisVisualColorSelectorShape::setDisplayRenderer (const KoColorDisplayRendererInterface *displayRenderer)
 {
     if (displayRenderer) {
-        if (m_d->displayRenderer) {
-            m_d->displayRenderer->disconnect(this);
-        }
         m_d->displayRenderer = displayRenderer;
     } else {
         m_d->displayRenderer = KoDumbColorDisplayRenderer::instance();

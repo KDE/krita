@@ -161,3 +161,9 @@ int SvgMeshArray::numColumns() const
         return 0;
     return m_array.first().size();
 }
+
+QColor SvgMeshArray::getColor(SvgMeshPatch::Type edge, int row, int col) const
+{
+    return getStop(edge, row, col).color;
+}
+

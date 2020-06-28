@@ -8,6 +8,7 @@
 #include <kis_painter.h>
 #include <KoColorConversions.h>
 #include <kis_paintop_plugin_utils.h>
+#include <kis_my_paintop_option.h>
 
 #include <libmypaint/mypaint-brush.h>
 #include <QDebug>
@@ -35,13 +36,10 @@ KisMyPaintOp::KisMyPaintOp(const KisPaintOpSettingsSP settings, KisPainter * pai
     m_settings = settings;
 
     dtime = -1;
-    m_radius = exp(3.3);
+    m_radius = settings->getFloat(MYPAINT_DIAMETER)/2;
 }
 
 KisMyPaintOp::~KisMyPaintOp() {
-
-//    delete m_brush;
-//    delete m_surface;
 }
 
 KisSpacingInformation KisMyPaintOp::paintAt(const KisPaintInformation& info) {
@@ -57,7 +55,7 @@ KisSpacingInformation KisMyPaintOp::paintAt(const KisPaintInformation& info) {
         dtime = 0.015;
     }
     else {
-        dtime = (info.currentTime() - dtime)*0.001;
+        dtime = abs(info.currentTime() - dtime)*0.001;
     }
 
     mypaint_brush_stroke_to(m_brush->brush(), m_surface->surface(), info.pos().x(), info.pos().y(), info.pressure(),
@@ -66,13 +64,14 @@ KisSpacingInformation KisMyPaintOp::paintAt(const KisPaintInformation& info) {
     dtime = info.currentTime();
 
     const qreal lodScale = KisLodTransform::lodToScale(painter()->device());
-    m_radius = exp(3.3)*lodScale;
+    m_radius = m_radius*lodScale;
+
     return computeSpacing(info, lodScale);
 }
 
 KisSpacingInformation KisMyPaintOp::updateSpacingImpl(const KisPaintInformation &info) const
 {
-    KisSpacingInformation spacingInfo = computeSpacing(info, m_radius*KisLodTransform::lodToScale(painter()->device()));
+    KisSpacingInformation spacingInfo = computeSpacing(info, KisLodTransform::lodToScale(painter()->device()));
     return spacingInfo;
 }
 

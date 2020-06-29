@@ -59,11 +59,11 @@ void KoMeshGradientBackground::fillPatch(QPainter &painter, const SvgMeshPatch *
             delete p;
         }
     } else {
-        QPen pen(patch->getStop(SvgMeshPatch::Bottom)->color);
+        QPen pen(patch->getStop(SvgMeshPatch::Bottom).color);
         painter.setPen(pen);
         painter.drawPath(patch->getPath()->outline());
 
-        QBrush brush(patch->getStop(SvgMeshPatch::Bottom)->color);
+        QBrush brush(patch->getStop(SvgMeshPatch::Bottom).color);
         painter.fillPath(patch->getPath()->outline(), brush);
     }
 }

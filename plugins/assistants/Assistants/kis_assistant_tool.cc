@@ -561,8 +561,11 @@ void KisAssistantTool::continuePrimaryAction(KoPointerEvent *event)
 					m_handleDrag == side_hndl[5] || m_handleDrag == side_hndl[7] ;
 	  bool cov_is_dragged =		m_handleDrag == hndl[2];
 
-	  // translate relevant VP
-	  if (far_handle_is_dragged ){
+          if (cov_is_dragged) {
+	      assis->setCov(*hndl[0], *hndl[1], event->point);
+	      assis->setSp(*hndl[0], *hndl[1], assis->cov());
+
+          } else if (far_handle_is_dragged) {
 	      QLineF perspective_line_a, perspective_line_b;
 	      QPointF vp_new_pos(0,0);
 	      KisPaintingAssistantHandleSP vp_moved;
@@ -581,11 +584,8 @@ void KisAssistantTool::continuePrimaryAction(KoPointerEvent *event)
 	      assis->setHorizon(*hndl[0],*hndl[1]);
 	      assis->setCov(*hndl[0], *hndl[1], *hndl[2]);
 	      assis->setSp(*hndl[0], *hndl[1], *hndl[2]);
-	  }
 
-	  // translate the VPs together
-	  if (vp_is_dragged) {
-
+	  } else if (vp_is_dragged) {
 	      m_handleDrag == hndl[0] ? vp_opp = hndl[1]	: vp_opp = hndl[0];
 
 	      QPointF new_dragged_vp;
@@ -648,11 +648,6 @@ void KisAssistantTool::continuePrimaryAction(KoPointerEvent *event)
 	      perspective_line_b2.translate(*side_hndl[6] - perspective_line_b2.p1());
 	      *side_hndl[7] = perspective_line_b2.p2();
 	  }
-
-          if (cov_is_dragged) {
-	      assis->setCov(*hndl[0],*hndl[1],event->point);
-	      assis->setSp(*hndl[0],*hndl[1],*hndl[2]);
-          }
         }
     }
     if (wasHiglightedNode && !m_higlightedNode) {

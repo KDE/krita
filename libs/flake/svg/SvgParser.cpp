@@ -513,6 +513,7 @@ SvgGradientHelper* SvgParser::parseMeshGradient(const KoXmlElement &e)
             }
 
             icols = 0;
+            g->getMeshArray()->newRow();
             for (int j = 0; j < node.childNodes().size() ; ++j) {
                 KoXmlNode meshpatchNode = node.childNodes().at(j);
 
@@ -531,7 +532,6 @@ SvgGradientHelper* SvgParser::parseMeshGradient(const KoXmlElement &e)
                     icols++;
                 }
             }
-            g->getMeshArray()->newRow();
             irow++;
         }
     }

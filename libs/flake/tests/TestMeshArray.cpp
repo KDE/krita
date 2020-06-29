@@ -30,6 +30,7 @@ TestMeshArray::TestMeshArray()
 void TestMeshArray::testSinglePatch()
 {
     SvgMeshArray mesharray;
+    mesharray.newRow();
     QPointF point(50, 50);
     mesharray.addPatch(patch0, point);
 
@@ -48,6 +49,7 @@ void TestMeshArray::test_2_by_2_Patch()
     SvgMeshArray mesharray;
 
     QPointF point(50, 50);
+    mesharray.newRow();
     mesharray.addPatch(patch0, point);
 
     point = mesharray.getStop(SvgMeshPatch::Right, 0, 0).point;

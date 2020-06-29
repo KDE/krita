@@ -37,7 +37,6 @@ SvgGradientHelper::SvgGradientHelper()
 SvgGradientHelper::~SvgGradientHelper()
 {
     delete m_gradient;
-    delete m_meshgradient;
 }
 
 SvgGradientHelper::SvgGradientHelper(const SvgGradientHelper &other)
@@ -56,7 +55,7 @@ SvgGradientHelper & SvgGradientHelper::operator = (const SvgGradientHelper & rhs
     m_gradientUnits = rhs.m_gradientUnits;
     m_gradientTransform = rhs.m_gradientTransform;
     m_gradient = KoFlake::cloneGradient(rhs.m_gradient);
-    m_meshgradient = new SvgMeshGradient(*rhs.m_meshgradient);
+    m_meshgradient.reset(new SvgMeshGradient(*rhs.m_meshgradient));
 
     return *this;
 }
@@ -84,11 +83,10 @@ void SvgGradientHelper::setGradient(QGradient * g)
 
 void SvgGradientHelper::setMeshGradient(SvgMeshGradient *g)
 {
-    delete m_meshgradient;
-    m_meshgradient = g;
+    m_meshgradient.reset(g);
 }
 
-SvgMeshGradient* SvgGradientHelper::meshgradient() const
+QScopedPointer<SvgMeshGradient>& SvgGradientHelper::meshgradient()
 {
     return m_meshgradient;
 }

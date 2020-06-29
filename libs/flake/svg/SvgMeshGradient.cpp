@@ -28,11 +28,6 @@ SvgMeshGradient::SvgMeshGradient(const SvgMeshGradient& other)
 {
 }
 
-SvgMeshGradient::~SvgMeshGradient()
-{
-    delete m_mesharray;
-}
-
 void SvgMeshGradient::setType(SvgMeshGradient::Type type)
 {
     m_type = type;
@@ -48,7 +43,7 @@ bool SvgMeshGradient::isValid() const
     return m_mesharray->numRows() != 0;
 }
 
-SvgMeshArray* SvgMeshGradient::getMeshArray() const
+QScopedPointer<SvgMeshArray>& SvgMeshGradient::getMeshArray()
 {
     return m_mesharray;
 }

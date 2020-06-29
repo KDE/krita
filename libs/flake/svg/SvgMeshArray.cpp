@@ -25,12 +25,14 @@ SvgMeshArray::SvgMeshArray()
 {
 }
 
-SvgMeshArray::SvgMeshArray(SvgMeshArray& other)
+SvgMeshArray::SvgMeshArray(const SvgMeshArray& other)
 {
-    // FIXME The way SvgParser works with gradients is, it frequently destroys the objects holding reference to
-    // SvgMeshGradients, so rather than copying we move it. This certainly needs a design refactor.
-    m_array = std::move(other.m_array);
-
+    for (const auto& row: other.m_array) {
+        newRow();
+        for (const auto& patch: row) {
+            m_array.last().append(new SvgMeshPatch(*patch));
+        }
+    }
 }
 
 SvgMeshArray::~SvgMeshArray()

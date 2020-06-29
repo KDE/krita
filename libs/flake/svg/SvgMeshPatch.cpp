@@ -32,10 +32,10 @@ SvgMeshPatch::SvgMeshPatch(QPointF startingPoint)
 }
 
 SvgMeshPatch::SvgMeshPatch(const SvgMeshPatch& other)
-{
-}
-
-SvgMeshPatch::~SvgMeshPatch()
+    : m_newPath(other.m_newPath)
+    , m_startingPoint(other.m_startingPoint)
+    , m_nodes(other.m_nodes)
+    , m_path(static_cast<KoPathShape*>(other.m_path->cloneShape()))
 {
 }
 

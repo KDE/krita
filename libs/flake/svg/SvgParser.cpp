@@ -1115,7 +1115,6 @@ void SvgParser::applyFillStyle(KoShape *shape)
 
             if (gradient->isMeshGradient()) {
                 QSharedPointer<KoMeshGradientBackground> bg;
-                // NOTE: this will MOVE SvgMeshPatch elements in mesharray
                 SvgMeshGradient *result = new SvgMeshGradient(*gradient->meshgradient());
 
                 // TODO handle transform

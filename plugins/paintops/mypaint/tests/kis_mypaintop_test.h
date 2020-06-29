@@ -20,5 +20,4 @@ private Q_SLOTS:
 
 };
 
-#include "kis_mypaintop_test.moc"
 #endif // KIS_MYPAINTOP_TEST_H

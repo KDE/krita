@@ -83,7 +83,7 @@ void SvgGradientHelper::setGradient(QGradient * g)
 
 void SvgGradientHelper::setMeshGradient(SvgMeshGradient *g)
 {
-    m_meshgradient.reset(g);
+    m_meshgradient.reset(new SvgMeshGradient(*g));
 }
 
 QScopedPointer<SvgMeshGradient>& SvgGradientHelper::meshgradient()

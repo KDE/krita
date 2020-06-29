@@ -27,8 +27,7 @@ class KRITAFLAKE_EXPORT SvgMeshArray
 public:
     SvgMeshArray();
 
-    // MOVES the elements of m_array from other to this
-    SvgMeshArray(SvgMeshArray& other);
+    SvgMeshArray(const SvgMeshArray& other);
 
     ~SvgMeshArray();
 

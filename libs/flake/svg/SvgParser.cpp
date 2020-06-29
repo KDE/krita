@@ -553,15 +553,8 @@ QList<QPair<QString, QColor>> SvgParser::parseMeshPatch(const KoXmlNode& meshpat
 
     KoXmlElement stop;
     forEachElement(stop, e) {
-        QColor color;
-
-        // keep the default (Invalid Color), incase none is provided
-        if (stop.attribute("stop-color").isNull()) {
-            color = QColor();
-        } else {
-            qreal X;    // don't care..
-            color = m_context.styleParser().parseColorStop(stop, gc, X).second;
-        }
+        qreal X;    // don't care..
+        QColor color = m_context.styleParser().parseColorStop(stop, gc, X).second;
 
         QString pathStr = stop.attribute("path");
 

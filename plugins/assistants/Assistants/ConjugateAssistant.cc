@@ -23,6 +23,9 @@ ConjugateAssistant::ConjugateAssistant(const ConjugateAssistant &rhs, QMap<KisPa
     , m_canvas(rhs.m_canvas)
     , m_referenceLineDensity(rhs.m_referenceLineDensity)
     , m_snapLine(rhs.m_snapLine)
+    , m_horizon(rhs.m_horizon)
+    , m_cov(rhs.m_cov)
+    , m_sp(rhs.m_sp)
 {
 }
 
@@ -325,6 +328,73 @@ float ConjugateAssistant::referenceLineDensity()
 {
   float f = 0.0;
   return f;
+}
+
+void ConjugateAssistant::setHorizon(const QPointF a, const QPointF b)
+{
+    m_horizon = QLineF(a,b);
+}
+
+QLineF ConjugateAssistant::horizon()
+{
+    return m_horizon;
+}
+
+void ConjugateAssistant::setCov(const QPointF a, const QPointF b, const QPointF c)
+{
+    qreal m_num = (b.y() - a.y());
+    qreal m_denom = (b.x() - a.x());
+    qreal px = 0;
+    qreal py = 0;
+
+    if (m_num == 0) {
+	px = c.x();
+	py = a.y();
+    } else if (m_num == 0) {
+	py = a.x();
+	px = c.y();
+    } else {
+	qreal m = m_num / m_denom;
+	px = (m * m * a.x() + m * c.y() - m * a.y() + c.x()) / (m * m + 1);
+	py = m * px + a.y() - m * a.x();
+    }
+
+    m_cov = QPointF(px, py);
+    *handles()[2] = m_cov;
+}
+
+QPointF ConjugateAssistant::cov()
+{
+    return m_cov;
+}
+
+void ConjugateAssistant::setSp(const QPointF a, const QPointF b, const QPointF c)
+{
+    qreal m_num = (b.y() - a.y());
+    qreal m_denom = (b.x() - a.x());
+    qreal px = 0;
+    qreal py = 0;
+    QLineF gap = QLineF(c,m_horizon.center());
+
+    if (m_num == 0) {
+	px = c.x();
+	py = c.y() - (sqrt(pow(m_horizon.length() / 2.0,2) - pow(gap.length(),2)));
+    } else if (m_denom == 0) {
+	py = c.x() - (sqrt(pow(m_horizon.length() / 2.0,2) - pow(gap.length(),2)));
+	px = c.y();
+    } else {
+	qreal m = m_num / m_denom;
+	qreal dx = sqrt(pow(m_horizon.length() / 2.0,2) - pow(gap.length(),2)) * sin(m_horizon.angle()*M_PI/180);
+	px = c.x() + dx;
+	py = c.y() + (c.x() / m) - (px / m);
+    }
+
+    m_sp = QPointF(px,py);
+}
+
+QPointF ConjugateAssistant::sp()
+{
+    return m_sp;
 }
 
 bool ConjugateAssistant::isAssistantComplete() const

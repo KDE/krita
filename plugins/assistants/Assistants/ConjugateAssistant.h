@@ -20,11 +20,21 @@ public:
     float referenceLineDensity();
     void setReferenceLineDensity(float value);
 
+    QLineF horizon();
+    void setHorizon(const QPointF a, const QPointF b);
+    QPointF cov();
+    void setCov(const QPointF a, const QPointF b, const QPointF c);
+    QPointF sp();
+    void setSp(const QPointF a, const QPointF b, const QPointF c);
+
     bool isAssistantComplete() const override;
 
     void saveCustomXml(QXmlStreamWriter* xml) override;
     bool loadCustomXml(QXmlStreamReader* xml) override;
 
+    QLineF m_horizon;
+    QPointF m_cov;
+    QPointF m_sp;
 protected:
     void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool  cached = true,KisCanvas2* canvas=0, bool assistantVisible=true, bool previewVisible=true) override;
     void drawCache(QPainter& gc, const KisCoordinatesConverter *converter,  bool assistantVisible=true) override;

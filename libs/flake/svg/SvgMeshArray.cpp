@@ -149,6 +149,14 @@ QList<QPointF> SvgMeshArray::getPath(const SvgMeshPatch::Type edge, const int ro
     return m_array[row][col]->getPathSegment(edge).controlPoints();
 }
 
+SvgMeshPatch* SvgMeshArray::getPatch(const int row, const int col) const
+{
+    KIS_ASSERT(row < m_array.size() && col < m_array[row].size()
+            && row >= 0 && col >= 0);
+
+    return m_array[row][col];
+}
+
 int SvgMeshArray::numRows() const
 {
     return m_array.size();

@@ -42,6 +42,7 @@ public:
     /// Get the Path Points for a segment of the meshpatch
     QList<QPointF> getPath(const SvgMeshPatch::Type edge, const int row, const int col) const;
 
+    SvgMeshPatch* getPatch(const int row, const int col) const;
 
     int numRows() const;
     int numColumns() const;

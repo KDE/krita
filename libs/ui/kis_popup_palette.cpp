@@ -27,6 +27,7 @@
 #include "KisResourceServerProvider.h"
 #include <kis_canvas_resource_provider.h>
 #include <KoTriangleColorSelector.h>
+#include "KoColorDisplayRendererInterface.h"
 #include <KisVisualColorSelector.h>
 #include <kis_config_notifier.h>
 #include <QtGui>

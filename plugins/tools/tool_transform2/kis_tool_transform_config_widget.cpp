@@ -116,12 +116,12 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
 
 
     // initialize values for free transform sliders
-    shearXBox->setSuffix(i18n(" px"));
-    shearYBox->setSuffix(i18n(" px"));
-    shearXBox->setRange(-5.0, 5.0, 2);
-    shearYBox->setRange(-5.0, 5.0, 2);
-    shearXBox->setSingleStep(0.01);
-    shearYBox->setSingleStep(0.01);
+    shearXBox->setSuffix(QChar(Qt::Key_Percent));
+    shearYBox->setSuffix(QChar(Qt::Key_Percent));
+    shearXBox->setRange(-500, 500, 2);
+    shearYBox->setRange(-500, 500, 2);
+    shearXBox->setSingleStep(1);
+    shearYBox->setSingleStep(1);
     shearXBox->setValue(0.0);
     shearYBox->setValue(0.0);
 
@@ -553,8 +553,8 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
 
         scaleXBox->setValue(config.scaleX() * 100.);
         scaleYBox->setValue(config.scaleY() * 100.);
-        shearXBox->setValue(config.shearX());
-        shearYBox->setValue(config.shearY());
+        shearXBox->setValue(config.shearX() * 100.);
+        shearYBox->setValue(config.shearY() * 100.);
 
         const QPointF anchorPoint = config.originalCenter() + config.rotationCenterOffset();
         const KisTransformUtils::MatricesPack m(config);
@@ -931,7 +931,7 @@ void KisToolTransformConfigWidget::slotSetShearX(qreal value)
 
     {
         KisTransformUtils::AnchorHolder keeper(config->transformAroundRotationCenter(), config);
-        config->setShearX((double)value);
+        config->setShearX((double)value / 100.);
     }
 
     notifyConfigChanged();
@@ -946,7 +946,7 @@ void KisToolTransformConfigWidget::slotSetShearY(qreal value)
 
     {
         KisTransformUtils::AnchorHolder keeper(config->transformAroundRotationCenter(), config);
-        config->setShearY((double)value);
+        config->setShearY((double)value / 100.);
     }
 
 

@@ -66,10 +66,12 @@ KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString & defaultName, KisViewM
 
 KisDlgGeneratorLayer::~KisDlgGeneratorLayer()
 {
-    /*Editing a layer should be using the show function with automatic deletion on close.
-     *Because of this, the action should be taken care of when the window is closed and
-     *the user has accepted the changes.*/
-    if(isEditing && result() == QDialog::Accepted) {
+    /*
+     * Editing a layer should be using the show function with automatic deletion on close.
+     * Because of this, the action should be taken care of when the window is closed and
+     * the user has accepted the changes.
+     */
+    if (isEditing && result() == QDialog::Accepted) {
 
         layer->setName(layerName());
 
@@ -91,7 +93,7 @@ KisDlgGeneratorLayer::~KisDlgGeneratorLayer()
             m_view->document()->setModified(true);
         }
     }
-    else if(isEditing && result() == QDialog::Rejected){
+    else if (isEditing && result() == QDialog::Rejected){
         layer->setFilter(configBefore);
     }
 }

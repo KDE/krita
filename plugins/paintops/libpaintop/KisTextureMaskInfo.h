@@ -54,6 +54,8 @@ public:
 
     void recalculateMask();
 
+    bool hasAlpha();
+
 private:
     int m_levelOfDetail = 0;
 
@@ -62,6 +64,7 @@ private:
     qreal m_scale = 1.0;
     qreal m_brightness = 0.0;
     qreal m_contrast = 1.0;
+    qreal m_neutralPoint = 0.5;
     bool m_invert = false;
 
     int m_cutoffLeft = 0;

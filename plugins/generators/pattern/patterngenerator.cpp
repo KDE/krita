@@ -74,8 +74,20 @@ KisFilterConfigurationSP KoPatternGenerator::defaultConfiguration() const
     v.setValue(QString("Grid01.pat"));
     config->setProperty("pattern", v);
 
-//    v.setValue(KoColor());
-//    config->setProperty("color", v);
+    config->setProperty("transform_shear_x", QVariant::fromValue(0.0));
+    config->setProperty("transform_shear_y", QVariant::fromValue(0.0));
+
+    config->setProperty("transform_scale_x", QVariant::fromValue(1.0));
+    config->setProperty("transform_scale_y", QVariant::fromValue(1.0));
+
+    config->setProperty("transform_rotation_x", QVariant::fromValue(0.0));
+    config->setProperty("transform_rotation_y", QVariant::fromValue(0.0));
+    config->setProperty("transform_rotation_z", QVariant::fromValue(0.0));
+
+    config->setProperty("transform_offset_x", QVariant::fromValue(0));
+    config->setProperty("transform_offset_y", QVariant::fromValue(0));
+
+    config->setProperty("transform_keep_scale_aspect", QVariant::fromValue(true));
 
     return config;
 }
@@ -100,12 +112,19 @@ void KoPatternGenerator::generate(KisProcessingInformation dstInfo,
     QString patternName = config->getString("pattern", "Grid01.pat");
     KoResourceServer<KoPattern> *rserver = KoResourceServerProvider::instance()->patternServer();
     KoPattern *pattern = rserver->resourceByName(patternName);
+    QTransform transform;
 
-//    KoColor c = config->getColor("color");
+    transform.shear(config->getDouble("transform_shear_x", 0.0), config->getDouble("transform_shear_y", 0.0));
+
+    transform.scale(config->getDouble("transform_scale_x", 1.0), config->getDouble("transform_scale_y", 1.0));
+    transform.rotate(config->getDouble("transform_rotation_x", 0.0), Qt::XAxis);
+    transform.rotate(config->getDouble("transform_rotation_y", 0.0), Qt::YAxis);
+    transform.rotate(config->getDouble("transform_rotation_z", 0.0), Qt::ZAxis);
+
+    transform.translate(config->getInt("transform_offset_x", 0), config->getInt("transform_offset_y", 0));
 
     KisFillPainter gc(dst);
     gc.setPattern(pattern);
-//    gc.setPaintColor(c);
     gc.setProgress(progressUpdater);
     gc.setChannelFlags(config->channelFlags());
     gc.setOpacity(OPACITY_OPAQUE_U8);
@@ -113,7 +132,7 @@ void KoPatternGenerator::generate(KisProcessingInformation dstInfo,
     gc.setWidth(size.width());
     gc.setHeight(size.height());
     gc.setFillStyle(KisFillPainter::FillStylePattern);
-    gc.fillRect(QRect(dstInfo.topLeft(), size), pattern);
+    gc.fillRect(QRect(dstInfo.topLeft(), size), pattern, transform);
     gc.end();
 
 }

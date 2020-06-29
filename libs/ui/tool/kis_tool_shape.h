@@ -64,12 +64,15 @@ public Q_SLOTS:
     void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
     virtual void outlineSettingChanged(int value);
     virtual void fillSettingChanged(int value);
+    virtual void patternRotationSettingChanged(qreal value);
+    virtual void patternScaleSettingChanged(qreal value);
 
 protected:
     QWidget* createOptionWidget() override;
 
     KisToolShapeUtils::FillStyle fillStyle();
     KisToolShapeUtils::StrokeStyle strokeStyle();
+    QTransform fillTransform();
 
     qreal currentStrokeWidth() const;
 

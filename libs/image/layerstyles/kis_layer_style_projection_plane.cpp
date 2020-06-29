@@ -112,8 +112,16 @@ KisLayerStyleProjectionPlane::KisLayerStyleProjectionPlane(const KisLayerStylePr
         m_d->style = toQShared(new KisPSDLayerStyle());
     }
 
-    Q_FOREACH (KisLayerStyleFilterProjectionPlaneSP plane, rhs.m_d->allStyles()) {
+    Q_FOREACH (KisLayerStyleFilterProjectionPlaneSP plane, rhs.m_d->stylesBefore) {
         m_d->stylesBefore << toQShared(new KisLayerStyleFilterProjectionPlane(*plane, sourceLayer, m_d->style));
+    }
+
+    Q_FOREACH (KisLayerStyleFilterProjectionPlaneSP plane, rhs.m_d->stylesAfter) {
+        m_d->stylesAfter << toQShared(new KisLayerStyleFilterProjectionPlane(*plane, sourceLayer, m_d->style));
+    }
+
+    Q_FOREACH (KisLayerStyleFilterProjectionPlaneSP plane, rhs.m_d->stylesOverlay) {
+        m_d->stylesOverlay << toQShared(new KisLayerStyleFilterProjectionPlane(*plane, sourceLayer, m_d->style));
     }
 }
 

@@ -32,6 +32,7 @@ FillProcessingVisitor::FillProcessingVisitor(KisPaintDeviceSP refPaintDevice,
                                bool useFastMode,
                                bool usePattern,
                                bool selectionOnly,
+                               bool useSelectionAsBoundary,
                                int feather,
                                int sizemod,
                                int fillThreshold,
@@ -42,6 +43,7 @@ FillProcessingVisitor::FillProcessingVisitor(KisPaintDeviceSP refPaintDevice,
       m_selection(selection),
       m_useFastMode(useFastMode),
       m_selectionOnly(selectionOnly),
+      m_useSelectionAsBoundary(useSelectionAsBoundary),
       m_usePattern(usePattern),
       m_resources(resources),
       m_feather(feather),
@@ -82,7 +84,7 @@ void FillProcessingVisitor::fillPaintDevice(KisPaintDeviceSP device, KisUndoAdap
         fillPainter.setProgress(helper.updater());
 
         if (m_usePattern) {
-            fillPainter.fillRect(fillRect, m_resources->currentPattern());
+            fillPainter.fillRect(fillRect, m_resources->currentPattern(), m_resources->fillTransform());
         } else if (m_useBgColor) {
             fillPainter.fillRect(fillRect,
                                  m_resources->currentBgColor(),
@@ -123,6 +125,7 @@ void FillProcessingVisitor::fillPaintDevice(KisPaintDeviceSP device, KisUndoAdap
         fillPainter.setFeather(m_feather);
         fillPainter.setFillThreshold(m_fillThreshold);
         fillPainter.setCareForSelection(true);
+        fillPainter.setUseSelectionAsBoundary((m_selection.isNull() || m_selection->hasNonEmptyPixelSelection()) ? m_useSelectionAsBoundary : false);
         fillPainter.setWidth(fillRect.width());
         fillPainter.setHeight(fillRect.height());
         fillPainter.setUseCompositioning(!m_useFastMode);
@@ -130,7 +133,7 @@ void FillProcessingVisitor::fillPaintDevice(KisPaintDeviceSP device, KisUndoAdap
         KisPaintDeviceSP sourceDevice = m_unmerged ? device : m_refPaintDevice;
 
         if (m_usePattern) {
-            fillPainter.fillPattern(startPoint.x(), startPoint.y(), sourceDevice);
+            fillPainter.fillPattern(startPoint.x(), startPoint.y(), sourceDevice, m_resources->fillTransform());
         } else {
             fillPainter.fillColor(startPoint.x(), startPoint.y(), sourceDevice);
         }

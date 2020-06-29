@@ -61,6 +61,7 @@ public Q_SLOTS:
     virtual void slotSetFuzziness(int);
     virtual void slotSetSizemod(int);
     virtual void slotSetFeather(int);
+    virtual void slotSetUseSelectionAsBoundary(bool);
     //virtual bool antiAliasSelection();
 
 protected:
@@ -70,6 +71,7 @@ private:
     int  m_fuzziness;
     int  m_sizemod;
     int  m_feather;
+    bool m_useSelectionAsBoundary;
     KConfigGroup m_configGroup;
 };
 

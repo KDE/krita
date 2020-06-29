@@ -91,4 +91,43 @@ void KisMultipliersDoubleSliderSpinBox::setExponentRatio(qreal dbl)
     d->form.sliderSpinBox->setExponentRatio(dbl);
 }
 
+void KisMultipliersDoubleSliderSpinBox::setPrefix(const QString& prefix)
+{
+    d->form.sliderSpinBox->setPrefix(prefix);
+}
+
+void KisMultipliersDoubleSliderSpinBox::setSuffix(const QString& suffix)
+{
+    d->form.sliderSpinBox->setSuffix(suffix);
+}
+
+void KisMultipliersDoubleSliderSpinBox::setBlockUpdateSignalOnDrag(bool block)
+{
+    d->form.sliderSpinBox->setBlockUpdateSignalOnDrag(block);
+}
+
+void KisMultipliersDoubleSliderSpinBox::setSingleStep(qreal value)
+{
+    d->form.sliderSpinBox->setSingleStep(value);
+}
+
+QSize KisMultipliersDoubleSliderSpinBox::sizeHint() const
+{
+    QSize sliderhint = d->form.sliderSpinBox->sizeHint();
+    QSize comboboxhint = d->form.comboBox->sizeHint();
+    sliderhint.setWidth(sliderhint.width() + comboboxhint.width() + 10);
+    sliderhint.setHeight(qMax(sliderhint.height(), comboboxhint.height()));
+    return sliderhint;
+}
+
+QSize KisMultipliersDoubleSliderSpinBox::minimumSizeHint() const
+{
+    return sizeHint();
+}
+
+QSize KisMultipliersDoubleSliderSpinBox::minimumSize() const
+{
+    return QWidget::minimumSize();
+}
+
 #include "moc_kis_multipliers_double_slider_spinbox.cpp"

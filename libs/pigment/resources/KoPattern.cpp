@@ -367,6 +367,7 @@ qint32 KoPattern::height() const
 void KoPattern::setPatternImage(const QImage& image)
 {
     m_pattern = image;
+    checkForAlpha(image);
     setImage(image);
     setValid(true);
 }
@@ -397,3 +398,18 @@ QImage KoPattern::pattern() const
     return m_pattern;
 }
 
+void KoPattern::checkForAlpha(const QImage& image) {
+    m_hasAlpha = false;
+    for (int y = 0; y < image.height(); y++) {
+        for (int x = 0; x < image.width(); x++) {
+            if (qAlpha(image.pixel(x, y)) != 255) {
+                m_hasAlpha = true;
+                break;
+            }
+        }
+    }
+}
+
+bool KoPattern::hasAlpha() {
+    return m_hasAlpha;
+}

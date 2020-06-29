@@ -117,7 +117,7 @@ class PhotobashDocker(DockWidget):
         slider.valueChanged.connect(self.updateScale)
 
         fitBordersLabel = QLabel(self.mainWidget)
-        fitBordersLabel.setText("Fit to Canvas")
+        fitBordersLabel.setText("Fit Canvas")
         fitBordersLabel.setMaximumWidth(fitBordersLabel.fontMetrics().width(fitBordersLabel.text()))
 
         fitCanvasCheckBox = QCheckBox(self.mainWidget)
@@ -148,7 +148,7 @@ class PhotobashDocker(DockWidget):
 
     def updateScale(self, value):
         self.currImageScale = value
-        self.sliderLabel.setText(f"Image Scale : {self.currImageScale}%")
+        self.sliderLabel.setText(f"Scale : {self.currImageScale}%")
 
     def updateCurrPage(self, increment):
         if (self.currPage == 0 and increment == -1) or \

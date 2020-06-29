@@ -11,14 +11,11 @@ public:
         , gradient(0)
     {}
 
+    ~Private() { delete gradient; }
+
     SvgMeshGradient *gradient;
     QTransform matrix;
 };
-
-KoMeshGradientBackground::~KoMeshGradientBackground()
-{
-    delete d->gradient;
-}
 
 KoMeshGradientBackground::KoMeshGradientBackground(SvgMeshGradient *gradient, const QTransform &matrix)
     : KoShapeBackground()
@@ -27,6 +24,10 @@ KoMeshGradientBackground::KoMeshGradientBackground(SvgMeshGradient *gradient, co
     d->gradient = gradient;
     d->matrix = matrix;
     Q_ASSERT(d->gradient);
+}
+
+KoMeshGradientBackground::~KoMeshGradientBackground()
+{
 }
 
 void KoMeshGradientBackground::paint(QPainter &painter,

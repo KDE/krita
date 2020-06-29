@@ -65,7 +65,7 @@ bool SvgMeshArray::addPatch(QList<QPair<QString, QColor>> stops, const QPointF i
         stops.removeFirst();
     } else if (irow == 0) {
         // For first row, parse patches
-        patch->addStop(stops[0].first, stops[0].second, SvgMeshPatch::Top);
+        patch->addStop(stops[0].first, getColor(SvgMeshPatch::Right, irow, icol - 1), SvgMeshPatch::Top);
         stops.removeFirst();
     } else {
         // path is already defined for rows >= 1
@@ -77,10 +77,13 @@ bool SvgMeshArray::addPatch(QList<QPair<QString, QColor>> stops, const QPointF i
         patch->addStop(points, color, SvgMeshPatch::Top);
     }
 
-
-    // Right will always be independent
-    patch->addStop(stops[0].first, stops[0].second, SvgMeshPatch::Right);
-    stops.removeFirst();
+    if (irow > 0) {
+        patch->addStop(stops[0].first, getColor(SvgMeshPatch::Bottom, irow - 1, icol), SvgMeshPatch::Right);
+        stops.removeFirst();
+    } else {
+        patch->addStop(stops[0].first, stops[0].second, SvgMeshPatch::Right);
+        stops.removeFirst();
+    }
 
     if (icol > 0) {
         patch->addStop(

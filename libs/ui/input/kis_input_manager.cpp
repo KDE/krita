@@ -367,14 +367,12 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             retval = d->matcher.autoRepeatedKeyPressed(key);
         }
 
-        /**
-         * Workaround for temporary switching of tools by
-         * KoCanvasControllerWidget. We don't need this switch because
-         * we handle it ourselves.
-         */
-        retval |= !d->forwardAllEventsToTool &&
-                (keyEvent->key() == Qt::Key_Space ||
-                 keyEvent->key() == Qt::Key_Escape);
+        // In case we matched ashortcut we should accept the event to
+        // notify Qt that it shouldn't try to trigger its partially matched
+        // shortcuts.
+        if (retval) {
+            keyEvent->setAccepted(true);
+        }
 
         break;
     }

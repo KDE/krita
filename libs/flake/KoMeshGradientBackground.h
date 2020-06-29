@@ -13,6 +13,8 @@ public:
     
     void paint(QPainter &painter, KoShapePaintingContext &context, const QPainterPath &fillPath) const override;
 
+    void fillPatch(QPainter &painter, const SvgMeshPatch *patch, int i) const;
+
     bool compareTo(const KoShapeBackground *other) const override;
 
     void fillStyle(KoGenStyle &style, KoShapeSavingContext &context) override;

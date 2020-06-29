@@ -32,6 +32,7 @@ class CommentMenu;
 class ArrangeMenu;
 class CommentModel;
 class StoryboardModel;
+class StoryboardDelegate;
 
 class StoryboardDockerDock : public QDockWidget, public KisMainwindowObserver{
     Q_OBJECT
@@ -74,7 +75,7 @@ private:
     QButtonGroup *m_viewGroup;
 
     QPointer<StoryboardModel> m_storyboardModel;
-
+    QPointer<StoryboardDelegate> m_storyboardDelegate;
 };
 
 

@@ -137,12 +137,17 @@ private:
 StoryboardDockerDock::StoryboardDockerDock( )
     : QDockWidget(i18n("Storyboard"))
     , m_ui(new Ui_WdgStoryboardDock())
+    , m_exportMenu(new QMenu(this))
+    , m_commentModel(new CommentModel(this))
+    , m_commentMenu(new CommentMenu(this, m_commentModel))
+    , m_arrangeMenu(new ArrangeMenu(this))
+    , m_storyboardModel(new StoryboardModel(this))
+    , m_storyboardDelegate(new StoryboardDelegate(this))
 {
     QWidget* mainWidget = new QWidget(this);
     setWidget(mainWidget);
     m_ui->setupUi(mainWidget);
 
-    m_exportMenu = new QMenu(this);
     m_ui->btnExport->setMenu(m_exportMenu);
     m_ui->btnExport->setPopupMode(QToolButton::MenuButtonPopup);
 
@@ -154,9 +159,6 @@ StoryboardDockerDock::StoryboardDockerDock( )
     connect(m_exportAsPdfAction, SIGNAL(triggered()), this, SLOT(slotExportAsPdf()));
     connect(m_exportAsSvgAction, SIGNAL(triggered()), this, SLOT(slotExportAsSvg()));
 
-    m_commentModel = new CommentModel(this);
-    m_commentMenu = new CommentMenu(this, m_commentModel);
-
     m_ui->btnComment->setMenu(m_commentMenu);
     m_ui->btnComment->setPopupMode(QToolButton::MenuButtonPopup);
 
@@ -166,7 +168,6 @@ StoryboardDockerDock::StoryboardDockerDock( )
     m_ui->btnLock->setIconSize(QSize(22, 22));
     connect(m_lockAction, SIGNAL(toggled(bool)), this, SLOT(slotLockClicked(bool)));
 
-    m_arrangeMenu = new ArrangeMenu(this);
     m_ui->btnArrange->setMenu(m_arrangeMenu);
     m_ui->btnArrange->setPopupMode(QToolButton::InstantPopup);
     m_ui->btnArrange->setIcon(KisIconUtils::loadIcon("view-choose"));
@@ -178,13 +179,9 @@ StoryboardDockerDock::StoryboardDockerDock( )
     connect(m_modeGroup, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(slotModeChanged(QAbstractButton*)));
     connect(m_viewGroup, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(slotViewChanged(QAbstractButton*)));
 
-    m_storyboardModel = new StoryboardModel(this);
-    StoryboardDelegate *delegate = new StoryboardDelegate(this);
-    delegate->setView(m_ui->listView);
+    m_storyboardDelegate->setView(m_ui->listView);
     m_ui->listView->setModel(m_storyboardModel);
-    m_ui->listView->setItemDelegate(delegate);
-
-    connect(m_ui->listView, SIGNAL(currentItemChanged(int)), this, SLOT(slotChangeFrameGlobal(int)));
+    m_ui->listView->setItemDelegate(m_storyboardDelegate);
 
     connect(m_ui->listView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
             this, SLOT(slotChangeFrameGlobal(QItemSelection, QItemSelection)));
@@ -211,6 +208,9 @@ void StoryboardDockerDock::setCanvas(KoCanvasBase *canvas)
 
     if (m_canvas) {
         connect(m_canvas->image()->animationInterface(), SIGNAL(sigUiTimeChanged(int)), this, SLOT(slotFrameChanged(int)));
+        if (m_canvas->image()) {
+            m_storyboardDelegate->setImage(m_canvas->image());
+        }
     }
 }
 

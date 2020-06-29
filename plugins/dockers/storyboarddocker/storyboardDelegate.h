@@ -21,6 +21,8 @@
 
 #include <QStyledItemDelegate>
 #include "storyboardView.h"
+#include <kis_types.h>
+#include <kis_image.h>
 
 class QListView;
 class StoryboardModel;
@@ -53,6 +55,7 @@ public:
     QRect scrollBar(const QStyleOptionViewItem &option, QStyleOptionSlider &scrollBarOption) const;
     QRect scrollDownButton(const QStyleOptionViewItem &option, QStyleOptionSlider &scrollBarOption);
     QRect scrollUpButton(const QStyleOptionViewItem &option, QStyleOptionSlider &scrollBarOption);
+    void setImage(KisImageWSP image);
 
 private Q_SLOTS:
     void slotCommentScrolledTo(int value) const;
@@ -60,6 +63,7 @@ private Q_SLOTS:
 private:
     StoryboardView *m_view;
     QPoint m_lastDragPos = QPoint(0, 0);
+    KisImageWSP m_image;
 };
 
 #endif

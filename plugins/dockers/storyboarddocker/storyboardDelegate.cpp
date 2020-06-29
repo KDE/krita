@@ -31,6 +31,10 @@
 #include <QScrollBar>
 
 #include <kis_icon.h>
+#include <KoColorSpaceRegistry.h>
+#include <kis_paint_device_frames_interface.h>
+#include <kis_group_layer.h>
+#include <kis_image_animation_interface.h>
 #include "storyboardModel.h"
 
 StoryboardDelegate::StoryboardDelegate(QObject *parent)
@@ -88,10 +92,19 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
                         p->setPen(QPen(option.palette.text(), 1));
                         p->drawText(frameNumRect, Qt::AlignHCenter | Qt::AlignVCenter, data);
 
-                        QIcon icon = KisIconUtils::loadIcon("krita-base");
-                        QRect thumbnailRect = option.rect;
-                        //TO DO make thumbnail keep aspect ratio
-                        icon.paint(p, option.rect);
+                        if (m_image.isValid() && m_image->animationInterface()->hasAnimation()) {
+                            float scale = qMin(option.rect.height() / (float)m_image->height(), (float)option.rect.width() / m_image->width());
+                            QRect thumbnailRect = option.rect;
+                            thumbnailRect.setSize(m_image->size() * scale);
+                            thumbnailRect.moveCenter(option.rect.center());
+
+                            //TODO: get the paintdevice for the current frame
+                            KisPaintDeviceSP thumbDev = m_image->projection();
+                            QImage image = thumbDev->convertToQImage(KoColorSpaceRegistry::instance()->rgb8()->profile());
+                            QPixmap pxmap = QPixmap::fromImage(image);
+                            pxmap = pxmap.scaled(thumbnailRect.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+                            p->drawPixmap(thumbnailRect, pxmap);
+                        }
                         p->setPen(QPen(option.palette.dark(), 2));
                         p->drawRect(option.rect);
 
@@ -557,4 +570,9 @@ QRect StoryboardDelegate::scrollUpButton(const QStyleOptionViewItem &option, QSt
                     QStyle::QStyle::SC_ScrollBarSubLine);
     rect.moveTopLeft(rect.topLeft() + scrollBarOption.rect.topLeft());
     return rect;
+}
+
+void StoryboardDelegate::setImage(KisImageWSP image)
+{
+    m_image = image;
 }

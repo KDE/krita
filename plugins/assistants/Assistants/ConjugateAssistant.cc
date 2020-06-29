@@ -342,19 +342,19 @@ QLineF ConjugateAssistant::horizon()
 
 void ConjugateAssistant::setCov(const QPointF a, const QPointF b, const QPointF c)
 {
-    qreal m_num = (b.y() - a.y());
-    qreal m_denom = (b.x() - a.x());
-    qreal px = 0;
-    qreal py = 0;
+    float px = 0;
+    float py = 0;
 
-    if (m_num == 0) {
+    if (qFuzzyCompare(b.y(),a.y())) {
 	px = c.x();
 	py = a.y();
-    } else if (m_num == 0) {
+    } else if (qFuzzyCompare(b.x(),a.x())) {
 	py = a.x();
 	px = c.y();
     } else {
-	qreal m = m_num / m_denom;
+	float m_num = (b.y() - a.y());
+	float m_denom = (b.x() - a.x());
+	float m = m_num / m_denom;
 	px = (m * m * a.x() + m * c.y() - m * a.y() + c.x()) / (m * m + 1);
 	py = m * px + a.y() - m * a.x();
     }
@@ -370,21 +370,21 @@ QPointF ConjugateAssistant::cov()
 
 void ConjugateAssistant::setSp(const QPointF a, const QPointF b, const QPointF c)
 {
-    qreal m_num = (b.y() - a.y());
-    qreal m_denom = (b.x() - a.x());
-    qreal px = 0;
-    qreal py = 0;
-    QLineF gap = QLineF(c,m_horizon.center());
+    float px = 0;
+    float py = 0;
+    QLineF gap = QLineF(m_cov,m_horizon.center());
 
-    if (m_num == 0) {
+    if (qFuzzyCompare(b.y(),a.y())) {
 	px = c.x();
 	py = c.y() - (sqrt(pow(m_horizon.length() / 2.0,2) - pow(gap.length(),2)));
-    } else if (m_denom == 0) {
+    } else if (qFuzzyCompare(b.x(),a.x())) {
 	py = c.x() - (sqrt(pow(m_horizon.length() / 2.0,2) - pow(gap.length(),2)));
 	px = c.y();
     } else {
-	qreal m = m_num / m_denom;
-	qreal dx = sqrt(pow(m_horizon.length() / 2.0,2) - pow(gap.length(),2)) * sin(m_horizon.angle()*M_PI/180);
+	float m_num = (b.y() - a.y());
+	float m_denom = (b.x() - a.x());
+	float m = m_num / m_denom;
+	float dx = sqrt(pow(m_horizon.length() / 2.0,2) - pow(gap.length(),2)) * sin(m_horizon.angle()*M_PI/180);
 	px = c.x() + dx;
 	py = c.y() + (c.x() / m) - (px / m);
     }

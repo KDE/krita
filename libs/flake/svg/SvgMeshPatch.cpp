@@ -239,7 +239,11 @@ void SvgMeshPatch::addStop(const QList<QPointF>& pathPoints, QColor color, Type 
 
     // if path is a line
     if (pathPoints.size() == 2) {
-        m_path->lineTo(pathPoints.last());
+        // we convert lines to cubic curve
+        KoPathSegment cubicCurve(m_startingPoint, pathPoints.last());
+        m_path->curveTo(cubicCurve.pointAt(1.0 / 3),
+                        cubicCurve.pointAt(2.0 / 3),
+                        cubicCurve.second()->point());
     } else if (pathPoints.size() == 4) {
         // if path is a Bezier curve
         m_path->curveTo(pathPoints[1], pathPoints[2], pathPoints[3]);
@@ -295,7 +299,11 @@ QPointF SvgMeshPatch::parseMeshPath(const QString& s, bool pathIncomplete, const
                toy = lastPoint.y();
            }
 
-           m_path->lineTo(QPointF(tox, toy));
+           // we convert lines to cubic curve
+           KoPathSegment cubicCurve(m_startingPoint, {tox, toy});
+           m_path->curveTo(cubicCurve.pointAt(1.0 / 3),
+                           cubicCurve.pointAt(2.0 / 3),
+                           cubicCurve.second()->point());
            break;
        }
        case 'c':

@@ -459,6 +459,14 @@ void KisAssistantTool::continuePrimaryAction(KoPointerEvent *event)
             Q_FOREACH (KisPaintingAssistantHandleSP handle, m_assistantDrag->sideHandles()) {
                 *handle += (newAdjustment - m_currentAdjustment);
             }
+            if (m_assistantDrag->id() == "conjugate") {
+		QSharedPointer <ConjugateAssistant> assis = qSharedPointerCast<ConjugateAssistant>(m_assistantDrag);
+		QList<KisPaintingAssistantHandleSP> handles = assis->handles();
+
+		assis->setHorizon(*handles[0], *handles[1]);
+		assis->setCov(*handles[0], *handles[1], *handles[2]);
+		assis->setSp(*handles[0],*handles[1], *handles[2]);
+            }
         }
         m_assistantDrag->uncache();
         m_currentAdjustment = newAdjustment;

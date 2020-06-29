@@ -22,7 +22,7 @@ public:
     };
 
 public:
-    KisMyPaintSurface(KisPainter* painter, KisNodeSP node=nullptr);
+    KisMyPaintSurface(KisPainter* painter, KisPaintDeviceSP paintNode=nullptr);
 
     /**
       * mypaint_surface_draw_dab:
@@ -65,7 +65,7 @@ public:
 
 private:
     KisPainter *m_painter;
-    KisNodeSP m_node;
+    KisPaintDeviceSP m_imageDevice;
     MyPaintSurfaceInternal *m_surface;
 };
 

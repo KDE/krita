@@ -11,10 +11,10 @@
 
 using namespace std;
 
-KisMyPaintSurface::KisMyPaintSurface(KisPainter *painter, KisNodeSP node)
+KisMyPaintSurface::KisMyPaintSurface(KisPainter *painter, KisPaintDeviceSP paintNode)
 {
     m_painter = painter;
-    m_node = node;
+    m_imageDevice = paintNode;
 
     m_surface = new MyPaintSurfaceInternal();
     mypaint_surface_init(m_surface);
@@ -179,7 +179,7 @@ void KisMyPaintSurface::getColorImpl(MyPaintSurface *self, float x, float y, flo
     float sum_b = 0.0f;
     float sum_a = 0.0f;
 
-    KisSequentialIterator it(m_node->paintDevice(), dabRectAligned);
+    KisSequentialIterator it(m_imageDevice, dabRectAligned);
     //KisRandomAccessorSP im = m_node->paintDevice()->createRandomAccessorNG(x, y);
 
     while(it.nextPixel()) {

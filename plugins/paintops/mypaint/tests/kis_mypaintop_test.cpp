@@ -23,22 +23,16 @@ KisMyPaintOpTest::KisMyPaintOpTest(): TestUtil::QImageBasedTest("MyPaintOp")
 
 void KisMyPaintOpTest::testDab() {
 
-    KisImageSP image = createTrivialImage(new KisSurrogateUndoStore());
-    image->initialRefreshGraph();
-
-    KisNodeSP paintNode = findNode(image->root(), "paint1");
-    KisPainter gc(paintNode->paintDevice());
-
-    KisPaintDeviceSP dst = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb16());
-    KisPainter painter(paintNode->paintDevice());
+    KisPaintDeviceSP dst = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+    KisPainter painter(dst);
 
     mypaint_brush_new();
 
-    QScopedPointer<KisMyPaintSurface> surface(new KisMyPaintSurface(&painter, paintNode));
+    QScopedPointer<KisMyPaintSurface> surface(new KisMyPaintSurface(&painter, dst));
 
     surface->draw_dab(surface->surface(), 250, 250, 100, 0, 0, 1, 1, 0.8, 1, 1, 90, 0, 0);
 
-    QImage img = paintNode->paintDevice()->convertToQImage(0, image->bounds().x(), image->bounds().y(), image->bounds().width(), image->bounds().height());
+    QImage img = dst->convertToQImage(0, dst->exactBounds().x(), dst->exactBounds().y(), dst->exactBounds().width(), dst->exactBounds().height());
     QImage source(QString(FILES_DATA_DIR) + QDir::separator() + "draw_dab.png");
 
     QVERIFY(img == source);
@@ -46,25 +40,16 @@ void KisMyPaintOpTest::testDab() {
 
 void KisMyPaintOpTest::testGetColor() {
 
-    KisImageSP image = createTrivialImage(new KisSurrogateUndoStore());
-    image->initialRefreshGraph();
+    KisPaintDeviceSP dst = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
 
-    KisNodeSP paintNode = findNode(image->root(), "paint1");
-    KisPainter gc(paintNode->paintDevice());
+    QImage source(QString(FILES_DATA_DIR) + QDir::separator() + "draw_dab.png");
+    dst->convertFromQImage(source, 0);
 
-    KisPaintDeviceSP dst = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb16());
-    KisPainter painter(paintNode->paintDevice());
+    KisPainter painter(dst);
 
-    mypaint_brush_new();
-
-    QScopedPointer<KisMyPaintSurface> surface(new KisMyPaintSurface(&painter, paintNode));
+    QScopedPointer<KisMyPaintSurface> surface(new KisMyPaintSurface(&painter, dst));
 
     surface->draw_dab(surface->surface(), 250, 250, 100, 0, 0, 1, 1, 0.8, 1, 1, 90, 0, 0);
-
-    QImage img = paintNode->paintDevice()->convertToQImage(0, image->bounds().x(), image->bounds().y(), image->bounds().width(), image->bounds().height());
-    QImage source(QString(FILES_DATA_DIR) + QDir::separator() + "draw_dab.png");
-
-    QVERIFY(img == source);
 
     float r = 0.0f;
     float g = 0.0f;

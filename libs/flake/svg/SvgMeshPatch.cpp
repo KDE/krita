@@ -63,8 +63,6 @@ KoPathShape* SvgMeshPatch::getPath() const
 
 KoPathSegment SvgMeshPatch::getMidCurve(bool isVertical) const
 {
-    // TODO for this to work in all cases, we'll have to treat straight line segment as
-    // a special case of bezier curve
     QList<QPointF> curvedBoundary0;
     QList<QPointF> curvedBoundary1;
 

@@ -124,10 +124,10 @@ SvgMeshStop SvgMeshArray::getStop(const SvgMeshPatch::Type edge, const int row, 
             && row >= 0 && col >= 0);
 
     SvgMeshPatch *patch = m_array[row][col];
-    SvgMeshStop *node = patch->getStop(edge);
+    SvgMeshStop node = patch->getStop(edge);
 
-    if (node != nullptr) {
-        return *node;
+    if (node.isValid()) {
+        return node;
     }
 
     switch (patch->countPoints()) {

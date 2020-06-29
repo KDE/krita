@@ -36,6 +36,8 @@ struct SvgMeshStop {
     SvgMeshStop(QColor color, QPointF point)
         : color(color), point(point)
     {}
+
+    bool isValid() { return color.isValid(); }
 };
 
 
@@ -55,7 +57,7 @@ public:
     SvgMeshPatch(const SvgMeshPatch& other);
     ~SvgMeshPatch();
 
-    SvgMeshStop* getStop(Type type) const;
+    SvgMeshStop getStop(Type type) const;
 
     /// Get a segment of the path in the meshpatch
     KoPathSegment getPathSegment(Type type) const;
@@ -92,7 +94,7 @@ private:
     /// This is the starting point for each path
     QPointF m_startingPoint;
 
-    QMap<Type, SvgMeshStop*> m_nodes;
+    QMap<Type, SvgMeshStop> m_nodes;
     QScopedPointer<KoPathShape> m_path;
 };
 

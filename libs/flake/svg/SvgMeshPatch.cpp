@@ -37,15 +37,12 @@ SvgMeshPatch::SvgMeshPatch(const SvgMeshPatch& other)
 
 SvgMeshPatch::~SvgMeshPatch()
 {
-    for (auto &node: m_nodes.values()) {
-        delete node;
-    }
 }
 
-SvgMeshStop* SvgMeshPatch::getStop(SvgMeshPatch::Type type) const
+SvgMeshStop SvgMeshPatch::getStop(SvgMeshPatch::Type type) const
 {
     if (m_nodes.find(type) == m_nodes.end())
-        return nullptr;
+        return SvgMeshStop();
 
     return *m_nodes.find(type);
 }
@@ -170,10 +167,10 @@ void SvgMeshPatch::subdivide(QVector<SvgMeshPatch*>& subdivided) const
     QList<QPointF> reversedMidVerSecond = midVer.second.controlPoints();
     std::reverse(reversedMidVerSecond.begin(), reversedMidVerSecond.end());
 
-    QColor c1 = getStop(Top)->color;
-    QColor c2 = getStop(Right)->color;
-    QColor c3 = getStop(Bottom)->color;
-    QColor c4 = getStop(Left)->color;
+    QColor c1 = getStop(Top).color;
+    QColor c2 = getStop(Right).color;
+    QColor c3 = getStop(Bottom).color;
+    QColor c4 = getStop(Left).color;
     QColor midc12 = midPointColor(c1, c2);
     QColor midc23 = midPointColor(c2, c3);
     QColor midc34 = midPointColor(c3, c4);
@@ -219,7 +216,7 @@ void SvgMeshPatch::addStop(const QString& pathStr,
                            bool pathIncomplete,
                            QPointF lastPoint)
 {
-    SvgMeshStop *node = new SvgMeshStop(color, m_startingPoint);
+    SvgMeshStop node(color, m_startingPoint);
     m_nodes.insert(edge, node);
 
     m_startingPoint = parseMeshPath(pathStr, pathIncomplete, lastPoint);
@@ -227,7 +224,7 @@ void SvgMeshPatch::addStop(const QString& pathStr,
 
 void SvgMeshPatch::addStop(const QList<QPointF>& pathPoints, QColor color, Type edge)
 {
-    SvgMeshStop *stop = new SvgMeshStop(color, pathPoints.first());
+    SvgMeshStop stop(color, pathPoints.first());
     m_nodes.insert(edge, stop);
 
     if (edge == SvgMeshPatch::Top) {

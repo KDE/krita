@@ -108,7 +108,6 @@ void ConjugateAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, c
 
     const QTransform initialTransform = converter->documentToWidgetTransform();
     bool isEditing = canvas->paintingAssistantsDecoration()->isEditingAssistants();
-    QLineF hl; // objective horizon line
 
     if (isEditing){
 	Q_FOREACH (const QPointF* handle, handles()) {
@@ -124,18 +123,15 @@ void ConjugateAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, c
 	const QPointF p1 = *handles()[0];
 	const QPointF p2 = *handles()[1];
 	const QRect viewport= gc.viewport();
-
-	hl = QLineF(p1,p2);
-	QLineF horizonLine = initialTransform.map(hl); // The apparent, SUBJECTIVE horizon line to draw
-	KisAlgebra2D::intersectLineRect(horizonLine, viewport);
-
 	QPainterPath path;
 
 	// draw the horizon
 	if (assistantVisible == true || isEditing == true) {
-	  path.moveTo(horizonLine.p1());
-	  path.lineTo(horizonLine.p2());
-	  drawPath(gc, path, isSnappingActive());
+	    QLineF horizonLine = initialTransform.map(QLineF(p1,p2));
+	    KisAlgebra2D::intersectLineRect(horizonLine, viewport);
+	    path.moveTo(horizonLine.p1());
+	    path.lineTo(horizonLine.p2());
+	    drawPath(gc, path, isSnappingActive());
 	}
 
 	// draw the VP-->mousePos lines
@@ -149,35 +145,6 @@ void ConjugateAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, c
 	    path.moveTo(initialTransform.map(p2));
 	    path.lineTo(snapMouse2.p1());
 	    drawPreview(gc, path);
-	}
-
-	QPointF p3;
-	QPointF cov;
-	if (handles().size() >= 3) {
-	    p3 = *handles()[2];
-	    QLineF norm = hl.normalVector();
-	    norm.translate(-norm.p1()+p3);
-	    hl.intersect(norm,&cov);
-
-	    // p3 is invalid if cov doesnt lie somewhere between p1 and p2, so set a valid cov
-	    if(!((p1.y() <= p2.y() && cov.y() >= p1.y() && cov.y() <= p2.y()) ||
-		 (p1.y() >= p2.y() && cov.y() <= p1.y() && cov.y() >= p2.y()) ||
-		 (p1.x() <= p2.x() && cov.x() >= p1.x() && cov.x() <= p2.x()) ||
-		 (p1.x() >= p2.x() && cov.x() <= p1.x() && cov.x() >= p2.x()))) {
-		cov = QLineF(p1,p2).center();
-		p3 = QLineF(p1,p2).center();
-		norm.translate(-norm.p1()+p3);
-		*handles()[2] = norm.p2();
-	    }
-
-	    // draw the vertical normal line
-	    if (isEditing == true) {
-		QLineF normalLine = initialTransform.map(norm);
-		KisAlgebra2D::intersectLineRect(normalLine, viewport);
-		path.moveTo(normalLine.p1());
-		path.lineTo(normalLine.p2());
-		drawPath(gc, path, isSnappingActive());
-	    }
 	}
 
 	// draw the side handle bars
@@ -197,74 +164,19 @@ void ConjugateAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, c
 	    drawPreview(gc,path);
 	}
 
-	if (handles().size() >= 3) {
-	    const QLineF hl = QLineF(*handles()[0], *handles()[1]);
-	    const qreal radius = hl.length() / 2.0;
-	    const qreal gap = QLineF(hl.center(),cov).length();
-	    QLineF vertical;
-	    vertical = hl.normalVector();
-	    vertical.translate(cov - vertical.p1());
-	    vertical.setLength(sqrt((radius*radius) - (gap*gap)));
-	    const QPointF sp = vertical.p2();
+	if (handles().size() >= 3 && isSnappingActive()) {
+	    const QPointF p3 = *handles()[2];
 
-	    qreal hl_angle = hl.angle();
-	    qreal interval = QLineF(sp,cov).length();
-	    hl_angle > 180 ? hl_angle = hl_angle - 180: hl_angle = hl_angle;
-
-	    QList<QPointF> points = QList<QPointF>({p1,p2});
-
-	    Q_FOREACH (QPointF pt, points) {
-
-		QPointF point = initialTransform.map(pt);
-		qreal arm = QLineF(pt,cov).length();
-		QLineF gridline = QLineF(pt,sp);
-		const QLineF sp_line = QLineF(pt,sp);
-		QLineF ray = initialTransform.map(gridline);
-		KisAlgebra2D::intersectLineRect(ray, viewport);
-
-		QLineF other_gridline;
-		pt == p1 ? other_gridline = QLineF(p2,sp) : other_gridline = QLineF(p1,sp);
-
-		qreal actual_interval = abs( interval / cos((other_gridline.angle()-hl_angle) * M_PI / 180) );
-
-		qreal new_angle;
-		qreal actual_angle;
-		qreal mirroring_adjustment;
-
-		for (int i = -50; i!=50; i++) {
-		    new_angle = atan2(interval,arm + actual_interval*i) * 180 / M_PI;
-
-		    if (sp_line.angle() - hl_angle <  90) {
-			actual_angle = new_angle ;
-			mirroring_adjustment = 360 - new_angle ;}
-
-		    if (sp_line.angle() - hl_angle >  90)  {
-			actual_angle = 180  - new_angle;
-			mirroring_adjustment = new_angle + 180 ;}
-
-		    if (sp_line.angle() - hl_angle >  180) {
-			actual_angle = new_angle + 180 ;
-			mirroring_adjustment = 180  - new_angle;}
-
-		    if (sp_line.angle() - hl_angle >  270) {
-			actual_angle = 360 - new_angle;
-			mirroring_adjustment = new_angle ;}
-
-		    gridline.setAngle(actual_angle + hl_angle);
-		    ray = initialTransform.map(gridline);
-		    KisAlgebra2D::intersectLineRect(ray, viewport);
-		    path.moveTo(point);
-		    path.lineTo(ray.p2());
-
-		    gridline.setAngle(mirroring_adjustment + hl_angle);
-		    ray = initialTransform.map(gridline);
-		    KisAlgebra2D::intersectLineRect(ray, viewport);
-		    path.moveTo(point);
-		    path.lineTo(ray.p2());
-		}
+	    // draw the vertical normal line
+	    if (isEditing == true) {
+		QLineF norm = m_horizon.normalVector();
+		norm.translate(-norm.p1()+p3);
+		QLineF normalLine = initialTransform.map(norm);
+		KisAlgebra2D::intersectLineRect(normalLine, viewport);
+		path.moveTo(normalLine.p1());
+		path.lineTo(normalLine.p2());
+		drawPath(gc, path, isSnappingActive());
 	    }
-
-	    drawPreview(gc,path);
 	}
     }
 

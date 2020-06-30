@@ -114,7 +114,6 @@ void TestFolderStorage::testAddResource()
     r = folderStorage.addResource("paintoppresets", resource);
     QVERIFY(r);
     QVERIFY(resource->filename() != fileName);
-    QVERIFY(resource->version() == 1);
 
     QDir d(m_dstLocation + "/" + "paintoppresets");
     QVERIFY(d.entryList().contains("anewresource.0001.kpp"));

@@ -1,4 +1,6 @@
 #include "KoMeshGradientBackground.h"
+#include <KoColorSpaceRegistry.h>
+#include <KoMixColorsOp.h>
 #include <QPainter>
 #include <QPainterPath>
 #include <QDebug>
@@ -39,32 +41,54 @@ void KoMeshGradientBackground::paint(QPainter &painter,
     for (int row = 0; row < d->gradient->getMeshArray()->numRows(); ++row) {
         for (int col = 0; col < d->gradient->getMeshArray()->numColumns(); ++col) {
             SvgMeshPatch *patch = d->gradient->getMeshArray()->getPatch(row, col);
-            fillPatch(painter, patch, 0);
+            fillPatch(painter, patch);
         }
     }
 }
 
-void KoMeshGradientBackground::fillPatch(QPainter &painter, const SvgMeshPatch *patch, int i) const
+void KoMeshGradientBackground::fillPatch(QPainter &painter, const SvgMeshPatch *patch) const
 {
-    // TODO check for color variation
-    if (i <= 5) {
+    QColor color0 = patch->getStop(SvgMeshPatch::Top).color;
+    QColor color1 = patch->getStop(SvgMeshPatch::Right).color;
+    QColor color2 = patch->getStop(SvgMeshPatch::Bottom).color;
+    QColor color3 = patch->getStop(SvgMeshPatch::Left).color;
+
+    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
+
+    quint8 c[4][4];
+    cs->fromQColor(color0, c[0]);
+    cs->fromQColor(color1, c[1]);
+    cs->fromQColor(color2, c[2]);
+    cs->fromQColor(color3, c[3]);
+
+    const quint8 threshold = 0;
+
+    // TODO stop dividing if the size is less than the pixel
+    if (cs->difference(c[0], c[1]) > threshold || cs->difference(c[1], c[2]) > threshold ||
+        cs->difference(c[2], c[3]) > threshold || cs->difference(c[3], c[0]) > threshold) {
+
         QVector<SvgMeshPatch*> patches;
         patch->subdivide(patches);
-        ++i;
 
         for (const auto& p: patches) {
-            fillPatch(painter, p, i);
+            fillPatch(painter, p);
         }
 
         for (auto& p: patches) {
             delete p;
         }
     } else {
-        QPen pen(patch->getStop(SvgMeshPatch::Bottom).color);
+        quint8 mixed[4];
+        cs->mixColorsOp()->mixColors(c[0], 4, mixed);
+
+        QColor average;
+        cs->toQColor(mixed, &average);
+
+        QPen pen(average);
         painter.setPen(pen);
         painter.drawPath(patch->getPath()->outline());
 
-        QBrush brush(patch->getStop(SvgMeshPatch::Bottom).color);
+        QBrush brush(average);
         painter.fillPath(patch->getPath()->outline(), brush);
     }
 }

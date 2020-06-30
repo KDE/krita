@@ -172,6 +172,11 @@ void KisPresetSaveWidget::savePreset()
     // We don't want dots or spaces in the filenames
     presetFileName = presetFileName.replace(' ', '_').replace('.', '_');
 
+    // Make sure of the extension
+    if (!presetFileName.endsWith(".kpp")) {
+        presetFileName += ".kpp";
+    }
+
     if (m_useNewBrushDialog) {
         KisPaintOpPresetSP newPreset = curPreset->clone().dynamicCast<KisPaintOpPreset>();
         newPreset->setFilename(presetFileName);

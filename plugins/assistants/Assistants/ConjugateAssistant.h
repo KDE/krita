@@ -12,6 +12,7 @@ class ConjugateAssistant : public KisPaintingAssistant
 public:
     ConjugateAssistant();
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin) override;
+    void endStroke() override;
     KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const override;
     //virtual void endStroke();
     QPointF getEditorPosition() const override;

@@ -29,6 +29,12 @@ ConjugateAssistant::ConjugateAssistant(const ConjugateAssistant &rhs, QMap<KisPa
 {
 }
 
+inline qreal distsqr(const QPointF& pt, const QLineF& line)
+{
+    const qreal cross = (line.dx() * (line.y1() - pt.y()) - line.dy() * (line.x1() - pt.x()));
+    return cross * cross / (line.dx() * line.dx() + line.dy() * line.dy());
+}
+
 KisPaintingAssistantSP ConjugateAssistant::clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const
 {
     return KisPaintingAssistantSP(new ConjugateAssistant(*this, handleMap));
@@ -36,65 +42,47 @@ KisPaintingAssistantSP ConjugateAssistant::clone(QMap<KisPaintingAssistantHandle
 
 QPointF ConjugateAssistant::project(const QPointF& pt, const QPointF& strokeBegin)
 {
-    //Q_ASSERT(handles().size() == 1 || handles().size() == 5);
-    //code nicked from the perspective ruler.
-    qreal dx = pt.x() - strokeBegin.x();
-    qreal dy = pt.y() - strokeBegin.y();
+    Q_ASSERT(isAssistantComplete());
 
-    if (dx * dx + dy * dy < 4.0) {
-        // allow some movement before snapping
-        return strokeBegin;
+    // nicked wholesale from PerspectiveAssistant.cc
+    if (m_snapLine.isNull()) {
+        const qreal dx = pt.x() - strokeBegin.x();
+        const qreal dy = pt.y() - strokeBegin.y();
+
+        if (dx * dx + dy * dy < 4.0) {
+            return strokeBegin; // allow some movement before snapping
+        }
+
+        // figure out which direction to go
+        const QLineF vp_snap_a = QLineF(strokeBegin, QLineF(strokeBegin, *handles()[0]).unitVector().p2());
+        const QLineF vp_snap_b = QLineF(strokeBegin, QLineF(strokeBegin, *handles()[1]).unitVector().p2());
+	QLineF vertical_snap = QLineF(m_cov, m_sp); // nickde from ParallelRulerAssistant.cc
+	QPointF translation = (m_cov-strokeBegin)*-1.0;
+	vertical_snap = vertical_snap.translated(translation);
+
+        // determine whether the horizontal or vertical line is closer to the point
+        m_snapLine = distsqr(pt, vp_snap_a) < distsqr(pt, vp_snap_b) ? vp_snap_a : vp_snap_b;
+        m_snapLine = distsqr(pt, m_snapLine) < distsqr(pt, vertical_snap) ? m_snapLine : vertical_snap;
     }
 
-    QLineF first = QLineF(strokeBegin, *handles()[0]);
-    QLineF second = QLineF(strokeBegin, *handles()[1]);
+    // snap to line
+    const qreal
+	dx = m_snapLine.dx(),
+	dy = m_snapLine.dy(),
+	dx2 = dx * dx,
+	dy2 = dy * dy,
+	invsqrlen = 1.0 / (dx2 + dy2);
 
-    QList<qreal> angles = QList<qreal>({first.angleTo(QLineF(strokeBegin,pt)),
-					second.angleTo(QLineF(strokeBegin,pt)),
-      });
-
-    // for (int i = 0; i < 2; i++) {
-    //   ENTER_FUNCTION() << "angle: " << angles[i];
-    //   if (angles[i] > 180) {
-    // 	angles[i] = 360 - angles[i] ;
-    //   }
-    // }
-
-    for (int i = 0; i < angles.length(); i++) {
-      ENTER_FUNCTION() << i << angles[i];
-
-      if (90 < angles[i] && angles[i] < 270) {
-	angles[i] = qAbs(angles[i] - 180);
-      }
-
-      if (angles[i] > 270) {
-	angles[i] = 360 - angles[i];
-      }
-      ENTER_FUNCTION() << i << angles[i];
-    }
-
-    //dbgKrita<<strokeBegin<< ", " <<*handles()[0];
-    QLineF snapLine;
-    if (angles[0]< angles[1]) {
-      snapLine = QLineF(*handles()[0], strokeBegin);
-    } else {
-      snapLine = QLineF(*handles()[1], strokeBegin);
-    }
-
-    //= QLineF(*handles()[0], strokeBegin);
-
-    dx = snapLine.dx();
-    dy = snapLine.dy();
-
-    const qreal dx2 = dx * dx;
-    const qreal dy2 = dy * dy;
-    const qreal invsqrlen = 1.0 / (dx2 + dy2);
-
-    QPointF r(dx2 * pt.x() + dy2 * snapLine.x1() + dx * dy * (pt.y() - snapLine.y1()),
-              dx2 * snapLine.y1() + dy2 * pt.y() + dx * dy * (pt.x() - snapLine.x1()));
+    QPointF r(dx2 * pt.x() + dy2 * m_snapLine.x1() + dx * dy * (pt.y() - m_snapLine.y1()),
+              dx2 * m_snapLine.y1() + dy2 * pt.y() + dx * dy * (pt.x() - m_snapLine.x1()));
 
     r *= invsqrlen;
     return r;
+}
+
+void ConjugateAssistant::endStroke()
+{
+    m_snapLine = QLineF();
 }
 
 QPointF ConjugateAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin)

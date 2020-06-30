@@ -472,7 +472,8 @@ bool KisAllResourcesModel::setResourceInactive(const QModelIndex &index)
         qWarning() << "Failed to remove resource" << resourceId;
         return false;
     }
-    emit dataChanged(index, index, {Qt::EditRole});
+    resetQuery();
+    emit dataChanged(index, index, {Qt::EditRole, Qt::CheckStateRole});
     return true;
 }
 //static int s_i5 {0};
@@ -487,7 +488,7 @@ bool KisAllResourcesModel::setResourceInactive(KoResourceSP resource)
         qWarning() << "Failed to remove resource" << resource->resourceId();
         return false;
     }
-
+    resetQuery();
     QModelIndex index = indexForResource(resource);
     emit dataChanged(index, index, {Qt::EditRole});
     return true;
@@ -644,6 +645,7 @@ KisResourceModel::KisResourceModel(const QString &type, QObject *parent)
     , d(new Private)
 {
     setSourceModel(new KisAllResourcesModel(type));
+    setDynamicSortFilter(true);
 }
 
 KisResourceModel::~KisResourceModel()

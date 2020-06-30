@@ -599,8 +599,8 @@ void KisLayerManager::addLayerCommon(KisNodeSP activeNode, KisNodeSP layer, bool
 
 KisLayerSP KisLayerManager::addPaintLayer(KisNodeSP activeNode)
 {
-    KisImageWSP image = m_view->image();
-    KisLayerSP layer = new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, image->colorSpace());
+    KisImageWSP image = m_view->image();    
+    KisLayerSP layer = new KisPaintLayer(image.data(),  image->nextLayerName( i18n("Paint Layer") ), OPACITY_OPAQUE_U8, image->colorSpace());
 
     KisConfig cfg(true);
     layer->setPinnedToTimeline(cfg.autoPinLayersToTimeline());
@@ -613,7 +613,7 @@ KisLayerSP KisLayerManager::addPaintLayer(KisNodeSP activeNode)
 KisNodeSP KisLayerManager::addGroupLayer(KisNodeSP activeNode)
 {
     KisImageWSP image = m_view->image();
-    KisGroupLayerSP group = new KisGroupLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8);
+    KisGroupLayerSP group = new KisGroupLayer(image.data(), image->nextLayerName( i18n("Group Layer") ), OPACITY_OPAQUE_U8);
     addLayerCommon(activeNode, group, false, 0);
     return group;
 }
@@ -629,7 +629,7 @@ KisNodeSP KisLayerManager::addCloneLayer(KisNodeList nodes)
 
     KisNodeSP node, lastClonedNode;
     Q_FOREACH (node, filteredNodes) {
-        lastClonedNode = new KisCloneLayer(qobject_cast<KisLayer*>(node.data()), image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8);
+        lastClonedNode = new KisCloneLayer(qobject_cast<KisLayer*>(node.data()), image.data(), image->nextLayerName( i18n("Clone Layer") ), OPACITY_OPAQUE_U8);
         addLayerCommon(newAbove, lastClonedNode, true, 0 );
     }
 
@@ -642,7 +642,7 @@ KisNodeSP KisLayerManager::addShapeLayer(KisNodeSP activeNode)
     if (!m_view->document()) return 0;
 
     KisImageWSP image = m_view->image();
-    KisShapeLayerSP layer = new KisShapeLayer(m_view->document()->shapeController(), image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8);
+    KisShapeLayerSP layer = new KisShapeLayer(m_view->document()->shapeController(), image.data(), image->nextLayerName(i18n("Vector Layer")), OPACITY_OPAQUE_U8);
 
     addLayerCommon(activeNode, layer, false, 0);
 
@@ -664,7 +664,7 @@ KisNodeSP KisLayerManager::addAdjustmentLayer(KisNodeSP activeNode)
 
     KisPaintDeviceSP previewDevice = new KisPaintDevice(*adjl->original());
 
-    KisDlgAdjustmentLayer dlg(adjl, adjl.data(), previewDevice, image->nextLayerName(), i18n("New Filter Layer"), m_view, qApp->activeWindow());
+    KisDlgAdjustmentLayer dlg(adjl, adjl.data(), previewDevice, image->nextLayerName(i18n("Filter Layer")), i18n("New Filter Layer"), m_view, qApp->activeWindow());
     dlg.resize(dlg.minimumSizeHint());
 
     // ensure that the device may be free'd by the dialog
@@ -700,7 +700,7 @@ KisNodeSP KisLayerManager::addGeneratorLayer(KisNodeSP activeNode)
     QColor currentForeground = m_view->canvasResourceProvider()->fgColor().toQColor();
 
 
-    KisDlgGeneratorLayer dlg(image->nextLayerName(), m_view, m_view->mainWindow(), 0, 0);
+    KisDlgGeneratorLayer dlg(image->nextLayerName(i18n("Fill Layer")), m_view, m_view->mainWindow(), 0, 0);
     KisFilterConfigurationSP defaultConfig = dlg.configuration();
     defaultConfig->setProperty("color", currentForeground);
     dlg.setConfiguration(defaultConfig);
@@ -942,7 +942,7 @@ KisNodeSP KisLayerManager::addFileLayer(KisNodeSP activeNode)
     }
     KisImageWSP image = m_view->image();
 
-    KisDlgFileLayer dlg(basePath, image->nextLayerName(), m_view->mainWindow());
+    KisDlgFileLayer dlg(basePath, image->nextLayerName(i18n("File Layer")), m_view->mainWindow());
     dlg.resize(dlg.minimumSizeHint());
 
     if (dlg.exec() == QDialog::Accepted) {

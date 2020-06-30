@@ -817,6 +817,8 @@ void KisAssistantTool::mouseMoveEvent(KoPointerEvent *event)
             if (m_newAssistant->handles().length() == 3) {
 		// We want to keep the 3rd handle on the horizon line
 		assis->setCov(*handles[0], *handles[1], event->point);
+		assis->setSp(*handles[0], *handles[1], *handles[2]);
+		assis->setHorizon(*handles[0], *handles[1]);
             } else if (m_newAssistant->handles().length() == 2 && event->modifiers() & Qt::ShiftModifier) {
 		// Snap 2nd handle if shift is held
 		QPointF snap_point = snapToClosestAxis(event->point - *handles[0]);

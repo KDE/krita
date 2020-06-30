@@ -63,6 +63,15 @@ public:
     }
     KisFilterConfigurationSP defaultConfiguration() const override;
     KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool useForMasks) const override;
+
+private:
+    enum RenderDepth {
+        RENDER_RGB_DIRECTLY,
+        RENDER_BGR_AND_CLAMP,
+        RENDER_WITH_CONVERSION
+    };
+
+    inline RenderDepth textureConversionStrategy(const KoColorSpace* cs) const;
 };
 
 #endif

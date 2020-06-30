@@ -78,6 +78,28 @@ KisConfigWidget *KisSeExprGenerator::createConfigurationWidget(QWidget *parent, 
     return new KisWdgSeExpr(parent);
 }
 
+inline KisSeExprGenerator::RenderDepth KisSeExprGenerator::textureConversionStrategy(const KoColorSpace *cs) const
+{
+    KIS_ASSERT(cs);
+    KoID colorDepth = cs->colorDepthId();
+
+    if (cs->colorModelId() == RGBAColorModelID)
+    {
+        if (colorDepth == Float16BitsColorDepthID || colorDepth == Float32BitsColorDepthID || colorDepth == Float64BitsColorDepthID)
+        {
+            return RENDER_RGB_DIRECTLY;
+        }
+        else
+        {
+            return RENDER_BGR_AND_CLAMP;
+        }
+    }
+    else
+    {
+        return RENDER_WITH_CONVERSION;
+    }
+}
+
 void KisSeExprGenerator::generate(KisProcessingInformation dstInfo,
                                   const QSize &size,
                                   const KisFilterConfigurationSP config,
@@ -94,6 +116,7 @@ void KisSeExprGenerator::generate(KisProcessingInformation dstInfo,
 
         QRect bounds = QRect(dstInfo.topLeft(), size);
         const KoColorSpace *cs = device->colorSpace();
+        const RenderDepth strategy = textureConversionStrategy(cs);
         KisSequentialIteratorProgress it(device, bounds, progressUpdater);
 
         SeExprExpressionContext expression(script);
@@ -110,20 +133,64 @@ void KisSeExprGenerator::generate(KisProcessingInformation dstInfo,
             double &u = expression.m_vars["u"]->m_value;
             double &v = expression.m_vars["v"]->m_value;
 
-            while(it.nextPixel())
+            switch(strategy)
             {
-                u = pixel_stride_x * (it.x() + .5);
-                v = pixel_stride_y * (it.y() + .5);
+                case RENDER_RGB_DIRECTLY:
+                    // SeExpr already outputs floating-point RGB
+                    while (it.nextPixel())
+                    {
+                        u = pixel_stride_x * (it.x() + .5);
+                        v = pixel_stride_y * (it.y() + .5);
 
-                const qreal* value = expression.evalFP();
-                QColor color;
+                        const double *value = expression.evalFP();
 
-                // SeExpr already outputs normalized RGB
-                color.setRedF(value[0]);
-                color.setGreenF(value[1]);
-                color.setBlueF(value[2]);
+                        QVector<float> color = {
+                            static_cast<float>(value[0]),
+                            static_cast<float>(value[1]),
+                            static_cast<float>(value[2]),
+                            KoColorSpaceMathsTraits<float>::unitValue
+                        };
 
-                cs->fromQColor(color, it.rawData());
+                        cs->fromNormalisedChannelsValue(it.rawData(), color);
+                    }
+                    break;
+                case RENDER_BGR_AND_CLAMP:
+                    // Adjust all pixels to 0.0-1.0 and render them in BGRA order
+                    while (it.nextPixel())
+                    {
+                        u = pixel_stride_x * (it.x() + .5);
+                        v = pixel_stride_y * (it.y() + .5);
+
+                        const double *value = expression.evalFP();
+
+                        QVector<float> color = {
+                            (float)qBound(value[2], 0.0, 1.0),
+                            (float)qBound(value[1], 0.0, 1.0),
+                            (float)qBound(value[0], 0.0, 1.0),
+                            KoColorSpaceMathsTraits<float>::unitValue
+                        };
+
+                        cs->fromNormalisedChannelsValue(it.rawData(), color);
+                    }
+                    break;
+                case RENDER_WITH_CONVERSION:
+                    // Adjust all pixels to 0.0-1.0 and transform them via QColor
+                    while (it.nextPixel())
+                    {
+                        u = pixel_stride_x * (it.x() + .5);
+                        v = pixel_stride_y * (it.y() + .5);
+
+                        const double *value = expression.evalFP();
+
+                        QColor color = QColor::fromRgbF(
+                            qBound(static_cast<float>(value[0]), 0.0f, 1.0f),
+                            qBound(static_cast<float>(value[1]), 0.0f, 1.0f),
+                            qBound(static_cast<float>(value[2]), 0.0f, 1.0f)
+                        );
+
+                        cs->fromQColor(color, it.rawData());
+                    }
+                    break;
             }
         }
     }

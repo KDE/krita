@@ -326,7 +326,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     , d(new Private(this, uuid))
 {
     d->workspacemodel = KisResourceModelProvider::resourceModel(ResourceType::Workspaces);
-    connect(d->workspacemodel, SIGNAL(afterResourcesLayoutReset()), this, SLOT(updateWindowMenu()));
+    connect(d->workspacemodel, SIGNAL(modelReset()), this, SLOT(updateWindowMenu()));
 
     d->viewManager = new KisViewManager(this, actionCollection());
     KConfigGroup group( KSharedConfig::openConfig(), "theme");

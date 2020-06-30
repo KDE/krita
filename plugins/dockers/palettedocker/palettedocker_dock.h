@@ -95,7 +95,7 @@ private Q_SLOTS:
 
     void slotFGColorResourceChanged(const KoColor& color);
 
-    void slotStoragesChanged();
+    void slotStoragesChanged(const QString &location);
 
 private:
     void setEntryByForeground(const QModelIndex &index);

@@ -102,7 +102,7 @@ void KisTagChooserWidget::tagToolDeleteCurrentTag()
 {
     KisTagSP currentTag = currentlySelectedTag();
     if (!currentTag.isNull() && currentTag->id() >= 0) {
-        d->model->removeTag(currentTag);
+        d->model->setTagInactive(currentTag);
         setCurrentIndex(0);
         d->tagToolButton->setUndeletionCandidate(currentTag);
     }

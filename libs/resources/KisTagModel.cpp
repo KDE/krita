@@ -319,12 +319,7 @@ bool KisAllTagsModel::addTag(const KisTagSP tag, QVector<KoResourceSP> taggedRes
     } else {
         setData(indexForTag(tag), QVariant::fromValue(true), Qt::CheckStateRole);
     }
-
-    qDebug() << "tag = " << tag;
     if (!taggedResouces.isEmpty()) {
-
-        qDebug() << "********************";
-
         qDebug() << "tag = " << tag;
         qDebug() << "tag url = " << tag->url();
 
@@ -339,12 +334,10 @@ bool KisAllTagsModel::addTag(const KisTagSP tag, QVector<KoResourceSP> taggedRes
             tagResource(tagFromDb, resource);
         }
     }
-
-    qDebug() << "^^^^^^^^^^^^^^^^^^^^^^^^^";
     return resetQuery();
 }
 
-bool KisAllTagsModel::removeTag(const KisTagSP tag)
+bool KisAllTagsModel::setTagInactive(const KisTagSP tag)
 {
     if (!tag) return false;
     if (!tag->valid()) return false;
@@ -664,11 +657,11 @@ bool KisTagModel::addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouce
     return false;
 }
 
-bool KisTagModel::removeTag(const KisTagSP tag)
+bool KisTagModel::setTagInactive(const KisTagSP tag)
 {
     KisAbstractTagModel *source = dynamic_cast<KisAbstractTagModel*>(sourceModel());
     if (source) {
-        return source->removeTag(tag) ;
+        return source->setTagInactive(tag) ;
     }
     return false;
 }

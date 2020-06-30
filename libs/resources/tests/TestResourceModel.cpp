@@ -141,7 +141,7 @@ void TestResourceModel::testRemoveResourceByIndex()
 
 }
 
-void TestResourceModel::testRemoveResource()
+void TestResourceModel::testSetResourceInactive()
 {
     KisResourceModel resourceModel(m_resourceType);
     int resourceCount = resourceModel.rowCount();

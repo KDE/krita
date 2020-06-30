@@ -122,6 +122,15 @@ bool KisTagFilterResourceProxyModel::setResourceInactive(KoResourceSP resource)
     return false;
 }
 
+bool KisTagFilterResourceProxyModel::setResourceActive(KoResourceSP resource)
+{
+    KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+    if (source) {
+        return source->setResourceInactive(resource);
+    }
+    return false;
+}
+
 bool KisTagFilterResourceProxyModel::setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata)
 {
     KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());

@@ -34,7 +34,6 @@
 
 struct KisAllResourcesModel::Private {
     QSqlQuery resourcesQuery;
-    QSqlQuery tagQuery;
     QString resourceType;
     int columnCount {10};
     int cachedRowCount {-1};
@@ -79,21 +78,6 @@ KisAllResourcesModel::KisAllResourcesModel(const QString &resourceType, QObject 
     d->resourcesQuery.bindValue(":resource_type", d->resourceType);
     
     resetQuery();
-    
-    r = d->tagQuery.prepare("SELECT tags.id\n"
-                            ",      tags.url\n"
-                            ",      tags.name\n"
-                            ",      tags.comment\n"
-                            "FROM   tags\n"
-                            ",      resource_tags\n"
-                            "WHERE  tags.active > 0\n"                               // make sure the tag is active
-                            "AND    tags.id = resource_tags.tag_id\n"                // join tags + resource_tags by tag_id
-                            "AND    resource_tags.resource_id = :resource_id\n"
-                            "ORDER BY tags.id");    // make sure we're looking for tags for a specific resource
-    if (!r)  {
-        qWarning() << "Could not prepare TagsForResource query" << d->tagQuery.lastError();
-    }
-    
 }
 
 KisAllResourcesModel::~KisAllResourcesModel()
@@ -289,30 +273,13 @@ QVariant KisAllResourcesModel::headerData(int section, Qt::Orientation orientati
 
 bool KisAllResourcesModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    if (index.isValid()) {
-        if (role == Qt::CheckStateRole) {
-            QSqlQuery query;
-            bool r = query.prepare("UPDATE resources\n"
-                                   "SET    active = :active\n"
-                                   "WHERE  id = :id\n");
-            query.bindValue(":active", value);
-            query.bindValue(":id", index.data(Qt::UserRole + Id));
-
-            if (!r) {
-                qWarning() << "Could not prepare KisResourceModel update query" << query.lastError();
-                return false;
-            }
-
-            r = query.exec();
-
-            if (!r) {
-                qWarning() << "Could not execute KisResourceModel update query" << query.lastError();
-                return false;
-            }
-
+    if (index.isValid() && role == Qt::CheckStateRole) {
+        if (!KisResourceLocator::instance()->setResourceInactive(index.data(Qt::UserRole + KisAbstractResourceModel::Id).toInt())) {
+            return false;
         }
+        resetQuery();
+        emit dataChanged(index, index, {role});
     }
-    emit dataChanged(index, index, {role});
     return true;
 }
 
@@ -481,16 +448,17 @@ bool KisAllResourcesModel::setResourceInactive(const QModelIndex &index)
 bool KisAllResourcesModel::setResourceInactive(KoResourceSP resource)
 {
     if (!resource || !resource->valid()) return false;
-
-    //qDebug() << "KisAllResourcesModel::remvoeResource 2" << s_i5 << d->resourceType; s_i5++;
-
-    if (!KisResourceLocator::instance()->setResourceInactive(resource->resourceId())) {
-        qWarning() << "Failed to remove resource" << resource->resourceId();
-        return false;
-    }
-    resetQuery();
     QModelIndex index = indexForResource(resource);
-    emit dataChanged(index, index, {Qt::EditRole});
+    return setData(index, QVariant::fromValue(false), Qt::CheckStateRole);
+    return true;
+}
+
+
+bool KisAllResourcesModel::setResourceActive(KoResourceSP resource)
+{
+    if (!resource || !resource->valid()) return false;
+    QModelIndex index = indexForResource(resource);
+    return setData(index, QVariant::fromValue(true), Qt::CheckStateRole);
     return true;
 }
 
@@ -739,6 +707,16 @@ bool KisResourceModel::setResourceInactive(KoResourceSP resource)
         return source->setResourceInactive(resource);
     }
     return false;
+}
+
+bool KisResourceModel::setResourceActive(KoResourceSP resource)
+{
+    KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+    if (source) {
+        return source->setResourceActive(resource);
+    }
+    return false;
+
 }
 
 bool KisResourceModel::setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata)

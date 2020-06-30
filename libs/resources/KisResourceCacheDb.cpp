@@ -26,6 +26,7 @@
 #include <QElapsedTimer>
 #include <QDataStream>
 #include <QByteArray>
+#include <QMessageBox>
 
 #include <KritaVersionWrapper.h>
 #include <klocalizedstring.h>
@@ -39,7 +40,7 @@ const QString dbDriver = "QSQLITE";
 
 const QString KisResourceCacheDb::dbLocationKey { "ResourceCacheDbDirectory" };
 const QString KisResourceCacheDb::resourceCacheDbFilename { "resourcecache.sqlite" };
-const QString KisResourceCacheDb::databaseVersion { "0.0.2" };
+const QString KisResourceCacheDb::databaseVersion { "0.0.3" };
 QStringList KisResourceCacheDb::storageTypes { QStringList() };
 QStringList KisResourceCacheDb::disabledBundles { QStringList() << "Krita_3_Default_Resources.bundle" };
 
@@ -70,8 +71,7 @@ QSqlError createDatabase(const QString &location)
                                      ;
 
     if (!QSqlDatabase::connectionNames().isEmpty()) {
-        infoResources << "Already connected to resource cache database";
-        return QSqlError();
+        return QSqlError("sqlite", "database", QSqlError::ConnectionError, "Already connected to resource cache database");
     }
 
     QDir dbLocation(location);
@@ -81,8 +81,6 @@ QSqlError createDatabase(const QString &location)
 
     QSqlDatabase db = QSqlDatabase::addDatabase(dbDriver);
     db.setDatabaseName(location + "/" + KisResourceCacheDb::resourceCacheDbFilename);
-
-    //qDebug() << "QuerySize supported" << db.driver()->hasFeature(QSqlDriver::QuerySize);
 
     if (!db.open()) {
         qWarning() << "Could not connect to resource cache database";
@@ -112,32 +110,44 @@ QSqlError createDatabase(const QString &location)
         }
 
         bool schemaIsOutDated = false;
-        QString schemaVersion = "Unknown";
+        QString schemaVersion = "0.0.0";
         QString kritaVersion = "Unknown";
         int creationDate = 0;
 
-
         if (dbTables.contains("version_information")) {
             // Verify the version number
-            QFile f(":/get_version_information.sql");
-            if (f.open(QFile::ReadOnly)) {
-                QSqlQuery q(f.readAll());
-                if (q.size() > 0) {
-                    q.first();
-                    schemaVersion = q.value(0).toString();
-                    kritaVersion = q.value(1).toString();
-                    creationDate = q.value(2).toInt();
 
-                    if (schemaVersion != KisResourceCacheDb::databaseVersion) {
-                        // XXX: Implement migration
-                        schemaIsOutDated = true;
-                        qFatal("Database schema is outdated, migration is needed. Database migration has NOT been implemented yet.");
-                    }
+            QSqlQuery q("SELECT database_version\n"
+                        ",      krita_version\n"
+                        ",      creation_date\n"
+                        "FROM version_information\n"
+                        "ORDER BY id\n"
+                        "DESC\n"
+                        "LIMIT 1;\n");
+
+            if (!q.exec()) {
+                qWarning() << "Could not retrieve version information from the database." << q.lastError();
+                abort();
+            }
+            q.first();
+            schemaVersion = q.value(0).toString();
+            kritaVersion = q.value(1).toString();
+            creationDate = q.value(2).toInt();
+
+            QVersionNumber schemaVersionNumber = QVersionNumber::fromString(schemaVersion);
+            QVersionNumber currentSchemaVersionNumber = QVersionNumber::fromString(KisResourceCacheDb::databaseVersion);
+            if (QVersionNumber::compare(schemaVersionNumber, currentSchemaVersionNumber) < 0) {
+                // XXX: Implement migration
+                schemaIsOutDated = true;
+                QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("The resource database scheme is changed. Krita will backup your database and create a new database. Your local tags will be lost."));
+                db.close();
+                if (!QFile::rename(location + "/" + KisResourceCacheDb::resourceCacheDbFilename, location + "/" + KisResourceCacheDb::resourceCacheDbFilename + ".bak")) {
+                    qWarning() << "Could not move old database from " << location + "/" + KisResourceCacheDb::resourceCacheDbFilename << "to" << location + "/" + KisResourceCacheDb::resourceCacheDbFilename + ".bak";
+                    QFile::remove(location + "/" + KisResourceCacheDb::resourceCacheDbFilename);
                 }
+                db.open();
             }
-            else {
-                return QSqlError("Error executing SQL", "Could not open get_version_information.sql", QSqlError::StatementError);
-            }
+
         }
 
         if (allTablesPresent && !schemaIsOutDated) {
@@ -381,7 +391,7 @@ bool KisResourceCacheDb::addResourceVersion(int resourceId, QDateTime timestamp,
         q.bindValue(":md5sum", resource->md5().toHex());
         r = q.exec();
         if (!r) {
-            qWarning() << "Could not execute addResourceVersion statement" << q.boundValues() << q.lastError();
+            qWarning() << "Could not execute addResourceVersion statement" << q.lastError();
             return r;
         }
     }
@@ -493,7 +503,7 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
 
     r = q.exec();
     if (!r) {
-        qWarning() << "Could not execute addResource statement" << q.boundValues() << q.lastError();
+        qWarning() << "Could not execute addResource statement" << q.lastError();
         return r;
     }
 

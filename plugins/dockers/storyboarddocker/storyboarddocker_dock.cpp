@@ -186,7 +186,6 @@ StoryboardDockerDock::StoryboardDockerDock( )
     connect(m_ui->listView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
             this, SLOT(slotChangeFrameGlobal(QItemSelection, QItemSelection)));
 
-    m_storyboardModel->insertRows(0, 10);
     m_storyboardModel->setCommentModel(m_commentModel);
 
     m_modeGroup->button(2)->click();
@@ -206,11 +205,15 @@ void StoryboardDockerDock::setCanvas(KoCanvasBase *canvas)
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     setEnabled(m_canvas);
 
-    if (m_canvas) {
+    if (m_canvas && m_canvas->image()) {
         connect(m_canvas->image()->animationInterface(), SIGNAL(sigUiTimeChanged(int)), this, SLOT(slotFrameChanged(int)));
-        if (m_canvas->image()) {
-            m_storyboardDelegate->setImage(m_canvas->image());
-        }
+        connect(m_canvas->image()->animationInterface(), SIGNAL(sigKeyframeAdded(KisKeyframeSP)), m_storyboardModel, SLOT(slotKeyframeAdded(KisKeyframeSP)));
+        connect(m_canvas->image()->animationInterface(), SIGNAL(sigKeyframeRemoved(KisKeyframeSP)), m_storyboardModel, SLOT(slotKeyframeRemoved(KisKeyframeSP)));
+        connect(m_canvas->image()->animationInterface(), SIGNAL(sigKeyframeMoved(KisKeyframeSP, int)), m_storyboardModel, SLOT(slotKeyframeMoved(KisKeyframeSP, int)));
+
+        //TODO: change current item in docker on insertion and moving
+        slotFrameChanged(m_canvas->image()->animationInterface()->currentUITime());
+        m_storyboardDelegate->setImage(m_canvas->image());
     }
 }
 
@@ -243,9 +246,11 @@ void StoryboardDockerDock::slotExport(QString mode)
 void StoryboardDockerDock::slotLockClicked(bool isLocked){
     if (isLocked) {
         m_lockAction->setIcon(KisIconUtils::loadIcon("locked"));
+        m_storyboardModel->setLocked(true);
     }
     else {
         m_lockAction->setIcon(KisIconUtils::loadIcon("unlocked"));
+        m_storyboardModel->setLocked(false);
     }
 }
 
@@ -302,8 +307,10 @@ void StoryboardDockerDock::slotFrameChanged(int frameId)
 
 void StoryboardDockerDock::slotChangeFrameGlobal(QItemSelection selected, QItemSelection deselected)
 {
-    int frameId = m_storyboardModel->data(m_storyboardModel->index(0, 0, selected.indexes().at(0))).toInt();
-    m_canvas->image()->animationInterface()->switchCurrentTimeAsync(frameId);
+    if (!selected.indexes().isEmpty()) {
+        int frameId = m_storyboardModel->data(m_storyboardModel->index(0, 0, selected.indexes().at(0))).toInt();
+        m_canvas->image()->animationInterface()->switchCurrentTimeAsync(frameId);
+    }
 }
 
 #include "storyboarddocker_dock.moc"

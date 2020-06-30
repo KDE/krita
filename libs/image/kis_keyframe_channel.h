@@ -150,6 +150,7 @@ protected:
     virtual void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename) = 0;
 
     void workaroundBrokenFrameTimeBug(int *time);
+    void relaySingalsToAnimationInterface();
 
 private:
     KisKeyframeSP replaceKeyframeAt(int time, KisKeyframeSP newKeyframe);

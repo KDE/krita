@@ -206,6 +206,9 @@ Q_SIGNALS:
      * when you mute the channel! When muting, sigAudioChannelChanged() is used instead!
      */
     void sigAudioVolumeChanged();
+    void sigKeyframeAdded(KisKeyframeSP);
+    void sigKeyframeRemoved(KisKeyframeSP);
+    void sigKeyframeMoved(KisKeyframeSP, int);
 
 private:
     struct Private;

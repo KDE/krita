@@ -24,6 +24,7 @@
 #include "storyboardItem.h"
 #include "commentModel.h"
 #include <kritaui_export.h>
+#include <kis_keyframe_channel.h>
 
 /*
     The main storyboard model. 
@@ -82,8 +83,16 @@ public:
     int visibleCommentsUpto(QModelIndex index) const;
     void setCommentModel(CommentModel *commentModel);
     Comment getComment(int row) const;
+    void setLocked(bool);
+    bool isLocked() const;
 
     QModelIndex indexFromFrame(int frame) const;
+    QModelIndex lastIndexBeforeFrame(int frame) const;
+
+public Q_SLOTS:
+    void slotKeyframeAdded(KisKeyframeSP keyframe);
+    void slotKeyframeRemoved(KisKeyframeSP);
+    void slotKeyframeMoved(KisKeyframeSP, int);
 
 private Q_SLOTS:
     void slotCommentDataChanged();
@@ -97,8 +106,7 @@ private:
     QVector<StoryboardItem*> m_items;
     QVector<Comment> m_commentList;
     CommentModel *m_commentModel;
-
-    int m_lastFrame = 0;
+    bool m_locked;
     int m_lastScene = 0;
 };
 

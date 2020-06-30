@@ -20,6 +20,8 @@
 #include "KoID.h"
 #include "kis_global.h"
 #include "kis_node.h"
+#include "kis_image_animation_interface.h"
+#include "kis_image.h"
 #include "kis_time_range.h"
 #include "kundo2command.h"
 #include "kis_keyframe_commands.h"
@@ -60,6 +62,7 @@ KisKeyframeChannel::KisKeyframeChannel(const KoID &id, KisNodeWSP parent)
     m_d->id = id;
     m_d->node = parent;
     m_d->defaultBounds = KisDefaultBoundsNodeWrapperSP( new KisDefaultBoundsNodeWrapper( parent ));
+    relaySingalsToAnimationInterface();
 }
 
 KisKeyframeChannel::KisKeyframeChannel(const KoID &id, KisDefaultBoundsBaseSP bounds)
@@ -81,6 +84,7 @@ KisKeyframeChannel::KisKeyframeChannel(const KisKeyframeChannel &rhs, KisNodeWSP
     Q_FOREACH(KisKeyframeSP keyframe, rhs.m_d->keys) {
         m_d->keys.insert(keyframe->time(), keyframe->cloneFor(this));
     }
+    relaySingalsToAnimationInterface();
 }
 
 KisKeyframeChannel::~KisKeyframeChannel()
@@ -100,6 +104,7 @@ void KisKeyframeChannel::setNode(KisNodeWSP node)
 {
     m_d->node = node;
     m_d->defaultBounds = KisDefaultBoundsNodeWrapperSP( new KisDefaultBoundsNodeWrapper( node ));
+    relaySingalsToAnimationInterface();
 }
 
 KisNodeWSP KisKeyframeChannel::node() const
@@ -654,6 +659,17 @@ void KisKeyframeChannel::workaroundBrokenFrameTimeBug(int *time)
         while (keyframeAt(*time)) {
             (*time)++;
         }
+    }
+}
+
+void KisKeyframeChannel::relaySingalsToAnimationInterface()
+{
+
+    if (m_d->node && m_d->node->image() && m_d->node->image()->animationInterface()) {
+        connect(this, SIGNAL(sigKeyframeAdded(KisKeyframeSP)), m_d->node->image()->animationInterface(), SIGNAL(sigKeyframeAdded(KisKeyframeSP)), Qt::UniqueConnection);
+
+        connect(this, SIGNAL(sigKeyframeRemoved(KisKeyframeSP)), m_d->node->image()->animationInterface(), SIGNAL(sigKeyframeRemoved(KisKeyframeSP)), Qt::UniqueConnection);
+        connect(this, SIGNAL(sigKeyframeMoved(KisKeyframeSP, int)), m_d->node->image()->animationInterface(), SIGNAL(sigKeyframeMoved(KisKeyframeSP, int)), Qt::UniqueConnection);
     }
 }
 

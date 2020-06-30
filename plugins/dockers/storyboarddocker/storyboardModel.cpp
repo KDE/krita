@@ -25,6 +25,7 @@
 
 StoryboardModel::StoryboardModel(QObject *parent)
         : QAbstractItemModel(parent)
+        , m_locked(false)
 {
     connect(this, SIGNAL(rowsInserted(const QModelIndex, int, int)),
                 this, SLOT(slotInsertChildRows(const QModelIndex, int, int)));
@@ -407,6 +408,16 @@ Comment StoryboardModel::getComment(int row) const
     return m_commentList.at(row);
 }
 
+void StoryboardModel::setLocked(bool value)
+{
+    m_locked = value;
+}
+
+bool StoryboardModel::isLocked() const
+{
+    return m_locked;
+}
+
 QModelIndex StoryboardModel::indexFromFrame(int frame) const
 {
     int end = rowCount(), begin = 0;
@@ -427,6 +438,49 @@ QModelIndex StoryboardModel::indexFromFrame(int frame) const
     return QModelIndex();
 }
 
+QModelIndex StoryboardModel::lastIndexBeforeFrame(int frame) const
+{
+    int end = rowCount(), begin = 0;
+    QModelIndex retIndex;
+    while (end >= begin) {
+        int row = begin + (end - begin) / 2;
+        QModelIndex parentIndex = index(row, 0);
+        QModelIndex childIndex = index(0, 0, parentIndex);
+        if (childIndex.data().toInt() >= frame) {
+            end = row - 1;
+        }
+        else if (childIndex.data().toInt() < frame) {
+            retIndex = parentIndex.row() > retIndex.row() ? parentIndex : retIndex;
+            begin = row + 1;
+        }
+    }
+    return retIndex;
+}
+
+void StoryboardModel::slotKeyframeAdded(KisKeyframeSP keyframe)
+{
+    if (!indexFromFrame(keyframe->time()).isValid() && !isLocked()) {
+        int frame = keyframe->time();
+        int prevItemRow = lastIndexBeforeFrame(frame).row();
+        insertRows(prevItemRow + 1, 1);
+        setData (index (0, 0, index(prevItemRow + 1, 0)), frame);
+    }
+}
+
+void StoryboardModel::slotKeyframeRemoved(KisKeyframeSP keyframe)
+{
+    QModelIndex itemIndex = indexFromFrame(keyframe->time());
+    qDebug()<<"itemIndex row is "<<itemIndex.row();
+    if (itemIndex.isValid()) {
+        qDebug()<<"m_items size is "<<m_items.count();
+        removeRows(itemIndex.row(), 1);
+    }
+}
+
+void StoryboardModel::slotKeyframeMoved(KisKeyframeSP keyframe, int from)
+{
+    qDebug()<<"Keyframe moved to"<< keyframe->time()<< " from "<<from;
+}
 
 void StoryboardModel::slotCommentDataChanged()
 {
@@ -472,9 +526,6 @@ void StoryboardModel::slotInsertChildRows(const QModelIndex parent, int first, i
         for (int row = 0; row < rows; ++row) {
             QModelIndex parentIndex = index(first + row, 0);
             insertRows(0, 4 + m_commentList.count(), parentIndex);
-
-            setData (index (0, 0, parentIndex), m_lastFrame);
-            m_lastFrame++;
 
             QString sceneName = "scene " + QString::number(m_lastScene);
             setData (index (1, 0, parentIndex), sceneName);

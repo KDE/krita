@@ -29,7 +29,10 @@
 #include <QMessageBox>
 
 #include <KritaVersionWrapper.h>
+
 #include <klocalizedstring.h>
+#include <kbackup.h>
+
 #include <kis_debug.h>
 #include <KisUsageLogger.h>
 
@@ -136,14 +139,14 @@ QSqlError createDatabase(const QString &location)
 
             QVersionNumber schemaVersionNumber = QVersionNumber::fromString(schemaVersion);
             QVersionNumber currentSchemaVersionNumber = QVersionNumber::fromString(KisResourceCacheDb::databaseVersion);
+
             if (QVersionNumber::compare(schemaVersionNumber, currentSchemaVersionNumber) < 0) {
                 // XXX: Implement migration
                 schemaIsOutDated = true;
                 QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("The resource database scheme is changed. Krita will backup your database and create a new database. Your local tags will be lost."));
                 db.close();
-                if (!QFile::rename(location + "/" + KisResourceCacheDb::resourceCacheDbFilename, location + "/" + KisResourceCacheDb::resourceCacheDbFilename + ".bak")) {
-                    qWarning() << "Could not move old database from " << location + "/" + KisResourceCacheDb::resourceCacheDbFilename << "to" << location + "/" + KisResourceCacheDb::resourceCacheDbFilename + ".bak";
-                    QFile::remove(location + "/" + KisResourceCacheDb::resourceCacheDbFilename);
+                KBackup::numberedBackupFile(location + "/" + KisResourceCacheDb::resourceCacheDbFilename); {
+                QFile::remove(location + "/" + KisResourceCacheDb::resourceCacheDbFilename);
                 }
                 db.open();
             }

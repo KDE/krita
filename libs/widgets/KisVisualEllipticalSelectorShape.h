@@ -18,17 +18,6 @@
 #ifndef KISVISUALCOLORSELECTOR_H
 #define KISVISUALCOLORSELECTOR_H
 
-#include <QWidget>
-#include <QScopedPointer>
-#include <QPixmap>
-#include <QRegion>
-#include <QMouseEvent>
-
-#include <KoColor.h>
-#include <KoColorSpace.h>
-#include "KoColorDisplayRendererInterface.h"
-
-#include "KisColorSelectorConfiguration.h"
 #include "KisVisualColorSelectorShape.h"
 
 class KisVisualEllipticalSelectorShape : public KisVisualColorSelectorShape

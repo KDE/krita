@@ -58,6 +58,8 @@ protected:
     void mouseMoveEvent(QMouseEvent * e) override;
     void contextMenuEvent(QContextMenuEvent * e) override;
 
+    void paintSegmentHandle(int position, const QString text, const QPoint& textPos, QPainter& painter);
+
 private Q_SLOTS:
     void slotSplitSegment();
     void slotDuplicateSegment();

@@ -89,6 +89,7 @@ set(kritapigment_SRCS
     resources/KoPattern.cpp
     resources/KoStopGradient.cpp
     resources/KoSegmentGradient.cpp
+    resources/KoCachedGradient.h
 )
 
 set (EXTRA_LIBRARIES ${LINK_OPENEXR_LIB} ${LINK_VC_LIB})

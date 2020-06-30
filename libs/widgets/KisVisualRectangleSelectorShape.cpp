@@ -18,25 +18,12 @@
 #include "KisVisualRectangleSelectorShape.h"
 
 #include <QColor>
-#include <QPixmap>
 #include <QPainter>
-#include <QPainterPath>
 #include <QRect>
-#include <QVector>
-#include <QVBoxLayout>
 #include <QList>
-#include <QPolygon>
+#include <QLineF>
 #include <QtMath>
 
-#include <KSharedConfig>
-#include <KConfigGroup>
-
-#include "KoColorConversions.h"
-#include "KoColorDisplayRendererInterface.h"
-#include "KoChannelInfo.h"
-#include <KoColorModelStandardIds.h>
-#include <QPointer>
-#include "kis_signal_compressor.h"
 #include "kis_debug.h"
 
 KisVisualRectangleSelectorShape::KisVisualRectangleSelectorShape(QWidget *parent,

@@ -103,6 +103,7 @@ KisBrushBasedPaintOp::KisBrushBasedPaintOp(const KisPaintOpSettingsSP settings, 
 
     m_textureProperties.fillProperties(settings, settings->resourcesInterface());
     m_dabCache->setTexturePostprocessing(&m_textureProperties);
+    m_textureProperties.setTextureGradient(painter->gradient());
 
     m_precisionOption.setHasImprecisePositionOptions(
         m_precisionOption.hasImprecisePositionOptions() |

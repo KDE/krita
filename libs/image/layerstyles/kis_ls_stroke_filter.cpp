@@ -98,34 +98,35 @@ void KisLsStrokeFilter::applyStroke(KisPaintDeviceSP srcDevice,
 
     const QRect needRect = kisGrowRect(applyRect, borderSize(config->position(), config->size()));
 
-    KisSelectionSP finalBlowerSelection = blower->knockoutSelectionLazy();
+    KisSelectionSP baseSelection = blower->knockoutSelectionLazy();
+    KisPixelSelectionSP selection = baseSelection->pixelSelection();
 
     KisCachedSelection::Guard s1(*env->cachedSelection());
-    KisSelectionSP baseSelection = s1.selection();
-
-    KisLsUtils::selectionFromAlphaChannel(srcDevice, baseSelection, needRect);
-    KisPixelSelectionSP selection = baseSelection->pixelSelection();
+    KisPixelSelectionSP dilatedSelection = s1.selection()->pixelSelection();
+    KisLsUtils::selectionFromAlphaChannel(srcDevice, s1.selection(), needRect);
 
     {
         KisCachedSelection::Guard s2(*env->cachedSelection());
-        KisPixelSelectionSP knockOutSelection = s2.selection()->pixelSelection();
-        knockOutSelection->makeCloneFromRough(selection, needRect);
+        KisPixelSelectionSP erodedSelection = s2.selection()->pixelSelection();
+        erodedSelection->makeCloneFromRough(dilatedSelection, needRect);
 
         if (config->position() == psd_stroke_outside) {
-            KisGaussianKernel::applyDilate(selection, needRect, config->size(), QBitArray(), 0, true);
+            KisGaussianKernel::applyDilate(dilatedSelection, needRect, config->size(), QBitArray(), 0, true);
         } else if (config->position() == psd_stroke_inside) {
-            KisGaussianKernel::applyErodeU8(knockOutSelection, needRect, config->size(), QBitArray(), 0, true);
+            KisGaussianKernel::applyErodeU8(erodedSelection, needRect, config->size(), QBitArray(), 0, true);
         } else if (config->position() == psd_stroke_center) {
-            KisGaussianKernel::applyDilate(selection, needRect, 0.5 * config->size(), QBitArray(), 0, true);
-            KisGaussianKernel::applyErodeU8(knockOutSelection, needRect, 0.5 * config->size(), QBitArray(), 0, true);
+            KisGaussianKernel::applyDilate(dilatedSelection, needRect, 0.5 * config->size(), QBitArray(), 0, true);
+            KisGaussianKernel::applyErodeU8(erodedSelection, needRect, 0.5 * config->size(), QBitArray(), 0, true);
         }
 
         KisPainter gc(selection);
-        gc.setCompositeOp(COMPOSITE_ERASE);
-        gc.bitBlt(applyRect.topLeft(), knockOutSelection, applyRect);
-        gc.end();
 
-        KisPainter::copyAreaOptimized(applyRect.topLeft(), selection, finalBlowerSelection->pixelSelection(), applyRect);
+        gc.setCompositeOp(COMPOSITE_COPY);
+        gc.bitBlt(applyRect.topLeft(), dilatedSelection, applyRect);
+
+        gc.setCompositeOp(COMPOSITE_ERASE);
+        gc.bitBlt(applyRect.topLeft(), erodedSelection, applyRect);
+        gc.end();
     }
 
     const QString compositeOp = config->blendMode();

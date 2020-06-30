@@ -817,15 +817,20 @@ bool KoColorSpace::preferCompositionInSourceColorSpace() const
 
 void KoColorSpace::fillGrayBrushWithColorAndLightnessOverlay(quint8 *dst, const QRgb *brush, quint8 *brushColor, qint32 nPixels) const
 {
+    fillGrayBrushWithColorAndLightnessWithStrength(dst, brush, brushColor, 1.0, nPixels);
+}
+
+void KoColorSpace::fillGrayBrushWithColorAndLightnessWithStrength(quint8* dst, const QRgb* brush, quint8* brushColor, qreal strength, qint32 nPixels) const
+{
     /// Fallback implementation. All RGB color spaces have their own
     /// implementation without any conversions.
 
     const int rgbPixelSize = sizeof(KoBgrU16Traits::Pixel);
     QScopedArrayPointer<quint8> rgbBuffer(new quint8[(nPixels + 1) * rgbPixelSize]);
-    quint8 *rgbBrushColorBuffer = rgbBuffer.data() + nPixels * rgbPixelSize;
+    quint8* rgbBrushColorBuffer = rgbBuffer.data() + nPixels * rgbPixelSize;
 
     this->toRgbA16(dst, rgbBuffer.data(), nPixels);
     this->toRgbA16(brushColor, rgbBrushColorBuffer, 1);
-    fillGrayBrushWithColorPreserveLightnessRGB<KoBgrU16Traits>(rgbBuffer.data(), brush, rgbBrushColorBuffer, nPixels);
+    fillGrayBrushWithColorPreserveLightnessRGB<KoBgrU16Traits>(rgbBuffer.data(), brush, rgbBrushColorBuffer, strength, nPixels);
     this->fromRgbA16(rgbBuffer.data(), dst, nPixels);
 }

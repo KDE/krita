@@ -45,7 +45,8 @@
 #include "kis_canvas_resource_provider.h"
 #include "kis_stopgradient_editor.h"
 
-KisCustomGradientDialog::KisCustomGradientDialog(KoAbstractGradientSP gradient, QWidget *parent, const char *name)
+KisCustomGradientDialog::KisCustomGradientDialog(KoAbstractGradientSP gradient, QWidget *parent, const char *name,
+    const KoColor &fgColor, const KoColor &bgColor)
     : KoDialog(parent, Qt::Dialog)
 {
     setButtons(Ok|Cancel);
@@ -58,12 +59,12 @@ KisCustomGradientDialog::KisCustomGradientDialog(KoAbstractGradientSP gradient, 
 
     KoStopGradientSP stopGradient = gradient.dynamicCast<KoStopGradient>();
     if (stopGradient) {
-        m_page = new KisStopGradientEditor(stopGradient, this, "autogradient", i18n("Custom Stop Gradient"));
+        m_page = new KisStopGradientEditor(stopGradient, this, "autogradient", i18n("Custom Stop Gradient"), fgColor, bgColor);
     }
     else {
         KoSegmentGradientSP segmentedGradient = gradient.dynamicCast<KoSegmentGradient>();
         if (segmentedGradient) {
-            m_page = new KisAutogradientEditor(segmentedGradient, this, "autogradient", i18n("Custom Segmented Gradient"));
+            m_page = new KisAutogradientEditor(segmentedGradient, this, "autogradient", i18n("Custom Segmented Gradient"), fgColor, bgColor);
         }
     }
     setCaption(m_page->windowTitle());
@@ -157,6 +158,16 @@ void KisGradientChooser::slotUpdateIcons()
     }
 }
 
+void KisGradientChooser::setForegroundColor(KoColor color)
+{
+  m_foregroundColor = color;
+}
+
+void KisGradientChooser::setBackgroundColor(KoColor color)
+{
+  m_backgroundColor = color;
+}
+
 void KisGradientChooser::update(KoResourceSP resource)
 {
     KoAbstractGradientSP gradient = resource.staticCast<KoAbstractGradient>();
@@ -169,7 +180,8 @@ void KisGradientChooser::addStopGradient()
     KoStopGradientSP gradient(new KoStopGradient(""));
 
     QList<KoGradientStop> stops;
-    stops << KoGradientStop(0.0, KoColor(QColor(250, 250, 0), KoColorSpaceRegistry::instance()->rgb8())) << KoGradientStop(1.0,  KoColor(QColor(255, 0, 0, 255), KoColorSpaceRegistry::instance()->rgb8()));
+    stops << KoGradientStop(0.0, KoColor(QColor(250, 250, 0), KoColorSpaceRegistry::instance()->rgb8()), COLORSTOP) 
+        << KoGradientStop(1.0, KoColor(QColor(255, 0, 0, 255), KoColorSpaceRegistry::instance()->rgb8()), COLORSTOP);
     gradient->setType(QGradient::LinearGradient);
     gradient->setName(i18n("unnamed"));
     gradient->setStops(stops);
@@ -189,7 +201,8 @@ void KisGradientChooser::addGradient(KoAbstractGradientSP gradient, bool editGra
     KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer();
     QString saveLocation = rserver->saveLocation();
 
-    KisCustomGradientDialog dialog(gradient, this, "KisCustomGradientDialog");
+    KisCustomGradientDialog dialog(gradient, this, "KisCustomGradientDialog", m_foregroundColor, m_backgroundColor);
+    dialog.exec();
 
     QFileInfo fileInfo(saveLocation + gradient->name().split(" ").join("_") + gradient->defaultFileExtension());
 
@@ -231,6 +244,10 @@ void KisGradientChooser::addGradient(KoAbstractGradientSP gradient, bool editGra
 
 void KisGradientChooser::editGradient()
 {
+    // FIXME: restore actual editing!
+
+//    KisCustomGradientDialog dialog(static_cast<KoAbstractGradient*>(currentResource()), this, "KisCustomGradientDialog", m_foregroundColor, m_backgroundColor);
+//    dialog.exec();
     addGradient(currentResource().staticCast<KoAbstractGradient>(), true);
 }
 

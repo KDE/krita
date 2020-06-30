@@ -18,6 +18,7 @@
  */
 #include "kis_layer_filter_widget.h"
 
+#include <QDesktopWidget>
 #include <QApplication>
 #include <QVBoxLayout>
 #include <QLineEdit>

@@ -1053,6 +1053,12 @@ void NodeDelegate::updateEditorGeometry(QWidget *widget, const QStyleOptionViewI
     widget->setGeometry(option.rect);
 }
 
+void NodeDelegate::toggleSolo(const QModelIndex &index) {
+    KisBaseNode::PropertyList props = index.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
+    OptionalProperty visibilityProperty = d->findVisibilityProperty(props);
+    d->toggleProperty(props, visibilityProperty, Qt::ShiftModifier, index);
+}
+
 
 // PROTECTED
 

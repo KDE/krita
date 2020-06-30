@@ -295,28 +295,47 @@ void KisCanvasResourceProvider::slotOnScreenResolutionChanged()
 
 void KisCanvasResourceProvider::slotCanvasResourceChanged(int key, const QVariant & res)
 {
-    if (key == KoCanvasResourceProvider::ForegroundColor || key == KoCanvasResourceProvider::BackgroundColor) {
+
+    if(key == KoCanvasResourceProvider::ForegroundColor || key == KoCanvasResourceProvider::BackgroundColor) {
+
         KoAbstractGradientSP resource = KoResourceServerProvider::instance()->gradientServer()->resourceByFilename("Foreground to Background");
         if (resource) {
             KoStopGradientSP stopGradient = resource.dynamicCast<KoStopGradient>();
             if (stopGradient) {
                 QList<KoGradientStop> stops;
-                stops << KoGradientStop(0.0, fgColor()) << KoGradientStop(1.0,  KoColor(QColor(0, 0, 0, 0), fgColor().colorSpace()));
+                stops << KoGradientStop(0.0, fgColor(), FOREGROUNDSTOP) << KoGradientStop(1.0, bgColor(), BACKGROUNDSTOP);
                 stopGradient->setStops(stops);
                 KoResourceServerProvider::instance()->gradientServer()->updateResource(resource);
             }
         }
+
         resource = KoResourceServerProvider::instance()->gradientServer()->resourceByFilename("Foreground to Transparent");
         if (resource){
             KoStopGradientSP stopGradient = resource.dynamicCast<KoStopGradient>();
             if (stopGradient) {
                 QList<KoGradientStop> stops;
-                stops << KoGradientStop(0.0, fgColor()) << KoGradientStop(1.0, bgColor());
+                stops << KoGradientStop(0.0, fgColor(), FOREGROUNDSTOP) << KoGradientStop(1.0, KoColor(Qt::transparent, fgColor().colorSpace()), COLORSTOP);
                 stopGradient->setStops(stops);
                 KoResourceServerProvider::instance()->gradientServer()->updateResource(resource);
             }
         }
+
+        // TODO: fix updating dynamic gradients that have FG/BG colors inside
+#if 0
+
+        QList<KoAbstractGradient*> resources = KoResourceServerProvider::instance()->gradientServer()->resources();
+        for (int i = 0; i < resources.count(); i++) {
+            KoAbstractGradient* gradient = resources[i];
+            if(gradient->hasVariableColors()){
+                gradient->setVariableColors(fgColor(), bgColor());
+                KoResourceServerProvider::instance()->gradientServer()->updateResource(gradient);
+            }
+        }
+
+#endif
+
     }
+
     switch (key) {
     case(KoCanvasResourceProvider::ForegroundColor):
         m_fGChanged = true;

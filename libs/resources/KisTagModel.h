@@ -39,6 +39,7 @@ public:
     virtual bool addEmptyTag(const QString &tagName, QVector<KoResourceSP> taggedResouces)  = 0;
     virtual bool addEmptyTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces) = 0;
     virtual bool addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces = QVector<KoResourceSP>()) = 0;
+    virtual bool setTagActive(const KisTagSP tag) = 0;
     virtual bool setTagInactive(const KisTagSP tag) = 0;
     virtual bool tagResource(const KisTagSP tag, const KoResourceSP resource) = 0;
     virtual bool untagResource(const KisTagSP tag, const KoResourceSP resource) = 0;
@@ -93,6 +94,7 @@ public:
     bool addEmptyTag(const QString &tagName, QVector<KoResourceSP> taggedResouces) override;
     bool addEmptyTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces) override;
     bool addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces = QVector<KoResourceSP>()) override;
+    bool setTagActive(const KisTagSP tag) override;
     bool setTagInactive(const KisTagSP tag) override;
     bool tagResource(const KisTagSP tag, const KoResourceSP resource) override;
     bool untagResource(const KisTagSP tag, const KoResourceSP resource) override;
@@ -149,6 +151,7 @@ public:
     bool addEmptyTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces) override;
     bool addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces = QVector<KoResourceSP>()) override;
     bool setTagInactive(const KisTagSP tag) override;
+    bool setTagActive(const KisTagSP tag) override;
     bool tagResource(const KisTagSP tag, const KoResourceSP resource) override;
     bool untagResource(const KisTagSP tag, const KoResourceSP resource) override;
     bool renameTag(const KisTagSP tag, const QString &name) override;

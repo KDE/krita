@@ -337,6 +337,16 @@ bool KisAllTagsModel::addTag(const KisTagSP tag, QVector<KoResourceSP> taggedRes
     return resetQuery();
 }
 
+bool KisAllTagsModel::setTagActive(const KisTagSP tag)
+{
+    if (!tag) return false;
+    if (!tag->valid()) return false;
+    if (tag->id() < 0) return false;
+
+    return setData(indexForTag(tag), QVariant::fromValue(true), Qt::CheckStateRole);
+
+}
+
 bool KisAllTagsModel::setTagInactive(const KisTagSP tag)
 {
     if (!tag) return false;
@@ -664,6 +674,16 @@ bool KisTagModel::setTagInactive(const KisTagSP tag)
         return source->setTagInactive(tag) ;
     }
     return false;
+}
+
+bool KisTagModel::setTagActive(const KisTagSP tag)
+{
+    KisAbstractTagModel *source = dynamic_cast<KisAbstractTagModel*>(sourceModel());
+    if (source) {
+        return source->setTagActive(tag) ;
+    }
+    return false;
+
 }
 
 bool KisTagModel::tagResource(const KisTagSP tag, const KoResourceSP resource)

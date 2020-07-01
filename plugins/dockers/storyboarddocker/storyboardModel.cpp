@@ -140,15 +140,15 @@ bool StoryboardModel::setData(const QModelIndex & index, const QVariant & value,
         StoryboardChild *child = m_items.at(index.parent().row())->child(index.row());
         if (child) {
             int fps = 24;
-            if ((index.row() <= 3  && index.row() != 1) && value.toInt() < 0) {
+            if ((index.row() == StoryboardModel::DurationFrame  || index.row() == StoryboardModel::DurationSecond) && value.toInt() < 0) {
                 return false;
             }
-            if (index.row() == 3 && value.toInt() >= fps) {         //TODO : set fps
+            if (index.row() == StoryboardModel::DurationFrame && value.toInt() >= fps) {         //TODO : set fps
                 QModelIndex secondIndex = index.siblingAtRow(2);
                 setData(secondIndex, secondIndex.data().toInt() + value.toInt() / fps, role);
                 child->setData(value.toInt() % fps);
             }
-            else if (index.row() > 3) {
+            else if (index.row() >= StoryboardModel::Comments) {
                 CommentBox commentBox = qvariant_cast<CommentBox>(child->data());
                 commentBox.content = value.toString();
                 child->setData(QVariant::fromValue<CommentBox>(commentBox));
@@ -277,10 +277,10 @@ bool StoryboardModel::moveRows(const QModelIndex &sourceParent, int sourceRow, i
     if (sourceParent == destinationParent && sourceParent.isValid() && !sourceParent.parent().isValid()) {
         const QModelIndex parent = sourceParent;
         for (int row = 0; row < count; row++) {
-            if (sourceRow < 4 || sourceRow >= rowCount(parent)) {
+            if (sourceRow < StoryboardModel::Comments || sourceRow >= rowCount(parent)) {
                 return false;
             }
-            if (destinationChild + row < 4 || destinationChild + row >= rowCount(parent)) {
+            if (destinationChild + row < StoryboardModel::Comments || destinationChild + row >= rowCount(parent)) {
                 return false;
             }
 
@@ -470,9 +470,7 @@ void StoryboardModel::slotKeyframeAdded(KisKeyframeSP keyframe)
 void StoryboardModel::slotKeyframeRemoved(KisKeyframeSP keyframe)
 {
     QModelIndex itemIndex = indexFromFrame(keyframe->time());
-    qDebug()<<"itemIndex row is "<<itemIndex.row();
     if (itemIndex.isValid()) {
-        qDebug()<<"m_items size is "<<m_items.count();
         removeRows(itemIndex.row(), 1);
     }
 }
@@ -527,7 +525,7 @@ void StoryboardModel::slotInsertChildRows(const QModelIndex parent, int first, i
             QModelIndex parentIndex = index(first + row, 0);
             insertRows(0, 4 + m_commentList.count(), parentIndex);
 
-            QString sceneName = "scene " + QString::number(m_lastScene);
+            QString sceneName = i18nc("default name for storyboard item", "scene ") + QString::number(m_lastScene);
             setData (index (1, 0, parentIndex), sceneName);
             m_lastScene++;
 

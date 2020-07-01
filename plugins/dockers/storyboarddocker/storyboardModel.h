@@ -89,6 +89,14 @@ public:
     QModelIndex indexFromFrame(int frame) const;
     QModelIndex lastIndexBeforeFrame(int frame) const;
 
+    enum childIndexType{
+        FrameNumber,
+        ItemName,
+        DurationSecond,
+        DurationFrame,
+        Comments
+    };
+
 public Q_SLOTS:
     void slotKeyframeAdded(KisKeyframeSP keyframe);
     void slotKeyframeRemoved(KisKeyframeSP);

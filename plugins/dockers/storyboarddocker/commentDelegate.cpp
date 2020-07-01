@@ -83,8 +83,7 @@ bool CommentDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, cons
     QStyleOptionViewItem newOption = option;
 
     if ((event->type() == QEvent::MouseButtonPress || event->type() == QEvent::MouseButtonDblClick)
-        && (index.flags() & Qt::ItemIsEnabled))
-    {
+        && (index.flags() & Qt::ItemIsEnabled)) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
 
         QRect visibilityRect = option.rect;

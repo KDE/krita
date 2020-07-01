@@ -60,8 +60,7 @@ QVariant CommentModel::data(const QModelIndex &index, int role) const
 
 bool CommentModel::setData(const QModelIndex & index, const QVariant & value, int role)
 {
-    if (index.isValid() && (role == Qt::EditRole || role == Qt::DisplayRole))
-    {
+    if (index.isValid() && (role == Qt::EditRole || role == Qt::DisplayRole)) {
         m_commentList[index.row()].name = value.toString();
         emit dataChanged(index, index);
         return true;
@@ -93,7 +92,9 @@ bool CommentModel::insertRows(int position, int rows, const QModelIndex &parent)
         newcomment.name = "";
         newcomment.visibility = true;
 
-        if (position < 0 || position > m_commentList.size()) return false;
+        if (position < 0 || position > m_commentList.size()) {
+            return false;
+        }
         m_commentList.insert(position, newcomment);
     }
 
@@ -106,7 +107,9 @@ bool CommentModel::removeRows(int position, int rows, const QModelIndex &parent)
     beginRemoveRows(QModelIndex(), position, position+rows-1);
 
     for (int row = 0; row < rows; ++row) {
-        if (position < 0 || position >= m_commentList.size()) return false;
+        if (position < 0 || position >= m_commentList.size()) {
+            return false;
+        }
         m_commentList.removeAt(position);
     }
     endRemoveRows();

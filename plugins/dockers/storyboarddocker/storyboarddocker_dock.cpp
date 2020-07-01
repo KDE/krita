@@ -42,6 +42,18 @@
 #include "ui_wdgcommentmenu.h"
 #include "ui_wdgarrangemenu.h"
 
+enum Mode {
+    Column,
+    Row,
+    Grid
+};
+
+enum View {
+    All,
+    ThumbnailsOnly,
+    CommentsOnly
+};
+
 class CommentMenu: public QMenu
 {
     Q_OBJECT
@@ -112,13 +124,13 @@ public:
         QWidget* arrangeWidget = new QWidget(this);
         m_menuUI->setupUi(arrangeWidget);
 
-        modeGroup->addButton(m_menuUI->btnColumnMode, 0);
-        modeGroup->addButton(m_menuUI->btnRowMode, 1);
-        modeGroup->addButton(m_menuUI->btnGridMode, 2);
+        modeGroup->addButton(m_menuUI->btnColumnMode, Mode::Column);
+        modeGroup->addButton(m_menuUI->btnRowMode, Mode::Row);
+        modeGroup->addButton(m_menuUI->btnGridMode, Mode::Grid);
 
-        viewGroup->addButton(m_menuUI->btnAllView, 0);
-        viewGroup->addButton(m_menuUI->btnThumbnailsView, 1);
-        viewGroup->addButton(m_menuUI->btnCommentsView, 2);
+        viewGroup->addButton(m_menuUI->btnAllView, View::All);
+        viewGroup->addButton(m_menuUI->btnThumbnailsView, View::ThumbnailsOnly);
+        viewGroup->addButton(m_menuUI->btnCommentsView, View::CommentsOnly);
 
         KisAction *arrangeAction = new KisAction(arrangeWidget);
         arrangeAction->setDefaultWidget(arrangeWidget);
@@ -135,7 +147,7 @@ private:
 };
 
 StoryboardDockerDock::StoryboardDockerDock( )
-    : QDockWidget(i18n("Storyboard"))
+    : QDockWidget(i18nc("Storyboard Docker", "Storyboard"))
     , m_ui(new Ui_WdgStoryboardDock())
     , m_exportMenu(new QMenu(this))
     , m_commentModel(new CommentModel(this))
@@ -151,10 +163,10 @@ StoryboardDockerDock::StoryboardDockerDock( )
     m_ui->btnExport->setMenu(m_exportMenu);
     m_ui->btnExport->setPopupMode(QToolButton::MenuButtonPopup);
 
-    m_exportAsPdfAction = new KisAction("Export as PDF", m_exportMenu);
+    m_exportAsPdfAction = new KisAction(i18nc("Export storyboard as PDF", "Export as PDF"), m_exportMenu);
     m_exportMenu->addAction(m_exportAsPdfAction);
 
-    m_exportAsSvgAction = new KisAction("Export as SVG");
+    m_exportAsSvgAction = new KisAction(i18nc("Export storyboard as SVG", "Export as SVG"));
     m_exportMenu->addAction(m_exportAsSvgAction);
     connect(m_exportAsPdfAction, SIGNAL(triggered()), this, SLOT(slotExportAsPdf()));
     connect(m_exportAsSvgAction, SIGNAL(triggered()), this, SLOT(slotExportAsSvg()));
@@ -162,7 +174,8 @@ StoryboardDockerDock::StoryboardDockerDock( )
     m_ui->btnComment->setMenu(m_commentMenu);
     m_ui->btnComment->setPopupMode(QToolButton::MenuButtonPopup);
 
-    m_lockAction = new KisAction(KisIconUtils::loadIcon("unlocked"), "Lock", m_ui->btnLock);
+    m_lockAction = new KisAction(KisIconUtils::loadIcon("unlocked"),
+                                i18nc("Lock addition of keyframes to storyboard", "Lock"), m_ui->btnLock);
     m_lockAction->setCheckable(true);
     m_ui->btnLock->setDefaultAction(m_lockAction);
     m_ui->btnLock->setIconSize(QSize(22, 22));
@@ -188,8 +201,8 @@ StoryboardDockerDock::StoryboardDockerDock( )
 
     m_storyboardModel->setCommentModel(m_commentModel);
 
-    m_modeGroup->button(2)->click();
-    m_viewGroup->button(0)->click();
+    m_modeGroup->button(Mode::Grid)->click();
+    m_viewGroup->button(View::All)->click();
 }
 
 StoryboardDockerDock::~StoryboardDockerDock()
@@ -207,9 +220,12 @@ void StoryboardDockerDock::setCanvas(KoCanvasBase *canvas)
 
     if (m_canvas && m_canvas->image()) {
         connect(m_canvas->image()->animationInterface(), SIGNAL(sigUiTimeChanged(int)), this, SLOT(slotFrameChanged(int)));
-        connect(m_canvas->image()->animationInterface(), SIGNAL(sigKeyframeAdded(KisKeyframeSP)), m_storyboardModel, SLOT(slotKeyframeAdded(KisKeyframeSP)));
-        connect(m_canvas->image()->animationInterface(), SIGNAL(sigKeyframeRemoved(KisKeyframeSP)), m_storyboardModel, SLOT(slotKeyframeRemoved(KisKeyframeSP)));
-        connect(m_canvas->image()->animationInterface(), SIGNAL(sigKeyframeMoved(KisKeyframeSP, int)), m_storyboardModel, SLOT(slotKeyframeMoved(KisKeyframeSP, int)));
+        connect(m_canvas->image()->animationInterface(), SIGNAL(sigKeyframeAdded(KisKeyframeSP)),
+                m_storyboardModel, SLOT(slotKeyframeAdded(KisKeyframeSP)));
+        connect(m_canvas->image()->animationInterface(), SIGNAL(sigKeyframeRemoved(KisKeyframeSP)),
+                m_storyboardModel, SLOT(slotKeyframeRemoved(KisKeyframeSP)));
+        connect(m_canvas->image()->animationInterface(), SIGNAL(sigKeyframeMoved(KisKeyframeSP, int)),
+                m_storyboardModel, SLOT(slotKeyframeMoved(KisKeyframeSP, int)));
 
         //TODO: change current item in docker on insertion and moving
         slotFrameChanged(m_canvas->image()->animationInterface()->currentUITime());
@@ -256,46 +272,46 @@ void StoryboardDockerDock::slotLockClicked(bool isLocked){
 
 void StoryboardDockerDock::slotModeChanged(QAbstractButton* button)
 {
-    QString mode = button->text();
-    if (mode == "Column") {
+    int mode = m_modeGroup->id(button);
+    if (mode == Mode::Column) {
         m_ui->listView->setFlow(QListView::LeftToRight);
         m_ui->listView->setWrapping(false);
         m_ui->listView->setItemOrientation(Qt::Vertical);
-        m_viewGroup->button(2)->setEnabled(true);
+        m_viewGroup->button(View::CommentsOnly)->setEnabled(true);
     }
-    else if (mode == "Row") {
+    else if (mode == Mode::Row) {
         m_ui->listView->setFlow(QListView::TopToBottom);
         m_ui->listView->setWrapping(false);
         m_ui->listView->setItemOrientation(Qt::Horizontal);
-        m_viewGroup->button(2)->setEnabled(false);           //disable the comments only view
+        m_viewGroup->button(View::CommentsOnly)->setEnabled(false);           //disable the comments only view
     }
-    else if (mode == "Grid") {
+    else if (mode == Mode::Grid) {
         m_ui->listView->setFlow(QListView::LeftToRight);
         m_ui->listView->setWrapping(true);
         m_ui->listView->setItemOrientation(Qt::Vertical);
-        m_viewGroup->button(2)->setEnabled(true);
+        m_viewGroup->button(View::CommentsOnly)->setEnabled(true);
     }
     m_storyboardModel->layoutChanged();
 }
 
 void StoryboardDockerDock::slotViewChanged(QAbstractButton* button)
 {
-    QString view = button->text();
-    if (view == "All") {
+    int view = m_viewGroup->id(button);
+    if (view == View::All) {
         m_ui->listView->setCommentVisibility(true);
         m_ui->listView->setThumbnailVisibility(true);
-        m_modeGroup->button(1)->setEnabled(true);
+        m_modeGroup->button(Mode::Row)->setEnabled(true);
     }
-    else if (view == "Thumbnails Only") {
+    else if (view == View::ThumbnailsOnly) {
         m_ui->listView->setCommentVisibility(false);
         m_ui->listView->setThumbnailVisibility(true);
-        m_modeGroup->button(1)->setEnabled(true);
+        m_modeGroup->button(Mode::Row)->setEnabled(true);
     }
 
-    else if (view == "Comments Only") {
+    else if (view == View::CommentsOnly) {
         m_ui->listView->setCommentVisibility(true);
         m_ui->listView->setThumbnailVisibility(false);
-        m_modeGroup->button(1)->setEnabled(false);               //disable the row mode
+        m_modeGroup->button(Mode::Row)->setEnabled(false);               //disable the row mode
     }
     m_storyboardModel->layoutChanged();
 }

@@ -106,7 +106,7 @@ QRect StoryboardView::visualRect(const QModelIndex &index) const
         }
         switch (childRow)
         {
-            case 0:
+            case StoryboardModel::FrameNumber:
             {   
                 //the frame thumbnail rect
                 if (!thumbnailIsVisible()) {
@@ -118,14 +118,14 @@ QRect StoryboardView::visualRect(const QModelIndex &index) const
                 parentRect.translate(0, fontHeight);
                 return parentRect;
             }
-            case 1:
+            case StoryboardModel::ItemName:
             {
                 QRect itemNameRect = parentRect;
                 itemNameRect.setSize(QSize(thumbnailWidth - (10 * numericFontWidth + 22), fontHeight));
                 itemNameRect.moveLeft(parentRect.left() + 3*numericFontWidth + 2);
                 return itemNameRect;
             }
-            case 2:
+            case StoryboardModel::DurationSecond:
             {
                 QRect secondRect = parentRect;
                 secondRect.setSize(QSize(4 * numericFontWidth + 10, fontHeight));
@@ -133,7 +133,7 @@ QRect StoryboardView::visualRect(const QModelIndex &index) const
                 secondRect.moveLeft(parentRect.left() - 7*numericFontWidth + thumbnailWidth -20);
                 return secondRect;
             }
-            case 3:
+            case StoryboardModel::DurationFrame:
             {
                 QRect frameRect = parentRect;
                 frameRect.setSize(QSize(3 * numericFontWidth + 10, fontHeight));
@@ -223,16 +223,16 @@ void StoryboardView::slotContextMenuRequested(const QPoint &point)
     QMenu contextMenu;
     QModelIndex index = indexAt(point);
     if (!index.isValid()) {
-        contextMenu.addAction("Add Stroyboard Item", [this, index] {model()->insertRows(model()->rowCount(), 1); });
+        contextMenu.addAction(i18nc("Add Storyboard Item at the end", "Add Storyboard Item"), [this, index] {model()->insertRows(model()->rowCount(), 1); });
     }
     else if (index.parent().isValid()) {
         index = index.parent();
-        contextMenu.addAction("Add Stroyboard Item After", [this, index] {model()->insertRows(index.row() + 1, 1); });
+        contextMenu.addAction(i18nc("Add Storyboard Item after the current item", "Add Storyboard Item After"), [this, index] {model()->insertRows(index.row() + 1, 1); });
     }
 
     if (index.isValid()) {
-        contextMenu.addAction("Add Stroyboard Item Before", [this, index] {model()->insertRows(index.row(), 1); });
-        contextMenu.addAction("Remove Stroyboard Item", [this, index] {model()->removeRows(index.row(), 1); });
+        contextMenu.addAction(i18nc("Add Storyboard Item before the current item", "Add Storyboard Item Before"), [this, index] {model()->insertRows(index.row(), 1); });
+        contextMenu.addAction(i18nc("Remove current storyboard item", "Remove Storyboard Item"), [this, index] {model()->removeRows(index.row(), 1); });
     }
     contextMenu.exec(viewport()->mapToGlobal(point));
 }

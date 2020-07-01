@@ -33,9 +33,7 @@
 
 #include <kis_assert.h>
 
-
-Q_DECLARE_METATYPE(QSharedPointer<KisTag>)
-
+static int s_fakeRowsCount {2};
 
 struct KisAllTagsModel::Private {
     QSqlQuery query;
@@ -46,7 +44,6 @@ struct KisAllTagsModel::Private {
     QString resourceType;
     int columnCount {5};
     int cachedRowCount {-1};
-    int fakeRowsCount {2};
 };
 
 
@@ -78,7 +75,7 @@ int KisAllTagsModel::rowCount(const QModelIndex &/*parent*/) const
         q.exec();
         q.first();
 
-        const_cast<KisAllTagsModel*>(this)->d->cachedRowCount = q.value(0).toInt() + d->fakeRowsCount;
+        const_cast<KisAllTagsModel*>(this)->d->cachedRowCount = q.value(0).toInt() + s_fakeRowsCount;
     }
 
     return d->cachedRowCount;
@@ -97,8 +94,8 @@ QVariant KisAllTagsModel::data(const QModelIndex &index, int role) const
     if (index.row() > rowCount()) return v;
     if (index.column() > d->columnCount) return v;
 
-    if (index.row() < d->fakeRowsCount) {
-        if (index.row() == KisAllTagsModel::All + d->fakeRowsCount) {
+    if (index.row() < s_fakeRowsCount) {
+        if (index.row() == KisAllTagsModel::All + s_fakeRowsCount) {
             switch(role) {
             case Qt::DisplayRole:   // fallthrough
             case Qt::ToolTipRole:   // fallthrough
@@ -125,7 +122,7 @@ QVariant KisAllTagsModel::data(const QModelIndex &index, int role) const
             default:
                 ;
             }
-        } else if (index.row() == KisAllTagsModel::AllUntagged + d->fakeRowsCount) {
+        } else if (index.row() == KisAllTagsModel::AllUntagged + s_fakeRowsCount) {
             switch(role) {
             case Qt::DisplayRole:   // fallthrough
             case Qt::ToolTipRole:   // fallthrough
@@ -155,7 +152,7 @@ QVariant KisAllTagsModel::data(const QModelIndex &index, int role) const
         }
     }
     else {
-        bool pos = const_cast<KisAllTagsModel*>(this)->d->query.seek(index.row() - d->fakeRowsCount);
+        bool pos = const_cast<KisAllTagsModel*>(this)->d->query.seek(index.row() - s_fakeRowsCount);
         if (pos) {
             switch(role) {
             case Qt::DisplayRole:
@@ -240,9 +237,8 @@ KisTagSP KisAllTagsModel::tagForIndex(QModelIndex index) const
     if (index.row() > rowCount()) return tag;
     if (index.column() > columnCount()) return tag;
 
-
-    if (index.row() < d->fakeRowsCount) {
-        if (index.row() == KisAllTagsModel::All + d->fakeRowsCount) {
+    if (index.row() < s_fakeRowsCount) {
+        if (index.row() == KisAllTagsModel::All + s_fakeRowsCount) {
             tag.reset(new KisTag());
             tag->setName(i18n("All"));
             tag->setUrl("All");
@@ -250,7 +246,7 @@ KisTagSP KisAllTagsModel::tagForIndex(QModelIndex index) const
             tag->setId(KisAllTagsModel::All);
             tag->setActive(true);
             tag->setValid(true);
-        } else if (index.row() == KisAllTagsModel::AllUntagged + d->fakeRowsCount) {
+        } else if (index.row() == KisAllTagsModel::AllUntagged + s_fakeRowsCount) {
             tag.reset(new KisTag());
             tag->setName(i18n("All untagged"));
             tag->setUrl("All untagged");
@@ -261,7 +257,7 @@ KisTagSP KisAllTagsModel::tagForIndex(QModelIndex index) const
         }
     }
     else {
-        bool pos = const_cast<KisAllTagsModel*>(this)->d->query.seek(index.row() - d->fakeRowsCount);
+        bool pos = const_cast<KisAllTagsModel*>(this)->d->query.seek(index.row() - s_fakeRowsCount);
         if (pos) {
 
             tag.reset(new KisTag());
@@ -277,27 +273,27 @@ KisTagSP KisAllTagsModel::tagForIndex(QModelIndex index) const
     return tag;
 }
 
-bool KisAllTagsModel::addEmptyTag(const QString& tagName, QVector<KoResourceSP> taggedResouces)
+KisTagSP KisAllTagsModel::addEmptyTag(const QString& tagName, QVector<KoResourceSP> taggedResouces)
 {
-    qDebug() << "bool KisAllTagsModel::addEmptyTag(const QString& tagName, QVector<KoResourceSP> taggedResouces) ### " << tagName;
+    qDebug() << "bool KisAllTagsModel::addEmptyTag(const QString& tagName, QVector<KoResourceSP> taggedResouces) ### " << tagName << taggedResouces;
     KisTagSP tag = KisTagSP(new KisTag());
     tag->setName(tagName);
     tag->setUrl(tagName);
-    return addEmptyTag(tag, taggedResouces);
-}
-
-bool KisAllTagsModel::addEmptyTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces)
-{
-    qDebug() << "bool KisAllTagsModel::addEmptyTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces) ### " << tag;
     tag->setValid(true);
     tag->setActive(true);
-    return addTag(tag, taggedResouces);
+    if (addTag(tag, taggedResouces)) {
+        return tag;
+    }
+    else {
+        return 0;
+    }
 }
+
 
 bool KisAllTagsModel::addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces)
 {
     qDebug() << "######################";
-    qDebug() << "bool KisAllTagsModel::addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces) " << tag;
+    qDebug() << "bool KisAllTagsModel::addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces) " << tag << taggedResouces;
 
     if (tag.isNull()) return false;
     if (!tag) return false;
@@ -305,6 +301,7 @@ bool KisAllTagsModel::addTag(const KisTagSP tag, QVector<KoResourceSP> taggedRes
     // A new tag doesn't have an ID yet, that comes from the database
     if (tag->id() >= 0) return false;
 
+    bool r = true;
 
     if (!KisResourceCacheDb::hasTag(tag->url(), d->resourceType)) {
         qDebug() << "it doesn't have the tag!" << tag->url() << tag->name() << tag->comment();
@@ -317,8 +314,9 @@ bool KisAllTagsModel::addTag(const KisTagSP tag, QVector<KoResourceSP> taggedRes
         endInsertRows();
 
     } else {
-        setData(indexForTag(tag), QVariant::fromValue(true), Qt::CheckStateRole);
+        r = setData(indexForTag(tag), QVariant::fromValue(true), Qt::CheckStateRole);
     }
+
     if (!taggedResouces.isEmpty()) {
         qDebug() << "tag = " << tag;
         qDebug() << "tag url = " << tag->url();
@@ -334,7 +332,7 @@ bool KisAllTagsModel::addTag(const KisTagSP tag, QVector<KoResourceSP> taggedRes
             tagResource(tagFromDb, resource);
         }
     }
-    return resetQuery();
+    return r;
 }
 
 bool KisAllTagsModel::setTagActive(const KisTagSP tag)
@@ -432,10 +430,12 @@ bool KisAllTagsModel::untagResource(const KisTagSP tag, const KoResourceSP resou
     return true;
 }
 
-bool KisAllTagsModel::renameTag(const KisTagSP tag, const QString &name)
+bool KisAllTagsModel::renameTag(const KisTagSP tag)
 {
     if (!tag) return false;
     if (!tag->valid()) return false;
+
+    QString name = tag->name();
 
     if (name.isEmpty()) return false;
 
@@ -519,21 +519,18 @@ KisTagSP KisAllTagsModel::tagByUrl(const QString& tagUrl) const
     }
 
     QSqlQuery query;
-    bool r = query.prepare("SELECT  tags.id\n"
-                              ",       tags.url\n"
-                              ",       tags.name\n"
-                              ",       tags.comment\n"
-                              ",       tags.active\n"
-                              ",       resource_types.name as resource_type\n"
-                              "FROM    tags\n"
-                              ",       resource_types\n"
-                              "WHERE   tags.resource_type_id = resource_types.id\n"
-                              "AND     resource_types.name = :resource_type\n"
-                              "AND     tags.active = 1\n"
-                              "AND     tags.url = :tag_url\n"
-                              "AND     tags.storage_id in (SELECT id\n"
-                              "                      FROM   storages\n"
-                              "                      WHERE  storages.active  == 1)");
+    bool r = query.prepare("SELECT tags.id\n"
+                           ",      tags.url\n"
+                           ",      tags.name\n"
+                           ",      tags.comment\n"
+                           ",      tags.active\n"
+                           ",      resource_types.name as resource_type\n"
+                           "FROM   tags\n"
+                           ",      resource_types\n"
+                           "WHERE  tags.resource_type_id = resource_types.id\n"
+                           "AND    resource_types.name = :resource_type\n"
+                           "AND    tags.active = 1\n"
+                           "AND    tags.url = :tag_url\n");
 
     if (!r) {
         qWarning() << "Could not prepare KisAllTagsModel::tagByUrl query" << query.lastError();
@@ -548,7 +545,8 @@ KisTagSP KisAllTagsModel::tagByUrl(const QString& tagUrl) const
         qWarning() << "Could not execute KisAllTagsModel::tagByUrl query" << query.lastError();
     }
     KisTagSP tag(new KisTag());
-    query.next();
+    query.first();
+
     tag->setUrl(query.value("url").toString());
     tag->setName(query.value("name").toString());
     tag->setComment(query.value("comment").toString());
@@ -597,7 +595,8 @@ bool KisAllTagsModel::resetQuery()
 
 
 struct KisTagModel::Private {
-    TagFilter filter {KisTagModel::Active};
+    TagFilter tagFilter{KisTagModel::ShowActiveTags};
+    StorageFilter storageFilter {KisTagModel::ShowActiveStorages};
 };
 
 KisTagModel::KisTagModel(const QString &type, QObject *parent)
@@ -614,8 +613,16 @@ KisTagModel::~KisTagModel()
 
 void KisTagModel::setTagFilter(KisTagModel::TagFilter filter)
 {
-    if (d->filter != filter) {
-        d->filter = filter;
+    if (d->tagFilter != filter) {
+        d->tagFilter = filter;
+        invalidateFilter();
+    }
+}
+
+void KisTagModel::setStorageFilter(KisTagModel::StorageFilter filter)
+{
+    if (d->storageFilter != filter) {
+        d->storageFilter = filter;
         invalidateFilter();
     }
 }
@@ -640,23 +647,15 @@ KisTagSP KisTagModel::tagForIndex(QModelIndex index) const
 }
 
 
-bool KisTagModel::addEmptyTag(const QString &tagName, QVector<KoResourceSP> taggedResouces)
+KisTagSP KisTagModel::addEmptyTag(const QString &tagName, QVector<KoResourceSP> taggedResources)
 {
     KisAbstractTagModel *source = dynamic_cast<KisAbstractTagModel*>(sourceModel());
     if (source) {
-        return source->addEmptyTag(tagName, taggedResouces) ;
+        return source->addEmptyTag(tagName, taggedResources);
     }
-    return false;
+    return 0;
 }
 
-bool KisTagModel::addEmptyTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces)
-{
-    KisAbstractTagModel *source = dynamic_cast<KisAbstractTagModel*>(sourceModel());
-    if (source) {
-        return source->addEmptyTag(tag, taggedResouces) ;
-    }
-    return false;
-}
 
 bool KisTagModel::addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces)
 {
@@ -704,11 +703,11 @@ bool KisTagModel::untagResource(const KisTagSP tag, const KoResourceSP resource)
     return false;
 }
 
-bool KisTagModel::renameTag(const KisTagSP tag, const QString &name)
+bool KisTagModel::renameTag(const KisTagSP tag)
 {
     KisAbstractTagModel *source = dynamic_cast<KisAbstractTagModel*>(sourceModel());
     if (source) {
-        return source->renameTag(tag, name);
+        return source->renameTag(tag);
     }
     return false;
 }
@@ -738,14 +737,58 @@ bool KisTagModel::filterAcceptsColumn(int /*source_column*/, const QModelIndex &
 
 bool KisTagModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
-    if (d->filter == All) return true;
+    if (d->tagFilter == ShowAllTags && d->storageFilter == ShowAllStorages) {
+        return true;
+    }
 
     QModelIndex idx = sourceModel()->index(source_row, 0, source_parent);
-    bool active = sourceModel()->data(idx, Qt::UserRole + KisAllTagsModel::Active).toInt();
-    if (d->filter == Active && active) return true;
-    if (d->filter == Inactive && !active) return true;
+    if (!idx.isValid()) return false;
 
-    return false;
+    int tagId = sourceModel()->data(idx, Qt::UserRole + KisAllTagsModel::Id).toInt();
+
+    if (tagId <= s_fakeRowsCount) {
+        return true;
+    }
+
+    TagFilter tagActive = (TagFilter)sourceModel()->data(idx, Qt::UserRole + KisAllTagsModel::Active).toInt();
+
+    StorageFilter storageActive = ShowAllStorages;
+
+    if (d->storageFilter == ShowAllStorages) {
+        return (tagActive == d->tagFilter);
+    }
+
+    {
+
+        if (tagId > 0) {
+            QSqlQuery q;
+            q.prepare("SELECT count(*)\n"
+                      "FROM   tags_storages\n"
+                      ",      storages\n"
+                      "WHERE  tags_storages.tag_id = :tag_id\n"
+                      "AND    tags_storages.storage_id = storages.id\n"
+                      "AND    storages.active = 1\n");
+
+            q.bindValue(":tag_id", tagId);
+
+            if (!q.exec()) {
+                qWarning() << "Could not execute tags in storages query" << q.lastError() << q.boundValues();
+            }
+            else {
+                q.first();
+
+                if (q.value(0).toInt() > 0) {
+                    storageActive = ShowActiveStorages;
+                }
+            }
+        }
+    }
+
+    if (d->tagFilter == ShowAllTags) {
+        return (storageActive == d->storageFilter);
+    }
+
+    return ((storageActive == d->storageFilter) && (tagActive == d->tagFilter));
 }
 
 bool KisTagModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const

@@ -80,9 +80,11 @@ private:
     friend class KisAllTagsModel;
     friend class KisResourceModel;
     friend class KisTagChooserWidget;
+
     void setId(int id);
     void setActive(bool active);
     void setValid(bool valid);
+
     static const QByteArray s_group;
     static const QByteArray s_type;
     static const QByteArray s_tag;
@@ -90,6 +92,7 @@ private:
     static const QByteArray s_url;
     static const QByteArray s_comment;
     static const QByteArray s_defaultResources;
+
     class Private;
     QScopedPointer<Private> d;
 };
@@ -103,5 +106,7 @@ inline QDebug operator<<(QDebug dbg, const KisTagSP tag)
                 << "Default resources" << tag->defaultResources().join(", ");
     return dbg.space();
 }
+
+Q_DECLARE_METATYPE(QSharedPointer<KisTag>)
 
 #endif // KISTAGLOADER_H

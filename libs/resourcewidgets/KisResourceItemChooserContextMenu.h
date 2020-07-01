@@ -33,72 +33,7 @@
 
 #include <KisTag.h>
 #include <KisTagModel.h>
-
-class ContextMenuExistingTagAction : public QAction
-{
-    Q_OBJECT
-public:
-    explicit ContextMenuExistingTagAction( KoResourceSP resource, KisTagSP tag, QObject* parent = 0);
-    ~ContextMenuExistingTagAction() override;
-
-Q_SIGNALS:
-    void triggered(KoResourceSP resource, KisTagSP tag);
-
-protected Q_SLOTS:
-    void onTriggered();
-
-private:
-    KoResourceSP m_resource;
-    KisTagSP m_tag;
-};
-
-/*!
- *  A line edit QWidgetAction.
- *  Default behavior: Closes its parent upon triggering.
- */
-class KoLineEditAction : public QWidgetAction
-{
-    Q_OBJECT
-public:
-    explicit KoLineEditAction(QObject* parent);
-    ~KoLineEditAction() override;
-    void setIcon(const QIcon &icon);
-    void closeParentOnTrigger(bool closeParent);
-    bool closeParentOnTrigger();
-    void setPlaceholderText(const QString& clickMessage);
-    void setText(const QString& text);
-    void setVisible(bool showAction);
-
-    Q_SIGNALS:
-    void triggered(const KisTagSP tag);
-
-protected Q_SLOTS:
-    void onTriggered();
-
-private:
-    bool m_closeParentOnTrigger;
-    QLabel * m_label;
-    QLineEdit * m_editBox;
-    QPushButton * m_AddButton;
-};
-
-class NewTagAction : public KoLineEditAction
-{
-    Q_OBJECT
-public:
-    explicit NewTagAction (KoResourceSP resource, QMenu* parent);
-    ~NewTagAction() override;
-
-    Q_SIGNALS:
-    void triggered(KoResourceSP resource, const KisTagSP tag);
-
-protected Q_SLOTS:
-    void onTriggered(const KisTagSP tagName);
-
-private:
-    KoResourceSP m_resource;
-};
-
+#include <TagActions.h>
 
 ///
 /// \brief The KisResourceItemChooserContextMenu class is responsible for the context menu in ResourceItemChooser
@@ -124,12 +59,15 @@ public:
     ~KisResourceItemChooserContextMenu() override;
 
 Q_SIGNALS:
+
     /// Emitted when a resource should be added to an existing tag.
     void resourceTagAdditionRequested(KoResourceSP resource, const KisTagSP tag);
+
     /// Emitted when a resource should be removed from an existing tag.
     void resourceTagRemovalRequested(KoResourceSP resource, const KisTagSP tag);
+
     /// Emitted when a resource should be added to a new tag, which will need to be created.
-    void resourceAssignmentToNewTagRequested(KoResourceSP resource, const KisTagSP tag);
+    void resourceAssignmentToNewTagRequested(KoResourceSP resource, const QString &tag);
 
 
 public Q_SLOTS:
@@ -138,7 +76,7 @@ public Q_SLOTS:
     /// \param resource resource that needs to be tagged
     /// \param tag tag to add to the resource
     ///
-    void addResourceTag(KoResourceSP resource, const KisTagSP tag);
+    void addResourceExistingTag(KoResourceSP resource, const KisTagSP tag);
     ///
     /// \brief removeResourceExistingTag slot for a signal from the action to remove the tag from the resource
     /// \param resource resource that the tag needs to be removed from
@@ -150,13 +88,13 @@ public Q_SLOTS:
     /// \param resource resource that the tag needs to be added to
     /// \param tag tag (more precisely, tag name encapsulated in a tag class) that needs to be added to the resource
     ///
-    void addResourceNewTag(KoResourceSP resource, const KisTagSP tag);
+    void addResourceNewTag(KoResourceSP resource, const QString tag);
 
 private:
     ///
     /// \brief m_tagModel data model for tags (for tagging and untagging resources and create lists of tags)
     ///
-    KisTagModel* m_tagModel;
+    KisTagModel *m_tagModel;
 
 };
 

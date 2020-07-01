@@ -45,18 +45,18 @@ class Q_DECL_HIDDEN KisTagChooserWidget::Private
 public:
     QComboBox *comboBox;
     KisTagToolButton *tagToolButton;
-    KisTagModel* model;
+    KisTagModel *model;
     KisTagSP rememberedTag;
 };
 
-KisTagChooserWidget::KisTagChooserWidget(KisTagModel* model, QWidget* parent)
+KisTagChooserWidget::KisTagChooserWidget(KisTagModel *model, QWidget* parent)
     : QWidget(parent)
     , d(new Private)
 {
     d->comboBox = new QComboBox(this);
 
     d->comboBox->setToolTip(i18n("Tag"));
-    d->comboBox->setSizePolicy(QSizePolicy::MinimumExpanding , QSizePolicy::Fixed );
+    d->comboBox->setSizePolicy(QSizePolicy::MinimumExpanding , QSizePolicy::Fixed);
     d->comboBox->setModel(model);
 
     d->model = model;
@@ -79,8 +79,8 @@ KisTagChooserWidget::KisTagChooserWidget(KisTagModel* model, QWidget* parent)
     connect(d->tagToolButton, SIGNAL(popupMenuAboutToShow()),
             this, SLOT (tagToolContextMenuAboutToShow()));
 
-    connect(d->tagToolButton, SIGNAL(newTagRequested(KisTagSP)),
-            this, SLOT(tagToolCreateNewTag(KisTagSP)));
+    connect(d->tagToolButton, SIGNAL(newTagRequested(QString)),
+            this, SLOT(tagToolCreateNewTag(QString)));
 
     connect(d->tagToolButton, SIGNAL(deletionOfCurrentTagRequested()),
             this, SLOT(tagToolDeleteCurrentTag()));
@@ -111,29 +111,29 @@ void KisTagChooserWidget::tagToolDeleteCurrentTag()
 void KisTagChooserWidget::tagChanged(int tagIndex)
 {
     if (tagIndex >= 0) {
-        emit sigTagChosen(currentlySelectedTag());
+        KisTagSP tag = currentlySelectedTag();
+        d->tagToolButton->setCurrentTag(tag);
+        emit sigTagChosen(tag);
     }
 }
 
-void KisTagChooserWidget::tagToolRenameCurrentTag(const KisTagSP newName)
+void KisTagChooserWidget::tagToolRenameCurrentTag(KisTagSP tag)
 {
-    // TODO: RESOURCES: it should use QString, not KisTagSP
-    KisTagSP currentTag = currentlySelectedTag();
-    QString name = newName.isNull() ? "" : newName->name();
-    bool canRenameCurrentTag = !currentTag.isNull() && currentTag->id() < 0;
-    if (canRenameCurrentTag && !name.isEmpty()) {
-        d->model->renameTag(currentTag, newName->name());
+    bool canRenameCurrentTag = !tag.isNull() && tag->id() < 0;
+    if (canRenameCurrentTag && !tag->name().isEmpty()) {
+        d->model->renameTag(tag);
     }
 }
 
-void KisTagChooserWidget::tagToolUndeleteLastTag(const KisTagSP tag)
+void KisTagChooserWidget::tagToolUndeleteLastTag(KisTagSP tag)
 {
     int previousIndex = d->comboBox->currentIndex();
-    bool success = d->model->changeTagActive(tag, true);
+
+    bool success = d->model->setTagActive(tag);
     setCurrentIndex(previousIndex);
     if (success) {
         d->tagToolButton->setUndeletionCandidate(KisTagSP());
-        setCurrentItem(tag);
+        setCurrentItem(tag->name());
     }
 }
 
@@ -147,45 +147,21 @@ int KisTagChooserWidget::currentIndex() const
     return d->comboBox->currentIndex();
 }
 
-bool KisTagChooserWidget::setCurrentItem(KisTagSP tag)
+void KisTagChooserWidget::setCurrentItem(const QString &tag)
 {
     for (int i = 0; i < d->model->rowCount(); i++) {
         QModelIndex index = d->model->index(i, 0);
-        KisTagSP temp = d->model->tagForIndex(index);
-        if (!temp.isNull() && temp->url() == tag->url()) {
+        QString currentRowTag = d->model->data(index, Qt::UserRole + KisAllTagsModel::Name).toString();
+        if (currentRowTag == tag) {
             setCurrentIndex(i);
-            return true;
         }
     }
-    return false;
 }
 
-KisTagSP KisTagChooserWidget::tagToolCreateNewTag(KisTagSP tag)
+void KisTagChooserWidget::tagToolCreateNewTag(const QString &tagName)
 {
-    // TODO: RESOURCES: this function should use QString, not KisTagSP
-    int previous = d->comboBox->currentIndex();
-
-    if(tag.isNull() || tag->name().isNull() || tag->name().isEmpty()) {
-        return KisTagSP();
-    }
-
-    tag->setUrl(tag->name());
-    tag->setComment(tag->name());
-    tag->setActive(true);
-    tag->setValid(true);
-    bool added = d->model->addTag(tag);
-
-    if (added) {
-        bool found = setCurrentItem(tag);
-        if (found) {
-            return currentlySelectedTag();
-        } else {
-            return KisTagSP();
-        }
-    }
-
-    setCurrentIndex(previous);
-    return KisTagSP();
+    d->model->addEmptyTag(tagName, {});
+    setCurrentItem(tagName);
 }
 
 KisTagSP KisTagChooserWidget::currentlySelectedTag()

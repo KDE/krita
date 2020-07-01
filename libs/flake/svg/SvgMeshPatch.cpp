@@ -247,6 +247,32 @@ void SvgMeshPatch::addStop(const QList<QPointF>& pathPoints, QColor color, Type 
     m_startingPoint = pathPoints.last();
 }
 
+void transformShape(const QTransform& matrix, QScopedPointer<KoPathShape>& shape)
+{
+    // apparently, you can't transform KoPathShape
+    for (int i = 0; i < shape->pointCount(); ++i) {
+        KoPathPointIndex index(0, i);
+        KoPathPoint *point = shape->pointByIndex(index);
+
+        QPointF previous = point->point();
+        QPointF cp1 = point->controlPoint1();
+        QPointF cp2 = point->controlPoint2();
+
+        point->setPoint(matrix.map(previous));
+        point->setControlPoint1(matrix.map(cp1));
+        point->setControlPoint2(matrix.map(cp2));
+    }
+}
+
+void SvgMeshPatch::setTransform(const QTransform& matrix)
+{
+    transformShape(matrix, m_path);
+    m_startingPoint = matrix.map(m_startingPoint);
+    for (int i = 1; i < Size; ++i) {
+        m_nodes[static_cast<Type>(i)].point = matrix.map(m_nodes[static_cast<Type>(i)].point);
+    }
+}
+
 int SvgMeshPatch::countPoints() const
 {
     return m_nodes.size();

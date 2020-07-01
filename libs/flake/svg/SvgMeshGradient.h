@@ -37,6 +37,7 @@ public:
     void setType(Type type);
     SvgMeshGradient::Type type() const;
 
+    void setTransform(const QTransform& matrix);
     bool isValid() const;
 
     QScopedPointer<SvgMeshArray>& getMeshArray();

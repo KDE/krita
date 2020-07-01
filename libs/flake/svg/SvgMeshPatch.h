@@ -80,6 +80,8 @@ public:
     /// Adds path to the shape
     void addStop(const QList<QPointF>& pathPoints, QColor color, Type edge);
 
+    void setTransform(const QTransform& matrix);
+
 private:
     /* Parses path and adds it to m_path and returns the last point of the curve/line
      * see also: SvgMeshPatch::addStop

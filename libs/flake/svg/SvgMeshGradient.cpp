@@ -38,6 +38,11 @@ SvgMeshGradient::Type SvgMeshGradient::type() const
     return m_type;
 }
 
+void SvgMeshGradient::setTransform(const QTransform& matrix)
+{
+    m_mesharray->setTransform(matrix);
+}
+
 bool SvgMeshGradient::isValid() const
 {
     return m_mesharray->numRows() != 0;

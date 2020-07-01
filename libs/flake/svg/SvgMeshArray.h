@@ -46,6 +46,8 @@ public:
     int numRows() const;
     int numColumns() const;
 
+    void setTransform(const QTransform& matrix);
+
     //  get color of a stop
     QColor getColor(SvgMeshPatch::Type edge, int row, int col) const;
 

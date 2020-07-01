@@ -111,36 +111,9 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
         gc.setClipRect(updateWidgetRect);
         gc.setTransform(m_d->coordinatesConverter->documentToWidgetTransform());
 
-
         // Paint the shapes (other than the layers)
         m_d->canvas->globalShapeManager()->paint(gc, false);
 
-        // draw green selection outlines around text shapes that are edited, so the user sees where they end
-        gc.setPen( Qt::green );
-        Q_FOREACH (KoShape *shape, canvas()->shapeManager()->selection()->selectedShapes()) {
-            if (shape->shapeId() == "ArtisticText" || shape->shapeId() == "TextShapeID") {
-                gc.save();
-                gc.setTransform(shape->absoluteTransformation(), true);
-                gc.drawRect(QRectF(QPointF(), shape->size()));
-                gc.restore();
-            }
-        }
-
-        // Draw text shape over canvas while editing it, that's needs to show the text selection correctly
-        QString toolId = KoToolManager::instance()->activeToolId();
-        if (toolId == "ArtisticTextTool" || toolId == "TextTool") {
-            gc.save();
-            gc.setTransform(m_d->coordinatesConverter->documentToWidgetTransform());
-            gc.setPen(Qt::NoPen);
-            gc.setBrush(Qt::NoBrush);
-            Q_FOREACH (KoShape *shape, canvas()->shapeManager()->selection()->selectedShapes()) {
-                if (shape->shapeId() == "ArtisticText" || shape->shapeId() == "TextShapeID") {
-                    KoShapePaintingContext  paintContext(canvas(), false);
-                    KoShapeManager::renderSingleShape(shape, gc, paintContext);
-                }
-            }
-            gc.restore();
-        }
     }
 
     // ask the decorations to paint themselves

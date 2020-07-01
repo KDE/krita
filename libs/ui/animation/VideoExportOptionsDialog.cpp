@@ -32,11 +32,17 @@ struct KisVideoExportOptionsDialog::Private
     Private(ContainerType _containerType)
         : containerType(_containerType)
     {
-        if (containerType == DEFAULT) {
-            codecs << KoID("libx264", i18nc("h264 codec name, check simplescreenrecorder for standard translations", "H.264, MPEG-4 Part 10"));
-            codecs << KoID("libx265", i18nc("h265 codec name, check simplescreenrecorder for standard translations", "H.265, MPEG-H Part 2 (HEVC)"));
-        } else {
-            codecs << KoID("libtheora", i18nc("theora codec name, check simplescreenrecorder for standard translations", "Theora"));
+        switch (containerType) {
+            case ContainerType::OGV:
+                codecs << KoID("libtheora", i18nc("theora codec name, check simplescreenrecorder for standard translations", "Theora"));
+                break;
+            case ContainerType::WEBM:
+                codecs << KoID("libvpx", i18nc("VP9 codec name", "VP9"));
+                break;
+            default:
+                codecs << KoID("libx264", i18nc("h264 codec name, check simplescreenrecorder for standard translations", "H.264, MPEG-4 Part 10"));
+                codecs << KoID("libx265", i18nc("h265 codec name, check simplescreenrecorder for standard translations", "H.265, MPEG-H Part 2 (HEVC)"));
+                break;
         }
 
         presets << KoID("ultrafast", i18nc("h264 preset name, check simplescreenrecorder for standard translations", "ultrafast"));
@@ -77,7 +83,6 @@ struct KisVideoExportOptionsDialog::Private
         tunesH265 << KoID("ssim", i18nc("h264 tune option name, check simplescreenrecorder for standard translations", "ssim"));
         tunesH265 << KoID("fastdecode", i18nc("h264 tune option name, check simplescreenrecorder for standard translations", "fastdecode"));
         tunesH265 << KoID("zero-latency", i18nc("h264 tune option name, check simplescreenrecorder for standard translations", "zero-latency"));
-
     }
 
     QVector<KoID> codecs;
@@ -196,6 +201,17 @@ KisPropertiesConfigurationSP KisVideoExportOptionsDialog::configuration() const
     return cfg;
 }
 
+KisVideoExportOptionsDialog::ContainerType KisVideoExportOptionsDialog::mimeToContainer(const QString &mimeType)
+{
+    if (mimeType == "video/webm") {
+        return ContainerType::WEBM;
+    } else if (mimeType == "video/ogg") {
+        return ContainerType::OGV;
+    }
+
+    return ContainerType::DEFAULT;
+}
+
 void KisVideoExportOptionsDialog::slotCustomLineToggled(bool value)
 {
     QString customLine = m_d->currentCustomLine;
@@ -230,6 +246,8 @@ void KisVideoExportOptionsDialog::slotCodecSelected(int index)
         ui->stackedWidget->setCurrentIndex(CODEC_H265);
     } else if (codec == "libtheora") {
         ui->stackedWidget->setCurrentIndex(CODEC_THEORA);
+    } else if (codec == "libvpx") {
+        ui->stackedWidget->setCurrentIndex(CODEC_VP9);
     }
 }
 
@@ -375,6 +393,13 @@ QStringList KisVideoExportOptionsDialog::generateCustomLine() const
 
     } else if (currentCodecId() == "libtheora") {
         options << "-b" << QString::number(ui->intBitrate->value()) + "k";
+    } else if (currentCodecId() == "libvpx") {
+        options << "-vcodec" << "libvpx-vp9";
+        if (ui->vp9Lossless->isChecked()) {
+            options << "-lossless" <<  "1";
+        } else {
+            options << "-b:v" << QString::number(ui->vp9Mbits->value()) + "M";
+        }
     }
 
     return options;

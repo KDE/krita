@@ -37,13 +37,15 @@ class KisVideoExportOptionsDialog : public KisConfigWidget
 public:
     enum ContainerType {
         DEFAULT,
-        OGV
+        OGV,
+        WEBM
     };
 
     enum CodecPageIndex {
         CODEC_H264 = 0,
         CODEC_H265,
-        CODEC_THEORA
+        CODEC_THEORA,
+        CODEC_VP9
     };
 
 public:
@@ -59,6 +61,8 @@ public:
 
     void setConfiguration(const KisPropertiesConfigurationSP  config) override;
     KisPropertiesConfigurationSP configuration() const override;
+
+    static ContainerType mimeToContainer(const QString & mimeType);
 
 private Q_SLOTS:
     void slotCustomLineToggled(bool value);

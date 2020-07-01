@@ -311,9 +311,9 @@ KisImportExportErrorCode KisVideoSaver::encode(const QString &savedFilesMask, co
             args << "-vf" << exportDimensions;
         }
 
-        args << additionalOptionsList
-             << "-y" << resultFile;
+        args << additionalOptionsList;
 
+        args << "-y" << resultFile;
 
         resultOuter = runner->runFFMpeg(args, i18n("Encoding frames..."),
                                      videoDir.filePath("log_encode.log"),

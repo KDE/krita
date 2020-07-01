@@ -165,9 +165,7 @@ void KisDlgAnimationRenderer::getDefaultVideoEncoderOptions(const QString &mimeT
                                                          bool *renderHDR)
 {
     const KisVideoExportOptionsDialog::ContainerType containerType =
-        mimeType == "video/ogg" ?
-        KisVideoExportOptionsDialog::OGV :
-        KisVideoExportOptionsDialog::DEFAULT;
+            KisVideoExportOptionsDialog::mimeToContainer(mimeType);
 
     QScopedPointer<KisVideoExportOptionsDialog> encoderConfigWidget(
         new KisVideoExportOptionsDialog(containerType, 0));
@@ -195,6 +193,7 @@ QStringList KisDlgAnimationRenderer::makeVideoMimeTypesList()
     supportedMimeTypes << "image/gif";
     supportedMimeTypes << "video/ogg";
     supportedMimeTypes << "video/mp4";
+    supportedMimeTypes << "video/webm";
 
     return supportedMimeTypes;
 }
@@ -330,9 +329,7 @@ void KisDlgAnimationRenderer::selectRenderOptions()
     const QString mimetype = m_page->cmbRenderType->itemData(index).toString();
 
     const KisVideoExportOptionsDialog::ContainerType containerType =
-        mimetype == "video/ogg" ?
-        KisVideoExportOptionsDialog::OGV :
-        KisVideoExportOptionsDialog::DEFAULT;
+        KisVideoExportOptionsDialog::mimeToContainer(mimetype);
 
     KisVideoExportOptionsDialog *encoderConfigWidget =
         new KisVideoExportOptionsDialog(containerType, this);

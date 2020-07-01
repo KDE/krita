@@ -171,6 +171,14 @@ int SvgMeshArray::numColumns() const
     return m_array.first().size();
 }
 
+void SvgMeshArray::setTransform(const QTransform& matrix)
+{
+    for (auto& row: m_array) {
+        for (auto& patch: row) {
+            patch->setTransform(matrix);
+        }
+    }
+}
 QColor SvgMeshArray::getColor(SvgMeshPatch::Type edge, int row, int col) const
 {
     return getStop(edge, row, col).color;

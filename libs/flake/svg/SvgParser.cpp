@@ -1097,6 +1097,44 @@ QGradient* prepareGradientForShape(const SvgGradientHelper *gradient,
     return resultGradient;
 }
 
+SvgMeshGradient* prepareMeshGradientForShape(SvgGradientHelper *gradient,
+                                             const KoShape *shape,
+                                             const SvgGraphicsContext *gc) {
+
+    SvgMeshGradient *resultGradient;
+
+    if (gradient->gradientUnits() == KoFlake::ObjectBoundingBox) {
+
+        resultGradient = new SvgMeshGradient(*gradient->meshgradient());
+
+        const QRectF boundingRect = shape->outline().boundingRect();
+        const QTransform relativeToShape(boundingRect.width(), 0, 0, boundingRect.height(),
+                                         boundingRect.x(), boundingRect.y());
+
+        // NOTE: we apply translation right away, because caching hasn't been implemented for rendering, yet.
+        // So, transform is called multiple times on the mesh and that's not nice
+        resultGradient->setTransform(relativeToShape * gradient->transform());
+    } else {
+        // NOTE: Krita's shapes use their own coordinate system. Where origin is at the top left
+        // of the SHAPE. All the mesh patches will be rendered in the global 'user' coorindate system
+        // where the origin is at the top left of the LAYER/DOCUMENT.
+
+        // Get the user coordinates of the shape
+        const QTransform shapeglobal = shape->absoluteTransformation() * gc->matrix.inverted();
+
+        // Get the translation offset to shift the origin from "Shape" to "User"
+        const QTransform translationOffset = QTransform::fromTranslate(-shapeglobal.dx(), -shapeglobal.dy());
+
+        resultGradient = new SvgMeshGradient(*gradient->meshgradient());
+
+        // NOTE: we apply translation right away, because caching hasn't been implemented for rendering, yet.
+        // So, transform is called multiple times on the mesh and that's not nice
+        resultGradient->setTransform(gradient->transform() * translationOffset);
+    }
+
+    return resultGradient;
+}
+
 void SvgParser::applyFillStyle(KoShape *shape)
 {
     SvgGraphicsContext *gc = m_context.currentGC();
@@ -1115,9 +1153,9 @@ void SvgParser::applyFillStyle(KoShape *shape)
 
             if (gradient->isMeshGradient()) {
                 QSharedPointer<KoMeshGradientBackground> bg;
-                SvgMeshGradient *result = new SvgMeshGradient(*gradient->meshgradient());
 
-                // TODO handle transform
+                SvgMeshGradient *result = prepareMeshGradientForShape(gradient, shape, gc);
+
                 bg = toQShared(new KoMeshGradientBackground(result, transform));
                 shape->setBackground(bg);
             } else {

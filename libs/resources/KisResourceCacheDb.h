@@ -101,8 +101,8 @@ private:
     static bool addResource(KisResourceStorageSP storage, QDateTime timestamp, KoResourceSP resource, const QString &resourceType);
     static bool addResources(KisResourceStorageSP storage, QString resourceType);
 
-    /// Make this resource inactive; this does not remove the resource from disk or from the database
-    static bool setResourceInActive(int resourceId);
+    /// Make this resource active or inactive; this does not remove the resource from disk or from the database
+    static bool setResourceActive(int resourceId, bool active = false);
 
     static bool tagResource(KisResourceStorageSP storage, const QString resourceName, KisTagSP tag, const QString &resourceType);
     static bool hasTag(const QString &url, const QString &resourceType);

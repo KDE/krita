@@ -567,7 +567,7 @@ bool KisResourceCacheDb::addResources(KisResourceStorageSP storage, QString reso
     return true;
 }
 
-bool KisResourceCacheDb::setResourceInActive(int resourceId)
+bool KisResourceCacheDb::setResourceActive(int resourceId, bool active)
 {
     if (resourceId < 0) {
         qWarning() << "Invalid resource id; cannot remove resource";
@@ -575,11 +575,12 @@ bool KisResourceCacheDb::setResourceInActive(int resourceId)
     }
     QSqlQuery q;
     bool r = q.prepare("UPDATE resources\n"
-                       "SET    status = 0\n"
+                       "SET    status = :status\n"
                        "WHERE  id = :resource_id");
     if (!r) {
         qWarning() << "Could not prepare removeResource query" << q.lastError();
     }
+    q.bindValue(":status", active);
     q.bindValue(":resource_id", resourceId);
     if (!q.exec()) {
         qWarning() << "Could not update resource" << resourceId << "to  inactive" << q.lastError();

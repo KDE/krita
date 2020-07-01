@@ -274,8 +274,10 @@ QVariant KisAllResourcesModel::headerData(int section, Qt::Orientation orientati
 bool KisAllResourcesModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if (index.isValid() && role == Qt::CheckStateRole) {
-        if (!KisResourceLocator::instance()->setResourceInactive(index.data(Qt::UserRole + KisAbstractResourceModel::Id).toInt())) {
-            return false;
+        if (value.toBool()) {
+            if (!KisResourceLocator::instance()->setResourceActive(index.data(Qt::UserRole + KisAbstractResourceModel::Id).toInt(), value.toBool())) {
+                return false;
+            }
         }
         resetQuery();
         emit dataChanged(index, index, {role});
@@ -435,7 +437,7 @@ bool KisAllResourcesModel::setResourceInactive(const QModelIndex &index)
     if (index.column() > d->columnCount) return false;
     
     int resourceId = index.data(Qt::UserRole + Id).toInt();
-    if (!KisResourceLocator::instance()->setResourceInactive(resourceId)) {
+    if (!KisResourceLocator::instance()->setResourceActive(resourceId)) {
         qWarning() << "Failed to remove resource" << resourceId;
         return false;
     }
@@ -482,6 +484,9 @@ bool KisAllResourcesModel::importResourceFile(const QString &filename)
 
 bool KisAllResourcesModel::addResource(KoResourceSP resource, const QString &storageId)
 {
+
+    qDebug() << "addResource" << resource << resource->filename() << storageId;
+
     if (!resource || !resource->valid()) {
         qWarning() << "Cannot add resource. Resource is null or not valid";
         return false;

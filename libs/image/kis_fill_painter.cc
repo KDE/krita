@@ -273,7 +273,8 @@ void KisFillPainter::genericFillStart(int startX, int startY, KisPaintDeviceSP s
 
     // Create a selection from the surrounding area
 
-    KisPixelSelectionSP pixelSelection = createFloodSelection(startX, startY, sourceDevice, selection()->pixelSelection());
+    KisPixelSelectionSP pixelSelection = createFloodSelection(startX, startY, sourceDevice,
+                                                              (selection().isNull() ? 0 : selection()->pixelSelection()));
     KisSelectionSP newSelection = new KisSelection(pixelSelection->defaultBounds());
     newSelection->pixelSelection()->applySelection(pixelSelection, SELECTION_REPLACE);
     m_fillSelection = newSelection;
@@ -342,7 +343,7 @@ KisPixelSelectionSP KisFillPainter::createFloodSelection(KisPixelSelectionSP pix
 
     KisScanlineFill gc(sourceDevice, startPoint, fillBoundsRect);
     gc.setThreshold(m_threshold);
-    if (m_useSelectionAsBoundary) {
+    if (m_useSelectionAsBoundary && !pixelSelection.isNull()) {
         gc.fillSelectionWithBoundary(pixelSelection, existingSelection);
     } else {
         gc.fillSelection(pixelSelection);

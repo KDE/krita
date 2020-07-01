@@ -73,6 +73,7 @@ public:
     void continuePrimaryAction(KoPointerEvent *event) override;
     void endPrimaryAction(KoPointerEvent *event) override;
     void mouseMoveEvent(KoPointerEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
 
     QWidget *createOptionWidget() override;
 

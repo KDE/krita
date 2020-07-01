@@ -125,7 +125,7 @@ void FillProcessingVisitor::fillPaintDevice(KisPaintDeviceSP device, KisUndoAdap
         fillPainter.setFeather(m_feather);
         fillPainter.setFillThreshold(m_fillThreshold);
         fillPainter.setCareForSelection(true);
-        fillPainter.setUseSelectionAsBoundary((m_selection.isNull() || m_selection->hasNonEmptyPixelSelection()) ? m_useSelectionAsBoundary : false);
+        fillPainter.setUseSelectionAsBoundary((m_selection.isNull() || !m_selection->hasNonEmptyPixelSelection()) ? false : m_useSelectionAsBoundary);
         fillPainter.setWidth(fillRect.width());
         fillPainter.setHeight(fillRect.height());
         fillPainter.setUseCompositioning(!m_useFastMode);

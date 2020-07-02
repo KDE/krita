@@ -35,6 +35,8 @@ public:
 
     bool saveStoryboard(KoStore *store, KisImageSP image, const QString &uri);
 
+    bool saveAnimationMetadata(KoStore *store, KisImageSP image, const QString &uri);
+
     /// @return a list with everything that went wrong while saving
     QStringList errorMessages() const;
 
@@ -52,6 +54,8 @@ private:
     bool saveNodeKeyframes(KoStore *store, QString location, const KisNode *node);
     void savePalettesToXML(QDomDocument& doc, QDomElement &element);
     void saveStoryboardToXML(QDomDocument& doc, QDomElement &element);
+    void saveAnimationMetadataToXML(QDomDocument& doc, QDomElement &element, KisImageSP image);
+
     struct Private;
     Private * const m_d;
 };

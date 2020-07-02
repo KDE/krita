@@ -85,6 +85,10 @@ private:
     static void filterSequenceMimeTypes(QStringList &mimeTypes);
     static QStringList makeVideoMimeTypesList();
     static bool imageMimeSupportsHDR(QString &hdr);
+
+    static KisPropertiesConfigurationSP loadLastConfiguration(QString configurationID);
+    static void saveLastUsedConfiguration(QString configurationID, KisPropertiesConfigurationSP config);
+
 private:
 
     static QString findFFMpeg(const QString &customLocation);

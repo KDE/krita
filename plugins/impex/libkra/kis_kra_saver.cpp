@@ -136,6 +136,7 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageSP image)
     saveAudio(doc, imageElement);
     savePalettesToXML(doc, imageElement);
 
+    // Redundancy -- Save animation metadata in XML to prevent data loss for the time being...
     QDomElement animationElement = doc.createElement("animation");
     KisDomUtils::saveValue(&animationElement, "framerate", image->animationInterface()->framerate());
     KisDomUtils::saveValue(&animationElement, "range", image->animationInterface()->fullClipRange());
@@ -207,6 +208,30 @@ bool KisKraSaver::saveStoryboard(KoStore *store, KisImageSP image, const QString
     return true;
 }
 
+bool KisKraSaver::saveAnimationMetadata(KoStore *store, KisImageSP image, const QString &uri)
+{
+    Q_UNUSED(uri);
+
+    if (!store->open(m_d->imageName + ANIMATION_METADATA_PATH + "index.xml")) {
+        m_d->errorMessages << i18n("could not save animation meta data");
+        return false;
+    }
+
+    QDomDocument animationDocument = m_d->doc->createDomDocument("animation-metadata", "1.1");
+    QDomElement root = animationDocument.documentElement();
+    saveAnimationMetadataToXML(animationDocument, root, image);
+
+    QByteArray ba = animationDocument.toByteArray();
+    if (!ba.isEmpty()) {
+        store->write(ba);
+    } else {
+        qWarning() << "Could not save animation meta data to a byte array!";
+    }
+
+    store->close();
+    return true;
+}
+
 void KisKraSaver::savePalettesToXML(QDomDocument &doc, QDomElement &element)
 {
     QDomElement ePalette = doc.createElement(PALETTES);
@@ -220,7 +245,7 @@ void KisKraSaver::savePalettesToXML(QDomDocument &doc, QDomElement &element)
     element.appendChild(ePalette);
 }
 
-void KisKraSaver:: saveStoryboardToXML(QDomDocument& doc, QDomElement &element)
+void KisKraSaver::saveStoryboardToXML(QDomDocument& doc, QDomElement &element)
 {
     //saving storyboard comments
     QDomElement eCommentList = doc.createElement("StoryboardCommentList");
@@ -239,6 +264,21 @@ void KisKraSaver:: saveStoryboardToXML(QDomDocument& doc, QDomElement &element)
         eItemList.appendChild(eItem);
     }
     element.appendChild(eItemList);
+}
+
+void KisKraSaver::saveAnimationMetadataToXML(QDomDocument &doc, QDomElement &element, KisImageSP image)
+{
+    KisDomUtils::saveValue(&element, "framerate", image->animationInterface()->framerate());
+    KisDomUtils::saveValue(&element, "range", image->animationInterface()->fullClipRange());
+    KisDomUtils::saveValue(&element, "currentTime", image->animationInterface()->currentUITime());
+
+    {
+        QDomElement exportItemElem = doc.createElement("export-settings");
+        KisDomUtils::saveValue(&exportItemElem, "sequenceFilePath", image->animationInterface()->exportSequenceFilePath());
+        KisDomUtils::saveValue(&exportItemElem, "sequenceBaseName", image->animationInterface()->exportSequenceBaseName());
+        KisDomUtils::saveValue(&exportItemElem, "sequenceInitialFrameNumber", image->animationInterface()->exportInitialFrameNumber());
+        element.appendChild(exportItemElem);
+    }
 }
 
 bool KisKraSaver::saveKeyframes(KoStore *store, const QString &uri, bool external)

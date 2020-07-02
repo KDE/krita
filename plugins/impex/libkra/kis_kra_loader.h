@@ -43,6 +43,7 @@ public:
 
     void loadPalettes(KoStore *store, KisDocument *doc);
     void loadStoryboards(KoStore *store, KisDocument *doc);
+    void loadAnimationMetadata(KoStore *store, KisImageSP image);
 
     vKisNodeSP selectedNodes() const;
 
@@ -70,7 +71,7 @@ private:
     // this needs to be private, for neatness sake
     void loadAssistants(KoStore* store, const QString & uri, bool external);
 
-    void loadAnimationMetadata(const KoXmlElement& element, KisImageSP image);
+    void loadAnimationMetadataFromXML(const KoXmlElement& element, KisImageSP image);
 
     KisNodeSP loadNodes(const KoXmlElement& element, KisImageSP image, KisNodeSP parent);
 

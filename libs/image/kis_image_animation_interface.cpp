@@ -30,6 +30,7 @@ struct KisImageAnimationInterface::Private
           cachedLastFrameValue(-1),
           audioChannelMuted(false),
           audioChannelVolume(0.5),
+          exportInitialFrameNumber(-1),
           m_currentTime(0),
           m_currentUITime(0)
     {
@@ -46,6 +47,9 @@ struct KisImageAnimationInterface::Private
           audioChannelFileName(rhs.audioChannelFileName),
           audioChannelMuted(rhs.audioChannelMuted),
           audioChannelVolume(rhs.audioChannelVolume),
+          exportSequenceFilePath(rhs.exportSequenceFilePath),
+          exportSequenceBaseName(rhs.exportSequenceBaseName),
+          exportInitialFrameNumber(rhs.exportInitialFrameNumber),
           m_currentTime(rhs.m_currentTime),
           m_currentUITime(rhs.m_currentUITime)
     {
@@ -63,6 +67,10 @@ struct KisImageAnimationInterface::Private
     bool audioChannelMuted;
     qreal audioChannelVolume;
 
+    QString exportSequenceFilePath;
+    QString exportSequenceBaseName;
+    int exportInitialFrameNumber;
+
     KisSwitchTimeStrokeStrategy::SharedTokenWSP switchToken;
 
     inline int currentTime() const {
@@ -72,6 +80,7 @@ struct KisImageAnimationInterface::Private
     inline int currentUITime() const {
         return m_currentUITime;
     }
+
     inline void setCurrentTime(int value) {
         m_currentTime = value;
     }
@@ -184,6 +193,36 @@ void KisImageAnimationInterface::setAudioChannelFileName(const QString &fileName
     m_d->audioChannelFileName = fileName.isEmpty() ? fileName : info.absoluteFilePath();
 
     emit sigAudioChannelChanged();
+}
+
+QString KisImageAnimationInterface::exportSequenceFilePath()
+{
+    return m_d->exportSequenceFilePath;
+}
+
+void KisImageAnimationInterface::setExportSequenceFilePath(const QString &filePath)
+{
+    m_d->exportSequenceFilePath = filePath;
+}
+
+QString KisImageAnimationInterface::exportSequenceBaseName()
+{
+    return m_d->exportSequenceBaseName;
+}
+
+void KisImageAnimationInterface::setExportSequenceBaseName(const QString &baseName)
+{
+    m_d->exportSequenceBaseName = baseName;
+}
+
+int KisImageAnimationInterface::exportInitialFrameNumber()
+{
+    return m_d->exportInitialFrameNumber;
+}
+
+void KisImageAnimationInterface::setExportInitialFrameNumber(const int frameNum)
+{
+    m_d->exportInitialFrameNumber = frameNum;
 }
 
 bool KisImageAnimationInterface::isAudioMuted() const

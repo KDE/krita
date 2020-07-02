@@ -328,8 +328,9 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
                 proofingConfig->warningColor = KoColor::fromXML(eq.firstChildElement(), Integer8BitsColorDepthID.id());
             }
 
+            // COMPATIBILITY -- Load Animation Metadata from OLD KRA files.
             if (e.tagName().toLower() == "animation") {
-                loadAnimationMetadata(e, image);
+                loadAnimationMetadataFromXML(e, image);
             }
         }
 
@@ -535,9 +536,23 @@ void KisKraLoader::loadStoryboards(KoStore *store, KisDocument *doc)
                 } else if (element.tagName() == "StoryboardCommentList") {
                     loadStoryboardCommentList(element);
                 }
-
             }
         }
+    }
+}
+
+void KisKraLoader::loadAnimationMetadata(KoStore *store, KisImageSP image)
+{
+    if (!store->hasFile(m_d->imageName + ANIMATION_METADATA_PATH + "index.xml")) return;
+
+    if (store->open(m_d->imageName + ANIMATION_METADATA_PATH + "index.xml")) {
+        QByteArray data = store->read(store->size());
+        QDomDocument document;
+        document.setContent(data);
+        store->close();
+
+        QDomElement root = document.documentElement();
+        loadAnimationMetadataFromXML(root, image);
     }
 }
 
@@ -604,29 +619,48 @@ void KisKraLoader::loadAssistants(KoStore *store, const QString &uri, bool exter
     }
 }
 
-void KisKraLoader::loadAnimationMetadata(const KoXmlElement &element, KisImageSP image)
+void KisKraLoader::loadAnimationMetadataFromXML(const KoXmlElement &element, KisImageSP image)
 {
     QDomDocument qDom;
     KoXml::asQDomElement(qDom, element);
-    QDomElement qElement = qDom.firstChildElement();
+    QDomElement rootElement = qDom.firstChildElement();
 
     float framerate;
     KisTimeSpan range;
     int currentTime;
+    QString string;
 
     KisImageAnimationInterface *animation = image->animationInterface();
 
-    if (KisDomUtils::loadValue(qElement, "framerate", &framerate)) {
+    if (KisDomUtils::loadValue(rootElement, "framerate", &framerate)) {
         animation->setFramerate(framerate);
     }
 
-    if (KisDomUtils::loadValue(qElement, "range", &range)) {
+    if (KisDomUtils::loadValue(rootElement, "range", &range)) {
         animation->setFullClipRange(range);
     }
 
-    if (KisDomUtils::loadValue(qElement, "currentTime", &currentTime)) {
+    if (KisDomUtils::loadValue(rootElement, "currentTime", &currentTime)) {
         animation->switchCurrentTimeAsync(currentTime);
     }
+
+    {
+        int initialFrameNumber = -1;
+        QDomElement exportElement = rootElement.firstChildElement("export-settings");
+        if (KisDomUtils::loadValue(exportElement, "sequenceFilePath", &string)) {
+            animation->setExportSequenceFilePath(string);
+        }
+
+        if (KisDomUtils::loadValue(exportElement, "sequenceBaseName", &string)) {
+            animation->setExportSequenceBaseName(string);
+        }
+
+        if (KisDomUtils::loadValue(exportElement, "sequenceInitialFrameNumber", &initialFrameNumber)) {
+            animation->setExportInitialFrameNumber(initialFrameNumber);
+        }
+    }
+
+    animation->setExportSequenceBaseName(string);
 }
 
 KisNodeSP KisKraLoader::loadNodes(const KoXmlElement& element, KisImageSP image, KisNodeSP parent)
@@ -1330,6 +1364,7 @@ void KisKraLoader::loadStoryboardCommentList(const KoXmlElement& elem)
         }
     }
 }
+
 KisNodeSP KisKraLoader::loadReferenceImagesLayer(const KoXmlElement &elem, KisImageSP image)
 {
     KisSharedPtr<KisReferenceImagesLayer> layer =

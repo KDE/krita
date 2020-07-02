@@ -117,6 +117,15 @@ public:
      */
     void setAudioChannelFileName(const QString &fileName);
 
+    QString exportSequenceFilePath();
+    void setExportSequenceFilePath(const QString &filePath);
+
+    QString exportSequenceBaseName();
+    void setExportSequenceBaseName(const QString &baseName);
+
+    int exportInitialFrameNumber();
+    void setExportInitialFrameNumber(const int frameNum);
+
     /**
      * @return is the audio channel is currently muted
      */

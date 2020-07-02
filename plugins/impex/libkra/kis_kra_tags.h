@@ -29,6 +29,7 @@ const QString ASSISTANTS_PATH = "/assistants/";
 const QString LAYER_PATH = "/layers/";
 const QString PALETTE_PATH = "/palettes/";
 const QString STORYBOARD_PATH = "/storyboard/";
+const QString ANIMATION_METADATA_PATH = "/animation/";
 
 const QString ADJUSTMENT_LAYER = "adjustmentlayer";
 const QString CHANNEL_FLAGS = "channelflags";

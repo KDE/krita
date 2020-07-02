@@ -155,7 +155,6 @@ void ConjugateAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, c
 	    path.lineTo(snapMouse1.p1());
 	    path.moveTo(initialTransform.map(p2));
 	    path.lineTo(snapMouse2.p1());
-	    drawPreview(gc, path);
 	}
 
 	// draw the side handle bars
@@ -172,11 +171,13 @@ void ConjugateAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, c
 	    path.moveTo(initialTransform.map(p2));
 	    path.lineTo(initialTransform.map(*sideHandles()[6]));
 	    path.lineTo(initialTransform.map(*sideHandles()[7]));
-	    drawPreview(gc,path);
 	}
+
+	drawPreview(gc,path);
 
 	if (handles().size() >= 3 && isSnappingActive()) {
 	    const QPointF p3 = *handles()[2];
+	    path = QPainterPath(); // clear
 
 	    // draw the vertical normal line
 	    if (isEditing == true) {
@@ -189,81 +190,85 @@ void ConjugateAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, c
 		drawPath(gc, path, isSnappingActive());
 	    }
 
-	    // Now we will draw the grid lines.
-	    // to draw the grid, we're gonna do the exact same calculations for both VPs
-            const QList<QPointF> v_points = QList<QPointF>({p1, p2});
+            if (assistantVisible == true) {
+		path = QPainterPath(); // clear
 
-	    // We will start by drawing the "furthest" gridline, ie nearly parallel to the horizon
-	    // the furthest grid line shall be at least as far as this point
-	    const QPointF farthest_point = m_cov + ((m_sp - m_cov) / 40.0);
+		// Now we will draw the grid lines.
+		// to draw the grid, we're gonna do the exact same calculations for both VPs
+		const QList<QPointF> v_points = QList<QPointF>({p1, p2});
 
-	    // Radius of the cone of vision
-	    const qreal radius = sqrt(pow(m_cov.x()-m_sp.x(),2) + pow(m_cov.y()-m_sp.y(),2));
+		// We will start by drawing the "furthest" gridline, ie line nearly parallel to the horizon
+		// the furthest grid line shall be at least as far as this point
+		const QPointF farthest_point = m_cov + ((m_sp - m_cov) / 40.0);
 
-	    QLineF grid_line;
-	    QLineF ray;	// this is what actually gets drawn
+		// Radius of the cone of vision
+		const qreal radius = sqrt(pow(m_cov.x()-m_sp.x(),2) + pow(m_cov.y()-m_sp.y(),2));
 
-            for (QPointF vp : v_points) {
+		QLineF grid_line;
+		QLineF ray;	// this is what actually gets drawn
 
-		// How the farthest grid line gets drawn depends on how far away the relevant VP is
-		const qreal cov_to_vp = sqrt(pow(m_cov.x()-vp.x(),2) + pow(m_cov.y()-vp.y(),2));
-                if (cov_to_vp > radius) {
-		    grid_line = QLineF(vp, farthest_point);
-		    ray = initialTransform.map(grid_line);
-                } else {
-		    // The point where VP is on the cone. Neither inside not outside cone of vision
-		    const QPointF threshold_point = m_cov + ( vp - m_cov ) * (radius / cov_to_vp);
-		    const QPointF translation = vp - threshold_point;
-		    grid_line = QLineF(threshold_point + translation, farthest_point + translation);
-		    ray = initialTransform.map(grid_line);
-                }
+		for (QPointF vp : v_points) {
+		    // How the farthest grid line gets drawn depends on how far away the relevant VP is
+		    const qreal cov_to_vp = sqrt(pow(m_cov.x()-vp.x(),2) + pow(m_cov.y()-vp.y(),2));
+		    if (cov_to_vp > radius) {
+			grid_line = QLineF(vp, farthest_point);
+			ray = initialTransform.map(grid_line);
+		    } else {
+			// The point where VP is on the cone. Neither inside not outside cone of vision
+			const QPointF threshold_point = m_cov + ( vp - m_cov ) * (radius / cov_to_vp);
+			const QPointF translation = vp - threshold_point;
+			grid_line = QLineF(threshold_point + translation, farthest_point + translation);
+			ray = initialTransform.map(grid_line);
+		    }
 
-		KisAlgebra2D::intersectLineRect(ray, viewport);
-		path.moveTo(initialTransform.map(vp));
-		path.lineTo(ray.p1());
-
-		// calculate interval between each grid line
-		qreal acute_angle = acuteAngle(QLineF(m_sp, vp).angleTo(m_horizon));
-		const qreal interval = radius / sin(acute_angle*M_PI/180);
-
-		// the base point is where the grid line we drew earlier passes through
-		const QPointF translation = m_sp - m_cov;
-		const QLineF base_line = QLineF(*handles()[0] + translation, *handles()[1] + translation);
-		QPointF base_point;
-		base_line.intersect(grid_line, &base_point);
-
-		// we will apply a translation to the base point to draw each of the following grid lines
-		QLineF interval_vector = QLineF(base_point, m_sp);
-		interval_vector.setLength(interval);
-		const QPointF interval_translation = QPointF(interval_vector.dx(), interval_vector.dy());
-
-		// initialize variables to control the grid drawing loop
-		const qreal threshold_length = QLineF(base_point, vp + translation).length();
-		qreal current_length = 0;
-		qreal acute_grid_angle = acuteAngle(grid_line.angleTo(m_horizon));
-		qreal curr_grid_angle = acute_grid_angle;
-		bool draw_next = true;
-		int i = 0;
-
-		// here be dragons, this code runs for *every* subsequent grid line
-                while (draw_next == true) {
-		    grid_line = QLineF(vp, base_point + i*interval_translation);
-
-		    ray = initialTransform.map(grid_line);
 		    KisAlgebra2D::intersectLineRect(ray, viewport);
 		    path.moveTo(initialTransform.map(vp));
 		    path.lineTo(ray.p1());
 
-                    current_length = QLineF(base_point, grid_line.p2()).length();
-		    curr_grid_angle = acuteAngle(grid_line.angleTo(m_horizon));
-		    i++;
+		    // calculate interval between each grid line
+		    qreal acute_angle = acuteAngle(QLineF(m_sp, vp).angleTo(m_horizon));
+		    const qreal interval = radius / sin(acute_angle*M_PI/180);
 
-		    cov_to_vp > radius ?
-			draw_next = current_length < threshold_length && cov_to_vp > radius :
-			draw_next = (curr_grid_angle >= acute_grid_angle || current_length < threshold_length ) && cov_to_vp < radius ;
-                }
+		    // the base point is where the grid line we drew earlier passes through
+		    const QPointF translation = m_sp - m_cov;
+		    const QLineF base_line = QLineF(*handles()[0] + translation, *handles()[1] + translation);
+		    QPointF base_point;
+		    base_line.intersect(grid_line, &base_point);
+
+		    // we will apply a translation to the base point to draw each of the following grid lines
+		    QLineF interval_vector = QLineF(base_point, m_sp);
+		    interval_vector.setLength(interval);
+		    const QPointF interval_translation = QPointF(interval_vector.dx(), interval_vector.dy());
+
+		    // initialize variables to control the grid drawing loop
+		    const qreal threshold_length = QLineF(base_point, vp + translation).length();
+		    qreal current_length = 0;
+		    qreal acute_grid_angle = acuteAngle(grid_line.angleTo(m_horizon));
+		    qreal curr_grid_angle = acute_grid_angle;
+		    bool draw_next = true;
+		    int i = 0;
+
+		    // here be dragons, this code runs for *every* subsequent grid line
+		    while (draw_next == true) {
+			grid_line = QLineF(vp, base_point + i*interval_translation);
+
+			ray = initialTransform.map(grid_line);
+			KisAlgebra2D::intersectLineRect(ray, viewport);
+			path.moveTo(initialTransform.map(vp));
+			path.lineTo(ray.p1());
+
+			current_length = QLineF(base_point, grid_line.p2()).length();
+			curr_grid_angle = acuteAngle(grid_line.angleTo(m_horizon));
+			i++;
+
+			cov_to_vp > radius ?
+			    draw_next = current_length < threshold_length && cov_to_vp > radius :
+			    draw_next = (curr_grid_angle >= acute_grid_angle || current_length < threshold_length ) && cov_to_vp < radius ;
+		    }
+		}
+		drawPreview(gc, path);
             }
-	    drawPreview(gc, path);
+
 	}
     }
 

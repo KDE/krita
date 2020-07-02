@@ -105,6 +105,12 @@ void TestTagModel::testData()
     v = tagModel.data(tagModel.index(0, 0), Qt::UserRole + KisAllTagsModel::Url);
     QCOMPARE(v.toString(), "All");
 
+    v = tagModel.data(tagModel.index(1, 0), Qt::DisplayRole);
+    QCOMPARE(v.toString(), "All Untagged");
+
+    v = tagModel.data(tagModel.index(1, 0), Qt::UserRole + KisAllTagsModel::Url);
+    QCOMPARE(v.toString(), "All Untagged");
+
     v = tagModel.data(tagModel.index(2, 0), Qt::DisplayRole);
     QCOMPARE(v.toString(), "* Favorites");
 

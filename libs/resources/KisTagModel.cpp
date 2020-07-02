@@ -72,7 +72,9 @@ int KisAllTagsModel::rowCount(const QModelIndex &/*parent*/) const
                   "WHERE  tags.resource_type_id = resource_types.id\n"
                   "AND    resource_types.name = :resource_type\n");
         q.bindValue(":resource_type", d->resourceType);
-        q.exec();
+        if (!q.exec()) {
+            qWarning() << "Could not execute tags rowcount query" << q.lastError();
+        }
         q.first();
 
         const_cast<KisAllTagsModel*>(this)->d->cachedRowCount = q.value(0).toInt() + s_fakeRowsCount;
@@ -133,7 +135,7 @@ QVariant KisAllTagsModel::data(const QModelIndex &index, int role) const
             case Qt::UserRole + Id:
                 return QString::number(KisAllTagsModel::AllUntagged);
             case Qt::UserRole + Url: {
-                return "All untagged";
+                return "All Untagged";
             }
             case Qt::UserRole + ResourceType:
                 return d->resourceType;
@@ -193,14 +195,14 @@ bool KisAllTagsModel::setData(const QModelIndex &index, const QVariant &value, i
         if (!q.prepare("UPDATE tags\n"
                        "SET    active = :active\n"
                        "WHERE  id = :id\n")) {
-            qWarning() << "Couild not prepare make existing tag active query" << q.lastError();
+            qWarning() << "Could not prepare make existing tag active query" << q.lastError();
             return false;
         }
         q.bindValue(":active", value.toBool());
         q.bindValue(":id", index.data(Qt::UserRole + Id));
 
         if (!q.exec()) {
-            qWarning() << "Couild not execute make existing tag active query" << q.boundValues(), q.lastError();
+            qWarning() << "Could not execute make existing tag active query" << q.boundValues(), q.lastError();
             return false;
         }
     }
@@ -248,9 +250,9 @@ KisTagSP KisAllTagsModel::tagForIndex(QModelIndex index) const
             tag->setValid(true);
         } else if (index.row() == KisAllTagsModel::AllUntagged + s_fakeRowsCount) {
             tag.reset(new KisTag());
-            tag->setName(i18n("All untagged"));
+            tag->setName(i18n("All Untagged"));
             tag->setUrl("All untagged");
-            tag->setComment(i18n("All untagged"));
+            tag->setComment(i18n("All Untagged"));
             tag->setId(KisAllTagsModel::AllUntagged);
             tag->setActive(true);
             tag->setValid(true);
@@ -341,6 +343,8 @@ bool KisAllTagsModel::setTagActive(const KisTagSP tag)
     if (!tag->valid()) return false;
     if (tag->id() < 0) return false;
 
+    tag->setActive(true);
+
     return setData(indexForTag(tag), QVariant::fromValue(true), Qt::CheckStateRole);
 
 }
@@ -351,6 +355,8 @@ bool KisAllTagsModel::setTagInactive(const KisTagSP tag)
     if (!tag->valid()) return false;
     if (tag->id() < 0) return false;
 
+    tag->setActive(false);
+
     return setData(indexForTag(tag), QVariant::fromValue(false), Qt::CheckStateRole);
 }
 
@@ -360,7 +366,7 @@ bool KisAllTagsModel::tagResource(const KisTagSP tag, const KoResourceSP resourc
     if (!tag->valid()) return false;
     if (tag->id() < 0) return false;
 
-    qDebug() << tag << " tag id " << tag->id();
+    qDebug() << "tagresource" << tag << " tag id " << tag->id();
 
     if (!resource) return false;
     if (!resource->valid()) return false;
@@ -371,15 +377,14 @@ bool KisAllTagsModel::tagResource(const KisTagSP tag, const KoResourceSP resourc
                        "(resource_id, tag_id)\n"
                        "VALUES\n"
                        "( (SELECT id\n"
-                       "  FROM   resources\n"
-                       "  WHERE  id = :resource_id)\n"
+                       "   FROM   resources\n"
+                       "   WHERE  id = :resource_id)\n"
                        ", (SELECT id\n"
                        "   FROM   tags\n"
                        "   WHERE  id = :tag_id\n"
                        "   AND    resource_type_id = (SELECT id\n"
                        "                              FROM   resource_types\n"
-                       "                              WHERE  name = :resource_type"
-                       "                             \n)"
+                       "                              WHERE  name = :resource_type)\n"
                        "  )\n"
                        ")\n");
     if (!r) {
@@ -411,8 +416,8 @@ bool KisAllTagsModel::untagResource(const KisTagSP tag, const KoResourceSP resou
     // we need to delete an entry in resource_tags
     QSqlQuery query;
     bool r = query.prepare("DELETE FROM resource_tags\n"
-                           "WHERE   resource_id = :resource_id\n"
-                           "AND     tag_id = :tag_id");
+                           "WHERE  resource_id = :resource_id\n"
+                           "AND    tag_id = :tag_id");
 
     if (!r) {
         qWarning() << "Could not prepare KisAllTagsModel query untagResource " << query.lastError();
@@ -484,8 +489,7 @@ QVector<KisTagSP> KisAllTagsModel::tagsForResource(int resourceId) const
                                              ",      tags.comment\n"
                                              "FROM   tags\n"
                                              ",      resource_tags\n"
-                                             "WHERE  tags.active > 0\n"                               // make sure the tag is active
-                                             "AND    tags.id = resource_tags.tag_id\n"                // join tags + resource_tags by tag_id
+                                             "WHERE  tags.id = resource_tags.tag_id\n"                // join tags + resource_tags by tag_id
                                              "AND    resource_tags.resource_id = :resource_id\n");    // make sure we're looking for tags for a specific resource
     if (!r)  {
         qWarning() << "Could not prepare TagsForResource query" << d->tagsForResourceQuery.lastError();
@@ -529,7 +533,6 @@ KisTagSP KisAllTagsModel::tagByUrl(const QString& tagUrl) const
                            ",      resource_types\n"
                            "WHERE  tags.resource_type_id = resource_types.id\n"
                            "AND    resource_types.name = :resource_type\n"
-                           "AND    tags.active = 1\n"
                            "AND    tags.url = :tag_url\n");
 
     if (!r) {
@@ -746,7 +749,7 @@ bool KisTagModel::filterAcceptsRow(int source_row, const QModelIndex &source_par
 
     int tagId = sourceModel()->data(idx, Qt::UserRole + KisAllTagsModel::Id).toInt();
 
-    if (tagId <= s_fakeRowsCount) {
+    if (tagId < 0) {
         return true;
     }
 

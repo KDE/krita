@@ -183,7 +183,7 @@ bool KisTagFilterResourceProxyModel::resourceHasCurrentTag(KisTagSP currentTag, 
             // current tag is "All", all resources are allowed
             return true;
         } else if (currentTag->id() == KisAllTagsModel::AllUntagged) {
-            // current tag is "All untagged", all resources without any tags are allowed
+            // current tag is "All Untagged", all resources without any tags are allowed
             return tagsForResource.size() == 0;
         } else {
              // checking whether the current tag is on the list of tags assigned to the resource

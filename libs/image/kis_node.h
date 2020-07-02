@@ -358,6 +358,8 @@ Q_SIGNALS:
      * Don't use this signal anywhere other than KisNodeShape. It's a hack.
      */
     void sigNodeChangedInternal();
+    void sigBeginImageReset(KisNodeWSP node, KisImageWSP image);
+    void sigEndImageReset(KisNodeWSP node);
 
 public:
 

@@ -111,8 +111,7 @@ QVariant StoryboardModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
 
-    if (role == Qt::DisplayRole || role == Qt::EditRole || role == Qt::UserRole)
-    {
+    if (role == Qt::DisplayRole || role == Qt::EditRole || role == Qt::UserRole) {
         StoryboardChild *child = m_items.at(index.parent().row())->child(index.row());
         if (index.row() > 3) {
             if (role == Qt::UserRole) {         //scroll bar position
@@ -131,8 +130,7 @@ QVariant StoryboardModel::data(const QModelIndex &index, int role) const
 
 bool StoryboardModel::setData(const QModelIndex & index, const QVariant & value, int role)
 {
-    if (index.isValid() && (role == Qt::EditRole || role == Qt::DisplayRole))
-    {
+    if (index.isValid() && (role == Qt::EditRole || role == Qt::DisplayRole)) {
         if (!index.parent().isValid()) {
             return false;
         }

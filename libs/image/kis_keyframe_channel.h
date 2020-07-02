@@ -31,6 +31,7 @@
 #include "kis_default_bounds_node_wrapper.h"
 
 class KisTimeRange;
+class KisImageAnimationInterface;
 
 
 class KRITAIMAGE_EXPORT KisKeyframeChannel : public QObject
@@ -150,7 +151,10 @@ protected:
     virtual void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename) = 0;
 
     void workaroundBrokenFrameTimeBug(int *time);
-    void relaySingalsToAnimationInterface();
+
+private Q_SLOTS:
+    void slotBindSignalsToAnimationInterface(KisNodeWSP parent);
+    void slotUnbindSignalsToAnimationInterface(KisNodeWSP parent, KisImageWSP image);
 
 private:
     KisKeyframeSP replaceKeyframeAt(int time, KisKeyframeSP newKeyframe);

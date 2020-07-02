@@ -124,28 +124,29 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
 	    assis->setHorizon(*handles[0], *handles[1]);
 	    assis->setSp(*handles[0], *handles[1], *handles[2]);
 
-	    QLineF distance = QLineF(event->point,assis->cov());
-	    distance.setLength(distance.length() * 2.0); // Double it, we will use both p1() and p2()
-	    const qreal length = QLineF(event->point,assis->cov()).length();
+	    const QPointF translation = (assis->cov() - assis->sp()) / 2.0;
+	    const qreal length = QLineF(assis->cov(), assis->cov() + translation).length();
+	    const QPointF handles_above = assis->cov() + translation;
+	    const QPointF handles_below = assis->cov() - translation;
 
 	    QLineF bar;
-	    bar= QLineF(distance.p1(), *handles[0]);
+	    bar= QLineF(handles_above, *handles[0]);
 	    bar.setLength(length);
 	    m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
 	    bar.setLength(length * 0.5);
 	    m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
-	    bar= QLineF(distance.p1(), *handles[1]);
+	    bar= QLineF(handles_above, *handles[1]);
 	    bar.setLength(length);
 	    m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
 	    bar.setLength(length * 0.5);
 	    m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
 
-	    bar= QLineF(distance.p2(), *handles[0]);
+	    bar= QLineF(handles_below, *handles[0]);
 	    bar.setLength(length);
 	    m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
 	    bar.setLength(length * 0.5);
 	    m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
-	    bar= QLineF(distance.p2(), *handles[1]);
+	    bar= QLineF(handles_below, *handles[1]);
 	    bar.setLength(length);
 	    m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
 	    bar.setLength(length * 0.5);

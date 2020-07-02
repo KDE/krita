@@ -8,7 +8,6 @@
 
 struct KisMyPaintOpSettings::Private
 {
-    //QList<KisUniformPaintOpPropertyWSP> uniformProperties;
 };
 
 
@@ -71,17 +70,4 @@ QPainterPath KisMyPaintOpSettings::brushOutline(const KisPaintInformation &info,
     }
 
     return path;
-}
-
-#include <brushengine/kis_slider_based_paintop_property.h>
-#include "kis_paintop_preset.h"
-#include "kis_paintop_settings_update_proxy.h"
-#include "kis_standard_uniform_properties_factory.h"
-
-
-QList<KisUniformPaintOpPropertySP> KisMyPaintOpSettings::uniformProperties(KisPaintOpSettingsSP settings)
-{
-    QList<KisUniformPaintOpPropertySP> props;
-        //listWeakToStrong(m_d->uniformProperties);
-    return props;
 }

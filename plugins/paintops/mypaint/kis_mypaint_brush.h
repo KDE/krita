@@ -27,6 +27,9 @@ public:
 
     QByteArray getJsonData();
     float getSize();
+    float getHardness();
+    float getOpacity();
+    bool isEraser();
 
 private:
 

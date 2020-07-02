@@ -256,6 +256,9 @@ void ConjugateAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, c
 		    bool draw_next = true;
 		    int i = 0;
 
+		    // dont start the loop if m_sp is null, because it will never end
+		    draw_next = !(qIsNull(m_sp.x()) && qIsNull(m_sp.x()));
+
 		    // here be dragons, this code runs for *every* subsequent grid line
 		    while (draw_next == true) {
 			grid_line = QLineF(vp, base_point + i*interval_translation);

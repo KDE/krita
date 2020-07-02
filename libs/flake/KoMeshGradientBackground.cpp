@@ -1,6 +1,8 @@
 #include "KoMeshGradientBackground.h"
 #include <KoColorSpaceRegistry.h>
 #include <KoMixColorsOp.h>
+
+#include <QRegion>
 #include <QPainter>
 #include <QPainterPath>
 #include <QDebug>
@@ -33,8 +35,8 @@ KoMeshGradientBackground::~KoMeshGradientBackground()
 }
 
 void KoMeshGradientBackground::paint(QPainter &painter,
-                                     KoShapePaintingContext &context,
-                                     const QPainterPath &fillPath) const
+                                     KoShapePaintingContext &,
+                                     const QPainterPath &) const
 {
     if (!d->gradient || !d->gradient->isValid())   return;
 
@@ -48,6 +50,13 @@ void KoMeshGradientBackground::paint(QPainter &painter,
 
 void KoMeshGradientBackground::fillPatch(QPainter &painter, const SvgMeshPatch *patch) const
 {
+    QRegion clipRegion = painter.clipRegion();
+    KoPathShape *patchPath = patch->getPath();
+
+    // if patch is outside the bounding box of the clipped region, don't render
+    if (!clipRegion.contains(patchPath->boundingRect().toRect()))
+        return;
+
     QColor color0 = patch->getStop(SvgMeshPatch::Top).color;
     QColor color1 = patch->getStop(SvgMeshPatch::Right).color;
     QColor color2 = patch->getStop(SvgMeshPatch::Bottom).color;
@@ -87,10 +96,11 @@ void KoMeshGradientBackground::fillPatch(QPainter &painter, const SvgMeshPatch *
 
         QPen pen(average);
         painter.setPen(pen);
-        painter.drawPath(patch->getPath()->outline());
+
+        painter.drawPath(patchPath->outline());
 
         QBrush brush(average);
-        painter.fillPath(patch->getPath()->outline(), brush);
+        painter.fillPath(patchPath->outline(), brush);
     }
 }
 

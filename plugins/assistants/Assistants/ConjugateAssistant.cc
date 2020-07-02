@@ -176,24 +176,36 @@ void ConjugateAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, c
 	drawPreview(gc,path);
 
 	if (handles().size() >= 3 && isSnappingActive()) {
-	    const QPointF p3 = *handles()[2];
 	    path = QPainterPath(); // clear
 
 	    // draw the vertical normal line
-	    if (isEditing == true) {
+	    if (previewVisible == true) {
 		QLineF norm = m_horizon.normalVector();
-		norm.translate(-norm.p1()+p3);
 		QLineF normalLine = initialTransform.map(norm);
+		normalLine.translate(mousePos - normalLine.p1());
 		KisAlgebra2D::intersectLineRect(normalLine, viewport);
 		path.moveTo(normalLine.p1());
 		path.lineTo(normalLine.p2());
-		drawPath(gc, path, isSnappingActive());
+		drawPreview(gc, path);
 	    }
 
+	    // Now we will draw the grid lines.
             if (assistantVisible == true) {
 		path = QPainterPath(); // clear
 
-		// Now we will draw the grid lines.
+		// First set up fading gradient for grid lines
+		const QPointF translation = m_cov - m_sp;
+		QGradient fade = QLinearGradient(initialTransform.map(m_cov + translation), initialTransform.map(m_sp));
+		QColor c = effectiveAssistantColor();
+		c.setAlphaF(0);
+		fade.setColorAt(0.2, effectiveAssistantColor());
+		fade.setColorAt(0.5, c);
+		fade.setColorAt(0.8, effectiveAssistantColor());
+		QPen p = gc.pen();
+		QBrush new_b = QBrush(fade);
+		QPen new_p = QPen(new_b, p.width(), p.style());
+		gc.setPen(new_p);
+
 		// to draw the grid, we're gonna do the exact same calculations for both VPs
 		const QList<QPointF> v_points = QList<QPointF>({p1, p2});
 
@@ -205,31 +217,27 @@ void ConjugateAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, c
 		const qreal radius = sqrt(pow(m_cov.x()-m_sp.x(),2) + pow(m_cov.y()-m_sp.y(),2));
 
 		QLineF grid_line;
+		QLineF mirror_grid_line;
 		QLineF ray;	// this is what actually gets drawn
+		QLineF mirror_ray;
 
 		for (QPointF vp : v_points) {
+		    // calculate interval between each grid line
+		    qreal acute_angle = acuteAngle(QLineF(m_sp, vp).angleTo(m_horizon));
+		    const qreal interval = radius / sin(acute_angle*M_PI/180);
+
 		    // How the farthest grid line gets drawn depends on how far away the relevant VP is
 		    const qreal cov_to_vp = sqrt(pow(m_cov.x()-vp.x(),2) + pow(m_cov.y()-vp.y(),2));
 		    if (cov_to_vp > radius) {
 			grid_line = QLineF(vp, farthest_point);
-			ray = initialTransform.map(grid_line);
 		    } else {
 			// The point where VP is on the cone. Neither inside not outside cone of vision
 			const QPointF threshold_point = m_cov + ( vp - m_cov ) * (radius / cov_to_vp);
 			const QPointF translation = vp - threshold_point;
 			grid_line = QLineF(threshold_point + translation, farthest_point + translation);
-			ray = initialTransform.map(grid_line);
 		    }
 
-		    KisAlgebra2D::intersectLineRect(ray, viewport);
-		    path.moveTo(initialTransform.map(vp));
-		    path.lineTo(ray.p1());
-
-		    // calculate interval between each grid line
-		    qreal acute_angle = acuteAngle(QLineF(m_sp, vp).angleTo(m_horizon));
-		    const qreal interval = radius / sin(acute_angle*M_PI/180);
-
-		    // the base point is where the grid line we drew earlier passes through
+		    // the base point is where the farthest grid_line passes through the "foot" of the viewer
 		    const QPointF translation = m_sp - m_cov;
 		    const QLineF base_line = QLineF(*handles()[0] + translation, *handles()[1] + translation);
 		    QPointF base_point;
@@ -251,11 +259,17 @@ void ConjugateAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, c
 		    // here be dragons, this code runs for *every* subsequent grid line
 		    while (draw_next == true) {
 			grid_line = QLineF(vp, base_point + i*interval_translation);
+			mirror_grid_line = grid_line;
+			mirror_grid_line.setAngle(grid_line.angle() + 2*grid_line.angleTo(m_horizon));
 
+			mirror_ray = initialTransform.map(mirror_grid_line);
 			ray = initialTransform.map(grid_line);
+
 			KisAlgebra2D::intersectLineRect(ray, viewport);
-			path.moveTo(initialTransform.map(vp));
-			path.lineTo(ray.p1());
+			KisAlgebra2D::intersectLineRect(mirror_ray, viewport);
+			path.moveTo(ray.p1());
+			path.lineTo(initialTransform.map(vp));
+			path.lineTo(mirror_ray.p1());
 
 			current_length = QLineF(base_point, grid_line.p2()).length();
 			curr_grid_angle = acuteAngle(grid_line.angleTo(m_horizon));
@@ -265,8 +279,8 @@ void ConjugateAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, c
 			    draw_next = current_length < threshold_length && cov_to_vp > radius :
 			    draw_next = (curr_grid_angle >= acute_grid_angle || current_length < threshold_length ) && cov_to_vp < radius ;
 		    }
+		    gc.drawPath(path);
 		}
-		drawPreview(gc, path);
             }
 
 	}

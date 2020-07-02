@@ -842,6 +842,22 @@ void KisAssistantTool::mouseMoveEvent(KoPointerEvent *event)
      m_canvas->updateCanvas();
 }
 
+
+void KisAssistantTool::keyPressEvent(QKeyEvent *event)
+{
+    // When the user is in the middle of creating a new
+    // assistant the escape key can be used to cancel this process.
+    if (event->key()==Qt::Key_Escape && (m_newAssistant)) {
+        // Clear shared pointer to the assistant being created so
+        // it gets cleaned-up
+        m_newAssistant.clear();
+        m_canvas->updateCanvas();
+        event->accept();
+    } else {
+        event->ignore();
+    }
+}
+
 void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
 {
     QRectF canvasSize = QRectF(QPointF(0, 0), QSizeF(m_canvas->image()->size()));

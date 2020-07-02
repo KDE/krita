@@ -73,6 +73,7 @@ public:
     void continuePrimaryAction(KoPointerEvent *event) override;
     void endPrimaryAction(KoPointerEvent *event) override;
     void mouseMoveEvent(KoPointerEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
 
     // We will need this to allow Shift-modifier to align to axes when making new assistants
     void beginAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action) override;

@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "video_saver.h"
+#include "KisVideoSaver.h"
 
 #include <QDebug>
 
@@ -187,23 +187,23 @@ private:
 };
 
 
-VideoSaver::VideoSaver(KisDocument *doc, bool batchMode)
+KisVideoSaver::KisVideoSaver(KisDocument *doc, bool batchMode)
     : m_image(doc->image())
     , m_doc(doc)
     , m_batchMode(batchMode)
 {
 }
 
-VideoSaver::~VideoSaver()
+KisVideoSaver::~KisVideoSaver()
 {
 }
 
-KisImageSP VideoSaver::image()
+KisImageSP KisVideoSaver::image()
 {
     return m_image;
 }
 
-KisImportExportErrorCode VideoSaver::encode(const QString &savedFilesMask, const KisAnimationRenderingOptions &options)
+KisImportExportErrorCode KisVideoSaver::encode(const QString &savedFilesMask, const KisAnimationRenderingOptions &options)
 {
     if (!QFileInfo(options.ffmpegPath).exists()) {
         m_doc->setErrorMessage(i18n("ffmpeg could not be found at %1", options.ffmpegPath));
@@ -311,9 +311,9 @@ KisImportExportErrorCode VideoSaver::encode(const QString &savedFilesMask, const
             args << "-vf" << exportDimensions;
         }
 
-        args << additionalOptionsList
-             << "-y" << resultFile;
+        args << additionalOptionsList;
 
+        args << "-y" << resultFile;
 
         resultOuter = runner->runFFMpeg(args, i18n("Encoding frames..."),
                                      videoDir.filePath("log_encode.log"),
@@ -323,11 +323,11 @@ KisImportExportErrorCode VideoSaver::encode(const QString &savedFilesMask, const
     return resultOuter;
 }
 
-KisImportExportErrorCode VideoSaver::convert(KisDocument *document, const QString &savedFilesMask, const KisAnimationRenderingOptions &options, bool batchMode)
+KisImportExportErrorCode KisVideoSaver::convert(KisDocument *document, const QString &savedFilesMask, const KisAnimationRenderingOptions &options, bool batchMode)
 {
-    VideoSaver videoSaver(document, batchMode);
+    KisVideoSaver videoSaver(document, batchMode);
     KisImportExportErrorCode res = videoSaver.encode(savedFilesMask, options);
     return res;
 }
 
-#include "video_saver.moc"
+#include "KisVideoSaver.moc"

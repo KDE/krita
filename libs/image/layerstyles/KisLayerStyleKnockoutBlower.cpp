@@ -20,6 +20,15 @@
 #include "kis_painter.h"
 #include "KoCompositeOpRegistry.h"
 
+KisLayerStyleKnockoutBlower::KisLayerStyleKnockoutBlower()
+{
+}
+
+KisLayerStyleKnockoutBlower::KisLayerStyleKnockoutBlower(const KisLayerStyleKnockoutBlower &rhs)
+    : m_knockoutSelection(rhs.m_knockoutSelection ? new KisSelection(*rhs.m_knockoutSelection) : nullptr)
+{
+}
+
 KisSelectionSP KisLayerStyleKnockoutBlower::knockoutSelectionLazy()
 {
     {
@@ -63,6 +72,7 @@ void KisLayerStyleKnockoutBlower::apply(KisPainter *painter, KisPaintDeviceSP me
     painter->setCompositeOp(COMPOSITE_COPY);
     painter->setSelection(m_knockoutSelection);
     painter->bitBlt(rect.topLeft(), mergedStyle, rect);
+    painter->setSelection(0);
 }
 
 bool KisLayerStyleKnockoutBlower::isEmpty() const

@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "video_export_options_dialog.h"
+#include "VideoExportOptionsDialog.h"
 #include "ui_video_export_options_dialog.h"
 
 #include <KoID.h>
@@ -27,16 +27,22 @@
 #include "KisHDRMetadataOptions.h"
 
 
-struct VideoExportOptionsDialog::Private
+struct KisVideoExportOptionsDialog::Private
 {
     Private(ContainerType _containerType)
         : containerType(_containerType)
     {
-        if (containerType == DEFAULT) {
-            codecs << KoID("libx264", i18nc("h264 codec name, check simplescreenrecorder for standard translations", "H.264, MPEG-4 Part 10"));
-            codecs << KoID("libx265", i18nc("h265 codec name, check simplescreenrecorder for standard translations", "H.265, MPEG-H Part 2 (HEVC)"));
-        } else {
-            codecs << KoID("libtheora", i18nc("theora codec name, check simplescreenrecorder for standard translations", "Theora"));
+        switch (containerType) {
+            case ContainerType::OGV:
+                codecs << KoID("libtheora", i18nc("theora codec name, check simplescreenrecorder for standard translations", "Theora"));
+                break;
+            case ContainerType::WEBM:
+                codecs << KoID("libvpx", i18nc("VP9 codec name", "VP9"));
+                break;
+            default:
+                codecs << KoID("libx264", i18nc("h264 codec name, check simplescreenrecorder for standard translations", "H.264, MPEG-4 Part 10"));
+                codecs << KoID("libx265", i18nc("h265 codec name, check simplescreenrecorder for standard translations", "H.265, MPEG-H Part 2 (HEVC)"));
+                break;
         }
 
         presets << KoID("ultrafast", i18nc("h264 preset name, check simplescreenrecorder for standard translations", "ultrafast"));
@@ -77,7 +83,6 @@ struct VideoExportOptionsDialog::Private
         tunesH265 << KoID("ssim", i18nc("h264 tune option name, check simplescreenrecorder for standard translations", "ssim"));
         tunesH265 << KoID("fastdecode", i18nc("h264 tune option name, check simplescreenrecorder for standard translations", "fastdecode"));
         tunesH265 << KoID("zero-latency", i18nc("h264 tune option name, check simplescreenrecorder for standard translations", "zero-latency"));
-
     }
 
     QVector<KoID> codecs;
@@ -103,7 +108,7 @@ void populateComboWithKoIds(QComboBox *combo, const QVector<KoID> &ids, int defa
     combo->setCurrentIndex(defaultIndex);
 }
 
-VideoExportOptionsDialog::VideoExportOptionsDialog(ContainerType containerType, QWidget *parent)
+KisVideoExportOptionsDialog::KisVideoExportOptionsDialog(ContainerType containerType, QWidget *parent)
     : KisConfigWidget(parent),
       ui(new Ui::VideoExportOptionsDialog),
       m_d(new Private(containerType))
@@ -160,18 +165,18 @@ VideoExportOptionsDialog::VideoExportOptionsDialog(ContainerType containerType, 
     setSupportsHDR(false);
 }
 
-VideoExportOptionsDialog::~VideoExportOptionsDialog()
+KisVideoExportOptionsDialog::~KisVideoExportOptionsDialog()
 {
     delete ui;
 }
 
-void VideoExportOptionsDialog::setSupportsHDR(bool value)
+void KisVideoExportOptionsDialog::setSupportsHDR(bool value)
 {
     m_d->supportsHDR = value;
     slotH265ProfileChanged(ui->cmbProfileH265->currentIndex());
 }
 
-KisPropertiesConfigurationSP VideoExportOptionsDialog::configuration() const
+KisPropertiesConfigurationSP KisVideoExportOptionsDialog::configuration() const
 {
     KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
 
@@ -196,7 +201,18 @@ KisPropertiesConfigurationSP VideoExportOptionsDialog::configuration() const
     return cfg;
 }
 
-void VideoExportOptionsDialog::slotCustomLineToggled(bool value)
+KisVideoExportOptionsDialog::ContainerType KisVideoExportOptionsDialog::mimeToContainer(const QString &mimeType)
+{
+    if (mimeType == "video/webm") {
+        return ContainerType::WEBM;
+    } else if (mimeType == "video/ogg") {
+        return ContainerType::OGV;
+    }
+
+    return ContainerType::DEFAULT;
+}
+
+void KisVideoExportOptionsDialog::slotCustomLineToggled(bool value)
 {
     QString customLine = m_d->currentCustomLine;
 
@@ -214,13 +230,13 @@ void VideoExportOptionsDialog::slotCustomLineToggled(bool value)
     ui->btnResetCustomLine->setEnabled(value);
 }
 
-void VideoExportOptionsDialog::slotResetCustomLine()
+void KisVideoExportOptionsDialog::slotResetCustomLine()
 {
     ui->txtCustomLine->setText(generateCustomLine().join(" "));
     slotSaveCustomLine();
 }
 
-void VideoExportOptionsDialog::slotCodecSelected(int index)
+void KisVideoExportOptionsDialog::slotCodecSelected(int index)
 {
     const QString codec = m_d->codecs[index].id();
 
@@ -230,34 +246,36 @@ void VideoExportOptionsDialog::slotCodecSelected(int index)
         ui->stackedWidget->setCurrentIndex(CODEC_H265);
     } else if (codec == "libtheora") {
         ui->stackedWidget->setCurrentIndex(CODEC_THEORA);
+    } else if (codec == "libvpx") {
+        ui->stackedWidget->setCurrentIndex(CODEC_VP9);
     }
 }
 
-void VideoExportOptionsDialog::slotSaveCustomLine()
+void KisVideoExportOptionsDialog::slotSaveCustomLine()
 {
     m_d->currentCustomLine = ui->txtCustomLine->text();
 }
 
-QStringList VideoExportOptionsDialog::customUserOptions() const
+QStringList KisVideoExportOptionsDialog::customUserOptions() const
 {
     return ui->chkCustomLine->isChecked() ?
         ui->txtCustomLine->text().split(" ", QString::SkipEmptyParts) :
                 generateCustomLine();
 }
 
-QString VideoExportOptionsDialog::customUserOptionsString() const
+QString KisVideoExportOptionsDialog::customUserOptionsString() const
 {
     return customUserOptions().join(' ');
 }
 
-bool VideoExportOptionsDialog::videoConfiguredForHDR() const
+bool KisVideoExportOptionsDialog::videoConfiguredForHDR() const
 {
     return currentCodecId() == "libx265" &&
         ui->chkUseHDRMetadata->isEnabled() &&
             ui->chkUseHDRMetadata->isChecked();
 }
 
-void VideoExportOptionsDialog::setHDRConfiguration(bool value) {
+void KisVideoExportOptionsDialog::setHDRConfiguration(bool value) {
     if (value && currentCodecId() != "libx265") {
         ui->cmbCodec->setCurrentIndex(m_d->codecs.indexOf(KoID("libx265")));
         ui->chkUseHDRMetadata->setEnabled(true);
@@ -283,7 +301,7 @@ int findIndexById(const QString &id, const QVector<KoID> &ids)
     return index;
 }
 
-void VideoExportOptionsDialog::setConfiguration(const KisPropertiesConfigurationSP cfg)
+void KisVideoExportOptionsDialog::setConfiguration(const KisPropertiesConfigurationSP cfg)
 {
     ui->cmbPresetH264->setCurrentIndex(cfg->getInt("h264PresetIndex", 5));
     ui->intCRFH264->setValue(cfg->getInt("h264ConstantRateFactor", 23));
@@ -315,7 +333,7 @@ void VideoExportOptionsDialog::setConfiguration(const KisPropertiesConfiguration
     m_d->hdrMetadataOptions.fromProperties(metadataProperties);
 }
 
-QStringList VideoExportOptionsDialog::generateCustomLine() const
+QStringList KisVideoExportOptionsDialog::generateCustomLine() const
 {
     QStringList options;
 
@@ -375,17 +393,24 @@ QStringList VideoExportOptionsDialog::generateCustomLine() const
 
     } else if (currentCodecId() == "libtheora") {
         options << "-b" << QString::number(ui->intBitrate->value()) + "k";
+    } else if (currentCodecId() == "libvpx") {
+        options << "-vcodec" << "libvpx-vp9";
+        if (ui->vp9Lossless->isChecked()) {
+            options << "-lossless" <<  "1";
+        } else {
+            options << "-b:v" << QString::number(ui->vp9Mbits->value()) + "M";
+        }
     }
 
     return options;
 }
 
-QString VideoExportOptionsDialog::currentCodecId() const
+QString KisVideoExportOptionsDialog::currentCodecId() const
 {
     return m_d->codecs[ui->cmbCodec->currentIndex()].id();
 }
 
-void VideoExportOptionsDialog::slotH265ProfileChanged(int index)
+void KisVideoExportOptionsDialog::slotH265ProfileChanged(int index)
 {
     const bool enableHDR =
         m_d->supportsHDR &&
@@ -407,7 +432,7 @@ void VideoExportOptionsDialog::slotH265ProfileChanged(int index)
     ui->btnHdrMetadata->setToolTip(hdrToolTip);
 }
 
-void VideoExportOptionsDialog::slotEditHDRMetadata()
+void KisVideoExportOptionsDialog::slotEditHDRMetadata()
 {
     VideoHDRMetadataOptionsDialog dlg(this);
     dlg.setHDRMetadataOptions(m_d->hdrMetadataOptions);

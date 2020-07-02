@@ -27,6 +27,9 @@ class KisPainter;
 class KRITAIMAGE_EXPORT KisLayerStyleKnockoutBlower
 {
 public:
+    KisLayerStyleKnockoutBlower();
+    KisLayerStyleKnockoutBlower(const KisLayerStyleKnockoutBlower &rhs);
+
     KisSelectionSP knockoutSelectionLazy();
 
     void setKnockoutSelection(KisSelectionSP selection);

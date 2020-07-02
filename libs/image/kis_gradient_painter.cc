@@ -39,69 +39,7 @@
 #include "kis_cached_gradient_shape_strategy.h"
 #include "krita_utils.h"
 #include "KoMixColorsOp.h"
-
-
-class CachedGradient : public KoEphemeralResource<KoAbstractGradient>
-{
-
-public:
-    explicit CachedGradient(const KoAbstractGradientSP gradient, qint32 steps, const KoColorSpace *cs)
-        : KoEphemeralResource<KoAbstractGradient>(gradient->filename())
-        , m_subject(gradient)
-        , m_max(steps - 1)
-        , m_colorSpace(cs)
-        , m_black(KoColor(cs))
-    {
-        KoColor tmpColor(m_colorSpace);
-        for(qint32 i = 0; i < steps; i++) {
-            m_subject->colorAt(tmpColor, qreal(i) / m_max);
-            m_colors << tmpColor;
-        }
-    }
-
-    ~CachedGradient() override {}
-
-    KoResourceSP clone() const override {
-        return KoResourceSP(new CachedGradient(m_subject, m_max + 1, m_colorSpace));
-    }
-
-    /**
-    * Creates a QGradient from the gradient.
-    * The resulting QGradient might differ from original gradient
-    */
-    QGradient* toQGradient() const override
-    {
-        return m_subject->toQGradient();
-    }
-
-    QPair<QString, QString> resourceType() const override {
-        return m_subject->resourceType();
-    }
-
-    /// gets the color data at position 0 <= t <= 1
-    const quint8 *cachedAt(qreal t) const
-    {
-        qint32 tInt = t * m_max + 0.5;
-        if (m_colors.size() > tInt) {
-            return m_colors[tInt].data();
-        }
-        else {
-            return m_black.data();
-        }
-    }
-
-    void setColorSpace(KoColorSpace* colorSpace) { m_colorSpace = colorSpace; }
-    const KoColorSpace * colorSpace() const { return m_colorSpace; }
-
-    QByteArray generateMD5() const override { return QByteArray(); }
-
-private:
-    const KoAbstractGradientSP m_subject;
-    qint32 m_max;
-    const KoColorSpace *m_colorSpace;
-    QVector<KoColor> m_colors;
-    KoColor m_black;
-};
+#include <KoCachedGradient.h>
 
 namespace
 {
@@ -658,7 +596,7 @@ public:
                const GradientRepeatStrategy *repeatStrategy,
                qreal antiAliasThreshold,
                bool reverseGradient,
-               const CachedGradient * cachedGradient);
+               const KoCachedGradient * cachedGradient);
 
     const quint8 *colorAt(qreal x, qreal y) const;
 
@@ -670,7 +608,7 @@ private:
     QSharedPointer<KisGradientShapeStrategy> m_shapeStrategy;
     const GradientRepeatStrategy *m_repeatStrategy;
     bool m_reverseGradient;
-    const CachedGradient *m_cachedGradient;
+    const KoCachedGradient *m_cachedGradient;
     const quint8 *m_extremeColors[2];
     const KoColorSpace *m_colorSpace;
     mutable QVector<quint8> m_resultColor;
@@ -686,7 +624,7 @@ void RepeatForwardsPaintPolicy::setup(const QPointF& gradientVectorStart,
                                       const GradientRepeatStrategy *repeatStrategy,
                                       qreal antiAliasThreshold,
                                       bool reverseGradient,
-                                      const CachedGradient * cachedGradient)
+                                      const KoCachedGradient * cachedGradient)
 {
     qreal dx = gradientVectorEnd.x() - gradientVectorStart.x();
     qreal dy = gradientVectorEnd.y() - gradientVectorStart.y();
@@ -765,7 +703,7 @@ public:
                const GradientRepeatStrategy *repeatStrategy,
                qreal antiAliasThreshold,
                bool reverseGradient,
-               const CachedGradient * cachedGradient);
+               const KoCachedGradient * cachedGradient);
 
     const quint8 *colorAt(qreal x, qreal y) const;
 
@@ -776,7 +714,7 @@ private:
     qreal m_singularityThreshold;
     qreal m_antiAliasThreshold;
     bool m_reverseGradient;
-    const CachedGradient *m_cachedGradient;
+    const KoCachedGradient *m_cachedGradient;
     const quint8 *m_extremeColors[2];
     const KoColorSpace *m_colorSpace;
     mutable QVector<quint8> m_resultColor;
@@ -788,7 +726,7 @@ void ConicalGradientPaintPolicy::setup(const QPointF& gradientVectorStart,
                                        const GradientRepeatStrategy *repeatStrategy,
                                        qreal antiAliasThreshold,
                                        bool reverseGradient,
-                                       const CachedGradient * cachedGradient)
+                                       const KoCachedGradient * cachedGradient)
 {
     Q_UNUSED(gradientVectorEnd);
 
@@ -873,7 +811,7 @@ public:
                const GradientRepeatStrategy *repeatStrategy,
                qreal antiAliasThreshold,
                bool reverseGradient,
-               const CachedGradient * cachedGradient);
+               const KoCachedGradient * cachedGradient);
 
     const quint8 *colorAt(qreal x, qreal y) const;
 
@@ -886,7 +824,7 @@ private:
     const GradientRepeatStrategy *m_repeatStrategy;
     qreal m_antiAliasThreshold;
     bool m_reverseGradient;
-    const CachedGradient *m_cachedGradient;
+    const KoCachedGradient *m_cachedGradient;
     mutable const quint8 *m_extremeColors[2];
     const KoColorSpace *m_colorSpace;
     mutable QVector<quint8> m_resultColor;
@@ -904,7 +842,7 @@ void SpyralGradientRepeatNonePaintPolicy::setup(const QPointF& gradientVectorSta
                                                 const GradientRepeatStrategy *repeatStrategy,
                                                 qreal antiAliasThreshold,
                                                 bool reverseGradient,
-                                                const CachedGradient * cachedGradient)
+                                                const KoCachedGradient * cachedGradient)
 {
     m_gradientVectorStart = gradientVectorStart;
 
@@ -1013,7 +951,7 @@ public:
                const GradientRepeatStrategy *repeatStrategy,
                qreal antiAliasThreshold,
                bool reverseGradient,
-               const CachedGradient * cachedGradient);
+               const KoCachedGradient * cachedGradient);
 
     const quint8 *colorAt(qreal x, qreal y) const;
 
@@ -1021,7 +959,7 @@ private:
     QSharedPointer<KisGradientShapeStrategy> m_shapeStrategy;
     const GradientRepeatStrategy *m_repeatStrategy;
     bool m_reverseGradient;
-    const CachedGradient *m_cachedGradient;
+    const KoCachedGradient *m_cachedGradient;
 };
 
 void NoAntialiasPaintPolicy::setup(const QPointF& gradientVectorStart,
@@ -1030,7 +968,7 @@ void NoAntialiasPaintPolicy::setup(const QPointF& gradientVectorStart,
                                    const GradientRepeatStrategy *repeatStrategy,
                                    qreal antiAliasThreshold,
                                    bool reverseGradient,
-                                   const CachedGradient * cachedGradient)
+                                   const KoCachedGradient * cachedGradient)
 {
     Q_UNUSED(gradientVectorStart);
     Q_UNUSED(gradientVectorEnd);
@@ -1339,7 +1277,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
         QRect processRect = r.processRect;
         QSharedPointer<KisGradientShapeStrategy> shapeStrategy = r.precalculatedShapeStrategy;
 
-        CachedGradient cachedGradient(gradient(), qMax(processRect.width(), processRect.height()), colorSpace);
+        KoCachedGradient cachedGradient(gradient(), qMax(processRect.width(), processRect.height()), colorSpace);
 
         KisSequentialIteratorProgress it(dev, processRect, progressUpdater());
 

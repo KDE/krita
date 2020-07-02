@@ -452,6 +452,22 @@ void TimelineDocker::setViewManager(KisViewManager *view)
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(action, SIGNAL(triggered(bool)), SLOT(nextFrame()));
 
+    action = actionManager->createAction("previous_keyframe");
+    action->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    connect(action, SIGNAL(triggered(bool)), SLOT(previousKeyframe()));
+
+    action = actionManager->createAction("next_keyframe");
+    action->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    connect(action, SIGNAL(triggered(bool)), SLOT(nextKeyframe()));
+
+    action = actionManager->createAction("previous_matching_keyframe");
+    action->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    connect(action, SIGNAL(triggered(bool)), SLOT(previousMatchingKeyframe()));
+
+    action = actionManager->createAction("next_matching_keyframe");
+    action->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    connect(action, SIGNAL(triggered(bool)), SLOT(nextMatchingKeyframe()));
+
     action = actionManager->createAction("auto_key");
     m_d->titlebar->btnAutoFrame->setDefaultAction(action);
     connect(action, SIGNAL(triggered(bool)), SLOT(setAutoKey(bool)));
@@ -500,9 +516,17 @@ void TimelineDocker::previousFrame()
     if (!m_d->canvas) return;
     KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
 
-    int time = animInterface->currentUITime() - 1;
-    if (time >= 0) {
-        animInterface->requestTimeSwitchWithUndo(time);
+    const int startFrame = animInterface->playbackRange().start();
+    const int endFrame = animInterface->playbackRange().end();
+
+    int frame = animInterface->currentUITime() - 1;
+
+    if (frame < startFrame || frame >  endFrame) {
+        frame = endFrame;
+    }
+
+    if (frame >= 0) {
+        animInterface->requestTimeSwitchWithUndo(frame);
     }
 }
 
@@ -511,8 +535,131 @@ void TimelineDocker::nextFrame()
     if (!m_d->canvas) return;
     KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
 
-    int time = animInterface->currentUITime() + 1;
-    animInterface->requestTimeSwitchWithUndo(time);
+    const int startFrame = animInterface->playbackRange().start();
+    const int endFrame = animInterface->playbackRange().end();
+
+    int frame = animInterface->currentUITime() + 1;
+
+    if (frame > endFrame || frame < startFrame ) {
+        frame = startFrame;
+    }
+
+    animInterface->requestTimeSwitchWithUndo(frame);
+}
+
+void TimelineDocker::previousKeyframe()
+{
+    if (!m_d->canvas) return;
+
+    KisNodeSP node = m_d->canvas->viewManager()->activeNode();
+    if (!node) return;
+
+    KisKeyframeChannel *keyframes =
+        node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    if (!keyframes) return;
+
+    KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
+    int time = animInterface->currentUITime();
+
+    KisKeyframeSP currentKeyframe = keyframes->keyframeAt(time);
+    KisKeyframeSP destinationKeyframe;
+
+    if (!currentKeyframe) {
+        destinationKeyframe = keyframes->activeKeyframeAt(time);
+    } else {
+        destinationKeyframe = keyframes->previousKeyframe(currentKeyframe);
+    }
+
+    if (destinationKeyframe) {
+        animInterface->requestTimeSwitchWithUndo(destinationKeyframe->time());
+    }
+}
+
+void TimelineDocker::nextKeyframe()
+{
+    if (!m_d->canvas) return;
+
+    KisNodeSP node = m_d->canvas->viewManager()->activeNode();
+    if (!node) return;
+
+    KisKeyframeChannel *keyframes =
+        node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    if (!keyframes) return;
+
+    KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
+    int time = animation->currentUITime();
+
+    KisKeyframeSP currentKeyframe = keyframes->activeKeyframeAt(time);
+    KisKeyframeSP destinationKeyframe;
+
+    if (currentKeyframe) {
+        destinationKeyframe = keyframes->nextKeyframe(currentKeyframe);
+    }
+
+    if (destinationKeyframe) {
+        animation->requestTimeSwitchWithUndo(destinationKeyframe->time());
+    }
+}
+
+void TimelineDocker::previousMatchingKeyframe()
+{
+    if (!m_d->canvas) return;
+
+    KisNodeSP node = m_d->canvas->viewManager()->activeNode();
+    if (!node) return;
+
+    KisKeyframeChannel *keyframes =
+        node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    if (!keyframes) return;
+
+    KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
+    int time = animInterface->currentUITime();
+
+    KisKeyframeSP currentKeyframe = keyframes->keyframeAt(time);
+    KisKeyframeSP destinationKeyframe = keyframes->activeKeyframeAt(time);
+    const int desiredColor = currentKeyframe ? currentKeyframe->colorLabel() : destinationKeyframe->colorLabel();
+    while (destinationKeyframe &&
+           (currentKeyframe == destinationKeyframe || destinationKeyframe->colorLabel() != desiredColor)) {
+        destinationKeyframe = keyframes->previousKeyframe(destinationKeyframe);
+    }
+
+    if (destinationKeyframe) {
+        animInterface->requestTimeSwitchWithUndo(destinationKeyframe->time());
+    }
+
+}
+
+void TimelineDocker::nextMatchingKeyframe()
+{
+    if (!m_d->canvas) return;
+
+    KisNodeSP node = m_d->canvas->viewManager()->activeNode();
+    if (!node) return;
+
+    KisKeyframeChannel *keyframes =
+        node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    if (!keyframes) return;
+
+    KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
+    int time = animation->currentUITime();
+
+    KisKeyframeSP currentKeyframe = keyframes->activeKeyframeAt(time);
+
+    if (!currentKeyframe) {
+        return;
+    }
+
+    KisKeyframeSP destinationKeyframe = currentKeyframe;
+    const int desiredColor = currentKeyframe->colorLabel();
+
+    while ( destinationKeyframe &&
+            (currentKeyframe == destinationKeyframe || destinationKeyframe->colorLabel() != desiredColor)){
+        destinationKeyframe = keyframes->nextKeyframe(destinationKeyframe);
+    }
+
+    if (destinationKeyframe) {
+        animation->requestTimeSwitchWithUndo(destinationKeyframe->time());
+    }
 }
 
 void TimelineDocker::goToFrame(int frameIndex)

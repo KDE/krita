@@ -23,7 +23,9 @@
 #include <QString>
 #include "kis_properties_configuration.h"
 
-class KisAnimationRenderingOptions
+#include "kritaui_export.h"
+
+class KRITAUI_EXPORT KisAnimationRenderingOptions
 {
 public:
     KisAnimationRenderingOptions();

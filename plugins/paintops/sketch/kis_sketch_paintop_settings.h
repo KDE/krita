@@ -37,6 +37,8 @@ public:
     QPainterPath brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom) override;
 
     bool paintIncremental() override;
+
+    bool hasPatternSettings() const override;
 };
 
 typedef KisSharedPtr<KisSketchPaintOpSettings> KisSketchPaintOpSettingsSP;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2020 Eoin O'Neill <eoinoneill1991@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,93 +16,25 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "AnimationRenderer.h"
+#include "KisAnimationRender.h"
 
+#include <QFile>
+#include <QFileInfo>
+#include <QDir>
 #include <QMessageBox>
 
-#include <klocalizedstring.h>
-#include <kpluginfactory.h>
-
-#include <kis_image.h>
-#include <KisViewManager.h>
-#include <KoUpdater.h>
-#include <kis_node_manager.h>
-#include <kis_image_manager.h>
-#include <kis_action.h>
-#include <kis_image_animation_interface.h>
-#include <kis_properties_configuration.h>
-#include <kis_config.h>
-#include <KisDocument.h>
-#include <KisMimeDatabase.h>
-#include <kis_time_range.h>
-#include <krita_container_utils.h>
-#include <KisImportExportManager.h>
-#include <KisImportExportErrorCode.h>
-
-#include "DlgAnimationRenderer.h"
-#include <dialogs/KisAsyncAnimationFramesSaveDialog.h>
-
-#include "video_saver.h"
+#include "KisDocument.h"
+#include "KisViewManager.h"
 #include "KisAnimationRenderingOptions.h"
+#include "KisMimeDatabase.h"
+#include "dialogs/KisAsyncAnimationFramesSaveDialog.h"
+#include "kis_time_range.h"
 
-K_PLUGIN_FACTORY_WITH_JSON(AnimaterionRendererFactory, "kritaanimationrenderer.json", registerPlugin<AnimaterionRenderer>();)
+#include "krita_container_utils.h"
 
-AnimaterionRenderer::AnimaterionRenderer(QObject *parent, const QVariantList &)
-    : KisActionPlugin(parent)
-{
-    // Shows the big dialog
-    KisAction *action = createAction("render_animation");
-    action->setActivationFlags(KisAction::IMAGE_HAS_ANIMATION);
-    connect(action,  SIGNAL(triggered()), this, SLOT(slotRenderAnimation()));
+#include "KisVideoSaver.h"
 
-    // Re-renders the image sequence as defined in the last render
-    action = createAction("render_animation_again");
-    action->setActivationFlags(KisAction::IMAGE_HAS_ANIMATION);
-    connect(action,  SIGNAL(triggered()), this, SLOT(slotRenderSequenceAgain()));
-}
-
-AnimaterionRenderer::~AnimaterionRenderer()
-{
-}
-
-void AnimaterionRenderer::slotRenderAnimation()
-{
-    KisImageWSP image = viewManager()->image();
-
-    if (!image) return;
-    if (!image->animationInterface()->hasAnimation()) return;
-
-    KisDocument *doc = viewManager()->document();
-
-    DlgAnimationRenderer dlgAnimationRenderer(doc, viewManager()->mainWindow());
-    dlgAnimationRenderer.setCaption(i18n("Render Animation"));
-    if (dlgAnimationRenderer.exec() == QDialog::Accepted) {
-        KisAnimationRenderingOptions encoderOptions = dlgAnimationRenderer.getEncoderOptions();
-        renderAnimationImpl(doc, encoderOptions);
-    }
-}
-
-void AnimaterionRenderer::slotRenderSequenceAgain()
-{
-    KisImageWSP image = viewManager()->image();
-
-    if (!image) return;
-    if (!image->animationInterface()->hasAnimation()) return;
-
-    KisDocument *doc = viewManager()->document();
-
-    KisConfig cfg(true);
-
-    KisPropertiesConfigurationSP settings = cfg.exportConfiguration("ANIMATION_EXPORT");
-
-    KisAnimationRenderingOptions encoderOptions;
-    encoderOptions.fromProperties(settings);
-
-    renderAnimationImpl(doc, encoderOptions);
-}
-
-void AnimaterionRenderer::renderAnimationImpl(KisDocument *doc, KisAnimationRenderingOptions encoderOptions)
-{
+void KisAnimationRender::render(KisDocument *doc, KisViewManager *viewManager, KisAnimationRenderingOptions encoderOptions) {
     const QString frameMimeType = encoderOptions.frameMimeType;
     const QString framesDirectory = encoderOptions.resolveAbsoluteFramesDirectory();
     const QString extension = KisMimeDatabase::suffixesForMimeType(frameMimeType).first();
@@ -141,7 +73,7 @@ void AnimaterionRenderer::renderAnimationImpl(KisDocument *doc, KisAnimationRend
 
 
     KisAsyncAnimationFramesSaveDialog::Result result =
-        exporter.regenerateRange(viewManager()->mainWindow()->viewManager());
+        exporter.regenerateRange(viewManager->mainWindow()->viewManager());
 
     // the folder could have been read-only or something else could happen
     if ((encoderOptions.shouldEncodeVideo || encoderOptions.wantsOnlyUniqueFrameSequence) &&
@@ -172,7 +104,7 @@ void AnimaterionRenderer::renderAnimationImpl(KisDocument *doc, KisAnimationRend
                 fi.close();
             }
 
-            QScopedPointer<VideoSaver> encoder(new VideoSaver(doc, batchMode));
+            QScopedPointer<KisVideoSaver> encoder(new KisVideoSaver(doc, batchMode));
             res = encoder->convert(doc, savedFilesMask, encoderOptions, batchMode);
 
             if (!res.isOk()) {
@@ -206,17 +138,17 @@ void AnimaterionRenderer::renderAnimationImpl(KisDocument *doc, KisAnimationRend
         }
 
     } else if (result == KisAsyncAnimationFramesSaveDialog::RenderFailed) {
-        viewManager()->mainWindow()->viewManager()->showFloatingMessage(i18n("Failed to render animation frames!"), QIcon());
+        viewManager->mainWindow()->viewManager()->showFloatingMessage(i18n("Failed to render animation frames!"), QIcon());
     }
 }
 
-QString AnimaterionRenderer::getNameForFrame(QString basename, QString extension, int sequenceStart, int frame)
+QString KisAnimationRender::getNameForFrame(const QString &basename, const QString &extension, int sequenceStart, int frame)
 {
     QString frameNumberText = QString("%1").arg(frame + sequenceStart, 4, 10, QChar('0'));
     return basename + frameNumberText + "." + extension;
 }
 
-QStringList AnimaterionRenderer::getNamesForFrames(QString basename, QString extension, int sequenceStart, const QList<int> &frames)
+QStringList KisAnimationRender::getNamesForFrames(const QString &basename, const QString &extension, int sequenceStart, const QList<int> &frames)
 {
     QStringList list;
     Q_FOREACH(const int &i, frames) {
@@ -225,14 +157,12 @@ QStringList AnimaterionRenderer::getNamesForFrames(QString basename, QString ext
     return list;
 }
 
-const bool AnimaterionRenderer::mustHaveEvenDimensions(QString mimeType, KisAnimationRenderingOptions::RenderMode renderMode)
+bool KisAnimationRender::mustHaveEvenDimensions(const QString &mimeType, KisAnimationRenderingOptions::RenderMode renderMode)
 {
     return (mimeType == "video/mp4" || mimeType == "video/x-matroska") && renderMode != KisAnimationRenderingOptions::RENDER_FRAMES_ONLY;
 }
 
-const bool AnimaterionRenderer::hasEvenDimensions(int width, int height)
+bool KisAnimationRender::hasEvenDimensions(int width, int height)
 {
     return !((width & 0x1) || (height & 0x1));
 }
-
-#include "AnimationRenderer.moc"

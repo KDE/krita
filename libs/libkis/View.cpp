@@ -280,3 +280,13 @@ QList<Node *> View::selectedNodes() const
     KisNodeList selectedNodes = d->view->viewManager()->nodeManager()->selectedNodes();
     return LibKisUtils::createNodeList(selectedNodes, d->view->image());
 }
+
+void View::showFloatingMessage(const QString &message, const QIcon& icon, int timeout, int priority)
+{
+    if (!d->view) return;
+
+    KisFloatingMessage::Priority p;
+    p = static_cast<KisFloatingMessage::Priority>(priority);
+
+    d->view->showFloatingMessage(message, icon, timeout, p);
+}

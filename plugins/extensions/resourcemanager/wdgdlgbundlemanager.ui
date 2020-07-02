@@ -14,19 +14,13 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QTableView" name="tableView">
+      <widget class="QListView" name="listView">
        <property name="iconSize">
         <size>
          <width>48</width>
          <height>48</height>
         </size>
        </property>
-       <attribute name="horizontalHeaderStretchLastSection">
-        <bool>true</bool>
-       </attribute>
-       <attribute name="verticalHeaderStretchLastSection">
-        <bool>true</bool>
-       </attribute>
       </widget>
      </item>
      <item>
@@ -383,7 +377,7 @@
   </layout>
  </widget>
  <tabstops>
-  <tabstop>tableView</tabstop>
+  <tabstop>listView</tabstop>
   <tabstop>bnAdd</tabstop>
   <tabstop>bnNew</tabstop>
   <tabstop>bnDelete</tabstop>

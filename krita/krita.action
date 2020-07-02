@@ -1916,10 +1916,10 @@
     <text>Animation</text>
     <Action name="previous_frame">
       <icon>prevframe</icon>
-      <text>Previous frame</text>
+      <text>Previous Frame</text>
       <whatsThis></whatsThis>
-      <toolTip>Move to previous frame</toolTip>
-      <iconText>Move to previous frame</iconText>
+      <toolTip>Move selection to previous frame</toolTip>
+      <iconText>Move selection to previous frame</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
@@ -1928,10 +1928,58 @@
     </Action>
     <Action name="next_frame">
       <icon>nextframe</icon>
-      <text>Next frame</text>
+      <text>Next Frame</text>
       <whatsThis></whatsThis>
-      <toolTip>Move to next frame</toolTip>
-      <iconText>Move to next frame</iconText>
+      <toolTip>Move selection to next frame</toolTip>
+      <iconText>Move selection to next frame</iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="previous_keyframe">
+      <icon>prevkeyframe</icon>
+      <text>Previous Keyframe</text>
+      <whatsThis></whatsThis>
+      <toolTip>Move selection to previous keyframe</toolTip>
+      <iconText>Move selection to previous keyframe</iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="next_keyframe">
+      <icon>nextkeyframe</icon>
+      <text>Next Keyframe</text>
+      <whatsThis></whatsThis>
+      <toolTip>Move selection to next keyframe</toolTip>
+      <iconText>Move selection to next keyframe</iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="previous_matching_keyframe">
+      <icon>prevkeyframe</icon>
+      <text>Previous Matching Keyframe</text>
+      <whatsThis></whatsThis>
+      <toolTip>Move selection to previous keyframe of the same color</toolTip>
+      <iconText>Move selection to previous matching keyframe</iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="next_matching_keyframe">
+      <icon>nextkeyframe</icon>
+      <text>Next Matching Keyframe</text>
+      <whatsThis></whatsThis>
+      <toolTip>Move selection to next keyframe of the same color</toolTip>
+      <iconText>Move selection to next matching keyframe</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
@@ -2720,6 +2768,18 @@ Enable to preserve playback timing.</text>
       <whatsThis></whatsThis>
       <toolTip>Toggle layer visibility</toolTip>
       <iconText>Toggle layer visibility</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="toggle_layer_soloing">
+      <icon>visible</icon>
+      <text>Toggle Layer Soloing</text>
+      <whatsThis></whatsThis>
+      <toolTip>Toggle layer soloing, temporarily disabling visibility of all non-child layers.</toolTip>
+      <iconText>Toggle layer soloing</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>

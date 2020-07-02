@@ -127,6 +127,8 @@ public:
 
     void updateNode(const QModelIndex &index);
 
+    void toggleSolo(const QModelIndex &index);
+
     QRect originalVisualRect(const QModelIndex &index) const;
 
 protected:

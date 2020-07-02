@@ -82,8 +82,11 @@ void KisMyPaintOpFactory::processAfterLoading() {
         KisPaintOpSettingsSP s = new KisMyPaintOpSettings();
         s->setProperty("paintop", id());
         s->setProperty("filename", brush->filename());
-        s->setProperty("json_string", brush->getJsonData());
+        s->setProperty(MYPAINT_JSON, brush->getJsonData());
         s->setProperty(MYPAINT_DIAMETER, brush->getSize());
+        s->setProperty(MYPAINT_HARDNESS, brush->getHardness());
+        s->setProperty(MYPAINT_OPACITY, brush->getOpacity());
+        s->setProperty(MYPAINT_ERASER, brush->isEraser());
 
         KisPaintOpPresetSP preset = new KisPaintOpPreset();
         preset->setName(fileInfo.baseName());

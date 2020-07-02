@@ -13,10 +13,12 @@
 #include <kis_curve_option_widget.h>
 #include <kis_brush_option_widget.h>
 #include <kis_compositeop_option.h>
+#include <kis_my_paintop_option.h>
 
 KisMyPaintOpSettingsWidget:: KisMyPaintOpSettingsWidget(QWidget* parent)
     : KisPaintOpSettingsWidget(parent)
 {
+    addPaintOpOption(new KisMyPaintOpOption(), i18n("Basic"));
 }
 
 KisMyPaintOpSettingsWidget::~ KisMyPaintOpSettingsWidget()

@@ -445,25 +445,6 @@ bool KisAllResourcesModel::setResourceInactive(const QModelIndex &index)
     emit dataChanged(index, index, {Qt::EditRole, Qt::CheckStateRole});
     return true;
 }
-//static int s_i5 {0};
-
-bool KisAllResourcesModel::setResourceInactive(KoResourceSP resource)
-{
-    if (!resource || !resource->valid()) return false;
-    QModelIndex index = indexForResource(resource);
-    return setData(index, QVariant::fromValue(false), Qt::CheckStateRole);
-    return true;
-}
-
-
-bool KisAllResourcesModel::setResourceActive(KoResourceSP resource)
-{
-    if (!resource || !resource->valid()) return false;
-    QModelIndex index = indexForResource(resource);
-    return setData(index, QVariant::fromValue(true), Qt::CheckStateRole);
-    return true;
-}
-
 //static int s_i6 {0};
 
 bool KisAllResourcesModel::importResourceFile(const QString &filename)
@@ -703,25 +684,6 @@ bool KisResourceModel::renameResource(KoResourceSP resource, const QString &name
         return source->renameResource(resource, name);
     }
     return false;
-}
-
-bool KisResourceModel::setResourceInactive(KoResourceSP resource)
-{
-    KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
-    if (source) {
-        return source->setResourceInactive(resource);
-    }
-    return false;
-}
-
-bool KisResourceModel::setResourceActive(KoResourceSP resource)
-{
-    KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
-    if (source) {
-        return source->setResourceActive(resource);
-    }
-    return false;
-
 }
 
 bool KisResourceModel::setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata)

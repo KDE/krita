@@ -33,8 +33,7 @@ private Q_SLOTS:
     void testData();
     void testResourceForIndex();
     void testIndexFromResource();
-    void testRemoveResourceByIndex();
-    void testSetResourceInactive();
+    void testSetInactiveByIndex();
     void testImportResourceFile();
     void testAddResource();
     void testAddTemporaryResource();

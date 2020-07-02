@@ -48,8 +48,6 @@ public:
     bool addResource(KoResourceSP resource, const QString &storageId = QString()) override;
     bool updateResource(KoResourceSP resource) override;
     bool renameResource(KoResourceSP resource, const QString &name) override;
-    bool setResourceInactive(KoResourceSP resource) override;
-    bool setResourceActive(KoResourceSP resource) override;
     bool setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata) override;
 
     /**

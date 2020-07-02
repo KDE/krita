@@ -157,7 +157,7 @@ public:
             }
         }
 
-        if (m_resourceModel->setResourceInactive(resource)) {
+        if (m_resourceModel->setResourceInactive(m_resourceModel->indexForResource(resource))) {
             notifyRemovingResource(resource);
             return true;
         }

@@ -129,7 +129,7 @@ void TestResourceModel::testIndexFromResource()
     QVERIFY(idx.column() == 0);
 }
 
-void TestResourceModel::testRemoveResourceByIndex()
+void TestResourceModel::testSetInactiveByIndex()
 {
     KisResourceModel resourceModel(m_resourceType);
     int resourceCount = resourceModel.rowCount();
@@ -139,20 +139,6 @@ void TestResourceModel::testRemoveResourceByIndex()
     QCOMPARE(resourceCount - 1, resourceModel.rowCount());
     QVERIFY(!resourceModel.indexForResource(resource).isValid());
 
-}
-
-void TestResourceModel::testSetResourceInactive()
-{
-    KisResourceModel resourceModel(m_resourceType);
-    int resourceCount = resourceModel.rowCount();
-    KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(1, 0));
-    QVERIFY(resource);
-
-    bool r = resourceModel.setResourceInactive(resource);
-    QVERIFY(r);
-    QCOMPARE(resourceCount - 1, resourceModel.rowCount());
-
-    QVERIFY(!resourceModel.indexForResource(resource).isValid());
 }
 
 void TestResourceModel::testImportResourceFile()

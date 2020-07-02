@@ -1914,7 +1914,7 @@ void KisDocument::setPaletteList(const QList<KoColorSetSP > &paletteList, bool e
         if (oldPaletteList != paletteList) {
             KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(ResourceType::Palettes);
             Q_FOREACH(KoColorSetSP palette, oldPaletteList) {
-                resourceModel->setResourceInactive(palette);
+                resourceModel->setResourceInactive(resourceModel->indexForResource(palette));
             }
             Q_FOREACH(KoColorSetSP palette, paletteList) {
                 qDebug()<< "loading palette into document" << palette->filename();

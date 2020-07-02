@@ -246,24 +246,6 @@ public:
         return false;
     }
 
-    bool setResourceInactive(KoResourceSP resource) override
-    {
-        KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
-        if (source) {
-            return source->setResourceInactive(resource);
-        }
-        return false;
-    }
-
-    bool setResourceActive(KoResourceSP resource) override
-    {
-        KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
-        if (source) {
-            return source->setResourceActive(resource);
-        }
-        return false;
-    }
-
     bool setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata) override
     {
         KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());

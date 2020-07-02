@@ -125,16 +125,6 @@ public:
     virtual bool renameResource(KoResourceSP resource, const QString &name) = 0;
 
     /**
-     * @brief setResourceInactive sets the specified resource's status to inactive
-     * @param resource
-     * @return
-     */
-    virtual bool setResourceInactive(KoResourceSP resource) = 0;
-
-    virtual bool setResourceActive(KoResourceSP resource) = 0;
-
-
-    /**
      * @brief setResourceMetaData
      * @param metadata
      * @return
@@ -178,8 +168,6 @@ public:
     KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const override;
     QModelIndex indexForResource(KoResourceSP resource) const override;
     bool setResourceInactive(const QModelIndex &index) override;
-    bool setResourceInactive(KoResourceSP resource) override;
-    bool setResourceActive(KoResourceSP resource) override;
     bool importResourceFile(const QString &filename) override;
     bool addResource(KoResourceSP resource, const QString &storageId = QString()) override;
     bool updateResource(KoResourceSP resource) override;
@@ -264,8 +252,6 @@ public:
     bool addResource(KoResourceSP resource, const QString &storageId = QString()) override;
     bool updateResource(KoResourceSP resource) override;
     bool renameResource(KoResourceSP resource, const QString &name) override;
-    bool setResourceInactive(KoResourceSP resource) override;
-    bool setResourceActive(KoResourceSP resource) override;
     bool setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata) override;
 
 public:

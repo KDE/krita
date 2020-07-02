@@ -58,6 +58,11 @@ KoPathShape* SvgMeshPatch::getPath() const
     return m_path.get();
 }
 
+QSizeF SvgMeshPatch::size() const
+{
+    return m_path->size();
+}
+
 KoPathSegment SvgMeshPatch::getMidCurve(bool isVertical) const
 {
     QList<QPointF> curvedBoundary0;

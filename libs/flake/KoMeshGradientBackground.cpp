@@ -63,9 +63,10 @@ void KoMeshGradientBackground::fillPatch(QPainter &painter, const SvgMeshPatch *
 
     const quint8 threshold = 0;
 
-    // TODO stop dividing if the size is less than the pixel
-    if (cs->difference(c[0], c[1]) > threshold || cs->difference(c[1], c[2]) > threshold ||
-        cs->difference(c[2], c[3]) > threshold || cs->difference(c[3], c[0]) > threshold) {
+    // check if color variation is acceptable and patch size is less than ~pixel width/heigh
+    if ((cs->difference(c[0], c[1]) > threshold || cs->difference(c[1], c[2]) > threshold ||
+         cs->difference(c[2], c[3]) > threshold || cs->difference(c[3], c[0]) > threshold) &&
+        patch->size().width() > 1 && patch->size().height() > 1) {
 
         QVector<SvgMeshPatch*> patches;
         patch->subdivide(patches);

@@ -74,7 +74,7 @@ QSqlError createDatabase(const QString &location)
                                      ;
 
     if (!QSqlDatabase::connectionNames().isEmpty()) {
-        return QSqlError("sqlite", "database", QSqlError::ConnectionError, "Already connected to resource cache database");
+        return QSqlError();
     }
 
     QDir dbLocation(location);

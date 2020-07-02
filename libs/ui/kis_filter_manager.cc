@@ -191,7 +191,7 @@ void KisFilterManager::reapplyLastFilterReprompt()
     finish();
 }
 
-void KisFilterManager::showFilterDialog(const QString &filterId, KisFilterConfigurationSP config)
+void KisFilterManager::showFilterDialog(const QString &filterId, KisFilterConfigurationSP overrideDefaultConfig)
 {
     if (!d->view->activeNode()->isEditable()) {
         d->view->showFloatingMessage(i18n("Cannot apply filter to locked layer."),
@@ -201,7 +201,7 @@ void KisFilterManager::showFilterDialog(const QString &filterId, KisFilterConfig
 
     if (d->filterDialog && d->filterDialog->isVisible()) {
         KisFilterSP filter = KisFilterRegistry::instance()->value(filterId);
-        d->filterDialog->setFilter(filter);
+        d->filterDialog->setFilter(filter, overrideDefaultConfig);
         return;
     }
 
@@ -256,19 +256,17 @@ void KisFilterManager::showFilterDialog(const QString &filterId, KisFilterConfig
     }
 
     if (filter->showConfigurationWidget()) {
-        if (config) {
-            //TODO: load last used configuration to dialog
-        }
-
         if (!d->filterDialog) {
             d->filterDialog = new KisDlgFilter(d->view , d->view->activeNode(), this, d->view->mainWindow());
             d->filterDialog->setAttribute(Qt::WA_DeleteOnClose);
         }
 
-        d->filterDialog->setFilter(filter);
+        d->filterDialog->setFilter(filter, overrideDefaultConfig);
         d->filterDialog->setVisible(true);
     } else {
-        apply(KisFilterConfigurationSP(filter->defaultConfiguration()));
+        KisFilterConfigurationSP defaultConfiguration =
+            overrideDefaultConfig ? overrideDefaultConfig : filter->defaultConfiguration();
+        apply(defaultConfiguration);
         finish();
     }
 }

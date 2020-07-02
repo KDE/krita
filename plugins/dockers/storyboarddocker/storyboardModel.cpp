@@ -22,6 +22,7 @@
 #include <QMimeData>
 
 #include <kis_icon.h>
+#include <kis_layer_utils.h>
 
 StoryboardModel::StoryboardModel(QObject *parent)
         : QAbstractItemModel(parent)
@@ -475,7 +476,59 @@ void StoryboardModel::slotKeyframeRemoved(KisKeyframeSP keyframe)
 
 void StoryboardModel::slotKeyframeMoved(KisKeyframeSP keyframe, int from)
 {
-    qDebug()<<"Keyframe moved to"<< keyframe->time()<< " from "<<from;
+    QModelIndex fromIndex = indexFromFrame(from);
+    if (fromIndex.isValid()) {
+        //check whether there are keyframes at the "from" time in other nodes
+        bool onlyKeyframe = true;
+        KisNodeWSP node = keyframe->channel()->node();
+        while (node) {
+            KisLayerUtils::recursiveApplyNodes(node,
+                                                [from, keyframe, &onlyKeyframe] (KisNodeWSP node) {
+                                                auto keyframeMap = node->keyframeChannels();
+                                                    for (auto elem: keyframeMap) {
+                                                        KisKeyframeChannel *keyframeChannel = elem;
+                                                        bool keyframeExists = keyframeChannel->keyframeAt(from).isNull();
+                                                        if (node != keyframe->channel()->node()) {
+                                                            onlyKeyframe &= keyframeExists;
+                                                        }
+                                                    }
+                                                });
+            node = node->prevSibling();
+        }
+        node = keyframe->channel()->node();
+        while (node) {
+            KisLayerUtils::recursiveApplyNodes(node,
+                                                [from, keyframe, &onlyKeyframe] (KisNodeWSP node) {
+                                                auto keyframeMap = node->keyframeChannels();
+                                                    for (auto elem: keyframeMap) {
+                                                        KisKeyframeChannel *keyframeChannel = elem;
+                                                        bool keyframeExists = keyframeChannel->keyframeAt(from).isNull();
+                                                        if (node != keyframe->channel()->node()) {
+                                                            onlyKeyframe &= keyframeExists;
+                                                        }
+                                                    }
+                                                });
+            node = node->nextSibling();
+        }
+        int toItemRow = lastIndexBeforeFrame(keyframe->time()).row();
+        QModelIndex destinationIndex = indexFromFrame(keyframe->time());
+
+        if (onlyKeyframe && !destinationIndex.isValid()) {
+            setData(index(0, 0, fromIndex), keyframe->time());
+            moveRows(QModelIndex(), fromIndex.row(), 1, QModelIndex(), toItemRow + 1);
+        }
+        else if (onlyKeyframe && destinationIndex.isValid()) {
+            removeRows(fromIndex.row(), 1);
+        }
+        else if (!destinationIndex.isValid()) {
+            insertRows(toItemRow + 1, 1);
+            destinationIndex = index(toItemRow + 1, 0);
+            for (int i=1; i < rowCount(destinationIndex); i++) {
+                setData(index(i, 0, destinationIndex), index(i, 0, fromIndex).data());
+            }
+            setData(index(0, 0, destinationIndex), keyframe->time());
+        }
+    }
 }
 
 void StoryboardModel::slotCommentDataChanged()

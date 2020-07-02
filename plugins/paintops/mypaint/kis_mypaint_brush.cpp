@@ -5,6 +5,7 @@
 #include <QFileInfo>
 #include <kis_my_paintop_option.h>
 #include <libmypaint/mypaint-brush.h>
+#include <KisResourceServerProvider.h>
 
 class KisMyPaintBrush::Private {
 
@@ -13,6 +14,9 @@ public:
     QImage m_icon;
     QByteArray m_json;
     float diameter;
+    float hardness;
+    float opacity;
+    bool isEraser;
 };
 
 KisMyPaintBrush::KisMyPaintBrush(const QString &fileName)
@@ -82,22 +86,25 @@ void KisMyPaintBrush::apply(KisPaintOpSettingsSP settings) {
 //    mypaint_brush_set_base_value(m_brush, MYPAINT_BRUSH_SETTING_OFFSET_BY_SPEED_SLOWNESS, 1.0);
 //    mypaint_brush_set_base_value(m_brush, MYPAINT_BRUSH_SETTING_STROKE_DURATION_LOGARITHMIC, 4.0);
 
-    if(settings->getProperty("json_string").isNull()) {
+    if(settings->getProperty(MYPAINT_JSON).isNull()) {
         mypaint_brush_from_defaults(m_d->m_brush);
     }
     else {
-
-        QByteArray ba = settings->getProperty("json_string").toByteArray();
+        QByteArray ba = settings->getProperty(MYPAINT_JSON).toByteArray();
         mypaint_brush_from_string(m_d->m_brush, ba);
     }
 
     float diameter = settings->getFloat(MYPAINT_DIAMETER);
-    diameter = diameter==0 ? 40 : diameter;
     m_d->diameter = diameter;
     mypaint_brush_set_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC, log(diameter/2));
 
-    mypaint_brush_new_stroke(m_d->m_brush);
+    float hardness = settings->getFloat(MYPAINT_HARDNESS);
+    mypaint_brush_set_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_HARDNESS, hardness);
 
+    float opacity = settings->getFloat(MYPAINT_OPACITY);
+    mypaint_brush_set_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_OPAQUE, opacity);
+
+    mypaint_brush_new_stroke(m_d->m_brush);
 }
 
 MyPaintBrush* KisMyPaintBrush::brush() {
@@ -151,6 +158,9 @@ bool KisMyPaintBrush::loadFromDevice(QIODevice *dev) {
     m_d->m_json = ba;
     mypaint_brush_from_string(m_d->m_brush, ba);
     m_d->diameter = 2*exp(mypaint_brush_get_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC));
+    m_d->hardness = mypaint_brush_get_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_HARDNESS);
+    m_d->opacity = mypaint_brush_get_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_OPAQUE);
+    m_d->isEraser = mypaint_brush_get_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_ERASER);
 
     return true;
 }
@@ -169,3 +179,20 @@ float KisMyPaintBrush::getSize() {
 
     return m_d->diameter;
 }
+
+float KisMyPaintBrush::getHardness() {
+
+    return m_d->hardness;
+}
+
+float KisMyPaintBrush::getOpacity() {
+
+    return m_d->opacity;
+}
+
+bool KisMyPaintBrush::isEraser() {
+
+    return m_d->isEraser;
+}
+
+

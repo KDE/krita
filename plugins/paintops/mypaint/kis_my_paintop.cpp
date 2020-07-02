@@ -9,6 +9,7 @@
 #include <KoColorConversions.h>
 #include <kis_paintop_plugin_utils.h>
 #include <kis_my_paintop_option.h>
+#include <kis_paintop_settings.h>
 
 #include <libmypaint/mypaint-brush.h>
 #include <QDebug>
@@ -24,8 +25,10 @@ KisMyPaintOp::KisMyPaintOp(const KisPaintOpSettingsSP settings, KisPainter * pai
 
     m_brush->apply(settings);
 
-    if(qRound(mypaint_brush_get_base_value(m_brush->brush(), MYPAINT_BRUSH_SETTING_ERASER))) {
+    if(qRound(settings->getFloat(MYPAINT_ERASER)) || settings->getBool("EraserMode")) {
 
+        mypaint_brush_from_defaults(m_brush->brush());
+        mypaint_brush_set_base_value(m_brush->brush(), MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC, log(settings->getFloat(MYPAINT_DIAMETER)/2));
         m_brush->setColor(this->painter()->backgroundColor());
         mypaint_brush_set_base_value(m_brush->brush(), MYPAINT_BRUSH_SETTING_ERASER, false);
     }

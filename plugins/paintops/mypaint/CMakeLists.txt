@@ -17,7 +17,7 @@ set(kritamypaintop_SOURCES
     kis_my_paintop_factory.cpp
 )
 
-#ki18n_wrap_ui(kritasketchpaintop_SOURCES wdgsketchoptions.ui )
+ki18n_wrap_ui(kritamypaintop_SOURCES wdgmypaintoptions.ui )
 
 add_library(kritamypaintop MODULE ${kritamypaintop_SOURCES})
 

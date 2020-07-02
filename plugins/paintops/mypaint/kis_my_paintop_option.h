@@ -3,30 +3,76 @@
 
 #include <KisPaintopPropertiesBase.h>
 #include <kis_properties_configuration.h>
+#include <kis_paintop_option.h>
 
 const QString MYPAINT_DIAMETER = "MyPaint/diameter";
+const QString MYPAINT_HARDNESS = "MyPaint/hardness";
+const QString MYPAINT_OPACITY = "MyPaint/opcity";
+const QString MYPAINT_ERASER = "MyPaint/eraser";
+const QString MYPAINT_JSON = "MyPaint/json";
+
+class KisMyPaintOpOptionsWidget;
+
+class KisMyPaintOpOption : public KisPaintOpOption
+{
+public:
+    KisMyPaintOpOption();
+    ~KisMyPaintOpOption() override;
+
+    void setRadius(int radius) const;
+    int radius() const;
+
+    void setHardness(int hardness) const;
+    int hardness() const;
+
+    void setOpacity(int opacity) const;
+    int opacity() const;
+
+    void setEraser(bool isEraser) const;
+    bool eraser() const;
+
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
+
+private:
+    KisMyPaintOpOptionsWidget *m_options;
+    QByteArray json;
+
+};
 
 class KisMyPaintOptionProperties: public KisPaintopPropertiesBase
 {
 public:    
-    int radius() const {
-        return diameter/2;
+    float radius() const {
+        return log(diameter/2);
     }
 
     void readOptionSettingImpl(const KisPropertiesConfiguration *settings) override {
 
+        hardness = settings->getFloat(MYPAINT_HARDNESS);
+        eraser = settings->getFloat(MYPAINT_ERASER);
+        opacity = settings->getFloat(MYPAINT_OPACITY);
         diameter = settings->getFloat(MYPAINT_DIAMETER);
-        diameter = qRound(diameter)==0 ? 40 : diameter;
+        json = settings->getProperty(MYPAINT_JSON).toByteArray();
+
     }
 
-    void writeOptionSettingImpl(KisPropertiesConfiguration *setting) const override {
+    void writeOptionSettingImpl(KisPropertiesConfiguration *settings) const override {
 
-        setting->setProperty(MYPAINT_DIAMETER, diameter);
+        settings->setProperty(MYPAINT_DIAMETER, diameter);
+        settings->setProperty(MYPAINT_ERASER, eraser);
+        settings->setProperty(MYPAINT_OPACITY, opacity);
+        settings->setProperty(MYPAINT_HARDNESS, hardness);
+        settings->setProperty(MYPAINT_JSON, json);
     }
 
 
 public:
     float diameter;
+    float hardness;
+    float opacity;
+    bool eraser;
+    QByteArray json;
 
 };
 

@@ -1,4 +1,4 @@
-#include "ConjugateAssistant.h"
+#include "TwoPointAssistant.h"
 #include "kis_debug.h"
 #include <klocalizedstring.h>
 
@@ -13,15 +13,14 @@
 #include <math.h>
 #include <QtCore/qmath.h>
 
-ConjugateAssistant::ConjugateAssistant()
-    : KisPaintingAssistant("conjugate", i18n("Conjugate assistant"))
+TwoPointAssistant::TwoPointAssistant()
+    : KisPaintingAssistant("two_point", i18n("Two point assistant"))
 {
 }
 
-ConjugateAssistant::ConjugateAssistant(const ConjugateAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap)
+TwoPointAssistant::TwoPointAssistant(const TwoPointAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap)
     : KisPaintingAssistant(rhs, handleMap)
     , m_canvas(rhs.m_canvas)
-    , m_referenceLineDensity(rhs.m_referenceLineDensity)
     , m_snapLine(rhs.m_snapLine)
     , m_horizon(rhs.m_horizon)
     , m_cov(rhs.m_cov)
@@ -46,12 +45,12 @@ inline qreal acuteAngle(qreal angle) {
     }
 }
 
-KisPaintingAssistantSP ConjugateAssistant::clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const
+KisPaintingAssistantSP TwoPointAssistant::clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const
 {
-    return KisPaintingAssistantSP(new ConjugateAssistant(*this, handleMap));
+    return KisPaintingAssistantSP(new TwoPointAssistant(*this, handleMap));
 }
 
-QPointF ConjugateAssistant::project(const QPointF& pt, const QPointF& strokeBegin)
+QPointF TwoPointAssistant::project(const QPointF& pt, const QPointF& strokeBegin)
 {
     Q_ASSERT(isAssistantComplete());
 
@@ -91,18 +90,20 @@ QPointF ConjugateAssistant::project(const QPointF& pt, const QPointF& strokeBegi
     return r;
 }
 
-void ConjugateAssistant::endStroke()
+void TwoPointAssistant::endStroke()
 {
     m_snapLine = QLineF();
 }
 
-QPointF ConjugateAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin)
+QPointF TwoPointAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin)
 {
     return project(pt, strokeBegin);
 }
 
-void ConjugateAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible, bool previewVisible)
+void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible, bool previewVisible)
 {
+    Q_UNUSED(updateRect);
+    Q_UNUSED(cached);
     gc.save();
     gc.resetTransform();
     QPointF mousePos(0,0);
@@ -293,7 +294,7 @@ void ConjugateAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, c
     //KisPaintingAssistant::drawAssistant(gc, updateRect, converter, cached, canvas, assistantVisible, previewVisible);
 }
 
-void ConjugateAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter, bool assistantVisible)
+void TwoPointAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter, bool assistantVisible)
 {
     if (!m_canvas || !isAssistantComplete()) {
         return;
@@ -324,32 +325,22 @@ void ConjugateAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *
     }
 }
 
-QPointF ConjugateAssistant::getEditorPosition() const
+QPointF TwoPointAssistant::getEditorPosition() const
 {
     return *handles()[2];
 }
 
-void ConjugateAssistant::setReferenceLineDensity(float value)
-{
-}
-
-float ConjugateAssistant::referenceLineDensity()
-{
-  float f = 0.0;
-  return f;
-}
-
-void ConjugateAssistant::setHorizon(const QPointF a, const QPointF b)
+void TwoPointAssistant::setHorizon(const QPointF a, const QPointF b)
 {
     m_horizon = QLineF(a,b);
 }
 
-QLineF ConjugateAssistant::horizon()
+QLineF TwoPointAssistant::horizon()
 {
     return m_horizon;
 }
 
-void ConjugateAssistant::setCov(const QPointF a, const QPointF b, const QPointF c)
+void TwoPointAssistant::setCov(const QPointF a, const QPointF b, const QPointF c)
 {
     float px = 0;
     float py = 0;
@@ -372,12 +363,12 @@ void ConjugateAssistant::setCov(const QPointF a, const QPointF b, const QPointF 
     *handles()[2] = m_cov;
 }
 
-QPointF ConjugateAssistant::cov()
+QPointF TwoPointAssistant::cov()
 {
     return m_cov;
 }
 
-void ConjugateAssistant::setSp(const QPointF a, const QPointF b, const QPointF c)
+void TwoPointAssistant::setSp(const QPointF a, const QPointF b, const QPointF c)
 {
     float px = 0;
     float py = 0;
@@ -401,45 +392,35 @@ void ConjugateAssistant::setSp(const QPointF a, const QPointF b, const QPointF c
     m_sp = QPointF(px,py);
 }
 
-QPointF ConjugateAssistant::sp()
+QPointF TwoPointAssistant::sp()
 {
     return m_sp;
 }
 
-bool ConjugateAssistant::isAssistantComplete() const
+bool TwoPointAssistant::isAssistantComplete() const
 {
   return handles().size() >= 3;
 }
 
-void ConjugateAssistant::saveCustomXml(QXmlStreamWriter* xml)
+TwoPointAssistantFactory::TwoPointAssistantFactory()
 {
 }
 
-bool ConjugateAssistant::loadCustomXml(QXmlStreamReader* xml)
-{
-  bool b = true;
-  return b;
-}
-
-ConjugateAssistantFactory::ConjugateAssistantFactory()
+TwoPointAssistantFactory::~TwoPointAssistantFactory()
 {
 }
 
-ConjugateAssistantFactory::~ConjugateAssistantFactory()
+QString TwoPointAssistantFactory::id() const
 {
+    return "two_point";
 }
 
-QString ConjugateAssistantFactory::id() const
+QString TwoPointAssistantFactory::name() const
 {
-    return "conjugate";
+    return i18n("2 Point Perspective");
 }
 
-QString ConjugateAssistantFactory::name() const
+KisPaintingAssistant* TwoPointAssistantFactory::createPaintingAssistant() const
 {
-    return i18n("Conjugate");
-}
-
-KisPaintingAssistant* ConjugateAssistantFactory::createPaintingAssistant() const
-{
-    return new ConjugateAssistant;
+    return new TwoPointAssistant;
 }

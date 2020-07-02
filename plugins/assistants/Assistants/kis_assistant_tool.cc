@@ -53,7 +53,7 @@
 #include "VanishingPointAssistant.h"
 #include "EditAssistantsCommand.h"
 #include <kis_undo_adapter.h>
-#include "ConjugateAssistant.h"
+#include "TwoPointAssistant.h"
 
 #include <math.h>
 #include <QtCore/qmath.h>
@@ -115,10 +115,10 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
         m_internalMode = MODE_CREATION;
         *m_newAssistant->handles().back() = canvasDecoration->snapToGuide(event, QPointF(), false);
 
-	// give conjugate assistant side handles once it is completed
-	if (m_newAssistant->id() == "conjugate" && m_newAssistant->handles().size() == m_newAssistant->numHandles() && m_newAssistant->sideHandles().isEmpty()){
+	// give two point assistant side handles once it is completed
+	if (m_newAssistant->id() == "two_point" && m_newAssistant->handles().size() == m_newAssistant->numHandles() && m_newAssistant->sideHandles().isEmpty()){
 	    QList<KisPaintingAssistantHandleSP> handles = m_newAssistant->handles();
-	    QSharedPointer <ConjugateAssistant> assis = qSharedPointerCast<ConjugateAssistant>(m_newAssistant);
+	    QSharedPointer <TwoPointAssistant> assis = qSharedPointerCast<TwoPointAssistant>(m_newAssistant);
 
 	    assis->setCov(*handles[0], *handles[1], *handles[2]);
 	    assis->setHorizon(*handles[0], *handles[1]);
@@ -312,7 +312,7 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
         } else if (m_handleDrag && assistant->handles().size()>2 && (assistant->id() == "ellipse" ||
 								     assistant->id() == "concentric ellipse" ||
 								     assistant->id() == "fisheye-point" ||
-								     assistant->id() == "conjugate")){
+								     assistant->id() == "two_point")){
             m_snapIsRadial = false;
             if (m_handleDrag == assistant->handles()[0]) {
                 m_dragStart = *assistant->handles()[1];
@@ -456,12 +456,12 @@ void KisAssistantTool::continuePrimaryAction(KoPointerEvent *event)
         Q_FOREACH (KisPaintingAssistantHandleSP handle, m_assistantDrag->handles()) {
             *handle += (newAdjustment - m_currentAdjustment);
         }
-        if (m_assistantDrag->id()== "vanishing point" || m_assistantDrag->id()== "conjugate"){
+        if (m_assistantDrag->id()== "vanishing point" || m_assistantDrag->id()== "two_point"){
             Q_FOREACH (KisPaintingAssistantHandleSP handle, m_assistantDrag->sideHandles()) {
                 *handle += (newAdjustment - m_currentAdjustment);
             }
-            if (m_assistantDrag->id() == "conjugate") {
-		QSharedPointer <ConjugateAssistant> assis = qSharedPointerCast<ConjugateAssistant>(m_assistantDrag);
+            if (m_assistantDrag->id() == "two_point") {
+		QSharedPointer <TwoPointAssistant> assis = qSharedPointerCast<TwoPointAssistant>(m_assistantDrag);
 		QList<KisPaintingAssistantHandleSP> handles = assis->handles();
 
 		assis->setHorizon(*handles[0], *handles[1]);
@@ -555,10 +555,10 @@ void KisAssistantTool::continuePrimaryAction(KoPointerEvent *event)
             }
 
         }
-        if (m_handleDrag && assistant->id() == "conjugate" && assistant->handles().size() >= 3 &&
+        if (m_handleDrag && assistant->id() == "two_point" && assistant->handles().size() >= 3 &&
 	    assistant->sideHandles().size() == 8) {
 
-	  QSharedPointer <ConjugateAssistant> assis = qSharedPointerCast<ConjugateAssistant>(assistant);
+	  QSharedPointer <TwoPointAssistant> assis = qSharedPointerCast<TwoPointAssistant>(assistant);
 	  QList<KisPaintingAssistantHandleSP> hndl = assistant->handles();
 	  QList<KisPaintingAssistantHandleSP> side_hndl = assistant->sideHandles();
 	  KisPaintingAssistantHandleSP vp_opp;
@@ -812,9 +812,9 @@ void KisAssistantTool::mouseMoveEvent(KoPointerEvent *event)
 {
     if (m_newAssistant && m_internalMode == MODE_CREATION) {
 
-	if (m_newAssistant->id() == "conjugate") {
+	if (m_newAssistant->id() == "two_point") {
 	    QList<KisPaintingAssistantHandleSP> handles = m_newAssistant->handles();
-	    QSharedPointer <ConjugateAssistant> assis = qSharedPointerCast<ConjugateAssistant>(m_newAssistant);
+	    QSharedPointer <TwoPointAssistant> assis = qSharedPointerCast<TwoPointAssistant>(m_newAssistant);
             if (m_newAssistant->handles().length() == 3) {
 		// We want to keep the 3rd handle on the horizon line
 		assis->setCov(*handles[0], *handles[1], event->point);
@@ -1298,7 +1298,7 @@ void KisAssistantTool::beginAlternateAction(KoPointerEvent *event, KisTool::Alte
     setMode(KisTool::PAINT_MODE);
     KisPaintingAssistantsDecorationSP canvasDecoration = m_canvas->paintingAssistantsDecoration();
 
-    if (m_newAssistant && m_newAssistant->id() == "conjugate" && m_newAssistant->handles().length() == 2
+    if (m_newAssistant && m_newAssistant->id() == "two_point" && m_newAssistant->handles().length() == 2
 	&& event->modifiers() & Qt::ShiftModifier) {
 	QList<KisPaintingAssistantHandleSP> handles = m_newAssistant->handles();
 
@@ -1306,7 +1306,7 @@ void KisAssistantTool::beginAlternateAction(KoPointerEvent *event, KisTool::Alte
 	*handles[1] =  *handles[0] + snap_point;
 
 	m_newAssistant->addHandle(new KisPaintingAssistantHandle(canvasDecoration->snapToGuide(event, QPointF(), false)), HandleType::NORMAL);
-	qSharedPointerCast<ConjugateAssistant>(m_newAssistant)->setCov(*handles[0],*handles[1],*handles[1]);
+	qSharedPointerCast<TwoPointAssistant>(m_newAssistant)->setCov(*handles[0],*handles[1],*handles[1]);
 	m_canvas->updateCanvas();
 	m_handles = m_canvas->paintingAssistantsDecoration()->handles();
     }

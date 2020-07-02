@@ -32,7 +32,7 @@
 #include "ParallelRulerAssistant.h"
 #include "ConcentricEllipseAssistant.h"
 #include "FisheyePointAssistant.h"
-#include "ConjugateAssistant.h"
+#include "TwoPointAssistant.h"
 //#include "mesh_assistant.h"
 
 K_PLUGIN_FACTORY_WITH_JSON(AssistantToolFactory, "kritaassistanttool.json", registerPlugin<AssistantToolPlugin>();)
@@ -52,7 +52,7 @@ AssistantToolPlugin::AssistantToolPlugin(QObject *parent, const QVariantList &)
     KisPaintingAssistantFactoryRegistry::instance()->add(new ParallelRulerAssistantFactory);
     KisPaintingAssistantFactoryRegistry::instance()->add(new ConcentricEllipseAssistantFactory);
     KisPaintingAssistantFactoryRegistry::instance()->add(new FisheyePointAssistantFactory);
-    KisPaintingAssistantFactoryRegistry::instance()->add(new ConjugateAssistantFactory);
+    KisPaintingAssistantFactoryRegistry::instance()->add(new TwoPointAssistantFactory);
 //    KisPaintingAssistantFactoryRegistry::instance()->add(new MeshAssistantFactory);
 }
 

@@ -64,6 +64,9 @@ public:
     /// Get full (closed) meshpath
     KoPathShape* getPath() const;
 
+    /// Get size swept by mesh in pts
+    QSizeF size() const;
+
     /// Gets the curve passing through the middle of meshpatch
     KoPathSegment getMidCurve(bool isVertical) const;
 

@@ -42,7 +42,7 @@
 /// contains actions to tag and untag the selected resource.
 /// In case of tagging the user can choose to create a new tag or select one of the existing ones.
 /// In case of untagging the user can untag from the current selected tag (in the combobox) or from some other tags.
-/// This class needs to provide correct lists of tags and take into account that "All" and "All untagged" (and possibly other
+/// This class needs to provide correct lists of tags and take into account that "All" and "All Untagged" (and possibly other
 /// generated tags) are special and the user cannot untage the resource from it.
 ///
 class KisResourceItemChooserContextMenu :  public QMenu

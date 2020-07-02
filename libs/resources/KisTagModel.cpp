@@ -190,6 +190,8 @@ QVariant KisAllTagsModel::data(const QModelIndex &index, int role) const
 
 bool KisAllTagsModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
+    int id = data(index, Qt::UserRole + Id).toInt();
+
     if (index.isValid() && role == Qt::CheckStateRole) {
         QSqlQuery q;
         if (!q.prepare("UPDATE tags\n"
@@ -199,7 +201,7 @@ bool KisAllTagsModel::setData(const QModelIndex &index, const QVariant &value, i
             return false;
         }
         q.bindValue(":active", value.toBool());
-        q.bindValue(":id", index.data(Qt::UserRole + Id));
+        q.bindValue(":id", id);
 
         if (!q.exec()) {
             qWarning() << "Could not execute make existing tag active query" << q.boundValues(), q.lastError();
@@ -225,10 +227,21 @@ QModelIndex KisAllTagsModel::indexForTag(KisTagSP tag) const
     // For now a linear seek to find the first tag
     d->query.first();
     do {
-        if (d->query.value("is").toInt() == tag->id()) {
-            return createIndex(d->query.at(), 0);
+        if (tag->id() >= 0) {
+            if (d->query.value("id").toInt() == tag->id()) {
+                return createIndex(d->query.at() + s_fakeRowsCount, 0);
+            }
+        }
+        else {
+            // This is a naked tag, one that didn't come from the
+            // database.
+            if (d->query.value("url").toString() == tag->url()
+                    && d->query.value("resource_type") == d->resourceType) {
+                return createIndex(d->query.at() + s_fakeRowsCount, 0);
+            }
         }
     } while (d->query.next());
+
     return QModelIndex();
 }
 
@@ -251,7 +264,7 @@ KisTagSP KisAllTagsModel::tagForIndex(QModelIndex index) const
         } else if (index.row() == KisAllTagsModel::AllUntagged + s_fakeRowsCount) {
             tag.reset(new KisTag());
             tag->setName(i18n("All Untagged"));
-            tag->setUrl("All untagged");
+            tag->setUrl("All Untagged");
             tag->setComment(i18n("All Untagged"));
             tag->setId(KisAllTagsModel::AllUntagged);
             tag->setActive(true);
@@ -261,7 +274,7 @@ KisTagSP KisAllTagsModel::tagForIndex(QModelIndex index) const
     else {
         bool pos = const_cast<KisAllTagsModel*>(this)->d->query.seek(index.row() - s_fakeRowsCount);
         if (pos) {
-
+            qDebug() << "url" << d->query.value("url").toString() << "name" << d->query.value("name").toString();
             tag.reset(new KisTag());
             tag->setUrl(d->query.value("url").toString());
             tag->setName(d->query.value("name").toString());
@@ -283,6 +296,7 @@ KisTagSP KisAllTagsModel::addEmptyTag(const QString& tagName, QVector<KoResource
     tag->setUrl(tagName);
     tag->setValid(true);
     tag->setActive(true);
+
     if (addTag(tag, taggedResouces)) {
         return tag;
     }
@@ -294,19 +308,12 @@ KisTagSP KisAllTagsModel::addEmptyTag(const QString& tagName, QVector<KoResource
 
 bool KisAllTagsModel::addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces)
 {
-    qDebug() << "######################";
-    qDebug() << "bool KisAllTagsModel::addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces) " << tag << taggedResouces;
-
-    if (tag.isNull()) return false;
     if (!tag) return false;
     if (!tag->valid()) return false;
-    // A new tag doesn't have an ID yet, that comes from the database
-    if (tag->id() >= 0) return false;
 
     bool r = true;
 
     if (!KisResourceCacheDb::hasTag(tag->url(), d->resourceType)) {
-        qDebug() << "it doesn't have the tag!" << tag->url() << tag->name() << tag->comment();
         if (!KisResourceCacheDb::addTag(d->resourceType, "", tag->url(), tag->name(), tag->comment())) {
             qWarning() << "Could not add tag" << tag;
             return false;
@@ -319,12 +326,10 @@ bool KisAllTagsModel::addTag(const KisTagSP tag, QVector<KoResourceSP> taggedRes
         r = setData(indexForTag(tag), QVariant::fromValue(true), Qt::CheckStateRole);
     }
 
-    if (!taggedResouces.isEmpty()) {
-        qDebug() << "tag = " << tag;
-        qDebug() << "tag url = " << tag->url();
+    tag->setId(data(indexForTag(tag), Qt::UserRole + KisAllTagsModel::Id).toInt());
 
+    if (!taggedResouces.isEmpty()) {
         KisTagSP tagFromDb = tagByUrl(tag->url());
-        qDebug() << "tag from db: " << tagFromDb << tag->id();
         Q_FOREACH(const KoResourceSP resource, taggedResouces) {
 
             if (!resource) continue;
@@ -334,6 +339,7 @@ bool KisAllTagsModel::addTag(const KisTagSP tag, QVector<KoResourceSP> taggedRes
             tagResource(tagFromDb, resource);
         }
     }
+
     return r;
 }
 
@@ -341,7 +347,6 @@ bool KisAllTagsModel::setTagActive(const KisTagSP tag)
 {
     if (!tag) return false;
     if (!tag->valid()) return false;
-    if (tag->id() < 0) return false;
 
     tag->setActive(true);
 
@@ -353,7 +358,6 @@ bool KisAllTagsModel::setTagInactive(const KisTagSP tag)
 {
     if (!tag) return false;
     if (!tag->valid()) return false;
-    if (tag->id() < 0) return false;
 
     tag->setActive(false);
 
@@ -364,7 +368,6 @@ bool KisAllTagsModel::tagResource(const KisTagSP tag, const KoResourceSP resourc
 {
     if (!tag) return false;
     if (!tag->valid()) return false;
-    if (tag->id() < 0) return false;
 
     qDebug() << "tagresource" << tag << " tag id " << tag->id();
 
@@ -441,6 +444,7 @@ bool KisAllTagsModel::renameTag(const KisTagSP tag)
     if (!tag->valid()) return false;
 
     QString name = tag->name();
+    QString url = tag->url();
 
     if (name.isEmpty()) return false;
 
@@ -456,7 +460,7 @@ bool KisAllTagsModel::renameTag(const KisTagSP tag)
     }
 
     q.bindValue(":name", name);
-    q.bindValue(":url", tag->url());
+    q.bindValue(":url", url);
     q.bindValue(":resource_type", d->resourceType);
 
     if (!q.exec()) {
@@ -477,6 +481,7 @@ bool KisAllTagsModel::changeTagActive(const KisTagSP tag, bool active)
     if (!tag->valid()) return false;
 
     QModelIndex idx = indexForTag(tag);
+    tag->setActive(active);
     return setData(idx, QVariant::fromValue(active), Qt::CheckStateRole);
 
 }
@@ -634,7 +639,7 @@ QModelIndex KisTagModel::indexForTag(KisTagSP tag) const
 {
     KisAbstractTagModel *source = dynamic_cast<KisAbstractTagModel*>(sourceModel());
     if (source) {
-        return source->indexForTag(tag);
+        return mapFromSource(source->indexForTag(tag));
     }
     return QModelIndex();
 

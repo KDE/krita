@@ -80,6 +80,7 @@ private:
     friend class KisAllTagsModel;
     friend class KisResourceModel;
     friend class KisTagChooserWidget;
+    friend class TestTagModel;
 
     void setId(int id);
     void setActive(bool active);

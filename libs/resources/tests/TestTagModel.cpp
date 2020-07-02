@@ -73,6 +73,11 @@ void TestTagModel::initTestCase()
 
     QVERIFY(r == KisResourceLocator::LocatorError::Ok);
     QVERIFY(QDir(m_dstLocation).exists());
+
+    m_tag.reset(new KisTag());
+    QFile f(QString(FILES_DATA_DIR) + "paintoppresets/test.tag");
+    f.open(QFile::ReadOnly);
+    m_tag->load(f);
 }
 
 
@@ -119,12 +124,152 @@ void TestTagModel::testData()
 
 }
 
+void TestTagModel::testIndexForTag()
+{
+    KisTagModel tagModel(resourceType);
+    QModelIndex idx = tagModel.indexForTag(m_tag);
+    QVERIFY(idx.isValid());
+    QCOMPARE(idx.data(Qt::UserRole + KisAllTagsModel::Url).toString(), m_tag->url());
+    QCOMPARE(idx.data(Qt::UserRole + KisAllTagsModel::Name).toString(), m_tag->name());
+}
+
+void TestTagModel::testTagForIndex()
+{
+    KisTagModel tagModel(resourceType);
+
+    QModelIndex idx = tagModel.index(0, 0);
+    KisTagSP tag = tagModel.tagForIndex(idx);
+    QCOMPARE(tag->url(), "All");
+
+    idx = tagModel.index(1, 0);
+    tag = tagModel.tagForIndex(idx);
+    QCOMPARE(tag->url(), "All Untagged");
+
+    idx = tagModel.index(2, 0);
+    tag = tagModel.tagForIndex(idx);
+    QCOMPARE(tag->url(), m_tag->url());
+}
+
+void TestTagModel::testAddEmptyTag()
+{
+    KisTagModel tagModel(resourceType);
+
+    QString tagName("A Brand New Tag");
+
+    int rowCount = tagModel.rowCount();
+    tagModel.addEmptyTag(tagName, {});
+
+    QCOMPARE(tagModel.rowCount(), rowCount + 1);
+    QModelIndex idx = tagModel.index(3, 0);
+    QVERIFY(idx.isValid());
+
+    KisTagSP tag = tagModel.tagForIndex(idx);
+    QCOMPARE(tag->name(), tagName);
+    QCOMPARE(tag->id(), 2);
+}
+
+void TestTagModel::testAddTag()
+{
+    KisTagModel tagModel(resourceType);
+
+    QString tagName("test1");
+
+    KisTagSP tag(new KisTag);
+    tag->setUrl(tagName);
+    tag->setName(tagName);
+    tag->setComment("A tag for testing");
+    tag->setValid(true);
+    tag->setActive(true);
+
+    int rowCount = tagModel.rowCount();
+    tagModel.addTag(tag, {});
+    QCOMPARE(tagModel.rowCount(), rowCount + 1);
+    QVERIFY(tag->id() >= 0);
+
+    {
+        QCOMPARE(tagModel.rowCount(), rowCount + 1);
+        QModelIndex idx = tagModel.index(4, 0);
+        QVERIFY(idx.isValid());
+        QCOMPARE(idx.data(Qt::UserRole + KisAllTagsModel::Url).toString(), tag->url());
+        QCOMPARE(idx.data(Qt::UserRole + KisAllTagsModel::Name).toString(), tag->name());
+
+        KisTagSP tag = tagModel.tagForIndex(idx);
+        QCOMPARE(tag->name(), tagName);
+        QCOMPARE(tag->id(), 3);
+    }
+
+    {
+        QModelIndex idx = tagModel.indexForTag(tag);
+        QVERIFY(idx.isValid());
+        QCOMPARE(idx.data(Qt::UserRole + KisAllTagsModel::Url).toString(), tag->url());
+        QCOMPARE(idx.data(Qt::UserRole + KisAllTagsModel::Name).toString(), tag->name());
+    }
+
+}
+
+void TestTagModel::testSetTagActiveInactive()
+{
+    KisTagModel tagModel(resourceType);
+
+    int rowCount = tagModel.rowCount();
+
+    tagModel.setTagInactive(m_tag);
+    QVERIFY(!m_tag->active());
+    QCOMPARE(tagModel.rowCount(), rowCount -1);
+    QModelIndex idx = tagModel.indexForTag(m_tag);
+
+    QCOMPARE(tagModel.data(idx, Qt::UserRole + KisAllTagsModel::Active).toBool(), false);
+
+
+    tagModel.setTagActive(m_tag);
+    QVERIFY(m_tag->active());
+    QCOMPARE(tagModel.rowCount(), rowCount);
+
+    idx = tagModel.indexForTag(m_tag);
+
+    QCOMPARE(idx.data(Qt::UserRole + KisAllTagsModel::Url).toString(), m_tag->url());
+    QCOMPARE(idx.data(Qt::UserRole + KisAllTagsModel::Name).toString(), m_tag->name());
+    QCOMPARE(tagModel.data(idx, Qt::UserRole + KisAllTagsModel::Active).toBool(), true);
+}
+
+
+void TestTagModel::testTagResource()
+{
+
+}
+
+void TestTagModel::testUntagResource()
+{
+
+}
+
+void TestTagModel::testRenameTag()
+{
+    KisTagModel tagModel(resourceType);
+    KisTagSP tag = tagModel.tagForIndex(tagModel.index(2,0));
+    QCOMPARE(tag->url(), m_tag->url());
+    QCOMPARE(tag->name(), m_tag->name());
+
+    tag->setName("Another name altogether");
+    QVERIFY(tagModel.renameTag(tag));
+
+    tag = tagModel.tagForIndex(tagModel.index(2,0));
+    QCOMPARE(tag->url(), m_tag->url());
+    QCOMPARE(tag->name(), "Another name altogether");
+}
+
+void TestTagModel::testChangeTagActive()
+{
+
+}
+
 
 void TestTagModel::cleanupTestCase()
 {
     ResourceTestHelper::rmTestDb();
     ResourceTestHelper::cleanDstLocation(m_dstLocation);
 }
+
 
 
 

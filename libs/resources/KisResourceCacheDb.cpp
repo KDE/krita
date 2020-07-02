@@ -701,6 +701,7 @@ bool KisResourceCacheDb::linkTagToStorage(const QString &url, const QString &res
 
 bool KisResourceCacheDb::addTag(const QString &resourceType, const QString storageLocation, const QString url, const QString name, const QString comment)
 {
+
     if (hasTag(url, resourceType)) {
         // Check whether this storage is already registered for this tag
         QSqlQuery q;
@@ -750,6 +751,8 @@ bool KisResourceCacheDb::addTag(const QString &resourceType, const QString stora
             qWarning() << "Could not prepare insert tag statement" << q.lastError();
             return false;
         }
+
+
 
         q.bindValue(":url", url);
         q.bindValue(":name", name);

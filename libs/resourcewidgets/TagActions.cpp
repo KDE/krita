@@ -169,9 +169,9 @@ CompareWithOtherTagFunctor::CompareWithOtherTagFunctor(KisTagSP referenceTag)
 
 bool CompareWithOtherTagFunctor::operator()(KisTagSP otherTag)
 {
-    ENTER_FUNCTION() << "refTag: " << (m_referenceTag.isNull() ? "null" : m_referenceTag->name())
-                     << " other: " << (otherTag.isNull() ? "null" : otherTag->name())
-                     << " result = " << (!otherTag.isNull() && !m_referenceTag.isNull() && otherTag->url() == m_referenceTag->url());
+//    ENTER_FUNCTION() << "refTag: " << (m_referenceTag.isNull() ? "null" : m_referenceTag->name())
+//                     << " other: " << (otherTag.isNull() ? "null" : otherTag->name())
+//                     << " result = " << (!otherTag.isNull() && !m_referenceTag.isNull() && otherTag->url() == m_referenceTag->url());
     return !otherTag.isNull() && !m_referenceTag.isNull() && otherTag->url() == m_referenceTag->url();
 }
 

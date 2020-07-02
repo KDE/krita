@@ -54,8 +54,9 @@ public:
 private Q_SLOTS:
 
     void insertFilter(const QString &name);
-    void showFilterDialog(const QString &filterId);
+    void showFilterDialog(const QString &filterId, KisFilterConfigurationSP config = nullptr);
     void reapplyLastFilter();
+    void reapplyLastFilterReprompt();
 
     void slotStrokeEndRequested();
     void slotStrokeCancelRequested();

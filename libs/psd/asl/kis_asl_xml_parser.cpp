@@ -112,7 +112,7 @@ void parseColorStopsList(QDomElement parent,
                          QVector<qreal> &startLocations,
                          QVector<qreal> &middleOffsets,
                          QVector<QColor> &colors,
-                         QVector<KoGradientSegmentEndpointType> types)
+                         QVector<KoGradientSegmentEndpointType> &types)
 {
     QDomNode child = parent.firstChild();
     while (!child.isNull()) {
@@ -449,11 +449,13 @@ bool tryParseDescriptor(const QDomElement &el,
 
         if (colors.size() < transparencies.size()) {
             const QColor lastColor = !colors.isEmpty() ? colors.last() : QColor(Qt::black);
+            const KoGradientSegmentEndpointType lastType = !types.isEmpty() ? types.last() : COLOR_ENDPOINT;
             while (colors.size() != transparencies.size()) {
                 const int index = colors.size();
                 colors.append(lastColor);
                 startLocations.append(transpStartLocations[index]);
                 middleOffsets.append(transpMiddleOffsets[index]);
+                types.append(lastType);
             }
         }
 

@@ -17,7 +17,7 @@ public:
 private Q_SLOTS:
     void testDab();
     void testGetColor();
-
+    void testLoading();
 };
 
 #endif // KIS_MYPAINTOP_TEST_H

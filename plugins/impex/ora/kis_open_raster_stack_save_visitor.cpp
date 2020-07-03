@@ -60,8 +60,20 @@ void KisOpenRasterStackSaveVisitor::saveLayerInfo(QDomElement& elt, KisLayer* la
     elt.setAttribute("name", layer->name());
     elt.setAttribute("opacity", QString().setNum(layer->opacity() / 255.0));
     elt.setAttribute("visibility", layer->visible() ? "visible" : "hidden");
-    elt.setAttribute("x", QString().setNum(layer->exactBounds().x()));
-    elt.setAttribute("y", QString().setNum(layer->exactBounds().y()));
+
+    if (layer->inherits("KisGroupLayer")) {
+        // Workaround for the issue regarding ora specification.
+        // MyPaint treats layer's x and y relative to the group's x and y
+        //  while Gimp and Krita think those are absolute values.
+        // Hence we set x and y on group layers to always be 0.
+        elt.setAttribute("x", QString().setNum(0));
+        elt.setAttribute("y", QString().setNum(0));
+
+    } else {
+        elt.setAttribute("x", QString().setNum(layer->exactBounds().x()));
+        elt.setAttribute("y", QString().setNum(layer->exactBounds().y()));
+    }
+
     if (layer->userLocked()) {
         elt.setAttribute("edit-locked", "true");
     }

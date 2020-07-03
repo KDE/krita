@@ -45,7 +45,7 @@ public:
     bool isChecked() const override;
     void setChecked(bool checked) override;
     void show();
-    void setEnabled(bool enabled);
+    virtual void setEnabled(bool enabled);
 
 protected:
 

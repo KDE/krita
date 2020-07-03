@@ -359,6 +359,10 @@ private Q_SLOTS:
 
     void importAnimation();
 
+    void renderAnimation();
+
+    void renderAnimationAgain();
+
     /**
      * Show a dialog with author and document information.
      */

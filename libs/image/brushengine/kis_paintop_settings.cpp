@@ -48,6 +48,7 @@
 
 #include "KisPaintopSettingsIds.h"
 #include "kis_algebra_2d.h"
+#include "kis_image_config.h"
 
 
 struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
@@ -172,8 +173,27 @@ KisPaintOpSettingsSP KisPaintOpSettings::createMaskingSettings() const
 
     const bool useMasterSize = this->getBool(KisPaintOpUtils::MaskingBrushUseMasterSizeTag, true);
     if (useMasterSize) {
+        /**
+         * WARNING: cropping is a workaround for too big brushes due to
+         * the proportional scaling using shift+drag gesture.
+         *
+         * See this bug: https://bugs.kde.org/show_bug.cgi?id=423572
+         *
+         * TODO:
+         *
+         * 1) Implement a warning notifying the user that his masking
+         *    brush has been cropped
+         *
+         * 2) Make sure that the sliders in KisMaskingBrushOption have
+         *    correct limits (right now they are limited by usual
+         *    maximumBrushSize)
+         */
+
+        const qreal maxBrushSize = KisImageConfig(true).readEntry("maximumBrushSize", 1000);
+        const qreal maxMaskingBrushSize = qMin(15000.0, 3.0 * maxBrushSize);
+
         const qreal masterSizeCoeff = getDouble(KisPaintOpUtils::MaskingBrushMasterSizeCoeffTag, 1.0);
-        maskingSettings->setPaintOpSize(masterSizeCoeff * paintOpSize());
+        maskingSettings->setPaintOpSize(qMin(maxMaskingBrushSize, masterSizeCoeff * paintOpSize()));
     }
 
     return maskingSettings;

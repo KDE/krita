@@ -179,6 +179,10 @@ bool KisOpenRasterStackSaveVisitor::visit(KisExternalLayer * layer)
 
 bool KisOpenRasterStackSaveVisitor::saveLayer(KisLayer *layer)
 {
+    if (layer->isFakeNode()) {
+        // don't save grids, reference images layers etc.
+        return true;
+    }
 
     // here we adjust the bounds to encompass the entire area of the layer, including transforms
     QRect adjustedBounds = layer->exactBounds();

@@ -1,5 +1,5 @@
-/* This file is part of the KDE project
- * Copyright (C)Peter Schatz <voronwe13@gmail.com>, (C) 2020
+/*
+ * Copyright (C) Peter Schatz <voronwe13@gmail.com>, (C) 2020
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,15 +16,25 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "kis_pressure_lightness_strength_option.h"
 
-KisPressureLightnessStrengthOption::KisPressureLightnessStrengthOption()
-    : KisCurveOption("LightnessStrength", KisPaintOpOption::GENERAL, false)
-{
-}
+#ifndef KIS_PRESSURE_LIGHTNESS_STRENGTH_OPTION_WIDGET_H
+#define KIS_PRESSURE_LIGHTNESS_STRENGTH_OPTION_WIDGET_H
 
-double KisPressureLightnessStrengthOption::apply(const KisPaintInformation& info) const
+#include "kis_curve_option_widget.h"
+
+class QLabel;
+
+class PAINTOP_EXPORT KisPressureLightnessStrengthOptionWidget : public KisCurveOptionWidget
 {
-    if (!isChecked()) return 1.0;
-    return computeSizeLikeValue(info);
-}
+    Q_OBJECT
+
+public:
+    KisPressureLightnessStrengthOptionWidget();
+
+    void setEnabled(bool enabled) override;
+
+private:
+    QLabel* m_enabledLabel;
+};
+
+#endif // KIS_PRESSURE_LIGHTNESS_STRENGTH_OPTION_WIDGET_H

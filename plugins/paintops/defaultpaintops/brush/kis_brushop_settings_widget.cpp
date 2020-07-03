@@ -31,6 +31,7 @@
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_mix_option.h>
 #include <kis_pressure_lightness_strength_option.h>
+#include <kis_pressure_lightness_strength_option_widget.h>
 #include <kis_curve_option_widget.h>
 #include <kis_pressure_hsv_option.h>
 #include <kis_airbrush_option_widget.h>
@@ -70,8 +71,8 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSoftnessOption(), i18n("Soft"), i18n("Hard")), i18n("Softness"));
     addPaintOpOption(new KisPressureSharpnessOptionWidget(), i18n("Sharpness"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°")), i18n("Rotation"));
-    m_lightnessStrengthOptionWidget = new KisCurveOptionWidget(new KisPressureLightnessStrengthOption(), i18n("0%"), i18n("100%"));
-    addPaintOpOption(m_lightnessStrengthOptionWidget, i18n("Lightness Strength (RGBA brushes only)"));
+    m_lightnessStrengthOptionWidget = new KisPressureLightnessStrengthOptionWidget();
+    addPaintOpOption(m_lightnessStrengthOptionWidget, i18n("Lightness Strength"));
     addPaintOpOption(new KisPressureScatterOptionWidget(), i18n("Scatter"));
 
     // Colors options

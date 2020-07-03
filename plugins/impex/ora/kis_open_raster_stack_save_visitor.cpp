@@ -171,6 +171,12 @@ bool KisOpenRasterStackSaveVisitor::saveLayer(KisLayer *layer)
     // here we adjust the bounds to encompass the entire area of the layer, including transforms
     QRect adjustedBounds = layer->exactBounds();
 
+    if (adjustedBounds.isEmpty()) {
+        // in case of an empty layer, artificially increase the size of the saved rectangle
+        // to just save an empty layer file
+        adjustedBounds.adjust(0, 0, 1, 1);
+    }
+
     QString filename = d->saveContext->saveDeviceData(layer->projection(), layer->metaData(), adjustedBounds, layer->image()->xRes(), layer->image()->yRes());
 
     QDomElement elt = d->layerStack.createElement("layer");

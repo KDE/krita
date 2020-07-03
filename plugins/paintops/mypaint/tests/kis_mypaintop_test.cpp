@@ -64,4 +64,11 @@ void KisMyPaintOpTest::testGetColor() {
     QVERIFY(qFuzzyCompare((float)qRound(a), 1.0L));
 }
 
+void KisMyPaintOpTest::testLoading() {
+
+    QScopedPointer<KisMyPaintBrush> brush (new KisMyPaintBrush(QString(FILES_DATA_DIR) + QDir::separator() + "basic.myb"));
+    brush->load();
+    QVERIFY(brush->valid());
+}
+
 QTEST_MAIN(KisMyPaintOpTest)

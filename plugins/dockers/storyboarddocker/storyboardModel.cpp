@@ -22,7 +22,9 @@
 #include <QMimeData>
 
 #include <kis_icon.h>
+#include <kis_image.h>
 #include <kis_layer_utils.h>
+#include <kis_group_layer.h>
 
 StoryboardModel::StoryboardModel(QObject *parent)
         : QAbstractItemModel(parent)
@@ -470,7 +472,27 @@ void StoryboardModel::slotKeyframeRemoved(KisKeyframeSP keyframe)
 {
     QModelIndex itemIndex = indexFromFrame(keyframe->time());
     if (itemIndex.isValid()) {
-        removeRows(itemIndex.row(), 1);
+        bool onlyKeyframe = true;
+        KisNodeSP node = keyframe->channel()->node()->image()->rootLayer();
+        while (node) {
+            KisLayerUtils::recursiveApplyNodes(node,
+                                                [keyframe, &onlyKeyframe] (KisNodeSP node) {
+                                                if (node->isAnimated()) {
+                                                    auto keyframeMap = node->keyframeChannels();
+                                                    for (auto elem: keyframeMap) {
+                                                        KisKeyframeChannel *keyframeChannel = elem;
+                                                        bool keyframeAbsent = keyframeChannel->keyframeAt(keyframe->time()).isNull();
+                                                        if (node != KisNodeSP(keyframe->channel()->node())) {
+                                                            onlyKeyframe &= keyframeAbsent;
+                                                        }
+                                                    }
+                                                }
+                                                });
+            node = node->nextSibling();
+        }
+        if (onlyKeyframe) {
+            removeRows(itemIndex.row(), 1);
+        }
     }
 }
 
@@ -480,33 +502,20 @@ void StoryboardModel::slotKeyframeMoved(KisKeyframeSP keyframe, int from)
     if (fromIndex.isValid()) {
         //check whether there are keyframes at the "from" time in other nodes
         bool onlyKeyframe = true;
-        KisNodeWSP node = keyframe->channel()->node();
+        KisNodeSP node = keyframe->channel()->node()->image()->rootLayer();
         while (node) {
             KisLayerUtils::recursiveApplyNodes(node,
-                                                [from, keyframe, &onlyKeyframe] (KisNodeWSP node) {
-                                                auto keyframeMap = node->keyframeChannels();
+                                                [from, keyframe, &onlyKeyframe] (KisNodeSP node) {
+                                                if (node->isAnimated()) {
+                                                    auto keyframeMap = node->keyframeChannels();
                                                     for (auto elem: keyframeMap) {
                                                         KisKeyframeChannel *keyframeChannel = elem;
-                                                        bool keyframeExists = keyframeChannel->keyframeAt(from).isNull();
-                                                        if (node != keyframe->channel()->node()) {
-                                                            onlyKeyframe &= keyframeExists;
+                                                        bool keyframeAbsent = keyframeChannel->keyframeAt(from).isNull();
+                                                        if (node != KisNodeSP(keyframe->channel()->node())) {
+                                                            onlyKeyframe &= keyframeAbsent;
                                                         }
                                                     }
-                                                });
-            node = node->prevSibling();
-        }
-        node = keyframe->channel()->node();
-        while (node) {
-            KisLayerUtils::recursiveApplyNodes(node,
-                                                [from, keyframe, &onlyKeyframe] (KisNodeWSP node) {
-                                                auto keyframeMap = node->keyframeChannels();
-                                                    for (auto elem: keyframeMap) {
-                                                        KisKeyframeChannel *keyframeChannel = elem;
-                                                        bool keyframeExists = keyframeChannel->keyframeAt(from).isNull();
-                                                        if (node != keyframe->channel()->node()) {
-                                                            onlyKeyframe &= keyframeExists;
-                                                        }
-                                                    }
+                                                }
                                                 });
             node = node->nextSibling();
         }

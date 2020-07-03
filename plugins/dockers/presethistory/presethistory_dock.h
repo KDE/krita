@@ -30,6 +30,7 @@
 
 class QListWidget;
 class QListWidgetItem;
+class QActionGroup;
 
 class PresetHistoryDock : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
@@ -54,6 +55,8 @@ public Q_SLOTS:
 private Q_SLOTS:
     void presetSelected(QListWidgetItem* item);
     void canvasResourceChanged(int key, const QVariant& v);
+    void slotSortingModeChanged(QAction *action);
+    void slotContextMenuRequest(const QPoint &pos);
 private:
     void sortPresets(int position);
     int bubblePreset(int position);
@@ -61,6 +64,10 @@ private:
 private:
     QPointer<KisCanvas2> m_canvas;
     QListWidget *m_presetHistory;
+    QAction *m_actionSortStatic;
+    QAction *m_actionSortMostRecent;
+    QAction *m_actionSortBubble;
+    QActionGroup *m_sortingModes;
     DisplayOrder m_sorting {Static};
     bool m_block {false};
     bool m_initialized {false};

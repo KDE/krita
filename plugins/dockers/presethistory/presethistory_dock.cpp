@@ -18,6 +18,9 @@
 
 #include "presethistory_dock.h"
 
+#include <QAction>
+#include <QActionGroup>
+#include <QMenu>
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QListWidget>
@@ -50,7 +53,16 @@ PresetHistoryDock::PresetHistoryDock( )
     m_presetHistory->setSelectionBehavior(QAbstractItemView::SelectRows);
     m_presetHistory->setSelectionMode(QAbstractItemView::SingleSelection);
     m_presetHistory->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    m_presetHistory->setContextMenuPolicy(Qt::CustomContextMenu);
     setWidget(m_presetHistory);
+
+    m_sortingModes = new QActionGroup(this);
+    m_actionSortStatic = new QAction(i18n("Static Positions"), m_sortingModes);
+    m_actionSortStatic->setCheckable(true);
+    m_actionSortMostRecent = new QAction(i18n("Move to Top on Use"), m_sortingModes);
+    m_actionSortMostRecent->setCheckable(true);
+    m_actionSortBubble = new QAction(i18n("Bubble Up on Repeated Use"), m_sortingModes);
+    m_actionSortBubble->setCheckable(true);
 
     QScroller* scroller = KisKineticScroller::createPreconfiguredScroller(m_presetHistory);
     if( scroller ) {
@@ -58,6 +70,8 @@ PresetHistoryDock::PresetHistoryDock( )
     }
 
     connect(m_presetHistory, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(presetSelected(QListWidgetItem*)));
+    connect(m_sortingModes, SIGNAL(triggered(QAction*)), SLOT(slotSortingModeChanged(QAction*)));
+    connect(m_presetHistory, SIGNAL(customContextMenuRequested(QPoint)), SLOT(slotContextMenuRequest(QPoint)));
 }
 
 void PresetHistoryDock::setCanvas(KoCanvasBase * canvas)
@@ -83,8 +97,20 @@ void PresetHistoryDock::setCanvas(KoCanvasBase * canvas)
             KisPaintOpPresetSP preset = rserver->resourceByName(p);
             addPreset(preset);
         }
-        int ordering = qBound(int(Static), cfg.readEntry("presethistorySorting", 0), int(Bubbling));
-        m_sorting = static_cast<DisplayOrder>(ordering);
+        int ordering = cfg.readEntry("presethistorySorting", int(DisplayOrder::Static));
+        m_sorting = qBound(DisplayOrder::Static, static_cast<DisplayOrder>(ordering), DisplayOrder::Bubbling);
+
+        switch (m_sorting) {
+        case DisplayOrder::Static:
+            m_actionSortStatic->setChecked(true);
+            break;
+        case DisplayOrder::MostRecent:
+            m_actionSortMostRecent->setChecked(true);
+            break;
+        case DisplayOrder::Bubbling:
+            m_actionSortBubble->setChecked(true);
+        }
+
         m_initialized = true;
     }
 }
@@ -102,7 +128,6 @@ void PresetHistoryDock::unsetCanvas()
     }
     KisConfig cfg(false);
     cfg.writeEntry("presethistory", presetHistory.join(","));
-    cfg.writeEntry("presethistorySorting", int(m_sorting));
 }
 
 void PresetHistoryDock::presetSelected(QListWidgetItem *item)
@@ -134,6 +159,19 @@ void PresetHistoryDock::canvasResourceChanged(int key, const QVariant& v)
             addPreset(preset);
         }
     }
+}
+
+void PresetHistoryDock::slotSortingModeChanged(QAction *action)
+{
+    if (action == m_actionSortStatic) {
+        m_sorting = DisplayOrder::Static;
+    } else if (action == m_actionSortMostRecent) {
+        m_sorting = DisplayOrder::MostRecent;
+    } else if (action == m_actionSortBubble) {
+        m_sorting = DisplayOrder::Bubbling;
+    }
+    KisConfig cfg(false);
+    cfg.writeEntry("presethistorySorting", int(m_sorting));
 }
 
 void PresetHistoryDock::sortPresets(int position)
@@ -208,3 +246,25 @@ void PresetHistoryDock::addPreset(KisPaintOpPresetSP preset)
 
 }
 
+void PresetHistoryDock::slotContextMenuRequest(const QPoint &pos)
+{
+    QMenu contextMenu;
+    QListWidgetItem *presetItem = m_presetHistory->itemAt(pos);
+    QAction *actionForget = 0;
+    if (presetItem) {
+        actionForget = new QAction(i18n("Forget \"%1\"", presetItem->text()), &contextMenu);
+        contextMenu.addAction(actionForget);
+    }
+    contextMenu.addAction(i18n("Clear History"), m_presetHistory, SLOT(clear()));
+    contextMenu.addSeparator();
+    contextMenu.addSection(i18n("History Behavior:"));
+    contextMenu.addAction(m_actionSortStatic);
+    contextMenu.addAction(m_actionSortMostRecent);
+    contextMenu.addAction(m_actionSortBubble);
+    QAction *triggered = contextMenu.exec(m_presetHistory->mapToGlobal(pos));
+
+    if (presetItem && triggered == actionForget) {
+        // deleting a QListWidgetItem removes it from the QListWidget automatically
+        delete presetItem;
+    }
+}

@@ -1,3 +1,17 @@
+# This script is licensed CC 0 1.0, so that you can learn from it.
+
+# ------ CC 0 1.0 ---------------
+
+# The person who associated a work with this deed has dedicated the
+# work to the public domain by waiving all of his or her rights to the
+# work worldwide under copyright law, including all related and
+# neighboring rights, to the extent allowed by law.
+
+# You can copy, modify, distribute and perform the work, even for
+# commercial purposes, all without asking permission.
+
+# https://creativecommons.org/publicdomain/zero/1.0/legalcode
+
 from krita import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
@@ -106,7 +120,7 @@ class PhotobashDocker(DockWidget):
         nextButton.setArrowType(Qt.ArrowType.RightArrow)
 
         self.sliderLabel = QLabel(self.mainWidget)
-        self.sliderLabel.setText(f"Image Scale : {self.currImageScale}%")
+        self.sliderLabel.setText(f"Scale : {self.currImageScale}%")
         self.sliderLabel.setMaximumWidth(self.sliderLabel.fontMetrics().width(self.sliderLabel.text()))
         
         slider = QSlider(Qt.Horizontal, self)
@@ -148,7 +162,7 @@ class PhotobashDocker(DockWidget):
 
     def updateScale(self, value):
         self.currImageScale = value
-        self.sliderLabel.setText(f"Scale : {self.currImageScale}%")
+        self.sliderLabel.setText(f"Image Scale : {self.currImageScale}%")
 
     def updateCurrPage(self, increment):
         if (self.currPage == 0 and increment == -1) or \
@@ -218,7 +232,7 @@ class PhotobashDocker(DockWidget):
         fileDialog.setFileMode(QFileDialog.DirectoryOnly);
             
         if self.directoryPath == "":
-            self.directoryPath = fileDialog.getExistingDirectory()
+            self.directoryPath = fileDialog.getExistingDirectory(self.mainWidget, "Change Directory for Images", QStandardPaths.writableLocation(QStandardPaths.PicturesLocation))
             Application.writeSetting(self.applicationName, self.referencesSetting, self.directoryPath)
         else: 
             self.directoryPath = fileDialog.getExistingDirectory(self.mainWidget, "Change Directory for Images", self.directoryPath)

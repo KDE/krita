@@ -614,9 +614,6 @@ void KisAssistantTool::updateToolOptionsUI()
      }
 
      // show/hide elements if an assistant is selected or not
-      m_options.assistantsGlobalOpacitySlider->setVisible(hasActiveAssistant);
-      m_options.assistantsColor->setVisible(hasActiveAssistant);
-      m_options.globalColorLabel->setVisible(hasActiveAssistant);
       m_options.useCustomAssistantColor->setVisible(hasActiveAssistant);
 
       // hide custom color options if use custom color is not selected

@@ -478,16 +478,16 @@ void KisBrush::clearBrushPyramid()
     d->brushPyramid.reset(new KisSharedQImagePyramid());
 }
 
-void KisBrush::mask(KisFixedPaintDeviceSP dst, const KoColor& color, KisDabShape const& shape, const KisPaintInformation& info, double subPixelX, double subPixelY, qreal softnessFactor) const
+void KisBrush::mask(KisFixedPaintDeviceSP dst, const KoColor& color, KisDabShape const& shape, const KisPaintInformation& info, double subPixelX, double subPixelY, qreal softnessFactor, qreal lightnessStrength) const
 {
     PlainColoringInformation pci(color.data());
-    generateMaskAndApplyMaskOrCreateDab(dst, &pci, shape, info, subPixelX, subPixelY, softnessFactor);
+    generateMaskAndApplyMaskOrCreateDab(dst, &pci, shape, info, subPixelX, subPixelY, softnessFactor, lightnessStrength);
 }
 
-void KisBrush::mask(KisFixedPaintDeviceSP dst, const KisPaintDeviceSP src, KisDabShape const& shape, const KisPaintInformation& info, double subPixelX, double subPixelY, qreal softnessFactor) const
+void KisBrush::mask(KisFixedPaintDeviceSP dst, const KisPaintDeviceSP src, KisDabShape const& shape, const KisPaintInformation& info, double subPixelX, double subPixelY, qreal softnessFactor, qreal lightnessStrength) const
 {
     PaintDeviceColoringInformation pdci(src, maskWidth(shape, subPixelX, subPixelY, info));
-    generateMaskAndApplyMaskOrCreateDab(dst, &pdci, shape, info, subPixelX, subPixelY, softnessFactor);
+    generateMaskAndApplyMaskOrCreateDab(dst, &pdci, shape, info, subPixelX, subPixelY, softnessFactor, lightnessStrength);
 }
 
 namespace {
@@ -502,10 +502,19 @@ void fetchPremultipliedRed(const QRgb* src, quint8 *dst, int maskWidth)
 }
 
 void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
+    ColoringInformation* coloringInformation,
+    KisDabShape const& shape,
+    const KisPaintInformation& info_,
+    double subPixelX, double subPixelY, qreal softnessFactor) const
+{
+    generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, shape, info_, subPixelX, subPixelY, softnessFactor, DEFAULT_LIGHTNESS_STRENGTH);
+}
+
+void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
         ColoringInformation* coloringInformation,
         KisDabShape const& shape,
         const KisPaintInformation& info_,
-        double subPixelX, double subPixelY, qreal softnessFactor) const
+        double subPixelX, double subPixelY, qreal softnessFactor, qreal lightnessStrength) const
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(valid());
     Q_UNUSED(info_);
@@ -539,7 +548,7 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
         const quint8* maskPointer = outputImage.constScanLine(y);
         if (color) {
             if (preserveLightness) {
-                cs->fillGrayBrushWithColorAndLightnessOverlay(rowPointer, reinterpret_cast<const QRgb*>(maskPointer), color, maskWidth);
+                cs->fillGrayBrushWithColorAndLightnessWithStrength(rowPointer, reinterpret_cast<const QRgb*>(maskPointer), color, lightnessStrength, maskWidth);
             }
             else {
                 cs->fillGrayBrushWithColor(rowPointer, reinterpret_cast<const QRgb*>(maskPointer), color, maskWidth);

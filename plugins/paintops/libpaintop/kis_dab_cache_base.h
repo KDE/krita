@@ -107,6 +107,7 @@ private:
                                                const KisPaintInformation& info,
                                                double subPixelX, double subPixelY,
                                                qreal softnessFactor,
+                                               qreal lightnessStrength,
                                                MirrorProperties mirrorProperties);
 
     inline KisDabCacheBase::DabPosition

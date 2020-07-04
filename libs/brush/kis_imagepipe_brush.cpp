@@ -413,9 +413,9 @@ void KisImagePipeBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceS
         KisDabShape const& shape,
         const KisPaintInformation& info,
         double subPixelX , double subPixelY,
-        qreal softnessFactor) const
+        qreal softnessFactor, qreal lightnessStrength) const
 {
-    m_d->brushesPipe.generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, shape, info, subPixelX, subPixelY, softnessFactor);
+    m_d->brushesPipe.generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, shape, info, subPixelX, subPixelY, softnessFactor, lightnessStrength);
 }
 
 QVector<KisGbrBrush *> KisImagePipeBrush::brushes() const

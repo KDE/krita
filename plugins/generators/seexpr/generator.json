@@ -1,0 +1,9 @@
+{
+    "Id": "SeExpr Generator",
+    "Type": "Service",
+    "X-KDE-Library": "kritaseexprgenerator",
+    "X-KDE-ServiceTypes": [
+        "Krita/Generator"
+    ],
+    "X-Krita-Version": "28"
+}

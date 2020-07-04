@@ -122,6 +122,8 @@
 
 #include <kis_psd_layer_style.h>
 
+#include <config-seexpr.h>
+
 namespace {
 const QTime appStartTime(QTime::currentTime());
 }
@@ -280,6 +282,9 @@ void KisApplication::addResourceTypes()
     KoResourcePaths::addResourceType(ResourceType::Symbols, "data", "/symbols");
     KoResourcePaths::addResourceType("preset_icons", "data", "/preset_icons");
     KoResourcePaths::addResourceType(ResourceType::GamutMasks, "data", "/gamutmasks/", true);
+#if defined HAVE_SEEXPR
+    KoResourcePaths::addResourceType(ResourceType::SeExprScripts, "data", "/seexpr_scripts/", true);
+#endif
 
     //    // Extra directories to look for create resources. (Does anyone actually use that anymore?)
     //    KoResourcePaths::addResourceDir(ResourceType::Gradients, "/usr/share/create/gradients/gimp");
@@ -318,6 +323,9 @@ void KisApplication::addResourceTypes()
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/preset_icons/tool_icons/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/preset_icons/emblem_icons/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/gamutmasks/");
+#if defined HAVE_SEEXPR
+    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/seexpr_scripts/");
+#endif
 }
 
 bool KisApplication::registerResources()
@@ -360,6 +368,9 @@ bool KisApplication::registerResources()
     reg->add(new KisResourceLoader<KisWindowLayoutResource>(ResourceType::WindowLayouts, ResourceType::WindowLayouts, i18n("Window layouts"), QStringList() << "application/x-krita-windowlayout"));
     reg->add(new KisResourceLoader<KisSessionResource>(ResourceType::Sessions, ResourceType::Sessions, i18n("Sessions"), QStringList() << "application/x-krita-session"));
     reg->add(new KisResourceLoader<KoGamutMask>(ResourceType::GamutMasks, ResourceType::GamutMasks, i18n("Gamut masks"), QStringList() << "application/x-krita-gamutmasks"));
+#if defined HAVE_SEEXPR
+    reg->add(new KisResourceLoader<KisSeExprScript>(ResourceType::SeExprScripts, ResourceType::SeExprScripts, i18n("SeExpr Scripts"), QStringList() << "application/x-krita-seexpr-script"));
+#endif
 
     reg->add(new KisResourceLoader<KisPSDLayerStyle>(ResourceType::LayerStyles,
                                                      ResourceType::LayerStyles,

@@ -111,6 +111,8 @@ void KisGeneratorLayer::update()
     KisGeneratorSP f = KisGeneratorRegistry::instance()->value(filterConfig->name());
     KIS_SAFE_ASSERT_RECOVER_RETURN(f);
 
+    KisProcessingVisitor::ProgressHelper helper(this);
+
     KisPaintDeviceSP originalDevice = original();
 
     QVector<QRect> dirtyRegion;
@@ -121,7 +123,7 @@ void KisGeneratorLayer::update()
                                         rc->topLeft(),
                                         KisSelectionSP());
 
-        f->generate(dstCfg, rc->size(), filterConfig.data());
+        f->generate(dstCfg, rc->size(), filterConfig.data(), helper.updater());
         dirtyRegion << *rc;
         rc++;
     }

@@ -415,6 +415,12 @@ set(kritaui_LIB_SRCS
     KoDocumentInfo.cpp
 )
 
+if (SeExpr2_FOUND)
+    set(kritaui_LIB_SRCS ${kritaui_LIB_SRCS}
+        widgets/kis_seexpr_script_chooser.cpp
+    )
+endif()
+
 if(WIN32)
     # Private headers are needed for:
     #    * KisDlgCustomTabletResolution

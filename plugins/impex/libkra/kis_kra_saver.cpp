@@ -50,7 +50,6 @@
 #include <kis_adjustment_layer.h>
 #include <kis_layer_composition.h>
 #include <kis_painting_assistants_decoration.h>
-#include <kis_psd_layer_style_resource.h>
 #include "kis_png_converter.h"
 #include "kis_keyframe_channel.h"
 #include <kis_time_range.h>
@@ -116,11 +115,13 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageSP image)
     imageElement.setAttribute(Y_RESOLUTION, KisDomUtils::toString(image->yRes()*72.0));
     //now the proofing options:
     if (image->proofingConfiguration()) {
-        imageElement.setAttribute(PROOFINGPROFILENAME, KisDomUtils::toString(image->proofingConfiguration()->proofingProfile));
-        imageElement.setAttribute(PROOFINGMODEL, KisDomUtils::toString(image->proofingConfiguration()->proofingModel));
-        imageElement.setAttribute(PROOFINGDEPTH, KisDomUtils::toString(image->proofingConfiguration()->proofingDepth));
-        imageElement.setAttribute(PROOFINGINTENT, KisDomUtils::toString(image->proofingConfiguration()->intent));
-        imageElement.setAttribute(PROOFINGADAPTATIONSTATE, KisDomUtils::toString(image->proofingConfiguration()->adaptationState));
+        if (image->proofingConfiguration()->storeSoftproofingInsideImage) {
+            imageElement.setAttribute(PROOFINGPROFILENAME, KisDomUtils::toString(image->proofingConfiguration()->proofingProfile));
+            imageElement.setAttribute(PROOFINGMODEL, KisDomUtils::toString(image->proofingConfiguration()->proofingModel));
+            imageElement.setAttribute(PROOFINGDEPTH, KisDomUtils::toString(image->proofingConfiguration()->proofingDepth));
+            imageElement.setAttribute(PROOFINGINTENT, KisDomUtils::toString(image->proofingConfiguration()->intent));
+            imageElement.setAttribute(PROOFINGADAPTATIONSTATE, KisDomUtils::toString(image->proofingConfiguration()->adaptationState));
+        }
     }
 
     quint32 count = 1; // We don't save the root layer, but it does count
@@ -158,25 +159,26 @@ bool KisKraSaver::savePalettes(KoStore *store, KisImageSP image, const QString &
     Q_UNUSED(image);
     Q_UNUSED(uri);
 
+    qDebug() << "saving palettes to document" << m_d->doc->paletteList().size();
+
     bool res = false;
     if (m_d->doc->paletteList().size() == 0) {
         return true;
     }
-    for (const KoColorSet *palette : m_d->doc->paletteList()) {
-        if (!palette->isGlobal()) {
-            if (!store->open(m_d->imageName + PALETTE_PATH + palette->filename())) {
-                m_d->errorMessages << i18n("could not save palettes");
-                return false;
-            }
-            QByteArray ba = palette->toByteArray();
-            if (!ba.isEmpty()) {
-                store->write(ba);
-            } else {
-                qWarning() << "Cannot save the palette to a byte array:" << palette->name();
-            }
-            store->close();
-            res = true;
+    for (const KoColorSetSP palette : m_d->doc->paletteList()) {
+        qDebug() << "saving palette..." << palette->storageLocation() << palette->filename();
+        if (!store->open(m_d->imageName + PALETTE_PATH + palette->filename())) {
+            m_d->errorMessages << i18n("could not save palettes");
+            return false;
         }
+        QByteArray ba = palette->toByteArray();
+        if (!ba.isEmpty()) {
+            store->write(ba);
+        } else {
+            qWarning() << "Cannot save the palette to a byte array:" << palette->name();
+        }
+        store->close();
+        res = true;
     }
     return res;
 }
@@ -184,12 +186,10 @@ bool KisKraSaver::savePalettes(KoStore *store, KisImageSP image, const QString &
 void KisKraSaver::savePalettesToXML(QDomDocument &doc, QDomElement &element)
 {
     QDomElement ePalette = doc.createElement(PALETTES);
-    for (const KoColorSet *palette : m_d->doc->paletteList()) {
-        if (!palette->isGlobal()) {
-            QDomElement eFile =  doc.createElement("palette");
-            eFile.setAttribute("filename", palette->filename());
-            ePalette.appendChild(eFile);
-        }
+    for (const KoColorSetSP palette : m_d->doc->paletteList()) {
+        QDomElement eFile =  doc.createElement("palette");
+        eFile.setAttribute("filename", palette->filename());
+        ePalette.appendChild(eFile);
     }
     element.appendChild(ePalette);
 }
@@ -293,25 +293,30 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageSP image, const QString
 
     //This'll embed the profile used for proofing into the kra file.
     if (image->proofingConfiguration()) {
-        const KoColorProfile *proofingProfile = KoColorSpaceRegistry::instance()->profileByName(image->proofingConfiguration()->proofingProfile);
-        if (proofingProfile && proofingProfile->valid()) {
-            QByteArray proofingProfileRaw = proofingProfile->rawData();
-            if (!proofingProfileRaw.isEmpty()) {
-                annotation = new KisAnnotation(ICCPROOFINGPROFILE, proofingProfile->name(), proofingProfile->rawData());
+        if (image->proofingConfiguration()->storeSoftproofingInsideImage) {
+            const KoColorProfile *proofingProfile = KoColorSpaceRegistry::instance()->profileByName(image->proofingConfiguration()->proofingProfile);
+            if (proofingProfile && proofingProfile->valid()) {
+                QByteArray proofingProfileRaw = proofingProfile->rawData();
+                if (!proofingProfileRaw.isEmpty()) {
+                    annotation = new KisAnnotation(ICCPROOFINGPROFILE, proofingProfile->name(), proofingProfile->rawData());
+                }
+            }
+            if (annotation) {
+                location = external ? QString() : uri;
+                location += m_d->imageName + ICC_PROOFING_PATH;
+                if (store->open(location)) {
+                    store->write(annotation->annotation());
+                    store->close();
+                }
             }
         }
-        if (annotation) {
-            location = external ? QString() : uri;
-            location += m_d->imageName + ICC_PROOFING_PATH;
-            if (store->open(location)) {
-                store->write(annotation->annotation());
-                store->close();
-            }
-        }
-
     }
 
     {
+        warnKrita << "WARNING: Asl Layer Styles cannot be written (part of resource rewrite).";
+        // TODO: RESOURCES: needs implementation
+
+        /*
         KisPSDLayerStyleCollectionResource collection("not-nexists.asl");
         KIS_ASSERT_RECOVER_NOOP(!collection.valid());
         collection.collectAllLayerStyles(image->root());
@@ -329,11 +334,14 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageSP image, const QString
                 store->close();
             }
         }
+        */
     }
 
     if (!autosave) {
         KisPaintDeviceSP dev = image->projection();
+        store->setCompressionEnabled(false);
         KisPNGConverter::saveDeviceToStore("mergedimage.png", image->bounds(), image->xRes(), image->yRes(), dev, store);
+        store->setCompressionEnabled(KisConfig(true).compressKra());
     }
 
     saveAssistants(store, uri,external);
@@ -365,10 +373,12 @@ void KisKraSaver::saveAssistantsGlobalColor(QDomDocument& doc, QDomElement& elem
 void KisKraSaver::saveWarningColor(QDomDocument& doc, QDomElement& element, KisImageSP image)
 {
     if (image->proofingConfiguration()) {
-        QDomElement e = doc.createElement(PROOFINGWARNINGCOLOR);
-        KoColor color = image->proofingConfiguration()->warningColor;
-        color.toXML(doc, e);
-        element.appendChild(e);
+        if (image->proofingConfiguration()->storeSoftproofingInsideImage) {
+            QDomElement e = doc.createElement(PROOFINGWARNINGCOLOR);
+            KoColor color = image->proofingConfiguration()->warningColor;
+            color.toXML(doc, e);
+            element.appendChild(e);
+        }
     }
 }
 

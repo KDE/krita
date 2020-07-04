@@ -23,6 +23,7 @@
 #include <QScopedPointer>
 #include <QTableView>
 #include <QScroller>
+#include <QScrollBar>
 #include "kis_action_manager.h"
 #include "kritaanimationdocker_export.h"
 
@@ -38,7 +39,6 @@ enum TimelineDirection : short
     AFTER = 1
 };
 
-
 class KRITAANIMATIONDOCKER_EXPORT TimelineFramesView : public QTableView
 {
     Q_OBJECT
@@ -51,13 +51,15 @@ public:
 
     void updateGeometries() override;
 
-    void setShowInTimeline(KisAction *action);
+    void setPinToTimeline(KisAction *action);
 
     void setActionManager(KisActionManager *actionManager);
 
 public Q_SLOTS:
     void slotSelectionChanged();
     void slotUpdateIcons();
+
+    void slotCanvasUpdate(class KoCanvasBase* canvas);
 
 private Q_SLOTS:
     void slotUpdateLayersMenu();
@@ -124,8 +126,9 @@ private Q_SLOTS:
 
     void slotHeaderDataChanged(Qt::Orientation orientation, int first, int last);
 
-    void slotZoomButtonPressed(qreal staticPoint);
     void slotZoomButtonChanged(qreal value);
+
+    void slotScrollbarZoom(qreal zoom);
 
     void slotColorLabelChanged(int);
     void slotEnsureRowVisible(int row);
@@ -139,6 +142,9 @@ private Q_SLOTS:
 
     // DragScroll
     void slotScrollerStateChanged(QScroller::State state);
+    void slotUpdateDragInfiniteFramesCount();
+
+    void slotRealignScrollBars();
 
 private:
     void setFramesPerSecond(int fps);
@@ -165,6 +171,10 @@ private:
 
     QModelIndexList calculateSelectionSpan(bool entireColumn, bool editableOnly = true) const;
 
+    int estimateLastVisibleColumn();
+    int estimateFirstVisibleColumn();
+    int scrollPositionFromColumn( int column );
+
 protected:
     QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index,
                                                          const QEvent *event) const override;
@@ -179,6 +189,7 @@ protected:
     void mouseMoveEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;
     void wheelEvent(QWheelEvent *e) override;
+    void resizeEvent(QResizeEvent *e) override;
     void rowsInserted(const QModelIndex &parent, int start, int end) override;
     bool viewportEvent(QEvent *event) override;
 

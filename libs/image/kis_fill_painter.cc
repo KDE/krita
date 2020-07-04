@@ -54,6 +54,7 @@
 #include <KoCompositeOpRegistry.h>
 #include <floodfill/kis_scanline_fill.h>
 #include "kis_selection_filters.h"
+#include <kis_perspectivetransform_worker.h>
 
 KisFillPainter::KisFillPainter()
         : KisPainter()
@@ -81,6 +82,7 @@ void KisFillPainter::initFillPainter()
     m_feather = 0;
     m_useCompositioning = false;
     m_threshold = 0;
+    m_useSelectionAsBoundary = false;
 }
 
 void KisFillPainter::fillSelection(const QRect &rc, const KoColor &color)
@@ -110,12 +112,12 @@ void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const Ko
     }
 }
 
-void KisFillPainter::fillRect(const QRect &rc, const KoPattern *pattern, const QPoint &offset)
+void KisFillPainter::fillRect(const QRect &rc, const KoPatternSP pattern, const QPoint &offset)
 {
     fillRect(rc.x(), rc.y(), rc.width(), rc.height(), pattern, offset);
 }
 
-void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KoPattern * pattern, const QPoint &offset)
+void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KoPatternSP pattern, const QPoint &offset)
 {
     if (!pattern) return;
     if (!pattern->valid()) return;
@@ -131,6 +133,33 @@ void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const Ko
     }
 
     fillRect(x1, y1, w, h, patternLayer, QRect(offset.x(), offset.y(), pattern->width(), pattern->height()));
+}
+
+void KisFillPainter::fillRect(const QRect &rc, const KoPatternSP pattern, const QTransform transform)
+{
+    if (!pattern) return;
+    if (!pattern->valid()) return;
+    if (!device()) return;
+    if (rc.width() < 1) return;
+    if (rc.height() < 1) return;
+
+    KisPaintDeviceSP patternLayer = new KisPaintDevice(device()->compositionSourceColorSpace(), pattern->name());
+    patternLayer->convertFromQImage(pattern->pattern(), 0);
+
+    fillRect(rc.x(), rc.y(), rc.width(), rc.height(), patternLayer, QRect(0, 0, pattern->width(), pattern->height()), transform);
+}
+
+void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisPaintDeviceSP device, const QRect& deviceRect, const QTransform transform)
+{
+    KisPaintDeviceSP wrapped = device;
+    KisDefaultBoundsBaseSP oldBounds = wrapped->defaultBounds();
+    wrapped->setDefaultBounds(new KisWrapAroundBoundsWrapper(oldBounds, deviceRect));
+
+    KisPerspectiveTransformWorker worker = KisPerspectiveTransformWorker(this->device(), transform, this->progressUpdater());
+    worker.runPartialDst(device, this->device(), QRect(x1, y1, w, h));
+
+    addDirtyRect(QRect(x1, y1, w, h));
+    wrapped->setDefaultBounds(oldBounds);
 }
 
 void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisPaintDeviceSP device, const QRect& deviceRect)
@@ -225,7 +254,7 @@ void KisFillPainter::fillColor(int startX, int startY, KisPaintDeviceSP sourceDe
     }
 }
 
-void KisFillPainter::fillPattern(int startX, int startY, KisPaintDeviceSP sourceDevice)
+void KisFillPainter::fillPattern(int startX, int startY, KisPaintDeviceSP sourceDevice, QTransform patternTransform)
 {
     genericFillStart(startX, startY, sourceDevice);
 
@@ -233,7 +262,7 @@ void KisFillPainter::fillPattern(int startX, int startY, KisPaintDeviceSP source
     KisPaintDeviceSP filled = device()->createCompositionSourceDevice();
     Q_CHECK_PTR(filled);
     KisFillPainter painter(filled);
-    painter.fillRect(0, 0, m_width, m_height, pattern());
+    painter.fillRect(QRect(0, 0, m_width, m_height), pattern(), patternTransform);
     painter.end();
 
     genericFillEnd(filled);
@@ -245,7 +274,12 @@ void KisFillPainter::genericFillStart(int startX, int startY, KisPaintDeviceSP s
     Q_ASSERT(m_height > 0);
 
     // Create a selection from the surrounding area
-    m_fillSelection = createFloodSelection(startX, startY, sourceDevice);
+
+    KisPixelSelectionSP pixelSelection = createFloodSelection(startX, startY, sourceDevice,
+                                                              (selection().isNull() ? 0 : selection()->pixelSelection()));
+    KisSelectionSP newSelection = new KisSelection(pixelSelection->defaultBounds());
+    newSelection->pixelSelection()->applySelection(pixelSelection, SELECTION_REPLACE);
+    m_fillSelection = newSelection;
 }
 
 void KisFillPainter::genericFillEnd(KisPaintDeviceSP filled)
@@ -280,8 +314,17 @@ void KisFillPainter::genericFillEnd(KisPaintDeviceSP filled)
     m_width = m_height = -1;
 }
 
-KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisPaintDeviceSP sourceDevice)
+KisPixelSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisPaintDeviceSP sourceDevice,
+                                                         KisPaintDeviceSP existingSelection)
 {
+    KisPixelSelectionSP newSelection = new KisPixelSelection(new KisSelectionDefaultBounds(device()));
+    return createFloodSelection(newSelection, startX, startY, sourceDevice, existingSelection);
+}
+
+KisPixelSelectionSP KisFillPainter::createFloodSelection(KisPixelSelectionSP pixelSelection, int startX, int startY,
+                                                         KisPaintDeviceSP sourceDevice, KisPaintDeviceSP existingSelection)
+{
+
     if (m_width < 0 || m_height < 0) {
         if (selection() && m_careForSelection) {
             QRect rc = selection()->selectedExactRect();
@@ -296,29 +339,30 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
     QRect fillBoundsRect(0, 0, m_width, m_height);
     QPoint startPoint(startX, startY);
 
-    KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(device()));
-    KisPixelSelectionSP pixelSelection = selection->pixelSelection();
-
     if (!fillBoundsRect.contains(startPoint)) {
-        return selection;
+        return pixelSelection;
     }
 
     KisScanlineFill gc(sourceDevice, startPoint, fillBoundsRect);
     gc.setThreshold(m_threshold);
-    gc.fillSelection(pixelSelection);
+    if (m_useSelectionAsBoundary && !pixelSelection.isNull()) {
+        gc.fillSelectionWithBoundary(pixelSelection, existingSelection);
+    } else {
+        gc.fillSelection(pixelSelection);
+    }
 
     if (m_sizemod > 0) {
         KisGrowSelectionFilter biggy(m_sizemod, m_sizemod);
-        biggy.process(pixelSelection, selection->selectedRect().adjusted(-m_sizemod, -m_sizemod, m_sizemod, m_sizemod));
+        biggy.process(pixelSelection, pixelSelection->selectedRect().adjusted(-m_sizemod, -m_sizemod, m_sizemod, m_sizemod));
     }
     else if (m_sizemod < 0) {
         KisShrinkSelectionFilter tiny(-m_sizemod, -m_sizemod, false);
-        tiny.process(pixelSelection, selection->selectedRect());
+        tiny.process(pixelSelection, pixelSelection->selectedRect());
     }
     if (m_feather > 0) {
         KisFeatherSelectionFilter feathery(m_feather);
-        feathery.process(pixelSelection, selection->selectedRect().adjusted(-m_feather, -m_feather, m_feather, m_feather));
+        feathery.process(pixelSelection, pixelSelection->selectedRect().adjusted(-m_feather, -m_feather, m_feather, m_feather));
     }
 
-    return selection;
+    return pixelSelection;
 }

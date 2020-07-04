@@ -173,7 +173,7 @@ private:
      * @brief colorSet
      * @return gives qa KoColorSet object back
      */
-    KoColorSet *colorSet();
+    KoColorSetSP colorSet();
 
 };
 

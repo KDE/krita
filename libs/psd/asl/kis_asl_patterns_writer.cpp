@@ -42,6 +42,7 @@ void KisAslPatternsWriter::writePatterns()
 {
     KisAslCallbackObjectCatcher c;
     c.subscribePattern("/Patterns/KisPattern", std::bind(&KisAslPatternsWriter::addPattern, this, std::placeholders::_1));
+    c.subscribePattern("/patterns/KisPattern", std::bind(&KisAslPatternsWriter::addPattern, this, std::placeholders::_1));
 
     KisAslXmlParser parser;
     parser.parseXML(m_doc, c);
@@ -95,7 +96,7 @@ void sliceQImage(const QImage &image, QVector<QVector<QByteArray> > *dstPlanes, 
     }
 }
 
-void KisAslPatternsWriter::addPattern(const KoPattern *pattern)
+void KisAslPatternsWriter::addPattern(const KoPatternSP pattern)
 {
     {
         KisAslWriterUtils::OffsetStreamPusher<quint32> patternSizeField(m_device);

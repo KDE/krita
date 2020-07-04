@@ -22,6 +22,7 @@
 #include <QTest>
 
 #include <QBitArray>
+#include <QElapsedTimer>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
@@ -111,7 +112,7 @@ void printPixel(QString prefix, int pixelSize, quint8 *data) {
 
 void KisConvolutionPainterTest::testIdentityConvolution()
 {
-    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    QImage qimage(QString(FILES_DATA_DIR) + '/' + "hakonepa.png");
 
     KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
     dev->convertFromQImage(qimage, 0, 0, 0);
@@ -272,7 +273,7 @@ void KisConvolutionPainterTest::testAsymmSkipAlpha()
 // #include <valgrind/callgrind.h>
 void KisConvolutionPainterTest::benchmarkConvolution()
 {
-    QImage referenceImage(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    QImage referenceImage(QString(FILES_DATA_DIR) + '/' + "hakonepa.png");
     QRect imageRect(QPoint(), referenceImage.size());
 
     KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
@@ -287,7 +288,7 @@ void KisConvolutionPainterTest::benchmarkConvolution()
 
         KisConvolutionPainter gc(dev);
 
-        QTime timer; timer.start();
+        QElapsedTimer timer; timer.start();
 
         // CALLGRIND_START_INSTRUMENTATION;
 
@@ -320,7 +321,7 @@ void KisConvolutionPainterTest::testGaussianBase(KisPaintDeviceSP dev, bool useF
 
    for(int i = 0; i < 3 ; i++, horizontalRadius+=5, verticalRadius+=5)
    {
-       QTime timer;
+       QElapsedTimer timer;
        timer.start();
 
        gc.beginTransaction();

@@ -25,10 +25,10 @@
 
 #include "KoFlake.h"
 #include "KoFlakeTypes.h"
-#include "KoConnectionPoint.h"
 
 #include <QSharedPointer>
 #include <QSet>
+#include <QMap>
 #include <QMetaType>
 #include <QSharedDataPointer>
 
@@ -48,7 +48,6 @@ class KoViewConverter;
 class KoShapeApplicationData;
 class KoShapeSavingContext;
 class KoShapeLoadingContext;
-class KoGenStyle;
 class KoShapeShadow;
 class KoFilterEffectStack;
 class KoSnapData;
@@ -56,7 +55,6 @@ class KoClipPath;
 class KoClipMask;
 class KoShapePaintingContext;
 class KoShapeAnchor;
-class KoBorder;
 struct KoInsets;
 class KoShapeBackground;
 class KisHandlePainterHelper;
@@ -117,7 +115,6 @@ public:
         GenericMatrixChange,    ///< used after the matrix was changed without knowing which property explicitly changed
         KeepAspectRatioChange, ///< used after setKeepAspectRatio()
         ParentChanged,   ///< used after a setParent()
-        CollisionDetected, ///< used when another shape moved in our boundingrect
         Deleted, ///< the shape was deleted
         StrokeChanged, ///< the shapes stroke has changed
         BackgroundChanged, ///< the shapes background has changed
@@ -129,6 +126,7 @@ public:
         ChildChanged, ///< a child of a container was changed/removed. This is propagated to all parents
         ConnectionPointChanged, ///< a connection point has changed
         ClipPathChanged, ///< the shapes clip path has changed
+        ClipMaskChanged, ///< the shapes clip path has changed
         TransparencyChanged ///< the shapetransparency value has changed
     };
 
@@ -169,91 +167,28 @@ public:
     virtual ~KoShape();
 
     /**
-     * @brief creates a deep copy of the shape or shape's subtree 
+     * @brief creates a deep copy of the shape or shape's subtree
      * @return a cloned shape
      */
     virtual KoShape* cloneShape() const;
 
     /**
      * @brief Paint the shape fill
-     * The class extending this one is responsible for painting itself.  Since we do not
-     * assume the shape is square the paint must also clear its background if it will draw
-     * something transparent on top.
-     * This can be done with a method like:
-     * <code>
-       painter.fillRect(converter.normalToView(QRectF(QPointF(0.0,0.0), size())), background());</code>
-     * Or equivalent for non-square objects.
-     * Do note that a shape's top-left is always at coordinate 0,0. Even if the shape itself is rotated
-     * or translated.
+     * The class extending this one is responsible for painting itself. \p painter is expected
+     * to be preconfigured to work in "document" pixels.
+     *
      * @param painter used for painting the shape
-     * @param converter to convert between internal and view coordinates.
-     * @see applyConversion()
      * @param paintcontext the painting context.
      */
-    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) = 0;
+    virtual void paint(QPainter &painter, KoShapePaintingContext &paintcontext) const = 0;
 
     /**
      * @brief paintStroke paints the shape's stroked outline
      * @param painter used for painting the shape
-     * @param converter to convert between internal and view coordinates.
      * @see applyConversion()
      * @param paintcontext the painting context.
      */
-    virtual void paintStroke(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
-
-    /**
-     * @brief Paint the shape's border
-     * This is a helper function that could be called from the paint() method of all shapes. 
-     * @param painter used for painting the shape
-     * @param converter to convert between internal and view coordinates.
-     * @see applyConversion()
-     */
-    virtual void paintBorder(QPainter &painter, const KoViewConverter &converter);
-
-    /**
-     * Load a shape from odf
-     *
-     * @param context the KoShapeLoadingContext used for loading
-     * @param element element which represents the shape in odf
-     *
-     * @return false if loading failed
-     */
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) = 0;
-
-    /**
-     * @brief store the shape data as ODF XML.
-     * This is the method that will be called when saving a shape as a described in
-     * OpenDocument 9.2 Drawing Shapes.
-     * @see saveOdfAttributes
-     */
-    virtual void saveOdf(KoShapeSavingContext &context) const = 0;
-
-    /**
-     * This method can be used while saving the shape as ODF to add the data
-     * stored on this shape to the current element.
-     *
-     * @param context the context for the current save.
-     * @param attributes a number of OdfAttribute items to state which attributes to save.
-     * @see saveOdf
-     */
-    void saveOdfAttributes(KoShapeSavingContext &context, int attributes) const;
-
-    /**
-     * This method can be used while saving the shape as Odf to add common child elements
-     *
-     * The office:event-listeners and draw:glue-point are saved.
-     * @param context the context for the current save.
-     */
-    void saveOdfCommonChildElements(KoShapeSavingContext &context) const;
-
-    /**
-     * This method can be used to save contour data from the clipPath()
-     *
-     * The draw:contour-polygon or draw:contour-path elements are saved.
-     * @param context the context for the current save.
-     * @param originalSize the original size of the unscaled image.
-     */
-    void saveOdfClipContour(KoShapeSavingContext &context, const QSizeF &originalSize) const;
+    virtual void paintStroke(QPainter &painter, KoShapePaintingContext &paintcontext) const;
 
     /**
      * @brief Scale the shape using the zero-point which is the top-left corner.
@@ -351,58 +286,13 @@ public:
      *         boundingRect() this rect doesn't include the stroke and other
      *         insets.
      */
-    QRectF absoluteOutlineRect(KoViewConverter *converter = 0) const;
+    QRectF absoluteOutlineRect() const;
 
     /**
      * Same as a member function, but applies to a list of shapes and returns a
      * united rect.
      */
-    static QRectF absoluteOutlineRect(const QList<KoShape*> &shapes, KoViewConverter *converter = 0);
-
-    /**
-     * @brief Add a connector point to the shape
-     *
-     * A connector is a place on the shape that allows a graphical connection to be made
-     * using a line, for example.
-     *
-     * @param point the connection point to add
-     * @return the id of the new connection point
-     */
-    int addConnectionPoint(const KoConnectionPoint &point);
-
-    /**
-     * Sets data of connection point with specified id.
-     *
-     * The position of the connector is restricted to the bounding rectangle of the shape.
-     * When setting a default connection point, the new position is ignored, as these
-     * are fixed at their default position.
-     * The function will insert a new connection point if the specified id was not used
-     * before.
-     *
-     * @param connectionPointId the id of the connection point to set
-     * @param point the connection point data
-     * @return false if specified connection point id is invalid, else true
-     */
-    bool setConnectionPoint(int connectionPointId, const KoConnectionPoint &point);
-
-    /// Checks if a connection point with the specified id exists
-    bool hasConnectionPoint(int connectionPointId) const;
-
-    /// Returns connection point with specified connection point id
-    KoConnectionPoint connectionPoint(int connectionPointId) const;
-
-    /**
-     * Return a list of the connection points that have been added to this shape.
-     * All the points are relative to the shape position, see absolutePosition().
-     * @return a list of the connectors that have been added to this shape.
-     */
-    KoConnectionPoints connectionPoints() const;
-
-    /// Removes connection point with specified id
-    void removeConnectionPoint(int connectionPointId);
-
-    /// Removes all connection points
-    void clearConnectionPoints();
+    static QRectF absoluteOutlineRect(const QList<KoShape*> &shapes);
 
     /**
      * Return the side text should flow around this shape. This implements the ODF style:wrap
@@ -610,7 +500,7 @@ public:
      * The run through property is used to determine if the shape is behind, inside or before text.
      * @return the run through of this shape.
      */
-    int runThrough();
+    int runThrough() const;
 
     /**
      * Set the run through property of this shape.
@@ -801,7 +691,7 @@ public:
      * Normally this would be the same as outline() if there is a fill (background) set on the
      * shape and empty if not.  However, a shape could reimplement this to return an outline
      * even if no fill is defined. A typical example of this would be the picture shape
-     * which has a picture but almost never a background. 
+     * which has a picture but almost never a background.
      *
      * @returns the outline of the shape in the form of a path.
      */
@@ -843,12 +733,6 @@ public:
 
     /// Returns the currently set shadow or 0 if there is no shadow set
     KoShapeShadow *shadow() const;
-
-    /// Sets the new border, removing the old one.
-    void setBorder(KoBorder *border);
-
-    /// Returns the currently set border or 0 if there is no border set
-    KoBorder *border() const;
 
     /// Sets a new clip path, removing the old one
     void setClipPath(KoClipPath *clipPath);
@@ -934,11 +818,8 @@ public:
      *
      * The absolute transformation is the combined transformation of this shape
      * and all its parents and grandparents.
-     *
-     * @param converter if not null, this method uses the converter to mark the right
-     *        offsets in the current view.
      */
-    QTransform absoluteTransformation(const KoViewConverter *converter) const;
+    QTransform absoluteTransformation() const;
 
     /**
      * Applies a transformation to this shape.
@@ -978,20 +859,12 @@ public:
     void copySettings(const KoShape *shape);
 
     /**
-     * Convenience method that allows people implementing paint() to use the shape
-     * internal coordinate system directly to paint itself instead of considering the
-     * views zoom.
-     * @param painter the painter to alter the zoom level of.
-     * @param converter the converter for the current views zoom.
-     */
-    static void applyConversion(QPainter &painter, const KoViewConverter &converter);
-
-    /**
      * A convenience method that creates a handles helper with applying transformations at
      * the same time. Please note that you shouldn't save/restore additionally. All the work
      * on restoring original painter's transformations is done by the helper.
      */
-    static KisHandlePainterHelper createHandlePainterHelper(QPainter *painter, KoShape *shape, const KoViewConverter &converter, qreal handleRadius = 0.0);
+    static KisHandlePainterHelper createHandlePainterHelperView(QPainter *painter, KoShape *shape, const KoViewConverter &converter, qreal handleRadius = 0.0);
+    static KisHandlePainterHelper createHandlePainterHelperDocument(QPainter *painter, KoShape *shape, qreal handleRadius);
 
     /**
      * @brief Transforms point from shape coordinates to document coordinates
@@ -1043,7 +916,6 @@ public:
      * In this case it can be shown on screen probably partially but it should really not be printed
      * until it is fully done processing.
      * Warning! This method can be blocking for a long time
-     * @param converter    The converter
      * @param asynchronous If set to true the processing will can take place in a different thread and the
      *                     function will not block until the shape is finished.
      *                     In case of printing Flake will call this method from a non-main thread and only
@@ -1051,7 +923,7 @@ public:
      *                     If set to false the processing needs to be done synchronously and will
      *                     block until the result is finished.
      */
-    virtual void waitUntilReady(const KoViewConverter &converter, bool asynchronous = true) const;
+    virtual void waitUntilReady(bool asynchronous = true) const;
 
     /// checks recursively if the shape or one of its parents is not visible or locked
     virtual bool isShapeEditable(bool recursive = true) const;
@@ -1136,20 +1008,6 @@ public:
     void setFilterEffectStack(KoFilterEffectStack *filterEffectStack);
 
     /**
-     * Set the property collision detection.
-     * Setting this to true will result in calls to shapeChanged() with the CollisionDetected
-     * parameter whenever either this or another shape is moved/rotated etc and intersects this shape.
-     * @param detect if true detect collisions.
-     */
-    void setCollisionDetection(bool detect);
-
-    /**
-     * get the property collision detection.
-     * @returns true if collision detection is on.
-     */
-    bool collisionDetection();
-
-    /**
      * Return the tool delegates for this shape.
      * In Flake a shape being selected will cause the tool manager to make available all tools that
      * can edit the selected shapes.  In some cases selecting one shape should allow the tool to
@@ -1202,85 +1060,11 @@ protected:
 
 public:
     static QList<KoShape*> linearizeSubtree(const QList<KoShape*> &shapes);
-
+    static QList<KoShape *> linearizeSubtreeSorted(const QList<KoShape *> &shapes);
 protected:
     KoShape(const KoShape &rhs);
 
-    /* ** loading saving helper methods */
-    /// attributes from ODF 1.1 chapter 9.2.15 Common Drawing Shape Attributes
-    enum OdfAttribute {
-        OdfTransformation = 1,       ///< Store transformation information
-        OdfSize = 2,                 ///< Store size information
-        OdfPosition = 8,             ///< Store position
-        OdfAdditionalAttributes = 4, ///< Store additional attributes of the shape
-        OdfCommonChildElements = 16, ///< Event actions and connection points
-        OdfLayer = 64,               ///< Store layer name
-        OdfStyle = 128,              ///< Store the style
-        OdfId = 256,                 ///< Store the unique ID
-        OdfName = 512,               ///< Store the name of the shape
-        OdfZIndex = 1024,            ///< Store the z-index
-        OdfViewbox = 2048,           ///< Store the viewbox
-
-        /// A mask for all mandatory attributes
-        OdfMandatories = OdfLayer | OdfStyle | OdfId | OdfName | OdfZIndex,
-        /// A mask for geometry attributes
-        OdfGeometry = OdfPosition | OdfSize,
-        /// A mask for all the attributes
-        OdfAllAttributes = OdfTransformation | OdfGeometry | OdfAdditionalAttributes | OdfMandatories | OdfCommonChildElements
-    };
-
-    /**
-     * This method is used during loading of the shape to load common attributes
-     *
-     * @param context the KoShapeLoadingContext used for loading
-     * @param element element which represents the shape in odf
-     * @param attributes a number of OdfAttribute items to state which attributes to load.
-     */
-    bool loadOdfAttributes(const KoXmlElement &element, KoShapeLoadingContext &context, int attributes);
-
-    /**
-     * Parses the transformation attribute from the given string
-     * @param transform the transform attribute string
-     * @return the resulting transformation matrix
-     */
-    QTransform parseOdfTransform(const QString &transform);
-
-    /**
-     * @brief Saves the style used for the shape
-     *
-     * This method fills the given style object with the stroke and
-     * background properties and then adds the style to the context.
-     *
-     * @param style the style object to fill
-     * @param context used for saving
-     * @return the name of the style
-     * @see saveOdf
-     */
-    virtual QString saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const;
-
-    /**
-     * Loads the stroke and fill style from the given element.
-     *
-     * @param element the xml element to  load the style from
-     * @param context the loading context used for loading
-     */
-    virtual void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context);
-
-    /// Loads the stroke style
-    KoShapeStrokeModelSP loadOdfStroke(const KoXmlElement &element, KoShapeLoadingContext &context) const;
-
-    /// Loads the fill style
-    QSharedPointer<KoShapeBackground> loadOdfFill(KoShapeLoadingContext &context) const;
-
-    /// Loads the connection points
-    void loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingContext &context);
-
-    /// Loads the clip contour
-    void loadOdfClipContour(const KoXmlElement &element, KoShapeLoadingContext &context, const QSizeF &scaleFactor);
-
-    /* ** end loading saving */
-
-    /**
+     /**
      * A hook that allows inheriting classes to do something after a KoShape property changed
      * This is called whenever the shape, position rotation or scale properties were altered.
      * @param type an indicator which type was changed.
@@ -1293,7 +1077,11 @@ protected:
 
 private:
     class Private;
-    QSharedDataPointer<Private> d;
+    QScopedPointer<Private> d;
+
+    class SharedData;
+    QSharedDataPointer<SharedData> s;
+
 
 protected:
     /**

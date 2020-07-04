@@ -32,6 +32,12 @@ class KisPaintOp;
 class QWidget;
 class KisPaintOpConfigWidget;
 
+class KoResource;
+using KoResourceSP = QSharedPointer<KoResource>;
+
+class KisResourcesInterface;
+using KisResourcesInterfaceSP = QSharedPointer<KisResourcesInterface>;
+
 /**
  * The paintop factory is responsible for creating paintops of the specified class.
  * If there is an optionWidget, the derived paintop itself must support settings,
@@ -74,6 +80,17 @@ public:
     virtual QString category() const = 0;
 
     /**
+     * @return all the resources linked to \p settings.
+     */
+    virtual QList<KoResourceSP> prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface) = 0;
+
+    /**
+     * @return all the resources embedded into \p settings. The resources are first tried to be loaded
+     * from \p resourcesInterface, and, if it fails, loaded from the embedded data.
+     */
+    virtual QList<KoResourceSP> prepareEmbeddedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface) = 0;
+
+    /**
      * List of usually hidden compositeops that are useful for this paintop.
      */
     QStringList whiteListedCompositeOps() const;
@@ -87,7 +104,7 @@ public:
     /**
      * Create and return an settings object for this paintop.
      */
-    virtual KisPaintOpSettingsSP settings() = 0;
+    virtual KisPaintOpSettingsSP createSettings(KisResourcesInterfaceSP resourcesInterface) = 0;
 
     /**
      * create a widget that can display paintop settings
@@ -102,12 +119,6 @@ public:
     void setPriority(int newPriority);
 
     int priority() const;
-
-    /**
-     * This method will be called by the registry after all paintops are loaded
-     * Overwrite to let the factory do something.
-     */
-    virtual void processAfterLoading() {}
 
 private:
     QStringList m_whiteListedCompositeOps;

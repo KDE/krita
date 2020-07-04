@@ -80,7 +80,7 @@ public:
      *
      * Typically called during startup before reading the config.
      */
-    void askClearConfig();
+    void askresetConfig();
 
     /**
      * Tell KisApplication to show this splashscreen when you call start();
@@ -88,17 +88,13 @@ public:
      * to have the splash show correctly on Xinerama displays.
      */
     void setSplashScreen(QWidget *splash);
-
-    void setSplashScreenLoadingText(QString);
-
     void hideSplashScreen();
 
     /// Overridden to handle exceptions from event handlers.
     bool notify(QObject *receiver, QEvent *event) override;
 
     void addResourceTypes();
-    void loadResources();
-    void loadResourceTags();
+    bool registerResources();
     void loadPlugins();
     void loadGuiPlugins();
     void initializeGlobals(const KisApplicationArguments &args);
@@ -108,12 +104,13 @@ public Q_SLOTS:
     void executeRemoteArguments(QByteArray message, KisMainWindow *mainWindow);
     void remoteArguments(QByteArray message, QObject*socket);
     void fileOpenRequested(const QString & url);
+    void setSplashScreenLoadingText(const QString&);
 
 private:
     /// @return the number of autosavefiles opened
     void checkAutosaveFiles();
     bool createNewDocFromTemplate(const QString &fileName, KisMainWindow *m_mainWindow);
-    void clearConfig();
+    void resetConfig();
 
 private:
     class Private;

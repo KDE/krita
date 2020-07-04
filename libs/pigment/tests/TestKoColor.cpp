@@ -97,4 +97,30 @@ void TestKoColor::testSimpleSerialization()
     QVERIFY(k2.colorSpace() == k.colorSpace());
 }
 
+void TestKoColor::testComparison()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KoColor c1(Qt::white, cs);
+    KoColor c2(Qt::white, cs);
+    KoColor c3(Qt::black, cs);
+
+    QVERIFY(c1 == c2);
+    QVERIFY(c2 != c3);
+}
+
+void TestKoColor::testComparisonQVariant()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KoColor c1(Qt::white, cs);
+    KoColor c2(Qt::white, cs);
+    KoColor c3(Qt::black, cs);
+
+    QVariant v1 = QVariant::fromValue(c1);
+    QVariant v2 = QVariant::fromValue(c2);
+    QVariant v3 = QVariant::fromValue(c3);
+
+    QVERIFY(v1 == v2);
+    QVERIFY(v2 != v3);
+}
+
 KISTEST_MAIN(TestKoColor)

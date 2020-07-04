@@ -25,8 +25,6 @@
 
 #include <QMessageBox>
 
-#include <QFileInfo>
-
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceTraits.h>
 #include <KoColorSpaceConstants.h>

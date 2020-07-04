@@ -32,49 +32,67 @@
 #include "KoUnit.h"
 
 #include "kritaflake_export.h"
+#include "kis_assert.h"
 
 
 class KRITAFLAKE_EXPORT MockShape : public KoShape
 {
 public:
     MockShape() : paintedCount(0) {}
-    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &) override {
+    void paint(QPainter &painter, KoShapePaintingContext &) const override {
         Q_UNUSED(painter);
-        Q_UNUSED(converter);
         //qDebug() << "Shape" << kBacktrace( 10 );
         paintedCount++;
     }
-    void saveOdf(KoShapeSavingContext &) const override {}
-    bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) override {
-        return true;
-    }
-    int paintedCount;
+    mutable int paintedCount;
 };
+
+#include <SimpleShapeContainerModel.h>
 
 class KRITAFLAKE_EXPORT MockContainer : public KoShapeContainer
 {
 public:
-    MockContainer(KoShapeContainerModel *model = 0) : KoShapeContainer(model), paintedCount(0) {}
-    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &) override {
+    MockContainer(KoShapeContainerModel *model = new SimpleShapeContainerModel()) : KoShapeContainer(model), paintedCount(0) {}
+    void paintComponent(QPainter &painter, KoShapePaintingContext &) const override {
         Q_UNUSED(painter);
-        Q_UNUSED(converter);
         //qDebug() << "Container:" << kBacktrace( 10 );
         paintedCount++;
     }
 
-    void saveOdf(KoShapeSavingContext &) const override {}
-    bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) override {
-        return true;
+    mutable int paintedCount;
+
+    bool contains(KoShape *shape) const {
+        return shapes().contains(shape);
     }
-    int paintedCount;
+
+    void setAssociatedRootShapeManager(KoShapeManager *shapeManager)
+    {
+        SimpleShapeContainerModel *model = dynamic_cast<SimpleShapeContainerModel*>(this->model());
+        KIS_SAFE_ASSERT_RECOVER_RETURN(model);
+        model->setAssociatedRootShapeManager(shapeManager);
+    }
+
+    KoShapeManager* associatedRootShapeManager() const
+    {
+        SimpleShapeContainerModel *model = dynamic_cast<SimpleShapeContainerModel*>(this->model());
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(model, 0);
+        return model->associatedRootShapeManager();
+    }
+
 };
 
 class KRITAFLAKE_EXPORT MockGroup : public KoShapeGroup
 {
-    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &) override {
+    void paintComponent(QPainter &painter, KoShapePaintingContext &) const override {
         Q_UNUSED(painter);
-        Q_UNUSED(converter);
+        paintedCount++;
     }
+public:
+    bool contains(KoShape *shape) const {
+        return shapes().contains(shape);
+    }
+
+    mutable int paintedCount;
 };
 
 class KoToolProxy;
@@ -82,28 +100,6 @@ class KoToolProxy;
 class KRITAFLAKE_EXPORT MockShapeController : public KoShapeControllerBase
 {
 public:
-    void addShapes(const QList<KoShape*> shapes) override {
-        Q_FOREACH (KoShape *shape, shapes) {
-            m_shapes.insert(shape);
-            if (m_shapeManager) {
-                m_shapeManager->addShape(shape);
-            }
-        }
-    }
-    void removeShape(KoShape* shape) override {
-        m_shapes.remove(shape);
-        if (m_shapeManager) {
-            m_shapeManager->remove(shape);
-        }
-    }
-    bool contains(KoShape* shape) {
-        return m_shapes.contains(shape);
-    }
-
-    void setShapeManager(KoShapeManager *shapeManager) {
-        m_shapeManager = shapeManager;
-    }
-
     QRectF documentRectInPixels() const override {
         return QRectF(0,0,100,100);
     }
@@ -111,10 +107,6 @@ public:
     qreal pixelsPerInch() const override {
         return 72.0;
     }
-
-private:
-    QSet<KoShape * > m_shapes;
-    KoShapeManager *m_shapeManager = 0;
 };
 
 class KRITAFLAKE_EXPORT MockCanvas : public KoCanvasBase
@@ -126,9 +118,6 @@ public:
               m_shapeManager(new KoShapeManager(this)),
               m_selectedShapesProxy(new KoSelectedShapesProxySimple(m_shapeManager.data()))
     {
-        if (MockShapeController *controller = dynamic_cast<MockShapeController*>(aKoShapeControllerBase)) {
-            controller->setShapeManager(m_shapeManager.data());
-        }
     }
 
     ~MockCanvas() override {}

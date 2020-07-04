@@ -37,31 +37,11 @@
 #include <KoShape.h>
 #include <KoShapeGroup.h>
 #include <KoShapeManager.h>
-#include <KoViewConverter.h>
 #include <KoShapePaintingContext.h>
 #include <SvgParser.h>
+#include <KoMD5Generator.h>
 
 #include <FlakeDebug.h>
-
-void paintGroup(KoShapeGroup *group, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
-{
-    QList<KoShape*> shapes = group->shapes();
-    std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
-    Q_FOREACH (KoShape *child, shapes) {
-        // we paint recursively here, so we do not have to check recursively for visibility
-        if (!child->isVisible(false))
-            continue;
-        KoShapeGroup *childGroup = dynamic_cast<KoShapeGroup*>(child);
-        if (childGroup) {
-            paintGroup(childGroup, painter, converter, paintContext);
-        } else {
-            painter.save();
-            KoShapeManager::renderSingleShape(child, painter, converter, paintContext);
-            painter.restore();
-        }
-    }
-
-}
 
 QImage KoSvgSymbol::icon()
 {
@@ -74,7 +54,6 @@ QImage KoSvgSymbol::icon()
     QPainter gc(&image);
     image.fill(Qt::gray);
 
-    KoViewConverter vc;
     KoShapePaintingContext ctx;
 
 //        debugFlake << "Going to render. Original bounding rect:" << group->boundingRect()
@@ -82,7 +61,7 @@ QImage KoSvgSymbol::icon()
 //                 << "Scale W" << 256 / rc.width() << "Scale H" << 256 / rc.height();
 
     gc.translate(-rc.x(), -rc.y());
-    paintGroup(group, gc, vc, ctx);
+    KoShapeManager::renderSingleShape(group, gc, ctx);
     gc.end();
     image = image.scaled(128, 128, Qt::KeepAspectRatio);
     return image;
@@ -110,36 +89,32 @@ KoSvgSymbolCollectionResource::KoSvgSymbolCollectionResource()
 }
 
 KoSvgSymbolCollectionResource::KoSvgSymbolCollectionResource(const KoSvgSymbolCollectionResource& rhs)
-    : QObject(0)
-    , KoResource(QString())
-    , d(new Private())
+    : KoResource(QString())
+    , d(new Private(*rhs.d))
 {
-    setFilename(rhs.filename());
-    d->symbols = rhs.d->symbols;
-    setValid(true);
+}
+
+KoResourceSP KoSvgSymbolCollectionResource::clone() const
+{
+    return KoResourceSP(new KoSvgSymbolCollectionResource(*this));
 }
 
 KoSvgSymbolCollectionResource::~KoSvgSymbolCollectionResource()
 {
 }
 
-bool KoSvgSymbolCollectionResource::load()
+bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
-    QFile file(filename());
-    if (file.size() == 0) return false;
-    if (!file.open(QIODevice::ReadOnly)) {
-        return false;
+    Q_UNUSED(resourcesInterface);
+
+    if (!dev->isOpen()) {
+        dev->open(QIODevice::ReadOnly);
     }
-    bool res =  loadFromDevice(&file);
-    file.close();
-    return res;
-}
 
+    QByteArray ba = dev->readAll();
+    setMD5(KoMD5Generator::generateHash(ba));
 
-
-bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev)
-{
-    if (!dev->isOpen()) dev->open(QIODevice::ReadOnly);
+    dev->seek(0);
 
     QString errorMsg;
     int errorLine = 0;
@@ -166,7 +141,7 @@ bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev)
 //    debugFlake << "Loaded" << filename() << "\n\t"
 //             << "Title" << parser.documentTitle() << "\n\t"
 //             << "Description" << parser.documentDescription()
-//             << "\n\tgot" << d->symbols.size() << "symbols"
+//             << "\n\tgot" << d->symbols.size() << ResourceType::Symbols
 //             << d->symbols[0]->shape->outlineRect()
 //             << d->symbols[0]->shape->size();
 
@@ -180,17 +155,6 @@ bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev)
     }
     setValid(true);
     setImage(d->symbols[0]->icon());
-    return true;
-}
-
-bool KoSvgSymbolCollectionResource::save()
-{
-    QFile file(filename());
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-        return false;
-    }
-    saveToDevice(&file);
-    file.close();
     return true;
 }
 

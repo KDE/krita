@@ -28,6 +28,8 @@ class KisSignalCompressorTest : public QObject
 
 private Q_SLOTS:
     void test();
+    void testSlowHandlerPrecise();
+    void testSlowHandlerAdditive();
 };
 
 #endif // KISSIGNALCOMPRESSORTEST_H

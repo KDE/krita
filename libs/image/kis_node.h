@@ -25,6 +25,7 @@
 #include "kritaimage_export.h"
 
 #include <QVector>
+#include <KisRegion.h>
 
 class QRect;
 class QStringList;
@@ -128,7 +129,7 @@ public:
      * this percolates up to parent nodes all the way to the root
      * node, if propagate is true;
      */
-    void setDirty(const QRegion &region);
+    void setDirty(const KisRegion &region);
 
     /**
      * Convenience override of multirect version of setDirtyDontResetAnimationCache()

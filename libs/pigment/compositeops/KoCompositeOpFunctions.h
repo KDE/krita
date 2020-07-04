@@ -661,7 +661,7 @@ inline T cfNegation(T src, T dst) {
         
     composite_type unit = unitValue<T>();
     composite_type a = unit - src - dst;
-    composite_type s = abs(a);
+    composite_type s = std::abs(a);
     composite_type d = unit - s;
         
     return T(d);

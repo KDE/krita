@@ -40,7 +40,7 @@ public:
      * Create an empty selection mask. There is filter and no layer
      * associated with this mask.
      */
-    KisSelectionMask(KisImageWSP image);
+    KisSelectionMask(KisImageWSP image, const QString &name = QString());
 
     ~KisSelectionMask() override;
     KisSelectionMask(const KisSelectionMask& rhs);
@@ -80,6 +80,9 @@ public:
     bool decorationsVisible() const override;
     void setDecorationsVisible(bool value, bool update) override;
     using KisDecoratedNodeInterface::setDecorationsVisible;
+
+    void setDirty(const QVector<QRect> &rects) override;
+    using KisEffectMask::setDirty;
 
 protected:
     void flattenSelectionProjection(KisSelectionSP selection, const QRect &dirtyRect) const override;

@@ -113,7 +113,7 @@ struct KisNodeManager::Private {
     QScopedPointer<KisNodeInsertionAdapter> nodeInsertionAdapter;
     QScopedPointer<KisNodeDisplayModeAdapter> nodeDisplayModeAdapter;
 
-    KisAction *showInTimeline;
+    KisAction *pinToTimeline;
 
     KisNodeList selectedNodes;
     QPointer<KisNodeJugglerCompressed> nodeJuggler;
@@ -221,9 +221,9 @@ void KisNodeManager::setView(QPointer<KisView>imageView)
         KisShapeController *shapeController = dynamic_cast<KisShapeController*>(m_d->imageView->document()->shapeController());
         Q_ASSERT(shapeController);
         connect(shapeController, SIGNAL(sigActivateNode(KisNodeSP)), SLOT(slotNonUiActivatedNode(KisNodeSP)));
-        connect(m_d->imageView->image(), SIGNAL(sigIsolatedModeChanged()),this, SLOT(slotUpdateIsolateModeActionImageStatusChange()));
         connect(m_d->imageView->image(), SIGNAL(sigRequestNodeReselection(KisNodeSP,KisNodeList)),this, SLOT(slotImageRequestNodeReselection(KisNodeSP,KisNodeList)));
         m_d->imageView->resourceProvider()->slotNodeActivated(m_d->imageView->currentNode());
+        connect(m_d->imageView->image(), SIGNAL(sigIsolatedModeChanged()), this, SLOT(handleExternalIsolationChange()));
     }
 
 }
@@ -271,8 +271,14 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
     action = actionManager->createAction("activateNextLayer");
     connect(action, SIGNAL(triggered()), this, SLOT(activateNextNode()));
 
+    action = actionManager->createAction("activateNextSiblingLayer");
+    connect(action, SIGNAL(triggered()), this, SLOT(activateNextSiblingNode()));
+
     action = actionManager->createAction("activatePreviousLayer");
     connect(action, SIGNAL(triggered()), this, SLOT(activatePreviousNode()));
+
+    action = actionManager->createAction("activatePreviousSiblingLayer");
+    connect(action, SIGNAL(triggered()), this, SLOT(activatePreviousSiblingNode()));
 
     action = actionManager->createAction("switchToPreviouslyActiveNode");
     connect(action, SIGNAL(triggered()), this, SLOT(switchToPreviouslyActiveNode()));
@@ -323,10 +329,10 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
     action = actionManager->createAction("new_from_visible");
     connect(action, SIGNAL(triggered()), this, SLOT(createFromVisible()));
 
-    action = actionManager->createAction("show_in_timeline");
+    action = actionManager->createAction("pin_to_timeline");
     action->setCheckable(true);
-    connect(action, SIGNAL(toggled(bool)), this, SLOT(slotShowHideTimeline(bool)));
-    m_d->showInTimeline = action;
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(slotPinToTimeline(bool)));
+    m_d->pinToTimeline = action;
 
     NEW_LAYER_ACTION("add_new_paint_layer", "KisPaintLayer");
 
@@ -370,8 +376,13 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
     connect(&m_d->nodeConversionSignalMapper, SIGNAL(mapped(QString)),
             this, SLOT(convertNode(QString)));
 
-    action = actionManager->createAction("isolate_layer");
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(toggleIsolateMode(bool)));
+    // Isolation Modes...
+    // Post Qt5.14 this can be replaced with QActionGroup + ExclusionPolicy::ExclusiveOptional.
+    action = actionManager->createAction("isolate_active_layer");
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(setIsolateActiveLayerMode(bool)));
+    action = actionManager->createAction("isolate_active_group");
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(setIsolateActiveGroupMode(bool)));
+    connect(this, SIGNAL(sigNodeActivated(KisNodeSP)), SLOT(changeIsolationRoot(KisNodeSP)));
 
     action = actionManager->createAction("toggle_layer_visibility");
     connect(action, SIGNAL(triggered()), this, SLOT(toggleVisibility()));
@@ -394,9 +405,6 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
     // HINT: we can save even when the nodes are not editable
     action  = actionManager->createAction("split_alpha_save_merged");
     connect(action, SIGNAL(triggered()), this, SLOT(slotSplitAlphaSaveMerged()));
-
-    connect(this, SIGNAL(sigNodeActivated(KisNodeSP)), SLOT(slotUpdateIsolateModeAction()));
-    connect(this, SIGNAL(sigNodeActivated(KisNodeSP)), SLOT(slotTryRestartIsolatedMode()));
 }
 
 void KisNodeManager::updateGUI()
@@ -469,74 +477,77 @@ void KisNodeManager::addNodesDirect(KisNodeList nodes, KisNodeSP parent, KisNode
 
 void KisNodeManager::toggleIsolateActiveNode()
 {
-    KisImageWSP image = m_d->view->image();
-    KisNodeSP activeNode = this->activeNode();
-    KIS_ASSERT_RECOVER_RETURN(activeNode);
-
-    if (activeNode == image->isolatedModeRoot()) {
-        toggleIsolateMode(false);
-    } else {
-        toggleIsolateMode(true);
-    }
+    QAction* action = m_d->view->actionManager()->actionByName("isolate_active_layer");
+    action->toggle();
 }
 
-void KisNodeManager::toggleIsolateMode(bool checked)
+void KisNodeManager::setIsolateActiveLayerMode(bool checked)
 {
     KisImageWSP image = m_d->view->image();
+    KIS_ASSERT_RECOVER_RETURN(image);
 
+    const bool groupIsolationState = image->isIsolatingGroup();
+    changeIsolationMode(checked, groupIsolationState);
+}
+
+void KisNodeManager::setIsolateActiveGroupMode(bool checked)
+{
+    KisImageWSP image = m_d->view->image();
+    KIS_ASSERT_RECOVER_RETURN(image);
+
+    const bool layerIsolationState = image->isIsolatingLayer();
+    changeIsolationMode(layerIsolationState, checked);
+}
+
+void KisNodeManager::changeIsolationMode(bool isolateActiveLayer, bool isolateActiveGroup)
+{
+    KisImageWSP image = m_d->view->image();
     KisNodeSP activeNode = this->activeNode();
-    if (checked && activeNode) {
+    KIS_ASSERT_RECOVER_RETURN(image && activeNode);
 
-        // Transform and colorize masks don't have pixel data...
-        if (activeNode->inherits("KisTransformMask") ||
-                activeNode->inherits("KisColorizeMask")) return;
-
-        if (!image->startIsolatedMode(activeNode)) {
-            KisAction *action = m_d->view->actionManager()->actionByName("isolate_layer");
-            action->setChecked(false);
+    if (isolateActiveLayer || isolateActiveGroup) {
+        if (image->startIsolatedMode(activeNode, isolateActiveLayer, isolateActiveGroup) == false) {
+            reinitializeIsolationActionGroup();
         }
     } else {
         image->stopIsolatedMode();
     }
-
-    m_d->lastRequestedIsolatedModeStatus = checked;
 }
 
-void KisNodeManager::slotUpdateIsolateModeActionImageStatusChange()
+void KisNodeManager::changeIsolationRoot(KisNodeSP isolationRoot)
 {
-    slotUpdateIsolateModeAction();
+    KisImageWSP image = m_d->view->image();
+    if (!image || !isolationRoot) return;
 
-    KisNodeSP isolatedRootNode = m_d->view->image()->isolatedModeRoot();
-    if (this->activeNode() &&
-            bool(isolatedRootNode) != m_d->lastRequestedIsolatedModeStatus) {
+    const bool isIsolatingLayer = image->isIsolatingLayer();
+    const bool isIsolatingGroup = image->isIsolatingGroup();
 
-        slotTryRestartIsolatedMode();
+    // Restart isolation with a new root node and the same settings.
+    if (image->startIsolatedMode(isolationRoot, isIsolatingLayer, isIsolatingGroup) == false) {
+        reinitializeIsolationActionGroup();
     }
 }
 
-void KisNodeManager::slotUpdateIsolateModeAction()
+void KisNodeManager::handleExternalIsolationChange()
 {
-    KisAction *action = m_d->view->actionManager()->actionByName("isolate_layer");
-    Q_ASSERT(action);
-
-    KisNodeSP activeNode = this->activeNode();
-    KisNodeSP isolatedRootNode = m_d->view->image()->isolatedModeRoot();
-
-    action->setChecked(isolatedRootNode && isolatedRootNode == activeNode);
-}
-
-void KisNodeManager::slotTryRestartIsolatedMode()
-{
-    /**
-     * It might be that we have multiple Krita windows open. In such a case
-     * only the currently active one should restart isolated mode
-     */
+    // It might be that we have multiple Krita windows open. In such a case
+    // only the currently active one should restart isolated mode
     if (!m_d->view->mainWindow()->isActiveWindow()) return;
 
-    KisNodeSP isolatedRootNode = m_d->view->image()->isolatedModeRoot();
-    if (!isolatedRootNode && !m_d->lastRequestedIsolatedModeStatus) return;
+    KisImageWSP image = m_d->view->image();
+    KisNodeSP activeNode = this->activeNode();
 
-    this->toggleIsolateMode(true);
+    const bool isIsolatingLayer = image->isIsolatingLayer();
+    const bool isIsolatingGroup = image->isIsolatingGroup();
+
+    m_d->view->actionManager()->actionByName("isolate_active_layer")->setChecked(isIsolatingLayer);
+    m_d->view->actionManager()->actionByName("isolate_active_group")->setChecked(isIsolatingGroup);
+}
+
+void KisNodeManager::reinitializeIsolationActionGroup()
+{
+    m_d->view->actionManager()->actionByName("isolate_active_layer")->setChecked(false);
+    m_d->view->actionManager()->actionByName("isolate_active_group")->setChecked(false);
 }
 
 KisNodeSP  KisNodeManager::createNode(const QString & nodeType, bool quiet, KisPaintDeviceSP copyFrom)
@@ -593,10 +604,10 @@ void KisNodeManager::createFromVisible()
     KisLayerUtils::newLayerFromVisible(m_d->view->image(), m_d->view->image()->root()->lastChild());
 }
 
-void KisNodeManager::slotShowHideTimeline(bool value)
+void KisNodeManager::slotPinToTimeline(bool value)
 {
     Q_FOREACH (KisNodeSP node, selectedNodes()) {
-        node->setUseInTimeline(value);
+        node->setPinnedToTimeline(value);
     }
 }
 
@@ -752,8 +763,8 @@ void KisNodeManager::nodesUpdated()
     m_d->view->selectionManager()->selectionChanged();
 
     {
-        KisSignalsBlocker b(m_d->showInTimeline);
-        m_d->showInTimeline->setChecked(node->useInTimeline());
+        KisSignalsBlocker b(m_d->pinToTimeline);
+        m_d->pinToTimeline->setChecked(node->isPinnedToTimeline());
     }
 }
 
@@ -999,56 +1010,74 @@ void KisNodeManager::mirrorAllNodesY()
                Qt::Vertical, m_d->view->selection());
 }
 
-void KisNodeManager::activateNextNode()
+void KisNodeManager::activateNextNode(bool siblingsOnly)
 {
     KisNodeSP activeNode = this->activeNode();
     if (!activeNode) return;
 
-    KisNodeSP node = activeNode->nextSibling();
+    KisNodeSP nextNode = activeNode->nextSibling();
 
-    while (node && node->childCount() > 0) {
-        node = node->firstChild();
+    if (!siblingsOnly) {
+        // Recurse groups...
+        while (nextNode && nextNode->childCount() > 0) {
+            nextNode = nextNode->firstChild();
+        }
+
+        // Out of nodes? Back out of group...
+        if (!nextNode && activeNode->parent()) {
+            nextNode = activeNode->parent();
+        }
     }
 
-    if (!node && activeNode->parent() && activeNode->parent()->parent()) {
-        node = activeNode->parent();
+    // Skip nodes hidden from tree view..
+    while (nextNode && isNodeHidden(nextNode, m_d->nodeDisplayModeAdapter->showGlobalSelectionMask())) {
+        nextNode = nextNode->nextSibling();
     }
 
-    while(node && isNodeHidden(node, m_d->nodeDisplayModeAdapter->showGlobalSelectionMask())) {
-        node = node->nextSibling();
-    }
-
-    if (node) {
-        slotNonUiActivatedNode(node);
+    // Select node, unless root..
+    if (nextNode && nextNode->parent()) {
+        slotNonUiActivatedNode(nextNode);
     }
 }
 
-void KisNodeManager::activatePreviousNode()
+void KisNodeManager::activateNextSiblingNode()
+{
+    activateNextNode(true);
+}
+
+void KisNodeManager::activatePreviousNode(bool siblingsOnly)
 {
     KisNodeSP activeNode = this->activeNode();
     if (!activeNode) return;
 
-    KisNodeSP node;
+    KisNodeSP nextNode = activeNode->prevSibling();
 
-    if (activeNode->childCount() > 0) {
-        node = activeNode->lastChild();
-    }
-    else {
-        node = activeNode->prevSibling();
-    }
+    if (!siblingsOnly) {
+        // Enter groups..
+        if (activeNode->childCount() > 0) {
+            nextNode = activeNode->lastChild();
+        }
 
-    while (!node && activeNode->parent()) {
-        node = activeNode->parent()->prevSibling();
-        activeNode = activeNode->parent();
-    }
-
-    while(node && isNodeHidden(node, m_d->nodeDisplayModeAdapter->showGlobalSelectionMask())) {
-        node = node->prevSibling();
+        // Out of nodes? Back out of group...
+        if (!nextNode && activeNode->parent()) {
+            nextNode = activeNode->parent()->prevSibling();
+        }
     }
 
-    if (node) {
-        slotNonUiActivatedNode(node);
+    // Skip nodes hidden from tree view..
+    while (nextNode && isNodeHidden(nextNode, m_d->nodeDisplayModeAdapter->showGlobalSelectionMask())) {
+        nextNode = nextNode->prevSibling();
     }
+
+    // Select node, unless root..
+    if (nextNode && nextNode->parent()) {
+        slotNonUiActivatedNode(nextNode);
+    }
+}
+
+void KisNodeManager::activatePreviousSiblingNode()
+{
+    activatePreviousNode(true);
 }
 
 void KisNodeManager::switchToPreviouslyActiveNode()

@@ -150,7 +150,7 @@ void readChildObject(QIODevice *device,
     //dbgKrita << "Child" << ppVar(key) << ppVar(OSType);
 
     if (OSType == "obj ") {
-        qFatal("no implemented");
+        throw KisAslReaderUtils::ASLParseException("OSType 'obj' not implemented");
 
     } else if (OSType == "Objc" || OSType == "GlbO") {
         readDescriptor(device, key, parent, doc);
@@ -193,13 +193,13 @@ void readChildObject(QIODevice *device,
         appendXMLNodeCommon(key, value, "Boolean", parent, doc);
 
     } else if (OSType == "type") {
-        qFatal("no implemented");
+        throw KisAslReaderUtils::ASLParseException("OSType 'type' not implemented");
     } else if (OSType == "GlbC") {
-        qFatal("no implemented");
+        throw KisAslReaderUtils::ASLParseException("OSType 'GlbC' not implemented");
     } else if (OSType == "alis") {
-        qFatal("no implemented");
+        throw KisAslReaderUtils::ASLParseException("OSType 'alis' not implemented");
     } else if (OSType == "tdta") {
-        qFatal("no implemented");
+        throw KisAslReaderUtils::ASLParseException("OSType 'tdta' not implemented");
     }
 }
 
@@ -528,7 +528,7 @@ QDomDocument readFileImpl(QIODevice *device)
 
             QDomElement patternsRoot = doc.createElement("node");
             patternsRoot.setAttribute("type", "List");
-            patternsRoot.setAttribute("key", "Patterns");
+            patternsRoot.setAttribute("key", ResourceType::Patterns);
             root.appendChild(patternsRoot);
 
             try {
@@ -640,7 +640,7 @@ QDomDocument KisAslReader::readPsdSectionPattern(QIODevice *device, qint64 bytes
     QDomElement pat = doc.createElement("node");
     root.appendChild(pat);
 
-    pat.setAttribute("classId", "Patterns");
+    pat.setAttribute("classId", ResourceType::Patterns);
     pat.setAttribute("type", "Descriptor");
     pat.setAttribute("name", "");
 

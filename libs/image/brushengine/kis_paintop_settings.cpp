@@ -21,6 +21,7 @@
 
 #include <QImage>
 #include <QColor>
+#include <QPainterPath>
 #include <QPointer>
 
 #include <KoPointerEvent.h>
@@ -28,6 +29,7 @@
 #include <KoCompositeOpRegistry.h>
 #include <KoViewConverter.h>
 
+#include "kis_paintop_preset.h"
 #include "kis_paint_layer.h"
 #include "kis_image.h"
 #include "kis_painter.h"
@@ -46,6 +48,8 @@
 #include <brushengine/kis_locked_properties_proxy.h>
 
 #include "KisPaintopSettingsIds.h"
+#include "kis_algebra_2d.h"
+#include "kis_image_config.h"
 
 
 struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
@@ -55,8 +59,9 @@ struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
 
     QPointer<KisPaintOpConfigWidget> settingsWidget;
     QString modelName;
-    KisPaintOpPresetWSP preset;
+    QPointer<KisPaintopSettingsUpdateProxy> updateProxy;
     QList<KisUniformPaintOpPropertyWSP> uniformProperties;
+    KisResourcesInterfaceSP resourcesInterface = 0;
 
     bool disableDirtyNotifications;
 
@@ -78,23 +83,14 @@ struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
         bool m_oldNotificationsState;
         Q_DISABLE_COPY(DirtyNotificationsLocker)
     };
-
-    KisPaintopSettingsUpdateProxy* updateProxyNoCreate() const {
-        auto presetSP = preset.toStrongRef();
-        return presetSP ? presetSP->updateProxyNoCreate() : 0;
-    }
-
-    KisPaintopSettingsUpdateProxy* updateProxyCreate() const {
-        auto presetSP = preset.toStrongRef();
-        return presetSP ? presetSP->updateProxy() : 0;
-    }
 };
 
 
-KisPaintOpSettings::KisPaintOpSettings()
+KisPaintOpSettings::KisPaintOpSettings(KisResourcesInterfaceSP resourcesInterface)
     : d(new Private)
 {
-    d->preset = 0;
+    d->updateProxy = 0;
+    d->resourcesInterface = resourcesInterface;
 }
 
 KisPaintOpSettings::~KisPaintOpSettings()
@@ -106,21 +102,24 @@ KisPaintOpSettings::KisPaintOpSettings(const KisPaintOpSettings &rhs)
     , d(new Private)
 {
     d->settingsWidget = 0;
-    d->preset = rhs.preset();
+    d->updateProxy = rhs.updateProxy();
     d->modelName = rhs.modelName();
+    d->resourcesInterface = rhs.d->resourcesInterface;
 }
 
 void KisPaintOpSettings::setOptionsWidget(KisPaintOpConfigWidget* widget)
 {
     d->settingsWidget = widget;
 }
-void KisPaintOpSettings::setPreset(KisPaintOpPresetWSP preset)
+
+void KisPaintOpSettings::setUpdateProxy(const QPointer<KisPaintopSettingsUpdateProxy> proxy)
 {
-    d->preset = preset;
+    d->updateProxy = proxy;
 }
-KisPaintOpPresetWSP KisPaintOpSettings::preset() const
+
+QPointer<KisPaintopSettingsUpdateProxy> KisPaintOpSettings::updateProxy() const
 {
-    return d->preset;
+    return d->updateProxy;
 }
 
 bool KisPaintOpSettings::mousePressEvent(const KisPaintInformation &paintInformation, Qt::KeyboardModifiers modifiers, KisNodeWSP currentNode)
@@ -165,21 +164,55 @@ KisPaintOpSettingsSP KisPaintOpSettings::createMaskingSettings() const
 
     const KoID pixelBrushId(KisPaintOpUtils::MaskingBrushPaintOpId, QString());
 
-    KisPaintOpSettingsSP maskingSettings = KisPaintOpRegistry::instance()->settings(pixelBrushId);
+    KisPaintOpSettingsSP maskingSettings = KisPaintOpRegistry::instance()->createSettings(pixelBrushId, resourcesInterface());
     this->getPrefixedProperties(KisPaintOpUtils::MaskingBrushPresetPrefix, maskingSettings);
 
     const bool useMasterSize = this->getBool(KisPaintOpUtils::MaskingBrushUseMasterSizeTag, true);
     if (useMasterSize) {
+        /**
+         * WARNING: cropping is a workaround for too big brushes due to
+         * the proportional scaling using shift+drag gesture.
+         *
+         * See this bug: https://bugs.kde.org/show_bug.cgi?id=423572
+         *
+         * TODO:
+         *
+         * 1) Implement a warning notifying the user that his masking
+         *    brush has been cropped
+         *
+         * 2) Make sure that the sliders in KisMaskingBrushOption have
+         *    correct limits (right now they are limited by usual
+         *    maximumBrushSize)
+         */
+
+        const qreal maxBrushSize = KisImageConfig(true).readEntry("maximumBrushSize", 1000);
+        const qreal maxMaskingBrushSize = qMin(15000.0, 3.0 * maxBrushSize);
+
         const qreal masterSizeCoeff = getDouble(KisPaintOpUtils::MaskingBrushMasterSizeCoeffTag, 1.0);
-        maskingSettings->setPaintOpSize(masterSizeCoeff * paintOpSize());
+        maskingSettings->setPaintOpSize(qMin(maxMaskingBrushSize, masterSizeCoeff * paintOpSize()));
     }
 
     return maskingSettings;
 }
 
+bool KisPaintOpSettings::hasPatternSettings() const
+{
+    return false;
+}
+
 QString KisPaintOpSettings::maskingBrushCompositeOp() const
 {
     return getString(KisPaintOpUtils::MaskingBrushCompositeOpTag, COMPOSITE_MULT);
+}
+
+KisResourcesInterfaceSP KisPaintOpSettings::resourcesInterface() const
+{
+    return d->resourcesInterface;
+}
+
+void KisPaintOpSettings::setResourcesInterface(KisResourcesInterfaceSP resourcesInterface)
+{
+    d->resourcesInterface = resourcesInterface;
 }
 
 KisPaintOpSettingsSP KisPaintOpSettings::clone() const
@@ -188,13 +221,13 @@ KisPaintOpSettingsSP KisPaintOpSettings::clone() const
     if (paintopID.isEmpty())
         return 0;
 
-    KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->settings(KoID(paintopID));
+    KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->createSettings(KoID(paintopID), resourcesInterface());
     QMapIterator<QString, QVariant> i(getProperties());
     while (i.hasNext()) {
         i.next();
         settings->setProperty(i.key(), QVariant(i.value()));
     }
-    settings->setPreset(this->preset());
+    settings->setUpdateProxy(this->updateProxy());
     return settings;
 }
 
@@ -258,6 +291,14 @@ qreal KisPaintOpSettings::paintOpFlow()
                 KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
 
     return proxy->getDouble("FlowValue", 1.0);
+}
+
+qreal KisPaintOpSettings::paintOpPatternSize()
+{
+    KisLockedPropertiesProxySP proxy(
+        KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
+
+    return proxy->getDouble("Texture/Pattern/Scale", 0.5);
 }
 
 QString KisPaintOpSettings::paintOpCompositeOp()
@@ -356,11 +397,6 @@ bool KisPaintOpSettings::isValid() const
     return true;
 }
 
-bool KisPaintOpSettings::isLoadable()
-{
-    return isValid();
-}
-
 QString KisPaintOpSettings::indirectPaintingCompositeOp() const
 {
     return COMPOSITE_ALPHA_DARKEN;
@@ -392,7 +428,7 @@ bool KisPaintOpSettings::needsAsynchronousUpdates() const
     return false;
 }
 
-QPainterPath KisPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode)
+QPainterPath KisPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
 {
     QPainterPath path;
     if (mode.isVisible) {
@@ -402,7 +438,7 @@ QPainterPath KisPaintOpSettings::brushOutline(const KisPaintInformation &info, c
             path.addPath(makeTiltIndicator(info, QPointF(0.0, 0.0), 0.0, 2.0));
         }
 
-        path.translate(info.pos());
+        path.translate(KisAlgebra2D::alignForZoom(info.pos(), alignForZoom));
     }
 
     return path;
@@ -443,11 +479,9 @@ QPainterPath KisPaintOpSettings::makeTiltIndicator(KisPaintInformation const& in
 
 void KisPaintOpSettings::setProperty(const QString & name, const QVariant & value)
 {
-    if (value != KisPropertiesConfiguration::getProperty(name) &&
-            !d->disableDirtyNotifications) {
-        KisPaintOpPresetSP presetSP = preset().toStrongRef();
-        if (presetSP) {
-            presetSP->setDirty(true);
+    if (value != KisPropertiesConfiguration::getProperty(name) && !d->disableDirtyNotifications) {
+        if (d->updateProxy) {
+            d->updateProxy->setDirty(true);
         }
     }
 
@@ -458,10 +492,8 @@ void KisPaintOpSettings::setProperty(const QString & name, const QVariant & valu
 
 void KisPaintOpSettings::onPropertyChanged()
 {
-    KisPaintopSettingsUpdateProxy *proxy = d->updateProxyNoCreate();
-
-    if (proxy) {
-        proxy->notifySettingsChanged();
+    if (d->updateProxy) {
+        d->updateProxy->notifySettingsChanged();
     }
 }
 
@@ -501,9 +533,9 @@ QList<KisUniformPaintOpPropertySP> KisPaintOpSettings::uniformProperties(KisPain
     if (props.isEmpty()) {
         using namespace KisStandardUniformPropertiesFactory;
 
-        props.append(createProperty(opacity, settings, d->updateProxyCreate()));
-        props.append(createProperty(size, settings, d->updateProxyCreate()));
-        props.append(createProperty(flow, settings, d->updateProxyCreate()));
+        props.append(createProperty(opacity, settings, d->updateProxy));
+        props.append(createProperty(size, settings, d->updateProxy));
+        props.append(createProperty(flow, settings, d->updateProxy));
 
         d->uniformProperties = listStrongToWeak(props);
     }

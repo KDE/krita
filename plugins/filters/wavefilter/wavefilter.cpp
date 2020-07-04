@@ -104,9 +104,9 @@ KisFilterWave::KisFilterWave() : KisFilter(id(), FiltersCategoryOtherId, i18n("&
 
 }
 
-KisFilterConfigurationSP KisFilterWave::defaultConfiguration() const
+KisFilterConfigurationSP KisFilterWave::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration();
+    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
     config->setProperty("horizontalwavelength", 50);
     config->setProperty("horizontalshift", 50);
     config->setProperty("horizontalamplitude", 4);

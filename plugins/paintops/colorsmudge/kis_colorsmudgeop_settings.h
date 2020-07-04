@@ -26,7 +26,7 @@
 class KisColorSmudgeOpSettings : public KisBrushBasedPaintOpSettings
 {
 public:
-    KisColorSmudgeOpSettings();
+    KisColorSmudgeOpSettings(KisResourcesInterfaceSP resourcesInterface);
     ~KisColorSmudgeOpSettings() override;
 
     QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings) override;

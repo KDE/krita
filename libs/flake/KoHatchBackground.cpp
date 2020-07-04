@@ -20,14 +20,10 @@
 
 #include "KoHatchBackground.h"
 
-#include <KoOdfLoadingContext.h>
-#include <KoStyleStack.h>
 #include <KoShapeSavingContext.h>
-#include <KoGenStyles.h>
-#include <KoGenStyle.h>
+
 #include <KoXmlNS.h>
 #include <KoUnit.h>
-#include <KoOdfStylesReader.h>
 #include <KoXmlReader.h>
 
 #include <FlakeDebug.h>
@@ -35,6 +31,7 @@
 #include <QColor>
 #include <QString>
 #include <QPainter>
+#include <QPainterPath>
 
 class KoHatchBackground::Private : public QSharedData
 {
@@ -63,11 +60,11 @@ KoHatchBackground::~KoHatchBackground()
 {
 }
 
-void KoHatchBackground::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &context, const QPainterPath &fillPath) const
+void KoHatchBackground::paint(QPainter &painter, KoShapePaintingContext &context, const QPainterPath &fillPath) const
 {
     if (color().isValid()) {
         // paint background color if set by using the color background
-        KoColorBackground::paint(painter, converter, context, fillPath);
+        KoColorBackground::paint(painter, context, fillPath);
     }
 
     const QRectF targetRect = fillPath.boundingRect();
@@ -127,111 +124,4 @@ void KoHatchBackground::paint(QPainter &painter, const KoViewConverter &converte
 
     painter.drawLines(lines);
     painter.restore();
-}
-
-void KoHatchBackground::fillStyle(KoGenStyle &style, KoShapeSavingContext &context)
-{
-    KoGenStyle::Type type = style.type();
-    KoGenStyle::PropertyType propertyType = (type == KoGenStyle::GraphicStyle || type == KoGenStyle::GraphicAutoStyle ||
-                                             type == KoGenStyle::DrawingPageStyle || type == KoGenStyle::DrawingPageAutoStyle )
-                                            ? KoGenStyle::DefaultType : KoGenStyle::GraphicType;
-
-    style.addProperty("draw:fill", "hatch", propertyType);
-    style.addProperty("draw:fill-hatch-name", saveHatchStyle(context), propertyType);
-    bool fillHatchSolid = color().isValid();
-    style.addProperty("draw:fill-hatch-solid", fillHatchSolid, propertyType);
-    if (fillHatchSolid) {
-        style.addProperty("draw:fill-color", color().name(), propertyType);
-    }
-}
-
-QString KoHatchBackground::saveHatchStyle(KoShapeSavingContext &context) const
-{
-    KoGenStyle hatchStyle(KoGenStyle::HatchStyle /*no family name*/);
-    hatchStyle.addAttribute("draw:display-name", d->name);
-    hatchStyle.addAttribute("draw:color", d->lineColor.name());
-
-    hatchStyle.addAttribute("draw:distance", d->distance);
-
-    hatchStyle.addAttribute("draw:rotation", QString("%1").arg(d->angle * 10));
-
-    switch (d->style) {
-    case Single:
-        hatchStyle.addAttribute("draw:style", "single");
-        break;
-    case Double:
-        hatchStyle.addAttribute("draw:style", "double");
-        break;
-    case Triple:
-        hatchStyle.addAttribute("draw:style", "triple");
-        break;
-    }
-
-    return context.mainStyles().insert(hatchStyle, "hatch");
-}
-
-bool KoHatchBackground::loadStyle(KoOdfLoadingContext &context, const QSizeF &shapeSize)
-{
-    // <draw:hatch draw:name="hatchStyle3" draw:color="#000000" draw:display-name="#000000 Vertical" draw:distance="0.102cm" draw:rotation="900" draw:style="single"/>
-    Q_UNUSED(shapeSize);
-
-    KoStyleStack &styleStack = context.styleStack();
-    QString fillStyle = styleStack.property(KoXmlNS::draw, "fill");
-    if (fillStyle == "hatch") {
-        QString style = styleStack.property(KoXmlNS::draw, "fill-hatch-name");
-        debugFlake << " hatch style is  :" << style;
-
-        KoXmlElement* draw = context.stylesReader().drawStyles("hatch")[style];
-        if (draw) {
-            debugFlake << "Hatch style found for:" << style;
-
-            QString angle = draw->attributeNS(KoXmlNS::draw, "rotation", QString("0"));
-            if (angle.at(angle.size()-1).isLetter()) {
-                d->angle = KoUnit::parseAngle(angle);
-            }
-            else {
-                // OO saves the angle value without unit and multiplied by a factor of 10
-                d->angle = int(angle.toInt() / 10);
-            }
-
-            debugFlake << "angle :" << d->angle;
-
-            d->name = draw->attributeNS(KoXmlNS::draw, "display-name");
-
-            // use 2mm as default, just in case it is not given in a document so we show something sensible. 
-            d->distance = KoUnit::parseValue(draw->attributeNS(KoXmlNS::draw, "distance", "2mm"));
-
-            bool fillHatchSolid = styleStack.property(KoXmlNS::draw, "fill-hatch-solid") == QLatin1String("true");
-            if (fillHatchSolid) {
-                QString fillColor = styleStack.property(KoXmlNS::draw, "fill-color");
-                if (!fillColor.isEmpty()) {
-                    QColor c = color();
-                    c.setNamedColor(fillColor);
-                    setColor(c);
-                }
-                else {
-                    setColor(QColor());
-                }
-            }
-            else {
-                setColor(QColor());
-            }
-            d->lineColor.setNamedColor(draw->attributeNS(KoXmlNS::draw, "color", QString("#000000")));
-
-            QString style = draw->attributeNS(KoXmlNS::draw, "style", QString());
-            if (style == "double") {
-                d->style = Double;
-            }
-            else if (style == "triple") {
-                d->style = Triple;
-            }
-            else {
-                d->style = Single;
-            }
-        }
-
-        return true;
-    }
-
-    return false;
 }

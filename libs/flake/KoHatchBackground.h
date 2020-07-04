@@ -39,16 +39,7 @@ public:
     ~KoHatchBackground() override;
 
     // reimplemented
-    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &context, const QPainterPath &fillPath) const override;
-
-    // reimplemented
-    void fillStyle(KoGenStyle &style, KoShapeSavingContext &context) override;
-
-    // reimplemented
-    bool loadStyle(KoOdfLoadingContext &context, const QSizeF &shapeSize) override;
-
-private:
-    QString saveHatchStyle(KoShapeSavingContext &context) const;
+    void paint(QPainter &painter, KoShapePaintingContext &context, const QPainterPath &fillPath) const override;
 
 private:
     class Private;

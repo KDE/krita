@@ -24,32 +24,33 @@
 PresetChooser::PresetChooser(QWidget *parent)
     : KisPresetChooser(parent)
 {
-    connect(this, SIGNAL(resourceSelected(KoResource*)), SLOT(slotResourceSelected(KoResource*)));
-    connect(this, SIGNAL(resourceClicked(KoResource*)), SLOT(slotResourceClicked(KoResource*)));
+    connect(this, SIGNAL(resourceSelected(KoResourceSP )), SLOT(slotResourceSelected(KoResourceSP )));
+    connect(this, SIGNAL(resourceClicked(KoResourceSP )), SLOT(slotResourceClicked(KoResourceSP )));
     showTaggingBar(true);
 }
 
 
 void PresetChooser::setCurrentPreset(Resource *resource)
 {
-    KoResource *r = resource->resource();
+    KoResourceSP r = resource->resource();
     setCurrentResource(r);
 }
 
 Resource *PresetChooser::currentPreset() const
 {
-    KoResource *r = currentResource();
-    return new Resource(r);
+    KoResourceSP r = currentResource();
+    if (r) {
+        return new Resource(r->resourceId(), "paintoppreset", r->name(), r->filename(), r->image());
+    }
+    return 0;
 }
 
-void PresetChooser::slotResourceSelected(KoResource *resource)
+void PresetChooser::slotResourceSelected(KoResourceSP r)
 {
-    Resource *r = new Resource(resource);
-    emit presetSelected(r);
+    emit presetSelected(Resource(r->resourceId(), "paintoppreset", r->name(), r->filename(), r->image()));
 }
 
-void PresetChooser::slotResourceClicked(KoResource *resource)
+void PresetChooser::slotResourceClicked(KoResourceSP r)
 {
-    Resource *r = new Resource(resource);
-    emit presetClicked(r);
+    emit presetClicked(Resource(r->resourceId(), "paintoppreset", r->name(), r->filename(), r->image()));
 }

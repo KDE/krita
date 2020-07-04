@@ -26,7 +26,7 @@
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_registry.h"
 #include "filter/kis_filter_configuration.h"
-
+#include <KisGlobalResourcesInterface.h>
 
 class FilterStrokeTester : public utils::StrokeTester
 {
@@ -43,7 +43,7 @@ protected:
     using utils::StrokeTester::addPaintingJobs;
 
     void initImage(KisImageWSP image, KisNodeSP activeNode) override {
-        QImage src(QString(FILES_DATA_DIR) + QDir::separator() + "carrot.png");
+        QImage src(QString(FILES_DATA_DIR) + '/' + "carrot.png");
         activeNode->original()->convertFromQImage(src, 0);
 
         image->refreshGraph();
@@ -55,7 +55,7 @@ protected:
 
         KisFilterSP filter = KisFilterRegistry::instance()->value(m_filterName);
         Q_ASSERT(filter);
-        KisFilterConfigurationSP filterConfig = filter->defaultConfiguration();
+        KisFilterConfigurationSP filterConfig = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
         Q_ASSERT(filterConfig);
 
         return new KisFilterStrokeStrategy(filter, KisFilterConfigurationSP(filterConfig), resources);

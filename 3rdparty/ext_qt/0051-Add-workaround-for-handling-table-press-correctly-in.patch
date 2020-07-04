@@ -1,7 +1,7 @@
-From 89a69b6c61df0bd758ffff258b456f21bf7a03cb Mon Sep 17 00:00:00 2001
+From 8c3da665b4b10bae49ee4e0eabd2b0d9b39bb9f8 Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Wed, 15 May 2019 19:54:52 +0300
-Subject: [PATCH 10/19] Add workaround for handling table press correctly in
+Subject: [PATCH 10/22] Add workaround for handling table press correctly in
  WinInk mode
 
 Original problem: widgets do not get synthesized mouse-down and
@@ -41,7 +41,7 @@ See bug: https://bugs.kde.org/show_bug.cgi?id=406668
  4 files changed, 99 insertions(+), 18 deletions(-)
 
 diff --git a/src/gui/kernel/qguiapplication.cpp b/src/gui/kernel/qguiapplication.cpp
-index 5014878bd2..d97ef36ece 100644
+index 0e8abe76ce..1000404c30 100644
 --- a/src/gui/kernel/qguiapplication.cpp
 +++ b/src/gui/kernel/qguiapplication.cpp
 @@ -2537,6 +2537,7 @@ void QGuiApplicationPrivate::processTabletEvent(QWindowSystemInterfacePrivate::T

@@ -33,6 +33,7 @@
 #include "kis_update_job_item.h"
 #include "kis_simple_update_queue.h"
 #include "scheduler_utils.h"
+#include <KisGlobalResourcesInterface.h>
 
 #include "lod_override.h"
 
@@ -49,7 +50,7 @@ void KisSimpleUpdateQueueTest::testJobProcessing()
 
     KisPaintLayerSP paintLayer = new KisPaintLayer(image, "test", OPACITY_OPAQUE_U8);
 
-    image->lock();
+    image->barrierLock();
     image->addNode(paintLayer);
     image->unlock();
 
@@ -115,7 +116,7 @@ void KisSimpleUpdateQueueTest::testSplit(bool useFullRefresh)
 
     KisPaintLayerSP paintLayer = new KisPaintLayer(image, "test", OPACITY_OPAQUE_U8);
 
-    image->lock();
+    image->barrierLock();
     image->addNode(paintLayer);
     image->unlock();
 
@@ -160,14 +161,14 @@ void KisSimpleUpdateQueueTest::testChecksum()
     KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
     KisAdjustmentLayerSP adjustmentLayer = new KisAdjustmentLayer(image, "adj", 0, 0);
 
-    image->lock();
+    image->barrierLock();
     image->addNode(paintLayer1, image->rootLayer());
     image->addNode(adjustmentLayer, image->rootLayer());
     image->unlock();
 
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
     Q_ASSERT(filter);
-    KisFilterConfigurationSP configuration = filter->defaultConfiguration();
+    KisFilterConfigurationSP configuration = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
 
 
     KisTestableSimpleUpdateQueue queue;
@@ -180,7 +181,7 @@ void KisSimpleUpdateQueueTest::testChecksum()
         QCOMPARE(walkersList[0]->levelOfDetail(), 1);
     }
 
-    adjustmentLayer->setFilter(configuration);
+    adjustmentLayer->setFilter(configuration->cloneWithResourcesSnapshot());
 
     {
         TestUtil::LodOverride l(1, image);
@@ -213,7 +214,7 @@ void KisSimpleUpdateQueueTest::testMixingTypes()
 
     KisPaintLayerSP paintLayer = new KisPaintLayer(image, "test", OPACITY_OPAQUE_U8);
 
-    image->lock();
+    image->barrierLock();
     image->addNode(paintLayer);
     image->unlock();
 

@@ -21,6 +21,7 @@
 
 #include <QScopedPointer>
 #include <QComboBox>
+#include <QStylePainter>
 #include "kritaui_export.h"
 #include "kis_types.h"
 
@@ -30,11 +31,12 @@ class KRITAUI_EXPORT KisColorFilterCombo : public QComboBox
 {
     Q_OBJECT
 public:
-    KisColorFilterCombo(QWidget *parent);
+    KisColorFilterCombo(QWidget *parent, bool filterMode = true, bool circleMode = true);
     ~KisColorFilterCombo() override;
 
     void updateAvailableLabels(KisNodeSP rootNode);
     void updateAvailableLabels(const QSet<int> &labels);
+    void setModes(bool filterMode, bool circleMode);
 
     QSize minimumSizeHint() const override;
     QSize sizeHint() const override;
@@ -43,6 +45,9 @@ public:
 
 Q_SIGNALS:
     void selectedColorsChanged();
+
+public:
+    static void paintColorPie(QStylePainter &painter, const QPalette& palette, const QList<int> &selectedColors, const QRect &rect, const int &baseSize);
 
 private:
     void paintEvent(QPaintEvent *event) override;

@@ -13,6 +13,7 @@
 # https://creativecommons.org/publicdomain/zero/1.0/legalcode
 
 import krita
+from PyQt5.QtGui import QPixmap, QIcon
 from . import uitenbrushes
 
 
@@ -91,3 +92,9 @@ class TenBrushesExtension(krita.Extension):
                 self.oldPreset = window.views()[0].currentBrushPreset()
                 window.views()[0].activateResource(
                     allPresets[self.sender().preset])
+
+        preset = window.views()[0].currentBrushPreset()
+        window.views()[0].showFloatingMessage(str(i18n("{}\nselected")).format(preset.name()),
+                                              QIcon(QPixmap.fromImage(preset.image())),
+                                              1000, 1)
+

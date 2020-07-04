@@ -26,11 +26,17 @@
 #include "kis_brush_based_paintop_options_widget.h"
 #include "kis_boundary.h"
 
-KisHairyPaintOpSettings::KisHairyPaintOpSettings()
+KisHairyPaintOpSettings::KisHairyPaintOpSettings(KisResourcesInterfaceSP resourcesInterface)
+    : KisBrushBasedPaintOpSettings(resourcesInterface)
 {
 }
 
-QPainterPath KisHairyPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode)
+QPainterPath KisHairyPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
 {
-    return brushOutlineImpl(info, mode, getDouble(HAIRY_BRISTLE_SCALE));
+    return brushOutlineImpl(info, mode, alignForZoom, getDouble(HAIRY_BRISTLE_SCALE));
+}
+
+bool KisHairyPaintOpSettings::hasPatternSettings() const
+{
+    return false;
 }

@@ -39,7 +39,7 @@
 #include "kis_texture_option.h"
 #include <kis_pressure_mirror_option_widget.h>
 #include "kis_pressure_texture_strength_option.h"
-
+#include <KisGlobalResourcesInterface.h>
 
 
 KisTangentNormalPaintOpSettingsWidget::KisTangentNormalPaintOpSettingsWidget(QWidget* parent):
@@ -47,6 +47,7 @@ KisTangentNormalPaintOpSettingsWidget::KisTangentNormalPaintOpSettingsWidget(QWi
 {
     setObjectName("brush option widget");
     setPrecisionEnabled(true);
+    setHSLBrushTipEnabled(true);
 
     addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")), i18n("Opacity"));
@@ -74,7 +75,7 @@ KisTangentNormalPaintOpSettingsWidget::~KisTangentNormalPaintOpSettingsWidget() 
 
 KisPropertiesConfigurationSP KisTangentNormalPaintOpSettingsWidget::configuration() const
 {
-    KisBrushBasedPaintOpSettingsSP config = new KisBrushBasedPaintOpSettings();
+    KisBrushBasedPaintOpSettingsSP config = new KisBrushBasedPaintOpSettings(KisGlobalResourcesInterface::instance());
     config->setOptionsWidget(const_cast<KisTangentNormalPaintOpSettingsWidget*>(this));
     config->setProperty("paintop", "tangentnormal");
     writeConfiguration(config);

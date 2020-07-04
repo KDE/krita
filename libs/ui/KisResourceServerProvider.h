@@ -24,8 +24,6 @@
 #define KIS_RESOURCESERVERPROVIDER_H_
 
 #include <KoResourceServer.h>
-#include <KoResourceServerAdapter.h>
-#include <KisResourceBundleServerProvider.h>
 
 #include <brushengine/kis_paintop_preset.h>
 
@@ -34,10 +32,9 @@
 
 class KisWorkspaceResource;
 class KisSessionResource;
-class KisPSDLayerStyleCollectionResource;
+class KisPSDLayerStyle;
 
-typedef KoResourceServerSimpleConstruction<KisPaintOpPreset, SharedPointerStoragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServer;
-typedef KoResourceServerAdapter<KisPaintOpPreset, SharedPointerStoragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServerAdapter;
+typedef KoResourceServer<KisPaintOpPreset> KisPaintOpPresetResourceServer;
 
 class KRITAUI_EXPORT KisResourceServerProvider : public QObject
 {
@@ -53,12 +50,7 @@ public:
     KoResourceServer<KisWorkspaceResource>* workspaceServer();
     KoResourceServer<KisWindowLayoutResource>* windowLayoutServer();
     KoResourceServer<KisSessionResource>* sessionServer();
-    KoResourceServer<KisPSDLayerStyleCollectionResource>* layerStyleCollectionServer();
-
-    void brushBlacklistCleanup();
-
-Q_SIGNALS:
-    void notifyBrushBlacklistCleanup();
+    KoResourceServer<KisPSDLayerStyle>* layerStyleServer();
 
 private:
 
@@ -69,7 +61,7 @@ private:
     KoResourceServer<KisWorkspaceResource> *m_workspaceServer;
     KoResourceServer<KisWindowLayoutResource> *m_windowLayoutServer;
     KoResourceServer<KisSessionResource> *m_sessionServer;
-    KoResourceServer<KisPSDLayerStyleCollectionResource> *m_layerStyleCollectionServer;
+    KoResourceServer<KisPSDLayerStyle> *m_layerStyleServer;
 };
 
 #endif // KIS_RESOURCESERVERPROVIDER_H_

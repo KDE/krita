@@ -24,6 +24,7 @@
 #include <QLayout>
 
 #include <filter/kis_filter_configuration.h>
+#include <KisGlobalResourcesInterface.h>
 
 #include "ui_wdgnoiseoptions.h"
 
@@ -59,7 +60,7 @@ void KisWdgNoise::setConfiguration(const KisPropertiesConfigurationSP config)
 
 KisPropertiesConfigurationSP KisWdgNoise::configuration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("noise", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("noise", 1, KisGlobalResourcesInterface::instance());
     config->setProperty("level", this->widget()->intLevel->value());
     config->setProperty("opacity", this->widget()->intOpacity->value());
     config->setProperty("seedThreshold", m_seedThreshold);

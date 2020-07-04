@@ -37,6 +37,7 @@
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter_registry.h"
+#include <KisGlobalResourcesInterface.h>
 
 
 void KisLayerTest::testCreation()
@@ -44,7 +45,7 @@ void KisLayerTest::testCreation()
 
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 512, 512, colorSpace, "layer test");
-    image->lock();
+    image->waitForDone();
 
     KisLayerSP layer = new TestLayer(image, "test", OPACITY_OPAQUE_U8);
     QCOMPARE(layer->name(), QString("test"));
@@ -82,7 +83,7 @@ void KisLayerTest::testOrdering()
 {
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 512, 512, colorSpace, "layer test");
-    image->lock();
+    image->waitForDone();
 
     KisLayerSP layer1 = new TestLayer(image, "layer1", OPACITY_OPAQUE_U8);
     KisLayerSP layer2 = new TestLayer(image, "layer2", OPACITY_OPAQUE_U8);
@@ -167,7 +168,7 @@ void KisLayerTest::testMoveNode()
 {
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 512, 512, colorSpace, "layer test");
-    image->lock();
+    image->waitForDone();
 
     KisLayerSP node1 = new TestLayer(image, "layer1", OPACITY_OPAQUE_U8);
     KisLayerSP node2 = new TestLayer(image, "layer2", OPACITY_OPAQUE_U8);
@@ -198,7 +199,7 @@ void KisLayerTest::testMoveLayer()
 {
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 512, 512, colorSpace, "layer test");
-    image->lock();
+    image->waitForDone();
 
     KisLayerSP node1 = new TestLayer(image, "layer1", OPACITY_OPAQUE_U8);
     KisLayerSP node2 = new TestLayer(image, "layer2", OPACITY_OPAQUE_U8);
@@ -246,11 +247,11 @@ void KisLayerTest::testMasksChangeRect()
 
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
     Q_ASSERT(filter);
-    KisFilterConfigurationSP configuration1 = filter->defaultConfiguration();
-    KisFilterConfigurationSP configuration2 = filter->defaultConfiguration();
+    KisFilterConfigurationSP configuration1 = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
+    KisFilterConfigurationSP configuration2 = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
 
-    filterMask1->setFilter(configuration1);
-    filterMask2->setFilter(configuration2);
+    filterMask1->setFilter(configuration1->cloneWithResourcesSnapshot());
+    filterMask2->setFilter(configuration2->cloneWithResourcesSnapshot());
 
     image->addNode(filterMask1, paintLayer1);
     image->addNode(filterMask2, paintLayer1);

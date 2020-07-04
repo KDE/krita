@@ -6,6 +6,6 @@
     "X-KDE-Library": "krita_flaketools",
     "X-KDE-PluginInfo-Name": "defaulttools",
     "X-KDE-ServiceTypes": [
-        "Calligra/Tool"
+        "Krita/Tool"
     ]
 }

@@ -48,7 +48,7 @@ void TestFilter::testApply()
     gc.fillRect(0, 0, 100, 100, KoColor(Qt::black, layer->colorSpace()));
     image->addNode(layer);
     kisdoc->setCurrentImage(image);
-    Document d(kisdoc);
+    Document d(kisdoc, false);
     NodeSP node = NodeSP(Node::createNode(image, layer));
 
     Filter f;
@@ -79,7 +79,7 @@ void TestFilter::testStartFilter()
     gc.fillRect(0, 0, 100, 100, KoColor(Qt::black, layer->colorSpace()));
     image->addNode(layer);
     kisdoc->setCurrentImage(image);
-    Document d(kisdoc);
+    Document d(kisdoc, false);
     NodeSP node = NodeSP(Node::createNode(image, layer));
 
     Filter f;

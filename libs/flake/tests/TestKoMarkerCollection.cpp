@@ -21,6 +21,7 @@
 #include <QTest>
 #include <QFileInfo>
 #include <QPainter>
+#include <QPainterPath>
 #include <KoMarker.h>
 #include <KoMarkerCollection.h>
 #include <KoPathShape.h>

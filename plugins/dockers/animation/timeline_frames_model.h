@@ -106,7 +106,7 @@ public:
         ActiveLayerRole = KisTimeBasedItemModel::UserRole,
         TimelinePropertiesRole,
         OtherLayersRole,
-        LayerUsedInTimelineRole,
+        PinnedToTimelineRole,
         FrameColorLabelIndexRole
     };
 
@@ -148,6 +148,7 @@ Q_SIGNALS:
     void sigInfiniteTimelineUpdateNeeded();
     void sigAudioChannelChanged();
     void sigEnsureRowVisible(int row);
+    void sigFullClipRangeChanged();
 
 private:
     struct Private;

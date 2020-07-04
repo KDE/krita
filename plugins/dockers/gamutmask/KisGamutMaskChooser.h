@@ -22,9 +22,10 @@
 
 #include <QWidget>
 
-class KoResourceItemChooser;
-class KoResource;
-class KoGamutMask;
+class KisResourceItemChooser;
+#include <KoResource.h>
+#include <resources/KoGamutMask.h>
+
 class KisGamutMaskDelegate;
 
 class KisGamutMaskChooser : public QWidget
@@ -39,23 +40,23 @@ public:
         DETAIL  // Shows thumbsnails with text next to it
     };
 
-    void setCurrentResource(KoResource* resource);
+    void setCurrentResource(KoResourceSP resource);
 
 protected:
     void resizeEvent(QResizeEvent* event) override;
 
 Q_SIGNALS:
-    void sigGamutMaskSelected(KoGamutMask* mask);
+    void sigGamutMaskSelected(KoGamutMaskSP mask);
 
 private Q_SLOTS:
-    void resourceSelected(KoResource* resource);
+    void resourceSelected(KoResourceSP resource);
     void slotSetModeThumbnail();
     void slotSetModeDetail();
 
 private:
     void setViewMode(ViewMode mode);
     void updateViewSettings();
-    KoResourceItemChooser* m_itemChooser;
+    KisResourceItemChooser* m_itemChooser;
     KisGamutMaskDelegate* m_delegate;
     ViewMode m_mode;
 };

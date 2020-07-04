@@ -66,6 +66,14 @@ public:
         return m_transform.mapRect(rc);
     }
 
+    QRectF mapInverted(const QRectF &rc) const {
+        return m_transform.inverted().mapRect(rc);
+    }
+
+    QRect mapInverted(const QRect &rc) const {
+        return m_transform.inverted().mapRect(rc);
+    }
+
     KisPaintInformation map(KisPaintInformation pi) const {
         QPointF pos = pi.pos();
         pi.setPos(m_transform.map(pos));
@@ -182,7 +190,7 @@ public:
         m_scale = KisLodTransform::lodToScale(device->defaultBounds()->currentLevelOfDetail());
     }
 
-    qreal scale(qreal value) {
+    qreal scale(qreal value) const {
         return m_scale * value;
     }
 

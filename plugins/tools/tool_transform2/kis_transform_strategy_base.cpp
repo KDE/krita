@@ -19,6 +19,7 @@
 #include "kis_transform_strategy_base.h"
 
 #include <QImage>
+#include <QPainterPath>
 #include <QTransform>
 #include "KoPointerEvent.h"
 

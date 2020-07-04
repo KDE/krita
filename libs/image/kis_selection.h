@@ -49,6 +49,8 @@ class QPainterPath;
  */
 class KRITAIMAGE_EXPORT KisSelection : public KisShared
 {
+private:
+    struct ChangeShapeSelectionCommand;
 
 public:
     /**
@@ -85,7 +87,8 @@ public:
      */
     void setParentNode(KisNodeWSP node);
 
-    bool hasPixelSelection() const;
+    bool hasNonEmptyPixelSelection() const;
+    bool hasNonEmptyShapeSelection() const;
     bool hasShapeSelection() const;
 
     bool outlineCacheValid() const;
@@ -135,7 +138,22 @@ public:
      */
     KisSelectionComponent* shapeSelection() const;
 
-    void setShapeSelection(KisSelectionComponent* shapeSelection);
+    /**
+     * @brief converts shape selection into the vector state
+     *
+     * The selection must not have any shape selection active. It should
+     * be checked by calling hasShapeSelection() in advance.
+     *
+     * @param shapeSelection new shape selection object that should be
+     *                       attached to the selection
+     * @return undo command that exectes and undos the conversion
+     */
+    KUndo2Command* convertToVectorSelection(KisSelectionComponent* shapeSelection);
+
+    /**
+     * @see convertToVectorSelection()
+     */
+    void convertToVectorSelectionNoUndo(KisSelectionComponent* shapeSelection);
 
     /**
      * Returns the projection of the selection. It may be the same
@@ -199,8 +217,6 @@ public:
      */
     void requestCompressedProjectionUpdate(const QRect &rc);
 
-    void notifyShapeSelectionBecameEmpty();
-
     /// XXX: This method was marked KDE_DEPRECATED but without information on what to
     /// replace it with. Undeprecate, therefore.
     quint8 selected(qint32 x, qint32 y) const;
@@ -214,7 +230,6 @@ private:
     friend class KisUpdateSelectionJob;
     friend class KisSelectionUpdateCompressor;
     friend class KisDeselectActiveSelectionCommand;
-
 
     void copyFrom(const KisSelection &rhs);
 

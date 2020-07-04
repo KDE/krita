@@ -75,7 +75,7 @@ void KisAction::setDefaultShortcut(const QKeySequence &shortcut)
     if (shortcut != QKeySequence("")) {
         listifiedShortcut.append(shortcut);
     }
-    setProperty("defaultShortcuts", qVariantFromValue(listifiedShortcut));
+    setProperty("defaultShortcuts", QVariant::fromValue(listifiedShortcut));
 }
 
 QKeySequence KisAction::defaultShortcut() const

@@ -21,6 +21,7 @@
 #include <kis_assistant_tool.h>
 
 #include <QPainter>
+#include <QPainterPath>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 #include <QStandardPaths>
@@ -669,6 +670,22 @@ void KisAssistantTool::mouseMoveEvent(KoPointerEvent *event)
      m_canvas->updateCanvas();
 }
 
+
+void KisAssistantTool::keyPressEvent(QKeyEvent *event)
+{
+    // When the user is in the middle of creating a new
+    // assistant the escape key can be used to cancel this process.
+    if (event->key()==Qt::Key_Escape && (m_newAssistant)) {
+        // Clear shared pointer to the assistant being created so
+        // it gets cleaned-up
+        m_newAssistant.clear();
+        m_canvas->updateCanvas();
+        event->accept();
+    } else {
+        event->ignore();
+    }
+}
+
 void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
 {
     QRectF canvasSize = QRectF(QPointF(0, 0), QSizeF(m_canvas->image()->size()));
@@ -718,8 +735,14 @@ void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
 
 void KisAssistantTool::removeAllAssistants()
 {
+    m_origAssistantList = m_canvas->paintingAssistantsDecoration()->assistants();
+
     m_canvas->viewManager()->canvasResourceProvider()->clearPerspectiveGrids();
     m_canvas->paintingAssistantsDecoration()->removeAll();
+
+    KUndo2Command *removeAssistantCmd = new EditAssistantsCommand(m_canvas, m_origAssistantList, KisPaintingAssistant::cloneAssistantList(m_canvas->paintingAssistantsDecoration()->assistants()));
+    m_canvas->viewManager()->undoAdapter()->addCommand(removeAssistantCmd);
+
     m_handles = m_canvas->paintingAssistantsDecoration()->handles();
     m_canvas->updateCanvas();
 
@@ -743,6 +766,7 @@ void KisAssistantTool::loadAssistants()
     QByteArray data = file.readAll();
     QXmlStreamReader xml(data);
     QMap<int, KisPaintingAssistantHandleSP> handleMap;
+    QMap<int, KisPaintingAssistantHandleSP> sideHandleMap;
     KisPaintingAssistantSP assistant;
     bool errors = false;
     while (!xml.atEnd()) {
@@ -776,6 +800,30 @@ void KisAssistantTool::loadAssistants()
                         errors = true;
                     }
                 }
+	    // for vanishing point assistant
+            } else if (xml.name() == "sidehandle"){
+
+	      // read in sidehandles
+              if (!xml.attributes().value("id").isEmpty()) {
+		  QString strId = xml.attributes().value("id").toString(),
+			  strX = xml.attributes().value("x").toString(),
+			  strY = xml.attributes().value("y").toString();
+		  if (!strId.isEmpty() && !strX.isEmpty() && !strY.isEmpty()) {
+		      int id = strId.toInt();
+		      double x = strX.toDouble();
+		      double y = strY.toDouble();
+		      if (!sideHandleMap.contains(id)) {
+			  sideHandleMap.insert(id, new KisPaintingAssistantHandle(x,y));
+		      }}
+              }
+	      // addHandle to assistant
+              if (!xml.attributes().value("ref").isEmpty() && assistant) {
+		  KisPaintingAssistantHandleSP handle = sideHandleMap.value(xml.attributes().value("ref").toString().toInt());
+		  if (handle) {
+		      assistant->addHandle(handle, HandleType::SIDE);
+		  }
+	      }
+
             } else if (xml.name() == "assistant") {
                 const KisPaintingAssistantFactory* factory = KisPaintingAssistantFactoryRegistry::instance()->get(xml.attributes().value("type").toString());
 
@@ -819,8 +867,8 @@ void KisAssistantTool::loadAssistants()
             if (xml.name() == "assistant") {
                 if (assistant) {
                     if (assistant->handles().size() == assistant->numHandles()) {
-                        if (assistant->id() == "vanishing point"){
-                        //ideally we'd save and load side-handles as well, but this is all I've got//
+		        if (assistant->id() == "vanishing point" && sideHandleMap.empty()){
+                        // Create side handles if the saved vp assistant doesn't have any.
                             QPointF pos = *assistant->handles()[0];
                             assistant->addHandle(new KisPaintingAssistantHandle(pos+QPointF(-70,0)), HandleType::SIDE);
                             assistant->addHandle(new KisPaintingAssistantHandle(pos+QPointF(-140,0)), HandleType::SIDE);
@@ -887,6 +935,19 @@ void KisAssistantTool::saveAssistants()
         xml.writeEndElement();
     }
     xml.writeEndElement();
+    xml.writeStartElement("sidehandles");
+    QMap<KisPaintingAssistantHandleSP, int> sideHandleMap;
+    Q_FOREACH (KisPaintingAssistantSP assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
+	Q_FOREACH (KisPaintingAssistantHandleSP handle, assistant->sideHandles()) {
+	    int id = sideHandleMap.size();
+	    sideHandleMap.insert(handle, id);
+	    xml.writeStartElement("sidehandle");
+	    xml.writeAttribute("id", QString::number(id));
+	    xml.writeAttribute("x", QString::number(double(handle->x()), 'f', 3));
+	    xml.writeAttribute("y", QString::number(double(handle->y()), 'f', 3));
+	    xml.writeEndElement();
+	}
+    }
     xml.writeStartElement("assistants");
 
 
@@ -909,6 +970,15 @@ void KisAssistantTool::saveAssistants()
             xml.writeEndElement();
         }
         xml.writeEndElement();
+        if (!sideHandleMap.empty()) {
+	    xml.writeStartElement("sidehandles");
+	    Q_FOREACH (const KisPaintingAssistantHandleSP handle, assistant->sideHandles()) {
+		xml.writeStartElement("sidehandle");
+		xml.writeAttribute("ref", QString::number(sideHandleMap.value(handle)));
+		xml.writeEndElement();
+	    }
+	    xml.writeEndElement();
+        }
         xml.writeEndElement();
     }
     xml.writeEndElement();
@@ -960,10 +1030,7 @@ QWidget *KisAssistantTool::createOptionWidget()
         connect(m_options.assistantsColor, SIGNAL(changed(QColor)), SLOT(slotGlobalAssistantsColorChanged(QColor)));
         connect(m_options.assistantsGlobalOpacitySlider, SIGNAL(valueChanged(int)), SLOT(slotGlobalAssistantOpacityChanged()));
 
-
         connect(m_options.vanishingPointAngleSpinbox, SIGNAL(valueChanged(double)), this, SLOT(slotChangeVanishingPointAngle(double)));
-
-        //ENTER_FUNCTION() << ppVar(m_canvas) << ppVar(m_canvas && m_canvas->paintingAssistantsDecoration());
 
         // initialize UI elements with existing data if possible
         if (m_canvas && m_canvas->paintingAssistantsDecoration()) {
@@ -971,8 +1038,6 @@ QWidget *KisAssistantTool::createOptionWidget()
 
             QColor opaqueColor = color;
             opaqueColor.setAlpha(255);
-
-            //ENTER_FUNCTION() << ppVar(opaqueColor);
 
             m_options.assistantsColor->setColor(opaqueColor);
             m_options.customAssistantColorButton->setColor(opaqueColor);
@@ -999,7 +1064,7 @@ QWidget *KisAssistantTool::createOptionWidget()
         m_options.vanishingPointAngleSpinbox->setPrefix(i18n("Density: "));
         m_options.vanishingPointAngleSpinbox->setSuffix(QChar(Qt::Key_degree));
         m_options.vanishingPointAngleSpinbox->setRange(1.0, 180.0);
-        m_options.vanishingPointAngleSpinbox->setSingleStep(0.5);
+        m_options.vanishingPointAngleSpinbox->setSingleStep(1.0);
 
 
         m_options.vanishingPointAngleSpinbox->setVisible(false);

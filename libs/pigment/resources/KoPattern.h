@@ -18,15 +18,19 @@
 #ifndef KOPATTERN_H
 #define KOPATTERN_H
 
-#include <resources/KoResource.h>
+#include <KoResource.h>
 #include <kritapigment_export.h>
 
 #include <QMetaType>
+#include <QSharedPointer>
+
+class KoPattern;
+typedef QSharedPointer<KoPattern> KoPatternSP;
+
 
 /// Write API docs here
 class KRITAPIGMENT_EXPORT KoPattern : public KoResource
 {
-
 public:
 
     /**
@@ -39,11 +43,14 @@ public:
     KoPattern(const QImage &image, const QString &name, const QString &folderName);
     ~KoPattern() override;
 
+    KoPattern(const KoPattern &rhs);
+    KoPattern& operator=(const KoPattern& rhs) = delete;
+    KoResourceSP clone() const override;
+
+
 public:
 
-    bool load() override;
-    bool loadFromDevice(QIODevice *dev) override;
-    bool save() override;
+    bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;
     bool saveToDevice(QIODevice* dev) const override;
 
     bool loadPatFromDevice(QIODevice *dev);
@@ -54,9 +61,9 @@ public:
 
     QString defaultFileExtension() const override;
 
-    KoPattern& operator=(const KoPattern& pattern);
-
-    KoPattern* clone() const;
+    QPair<QString, QString> resourceType() const override {
+        return QPair<QString, QString>(ResourceType::Patterns, "");
+    }
 
     /**
      * @brief pattern the actual pattern image
@@ -64,17 +71,23 @@ public:
      */
     QImage pattern() const;
 
+    bool hasAlpha();
+
 private:
 
     bool init(QByteArray& data);
     void setPatternImage(const QImage& image);
+    void checkForAlpha(const QImage& image);
 
 private:
     QImage m_pattern;
+    bool m_hasAlpha = false;
     mutable QByteArray m_md5;
 };
 
 Q_DECLARE_METATYPE(KoPattern*)
+
+Q_DECLARE_METATYPE(QSharedPointer<KoPattern>)
 
 #endif // KOPATTERN_H
 

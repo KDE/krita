@@ -49,7 +49,7 @@ void KisSelectionExtras::shrink(qint32 xradius, qint32 yradius, bool edge_lock)
 
 void KisSelectionExtras::border(qint32 xradius, qint32 yradius)
 {
-    KisSelectionFilter *filter = new KisBorderSelectionFilter(xradius, yradius);
+    KisSelectionFilter *filter = new KisBorderSelectionFilter(xradius, yradius, true);
     KisFilterSelectionOperation opr("border-oper");
     opr.runFilter(filter, m_view, KisOperationConfiguration());
 }

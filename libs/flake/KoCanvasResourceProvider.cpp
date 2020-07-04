@@ -46,6 +46,8 @@ KoCanvasResourceProvider::KoCanvasResourceProvider(QObject *parent)
 
     connect(&d->manager, &KoResourceManager::resourceChanged,
             this, &KoCanvasResourceProvider::canvasResourceChanged);
+    connect(&d->manager, &KoResourceManager::resourceChangeAttempted,
+            this, &KoCanvasResourceProvider::canvasResourceChangeAttempted);
 }
 
 KoCanvasResourceProvider::~KoCanvasResourceProvider()

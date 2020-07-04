@@ -37,60 +37,40 @@ class KisChangeFilterCmd : public KUndo2Command
 
 public:
     KisChangeFilterCmd(KisNodeSP node,
-                       const QString &filterNameBefore,
-                       const QString &xmlBefore,
-                       const QString &filterNameAfter,
-                       const QString &xmlAfter,
-                       bool useGeneratorRegistry)
+                       KisFilterConfigurationSP configBefore,
+                       KisFilterConfigurationSP configAfter)
             : KUndo2Command(kundo2_i18n("Change Filter")) {
         m_node = node;
         m_filterInterface = dynamic_cast<KisNodeFilterInterface*>(node.data());
         Q_ASSERT(m_filterInterface);
 
-        m_useGeneratorRegistry = useGeneratorRegistry;
+        KIS_SAFE_ASSERT_RECOVER(configBefore->hasLocalResourcesSnapshot()) {
+            configBefore->createLocalResourcesSnapshot();
+        }
 
-        m_xmlBefore = xmlBefore;
-        m_xmlAfter = xmlAfter;
-        m_filterNameBefore = filterNameBefore;
-        m_filterNameAfter = filterNameAfter;
+        KIS_SAFE_ASSERT_RECOVER(configAfter->hasLocalResourcesSnapshot()) {
+            configAfter->createLocalResourcesSnapshot();
+        }
+
+        m_configBefore = configBefore;
+        m_configAfter = configAfter;
     }
 public:
     void redo() override {
-        m_filterInterface->setFilter(createConfiguration(m_filterNameAfter, m_xmlAfter));
+        m_filterInterface->setFilter(m_configAfter);
         m_node->setDirty();
     }
 
     void undo() override {
-        m_filterInterface->setFilter(createConfiguration(m_filterNameBefore, m_xmlBefore));
+        m_filterInterface->setFilter(m_configBefore);
         m_node->setDirty();
     }
-
-private:
-    KisFilterConfigurationSP createConfiguration(const QString &name, const QString &data)
-    {
-        KisFilterConfigurationSP config;
-
-        if (m_useGeneratorRegistry) {
-            KisGeneratorSP generator = KisGeneratorRegistry::instance()->value(name);
-            config = generator->factoryConfiguration();
-        } else {
-            KisFilterSP filter = KisFilterRegistry::instance()->value(name);
-            config = filter->factoryConfiguration();
-        }
-
-        config->fromXML(data);
-        return config;
-}
 
 private:
     KisNodeSP m_node;
     KisNodeFilterInterface *m_filterInterface;
 
-    bool m_useGeneratorRegistry;
-
-    QString m_xmlBefore;
-    QString m_xmlAfter;
-    QString m_filterNameBefore;
-    QString m_filterNameAfter;
+    KisFilterConfigurationSP m_configBefore;
+    KisFilterConfigurationSP m_configAfter;
 };
 #endif

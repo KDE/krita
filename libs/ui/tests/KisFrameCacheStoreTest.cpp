@@ -124,9 +124,7 @@ public:
         connect(this, SIGNAL(sigCancelRegenerationInternal(int)), SLOT(notifyFrameCancelled(int)));
     }
 
-    void frameCompletedCallback(int frame, const QRegion &requestedRegion) override {
-        ENTER_FUNCTION() << ppVar(frame);
-
+    void frameCompletedCallback(int frame, const KisRegion &requestedRegion) override {
         KisImageSP image = requestedImage();
         KIS_SAFE_ASSERT_RECOVER_NOOP(frame == image->animationInterface()->currentTime());
 

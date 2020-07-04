@@ -39,7 +39,6 @@
 #include <KoSelectedShapesProxy.h>
 #include <KoShapeGroup.h>
 #include <KoShapeLayer.h>
-#include <KoShapeOdfSaveHelper.h>
 #include <KoPathShape.h>
 #include <KoDrag.h>
 #include <KoCanvasBase.h>
@@ -67,6 +66,7 @@
 
 #include <KoIcon.h>
 
+#include <QPainterPath>
 #include <QPointer>
 #include <QAction>
 #include <QKeyEvent>
@@ -81,6 +81,7 @@
 #include "kis_assert.h"
 #include "kis_global.h"
 #include "kis_debug.h"
+#include "krita_utils.h"
 
 #include <QVector2D>
 
@@ -213,9 +214,10 @@ public:
     bool tryUseCustomCursor() override {
         if (m_currentHandle.type != KoShapeGradientHandles::Handle::None) {
             q->useCursor(Qt::OpenHandCursor);
+            return true;
         }
 
-        return m_currentHandle.type != KoShapeGradientHandles::Handle::None;
+        return false;
     }
 
 private:
@@ -691,7 +693,7 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
     KoInteractionTool::paint(painter, converter);
 
     painter.save();
-    KoShape::applyConversion(painter, converter);
+    painter.setTransform(converter.documentToView(), true);
     canvas()->snapGuide()->paint(painter, converter);
     painter.restore();
 }
@@ -966,7 +968,7 @@ void DefaultTool::recalcSelectionBox(KoSelection *selection)
 {
     KIS_ASSERT_RECOVER_RETURN(selection->count());
 
-    QTransform matrix = selection->absoluteTransformation(0);
+    QTransform matrix = selection->absoluteTransformation();
     m_selectionOutline = matrix.map(QPolygonF(selection->outlineRect()));
     m_angle = 0.0;
 
@@ -1194,7 +1196,7 @@ void DefaultTool::selectionTransform(int transformAction)
         QTransform t;
 
         if (!shouldReset) {
-            const QTransform world = shape->absoluteTransformation(0);
+            const QTransform world = shape->absoluteTransformation();
             t =  world * centerTransInv * applyTransform * centerTrans * world.inverted() * shape->transformation();
         } else {
             const QPointF center = shape->outlineRect().center();
@@ -1228,8 +1230,16 @@ void DefaultTool::selectionBooleanOp(int booleanOp)
     const int referenceShapeIndex = 0;
     KoShape *referenceShape = editableShapes[referenceShapeIndex];
 
+    KisCanvas2 *kisCanvas = static_cast<KisCanvas2 *>(canvas());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(kisCanvas);
+    const QTransform booleanWorkaroundTransform =
+        KritaUtils::pathShapeBooleanSpaceWorkaround(kisCanvas->image());
+
     Q_FOREACH (KoShape *shape, editableShapes) {
-        srcOutlines << shape->absoluteTransformation(0).map(shape->outline());
+        srcOutlines <<
+            booleanWorkaroundTransform.map(
+            shape->absoluteTransformation().map(
+                shape->outline()));
     }
 
     if (booleanOp == BooleanUnion) {
@@ -1262,6 +1272,8 @@ void DefaultTool::selectionBooleanOp(int booleanOp)
 
         actionName = kundo2_i18n("Subtract Shapes");
     }
+
+    dstOutline = booleanWorkaroundTransform.inverted().map(dstOutline);
 
     KoShape *newShape = 0;
 

@@ -1,103 +1,98 @@
-# Try to find the OpenEXR libraries
-# This check defines:
 #
-#  OPENEXR_FOUND - system has OpenEXR
-#  OPENEXR_INCLUDE_DIR - OpenEXR include directory
-#  OPENEXR_LIBRARIES - Libraries needed to use OpenEXR
-#  OPENEXR_DEFINITIONS - definitions required to use OpenEXR
-
-# Copyright (c) 2006, Alexander Neundorf, <neundorf@kde.org>
+# Copyright 2016 Pixar
 #
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+# Licensed under the Apache License, Version 2.0 (the "Apache License")
+# with the following modification; you may not use this file except in
+# compliance with the Apache License and the following modification to it:
+# Section 6. Trademarks. is deleted and replaced with:
+#
+# 6. Trademarks. This License does not grant permission to use the trade
+#    names, trademarks, service marks, or product names of the Licensor
+#    and its affiliates, except as required to comply with Section 4(c) of
+#    the License and to reproduce the content of the NOTICE file.
+#
+# You may obtain a copy of the Apache License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the Apache License with the above modification is
+# distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied. See the Apache License for the specific
+# language governing permissions and limitations under the Apache License.
+#
 
+find_path(OPENEXR_INCLUDE_DIR
+    OpenEXR/half.h
+HINTS
+    "${OPENEXR_LOCATION}"
+    "$ENV{OPENEXR_LOCATION}"
+PATH_SUFFIXES
+    include/
+DOC
+    "OpenEXR headers path"
+)
 
-if (OPENEXR_INCLUDE_DIR AND OPENEXR_LIBRARIES)
-  # in cache already
-  set(OPENEXR_FOUND TRUE)
+if(OPENEXR_INCLUDE_DIR)
+  set(openexr_config_file "${OPENEXR_INCLUDE_DIR}/OpenEXR/OpenEXRConfig.h")
+  if(EXISTS ${openexr_config_file})
+      file(STRINGS
+           ${openexr_config_file}
+           TMP
+           REGEX "#define OPENEXR_VERSION_STRING.*$")
+      string(REGEX MATCHALL "[0-9.]+" OPENEXR_VERSION ${TMP})
 
-else (OPENEXR_INCLUDE_DIR AND OPENEXR_LIBRARIES)
+      file(STRINGS
+           ${openexr_config_file}
+           TMP
+           REGEX "#define OPENEXR_VERSION_MAJOR.*$")
+      string(REGEX MATCHALL "[0-9]" OPENEXR_MAJOR_VERSION ${TMP})
 
-  # use pkg-config to get the directories and then use these values
-  # in the FIND_PATH() and FIND_LIBRARY() calls
-  find_package(PkgConfig)
-  pkg_check_modules(PC_OPENEXR QUIET OpenEXR) 
+      file(STRINGS
+           ${openexr_config_file}
+           TMP
+           REGEX "#define OPENEXR_VERSION_MINOR.*$")
+      string(REGEX MATCHALL "[0-9]" OPENEXR_MINOR_VERSION ${TMP})
+  endif()
+endif()
 
-  FIND_PATH(OPENEXR_INCLUDE_DIR ImfRgbaFile.h
-     HINTS
-     ${PC_OPENEXR_INCLUDEDIR}
-     ${PC_OPENEXR_INCLUDE_DIRS}
-     PATH_SUFFIXES OpenEXR
-  )
+foreach(OPENEXR_LIB
+    Half
+    Iex
+    Imath
+    IlmImf
+    IlmThread
+    )
 
-  FIND_LIBRARY(OPENEXR_HALF_LIBRARY NAMES Half
-    HINTS
-    ${PC_OPENEXR_LIBDIR}
-    ${PC_OPENEXR_LIBRARY_DIRS}
-  )
+    # OpenEXR libraries may be suffixed with the version number, so we search
+    # using both versioned and unversioned names.
+    find_library(OPENEXR_${OPENEXR_LIB}_LIBRARY
+        NAMES
+            ${OPENEXR_LIB}-${OPENEXR_MAJOR_VERSION}_${OPENEXR_MINOR_VERSION}
+            ${OPENEXR_LIB}
+        HINTS
+            "${OPENEXR_LOCATION}"
+            "$ENV{OPENEXR_LOCATION}"
+        PATH_SUFFIXES
+            lib/
+        DOC
+            "OPENEXR's ${OPENEXR_LIB} library path"
+    )
 
+    if(OPENEXR_${OPENEXR_LIB}_LIBRARY)
+        list(APPEND OPENEXR_LIBRARIES ${OPENEXR_${OPENEXR_LIB}_LIBRARY})
+    endif()
+endforeach(OPENEXR_LIB)
 
-  FIND_LIBRARY(OPENEXR_IEX_LIBRARY NAMES Iex
-    PATHS
-    ${PC_OPENEXR_LIBDIR}
-    ${PC_OPENEXR_LIBRARY_DIRS}
-  )
+# So #include <half.h> works
+list(APPEND OPENEXR_INCLUDE_DIRS ${OPENEXR_INCLUDE_DIR})
+list(APPEND OPENEXR_INCLUDE_DIRS ${OPENEXR_INCLUDE_DIR}/OpenEXR)
 
-  FIND_LIBRARY(OPENEXR_IMATH_LIBRARY NAMES Imath
-    HINTS
-    ${PC_OPENEXR_LIBDIR}
-    ${PC_OPENEXR_LIBRARY_DIRS}
-  )
-
-  FIND_LIBRARY(OPENEXR_ILMIMF_LIBRARY NAMES IlmImf 
-    HINTS
-    ${PC_OPENEXR_LIBDIR}
-    ${PC_OPENEXR_LIBRARY_DIRS}
-  )
-  
-  FIND_LIBRARY(OPENEXR_ILMTHREAD_LIBRARY NAMES IlmThread
-    HINTS
-    ${PC_OPENEXR_LIBDIR}
-    ${PC_OPENEXR_LIBRARY_DIRS}
-  )
-
-  if (OPENEXR_INCLUDE_DIR AND OPENEXR_IMATH_LIBRARY AND OPENEXR_ILMIMF_LIBRARY AND OPENEXR_IEX_LIBRARY AND OPENEXR_HALF_LIBRARY)
-     set(OPENEXR_FOUND TRUE)
-     if (OPENEXR_ILMTHREAD_LIBRARY)
-         set(OPENEXR_LIBRARIES ${OPENEXR_IMATH_LIBRARY} ${OPENEXR_ILMIMF_LIBRARY} ${OPENEXR_IEX_LIBRARY} ${OPENEXR_HALF_LIBRARY} ${OPENEXR_ILMTHREAD_LIBRARY} )
-     else (OPENEXR_ILMTHREAD_LIBRARY)
-         set(OPENEXR_LIBRARIES ${OPENEXR_IMATH_LIBRARY} ${OPENEXR_ILMIMF_LIBRARY} ${OPENEXR_IEX_LIBRARY} ${OPENEXR_HALF_LIBRARY} )
-     endif (OPENEXR_ILMTHREAD_LIBRARY)
-
-     if (WIN32)
-        set(_OPENEXR_DEFINITIONS -DOPENEXR_DLL)
-     else (WIN32)
-        set(_OPENEXR_DEFINITIONS)
-     endif (WIN32)
-
-     set(OPENEXR_DEFINITIONS ${_OPENEXR_DEFINITIONS})
-
-  endif (OPENEXR_INCLUDE_DIR AND OPENEXR_IMATH_LIBRARY AND OPENEXR_ILMIMF_LIBRARY AND OPENEXR_IEX_LIBRARY AND OPENEXR_HALF_LIBRARY)
-  
-  
-  if (OPENEXR_FOUND)
-    if (NOT OpenEXR_FIND_QUIETLY)
-      message(STATUS "Found OPENEXR: ${OPENEXR_LIBRARIES}")
-    endif (NOT OpenEXR_FIND_QUIETLY)
-  else (OPENEXR_FOUND)
-    if (OpenEXR_FIND_REQUIRED)
-      message(FATAL_ERROR "Could NOT find OPENEXR")
-    endif (OpenEXR_FIND_REQUIRED)
-  endif (OPENEXR_FOUND)
-  
-  mark_as_advanced(
-     OPENEXR_INCLUDE_DIR 
-     OPENEXR_LIBRARIES 
-     OPENEXR_ILMIMF_LIBRARY 
-     OPENEXR_ILMTHREAD_LIBRARY
-     OPENEXR_IMATH_LIBRARY 
-     OPENEXR_IEX_LIBRARY 
-     OPENEXR_HALF_LIBRARY
-     OPENEXR_DEFINITIONS )
-  
-endif (OPENEXR_INCLUDE_DIR AND OPENEXR_LIBRARIES)
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(OpenEXR
+    REQUIRED_VARS
+        OPENEXR_INCLUDE_DIRS
+        OPENEXR_LIBRARIES
+    VERSION_VAR
+        OPENEXR_VERSION
+)

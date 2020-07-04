@@ -96,7 +96,7 @@ public:
     }
 private:
 
-	float exposure;
+    float exposure {0.0f};
  };
 
  KisDodgeShadowsAdjustmentFactory::KisDodgeShadowsAdjustmentFactory()

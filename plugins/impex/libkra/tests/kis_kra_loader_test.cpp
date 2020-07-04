@@ -53,9 +53,9 @@ void KisKraLoaderTest::initTestCase()
 void KisKraLoaderTest::testLoading()
 {
     QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
-    doc->loadNativeFormat(QString(FILES_DATA_DIR) + QDir::separator() + "load_test.kra");
+    doc->loadNativeFormat(QString(FILES_DATA_DIR) + '/' + "load_test.kra");
     KisImageSP image = doc->image();
-    image->lock();
+    image->waitForDone();
     QCOMPARE(image->nlayers(), 12);
     QCOMPARE(doc->documentInfo()->aboutInfo("title"), QString("test image for loading"));
     QCOMPARE(image->height(), 753);
@@ -119,7 +119,7 @@ void KisKraLoaderTest::testObligeSingleChildNonTranspPixel()
 void KisKraLoaderTest::testLoadAnimated()
 {
     QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
-    doc->loadNativeFormat(QString(FILES_DATA_DIR) + QDir::separator() + "load_test_animation.kra");
+    doc->loadNativeFormat(QString(FILES_DATA_DIR) + '/' + "load_test_animation.kra");
     KisImageSP image = doc->image();
 
     KisNodeSP node1 = image->root()->firstChild();

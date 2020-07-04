@@ -21,9 +21,12 @@
 
 #include <QDialog>
 
+
 #include "ui_wdgsessionmanager.h"
 
-class KisSessionResource;
+#include <KisSessionResource.h>
+
+class KisResourceModel;
 
 class KisSessionManagerDialog : public QDialog, Ui::DlgSessionManager
 {
@@ -31,20 +34,34 @@ class KisSessionManagerDialog : public QDialog, Ui::DlgSessionManager
 
 public:
     explicit KisSessionManagerDialog(QWidget *parent = nullptr);
+    
+protected:
+    bool event(QEvent *event) override;
 
 private Q_SLOTS:
     void slotNewSession();
     void slotRenameSession();
     void slotSwitchSession();
     void slotDeleteSession();
-    void slotSessionDoubleClicked(QListWidgetItem* item);
+    void slotSessionDoubleClicked(QModelIndex item);
 
     void slotClose();
 
-private:
-    void updateSessionList();
+    void slotModelAboutToBeReset(QModelIndex);
+    void slotModelReset();
 
-    KisSessionResource *getSelectedSession() const;
+    void slotModelSelectionChanged(QItemSelection selected, QItemSelection deselected);
+
+private:
+    void updateButtons();
+
+    KisSessionResourceSP getSelectedSession() const;
+
+    int m_lastSessionId;
+
+    KisResourceModel* m_model;
+    
+    static int refreshEventType;
 };
 
 #endif

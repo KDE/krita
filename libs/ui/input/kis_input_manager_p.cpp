@@ -176,7 +176,9 @@ void KisInputManager::Private::setMaskSyntheticEvents(bool value)
 
 KisInputManager::Private::Private(KisInputManager *qq)
     : q(qq)
-    , moveEventCompressor(10 /* ms */, KisSignalCompressor::FIRST_ACTIVE)
+    , moveEventCompressor(10 /* ms */,
+                          KisSignalCompressor::FIRST_ACTIVE,
+                          KisSignalCompressor::ADDITIVE_INTERVAL)
     , priorityEventFilterSeqNo(0)
     , canvasSwitcher(this, qq)
 {
@@ -225,6 +227,13 @@ void KisInputManager::Private::CanvasSwitcher::addCanvas(KisCanvas2 *canvas)
 
     if (!canvasResolver.contains(canvasWidget)) {
         canvasResolver.insert(canvasWidget, canvas);
+    } else {
+        // just a sanity cheeck to find out if we are
+        // trying to add two canvases concurrently.
+        KIS_SAFE_ASSERT_RECOVER_NOOP(d->canvas == canvas);
+    }
+
+    if (canvas != d->canvas) {
         d->q->setupAsEventFilter(canvasWidget);
         canvasWidget->installEventFilter(this);
 
@@ -233,8 +242,6 @@ void KisInputManager::Private::CanvasSwitcher::addCanvas(KisCanvas2 *canvas)
 
         d->canvas = canvas;
         d->toolProxy = qobject_cast<KisToolProxy*>(canvas->toolProxy());
-    } else {
-        KIS_ASSERT_RECOVER_RETURN(d->canvas == canvas);
     }
 }
 
@@ -441,7 +448,11 @@ void KisInputManager::Private::addStrokeShortcut(KisAbstractInputAction* action,
     }
 
     if (buttonList.size() > 0) {
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
+        strokeShortcut->setButtons(QSet<Qt::Key>(modifiers.begin(), modifiers.end()), QSet<Qt::MouseButton>(buttonList.begin(), buttonList.end()));
+#else
         strokeShortcut->setButtons(QSet<Qt::Key>::fromList(modifiers), QSet<Qt::MouseButton>::fromList(buttonList));
+#endif
         matcher.addShortcut(strokeShortcut);
     }
     else {
@@ -463,7 +474,11 @@ void KisInputManager::Private::addKeyShortcut(KisAbstractInputAction* action, in
     //the way the shortcut matcher is currently implemented.
     QList<Qt::Key> allKeys = keys;
     Qt::Key key = allKeys.takeLast();
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
+    QSet<Qt::Key> modifiers = QSet<Qt::Key>(allKeys.begin(), allKeys.end());
+#else
     QSet<Qt::Key> modifiers = QSet<Qt::Key>::fromList(allKeys);
+#endif
     keyShortcut->setKey(modifiers, key);
     matcher.addShortcut(keyShortcut);
 }
@@ -495,8 +510,11 @@ void KisInputManager::Private::addWheelShortcut(KisAbstractInputAction* action, 
     default:
         return;
     }
-
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
+    keyShortcut->setWheel(QSet<Qt::Key>(modifiers.begin(), modifiers.end()), a);
+#else
     keyShortcut->setWheel(QSet<Qt::Key>::fromList(modifiers), a);
+#endif
     matcher.addShortcut(keyShortcut.take());
 }
 

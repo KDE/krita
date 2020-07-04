@@ -25,6 +25,7 @@
 #include <QPainter>
 #include <QInputDialog>
 #include <QAction>
+#include <QMessageBox>
 
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
@@ -32,11 +33,10 @@
 #include <kis_icon.h>
 
 #include <KoCanvasBase.h>
-#include <KoResourceItemChooser.h>
-#include <KoResourceServerAdapter.h>
-#include <KoResourceServerProvider.h>
-
-#include <KisResourceServerProvider.h>
+#include <KisResourceItemChooser.h>
+#include <KisResourceLoader.h>
+#include <KisResourceItemListView.h>
+#include <KisResourceLoaderRegistry.h>
 #include <KisViewManager.h>
 #include <kis_canvas2.h>
 #include <KisMainWindow.h>
@@ -69,7 +69,7 @@ void KisTasksetResourceDelegate::paint(QPainter * painter, const QStyleOptionVie
     if (! index.isValid())
         return;
 
-    TasksetResource* taskset = static_cast<TasksetResource*>(index.internalPointer());
+    QString name = index.data(Qt::UserRole + KisResourceModel::Name).toString();
 
     if (option.state & QStyle::State_Selected) {
         painter->setPen(QPen(option.palette.highlight(), 2.0));
@@ -80,8 +80,7 @@ void KisTasksetResourceDelegate::paint(QPainter * painter, const QStyleOptionVie
         painter->setBrush(option.palette.text());
     }
 
-    painter->drawText(option.rect.x() + 5, option.rect.y() + painter->fontMetrics().ascent() + 5, taskset->name());
-
+    painter->drawText(option.rect.x() + 5, option.rect.y() + painter->fontMetrics().ascent() + 5, name);
 }
 
 TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canvas(0), m_blocked(false)
@@ -99,23 +98,17 @@ TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canv
 
     chooserButton->setIcon(KisIconUtils::loadIcon("edit-copy"));
 
-    m_rserver = new KoResourceServerSimpleConstruction<TasksetResource>("kis_taskset", "*.kts");
-    if (!QFileInfo(m_rserver->saveLocation()).exists()) {
-        QDir().mkpath(m_rserver->saveLocation());
-    }
-    QSharedPointer<KoAbstractResourceServerAdapter> adapter (new KoResourceServerAdapter<TasksetResource>(m_rserver));
-    m_rserver->loadResources(KoResourceServerProvider::blacklistFileNames(m_rserver->fileNames(), m_rserver->blackListedFiles()));
-    m_rserver->loadTags();
-
-    KoResourceItemChooser* itemChooser = new KoResourceItemChooser(adapter, this);
+    m_rserver = new KoResourceServer<TasksetResource>(ResourceType::TaskSets);
+    KisResourceLoaderRegistry::instance()->registerLoader(new KisResourceLoader<TasksetResource>(ResourceType::TaskSets, ResourceType::TaskSets, i18n("Task sets"), QStringList() << "application/x-krita-taskset"));
+    KisResourceItemChooser *itemChooser = new KisResourceItemChooser(ResourceType::TaskSets, false, this);
     itemChooser->setItemDelegate(new KisTasksetResourceDelegate(this));
     itemChooser->setFixedSize(500, 250);
     itemChooser->setRowHeight(30);
-    itemChooser->setColumnCount(1);
+    itemChooser->itemView()->setViewMode(QListView::ListMode);
     itemChooser->showTaggingBar(true);
     chooserButton->setPopupWidget(itemChooser);
 
-    connect(itemChooser, SIGNAL(resourceSelected(KoResource*)), this, SLOT(resourceSelected(KoResource*)));
+    connect(itemChooser, SIGNAL(resourceSelected(KoResourceSP )), this, SLOT(resourceSelected(KoResourceSP )));
 
     setWidget(widget);
 
@@ -181,15 +174,9 @@ void TasksetDockerDock::recordClicked()
 
 void TasksetDockerDock::saveClicked()
 {
-    bool ok;
-    QString name = QInputDialog::getText(this, i18n("Taskset Name"),
-                                         i18n("Name:"), QLineEdit::Normal,
-                                         QString(), &ok);
-    if (!ok) {
-        return;
-    }
+    QString name;
 
-    TasksetResource* taskset = new TasksetResource(QString());
+    TasksetResourceSP taskset(new TasksetResource(QString()));
 
     QStringList actionNames;
     Q_FOREACH (QAction* action, m_model->actions()) {
@@ -199,23 +186,35 @@ void TasksetDockerDock::saveClicked()
     taskset->setValid(true);
     QString saveLocation = m_rserver->saveLocation();
 
-    bool newName = false;
-    if(name.isEmpty()) {
-        newName = true;
+    if (name.isEmpty()) {
         name = i18n("Taskset");
     }
     QFileInfo fileInfo(saveLocation + name + taskset->defaultFileExtension());
 
-    int i = 1;
-    while (fileInfo.exists()) {
-        fileInfo.setFile(saveLocation + name + QString("%1").arg(i) + taskset->defaultFileExtension());
-        i++;
+    bool fileOverwriteAccepted = false;
+    bool ok = false;
+
+    while(!fileOverwriteAccepted) {
+        name = QInputDialog::getText(this, i18n("Taskset Name"),
+                                     i18n("Name:"), QLineEdit::Normal,
+                                     QString(), &ok);
+        if (name.isNull() || name.isEmpty()) {
+            return;
+        } else {
+            fileInfo = QFileInfo(saveLocation + name.split(" ").join("_") + taskset->defaultFileExtension());
+            if (fileInfo.exists()) {
+                int res = QMessageBox::warning(this, i18nc("@title:window", "Name Already Exists")
+                                                        , i18n("The name '%1' already exists, do you wish to overwrite it?", name)
+                                                        , QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+                if (res == QMessageBox::Yes) fileOverwriteAccepted = true;
+            } else {
+                fileOverwriteAccepted = true;
+            }
+        }
     }
-    taskset->setFilename(fileInfo.filePath());
-    if(newName) {
-        name = i18n("Taskset %1", i);
-    }
+
     taskset->setName(name);
+    taskset->setFilename(fileInfo.fileName());
     m_rserver->addResource(taskset);
 }
 
@@ -225,14 +224,14 @@ void TasksetDockerDock::clearClicked()
     m_model->clear();
 }
 
-void TasksetDockerDock::resourceSelected(KoResource* resource)
+void TasksetDockerDock::resourceSelected(KoResourceSP resource)
 {
     if(!m_canvas) {
         return;
     }
     m_model->clear();
     saveButton->setEnabled(true);
-    Q_FOREACH (const QString& actionName, static_cast<TasksetResource*>(resource)->actionList()) {
+    Q_FOREACH (const QString& actionName, resource.staticCast<TasksetResource>()->actionList()) {
         QAction* action = m_canvas->viewManager()->actionCollection()->action(actionName);
         if(action) {
             m_model->addAction(action);

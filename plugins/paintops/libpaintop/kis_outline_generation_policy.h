@@ -31,8 +31,10 @@ template <class ParentClass>
 class KisOutlineGenerationPolicy : public ParentClass
 {
 public:
-    KisOutlineGenerationPolicy(KisCurrentOutlineFetcher::Options options)
-        : m_outlineFetcher(options)
+    KisOutlineGenerationPolicy(KisCurrentOutlineFetcher::Options options,
+                               KisResourcesInterfaceSP resourcesInterface)
+        : ParentClass(resourcesInterface),
+          m_outlineFetcher(options)
     {
     }
 

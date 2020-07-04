@@ -66,11 +66,11 @@ KoPattern::KoPattern(const QImage &image, const QString &name, const QString &fo
     setPatternImage(image);
     setName(name);
 
-    QFileInfo fileInfo(folderName + QDir::separator() + name + defaultFileExtension());
+    QFileInfo fileInfo(folderName + '/' + name + defaultFileExtension());
 
     int i = 1;
     while (fileInfo.exists()) {
-        fileInfo.setFile(folderName + QDir::separator() +
+        fileInfo.setFile(folderName + '/' +
                          name + QString::number(i) + defaultFileExtension());
         i++;
     }
@@ -83,20 +83,16 @@ KoPattern::~KoPattern()
 {
 }
 
-bool KoPattern::load()
+KoPattern::KoPattern(const KoPattern &rhs)
+    : KoResource(rhs),
+      m_pattern(rhs.m_pattern),
+      m_md5(rhs.m_md5)
 {
-    QFile file(filename());
-    if (file.size() == 0) return false;
+}
 
-    bool result;
-    if (!file.open(QIODevice::ReadOnly)) {
-        qWarning() << "Can't open file " << filename();
-        return false;
-    }
-    result = loadFromDevice(&file);
-    file.close();
-
-    return result;
+KoResourceSP KoPattern::clone() const
+{
+    return KoResourceSP(new KoPattern(*this));
 }
 
 bool KoPattern::loadPatFromDevice(QIODevice *dev)
@@ -160,8 +156,10 @@ bool KoPattern::savePatToDevice(QIODevice* dev) const
     return true;
 }
 
-bool KoPattern::loadFromDevice(QIODevice *dev)
+bool KoPattern::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
+    Q_UNUSED(resourcesInterface);
+
     QString fileExtension;
     int index = filename().lastIndexOf('.');
 
@@ -187,15 +185,6 @@ bool KoPattern::loadFromDevice(QIODevice *dev)
 
 }
 
-bool KoPattern::save()
-{
-    QFile file(filename());
-    file.open(QIODevice::WriteOnly | QIODevice::Truncate);
-    bool res = saveToDevice(&file);
-    file.close();
-    return res;
-}
-
 bool KoPattern::saveToDevice(QIODevice *dev) const
 {
     QString fileExtension;
@@ -204,15 +193,16 @@ bool KoPattern::saveToDevice(QIODevice *dev) const
     if (index != -1)
         fileExtension = filename().mid(index + 1).toLower();
 
+    bool result = false;
+
     if (fileExtension == "pat") {
-        return savePatToDevice(dev);
+        result = savePatToDevice(dev);
     }
     else {
-        return m_pattern.save(dev, fileExtension.toUpper().toLatin1());
+        result = m_pattern.save(dev, fileExtension.toUpper().toLatin1());
     }
 
-    return true;
-
+    return result && KoResource::saveToDevice(dev);
 }
 
 bool KoPattern::init(QByteArray& bytes)
@@ -367,33 +357,35 @@ qint32 KoPattern::height() const
 void KoPattern::setPatternImage(const QImage& image)
 {
     m_pattern = image;
+    checkForAlpha(image);
     setImage(image);
     setValid(true);
 }
 
-KoPattern& KoPattern::operator=(const KoPattern & pattern)
-{
-    setFilename(pattern.filename());
-    setPatternImage(pattern.pattern());
-    setValid(true);
-    return *this;
-}
 
 QString KoPattern::defaultFileExtension() const
 {
     return QString(".pat");
 }
 
-KoPattern* KoPattern::clone() const
-{
-    KoPattern* pat = new KoPattern(filename());
-    pat->setPatternImage(pattern());
-    pat->setName(name());
-    return pat;
-}
 
 QImage KoPattern::pattern() const
 {
     return m_pattern;
 }
 
+void KoPattern::checkForAlpha(const QImage& image) {
+    m_hasAlpha = false;
+    for (int y = 0; y < image.height(); y++) {
+        for (int x = 0; x < image.width(); x++) {
+            if (qAlpha(image.pixel(x, y)) != 255) {
+                m_hasAlpha = true;
+                break;
+            }
+        }
+    }
+}
+
+bool KoPattern::hasAlpha() {
+    return m_hasAlpha;
+}

@@ -27,7 +27,9 @@ FilterMask::FilterMask(KisImageSP image, QString name, Filter &filter, QObject *
 {
     this->node()->setName(name);
     KisFilterMask *mask = dynamic_cast<KisFilterMask*>(this->node().data());
-    mask->setFilter(filter.filterConfig());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(mask);
+    
+    mask->setFilter(filter.filterConfig()->cloneWithResourcesSnapshot());
 }
 
 FilterMask::FilterMask(KisImageSP image, KisFilterMaskSP mask, QObject *parent):
@@ -49,13 +51,17 @@ QString FilterMask::type() const
 void FilterMask::setFilter(Filter &filter)
 {
     KisFilterMask *mask = dynamic_cast<KisFilterMask*>(this->node().data());
-    mask->setFilter(filter.filterConfig());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(mask);
+
+    mask->setFilter(filter.filterConfig()->cloneWithResourcesSnapshot());
 }
 
 Filter * FilterMask::filter()
 {
     Filter* filter = new Filter();
     const KisFilterMask *mask = qobject_cast<const KisFilterMask*>(this->node());
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(mask, 0);
+
     filter->setName(mask->filter()->name());
     filter->setConfiguration(new InfoObject(mask->filter()));
     return filter;

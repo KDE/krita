@@ -37,6 +37,8 @@ private Q_SLOTS:
 
     void testDivisionWithFloor();
     void testDrawEllipse();
+
+    void testNullRectProcessing();
 };
 
 #endif /* __KIS_ALGEBRA_2D_TEST_H */

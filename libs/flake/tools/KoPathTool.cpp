@@ -47,10 +47,8 @@
 #include "KoPathPoint.h"
 #include "KoPathPointRubberSelectStrategy.h"
 #include "KoPathSegmentChangeStrategy.h"
-#include "KoPathConnectionPointStrategy.h"
 #include "KoParameterChangeStrategy.h"
 #include "PathToolOptionWidget.h"
-#include "KoConnectionShape.h"
 #include "KoSnapGuide.h"
 #include "KoShapeController.h"
 #include "kis_action_registry.h"
@@ -66,6 +64,7 @@
 #include <FlakeDebug.h>
 #include <klocalizedstring.h>
 #include <QPainter>
+#include <QPainterPath>
 #include <QBitmap>
 #include <QTabWidget>
 
@@ -478,7 +477,7 @@ void KoPathTool::paint(QPainter &painter, const KoViewConverter &converter)
 
     Q_FOREACH (KoPathShape *shape, m_pointSelection.selectedShapes()) {
         KisHandlePainterHelper helper =
-                KoShape::createHandlePainterHelper(&painter, shape, converter, m_handleRadius);
+                KoShape::createHandlePainterHelperView(&painter, shape, converter, m_handleRadius);
         helper.setHandleStyle(KisHandleStyle::primarySelection());
 
         KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>(shape);
@@ -521,7 +520,7 @@ void KoPathTool::paint(QPainter &painter, const KoViewConverter &converter)
             KIS_SAFE_ASSERT_RECOVER_RETURN(segment.isValid());
 
             KisHandlePainterHelper helper =
-                    KoShape::createHandlePainterHelper(&painter, shape, converter, m_handleRadius);
+                    KoShape::createHandlePainterHelperView(&painter, shape, converter, m_handleRadius);
             helper.setHandleStyle(KisHandleStyle::secondarySelection());
 
             QPainterPath path;
@@ -538,7 +537,7 @@ void KoPathTool::paint(QPainter &painter, const KoViewConverter &converter)
 
     if (m_currentStrategy) {
         painter.save();
-        KoShape::applyConversion(painter, converter);
+        painter.setTransform(converter.documentToView(), true);
         d->canvas->snapGuide()->paint(painter, converter);
         painter.restore();
     }
@@ -643,20 +642,11 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
                 if (m_activeHandle)
                     m_activeHandle->repaint();
                 delete m_activeHandle;
-
-                if (KoConnectionShape * connectionShape = dynamic_cast<KoConnectionShape*>(parameterShape)) {
-                    //debugFlake << "handleId" << handleId;
-                    m_activeHandle = new ConnectionHandle(this, connectionShape, handleId);
-                    m_activeHandle->repaint();
-                    return;
-                } else {
-                    //debugFlake << "handleId" << handleId;
-                    m_activeHandle = new ParameterHandle(this, parameterShape, handleId);
-                    m_activeHandle->repaint();
-                    return;
-                }
+                //debugFlake << "handleId" << handleId;
+                m_activeHandle = new ParameterHandle(this, parameterShape, handleId);
+                m_activeHandle->repaint();
+                return;
             }
-
         } else {
             QList<KoPathPoint*> points = shape->pointsAt(roi);
             if (! points.empty()) {
@@ -938,9 +928,11 @@ void KoPathTool::activate(ToolActivation activation, const QSet<KoShape*> &shape
     m_canvasConnections.addConnection(d->canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
     m_canvasConnections.addConnection(d->canvas->selectedShapesProxy(), SIGNAL(selectionContentChanged()), this, SLOT(updateActions()));
     m_shapeFillResourceConnector.connectToCanvas(d->canvas);
-
-    initializeWithShapes(shapes.toList());
-
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
+    initializeWithShapes(QList<KoShape*>(shapes.begin(), shapes.end()));
+#else
+    initializeWithShapes(QList<KoShape*>::fromSet(shapes));
+#endif
     connect(m_actionCurvePoint, SIGNAL(triggered()), this, SLOT(pointToCurve()), Qt::UniqueConnection);
     connect(m_actionLinePoint, SIGNAL(triggered()), this, SLOT(pointToLine()), Qt::UniqueConnection);
     connect(m_actionLineSegment, SIGNAL(triggered()), this, SLOT(segmentToLine()), Qt::UniqueConnection);
@@ -1181,7 +1173,7 @@ void KoPathTool::documentResourceChanged(int key, const QVariant & res)
         // repaint with the bigger of old and new handle radius
         int maxRadius = qMax(m_handleRadius, oldHandleRadius);
         Q_FOREACH (KoPathShape *shape, m_pointSelection.selectedShapes()) {
-            QRectF controlPointRect = shape->absoluteTransformation(0).map(shape->outline()).controlPointRect();
+            QRectF controlPointRect = shape->absoluteTransformation().map(shape->outline()).controlPointRect();
             repaint(controlPointRect.adjusted(-maxRadius, -maxRadius, maxRadius, maxRadius));
         }
     }
@@ -1191,7 +1183,11 @@ void KoPathTool::pointSelectionChanged()
 {
     Q_D(KoToolBase);
     updateActions();
-    d->canvas->snapGuide()->setIgnoredPathPoints(m_pointSelection.selectedPoints().toList());
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
+    d->canvas->snapGuide()->setIgnoredPathPoints(QList<KoPathPoint*>(m_pointSelection.selectedPoints().begin(), m_pointSelection.selectedPoints().end()));
+#else
+    d->canvas->snapGuide()->setIgnoredPathPoints(QList<KoPathPoint*>::fromSet(m_pointSelection.selectedPoints()));
+#endif
     emit selectionChanged(m_pointSelection.hasSelection());
 }
 

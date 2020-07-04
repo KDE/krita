@@ -28,406 +28,285 @@
 #include <QPainter>
 #include <QPixmap>
 #include <QMessageBox>
+#include <QInputDialog>
+#include <QItemSelectionModel>
+
+
+#include <kconfiggroup.h>
+#include <ksharedconfig.h>
+#include <KoIcon.h>
+#include <KoFileDialog.h>
 
 #include <kis_icon.h>
 #include "kis_action.h"
+#include <KisResourceStorage.h>
 #include <KisResourceServerProvider.h>
-#include <kconfiggroup.h>
-#include <ksharedconfig.h>
+#include <KisStorageModel.h>
+#include <KisStorageFilterProxyModel.h>
+#include <kis_config.h>
+#include <KisResourceLocator.h>
 
-#define ICON_SIZE 48
 
-DlgBundleManager::DlgBundleManager(ResourceManager *resourceManager, KisActionManager* actionMgr, QWidget *parent)
+
+DlgBundleManager::ItemDelegate::ItemDelegate(QObject *parent, KisStorageFilterProxyModel* proxy)
+    : QStyledItemDelegate(parent)
+    , m_bundleManagerProxyModel(proxy)
+{
+
+}
+
+QSize DlgBundleManager::ItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    return QSize(100, 30);
+}
+
+void DlgBundleManager::ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    if (!index.isValid()) {
+        return;
+    }
+
+    QModelIndex sourceIndex = m_bundleManagerProxyModel->mapToSource(index);
+
+    int minMargin = 3;
+    int textMargin = 10;
+
+
+    painter->save();
+
+    // paint background
+    QColor bgColor = option.state & QStyle::State_Selected ?
+        qApp->palette().color(QPalette::Highlight) :
+        qApp->palette().color(QPalette::Base);
+    QBrush oldBrush(painter->brush());
+    QPen oldPen = painter->pen();
+    painter->setBrush(QBrush(bgColor));
+    painter->setPen(Qt::NoPen);
+    painter->drawRect(option.rect);
+    painter->setBrush(oldBrush);
+    painter->setPen(oldPen);
+
+
+    QRect paintRect = kisGrowRect(option.rect, -minMargin);
+    int height = paintRect.height();
+
+
+    // make border around active ones
+    bool active = KisStorageModel::instance()->data(sourceIndex, Qt::UserRole + KisStorageModel::Active).toBool();
+
+    QColor borderColor = qApp->palette().color(QPalette::Text);
+    painter->setBrush(Qt::NoBrush);
+    painter->setPen(QPen(borderColor));
+
+    QRect borderRect = kisGrowRect(paintRect, -painter->pen().widthF());
+    if (active) {
+        painter->drawRect(borderRect);
+    }
+    painter->setBrush(oldBrush);
+    painter->setPen(oldPen);
+
+
+    // paint the image
+    QImage thumbnail = KisStorageModel::instance()->data(sourceIndex, Qt::UserRole + KisStorageModel::Thumbnail).value<QImage>();
+
+
+    QRect iconRect = paintRect;
+    iconRect.setWidth(height);
+    painter->drawImage(iconRect, thumbnail);
+
+    QRect nameRect = paintRect;
+    nameRect.setX(paintRect.x() + height + textMargin);
+    nameRect.setWidth(paintRect.width() - height - textMargin);
+
+    QTextOption textCenterOption;
+    textCenterOption.setAlignment(Qt::AlignVCenter);
+    QString name = KisStorageModel::instance()->data(sourceIndex, Qt::UserRole + KisStorageModel::DisplayName).toString();
+    painter->drawText(nameRect, name, textCenterOption);
+
+    painter->restore();
+
+}
+
+
+DlgBundleManager::DlgBundleManager(QWidget *parent)
     : KoDialog(parent)
     , m_page(new QWidget())
     , m_ui(new Ui::WdgDlgBundleManager)
-    , m_currentBundle(0)
-    , m_resourceManager(resourceManager)
 {
-    setCaption(i18n("Manage Resource Bundles"));
+    setCaption(i18n("Manage Resource Libraries"));
     m_ui->setupUi(m_page);
     setMainWidget(m_page);
     resize(m_page->sizeHint());
-    setButtons(Ok | Cancel);
-    setDefaultButton(Ok);
 
-    m_ui->listActive->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
-    m_ui->listActive->setSelectionMode(QAbstractItemView::SingleSelection);
-    connect(m_ui->listActive, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)), SLOT(itemSelected(QListWidgetItem*,QListWidgetItem*)));
-    connect(m_ui->listActive, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(itemSelected(QListWidgetItem*)));
+    m_ui->bnAdd->setIcon(KisIconUtils::loadIcon("list-add"));
+    m_ui->bnAdd->setText(i18nc("In bundle manager; press button to import a bundle", "Import"));
+    connect(m_ui->bnAdd, SIGNAL(clicked(bool)), SLOT(addBundle()));
 
-    m_ui->listInactive->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
-    m_ui->listInactive->setSelectionMode(QAbstractItemView::SingleSelection);
-    connect(m_ui->listInactive, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)), SLOT(itemSelected(QListWidgetItem*,QListWidgetItem*)));
-    connect(m_ui->listInactive, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(itemSelected(QListWidgetItem*)));
+    m_ui->bnNew->setIcon(KisIconUtils::loadIcon("document-new"));
+    m_ui->bnNew->setText(i18nc("In bundle manager; press button to create a new bundle", "Create"));
+    connect(m_ui->bnNew, SIGNAL(clicked(bool)), SLOT(createBundle()));
 
-    m_ui->bnAdd->setIcon(KisIconUtils::loadIcon("arrow-right"));
-    connect(m_ui->bnAdd, SIGNAL(clicked()), SLOT(addSelected()));
+    m_ui->bnDelete->setIcon(KisIconUtils::loadIcon("edit-delete"));
+    m_ui->bnDelete->setText(i18nc("In bundle manager; press button to deactivate the bundle "
+                                  "(remove resources from the bundle from the available resources)","Deactivate"));
+    connect(m_ui->bnDelete, SIGNAL(clicked(bool)), SLOT(deleteBundle()));
 
-    m_ui->bnRemove->setIcon(KisIconUtils::loadIcon("arrow-left"));
-    connect(m_ui->bnRemove, SIGNAL(clicked()), SLOT(removeSelected()));
+    setButtons(Close);
 
-    m_ui->listBundleContents->setHeaderLabel(i18n("Resource"));
-    m_ui->listBundleContents->setSelectionMode(QAbstractItemView::NoSelection);
+    m_proxyModel = new KisStorageFilterProxyModel(this);
+    m_proxyModel->setSourceModel(KisStorageModel::instance());
+    m_proxyModel->setFilter(KisStorageFilterProxyModel::ByStorageType,
+                          QStringList()
+                          << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType::Bundle)
+                          << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType::Folder));
 
-    m_actionManager = actionMgr;
+    m_ui->listView->setModel(m_proxyModel);
+    m_ui->listView->setItemDelegate(new ItemDelegate(this, m_proxyModel));
 
-    refreshListData();
-
-    connect(m_ui->bnEditBundle, SIGNAL(clicked()), SLOT(editBundle()));
-
-    connect(m_ui->bnImportBrushes, SIGNAL(clicked()), SLOT(slotImportResource()));
-    connect(m_ui->bnImportGradients, SIGNAL(clicked()), SLOT(slotImportResource()));
-    connect(m_ui->bnImportPalettes, SIGNAL(clicked()), SLOT(slotImportResource()));
-    connect(m_ui->bnImportPatterns, SIGNAL(clicked()), SLOT(slotImportResource()));
-    connect(m_ui->bnImportPresets, SIGNAL(clicked()), SLOT(slotImportResource()));
-    connect(m_ui->bnImportWorkspaces, SIGNAL(clicked()), SLOT(slotImportResource()));
-    connect(m_ui->bnImportBundles, SIGNAL(clicked()), SLOT(slotImportResource()));
+    QItemSelectionModel* selectionModel = m_ui->listView->selectionModel();
+    connect(selectionModel, &QItemSelectionModel::currentChanged, this, &DlgBundleManager::currentCellSelectedChanged);
+    //connect(m_ui->listView, &QItemSelectionModel::currentChanged, this, &DlgBundleManager::currentCellSelectedChanged);
 
 
-    connect(m_ui->createBundleButton, SIGNAL(clicked()), SLOT(slotCreateBundle()));
-    connect(m_ui->deleteBackupFilesButton, SIGNAL(clicked()), SLOT(slotDeleteBackupFiles()));
-    connect(m_ui->openResourceFolderButton, SIGNAL(clicked()), SLOT(slotOpenResourceFolder()));
+    connect(KisStorageModel::instance(), &KisStorageModel::modelAboutToBeReset, this, &DlgBundleManager::slotModelAboutToBeReset);
+    connect(KisStorageModel::instance(), &KisStorageModel::modelReset, this, &DlgBundleManager::slotModelReset);
+
+
 
 }
 
-
-void DlgBundleManager::refreshListData()
+void DlgBundleManager::addBundle()
 {
-    KoResourceServer<KisResourceBundle> *bundleServer = KisResourceBundleServerProvider::instance()->resourceBundleServer();
-
-    m_ui->listInactive->clear();
-    m_ui->listActive->clear();
-
-    Q_FOREACH (const QString &f, bundleServer->blackListedFiles()) {
-        KisResourceBundle *bundle = new KisResourceBundle(f);
-        bundle->load();
-        if (bundle->valid()) {
-            bundle->setInstalled(false);
-            m_blacklistedBundles[f] = bundle;
-        }
+    KoFileDialog* dlg = new KoFileDialog(this, KoFileDialog::OpenFile, i18n("Choose the bundle to import"));
+    dlg->setCaption(i18n("Select the bundle"));
+    QString filename = dlg->filename();
+    if (!filename.isEmpty()) {
+        addBundleToActiveResources(filename);
     }
-    fillListWidget(m_blacklistedBundles.values(), m_ui->listInactive);
-
-    Q_FOREACH (KisResourceBundle *bundle, bundleServer->resources()) {
-        if (bundle->valid()) {
-            m_activeBundles[bundle->filename()] = bundle;
-        }
-    }
-    fillListWidget(m_activeBundles.values(), m_ui->listActive);
 }
 
-void DlgBundleManager::accept()
+void DlgBundleManager::createBundle()
 {
-    KoResourceServer<KisResourceBundle> *bundleServer = KisResourceBundleServerProvider::instance()->resourceBundleServer();
-
-    for (int i = 0; i < m_ui->listActive->count(); ++i) {
-        QListWidgetItem *item = m_ui->listActive->item(i);
-        QByteArray ba = item->data(Qt::UserRole).toByteArray();
-        QString name = item->text();
-        KisResourceBundle *bundle = bundleServer->resourceByMD5(ba);
-        QMessageBox bundleFeedback;
-        bundleFeedback.setIcon(QMessageBox::Warning);
-        QString feedback = "bundlefeedback";
-
-        if (!bundle) {
-            // Get it from the blacklisted bundles
-            Q_FOREACH (KisResourceBundle *b2, m_blacklistedBundles.values()) {
-                if (b2->md5() == ba) {
-                    bundle = b2;
-                    break;
-                }
-            }
-        }
-
-        if (bundle) {
-            bool isKrita3Bundle = false;
-            if (bundle->filename().endsWith("Krita_3_Default_Resources.bundle")) {
-                isKrita3Bundle = true;
-                KConfigGroup group = KSharedConfig::openConfig()->group("BundleHack");
-                group.writeEntry("HideKrita3Bundle", false);
-            }
-            else {
-                if (!bundle->isInstalled()) {
-                    bundle->install();
-                    //this removes the bundle from the blacklist and add it to the server without saving or putting it in front//
-                    if (!bundleServer->addResource(bundle, false, false)){
-
-                        feedback = i18n("Couldn't add bundle \"%1\" to resource server", name);
-                        bundleFeedback.setText(feedback);
-                        bundleFeedback.exec();
-                    }
-                    if (!isKrita3Bundle) {
-                        if (!bundleServer->removeFromBlacklist(bundle)) {
-                            feedback = i18n("Couldn't remove bundle \"%1\" from blacklist", name);
-                            bundleFeedback.setText(feedback);
-                            bundleFeedback.exec();
-                        }
-                    }
-                }
-                else {
-                    if (!isKrita3Bundle) {
-                        bundleServer->removeFromBlacklist(bundle);
-                    }
-                    //let's assume that bundles that exist and are installed have to be removed from the blacklist, and if they were already this returns false, so that's not a problem.
-                }
-            }
-        }
-        else{
-            QString feedback = i18n("Bundle \"%1\" doesn't exist!", name);
-            bundleFeedback.setText(feedback);
-            bundleFeedback.exec();
-
-        }
-    }
-
-    for (int i = 0; i < m_ui->listInactive->count(); ++i) {
-        QListWidgetItem *item = m_ui->listInactive->item(i);
-        QByteArray ba = item->data(Qt::UserRole).toByteArray();
-        KisResourceBundle *bundle = bundleServer->resourceByMD5(ba);
-        bool isKrits3Bundle = false;
-        if (bundle) {
-            if (bundle->filename().contains("Krita_3_Default_Resources.bundle")) {
-                isKrits3Bundle = true;
-                KConfigGroup group = KSharedConfig::openConfig()->group("BundleHack");
-                group.writeEntry("HideKrita3Bundle", true);
-            }
-            if (bundle->isInstalled()) {
-                bundle->uninstall();
-                if (!isKrits3Bundle) {
-                    bundleServer->removeResourceAndBlacklist(bundle);
-                }
-            }
-        }
-    }
-
-
-    KoDialog::accept();
+    DlgCreateBundle* dlg = new DlgCreateBundle(0, this);
+    dlg->exec();
 }
 
-void DlgBundleManager::addSelected()
+void DlgBundleManager::deleteBundle()
 {
-    Q_FOREACH (QListWidgetItem *item, m_ui->listActive->selectedItems()) {
-        m_ui->listInactive->addItem(m_ui->listActive->takeItem(m_ui->listActive->row(item)));
+    QModelIndex idx = m_ui->listView->currentIndex();
+    KIS_ASSERT(m_proxyModel);
+    if (!idx.isValid()) {
+        ENTER_FUNCTION() << "Index is invalid\n";
+        return;
     }
-
+    bool active = m_proxyModel->data(idx, Qt::UserRole + KisStorageModel::Active).toBool();
+    idx = m_proxyModel->index(idx.row(), 0);
+    m_proxyModel->setData(idx, QVariant(!active), Qt::CheckStateRole);
 }
 
-void DlgBundleManager::removeSelected()
+void DlgBundleManager::slotModelAboutToBeReset()
 {
-    Q_FOREACH (QListWidgetItem *item, m_ui->listInactive->selectedItems()) {
-        m_ui->listActive->addItem(m_ui->listInactive->takeItem(m_ui->listInactive->row(item)));
-    }
+    ENTER_FUNCTION();
+    lastIndex = QPersistentModelIndex(m_proxyModel->mapToSource(m_ui->listView->currentIndex()));
+    ENTER_FUNCTION() << ppVar(lastIndex) << ppVar(lastIndex.isValid());
 }
 
-void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
+void DlgBundleManager::slotModelReset()
 {
-    if (!current) {
-        m_ui->lblName->clear();
-        m_ui->lblAuthor->clear();
-        m_ui->lblEmail->clear();
-        m_ui->lblLicense->clear();
-        m_ui->lblWebsite->clear();
-        m_ui->lblDescription->clear();
-        m_ui->lblCreated->clear();
-        m_ui->lblUpdated->clear();
-        m_ui->lblPreview->setPixmap(QPixmap::fromImage(QImage()));
-        m_ui->listBundleContents->clear();
-        m_ui->bnEditBundle->setEnabled(false);
-        m_currentBundle = 0;
+    ENTER_FUNCTION();
+    ENTER_FUNCTION() << ppVar(lastIndex) << ppVar(lastIndex.isValid());
+    if (lastIndex.isValid()) {
+        ENTER_FUNCTION() << "last index valid!";
+        m_ui->listView->setCurrentIndex(m_proxyModel->mapToSource(lastIndex));
     }
-    else {
-
-        QByteArray ba = current->data(Qt::UserRole).toByteArray();
-        KoResourceServer<KisResourceBundle> *bundleServer = KisResourceBundleServerProvider::instance()->resourceBundleServer();
-        KisResourceBundle *bundle = bundleServer->resourceByMD5(ba);
-
-        if (!bundle) {
-            // Get it from the blacklisted bundles
-            Q_FOREACH (KisResourceBundle *b2, m_blacklistedBundles.values()) {
-                if (b2->md5() == ba) {
-                    bundle = b2;
-                    break;
-                }
-            }
-        }
-
-
-        if (bundle) {
-            QFontMetrics metrics(this->font());
-
-            m_currentBundle = bundle;
-            m_ui->bnEditBundle->setEnabled(true);
-
-            m_ui->lblName->setText(bundle->name());
-            m_ui->lblAuthor->setText(metrics.elidedText(bundle->getMeta("author"), Qt::ElideRight, m_ui->lblAuthor->width()));
-            m_ui->lblAuthor->setToolTip(bundle->getMeta("author"));
-            m_ui->lblEmail->setText(metrics.elidedText(bundle->getMeta("email"), Qt::ElideRight, m_ui->lblEmail->width()));
-            m_ui->lblEmail->setToolTip(bundle->getMeta("email"));
-            m_ui->lblLicense->setText(metrics.elidedText(bundle->getMeta("license"), Qt::ElideRight, m_ui->lblLicense->width()));
-            m_ui->lblLicense->setToolTip(bundle->getMeta("license"));
-            m_ui->lblWebsite->setText(metrics.elidedText(bundle->getMeta("website"), Qt::ElideRight, m_ui->lblWebsite->width()));
-            m_ui->lblWebsite->setToolTip(bundle->getMeta("website"));
-            m_ui->lblDescription->setPlainText(bundle->getMeta("description"));
-            if (QDateTime::fromString(bundle->getMeta("created"), Qt::ISODate).isValid()) {
-                m_ui->lblCreated->setText(QDateTime::fromString(bundle->getMeta("created"), Qt::ISODate).toLocalTime().toString(Qt::DefaultLocaleShortDate));
-            } else {
-                m_ui->lblCreated->setText(QDate::fromString(bundle->getMeta("created"), "dd/MM/yyyy").toString(Qt::DefaultLocaleShortDate));
-            }
-            if (QDateTime::fromString(bundle->getMeta("updated"), Qt::ISODate).isValid()) {
-                m_ui->lblUpdated->setText(QDateTime::fromString(bundle->getMeta("updated"), Qt::ISODate).toLocalTime().toString(Qt::DefaultLocaleShortDate));
-            } else {
-                m_ui->lblUpdated->setText(QDate::fromString(bundle->getMeta("updated"), "dd/MM/yyyy").toString(Qt::DefaultLocaleShortDate));
-            }
-            m_ui->lblPreview->setPixmap(QPixmap::fromImage(bundle->image().scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
-            m_ui->listBundleContents->clear();
-
-            Q_FOREACH (const QString & resType, bundle->resourceTypes()) {
-
-                QTreeWidgetItem *toplevel = new QTreeWidgetItem();
-                if (resType == "gradients") {
-                    toplevel->setText(0, i18n("Gradients"));
-                }
-                else if (resType  == "patterns") {
-                    toplevel->setText(0, i18n("Patterns"));
-                }
-                else if (resType  == "brushes") {
-                    toplevel->setText(0, i18n("Brushes"));
-                }
-                else if (resType  == "palettes") {
-                    toplevel->setText(0, i18n("Palettes"));
-                }
-                else if (resType  == "workspaces") {
-                    toplevel->setText(0, i18n("Workspaces"));
-                }
-                else if (resType  == "paintoppresets") {
-                    toplevel->setText(0, i18n("Brush Presets"));
-                }
-                else if (resType  == "gamutmasks") {
-                    toplevel->setText(0, i18n("Gamut Masks"));
-                }
-
-
-                m_ui->listBundleContents->addTopLevelItem(toplevel);
-
-                Q_FOREACH (const KoResource *res, bundle->resources(resType)) {
-                    if (res) {
-                        QTreeWidgetItem *i = new QTreeWidgetItem();
-                        i->setIcon(0, QIcon(QPixmap::fromImage(res->image())));
-                        i->setText(0, res->name());
-                        toplevel->addChild(i);
-                    }
-                }
-            }
-        }
-        else {
-            m_currentBundle = 0;
-        }
-    }
+    lastIndex = QModelIndex();
 }
 
-void DlgBundleManager::itemSelected(QListWidgetItem *current)
+void DlgBundleManager::currentCellSelectedChanged(QModelIndex current, QModelIndex previous)
 {
-    itemSelected(current, 0);
+    ENTER_FUNCTION() << "Current cell changed!";
+    QModelIndex idx = m_ui->listView->currentIndex();
+    KIS_ASSERT(m_proxyModel);
+    if (!idx.isValid()) {
+        ENTER_FUNCTION() << "Index is invalid\n";
+        return;
+    }
+    bool active = m_proxyModel->data(idx, Qt::UserRole + KisStorageModel::Active).toBool();
+
+    if (active) {
+        m_ui->bnDelete->setIcon(KisIconUtils::loadIcon("edit-delete"));
+        m_ui->bnDelete->setText(i18nc("In bundle manager; press button to deactivate the bundle "
+                                      "(remove resources from the bundle from the available resources)","Deactivate"));
+    } else {
+        m_ui->bnDelete->setIcon(QIcon());
+        m_ui->bnDelete->setText(i18nc("In bundle manager; press button to activate the bundle "
+                                      "(add resources from the bundle to the available resources)","Activate"));
+    }
+    updateBundleInformation(current);
 }
 
-void DlgBundleManager::editBundle()
+void DlgBundleManager::updateBundleInformation(QModelIndex currentInProxy)
 {
-    if (m_currentBundle) {
-        DlgCreateBundle dlg(m_currentBundle);
-        m_activeBundles.remove(m_currentBundle->filename());
-        m_currentBundle = 0;
-        if (dlg.exec() != QDialog::Accepted) {
-            return;
-        }
-        m_currentBundle = m_resourceManager->saveBundle(dlg);
-        refreshListData();
-    }
+    QModelIndex idx = m_proxyModel->mapToSource(currentInProxy);
+
+    KisResourceStorageSP storage = KisStorageModel::instance()->storageForIndex(idx);
+
+    m_ui->lblAuthor->setText(storage->metaData(KisResourceStorage::s_meta_author).toString());
+    QString date = storage->metaData(KisResourceStorage::s_meta_creation_date).toString();
+    date = QDateTime::fromSecsSinceEpoch(date.toInt()).toString();
+    m_ui->lblCreated->setText(date);
+    m_ui->lblDescription->setPlainText(storage->metaData(KisResourceStorage::s_meta_description).toString());
+    m_ui->lblName->setText(storage->name());
+    m_ui->lblType->setText(KisResourceStorage::storageTypeToString(storage->type()));
+
+
+
+    //m_ui->lblEmail->setText(storage->metaData(KisResourceStorage::s_meta_).toString());
+    //m_ui->lblLicense->setText(storage->metaData(KisResourceStorage::s_meta_).toString());
+
+    QImage thumbnail = KisStorageModel::instance()->data(idx, Qt::UserRole + KisStorageModel::Thumbnail).value<QImage>();
+    m_ui->lblPreview->setPixmap(QPixmap::fromImage(thumbnail));
+
 }
 
-void DlgBundleManager::fillListWidget(QList<KisResourceBundle *> bundles, QListWidget *w)
+QString createNewBundlePath(QString resourceFolder, QString filename)
 {
-    w->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
-    w->setSelectionMode(QAbstractItemView::MultiSelection);
-
-    Q_FOREACH (KisResourceBundle *bundle, bundles) {
-        QPixmap pixmap(ICON_SIZE, ICON_SIZE);
-        pixmap.fill(Qt::gray);
-        if (!bundle->image().isNull()) {
-            QImage scaled = bundle->image().scaled(ICON_SIZE, ICON_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-            int x = (ICON_SIZE - scaled.width()) / 2;
-            int y = (ICON_SIZE - scaled.height()) / 2;
-            QPainter gc(&pixmap);
-            gc.drawImage(x, y, scaled);
-            gc.end();
-        }
-
-        QListWidgetItem *item = new QListWidgetItem(pixmap, bundle->name());
-        item->setData(Qt::UserRole, bundle->md5());
-        w->addItem(item);
-    }
+    return resourceFolder + '/' + "bundles" + '/' + filename;
 }
 
-
-void DlgBundleManager::slotImportResource()
+void DlgBundleManager::addBundleToActiveResources(QString filename)
 {
-    if (m_actionManager) {
-        QObject *button = sender();
-        QString buttonName = button->objectName();
-        KisAction *action = 0;
-        if (buttonName == "bnImportBundles") {
-            action = m_actionManager->actionByName("import_bundles");
-        }
-        else if (buttonName == "bnImportBrushes") {
-            action = m_actionManager->actionByName("import_brushes");
-        }
-        else if (buttonName == "bnImportGradients") {
-            action = m_actionManager->actionByName("import_gradients");
-        }
-        else if (buttonName == "bnImportPalettes") {
-            action = m_actionManager->actionByName("import_palettes");
-        }
-        else if (buttonName == "bnImportPatterns") {
-            action = m_actionManager->actionByName("import_patterns");
-        }
-        else if (buttonName == "bnImportPresets") {
-            action = m_actionManager->actionByName("import_presets");
-        }
-        else if (buttonName == "bnImportWorkspaces") {
-            action = m_actionManager->actionByName("import_workspaces");
-        }
-        else {
-            warnUI << "Unhandled bundle manager import button " << buttonName;
-            return;
-        }
+    warnKrita << "DlgBundleManager::addBundle(): Loading a bundle is not implemented yet.";
+    Q_UNUSED(filename);
+    // 1. Copy the bundle to the resource folder
+    // 2. Add the bundle as a storage/update database
+    QFileInfo oldFileInfo(filename);
 
-        action->trigger();
-        refreshListData();
+    KisConfig cfg(true);
+    QString newDir = cfg.readEntry<QString>(KisResourceLocator::resourceLocationKey,
+                                            QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+    QString newName = oldFileInfo.fileName();
+    QString newLocation = createNewBundlePath(newDir, newName);
+
+    QFileInfo newFileInfo(newLocation);
+    if (newFileInfo.exists()) {
+        bool done = false;
+        int i = 0;
+        do {
+            // ask for new filename
+            bool ok;
+            newName = QInputDialog::getText(this, i18n("New name for the bundle"), i18n("The old filename %1 is taken.\nNew name:", newName),
+                                                    QLineEdit::Normal, newName, &ok);
+            newLocation = createNewBundlePath(newDir, newName);
+            newFileInfo.setFile(newLocation);
+            done = !newFileInfo.exists();
+            i++;
+        } while (!done);
     }
-}
 
-void DlgBundleManager::slotCreateBundle() {
-
-    if (m_actionManager) {
-        KisAction *action = m_actionManager->actionByName("create_bundle");
-        action->trigger();
-        refreshListData();
-    }
-}
-
-void DlgBundleManager::slotDeleteBackupFiles() {
-
-    if (m_actionManager) {
-        KisAction *action = m_actionManager->actionByName("edit_blacklist_cleanup");
-        action->trigger();
-    }
-}
-
-void DlgBundleManager::slotOpenResourceFolder() {
-
-    if (m_actionManager) {
-        KisAction *action = m_actionManager->actionByName("open_resources_directory");
-        action->trigger();
-    }
+    QFile::copy(filename, newLocation);
+    KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(newLocation);
+    KIS_ASSERT(!storage.isNull());
+    KisResourceLocator::instance()->addStorage(newLocation, storage);
 }
 

@@ -20,19 +20,71 @@
 
 #include <QPair>
 #include <QGradient>
+#include <QtAlgorithms>
 
 #include "KoColor.h"
 #include <resources/KoAbstractGradient.h>
-#include <resources/KoResource.h>
+#include <KoResource.h>
 #include <kritapigment_export.h>
 #include <boost/operators.hpp>
 
-typedef QPair<qreal, KoColor> KoGradientStop;
+enum KoGradientStopType 
+{
+    COLORSTOP,
+    FOREGROUNDSTOP,
+    BACKGROUNDSTOP
+};
+
+struct KoGradientStop : public boost::equality_comparable<KoGradientStop>
+{
+    KoGradientStopType type;
+    KoColor color;
+    qreal position;
+
+    KoGradientStop(qreal _position = 0.0, KoColor _color = KoColor(), KoGradientStopType _type = COLORSTOP) 
+    {
+        type = _type;
+        color = _color;
+        position = _position;
+    }
+
+    bool operator == (const KoGradientStop& other) 
+    { 
+        return this->type == other.type && this->color == other.color && this->position == other.position;
+    }
+
+
+
+    QString typeString() const 
+    {
+        switch (type) {
+        case COLORSTOP:
+            return "color-stop";
+        case FOREGROUNDSTOP:
+            return "foreground-stop";
+        case BACKGROUNDSTOP:
+            return "background-stop";
+        default:
+            return "color-stop";
+        }
+    }
+
+    static KoGradientStopType typeFromString(QString typestring) {
+        if (typestring == "foreground-stop") {
+            return FOREGROUNDSTOP;
+        } else if (typestring == "background-stop") {
+            return BACKGROUNDSTOP;
+        } else {
+            return COLORSTOP;
+        }
+    }
+};
+
 
 struct KoGradientStopValueSort
 {
     inline bool operator() (const KoGradientStop& a, const KoGradientStop& b) {
-        return (a.second.toQColor().valueF() < b.second.toQColor().valueF());
+        return (a.color.toQColor().valueF() < b.color.toQColor().valueF());
     }
 };
 
@@ -43,17 +95,20 @@ class KRITAPIGMENT_EXPORT KoStopGradient : public KoAbstractGradient, public boo
 {
 
 public:
+    
     explicit KoStopGradient(const QString &filename = QString());
     ~KoStopGradient() override;
-
+    KoStopGradient(const KoStopGradient &rhs);
     bool operator==(const KoStopGradient &rhs) const;
+    KoStopGradient &operator=(const KoStopGradient &rhs) = delete;
+    KoResourceSP clone() const override;
 
-    KoAbstractGradient* clone() const override;
-
-    bool load() override;
-    bool loadFromDevice(QIODevice *dev) override;
-    bool save() override;
+    bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;
     bool saveToDevice(QIODevice* dev) const override;
+
+    QPair<QString, QString> resourceType() const override {
+        return QPair<QString, QString>(ResourceType::Gradients, ResourceSubType::StopGradients);
+    }
 
     /// reimplemented
     QGradient* toQGradient() const override;
@@ -65,11 +120,16 @@ public:
     void colorAt(KoColor&, qreal t) const override;
 
     /// Creates KoStopGradient from a QGradient
-    static KoStopGradient * fromQGradient(const QGradient * gradient);
+    static QSharedPointer<KoStopGradient> fromQGradient(const QGradient *gradient);
 
     /// Sets the gradient stops
     void setStops(QList<KoGradientStop> stops);
-    QList<KoGradientStop> stops() const;
+    QList<KoGradientStop> stops() const;    
+
+    /// reimplemented
+    bool hasVariableColors() const override;
+    /// reimplemented
+    void setVariableColors(const KoColor& foreground, const KoColor& background) override;
 
     /// reimplemented
     QString defaultFileExtension() const override;
@@ -89,6 +149,7 @@ public:
 protected:
 
     QList<KoGradientStop> m_stops;
+    bool m_hasVariableStops = false;
     QPointF m_start;
     QPointF m_stop;
     QPointF m_focalPoint;
@@ -99,6 +160,8 @@ private:
     void parseSvgGradient(const QDomElement& element);
     void parseSvgColor(QColor &color, const QString &s);
 };
+
+typedef QSharedPointer<KoStopGradient> KoStopGradientSP;
 
 #endif // KOSTOPGRADIENT_H
 

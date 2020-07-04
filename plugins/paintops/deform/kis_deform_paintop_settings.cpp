@@ -29,9 +29,10 @@ struct KisDeformPaintOpSettings::Private
     QList<KisUniformPaintOpPropertyWSP> uniformProperties;
 };
 
-KisDeformPaintOpSettings::KisDeformPaintOpSettings()
+KisDeformPaintOpSettings::KisDeformPaintOpSettings(KisResourcesInterfaceSP resourcesInterface)
     : KisOutlineGenerationPolicy<KisPaintOpSettings>(KisCurrentOutlineFetcher::SIZE_OPTION |
-                                                     KisCurrentOutlineFetcher::ROTATION_OPTION),
+                                                     KisCurrentOutlineFetcher::ROTATION_OPTION,
+                                                     resourcesInterface),
     m_d(new Private)
 {
 }
@@ -71,7 +72,7 @@ bool KisDeformPaintOpSettings::isAirbrushing() const
     }
 }
 
-QPainterPath KisDeformPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode)
+QPainterPath KisDeformPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
 {
     QPainterPath path;
     if (mode.isVisible) {
@@ -79,11 +80,11 @@ QPainterPath KisDeformPaintOpSettings::brushOutline(const KisPaintInformation &i
         qreal height = getInt(BRUSH_DIAMETER) * getDouble(BRUSH_ASPECT);
         path = ellipseOutline(width, height, getDouble(BRUSH_SCALE), getDouble(BRUSH_ROTATION));
 
-        path = outlineFetcher()->fetchOutline(info, this, path, mode);
+        path = outlineFetcher()->fetchOutline(info, this, path, mode, alignForZoom);
 
         if (mode.showTiltDecoration) {
             QPainterPath tiltLine = makeTiltIndicator(info, QPointF(0.0, 0.0), width * 0.5, 3.0);
-            path.addPath(outlineFetcher()->fetchOutline(info, this, tiltLine, mode, 1.0, 0.0, true, 0, 0));
+            path.addPath(outlineFetcher()->fetchOutline(info, this, tiltLine, mode, alignForZoom, 1.0, 0.0, true, 0, 0));
         }
     }
     return path;
@@ -129,7 +130,7 @@ QList<KisUniformPaintOpPropertySP> KisDeformPaintOpSettings::uniformProperties(K
                     option.writeOptionSetting(prop->settings().data());
                 });
 
-            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            QObject::connect(updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
             prop->requestReadValue();
             props << toQShared(prop);
         }
@@ -167,7 +168,7 @@ QList<KisUniformPaintOpPropertySP> KisDeformPaintOpSettings::uniformProperties(K
                     option.writeOptionSetting(prop->settings().data());
                 });
 
-            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            QObject::connect(updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
             prop->requestReadValue();
             props << toQShared(prop);
         }
@@ -201,7 +202,7 @@ QList<KisUniformPaintOpPropertySP> KisDeformPaintOpSettings::uniformProperties(K
                     option.writeOptionSetting(prop->settings().data());
                 });
 
-            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            QObject::connect(updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
             prop->requestReadValue();
             props << toQShared(prop);
         }

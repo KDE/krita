@@ -120,7 +120,7 @@ KisImportExportErrorCode KisRawImport::convert(KisDocument *document, QIODevice 
         for (int y = 0; y < height; ++y) {
             do {
                 KoBgrU16Traits::Pixel* pixel = reinterpret_cast<KoBgrU16Traits::Pixel*>(it->rawData());
-                quint16* ptr = ((quint16*)imageData.data()) + (y * width + it->x()) * 3;
+                quint16* ptr = (reinterpret_cast<quint16*>(imageData.data())) + (y * width + it->x()) * 3;
 #if KDCRAW_VERSION < 0x000400
                 pixel->red = correctIndian(ptr[2]);
                 pixel->green = correctIndian(ptr[1]);

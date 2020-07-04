@@ -29,6 +29,7 @@
 #include <QBitmap>
 #include <QAction>
 #include <QSharedPointer>
+#include <QMessageBox>
 
 #include <klocalizedstring.h>
 
@@ -36,7 +37,6 @@
 #include <KoColor.h>
 #include <KoColorPopupAction.h>
 #include "KoResourceServerProvider.h"
-#include "KoResourceServerAdapter.h"
 #include <KoSelection.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasResourceProvider.h>
@@ -196,7 +196,7 @@ public:
     KisAcyclicSignalConnector resourceManagerAcyclicConnector;
     KoFillConfigWidget::StyleButton selectedFillIndex {KoFillConfigWidget::None};
 
-    QSharedPointer<KoStopGradient> activeGradient;
+    KoStopGradientSP activeGradient;
     KisSignalCompressor gradientChangedCompressor;
     KisSignalCompressor shapeChangedCompressor;
     KoFlake::FillVariant fillVariant;
@@ -294,12 +294,7 @@ KoFillConfigWidget::KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVarian
     connect(d->ui->wdgGradientEditor, SIGNAL(sigGradientChanged()), &d->gradientChangedCompressor, SLOT(start()));
     connect(&d->gradientChangedCompressor, SIGNAL(timeout()), SLOT(activeGradientChanged()));
 
-    KoResourceServerProvider *serverProvider = KoResourceServerProvider::instance();
-    QSharedPointer<KoAbstractResourceServerAdapter> gradientResourceAdapter(
-                new KoResourceServerAdapter<KoAbstractGradient>(serverProvider->gradientServer()));
-
-    d->gradientAction = new KoResourcePopupAction(gradientResourceAdapter,
-                                                  d->ui->btnChoosePredefinedGradient);
+    d->gradientAction = new KoResourcePopupAction(ResourceType::Gradients, d->ui->btnChoosePredefinedGradient);
 
     d->gradientAction->setToolTip(i18n("Change filling gradient"));
     d->ui->btnChoosePredefinedGradient->setDefaultAction(d->gradientAction);
@@ -315,18 +310,19 @@ KoFillConfigWidget::KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVarian
     connect(d->ui->cmbGradientRepeat, SIGNAL(currentIndexChanged(int)), SLOT(slotGradientRepeatChanged()));
     connect(d->ui->cmbGradientType, SIGNAL(currentIndexChanged(int)), SLOT(slotGradientTypeChanged()));
 
-    deactivate();
+    // initialize deactivation locks
+    d->deactivationLocks.push_back(KisAcyclicSignalConnector::Blocker(d->shapeChangedAcyclicConnector));
+    d->deactivationLocks.push_back(KisAcyclicSignalConnector::Blocker(d->resourceManagerAcyclicConnector));
 
-#if 0
 
+/*
     // Pattern selector
-    QSharedPointer<KoAbstractResourceServerAdapter>patternResourceAdapter(new KoResourceServerAdapter<KoPattern>(serverProvider->patternServer()));
-    d->patternAction = new KoResourcePopupAction(patternResourceAdapter, d->colorButton);
+    d->patternAction = new KoResourcePopupAction(ResourceType::Patterns, d->colorButton);
     d->patternAction->setToolTip(i18n("Change the filling pattern"));
     connect(d->patternAction, SIGNAL(resourceSelected(QSharedPointer<KoShapeBackground>)), this, SLOT(patternChanged(QSharedPointer<KoShapeBackground>)));
     connect(d->colorButton, SIGNAL(iconSizeChanged()), d->patternAction, SLOT(updateIcon()));
+*/
 
-#endif
 
 }
 
@@ -337,7 +333,9 @@ KoFillConfigWidget::~KoFillConfigWidget()
 
 void KoFillConfigWidget::activate()
 {
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!d->deactivationLocks.empty());
     d->deactivationLocks.clear();
+
     if (!d->noSelectionTrackingMode) {
         d->shapeChangedCompressor.start();
     } else {
@@ -350,7 +348,8 @@ void KoFillConfigWidget::activate()
 void KoFillConfigWidget::deactivate()
 {
     emit sigInternalRecoverColorInResourceManager();
-    d->deactivationLocks.clear();
+
+    KIS_SAFE_ASSERT_RECOVER_NOOP(d->deactivationLocks.empty());
     d->deactivationLocks.push_back(KisAcyclicSignalConnector::Blocker(d->shapeChangedAcyclicConnector));
     d->deactivationLocks.push_back(KisAcyclicSignalConnector::Blocker(d->resourceManagerAcyclicConnector));
 }
@@ -398,7 +397,7 @@ void KoFillConfigWidget::slotCanvasResourceChanged(int key, const QVariant &valu
             d->ui->wdgGradientEditor->notifyGlobalColorChanged(color);
         }
     } else if (key == KisCanvasResourceProvider::CurrentGradient) {
-        KoResource *gradient = value.value<KoAbstractGradient*>();
+        KoResourceSP gradient = value.value<KoAbstractGradientSP>();
         const int checkedId = d->group->checkedId();
 
         if (gradient && (checkedId < 0 || checkedId == None || checkedId == Gradient)) {
@@ -606,45 +605,42 @@ void KoFillConfigWidget::slotRecoverColorInResourceManager()
     }
 }
 
-template <class ResourceServer>
-QString findFirstAvailableResourceName(const QString &baseName, ResourceServer *server)
-{
-    if (!server->resourceByName(baseName)) return baseName;
-
-    int counter = 1;
-    QString result;
-    while ((result = QString("%1%2").arg(baseName).arg(counter)),
-           server->resourceByName(result)) {
-
-        counter++;
-    }
-
-    return result;
-}
-
-
 void KoFillConfigWidget::slotSavePredefinedGradientClicked()
 {
     KoResourceServerProvider *serverProvider = KoResourceServerProvider::instance();
     auto server = serverProvider->gradientServer();
 
     const QString defaultGradientNamePrefix = i18nc("default prefix for the saved gradient", "gradient");
+    const QString saveLocation = server->saveLocation();
 
     QString name = d->activeGradient->name().isEmpty() ? defaultGradientNamePrefix : d->activeGradient->name();
-    name = findFirstAvailableResourceName(name, server);
-    name = QInputDialog::getText(this, i18nc("@title:window", "Save Gradient"), i18n("Enter gradient name:"), QLineEdit::Normal, name);
+    QFileInfo fileInfo(saveLocation + name.split(" ").join("_") + d->activeGradient->defaultFileExtension());
+    bool fileOverWriteAccepted = false;
 
-    // TODO: currently we do not allow the user to
-    //       create two resources with the same name!
-    //       Please add some feedback for it!
-    name = findFirstAvailableResourceName(name, server);
+    while(!fileOverWriteAccepted) {
+        name = QInputDialog::getText(this,
+                                     i18nc("@title:window", "Save Gradient"),
+                                     i18n("Enter gradient name:"),
+                                     QLineEdit::Normal, name);
+        if (name.isNull() || name.isEmpty()) {
+            return;
+        } else {
+            fileInfo = QFileInfo(saveLocation + name.split(" ").join("_") + d->activeGradient->defaultFileExtension());
+            if (fileInfo.exists()) {
+                int res = QMessageBox::warning(this, i18nc("@title:window", "Name Already Exists")
+                                                            , i18n("The name '%1' already exists, do you wish to overwrite it?", name)
+                                                            , QMessageBox::Yes | QMessageBox::No);
+                if (res == QMessageBox::Yes) fileOverWriteAccepted = true;
+            } else {
+                fileOverWriteAccepted = true;
+            }
+        }
+    }
 
     d->activeGradient->setName(name);
+    d->activeGradient->setFilename(name.split(" ").join("_") + d->activeGradient->defaultFileExtension());
 
-    const QString saveLocation = server->saveLocation();
-    d->activeGradient->setFilename(saveLocation + d->activeGradient->name() + d->activeGradient->defaultFileExtension());
-
-    KoAbstractGradient *newGradient = d->activeGradient->clone();
+    KoAbstractGradientSP newGradient = d->activeGradient->clone().dynamicCast<KoAbstractGradient>();
     server->addResource(newGradient);
 
     d->gradientAction->setCurrentResource(newGradient);
@@ -697,9 +693,9 @@ void KoFillConfigWidget::uploadNewGradientBackground(const QGradient *gradient)
 
     d->ui->wdgGradientEditor->setGradient(0);
 
-    d->activeGradient.reset(KoStopGradient::fromQGradient(gradient));
+    d->activeGradient = KoStopGradient::fromQGradient(gradient);
 
-    d->ui->wdgGradientEditor->setGradient(d->activeGradient.data());
+    d->ui->wdgGradientEditor->setGradient(d->activeGradient);
     d->ui->cmbGradientType->setCurrentIndex(d->activeGradient->type() != QGradient::LinearGradient);
     d->ui->cmbGradientRepeat->setCurrentIndex(int(d->activeGradient->spread()));
 }

@@ -26,6 +26,7 @@
 #include "filter/kis_filter.h"
 #include "testutil.h"
 #include "kis_pixel_selection.h"
+#include <KisGlobalResourcesInterface.h>
 
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
@@ -63,15 +64,15 @@ void KisFilterTest::testWithProgressUpdater()
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
-    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
-    QImage inverted(QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png");
+    QImage qimage(QString(FILES_DATA_DIR) + '/' + "hakonepa.png");
+    QImage inverted(QString(FILES_DATA_DIR) + '/' + "inverted_hakonepa.png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->convertFromQImage(qimage, 0, 0, 0);
 
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
 
-    KisFilterConfigurationSP  kfc = f->defaultConfiguration();
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(kfc);
 
     f->process(dev, QRect(QPoint(0,0), qimage.size()), kfc, updater);
@@ -89,15 +90,15 @@ void KisFilterTest::testSingleThreaded()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
-    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
-    QImage inverted(QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png");
+    QImage qimage(QString(FILES_DATA_DIR) + '/' + "hakonepa.png");
+    QImage inverted(QString(FILES_DATA_DIR) + '/' + "inverted_hakonepa.png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->convertFromQImage(qimage, 0, 0, 0);
 
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
 
-    KisFilterConfigurationSP  kfc = f->defaultConfiguration();
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(kfc);
 
     f->process(dev, QRect(QPoint(0,0), qimage.size()), kfc);
@@ -113,8 +114,8 @@ void KisFilterTest::testDifferentSrcAndDst()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
-    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
-    QImage inverted(QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png");
+    QImage qimage(QString(FILES_DATA_DIR) + '/' + "hakonepa.png");
+    QImage inverted(QString(FILES_DATA_DIR) + '/' + "inverted_hakonepa.png");
     KisPaintDeviceSP src = new KisPaintDevice(cs);
     KisPaintDeviceSP dst = new KisPaintDevice(cs);
     KisSelectionSP sel = new KisSelection(new KisSelectionDefaultBounds(src));
@@ -126,7 +127,7 @@ void KisFilterTest::testDifferentSrcAndDst()
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
 
-    KisFilterConfigurationSP  kfc = f->defaultConfiguration();
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(kfc);
 
     f->process(src, dst, sel, QRect(QPoint(0,0), qimage.size()), kfc);
@@ -167,7 +168,7 @@ void KisFilterTest::testOldDataApiAfterCopy()
 
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
-    KisFilterConfigurationSP  kfc = f->defaultConfiguration();
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(kfc);
 
     /**
@@ -215,7 +216,7 @@ void KisFilterTest::testBlurFilterApplicationRect()
 
     KisFilterSP f = KisFilterRegistry::instance()->value("blur");
     Q_ASSERT(f);
-    KisFilterConfigurationSP  kfc = f->defaultConfiguration();
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(kfc);
 
     f->process(src1, dst1, 0, filterRect, kfc);

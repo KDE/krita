@@ -36,6 +36,7 @@
 #include <kis_painter.h>
 #include <kis_pixel_selection.h>
 #include <kis_selection.h>
+#include <KisGlobalResourcesInterface.h>
 
 #include "kis_halftone_filter.h"
 
@@ -114,7 +115,7 @@ void KisHalftoneFilter::processImpl(KisPaintDeviceSP device,
     if (progressUpdater) {
         progressUpdater->setRange(0, (applyRect.height()/cellSpacingV+3)*(applyRect.width()/cellSpacingH+3));
     }
-    KisRandomConstAccessorSP iterator = device->createRandomConstAccessorNG( 0, 0);
+    KisRandomConstAccessorSP iterator = device->createRandomConstAccessorNG();
     //iterator->numContiguousColumns(qCeil(cellSize));
     //iterator->numContiguousRows(qCeil(cellSize));
     KisPainter painter(device);
@@ -172,9 +173,9 @@ void KisHalftoneFilter::processImpl(KisPaintDeviceSP device,
     device->clearSelection(alpha);
 }
 
-KisFilterConfigurationSP KisHalftoneFilter::defaultConfiguration() const
+KisFilterConfigurationSP KisHalftoneFilter::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration();
+    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
     config->setProperty("cellSize", 8.0);
     config->setProperty("patternAngle", 45.0);
     QVariant v;
@@ -231,7 +232,7 @@ KisHalftoneConfigWidget::~KisHalftoneConfigWidget()
 
 KisPropertiesConfigurationSP KisHalftoneConfigWidget::configuration() const
 {
-    KisFilterConfiguration *config = new KisFilterConfiguration("halftone", 1);
+    KisFilterConfiguration *config = new KisFilterConfiguration("halftone", 1, KisGlobalResourcesInterface::instance());
     config->setProperty("cellSize", m_page.sld_cellSize->value());
     config->setProperty("patternAngle", m_page.spb_angle->value());
     QVariant v;

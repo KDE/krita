@@ -24,6 +24,7 @@
 
 #include "LayerBox.h"
 
+#include <QApplication>
 #include <QToolButton>
 #include <QLayout>
 #include <QMouseEvent>
@@ -37,6 +38,7 @@
 #include <QCheckBox>
 #include <QVBoxLayout>
 #include <QPixmap>
+#include <QBitmap>
 #include <QList>
 #include <QVector>
 #include <QLabel>
@@ -68,7 +70,7 @@
 #include <kis_action.h>
 #include "kis_action_manager.h"
 #include "widgets/kis_cmb_composite.h"
-#include "widgets/kis_slider_spin_box.h"
+#include "kis_slider_spin_box.h"
 #include "KisViewManager.h"
 #include "kis_node_manager.h"
 #include "kis_node_model.h"
@@ -155,7 +157,7 @@ LayerBox::LayerBox()
     , m_canvas(0)
     , m_wdgLayerBox(new Ui_WdgLayerBox)
     , m_thumbnailCompressor(500, KisSignalCompressor::FIRST_INACTIVE)
-    , m_colorLabelCompressor(900, KisSignalCompressor::FIRST_INACTIVE)
+    , m_colorLabelCompressor(500, KisSignalCompressor::FIRST_INACTIVE)
     , m_thumbnailSizeCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
 {
     KisConfig cfg(false);
@@ -221,6 +223,12 @@ LayerBox::LayerBox()
     connect(m_nodeModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(updateUI()));
     connect(m_nodeModel, SIGNAL(modelReset()), SLOT(slotModelReset()));
 
+    connect(m_nodeModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(slotForgetAboutSavedNodeBeforeEditSelectionMode()));
+    connect(m_nodeModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SLOT(slotForgetAboutSavedNodeBeforeEditSelectionMode()));
+    connect(m_nodeModel, SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)), SLOT(slotForgetAboutSavedNodeBeforeEditSelectionMode()));
+    connect(m_nodeModel, SIGNAL(modelReset()), SLOT(slotForgetAboutSavedNodeBeforeEditSelectionMode()));
+
+
     KisAction *showGlobalSelectionMask = new KisAction(i18n("&Show Global Selection Mask"), this);
     showGlobalSelectionMask->setObjectName("show-global-selection-mask");
     showGlobalSelectionMask->setActivationFlags(KisAction::ACTIVE_IMAGE);
@@ -232,6 +240,8 @@ LayerBox::LayerBox()
     showGlobalSelectionMask->setChecked(cfg.showGlobalSelection());
 
     m_colorSelector = new KisColorLabelSelectorWidget(this);
+    MouseClickIgnore* mouseEater = new MouseClickIgnore(this);
+    m_colorSelector->installEventFilter(mouseEater);
     connect(m_colorSelector, SIGNAL(currentIndexChanged(int)), SLOT(slotColorLabelChanged(int)));
     m_colorSelectorAction = new QWidgetAction(this);
     m_colorSelectorAction->setDefaultWidget(m_colorSelector);
@@ -245,13 +255,41 @@ LayerBox::LayerBox()
     connect(m_filteringModel.data(), &KisNodeFilterProxyModel::rowsAboutToBeRemoved,
             this, &LayerBox::slotAboutToRemoveRows);
 
-    connect(m_wdgLayerBox->cmbFilter, SIGNAL(selectedColorsChanged()), SLOT(updateLayerFiltering()));
+
+    //LayerFilter Menu
+    QMenu *layerFilterMenu = new QMenu(this);
+    m_wdgLayerBox->bnLayerFilters->setMenu(layerFilterMenu);
+    m_wdgLayerBox->bnLayerFilters->setPopupMode(QToolButton::InstantPopup);
+
+    const QIcon filterIcon = KisIconUtils::loadIcon("view-filter");
+    m_wdgLayerBox->bnLayerFilters->setIcon(filterIcon);
+    QPixmap filterEnabledPixmap = filterIcon.pixmap(64,64);
+    const QBitmap filterEnabledBitmask = filterEnabledPixmap.mask();
+    filterEnabledPixmap.fill(palette().color(QPalette::Highlight));
+    filterEnabledPixmap.setMask(filterEnabledBitmask);
+    const QIcon filterEnabledIcon = QIcon(filterEnabledPixmap);
+
+    layerFilterWidget = new KisLayerFilterWidget(this);
+    connect(layerFilterWidget, SIGNAL(filteringOptionsChanged()), this, SLOT(updateLayerFiltering()));
+    connect(layerFilterWidget, &KisLayerFilterWidget::filteringOptionsChanged, [this, filterIcon, filterEnabledIcon](){
+        if(layerFilterWidget->isCurrentlyFiltering()) {
+            m_wdgLayerBox->bnLayerFilters->setIcon(filterEnabledIcon);
+        } else {
+            m_wdgLayerBox->bnLayerFilters->setIcon(filterIcon);
+        }
+
+        m_wdgLayerBox->bnLayerFilters->setSelectedColors(QList<int>::fromSet(layerFilterWidget->getActiveColors()));
+        m_wdgLayerBox->bnLayerFilters->setTextFilter(layerFilterWidget->hasTextFilter());
+    });
+
+    QWidgetAction *layerFilterMenuAction = new QWidgetAction(this);
+    layerFilterMenuAction->setDefaultWidget(layerFilterWidget);
+    layerFilterMenu->addAction(layerFilterMenuAction);
 
     setEnabled(false);
 
     connect(&m_thumbnailCompressor, SIGNAL(timeout()), SLOT(updateThumbnail()));
     connect(&m_colorLabelCompressor, SIGNAL(timeout()), SLOT(updateAvailableLabels()));
-
 
 
     // set up the configure menu for changing thumbnail size
@@ -334,6 +372,10 @@ void LayerBox::setViewManager(KisViewManager* kisview)
 {
     m_nodeManager = kisview->nodeManager();
 
+    if (m_nodeManager) {
+        connect(m_nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)), SLOT(slotForgetAboutSavedNodeBeforeEditSelectionMode()));
+    }
+
     Q_FOREACH (KisAction *action, m_actions) {
         kisview->actionManager()->
                 addAction(action->objectName(),
@@ -373,6 +415,9 @@ void LayerBox::setViewManager(KisViewManager* kisview)
     Q_ASSERT(m_changeCloneSourceAction);
     connect(m_changeCloneSourceAction, &KisAction::triggered,
             this, &LayerBox::slotChangeCloneSourceClicked);
+
+    m_layerToggleSolo = actionManager->createAction("toggle_layer_soloing");
+    connect(m_layerToggleSolo, SIGNAL(triggered(bool)), this, SLOT(toggleActiveLayerSolo()));
 }
 
 void LayerBox::setCanvas(KoCanvasBase *canvas)
@@ -402,6 +447,7 @@ void LayerBox::setCanvas(KoCanvasBase *canvas)
 
     if (m_canvas) {
         m_image = m_canvas->image();
+        emit imageChanged();
         connect(m_image, SIGNAL(sigImageUpdated(QRect)), &m_thumbnailCompressor, SLOT(start()));
 
         KisDocument* doc = static_cast<KisDocument*>(m_canvas->imageView()->document());
@@ -520,8 +566,7 @@ void LayerBox::updateUI()
     m_wdgLayerBox->cmbComposite->validate(m_image->colorSpace());
 
     if (activeNode) {
-        if (activeNode->inherits("KisColorizeMask") ||
-                activeNode->inherits("KisLayer")) {
+        if (activeNode->inherits("KisColorizeMask") || activeNode->inherits("KisLayer")) {
 
             m_wdgLayerBox->doubleOpacity->setEnabled(true);
 
@@ -626,6 +671,7 @@ void LayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &in
                 KisSignalsBlocker b(m_colorSelector);
                 m_colorSelector->setCurrentIndex(singleLayer ? activeNode->colorLabelIndex() : -1);
             }
+
             menu.addAction(m_colorSelectorAction);
 
             menu.addSeparator();
@@ -690,12 +736,13 @@ void LayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &in
 
             menu.addSeparator();
 
-            addActionToMenu(&menu, "show_in_timeline");
+            addActionToMenu(&menu, "pin_to_timeline");
 
             if (singleLayer) {
                 KisNodeSP node = m_filteringModel->nodeFromIndex(index);
                 if (node && !node->inherits("KisTransformMask")) {
-                    addActionToMenu(&menu, "isolate_layer");
+                    addActionToMenu(&menu, "isolate_active_layer");
+                    addActionToMenu(&menu, "isolate_active_group");
                 }
 
                 addActionToMenu(&menu, "selectopaque");
@@ -851,7 +898,10 @@ void LayerBox::slotEditGlobalSelection(bool showSelections)
     KisSelectionMaskSP globalSelectionMask;
 
     if (!showSelections) {
-        activateNode = findNonHidableNode(activateNode);
+        activateNode =
+            m_savedNodeBeforeEditSelectionMode ?
+                KisNodeSP(m_savedNodeBeforeEditSelectionMode) :
+                findNonHidableNode(activateNode);
     }
 
     m_nodeModel->setShowGlobalSelection(showSelections);
@@ -920,6 +970,9 @@ void LayerBox::slotEditGlobalSelection(bool showSelections)
         applicator.end();
     }
 
+    if (showSelections) {
+        m_savedNodeBeforeEditSelectionMode = lastActiveNode;
+    }
 }
 
 void LayerBox::selectionChanged(const QModelIndexList selection)
@@ -1019,27 +1072,38 @@ void LayerBox::slotRenameCurrentNode()
 
 void LayerBox::slotColorLabelChanged(int label)
 {
-    KisNodeList nodes = m_nodeManager->selectedNodes();
+    KisNodeList selectedNodes = m_nodeManager->selectedNodes();
 
-    Q_FOREACH(KisNodeSP node, nodes) {
+    Q_FOREACH(KisNodeSP selectedNode, selectedNodes) {
+        //Always apply label to selected nodes..
+        selectedNode->setColorLabelIndex(label);
+
+        //Apply label only to unlabelled children..
+        KisNodeList children = selectedNode->childNodes(QStringList(), KoProperties());
+
         auto applyLabelFunc =
-                [label](KisNodeSP node) {
-            node->setColorLabelIndex(label);
+                [label](KisNodeSP child) {
+            if (child->colorLabelIndex() == 0) {
+                child->setColorLabelIndex(label);
+            }
         };
 
-        KisLayerUtils::recursiveApplyNodes(node, applyLabelFunc);
+        Q_FOREACH(KisNodeSP child, children) {
+            KisLayerUtils::recursiveApplyNodes(child, applyLabelFunc);
+        }
     }
 }
 
 void LayerBox::updateAvailableLabels()
 {
     if (!m_image) return;
-    m_wdgLayerBox->cmbFilter->updateAvailableLabels(m_image->root());
+    layerFilterWidget->updateColorLabels(m_image->root());
 }
 
 void LayerBox::updateLayerFiltering()
 {
-    m_filteringModel->setAcceptedLabels(m_wdgLayerBox->cmbFilter->selectedColors());
+    m_filteringModel->setAcceptedLabels(layerFilterWidget->getActiveColors());
+    m_filteringModel->setTextFilter(layerFilterWidget->getTextFilter());
 }
 
 void LayerBox::slotKeyframeChannelAdded(KisKeyframeChannel *channel)
@@ -1083,6 +1147,11 @@ void LayerBox::slotImageTimeChanged(int time)
     updateUI();
 }
 
+void LayerBox::slotForgetAboutSavedNodeBeforeEditSelectionMode()
+{
+    m_savedNodeBeforeEditSelectionMode = 0;
+}
+
 void LayerBox::slotUpdateIcons() {
     m_wdgLayerBox->bnAdd->setIcon(KisIconUtils::loadIcon("addlayer"));
     m_wdgLayerBox->bnRaise->setIcon(KisIconUtils::loadIcon("arrowupblr"));
@@ -1093,6 +1162,22 @@ void LayerBox::slotUpdateIcons() {
 
     // call child function about needing to update icons
     m_wdgLayerBox->listLayers->slotUpdateIcons();
+}
+
+void LayerBox::toggleActiveLayerSolo() {
+    NodeView* view = m_wdgLayerBox->listLayers;
+    if (!view)
+        return;
+
+    KisNodeSP node = m_nodeManager->activeNode();
+    if (!node)
+        return;
+
+    QModelIndex index = m_filteringModel->indexFromNode(node);
+    if (!index.isValid())
+        return;
+
+    view->toggleSolo(index);
 }
 
 void LayerBox::slotUpdateThumbnailIconSize()

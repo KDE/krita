@@ -84,6 +84,9 @@ Node::Node(KisImageSP image, KisNodeSP node, QObject *parent)
 
 Node *Node::createNode(KisImageSP image, KisNodeSP node, QObject *parent)
 {
+    if (node.isNull()) {
+        return 0;
+    }
     if (node->inherits("KisGroupLayer")) {
         return new GroupLayer(dynamic_cast<KisGroupLayer*>(node.data()));
     }
@@ -279,7 +282,6 @@ bool Node::setColorSpace(const QString &colorModel, const QString &colorDepth, c
 {
     if (!d->node) return false;
     if (!d->node->inherits("KisLayer")) return false;
-    KisLayer *layer = qobject_cast<KisLayer*>(d->node.data());
     const KoColorProfile *profile = KoColorSpaceRegistry::instance()->profileByName(colorProfile);
     const KoColorSpace *dstCs = KoColorSpaceRegistry::instance()->colorSpace(colorModel,
                                                                              colorDepth,
@@ -301,16 +303,16 @@ void Node::enableAnimation() const
     d->node->enableAnimation();
 }
 
-void Node::setShowInTimeline(bool showInTimeline) const
+void Node::setPinnedToTimeline(bool pinned) const
 {
     if (!d->node) return;
-    d->node->setUseInTimeline(showInTimeline);
+    d->node->setPinnedToTimeline(pinned);
 }
 
-bool Node::showInTimeline() const
+bool Node::isPinnedToTimeline() const
 {
     if (!d->node) return false;
-    return d->node->useInTimeline();
+    return d->node->isPinnedToTimeline();
 }
 
 bool Node::collapsed() const
@@ -387,6 +389,7 @@ void Node::setOpacity(int value)
 Node* Node::parentNode() const
 {
     if (!d->node) return 0;
+    if (!d->node->parent()) return 0;
     return Node::createNode(d->image, d->node->parent());
 }
 
@@ -625,6 +628,7 @@ void Node::scaleNode(QPointF origin, int width, int height, QString strategy)
                         qreal(width) / bounds.width(),
                         qreal(height) / bounds.height(),
                         actualStrategy, 0);
+    d->image->waitForDone();
 }
 
 void Node::rotateNode(double radians)
@@ -634,6 +638,7 @@ void Node::rotateNode(double radians)
     if (!d->node->parent()) return;
 
     d->image->rotateNode(d->node, radians, 0);
+    d->image->waitForDone();
 }
 
 void Node::cropNode(int x, int y, int w, int h)
@@ -644,6 +649,7 @@ void Node::cropNode(int x, int y, int w, int h)
 
     QRect rect = QRect(x, y, w, h);
     d->image->cropNode(d->node, rect);
+    d->image->waitForDone();
 }
 
 void Node::shearNode(double angleX, double angleY)
@@ -653,6 +659,7 @@ void Node::shearNode(double angleX, double angleY)
     if (!d->node->parent()) return;
 
     d->image->shearNode(d->node, angleX, angleY, 0);
+    d->image->waitForDone();
 }
 
 QImage Node::thumbnail(int w, int h)

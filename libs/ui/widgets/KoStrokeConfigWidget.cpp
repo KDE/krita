@@ -323,8 +323,9 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(KoCanvasBase *canvas, QWidget * paren
 
     d->selectionChangedCompressor.start();
 
-    d->fillConfigWidget->activate();
-    deactivate();
+    // initialize deactivation locks
+    d->deactivationLocks.push_back(KisAcyclicSignalConnector::Blocker(d->shapeChangedAcyclicConnector));
+    d->deactivationLocks.push_back(KisAcyclicSignalConnector::Blocker(d->resourceManagerAcyclicConnector));
 }
 
 KoStrokeConfigWidget::~KoStrokeConfigWidget()
@@ -428,7 +429,7 @@ void KoStrokeConfigWidget::setUnit(const KoUnit &unit, KoShape *representativeSh
      */
     KoUnit newUnit(unit);
     if (representativeShape) {
-        newUnit.adjustByPixelTransform(representativeShape->absoluteTransformation(0));
+        newUnit.adjustByPixelTransform(representativeShape->absoluteTransformation());
     }
 
     d->ui->lineWidth->setUnit(newUnit);
@@ -459,8 +460,10 @@ void KoStrokeConfigWidget::updateMarkers(const QList<KoMarker*> &markers)
 
 void KoStrokeConfigWidget::activate()
 {
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!d->deactivationLocks.empty());
     d->deactivationLocks.clear();
     d->fillConfigWidget->activate();
+
     if (!d->noSelectionTrackingMode) {
         d->selectionChangedCompressor.start();
     } else {
@@ -470,7 +473,8 @@ void KoStrokeConfigWidget::activate()
 
 void KoStrokeConfigWidget::deactivate()
 {
-    d->deactivationLocks.clear();
+    KIS_SAFE_ASSERT_RECOVER_NOOP(d->deactivationLocks.empty());
+
     d->deactivationLocks.push_back(KisAcyclicSignalConnector::Blocker(d->shapeChangedAcyclicConnector));
     d->deactivationLocks.push_back(KisAcyclicSignalConnector::Blocker(d->resourceManagerAcyclicConnector));
     d->fillConfigWidget->deactivate();

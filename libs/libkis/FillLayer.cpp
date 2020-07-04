@@ -22,9 +22,11 @@
 #include <kis_generator_registry.h>
 #include <InfoObject.h>
 #include <kis_selection.h>
+#include <KisGlobalResourcesInterface.h>
+#include <kis_assert.h>
 
 FillLayer::FillLayer(KisImageSP image, QString name, KisFilterConfigurationSP filterConfig, Selection &selection, QObject *parent) :
-    Node(image, new KisGeneratorLayer(image, name, filterConfig, selection.selection()), parent)
+    Node(image, new KisGeneratorLayer(image, name, filterConfig->cloneWithResourcesSnapshot(), selection.selection()), parent)
 {
 
 }
@@ -60,14 +62,16 @@ QString FillLayer::type() const
 bool FillLayer::setGenerator(const QString &generatorName, InfoObject *config)
 {
     KisGeneratorLayer *layer = dynamic_cast<KisGeneratorLayer*>(this->node().data());
+    KIS_ASSERT_RECOVER_RETURN_VALUE(layer, false);
+
     //getting the default configuration here avoids trouble with versioning.
     KisGeneratorSP generator = KisGeneratorRegistry::instance()->value(generatorName);
     if (generator) {
-        KisFilterConfigurationSP cfg = generator->factoryConfiguration();
+        KisFilterConfigurationSP cfg = generator->factoryConfiguration(KisGlobalResourcesInterface::instance());
         Q_FOREACH(const QString property, config->properties().keys()) {
             cfg->setProperty(property, config->property(property));
         }
-        layer->setFilter(cfg);
+        layer->setFilter(cfg->cloneWithResourcesSnapshot());
         return true;
     }
     return false;

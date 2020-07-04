@@ -25,6 +25,9 @@
 #include <strokes/KisFreehandStrokeInfo.h>
 #include "KisAsyncronousStrokeUpdateHelper.h"
 #include <kis_brush.h>
+#include <KisGlobalResourcesInterface.h>
+#include "kis_transaction.h"
+#include <KoCanvasResourceProvider.h>
 
 KisPresetLivePreviewView::KisPresetLivePreviewView(QWidget *parent)
     : QGraphicsView(parent),
@@ -39,8 +42,10 @@ KisPresetLivePreviewView::~KisPresetLivePreviewView()
     delete m_brushPreviewScene;
 }
 
-void KisPresetLivePreviewView::setup()
+void KisPresetLivePreviewView::setup(KoCanvasResourceProvider* resourceManager)
 {
+    m_resourceManager = resourceManager;
+
     // initializing to 0 helps check later if they actually have something in them
     m_noPreviewText = 0;
     m_sceneImageItem = 0;
@@ -148,7 +153,10 @@ void KisPresetLivePreviewView::paintBackground()
                                  0,
                                  m_layer->image()->width()*(sectionPercent*i +sectionPercent),
                                  m_layer->image()->height());
+
+            KisTransaction t(m_layer->paintDevice());
             m_layer->paintDevice()->fill(fillRect, fillColor);
+            t.end();
         }
 
         m_paintColor = KoColor(Qt::white, m_colorSpace);
@@ -180,7 +188,10 @@ void KisPresetLivePreviewView::paintBackground()
     else {
 
         // fill with gray first to clear out what existed from previous preview
+        KisTransaction t(m_layer->paintDevice());
         m_layer->paintDevice()->fill(m_image->bounds(), KoColor(palette().color(QPalette::Background) , m_colorSpace));
+        t.end();
+
         m_paintColor = KoColor(palette().color(QPalette::Text), m_colorSpace);
     }
 }
@@ -197,11 +208,11 @@ public:
         this->enableJob(JOB_CANCEL, true, KisStrokeJobData::BARRIER);
     }
 
-    void initStrokeCallback() {
+    void initStrokeCallback() override {
         emit timeout();
     }
 
-    void cancelStrokeCallback() {
+    void cancelStrokeCallback() override {
         emit cancelled();
     }
 
@@ -215,7 +226,6 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
     // limit the brush stroke size. larger brush strokes just don't look good and are CPU intensive
     // we are making a proxy preset and setting it to the painter...otherwise setting the brush size of the original preset
     // will fire off signals that make this run in an infinite loop
-    qreal originalPresetSize = m_currentPreset->settings()->paintOpSize();
     qreal previewSize = qBound(3.0, m_currentPreset->settings()->paintOpSize(), 25.0 ); // constrain live preview brush size
     //Except for the sketchbrush where it determine sthe history.
     if (m_currentPreset->paintOp().id() == "sketchbrush" ||
@@ -224,7 +234,7 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
     }
 
 
-    KisPaintOpPresetSP proxy_preset = m_currentPreset->clone();
+    KisPaintOpPresetSP proxy_preset = m_currentPreset->clone().dynamicCast<KisPaintOpPreset>();
     KisPaintOpSettingsSP settings = proxy_preset->settings();
     settings->setPaintOpSize(previewSize);
 
@@ -246,7 +256,7 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
             d.setContent(brushDefinition, false);
             element = d.firstChildElement("Brush");
 
-            KisBrushSP brush = KisBrush::fromXML(element);
+            KisBrushSP brush = KisBrush::fromXML(element, KisGlobalResourcesInterface::instance());
 
             qreal width = brush->image().width();
             qreal scale = brush->scale();
@@ -273,22 +283,12 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
         }
     }
 
-    // Preset preview cannot display gradient color source: there is
-    // no resource manager for KisResourcesSnapshot, therefore gradient is nullptr.
-    // BUG: 385521 (Selecting "Gradient" in brush editor crashes krita)
-    if (proxy_preset->paintOp().id() == "paintbrush") {
-        QString colorSourceType = settings->getString("ColorSource/Type", "plain");
-        if (colorSourceType == "gradient") {
-            settings->setProperty("ColorSource/Type", "plain");
-        }
-    }
-
     proxy_preset->setSettings(settings);
 
 
     KisResourcesSnapshotSP resources =
             new KisResourcesSnapshot(m_image,
-                                     m_layer);
+                                     m_layer, m_resourceManager);
     resources->setOpacity(settings->paintOpOpacity());
 
     resources->setBrush(proxy_preset);

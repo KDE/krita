@@ -40,6 +40,7 @@
 #include "KisViewManager.h"
 #include "kis_mainwindow_observer.h"
 #include "kis_signal_compressor.h"
+#include "kis_layer_filter_widget.h"
 #include <QSlider>
 
 class QModelIndex;
@@ -123,6 +124,7 @@ private Q_SLOTS:
     void slotNodeManagerChangedSelection(const QList<KisNodeSP> &nodes);
     void slotColorLabelChanged(int index);
     void slotUpdateIcons();
+    void toggleActiveLayerSolo();
 
     void slotAddLayerBnClicked();
 
@@ -138,6 +140,10 @@ private Q_SLOTS:
     void slotOpacityKeyframeChanged(KisKeyframeSP keyframe);
     void slotOpacityKeyframeMoved(KisKeyframeSP keyframe, int fromTime);
     void slotImageTimeChanged(int time);
+    void slotForgetAboutSavedNodeBeforeEditSelectionMode();
+
+Q_SIGNALS:
+    void imageChanged();
 
 private:
     inline void connectActionToButton(KisViewManager* view, QAbstractButton *button, const QString &id);
@@ -164,13 +170,16 @@ private:
     KisAction* m_removeAction;
     KisAction* m_propertiesAction;
     KisAction* m_changeCloneSourceAction;
+    KisAction* m_layerToggleSolo;
     KisSignalCompressor m_thumbnailCompressor;
     KisSignalCompressor m_colorLabelCompressor;
     KisSignalCompressor m_thumbnailSizeCompressor;
 
+    KisLayerFilterWidget* layerFilterWidget;
     QSlider* thumbnailSizeSlider;
 
     KisNodeSP m_activeNode;
+    KisNodeWSP m_savedNodeBeforeEditSelectionMode;
     QPointer<KisKeyframeChannel> m_opacityChannel;
     bool m_blockOpacityUpdate {false};
 };

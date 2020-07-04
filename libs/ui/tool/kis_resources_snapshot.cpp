@@ -49,8 +49,8 @@ struct KisResourcesSnapshot::Private {
     KisDefaultBoundsBaseSP bounds;
     KoColor currentFgColor;
     KoColor currentBgColor;
-    KoPattern *currentPattern = 0;
-    KoAbstractGradient *currentGradient;
+    KoPatternSP currentPattern;
+    KoAbstractGradientSP currentGradient;
     KisPaintOpPresetSP currentPaintOpPreset;
     KisNodeSP currentNode;
     qreal currentExposure;
@@ -66,6 +66,7 @@ struct KisResourcesSnapshot::Private {
 
     KisPainter::StrokeStyle strokeStyle = KisPainter::StrokeStyleBrush;
     KisPainter::FillStyle fillStyle = KisPainter::FillStyleForegroundColor;
+    QTransform fillTransform = QTransform();
 
     bool globalAlphaLock = false;
     qreal effectiveZoom = 1.0;
@@ -84,8 +85,8 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
     m_d->bounds = bounds;
     m_d->currentFgColor = resourceManager->resource(KoCanvasResourceProvider::ForegroundColor).value<KoColor>();
     m_d->currentBgColor = resourceManager->resource(KoCanvasResourceProvider::BackgroundColor).value<KoColor>();
-    m_d->currentPattern = resourceManager->resource(KisCanvasResourceProvider::CurrentPattern).value<KoPattern*>();
-    m_d->currentGradient = resourceManager->resource(KisCanvasResourceProvider::CurrentGradient).value<KoAbstractGradient*>();
+    m_d->currentPattern = resourceManager->resource(KisCanvasResourceProvider::CurrentPattern).value<KoPatternSP>();
+    m_d->currentGradient = resourceManager->resource(KisCanvasResourceProvider::CurrentGradient).value<KoAbstractGradientSP>();
 
     /**
      * We should deep-copy the preset, so that long-running actions
@@ -95,7 +96,7 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
      */
     KisPaintOpPresetSP p = resourceManager->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
     if (p) {
-        m_d->currentPaintOpPreset = resourceManager->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>()->clone();
+        m_d->currentPaintOpPreset = resourceManager->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>()->cloneWithResourcesSnapshot();
     }
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
@@ -103,14 +104,18 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
     m_d->currentExposure = resourceManager->resource(KisCanvasResourceProvider::HdrExposure).toDouble();
-    m_d->currentGenerator = resourceManager->resource(KisCanvasResourceProvider::CurrentGeneratorConfiguration).value<KisFilterConfiguration*>();
 
+
+    m_d->currentGenerator = resourceManager->resource(KisCanvasResourceProvider::CurrentGeneratorConfiguration).value<KisFilterConfiguration*>();
+    if (m_d->currentGenerator) {
+        m_d->currentGenerator = m_d->currentGenerator->cloneWithResourcesSnapshot();
+    }
 
     QPointF relativeAxesCenter(0.5, 0.5);
     if (m_d->image) {
         relativeAxesCenter = m_d->image->mirrorAxesCenter();
     }
-    m_d->axesCenter = KisAlgebra2D::relativeToAbsolute(relativeAxesCenter, m_d->bounds->bounds());
+    m_d->axesCenter = KisAlgebra2D::relativeToAbsolute(relativeAxesCenter, m_d->bounds->imageBorderRect());
 
     m_d->mirrorMaskHorizontal = resourceManager->resource(KisCanvasResourceProvider::MirrorHorizontal).toBool();
     m_d->mirrorMaskVertical = resourceManager->resource(KisCanvasResourceProvider::MirrorVertical).toBool();
@@ -154,7 +159,7 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
     if (m_d->image) {
         relativeAxesCenter = m_d->image->mirrorAxesCenter();
     }
-    m_d->axesCenter = KisAlgebra2D::relativeToAbsolute(relativeAxesCenter, m_d->bounds->bounds());
+    m_d->axesCenter = KisAlgebra2D::relativeToAbsolute(relativeAxesCenter, m_d->bounds->imageBorderRect());
     m_d->opacity = OPACITY_OPAQUE_U8;
 
     setCurrentNode(currentNode);
@@ -194,6 +199,8 @@ void KisResourcesSnapshot::setupPainter(KisPainter* painter)
 
     painter->setStrokeStyle(m_d->strokeStyle);
     painter->setFillStyle(m_d->fillStyle);
+    painter->setPatternTransform(m_d->fillTransform);
+
 
     /**
      * The paintOp should be initialized the last, because it may
@@ -256,6 +263,11 @@ void KisResourcesSnapshot::setFillStyle(KisPainter::FillStyle fillStyle)
     m_d->fillStyle = fillStyle;
 }
 
+void KisResourcesSnapshot::setFillTransform(QTransform transform)
+{
+    m_d->fillTransform = transform;
+}
+
 KisNodeSP KisResourcesSnapshot::currentNode() const
 {
     return m_d->currentNode;
@@ -310,17 +322,23 @@ KisSelectionSP KisResourcesSnapshot::activeSelection() const
 
 bool KisResourcesSnapshot::needsAirbrushing() const
 {
-    return m_d->currentPaintOpPreset->settings()->isAirbrushing();
+    return (   m_d->currentPaintOpPreset
+            && m_d->currentPaintOpPreset->settings()
+            && m_d->currentPaintOpPreset->settings()->isAirbrushing());
 }
 
 qreal KisResourcesSnapshot::airbrushingInterval() const
 {
-    return m_d->currentPaintOpPreset->settings()->airbrushInterval();
+    return (   m_d->currentPaintOpPreset
+            && m_d->currentPaintOpPreset->settings()
+            && m_d->currentPaintOpPreset->settings()->airbrushInterval());
 }
 
 bool KisResourcesSnapshot::needsSpacingUpdates() const
 {
-    return m_d->currentPaintOpPreset->settings()->useSpacingUpdates();
+    return (   m_d->currentPaintOpPreset
+            && m_d->currentPaintOpPreset->settings()
+            && m_d->currentPaintOpPreset->settings()->useSpacingUpdates());
 }
 
 void KisResourcesSnapshot::setOpacity(qreal opacity)
@@ -343,7 +361,7 @@ QString KisResourcesSnapshot::compositeOpId() const
     return m_d->compositeOpId;
 }
 
-KoPattern* KisResourcesSnapshot::currentPattern() const
+KoPatternSP KisResourcesSnapshot::currentPattern() const
 {
     return m_d->currentPattern;
 }
@@ -363,6 +381,15 @@ KisPaintOpPresetSP KisResourcesSnapshot::currentPaintOpPreset() const
     return m_d->currentPaintOpPreset;
 }
 
+QTransform KisResourcesSnapshot::fillTransform() const
+{
+    return m_d->fillTransform;
+}
+
+KoAbstractGradientSP KisResourcesSnapshot::currentGradient() const
+{
+    return m_d->currentGradient;
+}
 
 QBitArray KisResourcesSnapshot::channelLockFlags() const
 {
@@ -415,5 +442,9 @@ void KisResourcesSnapshot::setSelectionOverride(KisSelectionSP selection)
 
 void KisResourcesSnapshot::setBrush(const KisPaintOpPresetSP &brush)
 {
-    m_d->currentPaintOpPreset = brush;
+    m_d->currentPaintOpPreset = brush->cloneWithResourcesSnapshot();
+
+#ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
+    KisPaintOpRegistry::instance()->preinitializePaintOpIfNeeded(m_d->currentPaintOpPreset);
+#endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 }

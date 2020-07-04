@@ -36,6 +36,8 @@ void KoResourceManager::slotResourceInternalsChanged(int key)
 
 void KoResourceManager::setResource(int key, const QVariant &value)
 {
+    notifyResourceChangeAttempted(key, value);
+
     KoDerivedResourceConverterSP converter =
         m_derivedResources.value(key, KoDerivedResourceConverterSP());
 
@@ -93,6 +95,24 @@ void KoResourceManager::notifyDerivedResourcesChanged(int key, const QVariant &v
             notifyResourceChanged(converter->key(), converter->readFromSource(value));
         }
 
+        it++;
+    }
+}
+
+void KoResourceManager::notifyResourceChangeAttempted(int key, const QVariant &value)
+{
+    emit resourceChangeAttempted(key, value);
+    notifyDerivedResourcesChangeAttempted(key, value);
+}
+
+void KoResourceManager::notifyDerivedResourcesChangeAttempted(int key, const QVariant &value)
+{
+    QMultiHash<int, KoDerivedResourceConverterSP>::const_iterator it = m_derivedFromSource.constFind(key);
+    QMultiHash<int, KoDerivedResourceConverterSP>::const_iterator end = m_derivedFromSource.constEnd();
+
+    while (it != end && it.key() == key) {
+        KoDerivedResourceConverterSP converter = it.value();
+        notifyResourceChangeAttempted(converter->key(), converter->readFromSource(value));
         it++;
     }
 }

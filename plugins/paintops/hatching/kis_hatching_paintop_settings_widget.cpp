@@ -38,6 +38,7 @@
 #include "kis_texture_option.h"
 #include <kis_pressure_mirror_option_widget.h>
 #include "kis_pressure_texture_strength_option.h"
+#include <KisGlobalResourcesInterface.h>
 
 #include <QDomDocument>
 #include <QDomElement>
@@ -130,7 +131,7 @@ KisHatchingPaintOpSettingsWidget::~ KisHatchingPaintOpSettingsWidget()
 
 KisPropertiesConfigurationSP  KisHatchingPaintOpSettingsWidget::configuration() const
 {
-    KisHatchingPaintOpSettingsSP config = new KisHatchingPaintOpSettings();
+    KisHatchingPaintOpSettingsSP config = new KisHatchingPaintOpSettings(KisGlobalResourcesInterface::instance());
     config->setOptionsWidget(const_cast<KisHatchingPaintOpSettingsWidget*>(this));
     config->setProperty("paintop", "hatchingbrush"); // XXX: make this a const id string
     writeConfiguration(config);

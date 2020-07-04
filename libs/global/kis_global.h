@@ -236,6 +236,15 @@ inline QRect kisEnsureInRect(QRect rc, const QRect &bounds)
     return rc;
 }
 
+inline QRect kisTrimLeft( int width, QRect &toTakeFrom)
+{
+    QPoint trimmedOrigin = toTakeFrom.topLeft();
+    QSize trimmedSize = QSize(width, toTakeFrom.height());
+    toTakeFrom.setWidth(toTakeFrom.width() - width);
+    toTakeFrom.translate(width, 0);
+    return QRect(trimmedOrigin, trimmedSize);
+}
+
 #include "kis_pointer_utils.h"
 
 /**

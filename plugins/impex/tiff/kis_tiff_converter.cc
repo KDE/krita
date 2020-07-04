@@ -442,7 +442,7 @@ KisImportExportErrorCode KisTIFFConverter::readTIFFDirectory(TIFF* image)
             if (sampleinfo[i] == EXTRASAMPLE_ASSOCALPHA) {
                 // XXX: dangelo: the color values are already multiplied with
                 // the alpha value.  This needs to be reversed later (postprocessor?)
-                qWarning() << "Associated alpha in this file: krita does not handle plremultiplied alpha.";
+                qWarning() << "Associated alpha in this file: krita does not handle pre-multiplied alpha.";
                 alphapos = i;
             }
 

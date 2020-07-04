@@ -75,7 +75,6 @@ set(kritaflake_SRCS
     KoShapeBackground.cpp
     KoColorBackground.cpp
     KoGradientBackground.cpp
-    KoOdfGradientBackground.cpp
     KoHatchBackground.cpp
     KoPatternBackground.cpp
     KoVectorPatternBackground.cpp
@@ -84,13 +83,6 @@ set(kritaflake_SRCS
     KoShapeConfigWidgetBase.cpp
     KoDrag.cpp
     KoSvgPaste.cpp
-    KoDragOdfSaveHelper.cpp
-    KoShapeOdfSaveHelper.cpp
-    KoConnectionPoint.cpp
-    KoConnectionShape.cpp
-    KoConnectionShapeLoadingUpdater.cpp
-    KoConnectionShapeFactory.cpp
-    KoConnectionShapeConfigWidget.cpp
     KoSnapGuide.cpp
     KoSnapProxy.cpp
     KoSnapStrategy.cpp
@@ -105,7 +97,6 @@ set(kritaflake_SRCS
     KoImageData.cpp
     KoImageData_p.cpp
     KoImageCollection.cpp
-    KoOdfWorkaround.cpp
     KoFilterEffect.cpp
     KoFilterEffectStack.cpp
     KoFilterEffectFactoryBase.cpp
@@ -120,7 +111,6 @@ set(kritaflake_SRCS
     KoClipMask.cpp
     KoClipMaskPainter.cpp
     KoCurveFit.cpp
-    KisGamutMaskViewConverter.cpp
 
     commands/KoShapeGroupCommand.cpp
     commands/KoShapeAlignCommand.cpp
@@ -153,7 +143,6 @@ set(kritaflake_SRCS
     commands/KoParameterToPathCommand.cpp
     commands/KoShapeTransformCommand.cpp
     commands/KoPathFillRuleCommand.cpp
-    commands/KoConnectionShapeTypeCommand.cpp
     commands/KoShapeShadowCommand.cpp
     commands/KoPathReverseCommand.cpp
     commands/KoShapeRenameCommand.cpp
@@ -163,11 +152,11 @@ set(kritaflake_SRCS
     commands/KoShapeClipCommand.cpp
     commands/KoShapeUnclipCommand.cpp
     commands/KoPathShapeMarkerCommand.cpp
-    commands/KoShapeConnectionChangeCommand.cpp
     commands/KoMultiPathPointMergeCommand.cpp
     commands/KoMultiPathPointJoinCommand.cpp
     commands/KoKeepShapesSelectedCommand.cpp
     commands/KoPathMergeUtils.cpp
+    commands/KoAddRemoveShapeCommands.cpp
 
     html/HtmlSavingContext.cpp
     html/HtmlWriter.cpp
@@ -179,7 +168,6 @@ set(kritaflake_SRCS
     tools/PathToolOptionWidget.cpp
     tools/KoPathPointRubberSelectStrategy.cpp
     tools/KoPathPointMoveStrategy.cpp
-    tools/KoPathConnectionPointStrategy.cpp
     tools/KoPathControlPointMoveStrategy.cpp
     tools/KoParameterChangeStrategy.cpp
     tools/KoZoomTool.cpp
@@ -224,7 +212,6 @@ set(kritaflake_SRCS
 
 ki18n_wrap_ui(kritaflake_SRCS
     tools/PathToolOptionWidgetBase.ui
-    KoConnectionShapeConfigWidget.ui
     tools/KoZoomToolWidget.ui
 )
 
@@ -239,7 +226,7 @@ target_include_directories(kritaflake
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/text>
 )
 
-target_link_libraries(kritaflake kritapigment kritawidgetutils kritaodf kritacommand KF5::WidgetsAddons Qt5::Svg)
+target_link_libraries(kritaflake kritapigment kritawidgetutils kritacommand KF5::WidgetsAddons Qt5::Svg KF5::CoreAddons KF5::ConfigCore KF5::I18n Qt5::Gui Qt5::Xml)
 
 set_target_properties(kritaflake PROPERTIES
     VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}

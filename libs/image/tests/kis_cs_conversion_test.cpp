@@ -57,13 +57,13 @@ void logFailure(const QString & reason, const KoColorSpace * srcCs, const KoColo
 
 void KisCsConversionTest::testColorSpaceConversion()
 {
-    QTime t;
+    QElapsedTimer t;
     t.start();
 
     QList<const KoColorSpace*> colorSpaces = KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::OnlyDefaultProfile);
     int failedColorSpaces = 0;
 
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "tile.png");
+    QImage image(QString(FILES_DATA_DIR) + '/' + "tile.png");
 
     Q_FOREACH (const KoColorSpace * srcCs, colorSpaces) {
         Q_FOREACH (const KoColorSpace * dstCs,  colorSpaces) {

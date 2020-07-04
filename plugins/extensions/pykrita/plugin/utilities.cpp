@@ -296,7 +296,11 @@ namespace
 QString findKritaPythonLibsPath(const QString &libdir)
 {
     QDir rootDir(KoResourcePaths::getApplicationRoot());
-    QFileInfoList candidates =  rootDir.entryInfoList(QStringList() << "lib*", QDir::Dirs | QDir::NoDotAndDotDot) + rootDir.entryInfoList(QStringList() << "Frameworks", QDir::Dirs | QDir::NoDotAndDotDot);
+
+    QFileInfoList candidates =
+        rootDir.entryInfoList(QStringList() << "lib*", QDir::Dirs | QDir::NoDotAndDotDot) +
+        rootDir.entryInfoList(QStringList() << "Frameworks", QDir::Dirs | QDir::NoDotAndDotDot) +
+        rootDir.entryInfoList(QStringList() << "share", QDir::Dirs | QDir::NoDotAndDotDot);
     Q_FOREACH (const QFileInfo &entry, candidates) {
         QDir libDir(entry.absoluteFilePath());
         if (libDir.cd(libdir)) {
@@ -328,7 +332,14 @@ bool Python::setPath(const QStringList& scriptPaths)
 //             << (!qgetenv("APPDIR").isNull() && KoResourcePaths::getApplicationRoot().contains(qgetenv("APPDIR")));
 
 
-    bool runningInBundle = ((!qgetenv("APPDIR").isNull() && KoResourcePaths::getApplicationRoot().contains(qgetenv("APPDIR"))) || KoResourcePaths::getApplicationRoot().toLower().contains("krita.app"));
+#if defined Q_OS_WIN
+    bool runningInBundle = false;
+#elif defined Q_OS_MAC
+    bool runningInBundle = KoResourcePaths::getApplicationRoot().toLower().contains("krita.app");
+#else
+    bool runningInBundle = (!qgetenv("APPDIR").isNull() &&
+                             KoResourcePaths::getApplicationRoot().contains(qgetenv("APPDIR")));
+#endif
     dbgScript << "Python::setPath. Script paths:" << scriptPaths << runningInBundle;
 
 #ifdef Q_OS_WIN
@@ -366,10 +377,10 @@ bool Python::setPath(const QStringList& scriptPaths)
     QDir pythonDir(KoResourcePaths::getApplicationRoot());
     if (pythonDir.cd("python")) {
         dbgScript << "Found bundled Python at" << pythonDir.absolutePath();
-        // The default paths for Windows embeddable Python is ./python36.zip;./
-        // HACK: Assuming bundled Python is version 3.6.*
+        // The default paths for Windows embeddable Python is ./python38.zip;./
+        // HACK: Assuming bundled Python is version 3.8.*
         // FIXME: Should we read python36._pth for the paths or use Py_GetPath?
-        paths.append(pythonDir.absoluteFilePath("python36.zip"));
+        paths.append(pythonDir.absoluteFilePath("python38.zip"));
         paths.append(pythonDir.absolutePath());
     } else {
         errScript << "Bundled Python not found, cannot set Python library paths";
@@ -381,9 +392,9 @@ bool Python::setPath(const QStringList& scriptPaths)
         // We're running from an appimage, so we need our local python
         QString p = QFileInfo(PYKRITA_PYTHON_LIBRARY).fileName();
 #ifdef Q_OS_MAC
-        QString p2 = p.remove("lib").remove("m.dy");
+        QString p2 = p.remove("lib").remove("m.dy").remove(".dy");
 #else
-        QString p2 = p.remove("lib").remove("m.so");
+        QString p2 = p.remove("lib").remove("m.so").remove(".so");
 #endif
         dbgScript << "\t" << p << p2;
         originalPath = findKritaPythonLibsPath(p);

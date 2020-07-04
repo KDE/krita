@@ -30,20 +30,17 @@
 class PAINTOP_EXPORT KisBrushBasedPaintOpSettings : public KisOutlineGenerationPolicy<KisPaintOpSettings>
 {
 public:
-    KisBrushBasedPaintOpSettings();
+    KisBrushBasedPaintOpSettings(KisResourcesInterfaceSP resourcesInterface);
     ~KisBrushBasedPaintOpSettings() override {}
 
     ///Reimplemented
     bool paintIncremental() override;
 
     using KisPaintOpSettings::brushOutline;
-    QPainterPath brushOutline(const KisPaintInformation &info, const OutlineMode &mode) override;
+    QPainterPath brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom) override;
 
     ///Reimplemented
     bool isValid() const override;
-
-    ///Reimplemented
-    bool isLoadable() override;
 
     KisBrushSP brush() const;
 
@@ -65,10 +62,12 @@ public:
 
     QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings) override;
 
+    virtual bool hasPatternSettings() const override;
+
 protected:
 
     void onPropertyChanged() override;
-    QPainterPath brushOutlineImpl(const KisPaintInformation &info, const OutlineMode &mode, qreal additionalScale);
+    QPainterPath brushOutlineImpl(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom, qreal additionalScale);
     mutable KisBrushSP m_savedBrush;
     QList<KisUniformPaintOpPropertyWSP> m_uniformProperties;
 

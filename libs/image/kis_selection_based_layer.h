@@ -51,7 +51,7 @@ public:
      * @param selection is a mask used by the layer to know
      * where to apply the filter/generator.
      */
-    KisSelectionBasedLayer(KisImageWSP image, const QString &name, KisSelectionSP selection, KisFilterConfigurationSP filterConfig, bool useGeneratorRegistry = false);
+    KisSelectionBasedLayer(KisImageWSP image, const QString &name, KisSelectionSP selection, KisFilterConfigurationSP filterConfig);
     KisSelectionBasedLayer(const KisSelectionBasedLayer& rhs);
     ~KisSelectionBasedLayer() override;
 
@@ -77,7 +77,7 @@ public:
     virtual void resetCache();
 
     /**
-     * for KisLayer::setDirty(const QRegion&)
+     * for KisLayer::setDirty(const KisRegion&)
      */
     using KisLayer::setDirty;
 
@@ -161,7 +161,7 @@ public:
      * @param h height of the thumbnail to create
      * @return the thumbnail image created.
      */
-    QImage createThumbnail(qint32 w, qint32 h) override;
+    QImage createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio) override;
 
 
 protected:

@@ -31,9 +31,11 @@ typedef KisSharedPtr<KisColorTransformationConfiguration> KisColorTransformation
 class KRITAIMAGE_EXPORT KisColorTransformationConfiguration : public KisFilterConfiguration
 {
 public:
-    KisColorTransformationConfiguration(const QString & name, qint32 version);
+    KisColorTransformationConfiguration(const QString & name, qint32 version, KisResourcesInterfaceSP resourcesInterface);
     KisColorTransformationConfiguration(const KisColorTransformationConfiguration &rhs);
     ~KisColorTransformationConfiguration() override;
+
+    KisFilterConfigurationSP clone() const override;
 
     KoColorTransformation *colorTransformation(const KoColorSpace *cs, const KisColorTransformationFilter *filter) const;
 

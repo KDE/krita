@@ -22,6 +22,11 @@
 #include <kis_types.h>
 #include <kritaui_export.h>
 
+class KoResource;
+using KoResourceSP = QSharedPointer<KoResource>;
+
+class KisResourcesInterface;
+using KisResourcesInterfaceSP = QSharedPointer<KisResourcesInterface>;
 
 /**
  * This is a special base class for all the options that load/save
@@ -40,20 +45,45 @@
  * it atm, but we still can create a special interface for accepting raw pointers,
  * which will be used automatically, when 'this' is passed.
  */
-class KRITAUI_EXPORT KisPaintopPropertiesBase
+
+class KRITAUI_EXPORT KisPaintopPropertiesResourcesBase
 {
 public:
-    virtual ~KisPaintopPropertiesBase();
+    virtual ~KisPaintopPropertiesResourcesBase();
 
-    void readOptionSetting(KisPropertiesConfigurationSP settings);
+    void readOptionSetting(KisPropertiesConfigurationSP settings, KisResourcesInterfaceSP resourcesInterface);
     void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
 
-    void readOptionSetting(const KisPropertiesConfiguration *settings);
+    void readOptionSetting(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface);
     void writeOptionSetting(KisPropertiesConfiguration *settings) const;
+
+    QList<KoResourceSP> prepareLinkedResources(const KisPropertiesConfigurationSP settings, KisResourcesInterfaceSP resourcesInterface) const;
+    QList<KoResourceSP> prepareLinkedResources(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const;
+
+    QList<KoResourceSP> prepareEmbeddedResources(const KisPropertiesConfigurationSP settings, KisResourcesInterfaceSP resourcesInterface) const;
+    QList<KoResourceSP> prepareEmbeddedResources(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const;
+
+
+protected:
+    virtual void readOptionSettingResourceImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) = 0;
+    virtual void writeOptionSettingImpl(KisPropertiesConfiguration *settings) const = 0;
+    virtual QList<KoResourceSP> prepareLinkedResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const = 0;
+    virtual QList<KoResourceSP> prepareEmbeddedResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const = 0;
+};
+
+class KRITAUI_EXPORT KisPaintopPropertiesBase : public KisPaintopPropertiesResourcesBase
+{
+public:
+    void readOptionSetting(KisPropertiesConfigurationSP settings);
+    void readOptionSetting(const KisPropertiesConfiguration *settings);
+
+private:
+    void readOptionSettingResourceImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) override final;
+    QList<KoResourceSP> prepareLinkedResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const override final;
+    QList<KoResourceSP> prepareEmbeddedResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const override final;
 
 protected:
     virtual void readOptionSettingImpl(const KisPropertiesConfiguration *settings) = 0;
-    virtual void writeOptionSettingImpl(KisPropertiesConfiguration *settings) const = 0;
 };
 
 #endif // KISBASEOPTION_H

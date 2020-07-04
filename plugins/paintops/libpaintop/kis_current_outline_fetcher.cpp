@@ -26,6 +26,7 @@
 #include <kis_properties_configuration.h>
 #include "kis_paintop_settings.h"
 #include <QElapsedTimer>
+#include "kis_algebra_2d.h"
 
 #define NOISY_UPDATE_SPEED 50  // Time in ms for outline updates to noisy brushes
 
@@ -81,6 +82,7 @@ QPainterPath KisCurrentOutlineFetcher::fetchOutline(const KisPaintInformation &i
                                                     const KisPaintOpSettingsSP settings,
                                                     const QPainterPath &originalOutline,
                                                     const KisPaintOpSettings::OutlineMode &mode,
+                                                    qreal alignForZoom,
                                                     qreal additionalScale,
                                                     qreal additionalRotation,
                                                     bool tilt, qreal tiltcenterx, qreal tiltcentery) const
@@ -172,6 +174,9 @@ QPainterPath KisCurrentOutlineFetcher::fetchOutline(const KisPaintInformation &i
         d->sharpnessOption->apply(info, pos - hotSpot, x, y, subPixelX, subPixelY);
         pos = QPointF(x + subPixelX, y + subPixelY) + hotSpot;
     }
+
+    // align cursor position to widget pixel grid to avoid noise
+    pos = KisAlgebra2D::alignForZoom(pos, alignForZoom);
 
     QTransform T1 = QTransform::fromTranslate(-hotSpot.x(), -hotSpot.y());
     QTransform T2 = QTransform::fromTranslate(pos.x(), pos.y());

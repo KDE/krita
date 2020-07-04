@@ -25,6 +25,7 @@
 class KisBrushOpSettings : public KisBrushBasedPaintOpSettings
 {
 public:
+    KisBrushOpSettings(KisResourcesInterfaceSP resourcesInterface);
     bool needsAsynchronousUpdates() const;
 };
 

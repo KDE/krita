@@ -22,13 +22,18 @@
 
 #include <QWidget>
 #include <QScroller>
-#include <kritaui_export.h>
+#include <QPointer>
+
+#include <KoResource.h>
 #include <KoID.h>
+#include "kis_signal_auto_connection.h"
 
 class KoAbstractResourceServerAdapter;
 class KisPresetDelegate;
-class KoResourceItemChooser;
-class KoResource;
+class KisResourceItemChooser;
+
+
+#include <kritaui_export.h>
 
 /**
  * A special type of item chooser that can contain extra widgets that show
@@ -54,19 +59,19 @@ public:
     void setViewMode(ViewMode mode);
     void showButtons(bool show);
 
-    void setCurrentResource(KoResource *resource);
-    KoResource* currentResource() const;
+    void setCurrentResource(KoResourceSP resource);
+    KoResourceSP currentResource() const;
     /// Sets the visibility of tagging klineEdits
     void showTaggingBar(bool show);
-    KoResourceItemChooser *itemChooser();
+    KisResourceItemChooser *itemChooser();
     void setPresetFilter(const QString& paintOpId);
 
     /// get the base size for the icons. Used by the slider in the view options
     int iconSize();
 
 Q_SIGNALS:
-    void resourceSelected(KoResource *resource);
-    void resourceClicked(KoResource *resource);
+    void resourceSelected(KoResourceSP resource);
+    void resourceClicked(KoResourceSP resource);
 
 public Q_SLOTS:
     void updateViewSettings();
@@ -81,15 +86,21 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void notifyConfigChanged();
+    void slotResourceWasSelected(KoResourceSP resource);
+    void slotCurrentPresetChanged();
 
 protected:
     void resizeEvent(QResizeEvent* event) override;
 
 private:
-    KoResourceItemChooser *m_chooser;
-    KisPresetDelegate* m_delegate;
+    KisResourceItemChooser *m_chooser {0};
+    KisPresetDelegate* m_delegate {0};
     ViewMode m_mode;
-    QSharedPointer<KoAbstractResourceServerAdapter> m_adapter;
+
+    class PaintOpFilterModel;
+    QPointer<PaintOpFilterModel> m_paintOpFilterModel;
+
+    KisSignalAutoConnectionsStore m_currentPresetConnections;
 };
 
 #endif // KIS_ITEM_CHOOSER_H_

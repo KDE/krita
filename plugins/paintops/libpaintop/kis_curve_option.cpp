@@ -20,6 +20,36 @@
 #include "kis_curve_option.h"
 
 #include <QDomNode>
+#include "kis_algebra_2d.h"
+
+qreal KisCurveOption::ValueComponents::rotationLikeValue(qreal normalizedBaseAngle, bool absoluteAxesFlipped, qreal scalingPartCoeff, bool disableScalingPart) const {
+    const qreal offset =
+            !hasAbsoluteOffset ? normalizedBaseAngle :
+                                 absoluteAxesFlipped ? 0.5 - absoluteOffset :
+                                                       absoluteOffset;
+
+    const qreal realScalingPart = hasScaling && !disableScalingPart ? KisDynamicSensor::scalingToAdditive(scaling) : 0.0;
+    const qreal realAdditivePart = hasAdditive ? additive : 0;
+
+    qreal value = KisAlgebra2D::wrapValue(2 * offset + constant * (scalingPartCoeff * realScalingPart + realAdditivePart), -1.0, 1.0);
+    if (qIsNaN(value)) {
+        qWarning() << "rotationLikeValue returns NaN!" << normalizedBaseAngle << absoluteAxesFlipped;
+        value = 0;
+    }
+    return value;
+}
+
+qreal KisCurveOption::ValueComponents::sizeLikeValue() const {
+    const qreal offset =
+            hasAbsoluteOffset ? absoluteOffset : 1.0;
+
+    const qreal realScalingPart = hasScaling ? scaling : 1.0;
+    const qreal realAdditivePart = hasAdditive ? KisDynamicSensor::additiveToScaling(additive) : 1.0;
+
+    return qBound(minSizeLikeValue,
+                  constant * offset * realScalingPart * realAdditivePart,
+                  maxSizeLikeValue);
+}
 
 KisCurveOption::KisCurveOption(const QString& name, KisPaintOpOption::PaintopCategory category,
                                bool checked, qreal value, qreal min, qreal max)
@@ -42,15 +72,8 @@ KisCurveOption::KisCurveOption(const QString& name, KisPaintOpOption::PaintopCat
     setValueRange(min, max);
     setValue(value);
 
-    QList<QPointF> points;
-    // needs to be set to something, weird curve is better for debugging
-    // it will be reset to the curve from the preset anyway though
-    points.push_back(QPointF(0,0));
-    points.push_back(QPointF(0.25,0.9));
-    points.push_back(QPointF(0.5,0));
-    points.push_back(QPointF(0.75,0.6));
-    points.push_back(QPointF(1,0));
-    m_commonCurve = KisCubicCurve(points);
+
+    m_commonCurve = defaultCurve();
 }
 
 KisCurveOption::~KisCurveOption()
@@ -117,7 +140,7 @@ void KisCurveOption::writeOptionSetting(KisPropertiesConfigurationSP setting) co
     setting->setProperty(m_name + "UseSameCurve", m_useSameCurve);
     setting->setProperty(m_name + "Value", m_value);
     setting->setProperty(m_name + "curveMode", m_curveMode);
-    setting->setProperty(m_name + "commonCurve", qVariantFromValue(m_commonCurve));
+    setting->setProperty(m_name + "commonCurve", QVariant::fromValue(m_commonCurve));
 
 }
 
@@ -212,6 +235,8 @@ void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisProp
                 s->setCurve(setting->getCubicCurve("Curve" + prefix));
                 commonCurve = s->curve();
             }
+        } else {
+            commonCurve = emptyCurve();
         }
     }
 
@@ -443,10 +468,31 @@ qreal KisCurveOption::computeSizeLikeValue(const KisPaintInformation& info) cons
     return components.sizeLikeValue();
 }
 
-qreal KisCurveOption::computeRotationLikeValue(const KisPaintInformation& info, qreal baseValue, bool absoluteAxesFlipped) const
+qreal KisCurveOption::computeRotationLikeValue(const KisPaintInformation& info, qreal baseValue, bool absoluteAxesFlipped, qreal scalingPartCoeff, bool disableScalingPart) const
 {
     const ValueComponents components = computeValueComponents(info);
-    return components.rotationLikeValue(baseValue, absoluteAxesFlipped);
+    return components.rotationLikeValue(baseValue, absoluteAxesFlipped, scalingPartCoeff, disableScalingPart);
+}
+
+KisCubicCurve KisCurveOption::defaultCurve()
+{
+    QList<QPointF> points;
+    // needs to be set to something, weird curve is better for debugging
+    // it will be reset to the curve from the preset anyway though
+    points.push_back(QPointF(0,0));
+    points.push_back(QPointF(0.25,0.9));
+    points.push_back(QPointF(0.5,0));
+    points.push_back(QPointF(0.75,0.6));
+    points.push_back(QPointF(1,0));
+    return KisCubicCurve(points);
+}
+
+KisCubicCurve KisCurveOption::emptyCurve()
+{
+    QList<QPointF> points;
+    points.push_back(QPointF(0,0));
+    points.push_back(QPointF(1,1));
+    return KisCubicCurve(points);
 }
 
 QList<KisDynamicSensorSP> KisCurveOption::sensors()

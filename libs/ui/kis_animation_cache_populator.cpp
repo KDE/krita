@@ -55,6 +55,7 @@ struct KisAnimationCachePopulator::Private
      * Counts up the number of subsequent times Krita has been detected idle.
      */
     int idleCounter;
+    QStack<QPair<KisImageSP, int>> priorityFrames;
     static const int IDLE_COUNT_THRESHOLD = 4;
     static const int IDLE_CHECK_INTERVAL = 500;
     static const int BETWEEN_FRAMES_INTERVAL = 10;
@@ -83,6 +84,7 @@ struct KisAnimationCachePopulator::Private
         : q(_q),
           part(_part),
           idleCounter(0),
+          priorityFrames(),
           requestedFrame(-1),
           state(WaitingForIdle)
     {
@@ -125,6 +127,18 @@ struct KisAnimationCachePopulator::Private
 
     bool tryRequestGeneration()
     {
+        if (!priorityFrames.isEmpty()) {
+            KisImageSP image = priorityFrames.top().first;
+            const int priorityFrame = priorityFrames.top().second;
+            priorityFrames.pop();
+
+            KisAnimationFrameCacheSP cache = KisAnimationFrameCache::cacheForImage(image);
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(cache, false);
+
+            bool requested = tryRequestGeneration(cache, KisTimeRange(), priorityFrame);
+            if (requested) return true;
+        }
+
         // Prioritize the active document
         KisAnimationFrameCacheSP activeDocumentCache = KisAnimationFrameCacheSP(0);
 
@@ -140,7 +154,7 @@ struct KisAnimationCachePopulator::Private
                 KisNodeSP activeNode = activeCanvas->viewManager()->nodeManager()->activeNode();
                 KisTimeRange skipRange;
                 if (activeNode) {
-                    int currentTime = activeCanvas->currentImage()->animationInterface()->currentUITime();
+                    const int currentTime = activeCanvas->currentImage()->animationInterface()->currentUITime();
 
                     if (!activeNode->keyframeChannels().isEmpty()) {
                         Q_FOREACH (const KisKeyframeChannel *channel, activeNode->keyframeChannels()) {
@@ -151,7 +165,7 @@ struct KisAnimationCachePopulator::Private
                     }
                 }
 
-                bool requested = tryRequestGeneration(activeDocumentCache, skipRange);
+                bool requested = tryRequestGeneration(activeDocumentCache, skipRange, -1);
                 if (requested) return true;
             }
         }
@@ -164,14 +178,14 @@ struct KisAnimationCachePopulator::Private
                 continue;
             }
 
-            bool requested = tryRequestGeneration(cache, KisTimeRange());
+            bool requested = tryRequestGeneration(cache, KisTimeRange(), -1);
             if (requested) return true;
         }
 
         return false;
     }
 
-    bool tryRequestGeneration(KisAnimationFrameCacheSP cache, KisTimeRange skipRange)
+    bool tryRequestGeneration(KisAnimationFrameCacheSP cache, KisTimeRange skipRange, int priorityFrame)
     {
         KisImageSP image = cache->image();
         if (!image) return false;
@@ -179,7 +193,7 @@ struct KisAnimationCachePopulator::Private
         KisImageAnimationInterface *animation = image->animationInterface();
         KisTimeRange currentRange = animation->fullClipRange();
 
-        const int frame = KisAsyncAnimationCacheRenderDialog::calcFirstDirtyFrame(cache, currentRange, skipRange);
+        const int frame = priorityFrame >= 0 ? priorityFrame : KisAsyncAnimationCacheRenderDialog::calcFirstDirtyFrame(cache, currentRange, skipRange);
 
         if (frame >= 0) {
             return regenerate(cache, frame);
@@ -283,6 +297,15 @@ KisAnimationCachePopulator::~KisAnimationCachePopulator()
 bool KisAnimationCachePopulator::regenerate(KisAnimationFrameCacheSP cache, int frame)
 {
     return m_d->regenerate(cache, frame);
+}
+
+void KisAnimationCachePopulator::requestRegenerationWithPriorityFrame(KisImageSP image, int frameIndex)
+{
+    m_d->priorityFrames.append(qMakePair(image, frameIndex));
+
+    if (m_d->state == Private::NotWaitingForAnything) {
+        m_d->generateIfIdle();
+    }
 }
 
 void KisAnimationCachePopulator::slotTimer()

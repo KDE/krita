@@ -28,10 +28,9 @@
 #include <QTextDocument>
 #include <QTextLayout>
 
-#include <KoResourceServer.h>
-#include <KoResourceServerProvider.h>
-#include <KoResourceItemChooser.h>
-#include <KoResourceServerAdapter.h>
+#include <KisResourceItemChooser.h>
+#include <KisResourceItemListView.h>
+#include <KisResourceModel.h>
 #include <kis_icon_utils.h>
 #include <kis_config.h>
 
@@ -67,14 +66,8 @@ void KisGamutMaskDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
     if (!index.isValid())
         return;
 
-    KoResource* resource = static_cast<KoResource*>(index.internalPointer());
-    KoGamutMask* mask = static_cast<KoGamutMask*>(resource);
-
-    if (!mask) {
-        return;
-    }
-
-    QImage preview = mask->image();
+    QImage preview = index.data(Qt::UserRole + KisResourceModel::Thumbnail).value<QImage>();
+    QString name = index.data(Qt::UserRole + KisResourceModel::Name).value<QString>();
 
     if(preview.isNull()) {
         return;
@@ -112,10 +105,11 @@ void KisGamutMaskDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
                        QPointF(paintRect.width() - rightMargin, paintRect.y() + descOffset + painter->fontMetrics().lineSpacing()));
         painter->drawText(titleRect, Qt::AlignLeft,
                           painter->fontMetrics().elidedText(
-                              mask->title(), Qt::ElideRight, titleRect.width()
+                              name, Qt::ElideRight, titleRect.width()
                               )
                           );
-
+/*
+ * We currently cannot actually get the mask description, so lets stop this for now.
         if (!mask->description().isEmpty() && !mask->description().isNull()) {
             font.setPointSize(font.pointSize()-1);
             font.setBold(false);
@@ -140,7 +134,7 @@ void KisGamutMaskDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
                 QString elidedText = painter->fontMetrics().elidedText(mask->description(), Qt::ElideRight, elideWidth);
                 painter->drawText(descRect, Qt::AlignLeft|Qt::TextWordWrap, elidedText);
             }
-        }
+        }*/
     }
 
     painter->restore();
@@ -151,13 +145,10 @@ KisGamutMaskChooser::KisGamutMaskChooser(QWidget *parent) : QWidget(parent)
 {
     m_delegate = new KisGamutMaskDelegate(this);
 
-    KoResourceServer<KoGamutMask>* rServer = KoResourceServerProvider::instance()->gamutMaskServer();
-    QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<KoGamutMask>(rServer));
-    m_itemChooser = new KoResourceItemChooser(adapter, this);
+    m_itemChooser = new KisResourceItemChooser(ResourceType::GamutMasks, false, this);
     m_itemChooser->setItemDelegate(m_delegate);
     m_itemChooser->showTaggingBar(true);
     m_itemChooser->showButtons(false);
-    m_itemChooser->setColumnCount(4);
     m_itemChooser->setSynced(true);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
@@ -194,7 +185,7 @@ KisGamutMaskChooser::KisGamutMaskChooser(QWidget *parent) : QWidget(parent)
     layout->addWidget(m_itemChooser);
     setLayout(layout);
 
-    connect(m_itemChooser, SIGNAL(resourceSelected(KoResource*)), this, SLOT(resourceSelected(KoResource*)));
+    connect(m_itemChooser, SIGNAL(resourceSelected(KoResourceSP )), this, SLOT(resourceSelected(KoResourceSP )));
 }
 
 KisGamutMaskChooser::~KisGamutMaskChooser()
@@ -202,7 +193,7 @@ KisGamutMaskChooser::~KisGamutMaskChooser()
 
 }
 
-void KisGamutMaskChooser::setCurrentResource(KoResource *resource)
+void KisGamutMaskChooser::setCurrentResource(KoResourceSP resource)
 {
     m_itemChooser->setCurrentResource(resource);
 }
@@ -229,16 +220,16 @@ void KisGamutMaskChooser::updateViewSettings()
         m_delegate->setViewMode(m_mode);
     } else if (m_mode == KisGamutMaskChooser::DETAIL) {
         m_itemChooser->setSynced(false);
-        m_itemChooser->setColumnCount(1);
+        m_itemChooser->itemView()->setViewMode(QListView::ListMode);
         m_itemChooser->setRowHeight(this->fontMetrics().lineSpacing()*4);
         m_itemChooser->setColumnWidth(m_itemChooser->width());
         m_delegate->setViewMode(m_mode);
     }
 }
 
-void KisGamutMaskChooser::resourceSelected(KoResource* resource)
+void KisGamutMaskChooser::resourceSelected(KoResourceSP resource)
 {
-    emit sigGamutMaskSelected(static_cast<KoGamutMask*>(resource));
+    emit sigGamutMaskSelected(resource.staticCast<KoGamutMask>());
 }
 
 void KisGamutMaskChooser::slotSetModeThumbnail()

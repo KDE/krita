@@ -67,9 +67,7 @@ public:
     QRectF outlineRect() const override;
     QPainterPath outline() const override;
 
-    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext) override;
-    void saveOdf(KoShapeSavingContext &Context) const override;
-    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &Context) override;
+    void paintComponent(QPainter &painter, KoShapePaintingContext &paintContext) const override;
 
     bool saveHtml(HtmlSavingContext &context);
     /**
@@ -142,7 +140,7 @@ public:
      * A special interface for KoSvgTextShape's layout code. Don't use it
      * unless you are KoSvgTextShape.
      */
-    KoSvgTextChunkShapeLayoutInterface* layoutInterface();
+    KoSvgTextChunkShapeLayoutInterface* layoutInterface() const;
 
     /**
      * WARNING: this propperty is available only if isRootTextNode() is true
@@ -175,7 +173,10 @@ private:
 
 private:
     class Private;
-    QSharedDataPointer<Private> d;
+    QScopedPointer<Private> d;
+
+    class SharedData;
+    QSharedDataPointer<SharedData> s;
 };
 
 #endif // KOSVGTEXTCHUNKSHAPE_H

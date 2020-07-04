@@ -22,7 +22,7 @@
 #include <QMetaType>
 
 #include "KoColorSpace.h"
-#include <resources/KoResource.h>
+#include <KoResource.h>
 #include <kritapigment_export.h>
 
 class KoAbstractGradient;
@@ -38,24 +38,6 @@ class KRITAPIGMENT_EXPORT KoAbstractGradient : public KoResource
 public:
     explicit KoAbstractGradient(const QString &filename);
     ~KoAbstractGradient() override;
-
-    virtual KoAbstractGradient* clone() const = 0;
-
-    bool load() override {
-        return false;
-    }
-
-    bool loadFromDevice(QIODevice *) override {
-        return false;
-    }
-
-    bool save() override {
-        return false;
-    }
-
-    bool saveToDevice(QIODevice*) const override {
-        return false;
-    }
 
     /**
     * Creates a QGradient from the gradient.
@@ -77,6 +59,16 @@ public:
     void setType(QGradient::Type repeatType);
     QGradient::Type type() const;
 
+    ///tell whether there are any foreground or background color stops
+    virtual bool hasVariableColors() const {
+        return false;
+    }
+    ///Set the colors for stops that use the foreground or background color.
+    virtual void setVariableColors(const KoColor& foreground, const KoColor& background) {
+        //Do nothing... Override if gradient type supports variable colors.
+        Q_UNUSED(foreground); Q_UNUSED(background);
+    }
+
     void updatePreview();
 
     QImage generatePreview(int width, int height) const;
@@ -89,5 +81,7 @@ private:
 };
 
 Q_DECLARE_METATYPE(KoAbstractGradient*)
+Q_DECLARE_METATYPE(QSharedPointer<KoAbstractGradient>)
+
 
 #endif // KOABSTRACTGRADIENT_H

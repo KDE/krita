@@ -20,6 +20,10 @@
 #define _KIS_AUTOBRUSH_RESOURCE_H_
 
 #include "kritabrush_export.h"
+
+#include <KoResource.h>
+#include <KoEphemeralResource.h>
+
 #include "kis_brush.h"
 
 #include <QScopedPointer>
@@ -29,14 +33,15 @@ class KisMaskGenerator;
 /**
  * XXX: docs!
  */
-class BRUSH_EXPORT KisAutoBrush : public KisBrush
+class BRUSH_EXPORT KisAutoBrush : public KoEphemeralResource<KisBrush>
 {
 
 public:
 
-    KisAutoBrush(KisMaskGenerator* as, qreal angle, qreal randomness, qreal density = 1.0);
-    KisAutoBrush(const KisAutoBrush& rhs);
-    KisBrush* clone() const override;
+    KisAutoBrush(KisMaskGenerator *as, qreal angle, qreal randomness, qreal density = 1.0);
+    KisAutoBrush(const KisAutoBrush &rhs);
+    KisAutoBrush &operator=(const KisAutoBrush &rhs) = delete;
+    KoResourceSP clone() const override;
 
     ~KisAutoBrush() override;
 
@@ -59,31 +64,16 @@ public:
     }
 
     void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
-            KisBrush::ColoringInformation* src,
-            KisDabShape const&,
-            const KisPaintInformation& info,
-            double subPixelX = 0, double subPixelY = 0,
-            qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const override;
+        KisBrush::ColoringInformation* src,
+        KisDabShape const&,
+        const KisPaintInformation& info,
+        double subPixelX = 0, double subPixelY = 0,
+        qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR,
+        qreal lightnessStrength = DEFAULT_LIGHTNESS_STRENGTH) const override;
 
     QPainterPath outline() const override;
 
 public:
-
-    bool load() override {
-        return false;
-    }
-
-    bool loadFromDevice(QIODevice *) override {
-        return false;
-    }
-
-    bool save() override {
-        return false;
-    }
-
-    bool saveToDevice(QIODevice*) const override {
-        return false;
-    }
 
     void toXML(QDomDocument& , QDomElement&) const override;
     const KisMaskGenerator* maskGenerator() const;

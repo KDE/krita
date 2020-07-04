@@ -315,6 +315,10 @@ void KisPaintLayer::setOnionSkinEnabled(bool state)
     setNodeProperty("onionskin", state);
 }
 
+void KisPaintLayer::flushOnionSkinCache() {
+    m_d->onionSkinCache.reset();
+}
+
 void KisPaintLayer::slotExternalUpdateOnionSkins()
 {
     if (!onionSkinEnabled()) return;

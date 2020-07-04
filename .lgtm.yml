@@ -43,7 +43,6 @@ extraction:
                 - shared-mime-info
                 - libopenimageio-dev
                 - extra-cmake-modules
-                - libkf5archive-dev
                 - libkf5coreaddons-dev
                 - libkf5guiaddons-dev
                 - libkf5itemmodels-dev

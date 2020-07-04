@@ -22,7 +22,7 @@
 
 #include <QImage>
 
-#include <resources/KoResource.h>
+#include <KoResource.h>
 
 #include <kis_types.h>
 #include <kis_shared.h>
@@ -49,9 +49,10 @@ enum enumBrushType {
 };
 
 static const qreal DEFAULT_SOFTNESS_FACTOR = 1.0;
+static const qreal DEFAULT_LIGHTNESS_STRENGTH = 1.0;
 
 class KisBrush;
-typedef KisSharedPtr<KisBrush> KisBrushSP;
+typedef QSharedPointer<KisBrush> KisBrushSP;
 
 /**
  * KisBrush is the base class for brush resources. A brush resource
@@ -68,10 +69,8 @@ typedef KisSharedPtr<KisBrush> KisBrushSP;
  * XXX: This api is still a big mess -- it needs a good refactoring.
  * And the whole KoResource architecture is way over-designed.
  */
-class BRUSH_EXPORT KisBrush : public KoResource, public KisShared
+class BRUSH_EXPORT KisBrush : public KoResource
 {
-
-
 public:
     class ColoringInformation
     {
@@ -117,27 +116,16 @@ public:
 
     KisBrush();
     KisBrush(const QString& filename);
-
     ~KisBrush() override;
+
+    KisBrush(const KisBrush &rhs);
+    KisBrush &operator=(const KisBrush &rhs) = delete;
 
     virtual qreal userEffectiveSize() const = 0;
     virtual void setUserEffectiveSize(qreal value) = 0;
 
-    bool load() override {
-        return false;
-    }
-
-    bool loadFromDevice(QIODevice *) override {
-        return false;
-    }
-
-
-    bool save() override {
-        return false;
-    }
-
-    bool saveToDevice(QIODevice* ) const override {
-        return false;
+    QPair<QString, QString> resourceType() const override {
+        return QPair<QString, QString>(ResourceType::Brushes, "");
     }
 
     /**
@@ -279,7 +267,8 @@ public:
               const KoColor& color,
               KisDabShape const& shape,
               const KisPaintInformation& info,
-              double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
+              double subPixelX = 0, double subPixelY = 0, 
+              qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR, qreal lightnessStrength = DEFAULT_LIGHTNESS_STRENGTH) const;
 
     /**
      * clear dst and fill it with a mask colored with the corresponding colors of src
@@ -288,10 +277,20 @@ public:
               const KisPaintDeviceSP src,
               KisDabShape const& shape,
               const KisPaintInformation& info,
-              double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
+              double subPixelX = 0, double subPixelY = 0, 
+              qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR, qreal lightnessStrength = DEFAULT_LIGHTNESS_STRENGTH) const;
 
 
     virtual bool hasColor() const;
+
+    virtual bool preserveLightness() const;
+
+    /**
+    * If the brush image data are colorful (e.g. you created the brush from the canvas with custom brush)
+    * and you want to paint with it as with masks, but preserve Lightness (Value), set to true.
+    */
+    virtual void setPreserveLightness(bool preserveLightness);
+
 
     /**
      * Create a mask and either mask dst (that is, change all alpha values of the
@@ -317,7 +316,15 @@ public:
             ColoringInformation* coloringInfo,
             KisDabShape const&,
             const KisPaintInformation& info,
-            double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
+            double subPixelX, double subPixelY,
+            qreal softnessFactor, qreal lightnessStrength) const;
+
+    virtual void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
+        ColoringInformation* coloringInfo,
+        KisDabShape const&,
+        const KisPaintInformation& info,
+        double subPixelX = 0, double subPixelY = 0,
+        qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
 
     /**
@@ -325,7 +332,7 @@ public:
      */
     virtual void toXML(QDomDocument& , QDomElement&) const;
 
-    static KisBrushSP fromXML(const QDomElement& element);
+    static KisBrushSP fromXML(const QDomElement& element, KisResourcesInterfaceSP resourcesInterface);
 
     virtual const KisBoundary* boundary() const;
     virtual QPainterPath outline() const;
@@ -339,11 +346,7 @@ public:
 
     virtual void lodLimitations(KisPaintopLodLimitations *l) const;
 
-    virtual KisBrush* clone() const = 0;
-
 protected:
-
-    KisBrush(const KisBrush& rhs);
 
     void setWidth(qint32 width);
 

@@ -27,6 +27,7 @@
 class QPointF;
 class QRectF;
 class QSizeF;
+class QTransform;
 
 /**
  * The interface for view conversions.
@@ -127,6 +128,12 @@ public:
      * Return the current zoom level. 1.0 is 100%.
      */
     qreal zoom() const;
+
+    QTransform documentToView() const;
+    QTransform viewToDocument() const;
+
+    virtual QTransform viewToWidget() const;
+    virtual QTransform widgetToView() const;
 
 private:
     qreal m_zoomLevel; // 1.0 is 100%

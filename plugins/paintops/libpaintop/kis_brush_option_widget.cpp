@@ -23,7 +23,7 @@
 
 #include "kis_brush_selection_widget.h"
 #include "kis_brush.h"
-
+#include <KisGlobalResourcesInterface.h>
 
 KisBrushOptionWidget::KisBrushOptionWidget()
     : KisPaintOpOption(KisPaintOpOption::GENERAL, true)
@@ -74,6 +74,11 @@ void KisBrushOptionWidget::setPrecisionEnabled(bool value)
     m_brushSelectionWidget->setPrecisionEnabled(value);
 }
 
+void KisBrushOptionWidget::setHSLBrushTipEnabled(bool value)
+{
+    m_brushSelectionWidget->setHSLBrushTipEnabled(value);
+}
+
 void KisBrushOptionWidget::writeOptionSetting(KisPropertiesConfigurationSP settings) const
 {
     m_brushSelectionWidget->writeOptionSetting(settings);
@@ -83,7 +88,7 @@ void KisBrushOptionWidget::writeOptionSetting(KisPropertiesConfigurationSP setti
 void KisBrushOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     m_brushSelectionWidget->readOptionSetting(setting);
-    m_brushOption.readOptionSetting(setting);
+    m_brushOption.readOptionSetting(setting, KisGlobalResourcesInterface::instance());
     m_brushSelectionWidget->setCurrentBrush(m_brushOption.brush());
 }
 

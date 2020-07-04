@@ -35,6 +35,7 @@
 #include <KisViewManager.h>
 
 #include "testutil.h"
+#include <KisGlobalResourcesInterface.h>
 
 
 KisImageSP utils::createImage(KisUndoStore *undoStore, const QSize &imageSize) {
@@ -49,7 +50,7 @@ KisImageSP utils::createImage(KisUndoStore *undoStore, const QSize &imageSize) {
     KisPaintLayerSP paintLayer4 = new KisPaintLayer(image, "paint4", OPACITY_OPAQUE_U8);
     KisPaintLayerSP paintLayer5 = new KisPaintLayer(image, "paint5", OPACITY_OPAQUE_U8);
 
-    image->lock();
+    image->barrierLock();
     image->addNode(paintLayer1);
     image->addNode(paintLayer2);
     image->addNode(paintLayer3);
@@ -96,8 +97,8 @@ KoCanvasResourceProvider* utils::createResourceManager(KisImageWSP image,
 
     if (!presetFileName.isEmpty()) {
         QString fullFileName = TestUtil::fetchDataFileLazy(presetFileName);
-        preset = new KisPaintOpPreset(fullFileName);
-        bool presetValid = preset->load();
+        preset = KisPaintOpPresetSP(new KisPaintOpPreset(fullFileName));
+        bool presetValid = preset->load(KisGlobalResourcesInterface::instance());
         Q_ASSERT(presetValid); Q_UNUSED(presetValid);
 
         i.setValue(preset);
@@ -235,8 +236,8 @@ QString utils::StrokeTester::formatTestName(const QString &baseName,
 QString utils::StrokeTester::referenceFile(const QString &testName)
 {
     QString path =
-        QString(FILES_DATA_DIR) + QDir::separator() +
-        m_name + QDir::separator();
+        QString(FILES_DATA_DIR) + '/' +
+        m_name + '/';
 
     path += testName;
     path += ".png";
@@ -245,7 +246,7 @@ QString utils::StrokeTester::referenceFile(const QString &testName)
 
 QString utils::StrokeTester::dumpReferenceFile(const QString &testName)
 {
-    QString path = QString(FILES_OUTPUT_DIR) + QDir::separator();
+    QString path = QString(FILES_OUTPUT_DIR) + '/';
     path += testName;
     path += "_expected";
     path += ".png";
@@ -254,7 +255,7 @@ QString utils::StrokeTester::dumpReferenceFile(const QString &testName)
 
 QString utils::StrokeTester::resultFile(const QString &testName)
 {
-    QString path = QString(FILES_OUTPUT_DIR) + QDir::separator();
+    QString path = QString(FILES_OUTPUT_DIR) + '/';
     path += testName;
     path += ".png";
     return path;

@@ -35,6 +35,12 @@
 class KoShape;
 class QVariant;
 
+/**
+ * @brief The KoResourceManager class provides access to the currently
+ * active resources for a given canvas. It has nearly zilch to do with
+ * the system that provides resources like brushes or palettes to the
+ * application.
+ */
 class KRITAFLAKE_EXPORT KoResourceManager : public QObject
 {
     Q_OBJECT
@@ -196,10 +202,14 @@ public:
 
 Q_SIGNALS:
     void resourceChanged(int key, const QVariant &value);
+    void resourceChangeAttempted(int key, const QVariant &value);
 
 private:
     void notifyResourceChanged(int key, const QVariant &value);
     void notifyDerivedResourcesChanged(int key, const QVariant &value);
+
+    void notifyResourceChangeAttempted(int key, const QVariant &value);
+    void notifyDerivedResourcesChangeAttempted(int key, const QVariant &value);
 
 private Q_SLOTS:
     void slotResourceInternalsChanged(int key);

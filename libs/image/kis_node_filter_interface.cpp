@@ -52,22 +52,17 @@
 
 #endif /* SANITY_CHECK_FILTER_CONFIGURATION_OWNER*/
 
-KisNodeFilterInterface::KisNodeFilterInterface(KisFilterConfigurationSP filterConfig, bool useGeneratorRegistry)
-    : m_filter(filterConfig),
-      m_useGeneratorRegistry(useGeneratorRegistry)
+KisNodeFilterInterface::KisNodeFilterInterface(KisFilterConfigurationSP filterConfig)
+    : m_filter(filterConfig)
 {
     SANITY_ACQUIRE_FILTER(m_filter);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!filterConfig || filterConfig->hasLocalResourcesSnapshot());
 }
 
 KisNodeFilterInterface::KisNodeFilterInterface(const KisNodeFilterInterface &rhs)
-    : m_useGeneratorRegistry(rhs.m_useGeneratorRegistry)
-{
-    if (m_useGeneratorRegistry) {
-        m_filter = KisGeneratorRegistry::instance()->cloneConfiguration(const_cast<KisFilterConfiguration*>(rhs.m_filter.data()));
-    } else {
-        m_filter = KisFilterRegistry::instance()->cloneConfiguration(const_cast<KisFilterConfiguration*>(rhs.m_filter.data()));
-    }
+    : m_filter(rhs.m_filter->clone())
 
+{
     SANITY_ACQUIRE_FILTER(m_filter);
 }
 
@@ -86,6 +81,7 @@ void KisNodeFilterInterface::setFilter(KisFilterConfigurationSP filterConfig)
     SANITY_RELEASE_FILTER(m_filter);
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(filterConfig);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(filterConfig->hasLocalResourcesSnapshot());
     m_filter = filterConfig;
 
     SANITY_ACQUIRE_FILTER(m_filter);

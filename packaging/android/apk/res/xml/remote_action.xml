@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<remote-actions version="1.2">
+	<action
+		id="remote_action_click"
+		label="@string/remote_action_click"
+		priority="1"
+		repeatable="true"
+		repeatable_interval="short"
+		trigger_key="AT">
+		<preference name="gesture" value="click"/>
+	</action>
+
+	<action
+		id="remote_action_doubleclick"
+		label="@string/remote_action_doubleclick"
+		priority="2"
+		repeatable="true"
+		repeatable_interval="short"
+		trigger_key="POUND">
+		<preference name="gesture" value="double_click"/>
+	</action>
+
+	<action
+		id="remote_action_swipeup"
+		label="@string/remote_action_swipeup"
+		priority="5"
+		repeatable="true"
+		repeatable_interval="short"
+		trigger_key="F7">
+		<preference name="gesture" value="swipe_up"/>
+	</action>
+
+	<action
+		id="remote_action_swipedown"
+		label="@string/remote_action_swipedown"
+		priority="6"
+		repeatable="true"
+		repeatable_interval="short"
+		trigger_key="F8">
+		<preference name="gesture" value="swipe_down"/>
+	</action>
+
+
+	<action
+		id="remote_action_swipeleft"
+		label="@string/remote_action_swipeleft"
+		priority="4"
+		repeatable="true"
+		repeatable_interval="short"
+		trigger_key="F9">
+		<preference name="gesture" value="swipe_left"/>
+	</action>
+
+	<action
+		id="remote_action_swiperight"
+		label="@string/remote_action_swiperight"
+		priority="3"
+		repeatable="true"
+		repeatable_interval="short"
+		trigger_key="F10">
+		<preference name="gesture" value="swipe_right"/>
+	</action>
+
+
+	<action
+		id="remote_action_circlecw"
+		label="@string/remote_action_circlecw"
+		priority="7"
+		repeatable="true"
+		repeatable_interval="short"
+		trigger_key="F11">
+		<preference name="gesture" value="circle_cw"/>
+	</action>
+
+	<action
+		id="remote_action_circleccw"
+		label="@string/remote_action_circleccw"
+		priority="8"
+		repeatable="true"
+		repeatable_interval="short"
+		trigger_key="F12">
+		<preference name="gesture" value="circle_ccw"/>
+	</action>
+
+</remote-actions>

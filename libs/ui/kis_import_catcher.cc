@@ -111,11 +111,11 @@ void KisImportCatcher::slotLoadingFinished()
             KisShapeLayerSP shapeLayer = dynamic_cast<KisShapeLayer*>(m_d->view->nodeManager()->createNode(m_d->layerType, false, importedImage->projection()).data());
             KisShapeLayerSP imported = dynamic_cast<KisShapeLayer*>(importedImage->rootLayer()->firstChild().data());
 
-            const QTransform thisInvertedTransform = shapeLayer->absoluteTransformation(0).inverted();
+            const QTransform thisInvertedTransform = shapeLayer->absoluteTransformation().inverted();
 
             Q_FOREACH (KoShape *shape, imported->shapes()) {
                 KoShape *clonedShape = shape->cloneShape();
-                clonedShape->setTransformation(shape->absoluteTransformation(0) * thisInvertedTransform);
+                clonedShape->setTransformation(shape->absoluteTransformation() * thisInvertedTransform);
                 shapeLayer->addShape(clonedShape);
             }
         }

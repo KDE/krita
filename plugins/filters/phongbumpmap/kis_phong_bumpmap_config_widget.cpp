@@ -22,6 +22,7 @@
 #include "phong_bumpmap_constants.h"
 #include "KoChannelInfo.h"
 #include "KoColorSpace.h"
+#include <KisGlobalResourcesInterface.h>
 
 KisPhongBumpmapConfigWidget::KisPhongBumpmapConfigWidget(const KisPaintDeviceSP dev, QWidget *parent, Qt::WindowFlags f)
                             : KisConfigWidget(parent, f)
@@ -136,7 +137,7 @@ void KisPhongBumpmapConfigWidget::setConfiguration(const KisPropertiesConfigurat
 
 KisPropertiesConfigurationSP KisPhongBumpmapConfigWidget::configuration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("phongbumpmap", 2);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("phongbumpmap", 2, KisGlobalResourcesInterface::instance());
     config->setProperty(PHONG_HEIGHT_CHANNEL, m_page->heightChannelComboBox->currentText());
     config->setProperty(USE_NORMALMAP_IS_ENABLED, m_page->useNormalMap->isChecked());
     

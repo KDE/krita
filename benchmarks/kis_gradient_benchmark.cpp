@@ -59,7 +59,7 @@ void KisGradientBenchmark::benchmarkGradient()
         QLinearGradient grad;
         grad.setColorAt(0, Qt::white);
         grad.setColorAt(1.0, Qt::red);
-        KoAbstractGradient* kograd = KoStopGradient::fromQGradient(&grad);
+        KoAbstractGradientSP kograd(KoStopGradient::fromQGradient(&grad));
         Q_ASSERT(kograd);
         KisGradientPainter fillPainter(m_device);
         //setupPainter(&fillPainter);

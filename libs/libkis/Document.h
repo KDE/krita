@@ -45,7 +45,7 @@ class KRITALIBKIS_EXPORT Document : public QObject
     Q_DISABLE_COPY(Document)
 
 public:
-    explicit Document(KisDocument *document, QObject *parent = 0);
+    explicit Document(KisDocument *document, bool ownsDocument, QObject *parent = 0);
     ~Document() override;
 
     bool operator==(const Document &other) const;
@@ -693,40 +693,55 @@ print(root.childNodes())
 
 
     /**
-     * Why this should be used, When it should be used, How it should be used,
-     * and warnings about when not.
+     * [low-level] Lock the image without waiting for all the internal job queues are processed
+     *
+     * WARNING: Don't use it unless you really know what you are doing! Use barrierLock() instead!
+     *
+     * Waits for all the **currently running** internal jobs to complete and locks the image
+     * for writing. Please note that this function does **not** wait for all the internal
+     * queues to process, so there might be some non-finished actions pending. It means that
+     * you just postpone these actions until you unlock() the image back. Until then, then image
+     * might easily be frozen in some inconsistent state.
+     *
+     * The only sane usage for this function is to lock the image for **emergency**
+     * processing, when some internal action or scheduler got hung up, and you just want
+     * to fetch some data from the image without races.
+     *
+     * In all other cases, please use barrierLock() instead!
      */
     void lock();
 
     /**
-     * Why this should be used, When it should be used, How it should be used,
-     * and warnings about when not.
+     * Unlocks the image and starts/resumes all the pending internal jobs. If the image
+     * has been locked for a non-readOnly access, then all the internal caches of the image
+     * (e.g. lod-planes) are reset and regeneration jobs are scheduled.
      */
     void unlock();
 
     /**
-     * Why this should be used, When it should be used, How it should be used,
-     * and warnings about when not.
+     * Wait for all the internal image jobs to complete and return without locking
+     * the image. This function is handly for tests or other synchronous actions,
+     * when one needs to wait for the result of his actions.
      */
     void waitForDone();
 
     /**
-     * Why this should be used, When it should be used, How it should be used,
-     * and warnings about when not.
+     * @brief Tries to lock the image without waiting for the jobs to finish
+     *
+     * Same as barrierLock(), but doesn't block execution of the calling thread
+     * until all the background jobs are finished. Instead, in case of presence of
+     * unfinished jobs in the queue, it just returns false
+     *
+     * @return whether the lock has been acquired
      */
     bool tryBarrierLock();
-
-    /**
-     * Why this should be used, When it should be used, How it should be used,
-     * and warnings about when not.
-     */
-    bool isIdle();
 
     /**
      * Starts a synchronous recomposition of the projection: everything will
      * wait until the image is fully recomputed.
      */
     void refreshProjection();
+
     /**
      * @brief setHorizontalGuides
      * replace all existing horizontal guides with the entries in the list.
@@ -765,15 +780,9 @@ print(root.childNodes())
      */
     QRect bounds() const;
 
-
-
-
-
-
-
     /****
      * Animation Related API
-    *****/
+     *****/
 
 
     /**
@@ -860,7 +869,7 @@ private:
     friend class Filter;
     friend class View;
     QPointer<KisDocument> document() const;
-
+    void setOwnsDocument(bool ownsDocument);
 
 private:
     struct Private;

@@ -50,8 +50,9 @@ KisConvertHeightToNormalMapFilter::KisConvertHeightToNormalMapFilter(): KisFilte
 void KisConvertHeightToNormalMapFilter::processImpl(KisPaintDeviceSP device, const QRect &rect, const KisFilterConfigurationSP config, KoUpdater *progressUpdater) const
 {
     Q_ASSERT(device);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(config);
 
-    KisFilterConfigurationSP configuration = config ? config : new KisFilterConfiguration(id().id(), 1);
+    KisFilterConfigurationSP configuration = config;
 
     KisLodTransformScalar t(device);
 
@@ -121,9 +122,9 @@ void KisConvertHeightToNormalMapFilter::processImpl(KisPaintDeviceSP device, con
                                               progressUpdater);
 }
 
-KisFilterConfigurationSP KisConvertHeightToNormalMapFilter::defaultConfiguration() const
+KisFilterConfigurationSP KisConvertHeightToNormalMapFilter::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration();
+    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
     config->setProperty("horizRadius", 1);
     config->setProperty("vertRadius", 1);
     config->setProperty("type", "sobol");

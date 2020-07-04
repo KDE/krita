@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ActionCollection version="2" name="Tools">
-  <Actions category="Contiguous Selection Tool">
-    <text>Contiguous Selection Tool</text>
+  <Actions category="tool-shortcuts">
+      <text>Tool Shortcuts</text>
+        <Action name="KisToolSelectContiguous">
+      <icon></icon>
+      <text>Contiguous Selection Tool</text>
+      <whatsThis></whatsThis>
+      <toolTip>Contiguous Selection Tool</toolTip>
+      <iconText>Contiguous Selection Tool</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
   </Actions>
 </ActionCollection>

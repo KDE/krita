@@ -122,7 +122,7 @@ QDomElement KisSaveXmlVisitor::savePaintLayerAttributes(KisPaintLayer *layer, QD
     element.setAttribute(COLORSPACE_NAME, layer->paintDevice()->colorSpace()->id());
 
     element.setAttribute(ONION_SKIN_ENABLED, layer->onionSkinEnabled());
-    element.setAttribute(VISIBLE_IN_TIMELINE, layer->useInTimeline());
+    element.setAttribute(VISIBLE_IN_TIMELINE, layer->isPinnedToTimeline());
 
     return element;
 }
@@ -337,7 +337,7 @@ void KisSaveXmlVisitor::loadLayerAttributes(const QDomElement &el, KisLayer *lay
     }
 
     if (el.hasAttribute(VISIBLE_IN_TIMELINE)) {
-        layer->setUseInTimeline(el.attribute(VISIBLE_IN_TIMELINE).toInt());
+        layer->setPinnedToTimeline(el.attribute(VISIBLE_IN_TIMELINE).toInt());
     }
 
     if (el.hasAttribute(LAYER_STYLE_UUID)) {
@@ -379,7 +379,7 @@ void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, c
     el.setAttribute(UUID, layer->uuid().toString());
     el.setAttribute(COLLAPSED, layer->collapsed());
     el.setAttribute(COLOR_LABEL, layer->colorLabelIndex());
-    el.setAttribute(VISIBLE_IN_TIMELINE, layer->useInTimeline());
+    el.setAttribute(VISIBLE_IN_TIMELINE, layer->isPinnedToTimeline());
 
     if (layer->layerStyle()) {
         el.setAttribute(LAYER_STYLE_UUID, layer->layerStyle()->uuid().toString());

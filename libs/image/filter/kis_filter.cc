@@ -57,6 +57,8 @@ void KisFilter::process(const KisPaintDeviceSP src,
                         const KisFilterConfigurationSP config,
                         KoUpdater* progressUpdater ) const
 {
+    KIS_SAFE_ASSERT_RECOVER_NOOP(config->hasLocalResourcesSnapshot());
+
     if (applyRect.isEmpty()) return;
     QRect needRect = neededRect(applyRect, config, src->defaultBounds()->currentLevelOfDetail());
 

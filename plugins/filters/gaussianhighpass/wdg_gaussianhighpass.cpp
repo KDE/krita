@@ -25,6 +25,7 @@
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
+#include <KisGlobalResourcesInterface.h>
 
 #include "ui_wdggaussianhighpass.h"
 
@@ -49,7 +50,7 @@ void KisWdgGaussianHighPass::setConfiguration(const KisPropertiesConfigurationSP
 
 KisPropertiesConfigurationSP KisWdgGaussianHighPass::configuration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("gaussianhighpass", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("gaussianhighpass", 1, KisGlobalResourcesInterface::instance());
     config->setProperty("blurAmount", widget()->doubleblurAmount->value());
     return config;
 }

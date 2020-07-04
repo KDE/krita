@@ -25,7 +25,7 @@
 #include "kis_transaction.h"
 #include <KoCompositeOpRegistry.h>
 #include "kis_datamanager.h"
-
+#include <KisGlobalResourcesInterface.h>
 
 #define NUM_CYCLES 50
 #define WARMUP_CYCLES 2
@@ -69,7 +69,7 @@ private:
     double m_factor;
 };
 #else /* if(USE_UTIME==0) */
-typedef QTime KisTimeCounter;
+typedef QElapsedTimer KisTimeCounter;
 #endif
 
 void KisFilterSelectionsBenchmark::initSelection()
@@ -106,7 +106,7 @@ void KisFilterSelectionsBenchmark::initFilter(const QString &name)
 {
     m_filter = KisFilterRegistry::instance()->value(name);
     Q_ASSERT(m_filter);
-    m_configuration = m_filter->defaultConfiguration();
+    m_configuration = m_filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
 
     dbgKrita << "Filter initialized:" << name;
 }
@@ -141,7 +141,7 @@ void KisFilterSelectionsBenchmark::testAll()
     initSelection();
 
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    QImage image(QString(FILES_DATA_DIR) + '/' + "hakonepa.png");
     m_device = new KisPaintDevice(cs);
     m_device->convertFromQImage(image, 0, 0, 0);
 

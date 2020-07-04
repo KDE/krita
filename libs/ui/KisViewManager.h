@@ -230,7 +230,6 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
-    void slotBlacklistCleanup();
     void slotCreateTemplate();
     void slotCreateCopy();
     void slotDocumentSaved();
@@ -247,6 +246,7 @@ private Q_SLOTS:
     void slotToggleFgBg();
     void slotResetFgBg();
     void slotResetRotation();
+    void slotToggleFullscreen();
 private:
     void createActions();
     void setupManagers();

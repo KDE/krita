@@ -91,10 +91,10 @@ Q_SIGNALS:
     void viewClosed(View *view);
 
     /**
-     * @brief windowCreated is emitted whenever a window is created
-     * @param window the window
+     * @brief windowCreated is emitted whenever a window is being created
+     * @param window the window; this is called from the constructor of the window, before the xmlgui file is loaded
      */
-    void windowCreated(Window *window);
+    void windowIsBeingCreated(Window *window);
 
     /**
      * @brief configurationChanged is emitted every time Krita's configuration
@@ -109,7 +109,7 @@ private Q_SLOTS:
     void viewCreated(KisView *view);
     void viewClosed(KisView *view);
 
-    void windowCreated(KisMainWindow *window);
+    void windowIsBeingCreated(KisMainWindow *window);
 
 
 private:

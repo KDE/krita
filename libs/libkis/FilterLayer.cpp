@@ -24,7 +24,7 @@
 #include <kis_selection.h>
 
 FilterLayer::FilterLayer(KisImageSP image, QString name, Filter &filter, Selection &selection, QObject *parent) :
-    Node(image, new KisAdjustmentLayer(image, name, filter.filterConfig(), selection.selection()), parent)
+    Node(image, new KisAdjustmentLayer(image, name, filter.filterConfig()->cloneWithResourcesSnapshot(), selection.selection()), parent)
 {
 
 }
@@ -51,7 +51,7 @@ void FilterLayer::setFilter(Filter &filter)
     KisAdjustmentLayer *layer = dynamic_cast<KisAdjustmentLayer*>(this->node().data());
     //getting the default configuration here avoids trouble with versioning.
     if (layer) {
-        layer->setFilter(filter.filterConfig());
+        layer->setFilter(filter.filterConfig()->cloneWithResourcesSnapshot());
     }
 }
 

@@ -34,14 +34,17 @@ public:
 
     void setFramePerSecond(int fps);
     bool setZoom(qreal zoomLevel);
+    qreal zoom();
 
     void setModel(QAbstractItemModel *model) override;
 
     void setActionManager(KisActionManager *actionManager);
 
+     void mouseMoveEvent(QMouseEvent *e) override;
+
 protected:
     void mousePressEvent(QMouseEvent *e) override;
-    void mouseMoveEvent(QMouseEvent *e) override;
+
     void mouseReleaseEvent(QMouseEvent *e) override;
 
     void paintEvent(QPaintEvent *e) override;
@@ -78,6 +81,7 @@ Q_SIGNALS:
     void sigCutColumns();
     void sigCopyColumns();
     void sigPasteColumns();
+
 
 private:
     struct Private;

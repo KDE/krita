@@ -87,13 +87,13 @@ class comic_export_resize_widget(QGroupBox):
         self.spn_width.setEnabled(False)
         self.spn_height.setEnabled(False)
 
-        if method is 0:
+        if method == 0:
             self.spn_PER.setEnabled(True)
-        if method is 1:
+        if method == 1:
             self.spn_DPI.setEnabled(True)
-        if method is 2:
+        if method == 2:
             self.spn_width.setEnabled(True)
-        if method is 3:
+        if method == 3:
             self.spn_height.setEnabled(True)
 
     def set_config(self, config):

@@ -1,4 +1,0 @@
-This directory stores additional productsets.
-
-Please read the explanation in the toplevel file "KritaProducts.cmake",
-section "How to add another productset?" at the end.

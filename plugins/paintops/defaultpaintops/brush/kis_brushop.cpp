@@ -87,6 +87,7 @@ KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter,
     m_rotationOption.readOptionSetting(settings);
     m_scatterOption.readOptionSetting(settings);
     m_sharpnessOption.readOptionSetting(settings);
+    m_lightnessStrengthOption.readOptionSetting(settings);
 
     m_opacityOption.resetAllSensors();
     m_flowOption.resetAllSensors();
@@ -98,6 +99,7 @@ KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter,
     m_rotationOption.resetAllSensors();
     m_scatterOption.resetAllSensors();
     m_sharpnessOption.resetAllSensors();
+    m_lightnessStrengthOption.resetAllSensors();
 
     m_rotationOption.applyFanCornersInfo(this);
 
@@ -112,7 +114,7 @@ KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter,
         [baseBrush, settings, painter] () {
             KisDabCacheUtils::DabRenderingResources *resources =
                 new KisBrushOpResources(settings, painter);
-            resources->brush = baseBrush->clone();
+            resources->brush = baseBrush->clone().dynamicCast<KisBrush>();
 
             return resources;
         };
@@ -167,7 +169,8 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
                                              cursorPos,
                                              shape,
                                              info,
-                                             m_softnessOption.apply(info));
+                                             m_softnessOption.apply(info),
+                                             m_lightnessStrengthOption.apply(info));
 
     m_dabExecutor->addDab(request, qreal(dabOpacity) / 255.0, qreal(dabFlow) / 255.0);
 
@@ -202,13 +205,25 @@ void KisBrushOp::addMirroringJobs(Qt::Orientation direction,
 {
     jobs.append(new KisRunnableStrokeJobData(0, KisStrokeJobData::SEQUENTIAL));
 
+
+    /**
+     * Some KisRenderedDab may share their devices, so we should mirror them
+     * carefully, avoiding doing that twice. KisDabRenderingQueue is implemented in
+     * a way that duplicated dabs can go only sequentially, one after another, so
+     * we don't have to use complex deduplication algorithms here.
+     */
+    KisFixedPaintDeviceSP prevDabDevice = 0;
     for (KisRenderedDab &dab : state->dabsQueue) {
+        const bool skipMirrorPixels = prevDabDevice && prevDabDevice == dab.device;
+
         jobs.append(
             new KisRunnableStrokeJobData(
-                [state, &dab, direction] () {
-                    state->painter->mirrorDab(direction, &dab);
+                [state, &dab, direction, skipMirrorPixels] () {
+                    state->painter->mirrorDab(direction, &dab, skipMirrorPixels);
                 },
                 KisStrokeJobData::CONCURRENT));
+
+        prevDabDevice = dab.device;
     }
 
     jobs.append(new KisRunnableStrokeJobData(0, KisStrokeJobData::SEQUENTIAL));
@@ -278,7 +293,7 @@ std::pair<int, bool> KisBrushOp::doAsyncronousUpdate(QVector<KisRunnableStrokeJo
              *    we paint only the parts intersecting the wrap rect.
              */
 
-            const QRect wrapRect = painter()->device()->defaultBounds()->bounds();
+            const QRect wrapRect = painter()->device()->defaultBounds()->imageBorderRect();
 
             QList<KisRenderedDab> wrappedDabs;
 

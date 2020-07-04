@@ -299,6 +299,12 @@ bool KisOpenGL::supportsFenceSync()
     return openGLCheckResult && openGLCheckResult->supportsFenceSync();
 }
 
+bool KisOpenGL::supportsRenderToFBO()
+{
+    initialize();
+    return openGLCheckResult && openGLCheckResult->supportsFBO();
+}
+
 bool KisOpenGL::needsFenceWorkaround()
 {
     initialize();
@@ -706,7 +712,9 @@ KisOpenGL::RendererConfig KisOpenGL::selectSurfaceConfig(KisOpenGL::OpenGLRender
     using Info = boost::optional<KisOpenGLModeProber::Result>;
 
     QHash<OpenGLRenderer, Info> renderersToTest;
+#ifndef Q_OS_ANDROID
     renderersToTest.insert(RendererDesktopGL, Info());
+#endif
     renderersToTest.insert(RendererOpenGLES, Info());
 
 #ifdef Q_OS_WIN
@@ -741,10 +749,19 @@ KisOpenGL::RendererConfig KisOpenGL::selectSurfaceConfig(KisOpenGL::OpenGLRender
 
     const OpenGLRenderer defaultRenderer = getRendererFromProbeResult(*info);
 
+    /**
+     * On Windows we always prefer Angle, not what Qt suggests us
+     */
+#ifdef Q_OS_WIN
+    const OpenGLRenderer preferredAutoRenderer = RendererOpenGLES;
+#else
+    const OpenGLRenderer preferredAutoRenderer = defaultRenderer;
+#endif
+
     OpenGLRenderers supportedRenderers = RendererNone;
 
     FormatPositionLess compareOp;
-    compareOp.setPreferredRendererByQt(defaultRenderer);
+    compareOp.setPreferredRendererByQt(preferredAutoRenderer);
 
 #ifdef HAVE_HDR
     compareOp.setPreferredColorSpace(
@@ -786,7 +803,7 @@ KisOpenGL::RendererConfig KisOpenGL::selectSurfaceConfig(KisOpenGL::OpenGLRender
         }
     }
 
-    OpenGLRenderer preferredByQt = defaultRenderer;
+    OpenGLRenderer preferredByQt = preferredAutoRenderer;
 
     if (preferredByQt == RendererDesktopGL &&
         supportedRenderers & RendererDesktopGL &&

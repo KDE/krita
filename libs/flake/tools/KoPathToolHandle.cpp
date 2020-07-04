@@ -24,14 +24,12 @@
 #include "KoPathTool.h"
 #include "KoPathPointMoveStrategy.h"
 #include "KoPathControlPointMoveStrategy.h"
-#include "KoPathConnectionPointStrategy.h"
 #include "KoSelection.h"
 #include "commands/KoPathPointTypeCommand.h"
 #include "KoParameterChangeStrategy.h"
 #include "KoParameterShape.h"
 #include "KoCanvasBase.h"
 #include "KoDocumentResourceManager.h"
-#include "KoConnectionShape.h"
 #include "KoViewConverter.h"
 #include "KoPointerEvent.h"
 #include "KoShapeController.h"
@@ -70,7 +68,7 @@ void PointHandle::paint(QPainter &painter, const KoViewConverter &converter, qre
     }
 
 
-    KisHandlePainterHelper helper = KoShape::createHandlePainterHelper(&painter, m_activePoint->parent(), converter, handleRadius);
+    KisHandlePainterHelper helper = KoShape::createHandlePainterHelperView(&painter, m_activePoint->parent(), converter, handleRadius);
 
 
     if (allPaintedTypes != m_activePointType) {
@@ -190,7 +188,7 @@ ParameterHandle::ParameterHandle(KoPathTool *tool, KoParameterShape *parameterSh
 
 void ParameterHandle::paint(QPainter &painter, const KoViewConverter &converter, qreal handleRadius)
 {
-    KisHandlePainterHelper helper = KoShape::createHandlePainterHelper(&painter, m_parameterShape, converter, handleRadius);
+    KisHandlePainterHelper helper = KoShape::createHandlePainterHelperView(&painter, m_parameterShape, converter, handleRadius);
     helper.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
     m_parameterShape->paintHandle(helper, m_handleId);
 }
@@ -214,24 +212,4 @@ KoInteractionStrategy * ParameterHandle::handleMousePress(KoPointerEvent *event)
 bool ParameterHandle::check(const QList<KoPathShape*> &selectedShapes)
 {
     return selectedShapes.contains(m_parameterShape);
-}
-
-
-ConnectionHandle::ConnectionHandle(KoPathTool *tool, KoParameterShape *parameterShape, int handleId)
-        : ParameterHandle(tool, parameterShape, handleId)
-{
-}
-
-KoInteractionStrategy * ConnectionHandle::handleMousePress(KoPointerEvent *event)
-{
-    if (event->button() & Qt::LeftButton) {
-        KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>(m_tool->selection());
-        if (selection)
-            selection->clear();
-        KoConnectionShape * shape = dynamic_cast<KoConnectionShape*>(m_parameterShape);
-        if (! shape)
-            return 0;
-        return new KoPathConnectionPointStrategy(m_tool, shape, m_handleId);
-    }
-    return 0;
 }

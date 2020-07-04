@@ -30,17 +30,19 @@
 #include <kis_types.h>
 #include <kis_shared.h>
 #include <brushengine/kis_paint_information.h>
+#include <kis_abr_brush.h>
+
 
 class QString;
 class QIODevice;
 
-class KisAbrBrush;
+
 struct AbrInfo;
 
 /**
  * load a collection of brushes from an abr file
  */
-class BRUSH_EXPORT KisAbrBrushCollection : public KisScalingSizeBrush
+class BRUSH_EXPORT KisAbrBrushCollection
 {
 
 protected:
@@ -50,44 +52,75 @@ public:
     /// Construct brush to load filename later as brush
     KisAbrBrushCollection(const QString& filename);
 
-    KisBrush* clone() const override;
+    ~KisAbrBrushCollection() {}
 
-    ~KisAbrBrushCollection() override {}
+    bool load();
 
-    bool load() override;
+    bool loadFromDevice(QIODevice *dev);
 
-    bool loadFromDevice(QIODevice *dev) override;
+    bool save();
 
-    bool save() override;
+    bool saveToDevice(QIODevice* dev) const;
 
-    bool saveToDevice(QIODevice* dev) const override;
+    bool isLoaded() const;
 
     /**
      * @return a preview of the brush
      */
-    virtual QImage image() const;
+    QImage image() const;
 
     /**
      * @return default file extension for saving the brush
      */
-    QString defaultFileExtension() const override;
+    QString defaultFileExtension() const;
 
-    QList<KisAbrBrush*> brushes() {
-        return m_abrBrushes.values();
+    QList<KisAbrBrushSP> brushes() const {
+        return m_abrBrushes->values();
+    }
+
+    QSharedPointer<QMap<QString, KisAbrBrushSP>> brushesMap() const {
+        return m_abrBrushes;
+    }
+
+    KisAbrBrushSP brushByName(QString name) const {
+        if (m_abrBrushes->contains(name)) {
+            return m_abrBrushes.data()->operator[](name);
+        }
+        return KisAbrBrushSP();
+    }
+
+    QDateTime lastModified() const {
+        return m_lastModified;
+    }
+
+    QString filename() const {
+        return m_filename;
+    }
+
+    QByteArray md5() const {
+        return m_md5;
     }
 
 protected:
     KisAbrBrushCollection(const KisAbrBrushCollection& rhs);
 
-    void toXML(QDomDocument& d, QDomElement& e) const override;
+    void toXML(QDomDocument& d, QDomElement& e) const;
 
 private:
 
     qint32 abr_brush_load(QDataStream & abr, AbrInfo *abr_hdr, const QString filename, qint32 image_ID, qint32 id);
     qint32 abr_brush_load_v12(QDataStream & abr, AbrInfo *abr_hdr, const QString filename, qint32 image_ID, qint32 id);
     quint32 abr_brush_load_v6(QDataStream & abr, AbrInfo *abr_hdr, const QString filename, qint32 image_ID, qint32 id);
-    QMap<QString, KisAbrBrush*> m_abrBrushes;
+
+    bool m_isLoaded;
+    QDateTime m_lastModified;
+    QString m_filename;
+    QSharedPointer<QMap<QString, KisAbrBrushSP>> m_abrBrushes;
+    QByteArray m_md5;
+
 };
+
+typedef QSharedPointer<KisAbrBrushCollection> KisAbrBrushCollectionSP;
 
 #endif
 

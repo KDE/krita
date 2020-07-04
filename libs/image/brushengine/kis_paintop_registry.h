@@ -64,12 +64,12 @@ public:
      * with the specified parent as widget parent. Returns 0 if there
      * are no settings available for the given device.
      */
-    KisPaintOpSettingsSP settings(const KoID& id) const;
+    KisPaintOpSettingsSP createSettings(const KoID& id, KisResourcesInterfaceSP resourcesInterface) const;
 
     /**
      * @return a default preset for the given paintop.
      */
-    KisPaintOpPresetSP defaultPreset(const KoID& id) const;
+    KisPaintOpPresetSP defaultPreset(const KoID& id, KisResourcesInterfaceSP resourcesInterface) const;
 
     // Get the icon to show in the user interface
     QIcon icon(const KoID & id) const;

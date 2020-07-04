@@ -143,7 +143,7 @@ public:
 
 private:
 
-    int m_type;
+    int m_type {0};
 
 };
 

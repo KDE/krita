@@ -22,7 +22,6 @@
 #include "kis_debug.h"
 
 #include <QPainter>
-#include <KoViewConverter.h>
 #include <SvgLoadingContext.h>
 #include <SvgSavingContext.h>
 #include <SvgUtil.h>
@@ -35,11 +34,12 @@
 #include "KisQPainterStateSaver.h"
 
 
-struct Q_DECL_HIDDEN ImageShape::Private
+struct Q_DECL_HIDDEN ImageShape::Private : public QSharedData
 {
     Private() {}
     Private(const Private &rhs)
-        : image(rhs.image),
+        : QSharedData(),
+          image(rhs.image),
           ratioParser(rhs.ratioParser ? new SvgUtil::PreserveAspectRatioParser(*rhs.ratioParser) : 0),
           viewBoxTransform(rhs.viewBoxTransform)
     {
@@ -58,7 +58,7 @@ ImageShape::ImageShape()
 
 ImageShape::ImageShape(const ImageShape &rhs)
     : KoTosContainer(rhs),
-      m_d(new Private(*rhs.m_d))
+      m_d(rhs.m_d)
 {
 }
 
@@ -71,13 +71,12 @@ KoShape *ImageShape::cloneShape() const
     return new ImageShape(*this);
 }
 
-void ImageShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
+void ImageShape::paint(QPainter &painter, KoShapePaintingContext &paintContext) const
 {
     Q_UNUSED(paintContext);
     KisQPainterStateSaver saver(&painter);
 
     const QRectF myrect(QPointF(), size());
-    applyConversion(painter, converter);
 
     painter.setRenderHint(QPainter::SmoothPixmapTransform);
     painter.setClipRect(QRectF(QPointF(), size()), Qt::IntersectClip);
@@ -88,19 +87,6 @@ void ImageShape::paint(QPainter &painter, const KoViewConverter &converter, KoSh
 void ImageShape::setSize(const QSizeF &size)
 {
     KoTosContainer::setSize(size);
-}
-
-void ImageShape::saveOdf(KoShapeSavingContext &context) const
-{
-    Q_UNUSED(context);
-}
-
-bool ImageShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
-{
-    Q_UNUSED(element);
-    Q_UNUSED(context);
-
-    return false;
 }
 
 bool ImageShape::saveSvg(SvgSavingContext &context)

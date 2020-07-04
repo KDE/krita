@@ -23,7 +23,7 @@
 #include <QApplication>
 
 #include <KoCheckerBoardPainter.h>
-#include <resources/KoResource.h>
+#include <KoResource.h>
 #include <resources/KoAbstractGradient.h>
 #include "kis_gradient_chooser.h"
 
@@ -31,23 +31,23 @@ KisCmbGradient::KisCmbGradient(QWidget *parent)
     : KisPopupButton(parent)
     , m_gradientChooser(new KisGradientChooser(this))
 {
-    connect(m_gradientChooser, SIGNAL(resourceSelected(KoResource*)), SLOT(gradientSelected(KoResource*)));
+    connect(m_gradientChooser, SIGNAL(resourceSelected(KoResourceSP )), SLOT(gradientSelected(KoResourceSP )));
     setPopupWidget(m_gradientChooser);
 }
 
-void KisCmbGradient::setGradient(KoAbstractGradient *gradient)
+void KisCmbGradient::setGradient(KoAbstractGradientSP gradient)
 {
     m_gradientChooser->setCurrentResource(gradient);
 }
 
-KoAbstractGradient *KisCmbGradient::gradient() const
+KoAbstractGradientSP KisCmbGradient::gradient() const
 {
-    return dynamic_cast<KoAbstractGradient*>(m_gradientChooser->currentResource());
+    return m_gradientChooser->currentResource().dynamicCast<KoAbstractGradient>();
 }
 
-void KisCmbGradient::gradientSelected(KoResource *resource)
+void KisCmbGradient::gradientSelected(KoResourceSP resource)
 {
-    KoAbstractGradient *gradient = dynamic_cast<KoAbstractGradient*>(resource);
+    KoAbstractGradientSP gradient = resource.dynamicCast<KoAbstractGradient>();
     if (!gradient) return;
 
     QImage pm = gradient->generatePreview(iconSize().width(), iconSize().height());
@@ -60,8 +60,11 @@ QSize KisCmbGradient::sizeHint() const
 {
     ensurePolished();
     QFontMetrics fm = fontMetrics();
-
+#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
+    int maxW = 7 * fm.horizontalAdvance(QChar('x')) + 18;
+#else
     int maxW = 7 * fm.width(QChar('x')) + 18;
+#endif
     int maxH = qMax(fm.lineSpacing(), 14) + 2;
 
     QStyleOptionComboBox options;

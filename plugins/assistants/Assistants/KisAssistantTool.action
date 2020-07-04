@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ActionCollection version="2" name="Tools">
-  <Actions category="Assistant Tool">
-    <text>Assistant Tool</text>
+  <Actions category="tool-shortcuts">
+    <text>Tool Shortcuts</text>
+        <Action name="KisAssistantTool">
+      <icon></icon>
+      <text>Assistant Tool</text>
+      <whatsThis></whatsThis>
+      <toolTip>Assistant Tool</toolTip>
+      <iconText>Assistant Tool</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
   </Actions>
 </ActionCollection>

@@ -25,12 +25,12 @@
 #include <cmath>
 
 #include <FlakeDebug.h>
-#include <resources/KoResource.h>
+#include <KoResource.h>
 #include <KoShape.h>
-#include <KisGamutMaskViewConverter.h>
 #include <KoShapePaintingContext.h>
 
-class KoViewConverter;
+//class KoViewConverter;
+class QTransform;
 
 class KoGamutMaskShape
 {
@@ -39,10 +39,10 @@ public:
     KoGamutMaskShape();
     ~KoGamutMaskShape();
 
-    bool coordIsClear(const QPointF& coord, const KoViewConverter& viewConverter, int maskRotation) const;
+    bool coordIsClear(const QPointF& coord) const;
     QPainterPath outline();
-    void paint(QPainter &painter, const KoViewConverter& viewConverter, int maskRotation);
-    void paintStroke(QPainter &painter, const KoViewConverter& viewConverter, int maskRotation);
+    void paint(QPainter &painter);
+    void paintStroke(QPainter &painter);
     KoShape* koShape();
 
 private:
@@ -62,22 +62,33 @@ public:
     KoGamutMask(const QString &filename);
     KoGamutMask();
     KoGamutMask(KoGamutMask *rhs);
+    KoGamutMask(const KoGamutMask &rhs);
+    KoGamutMask &operator=(const KoGamutMask &rhs) = delete;
+    KoResourceSP clone() const override;
     ~KoGamutMask() override;
 
-    bool coordIsClear(const QPointF& coord, KoViewConverter& viewConverter, bool preview);
-    bool load() override;
-    bool loadFromDevice(QIODevice *dev) override;
-    bool save() override;
+    bool coordIsClear(const QPointF& coord, bool preview);
+    bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;
     bool saveToDevice(QIODevice* dev) const override;
 
-    void paint(QPainter &painter, KoViewConverter& viewConverter, bool preview);
-    void paintStroke(QPainter &painter, KoViewConverter& viewConverter, bool preview);
+    QPair<QString, QString> resourceType() const override
+    {
+        return QPair<QString, QString>(ResourceType::GamutMasks, "");
+    }
 
-    QString title();
+    void paint(QPainter &painter, bool preview);
+    void paintStroke(QPainter &painter, bool preview);
+
+    QTransform maskToViewTransform(qreal viewSize);
+    QTransform viewToMaskTransform(qreal viewSize);
+
+    QString title() const;
     void setTitle(QString title);
 
-    QString description();
+    QString description() const;
     void setDescription(QString description);
+
+    QString defaultFileExtension() const override;
 
     int rotation();
     void setRotation(int rotation);
@@ -97,5 +108,7 @@ private:
     struct Private;
     Private* const d;
 };
+
+typedef QSharedPointer<KoGamutMask> KoGamutMaskSP;
 
 #endif // KOGAMUTMASK_H

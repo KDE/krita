@@ -1,6 +1,5 @@
-<!DOCTYPE RCC>
-<RCC version="1.0">
-    <qresource>
+<RCC>
+    <qresource prefix="/">
         <file>light_application-exit.svg</file>
         <file>light_application-pdf.svg</file>
         <file>light_applications-system.svg</file>
@@ -28,7 +27,7 @@
         <file>light_document-open.svg</file>
         <file>light_document-print-preview.svg</file>
         <file>light_document-print.svg</file>
-        <file alias="light_document-properties.svg">light_configure.svg</file>       
+        <file alias="light_document-properties.svg">light_configure.svg</file>
         <file>light_document-save-as.svg</file>
         <file>light_document-save.svg</file>
         <file>light_download.svg</file>
@@ -86,6 +85,7 @@
         <file>light_zoom-in.svg</file>
         <file>light_zoom-original.svg</file>
         <file>light_zoom-out.svg</file>
-   </qresource>
+        <file>breeze-light-icons.qrc</file>
+        <file>light_update-medium.svg</file>
+    </qresource>
 </RCC>
-

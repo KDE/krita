@@ -24,6 +24,7 @@
 #include "KoPathShape.h"
 #include "KoPathPoint.h"
 #include <KoSnapData.h>
+#include <KoShapeLayer.h>
 
 KoSnapProxy::KoSnapProxy(KoSnapGuide * snapGuide)
         : m_snapGuide(snapGuide)
@@ -84,7 +85,7 @@ QList<QPointF> KoSnapProxy::pointsFromShape(KoShape * shape)
 
     KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
     if (path) {
-        QTransform m = path->absoluteTransformation(0);
+        QTransform m = path->absoluteTransformation();
 
         QList<KoPathPoint*> ignoredPoints = m_snapGuide->ignoredPathPoints();
 
@@ -138,7 +139,7 @@ QList<KoPathSegment> KoSnapProxy::segmentsInRect(const QRectF &rect, bool omitEd
             }
         }
 
-        QTransform m = shape->absoluteTransformation(0);
+        QTransform m = shape->absoluteTransformation();
         // transform segments to document coordinates
         Q_FOREACH (const KoPathSegment & s, shapeSegments) {
             if (ignoredPoints.contains(s.first()) || ignoredPoints.contains(s.second()))
@@ -158,7 +159,8 @@ QList<KoShape*> KoSnapProxy::shapes(bool omitEditedShape)
     // filter all hidden and ignored shapes
     Q_FOREACH (KoShape * shape, allShapes) {
         if (shape->isVisible() &&
-            !ignoredShapes.contains(shape)) {
+            !ignoredShapes.contains(shape) &&
+            !dynamic_cast<KoShapeLayer*>(shape)) {
 
             filteredShapes.append(shape);
         }

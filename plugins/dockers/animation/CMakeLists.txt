@@ -4,7 +4,6 @@ endif()
 
 set(KRITA_ANIMATIONDOCKER_SOURCES
     animation_dockers.cpp
-    animation_docker.cpp
     timeline_docker.cpp
     onion_skins_docker.cpp
 
@@ -42,7 +41,6 @@ set(KRITA_ANIMATIONDOCKER_SOURCES
 )
 
 ki18n_wrap_ui(KRITA_ANIMATIONDOCKER_SOURCES
-    wdg_animation.ui
     onion_skins_docker.ui
     wdg_animation_curves.ui
 )

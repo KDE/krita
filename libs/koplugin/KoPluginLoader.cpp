@@ -26,6 +26,8 @@
 
 #include "KritaPluginDebug.h"
 
+#include <kis_debug.h>
+
 #include <KConfig>
 #include <KSharedConfig>
 #include <KConfigGroup>
@@ -56,6 +58,7 @@ KoPluginLoader* KoPluginLoader::instance()
 
 void KoPluginLoader::load(const QString & serviceType, const QString & versionString, const PluginsConfig &config, QObject* owner, bool cache)
 {
+
     // Don't load the same plugins again
     if (cache && d->loadedServiceTypes.contains(serviceType)) {
         return;
@@ -94,6 +97,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
                 qWarning() << "Loading plugin" << loader->fileName() << "failed, has no X-KDE-PluginInfo-Name.";
                 continue;
             }
+
             if (whiteList.contains(pluginName)) {
                 plugins.append(loader);
             }
@@ -141,7 +145,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
             json = json.value("KPlugin").toObject();
             const QString pluginName = json.value("Id").toString();
             whiteList << pluginName;
-            debugPlugin << "Loaded plugin" << loader->fileName() << owner;
+            debugPlugin << "\tLoaded plugin" << loader->fileName() << owner;
             if (!owner) {
                 delete plugin;
             }

@@ -21,6 +21,7 @@
 
 #include "KoAlwaysInline.h"
 #include "kundo2command.h"
+#include "kis_command_utils.h"
 
 
 struct DirectDataAccessPolicy {
@@ -87,7 +88,6 @@ public:
                              const KoColorSpace *oldCs, const KoColorSpace *newCs,
                              KUndo2Command *parent)
             : KUndo2Command(parent),
-              m_firstRun(true),
               m_data(data),
               m_oldCs(oldCs),
               m_newCs(newCs)
@@ -120,7 +120,7 @@ public:
         KisPaintDeviceData *m_data;
 
     private:
-        bool m_firstRun;
+        bool m_firstRun {true};
         const KoColorSpace *m_oldCs;
         const KoColorSpace *m_newCs;
     };
@@ -220,6 +220,45 @@ public:
         if (!parentCommand) {
             delete cmd;
         }
+    }
+
+    void reincarnateWithDetachedHistory(bool copyContent, KUndo2Command *parentCommand) {
+        struct SwitchDataManager : public KUndo2Command
+        {
+            SwitchDataManager(KisPaintDeviceData *data,
+                              KisDataManagerSP oldDm, KisDataManagerSP newDm,
+                              KUndo2Command *parent = 0)
+                : KUndo2Command(parent),
+                  m_data(data),
+                  m_oldDm(oldDm),
+                  m_newDm(newDm)
+            {
+            }
+
+            void redo() override {
+                m_data->m_dataManager = m_newDm;
+                m_data->cache()->invalidate();
+            }
+
+            void undo() override {
+                m_data->m_dataManager = m_oldDm;
+                m_data->cache()->invalidate();
+            }
+
+        private:
+            KisPaintDeviceData *m_data;
+            KisDataManagerSP m_oldDm;
+            KisDataManagerSP m_newDm;
+        };
+
+        new KisCommandUtils::LambdaCommand(parentCommand,
+            [this, copyContent] () {
+                KisDataManagerSP newDm =
+                    copyContent ?
+                    new KisDataManager(*this->dataManager()) :
+                    new KisDataManager(this->dataManager()->pixelSize(), this->dataManager()->defaultPixel());
+                return new SwitchDataManager(this, this->dataManager(), newDm);
+            });
     }
 
     void prepareClone(const KisPaintDeviceData *srcData, bool copyContent = false) {

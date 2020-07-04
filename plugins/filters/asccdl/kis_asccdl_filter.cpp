@@ -77,9 +77,9 @@ bool KisFilterASCCDL::needsTransparentPixels(const KisFilterConfigurationSP conf
     return false;
 }
 
-KisFilterConfigurationSP KisFilterASCCDL::defaultConfiguration() const
+KisFilterConfigurationSP KisFilterASCCDL::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration();
+    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
     QVariant colorVariant("KoColor");
     KoColor black;
     black.fromQColor(QColor(Qt::black));

@@ -23,8 +23,8 @@
 #include <kis_icon.h>
 
 
-KisEffectMask::KisEffectMask()
-        : KisMask("effect")
+KisEffectMask::KisEffectMask(const QString &name)
+        : KisMask(name)
 {
 }
 

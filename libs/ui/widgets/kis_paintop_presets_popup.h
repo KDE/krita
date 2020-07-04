@@ -91,7 +91,7 @@ protected:
 
 public Q_SLOTS:
     void switchDetached(bool show = true);
-    void resourceSelected(KoResource* resource);
+    void resourceSelected(KoResourceSP resource);
     void updateThemedIcons();
 
 
@@ -107,7 +107,7 @@ Q_SIGNALS:
     void saveBrushPreset();
     void defaultPresetClicked();
     void paintopActivated(const QString& presetName);
-    void signalResourceSelected(KoResource* resource);
+    void signalResourceSelected(KoResourceSP resource);
     void reloadPresetClicked();
     void dirtyPresetToggled(bool value);
     void eraserBrushSizeToggled(bool value);

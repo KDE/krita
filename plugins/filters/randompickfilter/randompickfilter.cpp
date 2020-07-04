@@ -100,7 +100,7 @@ void KisFilterRandomPick::processImpl(KisPaintDeviceSP device,
     KisRandomGenerator randV(seedV);
 
     KisSequentialIteratorProgress dstIt(device, applyRect, progressUpdater);
-    KisRandomConstAccessorSP srcRA = device->createRandomConstAccessorNG(0, 0);
+    KisRandomConstAccessorSP srcRA = device->createRandomConstAccessorNG();
 
     double threshold = (100 - level) / 100.0;
 
@@ -127,9 +127,9 @@ KisConfigWidget * KisFilterRandomPick::createConfigurationWidget(QWidget* parent
     return new KisWdgRandomPick((KisFilter*)this, (QWidget*)parent);
 }
 
-KisFilterConfigurationSP KisFilterRandomPick::defaultConfiguration() const
+KisFilterConfigurationSP KisFilterRandomPick::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration();
+    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
     config->setProperty("level", 50);
     config->setProperty("windowsize", 2.5);
     config->setProperty("opacity", 100);

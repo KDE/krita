@@ -25,7 +25,7 @@
 #include <QPixmap>
 #include <QShowEvent>
 #include <QPushButton>
-
+#include <QDialogButtonBox>
 
 #include <KoResourcePaths.h>
 
@@ -34,19 +34,19 @@
 #include "kis_clipboard.h"
 #include "kis_paint_device.h"
 #include "kis_gbr_brush.h"
-#include "kis_brush_server.h"
+#include "KisBrushServerProvider.h"
+#include "kis_icon.h"
 
 KisClipboardBrushWidget::KisClipboardBrushWidget(QWidget *parent, const QString &caption, KisImageWSP /*image*/)
     : KisWdgClipboardBrush(parent)
 {
     setWindowTitle(caption);
-    preview->setScaledContents(true);
+    preview->setScaledContents(false);
     preview->setFixedSize(preview->size());
     preview->setStyleSheet("border: 2px solid #222; border-radius: 4px; padding: 5px; font: normal 10px;");
 
 
-    KisBrushResourceServer* rServer = KisBrushServer::instance()->brushServer();
-    m_rServerAdapter = QSharedPointer<KisBrushResourceServerAdapter>(new KisBrushResourceServerAdapter(rServer));
+    m_rServer = KisBrushServerProvider::instance()->brushServer();
 
     m_brush = 0;
 
@@ -55,6 +55,7 @@ KisClipboardBrushWidget::KisClipboardBrushWidget(QWidget *parent, const QString 
     connect(m_clipboard, SIGNAL(clipChanged()), this, SLOT(slotCreateBrush()));
     connect(colorAsmask, SIGNAL(toggled(bool)), this, SLOT(slotUpdateUseColorAsMask(bool)));
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(slotAddPredefined()));
+    connect(nameEdit, SIGNAL(textEdited(const QString&)), this, SLOT(slotUpdateSaveButton()));
 
     spacingWidget->setSpacing(true, 1.0);
     connect(spacingWidget, SIGNAL(sigSpacingChanged()), SLOT(slotSpacingChanged()));
@@ -73,7 +74,7 @@ void KisClipboardBrushWidget::slotCreateBrush()
         if (pd) {
             QRect rc = pd->exactBounds();
 
-            m_brush = new KisGbrBrush(pd, rc.x(), rc.y(), rc.width(), rc.height());
+            m_brush = KisBrushSP(new KisGbrBrush(pd, rc.x(), rc.y(), rc.width(), rc.height()));
 
             m_brush->setSpacing(spacingWidget->spacing());
             m_brush->setAutoSpacing(spacingWidget->autoSpacingActive(), spacingWidget->autoSpacingCoeff());
@@ -81,17 +82,20 @@ void KisClipboardBrushWidget::slotCreateBrush()
             m_brush->setName(TEMPORARY_CLIPBOARD_BRUSH_NAME);
             m_brush->setValid(true);
 
-            preview->setPixmap(QPixmap::fromImage(m_brush->image()));
+            int w = preview->size().width()-10;
+            preview->setPixmap(QPixmap::fromImage(m_brush->image().scaled(w, w, Qt::KeepAspectRatio)));
         }
     } else {
         preview->setText(i18n("Nothing copied\n to Clipboard"));
     }
 
-    if(m_brush == 0) {
-        buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
-    } else {        
-        buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
+    if (!m_brush) {
+        buttonBox->button(QDialogButtonBox::Save)->setEnabled(false);
+    } else {
+        buttonBox->button(QDialogButtonBox::Save)->setEnabled(true);
         colorAsmask->setChecked(true); // initializing this has to happen here since we need a valid brush for it to work
+        preserveAlpha->setEnabled(true);
+        preserveAlpha->setChecked(false);
     }
 }
 
@@ -110,9 +114,11 @@ void KisClipboardBrushWidget::showEvent(QShowEvent *)
 
 void KisClipboardBrushWidget::slotUpdateUseColorAsMask(bool useColorAsMask)
 {
+    preserveAlpha->setEnabled(useColorAsMask);
     if (m_brush) {
         static_cast<KisGbrBrush*>(m_brush.data())->setUseColorAsMask(useColorAsMask);
-        preview->setPixmap(QPixmap::fromImage(m_brush->brushTipImage()));
+        int w = preview->size().width()-10;
+        preview->setPixmap(QPixmap::fromImage(m_brush->image().scaled(w, w, Qt::KeepAspectRatio)));
     }
 }
 
@@ -121,24 +127,12 @@ void KisClipboardBrushWidget::slotAddPredefined()
     if(!m_brush)
         return;
 
-    QString dir = KoResourcePaths::saveLocation("data", "brushes");
+    QString dir = KoResourcePaths::saveLocation("data", ResourceType::Brushes);
     QString extension = ".gbr";
     QString name = nameEdit->text();
 
-    QString tempFileName;
-    QFileInfo fileInfo;
-    fileInfo.setFile(dir + name + extension);
-
-    int i = 1;
-    while (fileInfo.exists()) {
-        fileInfo.setFile(dir + name + QString("%1").arg(i) + extension);
-        i++;
-    }
-    tempFileName = fileInfo.filePath();
-
-    if (m_rServerAdapter) {
-        KisGbrBrush *resource = dynamic_cast<KisGbrBrush*>(m_brush->clone());
-        resource->setFilename(tempFileName);
+    if (m_rServer) {
+        KisGbrBrushSP resource = m_brush->clone().dynamicCast<KisGbrBrush>();
 
         if (nameEdit->text().isEmpty()) {
             resource->setName(QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm"));
@@ -147,14 +141,27 @@ void KisClipboardBrushWidget::slotAddPredefined()
             resource->setName(name);
         }
 
+        resource->setFilename(resource->name().split(" ").join("_") + extension);
+
+
         if (colorAsmask->isChecked()) {
-            resource->makeMaskImage();
+            resource->makeMaskImage(preserveAlpha->isChecked());
         }
-        m_rServerAdapter->addResource(resource);
+        m_rServer->addResource(resource.dynamicCast<KisBrush>());
         emit sigNewPredefinedBrush(resource);
     }
 
     close();
+}
+
+void KisClipboardBrushWidget::slotUpdateSaveButton()
+{
+    if (QFileInfo(m_rServer->saveLocation() + "/" + nameEdit->text().split(" ").join("_")
+                  + ".gbr").exists()) {
+        buttonBox->button(QDialogButtonBox::Save)->setText(i18n("Overwrite"));
+    } else {
+        buttonBox->button(QDialogButtonBox::Save)->setText(i18n("Save"));
+    }
 }
 
 #include "moc_kis_clipboard_brush_widget.cpp"

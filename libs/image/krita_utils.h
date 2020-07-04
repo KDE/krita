@@ -28,6 +28,7 @@ class QPainterPath;
 class QBitArray;
 class QPainter;
 struct KisRenderedDab;
+class KisRegion;
 
 #include <QVector>
 #include "kritaimage_export.h"
@@ -41,11 +42,13 @@ namespace KritaUtils
     QSize KRITAIMAGE_EXPORT optimalPatchSize();
 
     QVector<QRect> KRITAIMAGE_EXPORT splitRectIntoPatches(const QRect &rc, const QSize &patchSize);
+    QVector<QRect> KRITAIMAGE_EXPORT splitRectIntoPatchesTight(const QRect &rc, const QSize &patchSize);
     QVector<QRect> KRITAIMAGE_EXPORT splitRegionIntoPatches(const QRegion &region, const QSize &patchSize);
+    QVector<QRect> KRITAIMAGE_EXPORT splitRegionIntoPatches(const KisRegion &region, const QSize &patchSize);
 
-    QRegion KRITAIMAGE_EXPORT splitTriangles(const QPointF &center,
+    KisRegion splitTriangles(const QPointF &center,
                                              const QVector<QPointF> &points);
-    QRegion KRITAIMAGE_EXPORT splitPath(const QPainterPath &path);
+    KisRegion splitPath(const QPainterPath &path);
 
     QString KRITAIMAGE_EXPORT prettyFormatReal(qreal value);
 
@@ -112,9 +115,26 @@ namespace KritaUtils
 
     qreal KRITAIMAGE_EXPORT estimatePortionOfTransparentPixels(KisPaintDeviceSP dev, const QRect &rect, qreal samplePortion);
 
-    void KRITAIMAGE_EXPORT mirrorDab(Qt::Orientation dir, const QPoint &center, KisRenderedDab *dab);
+    void KRITAIMAGE_EXPORT mirrorDab(Qt::Orientation dir, const QPoint &center, KisRenderedDab *dab, bool skipMirrorPixels = false);
     void KRITAIMAGE_EXPORT mirrorRect(Qt::Orientation dir, const QPoint &center, QRect *rc);
     void KRITAIMAGE_EXPORT mirrorPoint(Qt::Orientation dir, const QPoint &center, QPointF *pt);
+
+
+    /**
+     * Returns a special transformation that converts vector shape coordinates
+     * ('pt') into a special coordinate space, where all path boolean operations
+     * should happen.
+     *
+     * The problem is that Qt's path boolean operation do not support curves,
+     * therefore all the curves are converted into lines
+     * (see QPathSegments::addPath()). The curves are split into lines using
+     * absolute size of the curve for the threshold. Therefore, when applying
+     * boolean operations we should convert them into 'image pixel' coordinate
+     * space first.
+     *
+     * See https://bugs.kde.org/show_bug.cgi?id=411056
+     */
+    QTransform KRITAIMAGE_EXPORT pathShapeBooleanSpaceWorkaround(KisImageSP image);
 }
 
 #endif /* __KRITA_UTILS_H */

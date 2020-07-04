@@ -45,7 +45,7 @@ public:
     ~KisCrossChannelFilter() override;
 
     KisConfigWidget * createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, bool useForMasks) const override;
-    KisFilterConfigurationSP factoryConfiguration() const override;
+    KisFilterConfigurationSP factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const override;
 
     KoColorTransformation* createTransformation(const KoColorSpace *cs, const KisFilterConfigurationSP config) const override;
 
@@ -57,9 +57,12 @@ public:
 class KisCrossChannelFilterConfiguration : public KisMultiChannelFilterConfiguration
 {
 public:
-    KisCrossChannelFilterConfiguration(int channelCount, const KoColorSpace *cs);
+    KisCrossChannelFilterConfiguration(int channelCount, const KoColorSpace *cs, KisResourcesInterfaceSP resourcesInterface);
+    KisCrossChannelFilterConfiguration(const KisCrossChannelFilterConfiguration&rhs);
 
     ~KisCrossChannelFilterConfiguration() override;
+
+    KisFilterConfigurationSP clone() const override;
 
     const QVector<int> driverChannels() const;
 

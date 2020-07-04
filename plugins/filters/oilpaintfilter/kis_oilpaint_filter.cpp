@@ -50,6 +50,7 @@
 #include <kis_processing_information.h>
 #include <kis_paint_device.h>
 #include "widgets/kis_multi_integer_filter_widget.h"
+#include <KisGlobalResourcesInterface.h>
 
 
 KisOilPaintFilter::KisOilPaintFilter() : KisFilter(id(), FiltersCategoryArtisticId, i18n("&Oilpaint..."))
@@ -190,13 +191,13 @@ KisConfigWidget * KisOilPaintFilter::createConfigurationWidget(QWidget* parent, 
     param.push_back(KisIntegerWidgetParam(1, 5, 1, i18n("Brush size"), "brushSize"));
     param.push_back(KisIntegerWidgetParam(10, 255, 30, i18nc("smooth out the painting strokes the filter creates", "Smooth"), "smooth"));
     KisMultiIntegerFilterWidget * w = new KisMultiIntegerFilterWidget(id().id(),  parent,  id().id(),  param);
-    w->setConfiguration(defaultConfiguration());
+    w->setConfiguration(defaultConfiguration(KisGlobalResourcesInterface::instance()));
     return w;
 }
 
-KisFilterConfigurationSP KisOilPaintFilter::defaultConfiguration() const
+KisFilterConfigurationSP KisOilPaintFilter::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration();
+    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
     config->setProperty("brushSize", 1);
     config->setProperty("smooth", 30);
 

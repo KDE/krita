@@ -93,7 +93,7 @@ void ParticleBrush::paintParticle(KisRandomAccessorSP accWrite, const KoColorSpa
 
 void ParticleBrush::draw(KisPaintDeviceSP dab, const KoColor& color, const QPointF &pos)
 {
-    KisRandomAccessorSP accessor = dab->createRandomAccessorNG(qRound(pos.x()), qRound(pos.y()));
+    KisRandomAccessorSP accessor = dab->createRandomAccessorNG();
     const KoColorSpace * cs = dab->colorSpace();
 
     QRect boundingRect;

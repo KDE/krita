@@ -59,10 +59,13 @@ public:
     bool mirrorFrames(QModelIndexList indexes);
 
     void setScrubState(bool active);
+    bool isScrubbing();
     void scrubTo(int time, bool preview);
 
     void setPlaybackRange(const KisTimeRange &range);
     bool isPlaybackActive() const;
+    bool isPlaybackPaused() const;
+    void stopPlayback() const;
     int currentTime() const;
 
     enum ItemDataRole
@@ -87,15 +90,17 @@ protected:
                                              KUndo2Command *parentCommand = 0);
 
 
+protected Q_SLOTS:
+    void slotCurrentTimeChanged(int time);
+
 private Q_SLOTS:
     void slotFramerateChanged();
-    void slotCurrentTimeChanged(int time);
+    void slotClipRangeChanged();
     void slotCacheChanged();
     void slotInternalScrubPreviewRequested(int time);
 
     void slotPlaybackFrameChanged();
     void slotPlaybackStopped();
-
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

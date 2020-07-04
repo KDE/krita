@@ -1,6 +1,6 @@
 name: krita
-version: 4.2.8.2
-adopt-info: krita 
+grade: stable
+adopt-info: krita
 
 base: core18
 confinement: strict
@@ -9,9 +9,14 @@ apps:
   krita:
     common-id: org.kde.krita
     command: usr/bin/krita
-    command-chain:
-      - bin/qt5-launch
-    plugs: [x11, unity7, home, opengl, network, network-bind, removable-media, desktop, desktop-legacy]
+    extensions:
+      - kde-neon
+    plugs:
+      - home
+      - opengl
+      - network
+      - network-bind
+      - removable-media
 
 layout:
   /usr/bin/ffmpeg:
@@ -27,147 +32,76 @@ parts:
     - "-DBUILD_TESTING=OFF"
     - "-DHIDE_SAFE_ASSERTS=OFF"
     - "-DKDE_SKIP_TEST_SETTINGS=ON"
-    source: https://download.kde.org/stable/krita/4.2.8/krita-$SNAPCRAFT_PROJECT_VERSION.tar.xz
-    # Use these instead to build from the git source
+    source: https://download.kde.org/stable/krita/4.3.0/krita-4.3.0.tar.xz
+    # # Use these instead to build from the git source
     # source: https://anongit.kde.org/krita.git
     # source-type: git
     # source-branch: master
     parse-info: ["usr/share/metainfo/org.kde.krita.appdata.xml"]
+    build-snaps: [kde-frameworks-5-core18-sdk]
     build-packages:
-        - gettext
-        - build-essential
-        - cmake
-        - libboost-dev
-        - libboost-system-dev
-        - libeigen3-dev
-        - libexiv2-dev
-        - libfftw3-dev
-        - libfontconfig1-dev
-        - libfreetype6-dev
-        - libgl1-mesa-dev
-        - libglew-dev
-        - libglib2.0-dev
-        - libglu1-mesa-dev
-        - libgsf-1-dev
-        - libgsl-dev
-        - libjpeg-dev
-        - liblcms2-dev
-        - libopenexr-dev
-        - libpng-dev
-        - libpoppler-qt5-dev
-        - libopenjp2-7-dev
-        - libtiff5-dev
-        - libvc-dev
-        - libopencolorio-dev
-        - libx11-dev
-        - libxml2-dev
-        - libxslt1-dev
-        - libxi-dev
-        - pkg-config
-        - vc-dev
-        - zlib1g-dev
-        - libkf5kdcraw-dev
-        - shared-mime-info
-        - libopenimageio-dev
-        - extra-cmake-modules
-        - libkf5archive-dev
-        - libkf5coreaddons-dev
-        - libkf5guiaddons-dev
-        - libkf5itemmodels-dev
-        - libkf5itemviews-dev
-        - libkf5widgetsaddons-dev
-        - libkf5i18n-dev
-        - libkf5windowsystem-dev
-        - libkf5completion-dev
-        - libkf5iconthemes-dev
-        - libkf5kiocore5
-        - libqt5svg5-dev
-        - libqt5x11extras5-dev
-        - libqt5opengl5-dev
-        - libquazip5-dev
-        - qtmultimedia5-dev
-        - qtdeclarative5-dev
-        - libkf5crash-dev
+      - libboost-dev
+      - libboost-system-dev
+      - libeigen3-dev
+      - libfftw3-dev
+      - libglew-dev
+      - libgsf-1-dev
+      - libgsl-dev
+      - libjpeg-dev  # This is part of the sdk, but the build crashes if not included..
+      - libopencolorio-dev
+      - libopenexr-dev
+      - libopenimageio-dev
+      - libquazip5-dev
+      - libvc-dev
+      - libx11-dev
+      - libxi-dev
+      - vc-dev
+    parse-info: [usr/share/metainfo/org.kde.krita.appdata.xml]
 
   runtime:
     plugin: nil
     stage-packages:
-        - libexiv2-27
-        - libfftw3-double3
-        - libgomp1
-        - libgsl23
-        - libilmbase12
-        - libjpeg8
-        - liblcms2-2
-        - libopencolorio1v5
-        - libopenexr22
-        - libpng16-16
-        - libstdc++6
-        - libtiff5
-        - libx11-6
-        - libxcb1
-        - libxi6
-        - zlib1g
-        - libpoppler-qt5-1
-        - shared-mime-info
-        - libboost-system1.65.1
-        - librtmp1
-        - libqt5quickwidgets5
-        - libkf5archive5
-        - libkf5completion5
-        - libkf5configcore5
-        - libkf5configgui5
-        - libkf5coreaddons5
-        - libkf5guiaddons5
-        - libkf5i18n5
-        - libkf5itemviews5
-        - libkf5widgetsaddons5
-        - libkf5windowsystem5
-        - libkf5crash5
-        - libqt5concurrent5
-        - libqt5core5a
-        - libqt5dbus5
-        - libqt5gui5
-        - libqt5network5
-        - libqt5printsupport5
-        - libqt5svg5
-        - libqt5widgets5
-        - libqt5x11extras5
-        - libqt5xml5
-        - locales
-        - libc-bin
-        - libquazip5-1
-        - libqt5quick5
-        - libqt5quickparticles5
-        - libqt5quickshapes5
-        - qt5-qmltooling-plugins
-        - libqt5qml5
-        - libqt5multimedia5
-        - libqt5multimediagsttools5
-        - libqt5multimediaquick5
-        - libqt5multimediawidgets5
-        # Required for rendering animations
-        - ffmpeg
-        - libglu1-mesa
-        - libslang2
+      - libboost-system1.65.1
+      - libfftw3-double3
+      - libgsl23
+      - libgslcblas0
+      - libilmbase12
+      - libopencolorio1v5
+      - libopenexr22
+      - libquazip5-1
+      - libtinyxml2.6.2v5
+      - libxi6
+      - libyaml-cpp0.5v5
+      - zlib1g
+      # Required for rendering animations
+      - ffmpeg
+      - libglu1-mesa
+      - libslang2
     prime:
-    - "-usr/share/wallpapers/*"
-    - "-usr/share/fonts/*"
+      - "-usr/share/fonts/*"
+      # libquazip5-1 pulls in Qt5 from bionic as a dependency. We don't
+      # want it in our snap, however, because we get a newer Qt5 from the
+      # kde-kf5 platform snap.
+      - "-usr/lib/x86_64-linux-gnu/libQt5*"
+      - "-usr/lib/x86_64-linux-gnu/libqt5*"
 
-  plasma-integration:
+  # This part removes all the files in this snap which already exist in
+  # connected content and base snaps. Since these files will be available
+  # at runtime from the content and base snaps, they do not need to be
+  # included in this snap itself.
+  #
+  # More info: https://snapcraft-utils-library.readthedocs.io/en/latest/lib/cleanup.html 
+  #
+  cleanup:
+    after:  # Make this part run last; list all your other parts here
+      - krita
+      - runtime
     plugin: nil
-    stage-packages:
-    - plasma-integration
-    - kde-style-breeze
-    - breeze-icon-theme
-    - kio # runtime slaves for kio
-    prime:
-    - "-usr/share/wallpapers/*"
-    - "-usr/share/fonts/*"
-
-  launcher:
-    plugin: dump
-    source: scripts
-    organize:
-      qt5-launch: bin/qt5-launch
-      kf5-locale-gen: bin/kf5-locale-gen
+    build-snaps:  # List all content-snaps and base snaps you're using here
+      - core18
+      - kde-frameworks-5-core18
+    override-prime: |
+      set -eux
+      for snap in "core18" "kde-frameworks-5-core18"; do  # List all content-snaps and base snaps you're using here
+        cd "/snap/$snap/current" && find . -type f,l -exec rm -f "$SNAPCRAFT_PRIME/{}" \;
+      done

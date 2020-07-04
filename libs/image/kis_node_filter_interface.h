@@ -28,7 +28,7 @@
 class KRITAIMAGE_EXPORT KisNodeFilterInterface
 {
 public:
-    KisNodeFilterInterface(KisFilterConfigurationSP filterConfig, bool useGeneratorRegistry);
+    KisNodeFilterInterface(KisFilterConfigurationSP filterConfig);
     KisNodeFilterInterface(const KisNodeFilterInterface &rhs);
     virtual ~KisNodeFilterInterface();
 
@@ -53,7 +53,6 @@ private:
     KisNodeFilterInterface& operator=(const KisNodeFilterInterface &other);
 
     KisFilterConfigurationSP m_filter;
-    bool m_useGeneratorRegistry;
 };
 
 #endif

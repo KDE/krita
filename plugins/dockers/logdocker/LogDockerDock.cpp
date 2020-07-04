@@ -314,7 +314,7 @@ void LogDockerDock::insertMessage(QtMsgType type, const QString &msg)
 void LogDockerDock::changeTheme()
 {
     clearLog();
-    QColor background = qApp->palette().background().color();
+    QColor background = qApp->palette().window().color();
     if (background.value() > 100) {
         s_debug.setForeground(Qt::black);
         s_info.setForeground(Qt::darkGreen);

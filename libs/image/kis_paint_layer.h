@@ -144,6 +144,13 @@ public:
      */
     void setOnionSkinEnabled(bool state);
 
+    /**
+     * Reset the onion skin cache to initial state. Useful for
+     * ensuring that old and invalid onion skin projections
+     * are no longer used.
+     */
+    void flushOnionSkinCache();
+
     KisPaintDeviceList getLodCapableDevices() const override;
 
     bool decorationsVisible() const override;

@@ -20,6 +20,8 @@
 #include <QImage>
 #include <KoColorSpace.h>
 #include <KoChannelInfo.h>
+#include <KoColorModelStandardIds.h>
+
 #include <kis_painter.h>
 
 #include <kis_group_layer.h>
@@ -237,13 +239,20 @@ void ChannelModel::updateThumbnails(void)
 
         KisSequentialConstIterator it(thumbnailDev, QRect(0, 0, thumbnailSize.width(), thumbnailSize.height()));
 
+        bool invert = (cs->colorModelId() == CMYKAColorModelID);
+
         for (int y = 0; y < thumbnailSize.height(); y++) {
             for (int x = 0; x < thumbnailSize.width(); x++) {
                 it.nextPixel();
                 const quint8* pixel = it.rawDataConst();
                 for (int chan = 0; chan < m_channelCount; ++chan) {
                     QImage &img = m_thumbnails[chan];
-                    *(img.scanLine(y) + x) = cs->scaleToU8(pixel, chan);
+                    if (invert) {
+                        *(img.scanLine(y) + x) = 255 - cs->scaleToU8(pixel, chan);
+                    }
+                    else {
+                        *(img.scanLine(y) + x) = cs->scaleToU8(pixel, chan);
+                    }
                 }
             }
         }

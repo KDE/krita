@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <QTime>
 #include <QPainter>
+#include <QPainterPath>
 #include <functional>
 
 #include "KoChannelInfo.h"
@@ -33,7 +34,7 @@
 #include "kis_canvas2.h"
 
 HistogramDockerWidget::HistogramDockerWidget(QWidget *parent, const char *name, Qt::WindowFlags f)
-    : QLabel(parent, f), m_paintDevice(nullptr), m_smoothHistogram(true)
+    : QLabel(parent, f), m_colorSpace(0), m_smoothHistogram(true)
 {
     setObjectName(name);
 }
@@ -43,26 +44,20 @@ HistogramDockerWidget::~HistogramDockerWidget()
 
 }
 
-void HistogramDockerWidget::setPaintDevice(KisCanvas2* canvas)
+void HistogramDockerWidget::updateHistogram(KisCanvas2* canvas)
 {
     if (canvas) {
-        m_paintDevice = canvas->image()->projection();
-        m_bounds = canvas->image()->bounds();
-    } else {
-        m_paintDevice.clear();
-        m_bounds = QRect();
-        m_histogramData.clear();
-    }
-}
+        KisPaintDeviceSP paintDevice = canvas->image()->projection();
+        QRect bounds = canvas->image()->bounds();
 
-void HistogramDockerWidget::updateHistogram()
-{
-    if (!m_paintDevice.isNull()) {
-        KisPaintDeviceSP m_devClone = new KisPaintDevice(m_paintDevice->colorSpace());
+        // remember to save the color space to paint the histogram data!
+        m_colorSpace = paintDevice->colorSpace();
 
-        m_devClone->makeCloneFrom(m_paintDevice, m_bounds);
+        KisPaintDeviceSP m_devClone = new KisPaintDevice(paintDevice->colorSpace());
 
-        HistogramComputationThread *workerThread = new HistogramComputationThread(m_devClone, m_bounds);
+        m_devClone->makeCloneFrom(paintDevice, bounds);
+
+        HistogramComputationThread *workerThread = new HistogramComputationThread(m_devClone, bounds);
         connect(workerThread, &HistogramComputationThread::resultReady, this, &HistogramDockerWidget::receiveNewHistogram);
         connect(workerThread, &HistogramComputationThread::finished, workerThread, &QObject::deleteLater);
         workerThread->start();
@@ -80,9 +75,9 @@ void HistogramDockerWidget::receiveNewHistogram(HistVector *histogramData)
 
 void HistogramDockerWidget::paintEvent(QPaintEvent *event)
 {
-    if (m_paintDevice && !m_histogramData.empty()) {
+    if (m_colorSpace && !m_histogramData.empty()) {
         int nBins = m_histogramData.at(0).size();
-        const KoColorSpace* cs = m_paintDevice->colorSpace();
+        const KoColorSpace* cs = m_colorSpace;
 
         QLabel::paintEvent(event);
         QPainter painter(this);

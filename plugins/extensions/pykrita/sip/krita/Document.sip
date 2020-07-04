@@ -77,7 +77,6 @@ public Q_SLOTS:
     void unlock();
     void waitForDone();
     bool tryBarrierLock();
-    bool isIdle();
     void refreshProjection();
     void setHorizontalGuides(const QList<qreal> &lines);
     void setVerticalGuides(const QList<qreal> &lines);
@@ -98,7 +97,7 @@ public Q_SLOTS:
     int playBackEndTime();
     int currentTime();
     void setCurrentTime(int time);
-
+    
 private:
 
 };

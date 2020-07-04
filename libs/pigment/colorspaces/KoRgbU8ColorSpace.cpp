@@ -32,6 +32,7 @@
 #include "compositeops/KoCompositeOps.h"
 
 #include "KoColorConversions.h"
+#include <KoColorSpacePreserveLightnessUtils.h>
 
 
 KoRgbU8ColorSpace::KoRgbU8ColorSpace() :
@@ -108,4 +109,14 @@ QVector <double> KoRgbU8ColorSpace::fromYUV(qreal *y, qreal *u, qreal *v) const
     YUVToRGB(*y, *u, *v, &channelValues[0],&channelValues[1],&channelValues[2]);
     channelValues[3]=1.0;
     return channelValues;
+}
+
+void KoRgbU8ColorSpace::fillGrayBrushWithColorAndLightnessOverlay(quint8 *dst, const QRgb *brush, quint8 *brushColor, qint32 nPixels) const
+{
+    fillGrayBrushWithColorPreserveLightnessRGB<KoBgrU8Traits>(dst, brush, brushColor, 1.0, nPixels);
+}
+
+void KoRgbU8ColorSpace::fillGrayBrushWithColorAndLightnessWithStrength(quint8* dst, const QRgb* brush, quint8* brushColor, qreal strength, qint32 nPixels) const
+{
+    fillGrayBrushWithColorPreserveLightnessRGB<KoBgrU8Traits>(dst, brush, brushColor, strength, nPixels);
 }

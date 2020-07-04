@@ -8,7 +8,11 @@ If you need to build Krita's dependencies for the following reasons:
 * you develop on Linux, but some dependencies aren't available for your distribution and aren't using the scripts in packaging/linux/appimage
 
 and you know what you're doing, you can use the following guide to build
-the dependencies that Krita needs.
+the dependencies that Krita needs. 
+
+Using the scripts mentioned above is strongly preferred because that's what
+the Krita team uses to build the binaries on the binary factory
+(https://binary-factory.kde.org/).
 
 If you develop on Linux and your distribution has all dependencies available,
 
@@ -26,8 +30,7 @@ Note: on all operating systems the entire procedure is done in a terminal window
 3. Make sure you have a compiler:
     * Linux: gcc, minimum version 4.8
     * OSX: clang, you need to install xcode for this
-    * Windows: mingw-w64 7.3 (by mingw-builds): https://sourceforge.net/projects/mingw-w64/
-        * The Files can be found under "Toolchains targetting Win64/Win32"/"Personal Builds".
+    * Windows: mingw-w64 7.3 (by mingw-builds): https://files.kde.org/krita/build/x86_64-7.3.0-release-posix-seh-rt_v5-rev0.7z
         * For threading, select posix.
         * For exceptions, select seh (64-bit) or dwarf (32-bit).
         * Install mingw to something like C:\mingw; the full path must not contain any spaces.
@@ -35,10 +38,18 @@ Note: on all operating systems the entire procedure is done in a terminal window
                idea to create a batch file which sets the path and start cmd.
         * MSVC is *not* supported at the moment.
 
-4. On Windows, you will also need a release of Python 3.6 (*not* 3.7 or any other versions): https://www.python.org. Make sure to have that version of python.exe in your path. This version of Python will be used for two things: to configure Qt and to build the Python scripting module.  Make sure that this version of Python comes first in your path. Do not set PYTHONHOME or PYTHONPATH.
+4. On Windows, you will also need a release of Python 3.8 (not 3.7, probably not 3.9): https://www.python.org. Make sure to have that version of python.exe in your path. This version of Python will be used for two things: to configure Qt and to build the Python scripting module.  Make sure that this version of Python comes first in your path. Do not set PYTHONHOME or PYTHONPATH.
     * Make sure that your Python will have the correct architecture for the version you are trying to build. If building for 32-bit target, you need the 32-bit release of Python.
 
-5. On Windows, if you want to compile Qt with ANGLE support, you will need to install Windows 10 SDK and have the environment variable `WindowsSdkDir` set to it (typically `C:\Program Files (x86)\Windows Kits\10`)
+5. On Windows, if you want to compile Qt with ANGLE support, you will need to install Windows 10 SDK and have 2 environment variables set:
+    * `WindowsSdkDir` (typically set to `C:\Program Files (x86)\Windows Kits\10`)
+    * `WindowsSdkVerBinPath` (typically set to `C:\Program Files (x86)\Windows Kits\10\bin\10.0.18362.0`) where 10.0.18362.0 is the version of the Window 10 SDK.
+
+    * Example:
+        set "WindowsSdkDir=%ProgramFiles(x86)%\Windows Kits\10"
+        set "WindowsSdkVerBinPath=%ProgramFiles(x86)%\Windows Kits\10\bin\10.0.18362.0"
+
+THIS IS ALSO NEEDED IF YOU USE THE build.cmd script.
 
 ## Setup your environment
 
@@ -185,6 +196,13 @@ Note: on all operating systems the entire procedure is done in a terminal window
     cmake --build . --config RelWithDebInfo --target ext_sip
     cmake --build . --config RelWithDebInfo --target ext_pyqt
     ```
+
+    Troubleshooting: if you have problems with 'install' step
+    of ext_sip or ext_pyqt, make sure you install it in single
+    thread only (`mingw32-make -j1 install`). Otherwise, a
+    race condition may happen in the post-install script and
+    metadata generation will be started before actual libraries
+    are installed.
 
     On Windows and Linux (if you want to include gmic-qt)
     ```

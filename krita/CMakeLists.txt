@@ -9,7 +9,7 @@ add_subdirectory( dtd )
 add_subdirectory( data )
 add_subdirectory( integration )
 # Install the application icons following the freedesktop icon theme spec
-add_subdirectory( pics/app )
+add_subdirectory( "pics/branding/${BRANDING}" )
 
 if (ANDROID)
     include_directories (${Qt5AndroidExtras_INCLUDE_DIRS})
@@ -19,18 +19,18 @@ set(krita_SRCS main.cc)
 
 # Set the application icon on the application
 if (NOT APPLE)
-    file(GLOB ICON_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/*-apps-krita.png")
+	file(GLOB ICON_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/branding/${BRANDING}/*-apps-krita.png")
 else()
-    set(ICON_SRCS
-         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/16-apps-krita.png"
-         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/32-apps-krita.png"
-         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/48-apps-krita.png"
-         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/128-apps-krita.png"
-         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/256-apps-krita.png"
-         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/512-apps-krita.png"
-         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/1024-apps-krita.png"
-    )
-endif() 
+	set(ICON_SRCS
+	     "${CMAKE_CURRENT_SOURCE_DIR}/pics/branding/${BRANDING}/16-apps-krita.png"
+	     "${CMAKE_CURRENT_SOURCE_DIR}/pics/branding/${BRANDING}/32-apps-krita.png"
+	     "${CMAKE_CURRENT_SOURCE_DIR}/pics/branding/${BRANDING}/48-apps-krita.png"
+	     "${CMAKE_CURRENT_SOURCE_DIR}/pics/branding/${BRANDING}/128-apps-krita.png"
+	     "${CMAKE_CURRENT_SOURCE_DIR}/pics/branding/${BRANDING}/256-apps-krita.png"
+	     "${CMAKE_CURRENT_SOURCE_DIR}/pics/branding/${BRANDING}/512-apps-krita.png"
+	     "${CMAKE_CURRENT_SOURCE_DIR}/pics/branding/${BRANDING}/1024-apps-krita.png"
+	)
+endif()
 ecm_add_app_icon(krita_SRCS ICONS ${ICON_SRCS})
 
 # Install the mimetype icons
@@ -77,9 +77,9 @@ if (ANDROID)
 else()
     add_executable(krita ${krita_SRCS})
 endif()
-target_link_libraries(krita 
+target_link_libraries(krita
     PRIVATE
-                      kritaui 
+                      kritaui
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Widgets
@@ -104,7 +104,17 @@ if (APPLE)
     set_target_properties(krita PROPERTIES MACOSX_BUNDLE_COPYRIGHT "GNU Public License, V2 or, at your option, any later version.")
 endif ()
 
+set(KRITAVERSION_SRCS kritaversion.cpp)
+add_executable(krita_version ${KRITAVERSION_SRCS})
+target_link_libraries(krita_version
+    PRIVATE
+        Qt5::Core
+        kritaversion
+)
+
+
 install(TARGETS krita ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS krita_version ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(PROGRAMS org.kde.krita.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install(FILES  krita.action kritamenu.action DESTINATION ${DATA_INSTALL_DIR}/krita/actions)
 install(FILES  org.kde.krita.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR} )

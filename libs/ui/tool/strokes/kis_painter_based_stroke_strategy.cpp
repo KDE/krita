@@ -352,7 +352,7 @@ void KisPainterBasedStrokeStrategy::cancelStrokeCallback()
             delete m_transaction;
             deletePainters();
 
-            QRegion region = t->region();
+            KisRegion region = t->region();
             indirect->setTemporaryTarget(0);
             node->setDirty(region);
             revert = false;

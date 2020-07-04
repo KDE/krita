@@ -149,7 +149,10 @@ void NodeView::addPropertyActions(QMenu *menu, const QModelIndex &index)
 void NodeView::updateNode(const QModelIndex &index)
 {
     dataChanged(index, index);
-    d->delegate.resetVisibilityStasis();
+}
+
+void NodeView::toggleSolo(const QModelIndex &index) {
+    d->delegate.toggleSolo(index);
 }
 
 QItemSelectionModel::SelectionFlags NodeView::selectionCommand(const QModelIndex &index,
@@ -538,7 +541,7 @@ void NodeView::dragEnterEvent(QDragEnterEvent *ev)
 {
     DRAG_WHILE_DRAG_WORKAROUND_START();
 
-    QVariant data = qVariantFromValue(
+    QVariant data = QVariant::fromValue(
         static_cast<void*>(const_cast<QMimeData*>(ev->mimeData())));
     model()->setData(QModelIndex(), data, KisNodeModel::DropEnabled);
 

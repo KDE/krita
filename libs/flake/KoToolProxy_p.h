@@ -21,7 +21,7 @@
 #define KOTOOLPROXYPRIVATE_P
 
 #include <QTimer>
-#include <QTime>
+#include <QElapsedTimer>
 #include <QPointF>
 
 class KoPointerEvent;
@@ -64,7 +64,7 @@ public:
     // for multi clicking (double click or triple click) we need the following
     int multiClickCount {0};
     QPointF multiClickGlobalPoint;
-    QTime multiClickTimeStamp;
+    QElapsedTimer multiClickTimeStamp;
 };
 
 #endif

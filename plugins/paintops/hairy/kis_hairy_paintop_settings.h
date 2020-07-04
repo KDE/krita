@@ -32,9 +32,10 @@ class KisHairyPaintOpSettings : public KisBrushBasedPaintOpSettings
 public:
     using KisPaintOpSettings::fromXML;
 
-    KisHairyPaintOpSettings();
+    KisHairyPaintOpSettings(KisResourcesInterfaceSP resourcesInterface);
     using KisBrushBasedPaintOpSettings::brushOutline;
-    QPainterPath brushOutline(const KisPaintInformation &info, const OutlineMode &mode) override;
+    QPainterPath brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom) override;
+    bool hasPatternSettings() const override;
 
 };
 

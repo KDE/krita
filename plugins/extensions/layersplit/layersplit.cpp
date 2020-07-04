@@ -46,6 +46,8 @@
 #include "kis_node_manager.h"
 #include "kis_node_commands_adapter.h"
 #include "kis_undo_adapter.h"
+#include <kis_image_barrier_locker.h>
+#include "kis_selection_mask.h"
 
 #include <KoUpdater.h>
 #include <KoProgressUpdater.h>
@@ -82,16 +84,22 @@ void LayerSplit::slotLayerSplit()
 
     if (dlg.exec() == QDialog::Accepted) {
 
+        bool modeToLayer = !dlg.m_modeToMask;
         dlg.hide();
 
         QApplication::setOverrideCursor(Qt::WaitCursor);
 
-        QPointer<KoUpdater> updater = viewManager()->createUnthreadedUpdater(i18n("Split into Layers"));
-
+        QPointer<KoUpdater> updater;
+        if( modeToLayer){
+            updater = viewManager()->createUnthreadedUpdater(i18n("Split into Layers"));
+        }
+        else {
+            updater = viewManager()->createUnthreadedUpdater(i18n("Split into Masks"));
+        }
         KisImageSP image = viewManager()->image();
         if (!image) return;
 
-        image->lock();
+        KisImageBarrierLocker locker(image);
 
         KisNodeSP node = viewManager()->activeNode();
         if (!node) return;
@@ -108,7 +116,7 @@ void LayerSplit::slotLayerSplit()
 
         updater->setProgress(0);
 
-        KisRandomConstAccessorSP acc = projection->createRandomConstAccessorNG(rc.x(), rc.y());
+        KisRandomConstAccessorSP acc = projection->createRandomConstAccessorNG();
 
         for (int row = rc.y(); row < rc.height(); ++row) {
 
@@ -158,7 +166,7 @@ void LayerSplit::slotLayerSplit()
                     Layer l;
                     l.color = c;
                     l.device = new KisPaintDevice(cs, name);
-                    l.accessor = l.device->createRandomAccessorNG(col, row);
+                    l.accessor = l.device->createRandomAccessorNG();
                     l.accessor->moveTo(col, row);
                     memcpy(l.accessor->rawData(), acc->rawDataConst(), cs->pixelSize());
                     l.pixelsWritten = 1;
@@ -188,35 +196,48 @@ void LayerSplit::slotLayerSplit()
         undo->beginMacro(kundo2_i18n("Split Layer"));
         KisNodeCommandsAdapter adapter(viewManager());
 
-        KisGroupLayerSP baseGroup = dynamic_cast<KisGroupLayer*>(node->parent().data());
-        if (!baseGroup) {
-            // Masks are never nested
-            baseGroup = dynamic_cast<KisGroupLayer*>(node->parent()->parent().data());
-        }
-
-        if (dlg.hideOriginal()) {
-            node->setVisible(false);
-        }
-
-        if (dlg.createBaseGroup()) {
-            KisGroupLayerSP grp = new KisGroupLayer(image, i18n("Color"), OPACITY_OPAQUE_U8);
-            adapter.addNode(grp, baseGroup, 1);
-            baseGroup = grp;
-        }
-
-        Q_FOREACH (const Layer &l, colorMap) {
-            KisGroupLayerSP grp = baseGroup;
-            if (dlg.createSeparateGroups()) {
-                grp = new KisGroupLayer(image, l.device->objectName(), OPACITY_OPAQUE_U8);
-                adapter.addNode(grp, baseGroup, 1);
+        if(modeToLayer){
+            KisGroupLayerSP baseGroup = dynamic_cast<KisGroupLayer*>(node->parent().data());
+            if (!baseGroup) {
+                // Masks are never nested
+                baseGroup = dynamic_cast<KisGroupLayer*>(node->parent()->parent().data());
             }
-            KisPaintLayerSP paintLayer = new KisPaintLayer(image, l.device->objectName(), OPACITY_OPAQUE_U8, l.device);
-            adapter.addNode(paintLayer, grp, 0);
-            paintLayer->setAlphaLocked(dlg.lockAlpha());
+
+            if (dlg.hideOriginal()) {
+                node->setVisible(false);
+            }
+
+            if (dlg.createBaseGroup()) {
+                KisGroupLayerSP grp = new KisGroupLayer(image, i18n("Color"), OPACITY_OPAQUE_U8);
+                adapter.addNode(grp, baseGroup, 1);
+                baseGroup = grp;
+            }
+
+            Q_FOREACH (const Layer &l, colorMap) {
+                KisGroupLayerSP grp = baseGroup;
+                if (dlg.createSeparateGroups()) {
+                    grp = new KisGroupLayer(image, l.device->objectName(), OPACITY_OPAQUE_U8);
+                    adapter.addNode(grp, baseGroup, 1);
+                }
+                KisPaintLayerSP paintLayer = new KisPaintLayer(image, l.device->objectName(), OPACITY_OPAQUE_U8, l.device);
+                adapter.addNode(paintLayer, grp, 0);
+                paintLayer->setAlphaLocked(dlg.lockAlpha());
+            }
+        }
+        else{
+            KisLayerSP baseGroup = dynamic_cast<KisLayer*>(node.data());
+            Q_FOREACH (const Layer &l, colorMap) {
+                KisSelectionMaskSP mask = new KisSelectionMask(image);
+                mask->setName( l.device->objectName());
+
+                KisPaintDeviceSP temp = KisPainter::convertToAlphaAsPureAlpha(l.device);
+                mask->initSelection(temp , baseGroup);
+                adapter.addNode(mask, baseGroup,0);
+                mask->setActive(true);
+            }
         }
 
         undo->endMacro();
-        image->unlock();
         image->setModified();
    }
 

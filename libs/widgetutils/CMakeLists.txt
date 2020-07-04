@@ -21,15 +21,21 @@ set(kritawidgetutils_LIB_SRCS
     KoUpdaterPrivate_p.cpp
     KoProperties.cpp
     KoFileDialog.cpp
-    KoResourcePaths.cpp
     KisKineticScroller.cpp
+    KoCheckerBoardPainter.cpp
+    KoItemToolTip.cpp
     KisSqueezedComboBox.cpp
     KisDialogStateSaver.cpp
+    KisPopupButton.cpp
+    kis_cursor.cc
+    kis_cursor_cache.cpp
     
     kis_double_parse_spin_box.cpp
     kis_double_parse_unit_spin_box.cpp
     kis_int_parse_spin_box.cpp
     kis_num_parser.cpp
+    kis_slider_spin_box.cpp
+    kis_zoom_scrollbar.cpp
     kis_spin_box_unit_manager.cpp
 
     config/kcolorscheme.cpp
@@ -116,6 +122,7 @@ target_link_libraries(kritawidgetutils
         Qt5::Core
         KF5::ItemViews
         kritaglobal
+        kritaresources
     PRIVATE
         Qt5::PrintSupport
         KF5::I18n
@@ -126,7 +133,7 @@ target_link_libraries(kritawidgetutils
         KF5::WidgetsAddons
         KF5::WindowSystem
         kritaplugin
-        kritaodf
+        
         ${KRITA_WIDGET_UTILS_EXTRA_LIBS}
 )
 

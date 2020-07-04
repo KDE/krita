@@ -33,6 +33,8 @@
 #include "KisImageBarrierLockerWithFeedback.h"
 #include "commands_new/kis_switch_current_time_command.h"
 #include "kis_command_utils.h"
+#include "KisPart.h"
+#include "kis_animation_cache_populator.h"
 
 struct KisTimeBasedItemModel::Private
 {
@@ -106,10 +108,9 @@ void KisTimeBasedItemModel::setImage(KisImageWSP image)
     if (image) {
         KisImageAnimationInterface *ai = image->animationInterface();
 
-        slotCurrentTimeChanged(ai->currentUITime());
-
         connect(ai, SIGNAL(sigFramerateChanged()), SLOT(slotFramerateChanged()));
         connect(ai, SIGNAL(sigUiTimeChanged(int)), SLOT(slotCurrentTimeChanged(int)));
+        connect(ai, SIGNAL(sigFullClipRangeChanged()), SLOT(slotClipRangeChanged()));
     }
 
     if (image != oldImage) {
@@ -151,12 +152,12 @@ void KisTimeBasedItemModel::setAnimationPlayer(KisAnimationPlayer *player)
 
 void KisTimeBasedItemModel::setLastVisibleFrame(int time)
 {
-    const int growThreshold = m_d->effectiveNumFrames() - 3;
+    const int growThreshold = m_d->effectiveNumFrames() - 1;
     const int growValue = time + 8;
 
-    const int shrinkThreshold = m_d->effectiveNumFrames() - 12;
+    const int shrinkThreshold = m_d->effectiveNumFrames() - 3;
     const int shrinkValue = qMax(m_d->baseNumFrames(), qMin(growValue, shrinkThreshold));
-    const bool canShrink = m_d->effectiveNumFrames() > m_d->baseNumFrames();
+    const bool canShrink = m_d->baseNumFrames() < m_d->effectiveNumFrames();
 
     if (time >= growThreshold) {
         beginInsertColumns(QModelIndex(), m_d->effectiveNumFrames(), growValue - 1);
@@ -422,6 +423,12 @@ void KisTimeBasedItemModel::slotInternalScrubPreviewRequested(int time)
 void KisTimeBasedItemModel::setScrubState(bool active)
 {
     if (!m_d->scrubInProgress && active) {
+        const int currentFrame = m_d->image->animationInterface()->currentUITime();
+        const bool hasCurrentFrameInCache = m_d->framesCache->frameStatus(currentFrame) == KisAnimationFrameCache::Cached;
+        if(!hasCurrentFrameInCache) {
+            KisPart::instance()->prioritizeFrameForCache(m_d->image, currentFrame);
+        }
+
         m_d->scrubStartFrame = m_d->activeFrameIndex;
         m_d->scrubInProgress = true;
     }
@@ -440,6 +447,11 @@ void KisTimeBasedItemModel::setScrubState(bool active)
     }
 }
 
+bool KisTimeBasedItemModel::isScrubbing()
+{
+    return m_d->scrubInProgress;
+}
+
 void KisTimeBasedItemModel::scrubTo(int time, bool preview)
 {
     if (m_d->animationPlayer && m_d->animationPlayer->isPlaying()) return;
@@ -455,15 +467,28 @@ void KisTimeBasedItemModel::scrubTo(int time, bool preview)
     }
 }
 
+void KisTimeBasedItemModel::slotCurrentTimeChanged(int time)
+{
+    if (time != m_d->activeFrameIndex) {
+        setHeaderData(time, Qt::Horizontal, true, ActiveFrameRole);
+    }
+}
+
 void KisTimeBasedItemModel::slotFramerateChanged()
 {
     emit headerDataChanged(Qt::Horizontal, 0, columnCount() - 1);
 }
 
-void KisTimeBasedItemModel::slotCurrentTimeChanged(int time)
+void KisTimeBasedItemModel::slotClipRangeChanged()
 {
-    if (time != m_d->activeFrameIndex) {
-        setHeaderData(time, Qt::Horizontal, true, ActiveFrameRole);
+    if (m_d->image && m_d->image->animationInterface() ) {
+        const KisImageAnimationInterface* const interface = m_d->image->animationInterface();
+        const int lastFrame = interface->playbackRange().end();
+        if ( lastFrame > m_d->numFramesOverride) {
+            beginInsertColumns(QModelIndex(), m_d->numFramesOverride, interface->playbackRange().end());
+            m_d->numFramesOverride = interface->playbackRange().end();
+            endInsertColumns();
+        }
     }
 }
 
@@ -484,7 +509,7 @@ void KisTimeBasedItemModel::slotCacheChanged()
 void KisTimeBasedItemModel::slotPlaybackFrameChanged()
 {
     if (!m_d->animationPlayer->isPlaying()) return;
-    setData(index(0, m_d->animationPlayer->currentTime()), true, ActiveFrameRole);
+    setData(index(0, m_d->animationPlayer->visibleFrame()), true, ActiveFrameRole);
 }
 
 void KisTimeBasedItemModel::slotPlaybackStopped()
@@ -503,6 +528,16 @@ void KisTimeBasedItemModel::setPlaybackRange(const KisTimeRange &range)
 bool KisTimeBasedItemModel::isPlaybackActive() const
 {
     return m_d->animationPlayer && m_d->animationPlayer->isPlaying();
+}
+
+bool KisTimeBasedItemModel::isPlaybackPaused() const
+{
+    return m_d->animationPlayer && m_d->animationPlayer->isPaused();
+}
+
+void KisTimeBasedItemModel::stopPlayback() const {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->animationPlayer);
+    m_d->animationPlayer->stop();
 }
 
 int KisTimeBasedItemModel::currentTime() const

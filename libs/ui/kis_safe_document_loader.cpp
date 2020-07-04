@@ -186,7 +186,7 @@ void KisSafeDocumentLoader::fileChangedCompressed(bool sync)
     m_d->fileChangedFlag = false;
 
     m_d->temporaryPath =
-            QDir::tempPath() + QDir::separator() +
+            QDir::tempPath() + '/' +
             QString("krita_file_layer_copy_%1_%2.%3")
             .arg(QApplication::applicationPid())
             .arg(qrand())

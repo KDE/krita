@@ -33,7 +33,6 @@
 
 class KisDocument;
 class KisMainWindow;
-class KisPrintJob;
 class KisCanvasController;
 class KisZoomManager;
 class KisCanvas2;
@@ -45,7 +44,6 @@ class KisInputManager;
 
 class KoZoomController;
 class KoZoomController;
-struct KoPageLayout;
 class KoCanvasResourceProvider;
 
 // KDE classes
@@ -98,18 +96,6 @@ public:
     KisView *replaceBy(KisDocument *document);
 
     /**
-     * In order to print the document represented by this view a new print job should
-     * be constructed that is capable of doing the printing.
-     * The default implementation returns 0, which silently cancels printing.
-     */
-    KisPrintJob * createPrintJob();
-
-    /**
-     * Create a QPrintDialog based on the @p printJob
-     */
-    QPrintDialog *createPrintDialog(KisPrintJob *printJob, QWidget *parent);
-
-    /**
      * @return the KisMainWindow in which this view is currently.
      */
     KisMainWindow *mainWindow() const;
@@ -123,6 +109,9 @@ public:
      * @return the statusbar of the KisMainWindow in which this view is currently.
      */
     QStatusBar *statusBar() const;
+
+
+
 
     /**
      * This adds a widget to the statusbar for this view.

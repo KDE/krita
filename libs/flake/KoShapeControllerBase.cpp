@@ -30,6 +30,7 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
+#include <kundo2command.h>
 
 class KoshapeControllerBasePrivate
 {
@@ -69,13 +70,12 @@ KoShapeControllerBase::~KoShapeControllerBase()
     delete d;
 }
 
-void KoShapeControllerBase::addShape(KoShape *shape)
+KoShapeContainer* KoShapeControllerBase::createParentForShapes(const QList<KoShape*> shapes, KUndo2Command *parentCommand)
 {
-    addShapes({shape});
-}
+    Q_UNUSED(parentCommand);
+    Q_UNUSED(shapes);
 
-void KoShapeControllerBase::shapesRemoved(const QList<KoShape*> & /*shapes*/, KUndo2Command * /*command*/)
-{
+    return 0;
 }
 
 KoDocumentResourceManager *KoShapeControllerBase::resourceManager() const

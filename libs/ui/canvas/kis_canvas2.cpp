@@ -303,20 +303,24 @@ void KisCanvas2::setCanvasWidget(KisAbstractCanvasWidget *widget)
         m_d->popupPalette->setParent(widget->widget());
     }
 
-    if (m_d->canvasWidget != 0) {
+    if (m_d->canvasWidget) {
+        /**
+         * We are switching the canvas type. We should reinitialize our
+         * connections to decorations and input manager
+         */
+
         widget->setDecorations(m_d->canvasWidget->decorations());
 
-        // Redundant check for the constructor case, see below
-        if(viewManager() != 0)
+        if(viewManager()) {
             viewManager()->inputManager()->removeTrackedCanvas(this);
+            m_d->canvasWidget = widget;
+            viewManager()->inputManager()->addTrackedCanvas(this);
+        } else {
+            m_d->canvasWidget = widget;
+        }
+    } else {
+        m_d->canvasWidget = widget;
     }
-
-    m_d->canvasWidget = widget;
-
-    // Either tmp was null or we are being called by KisCanvas2 constructor that is called by KisView
-    // constructor, so the view manager still doesn't exists.
-    if(m_d->canvasWidget != 0 && viewManager() != 0)
-        viewManager()->inputManager()->addTrackedCanvas(this);
 
     if (!m_d->canvasWidget->decoration(INFINITY_DECORATION_ID)) {
         KisInfinityManager *manager = new KisInfinityManager(m_d->view, this);

@@ -208,11 +208,6 @@ KisScreenInformationAdapter::ScreenInfo KisScreenInformationAdapter::infoForScre
     QPlatformNativeInterface *nativeInterface = qGuiApp->platformNativeInterface();
     HMONITOR monitor = reinterpret_cast<HMONITOR>(nativeInterface->nativeResourceForScreen("handle", screen));
 
-    if (!monitor) {
-        qWarning("%s: failed to get HMONITOR handle for screen: screen = 0x%X, monitor = 0x%X",
-                 __PRETTY_FUNCTION__, screen, monitor);
-    }
-
     UINT i = 0;
     Microsoft::WRL::ComPtr<IDXGIOutput> currentOutput;
 

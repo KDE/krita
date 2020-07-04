@@ -23,6 +23,7 @@
 
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
+#include <KisGlobalResourcesInterface.h>
 
 #include "ui_wdgwaveoptions.h"
 
@@ -78,7 +79,7 @@ void KisWdgWave::setConfiguration(const KisPropertiesConfigurationSP config)
 
 KisPropertiesConfigurationSP KisWdgWave::configuration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("wave", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("wave", 1, KisGlobalResourcesInterface::instance());
     config->setProperty("horizontalwavelength", this->widget()->intHWavelength->value());
     config->setProperty("horizontalshift", this->widget()->intHShift->value());
     config->setProperty("horizontalamplitude", this->widget()->intHAmplitude->value());

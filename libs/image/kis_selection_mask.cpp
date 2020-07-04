@@ -61,8 +61,8 @@ public:
     void slotConfigChanged();
 };
 
-KisSelectionMask::KisSelectionMask(KisImageWSP image)
-    : KisEffectMask()
+KisSelectionMask::KisSelectionMask(KisImageWSP image, const QString &name)
+    : KisEffectMask(name)
     , m_d(new Private(this))
 {
     setName("selection");
@@ -305,6 +305,13 @@ void KisSelectionMask::setDecorationsVisible(bool value, bool update)
 
     if (update) {
         setDirty(oldExtent | extent());
+    }
+}
+
+void KisSelectionMask::setDirty(const QVector<QRect> &rects)
+{
+    if (m_d->image && m_d->image->overlaySelectionMask() == this) {
+        KisEffectMask::setDirty(rects);
     }
 }
 

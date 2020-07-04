@@ -88,7 +88,7 @@ void writeFixedString(const QString &value, QIODevice *device)
 }
 
     // Write UUID fetched from the file name or generate
-QString getPatternUuidLazy(const KoPattern *pattern)
+QString getPatternUuidLazy(const KoPatternSP pattern)
 {
     QUuid uuid;
     QString patternFileName = pattern->filename();

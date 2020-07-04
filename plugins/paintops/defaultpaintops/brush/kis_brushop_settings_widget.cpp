@@ -30,6 +30,8 @@
 #include <kis_paint_action_type_option.h>
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_mix_option.h>
+#include <kis_pressure_lightness_strength_option.h>
+#include <kis_pressure_lightness_strength_option_widget.h>
 #include <kis_curve_option_widget.h>
 #include <kis_pressure_hsv_option.h>
 #include <kis_airbrush_option_widget.h>
@@ -48,12 +50,14 @@
 
 #include <KisPrefixedPaintOpOptionWrapper.h>
 #include <KisPaintopSettingsIds.h>
+#include <KisGlobalResourcesInterface.h>
 
 KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     : KisBrushBasedPaintopOptionWidget(parent)
 {
     setObjectName("brush option widget");
     setPrecisionEnabled(true);
+    setHSLBrushTipEnabled(true);
 
     // Brush tip options
     addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
@@ -68,6 +72,8 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSoftnessOption(), i18n("Soft"), i18n("Hard")), i18n("Softness"));
     addPaintOpOption(new KisPressureSharpnessOptionWidget(), i18n("Sharpness"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°")), i18n("Rotation"));
+    m_lightnessStrengthOptionWidget = new KisPressureLightnessStrengthOptionWidget();
+    addPaintOpOption(m_lightnessStrengthOptionWidget, i18n("Lightness Strength"));
     addPaintOpOption(new KisPressureScatterOptionWidget(), i18n("Scatter"));
 
     // Colors options
@@ -155,10 +161,15 @@ KisBrushOpSettingsWidget::~KisBrushOpSettingsWidget()
 
 KisPropertiesConfigurationSP KisBrushOpSettingsWidget::configuration() const
 {
-    KisBrushBasedPaintOpSettingsSP config = new KisBrushOpSettings();
+    KisBrushBasedPaintOpSettingsSP config = new KisBrushOpSettings(KisGlobalResourcesInterface::instance());
     config->setOptionsWidget(const_cast<KisBrushOpSettingsWidget*>(this));
     config->setProperty("paintop", "paintbrush"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;
 }
 
+void KisBrushOpSettingsWidget::notifyPageChanged()
+{
+    KisBrushSP brush = this->brush();
+    m_lightnessStrengthOptionWidget->setEnabled(brush->preserveLightness());
+}

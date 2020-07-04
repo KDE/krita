@@ -63,9 +63,12 @@ public:
     virtual void refreshGraphAsync(KisNodeSP root) = 0;
     virtual void refreshGraphAsync(KisNodeSP root, const QRect &rc) = 0;
     virtual void refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &cropRect) = 0;
+    virtual void refreshGraphAsync(KisNodeSP root, const QVector<QRect> &rc, const QRect &cropRect) = 0;
 
-    virtual void setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP filter) = 0;
-    virtual KisProjectionUpdatesFilterSP projectionUpdatesFilter() const = 0;
+    virtual KisProjectionUpdatesFilterCookie addProjectionUpdatesFilter(KisProjectionUpdatesFilterSP filter) = 0;
+    virtual KisProjectionUpdatesFilterSP removeProjectionUpdatesFilter(KisProjectionUpdatesFilterCookie cookie) = 0;
+    virtual KisProjectionUpdatesFilterCookie currentProjectionUpdatesFilter() const = 0;
+
 };
 
 class KRITAIMAGE_EXPORT KisProjectionUpdateListener

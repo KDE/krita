@@ -46,6 +46,7 @@ struct Q_DECL_HIDDEN KisDistanceInformation::Private {
         timeSinceSpacingUpdate(0.0),
         timingUpdateInterval(LONG_TIME),
         timeSinceTimingUpdate(0.0),
+        lastAngle(0.0),
         lastDabInfoValid(false),
         lastPaintInfoValid(false),
         totalDistance(0.0),

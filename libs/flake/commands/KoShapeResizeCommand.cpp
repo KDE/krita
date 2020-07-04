@@ -91,7 +91,7 @@ QMap<KoShape*, QRectF> KoShapeResizeCommand::redoNoUpdate()
     Q_FOREACH (KoShape *shape, m_d->shapes) {
         const QRectF oldDirtyRect = shape->boundingRect();
 
-        KoFlake::resizeShape(shape,
+        KoFlake::resizeShapeCommon(shape,
                              m_d->scaleX, m_d->scaleY,
                              m_d->absoluteStillPoint,
                              m_d->useGlobalMode,

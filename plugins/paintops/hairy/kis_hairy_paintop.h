@@ -33,6 +33,7 @@
 
 class KisPainter;
 class KisBrushBasedPaintOpSettings;
+class KisResourcesInterface;
 
 class KisHairyPaintOp : public KisPaintOp
 {
@@ -42,6 +43,7 @@ public:
 
     void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance) override;
 
+    static QList<KoResourceSP> prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface);
 protected:
     KisSpacingInformation paintAt(const KisPaintInformation& info) override;
 

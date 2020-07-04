@@ -27,6 +27,7 @@
 #include "kis_painter.h"
 #include "kis_random_accessor_ng.h"
 #include "kis_global.h"
+#include <KisRegion.h>
 
 
 class KisLazyFillCapacityMap
@@ -66,10 +67,10 @@ public:
 
         const QPoint pt = m_mainRect.topLeft();
 
-        m_mainAccessor = m_mainImage->createRandomConstAccessorNG(pt.x(), pt.y());
-        m_aAccessor = m_aLabelImage->createRandomConstAccessorNG(pt.x(), pt.y());
-        m_bAccessor = m_bLabelImage->createRandomConstAccessorNG(pt.x(), pt.y());
-        m_maskAccessor = m_maskImage->createRandomConstAccessorNG(pt.x(), pt.y());
+        m_mainAccessor = m_mainImage->createRandomConstAccessorNG();
+        m_aAccessor = m_aLabelImage->createRandomConstAccessorNG();
+        m_bAccessor = m_bLabelImage->createRandomConstAccessorNG();
+        m_maskAccessor = m_maskImage->createRandomConstAccessorNG();
         m_srcPixelBuf.resize(m_pixelSize);
     }
 

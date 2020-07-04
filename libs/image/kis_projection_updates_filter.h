@@ -20,12 +20,13 @@
 #define __KIS_PROJECTION_UPDATES_FILTER_H
 
 #include <QSharedPointer>
+#include "kritaimage_export.h"
 
 class KisImage;
 class KisNode;
 class QRect;
 
-class KisProjectionUpdatesFilter
+class KRITAIMAGE_EXPORT KisProjectionUpdatesFilter
 {
 public:
     virtual ~KisProjectionUpdatesFilter();
@@ -34,6 +35,7 @@ public:
      * \return true if an update should be dropped by the image
      */
     virtual bool filter(KisImage *image, KisNode *node, const QVector<QRect> &rects, bool resetAnimationCache) = 0;
+    virtual bool filterRefreshGraph(KisImage *image, KisNode *node, const QVector<QRect> &rect, const QRect &cropRect) = 0;
 };
 
 
@@ -41,10 +43,11 @@ public:
 /**
  * A dummy filter implementation that eats all the updates
  */
-class KisDropAllProjectionUpdatesFilter : public KisProjectionUpdatesFilter
+class KRITAIMAGE_EXPORT KisDropAllProjectionUpdatesFilter : public KisProjectionUpdatesFilter
 {
 public:
     bool filter(KisImage *image, KisNode *node, const QVector<QRect> &rects, bool resetAnimationCache) override;
+    bool filterRefreshGraph(KisImage *image, KisNode *node, const QVector<QRect> &rects, const QRect &cropRect) override;
 };
 
 #endif /* __KIS_PROJECTION_UPDATES_FILTER_H */

@@ -34,7 +34,6 @@
 #include <KoDpi.h>
 #include <KoUnit.h>
 #include <KoID.h>
-#include <KoOdfReadStore.h>
 #include <KoProgressProxy.h>
 #include <KoProgressUpdater.h>
 #include <KoSelection.h>
@@ -49,15 +48,21 @@
 #include <KisImportExportErrorCode.h>
 #include <KoDocumentResourceManager.h>
 #include <KoMD5Generator.h>
+#include <KisResourceStorage.h>
+#include <KisResourceLocator.h>
+#include <KisResourceTypes.h>
+#include <KisGlobalResourcesInterface.h>
 
 #include <KisUsageLogger.h>
 #include <klocalizedstring.h>
+#include "kis_scratch_pad.h"
 #include <kis_debug.h>
 #include <kis_generator_layer.h>
 #include <kis_generator_registry.h>
 #include <kdesktopfile.h>
 #include <kconfiggroup.h>
 #include <kbackup.h>
+#include <KisView.h>
 
 #include <QTextBrowser>
 #include <QApplication>
@@ -79,6 +84,7 @@
 #include <QWidget>
 #include <QFuture>
 #include <QFutureWatcher>
+#include <QUuid>
 
 // Krita Image
 #include <kis_image_animation_interface.h>
@@ -119,6 +125,7 @@
 #include "kis_guides_config.h"
 #include "kis_image_barrier_lock_adapter.h"
 #include "KisReferenceImagesLayer.h"
+#include "dialogs/KisRecoverNamedAutosaveDialog.h"
 
 #include <mutex>
 #include "kis_config_notifier.h"
@@ -253,6 +260,7 @@ public:
         } else {
             unit = KoUnit::Centimeter;
         }
+        connect(&imageIdleWatcher, SIGNAL(startedIdleMode()), q, SLOT(slotPerformIdleRoutines()));
     }
 
     Private(const Private &rhs, KisDocument *_q)
@@ -267,6 +275,7 @@ public:
         , savingLock(&savingMutex)
     {
         copyFromImpl(rhs, _q, CONSTRUCT);
+        connect(&imageIdleWatcher, SIGNAL(startedIdleMode()), q, SLOT(slotPerformIdleRoutines()));
     }
 
     ~Private() {
@@ -325,9 +334,7 @@ public:
 
     QColor globalAssistantsColor;
 
-    QList<KoColorSet*> paletteList;
-    bool ownsPaletteList = false;
-
+    KisSharedPtr<KisReferenceImagesLayer> referenceImagesLayer;
     KisGridConfig gridConfig;
 
     StdLockableWrapper<QMutex> savingLock;
@@ -342,19 +349,15 @@ public:
 
     bool batchMode { false };
 
+    QString documentStorageID {QUuid::createUuid().toString()};
+    KisResourceStorageSP documentResourceStorage;
+
     void syncDecorationsWrapperLayerState();
 
     void setImageAndInitIdleWatcher(KisImageSP _image) {
         image = _image;
 
         imageIdleWatcher.setTrackedImage(image);
-
-        if (image) {
-            imageIdleConnection.reset(
-                        new KisSignalAutoConnection(
-                            &imageIdleWatcher, SIGNAL(startedIdleMode()),
-                            image.data(), SLOT(explicitRegenerateLevelOfDetail())));
-        }
     }
 
     void copyFrom(const Private &rhs, KisDocument *q);
@@ -362,8 +365,6 @@ public:
 
     /// clones the palette list oldList
     /// the ownership of the returned KoColorSet * belongs to the caller
-    QList<KoColorSet *> clonePaletteList(const QList<KoColorSet *> &oldList);
-
     class StrippedSafeSavingLocker;
 };
 
@@ -390,7 +391,7 @@ void KisDocument::Private::syncDecorationsWrapperLayerState()
             setClearsRedoOnStart(false);
         }
 
-        void initStrokeCallback() {
+        void initStrokeCallback() override {
             KisDecorationsWrapperLayerSP decorationsLayer =
                 KisLayerUtils::findNodeByType<KisDecorationsWrapperLayer>(m_document->image()->root());
 
@@ -448,25 +449,28 @@ void KisDocument::Private::copyFromImpl(const Private &rhs, KisDocument *q, KisD
     lastMod = rhs.lastMod;
     // XXX: the display properties will be shared between different snapshots
     globalAssistantsColor = rhs.globalAssistantsColor;
-
-    if (policy == REPLACE) {
-        QList<KoColorSet *> newPaletteList = clonePaletteList(rhs.paletteList);
-        q->setPaletteList(newPaletteList, /* emitSignal = */ true);
-        // we still do not own palettes if we did not
-    } else {
-        paletteList = rhs.paletteList;
-    }
-
     batchMode = rhs.batchMode;
-}
 
-QList<KoColorSet *> KisDocument::Private::clonePaletteList(const QList<KoColorSet *> &oldList)
-{
-    QList<KoColorSet *> newList;
-    Q_FOREACH (KoColorSet *palette, oldList) {
-        newList << new KoColorSet(*palette);
+    // CHECK THIS! This is what happened to the palette list -- but is it correct here as well? Ask Dmitry!!!
+    //    if (policy == REPLACE) {
+    //        QList<KoColorSetSP> newPaletteList = clonePaletteList(rhs.paletteList);
+    //        q->setPaletteList(newPaletteList, /* emitSignal = */ true);
+    //        // we still do not own palettes if we did not
+    //    } else {
+    //        paletteList = rhs.paletteList;
+    //    }
+
+    if (rhs.documentResourceStorage) {
+        if (policy == REPLACE) {
+            // Clone the resources, but don't add them to the database, only the editable
+            // version of the document should have those resources in the database.
+            documentResourceStorage = rhs.documentResourceStorage->clone();
+        }
+        else {
+            documentResourceStorage = rhs.documentResourceStorage;
+        }
     }
-    return newList;
+
 }
 
 class KisDocument::Private::StrippedSafeSavingLocker {
@@ -516,13 +520,19 @@ private:
     KisImageBarrierLockAdapter m_imageLock;
 };
 
-KisDocument::KisDocument()
+KisDocument::KisDocument(bool addStorage)
     : d(new Private(this))
 {
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     connect(d->undoStack, SIGNAL(cleanChanged(bool)), this, SLOT(slotUndoStackCleanChanged(bool)));
     connect(d->autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
     setObjectName(newObjectName());
+
+
+    if (addStorage) {
+        d->documentResourceStorage.reset(new KisResourceStorage(d->documentStorageID));
+        KisResourceLocator::instance()->addStorage(d->documentStorageID, d->documentResourceStorage);
+    }
 
     // preload the krita resources
     KisResourceServerProvider::instance();
@@ -593,18 +603,16 @@ KisDocument::~KisDocument()
         // check if the image has actually been deleted
         KIS_SAFE_ASSERT_RECOVER_NOOP(!sanityCheckPointer.isValid());
     }
-
-    if (d->ownsPaletteList) {
-        qDeleteAll(d->paletteList);
+    if (KisResourceLocator::instance()->hasStorage(d->documentStorageID)) {
+        KisResourceLocator::instance()->removeStorage(d->documentStorageID);
     }
 
     delete d;
 }
 
-bool KisDocument::reload()
+QString KisDocument::uniqueID() const
 {
-    // XXX: reimplement!
-    return false;
+    return d->documentStorageID;
 }
 
 KisDocument *KisDocument::clone()
@@ -653,7 +661,7 @@ bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPr
                 KisUsageLogger::log(QString("Create a simple backup for %1 in %2.").arg(job.filePath).arg(backupDir.isEmpty() ? "the same location as the file" : backupDir));
             }
         }
-        else if (numOfBackupsKept > 2) {
+        else if (numOfBackupsKept > 1) {
             if (!KBackup::numberedBackupFile(job.filePath, backupDir, suffix, numOfBackupsKept)) {
                 qWarning() << "Failed to create numbered backup file!" << job.filePath << backupDir << suffix;
                 KisUsageLogger::log(QString("Failed to create a numbered backup for %2.").arg(job.filePath).arg(backupDir.isEmpty() ? "the same location as the file" : backupDir));
@@ -864,9 +872,10 @@ KisDocument *KisDocument::lockAndCreateSnapshot()
 {
     KisDocument *doc = lockAndCloneForSaving();
     if (doc) {
-        // clone palette list
-        doc->d->paletteList = doc->d->clonePaletteList(doc->d->paletteList);
-        doc->d->ownsPaletteList = true;
+        // clone the local resource storage and its contents -- that is, the old palette list
+        if (doc->d->documentResourceStorage) {
+            doc->d->documentResourceStorage = doc->d->documentResourceStorage->clone();
+        }
     }
     return doc;
 }
@@ -972,6 +981,7 @@ bool KisDocument::exportDocumentSync(const QUrl &url, const QByteArray &mimeType
     return status.isOk();
 }
 
+
 bool KisDocument::initiateSavingInBackground(const QString actionName,
                                              const QObject *receiverObject, const char *receiverMethod,
                                              const KritaUtils::ExportFileJob &job,
@@ -1021,6 +1031,13 @@ bool KisDocument::initiateSavingInBackground(const QString actionName,
 
     if (clonedDocument->image()->hasOverlaySelectionMask()) {
         clonedDocument->image()->setOverlaySelectionMask(0);
+        waitForImage(clonedDocument->image());
+    }
+
+    KisConfig cfg(true);
+    if (cfg.trimKra()) {
+        clonedDocument->image()->cropImage(clonedDocument->image()->bounds());
+        clonedDocument->image()->purgeUnusedData(false);
         waitForImage(clonedDocument->image());
     }
 
@@ -1102,7 +1119,7 @@ void KisDocument::slotChildCompletedSavingInBackground(KisImportExportErrorCode 
                         .arg(QString::fromLatin1(job.mimeType))
                         .arg(!status.isOk() ? exportErrorToUserMessage(status, errorMessage) : "OK")
                         .arg(fi.size())
-                        .arg(QString::fromLatin1(KoMD5Generator().generateHash(job.filePath).toHex())));
+                        .arg(fi.size() > 10000000 ? "FILE_BIGGER_10MB" : QString::fromLatin1(KoMD5Generator().generateHash(job.filePath).toHex())));
 
     emit sigCompleteBackgroundSaving(job, status, errorMessage);
 }
@@ -1155,6 +1172,18 @@ void KisDocument::slotAutoSave()
 void KisDocument::slotInitiateAsyncAutosaving(KisDocument *clonedDocument)
 {
     slotAutoSaveImpl(std::unique_ptr<KisDocument>(clonedDocument));
+}
+
+void KisDocument::slotPerformIdleRoutines()
+{
+    d->image->explicitRegenerateLevelOfDetail();
+
+
+    /// TODO: automatical purging is disabled for now: it modifies
+    ///       data managers without creating a transaction, which breaks
+    ///       undo.
+
+    // d->image->purgeUnusedData(true);
 }
 
 void KisDocument::slotCompleteAutoSaving(const KritaUtils::ExportFileJob &job, KisImportExportErrorCode status, const QString &errorMessage)
@@ -1338,13 +1367,13 @@ QString KisDocument::generateAutoSaveFileName(const QString & path) const
         // Never saved?
 #ifdef Q_OS_WIN
         // On Windows, use the temp location (https://bugs.kde.org/show_bug.cgi?id=314921)
-        retval = QString("%1%2%7%3-%4-%5-autosave%6").arg(QDir::tempPath()).arg(QDir::separator()).arg("krita").arg(qApp->applicationPid()).arg(objectName()).arg(extension).arg(prefix);
+        retval = QString("%1%2%7%3-%4-%5-autosave%6").arg(QDir::tempPath()).arg('/').arg("krita").arg(qApp->applicationPid()).arg(objectName()).arg(extension).arg(prefix);
 #else
         // On Linux, use a temp file in $HOME then. Mark it with the pid so two instances don't overwrite each other's autosave file
-        retval = QString("%1%2%7%3-%4-%5-autosave%6").arg(QDir::homePath()).arg(QDir::separator()).arg("krita").arg(qApp->applicationPid()).arg(objectName()).arg(extension).arg(prefix);
+        retval = QString("%1%2%7%3-%4-%5-autosave%6").arg(QDir::homePath()).arg('/').arg("krita").arg(qApp->applicationPid()).arg(objectName()).arg(extension).arg(prefix);
 #endif
     } else {
-        retval = QString("%1%2%5%3-autosave%4").arg(dir).arg(QDir::separator()).arg(filename).arg(extension).arg(prefix);
+        retval = QString("%1%2%5%3-autosave%4").arg(dir).arg('/').arg(filename).arg(extension).arg(prefix);
     }
 
     //qDebug() << "generateAutoSaveFileName() for path" << path << ":" << retval;
@@ -1387,6 +1416,7 @@ bool KisDocument::openUrl(const QUrl &_url, OpenFlags flags)
     }
 
     QUrl url(_url);
+    QString original  = "";
     bool autosaveOpened = false;
     if (url.isLocalFile() && !fileBatchMode()) {
         QString file = url.toLocalFile();
@@ -1396,16 +1426,17 @@ bool KisDocument::openUrl(const QUrl &_url, OpenFlags flags)
             kisApp->hideSplashScreen();
             //qDebug() <<"asf=" << asf;
             // ## TODO compare timestamps ?
-            int res = QMessageBox::warning(0,
-                                           i18nc("@title:window", "Krita"),
-                                           i18n("An autosaved file exists for this document.\nDo you want to open the autosaved file instead?"),
-                                           QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Yes);
+            KisRecoverNamedAutosaveDialog dlg(0, file, asf);
+            dlg.exec();
+            int res = dlg.result();
+
             switch (res) {
-            case QMessageBox::Yes :
+            case KisRecoverNamedAutosaveDialog::OpenAutosave :
+                original = file;
                 url.setPath(asf);
                 autosaveOpened = true;
                 break;
-            case QMessageBox::No :
+            case KisRecoverNamedAutosaveDialog::OpenMainFile :
                 KisUsageLogger::log(QString("Removing autosave file: %1").arg(asf));
                 QFile::remove(asf);
                 break;
@@ -1421,6 +1452,9 @@ bool KisDocument::openUrl(const QUrl &_url, OpenFlags flags)
         setReadWrite(true); // enable save button
         setModified(true);
         setRecovered(true);
+
+        setUrl(QUrl::fromLocalFile(original)); // since it was an autosave, it will be a local file
+        setLocalFilePath(original);
     }
     else {
         if (ret) {
@@ -1842,18 +1876,53 @@ void KisDocument::setGridConfig(const KisGridConfig &config)
     }
 }
 
-QList<KoColorSet *> &KisDocument::paletteList()
+QList<KoColorSetSP > KisDocument::paletteList()
 {
-    return d->paletteList;
+    qDebug() << "PALETTELIST storage" << d->documentResourceStorage;
+
+    QList<KoColorSetSP> _paletteList;
+    if (d->documentResourceStorage.isNull()) {
+        qWarning() << "No documentstorage for palettes";
+        return _paletteList;
+    }
+
+    QSharedPointer<KisResourceStorage::ResourceIterator> iter = d->documentResourceStorage->resources(ResourceType::Palettes);
+    while (iter->hasNext()) {
+        iter->next();
+        KoResourceSP resource = iter->resource();
+        if (resource && resource->valid()) {
+            _paletteList << resource.dynamicCast<KoColorSet>();
+        }
+    }
+    return _paletteList;
 }
 
-void KisDocument::setPaletteList(const QList<KoColorSet *> &paletteList, bool emitSignal)
+void KisDocument::setPaletteList(const QList<KoColorSetSP > &paletteList, bool emitSignal)
 {
-    if (d->paletteList != paletteList) {
-        QList<KoColorSet *> oldPaletteList = d->paletteList;
-        d->paletteList = paletteList;
-        if (emitSignal) {
-            emit sigPaletteListChanged(oldPaletteList, paletteList);
+    qDebug() << "SET PALETTE LIST" << paletteList.size() << "storage" << d->documentResourceStorage;
+
+    QList<KoColorSetSP> oldPaletteList;
+    if (d->documentResourceStorage) {
+        QSharedPointer<KisResourceStorage::ResourceIterator> iter = d->documentResourceStorage->resources(ResourceType::Palettes);
+        while (iter->hasNext()) {
+            iter->next();
+            KoResourceSP resource = iter->resource();
+            if (resource && resource->valid()) {
+                oldPaletteList << resource.dynamicCast<KoColorSet>();
+            }
+        }
+        if (oldPaletteList != paletteList) {
+            KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(ResourceType::Palettes);
+            Q_FOREACH(KoColorSetSP palette, oldPaletteList) {
+                resourceModel->removeResource(palette);
+            }
+            Q_FOREACH(KoColorSetSP palette, paletteList) {
+                qDebug()<< "loading palette into document" << palette->filename();
+                resourceModel->addResource(palette, d->documentStorageID);
+            }
+            if (emitSignal) {
+                emit sigPaletteListChanged(oldPaletteList, paletteList);
+            }
         }
     }
 }
@@ -2024,44 +2093,6 @@ bool KisDocument::newImage(const QString& name,
     documentInfo()->setAboutInfo("title", name);
     documentInfo()->setAboutInfo("abstract", description);
 
-    KisLayerSP layer;
-    if (bgStyle == KisConfig::RASTER_LAYER || bgStyle == KisConfig::FILL_LAYER) {
-        KoColor strippedAlpha = bgColor;
-        strippedAlpha.setOpacity(OPACITY_OPAQUE_U8);
-
-        if (bgStyle == KisConfig::RASTER_LAYER) {
-            layer = new KisPaintLayer(image.data(), "Background", OPACITY_OPAQUE_U8, cs);;
-            layer->paintDevice()->setDefaultPixel(strippedAlpha);
-        } else if (bgStyle == KisConfig::FILL_LAYER) {
-            KisFilterConfigurationSP filter_config = KisGeneratorRegistry::instance()->get("color")->defaultConfiguration();
-            filter_config->setProperty("color", strippedAlpha.toQColor());
-            layer = new KisGeneratorLayer(image.data(), "Background Fill", filter_config, image->globalSelection());
-        }
-
-        layer->setOpacity(bgColor.opacityU8());
-
-        if (numberOfLayers > 1) {
-            //Lock bg layer if others are present.
-            layer->setUserLocked(true);
-        }
-    }
-    else { // KisConfig::CANVAS_COLOR (needs an unlocked starting layer).
-        image->setDefaultProjectionColor(bgColor);
-        layer = new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, cs);
-    }
-
-    Q_CHECK_PTR(layer);
-    image->addNode(layer.data(), image->rootLayer().data());
-    layer->setDirty(QRect(0, 0, width, height));
-
-    setCurrentImage(image);
-
-    for(int i = 1; i < numberOfLayers; ++i) {
-        KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), OPACITY_OPAQUE_U8, cs);
-        image->addNode(layer, image->root(), i);
-        layer->setDirty(QRect(0, 0, width, height));
-    }
-
     KisConfig cfg(false);
     cfg.defImageWidth(width);
     cfg.defImageHeight(height);
@@ -2069,6 +2100,49 @@ bool KisDocument::newImage(const QString& name,
     cfg.defColorModel(image->colorSpace()->colorModelId().id());
     cfg.setDefaultColorDepth(image->colorSpace()->colorDepthId().id());
     cfg.defColorProfile(image->colorSpace()->profile()->name());
+
+    bool autopin = cfg.autoPinLayersToTimeline();
+
+    KisLayerSP bgLayer;
+    if (bgStyle == KisConfig::RASTER_LAYER || bgStyle == KisConfig::FILL_LAYER) {
+        KoColor strippedAlpha = bgColor;
+        strippedAlpha.setOpacity(OPACITY_OPAQUE_U8);
+
+        if (bgStyle == KisConfig::RASTER_LAYER) {
+            bgLayer = new KisPaintLayer(image.data(), "Background", OPACITY_OPAQUE_U8, cs);;
+            bgLayer->paintDevice()->setDefaultPixel(strippedAlpha);
+            bgLayer->setPinnedToTimeline(autopin);
+        } else if (bgStyle == KisConfig::FILL_LAYER) {
+            KisFilterConfigurationSP filter_config = KisGeneratorRegistry::instance()->get("color")->defaultConfiguration(KisGlobalResourcesInterface::instance());
+            filter_config->setProperty("color", strippedAlpha.toQColor());
+            filter_config->createLocalResourcesSnapshot();
+            bgLayer = new KisGeneratorLayer(image.data(), "Background Fill", filter_config, image->globalSelection());
+        }
+
+        bgLayer->setOpacity(bgColor.opacityU8());
+
+        if (numberOfLayers > 1) {
+            //Lock bg layer if others are present.
+            bgLayer->setUserLocked(true);
+        }
+    }
+    else { // KisConfig::CANVAS_COLOR (needs an unlocked starting layer).
+        image->setDefaultProjectionColor(bgColor);
+        bgLayer = new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, cs);
+    }
+
+    Q_CHECK_PTR(bgLayer);
+    image->addNode(bgLayer.data(), image->rootLayer().data());
+    bgLayer->setDirty(QRect(0, 0, width, height));
+
+    setCurrentImage(image);
+
+    for(int i = 1; i < numberOfLayers; ++i) {
+        KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), OPACITY_OPAQUE_U8, cs);
+        layer->setPinnedToTimeline(autopin);
+        image->addNode(layer, image->root(), i);
+        layer->setDirty(QRect(0, 0, width, height));
+    }
 
     KisUsageLogger::log(QString("Created image \"%1\", %2 * %3 pixels, %4 dpi. Color model: %6 %5 (%7). Layers: %8")
                              .arg(name)
@@ -2200,6 +2274,10 @@ void KisDocument::setCurrentImage(KisImageSP image, bool forceInitialUpdate)
 
     if (!image) return;
 
+    if (d->documentResourceStorage){
+        d->documentResourceStorage->setMetaData(KisResourceStorage::s_meta_name, image->objectName());
+    }
+
     d->setImageAndInitIdleWatcher(image);
     d->image->setUndoStore(new KisDocumentUndoStore(this));
     d->shapeController->setImage(image);
@@ -2216,7 +2294,9 @@ void KisDocument::hackPreliminarySetImage(KisImageSP image)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(!d->image);
 
-    d->setImageAndInitIdleWatcher(image);
+    // we set image without connecting idle-watcher, because loading
+    // hasn't been finished yet
+    d->image = image;
     d->shapeController->setImage(image);
 }
 

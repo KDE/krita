@@ -488,6 +488,20 @@ QByteArray KisPaintingAssistant::saveXml(QMap<KisPaintingAssistantHandleSP, int>
         xml.writeEndElement();
     }
     xml.writeEndElement();
+    if (!d->sideHandles.isEmpty()) { // for vanishing points only
+	xml.writeStartElement("sidehandles");
+	QMap<KisPaintingAssistantHandleSP, int> sideHandleMap;
+	Q_FOREACH (KisPaintingAssistantHandleSP handle, d->sideHandles) {
+	    int id = sideHandleMap.size();
+	    sideHandleMap.insert(handle, id);
+	    xml.writeStartElement("sidehandle");
+	    xml.writeAttribute("id", QString::number(id));
+	    xml.writeAttribute("x", QString::number(double(handle->x()), 'f', 3));
+	    xml.writeAttribute("y", QString::number(double(handle->y()), 'f', 3));
+	    xml.writeEndElement();
+      }
+    }
+
     xml.writeEndElement();
     xml.writeEndDocument();
     return data;
@@ -505,6 +519,7 @@ void KisPaintingAssistant::loadXml(KoStore* store, QMap<int, KisPaintingAssistan
     store->open(path);
     QByteArray data = store->read(store->size());
     QXmlStreamReader xml(data);
+    QMap<int, KisPaintingAssistantHandleSP> sideHandleMap;
     while (!xml.atEnd()) {
         switch (xml.readNext()) {
         case QXmlStreamReader::StartElement:
@@ -549,6 +564,20 @@ void KisPaintingAssistant::loadXml(KoStore* store, QMap<int, KisPaintingAssistan
                     }
                 }
                 addHandle(handleMap.value(id), HandleType::NORMAL);
+            } else if (xml.name() == "sidehandle") {
+                QString strId = xml.attributes().value("id").toString(),
+                        strX = xml.attributes().value("x").toString(),
+                        strY = xml.attributes().value("y").toString();
+                if (!strId.isEmpty() && !strX.isEmpty() && !strY.isEmpty()) {
+                    id = strId.toInt();
+                    x = strX.toDouble();
+                    y = strY.toDouble();
+                    if (!sideHandleMap.contains(id)) {
+                        sideHandleMap.insert(id, new KisPaintingAssistantHandle(x, y));
+                    }
+                }
+                addHandle(sideHandleMap.value(id), HandleType::SIDE);
+
             }
             break;
         default:
@@ -640,14 +669,22 @@ void KisPaintingAssistant::findPerspectiveAssistantHandleLocation() {
              sort handles on the basis of X-coordinate
              */
             while(hHole > 0 && hHandlesList.at(hHole -1).data()->x() > handle.data()->x()) {
-                hHandlesList.swap(hHole-1, hHole);
+#if QT_VERSION >= QT_VERSION_CHECK(5,13,0)
+                hHandlesList.swapItemsAt(hHole - 1, hHole);
+#else
+                hHandlesList.swap(hHole - 1, hHole);
+#endif
                 hHole = hHole - 1;
             }
             /*
              sort handles on the basis of Y-coordinate
              */
             while(vHole > 0 && vHandlesList.at(vHole -1).data()->y() > handle.data()->y()) {
+#if QT_VERSION >= QT_VERSION_CHECK(5,13,0)
+                vHandlesList.swapItemsAt(vHole-1, vHole);
+#else
                 vHandlesList.swap(vHole-1, vHole);
+#endif
                 vHole = vHole - 1;
             }
         }

@@ -89,7 +89,11 @@ KritaPyQtPlugin::KritaPyQtPlugin(QObject *parent, const QVariantList &)
 
 KritaPyQtPlugin::~KritaPyQtPlugin()
 {
+    // XXX: With Qt 5.14, this crashes Krita on exit. See https://bugs.kde.org/show_bug.cgi?id=417465
+    //      So, for now, we just don't call finalize...
+#if QT_VERSION < QT_VERSION_CHECK(5,14,0)
     PyKrita::finalize();
+#endif
 }
 
 #include "plugin.moc"

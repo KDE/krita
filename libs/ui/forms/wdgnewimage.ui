@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>450</width>
-    <height>471</height>
+    <height>492</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -714,7 +714,7 @@
   <customwidget>
    <class>KisDoubleSliderSpinBox</class>
    <extends>QWidget</extends>
-   <header>kis_slider_spin_box.h</header>
+   <header location="global">kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -740,17 +740,24 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>tabWidget</tabstop>
+  <tabstop>cmbPredefined</tabstop>
+  <tabstop>bnLandscape</tabstop>
+  <tabstop>bnPortrait</tabstop>
   <tabstop>doubleWidth</tabstop>
-  <tabstop>doubleHeight</tabstop>
-  <tabstop>doubleResolution</tabstop>
   <tabstop>cmbWidthUnit</tabstop>
+  <tabstop>doubleHeight</tabstop>
   <tabstop>cmbHeightUnit</tabstop>
-  <tabstop>intNumLayers</tabstop>
+  <tabstop>doubleResolution</tabstop>
+  <tabstop>txtPredefinedName</tabstop>
+  <tabstop>bnSaveAsPredefined</tabstop>
+  <tabstop>txtDescription</tabstop>
+  <tabstop>tabWidget</tabstop>
   <tabstop>cmbColor</tabstop>
+  <tabstop>intNumLayers</tabstop>
   <tabstop>radioBackgroundAsRaster</tabstop>
   <tabstop>radioBackgroundAsProjection</tabstop>
-  <tabstop>txtDescription</tabstop>
+  <tabstop>radioBackgroundAsFill</tabstop>
+  <tabstop>txtName</tabstop>
  </tabstops>
  <resources/>
  <connections/>

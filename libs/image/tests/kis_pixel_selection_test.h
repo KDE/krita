@@ -45,6 +45,8 @@ private Q_SLOTS:
     void testOutlineCache();
 
     void testOutlineCacheTransactions();
+
+    void testOutlineArtifacts();
 };
 
 #endif

@@ -42,8 +42,8 @@ else (WIN32)
 
     ExternalProject_Add( ext_openssl
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://www.openssl.org/source/openssl-1.1.1b.tar.gz
-        URL_HASH SHA1=e9710abf5e95c48ebf47991b10cbb48c09dae102
+        URL https://www.openssl.org/source/openssl-1.1.1f.tar.gz
+        URL_HASH SHA1=238e001ea1fbf19ede43e36209c37c1a636bb51f
 
         CONFIGURE_COMMAND <SOURCE_DIR>/config --prefix=${PREFIX_ext_openssl} --openssldir=ssl
 

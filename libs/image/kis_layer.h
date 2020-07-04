@@ -22,7 +22,6 @@
 #define KIS_LAYER_H_
 
 #include <QRect>
-#include <QRegion>
 #include <QMetaType>
 #include <QObject>
 
@@ -247,9 +246,9 @@ public:
      */
     QRect exactBounds() const override;
 
-    QImage createThumbnail(qint32 w, qint32 h) override;
+    QImage createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio) override;
 
-    QImage createThumbnailForFrame(qint32 w, qint32 h, int time) override;
+    QImage createThumbnailForFrame(qint32 w, qint32 h, int time, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio) override;
 
     /**
      * Return a tight rectange, where the contents of the layer

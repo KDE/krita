@@ -30,6 +30,7 @@
 #include "kis_canvas_resource_provider.h"
 
 #include <processing/fill_processing_visitor.h>
+#include <KisGlobalResourcesInterface.h>
 
 class FillProcessingVisitorTester : public TestUtil::QImageBasedTest
 {
@@ -55,12 +56,12 @@ public:
 
         KoCanvasResourceProvider *manager = utils::createResourceManager(image, fillNode);
 
-        KoPattern *newPattern = new KoPattern(TestUtil::fetchDataFileLazy("HR_SketchPaper_01.pat"));
-        newPattern->load();
+        KoPatternSP newPattern(new KoPattern(TestUtil::fetchDataFileLazy("HR_SketchPaper_01.pat")));
+        newPattern->load(KisGlobalResourcesInterface::instance());
         Q_ASSERT(newPattern->valid());
 
         QVariant v;
-        v.setValue(static_cast<void*>(newPattern));
+        v.setValue<KoPatternSP>(newPattern);
         manager->setResource(KisCanvasResourceProvider::CurrentPattern, v);
 
         KisResourcesSnapshotSP resources =
@@ -69,13 +70,17 @@ public:
                                      manager);
 
         KisProcessingVisitorSP visitor =
-            new FillProcessingVisitor(QPoint(100,100),
+            new FillProcessingVisitor(0,
+                                      QPoint(100,100),
                                       image->globalSelection(),
                                       resources,
                                       false, // useFastMode
                                       usePattern,
                                       selectionOnly,
-                                      10, 10, 10, true, false);
+                                      false,
+                                      10, 10, 10,
+                                      true /* use the current device (unmerged) */,
+                                      false);
 
 
         KisProcessingApplicator applicator(image, fillNode,

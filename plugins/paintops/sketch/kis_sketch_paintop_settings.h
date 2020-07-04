@@ -31,12 +31,14 @@ class KisSketchPaintOpSettings : public KisBrushBasedPaintOpSettings
 {
 
 public:
-    KisSketchPaintOpSettings();
+    KisSketchPaintOpSettings(KisResourcesInterfaceSP resourcesInterface);
     ~KisSketchPaintOpSettings() override {}
 
-    QPainterPath brushOutline(const KisPaintInformation &info, const OutlineMode &mode) override;
+    QPainterPath brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom) override;
 
     bool paintIncremental() override;
+
+    bool hasPatternSettings() const override;
 };
 
 typedef KisSharedPtr<KisSketchPaintOpSettings> KisSketchPaintOpSettingsSP;

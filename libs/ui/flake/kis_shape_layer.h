@@ -173,6 +173,8 @@ protected:
 
     KoShapeControllerBase *shapeController() const;
 
+    friend class TransformShapeLayerDeferred;
+
 Q_SIGNALS:
     /**
      * These signals are forwarded from the local shape manager
@@ -195,6 +197,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void slotMoveShapes(const QPointF &diff);
+    void slotTransformShapes(const QTransform &transform);
 
 private:
     QList<KoShape*> shapesToBeTransformed();

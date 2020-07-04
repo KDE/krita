@@ -154,7 +154,7 @@ QList<KisStrokeJobData*> KisSyncLodCacheStrokeStrategy::createJobsData(KisImageW
     }
 
     Q_FOREACH (KisPaintDeviceSP device, deviceList) {
-        QRegion region = device->regionForLodSyncing();
+        KisRegion region = device->regionForLodSyncing();
         QVector<QRect> rects = splitRegionIntoPatches(region, optimalPatchSize());
 
         Q_FOREACH (const QRect &rc, rects) {

@@ -32,6 +32,7 @@
 #include "kis_processing_visitor.h"
 #include "kis_thread_safe_signal_compressor.h"
 #include "kis_recalculate_generator_layer_job.h"
+#include "kis_generator_stroke_strategy.h"
 
 
 #define UPDATE_DELAY 100 /*ms */
@@ -46,6 +47,7 @@ struct Q_DECL_HIDDEN KisGeneratorLayer::Private
     KisThreadSafeSignalCompressor updateSignalCompressor;
     QRect preparedRect;
     KisFilterConfigurationSP preparedForFilter;
+    KisStrokeId strokeId;
 };
 
 
@@ -117,16 +119,24 @@ void KisGeneratorLayer::update()
 
     QVector<QRect> dirtyRegion;
 
+    if (!m_d->strokeId.isNull()) {
+        image->cancelStroke(m_d->strokeId);
+        m_d->strokeId.clear();
+    }
+
+    KisGeneratorStrokeStrategy *stroke = new KisGeneratorStrokeStrategy(image);
+
+    m_d->strokeId = image->startStroke(stroke);
+
     auto rc = processRegion.begin();
     while (rc != processRegion.end()) {
-        KisProcessingInformation dstCfg(originalDevice,
-                                        rc->topLeft(),
-                                        KisSelectionSP());
-
-        f->generate(dstCfg, rc->size(), filterConfig.data(), helper.updater());
+        KisStrokeJobData * jd = stroke->createJobData(f, originalDevice, *rc, filterConfig, helper);
+        image->addJob(m_d->strokeId, jd);
         dirtyRegion << *rc;
         rc++;
     }
+
+    image->endStroke(m_d->strokeId);
 
     m_d->preparedRect = updateRect;
     m_d->preparedForFilter = filterConfig;

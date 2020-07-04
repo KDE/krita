@@ -54,9 +54,6 @@ fi
 # Switch to our build directory as we're basically ready to start building...
 cd $BUILD_PREFIX/deps-build/
 
-# Determine how many CPUs we have
-export MAKEFLAGS="-j`grep processor /proc/cpuinfo | wc -l`"
-
 # Configure the dependencies for building
 cmake $KRITA_SOURCES/3rdparty -DCMAKE_INSTALL_PREFIX=$DEPS_INSTALL_PREFIX -DINSTALL_ROOT=$DEPS_INSTALL_PREFIX -DEXTERNALS_DOWNLOAD_DIR=$DOWNLOADS_DIR
 

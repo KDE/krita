@@ -17,6 +17,7 @@
  */
 
 #include "storyboardDelegate.h"
+#include "storyboardModel.h"
 
 #include <QLineEdit>
 #include <QTextEdit>
@@ -31,11 +32,6 @@
 #include <QScrollBar>
 
 #include <kis_icon.h>
-#include <KoColorSpaceRegistry.h>
-#include <kis_paint_device_frames_interface.h>
-#include <kis_group_layer.h>
-#include <kis_image_animation_interface.h>
-#include "storyboardModel.h"
 
 StoryboardDelegate::StoryboardDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
@@ -76,7 +72,7 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
         else {
             //draw the child items
             int childNum = index.row();
-            QString data = index.model()->data(index, Qt::DisplayRole).toString();
+            QString data = index.data().toString();
 
             switch (childNum)
             {
@@ -92,18 +88,14 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
                         p->setPen(QPen(option.palette.text(), 1));
                         p->drawText(frameNumRect, Qt::AlignHCenter | Qt::AlignVCenter, data);
 
-                        if (m_image.isValid() && m_image->animationInterface()->hasAnimation()) {
+                        if (m_image.isValid()) {
                             float scale = qMin(option.rect.height() / (float)m_image->height(), (float)option.rect.width() / m_image->width());
                             QRect thumbnailRect = option.rect;
                             thumbnailRect.setSize(m_image->size() * scale);
                             thumbnailRect.moveCenter(option.rect.center());
 
-                            //TODO: get the paintdevice for the current frame
-                            KisPaintDeviceSP thumbDev = m_image->projection();
-                            QImage image = thumbDev->convertToQImage(KoColorSpaceRegistry::instance()->rgb8()->profile());
-                            QPixmap pxmap = QPixmap::fromImage(image);
-                            pxmap = pxmap.scaled(thumbnailRect.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-                            p->drawPixmap(thumbnailRect, pxmap);
+                            QPixmap  thumbnailPixmap= index.data(Qt::UserRole).value<QPixmap>();
+                            p->drawPixmap(thumbnailRect, thumbnailPixmap);
                         }
                         p->setPen(QPen(option.palette.dark(), 2));
                         p->drawRect(option.rect);
@@ -184,7 +176,7 @@ QStyleOptionSlider StoryboardDelegate::drawComment(QPainter *p, const QStyleOpti
 {
     QStyle *style = option.widget ? option.widget->style() : QApplication::style();
     const StoryboardModel* model = dynamic_cast<const StoryboardModel*>(index.model());
-    QString data = index.model()->data(index, Qt::DisplayRole).toString();
+    QString data = index.data().toString();
 
     QRect titleRect = option.rect;
     titleRect.setHeight(option.fontMetrics.height() + 3);
@@ -205,7 +197,7 @@ QStyleOptionSlider StoryboardDelegate::drawComment(QPainter *p, const QStyleOpti
     contentRect.setTopLeft(contentRect.topLeft() + QPoint(5, 5));
     contentRect.setBottomRight(contentRect.bottomRight() - QPoint(5, 5));
 
-    int scrollValue = index.model()->data(index, Qt::UserRole).toInt();
+    int scrollValue = index.data(Qt::UserRole).toInt();
 
     //draw comment
     QRect commentRect = contentRect;

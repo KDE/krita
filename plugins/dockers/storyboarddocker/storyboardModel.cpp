@@ -17,12 +17,15 @@
  */
 
 #include "storyboardModel.h"
-
+#include "storyboardView.h"
+#include <kis_image_animation_interface.h>
+#include <kis_image.h>
 #include <QDebug>
 #include <QMimeData>
 
 #include <kis_icon.h>
 #include <kis_image.h>
+#include <KoColorSpaceRegistry.h>
 #include <kis_layer_utils.h>
 #include <kis_group_layer.h>
 
@@ -32,6 +35,7 @@ StoryboardModel::StoryboardModel(QObject *parent)
 {
     connect(this, SIGNAL(rowsInserted(const QModelIndex, int, int)),
                 this, SLOT(slotInsertChildRows(const QModelIndex, int, int)));
+    //TODO: populate model with already existing item's thumbnails
 }
 
 QModelIndex StoryboardModel::index(int row, int column, const QModelIndex &parent) const
@@ -116,13 +120,21 @@ QVariant StoryboardModel::data(const QModelIndex &index, int role) const
 
     if (role == Qt::DisplayRole || role == Qt::EditRole || role == Qt::UserRole) {
         StoryboardChild *child = m_items.at(index.parent().row())->child(index.row());
-        if (index.row() > 3) {
+        if (index.row() == StoryboardModel::FrameNumber) {
+            ThumbnailData thumbnailData = qvariant_cast<ThumbnailData>(child->data());
+            if (role == Qt::UserRole) {
+                return thumbnailData.pixmap;
+            }
+            else {
+                return thumbnailData.frameNum;
+            }
+        }
+        else if (index.row() >= StoryboardModel::Comments) {
+            CommentBox commentBox = qvariant_cast<CommentBox>(child->data());
             if (role == Qt::UserRole) {         //scroll bar position
-                CommentBox commentBox = qvariant_cast<CommentBox>(child->data());
                 return commentBox.scrollValue;
             }
             else {
-                CommentBox commentBox = qvariant_cast<CommentBox>(child->data());
                 return commentBox.content;
             }
         }
@@ -140,14 +152,19 @@ bool StoryboardModel::setData(const QModelIndex & index, const QVariant & value,
 
         StoryboardChild *child = m_items.at(index.parent().row())->child(index.row());
         if (child) {
-            int fps = 24;
+            int fps = m_image->animationInterface()->framerate();      //TODO: update all items on framerate change
             if ((index.row() == StoryboardModel::DurationFrame  || index.row() == StoryboardModel::DurationSecond) && value.toInt() < 0) {
                 return false;
             }
-            if (index.row() == StoryboardModel::DurationFrame && value.toInt() >= fps) {         //TODO : set fps
+            if (index.row() == StoryboardModel::DurationFrame && value.toInt() >= fps) {
                 QModelIndex secondIndex = index.siblingAtRow(2);
                 setData(secondIndex, secondIndex.data().toInt() + value.toInt() / fps, role);
                 child->setData(value.toInt() % fps);
+            }
+            else if (index.row() == StoryboardModel::FrameNumber) {
+                ThumbnailData thumbnailData = qvariant_cast<ThumbnailData>(child->data());
+                thumbnailData.frameNum = value.toInt();
+                child->setData(QVariant::fromValue<ThumbnailData>(thumbnailData));
             }
             else if (index.row() >= StoryboardModel::Comments) {
                 CommentBox commentBox = qvariant_cast<CommentBox>(child->data());
@@ -171,6 +188,20 @@ bool StoryboardModel::setCommentScrollData(const QModelIndex & index, const QVar
         CommentBox commentBox = qvariant_cast<CommentBox>(child->data());
         commentBox.scrollValue = value.toInt();
         child->setData(QVariant::fromValue<CommentBox>(commentBox));
+        emit dataChanged(index, index);
+        return true;
+    }
+    return false;
+}
+
+bool StoryboardModel::setThumbnailPixmapData(const QModelIndex & index, const QVariant & value)
+{
+    StoryboardChild *child = m_items.at(index.parent().row())->child(index.row());
+    if (child) {
+        ThumbnailData thumbnailData = qvariant_cast<ThumbnailData>(child->data());
+        thumbnailData.pixmap = value;
+        child->setData(QVariant::fromValue<ThumbnailData>(thumbnailData));
+        emit dataChanged(index, index);
         return true;
     }
     return false;
@@ -332,6 +363,7 @@ QMimeData *StoryboardModel::mimeData(const QModelIndexList &indexes) const
 bool StoryboardModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
                                 int row, int column, const QModelIndex &parent)
 {
+    Q_UNUSED(column);
     if (action == Qt::IgnoreAction) {
         return false;
     }
@@ -419,6 +451,16 @@ bool StoryboardModel::isLocked() const
     return m_locked;
 }
 
+void StoryboardModel::setView(StoryboardView *view)
+{
+    m_view = view;
+}
+
+void StoryboardModel::setImage(KisImageWSP image)
+{
+    m_image = image;
+}
+
 QModelIndex StoryboardModel::indexFromFrame(int frame) const
 {
     int end = rowCount(), begin = 0;
@@ -465,6 +507,8 @@ void StoryboardModel::slotKeyframeAdded(KisKeyframeSP keyframe)
         int prevItemRow = lastIndexBeforeFrame(frame).row();
         insertRows(prevItemRow + 1, 1);
         setData (index (0, 0, index(prevItemRow + 1, 0)), frame);
+        m_view->setCurrentItem(frame);
+        slotUpdateCurrentThumbnail();
     }
 }
 
@@ -537,7 +581,32 @@ void StoryboardModel::slotKeyframeMoved(KisKeyframeSP keyframe, int from)
             }
             setData(index(0, 0, destinationIndex), keyframe->time());
         }
+        m_view->setCurrentItem(keyframe->time());
+        slotUpdateCurrentThumbnail();
     }
+}
+
+void StoryboardModel::slotUpdateCurrentThumbnail()
+{
+    QModelIndex currIndex = indexFromFrame(m_image->animationInterface()->currentUITime());
+    QModelIndex currFrameIndex = index(0, 0, currIndex);
+
+    if (!currIndex.isValid()) {
+        return;
+    }
+
+    QRect thumbnailRect = m_view->visualRect(currIndex);
+    float scale = qMin(thumbnailRect.height() / (float)m_image->height(), (float)thumbnailRect.width() / m_image->width());
+    KisPaintDeviceSP thumbDev = m_image->projection();
+
+    if (thumbDev) {
+        QImage image = thumbDev->convertToQImage(KoColorSpaceRegistry::instance()->rgb8()->profile());
+        QPixmap pxmap = QPixmap::fromImage(image);
+        pxmap = pxmap.scaled((1.5)*scale*m_image->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        setThumbnailPixmapData(currFrameIndex, pxmap);
+    }
+
+    //TODO: check if other thumbnails need updating and update only those that need to be
 }
 
 void StoryboardModel::slotCommentDataChanged()
@@ -548,6 +617,7 @@ void StoryboardModel::slotCommentDataChanged()
 
 void StoryboardModel::slotCommentRowInserted(const QModelIndex parent, int first, int last)
 {
+    Q_UNUSED(parent);
     int numItems = rowCount();
     for(int row = 0; row < numItems; row++) {
         QModelIndex parentIndex = index(row, 0);
@@ -558,6 +628,7 @@ void StoryboardModel::slotCommentRowInserted(const QModelIndex parent, int first
 
 void StoryboardModel::slotCommentRowRemoved(const QModelIndex parent, int first, int last)
 {
+    Q_UNUSED(parent);
     int numItems = rowCount();
     for(int row = 0; row < numItems; row++) {
         QModelIndex parentIndex = index(row, 0);
@@ -569,6 +640,8 @@ void StoryboardModel::slotCommentRowRemoved(const QModelIndex parent, int first,
 void StoryboardModel::slotCommentRowMoved(const QModelIndex &sourceParent, int start, int end,
                             const QModelIndex &destinationParent, int destinationRow)
 {
+    Q_UNUSED(sourceParent);
+    Q_UNUSED(destinationParent);
     int numItems = rowCount();
     for(int row = 0; row < numItems; row++) {
         QModelIndex parentIndex = index(row, 0);

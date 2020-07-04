@@ -18,18 +18,18 @@
 #ifndef STORYBOARD_MODEL
 #define STORYBOARD_MODEL
 
-#include <QAbstractListModel>
-#include <QStringList>
-
 #include "storyboardItem.h"
 #include "commentModel.h"
+
+#include <QAbstractListModel>
+
 #include <kritaui_export.h>
 #include <kis_keyframe_channel.h>
 
 /*
     The main storyboard model. 
 */
-
+class StoryboardView;
 class CommentBox
 {
 public:
@@ -46,7 +46,26 @@ public:
     QVariant content;
     QVariant scrollValue;
 };
+
+class ThumbnailData
+{
+public:
+    ThumbnailData()
+    : frameNum("")
+    , pixmap(QPixmap())
+    {}
+    ThumbnailData(const ThumbnailData& other)
+    : frameNum(other.frameNum)
+    , pixmap(other.pixmap)
+    {}
+    ~ThumbnailData()
+    {}
+    QVariant frameNum;
+    QVariant pixmap;
+};
+
 Q_DECLARE_METATYPE(CommentBox)
+Q_DECLARE_METATYPE(ThumbnailData)
 
 class KRITAUI_EXPORT StoryboardModel : public QAbstractItemModel
 {
@@ -64,6 +83,7 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
     bool setCommentScrollData(const QModelIndex & index, const QVariant & value);
+    bool setThumbnailPixmapData(const QModelIndex & index, const QVariant & value);
     Qt::ItemFlags flags(const QModelIndex &index) const override;
     
     //for removing and inserting rows
@@ -85,6 +105,8 @@ public:
     Comment getComment(int row) const;
     void setLocked(bool);
     bool isLocked() const;
+    void setView(StoryboardView *view);
+    void setImage(KisImageWSP image);
 
     QModelIndex indexFromFrame(int frame) const;
     QModelIndex lastIndexBeforeFrame(int frame) const;
@@ -101,6 +123,7 @@ public Q_SLOTS:
     void slotKeyframeAdded(KisKeyframeSP keyframe);
     void slotKeyframeRemoved(KisKeyframeSP);
     void slotKeyframeMoved(KisKeyframeSP, int);
+    void slotUpdateCurrentThumbnail();
 
 private Q_SLOTS:
     void slotCommentDataChanged();
@@ -116,6 +139,8 @@ private:
     CommentModel *m_commentModel;
     bool m_locked;
     int m_lastScene = 0;
+    KisImageWSP m_image;
+    StoryboardView *m_view;
 };
 
 #endif

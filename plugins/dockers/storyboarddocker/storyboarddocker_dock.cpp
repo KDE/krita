@@ -193,6 +193,7 @@ StoryboardDockerDock::StoryboardDockerDock( )
     connect(m_viewGroup, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(slotViewChanged(QAbstractButton*)));
 
     m_storyboardDelegate->setView(m_ui->listView);
+    m_storyboardModel->setView(m_ui->listView);
     m_ui->listView->setModel(m_storyboardModel);
     m_ui->listView->setItemDelegate(m_storyboardDelegate);
 
@@ -227,8 +228,9 @@ void StoryboardDockerDock::setCanvas(KoCanvasBase *canvas)
         connect(m_canvas->image()->animationInterface(), SIGNAL(sigKeyframeMoved(KisKeyframeSP, int)),
                 m_storyboardModel, SLOT(slotKeyframeMoved(KisKeyframeSP, int)));
 
-        //TODO: change current item in docker on insertion and moving
         slotFrameChanged(m_canvas->image()->animationInterface()->currentUITime());
+        connect(m_canvas->image(), SIGNAL(sigImageUpdated(const QRect &)), m_storyboardModel, SLOT(slotUpdateCurrentThumbnail()));
+        m_storyboardModel->setImage(m_canvas->image());
         m_storyboardDelegate->setImage(m_canvas->image());
     }
 }

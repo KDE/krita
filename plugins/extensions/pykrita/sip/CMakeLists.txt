@@ -1,13 +1,9 @@
 include(SIPMacros)
 
-message( ${SIP_VERSION} " - The version of SIP found expressed as a 6 digit hex number suitable for comparison as a string.")
 message( ${SIP_VERSION_STR} " - The version of SIP found as a human readable string.")
 message( ${SIP_EXECUTABLE} " - Path and filename of the SIP command line executable.")
-message( ${SIP_INCLUDE_DIR} " - Directory holding the SIP C++ header file.")
-message( ${SIP_DEFAULT_SIP_DIR} " - default SIP dir" )
 
 set(SIP_INCLUDES
-    ${SIP_DEFAULT_SIP_DIR}
     ${PYQT5_SIP_DIR}
     ${PYQT_SIP_DIR_OVERRIDE}
      ./krita)

@@ -21,6 +21,7 @@
 #include <kis_generator_layer.h>
 #include <kis_processing_information.h>
 #include <kis_selection.h>
+#include <krita_utils.h>
 
 #include "kis_generator_stroke_strategy.h"
 
@@ -61,11 +62,21 @@ KisGeneratorStrokeStrategy::KisGeneratorStrokeStrategy(KisImageWSP image)
     setCanForgetAboutMe(true);
 }
 
-KisStrokeJobData* KisGeneratorStrokeStrategy::createJobData(KisGeneratorLayer* layer, KisGeneratorSP f, KisPaintDeviceSP dev, const QRect &rc, const KisFilterConfigurationSP filterConfig, KisProcessingVisitor::ProgressHelper &helper)
+QList<KisStrokeJobData *> KisGeneratorStrokeStrategy::createJobsData(KisGeneratorLayer* layer, KisGeneratorSP f, KisPaintDeviceSP dev, const QRect &rc, const KisFilterConfigurationSP filterConfig, KisProcessingVisitor::ProgressHelper &helper)
 {
-    KisProcessingInformation dstCfg(dev, rc.topLeft(), KisSelectionSP());
+    using KritaUtils::optimalPatchSize;
+    using KritaUtils::splitRectIntoPatches;
 
-    return new Private::ProcessData(layer, f, dstCfg, rc, filterConfig, helper.updater());
+    QVector<QRect> rects = splitRectIntoPatches(rc, optimalPatchSize());
+    QList<KisStrokeJobData *> jobsData;
+
+    Q_FOREACH (const QRect &rc, rects)
+    {
+        KisProcessingInformation dstCfg(dev, rc.topLeft(), KisSelectionSP());
+        jobsData << new Private::ProcessData(layer, f, dstCfg, rc, filterConfig, helper.updater());
+    }
+
+    return jobsData;
 }
 
 KisGeneratorStrokeStrategy::~KisGeneratorStrokeStrategy()

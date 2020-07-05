@@ -20,6 +20,7 @@
 
 #include <QObject>
 #include <kis_generator.h>
+#include <kis_generator_layer.h>
 #include "kis_simple_stroke_strategy.h"
 
 class KisGeneratorStrokeStrategy: public QObject, public KisSimpleStrokeStrategy
@@ -29,7 +30,7 @@ public:
     KisGeneratorStrokeStrategy(KisImageWSP image);
     ~KisGeneratorStrokeStrategy() override;
 
-    KisStrokeJobData* createJobData(KisGeneratorSP f, KisPaintDeviceSP dev, const QRect &rc, const KisFilterConfigurationSP filterConfig, KisProcessingVisitor::ProgressHelper &helper);
+    KisStrokeJobData* createJobData(KisGeneratorLayer* layer, KisGeneratorSP f, KisPaintDeviceSP dev, const QRect &rc, const KisFilterConfigurationSP filterConfig, KisProcessingVisitor::ProgressHelper &helper);
 
 private:
     void initStrokeCallback() override;

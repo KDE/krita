@@ -33,7 +33,7 @@
 #include "kis_thread_safe_signal_compressor.h"
 #include "kis_recalculate_generator_layer_job.h"
 #include "kis_generator_stroke_strategy.h"
-
+#include "krita_utils.h"
 
 #define UPDATE_DELAY 100 /*ms */
 
@@ -97,6 +97,9 @@ void KisGeneratorLayer::slotDelayedStaticUpdate()
 
 void KisGeneratorLayer::update()
 {
+    using KritaUtils::splitRectIntoPatches;
+    using KritaUtils::optimalPatchSize;
+
     KisImageSP image = this->image().toStrongRef();
     const QRect updateRect = extent() | image->bounds();
 
@@ -130,9 +133,13 @@ void KisGeneratorLayer::update()
 
     auto rc = processRegion.begin();
     while (rc != processRegion.end()) {
-        KisStrokeJobData * jd = stroke->createJobData(f, originalDevice, *rc, filterConfig, helper);
-        image->addJob(m_d->strokeId, jd);
-        dirtyRegion << *rc;
+        QVector<QRect> tiles = splitRectIntoPatches(*rc, optimalPatchSize());
+
+        Q_FOREACH (const QRect &tile, tiles) {
+            KisStrokeJobData * jd = stroke->createJobData(this, f, originalDevice, tile, filterConfig, helper);
+            image->addJob(m_d->strokeId, jd);
+        }
+
         rc++;
     }
 
@@ -140,10 +147,6 @@ void KisGeneratorLayer::update()
 
     m_d->preparedRect = updateRect;
     m_d->preparedForFilter = filterConfig;
-
-    // HACK ALERT!!!
-    // this avoids cyclic loop with KisRecalculateGeneratorLayerJob::run()
-    KisSelectionBasedLayer::setDirty(dirtyRegion);
 }
 
 bool KisGeneratorLayer::accept(KisNodeVisitor & v)

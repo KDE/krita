@@ -148,6 +148,8 @@ void KisSeExprGenerator::generate(KisProcessingInformation dstInfo,
         QString script = config->getString("script");
 
         QRect bounds = QRect(dstInfo.topLeft(), size);
+        QRect whole_image_bounds = device->defaultBounds()->bounds();
+
         const KoColorSpace *cs = device->colorSpace();
         const RenderDepth strategy = textureConversionStrategy(cs);
         KisSequentialIteratorProgress it(device, bounds, progressUpdater);
@@ -156,13 +158,13 @@ void KisSeExprGenerator::generate(KisProcessingInformation dstInfo,
 
         expression.m_vars["u"] = new SeExprVariable();
         expression.m_vars["v"] = new SeExprVariable();
-        expression.m_vars["w"] = new SeExprVariable(bounds.width());
-        expression.m_vars["h"] = new SeExprVariable(bounds.height());
+        expression.m_vars["w"] = new SeExprVariable(whole_image_bounds.width());
+        expression.m_vars["h"] = new SeExprVariable(whole_image_bounds.height());
 
         if (expression.isValid() && expression.returnType().isFP(3))
         {
-            double pixel_stride_x = 1. / bounds.width();
-            double pixel_stride_y = 1. / bounds.height();
+            double pixel_stride_x = 1. / whole_image_bounds.width();
+            double pixel_stride_y = 1. / whole_image_bounds.height();
             double &u = expression.m_vars["u"]->m_value;
             double &v = expression.m_vars["v"]->m_value;
 

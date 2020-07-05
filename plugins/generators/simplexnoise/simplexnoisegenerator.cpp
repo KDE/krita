@@ -59,7 +59,8 @@ void KisSimplexNoiseGenerator::generate(KisProcessingInformation dst, const QSiz
     osn_context *noise_context;
 
     QRect bounds = QRect(dst.topLeft(), size);
-    const KoColorSpace * cs = device->colorSpace();
+    QRect whole_image_bounds = device->defaultBounds()->bounds();
+    const KoColorSpace *cs = device->colorSpace();
     KisSequentialIteratorProgress it(device, bounds, progressUpdater);
 
     QVariant property;
@@ -81,8 +82,8 @@ void KisSimplexNoiseGenerator::generate(KisProcessingInformation dst, const QSiz
         float major_radius = 0.5f * frequency * ratio_x;
         float minor_radius = 0.5f * frequency * ratio_y;
         while(it.nextPixel()){
-            double x_phase = (double)it.x() / (double)bounds.width() * M_PI * 2;
-            double y_phase = (double)it.y() / (double)(bounds.height()) * M_PI * 2;
+            double x_phase = (double)it.x() / (double)whole_image_bounds.width() * M_PI * 2;
+            double y_phase = (double)it.y() / (double)(whole_image_bounds.height()) * M_PI * 2;
             double x_coordinate = major_radius * map_range(cos(x_phase), -1.0, 1.0, 0.0, 1.0);
             double y_coordinate = major_radius * map_range(sin(x_phase), -1.0, 1.0, 0.0, 1.0);
             double z_coordinate = minor_radius * map_range(cos(y_phase), -1.0, 1.0, 0.0, 1.0);
@@ -96,8 +97,8 @@ void KisSimplexNoiseGenerator::generate(KisProcessingInformation dst, const QSiz
         }
     } else {
         while(it.nextPixel()){
-            double x_phase = (double)it.x() / (double)(bounds.width()) * ratio_x;
-            double y_phase = (double)it.y() / (double)(bounds.height()) * ratio_y;
+            double x_phase = (double)it.x() / (double)(whole_image_bounds.width()) * ratio_x;
+            double y_phase = (double)it.y() / (double)(whole_image_bounds.height()) * ratio_y;
             double value = open_simplex_noise4(noise_context, x_phase * frequency, y_phase * frequency, x_phase * frequency, y_phase * frequency);
             value = map_range(value, -1.0, 1.0, 0.0, 255.0);
             QColor color = qRgb(static_cast<int>(value),

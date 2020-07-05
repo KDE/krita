@@ -18,6 +18,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <filter/kis_filter_configuration.h>
+#include <kis_generator_layer.h>
 #include <kis_processing_information.h>
 #include <kis_selection.h>
 
@@ -27,20 +28,21 @@ struct KisGeneratorStrokeStrategy::Private {
     class ProcessData : public KisStrokeJobData
     {
     public:
-        ProcessData(KisGeneratorSP _f, KisProcessingInformation &_dstCfg, QSize _size, KisFilterConfigurationSP _filterConfig, KoUpdater *_updater)
+        ProcessData(KisGeneratorLayer* _layer, KisGeneratorSP _f, KisProcessingInformation &_dstCfg, QRect _rect, KisFilterConfigurationSP _filterConfig, KoUpdater *_updater)
             : KisStrokeJobData(CONCURRENT)
+            ,layer(_layer)
             ,f(_f)
             ,dstCfg(_dstCfg)
-            ,size(_size)
+            ,tile(_rect)
             ,filterConfig(_filterConfig)
             ,updater(_updater)
         {
         }
 
-
+        KisGeneratorLayer* layer;
         KisGeneratorSP f;
         KisProcessingInformation dstCfg;
-        QSize size;
+        QRect tile;
         KisFilterConfigurationSP filterConfig;
         KoUpdater *updater;
     };
@@ -59,11 +61,11 @@ KisGeneratorStrokeStrategy::KisGeneratorStrokeStrategy(KisImageWSP image)
     setCanForgetAboutMe(true);
 }
 
-KisStrokeJobData* KisGeneratorStrokeStrategy::createJobData(KisGeneratorSP f, KisPaintDeviceSP dev, const QRect &rc, const KisFilterConfigurationSP filterConfig, KisProcessingVisitor::ProgressHelper &helper)
+KisStrokeJobData* KisGeneratorStrokeStrategy::createJobData(KisGeneratorLayer* layer, KisGeneratorSP f, KisPaintDeviceSP dev, const QRect &rc, const KisFilterConfigurationSP filterConfig, KisProcessingVisitor::ProgressHelper &helper)
 {
     KisProcessingInformation dstCfg(dev, rc.topLeft(), KisSelectionSP());
 
-    return new Private::ProcessData(f, dstCfg, rc.size(), filterConfig, helper.updater());
+    return new Private::ProcessData(layer, f, dstCfg, rc, filterConfig, helper.updater());
 }
 
 KisGeneratorStrokeStrategy::~KisGeneratorStrokeStrategy()
@@ -78,7 +80,11 @@ void KisGeneratorStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
     Private::ProcessData *d_pd = dynamic_cast<Private::ProcessData *>(data);
     if (d_pd) {
-        d_pd->f->generate(d_pd->dstCfg, d_pd->size, d_pd->filterConfig, d_pd->updater);
+        d_pd->f->generate(d_pd->dstCfg, d_pd->tile.size(), d_pd->filterConfig, d_pd->updater);
+
+        // HACK ALERT!!!
+        // this avoids cyclic loop with KisRecalculateGeneratorLayerJob::run()
+        d_pd->layer->setDirty(d_pd->tile);
         return;
     }
 }

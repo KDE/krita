@@ -26,10 +26,10 @@
 #include "kis_selection.h"
 #include "filter/kis_filter_configuration.h"
 #include "kis_processing_information.h"
+#include <kis_processing_visitor.h>
 #include "generator/kis_generator_registry.h"
 #include "generator/kis_generator.h"
 #include "kis_node_visitor.h"
-#include "kis_processing_visitor.h"
 #include "kis_thread_safe_signal_compressor.h"
 #include "kis_recalculate_generator_layer_job.h"
 #include "kis_generator_stroke_strategy.h"
@@ -113,7 +113,7 @@ void KisGeneratorLayer::update()
     KisGeneratorSP f = KisGeneratorRegistry::instance()->value(filterConfig->name());
     KIS_SAFE_ASSERT_RECOVER_RETURN(f);
 
-    KisProcessingVisitor::ProgressHelper helper(this);
+    QSharedPointer<KisProcessingVisitor::ProgressHelper> helper(new KisProcessingVisitor::ProgressHelper(this));
 
     KisPaintDeviceSP originalDevice = original();
 

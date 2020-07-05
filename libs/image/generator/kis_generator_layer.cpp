@@ -69,6 +69,10 @@ KisGeneratorLayer::KisGeneratorLayer(const KisGeneratorLayer& rhs)
 
 KisGeneratorLayer::~KisGeneratorLayer()
 {
+    if (!m_d->strokeId.isNull()) {
+        this->image()->cancelStroke(m_d->strokeId);
+        m_d->strokeId.clear();
+    }
 }
 
 void KisGeneratorLayer::setFilter(KisFilterConfigurationSP filterConfig)

@@ -33,7 +33,6 @@
 #include "kis_thread_safe_signal_compressor.h"
 #include "kis_recalculate_generator_layer_job.h"
 #include "kis_generator_stroke_strategy.h"
-#include "krita_utils.h"
 
 #define UPDATE_DELAY 100 /*ms */
 
@@ -97,8 +96,6 @@ void KisGeneratorLayer::slotDelayedStaticUpdate()
 
 void KisGeneratorLayer::update()
 {
-    using KritaUtils::splitRectIntoPatches;
-    using KritaUtils::optimalPatchSize;
 
     KisImageSP image = this->image().toStrongRef();
     const QRect updateRect = extent() | image->bounds();
@@ -118,8 +115,6 @@ void KisGeneratorLayer::update()
 
     KisPaintDeviceSP originalDevice = original();
 
-    QVector<QRect> dirtyRegion;
-
     if (!m_d->strokeId.isNull()) {
         image->cancelStroke(m_d->strokeId);
         m_d->strokeId.clear();
@@ -131,11 +126,11 @@ void KisGeneratorLayer::update()
 
     auto rc = processRegion.begin();
     while (rc != processRegion.end()) {
-        QVector<QRect> tiles = splitRectIntoPatches(*rc, optimalPatchSize());
+        QList<KisStrokeJobData *> jobs = KisGeneratorStrokeStrategy::createJobsData(this, f, originalDevice, *rc, filterConfig, helper);
 
-        Q_FOREACH (const QRect &tile, tiles) {
-            KisStrokeJobData * jd = stroke->createJobData(this, f, originalDevice, tile, filterConfig, helper);
-            image->addJob(m_d->strokeId, jd);
+        Q_FOREACH (KisStrokeJobData *job, jobs)
+        {
+            image->addJob(m_d->strokeId, job);
         }
 
         rc++;

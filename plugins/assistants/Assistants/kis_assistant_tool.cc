@@ -746,11 +746,19 @@ void KisAssistantTool::updateToolOptionsUI()
 
      if (m_selectedAssistant) {
          bool isVanishingPointAssistant = m_selectedAssistant->id() == "vanishing point";
+         bool isTwoPointAssistant = m_selectedAssistant->id() == "two_point";
+
          m_options.vanishingPointAngleSpinbox->setVisible(isVanishingPointAssistant);
+         m_options.twoPointDensitySpinbox->setVisible(isTwoPointAssistant);
 
          if (isVanishingPointAssistant) {
              QSharedPointer <VanishingPointAssistant> assis = qSharedPointerCast<VanishingPointAssistant>(m_selectedAssistant);
              m_options.vanishingPointAngleSpinbox->setValue(assis->referenceLineDensity());
+         }
+
+         if (isTwoPointAssistant) {
+             QSharedPointer <TwoPointAssistant> assis = qSharedPointerCast<TwoPointAssistant>(m_selectedAssistant);
+             m_options.twoPointDensitySpinbox->setValue(assis->gridDensity());
          }
 
          // load custom color settings from assistant (this happens when changing assistant
@@ -767,7 +775,8 @@ void KisAssistantTool::updateToolOptionsUI()
 
 
      } else {
-         m_options.vanishingPointAngleSpinbox->setVisible(false); //
+         m_options.vanishingPointAngleSpinbox->setVisible(false);
+         m_options.twoPointDensitySpinbox->setVisible(false);
      }
 
      // show/hide elements if an assistant is selected or not
@@ -802,6 +811,26 @@ void KisAssistantTool::slotChangeVanishingPointAngle(double value)
         if (isVanishingPointAssistant) {
             QSharedPointer <VanishingPointAssistant> assis = qSharedPointerCast<VanishingPointAssistant>(m_selectedAssistant);
             assis->setReferenceLineDensity((float)value);
+        }
+    }
+
+    m_canvas->canvasWidget()->update();
+}
+
+void KisAssistantTool::slotChangeTwoPointDensity(double value)
+{
+    if ( m_canvas->paintingAssistantsDecoration()->assistants().length() == 0) {
+        return;
+    }
+
+    // get the selected assistant and change the angle value
+    KisPaintingAssistantSP m_selectedAssistant =  m_canvas->paintingAssistantsDecoration()->selectedAssistant();
+    if (m_selectedAssistant) {
+        bool isTwoPointAssistant = m_selectedAssistant->id() == "two_point";
+
+        if (isTwoPointAssistant) {
+            QSharedPointer <TwoPointAssistant> assis = qSharedPointerCast<TwoPointAssistant>(m_selectedAssistant);
+            assis->setGridDensity((float)value);
         }
     }
 
@@ -1203,6 +1232,7 @@ QWidget *KisAssistantTool::createOptionWidget()
         connect(m_options.assistantsGlobalOpacitySlider, SIGNAL(valueChanged(int)), SLOT(slotGlobalAssistantOpacityChanged()));
 
         connect(m_options.vanishingPointAngleSpinbox, SIGNAL(valueChanged(double)), this, SLOT(slotChangeVanishingPointAngle(double)));
+        connect(m_options.twoPointDensitySpinbox, SIGNAL(valueChanged(double)), this, SLOT(slotChangeTwoPointDensity(double)));
 
         // initialize UI elements with existing data if possible
         if (m_canvas && m_canvas->paintingAssistantsDecoration()) {
@@ -1233,6 +1263,10 @@ QWidget *KisAssistantTool::createOptionWidget()
         connect(m_options.customAssistantColorButton, SIGNAL(changed(QColor)), this, SLOT(slotUpdateCustomColor()));
         connect(m_options.customColorOpacitySlider, SIGNAL(valueChanged(int)), SLOT(slotCustomOpacityChanged()));
 
+        m_options.twoPointDensitySpinbox->setPrefix(i18n("Density: "));
+        m_options.twoPointDensitySpinbox->setRange(0.1, 4.0, 2);
+        m_options.twoPointDensitySpinbox->setSingleStep(0.1);
+
         m_options.vanishingPointAngleSpinbox->setPrefix(i18n("Density: "));
         m_options.vanishingPointAngleSpinbox->setSuffix(QChar(Qt::Key_degree));
         m_options.vanishingPointAngleSpinbox->setRange(1.0, 180.0);
@@ -1240,6 +1274,7 @@ QWidget *KisAssistantTool::createOptionWidget()
 
 
         m_options.vanishingPointAngleSpinbox->setVisible(false);
+        m_options.twoPointDensitySpinbox->setVisible(false);
 
     }
 

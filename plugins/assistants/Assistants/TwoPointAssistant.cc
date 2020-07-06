@@ -25,6 +25,7 @@ TwoPointAssistant::TwoPointAssistant(const TwoPointAssistant &rhs, QMap<KisPaint
     , m_horizon(rhs.m_horizon)
     , m_cov(rhs.m_cov)
     , m_sp(rhs.m_sp)
+    , m_gridDensity(rhs.m_gridDensity)
 {
 }
 
@@ -225,7 +226,7 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
 		for (QPointF vp : v_points) {
 		    // calculate interval between each grid line
 		    qreal acute_angle = acuteAngle(QLineF(m_sp, vp).angleTo(m_horizon));
-		    const qreal interval = radius / sin(acute_angle*M_PI/180);
+		    const qreal interval = (radius / sin(acute_angle*M_PI/180)) * m_gridDensity;
 
 		    // How the farthest grid line gets drawn depends on how far away the relevant VP is
 		    const qreal cov_to_vp = sqrt(pow(m_cov.x()-vp.x(),2) + pow(m_cov.y()-vp.y(),2));
@@ -395,6 +396,16 @@ void TwoPointAssistant::setSp(const QPointF a, const QPointF b, const QPointF c)
 QPointF TwoPointAssistant::sp()
 {
     return m_sp;
+}
+
+void TwoPointAssistant::setGridDensity(double density)
+{
+    m_gridDensity = density;
+}
+
+double TwoPointAssistant::gridDensity()
+{
+    return m_gridDensity;
 }
 
 bool TwoPointAssistant::isAssistantComplete() const

@@ -24,6 +24,8 @@ public:
     void setCov(const QPointF a, const QPointF b, const QPointF c);
     QPointF sp();
     void setSp(const QPointF a, const QPointF b, const QPointF c);
+    double gridDensity();
+    void setGridDensity(double density);
 
     bool isAssistantComplete() const override;
 
@@ -39,6 +41,7 @@ private:
     QLineF m_horizon;
     QPointF m_cov;
     QPointF m_sp;
+    double m_gridDensity = 1.0;
 };
 
 class TwoPointAssistantFactory : public KisPaintingAssistantFactory

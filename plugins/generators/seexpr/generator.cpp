@@ -78,28 +78,6 @@ KisConfigWidget *KisSeExprGenerator::createConfigurationWidget(QWidget *parent, 
     return new KisWdgSeExpr(parent);
 }
 
-inline KisSeExprGenerator::RenderDepth KisSeExprGenerator::textureConversionStrategy(const KoColorSpace *cs) const
-{
-    KIS_ASSERT(cs);
-    KoID colorDepth = cs->colorDepthId();
-
-    if (cs->colorModelId() == RGBAColorModelID)
-    {
-        if (colorDepth == Float16BitsColorDepthID || colorDepth == Float32BitsColorDepthID || colorDepth == Float64BitsColorDepthID)
-        {
-            return RENDER_RGB_DIRECTLY;
-        }
-        else
-        {
-            return RENDER_BGR_AND_CLAMP;
-        }
-    }
-    else
-    {
-        return RENDER_WITH_CONVERSION;
-    }
-}
-
 void KisSeExprGenerator::generate(KisProcessingInformation dstInfo,
                                   const QSize &size,
                                   const KisFilterConfigurationSP config,
@@ -117,10 +95,6 @@ void KisSeExprGenerator::generate(KisProcessingInformation dstInfo,
         QRect bounds = QRect(dstInfo.topLeft(), size);
         QRect whole_image_bounds = device->defaultBounds()->bounds();
 
-        const KoColorSpace *cs = device->colorSpace();
-        const RenderDepth strategy = textureConversionStrategy(cs);
-        KisSequentialIteratorProgress it(device, bounds, progressUpdater);
-
         SeExprExpressionContext expression(script);
 
         expression.m_vars["u"] = new SeExprVariable();
@@ -135,64 +109,26 @@ void KisSeExprGenerator::generate(KisProcessingInformation dstInfo,
             double &u = expression.m_vars["u"]->m_value;
             double &v = expression.m_vars["v"]->m_value;
 
-            switch(strategy)
-            {
-                case RENDER_RGB_DIRECTLY:
-                    // SeExpr already outputs floating-point RGB
-                    while (it.nextPixel())
-                    {
-                        u = pixel_stride_x * (it.x() + .5);
-                        v = pixel_stride_y * (it.y() + .5);
+            // SeExpr already outputs floating-point RGB
+            const KoColorSpace *dst = device->colorSpace();
+            const KoColorSpace *src = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), KoColorSpaceRegistry::instance()->p709SRGBProfile());
+            auto conv = KoColorSpaceRegistry::instance()->createColorConverter(src, dst, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
 
-                        const double *value = expression.evalFP();
+            KisSequentialIteratorProgress it(device, bounds, progressUpdater);
 
-                        QVector<float> color = {
-                            static_cast<float>(value[0]),
-                            static_cast<float>(value[1]),
-                            static_cast<float>(value[2]),
-                            KoColorSpaceMathsTraits<float>::unitValue
-                        };
+            while (it.nextPixel()) {
+                u = pixel_stride_x * (it.x() + .5);
+                v = pixel_stride_y * (it.y() + .5);
 
-                        cs->fromNormalisedChannelsValue(it.rawData(), color);
-                    }
-                    break;
-                case RENDER_BGR_AND_CLAMP:
-                    // Adjust all pixels to 0.0-1.0 and render them in BGRA order
-                    while (it.nextPixel())
-                    {
-                        u = pixel_stride_x * (it.x() + .5);
-                        v = pixel_stride_y * (it.y() + .5);
+                const double *value = expression.evalFP();
 
-                        const double *value = expression.evalFP();
+                KoColor c(src);
+                reinterpret_cast<float *>(c.data())[0] = value[0];
+                reinterpret_cast<float *>(c.data())[1] = value[1];
+                reinterpret_cast<float *>(c.data())[2] = value[2];
+                c.setOpacity(OPACITY_OPAQUE_F);
 
-                        QVector<float> color = {
-                            (float)qBound(value[2], 0.0, 1.0),
-                            (float)qBound(value[1], 0.0, 1.0),
-                            (float)qBound(value[0], 0.0, 1.0),
-                            KoColorSpaceMathsTraits<float>::unitValue
-                        };
-
-                        cs->fromNormalisedChannelsValue(it.rawData(), color);
-                    }
-                    break;
-                case RENDER_WITH_CONVERSION:
-                    // Adjust all pixels to 0.0-1.0 and transform them via QColor
-                    while (it.nextPixel())
-                    {
-                        u = pixel_stride_x * (it.x() + .5);
-                        v = pixel_stride_y * (it.y() + .5);
-
-                        const double *value = expression.evalFP();
-
-                        QColor color = QColor::fromRgbF(
-                            qBound(static_cast<float>(value[0]), 0.0f, 1.0f),
-                            qBound(static_cast<float>(value[1]), 0.0f, 1.0f),
-                            qBound(static_cast<float>(value[2]), 0.0f, 1.0f)
-                        );
-
-                        cs->fromQColor(color, it.rawData());
-                    }
-                    break;
+                conv->transform(c.data(), it.rawData(), 1);
             }
         }
     }

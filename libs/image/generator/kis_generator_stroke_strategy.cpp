@@ -60,7 +60,7 @@ KisGeneratorStrokeStrategy::KisGeneratorStrokeStrategy(KisImageWSP image)
 
     setRequestsOtherStrokesToEnd(false);
     setClearsRedoOnStart(false);
-    setCanForgetAboutMe(true);
+    setCanForgetAboutMe(false);
 }
 
 QList<KisStrokeJobData *> KisGeneratorStrokeStrategy::createJobsData(KisGeneratorLayer* layer, KisGeneratorSP f, KisPaintDeviceSP dev, const QRect &rc, const KisFilterConfigurationSP filterConfig, QSharedPointer<KisProcessingVisitor::ProgressHelper> helper)

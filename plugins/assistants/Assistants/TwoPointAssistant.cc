@@ -57,23 +57,23 @@ QPointF TwoPointAssistant::project(const QPointF& pt, const QPointF& strokeBegin
 
     // nicked wholesale from PerspectiveAssistant.cc
     if (m_snapLine.isNull()) {
-        const qreal dx = pt.x() - strokeBegin.x();
-        const qreal dy = pt.y() - strokeBegin.y();
+	const qreal dx = pt.x() - strokeBegin.x();
+	const qreal dy = pt.y() - strokeBegin.y();
 
-        if (dx * dx + dy * dy < 4.0) {
-            return strokeBegin; // allow some movement before snapping
-        }
+	if (dx * dx + dy * dy < 4.0) {
+	    return strokeBegin; // allow some movement before snapping
+	}
 
-        // figure out which direction to go
-        const QLineF vp_snap_a = QLineF(strokeBegin, QLineF(strokeBegin, *handles()[0]).unitVector().p2());
-        const QLineF vp_snap_b = QLineF(strokeBegin, QLineF(strokeBegin, *handles()[1]).unitVector().p2());
+	// figure out which direction to go
+	const QLineF vp_snap_a = QLineF(strokeBegin, QLineF(strokeBegin, *handles()[0]).unitVector().p2());
+	const QLineF vp_snap_b = QLineF(strokeBegin, QLineF(strokeBegin, *handles()[1]).unitVector().p2());
 	QLineF vertical_snap = QLineF(m_cov, m_sp); // nickde from ParallelRulerAssistant.cc
 	QPointF translation = (m_cov-strokeBegin)*-1.0;
 	vertical_snap = vertical_snap.translated(translation);
 
-        // determine whether the horizontal or vertical line is closer to the point
-        m_snapLine = distsqr(pt, vp_snap_a) < distsqr(pt, vp_snap_b) ? vp_snap_a : vp_snap_b;
-        m_snapLine = distsqr(pt, m_snapLine) < distsqr(pt, vertical_snap) ? m_snapLine : vertical_snap;
+	// determine whether the horizontal or vertical line is closer to the point
+	m_snapLine = distsqr(pt, vp_snap_a) < distsqr(pt, vp_snap_b) ? vp_snap_a : vp_snap_b;
+	m_snapLine = distsqr(pt, m_snapLine) < distsqr(pt, vertical_snap) ? m_snapLine : vertical_snap;
     }
 
     // snap to line
@@ -85,7 +85,7 @@ QPointF TwoPointAssistant::project(const QPointF& pt, const QPointF& strokeBegin
 	invsqrlen = 1.0 / (dx2 + dy2);
 
     QPointF r(dx2 * pt.x() + dy2 * m_snapLine.x1() + dx * dy * (pt.y() - m_snapLine.y1()),
-              dx2 * m_snapLine.y1() + dy2 * pt.y() + dx * dy * (pt.x() - m_snapLine.x1()));
+	      dx2 * m_snapLine.y1() + dy2 * pt.y() + dx * dy * (pt.x() - m_snapLine.x1()));
 
     r *= invsqrlen;
     return r;
@@ -192,7 +192,7 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
 	    }
 
 	    // Now we will draw the grid lines.
-            if (assistantVisible == true) {
+	    if (assistantVisible == true) {
 		path = QPainterPath(); // clear
 
 		// First set up fading gradient for grid lines
@@ -286,7 +286,7 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
 		    }
 		    gc.drawPath(path);
 		}
-            }
+	    }
 
 	}
     }
@@ -423,7 +423,7 @@ void TwoPointAssistant::saveCustomXml(QXmlStreamWriter* xml)
 bool TwoPointAssistant::loadCustomXml(QXmlStreamReader* xml)
 {
     if (xml && xml->name() == "gridDensity") {
-        this->setGridDensity((float)KisDomUtils::toDouble(xml->attributes().value("value").toString()));
+	this->setGridDensity((float)KisDomUtils::toDouble(xml->attributes().value("value").toString()));
     }
 
     return true;

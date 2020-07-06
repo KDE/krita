@@ -413,6 +413,22 @@ bool TwoPointAssistant::isAssistantComplete() const
   return handles().size() >= 3;
 }
 
+void TwoPointAssistant::saveCustomXml(QXmlStreamWriter* xml)
+{
+    xml->writeStartElement("gridDensity");
+    xml->writeAttribute("value", KisDomUtils::toString( this->gridDensity()));
+    xml->writeEndElement();
+}
+
+bool TwoPointAssistant::loadCustomXml(QXmlStreamReader* xml)
+{
+    if (xml && xml->name() == "gridDensity") {
+        this->setGridDensity((float)KisDomUtils::toDouble(xml->attributes().value("value").toString()));
+    }
+
+    return true;
+}
+
 TwoPointAssistantFactory::TwoPointAssistantFactory()
 {
 }

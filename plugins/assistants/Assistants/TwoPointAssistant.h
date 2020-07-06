@@ -18,6 +18,9 @@ public:
     QPointF getEditorPosition() const override;
     int numHandles() const override { return 3; }
 
+    void saveCustomXml(QXmlStreamWriter* xml) override;
+    bool loadCustomXml(QXmlStreamReader* xml) override;
+
     QLineF horizon();
     void setHorizon(const QPointF a, const QPointF b);
     QPointF cov();

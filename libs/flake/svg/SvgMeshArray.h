@@ -48,6 +48,8 @@ public:
 
     void setTransform(const QTransform& matrix);
 
+    QRectF boundingRect() const;
+
     //  get color of a stop
     QColor getColor(SvgMeshPatch::Type edge, int row, int col) const;
 

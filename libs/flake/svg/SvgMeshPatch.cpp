@@ -283,6 +283,12 @@ int SvgMeshPatch::countPoints() const
     return m_nodes.size();
 }
 
+
+QRectF SvgMeshPatch::boundingRect() const
+{
+    return m_path->absoluteOutlineRect();
+}
+
 QPointF SvgMeshPatch::parseMeshPath(const QString& s, bool pathIncomplete, const QPointF lastPoint)
 {
     // bits and pieces from KoPathShapeLoader, see the copyright above

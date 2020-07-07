@@ -7,18 +7,25 @@
 #include <QPainterPath>
 #include <QDebug>
 
+#include "KoMeshPatchesRenderer.h"
+
 class KoMeshGradientBackground::Private : public QSharedData
 {
 public:
     Private()
         : QSharedData()
         , gradient(0)
+        , renderer(new KoMeshPatchesRenderer)
     {}
 
-    ~Private() { delete gradient; }
+    ~Private() {
+        delete gradient;
+        delete renderer;
+    }
 
     SvgMeshGradient *gradient;
     QTransform matrix;
+    KoMeshPatchesRenderer *renderer;
 };
 
 KoMeshGradientBackground::KoMeshGradientBackground(SvgMeshGradient *gradient, const QTransform &matrix)
@@ -36,72 +43,33 @@ KoMeshGradientBackground::~KoMeshGradientBackground()
 
 void KoMeshGradientBackground::paint(QPainter &painter,
                                      KoShapePaintingContext &,
-                                     const QPainterPath &) const
+                                     const QPainterPath &fillPath) const
 {
     if (!d->gradient || !d->gradient->isValid())   return;
+    painter.save();
 
-    for (int row = 0; row < d->gradient->getMeshArray()->numRows(); ++row) {
-        for (int col = 0; col < d->gradient->getMeshArray()->numColumns(); ++col) {
-            SvgMeshPatch *patch = d->gradient->getMeshArray()->getPatch(row, col);
-            fillPatch(painter, patch);
+    QRectF meshBoundingRect = d->gradient->boundingRect();
+
+    if (d->renderer->patchImage()->isNull()) {
+
+        d->renderer->configure(meshBoundingRect, painter.transform());
+
+        for (int row = 0; row < d->gradient->getMeshArray()->numRows(); ++row) {
+            for (int col = 0; col < d->gradient->getMeshArray()->numColumns(); ++col) {
+                SvgMeshPatch *patch = d->gradient->getMeshArray()->getPatch(row, col);
+                d->renderer->fillPatch(patch);
+            }
         }
+        // uncomment to debug
+        //  d->renderer->patchImage()->save("mesh-patch.png");
     }
-}
 
-void KoMeshGradientBackground::fillPatch(QPainter &painter, const SvgMeshPatch *patch) const
-{
-    QRegion clipRegion = painter.clipRegion();
-    KoPathShape *patchPath = patch->getPath();
+    painter.setClipRect(fillPath.boundingRect());
 
-    // if patch is outside the bounding box of the clipped region, don't render
-    if (!clipRegion.contains(patchPath->boundingRect().toRect()))
-        return;
+    // patch is to be drawn wrt. to "user" coordinates
+    painter.drawImage(meshBoundingRect, *d->renderer->patchImage());
 
-    QColor color0 = patch->getStop(SvgMeshPatch::Top).color;
-    QColor color1 = patch->getStop(SvgMeshPatch::Right).color;
-    QColor color2 = patch->getStop(SvgMeshPatch::Bottom).color;
-    QColor color3 = patch->getStop(SvgMeshPatch::Left).color;
-
-    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
-
-    quint8 c[4][4];
-    cs->fromQColor(color0, c[0]);
-    cs->fromQColor(color1, c[1]);
-    cs->fromQColor(color2, c[2]);
-    cs->fromQColor(color3, c[3]);
-
-    const quint8 threshold = 0;
-
-    // check if color variation is acceptable and patch size is less than ~pixel width/heigh
-    if ((cs->difference(c[0], c[1]) > threshold || cs->difference(c[1], c[2]) > threshold ||
-         cs->difference(c[2], c[3]) > threshold || cs->difference(c[3], c[0]) > threshold) &&
-        patch->size().width() > 1 && patch->size().height() > 1) {
-
-        QVector<SvgMeshPatch*> patches;
-        patch->subdivide(patches);
-
-        for (const auto& p: patches) {
-            fillPatch(painter, p);
-        }
-
-        for (auto& p: patches) {
-            delete p;
-        }
-    } else {
-        quint8 mixed[4];
-        cs->mixColorsOp()->mixColors(c[0], 4, mixed);
-
-        QColor average;
-        cs->toQColor(mixed, &average);
-
-        QPen pen(average);
-        painter.setPen(pen);
-
-        painter.drawPath(patchPath->outline());
-
-        QBrush brush(average);
-        painter.fillPath(patchPath->outline(), brush);
-    }
+    painter.restore();
 }
 
 bool KoMeshGradientBackground::compareTo(const KoShapeBackground *other) const

@@ -48,6 +48,11 @@ bool SvgMeshGradient::isValid() const
     return m_mesharray->numRows() != 0;
 }
 
+QRectF SvgMeshGradient::boundingRect() const
+{
+    return m_mesharray->boundingRect();
+}
+
 QScopedPointer<SvgMeshArray>& SvgMeshGradient::getMeshArray()
 {
     return m_mesharray;

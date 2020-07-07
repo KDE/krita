@@ -315,9 +315,13 @@ extern "C" int main(int argc, char **argv)
         // The following code should be configured to **only** run when we detect that Krita is being
         // run within an appimage. Checking for the presence of an APPDIR path env variable seems to be
         // enough to filter out this step for non-appimage krita builds.
-        QByteArray appimageMountDir = qgetenv("APPDIR");
-        const bool isInAppimage = !appimageMountDir.isEmpty();
+
+        const bool isInAppimage = qEnvironmentVariableIsSet("APPIMAGE");
         if (isInAppimage) {
+            QByteArray appimageMountDir = qgetenv("APPDIR");
+
+            //We need to add new gstreamer plugin paths for the system to find the
+            //appropriate plugins.
             const QByteArray gstPluginSystemPath = qgetenv("GST_PLUGIN_SYSTEM_PATH_1_0");
             const QByteArray gstPluginScannerPath = qgetenv("GST_PLUGIN_SCANNER");
 

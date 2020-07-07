@@ -516,9 +516,17 @@ void TimelineDocker::previousFrame()
     if (!m_d->canvas) return;
     KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
 
-    int time = animInterface->currentUITime() - 1;
-    if (time >= 0) {
-        animInterface->requestTimeSwitchWithUndo(time);
+    const int startFrame = animInterface->playbackRange().start();
+    const int endFrame = animInterface->playbackRange().end();
+
+    int frame = animInterface->currentUITime() - 1;
+
+    if (frame < startFrame || frame >  endFrame) {
+        frame = endFrame;
+    }
+
+    if (frame >= 0) {
+        animInterface->requestTimeSwitchWithUndo(frame);
     }
 }
 
@@ -527,8 +535,16 @@ void TimelineDocker::nextFrame()
     if (!m_d->canvas) return;
     KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
 
-    int time = animInterface->currentUITime() + 1;
-    animInterface->requestTimeSwitchWithUndo(time);
+    const int startFrame = animInterface->playbackRange().start();
+    const int endFrame = animInterface->playbackRange().end();
+
+    int frame = animInterface->currentUITime() + 1;
+
+    if (frame > endFrame || frame < startFrame ) {
+        frame = startFrame;
+    }
+
+    animInterface->requestTimeSwitchWithUndo(frame);
 }
 
 void TimelineDocker::previousKeyframe()

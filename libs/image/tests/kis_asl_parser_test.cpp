@@ -329,4 +329,4 @@ void KisAslParserTest::testParserWithPatterns()
     }
 }
 
-QTEST_MAIN(KisAslParserTest)
+KISTEST_MAIN(KisAslParserTest)

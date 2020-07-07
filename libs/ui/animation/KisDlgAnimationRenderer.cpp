@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "DlgAnimationRenderer.h"
+#include "KisDlgAnimationRenderer.h"
 
 #include <QStandardPaths>
 #include <QPluginLoader>
@@ -47,12 +47,12 @@
 #include <KoDialog.h>
 #include "kis_slider_spin_box.h"
 #include "kis_acyclic_signal_connector.h"
-#include "video_saver.h"
+#include "KisVideoSaver.h"
 #include "KisAnimationRenderingOptions.h"
-#include "video_export_options_dialog.h"
+#include "VideoExportOptionsDialog.h"
 
 
-DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
+KisDlgAnimationRenderer::KisDlgAnimationRenderer(KisDocument *doc, QWidget *parent)
     : KoDialog(parent)
     , m_image(doc->image())
     , m_doc(doc)
@@ -154,23 +154,21 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
     }
 }
 
-DlgAnimationRenderer::~DlgAnimationRenderer()
+KisDlgAnimationRenderer::~KisDlgAnimationRenderer()
 {
     delete m_page;
 }
 
-void DlgAnimationRenderer::getDefaultVideoEncoderOptions(const QString &mimeType,
+void KisDlgAnimationRenderer::getDefaultVideoEncoderOptions(const QString &mimeType,
                                                          KisPropertiesConfigurationSP cfg,
                                                          QString *customFFMpegOptionsString,
                                                          bool *renderHDR)
 {
-    const VideoExportOptionsDialog::ContainerType containerType =
-        mimeType == "video/ogg" ?
-        VideoExportOptionsDialog::OGV :
-        VideoExportOptionsDialog::DEFAULT;
+    const KisVideoExportOptionsDialog::ContainerType containerType =
+            KisVideoExportOptionsDialog::mimeToContainer(mimeType);
 
-    QScopedPointer<VideoExportOptionsDialog> encoderConfigWidget(
-        new VideoExportOptionsDialog(containerType, 0));
+    QScopedPointer<KisVideoExportOptionsDialog> encoderConfigWidget(
+        new KisVideoExportOptionsDialog(containerType, 0));
 
     // we always enable HDR, letting the user to force it
     encoderConfigWidget->setSupportsHDR(true);
@@ -179,7 +177,7 @@ void DlgAnimationRenderer::getDefaultVideoEncoderOptions(const QString &mimeType
     *renderHDR = encoderConfigWidget->videoConfiguredForHDR();
 }
 
-void DlgAnimationRenderer::filterSequenceMimeTypes(QStringList &mimeTypes)
+void KisDlgAnimationRenderer::filterSequenceMimeTypes(QStringList &mimeTypes)
 {
     KritaUtils::filterContainer(mimeTypes, [](QString type) {
         return (type.startsWith("image/")
@@ -188,23 +186,24 @@ void DlgAnimationRenderer::filterSequenceMimeTypes(QStringList &mimeTypes)
     });
 }
 
-QStringList DlgAnimationRenderer::makeVideoMimeTypesList()
+QStringList KisDlgAnimationRenderer::makeVideoMimeTypesList()
 {
     QStringList supportedMimeTypes = QStringList();
     supportedMimeTypes << "video/x-matroska";
     supportedMimeTypes << "image/gif";
     supportedMimeTypes << "video/ogg";
     supportedMimeTypes << "video/mp4";
+    supportedMimeTypes << "video/webm";
 
     return supportedMimeTypes;
 }
 
-bool DlgAnimationRenderer::imageMimeSupportsHDR(QString &mime)
+bool KisDlgAnimationRenderer::imageMimeSupportsHDR(QString &mime)
 {
     return (mime == "image/png");
 }
 
-void DlgAnimationRenderer::loadAnimationOptions(const KisAnimationRenderingOptions &options)
+void KisDlgAnimationRenderer::loadAnimationOptions(const KisAnimationRenderingOptions &options)
 {
     const QString documentPath = m_doc->localFilePath();
 
@@ -289,7 +288,7 @@ void DlgAnimationRenderer::loadAnimationOptions(const KisAnimationRenderingOptio
     m_page->ffmpegLocation->setFileName(findFFMpeg(options.ffmpegPath));
 }
 
-QString DlgAnimationRenderer::defaultVideoFileName(KisDocument *doc, const QString &mimeType)
+QString KisDlgAnimationRenderer::defaultVideoFileName(KisDocument *doc, const QString &mimeType)
 {
     const QString docFileName = !doc->localFilePath().isEmpty() ?
         doc->localFilePath() : i18n("Untitled");
@@ -300,7 +299,7 @@ QString DlgAnimationRenderer::defaultVideoFileName(KisDocument *doc, const QStri
             .arg(KisMimeDatabase::suffixesForMimeType(mimeType).first());
 }
 
-void DlgAnimationRenderer::selectRenderType(int index)
+void KisDlgAnimationRenderer::selectRenderType(int index)
 {
     const QString mimeType = m_page->cmbRenderType->itemData(index).toString();
 
@@ -324,18 +323,16 @@ void DlgAnimationRenderer::selectRenderType(int index)
     m_wantsRenderWithHDR = (mimeType == "video/mp4") ? m_wantsRenderWithHDR : false;
 }
 
-void DlgAnimationRenderer::selectRenderOptions()
+void KisDlgAnimationRenderer::selectRenderOptions()
 {
     const int index = m_page->cmbRenderType->currentIndex();
     const QString mimetype = m_page->cmbRenderType->itemData(index).toString();
 
-    const VideoExportOptionsDialog::ContainerType containerType =
-        mimetype == "video/ogg" ?
-        VideoExportOptionsDialog::OGV :
-        VideoExportOptionsDialog::DEFAULT;
+    const KisVideoExportOptionsDialog::ContainerType containerType =
+        KisVideoExportOptionsDialog::mimeToContainer(mimetype);
 
-    VideoExportOptionsDialog *encoderConfigWidget =
-        new VideoExportOptionsDialog(containerType, this);
+    KisVideoExportOptionsDialog *encoderConfigWidget =
+        new KisVideoExportOptionsDialog(containerType, this);
 
     // we always enable HDR, letting the user to force it
     encoderConfigWidget->setSupportsHDR(true);
@@ -361,7 +358,7 @@ void DlgAnimationRenderer::selectRenderOptions()
     encoderConfigWidget->deleteLater();
 }
 
-void DlgAnimationRenderer::sequenceMimeTypeOptionsClicked()
+void KisDlgAnimationRenderer::sequenceMimeTypeOptionsClicked()
 {
     int index = m_page->cmbMimetype->currentIndex();
 
@@ -411,7 +408,7 @@ inline int roundByTwo(int value) {
     return value + (value & 0x1);
 }
 
-KisAnimationRenderingOptions DlgAnimationRenderer::getEncoderOptions() const
+KisAnimationRenderingOptions KisDlgAnimationRenderer::getEncoderOptions() const
 {
     KisAnimationRenderingOptions options;
 
@@ -464,7 +461,7 @@ KisAnimationRenderingOptions DlgAnimationRenderer::getEncoderOptions() const
     return options;
 }
 
-void DlgAnimationRenderer::slotButtonClicked(int button)
+void KisDlgAnimationRenderer::slotButtonClicked(int button)
 {
     if (button == KoDialog::Ok && !m_page->shouldExportOnlyImageSequence->isChecked()) {
         QString ffmpeg = m_page->ffmpegLocation->fileName();
@@ -511,14 +508,14 @@ void DlgAnimationRenderer::slotButtonClicked(int button)
     KoDialog::slotButtonClicked(button);
 }
 
-void DlgAnimationRenderer::slotDialogAccepted()
+void KisDlgAnimationRenderer::slotDialogAccepted()
 {
     KisConfig cfg(false);
     KisAnimationRenderingOptions options = getEncoderOptions();
     cfg.setExportConfiguration("ANIMATION_EXPORT", options.toProperties());
 }
 
-QString DlgAnimationRenderer::findFFMpeg(const QString &customLocation)
+QString KisDlgAnimationRenderer::findFFMpeg(const QString &customLocation)
 {
     QString result;
 
@@ -574,7 +571,7 @@ QString DlgAnimationRenderer::findFFMpeg(const QString &customLocation)
     return result;
 }
 
-void DlgAnimationRenderer::slotExportTypeChanged()
+void KisDlgAnimationRenderer::slotExportTypeChanged()
 {
     KisConfig cfg(false);
 
@@ -629,13 +626,13 @@ void DlgAnimationRenderer::slotExportTypeChanged()
      resize(m_page->sizeHint());
 }
 
-void DlgAnimationRenderer::frameRateChanged(int framerate)
+void KisDlgAnimationRenderer::frameRateChanged(int framerate)
 {
     const QString mimeType = m_page->cmbRenderType->itemData(m_page->cmbRenderType->currentIndex()).toString();
     m_page->lblGifWarning->setVisible((mimeType == "image/gif" && framerate > 50));
 }
 
-void DlgAnimationRenderer::slotLockAspectRatioDimensionsWidth(int width)
+void KisDlgAnimationRenderer::slotLockAspectRatioDimensionsWidth(int width)
 {
     Q_UNUSED(width);
 
@@ -648,7 +645,7 @@ void DlgAnimationRenderer::slotLockAspectRatioDimensionsWidth(int width)
 
 }
 
-void DlgAnimationRenderer::slotLockAspectRatioDimensionsHeight(int height)
+void KisDlgAnimationRenderer::slotLockAspectRatioDimensionsHeight(int height)
 {
     Q_UNUSED(height);
 

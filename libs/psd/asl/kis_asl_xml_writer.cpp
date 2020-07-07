@@ -431,6 +431,7 @@ void KisAslXmlWriter::writeStopGradient(const QString &key, const KoStopGradient
         colors << color;
         transparencies << transparency;
         positions << stop.position;
+        types << type;
         middleOffsets << 0.5;
     }
 

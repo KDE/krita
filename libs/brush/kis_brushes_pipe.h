@@ -117,13 +117,13 @@ public:
             KisDabShape const& shape,
             const KisPaintInformation& info,
             double subPixelX , double subPixelY,
-            qreal softnessFactor) {
+            qreal softnessFactor, qreal lightnessStrength = DEFAULT_LIGHTNESS_STRENGTH) {
 
         QSharedPointer<BrushType> brush = currentBrush(info);
         if (!brush) return;
 
 
-        brush->generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, shape, info, subPixelX, subPixelY, softnessFactor);
+        brush->generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, shape, info, subPixelX, subPixelY, softnessFactor, lightnessStrength);
         notifyCachedDabPainted(info);
     }
 

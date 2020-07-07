@@ -73,7 +73,7 @@ void TestKoDrag::test()
         QVERIFY(layer);
         QCOMPARE(layer->shapeCount(), 2);
 
-        QCOMPARE(fragmentSize.toSize(), QSize(62, 61));
+        QCOMPARE(fragmentSize.toSize(), QSize(57, 55));
         QCOMPARE(KoShape::absoluteOutlineRect(newShapes).toAlignedRect(), QRect(6,6,19,18));
     }
 

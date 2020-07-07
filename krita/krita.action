@@ -2045,6 +2045,7 @@
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
+    </Action>
     <Action name="first_frame">
       <icon></icon>
       <text>First Frame</text>

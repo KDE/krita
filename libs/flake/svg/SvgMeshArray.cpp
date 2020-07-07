@@ -179,6 +179,26 @@ void SvgMeshArray::setTransform(const QTransform& matrix)
         }
     }
 }
+
+QRectF SvgMeshArray::boundingRect() const
+{
+    KIS_ASSERT(numRows() > 0 && numColumns() > 0);
+
+    // because meshpatches are adjacent and share sides. If combined, it *should* form a rectangle
+    qreal width = 0, height = 0;
+
+    QPointF start = m_array[0][0]->boundingRect().topLeft();
+
+    for (int row = 0; row < numRows(); ++row) {
+        height += m_array[row][0]->boundingRect().height();
+    }
+
+    for (int col = 0; col < numColumns(); ++col) {
+        width += m_array[0][col]->boundingRect().width();
+    }
+
+    return QRectF(start, QSizeF(width, height));
+}
 QColor SvgMeshArray::getColor(SvgMeshPatch::Type edge, int row, int col) const
 {
     return getStop(edge, row, col).color;

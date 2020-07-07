@@ -40,6 +40,9 @@ public:
     void setTransform(const QTransform& matrix);
     bool isValid() const;
 
+    // returns boundingRect of the meshpatches in "user" coordinates (QPainter's)
+    QRectF boundingRect() const;
+
     QScopedPointer<SvgMeshArray>& getMeshArray();
 
 private:

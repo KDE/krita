@@ -74,6 +74,8 @@ public:
 
     int countPoints() const;
 
+    QRectF boundingRect() const;
+
     /* Parses raw pathstr and adds path to the shape, if the path isn't
      * complete, it will have to be computed and given with pathIncomplete = true
      * (Ideal case for std::optional)

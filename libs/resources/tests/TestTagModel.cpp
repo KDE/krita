@@ -33,7 +33,8 @@
 #include <KisResourceLocator.h>
 #include <KisResourceLoaderRegistry.h>
 #include <KisTagModel.h>
-
+#include <KisResourceModelProvider.h>
+#include <KisResourceModel.h>
 #include <DummyResource.h>
 #include <ResourceTestHelper.h>
 
@@ -232,17 +233,6 @@ void TestTagModel::testSetTagActiveInactive()
     QCOMPARE(tagModel.data(idx, Qt::UserRole + KisAllTagsModel::Active).toBool(), true);
 }
 
-
-void TestTagModel::testTagResource()
-{
-
-}
-
-void TestTagModel::testUntagResource()
-{
-
-}
-
 void TestTagModel::testRenameTag()
 {
     KisTagModel tagModel(resourceType);
@@ -260,9 +250,108 @@ void TestTagModel::testRenameTag()
 
 void TestTagModel::testChangeTagActive()
 {
+    KisTagModel tagModel(resourceType);
+
+    int rowCount = tagModel.rowCount();
+
+    tagModel.changeTagActive(m_tag, false);
+    QVERIFY(!m_tag->active());
+    QCOMPARE(tagModel.rowCount(), rowCount -1);
+    QModelIndex idx = tagModel.indexForTag(m_tag);
+
+    QCOMPARE(tagModel.data(idx, Qt::UserRole + KisAllTagsModel::Active).toBool(), false);
+
+    tagModel.changeTagActive(m_tag, true);
+    QVERIFY(m_tag->active());
+    QCOMPARE(tagModel.rowCount(), rowCount);
+
+    idx = tagModel.indexForTag(m_tag);
+
+    QCOMPARE(idx.data(Qt::UserRole + KisAllTagsModel::Url).toString(), m_tag->url());
+    QCOMPARE(idx.data(Qt::UserRole + KisAllTagsModel::Name).toString(), "Another name altogether");
+    QCOMPARE(tagModel.data(idx, Qt::UserRole + KisAllTagsModel::Active).toBool(), true);
 
 }
 
+
+void TestTagModel::testTagResource()
+{
+    KisTagModel tagModel(resourceType);
+    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel("paintoppresets");
+    KoResourceSP resource = resourceModel->resourceForIndex(resourceModel->index(0, 0));
+    QVERIFY(resource);
+    KisTagSP tag = tagModel.tagForIndex(tagModel.index(3, 0));
+    QVERIFY(tag);
+
+    tagModel.tagResource(tag, resource);
+
+    QVector<KisTagSP> tagsForResource = tagModel.tagsForResource(resource->resourceId());
+    QCOMPARE(tagsForResource.size(), 1);
+    QCOMPARE(tagsForResource.first()->name(), tag->name());
+
+}
+
+void TestTagModel::testUntagResource()
+{
+    KisTagModel tagModel(resourceType);
+    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel("paintoppresets");
+    KoResourceSP resource = resourceModel->resourceForIndex(resourceModel->index(0, 0));
+    QVERIFY(resource);
+    KisTagSP tag = tagModel.tagForIndex(tagModel.index(3, 0));
+    QVERIFY(tag);
+
+    tagModel.untagResource(tag, resource);
+
+    QVector<KisTagSP> tagsForResource = tagModel.tagsForResource(resource->resourceId());
+
+    QCOMPARE(tagsForResource.size(), 0);
+}
+
+void TestTagModel::testAddEmptyTagWithResources()
+{
+    KisTagModel tagModel(resourceType);
+    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel("paintoppresets");
+
+    QString tagName("A Brand New Tag");
+    QVector<KoResourceSP> resources;
+    for (int i = 0; i < resourceModel->rowCount(); ++i)
+    {
+        resources << resourceModel->resourceForIndex(resourceModel->index(i, 0));
+    }
+
+    tagModel.addEmptyTag(tagName, resources);
+
+    QVector<KisTagSP> tagsForResource = tagModel.   tagsForResource(resources.first()->resourceId());
+    QCOMPARE(tagsForResource.size(), 1);
+    QCOMPARE(tagsForResource.first()->name(), tagName);
+
+}
+
+void TestTagModel::testAddTagWithResources()
+{
+    KisTagModel tagModel(resourceType);
+    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel("paintoppresets");
+
+    QString tagName("test1");
+
+    KoResourceSP resource = resourceModel->resourceForIndex(resourceModel->index(0, 0));
+
+    KisTagSP tag(new KisTag);
+    tag->setUrl(tagName);
+    tag->setName(tagName);
+    tag->setComment("A tag for testing");
+    tag->setValid(true);
+    tag->setActive(true);
+
+    tagModel.addTag(tag, {resource});
+    QVERIFY(tag->id() >= 0);
+
+    QVector<KisTagSP> tagsForResource = tagModel.   tagsForResource(resource->resourceId());
+    QCOMPARE(tagsForResource.size(), 2);
+    QCOMPARE(tagsForResource[0]->name(), "A Brand New Tag"); // Inserted in testAddEmptyTagWithResources
+    QCOMPARE(tagsForResource[1]->name(), tagName);
+
+}
 
 void TestTagModel::cleanupTestCase()
 {

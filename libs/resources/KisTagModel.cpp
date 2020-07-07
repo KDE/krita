@@ -274,7 +274,7 @@ KisTagSP KisAllTagsModel::tagForIndex(QModelIndex index) const
     else {
         bool pos = const_cast<KisAllTagsModel*>(this)->d->query.seek(index.row() - s_fakeRowsCount);
         if (pos) {
-            qDebug() << "url" << d->query.value("url").toString() << "name" << d->query.value("name").toString();
+            //qDebug() << "url" << d->query.value("url").toString() << "name" << d->query.value("name").toString();
             tag.reset(new KisTag());
             tag->setUrl(d->query.value("url").toString());
             tag->setName(d->query.value("name").toString());
@@ -290,7 +290,7 @@ KisTagSP KisAllTagsModel::tagForIndex(QModelIndex index) const
 
 KisTagSP KisAllTagsModel::addEmptyTag(const QString& tagName, QVector<KoResourceSP> taggedResouces)
 {
-    qDebug() << "bool KisAllTagsModel::addEmptyTag(const QString& tagName, QVector<KoResourceSP> taggedResouces) ### " << tagName << taggedResouces;
+    //qDebug() << "bool KisAllTagsModel::addEmptyTag(const QString& tagName, QVector<KoResourceSP> taggedResouces) ### " << tagName << taggedResouces;
     KisTagSP tag = KisTagSP(new KisTag());
     tag->setName(tagName);
     tag->setUrl(tagName);
@@ -369,7 +369,7 @@ bool KisAllTagsModel::tagResource(const KisTagSP tag, const KoResourceSP resourc
     if (!tag) return false;
     if (!tag->valid()) return false;
 
-    qDebug() << "tagresource" << tag << " tag id " << tag->id();
+    //qDebug() << "tagresource" << tag << " tag id " << tag->id();
 
     if (!resource) return false;
     if (!resource->valid()) return false;
@@ -767,7 +767,6 @@ bool KisTagModel::filterAcceptsRow(int source_row, const QModelIndex &source_par
     }
 
     {
-
         if (tagId > 0) {
             QSqlQuery q;
             q.prepare("SELECT count(*)\n"

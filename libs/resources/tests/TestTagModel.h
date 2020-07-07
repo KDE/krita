@@ -38,10 +38,14 @@ private Q_SLOTS:
     void testAddEmptyTag();
     void testAddTag();
     void testSetTagActiveInactive();
-    void testTagResource();
-    void testUntagResource();
     void testRenameTag();
     void testChangeTagActive();
+
+    void testTagResource();
+    void testUntagResource();
+    void testAddEmptyTagWithResources();
+    void testAddTagWithResources();
+
 
     void cleanupTestCase();
 private:

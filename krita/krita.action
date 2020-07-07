@@ -2045,27 +2045,6 @@
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
-    </Action>
-    <Action name="previous_keyframe">
-      <icon></icon>
-      <text>Previous Keyframe</text>
-      <whatsThis></whatsThis>
-      <toolTip></toolTip>
-      <iconText></iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="next_keyframe">
-      <icon></icon>
-      <text>Next Keyframe</text>
-      <whatsThis></whatsThis>
-      <toolTip></toolTip>
-      <iconText></iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="first_frame">
       <icon></icon>
       <text>First Frame</text>

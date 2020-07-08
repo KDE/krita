@@ -31,7 +31,12 @@ class ConcentricEllipseAssistant : public KisPaintingAssistant
 public:
     ConcentricEllipseAssistant();
     KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const override;
+
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin) override;
+    void setAdjustedBrushPosition(const QPointF position) override;
+    void setFollowBrushPosition(bool follow) override;
+    void endStroke() override;
+
     QPointF getEditorPosition() const override;
     int numHandles() const override { return 3; }
     bool isAssistantComplete() const override;
@@ -48,6 +53,11 @@ private:
     mutable Ellipse m_ellipse;
     mutable Ellipse m_extraEllipse;
     explicit ConcentricEllipseAssistant(const ConcentricEllipseAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap);
+    // Needed to make sure that when we are in the middle of a brush stroke, the
+    // guides follow the brush position, not the cursor position.
+    bool m_followBrushPosition;
+    bool m_adjustedPositionValid;
+    QPointF m_adjustedBrushPosition;
 };
 
 class ConcentricEllipseAssistantFactory : public KisPaintingAssistantFactory

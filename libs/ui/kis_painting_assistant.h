@@ -117,7 +117,9 @@ public:
      * @param strokeBegin the coordinates of the beginning of the stroke
      */
     virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin) = 0;
-    virtual void endStroke() { }
+    virtual void endStroke() {}
+    virtual void setAdjustedBrushPosition(const QPointF position) { Q_UNUSED(position) }
+    virtual void setFollowBrushPosition(bool follow) { Q_UNUSED(follow) }
     virtual QPointF getEditorPosition() const = 0; // Returns editor widget position in document-space coordinates.
     virtual int numHandles() const = 0;
 

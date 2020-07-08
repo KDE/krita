@@ -175,6 +175,7 @@ protected:
                                   const QRect& rect) const override;
 
     KisKeyframeChannel *requestKeyframeChannel(const QString &id) override;
+    bool supportsKeyframeChannel(const QString &id) override;
 
 private:
     void init(KisPaintDeviceSP paintDevice, const QBitArray &paintChannelFlags = QBitArray());

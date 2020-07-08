@@ -288,6 +288,15 @@ KisKeyframeChannel *KisSelectionBasedLayer::requestKeyframeChannel(const QString
     return KisLayer::requestKeyframeChannel(id);
 }
 
+bool KisSelectionBasedLayer::supportsKeyframeChannel(const QString &id)
+{
+    if (id == KisKeyframeChannel::Content.id()) {
+        return true;
+    }
+
+    return KisLayer::supportsKeyframeChannel(id);
+}
+
 void KisSelectionBasedLayer::setDirty()
 {
     Q_ASSERT(image());

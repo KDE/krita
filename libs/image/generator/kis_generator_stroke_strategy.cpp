@@ -105,7 +105,7 @@ void KisGeneratorStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
         // HACK ALERT!!!
         // this avoids cyclic loop with KisRecalculateGeneratorLayerJob::run()
-        d_pd->layer->setDirty(d_pd->tile);
+        d_pd->layer->setDirty(QVector<QRect>({d_pd->tile}));
         return;
     }
 }

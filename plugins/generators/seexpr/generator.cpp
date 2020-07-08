@@ -88,7 +88,7 @@ KritaSeExprGenerator::~KritaSeExprGenerator()
 KisSeExprGenerator::KisSeExprGenerator() : KisGenerator(id(), KoID("basic"), i18n("&SeExpr..."))
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
-    setSupportsPainting(false);
+    setSupportsPainting(true);
 }
 
 KisFilterConfigurationSP KisSeExprGenerator::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const

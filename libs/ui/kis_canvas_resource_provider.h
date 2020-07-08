@@ -81,7 +81,8 @@ public:
         GlobalAlphaLock,
         DisablePressure,
         PreviousPaintOpPreset,
-        EffectiveZoom ///<-Used only by painting tools for non-displaying purposes
+        EffectiveZoom, ///<-Used only by painting tools for non-displaying purposes
+        PatternSize
     };
 
 
@@ -163,6 +164,9 @@ public:
     void setSize(qreal size);
     qreal size() const;
 
+    void setPatternSize(qreal size);
+    qreal patternSize() const;
+
     void setGlobalAlphaLock(bool lock);
     bool globalAlphaLock() const;
 
@@ -197,13 +201,6 @@ public Q_SLOTS:
     void slotImageSizeChanged();
     void slotOnScreenResolutionChanged();
 
-    // This is a flag to handle a bug:
-    // If pop up palette is visible and a new colour is selected, the new colour
-    // will be added when the user clicks on the canvas to hide the palette
-    // In general, we want to be able to store recent color if the pop up palette
-    // is not visible
-    void slotResetEnableFGChange(bool);
-
 private Q_SLOTS:
 
     void slotCanvasResourceChanged(int key, const QVariant & res);
@@ -237,14 +234,6 @@ private:
     KoCanvasResourceProvider *m_resourceManager;
     bool m_fGChanged;
     QList<QPointer<KisAbstractPerspectiveGrid> > m_perspectiveGrids;
-
-    // This is a flag to handle a bug:
-    // If pop up palette is visible and a new colour is selected, the new colour
-    // will be added when the user clicks on the canvas to hide the palette
-    // In general, we want to be able to store recent color if the pop up palette
-    // is not visible
-    bool m_enablefGChange;
-
 };
 
 #endif

@@ -118,6 +118,7 @@ KisWorkspaceChooser::ChooserWidgets KisWorkspaceChooser::createChooserWidgets(QS
     widgets.itemChooser->setRowHeight(30);
     widgets.itemChooser->setColumnCount(1);
     widgets.itemChooser->showTaggingBar(false);
+    widgets.itemChooser->itemView()->keepAspectRatio(false);
     widgets.saveButton = new QPushButton(i18n("Save"));
 
     widgets.nameEdit = new QLineEdit(this);

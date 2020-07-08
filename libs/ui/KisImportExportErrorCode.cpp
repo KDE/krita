@@ -140,7 +140,7 @@ QString KisImportExportErrorCode::errorMessage() const
         switch (codeId) {
             // Reading
             case ImportExportCodes::FileNotExist:
-                return i18n("The file doesn't exists.");
+                return i18n("The file doesn't exist.");
             case ImportExportCodes::NoAccessToRead:
                 return i18n("Permission denied: Krita is not allowed to read the file.");
             case ImportExportCodes::FileFormatIncorrect:

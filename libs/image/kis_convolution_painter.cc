@@ -147,6 +147,13 @@ void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, con
     // Determine whether we convolve border pixels, or not.
     switch (borderOp) {
     case BORDER_REPEAT: {
+        /**
+         * We don't use defaultBounds->topLevelWrapRect(), because
+         * the main purpose of this wrapping is "getting expected
+         * results when applying to the the layer". If a mask is bigger
+         * than the image, then it should be wrapped around the mask
+         * instead.
+         */
         const QRect boundsRect = src->defaultBounds()->bounds();
         const QRect requestedRect = QRect(srcPos, areaSize);
         QRect dataRect = requestedRect | boundsRect;

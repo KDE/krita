@@ -338,3 +338,8 @@ void KisBrushBasedPaintOpSettings::onPropertyChanged()
     m_savedBrush.clear();
     KisOutlineGenerationPolicy<KisPaintOpSettings>::onPropertyChanged();
 }
+
+bool KisBrushBasedPaintOpSettings::hasPatternSettings() const
+{
+    return true;
+}

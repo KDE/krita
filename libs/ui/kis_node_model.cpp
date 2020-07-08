@@ -518,15 +518,7 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
         if (role >= int(KisNodeModel::BeginThumbnailRole) && belongsToIsolatedGroup(node)) {
 
             const int maxSize = role - int(KisNodeModel::BeginThumbnailRole);
-
-            QSize size = node->extent().size();
-            size.scale(maxSize, maxSize, Qt::KeepAspectRatio);
-            if (size.width() == 0 || size.height() == 0) {
-                // No thumbnail can be shown if there isn't width or height...
-                return QVariant();
-            }
-
-            return node->createThumbnail(size.width(), size.height());
+            return node->createThumbnail(maxSize, maxSize, Qt::KeepAspectRatio);
         } else {
             return QVariant();
         }

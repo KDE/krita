@@ -141,6 +141,27 @@ public:
     QColor selectionOverlayMaskColor(bool defaultValue = false) const;
     void setSelectionOverlayMaskColor(const QColor &color);
 
+    template<class T>
+    void writeEntry(const QString& name, const T& value) {
+        m_config.writeEntry(name, value);
+    }
+
+    template<class T>
+    void writeList(const QString& name, const QList<T>& value) {
+        m_config.writeEntry(name, value);
+    }
+
+    template<class T>
+    T readEntry(const QString& name, const T& defaultValue=T()) {
+        return m_config.readEntry(name, defaultValue);
+    }
+
+    template<class T>
+    QList<T> readList(const QString& name, const QList<T>& defaultValue=QList<T>()) {
+        return m_config.readEntry(name, defaultValue);
+    }
+
+
 
     static void resetConfig();
 private:

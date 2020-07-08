@@ -32,6 +32,7 @@
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_scatter_option.h>
 #include <kis_pressure_softness_option.h>
+#include <kis_pressure_lightness_strength_option.h>
 #include <kis_pressure_sharpness_option.h>
 #include <kis_pressure_spacing_option.h>
 #include <kis_pressure_rate_option.h>
@@ -89,6 +90,7 @@ private:
     KisPressureSharpnessOption m_sharpnessOption;
     KisPressureRotationOption m_rotationOption;
     KisPressureScatterOption m_scatterOption;
+    KisPressureLightnessStrengthOption m_lightnessStrengthOption;
 
     KisPaintDeviceSP m_lineCacheDevice;
 

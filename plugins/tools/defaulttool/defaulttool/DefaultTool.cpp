@@ -82,6 +82,7 @@
 #include "kis_assert.h"
 #include "kis_global.h"
 #include "kis_debug.h"
+#include "krita_utils.h"
 
 #include <QVector2D>
 
@@ -1230,8 +1231,16 @@ void DefaultTool::selectionBooleanOp(int booleanOp)
     const int referenceShapeIndex = 0;
     KoShape *referenceShape = editableShapes[referenceShapeIndex];
 
+    KisCanvas2 *kisCanvas = static_cast<KisCanvas2 *>(canvas());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(kisCanvas);
+    const QTransform booleanWorkaroundTransform =
+        KritaUtils::pathShapeBooleanSpaceWorkaround(kisCanvas->image());
+
     Q_FOREACH (KoShape *shape, editableShapes) {
-        srcOutlines << shape->absoluteTransformation().map(shape->outline());
+        srcOutlines <<
+            booleanWorkaroundTransform.map(
+            shape->absoluteTransformation().map(
+                shape->outline()));
     }
 
     if (booleanOp == BooleanUnion) {
@@ -1264,6 +1273,8 @@ void DefaultTool::selectionBooleanOp(int booleanOp)
 
         actionName = kundo2_i18n("Subtract Shapes");
     }
+
+    dstOutline = booleanWorkaroundTransform.inverted().map(dstOutline);
 
     KoShape *newShape = 0;
 

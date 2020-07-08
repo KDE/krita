@@ -71,7 +71,8 @@ void generateDab(const DabGenerationInfo &di, DabRenderingResources *resources, 
                                di.shape,
                                di.info,
                                di.subPixel.x(), di.subPixel.y(),
-                               di.softnessFactor);
+                               di.softnessFactor,
+                               di.lightnessStrength);
     }
     else {
         if (!resources->colorSourceDevice ||
@@ -91,7 +92,8 @@ void generateDab(const DabGenerationInfo &di, DabRenderingResources *resources, 
                                di.shape,
                                di.info,
                                di.subPixel.x(), di.subPixel.y(),
-                               di.softnessFactor);
+                               di.softnessFactor,
+                               di.lightnessStrength);
     }
 
     if (!di.mirrorProperties.isEmpty()) {

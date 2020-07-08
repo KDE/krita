@@ -670,6 +670,22 @@ void KisAssistantTool::mouseMoveEvent(KoPointerEvent *event)
      m_canvas->updateCanvas();
 }
 
+
+void KisAssistantTool::keyPressEvent(QKeyEvent *event)
+{
+    // When the user is in the middle of creating a new
+    // assistant the escape key can be used to cancel this process.
+    if (event->key()==Qt::Key_Escape && (m_newAssistant)) {
+        // Clear shared pointer to the assistant being created so
+        // it gets cleaned-up
+        m_newAssistant.clear();
+        m_canvas->updateCanvas();
+        event->accept();
+    } else {
+        event->ignore();
+    }
+}
+
 void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
 {
     QRectF canvasSize = QRectF(QPointF(0, 0), QSizeF(m_canvas->image()->size()));
@@ -750,6 +766,7 @@ void KisAssistantTool::loadAssistants()
     QByteArray data = file.readAll();
     QXmlStreamReader xml(data);
     QMap<int, KisPaintingAssistantHandleSP> handleMap;
+    QMap<int, KisPaintingAssistantHandleSP> sideHandleMap;
     KisPaintingAssistantSP assistant;
     bool errors = false;
     while (!xml.atEnd()) {
@@ -783,6 +800,30 @@ void KisAssistantTool::loadAssistants()
                         errors = true;
                     }
                 }
+	    // for vanishing point assistant
+            } else if (xml.name() == "sidehandle"){
+
+	      // read in sidehandles
+              if (!xml.attributes().value("id").isEmpty()) {
+		  QString strId = xml.attributes().value("id").toString(),
+			  strX = xml.attributes().value("x").toString(),
+			  strY = xml.attributes().value("y").toString();
+		  if (!strId.isEmpty() && !strX.isEmpty() && !strY.isEmpty()) {
+		      int id = strId.toInt();
+		      double x = strX.toDouble();
+		      double y = strY.toDouble();
+		      if (!sideHandleMap.contains(id)) {
+			  sideHandleMap.insert(id, new KisPaintingAssistantHandle(x,y));
+		      }}
+              }
+	      // addHandle to assistant
+              if (!xml.attributes().value("ref").isEmpty() && assistant) {
+		  KisPaintingAssistantHandleSP handle = sideHandleMap.value(xml.attributes().value("ref").toString().toInt());
+		  if (handle) {
+		      assistant->addHandle(handle, HandleType::SIDE);
+		  }
+	      }
+
             } else if (xml.name() == "assistant") {
                 const KisPaintingAssistantFactory* factory = KisPaintingAssistantFactoryRegistry::instance()->get(xml.attributes().value("type").toString());
 
@@ -826,8 +867,8 @@ void KisAssistantTool::loadAssistants()
             if (xml.name() == "assistant") {
                 if (assistant) {
                     if (assistant->handles().size() == assistant->numHandles()) {
-                        if (assistant->id() == "vanishing point"){
-                        //ideally we'd save and load side-handles as well, but this is all I've got//
+		        if (assistant->id() == "vanishing point" && sideHandleMap.empty()){
+                        // Create side handles if the saved vp assistant doesn't have any.
                             QPointF pos = *assistant->handles()[0];
                             assistant->addHandle(new KisPaintingAssistantHandle(pos+QPointF(-70,0)), HandleType::SIDE);
                             assistant->addHandle(new KisPaintingAssistantHandle(pos+QPointF(-140,0)), HandleType::SIDE);
@@ -894,6 +935,19 @@ void KisAssistantTool::saveAssistants()
         xml.writeEndElement();
     }
     xml.writeEndElement();
+    xml.writeStartElement("sidehandles");
+    QMap<KisPaintingAssistantHandleSP, int> sideHandleMap;
+    Q_FOREACH (KisPaintingAssistantSP assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
+	Q_FOREACH (KisPaintingAssistantHandleSP handle, assistant->sideHandles()) {
+	    int id = sideHandleMap.size();
+	    sideHandleMap.insert(handle, id);
+	    xml.writeStartElement("sidehandle");
+	    xml.writeAttribute("id", QString::number(id));
+	    xml.writeAttribute("x", QString::number(double(handle->x()), 'f', 3));
+	    xml.writeAttribute("y", QString::number(double(handle->y()), 'f', 3));
+	    xml.writeEndElement();
+	}
+    }
     xml.writeStartElement("assistants");
 
 
@@ -916,6 +970,15 @@ void KisAssistantTool::saveAssistants()
             xml.writeEndElement();
         }
         xml.writeEndElement();
+        if (!sideHandleMap.empty()) {
+	    xml.writeStartElement("sidehandles");
+	    Q_FOREACH (const KisPaintingAssistantHandleSP handle, assistant->sideHandles()) {
+		xml.writeStartElement("sidehandle");
+		xml.writeAttribute("ref", QString::number(sideHandleMap.value(handle)));
+		xml.writeEndElement();
+	    }
+	    xml.writeEndElement();
+        }
         xml.writeEndElement();
     }
     xml.writeEndElement();

@@ -60,8 +60,20 @@ void KisOpenRasterStackSaveVisitor::saveLayerInfo(QDomElement& elt, KisLayer* la
     elt.setAttribute("name", layer->name());
     elt.setAttribute("opacity", QString().setNum(layer->opacity() / 255.0));
     elt.setAttribute("visibility", layer->visible() ? "visible" : "hidden");
-    elt.setAttribute("x", QString().setNum(layer->x()));
-    elt.setAttribute("y", QString().setNum(layer->y()));
+
+    if (layer->inherits("KisGroupLayer")) {
+        // Workaround for the issue regarding ora specification.
+        // MyPaint treats layer's x and y relative to the group's x and y
+        //  while Gimp and Krita think those are absolute values.
+        // Hence we set x and y on group layers to always be 0.
+        elt.setAttribute("x", QString().setNum(0));
+        elt.setAttribute("y", QString().setNum(0));
+
+    } else {
+        elt.setAttribute("x", QString().setNum(layer->exactBounds().x()));
+        elt.setAttribute("y", QString().setNum(layer->exactBounds().y()));
+    }
+
     if (layer->userLocked()) {
         elt.setAttribute("edit-locked", "true");
     }
@@ -167,10 +179,20 @@ bool KisOpenRasterStackSaveVisitor::visit(KisExternalLayer * layer)
 
 bool KisOpenRasterStackSaveVisitor::saveLayer(KisLayer *layer)
 {
+    if (layer->isFakeNode()) {
+        // don't save grids, reference images layers etc.
+        return true;
+    }
 
-    // here we adjust the bounds to encompass the entire area of the layer with color data by adding the current offsets
-    QRect adjustedBounds = layer->image()->bounds();
-    adjustedBounds.adjust(layer->x(), layer->y(), layer->x(), layer->y());
+    // here we adjust the bounds to encompass the entire area of the layer, including transforms
+    QRect adjustedBounds = layer->exactBounds();
+
+    if (adjustedBounds.isEmpty()) {
+        // in case of an empty layer, artificially increase the size of the saved rectangle
+        // to just save an empty layer file
+        adjustedBounds.adjust(0, 0, 1, 1);
+    }
+
     QString filename = d->saveContext->saveDeviceData(layer->projection(), layer->metaData(), adjustedBounds, layer->image()->xRes(), layer->image()->yRes());
 
     QDomElement elt = d->layerStack.createElement("layer");

@@ -26,6 +26,7 @@
 #include "kis_painter.h"
 #include "kis_transaction.h"
 #include <commands_new/kis_selection_move_command2.h>
+#include "kis_lod_transform.h"
 
 
 MoveSelectionStrokeStrategy::MoveSelectionStrokeStrategy(KisPaintLayerSP paintLayer,
@@ -81,12 +82,24 @@ void MoveSelectionStrokeStrategy::initStrokeCallback()
     indirect->setTemporaryTarget(movedDevice);
     indirect->setTemporaryCompositeOp(COMPOSITE_OVER);
     indirect->setTemporaryOpacity(OPACITY_OPAQUE_U8);
+    indirect->setTemporarySelection(0);
+    indirect->setTemporaryChannelFlags(QBitArray());
 
     m_initialDeviceOffset = QPoint(movedDevice->x(), movedDevice->y());
+    m_initialSelectionOffset = QPoint(m_selection->x(), m_selection->y());
 
-    m_selection->setVisible(false);
+    {
+        QRect handlesRect = movedDevice->exactBounds();
+        KisLodTransform t(paintDevice);
+        handlesRect = t.mapInverted(handlesRect);
 
-    emit sigHandlesRectCalculated(movedDevice->exactBounds());
+        if (!handlesRect.isEmpty()) {
+            emit this->sigHandlesRectCalculated(handlesRect);
+        } else {
+            emit this->sigStrokeStartedEmpty();
+        }
+
+    }
 }
 
 void MoveSelectionStrokeStrategy::finishStrokeCallback()
@@ -103,12 +116,12 @@ void MoveSelectionStrokeStrategy::finishStrokeCallback()
 
     indirect->setTemporaryTarget(0);
 
-    QPoint selectionOffset(m_selection->x(), m_selection->y());
-
     m_updatesFacade->blockUpdates();
 
     KUndo2CommandSP moveSelectionCommand(
-        new KisSelectionMoveCommand2(m_selection, selectionOffset, selectionOffset + m_finalOffset));
+        new KisSelectionMoveCommand2(m_selection,
+                                     m_initialSelectionOffset,
+                                     m_initialSelectionOffset + m_finalOffset));
 
     runAndSaveCommand(
         moveSelectionCommand,
@@ -134,9 +147,12 @@ void MoveSelectionStrokeStrategy::cancelStrokeCallback()
 
             indirect->setTemporaryTarget(0);
 
-            m_selection->setVisible(true);
-
             m_paintLayer->setDirty(dirtyRegion);
+
+            m_selection->setX(m_initialSelectionOffset.x());
+            m_selection->setY(m_initialSelectionOffset.y());
+            m_selection->setVisible(true);
+            m_selection->notifySelectionChanged();
         }
     }
     KisStrokeStrategyUndoCommandBased::cancelStrokeCallback();
@@ -147,6 +163,7 @@ void MoveSelectionStrokeStrategy::cancelStrokeCallback()
 void MoveSelectionStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
     MoveStrokeStrategy::Data *d = dynamic_cast<MoveStrokeStrategy::Data*>(data);
+    ShowSelectionData *ssd = dynamic_cast<ShowSelectionData*>(data);
 
     if (d) {
         KisIndirectPaintingSupport *indirect =
@@ -166,6 +183,16 @@ void MoveSelectionStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
         m_finalOffset = d->offset;
 
         m_paintLayer->setDirty(KisRegion::fromQRegion(dirtyRegion));
+
+        m_selection->setX((m_initialSelectionOffset + d->offset).x());
+        m_selection->setY((m_initialSelectionOffset + d->offset).y());
+
+        if (m_selection->isVisible()) {
+            m_selection->notifySelectionChanged();
+        }
+
+    } else if (ssd) {
+        m_selection->setVisible(ssd->showSelection);
     } else {
         KisStrokeStrategyUndoCommandBased::doStrokeCallback(data);
     }
@@ -175,6 +202,10 @@ KisStrokeStrategy* MoveSelectionStrokeStrategy::createLodClone(int levelOfDetail
 {
     Q_UNUSED(levelOfDetail);
 
+    // Vector selections don't support lod-moves
+    if (m_selection->hasShapeSelection()) return 0;
+
     MoveSelectionStrokeStrategy *clone = new MoveSelectionStrokeStrategy(*this);
+    connect(clone, SIGNAL(sigHandlesRectCalculated(QRect)), this, SIGNAL(sigHandlesRectCalculated(QRect)));
     return clone;
 }

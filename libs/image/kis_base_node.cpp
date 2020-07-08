@@ -239,8 +239,10 @@ bool KisBaseNode::check(const KoProperties & properties) const
 }
 
 
-QImage KisBaseNode::createThumbnail(qint32 w, qint32 h)
+QImage KisBaseNode::createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspectRatioMode)
 {
+    Q_UNUSED(aspectRatioMode);
+
     try {
         QImage image(w, h, QImage::Format_ARGB32);
         image.fill(0);
@@ -251,9 +253,10 @@ QImage KisBaseNode::createThumbnail(qint32 w, qint32 h)
 
 }
 
-QImage KisBaseNode::createThumbnailForFrame(qint32 w, qint32 h, int time)
+QImage KisBaseNode::createThumbnailForFrame(qint32 w, qint32 h, int time, Qt::AspectRatioMode aspectRatioMode)
 {
     Q_UNUSED(time)
+    Q_UNUSED(aspectRatioMode);
     return createThumbnail(w, h);
 }
 

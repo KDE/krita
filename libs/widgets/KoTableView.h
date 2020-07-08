@@ -52,6 +52,8 @@ public:
 
     void setViewMode(ViewMode mode);
 
+    void keepAspectRatio(bool keepRatio = true);
+
     void updateView();
 
 public Q_SLOTS:
@@ -63,6 +65,7 @@ Q_SIGNALS:
 
 private:
     ViewMode m_viewMode;
+    bool m_keepRatio;
 };
 
 #endif // KOTABLEVIEW_H

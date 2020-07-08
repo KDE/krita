@@ -896,7 +896,7 @@ QRect KisLayer::needRectForOriginal(const QRect &rect) const
     return needRect;
 }
 
-QImage KisLayer::createThumbnail(qint32 w, qint32 h)
+QImage KisLayer::createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspectRatioMode)
 {
     if (w == 0 || h == 0) {
         return QImage();
@@ -905,12 +905,12 @@ QImage KisLayer::createThumbnail(qint32 w, qint32 h)
     KisPaintDeviceSP originalDevice = original();
 
     return originalDevice ?
-           originalDevice->createThumbnail(w, h, 1,
+           originalDevice->createThumbnail(w, h, aspectRatioMode, 1,
                                            KoColorConversionTransformation::internalRenderingIntent(),
                                            KoColorConversionTransformation::internalConversionFlags()) : QImage();
 }
 
-QImage KisLayer::createThumbnailForFrame(qint32 w, qint32 h, int time)
+QImage KisLayer::createThumbnailForFrame(qint32 w, qint32 h, int time, Qt::AspectRatioMode aspectRatioMode)
 {
     if (w == 0 || h == 0) {
         return QImage();
@@ -924,7 +924,7 @@ QImage KisLayer::createThumbnailForFrame(qint32 w, qint32 h, int time)
             KisPaintDeviceSP targetDevice = new KisPaintDevice(colorSpace());
             KisKeyframeSP keyframe = channel->visibleKeyframeAt(time);
             channel->fetchFrame(keyframe, targetDevice);
-            return targetDevice->createThumbnail(w, h, 1,
+            return targetDevice->createThumbnail(w, h, aspectRatioMode, 1,
                                                  KoColorConversionTransformation::internalRenderingIntent(),
                                                  KoColorConversionTransformation::internalConversionFlags());
         }

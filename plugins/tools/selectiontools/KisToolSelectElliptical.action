@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ActionCollection version="2" name="Tools">
-  <Actions category="Elliptical Selection Tool">
-    <text>Elliptical Selection Tool</text>
+  <Actions category="tool-shortcuts">
+      <text>Tool Shortcuts</text>
+    <Action name="KisToolSelectElliptical">
+      <icon></icon>
+      <text>Elliptical Selection Tool</text>
+      <whatsThis></whatsThis>
+      <toolTip>Elliptical Selection Tool</toolTip>
+      <iconText>Elliptical Selection Tool</iconText>
+      <shortcut>J</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
   </Actions>
 </ActionCollection>

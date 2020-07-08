@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ActionCollection version="2" name="Tools">
-  <Actions category="Polyline Tool">
-    <text>Polyline Tool</text>
+  <Actions category="tool-shortcuts">
+      <text>Tool Shortcuts</text>
+    <Action name="KisToolPolyline">
+      <icon></icon>
+      <text>Polyline Tool</text>
+      <whatsThis></whatsThis>
+      <toolTip>Polyline Tool. Shift-mouseclick ends the polyline.</toolTip>
+      <iconText>Polyline Tool. Shift-mouseclick ends the polyline.</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
   </Actions>
 </ActionCollection>

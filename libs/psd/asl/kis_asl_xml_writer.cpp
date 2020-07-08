@@ -296,6 +296,7 @@ void KisAslXmlWriter::writeGradientImpl(const QString &key,
                                         QVector<QColor> colors,
                                         QVector<qreal> transparencies,
                                         QVector<qreal> positions,
+                                        QVector<QString> types,
                                         QVector<qreal> middleOffsets)
 {
     enterDescriptor(key, "Gradient", "Grdn");
@@ -310,7 +311,7 @@ void KisAslXmlWriter::writeGradientImpl(const QString &key,
         enterDescriptor("", "", "Clrt");
 
         writeColor("Clr ", colors[i]);
-        writeEnum("Type", "Clry", "UsrS"); // NOTE: we do not support BG/FG color tags
+        writeEnum("Type", "Clry", types[i]);
         writeInteger("Lctn", positions[i] * 4096.0);
         writeInteger("Mdpn", middleOffsets[i] * 100.0);
 
@@ -334,13 +335,33 @@ void KisAslXmlWriter::writeGradientImpl(const QString &key,
     leaveDescriptor();
 }
 
+QString KisAslXmlWriter::getSegmentEndpointTypeString(KoGradientSegmentEndpointType segtype) {
+    switch (segtype) {
+    case COLOR_ENDPOINT:
+        return "UsrS";
+        break;
+    case FOREGROUND_ENDPOINT:
+    case FOREGROUND_TRANSPARENT_ENDPOINT:
+        return "FrgC";
+        break;
+    case BACKGROUND_ENDPOINT:
+    case BACKGROUND_TRANSPARENT_ENDPOINT:
+        return "BckC";
+        break;
+    default:
+        return "UsrS";
+    }
+}
+
 void KisAslXmlWriter::writeSegmentGradient(const QString &key, const KoSegmentGradient *gradient)
 {
     const QList<KoGradientSegment *>&segments = gradient->segments();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!segments.isEmpty());
 
     QVector<QColor> colors;
     QVector<qreal> transparencies;
     QVector<qreal> positions;
+    QVector<QString> types;
     QVector<qreal> middleOffsets;
 
     Q_FOREACH (const KoGradientSegment *seg, segments) {
@@ -352,27 +373,33 @@ void KisAslXmlWriter::writeSegmentGradient(const QString &key, const KoSegmentGr
         qreal transparency = color.alphaF();
         color.setAlphaF(1.0);
 
+        QString type = getSegmentEndpointTypeString(seg->startType());
+
         colors << color;
         transparencies << transparency;
         positions << start;
+        types << type;
         middleOffsets << mid;
     }
 
     // last segment
-    {
+
+    if (!segments.isEmpty()) {
         const KoGradientSegment *lastSeg = segments.last();
 
         QColor color = lastSeg->endColor().toQColor();
         qreal transparency = color.alphaF();
         color.setAlphaF(1.0);
+        QString type = getSegmentEndpointTypeString(lastSeg->endType());
 
         colors << color;
         transparencies << transparency;
         positions << lastSeg->endOffset();
+        types << type;
         middleOffsets << 0.5;
     }
 
-    writeGradientImpl(key, gradient->name(), colors, transparencies, positions, middleOffsets);
+    writeGradientImpl(key, gradient->name(), colors, transparencies, positions, types, middleOffsets);
 }
 
 void KisAslXmlWriter::writeStopGradient(const QString &key, const KoStopGradient *gradient)
@@ -380,18 +407,33 @@ void KisAslXmlWriter::writeStopGradient(const QString &key, const KoStopGradient
     QVector<QColor> colors;
     QVector<qreal> transparencies;
     QVector<qreal> positions;
+    QVector<QString> types;
     QVector<qreal> middleOffsets;
 
     Q_FOREACH (const KoGradientStop &stop, gradient->stops()) {
-        QColor color = stop.second.toQColor();
+        QColor color = stop.color.toQColor();
         qreal transparency = color.alphaF();
         color.setAlphaF(1.0);
 
+        QString type;
+        switch (stop.type) {
+        case COLORSTOP:
+            type = "UsrS";
+            break;
+        case FOREGROUNDSTOP:
+            type = "FrgC";
+            break;
+        case BACKGROUNDSTOP:
+            type = "BckC";
+            break;
+        }
+
         colors << color;
         transparencies << transparency;
-        positions << stop.first;
+        positions << stop.position;
+        types << type;
         middleOffsets << 0.5;
     }
 
-    writeGradientImpl(key, gradient->name(), colors, transparencies, positions, middleOffsets);
+    writeGradientImpl(key, gradient->name(), colors, transparencies, positions, types, middleOffsets);
 }

@@ -273,9 +273,9 @@ void KisBrushSelectionWidget::hideOptions(const QStringList &options)
     }
 }
 
-void KisBrushSelectionWidget::setHSLBrusTipEnabled(bool value)
+void KisBrushSelectionWidget::setHSLBrushTipEnabled(bool value)
 {
-    m_predefinedBrushWidget->setHSLBrusTipEnabled(value);
+    m_predefinedBrushWidget->setHSLBrushTipEnabled(value);
 }
 
 bool KisBrushSelectionWidget::hslBrushTipEnabled() const

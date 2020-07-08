@@ -43,7 +43,7 @@
 
 #include <kis_icon.h>
 #include "kis_brush_server.h"
-#include "widgets/kis_slider_spin_box.h"
+#include "kis_slider_spin_box.h"
 #include "widgets/kis_multipliers_double_slider_spinbox.h"
 #include "kis_spacing_selection_widget.h"
 #include "kis_signals_blocker.h"
@@ -563,7 +563,7 @@ void KisPredefinedBrushChooser::setImage(KisImageWSP image)
     m_image = image;
 }
 
-void KisPredefinedBrushChooser::setHSLBrusTipEnabled(bool value)
+void KisPredefinedBrushChooser::setHSLBrushTipEnabled(bool value)
 {
     m_hslBrushTipEnabled = value;
 }

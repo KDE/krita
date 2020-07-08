@@ -123,3 +123,13 @@ QTransform KoViewConverter::viewToDocument() const
     zoom(&zoomX, &zoomY);
     return QTransform::fromScale(1.0 / zoomX, 1.0 / zoomY);
 }
+
+QTransform KoViewConverter::viewToWidget() const
+{
+    return QTransform();
+}
+
+QTransform KoViewConverter::widgetToView() const
+{
+    return QTransform();
+}

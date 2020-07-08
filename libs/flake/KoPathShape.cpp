@@ -572,7 +572,8 @@ QRectF KoPathShape::boundingRect() const
     QRectF bb = transform.map(pathStroke(pen)).boundingRect();
 #endif
 
-    QRectF bb = transform.mapRect(kisGrowRect(outline().boundingRect(), outlineSweepWidth));
+    // add 10% extra update area around the doubled insets
+    QRectF bb = transform.mapRect(kisGrowRect(outline().boundingRect(), 1.1 * 0.5 * outlineSweepWidth));
 
     if (shadow()) {
         KoInsets insets;
@@ -1594,6 +1595,9 @@ void KoPathShape::setMarker(KoMarker *marker, KoFlake::MarkerPosition pos)
     } else {
         d->markersNew[pos] = marker;
     }
+
+    notifyChanged();
+    shapeChangedPriv(StrokeChanged);
 }
 
 KoMarker *KoPathShape::marker(KoFlake::MarkerPosition pos) const

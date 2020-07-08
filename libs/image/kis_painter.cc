@@ -116,6 +116,7 @@ void KisPainter::init()
     d->paramInfo = KoCompositeOp::ParameterInfo();
     d->renderingIntent = KoColorConversionTransformation::internalRenderingIntent();
     d->conversionFlags = KoColorConversionTransformation::internalConversionFlags();
+    d->patternTransform = QTransform();
 }
 
 KisPainter::~KisPainter()
@@ -463,6 +464,8 @@ inline bool KisPainter::Private::tryReduceSourceRect(const KisPaintDevice *srcDe
                                                      qint32 *dstX,
                                                      qint32 *dstY)
 {
+    bool needsReadjustParams = false;
+
     /**
      * In case of COMPOSITE_COPY and Wrap Around Mode even the pixels
      * outside the device extent matter, because they will be either
@@ -484,7 +487,34 @@ inline bool KisPainter::Private::tryReduceSourceRect(const KisPaintDevice *srcDe
         *srcRect &= srcDev->extent();
 
         if (srcRect->isEmpty()) return true;
+        needsReadjustParams = true;
+    }
 
+    if (selection) {
+        /**
+         * We should also crop the blitted area by the selected region,
+         * because we cannot paint outside the selection.
+         */
+        *srcRect &= selection->selectedRect();
+
+        if (srcRect->isEmpty()) return true;
+        needsReadjustParams = true;
+    }
+
+    if (!paramInfo.channelFlags.isEmpty()) {
+        const QBitArray onlyColor = colorSpace->channelFlags(true, false);
+        KIS_SAFE_ASSERT_RECOVER_NOOP(onlyColor.size() == paramInfo.channelFlags.size());
+
+        // check if we have alpha channel locked
+        if ((paramInfo.channelFlags & onlyColor) == paramInfo.channelFlags) {
+            *srcRect &= device->extent();
+
+            if (srcRect->isEmpty()) return true;
+            needsReadjustParams = true;
+        }
+    }
+
+    if (needsReadjustParams) {
         // Readjust the function paramenters to the new dimensions.
         *dstX += srcRect->x() - *srcX;    // This will only add, not subtract
         *dstY += srcRect->y() - *srcY;    // Idem
@@ -670,15 +700,15 @@ void KisPainter::bitBltImpl(qint32 dstX, qint32 dstY,
     qint32 rowsRemaining = srcHeight;
 
     // Read below
-    KisRandomConstAccessorSP srcIt = srcDev->createRandomConstAccessorNG(srcX, srcY);
-    KisRandomAccessorSP dstIt = d->device->createRandomAccessorNG(dstX, dstY);
+    KisRandomConstAccessorSP srcIt = srcDev->createRandomConstAccessorNG();
+    KisRandomAccessorSP dstIt = d->device->createRandomAccessorNG();
 
     /* Here be a huge block of verbose code that does roughly the same than
     the other bit blit operations. This one is longer than the rest in an effort to
     optimize speed and memory use */
     if (d->selection) {
         KisPaintDeviceSP selectionProjection(d->selection->projection());
-        KisRandomConstAccessorSP maskIt = selectionProjection->createRandomConstAccessorNG(dstX, dstY);
+        KisRandomConstAccessorSP maskIt = selectionProjection->createRandomConstAccessorNG();
 
         while (rowsRemaining > 0) {
 
@@ -826,11 +856,11 @@ void KisPainter::fill(qint32 x, qint32 y, qint32 width, qint32 height, const KoC
     qint32  dstY          = y;
     qint32  rowsRemaining = height;
 
-    KisRandomAccessorSP dstIt = d->device->createRandomAccessorNG(x, y);
+    KisRandomAccessorSP dstIt = d->device->createRandomAccessorNG();
 
     if(d->selection) {
         KisPaintDeviceSP selectionProjection(d->selection->projection());
-        KisRandomConstAccessorSP maskIt = selectionProjection->createRandomConstAccessorNG(x, y);
+        KisRandomConstAccessorSP maskIt = selectionProjection->createRandomConstAccessorNG();
 
         while(rowsRemaining > 0) {
 
@@ -1429,7 +1459,7 @@ void KisPainter::Private::fillPainterPathImpl(const QPainterPath& path, const QR
         break;
     case FillStylePattern:
         if (pattern) { // if the user hasn't got any patterns installed, we shouldn't crash...
-            fillPainter->fillRect(fillRect, pattern);
+            fillPainter->fillRect(fillRect, pattern, patternTransform);
         }
         break;
     case FillStyleGenerator:
@@ -1613,10 +1643,10 @@ void KisPainter::drawLine(const QPointF& start, const QPointF& end, qreal width,
     denominator = 1.0/denominator;
 
     qreal projection,scanX,scanY,AA_;
-    KisRandomAccessorSP accessor = d->device->createRandomAccessorNG(x1, y1);
+    KisRandomAccessorSP accessor = d->device->createRandomAccessorNG();
     KisRandomConstAccessorSP selectionAccessor;
     if (d->selection) {
-        selectionAccessor = d->selection->projection()->createRandomConstAccessorNG(x1, y1);
+        selectionAccessor = d->selection->projection()->createRandomConstAccessorNG();
     }
 
     for (int y = y1-W_; y < y2+W_ ; y++){
@@ -1687,10 +1717,10 @@ void KisPainter::drawDDALine(const QPointF & start, const QPointF & end)
     float fy = y;
     int inc;
 
-    KisRandomAccessorSP accessor = d->device->createRandomAccessorNG(x, y);
+    KisRandomAccessorSP accessor = d->device->createRandomAccessorNG();
     KisRandomConstAccessorSP selectionAccessor;
     if (d->selection) {
-        selectionAccessor = d->selection->projection()->createRandomConstAccessorNG(x, y);
+        selectionAccessor = d->selection->projection()->createRandomConstAccessorNG();
     }
 
 
@@ -1744,10 +1774,10 @@ void KisPainter::drawWobblyLine(const QPointF & start, const QPointF & end)
     int x2 = qFloor(end.x());
     int y2 = qFloor(end.y());
 
-    KisRandomAccessorSP accessor = d->device->createRandomAccessorNG(x1, y1);
+    KisRandomAccessorSP accessor = d->device->createRandomAccessorNG();
     KisRandomConstAccessorSP selectionAccessor;
     if (d->selection) {
-        selectionAccessor = d->selection->projection()->createRandomConstAccessorNG(x1, y1);
+        selectionAccessor = d->selection->projection()->createRandomConstAccessorNG();
     }
 
     // Width and height of the line
@@ -1829,10 +1859,10 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
     int x2 = qFloor(end.x());
     int y2 = qFloor(end.y());
 
-    KisRandomAccessorSP accessor = d->device->createRandomAccessorNG(x1, y1);
+    KisRandomAccessorSP accessor = d->device->createRandomAccessorNG();
     KisRandomConstAccessorSP selectionAccessor;
     if (d->selection) {
-        selectionAccessor = d->selection->projection()->createRandomConstAccessorNG(x1, y1);
+        selectionAccessor = d->selection->projection()->createRandomConstAccessorNG();
     }
 
     float grad, xd, yd;
@@ -2093,10 +2123,10 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
 void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int startWidth, int endWidth)
 {
 
-    KisRandomAccessorSP accessor = d->device->createRandomAccessorNG(start.x(), start.y());
+    KisRandomAccessorSP accessor = d->device->createRandomAccessorNG();
     KisRandomConstAccessorSP selectionAccessor;
     if (d->selection) {
-        selectionAccessor = d->selection->projection()->createRandomConstAccessorNG(start.x(), start.y());
+        selectionAccessor = d->selection->projection()->createRandomConstAccessorNG();
     }
 
     const KoColorSpace *cs = d->device->colorSpace();
@@ -2568,6 +2598,16 @@ void KisPainter::setFillStyle(FillStyle fillStyle)
 KisPainter::FillStyle KisPainter::fillStyle() const
 {
     return d->fillStyle;
+}
+
+void KisPainter::setPatternTransform(QTransform transform)
+{
+    d->patternTransform = transform;
+}
+
+QTransform KisPainter::patternTransform()
+{
+    return d->patternTransform;
 }
 
 void KisPainter::setAntiAliasPolygonFill(bool antiAliasPolygonFill)

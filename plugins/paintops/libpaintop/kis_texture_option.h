@@ -26,6 +26,8 @@
 #include <kis_types.h>
 #include "kis_paintop_option.h"
 #include "kis_pressure_texture_strength_option.h"
+#include <resources/KoAbstractGradient.h>
+#include <resources/KoCachedGradient.h>
 
 #include "KisTextureMaskInfo.h"
 
@@ -55,6 +57,7 @@ private Q_SLOTS:
 
     void resetGUI(KoResource*); /// called when a new pattern is selected
 
+
 private:
     /// UI Widget that stores all the texture options
     KisTextureChooser* m_textureOptions;
@@ -68,7 +71,9 @@ public:
 
     enum TexturingMode {
         MULTIPLY,
-        SUBTRACT
+        SUBTRACT,
+        LIGHTNESS,
+        GRADIENT
     };
 
     bool m_enabled;
@@ -81,12 +86,20 @@ public:
      */
     void apply(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation & info);
     void fillProperties(const KisPropertiesConfigurationSP setting);
+    void setTextureGradient(const KoAbstractGradient* gradient);
+
+private:
+
+    void applyLightness(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation& info);
+    void applyGradient(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation& info);
 
 private:
 
     int m_offsetX;
     int m_offsetY;
     TexturingMode m_texturingMode;
+    const KoAbstractGradient* m_gradient;
+    KoCachedGradient m_cachedGradient;
 
     int m_levelOfDetail;
 

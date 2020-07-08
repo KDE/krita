@@ -519,6 +519,8 @@ public:
      * see KoColorSpacePreserveLightnessUtils.h
      */
     virtual void fillGrayBrushWithColorAndLightnessOverlay(quint8 *dst, const QRgb *brush, quint8 *brushColor, qint32 nPixels) const;
+    //Same as above, but with contrast adjusted by strength.  Strength == 1 -> full contrast.  Allows softer lightness adjustments.
+    virtual void fillGrayBrushWithColorAndLightnessWithStrength(quint8* dst, const QRgb* brush, quint8* brushColor, qreal strength, qint32 nPixels) const;
 
     /**
      * Create an adjustment object for adjusting the brightness and contrast
@@ -556,6 +558,9 @@ public:
      * Get the difference between 2 colors, normalized in the range (0,255). Only completely
      * opaque and completely transparent are taken into account when computing the difference;
      * other transparency levels are not regarded when finding the difference.
+     *
+     * Completely transparent pixels are treated as if they are completely
+     * different from any non-transparent pixels.
      */
     virtual quint8 difference(const quint8* src1, const quint8* src2) const = 0;
 
@@ -563,6 +568,10 @@ public:
      * Get the difference between 2 colors, normalized in the range (0,255). This function
      * takes the Alpha channel of the pixel into account. Alpha channel has the same
      * weight as Lightness channel.
+     *
+     * Completely transparent pixels are treated as if their color channels are
+     * the same as ones of the other pixel. In other words, only alpha channel
+     * difference is compared.
      */
     virtual quint8 differenceA(const quint8* src1, const quint8* src2) const = 0;
 

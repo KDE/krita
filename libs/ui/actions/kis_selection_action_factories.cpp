@@ -35,6 +35,7 @@
 #include <KoDocumentResourceManager.h>
 #include <KoShapeStroke.h>
 #include <KoDocumentInfo.h>
+#include <KoCanvasBase.h>
 
 #include "KisViewManager.h"
 #include "kis_canvas_resource_provider.h"
@@ -230,6 +231,7 @@ void KisFillActionFactory::run(const QString &fillSource, KisViewManager *view)
                                   false, // fast mode
                                   usePattern,
                                   true, // fill only selection,
+                                  false,
                                   0, // feathering radius
                                   0, // sizemod
                                   80, // threshold,
@@ -516,7 +518,8 @@ void KisSelectionToShapeActionFactory::run(KisViewManager *view)
     KoShapeStrokeSP border(new KoShapeStroke(1.0, fgColor.toQColor()));
     shape->setStroke(border);
 
-    view->document()->shapeController()->addShape(shape);
+    KUndo2Command *cmd = view->canvasBase()->shapeController()->addShapeDirect(shape, 0);
+    KisProcessingApplicator::runSingleCommandStroke(view->image(), cmd);
 }
 
 void KisStrokeSelectionActionFactory::run(KisViewManager *view, StrokeSelectionOptions params)
@@ -575,10 +578,10 @@ void KisStrokeSelectionActionFactory::run(KisViewManager *view, StrokeSelectionO
         KoShapeStrokeSP border(new KoShapeStroke(size, color));
         shape->setStroke(border);
 
-        view->document()->shapeController()->addShape(shape);
+        KUndo2Command *cmd = view->canvasBase()->shapeController()->addShapeDirect(shape, 0);
+        KisProcessingApplicator::runSingleCommandStroke(view->image(), cmd);
     }
     image->setModified();
-
 }
 
 void KisStrokeBrushSelectionActionFactory::run(KisViewManager *view, StrokeSelectionOptions params)

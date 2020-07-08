@@ -267,10 +267,6 @@ qreal KoMarker::maxInset(qreal strokeWidth) const
     result = qMax(KisAlgebra2D::norm(shapesBounds.bottomLeft()), result);
     result = qMax(KisAlgebra2D::norm(shapesBounds.bottomRight()), result);
 
-    if (d->coordinateSystem == StrokeWidth) {
-        result *= strokeWidth;
-    }
-
     return result;
 }
 

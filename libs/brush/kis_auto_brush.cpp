@@ -233,9 +233,10 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
         KisBrush::ColoringInformation* coloringInformation,
         KisDabShape const& shape,
         const KisPaintInformation& info,
-        double subPixelX , double subPixelY, qreal softnessFactor) const
+        double subPixelX , double subPixelY, qreal softnessFactor, qreal lightnessStrength) const
 {
     Q_UNUSED(info);
+    Q_UNUSED(lightnessStrength);
 
     // Generate the paint device from the mask
     const KoColorSpace* cs = dst->colorSpace();

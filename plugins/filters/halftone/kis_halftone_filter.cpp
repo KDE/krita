@@ -114,7 +114,7 @@ void KisHalftoneFilter::processImpl(KisPaintDeviceSP device,
     if (progressUpdater) {
         progressUpdater->setRange(0, (applyRect.height()/cellSpacingV+3)*(applyRect.width()/cellSpacingH+3));
     }
-    KisRandomConstAccessorSP iterator = device->createRandomConstAccessorNG( 0, 0);
+    KisRandomConstAccessorSP iterator = device->createRandomConstAccessorNG();
     //iterator->numContiguousColumns(qCeil(cellSize));
     //iterator->numContiguousRows(qCeil(cellSize));
     KisPainter painter(device);

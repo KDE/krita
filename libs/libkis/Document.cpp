@@ -315,7 +315,11 @@ void Document::setResolution(int value)
     KisImageSP image = d->document->image();
     if (!image) return;
 
-    d->document->image()->setResolution(value / 72.0, value / 72.0);
+    KisFilterStrategy *strategy = KisFilterStrategyRegistry::instance()->get("Bicubic");
+    KIS_SAFE_ASSERT_RECOVER_RETURN(strategy);
+
+    image->scaleImage(image->size(), value / 72.0, value / 72.0, strategy);
+    image->waitForDone();
 }
 
 
@@ -416,8 +420,14 @@ double Document::xRes() const
 void Document::setXRes(double xRes) const
 {
     if (!d->document) return;
-    if (!d->document->image()) return;
-    d->document->image()->setResolution(xRes/72.0, d->document->image()->yRes());
+    KisImageSP image = d->document->image();
+    if (!image) return;
+
+    KisFilterStrategy *strategy = KisFilterStrategyRegistry::instance()->get("Bicubic");
+    KIS_SAFE_ASSERT_RECOVER_RETURN(strategy);
+
+    image->scaleImage(image->size(), xRes / 72.0, image->yRes(), strategy);
+    image->waitForDone();
 }
 
 double Document::yRes() const
@@ -430,8 +440,14 @@ double Document::yRes() const
 void Document::setYRes(double yRes) const
 {
     if (!d->document) return;
-    if (!d->document->image()) return;
-    d->document->image()->setResolution(d->document->image()->xRes(), yRes/72.0);
+    KisImageSP image = d->document->image();
+    if (!image) return;
+
+    KisFilterStrategy *strategy = KisFilterStrategyRegistry::instance()->get("Bicubic");
+    KIS_SAFE_ASSERT_RECOVER_RETURN(strategy);
+
+    image->scaleImage(image->size(), image->xRes(), yRes / 72.0, strategy);
+    image->waitForDone();
 }
 
 
@@ -728,7 +744,6 @@ SelectionMask *Document::createSelectionMask(const QString &name)
 
     return new SelectionMask(image, name);
 }
-
 
 QImage Document::projection(int x, int y, int w, int h) const
 {

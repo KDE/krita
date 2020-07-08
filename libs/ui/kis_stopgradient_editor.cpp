@@ -35,13 +35,20 @@
 
 KisStopGradientEditor::KisStopGradientEditor(QWidget *parent)
     : QWidget(parent),
-      m_gradient(0)
+      m_gradient(0),
+      m_fgColor(KoColor()),
+      m_bgColor(KoColor())
 {
     setupUi(this);
 
     connect(gradientSlider, SIGNAL(sigSelectedStop(int)), this, SLOT(stopChanged(int)));
     connect(nameedit, SIGNAL(editingFinished()), this, SLOT(nameChanged()));
     connect(colorButton, SIGNAL(changed(KoColor)), SLOT(colorChanged(KoColor)));
+
+
+    connect(colorRadioButton, SIGNAL(toggled(bool)), this, SLOT(stopTypeChanged()));
+    connect(foregroundRadioButton, SIGNAL(toggled(bool)), this, SLOT(stopTypeChanged()));
+    connect(backgroundRadioButton, SIGNAL(toggled(bool)), this, SLOT(stopTypeChanged()));
 
     opacitySlider->setPrefix(i18n("Opacity: "));
     opacitySlider->setRange(0.0, 1.0, 2);
@@ -68,9 +75,12 @@ KisStopGradientEditor::KisStopGradientEditor(QWidget *parent)
     stopChanged(-1);
 }
 
-KisStopGradientEditor::KisStopGradientEditor(KoStopGradient* gradient, QWidget *parent, const char* name, const QString& caption)
+KisStopGradientEditor::KisStopGradientEditor(KoStopGradient* gradient, QWidget *parent, const char* name, const QString& caption, 
+      const KoColor &fgColor, const KoColor &bgColor)
     : KisStopGradientEditor(parent)
 {
+    m_fgColor = fgColor;
+    m_bgColor = bgColor;
     setObjectName(name);
     setWindowTitle(caption);
     setGradient(gradient);
@@ -123,15 +133,64 @@ void KisStopGradientEditor::stopChanged(int stop)
     opacitySlider->setEnabled(hasStopSelected);
     colorButton->setEnabled(hasStopSelected);
     stopLabel->setEnabled(hasStopSelected);
+    foregroundRadioButton->setEnabled(hasStopSelected);
+    backgroundRadioButton->setEnabled(hasStopSelected);
+    colorRadioButton->setEnabled(hasStopSelected);
 
     if (hasStopSelected) {
-        KoColor color = m_gradient->stops()[stop].second;
+        KoColor color;
+        KoGradientStopType type = m_gradient->stops()[stop].type;
+        if (type == FOREGROUNDSTOP) {
+            foregroundRadioButton->setChecked(true);
+            opacitySlider->setEnabled(false);
+            color = m_fgColor;
+        }
+        else if (type == BACKGROUNDSTOP) {
+            backgroundRadioButton->setChecked(true);
+            opacitySlider->setEnabled(false);
+            color = m_bgColor;
+        }
+        else {
+            colorRadioButton->setChecked(true);
+            opacitySlider->setEnabled(true);
+            color = m_gradient->stops()[stop].color;
+        }
+
         opacitySlider->setValue(color.opacityF());
-   
+
         color.setOpacity(1.0);
         colorButton->setColor(color);
+
     }
 
+    emit sigGradientChanged();
+}
+
+void KisStopGradientEditor::stopTypeChanged() {
+    QList<KoGradientStop> stops = m_gradient->stops();
+    int currentStop = gradientSlider->selectedStop();
+    double t = stops[currentStop].position;
+    KoColor color = stops[currentStop].color;
+
+    KoGradientStopType type;    
+    if (foregroundRadioButton->isChecked()) {
+        type = FOREGROUNDSTOP;
+        color = KoColor(m_fgColor, color.colorSpace());
+        opacitySlider->setEnabled(false);
+    } else if (backgroundRadioButton->isChecked()) {
+        type = BACKGROUNDSTOP;
+        color = KoColor(m_bgColor, color.colorSpace());
+        opacitySlider->setEnabled(false);
+    }
+    else {
+        type = COLORSTOP;
+        opacitySlider->setEnabled(true);
+    }
+
+    stops.removeAt(currentStop);
+    stops.insert(currentStop, KoGradientStop(t, color, type));
+    m_gradient->setStops(stops);
+    gradientSlider->update(); //setSelectedStopType(type);
     emit sigGradientChanged();
 }
 
@@ -142,14 +201,15 @@ void KisStopGradientEditor::colorChanged(const KoColor& color)
     QList<KoGradientStop> stops = m_gradient->stops();
 
     int currentStop = gradientSlider->selectedStop();
-    double t = stops[currentStop].first;
+    double t = stops[currentStop].position;
     
-    KoColor c(color, stops[currentStop].second.colorSpace());
-    c.setOpacity(stops[currentStop].second.opacityU8());
+    KoColor c(color, stops[currentStop].color.colorSpace());
+    c.setOpacity(stops[currentStop].color.opacityU8());
+
+    KoGradientStopType type = stops[currentStop].type;
     
     stops.removeAt(currentStop);
-    stops.insert(currentStop, KoGradientStop(t, c));
-    
+    stops.insert(currentStop, KoGradientStop(t, c, type));
     m_gradient->setStops(stops);
     gradientSlider->update();
 
@@ -163,14 +223,15 @@ void KisStopGradientEditor::opacityChanged(qreal value)
     QList<KoGradientStop> stops = m_gradient->stops();
 
     int currentStop = gradientSlider->selectedStop();
-    double t = stops[currentStop].first;
+    double t = stops[currentStop].position;
     
-    KoColor c = stops[currentStop].second;
+    KoColor c = stops[currentStop].color;
     c.setOpacity(value);
     
+    KoGradientStopType type = stops[currentStop].type;
+
     stops.removeAt(currentStop);
-    stops.insert(currentStop, KoGradientStop(t, c));
-    
+    stops.insert(currentStop, KoGradientStop(t, c, type));
     m_gradient->setStops(stops);
     gradientSlider->update();
 
@@ -193,7 +254,7 @@ void KisStopGradientEditor::reverse()
     QList<KoGradientStop> stops = m_gradient->stops();
     QList<KoGradientStop> reversedStops;
     for(const KoGradientStop& stop : stops) {
-        reversedStops.push_front(KoGradientStop(1 - stop.first, stop.second));
+        reversedStops.push_front(KoGradientStop(1 - stop.position, stop.color, stop.type));
     }
     m_gradient->setStops(reversedStops);
     gradientSlider->setSelectedStop(stops.size() - 1 - gradientSlider->selectedStop());
@@ -216,13 +277,13 @@ void KisStopGradientEditor::sortByValue( SortFlags flags = SORT_ASCENDING )
 
     int stopIndex = 0;
     for (const KoGradientStop& stop : stops) {
-        const float value = evenDistribution ? (float)stopIndex / (float)(stopCount - 1) : stop.second.toQColor().valueF();
+        const float value = evenDistribution ? (float)stopIndex / (float)(stopCount - 1) : stop.color.toQColor().valueF();
         const float position = ascending ? value : 1.f - value;
 
         if (ascending) {
-            sortedStops.push_back(KoGradientStop(position, stop.second));
+            sortedStops.push_back(KoGradientStop(position, stop.color, stop.type));
         } else {
-            sortedStops.push_front(KoGradientStop(position, stop.second));
+            sortedStops.push_front(KoGradientStop(position, stop.color, stop.type));
         }
 
         stopIndex++;

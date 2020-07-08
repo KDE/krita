@@ -106,13 +106,13 @@ public:
         return new KisVLineIterator2(m_d->dataManager().data(), x, y, w, m_d->x(), m_d->y(), false, m_d->cacheInvalidator());
     }
 
-    virtual KisRandomAccessorSP createRandomAccessorNG(qint32 x, qint32 y) {
+    virtual KisRandomAccessorSP createRandomAccessorNG() {
         m_d->cache()->invalidate();
-        return new KisRandomAccessor2(m_d->dataManager().data(), x, y, m_d->x(), m_d->y(), true, m_d->cacheInvalidator());
+        return new KisRandomAccessor2(m_d->dataManager().data(), m_d->x(), m_d->y(), true, m_d->cacheInvalidator());
     }
 
-    virtual KisRandomConstAccessorSP createRandomConstAccessorNG(qint32 x, qint32 y) const {
-        return new KisRandomAccessor2(m_d->dataManager().data(), x, y, m_d->x(), m_d->y(), false, m_d->cacheInvalidator());
+    virtual KisRandomConstAccessorSP createRandomConstAccessorNG() const {
+        return new KisRandomAccessor2(m_d->dataManager().data(), m_d->x(), m_d->y(), false, m_d->cacheInvalidator());
     }
 
     virtual void fastBitBlt(KisPaintDeviceSP src, const QRect &rect) {
@@ -230,8 +230,8 @@ public:
         auto rectIter = borderRegion.begin();
         while (rectIter != borderRegion.end()) {
             QRect rc = *rectIter;
-            KisRandomConstAccessorSP srcIt = KisPaintDeviceStrategy::createRandomConstAccessorNG(rc.x(), rc.y());
-            KisRandomAccessorSP dstIt = createRandomAccessorNG(rc.x(), rc.y());
+            KisRandomConstAccessorSP srcIt = KisPaintDeviceStrategy::createRandomConstAccessorNG();
+            KisRandomAccessorSP dstIt = createRandomAccessorNG();
 
             int rows = 1;
             int columns = 1;
@@ -323,13 +323,13 @@ public:
         return new KisWrappedVLineIterator(m_d->dataManager().data(), splitRect, m_d->x(), m_d->y(), false, m_d->cacheInvalidator());
     }
 
-    KisRandomAccessorSP createRandomAccessorNG(qint32 x, qint32 y) override {
+    KisRandomAccessorSP createRandomAccessorNG() override {
         m_d->cache()->invalidate();
-        return new KisWrappedRandomAccessor(m_d->dataManager().data(), x, y, m_d->x(), m_d->y(), true, m_d->cacheInvalidator(), m_wrapRect);
+        return new KisWrappedRandomAccessor(m_d->dataManager().data(), m_d->x(), m_d->y(), true, m_d->cacheInvalidator(), m_wrapRect);
     }
 
-    KisRandomConstAccessorSP createRandomConstAccessorNG(qint32 x, qint32 y) const override {
-        return new KisWrappedRandomAccessor(m_d->dataManager().data(), x, y, m_d->x(), m_d->y(), false, m_d->cacheInvalidator(), m_wrapRect);
+    KisRandomConstAccessorSP createRandomConstAccessorNG() const override {
+        return new KisWrappedRandomAccessor(m_d->dataManager().data(), m_d->x(), m_d->y(), false, m_d->cacheInvalidator(), m_wrapRect);
     }
 
     void fastBitBltImpl(KisDataManagerSP srcDataManager, const QRect &rect) override {

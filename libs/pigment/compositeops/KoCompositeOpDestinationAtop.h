@@ -57,9 +57,7 @@ public:
             // blend the color channels as if we were painting on the layer below
             for (qint8 channel = 0; channel < channels_nb; ++channel)
                 if(channel != alpha_pos && (allChannelFlags || channelFlags.testBit(channel))) {
-                    /*each color blended in proportion to their calculated opacity*/
-                    channels_type srcMult= mul(src[channel], appliedAlpha);
-                    dst[channel] = lerp(srcMult,dst[channel],dstAlpha);
+                    dst[channel] = lerp(src[channel],dst[channel],dstAlpha);
                 }
         }
         else if (srcAlpha != zeroValue<channels_type>()) {

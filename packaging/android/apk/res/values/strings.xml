@@ -8,5 +8,7 @@
 	<string name="remote_action_swiperight">Swipe Right</string>
 	<string name="remote_action_circlecw">Circle Clockwise</string>
 	<string name="remote_action_circleccw">Circle Counter-Clockwise</string>
+	<string name="something_wrong">Something went wrong...</string>
+	<string name="cancelled">Cancelled</string>
 </resources>
 

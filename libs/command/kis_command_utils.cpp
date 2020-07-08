@@ -199,8 +199,8 @@ namespace KisCommandUtils
 
     void CompositeCommand::undo() {
         KUndo2Command::undo();
-        Q_FOREACH (KUndo2Command *cmd, m_commands) {
-            cmd->undo();
+        for (auto it = m_commands.rbegin(); it != m_commands.rend(); ++it) {
+            (*it)->undo();
         }
     }
 

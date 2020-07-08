@@ -38,6 +38,8 @@
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
 
+#include <KisPart.h>
+
 #include <kis_debug.h>
 #include <kis_action.h>
 #include <KisViewManager.h>
@@ -46,10 +48,11 @@
 #include <brushengine/kis_paintop_preset.h>
 #include <kis_brush_server.h>
 #include <kis_paintop_settings.h>
+#include <KisPaintopSettingsIds.h>
+#include <krita_container_utils.h>
+
 #include "dlg_bundle_manager.h"
 #include "dlg_create_bundle.h"
-#include <KisPaintopSettingsIds.h>
-#include "krita_container_utils.h"
 
 class ResourceManager::Private {
 
@@ -227,7 +230,7 @@ KisResourceBundle *ResourceManager::saveBundle(const DlgCreateBundle &dlgCreateB
 
 void ResourceManager::slotManageBundles()
 {
-    DlgBundleManager* dlg = new DlgBundleManager(this, viewManager()->actionManager());
+    DlgBundleManager* dlg = new DlgBundleManager(this, viewManager()->actionManager(), KisPart::instance()->currentMainwindow());
     if (dlg->exec() != QDialog::Accepted) {
         return;
     }

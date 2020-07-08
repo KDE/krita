@@ -638,8 +638,8 @@ void KisWatershedWorker::Private::processQueue(qint32 _backgroundGroupId)
 
     // TODO: lazy initialization of the iterator's position
     // TODO: reuse iterators if possible!
-    groupIt = groupsMap->createRandomAccessorNG(boundingRect.x(), boundingRect.y());
-    levelIt = heightMap->createRandomConstAccessorNG(boundingRect.x(), boundingRect.y());
+    groupIt = groupsMap->createRandomAccessorNG();
+    levelIt = heightMap->createRandomConstAccessorNG();
     backgroundGroupId = _backgroundGroupId;
     backgroundGroupColor = groups[backgroundGroupId].colorIndex;
     recolorMode = backgroundGroupId > 1;

@@ -161,7 +161,7 @@ public:
      * @param h height of the thumbnail to create
      * @return the thumbnail image created.
      */
-    QImage createThumbnail(qint32 w, qint32 h) override;
+    QImage createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio) override;
 
 
 protected:

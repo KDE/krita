@@ -315,7 +315,12 @@ public Q_SLOTS:
      */
     void setCanvasDetached(bool detached);
 
-    void slotFileSelected(QString path);
+    /**
+     * @brief Called when a file is picked using Android's Storage Access Framework
+     * @param url
+     */
+    void slotFileSelected(QUrl url);
+
     void slotEmptyFilePath();
 
     /**
@@ -353,6 +358,10 @@ private Q_SLOTS:
     void slotFilePrintPreview();
 
     void importAnimation();
+
+    void renderAnimation();
+
+    void renderAnimationAgain();
 
     /**
      * Show a dialog with author and document information.

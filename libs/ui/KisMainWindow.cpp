@@ -124,10 +124,13 @@
 #include "kis_config.h"
 #include "kis_config_notifier.h"
 #include "kis_custom_image_widget.h"
+#include "animation/KisAnimationRender.h"
+#include "animation/KisDlgAnimationRenderer.h"
 #include <KisDocument.h>
 #include "kis_group_layer.h"
 #include "kis_image_from_clipboard_widget.h"
 #include "kis_image.h"
+#include "kis_image_animation_interface.h"
 #include <KisImportExportFilter.h>
 #include "KisImportExportManager.h"
 #include "kis_mainwindow_observer.h"
@@ -233,6 +236,8 @@ public:
     //    KisAction *printActionPreview;
     //    KisAction *exportPdf {0};
     KisAction *importAnimation {0};
+    KisAction *renderAnimation {0};
+    KisAction *renderAnimationAgain {0};
     KisAction *closeAll {0};
     //    KisAction *reloadFile;
     KisAction *importFile {0};
@@ -564,7 +569,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     connect(window, SIGNAL(screenChanged(QScreen *)), this, SLOT(windowScreenChanged(QScreen *)));
 
 #ifdef Q_OS_ANDROID
-    connect(d->fileManager, SIGNAL(sigFileSelected(QString)), this, SLOT(slotFileSelected(QString)));
+    connect(d->fileManager, SIGNAL(sigFileSelected(QUrl)), this, SLOT(slotFileSelected(QUrl)));
     connect(d->fileManager, SIGNAL(sigEmptyFilePath()), this, SLOT(slotEmptyFilePath()));
 
     QScreen *s = QGuiApplication::primaryScreen();
@@ -805,15 +810,9 @@ void KisMainWindow::setCanvasDetached(bool detach)
     }
 }
 
-void KisMainWindow::slotFileSelected(QString path)
+void KisMainWindow::slotFileSelected(QUrl url)
 {
-    QString url = path;
-    if (!url.isEmpty()) {
-        bool res = openDocument(QUrl::fromLocalFile(url), Import);
-        if (!res) {
-            warnKrita << "Loading" << url << "failed";
-        }
-    }
+    openDocumentInternal(url);
 }
 
 void KisMainWindow::slotEmptyFilePath()
@@ -1005,10 +1004,17 @@ bool KisMainWindow::openDocument(const QUrl &url, OpenFlags flags)
 
 bool KisMainWindow::openDocumentInternal(const QUrl &url, OpenFlags flags)
 {
+#ifndef Q_OS_ANDROID
     if (!url.isLocalFile()) {
         qWarning() << "KisMainWindow::openDocumentInternal. Not a local file:" << url;
         return false;
     }
+#else
+    if (!QFile(url.toString()).exists() && !url.isLocalFile()) {
+        qWarning() << "KisMainWindow::openDocumentInternal. Could not open:" << url;
+        return false;
+    }
+#endif
 
     KisDocument *newdoc = KisPart::instance()->createDocument();
 
@@ -1035,10 +1041,6 @@ bool KisMainWindow::openDocumentInternal(const QUrl &url, OpenFlags flags)
 
     KisPart::instance()->addDocument(newdoc);
     updateReloadFileAction(newdoc);
-
-    if (!QFileInfo(url.toLocalFile()).isWritable()) {
-        setReadWrite(false);
-    }
 
     // Try to determine whether this was an unnamed autosave
     if (flags & RecoveryFile &&
@@ -1990,6 +1992,44 @@ void KisMainWindow::importAnimation()
     }
 }
 
+void KisMainWindow::renderAnimation()
+{
+    if (!activeView()) return;
+
+    KisImageSP image = viewManager()->image();
+
+    if (!image) return;
+    if (!image->animationInterface()->hasAnimation()) return;
+
+    KisDocument *doc = viewManager()->document();
+
+    KisDlgAnimationRenderer dlgAnimationRenderer(doc, viewManager()->mainWindow());
+    dlgAnimationRenderer.setCaption(i18n("Render Animation"));
+    if (dlgAnimationRenderer.exec() == QDialog::Accepted) {
+        KisAnimationRenderingOptions encoderOptions = dlgAnimationRenderer.getEncoderOptions();
+        KisAnimationRender::render(doc, viewManager(), encoderOptions);
+    }
+}
+
+void KisMainWindow::renderAnimationAgain()
+{
+    KisImageSP image = viewManager()->image();
+
+    if (!image) return;
+    if (!image->animationInterface()->hasAnimation()) return;
+
+    KisDocument *doc = viewManager()->document();
+
+    KisConfig cfg(true);
+
+    KisPropertiesConfigurationSP settings = cfg.exportConfiguration("ANIMATION_EXPORT");
+
+    KisAnimationRenderingOptions encoderOptions;
+    encoderOptions.fromProperties(settings);
+
+    KisAnimationRender::render(doc, viewManager(), encoderOptions);
+}
+
 void KisMainWindow::slotConfigureToolbars()
 {
     saveWindowState();
@@ -2700,6 +2740,14 @@ void KisMainWindow::createActions()
 
     d->importAnimation  = actionManager->createAction("file_import_animation");
     connect(d->importAnimation, SIGNAL(triggered()), this, SLOT(importAnimation()));
+
+    d->renderAnimation = actionManager->createAction("render_animation");
+    d->renderAnimation->setActivationFlags(KisAction::IMAGE_HAS_ANIMATION);
+    connect( d->renderAnimation, SIGNAL(triggered()), this, SLOT(renderAnimation()));
+
+    d->renderAnimationAgain = actionManager->createAction("render_animation_again");
+    d->renderAnimationAgain->setActivationFlags(KisAction::IMAGE_HAS_ANIMATION);
+    connect( d->renderAnimationAgain, SIGNAL(triggered()), this, SLOT(renderAnimationAgain()));
 
     d->closeAll = actionManager->createAction("file_close_all");
     connect(d->closeAll, SIGNAL(triggered()), this, SLOT(slotFileCloseAll()));

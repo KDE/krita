@@ -123,10 +123,12 @@ void KisWdgSeExprPresetsSave::renderScriptToThumbnail()
     if (m_currentConfiguration)
     {
         // TODO add some sort of progress marker?
+        KisDefaultBoundsBaseSP bounds(new KisWrapAroundBoundsWrapper(new KisDefaultBounds(), QRect(0, 0, 256, 256)));
         KisPaintDeviceSP src = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+        src->setDefaultBounds(bounds);
         KisFillPainter fillPainter(src);
         fillPainter.fillRect(0, 0, 256, 256, m_currentConfiguration);
-        
+
         QImage thumbnail = src->convertToQImage(nullptr, 0, 0, 256, 256);
         presetThumbnailWidget->setPixmap(QPixmap::fromImage(thumbnail));
     }

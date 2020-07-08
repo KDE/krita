@@ -65,7 +65,7 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
                 p->fillRect(option.rect, option.palette.foreground());
             }
             else {
-                p->fillRect(option.rect, option.palette.background());
+                p->fillRect(option.rect, option.palette.window());
             }
             p->eraseRect(parentRect);
         }
@@ -81,7 +81,7 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
                     if (m_view->thumbnailIsVisible()) {
                         QRect frameNumRect = option.rect;
                         frameNumRect.setHeight(m_view->fontMetrics().height()+3);
-                        frameNumRect.setWidth(3 * m_view->fontMetrics().width("0")+2);
+                        frameNumRect.setWidth(3 * m_view->fontMetrics().horizontalAdvance("0")+2);
                         frameNumRect.moveBottom(option.rect.top()-1);
                         p->setPen(QPen(option.palette.dark(), 2));
                         p->drawRect(frameNumRect);
@@ -106,12 +106,12 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
                         buttonsRect.setWidth(22);
                         buttonsRect.moveBottomLeft(option.rect.bottomLeft());
                         QIcon addIcon = KisIconUtils::loadIcon("list-add");
-                        p->fillRect(buttonsRect, option.palette.background());
+                        p->fillRect(buttonsRect, option.palette.window());
                         addIcon.paint(p, buttonsRect);
 
                         buttonsRect.moveBottomRight(option.rect.bottomRight());
                         QIcon deleteIcon = KisIconUtils::loadIcon("trash-empty");
-                        p->fillRect(buttonsRect, option.palette.background());
+                        p->fillRect(buttonsRect, option.palette.window());
                         deleteIcon.paint(p, buttonsRect);
                     }
                     else {
@@ -278,6 +278,7 @@ QWidget *StoryboardDelegate::createEditor(QWidget *parent,
     const QStyleOptionViewItem &option ,
     const QModelIndex &index) const
 {
+    Q_UNUSED(option);
     //only create editor for children
     if (index.parent().isValid()) {
         int row = index.row();

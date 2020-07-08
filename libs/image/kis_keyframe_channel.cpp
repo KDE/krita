@@ -102,7 +102,9 @@ QString KisKeyframeChannel::name() const
 
 void KisKeyframeChannel::setNode(KisNodeWSP node)
 {
-    slotUnbindSignalsToAnimationInterface(m_d->node, m_d->node->image());
+    if (m_d->node.isValid()) {
+        slotUnbindSignalsToAnimationInterface(m_d->node, m_d->node->image());
+    }
     m_d->node = node;
     m_d->defaultBounds = KisDefaultBoundsNodeWrapperSP( new KisDefaultBoundsNodeWrapper( node ));
     slotBindSignalsToAnimationInterface(node);
@@ -665,13 +667,13 @@ void KisKeyframeChannel::workaroundBrokenFrameTimeBug(int *time)
 
 void KisKeyframeChannel::slotBindSignalsToAnimationInterface(KisNodeWSP parent)
 {
-    if (parent && parent->image() && parent->image()->animationInterface()) {
+    if (parent.isValid() && parent->image().isValid() && parent->image()->animationInterface()) {
         connect(this, SIGNAL(sigKeyframeAdded(KisKeyframeSP)), parent->image()->animationInterface(), SIGNAL(sigKeyframeAdded(KisKeyframeSP)), Qt::UniqueConnection);
         connect(this, SIGNAL(sigKeyframeRemoved(KisKeyframeSP)), parent->image()->animationInterface(), SIGNAL(sigKeyframeRemoved(KisKeyframeSP)), Qt::UniqueConnection);
         connect(this, SIGNAL(sigKeyframeMoved(KisKeyframeSP, int)), parent->image()->animationInterface(), SIGNAL(sigKeyframeMoved(KisKeyframeSP, int)), Qt::UniqueConnection);
     }
 
-    if (parent) {
+    if (parent.isValid()) {
         connect(parent, SIGNAL(sigBeginImageReset(KisNodeWSP, KisImageWSP)), this, SLOT(slotUnbindSignalsToAnimationInterface(KisNodeWSP, KisImageWSP)), Qt::UniqueConnection);
         connect(parent, SIGNAL(sigEndImageReset(KisNodeWSP)), this, SLOT(slotBindSignalsToAnimationInterface(KisNodeWSP)), Qt::UniqueConnection);
     }
@@ -679,13 +681,13 @@ void KisKeyframeChannel::slotBindSignalsToAnimationInterface(KisNodeWSP parent)
 
 void KisKeyframeChannel::slotUnbindSignalsToAnimationInterface(KisNodeWSP parent, KisImageWSP image)
 {
-    if (image && image->animationInterface()) {
+    if (image.isValid() && image->animationInterface()) {
         disconnect(this, SIGNAL(sigKeyframeAdded(KisKeyframeSP)), image->animationInterface(), SIGNAL(sigKeyframeAdded(KisKeyframeSP)));
         disconnect(this, SIGNAL(sigKeyframeRemoved(KisKeyframeSP)), image->animationInterface(), SIGNAL(sigKeyframeRemoved(KisKeyframeSP)));
         disconnect(this, SIGNAL(sigKeyframeMoved(KisKeyframeSP, int)), image->animationInterface(), SIGNAL(sigKeyframeMoved(KisKeyframeSP, int)));
     }
 
-    if (parent) {
+    if (parent.isValid()) {
         disconnect(parent, SIGNAL(sigBeginImageReset(KisNodeWSP, KisImageWSP)), this, SLOT(slotUnbindSignalsToAnimationInterface(KisNodeWSP, KisImageWSP)));
         disconnect(parent, SIGNAL(sigEndImageReset(KisNodeWSP)), this, SLOT(slotBindSignalsToAnimationInterface(KisNodeWSP)));
     }

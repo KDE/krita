@@ -38,7 +38,7 @@ TimelineInsertKeyframeDialog::TimelineInsertKeyframeDialog(QWidget *parent) :
 {
     setWindowTitle(i18nc("@title:window","Insert Keyframes"));
     setModal(true);
-    setLayout(new QVBoxLayout(this));
+    setLayout(new QVBoxLayout());
     {   // Count and Spacing Forms.
         QWidget *forms = new QWidget(this);
         layout()->addWidget(forms);
@@ -50,7 +50,6 @@ TimelineInsertKeyframeDialog::TimelineInsertKeyframeDialog(QWidget *parent) :
         frameTimingSpinbox.setValue(1);
 
         QFormLayout *LO = new QFormLayout(forms);
-
 
         LO->addRow(QString(i18nc("@label:spinbox", "Number of frames:")), &frameCountSpinbox);
         LO->addRow(QString(i18nc("@label:spinbox", "Frame timing:")), &frameTimingSpinbox);

@@ -86,12 +86,6 @@ RecorderDockerDock::RecorderDockerDock()
     m_recordToggleButton->setToolTip(i18n("Record Video"));
     m_layout->addWidget(m_recordToggleButton, 3, 1);
 
-    m_logLabel = new QLabel(this);
-    m_logLabel->setText("Recent Save:");
-    m_layout->addWidget(m_logLabel, 4, 0, 1, 2);
-    m_logLineEdit = new QLineEdit(this);
-    m_logLineEdit->setReadOnly(true);
-    m_layout->addWidget(m_logLineEdit, 5, 0, 1, 2);
 
     m_spacer = new QSpacerItem(1, 1, QSizePolicy::Minimum, QSizePolicy::Expanding);
     m_layout->addItem(m_spacer, 6, 0, 1, 2);

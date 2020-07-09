@@ -687,7 +687,7 @@ void KisKeyframeChannel::slotUnbindSignalsToAnimationInterface(KisNodeWSP parent
         disconnect(this, SIGNAL(sigKeyframeMoved(KisKeyframeSP, int)), image->animationInterface(), SIGNAL(sigKeyframeMoved(KisKeyframeSP, int)));
     }
 
-    if (parent.isValid()) {
+    if (parent.isValid() && parent->image() != image) {
         disconnect(parent, SIGNAL(sigBeginImageReset(KisNodeWSP, KisImageWSP)), this, SLOT(slotUnbindSignalsToAnimationInterface(KisNodeWSP, KisImageWSP)));
         disconnect(parent, SIGNAL(sigEndImageReset(KisNodeWSP)), this, SLOT(slotBindSignalsToAnimationInterface(KisNodeWSP)));
     }

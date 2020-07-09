@@ -35,6 +35,22 @@ class KisAnimationPlayer;
 class KisNodeDisplayModeAdapter;
 
 
+struct TimelineSelectionEntry {
+    KisRasterKeyframeChannel* channel;
+    int time;
+    KisRasterKeyframeSP keyframe;
+};
+
+inline bool operator==(const TimelineSelectionEntry& lhs, const TimelineSelectionEntry& rhs){
+    return (lhs.time == rhs.time) && (lhs.channel == rhs.channel) && (lhs.keyframe == rhs.keyframe);
+}
+
+inline uint qHash(const TimelineSelectionEntry &key, uint seed)
+{
+    return seed + key.time;
+}
+
+
 class KRITAANIMATIONDOCKER_EXPORT TimelineFramesModel : public TimelineNodeListKeeper::ModelWithExternalNotifications
 {
     Q_OBJECT

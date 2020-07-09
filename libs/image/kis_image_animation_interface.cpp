@@ -398,10 +398,7 @@ int findLastKeyframeTimeRecursive(KisNodeSP node)
 
     KisKeyframeChannel *channel;
     Q_FOREACH (channel, node->keyframeChannels()) {
-        KisKeyframeSP keyframe = channel->lastKeyframe();
-        if (keyframe) {
-            time = std::max(time, keyframe->time());
-        }
+        time = std::max(time, channel->lastKeyframeTime());
     }
 
     KisNodeSP child = node->firstChild();

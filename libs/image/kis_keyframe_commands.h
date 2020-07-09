@@ -1,4 +1,7 @@
 /*
+ *  Copyright (c) 2020 Emmet O'Neill <emmetoneill.pdx@gmail.com>
+ *  Copyright (c) 2020 Eoin O'Neill <eoinoneill1991@gmail.com>
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -21,51 +24,39 @@
 #include "kundo2command.h"
 #include "kritaimage_export.h"
 
-class KRITAIMAGE_EXPORT KisReplaceKeyframeCommand : public KUndo2Command
+
+class KisInsertKeyframeCommand : public KUndo2Command
 {
 public:
-    KisReplaceKeyframeCommand(KisKeyframeChannel *channel, int time, KisKeyframeSP keyframe, KUndo2Command *parentCommand);
+    KisInsertKeyframeCommand(KisKeyframeChannel *channel, int time, KisKeyframeSP keyframe, KUndo2Command *parentCmd);
 
     void redo() override;
     void undo() override;
 
 private:
-    void doSwap(bool insert);
-
-private:
-    KisKeyframeChannel *m_channel;
+    KisKeyframeChannel* m_channel;
     int m_time;
     KisKeyframeSP m_keyframe;
-    KisKeyframeSP m_existingKeyframe;
+
+    KisKeyframeSP m_overwritten = nullptr;
 };
 
-class KRITAIMAGE_EXPORT KisMoveFrameCommand : public KUndo2Command
+
+class KisRemoveKeyframeCommand : public KUndo2Command
 {
 public:
-    KisMoveFrameCommand(KisKeyframeChannel *channel, KisKeyframeSP keyframe, int oldTime, int newTime, KUndo2Command *parentCommand);
+    KisRemoveKeyframeCommand(KisKeyframeChannel *channel, int time, KUndo2Command* parentCmd);
 
     void redo() override;
     void undo() override;
 
 private:
-    KisKeyframeChannel *m_channel;
-    KisKeyframeSP m_keyframe;
-    int m_oldTime;
-    int m_newTime;
+    KisKeyframeChannel* m_channel;
+    int m_time;
+
+    KisKeyframeSP m_cached;
 };
 
-class KRITAIMAGE_EXPORT KisSwapFramesCommand : public KUndo2Command
-{
-public:
-    KisSwapFramesCommand(KisKeyframeChannel *channel, KisKeyframeSP lhsFrame, KisKeyframeSP rhsFrame, KUndo2Command *parentCommand);
 
-    void redo() override;
-    void undo() override;
-
-private:
-    KisKeyframeChannel *m_channel;
-    KisKeyframeSP m_lhsFrame;
-    KisKeyframeSP m_rhsFrame;
-};
 
 #endif

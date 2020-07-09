@@ -68,8 +68,7 @@ namespace KisAnimationUtils {
 
                 if (copy) {
                     if (!channel->keyframeAt(time)) {
-                        KisKeyframeSP srcFrame = channel->activeKeyframeAt(time);
-                        channel->copyKeyframe(srcFrame, time, cmd.data());
+                        channel->copyKeyframe(channel->activeKeyframeTime(time), time, cmd.data());
                         result = true;
                     }
                 } else {
@@ -140,7 +139,7 @@ namespace KisAnimationUtils {
                     KisKeyframeSP keyframe = channel->keyframeAt(time);
                     if (!keyframe) continue;
 
-                    channel->deleteKeyframe(keyframe, cmd.data());
+                    channel->removeKeyframe(time, cmd.data());
 
                     result = true;
                 }
@@ -201,11 +200,11 @@ namespace KisAnimationUtils {
         if (srcNode == dstNode) {
             if (!srcChannel) return; // TODO: add warning!
 
-            srcChannel->swapFrames(srcTime, dstTime, parentCommand);
+            srcChannel->swapKeyframes(srcTime, dstTime, parentCommand);
         } else {
             if (!srcChannel || !dstChannel) return; // TODO: add warning!
 
-            dstChannel->swapExternalKeyframe(srcChannel, srcTime, dstTime, parentCommand);
+            KisKeyframeChannel::swapKeyframes(srcChannel, srcTime, dstChannel, dstTime, parentCommand);
         }
     }
 
@@ -222,18 +221,16 @@ namespace KisAnimationUtils {
         if (srcNode == dstNode) {
             if (!srcChannel) return; // TODO: add warning!
 
-            KisKeyframeSP srcKeyframe = srcChannel->keyframeAt(srcTime);
-            KisKeyframeSP dstKeyFrame = srcChannel->keyframeAt(dstTime);
-            if (srcKeyframe) {
+            if (srcChannel->keyframeAt(srcTime)) {
                 if (copy) {
-                    srcChannel->copyKeyframe(srcKeyframe, dstTime, parentCommand);
+                    srcChannel->copyKeyframe(srcTime, dstTime, parentCommand);
                 } else {
-                    srcChannel->moveKeyframe(srcKeyframe, dstTime, parentCommand);
+                    srcChannel->moveKeyframe(srcTime, dstTime, parentCommand);
                 }
             } else {
-                if (dstKeyFrame && moveEmptyFrames && !copy) {
+                if (srcChannel->keyframeAt(dstTime) && moveEmptyFrames && !copy) {
                     //Destination is effectively replaced by an empty frame.
-                    dstChannel->deleteKeyframe(dstKeyFrame, parentCommand);
+                    dstChannel->removeKeyframe(dstTime, parentCommand);
                 }
             }
         } else {
@@ -243,10 +240,10 @@ namespace KisAnimationUtils {
 
             if (!srcKeyframe) return; // TODO: add warning!
 
-            dstChannel->copyExternalKeyframe(srcChannel, srcTime, dstTime, parentCommand);
+            KisKeyframeChannel::copyKeyframe(srcChannel, srcTime, dstChannel, dstTime, parentCommand);
 
             if (!copy) {
-                srcChannel->deleteKeyframe(srcKeyframe, parentCommand);
+                srcChannel->removeKeyframe(srcTime, parentCommand);
             }
         }
     }

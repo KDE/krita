@@ -1702,13 +1702,13 @@ void KisPaintDeviceTest::testFramesLeaking()
     // deletion of frame 0 is forbidden
     key = channel->keyframeAt(0);
     QVERIFY(key);
-    QVERIFY(channel->deleteKeyframe(key));
+    channel->removeKeyframe(0);
 
     // delete keyframe at position 11
-    key = channel->activeKeyframeAt(11);
-    QVERIFY(key);
-    QCOMPARE(key->time(), 10);
-    QVERIFY(channel->deleteKeyframe(key));
+    int keyIndex = channel->activeKeyframeTime(11);
+    key = channel->keyframeAt(keyIndex);
+    QVERIFY(key != nullptr);
+    channel->removeKeyframe(keyIndex);
 
     // two frames, m_data is default, current frame is 0
     o = i->testingGetDataObjects();
@@ -1719,10 +1719,10 @@ void KisPaintDeviceTest::testFramesLeaking()
     QCOMPARE(o.m_frames.size(), 2);
 
     // deletion of frame 0 is forbidden
-    key = channel->activeKeyframeAt(11);
-    QVERIFY(key);
-    QCOMPARE(key->time(), 0);
-    QVERIFY(channel->deleteKeyframe(key));
+    keyIndex = channel->activeKeyframeTime(11);
+    key = channel->keyframeAt(keyIndex);
+    QVERIFY(keyIndex != -1);
+    channel->removeKeyframe(keyIndex);
 
     // nothing changed
     o = i->testingGetDataObjects();
@@ -1733,10 +1733,9 @@ void KisPaintDeviceTest::testFramesLeaking()
     QCOMPARE(o.m_frames.size(), 2);
 
     // delete keyframe at position 20
-    key = channel->activeKeyframeAt(20);
-    QVERIFY(key);
-    QCOMPARE(key->time(), 20);
-    QVERIFY(channel->deleteKeyframe(key));
+    keyIndex = channel->activeKeyframeTime(20);
+    QVERIFY(keyIndex != -1);
+    channel->removeKeyframe(keyIndex);
 
     // one keyframe is left at position 0, m_data is default
     o = i->testingGetDataObjects();
@@ -1824,9 +1823,7 @@ void KisPaintDeviceTest::testFramesUndoRedo()
     KisKeyframeSP keyframe = channel->keyframeAt(time);
     QVERIFY(keyframe);
 
-    channel->deleteKeyframe(keyframe, &cmdRemove);
-
-    //i->deleteFrame(1, &cmdRemove);
+    channel->removeKeyframe(time, &cmdRemove);
 
     o = i->testingGetDataObjects();
     QVERIFY(o.m_data); // default m_data should always be present
@@ -1885,7 +1882,7 @@ void KisPaintDeviceTest::testFramesUndoRedoWithChannel()
 
     KUndo2Command cmdAdd;
 
-    KisKeyframeSP frame = channel->addKeyframe(10, &cmdAdd);
+    channel->addKeyframe(10, &cmdAdd);
 
     QVERIFY(channel->keyframeAt(10));
 
@@ -1920,7 +1917,7 @@ void KisPaintDeviceTest::testFramesUndoRedoWithChannel()
 
 
     KUndo2Command cmdRemove;
-    channel->deleteKeyframe(frame, &cmdRemove);
+    channel->removeKeyframe(10, &cmdRemove);
 
     QVERIFY(!channel->keyframeAt(10));
 
@@ -1966,7 +1963,7 @@ void KisPaintDeviceTest::testFramesUndoRedoWithChannel()
 
 
     KUndo2Command cmdMove;
-    channel->moveKeyframe(frame, 12, &cmdMove);
+    channel->moveKeyframe(10, 12, &cmdMove);
 
     QVERIFY(!channel->keyframeAt(10));
     QVERIFY(channel->keyframeAt(12));
@@ -2007,7 +2004,7 @@ void fillRect(KisPaintDeviceSP dev, int time, const QRect &rc, TestUtil::Testing
 {
     KUndo2Command parentCommand;
     KisRasterKeyframeChannel *channel = dev->keyframeChannel();
-    KisKeyframeSP frame = channel->addKeyframe(time, &parentCommand);
+    channel->addKeyframe(time, &parentCommand);
 
     const int oldTime = bounds->currentTime();
     bounds->testingSetTime(time);
@@ -2077,7 +2074,8 @@ void testCrossDeviceFrameCopyImpl(bool useChannel)
     if (!useChannel) {
         dev1->framesInterface()->uploadFrame(srcFrameId2, dstFrameId1, dev2);
     } else {
-        KisKeyframeSP k = channel1->copyExternalKeyframe(channel2, 20, 10, &cmd1);
+        KisKeyframeChannel::copyKeyframe(channel2, 20, channel1, 10, &cmd1 );
+
     }
 
     QCOMPARE(dev1->exactBounds(), QRect());
@@ -2092,7 +2090,7 @@ void testCrossDeviceFrameCopyImpl(bool useChannel)
     if (!useChannel) {
         dev1->framesInterface()->uploadFrame(srcFrameId3, dstFrameId1, dev3);
     } else {
-        KisKeyframeSP k = channel1->copyExternalKeyframe(channel3, 30, 10, &cmd2);
+        KisKeyframeChannel::copyKeyframe(channel3, 30, channel1, 10, &cmd2);
     }
 
     QCOMPARE(dev1->exactBounds(), QRect());
@@ -2185,7 +2183,7 @@ void KisPaintDeviceTest::testCopyPaintDeviceWithFrames()
 
     KUndo2Command cmdAdd;
 
-    KisKeyframeSP frame = channel->addKeyframe(10, &cmdAdd);
+    channel->addKeyframe(10, &cmdAdd);
 
     QVERIFY(channel->keyframeAt(10));
 

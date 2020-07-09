@@ -397,7 +397,7 @@ bool KisTimeBasedItemModel::mirrorFrames(QModelIndexList indexes)
 
             while (srcIt < dstIt) {
                 Q_FOREACH (KisKeyframeChannel *channel, channels) {
-                    channel->swapFrames(srcIt->column(), dstIt->column(), parentCommand.data());
+                    channel->swapKeyframes(srcIt->column(), dstIt->column(), parentCommand.data());
                 }
 
                 srcIt++;

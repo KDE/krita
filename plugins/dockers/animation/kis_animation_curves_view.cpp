@@ -247,9 +247,9 @@ void KisAnimationCurvesView::paintCurve(int channel, int firstFrame, int lastFra
         QPointF nextKeyPos = m_d->itemDelegate->nodeCenter(index, selectionModel()->isSelected(index));
         QPointF leftTangent = m_d->itemDelegate->leftHandle(index, active);
 
-        if (interpolationMode == KisKeyframe::Constant) {
+        if (interpolationMode == KisScalarKeyframe::Constant) {
             painter.drawLine(previousKeyPos, QPointF(nextKeyPos.x(), previousKeyPos.y()));
-        } else if (interpolationMode == KisKeyframe::Linear) {
+        } else if (interpolationMode == KisScalarKeyframe::Linear) {
             painter.drawLine(previousKeyPos, nextKeyPos);
         } else {
             paintCurveSegment(painter, previousKeyPos, rightTangent, leftTangent, nextKeyPos);
@@ -555,7 +555,7 @@ void KisAnimationCurvesView::mouseReleaseEvent(QMouseEvent *e)
 
             m_d->model->beginCommand(kundo2_i18n("Adjust tangent"));
 
-            if (mode == KisKeyframe::Smooth) {
+            if (mode == KisScalarKeyframe::Smooth) {
                 QPointF leftHandle = m_d->itemDelegate->leftHandle(index, true);
                 QPointF rightHandle = m_d->itemDelegate->rightHandle(index, true);
 
@@ -692,7 +692,7 @@ void KisAnimationCurvesView::applyConstantMode()
 {
     m_d->model->beginCommand(kundo2_i18n("Set interpolation mode"));
     Q_FOREACH(QModelIndex index, selectedIndexes()) {
-        m_d->model->setData(index, KisKeyframe::Constant, KisAnimationCurvesModel::InterpolationModeRole);
+        m_d->model->setData(index, KisScalarKeyframe::Constant, KisAnimationCurvesModel::InterpolationModeRole);
     }
     m_d->model->endCommand();
 }
@@ -701,7 +701,7 @@ void KisAnimationCurvesView::applyLinearMode()
 {
     m_d->model->beginCommand(kundo2_i18n("Set interpolation mode"));
     Q_FOREACH(QModelIndex index, selectedIndexes()) {
-        m_d->model->setData(index, KisKeyframe::Linear, KisAnimationCurvesModel::InterpolationModeRole);
+        m_d->model->setData(index, KisScalarKeyframe::Linear, KisAnimationCurvesModel::InterpolationModeRole);
     }
     m_d->model->endCommand();
 }
@@ -710,7 +710,7 @@ void KisAnimationCurvesView::applyBezierMode()
 {
     m_d->model->beginCommand(kundo2_i18n("Set interpolation mode"));
     Q_FOREACH(QModelIndex index, selectedIndexes()) {
-        m_d->model->setData(index, KisKeyframe::Bezier, KisAnimationCurvesModel::InterpolationModeRole);
+        m_d->model->setData(index, KisScalarKeyframe::Bezier, KisAnimationCurvesModel::InterpolationModeRole);
     }
     m_d->model->endCommand();
 }
@@ -738,7 +738,7 @@ void KisAnimationCurvesView::applySmoothMode()
             model()->setData(index, rightTangent, KisAnimationCurvesModel::RightTangentRole);
         }
 
-        model()->setData(index, KisKeyframe::Smooth, KisAnimationCurvesModel::TangentsModeRole);
+        model()->setData(index, KisScalarKeyframe::Smooth, KisAnimationCurvesModel::TangentsModeRole);
     }
     m_d->model->endCommand();
 }
@@ -747,7 +747,7 @@ void KisAnimationCurvesView::applySharpMode()
 {
     m_d->model->beginCommand(kundo2_i18n("Set interpolation mode"));
     Q_FOREACH(QModelIndex index, selectedIndexes()) {
-        model()->setData(index, KisKeyframe::Sharp, KisAnimationCurvesModel::TangentsModeRole);
+        model()->setData(index, KisScalarKeyframe::Sharp, KisAnimationCurvesModel::TangentsModeRole);
     }
     m_d->model->endCommand();
 }

@@ -286,10 +286,6 @@ public:
 
     int createFrame(bool copy, int copySrc, const QPoint &offset, KUndo2Command *parentCommand)
     {
-        KIS_ASSERT_RECOVER(parentCommand) {
-            return -1;
-        }
-
         DataSP data;
         bool initialFrame = false;
 
@@ -319,30 +315,36 @@ public:
 
         int frameId = getNextFrameId();
 
-        KUndo2Command *cmd =
-            new FrameInsertionCommand(&m_frames,
-                                      data,
-                                      frameId, true,
-                                      parentCommand);
+        if (parentCommand) {
+            KUndo2Command *cmd =
+                new FrameInsertionCommand(&m_frames,
+                                          data,
+                                          frameId, true,
+                                          parentCommand);
 
-        cmd->redo();
+            cmd->redo();
+        } else {
+            m_frames.insert(frameId, data);
+        }
 
         return frameId;
     }
 
-    void deleteFrame(int frame, KUndo2Command *parentCommand)
+    void deleteFrame(int frameID, KUndo2Command *parentCommand)
     {
-        KIS_ASSERT_RECOVER_RETURN(m_frames.contains(frame));
-        KIS_ASSERT_RECOVER_RETURN(parentCommand);
+        KIS_SAFE_ASSERT_RECOVER_RETURN( m_frames.contains(frameID) );
+        DataSP deletedData = m_frames[frameID];
 
-        DataSP deletedData = m_frames[frame];
-
-        KUndo2Command *cmd =
-            new FrameInsertionCommand(&m_frames,
-                                      deletedData,
-                                      frame, false,
-                                      parentCommand);
-        cmd->redo();
+        if(parentCommand) {
+            KUndo2Command *cmd =
+                new FrameInsertionCommand(&m_frames,
+                                          deletedData,
+                                          frameID, false,
+                                          parentCommand);
+            cmd->redo();
+        } else {
+            m_frames.take(frameID);
+        }
     }
 
     QRect frameBounds(int frameId)
@@ -609,6 +611,7 @@ KisPaintDevice::Private::Private(KisPaintDevice *paintDevice)
 
 KisPaintDevice::Private::~Private()
 {
+    contentChannel.reset();
     m_frames.clear();
 }
 
@@ -2027,13 +2030,12 @@ KisRasterKeyframeChannel *KisPaintDevice::createKeyframeChannel(const KoID &id)
         m_d->contentChannel.reset(new KisRasterKeyframeChannel(id, this, m_d->parent));
     } else {
         //fallback when paint device is isolated / does not belong to a node.
-        ENTER_FUNCTION() << ppVar(this) << ppVar(m_d->defaultBounds);
         m_d->contentChannel.reset(new KisRasterKeyframeChannel(id, this, m_d->defaultBounds));
     }
 
     // Raster channels always have at least one frame (representing a static image)
     KUndo2Command tempParentCommand;
-    m_d->contentChannel->addKeyframe(0, &tempParentCommand);
+    m_d->contentChannel->addKeyframe(0);
 
     return m_d->contentChannel.data();
 }

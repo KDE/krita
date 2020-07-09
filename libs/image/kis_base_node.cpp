@@ -143,10 +143,11 @@ quint8 KisBaseNode::opacity() const
 void KisBaseNode::setOpacity(quint8 val)
 {
     if (m_d->opacityChannel) {
-        KisKeyframeSP activeKeyframe = m_d->opacityChannel->currentlyActiveKeyframe();
+        int activeKeyframeTime = m_d->opacityChannel->activeKeyframeTime();
+        KisScalarKeyframeSP scalarKey = m_d->opacityChannel->keyframeAt<KisScalarKeyframe>(activeKeyframeTime);
 
-        if (activeKeyframe) {
-            m_d->opacityChannel->setScalarValue(activeKeyframe, val);
+        if (scalarKey) {
+            scalarKey->setValue(val);
         }
     }
 
@@ -484,7 +485,7 @@ KisKeyframeChannel *KisBaseNode::requestKeyframeChannel(const QString &id)
                 KisKeyframeChannel::Opacity,
                 0, 255,
                 KisNodeWSP( node ),
-                KisKeyframe::Linear
+                KisScalarKeyframe::Linear
             );
 
             m_d->opacityChannel.reset(channel);

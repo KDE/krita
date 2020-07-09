@@ -460,14 +460,12 @@ bool Node::hasKeyframeAtTime(int frameNumber)
     KisRasterKeyframeChannel *rkc = dynamic_cast<KisRasterKeyframeChannel*>(d->node->getKeyframeChannel(KisKeyframeChannel::Content.id()));
     if (!rkc) return false;
 
-    KisKeyframeSP timeOfCurrentKeyframe = rkc->keyframeAt(frameNumber);
+    KisKeyframeSP currentKeyframe = rkc->keyframeAt(frameNumber);
 
-    if (!timeOfCurrentKeyframe) {
+    if (!currentKeyframe) {
         return false;
     }
 
-    // do an assert just to be careful
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(timeOfCurrentKeyframe->time() == frameNumber, false);
     return true;
 }
 

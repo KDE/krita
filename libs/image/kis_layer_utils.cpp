@@ -913,9 +913,9 @@ namespace KisLayerUtils {
         void populateChildCommands() override {
             KUndo2Command *cmd = new KisCommandUtils::SkipFirstRedoWrapper();
             KisKeyframeChannel *channel = m_info->dstNode->getKeyframeChannel(KisKeyframeChannel::Content.id());
-            KisKeyframeSP keyframe = channel->addKeyframe(m_frame, cmd);
+            channel->addKeyframe(m_frame, cmd);
 
-            applyKeyframeColorLabel(keyframe);
+            applyKeyframeColorLabel(channel->keyframeAt(m_frame));
 
             addCommand(cmd);
         }

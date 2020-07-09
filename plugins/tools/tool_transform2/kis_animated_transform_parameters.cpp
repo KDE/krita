@@ -51,7 +51,7 @@ struct KisAnimatedTransformMaskParameters::Private
     {
         if (!rawArgsChannel) return argsCache;
 
-        KisKeyframeSP keyframe = rawArgsChannel->currentlyActiveKeyframe();
+        KisKeyframeSP keyframe = rawArgsChannel->keyframeAt(rawArgsChannel->activeKeyframeTime());
         if (keyframe.isNull()) return argsCache;
 
         return rawArgsChannel->transformArgs(keyframe);
@@ -62,7 +62,7 @@ struct KisAnimatedTransformMaskParameters::Private
         KisScalarKeyframeChannel *channel = this->*field;
 
         if (!channel) {
-            channel = this->*field = new KisScalarKeyframeChannel(channelId, -qInf(), qInf(), parent, KisKeyframe::Linear);
+            channel = this->*field = new KisScalarKeyframeChannel(channelId, -qInf(), qInf(), parent, KisScalarKeyframe::Linear);
         }
 
         return channel;
@@ -251,7 +251,7 @@ void setScalarChannelValue(KisTransformMaskSP mask, const KoID &channelId, int t
 {
     KisScalarKeyframeChannel *channel = dynamic_cast<KisScalarKeyframeChannel*>(mask->getKeyframeChannel(channelId.id(), true));
     KIS_ASSERT_RECOVER_RETURN(channel);
-    new KisScalarKeyframeChannel::AddKeyframeCommand(channel, time, value, parentCommand);
+    //new KisScalarKeyframeChannel::AddKeyframeCommand(channel, time, value, parentCommand);
 }
 
 void KisAnimatedTransformMaskParameters::addKeyframes(KisTransformMaskSP mask, int time, KisTransformMaskParamsInterfaceSP params, KUndo2Command *parentCommand)
@@ -278,7 +278,7 @@ void KisAnimatedTransformMaskParameters::addKeyframes(KisTransformMaskSP mask, i
 
     KisTransformArgsKeyframeChannel *rawArgsChannel = dynamic_cast<KisTransformArgsKeyframeChannel*>(mask->getKeyframeChannel(KisKeyframeChannel::TransformArguments.id(), true));
     if (rawArgsChannel) {
-        new KisTransformArgsKeyframeChannel::AddKeyframeCommand(rawArgsChannel, time, args, parentCommand);
+        //new KisTransformArgsKeyframeChannel::AddKeyframeCommand(rawArgsChannel, time, args, parentCommand);
     }
 
     setScalarChannelValue(mask, KisKeyframeChannel::TransformPositionX, time, args.transformedCenter().x(), parentCommand);

@@ -132,17 +132,21 @@ void KisBaseNodeTest::testOpacityKeyframing()
     KisScalarKeyframeChannel *opacityChannel = dynamic_cast<KisScalarKeyframeChannel*>(channel);
     QVERIFY(opacityChannel);
 
-    KisKeyframeSP key1 = opacityChannel->addKeyframe(7);
-    opacityChannel->setScalarValue(key1, 128);
+    const int keyIndex1 = 7;
+    opacityChannel->addKeyframe(keyIndex1);
+    KisScalarKeyframeSP key1 = opacityChannel->keyframeAt<KisScalarKeyframe>(keyIndex1);
+    opacityChannel->setScalarValue(keyIndex1, 128);
 
-    KisKeyframeSP key2 = opacityChannel->addKeyframe(20);
-    opacityChannel->setScalarValue(key2, 64);
+    const int keyIndex2 = 20;
+    opacityChannel->addKeyframe(keyIndex2);
+    KisScalarKeyframeSP key2 = opacityChannel->keyframeAt<KisScalarKeyframe>(keyIndex2);
+    opacityChannel->setScalarValue(keyIndex2, 64);
 
     p.image->refreshGraph();
 
     // No interpolation
 
-    key1->setInterpolationMode(KisKeyframe::Constant);
+    key1->setInterpolationMode(KisScalarKeyframe::Constant);
 
     QColor sample;
     p.image->projection()->pixel(16, 16, &sample);
@@ -158,7 +162,7 @@ void KisBaseNodeTest::testOpacityKeyframing()
     p.image->waitForDone();
 
     layer2->setOpacity(32);
-    QCOMPARE(opacityChannel->scalarValue(key2), 32.0);
+    QCOMPARE(opacityChannel->scalarValue(keyIndex2), 32.0);
 
     p.image->waitForDone();
     p.image->projection()->pixel(16, 16, &sample);
@@ -166,7 +170,7 @@ void KisBaseNodeTest::testOpacityKeyframing()
 
     // With interpolation
 
-    key1->setInterpolationMode(KisKeyframe::Linear);
+    key1->setInterpolationMode(KisScalarKeyframe::Linear);
     key1->setInterpolationTangents(QPointF(), QPointF(0,0));
     key2->setInterpolationTangents(QPointF(0,0), QPointF());
 

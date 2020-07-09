@@ -38,6 +38,7 @@
 #include "kis_signal_compressor.h"
 #include "kis_signal_compressor_with_param.h"
 #include "kis_keyframe_channel.h"
+#include "kis_raster_keyframe_channel.h"
 #include "kundo2command.h"
 #include "kis_post_execution_undo_adapter.h"
 #include <commands/kis_node_property_list_command.h>
@@ -116,7 +117,7 @@ struct TimelineFramesModel::Private
         if (!primaryChannel) return false;
 
         // first check if we are a key frame
-        KisKeyframeSP frame = primaryChannel->activeKeyframeAt(column);
+        KisRasterKeyframeSP frame = primaryChannel->keyframeAt<KisRasterKeyframe>(primaryChannel->activeKeyframeTime(column));
         if (!frame) return false;
 
         return frame->hasContent();
@@ -140,7 +141,7 @@ struct TimelineFramesModel::Private
         KisKeyframeChannel *primaryChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
         if (!primaryChannel) return -1;
 
-        KisKeyframeSP frame = primaryChannel->activeKeyframeAt(column);
+        KisKeyframeSP frame = primaryChannel->keyframeAt(primaryChannel->activeKeyframeTime(column));
         if (!frame) return -1;
 
         return frame->colorLabel();
@@ -887,7 +888,7 @@ bool TimelineFramesModel::insertHoldFrames(const QModelIndexList &selectedIndexe
     {
         KisImageBarrierLockerWithFeedback locker(m_d->image);
 
-        QSet<KisKeyframeSP> uniqueKeyframesInSelection;
+        QSet<TimelineSelectionEntry> uniqueKeyframesInSelection;
 
         int minSelectedTime = std::numeric_limits<int>::max();
 
@@ -895,33 +896,35 @@ bool TimelineFramesModel::insertHoldFrames(const QModelIndexList &selectedIndexe
             KisNodeSP node = nodeAt(index);
             KIS_SAFE_ASSERT_RECOVER(node) { continue; }
 
-            KisKeyframeChannel *channel = node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+            KisRasterKeyframeChannel *channel = dynamic_cast<KisRasterKeyframeChannel*>(node->getKeyframeChannel(KisKeyframeChannel::Content.id()));
             if (!channel) continue;
 
             minSelectedTime = qMin(minSelectedTime, index.column());
-            KisKeyframeSP keyFrame = channel->activeKeyframeAt(index.column());
+            int entryTime = channel->activeKeyframeTime(index.column());
+            KisRasterKeyframeSP keyframe = channel->keyframeAt<KisRasterKeyframe>(entryTime);
 
-            if (keyFrame) {
-                uniqueKeyframesInSelection.insert(keyFrame);
+            if (keyframe) {
+                uniqueKeyframesInSelection.insert(TimelineSelectionEntry{channel, entryTime, keyframe});
             }
         }
 
-        QList<KisKeyframeSP> keyframesToMove;
+        QList<TimelineSelectionEntry> keyframesToMove;
 
         for (auto it = uniqueKeyframesInSelection.begin(); it != uniqueKeyframesInSelection.end(); ++it) {
-            KisKeyframeSP keyframe = *it;
+            TimelineSelectionEntry keyframeEntry = *it;
 
-            KisKeyframeChannel *channel = keyframe->channel();
-            KisKeyframeSP nextKeyframe = channel->nextKeyframe(keyframe);
+            KisRasterKeyframeChannel *channel = keyframeEntry.channel;
+            int nextKeyframeTime = channel->nextKeyframeTime(keyframeEntry.time);
+            KisRasterKeyframeSP nextKeyframe = channel->keyframeAt<KisRasterKeyframe>(nextKeyframeTime);
 
             if (nextKeyframe) {
-                keyframesToMove << nextKeyframe;
+                keyframesToMove << TimelineSelectionEntry{ channel, nextKeyframeTime, nextKeyframe };
             }
         }
 
         std::sort(keyframesToMove.begin(), keyframesToMove.end(),
-            [] (KisKeyframeSP lhs, KisKeyframeSP rhs) {
-                return lhs->time() > rhs->time();
+            [] (TimelineSelectionEntry lhs, TimelineSelectionEntry rhs) {
+                return lhs.time > rhs.time;
             });
 
         if (keyframesToMove.isEmpty()) return true;
@@ -932,34 +935,37 @@ bool TimelineFramesModel::insertHoldFrames(const QModelIndexList &selectedIndexe
             setLastVisibleFrame(columnCount() + count);
         }
 
-        Q_FOREACH (KisKeyframeSP keyframe, keyframesToMove) {
+        Q_FOREACH (TimelineSelectionEntry entry, keyframesToMove) {
             int plannedFrameMove = count;
 
             if (count < 0) {
-                KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(keyframe->time() > 0, false);
+                KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(entry.time > 0, false);
 
-                KisKeyframeSP prevFrame = keyframe->channel()->previousKeyframe(keyframe);
+                int prevKeyframeTime = entry.channel->previousKeyframeTime(entry.time);
+                KisRasterKeyframeSP prevFrame = entry.channel->keyframeAt<KisRasterKeyframe>(prevKeyframeTime);
                 KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(prevFrame, false);
 
-                plannedFrameMove = qMax(count, prevFrame->time() - keyframe->time() + 1);
+                plannedFrameMove = qMax(count, prevKeyframeTime - entry.time + 1);
 
-                minSelectedTime = qMin(minSelectedTime, prevFrame->time());
+                minSelectedTime = qMin(minSelectedTime, prevKeyframeTime);
             }
 
-            KisNodeDummy *dummy = m_d->dummiesFacade->dummyForNode(keyframe->channel()->node());
+            KisNodeDummy *dummy = m_d->dummiesFacade->dummyForNode(entry.channel->node());
             KIS_SAFE_ASSERT_RECOVER(dummy) { continue; }
 
             const int row = m_d->converter->rowForDummy(dummy);
             KIS_SAFE_ASSERT_RECOVER(row >= 0) { continue; }
 
-            QModelIndexList indexes;
-            for (int column = keyframe->time(); column < maxColumn; column++) {
-                indexes << index(row, column);
+            QModelIndexList indices;
+            for (int column = entry.time; column < maxColumn; column++) {
+                indices << index(row, column);
             }
 
-            createOffsetFramesCommand(indexes,
+            createOffsetFramesCommand(indices,
                                       QPoint(plannedFrameMove, 0),
-                                      false, true, parentCommand.data());
+                                      false,
+                                      true,
+                                      parentCommand.data());
         }
 
         const int oldTime = m_d->image->animationInterface()->currentUITime();
@@ -967,7 +973,8 @@ bool TimelineFramesModel::insertHoldFrames(const QModelIndexList &selectedIndexe
 
         new KisSwitchCurrentTimeCommand(m_d->image->animationInterface(),
                                         oldTime,
-                                        newTime, parentCommand.data());
+                                        newTime,
+                                        parentCommand.data());
     }
 
 

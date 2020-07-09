@@ -1,5 +1,7 @@
 /*
  *  Copyright (c) 2015 Jouni Pentikäinen <joupent@gmail.com>
+ *  Copyright (c) 2020 Emmet O'Neill <emmetoneill.pdx@gmail.com>
+ *  Copyright (c) 2020 Eoin O'Neill <eoinoneill1991@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,27 +27,30 @@
 
 #include "kis_types.h"
 #include "KoID.h"
-#include "kritaimage_export.h"
 #include "kis_keyframe.h"
 #include "kis_default_bounds.h"
 #include "kis_default_bounds_node_wrapper.h"
 
+#include "kritaimage_export.h"
+
 class KisTimeRange;
 
 
+/**
+ * KisKeyframeChannel stores and manages KisKeyframes.
+ * Maps units of time to virtual keyframe values.
+ * This class is a key piece of Krita's animation backend.
+ */
 class KRITAIMAGE_EXPORT KisKeyframeChannel : public QObject
 {
     Q_OBJECT
 
 public:
-    // Standard Keyframe Ids
-
     static const KoID Content;
     static const KoID Opacity;
     static const KoID TransformArguments;
     static const KoID TransformPositionX;
     static const KoID TransformPositionY;
-
     static const KoID TransformScaleX;
     static const KoID TransformScaleY;
     static const KoID TransformShearX;
@@ -53,35 +58,49 @@ public:
     static const KoID TransformRotationX;
     static const KoID TransformRotationY;
     static const KoID TransformRotationZ;
-public:
-    KisKeyframeChannel(const KoID& id, KisNodeWSP parent = 0);
-    KisKeyframeChannel(const KoID& id, KisDefaultBoundsBaseSP bounds );
+
+    Q_DECL_DEPRECATED KisKeyframeChannel(const KoID& id, KisNodeWSP parent = 0);
+    KisKeyframeChannel(const KoID& id, KisDefaultBoundsBaseSP bounds);
     KisKeyframeChannel(const KisKeyframeChannel &rhs, KisNodeWSP newParent);
     ~KisKeyframeChannel() override;
+
+    void addKeyframe(int time, KUndo2Command *parentCmd = nullptr);
+    void insertKeyframe(int time, KisKeyframeSP keyframe, KUndo2Command *parentCmd = nullptr);
+    void removeKeyframe(int time, KUndo2Command *parentCmd = nullptr);
+
+    // Inter-channel operations..
+    static void moveKeyframe(KisKeyframeChannel *sourceChannel, int sourceTime, KisKeyframeChannel *targetChannel, int targetTime, KUndo2Command* parentCmd = nullptr);
+    static void copyKeyframe(KisKeyframeChannel *sourceChannel, int sourceTime, KisKeyframeChannel *targetChannel, int targetTime, KUndo2Command* parentCmd = nullptr);
+    static void swapKeyframes(KisKeyframeChannel *channelA, int timeA, KisKeyframeChannel *channelB, int timeB, KUndo2Command* parentCmd = nullptr);
+
+    // Intra-channel convenience methods..
+    void moveKeyframe(int sourceTime, int targetTime, KUndo2Command* parentCmd = nullptr) { moveKeyframe(this, sourceTime, this, targetTime, parentCmd); }
+    void copyKeyframe(int sourceTime, int targetTime, KUndo2Command* parentCmd = nullptr) { copyKeyframe(this, sourceTime, this, targetTime, parentCmd); }
+    void swapKeyframes(int timeA, int timeB, KUndo2Command* parentCmd = nullptr) { swapKeyframes(this, timeA, this, timeB, parentCmd); }
+
+    KisKeyframeSP keyframeAt(int time) const;
+
+    template <class KeyframeType> // Convenience template..
+    QSharedPointer<KeyframeType> keyframeAt(int time) const {
+        return keyframeAt(time).dynamicCast<KeyframeType>();
+    }
+
+    int activeKeyframeTime(int time) const;
+    int activeKeyframeTime() const { return activeKeyframeTime(currentTime()); }
+
+    int firstKeyframeTime() const;
+    int previousKeyframeTime(const int time) const;
+    int nextKeyframeTime(const int time) const;
+    int lastKeyframeTime() const;
 
     QString id() const;
     QString name() const;
 
-    void setNode(KisNodeWSP node);
-    KisNodeWSP node() const;
+    Q_DECL_DEPRECATED void setNode(KisNodeWSP node);
+    Q_DECL_DEPRECATED KisNodeWSP node() const;
 
-    KisKeyframeSP addKeyframe(int time, KUndo2Command *parentCommand = 0);
-    bool deleteKeyframe(KisKeyframeSP keyframe, KUndo2Command *parentCommand = 0);
-    bool moveKeyframe(KisKeyframeSP keyframe, int newTime, KUndo2Command *parentCommand = 0);
-    bool swapFrames(int lhsTime, int rhsTime, KUndo2Command *parentCommand = 0);
-    KisKeyframeSP copyKeyframe(const KisKeyframeSP keyframe, int newTime, KUndo2Command *parentCommand = 0);
-    KisKeyframeSP copyExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, int dstTime, KUndo2Command *parentCommand = 0);
-
-    bool swapExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, int dstTime, KUndo2Command *parentCommand = 0);
-
-    KisKeyframeSP keyframeAt(int time) const;
-    KisKeyframeSP activeKeyframeAt(int time) const;
-    KisKeyframeSP currentlyActiveKeyframe() const;
-
-    KisKeyframeSP firstKeyframe() const;
-    KisKeyframeSP nextKeyframe(KisKeyframeSP keyframe) const;
-    KisKeyframeSP previousKeyframe(KisKeyframeSP keyframe) const;
-    KisKeyframeSP lastKeyframe() const;
+    int keyframeCount() const;
+    Q_DECL_DEPRECATED QSet<int> allKeyframeIds() const;
 
     /**
      * Calculates a pseudo-unique keyframes hash. The hash changes
@@ -89,7 +108,6 @@ public:
      */
     int framesHash() const;
 
-    QSet<int> allKeyframeIds() const;
     /**
      * Get the set of frames affected by any changes to the value
      * of the active keyframe at the given time.
@@ -103,71 +121,43 @@ public:
      * Note: this set may be different than the set of affected frames
      * due to interpolation.
      */
-    KisTimeRange identicalFrames(int time) const;
-
-    int keyframeCount() const;
-
-    int keyframeRowIndexOf(KisKeyframeSP keyframe) const;
-    KisKeyframeSP keyframeAtRow(int row) const;
-
-    int keyframeInsertionRow(int time) const;
-
-    virtual bool hasScalarValue() const = 0;
-    virtual qreal minScalarValue() const;
-    virtual qreal maxScalarValue() const;
-    virtual qreal scalarValue(const KisKeyframeSP keyframe) const;
-    virtual void setScalarValue(KisKeyframeSP keyframe, qreal value, KUndo2Command *parentCommand = 0);
+    KisTimeRange identicalFrames(int time) const; //TEMP NOTE: scalar specific?
 
     virtual QDomElement toXML(QDomDocument doc, const QString &layerFilename);
     virtual void loadXML(const QDomElement &channelNode);
 
-    int currentTime() const;
-
 Q_SIGNALS:
-    void sigKeyframeAboutToBeAdded(KisKeyframeSP keyframe);
-    void sigKeyframeAdded(KisKeyframeSP keyframe);
-    void sigKeyframeAboutToBeRemoved(KisKeyframeSP keyframe);
-    void sigKeyframeRemoved(KisKeyframeSP keyframe);
-    void sigKeyframeAboutToBeMoved(KisKeyframeSP keyframe, int toTime);
-    void sigKeyframeMoved(KisKeyframeSP keyframe, int fromTime);
-    void sigKeyframeChanged(KisKeyframeSP keyframe);
+    void sigUpdated(const KisTimeRange &affectedTimeSpan, const QRect &affectedArea);
+
+    void sigKeyframeAboutToBeAdded(const KisKeyframeChannel *channel, KisKeyframeSP keyframe);
+    void sigKeyframeAdded(const KisKeyframeChannel *channel,KisKeyframeSP keyframe, int index);
+    void sigKeyframeAboutToBeRemoved(const KisKeyframeChannel *channel, KisKeyframeSP keyframe, int index);
+    void sigKeyframeRemoved(const KisKeyframeChannel *channel, KisKeyframeSP keyframe);
+    void sigKeyframeAboutToBeMoved(const KisKeyframeChannel *channel, KisKeyframeSP keyframe, int toTime);
+    void sigKeyframeMoved(const KisKeyframeChannel *channel, KisKeyframeSP keyframe, int fromTime, int toTime);
+    void sigKeyframeChanged(const KisKeyframeChannel *channel, KisKeyframeSP keyframe, int index);
 
 protected:
     typedef QMap<int, KisKeyframeSP> KeyframesMap;
-
     KeyframesMap &keys();
     const KeyframesMap &constKeys() const;
-    KeyframesMap::const_iterator activeKeyIterator(int time) const;
 
-    virtual KisKeyframeSP createKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand) = 0;
-    virtual void destroyKeyframe(KisKeyframeSP key, KUndo2Command *parentCommand) = 0;
-    virtual void uploadExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, KisKeyframeSP dstFrame) = 0;
+    int currentTime() const;
 
-    virtual QRect affectedRect(KisKeyframeSP key) = 0;
-    virtual void requestUpdate(const KisTimeRange &range, const QRect &rect);
+    Q_DECL_DEPRECATED virtual void requestUpdate(const KisTimeRange &range, const QRect &rect);
 
-    virtual KisKeyframeSP loadKeyframe(const QDomElement &keyframeNode) = 0;
-    virtual void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename) = 0;
-
-    void workaroundBrokenFrameTimeBug(int *time);
+    Q_DECL_DEPRECATED void workaroundBrokenFrameTimeBug(int *time); //TEMP NOTE: scalar specific?
 
 private:
-    KisKeyframeSP replaceKeyframeAt(int time, KisKeyframeSP newKeyframe);
-    void insertKeyframeLogical(KisKeyframeSP keyframe);
-    void removeKeyframeLogical(KisKeyframeSP keyframe);
-    bool deleteKeyframeImpl(KisKeyframeSP keyframe, KUndo2Command *parentCommand, bool recreate);
-    void moveKeyframeImpl(KisKeyframeSP keyframe, int newTime);
-    void swapKeyframesImpl(KisKeyframeSP lhsKeyframe, KisKeyframeSP rhsKeyframe);
-
-    friend class KisMoveFrameCommand;
-    friend class KisReplaceKeyframeCommand;
-    friend class KisSwapFramesCommand;
-
-private:
-    KisKeyframeSP insertKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand);
-
     struct Private;
     QScopedPointer<Private> m_d;
+
+    KeyframesMap::const_iterator activeKeyIterator(int time) const;
+
+    virtual KisKeyframeSP createKeyframe() = 0;
+    virtual QRect affectedRect(int time) = 0;
+    virtual QPair<int, KisKeyframeSP> loadKeyframe(const QDomElement &keyframeNode) = 0;
+    virtual void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename) = 0;
 };
 
 #endif // KIS_KEYFRAME_CHANNEL_H

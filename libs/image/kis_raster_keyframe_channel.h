@@ -1,5 +1,7 @@
 /*
  *  Copyright (c) 2015 Jouni Pentikäinen <joupent@gmail.com>
+ *  Copyright (c) 2020 Emmet O'Neill <emmetoneill.pdx@gmail.com>
+ *  Copyright (c) 2020 Eoin O'Neill <eoinoneill1991@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,10 +17,32 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
 #ifndef _KIS_RASTER_KEYFRAME_CHANNEL_H
 #define _KIS_RASTER_KEYFRAME_CHANNEL_H
 
 #include "kis_keyframe_channel.h"
+
+
+class KRITAIMAGE_EXPORT KisRasterKeyframe : public KisKeyframe
+{
+public:
+    KisRasterKeyframe(KisPaintDeviceWSP paintDevice);
+    KisRasterKeyframe(KisPaintDeviceWSP paintDevice, int premadeFrameID);
+    ~KisRasterKeyframe() override;
+
+    bool hasContent();
+    int frameID() const;
+
+    KisKeyframeSP duplicate(KisKeyframeChannel *channel = 0) override;
+
+private:
+    KisRasterKeyframe(const KisRasterKeyframe &rhs);
+
+    int m_frameId;
+    KisPaintDeviceWSP m_paintDevice;
+};
+
 
 class KRITAIMAGE_EXPORT KisRasterKeyframeChannel : public KisKeyframeChannel
 {
@@ -30,7 +54,6 @@ public:
     KisRasterKeyframeChannel(const KisRasterKeyframeChannel &rhs, KisNodeWSP newParent, const KisPaintDeviceWSP newPaintDevice);
     ~KisRasterKeyframeChannel() override;
 
-public:
     /**
      * Return the ID of the active frame at a given time. The active frame is
      * defined by the keyframe at the given time or the last keyframe before it.
@@ -44,7 +67,9 @@ public:
      * @param keyframe keyframe to copy from
      * @param targetDevice device to copy the frame to
      */
-    void fetchFrame(KisKeyframeSP keyframe, KisPaintDeviceSP targetDevice);
+    Q_DECL_DEPRECATED void fetchFrame(KisKeyframeSP keyframe, KisPaintDeviceSP targetDevice);
+
+    void fetchFrame(int time, KisPaintDeviceSP targetDevice);
 
     /**
      * Copy the content of the sourceDevice into a new keyframe at given time
@@ -63,28 +88,23 @@ public:
      */
     void setFilenameSuffix(const QString &suffix);
 
-    bool hasScalarValue() const override;
-
     QDomElement toXML(QDomDocument doc, const QString &layerFilename) override;
     void loadXML(const QDomElement &channelNode) override;
 
     void setOnionSkinsEnabled(bool value);
     bool onionSkinsEnabled() const;
 
-protected:
-    KisKeyframeSP createKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand) override;
-    void destroyKeyframe(KisKeyframeSP key, KUndo2Command *parentCommand) override;
-    void uploadExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, KisKeyframeSP dstFrame) override;
-
-    QRect affectedRect(KisKeyframeSP key) override;
-
-    void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename) override;
-    KisKeyframeSP loadKeyframe(const QDomElement &keyframeNode) override;
-
-    friend class KisRasterKeyframe;
-    bool keyframeHasContent(const KisKeyframe *keyframe) const;
+    KisPaintDeviceWSP paintDevice();
 
 private:
+
+    QRect affectedRect(int time) override;
+
+    void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename) override;
+    QPair<int, KisKeyframeSP> loadKeyframe(const QDomElement &keyframeNode) override;
+
+    KisKeyframeSP createKeyframe() override;
+
     void setFrameFilename(int frameId, const QString &filename);
     QString chooseFrameFilename(int frameId, const QString &layerFilename);
     int frameId(KisKeyframeSP keyframe) const;

@@ -922,7 +922,7 @@ QImage KisLayer::createThumbnailForFrame(qint32 w, qint32 h, int time, Qt::Aspec
 
         if (channel) {
             KisPaintDeviceSP targetDevice = new KisPaintDevice(colorSpace());
-            KisKeyframeSP keyframe = channel->activeKeyframeAt(time);
+            KisKeyframeSP keyframe = channel->keyframeAt(channel->activeKeyframeTime(time));
             channel->fetchFrame(keyframe, targetDevice);
             return targetDevice->createThumbnail(w, h, aspectRatioMode, 1,
                                                  KoColorConversionTransformation::internalRenderingIntent(),

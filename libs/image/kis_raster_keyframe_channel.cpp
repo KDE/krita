@@ -1,5 +1,7 @@
 /*
  *  Copyright (c) 2015 Jouni Pentikäinen <joupent@gmail.com>
+ *  Copyright (c) 2020 Emmet O'Neill <emmetoneill.pdx@gmail.com>
+ *  Copyright (c) 2020 Eoin O'Neill <eoinoneill1991@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,46 +28,81 @@
 #include "kundo2command.h"
 #include "kis_onion_skin_compositor.h"
 
-class KisRasterKeyframe : public KisKeyframe
+KisRasterKeyframe::KisRasterKeyframe(KisPaintDeviceWSP paintDevice)
+    : KisKeyframe()
 {
-public:
-    KisRasterKeyframe(KisRasterKeyframeChannel *channel, int time, int frameId)
-        : KisKeyframe(channel, time)
-        , frameId(frameId)
-    {}
+    m_paintDevice = paintDevice;
+    KIS_ASSERT(m_paintDevice);
 
-    KisRasterKeyframe(const KisRasterKeyframe *rhs, KisKeyframeChannel *channel)
-        : KisKeyframe(rhs, channel)
-        , frameId(rhs->frameId)
-    {}
+    // TODO: make sure command isn't needed.
+    m_frameId = m_paintDevice->framesInterface()->createFrame(false, 0, QPoint(), nullptr);
+}
 
-    int frameId;
+KisRasterKeyframe::KisRasterKeyframe(KisPaintDeviceWSP paintDevice, int premadeFrameID)
+    : KisKeyframe()
+{
+    m_paintDevice = paintDevice;
+    m_frameId = premadeFrameID;
 
-    KisKeyframeSP cloneFor(KisKeyframeChannel *channel) const override
-    {
-        return toQShared(new KisRasterKeyframe(this, channel));
+    KIS_ASSERT(m_paintDevice);
+}
+
+KisRasterKeyframe::~KisRasterKeyframe()
+{
+    // Note: Because keyframe ownership is shared, it's possible for them to outlive
+    // the paint device.
+    if (m_paintDevice && m_paintDevice->framesInterface()) {
+        // TODO: make sure command isn't needed.
+        m_paintDevice->framesInterface()->deleteFrame(m_frameId, nullptr);
+    }
+}
+
+bool KisRasterKeyframe::hasContent()
+{
+    return !m_paintDevice->framesInterface()->frameBounds(m_frameId).isEmpty();
+}
+
+int KisRasterKeyframe::frameID() const
+{
+    return m_frameId;
+}
+
+KisKeyframeSP KisRasterKeyframe::duplicate(KisKeyframeChannel *channel)
+{
+    if (channel) {
+        KisRasterKeyframeChannel* rasterChannel = dynamic_cast<KisRasterKeyframeChannel*>(channel);
+        KIS_ASSERT(rasterChannel);
+        KisPaintDeviceWSP targetDevice = rasterChannel->paintDevice();
+
+        if (targetDevice != m_paintDevice) {
+            int targetFrameID = targetDevice->framesInterface()->createFrame(false, 0, QPoint(), nullptr);
+            targetDevice->framesInterface()->uploadFrame(m_frameId, targetFrameID, m_paintDevice);
+            KisKeyframeSP key = toQShared(new KisRasterKeyframe(targetDevice, targetFrameID ));
+            key->setColorLabel(colorLabel());
+            return key;
+        }
     }
 
-    bool hasContent() const override {
-        KisRasterKeyframeChannel *channel = dynamic_cast<KisRasterKeyframeChannel*>(this->channel());
-        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(channel, true);
+    int copyFrameID = m_paintDevice->framesInterface()->createFrame(true, m_frameId, QPoint(), nullptr);
+    KisKeyframeSP key = toQShared(new KisRasterKeyframe(m_paintDevice, copyFrameID));
+    key->setColorLabel(colorLabel());
+    return key;
+}
 
-        return channel->keyframeHasContent(this);
-    }
-};
+// =========================================================================================
 
 struct KisRasterKeyframeChannel::Private
 {
-  Private(KisPaintDeviceWSP paintDevice, const QString filenameSuffix)
-      : paintDevice(paintDevice),
-        filenameSuffix(filenameSuffix),
-        onionSkinsEnabled(false)
-  {}
+    Private(KisPaintDeviceWSP paintDevice, const QString filenameSuffix)
+        : paintDevice(paintDevice),
+          filenameSuffix(filenameSuffix),
+          onionSkinsEnabled(false)
+    {}
 
-  KisPaintDeviceWSP paintDevice;
-  QMap<int, QString> frameFilenames;
-  QString filenameSuffix;
-  bool onionSkinsEnabled;
+    KisPaintDeviceWSP paintDevice;
+    QMap<int, QString> frameFilenames;
+    QString filenameSuffix;
+    bool onionSkinsEnabled;
 };
 
 KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KoID &id, const KisPaintDeviceWSP paintDevice, KisNodeWSP parent)
@@ -75,7 +112,7 @@ KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KoID &id, const KisPain
 }
 
 KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KoID &id, const KisPaintDeviceWSP paintDevice, const KisDefaultBoundsBaseSP bounds)
-    : KisKeyframeChannel(id, bounds ),
+    : KisKeyframeChannel(id, bounds),
       m_d(new Private(paintDevice, QString()))
 {
 }
@@ -88,6 +125,11 @@ KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KisRasterKeyframeChanne
 
     m_d->frameFilenames = rhs.m_d->frameFilenames;
     m_d->onionSkinsEnabled = rhs.m_d->onionSkinsEnabled;
+
+    Q_FOREACH (int time, rhs.constKeys().keys()) {
+        KisRasterKeyframeSP copySource = rhs.keyframeAt<KisRasterKeyframe>(time);
+        keys().insert(time, toQShared(new KisRasterKeyframe(newPaintDevice, copySource->frameID())));
+    }
 }
 
 KisRasterKeyframeChannel::~KisRasterKeyframeChannel()
@@ -103,12 +145,12 @@ int KisRasterKeyframeChannel::frameId(const KisKeyframe *keyframe) const
 {
     const KisRasterKeyframe *key = dynamic_cast<const KisRasterKeyframe*>(keyframe);
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(key, -1);
-    return key->frameId;
+    return key->frameID();
 }
 
 int KisRasterKeyframeChannel::frameIdAt(int time) const
 {
-    KisKeyframeSP activeKey = activeKeyframeAt(time);
+    KisKeyframeSP activeKey = keyframeAt(activeKeyframeTime(time));
     if (activeKey.isNull()) return -1;
     return frameId(activeKey);
 }
@@ -118,13 +160,21 @@ void KisRasterKeyframeChannel::fetchFrame(KisKeyframeSP keyframe, KisPaintDevice
     m_d->paintDevice->framesInterface()->fetchFrame(frameId(keyframe), targetDevice);
 }
 
+void KisRasterKeyframeChannel::fetchFrame(int time, KisPaintDeviceSP targetDevice)
+{
+    KisRasterKeyframeSP key = keyframeAt<KisRasterKeyframe>(time);
+    if (!key) {
+        key = keyframeAt<KisRasterKeyframe>(activeKeyframeTime(time));
+    }
+
+    m_d->paintDevice->framesInterface()->fetchFrame(key->frameID(), targetDevice);
+}
+
 void KisRasterKeyframeChannel::importFrame(int time, KisPaintDeviceSP sourceDevice, KUndo2Command *parentCommand)
 {
-    KisKeyframeSP keyframe = addKeyframe(time, parentCommand);
-
-    const int frame = frameId(keyframe);
-
-    m_d->paintDevice->framesInterface()->uploadFrame(frame, sourceDevice);
+    addKeyframe(time, parentCommand);
+    KisRasterKeyframeSP keyframe = keyframeAt<KisRasterKeyframe>(time);
+    m_d->paintDevice->framesInterface()->uploadFrame(keyframe->frameID(), sourceDevice);
 }
 
 QRect KisRasterKeyframeChannel::frameExtents(KisKeyframeSP keyframe)
@@ -164,52 +214,9 @@ QString KisRasterKeyframeChannel::chooseFrameFilename(int frameId, const QString
     return filename;
 }
 
-KisKeyframeSP KisRasterKeyframeChannel::createKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand)
+QRect KisRasterKeyframeChannel::affectedRect(int time)
 {
-    KisRasterKeyframe *keyframe;
-
-    KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->paintDevice->defaultBounds()->currentTime() == this->currentTime());
-
-    if (!copySrc) {
-        int frameId = m_d->paintDevice->framesInterface()->createFrame(false, 0, QPoint(), parentCommand);
-        keyframe = new KisRasterKeyframe(this, time, frameId);
-    } else {
-        int srcFrame = frameId(copySrc);
-        int frameId = m_d->paintDevice->framesInterface()->createFrame(true, srcFrame, QPoint(), parentCommand);
-
-        KisRasterKeyframe *srcKeyframe = dynamic_cast<KisRasterKeyframe*>(copySrc.data());
-        Q_ASSERT(srcKeyframe);
-        keyframe = new KisRasterKeyframe(srcKeyframe, this);
-
-        keyframe->setTime(time);
-        keyframe->frameId = frameId;
-    }
-
-    return toQShared(keyframe);
-}
-
-void KisRasterKeyframeChannel::destroyKeyframe(KisKeyframeSP key, KUndo2Command *parentCommand)
-{
-    m_d->paintDevice->framesInterface()->deleteFrame(frameId(key), parentCommand);
-}
-
-void KisRasterKeyframeChannel::uploadExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, KisKeyframeSP dstFrame)
-{
-    KisRasterKeyframeChannel *srcRasterChannel = dynamic_cast<KisRasterKeyframeChannel*>(srcChannel);
-    KIS_ASSERT_RECOVER_RETURN(srcRasterChannel);
-
-    const int srcId = srcRasterChannel->frameIdAt(srcTime);
-    const int dstId = frameId(dstFrame);
-
-    m_d->paintDevice->framesInterface()->
-        uploadFrame(srcId,
-                    dstId,
-                    srcRasterChannel->m_d->paintDevice);
-}
-
-QRect KisRasterKeyframeChannel::affectedRect(KisKeyframeSP key)
-{
-    KeyframesMap::iterator it = keys().find(key->time());
+    KeyframesMap::iterator it = keys().find(time);
     QRect rect;
 
     // Calculate changed area as the union of the current and previous keyframe.
@@ -228,7 +235,7 @@ QRect KisRasterKeyframeChannel::affectedRect(KisKeyframeSP key)
         rect = m_d->paintDevice->framesInterface()->frameBounds(frameId(it.value()));
     }
 
-    rect |= m_d->paintDevice->framesInterface()->frameBounds(frameId(key));
+    rect |= m_d->paintDevice->framesInterface()->frameBounds(frameIdAt(time));
 
     if (m_d->onionSkinsEnabled) {
         const QRect dirtyOnionSkinsRect =
@@ -267,48 +274,41 @@ void KisRasterKeyframeChannel::saveKeyframe(KisKeyframeSP keyframe, QDomElement 
     KisDomUtils::saveValue(&keyframeElement, "offset", offset);
 }
 
-KisKeyframeSP KisRasterKeyframeChannel::loadKeyframe(const QDomElement &keyframeNode)
+QPair<int, KisKeyframeSP> KisRasterKeyframeChannel::loadKeyframe(const QDomElement &keyframeNode)
 {
     int time = keyframeNode.attribute("time").toInt();
     workaroundBrokenFrameTimeBug(&time);
+
+    KisKeyframeSP keyframe;
 
     QPoint offset;
     KisDomUtils::loadValue(keyframeNode, "offset", &offset);
     QString frameFilename = keyframeNode.attribute("frame");
 
-    KisKeyframeSP keyframe;
-
     if (m_d->frameFilenames.isEmpty()) {
         // First keyframe loaded: use the existing frame
 
         KIS_SAFE_ASSERT_RECOVER_NOOP(keyframeCount() == 1);
-        keyframe = constKeys().begin().value();
+        int firstKeyframeTime = constKeys().begin().key();
+        keyframe = keyframeAt(firstKeyframeTime);
 
         // Remove from keys. It will get reinserted with new time once we return
-        keys().remove(keyframe->time());
+        keys().remove(firstKeyframeTime);
 
-        keyframe->setTime(time);
         m_d->paintDevice->framesInterface()->setFrameOffset(frameId(keyframe), offset);
     } else {
-        KUndo2Command tempCommand;
-        int frameId = m_d->paintDevice->framesInterface()->createFrame(false, 0, offset, &tempCommand);
-
-        keyframe = toQShared(new KisRasterKeyframe(this, time, frameId));
+        //KUndo2Command tempCommand;
+        keyframe = toQShared(new KisRasterKeyframe(m_d->paintDevice));
     }
 
     setFrameFilename(frameId(keyframe), frameFilename);
 
-    return keyframe;
+    return QPair<int, KisKeyframeSP>(time, keyframe);
 }
 
-bool KisRasterKeyframeChannel::keyframeHasContent(const KisKeyframe *keyframe) const
+KisKeyframeSP KisRasterKeyframeChannel::createKeyframe()
 {
-    return !m_d->paintDevice->framesInterface()->frameBounds(frameId(keyframe)).isEmpty();
-}
-
-bool KisRasterKeyframeChannel::hasScalarValue() const
-{
-    return false;
+    return toQShared(new KisRasterKeyframe(m_d->paintDevice));
 }
 
 void KisRasterKeyframeChannel::setOnionSkinsEnabled(bool value)
@@ -319,4 +319,9 @@ void KisRasterKeyframeChannel::setOnionSkinsEnabled(bool value)
 bool KisRasterKeyframeChannel::onionSkinsEnabled() const
 {
     return m_d->onionSkinsEnabled;
+}
+
+KisPaintDeviceWSP KisRasterKeyframeChannel::paintDevice()
+{
+    return m_d->paintDevice;
 }

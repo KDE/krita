@@ -81,7 +81,7 @@ KisFilterConfigurationSP KisMultigridPatternGenerator::defaultConfiguration(KisR
     c.fromQColor(QColor(Qt::black));
     v.setValue(c);
     config->setProperty("lineColor", v);
-    config->setProperty("divisions", 1);
+    config->setProperty("divisions", 5);
     config->setProperty("lineWidth", 1);
     config->setProperty("dimensions", 5);
     config->setProperty("offset", .2);
@@ -161,8 +161,8 @@ void KisMultigridPatternGenerator::generate(KisProcessingInformation dstInfo,
             QPolygonF shape = tf.map(rhomb.shape);
 
             QPointF center = shape.at(0)+shape.at(1)+shape.at(2)+shape.at(3);
-            center.setX(center.x()/4);
-            center.setY(center.y()/4);
+            center.setX(center.x()/4.0);
+            center.setY(center.y()/4.0);
 
             QTransform lineWidthTransform;
 
@@ -188,19 +188,20 @@ void KisMultigridPatternGenerator::generate(KisProcessingInformation dstInfo,
 
                 qreal intersectRatio = qreal(rhomb.line1)/qreal(dimensions);
                 intersectRatio += qreal(rhomb.line2)/qreal(dimensions);
-                intersectRatio *= 0.5;
 
-                qreal divisionRatio = 1-abs(qreal(rhomb.parallel1)/qreal(divisions));
-                divisionRatio *= 1-abs(qreal(rhomb.parallel2)/qreal(divisions));
+                qreal indexRatio = 1-abs(qreal(rhomb.parallel1)/qreal(divisions/2.0));
+                indexRatio *= 1-abs(qreal(rhomb.parallel2)/qreal(divisions/2.0));
 
-                if (colorRatio!=0) {
+                if (colorRatio>=0) {
                     gradientPos *= (shapeRatio*colorRatio);
+                } else {
+                    gradientPos *= 1-(shapeRatio*abs(colorRatio));
                 }
-                if (colorIntersect!=0) {
-                    gradientPos *= (intersectRatio*colorIntersect);
-                }
-                if (colorIndex!=0) {
-                    gradientPos *= (divisionRatio*colorIndex);
+                gradientPos *= 1-(intersectRatio*colorIntersect);
+                if (colorIndex>=0) {
+                    gradientPos *= 1-(indexRatio*colorIndex);
+                } else {
+                    gradientPos *= 1-((1-indexRatio)*abs(colorIndex));
                 }
 
                 grad.colorAt(c, gradientPos);

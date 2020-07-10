@@ -116,7 +116,7 @@ void KisMultigridPatternGenerator::generate(KisProcessingInformation dstInfo,
         //QLineF l(bounds.topLeft(), bounds.bottomRight());
 
         int lineWidth = bounds.width()/2/divisions;
-        QList<QPolygonF> rhombs = generateRhombs(dimensions, lineWidth, offset, bounds);
+        QList<KisMultiGridRhomb> rhombs = generateRhombs(dimensions, lineWidth, offset, bounds);
 
         KisProgressUpdateHelper progress(progressUpdater, 100, rhombs.size());
 
@@ -125,6 +125,7 @@ void KisMultigridPatternGenerator::generate(KisProcessingInformation dstInfo,
         gc.setChannelFlags(config->channelFlags());
         gc.setOpacity(255);
         gc.setFillStyle(KisPainter::FillStyleBackgroundColor);
+        gc.setStrokeStyle(KisPainter::StrokeStyleBrush);
         gc.setSelection(dstInfo.selection());
 
         KoStopGradient grad;
@@ -138,20 +139,33 @@ void KisMultigridPatternGenerator::generate(KisProcessingInformation dstInfo,
         tf.scale(lineWidth/2, lineWidth/2);
         KoColor c = c1;
         for (int i= 0; i < rhombs.size(); i++){
-            QPolygonF rhomb = tf.map(rhombs.at(i));
-            if (rhomb.boundingRect().intersects(bounds)) {
+            KisMultiGridRhomb rhomb = rhombs.at(i);
+            QPolygonF shape = tf.map(rhomb.shape);
+            if (shape.boundingRect().intersects(bounds)) {
                 QPainterPath p;
-                p.addPolygon(rhomb);
-                qreal w1 = QLineF (rhomb.at(0), rhomb.at(2)).length();
-                qreal w2 = QLineF (rhomb.at(1), rhomb.at(3)).length();
-                qreal ratio = qMin(w1, w2)/qMax(w1, w2);
+                p.addPolygon(shape);
 
-                grad.colorAt(c, ratio);
+                qreal gradientPos = 1;
+
+                qreal w1 = QLineF (shape.at(0), shape.at(2)).length();
+                qreal w2 = QLineF (shape.at(1), shape.at(3)).length();
+                qreal shapeRatio = qMin(w1, w2)/qMax(w1, w2);
+
+                qreal intersectRatio = qreal(rhomb.line1)/qreal(dimensions);
+                intersectRatio += qreal(rhomb.line2)/qreal(dimensions);
+                intersectRatio *= 0.5;
+
+                qreal divisionRatio = 1-abs(qreal(rhomb.parallel1)/qreal(divisions));
+                divisionRatio *= 1-abs(qreal(rhomb.parallel2)/qreal(divisions));
+
+                gradientPos *= shapeRatio;
+                gradientPos *= intersectRatio;
+                gradientPos *= divisionRatio;
+
+                grad.colorAt(c, gradientPos);
                 gc.setBackgroundColor(c);
 
                 gc.fillPainterPath(p, p.boundingRect().adjusted(-2, -2, 2, 2).toRect());
-
-                //gc.drawPainterPath(p, QPen(Qt::black), p.boundingRect().adjusted(-2, -2, 2, 2).toRect());
                 progress.step();
             }
         }
@@ -160,9 +174,9 @@ void KisMultigridPatternGenerator::generate(KisProcessingInformation dstInfo,
     }
 }
 
-QList<QPolygonF> KisMultigridPatternGenerator::generateRhombs(int lines, int lineWidth, qreal offset, QRectF area) const
+QList<KisMultiGridRhomb> KisMultigridPatternGenerator::generateRhombs(int lines, int lineWidth, qreal offset, QRectF area) const
 {
-    QList<QPolygonF> rhombs;
+    QList<KisMultiGridRhomb> rhombs;
     QList<QLineF> parallelLines;
     QList<qreal> angles;
 
@@ -212,22 +226,29 @@ QList<QPolygonF> KisMultigridPatternGenerator::generateRhombs(int lines, int lin
 
                         QList<int> indices = getIndicesFromPoint(intersect, angles, offset );
 
-                        QPolygonF rhomb;
+                        QPolygonF shape;
                         indices[i] = index1+1;
                         indices[k] = index2+1;
-                        rhomb << getVertice(indices, angles);
+                        shape << getVertice(indices, angles);
                         indices[i] = index1;
                         indices[k] = index2+1;
-                        rhomb << getVertice(indices, angles);
+                        shape << getVertice(indices, angles);
                         indices[i] = index1;
                         indices[k] = index2;
-                        rhomb << getVertice(indices, angles);
+                        shape << getVertice(indices, angles);
                         indices[i] = index1+1;
                         indices[k] = index2;
-                        rhomb << getVertice(indices, angles);
+                        shape << getVertice(indices, angles);
                         indices[i] = index1+1;
                         indices[k] = index2+1;
-                        rhomb << getVertice(indices, angles);
+                        shape << getVertice(indices, angles);
+
+                        KisMultiGridRhomb rhomb;
+                        rhomb.shape = shape;
+                        rhomb.parallel1 = index1;
+                        rhomb.parallel2 = index2;
+                        rhomb.line1 = i;
+                        rhomb.line2 = k;
 
                         rhombs.append(rhomb);
                     }

@@ -41,7 +41,7 @@
 #include <kis_types.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
-#include <KoUpdater.h>
+#include <kis_progress_update_helper.h>
 #include <KoStopGradient.h>
 
 #include "kis_wdg_multigrid_pattern.h"
@@ -118,15 +118,14 @@ void KisMultigridPatternGenerator::generate(KisProcessingInformation dstInfo,
         int lineWidth = bounds.width()/2/divisions;
         QList<QPolygonF> rhombs = generateRhombs(dimensions, lineWidth, offset, bounds);
 
+        KisProgressUpdateHelper progress(progressUpdater, 100, rhombs.size());
+
 
         KisPainter gc(dst);
-        gc.setProgress(progressUpdater);
         gc.setChannelFlags(config->channelFlags());
         gc.setOpacity(255);
         gc.setFillStyle(KisPainter::FillStyleBackgroundColor);
         gc.setSelection(dstInfo.selection());
-
-        qDebug() << "drawing rhombs" << rhombs.size();
 
         KoStopGradient grad;
         auto gradientStops = grad.stops();
@@ -152,8 +151,8 @@ void KisMultigridPatternGenerator::generate(KisProcessingInformation dstInfo,
 
                 gc.fillPainterPath(p, p.boundingRect().adjusted(-2, -2, 2, 2).toRect());
 
-                gc.drawPainterPath(p, QPen(Qt::black), p.boundingRect().adjusted(-2, -2, 2, 2).toRect());
-                qDebug() << "rhomb" << i << "/" << rhombs.size();
+                //gc.drawPainterPath(p, QPen(Qt::black), p.boundingRect().adjusted(-2, -2, 2, 2).toRect());
+                progress.step();
             }
         }
 

@@ -82,12 +82,14 @@ void FileLayer::resetCache()
 QString FileLayer::path() const
 {
     const KisFileLayer *file = qobject_cast<const KisFileLayer*>(this->node());
+    KIS_ASSERT(file);
     return file->path();
 }
 
 QString FileLayer::scalingMethod() const
 {
     const KisFileLayer *file = qobject_cast<const KisFileLayer*>(this->node());
+    KIS_ASSERT_RECOVER_RETURN_VALUE(file, "None");
     KisFileLayer::ScalingMethod sm = file->scalingMethod();
     QString method = "None";
 

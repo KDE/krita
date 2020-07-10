@@ -108,7 +108,7 @@ KisTileDataStore::MemoryStatistics KisTileDataStore::memoryStatistics()
 
     MemoryStatistics stats;
 
-    const qint64 metricCoeff = KisTileData::WIDTH * KisTileData::HEIGHT;
+    const qint64 metricCoeff = qint64(KisTileData::WIDTH) * KisTileData::HEIGHT;
 
     stats.realMemorySize = m_pooler.lastRealMemoryMetric() * metricCoeff;
     stats.historicalMemorySize = m_pooler.lastHistoricalMemoryMetric() * metricCoeff;

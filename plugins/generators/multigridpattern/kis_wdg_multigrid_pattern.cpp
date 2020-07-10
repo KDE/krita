@@ -34,11 +34,37 @@ KisWdgMultigridPattern::KisWdgMultigridPattern(QWidget* parent, const KoColorSpa
     m_widget = new Ui_WdgMultigridPatternOptions();
     m_widget->setupUi(this);
     m_cs = cs;
+
+    widget()->sldDivisions->setRange(0, 100);
+    widget()->sldDivisions->setPrefix(i18n("Divisions:"));
+
+    widget()->sldDimensions->setRange(3, 36);
+    widget()->sldDimensions->setPrefix(i18n("Dimensions:"));
+
+    widget()->sldOffset->setRange(0.01, 0.49, 2);
+    widget()->sldOffset->setPrefix(i18n("Offset:"));
+
+    widget()->sldColorRatio->setRange(0.0, 1.0, 2);
+    widget()->sldColorRatio->setPrefix(i18n("Ratio:"));
+
+    widget()->sldColorIndex->setRange(0.0, 1.0, 2);
+    widget()->sldColorIndex->setPrefix(i18n("Index:"));
+
+    widget()->sldColorIntersect->setRange(0.0, 1.0, 2);
+    widget()->sldColorIntersect->setPrefix(i18n("Intersect:"));
+
     connect(m_widget->bnColor1, SIGNAL(changed(const KoColor&)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_widget->bnColor2, SIGNAL(changed(const KoColor&)), this, SIGNAL(sigConfigurationUpdated()));
-    connect(m_widget->spnDivisions, SIGNAL(valueChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
-    connect(m_widget->spnDimensions, SIGNAL(valueChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
-    connect(m_widget->spnOffset, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
+    connect(m_widget->sldDivisions, SIGNAL(valueChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
+    connect(m_widget->sldDimensions, SIGNAL(valueChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
+    connect(m_widget->sldOffset, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
+
+    connect(m_widget->sldColorIndex, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
+    connect(m_widget->sldColorRatio, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
+    connect(m_widget->sldColorIntersect, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
+
+    connect(m_widget->spnLineWidth, SIGNAL(valueChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
+    connect(m_widget->bnLineColor, SIGNAL(changed(const KoColor&)), this, SIGNAL(sigConfigurationUpdated()));
 }
 
 KisWdgMultigridPattern::~KisWdgMultigridPattern()
@@ -58,10 +84,20 @@ void KisWdgMultigridPattern::setConfiguration(const KisPropertiesConfigurationSP
     c.convertTo(m_cs);
     widget()->bnColor2->setColor(c);
 
-    widget()->spnDivisions->setValue(config->getInt("divisions", 1));
+    c = config->getColor("lineColor");
+    c.convertTo(m_cs);
+    widget()->bnLineColor->setColor(c);
 
-    widget()->spnDimensions->setValue(config->getInt("dimensions", 5));
-    widget()->spnOffset->setValue(config->getFloat("offset", 0.2));
+    widget()->spnLineWidth->setValue(config->getInt("lineWidth", 1));
+
+    widget()->sldDivisions->setValue(config->getInt("divisions", 1));
+
+    widget()->sldDimensions->setValue(config->getInt("dimensions", 5));
+    widget()->sldOffset->setValue(config->getFloat("offset", 0.2));
+
+    widget()->sldColorIndex->setValue(config->getFloat("colorIndex", 1.0));
+    widget()->sldColorRatio->setValue(config->getFloat("colorRatio", 0.0));
+    widget()->sldColorIntersect->setValue(config->getFloat("colorIntersect", 0.0));
 }
 
 KisPropertiesConfigurationSP KisWdgMultigridPattern::configuration() const
@@ -77,10 +113,19 @@ KisPropertiesConfigurationSP KisWdgMultigridPattern::configuration() const
     v.setValue(c);
     config->setProperty("color2", v);
 
-    config->setProperty("divisions", widget()->spnDivisions->value());
+    c.fromKoColor(widget()->bnLineColor->color());
+    v.setValue(c);
+    config->setProperty("lineColor", v);
+    config->setProperty("lineWidth", widget()->spnLineWidth->value());
 
-    config->setProperty("dimensions", widget()->spnDimensions->value());
-    config->setProperty("offset", widget()->spnOffset->value());
+    config->setProperty("divisions", widget()->sldDivisions->value());
+
+    config->setProperty("dimensions", widget()->sldDimensions->value());
+    config->setProperty("offset", widget()->sldOffset->value());
+
+    config->setProperty("colorRatio", widget()->sldColorRatio->value());
+    config->setProperty("colorIndex", widget()->sldColorIndex->value());
+    config->setProperty("colorIntersect", widget()->sldColorIntersect->value());
 
     return config;
 }

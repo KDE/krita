@@ -78,9 +78,17 @@ KisFilterConfigurationSP KisMultigridPatternGenerator::defaultConfiguration(KisR
     c.fromQColor(QColor(Qt::blue));
     v.setValue(c);
     config->setProperty("color2", v);
+    c.fromQColor(QColor(Qt::black));
+    v.setValue(c);
+    config->setProperty("lineColor", v);
     config->setProperty("divisions", 1);
+    config->setProperty("lineWidth", 1);
     config->setProperty("dimensions", 5);
     config->setProperty("offset", .2);
+
+    config->setProperty("colorRatio", 1.0);
+    config->setProperty("colorIndex", 0.0);
+    config->setProperty("colorIntersect", 0.0);
     return config;
 }
 
@@ -102,21 +110,35 @@ void KisMultigridPatternGenerator::generate(KisProcessingInformation dstInfo,
 
     KoColor c1;
     KoColor c2;
-    int divisions = 0;
     if (config) {
         c1 = config->getColor("color1");
         c1.setOpacity(1.0);
         c2 = config->getColor("color2");
         c2.setOpacity(1.0);
-        divisions = config->getInt("divisions", 1);
+
+        KoStopGradient grad;
+        auto gradientStops = grad.stops();
+        gradientStops.append(KoGradientStop(0, c1));
+        gradientStops.append(KoGradientStop(1, c2));
+        grad.setStops(gradientStops);
+
+        int divisions = config->getInt("divisions", 1);
         int dimensions = config->getInt("dimensions", 5);
         qreal offset = config->getFloat("offset", .2);
         QRectF bounds(QPoint(), size);
 
-        //QLineF l(bounds.topLeft(), bounds.bottomRight());
+        KoColor lineColor = config->getColor("lineColor");
+        lineColor.setOpacity(1.0);
+        int lineWidth = config->getInt("lineWidth", 1);
 
-        int lineWidth = bounds.width()/2/divisions;
-        QList<KisMultiGridRhomb> rhombs = generateRhombs(dimensions, lineWidth, offset, bounds);
+        qreal colorRatio = config->getFloat("colorRatio", 1.0);
+        qreal colorIndex = config->getFloat("colorIndex", 0.0);
+        qreal colorIntersect = config->getFloat("colorIntersect", 0.0);
+
+        qreal diameter = QLineF(bounds.topLeft(), bounds.bottomRight()).length();
+        qreal scale = diameter/2/divisions;
+
+        QList<KisMultiGridRhomb> rhombs = generateRhombs(dimensions, divisions, offset);
 
         KisProgressUpdateHelper progress(progressUpdater, 100, rhombs.size());
 
@@ -128,22 +150,35 @@ void KisMultigridPatternGenerator::generate(KisProcessingInformation dstInfo,
         gc.setStrokeStyle(KisPainter::StrokeStyleBrush);
         gc.setSelection(dstInfo.selection());
 
-        KoStopGradient grad;
-        auto gradientStops = grad.stops();
-        gradientStops.append(KoGradientStop(0, c1));
-        gradientStops.append(KoGradientStop(1, c2));
-        grad.setStops(gradientStops);
+        gc.fill(bounds.left(), bounds.top(), bounds.right(), bounds.bottom(), lineColor);
 
         QTransform tf;
         tf.translate(bounds.center().x(), bounds.center().y());
-        tf.scale(lineWidth/2, lineWidth/2);
+        tf.scale(scale, scale);
         KoColor c = c1;
         for (int i= 0; i < rhombs.size(); i++){
             KisMultiGridRhomb rhomb = rhombs.at(i);
             QPolygonF shape = tf.map(rhomb.shape);
-            if (shape.boundingRect().intersects(bounds)) {
+
+            QPointF center = shape.at(0)+shape.at(1)+shape.at(2)+shape.at(3);
+            center.setX(center.x()/4);
+            center.setY(center.y()/4);
+
+            QTransform lineWidthTransform;
+
+            qreal scaleForLineWidth = qMax(1-(qreal(lineWidth)/scale), 0.0);
+            lineWidthTransform.scale(scaleForLineWidth, scaleForLineWidth);
+            QPointF scaledCenter = lineWidthTransform.map(center);
+            lineWidthTransform.reset();
+
+            lineWidthTransform.translate(center.x()-scaledCenter.x(), center.y()-scaledCenter.y());
+            lineWidthTransform.scale(scaleForLineWidth, scaleForLineWidth);
+
+            shape = lineWidthTransform.map(shape);
+
+            if (shape.intersects(bounds) && shape.boundingRect().width()>0) {
                 QPainterPath p;
-                p.addPolygon(shape);
+                p.addPolygon(lineWidthTransform.map(shape));
 
                 qreal gradientPos = 1;
 
@@ -158,14 +193,21 @@ void KisMultigridPatternGenerator::generate(KisProcessingInformation dstInfo,
                 qreal divisionRatio = 1-abs(qreal(rhomb.parallel1)/qreal(divisions));
                 divisionRatio *= 1-abs(qreal(rhomb.parallel2)/qreal(divisions));
 
-                gradientPos *= shapeRatio;
-                gradientPos *= intersectRatio;
-                gradientPos *= divisionRatio;
+                if (colorRatio!=0) {
+                    gradientPos *= (shapeRatio*colorRatio);
+                }
+                if (colorIntersect!=0) {
+                    gradientPos *= (intersectRatio*colorIntersect);
+                }
+                if (colorIndex!=0) {
+                    gradientPos *= (divisionRatio*colorIndex);
+                }
 
                 grad.colorAt(c, gradientPos);
                 gc.setBackgroundColor(c);
 
                 gc.fillPainterPath(p, p.boundingRect().adjusted(-2, -2, 2, 2).toRect());
+
                 progress.step();
             }
         }
@@ -174,15 +216,13 @@ void KisMultigridPatternGenerator::generate(KisProcessingInformation dstInfo,
     }
 }
 
-QList<KisMultiGridRhomb> KisMultigridPatternGenerator::generateRhombs(int lines, int lineWidth, qreal offset, QRectF area) const
+QList<KisMultiGridRhomb> KisMultigridPatternGenerator::generateRhombs(int lines, int divisions, qreal offset) const
 {
     QList<KisMultiGridRhomb> rhombs;
     QList<QLineF> parallelLines;
     QList<qreal> angles;
 
-
-    qreal radius = QLineF(area.topLeft(), area.topRight()).length();
-    int halfLines = radius/lineWidth;
+    int halfLines = divisions;
     int totalLines = (halfLines*2) +1;
 
     //setup our imaginary lines...

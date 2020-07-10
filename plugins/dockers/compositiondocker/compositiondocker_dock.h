@@ -53,7 +53,8 @@ private Q_SLOTS:
     void activated (const QModelIndex& index);
     void deleteClicked();
     void saveClicked();
-    void exportClicked();
+    void exportImageClicked();
+    void exportAnimationClicked();
     void activateCurrentIndex();
     void customContextMenuRequested(QPoint pos);
     void updateComposition();

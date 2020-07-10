@@ -82,6 +82,7 @@ public:
 
 protected:
     KisKeyframeChannel *requestKeyframeChannel(const QString &id) override;
+    bool supportsKeyframeChannel(const QString &id) override;
 
 Q_SIGNALS:
     void sigInternalForceStaticImageUpdate();

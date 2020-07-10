@@ -502,3 +502,12 @@ KisKeyframeChannel *KisBaseNode::requestKeyframeChannel(const QString &id)
 
     return 0;
 }
+
+bool KisBaseNode::supportsKeyframeChannel(const QString &id)
+{
+    if (id == KisKeyframeChannel::Opacity.id() && original()) {
+        return true;
+    }
+
+    return false;
+}

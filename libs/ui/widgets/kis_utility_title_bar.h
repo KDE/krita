@@ -44,7 +44,7 @@ public:
 
 protected:
     QLabel *title;
-    QHBoxLayout *widgetArea;
+    QHBoxLayout *widgetAreaLayout;
 
     const int SPACING_UNIT = 16;
 

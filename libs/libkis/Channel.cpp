@@ -35,7 +35,7 @@ struct Channel::Private {
     Private() {}
 
     KisNodeSP node;
-    KoChannelInfo *channel;
+    KoChannelInfo *channel {0};
 
 };
 

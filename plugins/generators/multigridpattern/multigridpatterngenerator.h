@@ -46,6 +46,14 @@ public:
     ~KritaMultigridPatternGenerator() override;
 };
 
+struct KisMultiGridRhomb {
+    QPolygonF shape;
+    int parallel1;
+    int parallel2;
+    int line1;
+    int line2;
+};
+
 class KisMultigridPatternGenerator : public KisGenerator
 {
 public:
@@ -68,7 +76,7 @@ public:
     KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool useForMasks) const override;
 
 private:
-    QList<QPolygonF> generateRhombs(int lines, int lineWidth, qreal offset, QRectF area) const;
+    QList<KisMultiGridRhomb> generateRhombs(int lines, int lineWidth, qreal offset, QRectF area) const;
 
     QList<int> getIndicesFromPoint(QPointF point, QList<qreal> angles, qreal offset) const;
 

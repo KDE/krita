@@ -263,6 +263,13 @@ bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)
         // We use the default, empty selection
     }
 
+    if (!result) {
+        m_warningMessages.append(i18nc("Warning during loading a kra file with a filter layer",
+                                       "Selection on layer %s couldn't be loaded. It will be replaced by an empty selection.", layer->name()));
+        // otherwise ignore and just use what is there already
+        // (most probably an empty selection)
+    }
+
     if (!loadMetaData(layer)) {
         return false;
     }

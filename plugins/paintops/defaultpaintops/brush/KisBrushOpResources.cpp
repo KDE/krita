@@ -18,6 +18,8 @@
 
 #include "KisBrushOpResources.h"
 
+#include "kis_brush.h"
+
 #include <KoColorSpace.h>
 #include <KoColorTransformation.h>
 
@@ -53,7 +55,14 @@ KisBrushOpResources::KisBrushOpResources(const KisPaintOpSettingsSP settings, Ki
 
     textureOption.reset(new KisTextureProperties(painter->device()->defaultBounds()->currentLevelOfDetail()));
     textureOption->fillProperties(settings);
-    textureOption->setTextureGradient(painter->gradient());
+
+    if (textureOption->applyingGradient()) {
+        textureOption->setTextureGradient(painter->gradient());
+    }
+
+    if (brush && brush->applyingGradient()) {
+        brush->setGradient(painter->gradient());
+    }
 
     m_d->hsvOptions.append(KisPressureHSVOption::createHueOption());
     m_d->hsvOptions.append(KisPressureHSVOption::createSaturationOption());
@@ -72,6 +81,9 @@ KisBrushOpResources::KisBrushOpResources(const KisPaintOpSettingsSP settings, Ki
 
     m_d->darkenOption.resetAllSensors();
     m_d->mixOption.resetAllSensors();
+
+    // the brush should be initialized explicitly by the caller later
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!brush);
 }
 
 KisBrushOpResources::~KisBrushOpResources()

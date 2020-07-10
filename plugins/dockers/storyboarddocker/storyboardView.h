@@ -23,6 +23,8 @@
 #include <QListView>
 #include <QScroller>
 
+#include <kritaui_export.h>
+
 class QStyleOptionViewItem;
 class StoryboardModel;
 
@@ -32,7 +34,7 @@ class StoryboardModel;
  *
  * */
 
-class StoryboardView: public QListView
+class KRITAUI_EXPORT StoryboardView: public QListView
 {
     Q_OBJECT
 public:

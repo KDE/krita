@@ -53,9 +53,6 @@ private Q_SLOTS:
     void slotModeChanged(QAbstractButton*);
     void slotViewChanged(QAbstractButton*);
 
-    void slotFrameChanged(int frameId);
-    void slotChangeFrameGlobal(QItemSelection selected, QItemSelection deselected);
-
 private:
     KisCanvas2* m_canvas;
     QScopedPointer<Ui_WdgStoryboardDock> m_ui;

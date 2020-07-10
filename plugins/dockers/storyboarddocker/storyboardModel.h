@@ -22,6 +22,7 @@
 #include "commentModel.h"
 
 #include <QAbstractListModel>
+#include <QItemSelection>
 
 #include <kritaui_export.h>
 #include <kis_keyframe_channel.h>
@@ -119,7 +120,9 @@ public:
         Comments
     };
 
-public Q_SLOTS:
+private Q_SLOTS:
+    void slotFrameChanged(int frameId);
+    void slotChangeFrameGlobal(QItemSelection selected, QItemSelection deselected);
     void slotKeyframeAdded(KisKeyframeSP keyframe);
     void slotKeyframeRemoved(KisKeyframeSP);
     void slotKeyframeMoved(KisKeyframeSP, int);

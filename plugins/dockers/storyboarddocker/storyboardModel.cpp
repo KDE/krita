@@ -152,8 +152,10 @@ bool StoryboardModel::setData(const QModelIndex & index, const QVariant & value,
 
         StoryboardChild *child = m_items.at(index.parent().row())->child(index.row());
         if (child) {
-            int fps = m_image->animationInterface()->framerate();      //TODO: update all items on framerate change
-            if ((index.row() == StoryboardModel::DurationFrame  || index.row() == StoryboardModel::DurationSecond) && value.toInt() < 0) {
+            int fps = m_image.isValid() ? m_image->animationInterface()->framerate() : 24;      //TODO: update all items on framerate change
+            if ( (index.row() == StoryboardModel::DurationFrame  
+               || index.row() == StoryboardModel::DurationSecond
+               || index.row() == StoryboardModel::FrameNumber) && value.toInt() < 0) {
                 return false;
             }
             if (index.row() == StoryboardModel::DurationFrame && value.toInt() >= fps) {
@@ -459,6 +461,18 @@ void StoryboardModel::setView(StoryboardView *view)
 void StoryboardModel::setImage(KisImageWSP image)
 {
     m_image = image;
+    slotFrameChanged(m_image->animationInterface()->currentUITime());
+
+    connect(m_image->animationInterface(), SIGNAL(sigUiTimeChanged(int)), this, SLOT(slotFrameChanged(int)));
+    connect(m_image->animationInterface(), SIGNAL(sigKeyframeAdded(KisKeyframeSP)),
+            this, SLOT(slotKeyframeAdded(KisKeyframeSP)));
+    connect(m_image->animationInterface(), SIGNAL(sigKeyframeRemoved(KisKeyframeSP)),
+            this, SLOT(slotKeyframeRemoved(KisKeyframeSP)));
+    connect(m_image->animationInterface(), SIGNAL(sigKeyframeMoved(KisKeyframeSP, int)),
+            this, SLOT(slotKeyframeMoved(KisKeyframeSP, int)));
+    connect(m_image, SIGNAL(sigImageUpdated(const QRect &)), this, SLOT(slotUpdateCurrentThumbnail()));
+    connect(m_view->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
+            this, SLOT(slotChangeFrameGlobal(QItemSelection, QItemSelection)));
 }
 
 QModelIndex StoryboardModel::indexFromFrame(int frame) const
@@ -498,6 +512,20 @@ QModelIndex StoryboardModel::lastIndexBeforeFrame(int frame) const
         }
     }
     return retIndex;
+}
+
+
+void StoryboardModel::slotFrameChanged(int frameId)
+{
+    m_view->setCurrentItem(frameId);
+}
+
+void StoryboardModel::slotChangeFrameGlobal(QItemSelection selected, QItemSelection deselected)
+{
+    if (!selected.indexes().isEmpty()) {
+        int frameId = data(index(0, 0, selected.indexes().at(0))).toInt();
+        m_image->animationInterface()->switchCurrentTimeAsync(frameId);
+    }
 }
 
 void StoryboardModel::slotKeyframeAdded(KisKeyframeSP keyframe)

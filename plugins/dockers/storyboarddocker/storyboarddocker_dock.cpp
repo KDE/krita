@@ -197,9 +197,6 @@ StoryboardDockerDock::StoryboardDockerDock( )
     m_ui->listView->setModel(m_storyboardModel);
     m_ui->listView->setItemDelegate(m_storyboardDelegate);
 
-    connect(m_ui->listView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
-            this, SLOT(slotChangeFrameGlobal(QItemSelection, QItemSelection)));
-
     m_storyboardModel->setCommentModel(m_commentModel);
 
     m_modeGroup->button(Mode::Grid)->click();
@@ -220,16 +217,6 @@ void StoryboardDockerDock::setCanvas(KoCanvasBase *canvas)
     setEnabled(m_canvas);
 
     if (m_canvas && m_canvas->image()) {
-        connect(m_canvas->image()->animationInterface(), SIGNAL(sigUiTimeChanged(int)), this, SLOT(slotFrameChanged(int)));
-        connect(m_canvas->image()->animationInterface(), SIGNAL(sigKeyframeAdded(KisKeyframeSP)),
-                m_storyboardModel, SLOT(slotKeyframeAdded(KisKeyframeSP)));
-        connect(m_canvas->image()->animationInterface(), SIGNAL(sigKeyframeRemoved(KisKeyframeSP)),
-                m_storyboardModel, SLOT(slotKeyframeRemoved(KisKeyframeSP)));
-        connect(m_canvas->image()->animationInterface(), SIGNAL(sigKeyframeMoved(KisKeyframeSP, int)),
-                m_storyboardModel, SLOT(slotKeyframeMoved(KisKeyframeSP, int)));
-
-        slotFrameChanged(m_canvas->image()->animationInterface()->currentUITime());
-        connect(m_canvas->image(), SIGNAL(sigImageUpdated(const QRect &)), m_storyboardModel, SLOT(slotUpdateCurrentThumbnail()));
         m_storyboardModel->setImage(m_canvas->image());
         m_storyboardDelegate->setImage(m_canvas->image());
     }
@@ -316,19 +303,6 @@ void StoryboardDockerDock::slotViewChanged(QAbstractButton* button)
         m_modeGroup->button(Mode::Row)->setEnabled(false);               //disable the row mode
     }
     m_storyboardModel->layoutChanged();
-}
-
-void StoryboardDockerDock::slotFrameChanged(int frameId)
-{
-    m_ui->listView->setCurrentItem(frameId);
-}
-
-void StoryboardDockerDock::slotChangeFrameGlobal(QItemSelection selected, QItemSelection deselected)
-{
-    if (!selected.indexes().isEmpty()) {
-        int frameId = m_storyboardModel->data(m_storyboardModel->index(0, 0, selected.indexes().at(0))).toInt();
-        m_canvas->image()->animationInterface()->switchCurrentTimeAsync(frameId);
-    }
 }
 
 #include "storyboarddocker_dock.moc"

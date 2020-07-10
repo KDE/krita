@@ -73,6 +73,7 @@ void FileLayer::setProperties(QString fileName, QString scalingMethod)
 void FileLayer::resetCache()
 {
     KisFileLayer *file = dynamic_cast<KisFileLayer*>(this->node().data());
+    KIS_ASSERT_RECOVER_RETURN(file);
     file->resetCache();
 }
 

@@ -90,6 +90,8 @@ public:
     QList<KoResourceSP> prepareEmbeddedResources(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface);
     void setTextureGradient(const KoAbstractGradientSP gradient);
 
+    bool applyingGradient() const;
+
 private:
 
     void applyLightness(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation& info);

@@ -210,7 +210,8 @@ void KisTextureOption::resetGUI(KoResourceSP res)
 
 
 KisTextureProperties::KisTextureProperties(int levelOfDetail)
-    : m_levelOfDetail(levelOfDetail)
+    : m_levelOfDetail(levelOfDetail),
+      m_gradient(0)
 {
 }
 
@@ -256,6 +257,11 @@ void KisTextureProperties::setTextureGradient(KoAbstractGradientSP gradient) {
         m_gradient = gradient;
         m_cachedGradient.setGradient(gradient, 256);
     }
+}
+
+bool KisTextureProperties::applyingGradient() const
+{
+    return m_texturingMode == GRADIENT;
 }
 
 void KisTextureProperties::applyLightness(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation& info) {
@@ -317,6 +323,7 @@ void KisTextureProperties::applyGradient(KisFixedPaintDeviceSP dab, const QPoint
     colorWeights[0] = qRound(pressure * 255);
     colorWeights[1] = 255 - colorWeights[0];
     quint8* colors[2];
+    m_cachedGradient.setColorSpace(dab->colorSpace()); //Change colorspace here so we don't have to convert each pixel drawn
 
     KisHLineIteratorSP iter = fillDevice->createHLineIteratorNG(x, y, rect.width());
     for (int row = 0; row < rect.height(); ++row) {
@@ -324,9 +331,8 @@ void KisTextureProperties::applyGradient(KisFixedPaintDeviceSP dab, const QPoint
 
             qreal gradientvalue = qreal(*iter->oldRawData()) / 255.0;
             KoColor paintcolor;
-            paintcolor.setColor(m_cachedGradient.cachedAt(gradientvalue), m_gradient->colorSpace());
+            paintcolor.setColor(m_cachedGradient.cachedAt(gradientvalue), dab->colorSpace());
             paintcolor.setOpacity(qMin(paintcolor.opacityF(), dab->colorSpace()->opacityF(dabData)));
-            paintcolor.convertTo(dab->colorSpace(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
             colors[0] = paintcolor.data();
             KoColor dabColor(dabData, dab->colorSpace());
             colors[1] = dabColor.data();

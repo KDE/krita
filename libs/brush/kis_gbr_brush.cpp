@@ -244,6 +244,7 @@ bool KisGbrBrush::init()
         }
 
         setHasColor(false);
+        setBrushApplication(ALPHAMASK);
 
         for (quint32 y = 0; y < bh.height; y++) {
             uchar *pixel = reinterpret_cast<uchar *>(image.scanLine(y));
@@ -263,7 +264,7 @@ bool KisGbrBrush::init()
         }
 
         setHasColor(true);
-        setPreserveLightness(false);
+        setBrushApplication(useColorAsMask() ? ALPHAMASK : IMAGESTAMP);
 
         for (quint32 y = 0; y < bh.height; y++) {
             QRgb *pixel = reinterpret_cast<QRgb *>(image.scanLine(y));
@@ -296,7 +297,7 @@ bool KisGbrBrush::initFromPaintDev(KisPaintDeviceSP image, int x, int y, int w, 
     setName(image->objectName());
 
     setHasColor(true);
-    setPreserveLightness(false);
+    setBrushApplication(useColorAsMask() ? ALPHAMASK : IMAGESTAMP);
 
     return true;
 }
@@ -433,6 +434,7 @@ void KisGbrBrush::makeMaskImage(bool preserveAlpha)
 
     setHasColor(preserveAlpha);
     setUseColorAsMask(preserveAlpha);
+    setBrushApplication(ALPHAMASK);
     resetBoundary();
     clearBrushPyramid();
 }

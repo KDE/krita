@@ -38,8 +38,16 @@ void KisColorfulBrush::setUseColorAsMask(bool useColorAsMask)
      * reset the internal state of the brush on our way.
      */
 
-    if (useColorAsMask != m_useColorAsMask) {
-        m_useColorAsMask = useColorAsMask;
+    if (!hasColor()) { //should already be ALPHAMASK, and shouldn't be able to change this
+        return;
+    }
+
+    if (useColorAsMask && brushApplication() == IMAGESTAMP) {
+        setBrushApplication(ALPHAMASK);
+        resetBoundary();
+        clearBrushPyramid();
+    } else if (!useColorAsMask && brushApplication() != IMAGESTAMP) {
+        setBrushApplication(IMAGESTAMP);
         resetBoundary();
         clearBrushPyramid();
     }
@@ -47,7 +55,7 @@ void KisColorfulBrush::setUseColorAsMask(bool useColorAsMask)
 
 bool KisColorfulBrush::useColorAsMask() const
 {
-    return m_useColorAsMask;
+    return brushApplication() != IMAGESTAMP;
 }
 
 #include <KoColorSpaceMaths.h>

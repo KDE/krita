@@ -57,6 +57,7 @@ QString FileLayer::type() const
 void FileLayer::setProperties(QString fileName, QString scalingMethod)
 {
     KisFileLayer *file = dynamic_cast<KisFileLayer*>(this->node().data());
+    KIS_ASSERT(file);
     KisFileLayer::ScalingMethod sm = KisFileLayer::None;
     if (scalingMethod.toLower() == "toimagesize") {
         sm= KisFileLayer::ToImageSize;

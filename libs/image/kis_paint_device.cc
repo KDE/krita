@@ -426,7 +426,7 @@ public:
 private:
     qint64 estimateDataSize(Data *data) const {
         const QRect &rc = data->dataManager()->extent();
-        return rc.width() * rc.height() * data->colorSpace()->pixelSize();
+        return qint64(rc.width()) * rc.height() * data->colorSpace()->pixelSize();
     }
 
 public:

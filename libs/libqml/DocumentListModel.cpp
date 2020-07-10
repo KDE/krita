@@ -38,8 +38,6 @@ public:
 
     DocumentType filter;
     QString searchPattern;
-
-    QTimer *timer;
 };
 
 QHash<QString, DocumentListModel::DocumentType> DocumentListModel::sm_extensions = QHash<QString, DocumentListModel::DocumentType>();

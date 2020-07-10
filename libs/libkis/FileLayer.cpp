@@ -25,6 +25,7 @@ FileLayer::FileLayer(KisImageSP image, const QString name, const QString baseNam
     : Node(image, new KisFileLayer(image, name, OPACITY_OPAQUE_U8), parent)
 {
     KisFileLayer *file = dynamic_cast<KisFileLayer*>(this->node().data());
+    KIS_ASSERT(file);
     KisFileLayer::ScalingMethod sm = KisFileLayer::None;
     if (scalingMethod=="ToImageSize") {
         sm= KisFileLayer::ToImageSize;

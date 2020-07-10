@@ -459,6 +459,9 @@ namespace KritaUtils
             }
         }
 
+        if (numPixels == 0) {
+            return 0; // avoid dividing by 0
+        }
         return qreal(numTransparentPixels) / numPixels;
     }
 

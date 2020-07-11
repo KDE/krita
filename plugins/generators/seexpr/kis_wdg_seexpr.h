@@ -55,7 +55,7 @@ private Q_SLOTS:
 private:
     Ui_WdgSeExpr *m_widget;
     KisSignalCompressor updateCompressor;
-    KisSeExprScriptSP m_currentPreset;
+    KisSeExprScript *m_currentPreset;
     KisWdgSeExprPresetsSave *m_saveDialog;
 
     bool m_isCreatingPresetFromScratch;

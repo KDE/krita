@@ -61,7 +61,7 @@ Q_SIGNALS:
     void resourceSelected(KoResource* resource);
 
 public Q_SLOTS:
-    void setCurrentPreset(KisSeExprScriptSP resource);
+    void setCurrentPreset(KisSeExprScript *resource);
     void setCurrentRenderConfiguration(KisFilterConfigurationSP config);
     void loadImageFromFile();
     void savePreset();
@@ -70,7 +70,7 @@ public Q_SLOTS:
 
 private:
     bool m_useNewPresetDialog;
-    KisSeExprScriptSP m_currentPreset;
+    KisSeExprScript *m_currentPreset;
     KisFilterConfigurationSP m_currentConfiguration;
 };
 

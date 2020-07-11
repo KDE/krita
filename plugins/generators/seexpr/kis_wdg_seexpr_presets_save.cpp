@@ -47,7 +47,7 @@ KisWdgSeExprPresetsSave::~KisWdgSeExprPresetsSave()
 {
 }
 
-void KisWdgSeExprPresetsSave::setCurrentPreset(KisSeExprScriptSP resource)
+void KisWdgSeExprPresetsSave::setCurrentPreset(KisSeExprScript *resource)
 {
     m_currentPreset = resource;
 }
@@ -62,7 +62,7 @@ void KisWdgSeExprPresetsSave::showDialog()
     setModal(true);
 
     // set the name of the current preset area.
-    KisSeExprScriptSP preset = m_currentPreset;
+    KisSeExprScript *preset = m_currentPreset;
 
     // UI will look a bit different if we are saving a new preset
     if (m_useNewPresetDialog) {
@@ -136,7 +136,7 @@ void KisWdgSeExprPresetsSave::renderScriptToThumbnail()
 
 void KisWdgSeExprPresetsSave::savePreset()
 {
-    KisSeExprScriptSP curPreset = m_currentPreset;
+    KisSeExprScript *curPreset = m_currentPreset;
     if (!curPreset)
         return;
 
@@ -165,7 +165,7 @@ void KisWdgSeExprPresetsSave::savePreset()
         rServer->removeResourceAndBlacklist(oldPreset);
 
         QStringList tags;
-        tags = rServer->assignedTagsList(curPreset.data());
+        tags = rServer->assignedTagsList(curPreset);
         Q_FOREACH (const QString &tag, tags) {
             rServer->addTag(oldPreset, tag);
         }
@@ -183,7 +183,7 @@ void KisWdgSeExprPresetsSave::savePreset()
         // keep tags if we are saving over existing preset
         if (isSavingOverExistingPreset) {
             QStringList tags;
-            tags = rServer->assignedTagsList(curPreset.data());
+            tags = rServer->assignedTagsList(curPreset);
             Q_FOREACH (const QString &tag, tags) {
                 rServer->addTag(newPreset, tag);
             }
@@ -196,15 +196,15 @@ void KisWdgSeExprPresetsSave::savePreset()
     } else { // saving a preset that is replacing an existing one
 
         if (curPreset->filename().contains(saveLocation) == false || curPreset->filename().contains(presetName) == false) {
-            rServer->removeResourceAndBlacklist(curPreset.data());
+            rServer->removeResourceAndBlacklist(curPreset);
             curPreset->setFilename(currentPresetFileName);
             curPreset->setName(presetName);
         }
 
         if (!rServer->resourceByFilename(curPreset->filename())) {
             // this is necessary so that we can get the preset afterwards.
-            rServer->addResource(curPreset.data(), false, false);
-            rServer->removeFromBlacklist(curPreset.data());
+            rServer->addResource(curPreset, false, false);
+            rServer->removeFromBlacklist(curPreset);
         }
         if (curPreset->image().isNull()) {
             curPreset->setImage(presetThumbnailWidget->pixmap()->toImage());

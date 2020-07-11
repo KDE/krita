@@ -186,7 +186,7 @@ void KisWdgSeExpr::slotSaveRenameCurrentPreset()
 {
     slotReloadPresetClicked();
 
-    KisSeExprScriptSP curPreset = m_currentPreset;
+    KisSeExprScript *curPreset = m_currentPreset;
 
     if (!curPreset)
         return;
@@ -210,7 +210,7 @@ void KisWdgSeExpr::slotSaveRenameCurrentPreset()
 
     // Now blacklist the original file
     if (rServer->resourceByName(originalPresetName)) {
-        rServer->removeResourceAndBlacklist(curPreset.data());
+        rServer->removeResourceAndBlacklist(curPreset);
     }
 
     togglePresetRenameUIActive(false); // this returns the UI to its original state after saving

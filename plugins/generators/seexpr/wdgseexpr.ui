@@ -192,7 +192,7 @@
             </layout>
            </item>
            <item>
-            <spacer name="verticalSpacer">
+            <spacer name="verticalSpacer_1">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
              </property>
@@ -351,17 +351,23 @@
         </layout>
        </item>
        <item>
-        <widget class="QScrollArea" name="scrollArea">
+        <widget class="QSplitter" name="splitter">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
-           <verstretch>5</verstretch>
+           <verstretch>9</verstretch>
           </sizepolicy>
          </property>
-         <property name="widgetResizable">
-          <bool>true</bool>
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
          </property>
-         <widget class="ExprControlCollection" name="wdgControls">
+         <widget class="QScrollArea" name="scrollArea">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>5</verstretch>
+           </sizepolicy>
+          </property>
           <property name="geometry">
            <rect>
             <x>0</x>
@@ -370,23 +376,26 @@
             <height>172</height>
            </rect>
           </property>
+          <property name="widgetResizable">
+           <bool>true</bool>
+          </property>
+          <widget class="ExprControlCollection" name="wdgControls">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Ignored" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </widget>
+         <widget class="ExprEditor" name="txtEditor" native="true">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Ignored" vsizetype="Expanding">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
+            <verstretch>4</verstretch>
            </sizepolicy>
           </property>
          </widget>
-        </widget>
-       </item>
-       <item>
-        <widget class="ExprEditor" name="txtEditor" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>4</verstretch>
-          </sizepolicy>
-         </property>
         </widget>
        </item>
       </layout>

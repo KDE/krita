@@ -46,7 +46,6 @@ struct Q_DECL_HIDDEN KisGeneratorLayer::Private
     KisThreadSafeSignalCompressor updateSignalCompressor;
     QRect preparedRect;
     KisFilterConfigurationSP preparedForFilter;
-    KisStrokeId strokeId;
 };
 
 
@@ -69,10 +68,6 @@ KisGeneratorLayer::KisGeneratorLayer(const KisGeneratorLayer& rhs)
 
 KisGeneratorLayer::~KisGeneratorLayer()
 {
-    if (!m_d->strokeId.isNull()) {
-        this->image()->cancelStroke(m_d->strokeId);
-        m_d->strokeId.clear();
-    }
 }
 
 void KisGeneratorLayer::setFilter(KisFilterConfigurationSP filterConfig)
@@ -117,32 +112,25 @@ void KisGeneratorLayer::update()
     KisGeneratorSP f = KisGeneratorRegistry::instance()->value(filterConfig->name());
     KIS_SAFE_ASSERT_RECOVER_RETURN(f);
 
-    QSharedPointer<KisProcessingVisitor::ProgressHelper> helper(new KisProcessingVisitor::ProgressHelper(this));
-
     KisPaintDeviceSP originalDevice = original();
-
-    if (!m_d->strokeId.isNull()) {
-        image->cancelStroke(m_d->strokeId);
-        m_d->strokeId.clear();
-    }
 
     KisGeneratorStrokeStrategy *stroke = new KisGeneratorStrokeStrategy(image);
 
-    m_d->strokeId = image->startStroke(stroke);
+    KisStrokeId strokeId = image->startStroke(stroke);
 
     auto rc = processRegion.begin();
     while (rc != processRegion.end()) {
-        QList<KisStrokeJobData *> jobs = KisGeneratorStrokeStrategy::createJobsData(this, f, originalDevice, *rc, filterConfig, helper);
+        QList<KisStrokeJobData *> jobs = KisGeneratorStrokeStrategy::createJobsData(this, f, originalDevice, *rc, filterConfig);
 
         Q_FOREACH (KisStrokeJobData *job, jobs)
         {
-            image->addJob(m_d->strokeId, job);
+            image->addJob(strokeId, job);
         }
 
         rc++;
     }
 
-    image->endStroke(m_d->strokeId);
+    image->endStroke(strokeId);
 
     m_d->preparedRect = updateRect;
     m_d->preparedForFilter = filterConfig;

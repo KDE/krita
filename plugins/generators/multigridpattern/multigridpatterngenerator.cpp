@@ -166,7 +166,9 @@ void KisMultigridPatternGenerator::generate(KisProcessingInformation dstInfo,
         QTransform tf;
         tf.translate(bounds.center().x(), bounds.center().y());
         tf.scale(scale, scale);
-        tf.rotateRadians((M_PI/dimensions)*.5);
+        if (dimensions%2>0) {
+            tf.rotateRadians((M_PI/dimensions)*0.5);
+        }
         KoColor c = grad->stops()[0].color;
         for (int i= 0; i < rhombs.size(); i++){
             KisMultiGridRhomb rhomb = rhombs.at(i);

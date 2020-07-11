@@ -64,37 +64,15 @@
       <string>Colors</string>
      </property>
      <layout class="QFormLayout" name="formLayout">
-      <item row="0" column="0">
-       <widget class="QLabel" name="lblColor">
-        <property name="text">
-         <string>&amp;Color 1:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy">
-         <cstring>bnColor1</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="KisColorButton" name="bnColor1"/>
-      </item>
       <item row="1" column="0">
        <widget class="QLabel" name="lblColor2">
         <property name="text">
-         <string>&amp;Color 2:</string>
+         <string>Color Factors:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
-        <property name="buddy">
-         <cstring>bnColor1</cstring>
-        </property>
        </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="KisColorButton" name="bnColor2"/>
       </item>
       <item row="2" column="0" colspan="2">
        <widget class="KisDoubleSliderSpinBox" name="sldColorRatio" native="true"/>
@@ -105,12 +83,21 @@
       <item row="4" column="0" colspan="2">
        <widget class="KisDoubleSliderSpinBox" name="sldColorIndex" native="true"/>
       </item>
+      <item row="0" column="0">
+       <widget class="KisStopGradientEditor" name="wdgGradient" native="true"/>
+      </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>KisStopGradientEditor</class>
+   <extends>QWidget</extends>
+   <header>kis_stopgradient_editor.h</header>
+   <container>1</container>
+  </customwidget>
   <customwidget>
    <class>KisDoubleSliderSpinBox</class>
    <extends>QWidget</extends>

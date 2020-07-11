@@ -25,6 +25,7 @@
 #include <QVector>
 #include <QMap>
 #include <QtMath>
+#include <QDomDocument>
 
 #include <kis_debug.h>
 
@@ -70,15 +71,20 @@ KisFilterConfigurationSP KisMultigridPatternGenerator::defaultConfiguration(KisR
 {
     KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
 
+    QLinearGradient gradient;
+    gradient.setColorAt(0, Qt::green);
+    gradient.setColorAt(1.0, Qt::blue);
+    KoStopGradientSP grad = KoStopGradient::fromQGradient(&gradient);
+    if (grad) {
+        QDomDocument doc;
+        QDomElement elt = doc.createElement("gradient");
+        grad->toXML(doc, elt);
+        doc.appendChild(elt);
+        config->setProperty("gradientXML", doc.toString());
+    }
+
     QVariant v;
     KoColor c;
-    c.fromQColor(QColor(Qt::green));
-    v.setValue(c);
-    config->setProperty("color1", v);
-    c.fromQColor(QColor(Qt::blue));
-    v.setValue(c);
-    config->setProperty("color2", v);
-    c.fromQColor(QColor(Qt::black));
     v.setValue(c);
     config->setProperty("lineColor", v);
     config->setProperty("divisions", 5);
@@ -108,19 +114,20 @@ void KisMultigridPatternGenerator::generate(KisProcessingInformation dstInfo,
     Q_ASSERT(!dst.isNull());
     Q_ASSERT(config);
 
-    KoColor c1;
-    KoColor c2;
     if (config) {
-        c1 = config->getColor("color1");
-        c1.setOpacity(1.0);
-        c2 = config->getColor("color2");
-        c2.setOpacity(1.0);
 
-        KoStopGradient grad;
-        auto gradientStops = grad.stops();
-        gradientStops.append(KoGradientStop(0, c1));
-        gradientStops.append(KoGradientStop(1, c2));
-        grad.setStops(gradientStops);
+        QLinearGradient gradient;
+        gradient.setColorAt(0, Qt::green);
+        gradient.setColorAt(1.0, Qt::blue);
+        KoStopGradientSP grad = KoStopGradient::fromQGradient(&gradient);
+        if (config->hasProperty("gradientXML")) {
+            QDomDocument doc;
+            doc.setContent(config->getString("gradientXML", ""));
+            KoStopGradient gradient = KoStopGradient::fromXML(doc.firstChildElement());
+            if (gradient.stops().size() > 0) {
+                grad->setStops(gradient.stops());
+            }
+        }
 
         int divisions = config->getInt("divisions", 1);
         int dimensions = config->getInt("dimensions", 5);
@@ -155,7 +162,7 @@ void KisMultigridPatternGenerator::generate(KisProcessingInformation dstInfo,
         QTransform tf;
         tf.translate(bounds.center().x(), bounds.center().y());
         tf.scale(scale, scale);
-        KoColor c = c1;
+        KoColor c = grad->stops()[0].color;
         for (int i= 0; i < rhombs.size(); i++){
             KisMultiGridRhomb rhomb = rhombs.at(i);
             QPolygonF shape = tf.map(rhomb.shape);
@@ -209,7 +216,7 @@ void KisMultigridPatternGenerator::generate(KisProcessingInformation dstInfo,
                     gradientPos *= 1-((1-indexRatio)*abs(colorIndex));
                 }
 
-                grad.colorAt(c, gradientPos);
+                grad->colorAt(c, gradientPos);
                 gc.setBackgroundColor(c);
 
                 gc.fillPainterPath(p, p.boundingRect().adjusted(-2, -2, 2, 2).toRect());

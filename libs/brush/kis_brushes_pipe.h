@@ -100,9 +100,16 @@ public:
         return false;
     }
 
-    void setPreserveLightness(bool preserveLightness) const {
+
+    void setBrushApplication(enumBrushApplication brushApplication) const {
         Q_FOREACH(BrushType * brush, m_brushes) {
-            brush->setPreserveLightness(preserveLightness);
+            brush->setBrushApplication(brushApplication);
+        }
+    }
+
+    void setGradient(const KoAbstractGradient* gradient) const {
+        Q_FOREACH(BrushType * brush, m_brushes) {
+            brush->setGradient(gradient);
         }
     }
 

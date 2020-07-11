@@ -194,7 +194,7 @@
         return d->currentFilter;
     }
 
-    void KisFilterSelectorWidget::setFilter(KisFilterSP f)
+    void KisFilterSelectorWidget::setFilter(KisFilterSP f, KisFilterConfigurationSP overrideDefaultConfig)
     {
         Q_ASSERT(f);
         Q_ASSERT(d->filtersModel);
@@ -223,6 +223,11 @@
             d->uiFilterSelector.scrollArea->setMinimumSize(d->currentCentralWidget->sizeHint());
             qobject_cast<QLabel*>(d->currentCentralWidget)->setAlignment(Qt::AlignCenter);
         } else {
+            KisFilterConfigurationSP defaultConfiguration =
+                overrideDefaultConfig ?
+                overrideDefaultConfig :
+                d->currentFilter->defaultConfiguration();
+
             d->uiFilterSelector.comboBoxPresets->setEnabled(true);
             d->uiFilterSelector.pushButtonEditPressets->setEnabled(true);
             d->uiFilterSelector.btnXML->setEnabled(true);
@@ -232,7 +237,7 @@
             widget->layout()->setContentsMargins(0,0,0,0);
             d->currentFilterConfigurationWidget->setView(d->view);
             d->currentFilterConfigurationWidget->blockSignals(true);
-            d->currentFilterConfigurationWidget->setConfiguration(d->currentFilter->defaultConfiguration());
+            d->currentFilterConfigurationWidget->setConfiguration(defaultConfiguration);
             d->currentFilterConfigurationWidget->blockSignals(false);
             d->uiFilterSelector.scrollArea->setContentsMargins(0,0,0,0);
             d->uiFilterSelector.scrollArea->setMinimumWidth(widget->sizeHint().width() + 18);
@@ -266,7 +271,7 @@
         Q_ASSERT(d->filtersModel);
         KisFilter* filter = const_cast<KisFilter*>(d->filtersModel->indexToFilter(idx));
         if (filter) {
-            setFilter(filter);
+            setFilter(filter, 0);
         }
         else {
             if (d->currentFilter) {

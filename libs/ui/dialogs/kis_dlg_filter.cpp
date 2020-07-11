@@ -114,11 +114,11 @@ KisDlgFilter::~KisDlgFilter()
     delete d;
 }
 
-void KisDlgFilter::setFilter(KisFilterSP f)
+void KisDlgFilter::setFilter(KisFilterSP f, KisFilterConfigurationSP overrideDefaultConfig)
 {
     Q_ASSERT(f);
     setDialogTitle(f);
-    d->uiFilterDialog.filterSelection->setFilter(f);
+    d->uiFilterDialog.filterSelection->setFilter(f, overrideDefaultConfig);
     d->uiFilterDialog.pushButtonCreateMaskEffect->setEnabled(f->supportsAdjustmentLayers());
     d->currentFilter = f;
     updatePreview();

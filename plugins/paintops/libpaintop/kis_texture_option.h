@@ -88,6 +88,8 @@ public:
     void fillProperties(const KisPropertiesConfigurationSP setting);
     void setTextureGradient(const KoAbstractGradient* gradient);
 
+    bool applyingGradient() const;
+
 private:
 
     void applyLightness(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation& info);

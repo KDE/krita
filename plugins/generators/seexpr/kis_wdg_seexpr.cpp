@@ -105,18 +105,29 @@ inline const Ui_WdgSeExpr *KisWdgSeExpr::widget() const {
 
 void KisWdgSeExpr::setConfiguration(const KisPropertiesConfigurationSP config)
 {
-    Q_ASSERT(!config->getString("script").isEmpty());
+    auto rserver = KoResourceServerProvider::instance()->seExprScriptServer();
+    auto name = config->getString("pattern", "Disney_noisecolor2");
+    auto pattern = rserver->resourceByName(name);
+    if (pattern) {
+        m_widget->scriptSelectorWidget->setCurrentScript(pattern);
+    }
+
     QString script = config->getString("script");
 
-    m_widget->txtEditor->setExpr(script, true);
+    if (!script.isNull()) {
+        m_widget->txtEditor->setExpr(script, true);
+    }
 }
 
 KisPropertiesConfigurationSP KisWdgSeExpr::configuration() const
 {
     KisFilterConfigurationSP config = new KisFilterConfiguration("seexpr", 1, KisGlobalResourcesInterface::instance());
-    QVariant v(m_widget->txtEditor->getExpr());
 
-    config->setProperty("script", v);
+    if (m_widget->scriptSelectorWidget->currentResource()) {
+        QVariant v;
+        v.setValue(m_widget->scriptSelectorWidget->currentResource()->name());config->setProperty("pattern", v);
+    }
+    config->setProperty("script", QVariant(m_widget->txtEditor->getExpr()));
 
     return config;
 }

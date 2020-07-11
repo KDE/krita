@@ -100,8 +100,9 @@ KisFilterConfigurationSP KisSeExprGenerator::defaultConfiguration(KisResourcesIn
 {
     KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
 
-    QVariant script(QStringLiteral(BASE_SCRIPT));
-    config->setProperty("script", script);
+    QVariant v;
+    v.setValue(QString("Disney_noisecolor2"));
+    config->setProperty("pattern", v);
     return config;
 }
 

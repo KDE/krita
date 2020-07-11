@@ -356,7 +356,11 @@ QList<KisMultiGridRhomb> KisMultigridPatternGenerator::generateRhombs(int lines,
 
 
                     QPointF intersect;
+#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
+                    int intersection = l1.intersect(l2, &intersect);
+#else
                     int intersection = l1.intersects(l2, &intersect);
+#endif
                     if (intersection==QLineF::BoundedIntersection) {
 
                         QList<int> indices = getIndicesFromPoint(intersect, angles, offset );

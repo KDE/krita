@@ -188,16 +188,21 @@ void KisMultigridPatternGenerator::generate(KisProcessingInformation dstInfo,
 
                 qreal intersectRatio = qreal(rhomb.line1)/qreal(dimensions);
                 intersectRatio += qreal(rhomb.line2)/qreal(dimensions);
+                intersectRatio *= 0.5;
 
                 qreal indexRatio = 1-abs(qreal(rhomb.parallel1)/qreal(divisions/2.0));
                 indexRatio *= 1-abs(qreal(rhomb.parallel2)/qreal(divisions/2.0));
 
                 if (colorRatio>=0) {
-                    gradientPos *= (shapeRatio*colorRatio);
+                    gradientPos *= 1-(shapeRatio*colorRatio);
                 } else {
-                    gradientPos *= 1-(shapeRatio*abs(colorRatio));
+                    gradientPos *= 1-((1-shapeRatio)*abs(colorRatio));
                 }
-                gradientPos *= 1-(intersectRatio*colorIntersect);
+                if (colorIntersect>=0) {
+                    gradientPos *= 1-(intersectRatio*colorIntersect);
+                } else {
+                    gradientPos *= 1-((1-intersectRatio)*abs(colorIntersect));
+                }
                 if (colorIndex>=0) {
                     gradientPos *= 1-(indexRatio*colorIndex);
                 } else {

@@ -47,10 +47,10 @@ KisWdgMultigridPattern::KisWdgMultigridPattern(QWidget* parent, const KoColorSpa
     widget()->sldColorRatio->setRange(-2.0, 2.0, 2);
     widget()->sldColorRatio->setPrefix(i18n("Ratio:"));
 
-    widget()->sldColorIndex->setRange(-1.0, 1.0, 2);
+    widget()->sldColorIndex->setRange(-2.0, 2.0, 2);
     widget()->sldColorIndex->setPrefix(i18n("Index:"));
 
-    widget()->sldColorIntersect->setRange(0.0, 1.0, 2);
+    widget()->sldColorIntersect->setRange(-2.0, 2.0, 2);
     widget()->sldColorIntersect->setPrefix(i18n("Intersect:"));
 
     connect(m_widget->bnColor1, SIGNAL(changed(const KoColor&)), this, SIGNAL(sigConfigurationUpdated()));

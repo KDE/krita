@@ -7,12 +7,12 @@
     <x>0</x>
     <y>0</y>
     <width>323</width>
-    <height>440</height>
+    <height>508</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
-    <widget class="QGroupBox" name="groupBox_2">
+    <widget class="QGroupBox" name="gbShapes">
      <property name="title">
       <string>Shapes</string>
      </property>
@@ -30,36 +30,83 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox_3">
+    <widget class="QGroupBox" name="gbLines">
      <property name="title">
       <string>Lines</string>
      </property>
-     <layout class="QFormLayout" name="formLayout_3">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>Line Color: </string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="KisColorButton" name="bnLineColor"/>
-      </item>
-      <item row="1" column="0">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>Line Width:</string>
+         <string>Width:</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
+      <item>
        <widget class="QSpinBox" name="spnLineWidth"/>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Color: </string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="KisColorButton" name="bnLineColor"/>
       </item>
      </layout>
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox">
+    <widget class="QGroupBox" name="gbConnector">
+     <property name="title">
+      <string>Connector Lines</string>
+     </property>
+     <layout class="QFormLayout" name="formLayout_2">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Type:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="cmbConnectorType"/>
+      </item>
+      <item row="1" column="0" colspan="2">
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>Width:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="spnConnectorWidth"/>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>Color:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="KisColorButton" name="bnConnectorColor">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="gbColors">
      <property name="title">
       <string>Colors</string>
      </property>

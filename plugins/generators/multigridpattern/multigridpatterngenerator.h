@@ -58,6 +58,13 @@ class KisMultigridPatternGenerator : public KisGenerator
 {
 public:
 
+    enum Connector{
+        None,
+        Acute,
+        Obtuse,
+        Cross
+    };
+
     KisMultigridPatternGenerator();
 
     using KisGenerator::generate;

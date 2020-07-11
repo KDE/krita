@@ -91,6 +91,9 @@ void KisStopGradientEditor::setCompactMode(bool value)
     lblName->setVisible(!value);
     buttonReverse->setVisible(!value);
     nameedit->setVisible(!value);
+    foregroundRadioButton->setVisible(!value);
+    backgroundRadioButton->setVisible(!value);
+    colorRadioButton->setVisible(!value);
 
     buttonReverseSecond->setVisible(value);
 }

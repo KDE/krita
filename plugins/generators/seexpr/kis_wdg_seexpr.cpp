@@ -61,6 +61,8 @@ KisWdgSeExpr::KisWdgSeExpr(QWidget *parent)
 
     m_widget->txtEditor->updateCompleter();
 
+    m_widget->txtEditor->exprTe->setFont(QFontDatabase().systemFont(QFontDatabase::FixedFont));
+
     connect(m_widget->scriptSelectorWidget, SIGNAL(resourceSelected(KoResourceSP)), this, SLOT(slotResourceSelected(KoResourceSP)));
     connect(m_saveDialog, SIGNAL(resourceSelected(KoResourceSP)), this, SLOT(slotResourceSelected(KoResourceSP)));
 

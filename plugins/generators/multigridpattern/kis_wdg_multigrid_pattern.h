@@ -24,6 +24,7 @@
 #include <kis_config_widget.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoStopGradient.h>
 
 class Ui_WdgMultigridPatternOptions;
 
@@ -42,6 +43,7 @@ public:
 private:
     Ui_WdgMultigridPatternOptions* m_widget;
     const KoColorSpace *m_cs;
+    KoStopGradientSP m_gradient;
 };
 
 #endif

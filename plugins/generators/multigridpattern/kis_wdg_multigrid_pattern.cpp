@@ -21,6 +21,8 @@
 #include "kis_wdg_multigrid_pattern.h"
 
 #include <QLayout>
+#include <QDomDocument>
+#include <QDomElement>
 
 #include <KoColor.h>
 #include <filter/kis_filter_configuration.h>
@@ -34,6 +36,13 @@ KisWdgMultigridPattern::KisWdgMultigridPattern(QWidget* parent, const KoColorSpa
     m_widget = new Ui_WdgMultigridPatternOptions();
     m_widget->setupUi(this);
     m_cs = cs;
+
+    QLinearGradient grad;
+    grad.setColorAt(0, Qt::green);
+    grad.setColorAt(1.0, Qt::blue);
+    m_gradient = KoStopGradient::fromQGradient(&grad);
+    widget()->wdgGradient->setGradient(m_gradient);
+    widget()->wdgGradient->setCompactMode(true);
 
     widget()->sldDivisions->setRange(0, 100);
     widget()->sldDivisions->setPrefix(i18n("Divisions:"));
@@ -53,8 +62,6 @@ KisWdgMultigridPattern::KisWdgMultigridPattern(QWidget* parent, const KoColorSpa
     widget()->sldColorIntersect->setRange(-2.0, 2.0, 2);
     widget()->sldColorIntersect->setPrefix(i18n("Intersect:"));
 
-    connect(m_widget->bnColor1, SIGNAL(changed(const KoColor&)), this, SIGNAL(sigConfigurationUpdated()));
-    connect(m_widget->bnColor2, SIGNAL(changed(const KoColor&)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_widget->sldDivisions, SIGNAL(valueChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_widget->sldDimensions, SIGNAL(valueChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_widget->sldOffset, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
@@ -62,6 +69,8 @@ KisWdgMultigridPattern::KisWdgMultigridPattern(QWidget* parent, const KoColorSpa
     connect(m_widget->sldColorIndex, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_widget->sldColorRatio, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_widget->sldColorIntersect, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
+
+    connect(m_widget->wdgGradient, SIGNAL(sigGradientChanged()), this, SIGNAL(sigConfigurationUpdated()));
 
     connect(m_widget->spnLineWidth, SIGNAL(valueChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_widget->bnLineColor, SIGNAL(changed(const KoColor&)), this, SIGNAL(sigConfigurationUpdated()));
@@ -75,16 +84,18 @@ KisWdgMultigridPattern::~KisWdgMultigridPattern()
 
 void KisWdgMultigridPattern::setConfiguration(const KisPropertiesConfigurationSP config)
 {
-    QVariant value;
-    KoColor c =config->getColor("color1");
-    c.convertTo(m_cs);
-    widget()->bnColor1->setColor(c);
+    if (config->hasProperty("gradientXML")) {
+        QDomDocument doc;
+        doc.setContent(config->getString("gradientXML", ""));
+        KoStopGradient gradient = KoStopGradient::fromXML(doc.firstChildElement());
+        if (gradient.stops().size() > 0) {
+            m_gradient->setStops(gradient.stops());
+        }
+        widget()->wdgGradient->setGradient(m_gradient);
+    }
 
-    c = config->getColor("color2");
-    c.convertTo(m_cs);
-    widget()->bnColor2->setColor(c);
 
-    c = config->getColor("lineColor");
+    KoColor c = config->getColor("lineColor");
     c.convertTo(m_cs);
     widget()->bnLineColor->setColor(c);
 
@@ -103,16 +114,17 @@ void KisWdgMultigridPattern::setConfiguration(const KisPropertiesConfigurationSP
 KisPropertiesConfigurationSP KisWdgMultigridPattern::configuration() const
 {
     KisFilterConfigurationSP config = new KisFilterConfiguration("multigrid", 1, KisGlobalResourcesInterface::instance());
-    KoColor c;
-    c.fromKoColor(widget()->bnColor1->color());
+
+    if (m_gradient) {
+        QDomDocument doc;
+        QDomElement elt = doc.createElement("gradient");
+        m_gradient->toXML(doc, elt);
+        doc.appendChild(elt);
+        config->setProperty("gradientXML", doc.toString());
+    }
+
     QVariant v;
-    v.setValue(c);
-    config->setProperty("color1", v);
-
-    c.fromKoColor(widget()->bnColor2->color());
-    v.setValue(c);
-    config->setProperty("color2", v);
-
+    KoColor c;
     c.fromKoColor(widget()->bnLineColor->color());
     v.setValue(c);
     config->setProperty("lineColor", v);

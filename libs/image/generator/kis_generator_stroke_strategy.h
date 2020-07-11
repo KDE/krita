@@ -30,7 +30,7 @@ public:
     KisGeneratorStrokeStrategy(KisImageWSP image);
     ~KisGeneratorStrokeStrategy() override;
 
-    static QList<KisStrokeJobData *> createJobsData(KisGeneratorLayer *layer, KisGeneratorSP f, KisPaintDeviceSP dev, const QRect &rc, const KisFilterConfigurationSP filterConfig, QSharedPointer<KisProcessingVisitor::ProgressHelper> helper);
+    static QList<KisStrokeJobData *> createJobsData(KisGeneratorLayerSP layer, KisGeneratorSP f, KisPaintDeviceSP dev, const QRect &rc, const KisFilterConfigurationSP filterConfig);
 
 private:
     void initStrokeCallback() override;

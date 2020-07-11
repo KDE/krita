@@ -30,7 +30,7 @@ struct KisGeneratorStrokeStrategy::Private {
     class ProcessData : public KisStrokeJobData
     {
     public:
-        ProcessData(KisGeneratorLayer *_layer, KisGeneratorSP _f, KisProcessingInformation &_dstCfg, QRect _rect, KisFilterConfigurationSP _filterConfig, QSharedPointer<KisProcessingVisitor::ProgressHelper> _helper)
+        ProcessData(KisGeneratorLayerSP _layer, KisGeneratorSP _f, KisProcessingInformation &_dstCfg, QRect _rect, KisFilterConfigurationSP _filterConfig, QSharedPointer<KisProcessingVisitor::ProgressHelper> _helper)
             : KisStrokeJobData(CONCURRENT)
             , layer(_layer)
             , f(_f)
@@ -41,7 +41,7 @@ struct KisGeneratorStrokeStrategy::Private {
         {
         }
 
-        KisGeneratorLayer* layer;
+        KisGeneratorLayerSP layer;
         KisGeneratorSP f;
         KisProcessingInformation dstCfg;
         QRect tile;
@@ -63,9 +63,11 @@ KisGeneratorStrokeStrategy::KisGeneratorStrokeStrategy(KisImageWSP image)
     setCanForgetAboutMe(false);
 }
 
-QList<KisStrokeJobData *> KisGeneratorStrokeStrategy::createJobsData(KisGeneratorLayer* layer, KisGeneratorSP f, KisPaintDeviceSP dev, const QRect &rc, const KisFilterConfigurationSP filterConfig, QSharedPointer<KisProcessingVisitor::ProgressHelper> helper)
+QList<KisStrokeJobData *> KisGeneratorStrokeStrategy::createJobsData(KisGeneratorLayerSP layer, KisGeneratorSP f, KisPaintDeviceSP dev, const QRect &rc, const KisFilterConfigurationSP filterConfig)
 {
     QList<KisStrokeJobData *> jobsData;
+
+    QSharedPointer<KisProcessingVisitor::ProgressHelper> helper(new KisProcessingVisitor::ProgressHelper(layer));
 
     if (f->allowsSplittingIntoPatches())
     {

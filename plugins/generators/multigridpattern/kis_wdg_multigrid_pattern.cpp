@@ -62,6 +62,11 @@ KisWdgMultigridPattern::KisWdgMultigridPattern(QWidget* parent, const KoColorSpa
     widget()->sldColorIntersect->setRange(-2.0, 2.0, 2);
     widget()->sldColorIntersect->setPrefix(i18n("Intersect:"));
 
+    widget()->cmbConnectorType->addItem(i18n("No Connectors"));
+    widget()->cmbConnectorType->addItem(i18n("Acute Angles"));
+    widget()->cmbConnectorType->addItem(i18n("Obtuse Angles"));
+    widget()->cmbConnectorType->addItem(i18n("Cross Shape"));
+
     connect(m_widget->sldDivisions, SIGNAL(valueChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_widget->sldDimensions, SIGNAL(valueChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_widget->sldOffset, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
@@ -74,6 +79,10 @@ KisWdgMultigridPattern::KisWdgMultigridPattern(QWidget* parent, const KoColorSpa
 
     connect(m_widget->spnLineWidth, SIGNAL(valueChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_widget->bnLineColor, SIGNAL(changed(const KoColor&)), this, SIGNAL(sigConfigurationUpdated()));
+
+    connect(m_widget->spnConnectorWidth, SIGNAL(valueChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
+    connect(m_widget->bnConnectorColor, SIGNAL(changed(const KoColor&)), this, SIGNAL(sigConfigurationUpdated()));
+    connect(m_widget->cmbConnectorType, SIGNAL(currentIndexChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
 }
 
 KisWdgMultigridPattern::~KisWdgMultigridPattern()
@@ -109,6 +118,12 @@ void KisWdgMultigridPattern::setConfiguration(const KisPropertiesConfigurationSP
     widget()->sldColorIndex->setValue(config->getFloat("colorIndex", 1.0));
     widget()->sldColorRatio->setValue(config->getFloat("colorRatio", 0.0));
     widget()->sldColorIntersect->setValue(config->getFloat("colorIntersect", 0.0));
+
+    c = config->getColor("connectorColor");
+    c.convertTo(m_cs);
+    widget()->bnConnectorColor->setColor(c);
+    widget()->cmbConnectorType->setCurrentIndex(config->getInt("connectorType", 1));
+    widget()->spnConnectorWidth->setValue(config->getInt("connectorWidth", 1));
 }
 
 KisPropertiesConfigurationSP KisWdgMultigridPattern::configuration() const
@@ -138,6 +153,12 @@ KisPropertiesConfigurationSP KisWdgMultigridPattern::configuration() const
     config->setProperty("colorRatio", widget()->sldColorRatio->value());
     config->setProperty("colorIndex", widget()->sldColorIndex->value());
     config->setProperty("colorIntersect", widget()->sldColorIntersect->value());
+
+    c.fromKoColor(widget()->bnConnectorColor->color());
+    v.setValue(c);
+    config->setProperty("connectorColor", v);
+    config->setProperty("connectorType", widget()->cmbConnectorType->currentIndex());
+    config->setProperty("connectorWidth", widget()->spnConnectorWidth->value());
 
     return config;
 }

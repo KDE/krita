@@ -95,6 +95,10 @@ KisFilterConfigurationSP KisMultigridPatternGenerator::defaultConfiguration(KisR
     config->setProperty("colorRatio", 1.0);
     config->setProperty("colorIndex", 0.0);
     config->setProperty("colorIntersect", 0.0);
+
+    config->setProperty("connectorColor", v);
+    config->setProperty("connectorType", Connector::None);
+    config->setProperty("connectorWidth", 1);
     return config;
 }
 
@@ -220,6 +224,81 @@ void KisMultigridPatternGenerator::generate(KisProcessingInformation dstInfo,
                 gc.setBackgroundColor(c);
 
                 gc.fillPainterPath(p, p.boundingRect().adjusted(-2, -2, 2, 2).toRect());
+
+                int connectorType = config->getInt("connectorType", Connector::None);
+
+                if (connectorType != Connector::None) {
+                    gc.setBackgroundColor(config->getColor("connectorColor"));
+                    qreal connectorWidth = qreal(config->getInt("connectorWidth", 1))*.5;
+                    QPainterPath pConnect;
+                    qreal lower = connectorWidth/scale;
+
+                    if (connectorType == Connector::Cross) {
+                        QPointF cl = QLineF(shape.at(0), shape.at(1)).pointAt(0.5-lower);
+                        pConnect.moveTo(cl);
+                        cl = QLineF(shape.at(0), shape.at(1)).pointAt(0.5+lower);
+                        pConnect.lineTo(cl);
+                        cl = QLineF(shape.at(2), shape.at(3)).pointAt(0.5-lower);
+                        pConnect.lineTo(cl);
+                        cl = QLineF(shape.at(2), shape.at(3)).pointAt(0.5+lower);
+                        pConnect.lineTo(cl);
+                        pConnect.closeSubpath();
+
+                        cl = QLineF(shape.at(1), shape.at(2)).pointAt(0.5-lower);
+                        pConnect.moveTo(cl);
+                        cl = QLineF(shape.at(1), shape.at(2)).pointAt(0.5+lower);
+                        pConnect.lineTo(cl);
+                        cl = QLineF(shape.at(3), shape.at(0)).pointAt(0.5-lower);
+                        pConnect.lineTo(cl);
+                        cl = QLineF(shape.at(3), shape.at(0)).pointAt(0.5+lower);
+                        pConnect.lineTo(cl);
+                        pConnect.closeSubpath();
+
+                        gc.fillPainterPath(pConnect);
+
+                    } else {
+                        for (int i=1; i<shape.size(); i++) {
+                            QPainterPath pAngle;
+                            QPointF curPoint = shape.at(i);
+                            QLineF l1(curPoint, shape.at(i-1));
+                            QPointF np;
+                            if (i==4) {
+                                np = shape.at(1);
+                            } else {
+                                np = shape.at(i+1);
+                            }
+                            QLineF l2(curPoint, np);
+                            qreal angleDiff = abs(fmod(abs(l1.angle()-l2.angle())+180, 360)-180);
+
+                            if (round(angleDiff) == 90) {
+                                continue;
+                            }
+                            if (angleDiff > 90 && connectorType == Connector::Acute) {
+                                continue;
+                            }
+                            if (angleDiff < 90 && connectorType == Connector::Obtuse) {
+                                continue;
+                            }
+
+                            qreal length = (l1.length()*0.5)-connectorWidth;
+                            QRectF sweep(curPoint-QPointF(length, length), curPoint+QPointF(length, length));
+                            length = (l1.length()*0.5)+connectorWidth;
+                            QRectF sweep2(curPoint-QPointF(length, length), curPoint+QPointF(length, length));
+
+                            pAngle.moveTo(shape.at(i));
+                            pAngle.addEllipse(sweep2);
+                            pAngle.addEllipse(sweep);
+                            pAngle = pAngle.intersected(p);
+                            pAngle.closeSubpath();
+                            pConnect.addPath(pAngle);
+                        }
+                        pConnect.closeSubpath();
+
+                    }
+                    pConnect.setFillRule(Qt::WindingFill);
+                    gc.fillPainterPath(pConnect);
+
+                }
 
                 progress.step();
             }

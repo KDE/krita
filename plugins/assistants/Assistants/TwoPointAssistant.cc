@@ -211,8 +211,7 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
 		// to draw the grid, we're gonna do the exact same calculations for both VPs
 		const QList<QPointF> v_points = QList<QPointF>({p1, p2});
 
-		// We will start by drawing the "furthest" gridline, ie line nearly parallel to the horizon
-		// the furthest grid line shall be at least as far as this point
+		// the furthest grid lines (most parallel to horizon) shall be at least as far as this point
 		const QPointF farthest_point = m_cov + ((m_sp - m_cov) / 40.0);
 
 		// Radius of the cone of vision
@@ -239,11 +238,15 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
 			grid_line = QLineF(threshold_point + translation, farthest_point + translation);
 		    }
 
-		    // the base point is where the farthest grid_line passes through the "foot" of the viewer
-		    const QPointF translation = m_sp - m_cov;
-		    const QLineF base_line = QLineF(*handles()[0] + translation, *handles()[1] + translation);
+		    // the base point is where the first grid_line passes through the "foot" of the viewer
 		    QPointF base_point;
-		    base_line.intersect(grid_line, &base_point);
+		    const QPointF translation = m_sp - m_cov;
+		    QPointF far_point;
+		    QLineF(*handles()[0] + translation, *handles()[1] + translation).intersect(grid_line, &far_point);
+		    const qreal base_distance = QLineF(m_sp, far_point).length();
+		    QLineF base_gap = QLineF(m_sp, far_point);
+		    base_gap.setLength(base_distance - remainder(base_distance, interval));
+		    base_point = base_gap.p2();
 
 		    // we will apply a translation to the base point to draw each of the following grid lines
 		    QLineF interval_vector = QLineF(base_point, m_sp);
@@ -251,7 +254,7 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
 		    const QPointF interval_translation = QPointF(interval_vector.dx(), interval_vector.dy());
 
 		    // initialize variables to control the grid drawing loop
-		    const qreal threshold_length = QLineF(base_point, vp + translation).length();
+		    const qreal threshold_length = QLineF(far_point, vp + translation).length();
 		    qreal current_length = 0;
 		    qreal acute_grid_angle = acuteAngle(grid_line.angleTo(m_horizon));
 		    qreal curr_grid_angle = acute_grid_angle;

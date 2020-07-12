@@ -98,7 +98,7 @@ public:
     TimelineDocker();
     ~TimelineDocker() override;
 
-    QString observerName() override { return "AnimationTimelineDocker"; }
+    QString observerName() override { return "TimelineDocker"; }
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
     void setViewManager(KisViewManager *kisview) override;

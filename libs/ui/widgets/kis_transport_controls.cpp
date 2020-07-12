@@ -25,10 +25,11 @@
 #include "kis_icon.h"
 #include "klocalizedstring.h"
 
+
 KisTransportControls::KisTransportControls(QWidget* parent)
     : QWidget(parent)
 {
-    QHBoxLayout* layout = new QHBoxLayout(parent);
+    QHBoxLayout* layout = new QHBoxLayout(this);
     layout->setContentsMargins(0,0,0,0);
     layout->setSpacing(0);
 
@@ -51,8 +52,6 @@ KisTransportControls::KisTransportControls(QWidget* parent)
     buttonForward->setToolTip(i18n("Forward"));
     layout->addWidget(buttonForward);
     connect(buttonForward, SIGNAL(released()), this, SIGNAL(forward()));
-
-    setLayout(layout);
 }
 
 KisTransportControls::~KisTransportControls()

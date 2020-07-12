@@ -38,7 +38,7 @@ public:
 
     ~KisDlgFilter() override;
 
-    void setFilter(KisFilterSP f);
+    void setFilter(KisFilterSP f, KisFilterConfigurationSP overrideDefaultConfig);
 
 protected Q_SLOTS:
 

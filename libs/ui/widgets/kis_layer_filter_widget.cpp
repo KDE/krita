@@ -47,7 +47,6 @@
 KisLayerFilterWidget::KisLayerFilterWidget(QWidget *parent) : QWidget(parent)
 {
     QVBoxLayout *layout = new QVBoxLayout(this);
-    setLayout(layout);
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     textFilter = new QLineEdit(this);
@@ -73,7 +72,6 @@ KisLayerFilterWidget::KisLayerFilterWidget(QWidget *parent) : QWidget(parent)
     buttonEventFilter = new KisColorLabelMouseDragFilter(buttonContainer);
     {
         QHBoxLayout *subLayout = new QHBoxLayout(buttonContainer);
-        buttonContainer->setLayout(subLayout);
         subLayout->setContentsMargins(0,0,0,0);
         subLayout->setSpacing(0);
         subLayout->setAlignment(Qt::AlignLeft);

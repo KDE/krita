@@ -22,7 +22,9 @@
 #include <QDockWidget>
 #include <kis_mainwindow_observer.h>
 #include <QScopedPointer>
+#include <kis_types.h>
 #include <KisKineticScroller.h>
+
 
 class KisCanvas2;
 class KisAction;
@@ -39,11 +41,21 @@ public:
     void unsetCanvas() override;
     void setViewManager(KisViewManager *kisview) override;
 
+private:
+    void addKeyframe(const QString &channel);
+    void removeKeyframe(const QString &channel);
+
 public Q_SLOTS:
     void slotScrollerStateChanged(QScroller::State state);
+    void slotNodeActivated(KisNodeSP node);
 
 private Q_SLOTS:
     void slotUpdateIcons();
+
+    void slotAddAllEnabledKeys();
+    void slotAddOpacityKey();
+    void slotRemoveOpacityKey();
+
     void slotListRowsInserted(const QModelIndex &parentIndex, int first, int last);
 
 private:

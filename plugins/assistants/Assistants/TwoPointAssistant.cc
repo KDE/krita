@@ -283,7 +283,11 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
 			curr_grid_angle = acuteAngle(grid_line.angleTo(m_horizon));
 			i++;
 
-			cov_to_vp > radius ?
+                        if (i == 300) {
+			  draw_next = false;
+                        }
+
+                        cov_to_vp > radius ?
 			    draw_next = current_length < threshold_length && cov_to_vp > radius :
 			    draw_next = (curr_grid_angle >= acute_grid_angle || current_length < threshold_length ) && cov_to_vp < radius ;
 		    }

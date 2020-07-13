@@ -292,7 +292,9 @@ KisAnimationCachePopulator::KisAnimationCachePopulator(KisPart *part)
 }
 
 KisAnimationCachePopulator::~KisAnimationCachePopulator()
-{}
+{
+    m_d->priorityFrames.clear();
+}
 
 bool KisAnimationCachePopulator::regenerate(KisAnimationFrameCacheSP cache, int frame)
 {
@@ -301,6 +303,8 @@ bool KisAnimationCachePopulator::regenerate(KisAnimationFrameCacheSP cache, int 
 
 void KisAnimationCachePopulator::requestRegenerationWithPriorityFrame(KisImageSP image, int frameIndex)
 {
+    if (!m_d->calculateAnimationCacheInBackground) return;
+
     m_d->priorityFrames.append(qMakePair(image, frameIndex));
 
     if (m_d->state == Private::NotWaitingForAnything) {

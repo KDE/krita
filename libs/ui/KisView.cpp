@@ -577,7 +577,7 @@ void KisView::dropEvent(QDropEvent *event)
                         else if (action == insertAsNewFileLayer || action == insertManyFileLayers) {
                             KisNodeCommandsAdapter adapter(viewManager());
                             KisFileLayer *fileLayer = new KisFileLayer(image(), "", url.toLocalFile(),
-                                                                       KisFileLayer::None, image()->nextLayerName(), OPACITY_OPAQUE_U8);
+                                                                       KisFileLayer::None, image()->nextLayerName(i18n("File Layer")), OPACITY_OPAQUE_U8);
                             adapter.addNode(fileLayer, viewManager()->activeNode()->parent(), viewManager()->activeNode());
                         }
                         else if (action == openInNewDocument || action == openManyDocuments) {

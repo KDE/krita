@@ -1699,7 +1699,7 @@
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_13">
          <item>
-          <widget class="QLabel" name="previewGranularity">
+          <widget class="QLabel" name="previewGranularity" comment="The Granularity value for Preview">
            <property name="text">
             <string>Preview</string>
            </property>

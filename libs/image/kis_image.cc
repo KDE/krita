@@ -657,11 +657,11 @@ QString KisImage::nextLayerName(const QString &_baseName) const
 
     if (m_d->nserver.currentSeed() == 0) {
         m_d->nserver.number();
-        return i18n("Background");
+        return i18n("background");
     }
 
     if (baseName.isEmpty()) {
-        baseName = i18n("Paint");
+        baseName = i18n("Paint Layer");
     }
 
     return QString("%1 %2").arg(baseName).arg(m_d->nserver.number());

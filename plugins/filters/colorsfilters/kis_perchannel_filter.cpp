@@ -102,8 +102,16 @@ void KisPerChannelConfigWidget::updateChannelControls()
     default:
         //Hack Alert: should be changed to float
         if (m_dev->colorSpace()->colorModelId() == LABAColorModelID || m_dev->colorSpace()->colorModelId() == CMYKAColorModelID) {
-            min = m_dev->colorSpace()->channels()[m_activeVChannel]->getUIMin();
-            max = m_dev->colorSpace()->channels()[m_activeVChannel]->getUIMax();
+            if (m_dev->colorSpace()->channels().length() > m_activeVChannel) {
+                min = m_dev->colorSpace()->channels()[m_activeVChannel]->getUIMin();
+                max = m_dev->colorSpace()->channels()[m_activeVChannel]->getUIMax();
+            } else {
+                // it must be "Hue", "Saturation" or other "channel" that isn't actually accessible in the color space
+                min = 0;
+                // specific number apparently doesn't matter,
+                // if there is 255, it will work just fine, too
+                max = 100;
+            }
         } else {
             min = 0;
             max = 100;

@@ -64,21 +64,22 @@ TimelineDockerTitleBar::TimelineDockerTitleBar(QWidget* parent) :
 {
     // Transport Controls...
     transport = new KisTransportControls(this);
-    widgetArea->addWidget(transport);
+    widgetAreaLayout->addWidget(transport);
 
-    widgetArea->addSpacing(SPACING_UNIT);
+    widgetAreaLayout->addSpacing(SPACING_UNIT);
 
     // Frame Register...
     frameRegister = new KisIntParseSpinBox(this);
     frameRegister->setToolTip(i18n("Frame register"));
     frameRegister->setPrefix("#  ");
     frameRegister->setRange(0, MAX_FRAMES);
-    widgetArea->addWidget(frameRegister);
+    widgetAreaLayout->addWidget(frameRegister);
 
-    widgetArea->addSpacing(SPACING_UNIT);
+    widgetAreaLayout->addSpacing(SPACING_UNIT);
 
     {   // Frame ops...
-        QHBoxLayout *layout = new QHBoxLayout(this);
+        QWidget *widget = new QWidget(this);
+        QHBoxLayout *layout = new QHBoxLayout(widget);
         layout->setSpacing(0);
         layout->setContentsMargins(0,0,0,0);
 
@@ -91,17 +92,14 @@ TimelineDockerTitleBar::TimelineDockerTitleBar(QWidget* parent) :
         btnRemoveKeyframe = new QToolButton(this);
         layout->addWidget(btnRemoveKeyframe);
 
-        QWidget *widget = new QWidget();
-        widget->setLayout(layout);
-
-        widgetArea->addWidget(widget);
+        widgetAreaLayout->addWidget(widget);
     }
 
-    widgetArea->addSpacing(SPACING_UNIT);
+    widgetAreaLayout->addSpacing(SPACING_UNIT);
 
     // Drop Frames..
     btnDropFrames = new QToolButton(this);
-    widgetArea->addWidget(btnDropFrames);
+    widgetAreaLayout->addWidget(btnDropFrames);
 
     // Playback Speed..
     sbSpeed = new KisSliderSpinBox(this);
@@ -111,12 +109,14 @@ TimelineDockerTitleBar::TimelineDockerTitleBar(QWidget* parent) :
     sbSpeed->setPrefix("Speed: ");
     sbSpeed->setSuffix(" %");
     sbSpeed->setToolTip(i18n("Preview playback speed"));
-    widgetArea->addWidget(sbSpeed);
+    widgetAreaLayout->addWidget(sbSpeed);
 
-    widgetArea->addStretch();
+    widgetAreaLayout->addStretch();
 
     {   // Menus..
-        QHBoxLayout *layout = new QHBoxLayout(this);
+        QWidget *widget = new QWidget(this);
+
+        QHBoxLayout *layout = new QHBoxLayout(widget);
         layout->setSpacing(0);
         layout->setContentsMargins(SPACING_UNIT,0,0,0);
 
@@ -137,11 +137,10 @@ TimelineDockerTitleBar::TimelineDockerTitleBar(QWidget* parent) :
             btnSettingsMenu->setToolTip(i18n("Animation settings menu"));
 
             QWidget *settingsMenuWidget = new QWidget(this);
-            settingsMenuWidget->setLayout(new QHBoxLayout(settingsMenuWidget));
+            settingsMenuWidget->setLayout(new QHBoxLayout());
 
             QWidget *fields = new QWidget(settingsMenuWidget);
-            QFormLayout *fieldsLayout = new QFormLayout(settingsMenuWidget);
-            fields->setLayout(fieldsLayout);
+            QFormLayout *fieldsLayout = new QFormLayout(fields);
 
             sbStartFrame = new KisIntParseSpinBox(settingsMenuWidget);
             sbStartFrame->setMaximum(10000);
@@ -157,7 +156,7 @@ TimelineDockerTitleBar::TimelineDockerTitleBar(QWidget* parent) :
             fieldsLayout->addRow(i18n("Frame Rate: "), sbFrameRate);
 
             QWidget *buttons = new QWidget(settingsMenuWidget);
-            buttons->setLayout(new QVBoxLayout(settingsMenuWidget));
+            buttons->setLayout(new QVBoxLayout());
 
             btnAutoFrame = new QToolButton(settingsMenuWidget);
             buttons->layout()->addWidget(btnAutoFrame);
@@ -177,9 +176,7 @@ TimelineDockerTitleBar::TimelineDockerTitleBar(QWidget* parent) :
             btnSettingsMenu->setMenu(settingsPopMenu);
         }
 
-        QWidget *widget = new QWidget();
-        widget->setLayout(layout);
-        widgetArea->addWidget(widget);
+        widgetAreaLayout->addWidget(widget);
     }
 }
 

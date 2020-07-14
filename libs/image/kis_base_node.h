@@ -590,6 +590,18 @@ protected:
      */
     virtual KisKeyframeChannel * requestKeyframeChannel(const QString &id);
 
+public:
+    /**
+     * Ideally, this function would be used to query for keyframe support
+     * before trying to create channels. The ability to query would help
+     * in cases such as animation curves where you might want to ask
+     * which channels it supports before allowing the user to add.
+     *
+     * @param id querried channel
+     * @return bool whether it supports said channel or not.
+     */
+    virtual bool supportsKeyframeChannel(const QString &id);
+
 Q_SIGNALS:
     void keyframeChannelAdded(KisKeyframeChannel *channel);
 

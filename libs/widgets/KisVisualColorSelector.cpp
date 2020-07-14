@@ -304,7 +304,7 @@ void KisVisualColorSelector::configurationChanged()
 
 void KisVisualColorSelector::slotDisplayConfigurationChanged()
 {
-    Q_ASSERT(m_d->displayRenderer);
+    const KoColorDisplayRendererInterface *dri = displayRenderer();
 
     if (m_d->currentCS)
     {
@@ -312,7 +312,7 @@ void KisVisualColorSelector::slotDisplayConfigurationChanged()
         QList<KoChannelInfo *> channels = m_d->currentCS->channels();
         for (int i=0; i<m_d->colorChannelCount; ++i)
         {
-            m_d->channelMaxValues[i] = m_d->displayRenderer->maxVisibleFloatValue(channels[m_d->displayPosition[i]]);
+            m_d->channelMaxValues[i] = dri->maxVisibleFloatValue(channels[m_d->displayPosition[i]]);
         }
         // need to re-scale our normalized channel values on exposure changes:
         m_d->channelValues = convertKoColorToShapeCoordinates(m_d->currentcolor);
@@ -370,10 +370,10 @@ void KisVisualColorSelector::slotRebuildSelectors()
         KisVisualColorSelectorShape *bar;
 
         if (m_d->circular==false) {
-            bar = new KisVisualRectangleSelectorShape(this, KisVisualColorSelectorShape::onedimensional, m_d->currentCS, 0, 0,m_d->displayRenderer, 20);
+            bar = new KisVisualRectangleSelectorShape(this, KisVisualColorSelectorShape::onedimensional, m_d->currentCS, 0, 0, 20);
         }
         else {
-            bar = new KisVisualEllipticalSelectorShape(this, KisVisualColorSelectorShape::onedimensional, m_d->currentCS, 0, 0,m_d->displayRenderer, 20, KisVisualEllipticalSelectorShape::borderMirrored);
+            bar = new KisVisualEllipticalSelectorShape(this, KisVisualColorSelectorShape::onedimensional, m_d->currentCS, 0, 0, 20, KisVisualEllipticalSelectorShape::borderMirrored);
         }
 
         connect(bar, SIGNAL(sigCursorMoved(QPointF)), SLOT(slotCursorMoved(QPointF)));
@@ -493,20 +493,19 @@ void KisVisualColorSelector::slotRebuildSelectors()
         if (m_d->acs_config.subType == KisColorSelectorConfiguration::Ring) {
             bar = new KisVisualEllipticalSelectorShape(this,
                                                        KisVisualColorSelectorShape::onedimensional,
-                                                       m_d->currentCS, channel1, channel1,
-                                                       m_d->displayRenderer, 20,KisVisualEllipticalSelectorShape::border);
+                                                       m_d->currentCS, channel1, channel1, 20,
+                                                       KisVisualEllipticalSelectorShape::border);
         }
         else if (m_d->acs_config.subType == KisColorSelectorConfiguration::Slider && m_d->circular == false) {
             bar = new KisVisualRectangleSelectorShape(this,
                                                       KisVisualColorSelectorShape::onedimensional,
-                                                      m_d->currentCS, channel1, channel1,
-                                                      m_d->displayRenderer, 20);
+                                                      m_d->currentCS, channel1, channel1, 20);
         }
         else if (m_d->acs_config.subType == KisColorSelectorConfiguration::Slider && m_d->circular == true) {
             bar = new KisVisualEllipticalSelectorShape(this,
                                                        KisVisualColorSelectorShape::onedimensional,
                                                        m_d->currentCS, channel1, channel1,
-                                                       m_d->displayRenderer, 20, KisVisualEllipticalSelectorShape::borderMirrored);
+                                                       20, KisVisualEllipticalSelectorShape::borderMirrored);
         } else {
             // Accessing bar below would crash since it's not initialized.
             // Hopefully this can never happen.
@@ -520,18 +519,15 @@ void KisVisualColorSelector::slotRebuildSelectors()
         KisVisualColorSelectorShape *block;
         if (m_d->acs_config.mainType == KisColorSelectorConfiguration::Triangle) {
             block = new KisVisualTriangleSelectorShape(this, KisVisualColorSelectorShape::twodimensional,
-                                                       m_d->currentCS, channel2, channel3,
-                                                       m_d->displayRenderer);
+                                                       m_d->currentCS, channel2, channel3);
         }
         else if (m_d->acs_config.mainType == KisColorSelectorConfiguration::Square) {
             block = new KisVisualRectangleSelectorShape(this, KisVisualColorSelectorShape::twodimensional,
-                                                        m_d->currentCS, channel2, channel3,
-                                                        m_d->displayRenderer);
+                                                        m_d->currentCS, channel2, channel3);
         }
         else {
             block = new KisVisualEllipticalSelectorShape(this, KisVisualColorSelectorShape::twodimensional,
-                                                         m_d->currentCS, channel2, channel3,
-                                                         m_d->displayRenderer);
+                                                         m_d->currentCS, channel2, channel3);
         }
 
         connect(bar, SIGNAL(sigCursorMoved(QPointF)), SLOT(slotCursorMoved(QPointF)));
@@ -551,9 +547,8 @@ void KisVisualColorSelector::slotRebuildSelectors()
     KisVisualColorSelector::resizeEvent(0);
 
     // finally recalculate channel values and update widgets
-    if (m_d->displayRenderer) {
-        slotDisplayConfigurationChanged();
-    }
+    slotDisplayConfigurationChanged();
+
     m_d->channelValues = convertKoColorToShapeCoordinates(m_d->currentcolor);
     Q_FOREACH (KisVisualColorSelectorShape *shape, m_d->widgetlist) {
         shape->setChannelValues(m_d->channelValues, true);
@@ -566,19 +561,21 @@ void KisVisualColorSelector::slotRebuildSelectors()
     }
 }
 
+const KoColorDisplayRendererInterface* KisVisualColorSelector::displayRenderer() const
+{
+    return m_d->displayRenderer ? m_d->displayRenderer : KoDumbColorDisplayRenderer::instance();
+}
+
 void KisVisualColorSelector::setDisplayRenderer (const KoColorDisplayRendererInterface *displayRenderer)
 {
     if (m_d->displayRenderer) {
         m_d->displayRenderer->disconnect(this);
     }
-    m_d->displayRenderer = displayRenderer;
-    if (m_d->widgetlist.size()>0) {
-        Q_FOREACH (KisVisualColorSelectorShape *shape, m_d->widgetlist) {
-            shape->setDisplayRenderer(displayRenderer);
-        }
+    if (displayRenderer) {
+        connect(displayRenderer, SIGNAL(displayConfigurationChanged()),
+                SLOT(slotDisplayConfigurationChanged()), Qt::UniqueConnection);
     }
-    connect(m_d->displayRenderer, SIGNAL(displayConfigurationChanged()),
-            SLOT(slotDisplayConfigurationChanged()), Qt::UniqueConnection);
+    m_d->displayRenderer = displayRenderer;
     slotDisplayConfigurationChanged();
 }
 

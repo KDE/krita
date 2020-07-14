@@ -40,15 +40,13 @@ struct KisVisualColorSelectorShape::Private
     const KoColorSpace *colorSpace;
     int channel1;
     int channel2;
-    const KoColorDisplayRendererInterface *displayRenderer = 0;
 };
 
-KisVisualColorSelectorShape::KisVisualColorSelectorShape(QWidget *parent,
+KisVisualColorSelectorShape::KisVisualColorSelectorShape(KisVisualColorSelector *parent,
                                                          KisVisualColorSelectorShape::Dimensions dimension,
                                                          const KoColorSpace *cs,
                                                          int channel1,
-                                                         int channel2,
-                                                         const KoColorDisplayRendererInterface *displayRenderer): QWidget(parent), m_d(new Private)
+                                                         int channel2): QWidget(parent), m_d(new Private)
 {
     m_d->dimension = dimension;
     m_d->colorSpace = cs;
@@ -56,7 +54,6 @@ KisVisualColorSelectorShape::KisVisualColorSelectorShape(QWidget *parent,
     m_d->channel1 = qBound(0, channel1, maxchannel);
     m_d->channel2 = qBound(0, channel2, maxchannel);
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    setDisplayRenderer(displayRenderer);
 }
 
 KisVisualColorSelectorShape::~KisVisualColorSelectorShape()
@@ -109,15 +106,6 @@ void KisVisualColorSelectorShape::setAcceptTabletEvents(bool on)
     m_d->acceptTabletEvents = on;
 }
 
-void KisVisualColorSelectorShape::setDisplayRenderer (const KoColorDisplayRendererInterface *displayRenderer)
-{
-    if (displayRenderer) {
-        m_d->displayRenderer = displayRenderer;
-    } else {
-        m_d->displayRenderer = KoDumbColorDisplayRenderer::instance();
-    }
-}
-
 void KisVisualColorSelectorShape::forceImageUpdate()
 {
     //qDebug() << this  << "forceImageUpdate";
@@ -125,16 +113,12 @@ void KisVisualColorSelectorShape::forceImageUpdate()
     m_d->imagesNeedUpdate = true;
 }
 
-QColor KisVisualColorSelectorShape::getColorFromConverter(KoColor c){
-    QColor col;
-    KoColor color = c;
-    if (m_d->displayRenderer) {
-        color.convertTo(m_d->displayRenderer->getPaintingColorSpace());
-        col = m_d->displayRenderer->toQColor(c);
-    } else {
-        col = c.toQColor();
-    }
-    return col;
+QColor KisVisualColorSelectorShape::getColorFromConverter(KoColor c)
+{
+    const KoColorDisplayRendererInterface *renderer = colorSelector()->displayRenderer();
+    // Should we convert to painting color space first as Advanced Color Selector does?
+    // KoColor color = c.convertedTo(renderer->getPaintingColorSpace());
+    return renderer->toQColor(c);
 }
 
 KisVisualColorSelector* KisVisualColorSelectorShape::colorSelector() const
@@ -170,16 +154,11 @@ const QImage KisVisualColorSelectorShape::getAlphaMask() const
 QImage KisVisualColorSelectorShape::convertImageMap(const quint8 *rawColor, quint32 bufferSize, QSize imgSize) const
 {
     Q_ASSERT(bufferSize == imgSize.width() * imgSize.height() * m_d->colorSpace->pixelSize());
-    QImage image;
+    const KoColorDisplayRendererInterface *renderer = colorSelector()->displayRenderer();
+
     // Convert the buffer to a qimage
-    if (m_d->displayRenderer) {
-        image = m_d->displayRenderer->convertToQImage(m_d->colorSpace, rawColor, imgSize.width(), imgSize.height());
-    }
-    else {
-        image = m_d->colorSpace->convertToQImage(rawColor, imgSize.width(), imgSize.height(), 0,
-                                                 KoColorConversionTransformation::internalRenderingIntent(),
-                                                 KoColorConversionTransformation::internalConversionFlags());
-    }
+    QImage image = renderer->convertToQImage(m_d->colorSpace, rawColor, imgSize.width(), imgSize.height());
+
     // safeguard:
     if (image.isNull())
     {

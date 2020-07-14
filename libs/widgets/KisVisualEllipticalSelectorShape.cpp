@@ -14,14 +14,13 @@
 #include "kis_debug.h"
 #include "kis_global.h"
 
-KisVisualEllipticalSelectorShape::KisVisualEllipticalSelectorShape(QWidget *parent,
+KisVisualEllipticalSelectorShape::KisVisualEllipticalSelectorShape(KisVisualColorSelector *parent,
                                                                  Dimensions dimension,
                                                                  const KoColorSpace *cs,
                                                                  int channel1, int channel2,
-                                                                 const KoColorDisplayRendererInterface *displayRenderer,
                                                                  int barWidth,
                                                                  singelDTypes d)
-    : KisVisualColorSelectorShape(parent, dimension, cs, channel1, channel2, displayRenderer)
+    : KisVisualColorSelectorShape(parent, dimension, cs, channel1, channel2)
 {
     //qDebug() << "creating KisVisualEllipticalSelectorShape" << this;
     m_type = d;

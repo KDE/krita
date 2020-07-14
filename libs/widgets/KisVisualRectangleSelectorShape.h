@@ -13,11 +13,10 @@ class KisVisualRectangleSelectorShape : public KisVisualColorSelectorShape
     Q_OBJECT
 public:
     enum singelDTypes{vertical, horizontal, border, borderMirrored};
-    explicit KisVisualRectangleSelectorShape(QWidget *parent,
+    explicit KisVisualRectangleSelectorShape(KisVisualColorSelector *parent,
                                              Dimensions dimension,
                                              const KoColorSpace *cs,
-                                             int channel1, int channel2,
-                                             const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(), int width=20,
+                                             int channel1, int channel2, int width=20,
                                              KisVisualRectangleSelectorShape::singelDTypes d = KisVisualRectangleSelectorShape::vertical
             );
     ~KisVisualRectangleSelectorShape() override;

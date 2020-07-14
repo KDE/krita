@@ -13,11 +13,11 @@ class KisVisualEllipticalSelectorShape : public KisVisualColorSelectorShape
     Q_OBJECT
 public:
     enum singelDTypes{border, borderMirrored};
-    explicit KisVisualEllipticalSelectorShape(QWidget *parent,
+    explicit KisVisualEllipticalSelectorShape(KisVisualColorSelector *parent,
                                               Dimensions dimension,
                                               const KoColorSpace *cs,
                                               int channel1, int channel2,
-                                              const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(), int barWidth=20,
+                                              int barWidth=20,
                                               KisVisualEllipticalSelectorShape::singelDTypes d = KisVisualEllipticalSelectorShape::border
             );
     ~KisVisualEllipticalSelectorShape() override;

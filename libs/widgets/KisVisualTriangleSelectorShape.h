@@ -12,11 +12,10 @@ class KisVisualTriangleSelectorShape : public KisVisualColorSelectorShape
 {
     Q_OBJECT
 public:
-    explicit KisVisualTriangleSelectorShape(QWidget *parent,
+    explicit KisVisualTriangleSelectorShape(KisVisualColorSelector *parent,
                                             Dimensions dimension,
                                             const KoColorSpace *cs,
                                             int channel1, int channel2,
-                                            const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(),
                                             int margin = 5
             );
     ~KisVisualTriangleSelectorShape() override;

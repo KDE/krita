@@ -40,11 +40,10 @@ public:
      * Whether or not the shape is single or two dimensional.
      **/
     enum Dimensions{onedimensional, twodimensional};
-    explicit KisVisualColorSelectorShape(QWidget *parent,
+    explicit KisVisualColorSelectorShape(KisVisualColorSelector *parent,
                                          KisVisualColorSelectorShape::Dimensions dimension,
                                          const KoColorSpace *cs,
-                                         int channel1, int channel2,
-                                         const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
+                                         int channel1, int channel2);
     ~KisVisualColorSelectorShape() override;
 
     /**
@@ -71,12 +70,6 @@ public:
      * @return the current kocolor
      */
     KoColor getCurrentColor();
-    /**
-     * @brief setDisplayRenderer
-     * disconnect the old display renderer if needed and connect the new one.
-     * @param displayRenderer
-     */
-    void setDisplayRenderer (const KoColorDisplayRendererInterface *displayRenderer);
     /**
      * @brief getColorFromConverter
      * @param c a koColor.

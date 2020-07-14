@@ -13,13 +13,12 @@
 #include "kis_debug.h"
 #include "kis_global.h"
 
-KisVisualTriangleSelectorShape::KisVisualTriangleSelectorShape(QWidget *parent,
+KisVisualTriangleSelectorShape::KisVisualTriangleSelectorShape(KisVisualColorSelector *parent,
                                                                Dimensions dimension,
                                                                const KoColorSpace *cs,
                                                                int channel1, int channel2,
-                                                               const KoColorDisplayRendererInterface *displayRenderer,
                                                                int margin)
-    : KisVisualColorSelectorShape(parent, dimension, cs, channel1, channel2, displayRenderer),
+    : KisVisualColorSelectorShape(parent, dimension, cs, channel1, channel2),
       m_margin(margin)
 {
     //qDebug() << "creating KisVisualTriangleSelectorShape" << this;

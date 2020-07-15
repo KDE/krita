@@ -19,5 +19,6 @@ public Q_SLOTS:
     QAction *createAction(const QString &id, const QString &text = QString(), const QString &menuLocation = QString("tools/scripts"));
 Q_SIGNALS:
     void windowClosed();
+    void themeChanged();
 private:
 };

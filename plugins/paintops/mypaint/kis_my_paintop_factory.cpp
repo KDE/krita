@@ -9,6 +9,8 @@
 #include <KisResourceServerProvider.h>
 #include <kis_my_paintop_option.h>
 #include <kis_icon.h>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 class KisMyPaintOpFactory::Private {
 
@@ -88,13 +90,30 @@ void KisMyPaintOpFactory::processAfterLoading() {
         s->setProperty(MYPAINT_OPACITY, brush->getOpacity());
         s->setProperty(MYPAINT_ERASER, brush->isEraser());
 
+//        QJsonDocument doc = QJsonDocument::fromJson(s->getProperty(MYPAINT_JSON).toByteArray());
+//        QJsonObject brush_json = doc.object();
+//        QVariantMap map = brush_json.toVariantMap();
+//        QVariantMap settings_map = map["settings"].toMap();
+//        QVariantMap name_map = settings_map["hardness"].toMap();
+//        double base_val = name_map["base_value"].toDouble();
+
+//        name_map["base_value"] = 0.5;
+//        settings_map["hardness"] = name_map;
+//        map["settings"] = settings_map;
+
+//        QJsonObject json_obj = QJsonObject::fromVariantMap(map);
+//        QJsonDocument doc2(json_obj);
+
+//        s->setProperty(MYPAINT_JSON, doc2.toJson());
+
         KisPaintOpPresetSP preset = new KisPaintOpPreset();
         preset->setName(fileInfo.baseName());
         preset->setSettings(s);
         KoID paintOpID(id(), name());
-        preset->setPaintOp(paintOpID);
+        preset->setPaintOp(paintOpID);        
+        preset->setImage(brush->image());        
         preset->setValid(true);
-        preset->setImage(brush->image());
+        preset->setDirty(false);
 
         paintOpServer->addResource(preset, false);
     }

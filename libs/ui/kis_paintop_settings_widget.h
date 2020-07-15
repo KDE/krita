@@ -44,6 +44,7 @@ public:
 
     void addPaintOpOption(KisPaintOpOption * option, const QString &label);
     void addPaintOpOption(KisPaintOpOption * option, const QString &label, KisPaintOpOption::PaintopCategory category);
+    void addPaintOpOption(KisPaintOpOption *option, const QString &label, QString category);
 
     /// Reimplemented
     void setConfiguration(const KisPropertiesConfigurationSP  config) override;

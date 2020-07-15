@@ -35,7 +35,7 @@ print("pyqt_version_tag:%s" % pyqt_version_tag)
 
 try:
     index_n = pyqt_config_list.index('-n')
-    pyqt_sip_name = pyqt_config_list[index_n + 1]
+    pyqt_sip_name = '-n' + pyqt_config_list[index_n + 1]
     print("pyqt_sip_name:%s" % pyqt_sip_name)
 except ValueError:
     pass

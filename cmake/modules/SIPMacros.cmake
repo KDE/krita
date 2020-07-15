@@ -99,12 +99,6 @@ MACRO(ADD_SIP_PYTHON_MODULE MODULE_NAME MODULE_SIP)
         COMMAND ${SIP_EXECUTABLE} ${_sip_tags} ${_sip_x} ${SIP_EXTRA_OPTIONS} -j ${SIP_CONCAT_PARTS} -c ${CMAKE_CURRENT_SIP_OUTPUT_DIR} ${_sip_includes} ${_abs_module_sip}
         DEPENDS ${_abs_module_sip} ${SIP_EXTRA_FILES_DEPEND}
     )
-    IF (SIP_MODULE_EXECUTABLE)
-        ADD_CUSTOM_COMMAND(
-            OUTPUT ${_sip_output_files} APPEND
-            COMMAND ${SIP_MODULE_EXECUTABLE} --target-dir ${CMAKE_CURRENT_SIP_OUTPUT_DIR} --sip-h ${PYQT5_SIP_NAME}
-        )
-    ENDIF (SIP_MODULE_EXECUTABLE)
     # not sure if type MODULE could be uses anywhere, limit to cygwin for now
     IF (WIN32 OR CYGWIN OR APPLE)
         ADD_LIBRARY(${_logical_name} MODULE ${_sip_output_files} )

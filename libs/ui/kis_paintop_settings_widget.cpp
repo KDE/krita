@@ -112,6 +112,15 @@ void KisPaintOpSettingsWidget::addPaintOpOption(KisPaintOpOption *option, const 
     m_d->paintOpOptions << option;
 }
 
+void KisPaintOpSettingsWidget::addPaintOpOption(KisPaintOpOption *option, const QString &label, QString category)
+{
+    if (!option->configurationPage()) return;
+    m_d->model->addPaintOpOption(option, m_d->optionsStack->count(), label, category);
+    connect(option, SIGNAL(sigSettingChanged()), SIGNAL(sigConfigurationItemChanged()));
+    m_d->optionsStack->addWidget(option->configurationPage());
+    m_d->paintOpOptions << option;
+}
+
 void KisPaintOpSettingsWidget::setConfiguration(const KisPropertiesConfigurationSP  config)
 {
     Q_ASSERT(!config->getString("paintop").isEmpty());

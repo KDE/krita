@@ -392,7 +392,7 @@ void KisCubicCurve::setPoint(int idx, const QPointF& point)
 }
 
 int KisCubicCurve::addPoint(const QPointF& point)
-{
+{ 
     d->data.detach();
     d->data->points.append(point);
     d->data->keepSorted();

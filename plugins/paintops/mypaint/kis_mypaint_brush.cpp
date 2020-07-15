@@ -194,5 +194,3 @@ bool KisMyPaintBrush::isEraser() {
 
     return m_d->isEraser;
 }
-
-

@@ -10,6 +10,7 @@ const QString MYPAINT_HARDNESS = "MyPaint/hardness";
 const QString MYPAINT_OPACITY = "MyPaint/opcity";
 const QString MYPAINT_ERASER = "MyPaint/eraser";
 const QString MYPAINT_JSON = "MyPaint/json";
+const QString MYPAINT_BRUSH = "MyPaint/brush";
 
 class KisMyPaintOpOptionsWidget;
 

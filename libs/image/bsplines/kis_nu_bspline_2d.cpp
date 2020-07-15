@@ -79,9 +79,11 @@ void KisNUBSpline2D::initializeSplineImpl(const QVector<float> &values)
 {
     BCtype_s bctypeX;
     bctypeX.lCode = bctypeX.rCode = convertBorderType(m_d->bcX);
+    bctypeX.lVal = bctypeX.rVal = 0.0;
 
     BCtype_s bctypeY;
     bctypeY.lCode = bctypeY.rCode = convertBorderType(m_d->bcY);
+    bctypeY.lVal = bctypeY.rVal = 0.0;
 
     m_d->spline =
         create_NUBspline_2d_s(m_d->xGrid, m_d->yGrid,

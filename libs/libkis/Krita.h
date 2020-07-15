@@ -91,6 +91,11 @@ public Q_SLOTS:
     QList<Document*> documents() const;
 
     /**
+     * @return a list of all the dockers
+     */
+    QList<QDockWidget*> dockers() const;
+
+    /**
      * @brief Filters are identified by an internal name. This function returns a list
      * of all existing registered filters.
      * @return a list of all registered filters

@@ -104,6 +104,9 @@ Q_SIGNALS:
     ///  Emitted when we change the color theme
     void themeChanged();
 
+    /// Emitted when the active view changes
+    void activeViewChanged();
+
 private:
     struct Private;
     Private *const d;

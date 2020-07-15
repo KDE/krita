@@ -20,5 +20,6 @@ public Q_SLOTS:
 Q_SIGNALS:
     void windowClosed();
     void themeChanged();
+    void activeViewChanged();
 private:
 };

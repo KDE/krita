@@ -45,6 +45,7 @@ Window::Window(KisMainWindow *window, QObject *parent)
 {
     d->window = window;
     connect(window, SIGNAL(destroyed(QObject*)), SIGNAL(windowClosed()));
+    connect(window, SIGNAL(themeChanged()), SIGNAL(themeChanged()));
 }
 
 Window::~Window()

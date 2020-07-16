@@ -29,12 +29,12 @@
 
 #include <kritapaintop_export.h>
 
-class PAINTOP_EXPORT KisBrushOptionProperties : public KisPaintopPropertiesResourcesBase
+class PAINTOP_EXPORT KisBrushOptionProperties : public KisPaintopPropertiesCanvasResourcesBase
 {
 public:
 
     void writeOptionSettingImpl(KisPropertiesConfiguration *setting) const override;
-    void readOptionSettingResourceImpl(const KisPropertiesConfiguration *setting, KisResourcesInterfaceSP resourcesInterface) override;
+    void readOptionSettingResourceImpl(const KisPropertiesConfiguration *setting, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface) override;
     QList<KoResourceSP> prepareLinkedResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const override;
     QList<KoResourceSP> prepareEmbeddedResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const override;
 

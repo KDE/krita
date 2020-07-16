@@ -160,6 +160,8 @@ KisPaintopLodLimitations KisPaintOpSettingsWidget::lodLimitations() const
 
 void KisPaintOpSettingsWidget::setImage(KisImageWSP image)
 {
+    KisPaintOpConfigWidget::setImage(image);
+
     Q_FOREACH (KisPaintOpOption* option, m_d->paintOpOptions) {
         option->setImage(image);
     }
@@ -167,8 +169,28 @@ void KisPaintOpSettingsWidget::setImage(KisImageWSP image)
 
 void KisPaintOpSettingsWidget::setNode(KisNodeWSP node)
 {
+    KisPaintOpConfigWidget::setNode(node);
+
     Q_FOREACH (KisPaintOpOption* option, m_d->paintOpOptions) {
         option->setNode(node);
+    }
+}
+
+void KisPaintOpSettingsWidget::setResourcesInterface(KisResourcesInterfaceSP resourcesInterface)
+{
+    KisPaintOpConfigWidget::setResourcesInterface(resourcesInterface);
+
+    Q_FOREACH (KisPaintOpOption* option, m_d->paintOpOptions) {
+        option->setResourcesInterface(resourcesInterface);
+    }
+}
+
+void KisPaintOpSettingsWidget::setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface)
+{
+    KisPaintOpConfigWidget::setCanvasResourcesInterface(canvasResourcesInterface);
+
+    Q_FOREACH (KisPaintOpOption* option, m_d->paintOpOptions) {
+        option->setCanvasResourcesInterface(canvasResourcesInterface);
     }
 }
 

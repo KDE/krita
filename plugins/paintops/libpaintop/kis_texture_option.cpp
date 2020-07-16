@@ -54,6 +54,10 @@
 #include "kis_signals_blocker.h"
 #include <KisGlobalResourcesInterface.h>
 
+#include <KoCanvasResourcesIds.h>
+#include <KoCanvasResourcesInterface.h>
+
+
 KisTextureOption::KisTextureOption()
     : KisPaintOpOption(KisPaintOpOption::TEXTURE, true)
     , m_textureOptions(new KisTextureChooser())
@@ -165,7 +169,7 @@ void KisTextureOption::readOptionSetting(const KisPropertiesConfigurationSP sett
     if (!isChecked()) {
         return;
     }
-    KoPatternSP pattern = KisEmbeddedPatternManager::loadEmbeddedPattern(setting, KisGlobalResourcesInterface::instance());
+    KoPatternSP pattern = KisEmbeddedPatternManager::loadEmbeddedPattern(setting, resourcesInterface());
 
     if (!pattern) {
         pattern =m_textureOptions->textureSelectorWidget->currentResource().staticCast<KoPattern>();
@@ -215,7 +219,7 @@ KisTextureProperties::KisTextureProperties(int levelOfDetail)
 {
 }
 
-void KisTextureProperties::fillProperties(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface)
+void KisTextureProperties::fillProperties(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface)
 {
     if (!setting->hasProperty("Texture/Pattern/PatternMD5")) {
         m_enabled = false;
@@ -236,6 +240,14 @@ void KisTextureProperties::fillProperties(const KisPropertiesConfigurationSP set
     m_offsetY = setting->getInt("Texture/Pattern/OffsetY");
     m_texturingMode = (TexturingMode) setting->getInt("Texture/Pattern/TexturingMode", MULTIPLY);
 
+    if (m_texturingMode == GRADIENT && canvasResourcesInterface) {
+        KoAbstractGradientSP gradient = canvasResourcesInterface->resource(KoCanvasResource::CurrentGradient).value<KoAbstractGradientSP>();
+        if (gradient) {
+            m_gradient = gradient;
+            m_cachedGradient.setGradient(gradient, 256);
+        }
+    }
+
     m_strengthOption.readOptionSetting(setting);
     m_strengthOption.resetAllSensors();
 }
@@ -252,16 +264,14 @@ QList<KoResourceSP> KisTextureProperties::prepareEmbeddedResources(const KisProp
     return resources;
 }
 
-void KisTextureProperties::setTextureGradient(KoAbstractGradientSP gradient) {
-    if (gradient) {
-        m_gradient = gradient;
-        m_cachedGradient.setGradient(gradient, 256);
-    }
-}
-
 bool KisTextureProperties::applyingGradient() const
 {
     return m_texturingMode == GRADIENT;
+}
+
+bool KisTextureProperties::applyingGradient(const KisPropertiesConfiguration *settings)
+{
+    return (TexturingMode) settings->getInt("Texture/Pattern/TexturingMode", MULTIPLY) == GRADIENT;
 }
 
 void KisTextureProperties::applyLightness(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation& info) {
@@ -353,7 +363,7 @@ void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset
         applyLightness(dab, offset, info);
         return;
     }
-    else if (m_texturingMode == GRADIENT) {
+    else if (m_texturingMode == GRADIENT && m_gradient) {
         applyGradient(dab, offset, info);
         return;
     }

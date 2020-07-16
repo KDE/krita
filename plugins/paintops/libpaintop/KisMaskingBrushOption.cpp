@@ -34,7 +34,6 @@
 #include "KisMaskingBrushOptionProperties.h"
 #include <strokes/KisMaskingBrushCompositeOpFactory.h>
 #include <KoCompositeOpRegistry.h>
-#include <KisGlobalResourcesInterface.h>
 
 struct KisMaskingBrushOption::Private
 {
@@ -102,7 +101,7 @@ void KisMaskingBrushOption::writeOptionSetting(KisPropertiesConfigurationSP sett
 void KisMaskingBrushOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     KisMaskingBrushOptionProperties props;
-    props.read(setting.data(), m_d->masterBrushSizeAdapter(), KisGlobalResourcesInterface::instance());
+    props.read(setting.data(), m_d->masterBrushSizeAdapter(), resourcesInterface(), canvasResourcesInterface());
 
     setChecked(props.isEnabled);
 

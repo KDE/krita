@@ -623,8 +623,11 @@ void KisPaintopBox::setCurrentPaintop(KisPaintOpPresetSP preset)
 
     }
 
-    if (!m_paintopOptionWidgets.contains(paintop))
+    if (!m_paintopOptionWidgets.contains(paintop)) {
         m_paintopOptionWidgets[paintop] = KisPaintOpRegistry::instance()->get(paintop.id())->createConfigWidget(this);
+        m_paintopOptionWidgets[paintop]->setResourcesInterface(KisGlobalResourcesInterface::instance());
+        m_paintopOptionWidgets[paintop]->setCanvasResourcesInterface(m_viewManager->canvasResourceProvider()->resourceManager()->canvasResourcesInterface());
+    }
 
     m_optionWidget = m_paintopOptionWidgets[paintop];
 

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2020 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,23 +15,30 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef KOCANVASRESOURCESINTERFACE_H
+#define KOCANVASRESOURCESINTERFACE_H
 
-#include "KisPaintopPropertiesBase.h"
-#include "kis_properties_configuration.h"
-#include <KisResourcesInterface.h>
+#include "kritaglobal_export.h"
+#include <QSharedPointer>
+
+class QVariant;
 
 
-KisPaintopPropertiesResourcesBase::~KisPaintopPropertiesResourcesBase()
+/**
+ * @brief An abstract class for providing access to canvas resources
+ * like current gradient and Fg/Bg colors.
+ *
+ * Specific implementations may forward the requests either to
+ * KoCanvasResourceProvider or to a local storage.
+ */
+class KRITAGLOBAL_EXPORT KoCanvasResourcesInterface
 {
+public:
+    virtual ~KoCanvasResourcesInterface();
 
-}
+    virtual QVariant resource(int key) const = 0;
+};
 
-KisPaintopPropertiesBase::~KisPaintopPropertiesBase()
-{
-}
+using KoCanvasResourcesInterfaceSP = QSharedPointer<KoCanvasResourcesInterface>;
 
-
-KisPaintopPropertiesCanvasResourcesBase::~KisPaintopPropertiesCanvasResourcesBase()
-{
-
-}
+#endif // KOCANVASRESOURCESINTERFACE_H

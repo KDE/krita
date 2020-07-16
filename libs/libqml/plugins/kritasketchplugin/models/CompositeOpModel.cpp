@@ -34,6 +34,7 @@
 #include <KoCompositeOpRegistry.h>
 #include <KoColorSpace.h>
 #include <KoToolManager.h>
+#include <KisGlobalResourcesInterface.h>
 
 class CompositeOpModel::Private
 {
@@ -409,6 +410,8 @@ void CompositeOpModel::resourceChanged(int key, const QVariant& /*v*/)
             if (!d->settingsWidgets.contains(preset.data())) {
                 d->settingsWidgets[preset.data()] = KisPaintOpRegistry::instance()->get(preset->paintOp().id())->createConfigWidget(0);
                 d->settingsWidgets[preset.data()]->setImage(d->view->image());
+                d->settingsWidgets[preset.data()]->setResourcesInterface(KisGlobalResourcesInterface::instance());
+                d->settingsWidgets[preset.data()]->setCanvasResourcesInterface(d->view->canvasResourceProvider()->resourceManager()->canvasResourcesInterface());
                 d->settingsWidgets[preset.data()]->setConfiguration(preset->settings());
             }
 

@@ -28,6 +28,10 @@
 #include "KoResourceUpdateMediator.h"
 #include <KoCanvasResourcesIds.h>
 
+template<class T> class QSharedPointer;
+class KoCanvasResourcesInterface;
+using KoCanvasResourcesInterfaceSP = QSharedPointer<KoCanvasResourcesInterface>;
+
 class KoShape;
 class KoShapeStroke;
 class KoColor;
@@ -230,6 +234,12 @@ public:
      * @see KoResourceManager::removeResourceUpdateMediator
      */
     void removeResourceUpdateMediator(int key);
+
+    /**
+     * An interface for accessing this KoCanvasResourceProvider via
+     * KoCanvasResourcesInterface.
+     */
+    KoCanvasResourcesInterfaceSP canvasResourcesInterface() const;
 
 Q_SIGNALS:
     /**

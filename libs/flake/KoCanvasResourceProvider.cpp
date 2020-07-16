@@ -29,15 +29,39 @@
 #include "KoResourceManager_p.h"
 #include <KoColorSpaceRegistry.h>
 
+#include <KoCanvasResourcesInterface.h>
+
+struct Q_DECL_HIDDEN CanvasResourceProviderInterfaceWrapper : public KoCanvasResourcesInterface
+{
+    CanvasResourceProviderInterfaceWrapper(KoCanvasResourceProvider *provider)
+        : m_provider(provider)
+    {
+    }
+
+    QVariant resource(int key) const override {
+        return m_provider->resource(key);
+    }
+
+private:
+    KoCanvasResourceProvider *m_provider = 0;
+};
+
+
 class Q_DECL_HIDDEN KoCanvasResourceProvider::Private
 {
 public:
+    Private(KoCanvasResourceProvider *q)
+        : interfaceWrapper(new CanvasResourceProviderInterfaceWrapper(q))
+    {
+    }
+
     KoResourceManager manager;
+    QSharedPointer<CanvasResourceProviderInterfaceWrapper> interfaceWrapper;
 };
 
 KoCanvasResourceProvider::KoCanvasResourceProvider(QObject *parent)
     : QObject(parent)
-    , d(new Private())
+    , d(new Private(this))
 {
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
     setForegroundColor(KoColor(Qt::black, cs));
@@ -178,4 +202,9 @@ bool KoCanvasResourceProvider::hasResourceUpdateMediator(int key)
 void KoCanvasResourceProvider::removeResourceUpdateMediator(int key)
 {
     d->manager.removeResourceUpdateMediator(key);
+}
+
+KoCanvasResourcesInterfaceSP KoCanvasResourceProvider::canvasResourcesInterface() const
+{
+    return d->interfaceWrapper;
 }

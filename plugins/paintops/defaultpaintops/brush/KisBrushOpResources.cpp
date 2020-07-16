@@ -54,15 +54,7 @@ KisBrushOpResources::KisBrushOpResources(const KisPaintOpSettingsSP settings, Ki
     sharpnessOption->resetAllSensors();
 
     textureOption.reset(new KisTextureProperties(painter->device()->defaultBounds()->currentLevelOfDetail()));
-    textureOption->fillProperties(settings, settings->resourcesInterface());
-
-    if (textureOption->applyingGradient()) {
-        textureOption->setTextureGradient(painter->gradient());
-    }
-
-    if (brush && brush->applyingGradient()) {
-        brush->setGradient(painter->gradient());
-    }
+    textureOption->fillProperties(settings, settings->resourcesInterface(), settings->canvasResourcesInterface());
 
     m_d->hsvOptions.append(KisPressureHSVOption::createHueOption());
     m_d->hsvOptions.append(KisPressureHSVOption::createSaturationOption());

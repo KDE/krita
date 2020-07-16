@@ -34,7 +34,7 @@
 #include "kis_selection.h"
 #include "kis_selection_mask.h"
 #include "kis_algebra_2d.h"
-
+#include "KisGlobalResourcesInterface.h"
 
 struct KisResourcesSnapshot::Private {
     Private()
@@ -73,6 +73,8 @@ struct KisResourcesSnapshot::Private {
     bool presetAllowsLod = false;
     KisSelectionSP selectionOverride;
     bool hasOverrideSelection = false;
+
+    KoCanvasResourcesInterfaceSP globalCanvasResourcesInterface;
 };
 
 KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNode, KoCanvasResourceProvider *resourceManager, KisDefaultBoundsBaseSP bounds)
@@ -83,6 +85,7 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
         bounds = new KisDefaultBounds(m_d->image);
     }
     m_d->bounds = bounds;
+    m_d->globalCanvasResourcesInterface = resourceManager->canvasResourcesInterface();
     m_d->currentFgColor = resourceManager->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
     m_d->currentBgColor = resourceManager->resource(KoCanvasResource::BackgroundColor).value<KoColor>();
     m_d->currentPattern = resourceManager->resource(KoCanvasResource::CurrentPattern).value<KoPatternSP>();
@@ -96,7 +99,9 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
      */
     KisPaintOpPresetSP p = resourceManager->resource(KoCanvasResource::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
     if (p) {
-        m_d->currentPaintOpPreset = p->cloneWithResourcesSnapshot();
+        m_d->currentPaintOpPreset =
+            p->cloneWithResourcesSnapshot(KisGlobalResourcesInterface::instance(),
+                                          m_d->globalCanvasResourcesInterface);
     }
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
@@ -442,7 +447,10 @@ void KisResourcesSnapshot::setSelectionOverride(KisSelectionSP selection)
 
 void KisResourcesSnapshot::setBrush(const KisPaintOpPresetSP &brush)
 {
-    m_d->currentPaintOpPreset = brush->cloneWithResourcesSnapshot();
+    m_d->currentPaintOpPreset =
+        brush->cloneWithResourcesSnapshot(
+            KisGlobalResourcesInterface::instance(),
+            m_d->globalCanvasResourcesInterface);
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
     KisPaintOpRegistry::instance()->preinitializePaintOpIfNeeded(m_d->currentPaintOpPreset);

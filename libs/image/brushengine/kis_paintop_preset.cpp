@@ -38,6 +38,7 @@
 #include "kis_paintop_settings_update_proxy.h"
 #include <brushengine/kis_paintop_config_widget.h>
 #include <KisRequiredResourcesOperators.h>
+#include <KoCanvasResourcesLocalStorage.h>
 
 #include <KoStore.h>
 
@@ -407,6 +408,17 @@ void KisPaintOpPreset::setResourcesInterface(KisResourcesInterfaceSP resourcesIn
     d->settings->setResourcesInterface(resourcesInterface);
 }
 
+KoCanvasResourcesInterfaceSP KisPaintOpPreset::canvasResourcesInterface() const
+{
+    return d->settings ? d->settings->canvasResourcesInterface() : nullptr;
+}
+
+void KisPaintOpPreset::setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(d->settings);
+    d->settings->setCanvasResourcesInterface(canvasResourcesInterface);
+}
+
 namespace KisRequiredResourcesOperators
 {
 template <>
@@ -422,9 +434,18 @@ struct ResourceTraits<KisPaintOpPreset>
 };
 }
 
-void KisPaintOpPreset::createLocalResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface)
+void KisPaintOpPreset::createLocalResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface)
 {
     KisRequiredResourcesOperators::createLocalResourcesSnapshot(this, globalResourcesInterface);
+
+    const QList<int> canvasResources = this->requiredCanvasResources();
+    if (!canvasResources.isEmpty()) {
+        KoCanvasResourcesLocalStorageSP storage(new KoCanvasResourcesLocalStorage());
+        Q_FOREACH (int key, canvasResources) {
+            storage->storeResource(key, canvasResourcesInterface->resource(key));
+        }
+        setCanvasResourcesInterface(storage);
+    }
 }
 
 bool KisPaintOpPreset::hasLocalResourcesSnapshot() const
@@ -432,9 +453,21 @@ bool KisPaintOpPreset::hasLocalResourcesSnapshot() const
     return KisRequiredResourcesOperators::hasLocalResourcesSnapshot(this);
 }
 
-KisPaintOpPresetSP KisPaintOpPreset::cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface) const
+KisPaintOpPresetSP KisPaintOpPreset::cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface) const
 {
-    return KisRequiredResourcesOperators::cloneWithResourcesSnapshot(this, globalResourcesInterface);
+    KisPaintOpPresetSP result =
+        KisRequiredResourcesOperators::cloneWithResourcesSnapshot(this, globalResourcesInterface);
+
+    const QList<int> canvasResources = result->requiredCanvasResources();
+    if (!canvasResources.isEmpty()) {
+        KoCanvasResourcesLocalStorageSP storage(new KoCanvasResourcesLocalStorage());
+        Q_FOREACH (int key, canvasResources) {
+            storage->storeResource(key, canvasResourcesInterface->resource(key));
+        }
+        result->setCanvasResourcesInterface(storage);
+    }
+
+    return result;
 }
 
 QList<KoResourceSP> KisPaintOpPreset::linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const
@@ -477,6 +510,11 @@ QList<KoResourceSP> KisPaintOpPreset::embeddedResources(KisResourcesInterfaceSP 
     }
 
     return resources;
+}
+
+QList<int> KisPaintOpPreset::requiredCanvasResources() const
+{
+    return d->settings ? d->settings->requiredCanvasResources() : QList<int>();
 }
 
 KisPaintOpPreset::UpdatedPostponer::UpdatedPostponer(KisPaintOpPresetSP preset)

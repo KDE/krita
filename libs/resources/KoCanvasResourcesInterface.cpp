@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2020 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,22 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "KisPaintopPropertiesBase.h"
-#include "kis_properties_configuration.h"
-#include <KisResourcesInterface.h>
+#include "KoCanvasResourcesInterface.h"
 
-
-KisPaintopPropertiesResourcesBase::~KisPaintopPropertiesResourcesBase()
+KoCanvasResourcesInterface::~KoCanvasResourcesInterface()
 {
-
-}
-
-KisPaintopPropertiesBase::~KisPaintopPropertiesBase()
-{
-}
-
-
-KisPaintopPropertiesCanvasResourcesBase::~KisPaintopPropertiesCanvasResourcesBase()
-{
-
 }

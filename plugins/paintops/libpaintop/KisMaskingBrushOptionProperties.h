@@ -26,6 +26,9 @@
 class KisResourcesInterface;
 using KisResourcesInterfaceSP = QSharedPointer<KisResourcesInterface>;
 
+class KoCanvasResourcesInterface;
+using KoCanvasResourcesInterfaceSP = QSharedPointer<KoCanvasResourcesInterface>;
+
 
 struct PAINTOP_EXPORT KisMaskingBrushOptionProperties
 {
@@ -37,7 +40,7 @@ struct PAINTOP_EXPORT KisMaskingBrushOptionProperties
     bool useMasterSize = true;
 
     void write(KisPropertiesConfiguration *setting, qreal masterBrushSize) const;
-    void read(const KisPropertiesConfiguration *setting, qreal masterBrushSize, KisResourcesInterfaceSP resourcesInterface);
+    void read(const KisPropertiesConfiguration *setting, qreal masterBrushSize, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface);
     QList<KoResourceSP> prepareLinkedResources(const KisPropertiesConfigurationSP settings, KisResourcesInterfaceSP resourcesInterface);
 };
 

@@ -39,13 +39,7 @@
 struct KisColorLabelSelectorWidget::Private
 {
     Private(KisColorLabelSelectorWidget *_q)
-        : q(_q),
-          xMenuOffset(0),
-          yCenteringOffset(0),
-          realItemSize(0),
-          realItemSpacing(0),
-          hoveringItem(-1),
-          selectedItem(0)
+        : q(_q)
     {
     }
 
@@ -58,13 +52,13 @@ struct KisColorLabelSelectorWidget::Private
     const int maxSpacing = 3;
     const int border = 2;
 
-    int xMenuOffset;
-    int yCenteringOffset;
-    int realItemSize;
-    int realItemSpacing;
+    int xMenuOffset {0};
+    int yCenteringOffset {0};
+    int realItemSize {0};
+    int realItemSpacing {0};
 
-    int hoveringItem;
-    int selectedItem;
+    int hoveringItem {-1};
+    int selectedItem {0};
 
     QRect itemRect(int index) const;
     int indexFromPos(const QPoint &pos);

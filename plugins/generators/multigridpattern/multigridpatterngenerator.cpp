@@ -189,8 +189,11 @@ void KisMultigridPatternGenerator::generate(KisProcessingInformation dstInfo,
             lineWidthTransform.scale(scaleForLineWidth, scaleForLineWidth);
 
             shape = lineWidthTransform.map(shape);
-
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
             if (shape.intersects(bounds) && shape.boundingRect().width()>0) {
+#else
+            if (!shape.intersected(bounds).isEmpty() && shape.boundingRect().width()>0) {
+#endif
                 QPainterPath p;
                 p.addPolygon(lineWidthTransform.map(shape));
 

@@ -204,6 +204,21 @@ void KoCanvasResourceProvider::removeResourceUpdateMediator(int key)
     d->manager.removeResourceUpdateMediator(key);
 }
 
+void KoCanvasResourceProvider::addActiveCanvasResourceDependency(KoActiveCanvasResourceDependencySP dep)
+{
+    d->manager.addActiveCanvasResourceDependency(dep);
+}
+
+bool KoCanvasResourceProvider::hasActiveCanvasResourceDependency(int sourceKey, int targetKey) const
+{
+    return d->manager.hasActiveCanvasResourceDependency(sourceKey, targetKey);
+}
+
+void KoCanvasResourceProvider::removeActiveCanvasResourceDependency(int sourceKey, int targetKey)
+{
+    d->manager.removeActiveCanvasResourceDependency(sourceKey, targetKey);
+}
+
 KoCanvasResourcesInterfaceSP KoCanvasResourceProvider::canvasResourcesInterface() const
 {
     return d->interfaceWrapper;

@@ -26,6 +26,7 @@
 #include "kritaflake_export.h"
 #include "KoDerivedResourceConverter.h"
 #include "KoResourceUpdateMediator.h"
+#include "KoActiveCanvasResourceDependency.h"
 #include <KoCanvasResourcesIds.h>
 
 template<class T> class QSharedPointer;
@@ -234,6 +235,21 @@ public:
      * @see KoResourceManager::removeResourceUpdateMediator
      */
     void removeResourceUpdateMediator(int key);
+
+    /**
+     * @see KoResourceManager::addActiveCanvasResourceDependency
+     */
+    void addActiveCanvasResourceDependency(KoActiveCanvasResourceDependencySP dep);
+
+    /**
+     * @see KoResourceManager::hasActiveCanvasResourceDependency
+     */
+    bool hasActiveCanvasResourceDependency(int sourceKey, int targetKey) const;
+
+    /**
+     * @see KoResourceManager::removeActiveCanvasResourceDependency
+     */
+    void removeActiveCanvasResourceDependency(int sourceKey, int targetKey);
 
     /**
      * An interface for accessing this KoCanvasResourceProvider via

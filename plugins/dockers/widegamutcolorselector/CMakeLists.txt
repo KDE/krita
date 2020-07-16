@@ -1,6 +1,7 @@
 set(KRITA_WGCOLORSELECTOR_SOURCES
     WGColorSelectorPlugin.cpp
     WGColorSelectorDock.cpp
+    WGShadeSlider.cpp
     KisColorSourceToggle.cpp
 )
 

@@ -54,6 +54,7 @@
 struct KisFilterManager::Private {
     Private()
         : reapplyAction(0)
+        , reapplyActionReprompt(0)
         , actionCollection(0)
         , actionManager(0)
         , view(0)

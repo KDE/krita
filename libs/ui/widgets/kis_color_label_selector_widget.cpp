@@ -38,6 +38,8 @@ struct Private
 {
     Private(KisColorLabelSelectorWidget *_q)
         : q(_q)
+        , colorButtonGroup(0)
+        , menuAlignmentOffset(0)
         , buttonSize(26)
     {
     }

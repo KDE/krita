@@ -45,6 +45,7 @@ struct KisColorLabelButton::Private
     Private(const Private& rhs)
         : m_color(rhs.m_color)
         , m_sizeSquared(rhs.m_sizeSquared)
+        , selectionVis(rhs.selectionVis)
     {
 
     }

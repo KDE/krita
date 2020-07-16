@@ -230,33 +230,32 @@ public:
     void clearResource(int key);
 
     /**
-     * @see KoReosurceManager::addDerivedResourceConverter()
+     * @see KoResourceManager::addDerivedResourceConverter()
      */
     void addDerivedResourceConverter(KoDerivedResourceConverterSP converter);
 
     /**
-     * @see KoReosurceManager::hasDerivedResourceConverter()
+     * @see KoResourceManager::hasDerivedResourceConverter()
      */
     bool hasDerivedResourceConverter(int key);
 
     /**
-     * @see KoReosurceManager::removeDerivedResourceConverter()
+     * @see KoResourceManager::removeDerivedResourceConverter()
      */
     void removeDerivedResourceConverter(int key);
 
     /**
-     * @see KoReosurceManager::addResourceUpdateMediator
+     * @see KoResourceManager::addResourceUpdateMediator
      */
     void addResourceUpdateMediator(KoResourceUpdateMediatorSP mediator);
 
     /**
-     * @see KoReosurceManager::hasResourceUpdateMediator
+     * @see KoResourceManager::hasResourceUpdateMediator
      */
     bool hasResourceUpdateMediator(int key);
 
     /**
-
-     * @see KoReosurceManager::removeResourceUpdateMediator
+     * @see KoResourceManager::removeResourceUpdateMediator
      */
     void removeResourceUpdateMediator(int key);
 

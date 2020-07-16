@@ -11,8 +11,8 @@ include(ECMAddTests)
 macro_add_unittest_definitions()
 
 ecm_add_tests(
-    storyboardModelTest.cpp
-    storyboardTimelineSyncTest.cpp
+    StoryboardModelTest.cpp
+    StoryboardTimelineSyncTest.cpp
 
     NAME_PREFIX "plugins-dockers-storyboarddocker-"
     LINK_LIBRARIES kritastoryboarddocker kritaui Qt5::Test

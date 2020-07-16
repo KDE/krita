@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "storyboarddocker.h"
+#include "StoryboardDocker.h"
 
 #include <kpluginfactory.h>
 #include <klocalizedstring.h>
@@ -24,7 +24,7 @@
 #include <KoDockFactoryBase.h>
 #include <KoDockRegistry.h>
 
-#include "storyboarddocker_dock.h"
+#include "StoryboardDockerDock.h"
 
 K_PLUGIN_FACTORY_WITH_JSON(StoryboardDockerPluginFactory, "krita_storyboarddocker.json", registerPlugin<StoryboardDockerPlugin>();)
 
@@ -73,4 +73,4 @@ StoryboardDockerPlugin::~StoryboardDockerPlugin()
 {
 }
 
-#include "storyboarddocker.moc"
+#include "StoryboardDocker.moc"

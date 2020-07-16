@@ -16,12 +16,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "storyboarddocker_dock.h"
-#include "commentDelegate.h"
-#include "commentModel.h"
-#include "storyboardModel.h"
-#include "storyboardDelegate.h"
-#include "storyboardView.h"
+#include "StoryboardDockerDock.h"
+#include "CommentDelegate.h"
+#include "CommentModel.h"
+#include "StoryboardModel.h"
+#include "StoryboardDelegate.h"
+#include "StoryboardView.h"
 
 #include <QMenu>
 #include <QButtonGroup>
@@ -305,4 +305,4 @@ void StoryboardDockerDock::slotViewChanged(QAbstractButton* button)
     m_storyboardModel->layoutChanged();
 }
 
-#include "storyboarddocker_dock.moc"
+#include "StoryboardDockerDock.moc"

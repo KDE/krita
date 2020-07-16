@@ -16,9 +16,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "storyboardTimelineSyncTest.h"
-#include "storyboardModel.h"
-#include "storyboardView.h"
+#include "StoryboardTimelineSyncTest.h"
+#include "StoryboardModel.h"
+#include "StoryboardView.h"
 
 #include <kis_group_layer.h>
 

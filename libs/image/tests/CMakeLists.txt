@@ -137,7 +137,7 @@ ecm_add_tests(
     TestAslStorage.cpp
     kis_async_merger_test.cpp
     kis_selection_test.cpp
-    kis_keyframe_animationInterface_signal_test.cpp
+    KisKeyframeAnimationInterfaceSignalTest.cpp
 
     LINK_LIBRARIES kritaimage Qt5::Test
     NAME_PREFIX "libs-image-"

@@ -20,7 +20,7 @@
 #define __STORYBOARD_DELEGATE_H
 
 #include <QStyledItemDelegate>
-#include "storyboardView.h"
+#include "StoryboardView.h"
 #include <kis_types.h>
 #include <kis_image.h>
 

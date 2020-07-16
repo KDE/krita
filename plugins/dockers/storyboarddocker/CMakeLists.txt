@@ -1,25 +1,25 @@
 add_subdirectory(tests)
 
 set(KRITA_STORYBOARDDOCKER_SOURCES
-    commentModel.cpp
-    storyboarddocker.cpp
-    storyboarddocker_dock.cpp
-    commentDelegate.cpp
-    storyboardModel.cpp
-    storyboardItem.cpp
-    storyboardDelegate.cpp
-    storyboardView.cpp
+    CommentModel.cpp
+    StoryboardDocker.cpp
+    StoryboardDockerDock.cpp
+    CommentDelegate.cpp
+    StoryboardModel.cpp
+    StoryboardItem.cpp
+    StoryboardDelegate.cpp
+    StoryboardView.cpp
     )
 
 set(KRITA_STORYBOARDDOCKER_PART_HEADERS
-    commentModel.h
-    storyboarddocker.h
-    storyboarddocker_dock.h
-    commentDelegate.h
-    storyboardModel.h
-    storyboardItem.h
-    storyboardDelegate.h
-    storyboardView.h
+    CommentModel.h
+    StoryboardDocker.h
+    StoryboardDockerDock.h
+    CommentDelegate.h
+    StoryboardModel.h
+    StoryboardItem.h
+    StoryboardDelegate.h
+    StoryboardView.h
 )
 
 ki18n_wrap_ui(KRITA_STORYBOARDDOCKER_SOURCES

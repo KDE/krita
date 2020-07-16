@@ -22,8 +22,8 @@
 #include <QPaintEvent>
 #include <QMenu>
 
-#include "storyboardView.h"
-#include "storyboardModel.h"
+#include "StoryboardView.h"
+#include "StoryboardModel.h"
 
 /**
  * This view draws the children of every index in the first column of 

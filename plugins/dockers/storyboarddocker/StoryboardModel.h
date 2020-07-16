@@ -18,8 +18,8 @@
 #ifndef STORYBOARD_MODEL
 #define STORYBOARD_MODEL
 
-#include "storyboardItem.h"
-#include "commentModel.h"
+#include "StoryboardItem.h"
+#include "CommentModel.h"
 
 #include <QAbstractListModel>
 #include <QItemSelection>

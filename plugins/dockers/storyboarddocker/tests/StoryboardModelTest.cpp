@@ -16,12 +16,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "storyboardModelTest.h"
+#include "StoryboardModelTest.h"
 
 #include <QTest>
 #include <QWidget>
-#include <storyboardModel.h>
-#include <commentModel.h>
+#include <StoryboardModel.h>
+#include <CommentModel.h>
 
 void StoryboardModelTest::init()
 {

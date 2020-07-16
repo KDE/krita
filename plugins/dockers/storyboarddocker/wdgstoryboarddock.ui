@@ -103,7 +103,7 @@
   <customwidget>
    <class>StoryboardView</class>
    <extends>QListView</extends>
-   <header>storyboardView.h</header>
+   <header>StoryboardView.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

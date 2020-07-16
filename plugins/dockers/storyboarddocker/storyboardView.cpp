@@ -243,6 +243,7 @@ void StoryboardView::setCurrentItem(int frame)
     QModelIndex index = Model->indexFromFrame(frame);
     if (index.isValid()) {
         selectionModel()->select(index, QItemSelectionModel::ClearAndSelect);
+        selectionModel()->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);
         scrollTo(index);
     }
 }

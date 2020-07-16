@@ -20,6 +20,8 @@
 #include "storyboardModel.h"
 #include "storyboardView.h"
 
+#include <kis_group_layer.h>
+
 #include <QTest>
 
 
@@ -34,14 +36,16 @@ void StoryboardTimelineSyncTest::initTestCase()
     m_storyboardModel->setImage(m_image);
 
     m_layer1 = new KisPaintLayer(m_image, "layer1", OPACITY_OPAQUE_U8);
-    KisPaintDeviceSP paintDevice = m_layer1->paintDevice();
-    paintDevice->createKeyframeChannel(KoID("abc"));
-    m_channel1 = paintDevice->keyframeChannel();
+    m_image->addNode(m_layer1, m_image->rootLayer());
+
+    m_layer1->enableAnimation();
+    m_channel1 = m_layer1->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
 
     m_layer2 = new KisPaintLayer(m_image, "layer2", OPACITY_OPAQUE_U8);
-    KisPaintDeviceSP paintDevice2 = m_layer2->paintDevice();
-    paintDevice2->createKeyframeChannel(KoID("xyz"));
-    m_channel2 = paintDevice2->keyframeChannel();
+    m_image->addNode(m_layer2, m_image->rootLayer());
+
+    m_layer2->enableAnimation();
+    m_channel2 = m_layer2->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
 
     m_channel1->addKeyframe(0);
     m_channel2->addKeyframe(0);
@@ -58,6 +62,18 @@ void StoryboardTimelineSyncTest::cleanupTestCase()
 void StoryboardTimelineSyncTest::cleanup()
 {
     testStoryboardItemSortedUniquePositive();
+
+    //delete all keyframes
+    foreach(int id,  m_channel1->allKeyframeIds()) {
+        m_channel1->deleteKeyframe(m_channel1->keyframeAt(id));
+    }
+    foreach(int id,  m_channel2->allKeyframeIds()) {
+        m_channel2->deleteKeyframe(m_channel2->keyframeAt(id));
+    }
+
+    QCOMPARE(m_channel1->keyframeCount(), 1);
+    QCOMPARE(m_channel2->keyframeCount(), 1);
+    QCOMPARE(m_storyboardModel->rowCount(), 1);
 }
 
 void StoryboardTimelineSyncTest::testStoryboardItemSortedUniquePositive()
@@ -93,6 +109,9 @@ void StoryboardTimelineSyncTest::testStoryboardItemAddFromTimeline()
 
 void StoryboardTimelineSyncTest::testStoryboardItemMoveFromTimeline()
 {
+
+    testStoryboardItemAddFromTimeline();
+
     /*          0 1 2 3 4 5 6 7 8 9 
       channel1  | . | . . . . . . .
       channel2  | . | . | . . . . .
@@ -109,34 +128,80 @@ void StoryboardTimelineSyncTest::testStoryboardItemMoveFromTimeline()
 
 void StoryboardTimelineSyncTest::testStoryboardItemRemoveFromTimeline()
 {
+    testStoryboardItemAddFromTimeline();
+
     /*          0 1 2 3 4 5 6 7 8 9 
-      channel1  | . . . | . . . . .
+      channel1  | . | . . . . . . .
       channel2  | . | . | . . . . .
     */
-    m_channel2->deleteKeyframe(m_channel2->keyframeAt(4));
+
+    m_channel2->deleteKeyframe(m_channel2->keyframeAt(2));
     QCOMPARE(m_storyboardModel->rowCount(), 3);
 
-    m_channel1->deleteKeyframe(m_channel2->keyframeAt(4));
+    m_channel1->deleteKeyframe(m_channel1->keyframeAt(2));
     QCOMPARE(m_storyboardModel->rowCount(), 2);
 }
 
 void StoryboardTimelineSyncTest::testStorybaordTimeleineSync()
 {
-}
 
-void StoryboardTimelineSyncTest::testKeframeChangesAffectedItems()
-{
+    testStoryboardItemAddFromTimeline();
 
+    /*          0 1 2 3 4 5 6 7 8 9
+      channel1  | . | . . . . . . .
+      channel2  | . | . | . . . . .
+    */
+    QSignalSpy spyTimeChanged(m_image->animationInterface() , SIGNAL(sigUiTimeChanged(int)));
+    QVERIFY(spyTimeChanged.isValid());
+
+    m_image->animationInterface()->switchCurrentTimeAsync(2);
+    QCOMPARE(spyTimeChanged.count(), 1);
+
+    QModelIndex parentIndex = m_storyboardView->currentIndex();
+    QVERIFY(parentIndex.isValid());
+    QCOMPARE(m_storyboardModel->index(0, 0, parentIndex).data().toInt(), 2);
+
+    m_image->animationInterface()->switchCurrentTimeAsync(3);
+    parentIndex = m_storyboardView->selectionModel()->currentIndex();
+    QCOMPARE(m_storyboardModel->index(0, 0, parentIndex).data().toInt(), 2);
+
+    m_image->animationInterface()->switchCurrentTimeAsync(4);
+    parentIndex = m_storyboardView->selectionModel()->currentIndex();
+    QCOMPARE(m_storyboardModel->index(0, 0, parentIndex).data().toInt(), 4);
 }
 
 void StoryboardTimelineSyncTest::testDurationChange()
 {
+    int fps = m_image->animationInterface()->framerate();
 
+    QCOMPARE(m_storyboardModel->rowCount(), 1);
+
+    m_channel1->addKeyframe(fps + 1);
+    QCOMPARE(m_storyboardModel->rowCount(), 2);
+
+    QModelIndex parentIndex = m_storyboardModel->indexFromFrame(0);
+    QCOMPARE(m_storyboardModel->index(StoryboardModel::DurationSecond, 0, parentIndex).data().toInt(), 1);
+    QCOMPARE(m_storyboardModel->index(StoryboardModel::DurationFrame, 0, parentIndex).data().toInt(), 0);
+
+    m_storyboardModel->setData(m_storyboardModel->index(StoryboardModel::DurationFrame, 0, parentIndex), 3);
+
+    //keyframes at 0 and fps + 3 + 1 = fps + 4
+    QVERIFY(m_channel1->keyframeAt(fps + 1).isNull());
+    QVERIFY(!m_channel1->keyframeAt(fps + 4).isNull());
 }
 
 void StoryboardTimelineSyncTest::testFpsChanged()
 {
+    int fpsbefore = m_image->animationInterface()->framerate();
+    testDurationChange();
+    //keyframes at 0 and fps + 4
 
+    m_image->animationInterface()->setFramerate(fpsbefore / 2);
+    int fpsafter = m_image->animationInterface()->framerate();
+
+    QModelIndex parentIndex = m_storyboardModel->indexFromFrame(0);
+    QCOMPARE(m_storyboardModel->index(StoryboardModel::DurationSecond, 0, parentIndex).data().toInt(), (fpsbefore + 3) / fpsafter);
+    QCOMPARE(m_storyboardModel->index(StoryboardModel::DurationFrame, 0, parentIndex).data().toInt(), (fpsbefore + 3) % fpsafter);
 }
 
 QTEST_MAIN(StoryboardTimelineSyncTest)

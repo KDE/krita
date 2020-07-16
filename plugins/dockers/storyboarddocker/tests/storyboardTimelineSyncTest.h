@@ -43,7 +43,6 @@ private Q_SLOTS:
     void testStoryboardItemMoveFromTimeline();
     void testStoryboardItemRemoveFromTimeline();
     void testStorybaordTimeleineSync();
-    void testKeframeChangesAffectedItems();
     void testDurationChange();
     void testFpsChanged();
 

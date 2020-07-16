@@ -102,20 +102,20 @@ void KisDerivedResourcesTest::test()
 
     QSignalSpy spy(manager, SIGNAL(canvasResourceChanged(int,QVariant)));
 
-    manager->setResource(KisCanvasResourceProvider::CurrentPaintOpPreset, i);
+    manager->setResource(KoCanvasResource::CurrentPaintOpPreset, i);
 
     QMap<int, QVariant> expectedSignals;
-    expectedSignals[KisCanvasResourceProvider::CurrentPaintOpPreset] = QVariant::fromValue(preset);
-    expectedSignals[KisCanvasResourceProvider::EraserMode] = false;
-    expectedSignals[KisCanvasResourceProvider::LodSizeThresholdSupported] = true;
-    expectedSignals[KisCanvasResourceProvider::EffectiveLodAvailablility] = true;
-    expectedSignals[KisCanvasResourceProvider::LodSizeThreshold] = 100;
-    expectedSignals[KisCanvasResourceProvider::LodAvailability] = true;
-    expectedSignals[KisCanvasResourceProvider::Opacity] = 1.0;
-    expectedSignals[KisCanvasResourceProvider::Size] = 300.0;
-    expectedSignals[KisCanvasResourceProvider::Flow] = 1.0;
-    expectedSignals[KisCanvasResourceProvider::CurrentEffectiveCompositeOp] = COMPOSITE_OVER;
-    expectedSignals[KisCanvasResourceProvider::CurrentCompositeOp] = COMPOSITE_OVER;
+    expectedSignals[KoCanvasResource::CurrentPaintOpPreset] = QVariant::fromValue(preset);
+    expectedSignals[KoCanvasResource::EraserMode] = false;
+    expectedSignals[KoCanvasResource::LodSizeThresholdSupported] = true;
+    expectedSignals[KoCanvasResource::EffectiveLodAvailablility] = true;
+    expectedSignals[KoCanvasResource::LodSizeThreshold] = 100;
+    expectedSignals[KoCanvasResource::LodAvailability] = true;
+    expectedSignals[KoCanvasResource::Opacity] = 1.0;
+    expectedSignals[KoCanvasResource::Size] = 300.0;
+    expectedSignals[KoCanvasResource::Flow] = 1.0;
+    expectedSignals[KoCanvasResource::CurrentEffectiveCompositeOp] = COMPOSITE_OVER;
+    expectedSignals[KoCanvasResource::CurrentCompositeOp] = COMPOSITE_OVER;
 
     auto it = spy.begin();
     for (; it != spy.end(); ++it) {
@@ -140,7 +140,7 @@ void KisDerivedResourcesTest::test()
     preset->settings()->setPaintOpOpacity(0.8);
 
     QCOMPARE(spy.size(), 1);
-    QCOMPARE(spy[0][0].toInt(), (int)KisCanvasResourceProvider::Opacity);
+    QCOMPARE(spy[0][0].toInt(), (int)KoCanvasResource::Opacity);
     QCOMPARE(spy[0][1].toDouble(), 0.8);
     spy.clear();
 

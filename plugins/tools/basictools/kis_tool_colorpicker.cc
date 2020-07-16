@@ -139,10 +139,10 @@ bool KisToolColorPicker::pickColor(const QPointF &pos)
         publicColor.setOpacity(OPACITY_OPAQUE_U8); // Alpha is unwanted for FG and BG colors.
 
         if (m_config->toForegroundColor) {
-            canvas()->resourceManager()->setResource(KoCanvasResourceProvider::ForegroundColor, publicColor);
+            canvas()->resourceManager()->setResource(KoCanvasResource::ForegroundColor, publicColor);
         }
         else {
-            canvas()->resourceManager()->setResource(KoCanvasResourceProvider::BackgroundColor, publicColor);
+            canvas()->resourceManager()->setResource(KoCanvasResource::BackgroundColor, publicColor);
         }
     }
 

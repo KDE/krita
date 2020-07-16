@@ -86,7 +86,7 @@ public:
             utils::createResourceManager(image, 0, m_presetFileName));
 
         KisPaintOpPresetSP preset =
-            manager->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+            manager->resource(KoCanvasResource::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
 
         if (mirrorDabX || mirrorDabY) {
             KisPaintOpSettingsSP settings = preset->settings()->clone();

@@ -564,7 +564,7 @@ void KoStrokeConfigWidget::setCanvas( KoCanvasBase *canvas )
 void KoStrokeConfigWidget::canvasResourceChanged(int key, const QVariant &value)
 {
     switch (key) {
-    case KoCanvasResourceProvider::Unit:
+    case KoCanvasResource::Unit:
         setUnit(value.value<KoUnit>());
         break;
     }

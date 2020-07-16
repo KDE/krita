@@ -73,7 +73,7 @@ void DefaultToolTransformWidget::setUnit(const KoUnit &unit)
 
 void DefaultToolTransformWidget::resourceChanged(int key, const QVariant &res)
 {
-    if (key == KoCanvasResourceProvider::Unit) {
+    if (key == KoCanvasResource::Unit) {
         setUnit(res.value<KoUnit>());
     }
 }

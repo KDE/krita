@@ -469,7 +469,7 @@ void KisColorSelectorBase::updateColorPreview(const KoColor &color)
 
 void KisColorSelectorBase::canvasResourceChanged(int key, const QVariant &v)
 {
-    if (key == KoCanvasResourceProvider::ForegroundColor || key == KoCanvasResourceProvider::BackgroundColor) {
+    if (key == KoCanvasResource::ForegroundColor || key == KoCanvasResource::BackgroundColor) {
         KoColor realColor(v.value<KoColor>());
         updateColorPreview(realColor);
         if (m_colorUpdateAllowed && !m_colorUpdateSelf) {

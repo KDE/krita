@@ -1012,7 +1012,7 @@ void KisView::slotImageResolutionChanged()
     // update KoUnit value for the document
     if (resourceProvider()) {
         resourceProvider()->resourceManager()->
-                setResource(KoCanvasResourceProvider::Unit, d->canvas.unit());
+                setResource(KoCanvasResource::Unit, d->canvas.unit());
     }
 }
 

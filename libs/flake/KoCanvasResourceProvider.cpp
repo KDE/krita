@@ -42,7 +42,6 @@ KoCanvasResourceProvider::KoCanvasResourceProvider(QObject *parent)
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
     setForegroundColor(KoColor(Qt::black, cs));
     setBackgroundColor(KoColor(Qt::white, cs));
-    setResource(ApplicationSpeciality, NoSpecial);
 
     connect(&d->manager, &KoResourceManager::resourceChanged,
             this, &KoCanvasResourceProvider::canvasResourceChanged);
@@ -93,22 +92,22 @@ KoColor KoCanvasResourceProvider::koColorResource(int key) const
 
 void KoCanvasResourceProvider::setForegroundColor(const KoColor &color)
 {
-    setResource(ForegroundColor, color);
+    setResource(KoCanvasResource::ForegroundColor, color);
 }
 
 KoColor KoCanvasResourceProvider::foregroundColor() const
 {
-    return koColorResource(ForegroundColor);
+    return koColorResource(KoCanvasResource::ForegroundColor);
 }
 
 void KoCanvasResourceProvider::setBackgroundColor(const KoColor &color)
 {
-    setResource(BackgroundColor, color);
+    setResource(KoCanvasResource::BackgroundColor, color);
 }
 
 KoColor KoCanvasResourceProvider::backgroundColor() const
 {
-    return koColorResource(BackgroundColor);
+    return koColorResource(KoCanvasResource::BackgroundColor);
 }
 
 KoShape *KoCanvasResourceProvider::koShapeResource(int key) const

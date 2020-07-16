@@ -393,16 +393,16 @@ void CompositeOpModel::resourceChanged(int key, const QVariant& /*v*/)
 {
     if (d->view && d->view->canvasBase() && d->view->canvasBase()->resourceManager() && d->view->canvasResourceProvider()) {
 
-        if (key == KisCanvasResourceProvider::MirrorHorizontal) {
+        if (key == KoCanvasResource::MirrorHorizontal) {
             emit mirrorHorizontallyChanged();
             return;
         }
-        else if(key == KisCanvasResourceProvider::MirrorVertical) {
+        else if(key == KoCanvasResource::MirrorVertical) {
             emit mirrorVerticallyChanged();
             return;
         }
 
-        KisPaintOpPresetSP preset = d->view->canvasBase()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+        KisPaintOpPresetSP preset = d->view->canvasBase()->resourceManager()->resource(KoCanvasResource::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
 
         if (preset && d->currentPreset.data() != preset.data()) {
             d->currentPreset = preset;

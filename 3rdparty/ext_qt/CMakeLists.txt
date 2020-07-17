@@ -77,6 +77,7 @@ if (WIN32)
         COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0081-Fix-no-warning-for-overwriting-files-in-non-native-d.patch
         COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0082-Make-jp-e-g-default-extensions-context-aware.patch
         COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0100-Fix-artifacts-when-rendering-multisubpath-dashed-QPa.patch
+        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0101-Don-t-eat-ShortcutOverride-events-when-there-is-a-pa.patch
 #        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0031-Compute-logical-DPI-on-a-per-screen-basis.patch
 #        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0032-Update-Dpi-and-scale-factor-computation.patch
 #        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0033-Move-QT_FONT_DPI-to-cross-platform-code.patch
@@ -150,6 +151,7 @@ elseif (NOT APPLE)
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0081-Fix-no-warning-for-overwriting-files-in-non-native-d.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0082-Make-jp-e-g-default-extensions-context-aware.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0100-Fix-artifacts-when-rendering-multisubpath-dashed-QPa.patch
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0101-Don-t-eat-ShortcutOverride-events-when-there-is-a-pa.patch
 
       CMAKE_ARGS -DOPENSSL_LIBS='-L${EXTPREFIX_qt}/lib -lssl -lcrypto'
 
@@ -257,6 +259,7 @@ else( APPLE )
                 COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0081-Fix-no-warning-for-overwriting-files-in-non-native-d.patch
                 COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0082-Make-jp-e-g-default-extensions-context-aware.patch
                 COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0100-Fix-artifacts-when-rendering-multisubpath-dashed-QPa.patch
+                COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0101-Don-t-eat-ShortcutOverride-events-when-there-is-a-pa.patch
 
                 #COMMAND ${PATCH_COMMAND} -p1 -b -d <SOURCE_DIR>/qtbase/mkspecs/features/mac -i ${CMAKE_CURRENT_SOURCE_DIR}/mac-default.patch
             )
@@ -269,6 +272,7 @@ else( APPLE )
                 COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0081-Fix-no-warning-for-overwriting-files-in-non-native-d.patch
                 COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0082-Make-jp-e-g-default-extensions-context-aware.patch
                 COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0100-Fix-artifacts-when-rendering-multisubpath-dashed-QPa.patch
+                COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0101-Don-t-eat-ShortcutOverride-events-when-there-is-a-pa.patch
             )
       endif()
 

@@ -18,7 +18,7 @@
 #ifndef KOCANVASRESOURCESINTERFACE_H
 #define KOCANVASRESOURCESINTERFACE_H
 
-#include "kritaglobal_export.h"
+#include "kritaresources_export.h"
 #include <QSharedPointer>
 
 class QVariant;

@@ -32,6 +32,7 @@
 StoryboardModel::StoryboardModel(QObject *parent)
         : QAbstractItemModel(parent)
         , m_locked(false)
+        , m_imageIdleWatcher(100)
 {
     connect(this, SIGNAL(rowsInserted(const QModelIndex, int, int)),
                 this, SLOT(slotInsertChildRows(const QModelIndex, int, int)));
@@ -461,16 +462,21 @@ void StoryboardModel::setView(StoryboardView *view)
 void StoryboardModel::setImage(KisImageWSP image)
 {
     m_image = image;
-    slotFrameChanged(m_image->animationInterface()->currentUITime());
 
-    connect(m_image->animationInterface(), SIGNAL(sigUiTimeChanged(int)), this, SLOT(slotFrameChanged(int)));
+    m_imageIdleWatcher.setTrackedImage(image);
+    m_imageIdleWatcher.startCountdown();
+    connect(&m_imageIdleWatcher, SIGNAL(startedIdleMode()), this, SLOT(slotUpdateCurrentThumbnail()));
+
+    //for add, remove and move
     connect(m_image->animationInterface(), SIGNAL(sigKeyframeAdded(KisKeyframeSP)),
             this, SLOT(slotKeyframeAdded(KisKeyframeSP)));
     connect(m_image->animationInterface(), SIGNAL(sigKeyframeRemoved(KisKeyframeSP)),
             this, SLOT(slotKeyframeRemoved(KisKeyframeSP)));
     connect(m_image->animationInterface(), SIGNAL(sigKeyframeMoved(KisKeyframeSP, int)),
             this, SLOT(slotKeyframeMoved(KisKeyframeSP, int)));
-    connect(m_image, SIGNAL(sigImageUpdated(const QRect &)), this, SLOT(slotUpdateCurrentThumbnail()));
+
+    //for selection sync with timeline
+    connect(m_image->animationInterface(), SIGNAL(sigUiTimeChanged(int)), this, SLOT(slotFrameChanged(int)));
     connect(m_view->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
             this, SLOT(slotChangeFrameGlobal(QItemSelection, QItemSelection)));
 }

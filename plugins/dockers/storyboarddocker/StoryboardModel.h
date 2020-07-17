@@ -26,6 +26,7 @@
 
 #include <kritaui_export.h>
 #include <kis_keyframe_channel.h>
+#include "kis_idle_watcher.h"
 
 /*
     The main storyboard model. 
@@ -142,6 +143,7 @@ private:
     CommentModel *m_commentModel;
     bool m_locked;
     int m_lastScene = 0;
+    KisIdleWatcher m_imageIdleWatcher;
     KisImageWSP m_image;
     StoryboardView *m_view;
 };

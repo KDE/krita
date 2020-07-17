@@ -23,7 +23,9 @@
 #include <QScopedPointer>
 #include <QSharedPointer>
 
-class KRITAGLOBAL_EXPORT KoCanvasResourcesLocalStorage : public KoCanvasResourcesInterface
+#include <kritaresources_export.h>
+
+class KRITARESOURCES_EXPORT KoCanvasResourcesLocalStorage : public KoCanvasResourcesInterface
 {
 public:
     KoCanvasResourcesLocalStorage();

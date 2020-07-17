@@ -307,6 +307,20 @@ void KoStopGradient::bakeVariableColors(KoCanvasResourcesInterfaceSP canvasResou
     }
 }
 
+void KoStopGradient::updateVariableColors(KoCanvasResourcesInterfaceSP canvasResourcesInterface)
+{
+    const KoColor fgColor = canvasResourcesInterface->resource(KoCanvasResource::ForegroundColor).value<KoColor>().convertedTo(colorSpace());
+    const KoColor bgColor = canvasResourcesInterface->resource(KoCanvasResource::BackgroundColor).value<KoColor>().convertedTo(colorSpace());
+
+    for (auto it = m_stops.begin(); it != m_stops.end(); ++it) {
+        if (it->type == FOREGROUNDSTOP) {
+            it->color = fgColor;
+        } else if (it->type == BACKGROUNDSTOP) {
+            it->color = bgColor;
+        }
+    }
+}
+
 void KoStopGradient::loadSvgGradient(QIODevice* file)
 {
     QDomDocument doc;

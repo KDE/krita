@@ -28,6 +28,7 @@
 #include <KoAbstractGradient.h>
 #include <KoStopGradient.h>
 #include <KoSegmentGradient.h>
+#include <KoCanvasResourcesInterface.h>
 
 class KisViewManager;
 class QLabel;
@@ -44,7 +45,7 @@ class KisCustomGradientDialog : public KoDialog
 
 public:
 
-    KisCustomGradientDialog(KoAbstractGradientSP gradient, QWidget *parent, const char *name, const KoColor &fgColor, const KoColor &bgColor);
+    KisCustomGradientDialog(KoAbstractGradientSP gradient, QWidget *parent, const char *name, KoCanvasResourcesInterfaceSP canvasResourcesInterface);
 
 private:
 
@@ -61,6 +62,8 @@ public:
     KisGradientChooser(QWidget *parent = 0, const char *name = 0);
     ~KisGradientChooser() override;
 
+    void setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface);
+
     /// Gets the currently selected resource
     /// @returns the selected resource, 0 is no resource is selected
     KoResourceSP currentResource();
@@ -74,8 +77,6 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     void slotUpdateIcons();
-    void setForegroundColor(KoColor);
-    void setBackgroundColor(KoColor);
 
 private Q_SLOTS:
     virtual void update(KoResourceSP resource);
@@ -89,10 +90,10 @@ private:
     QLabel *m_lbName;
     KisResourceItemChooser * m_itemChooser;
 
-    KoColor m_foregroundColor, m_backgroundColor;
-
     QToolButton* m_addGradient;
     QPushButton* m_editGradient;
+
+    KoCanvasResourcesInterfaceSP m_canvasResourcesInterface;
 };
 
 #endif // KIS_GRADIENT_CHOOSER_H_

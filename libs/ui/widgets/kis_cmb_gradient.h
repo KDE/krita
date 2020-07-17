@@ -37,6 +37,8 @@ public:
     void setGradient(KoAbstractGradientSP gradient);
     KoAbstractGradientSP gradient() const;
 
+    void setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface);
+
     QSize sizeHint() const override;
 
 protected:

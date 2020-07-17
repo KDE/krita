@@ -45,6 +45,11 @@ KoAbstractGradientSP KisCmbGradient::gradient() const
     return m_gradientChooser->currentResource().dynamicCast<KoAbstractGradient>();
 }
 
+void KisCmbGradient::setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface)
+{
+    m_gradientChooser->setCanvasResourcesInterface(canvasResourcesInterface);
+}
+
 void KisCmbGradient::gradientSelected(KoResourceSP resource)
 {
     KoAbstractGradientSP gradient = resource.dynamicCast<KoAbstractGradient>();

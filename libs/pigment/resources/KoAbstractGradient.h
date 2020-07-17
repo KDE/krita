@@ -72,6 +72,9 @@ public:
     KoAbstractGradientSP cloneAndBakeVariableColors(KoCanvasResourcesInterfaceSP canvasResourcesInterface) const;
     virtual void bakeVariableColors(KoCanvasResourcesInterfaceSP canvasResourcesInterface);
 
+    KoAbstractGradientSP cloneAndUpdateVariableColors(KoCanvasResourcesInterfaceSP canvasResourcesInterface) const;
+    virtual void updateVariableColors(KoCanvasResourcesInterfaceSP canvasResourcesInterface);
+
 private:
     struct Private;
     Private* const d;

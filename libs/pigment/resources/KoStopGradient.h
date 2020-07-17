@@ -128,6 +128,8 @@ public:
 
     QList<int> requiredCanvasResources() const override;
     void bakeVariableColors(KoCanvasResourcesInterfaceSP canvasResourcesInterface) override;
+    void updateVariableColors(KoCanvasResourcesInterfaceSP canvasResourcesInterface) override;
+
 
     /// reimplemented
     QString defaultFileExtension() const override;

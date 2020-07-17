@@ -291,10 +291,11 @@ KoFillConfigWidget::KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVarian
 
     // Gradient selector
     d->ui->wdgGradientEditor->setCompactMode(true);
+    d->ui->wdgGradientEditor->setCanvasResourcesInterface(canvas->resourceManager()->canvasResourcesInterface());
     connect(d->ui->wdgGradientEditor, SIGNAL(sigGradientChanged()), &d->gradientChangedCompressor, SLOT(start()));
     connect(&d->gradientChangedCompressor, SIGNAL(timeout()), SLOT(activeGradientChanged()));
 
-    d->gradientAction = new KoResourcePopupAction(ResourceType::Gradients, d->ui->btnChoosePredefinedGradient);
+    d->gradientAction = new KoResourcePopupAction(ResourceType::Gradients, canvas->resourceManager()->canvasResourcesInterface(), d->ui->btnChoosePredefinedGradient);
 
     d->gradientAction->setToolTip(i18n("Change filling gradient"));
     d->ui->btnChoosePredefinedGradient->setDefaultAction(d->gradientAction);

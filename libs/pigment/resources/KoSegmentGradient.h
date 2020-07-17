@@ -319,6 +319,7 @@ public:
 
     QList<int> requiredCanvasResources() const override;
     void bakeVariableColors(KoCanvasResourcesInterfaceSP canvasResourcesInterface) override;
+    void updateVariableColors(KoCanvasResourcesInterfaceSP canvasResourcesInterface) override;
 
     /**
      * Returns the segment at a given position

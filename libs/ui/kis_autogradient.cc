@@ -30,13 +30,15 @@
 
 #include "KisGradientSliderWidget.h"
 
+#include <KoCanvasResourcesIds.h>
+#include <KoCanvasResourcesInterface.h>
+
 /****************************** KisAutogradient ******************************/
 
-KisAutogradientEditor::KisAutogradientEditor(KoSegmentGradientSP gradient, QWidget *parent, const char* name, const QString& caption, KoColor fgColor, KoColor bgColor)
+KisAutogradientEditor::KisAutogradientEditor(KoSegmentGradientSP gradient, QWidget *parent, const char* name, const QString& caption, KoCanvasResourcesInterfaceSP canvasResourcesInterface)
     : QWidget(parent)
     , m_autogradientResource(gradient)
-    , m_fgColor(fgColor)
-    , m_bgColor(bgColor)
+    , m_canvasResourcesInterface(canvasResourcesInterface)
 {
     setObjectName(name);
     setupUi(this);
@@ -218,7 +220,7 @@ void KisAutogradientEditor::slotChangedLeftType(QAbstractButton* button, bool ch
     KoColor color;
     const KoColorSpace* colorSpace = m_autogradientResource->colorSpace();
     if (button == leftForegroundRadioButton) {
-        color = KoColor(m_fgColor, colorSpace);
+        color = m_canvasResourcesInterface->resource(KoCanvasResource::ForegroundColor).value<KoColor>().convertedTo(colorSpace);
         leftForegroundTransparent->setEnabled(true);
         leftBackgroundTransparent->setEnabled(false);
         if (leftForegroundTransparent->isChecked()) {
@@ -227,7 +229,7 @@ void KisAutogradientEditor::slotChangedLeftType(QAbstractButton* button, bool ch
             type = FOREGROUND_ENDPOINT;
         }
     } else if (button == leftBackgroundRadioButton) {
-        color = KoColor(m_bgColor, colorSpace);
+        color = m_canvasResourcesInterface->resource(KoCanvasResource::BackgroundColor).value<KoColor>().convertedTo(colorSpace);
         leftBackgroundTransparent->setEnabled(true);
         leftForegroundTransparent->setEnabled(false);
         if (leftBackgroundTransparent->isChecked()) {
@@ -259,7 +261,7 @@ void KisAutogradientEditor::slotChangedRightType(QAbstractButton* button, bool c
     KoColor color;
     const KoColorSpace* colorSpace = m_autogradientResource->colorSpace();
     if (button == rightForegroundRadioButton) {
-        color = KoColor(m_fgColor, colorSpace);
+        color = m_canvasResourcesInterface->resource(KoCanvasResource::ForegroundColor).value<KoColor>().convertedTo(colorSpace);
         rightForegroundTransparent->setEnabled(true);
         rightBackgroundTransparent->setEnabled(false);
         if (rightForegroundTransparent->isChecked()) {
@@ -268,7 +270,7 @@ void KisAutogradientEditor::slotChangedRightType(QAbstractButton* button, bool c
             type = FOREGROUND_ENDPOINT;
         }
     } else if (button == rightBackgroundRadioButton) {
-        color = KoColor(m_bgColor, colorSpace);
+        color = m_canvasResourcesInterface->resource(KoCanvasResource::BackgroundColor).value<KoColor>().convertedTo(colorSpace);
         rightBackgroundTransparent->setEnabled(true);
         rightForegroundTransparent->setEnabled(false);
         if (rightBackgroundTransparent->isChecked()) {

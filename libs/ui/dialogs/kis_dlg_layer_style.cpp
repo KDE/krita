@@ -1087,6 +1087,8 @@ GradientOverlay::GradientOverlay(KisCanvasResourceProvider *resourceProvider, QW
     ui.intScale->setRange(0, 100);
     ui.intScale->setSuffix(i18n(" %"));
 
+    ui.cmbGradient->setCanvasResourcesInterface(resourceProvider->resourceManager()->canvasResourcesInterface());
+
     connect(ui.angleSelector, SIGNAL(configChanged()), SIGNAL(configChanged()));
 
     connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
@@ -1158,6 +1160,8 @@ InnerGlow::InnerGlow(Mode mode, KisCanvasResourceProvider *resourceProvider, QWi
 
     ui.intJitter->setRange(0, 100);
     ui.intJitter->setSuffix(i18n(" %"));
+
+    ui.cmbGradient->setCanvasResourcesInterface(resourceProvider->resourceManager()->canvasResourcesInterface());
 
     connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.intOpacity, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
@@ -1395,6 +1399,8 @@ Stroke::Stroke(KisCanvasResourceProvider *resourceProvider, QWidget *parent)
 
     ui.intScale_2->setRange(0, 100);
     ui.intScale_2->setSuffix(i18n(" %"));
+
+    ui.cmbGradient->setCanvasResourcesInterface(resourceProvider->resourceManager()->canvasResourcesInterface());
 
     connect(ui.cmbFillType, SIGNAL(currentIndexChanged(int)), ui.fillStack, SLOT(setCurrentIndex(int)));
 

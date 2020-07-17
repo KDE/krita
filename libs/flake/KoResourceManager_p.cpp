@@ -32,6 +32,7 @@ void KoResourceManager::slotResourceInternalsChanged(int key)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_resources.contains(key));
     notifyDerivedResourcesChanged(key, m_resources[key]);
+    notifyDependenciesAboutTargetChange(key, m_resources[key]);
 }
 
 void KoResourceManager::setResource(int key, const QVariant &value)
@@ -56,7 +57,7 @@ void KoResourceManager::setResource(int key, const QVariant &value)
             m_resources[sourceKey] = newSourceValue;
             notifyResourceChanged(sourceKey, newSourceValue);
         }
-	} else if (m_resources.contains(key)) {
+    } else if (m_resources.contains(key)) {
         const QVariant oldValue = m_resources.value(key, QVariant());
         m_resources[key] = value;
 
@@ -74,13 +75,13 @@ void KoResourceManager::setResource(int key, const QVariant &value)
         }
         notifyResourceChanged(key, value);
     }
-
 }
 
 void KoResourceManager::notifyResourceChanged(int key, const QVariant &value)
 {
     emit resourceChanged(key, value);
     notifyDerivedResourcesChanged(key, value);
+    notifyDependenciesAboutTargetChange(key, value);
 }
 
 void KoResourceManager::notifyDerivedResourcesChanged(int key, const QVariant &value)
@@ -114,6 +115,25 @@ void KoResourceManager::notifyDerivedResourcesChangeAttempted(int key, const QVa
         KoDerivedResourceConverterSP converter = it.value();
         notifyResourceChangeAttempted(converter->key(), converter->readFromSource(value));
         it++;
+    }
+}
+
+void KoResourceManager::notifyDependenciesAboutTargetChange(int targetKey, const QVariant &targetValue)
+{
+    auto it = m_dependencyFromTarget.find(targetKey);
+    while (it != m_dependencyFromTarget.end() && it.key() == targetKey) {
+        const int sourceKey = it.value()->sourceKey();
+
+        if (hasResource(sourceKey)) {
+            QVariant sourceValue = resource(sourceKey);
+
+            notifyResourceChangeAttempted(sourceKey, sourceValue);
+            if (it.value()->shouldUpdateSource(sourceValue, targetValue)) {
+                notifyResourceChanged(sourceKey, sourceValue);
+            }
+        }
+
+        ++it;
     }
 }
 
@@ -262,4 +282,55 @@ void KoResourceManager::removeResourceUpdateMediator(int key)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_updateMediators.contains(key));
     m_updateMediators.remove(key);
+}
+
+void KoResourceManager::addActiveCanvasResourceDependency(KoActiveCanvasResourceDependencySP dep)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!hasActiveCanvasResourceDependency(dep->sourceKey(), dep->targetKey()));
+
+    m_dependencyFromSource.insertMulti(dep->sourceKey(), dep);
+    m_dependencyFromTarget.insertMulti(dep->targetKey(), dep);
+}
+
+bool KoResourceManager::hasActiveCanvasResourceDependency(int sourceKey, int targetKey) const
+{
+    auto it = m_dependencyFromSource.find(sourceKey);
+
+    while (it != m_dependencyFromSource.end() && it.key() == sourceKey) {
+        if (it.value()->targetKey() == targetKey) {
+            return true;
+        }
+        ++it;
+    }
+
+    return false;
+}
+
+void KoResourceManager::removeActiveCanvasResourceDependency(int sourceKey, int targetKey)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(hasActiveCanvasResourceDependency(sourceKey, targetKey));
+
+    {
+        auto it = m_dependencyFromSource.find(sourceKey);
+        while (it != m_dependencyFromSource.end() && it.key() == sourceKey) {
+            if (it.value()->targetKey() == targetKey) {
+                it = m_dependencyFromSource.erase(it);
+                break;
+            } else {
+                ++it;
+            }
+        }
+    }
+
+    {
+        auto it = m_dependencyFromTarget.find(targetKey);
+        while (it != m_dependencyFromTarget.end() && it.key() == targetKey) {
+            if (it.value()->sourceKey() == sourceKey) {
+                it = m_dependencyFromTarget.erase(it);
+                break;
+            } else {
+                ++it;
+            }
+        }
+    }
 }

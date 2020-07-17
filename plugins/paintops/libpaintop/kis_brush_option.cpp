@@ -28,6 +28,9 @@
 #include <kis_brush.h>
 #include <KoEphemeralResource.h>
 
+#include <KoCanvasResourcesInterface.h>
+#include <KoCanvasResourcesIds.h>
+
 
 void KisBrushOptionProperties::writeOptionSettingImpl(KisPropertiesConfiguration *setting) const
 {
@@ -71,12 +74,18 @@ QDomElement getBrushXMLElement(const KisPropertiesConfiguration *setting)
     return element;
 }
 
-void KisBrushOptionProperties::readOptionSettingResourceImpl(const KisPropertiesConfiguration *setting, KisResourcesInterfaceSP resourcesInterface)
+void KisBrushOptionProperties::readOptionSettingResourceImpl(const KisPropertiesConfiguration *setting, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface)
 {
     QDomElement element = getBrushXMLElement(setting);
 
     if (!element.isNull()) {
         m_brush = KisBrush::fromXML(element, resourcesInterface);
+
+        if (m_brush->applyingGradient() && canvasResourcesInterface) {
+            KoAbstractGradientSP gradient = canvasResourcesInterface->resource(KoCanvasResource::CurrentGradient).value<KoAbstractGradientSP>();
+            m_brush->setGradient(gradient);
+        }
+
     }
 }
 

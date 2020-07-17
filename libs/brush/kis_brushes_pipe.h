@@ -99,9 +99,15 @@ public:
         return false;
     }
 
-    void setPreserveLightness(bool preserveLightness) const {
+    void setBrushApplication(enumBrushApplication brushApplication) const {
         Q_FOREACH(QSharedPointer<BrushType> brush, m_brushes) {
-            brush->setPreserveLightness(preserveLightness);
+            brush->setBrushApplication(brushApplication);
+        }
+    }
+
+    void setGradient(KoAbstractGradientSP gradient) const {
+        Q_FOREACH(QSharedPointer<BrushType> brush, m_brushes) {
+            brush->setGradient(gradient);
         }
     }
 

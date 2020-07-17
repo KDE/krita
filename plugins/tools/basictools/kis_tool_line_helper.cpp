@@ -84,7 +84,7 @@ void KisToolLineHelper::repaintLine(KisImageWSP image, KisNodeSP node,
     }
 
 
-    KisPaintOpPresetSP preset = resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset)
+    KisPaintOpPresetSP preset = resourceManager()->resource(KoCanvasResource::CurrentPaintOpPreset)
             .value<KisPaintOpPresetSP>();
 
     if (preset->settings()->paintOpSize() <= 1) {

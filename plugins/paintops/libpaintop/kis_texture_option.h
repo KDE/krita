@@ -86,9 +86,11 @@ public:
      * @param info the paint information
      */
     void apply(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation & info);
-    void fillProperties(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface);
+    void fillProperties(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface);
     QList<KoResourceSP> prepareEmbeddedResources(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface);
-    void setTextureGradient(const KoAbstractGradientSP gradient);
+    bool applyingGradient() const;
+
+    static bool applyingGradient(const KisPropertiesConfiguration *settings);
 
 private:
 

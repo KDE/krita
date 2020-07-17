@@ -128,7 +128,8 @@ public:
 protected:
     void setBrushType(enumBrushType type) override;
     void setHasColor(bool hasColor) override;
-    void setPreserveLightness(bool preserveLightness) override;
+    virtual void setBrushApplication(enumBrushApplication brushApplication) override;
+    virtual void setGradient(KoAbstractGradientSP gradient) override;
     /// Will call KisBrush's saveToDevice as well
 
 private:

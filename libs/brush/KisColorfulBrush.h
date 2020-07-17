@@ -49,7 +49,6 @@ public:
     void toXML(QDomDocument& d, QDomElement& e) const override;
 
 private:
-    bool m_useColorAsMask = false;
     quint8 m_adjustmentMidPoint = 127;
     qreal m_brightnessAdjustment = 0.0;
     qreal m_contrastAdjustment = 0.0;

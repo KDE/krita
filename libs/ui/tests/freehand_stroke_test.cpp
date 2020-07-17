@@ -85,7 +85,7 @@ protected:
         if (m_paintColor && iteration > 0) {
             QVariant i;
             i.setValue(KoColor(*m_paintColor, image->colorSpace()));
-            manager->setResource(KoCanvasResourceProvider::ForegroundColor, i);
+            manager->setResource(KoCanvasResource::ForegroundColor, i);
         }
     }
 

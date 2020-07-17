@@ -28,6 +28,7 @@
 #include <kis_shared.h>
 #include <kis_dab_shape.h>
 #include <kritabrush_export.h>
+#include <resources/KoAbstractGradient.h>
 
 class KisQImagemask;
 typedef KisSharedPtr<KisQImagemask> KisQImagemaskSP;
@@ -46,6 +47,13 @@ enum enumBrushType {
     IMAGE,
     PIPE_MASK,
     PIPE_IMAGE
+};
+
+enum enumBrushApplication {
+    ALPHAMASK,
+    IMAGESTAMP,
+    LIGHTNESSMAP,
+    GRADIENTMAP
 };
 
 static const qreal DEFAULT_SOFTNESS_FACTOR = 1.0;
@@ -283,13 +291,15 @@ public:
 
     virtual bool hasColor() const;
 
+    virtual enumBrushApplication brushApplication() const;
+
+    virtual void setBrushApplication(enumBrushApplication brushApplication);
+
     virtual bool preserveLightness() const;
 
-    /**
-    * If the brush image data are colorful (e.g. you created the brush from the canvas with custom brush)
-    * and you want to paint with it as with masks, but preserve Lightness (Value), set to true.
-    */
-    virtual void setPreserveLightness(bool preserveLightness);
+    virtual bool applyingGradient() const;
+
+    virtual void setGradient(KoAbstractGradientSP gradient);
 
 
     /**

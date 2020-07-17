@@ -317,10 +317,8 @@ public:
     /// reimplemented
     void colorAt(KoColor& dst, qreal t) const override;
 
-    /// reimplemented
-    bool hasVariableColors() const override;
-    /// reimplemented
-    void setVariableColors(const KoColor& foreground, const KoColor& background) override;
+    QList<int> requiredCanvasResources() const override;
+    void bakeVariableColors(KoCanvasResourcesInterfaceSP canvasResourcesInterface) override;
 
     /**
      * Returns the segment at a given position

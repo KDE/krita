@@ -464,7 +464,7 @@ void DefaultToolGeometryWidget::showEvent(QShowEvent *event)
 
 void DefaultToolGeometryWidget::resourceChanged(int key, const QVariant &res)
 {
-    if (key == KoCanvasResourceProvider::Unit) {
+    if (key == KoCanvasResource::Unit) {
         setUnit(res.value<KoUnit>());
     } else if (key == DefaultTool::HotPosition) {
         positionSelector->setValue(KoFlake::AnchorPosition(res.toInt()));

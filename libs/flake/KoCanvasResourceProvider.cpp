@@ -29,20 +29,43 @@
 #include "KoResourceManager_p.h"
 #include <KoColorSpaceRegistry.h>
 
+#include <KoCanvasResourcesInterface.h>
+
+struct Q_DECL_HIDDEN CanvasResourceProviderInterfaceWrapper : public KoCanvasResourcesInterface
+{
+    CanvasResourceProviderInterfaceWrapper(KoCanvasResourceProvider *provider)
+        : m_provider(provider)
+    {
+    }
+
+    QVariant resource(int key) const override {
+        return m_provider->resource(key);
+    }
+
+private:
+    KoCanvasResourceProvider *m_provider = 0;
+};
+
+
 class Q_DECL_HIDDEN KoCanvasResourceProvider::Private
 {
 public:
+    Private(KoCanvasResourceProvider *q)
+        : interfaceWrapper(new CanvasResourceProviderInterfaceWrapper(q))
+    {
+    }
+
     KoResourceManager manager;
+    QSharedPointer<CanvasResourceProviderInterfaceWrapper> interfaceWrapper;
 };
 
 KoCanvasResourceProvider::KoCanvasResourceProvider(QObject *parent)
     : QObject(parent)
-    , d(new Private())
+    , d(new Private(this))
 {
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
     setForegroundColor(KoColor(Qt::black, cs));
     setBackgroundColor(KoColor(Qt::white, cs));
-    setResource(ApplicationSpeciality, NoSpecial);
 
     connect(&d->manager, &KoResourceManager::resourceChanged,
             this, &KoCanvasResourceProvider::canvasResourceChanged);
@@ -93,22 +116,22 @@ KoColor KoCanvasResourceProvider::koColorResource(int key) const
 
 void KoCanvasResourceProvider::setForegroundColor(const KoColor &color)
 {
-    setResource(ForegroundColor, color);
+    setResource(KoCanvasResource::ForegroundColor, color);
 }
 
 KoColor KoCanvasResourceProvider::foregroundColor() const
 {
-    return koColorResource(ForegroundColor);
+    return koColorResource(KoCanvasResource::ForegroundColor);
 }
 
 void KoCanvasResourceProvider::setBackgroundColor(const KoColor &color)
 {
-    setResource(BackgroundColor, color);
+    setResource(KoCanvasResource::BackgroundColor, color);
 }
 
 KoColor KoCanvasResourceProvider::backgroundColor() const
 {
-    return koColorResource(BackgroundColor);
+    return koColorResource(KoCanvasResource::BackgroundColor);
 }
 
 KoShape *KoCanvasResourceProvider::koShapeResource(int key) const
@@ -179,4 +202,24 @@ bool KoCanvasResourceProvider::hasResourceUpdateMediator(int key)
 void KoCanvasResourceProvider::removeResourceUpdateMediator(int key)
 {
     d->manager.removeResourceUpdateMediator(key);
+}
+
+void KoCanvasResourceProvider::addActiveCanvasResourceDependency(KoActiveCanvasResourceDependencySP dep)
+{
+    d->manager.addActiveCanvasResourceDependency(dep);
+}
+
+bool KoCanvasResourceProvider::hasActiveCanvasResourceDependency(int sourceKey, int targetKey) const
+{
+    return d->manager.hasActiveCanvasResourceDependency(sourceKey, targetKey);
+}
+
+void KoCanvasResourceProvider::removeActiveCanvasResourceDependency(int sourceKey, int targetKey)
+{
+    d->manager.removeActiveCanvasResourceDependency(sourceKey, targetKey);
+}
+
+KoCanvasResourcesInterfaceSP KoCanvasResourceProvider::canvasResourcesInterface() const
+{
+    return d->interfaceWrapper;
 }

@@ -30,6 +30,7 @@
 #include <KoUnit.h>
 #include "KoDerivedResourceConverter.h"
 #include "KoResourceUpdateMediator.h"
+#include "KoActiveCanvasResourceDependency.h"
 
 
 class KoShape;
@@ -200,6 +201,27 @@ public:
      */
     void removeResourceUpdateMediator(int key);
 
+    /**
+     * Add a dependency object that will link two active resources. When the
+     * target of the dependency changes, the source will get a notification
+     * about the change.
+     */
+    void addActiveCanvasResourceDependency(KoActiveCanvasResourceDependencySP dep);
+
+    /**
+     * @return true if specified dependency exists
+     *
+     * \see addActiveCanvasResourceDependency
+     */
+    bool hasActiveCanvasResourceDependency(int sourceKey, int targetKey) const;
+
+    /**
+     * Remove specified dependency
+     *
+     * \see addActiveCanvasResourceDependency
+     */
+    void removeActiveCanvasResourceDependency(int sourceKey, int targetKey);
+
 Q_SIGNALS:
     void resourceChanged(int key, const QVariant &value);
     void resourceChangeAttempted(int key, const QVariant &value);
@@ -210,6 +232,8 @@ private:
 
     void notifyResourceChangeAttempted(int key, const QVariant &value);
     void notifyDerivedResourcesChangeAttempted(int key, const QVariant &value);
+
+    void notifyDependenciesAboutTargetChange(int targetKey, const QVariant &value);
 
 private Q_SLOTS:
     void slotResourceInternalsChanged(int key);
@@ -222,6 +246,9 @@ private:
 
     QHash<int, KoDerivedResourceConverterSP> m_derivedResources;
     QMultiHash<int, KoDerivedResourceConverterSP> m_derivedFromSource;
+
+    QMultiHash<int, KoActiveCanvasResourceDependencySP> m_dependencyFromSource;
+    QMultiHash<int, KoActiveCanvasResourceDependencySP> m_dependencyFromTarget;
 
     QHash<int, KoResourceUpdateMediatorSP> m_updateMediators;
 };

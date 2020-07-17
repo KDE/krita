@@ -23,6 +23,7 @@
 
 class QVariant;
 
+#include <kritaresources_export.h>
 
 /**
  * @brief An abstract class for providing access to canvas resources
@@ -31,7 +32,7 @@ class QVariant;
  * Specific implementations may forward the requests either to
  * KoCanvasResourceProvider or to a local storage.
  */
-class KRITAGLOBAL_EXPORT KoCanvasResourcesInterface
+class KRITARESOURES_EXPORT KoCanvasResourcesInterface
 {
 public:
     virtual ~KoCanvasResourcesInterface();

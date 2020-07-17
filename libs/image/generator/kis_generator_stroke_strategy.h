@@ -19,6 +19,7 @@
  */
 
 #include <QObject>
+#include <QSharedPointer>
 #include <kis_generator.h>
 #include <kis_generator_layer.h>
 #include "kis_simple_stroke_strategy.h"
@@ -30,13 +31,11 @@ public:
     KisGeneratorStrokeStrategy(KisImageWSP image);
     ~KisGeneratorStrokeStrategy() override;
 
-    static QList<KisStrokeJobData *> createJobsData(KisGeneratorLayerSP layer, KisGeneratorSP f, KisPaintDeviceSP dev, const QRect &rc, const KisFilterConfigurationSP filterConfig);
+    static QList<KisStrokeJobData *> createJobsData(KisGeneratorLayerSP layer, QSharedPointer<bool> cookie, KisGeneratorSP f, KisPaintDeviceSP dev, const QRect &rc, const KisFilterConfigurationSP filterConfig);
 
 private:
     void initStrokeCallback() override;
     void doStrokeCallback(KisStrokeJobData *data) override;
-    void finishStrokeCallback() override;
-    void cancelStrokeCallback() override;
 
 private:
     struct Private;

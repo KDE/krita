@@ -12,8 +12,9 @@
 #include "kis_mypaintbrush_option.h"
 #include "libmypaint/mypaint-brush.h"
 
-class PAINTOP_EXPORT KisMyPaintCurveOption
+class PAINTOP_EXPORT KisMyPaintCurveOption: public QObject
 {
+    Q_OBJECT
 public:
     KisMyPaintCurveOption(const QString& name,
                    KisPaintOpOption::PaintopCategory category,
@@ -204,7 +205,7 @@ protected:
      */
     KisCubicCurve m_commonCurve;
 
-    int m_curveMode;
+    int m_curveMode;  
 
     QMap<MyPaintBrushOptionType, KisDynamicOptionSP> m_sensorMap;
 
@@ -212,7 +213,11 @@ private:
 
     qreal m_value;
     qreal m_minValue;
-    qreal m_maxValue;   
+    qreal m_maxValue;
+    bool firstRead = true;
+
+Q_SIGNALS:
+    void checkUseCurve();
 };
 
 #endif // KIS_MYPAINT_CURVE_OPTION_H

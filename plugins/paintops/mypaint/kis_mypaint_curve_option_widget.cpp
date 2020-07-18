@@ -3,12 +3,14 @@
 #include "ui_wdgmypaintcurveoption.h"
 #include "widgets/kis_curve_widget.h"
 #include "kis_mypaintbrush_option.h"
+#include "kis_my_paintop_settings_widget.h"
 #include "kis_my_paintop_option.h"
 #include "kis_global.h"
 #include "kis_mypaint_curve_option.h"
 #include "kis_signals_blocker.h"
 #include "kis_icon_utils.h"
 #include "kis_mypaint_curve_option.h"
+#include "kis_my_paintop_option.h"
 #include <QJsonDocument>
 #include <QJsonObject>
 
@@ -22,7 +24,7 @@ inline void setLabel(QLabel* label, const KisCurveLabel& curve_label)
     }
 }
 
-KisMyPaintCurveOptionWidget::KisMyPaintCurveOptionWidget(KisMyPaintCurveOption* curveOption, const QString &minLabel, const QString &maxLabel, bool hideSlider)
+KisMyPaintCurveOptionWidget::KisMyPaintCurveOptionWidget(KisMyPaintCurveOption* curveOption, const QString &minLabel, const QString &maxLabel, bool hideSlider, KisMyPaintOpOption *baseOption)
     : KisPaintOpOption(curveOption->category(), curveOption->isChecked())
     , m_widget(new QWidget)
     , m_curveOptionWidget(new Ui_WdgMyPaintCurveOption())
@@ -63,9 +65,8 @@ KisMyPaintCurveOptionWidget::KisMyPaintCurveOptionWidget(KisMyPaintCurveOption* 
     m_curveOptionWidget->label_ymin->setText(minLabel);
     m_curveOptionWidget->label_ymax->setText(maxLabel);
 
-    // strength settings is shown as 0-100%
-    m_curveOptionWidget->strengthSlider->setRange(curveOption->minValue()*100, curveOption->maxValue()*100, 0);
-    m_curveOptionWidget->strengthSlider->setValue(curveOption->value()*100);
+    m_curveOptionWidget->strengthSlider->setRange(curveOption->minValue(), curveOption->maxValue(), 2);
+    m_curveOptionWidget->strengthSlider->setValue(curveOption->value());
     m_curveOptionWidget->strengthSlider->setPrefix(i18n("Strength: "));
     m_curveOptionWidget->strengthSlider->setSuffix(i18n("%"));    
 
@@ -74,9 +75,10 @@ KisMyPaintCurveOptionWidget::KisMyPaintCurveOptionWidget(KisMyPaintCurveOption* 
          m_curveOptionWidget->strengthSlider->hide();
     }
 
+    connect(m_curveOption, SIGNAL(checkUseCurve()), SLOT(slotCheckUseCurve()));
     connect(m_curveOptionWidget->checkBoxUseCurve, SIGNAL(stateChanged(int))  , SLOT(updateValues()));
     connect(m_curveOptionWidget->curveMode, SIGNAL(currentIndexChanged(int)), SLOT(updateMode()));
-    connect(m_curveOptionWidget->strengthSlider, SIGNAL(valueChanged(qreal)), SLOT(updateValues()));
+    connect(m_curveOptionWidget->strengthSlider, SIGNAL(valueChanged(qreal)), SLOT(updateValues()));  
 }
 
 KisMyPaintCurveOptionWidget::~KisMyPaintCurveOptionWidget()
@@ -87,14 +89,14 @@ KisMyPaintCurveOptionWidget::~KisMyPaintCurveOptionWidget()
 
 void KisMyPaintCurveOptionWidget::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {    
-    setBaseValue(setting, m_curveOptionWidget->strengthSlider->value()/100.0f);
-    m_curveOption->writeOptionSetting(setting);    
+    setBaseValue(setting, m_curveOptionWidget->strengthSlider->value());
+    m_curveOption->writeOptionSetting(setting);
 }
 
 void KisMyPaintCurveOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     //setting->dump();
-
+    updateValuesCalled = true;
     m_curveOption->readOptionSetting(setting);  
 
     // Signals needs to be blocked, otherwise checking the checkbox will trigger
@@ -104,7 +106,7 @@ void KisMyPaintCurveOptionWidget::readOptionSetting(const KisPropertiesConfigura
     m_curveOptionWidget->checkBoxUseSameCurve->blockSignals(blockedBefore);
 
     m_curveOptionWidget->checkBoxUseCurve->setChecked(m_curveOption->isCurveUsed());
-    m_curveOptionWidget->strengthSlider->setValue(getBaseValue(setting)*100);
+    m_curveOptionWidget->strengthSlider->setValue(getBaseValue(setting));
     m_curveOptionWidget->curveMode->setCurrentIndex(m_curveOption->getCurveMode());
 
     disableWidgets(!m_curveOption->isCurveUsed());
@@ -114,6 +116,7 @@ void KisMyPaintCurveOptionWidget::readOptionSetting(const KisPropertiesConfigura
         m_curveOptionWidget->sensorSelector->setCurrent(m_curveOption->activeSensors().first());
     updateSensorCurveLabels(m_curveOptionWidget->sensorSelector->currentHighlighted());
     updateCurve(m_curveOptionWidget->sensorSelector->currentHighlighted());
+    updateValuesCalled = false;
 }
 
 void KisMyPaintCurveOptionWidget::lodLimitations(KisPaintopLodLimitations *l) const
@@ -170,6 +173,12 @@ void KisMyPaintCurveOptionWidget::slotUseSameCurveChanged()
     emitSettingChanged();
 }
 
+void KisMyPaintCurveOptionWidget::slotCheckUseCurve() {
+
+    m_curveOptionWidget->checkBoxUseCurve->setChecked(false);
+    updateValues();
+}
+
 void KisMyPaintCurveOptionWidget::updateSensorCurveLabels(KisDynamicOptionSP sensor)
 {
     if (sensor) {
@@ -209,9 +218,10 @@ void KisMyPaintCurveOptionWidget::updateLabelsOfCurrentSensor()
 }
 
 void KisMyPaintCurveOptionWidget::updateValues()
-{    
-    m_curveOption->setValue(m_curveOptionWidget->strengthSlider->value()/100.0); // convert back to 0-1 for data
-    m_curveOption->setCurveUsed(m_curveOptionWidget->checkBoxUseCurve->isChecked());
+{
+    updateValuesCalled = true;
+    m_curveOption->setValue(m_curveOptionWidget->strengthSlider->value());
+    m_curveOption->setCurveUsed(m_curveOptionWidget->checkBoxUseCurve->isChecked());    
     disableWidgets(!m_curveOptionWidget->checkBoxUseCurve->isChecked());
     emitSettingChanged();
 }
@@ -295,9 +305,6 @@ void KisMyPaintCurveOptionWidget::changeCurveArchShape()
     m_curveOptionWidget->curveWidget->setCurve(KisCubicCurve(points));
 }
 
-
-
-
 void KisMyPaintCurveOptionWidget::disableWidgets(bool disable)
 {
     m_curveOptionWidget->checkBoxUseSameCurve->setDisabled(disable);
@@ -346,14 +353,20 @@ float KisMyPaintCurveOptionWidget::getBaseValue(KisPropertiesConfigurationSP set
 
     MyPaintBrush *brush = mypaint_brush_new();
     mypaint_brush_from_string(brush, setting->getProperty(MYPAINT_JSON).toByteArray());
+
+//    if(m_curveOption->currentSetting() == MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC)
+//        return log(setting->getFloat(MYPAINT_DIAMETER)/2);
+
+//    if(m_curveOption->currentSetting() == MYPAINT_BRUSH_SETTING_OPAQUE)
+//        return setting->getFloat(MYPAINT_OPACITY);
+
+//    if(m_curveOption->currentSetting() == MYPAINT_BRUSH_SETTING_HARDNESS)
+//        return setting->getFloat(MYPAINT_HARDNESS);
+
     return mypaint_brush_get_base_value(brush, m_curveOption->currentSetting());
 }
 
 void KisMyPaintCurveOptionWidget::setBaseValue(KisPropertiesConfigurationSP setting, float val) const {
-
-    return;
-    //qDebug() << "BEFORE";
-    //qDebug() << setting->getProperty(MYPAINT_JSON).toByteArray();
 
     QJsonDocument doc = QJsonDocument::fromJson(setting->getProperty(MYPAINT_JSON).toByteArray());
     QJsonObject brush_json = doc.object();
@@ -362,8 +375,6 @@ void KisMyPaintCurveOptionWidget::setBaseValue(KisPropertiesConfigurationSP sett
     QVariantMap name_map = settings_map[m_curveOption->name()].toMap();
     double base_val = name_map["base_value"].toDouble();
 
-    qDebug() << m_curveOption->name() << " " << base_val << " " << val << " " << m_curveOptionWidget->strengthSlider->value();
-
     name_map["base_value"] = val;
     settings_map[m_curveOption->name()] = name_map;
     map["settings"] = settings_map;
@@ -371,7 +382,19 @@ void KisMyPaintCurveOptionWidget::setBaseValue(KisPropertiesConfigurationSP sett
     QJsonObject json_obj = QJsonObject::fromVariantMap(map);
     QJsonDocument doc2(json_obj);
 
-    setting->setProperty(MYPAINT_JSON, doc2.toJson());
-    //qDebug() << "AFTER";
-    //qDebug() << doc2.toJson();
+    setting->setProperty(MYPAINT_JSON, doc2.toJson());    
+
+    if(m_curveOption->currentSetting() == MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC)
+        setting->setProperty(MYPAINT_DIAMETER, exp(val)*2);
+
+    if(m_curveOption->currentSetting() == MYPAINT_BRUSH_SETTING_HARDNESS)
+        setting->setProperty(MYPAINT_HARDNESS, val);
+
+    if(m_curveOption->currentSetting() == MYPAINT_BRUSH_SETTING_OPAQUE)
+        setting->setProperty(MYPAINT_OPACITY, val);
+}
+
+KisDoubleSliderSpinBox* KisMyPaintCurveOptionWidget::slider() {
+
+    return m_curveOptionWidget->strengthSlider;
 }

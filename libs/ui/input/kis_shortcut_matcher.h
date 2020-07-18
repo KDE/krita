@@ -45,7 +45,7 @@ class KisNativeGestureShortcut;
  *
  * The class works with two types of actions: long running
  * (represented by KisStrokeShortcuts) and "atomic"
- * (KisSingleActionShortcut). The former one invole some long
+ * (KisSingleActionShortcut). The former one involves some long
  * interaction with the user by means of a mouse cursor or a tablet,
  * the latter one simple action like "Zoom 100%" or "Reset Rotation".
  *

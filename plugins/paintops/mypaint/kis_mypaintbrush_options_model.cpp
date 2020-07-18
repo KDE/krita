@@ -56,7 +56,7 @@ bool KisMyPaintBrushOptionsModel::setData(const QModelIndex &index, const QVaria
     if (role == Qt::CheckStateRole) {
         bool checked = (value.toInt() == Qt::Checked);
 
-        if (true) { //m_curveOption->activeSensors().size() != 1) { // Don't uncheck the last sensor (but why not?)
+        if (true) {//|| m_curveOption->activeSensors().size() != 1) { // Don't uncheck the last sensor (but why not?)
             KisDynamicOptionSP sensor = m_curveOption->sensor(KisMyPaintBrushOption::id2Type(KisMyPaintBrushOption::sensorsIds()[index.row()].id()), false);
 
             if (!sensor) {

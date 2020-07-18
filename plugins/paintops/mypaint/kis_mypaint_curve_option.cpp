@@ -75,8 +75,7 @@ void KisMyPaintCurveOption::resetAllSensors()
 }
 
 void KisMyPaintCurveOption::writeOptionSetting(KisPropertiesConfigurationSP setting)
-{
-    qDebug() << "WRITE";
+{    
     if (m_checkable) {
         setting->setProperty("Pressure" + m_name, isChecked());
     }
@@ -107,6 +106,9 @@ void KisMyPaintCurveOption::writeOptionSetting(KisPropertiesConfigurationSP sett
         inputs_map[option->id(option->sensorType())] = pointsList;
     }
 
+    if(!m_useCurve || activeSensors().size()==0)
+        inputs_map.clear();
+
     name_map["inputs"] = inputs_map;    
     settings_map[m_name] = name_map;
     map["settings"] = settings_map;
@@ -120,8 +122,6 @@ void KisMyPaintCurveOption::writeOptionSetting(KisPropertiesConfigurationSP sett
 //    dev->open(QIODevice::ReadWrite);
 //    dev->write(doc2.toJson());
 //    dev->close();
-
-
 
     setting->setProperty(m_name + "UseCurve", m_useCurve);
     setting->setProperty(m_name + "UseSameCurve", m_useSameCurve);
@@ -171,7 +171,6 @@ void KisMyPaintCurveOption::readNamedOptionSetting(const QString& prefix, const 
         replaceSensor(KisMyPaintBrushOption::type2Sensor(sensorType, m_name));
     }
 
-
     MyPaintBrush *brush = mypaint_brush_new();
     mypaint_brush_from_string(brush, setting->getProperty(MYPAINT_JSON).toByteArray());
 
@@ -208,11 +207,20 @@ void KisMyPaintCurveOption::readNamedOptionSetting(const QString& prefix, const 
     }
 
     if (activeSensors().size() == 0) {
-     //   m_sensorMap[PRESSURE]->setActive(true);
+//        m_sensorMap[PRESSURE]->setActive(true);
+        if(m_useCurve){
+            m_useCurve = false;
+            emit checkUseCurve();
+        }
+        m_useCurve = false;
+    }
+    else {
+        m_useCurve = true;
     }
 
+    firstRead = false;
     m_value = setting->getDouble(m_name + "Value", m_maxValue);    
-    m_useCurve = setting->getBool(m_name + "UseCurve", true);      
+    //m_useCurve = setting->getBool(m_name + "UseCurve", true);
     m_curveMode = setting->getInt(m_name + "curveMode");    
 }
 
@@ -540,6 +548,8 @@ MyPaintBrushSetting KisMyPaintCurveOption::currentSetting() {
         return MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC;
     else if(m_name == "elliptical_dab_angle")
         return MYPAINT_BRUSH_SETTING_ELLIPTICAL_DAB_ANGLE;
+    else if(m_name == "elliptical_dab_ratio")
+        return MYPAINT_BRUSH_SETTING_ELLIPTICAL_DAB_RATIO;
     else if(m_name == "custom_input_slowness")
         return MYPAINT_BRUSH_SETTING_CUSTOM_INPUT_SLOWNESS;
     else if(m_name == "dabs_per_basic_radius")
@@ -550,7 +560,7 @@ MyPaintBrushSetting KisMyPaintCurveOption::currentSetting() {
         return MYPAINT_BRUSH_SETTING_DABS_PER_ACTUAL_RADIUS;
     else if(m_name == "offset_by_speed_slowness")
         return MYPAINT_BRUSH_SETTING_OFFSET_BY_SPEED_SLOWNESS;
-    else if(m_name == "stroke_duration_log")
+    else if(m_name == "stroke_duration_logarithmic")
         return MYPAINT_BRUSH_SETTING_STROKE_DURATION_LOGARITHMIC;
 
     return MYPAINT_BRUSH_SETTING_ERASER;

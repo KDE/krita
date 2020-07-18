@@ -2,7 +2,7 @@
 
 #include "kis_paintop.h"
 #include "kis_spacing_information.h"
-#include "kis_my_paintop_settings.h"
+//#include "kis_my_paintop_settings.h"
 #include <kis_paint_information.h>
 #include <kis_brush_based_paintop_settings.h>
 #include <kis_painter.h>
@@ -10,6 +10,7 @@
 #include <kis_paintop_plugin_utils.h>
 #include <kis_my_paintop_option.h>
 #include <kis_paintop_settings.h>
+#include <kis_node.h>
 
 #include <libmypaint/mypaint-brush.h>
 #include <QDebug>

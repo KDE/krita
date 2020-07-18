@@ -5,6 +5,7 @@
 #include <kis_paintop_option.h>
 #include "ui_wdgmypaintcurveoption.h"
 #include <kis_mypaint_curve_option.h>
+#include <kis_my_paintop_option.h>
 
 class Ui_WdgMyPaintCurveOption;
 class KisMyPaintCurveOption;
@@ -14,7 +15,7 @@ class PAINTOP_EXPORT KisMyPaintCurveOptionWidget : public KisPaintOpOption
 {
     Q_OBJECT
 public:
-    KisMyPaintCurveOptionWidget(KisMyPaintCurveOption* curveOption, const QString &minLabel, const QString &maxLabel, bool hideSlider = false);
+    KisMyPaintCurveOptionWidget(KisMyPaintCurveOption* curveOption, const QString &minLabel, const QString &maxLabel, bool hideSlider = false, KisMyPaintOpOption *option = nullptr);
     ~KisMyPaintCurveOptionWidget() override;
 
     void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
@@ -26,6 +27,8 @@ public:
     void setChecked(bool checked) override;
     void show();
 
+    KisDoubleSliderSpinBox* slider();
+
 protected:
 
     KisMyPaintCurveOption* curveOption();
@@ -35,6 +38,7 @@ private Q_SLOTS:
 
     void slotModified();
     void slotUseSameCurveChanged();
+    void slotCheckUseCurve();
 
     void updateSensorCurveLabels(KisDynamicOptionSP sensor);
     void updateCurve(KisDynamicOptionSP sensor);
@@ -61,6 +65,8 @@ private:
     Ui_WdgMyPaintCurveOption* m_curveOptionWidget;
     QComboBox* m_curveMode;
     KisMyPaintCurveOption* m_curveOption;
+    KisMyPaintOpOption *m_baseOption;
+    bool updateValuesCalled = false;
 
     KisCubicCurve getWidgetCurve();
     KisCubicCurve getHighlightedSensorCurve();

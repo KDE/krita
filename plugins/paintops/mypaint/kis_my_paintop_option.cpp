@@ -18,9 +18,9 @@ KisMyPaintOpOption::KisMyPaintOpOption()
     setObjectName("KisMyPaintOpOption");
 
     m_checkable = false;
-    m_options = new KisMyPaintOpOptionsWidget();
+    m_options = new KisMyPaintOpOptionsWidget();    
 
-    m_options->radiusSPBox->setRange(0.0, 7.0, 1);
+    m_options->radiusSPBox->setRange(0.0, 7.0, 2);
     m_options->radiusSPBox->setValue(radius());
     //m_options->radiusSPBox->setSuffix(i18n(" px"));
 
@@ -60,7 +60,7 @@ void KisMyPaintOpOption::writeOptionSetting(KisPropertiesConfigurationSP setting
 }
 
 void KisMyPaintOpOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
-{
+{    
     KisMyPaintOptionProperties op;
     op.readOptionSetting(setting);
 
@@ -71,6 +71,12 @@ void KisMyPaintOpOption::readOptionSetting(const KisPropertiesConfigurationSP se
     m_options->hardnessSPBox->setValue(op.hardness);
     m_options->opacitySPBox->setValue(op.opacity);
     m_options->eraserBox->setChecked(op.eraser);
+}
+
+void KisMyPaintOpOption::refresh() {
+
+    qDebug() << "Called";
+    emitSettingChanged();
 }
 
 void KisMyPaintOpOption::setEraser(bool isEraser) const
@@ -112,4 +118,19 @@ void KisMyPaintOpOption::setRadius(int radius) const
 int KisMyPaintOpOption::radius() const
 {
     return m_options->radiusSPBox->value();
+}
+
+KisDoubleSliderSpinBox* KisMyPaintOpOption::radiusSlider() {
+
+    return m_options->radiusSPBox;
+}
+
+KisDoubleSliderSpinBox* KisMyPaintOpOption::hardnessSlider() {
+
+    return m_options->hardnessSPBox;
+}
+
+KisDoubleSliderSpinBox* KisMyPaintOpOption::opacitySlider() {
+
+    return m_options->opacitySPBox;
 }

@@ -4,6 +4,7 @@
 #include <KisPaintopPropertiesBase.h>
 #include <kis_properties_configuration.h>
 #include <kis_paintop_option.h>
+#include <kis_slider_spin_box.h>
 
 const QString MYPAINT_DIAMETER = "MyPaint/diameter";
 const QString MYPAINT_HARDNESS = "MyPaint/hardness";
@@ -34,6 +35,11 @@ public:
 
     void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
     void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
+
+    void refresh();
+    KisDoubleSliderSpinBox* radiusSlider();
+    KisDoubleSliderSpinBox* hardnessSlider();
+    KisDoubleSliderSpinBox* opacitySlider();
 
 private:
     KisMyPaintOpOptionsWidget *m_options;

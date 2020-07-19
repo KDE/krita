@@ -19,6 +19,7 @@
  */
 
 #include <generator/kis_generator_registry.h>
+#include <kis_fill_painter.h>
 #include <kis_filter_configuration.h>
 #include <KisGlobalResourcesInterface.h>
 #include <kis_processing_information.h>
@@ -33,40 +34,48 @@
 
 #include "kis_seexpr_generator_test.h"
 
+#define BASE_SCRIPT "$val=voronoi(5*[$u,$v,.5],4,.6,.2); \n \
+$color=ccurve($val,\n\
+    0.000, [0.141, 0.059, 0.051], 4,\n\
+    0.185, [0.302, 0.176, 0.122], 4,\n\
+    0.301, [0.651, 0.447, 0.165], 4,\n\
+    0.462, [0.976, 0.976, 0.976], 4);\n\
+$color\n\
+"
+
 void KisSeExprGeneratorTest::initTestCase()
 {
     KisGeneratorRegistry::instance();
 }
 
-void KisSeExprGeneratorTest::testGeneration()
+void KisSeExprGeneratorTest::testGenerationFromScript()
 {
-
     KisGeneratorSP generator = KisGeneratorRegistry::instance()->get("seexpr");
     QVERIFY(generator);
 
     KisFilterConfigurationSP config = generator->defaultConfiguration(KisGlobalResourcesInterface::instance());
     QVERIFY(config);
 
-    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    KisProcessingInformation test(dev, QPoint(0, 0), KisSelectionSP());
-    TestUtil::TestProgressBar *bar = new TestUtil::TestProgressBar();
-    KoProgressUpdater *pu = new KoProgressUpdater(bar);
-    KoUpdaterPtr updater = pu->startSubtask();
-
+    config->setProperty("script", BASE_SCRIPT);
+    
+    QPoint point(0, 0);
     QSize testSize(256, 256);
 
-    generator->generate(test, testSize, config, updater);
+    KisDefaultBoundsBaseSP bounds(new KisWrapAroundBoundsWrapper(new KisDefaultBounds(), QRect(point.x(), point.y(), testSize.width(), testSize.height())));
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    dev->setDefaultBounds(bounds);
+
+    KisFillPainter fillPainter(dev);
+    fillPainter.fillRect(point.x(), point.y(), 256, 256, config);
 
     QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "noisecolor2.png");
 
     QPoint errpoint;
-    if (!TestUtil::compareQImages(errpoint, qimage, dev->convertToQImage(0, 0, 0, testSize.width(), testSize.height()))) {
-        dev->convertToQImage(0, 0, 0, testSize.width(), testSize.height()).save("filtertest.png");
+    if (!TestUtil::compareQImages(errpoint, qimage, dev->convertToQImage(nullptr, point.x(), point.y(), testSize.width(), testSize.height()), 1)) {
+        dev->convertToQImage(nullptr, point.x(), point.y(), testSize.width(), testSize.height()).save("filtertest.png");
         QFAIL(QString("Failed to create image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
-    delete pu;
-    delete bar;
 }
 
 KISTEST_MAIN(KisSeExprGeneratorTest)

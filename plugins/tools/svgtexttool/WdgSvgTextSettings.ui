@@ -161,7 +161,7 @@
          <item>
           <widget class="QLabel" name="label_5">
            <property name="text">
-            <string>Value</string>
+            <string comment="The Value label used by SVG Text Tool">Value</string>
            </property>
           </widget>
          </item>

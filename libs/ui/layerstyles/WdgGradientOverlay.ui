@@ -151,7 +151,7 @@
              </item>
              <item>
               <property name="text">
-               <string>Diamond</string>
+               <string comment="Gradient type - Diamond">Diamond</string>
               </property>
              </item>
             </widget>

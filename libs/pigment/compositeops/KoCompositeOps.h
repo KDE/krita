@@ -256,43 +256,43 @@ struct AddRGBOps<Traits, true>
         add<&cfTangentNormalmap  <HSYType,Arg> >(cs, COMPOSITE_TANGENT_NORMALMAP  , i18n("Tangent Normalmap")  , KoCompositeOp::categoryMisc());
         add<&cfReorientedNormalMapCombine <HSYType, Arg> >(cs, COMPOSITE_COMBINE_NORMAL, i18n("Combine Normal Maps"), KoCompositeOp::categoryMisc());
 
-        add<&cfColor             <HSYType,Arg> >(cs, COMPOSITE_COLOR         , i18n("Color")              , KoCompositeOp::categoryHSY());
-        add<&cfHue               <HSYType,Arg> >(cs, COMPOSITE_HUE           , i18n("Hue")                , KoCompositeOp::categoryHSY());
-        add<&cfSaturation        <HSYType,Arg> >(cs, COMPOSITE_SATURATION    , i18n("Saturation")         , KoCompositeOp::categoryHSY());
-        add<&cfIncreaseSaturation<HSYType,Arg> >(cs, COMPOSITE_INC_SATURATION, i18n("Increase Saturation"), KoCompositeOp::categoryHSY());
-        add<&cfDecreaseSaturation<HSYType,Arg> >(cs, COMPOSITE_DEC_SATURATION, i18n("Decrease Saturation"), KoCompositeOp::categoryHSY());
-        add<&cfLightness         <HSYType,Arg> >(cs, COMPOSITE_LUMINIZE      , i18n("Luminosity")         , KoCompositeOp::categoryHSY());
-        add<&cfIncreaseLightness <HSYType,Arg> >(cs, COMPOSITE_INC_LUMINOSITY, i18n("Increase Luminosity"), KoCompositeOp::categoryHSY());
-        add<&cfDecreaseLightness <HSYType,Arg> >(cs, COMPOSITE_DEC_LUMINOSITY, i18n("Decrease Luminosity"), KoCompositeOp::categoryHSY());
-        add<&cfDarkerColor <HSYType,Arg> >(cs, COMPOSITE_DARKER_COLOR, i18n("Darker Color"), KoCompositeOp::categoryDark());//darker color as PSD does it//
-        add<&cfLighterColor <HSYType,Arg> >(cs, COMPOSITE_LIGHTER_COLOR, i18n("Lighter Color"), KoCompositeOp::categoryLight());//lighter color as PSD does it//
+        add<&cfColor             <HSYType,Arg> >(cs, COMPOSITE_COLOR         , i18nc("HSY Color", "Color")              , KoCompositeOp::categoryHSY());
+        add<&cfHue               <HSYType,Arg> >(cs, COMPOSITE_HUE           , i18nc("HSY Hue", "Hue")                , KoCompositeOp::categoryHSY());
+        add<&cfSaturation        <HSYType,Arg> >(cs, COMPOSITE_SATURATION    , i18nc("HSY Saturation", "Saturation")         , KoCompositeOp::categoryHSY());
+        add<&cfIncreaseSaturation<HSYType,Arg> >(cs, COMPOSITE_INC_SATURATION, i18nc("HSY Incease Saturation", "Increase Saturation"), KoCompositeOp::categoryHSY());
+        add<&cfDecreaseSaturation<HSYType,Arg> >(cs, COMPOSITE_DEC_SATURATION, i18nc("HSY Decrease Saturation", "Decrease Saturation"), KoCompositeOp::categoryHSY());
+        add<&cfLightness         <HSYType,Arg> >(cs, COMPOSITE_LUMINIZE      , i18nc("HSY Luminosity", "Luminosity")         , KoCompositeOp::categoryHSY());
+        add<&cfIncreaseLightness <HSYType,Arg> >(cs, COMPOSITE_INC_LUMINOSITY, i18nc("HSY Increase Luminosity", "Increase Luminosity"), KoCompositeOp::categoryHSY());
+        add<&cfDecreaseLightness <HSYType,Arg> >(cs, COMPOSITE_DEC_LUMINOSITY, i18nc("HSY Decrease Luminosity", "Decrease Luminosity"), KoCompositeOp::categoryHSY());
+        add<&cfDarkerColor <HSYType,Arg> >(cs, COMPOSITE_DARKER_COLOR, i18nc("HSY PSD Darker Color", "Darker Color"), KoCompositeOp::categoryDark());//darker color as PSD does it//
+        add<&cfLighterColor <HSYType,Arg> >(cs, COMPOSITE_LIGHTER_COLOR, i18nc("HSY PSD Lighter Color", "Lighter Color"), KoCompositeOp::categoryLight());//lighter color as PSD does it//
 
-        add<&cfColor             <HSIType,Arg> >(cs, COMPOSITE_COLOR_HSI         , i18n("Color HSI")              , KoCompositeOp::categoryHSI());
-        add<&cfHue               <HSIType,Arg> >(cs, COMPOSITE_HUE_HSI           , i18n("Hue HSI")                , KoCompositeOp::categoryHSI());
-        add<&cfSaturation        <HSIType,Arg> >(cs, COMPOSITE_SATURATION_HSI    , i18n("Saturation HSI")         , KoCompositeOp::categoryHSI());
-        add<&cfIncreaseSaturation<HSIType,Arg> >(cs, COMPOSITE_INC_SATURATION_HSI, i18n("Increase Saturation HSI"), KoCompositeOp::categoryHSI());
-        add<&cfDecreaseSaturation<HSIType,Arg> >(cs, COMPOSITE_DEC_SATURATION_HSI, i18n("Decrease Saturation HSI"), KoCompositeOp::categoryHSI());
-        add<&cfLightness         <HSIType,Arg> >(cs, COMPOSITE_INTENSITY         , i18n("Intensity")              , KoCompositeOp::categoryHSI());
-        add<&cfIncreaseLightness <HSIType,Arg> >(cs, COMPOSITE_INC_INTENSITY     , i18n("Increase Intensity")     , KoCompositeOp::categoryHSI());
-        add<&cfDecreaseLightness <HSIType,Arg> >(cs, COMPOSITE_DEC_INTENSITY     , i18n("Decrease Intensity")     , KoCompositeOp::categoryHSI());
+        add<&cfColor             <HSIType,Arg> >(cs, COMPOSITE_COLOR_HSI         , i18nc("HSI Color", "Color HSI")              , KoCompositeOp::categoryHSI());
+        add<&cfHue               <HSIType,Arg> >(cs, COMPOSITE_HUE_HSI           , i18nc("HSI Hue", "Hue HSI")                , KoCompositeOp::categoryHSI());
+        add<&cfSaturation        <HSIType,Arg> >(cs, COMPOSITE_SATURATION_HSI    , i18nc("HSI Saturation", "Saturation HSI")         , KoCompositeOp::categoryHSI());
+        add<&cfIncreaseSaturation<HSIType,Arg> >(cs, COMPOSITE_INC_SATURATION_HSI, i18nc("HSI Increase Saturation", "Increase Saturation HSI"), KoCompositeOp::categoryHSI());
+        add<&cfDecreaseSaturation<HSIType,Arg> >(cs, COMPOSITE_DEC_SATURATION_HSI, i18nc("HSI Decrease Saturation", "Decrease Saturation HSI"), KoCompositeOp::categoryHSI());
+        add<&cfLightness         <HSIType,Arg> >(cs, COMPOSITE_INTENSITY         , i18nc("HSI Intensity", "Intensity")              , KoCompositeOp::categoryHSI());
+        add<&cfIncreaseLightness <HSIType,Arg> >(cs, COMPOSITE_INC_INTENSITY     , i18nc("HSI Increase Intensity", "Increase Intensity")     , KoCompositeOp::categoryHSI());
+        add<&cfDecreaseLightness <HSIType,Arg> >(cs, COMPOSITE_DEC_INTENSITY     , i18nc("HSI Decrease Intensity", "Decrease Intensity")     , KoCompositeOp::categoryHSI());
 
-        add<&cfColor             <HSLType,Arg> >(cs, COMPOSITE_COLOR_HSL         , i18n("Color HSL")              , KoCompositeOp::categoryHSL());
-        add<&cfHue               <HSLType,Arg> >(cs, COMPOSITE_HUE_HSL           , i18n("Hue HSL")                , KoCompositeOp::categoryHSL());
-        add<&cfSaturation        <HSLType,Arg> >(cs, COMPOSITE_SATURATION_HSL    , i18n("Saturation HSL")         , KoCompositeOp::categoryHSL());
-        add<&cfIncreaseSaturation<HSLType,Arg> >(cs, COMPOSITE_INC_SATURATION_HSL, i18n("Increase Saturation HSL"), KoCompositeOp::categoryHSL());
-        add<&cfDecreaseSaturation<HSLType,Arg> >(cs, COMPOSITE_DEC_SATURATION_HSL, i18n("Decrease Saturation HSL"), KoCompositeOp::categoryHSL());
-        add<&cfLightness         <HSLType,Arg> >(cs, COMPOSITE_LIGHTNESS         , i18n("Lightness")              , KoCompositeOp::categoryHSL());
-        add<&cfIncreaseLightness <HSLType,Arg> >(cs, COMPOSITE_INC_LIGHTNESS     , i18n("Increase Lightness")     , KoCompositeOp::categoryHSL());
-        add<&cfDecreaseLightness <HSLType,Arg> >(cs, COMPOSITE_DEC_LIGHTNESS     , i18n("Decrease Lightness")     , KoCompositeOp::categoryHSL());
+        add<&cfColor             <HSLType,Arg> >(cs, COMPOSITE_COLOR_HSL         , i18nc("HSL Color", "Color HSL")              , KoCompositeOp::categoryHSL());
+        add<&cfHue               <HSLType,Arg> >(cs, COMPOSITE_HUE_HSL           , i18nc("HSL HSL", "Hue HSL")                , KoCompositeOp::categoryHSL());
+        add<&cfSaturation        <HSLType,Arg> >(cs, COMPOSITE_SATURATION_HSL    , i18nc("HSL Saturation", "Saturation HSL")         , KoCompositeOp::categoryHSL());
+        add<&cfIncreaseSaturation<HSLType,Arg> >(cs, COMPOSITE_INC_SATURATION_HSL, i18nc("HSL Increase Saturation", "Increase Saturation HSL"), KoCompositeOp::categoryHSL());
+        add<&cfDecreaseSaturation<HSLType,Arg> >(cs, COMPOSITE_DEC_SATURATION_HSL, i18nc("HSL Decrease Saturation", "Decrease Saturation HSL"), KoCompositeOp::categoryHSL());
+        add<&cfLightness         <HSLType,Arg> >(cs, COMPOSITE_LIGHTNESS         , i18nc("HSL Lightness", "Lightness")              , KoCompositeOp::categoryHSL());
+        add<&cfIncreaseLightness <HSLType,Arg> >(cs, COMPOSITE_INC_LIGHTNESS     , i18nc("HSL Increase Lightness", "Increase Lightness")     , KoCompositeOp::categoryHSL());
+        add<&cfDecreaseLightness <HSLType,Arg> >(cs, COMPOSITE_DEC_LIGHTNESS     , i18nc("HSL" Decrease Lightness, "Decrease Lightness")     , KoCompositeOp::categoryHSL());
 
-        add<&cfColor             <HSVType,Arg> >(cs, COMPOSITE_COLOR_HSV         , i18n("Color HSV")              , KoCompositeOp::categoryHSV());
-        add<&cfHue               <HSVType,Arg> >(cs, COMPOSITE_HUE_HSV           , i18n("Hue HSV")                , KoCompositeOp::categoryHSV());
-        add<&cfSaturation        <HSVType,Arg> >(cs, COMPOSITE_SATURATION_HSV    , i18n("Saturation HSV")         , KoCompositeOp::categoryHSV());
-        add<&cfIncreaseSaturation<HSVType,Arg> >(cs, COMPOSITE_INC_SATURATION_HSV, i18n("Increase Saturation HSV"), KoCompositeOp::categoryHSV());
-        add<&cfDecreaseSaturation<HSVType,Arg> >(cs, COMPOSITE_DEC_SATURATION_HSV, i18n("Decrease Saturation HSV"), KoCompositeOp::categoryHSV());
-        add<&cfLightness         <HSVType,Arg> >(cs, COMPOSITE_VALUE             , i18nc("HSV Value","Value")                  , KoCompositeOp::categoryHSV());
-        add<&cfIncreaseLightness <HSVType,Arg> >(cs, COMPOSITE_INC_VALUE         , i18n("Increase Value")         , KoCompositeOp::categoryHSV());
-        add<&cfDecreaseLightness <HSVType,Arg> >(cs, COMPOSITE_DEC_VALUE         , i18n("Decrease Value")         , KoCompositeOp::categoryHSV());
+        add<&cfColor             <HSVType,Arg> >(cs, COMPOSITE_COLOR_HSV         , i18nc("HSV Color", "Color HSV")              , KoCompositeOp::categoryHSV());
+        add<&cfHue               <HSVType,Arg> >(cs, COMPOSITE_HUE_HSV           , i18nc("HSV Hue", "Hue HSV")                , KoCompositeOp::categoryHSV());
+        add<&cfSaturation        <HSVType,Arg> >(cs, COMPOSITE_SATURATION_HSV    , i18nc("HSV Saturation", "Saturation HSV")         , KoCompositeOp::categoryHSV());
+        add<&cfIncreaseSaturation<HSVType,Arg> >(cs, COMPOSITE_INC_SATURATION_HSV, i18nc("HSV Increase Saturation", "Increase Saturation HSV"), KoCompositeOp::categoryHSV());
+        add<&cfDecreaseSaturation<HSVType,Arg> >(cs, COMPOSITE_DEC_SATURATION_HSV, i18nc("HSV Decrease Saturation", "Decrease Saturation HSV"), KoCompositeOp::categoryHSV());
+        add<&cfLightness         <HSVType,Arg> >(cs, COMPOSITE_VALUE             , i18nc("HSV Value", "HSV Value","Value")                  , KoCompositeOp::categoryHSV());
+        add<&cfIncreaseLightness <HSVType,Arg> >(cs, COMPOSITE_INC_VALUE         , i18nc("HSV Increase Value", "Increase Value")         , KoCompositeOp::categoryHSV());
+        add<&cfDecreaseLightness <HSVType,Arg> >(cs, COMPOSITE_DEC_VALUE         , i18nc("HSV Decrease Value", "Decrease Value")         , KoCompositeOp::categoryHSV());
     }
 };
 

@@ -435,8 +435,8 @@ QList<QPointer<QWidget> > KarbonCalligraphyTool::createOptionWidgets()
 
     // sync all parameters with the loaded profile
     m_widget->emitAll();
-    m_widget->setObjectName(i18nc("Object name of Calligraphy", "Calligraphy"));
-    m_widget->setWindowTitle(i18nc("Tool Option title of Calligraphy", "Calligraphy"));
+    m_widget->setObjectName(i18n("Calligraphy"));
+    m_widget->setWindowTitle(i18n("Calligraphy"));
     widgets.append(m_widget);
 
     return widgets;

@@ -128,7 +128,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Profile:</string>
+          <string comment="Label of ICC Color Profile in Layer Properties dialogue">Profile:</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>

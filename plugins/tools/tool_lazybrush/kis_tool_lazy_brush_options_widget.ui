@@ -142,7 +142,7 @@
         <item>
          <widget class="QPushButton" name="btnTransparent">
           <property name="text">
-           <string>Transparent</string>
+           <string comment="The label of the button that assigns a selected color as transparent">Transparent</string>
           </property>
           <property name="checkable">
            <bool>true</bool>

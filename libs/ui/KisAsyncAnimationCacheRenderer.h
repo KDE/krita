@@ -21,7 +21,9 @@
 
 #include <KisAsyncAnimationRendererBase.h>
 
-class KisAsyncAnimationCacheRenderer : public KisAsyncAnimationRendererBase
+#include "kritaui_export.h"
+
+class KRITAUI_EXPORT KisAsyncAnimationCacheRenderer : public KisAsyncAnimationRendererBase
 {
     Q_OBJECT
 public:

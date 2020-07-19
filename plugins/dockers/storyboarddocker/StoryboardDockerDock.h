@@ -33,6 +33,7 @@ class ArrangeMenu;
 class CommentModel;
 class StoryboardModel;
 class StoryboardDelegate;
+class KisNodeManager;
 
 class StoryboardDockerDock : public QDockWidget, public KisMainwindowObserver{
     Q_OBJECT
@@ -55,6 +56,7 @@ private Q_SLOTS:
 
 private:
     KisCanvas2* m_canvas;
+    KisNodeManager* m_nodeManager;
     QScopedPointer<Ui_WdgStoryboardDock> m_ui;
 
     QMenu *m_exportMenu;

@@ -34,6 +34,7 @@
 
 #include <KisPart.h>
 #include <KisViewManager.h>
+#include <kis_node_manager.h>
 #include <KisDocument.h>
 #include <kis_icon.h>
 #include <kis_image_animation_interface.h>
@@ -219,6 +220,10 @@ void StoryboardDockerDock::setCanvas(KoCanvasBase *canvas)
     if (m_canvas && m_canvas->image()) {
         m_storyboardModel->setImage(m_canvas->image());
         m_storyboardDelegate->setImage(m_canvas->image());
+
+        if (m_nodeManager) {
+            m_storyboardModel->slotSetActiveNode(m_nodeManager->activeNode());
+        }
     }
 }
 
@@ -229,6 +234,10 @@ void StoryboardDockerDock::unsetCanvas()
 
 void StoryboardDockerDock::setViewManager(KisViewManager* kisview)
 {
+    m_nodeManager = kisview->nodeManager();
+    if (m_nodeManager) {
+        connect(m_nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)), m_storyboardModel, SLOT(slotSetActiveNode(KisNodeSP)));
+    }
 }
 
 void StoryboardDockerDock::slotExportAsPdf()

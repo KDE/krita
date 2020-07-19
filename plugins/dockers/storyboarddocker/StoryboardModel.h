@@ -32,6 +32,7 @@
     The main storyboard model. 
 */
 class StoryboardView;
+class KisTimeRange;
 class CommentBox
 {
 public:
@@ -85,7 +86,7 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
     bool setCommentScrollData(const QModelIndex & index, const QVariant & value);
-    bool setThumbnailPixmapData(const QModelIndex & index, const QVariant & value);
+    bool setThumbnailPixmapData(const QModelIndex & parentIndex, const KisPaintDeviceSP & dev);
     Qt::ItemFlags flags(const QModelIndex &index) const override;
     
     //for removing and inserting rows
@@ -112,6 +113,8 @@ public:
 
     QModelIndex indexFromFrame(int frame) const;
     QModelIndex lastIndexBeforeFrame(int frame) const;
+    QModelIndexList affectedIndexes(KisTimeRange range) const;
+    bool isOnlyKeyframe(KisKeyframeSP keyframe, int time) const;
 
     enum childIndexType{
         FrameNumber,
@@ -127,9 +130,11 @@ private Q_SLOTS:
     void slotKeyframeAdded(KisKeyframeSP keyframe);
     void slotKeyframeRemoved(KisKeyframeSP);
     void slotKeyframeMoved(KisKeyframeSP, int);
-    void slotUpdateCurrentThumbnail();
+    void slotUpdateThumbnailForFrame(int frame);
+    void slotUpdateThumbnails();
+    void slotFrameRenderCompleted(int frame);
+    void slotFrameRenderCancelled(int frame);
 
-private Q_SLOTS:
     void slotCommentDataChanged();
     void slotCommentRowInserted(const QModelIndex, int, int);
     void slotCommentRowRemoved(const QModelIndex, int, int);
@@ -137,6 +142,8 @@ private Q_SLOTS:
                             const QModelIndex &destinationParent, int destinationChild);
     void slotInsertChildRows(const QModelIndex parent, int first, int last);
 
+public Q_SLOTS:
+    void slotSetActiveNode(KisNodeSP);
 private:
     QVector<StoryboardItem*> m_items;
     QVector<Comment> m_commentList;
@@ -146,6 +153,7 @@ private:
     KisIdleWatcher m_imageIdleWatcher;
     KisImageWSP m_image;
     StoryboardView *m_view;
+    KisNodeSP m_activeNode;
 };
 
 #endif

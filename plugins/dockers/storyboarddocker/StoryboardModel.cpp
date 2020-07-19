@@ -20,6 +20,7 @@
 #include "StoryboardView.h"
 #include <kis_image_animation_interface.h>
 #include <kis_image.h>
+
 #include <QDebug>
 #include <QMimeData>
 
@@ -28,6 +29,10 @@
 #include <KoColorSpaceRegistry.h>
 #include <kis_layer_utils.h>
 #include <kis_group_layer.h>
+#include "KisAsyncAnimationCacheRenderer.h"
+#include "kis_time_range.h"
+#include "kis_raster_keyframe_channel.h"
+#include "kis_animation_frame_cache.h"
 
 StoryboardModel::StoryboardModel(QObject *parent)
         : QAbstractItemModel(parent)
@@ -197,12 +202,21 @@ bool StoryboardModel::setCommentScrollData(const QModelIndex & index, const QVar
     return false;
 }
 
-bool StoryboardModel::setThumbnailPixmapData(const QModelIndex & index, const QVariant & value)
+bool StoryboardModel::setThumbnailPixmapData(const QModelIndex & parentIndex, const KisPaintDeviceSP & dev)
 {
+
+    QModelIndex index = this->index(0, 0, parentIndex);
+    QRect thumbnailRect = m_view->visualRect(parentIndex);
+    float scale = qMin(thumbnailRect.height() / (float)m_image->height(), (float)thumbnailRect.width() / m_image->width());
+
+    QImage image = dev->convertToQImage(KoColorSpaceRegistry::instance()->rgb8()->profile());
+    QPixmap pxmap = QPixmap::fromImage(image);
+    pxmap = pxmap.scaled((1.5)*scale*m_image->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
     StoryboardChild *child = m_items.at(index.parent().row())->child(index.row());
     if (child) {
         ThumbnailData thumbnailData = qvariant_cast<ThumbnailData>(child->data());
-        thumbnailData.pixmap = value;
+        thumbnailData.pixmap = pxmap;
         child->setData(QVariant::fromValue<ThumbnailData>(thumbnailData));
         emit dataChanged(index, index);
         return true;
@@ -465,7 +479,7 @@ void StoryboardModel::setImage(KisImageWSP image)
 
     m_imageIdleWatcher.setTrackedImage(image);
     m_imageIdleWatcher.startCountdown();
-    connect(&m_imageIdleWatcher, SIGNAL(startedIdleMode()), this, SLOT(slotUpdateCurrentThumbnail()));
+    connect(&m_imageIdleWatcher, SIGNAL(startedIdleMode()), this, SLOT(slotUpdateThumbnails()));
 
     //for add, remove and move
     connect(m_image->animationInterface(), SIGNAL(sigKeyframeAdded(KisKeyframeSP)),
@@ -479,6 +493,11 @@ void StoryboardModel::setImage(KisImageWSP image)
     connect(m_image->animationInterface(), SIGNAL(sigUiTimeChanged(int)), this, SLOT(slotFrameChanged(int)));
     connect(m_view->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
             this, SLOT(slotChangeFrameGlobal(QItemSelection, QItemSelection)));
+}
+
+void StoryboardModel::slotSetActiveNode(KisNodeSP node)
+{
+    m_activeNode = node;
 }
 
 QModelIndex StoryboardModel::indexFromFrame(int frame) const
@@ -521,6 +540,29 @@ QModelIndex StoryboardModel::lastIndexBeforeFrame(int frame) const
 }
 
 
+QModelIndexList StoryboardModel::affectedIndexes(KisTimeRange range) const
+{
+    QModelIndex firstIndex = indexFromFrame(range.start());
+    if (firstIndex.isValid()) {
+        firstIndex = firstIndex.siblingAtRow(firstIndex.row() + 1);
+    }
+    else {
+        firstIndex = lastIndexBeforeFrame(range.start());
+        firstIndex = firstIndex.siblingAtRow(firstIndex.row() + 1);
+    }
+
+    QModelIndex lastIndex = indexFromFrame(range.end());
+    if (!lastIndex.isValid()) {
+        lastIndex = lastIndexBeforeFrame(range.end());
+    }
+
+    QModelIndexList list;
+    for (int i = firstIndex.row(); i <= lastIndex.row(); i++) {
+        list.append(index(i, 0));
+    }
+    return list;
+}
+
 void StoryboardModel::slotFrameChanged(int frameId)
 {
     m_view->setCurrentItem(frameId);
@@ -542,33 +584,39 @@ void StoryboardModel::slotKeyframeAdded(KisKeyframeSP keyframe)
         insertRows(prevItemRow + 1, 1);
         setData (index (0, 0, index(prevItemRow + 1, 0)), frame);
         m_view->setCurrentItem(frame);
-        slotUpdateCurrentThumbnail();
     }
+
+    slotUpdateThumbnailForFrame(keyframe->time());
+}
+
+bool StoryboardModel::isOnlyKeyframe(KisKeyframeSP keyframe, int time) const
+{
+    bool onlyKeyframe = true;
+    KisNodeSP node = m_image->rootLayer();
+    while (node) {
+        KisLayerUtils::recursiveApplyNodes(node,
+                                            [keyframe, &onlyKeyframe, time] (KisNodeSP node) {
+                                            if (node->isAnimated()) {
+                                                auto keyframeMap = node->keyframeChannels();
+                                                for (auto elem: keyframeMap) {
+                                                    KisKeyframeChannel *keyframeChannel = elem;
+                                                    bool keyframeAbsent = keyframeChannel->keyframeAt(time).isNull();
+                                                    if (node != keyframe->channel()->node().toStrongRef()) {
+                                                        onlyKeyframe &= keyframeAbsent;
+                                                    }
+                                                }
+                                            }
+                                            });
+        node = node->nextSibling();
+    }
+    return onlyKeyframe;
 }
 
 void StoryboardModel::slotKeyframeRemoved(KisKeyframeSP keyframe)
 {
     QModelIndex itemIndex = indexFromFrame(keyframe->time());
     if (itemIndex.isValid()) {
-        bool onlyKeyframe = true;
-        KisNodeSP node = keyframe->channel()->node()->image()->rootLayer();
-        while (node) {
-            KisLayerUtils::recursiveApplyNodes(node,
-                                                [keyframe, &onlyKeyframe] (KisNodeSP node) {
-                                                if (node->isAnimated()) {
-                                                    auto keyframeMap = node->keyframeChannels();
-                                                    for (auto elem: keyframeMap) {
-                                                        KisKeyframeChannel *keyframeChannel = elem;
-                                                        bool keyframeAbsent = keyframeChannel->keyframeAt(keyframe->time()).isNull();
-                                                        if (node != KisNodeSP(keyframe->channel()->node())) {
-                                                            onlyKeyframe &= keyframeAbsent;
-                                                        }
-                                                    }
-                                                }
-                                                });
-            node = node->nextSibling();
-        }
-        if (onlyKeyframe) {
+        if (isOnlyKeyframe(keyframe, keyframe->time())) {
             removeRows(itemIndex.row(), 1);
         }
     }
@@ -579,24 +627,8 @@ void StoryboardModel::slotKeyframeMoved(KisKeyframeSP keyframe, int from)
     QModelIndex fromIndex = indexFromFrame(from);
     if (fromIndex.isValid()) {
         //check whether there are keyframes at the "from" time in other nodes
-        bool onlyKeyframe = true;
-        KisNodeSP node = keyframe->channel()->node()->image()->rootLayer();
-        while (node) {
-            KisLayerUtils::recursiveApplyNodes(node,
-                                                [from, keyframe, &onlyKeyframe] (KisNodeSP node) {
-                                                if (node->isAnimated()) {
-                                                    auto keyframeMap = node->keyframeChannels();
-                                                    for (auto elem: keyframeMap) {
-                                                        KisKeyframeChannel *keyframeChannel = elem;
-                                                        bool keyframeAbsent = keyframeChannel->keyframeAt(from).isNull();
-                                                        if (node != KisNodeSP(keyframe->channel()->node())) {
-                                                            onlyKeyframe &= keyframeAbsent;
-                                                        }
-                                                    }
-                                                }
-                                                });
-            node = node->nextSibling();
-        }
+        bool onlyKeyframe = isOnlyKeyframe(keyframe, from);
+
         int toItemRow = lastIndexBeforeFrame(keyframe->time()).row();
         QModelIndex destinationIndex = indexFromFrame(keyframe->time());
 
@@ -616,31 +648,61 @@ void StoryboardModel::slotKeyframeMoved(KisKeyframeSP keyframe, int from)
             setData(index(0, 0, destinationIndex), keyframe->time());
         }
         m_view->setCurrentItem(keyframe->time());
-        slotUpdateCurrentThumbnail();
+        slotUpdateThumbnailForFrame(keyframe->time());
     }
 }
 
-void StoryboardModel::slotUpdateCurrentThumbnail()
+void StoryboardModel::slotUpdateThumbnailForFrame(int frame)
 {
-    QModelIndex currIndex = indexFromFrame(m_image->animationInterface()->currentUITime());
-    QModelIndex currFrameIndex = index(0, 0, currIndex);
+    QModelIndex index = indexFromFrame(frame);
 
-    if (!currIndex.isValid()) {
+    if (index.isValid()) {
+        KisImage *image = m_image->clone(true);
+        KisAsyncAnimationCacheRenderer *renderer = new KisAsyncAnimationCacheRenderer();
+
+        connect(renderer, SIGNAL(sigFrameCompleted(int)), this, SLOT(slotFrameRenderCompleted(int)));
+        connect(renderer, SIGNAL(sigFrameCancelled(int)), SLOT(slotFrameRenderCancelled(int)));
+
+        renderer->setFrameCache(KisAnimationFrameCache::cacheForImage(image));
+
+        renderer->startFrameRegeneration(image, frame);
+    }
+}
+
+void StoryboardModel::slotUpdateThumbnails()
+{
+    int currentTime = m_image->animationInterface()->currentUITime();
+    //slotUpdateThumbnailForFrame(currentTime);
+
+    QModelIndex currIn = indexFromFrame(currentTime);
+    if (currIn.isValid()) {
+        setThumbnailPixmapData(currIn, m_image->projection());
+    }
+
+    KisTimeRange affectedRange;
+    if (m_activeNode) {
+        KisRasterKeyframeChannel *currentChannel = m_activeNode->paintDevice()->keyframeChannel();
+        if (currentChannel) {
+            affectedRange = currentChannel->affectedFrames(currentTime);
+        }
+        else {
+            affectedRange = KisTimeRange::infinite(0);
+            //update all
+        }
+    }
+    else {
         return;
     }
+}
 
-    QRect thumbnailRect = m_view->visualRect(currIndex);
-    float scale = qMin(thumbnailRect.height() / (float)m_image->height(), (float)thumbnailRect.width() / m_image->width());
-    KisPaintDeviceSP thumbDev = m_image->projection();
+void StoryboardModel::slotFrameRenderCompleted(int frame)
+{
+    qDebug()<<"frame render for "<<frame<<" complete";
+}
 
-    if (thumbDev) {
-        QImage image = thumbDev->convertToQImage(KoColorSpaceRegistry::instance()->rgb8()->profile());
-        QPixmap pxmap = QPixmap::fromImage(image);
-        pxmap = pxmap.scaled((1.5)*scale*m_image->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        setThumbnailPixmapData(currFrameIndex, pxmap);
-    }
-
-    //TODO: check if other thumbnails need updating and update only those that need to be
+void StoryboardModel::slotFrameRenderCancelled(int frame)
+{
+    qDebug()<<"frame render for "<<frame<<" cancelled";
 }
 
 void StoryboardModel::slotCommentDataChanged()

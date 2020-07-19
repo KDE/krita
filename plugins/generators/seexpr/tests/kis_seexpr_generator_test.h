@@ -29,7 +29,7 @@ class KisSeExprGeneratorTest : public QObject
 
 private Q_SLOTS:
     void initTestCase();
-    void testGeneration();
+    void testGenerationFromScript();
 };
 
 #endif

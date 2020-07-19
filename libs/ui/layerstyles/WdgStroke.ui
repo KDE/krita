@@ -14,7 +14,7 @@
    <item row="0" column="0">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Stroke</string>
+      <string comment="Layer Style - Stroke">Stroke</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
       <item row="0" column="0">

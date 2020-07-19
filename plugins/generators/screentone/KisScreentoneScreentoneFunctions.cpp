@@ -57,13 +57,13 @@ QStringList screentoneInterpolationNames(int pattern, int shape)
     if (pattern == KisScreentonePatternType_Dots) {
         if (shape == KisScreentoneShapeType_RoundDots || shape == KisScreentoneShapeType_EllipseDots) {
             return QStringList()
-                << i18n("Linear")
-                << i18n("Sinusoidal");
+                << i18nc("Screentone Interpolation Method - Linear", "Linear")
+                << i18nc("Screentone Interpolation Method - Sinusoidal", "Sinusoidal");
         }
     } else if (pattern == KisScreentonePatternType_Lines) {
         return QStringList()
-            << i18n("Linear")
-            << i18n("Sinusoidal");
+            << i18nc("Screentone Interpolation Method - Linear", "Linear")
+            << i18nc("Screentone Interpolation Method - Sinusoidal", "Sinusoidal");
     }
 
     return QStringList();

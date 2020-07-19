@@ -238,7 +238,7 @@ QWidget* KisToolFill::createOptionWidget()
              "features will also be disabled."));
 
 
-    QLabel *lbl_threshold = new QLabel(i18n("Threshold: "), widget);
+    QLabel *lbl_threshold = new QLabel(i18nc("The Threshold label in Fill tool options", "Threshold: "), widget);
     m_slThreshold = new KisSliderSpinBox(widget);
     m_slThreshold->setObjectName("int_widget");
     m_slThreshold->setRange(1, 100);

@@ -26,7 +26,7 @@
 class SvgMeshGradient
 {
 public:
-    enum Type {
+    enum Shading {
         BILINEAR,
         BICUBIC,
     };
@@ -34,8 +34,8 @@ public:
     SvgMeshGradient();
     SvgMeshGradient(const SvgMeshGradient& other);
 
-    void setType(Type type);
-    SvgMeshGradient::Type type() const;
+    void setType(Shading type);
+    SvgMeshGradient::Shading type() const;
 
     void setTransform(const QTransform& matrix);
     bool isValid() const;
@@ -46,7 +46,7 @@ public:
     QScopedPointer<SvgMeshArray>& getMeshArray();
 
 private:
-    Type m_type;
+    Shading m_type;
     QScopedPointer<SvgMeshArray> m_mesharray;
 };
 

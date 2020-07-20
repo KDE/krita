@@ -28,12 +28,12 @@ SvgMeshGradient::SvgMeshGradient(const SvgMeshGradient& other)
 {
 }
 
-void SvgMeshGradient::setType(SvgMeshGradient::Type type)
+void SvgMeshGradient::setType(SvgMeshGradient::Shading type)
 {
     m_type = type;
 }
 
-SvgMeshGradient::Type SvgMeshGradient::type() const
+SvgMeshGradient::Shading SvgMeshGradient::type() const
 {
     return m_type;
 }

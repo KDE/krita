@@ -53,11 +53,12 @@ void KoMeshGradientBackground::paint(QPainter &painter,
     if (d->renderer->patchImage()->isNull()) {
 
         d->renderer->configure(meshBoundingRect, painter.transform());
+        SvgMeshArray *mesharray = d->gradient->getMeshArray().data();
 
-        for (int row = 0; row < d->gradient->getMeshArray()->numRows(); ++row) {
-            for (int col = 0; col < d->gradient->getMeshArray()->numColumns(); ++col) {
-                SvgMeshPatch *patch = d->gradient->getMeshArray()->getPatch(row, col);
-                d->renderer->fillPatch(patch);
+        for (int row = 0; row < mesharray->numRows(); ++row) {
+            for (int col = 0; col < mesharray->numColumns(); ++col) {
+                SvgMeshPatch *patch = mesharray->getPatch(row, col);
+                d->renderer->fillPatch(patch, d->gradient->type(), mesharray, row, col);
             }
         }
         // uncomment to debug

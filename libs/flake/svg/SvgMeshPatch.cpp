@@ -22,6 +22,7 @@
 #include <QDebug>
 #include <KoPathPoint.h>
 #include <KoPathSegment.h>
+#include <kis_global.h>
 
 
 SvgMeshPatch::SvgMeshPatch(QPointF startingPoint)
@@ -121,18 +122,27 @@ KoPathSegment SvgMeshPatch::getMidCurve(bool isVertical) const
     return KoPathSegment(p[0], p[1], p[2], p[3]);
 }
 
-QColor midPointColor(QColor first, QColor second)
+QPointF lerp(QPointF p1, QPointF p2, qreal t)
 {
-    int r = (first.red() + second.red()) / 2;
-    int g = (first.green() + second.green()) / 2;
-    int b = (first.blue() + second.blue()) / 2;
-    int a = (first.alpha() + second.alpha()) / 2;
-
-    return QColor(r, g, b, a);
+    return (1 - t) * p1 + t * p2;
 }
 
-void SvgMeshPatch::subdivide(QVector<SvgMeshPatch*>& subdivided) const
+QPointF SvgMeshPatch::pointAt(qreal u, qreal v) const
 {
+    KoPathSegment C1 = getPathSegment(Top);
+    KoPathSegment C2 = getPathSegment(Bottom);
+
+    QPointF S_c = (1 - v) * getPathSegment(Top).pointAt(u) + v * getPathSegment(Bottom).pointAt(u);
+    QPointF S_d = (1 - u) * getPathSegment(Left).pointAt(v) + u * getPathSegment(Right).pointAt(v);
+    QPointF S_b = lerp(lerp(C1.pointAt(0), C1.pointAt(1), u), lerp(C2.pointAt(0), C2.pointAt(1), u), v);
+
+    return S_c + S_d - S_b;
+}
+
+void SvgMeshPatch::subdivide(QVector<SvgMeshPatch*>& subdivided, const QVector<QColor>& colors) const
+{
+    KIS_ASSERT(colors.size() == 5);
+
     // The orientation is left to right and top to bottom, which means
     // Eg. the first part of splitTop is TopLeft and the second part is TopRight
     // Similarly the first part of splitRight is RightTop, but the first part of
@@ -176,11 +186,11 @@ void SvgMeshPatch::subdivide(QVector<SvgMeshPatch*>& subdivided) const
     QColor c2 = getStop(Right).color;
     QColor c3 = getStop(Bottom).color;
     QColor c4 = getStop(Left).color;
-    QColor midc12 = midPointColor(c1, c2);
-    QColor midc23 = midPointColor(c2, c3);
-    QColor midc34 = midPointColor(c3, c4);
-    QColor midc41 = midPointColor(c4, c1);
-    QColor center = midPointColor(midPointColor(midc12, midc34), midPointColor(midc23, midc41));
+    QColor midc12 = colors[0];
+    QColor midc23 = colors[1];
+    QColor midc34 = colors[2];
+    QColor midc41 = colors[3];
+    QColor center = colors[4];
 
     // patch 1: TopLeft/NorthWest
     SvgMeshPatch *patch = new SvgMeshPatch(splitTop.first.first()->point());

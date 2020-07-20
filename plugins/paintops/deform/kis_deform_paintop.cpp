@@ -107,8 +107,8 @@ KisSpacingInformation KisDeformPaintOp::paintAt(const KisPaintInformation& info)
 
     QPointF pt = info.pos();
     if (m_sizeProperties.brush_jitter_movement_enabled) {
-        pt.setX(pt.x() + ((m_sizeProperties.brush_diameter * drand48()) - m_sizeProperties.brush_diameter * 0.5) * m_sizeProperties.brush_jitter_movement);
-        pt.setY(pt.y() + ((m_sizeProperties.brush_diameter * drand48()) - m_sizeProperties.brush_diameter * 0.5) * m_sizeProperties.brush_jitter_movement);
+        pt.setX(pt.x() + ((m_sizeProperties.brush_diameter * info.randomSource()->generateNormalized()) - m_sizeProperties.brush_diameter * 0.5) * m_sizeProperties.brush_jitter_movement);
+        pt.setY(pt.y() + ((m_sizeProperties.brush_diameter * info.randomSource()->generateNormalized()) - m_sizeProperties.brush_diameter * 0.5) * m_sizeProperties.brush_jitter_movement);
     }
 
     qreal rotation = m_rotationOption.apply(info);
@@ -126,7 +126,7 @@ KisSpacingInformation KisDeformPaintOp::paintAt(const KisPaintInformation& info)
     splitCoordinate(pos.x(), &x, &subPixelX);
     splitCoordinate(pos.y(), &y, &subPixelY);
 
-    KisFixedPaintDeviceSP mask = m_deformBrush.paintMask(dab, m_dev,
+    KisFixedPaintDeviceSP mask = m_deformBrush.paintMask(dab, m_dev, info.randomSource(),
                                  scale, rotation,
                                  info.pos(),
                                  subPixelX, subPixelY,

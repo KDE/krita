@@ -189,6 +189,20 @@ QRectF SvgMeshArray::boundingRect() const
 
     QPointF start = m_array[0][0]->boundingRect().topLeft();
 
+    // mesharray may be backwards, in which case we might get the right most value
+    // but we need topLeft for things to work as expected
+    for (int i = 0; i < numRows(); ++i) {
+        for (int j = 0; j < numColumns(); ++j) {
+            QPointF tmp  = m_array[i][j]->boundingRect().topLeft();
+            if (tmp.x() < start.x()) {
+                start.rx() = tmp.x();
+            }
+            if ( tmp.y() < start.y()) {
+                start.ry() = tmp.y();
+            }
+        }
+    }
+
     for (int row = 0; row < numRows(); ++row) {
         height += m_array[row][0]->boundingRect().height();
     }

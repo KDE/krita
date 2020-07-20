@@ -107,12 +107,12 @@ struct KRITAUI_EXPORT KisSelectionToShapeActionFactory : public KisNoParameterAc
 
 struct KRITAUI_EXPORT KisStrokeSelectionActionFactory : public  KisOperation  {
     KisStrokeSelectionActionFactory()  :  KisOperation("selection-to-shape-action") {}
-    void run(KisViewManager *view, StrokeSelectionOptions params);
+    void run(KisViewManager *view, const StrokeSelectionOptions& params);
 };
 
 struct KRITAUI_EXPORT KisStrokeBrushSelectionActionFactory : public  KisOperation  {
     KisStrokeBrushSelectionActionFactory()  :  KisOperation("selection-to-shape-action") {}
-    void run(KisViewManager *view, StrokeSelectionOptions params);
+    void run(KisViewManager *view, const StrokeSelectionOptions& params);
 };
 
 

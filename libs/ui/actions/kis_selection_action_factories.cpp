@@ -526,7 +526,7 @@ void KisSelectionToShapeActionFactory::run(KisViewManager *view)
     KisProcessingApplicator::runSingleCommandStroke(view->image(), cmd);
 }
 
-void KisStrokeSelectionActionFactory::run(KisViewManager *view, StrokeSelectionOptions params)
+void KisStrokeSelectionActionFactory::run(KisViewManager *view, const StrokeSelectionOptions& params)
 {
     KisImageWSP image = view->image();
     if (!image) {
@@ -588,7 +588,7 @@ void KisStrokeSelectionActionFactory::run(KisViewManager *view, StrokeSelectionO
     image->setModified();
 }
 
-void KisStrokeBrushSelectionActionFactory::run(KisViewManager *view, StrokeSelectionOptions params)
+void KisStrokeBrushSelectionActionFactory::run(KisViewManager *view, const StrokeSelectionOptions& params)
 {
     KisImageWSP image = view->image();
     if (!image) {

@@ -65,7 +65,7 @@ void KoMeshGradientBackground::paint(QPainter &painter,
         //  d->renderer->patchImage()->save("mesh-patch.png");
     }
 
-    painter.setClipRect(fillPath.boundingRect());
+    painter.setClipPath(fillPath);
 
     // patch is to be drawn wrt. to "user" coordinates
     painter.drawImage(meshBoundingRect, *d->renderer->patchImage());

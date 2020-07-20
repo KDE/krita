@@ -32,9 +32,9 @@ KisMyPaintOpOption::KisMyPaintOpOption()
 
     m_options->eraserBox->setChecked(eraser());
 
-    connect(m_options->radiusSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
-    connect(m_options->hardnessSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
-    connect(m_options->opacitySPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+//    connect(m_options->radiusSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+//    connect(m_options->hardnessSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+//    connect(m_options->opacitySPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
 
     connect(m_options->eraserBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
 
@@ -47,7 +47,7 @@ KisMyPaintOpOption::~KisMyPaintOpOption()
 }
 
 void KisMyPaintOpOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
-{
+{        
     KisMyPaintOptionProperties op;
 
     op.diameter = 2*exp(m_options->radiusSPBox->value());
@@ -60,7 +60,7 @@ void KisMyPaintOpOption::writeOptionSetting(KisPropertiesConfigurationSP setting
 }
 
 void KisMyPaintOpOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
-{    
+{        
     KisMyPaintOptionProperties op;
     op.readOptionSetting(setting);
 
@@ -75,7 +75,6 @@ void KisMyPaintOpOption::readOptionSetting(const KisPropertiesConfigurationSP se
 
 void KisMyPaintOpOption::refresh() {
 
-    qDebug() << "Called";
     emitSettingChanged();
 }
 

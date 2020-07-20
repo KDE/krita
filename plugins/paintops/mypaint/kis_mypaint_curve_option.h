@@ -217,7 +217,7 @@ private:
     bool firstRead = true;
 
 Q_SIGNALS:
-    void checkUseCurve();
+    void unCheckUseCurve();
 };
 
 #endif // KIS_MYPAINT_CURVE_OPTION_H

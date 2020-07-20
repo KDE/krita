@@ -22,7 +22,9 @@ export DEPS_INSTALL_PREFIX=$BUILD_PREFIX/deps/usr/
 export DOWNLOADS_DIR=$BUILD_PREFIX/downloads/
 
 # Setup variables needed to help everything find what we built
-export LD_LIBRARY_PATH=$DEPS_INSTALL_PREFIX/lib/:$DEPS_INSTALL_PREFIX/lib/x86_64-linux-gnu/:$APPDIR/usr/lib/:$LD_LIBRARY_PATH
+ARCH=`dpkg --print-architecture`
+TRIPLET=`gcc -dumpmachine`
+export LD_LIBRARY_PATH=$DEPS_INSTALL_PREFIX/lib/:$DEPS_INSTALL_PREFIX/lib/$TRIPLET/:$APPDIR/usr/lib/:$LD_LIBRARY_PATH
 export PATH=$DEPS_INSTALL_PREFIX/bin/:$PATH
 export PKG_CONFIG_PATH=$DEPS_INSTALL_PREFIX/share/pkgconfig/:$DEPS_INSTALL_PREFIX/lib/pkgconfig/:/usr/lib/pkgconfig/:$PKG_CONFIG_PATH
 export CMAKE_PREFIX_PATH=$DEPS_INSTALL_PREFIX:$CMAKE_PREFIX_PATH
@@ -49,9 +51,11 @@ cp -r $DEPS_INSTALL_PREFIX/lib/python3.8 $APPDIR/usr/lib
 cp -r $DEPS_INSTALL_PREFIX/share/sip $APPDIR/usr/share
 cp -r $DEPS_INSTALL_PREFIX/translations $APPDIR/usr/
 
-# Step 2: Relocate x64 binaries from the architecture specific directory as required for Appimages
-mv $APPDIR/usr/lib/x86_64-linux-gnu/*  $APPDIR/usr/lib
-rm -rf $APPDIR/usr/lib/x86_64-linux-gnu/
+# Step 2: Relocate binaries from the architecture specific directory as required for Appimages
+if [[ -d "$APPDIR/usr/lib/$TRIPLET" ]] ; then
+  mv $APPDIR/usr/lib/$TRIPLET/*  $APPDIR/usr/lib
+  rm -rf $APPDIR/usr/lib/$TRIPLET/
+fi
 
 # Step 3: Update the rpath in the various plugins we have to make sure they'll be loadable in an Appimage context
 for lib in $PLUGINS/*.so*; do
@@ -156,7 +160,14 @@ linuxdeployqt $APPDIR/usr/share/applications/org.kde.krita.desktop \
 appimagetool $APPDIR
 
 # Generate a new name for the Appimage file and rename it accordingly
-APPIMAGE=krita-"$VERSION"-x86_64.appimage
 
-mv Krita*x86_64.AppImage $APPIMAGE
+if [[ $ARCH == "arm64" ]]; then
+  APPIMAGE_ARCHITECTURE="aarch64"
+else
+  APPIMAGE_ARCHITECTURE=$ARCH
+fi
+
+APPIMAGE=krita-"$VERSION"-$APPIMAGE_ARCHITECTURE.appimage
+
+mv Krita*$APPIMAGE_ARCHITECTURE.AppImage $APPIMAGE
 

@@ -23,7 +23,9 @@ export DEPS_INSTALL_PREFIX=$BUILD_PREFIX/deps/usr/
 export DOWNLOADS_DIR=$BUILD_PREFIX/downloads/
 
 # Setup variables needed to help everything find what we built
-export LD_LIBRARY_PATH=$DEPS_INSTALL_PREFIX/lib/:$DEPS_INSTALL_PREFIX/lib/x86_64-linux-gnu/:$APPDIR/usr/lib/:$LD_LIBRARY_PATH
+ARCH=`dpkg --print-architecture`
+TRIPLET=`gcc -dumpmachine`
+export LD_LIBRARY_PATH=$DEPS_INSTALL_PREFIX/lib/:$DEPS_INSTALL_PREFIX/lib/$TRIPLET/:$APPDIR/usr/lib/:$LD_LIBRARY_PATH
 export PATH=$DEPS_INSTALL_PREFIX/bin/:$PATH
 export PKG_CONFIG_PATH=$DEPS_INSTALL_PREFIX/share/pkgconfig/:$DEPS_INSTALL_PREFIX/lib/pkgconfig/:/usr/lib/pkgconfig/:$PKG_CONFIG_PATH
 export CMAKE_PREFIX_PATH=$DEPS_INSTALL_PREFIX:$CMAKE_PREFIX_PATH
@@ -31,6 +33,7 @@ export PYTHONPATH=$DEPS_INSTALL_PREFIX/sip/:$DEPS_INSTALL_PREFIX/lib/python3.8/s
 export PYTHONHOME=$DEPS_INSTALL_PREFIX
 
 # download
+# XXX: bundle this inside the Docker image *and* make it portable to ARM
 mkdir -p $DOWNLOADS_DIR
 cd $DOWNLOADS_DIR
 wget "https://files.kde.org/krita/build/AppImageUpdate-x86_64.AppImage" -O AppImageUpdate
@@ -56,9 +59,11 @@ cp -r $DEPS_INSTALL_PREFIX/lib/python3.8 $APPDIR/usr/lib
 cp -r $DEPS_INSTALL_PREFIX/share/sip $APPDIR/usr/share
 cp -r $DEPS_INSTALL_PREFIX/translations $APPDIR/usr/
 
-# Step 2: Relocate x64 binaries from the architecture specific directory as required for Appimages
-mv $APPDIR/usr/lib/x86_64-linux-gnu/*  $APPDIR/usr/lib
-rm -rf $APPDIR/usr/lib/x86_64-linux-gnu/
+# Step 2: Relocate binaries from the architecture specific directory as required for Appimages
+if [[ -d "$APPDIR/usr/lib/$TRIPLET" ]] ; then
+  mv $APPDIR/usr/lib/$TRIPLET/*  $APPDIR/usr/lib
+  rm -rf $APPDIR/usr/lib/$TRIPLET/
+fi
 
 # Step 3: Update the rpath in the various plugins we have to make sure they'll be loadable in an Appimage context
 for lib in $PLUGINS/*.so*; do
@@ -191,7 +196,14 @@ linuxdeployqt $APPDIR/usr/share/applications/org.kde.krita.desktop \
   -updateinformation="${ZSYNC_URL}" \
   -appimage
 
+# Generate a new name for the Appimage file and rename it accordingly
 
-OLD_APPIMAGE_NAME="Krita-${VERSION}-x86_64.AppImage"
-NEW_APPIMAGE_NAME="krita-${VERSION}-x86_64.appimage"
+if [[ $ARCH == "arm64" ]]; then
+  APPIMAGE_ARCHITECTURE="aarch64"
+else
+  APPIMAGE_ARCHITECTURE=$ARCH
+fi
+
+OLD_APPIMAGE_NAME="Krita-${VERSION}-${APPIMAGE_ARCHITECTURE}.AppImage"
+NEW_APPIMAGE_NAME="krita-${VERSION}-${APPIMAGE_ARCHITECTURE}.appimage"
 mv ${OLD_APPIMAGE_NAME} ${NEW_APPIMAGE_NAME}

@@ -74,7 +74,8 @@ ExternalProject_Add(
 )
 endif(WIN32)
 
-IF ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+IF ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8" AND NOT CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
+    message(STATUS ${CMAKE_SYSTEM_PROCESSOR})
     ExternalProject_Add(ext_libx265_10bit
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
         URL http://ftp.videolan.org/pub/videolan/x265/x265_3.2.1.tar.gz
@@ -112,9 +113,11 @@ IF ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
 
         DEPENDS ext_nasm ext_libx265_10bit ext_libx265_12bit
     )
-else ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+else ()
     # x265 in 32-bit platforms cannot support 10-bit and 12-bit images
     # because they either crash on malloc or require SSE4.1+ extensions
+    # Same for aarch64, support for 10-bit and 12-bit requires NEON extensions
+    # and these are broken as of 3.4
     ExternalProject_Add(
         ext_libx265
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
@@ -131,7 +134,7 @@ else ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
 
         DEPENDS ext_nasm
     )
-endif ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+endif ()
 
 ExternalProject_Add(
     ext_libheif

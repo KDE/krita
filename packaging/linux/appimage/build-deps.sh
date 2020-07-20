@@ -69,7 +69,9 @@ cmake --build . --config RelWithDebInfo --target ext_exiv2
 cmake --build . --config RelWithDebInfo --target ext_lcms2
 cmake --build . --config RelWithDebInfo --target ext_ocio
 cmake --build . --config RelWithDebInfo --target ext_openexr
+if [[ $ARCH != "arm*" ]]; then
 cmake --build . --config RelWithDebInfo --target ext_vc
+fi
 cmake --build . --config RelWithDebInfo --target ext_libraw
 cmake --build . --config RelWithDebInfo --target ext_giflib
 #cmake --build . --config RelWithDebInfo --target ext_gsl

@@ -18,6 +18,7 @@ export DEPS_INSTALL_PREFIX=$BUILD_PREFIX/deps/usr/
 export DOWNLOADS_DIR=$BUILD_PREFIX/downloads/
 
 # Setup variables needed to help everything find what we build
+ARCH=`dpkg --print-architecture`
 export LD_LIBRARY_PATH=$DEPS_INSTALL_PREFIX/lib:$LD_LIBRARY_PATH
 export PATH=$DEPS_INSTALL_PREFIX/bin:$PATH
 export PKG_CONFIG_PATH=$DEPS_INSTALL_PREFIX/share/pkgconfig:$DEPS_INSTALL_PREFIX/lib/pkgconfig:/usr/lib/pkgconfig:$PKG_CONFIG_PATH
@@ -42,6 +43,10 @@ cp $BUILD_PREFIX/deps-build/ext_gmic/gmic-qt/resources/gmic_hat.png $BUILD_PREFI
 linuxdeployqt $BUILD_PREFIX/gmic_qt_krita.appdir/usr/bin/gmic_krita_qt.desktop -verbose=2 -bundle-non-qt-libs -appimage
 
 # Make sure it has a consistent name too
-mv gmic_krita_qt*x86_64.AppImage gmic_krita_qt-x86_64.appimage
+if [[ $ARCH == "arm64" ]]; then
+  APPIMAGE_ARCHITECTURE="aarch64"
+else
+  APPIMAGE_ARCHITECTURE=$ARCH
+fi
 
- 
+mv gmic_krita_qt*$APPIMAGE_ARCHITECTURE.AppImage gmic_krita_qt-$APPIMAGE_ARCHITECTURE.appimage 

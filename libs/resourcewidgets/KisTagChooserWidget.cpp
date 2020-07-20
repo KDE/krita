@@ -85,8 +85,8 @@ KisTagChooserWidget::KisTagChooserWidget(KisTagModel *model, QWidget* parent)
     connect(d->tagToolButton, SIGNAL(deletionOfCurrentTagRequested()),
             this, SLOT(tagToolDeleteCurrentTag()));
 
-    connect(d->tagToolButton, SIGNAL(renamingOfCurrentTagRequested(KisTagSP)),
-            this, SLOT(tagToolRenameCurrentTag(KisTagSP)));
+    connect(d->tagToolButton, SIGNAL(renamingOfCurrentTagRequested(const QString&)),
+            this, SLOT(tagToolRenameCurrentTag(const QString&)));
 
     connect(d->tagToolButton, SIGNAL(undeletionOfTagRequested(KisTagSP)),
             this, SLOT(tagToolUndeleteLastTag(KisTagSP)));
@@ -101,7 +101,6 @@ KisTagChooserWidget::~KisTagChooserWidget()
 void KisTagChooserWidget::tagToolDeleteCurrentTag()
 {
     KisTagSP currentTag = currentlySelectedTag();
-    qDebug() << "KisTagChooserWidget::tagToolDeleteCurrentTag" << currentTag->id() << currentTag->url();
     if (!currentTag.isNull() && currentTag->id() >= 0) {
         d->model->setTagInactive(currentTag);
         setCurrentIndex(0);
@@ -118,12 +117,14 @@ void KisTagChooserWidget::tagChanged(int tagIndex)
     }
 }
 
-void KisTagChooserWidget::tagToolRenameCurrentTag(KisTagSP tag)
+void KisTagChooserWidget::tagToolRenameCurrentTag(const QString& tagName)
 {
-    qDebug() << "KisTagChooserWidget::tagToolRenameCurrentTag" << tag->id() << tag->url();
-    bool canRenameCurrentTag = !tag.isNull() && tag->id() < 0;
-    if (canRenameCurrentTag && !tag->name().isEmpty()) {
-        d->model->renameTag(tag);
+    KisTagSP tag = currentlySelectedTag();
+    bool canRenameCurrentTag = !tag.isNull();
+
+    if (canRenameCurrentTag && !tagName.isEmpty()) {
+        tag->setName(tagName);
+        bool result = d->model->renameTag(tag);
     }
 }
 
@@ -162,8 +163,6 @@ void KisTagChooserWidget::setCurrentItem(const QString &tag)
 
 void KisTagChooserWidget::tagToolCreateNewTag(const QString &tagName)
 {
-    qDebug() << "KisTagChooserWidget::tagToolCreateNewTag" << tagName;
-
     d->model->addEmptyTag(tagName, {});
     setCurrentItem(tagName);
 }

@@ -85,7 +85,7 @@ Q_SIGNALS:
     ///
     /// Since KisTagToolButton doesn't know which tag is current or which KisTagModel it should be using,
     /// it signals KisTagChooserWidget to do rename the current tag to the name written by the user.
-    void renamingOfCurrentTagRequested(const KisTagSP tag);
+    void renamingOfCurrentTagRequested(const QString &tagName);
 
     ///
     /// \brief deletionOfCurrentTagRequested signals to KisTagChooserWidget to delete the current tag

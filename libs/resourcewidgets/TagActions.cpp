@@ -32,7 +32,9 @@
 
 #include "kis_debug.h"
 
-ExistingTagAction::ExistingTagAction(KoResourceSP resource, KisTagSP tag, QObject* parent)
+// ############ Simple Existing Tag Action ##############
+
+SimpleExistingTagAction::SimpleExistingTagAction(KoResourceSP resource, KisTagSP tag, QObject* parent)
     : QAction(parent)
     , m_resource(resource)
     , m_tag(tag)
@@ -44,11 +46,11 @@ ExistingTagAction::ExistingTagAction(KoResourceSP resource, KisTagSP tag, QObjec
              this, SLOT(onTriggered()));
 }
 
-ExistingTagAction::~ExistingTagAction()
+SimpleExistingTagAction::~SimpleExistingTagAction()
 {
 }
 
-void ExistingTagAction::onTriggered()
+void SimpleExistingTagAction::onTriggered()
 {
     ENTER_FUNCTION();
     if (!m_tag) return;
@@ -56,11 +58,11 @@ void ExistingTagAction::onTriggered()
 }
 
 
-TagEditAction::TagEditAction(KoResourceSP resource, KisTagSP tag, QObject* parent)
+// ############ Line Edit ##############
+
+LineEditAction::LineEditAction(QObject* parent)
     : QWidgetAction(parent)
     , m_closeParentOnTrigger(false)
-    , m_tag(tag)
-    , m_resource(resource)
 {
     QWidget* pWidget = new QWidget (0);
     QHBoxLayout* pLayout = new QHBoxLayout();
@@ -75,63 +77,56 @@ TagEditAction::TagEditAction(KoResourceSP resource, KisTagSP tag, QObject* paren
     pWidget->setLayout(pLayout);
     setDefaultWidget(pWidget);
 
-    connect(m_editBox, &QLineEdit::returnPressed, this, &TagEditAction::onTriggered);
-    connect(m_AddButton, &QPushButton::clicked, this, &TagEditAction::onTriggered);
+    connect(m_editBox, &QLineEdit::returnPressed, this, &LineEditAction::slotActionTriggered);
+    connect(m_AddButton, &QPushButton::clicked, this, &LineEditAction::slotActionTriggered);
+
 }
 
-TagEditAction::~TagEditAction()
+LineEditAction::~LineEditAction()
 {
 }
 
-void TagEditAction::setIcon(const QIcon &icon)
+void LineEditAction::setIcon(const QIcon &icon)
 {
     QPixmap pixmap = QPixmap(icon.pixmap(16,16));
     m_label->setPixmap(pixmap);
 }
 
-void TagEditAction::closeParentOnTrigger(bool closeParent)
+void LineEditAction::setCloseParentOnTrigger(bool closeParent)
 {
     m_closeParentOnTrigger = closeParent;
 }
 
-bool TagEditAction::closeParentOnTrigger()
+bool LineEditAction::closeParentOnTrigger()
 {
     return m_closeParentOnTrigger;
 }
 
-void TagEditAction::onTriggered()
+
+void LineEditAction::slotActionTriggered()
 {
+    onTriggered();
     if (!m_editBox->text().isEmpty()) {
-        if (m_tag) {
-            m_tag->setName(m_editBox->text());
-            emit triggered(m_tag);
-            m_editBox->text().clear();
-        }
-        else if (m_resource) {
-            emit triggered(m_resource, m_editBox->text());
-        }
-        else {
-            emit triggered(m_editBox->text());
-        }
         if (m_closeParentOnTrigger) {
             this->parentWidget()->close();
             m_editBox->clearFocus();
+            m_editBox->clear();
         }
     }
 }
 
-void TagEditAction::setPlaceholderText(const QString& clickMessage)
+void LineEditAction::setPlaceholderText(const QString& clickMessage)
 {
     m_editBox->setPlaceholderText(clickMessage);
 }
 
-void TagEditAction::setText(const QString& text)
+void LineEditAction::setText(const QString& text)
 {
     ENTER_FUNCTION();
     m_editBox->setText(text);
 }
 
-void TagEditAction::setVisible(bool showAction)
+void LineEditAction::setVisible(bool showAction)
 {
     QLayout* currentLayout = defaultWidget()->layout();
 
@@ -143,23 +138,56 @@ void TagEditAction::setVisible(bool showAction)
     defaultWidget()->setVisible(showAction);
 }
 
-void TagEditAction::setTag(KisTagSP tag)
+QString LineEditAction::userText()
 {
-    m_tag = tag;
+    return m_editBox->text();
 }
 
+// ############ New Tag ##############
 
-NewTagAction::~NewTagAction()
-{
-}
-
-NewTagAction::NewTagAction(KoResourceSP resource, QMenu* parent)
-    : TagEditAction(resource, 0, parent)
+UserInputTagAction::UserInputTagAction(QObject* parent)
+    : LineEditAction(parent)
 {
     setIcon(koIcon("document-new"));
     setPlaceholderText(i18n("New tag"));
-    closeParentOnTrigger(true);
+    setCloseParentOnTrigger(true);
 }
+
+UserInputTagAction::~UserInputTagAction()
+{
+}
+
+void UserInputTagAction::onTriggered()
+{
+    emit triggered(userText());
+}
+
+// ############ New Tag Resource ##############
+
+NewTagResourceAction::NewTagResourceAction(KoResourceSP resource, QObject *parent)
+    : LineEditAction(parent)
+{
+    setIcon(koIcon("document-new"));
+    setPlaceholderText(i18n("New tag"));
+    setCloseParentOnTrigger(true);
+    m_resource = resource;
+}
+
+NewTagResourceAction::~NewTagResourceAction()
+{
+}
+
+void NewTagResourceAction::setResource(KoResourceSP resource)
+{
+    m_resource = resource;
+}
+
+void NewTagResourceAction::onTriggered()
+{
+    emit triggered(m_resource, userText());
+}
+
+// ############ TAG COMPARER ##############
 
 
 CompareWithOtherTagFunctor::CompareWithOtherTagFunctor(KisTagSP referenceTag)

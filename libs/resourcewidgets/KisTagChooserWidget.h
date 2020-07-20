@@ -86,7 +86,7 @@ private Q_SLOTS:
 
     /// \brief tagToolRenameCurrentTag slot for the signal from KisTagToolButton that the current tag needs to be renamed
     /// \param newName new name for the tag
-    void tagToolRenameCurrentTag(KisTagSP tag);
+    void tagToolRenameCurrentTag(const QString& tag);
 
     /// \brief tagToolDeleteCurrentTag slot for the signal from the KisTagToolButton that the current tag needs to be deleted
     ///

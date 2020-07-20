@@ -46,8 +46,8 @@ public:
 
     QAction *undeleteTagAction {0};
     QAction *deleteTagAction {0};
-    TagEditAction *renameTagAction {0};
-    NewTagAction *addTagAction {0};
+    UserInputTagAction *renameTagAction {0};
+    UserInputTagAction *addTagAction {0};
 
     KisTagSP undeleteCandidate;
     KisTagSP currentTag;
@@ -72,21 +72,21 @@ KisTagToolButton::KisTagToolButton(QWidget* parent)
 
     QMenu* popup = new QMenu(this);
 
-    d->addTagAction = new NewTagAction(0, popup);
+    d->addTagAction = new UserInputTagAction(popup);
     d->addTagAction->setPlaceholderText(i18n("New tag"));
     d->addTagAction->setIcon(koIcon("document-new"));
-    d->addTagAction->closeParentOnTrigger(true);
+    d->addTagAction->setCloseParentOnTrigger(true);
     popup->addAction(d->addTagAction);
 
     connect(d->addTagAction, SIGNAL(triggered(QString)), this, SIGNAL(newTagRequested(QString)));
 
-    d->renameTagAction = new TagEditAction(0, 0, popup);
+    d->renameTagAction = new UserInputTagAction(popup);
     d->renameTagAction->setPlaceholderText(i18n("Rename tag"));
     d->renameTagAction->setIcon(koIcon("edit-rename"));
-    d->renameTagAction->closeParentOnTrigger(true);
+    d->renameTagAction->setCloseParentOnTrigger(true);
     popup->addAction(d->renameTagAction);
 
-    connect(d->renameTagAction, SIGNAL(triggered(KisTagSP)), this, SIGNAL(renamingOfCurrentTagRequested(KisTagSP)));
+    connect(d->renameTagAction, SIGNAL(triggered(QString)), this, SIGNAL(renamingOfCurrentTagRequested(QString)));
 
     popup->addSeparator();
 
@@ -139,8 +139,6 @@ void KisTagToolButton::setUndeletionCandidate(const KisTagSP deletedTag)
 void KisTagToolButton::setCurrentTag(const KisTagSP tag)
 {
     d->currentTag = tag;
-    d->addTagAction->setTag(tag);
-    d->renameTagAction->setTag(tag);
     d->deleteTagAction->setProperty("currentTag", QVariant::fromValue<KisTagSP>(tag));
 }
 

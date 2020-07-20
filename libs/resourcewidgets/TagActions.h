@@ -31,12 +31,19 @@
 #include <KisTagModel.h>
 
 
-class ExistingTagAction : public QAction
+// ########### Actions ###########
+///
+/// \brief The SimpleExistingTagAction class defines an action that holds a resource and a tag
+///
+/// This is mostly used in ContextMenu for the context menu actions displaying tags to tag or untag
+/// specific resource with a specific tag.
+///
+class SimpleExistingTagAction : public QAction
 {
     Q_OBJECT
 public:
-    explicit ExistingTagAction(KoResourceSP resource, KisTagSP tag, QObject* parent = 0);
-    ~ExistingTagAction() override;
+    explicit SimpleExistingTagAction(KoResourceSP resource, KisTagSP tag, QObject* parent = 0);
+    ~SimpleExistingTagAction() override;
 
 Q_SIGNALS:
     void triggered(KoResourceSP resource, KisTagSP tag);
@@ -45,67 +52,176 @@ protected Q_SLOTS:
     void onTriggered();
 
 private:
+    ///
+    /// \brief m_resource resource associated with the action
+    ///
     KoResourceSP m_resource;
+    ///
+    /// \brief m_tag tag associated with the action
+    ///
     KisTagSP m_tag;
 };
 
+
+// ########### Line Edit Actions ###########
+// ---------------------------
 /**
  *  A line edit QWidgetAction.
  *  Default behavior: Closes its parent upon triggering.
+ *  This is a base for all tag/resources actions that needs a user text input
+ *  (for example create new tag or rename tag)
  */
-class TagEditAction : public QWidgetAction
+
+///
+/// \brief The LineEditAction class defines an action with a user text input
+///
+/// This is a base for all tag/resources actions that needs a user text input
+/// (for example create new tag or rename tag).
+/// By default it closes its parent upon triggering and clears the content,
+///  but it can be disabled.
+///
+class LineEditAction : public QWidgetAction
 {
     Q_OBJECT
+protected:
+    LineEditAction(QObject* parent);
+
 public:
-    explicit TagEditAction(KoResourceSP resource, KisTagSP tag, QObject* parent);
-    ~TagEditAction() override;
+    ~LineEditAction() override;
     void setIcon(const QIcon &icon);
-    void closeParentOnTrigger(bool closeParent);
+    void setCloseParentOnTrigger(bool closeParent);
     bool closeParentOnTrigger();
+
     void setPlaceholderText(const QString& clickMessage);
     void setText(const QString& text);
     void setVisible(bool showAction);
-    void setTag(KisTagSP tag);
-
-Q_SIGNALS:
-
-    void triggered(const KisTagSP tag);
-    void triggered(const QString &tag);
-    void triggered(KoResourceSP resource, const QString &tag);
 
 protected Q_SLOTS:
 
-    void onTriggered();
+    ///
+    /// \brief slotActionTriggered defines all behaviour expressed when the widget is triggered
+    ///
+    /// It contains logic for closing the widget and calls onTriggered() to make sure
+    ///   behaviours defined in classes inheriting LineEditAction are called.
+    ///
+    void slotActionTriggered();
+
+    ///
+    /// \brief onTriggered defines additional behaviour for the action
+    ///
+    /// This function is called in slotActionTriggered() *before* the widget is closed
+    ///   and cleared.
+    ///
+    virtual void onTriggered() {}
+
+    ///
+    /// \brief userText getter for the text inside the edit box
+    /// \return text inside edit box (user input)
+    ///
+    QString userText();
 
 private:
     bool m_closeParentOnTrigger;
     QLabel *m_label;
     QLineEdit *m_editBox;
     QPushButton *m_AddButton;
-    KisTagSP m_tag;
+};
+
+///
+/// \brief The UserInputTagAction class defines an action with user text input that sends a signal with a simple QString
+///
+/// It inherits all behaviour from LineEditAction.
+/// When triggered, it sends a signal with the content of the edit box.
+///
+/// Usages:
+/// - Create a new tag
+/// - Rename a current tag (the responsibility to know which tag is current
+///    depends on the external widget like KisTagChooserWidget)
+///
+class UserInputTagAction : public LineEditAction
+{
+    Q_OBJECT
+
+public:
+    explicit UserInputTagAction(QObject* parent);
+    ~UserInputTagAction() override;
+
+Q_SIGNALS:
+    void triggered(const QString &newTagName);
+
+protected Q_SLOTS:
+    void onTriggered() override;
+};
+
+///
+/// \brief The NewTagResourceAction class defines an action that sends a signal with QString and a saved resource
+///
+/// It inherits all behaviours from LineEditAction.
+/// When triggered, it sends a signal with the content of the edit box as QString, and the saved resource.
+///
+/// Usages:
+/// - Tag a resource
+/// - Untag a resource
+///
+class NewTagResourceAction : public LineEditAction
+{
+    Q_OBJECT
+
+public:
+    explicit NewTagResourceAction(KoResourceSP resource, QObject* parent);
+    ~NewTagResourceAction() override;
+
+    void setResource(KoResourceSP resource);
+
+Q_SIGNALS:
+    void triggered(KoResourceSP resource, const QString &newTagName);
+
+protected Q_SLOTS:
+
+    void onTriggered() override;
+
+private:
     KoResourceSP m_resource;
 };
 
-class NewTagAction : public TagEditAction
-{
-    Q_OBJECT
-public:
-    explicit NewTagAction(KoResourceSP resource, QMenu* parent);
-    ~NewTagAction() override;
-};
+// ########### Tag Comparer ###########
 
-
+///
+/// \brief The CompareWithOtherTagFunctor class defines a comparer for tags
+///
+/// It contains a saved tag and can be used to determine if another tag is equal
+///   to the saved tag ("referece tag") or not. It can be used in stl list features
+///   like erase() etc.
+///
 class CompareWithOtherTagFunctor
 {
+    /// Tag to compare all other tags to
     KisTagSP m_referenceTag;
 
 public:
+    ///
+    /// \brief CompareWithOtherTagFunctor defines a default constructor
+    /// \param referenceTag a tag to compare all other tags to
+    ///
     CompareWithOtherTagFunctor(KisTagSP referenceTag);
 
+    ///
+    /// \brief operator () contains comparison logic
+    /// \param otherTag a tag to compare with the reference tag
+    /// \return
+    ///
     bool operator()(KisTagSP otherTag);
 
+    ///
+    /// \brief setReferenceTag sets a reference tag in the comparer
+    /// \param referenceTag a tag that is used to compare other tags to
+    ///
     void setReferenceTag(KisTagSP referenceTag);
 
+    ///
+    /// \brief referenceTag is a getter for the reference tag
+    /// \return a tag that is used to compare other tags to
+    ///
     KisTagSP referenceTag();
 
 };

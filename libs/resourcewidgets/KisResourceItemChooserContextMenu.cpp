@@ -110,7 +110,7 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
             }
             ENTER_FUNCTION() << "end";
 
-            ExistingTagAction * removeTagAction = new ExistingTagAction(resource, currentTag, this);
+            SimpleExistingTagAction * removeTagAction = new SimpleExistingTagAction(resource, currentTag, this);
             removeTagAction->setText(i18n("Remove from this tag"));
             removeTagAction->setIcon(koIcon("list-remove"));
 
@@ -133,7 +133,7 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
                 compareWithRemovable.setReferenceTag(tag);
                 std::remove_if(assignables2.begin(), assignables2.end(), compareWithRemovable);
 
-                ExistingTagAction * removeTagAction = new ExistingTagAction(resource, tag, this);
+                SimpleExistingTagAction * removeTagAction = new SimpleExistingTagAction(resource, tag, this);
 
                 connect(removeTagAction, SIGNAL(triggered(KoResourceSP, const KisTagSP)),
                         this, SLOT(removeResourceExistingTag(KoResourceSP, const KisTagSP)));
@@ -149,7 +149,7 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
             continue;
         }
 
-        ExistingTagAction * addTagAction = new ExistingTagAction(resource, tag, this);
+        SimpleExistingTagAction * addTagAction = new SimpleExistingTagAction(resource, tag, this);
 
         connect(addTagAction, SIGNAL(triggered(KoResourceSP, const KisTagSP)),
                 this, SLOT(addResourceExistingTag(KoResourceSP, const KisTagSP)));
@@ -159,8 +159,9 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
 
     assignableTagsMenu->addSeparator();
 
-    NewTagAction *addNewTagAction = new NewTagAction(resource, this);
+    NewTagResourceAction *addNewTagAction = new NewTagResourceAction(resource, this);
     connect(addNewTagAction, SIGNAL(triggered(KoResourceSP, QString)), this, SLOT(addResourceNewTag(KoResourceSP, QString)));
+
     assignableTagsMenu->addAction(addNewTagAction);
 
 }

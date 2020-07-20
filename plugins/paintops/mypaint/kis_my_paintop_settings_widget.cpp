@@ -18,7 +18,7 @@ KisMyPaintOpSettingsWidget:: KisMyPaintOpSettingsWidget(QWidget* parent)
     KisMyPaintOpOption *basicOption = new KisMyPaintOpOption();
     m_baseOption = basicOption;    
 
-    KisMyPaintCurveOptionWidget *radiusOption = new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("radius_logarithmic", KisPaintOpOption::GENERAL, false, 2.0, 1.0, 6.0), "0", "100");
+    KisMyPaintCurveOptionWidget *radiusOption = new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("radius_logarithmic", KisPaintOpOption::GENERAL, false, 2.0, 0.0, 6.0), "0", "100");
     m_radiusWidget = radiusOption;
 
     KisMyPaintCurveOptionWidget *hardnessOption = new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("hardness", KisPaintOpOption::GENERAL, false, 0.8, 0, 1), "0", "100");
@@ -97,7 +97,7 @@ void KisMyPaintOpSettingsWidget::showEvent(QShowEvent *event)
 }
 
 void KisMyPaintOpSettingsWidget::refreshBaseOption()
-{
+{    
     m_baseOption->refresh();
 }
 
@@ -105,7 +105,7 @@ void KisMyPaintOpSettingsWidget::updateBaseOptionRadius(qreal value) {
 
     m_baseOption->radiusSlider()->blockSignals(true);
     m_baseOption->radiusSlider()->setValue(value);
-    m_baseOption->radiusSlider()->blockSignals(false);
+    m_baseOption->radiusSlider()->blockSignals(false);    
 }
 
 void KisMyPaintOpSettingsWidget::updateBaseOptionHardness(qreal value) {
@@ -126,7 +126,8 @@ void KisMyPaintOpSettingsWidget::updateRadiusOptionOpacity(qreal value) {
 
     m_radiusWidget->slider()->blockSignals(true);
     m_radiusWidget->slider()->setValue(value);
-    m_radiusWidget->slider()->blockSignals(false);
+    m_radiusWidget->slider()->blockSignals(false);    
+    refreshBaseOption();
 }
 
 void KisMyPaintOpSettingsWidget::updateHardnessOptionOpacity(qreal value) {
@@ -134,6 +135,7 @@ void KisMyPaintOpSettingsWidget::updateHardnessOptionOpacity(qreal value) {
     m_hardnessWidget->slider()->blockSignals(true);
     m_hardnessWidget->slider()->setValue(value);
     m_hardnessWidget->slider()->blockSignals(false);
+    refreshBaseOption();
 }
 
 void KisMyPaintOpSettingsWidget::updateOpacityOptionOpacity(qreal value) {
@@ -141,4 +143,5 @@ void KisMyPaintOpSettingsWidget::updateOpacityOptionOpacity(qreal value) {
     m_opacityWidget->slider()->blockSignals(true);
     m_opacityWidget->slider()->setValue(value);
     m_opacityWidget->slider()->blockSignals(false);
+    refreshBaseOption();
 }

@@ -118,10 +118,10 @@ void KisMyPaintCurveOption::writeOptionSetting(KisPropertiesConfigurationSP sett
 
     setting->setProperty(MYPAINT_JSON, doc2.toJson());
     //qDebug() << doc2.toJson();
-//    QIODevice *dev = new QFile("/home/ashwin-dhakaita/b009.myb");
-//    dev->open(QIODevice::ReadWrite);
-//    dev->write(doc2.toJson());
-//    dev->close();
+    QIODevice *dev = new QFile("/home/ashwin-dhakaita/b009.myb");
+    dev->open(QIODevice::ReadWrite);
+    dev->write(doc2.toJson());
+    dev->close();
 
     setting->setProperty(m_name + "UseCurve", m_useCurve);
     setting->setProperty(m_name + "UseSameCurve", m_useSameCurve);
@@ -207,15 +207,11 @@ void KisMyPaintCurveOption::readNamedOptionSetting(const QString& prefix, const 
     }
 
     if (activeSensors().size() == 0) {
-//        m_sensorMap[PRESSURE]->setActive(true);
-        if(m_useCurve){
-            m_useCurve = false;
-            emit checkUseCurve();
-        }
         m_useCurve = false;
+        m_sensorMap[PRESSURE]->setActive(true);
     }
-    else {
-        m_useCurve = true;
+    if(!m_useCurve){
+        emit unCheckUseCurve();
     }
 
     firstRead = false;

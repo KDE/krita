@@ -68,7 +68,7 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
     m_map.insert(m_categories[1], KoID(COMPOSITE_NOT_CONVERSE    ,  i18nc("Blending mode - NOT CONVERSE", "NOT CONVERSE")));
 
     m_map.insert(m_categories[2], KoID(COMPOSITE_BURN       ,  i18nc("Blending mode - Burn", "Burn")));
-    m_map.insert(m_categories[2], KoID(COMPOSITE_LINEAR_BURN,  i18nc("Blending mode - Linear Burn, "Linear Burn")));
+    m_map.insert(m_categories[2], KoID(COMPOSITE_LINEAR_BURN,  i18nc("Blending mode - Linear Burn", "Linear Burn")));
     m_map.insert(m_categories[2], KoID(COMPOSITE_DARKEN     ,  i18nc("Blending mode - Darken", "Darken")));
     m_map.insert(m_categories[2], KoID(COMPOSITE_GAMMA_DARK ,  i18nc("Blending mode - Gamma Dark", "Gamma Dark")));
     m_map.insert(m_categories[2], KoID(COMPOSITE_DARKER_COLOR     ,  i18nc("Blending mode - Darker Color", "Darker Color")));

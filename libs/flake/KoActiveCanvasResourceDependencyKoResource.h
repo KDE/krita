@@ -26,7 +26,7 @@
  * on the presence of KoResource::requiredCanvasResources().
  */
 template <typename ResourceType>
-class KRITAFLAKE_EXPORT KoActiveCanvasResourceDependencyKoResource : public KoActiveCanvasResourceDependency
+class KoActiveCanvasResourceDependencyKoResource : public KoActiveCanvasResourceDependency
 {
     using ResourceTypeSP = QSharedPointer<ResourceType>;
 

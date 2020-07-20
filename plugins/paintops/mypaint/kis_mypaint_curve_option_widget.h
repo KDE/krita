@@ -38,7 +38,7 @@ private Q_SLOTS:
 
     void slotModified();
     void slotUseSameCurveChanged();
-    void slotCheckUseCurve();
+    void slotUnCheckUseCurve();
 
     void updateSensorCurveLabels(KisDynamicOptionSP sensor);
     void updateCurve(KisDynamicOptionSP sensor);
@@ -59,6 +59,8 @@ private Q_SLOTS:
     void changeCurveUShape();
     void changeCurveArchShape();
 
+public Q_SLOTS:
+    void refresh();
 
 private:
     QWidget* m_widget;

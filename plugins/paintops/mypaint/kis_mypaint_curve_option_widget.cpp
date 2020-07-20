@@ -75,7 +75,7 @@ KisMyPaintCurveOptionWidget::KisMyPaintCurveOptionWidget(KisMyPaintCurveOption* 
          m_curveOptionWidget->strengthSlider->hide();
     }
 
-    connect(m_curveOption, SIGNAL(checkUseCurve()), SLOT(slotCheckUseCurve()));
+    connect(m_curveOption, SIGNAL(unCheckUseCurve()), SLOT(slotUnCheckUseCurve()));
     connect(m_curveOptionWidget->checkBoxUseCurve, SIGNAL(stateChanged(int))  , SLOT(updateValues()));
     connect(m_curveOptionWidget->curveMode, SIGNAL(currentIndexChanged(int)), SLOT(updateMode()));
     connect(m_curveOptionWidget->strengthSlider, SIGNAL(valueChanged(qreal)), SLOT(updateValues()));  
@@ -88,14 +88,14 @@ KisMyPaintCurveOptionWidget::~KisMyPaintCurveOptionWidget()
 }
 
 void KisMyPaintCurveOptionWidget::writeOptionSetting(KisPropertiesConfigurationSP setting) const
-{    
+{        
     setBaseValue(setting, m_curveOptionWidget->strengthSlider->value());
     m_curveOption->writeOptionSetting(setting);
 }
 
 void KisMyPaintCurveOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
-    //setting->dump();
+    //setting->dump();    
     updateValuesCalled = true;
     m_curveOption->readOptionSetting(setting);  
 
@@ -173,7 +173,7 @@ void KisMyPaintCurveOptionWidget::slotUseSameCurveChanged()
     emitSettingChanged();
 }
 
-void KisMyPaintCurveOptionWidget::slotCheckUseCurve() {
+void KisMyPaintCurveOptionWidget::slotUnCheckUseCurve() {
 
     m_curveOptionWidget->checkBoxUseCurve->setChecked(false);
     updateValues();
@@ -354,14 +354,14 @@ float KisMyPaintCurveOptionWidget::getBaseValue(KisPropertiesConfigurationSP set
     MyPaintBrush *brush = mypaint_brush_new();
     mypaint_brush_from_string(brush, setting->getProperty(MYPAINT_JSON).toByteArray());
 
-//    if(m_curveOption->currentSetting() == MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC)
-//        return log(setting->getFloat(MYPAINT_DIAMETER)/2);
+    if(m_curveOption->currentSetting() == MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC)
+        return log(setting->getFloat(MYPAINT_DIAMETER)/2);
 
-//    if(m_curveOption->currentSetting() == MYPAINT_BRUSH_SETTING_OPAQUE)
-//        return setting->getFloat(MYPAINT_OPACITY);
+    if(m_curveOption->currentSetting() == MYPAINT_BRUSH_SETTING_OPAQUE)
+        return setting->getFloat(MYPAINT_OPACITY);
 
-//    if(m_curveOption->currentSetting() == MYPAINT_BRUSH_SETTING_HARDNESS)
-//        return setting->getFloat(MYPAINT_HARDNESS);
+    if(m_curveOption->currentSetting() == MYPAINT_BRUSH_SETTING_HARDNESS)
+        return setting->getFloat(MYPAINT_HARDNESS);
 
     return mypaint_brush_get_base_value(brush, m_curveOption->currentSetting());
 }
@@ -397,4 +397,8 @@ void KisMyPaintCurveOptionWidget::setBaseValue(KisPropertiesConfigurationSP sett
 KisDoubleSliderSpinBox* KisMyPaintCurveOptionWidget::slider() {
 
     return m_curveOptionWidget->strengthSlider;
+}
+
+void KisMyPaintCurveOptionWidget::refresh() {
+    emitSettingChanged();
 }

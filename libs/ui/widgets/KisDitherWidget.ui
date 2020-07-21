@@ -120,12 +120,12 @@
          </item>
          <item>
           <property name="text">
-           <string>Lightness</string>
+           <string comment="Name of Dither pattern value mode - Lightness">Lightness</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Alpha</string>
+           <string comment="Name of Dither pattern value mode - Alpha">Alpha</string>
           </property>
          </item>
         </widget>

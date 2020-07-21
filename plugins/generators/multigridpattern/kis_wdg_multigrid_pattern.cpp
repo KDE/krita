@@ -48,7 +48,7 @@ KisWdgMultigridPattern::KisWdgMultigridPattern(QWidget* parent, const KoColorSpa
     widget()->sldDivisions->setPrefix(i18n("Divisions:"));
 
     widget()->sldDimensions->setRange(3, 36);
-    widget()->sldDimensions->setPrefix(i18n("Dimensions:"));
+    widget()->sldDimensions->setPrefix(i18nc("The Dimensions of Multigrid pattern generator", "Dimensions:"));
 
     widget()->sldOffset->setRange(0.01, 0.49, 2);
     widget()->sldOffset->setPrefix(i18n("Offset:"));

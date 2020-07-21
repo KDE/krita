@@ -342,7 +342,7 @@
           </size>
          </property>
          <property name="title">
-          <string>Color</string>
+          <string comment="Label of Color as color space in Create New Image dialogue">Color</string>
          </property>
          <layout class="QVBoxLayout">
           <item>

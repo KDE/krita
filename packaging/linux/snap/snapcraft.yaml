@@ -17,6 +17,7 @@ apps:
       - network
       - network-bind
       - removable-media
+      - audio-playback
     environment:
       QT_QPA_PLATFORMTHEME: gtk3
 

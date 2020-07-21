@@ -51,9 +51,7 @@ class KisConvolutionWorkerFFT : public KisConvolutionWorker<_IteratorFactory_>
 {
 public:
     KisConvolutionWorkerFFT(KisPainter *painter, KoUpdater *progress)
-        : KisConvolutionWorker<_IteratorFactory_>(painter, progress),
-          m_currentProgress(0),
-          m_kernelFFT(0)
+        : KisConvolutionWorker<_IteratorFactory_>(painter, progress)
     {
     }
 
@@ -173,9 +171,7 @@ public:
                 const KisConvolutionKernelSP kernel,
                 const KoColorSpace */*colorSpace*/)
             : fftScale(_fftScale),
-              convChannelList(_convChannelList),
-              alphaCachePos(-1),
-              alphaRealPos(-1)
+              convChannelList(_convChannelList)
         {
             KisMathToolbox mathToolbox;
 
@@ -210,15 +206,15 @@ public:
         QVector<qreal> maxClamp;
         QVector<qreal> absoluteOffset;
 
-        qreal fftScale;
+        qreal fftScale {0.0};
         QList<KoChannelInfo*> convChannelList;
 
         QVector<PtrToDouble> toDoubleFuncPtr;
         QVector<PtrFromDouble> fromDoubleFuncPtr;
         QVector<PtrFromDoubleCheckNull> fromDoubleCheckNullFuncPtr;
 
-        int alphaCachePos;
-        int alphaRealPos;
+        int alphaCachePos {-1};
+        int alphaRealPos {-1};
     };
 
     void fillCacheFromDevice(KisPaintDeviceSP src,
@@ -553,10 +549,13 @@ private:
         m_channelFFT.clear();
     }
 private:
-    quint32 m_fftWidth, m_fftHeight, m_fftLength, m_extraMem;
-    float m_currentProgress;
+    quint32 m_fftWidth {0};
+    quint32 m_fftHeight {0};
+    quint32 m_fftLength {0};
+    quint32 m_extraMem {0};
+    float m_currentProgress {0.0};
 
-    fftw_complex* m_kernelFFT;
+    fftw_complex* m_kernelFFT {0};
     QVector<fftw_complex*> m_channelFFT;
 };
 

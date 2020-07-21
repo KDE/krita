@@ -87,3 +87,13 @@ bool KoMeshGradientBackground::loadStyle(KoOdfLoadingContext &context, const QSi
 {
     return false;
 }
+
+SvgMeshGradient* KoMeshGradientBackground::gradient()
+{
+    return d->gradient;
+}
+
+QTransform KoMeshGradientBackground::transform()
+{
+    return d->matrix;
+}

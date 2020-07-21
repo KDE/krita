@@ -77,9 +77,11 @@ KisGeneratorLayer::~KisGeneratorLayer()
 
 void KisGeneratorLayer::setFilter(KisFilterConfigurationSP filterConfig)
 {
-    QMutexLocker locker(&m_d->mutex);
     KisSelectionBasedLayer::setFilter(filterConfig);
-    m_d->preparedRect = QRect();
+    {
+        QMutexLocker(&m_d->mutex);
+        m_d->preparedRect = QRect();
+    }
     m_d->updateSignalCompressor.start();
 }
 
@@ -183,25 +185,32 @@ KisBaseNode::PropertyList KisGeneratorLayer::sectionModelProperties() const
 
 void KisGeneratorLayer::setX(qint32 x)
 {
-    QMutexLocker(&m_d->mutex);
+
     KisSelectionBasedLayer::setX(x);
-    m_d->preparedRect = QRect();
+    {
+        QMutexLocker(&m_d->mutex);
+        m_d->preparedRect = QRect();
+    }
     m_d->updateSignalCompressor.start();
 }
 
 void KisGeneratorLayer::setY(qint32 y)
 {
-    QMutexLocker(&m_d->mutex);
     KisSelectionBasedLayer::setY(y);
-    m_d->preparedRect = QRect();
+    {
+        QMutexLocker(&m_d->mutex);
+        m_d->preparedRect = QRect();
+    }
     m_d->updateSignalCompressor.start();
 }
 
 void KisGeneratorLayer::resetCache()
 {
-    QMutexLocker(&m_d->mutex);
     KisSelectionBasedLayer::resetCache();
-    m_d->preparedRect = QRect();
+    {
+        QMutexLocker(&m_d->mutex);
+        m_d->preparedRect = QRect();
+    }
     m_d->updateSignalCompressor.start();
 }
 

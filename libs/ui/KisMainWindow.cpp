@@ -63,8 +63,6 @@
 #include <QAction>
 #include <QWindow>
 #include <QScrollArea>
-#include <QDebug>
-
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kis_debug.h>

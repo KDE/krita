@@ -55,7 +55,6 @@
 #include <QKeySequence>
 
 #include <QDialog>
-#include <QDebug>
 #include <QApplication>
 #include <QDomDocument>
 #include <QDomElement>

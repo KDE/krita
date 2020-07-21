@@ -353,16 +353,13 @@ KisAnimationCurve *KisAnimationCurvesModel::addCurve(KisScalarKeyframeChannel *c
     connect(channel, &KisScalarKeyframeChannel::sigKeyframeAdded,
             this, &KisAnimationCurvesModel::slotKeyframeChanged);
 
-    connect(channel, &KisScalarKeyframeChannel::sigKeyframeMoved,
-            [this](const KisKeyframeChannel* channel, KisKeyframeSP keyframe, int fromTime, int toTime){
-        this->slotKeyframeChanged(channel, keyframe, toTime);
+    connect(channel, &KisScalarKeyframeChannel::sigKeyframeRemoved,
+            this, [this](const KisKeyframeChannel* channel, int time, KisKeyframeSP keyframe) {
+        this->slotKeyframeChanged(channel, time);
     });
 
-    connect(channel, &KisScalarKeyframeChannel::sigKeyframeAboutToBeRemoved,
-            this, &KisAnimationCurvesModel::slotKeyframeChanged);
-
-    connect(channel, &KisScalarKeyframeChannel::sigKeyframeChanged,
-            this, &KisAnimationCurvesModel::slotKeyframeChanged);
+    connect(channel, SIGNAL(sigKeyframeChanged(const KisKeyframeChannel*,int)),
+            this, SLOT(slotKeyframeChanged(const KisKeyframeChannel*,int)));
 
     return curve;
 }
@@ -407,7 +404,7 @@ QMap<QString, KisKeyframeChannel *> KisAnimationCurvesModel::channelsAt(QModelIn
     return list;
 }
 
-void KisAnimationCurvesModel::slotKeyframeChanged(const KisKeyframeChannel *channel, KisKeyframeSP keyframe, int time)
+void KisAnimationCurvesModel::slotKeyframeChanged(const KisKeyframeChannel *channel, int time)
 {
     int row = m_d->rowForChannel(channel);
     QModelIndex changedIndex = index(row, time);

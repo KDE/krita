@@ -98,7 +98,7 @@ public:
 
 private:
 
-    QRect affectedRect(int time) override;
+    QRect affectedRect(int time) const override;
 
     void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename) override;
     QPair<int, KisKeyframeSP> loadKeyframe(const QDomElement &keyframeNode) override;

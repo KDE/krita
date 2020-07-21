@@ -40,7 +40,7 @@ private:
     QPair<int, KisKeyframeSP> loadKeyframe(const QDomElement &keyframeNode);
     void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename);
 
-    QRect affectedRect(int time);
+    QRect affectedRect(int time) const override;
 };
 
 #endif

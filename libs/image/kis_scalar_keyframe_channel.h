@@ -87,12 +87,15 @@ public:
 
     static QPointF interpolate(QPointF point1, QPointF rightTangent, QPointF leftTangent, QPointF point2, qreal t);
 
+Q_SIGNALS:
+    void sigKeyframeChanged(KisKeyframeChannel* channel, int time);
+
 private:
     Q_DECL_DEPRECATED KisKeyframeSP createKeyframe(qreal value);
 
     KisKeyframeSP createKeyframe() override;
 
-    QRect affectedRect(int time) override;
+    QRect affectedRect(int time) const override;
 
     void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename);
     QPair<int, KisKeyframeSP> loadKeyframe(const QDomElement &keyframeNode) override;

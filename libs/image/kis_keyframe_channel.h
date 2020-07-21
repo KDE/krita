@@ -134,15 +134,10 @@ public:
     virtual void loadXML(const QDomElement &channelNode);
 
 Q_SIGNALS:
-    void sigUpdated(const KisTimeSpan &affectedTimeSpan, const QRect &affectedArea);
+    void sigUpdated(const KisTimeSpan &affectedTimeSpan, const QRect &affectedArea) const;
 
-    void sigKeyframeAboutToBeAdded(const KisKeyframeChannel *channel, KisKeyframeSP keyframe);
-    void sigKeyframeAdded(const KisKeyframeChannel *channel,KisKeyframeSP keyframe, int index);
-    void sigKeyframeAboutToBeRemoved(const KisKeyframeChannel *channel, KisKeyframeSP keyframe, int index);
-    void sigKeyframeRemoved(const KisKeyframeChannel *channel, KisKeyframeSP keyframe);
-    void sigKeyframeAboutToBeMoved(const KisKeyframeChannel *channel, KisKeyframeSP keyframe, int toTime);
-    void sigKeyframeMoved(const KisKeyframeChannel *channel, KisKeyframeSP keyframe, int fromTime, int toTime);
-    void sigKeyframeChanged(const KisKeyframeChannel *channel, KisKeyframeSP keyframe, int index);
+    void sigKeyframeAdded(const KisKeyframeChannel *channel, int time);
+    void sigKeyframeRemoved(const KisKeyframeChannel *channel, int time, KisKeyframeSP keyframe);
 
 protected:
     typedef QMap<int, KisKeyframeSP> KeyframesMap;
@@ -151,7 +146,7 @@ protected:
 
     int currentTime() const;
 
-    Q_DECL_DEPRECATED virtual void requestUpdate(const KisTimeSpan &range, const QRect &rect);
+    KisDefaultBoundsBaseSP bounds() const;
 
     Q_DECL_DEPRECATED void workaroundBrokenFrameTimeBug(int *time); //TEMP NOTE: scalar specific?
 
@@ -162,7 +157,7 @@ private:
     KeyframesMap::const_iterator activeKeyIterator(int time) const;
 
     virtual KisKeyframeSP createKeyframe() = 0;
-    virtual QRect affectedRect(int time) = 0;
+    virtual QRect affectedRect(int time) const = 0;
     virtual QPair<int, KisKeyframeSP> loadKeyframe(const QDomElement &keyframeNode) = 0;
     virtual void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename) = 0;
 };

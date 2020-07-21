@@ -214,16 +214,20 @@ QString KisRasterKeyframeChannel::chooseFrameFilename(int frameId, const QString
     return filename;
 }
 
-QRect KisRasterKeyframeChannel::affectedRect(int time)
+QRect KisRasterKeyframeChannel::affectedRect(int time) const
 {
-    KeyframesMap::iterator it = keys().find(time);
+    if (!keyframeAt(time)) {
+        return bounds()->imageBorderRect();
+    }
+
+    KeyframesMap::const_iterator it = constKeys().find(time);
     QRect rect;
 
     // Calculate changed area as the union of the current and previous keyframe.
     // This makes sure there are no artifacts left over from the previous frame
     // where the new one doesn't cover the area.
 
-    if (it == keys().begin()) {
+    if (it == constKeys().begin()) {
         // Using the *next* keyframe at the start of the timeline avoids artifacts
         // when deleting or moving the first key
         it++;
@@ -231,7 +235,7 @@ QRect KisRasterKeyframeChannel::affectedRect(int time)
         it--;
     }
 
-    if (it != keys().end()) {
+    if (it != constKeys().end()) {
         rect = m_d->paintDevice->framesInterface()->frameBounds(frameId(it.value()));
     }
 

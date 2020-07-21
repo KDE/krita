@@ -88,7 +88,7 @@ void KisTransformArgsKeyframeChannel::saveKeyframe(KisKeyframeSP keyframe, QDomE
     key->args.toXML(&keyframeElement);
 }
 
-QRect KisTransformArgsKeyframeChannel::affectedRect(int time)
+QRect KisTransformArgsKeyframeChannel::affectedRect(int time) const
 {
     Q_UNIMPLEMENTED();
     return QRect();

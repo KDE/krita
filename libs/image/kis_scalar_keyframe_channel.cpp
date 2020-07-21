@@ -451,7 +451,7 @@ KisKeyframeSP KisScalarKeyframeChannel::createKeyframe() // DOUBLE-CHECK!
     return toQShared(keyframe);
 }
 
-QRect KisScalarKeyframeChannel::affectedRect(int time)
+QRect KisScalarKeyframeChannel::affectedRect(int time) const
 {
     Q_UNUSED(time);
 
@@ -531,10 +531,9 @@ void KisScalarKeyframeChannel::setScalarValue(KisKeyframeSP keyframe, qreal valu
 
 void KisScalarKeyframeChannel::notifyKeyframeChanged(int time)
 {
-    QRect rect = affectedRect(time);
     KisTimeSpan range = affectedFrames(time);
+    QRect rect = affectedRect(time);
 
-    requestUpdate(range, rect);
-
-    emit sigKeyframeChanged(this, keyframeAt(time), time);
+    emit sigUpdated(range, rect);
+    emit sigKeyframeChanged(this, time);
 }

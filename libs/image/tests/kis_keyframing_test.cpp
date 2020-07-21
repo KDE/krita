@@ -56,79 +56,59 @@ void KisKeyframingTest::cleanupTestCase()
     delete[] blue;
 }
 
-// General.
+// ===================== General =======================
 
 void KisKeyframingTest::testChannelSignals()
 {
-      QVERIFY(false);
-//    KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID(""), -17, 31, 0);
-//    KisKeyframeSP key;
-//    KisKeyframeSP resKey;
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    TestUtil::TestingTimedDefaultBounds *bounds = new TestUtil::TestingTimedDefaultBounds();
+    dev->setDefaultBounds(bounds);
 
-//    qRegisterMetaType<KisKeyframeSP>("KisKeyframeSP");
-//    QSignalSpy spyPreAdd(channel, SIGNAL(sigKeyframeAboutToBeAdded(KisKeyframeSP)));
-//    QSignalSpy spyPostAdd(channel, SIGNAL(sigKeyframeAdded(KisKeyframeSP)));
+    // Create raster channel..
+    KisRasterKeyframeChannel *channel = dev->createKeyframeChannel(KoID());
 
-//    QSignalSpy spyPreRemove(channel, SIGNAL(sigKeyframeAboutToBeRemoved(KisKeyframeSP)));
-//    QSignalSpy spyPostRemove(channel, SIGNAL(sigKeyframeRemoved(KisKeyframeSP)));
+    qRegisterMetaType<const KisKeyframeChannel*>("const KisKeyframeChannel*");
+    qRegisterMetaType<KisKeyframeSP>("KisKeyframeSP");
+    QSignalSpy spyUpdated(channel, SIGNAL(sigUpdated(KisTimeSpan, QRect)));
+    QSignalSpy spyAdded(channel, SIGNAL(sigKeyframeAdded(const KisKeyframeChannel*, int)));
+    QSignalSpy spyRemoved(channel, SIGNAL(sigKeyframeRemoved(const KisKeyframeChannel*, int, KisKeyframeSP)));
 
-//    QSignalSpy spyPreMove(channel, SIGNAL(sigKeyframeAboutToBeMoved(KisKeyframeSP,int)));
-//    QSignalSpy spyPostMove(channel, SIGNAL(sigKeyframeMoved(KisKeyframeSP,int)));
+    QVERIFY(spyUpdated.isValid());
+    QVERIFY(spyAdded.isValid());
+    QVERIFY(spyRemoved.isValid());
 
-//    QVERIFY(spyPreAdd.isValid());
-//    QVERIFY(spyPostAdd.isValid());
-//    QVERIFY(spyPreRemove.isValid());
-//    QVERIFY(spyPostRemove.isValid());
-//    QVERIFY(spyPreMove.isValid());
-//    QVERIFY(spyPostMove.isValid());
+    int updateSignalCount = spyUpdated.count();
 
-//    // Adding a keyframe
+    {   // Adding a keyframe..
+        int originalSignalCount = spyAdded.count();
+        channel->addKeyframe(7);
 
-//    QCOMPARE(spyPreAdd.count(), 0);
-//    QCOMPARE(spyPostAdd.count(), 0);
+        QVERIFY(spyAdded.count() == originalSignalCount + 1);
+        QVERIFY(spyUpdated.count() > updateSignalCount);
+    }
 
-//    key = channel->addKeyframe(10);
+    updateSignalCount = spyUpdated.count();
 
-//    QCOMPARE(spyPreAdd.count(), 1);
-//    QCOMPARE(spyPostAdd.count(), 1);
+    {    // Moving a keyframe (7->11)..
+        channel->moveKeyframe(7, 11);
 
-//    resKey = spyPreAdd.at(0).at(0).value<KisKeyframeSP>();
-//    QVERIFY(resKey == key);
-//    resKey = spyPostAdd.at(0).at(0).value<KisKeyframeSP>();
-//    QVERIFY(resKey == key);
+        QVERIFY(spyUpdated.count() > updateSignalCount);
 
-//    // Moving a keyframe
+        // No-op move (no signals) ...why?
+    }
 
-//    QCOMPARE(spyPreMove.count(), 0);
-//    QCOMPARE(spyPostMove.count(), 0);
-//    channel->moveKeyframe(10, 15);
-//    QCOMPARE(spyPreMove.count(), 1);
-//    QCOMPARE(spyPostMove.count(), 1);
+    updateSignalCount = spyUpdated.count();
 
-//    resKey = spyPreMove.at(0).at(0).value<KisKeyframeSP>();
-//    QVERIFY(resKey == key);
-//    QCOMPARE(spyPreMove.at(0).at(1).toInt(), 15);
-//    resKey = spyPostMove.at(0).at(0).value<KisKeyframeSP>();
-//    QVERIFY(resKey == key);
+    {   // Removing a keyframe..
+        int originalSignalCount = spyRemoved.count();
+        channel->removeKeyframe(11);
 
-//    // No-op move (no signals)
-
-//    channel->moveKeyframe(15, 15);
-//    QCOMPARE(spyPreMove.count(), 1);
-//    QCOMPARE(spyPostMove.count(), 1);
-
-//    // Deleting a keyframe
-
-//    QCOMPARE(spyPreRemove.count(), 0);
-//    QCOMPARE(spyPostRemove.count(), 0);
-//    channel->deleteKeyframe(15);
-//    QCOMPARE(spyPreRemove.count(), 1);
-//    QCOMPARE(spyPostRemove.count(), 1);
-
-//    delete channel;
+        QVERIFY(spyRemoved.count() == originalSignalCount + 1);
+        QVERIFY(spyUpdated.count() > updateSignalCount);
+    }
 }
 
-// ===================== Raster Channel. ===============================
+// ===================== Raster Channel =================
 
 void KisKeyframingTest::testRasterChannel()
 {
@@ -522,6 +502,8 @@ void KisKeyframingTest::testInterChannelMovement()
     KisKeyframeChannel::moveKeyframe(channelA, 10, channelB, 15);
     QVERIFY(channelA->keyframeAt(10) == nullptr);
     QVERIFY(channelB->keyframeAt(15));
+    QVERIFY(channelA->keyframeCount() == 2);
+    QVERIFY(channelB->keyframeCount() == 4);
     QVERIFY(channelA->keyframeCount() == devA->framesInterface()->frames().count());
     QVERIFY(channelB->keyframeCount() == devB->framesInterface()->frames().count());
 

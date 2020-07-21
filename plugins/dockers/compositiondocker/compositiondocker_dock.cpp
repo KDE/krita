@@ -54,7 +54,7 @@
 #include <animation/KisAnimationRenderingOptions.h>
 #include <animation/KisAnimationRender.h>
 #include <kis_image_animation_interface.h>
-#include <kis_time_range.h>
+#include <kis_time_span.h>
 #include <KisMimeDatabase.h>
 
 
@@ -326,7 +326,7 @@ void CompositionDockerDock::exportAnimationClicked()
             image->waitForDone();
             image->refreshGraph();
 
-            KisTimeRange range = image->animationInterface()->fullClipRange();
+            KisTimeSpan range = image->animationInterface()->fullClipRange();
 
             exportOptions.firstFrame = range.start();
             exportOptions.lastFrame = range.end();

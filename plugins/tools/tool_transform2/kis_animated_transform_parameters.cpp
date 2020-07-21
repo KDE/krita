@@ -20,7 +20,7 @@
 #include "kis_scalar_keyframe_channel.h"
 #include "kis_transform_args_keyframe_channel.h"
 #include "tool_transform_args.h"
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 #include "kis_transform_mask.h"
 
 struct KisAnimatedTransformMaskParameters::Private
@@ -43,7 +43,7 @@ struct KisAnimatedTransformMaskParameters::Private
     KisScalarKeyframeChannel *rotationZchannel{0};
 
     bool hidden;
-    KisTimeRange validRange;
+    KisTimeSpan validRange;
 
     ToolTransformArgs argsCache;
 
@@ -226,7 +226,7 @@ void KisAnimatedTransformMaskParameters::clearChangedFlag()
 {
     int currentTime = (m_d->rawArgsChannel) ? m_d->rawArgsChannel->currentTime() : 0;
 
-    KisTimeRange validRange = KisTimeRange::infinite(0);
+    KisTimeSpan validRange = KisTimeSpan::infinite(0);
 
     if (m_d->rawArgsChannel) validRange &= m_d->rawArgsChannel->identicalFrames(currentTime);
     if (m_d->positionXchannel) validRange &= m_d->positionXchannel->identicalFrames(currentTime);

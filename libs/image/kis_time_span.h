@@ -28,32 +28,32 @@
 #include "kis_types.h"
 #include <kis_dom_utils.h>
 
-class KRITAIMAGE_EXPORT KisTimeRange : public boost::equality_comparable<KisTimeRange>
+class KRITAIMAGE_EXPORT KisTimeSpan : public boost::equality_comparable<KisTimeSpan>
 {
 public:
-    inline KisTimeRange()
+    inline KisTimeSpan()
         : m_start(0),
           m_end(-1)
     {
     }
 
-    inline KisTimeRange(int start, int duration)
+    inline KisTimeSpan(int start, int duration)
         : m_start(start),
           m_end(start + duration - 1)
     {
     }
 
-    inline KisTimeRange(int start, int end, bool)
+    inline KisTimeSpan(int start, int end, bool)
         : m_start(start),
           m_end(end)
     {
     }
 
-    bool operator==(const KisTimeRange &rhs) const {
+    bool operator==(const KisTimeSpan &rhs) const {
         return rhs.m_start == m_start && rhs.m_end == m_end;
     }
 
-    KisTimeRange& operator|=(const KisTimeRange &rhs) {
+    KisTimeSpan& operator|=(const KisTimeSpan &rhs) {
         if (!isValid()) {
             m_start = rhs.start();
         } else if (rhs.isValid()) {
@@ -71,7 +71,7 @@ public:
         return *this;
     }
 
-    KisTimeRange& operator&=(const KisTimeRange &rhs) {
+    KisTimeSpan& operator&=(const KisTimeSpan &rhs) {
         if (!isValid()) {
             return *this;
         } else if (!rhs.isValid()) {
@@ -119,19 +119,19 @@ public:
         return m_start <= time && time <= m_end;
     }
 
-    static inline KisTimeRange fromTime(int start, int end) {
-        return KisTimeRange(start, end, true);
+    static inline KisTimeSpan fromTime(int start, int end) {
+        return KisTimeSpan(start, end, true);
     }
 
-    static inline KisTimeRange infinite(int start) {
-        return KisTimeRange(start, std::numeric_limits<int>::min(), true);
+    static inline KisTimeSpan infinite(int start) {
+        return KisTimeSpan(start, std::numeric_limits<int>::min(), true);
     }
 
-    static KisTimeRange calculateIdenticalFramesRecursive(const KisNode *node, int time);
-    static KisTimeRange calculateAffectedFramesRecursive(const KisNode *node, int time);
+    static KisTimeSpan calculateIdenticalFramesRecursive(const KisNode *node, int time);
+    static KisTimeSpan calculateAffectedFramesRecursive(const KisNode *node, int time);
 
-    static KisTimeRange calculateNodeIdenticalFrames(const KisNode *node, int time);
-    static KisTimeRange calculateNodeAffectedFrames(const KisNode *node, int time);
+    static KisTimeSpan calculateNodeIdenticalFrames(const KisNode *node, int time);
+    static KisTimeSpan calculateNodeAffectedFrames(const KisNode *node, int time);
 
 private:
     int m_start;
@@ -139,15 +139,15 @@ private:
 };
 
 namespace KisDomUtils {
-    void KRITAIMAGE_EXPORT saveValue(QDomElement *parent, const QString &tag, const KisTimeRange &range);
-    bool KRITAIMAGE_EXPORT loadValue(const QDomElement &parent, const QString &tag, KisTimeRange *range);
+    void KRITAIMAGE_EXPORT saveValue(QDomElement *parent, const QString &tag, const KisTimeSpan &range);
+    bool KRITAIMAGE_EXPORT loadValue(const QDomElement &parent, const QString &tag, KisTimeSpan *range);
 }
 
 
 
-Q_DECLARE_METATYPE(KisTimeRange)
+Q_DECLARE_METATYPE(KisTimeSpan)
 
-KRITAIMAGE_EXPORT QDebug operator<<(QDebug dbg, const KisTimeRange &r);
+KRITAIMAGE_EXPORT QDebug operator<<(QDebug dbg, const KisTimeSpan &r);
 
 
 #endif /* __KIS_TIME_RANGE_H */

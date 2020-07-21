@@ -40,7 +40,7 @@
 #include <kis_paint_layer.h>
 #include <kis_raster_keyframe_channel.h>
 #include <kis_image_animation_interface.h>
-#include <kis_time_range.h>
+#include <kis_time_span.h>
 
 #include "csv_read_line.h"
 #include "csv_layer_record.h"
@@ -298,7 +298,7 @@ KisImportExportErrorCode CSVLoader::decode(QIODevice *io, const QString &filenam
             if (frame > frameCount)
                 frameCount = frame;
 
-            animation->setFullClipRange(KisTimeRange::fromTime(0,frameCount - 1));
+            animation->setFullClipRange(KisTimeSpan::fromTime(0,frameCount - 1));
             animation->setFramerate((int)framerate);
         }
 

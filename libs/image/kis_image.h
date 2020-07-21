@@ -92,7 +92,7 @@ public: // KisNodeGraphListener implementation
     void invalidateAllFrames() override;
     void notifySelectionChanged() override;
     void requestProjectionUpdate(KisNode *node, const QVector<QRect> &rects, bool resetAnimationCache) override;
-    void invalidateFrames(const KisTimeRange &range, const QRect &rect) override;
+    void invalidateFrames(const KisTimeSpan &range, const QRect &rect) override;
     void requestTimeSwitch(int time) override;
     KisNode* graphOverlayNode() const override;
 

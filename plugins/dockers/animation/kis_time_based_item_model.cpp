@@ -26,7 +26,7 @@
 #include "kis_signal_compressor_with_param.h"
 #include "kis_image.h"
 #include "kis_image_animation_interface.h"
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 #include "kis_animation_utils.h"
 #include "kis_keyframe_channel.h"
 #include "kis_processing_applicator.h"
@@ -520,7 +520,7 @@ void KisTimeBasedItemModel::slotPlaybackStopped()
     setData(index(0, m_d->image->animationInterface()->currentUITime()), true, ActiveFrameRole);
 }
 
-void KisTimeBasedItemModel::setPlaybackRange(const KisTimeRange &range)
+void KisTimeBasedItemModel::setPlaybackRange(const KisTimeSpan &range)
 {
     if (m_d->image.isNull()) return;
 

@@ -943,7 +943,7 @@ namespace KisLayerUtils {
         KisKeyframeChannel *channel = node->getKeyframeChannel(KisKeyframeChannel::Content.id());
         if (!channel) return QSet<int>();
 
-        return channel->allKeyframeIds();
+        return channel->allKeyframeTimes();
     }
 
     QSet<int> fetchLayerFramesRecursive(KisNodeSP rootNode) {

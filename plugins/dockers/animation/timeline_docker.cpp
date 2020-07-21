@@ -49,7 +49,7 @@
 
 #include "timeline_frames_model.h"
 #include "timeline_frames_view.h"
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 #include "kis_animation_frame_cache.h"
 #include "kis_image_animation_interface.h"
 #include "kis_signal_auto_connection.h"
@@ -618,7 +618,7 @@ void TimelineDocker::nextKeyframe()
     int currentTime = animation->currentUITime();
 
     int destinationTime = -1;
-    if (keyframes->keyframeAt(keyframes->activeKeyframeTime(currentTime))) {
+    if (keyframes->activeKeyframeAt(currentTime)) {
         destinationTime = keyframes->nextKeyframeTime(currentTime);
     }
 
@@ -669,14 +669,14 @@ void TimelineDocker::nextMatchingKeyframe()
     KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
     int time = animation->currentUITime();
 
-    if (!keyframes->keyframeAt(keyframes->activeKeyframeTime(time))) {
+    if (!keyframes->activeKeyframeAt(time)) {
         return;
     }
 
     int destinationTime = keyframes->activeKeyframeTime(time);
     const int desiredColor = keyframes->keyframeAt(destinationTime)->colorLabel();
 
-    while ( keyframes->keyframeAt(destinationTime) &&
+    while (keyframes->keyframeAt(destinationTime) &&
                 (keyframes->keyframeAt(destinationTime) == keyframes->keyframeAt(time) ||
                  keyframes->keyframeAt(destinationTime)->colorLabel() != desiredColor)){
         destinationTime = keyframes->nextKeyframeTime(destinationTime);

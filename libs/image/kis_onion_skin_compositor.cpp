@@ -201,13 +201,13 @@ QRect KisOnionSkinCompositor::calculateExtent(const KisPaintDeviceSP device)
     int keyframeTimeBack;
     int keyframeTimeFwd;
 
-    KisRasterKeyframeChannel *channel = device->keyframeChannel();
+    KisRasterKeyframeChannel *channel = device->keyframeChannel(); //TODO: take in channel instead of device...?
 
     if (!channel) { // it happens when you try to show onion skins on non-animated layer with opacity keyframes
         return rect;
     }
 
-    keyframeTimeBack = keyframeTimeFwd = channel->activeKeyframeTime(device->defaultBounds()->currentTime());
+    keyframeTimeBack = keyframeTimeFwd = channel->activeKeyframeTime();
 
     for (int offset = 1; offset <= m_d->numberOfSkins; offset++) {
         if (channel->keyframeAt(keyframeTimeBack)) {

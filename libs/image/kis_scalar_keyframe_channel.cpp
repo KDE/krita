@@ -19,7 +19,7 @@
 #include "kis_scalar_keyframe_channel.h"
 #include "kis_node.h"
 #include "kundo2command.h"
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 
 #include <kis_global.h>
 #include <kis_dom_utils.h>
@@ -532,7 +532,7 @@ void KisScalarKeyframeChannel::setScalarValue(KisKeyframeSP keyframe, qreal valu
 void KisScalarKeyframeChannel::notifyKeyframeChanged(int time)
 {
     QRect rect = affectedRect(time);
-    KisTimeRange range = affectedFrames(time);
+    KisTimeSpan range = affectedFrames(time);
 
     requestUpdate(range, rect);
 

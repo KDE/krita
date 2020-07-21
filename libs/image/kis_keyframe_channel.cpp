@@ -22,7 +22,7 @@
 #include "KoID.h"
 #include "kis_global.h"
 #include "kis_node.h"
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 #include "kundo2command.h"
 #include "kis_keyframe_commands.h"
 #include "kis_scalar_keyframe_channel.h"
@@ -260,7 +260,7 @@ int KisKeyframeChannel::keyframeCount() const
     return m_d->keys.count();
 }
 
-QSet<int> KisKeyframeChannel::allKeyframeIds() const
+QSet<int> KisKeyframeChannel::allKeyframeTimes() const
 {
     QSet<int> frames;
 
@@ -290,9 +290,9 @@ int KisKeyframeChannel::framesHash() const
     return hash;
 }
 
-KisTimeRange KisKeyframeChannel::affectedFrames(int time) const
+KisTimeSpan KisKeyframeChannel::affectedFrames(int time) const
 {
-    if (m_d->keys.isEmpty()) return KisTimeRange::infinite(0);
+    if (m_d->keys.isEmpty()) return KisTimeSpan::infinite(0);
 
     KeyframesMap::const_iterator active = activeKeyIterator(time);
     KeyframesMap::const_iterator next;
@@ -311,28 +311,28 @@ KisTimeRange KisKeyframeChannel::affectedFrames(int time) const
     }
 
     if (next == m_d->keys.constEnd()) {
-        return KisTimeRange::infinite(from);
+        return KisTimeSpan::infinite(from);
     } else {
         KisScalarKeyframeSP activeScalar = active.value().dynamicCast<KisScalarKeyframe>();
         const KisScalarKeyframe::InterpolationMode activeMode = (noActiveKeyframe || !activeScalar) ? KisScalarKeyframe::Constant :
                                                                 activeScalar->interpolationMode();
 
         if (activeMode == KisScalarKeyframe::Constant) {
-            return KisTimeRange::fromTime(from, next.key() - 1);
+            return KisTimeSpan::fromTime(from, next.key() - 1);
         } else {
-            return KisTimeRange::fromTime(from, from);
+            return KisTimeSpan::fromTime(from, from);
         }
     }
 }
 
-KisTimeRange KisKeyframeChannel::identicalFrames(int time) const
+KisTimeSpan KisKeyframeChannel::identicalFrames(int time) const
 {
     KeyframesMap::const_iterator active = activeKeyIterator(time);
 
     if (active != m_d->keys.constEnd() && (active+1) != m_d->keys.constEnd()) {
         KisScalarKeyframeSP activeScalar = active.value().dynamicCast<KisScalarKeyframe>();
         if (activeScalar && activeScalar->interpolationMode() != KisScalarKeyframe::Constant) {
-            return KisTimeRange::fromTime(time, time);
+            return KisTimeSpan::fromTime(time, time);
         }
     }
 
@@ -391,7 +391,7 @@ int KisKeyframeChannel::currentTime() const
     return m_d->defaultBounds->currentTime();
 }
 
-void KisKeyframeChannel::requestUpdate(const KisTimeRange &range, const QRect &rect)
+void KisKeyframeChannel::requestUpdate(const KisTimeSpan &range, const QRect &rect)
 {
     if (m_d->node) {
         m_d->node->invalidateFrames(range, rect);

@@ -28,7 +28,7 @@
 #include "kis_image_animation_interface.h"
 #include "KoColor.h"
 #include <KoUpdater.h>
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 #include "kis_keyframe_channel.h"
 #include <testui.h>
 
@@ -48,7 +48,7 @@ void KisAnimationExporterTest::testAnimationExport()
 
     rasterChannel->addKeyframe(1, &parentCommand);
     rasterChannel->addKeyframe(2, &parentCommand);
-    p.image->animationInterface()->setFullClipRange(KisTimeRange::fromTime(0, 2));
+    p.image->animationInterface()->setFullClipRange(KisTimeSpan::fromTime(0, 2));
 
     KisPaintDeviceSP dev = p.layer->paintDevice();
 
@@ -66,7 +66,7 @@ void KisAnimationExporterTest::testAnimationExport()
     QImage frame2 = dev->convertToQImage(0, rect);
 
     KisAsyncAnimationFramesSaveDialog exporter(document->image(),
-                                               KisTimeRange::fromTime(0,2),
+                                               KisTimeSpan::fromTime(0,2),
                                                "export-test.png",
                                                0,
                                                false,

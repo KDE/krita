@@ -644,7 +644,7 @@ void KisNode::setDirtyDontResetAnimationCache(const QVector<QRect> &rects)
     }
 }
 
-void KisNode::invalidateFrames(const KisTimeRange &range, const QRect &rect)
+void KisNode::invalidateFrames(const KisTimeSpan &range, const QRect &rect)
 {
     if(m_d->graphListener) {
         m_d->graphListener->invalidateFrames(range, rect);

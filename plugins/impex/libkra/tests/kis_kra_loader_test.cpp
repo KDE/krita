@@ -35,7 +35,7 @@
 
 #include "kis_image_animation_interface.h"
 #include "kis_keyframe_channel.h"
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 
 #include <filestest.h>
 
@@ -139,7 +139,7 @@ void KisKraLoaderTest::testLoadAnimated()
     QCOMPARE(channel1->keyframeCount(), 3);
 
     QCOMPARE(image->animationInterface()->framerate(), 17);
-    QCOMPARE(image->animationInterface()->fullClipRange(), KisTimeRange::fromTime(15, 45));
+    QCOMPARE(image->animationInterface()->fullClipRange(), KisTimeSpan::fromTime(15, 45));
     QCOMPARE(image->animationInterface()->currentTime(), 19);
 
     KisPaintDeviceSP dev = layer1->paintDevice();

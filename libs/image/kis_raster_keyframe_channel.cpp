@@ -24,7 +24,7 @@
 #include "kis_global.h"
 #include "kis_paint_device.h"
 #include "kis_paint_device_frames_interface.h"
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 #include "kundo2command.h"
 #include "kis_onion_skin_compositor.h"
 
@@ -150,7 +150,7 @@ int KisRasterKeyframeChannel::frameId(const KisKeyframe *keyframe) const
 
 int KisRasterKeyframeChannel::frameIdAt(int time) const
 {
-    KisKeyframeSP activeKey = keyframeAt(activeKeyframeTime(time));
+    KisKeyframeSP activeKey = activeKeyframeAt(time);
     if (activeKey.isNull()) return -1;
     return frameId(activeKey);
 }
@@ -164,7 +164,7 @@ void KisRasterKeyframeChannel::fetchFrame(int time, KisPaintDeviceSP targetDevic
 {
     KisRasterKeyframeSP key = keyframeAt<KisRasterKeyframe>(time);
     if (!key) {
-        key = keyframeAt<KisRasterKeyframe>(activeKeyframeTime(time));
+        key = activeKeyframeAt<KisRasterKeyframe>(time);
     }
 
     m_d->paintDevice->framesInterface()->fetchFrame(key->frameID(), targetDevice);

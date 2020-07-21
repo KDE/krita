@@ -48,7 +48,7 @@
 #include "timeline_color_scheme.h"
 #include "kis_node_model.h"
 #include "kis_projection_leaf.h"
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 
 #include "kis_node_view_color_scheme.h"
 #include "krita_utils.h"
@@ -110,14 +110,13 @@ struct TimelineFramesModel::Private
     }
 
     bool frameHasContent(int row, int column) {
-
         KisNodeDummy *dummy = converter->dummyFromRow(row);
 
         KisKeyframeChannel *primaryChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
         if (!primaryChannel) return false;
 
         // first check if we are a key frame
-        KisRasterKeyframeSP frame = primaryChannel->keyframeAt<KisRasterKeyframe>(primaryChannel->activeKeyframeTime(column));
+        KisRasterKeyframeSP frame = primaryChannel->activeKeyframeAt<KisRasterKeyframe>(column);
         if (!frame) return false;
 
         return frame->hasContent();
@@ -141,7 +140,7 @@ struct TimelineFramesModel::Private
         KisKeyframeChannel *primaryChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
         if (!primaryChannel) return -1;
 
-        KisKeyframeSP frame = primaryChannel->keyframeAt(primaryChannel->activeKeyframeTime(column));
+        KisKeyframeSP frame = primaryChannel->activeKeyframeAt(column);
         if (!frame) return -1;
 
         return frame->colorLabel();
@@ -900,11 +899,12 @@ bool TimelineFramesModel::insertHoldFrames(const QModelIndexList &selectedIndexe
             if (!channel) continue;
 
             minSelectedTime = qMin(minSelectedTime, index.column());
-            int entryTime = channel->activeKeyframeTime(index.column());
-            KisRasterKeyframeSP keyframe = channel->keyframeAt<KisRasterKeyframe>(entryTime);
+
+            int time = channel->activeKeyframeTime(index.column());
+            KisRasterKeyframeSP keyframe = channel->activeKeyframeAt<KisRasterKeyframe>(index.column());
 
             if (keyframe) {
-                uniqueKeyframesInSelection.insert(TimelineSelectionEntry{channel, entryTime, keyframe});
+                uniqueKeyframesInSelection.insert(TimelineSelectionEntry{channel, time, keyframe});
             }
         }
 

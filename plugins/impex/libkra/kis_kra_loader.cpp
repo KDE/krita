@@ -82,7 +82,7 @@
 #include "kis_kra_load_visitor.h"
 #include "kis_dom_utils.h"
 #include "kis_image_animation_interface.h"
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 #include "kis_grid_config.h"
 #include "kis_guides_config.h"
 #include "kis_image_config.h"
@@ -603,7 +603,7 @@ void KisKraLoader::loadAnimationMetadata(const KoXmlElement &element, KisImageSP
     QDomElement qElement = qDom.firstChildElement();
 
     float framerate;
-    KisTimeRange range;
+    KisTimeSpan range;
     int currentTime;
 
     KisImageAnimationInterface *animation = image->animationInterface();

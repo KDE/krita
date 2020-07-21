@@ -46,7 +46,7 @@
 #include <kis_paint_device.h>
 #include <kis_raster_keyframe_channel.h>
 #include <kis_image_animation_interface.h>
-#include <kis_time_range.h>
+#include <kis_time_span.h>
 #include <kis_iterator_ng.h>
 
 #include "csv_layer_record.h"
@@ -75,7 +75,7 @@ KisImportExportErrorCode CSVSaver::encode(QIODevice *io)
     KisNodeSP node;
     QByteArray ba;
 //    KisTimeKeyframePair keyframeEntry;
-    KisKeyframeSP keyframeEntry;
+    KisKeyframeSP keyframe;
     QVector<CSVLayerRecord*> layers;
 
     KisImageAnimationInterface *animation = m_image->animationInterface();
@@ -141,7 +141,7 @@ KisImportExportErrorCode CSVSaver::encode(QIODevice *io)
         node = node->nextSibling();
     }
 
-    KisTimeRange range = animation->fullClipRange();
+    KisTimeSpan range = animation->fullClipRange();
 
     start = (range.isValid()) ? range.start() : 0;
 
@@ -307,21 +307,21 @@ KisImportExportErrorCode CSVSaver::encode(QIODevice *io)
 
                 if (channel) {
                     if (frame == start) {
-                        keyframeEntry = channel->keyframeAt(channel->activeKeyframeTime(frame));
+                        keyframe = channel->activeKeyframeAt(frame);
                     } else {
-                        keyframeEntry = channel->keyframeAt(frame); //TODO: Ugly...
+                        keyframe = channel->keyframeAt(frame); //TODO: Ugly...
                     }
                 } else {
-                    keyframeEntry.clear(); // without animation
+                    keyframe.clear(); // without animation
                 }
 
-                if ( keyframeEntry || (frame == start) ) {
+                if ( keyframe || (frame == start) ) {
 
                     if (!m_batchMode) {
                         //emit m_doc->sigProgress(((frame - start) * layers.size() + idx) * 100 /
                         //                        ((end - start) * layers.size()));
                     }
-                    retval = getLayer(layer, exportDoc.data(), keyframeEntry, path, frame, idx);
+                    retval = getLayer(layer, exportDoc.data(), keyframe, path, frame, idx);
 
                     if (!retval.isOk())
                         break;

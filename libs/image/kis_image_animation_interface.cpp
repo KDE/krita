@@ -25,7 +25,7 @@
 #include "kis_regenerate_frame_stroke_strategy.h"
 #include "kis_switch_time_stroke_strategy.h"
 #include "kis_keyframe_channel.h"
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 
 #include "kis_post_execution_undo_adapter.h"
 #include "commands_new/kis_switch_current_time_command.h"
@@ -66,8 +66,8 @@ struct KisImageAnimationInterface::Private
     bool externalFrameActive;
     bool frameInvalidationBlocked;
 
-    KisTimeRange fullClipRange;
-    KisTimeRange playbackRange;
+    KisTimeSpan fullClipRange;
+    KisTimeSpan playbackRange;
     int framerate;
     int cachedLastFrameValue;
     QString audioChannelFileName;
@@ -103,7 +103,7 @@ KisImageAnimationInterface::KisImageAnimationInterface(KisImage *image)
     m_d->image = image;
 
     m_d->framerate = 24;
-    m_d->fullClipRange = KisTimeRange::fromTime(0, 100);
+    m_d->fullClipRange = KisTimeSpan::fromTime(0, 100);
 
     connect(this, SIGNAL(sigInternalRequestTimeSwitch(int,bool)), SLOT(switchCurrentTimeAsync(int,bool)));
 }
@@ -141,12 +141,12 @@ int KisImageAnimationInterface::currentUITime() const
     return m_d->currentUITime();
 }
 
-const KisTimeRange& KisImageAnimationInterface::fullClipRange() const
+const KisTimeSpan& KisImageAnimationInterface::fullClipRange() const
 {
     return m_d->fullClipRange;
 }
 
-void KisImageAnimationInterface::setFullClipRange(const KisTimeRange range)
+void KisImageAnimationInterface::setFullClipRange(const KisTimeSpan range)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(!range.isInfinite());
     m_d->fullClipRange = range;
@@ -155,22 +155,22 @@ void KisImageAnimationInterface::setFullClipRange(const KisTimeRange range)
 
 void KisImageAnimationInterface::setFullClipRangeStartTime(int column)
 {
-    KisTimeRange newRange(column,  m_d->fullClipRange.end(), false);
+    KisTimeSpan newRange(column,  m_d->fullClipRange.end(), false);
     setFullClipRange(newRange);
 }
 
 void KisImageAnimationInterface::setFullClipRangeEndTime(int column)
 {
-    KisTimeRange newRange(m_d->fullClipRange.start(), column, false);
+    KisTimeSpan newRange(m_d->fullClipRange.start(), column, false);
     setFullClipRange(newRange);
 }
 
-const KisTimeRange& KisImageAnimationInterface::playbackRange() const
+const KisTimeSpan& KisImageAnimationInterface::playbackRange() const
 {
     return m_d->playbackRange.isValid() ? m_d->playbackRange : m_d->fullClipRange;
 }
 
-void KisImageAnimationInterface::setPlaybackRange(const KisTimeRange range)
+void KisImageAnimationInterface::setPlaybackRange(const KisTimeSpan range)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(!range.isInfinite());
     m_d->playbackRange = range;
@@ -267,7 +267,7 @@ void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId, bool useUnd
 {
     if (currentUITime() == frameId) return;
 
-    const KisTimeRange range = KisTimeRange::calculateIdenticalFramesRecursive(m_d->image->root(), currentUITime());
+    const KisTimeSpan range = KisTimeSpan::calculateIdenticalFramesRecursive(m_d->image->root(), currentUITime());
     const bool needsRegeneration = !range.contains(frameId);
 
     KisSwitchTimeStrokeStrategy::SharedTokenSP token =
@@ -364,12 +364,12 @@ void KisImageAnimationInterface::notifyNodeChanged(const KisNode *node,
     if (node->inherits("KisSelectionMask")) return;
 
     const int currentTime = m_d->currentTime();
-    KisTimeRange invalidateRange;
+    KisTimeSpan invalidateRange;
 
     if (recursive) {
-        invalidateRange = KisTimeRange::calculateAffectedFramesRecursive(node, currentTime);
+        invalidateRange = KisTimeSpan::calculateAffectedFramesRecursive(node, currentTime);
     } else {
-        invalidateRange = KisTimeRange::calculateNodeAffectedFrames(node, currentTime);
+        invalidateRange = KisTimeSpan::calculateNodeAffectedFrames(node, currentTime);
     }
 
     // we compress the updated rect (atm, no one uses it anyway)
@@ -381,7 +381,7 @@ void KisImageAnimationInterface::notifyNodeChanged(const KisNode *node,
     invalidateFrames(invalidateRange, unitedRect);
 }
 
-void KisImageAnimationInterface::invalidateFrames(const KisTimeRange &range, const QRect &rect)
+void KisImageAnimationInterface::invalidateFrames(const KisTimeSpan &range, const QRect &rect)
 {
     m_d->cachedLastFrameValue = -1;
     emit sigFramesChanged(range, rect);

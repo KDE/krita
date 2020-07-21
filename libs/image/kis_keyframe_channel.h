@@ -33,7 +33,7 @@
 
 #include "kritaimage_export.h"
 
-class KisTimeRange;
+class KisTimeSpan;
 
 
 /**
@@ -79,10 +79,17 @@ public:
     void swapKeyframes(int timeA, int timeB, KUndo2Command* parentCmd = nullptr) { swapKeyframes(this, timeA, this, timeB, parentCmd); }
 
     KisKeyframeSP keyframeAt(int time) const;
+    KisKeyframeSP activeKeyframeAt(int time) const { return keyframeAt(activeKeyframeTime(time)); }
 
-    template <class KeyframeType> // Convenience template..
+    // Convenience templates..
+    template <class KeyframeType>
     QSharedPointer<KeyframeType> keyframeAt(int time) const {
         return keyframeAt(time).dynamicCast<KeyframeType>();
+    }
+
+    template <class KeyframeType>
+    QSharedPointer<KeyframeType> activeKeyframeAt(int time) const {
+        return activeKeyframeAt(time).dynamicCast<KeyframeType>();
     }
 
     int activeKeyframeTime(int time) const;
@@ -100,7 +107,7 @@ public:
     Q_DECL_DEPRECATED KisNodeWSP node() const;
 
     int keyframeCount() const;
-    Q_DECL_DEPRECATED QSet<int> allKeyframeIds() const;
+    QSet<int> allKeyframeTimes() const;
 
     /**
      * Calculates a pseudo-unique keyframes hash. The hash changes
@@ -112,7 +119,7 @@ public:
      * Get the set of frames affected by any changes to the value
      * of the active keyframe at the given time.
      */
-    KisTimeRange affectedFrames(int time) const;
+    KisTimeSpan affectedFrames(int time) const; //TEMP NOTE: scalar specific?
 
     /**
      * Get a set of frames for which the channel gives identical
@@ -121,13 +128,13 @@ public:
      * Note: this set may be different than the set of affected frames
      * due to interpolation.
      */
-    KisTimeRange identicalFrames(int time) const; //TEMP NOTE: scalar specific?
+    KisTimeSpan identicalFrames(int time) const; //TEMP NOTE: scalar specific?
 
     virtual QDomElement toXML(QDomDocument doc, const QString &layerFilename);
     virtual void loadXML(const QDomElement &channelNode);
 
 Q_SIGNALS:
-    void sigUpdated(const KisTimeRange &affectedTimeSpan, const QRect &affectedArea);
+    void sigUpdated(const KisTimeSpan &affectedTimeSpan, const QRect &affectedArea);
 
     void sigKeyframeAboutToBeAdded(const KisKeyframeChannel *channel, KisKeyframeSP keyframe);
     void sigKeyframeAdded(const KisKeyframeChannel *channel,KisKeyframeSP keyframe, int index);
@@ -144,7 +151,7 @@ protected:
 
     int currentTime() const;
 
-    Q_DECL_DEPRECATED virtual void requestUpdate(const KisTimeRange &range, const QRect &rect);
+    Q_DECL_DEPRECATED virtual void requestUpdate(const KisTimeSpan &range, const QRect &rect);
 
     Q_DECL_DEPRECATED void workaroundBrokenFrameTimeBug(int *time); //TEMP NOTE: scalar specific?
 

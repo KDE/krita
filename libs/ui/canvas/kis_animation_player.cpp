@@ -34,7 +34,7 @@
 #include "kis_animation_frame_cache.h"
 #include "kis_signal_auto_connection.h"
 #include "kis_image_animation_interface.h"
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 #include "kis_signal_compressor.h"
 #include <KisDocument.h>
 #include <QFileInfo>
@@ -318,7 +318,7 @@ void KisAnimationPlayer::slotUpdatePlaybackTimer()
      m_d->timer->stop();
 
     const KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
-    const KisTimeRange &playBackRange = animation->playbackRange();
+    const KisTimeSpan &playBackRange = animation->playbackRange();
     if (!playBackRange.isValid()) return;
 
     const int fps = animation->framerate();
@@ -355,7 +355,7 @@ void KisAnimationPlayer::play()
     const KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
 
     {
-        const KisTimeRange &range = animation->playbackRange();
+        const KisTimeSpan &range = animation->playbackRange();
         if (!range.isValid()) return;
 
         // when openGL is disabled, there is no animation cache

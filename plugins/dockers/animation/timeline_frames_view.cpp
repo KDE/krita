@@ -47,7 +47,7 @@
 #include "kis_custom_modifiers_catcher.h"
 #include "kis_action.h"
 #include "kis_signal_compressor.h"
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 #include "kis_color_label_selector_widget.h"
 #include "kis_layer_filter_widget.h"
 #include "kis_keyframe_channel.h"
@@ -709,9 +709,9 @@ void TimelineFramesView::slotSelectionChanged()
         }
     }
 
-    KisTimeRange range;
+    KisTimeSpan range;
     if (maxColumn > minColumn) {
-        range = KisTimeRange(minColumn, maxColumn - minColumn + 1);
+        range = KisTimeSpan(minColumn, maxColumn - minColumn + 1);
     }
 
     if (m_d->model->isPlaybackPaused()) {
@@ -1550,8 +1550,8 @@ void TimelineFramesView::insertOrRemoveHoldFrames(int count, bool entireColumn)
                 KisKeyframeChannel *channel = layerNode->getKeyframeChannel(KisKeyframeChannel::Content.id());
                 if (!channel) continue;
 
-                if (keyframesInLayerNode < channel->allKeyframeIds().count()) {
-                   keyframesInLayerNode = channel->allKeyframeIds().count();
+                if (keyframesInLayerNode < channel->allKeyframeTimes().count()) {
+                   keyframesInLayerNode = channel->allKeyframeTimes().count();
                 }
             }
             m_d->model->setLastVisibleFrame(m_d->model->columnCount() + count*keyframesInLayerNode);

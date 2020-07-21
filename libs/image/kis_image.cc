@@ -103,7 +103,7 @@
 
 #include <functional>
 
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 
 #include "KisRunnableBasedStrokeStrategy.h"
 #include "KisRunnableStrokeJobData.h"
@@ -525,7 +525,7 @@ void KisImage::nodeChanged(KisNode* node)
 
 void KisImage::invalidateAllFrames()
 {
-    invalidateFrames(KisTimeRange::infinite(0), QRect());
+    invalidateFrames(KisTimeSpan::infinite(0), QRect());
 }
 
 void KisImage::setOverlaySelectionMask(KisSelectionMaskSP mask)
@@ -2234,7 +2234,7 @@ void KisImage::requestProjectionUpdate(KisNode *node, const QVector<QRect> &rect
     KisNodeGraphListener::requestProjectionUpdate(node, rects, resetAnimationCache);
 }
 
-void KisImage::invalidateFrames(const KisTimeRange &range, const QRect &rect)
+void KisImage::invalidateFrames(const KisTimeSpan &range, const QRect &rect)
 {
     m_d->animationInterface->invalidateFrames(range, rect);
 }

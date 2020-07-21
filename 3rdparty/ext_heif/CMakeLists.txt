@@ -75,7 +75,6 @@ ExternalProject_Add(
 endif(WIN32)
 
 IF ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8" AND NOT CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
-    message(STATUS ${CMAKE_SYSTEM_PROCESSOR})
     ExternalProject_Add(ext_libx265_10bit
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
         URL http://ftp.videolan.org/pub/videolan/x265/x265_3.2.1.tar.gz

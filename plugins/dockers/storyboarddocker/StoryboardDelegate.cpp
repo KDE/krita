@@ -32,6 +32,7 @@
 #include <QScrollBar>
 
 #include <kis_icon.h>
+#include <kis_image_animation_interface.h>
 
 StoryboardDelegate::StoryboardDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
@@ -324,12 +325,13 @@ bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
             bool upButtonClicked = upButton.isValid() && upButton.contains(mouseEvent->pos());
             bool downButtonClicked = downButton.isValid() && downButton.contains(mouseEvent->pos());
 
+            StoryboardModel* sbModel = dynamic_cast<StoryboardModel*>(model);
             if (leftButton && upButtonClicked) {
-                model->setData(index, index.data().toInt() + 1);
+                sbModel->insertHoldFrames(index.data().toInt() + 1, index.data().toInt(), index);
                 return true;
             }
             else if (leftButton && downButtonClicked) {
-                model->setData(index, std::max(0,index.data().toInt() - 1));
+                sbModel->insertHoldFrames(std::max(0, index.data().toInt() - 1), index.data().toInt(), index);
                 return true;
             }
         }
@@ -465,7 +467,9 @@ void StoryboardDelegate::setModelData(QWidget *editor, QAbstractItemModel *model
             {
                 QSpinBox *spinbox = static_cast<QSpinBox*>(editor);
                 int value = spinbox->value();
-                model->setData(index, value, Qt::EditRole);
+
+                StoryboardModel* sbModel = dynamic_cast<StoryboardModel*>(model);
+                sbModel->insertHoldFrames(value, index.data().toInt(), index);
                 return;
             }
             default:             // for comments

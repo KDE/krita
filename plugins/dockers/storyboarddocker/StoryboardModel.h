@@ -87,6 +87,7 @@ public:
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
     bool setCommentScrollData(const QModelIndex & index, const QVariant & value);
     bool setThumbnailPixmapData(const QModelIndex & parentIndex, const KisPaintDeviceSP & dev);
+    bool updateDurationData(const QModelIndex & parentIndex);
     Qt::ItemFlags flags(const QModelIndex &index) const override;
     
     //for removing and inserting rows
@@ -115,6 +116,8 @@ public:
     QModelIndex lastIndexBeforeFrame(int frame) const;
     QModelIndexList affectedIndexes(KisTimeRange range) const;
     bool isOnlyKeyframe(KisKeyframeSP keyframe, int time) const;
+    int nextKeyframeGlobal(int keyframeTime) const;
+    bool insertHoldFrames(int newDuration, int oldDuration, QModelIndex index);
 
     enum childIndexType{
         FrameNumber,

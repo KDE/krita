@@ -340,6 +340,7 @@ private Q_SLOTS:
     /// This is called from the constructor of the window, before the xmlgui file is loaded
     void mainWindowIsBeingCreated(KisMainWindow *window);
 
+
 private:
     struct Private;
     Private *const d;

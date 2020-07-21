@@ -63,6 +63,7 @@
 #include <QAction>
 #include <QWindow>
 #include <QScrollArea>
+#include <QDebug>
 
 #include <kactioncollection.h>
 #include <kactionmenu.h>
@@ -598,6 +599,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     QWindow *window = this->windowHandle();
     connect(window, SIGNAL(screenChanged(QScreen *)), this, SLOT(windowScreenChanged(QScreen *)));
 
+    emit KisPart::instance()->sigMainWindowCreated();
 }
 
 KisMainWindow::~KisMainWindow()

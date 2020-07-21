@@ -55,6 +55,7 @@
 #include <QKeySequence>
 
 #include <QDialog>
+#include <QDebug>
 #include <QApplication>
 #include <QDomDocument>
 #include <QDomElement>
@@ -278,6 +279,7 @@ void KisPart::notifyMainWindowIsBeingCreated(KisMainWindow *mainWindow)
 {
     emit sigMainWindowIsBeingCreated(mainWindow);
 }
+
 
 KisView *KisPart::createView(KisDocument *document,
                              KisViewManager *viewManager,

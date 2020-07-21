@@ -39,6 +39,7 @@ class KoPatternBackground;
 class KoVectorPatternBackground;
 class QTransform;
 class QGradient;
+class SvgMeshGradient;
 
 /// Helper class to save svg styles
 class KRITAFLAKE_EXPORT SvgStyleWriter
@@ -68,6 +69,7 @@ protected:
     static void saveSvgColorStops(const QGradientStops &colorStops, SvgSavingContext &context);
     /// Saves gradient
     static QString saveSvgGradient(const QGradient *gradient, const QTransform &gradientTransform, SvgSavingContext &context);
+    static QString saveSvgMeshGradient(SvgMeshGradient* gradient, const QTransform &transform, SvgSavingContext &context);
     /// Saves pattern
     static QString saveSvgPattern(QSharedPointer<KoPatternBackground> pattern, KoShape *shape, SvgSavingContext &context);
     static QString saveSvgVectorPattern(QSharedPointer<KoVectorPatternBackground> pattern, KoShape *shape, SvgSavingContext &context);

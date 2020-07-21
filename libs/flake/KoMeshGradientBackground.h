@@ -19,6 +19,9 @@ public:
 
     bool loadStyle(KoOdfLoadingContext &context, const QSizeF &shapeSize) override;
 
+    SvgMeshGradient* gradient();
+    QTransform transform();
+
 private:
     class Private;
     QSharedDataPointer<Private> d;

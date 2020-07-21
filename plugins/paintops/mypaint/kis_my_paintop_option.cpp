@@ -53,8 +53,9 @@ void KisMyPaintOpOption::writeOptionSetting(KisPropertiesConfigurationSP setting
     op.diameter = 2*exp(m_options->radiusSPBox->value());
     op.hardness = m_options->hardnessSPBox->value();
     op.opacity = m_options->opacitySPBox->value();
-    op.eraser = m_options->eraserBox->isChecked();
+    op.eraserMode = m_options->eraserBox->isChecked();
     op.json = this->json;
+    op.eraser = this->eraserVal;
 
     op.writeOptionSetting(setting);
 }
@@ -70,7 +71,8 @@ void KisMyPaintOpOption::readOptionSetting(const KisPropertiesConfigurationSP se
     m_options->radiusSPBox->setValue(op.radius());
     m_options->hardnessSPBox->setValue(op.hardness);
     m_options->opacitySPBox->setValue(op.opacity);
-    m_options->eraserBox->setChecked(op.eraser);
+    m_options->eraserBox->setChecked(op.eraserMode);
+    this->eraserVal = op.eraser;
 }
 
 void KisMyPaintOpOption::refresh() {

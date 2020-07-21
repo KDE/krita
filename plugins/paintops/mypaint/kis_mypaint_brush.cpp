@@ -16,7 +16,7 @@ public:
     float diameter;
     float hardness;
     float opacity;
-    bool isEraser;
+    float isEraser;
 };
 
 KisMyPaintBrush::KisMyPaintBrush(const QString &fileName)
@@ -190,7 +190,7 @@ float KisMyPaintBrush::getOpacity() {
     return m_d->opacity;
 }
 
-bool KisMyPaintBrush::isEraser() {
+float KisMyPaintBrush::isEraser() {
 
     return m_d->isEraser;
 }

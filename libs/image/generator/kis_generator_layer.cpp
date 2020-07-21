@@ -94,8 +94,16 @@ void KisGeneratorLayer::slotDelayedStaticUpdate()
     if (!parentLayer) return;
 
     KisImageSP image = parentLayer->image();
-    if (image) {
-        this->update();
+    if (image)
+    {
+        if (!m_d->updateCookie)
+        {
+            this->update();
+        }
+        else
+        {
+            m_d->updateSignalCompressor.start();
+        }
     }
 }
 

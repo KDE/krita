@@ -283,7 +283,7 @@ struct AddRGBOps<Traits, true>
         add<&cfDecreaseSaturation<HSLType,Arg> >(cs, COMPOSITE_DEC_SATURATION_HSL, i18nc("HSL Decrease Saturation", "Decrease Saturation HSL"), KoCompositeOp::categoryHSL());
         add<&cfLightness         <HSLType,Arg> >(cs, COMPOSITE_LIGHTNESS         , i18nc("HSL Lightness", "Lightness")              , KoCompositeOp::categoryHSL());
         add<&cfIncreaseLightness <HSLType,Arg> >(cs, COMPOSITE_INC_LIGHTNESS     , i18nc("HSL Increase Lightness", "Increase Lightness")     , KoCompositeOp::categoryHSL());
-        add<&cfDecreaseLightness <HSLType,Arg> >(cs, COMPOSITE_DEC_LIGHTNESS     , i18nc("HSL" Decrease Lightness, "Decrease Lightness")     , KoCompositeOp::categoryHSL());
+        add<&cfDecreaseLightness <HSLType,Arg> >(cs, COMPOSITE_DEC_LIGHTNESS     , i18nc("HSL Decrease Lightness", "Decrease Lightness")     , KoCompositeOp::categoryHSL());
 
         add<&cfColor             <HSVType,Arg> >(cs, COMPOSITE_COLOR_HSV         , i18nc("HSV Color", "Color HSV")              , KoCompositeOp::categoryHSV());
         add<&cfHue               <HSVType,Arg> >(cs, COMPOSITE_HUE_HSV           , i18nc("HSV Hue", "Hue HSV")                , KoCompositeOp::categoryHSV());

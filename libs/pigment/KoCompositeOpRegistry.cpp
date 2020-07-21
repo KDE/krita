@@ -141,7 +141,7 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
     m_map.insert(m_categories[7], KoID(COMPOSITE_COMBINE_NORMAL,  i18nc("Blending mode - Combine Normal Map", "Combine Normal Map")));
     m_map.insert(m_categories[7], KoID(COMPOSITE_DISSOLVE  ,  i18nc("Blending mode - Dissolve", "Dissolve")));
     m_map.insert(m_categories[7], KoID(COMPOSITE_COPY_RED  ,  i18nc("Blending mode - Copy Red", "Copy Red")));
-    m_map.insert(m_categories[7], KoID(COMPOSITE_COPY_GREEN,  i18nc("Blending mode - "Copy Green, "Copy Green")));
+    m_map.insert(m_categories[7], KoID(COMPOSITE_COPY_GREEN,  i18nc("Blending mode - Copy Green", "Copy Green")));
     m_map.insert(m_categories[7], KoID(COMPOSITE_COPY_BLUE ,  i18nc("Blending mode - Copy Blue", "Copy Blue")));
     m_map.insert(m_categories[7], KoID(COMPOSITE_COPY      ,  i18nc("Blending mode - Copy", "Copy")));
     m_map.insert(m_categories[7], KoID(COMPOSITE_TANGENT_NORMALMAP,  i18nc("Blending mode - Tangent Normalmap", "Tangent Normalmap")));
@@ -176,7 +176,7 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
     m_map.insert(m_categories[11], KoID(COMPOSITE_COLOR_HSV         ,  i18nc("Blending mode - Color HSV", "Color HSV")));
     m_map.insert(m_categories[11], KoID(COMPOSITE_HUE_HSV           ,  i18nc("Blending mode - Hue HSV", "Hue HSV")));
     m_map.insert(m_categories[11], KoID(COMPOSITE_SATURATION_HSV    ,  i18nc("Blending mode - Saturation HSV", "Saturation HSV")));
-    m_map.insert(m_categories[11], KoID(COMPOSITE_VALUE             , i18nc("Blending mode - Value HSV", "Value")));
+    m_map.insert(m_categories[11], KoID(COMPOSITE_VALUE             ,  i18nc("Blending mode - Value HSV", "Value")));
     m_map.insert(m_categories[11], KoID(COMPOSITE_DEC_SATURATION_HSV,  i18nc("Blending mode - Decrease Saturation HSV", "Decrease Saturation HSV")));
     m_map.insert(m_categories[11], KoID(COMPOSITE_INC_SATURATION_HSV,  i18nc("Blending mode - Increase Saturation HSV", "Increase Saturation HSV")));
     m_map.insert(m_categories[11], KoID(COMPOSITE_DEC_VALUE         ,  i18nc("Blending mode - Decrease Value HSV", "Decrease Value")));

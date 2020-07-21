@@ -74,7 +74,7 @@ ExternalProject_Add(
 )
 endif(WIN32)
 
-IF ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8" AND NOT CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
+IF ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8" AND NOT CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64.*|AARCH64.*|arm64.*|ARM64.*)")
     ExternalProject_Add(ext_libx265_10bit
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
         URL https://bitbucket.org/multicoreware/x265/downloads/x265_3.4.tar.gz

@@ -11,6 +11,7 @@
 #include <kis_icon.h>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <qmath.h>
 
 class KisMyPaintOpFactory::Private {
 
@@ -89,6 +90,7 @@ void KisMyPaintOpFactory::processAfterLoading() {
         s->setProperty(MYPAINT_HARDNESS, brush->getHardness());
         s->setProperty(MYPAINT_OPACITY, brush->getOpacity());
         s->setProperty(MYPAINT_ERASER, brush->isEraser());
+        s->setProperty("EraserMode", qRound(brush->isEraser()));
 
 //        QJsonDocument doc = QJsonDocument::fromJson(s->getProperty(MYPAINT_JSON).toByteArray());
 //        QJsonObject brush_json = doc.object();

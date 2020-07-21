@@ -29,7 +29,7 @@ public:
     float getSize();
     float getHardness();
     float getOpacity();
-    bool isEraser();
+    float isEraser();
 
 private:
 

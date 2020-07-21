@@ -44,6 +44,7 @@ public:
 private:
     KisMyPaintOpOptionsWidget *m_options;
     QByteArray json;
+    float eraserVal;
 
 };
 
@@ -57,10 +58,11 @@ public:
     void readOptionSettingImpl(const KisPropertiesConfiguration *settings) override {
 
         hardness = settings->getFloat(MYPAINT_HARDNESS);
-        eraser = settings->getFloat(MYPAINT_ERASER);
+        eraserMode = settings->getBool("EraserMode");
         opacity = settings->getFloat(MYPAINT_OPACITY);
         diameter = settings->getFloat(MYPAINT_DIAMETER);
         json = settings->getProperty(MYPAINT_JSON).toByteArray();
+        eraser = settings->getFloat(MYPAINT_ERASER);
 
     }
 
@@ -71,6 +73,7 @@ public:
         settings->setProperty(MYPAINT_OPACITY, opacity);
         settings->setProperty(MYPAINT_HARDNESS, hardness);
         settings->setProperty(MYPAINT_JSON, json);
+        settings->setProperty("EraserMode", eraserMode);
     }
 
 
@@ -78,7 +81,8 @@ public:
     float diameter;
     float hardness;
     float opacity;
-    bool eraser;
+    float eraser;
+    bool eraserMode;
     QByteArray json;
 
 };

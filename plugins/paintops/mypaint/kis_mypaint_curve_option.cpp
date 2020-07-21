@@ -165,7 +165,7 @@ void KisMyPaintCurveOption::readNamedOptionSetting(const QString& prefix, const 
         setChecked(setting->getBool("Pressure" + prefix, false));
     }    
 
-    m_sensorMap.clear();
+    m_sensorMap.clear();    
 
     Q_FOREACH (const MyPaintBrushOptionType sensorType, KisMyPaintBrushOption::sensorsTypes()) {
         replaceSensor(KisMyPaintBrushOption::type2Sensor(sensorType, m_name));
@@ -202,6 +202,7 @@ void KisMyPaintCurveOption::readNamedOptionSetting(const QString& prefix, const 
         commonCurve = sensor->curve();
     }
 
+    m_useCurve = setting->getBool(m_name + "UseCurve", true);
     if (m_useSameCurve) {
         m_commonCurve = setting->getCubicCurve(prefix + "commonCurve", commonCurve);
     }
@@ -209,14 +210,13 @@ void KisMyPaintCurveOption::readNamedOptionSetting(const QString& prefix, const 
     if (activeSensors().size() == 0) {
         m_useCurve = false;
         m_sensorMap[PRESSURE]->setActive(true);
-    }
+    }  
     if(!m_useCurve){
         emit unCheckUseCurve();
     }
 
     firstRead = false;
-    m_value = setting->getDouble(m_name + "Value", m_maxValue);    
-    //m_useCurve = setting->getBool(m_name + "UseCurve", true);
+    m_value = setting->getDouble(m_name + "Value", m_maxValue);        
     m_curveMode = setting->getInt(m_name + "curveMode");    
 }
 

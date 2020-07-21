@@ -184,34 +184,33 @@ QRectF SvgMeshArray::boundingRect() const
 {
     KIS_ASSERT(numRows() > 0 && numColumns() > 0);
 
-    // because meshpatches are adjacent and share sides. If combined, it *should* form a rectangle
-    qreal width = 0, height = 0;
-
-    QPointF start = m_array[0][0]->boundingRect().topLeft();
+    QPointF topLeft = m_array[0][0]->boundingRect().topLeft();
+    QPointF bottomRight = m_array.last().last()->boundingRect().bottomRight();
 
     // mesharray may be backwards, in which case we might get the right most value
     // but we need topLeft for things to work as expected
     for (int i = 0; i < numRows(); ++i) {
         for (int j = 0; j < numColumns(); ++j) {
-            QPointF tmp  = m_array[i][j]->boundingRect().topLeft();
-            if (tmp.x() < start.x()) {
-                start.rx() = tmp.x();
+            QPointF left  = m_array[i][j]->boundingRect().topLeft();
+            if (left.x() < topLeft.x()) {
+                topLeft.rx() = left.x();
             }
-            if ( tmp.y() < start.y()) {
-                start.ry() = tmp.y();
+            if ( left.y() < topLeft.y()) {
+                topLeft.ry() = left.y();
+            }
+
+            QPointF right = m_array[i][j]->boundingRect().bottomRight();
+            if (bottomRight.x() < right.x()) {
+                bottomRight.rx() = right.x();
+            }
+            if (bottomRight.y() < right.y()) {
+                bottomRight.ry() = right.y();
             }
         }
     }
 
-    for (int row = 0; row < numRows(); ++row) {
-        height += m_array[row][0]->boundingRect().height();
-    }
-
-    for (int col = 0; col < numColumns(); ++col) {
-        width += m_array[0][col]->boundingRect().width();
-    }
-
-    return QRectF(start, QSizeF(width, height));
+    // return extremas
+    return QRectF(topLeft, bottomRight);
 }
 QColor SvgMeshArray::getColor(SvgMeshPatch::Type edge, int row, int col) const
 {

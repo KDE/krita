@@ -110,7 +110,9 @@ void KisGeneratorLayer::update()
     KIS_SAFE_ASSERT_RECOVER_RETURN(filterConfig);
 
     if (filterConfig != m_d->preparedForFilter) {
+        locker.unlock();
         resetCache();
+        locker.relock();
     }
 
     const QRegion processRegion(QRegion(updateRect) - m_d->preparedRect);
@@ -140,7 +142,6 @@ void KisGeneratorLayer::update()
 
     image->endStroke(strokeId);
 
-    QMutexLocker locker(&m_d->mutex);
     m_d->updateCookie = cookie;
     m_d->preparedRect = updateRect;
     m_d->preparedForFilter = filterConfig;

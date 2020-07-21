@@ -598,8 +598,6 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     this->winId(); // Ensures the native window has been created.
     QWindow *window = this->windowHandle();
     connect(window, SIGNAL(screenChanged(QScreen *)), this, SLOT(windowScreenChanged(QScreen *)));
-
-    emit KisPart::instance()->sigMainWindowCreated();
 }
 
 KisMainWindow::~KisMainWindow()
@@ -2530,6 +2528,12 @@ void KisMainWindow::checkSanity()
         QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
         return;
     }
+
+
+    // window is created signal (used in Python)
+    // there must be some asynchronous things happening in the constructor, because the window cannot
+    // be referenced until after this timeout is done
+    emit KisPart::instance()->sigMainWindowCreated();
 }
 
 void KisMainWindow::showErrorAndDie()

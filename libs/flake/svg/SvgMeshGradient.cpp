@@ -45,7 +45,7 @@ void SvgMeshGradient::setTransform(const QTransform& matrix)
 
 bool SvgMeshGradient::isValid() const
 {
-    return m_mesharray->numRows() != 0;
+    return m_mesharray->numRows() > 0 && m_mesharray->numColumns() > 0;
 }
 
 QRectF SvgMeshGradient::boundingRect() const

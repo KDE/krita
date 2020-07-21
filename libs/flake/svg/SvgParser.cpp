@@ -528,7 +528,9 @@ SvgGradientHelper* SvgParser::parseMeshGradient(const KoXmlElement &e)
 
                     QList<QPair<QString, QColor>> rawStops = parseMeshPatch(meshpatchNode);
                     // TODO handle the false result
-                    g->getMeshArray()->addPatch(rawStops, startingNode.point);
+                    if (!g->getMeshArray()->addPatch(rawStops, startingNode.point)) {
+                        debugFlake << "WARNING: Failed to create meshpatch";
+                    }
                     icols++;
                 }
             }
@@ -1158,7 +1160,7 @@ void SvgParser::applyFillStyle(KoShape *shape)
 
                 bg = toQShared(new KoMeshGradientBackground(result, transform));
                 shape->setBackground(bg);
-            } else {
+            } else if (gradient->gradient()) {
                 QGradient *result = prepareGradientForShape(gradient, shape, gc, &transform);
                 if (result) {
                     QSharedPointer<KoGradientBackground> bg;

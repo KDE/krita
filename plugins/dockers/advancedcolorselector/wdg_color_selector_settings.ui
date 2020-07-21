@@ -1323,7 +1323,7 @@
          <item>
           <widget class="QCheckBox" name="csl_hslL">
            <property name="text">
-            <string comment=Lightness HSI>Lightness</string>
+            <string comment="Lightness HSI">Lightness</string>
            </property>
           </widget>
          </item>

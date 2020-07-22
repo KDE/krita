@@ -82,6 +82,9 @@ public:
     KisFilterConfigurationSP defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const override;
     KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool useForMasks) const override;
 
+    // XXX: Fix the generation to work with tiles
+    virtual bool allowsSplittingIntoPatches() const override { return false; }
+
 private:
     QList<KisMultiGridRhomb> generateRhombs(int lines, int divisions, qreal offset) const;
 

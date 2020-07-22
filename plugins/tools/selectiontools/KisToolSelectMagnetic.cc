@@ -91,7 +91,7 @@ void KisToolSelectMagnetic::calculateCheckPoints(vQPointF points)
     for (; finalPoint < points.count(); finalPoint++) {
         totalDistance += kisDistance(points[finalPoint], points[finalPoint - 1]);
 
-        if (totalDistance <= m_anchorGap / 3) {
+        if (totalDistance <= m_anchorGap / 3.0) {
             minPoint = finalPoint;
         }
 

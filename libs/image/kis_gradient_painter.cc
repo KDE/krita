@@ -601,15 +601,15 @@ public:
 
 private:
     KisGradientPainter::enumGradientShape m_shape;
-    qreal m_antiAliasThresholdNormalized;
-    qreal m_antiAliasThresholdNormalizedRev;
-    qreal m_antiAliasThresholdNormalizedDbl;
+    qreal m_antiAliasThresholdNormalized {0};
+    qreal m_antiAliasThresholdNormalizedRev {0};
+    qreal m_antiAliasThresholdNormalizedDbl {0};
     QSharedPointer<KisGradientShapeStrategy> m_shapeStrategy;
-    const GradientRepeatStrategy *m_repeatStrategy;
-    bool m_reverseGradient;
-    const KoCachedGradient *m_cachedGradient;
+    const GradientRepeatStrategy *m_repeatStrategy {0};
+    bool m_reverseGradient {false};
+    const KoCachedGradient *m_cachedGradient {0};
     const quint8 *m_extremeColors[2];
-    const KoColorSpace *m_colorSpace;
+    const KoColorSpace *m_colorSpace {0};
     mutable QVector<quint8> m_resultColor;
 };
 
@@ -816,18 +816,18 @@ public:
 
 private:
     QPointF m_gradientVectorStart;
-    qreal m_distanceInPixels;
-    qreal m_singularityThreshold;
-    qreal m_angle;
+    qreal m_distanceInPixels {0};
+    qreal m_singularityThreshold {0};
+    qreal m_angle {0};
     QSharedPointer<KisGradientShapeStrategy> m_shapeStrategy;
-    const GradientRepeatStrategy *m_repeatStrategy;
-    qreal m_antiAliasThreshold;
-    bool m_reverseGradient;
-    const KoCachedGradient *m_cachedGradient;
+    const GradientRepeatStrategy *m_repeatStrategy {0};
+    qreal m_antiAliasThreshold {0};
+    bool m_reverseGradient {false};
+    const KoCachedGradient *m_cachedGradient {0};
     mutable const quint8 *m_extremeColors[2];
-    const KoColorSpace *m_colorSpace;
+    const KoColorSpace *m_colorSpace {0};
     mutable QVector<quint8> m_resultColor;
-    bool m_isReverseSpiral;
+    bool m_isReverseSpiral {false};
 };
 
 SpyralGradientRepeatNonePaintPolicy::SpyralGradientRepeatNonePaintPolicy(bool isReverseSpiral)
@@ -956,9 +956,9 @@ public:
 
 private:
     QSharedPointer<KisGradientShapeStrategy> m_shapeStrategy;
-    const GradientRepeatStrategy *m_repeatStrategy;
-    bool m_reverseGradient;
-    const KoCachedGradient *m_cachedGradient;
+    const GradientRepeatStrategy *m_repeatStrategy {0};
+    bool m_reverseGradient {false};
+    const KoCachedGradient *m_cachedGradient {0};
 };
 
 void NoAntialiasPaintPolicy::setup(const QPointF& gradientVectorStart,

@@ -37,6 +37,8 @@
 
 ParallelRulerAssistant::ParallelRulerAssistant()
     : KisPaintingAssistant("parallel ruler", i18n("Parallel Ruler assistant"))
+    , m_followBrushPosition(false)
+    , m_adjustedPositionValid(false)
 {
 }
 
@@ -47,7 +49,29 @@ KisPaintingAssistantSP ParallelRulerAssistant::clone(QMap<KisPaintingAssistantHa
 
 ParallelRulerAssistant::ParallelRulerAssistant(const ParallelRulerAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap)
     : KisPaintingAssistant(rhs, handleMap)
+    , m_followBrushPosition(rhs.m_followBrushPosition)
+    , m_adjustedPositionValid(rhs.m_adjustedPositionValid)
+    , m_adjustedBrushPosition(rhs.m_adjustedBrushPosition)
 {
+}
+
+void ParallelRulerAssistant::setAdjustedBrushPosition(const QPointF position)
+{
+    m_adjustedBrushPosition = position;
+    m_adjustedPositionValid = true;
+}
+
+void ParallelRulerAssistant::endStroke()
+{
+    // Brush stroke ended, guides should follow the brush position again.
+    m_followBrushPosition = false;
+    m_adjustedPositionValid = false;
+}
+
+
+void ParallelRulerAssistant::setFollowBrushPosition(bool follow)
+{
+    m_followBrushPosition = follow;
 }
 
 QPointF ParallelRulerAssistant::project(const QPointF& pt, const QPointF& strokeBegin)
@@ -66,7 +90,7 @@ QPointF ParallelRulerAssistant::project(const QPointF& pt, const QPointF& stroke
     QLineF snapLine = QLineF(*handles()[0], *handles()[1]);
     QPointF translation = (*handles()[0]-strokeBegin)*-1.0;
     snapLine = snapLine.translated(translation);
-        
+
     dx = snapLine.dx();
     dy = snapLine.dy();
 
@@ -91,7 +115,7 @@ void ParallelRulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRec
     gc.save();
     gc.resetTransform();
     QPointF mousePos(0,0);
-    
+
     if (canvas){
         //simplest, cheapest way to get the mouse-position//
         mousePos= canvas->canvasWidget()->mapFromGlobal(QCursor::pos());
@@ -101,26 +125,31 @@ void ParallelRulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRec
         mousePos = QCursor::pos();//this'll give an offset//
         dbgFile<<"canvas does not exist in ruler, you may have passed arguments incorrectly:"<<canvas;
     }
-    
+
     if (isAssistantComplete() && isSnappingActive() && previewVisible==true) {
         //don't draw if invalid.
         QTransform initialTransform = converter->documentToWidgetTransform();
         QLineF snapLine= QLineF(initialTransform.map(*handles()[0]), initialTransform.map(*handles()[1]));
+
+        if (m_followBrushPosition && m_adjustedPositionValid) {
+            mousePos = initialTransform.map(m_adjustedBrushPosition);
+        }
+
         QPointF translation = (initialTransform.map(*handles()[0])-mousePos)*-1.0;
         snapLine= snapLine.translated(translation);
 
         QRect viewport= gc.viewport();
         KisAlgebra2D::intersectLineRect(snapLine, viewport);
-        
-        
+
+
         QPainterPath path;
         path.moveTo(snapLine.p1());
         path.lineTo(snapLine.p2());
-        
+
         drawPreview(gc, path);//and we draw the preview.
     }
     gc.restore();
-    
+
     KisPaintingAssistant::drawAssistant(gc, updateRect, converter, cached, canvas, assistantVisible, previewVisible);
 
 }
@@ -142,7 +171,7 @@ void ParallelRulerAssistant::drawCache(QPainter& gc, const KisCoordinatesConvert
     path.moveTo(p1);
     path.lineTo(p2);
     drawPath(gc, path, isSnappingActive());
-    
+
 }
 
 QPointF ParallelRulerAssistant::getEditorPosition() const

@@ -372,6 +372,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     }
 
     QMap<QString, QAction*> dockwidgetActions;
+
     dockwidgetActions[toolbox->toggleViewAction()->text()] = toolbox->toggleViewAction();
     Q_FOREACH (const QString & docker, KoDockRegistry::instance()->keys()) {
         KoDockFactoryBase *factory = KoDockRegistry::instance()->value(docker);
@@ -1498,6 +1499,8 @@ void KisMainWindow::setActiveView(KisView* view)
     d->viewManager->setCurrentView(view);
 
     KisWindowLayoutManager::instance()->activeDocumentChanged(view->document());
+
+    emit activeViewChanged();
 }
 
 void KisMainWindow::dragMove(QDragMoveEvent * event)

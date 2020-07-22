@@ -48,7 +48,9 @@ public:
     VanishingPointAssistant();
     KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const override;
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin) override;
-    //virtual void endStroke();
+    void setAdjustedBrushPosition(const QPointF position) override;
+    void setFollowBrushPosition(bool follow) override;
+    virtual void endStroke();
     QPointF getEditorPosition() const override;
     int numHandles() const override { return 1; }
 
@@ -69,6 +71,12 @@ private:
     KisCanvas2 *m_canvas;
 
     float m_referenceLineDensity = 15.0;
+
+    // Needed to make sure that when we are in the middle of a brush stroke, the
+    // guides follow the brush position, not the cursor position.
+    bool m_followBrushPosition;
+    bool m_adjustedPositionValid;
+    QPointF m_adjustedBrushPosition;
 
 };
 

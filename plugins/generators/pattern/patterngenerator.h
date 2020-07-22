@@ -54,6 +54,11 @@ public:
     }
     KisFilterConfigurationSP defaultConfiguration() const override;
     KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool useForMasks) const override;
+
+    /**
+     * This generator pastes a single instance of pattern over the whole layer.
+     */
+    bool allowsSplittingIntoPatches() const override { return false; }
 };
 
 #endif

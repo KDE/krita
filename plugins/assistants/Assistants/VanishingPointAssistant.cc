@@ -37,6 +37,8 @@
 
 VanishingPointAssistant::VanishingPointAssistant()
     : KisPaintingAssistant("vanishing point", i18n("Vanishing Point assistant"))
+    , m_followBrushPosition(false)
+    , m_adjustedPositionValid(false)
 {
 }
 
@@ -44,12 +46,33 @@ VanishingPointAssistant::VanishingPointAssistant(const VanishingPointAssistant &
     : KisPaintingAssistant(rhs, handleMap)
     , m_canvas(rhs.m_canvas)
     , m_referenceLineDensity(rhs.m_referenceLineDensity)
+    , m_followBrushPosition(rhs.m_followBrushPosition)
+    , m_adjustedPositionValid(rhs.m_adjustedPositionValid)
+    , m_adjustedBrushPosition(rhs.m_adjustedBrushPosition)
 {
 }
 
 KisPaintingAssistantSP VanishingPointAssistant::clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const
 {
     return KisPaintingAssistantSP(new VanishingPointAssistant(*this, handleMap));
+}
+
+void VanishingPointAssistant::setAdjustedBrushPosition(const QPointF position)
+{
+    m_adjustedBrushPosition = position;
+    m_adjustedPositionValid = true;
+}
+
+void VanishingPointAssistant::endStroke()
+{
+    // Brush stroke ended, guides should follow the brush position again.
+    m_followBrushPosition = false;
+    m_adjustedPositionValid = false;
+}
+
+void VanishingPointAssistant::setFollowBrushPosition(bool follow)
+{
+    m_followBrushPosition = follow;
 }
 
 QPointF VanishingPointAssistant::project(const QPointF& pt, const QPointF& strokeBegin)
@@ -66,8 +89,8 @@ QPointF VanishingPointAssistant::project(const QPointF& pt, const QPointF& strok
 
     //dbgKrita<<strokeBegin<< ", " <<*handles()[0];
     QLineF snapLine = QLineF(*handles()[0], strokeBegin);
-    
-    
+
+
     dx = snapLine.dx();
     dy = snapLine.dy();
 
@@ -102,7 +125,7 @@ void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRe
     gc.save();
     gc.resetTransform();
     QPointF mousePos(0,0);
-    
+
     if (canvas) {
         //simplest, cheapest way to get the mouse-position//
         mousePos= canvas->canvasWidget()->mapFromGlobal(QCursor::pos());
@@ -113,7 +136,7 @@ void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRe
         mousePos = QCursor::pos();//this'll give an offset//
         dbgFile<<"canvas does not exist in ruler, you may have passed arguments incorrectly:"<<canvas;
     }
-    
+
 
 
     // draw controls when we are not editing
@@ -123,6 +146,10 @@ void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRe
             //don't draw if invalid.
             QTransform initialTransform = converter->documentToWidgetTransform();
             QPointF startPoint = initialTransform.map(*handles()[0]);
+
+            if (m_followBrushPosition && m_adjustedPositionValid) {
+                mousePos = initialTransform.map(m_adjustedBrushPosition);
+            }
 
             QLineF snapLine= QLineF(startPoint, mousePos);
             QRect viewport= gc.viewport();

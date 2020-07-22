@@ -19,24 +19,24 @@
  */
 
 #include <KisDialogStateSaver.h>
-#include <kis_icon.h>
 #include <KoColor.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
-#include <filter/kis_filter_configuration.h>
 #include <SeExpr2/UI/ErrorMessages.h>
+#include <filter/kis_filter_configuration.h>
+#include <kis_icon.h>
 
+#include "SeExprExpressionContext.h"
 #include "generator.h"
 #include "kis_wdg_seexpr.h"
-#include "SeExprExpressionContext.h"
 #include "ui_wdgseexpr.h"
 
 KisWdgSeExpr::KisWdgSeExpr(QWidget *parent)
-    : KisConfigWidget(parent),
-    updateCompressor(1000, KisSignalCompressor::Mode::POSTPONE),
-    m_currentPreset(new KisSeExprScript(i18n("Untitled"))),
-    m_saveDialog(new KisWdgSeExprPresetsSave(this)),
-    m_isCreatingPresetFromScratch(true)
+    : KisConfigWidget(parent)
+    , updateCompressor(1000, KisSignalCompressor::Mode::POSTPONE)
+    , m_currentPreset(new KisSeExprScript(i18n("Untitled")))
+    , m_saveDialog(new KisWdgSeExprPresetsSave(this))
+    , m_isCreatingPresetFromScratch(true)
 {
     m_widget = new Ui_WdgSeExpr();
     m_widget->setupUi(this);
@@ -90,7 +90,7 @@ KisWdgSeExpr::KisWdgSeExpr(QWidget *parent)
     connect(&updateCompressor, SIGNAL(timeout()), this, SLOT(isValid()));
 
     togglePresetRenameUIActive(false); // reset the UI state of renaming a preset if we are changing presets
-    slotUpdatePresetSettings(); // disable everything until a preset is selected
+    slotUpdatePresetSettings();        // disable everything until a preset is selected
 }
 
 KisWdgSeExpr::~KisWdgSeExpr()
@@ -100,7 +100,8 @@ KisWdgSeExpr::~KisWdgSeExpr()
     delete m_widget;
 }
 
-inline const Ui_WdgSeExpr *KisWdgSeExpr::widget() const {
+inline const Ui_WdgSeExpr *KisWdgSeExpr::widget() const
+{
     return m_widget;
 }
 
@@ -126,7 +127,8 @@ KisPropertiesConfigurationSP KisWdgSeExpr::configuration() const
 
     if (m_widget->scriptSelectorWidget->currentResource()) {
         QVariant v;
-        v.setValue(m_widget->scriptSelectorWidget->currentResource()->name());config->setProperty("pattern", v);
+        v.setValue(m_widget->scriptSelectorWidget->currentResource()->name());
+        config->setProperty("pattern", v);
     }
     config->setProperty("script", QVariant(m_widget->txtEditor->getExpr()));
 
@@ -136,8 +138,7 @@ KisPropertiesConfigurationSP KisWdgSeExpr::configuration() const
 void KisWdgSeExpr::slotResourceSelected(KoResource *r)
 {
     KisSeExprScript *g = static_cast<KisSeExprScript *>(r);
-    if (g)
-    {
+    if (g) {
         // ALWAYS have a manageable copy of the preset
         m_currentPreset = g->clone();
 
@@ -152,7 +153,7 @@ void KisWdgSeExpr::slotResourceSelected(KoResource *r)
         m_widget->presetThumbnailicon->setPixmap(QPixmap::fromImage(g->image().scaled(55, 55, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
 
         togglePresetRenameUIActive(false); // reset the UI state of renaming a brush if we are changing brush presets
-        slotUpdatePresetSettings();       // check to see if the dirty preset icon needs to be shown
+        slotUpdatePresetSettings();        // check to see if the dirty preset icon needs to be shown
 
         updateCompressor.start();
     }
@@ -201,7 +202,7 @@ void KisWdgSeExpr::slotSaveRenameCurrentPreset()
     QString originalPresetPathAndFile = saveLocation + originalPresetName + curPreset->defaultFileExtension();
     QString renamedPresetPathAndFile = saveLocation + renamedPresetName + curPreset->defaultFileExtension();
 
-    KisSeExprScript* newPreset = curPreset->clone();
+    KisSeExprScript *newPreset = curPreset->clone();
     newPreset->setFilename(renamedPresetPathAndFile); // this also contains the path
     newPreset->setName(renamedPresetName);
     newPreset->setImage(curPreset->image()); // use existing thumbnail (might not need to do this)
@@ -253,7 +254,7 @@ void KisWdgSeExpr::slotSaveBrushPreset()
     m_saveDialog->useNewPresetDialog(false); // this mostly just makes sure we keep the existing brush preset name when saving
     m_saveDialog->setCurrentPreset(m_currentPreset);
     m_saveDialog->setCurrentRenderConfiguration(currentConfiguration);
-    m_saveDialog->loadExistingThumbnail();  // This makes sure we use the existing preset icon when updating the existing brush preset
+    m_saveDialog->loadExistingThumbnail(); // This makes sure we use the existing preset icon when updating the existing brush preset
     m_saveDialog->savePreset();
 
     // refresh the view settings so the brush doesn't appear dirty
@@ -278,7 +279,7 @@ void KisWdgSeExpr::slotReloadPresetClicked()
         preset->load();
 
         KIS_ASSERT(!m_currentPreset->isDirty());
-        
+
         slotResourceSelected(preset);
     }
 }
@@ -297,12 +298,10 @@ void KisWdgSeExpr::isValid()
 
     m_widget->txtEditor->clearErrors();
 
-    if (!expression.isValid())
-    {
+    if (!expression.isValid()) {
         auto errors = expression.getErrors();
 
-        for (auto occurrence: errors)
-        {
+        for (auto occurrence : errors) {
             QString message = ErrorMessages::message(occurrence.error);
             for (auto arg : occurrence.ids) {
                 message = message.arg(QString::fromStdString(arg));
@@ -311,21 +310,17 @@ void KisWdgSeExpr::isValid()
         }
     }
     // Should not happen now, but I've left it for completeness's sake
-    else if (!expression.returnType().isFP(3))
-    {
+    else if (!expression.returnType().isFP(3)) {
         QString type = QString::fromStdString(expression.returnType().toString());
         m_widget->txtEditor->addError(1, 1, tr2i18n("Expected this script to output color, got '%1'").arg(type));
-    }
-    else
-    {
+    } else {
         m_widget->txtEditor->clearErrors();
         emit sigConfigurationUpdated();
 
-        if (m_currentPreset)
-        {
-            if (m_currentPreset->script() != m_widget->txtEditor->getExpr())
-            {
-                m_currentPreset->setScript(m_widget->txtEditor->getExpr());m_currentPreset->setDirty(true);
+        if (m_currentPreset) {
+            if (m_currentPreset->script() != m_widget->txtEditor->getExpr()) {
+                m_currentPreset->setScript(m_widget->txtEditor->getExpr());
+                m_currentPreset->setDirty(true);
             }
             slotUpdatePresetSettings();
         }

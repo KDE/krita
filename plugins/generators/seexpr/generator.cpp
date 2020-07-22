@@ -18,30 +18,25 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "generator.h"
-
-#include <cstdlib>
-#include <cstdio>
-#include <cstring>
-
-#include <kis_debug.h>
-#include <kpluginfactory.h>
-#include <klocalizedstring.h>
-#include <kis_fill_painter.h>
-#include <kis_image.h>
-#include <kis_paint_device.h>
-#include <kis_layer.h>
-#include <kis_global.h>
-#include <kis_selection.h>
-#include <kis_types.h>
-#include <kis_processing_information.h>
 #include <KisSequentialIteratorProgress.h>
 #include <KoUpdater.h>
+#include <cstring>
 #include <filter/kis_filter_configuration.h>
 #include <generator/kis_generator_registry.h>
+#include <kis_debug.h>
+#include <kis_fill_painter.h>
+#include <kis_global.h>
+#include <kis_image.h>
+#include <kis_layer.h>
+#include <kis_paint_device.h>
+#include <kis_processing_information.h>
+#include <kis_selection.h>
+#include <kis_types.h>
+#include <klocalizedstring.h>
+#include <kpluginfactory.h>
 
 #include "SeExprExpressionContext.h"
-
+#include "generator.h"
 #include "kis_wdg_seexpr.h"
 #include "ui_wdgseexpr.h"
 
@@ -57,7 +52,8 @@ KritaSeExprGenerator::~KritaSeExprGenerator()
 {
 }
 
-KisSeExprGenerator::KisSeExprGenerator() : KisGenerator(id(), KoID("basic"), i18n("&SeExpr..."))
+KisSeExprGenerator::KisSeExprGenerator()
+    : KisGenerator(id(), KoID("basic"), i18n("&SeExpr..."))
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);
@@ -79,18 +75,14 @@ KisConfigWidget *KisSeExprGenerator::createConfigurationWidget(QWidget *parent, 
     return new KisWdgSeExpr(parent);
 }
 
-void KisSeExprGenerator::generate(KisProcessingInformation dstInfo,
-                                  const QSize &size,
-                                  const KisFilterConfigurationSP config,
-                                  KoUpdater *progressUpdater) const
+void KisSeExprGenerator::generate(KisProcessingInformation dstInfo, const QSize &size, const KisFilterConfigurationSP config, KoUpdater *progressUpdater) const
 {
     KisPaintDeviceSP device = dstInfo.paintDevice();
 
     Q_ASSERT(!device.isNull());
     Q_ASSERT(config);
 
-    if (config)
-    {
+    if (config) {
         QString script = config->getString("script");
 
         QRect bounds = QRect(dstInfo.topLeft(), size);
@@ -103,8 +95,7 @@ void KisSeExprGenerator::generate(KisProcessingInformation dstInfo,
         expression.m_vars["w"] = new SeExprVariable(whole_image_bounds.width());
         expression.m_vars["h"] = new SeExprVariable(whole_image_bounds.height());
 
-        if (expression.isValid() && expression.returnType().isFP(3))
-        {
+        if (expression.isValid() && expression.returnType().isFP(3)) {
             double pixel_stride_x = 1. / whole_image_bounds.width();
             double pixel_stride_y = 1. / whole_image_bounds.height();
             double &u = expression.m_vars["u"]->m_value;

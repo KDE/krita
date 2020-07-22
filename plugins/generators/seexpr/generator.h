@@ -23,9 +23,11 @@
 
 #include <QObject>
 #include <QVariant>
+
 #include "generator/kis_generator.h"
 
-#define BASE_SCRIPT "$val=voronoi(5*[$u,$v,.5],4,.6,.2); \n \
+#define BASE_SCRIPT                                                                                                                                                                                                                            \
+    "$val=voronoi(5*[$u,$v,.5],4,.6,.2); \n \
 $color=ccurve($val,\n\
     0.000, [0.141, 0.059, 0.051], 4,\n\
     0.185, [0.302, 0.176, 0.122], 4,\n\
@@ -47,7 +49,6 @@ public:
 class KisSeExprGenerator : public KisGenerator
 {
 public:
-
     KisSeExprGenerator();
 
     using KisGenerator::generate;
@@ -58,11 +59,12 @@ public:
                   KoUpdater* progressUpdater
                  ) const override;
 
-    static inline KoID id() {
+    static inline KoID id()
+    {
         return KoID("seexpr", i18n("SeExpr"));
     }
     KisFilterConfigurationSP defaultConfiguration() const override;
-    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool useForMasks) const override;
+    KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, bool useForMasks) const override;
 };
 
 #endif

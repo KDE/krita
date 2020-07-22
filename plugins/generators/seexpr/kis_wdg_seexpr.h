@@ -33,17 +33,17 @@ class KisWdgSeExpr : public KisConfigWidget
 {
     Q_OBJECT
 public:
-    KisWdgSeExpr(QWidget* parent = 0);
+    KisWdgSeExpr(QWidget *parent = 0);
     ~KisWdgSeExpr() override;
 
 public:
-    inline const Ui_WdgSeExpr* widget() const;
+    inline const Ui_WdgSeExpr *widget() const;
     void setConfiguration(const KisPropertiesConfigurationSP) override;
     KisPropertiesConfigurationSP configuration() const override;
 
 private Q_SLOTS:
     void isValid();
-    void slotResourceSelected(KoResource* resource);
+    void slotResourceSelected(KoResource *resource);
     void slotRenamePresetActivated();
     void slotRenamePresetDeactivated();
     void slotSaveRenameCurrentPreset();
@@ -64,4 +64,3 @@ private:
 };
 
 #endif
-

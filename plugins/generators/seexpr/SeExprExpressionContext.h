@@ -18,17 +18,17 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <cstring>
 #include <QMap>
 #include <QString>
 #include <SeExpr2/Expression.h>
+#include <cstring>
 
 #include "SeExprVariable.h"
 
 class SeExprExpressionContext : public SeExpr2::Expression
 {
 public:
-    typedef QMap<std::string, SeExprVariable*> VariableMap;
+    typedef QMap<std::string, SeExprVariable *> VariableMap;
 
     VariableMap m_vars;
 

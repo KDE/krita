@@ -19,30 +19,31 @@
  */
 
 #include <FlakeDebug.h>
-#include <kis_assert.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 #include <QBuffer>
 #include <QDir>
 #include <QFileInfo>
 #include <QTextDecoder>
+#include <kis_assert.h>
 
 #include "KisSeExprScript.h"
 
-struct KisSeExprScript::Private
-{
+struct KisSeExprScript::Private {
     QString script;
     QByteArray data;
     bool dirtyPreset = false;
 };
 
 KisSeExprScript::KisSeExprScript(const QString &filename)
-    : KoResource(filename), d(new Private)
+    : KoResource(filename)
+    , d(new Private)
 {
 }
 
 KisSeExprScript::KisSeExprScript(const QImage &image, const QString &script, const QString &name, const QString &folderName)
-    : KoResource(QString()), d(new Private)
+    : KoResource(QString())
+    , d(new Private)
 {
     setScript(script);
     setImage(image);
@@ -51,10 +52,8 @@ KisSeExprScript::KisSeExprScript(const QImage &image, const QString &script, con
     QFileInfo fileInfo(folderName + QDir::separator() + name + defaultFileExtension());
 
     int i = 1;
-    while (fileInfo.exists())
-    {
-        fileInfo.setFile(folderName + QDir::separator() +
-                         name + QString::number(i) + defaultFileExtension());
+    while (fileInfo.exists()) {
+        fileInfo.setFile(folderName + QDir::separator() + name + QString::number(i) + defaultFileExtension());
         i++;
     }
 
@@ -72,8 +71,7 @@ bool KisSeExprScript::load()
     if (file.size() == 0)
         return false;
 
-    if (!file.open(QIODevice::ReadOnly))
-    {
+    if (!file.open(QIODevice::ReadOnly)) {
         warnFlake << "Can't open file " << filename();
         return false;
     }
@@ -93,17 +91,14 @@ bool KisSeExprScript::loadFromDevice(QIODevice *dev)
     // TODO: test
     KIS_ASSERT_RECOVER_RETURN_VALUE(d->data.size() != 0, false);
 
-    if (filename().isNull())
-    {
+    if (filename().isNull()) {
         warnFlake << "Cannot load SeExpr script" << name() << ", there is no filename set";
         return false;
     }
 
-    if (d->data.isNull())
-    {
+    if (d->data.isNull()) {
         QFile file(filename());
-        if (file.size() == 0)
-        {
+        if (file.size() == 0) {
             warnFlake << "Cannot load SeExpr script" << name() << "there is no data available";
             return false;
         }
@@ -121,16 +116,14 @@ bool KisSeExprScript::loadFromDevice(QIODevice *dev)
         return false;
 
     bool storeOpened = store->open("script.se");
-    if (!storeOpened)
-    {
+    if (!storeOpened) {
         return false;
     }
 
     d->script = QString(store->read(store->size()));
     store->close();
 
-    if (store->open("preview.png"))
-    {
+    if (store->open("preview.png")) {
         KoStoreDevice previewDev(store.data());
         previewDev.open(QIODevice::ReadOnly);
 
@@ -156,8 +149,7 @@ bool KisSeExprScript::loadFromDevice(QIODevice *dev)
 bool KisSeExprScript::save()
 {
     QFile file(filename());
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
-    {
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
         return false;
     }
     saveToDevice(&file);
@@ -172,8 +164,7 @@ bool KisSeExprScript::saveToDevice(QIODevice *dev) const
     if (!store || store->bad())
         return false;
 
-    if (!store->open("script.se"))
-    {
+    if (!store->open("script.se")) {
         return false;
     }
 
@@ -182,13 +173,11 @@ bool KisSeExprScript::saveToDevice(QIODevice *dev) const
 
     storeDev.write(d->script.toUtf8());
 
-    if (!store->close())
-    {
+    if (!store->close()) {
         return false;
     }
 
-    if (!store->open("preview.png"))
-    {
+    if (!store->open("preview.png")) {
         return false;
     }
 
@@ -196,8 +185,7 @@ bool KisSeExprScript::saveToDevice(QIODevice *dev) const
     previewDev.open(QIODevice::WriteOnly);
 
     image().save(&previewDev, "PNG");
-    if (!store->close())
-    {
+    if (!store->close()) {
         return false;
     }
 
@@ -219,9 +207,9 @@ void KisSeExprScript::setScript(const QString &script)
     d->script = script;
 }
 
-KisSeExprScript* KisSeExprScript::clone() const
+KisSeExprScript *KisSeExprScript::clone() const
 {
-    KisSeExprScript* scr = new KisSeExprScript(filename());
+    KisSeExprScript *scr = new KisSeExprScript(filename());
     scr->setScript(script());
     scr->setImage(image());
     scr->setName(name());

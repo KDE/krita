@@ -58,7 +58,7 @@ public:
 
 Q_SIGNALS:
     // Triggers after resource is saved
-    void resourceSelected(KoResource* resource);
+    void resourceSelected(KoResource *resource);
 
 public Q_SLOTS:
     void setCurrentPreset(KisSeExprScript *resource);

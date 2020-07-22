@@ -350,11 +350,11 @@ KisAnimationCurve *KisAnimationCurvesModel::addCurve(KisScalarKeyframeChannel *c
 
     endInsertRows();
 
-    connect(channel, &KisScalarKeyframeChannel::sigKeyframeAdded,
+    connect(channel, &KisScalarKeyframeChannel::sigAddedKeyframe,
             this, &KisAnimationCurvesModel::slotKeyframeChanged);
 
-    connect(channel, &KisScalarKeyframeChannel::sigKeyframeRemoved,
-            this, [this](const KisKeyframeChannel* channel, int time, KisKeyframeSP keyframe) {
+    connect(channel, &KisScalarKeyframeChannel::sigRemovingKeyframe,
+            this, [this](const KisKeyframeChannel* channel, int time) {
         this->slotKeyframeChanged(channel, time);
     });
 

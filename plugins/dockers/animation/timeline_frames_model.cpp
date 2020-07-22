@@ -105,14 +105,14 @@ struct TimelineFramesModel::Private
         KisNodeDummy *dummy = converter->dummyFromRow(row);
         if (!dummy) return false;
 
-        KisKeyframeChannel *primaryChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
+        KisKeyframeChannel *primaryChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Raster.id());
         return (primaryChannel && primaryChannel->keyframeAt(column));
     }
 
     bool frameHasContent(int row, int column) {
         KisNodeDummy *dummy = converter->dummyFromRow(row);
 
-        KisKeyframeChannel *primaryChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
+        KisKeyframeChannel *primaryChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Raster.id());
         if (!primaryChannel) return false;
 
         // first check if we are a key frame
@@ -126,7 +126,7 @@ struct TimelineFramesModel::Private
         KisNodeDummy *dummy = converter->dummyFromRow(row);
         if (!dummy) return false;
         Q_FOREACH(KisKeyframeChannel *channel, dummy->node()->keyframeChannels()) {
-            if (channel->id() != KisKeyframeChannel::Content.id() && channel->keyframeAt(column)) {
+            if (channel->id() != KisKeyframeChannel::Raster.id() && channel->keyframeAt(column)) {
                 return true;
             }
         }
@@ -137,7 +137,7 @@ struct TimelineFramesModel::Private
         KisNodeDummy *dummy = converter->dummyFromRow(row);
         if (!dummy) return -1;
 
-        KisKeyframeChannel *primaryChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
+        KisKeyframeChannel *primaryChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Raster.id());
         if (!primaryChannel) return -1;
 
         KisKeyframeSP frame = primaryChannel->activeKeyframeAt(column);
@@ -150,7 +150,7 @@ struct TimelineFramesModel::Private
         KisNodeDummy *dummy = converter->dummyFromRow(row);
         if (!dummy) return;
 
-        KisKeyframeChannel *primaryChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
+        KisKeyframeChannel *primaryChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Raster.id());
         if (!primaryChannel) return;
 
         KisKeyframeSP frame = primaryChannel->keyframeAt(column);
@@ -188,7 +188,7 @@ struct TimelineFramesModel::Private
         KisNodeSP node = dummy->node();
         if (!KisAnimationUtils::supportsContentFrames(node)) return false;
 
-        KisAnimationUtils::createKeyframeLazy(image, node, KisKeyframeChannel::Content.id(), column, copy);
+        KisAnimationUtils::createKeyframeLazy(image, node, KisKeyframeChannel::Raster.id(), column, copy);
         return true;
     }
 
@@ -859,7 +859,7 @@ bool TimelineFramesModel::insertFrames(int dstColumn, const QList<int> &dstRows,
             if (!KisAnimationUtils::supportsContentFrames(node)) continue;
 
             for (int column = dstColumn; column < dstColumn + (count * timing); column += timing) {
-                KisAnimationUtils::createKeyframeCommand(m_d->image, node, KisKeyframeChannel::Content.id(), column, false, parentCommand);
+                KisAnimationUtils::createKeyframeCommand(m_d->image, node, KisKeyframeChannel::Raster.id(), column, false, parentCommand);
             }
         }
 
@@ -895,7 +895,7 @@ bool TimelineFramesModel::insertHoldFrames(const QModelIndexList &selectedIndexe
             KisNodeSP node = nodeAt(index);
             KIS_SAFE_ASSERT_RECOVER(node) { continue; }
 
-            KisRasterKeyframeChannel *channel = dynamic_cast<KisRasterKeyframeChannel*>(node->getKeyframeChannel(KisKeyframeChannel::Content.id()));
+            KisRasterKeyframeChannel *channel = dynamic_cast<KisRasterKeyframeChannel*>(node->getKeyframeChannel(KisKeyframeChannel::Raster.id()));
             if (!channel) continue;
 
             minSelectedTime = qMin(minSelectedTime, index.column());

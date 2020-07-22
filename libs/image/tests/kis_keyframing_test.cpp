@@ -69,13 +69,13 @@ void KisKeyframingTest::testChannelSignals()
 
     qRegisterMetaType<const KisKeyframeChannel*>("const KisKeyframeChannel*");
     qRegisterMetaType<KisKeyframeSP>("KisKeyframeSP");
-    QSignalSpy spyUpdated(channel, SIGNAL(sigUpdated(KisTimeSpan, QRect)));
-    QSignalSpy spyAdded(channel, SIGNAL(sigKeyframeAdded(const KisKeyframeChannel*, int)));
-    QSignalSpy spyRemoved(channel, SIGNAL(sigKeyframeRemoved(const KisKeyframeChannel*, int, KisKeyframeSP)));
+    QSignalSpy spyUpdated(channel, SIGNAL(sigChannelUpdated(KisTimeSpan, QRect)));
+    QSignalSpy spyAdded(channel, SIGNAL(sigAddedKeyframe(const KisKeyframeChannel*,int)));
+    QSignalSpy spyRemoving(channel, SIGNAL(sigRemovingKeyframe(const KisKeyframeChannel*,int)));
 
     QVERIFY(spyUpdated.isValid());
     QVERIFY(spyAdded.isValid());
-    QVERIFY(spyRemoved.isValid());
+    QVERIFY(spyRemoving.isValid());
 
     int updateSignalCount = spyUpdated.count();
 
@@ -100,10 +100,10 @@ void KisKeyframingTest::testChannelSignals()
     updateSignalCount = spyUpdated.count();
 
     {   // Removing a keyframe..
-        int originalSignalCount = spyRemoved.count();
+        int originalSignalCount = spyRemoving.count();
         channel->removeKeyframe(11);
 
-        QVERIFY(spyRemoved.count() == originalSignalCount + 1);
+        QVERIFY(spyRemoving.count() == originalSignalCount + 1);
         QVERIFY(spyUpdated.count() > updateSignalCount);
     }
 }
@@ -182,7 +182,7 @@ void KisKeyframingTest::testRasterChannel()
     }
 
 
-    // Swap raster keyframes ()..
+    // Swap raster keyframes (5<->6)..
     {
         const int original_f5_frameID = channel->keyframeAt<KisRasterKeyframe>(5)->frameID();
         const int original_f6_frameID = channel->keyframeAt<KisRasterKeyframe>(6)->frameID();
@@ -193,6 +193,7 @@ void KisKeyframingTest::testRasterChannel()
         QVERIFY(channel->keyframeAt<KisRasterKeyframe>(5)->frameID() == original_f6_frameID);
         QVERIFY(channel->keyframeAt<KisRasterKeyframe>(6)->frameID() == original_f5_frameID);
     }
+
 
     // Delete raster keyrame..
     channel->removeKeyframe(5);
@@ -217,13 +218,14 @@ void KisKeyframingTest::testRasterChannel()
     }
 
 
-    // Clone raster keyframe..
-        // clone a frame..
+    {   // Clone raster keyframe..
+        // channel->cloneKeyframe(x, y);
         // verify same keyframeID
         // verify same thumbnail.
         // verify # virtual frames != # physical frames.
         // edit cloneA, and compare thumbnails.
         // edit cloneB, and compare thumbnails.
+    }
 }
 
 void KisKeyframingTest::testRasterFrameFetching()
@@ -541,7 +543,7 @@ void KisKeyframingTest::testInterChannelMovement()
     }
 }
 
-// ================= Scalar Channel. =============================
+// ===================== Scalar Channel =================
 
 void KisKeyframingTest::testScalarChannel()
 {

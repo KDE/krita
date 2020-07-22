@@ -94,7 +94,7 @@ KisTimeSpan KisTimeSpan::calculateNodeAffectedFrames(const KisNode *node, int ti
     //       to avoid the dirty range to be stretched into infinity!
 
     if (channels.isEmpty() ||
-        !channels.contains(KisKeyframeChannel::Content.id())) {
+        !channels.contains(KisKeyframeChannel::Raster.id())) {
         range = KisTimeSpan::infinite(0);
         return range;
     }

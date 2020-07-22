@@ -30,7 +30,7 @@
 #include <QMap>
 
 
-const KoID KisKeyframeChannel::Content = KoID("content", ki18n("Content"));
+const KoID KisKeyframeChannel::Raster = KoID("content", ki18n("Content"));
 const KoID KisKeyframeChannel::Opacity = KoID("opacity", ki18n("Opacity"));
 const KoID KisKeyframeChannel::TransformArguments = KoID("transform_arguments", ki18n("Transform"));
 const KoID KisKeyframeChannel::TransformPositionX = KoID("transform_pos_x", ki18n("Position (X)"));
@@ -47,9 +47,9 @@ const KoID KisKeyframeChannel::TransformRotationZ = KoID("transform_rotation_z",
 struct KisKeyframeChannel::Private
 {
     Private(const KoID &temp_id, KisDefaultBoundsBaseSP bounds) {
-        defaultBounds = bounds;
+        bounds = bounds;
         id = temp_id;
-        node = nullptr;
+        parentNode = nullptr;
     }
 
     Private(const Private &rhs) {
@@ -57,10 +57,11 @@ struct KisKeyframeChannel::Private
         haveBrokenFrameTimeBug = rhs.haveBrokenFrameTimeBug;
     }
 
-    QMap<int, KisKeyframeSP> keys;
-    KisNodeWSP node;
     KoID id;
-    KisDefaultBoundsBaseSP defaultBounds;
+    QMap<int, KisKeyframeSP> keys;
+    KisDefaultBoundsBaseSP bounds;
+
+    KisNodeWSP parentNode;
     bool haveBrokenFrameTimeBug = false;
 };
 
@@ -68,24 +69,25 @@ struct KisKeyframeChannel::Private
 KisKeyframeChannel::KisKeyframeChannel(const KoID &id, KisNodeWSP parent)
     : KisKeyframeChannel(id, KisDefaultBoundsNodeWrapperSP( new KisDefaultBoundsNodeWrapper(parent)))
 {
-    m_d->node = parent;
+    m_d->parentNode = parent;
 
-    connect(this, &KisKeyframeChannel::sigUpdated, m_d->node, &KisNode::invalidateFrames);
+    connect(this, &KisKeyframeChannel::sigChannelUpdated, m_d->parentNode, &KisNode::invalidateFrames);
 }
 
 KisKeyframeChannel::KisKeyframeChannel(const KoID &id, KisDefaultBoundsBaseSP bounds)
     : m_d(new Private(id, bounds))
 {
-    connect(this, &KisKeyframeChannel::sigKeyframeAdded, [](const KisKeyframeChannel *channel, int time) {
-        channel->sigUpdated(
+    // Added keyframes should fire channel updated signal..
+    connect(this, &KisKeyframeChannel::sigAddedKeyframe, [](const KisKeyframeChannel *channel, int time) {
+        channel->sigChannelUpdated(
                     channel->affectedFrames(time),
                     channel->affectedRect(time)
                     );
     });
 
-    connect(this, &KisKeyframeChannel::sigKeyframeRemoved, [](const KisKeyframeChannel *channel, int time, KisKeyframeSP keyframe) {
-
-        channel->sigUpdated(
+    // Removing keyframes should fire channel updated signal..
+    connect(this, &KisKeyframeChannel::sigRemovingKeyframe, [](const KisKeyframeChannel *channel, int time) {
+        channel->sigChannelUpdated(
                    channel->affectedFrames(time),
                    channel->affectedRect(time)
                    );
@@ -97,8 +99,8 @@ KisKeyframeChannel::KisKeyframeChannel(const KisKeyframeChannel &rhs, KisNodeWSP
 {
     KIS_ASSERT_RECOVER_NOOP(&rhs != this);
 
-    m_d->node = newParent;
-    m_d->defaultBounds = KisDefaultBoundsNodeWrapperSP( new KisDefaultBoundsNodeWrapper( newParent ));
+    m_d->parentNode = newParent;
+    m_d->bounds = KisDefaultBoundsNodeWrapperSP(new KisDefaultBoundsNodeWrapper(newParent));
 }
 
 KisKeyframeChannel::~KisKeyframeChannel()
@@ -119,7 +121,7 @@ void KisKeyframeChannel::insertKeyframe(int time, KisKeyframeSP keyframe, KUndo2
     }
 
     m_d->keys.insert(time, keyframe);
-    emit sigKeyframeAdded(this, time);
+    emit sigAddedKeyframe(this, time);
 }
 
 void KisKeyframeChannel::removeKeyframe(int time, KUndo2Command *parentCmd)
@@ -130,7 +132,7 @@ void KisKeyframeChannel::removeKeyframe(int time, KUndo2Command *parentCmd)
 
     KisKeyframeSP keyframe = keyframeAt(time);
 
-    emit sigKeyframeRemoved(this, time, keyframe);
+    emit sigRemovingKeyframe(this, time);
     m_d->keys.remove(time);
 
     if (time == 0) { // There should always be a frame on frame 0.
@@ -189,6 +191,11 @@ KisKeyframeSP KisKeyframeChannel::keyframeAt(int time) const
     } else {
         return KisKeyframeSP();
     }
+}
+
+int KisKeyframeChannel::keyframeCount() const
+{
+    return m_d->keys.count();
 }
 
 int KisKeyframeChannel::activeKeyframeTime(int time) const
@@ -254,6 +261,21 @@ int KisKeyframeChannel::lastKeyframeTime() const
     return m_d->keys.lastKey();
 }
 
+QSet<int> KisKeyframeChannel::allKeyframeTimes() const
+{
+    QSet<int> frames;
+
+    TimeKeyframeMap::const_iterator it = m_d->keys.constBegin();
+    TimeKeyframeMap::const_iterator end = m_d->keys.constEnd();
+
+    while (it != end) {
+        frames.insert(it.key());
+        ++it;
+    }
+
+    return frames;
+}
+
 QString KisKeyframeChannel::id() const
 {
     return m_d->id.id();
@@ -266,44 +288,24 @@ QString KisKeyframeChannel::name() const
 
 void KisKeyframeChannel::setNode(KisNodeWSP node)
 {
-    if (m_d->node.isValid()) {
-        disconnect(this, &KisKeyframeChannel::sigUpdated, m_d->node, &KisNode::invalidateFrames);
+    if (m_d->parentNode.isValid()) {
+        disconnect(this, &KisKeyframeChannel::sigChannelUpdated, m_d->parentNode, &KisNode::invalidateFrames);
     }
 
-    m_d->node = node;
-    m_d->defaultBounds = KisDefaultBoundsNodeWrapperSP( new KisDefaultBoundsNodeWrapper( node ));
-    connect(this, &KisKeyframeChannel::sigUpdated, m_d->node, &KisNode::invalidateFrames);
+    m_d->parentNode = node;
+    m_d->bounds = KisDefaultBoundsNodeWrapperSP( new KisDefaultBoundsNodeWrapper( node ));
+    connect(this, &KisKeyframeChannel::sigChannelUpdated, m_d->parentNode, &KisNode::invalidateFrames);
 }
 
 KisNodeWSP KisKeyframeChannel::node() const
 {
-    return m_d->node;
+    return m_d->parentNode;
 }
 
-int KisKeyframeChannel::keyframeCount() const
+int KisKeyframeChannel::channelHash() const
 {
-    return m_d->keys.count();
-}
-
-QSet<int> KisKeyframeChannel::allKeyframeTimes() const
-{
-    QSet<int> frames;
-
-    KeyframesMap::const_iterator it = m_d->keys.constBegin();
-    KeyframesMap::const_iterator end = m_d->keys.constEnd();
-
-    while (it != end) {
-        frames.insert(it.key());
-        ++it;
-    }
-
-    return frames;
-}
-
-int KisKeyframeChannel::framesHash() const
-{
-    KeyframesMap::const_iterator it = m_d->keys.constBegin();
-    KeyframesMap::const_iterator end = m_d->keys.constEnd();
+    TimeKeyframeMap::const_iterator it = m_d->keys.constBegin();
+    TimeKeyframeMap::const_iterator end = m_d->keys.constEnd();
 
     int hash = 0;
 
@@ -319,8 +321,8 @@ KisTimeSpan KisKeyframeChannel::affectedFrames(int time) const
 {
     if (m_d->keys.isEmpty()) return KisTimeSpan::infinite(0);
 
-    KeyframesMap::const_iterator active = activeKeyIterator(time);
-    KeyframesMap::const_iterator next;
+    TimeKeyframeMap::const_iterator active = activeKeyIterator(time);
+    TimeKeyframeMap::const_iterator next;
 
     // ie. time is before the first keyframe
     const bool noActiveKeyframe = (active == m_d->keys.constEnd());
@@ -352,7 +354,7 @@ KisTimeSpan KisKeyframeChannel::affectedFrames(int time) const
 
 KisTimeSpan KisKeyframeChannel::identicalFrames(int time) const
 {
-    KeyframesMap::const_iterator active = activeKeyIterator(time);
+    TimeKeyframeMap::const_iterator active = activeKeyIterator(time);
 
     if (active != m_d->keys.constEnd() && (active+1) != m_d->keys.constEnd()) {
         KisScalarKeyframeSP activeScalar = active.value().dynamicCast<KisScalarKeyframe>();
@@ -401,24 +403,19 @@ void KisKeyframeChannel::loadXML(const QDomElement &channelNode)
     }
 }
 
-KisKeyframeChannel::KeyframesMap& KisKeyframeChannel::keys()
+KisKeyframeChannel::TimeKeyframeMap& KisKeyframeChannel::keys()
 {
     return m_d->keys;
 }
 
-const KisKeyframeChannel::KeyframesMap& KisKeyframeChannel::constKeys() const
+const KisKeyframeChannel::TimeKeyframeMap& KisKeyframeChannel::constKeys() const
 {
     return m_d->keys;
 }
 
 int KisKeyframeChannel::currentTime() const
 {
-    return m_d->defaultBounds->currentTime();
-}
-
-KisDefaultBoundsBaseSP KisKeyframeChannel::bounds() const
-{
-    return m_d->defaultBounds;
+    return m_d->bounds->currentTime();
 }
 
 void KisKeyframeChannel::workaroundBrokenFrameTimeBug(int *time)
@@ -448,9 +445,9 @@ void KisKeyframeChannel::workaroundBrokenFrameTimeBug(int *time)
     }
 }
 
-KisKeyframeChannel::KeyframesMap::const_iterator KisKeyframeChannel::activeKeyIterator(int time) const
+KisKeyframeChannel::TimeKeyframeMap::const_iterator KisKeyframeChannel::activeKeyIterator(int time) const
 {
-    KeyframesMap::const_iterator i = const_cast<const KeyframesMap*>(&m_d->keys)->upperBound(time);
+    TimeKeyframeMap::const_iterator i = const_cast<const TimeKeyframeMap*>(&m_d->keys)->upperBound(time);
 
     if (i == m_d->keys.constBegin()) return m_d->keys.constEnd();
     return --i;

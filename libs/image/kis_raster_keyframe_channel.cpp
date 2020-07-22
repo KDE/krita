@@ -34,7 +34,6 @@ KisRasterKeyframe::KisRasterKeyframe(KisPaintDeviceWSP paintDevice)
     m_paintDevice = paintDevice;
     KIS_ASSERT(m_paintDevice);
 
-    // TODO: make sure command isn't needed.
     m_frameId = m_paintDevice->framesInterface()->createFrame(false, 0, QPoint(), nullptr);
 }
 
@@ -52,7 +51,6 @@ KisRasterKeyframe::~KisRasterKeyframe()
     // Note: Because keyframe ownership is shared, it's possible for them to outlive
     // the paint device.
     if (m_paintDevice && m_paintDevice->framesInterface()) {
-        // TODO: make sure command isn't needed.
         m_paintDevice->framesInterface()->deleteFrame(m_frameId, nullptr);
     }
 }
@@ -217,10 +215,10 @@ QString KisRasterKeyframeChannel::chooseFrameFilename(int frameId, const QString
 QRect KisRasterKeyframeChannel::affectedRect(int time) const
 {
     if (!keyframeAt(time)) {
-        return bounds()->imageBorderRect();
+        return QRect();
     }
 
-    KeyframesMap::const_iterator it = constKeys().find(time);
+    TimeKeyframeMap::const_iterator it = constKeys().find(time);
     QRect rect;
 
     // Calculate changed area as the union of the current and previous keyframe.
@@ -291,7 +289,6 @@ QPair<int, KisKeyframeSP> KisRasterKeyframeChannel::loadKeyframe(const QDomEleme
 
     if (m_d->frameFilenames.isEmpty()) {
         // First keyframe loaded: use the existing frame
-
         KIS_SAFE_ASSERT_RECOVER_NOOP(keyframeCount() == 1);
         int firstKeyframeTime = constKeys().begin().key();
         keyframe = keyframeAt(firstKeyframeTime);

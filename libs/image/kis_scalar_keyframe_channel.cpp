@@ -534,6 +534,6 @@ void KisScalarKeyframeChannel::notifyKeyframeChanged(int time)
     KisTimeSpan range = affectedFrames(time);
     QRect rect = affectedRect(time);
 
-    emit sigUpdated(range, rect);
+    emit sigChannelUpdated(range, rect);
     emit sigKeyframeChanged(this, time);
 }

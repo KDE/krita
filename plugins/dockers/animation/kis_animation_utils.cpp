@@ -73,7 +73,7 @@ namespace KisAnimationUtils {
                     }
                 } else {
                     if (channel->keyframeAt(time) && !createdChannel) {
-                        if (image->animationInterface()->currentTime() == time && channelId == KisKeyframeChannel::Content.id()) {
+                        if (image->animationInterface()->currentTime() == time && channelId == KisKeyframeChannel::Raster.id()) {
 
                             //shortcut: clearing the image instead
                             KisPaintDeviceSP device = node->paintDevice();

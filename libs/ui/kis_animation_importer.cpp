@@ -92,7 +92,7 @@ KisImportExportErrorCode KisAnimationImporter::import(QStringList files, int fir
             undo->addCommand(new KisImageLayerAddCommand(m_d->image, paintLayer, m_d->image->rootLayer(), m_d->image->rootLayer()->childCount()));
 
             paintLayer->enableAnimation();
-            contentChannel = qobject_cast<KisRasterKeyframeChannel*>(paintLayer->getKeyframeChannel(KisKeyframeChannel::Content.id(), true));
+            contentChannel = qobject_cast<KisRasterKeyframeChannel*>(paintLayer->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true));
         }
 
         if (m_d->updater) {

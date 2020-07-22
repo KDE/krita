@@ -1547,7 +1547,7 @@ void TimelineFramesView::insertOrRemoveHoldFrames(int count, bool entireColumn)
             Q_FOREACH (const QModelIndex &index, indexes) {
                 KisNodeSP layerNode = m_d->model->nodeAt(index);
 
-                KisKeyframeChannel *channel = layerNode->getKeyframeChannel(KisKeyframeChannel::Content.id());
+                KisKeyframeChannel *channel = layerNode->getKeyframeChannel(KisKeyframeChannel::Raster.id());
                 if (!channel) continue;
 
                 if (keyframesInLayerNode < channel->allKeyframeTimes().count()) {

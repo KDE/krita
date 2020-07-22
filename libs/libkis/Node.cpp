@@ -457,7 +457,7 @@ bool Node::hasKeyframeAtTime(int frameNumber)
 {
     if (!d->node || !d->node->isAnimated()) return false;
 
-    KisRasterKeyframeChannel *rkc = dynamic_cast<KisRasterKeyframeChannel*>(d->node->getKeyframeChannel(KisKeyframeChannel::Content.id()));
+    KisRasterKeyframeChannel *rkc = dynamic_cast<KisRasterKeyframeChannel*>(d->node->getKeyframeChannel(KisKeyframeChannel::Raster.id()));
     if (!rkc) return false;
 
     KisKeyframeSP currentKeyframe = rkc->keyframeAt(frameNumber);
@@ -497,7 +497,7 @@ QByteArray Node::pixelDataAtTime(int x, int y, int w, int h, int time) const
     if (!d->node || !d->node->isAnimated()) return ba;
 
     //
-    KisRasterKeyframeChannel *rkc = dynamic_cast<KisRasterKeyframeChannel*>(d->node->getKeyframeChannel(KisKeyframeChannel::Content.id()));
+    KisRasterKeyframeChannel *rkc = dynamic_cast<KisRasterKeyframeChannel*>(d->node->getKeyframeChannel(KisKeyframeChannel::Raster.id()));
     if (!rkc) return ba;
     KisKeyframeSP frame = rkc->keyframeAt(time);
     if (!frame) return ba;

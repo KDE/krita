@@ -585,7 +585,7 @@ void TimelineDocker::previousKeyframe()
     if (!node) return;
 
     KisKeyframeChannel *keyframes =
-        node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+        node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
     if (!keyframes) return;
 
     KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
@@ -611,7 +611,7 @@ void TimelineDocker::nextKeyframe()
     if (!node) return;
 
     KisKeyframeChannel *keyframes =
-        node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+        node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
     if (!keyframes) return;
 
     KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
@@ -635,7 +635,7 @@ void TimelineDocker::previousMatchingKeyframe()
     if (!node) return;
 
     KisKeyframeChannel *keyframes =
-        node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+        node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
     if (!keyframes) return;
 
     KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
@@ -663,7 +663,7 @@ void TimelineDocker::nextMatchingKeyframe()
     if (!node) return;
 
     KisKeyframeChannel *keyframes =
-        node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+        node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
     if (!keyframes) return;
 
     KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();

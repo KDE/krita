@@ -44,7 +44,7 @@ void KisAnimationExporterTest::testAnimationExport()
     KUndo2Command parentCommand;
 
     p.layer->enableAnimation();
-    KisKeyframeChannel *rasterChannel = p.layer->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+    KisKeyframeChannel *rasterChannel = p.layer->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
 
     rasterChannel->addKeyframe(1, &parentCommand);
     rasterChannel->addKeyframe(2, &parentCommand);

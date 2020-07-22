@@ -134,7 +134,7 @@ void KisKraLoaderTest::testLoadAnimated()
     QVERIFY(layer1->isAnimated());
     QVERIFY(!layer2->isAnimated());
 
-    KisKeyframeChannel *channel1 = layer1->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    KisKeyframeChannel *channel1 = layer1->getKeyframeChannel(KisKeyframeChannel::Raster.id());
     QVERIFY(channel1);
     QCOMPARE(channel1->keyframeCount(), 3);
 

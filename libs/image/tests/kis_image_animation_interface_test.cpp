@@ -57,8 +57,8 @@ void KisImageAnimationInterfaceTest::testFrameRegeneration()
     KisPaintDeviceSP dev1 = p.layer->paintDevice();
     KisPaintDeviceSP dev2 = layer2->paintDevice();
 
-    p.layer->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
-    layer2->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+    p.layer->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
+    layer2->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
 
     // check frame 0
     {
@@ -143,8 +143,8 @@ void KisImageAnimationInterfaceTest::testFramesChangedSignal()
     KisPaintLayerSP layer2 = new KisPaintLayer(p.image, "paint2", OPACITY_OPAQUE_U8);
     p.image->addNode(layer2);
 
-    layer1->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
-    layer2->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+    layer1->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
+    layer2->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
 
     KisImageAnimationInterface *i = p.image->animationInterface();
     KisPaintDeviceSP dev1 = p.layer->paintDevice();
@@ -200,13 +200,13 @@ void KisImageAnimationInterfaceTest::testAnimationCompositionBug()
     KisPaintLayerSP layer2 = new KisPaintLayer(p.image, "paint2", OPACITY_OPAQUE_U8);
     p.image->addNode(layer2);
 
-    layer1->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
-    layer2->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+    layer1->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
+    layer2->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
 
     layer1->paintDevice()->fill(rect, KoColor(Qt::red, layer1->paintDevice()->colorSpace()));
     layer2->paintDevice()->fill(QRect(128,128,128,128), KoColor(Qt::black, layer2->paintDevice()->colorSpace()));
 
-    KisKeyframeChannel *rasterChannel = layer2->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    KisKeyframeChannel *rasterChannel = layer2->getKeyframeChannel(KisKeyframeChannel::Raster.id());
     rasterChannel->addKeyframe(10, &parentCommand);
     p.image->refreshGraph();
 
@@ -235,7 +235,7 @@ void KisImageAnimationInterfaceTest::testSwitchFrameWithUndo()
 
     KisPaintLayerSP layer1 = p.layer;
 
-    layer1->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+    layer1->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
 
     KisImageAnimationInterface *i = p.image->animationInterface();
     KisPaintDeviceSP dev1 = p.layer->paintDevice();
@@ -276,7 +276,7 @@ void KisImageAnimationInterfaceTest::testSwitchFrameHangup()
 
     KisPaintLayerSP layer1 = p.layer;
 
-    layer1->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+    layer1->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
 
     KisImageAnimationInterface *i = p.image->animationInterface();
     KisPaintDeviceSP dev1 = p.layer->paintDevice();

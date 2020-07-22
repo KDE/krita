@@ -40,13 +40,14 @@ class KisTimeSpan;
  * KisKeyframeChannel stores and manages KisKeyframes.
  * Maps units of time to virtual keyframe values.
  * This class is a key piece of Krita's animation backend.
+ * Abstract base class of KisRasterKeyframeChannel, KisScalarKeyframeChannel, etc.
  */
 class KRITAIMAGE_EXPORT KisKeyframeChannel : public QObject
 {
     Q_OBJECT
 
 public:
-    static const KoID Content;
+    static const KoID Raster;
     static const KoID Opacity;
     static const KoID TransformArguments;
     static const KoID TransformPositionX;
@@ -59,8 +60,8 @@ public:
     static const KoID TransformRotationY;
     static const KoID TransformRotationZ;
 
-    Q_DECL_DEPRECATED KisKeyframeChannel(const KoID& id, KisNodeWSP parent = 0);
-    KisKeyframeChannel(const KoID& id, KisDefaultBoundsBaseSP bounds);
+    Q_DECL_DEPRECATED KisKeyframeChannel(const KoID &id, KisNodeWSP parent = 0);
+    KisKeyframeChannel(const KoID &id, KisDefaultBoundsBaseSP bounds);
     KisKeyframeChannel(const KisKeyframeChannel &rhs, KisNodeWSP newParent);
     ~KisKeyframeChannel() override;
 
@@ -78,10 +79,11 @@ public:
     void copyKeyframe(int sourceTime, int targetTime, KUndo2Command* parentCmd = nullptr) { copyKeyframe(this, sourceTime, this, targetTime, parentCmd); }
     void swapKeyframes(int timeA, int timeB, KUndo2Command* parentCmd = nullptr) { swapKeyframes(this, timeA, this, timeB, parentCmd); }
 
+    // Keyframe methods..
     KisKeyframeSP keyframeAt(int time) const;
     KisKeyframeSP activeKeyframeAt(int time) const { return keyframeAt(activeKeyframeTime(time)); }
 
-    // Convenience templates..
+    // Quick casting convenience templates..
     template <class KeyframeType>
     QSharedPointer<KeyframeType> keyframeAt(int time) const {
         return keyframeAt(time).dynamicCast<KeyframeType>();
@@ -92,6 +94,9 @@ public:
         return activeKeyframeAt(time).dynamicCast<KeyframeType>();
     }
 
+    int keyframeCount() const;
+
+    // Time methods..
     int activeKeyframeTime(int time) const;
     int activeKeyframeTime() const { return activeKeyframeTime(currentTime()); }
 
@@ -100,20 +105,19 @@ public:
     int nextKeyframeTime(const int time) const;
     int lastKeyframeTime() const;
 
+    QSet<int> allKeyframeTimes() const;
+
     QString id() const;
     QString name() const;
 
     Q_DECL_DEPRECATED void setNode(KisNodeWSP node);
     Q_DECL_DEPRECATED KisNodeWSP node() const;
 
-    int keyframeCount() const;
-    QSet<int> allKeyframeTimes() const;
-
     /**
-     * Calculates a pseudo-unique keyframes hash. The hash changes
-     * every time any frame is added/removed/moved
+     * Calculates a pseudo-unique hash based on
+     * the relevant internal state of the channel.
      */
-    int framesHash() const;
+    int channelHash() const;
 
     /**
      * Get the set of frames affected by any changes to the value
@@ -134,19 +138,20 @@ public:
     virtual void loadXML(const QDomElement &channelNode);
 
 Q_SIGNALS:
-    void sigUpdated(const KisTimeSpan &affectedTimeSpan, const QRect &affectedArea) const;
+    void sigChannelUpdated(const KisTimeSpan &affectedTimeSpan, const QRect &affectedArea) const;
 
-    void sigKeyframeAdded(const KisKeyframeChannel *channel, int time);
-    void sigKeyframeRemoved(const KisKeyframeChannel *channel, int time, KisKeyframeSP keyframe);
+    // Emitted just AFTER a keyframe is added.
+    void sigAddedKeyframe(const KisKeyframeChannel *channel, int time);
+
+    // Emitted just BEFORE a keyframe is removed.
+    void sigRemovingKeyframe(const KisKeyframeChannel *channel, int time);
 
 protected:
-    typedef QMap<int, KisKeyframeSP> KeyframesMap;
-    KeyframesMap &keys();
-    const KeyframesMap &constKeys() const;
+    typedef QMap<int, KisKeyframeSP> TimeKeyframeMap;
+    TimeKeyframeMap &keys();
+    const TimeKeyframeMap &constKeys() const;
 
     int currentTime() const;
-
-    KisDefaultBoundsBaseSP bounds() const;
 
     Q_DECL_DEPRECATED void workaroundBrokenFrameTimeBug(int *time); //TEMP NOTE: scalar specific?
 
@@ -154,7 +159,7 @@ private:
     struct Private;
     QScopedPointer<Private> m_d;
 
-    KeyframesMap::const_iterator activeKeyIterator(int time) const;
+    TimeKeyframeMap::const_iterator activeKeyIterator(int time) const;
 
     virtual KisKeyframeSP createKeyframe() = 0;
     virtual QRect affectedRect(int time) const = 0;

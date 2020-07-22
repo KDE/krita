@@ -1624,7 +1624,7 @@ void KisPaintDeviceTest::testFramesLeaking()
     TestUtil::TestingTimedDefaultBounds *bounds = new TestUtil::TestingTimedDefaultBounds();
     dev->setDefaultBounds(bounds);
 
-    KisRasterKeyframeChannel *channel = dev->createKeyframeChannel(KisKeyframeChannel::Content);
+    KisRasterKeyframeChannel *channel = dev->createKeyframeChannel(KisKeyframeChannel::Raster);
     QVERIFY(channel);
 
     KisPaintDeviceFramesInterface *i = dev->framesInterface();
@@ -1763,7 +1763,7 @@ void KisPaintDeviceTest::testFramesUndoRedo()
     TestUtil::TestingTimedDefaultBounds *bounds = new TestUtil::TestingTimedDefaultBounds();
     dev->setDefaultBounds(bounds);
 
-    KisRasterKeyframeChannel *channel = dev->createKeyframeChannel(KisKeyframeChannel::Content);
+    KisRasterKeyframeChannel *channel = dev->createKeyframeChannel(KisKeyframeChannel::Raster);
     QVERIFY(channel);
 
     KisPaintDeviceFramesInterface *i = dev->framesInterface();
@@ -1859,7 +1859,7 @@ void KisPaintDeviceTest::testFramesUndoRedoWithChannel()
     TestUtil::TestingTimedDefaultBounds *bounds = new TestUtil::TestingTimedDefaultBounds();
     dev->setDefaultBounds(bounds);
 
-    KisRasterKeyframeChannel *channel = dev->createKeyframeChannel(KisKeyframeChannel::Content);
+    KisRasterKeyframeChannel *channel = dev->createKeyframeChannel(KisKeyframeChannel::Raster);
     QVERIFY(channel);
 
     KisPaintDeviceFramesInterface *i = dev->framesInterface();
@@ -2045,17 +2045,17 @@ void testCrossDeviceFrameCopyImpl(bool useChannel)
     dev2->setDefaultBounds(bounds);
     dev3->setDefaultBounds(bounds);
 
-    KisRasterKeyframeChannel *channel1 = dev1->createKeyframeChannel(KisKeyframeChannel::Content);
+    KisRasterKeyframeChannel *channel1 = dev1->createKeyframeChannel(KisKeyframeChannel::Raster);
     KisPaintDeviceFramesInterface *i1 = dev1->framesInterface();
     QVERIFY(channel1);
     QVERIFY(i1);
 
-    KisRasterKeyframeChannel *channel2 = dev2->createKeyframeChannel(KisKeyframeChannel::Content);
+    KisRasterKeyframeChannel *channel2 = dev2->createKeyframeChannel(KisKeyframeChannel::Raster);
     KisPaintDeviceFramesInterface *i2 = dev2->framesInterface();
     QVERIFY(channel2);
     QVERIFY(i2);
 
-    KisRasterKeyframeChannel *channel3 = dev3->createKeyframeChannel(KisKeyframeChannel::Content);
+    KisRasterKeyframeChannel *channel3 = dev3->createKeyframeChannel(KisKeyframeChannel::Raster);
     KisPaintDeviceFramesInterface *i3 = dev3->framesInterface();
     QVERIFY(channel3);
     QVERIFY(i3);
@@ -2122,7 +2122,7 @@ void KisPaintDeviceTest::testLazyFrameCreation()
     TestUtil::TestingTimedDefaultBounds *bounds = new TestUtil::TestingTimedDefaultBounds();
     dev->setDefaultBounds(bounds);
 
-    KisRasterKeyframeChannel *channel = dev->createKeyframeChannel(KisKeyframeChannel::Content);
+    KisRasterKeyframeChannel *channel = dev->createKeyframeChannel(KisKeyframeChannel::Raster);
     QVERIFY(channel);
 
     KisPaintDeviceFramesInterface *i = dev->framesInterface();
@@ -2160,7 +2160,7 @@ void KisPaintDeviceTest::testCopyPaintDeviceWithFrames()
     TestUtil::TestingTimedDefaultBounds *bounds = new TestUtil::TestingTimedDefaultBounds();
     dev->setDefaultBounds(bounds);
 
-    KisRasterKeyframeChannel *channel = dev->createKeyframeChannel(KisKeyframeChannel::Content);
+    KisRasterKeyframeChannel *channel = dev->createKeyframeChannel(KisKeyframeChannel::Raster);
     QVERIFY(channel);
 
     KisPaintDeviceFramesInterface *i = dev->framesInterface();

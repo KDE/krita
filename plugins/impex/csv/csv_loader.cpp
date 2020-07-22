@@ -433,7 +433,7 @@ KisImportExportErrorCode CSVLoader::setLayer(CSVLayerRecord* layer, KisDocument 
 
         layer->layer = paintLayer;
         layer->channel = qobject_cast<KisRasterKeyframeChannel*>
-            (paintLayer->getKeyframeChannel(KisKeyframeChannel::Content.id(), true));
+            (paintLayer->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true));
     }
 
 

@@ -311,7 +311,7 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
 
             KisTimeSpan range;
 
-            KisKeyframeChannel *channel = node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+            KisKeyframeChannel *channel = node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
             if (channel) {
                 const int currentTime = image->animationInterface()->currentTime();
                 range = channel->affectedFrames(currentTime);

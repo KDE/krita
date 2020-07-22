@@ -237,7 +237,7 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
 
         if (range.isValid()) {
             newLayer->enableAnimation();
-            KisKeyframeChannel *channel = newLayer->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+            KisKeyframeChannel *channel = newLayer->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
             KisRasterKeyframeChannel *rasterChannel = dynamic_cast<KisRasterKeyframeChannel*>(channel);
             rasterChannel->importFrame(range.start(), clip, 0);
 

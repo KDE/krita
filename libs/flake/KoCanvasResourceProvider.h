@@ -26,6 +26,12 @@
 #include "kritaflake_export.h"
 #include "KoDerivedResourceConverter.h"
 #include "KoResourceUpdateMediator.h"
+#include "KoActiveCanvasResourceDependency.h"
+#include <KoCanvasResourcesIds.h>
+
+template<class T> class QSharedPointer;
+class KoCanvasResourcesInterface;
+using KoCanvasResourcesInterfaceSP = QSharedPointer<KoCanvasResourcesInterface>;
 
 class KoShape;
 class KoShapeStroke;
@@ -61,35 +67,6 @@ class KRITAFLAKE_EXPORT KoCanvasResourceProvider : public QObject
     Q_OBJECT
 
 public:
-
-    /**
-     * This enum holds identifiers to the resources that can be stored in here.
-     */
-    enum CanvasResource {
-        ForegroundColor,    ///< The active foreground color selected for this canvas.
-        BackgroundColor,    ///< The active background color selected for this canvas.
-        PageSize,           ///< The size of the (current) page in postscript points.
-        Unit,               ///< The unit of this canvas
-        CurrentPage,        ///< The current page number
-        ActiveStyleType,    ///< the actual active style type see KoFlake::StyleType for valid values
-        ActiveRange,        ///< The area where the rulers should show white
-        ShowTextShapeOutlines,     ///< Paint of text shape outlines ?
-        ShowFormattingCharacters,  ///< Paint of formatting characters ?
-        ShowTableBorders,  ///< Paint of table borders (when not really there) ?
-        ShowSectionBounds, ///< Paint of sections bounds ?
-        ShowInlineObjectVisualization, ///< paint a different  background for inline objects
-        ApplicationSpeciality, ///< Special features and limitations of the application
-        KarbonStart = 1000,      ///< Base number for Karbon specific values.
-        KexiStart = 2000,        ///< Base number for Kexi specific values.
-        FlowStart = 3000,        ///< Base number for Flow specific values.
-        PlanStart = 4000,        ///< Base number for Plan specific values.
-        StageStart = 5000,       ///< Base number for Stage specific values.
-        KritaStart = 6000,       ///< Base number for Krita specific values.
-        SheetsStart = 7000,      ///< Base number for Sheets specific values.
-        WordsStart = 8000,       ///< Base number for Words specific values.
-        KoPageAppStart = 9000    ///< Base number for KoPageApp specific values.
-    };
-
     enum ApplicationSpecial {
         NoSpecial = 0,
         NoAdvancedText = 1
@@ -230,35 +207,55 @@ public:
     void clearResource(int key);
 
     /**
-     * @see KoReosurceManager::addDerivedResourceConverter()
+     * @see KoResourceManager::addDerivedResourceConverter()
      */
     void addDerivedResourceConverter(KoDerivedResourceConverterSP converter);
 
     /**
-     * @see KoReosurceManager::hasDerivedResourceConverter()
+     * @see KoResourceManager::hasDerivedResourceConverter()
      */
     bool hasDerivedResourceConverter(int key);
 
     /**
-     * @see KoReosurceManager::removeDerivedResourceConverter()
+     * @see KoResourceManager::removeDerivedResourceConverter()
      */
     void removeDerivedResourceConverter(int key);
 
     /**
-     * @see KoReosurceManager::addResourceUpdateMediator
+     * @see KoResourceManager::addResourceUpdateMediator
      */
     void addResourceUpdateMediator(KoResourceUpdateMediatorSP mediator);
 
     /**
-     * @see KoReosurceManager::hasResourceUpdateMediator
+     * @see KoResourceManager::hasResourceUpdateMediator
      */
     bool hasResourceUpdateMediator(int key);
 
     /**
-
-     * @see KoReosurceManager::removeResourceUpdateMediator
+     * @see KoResourceManager::removeResourceUpdateMediator
      */
     void removeResourceUpdateMediator(int key);
+
+    /**
+     * @see KoResourceManager::addActiveCanvasResourceDependency
+     */
+    void addActiveCanvasResourceDependency(KoActiveCanvasResourceDependencySP dep);
+
+    /**
+     * @see KoResourceManager::hasActiveCanvasResourceDependency
+     */
+    bool hasActiveCanvasResourceDependency(int sourceKey, int targetKey) const;
+
+    /**
+     * @see KoResourceManager::removeActiveCanvasResourceDependency
+     */
+    void removeActiveCanvasResourceDependency(int sourceKey, int targetKey);
+
+    /**
+     * An interface for accessing this KoCanvasResourceProvider via
+     * KoCanvasResourcesInterface.
+     */
+    KoCanvasResourcesInterfaceSP canvasResourcesInterface() const;
 
 Q_SIGNALS:
     /**

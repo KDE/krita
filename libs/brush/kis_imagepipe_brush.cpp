@@ -529,11 +529,17 @@ void KisImagePipeBrush::setHasColor(bool hasColor)
     // hasColor() is a function of the underlying brushes
 }
 
-void KisImagePipeBrush::setPreserveLightness(bool preserveLightness)
+void KisImagePipeBrush::setBrushApplication(enumBrushApplication brushApplication)
 {
-    //Set all underlying brushes to preserve lightness
-    KisGbrBrush::setPreserveLightness(preserveLightness);
-    d->brushesPipe.setPreserveLightness(preserveLightness);
+    //Set all underlying brushes to use the same brush Application
+    KisGbrBrush::setBrushApplication(brushApplication);
+    d->brushesPipe.setBrushApplication(brushApplication);
+}
+
+void KisImagePipeBrush::setGradient(KoAbstractGradientSP gradient) {
+    //Set all underlying brushes to use the same gradient
+    KisGbrBrush::setGradient(gradient);
+    d->brushesPipe.setGradient(gradient);
 }
 
 KisGbrBrushSP KisImagePipeBrush::testingGetCurrentBrush(const KisPaintInformation& info) const

@@ -64,6 +64,8 @@ public:
 
     virtual bool hasPatternSettings() const override;
 
+    QList<int> requiredCanvasResources() const override;
+
 protected:
 
     void onPropertyChanged() override;

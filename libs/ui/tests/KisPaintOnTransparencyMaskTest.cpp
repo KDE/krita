@@ -47,7 +47,7 @@ protected:
 
         QVariant i;
         i.setValue(color);
-        manager->setResource(KoCanvasResourceProvider::ForegroundColor, i);
+        manager->setResource(KoCanvasResource::ForegroundColor, i);
     }
 
     KisStrokeStrategy* createStroke(KisResourcesSnapshotSP resources,

@@ -638,7 +638,7 @@ void KisSelectionManager::slotStrokeSelection()
         return;
     }
 
-    KisNodeSP currentNode = m_view->canvasResourceProvider()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeWSP>();
+    KisNodeSP currentNode = m_view->canvasResourceProvider()->resourceManager()->resource(KoCanvasResource::CurrentKritaNode).value<KisNodeWSP>();
     bool isVectorLayer = false;
     if (currentNode->inherits("KisShapeLayer")) {
         isVectorLayer = true;

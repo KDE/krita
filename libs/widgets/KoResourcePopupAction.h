@@ -31,6 +31,9 @@
 class KoShapeBackground;
 class QModelIndex;
 
+class KoCanvasResourcesInterface;
+using KoCanvasResourcesInterfaceSP = QSharedPointer<KoCanvasResourcesInterface>;
+
 #include "kritawidgets_export.h"
 
 class KRITAWIDGETS_EXPORT KoResourcePopupAction : public QAction
@@ -44,7 +47,7 @@ public:
      * @param gradientResourceAdapter pointer to the gradient or pattern
      * @param parent The parent for this action.
      */
-    explicit KoResourcePopupAction(const QString &resourceType, QObject *parent = 0);
+    explicit KoResourcePopupAction(const QString &resourceType, KoCanvasResourcesInterfaceSP canvasResourcesInterface, QObject *parent = 0);
 
     /**
      * Destructor
@@ -56,6 +59,8 @@ public:
 
     void setCurrentResource(KoResourceSP resource);
     KoResourceSP currentResource() const;
+
+    void setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface);
 
 Q_SIGNALS:
     /// Emitted when a resource was selected

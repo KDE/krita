@@ -31,13 +31,14 @@
 
 #include <kis_icon_utils.h>
 
+#include <KoCanvasResourcesIds.h>
+#include <KoCanvasResourcesInterface.h>
+
 /****************************** KisStopGradientEditor ******************************/
 
 KisStopGradientEditor::KisStopGradientEditor(QWidget *parent)
     : QWidget(parent),
-      m_gradient(0),
-      m_fgColor(KoColor()),
-      m_bgColor(KoColor())
+      m_gradient(0)
 {
     setupUi(this);
 
@@ -76,11 +77,10 @@ KisStopGradientEditor::KisStopGradientEditor(QWidget *parent)
 }
 
 KisStopGradientEditor::KisStopGradientEditor(KoStopGradientSP gradient, QWidget *parent, const char* name, const QString& caption,
-      const KoColor &fgColor, const KoColor &bgColor)
+      KoCanvasResourcesInterfaceSP canvasResourcesInterface)
     : KisStopGradientEditor(parent)
 {
-    m_fgColor = fgColor;
-    m_bgColor = bgColor;
+    m_canvasResourcesInterface = canvasResourcesInterface;
     setObjectName(name);
     setWindowTitle(caption);
     setGradient(gradient);
@@ -88,9 +88,12 @@ KisStopGradientEditor::KisStopGradientEditor(KoStopGradientSP gradient, QWidget 
 
 void KisStopGradientEditor::setCompactMode(bool value)
 {
-    lblName->setVisible(!value);
+    //lblName->setVisible(!value);
     buttonReverse->setVisible(!value);
     nameedit->setVisible(!value);
+    foregroundRadioButton->setVisible(!value);
+    backgroundRadioButton->setVisible(!value);
+    colorRadioButton->setVisible(!value);
 
     buttonReverseSecond->setVisible(value);
 }
@@ -107,6 +110,16 @@ void KisStopGradientEditor::setGradient(KoStopGradientSP gradient)
     }
 
     emit sigGradientChanged();
+}
+
+void KisStopGradientEditor::setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface)
+{
+    m_canvasResourcesInterface = canvasResourcesInterface;
+}
+
+KoCanvasResourcesInterfaceSP KisStopGradientEditor::canvasResourcesInterface() const
+{
+    return m_canvasResourcesInterface;
 }
 
 void KisStopGradientEditor::notifyGlobalColorChanged(const KoColor &color)
@@ -143,12 +156,12 @@ void KisStopGradientEditor::stopChanged(int stop)
         if (type == FOREGROUNDSTOP) {
             foregroundRadioButton->setChecked(true);
             opacitySlider->setEnabled(false);
-            color = m_fgColor;
+            color = m_canvasResourcesInterface->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
         }
         else if (type == BACKGROUNDSTOP) {
             backgroundRadioButton->setChecked(true);
             opacitySlider->setEnabled(false);
-            color = m_bgColor;
+            color = m_canvasResourcesInterface->resource(KoCanvasResource::BackgroundColor).value<KoColor>();;
         }
         else {
             colorRadioButton->setChecked(true);
@@ -175,11 +188,12 @@ void KisStopGradientEditor::stopTypeChanged() {
     KoGradientStopType type;    
     if (foregroundRadioButton->isChecked()) {
         type = FOREGROUNDSTOP;
-        color = KoColor(m_fgColor, color.colorSpace());
+        color = m_canvasResourcesInterface->resource(KoCanvasResource::ForegroundColor).value<KoColor>().convertedTo(color.colorSpace());
         opacitySlider->setEnabled(false);
     } else if (backgroundRadioButton->isChecked()) {
         type = BACKGROUNDSTOP;
-        color = KoColor(m_bgColor, color.colorSpace());
+        color = m_canvasResourcesInterface->resource(KoCanvasResource::BackgroundColor).value<KoColor>().convertedTo(color.colorSpace());
+
         opacitySlider->setEnabled(false);
     }
     else {

@@ -496,3 +496,24 @@ KisKeyframeChannel *KisTransformMask::requestKeyframeChannel(const QString &id)
     return KisEffectMask::requestKeyframeChannel(id);
 }
 
+bool KisTransformMask::supportsKeyframeChannel(const QString &id)
+{
+    if (id == KisKeyframeChannel::TransformArguments.id() ||
+        id == KisKeyframeChannel::TransformPositionX.id() ||
+        id == KisKeyframeChannel::TransformPositionY.id() ||
+        id == KisKeyframeChannel::TransformScaleX.id() ||
+        id == KisKeyframeChannel::TransformScaleY.id() ||
+        id == KisKeyframeChannel::TransformShearX.id() ||
+        id == KisKeyframeChannel::TransformShearY.id() ||
+        id == KisKeyframeChannel::TransformRotationX.id() ||
+        id == KisKeyframeChannel::TransformRotationY.id() ||
+            id == KisKeyframeChannel::TransformRotationZ.id()) {
+        return true;
+    }
+    else if (id == KisKeyframeChannel::Opacity.id()) {
+        return false;
+    }
+
+    return KisEffectMask::supportsKeyframeChannel(id);
+}
+

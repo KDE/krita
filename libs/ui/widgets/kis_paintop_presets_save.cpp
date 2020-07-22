@@ -171,9 +171,13 @@ void KisPresetSaveWidget::savePreset()
     QString presetFileName = m_useNewBrushDialog ? newBrushNameTexField->text() : curPreset->name();
     // We don't want dots or spaces in the filenames
     presetFileName = presetFileName.replace(' ', '_').replace('.', '_');
+    QString extension = curPreset->defaultFileExtension();
 
     if (m_useNewBrushDialog) {
         KisPaintOpPresetSP newPreset = curPreset->clone().dynamicCast<KisPaintOpPreset>();
+        if (!presetFileName.endsWith(extension)) {
+            presetFileName.append(extension);
+        }
         newPreset->setFilename(presetFileName);
         newPreset->setName(m_useNewBrushDialog ? newBrushNameTexField->text() : curPreset->name());
         newPreset->setImage(brushPresetThumbnailWidget->cutoutOverlay());

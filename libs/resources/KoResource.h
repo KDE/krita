@@ -178,6 +178,14 @@ public:
      */
     virtual QList<KoResourceSP> embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const;
 
+    /**
+     * A list of per-canvas active resources that are needed for this resource
+     * to function properly. E.g. some gradients may require Fg/Bg colors and
+     * some presets would like to know about the current gradient selection.
+     *
+     * @return a list of canvas resources needed for the current resource
+     */
+    virtual QList<int> requiredCanvasResources() const;
 
 private:
 

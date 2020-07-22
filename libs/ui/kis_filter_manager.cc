@@ -54,12 +54,14 @@
 struct KisFilterManager::Private {
     Private()
         : reapplyAction(0)
+        , reapplyActionReprompt(0)
         , actionCollection(0)
         , actionManager(0)
         , view(0)
     {
     }
     KisAction* reapplyAction;
+    KisAction* reapplyActionReprompt;
     QHash<QString, KActionMenu*> filterActionMenus;
     QHash<KisFilter*, QAction *> filters2Action;
     KActionCollection *actionCollection;
@@ -102,7 +104,13 @@ void KisFilterManager::setup(KActionCollection * ac, KisActionManager *actionMan
     d->reapplyAction = d->actionManager->createAction("filter_apply_again");
     d->reapplyAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
     d->reapplyAction->setEnabled(false);
+
+    d->reapplyActionReprompt = d->actionManager->createAction("filter_apply_reprompt");
+    d->reapplyActionReprompt->setActivationFlags(KisAction::ACTIVE_DEVICE);
+    d->reapplyActionReprompt->setEnabled(false);
+
     connect(d->reapplyAction, SIGNAL(triggered()), SLOT(reapplyLastFilter()));
+    connect(d->reapplyActionReprompt, SIGNAL(triggered()), SLOT(reapplyLastFilterReprompt()));
 
     connect(&d->actionsMapper, SIGNAL(mapped(QString)), SLOT(showFilterDialog(QString)));
 
@@ -177,7 +185,15 @@ void KisFilterManager::reapplyLastFilter()
     finish();
 }
 
-void KisFilterManager::showFilterDialog(const QString &filterId)
+void KisFilterManager::reapplyLastFilterReprompt()
+{
+    if (!d->lastConfiguration) return;
+
+    showFilterDialog(d->lastConfiguration->name(), d->lastConfiguration);
+    finish();
+}
+
+void KisFilterManager::showFilterDialog(const QString &filterId, KisFilterConfigurationSP overrideDefaultConfig)
 {
     if (!d->view->activeNode()->isEditable()) {
         d->view->showFloatingMessage(i18n("Cannot apply filter to locked layer."),
@@ -187,7 +203,7 @@ void KisFilterManager::showFilterDialog(const QString &filterId)
 
     if (d->filterDialog && d->filterDialog->isVisible()) {
         KisFilterSP filter = KisFilterRegistry::instance()->value(filterId);
-        d->filterDialog->setFilter(filter);
+        d->filterDialog->setFilter(filter, overrideDefaultConfig);
         return;
     }
 
@@ -246,10 +262,13 @@ void KisFilterManager::showFilterDialog(const QString &filterId)
             d->filterDialog = new KisDlgFilter(d->view , d->view->activeNode(), this, d->view->mainWindow());
             d->filterDialog->setAttribute(Qt::WA_DeleteOnClose);
         }
-        d->filterDialog->setFilter(filter);
+
+        d->filterDialog->setFilter(filter, overrideDefaultConfig);
         d->filterDialog->setVisible(true);
     } else {
-        apply(KisFilterConfigurationSP(filter->defaultConfiguration(KisGlobalResourcesInterface::instance())));
+        KisFilterConfigurationSP defaultConfiguration =
+            overrideDefaultConfig ? overrideDefaultConfig : filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
+        apply(defaultConfiguration);
         finish();
     }
 }

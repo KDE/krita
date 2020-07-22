@@ -420,7 +420,6 @@ bool KraConverter::completeLoading(KoStore* store)
     m_assistants = m_kraLoader->assistants();
 
     return true;
-    return m_kraLoader->errorMessages().isEmpty();
 }
 
 void KraConverter::cancel()

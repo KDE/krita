@@ -56,6 +56,11 @@ KisResourceSearchBoxFilter::KisResourceSearchBoxFilter()
 
 }
 
+KisResourceSearchBoxFilter::~KisResourceSearchBoxFilter()
+{
+
+}
+
 QString cutOutDelimeters(QString text)
 {
     QString response(text);

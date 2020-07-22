@@ -256,7 +256,7 @@ void KisBrushHud::slotCanvasResourceChanged(int key, const QVariant &resource)
 {
     Q_UNUSED(resource);
 
-    if (key == KisCanvasResourceProvider::CurrentPaintOpPreset) {
+    if (key == KoCanvasResource::CurrentPaintOpPreset) {
         updateProperties();
     }
 }

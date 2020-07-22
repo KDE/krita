@@ -56,6 +56,34 @@ KoAbstractGradient::KoAbstractGradient(const KoAbstractGradient &rhs)
 {
 }
 
+KoAbstractGradientSP KoAbstractGradient::cloneAndBakeVariableColors(KoCanvasResourcesInterfaceSP canvasResourcesInterface) const
+{
+    KoAbstractGradientSP result = this->clone().dynamicCast<KoAbstractGradient>();
+    if (canvasResourcesInterface) {
+        result->bakeVariableColors(canvasResourcesInterface);
+    }
+    return result;
+}
+
+void KoAbstractGradient::bakeVariableColors(KoCanvasResourcesInterfaceSP canvasResourcesInterface)
+{
+    Q_UNUSED(canvasResourcesInterface);
+}
+
+KoAbstractGradientSP KoAbstractGradient::cloneAndUpdateVariableColors(KoCanvasResourcesInterfaceSP canvasResourcesInterface) const
+{
+    KoAbstractGradientSP result = this->clone().dynamicCast<KoAbstractGradient>();
+    if (canvasResourcesInterface) {
+        result->updateVariableColors(canvasResourcesInterface);
+    }
+    return result;
+}
+
+void KoAbstractGradient::updateVariableColors(KoCanvasResourcesInterfaceSP canvasResourcesInterface)
+{
+    Q_UNUSED(canvasResourcesInterface);
+}
+
 void KoAbstractGradient::colorAt(KoColor&, qreal t) const
 {
     Q_UNUSED(t);
@@ -142,6 +170,20 @@ QImage KoAbstractGradient::generatePreview(int width, int height) const
     }
 
     return image;
+}
+
+QImage KoAbstractGradient::generatePreview(int width, int height, KoCanvasResourcesInterfaceSP canvasResourcesInterface) const
+{
+    QImage result;
+
+    if (!requiredCanvasResources().isEmpty()) {
+        KoAbstractGradientSP gradient = cloneAndBakeVariableColors(canvasResourcesInterface);
+        result = gradient->generatePreview(width, height);
+    } else {
+        result = generatePreview(width, height);
+    }
+
+    return result;
 }
 
 void KoAbstractGradient::updatePreview()

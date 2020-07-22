@@ -218,6 +218,7 @@ protected:
     virtual bool paintsOutsideSelection() const;
 
     KisKeyframeChannel *requestKeyframeChannel(const QString &id) override;
+    bool supportsKeyframeChannel(const QString &id) override;
 
     void baseNodeChangedCallback() override;
 

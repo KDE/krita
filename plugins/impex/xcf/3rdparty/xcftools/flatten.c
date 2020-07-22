@@ -488,7 +488,10 @@ static struct Tile *
 
     while( nlayers-- ) {
         if( tileSummary(top) & TILESUMMARY_ALLFULL ) {
-            freeTile(tile);
+            if (tile) {
+                /* it should always be not null here though */
+                freeTile(tile);
+            }
             return top ;
         }
         if( !spec->layers[nlayers].isVisible )

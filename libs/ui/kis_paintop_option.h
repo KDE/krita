@@ -73,8 +73,9 @@ public:
      * Reimplement this to use the image in the option widget
      */
     virtual void setImage(KisImageWSP image);
-
     virtual void setNode(KisNodeWSP node);
+    virtual void setResourcesInterface(KisResourcesInterfaceSP resourcesInterface);
+    virtual void setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface);
 
     void startReadOptionSetting(const KisPropertiesConfigurationSP setting);
     void startWriteOptionSetting(KisPropertiesConfigurationSP setting) const;
@@ -86,6 +87,9 @@ public:
 protected:
 
     void setConfigurationPage(QWidget *page);
+
+    KisResourcesInterfaceSP resourcesInterface() const;
+    KoCanvasResourcesInterfaceSP canvasResourcesInterface() const;
 
 protected:
     /**

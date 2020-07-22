@@ -499,6 +499,15 @@ KisKeyframeChannel *KisMask::requestKeyframeChannel(const QString &id)
     return KisNode::requestKeyframeChannel(id);
 }
 
+bool KisMask::supportsKeyframeChannel(const QString &id)
+{
+    if (id == KisKeyframeChannel::Content.id() && paintDevice()) {
+        return true;
+    }
+
+    return KisNode::supportsKeyframeChannel(id);
+}
+
 void KisMask::baseNodeChangedCallback()
 {
     KisNodeSP up = parent();

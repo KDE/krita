@@ -91,7 +91,7 @@ void KisToolSelectMagnetic::calculateCheckPoints(vQPointF points)
     for (; finalPoint < points.count(); finalPoint++) {
         totalDistance += kisDistance(points[finalPoint], points[finalPoint - 1]);
 
-        if (totalDistance <= m_anchorGap / 3) {
+        if (totalDistance <= m_anchorGap / 3.0) {
             minPoint = finalPoint;
         }
 
@@ -663,7 +663,7 @@ QWidget * KisToolSelectMagnetic::createOptionWidget()
     connect(filterRadiusInput, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetFilterRadius(qreal)));
 
     QHBoxLayout *f2        = new QHBoxLayout();
-    QLabel *thresholdLabel = new QLabel(i18n("Threshold: "), selectionWidget);
+    QLabel *thresholdLabel = new QLabel(i18nc("Threshold label in Magnetic Selection's Tool options", "Threshold: "), selectionWidget);
     f2->addWidget(thresholdLabel);
 
     KisSliderSpinBox *thresholdInput = new KisSliderSpinBox(selectionWidget);

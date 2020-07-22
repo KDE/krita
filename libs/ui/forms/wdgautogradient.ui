@@ -385,7 +385,7 @@
        </property>
        <item>
         <property name="text">
-         <string>Linear</string>
+         <string comment="Gradient type - Linear">Linear</string>
         </property>
        </item>
        <item>

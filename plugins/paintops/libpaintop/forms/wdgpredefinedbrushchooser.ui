@@ -225,21 +225,28 @@
           <item>
            <widget class="QRadioButton" name="btnMaskMode">
             <property name="text">
-             <string>Mask</string>
+             <string>Alpha Mask</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QRadioButton" name="btnColorMode">
             <property name="text">
-             <string>Color</string>
+             <string>Color Image</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="btnGradientMode">
+            <property name="text">
+             <string>Gradient Map</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QRadioButton" name="btnLightnessMode">
             <property name="text">
-             <string>Lightness</string>
+             <string>Lightness Map</string>
             </property>
            </widget>
           </item>

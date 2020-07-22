@@ -38,11 +38,14 @@ public:
 
 
     KisStopGradientEditor(QWidget *parent);
-    KisStopGradientEditor(KoStopGradientSP gradient, QWidget *parent, const char* name, const QString& caption, const KoColor &fgColor, const KoColor &bgColor);
+    KisStopGradientEditor(KoStopGradientSP gradient, QWidget *parent, const char* name, const QString& caption, KoCanvasResourcesInterfaceSP canvasResourcesInterface);
 
     void setCompactMode(bool value);
 
     void setGradient(KoStopGradientSP gradient);
+
+    void setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface);
+    KoCanvasResourcesInterfaceSP canvasResourcesInterface() const;
 
     void notifyGlobalColorChanged(const KoColor &color);
 
@@ -53,8 +56,7 @@ Q_SIGNALS:
 
 private:
      KoStopGradientSP m_gradient;
-     KoColor m_fgColor;
-     KoColor m_bgColor;
+     KoCanvasResourcesInterfaceSP m_canvasResourcesInterface;
 
 private Q_SLOTS:
     void stopChanged(int stop);

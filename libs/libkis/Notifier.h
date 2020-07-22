@@ -97,6 +97,11 @@ Q_SIGNALS:
     void windowIsBeingCreated(Window *window);
 
     /**
+     * @brief windowIsCreated is emitted after main window is completely created
+     */
+    void windowCreated();
+
+    /**
      * @brief configurationChanged is emitted every time Krita's configuration
      * has changed.
      */

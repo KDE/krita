@@ -661,7 +661,7 @@ QString KisImage::nextLayerName(const QString &_baseName) const
     }
 
     if (baseName.isEmpty()) {
-        baseName = i18n("Layer");
+        baseName = i18n("Paint Layer");
     }
 
     return QString("%1 %2").arg(baseName).arg(m_d->nserver.number());

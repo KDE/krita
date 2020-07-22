@@ -260,7 +260,7 @@ void DefaultToolWidget::setUnit(const KoUnit &unit)
 
 void DefaultToolWidget::resourceChanged(int key, const QVariant &res)
 {
-    if (key == KoCanvasResourceProvider::Unit) {
+    if (key == KoCanvasResource::Unit) {
         setUnit(res.value<KoUnit>());
     } else if (key == DefaultTool::HotPosition) {
         if (res.toInt() != positionSelector->position()) {

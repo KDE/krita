@@ -63,7 +63,6 @@
 #include <QAction>
 #include <QWindow>
 #include <QScrollArea>
-
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kis_debug.h>
@@ -373,6 +372,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     }
 
     QMap<QString, QAction*> dockwidgetActions;
+
     dockwidgetActions[toolbox->toggleViewAction()->text()] = toolbox->toggleViewAction();
     Q_FOREACH (const QString & docker, KoDockRegistry::instance()->keys()) {
         KoDockFactoryBase *factory = KoDockRegistry::instance()->value(docker);
@@ -596,7 +596,6 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     this->winId(); // Ensures the native window has been created.
     QWindow *window = this->windowHandle();
     connect(window, SIGNAL(screenChanged(QScreen *)), this, SLOT(windowScreenChanged(QScreen *)));
-
 }
 
 KisMainWindow::~KisMainWindow()
@@ -1537,6 +1536,8 @@ void KisMainWindow::setActiveView(KisView* view)
     d->viewManager->setCurrentView(view);
 
     KisWindowLayoutManager::instance()->activeDocumentChanged(view->document());
+
+    emit activeViewChanged();
 }
 
 void KisMainWindow::dragMove(QDragMoveEvent * event)
@@ -2525,6 +2526,12 @@ void KisMainWindow::checkSanity()
         QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
         return;
     }
+
+
+    // window is created signal (used in Python)
+    // there must be some asynchronous things happening in the constructor, because the window cannot
+    // be referenced until after this timeout is done
+    emit KisPart::instance()->sigMainWindowCreated();
 }
 
 void KisMainWindow::showErrorAndDie()

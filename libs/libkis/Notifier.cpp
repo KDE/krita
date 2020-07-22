@@ -43,8 +43,9 @@ Notifier::Notifier(QObject *parent)
 
     connect(KisPart::instance(), SIGNAL(sigMainWindowIsBeingCreated(KisMainWindow*)), SLOT(windowIsBeingCreated(KisMainWindow*)));
 
-    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SIGNAL(configurationChanged()));
+    connect(KisPart::instance(), SIGNAL(sigMainWindowCreated()), SIGNAL(windowCreated()));
 
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SIGNAL(configurationChanged()));
 }
 
 

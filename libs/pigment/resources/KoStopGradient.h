@@ -126,10 +126,10 @@ public:
     void setStops(QList<KoGradientStop> stops);
     QList<KoGradientStop> stops() const;    
 
-    /// reimplemented
-    bool hasVariableColors() const override;
-    /// reimplemented
-    void setVariableColors(const KoColor& foreground, const KoColor& background) override;
+    QList<int> requiredCanvasResources() const override;
+    void bakeVariableColors(KoCanvasResourcesInterfaceSP canvasResourcesInterface) override;
+    void updateVariableColors(KoCanvasResourcesInterfaceSP canvasResourcesInterface) override;
+
 
     /// reimplemented
     QString defaultFileExtension() const override;

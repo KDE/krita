@@ -220,6 +220,12 @@ class SelectednessPolicyOptimized
 
 public:
 
+    SelectednessPolicyOptimized()
+        : m_colorSpace(0)
+        , m_threshold(0)
+    {
+    }
+
     ALWAYS_INLINE void initSelectedness(KisPaintDeviceSP device, int threshold) {
         m_colorSpace = device->colorSpace();
         m_threshold = threshold;

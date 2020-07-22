@@ -43,14 +43,9 @@ public:
     virtual QSize sizeHint() const {return QSize(32,32);}
 
 protected:
-    QLabel *title;
-    QHBoxLayout *widgetArea;
+    QHBoxLayout *widgetAreaLayout;
 
     const int SPACING_UNIT = 16;
-
-private:
-    QPushButton *floatButton;
-    QPushButton *closeButton;
 };
 
 #endif // KISUTILITYTITLEBAR_H

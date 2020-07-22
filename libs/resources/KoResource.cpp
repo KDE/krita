@@ -230,6 +230,11 @@ QList<KoResourceSP> KoResource::embeddedResources(KisResourcesInterfaceSP global
     return {};
 }
 
+QList<int> KoResource::requiredCanvasResources() const
+{
+    return {};
+}
+
 QString KoResource::storageLocation() const
 {
     return d->storageLocation;

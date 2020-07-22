@@ -29,6 +29,8 @@
 #include <KoGradientBackground.h>
 #include <KisGlobalResourcesInterface.h>
 
+#include "KisViewManager.h"
+#include "kis_canvas_resource_provider.h"
 
 K_PLUGIN_FACTORY_WITH_JSON(KritaGradientMapFactory, "kritagradientmap.json", registerPlugin<KritaGradientMap>();)
 
@@ -44,7 +46,7 @@ KritaGradientMapConfigWidget::KritaGradientMapConfigWidget(QWidget *parent, KisP
 
     m_gradientChangedCompressor = new KisSignalCompressor(100, KisSignalCompressor::FIRST_ACTIVE);
 
-    m_gradientPopUp = new KoResourcePopupAction(ResourceType::Gradients, m_page->btnGradientChooser);
+    m_gradientPopUp = new KoResourcePopupAction(ResourceType::Gradients, 0, m_page->btnGradientChooser);
 
     m_activeGradient = KoStopGradient::fromQGradient(m_gradientPopUp->currentResource().dynamicCast<KoAbstractGradient>()->toQGradient());
     m_page->gradientEditor->setGradient(m_activeGradient);
@@ -104,6 +106,7 @@ void KritaGradientMapConfigWidget::setConfiguration(const KisPropertiesConfigura
         KoStopGradient gradient = KoStopGradient::fromXML(doc.firstChildElement());
         if (gradient.stops().size() > 0) {
             m_activeGradient->setStops(gradient.stops());
+            m_activeGradient->updateVariableColors(m_page->gradientEditor->canvasResourcesInterface());
         }
         m_page->gradientEditor->setGradient(m_activeGradient);
     }
@@ -117,7 +120,9 @@ void KritaGradientMapConfigWidget::setConfiguration(const KisPropertiesConfigura
 
 void KritaGradientMapConfigWidget::setView(KisViewManager *view)
 {
-    Q_UNUSED(view)
+    m_page->gradientEditor->setCanvasResourcesInterface(view->canvasResourceProvider()->resourceManager()->canvasResourcesInterface());
+    m_gradientPopUp->setCanvasResourcesInterface(view->canvasResourceProvider()->resourceManager()->canvasResourcesInterface());
+    m_activeGradient->updateVariableColors(m_page->gradientEditor->canvasResourcesInterface());
 }
 //------------------------------
 KritaGradientMap::KritaGradientMap(QObject *parent, const QVariantList &)

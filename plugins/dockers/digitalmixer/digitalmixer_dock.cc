@@ -161,7 +161,7 @@ void DigitalMixerDock::setCurrentColor(const KoColor& color)
 void DigitalMixerDock::canvasResourceChanged(int key, const QVariant& v)
 {
     m_tellCanvas = false;
-    if (key == KoCanvasResourceProvider::ForegroundColor)
+    if (key == KoCanvasResource::ForegroundColor)
         setCurrentColor(v.value<KoColor>());
     m_tellCanvas = true;
 }

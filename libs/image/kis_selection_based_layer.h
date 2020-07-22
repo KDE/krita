@@ -189,6 +189,8 @@ protected:
     void setUseSelectionInProjection(bool value) const;
 
     KisKeyframeChannel *requestKeyframeChannel(const QString &id) override;
+    bool supportsKeyframeChannel(const QString &id) override;
+
 
 public Q_SLOTS:
     void slotImageSizeChanged();

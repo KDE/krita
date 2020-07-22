@@ -1360,10 +1360,10 @@ void DefaultTool::selectionAlign(int _align)
 
     // single selected shape is automatically aligned to document rect
     if (editableShapes.count() == 1) {
-        if (!canvas()->resourceManager()->hasResource(KoCanvasResourceProvider::PageSize)) {
+        if (!canvas()->resourceManager()->hasResource(KoCanvasResource::PageSize)) {
             return;
         }
-        bb = QRectF(QPointF(0, 0), canvas()->resourceManager()->sizeResource(KoCanvasResourceProvider::PageSize));
+        bb = QRectF(QPointF(0, 0), canvas()->resourceManager()->sizeResource(KoCanvasResource::PageSize));
     } else {
         bb = KoShape::absoluteOutlineRect(editableShapes);
     }
@@ -1611,7 +1611,7 @@ void DefaultTool::updateActions()
     const bool alignmentEnabled =
        multipleSelected ||
        (!editableShapes.isEmpty() &&
-        canvas()->resourceManager()->hasResource(KoCanvasResourceProvider::PageSize));
+        canvas()->resourceManager()->hasResource(KoCanvasResource::PageSize));
 
     action("object_align_horizontal_left")->setEnabled(alignmentEnabled);
     action("object_align_horizontal_center")->setEnabled(alignmentEnabled);

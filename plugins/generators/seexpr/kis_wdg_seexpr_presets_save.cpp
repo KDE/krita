@@ -18,19 +18,19 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <kis_fill_painter.h>
+#include "kis_wdg_seexpr_presets_save.h"
 #include <KisImportExportManager.h>
-#include <kis_paint_device.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoFileDialog.h>
 #include <KoResourceServerProvider.h>
 #include <QDate>
 #include <QTime>
-#include "kis_wdg_seexpr_presets_save.h"
+#include <kis_fill_painter.h>
+#include <kis_paint_device.h>
 
 KisWdgSeExprPresetsSave::KisWdgSeExprPresetsSave(QWidget *parent)
-    : KisWdgSeExprSavePreset(parent),
-    m_currentPreset(nullptr)
+    : KisWdgSeExprSavePreset(parent)
+    , m_currentPreset(nullptr)
 {
     // we will default to reusing the previous preset thumbnail
     // have that checked by default, hide the other elements, and load the last preset image
@@ -74,8 +74,7 @@ void KisWdgSeExprPresetsSave::showDialog()
         if (preset) {
             if (!preset->name().isEmpty()) {
                 newPresetNameTextField->setText(preset->name().append(" ").append(i18n("Copy")));
-            }
-            else {
+            } else {
                 newPresetNameTextField->clear();
             }
         }
@@ -84,7 +83,7 @@ void KisWdgSeExprPresetsSave::showDialog()
         setWindowTitle(i18n("Save SeExpr Preset"));
         newPresetNameTextField->setVisible(false);
 
-        if(preset) {
+        if (preset) {
             newPresetNameTextField->setText(preset->name());
         }
     }
@@ -120,8 +119,7 @@ void KisWdgSeExprPresetsSave::loadExistingThumbnail()
 
 void KisWdgSeExprPresetsSave::renderScriptToThumbnail()
 {
-    if (m_currentConfiguration)
-    {
+    if (m_currentConfiguration) {
         // TODO add some sort of progress marker?
         KisDefaultBoundsBaseSP bounds(new KisWrapAroundBoundsWrapper(new KisDefaultBounds(), QRect(0, 0, 256, 256)));
         KisPaintDeviceSP src = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());

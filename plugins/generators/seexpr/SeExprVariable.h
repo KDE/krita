@@ -22,7 +22,7 @@
 #include <QString>
 #include <SeExpr2/Expression.h>
 
-struct SeExprVariable : public SeExpr2::ExprVarRef
+class SeExprVariable : public SeExpr2::ExprVarRef
 {
 public:
     double m_value;

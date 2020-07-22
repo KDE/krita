@@ -21,9 +21,9 @@
 #ifndef KIS_SEEXPR_SCRIPT_H
 #define KIS_SEEXPR_SCRIPT_H
 
-#include <kritaflake_export.h>
-#include <QMetaType>
 #include <KoResource.h>
+#include <QMetaType>
+#include <kritaflake_export.h>
 
 class KisSeExprScript;
 typedef QSharedPointer<KisSeExprScript> KisSeExprScriptSP;
@@ -33,9 +33,7 @@ typedef QSharedPointer<KisSeExprScript> KisSeExprScriptSP;
  */
 class KRITAFLAKE_EXPORT KisSeExprScript : public KoResource
 {
-
 public:
-
     /**
      * Creates a new KisSeExprScript object using @p filename.  No file is opened
      * in the constructor, you have to call load.
@@ -45,9 +43,9 @@ public:
     KisSeExprScript(const QString &filename);
 
     /**
-     * Creates a new SeExpr script resource with the given @p image thumbnail, 
+     * Creates a new SeExpr script resource with the given @p image thumbnail,
      * @p script, @p name, @p and folder name.
-     * 
+     *
      * @param image the thumbnail of the texture this script will render
      * @param script the actual script's contents
      * @param name the name of the script
@@ -57,7 +55,7 @@ public:
 
     /**
      * Clones the given SeExpr script into a new instance.
-     * 
+     *
      * @param rhs the original SeExpr script to be copied onto this object
      */
     KisSeExprScript(KisSeExprScript *rhs);
@@ -76,7 +74,7 @@ public:
      * Save this resource.
      * @return true if saving the resource succeeded.
      */
-    bool saveToDevice(QIODevice* dev) const override;
+    bool saveToDevice(QIODevice *dev) const override;
 
     QPair<QString, QString> resourceType() const override;
 
@@ -103,6 +101,6 @@ private:
     Private *const d;
 };
 
-Q_DECLARE_METATYPE(KisSeExprScript*)
+Q_DECLARE_METATYPE(KisSeExprScript *)
 
 #endif // KIS_SEEXPR_SCRIPT_H

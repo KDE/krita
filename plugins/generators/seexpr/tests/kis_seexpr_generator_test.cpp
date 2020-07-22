@@ -18,24 +18,25 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <generator/kis_generator_registry.h>
-#include <kis_fill_painter.h>
-#include <kis_filter_configuration.h>
 #include <KisGlobalResourcesInterface.h>
-#include <kis_processing_information.h>
-#include <kis_selection.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 #include <QTest>
+#include <generator/kis_generator_registry.h>
+#include <kis_fill_painter.h>
+#include <kis_filter_configuration.h>
+#include <kis_processing_information.h>
+#include <kis_selection.h>
 #include <resources/KisSeExprScript.h>
 #include <sdk/tests/kistest.h>
 #include <testutil.h>
 
 #include "kis_seexpr_generator_test.h"
 
-#define BASE_SCRIPT "$val=voronoi(5*[$u,$v,.5],4,.6,.2); \n \
+#define BASE_SCRIPT                                                                                                                                                                                                                            \
+    "$val=voronoi(5*[$u,$v,.5],4,.6,.2); \n \
 $color=ccurve($val,\n\
     0.000, [0.141, 0.059, 0.051], 4,\n\
     0.185, [0.302, 0.176, 0.122], 4,\n\

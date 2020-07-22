@@ -33,11 +33,11 @@ class KisWdgSeExpr : public KisConfigWidget
 {
     Q_OBJECT
 public:
-    KisWdgSeExpr(QWidget* parent = 0);
+    KisWdgSeExpr(QWidget *parent = 0);
     ~KisWdgSeExpr() override;
 
 public:
-    inline const Ui_WdgSeExpr* widget() const;
+    inline const Ui_WdgSeExpr *widget() const;
     void setConfiguration(const KisPropertiesConfigurationSP) override;
     KisPropertiesConfigurationSP configuration() const override;
 
@@ -64,4 +64,3 @@ private:
 };
 
 #endif
-

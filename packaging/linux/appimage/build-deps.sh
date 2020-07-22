@@ -59,9 +59,9 @@ cd $BUILD_PREFIX/deps-build/
 cmake $KRITA_SOURCES/3rdparty -DCMAKE_INSTALL_PREFIX=$DEPS_INSTALL_PREFIX -DINSTALL_ROOT=$DEPS_INSTALL_PREFIX -DEXTERNALS_DOWNLOAD_DIR=$DOWNLOADS_DIR
 
 # Now start building everything we need, in the appropriate order
-cmake --build . --config RelWithDebInfo --target ext_png
-cmake --build . --config RelWithDebInfo --target ext_tiff
-cmake --build . --config RelWithDebInfo --target ext_jpeg
+#cmake --build . --config RelWithDebInfo --target ext_png
+#cmake --build . --config RelWithDebInfo --target ext_tiff
+#cmake --build . --config RelWithDebInfo --target ext_jpeg
 cmake --build . --config RelWithDebInfo --target ext_boost
 cmake --build . --config RelWithDebInfo --target ext_fftw3
 cmake --build . --config RelWithDebInfo --target ext_eigen3
@@ -75,7 +75,7 @@ cmake --build . --config RelWithDebInfo --target ext_vc
 fi
 cmake --build . --config RelWithDebInfo --target ext_libraw
 cmake --build . --config RelWithDebInfo --target ext_giflib
-cmake --build . --config RelWithDebInfo --target ext_gsl
+#cmake --build . --config RelWithDebInfo --target ext_gsl
 cmake --build . --config RelWithDebInfo --target ext_python
 #cmake --build . --config RelWithDebInfo --target ext_freetype
 #cmake --build . --config RelWithDebInfo --target ext_fontconfig
@@ -86,6 +86,4 @@ cmake --build . --config RelWithDebInfo --target ext_gmic
 cmake --build . --config RelWithDebInfo --target ext_sip
 cmake --build . --config RelWithDebInfo --target ext_pyqt
 cmake --build . --config RelWithDebInfo --target ext_quazip
-cmake --build . --config RelWithDebInfo --target ext_openjpeg
-cmake --build . --config RelWithDebInfo --target ext_libheif
 cmake --build . --config RelWithDebInfo --target ext_seexpr

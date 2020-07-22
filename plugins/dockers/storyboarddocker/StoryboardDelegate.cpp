@@ -327,11 +327,11 @@ bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
 
             StoryboardModel* sbModel = dynamic_cast<StoryboardModel*>(model);
             if (leftButton && upButtonClicked) {
-                sbModel->insertHoldFrames(index.data().toInt() + 1, index.data().toInt(), index);
+                sbModel->insertHoldFramesAfter(index.data().toInt() + 1, index.data().toInt(), index);
                 return true;
             }
             else if (leftButton && downButtonClicked) {
-                sbModel->insertHoldFrames(std::max(0, index.data().toInt() - 1), index.data().toInt(), index);
+                sbModel->insertHoldFramesAfter(std::max(0, index.data().toInt() - 1), index.data().toInt(), index);
                 return true;
             }
         }
@@ -369,8 +369,10 @@ bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
             bool addItemButtonClicked = addItemButton.isValid() && addItemButton.contains(mouseEvent->pos());
             bool deleteItemButtonClicked = deleteItemButton.isValid() && deleteItemButton.contains(mouseEvent->pos());
 
+
+            StoryboardModel* sbModel = dynamic_cast<StoryboardModel*>(model);
             if (leftButton && addItemButtonClicked) {
-                model->insertRows(index.parent().row() + 1, 1);
+                sbModel->insertItem(index.parent(), true);
                 return true;
             }
             else if (leftButton && deleteItemButtonClicked) {
@@ -469,7 +471,7 @@ void StoryboardDelegate::setModelData(QWidget *editor, QAbstractItemModel *model
                 int value = spinbox->value();
 
                 StoryboardModel* sbModel = dynamic_cast<StoryboardModel*>(model);
-                sbModel->insertHoldFrames(value, index.data().toInt(), index);
+                sbModel->insertHoldFramesAfter(value, index.data().toInt(), index);
                 return;
             }
             default:             // for comments

@@ -220,18 +220,21 @@ void StoryboardView::setThumbnailVisibility(bool value)
 
 void StoryboardView::slotContextMenuRequested(const QPoint &point)
 {
+    StoryboardModel* Model = dynamic_cast<StoryboardModel*>(model());
     QMenu contextMenu;
     QModelIndex index = indexAt(point);
     if (!index.isValid()) {
-        contextMenu.addAction(i18nc("Add Storyboard Item at the end", "Add Storyboard Item"), [this, index] {model()->insertRows(model()->rowCount(), 1); });
+        contextMenu.addAction(i18nc("Add Storyboard Item at the end", "Add Storyboard Item"), [this, index, Model] {Model->insertItem(index, false); });
     }
     else if (index.parent().isValid()) {
         index = index.parent();
-        contextMenu.addAction(i18nc("Add Storyboard Item after the current item", "Add Storyboard Item After"), [this, index] {model()->insertRows(index.row() + 1, 1); });
     }
 
     if (index.isValid()) {
-        contextMenu.addAction(i18nc("Add Storyboard Item before the current item", "Add Storyboard Item Before"), [this, index] {model()->insertRows(index.row(), 1); });
+        contextMenu.addAction(i18nc("Add Storyboard Item after the current item", "Add Storyboard Item After"), [this, index, Model] {Model->insertItem(index, true); });
+        if (index.row() > 0) {
+            contextMenu.addAction(i18nc("Add Storyboard Item before the current item", "Add Storyboard Item Before"), [this, index, Model] {Model->insertItem(index, false); });
+        }
         contextMenu.addAction(i18nc("Remove current storyboard item", "Remove Storyboard Item"), [this, index] {model()->removeRows(index.row(), 1); });
     }
     contextMenu.exec(viewport()->mapToGlobal(point));

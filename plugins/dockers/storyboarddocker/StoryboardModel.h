@@ -117,7 +117,8 @@ public:
     QModelIndexList affectedIndexes(KisTimeRange range) const;
     bool isOnlyKeyframe(KisKeyframeSP keyframe, int time) const;
     int nextKeyframeGlobal(int keyframeTime) const;
-    bool insertHoldFrames(int newDuration, int oldDuration, QModelIndex index);
+    bool insertHoldFramesAfter(int newDuration, int oldDuration, QModelIndex durationIndex);
+    bool insertItem(QModelIndex index, bool after);
 
     enum childIndexType{
         FrameNumber,

@@ -96,8 +96,7 @@ class KActionCollection;
  */
 class KRITACOMMAND_EXPORT KUndo2Command
 {
-    KUndo2CommandPrivate *d;
-    int timedID;
+    KUndo2CommandPrivate *d {0};
 
 public:
     explicit KUndo2Command(KUndo2Command *parent = 0);
@@ -150,8 +149,8 @@ private:
     friend class KUndo2QStack;
 
 
-    bool m_hasParent;
-    int m_timedID;
+    bool m_hasParent {false};
+    int m_timedID {-1};
 
     QTime m_timeOfCreation;
     QTime m_endOfCommand;

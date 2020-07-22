@@ -66,8 +66,8 @@ private:
         QPointF m_oldControlPoint1;
         QPointF m_oldControlPoint2;
         KoPathPoint::PointProperties m_oldProperties;
-        bool m_hadControlPoint1;
-        bool m_hadControlPoint2;
+        bool m_hadControlPoint1 {false};
+        bool m_hadControlPoint2 {false};
     };
 
     bool appendPointData(KoPathPointData data);

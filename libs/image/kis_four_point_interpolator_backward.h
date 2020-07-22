@@ -126,20 +126,20 @@ private:
     QPointF m_c; // AC
     QPointF m_d; // m_b - m_c
 
-    qreal m_qA; // quadratic equation A coeff
-    qreal m_qB_const; // quadratic equation B coeff, const part
-    qreal m_qB_varX; // quadratic equation B coeff, X-dep part
-    qreal m_qB_varY; // quadratic equation B coeff, Y-dep part
-    qreal m_qC_varX; // quadratic equation C coeff, X-dep part
-    qreal m_qC_varY; // quadratic equation C coeff, Y-dep part
-    qreal m_qD_div; // inverted divisor of the quadratic equation solution
-    qreal m_px; // saved relative X coordinate
-    qreal m_py; // saved relative Y coordinate
+    qreal m_qA {0.0}; // quadratic equation A coeff
+    qreal m_qB_const {0.0}; // quadratic equation B coeff, const part
+    qreal m_qB_varX {0.0}; // quadratic equation B coeff, X-dep part
+    qreal m_qB_varY {0.0}; // quadratic equation B coeff, Y-dep part
+    qreal m_qC_varX {0.0}; // quadratic equation C coeff, X-dep part
+    qreal m_qC_varY {0.0}; // quadratic equation C coeff, Y-dep part
+    qreal m_qD_div {0.0}; // inverted divisor of the quadratic equation solution
+    qreal m_px {0.0}; // saved relative X coordinate
+    qreal m_py {0.0}; // saved relative Y coordinate
 
     QPointF m_srcBase;
     QPointF m_dstBase;
-    qreal m_xCoeff;
-    qreal m_yCoeff;
+    qreal m_xCoeff {0.0};
+    qreal m_yCoeff {0.0};
 };
 
 #endif /* __KIS_FOUR_POINT_INTERPOLATOR_BACKWARD_H */

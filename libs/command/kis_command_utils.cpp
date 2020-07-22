@@ -143,8 +143,7 @@ namespace KisCommandUtils
     }
 
     FlipFlopCommand::FlipFlopCommand(bool finalizing, KUndo2Command *parent)
-        : KUndo2Command(parent),
-          m_firstRedo(true)
+        : KUndo2Command(parent)
     {
         m_currentState = finalizing ? State::FINALIZING : State::INITIALIZING;
     }

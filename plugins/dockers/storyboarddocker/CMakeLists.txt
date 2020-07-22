@@ -30,5 +30,7 @@ add_library(kritastoryboarddocker MODULE ${KRITA_STORYBOARDDOCKER_SOURCES}
                                          ${KRITA_STORYBOARDDOCKER_PART_HEADERS}
 )
 
+generate_export_header(kritastoryboarddocker BASE_NAME kritastoryboarddocker)
+
 target_link_libraries(kritastoryboarddocker kritaui)
 install(TARGETS kritastoryboarddocker  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

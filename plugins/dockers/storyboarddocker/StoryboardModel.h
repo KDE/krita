@@ -24,9 +24,9 @@
 #include <QAbstractListModel>
 #include <QItemSelection>
 
-#include <kritaui_export.h>
 #include <kis_keyframe_channel.h>
 #include "kis_idle_watcher.h"
+#include <kritastoryboarddocker_export.h>
 
 /*
     The main storyboard model. 
@@ -70,7 +70,7 @@ public:
 Q_DECLARE_METATYPE(CommentBox)
 Q_DECLARE_METATYPE(ThumbnailData)
 
-class KRITAUI_EXPORT StoryboardModel : public QAbstractItemModel
+class KRITASTORYBOARDDOCKER_EXPORT StoryboardModel : public QAbstractItemModel
 {
     Q_OBJECT
 

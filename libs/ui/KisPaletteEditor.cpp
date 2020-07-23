@@ -378,7 +378,7 @@ void KisPaletteEditor::modifyEntry(const QModelIndex &index)
         KisSwatch entry = m_d->model->getEntry(index);
 
         editableItems->addRow(i18n("ID"), lnIDName);
-        editableItems->addRow(i18nc("Name for a swatch group", "Swatch group name"), lnGroupName);
+        editableItems->addRow(i18nc("Name of the color swatch", "Color swatch name"), lnGroupName);
         editableItems->addRow(i18n("Color"), bnColor);
         editableItems->addRow(i18n("Spot color"), chkSpot);
 

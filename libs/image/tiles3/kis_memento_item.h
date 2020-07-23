@@ -219,12 +219,12 @@ protected:
     }
 
 protected:
-    KisTileData *m_tileData;
-    bool m_committedFlag;
-    enumType m_type;
+    KisTileData *m_tileData {0};
+    bool m_committedFlag {false};
+    enumType m_type {CHANGED};
 
-    qint32 m_col;
-    qint32 m_row;
+    qint32 m_col {0};
+    qint32 m_row {0};
 
     KisMementoItemSP m_next;
     KisMementoItemSP m_parent;

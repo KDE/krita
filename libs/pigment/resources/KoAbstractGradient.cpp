@@ -59,11 +59,27 @@ KoAbstractGradient::KoAbstractGradient(const KoAbstractGradient &rhs)
 KoAbstractGradientSP KoAbstractGradient::cloneAndBakeVariableColors(KoCanvasResourcesInterfaceSP canvasResourcesInterface) const
 {
     KoAbstractGradientSP result = this->clone().dynamicCast<KoAbstractGradient>();
-    result->bakeVariableColors(canvasResourcesInterface);
+    if (canvasResourcesInterface) {
+        result->bakeVariableColors(canvasResourcesInterface);
+    }
     return result;
 }
 
 void KoAbstractGradient::bakeVariableColors(KoCanvasResourcesInterfaceSP canvasResourcesInterface)
+{
+    Q_UNUSED(canvasResourcesInterface);
+}
+
+KoAbstractGradientSP KoAbstractGradient::cloneAndUpdateVariableColors(KoCanvasResourcesInterfaceSP canvasResourcesInterface) const
+{
+    KoAbstractGradientSP result = this->clone().dynamicCast<KoAbstractGradient>();
+    if (canvasResourcesInterface) {
+        result->updateVariableColors(canvasResourcesInterface);
+    }
+    return result;
+}
+
+void KoAbstractGradient::updateVariableColors(KoCanvasResourcesInterfaceSP canvasResourcesInterface)
 {
     Q_UNUSED(canvasResourcesInterface);
 }

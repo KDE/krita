@@ -101,6 +101,12 @@ Q_SIGNALS:
     /// Emitted when the window is closed.
     void windowClosed();
 
+    ///  Emitted when we change the color theme
+    void themeChanged();
+
+    /// Emitted when the active view changes
+    void activeViewChanged();
+
 private:
     struct Private;
     Private *const d;

@@ -354,7 +354,7 @@
            </property>
            <item>
             <property name="text">
-             <string>Lines</string>
+             <string comment="Grid line style - Solid Lines">Lines</string>
             </property>
            </item>
            <item>
@@ -395,7 +395,7 @@
            </property>
            <item>
             <property name="text">
-             <string>Lines</string>
+             <string comment="Grid line style - Solid Lines">Lines</string>
             </property>
            </item>
            <item>
@@ -623,7 +623,7 @@
              </property>
              <item>
               <property name="text">
-               <string>Lines</string>
+               <string comment="Grid line style - Solid Lines">Lines</string>
               </property>
              </item>
              <item>

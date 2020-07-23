@@ -279,6 +279,7 @@ void KisPart::notifyMainWindowIsBeingCreated(KisMainWindow *mainWindow)
     emit sigMainWindowIsBeingCreated(mainWindow);
 }
 
+
 KisView *KisPart::createView(KisDocument *document,
                              KisViewManager *viewManager,
                              QWidget *parent)

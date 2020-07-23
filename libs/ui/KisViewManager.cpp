@@ -355,6 +355,16 @@ void KisViewManager::initializeResourceManager(KoCanvasResourceProvider *resourc
         toQShared(new KoActiveCanvasResourceDependencyKoResource<KisPaintOpPreset>(
                       KoCanvasResource::CurrentPaintOpPreset,
                       KoCanvasResource::CurrentGradient)));
+
+    resourceManager->addActiveCanvasResourceDependency(
+        toQShared(new KoActiveCanvasResourceDependencyKoResource<KoAbstractGradient>(
+                      KoCanvasResource::CurrentGradient,
+                      KoCanvasResource::ForegroundColor)));
+
+    resourceManager->addActiveCanvasResourceDependency(
+        toQShared(new KoActiveCanvasResourceDependencyKoResource<KoAbstractGradient>(
+                      KoCanvasResource::CurrentGradient,
+                      KoCanvasResource::BackgroundColor)));
 }
 
 KActionCollection *KisViewManager::actionCollection() const

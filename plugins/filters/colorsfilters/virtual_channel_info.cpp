@@ -46,7 +46,7 @@ VirtualChannelInfo::VirtualChannelInfo(Type type,
         m_valueTypeOverride = KoChannelInfo::FLOAT32;
         m_channelSizeOverride = 4;
     } else if (m_type == LIGHTNESS) {
-        m_nameOverride = i18n("Lightness");
+        m_nameOverride = i18nc("Lightness HSI", "Lightness");
         m_valueTypeOverride = KoChannelInfo::FLOAT32;
         m_channelSizeOverride = 4;
     } else if (m_type == ALL_COLORS) {

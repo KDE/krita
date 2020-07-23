@@ -428,7 +428,7 @@ QWidget* KisToolMultihand::createOptionWidget()
     connect(customUI->resetOriginButton, SIGNAL(released()), this, SLOT(resetAxes()));
 
     customUI->multihandTypeCombobox->addItem(i18n("Symmetry"),int(SYMMETRY));  // axis mode
-    customUI->multihandTypeCombobox->addItem(i18n("Mirror"),int(MIRROR));
+    customUI->multihandTypeCombobox->addItem(i18nc("Label of Mirror in Multihand brush tool options", "Mirror"),int(MIRROR));
     customUI->multihandTypeCombobox->addItem(i18n("Translate"),int(TRANSLATE));
     customUI->multihandTypeCombobox->addItem(i18n("Snowflake"),int(SNOWFLAKE));
     customUI->multihandTypeCombobox->addItem(i18n("Copy Translate"),int(COPYTRANSLATE));

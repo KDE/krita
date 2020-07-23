@@ -1096,3 +1096,15 @@ void KoSegmentGradient::bakeVariableColors(KoCanvasResourcesInterfaceSP canvasRe
         }
     }
 }
+
+void KoSegmentGradient::updateVariableColors(KoCanvasResourcesInterfaceSP canvasResourcesInterface)
+{
+    const KoColor fgColor = canvasResourcesInterface->resource(KoCanvasResource::ForegroundColor).value<KoColor>().convertedTo(colorSpace());
+    const KoColor bgColor = canvasResourcesInterface->resource(KoCanvasResource::BackgroundColor).value<KoColor>().convertedTo(colorSpace());
+
+    for (auto it = m_segments.begin(); it != m_segments.end(); ++it) {
+        if ((*it)->hasVariableColors()) {
+            (*it)->setVariableColors(fgColor, bgColor);
+        }
+    }
+}

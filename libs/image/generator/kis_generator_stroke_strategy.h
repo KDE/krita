@@ -1,5 +1,7 @@
 /*
- *  Copyright (c) 2020 Dmitry Kazakov <dimula73@gmail.com>
+ * This file is part of Krita
+ *
+ * Copyright (c) 2020 L. E. Segovia <amy@amyspark.me>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,31 +17,27 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KOCANVASRESOURCESINTERFACE_H
-#define KOCANVASRESOURCESINTERFACE_H
 
-#include "kritaresources_export.h"
+#include <QObject>
 #include <QSharedPointer>
+#include <kis_generator.h>
+#include <kis_generator_layer.h>
+#include "kis_simple_stroke_strategy.h"
 
-class QVariant;
-
-#include <kritaresources_export.h>
-
-/**
- * @brief An abstract class for providing access to canvas resources
- * like current gradient and Fg/Bg colors.
- *
- * Specific implementations may forward the requests either to
- * KoCanvasResourceProvider or to a local storage.
- */
-class KRITARESOURCES_EXPORT KoCanvasResourcesInterface
+class KisGeneratorStrokeStrategy: public QObject, public KisSimpleStrokeStrategy
 {
+    Q_OBJECT
 public:
-    virtual ~KoCanvasResourcesInterface();
+    KisGeneratorStrokeStrategy(KisImageWSP image);
+    ~KisGeneratorStrokeStrategy() override;
 
-    virtual QVariant resource(int key) const = 0;
+    static QList<KisStrokeJobData *> createJobsData(KisGeneratorLayerSP layer, QSharedPointer<bool> cookie, KisGeneratorSP f, KisPaintDeviceSP dev, const QRect &rc, const KisFilterConfigurationSP filterConfig);
+
+private:
+    void initStrokeCallback() override;
+    void doStrokeCallback(KisStrokeJobData *data) override;
+
+private:
+    struct Private;
+    KisImageSP m_image;
 };
-
-using KoCanvasResourcesInterfaceSP = QSharedPointer<KoCanvasResourcesInterface>;
-
-#endif // KOCANVASRESOURCESINTERFACE_H

@@ -18,6 +18,9 @@
 
 #include "presethistory_dock.h"
 
+#include <QAction>
+#include <QActionGroup>
+#include <QMenu>
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QListWidget>
@@ -43,9 +46,6 @@
 
 PresetHistoryDock::PresetHistoryDock( )
     : QDockWidget(i18n("Brush Preset History"))
-    , m_canvas(0)
-    , m_block(false)
-    , m_initialized(false)
 {
     m_presetHistory = new QListWidget(this);
     m_presetHistory->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
@@ -53,7 +53,16 @@ PresetHistoryDock::PresetHistoryDock( )
     m_presetHistory->setSelectionBehavior(QAbstractItemView::SelectRows);
     m_presetHistory->setSelectionMode(QAbstractItemView::SingleSelection);
     m_presetHistory->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    m_presetHistory->setContextMenuPolicy(Qt::CustomContextMenu);
     setWidget(m_presetHistory);
+
+    m_sortingModes = new QActionGroup(this);
+    m_actionSortStatic = new QAction(i18n("Static Positions"), m_sortingModes);
+    m_actionSortStatic->setCheckable(true);
+    m_actionSortMostRecent = new QAction(i18n("Move to Top on Use"), m_sortingModes);
+    m_actionSortMostRecent->setCheckable(true);
+    m_actionSortBubble = new QAction(i18n("Bubble Up on Repeated Use"), m_sortingModes);
+    m_actionSortBubble->setCheckable(true);
 
     QScroller* scroller = KisKineticScroller::createPreconfiguredScroller(m_presetHistory);
     if( scroller ) {
@@ -61,6 +70,8 @@ PresetHistoryDock::PresetHistoryDock( )
     }
 
     connect(m_presetHistory, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(presetSelected(QListWidgetItem*)));
+    connect(m_sortingModes, SIGNAL(triggered(QAction*)), SLOT(slotSortingModeChanged(QAction*)));
+    connect(m_presetHistory, SIGNAL(customContextMenuRequested(QPoint)), SLOT(slotContextMenuRequest(QPoint)));
 }
 
 void PresetHistoryDock::setCanvas(KoCanvasBase * canvas)
@@ -86,6 +97,20 @@ void PresetHistoryDock::setCanvas(KoCanvasBase * canvas)
             KisPaintOpPresetSP preset = rserver->resourceByName(p);
             addPreset(preset);
         }
+        int ordering = cfg.readEntry("presethistorySorting", int(DisplayOrder::Static));
+        m_sorting = qBound(DisplayOrder::Static, static_cast<DisplayOrder>(ordering), DisplayOrder::Bubbling);
+
+        switch (m_sorting) {
+        case DisplayOrder::Static:
+            m_actionSortStatic->setChecked(true);
+            break;
+        case DisplayOrder::MostRecent:
+            m_actionSortMostRecent->setChecked(true);
+            break;
+        case DisplayOrder::Bubbling:
+            m_actionSortBubble->setChecked(true);
+        }
+
         m_initialized = true;
     }
 }
@@ -97,7 +122,7 @@ void PresetHistoryDock::unsetCanvas()
     QStringList presetHistory;
     for(int i = m_presetHistory->count() -1; i >=0; --i) {
         QListWidgetItem *item = m_presetHistory->item(i);
-        QVariant v = item->data(Qt::UserRole);
+        QVariant v = item->data(BrushPresetRole);
         KisPaintOpPresetSP preset = v.value<KisPaintOpPresetSP>();
         presetHistory << preset->name();
     }
@@ -108,7 +133,9 @@ void PresetHistoryDock::unsetCanvas()
 void PresetHistoryDock::presetSelected(QListWidgetItem *item)
 {
     if (item) {
-        QVariant v = item->data(Qt::UserRole);
+        int oldPosition = m_presetHistory->currentRow();
+        sortPresets(oldPosition);
+        QVariant v = item->data(BrushPresetRole);
         KisPaintOpPresetSP preset = v.value<KisPaintOpPresetSP>();
         m_block = true;
         m_canvas->viewManager()->paintOpBox()->resourceSelected(preset);
@@ -116,16 +143,16 @@ void PresetHistoryDock::presetSelected(QListWidgetItem *item)
     }
 }
 
-void PresetHistoryDock::canvasResourceChanged(int key, const QVariant& /*v*/)
+void PresetHistoryDock::canvasResourceChanged(int key, const QVariant& v)
 {
     if (m_block) return;
 
     if (m_canvas && key == KoCanvasResource::CurrentPaintOpPreset) {
-        KisPaintOpPresetSP preset = m_canvas->resourceManager()->resource(KoCanvasResource::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+        KisPaintOpPresetSP preset = v.value<KisPaintOpPresetSP>();
         if (preset) {
             for (int i = 0; i < m_presetHistory->count(); ++i) {
                 if (preset->name() == m_presetHistory->item(i)->text()) {
-                    m_presetHistory->setCurrentRow(i);
+                    sortPresets(i);
                     return;
                 }
             }
@@ -134,12 +161,82 @@ void PresetHistoryDock::canvasResourceChanged(int key, const QVariant& /*v*/)
     }
 }
 
+void PresetHistoryDock::slotSortingModeChanged(QAction *action)
+{
+    if (action == m_actionSortStatic) {
+        m_sorting = DisplayOrder::Static;
+    } else if (action == m_actionSortMostRecent) {
+        m_sorting = DisplayOrder::MostRecent;
+    } else if (action == m_actionSortBubble) {
+        m_sorting = DisplayOrder::Bubbling;
+    }
+    KisConfig cfg(false);
+    cfg.writeEntry("presethistorySorting", int(m_sorting));
+}
+
+void PresetHistoryDock::sortPresets(int position)
+{
+    switch (m_sorting) {
+    case Static:
+        break;
+    case MostRecent:
+        m_presetHistory->insertItem(0, m_presetHistory->takeItem(position));
+        m_presetHistory->setCurrentRow(0);
+        break;
+    case Bubbling:
+        position = bubblePreset(position);
+        m_presetHistory->setCurrentRow(position);
+    };
+}
+
+int PresetHistoryDock::bubblePreset(int position)
+{
+    QListWidgetItem *item = m_presetHistory->item(position);
+    if (position == 0) {
+        // topmost item cannot bubble, its bubble state stays until
+        // below item tries to bubble, so state can be set unconditionally
+        item->setData(BubbleMarkerRole, QVariant(true));
+        return position;
+    }
+
+    if (!item->data(BubbleMarkerRole).toBool()) {
+        // first activation effectively makes the entry rival the list position above
+        // (unless that one is already marked to bubble too) but it won't raise in position
+        // until it gets activated again so its position is clearly defined as above
+        item->setData(BubbleMarkerRole, QVariant(true));
+        return position;
+    }
+    else {
+        item->setData(BubbleMarkerRole, QVariant(false));
+        int topPosition = position - 1;
+        for (; topPosition >= 0; --topPosition) {
+            QListWidgetItem *topItem = m_presetHistory->item(topPosition);
+            if (topItem->data(BubbleMarkerRole).toBool()) {
+                topItem->setData(BubbleMarkerRole, QVariant(false));
+            }
+            else {
+                break;
+            }
+        }
+        // if all above items want to bubble too, nothing happens besides resetting bubble state
+        if (topPosition >= 0) {
+            // since a group of items may bubble together, the net effect is
+            // that the item above this range moves below that group
+            QListWidgetItem *topItem = m_presetHistory->takeItem(topPosition);
+            m_presetHistory->insertItem(position, topItem);
+            return position - 1;
+        }
+    }
+    return position;
+}
+
 void PresetHistoryDock::addPreset(KisPaintOpPresetSP preset)
 {
     if (preset) {
         QListWidgetItem *item = new QListWidgetItem(QPixmap::fromImage(preset->image()), preset->name());
         QVariant v = QVariant::fromValue<KisPaintOpPresetSP>(preset);
-        item->setData(Qt::UserRole, v);
+        item->setData(BrushPresetRole, v);
+        item->setData(BubbleMarkerRole, QVariant(false));
         m_presetHistory->insertItem(0, item);
         m_presetHistory->setCurrentRow(0);
         if (m_presetHistory->count() > 10) {
@@ -149,3 +246,25 @@ void PresetHistoryDock::addPreset(KisPaintOpPresetSP preset)
 
 }
 
+void PresetHistoryDock::slotContextMenuRequest(const QPoint &pos)
+{
+    QMenu contextMenu;
+    QListWidgetItem *presetItem = m_presetHistory->itemAt(pos);
+    QAction *actionForget = 0;
+    if (presetItem) {
+        actionForget = new QAction(i18n("Forget \"%1\"", presetItem->text()), &contextMenu);
+        contextMenu.addAction(actionForget);
+    }
+    contextMenu.addAction(i18n("Clear History"), m_presetHistory, SLOT(clear()));
+    contextMenu.addSeparator();
+    contextMenu.addSection(i18n("History Behavior:"));
+    contextMenu.addAction(m_actionSortStatic);
+    contextMenu.addAction(m_actionSortMostRecent);
+    contextMenu.addAction(m_actionSortBubble);
+    QAction *triggered = contextMenu.exec(m_presetHistory->mapToGlobal(pos));
+
+    if (presetItem && triggered == actionForget) {
+        // deleting a QListWidgetItem removes it from the QListWidget automatically
+        delete presetItem;
+    }
+}

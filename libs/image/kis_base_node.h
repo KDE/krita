@@ -70,7 +70,7 @@ public:
         QString name;
 
         /** Whether the property is a boolean (e.g. locked, visible) which can be toggled directly from the widget itself. */
-        bool isMutable;
+        bool isMutable {false};
 
         /** Provide these if the property isMutable. */
         QIcon onIcon;
@@ -82,14 +82,14 @@ public:
         /** If the property is mutable, specifies whether it can be put into stasis. When a property
         is in stasis, a new state is created, and the old one is stored in stateInStasis. When
         stasis ends, the old value is restored and the new one discarded */
-        bool canHaveStasis;
+        bool canHaveStasis {false};
 
         /** If the property isMutable and canHaveStasis, indicate whether it is in stasis or not */
-        bool isInStasis;
+        bool isInStasis {false};
 
         /** If the property isMutable and canHaveStasis, provide this value to store the property's
         state while in stasis */
-        bool stateInStasis;
+        bool stateInStasis {false};
 
         bool operator==(const Property &rhs) const {
             return rhs.name == name && rhs.state == state && isInStasis == rhs.isInStasis;

@@ -146,7 +146,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     m_cmbCursorShape->setCurrentIndex(cfg.newCursorStyle());
 
-    m_cmbOutlineShape->addItem(i18n("No Outline"));
+    m_cmbOutlineShape->addItem(i18nc("Display options label to not DISPLAY brush outline", "No Outline"));
     m_cmbOutlineShape->addItem(i18n("Circle Outline"));
     m_cmbOutlineShape->addItem(i18n("Preview Outline"));
     m_cmbOutlineShape->addItem(i18n("Tilt Outline"));
@@ -1510,7 +1510,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     vbox = new KoVBox();
     page = new KPageWidgetItem(vbox, i18n("Color Management"));
     page->setObjectName("colormanagement");
-    page->setHeader(i18n("Color"));
+    page->setHeader(i18nc("Label of color as in Color Management", "Color"));
     page->setIcon(KisIconUtils::loadIcon("preferences-desktop-color"));
     m_pages << page;
     addPage(page);

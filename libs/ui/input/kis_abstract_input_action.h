@@ -93,6 +93,7 @@ public:
     virtual void begin(int shortcut, QEvent *event);
     /**
      * End the action.
+     *
      * \param event The mouse event that has finished this action.
      *              Is null for keyboard-activated actions.
      */
@@ -168,7 +169,7 @@ public:
 
     /**
      * Some of the actions are available in particular situations
-     * only.  E.g. switch frame action is available iff a animated
+     * only.  E.g. switch frame action is available iff an animated
      * layer is selected. If isAvailable() returns true then the
      * action will *not* be triggered by the shortcut matcher.
      */

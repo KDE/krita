@@ -38,20 +38,14 @@ struct Q_DECL_HIDDEN KisBaseNode::Private
     QMap<QString, KisKeyframeChannel*> keyframeChannels;
     QScopedPointer<KisScalarKeyframeChannel> opacityChannel;
 
-    bool systemLocked;
-    bool collapsed;
-    bool supportsLodMoves;
-    bool animated;
-    bool pinnedToTimeline;
+    bool collapsed {false};
+    bool supportsLodMoves {false};
+    bool animated {false};
+    bool pinnedToTimeline {false};
     KisImageWSP image;
 
     Private(KisImageWSP image)
         : id(QUuid::createUuid())
-        , systemLocked(false)
-        , collapsed(false)
-        , supportsLodMoves(false)
-        , animated(false)
-        , pinnedToTimeline(false)
         , image(image)
     {
     }
@@ -59,7 +53,6 @@ struct Q_DECL_HIDDEN KisBaseNode::Private
     Private(const Private &rhs)
         : compositeOp(rhs.compositeOp),
           id(QUuid::createUuid()),
-          systemLocked(false),
           collapsed(rhs.collapsed),
           supportsLodMoves(rhs.supportsLodMoves),
           animated(rhs.animated),

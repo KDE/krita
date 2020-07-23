@@ -194,7 +194,7 @@ struct ProfileEntry {
 void KisInputProfileManager::loadProfiles()
 {
     //Remove any profiles that already exist
-    d->currentProfile = 0;
+    d->currentProfile = nullptr;
     qDeleteAll(d->profiles);
     d->profiles.clear();
 
@@ -229,7 +229,7 @@ void KisInputProfileManager::loadProfiles()
         }
 
         if (p.contains(".kde") || p.contains(".krita")) {
-            // It's the user define one, drop the others
+            // It's the user defined one, drop the others
             profileEntries[entry.name].clear();
             profileEntries[entry.name].append(entry);
             break;

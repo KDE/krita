@@ -42,11 +42,12 @@ struct Q_DECL_HIDDEN KisCurveRectangleMaskGenerator::Private
     {
     }
 
-    qreal xcoeff, ycoeff;
-    qreal curveResolution;
+    qreal xcoeff {0.0};
+    qreal ycoeff {0.0};
+    qreal curveResolution {0.0};
     QVector<qreal> curveData;
     QList<QPointF> curvePoints;
-    bool dirty;
+    bool dirty {false};
 
     KisAntialiasingFadeMaker2D<Private> fadeMaker;
     QScopedPointer<KisBrushMaskApplicatorBase> applicator;

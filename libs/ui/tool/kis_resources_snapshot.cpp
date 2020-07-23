@@ -38,10 +38,6 @@
 
 struct KisResourcesSnapshot::Private {
     Private()
-        : currentPattern(0)
-        , currentGradient(0)
-        , currentGenerator(0)
-        , compositeOp(0)
     {
     }
 
@@ -49,30 +45,30 @@ struct KisResourcesSnapshot::Private {
     KisDefaultBoundsBaseSP bounds;
     KoColor currentFgColor;
     KoColor currentBgColor;
-    KoPatternSP currentPattern;
+    KoPatternSP currentPattern {0};
     KoAbstractGradientSP currentGradient;
     KisPaintOpPresetSP currentPaintOpPreset;
-    KisNodeSP currentNode;
-    qreal currentExposure;
+    KisNodeSP currentNode {0};
+    qreal currentExposure {0.0};
     KisFilterConfigurationSP currentGenerator;
 
     QPointF axesCenter;
-    bool mirrorMaskHorizontal = false;
-    bool mirrorMaskVertical = false;
+    bool mirrorMaskHorizontal {false};
+    bool mirrorMaskVertical {false};
 
-    quint8 opacity = OPACITY_OPAQUE_U8;
-    QString compositeOpId = COMPOSITE_OVER;
-    const KoCompositeOp *compositeOp;
+    quint8 opacity {OPACITY_OPAQUE_U8};
+    QString compositeOpId {COMPOSITE_OVER};
+    const KoCompositeOp *compositeOp {0};
 
-    KisPainter::StrokeStyle strokeStyle = KisPainter::StrokeStyleBrush;
-    KisPainter::FillStyle fillStyle = KisPainter::FillStyleForegroundColor;
-    QTransform fillTransform = QTransform();
+    KisPainter::StrokeStyle strokeStyle {KisPainter::StrokeStyleBrush};
+    KisPainter::FillStyle fillStyle {KisPainter::FillStyleForegroundColor};
+    QTransform fillTransform;
 
-    bool globalAlphaLock = false;
-    qreal effectiveZoom = 1.0;
-    bool presetAllowsLod = false;
+    bool globalAlphaLock {false};
+    qreal effectiveZoom {1.0};
+    bool presetAllowsLod {false};
     KisSelectionSP selectionOverride;
-    bool hasOverrideSelection = false;
+    bool hasOverrideSelection {false};
 
     KoCanvasResourcesInterfaceSP globalCanvasResourcesInterface;
 };

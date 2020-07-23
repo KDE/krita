@@ -39,11 +39,11 @@ struct Q_DECL_HIDDEN KisGaussCircleMaskGenerator::Private
     {
     }
 
-    qreal ycoef;
-    qreal fade;
-    qreal center;
-    qreal distfactor;
-    qreal alphafactor;
+    qreal ycoef {0.0};
+    qreal fade {0.0};
+    qreal center {0.0};
+    qreal distfactor {0.0};
+    qreal alphafactor {0.0};
     KisAntialiasingFadeMaker1D<Private> fadeMaker;
 
     QScopedPointer<KisBrushMaskApplicatorBase> applicator;

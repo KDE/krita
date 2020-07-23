@@ -849,6 +849,7 @@ void KisToolTransform::slotTransactionGenerated(TransformTransactionProperties t
 
     if (transaction.transformedNodes().isEmpty()) {
         KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+        KIS_ASSERT(kisCanvas);
         kisCanvas->viewManager()->
             showFloatingMessage(
                 i18nc("floating message in transformation tool",

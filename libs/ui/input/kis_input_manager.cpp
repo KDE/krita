@@ -213,7 +213,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     return eventFilterImpl(event);
 }
 
-// Qt's events do not have copy-ctors yes, so we should emulate them
+// Qt's events do not have copy-ctors yet, so we should emulate them
 // See https://bugreports.qt.io/browse/QTBUG-72488
 
 template <class Event> void copyEventHack(Event *src, QScopedPointer<QEvent> &dst);

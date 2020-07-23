@@ -45,6 +45,8 @@ linuxdeployqt $BUILD_PREFIX/gmic_qt_krita.appdir/usr/bin/gmic_krita_qt.desktop -
 # Make sure it has a consistent name too
 if [[ $ARCH == "arm64" ]]; then
   APPIMAGE_ARCHITECTURE="aarch64"
+elif [[ $ARCH == "amd64" ]]; then
+  APPIMAGE_ARCHITECTURE="x86_64"
 else
   APPIMAGE_ARCHITECTURE=$ARCH
 fi

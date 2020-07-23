@@ -293,18 +293,15 @@ void KisKeyframingTest::testRasterUndoRedo()
         KisRasterKeyframeSP keyframe = channel->keyframeAt<KisRasterKeyframe>(25);
         const int originalFrameID = keyframe->frameID();
 
-        //undo
         cmd.undo();
 
         QVERIFY(channel->keyframeAt(25) == nullptr);
 
-        //redo
         cmd.redo();
         keyframe = channel->keyframeAt<KisRasterKeyframe>(25);
 
         QVERIFY(channel->keyframeAt(25));
         QVERIFY(keyframe->frameID() == originalFrameID);
-        //thumbnail?
     }
 
 
@@ -318,15 +315,12 @@ void KisKeyframingTest::testRasterUndoRedo()
 
         QVERIFY(channel->keyframeAt(25) == nullptr);
 
-        //undo
         cmd.undo();
         keyframe = channel->keyframeAt<KisRasterKeyframe>(25);
 
         QVERIFY(channel->keyframeAt(25));
         QVERIFY(keyframe->frameID() == originalFrameID);
-        //thumbnail?
 
-        //redo
         cmd.redo();
 
         QVERIFY(channel->keyframeAt(25) == nullptr);
@@ -416,6 +410,20 @@ void KisKeyframingTest::testFirstFrameOperations()
 
     QVERIFY(dev->framesInterface()->frames().count() == channel->keyframeCount());
     QVERIFY(channel->keyframeAt<KisRasterKeyframe>(0) != 0);
+
+    {   // Check writing to first frame and overwriting first frame contents.
+        bounds->testingSetTime(0);
+        dev->fill(0, 0, 50, 50, blue);
+        QImage thumbnail = dev->createThumbnail(50, 50);
+
+        QVERIFY(channel->keyframeAt<KisRasterKeyframe>(0)->hasContent());
+
+        channel->addKeyframe(0);
+        QImage thumbnail2 = dev->createThumbnail(50, 50);
+
+        QVERIFY(channel->keyframeAt<KisRasterKeyframe>(0)->hasContent() == false);
+        QVERIFY(thumbnail2 != thumbnail);
+    }
 
     const int initialKeyframes = channel->keyframeCount();
     const int initialPhysicalFrames = dev->framesInterface()->frames().count();

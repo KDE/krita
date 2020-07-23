@@ -32,6 +32,7 @@ public:
     ~KisRasterKeyframe() override;
 
     bool hasContent();
+    QRect bounds();
     int frameID() const;
 
     KisKeyframeSP duplicate(KisKeyframeChannel *channel = 0) override;
@@ -60,7 +61,7 @@ public:
      * @param time
      * @return active frame id
      */
-    int frameIdAt(int time) const;
+    Q_DECL_DEPRECATED int frameIdAt(int time) const;
 
     /**
      * Copy the active frame at given time to target device.

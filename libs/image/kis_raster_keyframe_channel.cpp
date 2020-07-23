@@ -60,6 +60,20 @@ bool KisRasterKeyframe::hasContent()
     return !m_paintDevice->framesInterface()->frameBounds(m_frameId).isEmpty();
 }
 
+QRect KisRasterKeyframe::bounds()
+{
+    if (!m_paintDevice) {
+        return QRect();
+    }
+
+    // An empty frame should be the size of a full image.
+    if (hasContent()){
+        return m_paintDevice->framesInterface()->frameBounds(m_frameId);
+    } else {
+        return m_paintDevice->defaultBounds()->imageBorderRect();
+    }
+}
+
 int KisRasterKeyframe::frameID() const
 {
     return m_frameId;
@@ -214,38 +228,23 @@ QString KisRasterKeyframeChannel::chooseFrameFilename(int frameId, const QString
 
 QRect KisRasterKeyframeChannel::affectedRect(int time) const
 {
-    if (!keyframeAt(time)) {
-        return QRect();
+    //Note #1: Directionality *not* known
+    //Note #2: This function shouldn't fail outright if there is no keyframe at `time`
+    QRect affectedRect;
+
+    QList<KisRasterKeyframeSP> relevantFrames;
+
+    relevantFrames.append(keyframeAt<KisRasterKeyframe>(time));
+    relevantFrames.append(keyframeAt<KisRasterKeyframe>(nextKeyframeTime(time)));
+    relevantFrames.append(keyframeAt<KisRasterKeyframe>(previousKeyframeTime(time)));
+
+    Q_FOREACH (KisRasterKeyframeSP frame, relevantFrames) {
+        if (frame) {
+            affectedRect |= frame->bounds();
+        }
     }
 
-    TimeKeyframeMap::const_iterator it = constKeys().find(time);
-    QRect rect;
-
-    // Calculate changed area as the union of the current and previous keyframe.
-    // This makes sure there are no artifacts left over from the previous frame
-    // where the new one doesn't cover the area.
-
-    if (it == constKeys().begin()) {
-        // Using the *next* keyframe at the start of the timeline avoids artifacts
-        // when deleting or moving the first key
-        it++;
-    } else {
-        it--;
-    }
-
-    if (it != constKeys().end()) {
-        rect = m_d->paintDevice->framesInterface()->frameBounds(frameId(it.value()));
-    }
-
-    rect |= m_d->paintDevice->framesInterface()->frameBounds(frameIdAt(time));
-
-    if (m_d->onionSkinsEnabled) {
-        const QRect dirtyOnionSkinsRect =
-            KisOnionSkinCompositor::instance()->calculateFullExtent(m_d->paintDevice);
-        rect |= dirtyOnionSkinsRect;
-    }
-
-    return rect;
+    return affectedRect;
 }
 
 QDomElement KisRasterKeyframeChannel::toXML(QDomDocument doc, const QString &layerFilename)

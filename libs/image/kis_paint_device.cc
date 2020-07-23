@@ -332,7 +332,7 @@ public:
 
     void deleteFrame(int frameID, KUndo2Command *parentCommand)
     {
-        KIS_SAFE_ASSERT_RECOVER_RETURN( m_frames.contains(frameID) );
+        KIS_SAFE_ASSERT_RECOVER_RETURN(m_frames.contains(frameID));
         DataSP deletedData = m_frames[frameID];
 
         if(parentCommand) {
@@ -462,21 +462,20 @@ private:
     {
         DataSP data;
 
-        const int numberOfFrames = contentChannel->keyframeCount();
+        const int vFramesCount = contentChannel->keyframeCount();
 
-        if (numberOfFrames > 1) {
-            int frameId = contentChannel->frameIdAt(defaultBounds->currentTime());
-
-            if (frameId == -1) {
-                data = m_data;
-            } else {
-                KIS_ASSERT_RECOVER(m_frames.contains(frameId)) {
-                    return m_frames.begin().value();
-                }
-                data = m_frames[frameId];
+        if (vFramesCount >= 1) {
+            KisRasterKeyframeSP keyframe =  contentChannel->activeKeyframeAt<KisRasterKeyframe>(defaultBounds->currentTime());
+            if (!keyframe || keyframe->frameID() < 0) {
+                return m_data;
             }
-        } else if (numberOfFrames == 1) {
-            data = m_frames.begin().value();
+
+            const int frameID = keyframe->frameID();
+            KIS_ASSERT_RECOVER(m_frames.contains(frameID)) {
+                return m_data;
+            }
+
+            data = m_frames[frameID];
         } else {
             data = m_data;
         }

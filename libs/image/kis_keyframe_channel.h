@@ -78,7 +78,7 @@ public:
     static void moveKeyframe(KisKeyframeChannel *sourceChannel, int sourceTime, KisKeyframeChannel *targetChannel, int targetTime, KUndo2Command* parentUndoCmd = nullptr);
 
     /** @brief Copy a keyframe across channel(s) at the specified times. */
-    static void copyKeyframe(KisKeyframeChannel *sourceChannel, int sourceTime, KisKeyframeChannel *targetChannel, int targetTime, KUndo2Command* parentUndoCmd = nullptr);
+    static void copyKeyframe(const KisKeyframeChannel *sourceChannel, int sourceTime, KisKeyframeChannel *targetChannel, int targetTime, KUndo2Command* parentUndoCmd = nullptr);
 
     /** @brief Swap two keyframes across channel(s) at the specified times. */
     static void swapKeyframes(KisKeyframeChannel *channelA, int timeA, KisKeyframeChannel *channelB, int timeB, KUndo2Command* parentUndoCmd = nullptr);
@@ -170,8 +170,6 @@ protected:
 private:
     struct Private;
     QScopedPointer<Private> m_d;
-
-    TimeKeyframeMap::const_iterator activeKeyIterator(int time) const;
 
     /** @brief Virtual keyframe creation function.
      * Derived classes implement this function based on the needs

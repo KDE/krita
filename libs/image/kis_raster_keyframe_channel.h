@@ -48,7 +48,7 @@ public:
      * are drawn to a second, external device. */
     void writeFrameToDevice(KisPaintDeviceSP writeTarget);
 
-    KisKeyframeSP duplicate(KisKeyframeChannel *channel = 0) override;
+    KisKeyframeSP duplicate(KisKeyframeChannel *newChannel = 0) override;
 
 private:
     KisRasterKeyframe(const KisRasterKeyframe &rhs);

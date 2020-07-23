@@ -62,7 +62,9 @@ struct KisAnimatedTransformMaskParameters::Private
         KisScalarKeyframeChannel *channel = this->*field;
 
         if (!channel) {
-            channel = this->*field = new KisScalarKeyframeChannel(channelId, -qInf(), qInf(), parent, KisScalarKeyframe::Linear);
+            channel = this->*field = new KisScalarKeyframeChannel(channelId, new KisDefaultBoundsNodeWrapper(parent));
+            channel->setDefaultValue(0);
+            channel->setDefaultInterpolationMode(KisScalarKeyframe::Linear);
         }
 
         return channel;

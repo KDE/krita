@@ -135,12 +135,12 @@ void KisBaseNodeTest::testOpacityKeyframing()
     const int keyIndex1 = 7;
     opacityChannel->addKeyframe(keyIndex1);
     KisScalarKeyframeSP key1 = opacityChannel->keyframeAt<KisScalarKeyframe>(keyIndex1);
-    opacityChannel->setScalarValue(keyIndex1, 128);
+    key1->setValue(128);
 
     const int keyIndex2 = 20;
     opacityChannel->addKeyframe(keyIndex2);
     KisScalarKeyframeSP key2 = opacityChannel->keyframeAt<KisScalarKeyframe>(keyIndex2);
-    opacityChannel->setScalarValue(keyIndex2, 64);
+    key2->setValue(64);
 
     p.image->refreshGraph();
 
@@ -162,7 +162,7 @@ void KisBaseNodeTest::testOpacityKeyframing()
     p.image->waitForDone();
 
     layer2->setOpacity(32);
-    QCOMPARE(opacityChannel->scalarValue(keyIndex2), 32.0);
+    QCOMPARE(opacityChannel->valueAt(keyIndex2), 32.0);
 
     p.image->waitForDone();
     p.image->projection()->pixel(16, 16, &sample);

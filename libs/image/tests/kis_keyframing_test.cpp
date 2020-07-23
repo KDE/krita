@@ -21,6 +21,7 @@
 #include "kis_keyframing_test.h"
 #include <QTest>
 #include <qsignalspy.h>
+#include <QRandomGenerator>
 
 #include "kis_paint_device_frames_interface.h"
 #include "kis_keyframe_channel.h"
@@ -555,116 +556,299 @@ void KisKeyframingTest::testInterChannelMovement()
 
 void KisKeyframingTest::testScalarChannel()
 {
-    QVERIFY(false);
-    /*
-    KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID(""), -17, 31, 0);
-    bool ok;
+    float defaultValue = 0.2;
+    float lowerLimit = -1.0;
+    float upperLimit = 1.0;
 
-    QCOMPARE(channel->minScalarValue(), -17.0);
-    QCOMPARE(channel->maxScalarValue(),  31.0);
+    TestUtil::TestingTimedDefaultBounds *bounds = new TestUtil::TestingTimedDefaultBounds();
 
-    QVERIFY(channel->keyframeAt(0) == 0);
+    QScopedPointer<KisScalarKeyframeChannel> channel(new KisScalarKeyframeChannel(KoID(), bounds));
+    channel->setLimits(lowerLimit, upperLimit);
+    channel->setDefaultValue(defaultValue);
+    channel->setDefaultInterpolationMode(KisScalarKeyframe::Constant);
 
-    // Adding new keyframe
-    channel->addKeyframe(42);
-    channel->setScalarValue(42, 7.0);
 
-    QCOMPARE(channel->scalarValue(42), 7.0);
+    {   // Add keyframe..
+        channel->addKeyframe(0);
+        KisScalarKeyframeSP key0 = channel->keyframeAt<KisScalarKeyframe>(0);
 
-    // Copying a keyframe
+        QVERIFY(key0->value() == defaultValue);
+        QVERIFY(key0->interpolationMode() == KisScalarKeyframe::Constant);
 
-    channel->copyKeyframe(channel->keyframeAt(42), 13);
-    QVERIFY(channel->keyframeAt(13));
-    QCOMPARE(channel->scalarValue(42), channel->scalarValue(13));
-    QCOMPARE(channel->scalarValue(42), 7.0);
+        // Test limits..
+        QRandomGenerator generator;
+        for (int i = 0; i < 100; i++) {
+            float randomValue = (generator.generateDouble() - 0.5) * (upperLimit - lowerLimit);
 
-    // Adding a keyframe where one exists
-    {
-        KisKeyframeSP original = channel->keyframeAt(13);
-        KisKeyframeSP overwrite = channel->addKeyframe(13);
-        QVERIFY(original != overwrite);
-        QCOMPARE(channel->keyframeCount(), 2);
+            key0->setValue(randomValue);
+            QVERIFY(key0->value() >= lowerLimit && key0->value() <= upperLimit);
+
+            key0->setValue(upperLimit + randomValue);
+            QVERIFY(key0->value() >= lowerLimit && key0->value() <= upperLimit);
+
+            key0->setValue(lowerLimit - randomValue);
+            QVERIFY(key0->value() >= lowerLimit && key0->value() <= upperLimit);
+        }
     }
 
-    // Moving keyframes
-    {
-        const int oldKeyTime = 13;
-        const int newKeyTime = 10;
-        ok = channel->moveKeyframe(oldKeyTime, newKeyTime);
-        QCOMPARE(ok, true);
-        QVERIFY(channel->keyframeAt(oldKeyTime) == 0);
 
-        KisKeyframeSP moved = channel->keyframeAt(newKeyTime);
-        QVERIFY(moved);
-        QCOMPARE(channel->scalarValue(newKeyTime), 7.0);
+    {   // Copy keyframe (0>>5)..
+        channel->copyKeyframe(0, 5);
+
+        KisScalarKeyframeSP key0 = channel->keyframeAt<KisScalarKeyframe>(0);
+        KisScalarKeyframeSP key5 = channel->keyframeAt<KisScalarKeyframe>(5);
+
+        QVERIFY(key5);
+        QVERIFY(key0);
+        QVERIFY(key0 != key5); //Should be different instances..
+        QVERIFY(key5->value() == key0->value()); //But should be the same value!
     }
 
-    {
-        // Moving a keyframe where another one exists
-        const int oldKeyTime = channel->activeKeyframeAt(10).time();
-        const int newKeyTime = channel->nextKeyframe(10).time();
 
-        KisKeyframeSP removedKey = channel->keyframeAt(newKeyTime);
-        ok = channel->moveKeyframe(oldKeyTime, newKeyTime);
-        QCOMPARE(ok, true);
-        QVERIFY(!channel->keyframeAt(oldKeyTime));
-        QVERIFY(channel->keyframeAt(newKeyTime));
+    {   // Move keyframe (5->7)..
+        KisScalarKeyframeSP old_key5 = channel->keyframeAt<KisScalarKeyframe>(5);
 
-        KisKeyframeSP movedKey = channel->keyframeAt(newKeyTime);
-        QVERIFY(movedKey != removedKey);
+        channel->moveKeyframe(5, 7);
 
+        KisScalarKeyframeSP key5 = channel->keyframeAt<KisScalarKeyframe>(5);
+        KisScalarKeyframeSP key7 = channel->keyframeAt<KisScalarKeyframe>(7);
+
+        QVERIFY(key5 == nullptr);
+        QVERIFY(key7);
+        QVERIFY(key7 == old_key5); //Verify same instance has simply moved.
     }
 
-    // Deleting a keyframe
-    channel->deleteKeyframe(10);
-    QVERIFY(channel->keyframeAt(10) == 0);
-    QCOMPARE(channel->keyframeCount(), 0);
 
-    delete channel;
-    */
+    {   // Swap keyframe (0<->7)..
+        KisScalarKeyframeSP old_key0 = channel->keyframeAt<KisScalarKeyframe>(0);
+        KisScalarKeyframeSP old_key7 = channel->keyframeAt<KisScalarKeyframe>(7);
+
+        channel->swapKeyframes(0, 7);
+
+        KisScalarKeyframeSP new_key0 = channel->keyframeAt<KisScalarKeyframe>(0);
+        KisScalarKeyframeSP new_key7 = channel->keyframeAt<KisScalarKeyframe>(7);
+
+        QVERIFY(new_key0 && new_key7);
+        QVERIFY(new_key0 == old_key7);
+        QVERIFY(new_key7 == old_key0);
+    }
+
+
+    {   // Overwrite keyframe (7)..
+        channel->keyframeAt<KisScalarKeyframe>(7)->setValue(777);
+        channel->addKeyframe(7);
+        KisScalarKeyframeSP new_key7 = channel->keyframeAt<KisScalarKeyframe>(7);
+
+        QVERIFY(new_key7->value() == defaultValue);
+    }
+
+
+    {   // Remove keyframe..
+        channel->removeKeyframe(7);
+
+        QVERIFY(channel->keyframeAt(7) == nullptr);
+    }
+}
+
+void KisKeyframingTest::testScalarValueInterpolation()
+{
+    TestUtil::TestingTimedDefaultBounds *bounds = new TestUtil::TestingTimedDefaultBounds();
+
+    QScopedPointer<KisScalarKeyframeChannel> channel(new KisScalarKeyframeChannel(KoID(), bounds));
+    channel->setLimits(0, 30);
+    channel->setDefaultValue(0);
+    channel->setDefaultInterpolationMode(KisScalarKeyframe::Constant);
+
+    const int timeA = 0;
+    const int timeB = 10;
+
+    {
+        const float valueA = 15;
+        const float valueB = 30;
+        channel->addKeyframe(timeA);
+        channel->keyframeAt<KisScalarKeyframe>(timeA)->setValue(valueA);
+
+        channel->addKeyframe(timeB);
+        channel->keyframeAt<KisScalarKeyframe>(timeB)->setValue(valueB);
+
+        // Constant
+        KisScalarKeyframeSP keyA = channel->keyframeAt<KisScalarKeyframe>(timeA);
+        keyA->setInterpolationMode(KisScalarKeyframe::Constant);
+
+        QVERIFY(keyA->interpolationMode() == KisScalarKeyframe::Constant);
+        QVERIFY(channel->valueAt(timeA + 4) == valueA);
+        QVERIFY(channel->valueAt(timeA) == valueA);
+
+        // Bezier
+        keyA->setInterpolationMode(KisScalarKeyframe::Bezier);
+        keyA->setInterpolationTangents(QPointF(), QPointF(1,4));
+        KisScalarKeyframeSP keyB = channel->keyframeAt<KisScalarKeyframe>(timeB);
+        keyB->setInterpolationTangents(QPointF(-4,2), QPointF());
+
+        QVERIFY(keyA->interpolationMode() == KisScalarKeyframe::Bezier);
+        QVERIFY(qAbs(channel->valueAt(timeA + 4) - 24.9812f) < 0.1f);
+        QVERIFY(channel->valueAt(timeA) == valueA);
+    }
+
+
+    {   // Bezier, self-intersecting curve (auto-correct)
+        KisScalarKeyframeSP keyA = channel->keyframeAt<KisScalarKeyframe>(timeA);
+        KisScalarKeyframeSP keyB = channel->keyframeAt<KisScalarKeyframe>(timeB);
+
+        keyB->setValue(15);
+
+        keyA->setInterpolationTangents(QPointF(), QPointF(13,10));
+        keyB->setInterpolationTangents(QPointF(-13,10), QPointF());
+
+        QVERIFY(qAbs(channel->valueAt(timeA + 5) - 20.769f) < 0.1f);
+    }
+
+    {   // Bezier, result outside allowed range (clamp)
+        KisScalarKeyframeSP keyA = channel->keyframeAt<KisScalarKeyframe>(timeA);
+        KisScalarKeyframeSP keyB = channel->keyframeAt<KisScalarKeyframe>(timeB);
+
+        keyB->setValue(15);
+
+        keyA->setInterpolationTangents(QPointF(), QPointF(0, 50));
+        keyB->setInterpolationTangents(QPointF(0, 50), QPointF());
+    }
+
+    QCOMPARE(channel->valueAt(timeA + 5), 30.0f);
 }
 
 void KisKeyframingTest::testScalarChannelUndoRedo()
 {
-    QVERIFY(false);
-    /*
-    KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID(""), -17, 31, 0);
+    TestUtil::TestingTimedDefaultBounds *bounds = new TestUtil::TestingTimedDefaultBounds();
 
-    QCOMPARE(channel->minScalarValue(), -17.0);
-    QCOMPARE(channel->maxScalarValue(),  31.0);
+    QScopedPointer<KisScalarKeyframeChannel> channel(new KisScalarKeyframeChannel(KoID(), bounds));
 
-    QVERIFY(channel->keyframeAt(0) == 0);
+    int defaultValue = 7;
+    channel->setDefaultValue(defaultValue);
+    channel->setDefaultInterpolationMode(KisScalarKeyframe::Constant);
 
-    // Adding new keyframe
+    {   // Add
+        KUndo2Command cmd;
 
-    KUndo2Command addCmd;
+        channel->addKeyframe(1, &cmd);
+        KisScalarKeyframeSP key = channel->keyframeAt<KisScalarKeyframe>(1);
 
-    channel->addKeyframe(42, &addCmd);
-    channel->setScalarValue(42, 7.0, &addCmd);
-    QCOMPARE(channel->scalarValue(42), 7.0);
-    const float beforeUndoValue = channel->scalarValue(42);
+        QVERIFY(key);
+        QVERIFY(key->value() == defaultValue);
 
-    addCmd.undo();
+        cmd.undo();
 
-    KisKeyframeSP key = channel->keyframeAt(42);
-    QVERIFY(!key);
+        QVERIFY(channel->keyframeAt(1) == nullptr);
 
-    addCmd.redo();
+        cmd.redo();
 
-    key = channel->keyframeAt(42);
-    QVERIFY(key);
+        QVERIFY(channel->keyframeAt(1) == key);
+        QVERIFY(key->value() == defaultValue);
+    }
 
-    QCOMPARE(channel->scalarValue(42), beforeUndoValue);
-    delete channel;
-    */
+
+    {   // Remove
+        KUndo2Command cmd;
+        KisScalarKeyframeSP key = channel->keyframeAt<KisScalarKeyframe>(1);
+        const int value = 8;
+        key->setValue(value);
+
+        channel->removeKeyframe(1, &cmd);
+
+        QVERIFY(channel->keyframeAt(1) == nullptr);
+
+        cmd.undo();
+
+        QVERIFY(channel->keyframeAt(1) == key);
+        QVERIFY(key->value() == value);
+        QVERIFY(channel->valueAt(1) == value);
+
+        cmd.redo();
+
+        QVERIFY(channel->keyframeAt(1) == nullptr);
+    }
+
+
+    {   // Modifying Keyframe Value..
+        const int time = 88;
+        const float key88_value = 156;
+
+        channel->addKeyframe(time);
+        KisScalarKeyframeSP key88 = channel->keyframeAt<KisScalarKeyframe>(88);
+
+        KUndo2Command cmd;
+
+        QVERIFY(key88);
+
+        key88->setValue(key88_value, &cmd);
+
+        QVERIFY(key88->value() == key88_value);
+
+        cmd.undo();
+
+        QVERIFY(key88->value() == defaultValue);
+
+        cmd.redo();
+
+        QVERIFY(key88->value() == key88_value);
+
+        channel->removeKeyframe(time);
+    }
+
+
+    {   // Modify all values at once, they should all restore as expected.
+        const int time = 45;
+        const qreal value = 128.0f;
+        const KisScalarKeyframe::InterpolationMode interpMode = KisScalarKeyframe::Linear;
+        const KisScalarKeyframe::TangentsMode tangentMode = KisScalarKeyframe::Sharp;
+        const QPointF leftTangent = QPoint(0, 5);
+        const QPointF rightTangent = QPoint(0, -5);
+
+        channel->addKeyframe(time);
+        KisScalarKeyframeSP key = channel->keyframeAt<KisScalarKeyframe>(time);
+
+        KUndo2Command cmd;
+
+        QVERIFY(key);
+
+        key->setValue(value, &cmd);
+        key->setInterpolationMode(interpMode, &cmd);
+        key->setTangentsMode(tangentMode, &cmd);
+        key->setInterpolationTangents(leftTangent, rightTangent, &cmd);
+
+        QVERIFY(key->value() == value);
+        QVERIFY(key->interpolationMode() == interpMode);
+        QVERIFY(key->tangentsMode() == tangentMode);
+        QVERIFY(key->leftTangent() == leftTangent);
+        QVERIFY(key->rightTangent() == rightTangent);
+
+        cmd.undo();
+
+        QVERIFY(key->value() != value);
+        QVERIFY(key->interpolationMode() != interpMode);
+        QVERIFY(key->tangentsMode() != tangentMode);
+        QVERIFY(key->leftTangent() != leftTangent);
+        QVERIFY(key->rightTangent() != rightTangent);
+
+        cmd.redo();
+
+        QVERIFY(key->value() == value);
+        QVERIFY(key->interpolationMode() == interpMode);
+        QVERIFY(key->tangentsMode() == tangentMode);
+        QVERIFY(key->leftTangent() == leftTangent);
+        QVERIFY(key->rightTangent() == rightTangent);
+
+        channel->removeKeyframe(time);
+    }
 }
 
-void KisKeyframingTest::testAffectedFrames()
+void KisKeyframingTest::testScalarAffectedFrames()
 {
-    QVERIFY(false);
-    /*
-    KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID(""), -17, 31, 0);
-    KisTimeRange range;
+    TestUtil::TestingTimedDefaultBounds *bounds = new TestUtil::TestingTimedDefaultBounds();
+
+    QScopedPointer<KisScalarKeyframeChannel> channel( new KisScalarKeyframeChannel(KoID(""), bounds) );
+    channel->setLimits(-17, 31);
+    channel->setDefaultValue(0);
+    KisTimeSpan range;
 
     channel->addKeyframe(10);
     channel->addKeyframe(20);
@@ -692,74 +876,8 @@ void KisKeyframingTest::testAffectedFrames()
     range = channel->affectedFrames(35);
     QCOMPARE(range.start(), 30);
     QCOMPARE(range.isInfinite(), true);
-    */
 }
 
-void KisKeyframingTest::testScalarInterpolation()
-{
-    QVERIFY(false);
-    /*
-    KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID(""), 0, 30, 0);
-    const int keyIndexA = 0;
-    const int keyIndexB = 10;
-
-    {
-        const float valueA = 15;
-        const float valueB = 30;
-        channel->addKeyframe(keyIndexA);
-        channel->setScalarValue(keyIndexA, valueA);
-
-        channel->addKeyframe(keyIndexB);
-        channel->setScalarValue(keyIndexB, valueB);
-
-        // Constant
-
-        KisScalarKeyframeSP keyA = channel->keyframeAt(keyIndexA).dynamicCast<KisScalarKeyframe>();
-        keyA->setInterpolationMode(KisScalarKeyframe::Constant);
-
-        QCOMPARE(channel->interpolatedValue(keyIndexA + 4), valueA);
-
-        // Bezier
-
-        keyA->setInterpolationMode(KisScalarKeyframe::Bezier);
-
-
-        keyA->setInterpolationTangents(QPointF(), QPointF(1,4));
-        KisScalarKeyframeSP keyB = channel->keyframeAt(keyIndexB).dynamicCast<KisScalarKeyframe>();
-        keyB->setInterpolationTangents(QPointF(-4,2), QPointF());
-
-        QVERIFY(qAbs(channel->interpolatedValue(keyIndexA + 4) - 24.9812f) < 0.1f);
-    }
-
-    // Bezier, self-intersecting curve (auto-correct)
-
-    {
-        KisScalarKeyframeSP keyA = channel->keyframeAt(keyIndexA).dynamicCast<KisScalarKeyframe>();
-        KisScalarKeyframeSP keyB = channel->keyframeAt(keyIndexB).dynamicCast<KisScalarKeyframe>();
-        keyB->setValue(15);
-
-        keyA->setInterpolationTangents(QPointF(), QPointF(13,10));
-        keyB->setInterpolationTangents(QPointF(-13,10), QPointF());
-
-        QVERIFY(qAbs(channel->interpolatedValue(keyIndexA + 5) - 20.769f) < 0.1f);
-    }
-    // Bezier, result outside allowed range (clamp)
-
-    {
-        KisScalarKeyframeSP keyA = channel->keyframeAt(keyIndexA).dynamicCast<KisScalarKeyframe>();
-        KisScalarKeyframeSP keyB = channel->keyframeAt(keyIndexB).dynamicCast<KisScalarKeyframe>();
-
-        keyB->setValue(15);
-
-        keyA->setInterpolationTangents(QPointF(), QPointF(0, 50));
-        keyB->setInterpolationTangents(QPointF(0, 50), QPointF());
-    }
-
-    QCOMPARE(channel->interpolatedValue(keyIndexA + 5), 30.0f);
-
-    delete channel;
-    */
-}
 
 
 QTEST_MAIN(KisKeyframingTest)

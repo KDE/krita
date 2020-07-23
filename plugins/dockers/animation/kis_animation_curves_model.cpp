@@ -144,7 +144,7 @@ QVariant KisAnimationCurvesModel::data(const QModelIndex &index, int role) const
         case SpecialKeyframeExists:
             return !keyframe.isNull();
         case ScalarValueRole:
-            return channel->interpolatedValue(time);
+            return channel->valueAt(time);
         case LeftTangentRole:
             return (keyframe.isNull()) ? QVariant() : keyframe->leftTangent();
         case RightTangentRole:
@@ -203,44 +203,44 @@ bool KisAnimationCurvesModel::setData(const QModelIndex &index, const QVariant &
     {
         if (channel->keyframeAt(index.column())) {
             if (!command) command = new KUndo2Command(kundo2_i18n("Adjust keyframe"));
-            channel->setScalarValue(index.column(), value.toReal(), command);
+            channel->keyframeAt<KisScalarKeyframe>(index.column())->setValue(value.toReal(), command);
         } else {
             if (!command) command = new KUndo2Command(kundo2_i18n("Insert keyframe"));
             channel->addKeyframe(index.column(), command);
-            channel->keyframeAt<KisScalarKeyframe>(index.column())->setValue(value.toReal()); //undo
+            channel->keyframeAt<KisScalarKeyframe>(index.column())->setValue(value.toReal(), command); //undo
         }
     }
         break;
     case LeftTangentRole:
     case RightTangentRole:
     {
-        KisScalarKeyframeSP keyframe = channel->keyframeAt(index.column()).dynamicCast<KisScalarKeyframe>();
+        KisScalarKeyframeSP keyframe = channel->keyframeAt<KisScalarKeyframe>(index.column());
         if (!keyframe) return false;
 
         QPointF leftTangent = (role == LeftTangentRole ? value.toPointF() : keyframe->leftTangent());
         QPointF rightTangent = (role == RightTangentRole ? value.toPointF() : keyframe->rightTangent());
 
         if (!command) command = new KUndo2Command(kundo2_i18n("Adjust tangent"));
-        channel->setInterpolationTangents(index.column(), keyframe->tangentsMode(), leftTangent, rightTangent, command);
+        keyframe->setInterpolationTangents(leftTangent, rightTangent, command);
     }
         break;
     case InterpolationModeRole:
     {
+        KisScalarKeyframeSP key = channel->keyframeAt<KisScalarKeyframe>(index.column());
+
         if (!command) command = new KUndo2Command(kundo2_i18n("Set interpolation mode"));
-        channel->setInterpolationMode(index.column(), (KisScalarKeyframe::InterpolationMode)value.toInt(), command);
+        key->setInterpolationMode((KisScalarKeyframe::InterpolationMode)value.toInt(), command);
     }
         break;
     case TangentsModeRole:
     {
-        KisScalarKeyframeSP keyframe = channel->keyframeAt(index.column()).dynamicCast<KisScalarKeyframe>();
+        KisScalarKeyframeSP keyframe = channel->keyframeAt<KisScalarKeyframe>(index.column());
         if (!keyframe) return false;
 
-        KisScalarKeyframe::InterpolationTangentsMode mode = (KisScalarKeyframe::InterpolationTangentsMode)value.toInt();
-        QPointF leftTangent = keyframe->leftTangent();
-        QPointF rightTangent = keyframe->rightTangent();
+        KisScalarKeyframe::TangentsMode mode = (KisScalarKeyframe::TangentsMode)value.toInt();
 
         if (!command) command = new KUndo2Command(kundo2_i18n("Set interpolation mode"));
-        channel->setInterpolationTangents(index.column(), mode, leftTangent, rightTangent, command);
+        keyframe->setTangentsMode( mode, command );
     }
         break;
     default:

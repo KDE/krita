@@ -86,10 +86,10 @@ void KisRasterKeyframe::writeFrameToDevice(KisPaintDeviceSP writeTarget)
     m_paintDevice->framesInterface()->fetchFrame(m_frameID, writeTarget);
 }
 
-KisKeyframeSP KisRasterKeyframe::duplicate(KisKeyframeChannel *channel)
+KisKeyframeSP KisRasterKeyframe::duplicate(KisKeyframeChannel *newChannel)
 {
-    if (channel) {
-        KisRasterKeyframeChannel* rasterChannel = dynamic_cast<KisRasterKeyframeChannel*>(channel);
+    if (newChannel) {
+        KisRasterKeyframeChannel* rasterChannel = dynamic_cast<KisRasterKeyframeChannel*>(newChannel);
         KIS_ASSERT(rasterChannel);
         KisPaintDeviceWSP targetDevice = rasterChannel->paintDevice();
 

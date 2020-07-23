@@ -22,6 +22,7 @@
 
 #include "kis_keyframe_channel.h"
 #include "kundo2command.h"
+#include "kis_scalar_keyframe_channel.h"
 #include "kritaimage_export.h"
 
 
@@ -57,6 +58,24 @@ private:
     KisKeyframeSP m_cached;
 };
 
+
+class KisScalarKeyframeUpdateCommand : public KUndo2Command
+{
+public:
+    KisScalarKeyframeUpdateCommand(KisScalarKeyframe* keyframe, KUndo2Command *parentCmd);
+
+    void redo() override;
+    void undo() override;
+
+private:
+    KisScalarKeyframe* keyframe;
+    qreal cachedValue;
+    KisScalarKeyframe::InterpolationMode cachedInterpolationMode;
+    KisScalarKeyframe::TangentsMode cachedTangentsMode;
+    QPointF cachedTangentLeft;
+    QPointF cachedTangentRight;
+
+};
 
 
 #endif

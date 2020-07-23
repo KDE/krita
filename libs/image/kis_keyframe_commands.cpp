@@ -18,7 +18,7 @@
  */
 
 #include "kis_keyframe_commands.h"
-
+#include "kis_scalar_keyframe_channel.h"
 
 KisInsertKeyframeCommand::KisInsertKeyframeCommand(KisKeyframeChannel *channel, int time, KisKeyframeSP keyframe, KUndo2Command *parentCmd)
     : KUndo2Command(parentCmd),
@@ -60,4 +60,40 @@ void KisRemoveKeyframeCommand::redo()
 void KisRemoveKeyframeCommand::undo()
 {
     m_channel->insertKeyframe(m_time, m_cached);
+}
+
+KisScalarKeyframeUpdateCommand::KisScalarKeyframeUpdateCommand(KisScalarKeyframe *keyframe, KUndo2Command *parentCmd)
+    : KUndo2Command(parentCmd),
+      keyframe(keyframe),
+      cachedValue(keyframe->value()),
+      cachedInterpolationMode(keyframe->interpolationMode()),
+      cachedTangentsMode(keyframe->tangentsMode()),
+      cachedTangentLeft(keyframe->leftTangent()),
+      cachedTangentRight(keyframe->rightTangent())
+{}
+
+void KisScalarKeyframeUpdateCommand::redo()
+{
+    //Note -- cached values are swapped, so undo / redo can be the same.
+    KisScalarKeyframeUpdateCommand::undo();
+}
+
+void KisScalarKeyframeUpdateCommand::undo()
+{
+    const qreal value = keyframe->value();
+    const KisScalarKeyframe::InterpolationMode interpolationMode = keyframe->interpolationMode();
+    const KisScalarKeyframe::TangentsMode tangentsMode = keyframe->tangentsMode();
+    const QPointF leftTangent = keyframe->leftTangent();
+    const QPointF rightTangent = keyframe->rightTangent();
+
+    keyframe->setValue(cachedValue);
+    keyframe->setInterpolationMode(cachedInterpolationMode);
+    keyframe->setTangentsMode(cachedTangentsMode);
+    keyframe->setInterpolationTangents(cachedTangentLeft, cachedTangentRight);
+
+    cachedValue = value;
+    cachedInterpolationMode = interpolationMode;
+    cachedTangentsMode = tangentsMode;
+    cachedTangentLeft = leftTangent;
+    cachedTangentRight = rightTangent;
 }

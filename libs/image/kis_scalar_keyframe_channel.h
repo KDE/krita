@@ -19,8 +19,27 @@
 #define _KIS_SCALAR_KEYFRAME_CHANNEL_H
 
 #include "kis_keyframe_channel.h"
-#include "kis_keyframe_commands.h"
 
+
+struct ScalarKeyframeLimits {
+    qreal lower;
+    qreal upper;
+
+    ScalarKeyframeLimits(qreal x, qreal y){
+        KIS_ASSERT(x != y);
+
+        // Supports (high, low) or (low, high) assignment.
+        lower = x < y ? x : y;
+        upper = x > y ? x : y;
+    }
+
+    /** Clamp input value to within limits. */
+    qreal clamp(qreal value){
+        value = value < lower ? lower : value;
+        value = value > upper ? upper : value;
+        return value;
+    }
+};
 
 struct KRITAIMAGE_EXPORT KisScalarKeyframe : public KisKeyframe
 {
@@ -31,25 +50,25 @@ public:
         Bezier
     };
 
-    enum InterpolationTangentsMode {
+    enum TangentsMode {
         Sharp,
         Smooth
     };
 
-    KisScalarKeyframe(qreal value);
+    KisScalarKeyframe(qreal value, QWeakPointer<ScalarKeyframeLimits> limits);
     KisScalarKeyframe(const KisScalarKeyframe &rhs);
 
-    KisKeyframeSP duplicate(KisKeyframeChannel* channel = 0) override;
+    KisKeyframeSP duplicate(KisKeyframeChannel* newChannel = 0) override;
 
     qreal value() const;
-    void setValue(qreal val);
+    void setValue(qreal val, KUndo2Command* parentUndoCmd = nullptr);
 
-    void setInterpolationMode(InterpolationMode mode);
+    void setInterpolationMode(InterpolationMode mode, KUndo2Command* parentUndoCmd = nullptr);
     InterpolationMode interpolationMode() const;
-    void setTangentsMode(InterpolationTangentsMode mode);
-    InterpolationTangentsMode tangentsMode() const;
+    void setTangentsMode(TangentsMode mode, KUndo2Command* parentUndoCmd = nullptr);
+    TangentsMode tangentsMode() const;
 
-    void setInterpolationTangents(QPointF leftTangent, QPointF rightTangent);
+    void setInterpolationTangents(QPointF leftTangent, QPointF rightTangent, KUndo2Command* parentUndoCmd = nullptr);
 
     QPointF leftTangent() const;
     QPointF rightTangent() const;
@@ -58,51 +77,44 @@ private:
     qreal m_value;
 
     InterpolationMode m_interpolationMode;
-    InterpolationTangentsMode m_tangentsMode;
+    TangentsMode m_tangentsMode;
     QPointF m_leftTangent;
     QPointF m_rightTangent;
+
+    QWeakPointer<ScalarKeyframeLimits> m_channelLimits;
 };
 
 
 class KRITAIMAGE_EXPORT KisScalarKeyframeChannel : public KisKeyframeChannel
 {
     Q_OBJECT
-
 public:
-    KisScalarKeyframeChannel(const KoID& id, qreal minValue, qreal maxValue, KisNodeWSP parent, KisScalarKeyframe::InterpolationMode defaultInterpolation=KisScalarKeyframe::Constant);
+    KisScalarKeyframeChannel(const KoID& id, KisNodeWSP node);
+    KisScalarKeyframeChannel(const KoID& id, KisDefaultBoundsBaseSP bounds);
     KisScalarKeyframeChannel(const KisScalarKeyframeChannel &rhs, KisNodeWSP newParent);
     ~KisScalarKeyframeChannel() override;
 
-    qreal minScalarValue() const;
-    qreal maxScalarValue() const;
-    qreal scalarValue(const int time) const;
-    void setScalarValue(const int time, qreal value, KUndo2Command *parentCommand = 0);
+    QWeakPointer<ScalarKeyframeLimits> limits() const;
+    void setLimits(qreal low, qreal high);
+    void removeLimits();
 
-    void setInterpolationMode(const int time, KisScalarKeyframe::InterpolationMode mode, KUndo2Command *parentCommand = 0);
-    void setInterpolationTangents(const int time, QPointF leftTangent, QPointF rightTangent, KUndo2Command *parrentCommand = 0);
-    void setInterpolationTangents(const int time, KisScalarKeyframe::InterpolationTangentsMode, QPointF leftTangent, QPointF rightTangent, KUndo2Command *parentCommand = 0);
+    qreal valueAt(int time) const;
+    qreal currentValue() { return valueAt(currentTime()); }
 
-    qreal interpolatedValue(int time) const;
-    qreal currentValue() const;
+    void setDefaultValue(qreal value);
+    void setDefaultInterpolationMode(KisScalarKeyframe::InterpolationMode mode);
 
     static QPointF interpolate(QPointF point1, QPointF rightTangent, QPointF leftTangent, QPointF point2, qreal t);
 
-Q_SIGNALS:
-    void sigKeyframeChanged(KisKeyframeChannel* channel, int time);
-
 private:
-    Q_DECL_DEPRECATED KisKeyframeSP createKeyframe(qreal value);
+    static qreal findCubicCurveParameter(int time0, qreal delta0, qreal delta1, int time1, int time);
+    static qreal cubicBezier(qreal p0, qreal delta1, qreal delta2, qreal p3, qreal t);
+    static void normalizeTangents(const QPointF point1, QPointF &rightTangent, QPointF &leftTangent, const QPointF point2);
 
-    KisKeyframeSP createKeyframe() override;
-
-    QRect affectedRect(int time) const override;
-
-    void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename);
-    QPair<int, KisKeyframeSP> loadKeyframe(const QDomElement &keyframeNode) override;
-
-    void setScalarValue(KisKeyframeSP keyframe, qreal value);
-
-    void notifyKeyframeChanged(int time);
+    virtual KisKeyframeSP createKeyframe() override;
+    virtual QRect affectedRect(int time) const override;
+    virtual QPair<int, KisKeyframeSP> loadKeyframe(const QDomElement &keyframeNode) override;
+    virtual void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename) override;
 
     struct Private;
     QScopedPointer<Private> m_d;

@@ -26,6 +26,7 @@
 #include <KoCompositeOpRegistry.h>
 #include "kis_paint_device.h"
 #include "kis_layer_properties_icons.h"
+#include "kis_default_bounds_node_wrapper.h"
 
 #include "kis_scalar_keyframe_channel.h"
 
@@ -483,10 +484,12 @@ KisKeyframeChannel *KisBaseNode::requestKeyframeChannel(const QString &id)
             KisNode* node = dynamic_cast<KisNode*>(this);
             KisScalarKeyframeChannel * channel = new KisScalarKeyframeChannel(
                 KisKeyframeChannel::Opacity,
-                0, 255,
-                KisNodeWSP( node ),
-                KisScalarKeyframe::Linear
+                new KisDefaultBoundsNodeWrapper(node)
             );
+
+            channel->setLimits(0, 255);
+            channel->setDefaultInterpolationMode(KisScalarKeyframe::Linear);
+            channel->setDefaultValue(255);
 
             m_d->opacityChannel.reset(channel);
 

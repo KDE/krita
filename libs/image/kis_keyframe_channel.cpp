@@ -156,7 +156,7 @@ void KisKeyframeChannel::moveKeyframe(KisKeyframeChannel *sourceChannel, int sou
     targetChannel->insertKeyframe(targetTime, targetKeyframe, parentUndoCmd);
 }
 
-void KisKeyframeChannel::copyKeyframe(KisKeyframeChannel *sourceChannel, int sourceTime, KisKeyframeChannel *targetChannel, int targetTime, KUndo2Command* parentUndoCmd)
+void KisKeyframeChannel::copyKeyframe(const KisKeyframeChannel *sourceChannel, int sourceTime, KisKeyframeChannel *targetChannel, int targetTime, KUndo2Command* parentUndoCmd)
 {
     KIS_ASSERT(sourceChannel && targetChannel);
 
@@ -321,46 +321,37 @@ KisTimeSpan KisKeyframeChannel::affectedFrames(int time) const
 {
     if (m_d->keys.isEmpty()) return KisTimeSpan::infinite(0);
 
-    TimeKeyframeMap::const_iterator active = activeKeyIterator(time);
-    TimeKeyframeMap::const_iterator next;
+    const int activeKeyTime = activeKeyframeTime(time);
+    const int nextKeyTime = nextKeyframeTime(time);
 
-    // ie. time is before the first keyframe
-    const bool noActiveKeyframe = (active == m_d->keys.constEnd());
-
-    int from;
-
-    if (noActiveKeyframe) {
-        from = 0;
-        next = m_d->keys.constBegin();
-    } else {
-        from = active.key();
-        next = active + 1;
+    // Check for keyframe behind..
+    if (!keyframeAt(activeKeyTime)) {
+        return KisTimeSpan::fromTime(0, nextKeyTime - 1);
     }
 
-    if (next == m_d->keys.constEnd()) {
-        return KisTimeSpan::infinite(from);
-    } else {
-        KisScalarKeyframeSP activeScalar = active.value().dynamicCast<KisScalarKeyframe>();
-        const KisScalarKeyframe::InterpolationMode activeMode = (noActiveKeyframe || !activeScalar) ? KisScalarKeyframe::Constant :
-                                                                activeScalar->interpolationMode();
+    // Check for keyframe ahead..
+    if (!keyframeAt(nextKeyTime)) {
+        return KisTimeSpan::infinite(activeKeyTime);
+    }
 
-        if (activeMode == KisScalarKeyframe::Constant) {
-            return KisTimeSpan::fromTime(from, next.key() - 1);
-        } else {
-            return KisTimeSpan::fromTime(from, from);
-        }
+    // TODO: make virtual and offload to scalar channel!
+    KisScalarKeyframeSP activeScalarKey = activeKeyframeAt<KisScalarKeyframe>(time);
+    if (activeScalarKey && activeScalarKey->interpolationMode() != KisScalarKeyframe::Constant) {
+        return KisTimeSpan::fromTime(activeKeyTime, activeKeyTime);
+    } else {
+        return KisTimeSpan::fromTime(activeKeyTime, nextKeyTime - 1);
     }
 }
 
 KisTimeSpan KisKeyframeChannel::identicalFrames(int time) const
 {
-    TimeKeyframeMap::const_iterator active = activeKeyIterator(time);
+    const int activeKeyTime = activeKeyframeTime(time);
+    const KisScalarKeyframeSP activeScalarKey = keyframeAt<KisScalarKeyframe>(activeKeyTime);
 
-    if (active != m_d->keys.constEnd() && (active+1) != m_d->keys.constEnd()) {
-        KisScalarKeyframeSP activeScalar = active.value().dynamicCast<KisScalarKeyframe>();
-        if (activeScalar && activeScalar->interpolationMode() != KisScalarKeyframe::Constant) {
-            return KisTimeSpan::fromTime(time, time);
-        }
+    if (activeScalarKey != nullptr
+            && keyframeAt(nextKeyframeTime(time))
+            && activeScalarKey->interpolationMode() != KisScalarKeyframe::Constant) {
+        return KisTimeSpan::fromTime(time, time);
     }
 
     return affectedFrames(time);
@@ -443,12 +434,4 @@ void KisKeyframeChannel::workaroundBrokenFrameTimeBug(int *time)
             (*time)++;
         }
     }
-}
-
-KisKeyframeChannel::TimeKeyframeMap::const_iterator KisKeyframeChannel::activeKeyIterator(int time) const
-{
-    TimeKeyframeMap::const_iterator i = const_cast<const TimeKeyframeMap*>(&m_d->keys)->upperBound(time);
-
-    if (i == m_d->keys.constBegin()) return m_d->keys.constEnd();
-    return --i;
 }

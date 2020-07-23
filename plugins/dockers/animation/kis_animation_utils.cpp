@@ -66,7 +66,7 @@ namespace KisAnimationUtils {
                     createdChannel = true;
                 }
 
-                if (copy) {
+                if (copy && channel->activeKeyframeAt(time)) {
                     if (!channel->keyframeAt(time)) {
                         channel->copyKeyframe(channel->activeKeyframeTime(time), time, cmd.data());
                         result = true;

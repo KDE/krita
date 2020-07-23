@@ -42,9 +42,9 @@ private Q_SLOTS:
     void testInterChannelMovement();
 
     void testScalarChannel();
+    void testScalarValueInterpolation();
     void testScalarChannelUndoRedo();
-    void testAffectedFrames();
-    void testScalarInterpolation();
+    void testScalarAffectedFrames();
 
 private:
     const KoColorSpace *cs;

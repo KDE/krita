@@ -22,6 +22,7 @@
 #define KIS_WDG_SEEXPR_PRESETS_SAVE_H
 
 #include <QDialog>
+#include <filter/kis_filter_configuration.h>
 #include <resources/KisSeExprScript.h>
 
 #include "ui_wdgseexprsavepreset.h"

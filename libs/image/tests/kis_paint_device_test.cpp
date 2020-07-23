@@ -1788,9 +1788,8 @@ void KisPaintDeviceTest::testFramesUndoRedo()
     const int time = 1;
 
     channel->addKeyframe(time, &cmdAdd);
-    frameId = channel->frameIdAt(time);
-    //int frameId = i->createFrame(false, 0, QPoint(), &cmdAdd);
-
+    QVERIFY(channel->keyframeAt<KisRasterKeyframe>(time));
+    frameId = channel->keyframeAt<KisRasterKeyframe>(time)->frameID();
     QCOMPARE(frameId, 1);
 
     o = i->testingGetDataObjects();
@@ -2066,13 +2065,13 @@ void testCrossDeviceFrameCopyImpl(bool useChannel)
 
     QCOMPARE(dev1->exactBounds(), QRect());
 
-    const int dstFrameId1 = channel1->frameIdAt(10);
-    const int srcFrameId2 = channel2->frameIdAt(20);
-    const int srcFrameId3 = channel3->frameIdAt(30);
+    const int dst10FrameID = channel1->keyframeAt<KisRasterKeyframe>(10)->frameID();
+    const int src20FrameID = channel2->keyframeAt<KisRasterKeyframe>(20)->frameID();
+    const int src30FrameID = channel3->keyframeAt<KisRasterKeyframe>(30)->frameID();
 
     KUndo2Command cmd1;
     if (!useChannel) {
-        dev1->framesInterface()->uploadFrame(srcFrameId2, dstFrameId1, dev2);
+        dev1->framesInterface()->uploadFrame(src20FrameID, dst10FrameID, dev2);
     } else {
         KisKeyframeChannel::copyKeyframe(channel2, 20, channel1, 10, &cmd1 );
 
@@ -2088,7 +2087,7 @@ void testCrossDeviceFrameCopyImpl(bool useChannel)
 
     KUndo2Command cmd2;
     if (!useChannel) {
-        dev1->framesInterface()->uploadFrame(srcFrameId3, dstFrameId1, dev3);
+        dev1->framesInterface()->uploadFrame(src30FrameID, dst10FrameID, dev3);
     } else {
         KisKeyframeChannel::copyKeyframe(channel3, 30, channel1, 10, &cmd2);
     }

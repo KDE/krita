@@ -31,9 +31,11 @@ public:
     KisRasterKeyframe(KisPaintDeviceWSP paintDevice, int premadeFrameID);
     ~KisRasterKeyframe() override;
 
-    bool hasContent();
-    QRect bounds();
     int frameID() const;
+    QRect bounds();
+    bool hasContent();
+    void writeFrameToDevice(KisPaintDeviceSP writeTarget);
+
 
     KisKeyframeSP duplicate(KisKeyframeChannel *channel = 0) override;
 
@@ -56,20 +58,10 @@ public:
     ~KisRasterKeyframeChannel() override;
 
     /**
-     * Return the ID of the active frame at a given time. The active frame is
-     * defined by the keyframe at the given time or the last keyframe before it.
-     * @param time
-     * @return active frame id
-     */
-    Q_DECL_DEPRECATED int frameIdAt(int time) const;
-
-    /**
      * Copy the active frame at given time to target device.
      * @param keyframe keyframe to copy from
      * @param targetDevice device to copy the frame to
      */
-    Q_DECL_DEPRECATED void fetchFrame(KisKeyframeSP keyframe, KisPaintDeviceSP targetDevice);
-
     void fetchFrame(int time, KisPaintDeviceSP targetDevice);
 
     /**
@@ -108,8 +100,6 @@ private:
 
     void setFrameFilename(int frameId, const QString &filename);
     QString chooseFrameFilename(int frameId, const QString &layerFilename);
-    int frameId(KisKeyframeSP keyframe) const;
-    int frameId(const KisKeyframe *keyframe) const;
 
     struct Private;
     QScopedPointer<Private> m_d;

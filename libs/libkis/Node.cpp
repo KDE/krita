@@ -499,12 +499,12 @@ QByteArray Node::pixelDataAtTime(int x, int y, int w, int h, int time) const
     //
     KisRasterKeyframeChannel *rkc = dynamic_cast<KisRasterKeyframeChannel*>(d->node->getKeyframeChannel(KisKeyframeChannel::Raster.id()));
     if (!rkc) return ba;
-    KisKeyframeSP frame = rkc->keyframeAt(time);
+    KisRasterKeyframeSP frame = rkc->keyframeAt<KisRasterKeyframe>(time);
     if (!frame) return ba;
     KisPaintDeviceSP dev = new KisPaintDevice(*d->node->paintDevice(), KritaUtils::DeviceCopyMode::CopySnapshot);
     if (!dev) return ba;
 
-    rkc->fetchFrame(frame, dev);
+    frame->writeFrameToDevice(dev);
 
     ba.resize(w * h * dev->pixelSize());
     dev->readBytes(reinterpret_cast<quint8*>(ba.data()), x, y, w, h);

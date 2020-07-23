@@ -55,9 +55,9 @@ KisRasterKeyframe::~KisRasterKeyframe()
     }
 }
 
-bool KisRasterKeyframe::hasContent()
+int KisRasterKeyframe::frameID() const
 {
-    return !m_paintDevice->framesInterface()->frameBounds(m_frameId).isEmpty();
+    return m_frameId;
 }
 
 QRect KisRasterKeyframe::bounds()
@@ -74,9 +74,16 @@ QRect KisRasterKeyframe::bounds()
     }
 }
 
-int KisRasterKeyframe::frameID() const
+bool KisRasterKeyframe::hasContent()
 {
-    return m_frameId;
+    return !m_paintDevice->framesInterface()->frameBounds(m_frameId).isEmpty();
+}
+
+void KisRasterKeyframe::writeFrameToDevice(KisPaintDeviceSP writeTarget)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_paintDevice);
+
+    m_paintDevice->framesInterface()->fetchFrame(m_frameId, writeTarget);
 }
 
 KisKeyframeSP KisRasterKeyframe::duplicate(KisKeyframeChannel *channel)
@@ -148,30 +155,6 @@ KisRasterKeyframeChannel::~KisRasterKeyframeChannel()
 {
 }
 
-int KisRasterKeyframeChannel::frameId(KisKeyframeSP keyframe) const
-{
-    return frameId(keyframe.data());
-}
-
-int KisRasterKeyframeChannel::frameId(const KisKeyframe *keyframe) const
-{
-    const KisRasterKeyframe *key = dynamic_cast<const KisRasterKeyframe*>(keyframe);
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(key, -1);
-    return key->frameID();
-}
-
-int KisRasterKeyframeChannel::frameIdAt(int time) const
-{
-    KisKeyframeSP activeKey = activeKeyframeAt(time);
-    if (activeKey.isNull()) return -1;
-    return frameId(activeKey);
-}
-
-void KisRasterKeyframeChannel::fetchFrame(KisKeyframeSP keyframe, KisPaintDeviceSP targetDevice)
-{
-    m_d->paintDevice->framesInterface()->fetchFrame(frameId(keyframe), targetDevice);
-}
-
 void KisRasterKeyframeChannel::fetchFrame(int time, KisPaintDeviceSP targetDevice)
 {
     KisRasterKeyframeSP key = keyframeAt<KisRasterKeyframe>(time);
@@ -179,7 +162,7 @@ void KisRasterKeyframeChannel::fetchFrame(int time, KisPaintDeviceSP targetDevic
         key = activeKeyframeAt<KisRasterKeyframe>(time);
     }
 
-    m_d->paintDevice->framesInterface()->fetchFrame(key->frameID(), targetDevice);
+    key->writeFrameToDevice(targetDevice);
 }
 
 void KisRasterKeyframeChannel::importFrame(int time, KisPaintDeviceSP sourceDevice, KUndo2Command *parentCommand)
@@ -191,7 +174,7 @@ void KisRasterKeyframeChannel::importFrame(int time, KisPaintDeviceSP sourceDevi
 
 QRect KisRasterKeyframeChannel::frameExtents(KisKeyframeSP keyframe)
 {
-    return m_d->paintDevice->framesInterface()->frameBounds(frameId(keyframe));
+    return m_d->paintDevice->framesInterface()->frameBounds(keyframe.dynamicCast<KisRasterKeyframe>()->frameID());
 }
 
 QString KisRasterKeyframeChannel::frameFilename(int frameId) const
@@ -263,7 +246,10 @@ void KisRasterKeyframeChannel::loadXML(const QDomElement &channelNode)
 
 void KisRasterKeyframeChannel::saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename)
 {
-    int frame = frameId(keyframe);
+    KisRasterKeyframeSP rasterKeyframe = keyframe.dynamicCast<KisRasterKeyframe>();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(rasterKeyframe);
+
+    int frame = rasterKeyframe->frameID();
 
     QString filename = frameFilename(frame);
     if (filename.isEmpty()) {
@@ -280,7 +266,7 @@ QPair<int, KisKeyframeSP> KisRasterKeyframeChannel::loadKeyframe(const QDomEleme
     int time = keyframeNode.attribute("time").toInt();
     workaroundBrokenFrameTimeBug(&time);
 
-    KisKeyframeSP keyframe;
+    KisRasterKeyframeSP keyframe;
 
     QPoint offset;
     KisDomUtils::loadValue(keyframeNode, "offset", &offset);
@@ -290,18 +276,18 @@ QPair<int, KisKeyframeSP> KisRasterKeyframeChannel::loadKeyframe(const QDomEleme
         // First keyframe loaded: use the existing frame
         KIS_SAFE_ASSERT_RECOVER_NOOP(keyframeCount() == 1);
         int firstKeyframeTime = constKeys().begin().key();
-        keyframe = keyframeAt(firstKeyframeTime);
+        keyframe = keyframeAt<KisRasterKeyframe>(firstKeyframeTime);
 
         // Remove from keys. It will get reinserted with new time once we return
         keys().remove(firstKeyframeTime);
 
-        m_d->paintDevice->framesInterface()->setFrameOffset(frameId(keyframe), offset);
+        m_d->paintDevice->framesInterface()->setFrameOffset(keyframe->frameID(), offset);
     } else {
         //KUndo2Command tempCommand;
         keyframe = toQShared(new KisRasterKeyframe(m_d->paintDevice));
     }
 
-    setFrameFilename(frameId(keyframe), frameFilename);
+    setFrameFilename(keyframe->frameID(), frameFilename);
 
     return QPair<int, KisKeyframeSP>(time, keyframe);
 }

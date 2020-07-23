@@ -398,7 +398,10 @@ KisImportExportErrorCode CSVSaver::getLayer(CSVLayerRecord* layer, KisDocument* 
     KisPaintDeviceSP device = image->rootLayer()->firstChild()->projection();
 
     if (!keyframe.isNull()) {
-        layer->channel->fetchFrame(keyframe, device);
+        KisRasterKeyframeSP rasterKeyframe = keyframe.dynamicCast<KisRasterKeyframe>();
+        if (rasterKeyframe) {
+            rasterKeyframe->writeFrameToDevice(device);
+        }
     } else {
         device->makeCloneFrom(layer->layer->projection(),image->bounds()); // without animation
     }

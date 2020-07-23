@@ -213,7 +213,7 @@ public:
             return -1;
         }
         return !defaultBounds->currentLevelOfDetail() ?
-               contentChannel->frameIdAt(defaultBounds->currentTime()) :
+               contentChannel->activeKeyframeAt<KisRasterKeyframe>(defaultBounds->currentTime())->frameID() :
                -1;
     }
 

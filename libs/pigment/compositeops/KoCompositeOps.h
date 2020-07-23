@@ -290,7 +290,7 @@ struct AddRGBOps<Traits, true>
         add<&cfSaturation        <HSVType,Arg> >(cs, COMPOSITE_SATURATION_HSV    , i18nc("HSV Saturation", "Saturation HSV")         , KoCompositeOp::categoryHSV());
         add<&cfIncreaseSaturation<HSVType,Arg> >(cs, COMPOSITE_INC_SATURATION_HSV, i18nc("HSV Increase Saturation", "Increase Saturation HSV"), KoCompositeOp::categoryHSV());
         add<&cfDecreaseSaturation<HSVType,Arg> >(cs, COMPOSITE_DEC_SATURATION_HSV, i18nc("HSV Decrease Saturation", "Decrease Saturation HSV"), KoCompositeOp::categoryHSV());
-        add<&cfLightness         <HSVType,Arg> >(cs, COMPOSITE_VALUE             , i18nc("HSV Value", "HSV Value","Value")                  , KoCompositeOp::categoryHSV());
+        add<&cfLightness         <HSVType,Arg> >(cs, COMPOSITE_VALUE             , i18nc("HSV Value", "Value")                  , KoCompositeOp::categoryHSV());
         add<&cfIncreaseLightness <HSVType,Arg> >(cs, COMPOSITE_INC_VALUE         , i18nc("HSV Increase Value", "Increase Value")         , KoCompositeOp::categoryHSV());
         add<&cfDecreaseLightness <HSVType,Arg> >(cs, COMPOSITE_DEC_VALUE         , i18nc("HSV Decrease Value", "Decrease Value")         , KoCompositeOp::categoryHSV());
     }

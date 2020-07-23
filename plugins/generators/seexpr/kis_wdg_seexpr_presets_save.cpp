@@ -136,20 +136,25 @@ void KisWdgSeExprPresetsSave::renderScriptToThumbnail()
 void KisWdgSeExprPresetsSave::savePreset()
 {
     KisSeExprScriptSP curPreset = m_currentPreset;
-    if (!curPreset)
+    if (!curPreset) {
         return;
+    }
 
-    KoResourceSP oldPreset = curPreset->clone(); // tags are not cloned with this
     auto *rServer = KoResourceServerProvider::instance()->seExprScriptServer();
     QString saveLocation = rServer->saveLocation();
 
-    // if we are saving a new brush, use what we type in for the input
+    // if we are saving a new preset, use what we type in for the input
     QString presetName = m_useNewPresetDialog ? newPresetNameTextField->text() : curPreset->name();
-    QString currentPresetFileName = saveLocation + presetName.replace(" ", "_") + curPreset->defaultFileExtension();
+    // We don't want dots or spaces in the filenames
+    QString presetFileName = presetName.replace(' ', '_').replace('.', '_');
+    QString extension = curPreset->defaultFileExtension();
 
     if (m_useNewPresetDialog) {
         KisSeExprScriptSP newPreset = curPreset->clone().staticCast<KisSeExprScript>();
-        newPreset->setFilename(currentPresetFileName);
+        if (!presetFileName.endsWith(extension)) {
+            presetFileName.append(extension);
+        }
+        newPreset->setFilename(presetFileName);
         newPreset->setName(presetName);
         newPreset->setImage(presetThumbnailWidget->pixmap()->toImage());
         newPreset->setScript(m_currentConfiguration->getString("script"));

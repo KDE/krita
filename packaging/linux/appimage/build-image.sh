@@ -200,6 +200,8 @@ linuxdeployqt $APPDIR/usr/share/applications/org.kde.krita.desktop \
 
 if [[ $ARCH == "arm64" ]]; then
   APPIMAGE_ARCHITECTURE="aarch64"
+elif [[ $ARCH == "amd64" ]]; then
+  APPIMAGE_ARCHITECTURE="x86_64"
 else
   APPIMAGE_ARCHITECTURE=$ARCH
 fi

@@ -26,6 +26,7 @@
 
 #include <filter/kis_filter.h>
 #include <kis_filter_configuration.h>
+#include <kis_cached_paint_device.h>
 
 #include "KisHalftoneFilterConfiguration.h"
 
@@ -58,10 +59,10 @@ public:
     KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, bool useForMasks) const override;
 
 private:
-    static KisPaintDeviceSP makeGeneratorPaintDevice(const QString & prefix,
-                                                     const QRect &applyRect,
-                                                     const KisHalftoneFilterConfiguration *config,
-                                                     KoUpdater *progressUpdater);
+    mutable KisCachedSelection m_selectionsCache;
+    mutable KisCachedPaintDevice m_grayDevicesCache;
+    mutable KisCachedPaintDevice m_genericDevicesCache;
+
     static QVector<quint8> makeHardnessLut(qreal hardness);
     static QVector<quint8> makeNoiseWeightLut(qreal hardness);
     
@@ -74,6 +75,12 @@ private:
     static inline T mapU8ToRange(quint8 value, T new_min, T new_max) {
         return value * (new_max - new_min) / 255 + new_min;
     }
+
+    KisPaintDeviceSP makeGeneratorPaintDevice(KisPaintDeviceSP prototype,
+                                              const QString & prefix,
+                                              const QRect &applyRect,
+                                              const KisHalftoneFilterConfiguration *config,
+                                              KoUpdater *progressUpdater) const;
 
     bool checkUpdaterInterruptedAndSetPercent(KoUpdater *progressUpdater, int percent) const;
     

@@ -122,36 +122,6 @@ void KisHalftoneFilter::processImpl(KisPaintDeviceSP device,
     }
 }
 
-KisPaintDeviceSP KisHalftoneFilter::makeGeneratorPaintDevice(const QString & prefix,
-                                                             const QRect &applyRect,
-                                                             const KisHalftoneFilterConfiguration *config,
-                                                             KoUpdater *progressUpdater)
-{
-    const QString generatorId = config->generatorId(prefix);
-    if (generatorId.isEmpty()) {
-        return nullptr;
-    }
-
-    KisGeneratorSP generator  = KisGeneratorRegistry::instance()->get(generatorId);
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(generator, nullptr);
-
-    KisFilterConfigurationSP generatorConfiguration = config->generatorConfiguration(prefix);
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(generatorConfiguration, nullptr);
-
-    // Fill the generator device
-    KisPaintDeviceSP generatorDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->graya8());
-
-    KisProcessingInformation(generatorDevice, applyRect.topLeft(), KisSelectionSP());
-    generator->generate(
-        KisProcessingInformation(generatorDevice, applyRect.topLeft(),KisSelectionSP()),
-        applyRect.size(),
-        generatorConfiguration,
-        progressUpdater
-    );
-
-    return generatorDevice;
-}
-
 QVector<quint8> KisHalftoneFilter::makeHardnessLut(qreal hardness)
 {
     QVector<quint8> hardnessLut(256);
@@ -179,6 +149,37 @@ QVector<quint8> KisHalftoneFilter::makeNoiseWeightLut(qreal hardness)
         noiseWeightLut[i] = qBound(0, static_cast<int>(qRound(weight * 255.0)), 255);
     }
     return noiseWeightLut;
+}
+
+KisPaintDeviceSP KisHalftoneFilter::makeGeneratorPaintDevice(KisPaintDeviceSP prototype,
+                                                             const QString & prefix,
+                                                             const QRect &applyRect,
+                                                             const KisHalftoneFilterConfiguration *config,
+                                                             KoUpdater *progressUpdater) const
+{
+    const QString generatorId = config->generatorId(prefix);
+    if (generatorId.isEmpty()) {
+        return nullptr;
+    }
+
+    KisGeneratorSP generator  = KisGeneratorRegistry::instance()->get(generatorId);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(generator, nullptr);
+
+    KisFilterConfigurationSP generatorConfiguration = config->generatorConfiguration(prefix);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(generatorConfiguration, nullptr);
+
+    // Fill the generator device
+    KisPaintDeviceSP generatorDevice = m_grayDevicesCache.getDevice(prototype, KoColorSpaceRegistry::instance()->graya8());
+
+    KisProcessingInformation(generatorDevice, applyRect.topLeft(), KisSelectionSP());
+    generator->generate(
+        KisProcessingInformation(generatorDevice, applyRect.topLeft(),KisSelectionSP()),
+        applyRect.size(),
+        generatorConfiguration,
+        progressUpdater
+    );
+
+    return generatorDevice;
 }
 
 bool KisHalftoneFilter::checkUpdaterInterruptedAndSetPercent(KoUpdater *progressUpdater, int percent) const
@@ -209,7 +210,7 @@ void KisHalftoneFilter::processIntensity(KisPaintDeviceSP device,
     }
     
     // Make the generator device
-    KisPaintDeviceSP generatorDevice = makeGeneratorPaintDevice(prefix, applyRect, config, nullptr);
+    KisPaintDeviceSP generatorDevice = makeGeneratorPaintDevice(device, prefix, applyRect, config, nullptr);
     if (!generatorDevice) {
         return;
     }
@@ -223,10 +224,11 @@ void KisHalftoneFilter::processIntensity(KisPaintDeviceSP device,
     const QVector<quint8> noiseWeightLut = makeNoiseWeightLut(hardness);
 
     // Fill the mask device
-    KisSelectionSP maskDevice = new KisSelection(device->defaultBounds());
+    KisSelectionSP maskDevice = m_selectionsCache.getSelection();
 
     {
         const bool invert = config->invert(prefix);
+
         KisSequentialIterator maskIterator(maskDevice->pixelSelection(), applyRect);
         KisSequentialIterator dstIterator(device, applyRect);
         KisSequentialIterator srcIterator(generatorDevice, applyRect);
@@ -260,6 +262,7 @@ void KisHalftoneFilter::processIntensity(KisPaintDeviceSP device,
                 *maskIterator.rawData() = result;
             }
         }
+        m_grayDevicesCache.putDevice(generatorDevice);
     }
     if (checkUpdaterInterruptedAndSetPercent(progressUpdater, 50)) {
         return;
@@ -272,10 +275,10 @@ void KisHalftoneFilter::processIntensity(KisPaintDeviceSP device,
     } else {
         colorSpace = device->colorSpace();
     }
-    KisPaintDeviceSP halftoneDevice = new KisPaintDevice(colorSpace);
+    KisPaintDeviceSP halftoneDevice = m_genericDevicesCache.getDevice(device, colorSpace);
     
     {
-        KisPaintDeviceSP foregroundDevice = new KisPaintDevice(colorSpace);
+        KisPaintDeviceSP foregroundDevice = m_genericDevicesCache.getDevice(device, colorSpace);
         KoColor foregroundColor = config->foregroundColor(prefix);
         KoColor backgroundColor = config->backgroundColor(prefix);
         const qreal foregroundOpacity = config->foregroundOpacity(prefix) / 100.0;
@@ -291,6 +294,9 @@ void KisHalftoneFilter::processIntensity(KisPaintDeviceSP device,
         KisPainter painter(halftoneDevice, maskDevice);
         painter.setCompositeOp(COMPOSITE_OVER);
         painter.bitBlt(applyRect.topLeft(), foregroundDevice, applyRect);
+
+        m_genericDevicesCache.putDevice(foregroundDevice);
+        m_selectionsCache.putSelection(maskDevice);
     }
     if (checkUpdaterInterruptedAndSetPercent(progressUpdater, 75)) {
         return;
@@ -307,6 +313,8 @@ void KisHalftoneFilter::processIntensity(KisPaintDeviceSP device,
         painter.setCompositeOp(COMPOSITE_COPY);
         painter.bitBlt(applyRect.topLeft(), halftoneDevice, applyRect);
     }
+    m_genericDevicesCache.putDevice(halftoneDevice);
+
     if (checkUpdaterInterruptedAndSetPercent(progressUpdater, 100)) {
         return;
     }
@@ -434,7 +442,7 @@ void KisHalftoneFilter::processChannels(KisPaintDeviceSP device,
         } else {
             const QString prefix =
                 device->colorSpace()->colorModelId().id() + "_channel" + QString::number(i) + "_";
-            KisPaintDeviceSP generatorDevice = makeGeneratorPaintDevice(prefix, applyRect, config, nullptr);
+            KisPaintDeviceSP generatorDevice = makeGeneratorPaintDevice(device, prefix, applyRect, config, nullptr);
             if (generatorDevice) {
                 generatorDevices[i] = generatorDevice;
             } else {
@@ -487,6 +495,8 @@ void KisHalftoneFilter::processChannels(KisPaintDeviceSP device,
         }
         }
 
+        m_grayDevicesCache.putDevice(generatorDevices[i]);
+
         if (checkUpdaterInterruptedAndSetPercent(progressUpdater, progressUpdater->progress() + progressStep)) {
             return;
         }
@@ -509,7 +519,7 @@ void KisHalftoneFilter::processAlpha(KisPaintDeviceSP device,
     }
 
     // Make the generator device
-    KisPaintDeviceSP generatorDevice = makeGeneratorPaintDevice(prefix, applyRect, config, nullptr);
+    KisPaintDeviceSP generatorDevice = makeGeneratorPaintDevice(device, prefix, applyRect, config, nullptr);
     if (!generatorDevice) {
         return;
     }
@@ -556,6 +566,8 @@ void KisHalftoneFilter::processAlpha(KisPaintDeviceSP device,
             device->colorSpace()->setOpacity(dstIterator.rawData(), static_cast<quint8>(result), 1);
         }
     }
+    m_grayDevicesCache.putDevice(generatorDevice);
+
     if (checkUpdaterInterruptedAndSetPercent(progressUpdater, 100)) {
         return;
     }
@@ -573,7 +585,7 @@ void KisHalftoneFilter::processMask(KisPaintDeviceSP device,
     }
 
     // Make the generator device
-    KisPaintDeviceSP generatorDevice = makeGeneratorPaintDevice(prefix, applyRect, config, nullptr);
+    KisPaintDeviceSP generatorDevice = makeGeneratorPaintDevice(device, prefix, applyRect, config, nullptr);
     if (!generatorDevice) {
         return;
     }
@@ -618,6 +630,8 @@ void KisHalftoneFilter::processMask(KisPaintDeviceSP device,
             *dstIterator.rawData() =  static_cast<quint8>(result);
         }
     }
+    m_grayDevicesCache.putDevice(generatorDevice);
+
     if (checkUpdaterInterruptedAndSetPercent(progressUpdater, 100)) {
         return;
     }

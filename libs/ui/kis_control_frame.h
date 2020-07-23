@@ -29,6 +29,7 @@
 
 #include <KoPattern.h>
 #include <KoAbstractGradient.h>
+#include <KoCheckerBoardPainter.h>
 
 class QWidget;
 class QTabWidget;
@@ -89,6 +90,7 @@ private:
     KisPaintopBox *m_paintopBox;
 
     KoDualColorButton *m_dual;
+    KoCheckerBoardPainter m_checkersPainter;
 
 };
 

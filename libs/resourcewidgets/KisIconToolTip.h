@@ -26,6 +26,8 @@
 
 #include "kritaresourcewidgets_export.h"
 
+class KoCheckerBoardPainter;
+
 class KRITARESOURCEWIDGETS_EXPORT KisIconToolTip: public KoItemToolTip
 {
 
@@ -33,8 +35,15 @@ public:
     KisIconToolTip();
     ~KisIconToolTip() override;
 
+    void setFixedToolTipThumbnailSize(const QSize &size);
+    void setToolTipShouldRenderCheckers(bool value);
+
 protected:
     QTextDocument *createDocument( const QModelIndex &index ) override;
+
+private:
+    QSize m_fixedToolTipThumbnailSize;
+    QScopedPointer<KoCheckerBoardPainter> m_checkersPainter;
 };
 
 #endif // KOICONTOOLTIP_H

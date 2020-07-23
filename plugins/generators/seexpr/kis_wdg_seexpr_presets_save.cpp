@@ -18,7 +18,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_wdg_seexpr_presets_save.h"
 #include <KisImportExportManager.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoFileDialog.h>
@@ -27,6 +26,8 @@
 #include <QTime>
 #include <kis_fill_painter.h>
 #include <kis_paint_device.h>
+
+#include "kis_wdg_seexpr_presets_save.h"
 
 KisWdgSeExprPresetsSave::KisWdgSeExprPresetsSave(QWidget *parent)
     : KisWdgSeExprSavePreset(parent)

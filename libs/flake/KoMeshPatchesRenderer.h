@@ -123,11 +123,11 @@ public:
             QPen pen(average);
             m_patchPainter.setPen(pen);
 
-            m_patchPainter.drawPath(patchPath->outline());
+            QPainterPath outline = patchPath->outline();
 
             QBrush brush(average);
-            m_patchPainter.fillPath(patchPath->outline(), brush);
-            m_patchPainter.drawPath(patchPath->outline());
+            m_patchPainter.fillPath(outline, brush);
+            m_patchPainter.drawPath(outline);
         }
     }
 
@@ -562,10 +562,10 @@ public:
 
     QVector<QColor> getColorsBilinear(const SvgMeshPatch* patch)
     {
-        QColor c1     = patch->getStop(SvgMeshPatch::Top).color;
-        QColor c2     = patch->getStop(SvgMeshPatch::Right).color;
-        QColor c3     = patch->getStop(SvgMeshPatch::Bottom).color;
-        QColor c4     = patch->getStop(SvgMeshPatch::Left).color;
+        QColor c1 = patch->getStop(SvgMeshPatch::Top).color;
+        QColor c2 = patch->getStop(SvgMeshPatch::Right).color;
+        QColor c3 = patch->getStop(SvgMeshPatch::Bottom).color;
+        QColor c4 = patch->getStop(SvgMeshPatch::Left).color;
 
         QVector<QColor> result(5);
         result[0] = midPointColor(c1, c2);

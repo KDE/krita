@@ -3,7 +3,9 @@ include(SIPMacros)
 message( ${SIP_VERSION} " - The version of SIP found expressed as a 6 digit hex number suitable for comparison as a string.")
 message( ${SIP_VERSION_STR} " - The version of SIP found as a human readable string.")
 message( ${SIP_EXECUTABLE} " - Path and filename of the SIP command line executable.")
-message( ${SIP_INCLUDE_DIR} " - Directory holding the SIP C++ header file.")
+IF(${SIP_VERSION_STR} VERSION_LESS 5)
+    message( ${SIP_INCLUDE_DIR} " - Directory holding the SIP C++ header file.")
+ENDIF(${SIP_VERSION_STR} VERSION_LESS 5)
 message( ${SIP_DEFAULT_SIP_DIR} " - default SIP dir" )
 
 set(SIP_INCLUDES

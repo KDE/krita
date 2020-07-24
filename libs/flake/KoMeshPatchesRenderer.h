@@ -233,6 +233,39 @@ public:
         return result;
     }
 
+    /// Naming convention adopted from: https://en.wikipedia.org/wiki/Bicubic_interpolation#Computation
+    QVector<qreal> getAlpha(const QVector<qreal>& X)
+    {
+        QVector<QVector<qreal>> A = {
+            { 1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},
+            { 0, 0, 0, 0,  1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},
+            {-3, 3, 0, 0, -2,-1, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},
+            { 2,-2, 0, 0,  1, 1, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},
+            { 0, 0, 0, 0,  0, 0, 0, 0,  1, 0, 0, 0,  0, 0, 0, 0},
+            { 0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  1, 0, 0, 0},
+            { 0, 0, 0, 0,  0, 0, 0, 0, -3, 3, 0, 0, -2,-1, 0, 0},
+            { 0, 0, 0, 0,  0, 0, 0, 0,  2,-2, 0, 0,  1, 1, 0, 0},
+            {-3, 0, 3, 0,  0, 0, 0, 0, -2, 0,-1, 0,  0, 0, 0, 0},
+            { 0, 0, 0, 0, -3, 0, 3, 0,  0, 0, 0, 0, -2, 0,-1, 0},
+            { 9,-9,-9, 9,  6, 3,-6,-3,  6,-6, 3,-3,  4, 2, 2, 1},
+            {-6, 6, 6,-6, -3,-3, 3, 3, -4, 4,-2, 2, -2,-2,-1,-1},
+            { 2, 0,-2, 0,  0, 0, 0, 0,  1, 0, 1, 0,  0, 0, 0, 0},
+            { 0, 0, 0, 0,  2, 0,-2, 0,  0, 0, 0, 0,  1, 0, 1, 0},
+            {-6, 6, 6,-6, -4,-2, 4, 2, -3, 3,-3, 3, -2,-1,-2,-1},
+            { 4,-4,-4, 4,  2, 2,-2,-2,  2,-2, 2,-2,  1, 1, 1, 1}};
+
+
+        QVector<qreal> alpha(16, 0);
+        for (int i = 0; i < 16; ++i) {
+            alpha[i] = 0;
+            for (int j = 0; j < 16; ++j) {
+                alpha[i] += A[i][j] * X[j];
+            }
+        }
+
+        return alpha;
+    }
+
     QVector<qreal> derivative(const SvgMeshStop& stop0,
                               const SvgMeshStop& stop1,
                               const SvgMeshStop& stop2)
@@ -259,9 +292,10 @@ public:
         return result;
     }
 
-    QVector<QVector<qreal>> derivative(const SvgMeshPatch* patch0,
-                                       const SvgMeshPatch* patch1,
-                                       const SvgMeshPatch* patch2)
+    /// Derivative in the X direction, but the patch should not be on an edge
+    QVector<QVector<qreal>> derivativeX(const SvgMeshPatch* patch0,
+                                        const SvgMeshPatch* patch1,
+                                        const SvgMeshPatch* patch2)
     {
         SvgMeshStop f10 = patch0->getStop(SvgMeshPatch::Top);
         SvgMeshStop f20 = patch0->getStop(SvgMeshPatch::Left);
@@ -282,10 +316,34 @@ public:
         return {d11, d12, d21, d22};
     }
 
-    QVector<QVector<qreal>> derivativeEdge(const SvgMeshPatch* patch0,
-                                            const SvgMeshPatch* patch1)
+    /// Derivative in the Y direction, but the patch should not be on an edge
+    QVector<QVector<qreal>> derivativeY(const SvgMeshPatch* patch0,
+                                        const SvgMeshPatch* patch1,
+                                        const SvgMeshPatch* patch2)
     {
-        // FIXME shouldn't we move this to SvgMeshArray class?
+        SvgMeshStop f01 = patch0->getStop(SvgMeshPatch::Top);
+        SvgMeshStop f02 = patch0->getStop(SvgMeshPatch::Right);
+
+        SvgMeshStop f11 = patch1->getStop(SvgMeshPatch::Top);
+        SvgMeshStop f12 = patch1->getStop(SvgMeshPatch::Right);
+        SvgMeshStop f21 = patch1->getStop(SvgMeshPatch::Left);
+        SvgMeshStop f22 = patch1->getStop(SvgMeshPatch::Bottom);
+
+        SvgMeshStop f31 = patch2->getStop(SvgMeshPatch::Left);
+        SvgMeshStop f32 = patch2->getStop(SvgMeshPatch::Bottom);
+
+        QVector<qreal> d11 = derivative(f01, f11, f21);
+        QVector<qreal> d12 = derivative(f02, f12, f22);
+        QVector<qreal> d21 = derivative(f11, f21, f31);
+        QVector<qreal> d22 = derivative(f12, f22, f32);
+
+        return {d11, d12, d21, d22};
+    }
+
+    /// Derivative in the X direction. The edge has to be in left-most column.
+    QVector<QVector<qreal>> derivativeEdgeBeginX(const SvgMeshPatch* patch0,
+                                                 const SvgMeshPatch* patch1)
+    {
         SvgMeshStop f00 = patch0->getStop(SvgMeshPatch::Top);
         SvgMeshStop f01 = patch0->getStop(SvgMeshPatch::Right);
         SvgMeshStop f10 = patch0->getStop(SvgMeshPatch::Left);
@@ -294,55 +352,103 @@ public:
         SvgMeshStop f02 = patch1->getStop(SvgMeshPatch::Right);
         SvgMeshStop f12 = patch1->getStop(SvgMeshPatch::Bottom);
 
-        // TODO check otherwise, if results aren't good enough
-        QVector<qreal> d00 = multiply(secant(f00, f01), 2) /* - del_0 */;
         QVector<qreal> d01 = derivative(f00, f01, f02);
-        QVector<qreal> d10 = multiply(secant(f10, f11), 2) /* - del_0 */;
         QVector<qreal> d11 = derivative(f10, f11, f12);
+        QVector<qreal> d00 = difference(multiply(secant(f00, f01), 2), d01);
+        QVector<qreal> d10 = difference(multiply(secant(f10, f11), 2), d11);
 
         return {d00, d01, d10, d11};
     }
 
-    QVector<qreal> getAlpha(const QVector<qreal>& X)
+    /// Derivative in the Y direction. The edge has to be in top row
+    QVector<QVector<qreal>> derivativeEdgeBeginY(const SvgMeshPatch* patch0,
+                                                 const SvgMeshPatch* patch1)
     {
-        QVector<QVector<qreal>> A = {
-            { 1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},
-            { 0, 0, 0, 0,  1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},
-            {-3, 3, 0, 0, -2,-1, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},
-            { 2,-2, 0, 0,  1, 1, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},
-            { 0, 0, 0, 0,  0, 0, 0, 0,  1, 0, 0, 0,  0, 0, 0, 0},
-            { 0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  1, 0, 0, 0},
-            { 0, 0, 0, 0,  0, 0, 0, 0, -3, 3, 0, 0, -2,-1, 0, 0},
-            { 0, 0, 0, 0,  0, 0, 0, 0,  2,-2, 0, 0,  1, 1, 0, 0},
-            {-3, 0, 3, 0,  0, 0, 0, 0, -2, 0,-1, 0,  0, 0, 0, 0},
-            { 0, 0, 0, 0, -3, 0, 3, 0,  0, 0, 0, 0, -2, 0,-1, 0},
-            { 9,-9,-9, 9,  6, 3,-6,-3,  6,-6, 3,-3,  4, 2, 2, 1},
-            {-6, 6, 6,-6, -3,-3, 3, 3, -4, 4,-2, 2, -2,-2,-1,-1},
-            { 2, 0,-2, 0,  0, 0, 0, 0,  1, 0, 1, 0,  0, 0, 0, 0},
-            { 0, 0, 0, 0,  2, 0,-2, 0,  0, 0, 0, 0,  1, 0, 1, 0},
-            {-6, 6, 6,-6, -4,-2, 4, 2, -3, 3,-3, 3, -2,-1,-2,-1},
-            { 4,-4,-4, 4,  2, 2,-2,-2,  2,-2, 2,-2,  1, 1, 1, 1}
-            };
+        SvgMeshStop f00 = patch0->getStop(SvgMeshPatch::Top);
+        SvgMeshStop f01 = patch0->getStop(SvgMeshPatch::Right);
+        SvgMeshStop f10 = patch0->getStop(SvgMeshPatch::Left);
+        SvgMeshStop f11 = patch0->getStop(SvgMeshPatch::Bottom);
 
+        SvgMeshStop f20 = patch1->getStop(SvgMeshPatch::Left);
+        SvgMeshStop f21 = patch1->getStop(SvgMeshPatch::Bottom);
 
-        QVector<qreal> alpha(16, 0);
-        for (int i = 0; i < 16; ++i) {
-            alpha[i] = 0;
-            for (int j = 0; j < 16; ++j) {
-                alpha[i] += A[i][j] * X[j];
-            }
-        }
+        QVector<qreal> d10 = derivative(f00, f10, f20);
+        QVector<qreal> d11 = derivative(f01, f11, f21);
+        QVector<qreal> d00 = difference(multiply(secant(f00, f10), 2), d10);
+        QVector<qreal> d01 = difference(multiply(secant(f01, f11), 2), d11);
 
-        return alpha;
+        return {d00, d01, d10, d11};
+    }
+
+    // Derivative in the X direction. The edge has to be in right-most column.
+    QVector<QVector<qreal>> derivativeEdgeEndX(const SvgMeshPatch* patch1,
+                                               const SvgMeshPatch* patch0)
+    {
+        SvgMeshStop f02 = patch1->getStop(SvgMeshPatch::Top);
+        SvgMeshStop f03 = patch1->getStop(SvgMeshPatch::Right);
+        SvgMeshStop f12 = patch1->getStop(SvgMeshPatch::Left);
+        SvgMeshStop f13 = patch1->getStop(SvgMeshPatch::Bottom);
+
+        SvgMeshStop f01 = patch0->getStop(SvgMeshPatch::Top);
+        SvgMeshStop f11 = patch0->getStop(SvgMeshPatch::Left);
+
+        QVector<qreal> d02 = derivative(f01, f02, f03);
+        QVector<qreal> d12 = derivative(f11, f12, f13);
+        QVector<qreal> d03 = difference(multiply(secant(f02, f03), 2), d02);
+        QVector<qreal> d13 = difference(multiply(secant(f12, f13), 2), d12);
+
+        return {d02, d03, d12, d13};
+    }
+
+    // Derivative in the Y direction. The edge has to be the bottom row
+    QVector<QVector<qreal>> derivativeEdgeEndY(const SvgMeshPatch* patch1,
+                                                const SvgMeshPatch* patch0)
+    {
+        SvgMeshStop f22 = patch1->getStop(SvgMeshPatch::Top);
+        SvgMeshStop f23 = patch1->getStop(SvgMeshPatch::Right);
+        SvgMeshStop f32 = patch1->getStop(SvgMeshPatch::Left);
+        SvgMeshStop f33 = patch1->getStop(SvgMeshPatch::Bottom);
+
+        SvgMeshStop f12 = patch0->getStop(SvgMeshPatch::Top);
+        SvgMeshStop f13 = patch0->getStop(SvgMeshPatch::Right);
+
+        QVector<qreal> d22 = derivative(f12, f22, f32);
+        QVector<qreal> d23 = derivative(f13, f23, f33);
+        QVector<qreal> d32 = difference(multiply(secant(f22, f32), 2), d22);
+        QVector<qreal> d33 = difference(multiply(secant(f23, f33), 2), d23);
+
+        return {d22, d23, d32, d33};
     }
 
     // TODO: Make this private
     void calculateAlpha(const SvgMeshArray* mesharray, const int row, const int col, const SvgMeshPatch* patch)
     {
-        SvgMeshStop f00 = patch->getStop(SvgMeshPatch::Top);
-        SvgMeshStop f01 = patch->getStop(SvgMeshPatch::Right);
-        SvgMeshStop f10 = patch->getStop(SvgMeshPatch::Left);
-        SvgMeshStop f11 = patch->getStop(SvgMeshPatch::Bottom);
+        // This is the convention which is being followed:
+        //
+        // f00, f03, f30, f33 are corners and their respective derivatives are represented as
+        // d00, d03, d30, d33
+        //   
+        //   +-----> U/x (row)
+        // |
+        // |                 f00-------f01-------f02-------f03
+        // V                  |         |         |         |
+        //  V/y (col)         |         |         |         |
+        //                    |         |         |         |
+        //                   f10-------f11-------f12-------f13
+        //                    |         |         |         |
+        //                    |         |         |         |
+        //                    |         |         |         |
+        //                   f20-------f21-------f22-------f23
+        //                    |         |         |         |
+        //                    |         |         |         |
+        //                    |         |         |         |
+        //                   f30-------f31-------f32-------f33
+        //
+
+        SvgMeshStop f11 = patch->getStop(SvgMeshPatch::Top);
+        SvgMeshStop f12 = patch->getStop(SvgMeshPatch::Right);
+        SvgMeshStop f21 = patch->getStop(SvgMeshPatch::Left);
+        SvgMeshStop f22 = patch->getStop(SvgMeshPatch::Bottom);
 
         QVector<QVector<qreal>> dx(4, QVector<qreal>(4, 0));
         QVector<QVector<qreal>> dy(4, QVector<qreal>(4, 0));
@@ -351,58 +457,50 @@ public:
         if (!mesharray || mesharray->numColumns() < 2) {
 
             // NOTE: they're zero here: from trial and error
-            dx[1] = secant(f00, f00);
-            dx[0] = multiply(secant(f00, f01), 2) /* - del_0 */;
-            dx[3] = secant(f10, f10);
-            dx[2] = multiply(secant(f10, f11), 2) /* - del_0 */;
+            dx[0] = multiply(secant(f11, f12), 2);
+            dx[2] = multiply(secant(f21, f22), 2);
+            dx[1] = dx[3] = {0, 0, 0, 0};
 
         } else if (col == 0) {
-            // TODO this might or might not work, specs sheet is very vague about this...
-            dx = derivativeEdge(patch, patch);
+            dx = derivativeEdgeBeginX(patch, mesharray->getPatch(row, col + 1));
 
         } else if (col == mesharray->numColumns() - 1) {
-            // Because of symmetry, we just reversed
-            dx = derivativeEdge(mesharray->getPatch(row, col),
-                                 mesharray->getPatch(row, col - 1));
+            dx = derivativeEdgeEndX(mesharray->getPatch(row, col),
+                                     mesharray->getPatch(row, col - 1));
         } else {
-            dx = derivative(mesharray->getPatch(row, col - 1),
-                            mesharray->getPatch(row, col),
-                            mesharray->getPatch(row, col + 1));
+            dx = derivativeX(mesharray->getPatch(row, col - 1),
+                             mesharray->getPatch(row, col),
+                             mesharray->getPatch(row, col + 1));
         }
 
         // dy
         if (!mesharray || mesharray->numRows() < 2) {
 
             // NOTE: they're zero here: from trial and error
-            dy[1] = secant(f00, f00);
-            dy[0] = multiply(secant(f00, f10), 2) /* - del_0 */;
-            dy[3] = secant(f01, f01);
-            dy[2] = multiply(secant(f01, f11), 2) /* - del_0 */;
+            dy[0] = multiply(secant(f11, f21), 2);
+            dy[1] = multiply(secant(f12, f22), 2);
+            dy[2] = dy[3] = {0, 0, 0, 0};
 
         } else if (row == 0) {
-            // TODO this might or might not work, specs sheet is very vague about this...
-            dy = derivativeEdge(patch, patch);
+            dy = derivativeEdgeBeginY(patch, mesharray->getPatch(row + 1, col));
 
         } else if (row == mesharray->numRows() - 1) {
-            // Because of symmetry, we just reversed
-            dy = derivativeEdge(mesharray->getPatch(row, col),
-                                 mesharray->getPatch(row - 1, col));
+            dy = derivativeEdgeEndY(mesharray->getPatch(row, col),
+                                     mesharray->getPatch(row - 1, col));
         } else {
-            dy = derivative(mesharray->getPatch(row - 1, col),
-                            mesharray->getPatch(row, col),
-                            mesharray->getPatch(row + 1, col));
+            dy = derivativeY(mesharray->getPatch(row - 1, col),
+                             mesharray->getPatch(row, col),
+                             mesharray->getPatch(row + 1, col));
         }
 
-        // once we have the derivatives we find the colors at five points
-
-        QVector<QVector<qreal>> c = {split(f00.color), split(f01.color), split(f10.color), split(f11.color)};
+        QVector<QVector<qreal>> c = {split(f11.color), split(f12.color), split(f21.color), split(f22.color)};
         QVector<QVector<qreal>> alpha(4, QVector<qreal>(16, 0));
 
-        qreal width01 = QLineF(f00.point, f01.point).length();
-        qreal width23 = QLineF(f10.point, f11.point).length();
+        qreal width01 = QLineF(f11.point, f12.point).length();
+        qreal width23 = QLineF(f21.point, f22.point).length();
 
-        qreal height01 = QLineF(f00.point, f10.point).length();
-        qreal height23 = QLineF(f01.point, f11.point).length();
+        qreal height01 = QLineF(f11.point, f21.point).length();
+        qreal height23 = QLineF(f12.point, f22.point).length();
 
         for (int i = 0; i < 4; ++i) {
             QVector<qreal> X {
@@ -411,17 +509,17 @@ public:
                 c[2][i],
                 c[3][i],
 
-                // TODO: Use spacing because normalized...
-                dx[0][i], // * width01,
-                dx[1][i], // * width01,
-                dx[2][i], // * width23,
-                dx[3][i], // * width23,
+                dx[0][i] * width01,
+                dx[1][i] * width01,
+                dx[2][i] * width23,
+                dx[3][i] * width23,
 
-                dy[0][i], // * height01,
-                dy[1][i], // * height23,
-                dy[2][i], // * height01,
-                dy[3][i], // * height23,
+                dy[0][i] * height01,
+                dy[1][i] * height23,
+                dy[2][i] * height01,
+                dy[3][i] * height23,
 
+                // Specs says not to care about cross derivatives
                 0,
                 0,
                 0,

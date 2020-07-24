@@ -60,6 +60,23 @@ KisSeExprScript::KisSeExprScript(const QImage &image, const QString &script, con
     setFilename(fileInfo.filePath());
 }
 
+KisSeExprScript::KisSeExprScript(KisSeExprScript *rhs)
+    : KisSeExprScript(*rhs)
+{
+}
+
+KisSeExprScript::KisSeExprScript(const KisSeExprScript &rhs)
+    : KoResource(QString())
+    , d(new Private)
+{
+    setFilename(rhs.filename());
+    setScript(rhs.script());
+    setImage(rhs.image());
+    setName(rhs.name());
+    setValid(rhs.valid());
+    setDirty(rhs.isDirty());
+}
+
 KisSeExprScript::~KisSeExprScript()
 {
     delete d;
@@ -209,14 +226,7 @@ void KisSeExprScript::setScript(const QString &script)
 
 KisSeExprScript *KisSeExprScript::clone() const
 {
-    KisSeExprScript *scr = new KisSeExprScript(filename());
-    scr->setScript(script());
-    scr->setImage(image());
-    scr->setName(name());
-    scr->setValid(valid());
-    scr->setDirty(isDirty());
-
-    return scr;
+    return new KisSeExprScript(*this);
 }
 
 void KisSeExprScript::setDirty(bool value)

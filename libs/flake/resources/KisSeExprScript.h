@@ -56,6 +56,14 @@ public:
      */
     KisSeExprScript(const QImage &image, const QString &script, const QString &name, const QString &folderName);
 
+    /**
+     * Clones the given SeExpr script into a new instance.
+     *
+     * @param rhs the original SeExpr script to be copied onto this object
+     */
+    KisSeExprScript(KisSeExprScript *rhs);
+    KisSeExprScript(const KisSeExprScript &rhs);
+
     ~KisSeExprScript();
 
 public:

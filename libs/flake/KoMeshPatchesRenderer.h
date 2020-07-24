@@ -156,29 +156,10 @@ public:
         return {c.redF(), c.greenF(), c.blueF(), c.alphaF()};
     }
 
-    QVector<qreal> secant(SvgMeshStop stop1, SvgMeshStop stop2)
-    {
-        qreal distance = QLineF(stop1.point, stop2.point).length();
-
-        if (distance == 0.0) {  // NaN
-            return {0.0, 0.0, 0.0, 0.0};
-        }
-
-        qreal c1[4] = {stop1.color.redF(), stop1.color.greenF(), stop1.color.blueF(), stop1.color.alphaF()};
-        qreal c2[4] = {stop2.color.redF(), stop2.color.greenF(), stop2.color.blueF(), stop2.color.alphaF()};
-
-        QVector<qreal> result(4, 0.0);
-
-        for (int i = 0; i < 4; ++i) {
-            result[i] = (c2[i] - c1[i]) / distance;
-        }
-
-        return result;
-    }
-
-    qreal getValue(const QVector<qreal>& alpha, const qreal x, const qreal y)
+    qreal getValue(const QVector<qreal>& alpha, const QPointF p)
     {
         KIS_ASSERT(alpha.size() == 16);
+        qreal x = p.x(), y = p.y();
         qreal result = 0;
 
         qreal xx  = x * x;
@@ -209,12 +190,12 @@ public:
         return result;
     }
 
-    QColor getColorUsingAlpha(const QVector<QVector<qreal>>& alpha, const qreal x, const qreal y)
+    QColor getColorUsingAlpha(const QVector<QVector<qreal>>& alpha, QPointF p)
     {
-        qreal r = getValue(alpha[0], x, y);
-        qreal g = getValue(alpha[1], x, y);
-        qreal b = getValue(alpha[2], x, y);
-        qreal a = getValue(alpha[3], x, y);
+        qreal r = getValue(alpha[0], p);
+        qreal g = getValue(alpha[1], p);
+        qreal b = getValue(alpha[2], p);
+        qreal a = getValue(alpha[3], p);
 
         // Clamp
         r = r > 1.0 ? 1.0 : r;
@@ -264,6 +245,26 @@ public:
         }
 
         return alpha;
+    }
+
+    QVector<qreal> secant(const SvgMeshStop& stop1, const SvgMeshStop& stop2)
+    {
+        qreal distance = QLineF(stop1.point, stop2.point).length();
+
+        if (distance == 0.0) {  // NaN
+            return {0.0, 0.0, 0.0, 0.0};
+        }
+
+        qreal c1[4] = {stop1.color.redF(), stop1.color.greenF(), stop1.color.blueF(), stop1.color.alphaF()};
+        qreal c2[4] = {stop2.color.redF(), stop2.color.greenF(), stop2.color.blueF(), stop2.color.alphaF()};
+
+        QVector<qreal> result(4, 0.0);
+
+        for (int i = 0; i < 4; ++i) {
+            result[i] = (c2[i] - c1[i]) / distance;
+        }
+
+        return result;
     }
 
     QVector<qreal> derivative(const SvgMeshStop& stop0,

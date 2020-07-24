@@ -9,6 +9,5 @@ ExternalProject_Add( ext_openjpeg
 	
     UPDATE_COMMAND ""
 	ALWAYS 0
-    DEPENDS ext_png ext_tiff ext_lcms2 ext_zlib
+    DEPENDS ext_lcms2
 )
-

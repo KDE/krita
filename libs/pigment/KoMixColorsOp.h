@@ -24,7 +24,7 @@
 
 /**
  * Base class of the mix color operation. It's defined by
- * sum(colors[i] * weights[i]) / 255. You access the KoMixColorsOp
+ * sum(colors[i] * weights[i]) / weightSum. You access the KoMixColorsOp
  * of a colorspace by calling KoColorSpace::mixColorsOp.
  */
 class KoMixColorsOp
@@ -34,10 +34,13 @@ public:
     /**
      * Mix the colors.
      * @param colors a pointer toward the source pixels
-     * @param weights the coefficient of the source pixels (if you want
-     *                to average the sum of weights must be equal to 255)
+     * @param weights the coefficient of the source pixels
      * @param nColors the number of pixels in the colors array
      * @param dst the destination pixel
+     * @param weightSum an integer representing the sum of the coefficients.
+     *                  by default 255. If for some reason you do not want a
+     *                  perfect avarage, make this anything but the sum. Try
+     *                  to keep this below 255 for division-related performance.
      *
      * @code
      * quint8* colors[nColors];
@@ -54,8 +57,8 @@ public:
      * mixColors(colors, weights, nColors, ptrToDestinationPixel);
      * @endcode
      */
-    virtual void mixColors(const quint8 * const*colors, const qint16 *weights, quint32 nColors, quint8 *dst) const = 0;
-    virtual void mixColors(const quint8 *colors, const qint16 *weights, quint32 nColors, quint8 *dst) const = 0;
+    virtual void mixColors(const quint8 * const*colors, const qint16 *weights, quint32 nColors, quint8 *dst, int weightSum = 255) const = 0;
+    virtual void mixColors(const quint8 *colors, const qint16 *weights, quint32 nColors, quint8 *dst, int weightSum = 255) const = 0;
 
 
     /**

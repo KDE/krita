@@ -66,6 +66,11 @@ QSizeF SvgMeshPatch::size() const
     return m_path->size();
 }
 
+inline QPointF lerp(const QPointF& p1, const QPointF& p2, qreal t)
+{
+    return (1 - t) * p1 + t * p2;
+}
+
 KoPathSegment SvgMeshPatch::getMidCurve(bool isVertical) const
 {
     QList<QPointF> curvedBoundary0;
@@ -92,7 +97,7 @@ KoPathSegment SvgMeshPatch::getMidCurve(bool isVertical) const
     std::reverse(curvedBoundary1.begin(), curvedBoundary1.end());
 
     // Sum of two Bezier curve is a Bezier curve
-    QList<QPointF> midCurved = {
+    QVector<QPointF> midCurved = {
         (curvedBoundary0[0] + curvedBoundary1[0]) / 2,
         (curvedBoundary0[1] + curvedBoundary1[1]) / 2,
         (curvedBoundary0[2] + curvedBoundary1[2]) / 2,
@@ -101,13 +106,13 @@ KoPathSegment SvgMeshPatch::getMidCurve(bool isVertical) const
 
     // line cutting the bilinear surface in middle
     KoPathSegment midBilinear = KoPathSegment(midpointRuled0, midpointRuled1).toCubic();
-    QPointF x_2_1 = midBilinear.pointAt(1.0 / 3);
-    QPointF x_2_2 = midBilinear.pointAt(2.0 / 3);
+    QPointF x_2_1 = lerp(midpointRuled0, midpointRuled1, 1.0 / 3);
+    QPointF x_2_2 = lerp(midpointRuled0, midpointRuled1, 2.0 / 3);
 
     // line cutting rulled surface in middle
     KoPathSegment midRuled3 = KoPathSegment(midCurved[0], midCurved[3]).toCubic();
-    QPointF x_3_1 = midRuled3.pointAt(1.0 / 3);
-    QPointF x_3_2 = midRuled3.pointAt(2.0 / 3);
+    QPointF x_3_1 = lerp(midCurved[0], midCurved[3], 1.0 / 3);
+    QPointF x_3_2 = lerp(midCurved[0], midCurved[3], 2.0 / 3);
 
     QPointF p[4];
 
@@ -124,22 +129,6 @@ KoPathSegment SvgMeshPatch::getMidCurve(bool isVertical) const
     return KoPathSegment(p[0], p[1], p[2], p[3]);
 }
 
-QPointF lerp(QPointF p1, QPointF p2, qreal t)
-{
-    return (1 - t) * p1 + t * p2;
-}
-
-QPointF SvgMeshPatch::pointAt(qreal u, qreal v) const
-{
-    KoPathSegment C1 = getPathSegment(Top);
-    KoPathSegment C2 = getPathSegment(Bottom);
-
-    QPointF S_c = (1 - v) * getPathSegment(Top).pointAt(u) + v * getPathSegment(Bottom).pointAt(u);
-    QPointF S_d = (1 - u) * getPathSegment(Left).pointAt(v) + u * getPathSegment(Right).pointAt(v);
-    QPointF S_b = lerp(lerp(C1.pointAt(0), C1.pointAt(1), u), lerp(C2.pointAt(0), C2.pointAt(1), u), v);
-
-    return S_c + S_d - S_b;
-}
 
 void SvgMeshPatch::subdivide(QVector<SvgMeshPatch*>& subdivided, const QVector<QColor>& colors) const
 {

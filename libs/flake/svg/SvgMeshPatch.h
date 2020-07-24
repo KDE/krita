@@ -76,8 +76,6 @@ public:
     /// Gets the curve passing through the middle of meshpatch
     KoPathSegment getMidCurve(bool isVertical) const;
 
-    QPointF pointAt(qreal u, qreal v) const;
-
     void subdivide(QVector<SvgMeshPatch*>& subdivided, const QVector<QColor>& colors) const;
 
     int countPoints() const;

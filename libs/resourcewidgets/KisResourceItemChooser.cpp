@@ -127,6 +127,11 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
     d->view = new KisResourceItemListView(this);
     d->view->setObjectName("ResourceItemview");
 
+    if (d->resourceType == ResourceType::Gradients) {
+        d->view->setFixedToolTipThumbnailSize(QSize(256, 64));
+        d->view->setToolTipShouldRenderCheckers(true);
+    }
+
     d->view->setModel(d->tagFilterProxyModel);
     d->view->setItemDelegate(new KisResourceItemDelegate(this));
     d->view->setSelectionMode(QAbstractItemView::SingleSelection);

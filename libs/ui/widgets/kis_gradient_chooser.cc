@@ -142,6 +142,11 @@ void KisGradientChooser::setCanvasResourcesInterface(KoCanvasResourcesInterfaceS
     m_canvasResourcesInterface = canvasResourcesInterface;
 }
 
+KoCanvasResourcesInterfaceSP KisGradientChooser::canvasResourcesInterface() const
+{
+    return m_canvasResourcesInterface;
+}
+
 KoResourceSP KisGradientChooser::currentResource()
 {
     return m_itemChooser->currentResource();

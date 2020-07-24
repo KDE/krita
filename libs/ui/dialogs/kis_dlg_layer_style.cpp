@@ -1093,7 +1093,7 @@ GradientOverlay::GradientOverlay(KisCanvasResourceProvider *resourceProvider, QW
 
     connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.intOpacity, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
-    connect(ui.cmbGradient, SIGNAL(gradientChanged(KoAbstractGradient*)), SIGNAL(configChanged()));
+    connect(ui.cmbGradient, SIGNAL(gradientChanged(KoAbstractGradientSP)), SIGNAL(configChanged()));
     connect(ui.chkReverse, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
     connect(ui.cmbStyle, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.chkAlignWithLayer, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
@@ -1170,7 +1170,7 @@ InnerGlow::InnerGlow(Mode mode, KisCanvasResourceProvider *resourceProvider, QWi
     connect(ui.radioColor, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
     connect(ui.bnColor, SIGNAL(changed(KoColor)), SIGNAL(configChanged()));
     connect(ui.radioGradient, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
-    connect(ui.cmbGradient, SIGNAL(gradientChanged(KoAbstractGradient*)), SIGNAL(configChanged()));
+    connect(ui.cmbGradient, SIGNAL(gradientChanged(KoAbstractGradientSP)), SIGNAL(configChanged()));
 
     connect(ui.cmbTechnique, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.cmbSource, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
@@ -1413,7 +1413,7 @@ Stroke::Stroke(KisCanvasResourceProvider *resourceProvider, QWidget *parent)
 
     connect(ui.bnColor, SIGNAL(changed(KoColor)), SIGNAL(configChanged()));
 
-    connect(ui.cmbGradient, SIGNAL(gradientChanged(KoAbstractGradient*)), SIGNAL(configChanged()));
+    connect(ui.cmbGradient, SIGNAL(gradientChanged(KoAbstractGradientSP)), SIGNAL(configChanged()));
     connect(ui.chkReverse, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
     connect(ui.cmbStyle, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.chkAlignWithLayer, SIGNAL(toggled(bool)), SIGNAL(configChanged()));

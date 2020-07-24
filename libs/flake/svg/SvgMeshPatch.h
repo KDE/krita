@@ -56,7 +56,13 @@ public:
     SvgMeshPatch(QPointF startingPoint);
     SvgMeshPatch(const SvgMeshPatch& other);
 
+    /// returns the starting point of the stop
     SvgMeshStop getStop(Type type) const;
+
+    /// returns the midPoint in parametric space
+    inline QPointF getMidpointParametric(Type type) const {
+        return (m_parametricCoords[type - 1] + m_parametricCoords[(type % Left)]) * 0.5;
+    }
 
     /// Get a segment of the path in the meshpatch
     KoPathSegment getPathSegment(Type type) const;
@@ -69,7 +75,6 @@ public:
 
     /// Gets the curve passing through the middle of meshpatch
     KoPathSegment getMidCurve(bool isVertical) const;
-
 
     QPointF pointAt(qreal u, qreal v) const;
 
@@ -105,6 +110,8 @@ private:
 
     QMap<Type, SvgMeshStop> m_nodes;
     QScopedPointer<KoPathShape> m_path;
+    /// Coordinates in UV space
+    QVector<QPointF> m_parametricCoords;
 };
 
 #endif // SVGMESHPATCH_H

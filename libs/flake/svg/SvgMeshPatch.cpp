@@ -29,6 +29,7 @@ SvgMeshPatch::SvgMeshPatch(QPointF startingPoint)
     : m_newPath(true)
     , m_startingPoint(startingPoint)
     , m_path(new KoPathShape)
+    , m_parametricCoords({{0, 0}, {1, 0}, {1, 1}, {0, 1}})
 {
 }
 
@@ -37,6 +38,7 @@ SvgMeshPatch::SvgMeshPatch(const SvgMeshPatch& other)
     , m_startingPoint(other.m_startingPoint)
     , m_nodes(other.m_nodes)
     , m_path(static_cast<KoPathShape*>(other.m_path->cloneShape()))
+    , m_parametricCoords({{0, 0}, {1, 0}, {1, 1}, {0, 1}})
 {
 }
 
@@ -192,12 +194,25 @@ void SvgMeshPatch::subdivide(QVector<SvgMeshPatch*>& subdivided, const QVector<Q
     QColor midc41 = colors[3];
     QColor center = colors[4];
 
+    // mid points in parametric space
+    QPointF midTopP     = getMidpointParametric(Top);
+    QPointF midRightP   = getMidpointParametric(Right);
+    QPointF midBottomP  = getMidpointParametric(Bottom);
+    QPointF midLeftP    = getMidpointParametric(Left);
+    QPointF centerP     = 0.5 * (midTopP + midBottomP);
+
     // patch 1: TopLeft/NorthWest
     SvgMeshPatch *patch = new SvgMeshPatch(splitTop.first.first()->point());
     patch->addStop(splitTop.first.controlPoints(), c1, Top);
     patch->addStop(midVer.first.controlPoints(), midc12, Right);
     patch->addStop(reversedMidHorFirst, center, Bottom);
     patch->addStop(splitLeft.second.controlPoints(), midc41, Left);
+    patch->m_parametricCoords = {
+        m_parametricCoords[0],
+        midTopP,
+        centerP,
+        midLeftP
+    };
     subdivided.append(patch);
 
     // patch 2: TopRight/NorthRight
@@ -206,6 +221,12 @@ void SvgMeshPatch::subdivide(QVector<SvgMeshPatch*>& subdivided, const QVector<Q
     patch->addStop(splitRight.first.controlPoints(), c2, Right);
     patch->addStop(reversedMidHorSecond, midc23, Bottom);
     patch->addStop(reversedMidVerFirst, center, Left);
+    patch->m_parametricCoords = {
+        midTopP,
+        m_parametricCoords[1],
+        midRightP,
+        centerP
+    };
     subdivided.append(patch);
 
     // patch 3: BottomLeft/SouthWest
@@ -214,6 +235,12 @@ void SvgMeshPatch::subdivide(QVector<SvgMeshPatch*>& subdivided, const QVector<Q
     patch->addStop(midVer.second.controlPoints(), center, Right);
     patch->addStop(splitBottom.second.controlPoints(), midc34, Bottom);
     patch->addStop(splitLeft.first.controlPoints(), c4, Left);
+    patch->m_parametricCoords = {
+        midLeftP,
+        centerP,
+        midBottomP,
+        m_parametricCoords[3]
+    };
     subdivided.append(patch);
 
     // patch 4: BottomRight/SouthEast
@@ -222,6 +249,12 @@ void SvgMeshPatch::subdivide(QVector<SvgMeshPatch*>& subdivided, const QVector<Q
     patch->addStop(splitRight.second.controlPoints(), midc23, Right);
     patch->addStop(splitBottom.first.controlPoints(), c3, Bottom);
     patch->addStop(reversedMidVerSecond, midc34, Left);
+    patch->m_parametricCoords = {
+        centerP,
+        midRightP,
+        m_parametricCoords[2],
+        midBottomP
+    };
     subdivided.append(patch);
 }
 

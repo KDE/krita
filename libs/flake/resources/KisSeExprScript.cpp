@@ -69,7 +69,12 @@ KisSeExprScript::KisSeExprScript(const KisSeExprScript &rhs)
     : KoResource(rhs)
     , d(new Private)
 {
+    setFilename(rhs.filename());
     setScript(rhs.script());
+    setImage(rhs.image());
+    setName(rhs.name());
+    setValid(rhs.valid());
+    setDirty(rhs.isDirty());
 }
 
 KisSeExprScript::~KisSeExprScript()

@@ -534,28 +534,18 @@ public:
 
     QVector<QColor> getColorsBicubic(const SvgMeshPatch* patch)
     {
-        QRectF patchRect = patch->boundingRect();
-
-        patchRect.translate(-m_patchRect.topLeft());
-
-        QPointF topLeft = patchRect.topLeft();
-        QPointF bottomRight = patchRect.bottomRight();
-
-        qreal hw = (patch->pointAt(0.5, 0.5).x() - m_patchRect.topLeft().x()) / m_patchRect.width();
-        qreal hh = (patch->pointAt(0.5, 0.5).y() - m_patchRect.topLeft().y()) / m_patchRect.height();
-
-        qreal nlx = topLeft.x() / m_patchRect.width();
-        qreal nly = topLeft.y() / m_patchRect.height();
-
-        qreal nrx = bottomRight.x() / m_patchRect.width();
-        qreal nry = bottomRight.y() / m_patchRect.height();
+        QPointF midTop    = patch->getMidpointParametric(SvgMeshPatch::Top);
+        QPointF midRight  = patch->getMidpointParametric(SvgMeshPatch::Right);
+        QPointF midBottom = patch->getMidpointParametric(SvgMeshPatch::Bottom);
+        QPointF midLeft   = patch->getMidpointParametric(SvgMeshPatch::Left);
+        QPointF center    = (midTop + midBottom) / 2;
 
         QVector<QColor> result(5);
-        result[0] = getColorUsingAlpha(m_alpha, hw,  nly);
-        result[1] = getColorUsingAlpha(m_alpha, nrx, hh);
-        result[2] = getColorUsingAlpha(m_alpha, hw,  nry);
-        result[3] = getColorUsingAlpha(m_alpha, nlx, hh);
-        result[4] = getColorUsingAlpha(m_alpha, hw,  hh);
+        result[0] = getColorUsingAlpha(m_alpha, midTop);
+        result[1] = getColorUsingAlpha(m_alpha, midRight);
+        result[2] = getColorUsingAlpha(m_alpha, midBottom);
+        result[3] = getColorUsingAlpha(m_alpha, midLeft);
+        result[4] = getColorUsingAlpha(m_alpha, center);
 
         return result;
     }

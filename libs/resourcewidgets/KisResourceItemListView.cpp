@@ -49,6 +49,16 @@ void KisResourceItemListView::setItemSize(QSize size)
     setIconSize(size);
 }
 
+void KisResourceItemListView::setFixedToolTipThumbnailSize(const QSize &size)
+{
+    m_tip.setFixedToolTipThumbnailSize(size);
+}
+
+void KisResourceItemListView::setToolTipShouldRenderCheckers(bool value)
+{
+    m_tip.setToolTipShouldRenderCheckers(value);
+}
+
 void KisResourceItemListView::selectionChanged(const QItemSelection &selected, const QItemSelection &/*deselected*/)
 {
     if (selected.isEmpty()) {

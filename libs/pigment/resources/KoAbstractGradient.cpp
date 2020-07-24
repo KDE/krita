@@ -26,8 +26,8 @@
 #include <QBuffer>
 #include <QByteArray>
 
-#define PREVIEW_WIDTH 64
-#define PREVIEW_HEIGHT 64
+#define PREVIEW_WIDTH 2048
+#define PREVIEW_HEIGHT 1
 
 
 struct Q_DECL_HIDDEN KoAbstractGradient::Private {
@@ -121,52 +121,29 @@ QGradient::Type KoAbstractGradient::type() const
 
 QImage KoAbstractGradient::generatePreview(int width, int height) const
 {
-    QImage image(width, height, QImage::Format_RGB32);
+    QImage image(width, height, QImage::Format_ARGB32);
 
-    const int checkerSize = 4;
-    const int checkerSize_2 = 2 * checkerSize;
-    const int darkBackground = 128;
-    const int lightBackground = 128 + 63;
-
-    QRgb * lineA = reinterpret_cast<QRgb*>(image.scanLine(0));
-    QRgb * lineB = reinterpret_cast<QRgb*>(image.scanLine(checkerSize));
+    QRgb * firstLine = reinterpret_cast<QRgb*>(image.scanLine(0));
 
     KoColor c;
     QColor color;
-    // first create the two reference lines
+    // first create a reference line
     for (int x = 0; x < image.width(); ++x) {
 
         qreal t = static_cast<qreal>(x) / (image.width() - 1);
         colorAt(c, t);
         c.toQColor(&color);
-        const qreal alpha = color.alphaF();
 
-        int darkR = static_cast<int>((1 - alpha) * darkBackground + alpha * color.red() + 0.5);
-        int darkG = static_cast<int>((1 - alpha) * darkBackground + alpha * color.green() + 0.5);
-        int darkB = static_cast<int>((1 - alpha) * darkBackground + alpha * color.blue() + 0.5);
-
-        int lightR = static_cast<int>((1 - alpha) * lightBackground + alpha * color.red() + 0.5);
-        int lightG = static_cast<int>((1 - alpha) * lightBackground + alpha * color.green() + 0.5);
-        int lightB = static_cast<int>((1 - alpha) * lightBackground + alpha * color.blue() + 0.5);
-
-        bool defColor = (x % checkerSize_2) < checkerSize;
-
-        if (lineA)
-            lineA[x] = defColor ? qRgb(darkR, darkG, darkB) : qRgb(lightR, lightG, lightB);
-        if (lineB)
-            lineB[x] = defColor ? qRgb(lightR, lightG, lightB) : qRgb(darkR, darkG, darkB);
+        firstLine[x] = color.rgba();
     }
 
     int bytesPerLine = image.bytesPerLine();
 
     // now copy lines accordingly
-    for (int y = 0; y < image.height(); ++y) {
-        bool firstLine = (y % checkerSize_2) < checkerSize;
+    for (int y = 1; y < image.height(); ++y) {
         QRgb * line = reinterpret_cast<QRgb*>(image.scanLine(y));
-        if (line == lineA || line == lineB)
-            continue;
 
-        memcpy(line, firstLine ? lineA : lineB, bytesPerLine);
+        memcpy(line, firstLine, bytesPerLine);
     }
 
     return image;

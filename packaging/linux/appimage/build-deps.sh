@@ -86,4 +86,9 @@ cmake --build . --config RelWithDebInfo --target ext_gmic
 cmake --build . --config RelWithDebInfo --target ext_sip
 cmake --build . --config RelWithDebInfo --target ext_pyqt
 cmake --build . --config RelWithDebInfo --target ext_quazip
+cmake --build . --config RelWithDebInfo --target ext_openjpeg
+cmake --build . --config RelWithDebInfo --target ext_nasm
+cmake --build . --config RelWithDebInfo --target ext_libx265
+cmake --build . --config RelWithDebInfo --target ext_libde265
+cmake --build . --config RelWithDebInfo --target ext_libheif
 cmake --build . --config RelWithDebInfo --target ext_seexpr

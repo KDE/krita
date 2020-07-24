@@ -296,6 +296,13 @@ void KisRainDropsFilter::processImpl(KisPaintDeviceSP device,
                     if ((m >= 0) && (m < Height) && (n >= 0) && (n < Width)) {
                         QColor color;
 
+                        if (BlurPixels == 0) {
+                            // Coverity complains that it *is* possible
+                            // for BlurPixels to be 0, so let's make sure
+                            // Krita doesn't crash here
+                            BlurPixels = 1;
+                        }
+
                         color.setRgb((int)(R / BlurPixels), (int)(G / BlurPixels), (int)(B / BlurPixels));
                         dstAccessor->moveTo(srcTopLeft.x() + n, srcTopLeft.y() + m);
                         cs->fromQColor(color, dstAccessor->rawData());

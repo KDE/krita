@@ -21,6 +21,7 @@
 #include <KisPopupButton.h>
 
 #include <KoAbstractGradient.h>
+#include <KoCheckerBoardPainter.h>
 
 class KoResource;
 class KisGradientChooser;
@@ -54,6 +55,7 @@ private Q_SLOTS:
 
 private:
     KisGradientChooser *m_gradientChooser;
+    KoCheckerBoardPainter m_checkersPainter;
 };
 
 #endif // KIS_CMB_GRADIENT_H

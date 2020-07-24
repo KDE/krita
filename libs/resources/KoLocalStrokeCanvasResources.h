@@ -15,8 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KOCANVASRESOURCESLOCALSTORAGE_H
-#define KOCANVASRESOURCESLOCALSTORAGE_H
+#ifndef KOLOCALSTROKECANVASRESOURCES_H
+#define KOLOCALSTROKECANVASRESOURCES_H
 
 #include "KoCanvasResourcesInterface.h"
 
@@ -25,13 +25,13 @@
 
 #include <kritaresources_export.h>
 
-class KRITARESOURCES_EXPORT KoCanvasResourcesLocalStorage : public KoCanvasResourcesInterface
+class KRITARESOURCES_EXPORT KoLocalStrokeCanvasResources : public KoCanvasResourcesInterface
 {
 public:
-    KoCanvasResourcesLocalStorage();
-    KoCanvasResourcesLocalStorage(const KoCanvasResourcesLocalStorage &rhs);
-    KoCanvasResourcesLocalStorage& operator=(const KoCanvasResourcesLocalStorage &rhs);
-    ~KoCanvasResourcesLocalStorage();
+    KoLocalStrokeCanvasResources();
+    KoLocalStrokeCanvasResources(const KoLocalStrokeCanvasResources &rhs);
+    KoLocalStrokeCanvasResources& operator=(const KoLocalStrokeCanvasResources &rhs);
+    ~KoLocalStrokeCanvasResources();
 
     QVariant resource(int key) const override;
     void storeResource(int key, const QVariant &resource);
@@ -41,6 +41,6 @@ private:
     const QScopedPointer<Private> m_d;
 };
 
-using KoCanvasResourcesLocalStorageSP = QSharedPointer<KoCanvasResourcesLocalStorage>;
+using KoLocalStrokeCanvasResourcesSP = QSharedPointer<KoLocalStrokeCanvasResources>;
 
-#endif // KOCANVASRESOURCESLOCALSTORAGE_H
+#endif // KOLOCALSTROKECANVASRESOURCES_H

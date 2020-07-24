@@ -38,7 +38,7 @@
 #include "kis_paintop_settings_update_proxy.h"
 #include <brushengine/kis_paintop_config_widget.h>
 #include <KisRequiredResourcesOperators.h>
-#include <KoCanvasResourcesLocalStorage.h>
+#include <KoLocalStrokeCanvasResources.h>
 
 #include <KoStore.h>
 
@@ -440,7 +440,7 @@ void KisPaintOpPreset::createLocalResourcesSnapshot(KisResourcesInterfaceSP glob
 
     const QList<int> canvasResources = this->requiredCanvasResources();
     if (!canvasResources.isEmpty()) {
-        KoCanvasResourcesLocalStorageSP storage(new KoCanvasResourcesLocalStorage());
+        KoLocalStrokeCanvasResourcesSP storage(new KoLocalStrokeCanvasResources());
         Q_FOREACH (int key, canvasResources) {
             storage->storeResource(key, canvasResourcesInterface->resource(key));
         }
@@ -460,7 +460,7 @@ KisPaintOpPresetSP KisPaintOpPreset::cloneWithResourcesSnapshot(KisResourcesInte
 
     const QList<int> canvasResources = result->requiredCanvasResources();
     if (!canvasResources.isEmpty()) {
-        KoCanvasResourcesLocalStorageSP storage(new KoCanvasResourcesLocalStorage());
+        KoLocalStrokeCanvasResourcesSP storage(new KoLocalStrokeCanvasResources());
         Q_FOREACH (int key, canvasResources) {
             storage->storeResource(key, canvasResourcesInterface->resource(key));
         }

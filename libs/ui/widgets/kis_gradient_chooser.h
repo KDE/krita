@@ -63,6 +63,7 @@ public:
     ~KisGradientChooser() override;
 
     void setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface);
+    KoCanvasResourcesInterfaceSP canvasResourcesInterface() const;
 
     /// Gets the currently selected resource
     /// @returns the selected resource, 0 is no resource is selected

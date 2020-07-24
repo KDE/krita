@@ -30,6 +30,7 @@
 KisCmbGradient::KisCmbGradient(QWidget *parent)
     : KisPopupButton(parent)
     , m_gradientChooser(new KisGradientChooser(this))
+    , m_checkersPainter(4)
 {
     connect(m_gradientChooser, SIGNAL(resourceSelected(KoResourceSP )), SLOT(gradientSelected(KoResourceSP )));
     setPopupWidget(m_gradientChooser);
@@ -55,8 +56,17 @@ void KisCmbGradient::gradientSelected(KoResourceSP resource)
     KoAbstractGradientSP gradient = resource.dynamicCast<KoAbstractGradient>();
     if (!gradient) return;
 
-    QImage pm = gradient->generatePreview(iconSize().width(), iconSize().height());
-    setIcon(QIcon(QPixmap::fromImage(pm)));
+    QImage preview = gradient->generatePreview(iconSize().width(), iconSize().height(), m_gradientChooser->canvasResourcesInterface());
+
+    QImage thumbnail(preview.size(), QImage::Format_ARGB32);
+
+    {
+        QPainter gc(&thumbnail);
+        m_checkersPainter.paint(gc, preview.rect());
+        gc.drawImage(QPoint(), preview);
+    }
+
+    setIcon(QIcon(QPixmap::fromImage(thumbnail)));
 
     emit gradientChanged(gradient);
 }

@@ -115,8 +115,8 @@ void KisPropertiesConfiguration::fromXML(const QDomElement& e)
 
 void KisPropertiesConfiguration::toXML(QDomDocument& doc, QDomElement& root) const
 {
-    QMap<QString, QVariant>::Iterator it;
-    for (it = d->properties.begin(); it != d->properties.end(); ++it) {
+    QMap<QString, QVariant>::ConstIterator it;
+    for (it = d->properties.constBegin(); it != d->properties.constEnd(); ++it) {
         if(d->notSavedProperties.contains(it.key())) {
             continue;
         }
@@ -177,21 +177,17 @@ void KisPropertiesConfiguration::setProperty(const QString & name, const QVarian
 
 bool KisPropertiesConfiguration::getProperty(const QString & name, QVariant & value) const
 {
-    if (d->properties.find(name) == d->properties.end()) {
+    if (d->properties.constFind(name) == d->properties.constEnd()) {
         return false;
     } else {
-        value = d->properties[name];
+        value = d->properties.value(name);
         return true;
     }
 }
 
 QVariant KisPropertiesConfiguration::getProperty(const QString & name) const
 {
-    if (d->properties.find(name) == d->properties.end()) {
-        return QVariant();
-    } else {
-        return d->properties[name];
-    }
+    return d->properties.value(name, QVariant());
 }
 
 
@@ -314,8 +310,8 @@ KoColor KisPropertiesConfiguration::getColor(const QString& name, const KoColor&
 
 void KisPropertiesConfiguration::dump() const
 {
-    QMap<QString, QVariant>::Iterator it;
-    for (it = d->properties.begin(); it != d->properties.end(); ++it) {
+    QMap<QString, QVariant>::ConstIterator it;
+    for (it = d->properties.constBegin(); it != d->properties.constEnd(); ++it) {
         qDebug() << it.key() << " = " << it.value() << it.value().typeName();
     }
 

@@ -422,4 +422,4 @@ void KisAslLayerStyleSerializerTest::testWritingGradients()
     }
 }
 
-QTEST_MAIN(KisAslLayerStyleSerializerTest)
+KISTEST_MAIN(KisAslLayerStyleSerializerTest)

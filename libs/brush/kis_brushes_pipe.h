@@ -100,9 +100,16 @@ public:
         return false;
     }
 
-    void setPreserveLightness(bool preserveLightness) const {
+
+    void setBrushApplication(enumBrushApplication brushApplication) const {
         Q_FOREACH(BrushType * brush, m_brushes) {
-            brush->setPreserveLightness(preserveLightness);
+            brush->setBrushApplication(brushApplication);
+        }
+    }
+
+    void setGradient(const KoAbstractGradient* gradient) const {
+        Q_FOREACH(BrushType * brush, m_brushes) {
+            brush->setGradient(gradient);
         }
     }
 
@@ -118,13 +125,13 @@ public:
             KisDabShape const& shape,
             const KisPaintInformation& info,
             double subPixelX , double subPixelY,
-            qreal softnessFactor) {
+            qreal softnessFactor, qreal lightnessStrength = DEFAULT_LIGHTNESS_STRENGTH) {
 
         BrushType *brush = currentBrush(info);
         if (!brush) return;
 
 
-        brush->generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, shape, info, subPixelX, subPixelY, softnessFactor);
+        brush->generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, shape, info, subPixelX, subPixelY, softnessFactor, lightnessStrength);
         notifyCachedDabPainted(info);
     }
 

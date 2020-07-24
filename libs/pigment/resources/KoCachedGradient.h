@@ -25,7 +25,8 @@ class KoCachedGradient : public KoAbstractGradient
 
 public:
     KoCachedGradient() : KoAbstractGradient("")
-    {}
+    {
+    }
 
     KoCachedGradient(const KoAbstractGradient* gradient, qint32 steps, const KoColorSpace* cs)
         : KoAbstractGradient(gradient->filename())
@@ -52,6 +53,7 @@ public:
         m_subject = gradient;
         m_max = steps - 1;
         m_colorSpace = cs;
+        m_colors.clear();
 
         m_black = KoColor(cs);
 
@@ -83,16 +85,26 @@ public:
     {
         m_subject->colorAt(color, t);
     }
-    void setColorSpace(KoColorSpace* colorSpace) { m_colorSpace = colorSpace; }
+    void setColorSpace(const KoColorSpace* colorSpace) 
+    { 
+        if (!m_colorSpace || *m_colorSpace != *colorSpace) {
+            m_colorSpace = colorSpace;
+            for (qint32 i = 0; i < m_colors.size(); i++) {
+                m_colors[i].convertTo(m_colorSpace);
+            }
+        }
+    }
     const KoColorSpace* colorSpace() const { return m_colorSpace; }
+
+    const KoAbstractGradient* gradient() { return m_subject; }
 
     QByteArray generateMD5() const override { return QByteArray(); }
 
 private:
 
-    const KoAbstractGradient* m_subject;
-    const KoColorSpace* m_colorSpace;
-    qint32 m_max;
+    const KoAbstractGradient* m_subject = 0;
+    const KoColorSpace* m_colorSpace = 0;
+    qint32 m_max = 0;
     QVector<KoColor> m_colors;
     KoColor m_black;
 };

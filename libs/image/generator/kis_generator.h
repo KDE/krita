@@ -81,6 +81,16 @@ public:
      */
     virtual QRect generatedRect(QRect _imageArea, const KisFilterConfigurationSP = 0) const;
 
+    /**
+     * Reports whether this generator can run properly while
+     * tiling the image into patches (as opposed to over the whole
+     * image in one single pass).
+     * 
+     * Generators that are known to not work properly should override
+     * this function and return false.
+     */ 
+    virtual bool allowsSplittingIntoPatches() const { return true; }
+
 protected:
 
     /// @return the name of config group in KConfig

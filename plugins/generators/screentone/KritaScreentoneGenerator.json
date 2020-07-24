@@ -1,0 +1,9 @@
+{
+    "Id": "Screentone Generator",
+    "Type": "Service",
+    "X-KDE-Library": "KritaScreentoneGenerator",
+    "X-KDE-ServiceTypes": [
+        "Krita/Generator"
+    ],
+    "X-Krita-Version": "28"
+}

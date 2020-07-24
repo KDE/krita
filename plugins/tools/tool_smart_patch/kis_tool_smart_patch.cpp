@@ -125,6 +125,7 @@ void KisToolSmartPatch::deactivatePrimaryAction()
 void KisToolSmartPatch::addMaskPath( KoPointerEvent *event )
 {
     KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
+    KIS_ASSERT(canvas2);
     const KisCoordinatesConverter *converter = canvas2->coordinatesConverter();
 
     QPointF imagePos = currentImage()->documentToPixel(event->point);

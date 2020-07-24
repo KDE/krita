@@ -64,7 +64,8 @@ public:
                                    KisDabShape const&,
                                    const KisPaintInformation& info,
                                    qreal softnessFactor,
-                                   QRect *dstDabRect);
+                                   QRect *dstDabRect,
+                                   qreal lightnessStrength = 1.0);
 
     KisFixedPaintDeviceSP fetchDab(const KoColorSpace *cs,
                                    const KoColor& color,
@@ -72,7 +73,8 @@ public:
                                    KisDabShape const&,
                                    const KisPaintInformation& info,
                                    qreal softnessFactor,
-                                   QRect *dstDabRect);
+                                   QRect *dstDabRect,
+                                   qreal lightnessStrength = 1.0);
 
     void setSharpnessPostprocessing(KisPressureSharpnessOption *option);
     void setTexturePostprocessing(KisTextureProperties *option);
@@ -91,7 +93,8 @@ private:
             KisDabShape,
             const KisPaintInformation& info,
             qreal softnessFactor,
-            QRect *dstDabRect);
+            QRect *dstDabRect,
+            qreal lightnessStrength = 1.0);
 
 private:
 

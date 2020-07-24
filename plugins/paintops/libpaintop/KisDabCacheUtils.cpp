@@ -61,7 +61,7 @@ void generateDab(const DabGenerationInfo &di, DabRenderingResources *resources, 
     const KoColorSpace *cs = (*dab)->colorSpace();
 
 
-    if (resources->brush->brushType() == IMAGE || resources->brush->brushType() == PIPE_IMAGE) {
+    if (resources->brush->brushApplication() == IMAGESTAMP && (resources->brush->brushType() == IMAGE || resources->brush->brushType() == PIPE_IMAGE)) {
         *dab = resources->brush->paintDevice(cs, di.shape, di.info,
                                             di.subPixel.x(),
                                             di.subPixel.y());
@@ -71,7 +71,8 @@ void generateDab(const DabGenerationInfo &di, DabRenderingResources *resources, 
                                di.shape,
                                di.info,
                                di.subPixel.x(), di.subPixel.y(),
-                               di.softnessFactor);
+                               di.softnessFactor,
+                               di.lightnessStrength);
     }
     else {
         if (!resources->colorSourceDevice ||
@@ -91,7 +92,8 @@ void generateDab(const DabGenerationInfo &di, DabRenderingResources *resources, 
                                di.shape,
                                di.info,
                                di.subPixel.x(), di.subPixel.y(),
-                               di.softnessFactor);
+                               di.softnessFactor,
+                               di.lightnessStrength);
     }
 
     if (!di.mirrorProperties.isEmpty()) {

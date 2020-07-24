@@ -110,7 +110,8 @@ public:
     void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
             KisDabShape const&,
             const KisPaintInformation& info,
-            double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const override;
+            double subPixelX = 0, double subPixelY = 0, 
+            qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR, qreal lightnessStrength = DEFAULT_LIGHTNESS_STRENGTH) const override;
 
 
     QVector<KisGbrBrush*> brushes() const;
@@ -123,7 +124,8 @@ public:
 protected:
     void setBrushType(enumBrushType type) override;
     void setHasColor(bool hasColor) override;
-    void setPreserveLightness(bool preserveLightness) override;
+    virtual void setBrushApplication(enumBrushApplication brushApplication) override;
+    virtual void setGradient(const KoAbstractGradient* gradient) override;
     /// Will call KisBrush's saveToDevice as well
 
     KisImagePipeBrush(const KisImagePipeBrush& rhs);

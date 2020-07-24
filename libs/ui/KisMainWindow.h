@@ -234,6 +234,10 @@ Q_SIGNALS:
     /// emitted when the window is migrated among different screens
     void screenChanged();
 
+    /// emitted when the current view has changed
+    void activeViewChanged();
+
+
 public Q_SLOTS:
 
 
@@ -358,6 +362,10 @@ private Q_SLOTS:
     void slotFilePrintPreview();
 
     void importAnimation();
+
+    void renderAnimation();
+
+    void renderAnimationAgain();
 
     /**
      * Show a dialog with author and document information.

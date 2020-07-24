@@ -132,6 +132,7 @@ set(kritaimage_LIB_SRCS
    generator/kis_generator.cpp
    generator/kis_generator_layer.cpp
    generator/kis_generator_registry.cpp
+   generator/kis_generator_stroke_strategy.cpp
    floodfill/kis_fill_interval_map.cpp
    floodfill/kis_scanline_fill.cpp
    lazybrush/kis_min_cut_worker.cpp

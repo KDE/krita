@@ -129,6 +129,11 @@ KUndo2MagicString KisStroke::name() const
     return m_strokeStrategy->name();
 }
 
+QString KisStroke::id() const
+{
+    return m_strokeStrategy->id();
+}
+
 bool KisStroke::hasJobs() const
 {
     return !m_jobsQueue.isEmpty();

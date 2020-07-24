@@ -303,11 +303,11 @@ void KisAutogradientEditor::slotChangedLeftTypeTransparent(bool checked)
         } else {
             type = FOREGROUND_ENDPOINT;
         }
-    } else {
+    } else { //leftBackgroundRadioButton is checked
         if (checked) {
-            type = FOREGROUND_TRANSPARENT_ENDPOINT;
+            type = BACKGROUND_TRANSPARENT_ENDPOINT;
         } else {
-            type = FOREGROUND_ENDPOINT;
+            type = BACKGROUND_ENDPOINT;
         }
     }
 
@@ -331,11 +331,11 @@ void KisAutogradientEditor::slotChangedRightTypeTransparent(bool checked)
         } else {
             type = FOREGROUND_ENDPOINT;
         }
-    } else {
+    } else { //rightBackgroundRadioButton is checked
         if (checked) {
-            type = FOREGROUND_TRANSPARENT_ENDPOINT;
+            type = BACKGROUND_TRANSPARENT_ENDPOINT;
         } else {
-            type = FOREGROUND_ENDPOINT;
+            type = BACKGROUND_ENDPOINT;
         }
     }
 

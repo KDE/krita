@@ -64,7 +64,7 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
     inputRadius->setBlockUpdateSignalOnDrag(true);
     connect(inputRadius, SIGNAL(valueChanged(qreal)), m_updateCompressor.data(), SLOT(start()));
 
-    inputRatio->setRange(0.0, 1.0, 2);
+    inputRatio->setRange(0.01, 1.0, 2);
     inputRatio->setSingleStep(0.1);
     inputRatio->setValue(1.0);
     inputRatio->setBlockUpdateSignalOnDrag(true);

@@ -10,9 +10,6 @@
     <height>154</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>KisDitherWidget</string>
-  </property>
   <layout class="QFormLayout" name="formLayout">
    <property name="leftMargin">
     <number>0</number>

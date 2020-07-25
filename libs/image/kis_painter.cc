@@ -499,19 +499,6 @@ inline bool KisPainter::Private::tryReduceSourceRect(const KisPaintDevice *srcDe
         needsReadjustParams = true;
     }
 
-    if (!paramInfo.channelFlags.isEmpty()) {
-        const QBitArray onlyColor = colorSpace->channelFlags(true, false);
-        KIS_SAFE_ASSERT_RECOVER_NOOP(onlyColor.size() == paramInfo.channelFlags.size());
-
-        // check if we have alpha channel locked
-        if ((paramInfo.channelFlags & onlyColor) == paramInfo.channelFlags) {
-            *srcRect &= device->extent();
-
-            if (srcRect->isEmpty()) return true;
-            needsReadjustParams = true;
-        }
-    }
-
     if (needsReadjustParams) {
         // Readjust the function paramenters to the new dimensions.
         *dstX += srcRect->x() - *srcX;    // This will only add, not subtract

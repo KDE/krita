@@ -232,15 +232,27 @@ void KisColorSmudgeOp::mixSmudgePaintAt(const KisPaintInformation& info, KisPrec
 
     qreal colorRate = m_colorRateOption.isChecked() ? m_colorRateOption.computeSizeLikeValue(info) : 0.0;
     qreal smudgeLength = m_smudgeRateOption.isChecked() ? m_smudgeRateOption.computeSizeLikeValue(info) : 1.0;
+    const qreal fpOpacity = (qreal(painter()->opacity()) / 255.0) * m_opacityOption.getOpacityf(info);
 
-    int colorAlpha = qRound(colorRate * colorRate * 255.0);
-    int smudgeAlpha = qRound(smudgeLength * 255.0);
+    qreal dullingFactor = smudgeLength * 0.8 * fpOpacity;
+    int colorAlpha = qRound(colorRate * colorRate * fpOpacity * 255.0);
+    int smudgeAlpha = qRound(smudgeLength * fpOpacity * 255.0);
     int numPixels = width * height;
+
+    activeWrapper.readRect(m_dstDabRect); //copy the current data in the destination
+    activeWrapper.preciseDevice()->readBytes(m_canvasSrc->data(), m_dstDabRect); //to m_canvasSrc
 
     if (useDullingMode) {
         KoColor dullingFillColor = getDullingFillColor(info, activeWrapper, canvasLocalSamplePoint);
-        dullingFillColor.setOpacity(smudgeLength * smearAlpha ? dullingFillColor.opacityF() : 1.0);
-        m_backgroundPainter->fill(0, 0, m_dstDabRect.width(), m_dstDabRect.height(), dullingFillColor);
+        if (smearAlpha) {
+            dullingFillColor.convertTo(preciseCS); //convert to mix with background
+            preciseCS->mixColorsOp()->mixArrayWithColor(m_canvasSrc->data(), dullingFillColor.data(), numPixels, dullingFactor, canvasDabPtr);
+            m_backgroundPainter->bltFixed(0, 0, m_canvasDab, 0, 0, width, height);//composite_copy mixed bg/dullingfillcolor to m_tempDev
+        } else {
+            dullingFillColor.setOpacity(dullingFactor);
+            m_backgroundPainter->bltFixed(0, 0, m_canvasSrc, 0, 0, width, height); //draw background on tempDev
+            m_smudgePainter->fill(0, 0, m_dstDabRect.width(), m_dstDabRect.height(), dullingFillColor);//composite_over dullingfillcolor on bg in tempDev
+        }
     }
     else {
         //if overlay mode is checked, copy all layers at source to m_canvasDab 
@@ -253,11 +265,9 @@ void KisColorSmudgeOp::mixSmudgePaintAt(const KisPaintInformation& info, KisPrec
             activeWrapper.readRect(srcDabRect);
             activeWrapper.preciseDevice()->readBytes(canvasDabPtr, srcDabRect);
         }
-        activeWrapper.readRect(m_dstDabRect); //copy the current data in the destination
-        activeWrapper.preciseDevice()->readBytes(m_canvasSrc->data(), m_dstDabRect); //to m_canvasSrc
         if (smearAlpha) {//always use COMPOSITE_COPY for finalPainter, so we do smearAlpha here
             preciseCS->mixColorsOp()->mixTwoColorArrays(m_canvasSrc->data(), canvasDabPtr, numPixels, smudgeLength, canvasDabPtr);
-            m_backgroundPainter->bltFixed(0, 0, m_canvasDab, 0, 0, width, height);//m_canvasDab, 0, 0, width, height);
+            m_backgroundPainter->bltFixed(0, 0, m_canvasDab, 0, 0, width, height);
         }
         else {//else composite_over canvasDabPtr on m_canvasSrc
             m_backgroundPainter->bltFixed(0, 0, m_canvasSrc.data(), 0, 0, width, height);

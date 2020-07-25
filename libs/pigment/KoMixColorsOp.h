@@ -74,6 +74,14 @@ public:
      *
     */
     virtual void mixTwoColorArrays(const quint8* colorsA, const quint8* colorsB, quint32 nColors, qreal weight, quint8* dst) const = 0;
+
+    /**
+     *   Convenience function to mix one color array with one color with a specific weight.  Mixes colorArray[x] with color with
+     *   weight as the percentage of B vs A (0.0 -> 100% A, 1.0 -> 100% B), for all x = [0 .. nColors-1].
+     *
+     *
+    */
+    virtual void mixArrayWithColor(const quint8* colorArray, const quint8* color, quint32 nColors, qreal weight, quint8* dst) const = 0;
 };
 
 #endif

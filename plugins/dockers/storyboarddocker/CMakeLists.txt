@@ -9,6 +9,7 @@ set(KRITA_STORYBOARDDOCKER_SOURCES
     StoryboardItem.cpp
     StoryboardDelegate.cpp
     StoryboardView.cpp
+    KisAsyncStoryboardThumbnailRenderer.cpp
     )
 
 set(KRITA_STORYBOARDDOCKER_PART_HEADERS
@@ -20,6 +21,7 @@ set(KRITA_STORYBOARDDOCKER_PART_HEADERS
     StoryboardItem.h
     StoryboardDelegate.h
     StoryboardView.h
+    KisAsyncStoryboardThumbnailRenderer.h
 )
 
 ki18n_wrap_ui(KRITA_STORYBOARDDOCKER_SOURCES

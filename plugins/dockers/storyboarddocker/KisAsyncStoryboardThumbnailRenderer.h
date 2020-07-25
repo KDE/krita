@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2017 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2020 Saurabh Kumar <saurabhk660@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,35 +16,31 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KISASYNCANIMATIONCACHERENDERER_H
-#define KISASYNCANIMATIONCACHERENDERER_H
+#ifndef KISASYNCSTORYBOARDTHUMBNAILRENDERER_H
+#define KISASYNCSTORYBOARDTHUMBNAILRENDERER_H
 
 #include <KisAsyncAnimationRendererBase.h>
 
-class KisAsyncAnimationCacheRenderer : public KisAsyncAnimationRendererBase
+class KisPaintDevice;
+class KisAsyncStoryboardThumbnailRenderer : public KisAsyncAnimationRendererBase
 {
     Q_OBJECT
 public:
-    KisAsyncAnimationCacheRenderer();
-    ~KisAsyncAnimationCacheRenderer();
+    KisAsyncStoryboardThumbnailRenderer();
+    ~KisAsyncStoryboardThumbnailRenderer();
 
-    void setFrameCache(KisAnimationFrameCacheSP cache);
+    KisPaintDeviceSP frameProjection()
+    {
+        return m_requestedFrameProjection;
+    }
 
 protected:
     void frameCompletedCallback(int frame, const KisRegion &requestedRegion) override;
     void frameCancelledCallback(int frame) override;
     void clearFrameRegenerationState(bool isCancelled) override;
 
-
-Q_SIGNALS:
-    void sigCompleteRegenerationInternal(int frame);
-
-private Q_SLOTS:
-    void slotCompleteRegenerationInternal(int frame);
-
 private:
-    struct Private;
-    const QScopedPointer<Private> m_d;
+    KisPaintDeviceSP m_requestedFrameProjection;
 };
 
-#endif // KISASYNCANIMATIONCACHERENDERER_H
+#endif

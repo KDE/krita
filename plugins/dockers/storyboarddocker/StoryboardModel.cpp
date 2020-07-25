@@ -19,28 +19,29 @@
 #include "StoryboardModel.h"
 #include "StoryboardView.h"
 #include <kis_image_animation_interface.h>
-#include <kis_image.h>
 
 #include <QDebug>
 #include <QMimeData>
 
 #include <kis_icon.h>
-#include <kis_image.h>
 #include <KoColorSpaceRegistry.h>
 #include <kis_layer_utils.h>
 #include <kis_group_layer.h>
-#include "KisAsyncAnimationCacheRenderer.h"
 #include "kis_time_range.h"
 #include "kis_raster_keyframe_channel.h"
-#include "kis_animation_frame_cache.h"
+#include "KisAsyncStoryboardThumbnailRenderer.h"
 
 StoryboardModel::StoryboardModel(QObject *parent)
         : QAbstractItemModel(parent)
         , m_locked(false)
         , m_imageIdleWatcher(10)
+        , m_renderer(new KisAsyncStoryboardThumbnailRenderer())
 {
     connect(this, SIGNAL(rowsInserted(const QModelIndex, int, int)),
                 this, SLOT(slotInsertChildRows(const QModelIndex, int, int)));
+
+    connect(m_renderer, SIGNAL(sigFrameCompleted(int)), this, SLOT(slotFrameRenderCompleted(int)));
+    connect(m_renderer, SIGNAL(sigFrameCancelled(int)), this, SLOT(slotFrameRenderCancelled(int)));
     //TODO: populate model with already existing item's thumbnails
 }
 
@@ -576,7 +577,6 @@ QModelIndex StoryboardModel::lastIndexBeforeFrame(int frame) const
     return retIndex;
 }
 
-
 QModelIndexList StoryboardModel::affectedIndexes(KisTimeRange range) const
 {
     QModelIndex firstIndex = indexFromFrame(range.start());
@@ -594,6 +594,9 @@ QModelIndexList StoryboardModel::affectedIndexes(KisTimeRange range) const
     }
 
     QModelIndexList list;
+    if (!firstIndex.isValid()) {
+        return list;
+    }
     for (int i = firstIndex.row(); i <= lastIndex.row(); i++) {
         list.append(index(i, 0));
     }
@@ -831,33 +834,40 @@ void StoryboardModel::slotUpdateThumbnailForFrame(int frame)
     QModelIndex index = indexFromFrame(frame);
 
     if (index.isValid()) {
-        KisImage *image = m_image->clone(true);
-        KisAsyncAnimationCacheRenderer *renderer = new KisAsyncAnimationCacheRenderer();
+        if (frame == m_image->animationInterface()->currentUITime()) {
+            setThumbnailPixmapData(index, m_image->projection());
+            return;
+        }
+        else if (!m_renderer->isActive()) {
+            cloneImage = m_image->clone(false);
 
-        connect(renderer, SIGNAL(sigFrameCompleted(int)), this, SLOT(slotFrameRenderCompleted(int)));
-        connect(renderer, SIGNAL(sigFrameCancelled(int)), SLOT(slotFrameRenderCancelled(int)));
-
-        renderer->setFrameCache(KisAnimationFrameCache::cacheForImage(image));
-
-        renderer->startFrameRegeneration(image, frame);
+            if (!m_renderer->isActive()) {
+                cloneImage->requestTimeSwitch(frame);
+                m_renderer->startFrameRegeneration(cloneImage, frame);
+            }
+        }
     }
 }
 
 void StoryboardModel::slotUpdateThumbnails()
 {
     int currentTime = m_image->animationInterface()->currentUITime();
-    //slotUpdateThumbnailForFrame(currentTime);
-
-    QModelIndex currIn = indexFromFrame(currentTime);
-    if (currIn.isValid()) {
-        setThumbnailPixmapData(currIn, m_image->projection());
-    }
+    slotUpdateThumbnailForFrame(currentTime);
 
     KisTimeRange affectedRange;
     if (m_activeNode) {
         KisRasterKeyframeChannel *currentChannel = m_activeNode->paintDevice()->keyframeChannel();
         if (currentChannel) {
             affectedRange = currentChannel->affectedFrames(currentTime);
+            if (affectedRange.isInfinite()) {
+                int end = index(FrameNumber, 0, index(rowCount() - 1, 0)).data().toInt();
+                affectedRange = KisTimeRange(affectedRange.start(), end, true);
+            }
+            QModelIndexList dirtyIndexes = affectedIndexes(affectedRange);
+            foreach(QModelIndex index, dirtyIndexes) {
+                int frame = this->index(FrameNumber, 0, index).data().toInt();
+                slotUpdateThumbnailForFrame(frame);
+            }
         }
         else {
             affectedRange = KisTimeRange::infinite(0);
@@ -871,7 +881,8 @@ void StoryboardModel::slotUpdateThumbnails()
 
 void StoryboardModel::slotFrameRenderCompleted(int frame)
 {
-    qDebug()<<"frame render for "<<frame<<" complete";
+    QModelIndex index = indexFromFrame(frame);
+    setThumbnailPixmapData(index, m_renderer->frameProjection());
 }
 
 void StoryboardModel::slotFrameRenderCancelled(int frame)

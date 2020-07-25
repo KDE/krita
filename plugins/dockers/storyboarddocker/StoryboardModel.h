@@ -27,12 +27,14 @@
 #include <kis_keyframe_channel.h>
 #include "kis_idle_watcher.h"
 #include <kritastoryboarddocker_export.h>
+#include <kis_image.h>
 
 /*
     The main storyboard model. 
 */
 class StoryboardView;
 class KisTimeRange;
+class KisAsyncStoryboardThumbnailRenderer;
 class CommentBox
 {
 public:
@@ -158,6 +160,8 @@ private:
     KisImageWSP m_image;
     StoryboardView *m_view;
     KisNodeSP m_activeNode;
+    KisAsyncStoryboardThumbnailRenderer *m_renderer;
+    KisImageSP cloneImage;
 };
 
 #endif

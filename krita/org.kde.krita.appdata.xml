@@ -135,7 +135,7 @@
     <p xml:lang="zh-TW">Krita 是全功能的數位藝術工作室。</p>
     <p>It is perfect for sketching and painting, and presents an end–to–end solution for creating digital painting files from scratch by masters.</p>
     <p xml:lang="bs">On je savršen za skiciranje i slikanje i predstavlja finalno rješenje za kreiranje digitalnih slika od nule s majstorima</p>
-    <p xml:lang="ca">És perfecte per fer esbossos i pintar, i presenta una solució final per crear fitxers de dibuix digital des de zero per a mestres.</p>
+    <p xml:lang="ca">És perfecte per a fer esbossos i pintar, i presenta una solució final per a crear fitxers de dibuix digital des de zero per a mestres.</p>
     <p xml:lang="ca-valencia">És perfecte per fer esbossos i pintar, i presenta una solució final per crear fitxers de dibuix digital des de zero per a mestres.</p>
     <p xml:lang="el">Είναι ιδανικό για σκιτσογραφία και ζωγραφική, και παρουσιάζει μια από άκρη σε άκρη λύση για τη δημιουργία από το μηδέν αρχείων ψηφιακης ζωγραφικής από τους δασκάλους της τέχνης.</p>
     <p xml:lang="en-GB">It is perfect for sketching and painting, and presents an end–to–end solution for creating digital painting files from scratch by masters.</p>
@@ -168,7 +168,7 @@
       at 8 and 16 bits integer channels, as well as 16 and 32 bits floating point channels.
     </p>
     <p xml:lang="bs">Krita je odličan izbor za kreiranje konceptualne umjetnosti, stripove, teksture za obradu i mat slike. Krita podržava mnoge prostore boja kao RGB i CMIK na 8 i 16 bitnim cjelobrojnim kanalimaa, kao i 16 i 32 bita floating point kanalima.</p>
-    <p xml:lang="ca">El Krita és una gran elecció per crear art conceptual, còmics, textures per renderitzar i pintures «matte». El Krita permet molts espais de color com el RGB i el CMYK a 8 i 16 bits de canals sencers, així com 16 i 32 bits de canals de coma flotant.</p>
+    <p xml:lang="ca">El Krita és una gran elecció per a crear art conceptual, còmics, textures per a renderitzar i pintures «matte». El Krita permet molts espais de color com el RGB i el CMYK a 8 i 16 bits de canals sencers, així com 16 i 32 bits de canals de coma flotant.</p>
     <p xml:lang="ca-valencia">El Krita és una gran elecció per crear art conceptual, còmics, textures per renderitzar i pintures «matte». El Krita permet molts espais de color com el RGB i el CMYK a 8 i 16 bits de canals sencers, així com 16 i 32 bits de canals de coma flotant.</p>
     <p xml:lang="el">Το Krita είναι μια εξαιρετική επιλογή για τη δημιουργία αφηρημένης τέχνης, ιστοριών με εικόνες, υφής για ζωγραφική αποτύπωσης και διάχυσης φωτός. Το Krita υποστηρίζει πολλούς χρωματικούς χώρους όπως τα RGB και CMYK σε 8 και 16 bit κανάλια ακεραίων καθώς επίσης και σε 16 και 32 bit κανάλια κινητής υποδιαστολής,</p>
     <p xml:lang="en-GB">Krita is a great choice for creating concept art, comics, textures for rendering and matte paintings. Krita supports many colourspaces like RGB and CMYK at 8 and 16 bits integer channels, as well as 16 and 32 bits floating point channels.</p>
@@ -199,7 +199,7 @@
     <p xml:lang="zh-TW">Krita 是創造概念藝術、漫畫、彩現紋理和場景繪畫的絕佳選擇。Krita 在 8 位元和 16 位元整數色版，以及 16 位元和 32 位元浮點色板中支援 RGB 和 CMYK 等多種色彩空間。</p>
     <p>Have fun painting with the advanced brush engines, amazing filters and many handy features that make Krita enormously productive.</p>
     <p xml:lang="bs">Zabavite se kreirajući napredne pogone četki, filtere i mnoge praktične osobine koje čine Krita vrlo produktivnim.</p>
-    <p xml:lang="ca">Gaudiu pintant amb els motors avançats de pinzells, filtres impressionants i moltes característiques útils que fan el Krita molt productiu.</p>
+    <p xml:lang="ca">Gaudiu pintant amb els motors avançats de pinzell, filtres impressionants i moltes característiques útils que fan el Krita molt productiu.</p>
     <p xml:lang="ca-valencia">Gaudiu pintant amb els motors avançats de pinzells, filtres impressionants i moltes característiques útils que fan el Krita molt productiu.</p>
     <p xml:lang="el">Διασκεδάστε ζωγραφίζοντας με τις προηγμένες μηχανές πινέλων, με εκπληκτικά φίλτρα και πολλά εύκολης χρήσης χαρακτηριστικά που παρέχουν στο Krita εξαιρετικά αυξημένη παραγωγικότητα.</p>
     <p xml:lang="en-GB">Have fun painting with the advanced brush engines, amazing filters and many handy features that make Krita enormously productive.</p>
@@ -308,7 +308,7 @@
     </screenshot>
     <screenshot type="default">
       <caption>Create and use gamut masks to give your images a coherent feel</caption>
-      <caption xml:lang="ca">Creeu i useu màscares de gamma per donar a les imatges una aparença coherent</caption>
+      <caption xml:lang="ca">Creeu i useu màscares de gamma per a donar a les imatges una aparença coherent</caption>
       <caption xml:lang="ca-valencia">Creeu i useu màscares de gamma per donar a les imatges una aparença coherent</caption>
       <caption xml:lang="en-GB">Create and use gamut masks to give your images a coherent feel</caption>
       <caption xml:lang="es">Cree y use gamas para proporcionar a sus imágenes un aspecto coherente</caption>
@@ -331,7 +331,7 @@
     </screenshot>
     <screenshot type="default">
       <caption>Into animation? Krita provides everything you need for traditional, hand-drawn animation</caption>
-      <caption xml:lang="ca">Esteu amb animacions? El Krita proporciona tot el que cal per a l'animació a mà tradicional</caption>
+      <caption xml:lang="ca">Esteu amb les animacions? El Krita proporciona tot el que cal per a l'animació a mà tradicional</caption>
       <caption xml:lang="ca-valencia">Esteu amb animacions? El Krita proporciona tot el que cal per a l'animació a mà tradicional</caption>
       <caption xml:lang="en-GB">Into animation? Krita provides everything you need for traditional, hand-drawn animation</caption>
       <caption xml:lang="es">¿Trabaja con animación? Krita proporciona todo lo necesario para la animación manual tradicional</caption>
@@ -355,7 +355,7 @@
     </screenshot>
     <screenshot type="default">
       <caption>If you're new to digital painting, there's an extensive, up-to-date manual</caption>
-      <caption xml:lang="ca">Si sou nou a la pintura digital, hi ha un manual extens i actualitzat</caption>
+      <caption xml:lang="ca">Si sou nou en la pintura digital, hi ha un manual extens i actualitzat</caption>
       <caption xml:lang="ca-valencia">Si sou nou a la pintura digital, hi ha un manual extens i actualitzat</caption>
       <caption xml:lang="en-GB">If you're new to digital painting, there's an extensive, up-to-date manual</caption>
       <caption xml:lang="es">Si está empezando con el dibujo digital, dispone de un extenso y actualizado manual</caption>

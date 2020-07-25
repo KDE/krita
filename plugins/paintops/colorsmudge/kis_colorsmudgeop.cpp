@@ -222,7 +222,7 @@ void KisColorSmudgeOp::mixSmudgePaintAt(const KisPaintInformation& info, KisPrec
 
     m_canvasDab->setRect(dabBounds);
     m_canvasDab->initialize();
-    quint8* canvasPtr = m_canvasDab->data();
+    quint8* canvasDabPtr = m_canvasDab->data();
 
     m_canvasSrc->setRect(dabBounds);
     m_canvasSrc->initialize();
@@ -233,7 +233,7 @@ void KisColorSmudgeOp::mixSmudgePaintAt(const KisPaintInformation& info, KisPrec
     qreal colorRate = m_colorRateOption.isChecked() ? m_colorRateOption.computeSizeLikeValue(info) : 0.0;
     qreal smudgeLength = m_smudgeRateOption.isChecked() ? m_smudgeRateOption.computeSizeLikeValue(info) : 1.0;
 
-    int colorAlpha = qRound(colorRate * 255.0);
+    int colorAlpha = qRound(colorRate * colorRate * 255.0);
     int smudgeAlpha = qRound(smudgeLength * 255.0);
     int numPixels = width * height;
 
@@ -243,25 +243,25 @@ void KisColorSmudgeOp::mixSmudgePaintAt(const KisPaintInformation& info, KisPrec
         m_backgroundPainter->fill(0, 0, m_dstDabRect.width(), m_dstDabRect.height(), dullingFillColor);
     }
     else {
-        //if overlay mode is checked, copy the whole image instead of the layer
+        //if overlay mode is checked, copy all layers at source to m_canvasDab 
         if (m_image && m_overlayModeOption.isChecked()) {
             m_image->blockUpdates();
-            m_image->projection()->readBytes(canvasPtr, srcDabRect);
+            m_image->projection()->readBytes(canvasDabPtr, srcDabRect);
             m_image->unblockUpdates();
         }
-        else { //copy the layer
+        else { //else copy just the layer at source to m_canvasDab
             activeWrapper.readRect(srcDabRect);
-            activeWrapper.preciseDevice()->readBytes(canvasPtr, srcDabRect);
+            activeWrapper.preciseDevice()->readBytes(canvasDabPtr, srcDabRect);
         }
-        activeWrapper.readRect(m_dstDabRect);
-        activeWrapper.preciseDevice()->readBytes(m_canvasSrc->data(), srcDabRect);
+        activeWrapper.readRect(m_dstDabRect); //copy the current data in the destination
+        activeWrapper.preciseDevice()->readBytes(m_canvasSrc->data(), m_dstDabRect); //to m_canvasSrc
         if (smearAlpha) {//always use COMPOSITE_COPY for finalPainter, so we do smearAlpha here
-            preciseCS->mixColorsOp()->mixTwoColorArrays(m_canvasSrc->data(), canvasPtr, numPixels, smudgeLength, canvasPtr);
-            m_backgroundPainter->bltFixed(0, 0, m_canvasDab, 0, 0, width, height);
+            preciseCS->mixColorsOp()->mixTwoColorArrays(m_canvasSrc->data(), canvasDabPtr, numPixels, smudgeLength, canvasDabPtr);
+            m_backgroundPainter->bltFixed(0, 0, m_canvasDab, 0, 0, width, height);//m_canvasDab, 0, 0, width, height);
         }
-        else {//else composite_over canvasPtr on m_canvasSrc
+        else {//else composite_over canvasDabPtr on m_canvasSrc
             m_backgroundPainter->bltFixed(0, 0, m_canvasSrc.data(), 0, 0, width, height);
-            preciseCS->multiplyAlpha(canvasPtr, smudgeAlpha, numPixels);
+            preciseCS->multiplyAlpha(canvasDabPtr, smudgeAlpha, numPixels);
             m_smudgePainter->bltFixed(0, 0, m_canvasDab, 0, 0, width, height);
         }
     }

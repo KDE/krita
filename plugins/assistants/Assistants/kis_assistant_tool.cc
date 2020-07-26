@@ -1051,6 +1051,14 @@ void KisAssistantTool::loadAssistants()
             if (xml.name() == "assistant") {
                 if (assistant) {
                     if (assistant->handles().size() == assistant->numHandles()) {
+                        // Calculate internal variables for 2pp assistant now that handles are loaded
+		        if (assistant->id() == "two_point" && sideHandleMap.empty()){
+                            QSharedPointer <TwoPointAssistant> assis = qSharedPointerCast<TwoPointAssistant>(m_assistantDrag);
+                            assis->setHorizon(*assistant->handles()[0], *assistant->handles()[1]);
+                            assis->setCov(*assistant->handles()[0], *assistant->handles()[1], *assistant->handles()[2]);
+                            assis->setSp(*assistant->handles()[0], *assistant->handles()[1], *assistant->handles()[2]);
+                        }
+
 		        if (assistant->id() == "vanishing point" && sideHandleMap.empty()){
                         // Create side handles if the saved vp assistant doesn't have any.
                             QPointF pos = *assistant->handles()[0];

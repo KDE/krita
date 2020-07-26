@@ -78,7 +78,7 @@ KisColorSelectorNgDockerWidget::KisColorSelectorNgDockerWidget(QWidget *parent) 
     m_fallbackSettingsButton->hide();
 
     //layout
-    m_widgetLayout = new QHBoxLayout();
+    m_widgetLayout = new QHBoxLayout(this);
     m_widgetLayout->setSpacing(0);
     m_widgetLayout->setMargin(0);
 
@@ -111,7 +111,6 @@ KisColorSelectorNgDockerWidget::KisColorSelectorNgDockerWidget(QWidget *parent) 
 
     m_widgetLayout->addLayout(m_mainLayout);
     m_widgetLayout->addLayout(m_sidebarLayout);
-    setLayout(m_widgetLayout);
 
     updateLayout();
 

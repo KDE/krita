@@ -183,7 +183,6 @@ KisGamutMaskChooser::KisGamutMaskChooser(QWidget *parent) : QWidget(parent)
     viewModeButton->setMenu(menu);
 
     layout->addWidget(m_itemChooser);
-    setLayout(layout);
 
     connect(m_itemChooser, SIGNAL(resourceSelected(KoResourceSP )), this, SLOT(resourceSelected(KoResourceSP )));
 }

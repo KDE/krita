@@ -36,7 +36,6 @@ SmallColorSelectorDock::SmallColorSelectorDock()
     QVBoxLayout *layout = new QVBoxLayout(page);
     m_smallColorWidget = new KisSmallColorWidget(this);
     layout->addWidget(m_smallColorWidget, 1);
-    page->setLayout(layout);
 
     setWidget(page);
 

@@ -137,7 +137,7 @@ TimelineDockerTitleBar::TimelineDockerTitleBar(QWidget* parent) :
             btnSettingsMenu->setToolTip(i18n("Animation settings menu"));
 
             QWidget *settingsMenuWidget = new QWidget(this);
-            settingsMenuWidget->setLayout(new QHBoxLayout());
+            QHBoxLayout *settingsMenuLayout = new QHBoxLayout(settingsMenuWidget);
 
             QWidget *fields = new QWidget(settingsMenuWidget);
             QFormLayout *fieldsLayout = new QFormLayout(fields);
@@ -156,14 +156,14 @@ TimelineDockerTitleBar::TimelineDockerTitleBar(QWidget* parent) :
             fieldsLayout->addRow(i18n("Frame Rate: "), sbFrameRate);
 
             QWidget *buttons = new QWidget(settingsMenuWidget);
-            buttons->setLayout(new QVBoxLayout());
+            QVBoxLayout *buttonsLayout = new QVBoxLayout(buttons);
 
             btnAutoFrame = new QToolButton(settingsMenuWidget);
-            buttons->layout()->addWidget(btnAutoFrame);
-            buttons->layout()->setAlignment(Qt::AlignTop);
+            buttonsLayout->addWidget(btnAutoFrame);
+            buttonsLayout->setAlignment(Qt::AlignTop);
 
-            settingsMenuWidget->layout()->addWidget(fields);
-            settingsMenuWidget->layout()->addWidget(buttons);
+            settingsMenuLayout->addWidget(fields);
+            settingsMenuLayout->addWidget(buttons);
 
             layout->addWidget(btnSettingsMenu);
 

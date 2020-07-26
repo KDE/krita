@@ -38,10 +38,12 @@ TimelineInsertKeyframeDialog::TimelineInsertKeyframeDialog(QWidget *parent) :
 {
     setWindowTitle(i18nc("@title:window","Insert Keyframes"));
     setModal(true);
-    setLayout(new QVBoxLayout());
+
+    QVBoxLayout *layout = new QVBoxLayout(this);
+
     {   // Count and Spacing Forms.
         QWidget *forms = new QWidget(this);
-        layout()->addWidget(forms);
+        layout->addWidget(forms);
 
         frameCountSpinbox.setMinimum(1);
         frameCountSpinbox.setValue(1);
@@ -56,7 +58,7 @@ TimelineInsertKeyframeDialog::TimelineInsertKeyframeDialog(QWidget *parent) :
     }
     {   // Side Buttons.
         QGroupBox *sideRadioButtons = new QGroupBox(i18nc("@label:group","Side:"), this);
-        layout()->addWidget(sideRadioButtons);
+        layout->addWidget(sideRadioButtons);
 
         leftBefore = new QRadioButton(i18nc("@label:radio", "Left / Before"), sideRadioButtons);
         rightAfter = new QRadioButton(i18nc("@label:radio", "Right / After"), sideRadioButtons);
@@ -69,7 +71,7 @@ TimelineInsertKeyframeDialog::TimelineInsertKeyframeDialog(QWidget *parent) :
     }
     {   // Cancel / OK Buttons.
         QDialogButtonBox *buttonbox = new QDialogButtonBox(QDialogButtonBox::Cancel | QDialogButtonBox::Ok);
-        layout()->addWidget(buttonbox);
+        layout->addWidget(buttonbox);
 
         connect(buttonbox, SIGNAL(accepted()), this, SLOT(accept()));
         connect(buttonbox, SIGNAL(rejected()), this, SLOT(reject()));

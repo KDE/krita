@@ -133,19 +133,19 @@ void KisPresetSaveWidget::loadExistingThumbnail()
 void KisPresetSaveWidget::loadImageFromLibrary()
 {
     //add dialog code here.
-    QDialog *dlg = new QDialog(this);
-    dlg->setWindowTitle(i18n("Preset Icon Library"));
-    QVBoxLayout *layout = new QVBoxLayout();
-    dlg->setLayout(layout);
-    KisPaintopPresetIconLibrary *libWidget = new KisPaintopPresetIconLibrary(dlg);
+    QDialog dialog;
+    dialog.setWindowTitle(i18n("Preset Icon Library"));
+    QVBoxLayout *layout = new QVBoxLayout(&dialog);
+
+    KisPaintopPresetIconLibrary *libWidget = new KisPaintopPresetIconLibrary(&dialog);
     layout->addWidget(libWidget);
-    QDialogButtonBox *buttons = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, dlg);
-    connect(buttons, SIGNAL(accepted()), dlg, SLOT(accept()));
-    connect(buttons, SIGNAL(rejected()), dlg, SLOT(reject()));
+    QDialogButtonBox *buttons = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    connect(buttons, SIGNAL(accepted()), &dialog, SLOT(accept()));
+    connect(buttons, SIGNAL(rejected()), &dialog, SLOT(reject()));
     layout->addWidget(buttons);
 
     //if dialog accepted, get image.
-    if (dlg->exec()==QDialog::Accepted) {
+    if (dialog.exec() == QDialog::Accepted) {
 
         QImage presetImage = libWidget->getImage();
         brushPresetThumbnailWidget->paintCustomImage(presetImage);

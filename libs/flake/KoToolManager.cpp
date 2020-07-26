@@ -630,7 +630,6 @@ void KoToolManager::Private::postSwitchTool(bool temporary)
             canvasData->dummyToolLabel = new QLabel(toolWidget);
             layout->addWidget(canvasData->dummyToolLabel);
             layout->addItem(new QSpacerItem(1, 1, QSizePolicy::Minimum, QSizePolicy::Expanding));
-            toolWidget->setLayout(layout);
             canvasData->dummyToolWidget = toolWidget;
         }
         canvasData->dummyToolLabel->setText(i18n("Active tool: %1", title));

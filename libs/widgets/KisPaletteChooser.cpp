@@ -73,8 +73,8 @@ KisPaletteChooser::KisPaletteChooser(QWidget *parent)
     m_d->itemChooser->itemView()->setViewMode(QListView::ListMode);
     m_d->itemChooser->showButtons(false);
     m_d->itemChooser->showTaggingBar(true);
-    m_ui->viewPalette->setLayout(new QHBoxLayout(m_ui->viewPalette));
-    m_ui->viewPalette->layout()->addWidget(m_d->itemChooser.data());
+    QHBoxLayout *paletteLayout = new QHBoxLayout(m_ui->viewPalette);
+    paletteLayout->addWidget(m_d->itemChooser.data());
 
     connect(m_d->itemChooser.data(), SIGNAL(resourceSelected(KoResourceSP )), SLOT(slotPaletteResourceSelected(KoResourceSP )));
 }

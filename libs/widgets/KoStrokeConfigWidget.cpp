@@ -83,7 +83,7 @@ public:
 CapNJoinMenu::CapNJoinMenu(QWidget *parent)
     : QMenu(parent)
 {
-    QGridLayout *mainLayout = new QGridLayout();
+    QGridLayout *mainLayout = new QGridLayout(this);
     mainLayout->setMargin(2);
 
     // The cap group
@@ -148,7 +148,6 @@ CapNJoinMenu::CapNJoinMenu(QWidget *parent)
     mainLayout->addWidget(miterLimit, 4, 0, 1, 3);
 
     mainLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
-    setLayout(mainLayout);
 }
 
 QSize CapNJoinMenu::sizeHint() const

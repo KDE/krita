@@ -314,28 +314,29 @@ void TwoPointAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *c
 
     QTransform initialTransform = converter->documentToWidgetTransform();
     QPainterPath path;
+    QPointF centerOfVision = initialTransform.map(m_cov);
 
-    if (isAssistantComplete()){
-      QPointF cov;
-      QLineF hl = QLineF(*handles()[0],*handles()[1]);
-      QLineF vertical = hl.normalVector();
-      vertical.translate(*handles()[2] - vertical.p1());
-      vertical.intersect(hl, &cov);
-      QPointF centerOfVision = initialTransform.map(cov);
+    path.moveTo(QPointF(centerOfVision.x() - 10.0, centerOfVision.y() - 10.0));
+    path.lineTo(QPointF(centerOfVision.x() + 10.0, centerOfVision.y() + 10.0));
 
-      path.moveTo(QPointF(centerOfVision.x() - 10.0, centerOfVision.y() - 10.0));
-      path.lineTo(QPointF(centerOfVision.x() + 10.0, centerOfVision.y() + 10.0));
+    path.moveTo(QPointF(centerOfVision.x() - 10.0, centerOfVision.y() + 10.0));
+    path.lineTo(QPointF(centerOfVision.x() + 10.0, centerOfVision.y() - 10.0));
 
-      path.moveTo(QPointF(centerOfVision.x() - 10.0, centerOfVision.y() + 10.0));
-      path.lineTo(QPointF(centerOfVision.x() + 10.0, centerOfVision.y() - 10.0));
-
-      drawPath(gc, path, isSnappingActive());
-    }
+    drawPath(gc, path, isSnappingActive());
 }
 
 QPointF TwoPointAssistant::getEditorPosition() const
 {
-    return *handles()[2];
+    QLineF arm_0 = QLineF(m_sp, *handles()[0]).unitVector();
+    QLineF arm_1 = QLineF(m_sp, *handles()[1]).unitVector();
+    QPointF bisect_point = QLineF(arm_1.p2(), arm_0.p2()).center();
+    QLineF bisect_line = QLineF(m_sp, bisect_point);
+
+    // the "diagonal" vanishing point
+    QPointF diagonal_point;
+    m_horizon.intersect(bisect_line, &diagonal_point);
+
+    return diagonal_point;
 }
 
 void TwoPointAssistant::setHorizon(const QPointF a, const QPointF b)
@@ -417,7 +418,7 @@ double TwoPointAssistant::gridDensity()
 
 bool TwoPointAssistant::isAssistantComplete() const
 {
-  return handles().size() >= 3;
+  return handles().size() == 3;
 }
 
 void TwoPointAssistant::saveCustomXml(QXmlStreamWriter* xml)

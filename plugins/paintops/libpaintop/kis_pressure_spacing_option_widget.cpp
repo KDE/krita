@@ -41,15 +41,13 @@ KisPressureSpacingOptionWidget::KisPressureSpacingOptionWidget():
     hl->addWidget(m_isotropicSpacing);
     hl->addWidget(m_useSpacingUpdates);
 
-    QVBoxLayout *vl = new QVBoxLayout;
-    vl->setMargin(0);
-    vl->addLayout(hl);
-    vl->addWidget(KisCurveOptionWidget::curveWidget());
+    QWidget *page = new QWidget;
+    QVBoxLayout *pageLayout = new QVBoxLayout(page);
+    pageLayout->setMargin(0);
+    pageLayout->addLayout(hl);
+    pageLayout->addWidget(KisCurveOptionWidget::curveWidget());
 
-    QWidget *w = new QWidget;
-    w->setLayout(vl);
-
-    KisCurveOptionWidget::setConfigurationPage(w);
+    KisCurveOptionWidget::setConfigurationPage(page);
 
     connect(m_isotropicSpacing, SIGNAL(stateChanged(int)),
             this, SLOT(setIsotropicSpacing(int)));

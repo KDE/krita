@@ -34,7 +34,7 @@
 */
 class StoryboardView;
 class KisTimeRange;
-class KisAsyncStoryboardThumbnailRenderer;
+class KisStoryboardThumbnailRenderScheduler;
 class CommentBox
 {
 public:
@@ -138,7 +138,7 @@ private Q_SLOTS:
     void slotKeyframeMoved(KisKeyframeSP, int);
     void slotUpdateThumbnailForFrame(int frame);
     void slotUpdateThumbnails();
-    void slotFrameRenderCompleted(int frame);
+    void slotFrameRenderCompleted(int frame, KisPaintDeviceSP dev);
     void slotFrameRenderCancelled(int frame);
 
     void slotCommentDataChanged();
@@ -160,7 +160,7 @@ private:
     KisImageWSP m_image;
     StoryboardView *m_view;
     KisNodeSP m_activeNode;
-    KisAsyncStoryboardThumbnailRenderer *m_renderer;
+    KisStoryboardThumbnailRenderScheduler *m_renderScheduler;
     KisImageSP cloneImage;
 };
 

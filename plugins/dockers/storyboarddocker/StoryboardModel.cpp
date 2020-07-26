@@ -29,19 +29,19 @@
 #include <kis_group_layer.h>
 #include "kis_time_range.h"
 #include "kis_raster_keyframe_channel.h"
-#include "KisAsyncStoryboardThumbnailRenderer.h"
+#include "KisStoryboardThumbnailRenderScheduler.h"
 
 StoryboardModel::StoryboardModel(QObject *parent)
         : QAbstractItemModel(parent)
         , m_locked(false)
         , m_imageIdleWatcher(10)
-        , m_renderer(new KisAsyncStoryboardThumbnailRenderer())
+        , m_renderScheduler(new KisStoryboardThumbnailRenderScheduler())
 {
     connect(this, SIGNAL(rowsInserted(const QModelIndex, int, int)),
                 this, SLOT(slotInsertChildRows(const QModelIndex, int, int)));
 
-    connect(m_renderer, SIGNAL(sigFrameCompleted(int)), this, SLOT(slotFrameRenderCompleted(int)));
-    connect(m_renderer, SIGNAL(sigFrameCancelled(int)), this, SLOT(slotFrameRenderCancelled(int)));
+    connect(m_renderScheduler, SIGNAL(sigFrameCompleted(int, KisPaintDeviceSP)), this, SLOT(slotFrameRenderCompleted(int, KisPaintDeviceSP)));
+    connect(m_renderScheduler, SIGNAL(sigFrameCancelled(int)), this, SLOT(slotFrameRenderCancelled(int)));
     //TODO: populate model with already existing item's thumbnails
 }
 
@@ -519,6 +519,8 @@ void StoryboardModel::setImage(KisImageWSP image)
     m_imageIdleWatcher.startCountdown();
     connect(&m_imageIdleWatcher, SIGNAL(startedIdleMode()), this, SLOT(slotUpdateThumbnails()));
 
+    m_renderScheduler->setImage(m_image);
+
     //for add, remove and move
     connect(m_image->animationInterface(), SIGNAL(sigKeyframeAdded(KisKeyframeSP)),
             this, SLOT(slotKeyframeAdded(KisKeyframeSP)));
@@ -832,20 +834,13 @@ void StoryboardModel::slotKeyframeMoved(KisKeyframeSP keyframe, int from)
 void StoryboardModel::slotUpdateThumbnailForFrame(int frame)
 {
     QModelIndex index = indexFromFrame(frame);
-
+    bool affected = true;
     if (index.isValid()) {
         if (frame == m_image->animationInterface()->currentUITime()) {
             setThumbnailPixmapData(index, m_image->projection());
-            return;
+            affected = false;
         }
-        else if (!m_renderer->isActive()) {
-            cloneImage = m_image->clone(false);
-
-            if (!m_renderer->isActive()) {
-                cloneImage->requestTimeSwitch(frame);
-                m_renderer->startFrameRegeneration(cloneImage, frame);
-            }
-        }
+        m_renderScheduler->scheduleFrameForRegeneration(frame, affected);
     }
 }
 
@@ -879,10 +874,12 @@ void StoryboardModel::slotUpdateThumbnails()
     }
 }
 
-void StoryboardModel::slotFrameRenderCompleted(int frame)
+void StoryboardModel::slotFrameRenderCompleted(int frame, KisPaintDeviceSP dev)
 {
     QModelIndex index = indexFromFrame(frame);
-    setThumbnailPixmapData(index, m_renderer->frameProjection());
+    if (index.isValid()) {
+        setThumbnailPixmapData(index, dev);
+    }
 }
 
 void StoryboardModel::slotFrameRenderCancelled(int frame)

@@ -34,9 +34,7 @@ KisCanvasWindow::KisCanvasWindow(KisMainWindow *mainWindow)
       , d(new Private(mainWindow))
 {
     setWindowFlags(Qt::Window);
-
-    QLayout *layout = new QHBoxLayout(this);
-    setLayout(layout);
+    setLayout(new QHBoxLayout);
 }
 
 KisCanvasWindow::~KisCanvasWindow() = default;

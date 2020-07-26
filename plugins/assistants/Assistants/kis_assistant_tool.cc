@@ -276,7 +276,7 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
         } else if (m_handleDrag && assistant->handles().size()>2 && (assistant->id() == "ellipse" ||
                                                                      assistant->id() == "concentric ellipse" ||
                                                                      assistant->id() == "fisheye-point" ||
-                                                                     assistant->id() == "two_point")){
+                                                                     assistant->id() == "two point")){
             m_snapIsRadial = false;
             if (m_handleDrag == assistant->handles()[0]) {
                 m_dragStart = *assistant->handles()[1];
@@ -417,11 +417,11 @@ void KisAssistantTool::continuePrimaryAction(KoPointerEvent *event)
         Q_FOREACH (KisPaintingAssistantHandleSP handle, m_assistantDrag->handles()) {
             *handle += (newAdjustment - m_currentAdjustment);
         }
-        if (m_assistantDrag->id()== "vanishing point" || m_assistantDrag->id()== "two_point"){
+        if (m_assistantDrag->id()== "vanishing point" || m_assistantDrag->id()== "two point"){
             Q_FOREACH (KisPaintingAssistantHandleSP handle, m_assistantDrag->sideHandles()) {
                 *handle += (newAdjustment - m_currentAdjustment);
             }
-            if (m_assistantDrag->id() == "two_point") {
+            if (m_assistantDrag->id() == "two point") {
                 QSharedPointer <TwoPointAssistant> assis = qSharedPointerCast<TwoPointAssistant>(m_assistantDrag);
                 QList<KisPaintingAssistantHandleSP> handles = assis->handles();
 
@@ -516,7 +516,7 @@ void KisAssistantTool::continuePrimaryAction(KoPointerEvent *event)
             }
 
         }
-        if (m_handleDrag && assistant->id() == "two_point" && assistant->handles().size() >= 3 &&
+        if (m_handleDrag && assistant->id() == "two point" && assistant->handles().size() >= 3 &&
             assistant->sideHandles().size() == 8) {
 
           QSharedPointer <TwoPointAssistant> assis = qSharedPointerCast<TwoPointAssistant>(assistant);
@@ -665,7 +665,7 @@ void KisAssistantTool::addAssistant()
     }
 
     // generate the side handles for the Two Point assistant
-    if (m_newAssistant->id() == "two_point"){
+    if (m_newAssistant->id() == "two point"){
       QList<KisPaintingAssistantHandleSP> handles = m_newAssistant->handles();
       QSharedPointer <TwoPointAssistant> assis = qSharedPointerCast<TwoPointAssistant>(m_newAssistant);
 
@@ -746,7 +746,7 @@ void KisAssistantTool::updateToolOptionsUI()
 
      if (m_selectedAssistant) {
          bool isVanishingPointAssistant = m_selectedAssistant->id() == "vanishing point";
-         bool isTwoPointAssistant = m_selectedAssistant->id() == "two_point";
+         bool isTwoPointAssistant = m_selectedAssistant->id() == "two point";
 
          m_options.vanishingPointAngleSpinbox->setVisible(isVanishingPointAssistant);
          m_options.twoPointDensitySpinbox->setVisible(isTwoPointAssistant);
@@ -823,7 +823,7 @@ void KisAssistantTool::slotChangeTwoPointDensity(double value)
     // get the selected assistant and change the angle value
     KisPaintingAssistantSP m_selectedAssistant =  m_canvas->paintingAssistantsDecoration()->selectedAssistant();
     if (m_selectedAssistant) {
-        bool isTwoPointAssistant = m_selectedAssistant->id() == "two_point";
+        bool isTwoPointAssistant = m_selectedAssistant->id() == "two point";
 
         if (isTwoPointAssistant) {
             QSharedPointer <TwoPointAssistant> assis = qSharedPointerCast<TwoPointAssistant>(m_selectedAssistant);
@@ -1052,7 +1052,7 @@ void KisAssistantTool::loadAssistants()
                 if (assistant) {
                     if (assistant->handles().size() == assistant->numHandles()) {
                         // Calculate internal variables for 2pp assistant now that handles are loaded
-		        if (assistant->id() == "two_point" && sideHandleMap.empty()){
+		        if (assistant->id() == "two point" && sideHandleMap.empty()){
                             QSharedPointer <TwoPointAssistant> assis = qSharedPointerCast<TwoPointAssistant>(m_assistantDrag);
                             assis->setHorizon(*assistant->handles()[0], *assistant->handles()[1]);
                             assis->setCov(*assistant->handles()[0], *assistant->handles()[1], *assistant->handles()[2]);
@@ -1375,7 +1375,7 @@ void KisAssistantTool::endAlternateAction(KoPointerEvent *event, AlternateAction
 bool KisAssistantTool::snap(KoPointerEvent *event)
 {
     // when user is making a new two point assistant, always snap the 3rd handle to the horizon line
-    if (m_newAssistant && m_newAssistant->handles().length() == 3 && m_newAssistant->id() == "two_point") {
+    if (m_newAssistant && m_newAssistant->handles().length() == 3 && m_newAssistant->id() == "two point") {
         QList<KisPaintingAssistantHandleSP> handles = m_newAssistant->handles();
         QSharedPointer <TwoPointAssistant> two_point = qSharedPointerCast<TwoPointAssistant>(m_newAssistant);
         two_point->setCov(*handles[0], *handles[1], event->point);

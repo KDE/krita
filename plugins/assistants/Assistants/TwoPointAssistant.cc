@@ -14,7 +14,7 @@
 #include <QtCore/qmath.h>
 
 TwoPointAssistant::TwoPointAssistant()
-    : KisPaintingAssistant("two_point", i18n("Two point assistant"))
+    : KisPaintingAssistant("two point", i18n("Two point assistant"))
     , m_followBrushPosition(false)
     , m_adjustedPositionValid(false)
 {
@@ -470,7 +470,7 @@ TwoPointAssistantFactory::~TwoPointAssistantFactory()
 
 QString TwoPointAssistantFactory::id() const
 {
-    return "two_point";
+    return "two point";
 }
 
 QString TwoPointAssistantFactory::name() const

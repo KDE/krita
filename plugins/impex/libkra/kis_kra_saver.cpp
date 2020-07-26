@@ -461,7 +461,7 @@ bool KisKraSaver::saveAssistantsList(QDomDocument& doc, QDomElement& element)
                 assist->saveXmlList(doc, assistantsElement, count_fisheyepoint);
                 count_fisheyepoint++;
             }
-            else if (assist->id() == "two_point"){
+            else if (assist->id() == "two point"){
                 assist->saveXmlList(doc, assistantsElement, count_twopoint);
                 count_twopoint++;
             }

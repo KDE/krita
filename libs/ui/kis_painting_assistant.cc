@@ -651,10 +651,10 @@ void KisPaintingAssistant::saveXmlList(QDomDocument& doc, QDomElement& assistant
         assistantElement.setAttribute("filename", QString("ruler%1.assistant").arg(count));
         assistantsElement.appendChild(assistantElement);
     }
-    else if (d->s->id == "two_point"){
+    else if (d->s->id == "two point"){
         QDomElement assistantElement = doc.createElement("assistant");
-        assistantElement.setAttribute("type", "two_point");
-        assistantElement.setAttribute("filename", QString("two_point%1.assistant").arg(count));
+        assistantElement.setAttribute("type", "two point");
+        assistantElement.setAttribute("filename", QString("two point%1.assistant").arg(count));
         assistantsElement.appendChild(assistantElement);
     }
 }

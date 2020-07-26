@@ -291,10 +291,11 @@ KoFillConfigWidget::KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVarian
 
     // Gradient selector
     d->ui->wdgGradientEditor->setCompactMode(true);
+    d->ui->wdgGradientEditor->setCanvasResourcesInterface(canvas->resourceManager()->canvasResourcesInterface());
     connect(d->ui->wdgGradientEditor, SIGNAL(sigGradientChanged()), &d->gradientChangedCompressor, SLOT(start()));
     connect(&d->gradientChangedCompressor, SIGNAL(timeout()), SLOT(activeGradientChanged()));
 
-    d->gradientAction = new KoResourcePopupAction(ResourceType::Gradients, d->ui->btnChoosePredefinedGradient);
+    d->gradientAction = new KoResourcePopupAction(ResourceType::Gradients, canvas->resourceManager()->canvasResourcesInterface(), d->ui->btnChoosePredefinedGradient);
 
     d->gradientAction->setToolTip(i18n("Change filling gradient"));
     d->ui->btnChoosePredefinedGradient->setDefaultAction(d->gradientAction);
@@ -376,10 +377,10 @@ void KoFillConfigWidget::slotUpdateFillTitle()
 
 void KoFillConfigWidget::slotCanvasResourceChanged(int key, const QVariant &value)
 {
-    if ((key == KoCanvasResourceProvider::ForegroundColor && d->fillVariant == KoFlake::Fill) ||
-        (key == KoCanvasResourceProvider::BackgroundColor &&
+    if ((key == KoCanvasResource::ForegroundColor && d->fillVariant == KoFlake::Fill) ||
+        (key == KoCanvasResource::BackgroundColor &&
          d->fillVariant == KoFlake::StrokeFill && !d->noSelectionTrackingMode) ||
-        (key == KoCanvasResourceProvider::ForegroundColor && d->noSelectionTrackingMode)) {
+        (key == KoCanvasResource::ForegroundColor && d->noSelectionTrackingMode)) {
 
         KoColor color = value.value<KoColor>();
 
@@ -393,10 +394,10 @@ void KoFillConfigWidget::slotCanvasResourceChanged(int key, const QVariant &valu
 
             d->colorAction->setCurrentColor(color);
             d->colorChangedCompressor.start();
-        } else if (checkedId == Gradient && key == KoCanvasResourceProvider::ForegroundColor) {
+        } else if (checkedId == Gradient && key == KoCanvasResource::ForegroundColor) {
             d->ui->wdgGradientEditor->notifyGlobalColorChanged(color);
         }
-    } else if (key == KisCanvasResourceProvider::CurrentGradient) {
+    } else if (key == KoCanvasResource::CurrentGradient) {
         KoResourceSP gradient = value.value<KoAbstractGradientSP>();
         const int checkedId = d->group->checkedId();
 
@@ -559,12 +560,12 @@ void KoFillConfigWidget::slotProposeCurrentColorToResourceManager()
 
     bool hasColor = false;
     KoColor color;
-    KoCanvasResourceProvider::CanvasResource colorSlot = KoCanvasResourceProvider::ForegroundColor;
+    KoCanvasResource::CanvasResourceId colorSlot = KoCanvasResource::ForegroundColor;
 
 
     if (checkedId == Solid) {
         if (d->fillVariant == KoFlake::StrokeFill) {
-            colorSlot = KoCanvasResourceProvider::BackgroundColor;
+            colorSlot = KoCanvasResource::BackgroundColor;
         }
         color = d->colorAction->currentKoColor();
         hasColor = true;
@@ -595,9 +596,9 @@ void KoFillConfigWidget::slotProposeCurrentColorToResourceManager()
 void KoFillConfigWidget::slotRecoverColorInResourceManager()
 {
     if (d->overriddenColorFromProvider) {
-        KoCanvasResourceProvider::CanvasResource colorSlot = KoCanvasResourceProvider::ForegroundColor;
+        KoCanvasResource::CanvasResourceId colorSlot = KoCanvasResource::ForegroundColor;
         if (d->fillVariant == KoFlake::StrokeFill) {
-            colorSlot = KoCanvasResourceProvider::BackgroundColor;
+            colorSlot = KoCanvasResource::BackgroundColor;
         }
 
         d->canvas->resourceManager()->setResource(colorSlot, QVariant::fromValue(*d->overriddenColorFromProvider));
@@ -767,12 +768,12 @@ void KoFillConfigWidget::loadCurrentFillFromResourceServer()
 {
     {
         KoColor color = d->canvas->resourceManager()->backgroundColor();
-        slotCanvasResourceChanged(KoCanvasResourceProvider::BackgroundColor, QVariant::fromValue(color));
+        slotCanvasResourceChanged(KoCanvasResource::BackgroundColor, QVariant::fromValue(color));
     }
 
     {
         KoColor color = d->canvas->resourceManager()->foregroundColor();
-        slotCanvasResourceChanged(KoCanvasResourceProvider::ForegroundColor, QVariant::fromValue(color));
+        slotCanvasResourceChanged(KoCanvasResource::ForegroundColor, QVariant::fromValue(color));
     }
 
     Q_FOREACH (QAbstractButton *button, d->group->buttons()) {

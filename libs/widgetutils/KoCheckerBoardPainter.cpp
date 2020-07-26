@@ -41,9 +41,16 @@ void KoCheckerBoardPainter::setCheckerSize(int checkerSize)
     createChecker();
 }
 
+void KoCheckerBoardPainter::paint(QPainter &painter, const QRectF &rect, const QPointF &patternOrigin) const
+{
+    QBrush brush(m_checker);
+    brush.setTransform(QTransform::fromTranslate(patternOrigin.x(), patternOrigin.y()));
+    painter.fillRect(rect, brush);
+}
+
 void KoCheckerBoardPainter::paint(QPainter &painter, const QRectF &rect) const
 {
-    painter.fillRect(rect, QBrush(m_checker));
+    paint(painter, rect, QPointF());
 }
 
 void KoCheckerBoardPainter::createChecker()

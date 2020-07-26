@@ -335,6 +335,8 @@ KisViewManager::~KisViewManager()
     delete d;
 }
 
+#include <KoActiveCanvasResourceDependencyKoResource.h>
+
 void KisViewManager::initializeResourceManager(KoCanvasResourceProvider *resourceManager)
 {
     resourceManager->addDerivedResourceConverter(toQShared(new KisCompositeOpResourceConverter));
@@ -348,6 +350,21 @@ void KisViewManager::initializeResourceManager(KoCanvasResourceProvider *resourc
     resourceManager->addDerivedResourceConverter(toQShared(new KisEraserModeResourceConverter));
     resourceManager->addDerivedResourceConverter(toQShared(new KisPatternSizeResourceConverter));
     resourceManager->addResourceUpdateMediator(toQShared(new KisPresetUpdateMediator));
+
+    resourceManager->addActiveCanvasResourceDependency(
+        toQShared(new KoActiveCanvasResourceDependencyKoResource<KisPaintOpPreset>(
+                      KoCanvasResource::CurrentPaintOpPreset,
+                      KoCanvasResource::CurrentGradient)));
+
+    resourceManager->addActiveCanvasResourceDependency(
+        toQShared(new KoActiveCanvasResourceDependencyKoResource<KoAbstractGradient>(
+                      KoCanvasResource::CurrentGradient,
+                      KoCanvasResource::ForegroundColor)));
+
+    resourceManager->addActiveCanvasResourceDependency(
+        toQShared(new KoActiveCanvasResourceDependencyKoResource<KoAbstractGradient>(
+                      KoCanvasResource::CurrentGradient,
+                      KoCanvasResource::BackgroundColor)));
 }
 
 KActionCollection *KisViewManager::actionCollection() const

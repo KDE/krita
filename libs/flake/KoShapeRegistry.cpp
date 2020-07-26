@@ -168,7 +168,7 @@ struct ObjectEntry {
     QByteArray objectXmlContents; // the XML tree in the object
     QString objectName;       // object name in the frame without "./"
     // This is extracted from objectXmlContents.
-    bool isDir = false;
+    bool isDir {false};
 };
 
 // A FileEntry is used to store information about embedded files
@@ -185,7 +185,7 @@ struct FileEntry {
 
     QString path;           // Normalized filename, i.e. without "./".
     QString mimeType;
-    bool  isDir;
+    bool  isDir {false};
     QByteArray contents;
 };
 

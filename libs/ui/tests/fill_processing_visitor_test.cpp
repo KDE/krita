@@ -62,7 +62,7 @@ public:
 
         QVariant v;
         v.setValue<KoPatternSP>(newPattern);
-        manager->setResource(KisCanvasResourceProvider::CurrentPattern, v);
+        manager->setResource(KoCanvasResource::CurrentPattern, v);
 
         KisResourcesSnapshotSP resources =
             new KisResourcesSnapshot(image,

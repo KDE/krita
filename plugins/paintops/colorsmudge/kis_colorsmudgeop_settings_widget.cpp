@@ -41,7 +41,6 @@
 #include "kis_pressure_texture_strength_option.h"
 #include "kis_pressure_hsv_option.h"
 #include "kis_colorsmudgeop_settings.h"
-#include <KisGlobalResourcesInterface.h>
 
 
 KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
@@ -73,7 +72,7 @@ KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureGradientOption(), i18n("0%"), i18n("100%")), i18n("Gradient"));
     addPaintOpOption(new KisCurveOptionWidget(KisPressureHSVOption::createHueOption(), KisPressureHSVOption::hueMinLabel(), KisPressureHSVOption::huemaxLabel()), i18n("Hue"));
     addPaintOpOption(new KisCurveOptionWidget(KisPressureHSVOption::createSaturationOption(), KisPressureHSVOption::saturationMinLabel(), KisPressureHSVOption::saturationmaxLabel()), i18n("Saturation"));
-    addPaintOpOption(new KisCurveOptionWidget(KisPressureHSVOption::createValueOption(), KisPressureHSVOption::valueMinLabel(), KisPressureHSVOption::valuemaxLabel()), i18nc("HSV Value", "Value"));
+    addPaintOpOption(new KisCurveOptionWidget(KisPressureHSVOption::createValueOption(), KisPressureHSVOption::valueMinLabel(), KisPressureHSVOption::valuemaxLabel()), i18nc("Label of Brightness value in Color Smudge brush engine options", "Value"));
     addPaintOpOption(new KisAirbrushOptionWidget(false), i18n("Airbrush"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRateOption(), i18n("0%"), i18n("100%")), i18n("Rate"));
 
@@ -86,7 +85,7 @@ KisColorSmudgeOpSettingsWidget::~KisColorSmudgeOpSettingsWidget() { }
 
 KisPropertiesConfigurationSP KisColorSmudgeOpSettingsWidget::configuration() const
 {
-    KisColorSmudgeOpSettingsSP config = new KisColorSmudgeOpSettings(KisGlobalResourcesInterface::instance());
+    KisColorSmudgeOpSettingsSP config = new KisColorSmudgeOpSettings(resourcesInterface());
     config->setOptionsWidget(const_cast<KisColorSmudgeOpSettingsWidget*>(this));
     config->setProperty("paintop", "colorsmudge");
     writeConfiguration(config);

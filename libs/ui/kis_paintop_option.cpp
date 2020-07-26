@@ -21,6 +21,9 @@
 
 #include <klocalizedstring.h>
 
+#include <KisResourcesInterface.h>
+#include <KoCanvasResourcesInterface.h>
+
 struct KisPaintOpOption::Private
 {
 public:
@@ -31,6 +34,9 @@ public:
 
     bool updatesBlocked;
     bool isWritingSettings;
+
+    KisResourcesInterfaceSP resourcesInterface;
+    KoCanvasResourcesInterfaceSP canvasResourcesInterface;
 };
 
 KisPaintOpOption::KisPaintOpOption(PaintopCategory category, bool checked)
@@ -117,6 +123,26 @@ void KisPaintOpOption::setImage(KisImageWSP image)
 void KisPaintOpOption::setNode(KisNodeWSP node)
 {
     Q_UNUSED(node);
+}
+
+void KisPaintOpOption::setResourcesInterface(KisResourcesInterfaceSP resourcesInterface)
+{
+    m_d->resourcesInterface = resourcesInterface;
+}
+
+void KisPaintOpOption::setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface)
+{
+    m_d->canvasResourcesInterface = canvasResourcesInterface;
+}
+
+KisResourcesInterfaceSP KisPaintOpOption::resourcesInterface() const
+{
+    return m_d->resourcesInterface;
+}
+
+KoCanvasResourcesInterfaceSP KisPaintOpOption::canvasResourcesInterface() const
+{
+    return m_d->canvasResourcesInterface;
 }
 
 void KisPaintOpOption::setConfigurationPage(QWidget * page)

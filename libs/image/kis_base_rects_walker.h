@@ -477,8 +477,8 @@ private:
     QRect m_resultNeedRect;
     QRect m_resultChangeRect;
     QRect m_resultUncroppedChangeRect;
-    bool m_needRectVaries;
-    bool m_changeRectVaries;
+    bool m_needRectVaries {false};
+    bool m_changeRectVaries {false};
     LeafStack m_mergeTask;
     CloneNotificationsVector m_cloneNotifications;
 
@@ -493,14 +493,14 @@ private:
      * properties have changed since the walker was
      * calculated
      */
-    qint32 m_nodeChecksum;
+    qint32 m_nodeChecksum {0};
 
     /**
      * Used for getting know whether the structure of
      * the graph has changed since the walker was
      * calculated
      */
-    qint32 m_graphChecksum;
+    qint32 m_graphChecksum {0};
 
     /**
      * Temporary variables
@@ -510,7 +510,7 @@ private:
     QRect m_childNeedRect;
     QRect m_lastNeedRect;
 
-    int m_levelOfDetail;
+    int m_levelOfDetail {0};
 };
 
 #endif /* __KIS_BASE_RECTS_WALKER_H */

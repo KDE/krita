@@ -954,7 +954,7 @@
     <text>Image</text>
     <Action name="image_properties">
       <icon>document-properties</icon>
-      <text>&amp;Properties...</text>
+      <text context="Menu text of Image Properties">&amp;Properties...</text>
       <whatsThis></whatsThis>
       <toolTip>Properties</toolTip>
       <iconText>Properties</iconText>

@@ -21,7 +21,6 @@
 
 #include <brushengine/kis_paintop.h>
 #include <kis_types.h>
-#include "curve_brush.h"
 #include "kis_curve_line_option.h"
 #include "kis_curve_paintop_settings.h"
 #include <kis_pressure_opacity_option.h>

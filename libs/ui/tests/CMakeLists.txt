@@ -100,6 +100,13 @@ ecm_add_test(
 
 include(KritaAddBrokenUnitTest)
 
+# Works under Linux but does not work under Windows
+krita_add_broken_unit_test(
+    kis_painting_assistants_decoration_test.cpp ../../../sdk/tests/testutil.cpp
+    TEST_NAME KisPaintingAssistantsDecorationTest
+    LINK_LIBRARIES kritaui Qt5::Test
+    NAME_PREFIX "libs-ui-")
+
 krita_add_broken_unit_test( kis_shape_controller_test.cpp kis_dummies_facade_base_test.cpp
     TEST_NAME kis_shape_controller_test
     LINK_LIBRARIES kritaui Qt5::Test
@@ -131,7 +138,7 @@ krita_add_broken_unit_test( KisPaintOnTransparencyMaskTest.cpp ${CMAKE_SOURCE_DI
     NAME_PREFIX "libs-ui-")
 
 krita_add_broken_unit_test( fill_processing_visitor_test.cpp ${CMAKE_SOURCE_DIR}/sdk/tests/stroke_testing_utils.cpp
-    TEST_NAME 
+    TEST_NAME
     FillProcessingVisitorTest
     LINK_LIBRARIES kritaui Qt5::Test
     NAME_PREFIX "libs-ui-")

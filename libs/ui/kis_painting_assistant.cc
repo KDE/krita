@@ -130,6 +130,7 @@ struct KisPaintingAssistant::Private {
     explicit Private(const Private &rhs);
     KisPaintingAssistantHandleSP reuseOrCreateHandle(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap, KisPaintingAssistantHandleSP origHandle, KisPaintingAssistant *q, bool registerAssistant = true);
     QList<KisPaintingAssistantHandleSP> handles, sideHandles;
+
     KisPaintingAssistantHandleSP topLeft, bottomLeft, topRight, bottomRight, topMiddle, bottomMiddle, rightMiddle, leftMiddle;
 
     // share everything except handles between the clones
@@ -138,6 +139,7 @@ struct KisPaintingAssistant::Private {
         QString name;
         bool isSnappingActive;
         bool outlineVisible;
+
         KisCanvas2* m_canvas = 0;
 
         QPixmapCache::Key cached;

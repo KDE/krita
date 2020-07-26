@@ -4,6 +4,7 @@
 
 import sys
 import os
+from distutils.sysconfig import get_python_lib
 
 try:
     # On Windows and Python 3.8+ python doesn't load module DLL's
@@ -35,13 +36,14 @@ print("pyqt_version_tag:%s" % pyqt_version_tag)
 
 try:
     index_n = pyqt_config_list.index('-n')
-    pyqt_sip_name = '-n' + pyqt_config_list[index_n + 1]
+    pyqt_sip_name = pyqt_config_list[index_n + 1]
     print("pyqt_sip_name:%s" % pyqt_sip_name)
 except ValueError:
     pass
 
-# FIXME This next line is just a little bit too crude.
-pyqt_sip_dir = os.path.join(sys.prefix, "share", "sip", "PyQt5")
+pyqt_sip_dir = os.path.join(get_python_lib(plat_specific=1), "PyQt5", "bindings")
+if not os.path.exists(pyqt_sip_dir):  # Fallback for older PyQt5/SIP
+    pyqt_sip_dir = os.path.join(sys.prefix, "share", "sip", "PyQt5")
 print("pyqt_sip_dir:%s" % pyqt_sip_dir)
 
 print("pyqt_sip_flags:%s" % PyQt5.QtCore.PYQT_CONFIGURATION["sip_flags"])

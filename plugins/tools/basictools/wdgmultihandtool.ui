@@ -80,7 +80,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Radius:</string>
+        <string comment="Label of Radius in Multibrush tool options">Radius:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

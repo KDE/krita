@@ -21,6 +21,7 @@
 #include <KisPopupButton.h>
 
 #include <KoAbstractGradient.h>
+#include <KoCheckerBoardPainter.h>
 
 class KoResource;
 class KisGradientChooser;
@@ -37,6 +38,8 @@ public:
     void setGradient(KoAbstractGradientSP gradient);
     KoAbstractGradientSP gradient() const;
 
+    void setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface);
+
     QSize sizeHint() const override;
 
 protected:
@@ -52,6 +55,7 @@ private Q_SLOTS:
 
 private:
     KisGradientChooser *m_gradientChooser;
+    KoCheckerBoardPainter m_checkersPainter;
 };
 
 #endif // KIS_CMB_GRADIENT_H

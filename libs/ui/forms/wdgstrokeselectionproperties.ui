@@ -61,7 +61,7 @@
          </item>
          <item>
           <property name="text">
-           <string>Line selection</string>
+           <string>Solid line</string>
           </property>
          </item>
         </widget>
@@ -202,7 +202,7 @@
          </item>
          <item>
           <property name="text">
-           <string>Paint color</string>
+           <string>Line color</string>
           </property>
          </item>
          <item>

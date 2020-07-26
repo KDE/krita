@@ -70,15 +70,15 @@ KoCanvasResourceProvider* utils::createResourceManager(KisImageWSP image,
     QVariant i;
 
     i.setValue(KoColor(Qt::black, image->colorSpace()));
-    manager->setResource(KoCanvasResourceProvider::ForegroundColor, i);
+    manager->setResource(KoCanvasResource::ForegroundColor, i);
 
     i.setValue(KoColor(Qt::white, image->colorSpace()));
-    manager->setResource(KoCanvasResourceProvider::BackgroundColor, i);
+    manager->setResource(KoCanvasResource::BackgroundColor, i);
 
     i.setValue(static_cast<void*>(0));
-    manager->setResource(KisCanvasResourceProvider::CurrentPattern, i);
-    manager->setResource(KisCanvasResourceProvider::CurrentGradient, i);
-    manager->setResource(KisCanvasResourceProvider::CurrentGeneratorConfiguration, i);
+    manager->setResource(KoCanvasResource::CurrentPattern, i);
+    manager->setResource(KoCanvasResource::CurrentGradient, i);
+    manager->setResource(KoCanvasResource::CurrentGeneratorConfiguration, i);
 
     if(!node) {
         node = image->root();
@@ -91,7 +91,7 @@ KoCanvasResourceProvider* utils::createResourceManager(KisImageWSP image,
     }
 
     i.setValue(node);
-    manager->setResource(KisCanvasResourceProvider::CurrentKritaNode, i);
+    manager->setResource(KoCanvasResource::CurrentKritaNode, i);
 
     KisPaintOpPresetSP preset;
 
@@ -102,23 +102,23 @@ KoCanvasResourceProvider* utils::createResourceManager(KisImageWSP image,
         Q_ASSERT(presetValid); Q_UNUSED(presetValid);
 
         i.setValue(preset);
-        manager->setResource(KisCanvasResourceProvider::CurrentPaintOpPreset, i);
+        manager->setResource(KoCanvasResource::CurrentPaintOpPreset, i);
     }
 
     i.setValue(COMPOSITE_OVER);
-    manager->setResource(KisCanvasResourceProvider::CurrentCompositeOp, i);
+    manager->setResource(KoCanvasResource::CurrentCompositeOp, i);
 
     i.setValue(false);
-    manager->setResource(KisCanvasResourceProvider::MirrorHorizontal, i);
+    manager->setResource(KoCanvasResource::MirrorHorizontal, i);
 
     i.setValue(false);
-    manager->setResource(KisCanvasResourceProvider::MirrorVertical, i);
+    manager->setResource(KoCanvasResource::MirrorVertical, i);
 
     i.setValue(1.0);
-    manager->setResource(KisCanvasResourceProvider::Opacity, i);
+    manager->setResource(KoCanvasResource::Opacity, i);
 
     i.setValue(1.0);
-    manager->setResource(KisCanvasResourceProvider::HdrExposure, i);
+    manager->setResource(KoCanvasResource::HdrExposure, i);
 
     return manager;
 }

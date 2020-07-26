@@ -66,7 +66,7 @@ KisPaintInformation KisPaintingInformationBuilder::startStroke(KoPointerEvent *e
                                                                const KoCanvasResourceProvider *manager)
 {
     if (manager) {
-        m_pressureDisabled = manager->resource(KisCanvasResourceProvider::DisablePressure).toBool();
+        m_pressureDisabled = manager->resource(KoCanvasResource::DisablePressure).toBool();
     }
 
     m_startPoint = event->point;

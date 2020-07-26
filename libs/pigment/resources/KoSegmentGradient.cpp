@@ -43,6 +43,9 @@
 #include <DebugPigment.h>
 #include <klocalizedstring.h>
 
+#include <KoCanvasResourcesIds.h>
+#include <KoCanvasResourcesInterface.h>
+
 KoGradientSegment::RGBColorInterpolationStrategy *KoGradientSegment::RGBColorInterpolationStrategy::m_instance = 0;
 KoGradientSegment::HSVCWColorInterpolationStrategy *KoGradientSegment::HSVCWColorInterpolationStrategy::m_instance = 0;
 KoGradientSegment::HSVCCWColorInterpolationStrategy *KoGradientSegment::HSVCCWColorInterpolationStrategy::m_instance = 0;
@@ -1062,19 +1065,46 @@ const QList<KoGradientSegment *>& KoSegmentGradient::segments() const
     return m_segments;
 }
 
-bool KoSegmentGradient::hasVariableColors() const
+QList<int> KoSegmentGradient::requiredCanvasResources() const
 {
+    bool hasVariableColors = false;
     for (int i = 0; i < m_segments.count(); i++) {
         if (m_segments[i]->hasVariableColors()) {
-            return true;
+            hasVariableColors = true;
+            break;
         }
     }
-    return false;
+
+    QList<int> result;
+    if (hasVariableColors) {
+        result << KoCanvasResource::ForegroundColor << KoCanvasResource::BackgroundColor;
+    }
+
+    return result;
 }
 
-void KoSegmentGradient::setVariableColors(const KoColor& foreground, const KoColor& background)
+void KoSegmentGradient::bakeVariableColors(KoCanvasResourcesInterfaceSP canvasResourcesInterface)
 {
-    for (int i = 0; i < m_segments.count(); i++) {
-        m_segments[i]->setVariableColors(foreground, background);
+    const KoColor fgColor = canvasResourcesInterface->resource(KoCanvasResource::ForegroundColor).value<KoColor>().convertedTo(colorSpace());
+    const KoColor bgColor = canvasResourcesInterface->resource(KoCanvasResource::BackgroundColor).value<KoColor>().convertedTo(colorSpace());
+
+    for (auto it = m_segments.begin(); it != m_segments.end(); ++it) {
+        if ((*it)->hasVariableColors()) {
+            (*it)->setVariableColors(fgColor, bgColor);
+            (*it)->setStartType(COLOR_ENDPOINT);
+            (*it)->setEndType(COLOR_ENDPOINT);
+        }
+    }
+}
+
+void KoSegmentGradient::updateVariableColors(KoCanvasResourcesInterfaceSP canvasResourcesInterface)
+{
+    const KoColor fgColor = canvasResourcesInterface->resource(KoCanvasResource::ForegroundColor).value<KoColor>().convertedTo(colorSpace());
+    const KoColor bgColor = canvasResourcesInterface->resource(KoCanvasResource::BackgroundColor).value<KoColor>().convertedTo(colorSpace());
+
+    for (auto it = m_segments.begin(); it != m_segments.end(); ++it) {
+        if ((*it)->hasVariableColors()) {
+            (*it)->setVariableColors(fgColor, bgColor);
+        }
     }
 }

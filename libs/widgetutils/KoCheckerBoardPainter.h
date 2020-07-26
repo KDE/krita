@@ -32,6 +32,7 @@ public:
     explicit KoCheckerBoardPainter(int checkerSize);
     void setCheckerColors(const QColor &lightColor, const QColor &darkColor);
     void setCheckerSize(int checkerSize);
+    void paint(QPainter &painter, const QRectF &rect, const QPointF &patternOrigin) const;
     void paint(QPainter &painter, const QRectF &rect) const;
 
 private:

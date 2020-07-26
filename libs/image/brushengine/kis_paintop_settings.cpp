@@ -50,6 +50,7 @@
 #include "KisPaintopSettingsIds.h"
 #include "kis_algebra_2d.h"
 #include "kis_image_config.h"
+#include <KoCanvasResourcesInterface.h>
 
 
 struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
@@ -57,11 +58,22 @@ struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
         : disableDirtyNotifications(false)
     {}
 
+    Private(const Private &rhs)
+        : settingsWidget(0),
+          modelName(rhs.modelName),
+          updateProxy(rhs.updateProxy),
+          resourcesInterface(rhs.resourcesInterface),
+          canvasResourcesInterface(rhs.canvasResourcesInterface),
+          disableDirtyNotifications(false)
+    {
+    }
+
     QPointer<KisPaintOpConfigWidget> settingsWidget;
     QString modelName;
     QPointer<KisPaintopSettingsUpdateProxy> updateProxy;
     QList<KisUniformPaintOpPropertyWSP> uniformProperties;
-    KisResourcesInterfaceSP resourcesInterface = 0;
+    KisResourcesInterfaceSP resourcesInterface;
+    KoCanvasResourcesInterfaceSP canvasResourcesInterface;
 
     bool disableDirtyNotifications;
 
@@ -99,12 +111,8 @@ KisPaintOpSettings::~KisPaintOpSettings()
 
 KisPaintOpSettings::KisPaintOpSettings(const KisPaintOpSettings &rhs)
     : KisPropertiesConfiguration(rhs)
-    , d(new Private)
+    , d(new Private(*rhs.d))
 {
-    d->settingsWidget = 0;
-    d->updateProxy = rhs.updateProxy();
-    d->modelName = rhs.modelName();
-    d->resourcesInterface = rhs.d->resourcesInterface;
 }
 
 void KisPaintOpSettings::setOptionsWidget(KisPaintOpConfigWidget* widget)
@@ -200,6 +208,21 @@ bool KisPaintOpSettings::hasPatternSettings() const
     return false;
 }
 
+QList<int> KisPaintOpSettings::requiredCanvasResources() const
+{
+    return {};
+}
+
+KoCanvasResourcesInterfaceSP KisPaintOpSettings::canvasResourcesInterface() const
+{
+    return d->canvasResourcesInterface;
+}
+
+void KisPaintOpSettings::setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface)
+{
+    d->canvasResourcesInterface = canvasResourcesInterface;
+}
+
 QString KisPaintOpSettings::maskingBrushCompositeOp() const
 {
     return getString(KisPaintOpUtils::MaskingBrushCompositeOpTag, COMPOSITE_MULT);
@@ -228,6 +251,7 @@ KisPaintOpSettingsSP KisPaintOpSettings::clone() const
         settings->setProperty(i.key(), QVariant(i.value()));
     }
     settings->setUpdateProxy(this->updateProxy());
+    settings->setCanvasResourcesInterface(this->canvasResourcesInterface());
     return settings;
 }
 

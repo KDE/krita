@@ -16,6 +16,7 @@ Q_SIGNALS:
     void imageClosed(const QString &filename);
     void viewCreated(View *view);
     void viewClosed(View *view);
-    void windowCreated(Window *window);
+    void windowIsBeingCreated(Window *window);
+    void windowCreated();
     void configurationChanged();
 };

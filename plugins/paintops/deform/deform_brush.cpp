@@ -158,6 +158,7 @@ bool DeformBrush::setupAction(
 
 KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
         KisPaintDeviceSP layer,
+        KisRandomSourceSP randomSource,
         qreal scale,
         qreal rotation,
         QPointF pos, qreal subPixelX, qreal subPixelY, int dabX, int dabY)
@@ -224,7 +225,7 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
             }
 
             if (m_sizeProperties->brush_density != 1.0) {
-                if (m_sizeProperties->brush_density < drand48()) {
+                if (m_sizeProperties->brush_density < randomSource->generateNormalized()) {
                     dabPointer += dabPixelSize;
                     *maskPointer = OPACITY_TRANSPARENT_U8;
                     maskPointer += maskPixelSize;
@@ -232,7 +233,7 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
                 }
             }
 
-            m_deformAction->transform(&maskX, &maskY, distance);
+            m_deformAction->transform(&maskX, &maskY, distance, randomSource);
             reverseRotationMatrix.map(maskX, maskY, &maskX, &maskY);
 
             maskX += pos.x();

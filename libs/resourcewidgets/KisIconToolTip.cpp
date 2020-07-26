@@ -26,8 +26,11 @@
 #include <QModelIndex>
 
 #include <KisResourceModel.h>
+#include "KoCheckerBoardPainter.h"
+#include <QPainter>
 
 #include <klocalizedstring.h>
+#include "kis_assert.h"
 
 KisIconToolTip::KisIconToolTip()
 {
@@ -35,6 +38,20 @@ KisIconToolTip::KisIconToolTip()
 
 KisIconToolTip::~KisIconToolTip()
 {
+}
+
+void KisIconToolTip::setFixedToolTipThumbnailSize(const QSize &size)
+{
+    m_fixedToolTipThumbnailSize = size;
+}
+
+void KisIconToolTip::setToolTipShouldRenderCheckers(bool value)
+{
+    if (value) {
+        m_checkersPainter.reset(new KoCheckerBoardPainter(4));
+    } else {
+        m_checkersPainter.reset();
+    }
 }
 
 QTextDocument *KisIconToolTip::createDocument(const QModelIndex &index)
@@ -45,6 +62,23 @@ QTextDocument *KisIconToolTip::createDocument(const QModelIndex &index)
     if (thumb.isNull()) {
         thumb = index.data(Qt::UserRole + KisResourceModel::Thumbnail).value<QImage>();
     }
+
+    if (!m_fixedToolTipThumbnailSize.isNull() && !thumb.isNull()) {
+        thumb = thumb.scaled(m_fixedToolTipThumbnailSize, Qt::IgnoreAspectRatio);
+    }
+
+    if (m_checkersPainter) {
+        QImage image(thumb.size(), QImage::Format_ARGB32);
+
+        {
+            QPainter gc(&image);
+            m_checkersPainter->paint(gc, thumb.rect());
+            gc.drawImage(QPoint(), thumb);
+        }
+
+        thumb = image;
+    }
+
     doc->addResource(QTextDocument::ImageResource, QUrl("data:thumbnail"), thumb);
 
     QString name = index.data(Qt::DisplayRole).toString();

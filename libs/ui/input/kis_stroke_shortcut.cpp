@@ -22,6 +22,7 @@
 
 #include <QMouseEvent>
 
+#include <cmath>
 
 class Q_DECL_HIDDEN KisStrokeShortcut::Private
 {
@@ -44,9 +45,10 @@ KisStrokeShortcut::~KisStrokeShortcut()
 
 int KisStrokeShortcut::priority() const
 {
+    const int maxScore = std::log2((int) Qt::MaxMouseButton);
     int buttonScore = 0;
     Q_FOREACH (Qt::MouseButton button, m_d->buttons) {
-        buttonScore += Qt::XButton2 - button;
+        buttonScore += maxScore - std::log2((int) button);
     }
 
     return m_d->modifiers.size() * 0xFFFF + buttonScore * 0xFF + action()->priority();
@@ -55,7 +57,7 @@ int KisStrokeShortcut::priority() const
 void KisStrokeShortcut::setButtons(const QSet<Qt::Key> &modifiers,
                                    const QSet<Qt::MouseButton> &buttons)
 {
-    if (buttons.size() == 0) return;
+    if (buttons.empty()) return;
 
     m_d->modifiers = modifiers;
     m_d->buttons = buttons;
@@ -69,7 +71,6 @@ bool KisStrokeShortcut::matchReady(const QSet<Qt::Key> &modifiers,
         compareKeys(m_d->modifiers, modifiers);
 
     if (!modifiersOk || buttons.size() < m_d->buttons.size() - 1) {
-
         return false;
     }
 

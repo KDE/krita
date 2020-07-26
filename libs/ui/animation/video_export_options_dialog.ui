@@ -51,7 +51,7 @@
        <item row="2" column="0">
         <widget class="QLabel" name="lblProfileH264">
          <property name="text">
-          <string>Profile:</string>
+          <string comment="Label of H.264 encoder profiles">Profile:</string>
          </property>
         </widget>
        </item>
@@ -102,7 +102,7 @@
        <item row="2" column="0">
         <widget class="QLabel" name="lblProfileH265">
          <property name="text">
-          <string>Profile:</string>
+          <string comment="Label of H.265 encoder profiles">Profile:</string>
          </property>
         </widget>
        </item>

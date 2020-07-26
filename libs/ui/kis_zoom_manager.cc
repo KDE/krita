@@ -332,7 +332,7 @@ void KisZoomManager::slotUpdateGuiAfterZoomChange()
 
 
 
-    m_view->canvasBase()->resourceManager()->setResource(KisCanvasResourceProvider::EffectiveZoom, effectiveZoom);
+    m_view->canvasBase()->resourceManager()->setResource(KoCanvasResource::EffectiveZoom, effectiveZoom);
 }
 
 void KisZoomManager::setMinMaxZoom()

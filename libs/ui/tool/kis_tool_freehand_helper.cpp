@@ -899,7 +899,7 @@ int KisToolFreehandHelper::computeAirbrushTimerInterval() const
 
 qreal KisToolFreehandHelper::currentZoom() const
 {
-    return m_d->resourceManager ? m_d->resourceManager->resource(KisCanvasResourceProvider::EffectiveZoom).toReal() : 1.0;
+    return m_d->resourceManager ? m_d->resourceManager->resource(KoCanvasResource::EffectiveZoom).toReal() : 1.0;
 }
 
 void KisToolFreehandHelper::paintAt(int strokeInfoId,

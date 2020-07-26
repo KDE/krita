@@ -163,8 +163,8 @@ void KisMinimalShadeSelector::canvasResourceChanged(int key, const QVariant &v)
     bool onForeground = cfg.readEntry("shadeSelectorUpdateOnForeground", false);
     bool onBackground = cfg.readEntry("shadeSelectorUpdateOnBackground", true);
 
-    if ((key == KoCanvasResourceProvider::ForegroundColor && onForeground)
-        || (key == KoCanvasResourceProvider::BackgroundColor && onBackground)) {
+    if ((key == KoCanvasResource::ForegroundColor && onForeground)
+        || (key == KoCanvasResource::BackgroundColor && onBackground)) {
 
         setColor(v.value<KoColor>());
     }

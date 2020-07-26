@@ -298,13 +298,13 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
             SIGNAL(sigUserChangedLodThreshold(qreal)),
             SLOT(slotLodThresholdChanged(qreal)));
 
-    slotResourceChanged(KisCanvasResourceProvider::LodAvailability,
+    slotResourceChanged(KoCanvasResource::LodAvailability,
                         resourceProvider->resourceManager()->
-                        resource(KisCanvasResourceProvider::LodAvailability));
+                        resource(KoCanvasResource::LodAvailability));
 
-    slotResourceChanged(KisCanvasResourceProvider::LodSizeThreshold,
+    slotResourceChanged(KoCanvasResource::LodSizeThreshold,
                         resourceProvider->resourceManager()->
-                        resource(KisCanvasResourceProvider::LodSizeThreshold));
+                        resource(KoCanvasResource::LodSizeThreshold));
 
     connect(m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotUpdatePaintOpFilter()));
 
@@ -412,23 +412,23 @@ void KisPaintOpPresetsPopup::slotSaveRenameCurrentBrush()
 
 void KisPaintOpPresetsPopup::slotResourceChanged(int key, const QVariant &value)
 {
-    if (key == KisCanvasResourceProvider::LodAvailability) {
+    if (key == KoCanvasResource::LodAvailability) {
         m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability->slotUserChangedLodAvailability(value.toBool());
-    } else if (key == KisCanvasResourceProvider::LodSizeThreshold) {
+    } else if (key == KoCanvasResource::LodSizeThreshold) {
         m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability->slotUserChangedLodThreshold(value.toDouble());
-    } else if (key == KisCanvasResourceProvider::Size) {
+    } else if (key == KoCanvasResource::Size) {
         m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability->slotUserChangedSize(value.toDouble());
     }
 }
 
 void KisPaintOpPresetsPopup::slotLodAvailabilityChanged(bool value)
 {
-    m_d->resourceProvider->resourceManager()->setResource(KisCanvasResourceProvider::LodAvailability, QVariant(value));
+    m_d->resourceProvider->resourceManager()->setResource(KoCanvasResource::LodAvailability, QVariant(value));
 }
 
 void KisPaintOpPresetsPopup::slotLodThresholdChanged(qreal value)
 {
-    m_d->resourceProvider->resourceManager()->setResource(KisCanvasResourceProvider::LodSizeThreshold, QVariant(value));
+    m_d->resourceProvider->resourceManager()->setResource(KoCanvasResource::LodSizeThreshold, QVariant(value));
 }
 
 KisPaintOpPresetsPopup::~KisPaintOpPresetsPopup()

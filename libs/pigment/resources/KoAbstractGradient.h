@@ -28,6 +28,9 @@
 class KoAbstractGradient;
 typedef QSharedPointer<KoAbstractGradient> KoAbstractGradientSP;
 
+class KoCanvasResourcesInterface;
+using KoCanvasResourcesInterfaceSP = QSharedPointer<KoCanvasResourcesInterface>;
+
 class KoColor;
 
 /**
@@ -59,21 +62,18 @@ public:
     void setType(QGradient::Type repeatType);
     QGradient::Type type() const;
 
-    ///tell whether there are any foreground or background color stops
-    virtual bool hasVariableColors() const {
-        return false;
-    }
-    ///Set the colors for stops that use the foreground or background color.
-    virtual void setVariableColors(const KoColor& foreground, const KoColor& background) {
-        //Do nothing... Override if gradient type supports variable colors.
-        Q_UNUSED(foreground); Q_UNUSED(background);
-    }
-
     void updatePreview();
 
     QImage generatePreview(int width, int height) const;
+    QImage generatePreview(int width, int height, KoCanvasResourcesInterfaceSP canvasResourcesInterface) const;
 
     KoAbstractGradient(const KoAbstractGradient &rhs);
+
+    KoAbstractGradientSP cloneAndBakeVariableColors(KoCanvasResourcesInterfaceSP canvasResourcesInterface) const;
+    virtual void bakeVariableColors(KoCanvasResourcesInterfaceSP canvasResourcesInterface);
+
+    KoAbstractGradientSP cloneAndUpdateVariableColors(KoCanvasResourcesInterfaceSP canvasResourcesInterface) const;
+    virtual void updateVariableColors(KoCanvasResourcesInterfaceSP canvasResourcesInterface);
 
 private:
     struct Private;

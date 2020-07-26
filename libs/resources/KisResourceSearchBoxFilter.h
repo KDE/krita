@@ -22,6 +22,7 @@
 #include "kritaresources_export.h"
 
 #include <QString>
+#include <QScopedPointer>
 
 /**
  * XXX: Apidox
@@ -33,6 +34,7 @@ class KRITARESOURCES_EXPORT KisResourceSearchBoxFilter
 public:
 
     KisResourceSearchBoxFilter();
+    ~KisResourceSearchBoxFilter();
     void setFilter(const QString& filter);
     bool matchesResource(const QString& resourceName);
     bool isEmpty();
@@ -43,7 +45,7 @@ private:
     void clearFilterData();
 
     class Private;
-    Private * d;
+    QScopedPointer<Private> d;
 
 };
 

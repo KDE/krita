@@ -644,7 +644,7 @@ void KisWatershedWorker::Private::processQueue(qint32 _backgroundGroupId)
     backgroundGroupColor = groups[backgroundGroupId].colorIndex;
     recolorMode = backgroundGroupId > 1;
 
-    totalPixelsToFill = boundingRect.width() * boundingRect.height();
+    totalPixelsToFill = qint64(boundingRect.width()) * boundingRect.height();
     numFilledPixels = 0;
     const int progressReportingMask = (1 << 18) - 1; // report every 512x512 patch
 

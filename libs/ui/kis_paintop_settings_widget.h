@@ -59,6 +59,9 @@ public:
     ///Reimplemented, sets node on option widgets
     void setNode(KisNodeWSP node) override;
 
+    void setResourcesInterface(KisResourcesInterfaceSP resourcesInterface) override;
+    void setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface) override;
+
 private Q_SLOTS:
 
     void changePage(const QModelIndex&);

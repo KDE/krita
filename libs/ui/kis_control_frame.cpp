@@ -72,6 +72,7 @@ KisControlFrame::KisControlFrame(KisViewManager *view, QWidget *parent, const ch
     , m_patternChooserPopup(0)
     , m_gradientChooserPopup(0)
     , m_paintopBox(0)
+    , m_checkersPainter(4)
 {
     setObjectName(name);
     m_font = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
@@ -149,7 +150,21 @@ void KisControlFrame::slotSetPattern(KoPatternSP pattern)
 
 void KisControlFrame::slotSetGradient(KoAbstractGradientSP gradient)
 {
-    m_gradientWidget->setThumbnail(gradient->image());
+    const QSize iconSize = m_gradientWidget->preferredIconSize();
+
+    QImage icon(iconSize, QImage::Format_ARGB32);
+
+    {
+        QPainter gc(&icon);
+        m_checkersPainter.paint(gc, QRect(QPoint(), iconSize));
+        gc.drawImage(QPoint(),
+                     gradient->generatePreview(iconSize.width(), iconSize.height(),
+                                               m_viewManager->canvasResourceProvider()->
+                                               resourceManager()->canvasResourcesInterface()));
+    }
+
+
+    m_gradientWidget->setThumbnail(icon);
 }
 
 void KisControlFrame::createPatternsChooser(KisViewManager * view)
@@ -216,6 +231,7 @@ void KisControlFrame::createGradientsChooser(KisViewManager * view)
     l2->addWidget(m_gradientTab);
 
     m_gradientChooser = new KisGradientChooser(m_gradientChooserPopup);
+    m_gradientChooser->setCanvasResourcesInterface(view->canvasResourceProvider()->resourceManager()->canvasResourcesInterface());
     m_gradientChooser->setFont(m_font);
     m_gradientTab->addTab(m_gradientChooser, i18n("Gradients"));
 

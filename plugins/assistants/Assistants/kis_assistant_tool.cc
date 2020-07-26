@@ -116,42 +116,6 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
         *m_newAssistant->handles().back() = canvasDecoration->snapToGuide(event, QPointF(), false);
 
         // give two point assistant side handles once it is completed
-        if (m_newAssistant->id() == "two_point" && m_newAssistant->handles().size() == m_newAssistant->numHandles() && m_newAssistant->sideHandles().isEmpty()){
-            QList<KisPaintingAssistantHandleSP> handles = m_newAssistant->handles();
-            QSharedPointer <TwoPointAssistant> assis = qSharedPointerCast<TwoPointAssistant>(m_newAssistant);
-
-            assis->setCov(*handles[0], *handles[1], *handles[2]);
-            assis->setHorizon(*handles[0], *handles[1]);
-            assis->setSp(*handles[0], *handles[1], *handles[2]);
-
-            const QPointF translation = (assis->cov() - assis->sp()) / 2.0;
-            const qreal length = QLineF(assis->cov(), assis->cov() + translation).length();
-            const QPointF handles_above = assis->cov() + translation;
-            const QPointF handles_below = assis->cov() - translation;
-
-            QLineF bar;
-            bar= QLineF(handles_above, *handles[0]);
-            bar.setLength(length);
-            m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
-            bar.setLength(length * 0.5);
-            m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
-            bar= QLineF(handles_above, *handles[1]);
-            bar.setLength(length);
-            m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
-            bar.setLength(length * 0.5);
-            m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
-
-            bar= QLineF(handles_below, *handles[0]);
-            bar.setLength(length);
-            m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
-            bar.setLength(length * 0.5);
-            m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
-            bar= QLineF(handles_below, *handles[1]);
-            bar.setLength(length);
-            m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
-            bar.setLength(length * 0.5);
-            m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
-        }
 
         if (m_newAssistant->handles().size() == m_newAssistant->numHandles()) {
             addAssistant();
@@ -699,6 +663,45 @@ void KisAssistantTool::addAssistant()
     if (grid) {
         m_canvas->viewManager()->canvasResourceProvider()->addPerspectiveGrid(grid);
     }
+
+    // generate the side handles for the Two Point assistant
+    if (m_newAssistant->id() == "two_point"){
+      QList<KisPaintingAssistantHandleSP> handles = m_newAssistant->handles();
+      QSharedPointer <TwoPointAssistant> assis = qSharedPointerCast<TwoPointAssistant>(m_newAssistant);
+
+      assis->setCov(*handles[0], *handles[1], *handles[2]);
+      assis->setHorizon(*handles[0], *handles[1]);
+      assis->setSp(*handles[0], *handles[1], *handles[2]);
+
+      const QPointF translation = (assis->cov() - assis->sp()) / 2.0;
+      const qreal length = QLineF(assis->cov(), assis->cov() + translation).length();
+      const QPointF handles_above = assis->cov() + translation;
+      const QPointF handles_below = assis->cov() - translation;
+
+      QLineF bar;
+      bar= QLineF(handles_above, *handles[0]);
+      bar.setLength(length);
+      m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
+      bar.setLength(length * 0.5);
+      m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
+      bar= QLineF(handles_above, *handles[1]);
+      bar.setLength(length);
+      m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
+      bar.setLength(length * 0.5);
+      m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
+
+      bar= QLineF(handles_below, *handles[0]);
+      bar.setLength(length);
+      m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
+      bar.setLength(length * 0.5);
+      m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
+      bar= QLineF(handles_below, *handles[1]);
+      bar.setLength(length);
+      m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
+      bar.setLength(length * 0.5);
+      m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
+    }
+
 
     QList<KisPaintingAssistantSP> assistants = m_canvas->paintingAssistantsDecoration()->assistants();
     KUndo2Command *addAssistantCmd = new EditAssistantsCommand(m_canvas, m_origAssistantList, KisPaintingAssistant::cloneAssistantList(assistants), EditAssistantsCommand::ADD, assistants.indexOf(m_newAssistant));

@@ -176,12 +176,20 @@ private:
 
         typename _CSTrait::channels_type* dstColor = _CSTrait::nativeArray(dst);
 
+        /**
+         * FIXME: The following code relies on the unit value for floating point spaces being 1.0
+         * We should be using the division functions in KoColorSpaceMaths for this, but right now
+         * it is not clear how to call these functions.
+         **/
         if (totalAlpha > 0) {
 
             for (int i = 0; i < (int)_CSTrait::channels_nb; i++) {
                 if (i != _CSTrait::alpha_pos) {
 
-                    typename KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::compositetype v = totals[i] / totalAlpha;
+                    typename KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::compositetype v = (totals[i] + totalAlpha / 2) / totalAlpha;
+                    if (KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::unitValue == 1.0) {
+                        v = totals[i] / totalAlpha;
+                    }
 
                     if (v > KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::max) {
                         v = KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::max;
@@ -194,7 +202,11 @@ private:
             }
 
             if (_CSTrait::alpha_pos != -1) {
-                dstColor[ _CSTrait::alpha_pos ] = totalAlpha / sumOfWeights;
+                if (KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::unitValue == 1.0) {
+                    dstColor[ _CSTrait::alpha_pos ] = totalAlpha / sumOfWeights;
+                } else {
+                    dstColor[ _CSTrait::alpha_pos ] = (totalAlpha + sumOfWeights / 2) / sumOfWeights;
+                }
             }
         } else {
             memset(dst, 0, sizeof(typename _CSTrait::channels_type) * _CSTrait::channels_nb);

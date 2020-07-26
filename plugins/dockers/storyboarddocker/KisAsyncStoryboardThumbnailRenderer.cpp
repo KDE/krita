@@ -21,6 +21,8 @@
 
 KisAsyncStoryboardThumbnailRenderer::KisAsyncStoryboardThumbnailRenderer()
 {
+    connect(this, SIGNAL(sigNotifyFrameCompleted(int)), SLOT(notifyFrameCompleted(int)), Qt::QueuedConnection);
+    connect(this, SIGNAL(sigNotifyFrameCancelled(int)), SLOT(notifyFrameCancelled(int)), Qt::QueuedConnection);
 }
 
 KisAsyncStoryboardThumbnailRenderer::~KisAsyncStoryboardThumbnailRenderer()
@@ -33,12 +35,12 @@ void KisAsyncStoryboardThumbnailRenderer::frameCompletedCallback(int frame, cons
     if (image) {
         m_requestedFrameProjection = image->projection();
     }
-    notifyFrameCompleted(frame);
+    emit sigNotifyFrameCompleted(frame);
 }
 
 void KisAsyncStoryboardThumbnailRenderer::frameCancelledCallback(int frame)
 {
-    notifyFrameCancelled(frame);
+    emit sigNotifyFrameCancelled(frame);
 }
 
 void KisAsyncStoryboardThumbnailRenderer::clearFrameRegenerationState(bool isCancelled)

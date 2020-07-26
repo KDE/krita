@@ -39,6 +39,10 @@ protected:
     void frameCancelledCallback(int frame) override;
     void clearFrameRegenerationState(bool isCancelled) override;
 
+Q_SIGNALS:
+    void sigNotifyFrameCompleted(int frame);
+    void sigNotifyFrameCancelled(int frame);
+
 private:
     KisPaintDeviceSP m_requestedFrameProjection;
 };

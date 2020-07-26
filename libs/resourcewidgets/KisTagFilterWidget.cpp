@@ -80,7 +80,7 @@ KisTagFilterWidget::KisTagFilterWidget(KisTagModel* model, QWidget* parent)
             "@info:tooltip",
             "<p>Pressing <b>Enter</b> or clicking the <b>Save</b> button will save the changes.</p>");
 
-    QGridLayout* filterBarLayout = new QGridLayout;
+    QGridLayout* filterBarLayout = new QGridLayout(this);
 
 
     d->tagSearchLineEdit = new QLineEdit(this);
@@ -111,8 +111,6 @@ KisTagFilterWidget::KisTagFilterWidget(KisTagModel* model, QWidget* parent)
     connect(d->tagSearchLineEdit, SIGNAL(textChanged(QString)),
             this, SLOT(onTextChanged(QString)));
     connect(d->filterByTagCheckbox, SIGNAL(stateChanged(int)), this, SLOT(slotFilterByTagChanged(int)));
-    this->setLayout(filterBarLayout);
-
 }
 
 KisTagFilterWidget::~KisTagFilterWidget()

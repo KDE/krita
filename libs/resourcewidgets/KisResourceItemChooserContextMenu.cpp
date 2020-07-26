@@ -39,17 +39,17 @@ KoLineEditAction::KoLineEditAction(QObject* parent)
     : QWidgetAction(parent)
     , m_closeParentOnTrigger(false)
 {
-    QWidget* pWidget = new QWidget (0);
-    QHBoxLayout* pLayout = new QHBoxLayout();
-    m_label = new QLabel(0);
-    m_editBox = new QLineEdit(0);
+    QWidget* pWidget = new QWidget();
+    QHBoxLayout* pLayout = new QHBoxLayout(pWidget);
+    m_label = new QLabel();
+    m_editBox = new QLineEdit();
     m_editBox->setClearButtonEnabled(true);
     m_AddButton = new QPushButton();
     m_AddButton->setIcon(koIcon("list-add"));
     pLayout->addWidget(m_label);
     pLayout->addWidget(m_editBox);
     pLayout->addWidget(m_AddButton);
-    pWidget->setLayout(pLayout);
+
     setDefaultWidget(pWidget);
 
     connect (m_editBox, &QLineEdit::returnPressed, this, &KoLineEditAction::onTriggered);

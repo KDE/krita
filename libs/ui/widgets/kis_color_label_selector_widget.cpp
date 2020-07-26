@@ -60,7 +60,6 @@ KisColorLabelSelectorWidget::KisColorLabelSelectorWidget(QWidget *parent)
 
     QHBoxLayout *layout = new QHBoxLayout(this);
 
-    this->setLayout(layout);
     layout->setContentsMargins(0,0,0,0);
     layout->setSpacing(0);
     layout->setAlignment(Qt::AlignLeft);

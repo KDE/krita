@@ -61,8 +61,6 @@ KisSeExprScriptChooser::KisSeExprScriptChooser(QWidget *parent)
     mainLayout->setMargin(0);
     mainLayout->addWidget(m_lblName);
     mainLayout->addWidget(m_itemChooser, 10);
-
-    setLayout(mainLayout);
 }
 
 KisSeExprScriptChooser::~KisSeExprScriptChooser()

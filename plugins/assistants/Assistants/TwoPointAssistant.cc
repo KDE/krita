@@ -15,6 +15,8 @@
 
 TwoPointAssistant::TwoPointAssistant()
     : KisPaintingAssistant("two_point", i18n("Two point assistant"))
+    , m_followBrushPosition(false)
+    , m_adjustedPositionValid(false)
 {
 }
 
@@ -26,6 +28,9 @@ TwoPointAssistant::TwoPointAssistant(const TwoPointAssistant &rhs, QMap<KisPaint
     , m_cov(rhs.m_cov)
     , m_sp(rhs.m_sp)
     , m_gridDensity(rhs.m_gridDensity)
+    , m_followBrushPosition(rhs.m_followBrushPosition)
+    , m_adjustedPositionValid(rhs.m_adjustedPositionValid)
+    , m_adjustedBrushPosition(rhs.m_adjustedBrushPosition)
 {
 }
 
@@ -91,8 +96,22 @@ QPointF TwoPointAssistant::project(const QPointF& pt, const QPointF& strokeBegin
     return r;
 }
 
+void TwoPointAssistant::setAdjustedBrushPosition(const QPointF position)
+{
+    m_adjustedBrushPosition = position;
+    m_adjustedPositionValid = true;
+}
+
+void TwoPointAssistant::setFollowBrushPosition(bool follow)
+{
+    m_followBrushPosition = follow;
+}
+
 void TwoPointAssistant::endStroke()
 {
+    // Brush stroke ended, guides should follow the brush position again.
+    m_followBrushPosition = false;
+    m_adjustedPositionValid = false;
     m_snapLine = QLineF();
 }
 
@@ -109,6 +128,9 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
     gc.resetTransform();
     QPointF mousePos(0,0);
 
+    const QTransform initialTransform = converter->documentToWidgetTransform();
+    bool isEditing = canvas->paintingAssistantsDecoration()->isEditingAssistants();
+
     if (canvas){
 	//simplest, cheapest way to get the mouse-position//
 	mousePos= canvas->canvasWidget()->mapFromGlobal(QCursor::pos());
@@ -119,8 +141,9 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
 	dbgFile<<"canvas does not exist in ruler, you may have passed arguments incorrectly:"<<canvas;
     }
 
-    const QTransform initialTransform = converter->documentToWidgetTransform();
-    bool isEditing = canvas->paintingAssistantsDecoration()->isEditingAssistants();
+    if (m_followBrushPosition && m_adjustedPositionValid) {
+        mousePos = initialTransform.map(m_adjustedBrushPosition);
+    }
 
     if (isEditing){
 	Q_FOREACH (const QPointF* handle, handles()) {

@@ -12,9 +12,12 @@ class TwoPointAssistant : public KisPaintingAssistant
 public:
     TwoPointAssistant();
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin) override;
-    void endStroke() override;
     KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const override;
-    //virtual void endStroke();
+
+    void setAdjustedBrushPosition(const QPointF position) override;
+    void setFollowBrushPosition(bool follow) override;
+    void endStroke() override;
+
     QPointF getEditorPosition() const override;
     int numHandles() const override { return 3; }
 
@@ -45,6 +48,13 @@ private:
     QPointF m_cov;
     QPointF m_sp;
     double m_gridDensity = 1.0;
+
+    // Needed to make sure that when we are in the middle of a brush stroke, the
+    // guides follow the brush position, not the cursor position.
+    bool m_followBrushPosition;
+    bool m_adjustedPositionValid;
+    QPointF m_adjustedBrushPosition;
+
 };
 
 class TwoPointAssistantFactory : public KisPaintingAssistantFactory

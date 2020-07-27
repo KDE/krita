@@ -71,8 +71,9 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     cmbFilter->setToolTip(i18nc("@info:tooltip",
                                 "<p>Select filtering mode:\n"
                                 "<ul>"
-                                "<li><b>Bilinear</b> for areas with uniform color to avoid artifacts</li>"
-                                "<li><b>Bicubic</b> for smoother results</li>"
+                                "<li><b>Nearest neighbor</b> for pixel art. Does not produce new color.</li>"
+                                "<li><b>Bilinear</b> for areas with uniform color to avoid artifacts.</li>"
+                                "<li><b>Bicubic</b> for smoother results.</li>"
                                 "<li><b>Lanczos3</b> for sharp results. May produce aerials.</li>"
                                 "</ul></p>"));
     connect(cmbFilter, SIGNAL(activated(KoID)),

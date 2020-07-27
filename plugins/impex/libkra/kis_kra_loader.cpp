@@ -1224,7 +1224,7 @@ void KisKraLoader::loadAudio(const KoXmlElement& elem, KisImageSP image)
         fileName = QDir::toNativeSeparators(fileName);
 
         QDir baseDirectory = QFileInfo(m_d->document->localFilePath()).absoluteDir();
-        fileName = baseDirectory.absoluteFilePath(fileName);
+        fileName = QDir::cleanPath( baseDirectory.filePath(fileName) );
 
         QFileInfo info(fileName);
 

@@ -663,7 +663,7 @@ QWidget * KisToolSelectMagnetic::createOptionWidget()
     connect(filterRadiusInput, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetFilterRadius(qreal)));
 
     QHBoxLayout *f2        = new QHBoxLayout();
-    QLabel *thresholdLabel = new QLabel(i18n("Threshold: "), selectionWidget);
+    QLabel *thresholdLabel = new QLabel(i18nc("Threshold label in Magnetic Selection's Tool options", "Threshold: "), selectionWidget);
     f2->addWidget(thresholdLabel);
 
     KisSliderSpinBox *thresholdInput = new KisSliderSpinBox(selectionWidget);

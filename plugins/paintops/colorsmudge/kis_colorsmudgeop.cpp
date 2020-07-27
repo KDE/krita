@@ -249,7 +249,7 @@ void KisColorSmudgeOp::mixSmudgePaintAt(const KisPaintInformation& info, KisPrec
             preciseCS->mixColorsOp()->mixArrayWithColor(m_canvasSrc->data(), dullingFillColor.data(), numPixels, dullingFactor, canvasDabPtr);
             m_backgroundPainter->bltFixed(0, 0, m_canvasDab, 0, 0, width, height);//composite_copy mixed bg/dullingfillcolor to m_tempDev
         } else {
-            dullingFillColor.setOpacity(dullingFactor);
+            dullingFillColor.setOpacity(dullingFactor * dullingFillColor.opacityF());
             m_backgroundPainter->bltFixed(0, 0, m_canvasSrc, 0, 0, width, height); //draw background on tempDev
             m_smudgePainter->fill(0, 0, m_dstDabRect.width(), m_dstDabRect.height(), dullingFillColor);//composite_over dullingfillcolor on bg in tempDev
         }

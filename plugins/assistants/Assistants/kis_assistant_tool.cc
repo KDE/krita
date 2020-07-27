@@ -535,6 +535,15 @@ void KisAssistantTool::continuePrimaryAction(KoPointerEvent *event)
               assis->setCov(*hndl[0], *hndl[1], event->point);
               assis->setSp(*hndl[0], *hndl[1], assis->cov());
 
+              bool cov_is_invalid = (QLineF(*hndl[0], *hndl[1]).length() < QLineF(*hndl[0], *hndl[2]).length()) ||
+              (QLineF(*hndl[0], *hndl[1]).length() < QLineF(*hndl[1], *hndl[2]).length());
+
+              if (cov_is_invalid) {
+                  QLineF horizon = assis->horizon();
+                  assis->setCov(horizon.p1(), horizon.p2(), QLineF(horizon.p1(), horizon.p2()).center());
+                  assis->setSp(horizon.p1(), horizon.p2(), assis->cov());
+              }
+
           } else if (far_handle_is_dragged) {
               QLineF perspective_line_a, perspective_line_b;
               QPointF vp_new_pos(0,0);
@@ -700,6 +709,17 @@ void KisAssistantTool::addAssistant()
       m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
       bar.setLength(length * 0.5);
       m_newAssistant->addHandle(new KisPaintingAssistantHandle(bar.p2()), HandleType::SIDE);
+
+      // also make sure 3rd point (cov) is between the 2 vanishing points
+      bool cov_is_invalid = (QLineF(*handles[0], *handles[1]).length() < QLineF(*handles[0], *handles[2]).length()) ||
+          (QLineF(*handles[0], *handles[1]).length() < QLineF(*handles[1], *handles[2]).length());
+
+      if (cov_is_invalid) {
+          *handles[2] = QLineF(*handles[0], *handles[1]).center();
+          assis->setHorizon(*handles[0], *handles[1]);
+          assis->setCov(*handles[0], *handles[1], *handles[2]);
+          assis->setSp(*handles[0], *handles[1], *handles[2]);
+      }
     }
 
 

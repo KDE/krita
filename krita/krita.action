@@ -3551,7 +3551,7 @@
     </Action>
     <Action name="layer_properties">
       <icon>properties</icon>
-      <text>&amp;Properties...</text>
+      <text comment="Menu label of Layer Properties">&amp;Properties...</text>
       <whatsThis></whatsThis>
       <toolTip>Properties</toolTip>
       <iconText>Properties</iconText>

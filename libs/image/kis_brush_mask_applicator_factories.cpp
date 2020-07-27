@@ -323,6 +323,9 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
 
             Vc::float_v alphaValueF = valDist - vFloatAlphaValue;
 
+            Vc::float_m alphaMask = vAlphaValue < vZero;
+            vAlphaValue.setZero(alphaMask);
+
             vCurvedData.gather(curveDataPointer,vAlphaValue);
             vCurvedData1.gather(curveDataPointer,vAlphaValue + 1);
 //            Vc::float_v vCurvedData1(curveDataPointer,vAlphaValue + 1);

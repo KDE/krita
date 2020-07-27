@@ -90,7 +90,7 @@ void KisMyPaintCurveOption::writeOptionSetting(KisPropertiesConfigurationSP sett
     Q_FOREACH(KisDynamicOptionSP option, m_sensorMap.values()) {
 
         QVariantList pointsList;
-        QList<QPointF> curve_points = option->curve().points();
+        QList<QPointF> curve_points = option->getControlPoints();
 
         if(!option->isActive()){
             inputs_map.remove(option->id(option->sensorType()));
@@ -187,9 +187,22 @@ void KisMyPaintCurveOption::readNamedOptionSetting(const QString& prefix, const 
 
         if(points.size()) {
 
-            KisCubicCurve curve(points);
-            option->setCurve(curve);
+            //KisCubicCurve curve(points);
+            //option->setCurve(curve);
+            option->setCurveFromPoints(points);
         }
+
+        if(!setting->getProperty(name() + option->id() + "XMIN").isNull())
+            option->setXRangeMin(setting->getProperty(name() + option->id() + "XMIN").toReal());
+
+        if(!setting->getProperty(name() + option->id() + "XMAX").isNull())
+            option->setXRangeMax(setting->getProperty(name() + option->id() + "XMAX").toReal());
+
+        if(!setting->getProperty(name() + option->id() + "YMIN").isNull())
+            option->setYRangeMin(setting->getProperty(name() + option->id() + "YMIN").toReal());
+
+        if(!setting->getProperty(name() + option->id() + "YMAX").isNull())
+            option->setYRangeMax(setting->getProperty(name() + option->id() + "YMAX").toReal());
 
         replaceSensor(option);
         option->setActive(points.size()>0);
@@ -202,7 +215,7 @@ void KisMyPaintCurveOption::readNamedOptionSetting(const QString& prefix, const 
         commonCurve = sensor->curve();
     }
 
-    m_useCurve = setting->getBool(m_name + "UseCurve", true);
+    m_useCurve = setting->getBool(m_name + "UseCurve", true);    
     if (m_useSameCurve) {
         m_commonCurve = setting->getCubicCurve(prefix + "commonCurve", commonCurve);
     }

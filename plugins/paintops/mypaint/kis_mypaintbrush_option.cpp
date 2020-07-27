@@ -1,9 +1,12 @@
 #include "kis_mypaintbrush_option.h"
 #include <kis_paint_information.h>
 #include <QDomElement>
+#include <qmath.h>
 #include <libmypaint/mypaint-brush.h>
 
 #include "kis_algebra_2d.h"
+
+using namespace std;
 
 KisMyPaintBrushOption::KisMyPaintBrushOption(MyPaintBrushOptionType type)
     : m_length(-1)
@@ -108,6 +111,26 @@ QString KisMyPaintBrushOption::maximumLabel(MyPaintBrushOptionType sensorType, i
     default:
         return i18n("1.0");
     };
+}
+
+QString KisMyPaintBrushOption::minimumXLabel() {
+
+    return QString::number(curveXMin);
+}
+
+QString KisMyPaintBrushOption::minimumYLabel() {
+
+    return QString::number(curveYMin);
+}
+
+QString KisMyPaintBrushOption::maximumXLabel() {
+
+    return QString::number(curveXMax);
+}
+
+QString KisMyPaintBrushOption::maximumYLabel() {
+
+    return QString::number(curveYMax);
 }
 
 int KisMyPaintBrushOption::minimumValue(MyPaintBrushOptionType sensorType)
@@ -217,27 +240,68 @@ MyPaintBrushInput KisMyPaintBrushOption::input()
 {
     switch(m_type) {
 
-        case MyPaintBrushOptionType::PRESSURE:
+        case PRESSURE:
             return  MYPAINT_BRUSH_INPUT_PRESSURE;
-        case MyPaintBrushOptionType::FINE_SPEED:
+        case FINE_SPEED:
             return MYPAINT_BRUSH_INPUT_SPEED1;
-        case MyPaintBrushOptionType::GROSS_SPEED:
+        case GROSS_SPEED:
             return MYPAINT_BRUSH_INPUT_SPEED2;
-        case MyPaintBrushOptionType::RANDOM:
+        case RANDOM:
             return MYPAINT_BRUSH_INPUT_RANDOM;
-        case MyPaintBrushOptionType::STROKE:
+        case STROKE:
             return MYPAINT_BRUSH_INPUT_STROKE;
-        case MyPaintBrushOptionType::DIRECTION:
+        case DIRECTION:
             return MYPAINT_BRUSH_INPUT_DIRECTION;
-        case MyPaintBrushOptionType::DECLINATION:
+        case DECLINATION:
             return MYPAINT_BRUSH_INPUT_TILT_DECLINATION;
-        case MyPaintBrushOptionType::ASCENSION:
+        case ASCENSION:
             return MYPAINT_BRUSH_INPUT_TILT_ASCENSION;
 
         default:
             return MYPAINT_BRUSH_INPUT_PRESSURE;
     }
 }
+
+qreal KisMyPaintBrushOption::getXRangeMin() {
+
+    return curveXMin;
+}
+
+qreal KisMyPaintBrushOption::getXRangeMax() {
+
+    return curveXMax;
+}
+
+qreal KisMyPaintBrushOption::getYRangeMin() {
+
+    return curveYMin;
+}
+
+qreal KisMyPaintBrushOption::getYRangeMax() {
+
+    return curveYMax;
+}
+
+void KisMyPaintBrushOption::setXRangeMin(qreal value) {
+
+    curveXMin = value;
+}
+
+void KisMyPaintBrushOption::setXRangeMax(qreal value) {
+
+    curveXMax = value;
+}
+
+void KisMyPaintBrushOption::setYRangeMin(qreal value) {
+
+    curveYMin = value;
+}
+
+void KisMyPaintBrushOption::setYRangeMax(qreal value) {
+
+    curveYMax = value;
+}
+
 
 QString KisMyPaintBrushOption::id(MyPaintBrushOptionType sensorType)
 {
@@ -263,6 +327,11 @@ QString KisMyPaintBrushOption::id(MyPaintBrushOptionType sensorType)
     default:
         return QString();
     };
+}
+
+QString KisMyPaintBrushOption::id() {
+
+    return id(m_type);
 }
 
 
@@ -315,6 +384,19 @@ void KisMyPaintBrushOption::setCurve(const KisCubicCurve& curve)
     m_curve = curve;
 }
 
+void KisMyPaintBrushOption::setCurveFromPoints(QList<QPointF> points) {
+
+    setRangeFromPoints(points);
+
+    for (int i=0; i<points.size(); i++) {
+
+        points[i] = scaleTo0_1(points[i]);
+    }
+
+    KisCubicCurve curve(points);
+    setCurve(curve);
+}
+
 const KisCubicCurve& KisMyPaintBrushOption::curve() const
 {
     return m_curve;
@@ -323,6 +405,17 @@ const KisCubicCurve& KisMyPaintBrushOption::curve() const
 void KisMyPaintBrushOption::removeCurve()
 {
     m_customCurve = false;
+}
+
+QList<QPointF> KisMyPaintBrushOption::getControlPoints() {
+
+    QList<QPointF> curvePoints = curve().points();
+    for(int i=0; i<curvePoints.size(); i++) {
+
+         curvePoints[i] = scaleFrom0_1(curvePoints[i]);
+    }
+
+    return curvePoints;
 }
 
 bool KisMyPaintBrushOption::hasCustomCurve() const
@@ -353,4 +446,52 @@ void KisMyPaintBrushOption::setActive(bool active)
 bool KisMyPaintBrushOption::isActive() const
 {
     return m_active;
+}
+
+QPointF KisMyPaintBrushOption::scaleTo0_1(QPointF point) {
+
+    QPointF scaledPoint;
+    scaledPoint.setX(scaleToRange(curveXMin, curveXMax, 0, 1, point.x()));
+    scaledPoint.setY(scaleToRange(curveYMin, curveYMax, 0, 1, point.y()));
+
+    return scaledPoint;
+}
+
+QPointF KisMyPaintBrushOption::scaleFrom0_1(QPointF point) {
+
+    QPointF scaledPoint;
+    scaledPoint.setX(scaleToRange(0, 1, curveXMin, curveXMax, point.x()));
+    scaledPoint.setY(scaleToRange(0, 1, curveYMin, curveYMax, point.y()));
+
+    return scaledPoint;
+}
+
+qreal KisMyPaintBrushOption::scaleToRange(qreal inMin, qreal inMax, qreal outMin, qreal outMax, qreal inValue) {
+
+    qreal inRange = (inMax - inMin);
+    qreal outRange = (outMax - outMin);
+    qreal value = (((inValue - inMin) * outRange) / inRange) + outMin;
+
+    return value;
+}
+
+void KisMyPaintBrushOption::setRangeFromPoints(QList<QPointF> points) {
+
+    curveXMin = points[0].x();
+    curveXMax = points[0].x();
+    curveYMin = points[0].y();
+    curveYMax = points[0].y();
+
+    for(int i=1; i<points.size(); i++) {
+
+        curveXMin = min(curveXMin, points[i].x());
+        curveYMin = min(curveYMin, points[i].y());
+        curveXMax = max(curveXMax, points[i].x());
+        curveYMax = max(curveYMax, points[i].y());
+    }
+
+    curveXMax = curveXMax + 1;
+    curveYMax = curveYMax + 1;
+    curveXMin = curveXMin - 1;
+    curveYMin = curveYMin - 1;
 }

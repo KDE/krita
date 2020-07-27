@@ -33,9 +33,9 @@ KisMyPaintCurveOptionWidget::KisMyPaintCurveOptionWidget(KisMyPaintCurveOption* 
     setObjectName("KisMyPaintCurveOptionWidget");
 
     m_curveOptionWidget->setupUi(m_widget);
-    setConfigurationPage(m_widget);
+    setConfigurationPage(m_widget);    
 
-    m_curveOptionWidget->sensorSelector->setCurveOption(curveOption);
+    m_curveOptionWidget->sensorSelector->setCurveOption(curveOption);    
 
     updateSensorCurveLabels(m_curveOptionWidget->sensorSelector->currentHighlighted());
     updateCurve(m_curveOptionWidget->sensorSelector->currentHighlighted());
@@ -45,8 +45,12 @@ KisMyPaintCurveOptionWidget::KisMyPaintCurveOptionWidget(KisMyPaintCurveOption* 
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(parametersChanged()), SLOT(updateLabelsOfCurrentSensor()));
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(highlightedSensorChanged(KisDynamicOptionSP)), SLOT(updateSensorCurveLabels(KisDynamicOptionSP)));
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(highlightedSensorChanged(KisDynamicOptionSP)), SLOT(updateCurve(KisDynamicOptionSP)));
+    connect(m_curveOptionWidget->sensorSelector, SIGNAL(highlightedSensorChanged(KisDynamicOptionSP)), SLOT(updateRangeSpinBoxes(KisDynamicOptionSP)));
     connect(m_curveOptionWidget->checkBoxUseSameCurve, SIGNAL(stateChanged(int)), SLOT(slotUseSameCurveChanged()));
-
+    connect(m_curveOptionWidget->xMinBox, SIGNAL(valueChanged(double)), SLOT(emitSettingChanged()));
+    connect(m_curveOptionWidget->xMaxBox, SIGNAL(valueChanged(double)), SLOT(emitSettingChanged()));
+    connect(m_curveOptionWidget->yMinBox, SIGNAL(valueChanged(double)), SLOT(emitSettingChanged()));
+    connect(m_curveOptionWidget->yMaxBox, SIGNAL(valueChanged(double)), SLOT(emitSettingChanged()));
 
     // set all the icons for the curve preset shapes
     updateThemedIcons();
@@ -65,11 +69,11 @@ KisMyPaintCurveOptionWidget::KisMyPaintCurveOptionWidget(KisMyPaintCurveOption* 
     m_curveOptionWidget->label_ymin->setText(minLabel);
     m_curveOptionWidget->label_ymax->setText(maxLabel);
 
+
     m_curveOptionWidget->strengthSlider->setRange(curveOption->minValue(), curveOption->maxValue(), 2);
     m_curveOptionWidget->strengthSlider->setValue(curveOption->value());
     m_curveOptionWidget->strengthSlider->setPrefix(i18n("Strength: "));
-    m_curveOptionWidget->strengthSlider->setSuffix(i18n("%"));    
-
+    m_curveOptionWidget->strengthSlider->setSuffix(i18n("%"));       
 
     if (hideSlider) {
          m_curveOptionWidget->strengthSlider->hide();
@@ -88,16 +92,28 @@ KisMyPaintCurveOptionWidget::~KisMyPaintCurveOptionWidget()
 }
 
 void KisMyPaintCurveOptionWidget::writeOptionSetting(KisPropertiesConfigurationSP setting) const
-{        
+{
+    KisDynamicOptionSP currentSensor = m_curveOptionWidget->sensorSelector->currentHighlighted();
+    setting->setProperty(m_curveOption->name() + m_curveOptionWidget->sensorSelector->currentHighlighted()->id() + "XMIN", m_curveOptionWidget->xMinBox->value());
+    setting->setProperty(m_curveOption->name() + m_curveOptionWidget->sensorSelector->currentHighlighted()->id() + "XMAX", m_curveOptionWidget->xMaxBox->value());
+    setting->setProperty(m_curveOption->name() + m_curveOptionWidget->sensorSelector->currentHighlighted()->id() + "YMIN", m_curveOptionWidget->yMinBox->value());
+    setting->setProperty(m_curveOption->name() + m_curveOptionWidget->sensorSelector->currentHighlighted()->id() + "YMAX", m_curveOptionWidget->yMaxBox->value());
+
+    currentSensor->setXRangeMin(m_curveOptionWidget->xMinBox->value());
+    currentSensor->setXRangeMax(m_curveOptionWidget->xMaxBox->value());
+    currentSensor->setYRangeMin(m_curveOptionWidget->yMinBox->value());
+    currentSensor->setYRangeMax(m_curveOptionWidget->yMaxBox->value());
+
+    updateSensorCurveLabels(currentSensor);
     setBaseValue(setting, m_curveOptionWidget->strengthSlider->value());
-    m_curveOption->writeOptionSetting(setting);
+    m_curveOption->writeOptionSetting(setting);    
 }
 
 void KisMyPaintCurveOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     //setting->dump();    
     updateValuesCalled = true;
-    m_curveOption->readOptionSetting(setting);  
+    m_curveOption->readOptionSetting(setting);
 
     // Signals needs to be blocked, otherwise checking the checkbox will trigger
     //   setting the common curve to the widget curve, which is incorrect in this case.
@@ -116,6 +132,8 @@ void KisMyPaintCurveOptionWidget::readOptionSetting(const KisPropertiesConfigura
         m_curveOptionWidget->sensorSelector->setCurrent(m_curveOption->activeSensors().first());
     updateSensorCurveLabels(m_curveOptionWidget->sensorSelector->currentHighlighted());
     updateCurve(m_curveOptionWidget->sensorSelector->currentHighlighted());
+    updateRangeSpinBoxes(m_curveOptionWidget->sensorSelector->currentHighlighted());
+
     updateValuesCalled = false;
 }
 
@@ -179,11 +197,16 @@ void KisMyPaintCurveOptionWidget::slotUnCheckUseCurve() {
     updateValues();
 }
 
-void KisMyPaintCurveOptionWidget::updateSensorCurveLabels(KisDynamicOptionSP sensor)
+void KisMyPaintCurveOptionWidget::updateSensorCurveLabels(KisDynamicOptionSP sensor) const
 {
     if (sensor) {
-        m_curveOptionWidget->label_xmin->setText(KisMyPaintBrushOption::minimumLabel(sensor->sensorType()));
-        m_curveOptionWidget->label_xmax->setText(KisMyPaintBrushOption::maximumLabel(sensor->sensorType(), sensor->length()));
+//        m_curveOptionWidget->label_xmin->setText(KisMyPaintBrushOption::minimumLabel(sensor->sensorType()));
+//        m_curveOptionWidget->label_xmax->setText(KisMyPaintBrushOption::maximumLabel(sensor->sensorType(), sensor->length()));
+
+        m_curveOptionWidget->label_xmin->setText(sensor->minimumXLabel());
+        m_curveOptionWidget->label_xmax->setText(sensor->maximumXLabel());
+        m_curveOptionWidget->label_ymin->setText(sensor->minimumYLabel());
+        m_curveOptionWidget->label_ymax->setText(sensor->maximumYLabel());
 
         int inMinValue = KisMyPaintBrushOption::minimumValue(sensor->sensorType());
         int inMaxValue = KisMyPaintBrushOption::maximumValue(sensor->sensorType(), sensor->length());
@@ -209,6 +232,14 @@ void KisMyPaintCurveOptionWidget::updateCurve(KisDynamicOptionSP sensor)
         m_curveOptionWidget->curveWidget->setCurve(curve);
         m_curveOptionWidget->curveWidget->blockSignals(blockSignal);
     }    
+}
+
+void KisMyPaintCurveOptionWidget::updateRangeSpinBoxes(KisDynamicOptionSP sensor) const {
+
+    m_curveOptionWidget->xMinBox->setValue( sensor->getXRangeMin());
+    m_curveOptionWidget->xMaxBox->setValue( sensor->getXRangeMax());
+    m_curveOptionWidget->yMinBox->setValue( sensor->getYRangeMin());
+    m_curveOptionWidget->yMaxBox->setValue( sensor->getYRangeMax());
 }
 
 void KisMyPaintCurveOptionWidget::updateLabelsOfCurrentSensor()

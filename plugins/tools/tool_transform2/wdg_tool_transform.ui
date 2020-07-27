@@ -1660,7 +1660,7 @@
           <bool>true</bool>
          </property>
          <property name="text">
-          <string>Defor&amp;m Layer</string>
+          <string>Defor&amp;m Selection</string>
          </property>
          <attribute name="buttonGroup">
           <string notr="true">cageTransformButtonGroup</string>

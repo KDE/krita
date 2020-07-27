@@ -183,7 +183,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Dimensions:</string>
+          <string comment="Label of Dimensions as in Layer Position">Dimensions:</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

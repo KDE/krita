@@ -501,7 +501,7 @@
     </Action>
    <Action name="mirrorX-lock">
       <icon></icon>
-      <text>Lock</text>
+      <text>Lock X Line</text>
       <whatsThis></whatsThis>
       <toolTip>Lock X Line</toolTip>
       <iconText>Lock X Line</iconText>

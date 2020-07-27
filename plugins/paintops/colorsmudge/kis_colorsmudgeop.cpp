@@ -235,7 +235,7 @@ void KisColorSmudgeOp::mixSmudgePaintAt(const KisPaintInformation& info, KisPrec
     const qreal fpOpacity = (qreal(painter()->opacity()) / 255.0) * m_opacityOption.getOpacityf(info);
 
     qreal dullingFactor = smudgeLength * 0.8 * fpOpacity;
-    int colorAlpha = qRound(colorRate * colorRate * fpOpacity * 255.0);
+    int colorAlpha = qRound(colorRate * colorRate * fpOpacity * fpOpacity * 255.0);
     int smudgeAlpha = qRound(smudgeLength * fpOpacity * 255.0);
     int numPixels = width * height;
 
@@ -266,7 +266,7 @@ void KisColorSmudgeOp::mixSmudgePaintAt(const KisPaintInformation& info, KisPrec
             activeWrapper.preciseDevice()->readBytes(canvasDabPtr, srcDabRect);
         }
         if (smearAlpha) {//always use COMPOSITE_COPY for finalPainter, so we do smearAlpha here
-            preciseCS->mixColorsOp()->mixTwoColorArrays(m_canvasSrc->data(), canvasDabPtr, numPixels, smudgeLength, canvasDabPtr);
+            preciseCS->mixColorsOp()->mixTwoColorArrays(m_canvasSrc->data(), canvasDabPtr, numPixels, smudgeLength * fpOpacity, canvasDabPtr);
             m_backgroundPainter->bltFixed(0, 0, m_canvasDab, 0, 0, width, height);
         }
         else {//else composite_over canvasDabPtr on m_canvasSrc

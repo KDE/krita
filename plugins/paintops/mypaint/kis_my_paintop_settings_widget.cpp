@@ -54,7 +54,7 @@ KisMyPaintOpSettingsWidget:: KisMyPaintOpSettingsWidget(QWidget* parent)
     addPaintOpOption(new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("dabs_per_actual_radius", KisPaintOpOption::GENERAL, false, 2, 0, 6), "0", "100"), "Dabs Per Actual Radius", "Dabs");
     addPaintOpOption(new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("dabs_per_second", KisPaintOpOption::GENERAL, false, 0, 0, 80), "0", "100"), "Dabs per Second", "Dabs");
     addPaintOpOption(opacityOption, "Opaque", "Opacity");
-    addPaintOpOption(new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("opaque_linearize", KisPaintOpOption::GENERAL, false, 0.9, 0, 1), "0", "100"), "Opaque Linearize", "Opacity");
+    addPaintOpOption(new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("opaque_linearize", KisPaintOpOption::GENERAL, false, 0.9, 0, 3), "0", "100"), "Opaque Linearize", "Opacity");
     addPaintOpOption(new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("opaque_multiply", KisPaintOpOption::GENERAL, false, 0, 0, 2), "0", "100"), "Opaque Multiply", "Opacity");
     addPaintOpOption(new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("slow_tracking_per_dab", KisPaintOpOption::GENERAL, false, 0, 0, 10), "0", "100"), "Slow tracking per dab", "Tracking");
     addPaintOpOption(new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("slow_tracking", KisPaintOpOption::GENERAL, false, 0, 0, 10), "0", "100"), "Slow Tracking", "Tracking");

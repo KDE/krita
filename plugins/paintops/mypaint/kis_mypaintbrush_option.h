@@ -96,6 +96,7 @@ public:
     static MyPaintBrushOptionType typeForInput(MyPaintBrushInput input);
 
     static QString id(MyPaintBrushOptionType sensorType);
+    QString id();
 
     using KisSerializableConfiguration::fromXML;
     using KisSerializableConfiguration::toXML;
@@ -104,12 +105,13 @@ public:
     void fromXML(const QDomElement&) override;
 
     void setCurve(const KisCubicCurve& curve);
+    void setCurveFromPoints(QList<QPointF> points);
     const KisCubicCurve& curve() const;
     void removeCurve();
     bool hasCustomCurve() const;
 
     void setActive(bool active);
-    bool isActive() const;
+    bool isActive() const;       
 
     bool dependsOnCanvasRotation() const;
 
@@ -122,6 +124,15 @@ public:
 
     int length() { return m_length; }
 
+    qreal getXRangeMin();
+    qreal getXRangeMax();
+    qreal getYRangeMin();
+    qreal getYRangeMax();
+
+    void setXRangeMin(qreal value);
+    void setXRangeMax(qreal value);
+    void setYRangeMin(qreal value);
+    void setYRangeMax(qreal value);
 
 public:
     static inline qreal scalingToAdditive(qreal x) {
@@ -132,9 +143,20 @@ public:
         return 0.5 * (1.0 + x);
     }
 
+    QList<QPointF> getControlPoints();
+    QString minimumXLabel();
+    QString minimumYLabel();
+    QString maximumXLabel();
+    QString maximumYLabel();
+
 protected:
 
     qreal value(const KisPaintInformation& info);
+    QPointF scaleTo0_1(QPointF point);
+    QPointF scaleFrom0_1(QPointF point);
+    qreal scaleToRange(qreal inMin, qreal inMax, qreal outMin, qreal outMax, qreal inValue);
+    void setRangeFromPoints(QList<QPointF> points);
+
 
     int m_length;
 
@@ -146,6 +168,11 @@ private:
     bool m_customCurve;
     KisCubicCurve m_curve;
     bool m_active;
+
+    qreal curveXMin;
+    qreal curveXMax;
+    qreal curveYMin;
+    qreal curveYMax;
 
 };
 

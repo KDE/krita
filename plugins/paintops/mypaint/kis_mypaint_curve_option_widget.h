@@ -40,11 +40,12 @@ private Q_SLOTS:
     void slotUseSameCurveChanged();
     void slotUnCheckUseCurve();
 
-    void updateSensorCurveLabels(KisDynamicOptionSP sensor);
+    void updateSensorCurveLabels(KisDynamicOptionSP sensor) const;
     void updateCurve(KisDynamicOptionSP sensor);
+    void updateRangeSpinBoxes(KisDynamicOptionSP sensor) const;
     void updateValues();
     void updateMode();
-    void updateLabelsOfCurrentSensor();
+    void updateLabelsOfCurrentSensor();    
     void disableWidgets(bool disable);
     void updateThemedIcons();
 

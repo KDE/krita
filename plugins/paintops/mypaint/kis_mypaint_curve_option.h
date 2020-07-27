@@ -60,7 +60,7 @@ public:
      * Returns the curve that is being used instead of sensor ones
      * in case "Use the same curve" is checked.
      */
-    KisCubicCurve getCommonCurve() const;
+    KisCubicCurve getCommonCurve() const;    
 
     void setSeparateCurveValue(bool separateCurveValue);
 
@@ -68,7 +68,7 @@ public:
     void setCurveUsed(bool useCurve);
     void setCurve(MyPaintBrushOptionType sensorType, bool useSameCurve, const KisCubicCurve &curve);
     void setValue(qreal value);
-    void setCurveMode(int mode);
+    void setCurveMode(int mode);    
 
     /**
      * Sets the bool indicating whether "Share curve across all settings" is checked.
@@ -188,7 +188,7 @@ protected:
     /**
      * Read the option using the prefix in argument
      */
-    void readNamedOptionSetting(const QString& prefix, const KisPropertiesConfigurationSP setting);
+    void readNamedOptionSetting(const QString& prefix, const KisPropertiesConfigurationSP setting);    
 
     QString m_name;
     KisPaintOpOption::PaintopCategory m_category;
@@ -213,7 +213,7 @@ private:
 
     qreal m_value;
     qreal m_minValue;
-    qreal m_maxValue;
+    qreal m_maxValue;   
     bool firstRead = true;
 
 Q_SIGNALS:

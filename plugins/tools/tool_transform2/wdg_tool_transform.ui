@@ -1701,7 +1701,7 @@
          <item>
           <widget class="QLabel" name="previewGranularity">
            <property name="text">
-            <string comment="The Granularity value for Preview">Preview</string>
+           <string comment="The Granularity value for Cage Transformation Preview">Preview</string>
            </property>
           </widget>
          </item>
@@ -1718,7 +1718,7 @@
          <item>
           <widget class="QLabel" name="realGranularity">
            <property name="text">
-            <string>Real</string>
+            <string comment="The Granularity value for Cage Transformation Result">Real</string>
            </property>
           </widget>
          </item>

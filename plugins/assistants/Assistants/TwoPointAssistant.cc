@@ -449,12 +449,50 @@ void TwoPointAssistant::saveCustomXml(QXmlStreamWriter* xml)
     xml->writeStartElement("gridDensity");
     xml->writeAttribute("value", KisDomUtils::toString( this->gridDensity()));
     xml->writeEndElement();
+
+    xml->writeStartElement("horizon");
+    xml->writeAttribute("x1", KisDomUtils::toString(this->horizon().p1().x()));
+    xml->writeAttribute("y1", KisDomUtils::toString(this->horizon().p1().y()));
+    xml->writeAttribute("x2", KisDomUtils::toString(this->horizon().p2().x()));
+    xml->writeAttribute("y2", KisDomUtils::toString(this->horizon().p2().y()));
+    xml->writeEndElement();
+
+    xml->writeStartElement("cov");
+    xml->writeAttribute("x", KisDomUtils::toString(this->cov().x()));
+    xml->writeAttribute("y", KisDomUtils::toString(this->cov().y()));
+    xml->writeEndElement();
+
+    xml->writeStartElement("sp");
+    xml->writeAttribute("x", KisDomUtils::toString(this->sp().x()));
+    xml->writeAttribute("y", KisDomUtils::toString(this->sp().y()));
+    xml->writeEndElement();
 }
 
 bool TwoPointAssistant::loadCustomXml(QXmlStreamReader* xml)
 {
     if (xml && xml->name() == "gridDensity") {
 	this->setGridDensity((float)KisDomUtils::toDouble(xml->attributes().value("value").toString()));
+    }
+
+    if (xml && xml->name() == "horizon") {
+        QPointF p1 = QPointF((float)KisDomUtils::toDouble(xml->attributes().value("x1").toString()),
+                             (float)KisDomUtils::toDouble(xml->attributes().value("y1").toString()));
+        QPointF p2 = QPointF((float)KisDomUtils::toDouble(xml->attributes().value("x2").toString()),
+                             (float)KisDomUtils::toDouble(xml->attributes().value("y2").toString()));
+
+	this->m_horizon = QLineF(p1,p2);
+    }
+
+    if (xml && xml->name() == "cov") {
+        QPointF cov = QPointF((float)KisDomUtils::toDouble(xml->attributes().value("x").toString()),
+                              (float)KisDomUtils::toDouble(xml->attributes().value("y").toString()));
+        this->m_cov = cov;
+    }
+
+    if (xml && xml->name() == "sp") {
+        QPointF sp = QPointF((float)KisDomUtils::toDouble(xml->attributes().value("x").toString()),
+                             (float)KisDomUtils::toDouble(xml->attributes().value("y").toString()));
+        this->m_sp = sp;
     }
 
     return true;

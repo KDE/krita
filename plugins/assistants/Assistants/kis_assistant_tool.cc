@@ -598,6 +598,7 @@ void KisAssistantTool::continuePrimaryAction(KoPointerEvent *event)
               }
               *m_handleDrag = new_dragged_vp;
               *vp_opp = new_opp_vp;
+              assis->setHorizon(*m_handleDrag, *vp_opp);
           }
 
           // translate side handles

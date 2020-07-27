@@ -58,6 +58,8 @@ KisDynamicOptionSP KisMyPaintBrushOption::id2Sensor(const KoID& id, const QStrin
         return new KisMyPaintBrushOption(ASCENSION);
     else if(id.id()==Declination.id())
         return new KisMyPaintBrushOption(DECLINATION);
+    else if(id.id()==Custom.id())
+        return new KisMyPaintBrushOption(CUSTOM);
     else {
         return 0;
     }
@@ -88,6 +90,9 @@ MyPaintBrushOptionType KisMyPaintBrushOption::id2Type(const KoID &id)
     }
     else if (id.id() == Ascension.id()) {
         return ASCENSION;
+    }
+    else if (id.id() == Custom.id()) {
+        return CUSTOM;
     }
     return UNKNOWN;
 }
@@ -189,7 +194,8 @@ QList<KoID> KisMyPaintBrushOption::sensorsIds()
         << Stroke
         << Direction
         << Declination
-        << Ascension;
+        << Ascension
+        << Custom;
 
     return ids;
 }
@@ -205,7 +211,8 @@ QList<MyPaintBrushOptionType> KisMyPaintBrushOption::sensorsTypes()
             << STROKE
             << DIRECTION
             << DECLINATION
-            << ASCENSION;
+            << ASCENSION
+            << CUSTOM;
 
     return sensorTypes;
 }
@@ -230,6 +237,8 @@ MyPaintBrushOptionType KisMyPaintBrushOption::typeForInput(MyPaintBrushInput inp
             return MyPaintBrushOptionType::DECLINATION;
         case MYPAINT_BRUSH_INPUT_TILT_ASCENSION:
             return MyPaintBrushOptionType::ASCENSION;
+        case MYPAINT_BRUSH_INPUT_CUSTOM:
+            return MyPaintBrushOptionType::CUSTOM;
 
         default:
             return MyPaintBrushOptionType::PRESSURE;
@@ -256,6 +265,8 @@ MyPaintBrushInput KisMyPaintBrushOption::input()
             return MYPAINT_BRUSH_INPUT_TILT_DECLINATION;
         case ASCENSION:
             return MYPAINT_BRUSH_INPUT_TILT_ASCENSION;
+        case CUSTOM:
+            return MYPAINT_BRUSH_INPUT_CUSTOM;
 
         default:
             return MYPAINT_BRUSH_INPUT_PRESSURE;
@@ -323,6 +334,8 @@ QString KisMyPaintBrushOption::id(MyPaintBrushOptionType sensorType)
         return Declination.id();
     case STROKE:
         return Stroke.id();
+    case CUSTOM:
+        return Custom.id();
 
     default:
         return QString();

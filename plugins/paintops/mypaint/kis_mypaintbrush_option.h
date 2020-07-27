@@ -28,6 +28,7 @@ const KoID Stroke("stroke", ki18n("Stroke"));
 const KoID Direction("direction", ki18n("Direction"));
 const KoID Declination("tilt_declination", ki18n("Declination"));
 const KoID Ascension("tilt_ascension", ki18n("Ascension"));
+const KoID Custom("custom", ki18n("Custom"));
 
 const KoID SensorsListId("sensorslist", "SHOULD NOT APPEAR IN THE UI !"); ///< this a non user-visible sensor that can store a list of other sensors, and multiply their output
 
@@ -44,6 +45,7 @@ enum MyPaintBrushOptionType {
     DIRECTION,
     DECLINATION,
     ASCENSION,
+    CUSTOM,
     UNKNOWN = 255
 };
 

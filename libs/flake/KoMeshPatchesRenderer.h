@@ -45,8 +45,12 @@ public:
         QTransform painterTransformShifted = painterTransform *
             QTransform::fromTranslate(painterTransform.dx(), painterTransform.dy()).inverted();
 
+        // we are applying transformation on a Unit rect, so we can extract scaling info only
+        QRectF unitRectScaled = painterTransformShifted.mapRect(QRectF(gradientgRect.topLeft(), QSize(1, 1)));
+        QTransform scaledTransform = QTransform::fromScale(unitRectScaled.width(), unitRectScaled.height());
+
         // boundingRect of the scaled version
-        QRectF scaledGradientRect = painterTransformShifted.mapRect(gradientgRect);
+        QRectF scaledGradientRect = scaledTransform.mapRect(gradientgRect);
 
         m_patch = QImage(scaledGradientRect.size().toSize(), QImage::Format_ARGB32);
         m_patch.fill(Qt::transparent);
@@ -58,7 +62,7 @@ public:
         m_patchPainter.translate(-scaledGradientRect.topLeft());
 
         // upscale the patch to the same scaling factor as the painterTransform
-        m_patchPainter.setTransform(painterTransformShifted, true);
+        m_patchPainter.setTransform(scaledTransform, true);
     }
 
     void fillPatch(const SvgMeshPatch *patch,

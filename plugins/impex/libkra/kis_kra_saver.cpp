@@ -22,6 +22,8 @@
 #include "kis_kra_save_visitor.h"
 #include "kis_kra_savexml_visitor.h"
 
+#include <QApplication>
+#include <QMessageBox>
 #include <QDomDocument>
 #include <QDomElement>
 #include <QString>
@@ -45,6 +47,7 @@
 #include <kis_annotation.h>
 #include <kis_image.h>
 #include <kis_image_animation_interface.h>
+#include <KisImportExportManager.h>
 #include <kis_group_layer.h>
 #include <kis_layer.h>
 #include <kis_adjustment_layer.h>
@@ -511,12 +514,8 @@ bool KisKraSaver::saveAudio(QDomDocument& doc, QDomElement& element)
 {
     const KisImageAnimationInterface *interface = m_d->doc->image()->animationInterface();
     QString fileName = interface->audioChannelFileName();
-    if (fileName.isEmpty()) return true;
 
-    if (!QFileInfo::exists(fileName)) {
-        m_d->errorMessages << i18n("Audio channel file %1 doesn't exist!", fileName);
-        return false;
-    }
+    if (fileName.isEmpty()) return true;
 
     const QDir documentDir = QFileInfo(m_d->filename).absoluteDir();
     KIS_ASSERT_RECOVER_RETURN_VALUE(documentDir.exists(), false);

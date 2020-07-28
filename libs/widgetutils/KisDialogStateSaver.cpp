@@ -24,6 +24,7 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QLineEdit>
+#include <QTextEdit>
 #include <QAbstractSlider>
 #include <QSpinBox>
 #include <QDoubleSpinBox>
@@ -63,6 +64,9 @@ void KisDialogStateSaver::saveState(QWidget *parent, const QString &dialogName)
             }
             else if (qobject_cast<QLineEdit*>(widget)) {
                 group.writeEntry(widget->objectName(), qobject_cast<QLineEdit*>(widget)->text());
+            }
+            else if (qobject_cast<QTextEdit*>(widget)) {
+                group.writeEntry(widget->objectName(), qobject_cast<QTextEdit *>(widget)->toPlainText());
             }
             else if (qobject_cast<QAbstractSlider*>(widget)) {
                 group.writeEntry(widget->objectName(), qobject_cast<QAbstractSlider*>(widget)->value());
@@ -155,6 +159,13 @@ void KisDialogStateSaver::restoreState(QWidget *parent, const QString &dialogNam
                 }
                 else {
                     qobject_cast<QLineEdit*>(widget)->setText(group.readEntry<QString>(widgetName, qobject_cast<QLineEdit*>(widget)->text()));
+                }
+            }
+            else if (qobject_cast<QTextEdit *>(widget)) {
+                if (defaultValue.isValid()) {
+                    qobject_cast<QTextEdit *>(widget)->setPlainText(defaultValue.toString());
+                } else {
+                    qobject_cast<QTextEdit *>(widget)->setPlainText(group.readEntry<QString>(widgetName, qobject_cast<QTextEdit *>(widget)->toPlainText()));
                 }
             }
             else if (qobject_cast<QAbstractSlider*>(widget)) {

@@ -211,6 +211,12 @@ set(kritaflake_SRCS
     tests/MockShapes.cpp
 )
 
+if (SeExpr2_FOUND)
+    set(kritaflake_SRCS ${kritaflake_SRCS}
+        resources/KisSeExprScript.cpp
+    )
+endif()
+
 ki18n_wrap_ui(kritaflake_SRCS
     tools/PathToolOptionWidgetBase.ui
     tools/KoZoomToolWidget.ui

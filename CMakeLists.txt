@@ -595,6 +595,18 @@ endif()
 ############################
 ###########################
 
+##
+## Test for SeExpr
+##
+find_package(SeExpr2)
+set_package_properties(SeExpr2 PROPERTIES
+    URL "https://wdas.github.io/SeExpr/"
+    TYPE OPTIONAL
+    PURPOSE "Required by the SeExpr generator layer"
+)
+macro_bool_to_01(SeExpr2_FOUND HAVE_SEEXPR)
+configure_file(config-seexpr.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-seexpr.h )
+
 find_package(ZLIB)
 set_package_properties(ZLIB PROPERTIES
     DESCRIPTION "Compression library"

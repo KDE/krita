@@ -135,6 +135,15 @@ DlgCreateBundle::DlgCreateBundle(KoResourceBundleSP bundle, QWidget *parent)
                     }
                 }
             }
+#if defined HAVE_SEEXPR
+            else if (resType == ResourceTypes::SeExprScripts) {
+                Q_FOREACH (const KoResourceSP res, bundle->resources(resType)) {
+                    if (res) {
+                        m_selectedSeExprScripts << res->filename();
+                    }
+                }
+            }
+#endif
         }
         */
 #endif
@@ -171,6 +180,9 @@ DlgCreateBundle::DlgCreateBundle(KoResourceBundleSP bundle, QWidget *parent)
     m_ui->cmbResourceTypes->addItem(i18n("Brush Presets"), ResourceType::PaintOpPresets);
     m_ui->cmbResourceTypes->addItem(i18n("Gradients"), ResourceType::Gradients);
     m_ui->cmbResourceTypes->addItem(i18n("Gamut Masks"), ResourceType::GamutMasks);
+#if defined HAVE_SEEXPR
+    m_ui->cmbResourceTypes->addItem(i18n("SeExpr Scripts"), ResourceType::SeExprScripts);
+#endif
     m_ui->cmbResourceTypes->addItem(i18n("Patterns"), ResourceType::Patterns);
     m_ui->cmbResourceTypes->addItem(i18n("Palettes"), ResourceType::Palettes);
     m_ui->cmbResourceTypes->addItem(i18n("Workspaces"), ResourceType::Workspaces);

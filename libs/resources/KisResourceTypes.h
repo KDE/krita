@@ -37,6 +37,7 @@ namespace ResourceType {
     static const QString WindowLayouts {"windowlayouts"};
     static const QString Sessions {"sessions"};
     static const QString GamutMasks {"gamutmasks"};
+    static const QString SeExprScripts {"seexpr_scripts"};
     static const QString FilterEffects {"ko_effects"};
     static const QString TaskSets {"tasksets"};
     static const QString LayerStyles {"layerstyles"};

@@ -343,6 +343,7 @@ build_3rdparty () {
         ext_kwindowsystem \
         ext_quazip
 
+    cmake_3rdparty ext_seexpr
 
     ## All builds done, creating a new install onlydeps install dir
     dir_clean "${KIS_INSTALL_DIR}.onlydeps"
@@ -434,6 +435,9 @@ rebuild_3rdparty () {
         ext_kimageformats \
         ext_kwindowsystem \
         ext_quazip
+
+    build_install_ext \
+        ext_seexpr
 }
 
 #not tested

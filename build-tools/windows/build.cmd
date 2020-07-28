@@ -768,6 +768,7 @@ set EXT_TARGETS=%EXT_TARGETS% jpeg lcms2 ocio ilmbase openexr png tiff gsl vc li
 set EXT_TARGETS=%EXT_TARGETS% giflib qt kwindowsystem drmingw gmic freetype poppler 
 set EXT_TARGETS=%EXT_TARGETS% python sip pyqt
 set EXT_TARGETS=%EXT_TARGETS% lzma quazip openjpeg libheif
+set EXT_TARGETS=%EXT_TARGETS% seexpr 
 
 for %%a in (%EXT_TARGETS%) do (
     echo Building ext_%%a...

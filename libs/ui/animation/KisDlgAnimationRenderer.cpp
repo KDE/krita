@@ -322,6 +322,18 @@ void KisDlgAnimationRenderer::selectRenderType(int index)
     m_page->videoFilename->setFileName(videoFileName);
 
     m_wantsRenderWithHDR = (mimeType == "video/mp4") ? m_wantsRenderWithHDR : false;
+
+    {   // We've got to reload the render settings to account for the user changing render type without configuration.
+        // If this is removed from the configuration, ogg vorbis can fail to render on first attempt. BUG:421658
+        // This should be revisited at some point, too much configuration juggling in this class makes it error-prone...
+
+        KisConfig cfg(true);
+        KisPropertiesConfigurationSP settings = cfg.exportConfiguration("VIDEO_ENCODER");
+
+        getDefaultVideoEncoderOptions(mimeType, settings,
+                                      &m_customFFMpegOptionsString,
+                                      &m_wantsRenderWithHDR);
+    }
 }
 
 void KisDlgAnimationRenderer::selectRenderOptions()

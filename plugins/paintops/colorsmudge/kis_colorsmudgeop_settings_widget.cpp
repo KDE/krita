@@ -86,5 +86,11 @@ void KisColorSmudgeOpSettingsWidget::notifyPageChanged()
     KisBrushSP brush = this->brush();
     bool pierced =  brush ? brush->isPiercedApprox() : false;
     m_smudgeOptionWidget->updateBrushPierced(pierced);
+
+    //If brush is a mask, it can use either engine, but if its not, it must use the new engine
+    m_smudgeOptionWidget->setUseNewEngineCheckboxEnabled(brush->brushApplication() == ALPHAMASK);
+    if (brush->brushApplication() != ALPHAMASK) {
+        m_smudgeOptionWidget->setUseNewEngine(true);
+    }
     m_lightnessStrengthOptionWidget->setEnabled(brush->preserveLightness());
 }

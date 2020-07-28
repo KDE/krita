@@ -24,13 +24,19 @@ public:
 
     void updateBrushPierced(bool pierced);
 
+    void setUseNewEngineCheckboxEnabled(bool enabled);
+
+    void setUseNewEngine(bool useNew);
+
 private Q_SLOTS:
     void slotCurrentIndexChanged(int index);
     void slotSmearAlphaChanged(bool value);
+    void slotUseNewEngineChanged(bool value);
 
 private:
     QComboBox* mCbSmudgeMode;
     QCheckBox *mChkSmearAlpha;
+    QCheckBox* mChkUseNewEngine;
 };
 
 #endif // KIS_SMUDGE_OPTION_WIDGET_H

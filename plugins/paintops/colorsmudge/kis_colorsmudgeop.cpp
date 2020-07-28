@@ -89,9 +89,10 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
     m_backgroundPainter->setCompositeOp(COMPOSITE_COPY);
     // Smudge Painter works in default COMPOSITE_OVER mode
     m_colorRatePainter->setCompositeOp(painter->compositeOp()->id());
+    m_useNewEngine = m_smudgeRateOption.getUseNewEngine();
 
     QString finalCompositeOpId = m_smudgeRateOption.getSmearAlpha() ? COMPOSITE_COPY : COMPOSITE_OVER;
-    if (m_brush->brushApplication() != ALPHAMASK){
+    if (m_useNewEngine){
         finalCompositeOpId = COMPOSITE_COPY;
     }
     m_finalPainter->setCompositeOp(finalCompositeOpId);
@@ -131,7 +132,7 @@ void KisColorSmudgeOp::updateMask(const KisPaintInformation& info, const KisDabS
 {
     qreal lightnessStrength = m_lightnessStrengthOption.apply(info);
 
-    if (m_brush->brushApplication() == ALPHAMASK) {
+    if (!m_useNewEngine) {
         static const KoColorSpace* cs = KoColorSpaceRegistry::instance()->alpha8();
         static KoColor color(Qt::black, cs);
 
@@ -235,7 +236,7 @@ void KisColorSmudgeOp::mixSmudgePaintAt(const KisPaintInformation& info, KisPrec
     const qreal fpOpacity = (qreal(painter()->opacity()) / 255.0) * m_opacityOption.getOpacityf(info);
 
     qreal dullingFactor = smudgeLength * 0.8 * fpOpacity;
-    int colorAlpha = qRound(colorRate * colorRate * fpOpacity * fpOpacity * fpOpacity * 255.0);
+    int colorAlpha = qRound(colorRate * colorRate * fpOpacity * fpOpacity * 255.0);
     int smudgeAlpha = qRound(smudgeLength * fpOpacity * 255.0);
     int numPixels = width * height;
 
@@ -388,7 +389,7 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
 
     QPoint canvasLocalSamplePoint = (srcDabRect.topLeft() + hotSpot).toPoint();
 
-    if (brush->brushApplication() != ALPHAMASK) {
+    if (m_useNewEngine) {
         mixSmudgePaintAt(info, activeWrapper, srcDabRect, canvasLocalSamplePoint, useDullingMode);
         return spacingInfo;
     }

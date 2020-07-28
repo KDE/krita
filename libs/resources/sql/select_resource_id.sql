@@ -7,3 +7,4 @@ AND    storages.id = resources.storage_id
 AND    storages.location = :storage_location
 AND    resource_types.name = :resource_type
 AND    resources.name = :name
+AND    resources.filename = :filename

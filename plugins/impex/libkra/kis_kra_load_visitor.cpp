@@ -231,6 +231,8 @@ bool KisKraLoadVisitor::visit(KisPaintLayer *layer)
 
 bool KisKraLoadVisitor::visit(KisGroupLayer *layer)
 {
+    loadNodeKeyframes(layer);
+
     if (*layer->colorSpace() != *m_image->colorSpace()) {
         layer->resetCache(m_image->colorSpace());
     }

@@ -23,16 +23,20 @@
 
 #include <boost/thread/locks.hpp>
 #include <QMessageBox>
-#include "kis_cursor.h"
-#include "KisDocument.h"
-#include "kis_canvas2.h"
-#include "KisReferenceImagesLayer.h"
-#include "KoCanvasBase.h"
-#include "kis_random_accessor_ng.h"
-#include "KoResourceServerProvider.h"
+#include <kis_cursor.h>
+#include <KisDocument.h>
+#include <kis_canvas2.h>
+#include <KisReferenceImagesLayer.h>
+#include <KoCanvasBase.h>
+#include <kis_random_accessor_ng.h>
+#include <KoResourceServerProvider.h>
 #include <KoMixColorsOp.h>
-#include "kis_wrapped_rect.h"
+#include <kis_wrapped_rect.h>
+#include <KisResourceModel.h>
+#include <KisResourceModelProvider.h>
+
 #include "kis_tool_utils.h"
+
 
 namespace
 {
@@ -45,9 +49,6 @@ KisToolColorPicker::KisToolColorPicker(KoCanvasBase *canvas)
       m_config(new KisToolUtils::ColorPickerConfig)
 {
     setObjectName("tool_colorpicker");
-    m_isActivated = false;
-    m_optionsWidget = 0;
-    m_pickedColor = KoColor();
 }
 
 KisToolColorPicker::~KisToolColorPicker()
@@ -199,14 +200,16 @@ void KisToolColorPicker::endPrimaryAction(KoPointerEvent *event)
         KisSwatch swatch;
         swatch.setColor(m_pickedColor);
         // We don't ask for a name, too intrusive here
-        KoColorSetSP palette = m_palettes.at(m_optionsWidget->cmbPalette->currentIndex());
-        palette->add(swatch);
 
-        KoResourceServerProvider::instance()->paletteServer()->updateResource(palette);
+        QModelIndex idx = m_resourceModel->index(m_optionsWidget->cmbPalette->currentIndex(), 0);
+        KoColorSetSP palette = qSharedPointerDynamicCast<KoColorSet>(m_resourceModel->resourceForIndex(idx));
 
-
-        if (!palette->save()) {
-            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Cannot write to palette file %1. Maybe it is read-only.", palette->filename()));
+        if (palette) {
+            palette->add(swatch);
+            KoResourceServerProvider::instance()->paletteServer()->updateResource(palette);
+            if (!palette->save()) {
+                QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Cannot write to palette file %1. Maybe it is read-only.", palette->filename()));
+            }
         }
     }
 
@@ -298,6 +301,7 @@ QWidget* KisToolColorPicker::createOptionWidget()
         return m_optionsWidget;
     }
 
+    m_resourceModel = srv->resourceModel();
     m_optionsWidget->cmbPalette->setModel(srv->resourceModel());
     m_optionsWidget->cmbPalette->setModelColumn(KisAbstractResourceModel::Name);
 
@@ -356,13 +360,4 @@ void KisToolColorPicker::slotChangeBlend(int value)
 void KisToolColorPicker::slotSetColorSource(int value)
 {
     m_config->sampleMerged = value == SAMPLE_MERGED;
-}
-
-void KisToolColorPicker::slotAddPalette(KoResourceSP resource)
-{
-    KoColorSetSP palette = resource.dynamicCast<KoColorSet>();
-    if (palette) {
-        m_optionsWidget->cmbPalette->addSqueezedItem(palette->name());
-        m_palettes.append(palette);
-    }
 }

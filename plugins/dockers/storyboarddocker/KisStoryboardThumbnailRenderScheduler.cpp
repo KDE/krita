@@ -67,6 +67,25 @@ void KisStoryboardThumbnailRenderScheduler::scheduleFrameForRegeneration(int fra
     }
 }
 
+
+void KisStoryboardThumbnailRenderScheduler::cancelFrameRendering(int frame)
+{
+    if (frame < 0) {
+        return;
+    }
+    if (m_renderer->isActive()) {
+        if (frame == m_currentFrame) {
+            m_renderer->cancelCurrentFrameRendering();
+        }
+        else if (m_changedFramesQueue.contains(frame)) {
+            m_changedFramesQueue.removeAll(frame);
+        }
+        else if (m_affectedFramesQueue.contains(frame)) {
+            m_affectedFramesQueue.removeAll(frame);
+        }
+    }
+}
+
 void KisStoryboardThumbnailRenderScheduler::slotFrameRegenerationCompleted(int frame)
 {
     emit sigFrameCompleted(frame, m_renderer->frameProjection());
@@ -98,12 +117,17 @@ void KisStoryboardThumbnailRenderScheduler::renderNextFrame()
         int frame = m_changedFramesQueue.at(0);
         image->requestTimeSwitch(frame);
         m_renderer->startFrameRegeneration(image, frame);
+        m_currentFrame = frame;
         m_changedFramesQueue.removeFirst();
     }
     else if (!m_affectedFramesQueue.isEmpty()) {
         int frame = m_affectedFramesQueue.at(0);
         image->requestTimeSwitch(frame);
         m_renderer->startFrameRegeneration(image, frame);
+        m_currentFrame = frame;
         m_affectedFramesQueue.removeFirst();
+    }
+    else {
+        m_currentFrame = -1;
     }
 }

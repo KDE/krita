@@ -55,6 +55,8 @@ public:
     */
     void scheduleFrameForRegeneration(int frame, bool affected);
 
+    void cancelFrameRendering(int frame);
+
 private Q_SLOTS:
     /*
     emits the paintDevice for the frame if the regeneration was complete.
@@ -89,6 +91,7 @@ private:
     QVector<int> m_affectedFramesQueue;
     KisAsyncStoryboardThumbnailRenderer *m_renderer;
     KisImageSP m_image;
+    int m_currentFrame;
 };
 
 #endif

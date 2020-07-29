@@ -794,6 +794,7 @@ void StoryboardModel::slotKeyframeRemoved(KisKeyframeSP keyframe)
     if (itemIndex.isValid()) {
         if (isOnlyKeyframe(keyframe, keyframe->time())) {
             removeRows(itemIndex.row(), 1);
+            m_renderScheduler->cancelFrameRendering(itemIndex.row());
             updateDurationData(lastIndexBeforeFrame(keyframe->time()));
         }
     }
@@ -813,6 +814,9 @@ void StoryboardModel::slotKeyframeMoved(KisKeyframeSP keyframe, int from)
             setData(index(0, 0, fromIndex), keyframe->time());
             moveRows(QModelIndex(), fromIndex.row(), 1, QModelIndex(), toItemRow + 1);
 
+            m_renderScheduler->cancelFrameRendering(fromIndex.row());
+            m_renderScheduler->cancelFrameRendering(toItemRow);
+
             updateDurationData(indexFromFrame(keyframe->time()));
             updateDurationData(lastIndexBeforeFrame(keyframe->time()));
 
@@ -822,6 +826,7 @@ void StoryboardModel::slotKeyframeMoved(KisKeyframeSP keyframe, int from)
         else if (onlyKeyframe && destinationIndex.isValid()) {
             removeRows(fromIndex.row(), 1);
 
+            m_renderScheduler->cancelFrameRendering(fromIndex.row());
             QModelIndex beforeFromIndex = lastIndexBeforeFrame(from);
             updateDurationData(beforeFromIndex);
         }

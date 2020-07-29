@@ -9,6 +9,7 @@
 #include <kis_lod_transform.h>
 #include <KoColor.h>
 #include <kis_marker_painter.h>
+#include <kis_sequential_iterator.h>
 
 #include <libmypaint/mypaint-brush.h>
 #include <libmypaint/mypaint-surface.h>
@@ -61,7 +62,7 @@ public:
     qreal calculateOpacity(float angle, float hardness, float opaque, float x, float y,
                                             float xp, float yp, float aspect_ratio, float radius);
 
-    MyPaintSurface* surface();
+    MyPaintSurface* surface();    
 
 private:
     KisPainter *m_painter;

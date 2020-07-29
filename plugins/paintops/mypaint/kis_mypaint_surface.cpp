@@ -6,6 +6,7 @@
 #include <kis_algebra_2d.h>
 #include <kis_cross_device_color_picker.h>
 #include <kis_node.h>
+#include <kis_image.h>
 #include <QtMath>
 #include <qmath.h>
 
@@ -48,7 +49,7 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
                                 float aspect_ratio, float angle, float lock_alpha, float colorize) {
 
     const float one_over_radius2 = 1.0f / (radius * radius);
-    const double angle_rad = angle / 360 * 2 * M_PI;
+    const double angle_rad = kisDegreesToRadians(angle);
     const float cs = cos(angle_rad);
     const float sn = sin(angle_rad);
     float normal_mode;
@@ -211,7 +212,7 @@ void KisMyPaintSurface::getColorImpl(MyPaintSurface *self, float x, float y, flo
         sum_g += pixel_weight * g;
         sum_b += pixel_weight * b;
         sum_a += pixel_weight * a;
-        sum_weight += pixel_weight;
+        sum_weight += pixel_weight;        
     }
 
     if (sum_a > 0.0f && sum_weight > 0.0f) {
@@ -229,7 +230,7 @@ void KisMyPaintSurface::getColorImpl(MyPaintSurface *self, float x, float y, flo
         *color_g = CLAMP(sum_g, 0.0f, 1.0f);
         *color_b = CLAMP(sum_b, 0.0f, 1.0f);
         *color_a = CLAMP(sum_a, 0.0f, 1.0f);
-    }
+    }        
 }
 
 KisPainter* KisMyPaintSurface::painter() {

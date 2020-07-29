@@ -1,10 +1,8 @@
 add_subdirectory(tests)
 add_subdirectory(brushes)
 
-if(LIBMYPAINT_FOUND)
-    include_directories(${LIBMYPAINT_INCLUDE_DIR})
-    link_directories(${LIBMYPAINT_LIBRARIES})
-endif()
+include_directories(${LIBMYPAINT_INCLUDE_DIR})
+link_directories(${LIBMYPAINT_LIBRARIES})
 
 set(kritamypaintop_SOURCES
     my_paintop_plugin.cpp

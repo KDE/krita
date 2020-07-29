@@ -25,7 +25,7 @@ protected:
 
     KisSpacingInformation updateSpacingImpl(const KisPaintInformation &info) const override;
 
-    //KisTimingInformation updateTimingImpl(const KisPaintInformation &info) const override;
+    KisTimingInformation updateTimingImpl(const KisPaintInformation &info) const override;
 
 private:
     KisSpacingInformation computeSpacing(const KisPaintInformation &info, qreal lodScale) const;
@@ -35,6 +35,7 @@ private:
     QScopedPointer<KisMyPaintSurface> m_surface;
     KisPaintOpSettingsSP m_settings;
     KisNodeSP m_node;
+    KisImageWSP m_image;
     double dtime, m_radius;
 };
 

@@ -11,6 +11,7 @@
 #include <kis_my_paintop_option.h>
 #include <kis_paintop_settings.h>
 #include <kis_node.h>
+#include <kis_image.h>
 
 #include <libmypaint/mypaint-brush.h>
 #include <QDebug>
@@ -21,6 +22,8 @@ KisMyPaintOp::KisMyPaintOp(const KisPaintOpSettingsSP settings, KisPainter * pai
     : KisPaintOp (painter) {
 
     m_node = node;
+    m_image = image;
+
     m_brush.reset(new KisMyPaintBrush());
     m_surface.reset(new KisMyPaintSurface(this->painter(), m_node->paintDevice()));
 
@@ -48,7 +51,7 @@ KisMyPaintOp::KisMyPaintOp(const KisPaintOpSettingsSP settings, KisPainter * pai
     m_radius = settings->getFloat(MYPAINT_DIAMETER)/2;
 }
 
-KisMyPaintOp::~KisMyPaintOp() {
+KisMyPaintOp::~KisMyPaintOp() {    
 }
 
 KisSpacingInformation KisMyPaintOp::paintAt(const KisPaintInformation& info) {
@@ -82,6 +85,11 @@ KisSpacingInformation KisMyPaintOp::updateSpacingImpl(const KisPaintInformation 
 {
     KisSpacingInformation spacingInfo = computeSpacing(info, KisLodTransform::lodToScale(painter()->device()));
     return spacingInfo;
+}
+
+KisTimingInformation KisMyPaintOp::updateTimingImpl(const KisPaintInformation &info) const {
+
+    return KisPaintOpPluginUtils::effectiveTiming(nullptr, nullptr, info);
 }
 
 KisSpacingInformation KisMyPaintOp::computeSpacing(const KisPaintInformation &info, qreal lodScale) const {

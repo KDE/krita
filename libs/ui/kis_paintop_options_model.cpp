@@ -62,7 +62,7 @@ void KisPaintOpOptionListModel::addPaintOpOption(KisPaintOpOption *option, int w
     categoriesMapper()->expandAllCategories();
 }
 
-void KisPaintOpOptionListModel::addPaintOpOption(KisPaintOpOption *option, int widgetIndex, const QString &label, QString category) {
+void KisPaintOpOptionListModel::addPaintOpOption(KisPaintOpOption *option, int widgetIndex, const QString &label, const QString category) {
 
     DataItem *item = categoriesMapper()->addEntry(category, KisOptionInfo(option, widgetIndex, label));
 

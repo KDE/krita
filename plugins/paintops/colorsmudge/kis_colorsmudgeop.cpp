@@ -236,7 +236,8 @@ void KisColorSmudgeOp::mixSmudgePaintAt(const KisPaintInformation& info, KisPrec
     const qreal fpOpacity = (qreal(painter()->opacity()) / 255.0) * m_opacityOption.getOpacityf(info);
 
     qreal dullingFactor = smudgeLength * 0.8 * fpOpacity;
-    int colorAlpha = qRound(colorRate * colorRate * fpOpacity * fpOpacity * 255.0);
+    qreal opacityAdjusted = fpOpacity > 0.5 ? fpOpacity * fpOpacity : fpOpacity * 0.5;
+    int colorAlpha = qRound(colorRate * colorRate * opacityAdjusted * 255.0);
     int smudgeAlpha = qRound(smudgeLength * fpOpacity * 255.0);
     int numPixels = width * height;
 

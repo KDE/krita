@@ -35,7 +35,8 @@ KisSmudgeOptionWidget::KisSmudgeOptionWidget()
     QFormLayout *formLayout = new QFormLayout();
     formLayout->addRow(i18n("Smudge mode:"), mCbSmudgeMode);
     formLayout->addRow(i18n("Smear alpha:"), mChkSmearAlpha);
-    formLayout->addRow(i18n("Use New Engine (mandatory for Color, Lightness, and Gradient brushes):"), mChkUseNewEngine);
+    formLayout->addRow(i18n("Use new smudge algorithm:"), mChkUseNewEngine);
+    formLayout->addRow(new QLabel(i18n("(required for Color Image, Lightness Map, and Gradient Map brushes)")));
 
     QWidget     *page = new QWidget();
     QVBoxLayout *pageLayout = new QVBoxLayout(page);

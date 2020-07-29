@@ -137,6 +137,7 @@ private Q_SLOTS:
     void slotKeyframeAdded(KisKeyframeSP keyframe);
     void slotKeyframeRemoved(KisKeyframeSP);
     void slotKeyframeMoved(KisKeyframeSP, int);
+    void slotNodeRemoved(KisNodeSP node);
     void slotUpdateThumbnailForFrame(int frame);
     void slotUpdateThumbnails();
     void slotFrameRenderCompleted(int frame, KisPaintDeviceSP dev);

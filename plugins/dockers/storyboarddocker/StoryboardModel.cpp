@@ -526,6 +526,8 @@ void StoryboardModel::setImage(KisImageWSP image)
 
     m_renderScheduler->setImage(m_image);
 
+    connect(m_image, SIGNAL(sigRemoveNodeAsync(KisNodeSP)), this, SLOT(slotNodeRemoved(KisNodeSP)));
+
     //for add, remove and move
     connect(m_image->animationInterface(), SIGNAL(sigKeyframeAdded(KisKeyframeSP)),
             this, SLOT(slotKeyframeAdded(KisKeyframeSP)));
@@ -792,6 +794,7 @@ void StoryboardModel::slotKeyframeRemoved(KisKeyframeSP keyframe)
     if (itemIndex.isValid()) {
         if (isOnlyKeyframe(keyframe, keyframe->time())) {
             removeRows(itemIndex.row(), 1);
+            updateDurationData(lastIndexBeforeFrame(keyframe->time()));
         }
     }
 }
@@ -832,6 +835,19 @@ void StoryboardModel::slotKeyframeMoved(KisKeyframeSP keyframe, int from)
 
             updateDurationData(indexFromFrame(keyframe->time()));
             updateDurationData(lastIndexBeforeFrame(keyframe->time()));
+        }
+    }
+}
+
+void StoryboardModel::slotNodeRemoved(KisNodeSP node)
+{ 
+    if (node->isAnimated() && node->paintDevice()) {
+        KisKeyframeChannel *channel = node->paintDevice()->keyframeChannel();
+        KisKeyframeSP keyframe = channel->firstKeyframe();
+        while (keyframe) {
+            //sigKeyframeRemoved is not emitted when parent node is deleted so calling explicitly
+            slotKeyframeRemoved(keyframe);
+            keyframe = channel->nextKeyframe(keyframe);
         }
     }
 }

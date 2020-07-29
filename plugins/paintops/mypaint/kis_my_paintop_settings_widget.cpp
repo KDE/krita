@@ -32,7 +32,7 @@ KisMyPaintOpSettingsWidget:: KisMyPaintOpSettingsWidget(QWidget* parent)
     addPaintOpOption(radiusOption, i18n("Radius Logarithmic"), i18nc("Option Category", "Basic"));
     addPaintOpOption(new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("radius_by_random", KisPaintOpOption::GENERAL, false, 0.0, 0, 1.50), "0", "100"), i18n("Radius by Random"), i18nc("Option Category", "Basic"));
     addPaintOpOption(hardnessOption, i18n("Hardness"), i18nc("Option Category", "Basic"));
-    //addPaintOpOption(new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("anti_aliasing", KisPaintOpOption::GENERAL, false, 0.0, 0, 1), "0", "100"), "Anti Aliasing", "Basic");
+    addPaintOpOption(new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("anti_aliasing", KisPaintOpOption::GENERAL, false, 0.0, 0, 1), "0", "100"), i18n("Anti Aliasing"), i18nc("Option Category", "Basic"));
     addPaintOpOption(new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("elliptical_dab_angle", KisPaintOpOption::GENERAL, false, 0.0, 0, 180), "0", "100"), i18n("Elliptical Dab Angle"), i18nc("Option Category", "Basic"));
     addPaintOpOption(new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("elliptical_dab_ratio", KisPaintOpOption::GENERAL, false, 1, 1, 10), "0", "100"), i18n("Elliptical Dab Ratio"), i18nc("Option Category", "Basic"));
     addPaintOpOption(new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("direction_filter", KisPaintOpOption::GENERAL, false, 2, 0, 10), "0", "100"), i18n("Direction Filter"), i18nc("Option Category", "Basic"));

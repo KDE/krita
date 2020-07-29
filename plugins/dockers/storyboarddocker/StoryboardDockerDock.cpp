@@ -206,6 +206,9 @@ StoryboardDockerDock::StoryboardDockerDock( )
 
 StoryboardDockerDock::~StoryboardDockerDock()
 {
+    delete m_commentModel;
+    delete m_storyboardModel;
+    delete m_storyboardDelegate;
 }
 
 void StoryboardDockerDock::setCanvas(KoCanvasBase *canvas)

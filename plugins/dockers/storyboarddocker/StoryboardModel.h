@@ -77,7 +77,8 @@ class KRITASTORYBOARDDOCKER_EXPORT StoryboardModel : public QAbstractItemModel
     Q_OBJECT
 
 public:
-    StoryboardModel(QObject *parent = nullptr);
+    StoryboardModel(QObject *parent);
+    ~StoryboardModel() override;
 
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
     QModelIndex parent(const QModelIndex &index) const override;

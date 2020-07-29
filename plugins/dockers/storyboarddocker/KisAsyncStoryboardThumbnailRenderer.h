@@ -26,7 +26,7 @@ class KisAsyncStoryboardThumbnailRenderer : public KisAsyncAnimationRendererBase
 {
     Q_OBJECT
 public:
-    KisAsyncStoryboardThumbnailRenderer();
+    KisAsyncStoryboardThumbnailRenderer(QObject *parent);
     ~KisAsyncStoryboardThumbnailRenderer();
 
     KisPaintDeviceSP frameProjection()

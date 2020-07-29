@@ -19,7 +19,7 @@
 #include "KisAsyncStoryboardThumbnailRenderer.h"
 #include "kis_image.h"
 
-KisAsyncStoryboardThumbnailRenderer::KisAsyncStoryboardThumbnailRenderer()
+KisAsyncStoryboardThumbnailRenderer::KisAsyncStoryboardThumbnailRenderer(QObject *parent)
 {
     connect(this, SIGNAL(sigNotifyFrameCompleted(int)), SLOT(notifyFrameCompleted(int)), Qt::QueuedConnection);
     connect(this, SIGNAL(sigNotifyFrameCancelled(int)), SLOT(notifyFrameCancelled(int)), Qt::QueuedConnection);

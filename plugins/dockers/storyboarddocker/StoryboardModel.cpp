@@ -35,7 +35,7 @@ StoryboardModel::StoryboardModel(QObject *parent)
         : QAbstractItemModel(parent)
         , m_locked(false)
         , m_imageIdleWatcher(10)
-        , m_renderScheduler(new KisStoryboardThumbnailRenderScheduler())
+        , m_renderScheduler(new KisStoryboardThumbnailRenderScheduler(this))
 {
     connect(this, SIGNAL(rowsInserted(const QModelIndex, int, int)),
                 this, SLOT(slotInsertChildRows(const QModelIndex, int, int)));
@@ -43,6 +43,11 @@ StoryboardModel::StoryboardModel(QObject *parent)
     connect(m_renderScheduler, SIGNAL(sigFrameCompleted(int, KisPaintDeviceSP)), this, SLOT(slotFrameRenderCompleted(int, KisPaintDeviceSP)));
     connect(m_renderScheduler, SIGNAL(sigFrameCancelled(int)), this, SLOT(slotFrameRenderCancelled(int)));
     //TODO: populate model with already existing item's thumbnails
+}
+
+StoryboardModel::~StoryboardModel()
+{
+    delete m_renderScheduler;
 }
 
 QModelIndex StoryboardModel::index(int row, int column, const QModelIndex &parent) const

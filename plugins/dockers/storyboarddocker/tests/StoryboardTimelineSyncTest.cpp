@@ -29,7 +29,7 @@ void StoryboardTimelineSyncTest::initTestCase()
 {
     m_image = new KisImage(0, 100, 100, nullptr, "image");
 
-    m_storyboardModel = new StoryboardModel();
+    m_storyboardModel = new StoryboardModel(this);
     m_storyboardView = new StoryboardView();
     m_storyboardModel->setView(m_storyboardView);
     m_storyboardView->setModel(m_storyboardModel);

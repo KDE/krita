@@ -38,7 +38,7 @@ class KisStoryboardThumbnailRenderScheduler : public QObject
 {
     Q_OBJECT
 public:
-    KisStoryboardThumbnailRenderScheduler();
+    KisStoryboardThumbnailRenderScheduler(QObject *parent);
     ~KisStoryboardThumbnailRenderScheduler();
 
     /*

@@ -21,8 +21,8 @@
 #include "KisAsyncStoryboardThumbnailRenderer.h"
 #include "kis_paint_device.h"
 
-KisStoryboardThumbnailRenderScheduler::KisStoryboardThumbnailRenderScheduler()
-    : m_renderer(new KisAsyncStoryboardThumbnailRenderer())
+KisStoryboardThumbnailRenderScheduler::KisStoryboardThumbnailRenderScheduler(QObject *parent)
+    : m_renderer(new KisAsyncStoryboardThumbnailRenderer(this))
 {
     //connect signals to the renderer.
     connect(m_renderer, SIGNAL(sigFrameCompleted(int)), this, SLOT(slotFrameRegenerationCompleted(int)));
@@ -31,6 +31,7 @@ KisStoryboardThumbnailRenderScheduler::KisStoryboardThumbnailRenderScheduler()
 
 KisStoryboardThumbnailRenderScheduler::~KisStoryboardThumbnailRenderScheduler()
 {
+    delete m_renderer;
 }
 
 void KisStoryboardThumbnailRenderScheduler::setImage(KisImageSP image)

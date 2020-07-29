@@ -2006,6 +2006,16 @@ void KisConfig::setAutoPinLayersToTimeline(bool value)
     m_cfg.writeEntry("autoPinLayers", value);
 }
 
+qreal KisConfig::timelineZoom(bool defaultValue) const
+{
+    return (defaultValue ? 1.0f : m_cfg.readEntry("timelineZoom", 1.0f));
+}
+
+void KisConfig::setTimelineZoom(qreal value)
+{
+    m_cfg.writeEntry("timelineZoom", value);
+}
+
 bool KisConfig::animationDropFrames(bool defaultValue) const
 {
     return (defaultValue ? true : m_cfg.readEntry("animationDropFrames", true));

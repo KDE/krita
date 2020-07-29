@@ -25,7 +25,7 @@ KisMyPaintOp::KisMyPaintOp(const KisPaintOpSettingsSP settings, KisPainter * pai
     m_image = image;
 
     m_brush.reset(new KisMyPaintBrush());
-    m_surface.reset(new KisMyPaintSurface(this->painter(), m_node->paintDevice()));
+    m_surface.reset(new KisMyPaintSurface(this->painter(), nullptr, m_image));
 
     m_brush->apply(settings);
 

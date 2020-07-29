@@ -12,10 +12,11 @@
 
 using namespace std;
 
-KisMyPaintSurface::KisMyPaintSurface(KisPainter *painter, KisPaintDeviceSP paintNode)
+KisMyPaintSurface::KisMyPaintSurface(KisPainter *painter, KisPaintDeviceSP paintNode, KisImageSP image)
 {
     m_painter = painter;
     m_imageDevice = paintNode;
+    m_image = image;
 
     m_surface = new MyPaintSurfaceInternal();
     mypaint_surface_init(m_surface);
@@ -150,7 +151,7 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
 
     }
 
-    painter()->addDirtyRect(dabRectAligned);
+    painter()->addDirtyRect(dabRectAligned);    
     return 1;
 }
 
@@ -180,7 +181,16 @@ void KisMyPaintSurface::getColorImpl(MyPaintSurface *self, float x, float y, flo
     float sum_b = 0.0f;
     float sum_a = 0.0f;
 
-    KisSequentialIterator it(m_imageDevice, dabRectAligned);
+    KisPaintDeviceSP targetDevice;
+
+    if(!m_image.isNull()) {
+
+        m_image->blockUpdates();
+        targetDevice = m_image->projection();
+    }
+    else { targetDevice = m_imageDevice; }
+
+    KisSequentialIterator it(targetDevice, dabRectAligned);
     //KisRandomAccessorSP im = m_node->paintDevice()->createRandomAccessorNG(x, y);
 
     while(it.nextPixel()) {
@@ -212,7 +222,7 @@ void KisMyPaintSurface::getColorImpl(MyPaintSurface *self, float x, float y, flo
         sum_g += pixel_weight * g;
         sum_b += pixel_weight * b;
         sum_a += pixel_weight * a;
-        sum_weight += pixel_weight;        
+        sum_weight += pixel_weight;
     }
 
     if (sum_a > 0.0f && sum_weight > 0.0f) {
@@ -230,7 +240,11 @@ void KisMyPaintSurface::getColorImpl(MyPaintSurface *self, float x, float y, flo
         *color_g = CLAMP(sum_g, 0.0f, 1.0f);
         *color_b = CLAMP(sum_b, 0.0f, 1.0f);
         *color_a = CLAMP(sum_a, 0.0f, 1.0f);
-    }        
+    }
+
+    if(!m_image.isNull()) {
+        m_image->unblockUpdates();
+    }
 }
 
 KisPainter* KisMyPaintSurface::painter() {

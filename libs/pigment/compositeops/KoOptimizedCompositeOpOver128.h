@@ -173,7 +173,7 @@ struct OverCompositor128 {
             float dstAlpha = d[alpha_pos];
             float srcBlendNorm;
 
-            if (dstAlpha == NATIVE_OPACITY_OPAQUE) {
+            if (alphaLocked || dstAlpha == NATIVE_OPACITY_OPAQUE) {
                 srcBlendNorm = srcAlpha;
             } else if (dstAlpha == NATIVE_OPACITY_TRANSPARENT) {
                 dstAlpha = srcAlpha;

@@ -200,9 +200,14 @@ void OverviewWidget::generateThumbnail()
             if(previewSize.isValid()){
                 KisImageSP image = m_canvas->image();
 
+                /**
+                 * Compress the updates: if our previous stroke is still running
+                 * then idle watcher has missed something. Just poke it and wait
+                 * for the next event
+                 */
                 if (!strokeId.isNull()) {
-                    image->cancelStroke(strokeId);
-                    strokeId.clear();
+                    m_imageIdleWatcher.startCountdown();
+                    return;
                 }
 
                 OverviewThumbnailStrokeStrategy* stroke = new OverviewThumbnailStrokeStrategy(image->projection(), image->bounds(), previewSize);

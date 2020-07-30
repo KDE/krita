@@ -23,7 +23,6 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QCursor>
-#include <QMutex>
 
 #include <KoCanvasController.h>
 #include <KoZoomController.h>
@@ -31,20 +30,12 @@
 #include <kis_canvas2.h>
 #include <KisViewManager.h>
 #include <kis_image.h>
-#include <kis_paint_device.h>
 #include <kis_signal_compressor.h>
 #include <kis_config.h>
 #include "kis_idle_watcher.h"
-#include "krita_utils.h"
-#include "kis_painter.h"
-#include <KoUpdater.h>
-#include "kis_transform_worker.h"
-#include "kis_filter_strategy.h"
-#include <KoColorSpaceRegistry.h>
 #include <QApplication>
+#include "OverviewThumbnailStrokeStrategy.h"
 
-const qreal oversample = 2.;
-const int thumbnailTileDim = 128;
 
 OverviewWidget::OverviewWidget(QWidget * parent)
     : QWidget(parent)
@@ -265,85 +256,4 @@ void OverviewWidget::paintEvent(QPaintEvent* event)
     }
 }
 
-class OverviewThumbnailStrokeStrategy::ProcessData : public KisStrokeJobData
-{
-public:
-    ProcessData(const QRect &_rect)
-        : KisStrokeJobData(CONCURRENT),
-          tileRect(_rect)
-    {}
 
-    QRect tileRect;
-};
-
-OverviewThumbnailStrokeStrategy::OverviewThumbnailStrokeStrategy(KisPaintDeviceSP device, const QRect& rect, const QSize& thumbnailSize)
-    : KisSimpleStrokeStrategy(QLatin1String("OverviewThumbnail")),
-      m_device(device),
-      m_rect(rect),
-      m_thumbnailSize(thumbnailSize)
-{
-    enableJob(KisSimpleStrokeStrategy::JOB_INIT, true, KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE);
-    enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
-    enableJob(KisSimpleStrokeStrategy::JOB_FINISH, true, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
-    enableJob(KisSimpleStrokeStrategy::JOB_CANCEL, true, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
-
-    setRequestsOtherStrokesToEnd(false);
-    setClearsRedoOnStart(false);
-    setCanForgetAboutMe(true);
-}
-
-OverviewThumbnailStrokeStrategy::~OverviewThumbnailStrokeStrategy()
-{
-}
-
-
-void OverviewThumbnailStrokeStrategy::initStrokeCallback()
-{
-    const QRect imageRect = m_device->defaultBounds()->bounds();
-
-    m_thumbnailOversampledSize = oversample * m_thumbnailSize;
-
-    if ((m_thumbnailOversampledSize.width() > imageRect.width()) || (m_thumbnailOversampledSize.height() > imageRect.height())) {
-        m_thumbnailOversampledSize.scale(imageRect.size(), Qt::KeepAspectRatio);
-    }
-
-    m_thumbnailDevice = new KisPaintDevice(m_device->colorSpace());
-
-    QVector<KisStrokeJobData*> jobsData;
-
-    QVector<QRect> tileRects = KritaUtils::splitRectIntoPatches(QRect(QPoint(0, 0), m_thumbnailOversampledSize), QSize(thumbnailTileDim, thumbnailTileDim));
-    Q_FOREACH (const QRect &tileRect, tileRects) {
-        jobsData << new OverviewThumbnailStrokeStrategy::ProcessData(tileRect);
-    }
-
-    addMutatedJobs(jobsData);
-}
-
-void OverviewThumbnailStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
-{
-    ProcessData *d_pd = dynamic_cast<ProcessData*>(data);
-    if (d_pd) {
-        //we aren't going to use oversample capability of createThumbnailDevice because it recomputes exact bounds for each small patch, which is
-        //slow. We'll handle scaling separately.
-        KisPaintDeviceSP thumbnailTile = m_device->createThumbnailDeviceOversampled(m_thumbnailOversampledSize.width(), m_thumbnailOversampledSize.height(), 1, m_device->defaultBounds()->bounds(), d_pd->tileRect);
-        KisPainter::copyAreaOptimized(d_pd->tileRect.topLeft(), thumbnailTile, m_thumbnailDevice, d_pd->tileRect);
-    }
-}
-
-void OverviewThumbnailStrokeStrategy::finishStrokeCallback()
-{
-    QImage overviewImage;
-
-    KoDummyUpdater updater;
-    KisTransformWorker worker(m_thumbnailDevice, 1 / oversample, 1 / oversample, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-                              &updater, KisFilterStrategyRegistry::instance()->value("Bilinear"));
-    worker.run();
-
-    overviewImage = m_thumbnailDevice->convertToQImage(KoColorSpaceRegistry::instance()->rgb8()->profile(),
-                                                       QRect(QPoint(0,0), m_thumbnailSize));
-    emit thumbnailUpdated(overviewImage);
-}
-
-void OverviewThumbnailStrokeStrategy::cancelStrokeCallback()
-{
-}

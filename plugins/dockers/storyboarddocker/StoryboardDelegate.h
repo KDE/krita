@@ -45,7 +45,7 @@ public:
     void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     
     void setView(StoryboardView *view);
-    void drawSpinBox(QPainter *p, const QStyleOptionViewItem &option, QString data) const;
+    void drawSpinBox(QPainter *p, const QStyleOptionViewItem &option, QString data, QString suffix) const;
     QStyleOptionSlider drawComment(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     
     QRect spinBoxUpButton(const QStyleOptionViewItem &option);

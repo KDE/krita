@@ -135,9 +135,13 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
                     break;
                 }
                 case StoryboardModel::DurationSecond:
+                {
+                    drawSpinBox(p, option, data, "s");
+                    break;
+                }
                 case StoryboardModel::DurationFrame:
                 {
-                    drawSpinBox(p, option, data);
+                    drawSpinBox(p, option, data, "f");
                     break;
                 }
                 default:
@@ -155,7 +159,7 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
     p->restore();
 }
 
-void StoryboardDelegate::drawSpinBox(QPainter *p, const QStyleOptionViewItem &option, QString data) const
+void StoryboardDelegate::drawSpinBox(QPainter *p, const QStyleOptionViewItem &option, QString data, QString suffix) const
 {
     QStyle *style = option.widget ? option.widget->style() : QApplication::style();
     QStyleOptionSpinBox spinBoxOption;
@@ -170,7 +174,7 @@ void StoryboardDelegate::drawSpinBox(QPainter *p, const QStyleOptionViewItem &op
                     QStyle::QStyle::SC_SpinBoxEditField);
     rect.moveTopLeft(option.rect.topLeft());
     p->setPen(QPen(option.palette.text(), 1));
-    p->drawText(rect, Qt::AlignHCenter | Qt::AlignVCenter, data);
+    p->drawText(rect, Qt::AlignLeft | Qt::AlignVCenter, data + suffix);
 }
 
 QStyleOptionSlider StoryboardDelegate::drawComment(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -293,10 +297,17 @@ QWidget *StoryboardDelegate::createEditor(QWidget *parent,
                 return editor;
             }
             case StoryboardModel::DurationSecond:
-            case StoryboardModel::DurationFrame:
             {
                 QSpinBox *spinbox = new QSpinBox(parent);
                 spinbox->setRange(0, 999);
+                spinbox->setSuffix("s");
+                return spinbox;
+            }
+            case StoryboardModel::DurationFrame:
+            {
+                QSpinBox *spinbox = new QSpinBox(parent);
+                spinbox->setRange(0, 99);
+                spinbox->setSuffix("f");
                 return spinbox;
             }
             default:              //for comments

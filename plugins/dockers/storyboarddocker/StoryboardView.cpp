@@ -88,6 +88,21 @@ void StoryboardView::paintEvent(QPaintEvent *event)
 
 QRect StoryboardView::visualRect(const QModelIndex &index) const
 {
+    /*
+     *    fw = fontWidth
+     * 
+     *  (3*fw+2),        (5*fw+10)  _____ (4*fw+10)
+     *    |                |       /
+     *    |                |      /
+     *   ,_________________________,
+     *   |__|_____________|____|___|  ---------->(fontHeight)
+     *   |                         |
+     *   |                         |
+     *   |                         |
+     *   |                         |
+     *   |_________________________|
+     */
+
     if (!index.isValid() || !index.parent().isValid()) {
         return QListView::visualRect(index);
     }
@@ -121,24 +136,22 @@ QRect StoryboardView::visualRect(const QModelIndex &index) const
             case StoryboardModel::ItemName:
             {
                 QRect itemNameRect = parentRect;
-                itemNameRect.setSize(QSize(thumbnailWidth - (10 * numericFontWidth + 22), fontHeight));
+                itemNameRect.setSize(QSize(thumbnailWidth - (12 * numericFontWidth + 22), fontHeight));
                 itemNameRect.moveLeft(parentRect.left() + 3*numericFontWidth + 2);
                 return itemNameRect;
             }
             case StoryboardModel::DurationSecond:
             {
                 QRect secondRect = parentRect;
-                secondRect.setSize(QSize(4 * numericFontWidth + 10, fontHeight));
-                //secondRect.moveRight(parentRect.right() - 3*numericFontWidth -10);
-                secondRect.moveLeft(parentRect.left() - 7*numericFontWidth + thumbnailWidth -20);
+                secondRect.setSize(QSize(5 * numericFontWidth + 10, fontHeight));
+                secondRect.moveLeft(parentRect.left() + thumbnailWidth - 9*numericFontWidth  -20);
                 return secondRect;
             }
             case StoryboardModel::DurationFrame:
             {
                 QRect frameRect = parentRect;
-                frameRect.setSize(QSize(3 * numericFontWidth + 10, fontHeight));
-                frameRect.moveRight(parentRect.right());
-                frameRect.moveLeft(parentRect.left() - 3*numericFontWidth + thumbnailWidth - 10);
+                frameRect.setSize(QSize(4 * numericFontWidth + 10, fontHeight));
+                frameRect.moveLeft(parentRect.left() + thumbnailWidth - 4*numericFontWidth  - 10);
                 return frameRect;
             }
             default:

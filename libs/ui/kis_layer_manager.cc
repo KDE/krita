@@ -425,7 +425,6 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
 
         QRect rc(srcDevice->extent());
         KisPainter::copyAreaOptimized(rc.topLeft(), srcDevice, clone, rc);
-
     } else {
         clone = new KisPaintDevice(*srcDevice);
     }
@@ -434,6 +433,17 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
                                          source->name(),
                                          source->opacity(),
                                          clone);
+
+    if (srcDevice->framesInterface()) {
+        KisKeyframeChannel *cloneKeyChannel = layer->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+        layer->enableAnimation();
+        KisKeyframeChannel *sourceKeyChannel = srcDevice->keyframeChannel();
+
+        foreach (const int &index, sourceKeyChannel->allKeyframeIds()) {
+            cloneKeyChannel->copyExternalKeyframe(sourceKeyChannel, index, index);
+        }
+    }
+
     layer->setCompositeOpId(newCompositeOp);
 
     KisNodeSP parent = source->parent();
@@ -452,7 +462,6 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
     m_commandsAdapter->removeNode(source);
     m_commandsAdapter->addNode(layer, parent, above);
     m_commandsAdapter->endMacro();
-
 }
 
 void KisLayerManager::convertGroupToAnimated()

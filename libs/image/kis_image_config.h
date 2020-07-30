@@ -99,6 +99,9 @@ public:
     bool autoKeyEnabled(bool requestDefault = false) const;
     void setAutoKeyEnabled(bool value);
 
+    bool autoKeyModeDuplicate(bool requestDefault = false) const;
+    void setAutoKeyModeDuplicate(bool value);
+
     bool showAdditionalOnionSkinsSettings(bool requestDefault = false) const;
     void setShowAdditionalOnionSkinsSettings(bool value);
 

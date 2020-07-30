@@ -27,40 +27,11 @@
 
 #include <QMutex>
 #include "kis_idle_watcher.h"
-#include "kis_simple_stroke_strategy.h"
 
 #include <kis_canvas2.h>
 
 class KisSignalCompressor;
 class KoCanvasBase;
-
-class OverviewThumbnailStrokeStrategy : public QObject, public KisSimpleStrokeStrategy
-{
-    Q_OBJECT
-public:
-    OverviewThumbnailStrokeStrategy(KisPaintDeviceSP device, const QRect& rect, const QSize& thumbnailSize);
-    ~OverviewThumbnailStrokeStrategy() override;
-
-private:
-    void initStrokeCallback() override;
-    void doStrokeCallback(KisStrokeJobData *data) override;
-    void finishStrokeCallback() override;
-    void cancelStrokeCallback() override;
-
-Q_SIGNALS:
-    //Emitted when thumbnail is updated and overviewImage is fully generated.
-    void thumbnailUpdated(QImage pixmap);
-
-
-private:
-    class ProcessData;
-
-    KisPaintDeviceSP m_device;
-    QRect m_rect;
-    QSize m_thumbnailSize;
-    QSize m_thumbnailOversampledSize;
-    KisPaintDeviceSP m_thumbnailDevice;
-};
 
 class OverviewWidget : public QWidget
 {

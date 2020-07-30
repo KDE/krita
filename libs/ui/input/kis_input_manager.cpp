@@ -473,7 +473,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             d->allowMouseEvents();
             d->touchHasBlockedPressEvents = false;
         }
-
         d->matcher.enterEvent();
         break;
     case QEvent::Leave:

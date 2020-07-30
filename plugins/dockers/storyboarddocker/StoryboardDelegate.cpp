@@ -136,12 +136,12 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
                 }
                 case StoryboardModel::DurationSecond:
                 {
-                    drawSpinBox(p, option, data, "s");
+                    drawSpinBox(p, option, data, i18nc("suffix in spin box in storyboard that means 'seconds'", "s"));
                     break;
                 }
                 case StoryboardModel::DurationFrame:
                 {
-                    drawSpinBox(p, option, data, "f");
+                    drawSpinBox(p, option, data, i18nc("suffix in spin box in storyboard that means 'frames'", "f"));
                     break;
                 }
                 default:
@@ -300,14 +300,14 @@ QWidget *StoryboardDelegate::createEditor(QWidget *parent,
             {
                 QSpinBox *spinbox = new QSpinBox(parent);
                 spinbox->setRange(0, 999);
-                spinbox->setSuffix("s");
+                spinbox->setSuffix(i18nc("suffix in spin box in storyboard that means 'seconds'", "s"));
                 return spinbox;
             }
             case StoryboardModel::DurationFrame:
             {
                 QSpinBox *spinbox = new QSpinBox(parent);
                 spinbox->setRange(0, 99);
-                spinbox->setSuffix("f");
+                spinbox->setSuffix(i18nc("suffix in spin box in storyboard that means 'frames'", "f"));
                 return spinbox;
             }
             default:              //for comments

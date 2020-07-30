@@ -62,6 +62,21 @@ OverviewThumbnailStrokeStrategy::~OverviewThumbnailStrokeStrategy()
 {
 }
 
+KisStrokeStrategy *OverviewThumbnailStrokeStrategy::createLodClone(int levelOfDetail)
+{
+    /**
+     * We do not generate preview for Instant Preview mode. Even though we
+     * could do that, it is not very needed, because KisIdleWatcher ensures
+     * that overview preview is generated only when all the background jobs
+     * are completed.
+     *
+     * The only thing we should do about Instant Preview is to avoid resetting
+     * LoDN planes, when the thumbnail is running. Therefore we should return
+     * a fake noop strategy as our LoDN clone (that is a marker of non-legacy
+     * stroke for the scheduler)
+     */
+    return new KisSimpleStrokeStrategy(QLatin1String("OverviewThumbnail_FakeLodN"));
+}
 
 void OverviewThumbnailStrokeStrategy::initStrokeCallback()
 {

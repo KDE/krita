@@ -36,6 +36,8 @@ public:
     OverviewThumbnailStrokeStrategy(KisPaintDeviceSP device, const QRect& rect, const QSize& thumbnailSize);
     ~OverviewThumbnailStrokeStrategy() override;
 
+    KisStrokeStrategy* createLodClone(int levelOfDetail) override;
+
 private:
     void initStrokeCallback() override;
     void doStrokeCallback(KisStrokeJobData *data) override;

@@ -501,10 +501,5 @@ void KisMyPaintBrushOption::setRangeFromPoints(QList<QPointF> points) {
         curveYMin = min(curveYMin, points[i].y());
         curveXMax = max(curveXMax, points[i].x());
         curveYMax = max(curveYMax, points[i].y());
-    }
-
-    curveXMax = curveXMax + 1;
-    curveYMax = curveYMax + 1;
-    curveXMin = curveXMin - 1;
-    curveYMin = curveYMin - 1;
+    }   
 }

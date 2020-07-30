@@ -180,7 +180,7 @@ struct OverCompositor32 {
             float dstAlpha = dst[alpha_pos];
             float srcBlendNorm;
 
-            if (dstAlpha == uint8Max) {
+            if (alphaLocked || dstAlpha == uint8Max) {
                 srcBlendNorm = srcAlpha * uint8Rec1;
             } else if (dstAlpha == 0.0) {
                 dstAlpha = srcAlpha;

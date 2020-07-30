@@ -561,6 +561,8 @@ MyPaintBrushSetting KisMyPaintCurveOption::currentSetting() {
         return MYPAINT_BRUSH_SETTING_ELLIPTICAL_DAB_RATIO;
     else if(m_name == "custom_input_slowness")
         return MYPAINT_BRUSH_SETTING_CUSTOM_INPUT_SLOWNESS;
+    else if(m_name == "custom_input")
+        return MYPAINT_BRUSH_SETTING_CUSTOM_INPUT;
     else if(m_name == "dabs_per_basic_radius")
         return MYPAINT_BRUSH_SETTING_DABS_PER_BASIC_RADIUS;
     else if(m_name == "slow_tracking_per_dab")
@@ -586,7 +588,8 @@ QList<MyPaintBrushInput> KisMyPaintCurveOption::inputList() {
          << MYPAINT_BRUSH_INPUT_STROKE
          << MYPAINT_BRUSH_INPUT_DIRECTION
          << MYPAINT_BRUSH_INPUT_TILT_DECLINATION
-         << MYPAINT_BRUSH_INPUT_TILT_ASCENSION;
+         << MYPAINT_BRUSH_INPUT_TILT_ASCENSION
+         << MYPAINT_BRUSH_INPUT_CUSTOM;
 
     return list;
 }

@@ -376,13 +376,11 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
     KisImageWSP image = m_view->image();
     if (!image) return;
 
-
     KisLayer *srcLayer = qobject_cast<KisLayer*>(source.data());
     if (srcLayer && (srcLayer->inherits("KisGroupLayer") || srcLayer->layerStyle() || srcLayer->childCount() > 0)) {
         image->flattenLayer(srcLayer);
         return;
     }
-
 
     KisPaintDeviceSP srcDevice =
             source->paintDevice() ? source->projection() : source->original();
@@ -416,7 +414,6 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
 
         QRect rc(srcDevice->extent());
         KisPainter::copyAreaOptimized(rc.topLeft(), srcDevice, clone, rc);
-
     } else {
         clone = new KisPaintDevice(*srcDevice);
     }
@@ -425,6 +422,17 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
                                          source->name(),
                                          source->opacity(),
                                          clone);
+
+    if (srcDevice->framesInterface()) {
+        KisKeyframeChannel *cloneKeyChannel = layer->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+        layer->enableAnimation();
+        KisKeyframeChannel *sourceKeyChannel = srcDevice->keyframeChannel();
+
+        foreach (const int &index, sourceKeyChannel->allKeyframeIds()) {
+            cloneKeyChannel->copyExternalKeyframe(sourceKeyChannel, index, index);
+        }
+    }
+
     layer->setCompositeOpId(newCompositeOp);
 
     KisNodeSP parent = source->parent();
@@ -443,7 +451,6 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
     m_commandsAdapter->removeNode(source);
     m_commandsAdapter->addNode(layer, parent, above);
     m_commandsAdapter->endMacro();
-
 }
 
 void KisLayerManager::convertGroupToAnimated()

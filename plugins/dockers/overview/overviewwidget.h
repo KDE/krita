@@ -38,10 +38,8 @@ class OverviewThumbnailStrokeStrategy : public QObject, public KisSimpleStrokeSt
 {
     Q_OBJECT
 public:
-    OverviewThumbnailStrokeStrategy(KisImageWSP image);
+    OverviewThumbnailStrokeStrategy(KisPaintDeviceSP device, const QRect& rect, const QSize& thumbnailSize);
     ~OverviewThumbnailStrokeStrategy() override;
-
-    static QList<KisStrokeJobData*> createJobsData(KisPaintDeviceSP dev, const QRect& imageRect, KisPaintDeviceSP thumbDev, const QSize &thumbnailSize);
 
 private:
     void initStrokeCallback() override;
@@ -55,10 +53,13 @@ Q_SIGNALS:
 
 
 private:
-    struct Private;
-    const QScopedPointer<Private> m_d;
-    QMutex m_thumbnailMergeMutex;
-    KisImageSP m_image;
+    class ProcessData;
+
+    KisPaintDeviceSP m_device;
+    QRect m_rect;
+    QSize m_thumbnailSize;
+    QSize m_thumbnailOversampledSize;
+    KisPaintDeviceSP m_thumbnailDevice;
 };
 
 class OverviewWidget : public QWidget

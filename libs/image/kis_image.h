@@ -225,11 +225,6 @@ public:
     QString nextLayerName(const QString &baseName = "") const;
 
     /**
-     * Set the automatic layer name counter one back.
-     */
-    void rollBackLayerName();
-
-    /**
      * @brief start asynchronous operation on resizing the image
      *
      * The method will resize the image to fit the new size without

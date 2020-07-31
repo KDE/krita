@@ -12,6 +12,7 @@
 #include <kis_mypaint_curve_option.h>
 #include <kis_mypaint_curve_option_widget.h>
 #include <klocalizedstring.h>
+#include <kis_airbrush_option_widget.h>
 
 KisMyPaintOpSettingsWidget:: KisMyPaintOpSettingsWidget(QWidget* parent)
     : KisPaintOpSettingsWidget(parent)
@@ -68,6 +69,7 @@ KisMyPaintOpSettingsWidget:: KisMyPaintOpSettingsWidget(QWidget* parent)
     addPaintOpOption(new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("stroke_threshold", KisPaintOpOption::GENERAL, false, 0, 0, 0.50), "0", "100"), i18n("Stroke Threshold"), i18nc("Option Category", "Stroke"));
     addPaintOpOption(new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("custom_input", KisPaintOpOption::GENERAL, false, 0, -5, 5), "0", "100"), i18n("Custom Input"), i18nc("Option Category", "Custom"));
     addPaintOpOption(new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("custom_input_slowness", KisPaintOpOption::GENERAL, false, 0, 0, 10), "0", "100"), i18n("Custom Input Slowness"), i18nc("Option Category", "Custom"));
+    addPaintOpOption(new KisAirbrushOptionWidget(false), i18n("Airbrush"));
 
     connect(radiusOption->slider(), SIGNAL(valueChanged(qreal)), SLOT(updateBaseOptionRadius(qreal)));
     connect(hardnessOption->slider(), SIGNAL(valueChanged(qreal)), SLOT(updateBaseOptionHardness(qreal)));
@@ -76,7 +78,6 @@ KisMyPaintOpSettingsWidget:: KisMyPaintOpSettingsWidget(QWidget* parent)
     connect(basicOption->radiusSlider(), SIGNAL(valueChanged(qreal)), SLOT(updateRadiusOptionOpacity(qreal)));
     connect(basicOption->hardnessSlider(), SIGNAL(valueChanged(qreal)), SLOT(updateHardnessOptionOpacity(qreal)));
     connect(basicOption->opacitySlider(), SIGNAL(valueChanged(qreal)), SLOT(updateOpacityOptionOpacity(qreal)));
-
 }
 
 KisMyPaintOpSettingsWidget::~ KisMyPaintOpSettingsWidget()

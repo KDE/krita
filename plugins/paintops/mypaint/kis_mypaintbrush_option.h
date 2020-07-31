@@ -171,10 +171,10 @@ private:
     KisCubicCurve m_curve;
     bool m_active;
 
-    qreal curveXMin;
-    qreal curveXMax;
-    qreal curveYMin;
-    qreal curveYMax;
+    qreal curveXMin = 0;
+    qreal curveXMax = 1;
+    qreal curveYMin = 0;
+    qreal curveYMax = 1;
 
 };
 

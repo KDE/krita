@@ -67,13 +67,13 @@ KisSpacingInformation KisMyPaintOp::paintAt(const KisPaintInformation& info) {
         dtime = 0.015;
     }
     else {
-        dtime = abs(info.currentTime() - dtime)*0.001;
+        dtime = abs(info.currentTime() - previousTime)*0.001;
     }
 
     mypaint_brush_stroke_to(m_brush->brush(), m_surface->surface(), info.pos().x(), info.pos().y(), info.pressure(),
                            info.xTilt(), info.yTilt(), dtime);
 
-    dtime = info.currentTime();
+    previousTime = info.currentTime();
 
     const qreal lodScale = KisLodTransform::lodToScale(painter()->device());
     m_radius = m_radius*lodScale;

@@ -37,6 +37,7 @@ private:
     KisNodeSP m_node;
     KisImageWSP m_image;
     double dtime, m_radius, previousTime = 0;
+    bool isStrokeStarted;
 };
 
 #endif // KIS_MY_PAINTOP_H_

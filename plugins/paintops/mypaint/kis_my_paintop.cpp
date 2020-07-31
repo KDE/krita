@@ -48,6 +48,7 @@ KisMyPaintOp::KisMyPaintOp(const KisPaintOpSettingsSP settings, KisPainter * pai
     m_settings = settings;
 
     dtime = -1;
+    isStrokeStarted = false;
     m_radius = settings->getFloat(MYPAINT_DIAMETER)/2;
 }
 
@@ -60,7 +61,9 @@ KisSpacingInformation KisMyPaintOp::paintAt(const KisPaintInformation& info) {
         return KisSpacingInformation(1.0);
     }
 
-    if(dtime < 0) {
+    isStrokeStarted = mypaint_brush_get_state(m_brush->brush(), MYPAINT_BRUSH_STATE_STROKE_STARTED);
+    if(!isStrokeStarted) {
+
         mypaint_brush_stroke_to(m_brush->brush(), m_surface->surface(), info.pos().x(), info.pos().y(), info.pressure(),
                                info.xTilt(), info.yTilt(), 1.0f);
 

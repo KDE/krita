@@ -81,6 +81,8 @@ public:
     bool isActive() const;
     void setMode(Mode mode);
 
+    int delay() const;
+
 
 public Q_SLOTS:
     void setDelay(int delay);

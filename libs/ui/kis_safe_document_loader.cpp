@@ -33,14 +33,17 @@
 #include <kis_image.h>
 #include "kis_signal_compressor.h"
 #include "KisPart.h"
+#include "KisUsageLogger.h"
 
 class FileSystemWatcherWrapper : public QObject
 {
     Q_OBJECT
 public:
-    FileSystemWatcherWrapper() {
-        connect(&m_watcher, SIGNAL(fileChanged(QString)), SIGNAL(fileChanged(QString)));
+    FileSystemWatcherWrapper()
+        : m_reattachmentCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
+    {
         connect(&m_watcher, SIGNAL(fileChanged(QString)), SLOT(slotFileChanged(QString)));
+        connect(&m_reattachmentCompressor, SIGNAL(timeout()), SLOT(slotReattachLostFiles()));
     }
 
     bool addPath(const QString &file) {
@@ -79,22 +82,74 @@ public:
 private Q_SLOTS:
     void slotFileChanged(const QString &path) {
         // re-add the file after QSaveFile optimization
-        if (!m_watcher.files().contains(path) && QFileInfo(path).exists()) {
-            m_watcher.addPath(path);
+        if (!m_watcher.files().contains(path)) {
+
+            if (QFileInfo(path).exists()) {
+                m_watcher.addPath(path);
+                m_lostFilesAbsenceCounter.remove(path);
+                emit fileChanged(path);
+            } else {
+                if (m_lostFilesAbsenceCounter.contains(path)) {
+                    m_lostFilesAbsenceCounter[path]++;
+                } else {
+                    m_lostFilesAbsenceCounter[path] = 0;
+                }
+
+                const int absenceTimeMSec =
+                    m_reattachmentCompressor.delay() * m_lostFilesAbsenceCounter[path];
+
+                const bool shouldSpitWarning =
+                    absenceTimeMSec <= 600000 &&
+                        ((absenceTimeMSec >= 60000 && (absenceTimeMSec % 60000 == 0)) ||
+                         (absenceTimeMSec >= 10000 && (absenceTimeMSec % 10000 == 0)));
+
+                if (shouldSpitWarning) {
+                    QString message;
+                    QTextStream log(&message);
+
+                    log << "WARNING: couldn't reconnect to a removed file layer's file (" << path << "). File is not available for " << absenceTimeMSec / 1000 << " seconds";
+
+                    qWarning() << message;
+                    KisUsageLogger::log(message);
+
+                    if (absenceTimeMSec == 600000) {
+                        message.clear();
+                        log.reset();
+
+                        log << "Giving up... :( No more reports about " << path;
+
+                        qWarning() << message;
+                        KisUsageLogger::log(message);
+                    }
+                }
+
+                m_reattachmentCompressor.start();
+            }
+        } else {
+            emit fileChanged(path);
+        }
+    }
+
+    void slotReattachLostFiles() {
+        const QList<QString> lostFiles = m_lostFilesAbsenceCounter.keys();
+        Q_FOREACH (const QString &path, lostFiles) {
+            slotFileChanged(path);
         }
     }
 
 Q_SIGNALS:
     void fileChanged(const QString &path);
 
-private:
-    QString unifyFilePath(const QString &path) {
+public:
+    static QString unifyFilePath(const QString &path) {
         return QFileInfo(path).absoluteFilePath();
     }
 
 private:
     QFileSystemWatcher m_watcher;
     QHash<QString, int> m_pathCount;
+    KisSignalCompressor m_reattachmentCompressor;
+    QHash<QString, int> m_lostFilesAbsenceCounter;
 };
 
 Q_GLOBAL_STATIC(FileSystemWatcherWrapper, s_fileSystemWatcher)
@@ -159,7 +214,7 @@ void KisSafeDocumentLoader::reloadImage()
 
 void KisSafeDocumentLoader::fileChanged(QString path)
 {
-    if (path == m_d->path) {
+    if (FileSystemWatcherWrapper::unifyFilePath(m_d->path) == path) {
         m_d->fileChangedFlag = true;
         m_d->fileChangedSignalCompressor.start();
     }
@@ -172,11 +227,6 @@ void KisSafeDocumentLoader::fileChangedCompressed(bool sync)
     QFileInfo initialFileInfo(m_d->path);
     m_d->initialFileSize = initialFileInfo.size();
     m_d->initialFileTimeStamp = initialFileInfo.lastModified();
-
-    if (s_fileSystemWatcher->files().contains(m_d->path) == false && initialFileInfo.exists()) {
-        //When a path is renamed it is removed, so we ought to re-add it.
-        s_fileSystemWatcher->addPath(m_d->path);
-    }
 
     // it may happen when the file is flushed by
     // so other application

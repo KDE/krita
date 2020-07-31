@@ -36,7 +36,7 @@ private:
     KisPaintOpSettingsSP m_settings;
     KisNodeSP m_node;
     KisImageWSP m_image;
-    double dtime, m_radius;
+    double dtime, m_radius, previousTime = 0;
 };
 
 #endif // KIS_MY_PAINTOP_H_

@@ -22,8 +22,11 @@ KisMyPaintBrushOptionsSelector::KisMyPaintBrushOptionsSelector(QWidget* parent)
     d->model = new KisMyPaintBrushOptionsModel(this);
     connect(d->model, SIGNAL(sensorChanged(KisDynamicOptionSP)), SIGNAL(sensorChanged(KisDynamicOptionSP)));
     connect(d->model, SIGNAL(parametersChanged()), SIGNAL(parametersChanged()));
-    connect(d->form.sensorsList, SIGNAL(activated(QModelIndex)), SLOT(sensorActivated(QModelIndex)));
-    connect(d->form.sensorsList, SIGNAL(clicked(QModelIndex)), SLOT(sensorActivated(QModelIndex)));
+    //connect(d->form.sensorsList, SIGNAL(activated(QModelIndex)), SLOT(sensorActivated(QModelIndex)));
+    //connect(d->form.sensorsList, SIGNAL(clicked(QModelIndex)), SLOT(sensorActivated(QModelIndex)));
+
+    connect(d->form.sensorsList, SIGNAL(activated(QModelIndex)), SLOT(setCurrent(QModelIndex)));
+    connect(d->form.sensorsList, SIGNAL(clicked(QModelIndex)), SLOT(setCurrent(QModelIndex)));
     d->form.sensorsList->setModel(d->model);
     d->layout = new QHBoxLayout(d->form.widgetConfiguration);
 }
@@ -52,6 +55,20 @@ void KisMyPaintBrushOptionsSelector::setCurrent(KisDynamicOptionSP _sensor)
 
     // HACK ALERT: make sure the signal is delivered to us. Without this line it isn't.
     sensorActivated(d->model->sensorIndex(_sensor));
+
+    KisDynamicOptionSP sensor = currentHighlighted();
+    if (!sensor) {
+        sensor = d->model->getSensor(d->model->index(0, 0));
+    }
+    emit(highlightedSensorChanged(sensor));
+}
+
+void KisMyPaintBrushOptionsSelector::setCurrent(const QModelIndex& index)
+{
+    d->form.sensorsList->setCurrentIndex(index); // make sure the first element is selected
+
+    // HACK ALERT: make sure the signal is delivered to us. Without this line it isn't.
+    sensorActivated(index);
 
     KisDynamicOptionSP sensor = currentHighlighted();
     if (!sensor) {

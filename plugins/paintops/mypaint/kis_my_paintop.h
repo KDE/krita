@@ -7,6 +7,7 @@
 #include "kis_mypaint_brush.h"
 
 #include <libmypaint/mypaint-brush.h>
+#include <kis_airbrush_option_widget.h>
 
 class KisPainter;
 
@@ -34,6 +35,7 @@ private:
     QScopedPointer<KisMyPaintBrush> m_brush;
     QScopedPointer<KisMyPaintSurface> m_surface;
     KisPaintOpSettingsSP m_settings;
+    KisAirbrushOptionProperties m_airBrushOption;
     KisNodeSP m_node;
     KisImageWSP m_image;
     double dtime, m_radius, previousTime = 0;

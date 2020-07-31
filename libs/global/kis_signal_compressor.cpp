@@ -226,3 +226,8 @@ void KisSignalCompressor::setMode(KisSignalCompressor::Mode mode)
 {
     m_mode = mode;
 }
+
+int KisSignalCompressor::delay() const
+{
+    return m_timer->interval();
+}

@@ -717,11 +717,7 @@ bool KisView::queryClose()
 
     if (document()->isModified()) {
         QString name;
-        if (document()->documentInfo()) {
-            name = document()->documentInfo()->aboutInfo("title");
-        }
-        if (name.isEmpty())
-            name = document()->url().fileName();
+        name = document()->url().fileName();
 
         if (name.isEmpty())
             name = i18n("Untitled");

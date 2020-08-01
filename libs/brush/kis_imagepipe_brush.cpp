@@ -433,7 +433,7 @@ KisFixedPaintDeviceSP KisImagePipeBrush::paintDevice(
 
 enumBrushType KisImagePipeBrush::brushType() const
 {
-    return !hasColor() || useColorAsMask() ? PIPE_MASK : PIPE_IMAGE;
+    return !hasColor() ? PIPE_MASK : PIPE_IMAGE;
 }
 
 QString KisImagePipeBrush::parasiteSelection()

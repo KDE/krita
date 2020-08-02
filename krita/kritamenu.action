@@ -954,10 +954,10 @@
     <text>Image</text>
     <Action name="image_properties">
       <icon>document-properties</icon>
-      <text context="Menu text of Image Properties">&amp;Properties...</text>
+      <text context="Image Properties">&amp;Properties...</text>
       <whatsThis></whatsThis>
-      <toolTip>Properties</toolTip>
-      <iconText>Properties</iconText>
+      <toolTip context="Image Properties">Properties</toolTip>
+      <iconText context="Image Properties">Properties</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>

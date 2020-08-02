@@ -73,6 +73,7 @@ private:
 
     KisCubicCurve getWidgetCurve();
     KisCubicCurve getHighlightedSensorCurve();
+    void checkRanges() const;
     float getBaseValue(KisPropertiesConfigurationSP setting);
     void setBaseValue(KisPropertiesConfigurationSP setting, float val) const;
 

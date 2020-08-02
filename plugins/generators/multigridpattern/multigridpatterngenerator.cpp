@@ -257,8 +257,24 @@ void KisMultigridPatternGenerator::generate(KisProcessingInformation dstInfo,
                         pConnect.lineTo(cl);
                         pConnect.closeSubpath();
 
-                        gc.fillPainterPath(pConnect);
-
+                    } else if (connectorType == Connector::CornerDot) {
+                        QPointF cW(connectorWidth, connectorWidth);
+                        
+                        QRectF dot (shape.at(0)-cW, shape.at(0)+cW);
+                        pConnect.addEllipse(dot);
+                        dot = QRectF(shape.at(1)-cW, shape.at(1)+cW);
+                        pConnect.addEllipse(dot);
+                        dot = QRectF(shape.at(2)-cW, shape.at(2)+cW);
+                        pConnect.addEllipse(dot);
+                        dot = QRectF(shape.at(3)-cW, shape.at(3)+cW);
+                        pConnect.addEllipse(dot);
+                        pConnect = pConnect.intersected(p);
+                        
+                    } else if (connectorType == Connector::CenterDot) {
+                        
+                        QRectF dot (center-QPointF(connectorWidth, connectorWidth), center+QPointF(connectorWidth, connectorWidth));
+                        pConnect.addEllipse(dot);
+                        
                     } else {
                         for (int i=1; i<shape.size(); i++) {
                             QPainterPath pAngle;

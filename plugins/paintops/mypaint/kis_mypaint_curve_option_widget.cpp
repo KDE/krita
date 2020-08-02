@@ -93,6 +93,7 @@ KisMyPaintCurveOptionWidget::~KisMyPaintCurveOptionWidget()
 
 void KisMyPaintCurveOptionWidget::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
+    checkRanges();
     KisDynamicOptionSP currentSensor = m_curveOptionWidget->sensorSelector->currentHighlighted();
     setting->setProperty(m_curveOption->name() + m_curveOptionWidget->sensorSelector->currentHighlighted()->id() + "XMIN", m_curveOptionWidget->xMinBox->value());
     setting->setProperty(m_curveOption->name() + m_curveOptionWidget->sensorSelector->currentHighlighted()->id() + "XMAX", m_curveOptionWidget->xMaxBox->value());
@@ -433,6 +434,23 @@ void KisMyPaintCurveOptionWidget::setBaseValue(KisPropertiesConfigurationSP sett
 
     if(m_curveOption->currentSetting() == MYPAINT_BRUSH_SETTING_OPAQUE)
         setting->setProperty(MYPAINT_OPACITY, val);
+}
+
+void KisMyPaintCurveOptionWidget::checkRanges() const
+{
+    if(m_curveOptionWidget->xMinBox->value() >= m_curveOptionWidget->xMaxBox->value()) {
+
+        m_curveOptionWidget->xMinBox->blockSignals(true);
+        m_curveOptionWidget->xMinBox->setValue(m_curveOptionWidget->xMaxBox->value() - 1);
+        m_curveOptionWidget->xMinBox->blockSignals(false);
+    }
+
+    if(m_curveOptionWidget->yMinBox->value() >= m_curveOptionWidget->yMaxBox->value()) {
+
+        m_curveOptionWidget->yMinBox->blockSignals(true);
+        m_curveOptionWidget->yMinBox->setValue(m_curveOptionWidget->yMaxBox->value() - 1);
+        m_curveOptionWidget->yMinBox->blockSignals(false);
+    }
 }
 
 KisDoubleSliderSpinBox* KisMyPaintCurveOptionWidget::slider() {

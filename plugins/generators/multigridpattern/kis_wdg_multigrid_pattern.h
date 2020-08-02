@@ -43,7 +43,7 @@ public:
 private:
     Ui_WdgMultigridPatternOptions* m_widget;
     const KoColorSpace *m_cs;
-    KoStopGradientSP m_gradient;
+    KoStopGradient *m_gradient;
 };
 
 #endif

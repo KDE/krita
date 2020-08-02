@@ -26,7 +26,6 @@
 
 #include <KoColor.h>
 #include <filter/kis_filter_configuration.h>
-#include <KisGlobalResourcesInterface.h>
 
 #include "ui_wdgmultigridpatternoptions.h"
 
@@ -130,7 +129,7 @@ void KisWdgMultigridPattern::setConfiguration(const KisPropertiesConfigurationSP
 
 KisPropertiesConfigurationSP KisWdgMultigridPattern::configuration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("multigrid", 1, KisGlobalResourcesInterface::instance());
+    KisFilterConfigurationSP config = new KisFilterConfiguration("multigrid", 1);
 
     if (m_gradient) {
         QDomDocument doc;

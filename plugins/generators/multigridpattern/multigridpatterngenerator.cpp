@@ -67,14 +67,14 @@ KisMultigridPatternGenerator::KisMultigridPatternGenerator() : KisGenerator(id()
     setSupportsPainting(true);
 }
 
-KisFilterConfigurationSP KisMultigridPatternGenerator::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
+KisFilterConfigurationSP KisMultigridPatternGenerator::defaultConfiguration() const
 {
-    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
+    KisFilterConfigurationSP config = factoryConfiguration();
 
     QLinearGradient gradient;
     gradient.setColorAt(0, Qt::green);
     gradient.setColorAt(1.0, Qt::blue);
-    KoStopGradientSP grad = KoStopGradient::fromQGradient(&gradient);
+    KoStopGradient *grad = KoStopGradient::fromQGradient(&gradient);
     if (grad) {
         QDomDocument doc;
         QDomElement elt = doc.createElement("gradient");
@@ -123,7 +123,7 @@ void KisMultigridPatternGenerator::generate(KisProcessingInformation dstInfo,
         QLinearGradient gradient;
         gradient.setColorAt(0, Qt::green);
         gradient.setColorAt(1.0, Qt::blue);
-        KoStopGradientSP grad = KoStopGradient::fromQGradient(&gradient);
+        KoStopGradient *grad = KoStopGradient::fromQGradient(&gradient);
         if (config->hasProperty("gradientXML")) {
             QDomDocument doc;
             doc.setContent(config->getString("gradientXML", ""));

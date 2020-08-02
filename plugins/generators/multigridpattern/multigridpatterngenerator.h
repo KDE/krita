@@ -62,7 +62,9 @@ public:
         None,
         Acute,
         Obtuse,
-        Cross
+        Cross,
+        CenterDot,
+        CornerDot
     };
 
     KisMultigridPatternGenerator();

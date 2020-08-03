@@ -377,7 +377,7 @@ void KisTransformMaskTest::testMaskOnPaintLayer()
     KisPaintLayerSP player = new KisPaintLayer(p.image, "bg", OPACITY_OPAQUE_U8, p.image->colorSpace());
     p.image->addNode(player, p.image->root(), KisNodeSP());
 
-    KisTransformMaskSP mask = new KisTransformMask();
+    KisTransformMaskSP mask = new KisTransformMask(p.image, "mask");
     p.image->addNode(mask, p.layer);
 
     QTransform transform(-0.177454, -0.805953, -0.00213713,
@@ -404,7 +404,7 @@ void KisTransformMaskTest::testMaskOnCloneLayer()
     KisCloneLayerSP clone = new KisCloneLayer(p.layer, p.image, "clone", OPACITY_OPAQUE_U8);
     p.image->addNode(clone, p.image->root());
 
-    KisTransformMaskSP mask = new KisTransformMask();
+    KisTransformMaskSP mask = new KisTransformMask(p.image, "mask");
     p.image->addNode(mask, clone);
 
     QTransform transform(-0.177454, -0.805953, -0.00213713,
@@ -433,7 +433,7 @@ void KisTransformMaskTest::testMaskOnCloneLayerWithOffset()
     KisCloneLayerSP clone = new KisCloneLayer(p.layer, p.image, "clone", OPACITY_OPAQUE_U8);
     p.image->addNode(clone, p.image->root());
 
-    KisTransformMaskSP mask = new KisTransformMask();
+    KisTransformMaskSP mask = new KisTransformMask(p.image, "mask");
     p.image->addNode(mask, clone);
 
     QTransform transform(1, 0, 0,
@@ -488,14 +488,11 @@ void KisTransformMaskTest::testMultipleMasks()
     //KisCloneLayerSP clone = new KisCloneLayer(p.layer, p.image, "clone", OPACITY_OPAQUE_U8);
     //p.image->addNode(clone, p.image->root());
 
-    KisTransformMaskSP mask1 = new KisTransformMask();
+    KisTransformMaskSP mask1 = new KisTransformMask(p.image, "mask1");
     p.image->addNode(mask1, p.layer);
 
-    KisTransformMaskSP mask2 = new KisTransformMask();
+    KisTransformMaskSP mask2 = new KisTransformMask(p.image, "mask2");
     p.image->addNode(mask2, p.layer);
-
-    mask1->setName("mask1");
-    mask2->setName("mask2");
 
     p.layer->setDirty(refRect);
     p.image->waitForDone();
@@ -771,10 +768,8 @@ void KisTransformMaskTest::testMaskWithOffset()
     KisPaintLayerSP player = new KisPaintLayer(p.image, "bg", OPACITY_OPAQUE_U8, p.image->colorSpace());
     p.image->addNode(player, p.image->root(), KisNodeSP());
 
-    KisTransformMaskSP mask1 = new KisTransformMask();
+    KisTransformMaskSP mask1 = new KisTransformMask(p.image, "mask1");
     p.image->addNode(mask1, p.layer);
-
-    mask1->setName("mask1");
 
     p.layer->setDirty(refRect);
     p.image->waitForDone();
@@ -826,8 +821,7 @@ void KisTransformMaskTest::testWeirdFullUpdates()
     player1->paintDevice()->fill(fillRect, KoColor(Qt::red, p.layer->colorSpace()));
     p.image->addNode(player1, p.image->root());
 
-    KisTransformMaskSP mask1 = new KisTransformMask();
-    mask1->setName("mask1");
+    KisTransformMaskSP mask1 = new KisTransformMask(p.image, "mask1");
     QTransform transform1 =
         QTransform::fromTranslate(256, 0);
     mask1->setTransformParams(KisTransformMaskParamsInterfaceSP(
@@ -840,8 +834,7 @@ void KisTransformMaskTest::testWeirdFullUpdates()
     player2->paintDevice()->fill(fillRect, KoColor(Qt::red, p.layer->colorSpace()));
     p.image->addNode(player2, p.image->root());
 
-    KisTransformMaskSP mask2 = new KisTransformMask();
-    mask2->setName("mask2");
+    KisTransformMaskSP mask2 = new KisTransformMask(p.image, "mask2");
     QTransform transform2 =
         QTransform::fromTranslate(0, 256);
     mask2->setTransformParams(KisTransformMaskParamsInterfaceSP(
@@ -854,8 +847,7 @@ void KisTransformMaskTest::testWeirdFullUpdates()
     player3->paintDevice()->fill(fillRect, KoColor(Qt::red, p.layer->colorSpace()));
     p.image->addNode(player3, p.image->root());
 
-    KisTransformMaskSP mask3 = new KisTransformMask();
-    mask3->setName("mask3");
+    KisTransformMaskSP mask3 = new KisTransformMask(p.image, "mask3");
     QTransform transform3 =
         QTransform::fromTranslate(256, 256);
     mask3->setTransformParams(KisTransformMaskParamsInterfaceSP(
@@ -965,8 +957,7 @@ void KisTransformMaskTest::testTransformHiddenPartsOfTheGroup()
 
     //KIS_DUMP_DEVICE_2(p.image->projection(), imageRect, "image_proj_initial", "dd");
 
-    KisTransformMaskSP mask1 = new KisTransformMask();
-    mask1->setName("mask1");
+    KisTransformMaskSP mask1 = new KisTransformMask(p.image, "mask1");
     QTransform transform1 =
         QTransform::fromTranslate(0, 1.5 * 256);
     mask1->setTransformParams(KisTransformMaskParamsInterfaceSP(

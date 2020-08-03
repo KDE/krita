@@ -124,7 +124,7 @@ void KisLayerStyleProjectionPlaneTest::test(KisPSDLayerStyleSP style, const QStr
 
     //return;
 
-    KisTransparencyMaskSP transparencyMask = new KisTransparencyMask();
+    KisTransparencyMaskSP transparencyMask = new KisTransparencyMask(image, "tmask");
 
     KisSelectionSP selection = new KisSelection();
     selection->pixelSelection()->select(tMaskRect, OPACITY_OPAQUE_U8);

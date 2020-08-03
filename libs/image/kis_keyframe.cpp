@@ -36,7 +36,7 @@ static KisKeyframeSPStaticRegistrar __registrar;
 
 struct KisKeyframe::Private
 {
-    int colorLabel{0};
+    int colorLabel{0}; /**< User-assignable color index associated with a given frame. Used for organization. */
 };
 
 
@@ -60,7 +60,7 @@ int KisKeyframe::colorLabel() const
     return m_d->colorLabel;
 }
 
-void KisKeyframe::setColorLabel(int label)
+void KisKeyframe::setColorLabel(int colorIndex)
 {
-    m_d->colorLabel = label;
+    m_d->colorLabel = colorIndex;
 }

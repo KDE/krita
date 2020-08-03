@@ -34,14 +34,14 @@ KisRasterKeyframe::KisRasterKeyframe(KisPaintDeviceWSP paintDevice)
     m_paintDevice = paintDevice;
     KIS_ASSERT(m_paintDevice);
 
-    m_frameId = m_paintDevice->framesInterface()->createFrame(false, 0, QPoint(), nullptr);
+    m_frameID = m_paintDevice->framesInterface()->createFrame(false, 0, QPoint(), nullptr);
 }
 
 KisRasterKeyframe::KisRasterKeyframe(KisPaintDeviceWSP paintDevice, int premadeFrameID)
     : KisKeyframe()
 {
     m_paintDevice = paintDevice;
-    m_frameId = premadeFrameID;
+    m_frameID = premadeFrameID;
 
     KIS_ASSERT(m_paintDevice);
 }
@@ -51,16 +51,16 @@ KisRasterKeyframe::~KisRasterKeyframe()
     // Note: Because keyframe ownership is shared, it's possible for them to outlive
     // the paint device.
     if (m_paintDevice && m_paintDevice->framesInterface()) {
-        m_paintDevice->framesInterface()->deleteFrame(m_frameId, nullptr);
+        m_paintDevice->framesInterface()->deleteFrame(m_frameID, nullptr);
     }
 }
 
 int KisRasterKeyframe::frameID() const
 {
-    return m_frameId;
+    return m_frameID;
 }
 
-QRect KisRasterKeyframe::bounds()
+QRect KisRasterKeyframe::contentBounds()
 {
     if (!m_paintDevice) {
         return QRect();
@@ -68,7 +68,7 @@ QRect KisRasterKeyframe::bounds()
 
     // An empty frame should be the size of a full image.
     if (hasContent()){
-        return m_paintDevice->framesInterface()->frameBounds(m_frameId);
+        return m_paintDevice->framesInterface()->frameBounds(m_frameID);
     } else {
         return m_paintDevice->defaultBounds()->imageBorderRect();
     }
@@ -76,14 +76,14 @@ QRect KisRasterKeyframe::bounds()
 
 bool KisRasterKeyframe::hasContent()
 {
-    return !m_paintDevice->framesInterface()->frameBounds(m_frameId).isEmpty();
+    return !m_paintDevice->framesInterface()->frameBounds(m_frameID).isEmpty();
 }
 
 void KisRasterKeyframe::writeFrameToDevice(KisPaintDeviceSP writeTarget)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_paintDevice);
 
-    m_paintDevice->framesInterface()->fetchFrame(m_frameId, writeTarget);
+    m_paintDevice->framesInterface()->fetchFrame(m_frameID, writeTarget);
 }
 
 KisKeyframeSP KisRasterKeyframe::duplicate(KisKeyframeChannel *channel)
@@ -95,14 +95,14 @@ KisKeyframeSP KisRasterKeyframe::duplicate(KisKeyframeChannel *channel)
 
         if (targetDevice != m_paintDevice) {
             int targetFrameID = targetDevice->framesInterface()->createFrame(false, 0, QPoint(), nullptr);
-            targetDevice->framesInterface()->uploadFrame(m_frameId, targetFrameID, m_paintDevice);
+            targetDevice->framesInterface()->uploadFrame(m_frameID, targetFrameID, m_paintDevice);
             KisKeyframeSP key = toQShared(new KisRasterKeyframe(targetDevice, targetFrameID ));
             key->setColorLabel(colorLabel());
             return key;
         }
     }
 
-    int copyFrameID = m_paintDevice->framesInterface()->createFrame(true, m_frameId, QPoint(), nullptr);
+    int copyFrameID = m_paintDevice->framesInterface()->createFrame(true, m_frameID, QPoint(), nullptr);
     KisKeyframeSP key = toQShared(new KisRasterKeyframe(m_paintDevice, copyFrameID));
     key->setColorLabel(colorLabel());
     return key;
@@ -223,7 +223,7 @@ QRect KisRasterKeyframeChannel::affectedRect(int time) const
 
     Q_FOREACH (KisRasterKeyframeSP frame, relevantFrames) {
         if (frame) {
-            affectedRect |= frame->bounds();
+            affectedRect |= frame->contentBounds();
         }
     }
 

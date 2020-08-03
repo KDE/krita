@@ -58,8 +58,8 @@ struct KisKeyframeChannel::Private
     }
 
     KoID id;
-    QMap<int, KisKeyframeSP> keys;
-    KisDefaultBoundsBaseSP bounds;
+    QMap<int, KisKeyframeSP> keys; /**< Maps unique times to individual keyframes. */
+    KisDefaultBoundsBaseSP bounds; /**< Stores pixel dimensions as well as current time. */
 
     KisNodeWSP parentNode;
     bool haveBrokenFrameTimeBug = false;
@@ -107,27 +107,27 @@ KisKeyframeChannel::~KisKeyframeChannel()
 {
 }
 
-void KisKeyframeChannel::addKeyframe(int time, KUndo2Command *parentCmd)
+void KisKeyframeChannel::addKeyframe(int time, KUndo2Command *parentUndoCmd)
 {
     KisKeyframeSP keyframe = createKeyframe();
-    insertKeyframe(time, keyframe, parentCmd);
+    insertKeyframe(time, keyframe, parentUndoCmd);
 }
 
-void KisKeyframeChannel::insertKeyframe(int time, KisKeyframeSP keyframe, KUndo2Command *parentCmd)
+void KisKeyframeChannel::insertKeyframe(int time, KisKeyframeSP keyframe, KUndo2Command *parentUndoCmd)
 {
     KIS_ASSERT(keyframe);
-    if (parentCmd) {
-        KUndo2Command* cmd = new KisInsertKeyframeCommand(this, time, keyframe, parentCmd);
+    if (parentUndoCmd) {
+        KUndo2Command* cmd = new KisInsertKeyframeCommand(this, time, keyframe, parentUndoCmd);
     }
 
     m_d->keys.insert(time, keyframe);
     emit sigAddedKeyframe(this, time);
 }
 
-void KisKeyframeChannel::removeKeyframe(int time, KUndo2Command *parentCmd)
+void KisKeyframeChannel::removeKeyframe(int time, KUndo2Command *parentUndoCmd)
 {
-    if (parentCmd) {
-        KUndo2Command* cmd = new KisRemoveKeyframeCommand(this, time, parentCmd);
+    if (parentUndoCmd) {
+        KUndo2Command* cmd = new KisRemoveKeyframeCommand(this, time, parentUndoCmd);
     }
 
     KisKeyframeSP keyframe = keyframeAt(time);
@@ -140,12 +140,12 @@ void KisKeyframeChannel::removeKeyframe(int time, KUndo2Command *parentCmd)
     }
 }
 
-void KisKeyframeChannel::moveKeyframe(KisKeyframeChannel *sourceChannel, int sourceTime, KisKeyframeChannel *targetChannel, int targetTime, KUndo2Command *parentCmd)
+void KisKeyframeChannel::moveKeyframe(KisKeyframeChannel *sourceChannel, int sourceTime, KisKeyframeChannel *targetChannel, int targetTime, KUndo2Command *parentUndoCmd)
 {
     KIS_ASSERT(sourceChannel && targetChannel);
 
     KisKeyframeSP sourceKeyframe = sourceChannel->keyframeAt(sourceTime);
-    sourceChannel->removeKeyframe(sourceTime, parentCmd);
+    sourceChannel->removeKeyframe(sourceTime, parentUndoCmd);
 
     KisKeyframeSP targetKeyframe = sourceKeyframe;
     if (sourceChannel != targetChannel) {
@@ -153,20 +153,20 @@ void KisKeyframeChannel::moveKeyframe(KisKeyframeChannel *sourceChannel, int sou
         targetKeyframe = sourceKeyframe->duplicate(targetChannel);
     }
 
-    targetChannel->insertKeyframe(targetTime, targetKeyframe, parentCmd);
+    targetChannel->insertKeyframe(targetTime, targetKeyframe, parentUndoCmd);
 }
 
-void KisKeyframeChannel::copyKeyframe(KisKeyframeChannel *sourceChannel, int sourceTime, KisKeyframeChannel *targetChannel, int targetTime, KUndo2Command* parentCmd)
+void KisKeyframeChannel::copyKeyframe(KisKeyframeChannel *sourceChannel, int sourceTime, KisKeyframeChannel *targetChannel, int targetTime, KUndo2Command* parentUndoCmd)
 {
     KIS_ASSERT(sourceChannel && targetChannel);
 
     KisKeyframeSP sourceKeyframe = sourceChannel->keyframeAt(sourceTime);
     KisKeyframeSP copiedKeyframe = sourceKeyframe->duplicate(targetChannel);
 
-    targetChannel->insertKeyframe(targetTime, copiedKeyframe, parentCmd);
+    targetChannel->insertKeyframe(targetTime, copiedKeyframe, parentUndoCmd);
 }
 
-void KisKeyframeChannel::swapKeyframes(KisKeyframeChannel *channelA, int timeA, KisKeyframeChannel *channelB, int timeB, KUndo2Command *parentCmd)
+void KisKeyframeChannel::swapKeyframes(KisKeyframeChannel *channelA, int timeA, KisKeyframeChannel *channelB, int timeB, KUndo2Command *parentUndoCmd)
 {
     KIS_ASSERT(channelA && channelB);
 
@@ -174,13 +174,13 @@ void KisKeyframeChannel::swapKeyframes(KisKeyframeChannel *channelA, int timeA, 
     KisKeyframeSP keyframeB = channelB->keyframeAt(timeB);
 
     // Move A -> B
-    moveKeyframe(channelA, timeA, channelB, timeB, parentCmd);
+    moveKeyframe(channelA, timeA, channelB, timeB, parentUndoCmd);
 
     // Insert B -> A
     if (channelA != channelB) {
         keyframeB = keyframeB->duplicate(channelA);
     }
-    channelA->insertKeyframe(timeA, keyframeB, parentCmd);
+    channelA->insertKeyframe(timeA, keyframeB, parentUndoCmd);
 }
 
 KisKeyframeSP KisKeyframeChannel::keyframeAt(int time) const

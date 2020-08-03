@@ -30,18 +30,26 @@
 
 class KisKeyframeChannel;
 
-
+/** @brief Krita's base keyframe class.
+ * Mainly contained by KisKeyframeChannels.
+ * A core part of Krita's animation bankend.
+ */
 class KRITAIMAGE_EXPORT KisKeyframe {
 public:
     KisKeyframe();
-    KisKeyframe(const KisKeyframe &rhs);
     virtual ~KisKeyframe();
 
     int colorLabel() const;
-    void setColorLabel(int label);
+    void setColorLabel(int colorIndex);
 
-    //Optionally used to transfer channel-specific data over to new channels.
+    /** Creates a copy of this keyframe.
+     * @param  newChannel  (Optional) The channel that will hold this duplicate.
+     * This is used when some action must be taken to insert a frame into a new channel,
+     * for example, the registration of a KisRasterKeyframe with the new channel's paint device. */
     virtual KisKeyframeSP duplicate(class KisKeyframeChannel* newChannel = nullptr) = 0;
+
+protected:
+    KisKeyframe(const KisKeyframe &rhs);
 
 private:
     struct Private;

@@ -95,11 +95,11 @@ private:
 
     KisNodeSP loadCloneLayer(const KoXmlElement& elem, KisImageSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
 
-    KisNodeSP loadFilterMask(const KoXmlElement& elem);
+    KisNodeSP loadFilterMask(KisImageSP image, const KoXmlElement& elem);
 
-    KisNodeSP loadTransformMask(const KoXmlElement& elem);
+    KisNodeSP loadTransformMask(KisImageSP image, const KoXmlElement& elem);
 
-    KisNodeSP loadTransparencyMask(const KoXmlElement& elem);
+    KisNodeSP loadTransparencyMask(KisImageSP image, const KoXmlElement& elem);
 
     KisNodeSP loadSelectionMask(KisImageSP image, const KoXmlElement& elem);
 

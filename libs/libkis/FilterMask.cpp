@@ -23,9 +23,8 @@
 #include <InfoObject.h>
 
 FilterMask::FilterMask(KisImageSP image, QString name, Filter &filter, QObject *parent) :
-    Node(image, new KisFilterMask(), parent)
+    Node(image, new KisFilterMask(image, name), parent)
 {
-    this->node()->setName(name);
     KisFilterMask *mask = dynamic_cast<KisFilterMask*>(this->node().data());
     mask->setFilter(filter.filterConfig());
 }

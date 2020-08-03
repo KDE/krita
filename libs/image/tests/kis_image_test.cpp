@@ -456,7 +456,7 @@ struct FlattenTestImage
         layer5->disableAlphaChannel(true);
 
         layer2 = new KisPaintLayer(p.image, "paint2", OPACITY_OPAQUE_U8);
-        tmask = new KisTransparencyMask();
+        tmask = new KisTransparencyMask(p.image, "tmask");
 
         // check channel flags
         // make addition composite op

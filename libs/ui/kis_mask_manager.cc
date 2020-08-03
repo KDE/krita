@@ -215,7 +215,7 @@ KisNodeSP KisMaskManager::createTransparencyMask(KisNodeSP activeNode, KisPaintD
         return 0;
     }
 
-    KisMaskSP mask = new KisTransparencyMask();
+    KisMaskSP mask = new KisTransparencyMask(m_view->image(), "");
     createMaskCommon(mask, activeNode, copyFrom, kundo2_i18n("Add Transparency Mask"), "KisTransparencyMask", i18n("Transparency Mask"), false, convertActiveNode);
     if (convertActiveNode) {
         m_commandsAdapter->removeNode(activeNode);
@@ -230,7 +230,7 @@ KisNodeSP KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceS
         return 0;
     }
 
-    KisFilterMaskSP mask = new KisFilterMask();
+    KisFilterMaskSP mask = new KisFilterMask(m_view->image(), "");
     createMaskCommon(mask, activeNode, copyFrom, kundo2_i18n("Add Filter Mask"), "KisFilterMask", i18n("Filter Mask"), false, convertActiveNode);
 
     if (convertActiveNode) {
@@ -283,9 +283,8 @@ KisNodeSP KisMaskManager::createColorizeMask(KisNodeSP activeNode)
         return 0;
     }
 
-    KisColorizeMaskSP mask = new KisColorizeMask();
+    KisColorizeMaskSP mask = new KisColorizeMask(m_view->image(), "");
     createMaskCommon(mask, activeNode, 0, kundo2_i18n("Add Colorize Mask"), "KisColorizeMask", i18n("Colorize Mask"), true, false);
-    mask->setImage(m_view->image());
     mask->initializeCompositeOp();
     delete mask->setColorSpace(mask->parent()->colorSpace());
     return mask;
@@ -298,7 +297,7 @@ KisNodeSP KisMaskManager::createTransformMask(KisNodeSP activeNode)
         return 0;
     }
 
-    KisTransformMaskSP mask = new KisTransformMask();
+    KisTransformMaskSP mask = new KisTransformMask(m_view->image(), "");
     createMaskCommon(mask, activeNode, 0, kundo2_i18n("Add Transform Mask"), "KisTransformMask", i18n("Transform Mask"), true, false);
     return mask;
 }

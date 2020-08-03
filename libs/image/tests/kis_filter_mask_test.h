@@ -29,7 +29,6 @@ class KisFilterMaskTest : public QObject
 
 private Q_SLOTS:
 
-    void testCreation();
     void testProjectionNotSelected();
     void testProjectionSelected();
 

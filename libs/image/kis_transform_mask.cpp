@@ -98,8 +98,8 @@ struct Q_DECL_HIDDEN KisTransformMask::Private
 };
 
 
-KisTransformMask::KisTransformMask(const QString &name)
-    : KisEffectMask(name),
+KisTransformMask::KisTransformMask(KisImageWSP image, const QString &name)
+    : KisEffectMask(image, name),
       m_d(new Private())
 {
     setTransformParams(

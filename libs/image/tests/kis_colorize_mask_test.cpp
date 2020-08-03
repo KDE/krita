@@ -45,7 +45,7 @@ struct ColorizeMaskTester
 
         // KIS_DUMP_DEVICE_2(src, refRect, "src", "dd");
 
-        mask = new KisColorizeMask();
+        mask = new KisColorizeMask(p.image, "mask1");
         p.image->addNode(mask, p.layer);
 
         mask->initializeCompositeOp();

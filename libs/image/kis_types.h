@@ -303,6 +303,8 @@ class KisMirrorAxis;
 typedef KisSharedPtr<KisMirrorAxis> KisMirrorAxisSP;
 typedef KisWeakSharedPtr<KisMirrorAxis> KisMirrorAxisWSP;
 
+class StoryboardItem;
+typedef QVector<StoryboardItem*> StoryboardItemList;
 
 #include <QSharedPointer>
 #include <QWeakPointer>

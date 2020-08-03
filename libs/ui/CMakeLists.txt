@@ -406,6 +406,8 @@ set(kritaui_LIB_SRCS
 
     KoDocumentInfoDlg.cpp
     KoDocumentInfo.cpp
+
+    StoryboardItem.cpp
 )
 
 if(WIN32)

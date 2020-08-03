@@ -21,6 +21,7 @@
 
 #include <QVariant>
 #include <QVector>
+#include "kritaui_export.h"
 
 //each storyboardItem contains pointer to child data
 class StoryboardItem;
@@ -50,7 +51,7 @@ private:
     StoryboardItem *m_parentItem;
 };
 
-class StoryboardItem
+class KRITAUI_EXPORT StoryboardItem
 {
 public:
     explicit StoryboardItem();

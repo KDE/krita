@@ -153,7 +153,7 @@ private Q_SLOTS:
 public Q_SLOTS:
     void slotSetActiveNode(KisNodeSP);
 private:
-    QVector<StoryboardItem*> m_items;
+    StoryboardItemList *m_items;
     QVector<Comment> m_commentList;
     CommentModel *m_commentModel;
     bool m_locked;

@@ -19,21 +19,21 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#include "kis_mypaint_curve_option_widget.h"
+#include <QJsonObject>
+#include <QJsonDocument>
+
+#include <kis_global.h>
+#include <kis_icon_utils.h>
+#include <kis_signals_blocker.h>
+#include <widgets/kis_curve_widget.h>
 
 #include "ui_wdgmypaintcurveoption.h"
-#include "widgets/kis_curve_widget.h"
+#include "kis_my_paintop_option.h"
 #include "kis_mypaintbrush_option.h"
+#include "kis_mypaint_curve_option.h"
 #include "kis_my_paintop_settings_widget.h"
-#include "kis_my_paintop_option.h"
-#include "kis_global.h"
-#include "kis_mypaint_curve_option.h"
-#include "kis_signals_blocker.h"
-#include "kis_icon_utils.h"
-#include "kis_mypaint_curve_option.h"
-#include "kis_my_paintop_option.h"
-#include <QJsonDocument>
-#include <QJsonObject>
+#include "kis_mypaint_curve_option_widget.h"
+
 
 inline void setLabel(QLabel* label, const KisCurveLabel& curve_label)
 {
@@ -222,8 +222,6 @@ void KisMyPaintCurveOptionWidget::slotUnCheckUseCurve() {
 void KisMyPaintCurveOptionWidget::updateSensorCurveLabels(KisDynamicOptionSP sensor) const
 {
     if (sensor) {
-//        m_curveOptionWidget->label_xmin->setText(KisMyPaintBrushOption::minimumLabel(sensor->sensorType()));
-//        m_curveOptionWidget->label_xmax->setText(KisMyPaintBrushOption::maximumLabel(sensor->sensorType(), sensor->length()));
 
         m_curveOptionWidget->label_xmin->setText(sensor->minimumXLabel());
         m_curveOptionWidget->label_xmax->setText(sensor->maximumXLabel());

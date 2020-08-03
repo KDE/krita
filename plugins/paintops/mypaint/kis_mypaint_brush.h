@@ -37,6 +37,4 @@ private:
     Private* const m_d;
 };
 
-//Q_DECLARE_METATYPE(KisMyPaintBrush);
-
 #endif // KIS_MYPAINT_BRUSH_H

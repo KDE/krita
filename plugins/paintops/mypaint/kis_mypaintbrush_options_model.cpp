@@ -16,8 +16,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#include "kis_mypaintbrush_options_model.h"
 #include "kis_mypaint_curve_option.h"
+#include "kis_mypaintbrush_options_model.h"
 
 KisMyPaintBrushOptionsModel::KisMyPaintBrushOptionsModel(QObject* parent)
     : QAbstractListModel(parent)

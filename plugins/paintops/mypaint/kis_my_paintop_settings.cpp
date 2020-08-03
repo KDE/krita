@@ -18,8 +18,8 @@
 
 #include <cmath>
 
-#include <kis_paint_action_type_option.h>
 #include <kis_color_option.h>
+#include <kis_paint_action_type_option.h>
 
 #include "kis_my_paintop_settings.h"
 #include "kis_my_paintop_option.h"

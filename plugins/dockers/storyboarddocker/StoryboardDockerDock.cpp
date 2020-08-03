@@ -149,6 +149,7 @@ private:
 
 StoryboardDockerDock::StoryboardDockerDock( )
     : QDockWidget(i18nc("Storyboard Docker", "Storyboard"))
+    , m_canvas(0)
     , m_ui(new Ui_WdgStoryboardDock())
     , m_exportMenu(new QMenu(this))
     , m_commentModel(new CommentModel(this))
@@ -202,6 +203,8 @@ StoryboardDockerDock::StoryboardDockerDock( )
 
     m_modeGroup->button(Mode::Grid)->click();
     m_viewGroup->button(View::All)->click();
+
+    setEnabled(false);
 }
 
 StoryboardDockerDock::~StoryboardDockerDock()
@@ -218,11 +221,12 @@ void StoryboardDockerDock::setCanvas(KoCanvasBase *canvas)
     }
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
-    setEnabled(m_canvas);
+    setEnabled(m_canvas != 0);
 
     if (m_canvas && m_canvas->image()) {
         m_storyboardModel->setImage(m_canvas->image());
         m_storyboardDelegate->setImage(m_canvas->image());
+        connect(m_canvas->image(), SIGNAL(sigAboutToBeDeleted()), SLOT(notifyImageDeleted()));
 
         if (m_nodeManager) {
             m_storyboardModel->slotSetActiveNode(m_nodeManager->activeNode());
@@ -241,6 +245,11 @@ void StoryboardDockerDock::setViewManager(KisViewManager* kisview)
     if (m_nodeManager) {
         connect(m_nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)), m_storyboardModel, SLOT(slotSetActiveNode(KisNodeSP)));
     }
+}
+
+void StoryboardDockerDock::notifyImageDeleted()
+{
+    unsetCanvas();
 }
 
 void StoryboardDockerDock::slotExportAsPdf()

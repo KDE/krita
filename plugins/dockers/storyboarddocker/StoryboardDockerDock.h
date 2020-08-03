@@ -46,6 +46,8 @@ public:
     void setViewManager(KisViewManager* kisview) override;
 
 private Q_SLOTS:
+    void notifyImageDeleted();
+
     void slotExportAsPdf();
     void slotExportAsSvg();
     void slotExport(QString);

@@ -16,14 +16,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#include "kis_mypaint_brush.h"
-
-#include <KoColorConversions.h>
 #include <QFile>
 #include <QFileInfo>
+
+#include <KoColorConversions.h>
 #include <kis_my_paintop_option.h>
 #include <libmypaint/mypaint-brush.h>
 #include <KisResourceServerProvider.h>
+
+#include "kis_mypaint_brush.h"
 
 class KisMyPaintBrush::Private {
 

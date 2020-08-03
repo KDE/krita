@@ -17,20 +17,21 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#include "kis_my_paintop_factory.h"
+#include <qmath.h>
+#include <QJsonObject>
+#include <QJsonDocument>
 
+#include <kis_icon.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
-#include <kis_mypaint_brush.h>
-#include <kis_my_paintop.h>
-#include <kis_my_paintop_settings.h>
-#include <kis_my_paintop_settings_widget.h>
 #include <KisResourceServerProvider.h>
-#include <kis_my_paintop_option.h>
-#include <kis_icon.h>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <qmath.h>
+
+#include "kis_my_paintop.h"
+#include "kis_mypaint_brush.h"
+#include "kis_my_paintop_option.h"
+#include "kis_my_paintop_factory.h"
+#include "kis_my_paintop_settings.h"
+#include "kis_my_paintop_settings_widget.h"
 
 class KisMyPaintOpFactory::Private {
 
@@ -48,9 +49,6 @@ KisMyPaintOpFactory::KisMyPaintOpFactory()
 }
 
 KisMyPaintOpFactory::~KisMyPaintOpFactory() {
-
-//    delete m_d->brushServer;
-//    delete m_d;
 }
 
 KisPaintOp* KisMyPaintOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image) {
@@ -64,7 +62,6 @@ KisPaintOp* KisMyPaintOpFactory::createOp(const KisPaintOpSettingsSP settings, K
 KisPaintOpSettingsSP KisMyPaintOpFactory::settings() {
 
     KisPaintOpSettingsSP settings = new KisMyPaintOpSettings();
-//    settings->setModelName(m_model);
     return settings;
 }
 
@@ -111,22 +108,6 @@ void KisMyPaintOpFactory::processAfterLoading() {
         s->setProperty(MYPAINT_ERASER, brush->isEraser());
         s->setProperty("EraserMode", qRound(brush->isEraser()));
 
-//        QJsonDocument doc = QJsonDocument::fromJson(s->getProperty(MYPAINT_JSON).toByteArray());
-//        QJsonObject brush_json = doc.object();
-//        QVariantMap map = brush_json.toVariantMap();
-//        QVariantMap settings_map = map["settings"].toMap();
-//        QVariantMap name_map = settings_map["hardness"].toMap();
-//        double base_val = name_map["base_value"].toDouble();
-
-//        name_map["base_value"] = 0.5;
-//        settings_map["hardness"] = name_map;
-//        map["settings"] = settings_map;
-
-//        QJsonObject json_obj = QJsonObject::fromVariantMap(map);
-//        QJsonDocument doc2(json_obj);
-
-//        s->setProperty(MYPAINT_JSON, doc2.toJson());
-
         KisPaintOpPresetSP preset = new KisPaintOpPreset();
         preset->setName(fileInfo.baseName());
         preset->setSettings(s);
@@ -137,7 +118,6 @@ void KisMyPaintOpFactory::processAfterLoading() {
 
         paintOpServer->addResource(preset, false);
     }
-
 }
 
 #include "kis_my_paintop_factory.moc"

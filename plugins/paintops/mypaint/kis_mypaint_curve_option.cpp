@@ -18,17 +18,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#include "kis_mypaint_curve_option.h"
+#include <QFile>
+#include <QDomNode>
+#include <QJsonObject>
+#include <QJsonDocument>
 
-#include "kis_my_paintop_option.h"
-#include "kis_mypaint_brush.h"
 #include <libmypaint/mypaint-brush.h>
 #include <libmypaint/mypaint-config.h>
 
-#include <QDomNode>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QFile>
+#include "kis_mypaint_brush.h"
+#include "kis_my_paintop_option.h"
+#include "kis_mypaint_curve_option.h"
+
 
 struct MyPaintBrush;
 KisMyPaintCurveOption::KisMyPaintCurveOption(const QString& name, KisPaintOpOption::PaintopCategory category,
@@ -137,11 +138,11 @@ void KisMyPaintCurveOption::writeOptionSetting(KisPropertiesConfigurationSP sett
     QJsonDocument doc2(resultant_json);
 
     setting->setProperty(MYPAINT_JSON, doc2.toJson());
-    //qDebug() << doc2.toJson();
-    QIODevice *dev = new QFile("/home/ashwin-dhakaita/b009.myb");
-    dev->open(QIODevice::ReadWrite);
-    dev->write(doc2.toJson());
-    dev->close();
+
+//    QIODevice *dev = new QFile("/home/ashwin-dhakaita/b009.myb");
+//    dev->open(QIODevice::ReadWrite);
+//    dev->write(doc2.toJson());
+//    dev->close();
 
     setting->setProperty(m_name + "UseCurve", m_useCurve);
     setting->setProperty(m_name + "UseSameCurve", m_useSameCurve);
@@ -207,8 +208,6 @@ void KisMyPaintCurveOption::readNamedOptionSetting(const QString& prefix, const 
 
         if(points.size()) {
 
-            //KisCubicCurve curve(points);
-            //option->setCurve(curve);
             option->setCurveFromPoints(points);
         }
 

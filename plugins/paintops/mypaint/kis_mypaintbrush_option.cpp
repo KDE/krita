@@ -16,13 +16,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#include "kis_mypaintbrush_option.h"
-#include <kis_paint_information.h>
-#include <QDomElement>
 #include <qmath.h>
+#include <QDomElement>
+
+#include <kis_algebra_2d.h>
+#include <kis_paint_information.h>
 #include <libmypaint/mypaint-brush.h>
 
-#include "kis_algebra_2d.h"
+#include "kis_mypaintbrush_option.h"
 
 using namespace std;
 

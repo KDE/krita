@@ -16,9 +16,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#include "kis_my_paintop_option.h"
 #include <QWidget>
 #include "ui_wdgmypaintoptions.h"
+#include "kis_my_paintop_option.h"
 
 class KisMyPaintOpOptionsWidget: public QWidget, public Ui::WdgMyPaintOptions
 {
@@ -39,8 +39,7 @@ KisMyPaintOpOption::KisMyPaintOpOption()
     m_options = new KisMyPaintOpOptionsWidget();    
 
     m_options->radiusSPBox->setRange(0.0, 7.0, 2);
-    m_options->radiusSPBox->setValue(radius());
-    //m_options->radiusSPBox->setSuffix(i18n(" px"));
+    m_options->radiusSPBox->setValue(radius());    
 
     m_options->hardnessSPBox->setRange(0.0, 1.0, 2);
     m_options->hardnessSPBox->setValue(hardness());
@@ -49,10 +48,6 @@ KisMyPaintOpOption::KisMyPaintOpOption()
     m_options->opacitySPBox->setValue(opacity());
 
     m_options->eraserBox->setChecked(eraser());
-
-//    connect(m_options->radiusSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
-//    connect(m_options->hardnessSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
-//    connect(m_options->opacitySPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
 
     connect(m_options->eraserBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
 

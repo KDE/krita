@@ -16,17 +16,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#include "kis_mypaint_surface.h"
-
-#include <KoColorSpace.h>
-#include <kis_sequential_iterator.h>
-#include <KoColorConversions.h>
-#include <kis_algebra_2d.h>
-#include <kis_cross_device_color_picker.h>
-#include <kis_node.h>
-#include <kis_image.h>
 #include <QtMath>
 #include <qmath.h>
+
+#include <kis_node.h>
+#include <kis_image.h>
+#include <KoColorSpace.h>
+#include <kis_algebra_2d.h>
+#include <kis_sequential_iterator.h>
+#include <KoColorConversions.h>
+#include <kis_cross_device_color_picker.h>
+
+#include "kis_mypaint_surface.h"
 
 using namespace std;
 
@@ -208,8 +209,7 @@ void KisMyPaintSurface::getColorImpl(MyPaintSurface *self, float x, float y, flo
     }
     else { targetDevice = m_imageDevice; }
 
-    KisSequentialIterator it(targetDevice, dabRectAligned);
-    //KisRandomAccessorSP im = m_node->paintDevice()->createRandomAccessorNG(x, y);
+    KisSequentialIterator it(targetDevice, dabRectAligned);    
 
     while(it.nextPixel()) {
 
@@ -226,8 +226,6 @@ void KisMyPaintSurface::getColorImpl(MyPaintSurface *self, float x, float y, flo
         float pixel_weight = 0.0f;
         if (rr <= 1.0f)
             pixel_weight = 1.0f - rr;
-
-//        im->moveTo(it.x(), it.y());
 
         qreal r, g, b, a;
 

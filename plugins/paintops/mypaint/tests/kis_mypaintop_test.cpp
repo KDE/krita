@@ -16,22 +16,23 @@
 *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#include "kis_mypaintop_test.h"
-#include <kis_my_paintop_settings.h>
-#include "qimage_based_test.h"
-#include <kis_my_paintop.h>
-#include <stroke_testing_utils.h>
-#include <kis_paint_information.h>
-#include <kis_distance_information.h>
-#include <kis_mypaint_surface.h>
-#include <kis_node_facade.h>
+#include <QTest>
 #include <QImageReader>
+#include <QtTest/QtTest>
+#include <qimage_based_test.h>
+
+#include <kis_image.h>
+#include <kis_node_facade.h>
 #include <kis_group_layer.h>
 #include <kis_paintop_preset.h>
+#include <stroke_testing_utils.h>
+#include <kis_paint_information.h>
 #include <kis_random_accessor_ng.h>
-#include <kis_image.h>
-#include <QTest>
-#include <QtTest/QtTest>
+
+#include "kis_mypaintop_test.h"
+#include "kis_my_paintop.h"
+#include "kis_mypaint_surface.h"
+#include "kis_my_paintop_settings.h"
 
 class KisMyPaintOpSettings;
 KisMyPaintOpTest::KisMyPaintOpTest(): TestUtil::QImageBasedTest("MyPaintOp")

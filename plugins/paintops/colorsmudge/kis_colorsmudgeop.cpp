@@ -89,7 +89,12 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
     m_backgroundPainter->setCompositeOp(COMPOSITE_COPY);
     // Smudge Painter works in default COMPOSITE_OVER mode
     m_colorRatePainter->setCompositeOp(painter->compositeOp()->id());
-    m_useNewEngine = m_smudgeRateOption.getUseNewEngine();
+    if (m_brush->brushApplication() != ALPHAMASK) { //Forces this, in case the widget somehow doesn't
+        m_useNewEngine = true;
+    } else {
+        m_useNewEngine = m_smudgeRateOption.getUseNewEngine();
+    }
+
 
     QString finalCompositeOpId = m_smudgeRateOption.getSmearAlpha() ? COMPOSITE_COPY : COMPOSITE_OVER;
     if (m_useNewEngine){
@@ -233,12 +238,23 @@ void KisColorSmudgeOp::mixSmudgePaintAt(const KisPaintInformation& info, KisPrec
 
     qreal colorRate = m_colorRateOption.isChecked() ? m_colorRateOption.computeSizeLikeValue(info) : 0.0;
     qreal smudgeLength = m_smudgeRateOption.isChecked() ? m_smudgeRateOption.computeSizeLikeValue(info) : 1.0;
-    const qreal fpOpacity = (qreal(painter()->opacity()) / 255.0) * m_opacityOption.getOpacityf(info);
+    const qreal fpOpacity = m_opacityOption.getOpacityf(info);
 
     qreal dullingFactor = smudgeLength * 0.8 * fpOpacity;
-    qreal opacityAdjusted = fpOpacity > 0.5 ? fpOpacity * fpOpacity : fpOpacity * 0.5;
+
+    qreal opacityAdjusted; //Adjust opacity value to get a visually better curve
+    if (fpOpacity > 0.8) {
+        opacityAdjusted = fpOpacity * fpOpacity * fpOpacity * fpOpacity;
+    } else if (fpOpacity > 0.6) {
+        opacityAdjusted = fpOpacity * fpOpacity * fpOpacity * 0.8;
+    } else if (fpOpacity > 0.3) {
+        opacityAdjusted = fpOpacity * fpOpacity * 0.6 * 0.8;
+    } else {
+        opacityAdjusted = fpOpacity * (0.6 - fpOpacity) * 0.6 * 0.75;
+    }
+
     int colorAlpha = qRound(colorRate * colorRate * opacityAdjusted * 255.0);
-    int smudgeAlpha = qRound(smudgeLength * fpOpacity * 255.0);
+    int smudgeAlpha = qRound(smudgeLength * opacityAdjusted * 255.0);
     int numPixels = width * height;
 
     activeWrapper.readRect(m_dstDabRect); //copy the current data in the destination

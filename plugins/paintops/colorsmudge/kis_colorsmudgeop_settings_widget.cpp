@@ -9,6 +9,7 @@
 #include "kis_overlay_mode_option.h"
 #include "kis_rate_option.h"
 #include "kis_smudge_option_widget.h"
+#include "kis_brush_option_widget.h"
 #include "kis_smudge_radius_option.h"
 
 #include <kis_properties_configuration.h>
@@ -68,6 +69,8 @@ KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
     addPaintOpOption(new KisTextureOption(), i18n("Pattern"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureTextureStrengthOption(), i18n("Weak"), i18n("Strong")), i18n("Strength"));
 
+    const KisBrushOptionWidget* brushOption = brushOptionWidget();
+    connect(brushOption, SIGNAL(sigSettingChanged()), SLOT(slotBrushOptionChanged()));
 }
 
 KisColorSmudgeOpSettingsWidget::~KisColorSmudgeOpSettingsWidget() { }
@@ -88,9 +91,15 @@ void KisColorSmudgeOpSettingsWidget::notifyPageChanged()
     m_smudgeOptionWidget->updateBrushPierced(pierced);
 
     //If brush is a mask, it can use either engine, but if its not, it must use the new engine
-    m_smudgeOptionWidget->setUseNewEngineCheckboxEnabled(brush->brushApplication() == ALPHAMASK);
-    if (brush->brushApplication() != ALPHAMASK) {
-        m_smudgeOptionWidget->setUseNewEngine(true);
+    if (brush) {
+        m_smudgeOptionWidget->setUseNewEngineCheckboxEnabled(brush->brushApplication() == ALPHAMASK);
+        if (brush->brushApplication() != ALPHAMASK) {
+            m_smudgeOptionWidget->setUseNewEngine(true);
+        }
+        m_lightnessStrengthOptionWidget->setEnabled(brush->preserveLightness());
     }
-    m_lightnessStrengthOptionWidget->setEnabled(brush->preserveLightness());
+}
+
+void KisColorSmudgeOpSettingsWidget::slotBrushOptionChanged() {
+    notifyPageChanged();
 }

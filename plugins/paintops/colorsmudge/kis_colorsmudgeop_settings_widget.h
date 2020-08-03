@@ -25,6 +25,9 @@ public:
 protected:
     void notifyPageChanged() override;
 
+private Q_SLOTS:
+    void slotBrushOptionChanged();
+
 private:
     KisSmudgeOptionWidget *m_smudgeOptionWidget;
     KisCurveOptionWidget* m_lightnessStrengthOptionWidget;

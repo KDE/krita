@@ -122,6 +122,8 @@ public:
     int nextKeyframeGlobal(int keyframeTime) const;
     bool insertHoldFramesAfter(int newDuration, int oldDuration, QModelIndex durationIndex);
     bool insertItem(QModelIndex index, bool after);
+    void resetData(StoryboardItemList list);
+    StoryboardItemList getData();
 
     enum childIndexType{
         FrameNumber,
@@ -153,7 +155,7 @@ private Q_SLOTS:
 public Q_SLOTS:
     void slotSetActiveNode(KisNodeSP);
 private:
-    StoryboardItemList *m_items;
+    StoryboardItemList m_items;
     QVector<Comment> m_commentList;
     CommentModel *m_commentModel;
     bool m_locked;

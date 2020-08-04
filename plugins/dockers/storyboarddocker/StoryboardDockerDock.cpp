@@ -220,13 +220,21 @@ void StoryboardDockerDock::setCanvas(KoCanvasBase *canvas)
         return;
     }
 
+    if (m_canvas) {
+        //update the item list in KisDocument and empty storyboardModel
+        m_canvas->imageView()->document()->setStoryboardItemList(m_storyboardModel->getData());
+        m_storyboardModel->resetData(StoryboardItemList());
+    }
+
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     setEnabled(m_canvas != 0);
 
     if (m_canvas && m_canvas->image()) {
+        m_storyboardModel->resetData(m_canvas->imageView()->document()->getStoryboardItemList());
+
         m_storyboardModel->setImage(m_canvas->image());
-        m_storyboardDelegate->setImage(m_canvas->image());
-        connect(m_canvas->image(), SIGNAL(sigAboutToBeDeleted()), SLOT(notifyImageDeleted()));
+        m_storyboardDelegate->setImageSize(m_canvas->image()->size());
+        connect(m_canvas->image(), SIGNAL(sigAboutToBeDeleted()), SLOT(notifyImageDeleted()), Qt::UniqueConnection);
 
         if (m_nodeManager) {
             m_storyboardModel->slotSetActiveNode(m_nodeManager->activeNode());
@@ -249,7 +257,10 @@ void StoryboardDockerDock::setViewManager(KisViewManager* kisview)
 
 void StoryboardDockerDock::notifyImageDeleted()
 {
-    unsetCanvas();
+    //if there is no image
+    if (!m_canvas || !m_canvas->image()){
+        m_storyboardModel->setImage(0);
+    }
 }
 
 void StoryboardDockerDock::slotExportAsPdf()

@@ -36,6 +36,7 @@
 
 StoryboardDelegate::StoryboardDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
+    , m_imageSize(QSize())
 {
 }
 
@@ -89,10 +90,10 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
                         p->setPen(QPen(option.palette.text(), 1));
                         p->drawText(frameNumRect, Qt::AlignHCenter | Qt::AlignVCenter, data);
 
-                        if (m_image.isValid()) {
-                            float scale = qMin(option.rect.height() / (float)m_image->height(), (float)option.rect.width() / m_image->width());
+                        if (!m_imageSize.isEmpty()) {
+                            float scale = qMin(option.rect.height() / (float)m_imageSize.height(), (float)option.rect.width() / m_imageSize.width());
                             QRect thumbnailRect = option.rect;
-                            thumbnailRect.setSize(m_image->size() * scale);
+                            thumbnailRect.setSize(m_imageSize * scale);
                             thumbnailRect.moveCenter(option.rect.center());
 
                             QPixmap  thumbnailPixmap= index.data(Qt::UserRole).value<QPixmap>();
@@ -581,7 +582,7 @@ QRect StoryboardDelegate::scrollUpButton(const QStyleOptionViewItem &option, QSt
     return rect;
 }
 
-void StoryboardDelegate::setImage(KisImageWSP image)
+void StoryboardDelegate::setImageSize(QSize imageSize)
 {
-    m_image = image;
+    m_imageSize = imageSize;
 }

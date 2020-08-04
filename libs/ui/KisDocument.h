@@ -368,6 +368,13 @@ public:
      */
     void setPaletteList(const QList<KoColorSetSP> &paletteList, bool emitSignal = false);
 
+    /**
+     * @brief returns the list of storyboard Item for the document
+     */
+    StoryboardItemList getStoryboardItemList();
+
+    void setStoryboardItemList(const StoryboardItemList &StoryboardItemList, bool emitSignal = false);
+
     const KisMirrorAxisConfig& mirrorAxisConfig() const;
     void setMirrorAxisConfig(const KisMirrorAxisConfig& config);
 
@@ -482,6 +489,8 @@ Q_SIGNALS:
     void sigPaletteListChanged(const QList<KoColorSetSP> &oldPaletteList, const QList<KoColorSetSP> &newPaletteList);
 
     void sigAssistantsChanged();
+
+    void sigStoryboardItemListChanged();
 
 private Q_SLOTS:
     void finishExportInBackground();

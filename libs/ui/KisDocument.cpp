@@ -135,6 +135,7 @@
 #include <KisMirrorAxisConfig.h>
 #include <KisDecorationsWrapperLayer.h>
 #include "kis_simple_stroke_strategy.h"
+#include <StoryboardItem.h>
 
 // Define the protocol used here for embedded documents' URL
 // This used to "store" but QUrl didn't like it,
@@ -331,6 +332,8 @@ public:
     QScopedPointer<KisSignalAutoConnection> imageIdleConnection;
 
     QList<KisPaintingAssistantSP> assistants;
+
+    StoryboardItemList m_storyboardItemList;
 
     QColor globalAssistantsColor;
 
@@ -1924,6 +1927,19 @@ void KisDocument::setPaletteList(const QList<KoColorSetSP > &paletteList, bool e
                 emit sigPaletteListChanged(oldPaletteList, paletteList);
             }
         }
+    }
+}
+
+StoryboardItemList KisDocument::getStoryboardItemList()
+{
+    return d->m_storyboardItemList;
+}
+
+void KisDocument::setStoryboardItemList(const StoryboardItemList &storyboardItemList, bool emitSignal)
+{
+    d->m_storyboardItemList = storyboardItemList;
+    if (emitSignal) {
+        emit sigStoryboardItemListChanged();
     }
 }
 

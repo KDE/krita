@@ -24,6 +24,7 @@ StoryboardItem::StoryboardItem()
 StoryboardItem::~StoryboardItem()
 {
     qDeleteAll(m_childData);
+    m_childData.clear();
 }
 
 void StoryboardItem::appendChild(QVariant data)

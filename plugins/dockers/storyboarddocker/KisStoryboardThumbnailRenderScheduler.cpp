@@ -112,6 +112,9 @@ void KisStoryboardThumbnailRenderScheduler::sortAffectedFrameQueue()
 
 void KisStoryboardThumbnailRenderScheduler::renderNextFrame()
 {
+    if (!m_image) {
+        return;
+    }
     KisImageSP image = m_image->clone(false);
     if (!m_changedFramesQueue.isEmpty()) {
         int frame = m_changedFramesQueue.at(0);

@@ -55,7 +55,7 @@ public:
     QRect scrollBar(const QStyleOptionViewItem &option, QStyleOptionSlider &scrollBarOption) const;
     QRect scrollDownButton(const QStyleOptionViewItem &option, QStyleOptionSlider &scrollBarOption);
     QRect scrollUpButton(const QStyleOptionViewItem &option, QStyleOptionSlider &scrollBarOption);
-    void setImage(KisImageWSP image);
+    void setImageSize(QSize imageSize);
 
 private Q_SLOTS:
     void slotCommentScrolledTo(int value) const;
@@ -63,7 +63,7 @@ private Q_SLOTS:
 private:
     StoryboardView *m_view;
     QPoint m_lastDragPos = QPoint(0, 0);
-    KisImageWSP m_image;
+    QSize m_imageSize;
 };
 
 #endif

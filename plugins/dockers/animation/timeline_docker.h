@@ -74,8 +74,12 @@ public:
     KisIntParseSpinBox *sbEndFrame;
     KisIntParseSpinBox *sbFrameRate;
     KisSliderSpinBox *sbSpeed;
-    QToolButton *btnAutoFrame;
+
     QToolButton *btnDropFrames;
+
+    QToolButton *btnAutoKey;
+    QAction *autoKeyBlank;
+    QAction *autoKeyDuplicate;
 
 private:
     const int MAX_FRAMES = 9999;
@@ -119,7 +123,7 @@ public Q_SLOTS:
     void setFrameRate(int frmaerate);
     void setPlaybackSpeed(int playbackSpeed);
     void setDropFrames(bool dropFrames);
-    void setAutoKey(bool autoKey);
+    void setAutoKey(bool value);
 
     void handleClipRangeChange();
     void handleFrameRateChange();

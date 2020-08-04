@@ -93,13 +93,10 @@ KisLodAvailabilityWidget::KisLodAvailabilityWidget(QWidget *parent)
         m_d->thresholdMenu->addAction(sliderAction);
     }
 
-    QHBoxLayout *layout = new QHBoxLayout;
+    QHBoxLayout *layout = new QHBoxLayout(this);
+    layout->setSpacing(0);
     layout->addWidget(m_d->chkLod);
     layout->addWidget(m_d->btnLod);
-
-    layout->setSpacing(0);
-
-    setLayout(layout);
 
     // set no limitations
     setLimitations(m_d->limitations);

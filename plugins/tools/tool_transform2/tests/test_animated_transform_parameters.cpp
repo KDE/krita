@@ -30,7 +30,7 @@
 void KisAnimatedTransformParametersTest::testTransformKeyframing()
 {
     TestUtil::MaskParent p;
-    KisTransformMaskSP mask = new KisTransformMask();
+    KisTransformMaskSP mask = new KisTransformMask(p.image, "mask");
     p.image->addNode(mask, p.layer);
 
 

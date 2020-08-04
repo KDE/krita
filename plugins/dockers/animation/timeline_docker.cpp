@@ -137,7 +137,7 @@ TimelineDockerTitleBar::TimelineDockerTitleBar(QWidget* parent) :
             btnSettingsMenu->setToolTip(i18n("Animation settings menu"));
 
             QWidget *settingsMenuWidget = new QWidget(this);
-            settingsMenuWidget->setLayout(new QHBoxLayout());
+            QHBoxLayout *settingsMenuLayout = new QHBoxLayout(settingsMenuWidget);
 
             QWidget *fields = new QWidget(settingsMenuWidget);
             QFormLayout *fieldsLayout = new QFormLayout(fields);
@@ -156,14 +156,43 @@ TimelineDockerTitleBar::TimelineDockerTitleBar(QWidget* parent) :
             fieldsLayout->addRow(i18n("Frame Rate: "), sbFrameRate);
 
             QWidget *buttons = new QWidget(settingsMenuWidget);
-            buttons->setLayout(new QVBoxLayout());
+            QVBoxLayout *buttonsLayout = new QVBoxLayout(buttons);
+            buttonsLayout->setAlignment(Qt::AlignTop);
 
-            btnAutoFrame = new QToolButton(settingsMenuWidget);
-            buttons->layout()->addWidget(btnAutoFrame);
-            buttons->layout()->setAlignment(Qt::AlignTop);
+            {   // AutoKey..
+                // AutoKey Actions & Action Group..
+                autoKeyBlank = new QAction(i18n("AutoKey Blank"), this);
+                autoKeyBlank->setCheckable(true);
+                autoKeyDuplicate = new QAction(i18n("AutoKey Duplicate"), this);
+                autoKeyDuplicate->setCheckable(true);
+                QActionGroup *autoKeyModes = new QActionGroup(this);
+                autoKeyModes->addAction(autoKeyBlank);
+                autoKeyModes->addAction(autoKeyDuplicate);
+                autoKeyModes->setExclusive(true);
 
-            settingsMenuWidget->layout()->addWidget(fields);
-            settingsMenuWidget->layout()->addWidget(buttons);
+                connect(autoKeyModes, &QActionGroup::triggered, [this](QAction* modeAction){
+                    if (!modeAction) return;
+                    KisImageConfig  imageCfg(false);
+                    if (modeAction == autoKeyBlank) {
+                        imageCfg.setAutoKeyModeDuplicate(false);
+                    } else if (modeAction == autoKeyDuplicate) {
+                        imageCfg.setAutoKeyModeDuplicate(true);
+                    }
+                });
+
+                // AutoKey Mode Menu..
+                QMenu *autoKeyModeMenu = new QMenu(settingsMenuWidget);
+                autoKeyModeMenu->addActions(autoKeyModes->actions());
+
+                // AutoKey Button..
+                btnAutoKey = new QToolButton(settingsMenuWidget);
+                btnAutoKey->setMenu(autoKeyModeMenu);
+                btnAutoKey->setPopupMode(QToolButton::MenuButtonPopup);
+                buttonsLayout->addWidget(btnAutoKey);
+            }
+
+            settingsMenuLayout->addWidget(fields);
+            settingsMenuLayout->addWidget(buttons);
 
             layout->addWidget(btnSettingsMenu);
 
@@ -466,13 +495,17 @@ void TimelineDocker::setViewManager(KisViewManager *view)
     connect(action, SIGNAL(triggered(bool)), SLOT(nextMatchingKeyframe()));
 
     action = actionManager->createAction("auto_key");
-    m_d->titlebar->btnAutoFrame->setDefaultAction(action);
+    m_d->titlebar->btnAutoKey->setDefaultAction(action);
     connect(action, SIGNAL(triggered(bool)), SLOT(setAutoKey(bool)));
 
     {
         KisImageConfig config(true);
         action->setChecked(config.autoKeyEnabled());
         action->setIcon(config.autoKeyEnabled() ? KisIconUtils::loadIcon("auto-key-on") : KisIconUtils::loadIcon("auto-key-off"));
+
+        const bool autoKeyModeDuplicate = config.autoKeyModeDuplicate();
+        m_d->titlebar->autoKeyBlank->setChecked(!autoKeyModeDuplicate);
+        m_d->titlebar->autoKeyDuplicate->setChecked(autoKeyModeDuplicate);
     }
 
     action = actionManager->createAction("drop_frames");
@@ -717,13 +750,13 @@ void TimelineDocker::setDropFrames(bool dropFrames)
     }
 }
 
-void TimelineDocker::setAutoKey(bool autoKey)
+void TimelineDocker::setAutoKey(bool value)
 {
     KisImageConfig cfg(false);
-    if (autoKey != cfg.autoKeyEnabled()) {
-        cfg.setAutoKeyEnabled(autoKey);
+    if (value != cfg.autoKeyEnabled()) {
+        cfg.setAutoKeyEnabled(value);
         const QIcon icon = cfg.autoKeyEnabled() ? KisIconUtils::loadIcon("auto-key-on") : KisIconUtils::loadIcon("auto-key-off");
-        QAction* action = m_d->titlebar->btnAutoFrame->defaultAction();
+        QAction* action = m_d->titlebar->btnAutoKey->defaultAction();
         action->setIcon(icon);
     }
 }

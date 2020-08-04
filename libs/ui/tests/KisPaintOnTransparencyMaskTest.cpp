@@ -31,7 +31,7 @@ protected:
     void initImage(KisImageWSP image, KisNodeSP activeNode) override {
 
         activeNode->paintDevice()->fill(QRect(0,0,1024,1024), KoColor(Qt::red, image->colorSpace()));
-        m_mask = new KisTransparencyMask();
+        m_mask = new KisTransparencyMask(image, "tmask");
         m_mask->setSelection(new KisSelection());
         m_mask->paintDevice()->clear();
         image->addNode(m_mask, activeNode);

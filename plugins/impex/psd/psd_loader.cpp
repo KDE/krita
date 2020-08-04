@@ -296,8 +296,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice *io)
 
         Q_FOREACH (ChannelInfo *channelInfo, layerRecord->channelInfoRecords) {
             if (channelInfo->channelId < -1) {
-                KisTransparencyMaskSP mask = new KisTransparencyMask();
-                mask->setName(i18n("Transparency Mask"));
+                KisTransparencyMaskSP mask = new KisTransparencyMask(m_image, i18n("Transparency Mask"));
                 mask->initSelection(newLayer);
                 if (!layerRecord->readMask(io, mask->paintDevice(), channelInfo)) {
                     dbgFile << "failed reading masks for layer: " << layerRecord->layerName << layerRecord->error;

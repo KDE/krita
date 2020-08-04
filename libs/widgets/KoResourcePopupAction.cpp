@@ -78,7 +78,6 @@ KoResourcePopupAction::KoResourcePopupAction(const QString &resourceType, KoCanv
     indexChanged(d->resourceList->currentIndex());
     QHBoxLayout *layout = new QHBoxLayout(widget);
     layout->addWidget(d->resourceList);
-    widget->setLayout(layout);
 
     wdgAction->setDefaultWidget(widget);
     d->menu->addAction(wdgAction);

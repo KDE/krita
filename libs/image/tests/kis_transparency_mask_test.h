@@ -26,7 +26,6 @@ class KisTransparencyMaskTest : public QObject
     Q_OBJECT
 private Q_SLOTS:
 
-    void testCreation();
     void testApply();
     void testMoveParentLayer();
     void testMoveMaskItself();

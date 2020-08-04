@@ -160,35 +160,42 @@ bool LcmsColorProfileContainer::init()
         //present. This is necessary for profiles following the v4 spec.
         cmsCIEXYZ baseMediaWhitePoint;//dummy to hold copy of mediawhitepoint if this is modified by chromatic adaption.
         if (cmsIsTag(d->profile, cmsSigMediaWhitePointTag)) {
-            d->mediaWhitePoint = *((cmsCIEXYZ *)cmsReadTag(d->profile, cmsSigMediaWhitePointTag));
-            baseMediaWhitePoint = d->mediaWhitePoint;
-            cmsXYZ2xyY(&d->whitePoint, &d->mediaWhitePoint);
-
-            if (cmsIsTag(d->profile, cmsSigChromaticAdaptationTag)) {
-                //the chromatic adaption tag represent a matrix from the actual white point of the profile to D50.
-                cmsCIEXYZ *CAM1 = (cmsCIEXYZ *)cmsReadTag(d->profile, cmsSigChromaticAdaptationTag);
-                //We first put all our data into structures we can manipulate.
-                double d3dummy [3] = {d->mediaWhitePoint.X, d->mediaWhitePoint.Y, d->mediaWhitePoint.Z};
-                QGenericMatrix<1, 3, double> whitePointMatrix(d3dummy);
-                QTransform invertDummy(CAM1[0].X, CAM1[0].Y, CAM1[0].Z, CAM1[1].X, CAM1[1].Y, CAM1[1].Z, CAM1[2].X, CAM1[2].Y, CAM1[2].Z);
-                //we then abuse QTransform's invert function because it probably does matrix inversion 20 times better than I can program.
-                //if the matrix is uninvertable, invertedDummy will be an identity matrix, which for us means that it won't give any noticeble
-                //effect when we start multiplying.
-                QTransform invertedDummy = invertDummy.inverted();
-                //we then put the QTransform into a generic 3x3 matrix.
-                double d9dummy [9] = {invertedDummy.m11(), invertedDummy.m12(), invertedDummy.m13(),
-                                      invertedDummy.m21(), invertedDummy.m22(), invertedDummy.m23(),
-                                      invertedDummy.m31(), invertedDummy.m32(), invertedDummy.m33()
-                                     };
-                QGenericMatrix<3, 3, double> chromaticAdaptionMatrix(d9dummy);
-                //multiplying our inverted adaption matrix with the whitepoint gives us the right whitepoint.
-                QGenericMatrix<1, 3, double> result = chromaticAdaptionMatrix * whitePointMatrix;
-                //and then we pour the matrix into the whitepoint variable. Generic matrix does row/column for indices even though it
-                //uses column/row for initialising.
-                d->mediaWhitePoint.X = result(0, 0);
-                d->mediaWhitePoint.Y = result(1, 0);
-                d->mediaWhitePoint.Z = result(2, 0);
+            // Possible bug in profiles: there are in fact some that says they contain that tag
+            //    but in fact the pointer is null.
+            //    Let's not crash on it anyway, and assume there is no white point instead.
+            //    BUG:423685
+            cmsCIEXYZ *mediaWhitePointPtr = (cmsCIEXYZ *)cmsReadTag(d->profile, cmsSigMediaWhitePointTag);
+            if (mediaWhitePointPtr) {
+                d->mediaWhitePoint = *(mediaWhitePointPtr);
+                baseMediaWhitePoint = d->mediaWhitePoint;
                 cmsXYZ2xyY(&d->whitePoint, &d->mediaWhitePoint);
+
+                if (cmsIsTag(d->profile, cmsSigChromaticAdaptationTag)) {
+                    //the chromatic adaption tag represent a matrix from the actual white point of the profile to D50.
+                    cmsCIEXYZ *CAM1 = (cmsCIEXYZ *)cmsReadTag(d->profile, cmsSigChromaticAdaptationTag);
+                    //We first put all our data into structures we can manipulate.
+                    double d3dummy [3] = {d->mediaWhitePoint.X, d->mediaWhitePoint.Y, d->mediaWhitePoint.Z};
+                    QGenericMatrix<1, 3, double> whitePointMatrix(d3dummy);
+                    QTransform invertDummy(CAM1[0].X, CAM1[0].Y, CAM1[0].Z, CAM1[1].X, CAM1[1].Y, CAM1[1].Z, CAM1[2].X, CAM1[2].Y, CAM1[2].Z);
+                    //we then abuse QTransform's invert function because it probably does matrix inversion 20 times better than I can program.
+                    //if the matrix is uninvertable, invertedDummy will be an identity matrix, which for us means that it won't give any noticeble
+                    //effect when we start multiplying.
+                    QTransform invertedDummy = invertDummy.inverted();
+                    //we then put the QTransform into a generic 3x3 matrix.
+                    double d9dummy [9] = {invertedDummy.m11(), invertedDummy.m12(), invertedDummy.m13(),
+                                          invertedDummy.m21(), invertedDummy.m22(), invertedDummy.m23(),
+                                          invertedDummy.m31(), invertedDummy.m32(), invertedDummy.m33()
+                                         };
+                    QGenericMatrix<3, 3, double> chromaticAdaptionMatrix(d9dummy);
+                    //multiplying our inverted adaption matrix with the whitepoint gives us the right whitepoint.
+                    QGenericMatrix<1, 3, double> result = chromaticAdaptionMatrix * whitePointMatrix;
+                    //and then we pour the matrix into the whitepoint variable. Generic matrix does row/column for indices even though it
+                    //uses column/row for initialising.
+                    d->mediaWhitePoint.X = result(0, 0);
+                    d->mediaWhitePoint.Y = result(1, 0);
+                    d->mediaWhitePoint.Z = result(2, 0);
+                    cmsXYZ2xyY(&d->whitePoint, &d->mediaWhitePoint);
+                }
             }
         }
         //This is for RGB profiles, but it only works for matrix profiles. Need to design it to work with non-matrix profiles.

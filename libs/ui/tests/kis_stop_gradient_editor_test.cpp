@@ -31,17 +31,16 @@ void KisStopGradientEditorTest::test()
 {
     QLinearGradient gradient;
     QSharedPointer<KoStopGradient> koGradient(KoStopGradient::fromQGradient(&gradient));
-    QDialog dlg;
+    QDialog dialog;
 
-    KisStopGradientEditor *widget = new KisStopGradientEditor(&dlg);
+    KisStopGradientEditor *widget = new KisStopGradientEditor(&dialog);
     widget->setGradient(koGradient);
 
-    QVBoxLayout *layout = new QVBoxLayout(&dlg);
+    QVBoxLayout *layout = new QVBoxLayout(&dialog);
     layout->setContentsMargins(0,0,0,0);
 
     layout->addWidget(widget);
-    dlg.setLayout(layout);
-    dlg.setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    dialog.setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
     //dlg.exec();
     qWarning() << "WARNING: showing of the dialogs in the unittest is disabled!";

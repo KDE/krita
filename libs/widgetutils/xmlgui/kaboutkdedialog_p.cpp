@@ -147,12 +147,10 @@ KAboutKdeDialog::KAboutKdeDialog(QWidget *parent)
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 
-    QVBoxLayout *mainLayout = new QVBoxLayout;
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->addWidget(titleWidget);
     mainLayout->addLayout(midLayout);
     mainLayout->addWidget(buttonBox);
-
-    setLayout(mainLayout);
 }
 
 }

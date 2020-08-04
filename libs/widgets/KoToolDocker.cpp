@@ -170,10 +170,8 @@ KoToolDocker::KoToolDocker(QWidget *parent)
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(locationChanged(Qt::DockWidgetArea)));
 
     d->housekeeperWidget = new QWidget();
-    d->housekeeperLayout = new QGridLayout();
+    d->housekeeperLayout = new QGridLayout(d->housekeeperWidget);
     d->housekeeperLayout->setContentsMargins(4,4,4,0);
-    d->housekeeperWidget->setLayout(d->housekeeperLayout);
-
     d->housekeeperLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
 
     d->hiderWidget = new QWidget(d->housekeeperWidget);

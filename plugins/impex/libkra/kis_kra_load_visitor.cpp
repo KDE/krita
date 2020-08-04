@@ -218,7 +218,7 @@ bool KisKraLoadVisitor::visit(KisPaintLayer *layer)
             if (!pixelSelection->read(m_store->device())) {
                 pixelSelection->disconnect();
             } else {
-                KisTransparencyMask* mask = new KisTransparencyMask();
+                KisTransparencyMask* mask = new KisTransparencyMask(m_image, i18n("Transparency Mask"));
                 mask->setSelection(selection);
                 m_image->addNode(mask, layer, layer->firstChild());
             }
@@ -231,6 +231,8 @@ bool KisKraLoadVisitor::visit(KisPaintLayer *layer)
 
 bool KisKraLoadVisitor::visit(KisGroupLayer *layer)
 {
+    loadNodeKeyframes(layer);
+
     if (*layer->colorSpace() != *m_image->colorSpace()) {
         layer->resetCache(m_image->colorSpace());
     }

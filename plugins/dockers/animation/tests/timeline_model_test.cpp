@@ -302,8 +302,6 @@ void TimelineModelTest::testOnionSkins()
 
     layout->addWidget(w);
 
-    dlg.setLayout(layout);
-
     dlg.resize(600, 400);
     dlg.exec();
 

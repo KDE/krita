@@ -878,7 +878,7 @@ bool TimelineFramesModel::insertFrames(int dstColumn, const QList<int> &dstRows,
     return true;
 }
 
-bool TimelineFramesModel::insertHoldFrames(QModelIndexList selectedIndexes, int count)
+bool TimelineFramesModel::insertHoldFrames(const QModelIndexList &selectedIndexes, int count)
 {
     if (selectedIndexes.isEmpty() || count == 0) return true;
 

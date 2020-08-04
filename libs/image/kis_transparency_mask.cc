@@ -29,10 +29,10 @@
 #include "kis_painter.h"
 #include "kis_node_visitor.h"
 #include "kis_processing_visitor.h"
+#include "kis_image.h"
 
-
-KisTransparencyMask::KisTransparencyMask(const QString &name)
-        : KisEffectMask(name)
+KisTransparencyMask::KisTransparencyMask(KisImageWSP image, const QString &name)
+        : KisEffectMask(image, name)
 {
 }
 

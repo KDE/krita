@@ -215,7 +215,22 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
 
 KisOpenGLCanvas2::~KisOpenGLCanvas2()
 {
+    /**
+     * Since we delete openGL resources, we should make sure the
+     * context is initialized properly before they are deleted.
+     * Otherwise resources from some other (current) context may be
+     * deleted due to resource id aliasing.
+     *
+     * The main symptom of resources being deleted from wrong context,
+     * the canvas being locked/backened-out after some other document
+     * is closed.
+     */
+
+    makeCurrent();
+
     delete d;
+
+    doneCurrent();
 }
 
 void KisOpenGLCanvas2::setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter)

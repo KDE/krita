@@ -420,19 +420,18 @@ void SvgTextEditor::deselect()
 
 void SvgTextEditor::find()
 {
-    QDialog *findDialog = new QDialog(this);
-    findDialog->setWindowTitle(i18n("Find Text"));
-    QFormLayout *layout = new QFormLayout();
-    findDialog->setLayout(layout);
+    QDialog findDialog;
+    findDialog.setWindowTitle(i18n("Find Text"));
+    QFormLayout *layout = new QFormLayout(&findDialog);
     QLineEdit *lnSearchKey = new QLineEdit();
     layout->addRow(i18n("Find:"), lnSearchKey);
     QDialogButtonBox *buttons = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
-    findDialog->layout()->addWidget(buttons);
-    connect(buttons, SIGNAL(accepted()), findDialog, SLOT(accept()));
-    connect(buttons, SIGNAL(rejected()), findDialog, SLOT(reject()));
+    layout->addWidget(buttons);
 
+    connect(buttons, SIGNAL(accepted()), &findDialog, SLOT(accept()));
+    connect(buttons, SIGNAL(rejected()), &findDialog, SLOT(reject()));
 
-    if (findDialog->exec()==QDialog::Accepted) {
+    if (findDialog.exec() == QDialog::Accepted) {
         m_searchKey = lnSearchKey->text();
         m_currentEditor->find(m_searchKey);
     }
@@ -460,21 +459,20 @@ void SvgTextEditor::findPrev()
 
 void SvgTextEditor::replace()
 {
-    QDialog *findDialog = new QDialog(this);
-    findDialog->setWindowTitle(i18n("Find and Replace all"));
-    QFormLayout *layout = new QFormLayout();
-    findDialog->setLayout(layout);
+    QDialog findDialog;
+    findDialog.setWindowTitle(i18n("Find and Replace all"));
+    QFormLayout *layout = new QFormLayout(&findDialog);
     QLineEdit *lnSearchKey = new QLineEdit();
     QLineEdit *lnReplaceKey = new QLineEdit();
     layout->addRow(i18n("Find:"), lnSearchKey);
     QDialogButtonBox *buttons = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
     layout->addRow(i18n("Replace:"), lnReplaceKey);
-    findDialog->layout()->addWidget(buttons);
-    connect(buttons, SIGNAL(accepted()), findDialog, SLOT(accept()));
-    connect(buttons, SIGNAL(rejected()), findDialog, SLOT(reject()));
+    layout->addWidget(buttons);
 
+    connect(buttons, SIGNAL(accepted()), &findDialog, SLOT(accept()));
+    connect(buttons, SIGNAL(rejected()), &findDialog, SLOT(reject()));
 
-    if (findDialog->exec()==QDialog::Accepted) {
+    if (findDialog.exec() == QDialog::Accepted) {
         QString search = lnSearchKey->text();
         QString replace = lnReplaceKey->text();
         QTextCursor cursor(m_currentEditor->textCursor());

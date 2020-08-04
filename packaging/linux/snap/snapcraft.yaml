@@ -9,6 +9,8 @@ apps:
   krita:
     common-id: org.kde.krita
     command: usr/bin/krita
+    command-chain:
+      - snap/command-chain/add-qt-shortcuts
     extensions:
       - kde-neon
     plugs:
@@ -17,6 +19,7 @@ apps:
       - network
       - network-bind
       - removable-media
+      - audio-playback
     environment:
       QT_QPA_PLATFORMTHEME: gtk3
 
@@ -112,6 +115,19 @@ parts:
       # kde-kf5 platform snap.
       - "-usr/lib/x86_64-linux-gnu/libQt5*"
       - "-usr/lib/x86_64-linux-gnu/libqt5*"
+
+  launcher:
+    source: scripts
+    plugin: dump
+    organize:
+      add-qt-shortcuts: snap/command-chain/add-qt-shortcuts
+    stage-packages:
+      - xdg-user-dirs
+
+  qtctl:
+    source: https://github.com/snapcrafters/qtctl.git
+    plugin: cmake
+    build-snaps: [kde-frameworks-5-core18-sdk]
 
   # This part removes all the files in this snap which already exist in
   # connected content and base snaps. Since these files will be available

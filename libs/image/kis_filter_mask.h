@@ -41,7 +41,7 @@ public:
     /**
      * Create an empty filter mask.
      */
-    KisFilterMask(const QString &name  = QString());
+    KisFilterMask(KisImageWSP image, const QString &name = QString());
 
     ~KisFilterMask() override;
 

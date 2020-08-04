@@ -29,8 +29,6 @@ KoVBox::KoVBox(QWidget *parent)
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setSpacing(0);
     layout->setMargin(0);
-
-    setLayout(layout);
 }
 
 KoVBox::~KoVBox()

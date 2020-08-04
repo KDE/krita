@@ -61,7 +61,7 @@ void generateDab(const DabGenerationInfo &di, DabRenderingResources *resources, 
     const KoColorSpace *cs = (*dab)->colorSpace();
 
 
-    if (resources->brush->brushApplication() == IMAGESTAMP && (resources->brush->brushType() == IMAGE || resources->brush->brushType() == PIPE_IMAGE)) {
+    if (resources->brush->brushApplication() == IMAGESTAMP) {
         *dab = resources->brush->paintDevice(cs, di.shape, di.info,
                                             di.subPixel.x(),
                                             di.subPixel.y());

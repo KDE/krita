@@ -50,9 +50,8 @@ KisHalftoneConfigPageWidget::KisHalftoneConfigPageWidget(QWidget *parent, const 
         ui()->comboBoxGenerator->addItem(generator->name());
     }
 
-    QVBoxLayout *generatorContainerLayout = new QVBoxLayout;
+    QVBoxLayout *generatorContainerLayout = new QVBoxLayout(ui()->widgetGeneratorContainer);
     generatorContainerLayout->setContentsMargins(0, 0, 0, 0);
-    ui()->widgetGeneratorContainer->setLayout(generatorContainerLayout);
 
     ui()->sliderHardness->setRange(0.0, 100.0, 2);
     ui()->sliderHardness->setSingleStep(1.0);

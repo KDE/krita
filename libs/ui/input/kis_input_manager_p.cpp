@@ -259,8 +259,10 @@ void KisInputManager::Private::CanvasSwitcher::removeCanvas(KisCanvas2 *canvas)
 
     widget->removeEventFilter(this);
 
-    d->canvas = 0;
-    d->toolProxy = 0;
+    if (d->canvas == canvas) {
+        d->canvas = 0;
+        d->toolProxy = 0;
+    }
 }
 
 bool isInputWidget(QWidget *w)

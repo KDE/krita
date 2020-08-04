@@ -74,7 +74,7 @@ void KisSpinboxColorSelector::slotSetColorSpace(const KoColorSpace *cs)
     //remake spinboxes
     delete m_d->layout;
     m_d->layout = new QFormLayout(this);
-    
+
     Q_FOREACH(QObject *o, m_d->labels) {
         o->deleteLater();
     }
@@ -203,7 +203,6 @@ void KisSpinboxColorSelector::slotSetColorSpace(const KoColorSpace *cs)
         }
 
     }
-    this->setLayout(m_d->layout);
 }
 
 void KisSpinboxColorSelector::createColorFromSpinboxValues()

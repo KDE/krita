@@ -15,3 +15,6 @@ stage/
 
 # Testing directory
 squashfs-root
+
+# Delta files from pushing updates to the store
+*.xdelta3

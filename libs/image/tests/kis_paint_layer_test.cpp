@@ -57,7 +57,7 @@ void KisPaintLayerTest::testProjection()
     // Make sure the projection and the paint device are the same -- we don't have masks yet
     QVERIFY(layer->paintDevice().data() == layer->projection().data());
 
-    KisTransparencyMaskSP transparencyMask = new KisTransparencyMask();
+    KisTransparencyMaskSP transparencyMask = new KisTransparencyMask(image, "tmask");
     transparencyMask->initSelection(layer);
     transparencyMask->selection()->pixelSelection()->invert();
     image->addNode(transparencyMask.data(), layer.data());
@@ -169,7 +169,7 @@ void KisPaintLayerTest::testLayerStyles()
     image->waitForDone();
     KIS_DUMP_DEVICE_2(image->projection(), imageRect, "02P_styled", "dd");
 
-    KisTransparencyMaskSP transparencyMask = new KisTransparencyMask();
+    KisTransparencyMaskSP transparencyMask = new KisTransparencyMask(image, "tmask");
 
     KisSelectionSP selection = new KisSelection();
     selection->pixelSelection()->select(tMaskRect, OPACITY_OPAQUE_U8);

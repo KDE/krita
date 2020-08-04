@@ -122,7 +122,6 @@ RHBox::RHBox(QWidget* const parent)
     QHBoxLayout* const layout = new QHBoxLayout(this);
     layout->setSpacing(0);
     layout->setMargin(0);
-    setLayout(layout);
 }
 
 RHBox::RHBox(bool /*vertical*/, QWidget* const parent)
@@ -131,7 +130,6 @@ RHBox::RHBox(bool /*vertical*/, QWidget* const parent)
     QVBoxLayout* const layout = new QVBoxLayout(this);
     layout->setSpacing(0);
     layout->setMargin(0);
-    setLayout(layout);
 }
 
 RHBox::~RHBox()

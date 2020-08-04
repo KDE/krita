@@ -66,6 +66,8 @@ KisWdgMultigridPattern::KisWdgMultigridPattern(QWidget* parent, const KoColorSpa
     widget()->cmbConnectorType->addItem(i18n("Acute Angles"));
     widget()->cmbConnectorType->addItem(i18n("Obtuse Angles"));
     widget()->cmbConnectorType->addItem(i18n("Cross Shape"));
+    widget()->cmbConnectorType->addItem(i18n("Center Dot"));
+    widget()->cmbConnectorType->addItem(i18n("Corner Dot"));
 
     connect(m_widget->sldDivisions, SIGNAL(valueChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_widget->sldDimensions, SIGNAL(valueChanged(int)), this, SIGNAL(sigConfigurationUpdated()));

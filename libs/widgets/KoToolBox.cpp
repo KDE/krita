@@ -98,7 +98,7 @@ KoToolBox::KoToolBox()
     d->addSection(new Section(this), "dynamic");
 
     d->buttonGroup = new QButtonGroup(this);
-    setLayout(d->layout);
+
     Q_FOREACH (KoToolAction *toolAction, KoToolManager::instance()->toolActionList()) {
         addButton(toolAction);
     }

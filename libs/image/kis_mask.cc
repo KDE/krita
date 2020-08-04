@@ -73,13 +73,13 @@ struct Q_DECL_HIDDEN KisMask::Private {
     void initSelectionImpl(KisSelectionSP copyFrom, KisLayerSP parentLayer, KisPaintDeviceSP copyFromDevice);
 };
 
-KisMask::KisMask(const QString & name)
-        : KisNode(nullptr)
+KisMask::KisMask(KisImageWSP image, const QString &name)
+        : KisNode(image)
         , m_d(new Private(this))
 {
     setName(name);
     m_d->safeProjection = new KisSafeSelectionNodeProjectionStore();
-    m_d->safeProjection->setImage(image());
+    m_d->safeProjection->setImage(image);
 }
 
 KisMask::KisMask(const KisMask& rhs)

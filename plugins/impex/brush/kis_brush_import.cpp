@@ -57,7 +57,7 @@ KisBrushImport::~KisBrushImport()
 
 KisImportExportErrorCode KisBrushImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigurationSP /*configuration*/)
 {
-    KisBrush *brush;
+    KisColorfulBrush *brush;
 
     if (mimeType() == "image/x-gimp-brush") {
         brush = new KisGbrBrush(filename());

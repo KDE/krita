@@ -110,7 +110,6 @@ struct KisBrush::Private {
         : boundary(0)
         , angle(0)
         , scale(1.0)
-        , hasColor(false)
         , brushType(INVALID)
         , brushApplication(ALPHAMASK)
         , gradient(0)
@@ -127,7 +126,6 @@ struct KisBrush::Private {
     mutable KisBoundary* boundary;
     qreal angle;
     qreal scale;
-    bool hasColor;
     enumBrushType brushType;
     enumBrushApplication brushApplication;
 
@@ -173,7 +171,6 @@ KisBrush::KisBrush(const KisBrush& rhs)
     d->height = rhs.d->height;
     d->spacing = rhs.d->spacing;
     d->hotSpot = rhs.d->hotSpot;
-    d->hasColor = rhs.d->hasColor;
     d->angle = rhs.d->angle;
     d->scale = rhs.d->scale;
     d->autoSpacingActive = rhs.d->autoSpacingActive;
@@ -269,17 +266,6 @@ QPointF KisBrush::hotSpot(KisDabShape const& shape, const KisPaintInformation& i
     // anyway.
     QPointF p(w / 2, h / 2);
     return p;
-}
-
-
-bool KisBrush::hasColor() const
-{
-    return d->hasColor;
-}
-
-void KisBrush::setHasColor(bool hasColor)
-{
-    d->hasColor = hasColor;
 }
 
 void KisBrush::setBrushApplication(enumBrushApplication brushApplication)
@@ -675,7 +661,7 @@ void KisBrush::generateBoundary() const
     KisFixedPaintDeviceSP dev;
     KisDabShape inverseTransform(1.0 / scale(), 1.0, -angle());
 
-    if (brushType() == IMAGE || brushType() == PIPE_IMAGE) {
+    if (brushApplication() == IMAGESTAMP) {
         dev = paintDevice(KoColorSpaceRegistry::instance()->rgb8(),
             inverseTransform, KisPaintInformation());
     }

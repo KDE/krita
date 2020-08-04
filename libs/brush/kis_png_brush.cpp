@@ -32,7 +32,6 @@ KisPngBrush::KisPngBrush(const QString& filename)
 {
     setBrushType(INVALID);
     setSpacing(0.25);
-    setHasColor(false);
 }
 
 KisPngBrush::KisPngBrush(const KisPngBrush &rhs)
@@ -124,7 +123,6 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev)
         setBrushTipImage(converted);
         setBrushType(MASK);
         setBrushApplication(ALPHAMASK);
-        setHasColor(false);
     }
     else {
         if ((int)image.format() < (int)QImage::Format_RGB32) {
@@ -133,7 +131,6 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev)
         setBrushTipImage(image);
         setBrushType(IMAGE);
         setBrushApplication(image.allGray() ? ALPHAMASK : IMAGESTAMP);
-        setHasColor(true);
     }
 
     setWidth(brushTipImage().width());

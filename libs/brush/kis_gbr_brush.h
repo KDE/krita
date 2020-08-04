@@ -76,8 +76,6 @@ public:
      */
     virtual void makeMaskImage(bool preserveAlpha);
 
-    enumBrushType brushType() const override;
-
     /**
      * Makes a copy of this brush.
      */
@@ -95,7 +93,6 @@ protected:
     friend class KisImageBrushesPipe;
     friend class KisBrushExport;
 
-    void setBrushType(enumBrushType type) override;
     void setBrushTipImage(const QImage& image) override;
 
     void toXML(QDomDocument& d, QDomElement& e) const override;

@@ -285,15 +285,6 @@ void KisBrush::setHasColor(bool hasColor)
 void KisBrush::setBrushApplication(enumBrushApplication brushApplication)
 {
     d->brushApplication = brushApplication;
-
-    if (d->brushApplication == GRADIENTMAP) {
-        KoResourceServer<KoAbstractGradient>* rserver = KoResourceServerProvider::instance()->gradientServer();
-        setGradient(dynamic_cast<KoAbstractGradient*>(rserver->resources().first()));
-    } else {
-        d->gradient = 0;
-        d->cachedGradient.reset();
-    }
-
     clearBrushPyramid();
 }
 
@@ -585,11 +576,18 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
     quint8 *rowPointer = dst->data();
 
     const bool preserveLightness = this->preserveLightness();
-    const bool applyGradient = this->applyingGradient();
+    bool applyGradient = this->applyingGradient();
+    QScopedPointer<KoColor> fallbackColor;
 
     if (applyGradient) {
-        KIS_SAFE_ASSERT_RECOVER_RETURN(d->cachedGradient);
-        d->cachedGradient->setColorSpace(cs); //convert gradient to colorspace so we don't have to convert each pixel
+        if (d->cachedGradient) {
+            KIS_SAFE_ASSERT_RECOVER_RETURN(d->cachedGradient);
+            d->cachedGradient->setColorSpace(cs); //convert gradient to colorspace so we don't have to convert each pixel
+        } else {
+            fallbackColor.reset(new KoColor(Qt::red, cs));
+            color = fallbackColor->data();
+            applyGradient = false;
+        }
     }
 
     KoColor gradientcolor(Qt::blue, cs);

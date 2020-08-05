@@ -451,4 +451,4 @@ void KisProjectionLeafTest::testSelectionMaskOverlay()
     }
 }
 
-QTEST_MAIN(KisProjectionLeafTest)
+KISTEST_MAIN(KisProjectionLeafTest)

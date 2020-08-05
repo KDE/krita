@@ -20,7 +20,7 @@
 
 #include <QTest>
 
-#include "testutil.h"
+#include <testutil.h>
 #include "lazybrush/kis_colorize_mask.h"
 #include "kis_paint_device_debug_utils.h"
 #include "kis_global.h"

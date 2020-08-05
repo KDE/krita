@@ -18,7 +18,7 @@
 
 #include "kis_imagepipe_brush_test.h"
 
-#include <sdk/tests/kistest.h>
+#include <sdk/tests/testbrush.h>
 #include <QTest>
 #include <QPainter>
 

@@ -115,5 +115,5 @@ void KisCrashFilterTest::testCrashFilters()
     }
 }
 
-#include <sdk/tests/kistest.h>
+#include <sdk/tests/testimage.h>
 KISTEST_MAIN(KisCrashFilterTest)

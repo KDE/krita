@@ -20,7 +20,7 @@
 
 #include "layerstyles/kis_layer_style_filter_environment.h"
 #include "kis_pixel_selection.h"
-#include "testutil.h"
+#include <testutil.h>
 
 
 #include <QTest>

@@ -25,6 +25,8 @@
 #include <KisManualUpdater.h>
 #include <MockMultiFeedRssModel.h>
 
+#include <sdk/tests/testui.h>
+
 KisManualUpdaterTest::KisManualUpdaterTest(QObject *parent) : QObject(parent)
 {
 
@@ -150,4 +152,4 @@ void KisManualUpdaterTest::testCheckForUpdate_data()
             << UpdaterStatus::StatusID::UPDATE_AVAILABLE;
 }
 
-QTEST_MAIN(KisManualUpdaterTest);
+KISTEST_MAIN(KisManualUpdaterTest);

@@ -23,7 +23,7 @@
 #define USE_DOCUMENT 1
 #endif /* USE_DOCUMENT */
 
-#include "testutil.h"
+#include <testutil.h>
 
 
 #include <KoColorSpace.h>

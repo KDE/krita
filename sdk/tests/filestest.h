@@ -18,7 +18,8 @@
 #ifndef FILESTEST
 #define FILESTEST
 
-#include "testutil.h"
+#include <testutil.h>
+#include "testui.h"
 
 #include <QDir>
 

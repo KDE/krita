@@ -18,7 +18,7 @@
 
 #include "kis_fill_painter_test.h"
 
-#include "testutil.h"
+#include <testutil.h>
 
 #include <QTest>
 #include "kis_fill_painter.h"

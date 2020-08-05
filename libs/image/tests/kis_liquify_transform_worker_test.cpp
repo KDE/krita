@@ -24,7 +24,7 @@
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 
-#include "testutil.h"
+#include <testutil.h>
 #include <kis_liquify_transform_worker.h>
 #include <kis_algebra_2d.h>
 

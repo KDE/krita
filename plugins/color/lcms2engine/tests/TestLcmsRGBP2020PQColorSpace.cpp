@@ -19,7 +19,7 @@
 #include "TestLcmsRGBP2020PQColorSpace.h"
 
 #include <QTest>
-#include "sdk/tests/kistest.h"
+#include "sdk/tests/testpigment.h"
 
 #include "kis_debug.h"
 

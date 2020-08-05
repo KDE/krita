@@ -21,7 +21,7 @@
 #include "kis_painter.h"
 
 #include <QTest>
-#include "testutil.h"
+#include <testutil.h>
 #include "kis_transaction.h"
 #include <KoCompositeOpRegistry.h>
 #include "kis_datamanager.h"

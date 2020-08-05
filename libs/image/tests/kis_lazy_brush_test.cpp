@@ -36,6 +36,8 @@
 
 #include "lazybrush/kis_lazy_fill_graph.h"
 
+
+
 #if 0
 
 int
@@ -962,7 +964,7 @@ void KisLazyBrushTest::testCutOnGraph()
 
 #include "lazybrush/kis_lazy_fill_capacity_map.h"
 #include <KoColorSpaceRegistry.h>
-#include "testutil.h"
+#include <testutil.h>
 #include <KoColor.h>
 
 

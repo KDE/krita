@@ -27,7 +27,7 @@
 #include <KoColor.h>
 
 #include "kis_image.h"
-#include "testutil.h"
+#include <testutil.h>
 #include "KisPart.h"
 
 #include <filter/kis_filter_registry.h>
@@ -39,7 +39,7 @@
 
 #include <filestest.h>
 
-#include  <sdk/tests/kistest.h>
+#include  <sdk/tests/testui.h>
 
 
 const QString KraMimetype = "application/x-krita";

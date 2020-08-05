@@ -46,8 +46,8 @@
 #include "kis_double_parse_spin_box.h"
 #include "kis_int_parse_spin_box.h"
 
-#include  <sdk/tests/kistest.h>
 #include <sdk/tests/testutil.h>
+#include <sdk/tests/testui.h>
 
 void TimelineModelTest::init()
 {

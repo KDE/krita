@@ -37,7 +37,7 @@
 #include "filter/kis_filter_registry.h"
 #include "kis_filter_mask.h"
 #include "kis_transparency_mask.h"
-#include <sdk/tests/kistest.h>
+#include <sdk/tests/testimage.h>
 
 //#define DEBUG_VISITORS
 

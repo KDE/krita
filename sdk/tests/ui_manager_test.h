@@ -19,7 +19,7 @@
 #ifndef __UI_MANAGER_TEST_H
 #define __UI_MANAGER_TEST_H
 
-#include "testutil.h"
+#include <testutil.h>
 #include "qimage_based_test.h"
 #include "ksharedconfig.h"
 #include <kis_filter_configuration.h>

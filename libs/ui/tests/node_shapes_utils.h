@@ -22,7 +22,7 @@
 #include "kis_node_shape.h"
 #include "kis_node_shapes_graph.h"
 #include "kis_node_dummies_graph.h"
-#include "testutil.h"
+#include <testutil.h>
 
 inline KisNodeSP nodeFromId(int id) {
     KisNodeSP node = new TestUtil::TestNode();

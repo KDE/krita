@@ -27,7 +27,7 @@
 #include "kis_selection.h"
 #include "kis_image.h"
 #include "kis_group_layer.h"
-#include "testutil.h"
+#include <testutil.h>
 
 
 class TestMask : public KisMask

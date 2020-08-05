@@ -23,7 +23,7 @@
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 
-#include "testutil.h"
+#include <testutil.h>
 
 #include <kis_cage_transform_worker.h>
 #include <algorithm>

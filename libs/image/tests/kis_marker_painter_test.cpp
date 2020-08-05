@@ -29,7 +29,7 @@
 #include "kis_marker_painter.h"
 
 #include "kis_algebra_2d.h"
-#include "testutil.h"
+#include <testutil.h>
 
 
 void KisMarkerPainterTest::testFillHalfBrushDiff()

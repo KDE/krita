@@ -30,7 +30,7 @@
 #include "kis_painter.h"
 #include <brushengine/kis_paint_information.h>
 
-#include "kistest.h"
+#include "testui.h"
 
 class FreehandStrokeTester : public utils::StrokeTester
 {

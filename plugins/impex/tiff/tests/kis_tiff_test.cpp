@@ -28,7 +28,7 @@
 #include <KoColor.h>
 
 #include "kisexiv2/kis_exiv2.h"
-#include  <sdk/tests/kistest.h>
+#include  <sdk/tests/testui.h>
 #include <KoColorModelStandardIdsUtils.h>
 
 #ifndef FILES_DATA_DIR

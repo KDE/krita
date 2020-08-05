@@ -21,13 +21,13 @@
 #include "KisPart.h"
 #include "kis_animation_importer.h"
 #include "KisDocument.h"
-#include "testutil.h"
+#include <testutil.h>
 #include "kis_keyframe_channel.h"
 #include "kis_image_animation_interface.h"
 #include "kis_group_layer.h"
 #include <KoUpdater.h>
 
-#include "kistest.h"
+#include "testui.h"
 
 void KisAnimationImporterTest::testImport()
 {

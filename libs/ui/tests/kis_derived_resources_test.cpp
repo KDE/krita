@@ -35,45 +35,19 @@
 #include <kis_paintop_settings.h>
 #include <KoResourcePaths.h>
 #include <kis_config.h>
-#include "testutil.h"
+#include <testutil.h>
 #include "opengl/kis_opengl.h"
 #include <KisGlobalResourcesInterface.h>
 
-void addResourceTypes()
-{
-    // All Krita's resource types
-    KoResourcePaths::addResourceType("gmic_definitions", "data", "/gmic/");
-    KoResourcePaths::addResourceType("icc_profiles", "data", "/color/icc");
-    KoResourcePaths::addResourceType("icc_profiles", "data", "/profiles/");
-    KoResourcePaths::addResourceType("kis_actions", "data", "/actions");
-    KoResourcePaths::addResourceType(ResourceType::Brushes, "data", "/brushes/");
-    KoResourcePaths::addResourceType("kis_defaultpresets", "data", "/defaultpresets/");
-    KoResourcePaths::addResourceType("kis_images", "data", "/images/");
-    KoResourcePaths::addResourceType(ResourceType::PaintOpPresets, "data", "/paintoppresets/");
-    KoResourcePaths::addResourceType("kis_pics", "data", "/pics/");
-    KoResourcePaths::addResourceType("kis_resourcebundles", "data", "/bundles/");
-    KoResourcePaths::addResourceType("kis_shortcuts", "data", "/shortcuts/");
-    KoResourcePaths::addResourceType("kis_taskset", "data", "/taskset/");
-    KoResourcePaths::addResourceType("kis_taskset", "data", "/taskset/");
-    KoResourcePaths::addResourceType(ResourceType::WindowLayouts, "data", "/windowlayouts/");
-    KoResourcePaths::addResourceType(ResourceType::Workspaces, "data", "/workspaces/");
-    KoResourcePaths::addResourceType(ResourceType::FilterEffects, "data", "/effects/");
-    KoResourcePaths::addResourceType(ResourceType::Gradients, "data", "/gradients/");
-    KoResourcePaths::addResourceType(ResourceType::Palettes, "data", "/palettes/");
-    KoResourcePaths::addResourceType(ResourceType::Patterns, "data", "/patterns/");
-    KoResourcePaths::addResourceType("metadata_schema", "data", "/metadata/schemas/");
-    KoResourcePaths::addResourceType("psd_layer_style_collections", "data", "/asl");
-    KoResourcePaths::addResourceType("tags", "data", "/tags/");
+#include  <sdk/tests/testui.h>
 
+void KisDerivedResourcesTest::test()
+{
     KisOpenGL::testingInitializeDefaultSurfaceFormat();
 
     KisConfig cfg(false);
     cfg.disableOpenGL();
-}
 
-void KisDerivedResourcesTest::test()
-{
-    addResourceTypes();
 
     KisDocument* doc = createEmptyDocument();
 

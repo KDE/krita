@@ -23,6 +23,8 @@
 #include <Window.h>
 #include <Document.h>
 
+#include <sdk/tests/testui.h>
+
 void TestKrita::initTestCase()
 {
     Krita::instance();
@@ -60,5 +62,5 @@ void TestKrita::cleanupTestCase()
 }
 
 
-QTEST_MAIN(TestKrita)
+KISTEST_MAIN(TestKrita)
 

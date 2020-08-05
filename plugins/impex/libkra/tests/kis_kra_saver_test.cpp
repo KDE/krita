@@ -44,7 +44,7 @@
 #include "kis_fill_painter.h"
 #include "kis_shape_selection.h"
 #include "util.h"
-#include "testutil.h"
+#include <testutil.h>
 #include "kis_keyframe_channel.h"
 #include "kis_image_animation_interface.h"
 #include "kis_layer_properties_icons.h"
@@ -55,7 +55,7 @@
 #include <generator/kis_generator_registry.h>
 
 #include <KoResourcePaths.h>
-#include  <sdk/tests/kistest.h>
+#include  <sdk/tests/testui.h>
 #include <filestest.h>
 
 const QString KraMimetype = "application/x-krita";

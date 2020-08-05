@@ -19,8 +19,6 @@
 #ifndef KISRESOURCETYPES_H
 #define KISRESOURCETYPES_H
 
-#include <QString>
-
 /**
  * These namespaces define the type keys and sub-type keys for resource types.
  * The type keys correspond to folders in the resource folder, the sub-type
@@ -52,5 +50,6 @@ namespace ResourceSubType {
     static const QString SegmentedGradients {"segmented_gradients"};
     static const QString StopGradients {"stop_gradients"};
 }
+
 
 #endif // KISRESOURCETYPES_H

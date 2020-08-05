@@ -30,7 +30,7 @@
 #include <kis_processing_information.h>
 #include <kis_selection.h>
 #include <resources/KisSeExprScript.h>
-#include <sdk/tests/kistest.h>
+#include <sdk/tests/testimage.h>
 #include <testutil.h>
 
 #include "kis_seexpr_generator_test.h"

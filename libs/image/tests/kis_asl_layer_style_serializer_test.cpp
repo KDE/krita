@@ -30,7 +30,8 @@
 
 #include "kis_global.h"
 
-#include "testutil.h"
+#include <testutil.h>
+#include <testimage.h>
 #include "kis_psd_layer_style.h"
 #include "kis_asl_layer_style_serializer.h"
 #include <asl/kis_asl_reader.h>

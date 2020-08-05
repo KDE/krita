@@ -26,8 +26,6 @@
 #include <kis_dom_utils.h>
 
 
-
-
 KisScalarKeyframe::KisScalarKeyframe(qreal value, QWeakPointer<ScalarKeyframeLimits> limits)
     : KisKeyframe(),
       m_value(value),
@@ -124,17 +122,18 @@ QPointF KisScalarKeyframe::rightTangent() const
 
 // ========================================================================================================
 
+
 struct KisScalarKeyframeChannel::Private
 {
 public:
     Private()
         : defaultValue(0),
-          defaultInterpolation(KisScalarKeyframe::Constant)
+          defaultInterpolationMode(KisScalarKeyframe::Constant)
     {}
 
     Private(const Private &rhs)
         : defaultValue(rhs.defaultValue),
-          defaultInterpolation(rhs.defaultInterpolation)
+          defaultInterpolationMode(rhs.defaultInterpolationMode)
     {
         if (rhs.limits) {
             limits = toQShared(new ScalarKeyframeLimits(*rhs.limits));
@@ -142,10 +141,12 @@ public:
     }
 
     qreal defaultValue;
-    KisScalarKeyframe::InterpolationMode defaultInterpolation;
+    KisScalarKeyframe::InterpolationMode defaultInterpolationMode;
+
+    /** Optional structure that can be added to a channel in order to
+     * limit its scalar values within a certain range. */
     QSharedPointer<ScalarKeyframeLimits> limits;
 };
-
 
 
 KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KoID &id, KisNodeWSP node)
@@ -252,7 +253,7 @@ void KisScalarKeyframeChannel::setDefaultValue(qreal value)
 
 void KisScalarKeyframeChannel::setDefaultInterpolationMode(KisScalarKeyframe::InterpolationMode mode)
 {
-    m_d->defaultInterpolation = mode;
+    m_d->defaultInterpolationMode = mode;
 }
 
 QPointF KisScalarKeyframeChannel::interpolate(QPointF point1, QPointF rightTangent, QPointF leftTangent, QPointF point2, qreal t)
@@ -317,7 +318,7 @@ void KisScalarKeyframeChannel::normalizeTangents(const QPointF point1, QPointF &
 KisKeyframeSP KisScalarKeyframeChannel::createKeyframe() // DOUBLE-CHECK!
 {
     KisScalarKeyframe *keyframe = new KisScalarKeyframe(m_d->defaultValue, m_d->limits);
-    keyframe->setInterpolationMode(m_d->defaultInterpolation);
+    keyframe->setInterpolationMode(m_d->defaultInterpolationMode);
     return toQShared(keyframe);
 }
 

@@ -23,6 +23,7 @@
 
 #include "kis_keyframe_channel.h"
 
+
 /** @brief The KisRasterKeyframe class is a concrete subclass of KisKeyframe
  * that wraps a physical raster image frame on a KisPaintDevice.
  *
@@ -61,12 +62,15 @@ private:
 };
 
 
-/** @brief The KisRasterKeyframeChannel class is a concrete KisKeyframeChannel
- * subclass that deals exclusively with KisRasterKeyframes.
+/** @brief The KisRasterKeyframeChannel is a concrete KisKeyframeChannel
+ * subclass that stores and manages KisRasterKeyframes.
  *
  * Like a traditional animation dopesheet, this class maps individual units of times (in frames)
  * to "virtual" KisRasterKeyframes, which wrap and manage the "physical" raster images on
  * this channel's associated KisPaintDevice.
+ *
+ * Often, a raster channel will be represented by an individual track
+ * with Krita's KisAnimationTimelineDocker.
 */
 class KRITAIMAGE_EXPORT KisRasterKeyframeChannel : public KisKeyframeChannel
 {
@@ -79,22 +83,20 @@ public:
     ~KisRasterKeyframeChannel() override;
 
     /** Copy the active frame at given time to target device.
-     * @param  keyframe  keyframe to copy from
-     * @param  targetDevice  device to copy the frame to
-     */
+     * @param  keyframe  Keyframe to copy from.
+     * @param  targetDevice  Device to copy the frame to. */
     void fetchFrame(int time, KisPaintDeviceSP targetDevice);
 
-    /** Copy the content of the sourceDevice into a new keyframe at given time
-     * @param  time  position of new keyframe
-     * @param  sourceDevice  source for content
-     * @param  parentCommand  parent command used for stacking
-     */
+    /** Copy the content of the sourceDevice into a new keyframe at given time.
+     * @param  time  Position of new keyframe.
+     * @param  sourceDevice  Source for content.
+     * @param  parentCommand  Parent undo command used for stacking. */
     void importFrame(int time, KisPaintDeviceSP sourceDevice, KUndo2Command *parentCommand);
 
+    /** Get the rectangular area that the content of this frame occupies. */
     QRect frameExtents(KisKeyframeSP keyframe);
 
     QString frameFilename(int frameId) const;
-
     /** When choosing filenames for frames, this will be appended to the node filename. */
     void setFilenameSuffix(const QString &suffix);
 
@@ -107,7 +109,6 @@ public:
     KisPaintDeviceWSP paintDevice();
 
 private:
-
     QRect affectedRect(int time) const override;
 
     void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename) override;

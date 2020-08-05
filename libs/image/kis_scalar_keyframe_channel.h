@@ -21,6 +21,9 @@
 #include "kis_keyframe_channel.h"
 
 
+/** @brief This structure represents an optional limited range of
+ * values that be handled by KisScalarKeyframeChannel.
+*/
 struct ScalarKeyframeLimits {
     qreal lower;
     qreal upper;
@@ -33,7 +36,7 @@ struct ScalarKeyframeLimits {
         upper = x > y ? x : y;
     }
 
-    /** Clamp input value to within limits. */
+    /** Clamp input value within limits. */
     qreal clamp(qreal value){
         value = value < lower ? lower : value;
         value = value > upper ? upper : value;
@@ -41,18 +44,27 @@ struct ScalarKeyframeLimits {
     }
 };
 
-struct KRITAIMAGE_EXPORT KisScalarKeyframe : public KisKeyframe
+
+/** @brief The KisScalarKeyframe class is a concrete subclass of KisKeyframe
+ * that wraps a scalar value and interpolation parameters.
+*/
+class KRITAIMAGE_EXPORT KisScalarKeyframe : public KisKeyframe
 {
 public:
+    /** @brief Controls the type of interpolation between
+     * this KisScalarKeyframe and the next. */
     enum InterpolationMode {
-        Constant,
-        Linear,
-        Bezier
+        Constant, /**< Constant value until the next keyframe. */
+        Linear, /**< Linear interpolation between this keyframe and the next. */
+        Bezier /**< Bezier curve between this keyframe and the next,
+                 controlled by individual tangent handles on each. */
     };
 
+    /** @brief Controls the behavior of the left and right
+     * tangents on a given keyframe for different curve shapes. */
     enum TangentsMode {
-        Sharp,
-        Smooth
+        Sharp, /**< Independent control of each tangent for sudden, sharp curve changes. */
+        Smooth /**< Tangents are locked inline for smooth transitions across key values. */
     };
 
     KisScalarKeyframe(qreal value, QWeakPointer<ScalarKeyframeLimits> limits);
@@ -60,31 +72,46 @@ public:
 
     KisKeyframeSP duplicate(KisKeyframeChannel* newChannel = 0) override;
 
-    qreal value() const;
     void setValue(qreal val, KUndo2Command* parentUndoCmd = nullptr);
+    qreal value() const;
 
     void setInterpolationMode(InterpolationMode mode, KUndo2Command* parentUndoCmd = nullptr);
     InterpolationMode interpolationMode() const;
+
     void setTangentsMode(TangentsMode mode, KUndo2Command* parentUndoCmd = nullptr);
     TangentsMode tangentsMode() const;
 
     void setInterpolationTangents(QPointF leftTangent, QPointF rightTangent, KUndo2Command* parentUndoCmd = nullptr);
-
     QPointF leftTangent() const;
     QPointF rightTangent() const;
 
 private:
-    qreal m_value;
-
+    qreal m_value; /**< Scalar value of this keyframe. Optionally clamped to m_channelLimtis. */
     InterpolationMode m_interpolationMode;
     TangentsMode m_tangentsMode;
-    QPointF m_leftTangent;
-    QPointF m_rightTangent;
+    QPointF m_leftTangent; /**< Controls part of between this and PREVIOUS keyframe. */
+    QPointF m_rightTangent; /**< Controls part of between this and NEXT keyframe. */
 
+    /** Weak pointer back to the owning channel's limits,
+     * optionally used when setting the value of a keyframe
+     * to conform to the limited range of its current channel,
+     * Should change if keyframe is moved to a different channel. */
     QWeakPointer<ScalarKeyframeLimits> m_channelLimits;
 };
 
 
+/** @brief The KisScalarKeyframeChannel is a concrete KisKeyframeChannel
+ * subclass that stores and manages KisScalarKeyframes.
+ *
+ * This class maps units of time (in frames) to points along a curve for
+ * the animation of various interpolated scalar parameters within Krita.
+ * Each scalar channel can be provided with default values and interpolation modes,
+ * as well as an optional ScalarKeyframeLimits object that can be used
+ * to limit the range of possible values.
+ *
+ * Generally, each scalar channel will be represented as an individual curve
+ * within Krita's KisAnimationCurvesDocker.
+*/
 class KRITAIMAGE_EXPORT KisScalarKeyframeChannel : public KisKeyframeChannel
 {
     Q_OBJECT
@@ -95,9 +122,12 @@ public:
     ~KisScalarKeyframeChannel() override;
 
     QWeakPointer<ScalarKeyframeLimits> limits() const;
+    /** Limit channel within scalar value range. */
     void setLimits(qreal low, qreal high);
+    /** Remove limits, allowing channel to operate within any range of values. */
     void removeLimits();
 
+    /** @brief Quickly get the interpolated value at the given time. */
     qreal valueAt(int time) const;
     qreal currentValue() { return valueAt(currentTime()); }
 

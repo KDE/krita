@@ -118,6 +118,10 @@ struct KisRasterKeyframeChannel::Private
           onionSkinsEnabled(false)
     {}
 
+    /** @brief Weak pointer to the KisPaintDevice associated with this
+     * channel and a single layer of a KisImage. While the channel maintains
+     * "virtual" KisRasterKeyframes, the real "physical" frame images are stored
+     * within this paint device at the frameID index held in the KisRasterKeyframe. */
     KisPaintDeviceWSP paintDevice;
     QMap<int, QString> frameFilenames;
     QString filenameSuffix;

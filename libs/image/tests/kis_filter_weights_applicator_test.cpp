@@ -24,6 +24,7 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include "kis_paint_device.h"
+#include "kistest.h"
 
 #include <sstream>
 
@@ -766,4 +767,4 @@ void KisFilterWeightsApplicatorTest::benchmarkProcesssLine()
     }
 }
 
-QTEST_MAIN(KisFilterWeightsApplicatorTest)
+KISTEST_MAIN(KisFilterWeightsApplicatorTest)

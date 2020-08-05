@@ -334,7 +334,7 @@ void KisFilterWeightsApplicatorTest::testProcessLine_Scale_1_0_Shift_m0_25()
     qreal scale = 1.0;
     qreal dx = -0.25;
 
-    quint8 r[] = { 10, 12, 22, 32, 40,  0,  0};
+    quint8 r[] = { 10, 13, 23, 33, 40,  0,  0};
     quint8 a[] = { 64,255,255,255,191,  0,  0};
 
     testLine(scale, dx, r, a, -1, 7);
@@ -345,7 +345,7 @@ void KisFilterWeightsApplicatorTest::testProcessLine_Scale_0_5_Aligned()
     qreal scale = 0.5;
     qreal dx = 0.0;
 
-    quint8 r[] = { 10, 17, 32, 40,  0,  0,  0};
+    quint8 r[] = { 10, 17, 33, 40,  0,  0,  0};
     quint8 a[] = { 32,223,223, 32,  0,  0,  0};
 
     testLine(scale, dx, r, a, -1, 7);
@@ -367,7 +367,7 @@ void KisFilterWeightsApplicatorTest::testProcessLine_Scale_2_0_Aligned()
     qreal scale = 2.0;
     qreal dx = 0.0;
 
-    quint8 r[] = {  0, 10, 10, 12, 17, 22, 27, 32, 37, 40, 40,  0};
+    quint8 r[] = {  0, 10, 10, 13, 17, 23, 27, 33, 37, 40, 40,  0};
     quint8 a[] = {  0, 64,191,255,255,255,255,255,255,191, 64,  0};
 
     testLine(scale, dx, r, a, -2, 12);
@@ -411,7 +411,7 @@ void KisFilterWeightsApplicatorTest::testProcessLine_Scale_0_5_Aligned_Clamped()
     qreal scale = 0.5;
     qreal dx = 0.0;
 
-    quint8 r[] = {  0, 16, 33,  0,  0,  0,  0};
+    quint8 r[] = {  0, 16, 34,  0,  0,  0,  0};
     quint8 a[] = {  0,255,255,  0,  0,  0,  0};
 
     testLine(scale, dx, r, a, -1, 7, true);
@@ -422,7 +422,7 @@ void KisFilterWeightsApplicatorTest::testProcessLine_Scale_2_0_Aligned_Clamped()
     qreal scale = 2.0;
     qreal dx = 0.0;
 
-    quint8 r[] = {  0,  0, 10, 12, 17, 22, 27, 32, 37, 40,  0,  0};
+    quint8 r[] = {  0,  0, 10, 13, 17, 23, 27, 33, 37, 40,  0,  0};
     quint8 a[] = {  0,  0,255,255,255,255,255,255,255,255,  0,  0};
 
     testLine(scale, dx, r, a, -2, 12, true);
@@ -444,7 +444,7 @@ void KisFilterWeightsApplicatorTest::testProcessLine_Scale_1_0_Shift_0_25_Mirror
     qreal scale = -1.0;
     qreal dx = 0.25;
 
-    quint8 r[] = {  0,  0, 40, 32, 22, 12, 10,  0,  0,  0};
+    quint8 r[] = {  0,  0, 40, 33, 23, 13, 10,  0,  0,  0};
     quint8 a[] = {  0,  0,191,255,255,255, 64,  0,  0,  0};
 
     testLine(scale, dx, r, a, -6, 10);
@@ -455,7 +455,7 @@ void KisFilterWeightsApplicatorTest::testProcessLine_Scale_0_5_Aligned_Mirrored_
     qreal scale = -0.5;
     qreal dx = 0.0;
 
-    quint8 r[] = {  0,  0,  0,  0, 33, 16,  0,  0,  0,  0};
+    quint8 r[] = {  0,  0,  0,  0, 34, 16,  0,  0,  0,  0};
     quint8 a[] = {  0,  0,  0,  0,255,255,  0,  0,  0,  0};
 
     testLine(scale, dx, r, a, -6, 10, true);
@@ -466,7 +466,7 @@ void KisFilterWeightsApplicatorTest::testProcessLine_Scale_0_5_Shift_0_125_Mirro
     qreal scale = -0.5;
     qreal dx = 0.125;
 
-    quint8 r[] = {  0,  0,  0, 40, 34, 18, 10,  0,  0,  0};
+    quint8 r[] = {  0,  0,  0, 40, 35, 19, 10,  0,  0,  0};
     quint8 a[] = {  0,  0,  0, 16,207,239, 48,  0,  0,  0};
 
     testLine(scale, dx, r, a, -6, 10);

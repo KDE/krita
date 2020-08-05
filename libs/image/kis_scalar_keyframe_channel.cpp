@@ -73,6 +73,8 @@ void KisScalarKeyframe::setValue(qreal val, KUndo2Command *parentUndoCmd)
     if (m_channelLimits) {
         m_value = m_channelLimits.data()->clamp(m_value);
     }
+
+    emit sigChanged(this);
 }
 
 void KisScalarKeyframe::setInterpolationMode(InterpolationMode mode, KUndo2Command *parentUndoCmd)
@@ -82,6 +84,8 @@ void KisScalarKeyframe::setInterpolationMode(InterpolationMode mode, KUndo2Comma
     }
 
     m_interpolationMode = mode;
+
+    emit sigChanged(this);
 }
 
 KisScalarKeyframe::InterpolationMode KisScalarKeyframe::interpolationMode() const
@@ -91,7 +95,13 @@ KisScalarKeyframe::InterpolationMode KisScalarKeyframe::interpolationMode() cons
 
 void KisScalarKeyframe::setTangentsMode(TangentsMode mode, KUndo2Command *parentUndoCmd)
 {
+    if (parentUndoCmd) {
+        KUndo2Command* cmd = new KisScalarKeyframeUpdateCommand(this, parentUndoCmd);
+    }
+
     m_tangentsMode = mode;
+
+    emit sigChanged(this);
 }
 
 KisScalarKeyframe::TangentsMode KisScalarKeyframe::tangentsMode() const
@@ -107,6 +117,8 @@ void KisScalarKeyframe::setInterpolationTangents(QPointF leftTangent, QPointF ri
 
     m_leftTangent = leftTangent;
     m_rightTangent = rightTangent;
+
+    emit sigChanged(this);
 }
 
 QPointF KisScalarKeyframe::leftTangent() const
@@ -120,7 +132,7 @@ QPointF KisScalarKeyframe::rightTangent() const
 }
 
 
-// ========================================================================================================
+// ==================================== KisScalarKeyframeChannel ==========================================
 
 
 struct KisScalarKeyframeChannel::Private
@@ -158,12 +170,14 @@ KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KoID &id, KisDefaultBou
     : KisKeyframeChannel(id, bounds)
     , m_d(new Private)
 {
+    connect(this, SIGNAL(sigAddedKeyframe(const KisKeyframeChannel*,int)), SLOT(handleKeyframeAdded(const KisKeyframeChannel*, int)));
+    connect(this, SIGNAL(sigRemovingKeyframe(const KisKeyframeChannel*,int)), SLOT(handleKeyframeRemoved(const KisKeyframeChannel*,int)));
 }
 
 KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KisScalarKeyframeChannel &rhs, KisNodeWSP newParent)
     : KisKeyframeChannel(rhs, newParent)
-    , m_d(new Private(*rhs.m_d))
 {
+    m_d.reset(new Private(*rhs.m_d));
 
     Q_FOREACH (int time, rhs.constKeys().keys()) {
         KisKeyframeChannel::copyKeyframe(&rhs, time, this, time);
@@ -356,6 +370,26 @@ void KisScalarKeyframeChannel::saveKeyframe(KisKeyframeSP keyframe, QDomElement 
     KisDomUtils::saveValue(&keyframeElement, "rightTangent", scalarKey->rightTangent());
 }
 
+void KisScalarKeyframeChannel::handleKeyframeAdded(const KisKeyframeChannel *channel, int time)
+{
+    KisScalarKeyframeSP keyframe = keyframeAt<KisScalarKeyframe>(time);
+    if (keyframe) {
+        keyframe->valueChangedChannelConnection =
+                QObject::connect(keyframe.data(), &KisScalarKeyframe::sigChanged, channel,
+                                            [this, channel, time](const KisScalarKeyframe* key){
+                                                this->sigKeyframeChanged(channel, time);
+                                            });
+    }
+}
+
+void KisScalarKeyframeChannel::handleKeyframeRemoved(const KisKeyframeChannel *channel, int time)
+{
+    KisScalarKeyframeSP keyframe = keyframeAt<KisScalarKeyframe>(time);
+    if (keyframe) {
+        disconnect(keyframe->valueChangedChannelConnection);
+    }
+}
+
 QPair<int, KisKeyframeSP> KisScalarKeyframeChannel::loadKeyframe(const QDomElement &keyframeNode)
 {
     int time = keyframeNode.toElement().attribute("time").toInt();
@@ -365,7 +399,6 @@ QPair<int, KisKeyframeSP> KisScalarKeyframeChannel::loadKeyframe(const QDomEleme
 
     KisScalarKeyframeSP keyframe = createKeyframe().dynamicCast<KisScalarKeyframe>();
     keyframe->setValue(value);
-
 
     KisScalarKeyframeSP scalarKey = keyframe.dynamicCast<KisScalarKeyframe>();
 

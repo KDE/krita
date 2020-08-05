@@ -34,7 +34,8 @@ class KisKeyframeChannel;
  * Mainly contained by KisKeyframeChannels.
  * A core part of Krita's animation bankend.
  */
-class KRITAIMAGE_EXPORT KisKeyframe {
+class KRITAIMAGE_EXPORT KisKeyframe : public QObject {
+    Q_OBJECT
 public:
     KisKeyframe();
     virtual ~KisKeyframe();
@@ -56,6 +57,4 @@ private:
     QScopedPointer<Private> m_d;
 };
 
-Q_DECLARE_METATYPE(KisKeyframe*)
-Q_DECLARE_METATYPE(KisKeyframeSP)
 #endif

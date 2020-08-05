@@ -95,12 +95,10 @@ KisKeyframeChannel::KisKeyframeChannel(const KoID &id, KisDefaultBoundsBaseSP bo
 }
 
 KisKeyframeChannel::KisKeyframeChannel(const KisKeyframeChannel &rhs, KisNodeWSP newParent)
-    : m_d(new Private(*rhs.m_d))
+    : KisKeyframeChannel(rhs.m_d->id, KisDefaultBoundsNodeWrapperSP( new KisDefaultBoundsNodeWrapper(newParent)))
 {
-    KIS_ASSERT_RECOVER_NOOP(&rhs != this);
-
+    m_d.reset(new Private(*rhs.m_d));
     m_d->parentNode = newParent;
-    m_d->bounds = KisDefaultBoundsNodeWrapperSP(new KisDefaultBoundsNodeWrapper(newParent));
 }
 
 KisKeyframeChannel::~KisKeyframeChannel()
@@ -390,7 +388,7 @@ void KisKeyframeChannel::loadXML(const QDomElement &channelNode)
             timeKeyPair.second->setColorLabel(keyframeNode.attribute("color-label").toUInt());
         }
 
-        m_d->keys.insert(timeKeyPair.first, timeKeyPair.second);
+        insertKeyframe(timeKeyPair.first, timeKeyPair.second);
     }
 }
 

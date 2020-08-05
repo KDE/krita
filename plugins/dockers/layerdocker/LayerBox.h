@@ -138,8 +138,6 @@ private Q_SLOTS:
 
     // Opacity keyframing
     void slotKeyframeChannelAdded(KisKeyframeChannel *channel);
-    void slotOpacityKeyframeChanged(KisKeyframeSP keyframe);
-    void slotOpacityKeyframeMoved(KisKeyframeSP keyframe, int fromTime);
     void slotImageTimeChanged(int time);
     void slotForgetAboutSavedNodeBeforeEditSelectionMode();
 
@@ -149,7 +147,7 @@ Q_SIGNALS:
 private:
     inline void connectActionToButton(KisViewManager* view, QAbstractButton *button, const QString &id);
     inline void addActionToMenu(QMenu *menu, const QString &id);
-    void watchOpacityChannel(KisKeyframeChannel *channel);
+    void watchOpacityChannel(KisKeyframeChannel *newChannel);
 
     KisNodeSP findNonHidableNode(KisNodeSP startNode);
 private:

@@ -34,6 +34,7 @@
 */
 class KRITAIMAGE_EXPORT KisRasterKeyframe : public KisKeyframe
 {
+    Q_OBJECT
 public:
     KisRasterKeyframe(KisPaintDeviceWSP paintDevice);
     KisRasterKeyframe(KisPaintDeviceWSP paintDevice, int premadeFrameID);
@@ -75,7 +76,6 @@ private:
 class KRITAIMAGE_EXPORT KisRasterKeyframeChannel : public KisKeyframeChannel
 {
     Q_OBJECT
-
 public:
     KisRasterKeyframeChannel(const KoID& id, const KisPaintDeviceWSP paintDevice, KisNodeWSP parent);
     KisRasterKeyframeChannel(const KoID& id, const KisPaintDeviceWSP paintDevice, const KisDefaultBoundsBaseSP bounds);

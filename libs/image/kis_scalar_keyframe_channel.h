@@ -50,6 +50,7 @@ struct ScalarKeyframeLimits {
 */
 class KRITAIMAGE_EXPORT KisScalarKeyframe : public KisKeyframe
 {
+    Q_OBJECT
 public:
     /** @brief Controls the type of interpolation between
      * this KisScalarKeyframe and the next. */
@@ -84,6 +85,11 @@ public:
     void setInterpolationTangents(QPointF leftTangent, QPointF rightTangent, KUndo2Command* parentUndoCmd = nullptr);
     QPointF leftTangent() const;
     QPointF rightTangent() const;
+
+    QMetaObject::Connection valueChangedChannelConnection;
+
+Q_SIGNALS:
+    void sigChanged(const KisScalarKeyframe* scalarKey);
 
 private:
     qreal m_value; /**< Scalar value of this keyframe. Optionally clamped to m_channelLimtis. */
@@ -135,6 +141,13 @@ public:
     void setDefaultInterpolationMode(KisScalarKeyframe::InterpolationMode mode);
 
     static QPointF interpolate(QPointF point1, QPointF rightTangent, QPointF leftTangent, QPointF point2, qreal t);
+
+Q_SIGNALS:
+    void sigKeyframeChanged(const KisKeyframeChannel *channel, int time);
+
+private Q_SLOTS:
+    void handleKeyframeAdded(const KisKeyframeChannel *channel, int time);
+    void handleKeyframeRemoved(const KisKeyframeChannel *channel, int time);
 
 private:
     static qreal findCubicCurveParameter(int time0, qreal delta0, qreal delta1, int time1, int time);

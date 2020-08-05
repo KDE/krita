@@ -25,20 +25,10 @@
 
 #include <QPointer>
 
-
-struct KisKeyframeSPStaticRegistrar {
-    KisKeyframeSPStaticRegistrar() {
-        qRegisterMetaType<KisKeyframeSP>("KisKeyframeSP");
-    }
-};
-static KisKeyframeSPStaticRegistrar __registrar;
-
-
 struct KisKeyframe::Private
 {
     int colorLabel{0}; /**< User-assignable color index associated with a given frame. Used for organization. */
 };
-
 
 KisKeyframe::KisKeyframe()
     : m_d(new Private())

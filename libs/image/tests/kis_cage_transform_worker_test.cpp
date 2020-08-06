@@ -114,11 +114,11 @@ void testCage(bool clockwise, bool unityTransform, bool benchmarkPrepareOnly = f
         .arg(unityTransform ? "unity" : "normal");
 
     if (testQImage) {
-        QVERIFY(TestUtil::checkQImage(result, "cage_transform_test", "cage_qimage", testName));
+        QVERIFY(TestUtil::checkQImage(result, "cage_transform_test", "cage_qimage", testName, 1, 1));
     } else if (!benchmarkPrepareOnly && pixelPrecision == 8) {
 
         result = dev->convertToQImage(0);
-        QVERIFY(TestUtil::checkQImage(result, "cage_transform_test", "cage", testName));
+        QVERIFY(TestUtil::checkQImage(result, "cage_transform_test", "cage", testName, 1, 1));
     }
 }
 
@@ -327,4 +327,4 @@ void KisCageTransformWorkerTest::testAngleBetweenVectors()
     QCOMPARE(t.map(b1), b2);
 }
 
-QTEST_MAIN(KisCageTransformWorkerTest)
+KISTEST_MAIN(KisCageTransformWorkerTest)

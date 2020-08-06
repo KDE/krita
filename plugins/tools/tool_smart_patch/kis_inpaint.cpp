@@ -493,15 +493,15 @@ template <typename T> float distance_impl(const MaskedImage& my, int x, int y, c
 {
     float dsq = 0;
     quint32 nchannels = my.channelCount();
-    quint8* v1 = my.imageData(x, y);
-    quint8* v2 = other.imageData(xo, yo);
+    T *v1 = reinterpret_cast<T*>(my.imageData(x, y));
+    T *v2 = reinterpret_cast<T*>(other.imageData(xo, yo));
 
     for (quint32 chan = 0; chan < nchannels; chan++) {
         //It's very important not to lose precision in the next line
-        float v = ((float)(*((T*)v1 + chan)) - (float)(*((T*)v2 + chan)));
+        float v = ((float)(*(v1 + chan)) - (float)(*(v2 + chan)));
         dsq += v * v;
     }
-    return dsq / ( (float)KoColorSpaceMathsTraits<T>::unitValue * (float)KoColorSpaceMathsTraits<T>::unitValue / MAX_DIST );
+    return dsq / (KoColorSpaceMathsTraits<float>::unitValue * KoColorSpaceMathsTraits<float>::unitValue / MAX_DIST );
 }
 
 

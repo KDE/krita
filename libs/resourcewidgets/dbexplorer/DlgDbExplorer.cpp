@@ -149,6 +149,8 @@ void DlgDbExplorer::updateTagModel(const QString& resourceType)
 
 void DlgDbExplorer::slotResetTagModel(QModelIndex topLeft, QModelIndex bottomRight)
 {
+    Q_UNUSED(topLeft);
+    Q_UNUSED(bottomRight);
     KisTagModelProvider::resetModels();
 }
 

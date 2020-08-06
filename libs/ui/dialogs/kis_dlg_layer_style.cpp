@@ -246,6 +246,7 @@ void KisDlgLayerStyle::slotNotifyOnReject()
 
 bool checkCustomNameAvailable(const QString &name)
 {
+    Q_UNUSED(name);
     const QString customName = "CustomStyles.asl";
 
     KoResourceServer<KisPSDLayerStyle> *server = KisResourceServerProvider::instance()->layerStyleServer();
@@ -504,6 +505,7 @@ void StylesSelector::LocationProxyModel::setLocationToFilterBy(QString location)
 
 bool StylesSelector::LocationProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
+    Q_UNUSED(source_parent);
     if (!m_enableFiltering) {
         return true;
     }
@@ -574,6 +576,8 @@ void StylesSelector::refillCollections()
 
 void StylesSelector::notifyExternalStyleChanged(const QString &name, const QUuid &uuid)
 {
+    Q_UNUSED(name);
+    Q_UNUSED(uuid);
     /*
     int currentIndex = -1;
 
@@ -626,6 +630,7 @@ void StylesSelector::selectStyle(QModelIndex current)
 
 void StylesSelector::loadCollection(const QString &fileName)
 {
+    Q_UNUSED(fileName);
     // TODO: RESOURCES: implement or remove
     warnKrita << "Collection cannot be loaded, because we do not use collections now; please use KisAslStorage instead.";
 

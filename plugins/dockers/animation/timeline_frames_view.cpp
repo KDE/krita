@@ -1247,8 +1247,10 @@ void TimelineFramesView::wheelEvent(QWheelEvent *e)
     }
 }
 
-void TimelineFramesView::resizeEvent(QResizeEvent *e)
+void TimelineFramesView::resizeEvent(QResizeEvent *event)
 {
+    Q_UNUSED(event);
+
     updateGeometries();
     slotUpdateInfiniteFramesCount();
 }

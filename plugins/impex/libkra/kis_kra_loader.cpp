@@ -1271,6 +1271,7 @@ KisNodeSP KisKraLoader::loadReferenceImagesLayer(const KoXmlElement &elem, KisIm
     for (QDomElement child = elem.firstChildElement(); !child.isNull(); child = child.nextSiblingElement()) {
         if (child.nodeName().toLower() == "referenceimage") {
             auto* reference = KisReferenceImage::fromXml(child);
+            reference->setZIndex(layer->shapes().size());
             layer->addShape(reference);
         }
     }

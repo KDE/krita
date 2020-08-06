@@ -63,7 +63,7 @@ protected:
     }
 
     void beforeCheckingResult(KisImageWSP image, KisNodeSP activeNode) override {
-        Q_UNUSED(image)
+        Q_UNUSED(image);
         Q_UNUSED(activeNode);
 
         if (m_useLod) {

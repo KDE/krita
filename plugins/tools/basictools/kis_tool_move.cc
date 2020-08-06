@@ -503,13 +503,13 @@ void KisToolMove::beginAlternateAction(KoPointerEvent *event, AlternateAction ac
 
 void KisToolMove::continueAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
-    Q_UNUSED(action)
+    Q_UNUSED(action);
     continueAction(event);
 }
 
 void KisToolMove::endAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
-    Q_UNUSED(action)
+    Q_UNUSED(action);
     endAction(event);
 }
 

@@ -708,7 +708,7 @@ void LayerModel::imageHasChanged()
 
 void LayerModel::aboutToRemoveNode(KisNodeSP node)
 {
-    Q_UNUSED(node)
+    Q_UNUSED(node);
     QTimer::singleShot(0, this, SLOT(source_modelReset()));
 }
 

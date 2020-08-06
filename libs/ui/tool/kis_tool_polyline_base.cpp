@@ -263,7 +263,7 @@ QRectF KisToolPolylineBase::dragBoundingRect()
 
 void KisToolPolylineBase::listenToModifiers(bool listen)
 {
-    Q_UNUSED(listen)
+    Q_UNUSED(listen);
 }
 
 bool KisToolPolylineBase::listeningToModifiers()

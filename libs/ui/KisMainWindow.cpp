@@ -1673,7 +1673,7 @@ void KisMainWindow::slotFileOpen(bool isImporting)
         }
     }
 #else
-    Q_UNUSED(isImporting)
+    Q_UNUSED(isImporting);
 
     d->fileManager->openImportFile();
     connect(d->fileManager, SIGNAL(sigFileSelected(QString)), this, SLOT(slotFileSelected(QString)));

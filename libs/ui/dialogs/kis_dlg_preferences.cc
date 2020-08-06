@@ -1646,7 +1646,7 @@ bool KisDlgPreferences::editPreferences()
     connect(this->buttonBox(), SIGNAL(clicked(QAbstractButton*)), this, SLOT(slotButtonClicked(QAbstractButton*)));
 
     int retval = exec();
-    Q_UNUSED(retval)
+    Q_UNUSED(retval);
 
     if (!m_cancelClicked) {
         // General settings

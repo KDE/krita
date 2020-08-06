@@ -21,5 +21,5 @@
 
 void KisColorSelectorInterface::slotSetColorSpace(const KoColorSpace *cs)
 {
-    Q_UNUSED(cs)
+    Q_UNUSED(cs);
 }

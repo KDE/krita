@@ -344,7 +344,7 @@ QMimeData *ToolBarListWidget::mimeData(const QList<QListWidgetItem *> items) con
 
 bool ToolBarListWidget::dropMimeData(int index, const QMimeData *mimeData, Qt::DropAction action)
 {
-    Q_UNUSED(action)
+    Q_UNUSED(action);
     const QByteArray data = mimeData->data(QStringLiteral("application/x-kde-action-list"));
     if (data.isEmpty()) {
         return false;

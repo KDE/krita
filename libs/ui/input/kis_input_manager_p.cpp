@@ -82,7 +82,7 @@ KisInputManager::Private::EventEater::EventEater()
 
 bool KisInputManager::Private::EventEater::eventFilter(QObject* target, QEvent* event )
 {
-    Q_UNUSED(target)
+    Q_UNUSED(target);
 
     auto debugEvent = [&](int i) {
         if (KisTabletDebugger::instance()->debugEnabled()) {

@@ -80,13 +80,13 @@ void DocumentListModel::addDocument(const DocumentInfo &info)
 
 int DocumentListModel::rowCount(const QModelIndex &parent) const
 {
-    Q_UNUSED(parent)
+    Q_UNUSED(parent);
     return d->currentDocumentInfos.count();
 }
 
 int DocumentListModel::columnCount(const QModelIndex &parent) const
 {
-    Q_UNUSED(parent)
+    Q_UNUSED(parent);
     return 1;
 }
 
@@ -120,9 +120,9 @@ QString DocumentListModel::prettyTime( const QDateTime& theTime)
 
 QVariant DocumentListModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    Q_UNUSED(section)
-    Q_UNUSED(orientation)
-    Q_UNUSED(role)
+    Q_UNUSED(section);
+    Q_UNUSED(orientation);
+    Q_UNUSED(role);
     return QVariant();
 }
 

@@ -84,7 +84,7 @@ static bool checkForAsymmetricZeros = false;
         dbgKrita << ppVar(scaledIter) << ppVar(t);                      \
     } while (0)
 #else
-#define DEBUG_ALL() Q_UNUSED(beginDst); Q_UNUSED(endDst)
+#define DEBUG_ALL() Q_UNUSED(beginDst); Q_UNUSED(endDst);
 #define DEBUG_SAMPLE()
 #endif
 

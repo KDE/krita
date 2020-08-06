@@ -248,7 +248,7 @@ QImage KisBaseNode::createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspe
 
 QImage KisBaseNode::createThumbnailForFrame(qint32 w, qint32 h, int time, Qt::AspectRatioMode aspectRatioMode)
 {
-    Q_UNUSED(time)
+    Q_UNUSED(time);
     Q_UNUSED(aspectRatioMode);
     return createThumbnail(w, h);
 }

@@ -107,7 +107,7 @@ QList<KoResourceSP> KisBrushOptionProperties::prepareLinkedResourcesImpl(const K
 
 QList<KoResourceSP> KisBrushOptionProperties::prepareEmbeddedResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const
 {
-    Q_UNUSED(settings)
+    Q_UNUSED(settings);
     Q_UNUSED(resourcesInterface);
     return {};
 }

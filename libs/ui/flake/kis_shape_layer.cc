@@ -322,7 +322,7 @@ void KisShapeLayer::fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prev
 
 void KisShapeLayer::setParent(KoShapeContainer *parent)
 {
-    Q_UNUSED(parent)
+    Q_UNUSED(parent);
     KIS_ASSERT_RECOVER_RETURN(0);
 }
 

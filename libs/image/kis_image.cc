@@ -1860,7 +1860,7 @@ void KisImage::stopIsolatedMode()
             setClearsRedoOnStart(false);
         }
 
-        void initStrokeCallback() {
+        void initStrokeCallback() override {
             if (!m_image->m_d->isolationRootNode)  return;
 
             m_oldRootNode = m_image->m_d->isolationRootNode;

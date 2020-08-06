@@ -50,7 +50,7 @@ public:
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin) override;
     void setAdjustedBrushPosition(const QPointF position) override;
     void setFollowBrushPosition(bool follow) override;
-    virtual void endStroke();
+    void endStroke() override;
     QPointF getEditorPosition() const override;
     int numHandles() const override { return 1; }
 

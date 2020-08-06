@@ -35,7 +35,7 @@ public:
 
     int currentIndex() const;
 
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
     void resizeEvent(QResizeEvent* e) override;
 
     int calculateMenuOffset() const;

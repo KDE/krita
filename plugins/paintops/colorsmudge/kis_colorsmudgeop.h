@@ -59,7 +59,7 @@ protected:
     KisSpacingInformation paintAt(const KisPaintInformation& info) override;
 
     KisSpacingInformation updateSpacingImpl(const KisPaintInformation &info) const override;
-    KisTimingInformation updateTimingImpl(const KisPaintInformation &info) const;
+    KisTimingInformation updateTimingImpl(const KisPaintInformation &info) const override;
 
 private:
     // Sets the m_maskDab _and m_maskDabRect

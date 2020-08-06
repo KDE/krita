@@ -55,6 +55,7 @@ public:
     KisImageSP image();
     vKisNodeSP activeNodes();
     QList<KisPaintingAssistantSP> assistants();
+    StoryboardItemList storyboardItemList();
 
 public Q_SLOTS:
 
@@ -77,6 +78,7 @@ private:
 
     vKisNodeSP m_activeNodes;
     QList<KisPaintingAssistantSP> m_assistants;
+    StoryboardItemList m_storyboardItemList;
     bool m_stop {false};
 
     KoStore *m_store {0};

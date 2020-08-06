@@ -36,6 +36,10 @@ KisStoryboardThumbnailRenderScheduler::~KisStoryboardThumbnailRenderScheduler()
 
 void KisStoryboardThumbnailRenderScheduler::setImage(KisImageSP image)
 {
+    if (m_image == image) {
+        return;
+    }
+    cancelAllFrameRendering();
     m_image = image;
 }
 
@@ -67,22 +71,30 @@ void KisStoryboardThumbnailRenderScheduler::scheduleFrameForRegeneration(int fra
     }
 }
 
+void KisStoryboardThumbnailRenderScheduler::cancelAllFrameRendering()
+{
+    m_affectedFramesQueue.empty();
+    m_changedFramesQueue.empty();
+    if (m_renderer->isActive()) {
+        m_renderer->cancelCurrentFrameRendering();
+    }
+    m_currentFrame = -1;
+}
 
 void KisStoryboardThumbnailRenderScheduler::cancelFrameRendering(int frame)
 {
     if (frame < 0) {
         return;
     }
-    if (m_renderer->isActive()) {
-        if (frame == m_currentFrame) {
-            m_renderer->cancelCurrentFrameRendering();
-        }
-        else if (m_changedFramesQueue.contains(frame)) {
-            m_changedFramesQueue.removeAll(frame);
-        }
-        else if (m_affectedFramesQueue.contains(frame)) {
-            m_affectedFramesQueue.removeAll(frame);
-        }
+    if (m_renderer->isActive() && frame == m_currentFrame) {
+        m_renderer->cancelCurrentFrameRendering();
+        m_currentFrame = -1;
+    }
+    else if (m_changedFramesQueue.contains(frame)) {
+        m_changedFramesQueue.removeAll(frame);
+    }
+    else if (m_affectedFramesQueue.contains(frame)) {
+        m_affectedFramesQueue.removeAll(frame);
     }
 }
 

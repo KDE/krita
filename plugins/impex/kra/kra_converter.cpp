@@ -138,6 +138,11 @@ QList<KisPaintingAssistantSP> KraConverter::assistants()
     return m_assistants;
 }
 
+StoryboardItemList KraConverter::storyboardItemList()
+{
+    return m_storyboardItemList;
+}
+
 KisImportExportErrorCode KraConverter::buildFile(QIODevice *io, const QString &filename)
 {
     setProgress(5);
@@ -418,6 +423,7 @@ bool KraConverter::completeLoading(KoStore* store)
 
     m_activeNodes = m_kraLoader->selectedNodes();
     m_assistants = m_kraLoader->assistants();
+    m_storyboardItemList = m_kraLoader->storyboardItemList();
 
     return true;
     return m_kraLoader->errorMessages().isEmpty();

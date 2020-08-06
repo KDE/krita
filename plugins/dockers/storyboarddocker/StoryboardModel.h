@@ -35,42 +35,6 @@
 class StoryboardView;
 class KisTimeRange;
 class KisStoryboardThumbnailRenderScheduler;
-class CommentBox
-{
-public:
-    CommentBox()
-    : content("")
-    , scrollValue(0)
-    {}
-    CommentBox(const CommentBox& other)
-    : content(other.content)
-    , scrollValue(other.scrollValue)
-    {}
-    ~CommentBox()
-    {}
-    QVariant content;
-    QVariant scrollValue;
-};
-
-class ThumbnailData
-{
-public:
-    ThumbnailData()
-    : frameNum("")
-    , pixmap(QPixmap())
-    {}
-    ThumbnailData(const ThumbnailData& other)
-    : frameNum(other.frameNum)
-    , pixmap(other.pixmap)
-    {}
-    ~ThumbnailData()
-    {}
-    QVariant frameNum;
-    QVariant pixmap;
-};
-
-Q_DECLARE_METATYPE(CommentBox)
-Q_DECLARE_METATYPE(ThumbnailData)
 
 class KRITASTORYBOARDDOCKER_EXPORT StoryboardModel : public QAbstractItemModel
 {
@@ -125,14 +89,6 @@ public:
     void resetData(StoryboardItemList list);
     StoryboardItemList getData();
 
-    enum childIndexType{
-        FrameNumber,
-        ItemName,
-        DurationSecond,
-        DurationFrame,
-        Comments
-    };
-
 private Q_SLOTS:
     void slotFrameChanged(int frameId);
     void slotChangeFrameGlobal(QItemSelection selected, QItemSelection deselected);
@@ -154,6 +110,16 @@ private Q_SLOTS:
 
 public Q_SLOTS:
     void slotSetActiveNode(KisNodeSP);
+
+Q_SIGNALS:
+    /*
+     * this signal is emitted whenever m_items is changed.
+     * it is used to keep the StoryboardItemList in KisDocument
+     * in sync with m_items
+     */
+    //TODO: Use a signal compressor to reduce frequency
+    void sigStoryboardItemListChanged();
+
 private:
     StoryboardItemList m_items;
     QVector<Comment> m_commentList;

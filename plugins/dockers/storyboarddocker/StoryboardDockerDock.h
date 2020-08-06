@@ -46,7 +46,18 @@ public:
     void setViewManager(KisViewManager* kisview) override;
 
 private Q_SLOTS:
+    /**
+     * @brief sets the image in Model to nullptr if there is no canvas set or no KisImage
+     */
     void notifyImageDeleted();
+    /**
+     * @brief sets the KisDocument's storyboardItemList to be the same as Model's storyboardItemList
+     */
+    void slotUpdateDocumentList();
+    /**
+     * @brief sets the Model's storyboardItemList to be the same as KisDocument's storyboardItemList
+     */
+    void slotUpdateModelList();
 
     void slotExportAsPdf();
     void slotExportAsSvg();

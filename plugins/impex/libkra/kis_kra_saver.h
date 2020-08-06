@@ -62,6 +62,7 @@ private:
     bool saveAudio(QDomDocument& doc, QDomElement& element);
     bool saveNodeKeyframes(KoStore *store, QString location, const KisNode *node);
     void savePalettesToXML(QDomDocument& doc, QDomElement &element);
+    void saveStoryboardItems(QDomDocument& doc, QDomElement &element);
     struct Private;
     Private * const m_d;
 };

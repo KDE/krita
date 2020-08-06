@@ -60,6 +60,8 @@ public:
     // it's neater to follow the same design as with selectedNodes, so let's have a getter here
     QList<KisPaintingAssistantSP> assistants() const;
 
+    StoryboardItemList storyboardItemList() const;
+
     /// if empty, loading didn't fail...
     QStringList errorMessages() const;
 
@@ -118,6 +120,7 @@ private:
     void loadGuides(const KoXmlElement& elem);
     void loadMirrorAxis(const KoXmlElement& elem);
     void loadAudio(const KoXmlElement& elem, KisImageSP image);
+    void loadStoryboardItemList(const KoXmlElement& elem);
 private:
 
     struct Private;

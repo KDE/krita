@@ -121,7 +121,7 @@ QRect StoryboardView::visualRect(const QModelIndex &index) const
         }
         switch (childRow)
         {
-            case StoryboardModel::FrameNumber:
+            case StoryboardItem::FrameNumber:
             {   
                 //the frame thumbnail rect
                 if (!thumbnailIsVisible()) {
@@ -133,21 +133,21 @@ QRect StoryboardView::visualRect(const QModelIndex &index) const
                 parentRect.translate(0, fontHeight);
                 return parentRect;
             }
-            case StoryboardModel::ItemName:
+            case StoryboardItem::ItemName:
             {
                 QRect itemNameRect = parentRect;
                 itemNameRect.setSize(QSize(thumbnailWidth - (12 * numericFontWidth + 22), fontHeight));
                 itemNameRect.moveLeft(parentRect.left() + 3*numericFontWidth + 2);
                 return itemNameRect;
             }
-            case StoryboardModel::DurationSecond:
+            case StoryboardItem::DurationSecond:
             {
                 QRect secondRect = parentRect;
                 secondRect.setSize(QSize(5 * numericFontWidth + 10, fontHeight));
                 secondRect.moveLeft(parentRect.left() + thumbnailWidth - 9*numericFontWidth  -20);
                 return secondRect;
             }
-            case StoryboardModel::DurationFrame:
+            case StoryboardItem::DurationFrame:
             {
                 QRect frameRect = parentRect;
                 frameRect.setSize(QSize(4 * numericFontWidth + 10, fontHeight));

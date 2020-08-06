@@ -21,10 +21,52 @@
 
 #include <QVariant>
 #include <QVector>
+#include <QPixmap>
+
 #include "kritaui_export.h"
+#include "kis_types.h"
 
 //each storyboardItem contains pointer to child data
 class StoryboardItem;
+class QDomDocument;
+class QDomElement;
+
+class CommentBox
+{
+public:
+    CommentBox()
+    : content("")
+    , scrollValue(0)
+    {}
+    CommentBox(const CommentBox& other)
+    : content(other.content)
+    , scrollValue(other.scrollValue)
+    {}
+    ~CommentBox()
+    {}
+    QVariant content;
+    QVariant scrollValue;
+};
+
+class ThumbnailData
+{
+public:
+    ThumbnailData()
+    : frameNum("")
+    , pixmap(QPixmap())
+    {}
+    ThumbnailData(const ThumbnailData& other)
+    : frameNum(other.frameNum)
+    , pixmap(other.pixmap)
+    {}
+    ~ThumbnailData()
+    {}
+    QVariant frameNum;
+    QVariant pixmap;
+};
+
+Q_DECLARE_METATYPE(CommentBox)
+Q_DECLARE_METATYPE(ThumbnailData)
 
 class StoryboardChild
 {
@@ -55,6 +97,7 @@ class KRITAUI_EXPORT StoryboardItem
 {
 public:
     explicit StoryboardItem();
+    StoryboardItem(const StoryboardItem& other);
     ~StoryboardItem();
 
     void appendChild(QVariant data = QVariant());
@@ -62,7 +105,20 @@ public:
     void removeChild(int row);
     void moveChild(int from, int to);
     int childCount() const;
-    StoryboardChild *child(int row);
+    StoryboardChild *child(int row) const;
+
+    QDomElement toXML(QDomDocument doc);
+    void loadXML(const QDomElement &itemNode);
+
+    static StoryboardItemList cloneStoryboardItemList(const StoryboardItemList &list);
+
+    enum childType{
+        FrameNumber,
+        ItemName,
+        DurationSecond,
+        DurationFrame,
+        Comments
+    };
 
 private:
     QVector<StoryboardChild*> m_childData;

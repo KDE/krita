@@ -83,7 +83,7 @@ void StoryboardTimelineSyncTest::testStoryboardItemSortedUniquePositive()
     int lastFrame = -1;
     for (int i = 0; i < numRows; i++) {
         QModelIndex parentIndex = m_storyboardModel->index(i, 0);
-        QModelIndex frameIndex = m_storyboardModel->index(StoryboardModel::FrameNumber, 0, parentIndex);
+        QModelIndex frameIndex = m_storyboardModel->index(StoryboardItem::FrameNumber, 0, parentIndex);
         QVERIFY(frameIndex.data().toInt() > lastFrame);
         lastFrame = frameIndex.data().toInt();
     }
@@ -180,10 +180,10 @@ void StoryboardTimelineSyncTest::testDurationChange()
     QCOMPARE(m_storyboardModel->rowCount(), 2);
 
     QModelIndex parentIndex = m_storyboardModel->indexFromFrame(0);
-    QCOMPARE(m_storyboardModel->index(StoryboardModel::DurationSecond, 0, parentIndex).data().toInt(), 1);
-    QCOMPARE(m_storyboardModel->index(StoryboardModel::DurationFrame, 0, parentIndex).data().toInt(), 0);
+    QCOMPARE(m_storyboardModel->index(StoryboardItem::DurationSecond, 0, parentIndex).data().toInt(), 1);
+    QCOMPARE(m_storyboardModel->index(StoryboardItem::DurationFrame, 0, parentIndex).data().toInt(), 0);
 
-    m_storyboardModel->setData(m_storyboardModel->index(StoryboardModel::DurationFrame, 0, parentIndex), 3);
+    m_storyboardModel->setData(m_storyboardModel->index(StoryboardItem::DurationFrame, 0, parentIndex), 3);
 
     //keyframes at 0 and fps + 3 + 1 = fps + 4
     QVERIFY(m_channel1->keyframeAt(fps + 1).isNull());
@@ -200,8 +200,8 @@ void StoryboardTimelineSyncTest::testFpsChanged()
     int fpsafter = m_image->animationInterface()->framerate();
 
     QModelIndex parentIndex = m_storyboardModel->indexFromFrame(0);
-    QCOMPARE(m_storyboardModel->index(StoryboardModel::DurationSecond, 0, parentIndex).data().toInt(), (fpsbefore + 3) / fpsafter);
-    QCOMPARE(m_storyboardModel->index(StoryboardModel::DurationFrame, 0, parentIndex).data().toInt(), (fpsbefore + 3) % fpsafter);
+    QCOMPARE(m_storyboardModel->index(StoryboardItem::DurationSecond, 0, parentIndex).data().toInt(), (fpsbefore + 3) / fpsafter);
+    QCOMPARE(m_storyboardModel->index(StoryboardItem::DurationFrame, 0, parentIndex).data().toInt(), (fpsbefore + 3) % fpsafter);
 }
 
 QTEST_MAIN(StoryboardTimelineSyncTest)

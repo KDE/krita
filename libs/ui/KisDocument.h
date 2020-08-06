@@ -369,7 +369,7 @@ public:
     void setPaletteList(const QList<KoColorSetSP> &paletteList, bool emitSignal = false);
 
     /**
-     * @brief returns the list of storyboard Item for the document
+     * @brief returns the list of pointers to storyboard Items for the document
      */
     StoryboardItemList getStoryboardItemList();
 

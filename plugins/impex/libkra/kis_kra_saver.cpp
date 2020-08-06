@@ -59,6 +59,7 @@
 #include "kis_grid_config.h"
 #include "kis_guides_config.h"
 #include "KisProofingConfiguration.h"
+#include "StoryboardItem.h"
 
 #include <KisMirrorAxisConfig.h>
 
@@ -83,6 +84,7 @@ KisKraSaver::KisKraSaver(KisDocument* document, const QString &filename)
         : m_d(new Private)
 {
     m_d->doc = document;
+    qDebug()<<"creating kra saver and size of array is "<<document->getStoryboardItemList().count();
     m_d->filename = filename;
 
     m_d->imageName = m_d->doc->documentInfo()->aboutInfo("title");
@@ -144,6 +146,7 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageSP image)
     saveMirrorAxis(doc, imageElement);
     saveAudio(doc, imageElement);
     savePalettesToXML(doc, imageElement);
+    saveStoryboardItems(doc, imageElement);
 
     QDomElement animationElement = doc.createElement("animation");
     KisDomUtils::saveValue(&animationElement, "framerate", image->animationInterface()->framerate());
@@ -192,6 +195,16 @@ void KisKraSaver::savePalettesToXML(QDomDocument &doc, QDomElement &element)
         ePalette.appendChild(eFile);
     }
     element.appendChild(ePalette);
+}
+
+void KisKraSaver:: saveStoryboardItems(QDomDocument& doc, QDomElement &element)
+{
+    QDomElement eItemList = doc.createElement("StoryboardItemList");
+    for (StoryboardItem *item : m_d->doc->getStoryboardItemList()) {
+        QDomElement eItem =  item->toXML(doc);
+        eItemList.appendChild(eItem);
+    }
+    element.appendChild(eItemList);
 }
 
 bool KisKraSaver::saveKeyframes(KoStore *store, const QString &uri, bool external)

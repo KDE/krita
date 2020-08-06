@@ -221,9 +221,12 @@ void StoryboardDockerDock::setCanvas(KoCanvasBase *canvas)
     }
 
     if (m_canvas) {
-        //update the item list in KisDocument and empty storyboardModel
+        //update the item list in KisDocument and empty storyboardModel's list
         m_canvas->imageView()->document()->setStoryboardItemList(m_storyboardModel->getData());
         m_storyboardModel->resetData(StoryboardItemList());
+
+        disconnect(m_storyboardModel, SIGNAL(sigStoryboardItemListChanged()), this, SLOT(slotUpdateDocumentList()));
+        disconnect(m_canvas->imageView()->document(), SIGNAL(sigStoryboardItemListChanged()), this, SLOT(slotUpdateModelList()));
     }
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
@@ -235,7 +238,8 @@ void StoryboardDockerDock::setCanvas(KoCanvasBase *canvas)
         m_storyboardModel->setImage(m_canvas->image());
         m_storyboardDelegate->setImageSize(m_canvas->image()->size());
         connect(m_canvas->image(), SIGNAL(sigAboutToBeDeleted()), SLOT(notifyImageDeleted()), Qt::UniqueConnection);
-
+        connect(m_storyboardModel, SIGNAL(sigStoryboardItemListChanged()), SLOT(slotUpdateDocumentList()), Qt::UniqueConnection);
+        connect(m_canvas->imageView()->document(), SIGNAL(sigStoryboardItemListChanged()), this, SLOT(slotUpdateModelList()), Qt::UniqueConnection);
         if (m_nodeManager) {
             m_storyboardModel->slotSetActiveNode(m_nodeManager->activeNode());
         }
@@ -261,6 +265,16 @@ void StoryboardDockerDock::notifyImageDeleted()
     if (!m_canvas || !m_canvas->image()){
         m_storyboardModel->setImage(0);
     }
+}
+
+void StoryboardDockerDock::slotUpdateDocumentList()
+{
+    m_canvas->imageView()->document()->setStoryboardItemList(m_storyboardModel->getData());
+}
+
+void StoryboardDockerDock::slotUpdateModelList()
+{
+    m_storyboardModel->resetData(m_canvas->imageView()->document()->getStoryboardItemList());
 }
 
 void StoryboardDockerDock::slotExportAsPdf()

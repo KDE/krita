@@ -78,7 +78,7 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
 
             switch (childNum)
             {
-                case StoryboardModel::FrameNumber:
+                case StoryboardItem::FrameNumber:
                 {
                     if (m_view->thumbnailIsVisible()) {
                         QRect frameNumRect = option.rect;
@@ -125,7 +125,7 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
                     }
                     break;
                 }
-                case StoryboardModel::ItemName:
+                case StoryboardItem::ItemName:
                 {
                     QRect itemNameRect = option.rect;
                     itemNameRect.setLeft(option.rect.left() + 5);
@@ -135,12 +135,12 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
                     p->drawRect(option.rect);
                     break;
                 }
-                case StoryboardModel::DurationSecond:
+                case StoryboardItem::DurationSecond:
                 {
                     drawSpinBox(p, option, data, i18nc("suffix in spin box in storyboard that means 'seconds'", "s"));
                     break;
                 }
-                case StoryboardModel::DurationFrame:
+                case StoryboardItem::DurationFrame:
                 {
                     drawSpinBox(p, option, data, i18nc("suffix in spin box in storyboard that means 'frames'", "f"));
                     break;
@@ -290,21 +290,21 @@ QWidget *StoryboardDelegate::createEditor(QWidget *parent,
         int row = index.row();
         switch (row)
         {
-            case StoryboardModel::FrameNumber:
+            case StoryboardItem::FrameNumber:
             return nullptr;
-            case StoryboardModel::ItemName:
+            case StoryboardItem::ItemName:
             {
                 QLineEdit *editor = new QLineEdit(parent);
                 return editor;
             }
-            case StoryboardModel::DurationSecond:
+            case StoryboardItem::DurationSecond:
             {
                 QSpinBox *spinbox = new QSpinBox(parent);
                 spinbox->setRange(0, 999);
                 spinbox->setSuffix(i18nc("suffix in spin box in storyboard that means 'seconds'", "s"));
                 return spinbox;
             }
-            case StoryboardModel::DurationFrame:
+            case StoryboardItem::DurationFrame:
             {
                 QSpinBox *spinbox = new QSpinBox(parent);
                 spinbox->setRange(0, 99);
@@ -330,7 +330,7 @@ bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
         const bool leftButton = mouseEvent->buttons() & Qt::LeftButton;
 
         //handle the duration edit event
-        if (index.parent().isValid() && (index.row() == StoryboardModel::DurationSecond || index.row() == StoryboardModel::DurationFrame)) {
+        if (index.parent().isValid() && (index.row() == StoryboardItem::DurationSecond || index.row() == StoryboardItem::DurationFrame)) {
             QRect upButton = spinBoxUpButton(option);
             QRect downButton = spinBoxDownButton(option);
 
@@ -347,7 +347,7 @@ bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
                 return true;
             }
         }
-        else if (index.parent().isValid() && index.row() >= StoryboardModel::Comments) {
+        else if (index.parent().isValid() && index.row() >= StoryboardItem::Comments) {
             QStyleOptionSlider scrollBarOption = drawComment(nullptr, option, index);
             QRect upButton = scrollUpButton(option, scrollBarOption);
             QRect downButton = scrollDownButton(option, scrollBarOption);
@@ -371,7 +371,7 @@ bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
             }
         }
 
-        else if (index.parent().isValid() && index.row() == StoryboardModel::FrameNumber && m_view->thumbnailIsVisible()) {     //thumbnail add/delete events
+        else if (index.parent().isValid() && index.row() == StoryboardItem::FrameNumber && m_view->thumbnailIsVisible()) {     //thumbnail add/delete events
             QRect addItemButton(QPoint(0, 0), QSize(22, 22));
             addItemButton.moveBottomLeft(option.rect.bottomLeft());
 
@@ -404,7 +404,7 @@ bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
         bool lastClickPosInScroll = scrollBarRect.isValid() && scrollBarRect.contains(m_lastDragPos);
         bool currClickPosInScroll = scrollBarRect.isValid() && scrollBarRect.contains(mouseEvent->pos());
 
-        if (leftButton && index.parent().isValid() && index.row() >= StoryboardModel::Comments) {
+        if (leftButton && index.parent().isValid() && index.row() >= StoryboardItem::Comments) {
             if (lastClickPosInScroll && currClickPosInScroll) {
                 int lastValue = model->data(index, Qt::UserRole).toInt();
                 int value = lastValue + mouseEvent->pos().y() - m_lastDragPos.y();
@@ -430,16 +430,16 @@ void StoryboardDelegate::setEditorData(QWidget *editor,
         int row = index.row();
         switch (row)
         {
-            case StoryboardModel::FrameNumber:             //frame thumbnail is uneditable
+            case StoryboardItem::FrameNumber:             //frame thumbnail is uneditable
                 return;
-            case StoryboardModel::ItemName:
+            case StoryboardItem::ItemName:
             {
                 QLineEdit *lineEdit = static_cast<QLineEdit*>(editor);
                 lineEdit->setText(value.toString());
                 return;
             }
-            case StoryboardModel::DurationSecond:
-            case StoryboardModel::DurationFrame:
+            case StoryboardItem::DurationSecond:
+            case StoryboardItem::DurationFrame:
             {
                 QSpinBox *spinbox = static_cast<QSpinBox*>(editor);
                 spinbox->setValue(value.toInt());
@@ -467,17 +467,17 @@ void StoryboardDelegate::setModelData(QWidget *editor, QAbstractItemModel *model
         int row = index.row();
         switch (row)
         {
-            case StoryboardModel::FrameNumber:             //frame thumbnail is uneditable
+            case StoryboardItem::FrameNumber:             //frame thumbnail is uneditable
                 return;
-            case StoryboardModel::ItemName:
+            case StoryboardItem::ItemName:
             {
                 QLineEdit *lineEdit = static_cast<QLineEdit*>(editor);
                 QString value = lineEdit->text();
                 model->setData(index, value, Qt::EditRole);
                 return;
             }
-            case StoryboardModel::DurationSecond:
-            case StoryboardModel::DurationFrame:
+            case StoryboardItem::DurationSecond:
+            case StoryboardItem::DurationFrame:
             {
                 QSpinBox *spinbox = static_cast<QSpinBox*>(editor);
                 int value = spinbox->value();
@@ -500,7 +500,7 @@ void StoryboardDelegate::setModelData(QWidget *editor, QAbstractItemModel *model
 void StoryboardDelegate::updateEditorGeometry(QWidget *editor,
     const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    if (index.row() < StoryboardModel::Comments) {
+    if (index.row() < StoryboardItem::Comments) {
         editor->setGeometry(option.rect);
     }
     else {                                                //for comment textedits

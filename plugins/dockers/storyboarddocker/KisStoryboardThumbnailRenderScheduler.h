@@ -41,20 +41,22 @@ public:
     KisStoryboardThumbnailRenderScheduler(QObject *parent);
     ~KisStoryboardThumbnailRenderScheduler();
 
-    /*
-    The class takes an image, clones it and performs all the regenrations
-    on the clone so no need to pass cloned image explicitly. Also the image
-    should be set only once and not every time before scheduling a frame
-    for regenration.
+    /**
+     * @brief sets an image, the class takes an image, clones it and performs all the regenerations
+     * on the clone so no need to pass cloned image explicitly. Also the image
+     * should be set only once and not every time before scheduling a frame
+     * for regenration. Setting an image cancels rendering of all previously scheduled frames.
+     * @param image to be set
     */
     void setImage(KisImageSP image);
-    /*
-    adds the frame to the list of "to be rendered" frames. the affected
-    argument denotes whether this frame was directly changed or affected
-    by changes made to other keyframes.
-    */
+    /**
+     * @brief adds the frame to the list of "to be rendered" frames.
+     * @param frame to be added
+     * @param affected denotes whether this frame was directly changed or affected
+     * by changes made to other keyframes.
+     */
     void scheduleFrameForRegeneration(int frame, bool affected);
-
+    void cancelAllFrameRendering();
     void cancelFrameRendering(int frame);
 
 private Q_SLOTS:

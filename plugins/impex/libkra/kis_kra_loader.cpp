@@ -90,6 +90,7 @@
 #include "kis_layer_properties_icons.h"
 #include "kis_node_view_color_scheme.h"
 #include "KisMirrorAxisConfig.h"
+#include "StoryboardItem.h"
 
 /*
 
@@ -139,6 +140,7 @@ public:
     int syntaxVersion; // version of the fileformat we are loading
     vKisNodeSP selectedNodes; // the nodes that were active when saving the document.
     QMap<QString, QString> assistantsFilenames;
+    StoryboardItemList storyboardItemList;
     QList<KisPaintingAssistantSP> assistants;
     QMap<KisNode*, QString> keyframeFilenames;
     QVector<QString> paletteFilenames;
@@ -365,6 +367,8 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
             loadAssistantsList(e);
         } else if (e.tagName() == "audio") {
             loadAudio(e, image);
+        } else if (e.tagName() == "StoryboardItemList") {
+            loadStoryboardItemList(e);
         }
     }
 
@@ -550,6 +554,11 @@ vKisNodeSP KisKraLoader::selectedNodes() const
 QList<KisPaintingAssistantSP> KisKraLoader::assistants() const
 {
     return m_d->assistants;
+}
+
+StoryboardItemList KisKraLoader::storyboardItemList() const
+{
+    return m_d->storyboardItemList;
 }
 
 QStringList KisKraLoader::errorMessages() const
@@ -1280,6 +1289,22 @@ void KisKraLoader::loadAudio(const KoXmlElement& elem, KisImageSP image)
     if (KisDomUtils::loadValue(qElement, "audioVolume", &audioVolume)) {
         image->animationInterface()->setAudioVolume(audioVolume);
     }
+}
+
+void KisKraLoader::loadStoryboardItemList(const KoXmlElement& elem)
+{
+    KoXmlNode child;
+    int count = 0;
+    for (child = elem.firstChild(); !child.isNull(); child = child.nextSibling()) {
+        KoXmlElement e = child.toElement();
+        if (e.tagName() == "storyboarditem") {
+            StoryboardItem *item = new StoryboardItem();
+            item->loadXML(e);
+            count++;
+            m_d->storyboardItemList.append(item);
+        }
+    }
+    qDebug()<<"found "<<count<<" storyboards";
 }
 
 KisNodeSP KisKraLoader::loadReferenceImagesLayer(const KoXmlElement &elem, KisImageSP image)

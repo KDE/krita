@@ -777,7 +777,7 @@ void TimelineDocker::handleFrameRateChange()
 
     KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
 
-    m_d->titlebar->sbFrameRate->setValue( m_d->canvas->image()->animationInterface()->framerate() );
+    m_d->titlebar->sbFrameRate->setValue(animInterface->framerate());
 }
 
 

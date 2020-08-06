@@ -48,8 +48,6 @@ public:
 private:
     int m_precisionLevel;
     bool m_autoPrecisionEnabled;
-    double m_sizeToStartFrom;
-    double m_deltaValue;
     bool m_hasImprecisePositionOptions = false;
 };
 

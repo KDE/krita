@@ -51,7 +51,7 @@ KisUtilityTitleBar::KisUtilityTitleBar(QLabel *title, QWidget *parent)
         {   // Float button...
             QPushButton *button = new QPushButton(style()->standardIcon(QStyle::SP_TitleBarNormalButton), "", this);
             button->setFlat(true);
-            connect(button, &QPushButton::clicked, [this, dockWidget](){
+            connect(button, &QPushButton::clicked, [dockWidget](){
                 dockWidget->setFloating(!dockWidget->isFloating());
             } );
             sublayout->addWidget(button);

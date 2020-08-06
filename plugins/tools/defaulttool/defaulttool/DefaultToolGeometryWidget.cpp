@@ -318,7 +318,6 @@ void DefaultToolGeometryWidget::slotUpdateSizeBoxes(bool updateAspect)
     const QRectF bounds = calculateSelectionBounds(selection, anchor, useGlobalSize);
 
     const bool hasSizeConfiguration = !bounds.isNull();
-    const bool hasNullDimensions = bounds.isEmpty();
 
     widthSpinBox->setEnabled(hasSizeConfiguration && bounds.width() > 0);
     heightSpinBox->setEnabled(hasSizeConfiguration && bounds.height() > 0);

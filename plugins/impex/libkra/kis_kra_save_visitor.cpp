@@ -95,7 +95,9 @@ bool KisKraSaveVisitor::visit(KisExternalLayer * layer)
     bool result = false;
     if (auto* referencesLayer = dynamic_cast<KisReferenceImagesLayer*>(layer)) {
         result = true;
-        Q_FOREACH(KoShape *shape, referencesLayer->shapes()) {
+        QList <KoShape *> shapes = referencesLayer->shapes();
+        std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
+        Q_FOREACH(KoShape *shape, shapes) {
             auto *reference = dynamic_cast<KisReferenceImage*>(shape);
             KIS_ASSERT_RECOVER_RETURN_VALUE(reference, false);
             bool saved = reference->saveImage(m_store);

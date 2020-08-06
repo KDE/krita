@@ -105,6 +105,9 @@ void ToolReferenceImages::addReferenceImage()
     if (!QFileInfo(filename).exists()) return;
 
     auto *reference = KisReferenceImage::fromFile(filename, *kisCanvas->coordinatesConverter(), canvas()->canvasWidget());
+    if (document()->referenceImagesLayer()) {
+        reference->setZIndex(document()->referenceImagesLayer()->shapes().size());
+    }
 
     if (reference) {
         KisDocument *doc = document();
@@ -117,7 +120,11 @@ void ToolReferenceImages::pasteReferenceImage()
     KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     KIS_ASSERT_RECOVER_RETURN(kisCanvas);
 
-            KisReferenceImage* reference = KisReferenceImage::fromClipboard(*kisCanvas->coordinatesConverter());
+    KisReferenceImage* reference = KisReferenceImage::fromClipboard(*kisCanvas->coordinatesConverter());
+    if (document()->referenceImagesLayer()) {
+        reference->setZIndex(document()->referenceImagesLayer()->shapes().size());
+    }
+
     if(reference) {
         KisDocument *doc = document();
         doc->addCommand(KisReferenceImagesLayer::addReferenceImages(doc, {reference}));
@@ -159,10 +166,18 @@ void ToolReferenceImages::loadReferenceImages()
     }
 
     KisReferenceImageCollection collection;
+
+    int currentZIndex = 0;
+    if (document()->referenceImagesLayer()) {
+        currentZIndex = document()->referenceImagesLayer()->shapes().size();
+    }
+
     if (collection.load(&file)) {
         QList<KoShape*> shapes;
         Q_FOREACH(auto *reference, collection.referenceImages()) {
+            reference->setZIndex(currentZIndex);
             shapes.append(reference);
+            currentZIndex += 1;
         }
 
         KisDocument *doc = document();

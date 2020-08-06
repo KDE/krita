@@ -26,12 +26,10 @@ void KisKeyframeAnimationInterfaceSignalTest::initTestCase()
 {
     m_image1 = new KisImage(0, 100, 100, nullptr, "image1");
     m_layer1 = new KisPaintLayer(m_image1, "layer1", OPACITY_OPAQUE_U8);
-    KisPaintDeviceSP paintDevice = m_layer1->paintDevice();
-    paintDevice->createKeyframeChannel(KoID());
-    m_channel = paintDevice->keyframeChannel();
+    m_channel = m_layer1->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
 
-    m_image2 = new KisImage(0, 100, 100, nullptr, "image1");
-    m_layer2 = new KisPaintLayer(m_image1, "layer1", OPACITY_OPAQUE_U8);
+    m_image2 = new KisImage(0, 100, 100, nullptr, "image2");
+    m_layer2 = new KisPaintLayer(m_image1, "layer2", OPACITY_OPAQUE_U8);
 }
 
 void KisKeyframeAnimationInterfaceSignalTest::init()
@@ -74,37 +72,16 @@ void KisKeyframeAnimationInterfaceSignalTest::testSignalFromKeyframeChannelToInt
 
 void KisKeyframeAnimationInterfaceSignalTest::testSignalOnNodeReset()
 {
-    //set node to null 
-    m_channel->setNode(KisNodeWSP(nullptr));
-
-    //change node check connections
+    //change node check connections, the node must belong to the same image
     m_channel->setNode((KisNodeWSP)(m_layer2));
-
-    QVERIFY(!connect(m_layer2, SIGNAL(sigBeginImageReset(KisNodeWSP, KisImageWSP)), 
-                m_channel, SLOT(slotUnbindSignalsToAnimationInterface(KisNodeWSP, KisImageWSP)), Qt::UniqueConnection));
-    QVERIFY(!connect(m_layer2, SIGNAL(sigEndImageReset(KisNodeWSP)), 
-                m_channel, SLOT(slotBindSignalsToAnimationInterface(KisNodeWSP)), Qt::UniqueConnection));
 
     testSignalFromKeyframeChannelToInterface();
 }
 
 void KisKeyframeAnimationInterfaceSignalTest::testSignalOnImageReset()
 {
-    //change the image and check for signals from node
-    QSignalSpy newSpyBegImageReset(m_layer2 , SIGNAL(sigBeginImageReset(KisNodeWSP, KisImageWSP)));
-    QVERIFY(newSpyBegImageReset.isValid());
-
-    QSignalSpy newSpyEndImageReset(m_layer2 , SIGNAL(sigEndImageReset(KisNodeWSP)));
-    QVERIFY(newSpyEndImageReset.isValid());
-
-    m_layer2->setImage(m_image2);
+    m_layer1->setImage(m_image2);
     
-    QCOMPARE(newSpyBegImageReset.count(), 1);
-    newSpyBegImageReset.clear();
-
-    QCOMPARE(newSpyEndImageReset.count(), 1);
-    newSpyEndImageReset.clear();
-
     //test the connections between m_channel and new image's animation interface
     QVERIFY(!connect(m_channel, SIGNAL(sigKeyframeAdded(KisKeyframeSP)), m_image2->animationInterface(), SIGNAL(sigKeyframeAdded(KisKeyframeSP)), Qt::UniqueConnection));  
 

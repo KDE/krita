@@ -62,7 +62,6 @@ KisKeyframeChannel::KisKeyframeChannel(const KoID &id, KisNodeWSP parent)
     m_d->id = id;
     m_d->node = parent;
     m_d->defaultBounds = KisDefaultBoundsNodeWrapperSP( new KisDefaultBoundsNodeWrapper( parent ));
-    slotBindSignalsToAnimationInterface(parent);
 }
 
 KisKeyframeChannel::KisKeyframeChannel(const KoID &id, KisDefaultBoundsBaseSP bounds)
@@ -84,7 +83,6 @@ KisKeyframeChannel::KisKeyframeChannel(const KisKeyframeChannel &rhs, KisNodeWSP
     Q_FOREACH(KisKeyframeSP keyframe, rhs.m_d->keys) {
         m_d->keys.insert(keyframe->time(), keyframe->cloneFor(this));
     }
-    slotBindSignalsToAnimationInterface(newParent);
 }
 
 KisKeyframeChannel::~KisKeyframeChannel()
@@ -102,12 +100,8 @@ QString KisKeyframeChannel::name() const
 
 void KisKeyframeChannel::setNode(KisNodeWSP node)
 {
-    if (m_d->node.isValid()) {
-        slotUnbindSignalsToAnimationInterface(m_d->node, m_d->node->image());
-    }
     m_d->node = node;
     m_d->defaultBounds = KisDefaultBoundsNodeWrapperSP( new KisDefaultBoundsNodeWrapper( node ));
-    slotBindSignalsToAnimationInterface(node);
 }
 
 KisNodeWSP KisKeyframeChannel::node() const
@@ -665,37 +659,27 @@ void KisKeyframeChannel::workaroundBrokenFrameTimeBug(int *time)
     }
 }
 
-void KisKeyframeChannel::slotBindSignalsToAnimationInterface(KisNodeWSP parent)
+int KisKeyframeChannel::currentTime() const
 {
-    if (parent.isValid() && parent->image().isValid() && parent->image()->animationInterface()) {
-        connect(this, SIGNAL(sigKeyframeAdded(KisKeyframeSP)), parent->image()->animationInterface(), SIGNAL(sigKeyframeAdded(KisKeyframeSP)), Qt::UniqueConnection);
-        connect(this, SIGNAL(sigKeyframeRemoved(KisKeyframeSP)), parent->image()->animationInterface(), SIGNAL(sigKeyframeRemoved(KisKeyframeSP)), Qt::UniqueConnection);
-        connect(this, SIGNAL(sigKeyframeMoved(KisKeyframeSP, int)), parent->image()->animationInterface(), SIGNAL(sigKeyframeMoved(KisKeyframeSP, int)), Qt::UniqueConnection);
-    }
+    return m_d->defaultBounds->currentTime();
+}
 
-    if (parent.isValid()) {
-        connect(parent, SIGNAL(sigBeginImageReset(KisNodeWSP, KisImageWSP)), this, SLOT(slotUnbindSignalsToAnimationInterface(KisNodeWSP, KisImageWSP)), Qt::UniqueConnection);
-        connect(parent, SIGNAL(sigEndImageReset(KisNodeWSP)), this, SLOT(slotBindSignalsToAnimationInterface(KisNodeWSP)), Qt::UniqueConnection);
+void KisKeyframeChannel::bindChannelToAnimationInterface(KisImageWSP image)
+{
+    if (image.isValid() && image->animationInterface()) {
+        connect(this, SIGNAL(sigKeyframeAdded(KisKeyframeSP)), image->animationInterface(), SIGNAL(sigKeyframeAdded(KisKeyframeSP)), Qt::UniqueConnection);
+        connect(this, SIGNAL(sigKeyframeRemoved(KisKeyframeSP)), image->animationInterface(), SIGNAL(sigKeyframeRemoved(KisKeyframeSP)), Qt::UniqueConnection);
+        connect(this, SIGNAL(sigKeyframeMoved(KisKeyframeSP, int)), image->animationInterface(), SIGNAL(sigKeyframeMoved(KisKeyframeSP, int)), Qt::UniqueConnection);
     }
 }
 
-void KisKeyframeChannel::slotUnbindSignalsToAnimationInterface(KisNodeWSP parent, KisImageWSP image)
+void KisKeyframeChannel::unbindChannelToAnimationInterface(KisImageWSP image)
 {
     if (image.isValid() && image->animationInterface()) {
         disconnect(this, SIGNAL(sigKeyframeAdded(KisKeyframeSP)), image->animationInterface(), SIGNAL(sigKeyframeAdded(KisKeyframeSP)));
         disconnect(this, SIGNAL(sigKeyframeRemoved(KisKeyframeSP)), image->animationInterface(), SIGNAL(sigKeyframeRemoved(KisKeyframeSP)));
         disconnect(this, SIGNAL(sigKeyframeMoved(KisKeyframeSP, int)), image->animationInterface(), SIGNAL(sigKeyframeMoved(KisKeyframeSP, int)));
     }
-
-    if (parent.isValid() && parent->image() != image) {
-        disconnect(parent, SIGNAL(sigBeginImageReset(KisNodeWSP, KisImageWSP)), this, SLOT(slotUnbindSignalsToAnimationInterface(KisNodeWSP, KisImageWSP)));
-        disconnect(parent, SIGNAL(sigEndImageReset(KisNodeWSP)), this, SLOT(slotBindSignalsToAnimationInterface(KisNodeWSP)));
-    }
-}
-
-int KisKeyframeChannel::currentTime() const
-{
-    return m_d->defaultBounds->currentTime();
 }
 
 qreal KisKeyframeChannel::minScalarValue() const

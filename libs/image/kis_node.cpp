@@ -271,21 +271,31 @@ KisProjectionLeafSP KisNode::projectionLeaf() const
     return m_d->projectionLeaf;
 }
 
-void KisNode::setImage(KisImageWSP image)
+void KisNode::setImage(KisImageWSP newImage)
 {
-    emit sigBeginImageReset(this, this->image());
-    KisBaseNode::setImage(image);
+    if (image()) {
+        foreach (const QString &id, keyframeChannels().keys()){
+            keyframeChannels()[id]->unbindChannelToAnimationInterface(image());
+        }
+    }
+
+    KisBaseNode::setImage(newImage);
 
     KisNodeSP node = firstChild();
     while (node) {
         KisLayerUtils::recursiveApplyNodes(node,
-                                           [image] (KisNodeSP node) {
-                                               node->setImage(image);
+                                           [newImage] (KisNodeSP node) {
+                                               node->setImage(newImage);
                                            });
 
         node = node->nextSibling();
     }
-    emit sigEndImageReset(this);
+
+    if (newImage) {
+        foreach (const QString &id, keyframeChannels().keys()){
+            keyframeChannels()[id]->bindChannelToAnimationInterface(newImage);
+        }
+    }
 }
 
 bool KisNode::accept(KisNodeVisitor &v)

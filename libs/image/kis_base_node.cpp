@@ -475,6 +475,7 @@ void KisBaseNode::enableAnimation()
 void KisBaseNode::addKeyframeChannel(KisKeyframeChannel *channel)
 {
     m_d->keyframeChannels.insert(channel->id(), channel);
+    channel->bindChannelToAnimationInterface(image());
     emit keyframeChannelAdded(channel);
 }
 

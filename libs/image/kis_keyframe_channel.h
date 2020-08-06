@@ -124,6 +124,9 @@ public:
 
     int currentTime() const;
 
+    void bindChannelToAnimationInterface(KisImageWSP image);
+    void unbindChannelToAnimationInterface(KisImageWSP image);
+
 Q_SIGNALS:
     void sigKeyframeAboutToBeAdded(KisKeyframeSP keyframe);
     void sigKeyframeAdded(KisKeyframeSP keyframe);
@@ -151,10 +154,6 @@ protected:
     virtual void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename) = 0;
 
     void workaroundBrokenFrameTimeBug(int *time);
-
-private Q_SLOTS:
-    void slotBindSignalsToAnimationInterface(KisNodeWSP parent);
-    void slotUnbindSignalsToAnimationInterface(KisNodeWSP parent, KisImageWSP image);
 
 private:
     KisKeyframeSP replaceKeyframeAt(int time, KisKeyframeSP newKeyframe);

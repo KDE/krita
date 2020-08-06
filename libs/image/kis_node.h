@@ -198,7 +198,7 @@ public:
     virtual KisProjectionLeafSP projectionLeaf() const;
 
 
-    void setImage(KisImageWSP image) override;
+    void setImage(KisImageWSP newImage) override;
 
 protected:
 
@@ -358,8 +358,6 @@ Q_SIGNALS:
      * Don't use this signal anywhere other than KisNodeShape. It's a hack.
      */
     void sigNodeChangedInternal();
-    void sigBeginImageReset(KisNodeWSP node, KisImageWSP image);
-    void sigEndImageReset(KisNodeWSP node);
 
 public:
 

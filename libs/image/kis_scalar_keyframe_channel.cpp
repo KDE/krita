@@ -357,6 +357,11 @@ KisTimeSpan KisScalarKeyframeChannel::affectedFrames(int time) const
 
 KisTimeSpan KisScalarKeyframeChannel::identicalFrames(int time) const
 {
+    //Failsafe == no keys should mean all frames are identical!
+    if (allKeyframeTimes().count() == 0) {
+        return KisTimeSpan::infinite(0);
+    }
+
     KisScalarKeyframeSP activeScalarKey = activeKeyframeAt<KisScalarKeyframe>(time);
     if ( activeScalarKey &&
          activeScalarKey->interpolationMode() != KisScalarKeyframe::Constant &&
@@ -369,15 +374,12 @@ KisTimeSpan KisScalarKeyframeChannel::identicalFrames(int time) const
 
     const int nextKeyTime = nextKeyframeTime(time);
 
-    //Failsafe == no keys should mean all frames are identical!
-    if (allKeyframeTimes().count() == 0) {
-        return KisTimeSpan::infinite(0);
-    }
-
+    //Before the first frame => there's no active frame but a valid next frame.
     if (!activeScalarKey && keyframeAt(nextKeyTime)) {
         return KisTimeSpan::fromTime(0, nextKeyTime);
     }
 
+    //No next frame, all frames after are identical.
     if (!keyframeAt(nextKeyTime)) {
        return KisTimeSpan::infinite(activeKeyframeTime(time));
     }

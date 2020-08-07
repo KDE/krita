@@ -760,12 +760,14 @@ bool StoryboardModel::insertItem(QModelIndex index, bool after)
             keyframeChannel->addKeyframe(lastKeyframeTime + 1);
         }
         else {
-            m_activeNode->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+            keyframeChannel = m_activeNode->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+            slotKeyframeAdded(keyframeChannel->keyframeAt(0));
         }
     }
     else {
         if (!keyframeChannel) {
             keyframeChannel = m_activeNode->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+            slotKeyframeAdded(keyframeChannel->keyframeAt(0));
         }
         int frame = this->index(StoryboardItem::FrameNumber, 0, index).data().toInt();
         if (after) {

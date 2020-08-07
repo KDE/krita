@@ -369,6 +369,11 @@ KisTimeSpan KisScalarKeyframeChannel::identicalFrames(int time) const
 
     const int nextKeyTime = nextKeyframeTime(time);
 
+    //Failsafe == no keys should mean all frames are identical!
+    if (allKeyframeTimes().count() == 0) {
+        return KisTimeSpan::infinite(0);
+    }
+
     if (!activeScalarKey && keyframeAt(nextKeyTime)) {
         return KisTimeSpan::fromTime(0, nextKeyTime);
     }

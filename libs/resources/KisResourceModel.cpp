@@ -558,10 +558,8 @@ int KisAllResourcesModel::rowCount(const QModelIndex &) const
         q.prepare("SELECT count(*)\n"
                   "FROM   resources\n"
                   ",      resource_types\n"
-                  ",      storages\n"
                   "WHERE  resources.resource_type_id = resource_types.id\n"
-                  "AND    resource_types.name = :resource_type\n"
-                  "AND    resources.storage_id = storages.id\n");
+                  "AND    resource_types.name = :resource_type\n");
         q.bindValue(":resource_type", d->resourceType);
         q.exec();
         q.first();

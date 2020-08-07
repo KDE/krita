@@ -114,6 +114,8 @@ public:
 
     virtual void removeKeyframe(int time, KUndo2Command *parentUndoCmd = nullptr) override;
 
+    void cloneKeyframe(int source, int destination, KUndo2Command *parentUndoCmd = nullptr);
+
 private:
     QRect affectedRect(int time) const override;
 

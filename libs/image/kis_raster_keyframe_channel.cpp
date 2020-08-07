@@ -255,6 +255,12 @@ void KisRasterKeyframeChannel::removeKeyframe(int time, KUndo2Command *parentUnd
     }
 }
 
+void KisRasterKeyframeChannel::cloneKeyframe(int source, int destination, KUndo2Command *parentUndoCmd)
+{
+    KIS_ASSERT(keyframeAt(source));
+    insertKeyframe(destination, keyframeAt<KisRasterKeyframe>(source), parentUndoCmd);
+}
+
 QRect KisRasterKeyframeChannel::affectedRect(int time) const
 {
     //Note #1: Directionality *not* known

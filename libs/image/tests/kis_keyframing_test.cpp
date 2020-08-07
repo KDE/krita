@@ -220,12 +220,36 @@ void KisKeyframingTest::testRasterChannel()
 
 
     {   // Clone raster keyframe..
-        // channel->cloneKeyframe(x, y);
-        // verify same keyframeID
-        // verify same thumbnail.
-        // verify # virtual frames != # physical frames.
-        // edit cloneA, and compare thumbnails.
-        // edit cloneB, and compare thumbnails.
+        channel->cloneKeyframe(6, 12);
+
+        QVERIFY(channel->keyframeAt<KisRasterKeyframe>(6) == channel->keyframeAt<KisRasterKeyframe>(12));
+        QVERIFY(channel->keyframeAt<KisRasterKeyframe>(6)->frameID() == channel->keyframeAt<KisRasterKeyframe>(12)->frameID());
+
+        // Writing to 6 should change 12..
+        bounds->testingSetTime(6);
+        dev->fill(0, 0, 512, 512, green);
+
+        {
+            QImage key6_thumbnail = dev->createThumbnail(50,50);
+            bounds->testingSetTime(12);
+            QImage key12_thumbnail = dev->createThumbnail(50,50);
+
+            QVERIFY(key6_thumbnail == key12_thumbnail);
+        }
+
+        // Writing to 12 should change 6..
+        bounds->testingSetTime(12);
+        dev->fill(0,0, 512, 512, red);
+
+        {
+            QImage key6_thumbnail = dev->createThumbnail(50,50);
+            bounds->testingSetTime(12);
+            QImage key12_thumbnail = dev->createThumbnail(50,50);
+
+            QVERIFY(key6_thumbnail == key12_thumbnail);
+        }
+
+        QVERIFY(channel->keyframeCount() > dev->framesInterface()->frames().count());
     }
 }
 
@@ -395,6 +419,38 @@ void KisKeyframingTest::testRasterUndoRedo()
 
         QVERIFY(channel->keyframeAt<KisRasterKeyframe>(33)->frameID() == original_f66_frameID);
         QVERIFY(channel->keyframeAt<KisRasterKeyframe>(66)->frameID() == original_f33_frameID);
+    }
+
+    {
+        KUndo2Command cmd;
+        int original_f33_frameID = channel->keyframeAt<KisRasterKeyframe>(33)->frameID();
+        int original_f66_frameID = channel->keyframeAt<KisRasterKeyframe>(66)->frameID();
+
+        //Clone / overwrite frame 33 over 66
+        channel->cloneKeyframe(33, 66, &cmd);
+
+        QVERIFY(channel->keyframeAt(33));
+        QVERIFY(channel->keyframeAt(66));
+        QVERIFY(channel->keyframeAt<KisRasterKeyframe>(33)->frameID() == original_f33_frameID);
+        QVERIFY(channel->keyframeAt<KisRasterKeyframe>(66)->frameID() != original_f66_frameID);
+        QVERIFY(channel->keyframeAt<KisRasterKeyframe>(66)->frameID() == original_f33_frameID);
+
+        cmd.undo();
+
+        QVERIFY(channel->keyframeAt(33));
+        QVERIFY(channel->keyframeAt(66));
+        QVERIFY(channel->keyframeAt<KisRasterKeyframe>(33)->frameID() == original_f33_frameID);
+        QVERIFY(channel->keyframeAt<KisRasterKeyframe>(66)->frameID() == original_f66_frameID);
+
+        cmd.redo();
+        QVERIFY(channel->keyframeAt(33));
+        QVERIFY(channel->keyframeAt(66));
+        QVERIFY(channel->keyframeAt<KisRasterKeyframe>(33)->frameID() == original_f33_frameID);
+        QVERIFY(channel->keyframeAt<KisRasterKeyframe>(66)->frameID() != original_f66_frameID);
+        QVERIFY(channel->keyframeAt<KisRasterKeyframe>(66)->frameID() == original_f33_frameID);
+
+        //Let's remove the clone frame again
+        cmd.undo();
     }
 
     QVERIFY(channel->keyframeCount() == dev->framesInterface()->frames().count());

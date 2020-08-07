@@ -53,7 +53,7 @@ public:
         return rhs.m_start == m_start && rhs.m_end == m_end;
     }
 
-    KisTimeSpan& operator|=(const KisTimeSpan &rhs) {
+    KisTimeSpan& operator|(const KisTimeSpan &rhs) {
         if (!isValid()) {
             m_start = rhs.start();
         } else if (rhs.isValid()) {
@@ -69,6 +69,10 @@ public:
         }
 
         return *this;
+    }
+
+    KisTimeSpan& operator|=(const KisTimeSpan &rhs) {
+        return *this | rhs;
     }
 
     KisTimeSpan& operator&=(const KisTimeSpan &rhs) {

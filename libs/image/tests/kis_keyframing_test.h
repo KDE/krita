@@ -45,6 +45,7 @@ private Q_SLOTS:
     void testScalarValueInterpolation();
     void testScalarChannelUndoRedo();
     void testScalarAffectedFrames();
+    void testChangeOfScalarLimits();
 
 private:
     const KoColorSpace *cs;

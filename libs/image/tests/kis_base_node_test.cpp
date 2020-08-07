@@ -133,14 +133,12 @@ void KisBaseNodeTest::testOpacityKeyframing()
     QVERIFY(opacityChannel);
 
     const int keyIndex1 = 7;
-    opacityChannel->addKeyframe(keyIndex1);
+    opacityChannel->addScalarKeyframe(keyIndex1, 128);
     KisScalarKeyframeSP key1 = opacityChannel->keyframeAt<KisScalarKeyframe>(keyIndex1);
-    key1->setValue(128);
 
     const int keyIndex2 = 20;
-    opacityChannel->addKeyframe(keyIndex2);
+    opacityChannel->addScalarKeyframe(keyIndex2, 64);
     KisScalarKeyframeSP key2 = opacityChannel->keyframeAt<KisScalarKeyframe>(keyIndex2);
-    key2->setValue(64);
 
     p.image->refreshGraph();
 

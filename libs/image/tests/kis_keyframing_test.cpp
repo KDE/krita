@@ -878,6 +878,48 @@ void KisKeyframingTest::testScalarAffectedFrames()
     QCOMPARE(range.isInfinite(), true);
 }
 
+void KisKeyframingTest::testChangeOfScalarLimits()
+{
+    TestUtil::TestingTimedDefaultBounds *bounds = new TestUtil::TestingTimedDefaultBounds();
+    QScopedPointer<KisScalarKeyframeChannel> channel(new KisScalarKeyframeChannel(KoID(), bounds));
+    channel->setDefaultValue(0);
+    channel->setDefaultInterpolationMode(KisScalarKeyframe::Constant);
+
+    // Set channel scalar limtis..
+    const int original_low = 0;
+    const int original_high = 64;
+    channel->setLimits(original_low, original_high);
+
+    // Add a few keyframes..
+    channel->addScalarKeyframe(0, -12);
+    channel->addScalarKeyframe(15, 32);
+    channel->addScalarKeyframe(30, 100);
+
+    QVERIFY(channel->valueAt(0) >= original_low && channel->valueAt(0) <= original_high);
+    QVERIFY(channel->valueAt(15) >= original_low && channel->valueAt(15) <= original_high);
+    QVERIFY(channel->valueAt(30) >= original_low && channel->valueAt(30) <= original_high);
+
+    // Change channel scalar limits..
+    const int new_low = -10;
+    const int new_high = 10;
+    channel->setLimits(new_low, new_high);
+
+    QVERIFY(channel->valueAt(0) >= new_low && channel->valueAt(0) <= new_high);
+    QVERIFY(channel->valueAt(15) >= new_low && channel->valueAt(15) <= new_high);
+    QVERIFY(channel->valueAt(30) >= new_low && channel->valueAt(30) <= new_high);
+
+    // Double check that value directly from the keyframe is also within limits..
+    KisScalarKeyframeSP key0 = channel->keyframeAt<KisScalarKeyframe>(0);
+    KisScalarKeyframeSP key15 = channel->keyframeAt<KisScalarKeyframe>(15);
+    KisScalarKeyframeSP key30 = channel->keyframeAt<KisScalarKeyframe>(30);
+    //QVERIFY(key0 && key0->value() == channel->valueAt(0));
+    //QVERIFY(key15 && key15->value() == channel->valueAt(15));
+    //QVERIFY(key30 && key30->value() == channel->valueAt(30));
+    QCOMPARE(key0->value(), channel->valueAt(0));
+    QCOMPARE(key15->value(), channel->valueAt(15));
+    QCOMPARE(key30->value(), channel->valueAt(30));
+}
+
 
 
 QTEST_MAIN(KisKeyframingTest)

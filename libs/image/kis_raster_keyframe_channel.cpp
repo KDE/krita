@@ -108,7 +108,11 @@ KisKeyframeSP KisRasterKeyframe::duplicate(KisKeyframeChannel *newChannel)
     return key;
 }
 
-// =========================================================================================
+
+// ===========================================================================================================
+// =======================================KisRasterKeyframeChannel============================================
+// ===========================================================================================================
+
 
 struct KisRasterKeyframeChannel::Private
 {
@@ -213,6 +217,44 @@ QString KisRasterKeyframeChannel::chooseFrameFilename(int frameId, const QString
     return filename;
 }
 
+QDomElement KisRasterKeyframeChannel::toXML(QDomDocument doc, const QString &layerFilename)
+{
+    m_d->frameFilenames.clear();
+
+    return KisKeyframeChannel::toXML(doc, layerFilename);
+}
+
+void KisRasterKeyframeChannel::loadXML(const QDomElement &channelNode)
+{
+    m_d->frameFilenames.clear();
+
+    KisKeyframeChannel::loadXML(channelNode);
+}
+
+void KisRasterKeyframeChannel::setOnionSkinsEnabled(bool value)
+{
+    m_d->onionSkinsEnabled = value;
+}
+
+bool KisRasterKeyframeChannel::onionSkinsEnabled() const
+{
+    return m_d->onionSkinsEnabled;
+}
+
+KisPaintDeviceWSP KisRasterKeyframeChannel::paintDevice()
+{
+    return m_d->paintDevice;
+}
+
+void KisRasterKeyframeChannel::removeKeyframe(int time, KUndo2Command *parentUndoCmd)
+{
+    KisKeyframeChannel::removeKeyframe(time, parentUndoCmd);
+
+    if (time == 0) { // There should always be a raster frame on frame 0.
+        addKeyframe(time, parentUndoCmd);
+    }
+}
+
 QRect KisRasterKeyframeChannel::affectedRect(int time) const
 {
     //Note #1: Directionality *not* known
@@ -232,20 +274,6 @@ QRect KisRasterKeyframeChannel::affectedRect(int time) const
     }
 
     return affectedRect;
-}
-
-QDomElement KisRasterKeyframeChannel::toXML(QDomDocument doc, const QString &layerFilename)
-{
-    m_d->frameFilenames.clear();
-
-    return KisKeyframeChannel::toXML(doc, layerFilename);
-}
-
-void KisRasterKeyframeChannel::loadXML(const QDomElement &channelNode)
-{
-    m_d->frameFilenames.clear();
-
-    KisKeyframeChannel::loadXML(channelNode);
 }
 
 void KisRasterKeyframeChannel::saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename)
@@ -299,19 +327,4 @@ QPair<int, KisKeyframeSP> KisRasterKeyframeChannel::loadKeyframe(const QDomEleme
 KisKeyframeSP KisRasterKeyframeChannel::createKeyframe()
 {
     return toQShared(new KisRasterKeyframe(m_d->paintDevice));
-}
-
-void KisRasterKeyframeChannel::setOnionSkinsEnabled(bool value)
-{
-    m_d->onionSkinsEnabled = value;
-}
-
-bool KisRasterKeyframeChannel::onionSkinsEnabled() const
-{
-    return m_d->onionSkinsEnabled;
-}
-
-KisPaintDeviceWSP KisRasterKeyframeChannel::paintDevice()
-{
-    return m_d->paintDevice;
 }

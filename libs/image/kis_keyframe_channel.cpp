@@ -113,7 +113,9 @@ void KisKeyframeChannel::addKeyframe(int time, KUndo2Command *parentUndoCmd)
 
 void KisKeyframeChannel::insertKeyframe(int time, KisKeyframeSP keyframe, KUndo2Command *parentUndoCmd)
 {
+    KIS_ASSERT(time >= 0);
     KIS_ASSERT(keyframe);
+
     if (parentUndoCmd) {
         KUndo2Command* cmd = new KisInsertKeyframeCommand(this, time, keyframe, parentUndoCmd);
     }
@@ -132,10 +134,6 @@ void KisKeyframeChannel::removeKeyframe(int time, KUndo2Command *parentUndoCmd)
 
     emit sigRemovingKeyframe(this, time);
     m_d->keys.remove(time);
-
-    if (time == 0) { // There should always be a frame on frame 0.
-        addKeyframe(time);
-    }
 }
 
 void KisKeyframeChannel::moveKeyframe(KisKeyframeChannel *sourceChannel, int sourceTime, KisKeyframeChannel *targetChannel, int targetTime, KUndo2Command *parentUndoCmd)
@@ -332,26 +330,11 @@ KisTimeSpan KisKeyframeChannel::affectedFrames(int time) const
         return KisTimeSpan::infinite(activeKeyTime);
     }
 
-    // TODO: make virtual and offload to scalar channel!
-    KisScalarKeyframeSP activeScalarKey = activeKeyframeAt<KisScalarKeyframe>(time);
-    if (activeScalarKey && activeScalarKey->interpolationMode() != KisScalarKeyframe::Constant) {
-        return KisTimeSpan::fromTime(activeKeyTime, activeKeyTime);
-    } else {
-        return KisTimeSpan::fromTime(activeKeyTime, nextKeyTime - 1);
-    }
+    return KisTimeSpan::fromTime(activeKeyTime, nextKeyTime - 1);
 }
 
 KisTimeSpan KisKeyframeChannel::identicalFrames(int time) const
 {
-    const int activeKeyTime = activeKeyframeTime(time);
-    const KisScalarKeyframeSP activeScalarKey = keyframeAt<KisScalarKeyframe>(activeKeyTime);
-
-    if (activeScalarKey != nullptr
-            && keyframeAt(nextKeyframeTime(time))
-            && activeScalarKey->interpolationMode() != KisScalarKeyframe::Constant) {
-        return KisTimeSpan::fromTime(time, time);
-    }
-
     return affectedFrames(time);
 }
 
@@ -409,14 +392,6 @@ int KisKeyframeChannel::currentTime() const
 
 void KisKeyframeChannel::workaroundBrokenFrameTimeBug(int *time)
 {
-    /**
-     * Between Krita 4.1 and 4.4 Krita had a bug which resulted in creating frames
-     * with negative time stamp. The bug has been fixed, but there might be some files
-     * still in the wild.
-     *
-     * TODO: remove this workaround in Krita 5.0, when no such file are left :)
-     */
-
     if (*time < 0) {
         qWarning() << "WARNING: Loading a file with negative animation frames!";
         qWarning() << "         The file has been saved with a buggy version of Krita.";

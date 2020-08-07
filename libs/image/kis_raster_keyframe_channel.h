@@ -47,7 +47,8 @@ public:
 
     /** @brief Write this frame's raster content to another paint device.
      * Useful for things like onion skinning where the contents of the frame
-     * are drawn to a second, external device. */
+     * are drawn to a second, external device.
+     */
     void writeFrameToDevice(KisPaintDeviceSP writeTarget);
 
     KisKeyframeSP duplicate(KisKeyframeChannel *newChannel = 0) override;
@@ -57,7 +58,8 @@ private:
 
     /** @brief m_frameID is a handle that references the "physical" frame stored in this keyframe's KisPaintDevice, m_paintDevice.
      * This handle is created by the KisPaintDevice upon construction of the KisRasterKeyframe,
-     * and it is passed back to the KisPaintDevice for cleanup upon destruction of the KisRasterKeyframe. */
+     * and it is passed back to the KisPaintDevice for cleanup upon destruction of the KisRasterKeyframe.
+     */
     int m_frameID;
     KisPaintDeviceWSP m_paintDevice;
 };
@@ -84,13 +86,15 @@ public:
 
     /** Copy the active frame at given time to target device.
      * @param  keyframe  Keyframe to copy from.
-     * @param  targetDevice  Device to copy the frame to. */
+     * @param  targetDevice  Device to copy the frame to.
+     */
     void fetchFrame(int time, KisPaintDeviceSP targetDevice);
 
     /** Copy the content of the sourceDevice into a new keyframe at given time.
      * @param  time  Position of new keyframe.
      * @param  sourceDevice  Source for content.
-     * @param  parentCommand  Parent undo command used for stacking. */
+     * @param  parentCommand  Parent undo command used for stacking.
+     */
     void importFrame(int time, KisPaintDeviceSP sourceDevice, KUndo2Command *parentCommand);
 
     /** Get the rectangular area that the content of this frame occupies. */
@@ -107,6 +111,8 @@ public:
     bool onionSkinsEnabled() const;
 
     KisPaintDeviceWSP paintDevice();
+
+    virtual void removeKeyframe(int time, KUndo2Command *parentUndoCmd = nullptr) override;
 
 private:
     QRect affectedRect(int time) const override;

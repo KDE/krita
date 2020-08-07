@@ -86,6 +86,12 @@ public:
     QPointF leftTangent() const;
     QPointF rightTangent() const;
 
+    void setLimits(QWeakPointer<ScalarKeyframeLimits> limits);
+
+    /** @brief For now, scalar keyframes have a callback connection to
+     * the channel that owns them in order to signal that their
+     * internal state has changed. Created by the channel.
+     */
     QMetaObject::Connection valueChangedChannelConnection;
 
 Q_SIGNALS:
@@ -101,7 +107,8 @@ private:
     /** Weak pointer back to the owning channel's limits,
      * optionally used when setting the value of a keyframe
      * to conform to the limited range of its current channel,
-     * Should change if keyframe is moved to a different channel. */
+     * Should change if keyframe is moved to a different channel.
+     */
     QWeakPointer<ScalarKeyframeLimits> m_channelLimits;
 };
 
@@ -127,6 +134,9 @@ public:
     KisScalarKeyframeChannel(const KisScalarKeyframeChannel &rhs, KisNodeWSP newParent);
     ~KisScalarKeyframeChannel() override;
 
+    /** Utility for adding keyframe with non-default value. */
+    void addScalarKeyframe(int time, qreal value, KUndo2Command *parentUndoCmd = nullptr);
+
     QWeakPointer<ScalarKeyframeLimits> limits() const;
     /** Limit channel within scalar value range. */
     void setLimits(qreal low, qreal high);
@@ -142,12 +152,13 @@ public:
 
     static QPointF interpolate(QPointF point1, QPointF rightTangent, QPointF leftTangent, QPointF point2, qreal t);
 
+    virtual void insertKeyframe(int time, KisKeyframeSP keyframe, KUndo2Command *parentUndoCmd = nullptr) override;
+    virtual void removeKeyframe(int time, KUndo2Command *parentUndoCmd = nullptr) override;
+    virtual KisTimeSpan affectedFrames(int time) const override;
+    virtual KisTimeSpan identicalFrames(int time) const override;
+
 Q_SIGNALS:
     void sigKeyframeChanged(const KisKeyframeChannel *channel, int time);
-
-private Q_SLOTS:
-    void handleKeyframeAdded(const KisKeyframeChannel *channel, int time);
-    void handleKeyframeRemoved(const KisKeyframeChannel *channel, int time);
 
 private:
     static qreal findCubicCurveParameter(int time0, qreal delta0, qreal delta1, int time1, int time);

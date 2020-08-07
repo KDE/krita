@@ -206,8 +206,7 @@ bool KisAnimationCurvesModel::setData(const QModelIndex &index, const QVariant &
             channel->keyframeAt<KisScalarKeyframe>(index.column())->setValue(value.toReal(), command);
         } else {
             if (!command) command = new KUndo2Command(kundo2_i18n("Insert keyframe"));
-            channel->addKeyframe(index.column(), command);
-            channel->keyframeAt<KisScalarKeyframe>(index.column())->setValue(value.toReal(), command); //undo
+            channel->addScalarKeyframe(index.column(), value.toReal(), command);
         }
     }
         break;

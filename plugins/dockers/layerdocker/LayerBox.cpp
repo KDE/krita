@@ -53,6 +53,7 @@
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>
 #include <KisDocument.h>
+#include <kis_time_span.h>
 
 #include <kis_types.h>
 #include <kis_image.h>
@@ -1138,6 +1139,7 @@ void LayerBox::watchOpacityChannel(KisKeyframeChannel *newChannel)
 
         m_opacityChannel = newChannel;
         connect(m_opacityChannel, &KisKeyframeChannel::sigChannelUpdated, [this](const KisTimeSpan &affectedTimeSpan, const QRect &affectedArea){
+            ENTER_FUNCTION() << ppVar(affectedTimeSpan);
             if (!m_blockOpacityUpdate) {
                 updateUI(); // TODO: Make sure this is doing something useful.
             }

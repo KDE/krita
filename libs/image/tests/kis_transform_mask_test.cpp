@@ -26,7 +26,7 @@
 #include "kis_transform_mask.h"
 #include "kis_transform_mask_params_interface.h"
 
-#include "testutil.h"
+#include <testutil.h>
 
 #include "kis_algebra_2d.h"
 #include "kis_safe_transform.h"

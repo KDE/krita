@@ -32,7 +32,7 @@
 #include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kis_transparency_mask.h"
-#include "testutil.h"
+#include <testutil.h>
 #include "kis_selection.h"
 #include "kis_fill_painter.h"
 #include "kis_pixel_selection.h"

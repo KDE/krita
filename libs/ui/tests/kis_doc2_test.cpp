@@ -30,7 +30,7 @@
 #include "util.h"
 #include <KisView.h>
 #include <kis_config.h>
-#include "sdk/tests/kistest.h"
+#include "sdk/tests/testui.h"
 
 void silenceReignsSupreme(QtMsgType /*type*/, const QMessageLogContext &/*context*/, const QString &/*msg*/)
 {

@@ -45,7 +45,7 @@ struct TimelineRulerHeader::Private
         const int compressorDelayMS = 5000;
         zoomSaveCompressor.reset(
                     new KisSignalCompressorWithParam<qreal>(compressorDelayMS,
-                                                            [this](qreal zoomValue){
+                                                            [](qreal zoomValue){
                                                                 KisConfig cfg(false);
                                                                 cfg.setTimelineZoom(zoomValue);
                                                             },
@@ -317,7 +317,7 @@ int TimelineRulerHeader::Private::calcSpanWidth(const int sectionWidth) {
 }
 
 void TimelineRulerHeader::paintSection1(QPainter *painter, const QRect &rect, int logicalIndex) const
-{   
+{
 
     if (!rect.isValid())
         return;
@@ -520,7 +520,7 @@ void TimelineRulerHeader::mousePressEvent(QMouseEvent *e)
 
             return;
 
-        } else if (e->button() == Qt::LeftButton) {           
+        } else if (e->button() == Qt::LeftButton) {
             m_d->lastPressSectionIndex = logical;
             model()->setHeaderData(logical, orientation(), true, KisTimeBasedItemModel::ActiveFrameRole);
         }

@@ -61,24 +61,24 @@
 
 static QObject *provideConstantsObject(QQmlEngine *engine, QJSEngine *scriptEngine)
 {
-    Q_UNUSED(engine)
-    Q_UNUSED(scriptEngine)
+    Q_UNUSED(engine);
+    Q_UNUSED(scriptEngine);
 
     return new Constants;
 }
 
 static QObject *provideKritaNamespaceObject(QQmlEngine *engine, QJSEngine *scriptEngine)
 {
-    Q_UNUSED(engine)
-    Q_UNUSED(scriptEngine)
+    Q_UNUSED(engine);
+    Q_UNUSED(scriptEngine);
 
     return new KritaNamespace;
 }
 
 static QObject *provideKritaRssModelObject(QQmlEngine *engine, QJSEngine *scriptEngine)
 {
-    Q_UNUSED(engine)
-    Q_UNUSED(scriptEngine)
+    Q_UNUSED(engine);
+    Q_UNUSED(scriptEngine);
 
     MultiFeedRssModel *rssModel = new MultiFeedRssModel;
     rssModel->addFeed(QLatin1String("https://krita.org/en/feed/"));
@@ -89,7 +89,7 @@ static QObject *provideKritaRssModelObject(QQmlEngine *engine, QJSEngine *script
 
 void KritaSketchPlugin::registerTypes(const char* uri)
 {
-    Q_UNUSED(uri)
+    Q_UNUSED(uri);
     Q_ASSERT(uri == QLatin1String("org.krita.sketch"));
     qmlRegisterType<SimpleTouchArea>("org.krita.sketch", 1, 0, "SimpleTouchArea");
     qmlRegisterType<ColorSelectorItem>("org.krita.sketch", 1, 0, "ColorSelectorItem");
@@ -120,7 +120,7 @@ void KritaSketchPlugin::registerTypes(const char* uri)
 
 void KritaSketchPlugin::initializeEngine(QQmlEngine* engine, const char* uri)
 {
-    Q_UNUSED(uri)
+    Q_UNUSED(uri);
     Q_ASSERT(uri == QLatin1String("org.krita.sketch"));
 
     engine->addImageProvider(QLatin1String("color"), new ColorImageProvider);

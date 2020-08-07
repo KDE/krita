@@ -25,7 +25,9 @@
 class KisWindowLayoutResource;
 typedef QSharedPointer<KisWindowLayoutResource> KisWindowLayoutResourceSP;
 
-class KisWindowLayoutResource : public KoResource
+#include "kritaui_export.h"
+
+class KRITAUI_EXPORT KisWindowLayoutResource : public KoResource
 {
 public:
     explicit KisWindowLayoutResource(const QString &filename);

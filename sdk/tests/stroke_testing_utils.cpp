@@ -34,7 +34,7 @@
 #include "kis_group_layer.h"
 #include <KisViewManager.h>
 
-#include "testutil.h"
+#include <testutil.h>
 #include <KisGlobalResourcesInterface.h>
 
 

@@ -43,7 +43,7 @@ namespace {
 
 struct CompareQPoints
 {
-    bool operator() (const QPoint &p1, const QPoint &p2) {
+    bool operator() (const QPoint &p1, const QPoint &p2) const {
         return p1.y() < p2.y() || (p1.y() == p2.y() && p1.x() < p2.x());
     }
 };

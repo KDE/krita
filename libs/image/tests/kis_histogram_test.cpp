@@ -26,7 +26,7 @@
 #include "kis_histogram.h"
 #include "kis_paint_layer.h"
 #include "kis_types.h"
-#include "kistest.h"
+#include "testimage.h"
 
 void KisHistogramTest::testCreation()
 {

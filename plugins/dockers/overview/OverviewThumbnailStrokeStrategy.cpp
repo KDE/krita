@@ -64,6 +64,7 @@ OverviewThumbnailStrokeStrategy::~OverviewThumbnailStrokeStrategy()
 
 KisStrokeStrategy *OverviewThumbnailStrokeStrategy::createLodClone(int levelOfDetail)
 {
+    Q_UNUSED(levelOfDetail);
     /**
      * We do not generate preview for Instant Preview mode. Even though we
      * could do that, it is not very needed, because KisIdleWatcher ensures

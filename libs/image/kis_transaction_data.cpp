@@ -320,6 +320,7 @@ void KisTransactionData::saveSelectionOutlineCache()
 
 void KisTransactionData::restoreSelectionOutlineCache(bool undo)
 {
+    Q_UNUSED(undo);
     KisPixelSelectionSP pixelSelection =
         dynamic_cast<KisPixelSelection*>(m_d->device.data());
 

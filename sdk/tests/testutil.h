@@ -38,8 +38,6 @@
 #include "kis_image.h"
 #include "testing_nodes.h"
 
-#include "kistest.h"
-
 #ifndef FILES_DATA_DIR
 #define FILES_DATA_DIR "."
 #endif

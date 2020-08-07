@@ -143,11 +143,11 @@ public:
         return op;
     }
 
-    QList<KoResourceSP> prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface) {
+    QList<KoResourceSP> prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface) override {
         return detail::prepareLinkedResources<Op>(settings, resourcesInterface);
     }
 
-    QList<KoResourceSP> prepareEmbeddedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface) {
+    QList<KoResourceSP> prepareEmbeddedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface) override {
         return detail::prepareEmbeddedResources<Op>(settings, resourcesInterface);
     }
 

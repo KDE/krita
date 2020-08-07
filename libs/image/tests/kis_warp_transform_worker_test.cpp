@@ -19,7 +19,7 @@
 #include "kis_warp_transform_worker_test.h"
 
 #include <QTest>
-#include "testutil.h"
+#include <testutil.h>
 
 #include "kis_warptransform_worker.h"
 

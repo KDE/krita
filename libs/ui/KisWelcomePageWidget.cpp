@@ -145,7 +145,7 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 
 #ifdef ENABLE_UPDATERS
 #ifndef Q_OS_ANDROID
-    // Setup version updater, but do not check for them, unless the user explicitely
+    // Setup version updater, but do not check for them, unless the user explicitly
     // wants to check for updates.
     // * No updater is created for Linux/Steam, Windows/Steam and Windows/Store distributions,
     // as those stores have their own updating mechanism.

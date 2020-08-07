@@ -31,7 +31,7 @@
 #include "kis_filter_strategy.h"
 #include "kis_paint_device.h"
 #include "kis_transform_worker.h"
-#include "testutil.h"
+#include <testutil.h>
 #include "kis_transaction.h"
 #include "kis_random_accessor_ng.h"
 

@@ -65,7 +65,7 @@ public:
 
     void setComponentForAction(QAction *action)
     {
-        Q_UNUSED(action)
+        Q_UNUSED(action);
     }
 
     static QList<KActionCollection *> s_allCollections;

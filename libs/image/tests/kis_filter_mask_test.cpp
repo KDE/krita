@@ -34,7 +34,7 @@
 #include <KisGlobalResourcesInterface.h>
 
 
-#include "testutil.h"
+#include <testutil.h>
 
 #define IMAGE_WIDTH 1000
 #define IMAGE_HEIGHT 1000

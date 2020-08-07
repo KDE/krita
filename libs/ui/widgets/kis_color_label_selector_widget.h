@@ -35,7 +35,7 @@ public:
 
     int currentIndex() const;
 
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
     void resizeEvent(QResizeEvent* e) override;
 
     int calculateMenuOffset() const;
@@ -48,7 +48,7 @@ Q_SIGNALS:
     void currentIndexChanged(int index);
 
 private:
-    class Private* m_d;
+    struct Private* m_d;
 };
 
 #endif /* __KIS_COLOR_LABEL_SELECTOR_WIDGET_H */

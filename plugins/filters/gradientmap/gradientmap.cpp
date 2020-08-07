@@ -37,7 +37,7 @@ K_PLUGIN_FACTORY_WITH_JSON(KritaGradientMapFactory, "kritagradientmap.json", reg
 KritaGradientMapConfigWidget::KritaGradientMapConfigWidget(QWidget *parent, KisPaintDeviceSP dev, Qt::WindowFlags f)
     : KisConfigWidget(parent, f)
 {
-    Q_UNUSED(dev)
+    Q_UNUSED(dev);
     m_page = new WdgGradientMap(this);
     QHBoxLayout *l = new QHBoxLayout(this);
     Q_CHECK_PTR(l);

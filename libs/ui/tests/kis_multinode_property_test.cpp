@@ -19,7 +19,7 @@
 #include "kis_multinode_property_test.h"
 
 #include <QTest>
-#include "testutil.h"
+#include <testutil.h>
 
 #include <KoCompositeOpRegistry.h>
 

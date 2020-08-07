@@ -20,7 +20,8 @@
 
 #include <QTest>
 
-#include "testutil.h"
+#include <testutil.h>
+#include "testimage.h"
 
 #include <QDomDocument>
 

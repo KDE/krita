@@ -36,8 +36,9 @@
 #include "kis_pixel_selection.h"
 #include "kis_fill_painter.h"
 #include <kis_fixed_paint_device.h>
-#include "testutil.h"
+#include <testutil.h>
 #include <kis_iterator_ng.h>
+#include <testimage.h>
 
 void KisPainterTest::allCsApplicator(void (KisPainterTest::* funcPtr)(const KoColorSpace*cs))
 {

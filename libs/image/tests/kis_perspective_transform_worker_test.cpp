@@ -20,7 +20,7 @@
 
 #include <QTest>
 
-#include "testutil.h"
+#include <testutil.h>
 
 #define USE_DOCUMENT 0
 #include "qimage_based_test.h"

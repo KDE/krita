@@ -24,7 +24,7 @@
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
-#include "testutil.h"
+#include <testutil.h>
 #include "../kis_gbr_brush.h"
 #include "kis_types.h"
 #include "kis_paint_device.h"

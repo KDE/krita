@@ -253,7 +253,7 @@ QVariant KeyboardModel::data(const QModelIndex& index, int role) const
 
 int KeyboardModel::rowCount(const QModelIndex& parent) const
 {
-    Q_UNUSED(parent)
+    Q_UNUSED(parent);
     return d->currentKeys->count();
 }
 

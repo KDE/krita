@@ -249,7 +249,6 @@ void KisApplication::initializeGlobals(const KisApplicationArguments &args)
 
 void KisApplication::addResourceTypes()
 {
-    //    qDebug() << "addResourceTypes();";
     // All Krita's resource types
     KoResourcePaths::addResourceType("markers", "data", "/styles/");
     KoResourcePaths::addResourceType("kis_pics", "data", "/pics/");
@@ -384,7 +383,7 @@ bool KisApplication::registerResources()
 
     KisResourceLocator::LocatorError r = KisResourceLocator::instance()->initialize(KoResourcePaths::getApplicationRoot() + "/share/krita");
     connect(KisResourceLocator::instance(), SIGNAL(progressMessage(const QString&)), this, SLOT(setSplashScreenLoadingText(const QString&)));
-    if (r != KisResourceLocator::LocatorError::Ok ) {
+    if (r != KisResourceLocator::LocatorError::Ok && qApp->inherits("KisApplication")) {
         QMessageBox::critical(0, i18nc("@title:window", "Krita: Fatal error"), KisResourceLocator::instance()->errorMessages().join('\n') + i18n("\n\nKrita will quit now."));
         return false;
     }

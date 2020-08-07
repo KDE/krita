@@ -21,7 +21,9 @@
 
 #include "KisWindowLayoutResource.h"
 
-class KisSessionResource : public KisWindowLayoutResource
+#include "kritaui_export.h"
+
+class KRITAUI_EXPORT KisSessionResource : public KisWindowLayoutResource
 {
 public:
     KisSessionResource(const QString &filename);

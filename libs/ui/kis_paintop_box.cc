@@ -580,7 +580,7 @@ void KisPaintopBox::resourceSelected(KoResourceSP resource)
         //        }
         //        if (!m_dirtyPresetsEnabled) {
         //            KisSignalsBlocker blocker(m_optionWidget);
-        //            Q_UNUSED(blocker)
+        //            Q_UNUSED(blocker);
         //            if (!preset->load()) {
         //                qWarning() << "failed to load the preset.";
         //            }

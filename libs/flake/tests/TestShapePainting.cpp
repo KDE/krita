@@ -24,7 +24,7 @@
 #include "KoShapeContainer.h"
 #include "KoShapeManager.h"
 #include "KoShapePaintingContext.h"
-#include <sdk/tests/kistest.h>
+#include <sdk/tests/testflake.h>
 #include <MockShapes.h>
 
 #include <QTest>

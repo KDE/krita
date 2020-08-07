@@ -84,6 +84,8 @@ KoStore *KoShapeLoadingContext::store() const
 
 QString KoShapeLoadingContext::mimeTypeForPath(const QString &href, bool b)
 {
+    Q_UNUSED(href);
+    Q_UNUSED(b);
     return "image/svg+xml";
 }
 

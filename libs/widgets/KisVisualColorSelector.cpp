@@ -136,7 +136,7 @@ void KisVisualColorSelector::slotSetHSX(const QVector3D &hsx)
 
 void KisVisualColorSelector::setConfig(bool forceCircular, bool forceSelfUpdate)
 {
-    Q_UNUSED(forceSelfUpdate)
+    Q_UNUSED(forceSelfUpdate);
     m_d->circular = forceCircular;
 }
 

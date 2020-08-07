@@ -30,7 +30,7 @@
 #include "kis_clone_layer.h"
 #include "kis_image.h"
 
-#include "testutil.h"
+#include <testutil.h>
 
 
 void KisCloneLayerTest::testCreation()

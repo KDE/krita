@@ -1217,7 +1217,7 @@ void KisConfig::setUseWin8PointerInput(bool value)
     }
 
 #else
-    Q_UNUSED(value)
+    Q_UNUSED(value);
 #endif
 }
 

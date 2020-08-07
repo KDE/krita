@@ -44,6 +44,7 @@
 
 #include "kis_undo_stores.h"
 
+#include <testimage.h>
 
 #define IMAGE_WIDTH 128
 #define IMAGE_HEIGHT 128
@@ -81,7 +82,7 @@ void KisImageTest::benchmarkCreation()
     }
 }
 
-#include "testutil.h"
+#include <testutil.h>
 #include "kis_stroke_strategy.h"
 #include <functional>
 

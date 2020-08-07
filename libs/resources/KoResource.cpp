@@ -108,7 +108,7 @@ bool KoResource::save()
 
 bool KoResource::saveToDevice(QIODevice *dev) const
 {
-    Q_UNUSED(dev)
+    Q_UNUSED(dev);
     d->md5 = QByteArray();
 
     return true;

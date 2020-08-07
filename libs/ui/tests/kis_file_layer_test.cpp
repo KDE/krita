@@ -27,6 +27,7 @@
 #include <kis_transform_mask_params_interface.h>
 
 #include <testutil.h>
+#include <testui.h>
 
 #include "config-limit-long-tests.h"
 

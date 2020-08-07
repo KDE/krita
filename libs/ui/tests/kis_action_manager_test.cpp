@@ -31,7 +31,7 @@
 #include <KisViewManager.h>
 
 #include "kis_node_manager.h"
-#include <kistest.h>
+#include <testui.h>
 
 void KisActionManagerTest::testUpdateGUI()
 {

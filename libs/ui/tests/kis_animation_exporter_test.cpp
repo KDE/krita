@@ -30,7 +30,7 @@
 #include <KoUpdater.h>
 #include "kis_time_range.h"
 #include "kis_keyframe_channel.h"
-#include <kistest.h>
+#include <testui.h>
 
 void KisAnimationExporterTest::testAnimationExport()
 {

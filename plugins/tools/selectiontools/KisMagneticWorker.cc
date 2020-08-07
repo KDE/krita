@@ -111,7 +111,7 @@ public:
 
     void examine_vertex(VertexDescriptor u, KisMagneticGraph const &g)
     {
-        Q_UNUSED(g)
+        Q_UNUSED(g);
         if (u == m_goal) {
             throw GoalFound();
         }

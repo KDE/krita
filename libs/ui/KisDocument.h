@@ -40,6 +40,7 @@
 #include <KisImportExportUtils.h>
 #include <kis_config.h>
 #include "kis_scratch_pad.h"
+#include "StoryboardItem.h"
 
 #include "kritaui_export.h"
 
@@ -373,7 +374,20 @@ public:
      */
     StoryboardItemList getStoryboardItemList();
 
-    void setStoryboardItemList(const StoryboardItemList &StoryboardItemList, bool emitSignal = false);
+    /**
+     * @brief sets the storyboardItemList in the document, emits empty signal if emitSignal is true.
+     */
+    void setStoryboardItemList(const StoryboardItemList &storyboardItemList, bool emitSignal = false);
+
+    /**
+     * @brief returns the list of comments for the storyboard docker in the document
+     */
+    QVector<Comment> getStoryboardCommentsList();
+
+    /**
+     * @brief sets the  list of comments for the storyboard docker in the document, emits empty signal if emitSignal is true.
+     */
+    void setStoryboardCommentList(const QVector<Comment> &storyboardCommentList, bool emitSignal = false);
 
     const KisMirrorAxisConfig& mirrorAxisConfig() const;
     void setMirrorAxisConfig(const KisMirrorAxisConfig& config);
@@ -491,6 +505,8 @@ Q_SIGNALS:
     void sigAssistantsChanged();
 
     void sigStoryboardItemListChanged();
+
+    void sigStoryboardCommentListChanged();
 
 private Q_SLOTS:
     void finishExportInBackground();

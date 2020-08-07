@@ -28,6 +28,7 @@ class KoStore;
 class KisDocument;
 class KoColorSpace;
 class KisPaintingAssistant;
+class Comment;
 
 #include <kis_types.h>
 #include "kritalibkra_export.h"
@@ -61,6 +62,8 @@ public:
     QList<KisPaintingAssistantSP> assistants() const;
 
     StoryboardItemList storyboardItemList() const;
+
+    QVector<Comment> storyboardCommentList() const;
 
     /// if empty, loading didn't fail...
     QStringList errorMessages() const;
@@ -121,6 +124,7 @@ private:
     void loadMirrorAxis(const KoXmlElement& elem);
     void loadAudio(const KoXmlElement& elem, KisImageSP image);
     void loadStoryboardItemList(const KoXmlElement& elem);
+    void loadStoryboardCommentList(const KoXmlElement& elem);
 private:
 
     struct Private;

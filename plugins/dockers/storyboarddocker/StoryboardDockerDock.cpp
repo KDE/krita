@@ -221,25 +221,34 @@ void StoryboardDockerDock::setCanvas(KoCanvasBase *canvas)
     }
 
     if (m_canvas) {
-        //update the item list in KisDocument and empty storyboardModel's list
-        m_canvas->imageView()->document()->setStoryboardItemList(m_storyboardModel->getData());
-        m_storyboardModel->resetData(StoryboardItemList());
-
         disconnect(m_storyboardModel, SIGNAL(sigStoryboardItemListChanged()), this, SLOT(slotUpdateDocumentList()));
-        disconnect(m_canvas->imageView()->document(), SIGNAL(sigStoryboardItemListChanged()), this, SLOT(slotUpdateModelList()));
+        disconnect(m_commentModel, SIGNAL(sigCommentListChanged()), this, SLOT(slotUpdateDocumentList()));
+        disconnect(m_canvas->imageView()->document(), SIGNAL(sigStoryboardItemListChanged()), this, SLOT(slotUpdateStoryboardModelList()));
+        disconnect(m_canvas->imageView()->document(), SIGNAL(sigStoryboardItemListChanged()), this, SLOT(slotUpdateCommentModelList()));
+
+        //update the lists in KisDocument and empty storyboardModel's list and commentModel's list
+        slotUpdateDocumentList();
+        m_storyboardModel->resetData(StoryboardItemList());
+        m_commentModel->resetData(QVector<Comment>());
     }
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     setEnabled(m_canvas != 0);
 
     if (m_canvas && m_canvas->image()) {
-        m_storyboardModel->resetData(m_canvas->imageView()->document()->getStoryboardItemList());
+        //sync data between KisDocument and models
+        slotUpdateStoryboardModelList();
+        slotUpdateCommentModelList();
+
+        connect(m_storyboardModel, SIGNAL(sigStoryboardItemListChanged()), SLOT(slotUpdateDocumentList()), Qt::UniqueConnection);
+        connect(m_commentModel, SIGNAL(sigCommentListChanged()), SLOT(slotUpdateDocumentList()), Qt::UniqueConnection);
+        connect(m_canvas->imageView()->document(), SIGNAL(sigStoryboardItemListChanged()), this, SLOT(slotUpdateStoryboardModelList()), Qt::UniqueConnection);
+        connect(m_canvas->imageView()->document(), SIGNAL(sigStoryboardCommentListChanged()), this, SLOT(slotUpdateCommentModelList()), Qt::UniqueConnection);
 
         m_storyboardModel->setImage(m_canvas->image());
         m_storyboardDelegate->setImageSize(m_canvas->image()->size());
         connect(m_canvas->image(), SIGNAL(sigAboutToBeDeleted()), SLOT(notifyImageDeleted()), Qt::UniqueConnection);
-        connect(m_storyboardModel, SIGNAL(sigStoryboardItemListChanged()), SLOT(slotUpdateDocumentList()), Qt::UniqueConnection);
-        connect(m_canvas->imageView()->document(), SIGNAL(sigStoryboardItemListChanged()), this, SLOT(slotUpdateModelList()), Qt::UniqueConnection);
+
         if (m_nodeManager) {
             m_storyboardModel->slotSetActiveNode(m_nodeManager->activeNode());
         }
@@ -270,11 +279,17 @@ void StoryboardDockerDock::notifyImageDeleted()
 void StoryboardDockerDock::slotUpdateDocumentList()
 {
     m_canvas->imageView()->document()->setStoryboardItemList(m_storyboardModel->getData());
+    m_canvas->imageView()->document()->setStoryboardCommentList(m_commentModel->getData());
 }
 
-void StoryboardDockerDock::slotUpdateModelList()
+void StoryboardDockerDock::slotUpdateStoryboardModelList()
 {
     m_storyboardModel->resetData(m_canvas->imageView()->document()->getStoryboardItemList());
+}
+
+void StoryboardDockerDock::slotUpdateCommentModelList()
+{
+    m_commentModel->resetData(m_canvas->imageView()->document()->getStoryboardCommentsList());
 }
 
 void StoryboardDockerDock::slotExportAsPdf()

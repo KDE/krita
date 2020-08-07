@@ -79,7 +79,7 @@ QDomElement StoryboardItem::toXML(QDomDocument doc)
 
     int frame = qvariant_cast<ThumbnailData>(child(FrameNumber)->data()).frameNum.toInt();
     itemElement.setAttribute("frame", frame);
-    itemElement.setAttribute("item-name", child(ItemName)->data().toInt());
+    itemElement.setAttribute("item-name", child(ItemName)->data().toString());
     itemElement.setAttribute("duration-second", child(DurationSecond)->data().toInt());
     itemElement.setAttribute("duration-frame", child(DurationFrame)->data().toInt());
 
@@ -101,7 +101,7 @@ void StoryboardItem::loadXML(const QDomElement &itemNode)
     ThumbnailData thumbnail;
     thumbnail.frameNum = itemNode.attribute("frame").toInt();
     appendChild(QVariant::fromValue<ThumbnailData>(thumbnail));
-    appendChild(itemNode.attribute("item-name").toInt());
+    appendChild(itemNode.attribute("item-name"));
     appendChild(itemNode.attribute("duration-second").toInt());
     appendChild(itemNode.attribute("duration-frame").toInt());
 

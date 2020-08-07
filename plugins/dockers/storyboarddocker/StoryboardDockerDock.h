@@ -51,13 +51,19 @@ private Q_SLOTS:
      */
     void notifyImageDeleted();
     /**
-     * @brief sets the KisDocument's storyboardItemList to be the same as Model's storyboardItemList
+     * @brief sets the KisDocument's storyboardItemList to be the same as StoryboardModel's storyboardItemList
+     * and KisDocument's storyboardCommentList to be the same as CommentModel's commentList
      */
     void slotUpdateDocumentList();
     /**
      * @brief sets the Model's storyboardItemList to be the same as KisDocument's storyboardItemList
      */
-    void slotUpdateModelList();
+    void slotUpdateStoryboardModelList();
+    /**
+     * @brief sets the Model's storyboardItemList to be the same as KisDocument's storyboardItemList
+     */
+    void slotUpdateCommentModelList();
+
 
     void slotExportAsPdf();
     void slotExportAsSvg();

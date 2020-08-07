@@ -135,7 +135,6 @@
 #include <KisMirrorAxisConfig.h>
 #include <KisDecorationsWrapperLayer.h>
 #include "kis_simple_stroke_strategy.h"
-#include <StoryboardItem.h>
 
 // Define the protocol used here for embedded documents' URL
 // This used to "store" but QUrl didn't like it,
@@ -334,6 +333,7 @@ public:
     QList<KisPaintingAssistantSP> assistants;
 
     StoryboardItemList m_storyboardItemList;
+    QVector<Comment> m_storyboardCommentList;
 
     QColor globalAssistantsColor;
 
@@ -435,6 +435,7 @@ void KisDocument::Private::copyFromImpl(const Private &rhs, KisDocument *q, KisD
         q->setModified(rhs.modified);
         q->setAssistants(KisPaintingAssistant::cloneAssistantList(rhs.assistants));
         q->setStoryboardItemList(StoryboardItem::cloneStoryboardItemList(rhs.m_storyboardItemList));
+        q->setStoryboardCommentList(rhs.m_storyboardCommentList);
         q->setGridConfig(rhs.gridConfig);
     } else {
         // in CONSTRUCT mode, we cannot use the functions of KisDocument
@@ -444,6 +445,7 @@ void KisDocument::Private::copyFromImpl(const Private &rhs, KisDocument *q, KisD
         modified = rhs.modified;
         assistants = KisPaintingAssistant::cloneAssistantList(rhs.assistants);
         m_storyboardItemList = StoryboardItem::cloneStoryboardItemList(rhs.m_storyboardItemList);
+        m_storyboardCommentList = rhs.m_storyboardCommentList;
         gridConfig = rhs.gridConfig;
     }
     m_bAutoDetectedMime = rhs.m_bAutoDetectedMime;
@@ -1942,6 +1944,19 @@ void KisDocument::setStoryboardItemList(const StoryboardItemList &storyboardItem
     d->m_storyboardItemList = storyboardItemList;
     if (emitSignal) {
         emit sigStoryboardItemListChanged();
+    }
+}
+
+QVector<Comment> KisDocument::getStoryboardCommentsList()
+{
+    return d->m_storyboardCommentList;
+}
+
+void KisDocument::setStoryboardCommentList(const QVector<Comment> &storyboardCommentList, bool emitSignal)
+{
+    d->m_storyboardCommentList = storyboardCommentList;
+    if (emitSignal) {
+        emit sigStoryboardCommentListChanged();
     }
 }
 

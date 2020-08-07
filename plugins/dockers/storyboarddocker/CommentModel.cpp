@@ -63,12 +63,14 @@ bool CommentModel::setData(const QModelIndex & index, const QVariant & value, in
     if (index.isValid() && (role == Qt::EditRole || role == Qt::DisplayRole)) {
         m_commentList[index.row()].name = value.toString();
         emit dataChanged(index, index);
+        emit sigCommentListChanged();
         return true;
     }
     
     if (index.isValid() && role == Qt::DecorationRole) {
         m_commentList[index.row()].visibility = !m_commentList[index.row()].visibility;
         emit dataChanged(index, index);
+        emit sigCommentListChanged();
         return true;
     }
     return false;
@@ -99,6 +101,7 @@ bool CommentModel::insertRows(int position, int rows, const QModelIndex &parent)
     }
 
     endInsertRows();
+    emit sigCommentListChanged();
     return true;
 }
 
@@ -113,6 +116,7 @@ bool CommentModel::removeRows(int position, int rows, const QModelIndex &parent)
         m_commentList.removeAt(position);
     }
     endRemoveRows();
+    emit sigCommentListChanged();
     return true;
 }
 
@@ -140,6 +144,7 @@ bool CommentModel::moveRows(const QModelIndex &sourceParent, int sourceRow, int 
         m_commentList.move(sourceRow, destinationChild + row);
     }
     endMoveRows();
+    emit sigCommentListChanged();
     return true;
 }
 
@@ -198,4 +203,17 @@ Qt::DropActions CommentModel::supportedDropActions() const
 Qt::DropActions CommentModel::supportedDragActions() const
 {
     return Qt::CopyAction | Qt::MoveAction;
+}
+
+void CommentModel::resetData(QVector<Comment> list)
+{
+    beginResetModel();
+    m_commentList = list;
+    emit dataChanged(QModelIndex(), QModelIndex());
+    endResetModel();
+}
+
+QVector<Comment> CommentModel::getData()
+{
+    return m_commentList;
 }

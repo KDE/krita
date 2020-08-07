@@ -143,6 +143,11 @@ StoryboardItemList KraConverter::storyboardItemList()
     return m_storyboardItemList;
 }
 
+QVector<Comment> KraConverter::storyboardCommentList()
+{
+    return m_storyboardCommentList;
+}
+
 KisImportExportErrorCode KraConverter::buildFile(QIODevice *io, const QString &filename)
 {
     setProgress(5);
@@ -424,6 +429,7 @@ bool KraConverter::completeLoading(KoStore* store)
     m_activeNodes = m_kraLoader->selectedNodes();
     m_assistants = m_kraLoader->assistants();
     m_storyboardItemList = m_kraLoader->storyboardItemList();
+    m_storyboardCommentList = m_kraLoader->storyboardCommentList();
 
     return true;
     return m_kraLoader->errorMessages().isEmpty();

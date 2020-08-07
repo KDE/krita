@@ -52,6 +52,9 @@ KisImportExportErrorCode KraImport::convert(KisDocument *document, QIODevice *io
         if (kraConverter.storyboardItemList().size() > 0) {
             document->setStoryboardItemList(kraConverter.storyboardItemList(), true);
         }
+        if (kraConverter.storyboardCommentList().size() > 0) {
+            document->setStoryboardCommentList(kraConverter.storyboardCommentList(), true);
+        }
     }
     return result;
 }

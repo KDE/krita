@@ -18,15 +18,11 @@
 #ifndef COMMENT_MODEL
 #define COMMENT_MODEL
 
+#include "StoryboardItem.h"
 #include <QAbstractListModel>
 #include <kritastoryboarddocker_export.h>
 
 class StoryboardModel;
-struct Comment 
-{
-    QString name; 
-    bool visibility;
-};
 
 /*
     This model manages the comment data of StoryboardModel
@@ -55,6 +51,18 @@ public:
 
     Qt::DropActions supportedDropActions() const override;
     Qt::DropActions supportedDragActions() const override;
+
+    void resetData(QVector<Comment> list);
+    QVector<Comment> getData();
+
+Q_SIGNALS:
+    /*
+     * this signal is emitted whenever m_items is changed.
+     * it is used to keep the StoryboardItemList in KisDocument
+     * in sync with m_items
+     */
+    //TODO: Use a signal compressor to reduce frequency
+    void sigCommentListChanged();
 
 private:
     QVector<Comment> m_commentList;

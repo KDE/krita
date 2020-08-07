@@ -90,7 +90,6 @@
 #include "kis_layer_properties_icons.h"
 #include "kis_node_view_color_scheme.h"
 #include "KisMirrorAxisConfig.h"
-#include "StoryboardItem.h"
 
 /*
 
@@ -141,6 +140,7 @@ public:
     vKisNodeSP selectedNodes; // the nodes that were active when saving the document.
     QMap<QString, QString> assistantsFilenames;
     StoryboardItemList storyboardItemList;
+    QVector<Comment> storyboardCommentList;
     QList<KisPaintingAssistantSP> assistants;
     QMap<KisNode*, QString> keyframeFilenames;
     QVector<QString> paletteFilenames;
@@ -369,6 +369,8 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
             loadAudio(e, image);
         } else if (e.tagName() == "StoryboardItemList") {
             loadStoryboardItemList(e);
+        } else if (e.tagName() == "StoryboardCommentList") {
+            loadStoryboardCommentList(e);
         }
     }
 
@@ -561,6 +563,10 @@ StoryboardItemList KisKraLoader::storyboardItemList() const
     return m_d->storyboardItemList;
 }
 
+QVector<Comment> KisKraLoader::storyboardCommentList() const
+{
+    return m_d->storyboardCommentList;
+}
 QStringList KisKraLoader::errorMessages() const
 {
     return m_d->errorMessages;
@@ -1307,6 +1313,25 @@ void KisKraLoader::loadStoryboardItemList(const KoXmlElement& elem)
     qDebug()<<"found "<<count<<" storyboards";
 }
 
+void KisKraLoader::loadStoryboardCommentList(const KoXmlElement& elem)
+{
+    KoXmlNode child;
+    int count = 0;
+    for (child = elem.firstChild(); !child.isNull(); child = child.nextSibling()) {
+        KoXmlElement e = child.toElement();
+        if (e.tagName() == "storyboardcomment") {
+            Comment comment;
+            if (e.hasAttribute("visibility")) {
+                comment.visibility = e.attribute("visibility").toInt();
+            }
+            if (e.hasAttribute("name")) {
+                comment.name = e.attribute("name");
+            }
+            count++;
+            m_d->storyboardCommentList.append(comment);
+        }
+    }
+}
 KisNodeSP KisKraLoader::loadReferenceImagesLayer(const KoXmlElement &elem, KisImageSP image)
 {
     KisSharedPtr<KisReferenceImagesLayer> layer =

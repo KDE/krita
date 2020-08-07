@@ -325,7 +325,7 @@ bool KisAnimationCurvesModel::adjustKeyframes(const QModelIndexList &indexes, in
 
                     const qreal currentValue = scalarKeyframe->value();
                     //TODO Undo considerations.
-                    scalarKeyframe->setValue(currentValue + valueOffset);
+                    scalarKeyframe->setValue(currentValue + valueOffset, cmd.data());
                     result = true;
                 }
 

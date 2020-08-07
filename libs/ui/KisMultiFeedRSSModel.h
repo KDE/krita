@@ -56,7 +56,7 @@ public:
     ~MultiFeedRssModel() override;
 
     QHash<int, QByteArray> roleNames() const override;
-    void addFeed(const QString& feed);
+    virtual void addFeed(const QString& feed);
     void removeFeed(const QString& feed);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;

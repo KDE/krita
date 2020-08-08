@@ -88,11 +88,11 @@ void FillProcessingVisitor::fillPaintDevice(KisPaintDeviceSP device, KisUndoAdap
         } else if (m_useBgColor) {
             fillPainter.fillRect(fillRect,
                                  m_resources->currentBgColor(),
-                                 m_resources->opacity());
+                                 OPACITY_OPAQUE_U8);
         } else {
             fillPainter.fillRect(fillRect,
                                  m_resources->currentFgColor(),
-                                 m_resources->opacity());
+                                 OPACITY_OPAQUE_U8);
         }
 
         QVector<QRect> dirtyRect = fillPainter.takeDirtyRegion();

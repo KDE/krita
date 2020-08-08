@@ -151,6 +151,8 @@ void KisPerspectiveTransformWorker::runPartialDst(KisPaintDeviceSP srcDev,
                                                   KisPaintDeviceSP dstDev,
                                                   const QRect &dstRect)
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(srcDev->pixelSize() == dstDev->pixelSize());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(*srcDev->colorSpace() == *dstDev->colorSpace());
 
     QRectF srcClipRect = srcDev->defaultBounds()->imageBorderRect();
     if (srcClipRect.isEmpty()) return;

@@ -84,7 +84,7 @@ void FillProcessingVisitor::fillPaintDevice(KisPaintDeviceSP device, KisUndoAdap
         fillPainter.setProgress(helper.updater());
 
         if (m_usePattern) {
-            fillPainter.fillRect(fillRect, m_resources->currentPattern(), m_resources->fillTransform());
+            fillPainter.fillRectNoCompose(fillRect, m_resources->currentPattern(), m_resources->fillTransform());
         } else if (m_useBgColor) {
             fillPainter.fillRect(fillRect,
                                  m_resources->currentBgColor(),

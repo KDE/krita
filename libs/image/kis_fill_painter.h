@@ -126,14 +126,14 @@ public:
      * @param pattern pattern to use.
      * @param transform transformation to apply to the pattern.
      */
-    void fillRect(const QRect& rc, const KoPattern *pattern, const QTransform transform);
+    void fillRectNoCompose(const QRect& rc, const KoPattern *pattern, const QTransform transform);
     /**
      * Fill a rectangle with a certain pattern. The pattern is repeated if it does not fit the
      * entire rectangle.
      *
      * This one supports transforms, but does not use blitting.
      */
-    void fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisPaintDeviceSP device, const QRect& deviceRect, const QTransform transform);
+    void fillRectNoCompose(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisPaintDeviceSP device, const QRect& deviceRect, const QTransform transform);
 
     /**
      * Fill the specified area with the output of the generator plugin that is configured

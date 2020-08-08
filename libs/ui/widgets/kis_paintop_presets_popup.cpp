@@ -568,6 +568,8 @@ void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
     // when viewing the names, so replace them with spaces
     QString formattedBrushName = resource->name().replace("_", " ");
 
+    m_d->uiWdgPaintOpPresetSettings.currentBrushNameLabel->setToolTip(formattedBrushName);
+    formattedBrushName = this->fontMetrics().elidedText(formattedBrushName, Qt::ElideRight, m_d->uiWdgPaintOpPresetSettings.currentBrushNameLabel->width());
     m_d->uiWdgPaintOpPresetSettings.currentBrushNameLabel->setText(formattedBrushName);
     m_d->uiWdgPaintOpPresetSettings.currentBrushEngineLabel->setText(i18nc("%1 is the name of a brush engine", "%1 Engine", currentBrushEngineName));
     m_d->uiWdgPaintOpPresetSettings.currentBrushEngineIcon->setPixmap(currentBrushEngineIcon);

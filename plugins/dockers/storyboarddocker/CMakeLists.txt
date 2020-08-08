@@ -10,6 +10,7 @@ set(KRITA_STORYBOARDDOCKER_SOURCES
     StoryboardView.cpp
     KisAsyncStoryboardThumbnailRenderer.cpp
     KisStoryboardThumbnailRenderScheduler.cpp
+    DlgExportStoryboard.cpp
     )
 
 set(KRITA_STORYBOARDDOCKER_PART_HEADERS
@@ -22,10 +23,11 @@ set(KRITA_STORYBOARDDOCKER_PART_HEADERS
     StoryboardView.h
     KisAsyncStoryboardThumbnailRenderer.h
     KisStoryboardThumbnailRenderScheduler.h
+    DlgExportStoryboard.h
 )
 
 ki18n_wrap_ui(KRITA_STORYBOARDDOCKER_SOURCES
-    wdgstoryboarddock.ui wdgarrangemenu.ui wdgcommentmenu.ui
+    wdgstoryboarddock.ui wdgarrangemenu.ui wdgcommentmenu.ui wdgexportstoryboard.ui
 )
 
 add_library(kritastoryboarddocker MODULE ${KRITA_STORYBOARDDOCKER_SOURCES}

@@ -22,6 +22,7 @@
 #include "StoryboardModel.h"
 #include "StoryboardDelegate.h"
 #include "StoryboardView.h"
+#include "DlgExportStoryboard.h"
 
 #include <QMenu>
 #include <QButtonGroup>
@@ -212,6 +213,7 @@ StoryboardDockerDock::~StoryboardDockerDock()
     delete m_commentModel;
     delete m_storyboardModel;
     delete m_storyboardDelegate;
+    delete exportwidget;
 }
 
 void StoryboardDockerDock::setCanvas(KoCanvasBase *canvas)
@@ -306,6 +308,8 @@ void StoryboardDockerDock::slotExportAsSvg()
 
 void StoryboardDockerDock::slotExport(QString mode)
 {
+    exportwidget = new DlgExportStoryboard();
+    exportwidget->show();
     qDebug()<<"mode is "<<mode;
 }
 

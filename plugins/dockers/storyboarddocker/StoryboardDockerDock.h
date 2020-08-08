@@ -34,6 +34,7 @@ class CommentModel;
 class StoryboardModel;
 class StoryboardDelegate;
 class KisNodeManager;
+class DlgExportStoryboard;
 
 class StoryboardDockerDock : public QDockWidget, public KisMainwindowObserver{
     Q_OBJECT
@@ -56,11 +57,11 @@ private Q_SLOTS:
      */
     void slotUpdateDocumentList();
     /**
-     * @brief sets the Model's storyboardItemList to be the same as KisDocument's storyboardItemList
+     * @brief sets the StoryboardModel's storyboardItemList to be the same as KisDocument's storyboardItemList
      */
     void slotUpdateStoryboardModelList();
     /**
-     * @brief sets the Model's storyboardItemList to be the same as KisDocument's storyboardItemList
+     * @brief sets the CommentModel's comment list to be the same as KisDocument's storyboardCommentList
      */
     void slotUpdateCommentModelList();
 
@@ -81,6 +82,7 @@ private:
     QMenu *m_exportMenu;
     KisAction *m_exportAsPdfAction;
     KisAction *m_exportAsSvgAction;
+    DlgExportStoryboard *exportwidget;
 
     QPointer<CommentModel> m_commentModel;
     CommentMenu *m_commentMenu;

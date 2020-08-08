@@ -327,7 +327,7 @@ public:
             double subPixelX, double subPixelY,
             qreal softnessFactor, qreal lightnessStrength) const;
 
-    virtual void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
+    void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
         ColoringInformation* coloringInfo,
         KisDabShape const&,
         const KisPaintInformation& info,

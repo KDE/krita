@@ -27,7 +27,7 @@
 #include "MockShapes.h"
 #include "KoPathPoint.h"
 #include "KoViewConverter.h"
-#include <sdk/tests/kistest.h>
+#include <sdk/tests/testflake.h>
 //#include <PointProperties.h>
 #include <KoSnapData.h>
 

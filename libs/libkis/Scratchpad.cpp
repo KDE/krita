@@ -42,8 +42,8 @@ Scratchpad::Scratchpad(View *view, const QColor & defaultColor, QWidget *parent)
     d->scratchpad->setupScratchPad(view->view()->resourceProvider(), defaultColor);
     d->scratchpad->setMinimumSize(50, 50);
 
-    setLayout(new QVBoxLayout());
-    layout()->addWidget(d->scratchpad);
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    layout->addWidget(d->scratchpad);
 }
 
 Scratchpad::~Scratchpad()

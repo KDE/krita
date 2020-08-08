@@ -341,6 +341,15 @@ KisKeyframeChannel *KisPaintLayer::requestKeyframeChannel(const QString &id)
     return KisLayer::requestKeyframeChannel(id);
 }
 
+bool KisPaintLayer::supportsKeyframeChannel(const QString &id)
+{
+     if (id == KisKeyframeChannel::Content.id()) {
+         return true;
+     }
+
+     return KisLayer::supportsKeyframeChannel(id);
+}
+
 KisPaintDeviceList KisPaintLayer::getLodCapableDevices() const
 {
     KisPaintDeviceList list = KisLayer::getLodCapableDevices();

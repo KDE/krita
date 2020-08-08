@@ -30,7 +30,8 @@
 
 #include "kis_global.h"
 
-#include "testutil.h"
+#include <testutil.h>
+#include <testimage.h>
 #include "kis_psd_layer_style.h"
 #include "kis_asl_layer_style_serializer.h"
 #include <asl/kis_asl_reader.h>
@@ -346,10 +347,10 @@ void KisAslLayerStyleSerializerTest::testWritingGradients()
     {
         const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
         QList<KoGradientStop> stops;
-        stops << KoGradientStop(0.0, KoColor(Qt::black, cs));
-        stops << KoGradientStop(0.3, KoColor(Qt::red, cs));
-        stops << KoGradientStop(0.6, KoColor(Qt::green, cs));
-        stops << KoGradientStop(1.0, KoColor(Qt::white, cs));
+        stops << KoGradientStop(0.0, KoColor(Qt::black, cs), COLORSTOP);
+        stops << KoGradientStop(0.3, KoColor(Qt::red, cs), COLORSTOP);
+        stops << KoGradientStop(0.6, KoColor(Qt::green, cs), COLORSTOP);
+        stops << KoGradientStop(1.0, KoColor(Qt::white, cs), COLORSTOP);
         stopGradient.setStops(stops);
     }
 
@@ -420,4 +421,4 @@ void KisAslLayerStyleSerializerTest::testWritingGradients()
     }
 }
 
-QTEST_MAIN(KisAslLayerStyleSerializerTest)
+KISTEST_MAIN(KisAslLayerStyleSerializerTest)

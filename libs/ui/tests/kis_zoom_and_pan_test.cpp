@@ -22,7 +22,7 @@
 #include <QTest>
 
 #include <kis_filter_configuration.h>
-#include "testutil.h"
+#include <testutil.h>
 #include "qimage_based_test.h"
 
 #include <kactioncollection.h>
@@ -40,7 +40,7 @@
 #include "kis_coordinates_converter.h"
 #include "kis_filter_strategy.h"
 
-#include "kistest.h"
+#include "testui.h"
 
 class ZoomAndPanTester : public TestUtil::QImageBasedTest
 {

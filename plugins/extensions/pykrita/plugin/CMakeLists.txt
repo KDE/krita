@@ -19,6 +19,8 @@ ki18n_wrap_ui(SOURCES
 
 add_library(kritapykrita MODULE ${SOURCES})
 
+target_include_directories(kritapykrita SYSTEM PUBLIC "${PYTHON_INCLUDE_DIRS}")
+
 target_link_libraries(
     kritapykrita
     ${PYTHON_LIBRARY}

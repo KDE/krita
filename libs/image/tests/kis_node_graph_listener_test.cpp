@@ -21,7 +21,7 @@
 #include <QTest>
 #include "kis_node_graph_listener.h"
 #include "kis_node_facade.h"
-#include "testutil.h"
+#include <testutil.h>
 
 void KisNodeGraphListenerTest::testUpdateOfListener()
 {

@@ -218,7 +218,7 @@ bool KisKraLoadVisitor::visit(KisPaintLayer *layer)
             if (!pixelSelection->read(m_store->device())) {
                 pixelSelection->disconnect();
             } else {
-                KisTransparencyMask* mask = new KisTransparencyMask();
+                KisTransparencyMask* mask = new KisTransparencyMask(m_image, i18n("Transparency Mask"));
                 mask->setSelection(selection);
                 m_image->addNode(mask, layer, layer->firstChild());
             }
@@ -231,6 +231,8 @@ bool KisKraLoadVisitor::visit(KisPaintLayer *layer)
 
 bool KisKraLoadVisitor::visit(KisGroupLayer *layer)
 {
+    loadNodeKeyframes(layer);
+
     if (*layer->colorSpace() != *m_image->colorSpace()) {
         layer->resetCache(m_image->colorSpace());
     }
@@ -260,6 +262,13 @@ bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)
 
     } else {
         // We use the default, empty selection
+    }
+
+    if (!result) {
+        m_warningMessages.append(i18nc("Warning during loading a kra file with a filter layer",
+                                       "Selection on layer %s couldn't be loaded. It will be replaced by an empty selection.", layer->name()));
+        // otherwise ignore and just use what is there already
+        // (most probably an empty selection)
     }
 
     if (!loadMetaData(layer)) {

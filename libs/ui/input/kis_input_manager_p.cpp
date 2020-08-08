@@ -23,6 +23,8 @@
 #include <QScopedPointer>
 #include <QtGlobal>
 
+#include <boost/preprocessor/repeat_from_to.hpp>
+
 #include "kis_input_manager.h"
 #include "kis_config.h"
 #include "kis_abstract_input_action.h"
@@ -80,7 +82,7 @@ KisInputManager::Private::EventEater::EventEater()
 
 bool KisInputManager::Private::EventEater::eventFilter(QObject* target, QEvent* event )
 {
-    Q_UNUSED(target)
+    Q_UNUSED(target);
 
     auto debugEvent = [&](int i) {
         if (KisTabletDebugger::instance()->debugEnabled()) {
@@ -256,6 +258,11 @@ void KisInputManager::Private::CanvasSwitcher::removeCanvas(KisCanvas2 *canvas)
     }
 
     widget->removeEventFilter(this);
+
+    if (d->canvas == canvas) {
+        d->canvas = 0;
+        d->toolProxy = 0;
+    }
 }
 
 bool isInputWidget(QWidget *w)
@@ -423,6 +430,11 @@ bool KisInputManager::Private::ProximityNotifier::eventFilter(QObject* object, Q
     return QObject::eventFilter(object, event);
 }
 
+#define EXTRA_BUTTON(z, n, _) \
+    if(buttons & Qt::ExtraButton##n) { \
+        buttonSet << Qt::ExtraButton##n; \
+    }
+
 void KisInputManager::Private::addStrokeShortcut(KisAbstractInputAction* action, int index,
                                                  const QList<Qt::Key> &modifiers,
                                                  Qt::MouseButtons buttons)
@@ -430,28 +442,24 @@ void KisInputManager::Private::addStrokeShortcut(KisAbstractInputAction* action,
     KisStrokeShortcut *strokeShortcut =
         new KisStrokeShortcut(action, index);
 
-    QList<Qt::MouseButton> buttonList;
+    QSet<Qt::MouseButton> buttonSet;
     if(buttons & Qt::LeftButton) {
-        buttonList << Qt::LeftButton;
+        buttonSet << Qt::LeftButton;
     }
     if(buttons & Qt::RightButton) {
-        buttonList << Qt::RightButton;
+        buttonSet << Qt::RightButton;
     }
     if(buttons & Qt::MidButton) {
-        buttonList << Qt::MidButton;
-    }
-    if(buttons & Qt::XButton1) {
-        buttonList << Qt::XButton1;
-    }
-    if(buttons & Qt::XButton2) {
-        buttonList << Qt::XButton2;
+        buttonSet << Qt::MidButton;
     }
 
-    if (buttonList.size() > 0) {
+BOOST_PP_REPEAT_FROM_TO(1, 25, EXTRA_BUTTON, _)
+
+    if (!buttonSet.empty()) {
 #if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
-        strokeShortcut->setButtons(QSet<Qt::Key>(modifiers.begin(), modifiers.end()), QSet<Qt::MouseButton>(buttonList.begin(), buttonList.end()));
+        strokeShortcut->setButtons(QSet<Qt::Key>(modifiers.begin(), modifiers.end()), buttonSet);
 #else
-        strokeShortcut->setButtons(QSet<Qt::Key>::fromList(modifiers), QSet<Qt::MouseButton>::fromList(buttonList));
+        strokeShortcut->setButtons(QSet<Qt::Key>::fromList(modifiers), buttonSet);
 #endif
         matcher.addShortcut(strokeShortcut);
     }

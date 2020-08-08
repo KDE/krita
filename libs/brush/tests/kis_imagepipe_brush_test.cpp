@@ -18,7 +18,7 @@
 
 #include "kis_imagepipe_brush_test.h"
 
-#include <sdk/tests/kistest.h>
+#include <sdk/tests/testbrush.h>
 #include <QTest>
 #include <QPainter>
 
@@ -168,9 +168,9 @@ void KisImagePipeBrushTest::testColoredDab()
 
     checkConsistency(brush);
 
-    QCOMPARE(brush->useColorAsMask(), false);
+    QCOMPARE(brush->useColorAsMask(), true);
     QCOMPARE(brush->hasColor(), true);
-    QCOMPARE(brush->brushType(), PIPE_IMAGE);
+    QCOMPARE(brush->brushType(), PIPE_MASK);
 
     // let it be the mask (should be revertible)
     brush->setUseColorAsMask(true);
@@ -189,7 +189,7 @@ void KisImagePipeBrushTest::testColoredDab()
     // convert to the mask (irreversible)
     brush->makeMaskImage(false);
 
-    QCOMPARE(brush->useColorAsMask(), true);
+    QCOMPARE(brush->useColorAsMask(), false);
     QCOMPARE(brush->hasColor(), false);
     QCOMPARE(brush->brushType(), PIPE_MASK);
 

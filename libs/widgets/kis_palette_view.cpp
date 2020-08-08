@@ -110,18 +110,18 @@ void KisPaletteView::setCrossedKeyword(const QString &value)
 
 bool KisPaletteView::addEntryWithDialog(KoColor color)
 {
-    QScopedPointer<KoDialog> window(new KoDialog(this));
-    window->setWindowTitle(i18nc("@title:window", "Add a new Colorset Entry"));
-    QFormLayout *editableItems = new QFormLayout(window.data());
-    window->mainWidget()->setLayout(editableItems);
-    QComboBox *cmbGroups = new QComboBox(window.data());
+    KoDialog dialog;
+    dialog.setWindowTitle(i18nc("@title:dialog", "Add a new Colorset Entry"));
+    QFormLayout *editableItems = new QFormLayout(dialog.mainWidget());
+
+    QComboBox *cmbGroups = new QComboBox;
     QString defaultGroupName = i18nc("Name for default group", "Default");
     cmbGroups->addItem(defaultGroupName);
     cmbGroups->addItems(m_d->model->colorSet()->getGroupNames());
-    QLineEdit *lnIDName = new QLineEdit(window.data());
-    QLineEdit *lnName = new QLineEdit(window.data());
-    KisColorButton *bnColor = new KisColorButton(window.data());
-    QCheckBox *chkSpot = new QCheckBox(window.data());
+    QLineEdit *lnIDName = new QLineEdit;
+    QLineEdit *lnName = new QLineEdit;
+    KisColorButton *bnColor = new KisColorButton;
+    QCheckBox *chkSpot = new QCheckBox;
     chkSpot->setToolTip(i18nc("@info:tooltip", "A spot color is a color that the printer is able to print without mixing the paints it has available to it. The opposite is called a process color."));
     editableItems->addRow(i18n("Group"), cmbGroups);
     editableItems->addRow(i18n("ID"), lnIDName);
@@ -134,7 +134,7 @@ bool KisPaletteView::addEntryWithDialog(KoColor color)
     bnColor->setColor(color);
     chkSpot->setChecked(false);
 
-    if (window->exec() == KoDialog::Accepted) {
+    if (dialog.exec() == KoDialog::Accepted) {
         QString groupName = cmbGroups->currentText();
         if (groupName == defaultGroupName) {
             groupName = QString();
@@ -154,14 +154,14 @@ bool KisPaletteView::addEntryWithDialog(KoColor color)
 
 bool KisPaletteView::addGroupWithDialog()
 {
-    KoDialog *window = new KoDialog();
-    window->setWindowTitle(i18nc("@title:window","Add a new group"));
-    QFormLayout *editableItems = new QFormLayout();
-    window->mainWidget()->setLayout(editableItems);
+    KoDialog dialog;
+    dialog.setWindowTitle(i18nc("@title:dialog","Add a new group"));
+    QFormLayout *editableItems = new QFormLayout(dialog.mainWidget());
     QLineEdit *lnName = new QLineEdit();
-    editableItems->addRow(i18nc("Name for a group", "Name"), lnName);
     lnName->setText(i18nc("Part of default name for a new group", "Color Group")+""+QString::number(m_d->model->colorSet()->getGroupNames().size()+1));
-    if (window->exec() == KoDialog::Accepted) {
+    editableItems->addRow(i18nc("Name for a group", "Name"), lnName);
+
+    if (dialog.exec() == KoDialog::Accepted) {
         KisSwatchGroup group;
         group.setName(lnName->text());
         m_d->model->addGroup(group);
@@ -175,13 +175,13 @@ bool KisPaletteView::removeEntryWithDialog(QModelIndex index)
 {
     bool keepColors = false;
     if (qvariant_cast<bool>(index.data(KisPaletteModel::IsGroupNameRole))) {
-        QScopedPointer<KoDialog> window(new KoDialog(this));
-        window->setWindowTitle(i18nc("@title:window","Removing Group"));
-        QFormLayout *editableItems = new QFormLayout(window.data());
-        QCheckBox *chkKeep = new QCheckBox(window.data());
-        window->mainWidget()->setLayout(editableItems);
+        KoDialog dialog;
+        dialog.setWindowTitle(i18nc("@title:dialog","Removing Group"));
+        QFormLayout *editableItems = new QFormLayout(dialog.mainWidget());
+        QCheckBox *chkKeep = new QCheckBox();
         editableItems->addRow(i18nc("Shows up when deleting a swatch group", "Keep the Colors"), chkKeep);
-        if (window->exec() != KoDialog::Accepted) { return false; }
+
+        if (dialog.exec() != KoDialog::Accepted) { return false; }
         keepColors = chkKeep->isChecked();
     }
     m_d->model->removeEntry(index, keepColors);

@@ -21,7 +21,6 @@
 #include <QTest>
 
 #include "kis_transaction.h"
-#include "testutil.h"
 
 #include <KoColor.h>
 
@@ -32,6 +31,9 @@
 #include "kis_psd_layer_style.h"
 #include "layerstyles/kis_multiple_projection.h"
 #include "layerstyles/KisLayerStyleKnockoutBlower.h"
+
+#include <testutil.h>
+#include "testimage.h"
 
 
 struct TestConfig {

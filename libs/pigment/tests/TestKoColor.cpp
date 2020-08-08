@@ -30,7 +30,7 @@
 #include "KoColorSpaceRegistry.h"
 #include "DebugPigment.h"
 
-#include "sdk/tests/kistest.h"
+#include "sdk/tests/testpigment.h"
 
 bool nearEqualValue(int a, int b)
 {

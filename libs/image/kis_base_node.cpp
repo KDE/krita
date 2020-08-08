@@ -38,20 +38,14 @@ struct Q_DECL_HIDDEN KisBaseNode::Private
     QMap<QString, KisKeyframeChannel*> keyframeChannels;
     QScopedPointer<KisScalarKeyframeChannel> opacityChannel;
 
-    bool systemLocked;
-    bool collapsed;
-    bool supportsLodMoves;
-    bool animated;
-    bool pinnedToTimeline;
+    bool collapsed {false};
+    bool supportsLodMoves {false};
+    bool animated {false};
+    bool pinnedToTimeline {false};
     KisImageWSP image;
 
     Private(KisImageWSP image)
         : id(QUuid::createUuid())
-        , systemLocked(false)
-        , collapsed(false)
-        , supportsLodMoves(false)
-        , animated(false)
-        , pinnedToTimeline(false)
         , image(image)
     {
     }
@@ -59,7 +53,6 @@ struct Q_DECL_HIDDEN KisBaseNode::Private
     Private(const Private &rhs)
         : compositeOp(rhs.compositeOp),
           id(QUuid::createUuid()),
-          systemLocked(false),
           collapsed(rhs.collapsed),
           supportsLodMoves(rhs.supportsLodMoves),
           animated(rhs.animated),
@@ -255,7 +248,7 @@ QImage KisBaseNode::createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspe
 
 QImage KisBaseNode::createThumbnailForFrame(qint32 w, qint32 h, int time, Qt::AspectRatioMode aspectRatioMode)
 {
-    Q_UNUSED(time)
+    Q_UNUSED(time);
     Q_UNUSED(aspectRatioMode);
     return createThumbnail(w, h);
 }
@@ -502,4 +495,13 @@ KisKeyframeChannel *KisBaseNode::requestKeyframeChannel(const QString &id)
     }
 
     return 0;
+}
+
+bool KisBaseNode::supportsKeyframeChannel(const QString &id)
+{
+    if (id == KisKeyframeChannel::Opacity.id() && original()) {
+        return true;
+    }
+
+    return false;
 }

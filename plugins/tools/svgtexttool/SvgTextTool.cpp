@@ -131,12 +131,12 @@ QWidget *SvgTextTool::createOptionWidget()
     m_configGroup = KSharedConfig::openConfig()->group(toolId());
 
     QGroupBox *defsOptions = new QGroupBox(i18n("Create new texts with..."));
-    QVBoxLayout *defOptionsLayout = new QVBoxLayout();
-    defsOptions->setLayout(defOptionsLayout);
+    QVBoxLayout *defOptionsLayout = new QVBoxLayout(defsOptions);
+
     m_defFont = new QFontComboBox();
     QString storedFont = m_configGroup.readEntry<QString>("defaultFont", QApplication::font().family());
     m_defFont->setCurrentFont(QFont(storedFont));
-    defsOptions->layout()->addWidget(m_defFont);
+    defOptionsLayout->addWidget(m_defFont);
     m_defPointSize = new QComboBox();
     Q_FOREACH (int size, QFontDatabase::standardSizes()) {
         m_defPointSize->addItem(QString::number(size)+" pt");

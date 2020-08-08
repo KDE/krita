@@ -405,7 +405,7 @@ bool KisSketchView::event( QEvent* event )
 
 //                syncObject->mirrorHorizontal = provider->mirrorHorizontal();
 //                syncObject->mirrorVertical = provider->mirrorVertical();
-//                //syncObject->mirrorAxesCenter = provider->resourceManager()->resource(KisCanvasResourceProvider::MirrorAxesCenter).toPointF();
+//                //syncObject->mirrorAxesCenter = provider->resourceManager()->resource(KoCanvasResource::MirrorAxesCenter).toPointF();
 
 //                KisToolFreehand* tool = qobject_cast<KisToolFreehand*>(KoToolManager::instance()->toolById(d->view->canvasBase(), syncObject->activeToolId));
 //                if(tool) {
@@ -442,7 +442,7 @@ bool KisSketchView::event( QEvent* event )
 
 //                provider->setMirrorHorizontal(syncObject->mirrorHorizontal);
 //                provider->setMirrorVertical(syncObject->mirrorVertical);
-//                //provider->resourceManager()->setResource(KisCanvasResourceProvider::MirrorAxesCenter, syncObject->mirrorAxesCenter);
+//                //provider->resourceManager()->setResource(KoCanvasResource::MirrorAxesCenter, syncObject->mirrorAxesCenter);
 
 //                provider->setPaintOpPreset(syncObject->paintOp);
 //                qApp->processEvents();

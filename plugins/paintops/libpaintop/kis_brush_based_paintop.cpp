@@ -45,7 +45,7 @@ void TextBrushInitializationWorkaround::preinitialize(KisPaintOpSettingsSP setti
 {
     if (KisBrushOptionProperties::isTextBrush(settings.data())) {
         KisBrushOptionProperties brushOption;
-        brushOption.readOptionSetting(settings, settings->resourcesInterface());
+        brushOption.readOptionSetting(settings, settings->resourcesInterface(), settings->canvasResourcesInterface());
         m_brush = brushOption.brush();
         m_settings = settings;
     }
@@ -88,7 +88,7 @@ KisBrushBasedPaintOp::KisBrushBasedPaintOp(const KisPaintOpSettingsSP settings, 
 
     if (!m_brush) {
         KisBrushOptionProperties brushOption;
-        brushOption.readOptionSetting(settings, settings->resourcesInterface());
+        brushOption.readOptionSetting(settings, settings->resourcesInterface(), settings->canvasResourcesInterface());
         m_brush = brushOption.brush();
     }
 
@@ -101,7 +101,7 @@ KisBrushBasedPaintOp::KisBrushBasedPaintOp(const KisPaintOpSettingsSP settings, 
     m_mirrorOption.readOptionSetting(settings);
     m_dabCache->setMirrorPostprocessing(&m_mirrorOption);
 
-    m_textureProperties.fillProperties(settings, settings->resourcesInterface());
+    m_textureProperties.fillProperties(settings, settings->resourcesInterface(), settings->canvasResourcesInterface());
     m_dabCache->setTexturePostprocessing(&m_textureProperties);
 
     m_precisionOption.setHasImprecisePositionOptions(

@@ -63,7 +63,6 @@
 #include <QAction>
 #include <QWindow>
 #include <QScrollArea>
-
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kis_debug.h>
@@ -128,10 +127,13 @@
 #include "kis_config.h"
 #include "kis_config_notifier.h"
 #include "kis_custom_image_widget.h"
+#include "animation/KisAnimationRender.h"
+#include "animation/KisDlgAnimationRenderer.h"
 #include <KisDocument.h>
 #include "kis_group_layer.h"
 #include "kis_image_from_clipboard_widget.h"
 #include "kis_image.h"
+#include "kis_image_animation_interface.h"
 #include <KisImportExportFilter.h>
 #include "KisImportExportManager.h"
 #include "kis_mainwindow_observer.h"
@@ -234,6 +236,8 @@ public:
     KisAction *saveAction {0};
     KisAction *saveActionAs {0};
     KisAction *importAnimation {0};
+    KisAction *renderAnimation {0};
+    KisAction *renderAnimationAgain {0};
     KisAction *closeAll {0};
     KisAction *importFile {0};
     KisAction *exportFile {0};
@@ -368,6 +372,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     }
 
     QMap<QString, QAction*> dockwidgetActions;
+
     dockwidgetActions[toolbox->toggleViewAction()->text()] = toolbox->toggleViewAction();
     Q_FOREACH (const QString & docker, KoDockRegistry::instance()->keys()) {
         KoDockFactoryBase *factory = KoDockRegistry::instance()->value(docker);
@@ -591,7 +596,6 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     this->winId(); // Ensures the native window has been created.
     QWindow *window = this->windowHandle();
     connect(window, SIGNAL(screenChanged(QScreen *)), this, SLOT(windowScreenChanged(QScreen *)));
-
 }
 
 KisMainWindow::~KisMainWindow()
@@ -1532,6 +1536,8 @@ void KisMainWindow::setActiveView(KisView* view)
     d->viewManager->setCurrentView(view);
 
     KisWindowLayoutManager::instance()->activeDocumentChanged(view->document());
+
+    emit activeViewChanged();
 }
 
 void KisMainWindow::dragMove(QDragMoveEvent * event)
@@ -1667,7 +1673,7 @@ void KisMainWindow::slotFileOpen(bool isImporting)
         }
     }
 #else
-    Q_UNUSED(isImporting)
+    Q_UNUSED(isImporting);
 
     d->fileManager->openImportFile();
     connect(d->fileManager, SIGNAL(sigFileSelected(QString)), this, SLOT(slotFileSelected(QString)));
@@ -1897,6 +1903,44 @@ void KisMainWindow::importAnimation()
         }
         activeView()->canvasBase()->refetchDataFromImage();
     }
+}
+
+void KisMainWindow::renderAnimation()
+{
+    if (!activeView()) return;
+
+    KisImageSP image = viewManager()->image();
+
+    if (!image) return;
+    if (!image->animationInterface()->hasAnimation()) return;
+
+    KisDocument *doc = viewManager()->document();
+
+    KisDlgAnimationRenderer dlgAnimationRenderer(doc, viewManager()->mainWindow());
+    dlgAnimationRenderer.setCaption(i18n("Render Animation"));
+    if (dlgAnimationRenderer.exec() == QDialog::Accepted) {
+        KisAnimationRenderingOptions encoderOptions = dlgAnimationRenderer.getEncoderOptions();
+        KisAnimationRender::render(doc, viewManager(), encoderOptions);
+    }
+}
+
+void KisMainWindow::renderAnimationAgain()
+{
+    KisImageSP image = viewManager()->image();
+
+    if (!image) return;
+    if (!image->animationInterface()->hasAnimation()) return;
+
+    KisDocument *doc = viewManager()->document();
+
+    KisConfig cfg(true);
+
+    KisPropertiesConfigurationSP settings = cfg.exportConfiguration("ANIMATION_EXPORT");
+
+    KisAnimationRenderingOptions encoderOptions;
+    encoderOptions.fromProperties(settings);
+
+    KisAnimationRender::render(doc, viewManager(), encoderOptions);
 }
 
 void KisMainWindow::slotConfigureToolbars()
@@ -2482,6 +2526,12 @@ void KisMainWindow::checkSanity()
         QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
         return;
     }
+
+
+    // window is created signal (used in Python)
+    // there must be some asynchronous things happening in the constructor, because the window cannot
+    // be referenced until after this timeout is done
+    emit KisPart::instance()->sigMainWindowCreated();
 }
 
 void KisMainWindow::showErrorAndDie()
@@ -2569,6 +2619,14 @@ void KisMainWindow::createActions()
 
     d->importAnimation  = actionManager->createAction("file_import_animation");
     connect(d->importAnimation, SIGNAL(triggered()), this, SLOT(importAnimation()));
+
+    d->renderAnimation = actionManager->createAction("render_animation");
+    d->renderAnimation->setActivationFlags(KisAction::IMAGE_HAS_ANIMATION);
+    connect( d->renderAnimation, SIGNAL(triggered()), this, SLOT(renderAnimation()));
+
+    d->renderAnimationAgain = actionManager->createAction("render_animation_again");
+    d->renderAnimationAgain->setActivationFlags(KisAction::IMAGE_HAS_ANIMATION);
+    connect( d->renderAnimationAgain, SIGNAL(triggered()), this, SLOT(renderAnimationAgain()));
 
     d->closeAll = actionManager->createAction("file_close_all");
     connect(d->closeAll, SIGNAL(triggered()), this, SLOT(slotFileCloseAll()));

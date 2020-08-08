@@ -21,7 +21,7 @@
 #include <QTest>
 #include <QCoreApplication>
 
-#include  <sdk/tests/kistest.h>
+#include  <sdk/tests/testui.h>
 
 #include "filestest.h"
 

@@ -68,12 +68,14 @@ struct PAINTOP_EXPORT DabRequestInfo
                    const QPointF &_cursorPoint,
                    const KisDabShape &_shape,
                    const KisPaintInformation &_info,
-                   qreal _softnessFactor)
+                   qreal _softnessFactor,
+                   qreal _lightnessStrength = 1.0)
         : color(_color),
           cursorPoint(_cursorPoint),
           shape(_shape),
           info(_info),
-          softnessFactor(_softnessFactor)
+          softnessFactor(_softnessFactor),
+          lightnessStrength(_lightnessStrength)
     {
     }
 
@@ -82,6 +84,7 @@ struct PAINTOP_EXPORT DabRequestInfo
     const KisDabShape &shape;
     const KisPaintInformation &info;
     const qreal softnessFactor;
+    const qreal lightnessStrength;
 
 private:
     DabRequestInfo(const DabRequestInfo &rhs);
@@ -97,6 +100,7 @@ struct PAINTOP_EXPORT DabGenerationInfo
     KoColor paintColor;
     KisPaintInformation info;
     qreal softnessFactor = 1.0;
+    qreal lightnessStrength = 1.0;
 
     bool needsPostprocessing = false;
 };

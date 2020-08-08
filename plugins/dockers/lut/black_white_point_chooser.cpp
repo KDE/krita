@@ -54,8 +54,6 @@ BlackWhitePointChooser::BlackWhitePointChooser(QWidget* parent)
     QFormLayout *layout = new QFormLayout(this);
     layout->addRow(i18n("Black:"), m_black);
     layout->addRow(i18n("White:"), m_white);
-
-    setLayout(layout);
 }
 
 BlackWhitePointChooser::~BlackWhitePointChooser()

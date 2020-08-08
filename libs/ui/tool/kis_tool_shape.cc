@@ -175,7 +175,7 @@ QTransform KisToolShape::fillTransform()
 qreal KisToolShape::currentStrokeWidth() const
 {
     const qreal sizeInPx =
-        canvas()->resourceManager()->resource(KisCanvasResourceProvider::Size).toReal();
+        canvas()->resourceManager()->resource(KoCanvasResource::Size).toReal();
 
     return canvas()->unit().fromUserValue(sizeInPx);
 }

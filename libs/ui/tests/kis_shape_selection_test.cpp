@@ -30,8 +30,8 @@
 #include "kis_pixel_selection.h"
 #include "flake/kis_shape_selection.h"
 #include "kis_image.h"
-#include "testutil.h"
-#include "kistest.h"
+#include <testutil.h>
+#include "testui.h"
 #include <KisPart.h>
 #include <KisDocument.h>
 #include "kis_transaction.h"

@@ -24,7 +24,7 @@
 #include "kisexiv2/kis_exiv2.h"
 #include "filestest.h"
 #include "jpeglib.h"
-#include  <sdk/tests/kistest.h>
+#include  <sdk/tests/testui.h>
 
 #ifndef FILES_DATA_DIR
 #error "FILES_DATA_DIR not set. A directory with the data used for testing the importing of files in krita"

@@ -23,7 +23,7 @@
 #include "KoPathPointRemoveCommand.h"
 #include "KoShapeController.h"
 #include <MockShapes.h>
-#include <sdk/tests/kistest.h>
+#include <sdk/tests/testflake.h>
 #include <QTest>
 
 void TestPointRemoveCommand::redoUndoPointRemove()

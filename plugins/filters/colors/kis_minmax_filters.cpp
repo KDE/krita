@@ -34,8 +34,8 @@ typedef void (*funcMaxMin)(const quint8* , quint8* , uint);
 template<typename _TYPE>
 void maximize(const quint8* s, quint8* d, uint nbpixels)
 {
-    const _TYPE* sT = (_TYPE*)(s);
-    _TYPE* dT = (_TYPE*)(d);
+    const _TYPE* sT = reinterpret_cast<const _TYPE*>(s);
+    _TYPE* dT = reinterpret_cast<_TYPE*>(d);
     _TYPE vmax = *sT;
     for (uint i = 1; i < nbpixels; i ++) {
         if (sT[i] > vmax) {
@@ -52,8 +52,8 @@ void maximize(const quint8* s, quint8* d, uint nbpixels)
 template<typename _TYPE>
 void minimize(const quint8* s, quint8* d, uint nbpixels)
 {
-    const _TYPE* sT = (_TYPE*)(s);
-    _TYPE* dT = (_TYPE*)(d);
+    const _TYPE* sT = reinterpret_cast<const _TYPE*>(s);
+    _TYPE* dT = reinterpret_cast<_TYPE*>(d);
     _TYPE vmin = *sT;
     for (uint i = 1; i < nbpixels; i ++) {
         if (sT[i] < vmin) {

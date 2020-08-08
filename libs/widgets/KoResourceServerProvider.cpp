@@ -59,7 +59,8 @@ public:
         KoStopGradientSP gradient(new KoStopGradient());
         gradient->setType(QGradient::LinearGradient);
         gradient->setName(i18n("Foreground to Transparent"));
-        stops << KoGradientStop(0.0, KoColor(Qt::black, cs)) << KoGradientStop(1.0, KoColor(QColor(0, 0, 0, 0), cs));
+        stops << KoGradientStop(0.0, KoColor(Qt::black, cs), FOREGROUNDSTOP);
+        stops << KoGradientStop(1.0, KoColor(QColor(0, 0, 0, 0), cs), COLORSTOP);
 
         gradient->setStops(stops);
         gradient->setValid(true);
@@ -72,7 +73,8 @@ public:
         gradient->setName(i18n("Foreground to Background"));
 
         stops.clear();
-        stops << KoGradientStop(0.0, KoColor(Qt::black, cs)) << KoGradientStop(1.0, KoColor(Qt::white, cs));
+        stops << KoGradientStop(0.0, KoColor(Qt::black, cs), FOREGROUNDSTOP);
+        stops << KoGradientStop(1.0, KoColor(Qt::white, cs), BACKGROUNDSTOP);
 
         gradient->setStops(stops);
         gradient->setValid(true);
@@ -116,6 +118,9 @@ struct Q_DECL_HIDDEN KoResourceServerProvider::Private
     KoResourceServer<KoColorSet> *paletteServer;
     KoResourceServer<KoSvgSymbolCollectionResource> *svgSymbolCollectionServer;
     KoResourceServer<KoGamutMask> *gamutMaskServer;
+#if defined HAVE_SEEXPR
+    KoResourceServer<KisSeExprScript>* seExprScriptServer;
+#endif
 };
 
 KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
@@ -125,6 +130,9 @@ KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
     d->paletteServer = new KoResourceServer<KoColorSet>(ResourceType::Palettes);
     d->svgSymbolCollectionServer = new KoResourceServer<KoSvgSymbolCollectionResource>(ResourceType::Symbols);
     d->gamutMaskServer = new KoResourceServer<KoGamutMask>(ResourceType::GamutMasks);
+#if defined HAVE_SEEXPR
+    d->seExprScriptServer = new KoResourceServer<KisSeExprScript>(ResourceType::SeExprScripts);
+#endif
 }
 
 KoResourceServerProvider::~KoResourceServerProvider()
@@ -134,6 +142,9 @@ KoResourceServerProvider::~KoResourceServerProvider()
     delete d->paletteServer;
     delete d->svgSymbolCollectionServer;
     delete d->gamutMaskServer;
+#if defined HAVE_SEEXPR
+    delete d->seExprScriptServer;
+#endif    
 
     delete d;
 }
@@ -180,4 +191,9 @@ KoResourceServer<KoGamutMask> *KoResourceServerProvider::gamutMaskServer()
     return d->gamutMaskServer;
 }
 
-
+#if defined HAVE_SEEXPR
+KoResourceServer<KisSeExprScript> *KoResourceServerProvider::seExprScriptServer()
+{
+    return d->seExprScriptServer;
+}
+#endif

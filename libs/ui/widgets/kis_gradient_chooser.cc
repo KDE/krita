@@ -45,7 +45,12 @@
 #include "kis_canvas_resource_provider.h"
 #include "kis_stopgradient_editor.h"
 
-KisCustomGradientDialog::KisCustomGradientDialog(KoAbstractGradientSP gradient, QWidget *parent, const char *name)
+#include <KoCanvasResourcesIds.h>
+#include <KoCanvasResourcesInterface.h>
+
+
+KisCustomGradientDialog::KisCustomGradientDialog(KoAbstractGradientSP gradient, QWidget *parent, const char *name,
+    KoCanvasResourcesInterfaceSP canvasResourcesInterface)
     : KoDialog(parent, Qt::Dialog)
 {
     setButtons(Ok|Cancel);
@@ -58,12 +63,12 @@ KisCustomGradientDialog::KisCustomGradientDialog(KoAbstractGradientSP gradient, 
 
     KoStopGradientSP stopGradient = gradient.dynamicCast<KoStopGradient>();
     if (stopGradient) {
-        m_page = new KisStopGradientEditor(stopGradient, this, "autogradient", i18n("Custom Stop Gradient"));
+        m_page = new KisStopGradientEditor(stopGradient, this, "autogradient", i18n("Custom Stop Gradient"), canvasResourcesInterface);
     }
     else {
         KoSegmentGradientSP segmentedGradient = gradient.dynamicCast<KoSegmentGradient>();
         if (segmentedGradient) {
-            m_page = new KisAutogradientEditor(segmentedGradient, this, "autogradient", i18n("Custom Segmented Gradient"));
+            m_page = new KisAutogradientEditor(segmentedGradient, this, "autogradient", i18n("Custom Segmented Gradient"), canvasResourcesInterface);
         }
     }
     setCaption(m_page->windowTitle());
@@ -125,11 +130,20 @@ KisGradientChooser::KisGradientChooser(QWidget *parent, const char *name)
     mainLayout->addWidget(buttonWidget);
 
     slotUpdateIcons();
-    setLayout(mainLayout);
 }
 
 KisGradientChooser::~KisGradientChooser()
 {
+}
+
+void KisGradientChooser::setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface)
+{
+    m_canvasResourcesInterface = canvasResourcesInterface;
+}
+
+KoCanvasResourcesInterfaceSP KisGradientChooser::canvasResourcesInterface() const
+{
+    return m_canvasResourcesInterface;
 }
 
 KoResourceSP KisGradientChooser::currentResource()
@@ -169,7 +183,8 @@ void KisGradientChooser::addStopGradient()
     KoStopGradientSP gradient(new KoStopGradient(""));
 
     QList<KoGradientStop> stops;
-    stops << KoGradientStop(0.0, KoColor(QColor(250, 250, 0), KoColorSpaceRegistry::instance()->rgb8())) << KoGradientStop(1.0,  KoColor(QColor(255, 0, 0, 255), KoColorSpaceRegistry::instance()->rgb8()));
+    stops << KoGradientStop(0.0, KoColor(QColor(250, 250, 0), KoColorSpaceRegistry::instance()->rgb8()), COLORSTOP)
+        << KoGradientStop(1.0, KoColor(QColor(255, 0, 0, 255), KoColorSpaceRegistry::instance()->rgb8()), COLORSTOP);
     gradient->setType(QGradient::LinearGradient);
     gradient->setName(i18n("unnamed"));
     gradient->setStops(stops);
@@ -189,19 +204,22 @@ void KisGradientChooser::addGradient(KoAbstractGradientSP gradient, bool editGra
     KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer();
     QString saveLocation = rserver->saveLocation();
 
-    KisCustomGradientDialog dialog(gradient, this, "KisCustomGradientDialog");
+    gradient->updateVariableColors(m_canvasResourcesInterface);
 
-    QFileInfo fileInfo(saveLocation + gradient->name().split(" ").join("_") + gradient->defaultFileExtension());
+    KisCustomGradientDialog dialog(gradient, this, "KisCustomGradientDialog", m_canvasResourcesInterface);
 
     bool fileOverwriteAccepted = false;
 
     QString oldname = gradient->name();
 
+    bool shouldSaveResource = true;
+
     while(!fileOverwriteAccepted) {
         if (dialog.exec() == KoDialog::Accepted) {
 
             if (gradient->name().isEmpty()) {
-                return;
+                shouldSaveResource = false;
+                break;
             }
 
             if (editGradient && oldname == gradient->name()) {
@@ -209,7 +227,7 @@ void KisGradientChooser::addGradient(KoAbstractGradientSP gradient, bool editGra
                 continue;
             }
 
-            fileInfo = QFileInfo(saveLocation + gradient->name().split(" ").join("_") + gradient->defaultFileExtension());
+            const QFileInfo fileInfo(saveLocation + gradient->name().split(" ").join("_") + gradient->defaultFileExtension());
             if (fileInfo.exists()) {
                 int res = QMessageBox::warning(this, i18nc("@title:window", "Name Already Exists")
                                                , i18n("The name '%1' already exists, do you wish to overwrite it?", gradient->name())
@@ -219,14 +237,20 @@ void KisGradientChooser::addGradient(KoAbstractGradientSP gradient, bool editGra
                 fileOverwriteAccepted = true;
             }
         } else {
-            return;
+            shouldSaveResource = false;
+            break;
         }
     }
-    gradient->setFilename(gradient->name() + gradient->defaultFileExtension());
-    gradient->setValid(true);
-    rserver->addResource(gradient);
-    //TODO: select the right gradient from the resource server. Right now this is not possible :(
-    m_itemChooser->setCurrentItem(0);
+
+    if (shouldSaveResource) {
+        gradient->setFilename(gradient->name() + gradient->defaultFileExtension());
+        gradient->setValid(true);
+        rserver->addResource(gradient);
+        // TODO: select the right gradient from the resource server. Right now this is not possible :(
+        m_itemChooser->setCurrentItem(0);
+    } else {
+        // TODO: revert the changes made to the resource
+    }
 }
 
 void KisGradientChooser::editGradient()

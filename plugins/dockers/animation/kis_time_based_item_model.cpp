@@ -423,10 +423,13 @@ void KisTimeBasedItemModel::slotInternalScrubPreviewRequested(int time)
 void KisTimeBasedItemModel::setScrubState(bool active)
 {
     if (!m_d->scrubInProgress && active) {
-        const int currentFrame = m_d->image->animationInterface()->currentUITime();
-        const bool hasCurrentFrameInCache = m_d->framesCache->frameStatus(currentFrame) == KisAnimationFrameCache::Cached;
-        if(!hasCurrentFrameInCache) {
-            KisPart::instance()->prioritizeFrameForCache(m_d->image, currentFrame);
+
+        if (m_d->framesCache) {
+            const int currentFrame = m_d->image->animationInterface()->currentUITime();
+            const bool hasCurrentFrameInCache = m_d->framesCache->frameStatus(currentFrame) == KisAnimationFrameCache::Cached;
+            if(!hasCurrentFrameInCache) {
+                KisPart::instance()->prioritizeFrameForCache(m_d->image, currentFrame);
+            }
         }
 
         m_d->scrubStartFrame = m_d->activeFrameIndex;

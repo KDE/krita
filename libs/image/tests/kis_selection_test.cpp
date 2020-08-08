@@ -34,8 +34,8 @@
 #include "kis_mask.h"
 #include "kis_image.h"
 #include "kis_transparency_mask.h"
-#include "testutil.h"
-
+#include <testutil.h>
+#include "testimage.h"
 #include <KoColorModelStandardIds.h>
 
 void KisSelectionTest::testGrayColorspaceConversion()

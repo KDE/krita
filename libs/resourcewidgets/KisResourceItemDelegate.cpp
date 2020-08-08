@@ -52,7 +52,7 @@ void KisResourceItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
     QString resourceType = index.data(Qt::UserRole + KisResourceModel::ResourceType).toString();
     // XXX: don't use a hardcoded string here to identify the resource type
     if (resourceType == ResourceType::Gradients) {
-        m_checkerPainter.paint(*painter, innerRect);
+        m_checkerPainter.paint(*painter, innerRect, innerRect.topLeft());
         thumbnail = thumbnail.scaled(innerRect.width(), innerRect.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
         painter->drawImage(innerRect.topLeft(), thumbnail);
     }

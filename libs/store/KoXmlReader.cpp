@@ -44,7 +44,7 @@ KoXmlElement KoXml::namedItemNS(const KoXmlNode& node, const QString& nsURI,
 KoXmlElement KoXml::namedItemNS(const KoXmlNode& node, const QString& nsURI,
                                 const QString& localName, KoXmlNamedItemType type)
 {
-    Q_UNUSED(type)
+    Q_UNUSED(type);
     return namedItemNS(node, nsURI, localName);
 }
 

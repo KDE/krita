@@ -432,7 +432,6 @@ bool KraConverter::completeLoading(KoStore* store)
     m_storyboardCommentList = m_kraLoader->storyboardCommentList();
 
     return true;
-    return m_kraLoader->errorMessages().isEmpty();
 }
 
 void KraConverter::cancel()

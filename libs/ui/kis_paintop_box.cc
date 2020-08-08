@@ -580,7 +580,7 @@ void KisPaintopBox::resourceSelected(KoResourceSP resource)
         //        }
         //        if (!m_dirtyPresetsEnabled) {
         //            KisSignalsBlocker blocker(m_optionWidget);
-        //            Q_UNUSED(blocker)
+        //            Q_UNUSED(blocker);
         //            if (!preset->load()) {
         //                qWarning() << "failed to load the preset.";
         //            }
@@ -623,8 +623,11 @@ void KisPaintopBox::setCurrentPaintop(KisPaintOpPresetSP preset)
 
     }
 
-    if (!m_paintopOptionWidgets.contains(paintop))
+    if (!m_paintopOptionWidgets.contains(paintop)) {
         m_paintopOptionWidgets[paintop] = KisPaintOpRegistry::instance()->get(paintop.id())->createConfigWidget(this);
+        m_paintopOptionWidgets[paintop]->setResourcesInterface(KisGlobalResourcesInterface::instance());
+        m_paintopOptionWidgets[paintop]->setCanvasResourcesInterface(m_viewManager->canvasResourceProvider()->resourceManager()->canvasResourcesInterface());
+    }
 
     m_optionWidget = m_paintopOptionWidgets[paintop];
 
@@ -882,7 +885,7 @@ void KisPaintopBox::slotCanvasResourceChangeAttempted(int key, const QVariant &v
 {
     Q_UNUSED(value);
 
-    if (key == KoCanvasResourceProvider::ForegroundColor) {
+    if (key == KoCanvasResource::ForegroundColor) {
         slotUnsetEraseMode();
     }
 }
@@ -891,14 +894,14 @@ void KisPaintopBox::slotCanvasResourceChanged(int key, const QVariant &value)
 {
     if (m_viewManager) {
         sender()->blockSignals(true);
-        KisPaintOpPresetSP preset = m_viewManager->canvasResourceProvider()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+        KisPaintOpPresetSP preset = m_viewManager->canvasResourceProvider()->resourceManager()->resource(KoCanvasResource::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
         if (preset && m_resourceProvider->currentPreset()->name() != preset->name()) {
             QString compositeOp = preset->settings()->getString("CompositeOp");
             updateCompositeOp(compositeOp);
             resourceSelected(preset);
         }
 
-        if (key == KisCanvasResourceProvider::CurrentPaintOpPreset) {
+        if (key == KoCanvasResource::CurrentPaintOpPreset) {
             /**
              * Update currently selected preset in both the popup widgets
              */
@@ -906,41 +909,41 @@ void KisPaintopBox::slotCanvasResourceChanged(int key, const QVariant &value)
             m_presetsPopup->currentPresetChanged(preset);
         }
 
-        if (key == KisCanvasResourceProvider::CurrentCompositeOp) {
+        if (key == KoCanvasResource::CurrentCompositeOp) {
             if (m_resourceProvider->currentCompositeOp() != m_currCompositeOpID) {
                 updateCompositeOp(m_resourceProvider->currentCompositeOp());
             }
         }
 
-        if (key == KisCanvasResourceProvider::Size) {
+        if (key == KoCanvasResource::Size) {
             setSliderValue("size", m_resourceProvider->size());
         }
 
-        if (key == KisCanvasResourceProvider::PatternSize) {
+        if (key == KoCanvasResource::PatternSize) {
             setMultiplierSliderValue("patternsize", m_resourceProvider->patternSize());
         }
 
-        if (key == KisCanvasResourceProvider::Opacity) {
+        if (key == KoCanvasResource::Opacity) {
             setSliderValue("opacity", m_resourceProvider->opacity());
         }
 
-        if (key == KisCanvasResourceProvider::Flow) {
+        if (key == KoCanvasResource::Flow) {
             setSliderValue("flow", m_resourceProvider->flow());
         }
 
-        if (key == KisCanvasResourceProvider::EraserMode) {
+        if (key == KoCanvasResource::EraserMode) {
             m_eraseAction->setChecked(value.toBool());
         }
 
-        if (key == KisCanvasResourceProvider::DisablePressure) {
+        if (key == KoCanvasResource::DisablePressure) {
             m_disablePressureAction->setChecked(value.toBool());
         }
 
-        if (key == KisCanvasResourceProvider::MirrorHorizontal) {
+        if (key == KoCanvasResource::MirrorHorizontal) {
             m_hMirrorAction->setChecked(value.toBool());
         }
 
-        if (key == KisCanvasResourceProvider::MirrorVertical) {
+        if (key == KoCanvasResource::MirrorVertical) {
             m_vMirrorAction->setChecked(value.toBool());
         }
 
@@ -1288,7 +1291,7 @@ void KisPaintopBox::slotReloadPreset()
          */
 
         emit m_resourceProvider->resourceManager()->canvasResourceChanged(
-                    KisCanvasResourceProvider::CurrentPaintOpPreset,
+                    KoCanvasResource::CurrentPaintOpPreset,
                     QVariant::fromValue(preset));
     }
 }

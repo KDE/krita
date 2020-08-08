@@ -69,7 +69,7 @@ KisBrushHud::KisBrushHud(KisCanvasResourceProvider *provider, QWidget *parent)
 {
     m_d->provider = provider;
 
-    QVBoxLayout *layout = new QVBoxLayout();
+    QVBoxLayout *layout = new QVBoxLayout(this);
 
     QHBoxLayout *labelLayout = new QHBoxLayout();
     m_d->lblPresetIcon = new QLabel(this);
@@ -100,14 +100,13 @@ KisBrushHud::KisBrushHud(KisCanvasResourceProvider *provider, QWidget *parent)
     m_d->wdgPropertiesArea->setWidgetResizable(true);
 
     m_d->wdgProperties = new QWidget(this);
-    m_d->propertiesLayout = new QVBoxLayout(this);
+    m_d->propertiesLayout = new QVBoxLayout(m_d->wdgProperties);
     m_d->propertiesLayout->setSpacing(0);
     m_d->propertiesLayout->setContentsMargins(0, 0, 22, 0);
     m_d->propertiesLayout->setSizeConstraint(QLayout::SetMinimumSize);
 
     // not adding any widgets until explicitly requested
 
-    m_d->wdgProperties->setLayout(m_d->propertiesLayout);
     m_d->wdgPropertiesArea->setWidget(m_d->wdgProperties);
     layout->addWidget(m_d->wdgPropertiesArea);
 
@@ -118,7 +117,6 @@ KisBrushHud::KisBrushHud(KisCanvasResourceProvider *provider, QWidget *parent)
 
     updateIcons();
 
-    setLayout(layout);
     setCursor(Qt::ArrowCursor);
 
     // Prevent tablet events from being captured by the canvas
@@ -256,7 +254,7 @@ void KisBrushHud::slotCanvasResourceChanged(int key, const QVariant &resource)
 {
     Q_UNUSED(resource);
 
-    if (key == KisCanvasResourceProvider::CurrentPaintOpPreset) {
+    if (key == KoCanvasResource::CurrentPaintOpPreset) {
         updateProperties();
     }
 }

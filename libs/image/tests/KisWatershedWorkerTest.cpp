@@ -29,7 +29,7 @@
 #include "krita_utils.h"
 
 #include "lazybrush/kis_lazy_fill_tools.h"
-#include "testutil.h"
+#include <testutil.h>
 
 
 #include <lazybrush/KisWatershedWorker.h>

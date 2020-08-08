@@ -47,6 +47,90 @@
 #include <KisResourceLocator.h>
 
 
+
+DlgBundleManager::ItemDelegate::ItemDelegate(QObject *parent, KisStorageFilterProxyModel* proxy)
+    : QStyledItemDelegate(parent)
+    , m_bundleManagerProxyModel(proxy)
+{
+
+}
+
+QSize DlgBundleManager::ItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    Q_UNUSED(option);
+    Q_UNUSED(index);
+
+    return QSize(100, 30);
+}
+
+void DlgBundleManager::ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    if (!index.isValid()) {
+        return;
+    }
+
+    QModelIndex sourceIndex = m_bundleManagerProxyModel->mapToSource(index);
+
+    int minMargin = 3;
+    int textMargin = 10;
+
+
+    painter->save();
+
+    // paint background
+    QColor bgColor = option.state & QStyle::State_Selected ?
+        qApp->palette().color(QPalette::Highlight) :
+        qApp->palette().color(QPalette::Base);
+    QBrush oldBrush(painter->brush());
+    QPen oldPen = painter->pen();
+    painter->setBrush(QBrush(bgColor));
+    painter->setPen(Qt::NoPen);
+    painter->drawRect(option.rect);
+    painter->setBrush(oldBrush);
+    painter->setPen(oldPen);
+
+
+    QRect paintRect = kisGrowRect(option.rect, -minMargin);
+    int height = paintRect.height();
+
+
+    // make border around active ones
+    bool active = KisStorageModel::instance()->data(sourceIndex, Qt::UserRole + KisStorageModel::Active).toBool();
+
+    QColor borderColor = qApp->palette().color(QPalette::Text);
+    painter->setBrush(Qt::NoBrush);
+    painter->setPen(QPen(borderColor));
+
+    QRect borderRect = kisGrowRect(paintRect, -painter->pen().widthF());
+    if (active) {
+        painter->drawRect(borderRect);
+    }
+    painter->setBrush(oldBrush);
+    painter->setPen(oldPen);
+
+
+    // paint the image
+    QImage thumbnail = KisStorageModel::instance()->data(sourceIndex, Qt::UserRole + KisStorageModel::Thumbnail).value<QImage>();
+
+
+    QRect iconRect = paintRect;
+    iconRect.setWidth(height);
+    painter->drawImage(iconRect, thumbnail);
+
+    QRect nameRect = paintRect;
+    nameRect.setX(paintRect.x() + height + textMargin);
+    nameRect.setWidth(paintRect.width() - height - textMargin);
+
+    QTextOption textCenterOption;
+    textCenterOption.setAlignment(Qt::AlignVCenter);
+    QString name = KisStorageModel::instance()->data(sourceIndex, Qt::UserRole + KisStorageModel::DisplayName).toString();
+    painter->drawText(nameRect, name, textCenterOption);
+
+    painter->restore();
+
+}
+
+
 DlgBundleManager::DlgBundleManager(QWidget *parent)
     : KoDialog(parent)
     , m_page(new QWidget())
@@ -58,15 +142,16 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
     resize(m_page->sizeHint());
 
     m_ui->bnAdd->setIcon(KisIconUtils::loadIcon("list-add"));
-    m_ui->bnAdd->setText(i18n("Import"));
+    m_ui->bnAdd->setText(i18nc("In bundle manager; press button to import a bundle", "Import"));
     connect(m_ui->bnAdd, SIGNAL(clicked(bool)), SLOT(addBundle()));
 
     m_ui->bnNew->setIcon(KisIconUtils::loadIcon("document-new"));
-    m_ui->bnNew->setText(i18n("Create"));
+    m_ui->bnNew->setText(i18nc("In bundle manager; press button to create a new bundle", "Create"));
     connect(m_ui->bnNew, SIGNAL(clicked(bool)), SLOT(createBundle()));
 
     m_ui->bnDelete->setIcon(KisIconUtils::loadIcon("edit-delete"));
-    m_ui->bnDelete->setText(i18n("Delete"));
+    m_ui->bnDelete->setText(i18nc("In bundle manager; press button to deactivate the bundle "
+                                  "(remove resources from the bundle from the available resources)","Deactivate"));
     connect(m_ui->bnDelete, SIGNAL(clicked(bool)), SLOT(deleteBundle()));
 
     setButtons(Close);
@@ -77,14 +162,14 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
                           QStringList()
                           << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType::Bundle)
                           << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType::Folder));
-    m_ui->tableView->setModel(m_proxyModel);
 
-    m_ui->tableView->setColumnHidden(KisStorageModel::PreInstalled, true);
-    m_ui->tableView->setColumnHidden(KisStorageModel::Id, true);
-    m_ui->tableView->setColumnHidden(KisStorageModel::TimeStamp, true);
+    m_ui->listView->setModel(m_proxyModel);
+    m_ui->listView->setItemDelegate(new ItemDelegate(this, m_proxyModel));
 
-    QItemSelectionModel* selectionModel = m_ui->tableView->selectionModel();
+    QItemSelectionModel* selectionModel = m_ui->listView->selectionModel();
     connect(selectionModel, &QItemSelectionModel::currentChanged, this, &DlgBundleManager::currentCellSelectedChanged);
+    //connect(m_ui->listView, &QItemSelectionModel::currentChanged, this, &DlgBundleManager::currentCellSelectedChanged);
+
 
     connect(KisStorageModel::instance(), &KisStorageModel::modelAboutToBeReset, this, &DlgBundleManager::slotModelAboutToBeReset);
     connect(KisStorageModel::instance(), &KisStorageModel::modelReset, this, &DlgBundleManager::slotModelReset);
@@ -111,7 +196,7 @@ void DlgBundleManager::createBundle()
 
 void DlgBundleManager::deleteBundle()
 {
-    QModelIndex idx = m_ui->tableView->currentIndex();
+    QModelIndex idx = m_ui->listView->currentIndex();
     KIS_ASSERT(m_proxyModel);
     if (!idx.isValid()) {
         ENTER_FUNCTION() << "Index is invalid\n";
@@ -125,7 +210,7 @@ void DlgBundleManager::deleteBundle()
 void DlgBundleManager::slotModelAboutToBeReset()
 {
     ENTER_FUNCTION();
-    lastIndex = QPersistentModelIndex(m_proxyModel->mapToSource(m_ui->tableView->currentIndex()));
+    lastIndex = QPersistentModelIndex(m_proxyModel->mapToSource(m_ui->listView->currentIndex()));
     ENTER_FUNCTION() << ppVar(lastIndex) << ppVar(lastIndex.isValid());
 }
 
@@ -135,15 +220,17 @@ void DlgBundleManager::slotModelReset()
     ENTER_FUNCTION() << ppVar(lastIndex) << ppVar(lastIndex.isValid());
     if (lastIndex.isValid()) {
         ENTER_FUNCTION() << "last index valid!";
-        m_ui->tableView->setCurrentIndex(m_proxyModel->mapToSource(lastIndex));
+        m_ui->listView->setCurrentIndex(m_proxyModel->mapToSource(lastIndex));
     }
     lastIndex = QModelIndex();
 }
 
 void DlgBundleManager::currentCellSelectedChanged(QModelIndex current, QModelIndex previous)
 {
+    Q_UNUSED(previous);
+
     ENTER_FUNCTION() << "Current cell changed!";
-    QModelIndex idx = m_ui->tableView->currentIndex();
+    QModelIndex idx = m_ui->listView->currentIndex();
     KIS_ASSERT(m_proxyModel);
     if (!idx.isValid()) {
         ENTER_FUNCTION() << "Index is invalid\n";
@@ -152,9 +239,13 @@ void DlgBundleManager::currentCellSelectedChanged(QModelIndex current, QModelInd
     bool active = m_proxyModel->data(idx, Qt::UserRole + KisStorageModel::Active).toBool();
 
     if (active) {
-        m_ui->bnDelete->setText(i18n("Deactivate"));
+        m_ui->bnDelete->setIcon(KisIconUtils::loadIcon("edit-delete"));
+        m_ui->bnDelete->setText(i18nc("In bundle manager; press button to deactivate the bundle "
+                                      "(remove resources from the bundle from the available resources)","Deactivate"));
     } else {
-        m_ui->bnDelete->setText(i18n("Activate"));
+        m_ui->bnDelete->setIcon(QIcon());
+        m_ui->bnDelete->setText(i18nc("In bundle manager; press button to activate the bundle "
+                                      "(add resources from the bundle to the available resources)","Activate"));
     }
     updateBundleInformation(current);
 }
@@ -223,3 +314,4 @@ void DlgBundleManager::addBundleToActiveResources(QString filename)
     KIS_ASSERT(!storage.isNull());
     KisResourceLocator::instance()->addStorage(newLocation, storage);
 }
+

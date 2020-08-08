@@ -81,7 +81,6 @@ void KisSelectionBasedProcessingHelper::transformPaintDevice(KisPaintDeviceSP de
             device->clearSelection(m_cutSelection);
             KisPainter::copyAreaOptimized(pasteBounds.topLeft(), tempDev, device, pasteBounds, m_selection);
             transaction.commit(undoAdapter);
-
         }
     } else {
         KisTransaction transaction(device);

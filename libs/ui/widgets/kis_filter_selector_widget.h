@@ -46,7 +46,7 @@ class KisFilterSelectorWidget : public QWidget
 public:
     KisFilterSelectorWidget(QWidget* parent);
     ~KisFilterSelectorWidget() override;
-    void setFilter(KisFilterSP f);
+    void setFilter(KisFilterSP f, KisFilterConfigurationSP overrideDefaultConfig);
     void setView(KisViewManager *view);
     void setPaintDevice(bool showAll, KisPaintDeviceSP);
     KisFilterConfigurationSP configuration();

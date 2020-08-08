@@ -23,6 +23,8 @@
 #include <QKeySequence>
 #include <KLocalizedString>
 
+#include <boost/preprocessor/repeat_from_to.hpp>
+
 class KisShortcutConfiguration::Private
 {
 public:
@@ -114,10 +116,10 @@ bool KisShortcutConfiguration::unserialize(const QString &serialized)
         return false; //Invalid input, abort
 
     //First entry in the list is the mode
-    d->mode = parts.at(0).toUInt();
+    d->mode = parts.at(0).toUInt(nullptr, 16);
 
     //Second entry is the shortcut type
-    d->type = static_cast<ShortcutType>(parts.at(1).toInt());
+    d->type = static_cast<ShortcutType>(parts.at(1).toInt(nullptr, 16));
 
     if (d->type == UnknownType) {
         //Reject input that would set this shortcut to "Unknown"
@@ -132,14 +134,14 @@ bool KisShortcutConfiguration::unserialize(const QString &serialized)
     QStringList keylist = serializedKeys.split(',');
     Q_FOREACH(QString key, keylist) {
         if (!key.isEmpty()) {
-            d->keys.append(static_cast<Qt::Key>(key.toUInt(0, 16)));
+            d->keys.append(static_cast<Qt::Key>(key.toUInt(nullptr, 16)));
         }
     }
 
     //Fourth entry is the button mask
-    d->buttons = static_cast<Qt::MouseButtons>(parts.at(3).toInt());
-    d->wheel = static_cast<MouseWheelMovement>(parts.at(4).toUInt());
-    d->gesture = static_cast<GestureAction>(parts.at(5).toUInt());
+    d->buttons = static_cast<Qt::MouseButtons>(parts.at(3).toInt(nullptr, 16));
+    d->wheel = static_cast<MouseWheelMovement>(parts.at(4).toUInt(nullptr, 16));
+    d->gesture = static_cast<GestureAction>(parts.at(5).toUInt(nullptr, 16));
 
     return true;
 }
@@ -248,7 +250,7 @@ QString KisShortcutConfiguration::buttonsToText(Qt::MouseButtons buttons)
         text.append(i18nc("Right Mouse Button", "Right"));
     }
 
-    if (buttons & Qt::MidButton) {
+    if (buttons & Qt::MiddleButton) {
         if (buttonCount++ > 0) {
             text.append(sep);
         }
@@ -256,7 +258,7 @@ QString KisShortcutConfiguration::buttonsToText(Qt::MouseButtons buttons)
         text.append(i18nc("Middle Mouse Button", "Middle"));
     }
 
-    if (buttons & Qt::XButton1) {
+    if (buttons & Qt::BackButton) {
         if (buttonCount++ > 0) {
             text.append(sep);
         }
@@ -264,13 +266,30 @@ QString KisShortcutConfiguration::buttonsToText(Qt::MouseButtons buttons)
         text.append(i18nc("Mouse Back Button", "Back"));
     }
 
-    if (buttons & Qt::XButton2) {
+    if (buttons & Qt::ForwardButton) {
         if (buttonCount++ > 0) {
             text.append(sep);
         }
 
         text.append(i18nc("Mouse Forward Button", "Forward"));
     }
+
+    if (buttons & Qt::TaskButton) {
+        if (buttonCount++ > 0) {
+            text.append(sep);
+        }
+
+        text.append(i18nc("Mouse Task Button", "Task"));
+    }
+
+// Qt supports up to ExtraButton24 so include those
+#define EXTRA_BUTTON(z, n, _)\
+    if (buttons & Qt::ExtraButton##n) { \
+        if (buttonCount++ > 0) { text.append(sep); } \
+        text.append(i18nc("Mouse Button", "Mouse %1", n + 3)); \
+    }
+BOOST_PP_REPEAT_FROM_TO(4, 25, EXTRA_BUTTON, _)
+#undef EXTRA_BUTTON
 
     if (buttonCount == 0) {
         text.append(i18nc("No mouse buttons for shortcut", "None"));

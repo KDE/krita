@@ -30,12 +30,28 @@
 #include "kis_time_based_item_model.h"
 #include "timeline_color_scheme.h"
 #include "kis_action.h"
+#include "kis_signal_compressor_with_param.h"
+#include "kis_config.h"
 
 #include "kis_debug.h"
 
 struct TimelineRulerHeader::Private
 {
-    Private() : fps(12), lastPressSectionIndex(-1) {}
+    Private()
+        : fps(12)
+        , lastPressSectionIndex(-1)
+    {
+        // Compressed configuration writing..
+        const int compressorDelayMS = 5000;
+        zoomSaveCompressor.reset(
+                    new KisSignalCompressorWithParam<qreal>(compressorDelayMS,
+                                                            [](qreal zoomValue){
+                                                                KisConfig cfg(false);
+                                                                cfg.setTimelineZoom(zoomValue);
+                                                            },
+                                                            KisSignalCompressor::POSTPONE)
+                );
+    }
 
     int fps;
 
@@ -47,6 +63,8 @@ struct TimelineRulerHeader::Private
 
     KisActionManager* actionMan = 0;
 
+    QScopedPointer<KisSignalCompressorWithParam<qreal>> zoomSaveCompressor;
+
     const int minSectionSize = 4;
     const int maxSectionSize = 72;
     const int unitSectionSize = 18;
@@ -54,12 +72,19 @@ struct TimelineRulerHeader::Private
 };
 
 TimelineRulerHeader::TimelineRulerHeader(QWidget *parent)
-    : QHeaderView(Qt::Horizontal, parent),
-      m_d(new Private)
+    : QHeaderView(Qt::Horizontal, parent)
+    , m_d(new Private)
 {
     setSectionResizeMode(QHeaderView::Fixed);
     setDefaultSectionSize(18);
     setMinimumSectionSize(8);
+
+    KisConfig cfg(true);
+    setZoom(cfg.timelineZoom());
+
+    connect(this, &TimelineRulerHeader::sigZoomChanged, [this](qreal zoomValue){
+        m_d->zoomSaveCompressor->start(zoomValue);
+    });
 }
 
 TimelineRulerHeader::~TimelineRulerHeader()
@@ -292,7 +317,7 @@ int TimelineRulerHeader::Private::calcSpanWidth(const int sectionWidth) {
 }
 
 void TimelineRulerHeader::paintSection1(QPainter *painter, const QRect &rect, int logicalIndex) const
-{   
+{
 
     if (!rect.isValid())
         return;
@@ -384,6 +409,7 @@ bool TimelineRulerHeader::setZoom(qreal zoom)
 
     if (newSectionSize != defaultSectionSize()) {
         setDefaultSectionSize(newSectionSize);
+        emit sigZoomChanged(zoom);
         return true;
     }
 
@@ -494,7 +520,7 @@ void TimelineRulerHeader::mousePressEvent(QMouseEvent *e)
 
             return;
 
-        } else if (e->button() == Qt::LeftButton) {           
+        } else if (e->button() == Qt::LeftButton) {
             m_d->lastPressSectionIndex = logical;
             model()->setHeaderData(logical, orientation(), true, KisTimeBasedItemModel::ActiveFrameRole);
         }

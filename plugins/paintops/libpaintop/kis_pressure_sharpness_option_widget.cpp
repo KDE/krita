@@ -47,17 +47,15 @@ KisPressureSharpnessOptionWidget::KisPressureSharpnessOptionWidget():
     hl->addWidget(thresholdLbl);
     hl->addWidget(m_softenedge, 1);
 
-    QVBoxLayout* vl = new QVBoxLayout;
-    vl->setMargin(0);
-    vl->addLayout(hl);
-    vl->addWidget(KisCurveOptionWidget::curveWidget());
-
-    QWidget* w = new QWidget;
-    w->setLayout(vl);
+    QWidget* page = new QWidget;
+    QVBoxLayout* pageLayout = new QVBoxLayout(page);
+    pageLayout->setMargin(0);
+    pageLayout->addLayout(hl);
+    pageLayout->addWidget(KisCurveOptionWidget::curveWidget());
 
     connect(m_softenedge, SIGNAL(valueChanged(int)), SLOT(setThreshold(int)));
 
-    setConfigurationPage(w);
+    setConfigurationPage(page);
 
     setThreshold(m_softenedge->value());
 }

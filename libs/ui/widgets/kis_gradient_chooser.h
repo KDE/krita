@@ -19,6 +19,7 @@
 #define KIS_GRADIENT_CHOOSER_H_
 
 #include <KoDialog.h>
+#include <KoColor.h>
 
 #include <QFrame>
 #include <QToolButton>
@@ -27,6 +28,7 @@
 #include <KoAbstractGradient.h>
 #include <KoStopGradient.h>
 #include <KoSegmentGradient.h>
+#include <KoCanvasResourcesInterface.h>
 
 class KisViewManager;
 class QLabel;
@@ -43,7 +45,7 @@ class KisCustomGradientDialog : public KoDialog
 
 public:
 
-    KisCustomGradientDialog(KoAbstractGradientSP gradient, QWidget *parent, const char *name);
+    KisCustomGradientDialog(KoAbstractGradientSP gradient, QWidget *parent, const char *name, KoCanvasResourcesInterfaceSP canvasResourcesInterface);
 
 private:
 
@@ -59,6 +61,9 @@ class KRITAUI_EXPORT KisGradientChooser : public QFrame
 public:
     KisGradientChooser(QWidget *parent = 0, const char *name = 0);
     ~KisGradientChooser() override;
+
+    void setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface);
+    KoCanvasResourcesInterfaceSP canvasResourcesInterface() const;
 
     /// Gets the currently selected resource
     /// @returns the selected resource, 0 is no resource is selected
@@ -88,6 +93,8 @@ private:
 
     QToolButton* m_addGradient;
     QPushButton* m_editGradient;
+
+    KoCanvasResourcesInterfaceSP m_canvasResourcesInterface;
 };
 
 #endif // KIS_GRADIENT_CHOOSER_H_

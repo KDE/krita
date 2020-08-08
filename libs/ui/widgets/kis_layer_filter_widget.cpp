@@ -18,6 +18,7 @@
  */
 #include "kis_layer_filter_widget.h"
 
+#include <QDesktopWidget>
 #include <QApplication>
 #include <QVBoxLayout>
 #include <QLineEdit>
@@ -46,7 +47,6 @@
 KisLayerFilterWidget::KisLayerFilterWidget(QWidget *parent) : QWidget(parent)
 {
     QVBoxLayout *layout = new QVBoxLayout(this);
-    setLayout(layout);
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     textFilter = new QLineEdit(this);
@@ -72,7 +72,6 @@ KisLayerFilterWidget::KisLayerFilterWidget(QWidget *parent) : QWidget(parent)
     buttonEventFilter = new KisColorLabelMouseDragFilter(buttonContainer);
     {
         QHBoxLayout *subLayout = new QHBoxLayout(buttonContainer);
-        buttonContainer->setLayout(subLayout);
         subLayout->setContentsMargins(0,0,0,0);
         subLayout->setSpacing(0);
         subLayout->setAlignment(Qt::AlignLeft);
@@ -191,10 +190,12 @@ void KisLayerFilterWidget::showEvent(QShowEvent *show)
         parentMenu->resize(sizeHint());
         parentMenu->adjustSize();
         qApp->sendEvent(parentMenu, &event);
-
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
         QScreen *screen = QGuiApplication::screenAt(parentMenu->mapToGlobal(parentMenu->pos()));
         QRect screenGeometry = screen ? screen->geometry() : parentMenu->parentWidget()->window()->geometry();
-
+#else
+        QRect screenGeometry = QApplication::desktop()->screenGeometry(this);
+#endif
         const bool onRightEdge = (parentMenu->pos().x() + widthBefore + rightEdgeThreshold) >  screenGeometry.width();
         const int widthAfter = parentMenu->width();
 

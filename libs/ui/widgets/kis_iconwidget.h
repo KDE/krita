@@ -38,6 +38,9 @@ public:
     KisIconWidget(QWidget *parent = 0, const QString &name = QString());
     void setThumbnail(const QImage &thumbnail);
     void setResource(KoResourceSP resource);
+
+    QSize preferredIconSize() const;
+
 protected:
     void paintEvent(QPaintEvent *) override;
 

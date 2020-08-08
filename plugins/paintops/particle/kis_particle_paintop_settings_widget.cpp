@@ -27,7 +27,6 @@
 #include <kis_airbrush_option_widget.h>
 #include <kis_compositeop_option.h>
 #include <kis_pressure_rate_option.h>
-#include <KisGlobalResourcesInterface.h>
 
 KisParticlePaintOpSettingsWidget:: KisParticlePaintOpSettingsWidget(QWidget* parent)
     : KisPaintOpSettingsWidget(parent)
@@ -49,7 +48,7 @@ KisParticlePaintOpSettingsWidget::~ KisParticlePaintOpSettingsWidget()
 
 KisPropertiesConfigurationSP  KisParticlePaintOpSettingsWidget::configuration() const
 {
-    KisParticlePaintOpSettings* config = new KisParticlePaintOpSettings(KisGlobalResourcesInterface::instance());
+    KisParticlePaintOpSettings* config = new KisParticlePaintOpSettings(resourcesInterface());
     config->setOptionsWidget(const_cast<KisParticlePaintOpSettingsWidget*>(this));
     config->setProperty("paintop", "particlebrush"); // XXX: make this a const id string
     writeConfiguration(config);

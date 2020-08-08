@@ -31,7 +31,7 @@
 #include "processing/kis_crop_processing_visitor.h"
 #include "kis_image.h"
 
-#include "testutil.h"
+#include <testutil.h>
 
 /*
   +----------+

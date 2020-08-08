@@ -24,7 +24,7 @@
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter_registry.h"
-#include "testutil.h"
+#include <testutil.h>
 #include <KisGlobalResourcesInterface.h>
 
 void KisUnsharpMaskTest::testUnsharpWithTransparency()

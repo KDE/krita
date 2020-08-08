@@ -28,6 +28,9 @@
 class KoAbstractGradient;
 typedef QSharedPointer<KoAbstractGradient> KoAbstractGradientSP;
 
+class KoCanvasResourcesInterface;
+using KoCanvasResourcesInterfaceSP = QSharedPointer<KoCanvasResourcesInterface>;
+
 class KoColor;
 
 /**
@@ -62,8 +65,15 @@ public:
     void updatePreview();
 
     QImage generatePreview(int width, int height) const;
+    QImage generatePreview(int width, int height, KoCanvasResourcesInterfaceSP canvasResourcesInterface) const;
 
     KoAbstractGradient(const KoAbstractGradient &rhs);
+
+    KoAbstractGradientSP cloneAndBakeVariableColors(KoCanvasResourcesInterfaceSP canvasResourcesInterface) const;
+    virtual void bakeVariableColors(KoCanvasResourcesInterfaceSP canvasResourcesInterface);
+
+    KoAbstractGradientSP cloneAndUpdateVariableColors(KoCanvasResourcesInterfaceSP canvasResourcesInterface) const;
+    virtual void updateVariableColors(KoCanvasResourcesInterfaceSP canvasResourcesInterface);
 
 private:
     struct Private;

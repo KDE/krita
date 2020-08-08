@@ -151,6 +151,10 @@ void NodeView::updateNode(const QModelIndex &index)
     dataChanged(index, index);
 }
 
+void NodeView::toggleSolo(const QModelIndex &index) {
+    d->delegate.toggleSolo(index);
+}
+
 QItemSelectionModel::SelectionFlags NodeView::selectionCommand(const QModelIndex &index,
                                                                   const QEvent *event) const
 {

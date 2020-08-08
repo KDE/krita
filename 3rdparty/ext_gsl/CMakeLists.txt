@@ -1,7 +1,7 @@
 #
 # From https://github.com/ampl/gsl. which adds CMake support to gsl
 #
-if (ANDROID)
+if (UNIX)
 SET(EXTPREFIX_gsl "${EXTPREFIX}" )
 ExternalProject_Add( ext_gsl
 

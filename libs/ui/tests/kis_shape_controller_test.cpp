@@ -26,6 +26,7 @@
 #include "flake/kis_shape_controller.h"
 
 #include <sdk/tests/testutil.h>
+#include <sdk/tests/testui.h>
 
 KisDummiesFacadeBase* KisShapeControllerTest::dummiesFacadeFactory()
 {

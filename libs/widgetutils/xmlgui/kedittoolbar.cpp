@@ -344,7 +344,7 @@ QMimeData *ToolBarListWidget::mimeData(const QList<QListWidgetItem *> items) con
 
 bool ToolBarListWidget::dropMimeData(int index, const QMimeData *mimeData, Qt::DropAction action)
 {
-    Q_UNUSED(action)
+    Q_UNUSED(action);
     const QByteArray data = mimeData->data(QStringLiteral("application/x-kde-action-list"));
     if (data.isEmpty()) {
         return false;
@@ -368,8 +368,7 @@ IconTextEditDialog::IconTextEditDialog(QWidget *parent)
     setWindowTitle(i18n("Change Text"));
     setModal(true);
 
-    QVBoxLayout *layout = new QVBoxLayout;
-    setLayout(layout);
+    QVBoxLayout *layout = new QVBoxLayout(this);
 
     QGridLayout *grid = new QGridLayout;
     grid->setMargin(0);
@@ -622,8 +621,7 @@ void KEditToolBarPrivate::init()
     q->setWindowTitle(i18n("Configure Toolbars"));
     q->setModal(false);
 
-    m_layout = new QVBoxLayout;
-    q->setLayout(m_layout);
+    m_layout = new QVBoxLayout(q);
 
     m_layout->addWidget(m_widget);
 

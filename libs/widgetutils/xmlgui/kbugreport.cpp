@@ -101,8 +101,7 @@ KBugReport::KBugReport(const KAboutData &aboutData, QWidget *_parent)
     KGuiItem::assign(buttonBox->button(QDialogButtonBox::Cancel), KStandardGuiItem::close());
 
     QLabel *tmpLabel;
-    QVBoxLayout *lay = new QVBoxLayout;
-    setLayout(lay);
+    QVBoxLayout *lay = new QVBoxLayout(this);
 
     KTitleWidget *title = new KTitleWidget(this);
     title->setText(i18n("Submit Bug Report"));

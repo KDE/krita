@@ -22,7 +22,7 @@
 #include <QTest>
 
 #include <sdk/tests/testutil.h>
-
+#include <sdk/tests/testui.h>
 #include "ui_manager_test.h"
 
 class SelectionManagerTester : public TestUtil::UiManagerTest

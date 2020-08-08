@@ -62,6 +62,8 @@ public:
 
         return nullptr;
     }
+
+    virtual ~KisResourcesInterfacePrivate() {}
 };
 
 #endif // KisResourcesInterface_P_H

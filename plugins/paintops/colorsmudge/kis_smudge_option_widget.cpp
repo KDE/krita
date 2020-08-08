@@ -41,7 +41,7 @@ KisSmudgeOptionWidget::KisSmudgeOptionWidget()
     mCbSmudgeMode->addItem("dulling-placeholder" , KisSmudgeOption::DULLING_MODE);
 
     mChkSmearAlpha = new QCheckBox();
-    
+
     // the text for the second item is initialized here
     updateBrushPierced(false);
 
@@ -49,15 +49,15 @@ KisSmudgeOptionWidget::KisSmudgeOptionWidget()
     formLayout->addRow(i18n("Smudge mode:"), mCbSmudgeMode);
     formLayout->addRow(i18n("Smear alpha:"), mChkSmearAlpha);
 
-    QVBoxLayout* v = new QVBoxLayout();
-    v->setMargin(0);
-    QWidget*     w = new QWidget();
+    QWidget     *page = new QWidget();
+    QVBoxLayout *pageLayout = new QVBoxLayout(page);
+    pageLayout->setMargin(0);
 
-    v->addLayout(formLayout);
-    v->addWidget(curveWidget());
-    w->setLayout(v);
+    pageLayout->addLayout(formLayout);
+    pageLayout->addWidget(curveWidget());
 
-    KisCurveOptionWidget::setConfigurationPage(w);
+
+    KisCurveOptionWidget::setConfigurationPage(page);
 
     connect(mCbSmudgeMode, SIGNAL(currentIndexChanged(int)), this, SLOT(slotCurrentIndexChanged(int)));
     connect(mChkSmearAlpha, SIGNAL(toggled(bool)), SLOT(slotSmearAlphaChanged(bool)));

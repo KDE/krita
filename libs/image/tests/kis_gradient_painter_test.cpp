@@ -32,7 +32,7 @@
 #include <resources/KoStopGradient.h>
 
 #include "krita_utils.h"
-#include "testutil.h"
+#include <testutil.h>
 
 
 void KisGradientPainterTest::testSimplifyPath()

@@ -36,7 +36,10 @@
 #include <kis_pattern_chooser.h>
 #include <kis_slider_spin_box.h>
 #include <kis_multipliers_double_slider_spinbox.h>
-#include <resources/KoPattern.h>
+#include <KoPattern.h>
+#include <KoAbstractGradient.h>
+#include <KoResource.h>
+#include <KoResourceServerProvider.h>
 #include <kis_paint_device.h>
 #include <kis_fill_painter.h>
 #include <kis_painter.h>
@@ -46,9 +49,14 @@
 #include "kis_embedded_pattern_manager.h"
 #include <brushengine/kis_paintop_lod_limitations.h>
 #include "kis_texture_chooser.h"
+#include "KoMixColorsOp.h"
 #include <time.h>
 #include "kis_signals_blocker.h"
 #include <KisGlobalResourcesInterface.h>
+
+#include <KoCanvasResourcesIds.h>
+#include <KoCanvasResourcesInterface.h>
+
 
 KisTextureOption::KisTextureOption()
     : KisPaintOpOption(KisPaintOpOption::TEXTURE, true)
@@ -62,6 +70,7 @@ KisTextureOption::KisTextureOption()
     connect(m_textureOptions->scaleSlider, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_textureOptions->brightnessSlider, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_textureOptions->contrastSlider, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_textureOptions->neutralPointSlider, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_textureOptions->offsetSliderX, SIGNAL(valueChanged(int)), SLOT(emitSettingChanged()));
     connect(m_textureOptions->randomOffsetX, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
     connect(m_textureOptions->randomOffsetY, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
@@ -104,6 +113,8 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfigurationSP setting) 
 
     qreal contrast = m_textureOptions->contrastSlider->value();
 
+    qreal neutralPoint = m_textureOptions->neutralPointSlider->value();
+
     int offsetX = m_textureOptions->offsetSliderX->value();
     if (m_textureOptions ->randomOffsetX->isChecked()) {
 
@@ -134,6 +145,7 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfigurationSP setting) 
     setting->setProperty("Texture/Pattern/Scale", scale);
     setting->setProperty("Texture/Pattern/Brightness", brightness);
     setting->setProperty("Texture/Pattern/Contrast", contrast);
+    setting->setProperty("Texture/Pattern/NeutralPoint", neutralPoint);
     setting->setProperty("Texture/Pattern/OffsetX", offsetX);
     setting->setProperty("Texture/Pattern/OffsetY", offsetY);
     setting->setProperty("Texture/Pattern/TexturingMode", texturingMode);
@@ -157,7 +169,7 @@ void KisTextureOption::readOptionSetting(const KisPropertiesConfigurationSP sett
     if (!isChecked()) {
         return;
     }
-    KoPatternSP pattern = KisEmbeddedPatternManager::loadEmbeddedPattern(setting, KisGlobalResourcesInterface::instance());
+    KoPatternSP pattern = KisEmbeddedPatternManager::loadEmbeddedPattern(setting, resourcesInterface());
 
     if (!pattern) {
         pattern =m_textureOptions->textureSelectorWidget->currentResource().staticCast<KoPattern>();
@@ -168,6 +180,7 @@ void KisTextureOption::readOptionSetting(const KisPropertiesConfigurationSP sett
     m_textureOptions->scaleSlider->setValue(setting->getDouble("Texture/Pattern/Scale", 1.0));
     m_textureOptions->brightnessSlider->setValue(setting->getDouble("Texture/Pattern/Brightness"));
     m_textureOptions->contrastSlider->setValue(setting->getDouble("Texture/Pattern/Contrast", 1.0));
+    m_textureOptions->neutralPointSlider->setValue(setting->getDouble("Texture/Pattern/NeutralPoint", 0.5));
     m_textureOptions->offsetSliderX->setValue(setting->getInt("Texture/Pattern/OffsetX"));
     m_textureOptions->offsetSliderY->setValue(setting->getInt("Texture/Pattern/OffsetY"));
     m_textureOptions->randomOffsetX->setChecked(setting->getBool("Texture/Pattern/isRandomOffsetX"));
@@ -201,11 +214,12 @@ void KisTextureOption::resetGUI(KoResourceSP res)
 
 
 KisTextureProperties::KisTextureProperties(int levelOfDetail)
-    : m_levelOfDetail(levelOfDetail)
+    : m_gradient(0)
+    , m_levelOfDetail(levelOfDetail)
 {
 }
 
-void KisTextureProperties::fillProperties(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface)
+void KisTextureProperties::fillProperties(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface)
 {
     if (!setting->hasProperty("Texture/Pattern/PatternMD5")) {
         m_enabled = false;
@@ -226,6 +240,14 @@ void KisTextureProperties::fillProperties(const KisPropertiesConfigurationSP set
     m_offsetY = setting->getInt("Texture/Pattern/OffsetY");
     m_texturingMode = (TexturingMode) setting->getInt("Texture/Pattern/TexturingMode", MULTIPLY);
 
+    if (m_texturingMode == GRADIENT && canvasResourcesInterface) {
+        KoAbstractGradientSP gradient = canvasResourcesInterface->resource(KoCanvasResource::CurrentGradient).value<KoAbstractGradientSP>();
+        if (gradient) {
+            m_gradient = gradient;
+            m_cachedGradient.setGradient(gradient, 256);
+        }
+    }
+
     m_strengthOption.readOptionSetting(setting);
     m_strengthOption.resetAllSensors();
 }
@@ -242,9 +264,49 @@ QList<KoResourceSP> KisTextureProperties::prepareEmbeddedResources(const KisProp
     return resources;
 }
 
-void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset, const KisPaintInformation & info)
+bool KisTextureProperties::applyingGradient() const
 {
+    return m_texturingMode == GRADIENT;
+}
+
+bool KisTextureProperties::applyingGradient(const KisPropertiesConfiguration *settings)
+{
+    return (TexturingMode) settings->getInt("Texture/Pattern/TexturingMode", MULTIPLY) == GRADIENT;
+}
+
+void KisTextureProperties::applyLightness(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation& info) {
     if (!m_enabled) return;
+
+    KisPaintDeviceSP mask = m_maskInfo->mask();
+    const QRect maskBounds = m_maskInfo->maskBounds();
+
+    KisPaintDeviceSP fillMaskDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+    const QRect rect = dab->bounds();
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(mask);
+
+    int x = offset.x() % maskBounds.width() - m_offsetX;
+    int y = offset.y() % maskBounds.height() - m_offsetY;
+
+    KisFillPainter fillMaskPainter(fillMaskDevice);
+    fillMaskPainter.fillRect(x - 1, y - 1, rect.width() + 2, rect.height() + 2, mask, maskBounds);
+    fillMaskPainter.end();
+
+    qreal pressure = m_strengthOption.apply(info);
+    quint8* dabData = dab->data();
+
+    KisSequentialConstIterator it(fillMaskDevice, QRect(x, y, rect.width(), rect.height()));
+    while (it.nextPixel()) {
+        const QRgb *maskQRgb = reinterpret_cast<const QRgb*>(it.oldRawData());
+        dab->colorSpace()->fillGrayBrushWithColorAndLightnessWithStrength(dabData, maskQRgb, dabData, pressure, 1);
+        dabData += dab->pixelSize();
+    }
+}
+
+void KisTextureProperties::applyGradient(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation& info) {
+    if (!m_enabled) return;
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_gradient && m_gradient->valid());
 
     KisPaintDeviceSP fillDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
     QRect rect = dab->bounds();
@@ -263,7 +325,67 @@ void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset
     fillPainter.end();
 
     qreal pressure = m_strengthOption.apply(info);
-    quint8 *dabData = dab->data();
+    quint8* dabData = dab->data();
+
+    //for gradient textures...
+    KoMixColorsOp* colorMix = dab->colorSpace()->mixColorsOp();
+    qint16 colorWeights[2];
+    colorWeights[0] = qRound(pressure * 255);
+    colorWeights[1] = 255 - colorWeights[0];
+    quint8* colors[2];
+    m_cachedGradient.setColorSpace(dab->colorSpace()); //Change colorspace here so we don't have to convert each pixel drawn
+
+    KisHLineIteratorSP iter = fillDevice->createHLineIteratorNG(x, y, rect.width());
+    for (int row = 0; row < rect.height(); ++row) {
+        for (int col = 0; col < rect.width(); ++col) {
+
+            qreal gradientvalue = qreal(*iter->oldRawData()) / 255.0;
+            KoColor paintcolor;
+            paintcolor.setColor(m_cachedGradient.cachedAt(gradientvalue), dab->colorSpace());
+            paintcolor.setOpacity(qMin(paintcolor.opacityF(), dab->colorSpace()->opacityF(dabData)));
+            colors[0] = paintcolor.data();
+            KoColor dabColor(dabData, dab->colorSpace());
+            colors[1] = dabColor.data();
+            colorMix->mixColors(colors, colorWeights, 2, dabData);
+
+            iter->nextPixel();
+            dabData += dab->pixelSize();
+        }
+        iter->nextRow();
+    }
+}
+
+void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset, const KisPaintInformation & info)
+{
+    if (!m_enabled) return;
+
+    if (m_texturingMode == LIGHTNESS) {
+        applyLightness(dab, offset, info);
+        return;
+    }
+    else if (m_texturingMode == GRADIENT && m_gradient) {
+        applyGradient(dab, offset, info);
+        return;
+    }
+
+    KisPaintDeviceSP fillDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
+    QRect rect = dab->bounds();
+
+    KisPaintDeviceSP mask = m_maskInfo->mask();
+    const QRect maskBounds = m_maskInfo->maskBounds();
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(mask);
+
+    int x = offset.x() % maskBounds.width() - m_offsetX;
+    int y = offset.y() % maskBounds.height() - m_offsetY;
+
+
+    KisFillPainter fillPainter(fillDevice);
+    fillPainter.fillRect(x - 1, y - 1, rect.width() + 2, rect.height() + 2, mask, maskBounds);
+    fillPainter.end();
+
+    qreal pressure = m_strengthOption.apply(info);
+    quint8* dabData = dab->data();
 
     KisHLineIteratorSP iter = fillDevice->createHLineIteratorNG(x, y, rect.width());
     for (int row = 0; row < rect.height(); ++row) {

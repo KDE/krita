@@ -23,7 +23,7 @@
 #include "kis_global.h"
 #include "kis_base_node.h"
 #include "kis_paint_device.h"
-#include "testutil.h"
+#include <testutil.h>
 #include "kis_scalar_keyframe_channel.h"
 #include "KoColor.h"
 #include "kis_image_animation_interface.h"

@@ -27,6 +27,11 @@
 #include "kis_animation_curve_channel_list_model.h"
 #include "kis_animation_curve_channel_list_delegate.h"
 
+#include "kis_keyframe_channel.h"
+
+#include "kis_image_animation_interface.h"
+#include "kis_animation_utils.h"
+
 #include "KisDocument.h"
 #include "kis_canvas2.h"
 #include "kis_shape_controller.h"
@@ -36,6 +41,8 @@
 #include "kis_animation_frame_cache.h"
 #include "klocalizedstring.h"
 #include "kis_icon_utils.h"
+#include "kis_action_manager.h"
+#include "kis_action.h"
 
 #include "ui_wdg_animation_curves.h"
 
@@ -98,7 +105,7 @@ KisAnimationCurveDocker::KisAnimationCurveDocker()
     connect(m_d->curvesWidget.btnSharp, &QToolButton::clicked,
             curvesView, &KisAnimationCurvesView::applySharpMode);
     connect(m_d->curvesWidget.btnAddKeyframe, &QToolButton::clicked,
-            curvesView, &KisAnimationCurvesView::createKeyframe);
+            this, &KisAnimationCurveDocker::slotAddAllEnabledKeys);
     connect(m_d->curvesWidget.btnRemoveKeyframes, &QToolButton::clicked,
             curvesView, &KisAnimationCurvesView::removeKeyframes);
     connect(m_d->curvesWidget.btnZoomToFit, &QToolButton::clicked,
@@ -135,8 +142,14 @@ void KisAnimationCurveDocker::setCanvas(KoCanvasBase *canvas)
             m_d->channelListModel, SLOT(selectedNodesChanged(KisNodeList))
         );
 
+        m_d->canvasConnections.addConnection(
+            m_d->canvas->viewManager()->nodeManager(), SIGNAL(sigNodeActivated(KisNodeSP)),
+            this, SLOT(slotNodeActivated(KisNodeSP))
+        );
+
         m_d->channelListModel->clear();
         m_d->channelListModel->selectedNodesChanged(m_d->canvas->viewManager()->nodeManager()->selectedNodes());
+
     }
 }
 
@@ -149,11 +162,48 @@ void KisAnimationCurveDocker::setViewManager(KisViewManager *kisview)
 {
     connect(kisview->mainWindow(), SIGNAL(themeChanged()), this, SLOT(slotUpdateIcons()));
     slotUpdateIcons();
+
+    KisActionManager* manager = kisview->actionManager();
+
+    KisAction* action = manager->createAction("insert_opacity_keyframe");
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotAddOpacityKey()));
+    action = manager->createAction("remove_opacity_keyframe");
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotRemoveOpacityKey()));
+
+}
+
+void KisAnimationCurveDocker::addKeyframe(const QString &channel)
+{
+    if (!m_d->canvas) return;
+
+    KisNodeSP node = m_d->canvas->viewManager()->activeNode();
+    if (!node) return;
+
+    const int time = m_d->canvas->image()->animationInterface()->currentTime();
+
+    KisAnimationUtils::createKeyframeLazy(m_d->canvas->image(), node, channel, time, true);
+}
+
+void KisAnimationCurveDocker::removeKeyframe(const QString &channel)
+{
+    if (!m_d->canvas) return;
+
+    KisNodeSP node = m_d->canvas->viewManager()->activeNode();
+    if (!node) return;
+
+    const int time = m_d->canvas->image()->animationInterface()->currentTime();
+    KisAnimationUtils::removeKeyframe(m_d->canvas->image(), node, channel, time);
 }
 
 void KisAnimationCurveDocker::slotScrollerStateChanged(QScroller::State state)
 {
     KisKineticScroller::updateCursor(m_d->curvesWidget.channelListView, state);
+}
+
+void KisAnimationCurveDocker::slotNodeActivated(KisNodeSP node)
+{
+    if (!node) return;
+    m_d->curvesWidget.btnAddKeyframe->setEnabled(node->supportsKeyframeChannel(KisKeyframeChannel::Opacity.id()));
 }
 
 void KisAnimationCurveDocker::slotUpdateIcons()
@@ -170,6 +220,46 @@ void KisAnimationCurveDocker::slotUpdateIcons()
 
     m_d->curvesWidget.btnAddKeyframe->setIcon(KisIconUtils::loadIcon("keyframe-add"));
     m_d->curvesWidget.btnRemoveKeyframes->setIcon(KisIconUtils::loadIcon("keyframe-remove"));
+}
+
+void KisAnimationCurveDocker::slotAddAllEnabledKeys()
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->canvas && m_d->canvas->viewManager());
+    // remember current node's opacity and set it once we create a new opacity keyframe
+    KisNodeSP node = m_d->canvas->viewManager()->activeNode();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(node);
+
+
+    /* Once we have more than one supported scalar key value,
+     * we should add a dropdown check-box set of actions that can
+     * enable and disable keys. For now, since opacity is the only
+     * key officially supported, we will just presume opacity. */
+    if (node->supportsKeyframeChannel(KisKeyframeChannel::Opacity.id())) {
+        addKeyframe(KisKeyframeChannel::Opacity.id());
+    }
+}
+
+void KisAnimationCurveDocker::slotAddOpacityKey()
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->canvas && m_d->canvas->viewManager());
+
+    KisNodeSP node = m_d->canvas->viewManager()->activeNode();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(node);
+
+    if (node->supportsKeyframeChannel(KisKeyframeChannel::Opacity.id())) {
+        addKeyframe(KisKeyframeChannel::Opacity.id());
+    }
+}
+
+void KisAnimationCurveDocker::slotRemoveOpacityKey()
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->canvas && m_d->canvas->viewManager());
+
+    KisNodeSP node = m_d->canvas->viewManager()->activeNode();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(node);
+    if (node->supportsKeyframeChannel(KisKeyframeChannel::Opacity.id())) {
+        removeKeyframe(KisKeyframeChannel::Opacity.id());
+    }
 }
 
 void KisAnimationCurveDocker::slotListRowsInserted(const QModelIndex &parentIndex, int first, int last)

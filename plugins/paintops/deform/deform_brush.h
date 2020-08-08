@@ -54,10 +54,11 @@ class DeformBase
 public:
     DeformBase() {}
     virtual ~DeformBase() {}
-    virtual void transform(qreal * x, qreal * y, qreal distance) {
+    virtual void transform(qreal * x, qreal * y, qreal distance, KisRandomSourceSP randomSource) {
         Q_UNUSED(x);
         Q_UNUSED(y);
         Q_UNUSED(distance);
+        Q_UNUSED(randomSource);
     }
 };
 
@@ -72,7 +73,8 @@ public:
     qreal factor() {
         return m_factor;
     }
-    void transform(qreal* x, qreal* y, qreal distance) override {
+    void transform(qreal* x, qreal* y, qreal distance, KisRandomSourceSP randomSource) override {
+        Q_UNUSED(randomSource);
         qreal scaleFactor = KisAlgebra2D::signPZ(m_factor) * (qAbs((1.0 - distance) * m_factor) + distance);
         *x = *x / scaleFactor;
         *y = *y / scaleFactor;
@@ -90,7 +92,8 @@ public:
     void setAlpha(qreal alpha) {
         m_alpha = alpha;
     }
-    void transform(qreal* maskX, qreal* maskY, qreal distance) override {
+    void transform(qreal* maskX, qreal* maskY, qreal distance, KisRandomSourceSP randomSource) override {
+        Q_UNUSED(randomSource);
         distance = 1.0 - distance;
         qreal rotX = cos(-m_alpha * distance) * (*maskX) - sin(-m_alpha * distance) * (*maskY);
         qreal rotY = sin(-m_alpha * distance) * (*maskX) + cos(-m_alpha * distance) * (*maskY);
@@ -114,7 +117,8 @@ public:
         m_dx = dx;
         m_dy = dy;
     }
-    void transform(qreal* maskX, qreal* maskY, qreal distance) override {
+    void transform(qreal* maskX, qreal* maskY, qreal distance, KisRandomSourceSP randomSource) override {
+        Q_UNUSED(randomSource);
         *maskX -= m_dx * m_factor * (1.0 - distance);
         *maskY -= m_dy * m_factor * (1.0 - distance);
     }
@@ -141,8 +145,9 @@ public:
         m_out = out;
     }
 
-    void transform(qreal* maskX, qreal* maskY, qreal distance) override {
+    void transform(qreal* maskX, qreal* maskY, qreal distance, KisRandomSourceSP randomSource) override {
         Q_UNUSED(distance);
+        Q_UNUSED(randomSource);
         //normalize
         qreal normX = *maskX / m_maxX;
         qreal normY = *maskY / m_maxY;
@@ -174,16 +179,15 @@ class DeformColor : public DeformBase
 {
 public:
     DeformColor() {
-        srand48(time(0));
     }
 
     void setFactor(qreal factor) {
         m_factor = factor;
     }
-    void transform(qreal* x, qreal* y, qreal distance) override {
+    void transform(qreal* x, qreal* y, qreal distance, KisRandomSourceSP randomSource) override {
         Q_UNUSED(distance);
-        qreal randomX = m_factor * ((drand48() * 2.0) - 1.0);
-        qreal randomY = m_factor * ((drand48() * 2.0) - 1.0);
+        qreal randomX = m_factor * ((randomSource->generateNormalized() * 2.0) - 1.0);
+        qreal randomY = m_factor * ((randomSource->generateNormalized() * 2.0) - 1.0);
         *x += randomX;
         *y += randomY;
     }
@@ -203,7 +207,7 @@ public:
     DeformBrush();
     ~DeformBrush();
 
-    KisFixedPaintDeviceSP paintMask(KisFixedPaintDeviceSP dab, KisPaintDeviceSP layer,
+    KisFixedPaintDeviceSP paintMask(KisFixedPaintDeviceSP dab, KisPaintDeviceSP layer, KisRandomSourceSP randomSource,
                                     qreal scale, qreal rotation, QPointF pos,
                                     qreal subPixelX, qreal subPixelY, int dabX, int dabY);
 

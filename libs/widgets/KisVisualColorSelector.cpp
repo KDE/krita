@@ -17,17 +17,12 @@
  */
 #include "KisVisualColorSelector.h"
 
-#include <QColor>
-#include <QPixmap>
-#include <QPainter>
-#include <QPainterPath>
 #include <QRect>
 #include <QVector>
 #include <QVector3D>
 #include <QVector4D>
 #include <QVBoxLayout>
 #include <QList>
-#include <QPolygon>
 #include <QtMath>
 
 #include <KSharedConfig>
@@ -141,7 +136,7 @@ void KisVisualColorSelector::slotSetHSX(const QVector3D &hsx)
 
 void KisVisualColorSelector::setConfig(bool forceCircular, bool forceSelfUpdate)
 {
-    Q_UNUSED(forceSelfUpdate)
+    Q_UNUSED(forceSelfUpdate);
     m_d->circular = forceCircular;
 }
 
@@ -374,7 +369,7 @@ void KisVisualColorSelector::slotRebuildSelectors()
     qDeleteAll(children());
     m_d->widgetlist.clear();
     // TODO: Layout only used for monochrome selector currently, but always present
-    QLayout *layout = new QHBoxLayout;
+    QLayout *layout = new QHBoxLayout(this);
     //recreate all the widgets.
     m_d->model = KisVisualColorSelector::Channel;
 
@@ -563,7 +558,6 @@ void KisVisualColorSelector::slotRebuildSelectors()
         m_d->widgetlist.append(block2);
     }
 
-    this->setLayout(layout);
     // make sure we call "our" resize function
     KisVisualColorSelector::resizeEvent(0);
 
@@ -583,7 +577,11 @@ void KisVisualColorSelector::slotRebuildSelectors()
     }
 }
 
-void KisVisualColorSelector::setDisplayRenderer (const KoColorDisplayRendererInterface *displayRenderer) {
+void KisVisualColorSelector::setDisplayRenderer (const KoColorDisplayRendererInterface *displayRenderer)
+{
+    if (m_d->displayRenderer) {
+        m_d->displayRenderer->disconnect(this);
+    }
     m_d->displayRenderer = displayRenderer;
     if (m_d->widgetlist.size()>0) {
         Q_FOREACH (KisVisualColorSelectorShape *shape, m_d->widgetlist) {

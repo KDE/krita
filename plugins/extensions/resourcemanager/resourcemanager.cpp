@@ -46,10 +46,13 @@
 #include <brushengine/kis_paintop_preset.h>
 #include <KisBrushServerProvider.h>
 #include <kis_paintop_settings.h>
+#include <KisPaintopSettingsIds.h>
+#include <krita_container_utils.h>
+
+#include "config-seexpr.h"
+
 #include "dlg_bundle_manager.h"
 #include "dlg_create_bundle.h"
-#include <KisPaintopSettingsIds.h>
-#include "krita_container_utils.h"
 
 class ResourceManager::Private {
 
@@ -64,6 +67,9 @@ public:
         paletteServer = KoResourceServerProvider::instance()->paletteServer();
         workspaceServer = KisResourceServerProvider::instance()->workspaceServer();
         gamutMaskServer = KoResourceServerProvider::instance()->gamutMaskServer();
+#if defined HAVE_SEEXPR
+        seExprScriptServer = KoResourceServerProvider::instance() ->seExprScriptServer();
+#endif
     }
 
     KoResourceServer<KisBrush>* brushServer;
@@ -73,6 +79,9 @@ public:
     KoResourceServer<KoColorSet>* paletteServer;
     KoResourceServer<KisWorkspaceResource>* workspaceServer;
     KoResourceServer<KoGamutMask>* gamutMaskServer;
+#if defined HAVE_SEEXPR
+    KoResourceServer<KisSeExprScript>* seExprScriptServer;
+#endif
 };
 
 K_PLUGIN_FACTORY_WITH_JSON(ResourceManagerFactory, "kritaresourcemanager.json", registerPlugin<ResourceManager>();)
@@ -203,6 +212,14 @@ KoResourceBundleSP ResourceManager::saveBundle(const DlgCreateBundle &dlgCreateB
         KoResourceSP res = d->gamutMaskServer->resourceByFilename(r);
         newBundle->addResource(ResourceType::GamutMasks, res->filename(), d->gamutMaskServer->assignedTagsList(res), res->md5());
     }
+
+#if defined HAVE_SEEXPR
+    res = dlgCreateBundle.selectedSeExprScripts();
+    Q_FOREACH (const QString &r, res) {
+        KoResourceSP *res = d->seExprScriptServer->resourceByFilename(r);
+        newBundle->addResource(ResourceType::SeExprScripts, res->filename(), d->gamutMaskServer->assignedTagsList(res), res->md5());
+    }
+#endif
     */
 
     newBundle->setMetaData("fileName", bundlePath);

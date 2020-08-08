@@ -186,7 +186,7 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
         pathShape->setShapeId(KoPathShapeId);
 
         KoShapeStrokeSP stroke(new KoShapeStroke());
-        const qreal size = canvas()->resourceManager()->resource(KisCanvasResourceProvider::Size).toReal();
+        const qreal size = canvas()->resourceManager()->resource(KoCanvasResource::Size).toReal();
 
         stroke->setLineWidth(canvas()->unit().fromUserValue(size));
         stroke->setColor(canvas()->resourceManager()->foregroundColor().toQColor());

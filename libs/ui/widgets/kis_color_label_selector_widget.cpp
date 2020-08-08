@@ -38,6 +38,8 @@ struct Private
 {
     Private(KisColorLabelSelectorWidget *_q)
         : q(_q)
+        , colorButtonGroup(0)
+        , menuAlignmentOffset(0)
         , buttonSize(26)
     {
     }
@@ -58,7 +60,6 @@ KisColorLabelSelectorWidget::KisColorLabelSelectorWidget(QWidget *parent)
 
     QHBoxLayout *layout = new QHBoxLayout(this);
 
-    this->setLayout(layout);
     layout->setContentsMargins(0,0,0,0);
     layout->setSpacing(0);
     layout->setAlignment(Qt::AlignLeft);

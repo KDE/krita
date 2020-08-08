@@ -20,7 +20,7 @@
 
 #include <QTest>
 
-#include "testutil.h"
+#include <testutil.h>
 #include "lazybrush/kis_colorize_mask.h"
 #include "kis_paint_device_debug_utils.h"
 #include "kis_global.h"
@@ -45,7 +45,7 @@ struct ColorizeMaskTester
 
         // KIS_DUMP_DEVICE_2(src, refRect, "src", "dd");
 
-        mask = new KisColorizeMask();
+        mask = new KisColorizeMask(p.image, "mask1");
         p.image->addNode(mask, p.layer);
 
         mask->initializeCompositeOp();

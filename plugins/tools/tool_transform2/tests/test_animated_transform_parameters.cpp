@@ -19,7 +19,7 @@
 #include "test_animated_transform_parameters.h"
 
 #include "kis_transform_mask.h"
-#include "testutil.h"
+#include <testutil.h>
 #include "tool_transform_args.h"
 #include "kis_modify_transform_mask_command.h"
 #include "kis_image_animation_interface.h"
@@ -30,7 +30,7 @@
 void KisAnimatedTransformParametersTest::testTransformKeyframing()
 {
     TestUtil::MaskParent p;
-    KisTransformMaskSP mask = new KisTransformMask();
+    KisTransformMaskSP mask = new KisTransformMask(p.image, "mask");
     p.image->addNode(mask, p.layer);
 
 

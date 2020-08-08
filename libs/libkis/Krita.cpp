@@ -287,6 +287,14 @@ QMap<QString, Resource*> Krita::resources(const QString &type) const
     return resources;
 }
 
+
+QList<QDockWidget*> Krita::dockers() const
+{
+    KisMainWindow *mainWindow = KisPart::instance()->currentMainwindow();
+    return mainWindow->dockWidgets();
+}
+
+
 QStringList Krita::recentDocuments() const
 {
     KConfigGroup grp = KSharedConfig::openConfig()->group(QString("RecentFiles"));

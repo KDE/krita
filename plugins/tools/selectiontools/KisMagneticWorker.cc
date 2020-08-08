@@ -111,7 +111,7 @@ public:
 
     void examine_vertex(VertexDescriptor u, KisMagneticGraph const &g)
     {
-        Q_UNUSED(g)
+        Q_UNUSED(g);
         if (u == m_goal) {
             throw GoalFound();
         }
@@ -135,7 +135,7 @@ struct WeightMap {
     data_type &operator [] (key_type const &k)
     {
         if (m_map.find(k) == m_map.end()) {
-            double edge_gradient = (m_graph.getIntensity(k.first) + m_graph.getIntensity(k.second)) / 2;
+            double edge_gradient = (m_graph.getIntensity(k.first) + m_graph.getIntensity(k.second)) / 2.0;
             m_map[k] = EuclideanDistance(k.first, k.second) + 255.0 - edge_gradient;
         }
         return m_map[k];

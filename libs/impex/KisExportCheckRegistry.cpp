@@ -100,7 +100,7 @@ KisExportCheckRegistry::KisExportCheckRegistry ()
     // Node type checks
     chkFactory = new NodeTypeCheckFactory("KisCloneLayer", i18n("Clone Layer"));
     add(chkFactory->id(), chkFactory);
-    chkFactory = new NodeTypeCheckFactory("KisGroupLayer", i18n("Group Layer"));
+    chkFactory = new NodeTypeCheckFactory("KisGroupLayer", i18n("Group"));
     add(chkFactory->id(), chkFactory);
     chkFactory = new NodeTypeCheckFactory("KisFileLayer", i18n("File Layer"));
     add(chkFactory->id(), chkFactory);

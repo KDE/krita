@@ -39,8 +39,8 @@ struct KisAsyncAnimationFramesSaveDialog::Private {
             KisPropertiesConfigurationSP _exportConfiguration)
         : originalImage(_image),
           range(_range),
-          sequenceNumberingOffset(_sequenceNumberingOffset),
           onlyNeedsUniqueFrames(_onlyNeedsUniqueFrames),
+          sequenceNumberingOffset(_sequenceNumberingOffset),
           exportConfiguration(_exportConfiguration)
     {
         int baseLength = baseFilename.lastIndexOf(".");

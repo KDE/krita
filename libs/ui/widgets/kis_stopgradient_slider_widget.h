@@ -61,11 +61,11 @@ private:
 
     QRect sliderRect() const;
     QRect gradientStripeRect() const;
-    QRect handlesStipeRect() const;
+    QRect handlesStripeRect() const;
     QRegion allowedClickRegion(int tolerance) const;
 
     void updateCursor(const QPoint &pos);
-    void paintHandle(qreal position, const QColor &color, bool isSelected, QPainter *painter);
+    void paintHandle(qreal position, const QColor &color, bool isSelected, QString text, QPainter *painter);
     int handleClickTolerance() const;
     int minimalHeight() const;
 

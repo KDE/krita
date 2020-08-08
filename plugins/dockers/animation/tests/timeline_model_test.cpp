@@ -46,8 +46,8 @@
 #include "kis_double_parse_spin_box.h"
 #include "kis_int_parse_spin_box.h"
 
-#include  <sdk/tests/kistest.h>
 #include <sdk/tests/testutil.h>
+#include <sdk/tests/testui.h>
 
 void TimelineModelTest::init()
 {
@@ -301,8 +301,6 @@ void TimelineModelTest::testOnionSkins()
     connect(w, SIGNAL(sigConfigChanged()), SLOT(slotBang()));
 
     layout->addWidget(w);
-
-    dlg.setLayout(layout);
 
     dlg.resize(600, 400);
     dlg.exec();

@@ -50,7 +50,7 @@ int Palette::columnCount()
 
 void Palette::setColumnCount(int columns)
 {
-    if (d->palette)
+    if (d->palette && columns > 0)
         d->palette->setColumnCount(columns);
 }
 
@@ -92,7 +92,9 @@ int Palette::colorsCountTotal()
 
 Swatch *Palette::colorSetEntryByIndex(int index)
 {
-    if (!d->palette) return new Swatch();
+    if (!d->palette || columnCount() == 0) {
+        return new Swatch();
+    }
     int col = index % columnCount();
     int row = (index - col) / columnCount();
     return new Swatch(d->palette->getColorGlobal(col, row));
@@ -100,7 +102,9 @@ Swatch *Palette::colorSetEntryByIndex(int index)
 
 Swatch *Palette::colorSetEntryFromGroup(int index, const QString &groupName)
 {
-    if (!d->palette) return new Swatch();
+    if (!d->palette || columnCount() == 0) {
+        return new Swatch();
+    }
     int row = index % columnCount();
     return new Swatch(d->palette->getColorGroup((index - row) / columnCount(), row, groupName));
 }

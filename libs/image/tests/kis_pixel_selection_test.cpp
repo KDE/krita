@@ -31,7 +31,8 @@
 #include "kis_paint_device.h"
 #include "kis_fixed_paint_device.h"
 #include "kis_pixel_selection.h"
-#include "testutil.h"
+#include <testutil.h>
+#include <testimage.h>
 #include "kis_fill_painter.h"
 #include "kis_transaction.h"
 #include "kis_surrogate_undo_adapter.h"

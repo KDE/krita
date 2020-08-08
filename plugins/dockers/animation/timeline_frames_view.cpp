@@ -759,6 +759,7 @@ void TimelineFramesView::slotDataChanged(const QModelIndex &topLeft, const QMode
         return;
     }
 
+    if (selectionModel()->selectedIndexes().count() > 1) return;
 
     if (selectedColumn == -1) {
         selectedColumn = index.column();
@@ -1246,8 +1247,10 @@ void TimelineFramesView::wheelEvent(QWheelEvent *e)
     }
 }
 
-void TimelineFramesView::resizeEvent(QResizeEvent *e)
+void TimelineFramesView::resizeEvent(QResizeEvent *event)
 {
+    Q_UNUSED(event);
+
     updateGeometries();
     slotUpdateInfiniteFramesCount();
 }
@@ -1557,10 +1560,45 @@ void TimelineFramesView::insertOrRemoveHoldFrames(int count, bool entireColumn)
 
         m_d->model->insertHoldFrames(indexes, count);
 
+        // Fan selection based on insertion or deletion.
+        // This should allow better UI/UX for insertion of keyframes or hold frames.
+        fanSelectedFrames(indexes, count);
+
         // bulk adding frames can add too many
         // trim timeline to clean up extra frames that might have been added
         slotUpdateInfiniteFramesCount();
     }
+}
+
+void TimelineFramesView::fanSelectedFrames(const QModelIndexList &selection, int count, bool ignoreKeyless) {
+    QMap<int, QList<int>> indexMap;
+
+    QList<QModelIndex> selectedIndices = selection;
+
+    foreach (const QModelIndex &index, selectedIndices) {
+        if (!indexMap.contains(index.row())) {
+            indexMap.insert(index.row(), QList<int>());
+        }
+
+        if (m_d->model->data(index, TimelineFramesModel::FrameExistsRole).value<bool>() || !ignoreKeyless) {
+            indexMap[index.row()] << index.column();
+        }
+    }
+
+    selectionModel()->clearSelection();
+    KisSignalsBlocker blockSig(selectionModel());
+    foreach (const int &layer, indexMap.keys()) {
+        QList<int>::const_iterator it;
+        int progressIndex = 0;
+
+        std::sort(indexMap[layer].begin(), indexMap[layer].end());
+        for (it = indexMap[layer].constBegin(); it != indexMap[layer].constEnd(); it++) {
+            const int offsetColumn = *it + (progressIndex * count);
+            selectionModel()->select(model()->index(layer, offsetColumn), QItemSelectionModel::Select);
+            progressIndex++;
+        }
+    }
+
 }
 
 void TimelineFramesView::insertOrRemoveMultipleHoldFrames(bool insertion, bool entireColumn)

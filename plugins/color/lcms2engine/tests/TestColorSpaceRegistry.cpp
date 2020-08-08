@@ -9,7 +9,7 @@
 #include "RgbU16ColorSpace.h"
 #include "LabColorSpace.h"
 
-#include "sdk/tests/kistest.h"
+#include "sdk/tests/testpigment.h"
 
 void TestColorSpaceRegistry::testConstruction()
 {

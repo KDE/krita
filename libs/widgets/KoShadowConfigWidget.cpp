@@ -235,7 +235,7 @@ void KoShadowConfigWidget::setUnit(const KoUnit &unit)
 
 void KoShadowConfigWidget::resourceChanged( int key, const QVariant & res )
 {
-    if( key == KoCanvasResourceProvider::Unit ) {
+    if( key == KoCanvasResource::Unit ) {
         setUnit(res.value<KoUnit>());
     }
 }

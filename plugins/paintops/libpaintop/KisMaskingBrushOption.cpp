@@ -34,16 +34,13 @@
 #include "KisMaskingBrushOptionProperties.h"
 #include <strokes/KisMaskingBrushCompositeOpFactory.h>
 #include <KoCompositeOpRegistry.h>
-#include <KisGlobalResourcesInterface.h>
 
 struct KisMaskingBrushOption::Private
 {
     Private()
         : ui(new QWidget())
     {
-        QVBoxLayout *l  = new QVBoxLayout();
 
-        QHBoxLayout *compositeOpLayout = new QHBoxLayout();
         compositeSelector = new QComboBox(ui.data());
 
         const QStringList supportedComposites = KisMaskingBrushCompositeOpFactory::supportedCompositeOpIds();
@@ -53,15 +50,15 @@ struct KisMaskingBrushOption::Private
         }
         compositeSelector->setCurrentIndex(0);
 
+        QHBoxLayout *compositeOpLayout = new QHBoxLayout();
         compositeOpLayout->addWidget(new QLabel(i18n("Blending Mode:")), 0);
         compositeOpLayout->addWidget(compositeSelector, 1);
 
-        l->addLayout(compositeOpLayout, 0);
-
-
         brushChooser = new KisBrushSelectionWidget(ui.data());
-        l->addWidget(brushChooser, 1);
-        ui->setLayout(l);
+
+        QVBoxLayout *layout  = new QVBoxLayout(ui.data());
+        layout->addLayout(compositeOpLayout, 0);
+        layout->addWidget(brushChooser, 1);
     }
 
     QScopedPointer<QWidget> ui;
@@ -102,7 +99,7 @@ void KisMaskingBrushOption::writeOptionSetting(KisPropertiesConfigurationSP sett
 void KisMaskingBrushOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     KisMaskingBrushOptionProperties props;
-    props.read(setting.data(), m_d->masterBrushSizeAdapter(), KisGlobalResourcesInterface::instance());
+    props.read(setting.data(), m_d->masterBrushSizeAdapter(), resourcesInterface(), canvasResourcesInterface());
 
     setChecked(props.isEnabled);
 

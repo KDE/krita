@@ -35,7 +35,7 @@ KoCompositeColorTransformation::KoCompositeColorTransformation(Mode mode)
     : m_d(new Private)
 {
     Q_ASSERT_X(mode == INPLACE, "KoCompositeColorTransformation", "BUFFERED mode is not implemented yet!");
-    Q_UNUSED(mode)
+    Q_UNUSED(mode);
 }
 
 KoCompositeColorTransformation::~KoCompositeColorTransformation()

@@ -245,10 +245,10 @@ void ArtisticColorSelectorDock::setViewManager(KisViewManager* kisview)
 
 void ArtisticColorSelectorDock::slotCanvasResourceChanged(int key, const QVariant& value)
 {
-    if(key == KoCanvasResourceProvider::ForegroundColor)
+    if(key == KoCanvasResource::ForegroundColor)
         m_selectorUI->colorSelector->setFgColor(value.value<KoColor>());
 
-    if(key == KoCanvasResourceProvider::BackgroundColor)
+    if(key == KoCanvasResource::BackgroundColor)
         m_selectorUI->colorSelector->setBgColor(value.value<KoColor>());
 }
 

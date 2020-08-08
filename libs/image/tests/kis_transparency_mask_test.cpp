@@ -23,7 +23,7 @@
 #include "kis_paint_layer.h"
 #include "kis_image.h"
 #include "kis_fill_painter.h"
-#include "testutil.h"
+#include <testutil.h>
 #include "kis_selection.h"
 #include "kis_pixel_selection.h"
 #define IMAGE_WIDTH 1000
@@ -43,16 +43,11 @@ KisPaintDeviceSP createDevice()
     return dev;
 }
 
-void KisTransparencyMaskTest::testCreation()
-{
-    KisTransparencyMask test;
-}
-
 #define initImage(image, layer, device, mask) do {                      \
     image = new KisImage(0, IMAGE_WIDTH, IMAGE_HEIGHT, 0, "tests");     \
     device = createDevice();                                            \
     layer = new KisPaintLayer(image, "paint1", 100, device);                  \
-    mask = new KisTransparencyMask();                                   \
+    mask = new KisTransparencyMask(image, "tmask");                                   \
     image->addNode(layer);                                              \
     image->addNode(mask, layer);                                        \
     } while(0)

@@ -74,8 +74,12 @@ public:
     KisIntParseSpinBox *sbEndFrame;
     KisIntParseSpinBox *sbFrameRate;
     KisSliderSpinBox *sbSpeed;
-    QToolButton *btnAutoFrame;
+
     QToolButton *btnDropFrames;
+
+    QToolButton *btnAutoKey;
+    QAction *autoKeyBlank;
+    QAction *autoKeyDuplicate;
 
 private:
     const int MAX_FRAMES = 9999;
@@ -98,7 +102,7 @@ public:
     TimelineDocker();
     ~TimelineDocker() override;
 
-    QString observerName() override { return "AnimationTimelineDocker"; }
+    QString observerName() override { return "TimelineDocker"; }
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
     void setViewManager(KisViewManager *kisview) override;
@@ -108,6 +112,10 @@ public Q_SLOTS:
     void stop();
     void previousFrame();
     void nextFrame();
+    void previousKeyframe();
+    void nextKeyframe();
+    void previousMatchingKeyframe();
+    void nextMatchingKeyframe();
 
     void goToFrame(int frameIndex);
     void setStartFrame(int frame);
@@ -115,7 +123,7 @@ public Q_SLOTS:
     void setFrameRate(int frmaerate);
     void setPlaybackSpeed(int playbackSpeed);
     void setDropFrames(bool dropFrames);
-    void setAutoKey(bool autoKey);
+    void setAutoKey(bool value);
 
     void handleClipRangeChange();
     void handleFrameRateChange();

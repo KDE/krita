@@ -370,7 +370,7 @@ void KisShortcutMatcher::leaveEvent()
 
 bool KisShortcutMatcher::touchBeginEvent( QTouchEvent* event )
 {
-    Q_UNUSED(event)
+    Q_UNUSED(event);
 
     Private::RecursionNotifier notifier(this);
 
@@ -410,7 +410,7 @@ bool KisShortcutMatcher::touchEndEvent( QTouchEvent* event )
 
 bool KisShortcutMatcher::nativeGestureBeginEvent(QNativeGestureEvent *event)
 {
-    Q_UNUSED(event)
+    Q_UNUSED(event);
 
     Private::RecursionNotifier notifier(this);
 

@@ -67,7 +67,7 @@ void MouseTracker::removeItem(QQuickItem* item)
 
 bool MouseTracker::eventFilter(QObject* target, QEvent* event)
 {
-    Q_UNUSED(target)
+    Q_UNUSED(target);
     if (d->trackedItems.count() > 0) {
         switch(event->type()) {
     // QT5TODO

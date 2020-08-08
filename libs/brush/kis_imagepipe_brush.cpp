@@ -401,9 +401,9 @@ void KisImagePipeBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceS
         KisDabShape const& shape,
         const KisPaintInformation& info,
         double subPixelX , double subPixelY,
-        qreal softnessFactor) const
+        qreal softnessFactor, qreal lightnessStrength) const
 {
-    d->brushesPipe.generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, shape, info, subPixelX, subPixelY, softnessFactor);
+    d->brushesPipe.generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, shape, info, subPixelX, subPixelY, softnessFactor, lightnessStrength);
 }
 
 QVector<KisGbrBrushSP> KisImagePipeBrush::brushes() const
@@ -421,7 +421,7 @@ KisFixedPaintDeviceSP KisImagePipeBrush::paintDevice(
 
 enumBrushType KisImagePipeBrush::brushType() const
 {
-    return !hasColor() || useColorAsMask() ? PIPE_MASK : PIPE_IMAGE;
+    return !hasColor() ? PIPE_MASK : PIPE_IMAGE;
 }
 
 QString KisImagePipeBrush::parasiteSelection()
@@ -529,11 +529,17 @@ void KisImagePipeBrush::setHasColor(bool hasColor)
     // hasColor() is a function of the underlying brushes
 }
 
-void KisImagePipeBrush::setPreserveLightness(bool preserveLightness)
+void KisImagePipeBrush::setBrushApplication(enumBrushApplication brushApplication)
 {
-    //Set all underlying brushes to preserve lightness
-    KisGbrBrush::setPreserveLightness(preserveLightness);
-    d->brushesPipe.setPreserveLightness(preserveLightness);
+    //Set all underlying brushes to use the same brush Application
+    KisGbrBrush::setBrushApplication(brushApplication);
+    d->brushesPipe.setBrushApplication(brushApplication);
+}
+
+void KisImagePipeBrush::setGradient(KoAbstractGradientSP gradient) {
+    //Set all underlying brushes to use the same gradient
+    KisGbrBrush::setGradient(gradient);
+    d->brushesPipe.setGradient(gradient);
 }
 
 KisGbrBrushSP KisImagePipeBrush::testingGetCurrentBrush(const KisPaintInformation& info) const

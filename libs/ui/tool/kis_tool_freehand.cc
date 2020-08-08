@@ -416,9 +416,14 @@ void KisToolFreehand::slotDoResizeBrush(qreal newSize)
 QPointF KisToolFreehand::adjustPosition(const QPointF& point, const QPointF& strokeBegin)
 {
     if (m_assistant && static_cast<KisCanvas2*>(canvas())->paintingAssistantsDecoration()) {
-        static_cast<KisCanvas2*>(canvas())->paintingAssistantsDecoration()->setOnlyOneAssistantSnap(m_only_one_assistant);
-        QPointF ap = static_cast<KisCanvas2*>(canvas())->paintingAssistantsDecoration()->adjustPosition(point, strokeBegin);
-        return (1.0 - m_magnetism) * point + m_magnetism * ap;
+        KisCanvas2* c = static_cast<KisCanvas2*>(canvas());
+        c->paintingAssistantsDecoration()->setOnlyOneAssistantSnap(m_only_one_assistant);
+        QPointF ap = c->paintingAssistantsDecoration()->adjustPosition(point, strokeBegin);
+        QPointF fp = (1.0 - m_magnetism) * point + m_magnetism * ap;
+        // Report the final position back to the assistant so the guides
+        // can follow the brush
+        c->paintingAssistantsDecoration()->setAdjustedBrushPosition(fp);
+        return fp;
     }
     return point;
 }

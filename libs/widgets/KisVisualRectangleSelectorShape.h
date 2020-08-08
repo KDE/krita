@@ -18,17 +18,6 @@
 #ifndef KIS_VISUAL_RECTANGLE_SELECTOR_SHAPE_H
 #define KIS_VISUAL_RECTANGLE_SELECTOR_SHAPE_H
 
-#include <QWidget>
-#include <QScopedPointer>
-#include <QPixmap>
-#include <QRegion>
-#include <QMouseEvent>
-
-#include <KoColor.h>
-#include <KoColorSpace.h>
-#include "KoColorDisplayRendererInterface.h"
-
-#include "KisColorSelectorConfiguration.h"
 #include "KisVisualColorSelectorShape.h"
 
 class KisVisualRectangleSelectorShape : public KisVisualColorSelectorShape

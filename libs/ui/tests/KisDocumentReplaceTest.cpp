@@ -24,7 +24,7 @@
 #include <KisPart.h>
 #include <kis_layer_utils.h>
 #include <kis_group_layer.h>
-#include <sdk/tests/kistest.h>
+#include <sdk/tests/testui.h>
 #include <QScopedPointer>
 
 void KisDocumentReplaceTest::init()

@@ -43,8 +43,8 @@ PageThumbnailProvider::~PageThumbnailProvider()
 
 QImage PageThumbnailProvider::requestImage(const QString& id, QSize* size, const QSize& requestedSize)
 {
-    Q_UNUSED(size)
-    Q_UNUSED(requestedSize)
+    Q_UNUSED(size);
+    Q_UNUSED(requestedSize);
     if (d->thumbnails.contains(id))
         return d->thumbnails[id];
     return QImage();

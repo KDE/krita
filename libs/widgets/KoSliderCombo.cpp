@@ -61,11 +61,10 @@ KoSliderCombo::KoSliderCombo(QWidget *parent)
     // When set to true, causes flicker on Qt 4.6. Any reason to keep it?
     d->firstShowOfSlider = false; //true;
 
-    QHBoxLayout * l = new QHBoxLayout();
-    l->setMargin(2);
-    l->setSpacing(2);
-    l->addWidget(d->slider);
-    d->container->setLayout(l);
+    QHBoxLayout *layout = new QHBoxLayout(d->container);
+    layout->setMargin(2);
+    layout->setSpacing(2);
+    layout->addWidget(d->slider);
     d->container->resize(200, 30);
 
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);

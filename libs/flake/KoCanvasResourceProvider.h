@@ -26,6 +26,12 @@
 #include "kritaflake_export.h"
 #include "KoDerivedResourceConverter.h"
 #include "KoResourceUpdateMediator.h"
+#include "KoActiveCanvasResourceDependency.h"
+#include <KoCanvasResourcesIds.h>
+
+template<class T> class QSharedPointer;
+class KoCanvasResourcesInterface;
+using KoCanvasResourcesInterfaceSP = QSharedPointer<KoCanvasResourcesInterface>;
 
 class KoShape;
 class KoShapeStroke;
@@ -61,35 +67,6 @@ class KRITAFLAKE_EXPORT KoCanvasResourceProvider : public QObject
     Q_OBJECT
 
 public:
-
-    /**
-     * This enum holds identifiers to the resources that can be stored in here.
-     */
-    enum CanvasResource {
-        ForegroundColor,    ///< The active foreground color selected for this canvas.
-        BackgroundColor,    ///< The active background color selected for this canvas.
-        PageSize,           ///< The size of the (current) page in postscript points.
-        Unit,               ///< The unit of this canvas
-        CurrentPage,        ///< The current page number
-        ActiveStyleType,    ///< the actual active style type see KoFlake::StyleType for valid values
-        ActiveRange,        ///< The area where the rulers should show white
-        ShowTextShapeOutlines,     ///< Paint of text shape outlines ?
-        ShowFormattingCharacters,  ///< Paint of formatting characters ?
-        ShowTableBorders,  ///< Paint of table borders (when not really there) ?
-        ShowSectionBounds, ///< Paint of sections bounds ?
-        ShowInlineObjectVisualization, ///< paint a different  background for inline objects
-        ApplicationSpeciality, ///< Special features and limitations of the application
-        KarbonStart = 1000,      ///< Base number for Karbon specific values.
-        KexiStart = 2000,        ///< Base number for Kexi specific values.
-        FlowStart = 3000,        ///< Base number for Flow specific values.
-        PlanStart = 4000,        ///< Base number for Plan specific values.
-        StageStart = 5000,       ///< Base number for Stage specific values.
-        KritaStart = 6000,       ///< Base number for Krita specific values.
-        SheetsStart = 7000,      ///< Base number for Sheets specific values.
-        WordsStart = 8000,       ///< Base number for Words specific values.
-        KoPageAppStart = 9000    ///< Base number for KoPageApp specific values.
-    };
-
     enum ApplicationSpecial {
         NoSpecial = 0,
         NoAdvancedText = 1
@@ -107,7 +84,7 @@ public Q_SLOTS:
      * Set a resource of any type.
      * @param key the integer key
      * @param value the new value for the key.
-     * @see KoCanvasResourceProvider::CanvasResource
+     * @see KoCanvasResource::CanvasResourceId
      */
     void setResource(int key, const QVariant &value);
 
@@ -115,7 +92,7 @@ public Q_SLOTS:
      * Set a resource of type KoColor.
      * @param key the integer key
      * @param color the new value for the key.
-     * @see KoCanvasResourceProvider::CanvasResource
+     * @see KoCanvasResource::CanvasResourceId
      */
     void setResource(int key, const KoColor &color);
 
@@ -123,7 +100,7 @@ public Q_SLOTS:
      * Set a resource of type KoShape*.
      * @param key the integer key
      * @param id the new value for the key.
-     * @see KoCanvasResourceProvider::CanvasResource
+     * @see KoCanvasResource::CanvasResourceId
      */
     void setResource(int key, KoShape *shape);
 
@@ -131,7 +108,7 @@ public Q_SLOTS:
      * Set a resource of type KoUnit
      * @param key the integer key
      * @param id the new value for the key.
-     * @see KoCanvasResourceProvider::CanvasResource
+     * @see KoCanvasResource::CanvasResourceId
      */
     void setResource(int key, const KoUnit &unit);
 
@@ -140,7 +117,7 @@ public:
      * Returns a qvariant containing the specified resource or a standard one if the
      * specified resource does not exist.
      * @param key the key
-     * @see KoCanvasResourceProvider::CanvasResource
+     * @see KoCanvasResource::CanvasResourceId
      */
     QVariant resource(int key) const;
 
@@ -168,56 +145,56 @@ public:
     /**
      * Return the resource determined by param key as a boolean.
      * @param key the identifying key for the resource
-     * @see KoCanvasResourceProvider::CanvasResource
+     * @see KoCanvasResource::CanvasResourceId
      */
     bool boolResource(int key) const;
 
     /**
      * Return the resource determined by param key as an integer.
      * @param key the identifying key for the resource
-     * @see KoCanvasResourceProvider::CanvasResource
+     * @see KoCanvasResource::CanvasResourceId
      */
     int intResource(int key) const;
 
     /**
      * Return the resource determined by param key as a KoColor.
      * @param key the identifying key for the resource
-     * @see KoCanvasResourceProvider::CanvasResource
+     * @see KoCanvasResource::CanvasResourceId
      */
     KoColor koColorResource(int key) const;
 
     /**
      * Return the resource determined by param key as a pointer to a KoShape.
      * @param key the identifying key for the resource
-     * @see KoCanvasResourceProvider::CanvasResource
+     * @see KoCanvasResource::CanvasResourceId
      */
     KoShape *koShapeResource(int key) const;
 
     /**
      * Return the resource determined by param key as a QString .
      * @param key the identifying key for the resource
-     * @see KoCanvasResourceProvider::CanvasResource
+     * @see KoCanvasResource::CanvasResourceId
      */
     QString stringResource(int key) const;
 
     /**
      * Return the resource determined by param key as a QSizeF.
      * @param key the identifying key for the resource
-     * @see KoCanvasResourceProvider::CanvasResource
+     * @see KoCanvasResource::CanvasResourceId
      */
     QSizeF sizeResource(int key) const;
 
     /**
      * Return the resource determined by param key as a KoUnit.
      * @param key the identifying key for the resource
-     * @see KoCanvasResourceProvider::CanvasResource
+     * @see KoCanvasResource::CanvasResourceId
      */
     KoUnit unitResource(int key) const;
 
     /**
      * Returns true if there is a resource set with the requested key.
      * @param key the identifying key for the resource
-     * @see KoCanvasResourceProvider::CanvasResource
+     * @see KoCanvasResource::CanvasResourceId
      */
     bool hasResource(int key) const;
 
@@ -225,40 +202,60 @@ public:
      * Remove the resource with @p key from the provider.
      * @param key the key that will be used to remove the resource
      * There will be a signal emitted with a variable that will return true on QVariable::isNull();
-     * @see KoCanvasResourceProvider::CanvasResource
+     * @see KoCanvasResource::CanvasResourceId
      */
     void clearResource(int key);
 
     /**
-     * @see KoReosurceManager::addDerivedResourceConverter()
+     * @see KoResourceManager::addDerivedResourceConverter()
      */
     void addDerivedResourceConverter(KoDerivedResourceConverterSP converter);
 
     /**
-     * @see KoReosurceManager::hasDerivedResourceConverter()
+     * @see KoResourceManager::hasDerivedResourceConverter()
      */
     bool hasDerivedResourceConverter(int key);
 
     /**
-     * @see KoReosurceManager::removeDerivedResourceConverter()
+     * @see KoResourceManager::removeDerivedResourceConverter()
      */
     void removeDerivedResourceConverter(int key);
 
     /**
-     * @see KoReosurceManager::addResourceUpdateMediator
+     * @see KoResourceManager::addResourceUpdateMediator
      */
     void addResourceUpdateMediator(KoResourceUpdateMediatorSP mediator);
 
     /**
-     * @see KoReosurceManager::hasResourceUpdateMediator
+     * @see KoResourceManager::hasResourceUpdateMediator
      */
     bool hasResourceUpdateMediator(int key);
 
     /**
-
-     * @see KoReosurceManager::removeResourceUpdateMediator
+     * @see KoResourceManager::removeResourceUpdateMediator
      */
     void removeResourceUpdateMediator(int key);
+
+    /**
+     * @see KoResourceManager::addActiveCanvasResourceDependency
+     */
+    void addActiveCanvasResourceDependency(KoActiveCanvasResourceDependencySP dep);
+
+    /**
+     * @see KoResourceManager::hasActiveCanvasResourceDependency
+     */
+    bool hasActiveCanvasResourceDependency(int sourceKey, int targetKey) const;
+
+    /**
+     * @see KoResourceManager::removeActiveCanvasResourceDependency
+     */
+    void removeActiveCanvasResourceDependency(int sourceKey, int targetKey);
+
+    /**
+     * An interface for accessing this KoCanvasResourceProvider via
+     * KoCanvasResourcesInterface.
+     */
+    KoCanvasResourcesInterfaceSP canvasResourcesInterface() const;
 
 Q_SIGNALS:
     /**
@@ -266,7 +263,7 @@ Q_SIGNALS:
      * new or different from the previous set value.
      * @param key the identifying key for the resource
      * @param value the variants new value.
-     * @see KoCanvasResourceProvider::CanvasResource
+     * @see KoCanvasResource::CanvasResourceId
      */
     void canvasResourceChanged(int key, const QVariant &value);
 
@@ -277,7 +274,7 @@ Q_SIGNALS:
      * **before** the actual change has happended at the resource manager.
      * @param key the identifying key for the resource
      * @param value the variants new value.
-     * @see KoCanvasResourceProvider::CanvasResource
+     * @see KoCanvasResource::CanvasResourceId
      */
     void canvasResourceChangeAttempted(int key, const QVariant &value);
 

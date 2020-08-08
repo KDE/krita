@@ -185,8 +185,8 @@ KisPropertiesConfigurationSP KisPalettizeWidget::configuration() const
 
 KisConfigWidget* KisFilterPalettize::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, bool useForMasks) const
 {
-    Q_UNUSED(dev)
-    Q_UNUSED(useForMasks)
+    Q_UNUSED(dev);
+    Q_UNUSED(useForMasks);
 
     return new KisPalettizeWidget(parent);
 }

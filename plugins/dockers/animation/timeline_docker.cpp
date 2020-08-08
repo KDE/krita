@@ -64,21 +64,22 @@ TimelineDockerTitleBar::TimelineDockerTitleBar(QWidget* parent) :
 {
     // Transport Controls...
     transport = new KisTransportControls(this);
-    widgetArea->addWidget(transport);
+    widgetAreaLayout->addWidget(transport);
 
-    widgetArea->addSpacing(SPACING_UNIT);
+    widgetAreaLayout->addSpacing(SPACING_UNIT);
 
     // Frame Register...
     frameRegister = new KisIntParseSpinBox(this);
     frameRegister->setToolTip(i18n("Frame register"));
     frameRegister->setPrefix("#  ");
     frameRegister->setRange(0, MAX_FRAMES);
-    widgetArea->addWidget(frameRegister);
+    widgetAreaLayout->addWidget(frameRegister);
 
-    widgetArea->addSpacing(SPACING_UNIT);
+    widgetAreaLayout->addSpacing(SPACING_UNIT);
 
     {   // Frame ops...
-        QHBoxLayout *layout = new QHBoxLayout(this);
+        QWidget *widget = new QWidget(this);
+        QHBoxLayout *layout = new QHBoxLayout(widget);
         layout->setSpacing(0);
         layout->setContentsMargins(0,0,0,0);
 
@@ -91,17 +92,14 @@ TimelineDockerTitleBar::TimelineDockerTitleBar(QWidget* parent) :
         btnRemoveKeyframe = new QToolButton(this);
         layout->addWidget(btnRemoveKeyframe);
 
-        QWidget *widget = new QWidget();
-        widget->setLayout(layout);
-
-        widgetArea->addWidget(widget);
+        widgetAreaLayout->addWidget(widget);
     }
 
-    widgetArea->addSpacing(SPACING_UNIT);
+    widgetAreaLayout->addSpacing(SPACING_UNIT);
 
     // Drop Frames..
     btnDropFrames = new QToolButton(this);
-    widgetArea->addWidget(btnDropFrames);
+    widgetAreaLayout->addWidget(btnDropFrames);
 
     // Playback Speed..
     sbSpeed = new KisSliderSpinBox(this);
@@ -111,12 +109,14 @@ TimelineDockerTitleBar::TimelineDockerTitleBar(QWidget* parent) :
     sbSpeed->setPrefix("Speed: ");
     sbSpeed->setSuffix(" %");
     sbSpeed->setToolTip(i18n("Preview playback speed"));
-    widgetArea->addWidget(sbSpeed);
+    widgetAreaLayout->addWidget(sbSpeed);
 
-    widgetArea->addStretch();
+    widgetAreaLayout->addStretch();
 
     {   // Menus..
-        QHBoxLayout *layout = new QHBoxLayout(this);
+        QWidget *widget = new QWidget(this);
+
+        QHBoxLayout *layout = new QHBoxLayout(widget);
         layout->setSpacing(0);
         layout->setContentsMargins(SPACING_UNIT,0,0,0);
 
@@ -137,11 +137,10 @@ TimelineDockerTitleBar::TimelineDockerTitleBar(QWidget* parent) :
             btnSettingsMenu->setToolTip(i18n("Animation settings menu"));
 
             QWidget *settingsMenuWidget = new QWidget(this);
-            settingsMenuWidget->setLayout(new QHBoxLayout(settingsMenuWidget));
+            QHBoxLayout *settingsMenuLayout = new QHBoxLayout(settingsMenuWidget);
 
             QWidget *fields = new QWidget(settingsMenuWidget);
-            QFormLayout *fieldsLayout = new QFormLayout(settingsMenuWidget);
-            fields->setLayout(fieldsLayout);
+            QFormLayout *fieldsLayout = new QFormLayout(fields);
 
             sbStartFrame = new KisIntParseSpinBox(settingsMenuWidget);
             sbStartFrame->setMaximum(10000);
@@ -157,14 +156,43 @@ TimelineDockerTitleBar::TimelineDockerTitleBar(QWidget* parent) :
             fieldsLayout->addRow(i18n("Frame Rate: "), sbFrameRate);
 
             QWidget *buttons = new QWidget(settingsMenuWidget);
-            buttons->setLayout(new QVBoxLayout(settingsMenuWidget));
+            QVBoxLayout *buttonsLayout = new QVBoxLayout(buttons);
+            buttonsLayout->setAlignment(Qt::AlignTop);
 
-            btnAutoFrame = new QToolButton(settingsMenuWidget);
-            buttons->layout()->addWidget(btnAutoFrame);
-            buttons->layout()->setAlignment(Qt::AlignTop);
+            {   // AutoKey..
+                // AutoKey Actions & Action Group..
+                autoKeyBlank = new QAction(i18n("AutoKey Blank"), this);
+                autoKeyBlank->setCheckable(true);
+                autoKeyDuplicate = new QAction(i18n("AutoKey Duplicate"), this);
+                autoKeyDuplicate->setCheckable(true);
+                QActionGroup *autoKeyModes = new QActionGroup(this);
+                autoKeyModes->addAction(autoKeyBlank);
+                autoKeyModes->addAction(autoKeyDuplicate);
+                autoKeyModes->setExclusive(true);
 
-            settingsMenuWidget->layout()->addWidget(fields);
-            settingsMenuWidget->layout()->addWidget(buttons);
+                connect(autoKeyModes, &QActionGroup::triggered, [this](QAction* modeAction){
+                    if (!modeAction) return;
+                    KisImageConfig  imageCfg(false);
+                    if (modeAction == autoKeyBlank) {
+                        imageCfg.setAutoKeyModeDuplicate(false);
+                    } else if (modeAction == autoKeyDuplicate) {
+                        imageCfg.setAutoKeyModeDuplicate(true);
+                    }
+                });
+
+                // AutoKey Mode Menu..
+                QMenu *autoKeyModeMenu = new QMenu(settingsMenuWidget);
+                autoKeyModeMenu->addActions(autoKeyModes->actions());
+
+                // AutoKey Button..
+                btnAutoKey = new QToolButton(settingsMenuWidget);
+                btnAutoKey->setMenu(autoKeyModeMenu);
+                btnAutoKey->setPopupMode(QToolButton::MenuButtonPopup);
+                buttonsLayout->addWidget(btnAutoKey);
+            }
+
+            settingsMenuLayout->addWidget(fields);
+            settingsMenuLayout->addWidget(buttons);
 
             layout->addWidget(btnSettingsMenu);
 
@@ -177,9 +205,7 @@ TimelineDockerTitleBar::TimelineDockerTitleBar(QWidget* parent) :
             btnSettingsMenu->setMenu(settingsPopMenu);
         }
 
-        QWidget *widget = new QWidget();
-        widget->setLayout(layout);
-        widgetArea->addWidget(widget);
+        widgetAreaLayout->addWidget(widget);
     }
 }
 
@@ -452,14 +478,34 @@ void TimelineDocker::setViewManager(KisViewManager *view)
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(action, SIGNAL(triggered(bool)), SLOT(nextFrame()));
 
+    action = actionManager->createAction("previous_keyframe");
+    action->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    connect(action, SIGNAL(triggered(bool)), SLOT(previousKeyframe()));
+
+    action = actionManager->createAction("next_keyframe");
+    action->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    connect(action, SIGNAL(triggered(bool)), SLOT(nextKeyframe()));
+
+    action = actionManager->createAction("previous_matching_keyframe");
+    action->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    connect(action, SIGNAL(triggered(bool)), SLOT(previousMatchingKeyframe()));
+
+    action = actionManager->createAction("next_matching_keyframe");
+    action->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    connect(action, SIGNAL(triggered(bool)), SLOT(nextMatchingKeyframe()));
+
     action = actionManager->createAction("auto_key");
-    m_d->titlebar->btnAutoFrame->setDefaultAction(action);
+    m_d->titlebar->btnAutoKey->setDefaultAction(action);
     connect(action, SIGNAL(triggered(bool)), SLOT(setAutoKey(bool)));
 
     {
         KisImageConfig config(true);
         action->setChecked(config.autoKeyEnabled());
         action->setIcon(config.autoKeyEnabled() ? KisIconUtils::loadIcon("auto-key-on") : KisIconUtils::loadIcon("auto-key-off"));
+
+        const bool autoKeyModeDuplicate = config.autoKeyModeDuplicate();
+        m_d->titlebar->autoKeyBlank->setChecked(!autoKeyModeDuplicate);
+        m_d->titlebar->autoKeyDuplicate->setChecked(autoKeyModeDuplicate);
     }
 
     action = actionManager->createAction("drop_frames");
@@ -500,9 +546,17 @@ void TimelineDocker::previousFrame()
     if (!m_d->canvas) return;
     KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
 
-    int time = animInterface->currentUITime() - 1;
-    if (time >= 0) {
-        animInterface->requestTimeSwitchWithUndo(time);
+    const int startFrame = animInterface->playbackRange().start();
+    const int endFrame = animInterface->playbackRange().end();
+
+    int frame = animInterface->currentUITime() - 1;
+
+    if (frame < startFrame || frame >  endFrame) {
+        frame = endFrame;
+    }
+
+    if (frame >= 0) {
+        animInterface->requestTimeSwitchWithUndo(frame);
     }
 }
 
@@ -511,8 +565,131 @@ void TimelineDocker::nextFrame()
     if (!m_d->canvas) return;
     KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
 
-    int time = animInterface->currentUITime() + 1;
-    animInterface->requestTimeSwitchWithUndo(time);
+    const int startFrame = animInterface->playbackRange().start();
+    const int endFrame = animInterface->playbackRange().end();
+
+    int frame = animInterface->currentUITime() + 1;
+
+    if (frame > endFrame || frame < startFrame ) {
+        frame = startFrame;
+    }
+
+    animInterface->requestTimeSwitchWithUndo(frame);
+}
+
+void TimelineDocker::previousKeyframe()
+{
+    if (!m_d->canvas) return;
+
+    KisNodeSP node = m_d->canvas->viewManager()->activeNode();
+    if (!node) return;
+
+    KisKeyframeChannel *keyframes =
+        node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    if (!keyframes) return;
+
+    KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
+    int time = animInterface->currentUITime();
+
+    KisKeyframeSP currentKeyframe = keyframes->keyframeAt(time);
+    KisKeyframeSP destinationKeyframe;
+
+    if (!currentKeyframe) {
+        destinationKeyframe = keyframes->activeKeyframeAt(time);
+    } else {
+        destinationKeyframe = keyframes->previousKeyframe(currentKeyframe);
+    }
+
+    if (destinationKeyframe) {
+        animInterface->requestTimeSwitchWithUndo(destinationKeyframe->time());
+    }
+}
+
+void TimelineDocker::nextKeyframe()
+{
+    if (!m_d->canvas) return;
+
+    KisNodeSP node = m_d->canvas->viewManager()->activeNode();
+    if (!node) return;
+
+    KisKeyframeChannel *keyframes =
+        node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    if (!keyframes) return;
+
+    KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
+    int time = animation->currentUITime();
+
+    KisKeyframeSP currentKeyframe = keyframes->activeKeyframeAt(time);
+    KisKeyframeSP destinationKeyframe;
+
+    if (currentKeyframe) {
+        destinationKeyframe = keyframes->nextKeyframe(currentKeyframe);
+    }
+
+    if (destinationKeyframe) {
+        animation->requestTimeSwitchWithUndo(destinationKeyframe->time());
+    }
+}
+
+void TimelineDocker::previousMatchingKeyframe()
+{
+    if (!m_d->canvas) return;
+
+    KisNodeSP node = m_d->canvas->viewManager()->activeNode();
+    if (!node) return;
+
+    KisKeyframeChannel *keyframes =
+        node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    if (!keyframes) return;
+
+    KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
+    int time = animInterface->currentUITime();
+
+    KisKeyframeSP currentKeyframe = keyframes->keyframeAt(time);
+    KisKeyframeSP destinationKeyframe = keyframes->activeKeyframeAt(time);
+    const int desiredColor = currentKeyframe ? currentKeyframe->colorLabel() : destinationKeyframe->colorLabel();
+    while (destinationKeyframe &&
+           (currentKeyframe == destinationKeyframe || destinationKeyframe->colorLabel() != desiredColor)) {
+        destinationKeyframe = keyframes->previousKeyframe(destinationKeyframe);
+    }
+
+    if (destinationKeyframe) {
+        animInterface->requestTimeSwitchWithUndo(destinationKeyframe->time());
+    }
+
+}
+
+void TimelineDocker::nextMatchingKeyframe()
+{
+    if (!m_d->canvas) return;
+
+    KisNodeSP node = m_d->canvas->viewManager()->activeNode();
+    if (!node) return;
+
+    KisKeyframeChannel *keyframes =
+        node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    if (!keyframes) return;
+
+    KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
+    int time = animation->currentUITime();
+
+    KisKeyframeSP currentKeyframe = keyframes->activeKeyframeAt(time);
+
+    if (!currentKeyframe) {
+        return;
+    }
+
+    KisKeyframeSP destinationKeyframe = currentKeyframe;
+    const int desiredColor = currentKeyframe->colorLabel();
+
+    while ( destinationKeyframe &&
+            (currentKeyframe == destinationKeyframe || destinationKeyframe->colorLabel() != desiredColor)){
+        destinationKeyframe = keyframes->nextKeyframe(destinationKeyframe);
+    }
+
+    if (destinationKeyframe) {
+        animation->requestTimeSwitchWithUndo(destinationKeyframe->time());
+    }
 }
 
 void TimelineDocker::goToFrame(int frameIndex)
@@ -573,13 +750,13 @@ void TimelineDocker::setDropFrames(bool dropFrames)
     }
 }
 
-void TimelineDocker::setAutoKey(bool autoKey)
+void TimelineDocker::setAutoKey(bool value)
 {
     KisImageConfig cfg(false);
-    if (autoKey != cfg.autoKeyEnabled()) {
-        cfg.setAutoKeyEnabled(autoKey);
+    if (value != cfg.autoKeyEnabled()) {
+        cfg.setAutoKeyEnabled(value);
         const QIcon icon = cfg.autoKeyEnabled() ? KisIconUtils::loadIcon("auto-key-on") : KisIconUtils::loadIcon("auto-key-off");
-        QAction* action = m_d->titlebar->btnAutoFrame->defaultAction();
+        QAction* action = m_d->titlebar->btnAutoKey->defaultAction();
         action->setIcon(icon);
     }
 }
@@ -600,7 +777,7 @@ void TimelineDocker::handleFrameRateChange()
 
     KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
 
-    m_d->titlebar->sbFrameRate->setValue( m_d->canvas->image()->animationInterface()->framerate() );
+    m_d->titlebar->sbFrameRate->setValue(animInterface->framerate());
 }
 
 

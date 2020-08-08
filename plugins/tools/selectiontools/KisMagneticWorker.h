@@ -21,7 +21,7 @@
 #include <kis_paint_device.h>
 #include <kritaselectiontools_export.h>
 
-class KisMagneticGraph;
+struct KisMagneticGraph;
 
 class KisMagneticLazyTiles {
 private:

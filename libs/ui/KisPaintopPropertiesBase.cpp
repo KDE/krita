@@ -26,72 +26,12 @@ KisPaintopPropertiesResourcesBase::~KisPaintopPropertiesResourcesBase()
 
 }
 
-void KisPaintopPropertiesResourcesBase::readOptionSetting(KisPropertiesConfigurationSP settings, KisResourcesInterfaceSP resourcesInterface)
+KisPaintopPropertiesBase::~KisPaintopPropertiesBase()
 {
-    readOptionSettingResourceImpl(settings.data(), resourcesInterface);
 }
 
-void KisPaintopPropertiesResourcesBase::writeOptionSetting(KisPropertiesConfigurationSP settings) const
-{
-    writeOptionSettingImpl(settings.data());
-}
 
-void KisPaintopPropertiesResourcesBase::readOptionSetting(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface)
+KisPaintopPropertiesCanvasResourcesBase::~KisPaintopPropertiesCanvasResourcesBase()
 {
-    readOptionSettingResourceImpl(settings, resourcesInterface);
-}
 
-void KisPaintopPropertiesResourcesBase::writeOptionSetting(KisPropertiesConfiguration *settings) const
-{
-    writeOptionSettingImpl(settings);
-}
-
-QList<KoResourceSP> KisPaintopPropertiesResourcesBase::prepareLinkedResources(const KisPropertiesConfigurationSP settings, KisResourcesInterfaceSP resourcesInterface) const
-{
-    return prepareLinkedResourcesImpl(settings.data(), resourcesInterface);
-}
-
-QList<KoResourceSP> KisPaintopPropertiesResourcesBase::prepareLinkedResources(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const
-{
-    return prepareLinkedResourcesImpl(settings, resourcesInterface);
-}
-
-QList<KoResourceSP> KisPaintopPropertiesResourcesBase::prepareEmbeddedResources(const KisPropertiesConfigurationSP settings, KisResourcesInterfaceSP resourcesInterface) const
-{
-    return prepareEmbeddedResources(settings.data(), resourcesInterface);
-}
-
-QList<KoResourceSP> KisPaintopPropertiesResourcesBase::prepareEmbeddedResources(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const
-{
-    return prepareEmbeddedResources(settings, resourcesInterface);
-}
-
-void KisPaintopPropertiesBase::readOptionSetting(KisPropertiesConfigurationSP settings)
-{
-    readOptionSettingImpl(settings.data());
-}
-
-void KisPaintopPropertiesBase::readOptionSetting(const KisPropertiesConfiguration *settings)
-{
-    readOptionSettingImpl(settings);
-}
-
-void KisPaintopPropertiesBase::readOptionSettingResourceImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface)
-{
-    Q_UNUSED(resourcesInterface);
-    readOptionSettingImpl(settings);
-}
-
-QList<KoResourceSP> KisPaintopPropertiesBase::prepareLinkedResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const
-{
-    Q_UNUSED(settings);
-    Q_UNUSED(resourcesInterface);
-    return {};
-}
-
-QList<KoResourceSP> KisPaintopPropertiesBase::prepareEmbeddedResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const
-{
-    Q_UNUSED(settings);
-    Q_UNUSED(resourcesInterface);
-    return {};
 }

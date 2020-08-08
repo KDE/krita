@@ -52,7 +52,7 @@
      <item>
       <widget class="QLabel" name="lblColorModels">
        <property name="text">
-        <string>Depth:</string>
+        <string comment="Label of Color Depth in Color Space Selector dialogue">Depth:</string>
        </property>
        <property name="buddy">
         <cstring>cmbColorModels</cstring>

@@ -37,7 +37,7 @@
 #include <kis_paint_layer.h>
 #include <KisPart.h>
 
-#include  <sdk/tests/kistest.h>
+#include  <sdk/tests/testui.h>
 
 void TestFilter::testApply()
 {

@@ -108,7 +108,7 @@ bool KoResource::save()
 
 bool KoResource::saveToDevice(QIODevice *dev) const
 {
-    Q_UNUSED(dev)
+    Q_UNUSED(dev);
     d->md5 = QByteArray();
 
     return true;
@@ -227,6 +227,11 @@ QList<KoResourceSP> KoResource::linkedResources(KisResourcesInterfaceSP globalRe
 QList<KoResourceSP> KoResource::embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const
 {
     Q_UNUSED(globalResourcesInterface);
+    return {};
+}
+
+QList<int> KoResource::requiredCanvasResources() const
+{
     return {};
 }
 

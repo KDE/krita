@@ -1,5 +1,4 @@
 set(kritacurvepaintop_SOURCES
-      curve_brush.cpp
       curve_paintop_plugin.cpp
       kis_curve_paintop.cpp
       kis_curve_paintop_settings.cpp

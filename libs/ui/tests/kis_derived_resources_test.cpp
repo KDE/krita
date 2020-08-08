@@ -35,45 +35,19 @@
 #include <kis_paintop_settings.h>
 #include <KoResourcePaths.h>
 #include <kis_config.h>
-#include "testutil.h"
+#include <testutil.h>
 #include "opengl/kis_opengl.h"
 #include <KisGlobalResourcesInterface.h>
 
-void addResourceTypes()
-{
-    // All Krita's resource types
-    KoResourcePaths::addResourceType("gmic_definitions", "data", "/gmic/");
-    KoResourcePaths::addResourceType("icc_profiles", "data", "/color/icc");
-    KoResourcePaths::addResourceType("icc_profiles", "data", "/profiles/");
-    KoResourcePaths::addResourceType("kis_actions", "data", "/actions");
-    KoResourcePaths::addResourceType(ResourceType::Brushes, "data", "/brushes/");
-    KoResourcePaths::addResourceType("kis_defaultpresets", "data", "/defaultpresets/");
-    KoResourcePaths::addResourceType("kis_images", "data", "/images/");
-    KoResourcePaths::addResourceType(ResourceType::PaintOpPresets, "data", "/paintoppresets/");
-    KoResourcePaths::addResourceType("kis_pics", "data", "/pics/");
-    KoResourcePaths::addResourceType("kis_resourcebundles", "data", "/bundles/");
-    KoResourcePaths::addResourceType("kis_shortcuts", "data", "/shortcuts/");
-    KoResourcePaths::addResourceType("kis_taskset", "data", "/taskset/");
-    KoResourcePaths::addResourceType("kis_taskset", "data", "/taskset/");
-    KoResourcePaths::addResourceType(ResourceType::WindowLayouts, "data", "/windowlayouts/");
-    KoResourcePaths::addResourceType(ResourceType::Workspaces, "data", "/workspaces/");
-    KoResourcePaths::addResourceType(ResourceType::FilterEffects, "data", "/effects/");
-    KoResourcePaths::addResourceType(ResourceType::Gradients, "data", "/gradients/");
-    KoResourcePaths::addResourceType(ResourceType::Palettes, "data", "/palettes/");
-    KoResourcePaths::addResourceType(ResourceType::Patterns, "data", "/patterns/");
-    KoResourcePaths::addResourceType("metadata_schema", "data", "/metadata/schemas/");
-    KoResourcePaths::addResourceType("psd_layer_style_collections", "data", "/asl");
-    KoResourcePaths::addResourceType("tags", "data", "/tags/");
+#include  <sdk/tests/testui.h>
 
+void KisDerivedResourcesTest::test()
+{
     KisOpenGL::testingInitializeDefaultSurfaceFormat();
 
     KisConfig cfg(false);
     cfg.disableOpenGL();
-}
 
-void KisDerivedResourcesTest::test()
-{
-    addResourceTypes();
 
     KisDocument* doc = createEmptyDocument();
 
@@ -102,20 +76,20 @@ void KisDerivedResourcesTest::test()
 
     QSignalSpy spy(manager, SIGNAL(canvasResourceChanged(int,QVariant)));
 
-    manager->setResource(KisCanvasResourceProvider::CurrentPaintOpPreset, i);
+    manager->setResource(KoCanvasResource::CurrentPaintOpPreset, i);
 
     QMap<int, QVariant> expectedSignals;
-    expectedSignals[KisCanvasResourceProvider::CurrentPaintOpPreset] = QVariant::fromValue(preset);
-    expectedSignals[KisCanvasResourceProvider::EraserMode] = false;
-    expectedSignals[KisCanvasResourceProvider::LodSizeThresholdSupported] = true;
-    expectedSignals[KisCanvasResourceProvider::EffectiveLodAvailablility] = true;
-    expectedSignals[KisCanvasResourceProvider::LodSizeThreshold] = 100;
-    expectedSignals[KisCanvasResourceProvider::LodAvailability] = true;
-    expectedSignals[KisCanvasResourceProvider::Opacity] = 1.0;
-    expectedSignals[KisCanvasResourceProvider::Size] = 300.0;
-    expectedSignals[KisCanvasResourceProvider::Flow] = 1.0;
-    expectedSignals[KisCanvasResourceProvider::CurrentEffectiveCompositeOp] = COMPOSITE_OVER;
-    expectedSignals[KisCanvasResourceProvider::CurrentCompositeOp] = COMPOSITE_OVER;
+    expectedSignals[KoCanvasResource::CurrentPaintOpPreset] = QVariant::fromValue(preset);
+    expectedSignals[KoCanvasResource::EraserMode] = false;
+    expectedSignals[KoCanvasResource::LodSizeThresholdSupported] = true;
+    expectedSignals[KoCanvasResource::EffectiveLodAvailablility] = true;
+    expectedSignals[KoCanvasResource::LodSizeThreshold] = 100;
+    expectedSignals[KoCanvasResource::LodAvailability] = true;
+    expectedSignals[KoCanvasResource::Opacity] = 1.0;
+    expectedSignals[KoCanvasResource::Size] = 300.0;
+    expectedSignals[KoCanvasResource::Flow] = 1.0;
+    expectedSignals[KoCanvasResource::CurrentEffectiveCompositeOp] = COMPOSITE_OVER;
+    expectedSignals[KoCanvasResource::CurrentCompositeOp] = COMPOSITE_OVER;
 
     auto it = spy.begin();
     for (; it != spy.end(); ++it) {
@@ -140,7 +114,7 @@ void KisDerivedResourcesTest::test()
     preset->settings()->setPaintOpOpacity(0.8);
 
     QCOMPARE(spy.size(), 1);
-    QCOMPARE(spy[0][0].toInt(), (int)KisCanvasResourceProvider::Opacity);
+    QCOMPARE(spy[0][0].toInt(), (int)KoCanvasResource::Opacity);
     QCOMPARE(spy[0][1].toDouble(), 0.8);
     spy.clear();
 

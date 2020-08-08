@@ -261,13 +261,13 @@ struct graph_traits<KisMagneticGraph> {
 
 typename KisMagneticGraph::vertex_descriptor source(typename KisMagneticGraph::edge_descriptor e, KisMagneticGraph g)
 {
-    Q_UNUSED(g)
+    Q_UNUSED(g);
     return e.first;
 }
 
 typename KisMagneticGraph::vertex_descriptor target(typename KisMagneticGraph::edge_descriptor e, KisMagneticGraph g)
 {
-    Q_UNUSED(g)
+    Q_UNUSED(g);
     return e.second;
 }
 

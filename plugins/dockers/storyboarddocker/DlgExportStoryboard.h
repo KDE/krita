@@ -23,6 +23,19 @@
 #include <KoDialog.h>
 #include "ui_wdgexportstoryboard.h"
 
+enum ExportFormat : unsigned int
+{
+    PDF,
+    SVG
+};
+
+enum PageSize : int
+{
+    None = -1,
+    A3,
+    A4
+};
+
 class WdgExportStoryboard : public QWidget, public Ui::WdgExportStoryboard
 {
     Q_OBJECT
@@ -40,11 +53,18 @@ class DlgExportStoryboard: public KoDialog
 {
     Q_OBJECT
 public:
-    DlgExportStoryboard();
+    DlgExportStoryboard(ExportFormat format);
     ~DlgExportStoryboard() override;
+    int firstItem() const;
+    int lastItem() const;
+    int rows() const;
+    int columns() const;
+    PageSize pageSize() const;
+    QString exportSvgFile() const;
 
 private Q_SLOTS:
     void slotExportClicked();
+    void slotSpecifySvgClicked();
 
 private:
     WdgExportStoryboard *m_page {0};

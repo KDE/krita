@@ -35,6 +35,7 @@ class StoryboardModel;
 class StoryboardDelegate;
 class KisNodeManager;
 class DlgExportStoryboard;
+enum ExportFormat : unsigned int;
 
 class StoryboardDockerDock : public QDockWidget, public KisMainwindowObserver{
     Q_OBJECT
@@ -68,7 +69,7 @@ private Q_SLOTS:
 
     void slotExportAsPdf();
     void slotExportAsSvg();
-    void slotExport(QString);
+    void slotExport(ExportFormat format);
 
     void slotLockClicked(bool);
     void slotModeChanged(QAbstractButton*);
@@ -82,7 +83,6 @@ private:
     QMenu *m_exportMenu;
     KisAction *m_exportAsPdfAction;
     KisAction *m_exportAsSvgAction;
-    DlgExportStoryboard *exportwidget;
 
     QPointer<CommentModel> m_commentModel;
     CommentMenu *m_commentMenu;

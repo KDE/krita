@@ -17,8 +17,10 @@
  */
 #include "DlgExportStoryboard.h"
 #include <QDebug>
+#include "KoFileDialog.h"
+#include <QSpinBox>
 
-DlgExportStoryboard::DlgExportStoryboard()
+DlgExportStoryboard::DlgExportStoryboard(ExportFormat format)
         : KoDialog()
 {
     m_page = new WdgExportStoryboard(this);
@@ -28,13 +30,46 @@ DlgExportStoryboard::DlgExportStoryboard()
     setButtonText(Apply, i18n("Export"));
     setDefaultButton(Apply);
 
-    connect(this, SIGNAL(applyClicked()), this, SLOT(slotExportClicked()));
+    m_page->lblSvgFileName->hide();
+    m_page->lblSvgFileName->setWordWrap(true);
 
+    connect(this, SIGNAL(applyClicked()), this, SLOT(slotExportClicked()));
+    connect(m_page->btnSpecifySVG, SIGNAL(clicked()), this, SLOT(slotSpecifySvgClicked()));
     setMainWidget(m_page);
 }
 
 DlgExportStoryboard::~DlgExportStoryboard()
 {
+}
+
+int DlgExportStoryboard::firstItem() const
+{
+    return m_page->spinboxFirstItem->value();
+}
+
+int DlgExportStoryboard::lastItem() const
+{
+    return m_page->spinboxLastItem->value();
+}
+
+int DlgExportStoryboard::rows() const
+{
+    return m_page->spinboxRow->value();
+}
+
+int DlgExportStoryboard::columns() const
+{
+    return m_page->spinboxColumn->value();
+}
+
+PageSize DlgExportStoryboard::pageSize() const
+{
+    return (PageSize)m_page->cmbPageSize->currentIndex();
+}
+
+QString DlgExportStoryboard::exportSvgFile() const
+{
+    return m_page->lblSvgFileName->text();
 }
 
 void DlgExportStoryboard::slotExportClicked()
@@ -44,3 +79,32 @@ void DlgExportStoryboard::slotExportClicked()
     accept();
 }
 
+void DlgExportStoryboard::slotSpecifySvgClicked()
+{
+    KoFileDialog filedlg(this, KoFileDialog::OpenFile, "layout specification file");
+    filedlg.setCaption(i18nc("@title:window", "Choose SVG File to Specify Layout"));
+    filedlg.setDefaultDir(QDir::cleanPath(QDir::homePath()));
+
+    QStringList mimeTypes;
+    mimeTypes << "image/svg+xml";
+    filedlg.setMimeTypeFilters(mimeTypes);
+    QString fileName = filedlg.filename();
+
+    if (fileName.isEmpty()) {
+        return;
+    }
+
+    QFile f(fileName);
+    if (f.exists()) {
+        m_page->lblSvgFileName->setText(fileName);
+        m_page->lblSvgFileName->show();
+
+        //disable rows and column and size spinboxes
+        m_page->spinboxRow->setValue(0);
+        m_page->spinboxColumn->setValue(0);
+
+        m_page->spinboxRow->setEnabled(false);
+        m_page->spinboxColumn->setEnabled(false);
+        m_page->cmbPageSize->setEnabled(false);
+    }
+}

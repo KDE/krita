@@ -213,7 +213,6 @@ StoryboardDockerDock::~StoryboardDockerDock()
     delete m_commentModel;
     delete m_storyboardModel;
     delete m_storyboardDelegate;
-    delete exportwidget;
 }
 
 void StoryboardDockerDock::setCanvas(KoCanvasBase *canvas)
@@ -296,21 +295,24 @@ void StoryboardDockerDock::slotUpdateCommentModelList()
 
 void StoryboardDockerDock::slotExportAsPdf()
 {
-    qDebug()<<"export as pdf";
-    slotExport("pdf");
+    slotExport(ExportFormat::PDF);
 }
 
 void StoryboardDockerDock::slotExportAsSvg()
 {
-    qDebug()<<"export as svg";
-    slotExport("svg");
+    slotExport(ExportFormat::SVG);
 }
 
-void StoryboardDockerDock::slotExport(QString mode)
+void StoryboardDockerDock::slotExport(ExportFormat format)
 {
-    exportwidget = new DlgExportStoryboard();
-    exportwidget->show();
-    qDebug()<<"mode is "<<mode;
+    DlgExportStoryboard dlg(format);
+
+    if (dlg.exec() == QDialog::Accepted) {
+        dlg.hide();
+        QApplication::setOverrideCursor(Qt::WaitCursor);
+    }
+
+    QApplication::restoreOverrideCursor();
 }
 
 void StoryboardDockerDock::slotLockClicked(bool isLocked){

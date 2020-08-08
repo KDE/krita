@@ -143,7 +143,7 @@ void KisFillPainter::fillRect(const QRect &rc, const KoPatternSP pattern, const 
     if (rc.width() < 1) return;
     if (rc.height() < 1) return;
 
-    KisPaintDeviceSP patternLayer = new KisPaintDevice(device()->compositionSourceColorSpace(), pattern->name());
+    KisPaintDeviceSP patternLayer = new KisPaintDevice(device()->colorSpace(), pattern->name());
     patternLayer->convertFromQImage(pattern->pattern(), 0);
 
     fillRect(rc.x(), rc.y(), rc.width(), rc.height(), patternLayer, QRect(0, 0, pattern->width(), pattern->height()), transform);
@@ -151,6 +151,14 @@ void KisFillPainter::fillRect(const QRect &rc, const KoPatternSP pattern, const 
 
 void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisPaintDeviceSP device, const QRect& deviceRect, const QTransform transform)
 {
+    /**
+     * Since this function doesn't do any kind of compostiting, so the pixel size
+     * of the source and destination devices must be exactly the same. The color
+     * space should ideally be also the same.
+     */
+    KIS_SAFE_ASSERT_RECOVER_RETURN(device->pixelSize() == this->device()->pixelSize());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(*device->colorSpace() == *this->device()->colorSpace());
+
     KisPaintDeviceSP wrapped = device;
     KisDefaultBoundsBaseSP oldBounds = wrapped->defaultBounds();
     wrapped->setDefaultBounds(new KisWrapAroundBoundsWrapper(oldBounds, deviceRect));

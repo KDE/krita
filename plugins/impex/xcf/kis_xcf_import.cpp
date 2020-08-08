@@ -308,7 +308,7 @@ KisImportExportErrorCode KisXCFImport::convert(KisDocument *document, QIODevice 
                         } while (it->nextPixel());
                         it->nextRow();
                     }
-                    delete tile;
+                    freeTile(tile);
                 }
             }
             mask->paintDevice()->setX(left);

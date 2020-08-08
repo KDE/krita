@@ -110,7 +110,7 @@ public:
         , zoomManager(_q, &this->viewConverter, &this->canvasController)
         , viewManager(viewManager)
         , paintingAssistantsDecoration(new KisPaintingAssistantsDecoration(_q))
-        , referenceImagesDecoration(new KisReferenceImagesDecoration(_q, document))
+        , referenceImagesDecoration(new KisReferenceImagesDecoration(_q, document, /* viewReady = */ false))
         , floatingMessageCompressor(100, KisSignalCompressor::POSTPONE)
     {
     }

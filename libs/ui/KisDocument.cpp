@@ -334,7 +334,6 @@ public:
 
     QColor globalAssistantsColor;
 
-    KisSharedPtr<KisReferenceImagesLayer> referenceImagesLayer;
     KisGridConfig gridConfig;
 
     StdLockableWrapper<QMutex> savingLock;
@@ -913,6 +912,7 @@ void KisDocument::copyFromDocumentImpl(const KisDocument &rhs, CopyPolicy policy
             d->image->copyFromImage(*(rhs.d->image));
             d->image->unlock();
             rhs.d->image->unlock();
+
             setCurrentImage(d->image, /* forceInitialUpdate = */ true);
         } else {
             // clone the image with keeping the GUIDs of the layers intact
@@ -2213,7 +2213,9 @@ void KisDocument::setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> 
 {
     KisReferenceImagesLayerSP currentReferenceLayer = referenceImagesLayer();
 
-    if (currentReferenceLayer == layer) {
+    // updateImage=false inherently means we are not changing the
+    // reference images layer, but just would like to update its signals.
+    if (currentReferenceLayer == layer && updateImage) {
         return;
     }
 

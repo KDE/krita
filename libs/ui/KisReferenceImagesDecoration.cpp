@@ -96,7 +96,7 @@ private:
     }
 };
 
-KisReferenceImagesDecoration::KisReferenceImagesDecoration(QPointer<KisView> parent, KisDocument *document)
+KisReferenceImagesDecoration::KisReferenceImagesDecoration(QPointer<KisView> parent, KisDocument *document, bool viewReady)
     : KisCanvasDecoration("referenceImagesDecoration", parent)
     , d(new Private(this))
 {
@@ -105,7 +105,7 @@ KisReferenceImagesDecoration::KisReferenceImagesDecoration(QPointer<KisView> par
 
     auto referenceImageLayer = document->referenceImagesLayer();
     if (referenceImageLayer) {
-        setReferenceImageLayer(referenceImageLayer);
+        setReferenceImageLayer(referenceImageLayer, /* updateCanvas = */ viewReady);
     }
 }
 
@@ -152,7 +152,7 @@ void KisReferenceImagesDecoration::slotNodeAdded(KisNodeSP node)
     auto *referenceImagesLayer = dynamic_cast<KisReferenceImagesLayer*>(node.data());
 
     if (referenceImagesLayer) {
-        setReferenceImageLayer(referenceImagesLayer);
+        setReferenceImageLayer(referenceImagesLayer, /* updateCanvas = */ true);
     }
 }
 
@@ -164,16 +164,20 @@ void KisReferenceImagesDecoration::slotReferenceImagesChanged(const QRectF &dirt
     view()->canvasBase()->updateCanvas(documentRect);
 }
 
-void KisReferenceImagesDecoration::setReferenceImageLayer(KisSharedPtr<KisReferenceImagesLayer> layer)
+void KisReferenceImagesDecoration::setReferenceImageLayer(KisSharedPtr<KisReferenceImagesLayer> layer, bool updateCanvas)
 {
-    if (d->layer.data() != layer.data()) {
+    if (d->layer != layer.data()) {
         if (d->layer) {
-            d->layer->disconnect(this);
+            d->layer.toStrongRef()->disconnect(this);
         }
         d->layer = layer;
         connect(layer.data(), SIGNAL(sigUpdateCanvas(QRectF)),
                 this, SLOT(slotReferenceImagesChanged(QRectF)));
-        if (layer->extent() != QRectF()) { // in case the reference layer is just being loaded from the .kra file
+
+        // If the view is not ready yet (because this is being constructed
+        // from view.d's ctor and thus view.d is not available now),
+        // do not update canvas because it will lead to a crash.
+        if (updateCanvas) {
             slotReferenceImagesChanged(layer->extent());
         }
     }

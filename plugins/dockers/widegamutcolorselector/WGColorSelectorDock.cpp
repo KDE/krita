@@ -5,6 +5,7 @@
  */
 
 #include "WGColorSelectorDock.h"
+#include "WGShadeSelector.h"
 #include "KisVisualColorSelector.h"
 #include "KisColorSourceToggle.h"
 
@@ -29,13 +30,24 @@ WGColorSelectorDock::WGColorSelectorDock()
 
     QWidget *mainWidget = new QWidget();
     mainWidget->setLayout(new QVBoxLayout());
+
     m_selector = new KisVisualColorSelector(mainWidget);
     connect(m_selector, SIGNAL(sigNewColor(KoColor)), SLOT(slotColorSelected(KoColor)));
     connect(m_colorChangeCompressor, SIGNAL(timeout()), SLOT(slotSetNewColors()));
     mainWidget->layout()->addWidget(m_selector);
+
     m_toggle = new KisColorSourceToggle(mainWidget);
     connect(m_toggle, SIGNAL(toggled(bool)), SLOT(slotColorSourceToggled(bool)));
     mainWidget->layout()->addWidget(m_toggle);
+
+    KisVisualColorModel *model = m_selector->selectorModel();
+    WGShadeSelector *shadeSelector = new WGShadeSelector(model, this);
+    mainWidget->layout()->addWidget(shadeSelector);
+    connect(model, SIGNAL(sigChannelValuesChanged(QVector4D)),
+            shadeSelector, SLOT(slotChannelValuesChanged(QVector4D)));
+    connect(shadeSelector, SIGNAL(sigChannelValuesChanged(QVector4D)),
+            model, SLOT(slotSetChannelValues(QVector4D)));
+
     setWidget(mainWidget);
     setEnabled(false);
 }

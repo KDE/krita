@@ -69,9 +69,14 @@ void TestDocument::testSetColorProfile()
     Document d(kisdoc.data(), false);
 
     QStringList profiles = Krita().profiles("RGBA", "U8");
-    Q_FOREACH(const QString &profile, profiles) {
-        d.setColorProfile(profile);
-        QVERIFY(image->colorSpace()->profile()->name() == profile);
+    Q_FOREACH(const QString &profileName, profiles) {
+        const KoColorProfile *profile = KoColorSpaceRegistry::instance()->profileByName(profileName);
+
+        // skip input-only profiles (e.g. for scanners)
+        if (!profile->isSuitableForOutput()) continue;
+
+        d.setColorProfile(profileName);
+        QVERIFY(image->colorSpace()->profile()->name() == profileName);
     }
     KisPart::instance()->removeDocument(kisdoc.data(), false);
 }

@@ -681,7 +681,9 @@ void KisPainter::bitBltImpl(qint32 dstX, qint32 dstY,
     if (d->compositeOp->id() == COMPOSITE_COPY) {
         if(!d->selection && d->isOpacityUnit &&
            srcX == dstX && srcY == dstY &&
-           d->device->fastBitBltPossible(srcDev)) {
+           d->device->fastBitBltPossible(srcDev) &&
+           (!srcDev->defaultBounds()->wrapAroundMode() ||
+            srcDev->defaultBounds()->imageBorderRect().contains(srcRect))) {
 
             if(useOldSrcData) {
                 d->device->fastBitBltOldData(srcDev, srcRect);

@@ -170,7 +170,7 @@ inline bool compareQImagesPremultiplied(QPoint & pt, const QImage & image1, cons
 inline bool checkQImageImpl(bool externalTest,
                             const QImage &srcImage, const QString &testName,
                             const QString &prefix, const QString &name,
-                            int fuzzy, int fuzzyAlpha, int maxNumFailingPixels)
+                            int fuzzy, int fuzzyAlpha, int maxNumFailingPixels, bool premultipliedMode)
 {
     QImage image = srcImage.convertToFormat(QImage::Format_ARGB32);
 
@@ -210,7 +210,7 @@ inline bool checkQImageImpl(bool externalTest,
 
     bool valid = true;
     QPoint t;
-    if(!compareQImages(t, image, ref, fuzzy, fuzzyAlpha, maxNumFailingPixels)) {
+    if(!compareQImagesImpl(t, image, ref, fuzzy, fuzzyAlpha, maxNumFailingPixels, true, premultipliedMode)) {
         bool saveStandardResults = true;
 
         if (canSkipExternalTest) {
@@ -252,8 +252,18 @@ inline bool checkQImage(const QImage &image, const QString &testName,
 {
     return checkQImageImpl(false, image, testName,
                            prefix, name,
-                           fuzzy, fuzzyAlpha, maxNumFailingPixels);
+                           fuzzy, fuzzyAlpha, maxNumFailingPixels, false);
 }
+
+inline bool checkQImagePremultiplied(const QImage &image, const QString &testName,
+                                     const QString &prefix, const QString &name,
+                                     int fuzzy = 0, int fuzzyAlpha = -1, int maxNumFailingPixels = 0)
+{
+    return checkQImageImpl(false, image, testName,
+                           prefix, name,
+                           fuzzy, fuzzyAlpha, maxNumFailingPixels, true);
+}
+
 
 inline bool checkQImageExternal(const QImage &image, const QString &testName,
                                 const QString &prefix, const QString &name,
@@ -261,7 +271,7 @@ inline bool checkQImageExternal(const QImage &image, const QString &testName,
 {
     return checkQImageImpl(true, image, testName,
                            prefix, name,
-                           fuzzy, fuzzyAlpha, maxNumFailingPixels);
+                           fuzzy, fuzzyAlpha, maxNumFailingPixels, false);
 }
 
 }

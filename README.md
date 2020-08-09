@@ -2,9 +2,7 @@
 
 | Jenkins CI Name | Master | Stable |
 | --------------- | ------ | ------ |
-
-                                      
-| OpenSuse Qt 5.14 | [![https://build.kde.org/job/Extragear/job/krita/job/kf5-qt5%20SUSEQt5.14/badge/icon)](https://build.kde.org/job/Extragear/job/krita/job/kf5-qt5%20SUSEQt5.14//) |[![Build Status](https://build.kde.org/buildStatus/icon?https://build.kde.org/job/Extragear/job/krita/job/stable-kf5-qt5%20SUSEQt5.14/badge/icon)](https://build.kde.org/job/Extragear/job/krita/job/stable-kf5-qt5%20SUSEQt5.14/)|
+| OpenSuse Qt 5.14 | [![Build Status](https://build.kde.org/job/Extragear/job/krita/job/kf5-qt5%20SUSEQt5.14/badge/icon)](https://build.kde.org/job/Extragear/job/krita/job/kf5-qt5%20SUSEQt5.14//) |[![Build Status](https://build.kde.org/buildStatus/icon?https://build.kde.org/job/Extragear/job/krita/job/stable-kf5-qt5%20SUSEQt5.14/badge/icon)](https://build.kde.org/job/Extragear/job/krita/job/stable-kf5-qt5%20SUSEQt5.14/)|
 | FreeBSD Qt 5.15 | [![Build Status](https://build.kde.org/job/Extragear/job/krita/job/kf5-qt5%20FreeBSDQt5.15/badge/icon)](https://build.kde.org/job/Extragear/job/krita/job/kf5-qt5%20FreeBSDQt5.15/) |[![Build Status](https://build.kde.org/job/Extragear/job/krita/job/stable-kf5-qt5%20FreeBSDQt5.15/badge/icon)](https://build.kde.org/job/Extragear/job/krita/job/stable-kf5-qt5%20FreeBSDQt5.15/)|
 
 

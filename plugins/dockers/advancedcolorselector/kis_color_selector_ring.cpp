@@ -107,13 +107,27 @@ KoColor KisColorSelectorRing::selectColor(int x, int y)
     m_lastHue=hue;
     emit update();
 
+    if(m_parameter == KisColorSelectorConfiguration::Hluma) {
+        return m_parent->converter()->fromHsyF(hue, 1.0, 0.55, R, G, B, Gamma);
+    }
     return m_parent->converter()->fromHsvF(hue, 1.0, 1.0);
 }
 
 void KisColorSelectorRing::setColor(const KoColor &color)
 {
     qreal h, s, v;
-    m_parent->converter()->getHsvF(color, &h, &s, &v);
+    KConfigGroup cfg = KSharedConfig::openConfig()->group("advancedColorSelector");
+    R = cfg.readEntry("lumaR", 0.2126);
+    G = cfg.readEntry("lumaG", 0.7152);
+    B = cfg.readEntry("lumaB", 0.0722);
+    Gamma = cfg.readEntry("gamma", 2.2);
+
+    if(m_parameter == KisColorSelectorConfiguration::Hluma) {
+        m_parent->converter()->getHsyF(color, &h, &s, &v, R, G, B, Gamma);
+    }
+    else {
+        m_parent->converter()->getHsvF(color, &h, &s, &v);
+    }
 
     emit paramChanged(h, -1, -1, -1, -1, -1, -1, -1, -1);
 
@@ -195,7 +209,11 @@ void KisColorSelectorRing::colorCache()
     KoColor koColor;
     QColor qColor;
     for(int i=0; i<360; i++) {
-        koColor = m_parent->converter()->fromHsvF(1.0 * i / 360.0, 1.0, 1.0);
+        if(m_parameter == KisColorSelectorConfiguration::Hluma) {
+            koColor = m_parent->converter()->fromHsyF(1.0 * i / 360.0, 1.0, 0.55, R, G, B, Gamma);
+        } else {
+            koColor = m_parent->converter()->fromHsvF(1.0 * i / 360.0, 1.0, 1.0);
+        }
         qColor = m_parent->converter()->toQColor(koColor);
         m_cachedColors.append(qColor.rgb());
     }

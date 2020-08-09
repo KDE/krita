@@ -159,64 +159,65 @@ void KisColorSelectorComponent::setParam(qreal hue, qreal hsvSaturation, qreal v
        qFuzzyCompare(m_luma, luma))
         return;
 
-    if(hue>=0. && hue<=1.)
+    if(abs(hue-1) < 1.0e-05 || (hue > 0 && hue < 1)) {
         m_hue=hue;
+    }
 
-    if(hsvSaturation>=0. && hsvSaturation<=1.) {
+    if(abs(hsvSaturation-1) < 1.0e-05 || (hsvSaturation > 0 && hsvSaturation < 1)) {
         m_hsvSaturation=hsvSaturation;
         m_hslSaturation=-1;
-	m_hsiSaturation=-1;
-	m_hsySaturation=-1;
+        m_hsiSaturation=-1;
+        m_hsySaturation=-1;
     }
 
-    if(value>=0. && value<=1.) {
+    if(abs(value-1) < 1.0e-05 || (value > 0 && value < 1)) {
         m_value=value;
         m_intensity=-1;
-	m_luma=-1;
-	m_lightness=-1;
+        m_luma=-1;
+        m_lightness=-1;
     }
 
-    if(hslSaturation>=0. && hslSaturation<=1.) {
+    if(abs(hslSaturation-1) < 1.0e-05 || (hslSaturation > 0 && hslSaturation < 1)) {
         m_hslSaturation=hslSaturation;
         m_hsvSaturation=-1;
-	m_hsiSaturation=-1;
-	m_hsySaturation=-1;
+        m_hsiSaturation=-1;
+        m_hsySaturation=-1;
     }
 
-    if(lightness>=0. && lightness<=1.) {
+    if(abs(lightness-1) < 1.0e-05 || (lightness > 0 && lightness < 1)) {
         m_lightness=lightness;
         m_value=-1;
-	m_luma=-1;
-	m_intensity=-1;
+        m_luma=-1;
+        m_intensity=-1;
     }
-    if(hsiSaturation>=0. && hsiSaturation<=1.) {
+
+    if(abs(hsiSaturation-1) < 1.0e-05 || (hsiSaturation > 0 && luma < 1)) {
         m_hsiSaturation=hsiSaturation;
         m_hsvSaturation=-1;
-	m_hslSaturation=-1;
-	m_hsySaturation=-1;
+        m_hslSaturation=-1;
+        m_hsySaturation=-1;
     }
 
-    if(intensity>=0. && intensity<=1.) {
+    if(abs(intensity-1) < 1.0e-05 || (intensity > 0 && intensity < 1)) {
         m_intensity=intensity;
         m_value=-1;
-	m_luma=-1;
-	m_lightness=-1;
+        m_luma=-1;
+        m_lightness=-1;
     }
 
-    if(hsySaturation>=0. && hsySaturation<=1.) {
+    if(abs(hsySaturation-1) < 1.0e-05 || (hsySaturation > 0 && hsySaturation < 1)) {
         m_hsySaturation=hsySaturation;
         m_hsvSaturation=-1;
-	m_hsiSaturation=-1;
-	m_hslSaturation=-1;
+        m_hsiSaturation=-1;
+        m_hslSaturation=-1;
     }
 
-    if(luma>=0. && luma<=1.) {
+    if(abs(luma-1) < 1.0e-05 || (luma > 0 && luma < 1)) {
         m_intensity=-1;
         m_value=-1;
-	m_luma=luma;
-	m_lightness=-1;
+        m_luma=luma;
+        m_lightness=-1;
     }
-
 
     m_dirty=true;
     emit update();

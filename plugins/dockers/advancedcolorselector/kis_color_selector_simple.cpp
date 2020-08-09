@@ -40,6 +40,9 @@ KoColor KisColorSelectorSimple::selectColor(int x, int y)
     case KisColorSelectorConfiguration::H:
         emit paramChanged(relPos, -1, -1, -1, -1, -1, -1, -1, -1);
         break;
+    case KisColorSelectorConfiguration::Hluma:
+        emit paramChanged(relPos, -1, -1, -1, -1, -1, -1, -1, -1);
+        break;
     case KisColorSelectorConfiguration::hsvS:
         emit paramChanged(-1, relPos, -1, -1, -1, -1, -1, -1, -1);
         break;
@@ -235,6 +238,10 @@ void KisColorSelectorSimple::setColor(const KoColor &color)
         m_lastClickPos.setX(qBound<qreal>(0., hsvH, 1.));
         emit paramChanged(hsvH, -1, -1, -1, -1, -1, -1, -1, -1);
         break;
+    case KisColorSelectorConfiguration::Hluma:
+        m_lastClickPos.setX(qBound<qreal>(0., hsyH, 1.));
+        emit paramChanged(hsyH, -1, -1, -1, -1, -1, -1, -1, -1);
+        break;
     default:
         Q_ASSERT(false);
         break;
@@ -269,6 +276,7 @@ void KisColorSelectorSimple::paint(QPainter* painter)
     if(m_lastClickPos!=QPointF(-1,-1) && m_parent->displayBlip()) {
         switch (m_parameter) {
         case KisColorSelectorConfiguration::H:
+        case KisColorSelectorConfiguration::Hluma:
         case KisColorSelectorConfiguration::hsvS:
         case KisColorSelectorConfiguration::hslS:
         case KisColorSelectorConfiguration::hsiS:
@@ -367,6 +375,9 @@ KoColor KisColorSelectorSimple::colorAt(float x, float y)
         break;
     case KisColorSelectorConfiguration::H:
         color = m_parent->converter()->fromHsvF(relPos, 1, 1);
+        break;
+    case KisColorSelectorConfiguration::Hluma:
+        color = m_parent->converter()->fromHsyF(relPos, 1, m_luma, R, G, B, Gamma);
         break;
     case KisColorSelectorConfiguration::hsvS:
         color = m_parent->converter()->fromHsvF(m_hue, relPos, m_value);

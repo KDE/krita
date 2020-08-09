@@ -22,6 +22,12 @@
 #include <KisAsyncAnimationRendererBase.h>
 
 class KisPaintDevice;
+
+/**
+ * @class KisAsyncStoryboardThumbnailRenderer
+ * @brief requests regeneration of a frame. The regeneration should
+ * be requested after switching the @c KisImage to the relevant frame.
+ */
 class KisAsyncStoryboardThumbnailRenderer : public KisAsyncAnimationRendererBase
 {
     Q_OBJECT
@@ -29,6 +35,11 @@ public:
     KisAsyncStoryboardThumbnailRenderer(QObject *parent);
     ~KisAsyncStoryboardThumbnailRenderer();
 
+    /**
+     * @brief returns the projection of the requested frame.
+     * Should only be called after the frame regeneration is complete.
+     * @return Projection of requested frame.
+     */
     KisPaintDeviceSP frameProjection()
     {
         return m_requestedFrameProjection;

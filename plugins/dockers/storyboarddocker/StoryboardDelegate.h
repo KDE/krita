@@ -45,19 +45,54 @@ public:
     void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     
     void setView(StoryboardView *view);
+
+    /**
+     * @brief Draw the spin box.
+     */
     void drawSpinBox(QPainter *p, const QStyleOptionViewItem &option, QString data, QString suffix) const;
+
+    /**
+     * @brief Draw the spin box.
+     */
     QStyleOptionSlider drawComment(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     
+    /**
+     * @return rectangle for Spinbox Up button for spin box at @c option.rect
+     */
     QRect spinBoxUpButton(const QStyleOptionViewItem &option);
+
+    /**
+     * @return rectangle for Spinbox down button for spin box at @c option.rect
+     */
     QRect spinBoxDownButton(const QStyleOptionViewItem &option);
+
+    /**
+     * @return rectangle for Spinbox edit field for spin box at @c option.rect
+     */
     QRect spinBoxEditField(const QStyleOptionViewItem &option);
 
+    /**
+     * @return rectangle for Scrollbar(the rectangular controller) for scroll bar at @c option.rect
+     */
     QRect scrollBar(const QStyleOptionViewItem &option, QStyleOptionSlider &scrollBarOption) const;
+
+    /**
+     * @return rectangle for Scrollbar's down button for scroll bar at @c option.rect
+     */
     QRect scrollDownButton(const QStyleOptionViewItem &option, QStyleOptionSlider &scrollBarOption);
+
+    /**
+     * @return rectangle for Scrollbar's up button for scroll bar at @c option.rect
+     */
     QRect scrollUpButton(const QStyleOptionViewItem &option, QStyleOptionSlider &scrollBarOption);
     void setImageSize(QSize imageSize);
 
 private Q_SLOTS:
+
+    /**
+     * @brief updates the scroll value of the @c CommentBox in @c StoryboardModel
+     * This enables the model to keep track of the part of the comment that has to be drawn in delegate.
+     */
     void slotCommentScrolledTo(int value) const;
 
 private:

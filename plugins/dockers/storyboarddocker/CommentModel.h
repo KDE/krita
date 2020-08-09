@@ -24,9 +24,12 @@
 
 class StoryboardModel;
 
-/*
-    This model manages the comment data of StoryboardModel
-*/
+/**
+ * @class CommentBox
+ * @brief This model manages the comment data of StoryboardModel.
+ * It enables addition, deletion and modification of comments in
+ * the @a Comments menu of the storyboard docker.
+ */
 class KRITASTORYBOARDDOCKER_EXPORT CommentModel : public QAbstractListModel
 {
 
@@ -52,18 +55,25 @@ public:
     Qt::DropActions supportedDropActions() const override;
     Qt::DropActions supportedDragActions() const override;
 
+    /**
+     * @brief resets m_commentList to @c list.
+     * @param list The new list.
+     */
     void resetData(QVector<Comment> list);
+    /**
+     * @brief returns a list of comments
+     * @return m_commentList
+     */
     QVector<Comment> getData();
 
 Q_SIGNALS:
-    /*
-     * this signal is emitted whenever m_items is changed.
+    /**
+     * @brief Emitted whenever m_items is changed.
      * it is used to keep the StoryboardItemList in KisDocument
      * in sync with m_items
      */
-    //TODO: Use a signal compressor to reduce frequency
     void sigCommentListChanged();
-
+    //TODO: Use a signal compressor to reduce frequency
 private:
     QVector<Comment> m_commentList;
     friend class StoryboardModel;

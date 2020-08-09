@@ -559,8 +559,8 @@ void StoryboardModel::setImage(KisImageWSP image)
             this, SLOT(slotKeyframeMoved(KisKeyframeSP, int)), Qt::UniqueConnection);
 
     //for selection sync with timeline
-    slotFrameChanged(m_image->animationInterface()->currentUITime());
-    connect(m_image->animationInterface(), SIGNAL(sigUiTimeChanged(int)), this, SLOT(slotFrameChanged(int)), Qt::UniqueConnection);
+    slotCurrentFrameChanged(m_image->animationInterface()->currentUITime());
+    connect(m_image->animationInterface(), SIGNAL(sigUiTimeChanged(int)), this, SLOT(slotCurrentFrameChanged(int)), Qt::UniqueConnection);
     connect(m_view->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
             this, SLOT(slotChangeFrameGlobal(QItemSelection, QItemSelection)), Qt::UniqueConnection);
 }
@@ -635,19 +635,19 @@ QModelIndexList StoryboardModel::affectedIndexes(KisTimeRange range) const
     return list;
 }
 
-bool StoryboardModel::isOnlyKeyframe(KisKeyframeSP keyframe, int time) const
+bool StoryboardModel::isOnlyKeyframe(KisNodeSP keyframeNode, int time) const
 {
     bool onlyKeyframe = true;
     KisNodeSP node = m_image->rootLayer();
     while (node) {
         KisLayerUtils::recursiveApplyNodes(node,
-                                            [keyframe, &onlyKeyframe, time] (KisNodeSP node) {
+                                            [keyframeNode, &onlyKeyframe, time] (KisNodeSP node) {
                                             if (node->isAnimated()) {
                                                 auto keyframeMap = node->keyframeChannels();
                                                 for (auto elem: keyframeMap) {
                                                     KisKeyframeChannel *keyframeChannel = elem;
                                                     bool keyframeAbsent = keyframeChannel->keyframeAt(time).isNull();
-                                                    if (node != keyframe->channel()->node().toStrongRef()) {
+                                                    if (node != keyframeNode) {
                                                         onlyKeyframe &= keyframeAbsent;
                                                     }
                                                 }
@@ -797,7 +797,7 @@ StoryboardItemList StoryboardModel::getData()
     return m_items;
 }
 
-void StoryboardModel::slotFrameChanged(int frameId)
+void StoryboardModel::slotCurrentFrameChanged(int frameId)
 {
     m_view->setCurrentItem(frameId);
 }
@@ -830,7 +830,7 @@ void StoryboardModel::slotKeyframeRemoved(KisKeyframeSP keyframe)
 {
     QModelIndex itemIndex = indexFromFrame(keyframe->time());
     if (itemIndex.isValid()) {
-        if (isOnlyKeyframe(keyframe, keyframe->time())) {
+        if (isOnlyKeyframe(keyframe->channel()->node().toStrongRef(), keyframe->time())) {
             removeRows(itemIndex.row(), 1);
             m_renderScheduler->cancelFrameRendering(itemIndex.row());
             updateDurationData(lastIndexBeforeFrame(keyframe->time()));
@@ -843,7 +843,7 @@ void StoryboardModel::slotKeyframeMoved(KisKeyframeSP keyframe, int from)
     QModelIndex fromIndex = indexFromFrame(from);
     if (fromIndex.isValid()) {
         //check whether there are keyframes at the "from" time in other nodes
-        bool onlyKeyframe = isOnlyKeyframe(keyframe, from);
+        bool onlyKeyframe = isOnlyKeyframe(keyframe->channel()->node().toStrongRef(), from);
 
         int toItemRow = lastIndexBeforeFrame(keyframe->time()).row();
         QModelIndex destinationIndex = indexFromFrame(keyframe->time());

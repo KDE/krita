@@ -27,13 +27,12 @@
 class KisPaintDevice;
 class KisAsyncStoryboardThumbnailRenderer;
 
-/*
-This class gets the modified frames and maintains queues of dirty frames sorted
-in the order of proximity to the last changed frame. It regenerates the frames
-one by one and emits the paintdevice for each of the frames. It
-schedules the regeneration of frames based on the list of dirty frames maintained.
-The m_changedFramesQueue list is given preference when regenerating frames.
-*/
+/**
+ * @class KisStoryboardThumbnailRenderScheduler
+ * @brief This class maintains queues of dirty frames sorted in the order of proximity
+ * to the last changed frame. It regenerates the frames emits the paintdevice for each
+ * of the frames. The m_changedFramesQueue list is given preference.
+ */
 class KisStoryboardThumbnailRenderScheduler : public QObject
 {
     Q_OBJECT
@@ -42,46 +41,53 @@ public:
     ~KisStoryboardThumbnailRenderScheduler();
 
     /**
-     * @brief sets an image, the class takes an image, clones it and performs all the regenerations
-     * on the clone so no need to pass cloned image explicitly. Also the image
-     * should be set only once and not every time before scheduling a frame
-     * for regenration. Setting an image cancels rendering of all previously scheduled frames.
-     * @param image to be set
+     * @brief Sets an image, the class takes an image, clones it and calls frame
+     * regeneration on the clone so do not pass cloned image explicitly. The image
+     * should be set only_once and not every time before scheduling a frame for
+     * regenration. Setting an image cancels rendering of all previously scheduled frames.
+     * @param image Image whose frames are to be rendered.
     */
     void setImage(KisImageSP image);
     /**
-     * @brief adds the frame to the list of "to be rendered" frames.
-     * @param frame to be added
-     * @param affected denotes whether this frame was directly changed or affected
+     * @brief Adds the frame to the list of "to be regenerated" frames.
+     * @param frame To be regenerated frame
+     * @param affected Denotes whether this frame was directly changed or affected
      * by changes made to other keyframes.
      */
     void scheduleFrameForRegeneration(int frame, bool affected);
+    /**
+     * @brief Cancels all frame rendering. Empties all queues and cancels the current rendering, if any.
+     */
     void cancelAllFrameRendering();
+    /**
+     * @brief Cancel rendering of a single frame.
+     * @param frame The frame whose rendering is to be cancelled.
+     */
     void cancelFrameRendering(int frame);
 
 private Q_SLOTS:
-    /*
-    emits the paintDevice for the frame if the regeneration was complete.
-    Also calls regenration of the next frame in queue.
-    */
+    /**
+     * @brief Emits @c sigFrameCompleted(int,KisPaintDeviceSP) if the regeneration was complete
+     * and calls regenration of the next frame in queue.
+     */
     void slotFrameRegenerationCompleted(int frame);
 
-    /*
-    schedules the next frame for regenration.
-    */
+    /**
+     * @brief Emits @c sigFrameCancelled(int) and schedules the next frame for regenration.
+     */
     void slotFrameRegenerationCancelled(int frame);
 
 private:
-    /*
-    sorts the m_affectedFramesQueue based on proximity to the last changed frame
-    */
+    /**
+     * @brief Sorts the @c m_affectedFramesQueue based on proximity to the last changed frame
+     */
     void sortAffectedFrameQueue();
 
-    /*
-    renders the next frame, either from affected or changed queue. Changed
-    queue is given preference. It removes the the frame from the queue right after
-    calling the startFrameRegeneration().
-    */
+    /**
+     * @brief Renders the next frame, either from affected or changed queue. Changed
+     * queue is given preference. It removes the frame from the queue right after
+     * calling @c startFrameRegeneration()
+     */
     void renderNextFrame();
 
 Q_SIGNALS:

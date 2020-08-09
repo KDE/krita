@@ -923,6 +923,7 @@ void KisMainWindow::updateCaption()
         KisDocument *doc = d->activeView->document();
 
         QString caption(doc->caption());
+
         if (d->readOnly) {
             caption += " [" + i18n("Write Protected") + "] ";
         }
@@ -946,39 +947,21 @@ void KisMainWindow::updateCaption()
         else {
             d->saveAction->setToolTip(i18n("Save"));
         }
-
-
     }
-
 }
 
 void KisMainWindow::updateCaption(const QString &caption, bool modified)
 {
-    QString versionString = KritaVersionWrapper::versionString(true);
-
     QString title = caption;
     if (!title.contains(QStringLiteral("[*]"))) { // append the placeholder so that the modified mechanism works
         title.append(QStringLiteral(" [*]"));
     }
 
     if (d->mdiArea->activeSubWindow()) {
-#if defined(KRITA_ALPHA) || defined (KRITA_BETA) || defined (KRITA_RC)
-        d->mdiArea->activeSubWindow()->setWindowTitle(QString("%1: %2").arg(versionString).arg(title));
-#else
         d->mdiArea->activeSubWindow()->setWindowTitle(title);
-#endif
-        d->mdiArea->activeSubWindow()->setWindowModified(modified);
     }
-    else {
-#if defined(KRITA_ALPHA) || defined (KRITA_BETA) || defined (KRITA_RC)
-    setWindowTitle(QString("%1: %2").arg(versionString).arg(title));
-#else
     setWindowTitle(title);
-#endif
-    }
     setWindowModified(modified);
-
-
 }
 
 

@@ -101,51 +101,54 @@ void KisColorSelectorWheel::setColor(const KoColor &color)
     m_parent->converter()->getHsiF(color, &hsiH, &hsiS, &hsiI);
     m_parent->converter()->getHsyF(color, &hsyH, &hsyS, &hsyY, R, G, B, Gamma);
 
-    //workaround, for some reason the HSI and HSY algorithms are fine, but they don't seem to update the selectors properly.
-    hsiH=hslH;
-    hsyH=hslH;
-
     qreal angle = 0.0, radius = 0.0;
-    angle = hsvH;
-    angle *= 2. * M_PI;
-    angle -= M_PI;
     switch (m_parameter) {
     case KisColorSelectorConfiguration::LH:
         emit paramChanged(hslH, -1, -1, -1, hslL, -1, -1, -1, -1);
+        angle = hslH;
         radius = hslL;
         break;
     case KisColorSelectorConfiguration::VH:
         emit paramChanged(hsvH, -1, hsvV, -1, -1, -1, -1, -1, -1);
+        angle = hsvH;
         radius = hsvV;
         break;
     case KisColorSelectorConfiguration::IH:
         emit paramChanged(hslH, -1, -1, -1, -1, -1, hsiI, -1, -1);
+        angle = hsiH;
         radius = hsiI;
         break;
     case KisColorSelectorConfiguration::YH:
-        emit paramChanged(hsvH, -1, -1, -1, -1, -1, -1, -1, hsyY);
+        emit paramChanged(hsyH, -1, -1, -1, -1, -1, -1, -1, hsyY);
+        angle = hsyH;
         radius = hsyY;
         break;
     case KisColorSelectorConfiguration::hsvSH:
         emit paramChanged(hsvH, hsvS, -1, -1, -1, -1, -1, -1, -1);
+        angle = hsvH;
         radius = hsvS;
         break;
     case KisColorSelectorConfiguration::hslSH:
         emit paramChanged(hslH, -1, -1, hslS, -1, -1, -1, -1, -1);
+        angle = hslH;
         radius = hslS;
         break;
     case KisColorSelectorConfiguration::hsiSH:
         emit paramChanged(hsiH, -1, -1, -1, -1, hsiS, -1, -1, -1);
+        angle = hsiH;
         radius = hsiS;
         break;
     case KisColorSelectorConfiguration::hsySH:
         emit paramChanged(hsyH, -1, -1, -1, -1, -1, -1, hsyS, -1);
+        angle = hsyH;
         radius = hsyS;
         break;
     default:
         Q_ASSERT(false);
         break;
     }
+    angle *= 2. * M_PI;
+    angle -= M_PI;
     radius *= 0.5;
 
     m_lastClickPos.setX(cos(angle)*radius+0.5);

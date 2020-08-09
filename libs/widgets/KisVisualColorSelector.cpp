@@ -400,6 +400,7 @@ void KisVisualColorSelector::slotRebuildSelectors()
         switch(m_d->acs_config.subTypeParameter)
         {
         case KisColorSelectorConfiguration::H:
+        case KisColorSelectorConfiguration::Hluma:
             channel1 = 0;
             break;
         case KisColorSelectorConfiguration::hsyS:

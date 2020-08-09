@@ -28,7 +28,7 @@ class KRITAWIDGETS_EXPORT KisColorSelectorConfiguration {
 public:
 
     enum Type {Ring, Square, Wheel, Triangle, Slider};
-    enum Parameters {H, hsvS, V, hslS, L, SL, SV, SV2, hsvSH, hslSH, VH, LH, SI, SY, hsiSH, hsySH, I, Y, IH, YH, hsiS, hsyS};
+    enum Parameters {H, Hluma, hsvS, V, hslS, L, SL, SV, SV2, hsvSH, hslSH, VH, LH, SI, SY, hsiSH, hsySH, I, Y, IH, YH, hsiS, hsyS};
 
     Type mainType;
     Type subType;
@@ -62,7 +62,8 @@ public:
         int imtp=strili.at(2).toInt();
         int istp=strili.at(3).toInt();
 
-        if(imt>Slider || ist>Slider || imtp>hsyS || istp>hsyS)//this was LH before
+        // Makes sure that Type and Parameters are within bounds.
+        if(imt>Slider || ist>Slider || imtp>hsyS || istp>hsyS)
             return;
 
         mainType = Type(imt);

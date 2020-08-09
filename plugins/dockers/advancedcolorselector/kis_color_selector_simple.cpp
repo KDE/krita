@@ -124,7 +124,7 @@ void KisColorSelectorSimple::setColor(const KoColor &color)
     qreal hslH, hslS, hslL;
     qreal hsiH, hsiS, hsiI;
     qreal hsyH, hsyS, hsyY;
-    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
+    KConfigGroup cfg = KSharedConfig::openConfig()->group("advancedColorSelector");
     R = cfg.readEntry("lumaR", 0.2126);
     G = cfg.readEntry("lumaG", 0.7152);
     B = cfg.readEntry("lumaB", 0.0722);
@@ -134,10 +134,6 @@ void KisColorSelectorSimple::setColor(const KoColor &color)
     //here we add our converter options
     m_parent->converter()->getHsiF(color, &hsiH, &hsiS, &hsiI);
     m_parent->converter()->getHsyF(color, &hsyH, &hsyS, &hsyY, R, G, B, Gamma);
-
-    //workaround, for some reason the HSI and HSY algorithms are fine, but they don't seem to update the selectors properly.
-    hsiH=hslH;
-    hsyH=hslH;
 
     switch (m_parameter) {
     case KisColorSelectorConfiguration::SL:

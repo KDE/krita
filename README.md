@@ -10,7 +10,7 @@ Krita is a free and open source digital painting application. It is for artists 
 
 If you are reading this on Github, be aware that this is just a mirror. Our real code repository is provided by KDE: https://invent.kde.org/graphics/krita.git
 
-![Picture](https://krita.org/wp-content/uploads/2016/04/krita-30-screenshot.jpg)
+![Picture](https://krita.org/wp-content/uploads/2020/05/kiki_4.3.3_sm.png)
 
 
 ### User Manual

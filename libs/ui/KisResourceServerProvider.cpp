@@ -95,4 +95,3 @@ KoResourceServer<KisPSDLayerStyle> *KisResourceServerProvider::layerStyleServer(
 {
     return m_layerStyleServer;
 }
-

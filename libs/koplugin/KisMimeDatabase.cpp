@@ -177,6 +177,11 @@ void KisMimeDatabase::fillMimeData()
         mimeType.suffixes = QStringList() << "kpp";
         s_mimeDatabase << mimeType;
 
+        mimeType.mimeType = "application/x-krita-mypaint";
+        mimeType.description = i18nc("description of a file type", "MyPaint Brush Preset");
+        mimeType.suffixes = QStringList() << "myb";
+        s_mimeDatabase << mimeType;
+
         mimeType.mimeType = "application/x-krita-assistant";
         mimeType.description = i18nc("description of a file type", "Krita Assistant");
         mimeType.suffixes = QStringList() << "paintingassistant";

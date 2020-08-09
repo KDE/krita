@@ -62,6 +62,18 @@ void KisPaintOpOptionListModel::addPaintOpOption(KisPaintOpOption *option, int w
     categoriesMapper()->expandAllCategories();
 }
 
+void KisPaintOpOptionListModel::addPaintOpOption(KisPaintOpOption *option, int widgetIndex, const QString &label, const QString category) {
+
+    DataItem *item = categoriesMapper()->addEntry(category, KisOptionInfo(option, widgetIndex, label));
+
+    if (option->isCheckable()) {
+        item->setCheckable(true);
+        item->setChecked(option->isChecked());
+    }
+
+    categoriesMapper()->expandAllCategories();
+}
+
 QVariant KisPaintOpOptionListModel::data(const QModelIndex& idx, int role) const
 {
     if (!idx.isValid()) return false;

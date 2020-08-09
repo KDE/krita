@@ -212,7 +212,7 @@ KoResourceSP KisMemoryStorage::resource(const QString &url)
     QFileInfo fi(location() + '/' + url);
     const QString resourceType = fi.path().split("/").last();
     Q_FOREACH(resource, d->resources[resourceType]) {
-        if (resource->filename() == url) {
+        if (resource->filename() == location() + '/' + url) {
             break;
         }
     }

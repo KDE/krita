@@ -317,6 +317,7 @@ void KisResourceItemChooser::setCurrentResource(KoResourceSP resource)
     }
     QModelIndex index = d->resourceModel->indexFromResource(resource);
     d->view->setCurrentIndex(index);
+
     updatePreview(index);
 }
 

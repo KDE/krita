@@ -138,6 +138,7 @@ KisResourceLocator::LocatorError KisResourceLocator::initialize(const QString &i
             return LocatorError::CannotSynchronizeDb;
         }
     }
+    emit initializationComplete();
     return LocatorError::Ok;
 }
 

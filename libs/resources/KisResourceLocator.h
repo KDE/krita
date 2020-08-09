@@ -124,6 +124,8 @@ Q_SIGNALS:
     /// Emitted whenever a storage is removed
     void storageRemoved();
 
+    void initializationComplete();
+
 private:
 
     friend class KisResourceModel;

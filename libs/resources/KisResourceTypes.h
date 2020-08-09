@@ -28,6 +28,7 @@
  */
 namespace ResourceType {
     static const QString PaintOpPresets {"paintoppresets"};
+    static const QString MyPaintBrushes {"mypaint_brushes"};
     static const QString Brushes {"brushes"};
     static const QString Gradients {"gradients"};
     static const QString Palettes {"palettes"};

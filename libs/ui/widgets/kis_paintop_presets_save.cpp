@@ -30,7 +30,8 @@
 #include "QDesktopServices"
 #include "KisResourceServerProvider.h"
 #include <kis_paintop_preset_icon_library.h>
-
+#include <KisResourceLocator.h>
+#include <kis_paintop_settings.h>
 
 KisPresetSaveWidget::KisPresetSaveWidget(QWidget * parent)
     : KisPaintOpPresetSaveDialog(parent)
@@ -178,6 +179,13 @@ void KisPresetSaveWidget::savePreset()
         if (!presetFileName.endsWith(extension)) {
             presetFileName.append(extension);
         }
+
+        if(newPreset->storageLocation() == "memory") {
+            newPreset.reset(new KisPaintOpPreset());
+            newPreset->setSettings(curPreset->settings());
+            newPreset->setPaintOp(curPreset->paintOp());
+        }
+
         newPreset->setFilename(presetFileName);
         newPreset->setName(m_useNewBrushDialog ? newBrushNameTexField->text() : curPreset->name());
         newPreset->setImage(brushPresetThumbnailWidget->cutoutOverlay());
@@ -206,7 +214,6 @@ void KisPresetSaveWidget::savePreset()
     m_favoriteResourceManager->updateFavoritePresets();
 
     close(); // we are done... so close the save brush dialog
-
 }
 
 

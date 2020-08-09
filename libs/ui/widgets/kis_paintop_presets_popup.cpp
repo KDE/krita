@@ -547,7 +547,6 @@ void KisPaintOpPresetsPopup::resourceSelected(KoResourceSP resource)
     // the connections probably need to be thought about with this a bit more to keep things in sync
 
     m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser->setCurrentResource(resource);
-
     // find the display name of the brush engine and append it to the selected preset display
     QString currentBrushEngineName;
     QPixmap currentBrushEngineIcon = QPixmap(26, 26);

@@ -469,6 +469,35 @@ bool KisKraLoadVisitor::visit(KisColorizeMask *mask)
     mask->setKeyStrokesDirect(QList<KisLazyFillTools::KeyStroke>::fromVector(strokes));
 
     loadPaintDevice(mask->coloringProjection(), COLORIZE_COLORING_DEVICE);
+
+    const KoColorProfile *profile =
+        loadProfile(getLocation(mask, DOT_ICC), mask->colorSpace()->colorModelId().id(), mask->colorSpace()->colorDepthId().id());
+
+    if (!profile) {
+        KisNodeSP parent = mask->parent();
+        KIS_SAFE_ASSERT_RECOVER(parent) {
+            parent = m_image->root();
+        }
+
+        if (parent->colorSpace()->colorModelId() == mask->colorSpace()->colorModelId() &&
+            parent->colorSpace()->colorDepthId() == mask->colorSpace()->colorDepthId()) {
+
+            profile = parent->colorSpace()->profile();
+        }
+    }
+
+    if (!profile) {
+        if (m_image->colorSpace()->colorModelId() == mask->colorSpace()->colorModelId() &&
+            m_image->colorSpace()->colorDepthId() == mask->colorSpace()->colorDepthId()) {
+
+            profile = m_image->colorSpace()->profile();
+        }
+    }
+
+    if (profile) {
+        mask->setProfile(profile, 0);
+    }
+
     mask->resetCache();
 
     m_store->popDirectory();
@@ -584,11 +613,27 @@ bool KisKraLoadVisitor::loadPaintDeviceFrame(KisPaintDeviceSP device, const QStr
 
 bool KisKraLoadVisitor::loadProfile(KisPaintDeviceSP device, const QString& location)
 {
+    const KoColorProfile *profile = loadProfile(location, device->colorSpace()->colorModelId().id(), device->colorSpace()->colorDepthId().id());
+
+    if (profile) {
+        // TODO: check result!
+        device->setProfile(profile, 0);
+    } else {
+        m_warningMessages << i18n("Could not load profile: %1.", location);
+    }
+
+    return true;
+}
+
+const KoColorProfile *KisKraLoadVisitor::loadProfile(const QString &location, const QString &colorModelId, const QString &colorDepthId)
+{
+    const KoColorProfile *result = 0;
+
     if (m_store->hasFile(location)) {
         m_store->open(location);
         QByteArray data;
         data.resize(m_store->size());
-        dbgFile << "Data to load: " << m_store->size() << " from " << location << " with color space " << device->colorSpace()->id();
+        dbgFile << "Data to load: " << m_store->size() << " from " << location << " with color space " << colorModelId << colorDepthId;
         int read = m_store->read(data.data(), m_store->size());
         dbgFile << "Profile size: " << data.size() << " " << m_store->atEnd() << " " << m_store->device()->bytesAvailable() << " " << read;
         m_store->close();
@@ -596,22 +641,17 @@ bool KisKraLoadVisitor::loadProfile(KisPaintDeviceSP device, const QString& loca
         QByteArray hash = KoMD5Generator::generateHash(data);
 
         if (m_profileCache.contains(hash)) {
-            if (device->setProfile(m_profileCache[hash], 0)) {
-                return true;
-            }
+            result = m_profileCache[hash];
         }
         else {
             // Create a colorspace with the embedded profile
-            const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(device->colorSpace()->colorModelId().id(), device->colorSpace()->colorDepthId().id(), data);
+            const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(colorModelId, colorDepthId, data);
             m_profileCache[hash] = profile;
-            if (device->setProfile(profile, 0)) {
-                return true;
-            }
-
+            result = profile;
         }
     }
-    m_warningMessages << i18n("Could not load profile: %1.", location);
-    return true;
+
+    return result;
 }
 
 bool KisKraLoadVisitor::loadFilterConfiguration(KisFilterConfigurationSP kfc, const QString& location)

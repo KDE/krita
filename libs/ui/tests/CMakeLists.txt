@@ -27,6 +27,7 @@ ecm_add_tests(
     KisSpinBoxSplineUnitConverterTest.cpp
     KisDocumentReplaceTest.cpp
     KisRssReaderTest.cpp
+    kis_derived_resources_test.cpp
 
     LINK_LIBRARIES kritaui Qt5::Test
     NAME_PREFIX "libs-ui-"
@@ -183,12 +184,6 @@ krita_add_broken_unit_test( kis_categories_mapper_test.cpp testing_categories_ma
 
 krita_add_broken_unit_test( kis_animation_frame_cache_test.cpp
     TEST_NAME kis_animation_frame_cache_test
-    LINK_LIBRARIES kritaui Qt5::Test
-    NAME_PREFIX "libs-ui-")
-
-
-krita_add_broken_unit_test( kis_derived_resources_test.cpp
-    TEST_NAME kis_derived_resources_test
     LINK_LIBRARIES kritaui Qt5::Test
     NAME_PREFIX "libs-ui-")
 

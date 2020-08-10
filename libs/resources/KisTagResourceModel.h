@@ -76,7 +76,8 @@ private:
 
 /**
  * @brief The KisTagResourceModel class makes it possible to retrieve the resources for certain
- * tags or the tags for certain resources.
+ * tags or the tags for certain resources. If the filter for tags or resources is empty, all
+ * tags or resources that match for the active/inactive/all filters will match.
  */
 class KRITARESOURCES_EXPORT KisTagResourceModel : public QSortFilterProxyModel, KisAbstractTagResourceModel
 {

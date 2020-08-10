@@ -178,7 +178,7 @@ void TestTagResourceModel::testFilterTagResource()
     Q_ASSERT(tag);
 
     KisTagResourceModel *tagResourceModel = new KisTagResourceModel;
-    QCOMPARE(tagResourceModel->rowCount(), 0);
+    QCOMPARE(tagResourceModel->rowCount(), 2);
 
     QVector<int> tagIds;
     tagIds << tag->id();
@@ -191,9 +191,7 @@ void TestTagResourceModel::testFilterTagResource()
     QCOMPARE(tagResourceModel->rowCount(), 1);
 
     delete tagResourceModel;
-
 }
-
 
 void TestTagResourceModel::cleanupTestCase()
 {

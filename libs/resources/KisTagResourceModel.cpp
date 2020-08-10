@@ -350,5 +350,6 @@ bool KisTagResourceModel::filterAcceptsRow(int source_row, const QModelIndex &so
         return false;
     }
 
-    return (d->tagIds.contains(tagId) && d->resourceIds.contains(resourceId));
+    return ((d->tagIds.contains(tagId) || d->tagIds.isEmpty())
+            && (d->resourceIds.contains(resourceId) || d->resourceIds.isEmpty()));
 }

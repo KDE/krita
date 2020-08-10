@@ -31,13 +31,13 @@ struct KisTagFilterResourceProxyModel::Private
     }
 
     QList<KisTagSP> tags;
-    KisTagModel* tagModel;
+    KisTagModel *tagModel;
     QScopedPointer<KisResourceSearchBoxFilter> filter;
     bool filterInCurrentTag {false};
 
 };
 
-KisTagFilterResourceProxyModel::KisTagFilterResourceProxyModel(KisTagModel* model, QObject *parent)
+KisTagFilterResourceProxyModel::KisTagFilterResourceProxyModel(KisTagModel *model, QObject *parent)
     : QSortFilterProxyModel(parent)
     , d(new Private)
 {

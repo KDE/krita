@@ -36,7 +36,7 @@ class KRITARESOURCES_EXPORT KisTagFilterResourceProxyModel : public QSortFilterP
 {
     Q_OBJECT
 public:
-    KisTagFilterResourceProxyModel(KisTagModel* model = 0, QObject *parent = 0);
+    KisTagFilterResourceProxyModel(KisTagModel *model = 0, QObject *parent = 0);
     ~KisTagFilterResourceProxyModel() override;
 
     // KisAbstractResourceModel interface

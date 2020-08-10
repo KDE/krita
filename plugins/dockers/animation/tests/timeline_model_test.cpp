@@ -84,6 +84,14 @@ void TimelineModelTest::testConverter()
 
     m_layer1->enableAnimation();
 
+    // all nodes are visible in timeline by default, so
+    // we should hide the ones we don't expect to see
+    m_mask1->setUseInTimeline(false);
+    m_sel1->setUseInTimeline(false);
+    m_sel2->setUseInTimeline(false);
+    m_layer3->setUseInTimeline(false);
+    m_layer4->setUseInTimeline(false);
+
     m_layer1->setUseInTimeline(true);
     m_layer2->setUseInTimeline(true);
     m_sel3->setUseInTimeline(true);

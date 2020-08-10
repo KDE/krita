@@ -26,6 +26,7 @@
 #include "kis_global.h"
 #include "lazybrush/kis_lazy_fill_tools.h"
 #include "kundo2command.h"
+#include "kistest.h"
 
 #include <KoColor.h>
 
@@ -215,4 +216,4 @@ void KisColorizeMaskTest::testCrop()
     QCOMPARE(strokes[2].dev->exactBounds(), QRect(0,0,5,5));
 }
 
-QTEST_MAIN(KisColorizeMaskTest)
+KISTEST_MAIN(KisColorizeMaskTest)

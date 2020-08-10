@@ -81,6 +81,7 @@ private:
     bool saveSelection(KisNode* node);
     bool saveFilterConfiguration(KisNode* node);
     bool saveMetaData(KisNode* node);
+    bool saveIccProfile(KisNode* node, const KoColorProfile *profile);
     QString getLocation(KisNode* node, const QString& suffix = QString());
     QString getLocation(const QString &filename, const QString &suffix = QString());
 

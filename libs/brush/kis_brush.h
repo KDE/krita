@@ -289,8 +289,6 @@ public:
               qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR, qreal lightnessStrength = DEFAULT_LIGHTNESS_STRENGTH) const;
 
 
-    virtual bool hasColor() const;
-
     virtual enumBrushApplication brushApplication() const;
 
     virtual void setBrushApplication(enumBrushApplication brushApplication);
@@ -368,8 +366,6 @@ protected:
      * XXX
      */
     virtual void setBrushType(enumBrushType type);
-
-    virtual void setHasColor(bool hasColor);
 
 public:
 

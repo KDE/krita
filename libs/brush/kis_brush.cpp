@@ -273,17 +273,6 @@ QPointF KisBrush::hotSpot(KisDabShape const& shape, const KisPaintInformation& i
     return p;
 }
 
-
-bool KisBrush::hasColor() const
-{
-    return d->hasColor;
-}
-
-void KisBrush::setHasColor(bool hasColor)
-{
-    d->hasColor = hasColor;
-}
-
 void KisBrush::setBrushApplication(enumBrushApplication brushApplication)
 {
     d->brushApplication = brushApplication;
@@ -676,7 +665,7 @@ void KisBrush::generateBoundary() const
     KisFixedPaintDeviceSP dev;
     KisDabShape inverseTransform(1.0 / scale(), 1.0, -angle());
 
-    if (brushType() == IMAGE || brushType() == PIPE_IMAGE) {
+    if (brushApplication() == IMAGESTAMP) {
         dev = paintDevice(KoColorSpaceRegistry::instance()->rgb8(),
                           inverseTransform, KisPaintInformation());
     }

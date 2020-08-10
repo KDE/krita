@@ -288,7 +288,9 @@ void KisTextBrush::toXML(QDomDocument& doc, QDomElement& e) const
 
 void KisTextBrush::updateBrush()
 {
-    Q_ASSERT((brushType() == PIPE_MASK) || (brushType() == MASK));
+    KIS_ASSERT_RECOVER((brushType() == PIPE_MASK) || (brushType() == MASK)) {
+        setBrushType(MASK);
+    }
 
     if (brushType() == PIPE_MASK) {
         m_brushesPipe->setText(m_text, m_font);

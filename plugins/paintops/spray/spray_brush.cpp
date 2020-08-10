@@ -352,8 +352,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
             KisPaintOp::splitCoordinate(pt.y(), &iy, &yFraction);
 
             //KisFixedPaintDeviceSP dab;
-            if (m_brush->brushType() == IMAGE ||
-                    m_brush->brushType() == PIPE_IMAGE) {
+            if (m_brush->brushApplication() == IMAGESTAMP) {
                 m_fixedDab = m_brush->paintDevice(m_fixedDab->colorSpace(),
                           shape, info, xFraction, yFraction);
 

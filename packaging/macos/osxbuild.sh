@@ -96,7 +96,7 @@ fi
 
 # configure max core for make compile
 ((MAKE_THREADS=1))
-if test ${OSTYPE} == "darwin*"; then
+if [[ "${OSTYPE}" == "darwin"* ]]; then
     ((MAKE_THREADS = $(sysctl -n hw.logicalcpu)))
 fi
 

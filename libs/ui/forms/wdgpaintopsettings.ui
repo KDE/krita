@@ -114,7 +114,7 @@
          <item>
           <widget class="QLabel" name="currentBrushNameLabel">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -197,19 +197,6 @@
             <string>Cancel</string>
            </property>
           </widget>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer_3">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
          </item>
         </layout>
        </item>

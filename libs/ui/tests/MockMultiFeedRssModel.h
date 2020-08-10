@@ -12,7 +12,7 @@ class MockMultiFeedRssModel : public MultiFeedRssModel
 public:
     explicit MockMultiFeedRssModel(QObject *parent = 0);
 
-    void addFeed(const QString& feed);
+    void addFeed(const QString& feed) override;
 
     /**
      * @brief to be called in the setup phase of the unittest, before call to addFeed

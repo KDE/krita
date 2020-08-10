@@ -85,7 +85,7 @@ void __KisToolSelectRectangularLocal::finishRect(const QRectF& rect, qreal round
             {
                 KisPainter painter(tmpSel);
                 painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
-                painter.setAntiAliasPolygonFill(true);
+                painter.setAntiAliasPolygonFill(antiAliasSelection());
                 painter.setFillStyle(KisPainter::FillStyleForegroundColor);
                 painter.setStrokeStyle(KisPainter::StrokeStyleNone);
 

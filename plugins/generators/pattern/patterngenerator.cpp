@@ -193,7 +193,7 @@ void KoPatternGenerator::generate(KisProcessingInformation dstInfo,
     gc.setWidth(size.width());
     gc.setHeight(size.height());
     gc.setFillStyle(KisFillPainter::FillStylePattern);
-    gc.fillRect(QRect(dstInfo.topLeft(), size), pattern, transform);
+    gc.fillRectNoCompose(QRect(dstInfo.topLeft(), size), pattern, transform);
     gc.end();
 
 }

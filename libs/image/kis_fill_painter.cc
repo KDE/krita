@@ -135,7 +135,7 @@ void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const Ko
     fillRect(x1, y1, w, h, patternLayer, QRect(offset.x(), offset.y(), pattern->width(), pattern->height()));
 }
 
-void KisFillPainter::fillRect(const QRect &rc, const KoPatternSP pattern, const QTransform transform)
+void KisFillPainter::fillRectNoCompose(const QRect &rc, const KoPatternSP pattern, const QTransform transform)
 {
     if (!pattern) return;
     if (!pattern->valid()) return;
@@ -146,10 +146,10 @@ void KisFillPainter::fillRect(const QRect &rc, const KoPatternSP pattern, const 
     KisPaintDeviceSP patternLayer = new KisPaintDevice(device()->colorSpace(), pattern->name());
     patternLayer->convertFromQImage(pattern->pattern(), 0);
 
-    fillRect(rc.x(), rc.y(), rc.width(), rc.height(), patternLayer, QRect(0, 0, pattern->width(), pattern->height()), transform);
+    fillRectNoCompose(rc.x(), rc.y(), rc.width(), rc.height(), patternLayer, QRect(0, 0, pattern->width(), pattern->height()), transform);
 }
 
-void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisPaintDeviceSP device, const QRect& deviceRect, const QTransform transform)
+void KisFillPainter::fillRectNoCompose(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisPaintDeviceSP device, const QRect& deviceRect, const QTransform transform)
 {
     /**
      * Since this function doesn't do any kind of compostiting, so the pixel size
@@ -270,7 +270,7 @@ void KisFillPainter::fillPattern(int startX, int startY, KisPaintDeviceSP source
     KisPaintDeviceSP filled = device()->createCompositionSourceDevice();
     Q_CHECK_PTR(filled);
     KisFillPainter painter(filled);
-    painter.fillRect(QRect(0, 0, m_width, m_height), pattern(), patternTransform);
+    painter.fillRectNoCompose(QRect(0, 0, m_width, m_height), pattern(), patternTransform);
     painter.end();
 
     genericFillEnd(filled);

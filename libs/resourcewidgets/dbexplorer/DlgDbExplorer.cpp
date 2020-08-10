@@ -91,8 +91,6 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
         tagsDelegate->addBooleanColumn(5);
         tagsModel->select();
 
-        connect(tagsModel, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(slotResetTagModel(QModelIndex, QModelIndex)));
-
         m_page->tableTags->setModel(tagsModel);
         m_page->tableTags->hideColumn(0);
         m_page->tableTags->setItemDelegate(tagsDelegate);

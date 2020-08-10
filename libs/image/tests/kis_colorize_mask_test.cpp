@@ -140,7 +140,7 @@ void KisColorizeMaskTest::test()
     QCOMPARE(strokes[1].color.colorSpace(), oldCS);
     QCOMPARE(strokes[2].color.colorSpace(), oldCS);
 
-    KUndo2Command *cmd = t.mask->setColorSpace(newCS);
+    QScopedPointer<KUndo2Command> cmd(t.mask->setColorSpace(newCS));
     cmd->redo();
     strokes = t.mask->fetchKeyStrokesDirect();
 

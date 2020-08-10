@@ -38,6 +38,7 @@
 #include <KisGlobalResourcesInterface.h>
 
 #include "../../sdk/tests/testutil.h"
+#include "kistest.h"
 
 
 KisImageSP KisUpdateSchedulerTest::buildTestingImage()
@@ -428,5 +429,5 @@ void KisUpdateSchedulerTest::testLodSync()
     image->waitForDone();
 }
 
-QTEST_MAIN(KisUpdateSchedulerTest)
+KISTEST_MAIN(KisUpdateSchedulerTest)
 

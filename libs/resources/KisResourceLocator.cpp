@@ -209,9 +209,9 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
     }
 
     if (!resource) {
-        qDebug() << "KoResourceSP KisResourceLocator::resource" << storageLocation << resourceType << filename;
+        qWarning() << "KoResourceSP KisResourceLocator::resource" << storageLocation << resourceType << filename << "was not found";
+        return 0;
     }
-    Q_ASSERT(resource);
 
     resource->setStorageLocation(storageLocation);
     Q_ASSERT(!resource->storageLocation().isEmpty());

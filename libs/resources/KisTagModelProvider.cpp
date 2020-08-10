@@ -23,16 +23,17 @@
 
 Q_GLOBAL_STATIC(KisTagModelProvider, s_instance)
 
-
 struct KisTagModelProvider::Private {
 
     std::map<QString, std::unique_ptr<KisTagModel>> tagModelsMap;
+    std::unique_ptr<KisTagResourceModel> tagResourceModel;
 
 };
 
 KisTagModelProvider::KisTagModelProvider()
     : d(new Private())
 {
+    d->tagResourceModel.reset(new KisTagResourceModel());
 }
 
 
@@ -41,7 +42,7 @@ KisTagModelProvider::~KisTagModelProvider()
     delete d;
 }
 
-KisTagModel* KisTagModelProvider::tagModel(const QString& resourceType)
+KisTagModel *KisTagModelProvider::tagModel(const QString& resourceType)
 {
 
     std::map<QString, std::unique_ptr<KisTagModel> >::const_iterator found = s_instance->d->tagModelsMap.find(resourceType);
@@ -54,4 +55,9 @@ KisTagModel* KisTagModelProvider::tagModel(const QString& resourceType)
         return model;
     }
     return found->second.get();
+}
+
+KisTagResourceModel *KisTagModelProvider::tagResourceModel()
+{
+    return s_instance->d->tagResourceModel.get();
 }

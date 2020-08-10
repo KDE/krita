@@ -78,6 +78,7 @@ public:
 private:
 
     friend class KisAllTagsModel;
+    friend class KisAllTagResourceModel;
     friend class KisResourceModel;
     friend class KisTagChooserWidget;
     friend class TestTagModel;

@@ -738,11 +738,6 @@ QVector<KisTagSP> KisTagModel::tagsForResource(int resourceId) const
     return {};
 }
 
-bool KisTagModel::filterAcceptsColumn(int /*source_column*/, const QModelIndex &/*source_parent*/) const
-{
-    return true;
-}
-
 bool KisTagModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
     if (d->tagFilter == ShowAllTags && d->storageFilter == ShowAllStorages) {

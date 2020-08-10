@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Agata Cacko <cacko.azh@gmail.com>
+ * Copyright (c) 2020 boud <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,36 +15,38 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_TAG_MODEL_PROVIDER_H
-#define KIS_TAG_MODEL_PROVIDER_H
+#ifndef TESTAGFILTERTRESOURCEPROXYMODEL_H
+#define TESTAGFILTERTRESOURCEPROXYMODEL_H
 
 #include <QObject>
-#include <QAbstractTableModel>
+#include <QtSql>
+#include "KisResourceTypes.h"
 
-#include <KisTag.h>
-#include <KoResource.h>
+class KisResourceLocator;
 
-#include "kritaresources_export.h"
-#include "KisTagModel.h"
-#include "KisTagResourceModel.h"
-
-class KRITARESOURCES_EXPORT KisTagModelProvider : public QObject
+class TestTagResourceModel : public QObject
 {
     Q_OBJECT
+private Q_SLOTS:
 
-public:
+    void initTestCase();
+    void testRowCount();
+    void testData();
+    void testTagResource();
+    void testUntagResource();
 
-    KisTagModelProvider();
-    ~KisTagModelProvider();
+    void testFilterTagResource();
 
-    static KisTagModel *tagModel(const QString& resourceType);
-    static KisTagResourceModel *tagResourceModel();
+    void cleanupTestCase();
 
 private:
 
-    struct Private;
-    Private* const d;
+    QString m_srcLocation;
+    QString m_dstLocation;
+
+    KisResourceLocator *m_locator;
+    const QString resourceType = ResourceType::PaintOpPresets;
 
 };
 
-#endif // KIS_TAG_MODEL_PROVIDER_H
+#endif

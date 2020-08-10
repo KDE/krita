@@ -181,6 +181,8 @@ void DlgDbExplorer::slotTbResourceTypeSelected(int index)
 
 void DlgDbExplorer::slotTbResourceItemSelected()
 {
+    if (m_page->tableResources->selectionModel()->selectedIndexes().isEmpty()) return;
+
     QModelIndex idx = m_page->tableResources->selectionModel()->selectedIndexes().first();
 
     QImage thumb = idx.data(Qt::UserRole + KisAbstractResourceModel::Thumbnail).value<QImage>();

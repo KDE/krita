@@ -64,9 +64,9 @@ protected:
         m_layer3 = new KisCloneLayer(m_layer1, m_image, "layer3", OPACITY_OPAQUE_U8);
         m_layer4 = new KisGroupLayer(m_image, "layer4", OPACITY_OPAQUE_U8);
         m_mask1 = new KisTransparencyMask(m_image, "mask1");
-        m_sel1 = new KisSelectionMask(m_image);
-        m_sel2 = new KisSelectionMask(m_image);
-        m_sel3 = new KisSelectionMask(m_image);
+        m_sel1 = new KisSelectionMask(m_image, "sel1");
+        m_sel2 = new KisSelectionMask(m_image, "sel2");
+        m_sel3 = new KisSelectionMask(m_image, "sel3");
     }
 
     void cleanupBase() {

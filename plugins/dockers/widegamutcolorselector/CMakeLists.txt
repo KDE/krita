@@ -1,4 +1,5 @@
 set(KRITA_WGCOLORSELECTOR_SOURCES
+    WGColorPreviewPopup.cpp
     WGColorSelectorPlugin.cpp
     WGColorSelectorDock.cpp
     WGShadeSelector.cpp

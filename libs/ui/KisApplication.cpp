@@ -381,7 +381,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
         cfg.setCanvasState("OPENGL_FAILED");
     }
 
-    setSplashScreenLoadingText(i18n("Initializing Globals"));
+    setSplashScreenLoadingText(i18n("Initializing Globals..."));
     processEvents();
     initializeGlobals(args);
 
@@ -413,7 +413,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     Q_UNUSED(resetStarting);
 
     // Make sure we can save resources and tags
-    setSplashScreenLoadingText(i18n("Adding resource types"));
+    setSplashScreenLoadingText(i18n("Adding resource types..."));
     processEvents();
     addResourceTypes();
 

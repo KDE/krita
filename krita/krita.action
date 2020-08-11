@@ -2655,7 +2655,7 @@
     </Action>
     <Action name="add_new_transform_mask">
       <icon>transformMask</icon>
-      <text>&amp;Transform Mask...</text>
+      <text>&amp;Transform Mask</text>
       <whatsThis></whatsThis>
       <toolTip>Transform Mask</toolTip>
       <iconText>Transform Mask</iconText>
@@ -2991,7 +2991,7 @@
     </Action>
     <Action name="convert_to_file_layer">
       <icon>fileLayer</icon>
-      <text>to &amp;File Layer</text>
+      <text>to &amp;File Layer...</text>
       <whatsThis></whatsThis>
       <toolTip>Saves out the layers into a new image and then references that image.</toolTip>
       <iconText>Convert to File Layer</iconText>

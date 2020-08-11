@@ -470,13 +470,11 @@ void KisUpdateScheduler::spareThreadAppeared()
 KisTestableUpdateScheduler::KisTestableUpdateScheduler(KisProjectionUpdateListener *projectionUpdateListener,
                                                        qint32 threadCount)
 {
-    Q_UNUSED(threadCount);
     updateSettings();
     m_d->projectionUpdateListener = projectionUpdateListener;
 
-    // The queue will update settings in a constructor itself
-    // m_d->updatesQueue = new KisTestableSimpleUpdateQueue();
-    // m_d->strokesQueue = new KisStrokesQueue();
+    setThreadsLimit(threadCount);
+    m_d->updaterContext.setTestingMode(true);
 
     connectSignals();
 }
@@ -484,9 +482,4 @@ KisTestableUpdateScheduler::KisTestableUpdateScheduler(KisProjectionUpdateListen
 KisUpdaterContext *KisTestableUpdateScheduler::updaterContext()
 {
     return &m_d->updaterContext;
-}
-
-KisTestableSimpleUpdateQueue* KisTestableUpdateScheduler::updateQueue()
-{
-    return dynamic_cast<KisTestableSimpleUpdateQueue*>(&m_d->updatesQueue);
 }

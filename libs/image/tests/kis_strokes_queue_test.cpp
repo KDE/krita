@@ -19,6 +19,8 @@
 #include "kis_strokes_queue_test.h"
 #include <QTest>
 
+#include "kistest.h"
+
 #include "scheduler_utils.h"
 #include "kis_strokes_queue.h"
 #include "kis_updater_context.h"
@@ -836,4 +838,4 @@ void KisStrokesQueueTest::testUniquelyConcurrentJobs()
 }
 
 
-QTEST_MAIN(KisStrokesQueueTest)
+KISTEST_MAIN(KisStrokesQueueTest)

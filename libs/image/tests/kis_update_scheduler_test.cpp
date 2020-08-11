@@ -171,7 +171,7 @@ void KisUpdateSchedulerTest::testLocking()
 
     KisTestableUpdateScheduler scheduler(image.data(), 2);
     KisUpdaterContext *context = scheduler.updaterContext();
-    QVERIFY(context);
+
     QVector<KisUpdateJobItem*> jobs;
 
     QRect dirtyRect1(0,0,50,100);

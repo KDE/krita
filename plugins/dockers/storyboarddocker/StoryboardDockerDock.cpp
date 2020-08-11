@@ -30,6 +30,8 @@
 #include <QStringListModel>
 #include <QListView>
 #include <QItemSelection>
+#include <QSize>
+#include <QPrinter>
 
 #include <klocalizedstring.h>
 
@@ -310,8 +312,98 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
     if (dlg.exec() == QDialog::Accepted) {
         dlg.hide();
         QApplication::setOverrideCursor(Qt::WaitCursor);
-    }
 
+        bool layoutSpecifiedBySvg = dlg.exportSvgFile().isEmpty();
+        if (layoutSpecifiedBySvg) {
+            QString svgFileName = dlg.exportSvgFile();
+
+            //To be done
+        }
+        else {
+            int rows = dlg.rows();
+            int columns = dlg.columns();
+            int firstItemFrame = dlg.firstItem();
+            int lastItemFrame = dlg.lastItem();
+            PageSize size = dlg.pageSize();
+
+            if (dlg.format() == ExportFormat::SVG) {
+                //To be done
+                QApplication::restoreOverrideCursor();
+                return;
+            }
+
+            QPrinter printer(QPrinter::HighResolution);
+            printer.setOutputFormat(QPrinter::PdfFormat);
+            printer.setOutputFileName(dlg.saveFileName());
+            printer.setPageSize(QPrinter::A3);
+
+            QPainter p(&printer);
+
+            QRectF border(QPoint(0,0), printer.pageRect().size());
+            QSizeF pageSize(border.size());
+            QSizeF cellSize(pageSize.width() / columns, pageSize.height() / rows);
+
+            StoryboardItemList list = m_storyboardModel->getData();
+
+            for (int row = 0; row < rows; row++) {
+
+                QRectF cellRect = border;
+                cellRect.setSize(cellSize);
+                cellRect.moveTop(border.top() + row * cellRect.height() + 100);
+                cellRect.setSize(cellSize - QSize(200,200));
+
+                for (int column = 0; column < columns; column++) {
+                    cellRect.moveLeft(border.left() + column * (cellRect.width() + 100));
+
+                    int i = row*columns + column;
+                    if (i < list.size()) {
+                        p.setPen(Qt::darkGray);
+                        p.drawRect(cellRect);
+
+                        ThumbnailData data = qvariant_cast<ThumbnailData>(list.at(i)->child(StoryboardItem::FrameNumber)->data());
+                        QPixmap pxmp = qvariant_cast<QPixmap>(data.pixmap);
+
+                        float scale = qMin(cellRect.width() / pxmp.rect().width(), 1.2 * cellRect.height() /  pxmp.rect().height());
+                        QRectF upperRect = cellRect;
+                        upperRect.setSize(scale * pxmp.rect().size());
+
+                        int numericFontWidth = p.fontMetrics().width("0");
+                        QRectF sceneRect = upperRect;
+                        sceneRect.setHeight(upperRect.height() / 6);
+                        sceneRect.setWidth(sceneRect.width() - 8 * numericFontWidth);
+
+                        QString str = list.at(i)->child(StoryboardItem::ItemName)->data().toString();
+                        p.drawRect(sceneRect);
+                        QRectF boundRect = sceneRect;
+                        p.drawText(sceneRect, Qt::AlignLeft | Qt::AlignVCenter, str, &boundRect);
+
+                        QRectF durationRect = sceneRect;
+                        durationRect.setWidth(8 * numericFontWidth);
+                        durationRect.moveRight(upperRect.right());
+
+                        QString duration = QString::number(list.at(i)->child(StoryboardItem::DurationSecond)->data().toInt());
+                        duration +=i18nc("suffix in spin box in storyboard that means 'seconds'", "s");
+                        duration += QString::number(list.at(i)->child(StoryboardItem::DurationFrame)->data().toInt());
+                        duration +=i18nc("suffix in spin box in storyboard that means 'frames'", "f");
+
+                        boundRect = durationRect;
+                        boundRect.setSize(boundRect.size() - QSize(10,10));
+                        p.drawRect(durationRect);
+                        p.drawText(durationRect, Qt::AlignCenter, duration, &boundRect);
+
+                        QRectF thumbRect = upperRect;
+                        thumbRect.setHeight(upperRect.height() * 5 / 6);
+                        thumbRect.moveTop(thumbRect.top() + upperRect.height() / 6);
+                        thumbRect.setSize(thumbRect.size() - QSize(30,30));
+                        thumbRect.moveTopLeft(thumbRect.topLeft() + QPointF(15,15));
+
+                        p.drawRect(upperRect);
+                        p.drawPixmap(thumbRect, pxmp, pxmp.rect());
+                    }
+                }
+            }
+        }
+    }
     QApplication::restoreOverrideCursor();
 }
 

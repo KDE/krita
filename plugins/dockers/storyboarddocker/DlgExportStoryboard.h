@@ -61,6 +61,8 @@ public:
     int columns() const;
     PageSize pageSize() const;
     QString exportSvgFile() const;
+    QString saveFileName() const;
+    ExportFormat format() const;
 
 private Q_SLOTS:
     void slotExportClicked();
@@ -68,6 +70,8 @@ private Q_SLOTS:
 
 private:
     WdgExportStoryboard *m_page {0};
+    QString m_exportFileName;
+    ExportFormat m_format;
 };
 
 #endif

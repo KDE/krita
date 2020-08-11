@@ -22,6 +22,7 @@
 
 DlgExportStoryboard::DlgExportStoryboard(ExportFormat format)
         : KoDialog()
+        , m_format(format)
 {
     m_page = new WdgExportStoryboard(this);
 
@@ -72,10 +73,35 @@ QString DlgExportStoryboard::exportSvgFile() const
     return m_page->lblSvgFileName->text();
 }
 
+QString DlgExportStoryboard::saveFileName() const
+{
+    return m_exportFileName;
+}
+
+ExportFormat DlgExportStoryboard::format() const
+{
+    return m_format;
+}
+
 void DlgExportStoryboard::slotExportClicked()
 {
-    //Do something
-    qDebug()<<"export clicked";
+    KoFileDialog savedlg(this, KoFileDialog::SaveFile, "Export File location");
+    savedlg.setCaption(i18nc("Export File loacation for storyboard", "Export File location"));
+    savedlg.setDefaultDir(QDir::cleanPath(QDir::homePath()));
+
+    QStringList mimeTypes;
+    if (m_format == ExportFormat::PDF) {
+        mimeTypes << "application/pdf";
+    }
+    if (m_format == ExportFormat::SVG) {
+        mimeTypes << "image/svg+xml";
+    }
+    savedlg.setMimeTypeFilters(mimeTypes);
+
+    m_exportFileName = savedlg.filename();
+    if (m_exportFileName.isEmpty()) {
+        this->cancelClicked();
+    }
     accept();
 }
 

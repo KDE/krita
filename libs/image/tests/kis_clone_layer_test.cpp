@@ -30,6 +30,7 @@
 #include "kis_clone_layer.h"
 #include "kis_image.h"
 
+#include "kistest.h"
 #include "testutil.h"
 
 
@@ -387,4 +388,4 @@ void KisCloneLayerTest::testCyclingGroupLayer()
     testCyclingCase(t, t.cloneOfGroup2, t.cloneOfGroup1, false);
 }
 
-QTEST_MAIN(KisCloneLayerTest)
+KISTEST_MAIN(KisCloneLayerTest)

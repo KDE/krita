@@ -24,7 +24,8 @@
 #include "kis_processing_applicator.h"
 #include "processing/kis_crop_processing_visitor.h"
 
-#include <testutil.h>
+#include "testutil.h"
+#include "kistest.h"
 
 #define USE_DOCUMENT 0
 #include "qimage_based_test.h"
@@ -117,4 +118,4 @@ void KisProcessingsTest::testTransformVisitorScaleRotate()
     tester.test("transform_scale_rotate", visitor);
 }
 
-QTEST_MAIN(KisProcessingsTest)
+KISTEST_MAIN(KisProcessingsTest)

@@ -54,7 +54,7 @@ void TimelineModelTest::init()
     m_doc = KisPart::instance()->createDocument();
 
     m_nameServer = new KisNameServer();
-    m_shapeController = new KisShapeController(m_doc, m_nameServer);
+    m_shapeController = new KisShapeController(m_nameServer, m_doc->undoStack());
     m_displayModeAdapter = new KisNodeDisplayModeAdapter();
     //m_nodeModel = new KisNodeModel(0);
 

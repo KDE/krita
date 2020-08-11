@@ -29,6 +29,7 @@ ecm_add_tests(
     KisDocumentReplaceTest.cpp
     kis_derived_resources_test.cpp
     kis_animation_frame_cache_test.cpp
+    kis_shape_layer_test.cpp
 
     LINK_LIBRARIES kritaui Qt5::Test
     NAME_PREFIX "libs-ui-"
@@ -161,7 +162,3 @@ krita_add_broken_unit_test( kis_categories_mapper_test.cpp testing_categories_ma
     LINK_LIBRARIES kritaui Qt5::Test
     NAME_PREFIX "libs-ui-")
 
-krita_add_broken_unit_test( kis_shape_layer_test.cpp
-    TEST_NAME KisShapeLayerTest
-    LINK_LIBRARIES kritaui Qt5::Test
-    NAME_PREFIX "libs-ui-")

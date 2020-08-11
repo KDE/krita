@@ -27,6 +27,7 @@
 #include "kis_transform_mask_params_interface.h"
 
 #include "testutil.h"
+#include "kistest.h"
 
 #include "kis_algebra_2d.h"
 #include "kis_safe_transform.h"
@@ -977,4 +978,4 @@ void KisTransformMaskTest::testTransformHiddenPartsOfTheGroup()
     //KIS_DUMP_DEVICE_2(p.image->projection(), imageRect, "image_proj_mask", "dd");
 }
 
-QTEST_MAIN(KisTransformMaskTest)
+KISTEST_MAIN(KisTransformMaskTest)

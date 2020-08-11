@@ -140,6 +140,7 @@ ecm_add_tests(
     kis_update_scheduler_test.cpp
     kis_colorize_mask_test.cpp
     kis_processings_test.cpp
+    kis_paint_device_test.cpp
 
     LINK_LIBRARIES kritaimage Qt5::Test
     NAME_PREFIX "libs-image-"
@@ -155,12 +156,6 @@ krita_add_broken_unit_test( kis_transform_mask_test.cpp
 
 krita_add_broken_unit_test( kis_layer_styles_test.cpp
     TEST_NAME kis_layer_styles_test
-    LINK_LIBRARIES kritaimage Qt5::Test
-    NAME_PREFIX "libs-image-"
-)
-
-krita_add_broken_unit_test( kis_paint_device_test.cpp
-    TEST_NAME kis_paint_device_test
     LINK_LIBRARIES kritaimage Qt5::Test
     NAME_PREFIX "libs-image-"
 )

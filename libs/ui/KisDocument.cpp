@@ -525,7 +525,7 @@ KisDocument::KisDocument()
     // preload the krita resources
     KisResourceServerProvider::instance();
 
-    d->shapeController = new KisShapeController(this, d->nserver);
+    d->shapeController = new KisShapeController(d->nserver, d->undoStack, this);
     d->koShapeController = new KoShapeController(0, d->shapeController);
     d->shapeController->resourceManager()->setGlobalShapeController(d->koShapeController);
 
@@ -892,7 +892,7 @@ void KisDocument::copyFromDocumentImpl(const KisDocument &rhs, CopyPolicy policy
         connect(d->undoStack, SIGNAL(cleanChanged(bool)), this, SLOT(slotUndoStackCleanChanged(bool)));
         connect(d->autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
 
-        d->shapeController = new KisShapeController(this, d->nserver);
+        d->shapeController = new KisShapeController(d->nserver, d->undoStack, this);
         d->koShapeController = new KoShapeController(0, d->shapeController);
         d->shapeController->resourceManager()->setGlobalShapeController(d->koShapeController);
     }

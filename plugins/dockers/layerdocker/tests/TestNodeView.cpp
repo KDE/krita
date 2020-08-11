@@ -44,7 +44,7 @@ void NodeViewTest::init()
     m_doc = KisPart::instance()->createDocument();
 
     m_nameServer = new KisNameServer();
-    m_shapeController = new KisShapeController(m_doc, m_nameServer);
+    m_shapeController = new KisShapeController(m_nameServer, m_doc->undoStack());
 
     initBase();
 }

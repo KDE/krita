@@ -95,11 +95,14 @@ void KisTransactionData::Private::tryCreateNewFrame(KisPaintDeviceSP device, int
     KisKeyframeSP keyframe = channel->keyframeAt(time);
     if (!keyframe) {
         if (cfg.autoKeyModeDuplicate()) {
-            KisKeyframeSP activeKeyframe = channel->activeKeyframeAt(time);
-            keyframe = channel->copyKeyframe(activeKeyframe, time, &newFrameCommand);
+            int activeKeyTime = channel->activeKeyframeTime(time);
+            channel->copyKeyframe(activeKeyTime, time, &newFrameCommand);
         } else {
-            keyframe = channel->addKeyframe(time, &newFrameCommand);
+            channel->addKeyframe(time, &newFrameCommand);
         }
+
+        keyframe = channel->keyframeAt(time);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(keyframe);
         keyframe->setColorLabel(KisImageConfig(true).defaultFrameColorLabel());
     }
 }

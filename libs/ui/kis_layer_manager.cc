@@ -432,12 +432,12 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
                                          clone);
 
     if (srcDevice->framesInterface()) {
-        KisKeyframeChannel *cloneKeyChannel = layer->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+        KisKeyframeChannel *cloneKeyChannel = layer->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
         layer->enableAnimation();
         KisKeyframeChannel *sourceKeyChannel = srcDevice->keyframeChannel();
 
-        foreach (const int &index, sourceKeyChannel->allKeyframeIds()) {
-            cloneKeyChannel->copyExternalKeyframe(sourceKeyChannel, index, index);
+        foreach (const int &index, sourceKeyChannel->allKeyframeTimes()) {
+            KisKeyframeChannel::copyKeyframe(sourceKeyChannel, index, cloneKeyChannel, index);
         }
     }
 

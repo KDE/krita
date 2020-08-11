@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#include "WGColorPreviewPopup.h"
 #include "WGColorSelectorDock.h"
 #include "WGShadeSelector.h"
 #include "KisVisualColorSelector.h"
@@ -12,6 +13,7 @@
 #include <klocalizedstring.h>
 
 #include <kis_canvas2.h>
+#include <kis_canvas_resource_provider.h>
 #include <kis_display_color_converter.h>
 #include <kis_signal_compressor.h>
 #include <KoCanvasResourceProvider.h>
@@ -25,6 +27,7 @@
 WGColorSelectorDock::WGColorSelectorDock()
 	: QDockWidget()
     , m_colorChangeCompressor(new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this))
+    , m_previewPopup(new WGColorPreviewPopup(this))
 {
     setWindowTitle(i18n("Wide Gamut Color Selector"));
 
@@ -33,6 +36,7 @@ WGColorSelectorDock::WGColorSelectorDock()
 
     m_selector = new KisVisualColorSelector(mainWidget);
     connect(m_selector, SIGNAL(sigNewColor(KoColor)), SLOT(slotColorSelected(KoColor)));
+    connect(m_selector, SIGNAL(sigInteraction(bool)), SLOT(slotColorInteraction(bool)));
     connect(m_colorChangeCompressor, SIGNAL(timeout()), SLOT(slotSetNewColors()));
     mainWidget->layout()->addWidget(m_selector);
 
@@ -41,15 +45,22 @@ WGColorSelectorDock::WGColorSelectorDock()
     mainWidget->layout()->addWidget(m_toggle);
 
     KisVisualColorModel *model = m_selector->selectorModel();
-    WGShadeSelector *shadeSelector = new WGShadeSelector(model, this);
-    mainWidget->layout()->addWidget(shadeSelector);
+    m_shadeSelector = new WGShadeSelector(model, this);
+    mainWidget->layout()->addWidget(m_shadeSelector);
     connect(model, SIGNAL(sigChannelValuesChanged(QVector4D)),
-            shadeSelector, SLOT(slotChannelValuesChanged(QVector4D)));
-    connect(shadeSelector, SIGNAL(sigChannelValuesChanged(QVector4D)),
+            m_shadeSelector, SLOT(slotChannelValuesChanged(QVector4D)));
+    connect(m_shadeSelector, SIGNAL(sigChannelValuesChanged(QVector4D)),
             model, SLOT(slotSetChannelValues(QVector4D)));
+    connect(m_shadeSelector, SIGNAL(sigColorInteraction(bool)), SLOT(slotColorInteraction(bool)));
 
     setWidget(mainWidget);
     setEnabled(false);
+}
+
+void WGColorSelectorDock::leaveEvent(QEvent *event)
+{
+    Q_UNUSED(event)
+    m_previewPopup->hide();
 }
 
 void WGColorSelectorDock::setCanvas(KoCanvasBase *canvas)
@@ -69,6 +80,8 @@ void WGColorSelectorDock::setCanvas(KoCanvasBase *canvas)
         connect(dri, SIGNAL(displayConfigurationChanged()), this, SLOT(slotDisplayConfigurationChanged()));
         connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
                 this, SLOT(slotCanvasResourceChanged(int,QVariant)));
+        connect(m_canvas->imageView()->resourceProvider(), SIGNAL(sigFGColorUsed(KoColor)),
+                this, SLOT(slotFGColorUsed(KoColor)), Qt::UniqueConnection);
     }
     setEnabled(canvas != 0);
 }
@@ -102,14 +115,16 @@ void WGColorSelectorDock::slotDisplayConfigurationChanged()
 void WGColorSelectorDock::slotColorSelected(const KoColor &color)
 {
     bool selectingBg = m_toggle->isChecked();
+    QColor displayCol = m_canvas->displayColorConverter()->toQColor(color);
+    m_previewPopup->setCurrentColor(displayCol);
     if (selectingBg) {
-        m_toggle->setBackgroundColor(m_canvas->displayColorConverter()->toQColor(color));
+        m_toggle->setBackgroundColor(displayCol);
         m_pendingBgUpdate = true;
         m_bgColor = color;
         m_colorChangeCompressor->start();
     }
     else {
-        m_toggle->setForegroundColor(m_canvas->displayColorConverter()->toQColor(color));
+        m_toggle->setForegroundColor(displayCol);
         m_pendingFgUpdate = true;
         m_fgColor = color;
         m_colorChangeCompressor->start();
@@ -124,6 +139,26 @@ void WGColorSelectorDock::slotColorSourceToggled(bool selectingBg)
     else {
         m_selector->slotSetColor(m_canvas->resourceManager()->foregroundColor());
     }
+}
+
+void WGColorSelectorDock::slotColorInteraction(bool active)
+{
+    if (active) {
+        QColor baseCol = m_selector->selectorModel()->displayRenderer()->toQColor(m_selector->getCurrentColor());
+        m_previewPopup->setCurrentColor(baseCol);
+        m_previewPopup->setPreviousColor(baseCol);
+        if (sender() == m_shadeSelector) {
+            m_previewPopup->show(m_shadeSelector);
+        } else {
+            m_previewPopup->show(this);
+        }
+    }
+}
+
+void WGColorSelectorDock::slotFGColorUsed(const KoColor &color)
+{
+    QColor lastCol = m_selector->selectorModel()->displayRenderer()->toQColor(color);
+    m_previewPopup->setLastUsedColor(lastCol);
 }
 
 void WGColorSelectorDock::slotSetNewColors()

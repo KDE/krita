@@ -67,6 +67,7 @@ QSize WGShadeSlider::minimumSizeHint() const
 void WGShadeSlider::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
+        emit sigInteraction(true);
         qreal sliderPos = convertWidgetCoordinateToSliderValue(event->localPos());
         if (!qFuzzyIsNull(m_d->sliderValue - sliderPos)) {
             m_d->sliderValue = sliderPos;
@@ -85,6 +86,13 @@ void WGShadeSlider::mouseMoveEvent(QMouseEvent *event)
             emit sigChannelValuesChanged(channelValues());
             update();
         }
+    }
+}
+
+void WGShadeSlider::mouseReleaseEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton) {
+        emit sigInteraction(false);
     }
 }
 

@@ -26,12 +26,13 @@ public:
     QSize minimumSizeHint() const override;
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
-    //void mouseReleaseEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
     //void tabletEvent(QTabletEvent *event) override;
     void paintEvent(QPaintEvent*) override;
     void resizeEvent(QResizeEvent *) override;
 Q_SIGNALS:
     void sigChannelValuesChanged(const QVector4D &values);
+    void sigInteraction(bool active);
 
 public Q_SLOTS:
     void slotSetChannelValues(const QVector4D &values);

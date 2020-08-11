@@ -282,6 +282,7 @@ void KisVisualColorSelectorShape::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::LeftButton) {
         m_d->dragStart = e->localPos();
+        emit colorSelector()->sigInteraction(true);
         QPointF coordinates = mousePositionToShapeCoordinate(e->localPos(), m_d->dragStart);
         setCursorPosition(coordinates, true);
     }
@@ -302,7 +303,9 @@ void KisVisualColorSelectorShape::mouseMoveEvent(QMouseEvent *e)
 
 void KisVisualColorSelectorShape::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (e->button() != Qt::LeftButton) {
+    if (e->button() == Qt::LeftButton) {
+        emit colorSelector()->sigInteraction(false);
+    } else {
         e->ignore();
     }
 }

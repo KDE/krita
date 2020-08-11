@@ -42,6 +42,7 @@ void WGShadeSelector::updateSettings()
         m_sliders.append(line);
         layout()->addWidget(m_sliders.last());
         connect(line, SIGNAL(sigChannelValuesChanged(QVector4D)), SLOT(slotSliderValuesChanged(QVector4D)));
+        connect(line, SIGNAL(sigInteraction(bool)), SIGNAL(sigColorInteraction(bool)));
     }
     while (config.size() < m_sliders.size()) {
         layout()->removeWidget(m_sliders.last());

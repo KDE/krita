@@ -36,6 +36,8 @@ private Q_SLOTS:
 
 Q_SIGNALS:
     void sigChannelValuesChanged(const QVector4D &values);
+    void sigColorInteraction(bool active);
+
 private:
     KisVisualColorModel *m_model;
     QVector<WGShadeSlider *> m_sliders;

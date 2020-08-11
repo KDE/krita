@@ -17,6 +17,8 @@ class KisCanvas2;
 class KisColorSourceToggle;
 class KisSignalCompressor;
 class KisVisualColorSelector;
+class WGColorPreviewPopup;
+class WGShadeSelector;
 class QVariant;
 
 class WGColorSelectorDock : public QDockWidget, public KoCanvasObserverBase // public KisMainwindowObserver ?
@@ -25,6 +27,7 @@ class WGColorSelectorDock : public QDockWidget, public KoCanvasObserverBase // p
 public:
     WGColorSelectorDock();
 protected:
+    void leaveEvent(QEvent *event) override;
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
 
@@ -34,6 +37,8 @@ private Q_SLOTS:
     void slotDisplayConfigurationChanged();
     void slotColorSelected(const KoColor &color);
     void slotColorSourceToggled(bool selectingBg);
+    void slotColorInteraction(bool active);
+    void slotFGColorUsed(const KoColor&color);
     void slotSetNewColors();
     void slotCanvasResourceChanged(int key, const QVariant &value);
 private:
@@ -41,6 +46,8 @@ private:
     KisVisualColorSelector *m_selector {0};
     KisColorSourceToggle *m_toggle {0};
     KisSignalCompressor *m_colorChangeCompressor;
+    WGColorPreviewPopup *m_previewPopup {0};
+    WGShadeSelector *m_shadeSelector {0};
     bool m_pendingFgUpdate {false};
     bool m_pendingBgUpdate {false};
     KoColor m_fgColor;

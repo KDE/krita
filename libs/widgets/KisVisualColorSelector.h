@@ -67,6 +67,14 @@ private Q_SLOTS:
     void slotDisplayConfigurationChanged();
     void slotRebuildSelectors();
 
+Q_SIGNALS:
+    /**
+     * @brief sigInteraction is emitted whenever mouse interaction status changes
+     * @param active when true, the user started dragging a handle, when false the
+     *        interaction has just finished
+     */
+    void sigInteraction(bool active);
+
 protected:
     void resizeEvent(QResizeEvent *) override;
 

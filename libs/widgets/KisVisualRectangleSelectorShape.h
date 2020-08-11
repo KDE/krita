@@ -31,6 +31,7 @@ public:
     QRect getSpaceForCircle(QRect geom) override;
     QRect getSpaceForTriangle(QRect geom) override;
 protected:
+    QRect getAvailableSpace(QRect geom, bool stretch);
     QImage renderAlphaMask() const override;
 
 private:

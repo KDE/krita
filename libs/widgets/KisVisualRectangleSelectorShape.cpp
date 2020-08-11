@@ -38,33 +38,46 @@ void KisVisualRectangleSelectorShape::setBorderWidth(int width)
 
 QRect KisVisualRectangleSelectorShape::getSpaceForSquare(QRect geom)
 {
-    QPointF tl;
-    QPointF br;
-
-    if (m_type==KisVisualRectangleSelectorShape::vertical) {
-        br = geom.bottomRight();
-        tl = QPoint(geom.topLeft().x()+m_barWidth, geom.topLeft().y());
-    } else if (m_type==KisVisualRectangleSelectorShape::horizontal) {
-        br = geom.bottomRight();
-        tl = QPoint(geom.topLeft().x(), geom.topLeft().y()+m_barWidth);
-    } else {
-        tl = QPointF (geom.topLeft().x()+m_barWidth, geom.topLeft().y()+m_barWidth);
-        br = QPointF (geom.bottomRight().x()-m_barWidth, geom.bottomRight().y()-m_barWidth);
-
-    }
-    QRect a(tl.toPoint(), br.toPoint());
-    QRect r(a.left(), a.top(), qMin(a.height(), a.width()), qMin(a.height(), a.width()));
-    return r;
+    return getAvailableSpace(geom, true);
 }
 
 QRect KisVisualRectangleSelectorShape::getSpaceForCircle(QRect geom)
 {
-    return getSpaceForSquare(geom);
+    return getAvailableSpace(geom, false);
 }
 
 QRect KisVisualRectangleSelectorShape::getSpaceForTriangle(QRect geom)
 {
     return getSpaceForSquare(geom);
+}
+
+QRect KisVisualRectangleSelectorShape::getAvailableSpace(QRect geom, bool stretch)
+{
+    QPoint tl;
+    QPoint br;
+
+    if (m_type == KisVisualRectangleSelectorShape::vertical) {
+        br = geom.bottomRight();
+        tl = QPoint(geom.topLeft().x() + m_barWidth, geom.topLeft().y());
+    } else if (m_type == KisVisualRectangleSelectorShape::horizontal) {
+        br = geom.bottomRight();
+        tl = QPoint(geom.topLeft().x(), geom.topLeft().y() + m_barWidth);
+    } else {
+        tl = QPoint(geom.topLeft().x() + m_barWidth, geom.topLeft().y() + m_barWidth);
+        br = QPoint(geom.bottomRight().x() - m_barWidth, geom.bottomRight().y() - m_barWidth);
+    }
+    QRect available(tl, br);
+    if (!stretch) {
+        int size = qMin(available.height(), available.width());
+        if (m_type == KisVisualRectangleSelectorShape::vertical) {
+            available.moveTop(available.y() + (available.height() - size)/2);
+        } else if (m_type == KisVisualRectangleSelectorShape::horizontal) {
+            available.moveLeft(available.x() + (available.width() - size)/2);
+        }
+        available.setSize(QSize(size, size));
+    }
+
+    return available;
 }
 
 QPointF KisVisualRectangleSelectorShape::convertShapeCoordinateToWidgetCoordinate(QPointF coordinate) const

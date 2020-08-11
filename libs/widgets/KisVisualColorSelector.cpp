@@ -32,6 +32,7 @@ struct KisVisualColorSelector::Private
     bool initialized {false};
     bool loadingConfig {false};
     int colorChannelCount {0};
+    qreal stretchLimit {1.5};
     QVector4D channelValues;
     KisVisualColorSelector::RenderMode renderMode {RenderMode::DynamicBackground};
     KisColorSelectorConfiguration acs_config;
@@ -391,14 +392,18 @@ void KisVisualColorSelector::resizeEvent(QResizeEvent *)
     }
     else if (m_d->colorChannelCount == 3) {
         m_d->widgetlist.at(0)->setBorderWidth(borderWidth);
-        if (m_d->acs_config.subType == KisColorSelectorConfiguration::Ring) {
-            m_d->widgetlist.at(0)->resize(sizeValue,sizeValue);
+        if (m_d->acs_config.subType == KisColorSelectorConfiguration::Ring ||
+            (m_d->acs_config.subType == KisColorSelectorConfiguration::Slider && m_d->circular)) {
+
+            m_d->widgetlist.at(0)->setGeometry((width() - sizeValue)/2, (height() - sizeValue)/2,
+                                               sizeValue, sizeValue);
         }
-        else if (m_d->acs_config.subType == KisColorSelectorConfiguration::Slider && m_d->circular==false) {
-            m_d->widgetlist.at(0)->resize(borderWidth, sizeValue);
-        }
-        else if (m_d->acs_config.subType == KisColorSelectorConfiguration::Slider && m_d->circular==true) {
-            m_d->widgetlist.at(0)->resize(sizeValue,sizeValue);
+        else if (m_d->acs_config.subType == KisColorSelectorConfiguration::Slider) {
+            // limit stretch; only vertical slider currently
+            newrect.setWidth(qMin(newrect.width(), qRound(sizeValue * m_d->stretchLimit + borderWidth)));
+            newrect.setHeight(qMin(newrect.height(), qRound((newrect.width() - borderWidth) * m_d->stretchLimit)));
+
+            m_d->widgetlist.at(0)->setGeometry(0, 0, borderWidth, newrect.height());
         }
 
         if (m_d->acs_config.mainType == KisColorSelectorConfiguration::Triangle) {
@@ -410,6 +415,11 @@ void KisVisualColorSelector::resizeEvent(QResizeEvent *)
         else if (m_d->acs_config.mainType == KisColorSelectorConfiguration::Wheel) {
             m_d->widgetlist.at(1)->setGeometry(m_d->widgetlist.at(0)->getSpaceForCircle(newrect));
         }
+        // center horizontally
+        QRect boundRect(m_d->widgetlist.at(0)->geometry() | m_d->widgetlist.at(1)->geometry());
+        int offset = (width() - boundRect.width()) / 2 - boundRect.left();
+        m_d->widgetlist.at(0)->move(m_d->widgetlist.at(0)->pos() + QPoint(offset, 0));
+        m_d->widgetlist.at(1)->move(m_d->widgetlist.at(1)->pos() + QPoint(offset, 0));
     }
     else if (m_d->colorChannelCount == 4) {
         int sizeBlock = qMin(width()/2 - 8, height());

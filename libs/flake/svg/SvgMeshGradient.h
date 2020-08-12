@@ -23,7 +23,7 @@
 #include "SvgMeshPatch.h"
 #include "SvgMeshArray.h"
 
-class SvgMeshGradient
+class KRITAFLAKE_EXPORT SvgMeshGradient
 {
 public:
     enum Shading {

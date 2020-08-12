@@ -29,6 +29,7 @@ class KoShape;
 class QColor;
 class QTransform;
 class QGradient;
+class SvgMeshGradient;
 
 class KRITAFLAKE_EXPORT KoShapeFillWrapper
 {
@@ -52,6 +53,8 @@ public:
     KUndo2Command* setGradient(const QGradient *gradient, const QTransform &transform);
     KUndo2Command* applyGradient(const QGradient *gradient);
     KUndo2Command* applyGradientStopsOnly(const QGradient *gradient);
+
+    KUndo2Command* setMeshGradient(const SvgMeshGradient *gradient, const QTransform &transform);
 
 private:
     struct Private;

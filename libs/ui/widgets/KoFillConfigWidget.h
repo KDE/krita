@@ -41,7 +41,8 @@ class KRITAUI_EXPORT KoFillConfigWidget : public QWidget
         None = 0,
         Solid,
         Gradient,
-        Pattern
+        Pattern,
+        MeshGradient
     };
 
 public:
@@ -99,6 +100,8 @@ private Q_SLOTS:
 
     void slotProposeCurrentColorToResourceManager();
     void slotRecoverColorInResourceManager();
+
+    void slotMeshGradientChanged();
 
 Q_SIGNALS:
     void sigFillChanged();

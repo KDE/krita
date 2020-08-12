@@ -105,6 +105,7 @@ void KisMyPaintOpFactory::processAfterLoading() {
         s->setProperty(MYPAINT_DIAMETER, brush->getSize());
         s->setProperty(MYPAINT_HARDNESS, brush->getHardness());
         s->setProperty(MYPAINT_OPACITY, brush->getOpacity());
+        s->setProperty(MYPAINT_OFFSET_BY_RANDOM, brush->getOffset());
         s->setProperty(MYPAINT_ERASER, brush->isEraser());
         s->setProperty("EraserMode", qRound(brush->isEraser()));
 

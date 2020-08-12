@@ -35,6 +35,7 @@ public:
     float diameter;
     float hardness;
     float opacity;
+    float offset;
     float isEraser;
 };
 
@@ -77,6 +78,9 @@ void KisMyPaintBrush::apply(KisPaintOpSettingsSP settings) {
 
     float opacity = settings->getFloat(MYPAINT_OPACITY);
     mypaint_brush_set_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_OPAQUE, opacity);
+
+    float offset = settings->getFloat(MYPAINT_OFFSET_BY_RANDOM);
+    mypaint_brush_set_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_OFFSET_BY_RANDOM, offset);
 
     mypaint_brush_new_stroke(m_d->m_brush);
 }
@@ -134,6 +138,7 @@ bool KisMyPaintBrush::loadFromDevice(QIODevice *dev) {
     m_d->diameter = 2*exp(mypaint_brush_get_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC));
     m_d->hardness = mypaint_brush_get_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_HARDNESS);
     m_d->opacity = mypaint_brush_get_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_OPAQUE);
+    m_d->offset = mypaint_brush_get_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_OFFSET_BY_RANDOM);
     m_d->isEraser = mypaint_brush_get_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_ERASER);
 
     return true;
@@ -162,6 +167,11 @@ float KisMyPaintBrush::getHardness() {
 float KisMyPaintBrush::getOpacity() {
 
     return m_d->opacity;
+}
+
+float KisMyPaintBrush::getOffset() {
+
+    return m_d->offset;
 }
 
 float KisMyPaintBrush::isEraser() {

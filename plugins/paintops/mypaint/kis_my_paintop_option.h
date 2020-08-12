@@ -12,6 +12,7 @@ const QString MYPAINT_OPACITY = "MyPaint/opcity";
 const QString MYPAINT_ERASER = "MyPaint/eraser";
 const QString MYPAINT_JSON = "MyPaint/json";
 const QString MYPAINT_BRUSH = "MyPaint/brush";
+const QString MYPAINT_OFFSET_BY_RANDOM = "MyPaint/Offset";
 
 class KisMyPaintOpOptionsWidget;
 
@@ -63,6 +64,7 @@ public:
         diameter = settings->getFloat(MYPAINT_DIAMETER);
         json = settings->getProperty(MYPAINT_JSON).toByteArray();
         eraser = settings->getFloat(MYPAINT_ERASER);
+        offset = settings->getFloat(MYPAINT_OFFSET_BY_RANDOM);
 
     }
 
@@ -74,6 +76,7 @@ public:
         settings->setProperty(MYPAINT_HARDNESS, hardness);
         settings->setProperty(MYPAINT_JSON, json);
         settings->setProperty("EraserMode", eraserMode);
+        settings->setProperty(MYPAINT_OFFSET_BY_RANDOM, offset);
     }
 
 
@@ -82,6 +85,7 @@ public:
     float hardness;
     float opacity;
     float eraser;
+    float offset;
     bool eraserMode;
     QByteArray json;
 

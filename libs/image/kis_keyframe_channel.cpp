@@ -69,9 +69,7 @@ struct KisKeyframeChannel::Private
 KisKeyframeChannel::KisKeyframeChannel(const KoID &id, KisNodeWSP parent)
     : KisKeyframeChannel(id, KisDefaultBoundsNodeWrapperSP( new KisDefaultBoundsNodeWrapper(parent)))
 {
-    m_d->parentNode = parent;
-
-    connect(this, &KisKeyframeChannel::sigChannelUpdated, m_d->parentNode, &KisNode::invalidateFrames);
+    setNode(parent);
 }
 
 KisKeyframeChannel::KisKeyframeChannel(const KoID &id, KisDefaultBoundsBaseSP bounds)
@@ -284,13 +282,16 @@ QString KisKeyframeChannel::name() const
 
 void KisKeyframeChannel::setNode(KisNodeWSP node)
 {
-    if (m_d->parentNode.isValid()) {
-        disconnect(this, &KisKeyframeChannel::sigChannelUpdated, m_d->parentNode, &KisNode::invalidateFrames);
+    if (m_d->parentNode.isValid()) { // Disconnect old..
+        disconnect(this, &KisKeyframeChannel::sigChannelUpdated, m_d->parentNode, &KisNode::handleKeyframeChannelUpdate);
     }
 
     m_d->parentNode = node;
     m_d->bounds = KisDefaultBoundsNodeWrapperSP( new KisDefaultBoundsNodeWrapper( node ));
-    connect(this, &KisKeyframeChannel::sigChannelUpdated, m_d->parentNode, &KisNode::invalidateFrames);
+
+    if (m_d->parentNode) { // Connect new..
+        connect(this, &KisKeyframeChannel::sigChannelUpdated, m_d->parentNode, &KisNode::handleKeyframeChannelUpdate);
+    }
 }
 
 KisNodeWSP KisKeyframeChannel::node() const

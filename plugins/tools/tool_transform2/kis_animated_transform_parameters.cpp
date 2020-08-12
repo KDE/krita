@@ -253,7 +253,7 @@ void setScalarChannelValue(KisTransformMaskSP mask, const KoID &channelId, int t
 {
     KisScalarKeyframeChannel *channel = dynamic_cast<KisScalarKeyframeChannel*>(mask->getKeyframeChannel(channelId.id(), true));
     KIS_ASSERT_RECOVER_RETURN(channel);
-    //new KisScalarKeyframeChannel::AddKeyframeCommand(channel, time, value, parentCommand);
+    channel->addScalarKeyframe(time, value, parentCommand);
 }
 
 void KisAnimatedTransformMaskParameters::addKeyframes(KisTransformMaskSP mask, int time, KisTransformMaskParamsInterfaceSP params, KUndo2Command *parentCommand)

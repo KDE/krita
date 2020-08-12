@@ -651,6 +651,11 @@ void KisNode::invalidateFrames(const KisTimeSpan &range, const QRect &rect)
     if(m_d->graphListener) {
         m_d->graphListener->invalidateFrames(range, rect);
     }
+}
+
+void KisNode::handleKeyframeChannelUpdate(const KisTimeSpan &range, const QRect &rect)
+{
+    invalidateFrames(range, rect);
 
     if (original() && original()->defaultBounds()) {
         if (range.contains(original()->defaultBounds()->currentTime())) {

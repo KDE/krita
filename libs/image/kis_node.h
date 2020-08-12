@@ -153,11 +153,13 @@ public:
     void setDirtyDontResetAnimationCache(const QVector<QRect> &rects);
 
     /**
-     * Informs that the frames in the given range are no longer valid
-     * and need to be recached.
+     * Informs animation cache that the frames in the given range are
+     * no longer valid and need to be recached.
      * @param range frames to invalidate
      */
     void invalidateFrames(const KisTimeSpan &range, const QRect &rect);
+
+    void handleKeyframeChannelUpdate(const KisTimeSpan &range, const QRect &rect);
 
     /**
      * Informs that the current world time should be changed.

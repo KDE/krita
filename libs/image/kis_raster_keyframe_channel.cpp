@@ -66,12 +66,7 @@ QRect KisRasterKeyframe::contentBounds()
         return QRect();
     }
 
-    // An empty frame should be the size of a full image.
-    if (hasContent()){
-        return m_paintDevice->framesInterface()->frameBounds(m_frameID);
-    } else {
-        return m_paintDevice->defaultBounds()->imageBorderRect();
-    }
+    return m_paintDevice->framesInterface()->frameBounds(m_frameID);
 }
 
 bool KisRasterKeyframe::hasContent()
@@ -263,14 +258,10 @@ void KisRasterKeyframeChannel::cloneKeyframe(int source, int destination, KUndo2
 
 QRect KisRasterKeyframeChannel::affectedRect(int time) const
 {
-    //Note #1: Directionality *not* known
-    //Note #2: This function shouldn't fail outright if there is no keyframe at `time`
     QRect affectedRect;
 
     QList<KisRasterKeyframeSP> relevantFrames;
-
     relevantFrames.append(keyframeAt<KisRasterKeyframe>(time));
-    relevantFrames.append(keyframeAt<KisRasterKeyframe>(nextKeyframeTime(time)));
     relevantFrames.append(keyframeAt<KisRasterKeyframe>(previousKeyframeTime(time)));
 
     Q_FOREACH (KisRasterKeyframeSP frame, relevantFrames) {

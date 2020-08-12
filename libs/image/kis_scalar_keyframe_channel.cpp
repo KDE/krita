@@ -38,6 +38,10 @@ KisScalarKeyframe::KisScalarKeyframe(qreal value, QWeakPointer<ScalarKeyframeLim
 KisScalarKeyframe::KisScalarKeyframe(const KisScalarKeyframe &rhs)
     : KisKeyframe(rhs),
       m_value(rhs.m_value),
+      m_interpolationMode(rhs.m_interpolationMode),
+      m_tangentsMode(rhs.m_tangentsMode),
+      m_leftTangent(rhs.m_leftTangent),
+      m_rightTangent(rhs.m_rightTangent),
       m_channelLimits(rhs.m_channelLimits)
 {
 }
@@ -62,13 +66,13 @@ qreal KisScalarKeyframe::value() const
     return m_value;
 }
 
-void KisScalarKeyframe::setValue(qreal val, KUndo2Command *parentUndoCmd)
+void KisScalarKeyframe::setValue(qreal value, KUndo2Command *parentUndoCmd)
 {
     if (parentUndoCmd) {
         KUndo2Command* cmd = new KisScalarKeyframeUpdateCommand(this, parentUndoCmd);
     }
 
-    m_value = val;
+    m_value = value;
 
     if (m_channelLimits) {
         m_value = m_channelLimits.data()->clamp(m_value);
@@ -351,8 +355,6 @@ KisTimeSpan KisScalarKeyframeChannel::affectedFrames(int time) const
         }
         return normalSpan | KisTimeSpan::fromTime(0, activeKeyTime);
     }
-
-
 }
 
 KisTimeSpan KisScalarKeyframeChannel::identicalFrames(int time) const
@@ -436,7 +438,7 @@ void KisScalarKeyframeChannel::normalizeTangents(const QPointF point1, QPointF &
     }
 }
 
-KisKeyframeSP KisScalarKeyframeChannel::createKeyframe() // TODO: DOUBLE-CHECK!
+KisKeyframeSP KisScalarKeyframeChannel::createKeyframe()
 {
     KisScalarKeyframe *keyframe = new KisScalarKeyframe(m_d->defaultValue, m_d->limits);
     keyframe->setInterpolationMode(m_d->defaultInterpolationMode);

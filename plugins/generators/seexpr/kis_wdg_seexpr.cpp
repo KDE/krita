@@ -63,7 +63,7 @@ KisWdgSeExpr::KisWdgSeExpr(QWidget *parent)
     m_widget->txtEditor->exprTe->setFont(QFontDatabase().systemFont(QFontDatabase::FixedFont));
 
     connect(m_widget->scriptSelectorWidget, SIGNAL(resourceSelected(KoResource*)), this, SLOT(slotResourceSelected(KoResource*)));
-    connect(m_saveDialog, SIGNAL(resourceSelected(KoResource*)), this, SLOT(slotResourceSelected(KoResource*)));
+    connect(m_saveDialog, SIGNAL(resourceSelected(KoResource*)), this, SLOT(slotResourceSaved(KoResource*)));
 
     connect(m_widget->renameBrushPresetButton, SIGNAL(clicked(bool)),
             this, SLOT(slotRenamePresetActivated()));
@@ -133,6 +133,16 @@ KisPropertiesConfigurationSP KisWdgSeExpr::configuration() const
     config->setProperty("script", QVariant(m_widget->txtEditor->getExpr()));
 
     return config;
+}
+
+void KisWdgSeExpr::slotResourceSaved(KoResource *r)
+{
+    KisSeExprScript *g = static_cast<KisSeExprScript *>(r);
+
+    if (g) {
+        m_widget->scriptSelectorWidget->setCurrentScript(r);
+        slotResourceSelected(r);
+    }
 }
 
 void KisWdgSeExpr::slotResourceSelected(KoResource *r)

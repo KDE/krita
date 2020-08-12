@@ -74,7 +74,9 @@ void KisWdgSeExprPresetsSave::showDialog()
 
         if (preset) {
             if (!preset->name().isEmpty()) {
-                newPresetNameTextField->setText(preset->name().append(" ").append(i18n("Copy")));
+                // preset names have underscores as part of the file name (to help with building). We don't really need underscores
+                // when viewing the names, so replace them with spaces
+                newPresetNameTextField->setText(preset->name().replace("_", " ").append(" ").append(i18n("Copy")));
             } else {
                 newPresetNameTextField->clear();
             }
@@ -85,7 +87,7 @@ void KisWdgSeExprPresetsSave::showDialog()
         newPresetNameTextField->setVisible(false);
 
         if (preset) {
-            newPresetNameTextField->setText(preset->name());
+            newPresetNameTextField->setText(preset->name().replace("_", " "));
         }
     }
 

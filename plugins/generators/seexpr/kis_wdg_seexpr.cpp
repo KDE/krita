@@ -239,6 +239,7 @@ void KisWdgSeExpr::slotUpdatePresetSettings()
         m_widget->dirtyPresetIndicatorButton->setVisible(false);
         m_widget->reloadPresetButton->setVisible(false);
         m_widget->saveBrushPresetButton->setVisible(false);
+        m_widget->saveNewBrushPresetButton->setEnabled(false);
         m_widget->renameBrushPresetButton->setVisible(false);
     } else {
         // In SeExpr's case, there is never a default preset -- amyspark
@@ -253,6 +254,7 @@ void KisWdgSeExpr::slotUpdatePresetSettings()
         m_widget->dirtyPresetIndicatorButton->setVisible(isPresetDirty);
         m_widget->reloadPresetButton->setVisible(isPresetDirty);
         m_widget->saveBrushPresetButton->setEnabled(isPresetDirty);
+        m_widget->saveNewBrushPresetButton->setEnabled(true);
         m_widget->renameBrushPresetButton->setVisible(true);
     }
 }
@@ -318,11 +320,17 @@ void KisWdgSeExpr::isValid()
             }
             m_widget->txtEditor->addError(occurrence.startPos, occurrence.endPos, message);
         }
+
+        m_widget->saveBrushPresetButton->setEnabled(false);
+        m_widget->saveNewBrushPresetButton->setEnabled(false);
     }
     // Should not happen now, but I've left it for completeness's sake
     else if (!expression.returnType().isFP(3)) {
         QString type = QString::fromStdString(expression.returnType().toString());
         m_widget->txtEditor->addError(1, 1, tr2i18n("Expected this script to output color, got '%1'").arg(type));
+
+        m_widget->saveBrushPresetButton->setEnabled(false);
+        m_widget->saveNewBrushPresetButton->setEnabled(false);
     } else {
         m_widget->txtEditor->clearErrors();
         emit sigConfigurationUpdated();

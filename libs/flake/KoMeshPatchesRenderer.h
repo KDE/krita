@@ -56,7 +56,6 @@ public:
         m_patch.fill(Qt::transparent);
 
         m_patchPainter.begin(&m_patch);
-        m_patchPainter.setRenderHint(QPainter::Antialiasing);
 
         // this ensures that the patch renders inside the boundingRect
         m_patchPainter.translate(-scaledGradientRect.topLeft());

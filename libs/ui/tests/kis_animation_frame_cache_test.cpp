@@ -26,6 +26,7 @@
 #include "opengl/kis_opengl_image_textures.h"
 #include "kis_time_range.h"
 #include "kis_keyframe_channel.h"
+#include "kistest.h"
 
 #include "kundo2command.h"
 
@@ -52,16 +53,21 @@ void KisAnimationFrameCacheTest::testCache()
 
     KUndo2Command parentCommand;
 
-    KisKeyframeChannel *rasterChannel2 = layer2->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    KisKeyframeChannel *rasterChannel2 = layer2->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+
     rasterChannel2->addKeyframe(10, &parentCommand);
     rasterChannel2->addKeyframe(20, &parentCommand);
     rasterChannel2->addKeyframe(30, &parentCommand);
 
-    KisKeyframeChannel *rasterChannel3 = layer2->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    KisKeyframeChannel *rasterChannel3 = layer2->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
     rasterChannel3->addKeyframe(17, &parentCommand);
 
     KisOpenGLImageTexturesSP glTex = KisOpenGLImageTextures::getImageTextures(image, 0, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::Empty);
     KisAnimationFrameCacheSP cache = new KisAnimationFrameCache(glTex);
+    glTex->testingForceInitialized();
+
+    m_globalAnimationCache = cache.data();
+    connect(animation, SIGNAL(sigFrameReady(int)), this, SLOT(slotFrameGerenationFinished(int)));
 
     int t;
     animation->saveAndResetCurrentTime(11, &t);
@@ -100,4 +106,12 @@ void KisAnimationFrameCacheTest::testCache()
 
 }
 
-QTEST_MAIN(KisAnimationFrameCacheTest)
+void KisAnimationFrameCacheTest::slotFrameGerenationFinished(int time)
+{
+    KisImageSP image = m_globalAnimationCache->image();
+    KisOpenGLUpdateInfoSP info = m_globalAnimationCache->fetchFrameData(time, image, KisRegion(image->bounds()));
+    m_globalAnimationCache->addConvertedFrameData(info, time);
+
+}
+
+KISTEST_MAIN(KisAnimationFrameCacheTest)

@@ -241,8 +241,8 @@ void KisLayerTest::testMasksChangeRect()
 
     image->addNode(paintLayer1, image->rootLayer());
 
-    KisFilterMaskSP filterMask1 = new KisFilterMask();
-    KisFilterMaskSP filterMask2 = new KisFilterMask();
+    KisFilterMaskSP filterMask1 = new KisFilterMask(image, "fmask1");
+    KisFilterMaskSP filterMask2 = new KisFilterMask(image, "fmask2");
 
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
     Q_ASSERT(filter);
@@ -296,7 +296,7 @@ void KisLayerTest::testMoveLayerWithMaskThreaded()
 
     paintLayer->paintDevice()->fill(image->bounds(), KoColor(Qt::black, colorSpace));
 
-    KisTransparencyMaskSP transpMask = new KisTransparencyMask();
+    KisTransparencyMaskSP transpMask = new KisTransparencyMask(image, "tmask");
     transpMask->initSelection(paintLayer);
     image->addNode(transpMask, paintLayer);
 

@@ -65,6 +65,7 @@ struct TestConfig {
         style->dropShadow()->setNoise(noise);
         style->dropShadow()->setKnocksOut(knocks_out);
         style->dropShadow()->setOpacity(opacity);
+        style->dropShadow()->setAngle(angle);
     }
 
     QString genTestname(const QString &prefix) const {

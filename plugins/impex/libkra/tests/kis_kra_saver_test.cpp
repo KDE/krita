@@ -298,8 +298,7 @@ void KisKraSaverTest::testRoundTripAnimation()
     layer1->paintDevice()->moveTo(100, 50);
     layer1->paintDevice()->setDefaultPixel(KoColor(Qt::blue, cs));
 
-    QVERIFY(!layer1->useInTimeline());
-    layer1->setUseInTimeline(true);
+    QVERIFY(layer1->useInTimeline());
 
     doc->setCurrentImage(image);
     doc->exportDocumentSync(QUrl::fromLocalFile("roundtrip_animation.kra"), doc->mimeType());
@@ -361,7 +360,7 @@ void KisKraSaverTest::testRoundTripColorizeMask()
     KisPaintLayerSP layer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8, weirdCS);
     image->addNode(layer1);
 
-    KisColorizeMaskSP mask = new KisColorizeMask();
+    KisColorizeMaskSP mask = new KisColorizeMask(image, "mask1");
     image->addNode(mask, layer1);
     mask->initializeCompositeOp();
     delete mask->setColorSpace(layer1->colorSpace());
@@ -403,7 +402,7 @@ void KisKraSaverTest::testRoundTripColorizeMask()
     QVERIFY(mask2);
 
     QCOMPARE(mask2->compositeOpId(), mask->compositeOpId());
-    QCOMPARE(mask2->colorSpace(), mask->colorSpace());
+    QCOMPARE(*mask2->colorSpace(), *mask->colorSpace());
     QCOMPARE(KisLayerPropertiesIcons::nodeProperty(mask, KisLayerPropertiesIcons::colorizeEditKeyStrokes, true).toBool(), false);
     QCOMPARE(KisLayerPropertiesIcons::nodeProperty(mask, KisLayerPropertiesIcons::colorizeShowColoring, true).toBool(), false);
 
@@ -512,7 +511,7 @@ void KisKraSaverTest::testRoundTripShapeSelection()
 
     shapeSelection->addShape(path);
 
-    KisTransparencyMaskSP tmask = new KisTransparencyMask();
+    KisTransparencyMaskSP tmask = new KisTransparencyMask(p.image, "tmask");
     tmask->setSelection(selection);
     p.image->addNode(tmask, p.layer);
 

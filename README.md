@@ -2,25 +2,23 @@
 
 | Jenkins CI Name | Master | Stable |
 | --------------- | ------ | ------ |
-| OpenSuse Qt 5.12 | [![Build Status](https://build.kde.org/job/Extragear/job/krita/job/kf5-qt5%20SUSEQt5.12/badge/icon)](https://build.kde.org/job/Extragear/job/krita/job/kf5-qt5%20SUSEQt5.12/) |[![Build Status](https://build.kde.org/buildStatus/icon?job=Extragear%2Fkrita%2Fstable-kf5-qt5+SUSEQt5.12)](https://build.kde.org/job/Extragear/job/krita/job/stable-kf5-qt5%20SUSEQt5.12/)|
-| FreeBSD Qt 5.13 | [![Build Status](https://build.kde.org/job/Extragear/job/krita/job/kf5-qt5%20FreeBSDQt5.13/badge/icon)](https://build.kde.org/job/Extragear/job/krita/job/kf5-qt5%20FreeBSDQt5.13/) |[![Build Status](https://build.kde.org/job/Extragear/job/krita/job/stable-kf5-qt5%20FreeBSDQt5.13/badge/icon)](https://build.kde.org/job/Extragear/job/krita/job/stable-kf5-qt5%20FreeBSDQt5.13/)|
+| OpenSuse Qt 5.14 | [![Build Status](https://build.kde.org/job/Extragear/job/krita/job/kf5-qt5%20SUSEQt5.14/badge/icon)](https://build.kde.org/job/Extragear/job/krita/job/kf5-qt5%20SUSEQt5.14//) |[![Build Status](https://build.kde.org/buildStatus/icon?https://build.kde.org/job/Extragear/job/krita/job/stable-kf5-qt5%20SUSEQt5.14/badge/icon)](https://build.kde.org/job/Extragear/job/krita/job/stable-kf5-qt5%20SUSEQt5.14/)|
+| FreeBSD Qt 5.15 | [![Build Status](https://build.kde.org/job/Extragear/job/krita/job/kf5-qt5%20FreeBSDQt5.15/badge/icon)](https://build.kde.org/job/Extragear/job/krita/job/kf5-qt5%20FreeBSDQt5.15/) |[![Build Status](https://build.kde.org/job/Extragear/job/krita/job/stable-kf5-qt5%20FreeBSDQt5.15/badge/icon)](https://build.kde.org/job/Extragear/job/krita/job/stable-kf5-qt5%20FreeBSDQt5.15/)|
 
 
 Krita is a free and open source digital painting application. It is for artists who want to create professional work from start to end. Krita is used by comic book artists, illustrators, concept artists, matte and texture painters and in the digital VFX industry.
 
-If you are reading this on Github, be aware that this is just a mirror. Our real
-code repository is provided by KDE: https://invent.kde.org/graphics/krita.git
+If you are reading this on Github, be aware that this is just a mirror. Our real code repository is provided by KDE: https://invent.kde.org/graphics/krita.git
 
-![Picture](https://krita.org/wp-content/uploads/2016/04/krita-30-screenshot.jpg)
+![Picture](https://krita.org/wp-content/uploads/2020/05/kiki_4.3.3_sm.png)
 
 
 ### User Manual
 https://docs.krita.org/en/user_manual.html
 
 ### Development Notes and Build Instructions
-If you're building on Windows or OSX you'll need to build some third-party dependencies first. You should look at the README in the 3rdparty folder for directions. 
 
-If you're building on Linux, please follow [the online documentation](https://docs.krita.org/en/untranslatable_pages/building_krita.html).
+Please follow [the online documentation](https://docs.krita.org/en/untranslatable_pages/building_krita.html).
 
 Other developer guides, notes and wiki:
 
@@ -28,24 +26,49 @@ https://docs.krita.org/en/untranslatable_pages.html
 
 Apidox:
 
-https://api.kde.org/extragear-api/graphics-apidocs/krita/html/index.html
+https://api.kde.org/appscomplete-api/krita-apidocs/
 
 ### Bugs and Wishes
 
 https://bugs.kde.org/buglist.cgi?bug_status=UNCONFIRMED&bug_status=CONFIRMED&bug_status=ASSIGNED&bug_status=REOPENED&list_id=1315444&product=krita&query_format=advanced
 
 ### Discussion Forum
-http://forum.kde.org/viewforum.php?f=136
+
+* https://krita-artists.org/
+* http://forum.kde.org/viewforum.php?f=136
 
 ### IRC channel
-Most of the developers hang out here. If you are interested in helping with the project this is a great place to start. Many of the developers based in Europe so they may be offline depending on when you join.
+
+Most of the developers hang out here. If you are interested in helping with the project this is a great place to start.
 
 irc.freenode.net, #krita
 
 ### Project Website
 
-  http://www.krita.org
+https://www.krita.org
+
+
+### Nightly builds
+
+#### Unstable
+
+* https://binary-factory.kde.org/job/Krita_Nightly_Appimage_Build/
+* https://binary-factory.kde.org/job/Krita_Nightly_Windows_Build/
+* https://binary-factory.kde.org/job/Krita_Nightly_MacOS_Build/
+* https://binary-factory.kde.org/job/Krita_Nightly_Android_arm64-v8a_Build/
+* https://binary-factory.kde.org/job/Krita_nightly_flatpak/
+* https://binary-factory.kde.org/job/Krita_nightly_arm_flatpak/
+
+#### Stable
+
+* https://binary-factory.kde.org/job/Krita_Stable_Appimage_Build/
+* https://binary-factory.kde.org/job/Krita_Stable_Windows_Build/
+* https://binary-factory.kde.org/job/Krita_Stable_MacOS_Build/
+* https://binary-factory.kde.org/job/Krita_stable_flatpak/
+* https://binary-factory.kde.org/job/Krita_stable_flatpak/
+
 
 ### License
 
 Krita as a whole is licensed under the GNU Public License, Version 3. Individual files may have a different, but compatible license.
+

@@ -336,7 +336,7 @@ QWidget * KisToolBrush::createOptionWidget()
     m_sliderSmoothnessDistance->setEnabled(true);
     connect(m_sliderSmoothnessDistance, SIGNAL(valueChanged(qreal)), SLOT(slotSetSmoothnessDistance(qreal)));
     m_sliderSmoothnessDistance->setValue(smoothingOptions()->smoothnessDistance());
-    addOptionWidgetOption(m_sliderSmoothnessDistance, new QLabel(i18n("Distance:")));
+    addOptionWidgetOption(m_sliderSmoothnessDistance, new QLabel(i18nc("Label of Distance value in Freehand brush tool's Weighted Smoothing mode", "Distance:")));
 
     // Finish stabilizer curve
     m_chkFinishStabilizedCurve = new QCheckBox(optionsWidget);

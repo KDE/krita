@@ -272,7 +272,6 @@ void KisPredefinedBrushChooser::slotResetBrush()
         brush->setAngle(0.0);
 
         if (KisColorfulBrush *colorfulBrush = dynamic_cast<KisColorfulBrush*>(m_brush.data())) {
-            colorfulBrush->setUseColorAsMask(false);
             colorfulBrush->setBrushApplication(IMAGESTAMP);
             colorfulBrush->setAdjustmentMidPoint(127);
             colorfulBrush->setBrightnessAdjustment(0.0);
@@ -425,14 +424,19 @@ void KisPredefinedBrushChooser::slotUpdateBrushModeButtonsState()
         m_hslBrushTipEnabled && colorfulBrush && colorfulBrush->hasColor();
 
     if (modeSwitchEnabled) {
-        if (colorfulBrush->preserveLightness()) {
+        switch (colorfulBrush->brushApplication()) {
+        case LIGHTNESSMAP:
             btnLightnessMode->setChecked(true);
-        } else if (colorfulBrush->applyingGradient()) {
-            btnGradientMode->setChecked(true);
-        } else if (colorfulBrush->useColorAsMask()) {
+            break;
+        case GRADIENTMAP:
+             btnGradientMode->setChecked(true);
+            break;
+        case ALPHAMASK:
             btnMaskMode->setChecked(true);
-        } else {
+            break;
+        case IMAGESTAMP:
             btnColorMode->setChecked(true);
+            break;
         }
 
         {
@@ -513,16 +517,12 @@ void KisPredefinedBrushChooser::slotWriteBrushMode()
     if (!colorfulBrush) return;
 
     if (btnLightnessMode->isChecked()) {
-        colorfulBrush->setUseColorAsMask(true);
         colorfulBrush->setBrushApplication(LIGHTNESSMAP);
     } else if (btnGradientMode->isChecked()) {
-        colorfulBrush->setUseColorAsMask(true);
         colorfulBrush->setBrushApplication(GRADIENTMAP);
     } else if (btnMaskMode->isChecked()) {
-        colorfulBrush->setUseColorAsMask(true);
         colorfulBrush->setBrushApplication(ALPHAMASK);
     } else {
-        colorfulBrush->setUseColorAsMask(false);
         colorfulBrush->setBrushApplication(IMAGESTAMP);
     }
 

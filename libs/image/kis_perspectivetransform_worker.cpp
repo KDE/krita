@@ -85,6 +85,7 @@ void KisPerspectiveTransformWorker::fillParams(const QRectF &srcRect,
 void KisPerspectiveTransformWorker::init(const QTransform &transform)
 {
     m_isIdentity = transform.isIdentity();
+    m_isTranslating = transform.type() == QTransform::TxTranslate;
 
     m_forwardTransform = transform;
     m_backwardTransform = transform.inverted();
@@ -115,6 +116,15 @@ void KisPerspectiveTransformWorker::run()
     KIS_ASSERT_RECOVER_RETURN(m_dev);
 
     if (m_isIdentity) return;
+
+    // TODO: check if this optimization is possible. The only blocking issue might be if
+    //       some other thread also accesses this device (which should not be the case,
+    //       theoretically
+    //
+    // if (m_isTranslating) {
+    //     m_dev->moveTo(m_dev->offset() + QPoint(qRound(m_forwardTransform.dx()), qRound(m_forwardTransform.dy())));
+    //     return;
+    // }
 
     KisPaintDeviceSP cloneDevice = new KisPaintDevice(*m_dev.data());
 
@@ -151,48 +161,37 @@ void KisPerspectiveTransformWorker::runPartialDst(KisPaintDeviceSP srcDev,
                                                   KisPaintDeviceSP dstDev,
                                                   const QRect &dstRect)
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(srcDev->pixelSize() == dstDev->pixelSize());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(*srcDev->colorSpace() == *dstDev->colorSpace());
 
     QRectF srcClipRect = srcDev->defaultBounds()->imageBorderRect();
     if (srcClipRect.isEmpty()) return;
 
-    if (m_isIdentity) {
+    if (m_isIdentity || m_isTranslating) {
+        KisPainter gc(dstDev);
+        gc.setCompositeOp(COMPOSITE_COPY);
+        gc.bitBlt(dstRect.topLeft(), srcDev, m_backwardTransform.mapRect(dstRect));
+    } else {
+        KisProgressUpdateHelper progressHelper(m_progressUpdater, 100, dstRect.height());
 
-        if (srcDev->defaultBounds()->wrapAroundMode()) {
-            QRect srcRect = srcClipRect.toRect();
-            KisProgressUpdateHelper progressHelper(m_progressUpdater, 100, dstRect.height()/ srcRect.height());
-            for (int y = dstRect.y(); y < dstRect.y() + dstRect.height(); y+= srcRect.height()) {
-                for (int x = dstRect.x(); x < dstRect.x() + dstRect.width(); x+= srcRect.width()) {
-                    KisPainter::copyAreaOptimizedOldData(QPoint(x, y), srcDev, dstDev, srcRect);
+        KisRandomSubAccessorSP srcAcc = srcDev->createRandomSubAccessor();
+        KisRandomAccessorSP accessor = dstDev->createRandomAccessorNG();
+
+        for (int y = dstRect.y(); y < dstRect.y() + dstRect.height(); ++y) {
+            for (int x = dstRect.x(); x < dstRect.x() + dstRect.width(); ++x) {
+
+                QPointF dstPoint(x, y);
+                QPointF srcPoint = m_backwardTransform.map(dstPoint);
+
+                if (srcClipRect.contains(srcPoint) || srcDev->defaultBounds()->wrapAroundMode()) {
+                    accessor->moveTo(dstPoint.x(), dstPoint.y());
+                    srcAcc->moveTo(srcPoint.x(), srcPoint.y());
+                    srcAcc->sampledOldRawData(accessor->rawData());
                 }
-                progressHelper.step();
             }
-            return;
-        } else {
-            KisPainter::copyAreaOptimizedOldData(dstRect.topLeft(), srcDev, dstDev, dstRect);
-            return;
+            progressHelper.step();
         }
     }
-
-    KisProgressUpdateHelper progressHelper(m_progressUpdater, 100, dstRect.height());
-
-    KisRandomSubAccessorSP srcAcc = srcDev->createRandomSubAccessor();
-    KisRandomAccessorSP accessor = dstDev->createRandomAccessorNG();
-
-    for (int y = dstRect.y(); y < dstRect.y() + dstRect.height(); ++y) {
-        for (int x = dstRect.x(); x < dstRect.x() + dstRect.width(); ++x) {
-
-            QPointF dstPoint(x, y);
-            QPointF srcPoint = m_backwardTransform.map(dstPoint);
-
-            if (srcClipRect.contains(srcPoint) || srcDev->defaultBounds()->wrapAroundMode()) {
-                accessor->moveTo(dstPoint.x(), dstPoint.y());
-                srcAcc->moveTo(srcPoint.x(), srcPoint.y());
-                srcAcc->sampledOldRawData(accessor->rawData());
-            }
-        }
-        progressHelper.step();
-    }
-
 }
 
 QTransform KisPerspectiveTransformWorker::forwardTransform() const

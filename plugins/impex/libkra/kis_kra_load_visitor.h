@@ -77,6 +77,8 @@ private:
     bool loadPaintDeviceFrame(KisPaintDeviceSP device, const QString &location, DevicePolicy policy);
 
     bool loadProfile(KisPaintDeviceSP device,  const QString& location);
+    const KoColorProfile* loadProfile(const QString& location, const QString &colorModelId, const QString &colorDepthId);
+
     bool loadFilterConfiguration(KisNodeFilterInterface *nodeInterface, const QString& location);
     void fixOldFilterConfigurations(KisFilterConfigurationSP kfc);
     bool loadMetaData(KisNode* node);

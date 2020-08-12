@@ -1055,9 +1055,10 @@ void KisPaintDeviceTest::testWrappedRandomAccessor()
     int x;
     int y;
 
+    KisRandomAccessorSP dstIt = dev->createRandomAccessorNG();
     x = 3;
     y = 3;
-    KisRandomAccessorSP dstIt = dev->createRandomAccessorNG();
+    dstIt->moveTo(x, y);
 
     QVERIFY(!memcmp(dstIt->rawData(), c1.data(), pixelSize));
     QCOMPARE(dstIt->numContiguousColumns(x), 17);

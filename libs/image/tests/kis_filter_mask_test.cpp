@@ -38,41 +38,28 @@
 #define IMAGE_WIDTH 1000
 #define IMAGE_HEIGHT 1000
 
-void KisFilterMaskTest::testCreation()
-{
-    KisFilterMaskSP mask = new KisFilterMask();
-}
-
-#define initImage(image, layer, device, mask) do {                      \
-    image = new KisImage(0, IMAGE_WIDTH, IMAGE_HEIGHT, 0, "tests");     \
-    layer = new KisPaintLayer(image, 0, 100, device);         \
-    image->addNode(layer);                                              \
-    image->addNode(mask, layer);                                        \
-    } while(0)
-
 void KisFilterMaskTest::testProjectionNotSelected()
 {
-    KisImageSP image;
-    KisPaintLayerSP layer;
-
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    TestUtil::MaskParent p(QRect(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT));
+    KisImageSP image = p.image;
+    KisPaintLayerSP layer = p.layer;
+    KisPaintDeviceSP projection = layer->paintDevice();
 
     QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     QImage inverted(QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png");
+    projection->convertFromQImage(qimage, 0, 0, 0);
 
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
     KisFilterConfigurationSP  kfc = f->defaultConfiguration();
     Q_ASSERT(kfc);
 
-    KisFilterMaskSP mask = new KisFilterMask();
+    KisFilterMaskSP mask = new KisFilterMask(image, "mask");
+    image->addNode(mask, layer);
     mask->setFilter(kfc);
 
     // Check basic apply(). Shouldn't do anything, since nothing is selected yet.
-    KisPaintDeviceSP projection = new KisPaintDevice(cs);
-    initImage(image, layer, projection, mask);
 
-    projection->convertFromQImage(qimage, 0, 0, 0);
     mask->initSelection(layer);
     mask->createNodeProgressProxy();
     mask->select(qimage.rect(), MIN_SELECTED);
@@ -88,26 +75,25 @@ void KisFilterMaskTest::testProjectionNotSelected()
 
 void KisFilterMaskTest::testProjectionSelected()
 {
-    KisImageSP image;
-    KisPaintLayerSP layer;
-
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    TestUtil::MaskParent p(QRect(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT));
+    KisImageSP image = p.image;
+    KisPaintLayerSP layer = p.layer;
+    KisPaintDeviceSP projection = layer->paintDevice();
 
     QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     QImage inverted(QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png");
+    projection->convertFromQImage(qimage, 0, 0, 0);
 
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
     KisFilterConfigurationSP  kfc = f->defaultConfiguration();
     Q_ASSERT(kfc);
 
-    KisFilterMaskSP mask = new KisFilterMask();
+    KisFilterMaskSP mask = new KisFilterMask(image, "mask");
+    image->addNode(mask, layer);
+
     mask->setFilter(kfc);
     mask->createNodeProgressProxy();
-
-    KisPaintDeviceSP projection = new KisPaintDevice(cs);
-    initImage(image, layer, projection, mask);
-    projection->convertFromQImage(qimage, 0, 0, 0);
 
     mask->initSelection(layer);
     mask->select(qimage.rect(), MAX_SELECTED);

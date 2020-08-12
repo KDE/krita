@@ -88,21 +88,6 @@ namespace PyKrita
         Python::ensureInitialized();
         Python py = Python();
 
-        // NOTE: This code is not needed on Python 3.
-        //       This might also fail if private sip module for PyQt5 is used,
-        //       as required by newer PyQt5. It's fine since any exceptions
-        //       in this script will be ignored.
-        PyRun_SimpleString(
-                "import sip\n"
-                        "sip.setapi('QDate', 2)\n"
-                        "sip.setapi('QTime', 2)\n"
-                        "sip.setapi('QDateTime', 2)\n"
-                        "sip.setapi('QUrl', 2)\n"
-                        "sip.setapi('QTextStream', 2)\n"
-                        "sip.setapi('QString', 2)\n"
-                        "sip.setapi('QVariant', 2)\n"
-        );
-
         // Initialize 'plugins' dict of module 'pykrita'
         PyObject* plugins = PyDict_New();
         py.itemStringSet("plugins", plugins);

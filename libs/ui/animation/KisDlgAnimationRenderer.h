@@ -84,8 +84,8 @@ protected Q_SLOTS:
     void slotDialogAccepted();
 
 
-private:
-    void loadAnimationOptions(const KisAnimationRenderingOptions &options);
+private: 
+    void initializeRenderSettings(const KisDocument &doc, const KisAnimationRenderingOptions &lastUsedOptions);
 
     static QString defaultVideoFileName(KisDocument *doc, const QString &mimeType);
 

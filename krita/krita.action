@@ -501,7 +501,7 @@
     </Action>
    <Action name="mirrorX-lock">
       <icon></icon>
-      <text>Lock</text>
+      <text>Lock X Line</text>
       <whatsThis></whatsThis>
       <toolTip>Lock X Line</toolTip>
       <iconText>Lock X Line</iconText>
@@ -2655,7 +2655,7 @@
     </Action>
     <Action name="add_new_transform_mask">
       <icon>transformMask</icon>
-      <text>&amp;Transform Mask...</text>
+      <text>&amp;Transform Mask</text>
       <whatsThis></whatsThis>
       <toolTip>Transform Mask</toolTip>
       <iconText>Transform Mask</iconText>
@@ -2991,7 +2991,7 @@
     </Action>
     <Action name="convert_to_file_layer">
       <icon>fileLayer</icon>
-      <text>to &amp;File Layer</text>
+      <text>to &amp;File Layer...</text>
       <whatsThis></whatsThis>
       <toolTip>Saves out the layers into a new image and then references that image.</toolTip>
       <iconText>Convert to File Layer</iconText>
@@ -3551,7 +3551,7 @@
     </Action>
     <Action name="layer_properties">
       <icon>properties</icon>
-      <text>&amp;Properties...</text>
+      <text comment="Menu label of Layer Properties">&amp;Properties...</text>
       <whatsThis></whatsThis>
       <toolTip>Properties</toolTip>
       <iconText>Properties</iconText>

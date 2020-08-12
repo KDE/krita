@@ -670,7 +670,7 @@ void testRotationImpl(qreal angle, QString filePrefix, bool useUniformColor = fa
 
     image = QImage();
     image.load(QString(FILES_DATA_DIR) + QDir::separator() + resFileName);
-    if (!TestUtil::compareQImages(errpoint, image, result)) {
+    if (!TestUtil::compareQImagesPremultiplied(errpoint, image, result, 2, 1)) {
         dbgKrita << filePrefix;
         image.save(refFileName);
         result.save(resFileName);
@@ -990,4 +990,4 @@ void KisTransformWorkerTest::testPartialProcessing()
     TestUtil::checkQImage(result, "transform_test", "partial", "single");
 }
 
-QTEST_MAIN(KisTransformWorkerTest)
+KISTEST_MAIN(KisTransformWorkerTest)

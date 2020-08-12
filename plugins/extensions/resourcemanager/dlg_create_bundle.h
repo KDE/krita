@@ -21,6 +21,8 @@
 
 #include <KoDialog.h>
 
+#include "config-seexpr.h"
+
 class KisResourceBundle;
 
 namespace Ui
@@ -52,6 +54,9 @@ public:
     QStringList selectedPalettes() const { return m_selectedPalettes; }
     QStringList selectedWorkspaces() const { return m_selectedWorkspaces; }
     QStringList selectedGamutMasks() const { return m_selectedGamutMasks; }
+#if defined HAVE_SEEXPR
+    QStringList selectedSeExprScripts() const { return m_selectedSeExprScripts; }
+#endif
 
 private Q_SLOTS:
 
@@ -74,6 +79,9 @@ private:
     QStringList m_selectedPalettes;
     QStringList m_selectedWorkspaces;
     QStringList m_selectedGamutMasks;
+#if defined HAVE_SEEXPR
+    QStringList m_selectedSeExprScripts;
+#endif
 
     QString m_previewImage;
 

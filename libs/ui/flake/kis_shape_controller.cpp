@@ -64,20 +64,18 @@
 struct KisShapeController::Private
 {
 public:
-    KisDocument *doc;
     KisNameServer *nameServer;
     KisSignalAutoConnectionsStore imageConnections;
 
     KisNodeShapesGraph shapesGraph;
 };
 
-KisShapeController::KisShapeController(KisDocument *doc, KisNameServer *nameServer)
-    : KisDummiesFacadeBase(doc)
+KisShapeController::KisShapeController(KisNameServer *nameServer, KUndo2Stack *undoStack, QObject *parent)
+    : KisDummiesFacadeBase(parent)
     , m_d(new Private())
 {
-    m_d->doc = doc;
     m_d->nameServer = nameServer;
-    resourceManager()->setUndoStack(doc->undoStack());
+    resourceManager()->setUndoStack(undoStack);
 }
 
 
@@ -93,13 +91,21 @@ KisShapeController::~KisShapeController()
 
 void KisShapeController::slotUpdateDocumentResolution()
 {
-    const qreal pixelsPerInch = m_d->doc->image()->xRes() * 72.0;
-    resourceManager()->setResource(KoDocumentResourceManager::DocumentResolution, pixelsPerInch);
+    KisImageSP image = this->image();
+
+    if (image) {
+        const qreal pixelsPerInch = image->xRes() * 72.0;
+        resourceManager()->setResource(KoDocumentResourceManager::DocumentResolution, pixelsPerInch);
+    }
 }
 
 void KisShapeController::slotUpdateDocumentSize()
 {
-    resourceManager()->setResource(KoDocumentResourceManager::DocumentRectInPixels, m_d->doc->image()->bounds());
+    KisImageSP image = this->image();
+
+    if (image) {
+        resourceManager()->setResource(KoDocumentResourceManager::DocumentRectInPixels, image->bounds());
+    }
 }
 
 void KisShapeController::addNodeImpl(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis)
@@ -218,12 +224,14 @@ KoShapeContainer *KisShapeController::createParentForShapes(const QList<KoShape 
 
 QRectF KisShapeController::documentRectInPixels() const
 {
-    return m_d->doc->image()->bounds();
+    KisImageSP image = this->image();
+    return image ? image->bounds() : QRect(0, 0, 666, 777);
 }
 
 qreal KisShapeController::pixelsPerInch() const
 {
-    return m_d->doc->image()->xRes() * 72.0;
+    KisImageSP image = this->image();
+    return image ? image->xRes() * 72.0 : 72.0;
 }
 
 void KisShapeController::setInitialShapeForCanvas(KisCanvas2 *canvas)
@@ -251,10 +259,11 @@ void KisShapeController::setImage(KisImageWSP image)
         m_d->imageConnections.addConnection(image, SIGNAL(sigResolutionChanged(double, double)), this, SLOT(slotUpdateDocumentResolution()));
         m_d->imageConnections.addConnection(image, SIGNAL(sigSizeChanged(QPointF, QPointF)), this, SLOT(slotUpdateDocumentSize()));
     }
-    slotUpdateDocumentResolution();
-    slotUpdateDocumentSize();
 
     KisDummiesFacadeBase::setImage(image);
+
+    slotUpdateDocumentResolution();
+    slotUpdateDocumentSize();
 }
 
 KoShapeLayer* KisShapeController::shapeForNode(KisNodeSP node) const

@@ -395,7 +395,13 @@ struct MaskParent
         qApp->processEvents();
         image->waitForDone();
         KisLayerUtils::forceAllDelayedNodesUpdate(image->root());
-        qApp->processEvents();
+        /**
+         * Shape updates have two chanis of compresion, 100ms each.
+         * One in KoShapeManager, the other one in KisShapeLayerCanvas.
+         * Therefore we should wait for a decent amount of time for all
+         * of them to land.
+         */
+        QTest::qWait(500);
         image->waitForDone();
     }
 

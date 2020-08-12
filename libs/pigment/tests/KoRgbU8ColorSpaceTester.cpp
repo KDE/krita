@@ -119,7 +119,7 @@ void KoRgbU8ColorSpaceTester::testMixColors()
     mixOp->mixColors(pixelPtrs, weights, 2, outputPixel);
 
     QVERIFY((int)outputPixel[PIXEL_RED] == 150);
-    QCOMPARE((int)outputPixel[PIXEL_GREEN], 149);
+    QCOMPARE((int)outputPixel[PIXEL_GREEN], 150);
     QVERIFY((int)outputPixel[PIXEL_BLUE] == 35);
     QVERIFY((int)outputPixel[PIXEL_ALPHA] == 255);
 
@@ -173,14 +173,14 @@ void KoRgbU8ColorSpaceTester::testMixColorsAverage()
     QCOMPARE((int)outputPixel[PIXEL_RED], 255);
     QCOMPARE((int)outputPixel[PIXEL_GREEN], 255);
     QCOMPARE((int)outputPixel[PIXEL_BLUE], 255);
-    QCOMPARE((int)outputPixel[PIXEL_ALPHA], 127);
+    QCOMPARE((int)outputPixel[PIXEL_ALPHA], 128);
 
     pixel2[PIXEL_ALPHA] = 255;
     mixOp->mixColors(pixelPtrs, 2, outputPixel);
 
-    QCOMPARE((int)outputPixel[PIXEL_RED], 127);
-    QCOMPARE((int)outputPixel[PIXEL_GREEN], 127);
-    QCOMPARE((int)outputPixel[PIXEL_BLUE], 127);
+    QCOMPARE((int)outputPixel[PIXEL_RED], 128);
+    QCOMPARE((int)outputPixel[PIXEL_GREEN], 128);
+    QCOMPARE((int)outputPixel[PIXEL_BLUE], 128);
     QCOMPARE((int)outputPixel[PIXEL_ALPHA], 255);
 }
 

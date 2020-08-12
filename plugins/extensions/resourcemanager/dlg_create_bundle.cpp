@@ -133,6 +133,15 @@ DlgCreateBundle::DlgCreateBundle(KisResourceBundle *bundle, QWidget *parent)
                     }
                 }
             }
+#if defined HAVE_SEEXPR
+            else if (resType  == "seexpr_scripts") {
+                Q_FOREACH (const KoResource *res, bundle->resources(resType)) {
+                    if (res) {
+                        m_selectedSeExprScripts << res->shortFilename();
+                    }
+                }
+            }
+#endif
         }
     }
     else {
@@ -158,6 +167,9 @@ DlgCreateBundle::DlgCreateBundle(KisResourceBundle *bundle, QWidget *parent)
     m_ui->cmbResourceTypes->addItem(i18n("Brush Presets"), QString("presets"));
     m_ui->cmbResourceTypes->addItem(i18n("Gradients"), QString("gradients"));
     m_ui->cmbResourceTypes->addItem(i18n("Gamut Masks"), QString("gamutmasks"));
+#if defined HAVE_SEEXPR
+    m_ui->cmbResourceTypes->addItem(i18n("SeExpr Scripts"), QString("seexpr_scripts"));
+#endif
     m_ui->cmbResourceTypes->addItem(i18n("Patterns"), QString("patterns"));
     m_ui->cmbResourceTypes->addItem(i18n("Palettes"), QString("palettes"));
     m_ui->cmbResourceTypes->addItem(i18n("Workspaces"), QString("workspaces"));
@@ -288,6 +300,11 @@ void DlgCreateBundle::addSelected()
         else if (resourceType == "gamutmasks") {
             m_selectedGamutMasks.append(item->data(Qt::UserRole).toString());
         }
+#if defined HAVE_SEEXPR
+        else if (resourceType == "seexpr_scripts") {
+            m_selectedSeExprScripts.append(item->data(Qt::UserRole).toString());
+        }
+#endif
     }
 
     m_ui->tableAvailable->setCurrentRow(row);
@@ -322,6 +339,11 @@ void DlgCreateBundle::removeSelected()
         else if (resourceType == "gamutmasks") {
             m_selectedGamutMasks.removeAll(item->data(Qt::UserRole).toString());
         }
+#if defined HAVE_SEEXPR
+        else if (resourceType == "seexpr_scripts") {
+            m_selectedSeExprScripts.removeAll(item->data(Qt::UserRole).toString());
+        }
+#endif
     }
 
     m_ui->tableSelected->setCurrentRow(row);
@@ -448,6 +470,22 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
             }
         }
     }
+#if defined HAVE_SEEXPR
+    else if (resourceType == "seexpr_scripts") {
+        KoResourceServer<KisSeExprScript>* server = KoResourceServerProvider::instance()->seExprScriptServer();
+        Q_FOREACH (KoResource *res, server->resources()) {
+            QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
+            item->setData(Qt::UserRole, res->shortFilename());
+
+            if (m_selectedSeExprScripts.contains(res->shortFilename())) {
+                m_ui->tableSelected->addItem(item);
+            }
+            else {
+                m_ui->tableAvailable->addItem(item);
+            }
+        }
+    }
+#endif
 
 }
 

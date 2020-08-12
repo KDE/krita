@@ -30,7 +30,7 @@
 
 #include "lazybrush/kis_lazy_fill_tools.h"
 #include "testutil.h"
-
+#include "testing_timed_default_bounds.h"
 
 #include <lazybrush/KisWatershedWorker.h>
 
@@ -39,7 +39,6 @@ inline KisPaintDeviceSP loadTestImage(const QString &name, bool convertToAlpha)
     QImage image(TestUtil::fetchDataFileLazy(name));
     KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
     dev->convertFromQImage(image, 0);
-
     if (convertToAlpha) {
         dev = KisPainter::convertToAlphaAsAlpha(dev);
     }
@@ -56,6 +55,13 @@ void KisWatershedWorkerTest::testWorker()
 
     KisPaintDeviceSP filteredMainDev = KisPainter::convertToAlphaAsGray(mainDev);
     const QRect filterRect = filteredMainDev->exactBounds();
+
+    mainDev->setDefaultBounds(new TestUtil::TestingTimedDefaultBounds(filterRect));
+    aLabelDev->setDefaultBounds(mainDev->defaultBounds());
+    bLabelDev->setDefaultBounds(mainDev->defaultBounds());
+    resultColoring->setDefaultBounds(mainDev->defaultBounds());
+    filteredMainDev->setDefaultBounds(mainDev->defaultBounds());
+
     KisGaussianKernel::applyLoG(filteredMainDev,
                                 filterRect,
                                 2,

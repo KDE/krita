@@ -20,6 +20,7 @@
 #define KRITA_CONTAINER_UTILS_H
 
 #include <functional>
+#include <QList>
 
 namespace KritaUtils
 {

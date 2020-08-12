@@ -58,7 +58,7 @@ KisHairyPaintOp::KisHairyPaintOp(const KisPaintOpSettingsSP settings, KisPainter
     fakePaintInformation.setRandomSource(new KisRandomSource());
     fakePaintInformation.setPerStrokeRandomSource(new KisPerStrokeRandomSource());
 
-    if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
+    if (brush->brushApplication() == IMAGESTAMP) {
         dab = brush->paintDevice(source()->colorSpace(), KisDabShape(), fakePaintInformation);
     } else {
         brush->mask(dab, painter->paintColor(), KisDabShape(), fakePaintInformation);

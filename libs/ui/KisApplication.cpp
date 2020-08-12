@@ -104,6 +104,8 @@
 #include "kis_group_layer.h"
 #include "kis_node_commands_adapter.h"
 
+#include <config-seexpr.h>
+
 namespace {
 const QTime appStartTime(QTime::currentTime());
 }
@@ -251,6 +253,9 @@ void KisApplication::addResourceTypes()
     KoResourcePaths::addResourceType("symbols", "data", "/symbols");
     KoResourcePaths::addResourceType("preset_icons", "data", "/preset_icons");
     KoResourcePaths::addResourceType("ko_gamutmasks", "data", "/gamutmasks/", true);
+#if defined HAVE_SEEXPR
+    KoResourcePaths::addResourceType("kis_seexpr_scripts", "data", "/seexpr_scripts/", true);
+#endif
 
     //    // Extra directories to look for create resources. (Does anyone actually use that anymore?)
     //    KoResourcePaths::addResourceDir("ko_gradients", "/usr/share/create/gradients/gimp");
@@ -282,6 +287,9 @@ void KisApplication::addResourceTypes()
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/preset_icons/tool_icons/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/preset_icons/emblem_icons/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/gamutmasks/");
+#if defined HAVE_SEEXPR
+    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/seexpr_scripts/");
+#endif
 }
 
 void KisApplication::loadResources()
@@ -373,7 +381,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
         cfg.setCanvasState("OPENGL_FAILED");
     }
 
-    setSplashScreenLoadingText(i18n("Initializing Globals"));
+    setSplashScreenLoadingText(i18n("Initializing Globals..."));
     processEvents();
     initializeGlobals(args);
 
@@ -405,7 +413,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     Q_UNUSED(resetStarting);
 
     // Make sure we can save resources and tags
-    setSplashScreenLoadingText(i18n("Adding resource types"));
+    setSplashScreenLoadingText(i18n("Adding resource types..."));
     processEvents();
     addResourceTypes();
 

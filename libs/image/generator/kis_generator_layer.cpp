@@ -127,6 +127,8 @@ void KisGeneratorLayer::update()
     KisGeneratorSP f = KisGeneratorRegistry::instance()->value(filterConfig->name());
     KIS_SAFE_ASSERT_RECOVER_RETURN(f);
 
+    KisProcessingVisitor::ProgressHelper helper(this);
+
     KisPaintDeviceSP originalDevice = original();
 
     KisGeneratorStrokeStrategy *stroke = new KisGeneratorStrokeStrategy(image);

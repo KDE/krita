@@ -21,12 +21,19 @@
 
 #include <QtTest>
 
+class KisAnimationFrameCache;
+
 class KisAnimationFrameCacheTest : public QObject
 {
     Q_OBJECT
 
 private Q_SLOTS:
     void testCache();
+
+    void slotFrameGerenationFinished(int time);
+
+private:
+    KisAnimationFrameCache *m_globalAnimationCache = 0;
 
 };
 #endif

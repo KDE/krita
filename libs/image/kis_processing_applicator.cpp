@@ -27,6 +27,8 @@
 #include "kis_stroke_strategy_undo_command_based.h"
 #include "kis_layer_utils.h"
 #include "kis_command_utils.h"
+#include "kis_time_range.h"
+#include "kis_node.h"
 #include "kis_image_signal_router.h"
 
 class DisableUIUpdatesCommand : public KisCommandUtils::FlipFlopCommand
@@ -89,6 +91,8 @@ private:
                 }
             });
         }
+
+        m_image->root()->graphListener()->invalidateFrames(KisTimeRange::infinite(0), m_node->exactBounds());
 
         if (!m_flags.testFlag(KisProcessingApplicator::NO_IMAGE_UPDATES)) {
             if(m_flags.testFlag(KisProcessingApplicator::RECURSIVE)) {

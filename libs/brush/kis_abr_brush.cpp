@@ -44,7 +44,6 @@ KisAbrBrush::KisAbrBrush(const QString& filename, KisAbrBrushCollection *parent)
     , m_parent(parent)
 {
     setBrushType(INVALID);
-    setHasColor(false);
     setSpacing(DEFAULT_SPACING);
 }
 
@@ -92,7 +91,6 @@ void KisAbrBrush::setBrushTipImage(const QImage& image)
 {
     setValid(true);
     setBrushType(MASK);
-    setHasColor(false);
 
     KisBrush::setBrushTipImage(image);
 }

@@ -1274,7 +1274,7 @@
          <item>
           <widget class="QCheckBox" name="csl_hsvV">
            <property name="text">
-            <string>Value</string>
+            <string comment="Brightness level of HSV model">Value</string>
            </property>
           </widget>
          </item>
@@ -1304,7 +1304,7 @@
          <item>
           <widget class="QCheckBox" name="csl_hslL">
            <property name="text">
-            <string>Lightness</string>
+            <string comment="Lightness HSI">Lightness</string>
            </property>
           </widget>
          </item>

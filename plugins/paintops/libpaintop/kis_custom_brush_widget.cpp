@@ -130,7 +130,7 @@ void KisCustomBrushWidget::slotUpdateUseColorAsMask(bool useColorAsMask)
 {
     preserveAlpha->setEnabled(useColorAsMask);
     if (m_brush) {
-        static_cast<KisGbrBrush*>(m_brush.data())->setUseColorAsMask(useColorAsMask);
+        static_cast<KisGbrBrush*>(m_brush.data())->setBrushApplication(ALPHAMASK);
         updatePreviewImage();
     }
 }
@@ -259,7 +259,7 @@ void KisCustomBrushWidget::createBrush()
         m_brush = new KisImagePipeBrush(m_image->objectName(), w, h, devices, modes);
     }
 
-    static_cast<KisGbrBrush*>(m_brush.data())->setUseColorAsMask(colorAsMask->isChecked());
+    static_cast<KisGbrBrush*>(m_brush.data())->setBrushApplication(colorAsMask->isChecked() ? ALPHAMASK : IMAGESTAMP);
     m_brush->setSpacing(spacingWidget->spacing());
     m_brush->setAutoSpacing(spacingWidget->autoSpacingActive(), spacingWidget->autoSpacingCoeff());
     m_brush->setFilename(TEMPORARY_FILENAME);

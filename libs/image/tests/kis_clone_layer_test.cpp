@@ -30,6 +30,7 @@
 #include "kis_clone_layer.h"
 #include "kis_image.h"
 
+#include "kistest.h"
 #include "testutil.h"
 
 
@@ -249,6 +250,8 @@ void KisCloneLayerTest::testUndoingRemovingSource()
     cmd1->redo();
     image->unlock();
 
+    image->waitForDone();
+
     QCOMPARE(image->root()->lastChild()->name(), QString("clone_of_p1"));
     QVERIFY(image->root()->lastChild() != KisNodeSP(cloneLayer1));
 
@@ -272,11 +275,15 @@ void KisCloneLayerTest::testUndoingRemovingSource()
     cmd1->redo();
     image->unlock();
 
+    image->waitForDone();
+
     QCOMPARE(image->root()->lastChild()->name(), QString("clone_of_p1"));
     QCOMPARE(image->root()->lastChild(), reincarnatedLayer);
     QVERIFY(image->root()->lastChild() != KisNodeSP(cloneLayer1));
 
+    image->barrierLock();
     cmd2->redo();
+    image->unlock();
 }
 
 void KisCloneLayerTest::testDuplicateGroup()
@@ -387,4 +394,4 @@ void KisCloneLayerTest::testCyclingGroupLayer()
     testCyclingCase(t, t.cloneOfGroup2, t.cloneOfGroup1, false);
 }
 
-QTEST_MAIN(KisCloneLayerTest)
+KISTEST_MAIN(KisCloneLayerTest)

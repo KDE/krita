@@ -68,6 +68,10 @@ public:
     bool visit(KisColorizeMask* mask) override { return process(mask); }
 
     bool process(KisNode* node) {
+        if (node->isFakeNode()) {
+            dbgKrita << "Compositions: Skipping over Fake Node" << node->uuid() << node->name();
+            return true;
+        }
         if(m_mode == STORE) {
             m_layerComposition->m_visibilityMap[node->uuid()] = node->visible();
             m_layerComposition->m_collapsedMap[node->uuid()] = node->collapsed();
@@ -198,6 +202,7 @@ void KisLayerComposition::save(QDomDocument& doc, QDomElement& element)
     while (iter.hasNext()) {
         iter.next();
         QDomElement valueElement = doc.createElement("value");
+        dbgKrita << "uuid" << iter.key().toString() << "visible" <<  iter.value();
         valueElement.setAttribute("uuid", iter.key().toString());
         valueElement.setAttribute("visible", iter.value());
         dbgKrita << "contains" << m_collapsedMap.contains(iter.key());

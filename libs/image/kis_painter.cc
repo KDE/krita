@@ -495,7 +495,8 @@ inline bool KisPainter::Private::tryReduceSourceRect(const KisPaintDevice *srcDe
          * We should also crop the blitted area by the selected region,
          * because we cannot paint outside the selection.
          */
-        *srcRect &= selection->selectedRect();
+        *srcRect &= selection->selectedRect().translated(*srcX - *dstX,
+                                                         *srcY - *dstY);
 
         if (srcRect->isEmpty()) return true;
         needsReadjustParams = true;
@@ -543,12 +544,10 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
     Q_ASSERT(selection->colorSpace() == KoColorSpaceRegistry::instance()->alpha8());
 
     QRect srcRect = QRect(srcX, srcY, srcWidth, srcHeight);
-    QRect selRect = QRect(selX, selY, srcWidth, srcHeight);
 
-    /* Trying to read outside a KisFixedPaintDevice is inherently wrong and shouldn't be done,
-    so crash if someone attempts to do this. Don't resize YET as it would obfuscate the mistake. */
-    Q_ASSERT(selection->bounds().contains(selRect));
-    Q_UNUSED(selRect); // only used by the above Q_ASSERT
+    // save selection offset in case tryReduceSourceRect() will change rects
+    const int xSelectionOffset = selX - srcX;
+    const int ySelectionOffset = selY - srcY;
 
     /**
      * An optimization, which crops the source rect by the bounds of
@@ -558,6 +557,16 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
                                &srcX, &srcY,
                                &srcWidth, &srcHeight,
                                &dstX, &dstY)) return;
+
+    const QRect selRect = QRect(srcX + xSelectionOffset,
+                                srcY + ySelectionOffset,
+                                srcWidth, srcHeight);
+
+    /* Trying to read outside a KisFixedPaintDevice is inherently wrong and shouldn't be done,
+    so crash if someone attempts to do this. Don't resize YET as it would obfuscate the mistake. */
+    KIS_SAFE_ASSERT_RECOVER_RETURN(selection->bounds().contains(selRect));
+    Q_UNUSED(selRect); // only used by the above Q_ASSERT
+
 
     /* Create an intermediate byte array to hold information before it is written
     to the current paint device (d->device) */
@@ -582,9 +591,9 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
 
     srcDev->readBytes(srcBytes, srcX, srcY, srcWidth, srcHeight);
 
-    QRect selBounds = selection->bounds();
+    const QRect selBounds = selection->bounds();
     const quint8 *selRowStart = selection->data() +
-        (selBounds.width() * (selY - selBounds.top()) + (selX - selBounds.left())) * selection->pixelSize();
+        (selBounds.width() * (selRect.y() - selBounds.top()) + (selRect.x() - selBounds.left())) * selection->pixelSize();
 
     /*
      * This checks whether there is nothing selected.
@@ -672,7 +681,9 @@ void KisPainter::bitBltImpl(qint32 dstX, qint32 dstY,
     if (d->compositeOp->id() == COMPOSITE_COPY) {
         if(!d->selection && d->isOpacityUnit &&
            srcX == dstX && srcY == dstY &&
-           d->device->fastBitBltPossible(srcDev)) {
+           d->device->fastBitBltPossible(srcDev) &&
+           (!srcDev->defaultBounds()->wrapAroundMode() ||
+            srcDev->defaultBounds()->imageBorderRect().contains(srcRect))) {
 
             if(useOldSrcData) {
                 d->device->fastBitBltOldData(srcDev, srcRect);
@@ -1459,7 +1470,7 @@ void KisPainter::Private::fillPainterPathImpl(const QPainterPath& path, const QR
         break;
     case FillStylePattern:
         if (pattern) { // if the user hasn't got any patterns installed, we shouldn't crash...
-            fillPainter->fillRect(fillRect, pattern, patternTransform);
+            fillPainter->fillRectNoCompose(fillRect, pattern, patternTransform);
         }
         break;
     case FillStyleGenerator:

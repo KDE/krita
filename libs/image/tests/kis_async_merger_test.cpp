@@ -200,7 +200,7 @@ void KisAsyncMergerTest::testFullRefreshWithClones()
     Q_ASSERT(configuration);
 
     KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8, device1);
-    KisFilterMaskSP invertMask1 = new KisFilterMask();
+    KisFilterMaskSP invertMask1 = new KisFilterMask(image, "invert_mask");
     invertMask1->initSelection(paintLayer1);
     invertMask1->setFilter(configuration);
 
@@ -373,7 +373,7 @@ void testFullRefreshForDependentNodes(const DependentNodeType dependentNode,
         KisFilterConfigurationSP configuration = filter->defaultConfiguration();
         KIS_ASSERT(configuration);
 
-        KisFilterMaskSP blurMask1 = new KisFilterMask();
+        KisFilterMaskSP blurMask1 = new KisFilterMask(image, "blur_mask");
         blurMask1->initSelection(groupLayer);
         blurMask1->setFilter(configuration);
         image->addNode(blurMask1, testingLayer);
@@ -496,7 +496,7 @@ void KisAsyncMergerTest::testFilterMaskOnFilterLayer()
     KIS_ASSERT(filter3);
     KisFilterConfigurationSP configuration3 = filter3->defaultConfiguration();
     KIS_ASSERT(configuration3);
-    KisFilterMaskSP mask3 = new KisFilterMask();
+    KisFilterMaskSP mask3 = new KisFilterMask(image, "mask3");
     mask3->initSelection(adjLayer2);
     mask3->setFilter(configuration3);
     image->addNode(mask3, adjLayer2);

@@ -18,7 +18,11 @@
 #ifndef KISCPPQUIRKS_H
 #define KISCPPQUIRKS_H
 
+#include <type_traits>
+
 namespace std {
+
+// from C++14
 
 #if __cplusplus < 201402L
 
@@ -37,6 +41,18 @@ inline reverse_iterator<BidirectionalIterator> make_reverse_iterator(Bidirection
 {
     return reverse_iterator<BidirectionalIterator>(x);
 }
+
+template< bool B, class T = void >
+using enable_if_t = typename enable_if<B,T>::type;
+
+#endif
+
+// from C++17
+
+#if __cplusplus < 201703L
+
+template<typename...>
+using void_t = void;
 
 #endif
 

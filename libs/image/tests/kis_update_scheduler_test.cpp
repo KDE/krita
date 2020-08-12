@@ -37,6 +37,7 @@
 #include "kis_simple_update_queue.h"
 
 #include "../../sdk/tests/testutil.h"
+#include "kistest.h"
 
 
 KisImageSP KisUpdateSchedulerTest::buildTestingImage()
@@ -169,7 +170,7 @@ void KisUpdateSchedulerTest::testLocking()
 
     KisTestableUpdateScheduler scheduler(image.data(), 2);
     KisUpdaterContext *context = scheduler.updaterContext();
-    QVERIFY(context);
+
     QVector<KisUpdateJobItem*> jobs;
 
     QRect dirtyRect1(0,0,50,100);
@@ -427,5 +428,5 @@ void KisUpdateSchedulerTest::testLodSync()
     image->waitForDone();
 }
 
-QTEST_MAIN(KisUpdateSchedulerTest)
+KISTEST_MAIN(KisUpdateSchedulerTest)
 

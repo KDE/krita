@@ -91,3 +91,4 @@ cmake --build . --config RelWithDebInfo --target ext_nasm
 cmake --build . --config RelWithDebInfo --target ext_libx265
 cmake --build . --config RelWithDebInfo --target ext_libde265
 cmake --build . --config RelWithDebInfo --target ext_libheif
+cmake --build . --config RelWithDebInfo --target ext_seexpr

@@ -125,6 +125,9 @@ struct Q_DECL_HIDDEN KoResourceServerProvider::Private
     KoResourceServer<KoColorSet>* paletteServer;
     KoResourceServer<KoSvgSymbolCollectionResource> *svgSymbolCollectionServer;
     KoResourceServer<KoGamutMask>* gamutMaskServer;
+#if defined HAVE_SEEXPR
+    KoResourceServer<KisSeExprScript>* seExprScriptServer;
+#endif
 };
 
 KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
@@ -143,6 +146,11 @@ KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
 
     d->gamutMaskServer = new KoResourceServerSimpleConstruction<KoGamutMask>("ko_gamutmasks", "*.kgm");
     d->gamutMaskServer->loadResources(blacklistFileNames(d->gamutMaskServer->fileNames(), d->gamutMaskServer->blackListedFiles()));
+
+#if defined HAVE_SEEXPR
+    d->seExprScriptServer = new KoResourceServerSimpleConstruction<KisSeExprScript>("kis_seexpr_scripts", "*.kse");
+    d->seExprScriptServer->loadResources(blacklistFileNames(d->seExprScriptServer->fileNames(), d->seExprScriptServer->blackListedFiles()));
+#endif
 }
 
 KoResourceServerProvider::~KoResourceServerProvider()
@@ -152,6 +160,9 @@ KoResourceServerProvider::~KoResourceServerProvider()
     delete d->paletteServer;
     delete d->svgSymbolCollectionServer;
     delete d->gamutMaskServer;
+#if defined HAVE_SEEXPR
+    delete d->seExprScriptServer;
+#endif    
 
     delete d;
 }
@@ -198,4 +209,9 @@ KoResourceServer<KoGamutMask>* KoResourceServerProvider::gamutMaskServer()
     return d->gamutMaskServer;
 }
 
-
+#if defined HAVE_SEEXPR
+KoResourceServer<KisSeExprScript> *KoResourceServerProvider::seExprScriptServer()
+{
+    return d->seExprScriptServer;
+}
+#endif

@@ -74,7 +74,7 @@ public:
     /**
      * Create a new KisMask.
      */
-    KisMask(const QString & name);
+    KisMask(KisImageWSP image, const QString &name);
 
     /**
      * Copy the mask

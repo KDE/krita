@@ -26,6 +26,7 @@
 #include "kis_projection_leaf.h"
 #include "kis_group_layer.h"
 
+#include "kistest.h"
 
 
 struct TestImage : TestUtil::QImageBasedTest {
@@ -451,4 +452,4 @@ void KisProjectionLeafTest::testSelectionMaskOverlay()
     }
 }
 
-QTEST_MAIN(KisProjectionLeafTest)
+KISTEST_MAIN(KisProjectionLeafTest)

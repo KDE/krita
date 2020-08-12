@@ -80,14 +80,9 @@ public:
             const KisPaintInformation& info,
             double subPixelX = 0, double subPixelY = 0) const override;
 
-    void setUseColorAsMask(bool useColorAsMask) override;
-    bool hasColor() const override;
-
     void setAdjustmentMidPoint(quint8 value) override;
     void setBrightnessAdjustment(qreal value) override;
     void setContrastAdjustment(qreal value) override;
-
-    enumBrushType brushType() const override;
 
     QString parasiteSelection(); // returns random, constant, etc
 
@@ -126,8 +121,6 @@ public:
     void setDevices(QVector< QVector<KisPaintDevice*> > devices, int w, int h);
 
 protected:
-    void setBrushType(enumBrushType type) override;
-    void setHasColor(bool hasColor) override;
     virtual void setBrushApplication(enumBrushApplication brushApplication) override;
     virtual void setGradient(KoAbstractGradientSP gradient) override;
     /// Will call KisBrush's saveToDevice as well

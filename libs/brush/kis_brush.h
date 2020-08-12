@@ -289,8 +289,6 @@ public:
               qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR, qreal lightnessStrength = DEFAULT_LIGHTNESS_STRENGTH) const;
 
 
-    virtual bool hasColor() const;
-
     virtual enumBrushApplication brushApplication() const;
 
     virtual void setBrushApplication(enumBrushApplication brushApplication);
@@ -329,7 +327,7 @@ public:
             double subPixelX, double subPixelY,
             qreal softnessFactor, qreal lightnessStrength) const;
 
-    virtual void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
+    void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
         ColoringInformation* coloringInfo,
         KisDabShape const&,
         const KisPaintInformation& info,
@@ -368,8 +366,6 @@ protected:
      * XXX
      */
     virtual void setBrushType(enumBrushType type);
-
-    virtual void setHasColor(bool hasColor);
 
 public:
 

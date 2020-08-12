@@ -31,7 +31,7 @@
 
 void KisAnimationImporterTest::testImport()
 {
-    KisDocument *document = KisPart::instance()->createDocument();
+    QScopedPointer<KisDocument> document(KisPart::instance()->createDocument());
     TestUtil::MaskParent mp(QRect(0,0,512,512));
     document->setCurrentImage(mp.image);
 
@@ -76,7 +76,7 @@ void KisAnimationImporterTest::testImport()
     QVERIFY(TestUtil::compareQImages(pt, source2, imported2));
     QVERIFY(TestUtil::compareQImages(pt, source3, imported3));
 
-    delete document;
+    KisPart::instance()->removeDocument(document.data(), false);
 }
 
 KISTEST_MAIN(KisAnimationImporterTest)

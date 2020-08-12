@@ -193,7 +193,13 @@ void KoPatternGenerator::generate(KisProcessingInformation dstInfo,
     gc.setWidth(size.width());
     gc.setHeight(size.height());
     gc.setFillStyle(KisFillPainter::FillStylePattern);
-    gc.fillRect(QRect(dstInfo.topLeft(), size), pattern, transform);
+    /**
+     * HACK ALERT: using "no-compose" version of `fillRect` discards all the opacity,
+     * selection, and channel flags options. Though it doesn't seem that we have a any
+     * GUI in Krita that actually passes a selection to the generator itself. Fill
+     * layers apply their settings on a later stage of the compositing pipeline.
+     */
+    gc.fillRectNoCompose(QRect(dstInfo.topLeft(), size), pattern, transform);
     gc.end();
 
 }

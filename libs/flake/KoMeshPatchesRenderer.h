@@ -62,6 +62,7 @@ public:
 
         // upscale the patch to the same scaling factor as the painterTransform
         m_patchPainter.setTransform(scaledTransform, true);
+        m_patchPainter.setCompositionMode(QPainter::CompositionMode_Source);
     }
 
     void fillPatch(const SvgMeshPatch *patch,
@@ -86,11 +87,12 @@ public:
 
         const quint8 threshold = 0;
 
-        // TODO: No, this only checks logical coordinates, we have to first transform and then recheck.
         // check if color variation is acceptable and patch size is less than ~pixel width/heigh
         if ((cs->difference(c[0], c[1]) > threshold || cs->difference(c[1], c[2]) > threshold ||
-             cs->difference(c[2], c[3]) > threshold || cs->difference(c[3], c[0]) > threshold) &&
-            patch->size().width() > 1 && patch->size().height() > 1) {
+             cs->difference(c[2], c[3]) > threshold || cs->difference(c[3], c[0]) > threshold ||
+             cs->differenceA(c[0], c[1]) > threshold || cs->differenceA(c[1], c[2]) > threshold ||
+             cs->differenceA(c[2], c[3]) > threshold || cs->differenceA(c[3], c[0]) > threshold) &&
+            (patch->size().width() > 1 || patch->size().height() > 1)) {
 
             QVector<SvgMeshPatch*> patches;
             QVector<QColor> colors;
@@ -98,7 +100,6 @@ public:
 
                 // it is a parent patch, so calculate coefficients aka alpha
                 if (mesharray) {
-                    m_patchRect = patch->boundingRect();
                     calculateAlpha(mesharray, row, col, patch);
                 }
 
@@ -126,11 +127,14 @@ public:
             QPen pen(average);
             m_patchPainter.setPen(pen);
 
-            QPainterPath outline = patchPath->outline();
-
-            QBrush brush(average);
-            m_patchPainter.fillPath(outline, brush);
-            m_patchPainter.drawPath(outline);
+            // if QPainterPath's size is 1px, Qt paints it as 2px - which creates artifacts
+            if (patch->size().width() <= 1 && patch->size().height() <= 1) {
+                m_patchPainter.drawPoint(patch->boundingRect().topLeft());
+            } else {
+                QPainterPath outline = patchPath->outline();
+                m_patchPainter.setBrush(average);
+                m_patchPainter.drawPath(outline);
+            }
         }
     }
 
@@ -555,12 +559,14 @@ public:
 
     QColor midPointColor(QColor first, QColor second)
     {
-        int r = (first.red() + second.red()) / 2;
-        int g = (first.green() + second.green()) / 2;
-        int b = (first.blue() + second.blue()) / 2;
-        int a = (first.alpha() + second.alpha()) / 2;
+        qreal a = (first.alphaF() + second.alphaF()) / 2;
+        qreal r = (first.redF()   + second.redF()) / 2;
+        qreal g = (first.greenF() + second.greenF()) / 2;
+        qreal b = (first.blueF()  + second.blueF()) / 2;
 
-        return QColor(r, g, b, a);
+        QColor c;
+        c.setRgbF(r, g, b, a);
+        return c;
     }
 
     QVector<QColor> getColorsBilinear(const SvgMeshPatch* patch)
@@ -589,7 +595,6 @@ private:
     QPainter m_patchPainter;
     // TODO: make them local
     QVector<QVector<qreal>> m_alpha;
-    QRectF m_patchRect;
 };
 
 #endif // KOMESHPATCHESRENDERER_H

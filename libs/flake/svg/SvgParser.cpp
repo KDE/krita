@@ -1115,7 +1115,7 @@ SvgMeshGradient* prepareMeshGradientForShape(SvgGradientHelper *gradient,
 
         // NOTE: we apply translation right away, because caching hasn't been implemented for rendering, yet.
         // So, transform is called multiple times on the mesh and that's not nice
-        resultGradient->setTransform(relativeToShape * gradient->transform());
+        resultGradient->setTransform(gradient->transform() * relativeToShape);
     } else {
         // NOTE: Krita's shapes use their own coordinate system. Where origin is at the top left
         // of the SHAPE. All the mesh patches will be rendered in the global 'user' coorindate system

@@ -29,6 +29,7 @@ public:
     float getSize();
     float getHardness();
     float getOpacity();
+    float getOffset();
     float isEraser();
 
 private:

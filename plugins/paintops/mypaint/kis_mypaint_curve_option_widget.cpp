@@ -453,6 +453,9 @@ void KisMyPaintCurveOptionWidget::setBaseValue(KisPropertiesConfigurationSP sett
 
     if(m_curveOption->currentSetting() == MYPAINT_BRUSH_SETTING_OPAQUE)
         setting->setProperty(MYPAINT_OPACITY, val);
+
+    if(m_curveOption->currentSetting() == MYPAINT_BRUSH_SETTING_OFFSET_BY_RANDOM)
+        setting->setProperty(MYPAINT_OFFSET_BY_RANDOM, val);
 }
 
 void KisMyPaintCurveOptionWidget::checkRanges() const

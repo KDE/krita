@@ -21,6 +21,7 @@
 #include <kis_color_option.h>
 #include <kis_paint_action_type_option.h>
 
+#include <libmypaint/mypaint-brush.h>
 #include "kis_my_paintop_settings.h"
 #include "kis_my_paintop_option.h"
 
@@ -65,13 +66,22 @@ QPainterPath KisMyPaintOpSettings::brushOutline(const KisPaintInformation &info,
 {    
     QPainterPath path;
 
+    KisMyPaintOptionProperties op;
+    op.readOptionSettingImpl(this);
+
     if (mode.isVisible) {
         qreal finalScale = 1.0;
 
-        KisMyPaintOptionProperties op;
-        op.readOptionSettingImpl(this);
         qreal radius = 0.5 * op.diameter;
-        radius = radius > 3.5 ? radius : 3.5;
+        radius = radius > 1 ? radius : 1;
+
+//        MyPaintBrush *brush = mypaint_brush_new();
+//        mypaint_brush_from_defaults(brush);
+//        mypaint_brush_from_string(brush, op.json);
+
+        qreal offset = op.offset;
+
+        radius = radius + 2 * radius * offset;
 
         QPainterPath realOutline;
         realOutline.addEllipse(QPointF(), radius, radius);

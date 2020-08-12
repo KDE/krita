@@ -47,7 +47,8 @@ namespace KoFlake
         None,
         Solid,
         Gradient,
-        Pattern
+        Pattern,
+        MeshGradient
     };
 
     enum MarkerPosition {

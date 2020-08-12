@@ -24,6 +24,7 @@
 #include <KoColorBackground.h>
 #include <KoGradientBackground.h>
 #include <KoPatternBackground.h>
+#include <KoMeshGradientBackground.h>
 #include <KoShapeStroke.h>
 #include <KoShapeBackgroundCommand.h>
 #include <KoShapeStrokeCommand.h>
@@ -48,6 +49,8 @@ struct ShapeBackgroundFetchPolicy
         QSharedPointer<KoColorBackground> colorBackground = qSharedPointerDynamicCast<KoColorBackground>(background);
         QSharedPointer<KoGradientBackground> gradientBackground = qSharedPointerDynamicCast<KoGradientBackground>(background);
         QSharedPointer<KoPatternBackground> patternBackground = qSharedPointerDynamicCast<KoPatternBackground>(background);
+        QSharedPointer<KoMeshGradientBackground> meshgradientBackground = qSharedPointerDynamicCast<KoMeshGradientBackground>(background);
+
 
         if(gradientBackground) {
             return Type::Gradient;
@@ -59,6 +62,10 @@ struct ShapeBackgroundFetchPolicy
 
         if (colorBackground) {
             return Type::Solid;
+        }
+
+        if (meshgradientBackground) {
+            return Type::MeshGradient;
         }
 
         return Type::None;
@@ -427,5 +434,25 @@ KUndo2Command* KoShapeFillWrapper::applyGradientStopsOnly(const QGradient *gradi
             });
     }
 
+    return command;
+}
+
+KUndo2Command* KoShapeFillWrapper::setMeshGradient(const SvgMeshGradient *gradient,
+                                                   const QTransform &transform)
+{
+    KUndo2Command *command = nullptr;
+    if (m_d->fillVariant == KoFlake::Fill) {
+        QList<QSharedPointer<KoShapeBackground>> newBackgrounds;
+
+        for (const auto &shape: m_d->shapes) {
+            Q_UNUSED(shape);
+            KoMeshGradientBackground *newBackground =
+                new KoMeshGradientBackground(new SvgMeshGradient(*gradient), transform);
+
+            newBackgrounds << toQShared(newBackground);
+        }
+        command = new KoShapeBackgroundCommand(m_d->shapes, newBackgrounds);
+    }
+    // TODO: for strokes!!
     return command;
 }

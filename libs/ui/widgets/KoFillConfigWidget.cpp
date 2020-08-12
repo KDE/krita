@@ -64,6 +64,7 @@
 #include <KoStopGradient.h>
 #include <QInputDialog>
 #include <KoShapeFillWrapper.h>
+#include <SvgMeshGradient.h>
 
 #include "kis_global.h"
 #include "kis_debug.h"
@@ -264,6 +265,10 @@ KoFillConfigWidget::KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVarian
     d->group->addButton(d->ui->btnPatternFill, Pattern);
     d->ui->btnPatternFill->setVisible(false);
 
+    // FIXME: different button
+    d->ui->btnMeshFill->setIcon(QPixmap((const char**) buttonpattern));
+    d->group->addButton(d->ui->btnMeshFill, MeshGradient);
+
     d->colorAction = new KoColorPopupAction(d->ui->btnChooseSolidColor);
     d->colorAction->setToolTip(i18n("Change the filling color"));
     d->colorAction->setCurrentColor(Qt::white);
@@ -446,6 +451,9 @@ void KoFillConfigWidget::styleButtonPressed(int buttonId)
             // Only select mode in the widget, don't set actual pattern :/
             //d->colorButton->setDefaultAction(d->patternAction);
             //patternChanged(d->patternAction->currentBackground());
+            break;
+        case KoFillConfigWidget::MeshGradient:
+            slotMeshGradientChanged();
             break;
     }
 
@@ -773,6 +781,27 @@ void KoFillConfigWidget::patternChanged(QSharedPointer<KoShapeBackground>  backg
 #endif
 }
 
+void KoFillConfigWidget::slotMeshGradientChanged()
+{
+    KisAcyclicSignalConnector::Blocker b(d->shapeChangedAcyclicConnector);
+
+    QList<KoShape*> selectedShapes = currentShapes();
+    // if called by "manager"
+    if (selectedShapes.isEmpty()) {
+        emit sigFillChanged();
+        return;
+    }
+
+    KoShapeFillWrapper wrapper(selectedShapes, d->fillVariant);
+    SvgMeshGradient *gradient = new SvgMeshGradient;
+    KUndo2Command *command = wrapper.setMeshGradient(gradient, QTransform());
+    if (command) {
+        d->canvas->addCommand(command);
+    }
+
+    emit sigFillChanged();
+}
+
 void KoFillConfigWidget::loadCurrentFillFromResourceServer()
 {
     {
@@ -851,6 +880,9 @@ void KoFillConfigWidget::updateFillIndexFromShape(KoShape *shape)
         case KoFlake::Pattern:
             d->selectedFillIndex = KoFillConfigWidget::Pattern;
             break;
+        case KoFlake::MeshGradient:
+            d->selectedFillIndex = KoFillConfigWidget::MeshGradient;
+            break;
     }
 }
 
@@ -897,11 +929,18 @@ void KoFillConfigWidget::updateWidgetComponentVisbility()
     d->ui->gradientTypeLine->setVisible(false);
     d->ui->soldStrokeColorLabel->setVisible(false);
     d->ui->presetLabel->setVisible(false);
+    d->ui->rowsLabel->setVisible(false);
+    d->ui->spinbRows->setVisible(false);
+    d->ui->columnsLabel->setVisible(false);
+    d->ui->spinbColumns->setVisible(false);
+    d->ui->smoothingTypeLabel->setVisible(false);
+    d->ui->cmbSmoothingType->setVisible(false);
 
     // keep options hidden if no vector shapes are selected
     if(currentShapes().isEmpty()) {
         return;
     }
+
 
     switch (d->selectedFillIndex) {
         case KoFillConfigWidget::None:
@@ -923,6 +962,14 @@ void KoFillConfigWidget::updateWidgetComponentVisbility()
             d->ui->presetLabel->setVisible(true);
             break;
         case KoFillConfigWidget::Pattern:
+            break;
+        case KoFillConfigWidget::MeshGradient:
+            d->ui->rowsLabel->setVisible(true);
+            d->ui->spinbRows->setVisible(true);
+            d->ui->columnsLabel->setVisible(true);
+            d->ui->spinbColumns->setVisible(true);
+            d->ui->smoothingTypeLabel->setVisible(true);
+            d->ui->cmbSmoothingType->setVisible(true);
             break;
     }
 

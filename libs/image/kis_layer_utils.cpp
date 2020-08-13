@@ -900,6 +900,8 @@ namespace KisLayerUtils {
     }
 
     QSet<int> fetchLayerFramesRecursive(KisNodeSP rootNode) {
+        if (!rootNode->visible()) return QSet<int>();
+
         QSet<int> frames = fetchLayerFrames(rootNode);
 
         KisNodeSP node = rootNode->firstChild();

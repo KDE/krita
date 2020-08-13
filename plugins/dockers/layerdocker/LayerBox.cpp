@@ -815,7 +815,9 @@ void LayerBox::slotSelectOpaque()
 
 void LayerBox::slotNodeCollapsedChanged()
 {
-    expandNodesRecursively(m_image->rootLayer(), m_filteringModel, m_wdgLayerBox->listLayers);
+    if (m_nodeModel->hasDummiesFacade()) {
+        expandNodesRecursively(m_image->rootLayer(), m_filteringModel, m_wdgLayerBox->listLayers);
+    }
 }
 
 inline bool isSelectionMask(KisNodeSP node)

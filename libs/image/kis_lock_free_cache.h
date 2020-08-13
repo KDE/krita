@@ -55,11 +55,7 @@ public:
     }
 
     inline bool endRead(int seq) const {
-        bool result =
-            seq == m_value &&
-            (seq & IsValidMask) &&
-            !(seq & WritersCountMask);
-
+        bool result = seq == m_value;
         return result;
     }
 

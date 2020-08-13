@@ -226,9 +226,6 @@ LayerBox::LayerBox()
     connect(m_nodeModel, SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)), SLOT(slotForgetAboutSavedNodeBeforeEditSelectionMode()));
     connect(m_nodeModel, SIGNAL(modelReset()), SLOT(slotForgetAboutSavedNodeBeforeEditSelectionMode()));
 
-    // we should update expanded state of the nodes on adding the nodes
-    connect(m_nodeModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(slotNodeCollapsedChanged()));
-    connect(m_nodeModel, SIGNAL(modelReset()), SLOT(slotNodeCollapsedChanged()));
 
     KisAction *showGlobalSelectionMask = new KisAction(i18n("&Show Global Selection Mask"), this);
     showGlobalSelectionMask->setObjectName("show-global-selection-mask");

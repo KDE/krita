@@ -17,49 +17,18 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <kis_processing_visitor.h>
+#include <KisRunnableStrokeJobUtils.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_generator_layer.h>
 #include <kis_processing_information.h>
+#include <kis_processing_visitor.h>
 #include <kis_selection.h>
 #include <krita_utils.h>
 
 #include "kis_generator_stroke_strategy.h"
 
-struct KisGeneratorStrokeStrategy::Private {
-    class ProcessData : public KisStrokeJobData
-    {
-    public:
-        ProcessData(KisGeneratorLayerSP _layer,
-            QSharedPointer<bool> _cookie,
-            KisGeneratorSP _f,
-            KisProcessingInformation &_dstCfg,
-            QRect _rect,
-            KisFilterConfigurationSP _filterConfig, QSharedPointer<KisProcessingVisitor::ProgressHelper> _helper)
-            : KisStrokeJobData(CONCURRENT)
-            , layer(_layer)
-            , f(_f)
-            , dstCfg(_dstCfg)
-            , tile(_rect)
-            , filterConfig(_filterConfig)
-            , helper(_helper)
-            , cookie(_cookie)
-        {
-        }
-
-        KisGeneratorLayerSP layer;
-        KisGeneratorSP f;
-        KisProcessingInformation dstCfg;
-        QRect tile;
-        KisFilterConfigurationSP filterConfig;
-        QSharedPointer<KisProcessingVisitor::ProgressHelper> helper;
-        QSharedPointer<bool> cookie;
-    };
-};
-
-KisGeneratorStrokeStrategy::KisGeneratorStrokeStrategy(KisImageWSP image)
-    : KisSimpleStrokeStrategy(QLatin1String("KisGenerator"))
-    , m_image(image)
+KisGeneratorStrokeStrategy::KisGeneratorStrokeStrategy()
+    : KisRunnableBasedStrokeStrategy(QLatin1String("KisGeneratorLayer"), kundo2_noi18n("KisGeneratorLayer"))
 {
     enableJob(KisSimpleStrokeStrategy::JOB_INIT, true, KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE);
     enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
@@ -69,52 +38,46 @@ KisGeneratorStrokeStrategy::KisGeneratorStrokeStrategy(KisImageWSP image)
     setCanForgetAboutMe(false);
 }
 
-QList<KisStrokeJobData *> KisGeneratorStrokeStrategy::createJobsData(KisGeneratorLayerSP layer, QSharedPointer<bool> cookie, KisGeneratorSP f, KisPaintDeviceSP dev, const QRect &rc, const KisFilterConfigurationSP filterConfig)
+QVector<KisStrokeJobData *> KisGeneratorStrokeStrategy::createJobsData(KisGeneratorLayerSP layer, QSharedPointer<bool> cookie, KisGeneratorSP f, KisPaintDeviceSP dev, const QRegion &region, const KisFilterConfigurationSP filterConfig)
 {
-    QList<KisStrokeJobData *> jobsData;
+    QVector<KisStrokeJobData *> jobsData;
 
     QSharedPointer<KisProcessingVisitor::ProgressHelper> helper(new KisProcessingVisitor::ProgressHelper(layer));
 
-    if (f->allowsSplittingIntoPatches())
-    {
-        using KritaUtils::optimalPatchSize;
-        using KritaUtils::splitRectIntoPatches;
+    auto process = [layer, helper, cookie, f, filterConfig](KisProcessingInformation dstCfg, QRect tile) {
+        const_cast<QSharedPointer<bool> &>(cookie).clear();
+        f->generate(dstCfg, tile.size(), filterConfig, helper->updater());
 
-        QVector<QRect> tiles = splitRectIntoPatches(rc, optimalPatchSize());
+        // HACK ALERT!!!
+        // this avoids cyclic loop with KisRecalculateGeneratorLayerJob::run()
+        const_cast<KisGeneratorLayerSP&>(layer)->setDirty(QVector<QRect>({tile}));
+    };
 
-        Q_FOREACH (const QRect &tile, tiles)
-        {
-            KisProcessingInformation dstCfg(dev, tile.topLeft(), KisSelectionSP());
-            jobsData << new Private::ProcessData(layer, cookie, f, dstCfg, tile, filterConfig, helper);
+    for (auto rc {region.begin()}; rc != region.end(); rc++) {
+        using KritaUtils::addJobConcurrent;
+
+        if (f->allowsSplittingIntoPatches()) {
+            using KritaUtils::optimalPatchSize;
+            using KritaUtils::splitRectIntoPatches;
+
+            QVector<QRect> tiles = splitRectIntoPatches(*rc, optimalPatchSize());
+
+            Q_FOREACH (const QRect &tile, tiles) {
+                KisProcessingInformation dstCfg(dev, tile.topLeft(), KisSelectionSP());
+                addJobConcurrent(jobsData, [process, dstCfg, tile] {
+                    process(dstCfg, tile);
+                });
+            }
+        } else {
+            KisProcessingInformation dstCfg(dev, (*rc).topLeft(), KisSelectionSP());
+            addJobConcurrent(jobsData, [process, dstCfg, rc] {
+                process(dstCfg, *rc);
+            });
         }
-    }
-    else
-    {
-        KisProcessingInformation dstCfg(dev, rc.topLeft(), KisSelectionSP());
-        jobsData << new Private::ProcessData(layer, cookie, f, dstCfg, rc, filterConfig, helper);
     }
 
     return jobsData;
 }
-
 KisGeneratorStrokeStrategy::~KisGeneratorStrokeStrategy()
 {
-}
-
-void KisGeneratorStrokeStrategy::initStrokeCallback()
-{
-}
-
-void KisGeneratorStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
-{
-    Private::ProcessData *d_pd = dynamic_cast<Private::ProcessData *>(data);
-    if (d_pd) {
-        d_pd->cookie.clear();
-        d_pd->f->generate(d_pd->dstCfg, d_pd->tile.size(), d_pd->filterConfig, d_pd->helper->updater());
-
-        // HACK ALERT!!!
-        // this avoids cyclic loop with KisRecalculateGeneratorLayerJob::run()
-        d_pd->layer->setDirty(QVector<QRect>({d_pd->tile}));
-        return;
-    }
 }

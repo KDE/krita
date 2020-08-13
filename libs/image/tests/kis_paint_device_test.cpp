@@ -1359,7 +1359,7 @@ public:
             case 1:
             {
                 int newValue = m_cache.getValue();
-                Q_ASSERT(newValue >= m_oldValue);
+                KIS_ASSERT(newValue >= m_oldValue);
                 Q_UNUSED(newValue);
             }
                 break;

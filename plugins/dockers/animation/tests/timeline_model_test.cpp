@@ -54,7 +54,7 @@ void TimelineModelTest::init()
     m_doc = KisPart::instance()->createDocument();
 
     m_nameServer = new KisNameServer();
-    m_shapeController = new KisShapeController(m_doc, m_nameServer);
+    m_shapeController = new KisShapeController(m_nameServer, m_doc->undoStack());
     m_displayModeAdapter = new KisNodeDisplayModeAdapter();
     //m_nodeModel = new KisNodeModel(0);
 
@@ -83,6 +83,14 @@ void TimelineModelTest::testConverter()
     m_shapeController->setImage(m_image);
 
     m_layer1->enableAnimation();
+
+    // all nodes are visible in timeline by default, so
+    // we should hide the ones we don't expect to see
+    m_mask1->setPinnedToTimeline(false);
+    m_sel1->setPinnedToTimeline(false);
+    m_sel2->setPinnedToTimeline(false);
+    m_layer3->setPinnedToTimeline(false);
+    m_layer4->setPinnedToTimeline(false);
 
     m_layer1->setPinnedToTimeline(true);
     m_layer2->setPinnedToTimeline(true);

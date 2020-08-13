@@ -43,6 +43,7 @@ public:
 
 private Q_SLOTS:
     void isValid();
+    void slotResourceSaved(KoResourceSP resource);
     void slotResourceSelected(KoResourceSP resource);
     void slotRenamePresetActivated();
     void slotRenamePresetDeactivated();

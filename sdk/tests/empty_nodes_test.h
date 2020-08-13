@@ -32,7 +32,7 @@
 #include "kis_transparency_mask.h"
 #include "kis_selection_mask.h"
 #include "kis_random_source.h"
-
+#include "kis_undo_stores.h"
 
 namespace TestUtil
 {
@@ -58,15 +58,15 @@ protected:
 
 
     void initBase() {
-        m_image = new KisImage(0, 512, 512, 0, "test");
+        m_image = new KisImage(new KisSurrogateUndoStore(), 512, 512, KoColorSpaceRegistry::instance()->rgb8(), "test");
         m_layer1 = new KisPaintLayer(m_image, "layer1", OPACITY_OPAQUE_U8);
         m_layer2 = new KisGroupLayer(m_image, "layer2", OPACITY_OPAQUE_U8);
         m_layer3 = new KisCloneLayer(m_layer1, m_image, "layer3", OPACITY_OPAQUE_U8);
         m_layer4 = new KisGroupLayer(m_image, "layer4", OPACITY_OPAQUE_U8);
         m_mask1 = new KisTransparencyMask(m_image, "mask1");
-        m_sel1 = new KisSelectionMask(m_image);
-        m_sel2 = new KisSelectionMask(m_image);
-        m_sel3 = new KisSelectionMask(m_image);
+        m_sel1 = new KisSelectionMask(m_image, "sel1");
+        m_sel2 = new KisSelectionMask(m_image, "sel2");
+        m_sel3 = new KisSelectionMask(m_image, "sel3");
     }
 
     void cleanupBase() {

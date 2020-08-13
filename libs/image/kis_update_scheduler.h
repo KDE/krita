@@ -241,7 +241,6 @@ public:
                                qint32 threadCount);
 
     KisUpdaterContext* updaterContext();
-    KisTestableSimpleUpdateQueue* updateQueue();
     using KisUpdateScheduler::processQueues;
 };
 

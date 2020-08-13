@@ -85,7 +85,7 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
         const bool useColorAsMask = (bool)brushDefinition.attribute("ColorAsMask", "1").toInt();
 
         brush->setBrushApplication(preserveLightness ? LIGHTNESSMAP : 
-                    colorfulBrush && !useColorAsMask ? IMAGESTAMP : ALPHAMASK);
+                    colorfulBrush && colorfulBrush->hasColor() && !useColorAsMask ? IMAGESTAMP : ALPHAMASK);
     }
     else if (brushDefinition.hasAttribute("brushApplication")) {
         enumBrushApplication brushApplication = static_cast<enumBrushApplication>(KisDomUtils::toInt(brushDefinition.attribute("brushApplication", "0")));
@@ -95,7 +95,7 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
         KIS_SAFE_ASSERT_RECOVER_NOOP(colorfulBrush);
 
         const bool useColorAsMask = (bool)brushDefinition.attribute("ColorAsMask", "1").toInt();
-        brush->setBrushApplication(colorfulBrush && !useColorAsMask ? IMAGESTAMP : ALPHAMASK);
+        brush->setBrushApplication(colorfulBrush && colorfulBrush->hasColor() && !useColorAsMask ? IMAGESTAMP : ALPHAMASK);
     } else {
         brush->setBrushApplication(ALPHAMASK);
     }

@@ -125,8 +125,8 @@ namespace KisLayerUtils {
 
         KisNodeList allSrcNodes() override {
             KisNodeList mergedNodes;
-            mergedNodes << currLayer;
             mergedNodes << prevLayer;
+            mergedNodes << currLayer;
             return mergedNodes;
         }
     };
@@ -381,6 +381,7 @@ namespace KisLayerUtils {
             }
 
             m_info->dstNode->setUseInTimeline(m_info->useInTimeline);
+            m_info->dstNode->setColorLabelIndex(m_info->allSrcNodes().first()->colorLabelIndex());
 
             KisPaintLayer *dstPaintLayer = qobject_cast<KisPaintLayer*>(m_info->dstNode.data());
             if (dstPaintLayer) {
@@ -460,6 +461,8 @@ namespace KisLayerUtils {
             m_info->nodesCompositingVaries = compositionVaries;
 
             m_info->dstNode->setUseInTimeline(m_info->useInTimeline);
+            m_info->dstNode->setColorLabelIndex(m_info->allSrcNodes().first()->colorLabelIndex());
+
             dstPaintLayer->setOnionSkinEnabled(m_info->enableOnionSkins);
         }
 

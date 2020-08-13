@@ -47,6 +47,10 @@ public:
     void unsetCanvas() override;
     void setViewManager(KisViewManager* kisview) override;
 
+private:
+    QVector<QRectF> getLayoutCellRects(int rows, int columns, QRectF pageRect);
+    QVector<QRectF> getLayoutCellRects(QString layoutSvgFileName);
+
 private Q_SLOTS:
     /**
      * @brief sets the image in Model to nullptr if there is no canvas set or no KisImage

@@ -16,8 +16,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "DlgExportStoryboard.h"
-#include <QDebug>
+
 #include "KoFileDialog.h"
+#include <KisDialogStateSaver.h>
+
 #include <QSpinBox>
 
 DlgExportStoryboard::DlgExportStoryboard(ExportFormat format)
@@ -33,6 +35,14 @@ DlgExportStoryboard::DlgExportStoryboard(ExportFormat format)
 
     m_page->lblSvgFileName->hide();
     m_page->lblSvgFileName->setWordWrap(true);
+
+    QMap<QString, QVariant> defaults;
+    defaults[ m_page->spinboxFirstItem->objectName() ] = QVariant::fromValue<int>(0);
+    defaults[ m_page->spinboxLastItem->objectName() ] = QVariant::fromValue<int>(0);
+    defaults[ m_page->spinboxRow->objectName() ] = QVariant::fromValue<int>(3);
+    defaults[ m_page->spinboxColumn->objectName() ] = QVariant::fromValue<int>(3);
+    // TO DO : set default page size
+    KisDialogStateSaver::restoreState(m_page, "krita/storyboard_export", defaults);
 
     connect(this, SIGNAL(applyClicked()), this, SLOT(slotExportClicked()));
     connect(m_page->btnSpecifySVG, SIGNAL(clicked()), this, SLOT(slotSpecifySvgClicked()));
@@ -102,6 +112,8 @@ void DlgExportStoryboard::slotExportClicked()
     if (m_exportFileName.isEmpty()) {
         this->cancelClicked();
     }
+
+    KisDialogStateSaver::saveState(m_page, "krita/storyboard_export");
     accept();
 }
 

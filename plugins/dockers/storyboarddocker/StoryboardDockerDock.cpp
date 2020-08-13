@@ -32,6 +32,8 @@
 #include <QItemSelection>
 #include <QSize>
 #include <QPrinter>
+#include <QTextDocument>
+#include <QAbstractTextDocumentLayout>
 
 #include <klocalizedstring.h>
 
@@ -313,11 +315,18 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
         dlg.hide();
         QApplication::setOverrideCursor(Qt::WaitCursor);
 
+        QVector<QRectF> layoutCellRects;
+        QPrinter printer(QPrinter::HighResolution);
+        printer.setOutputFormat(QPrinter::PdfFormat );
+        printer.setOutputFileName(dlg.saveFileName());
+        printer.setPageSize(QPrinter::A3);
+
         bool layoutSpecifiedBySvg = dlg.exportSvgFile().isEmpty();
         if (layoutSpecifiedBySvg) {
             QString svgFileName = dlg.exportSvgFile();
 
-            //To be done
+            //get rects
+            layoutCellRects = getLayoutCellRects(svgFileName);
         }
         else {
             int rows = dlg.rows();
@@ -326,81 +335,104 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
             int lastItemFrame = dlg.lastItem();
             PageSize size = dlg.pageSize();
 
-            if (dlg.format() == ExportFormat::SVG) {
-                //To be done
-                QApplication::restoreOverrideCursor();
-                return;
-            }
+            //get rects
+            layoutCellRects = getLayoutCellRects(rows, columns, printer.pageRect());
+        }
 
-            QPrinter printer(QPrinter::HighResolution);
-            printer.setOutputFormat(QPrinter::PdfFormat);
-            printer.setOutputFileName(dlg.saveFileName());
-            printer.setPageSize(QPrinter::A3);
-
+        if (dlg.format() == ExportFormat::SVG) {
+            QApplication::restoreOverrideCursor();
+            return;
+        }
+        else {
             QPainter p(&printer);
 
-            QRectF border(QPoint(0,0), printer.pageRect().size());
-            QSizeF pageSize(border.size());
-            QSizeF cellSize(pageSize.width() / columns, pageSize.height() / rows);
-
+            //take font size as input
+            QFont font = p.font();
+            font.setPointSize(1.5 * font.pointSize());
+            p.setFont(font);
             StoryboardItemList list = m_storyboardModel->getData();
 
-            for (int row = 0; row < rows; row++) {
+            for (int i = 0; i < list.size(); i++) {
+                QRectF cellRect = layoutCellRects.at(i);
 
-                QRectF cellRect = border;
-                cellRect.setSize(cellSize);
-                cellRect.moveTop(border.top() + row * cellRect.height() + 100);
-                cellRect.setSize(cellSize - QSize(200,200));
+                //draw the cell rectangle
+                p.setPen(QColor(100, 100, 0));
+                p.drawRect(cellRect);
 
-                for (int column = 0; column < columns; column++) {
-                    cellRect.moveLeft(border.left() + column * (cellRect.width() + 100));
+                ThumbnailData data = qvariant_cast<ThumbnailData>(list.at(i)->child(StoryboardItem::FrameNumber)->data());
+                QPixmap pxmp = qvariant_cast<QPixmap>(data.pixmap);
 
-                    int i = row*columns + column;
-                    if (i < list.size()) {
-                        p.setPen(Qt::darkGray);
-                        p.drawRect(cellRect);
+                //get the thumbnail rectangle and draw it with content
+                float scale = qMin(cellRect.width() / pxmp.rect().width(), (cellRect.height() - p.fontMetrics().height()) /  pxmp.rect().height());
+                QRectF thumbRect = cellRect;
+                thumbRect.setSize(scale * pxmp.rect().size());
 
-                        ThumbnailData data = qvariant_cast<ThumbnailData>(list.at(i)->child(StoryboardItem::FrameNumber)->data());
-                        QPixmap pxmp = qvariant_cast<QPixmap>(data.pixmap);
+                thumbRect.moveTop(thumbRect.top() + p.fontMetrics().height());
+                p.drawRect(thumbRect);
 
-                        float scale = qMin(cellRect.width() / pxmp.rect().width(), 1.2 * cellRect.height() /  pxmp.rect().height());
-                        QRectF upperRect = cellRect;
-                        upperRect.setSize(scale * pxmp.rect().size());
+                thumbRect.setSize(thumbRect.size() - QSize(30,30));
+                thumbRect.moveTopLeft(thumbRect.topLeft() + QPointF(15,15));
+                p.drawPixmap(thumbRect, pxmp, pxmp.rect());
 
-                        int numericFontWidth = p.fontMetrics().width("0");
-                        QRectF sceneRect = upperRect;
-                        sceneRect.setHeight(upperRect.height() / 6);
-                        sceneRect.setWidth(sceneRect.width() - 8 * numericFontWidth);
+                //get the panelInfo rect and draw panel name and duration
+                int numericFontWidth = p.fontMetrics().horizontalAdvance("0");
+                QRectF panelInfoRect = cellRect;
+                panelInfoRect.setHeight(p.fontMetrics().height());
+                panelInfoRect.setWidth((scale * pxmp.rect().size()).width() - 6 * numericFontWidth);
 
-                        QString str = list.at(i)->child(StoryboardItem::ItemName)->data().toString();
-                        p.drawRect(sceneRect);
-                        QRectF boundRect = sceneRect;
-                        p.drawText(sceneRect, Qt::AlignLeft | Qt::AlignVCenter, str, &boundRect);
+                QString str = list.at(i)->child(StoryboardItem::ItemName)->data().toString();
+                p.drawRect(panelInfoRect);
+                QRectF boundRect = panelInfoRect;
+                p.drawText(panelInfoRect, Qt::AlignLeft | Qt::AlignVCenter, str, &boundRect);
 
-                        QRectF durationRect = sceneRect;
-                        durationRect.setWidth(8 * numericFontWidth);
-                        durationRect.moveRight(upperRect.right());
+                //get the duration rect and draw duration
+                QRectF durationRect = panelInfoRect;
+                durationRect.setWidth(6 * numericFontWidth);
+                durationRect.moveLeft(panelInfoRect.right());
 
-                        QString duration = QString::number(list.at(i)->child(StoryboardItem::DurationSecond)->data().toInt());
-                        duration +=i18nc("suffix in spin box in storyboard that means 'seconds'", "s");
-                        duration += QString::number(list.at(i)->child(StoryboardItem::DurationFrame)->data().toInt());
-                        duration +=i18nc("suffix in spin box in storyboard that means 'frames'", "f");
+                QString duration = QString::number(list.at(i)->child(StoryboardItem::DurationSecond)->data().toInt());
+                duration +=i18nc("suffix in spin box in storyboard that means 'seconds'", "s");
+                duration += QString::number(list.at(i)->child(StoryboardItem::DurationFrame)->data().toInt());
+                duration +=i18nc("suffix in spin box in storyboard that means 'frames'", "f");
 
-                        boundRect = durationRect;
-                        boundRect.setSize(boundRect.size() - QSize(10,10));
-                        p.drawRect(durationRect);
-                        p.drawText(durationRect, Qt::AlignCenter, duration, &boundRect);
+                boundRect = durationRect;
+                boundRect.setSize(boundRect.size() - QSize(10,10));
+                p.drawRect(durationRect);
+                p.drawText(durationRect, Qt::AlignCenter, duration, &boundRect);
 
-                        QRectF thumbRect = upperRect;
-                        thumbRect.setHeight(upperRect.height() * 5 / 6);
-                        thumbRect.moveTop(thumbRect.top() + upperRect.height() / 6);
-                        thumbRect.setSize(thumbRect.size() - QSize(30,30));
-                        thumbRect.moveTopLeft(thumbRect.topLeft() + QPointF(15,15));
-
-                        p.drawRect(upperRect);
-                        p.drawPixmap(thumbRect, pxmp, pxmp.rect());
-                    }
+                //if the comments are to be drawn below thumbnail
+                QTextDocument doc;
+                doc.setDocumentMargin(0);
+                doc.setDefaultFont(p.font());
+                QVector<Comment> comments = m_commentModel->getData();
+                int numComments = comments.size();
+                QString comment;
+                for (int j = 0; j < numComments; j++) {
+                    comment += "<p><b>" + comments.at(j).name + "</b>"; // if arrange options are used check for visibility
+                    comment += " : " + qvariant_cast<CommentBox>(list.at(i)->child(StoryboardItem::Comments + j)->data()).content.toString() + "</p>";
                 }
+
+                doc.setHtml(comment);
+                doc.setTextWidth(cellRect.width());
+
+                QRectF clipRect = cellRect;
+                clipRect.setTop(thumbRect.bottom() + 15);
+                clipRect.moveTopLeft(QPoint(0,0));
+                clipRect.setWidth(thumbRect.width());
+
+                QAbstractTextDocumentLayout::PaintContext ctx;
+                ctx.palette.setColor(QPalette::Text, p.pen().color());
+                ctx.clip = clipRect;
+
+                //draw the comments
+                p.save();
+                p.translate(thumbRect.bottomLeft());
+                doc.documentLayout()->draw( &p, ctx);
+                p.restore();
+
+                QRectF eRect = printer.pageRect();
+                eRect.setTop(cellRect.bottom() + 2);
+                p.eraseRect(eRect);
             }
         }
     }
@@ -463,5 +495,32 @@ void StoryboardDockerDock::slotViewChanged(QAbstractButton* button)
     }
     m_storyboardModel->layoutChanged();
 }
+
+QVector<QRectF> StoryboardDockerDock::getLayoutCellRects(int rows, int columns, QRectF pageRect)
+{
+    QSizeF pageSize = pageRect.size();
+    QRectF border = pageRect;
+    QSizeF cellSize(pageSize.width() / columns, pageSize.height() / rows);
+    QVector<QRectF> rectVec;
+
+    for (int row = 0; row < rows; row++) {
+
+        QRectF cellRect = border;
+        cellRect.moveTop(border.top() + row * cellRect.height() + 100);
+        cellRect.setSize(cellSize - QSize(200,200));
+        for (int column = 0; column < columns; column++) {
+            cellRect.moveLeft(border.left() + column * (cellRect.width() + 100));
+            rectVec.push_back(cellRect);
+        }
+    }
+    return rectVec;
+}
+
+QVector<QRectF> StoryboardDockerDock::getLayoutCellRects(QString layoutSvgFileName)
+{
+    QVector<QRectF> rectVec;
+    return rectVec;
+}
+
 
 #include "StoryboardDockerDock.moc"

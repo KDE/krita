@@ -61,7 +61,11 @@ KisTiledDataManager::KisTiledDataManager(const KisTiledDataManager &dm)
 
     /* We do not clone the history of the device, there is no usecase for it */
     m_mementoManager = new KisMementoManager();
-    m_mementoManager->setDefaultTileData(dm.m_hashTable->defaultTileData());
+
+    KisTileData *defaultTileData = dm.m_hashTable->refAndFetchDefaultTileData();
+    m_mementoManager->setDefaultTileData(defaultTileData);
+    defaultTileData->deref();
+
     m_hashTable = new KisTileHashTable(*dm.m_hashTable, m_mementoManager);
 
     m_pixelSize = dm.m_pixelSize;
@@ -273,7 +277,7 @@ void KisTiledDataManager::purge(const QRect& area)
     QList<KisTileSP> tilesToDelete;
     {
         const qint32 tileDataSize = KisTileData::HEIGHT * KisTileData::WIDTH * pixelSize();
-        KisTileData *tileData = m_hashTable->defaultTileData();
+        KisTileData *tileData = m_hashTable->refAndFetchDefaultTileData();
         tileData->blockSwapping();
         const quint8 *defaultData = tileData->data();
 
@@ -292,6 +296,7 @@ void KisTiledDataManager::purge(const QRect& area)
         }
 
         tileData->unblockSwapping();
+        tileData->deref();
     }
     Q_FOREACH (KisTileSP tile, tilesToDelete) {
         if (m_hashTable->deleteTile(tile)) {

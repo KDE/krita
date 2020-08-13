@@ -31,5 +31,5 @@ public:
     KisGeneratorStrokeStrategy();
     ~KisGeneratorStrokeStrategy() override;
 
-    static QVector<KisStrokeJobData *> createJobsData(KisGeneratorLayerSP layer, QSharedPointer<bool> cookie, KisGeneratorSP f, KisPaintDeviceSP dev, const QRegion &rc, const KisFilterConfigurationSP filterConfig);
+    static QVector<KisStrokeJobData *> createJobsData(const KisGeneratorLayerSP layer, QSharedPointer<bool> cookie, const KisGeneratorSP f, const KisPaintDeviceSP dev, const QRegion &rc, const KisFilterConfigurationSP filterConfig);
 };

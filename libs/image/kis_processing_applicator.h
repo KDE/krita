@@ -80,6 +80,12 @@ public:
     void cancel();
 
     /**
+     * Returns the underlying stroke.
+     * Useful if you want to inject additional jobs in the applicator.
+     */
+    const KisStrokeId getStroke() const;
+
+    /**
      * @brief runSingleCommandStroke creates a stroke and runs \p cmd in it.
      *        The text() field fo \p cmd is used as a title of the stroke.
      * @param image the image to run the stroke on

@@ -107,15 +107,12 @@ void KisGeneratorLayer::slotDelayedStaticUpdate()
     }
 }
 
-void KisGeneratorLayer::update()
+void KisGeneratorLayer::requestUpdateJobsWithStroke(KisStrokeId strokeId, KisFilterConfigurationSP filterConfig)
 {
     QMutexLocker locker(&m_d->mutex);
-
+    
     KisImageSP image = this->image().toStrongRef();
     const QRect updateRect = extent() | image->bounds();
-
-    KisFilterConfigurationSP filterConfig = filter();
-    KIS_SAFE_ASSERT_RECOVER_RETURN(filterConfig);
 
     if (filterConfig != m_d->preparedForFilter) {
         locker.unlock();
@@ -134,23 +131,33 @@ void KisGeneratorLayer::update()
 
     KisPaintDeviceSP originalDevice = original();
 
-    KisGeneratorStrokeStrategy* stroke = new KisGeneratorStrokeStrategy();
-
-    KisStrokeId strokeId = image->startStroke(stroke);
-
     QSharedPointer<bool> cookie(new bool(true));
 
     auto jobs = KisGeneratorStrokeStrategy::createJobsData(this, cookie, f, originalDevice, processRegion, filterConfig);
 
-    Q_FOREACH(auto job, jobs) {
+    Q_FOREACH (auto job, jobs) {
         image->addJob(strokeId, job);
     }
-
-    image->endStroke(strokeId);
 
     m_d->updateCookie = cookie;
     m_d->preparedRect = updateRect;
     m_d->preparedForFilter = filterConfig;
+}
+
+void KisGeneratorLayer::update()
+{
+    KisImageSP image = this->image().toStrongRef();
+
+    KisFilterConfigurationSP filterConfig = filter();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(filterConfig);
+
+    KisGeneratorStrokeStrategy *stroke = new KisGeneratorStrokeStrategy();
+
+    KisStrokeId strokeId = image->startStroke(stroke);
+
+    requestUpdateJobsWithStroke(strokeId, filterConfig);
+
+    image->endStroke(strokeId);
 }
 
 bool KisGeneratorLayer::accept(KisNodeVisitor & v)

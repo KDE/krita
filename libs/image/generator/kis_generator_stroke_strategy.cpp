@@ -28,7 +28,7 @@
 #include "kis_generator_stroke_strategy.h"
 
 KisGeneratorStrokeStrategy::KisGeneratorStrokeStrategy()
-    : KisRunnableBasedStrokeStrategy(QLatin1String("KisGeneratorLayer"), kundo2_noi18n("KisGeneratorLayer"))
+    : KisRunnableBasedStrokeStrategy(QLatin1String("KisGenerator"), kundo2_noi18n("KisGenerator"))
 {
     enableJob(KisSimpleStrokeStrategy::JOB_INIT, true, KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE);
     enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
@@ -38,40 +38,44 @@ KisGeneratorStrokeStrategy::KisGeneratorStrokeStrategy()
     setCanForgetAboutMe(false);
 }
 
-QVector<KisStrokeJobData *> KisGeneratorStrokeStrategy::createJobsData(KisGeneratorLayerSP layer, QSharedPointer<bool> cookie, KisGeneratorSP f, KisPaintDeviceSP dev, const QRegion &region, const KisFilterConfigurationSP filterConfig)
+QVector<KisStrokeJobData *>KisGeneratorStrokeStrategy::createJobsData(const KisGeneratorLayerSP layer, QSharedPointer<bool> cookie, const KisGeneratorSP f, const KisPaintDeviceSP dev, const QRegion &region, const KisFilterConfigurationSP filterConfig)
 {
     QVector<KisStrokeJobData *> jobsData;
 
     QSharedPointer<KisProcessingVisitor::ProgressHelper> helper(new KisProcessingVisitor::ProgressHelper(layer));
 
-    auto process = [layer, helper, cookie, f, filterConfig](KisProcessingInformation dstCfg, QRect tile) {
-        const_cast<QSharedPointer<bool> &>(cookie).clear();
-        f->generate(dstCfg, tile.size(), filterConfig, helper->updater());
-
-        // HACK ALERT!!!
-        // this avoids cyclic loop with KisRecalculateGeneratorLayerJob::run()
-        const_cast<KisGeneratorLayerSP&>(layer)->setDirty(QVector<QRect>({tile}));
-    };
-
-    for (auto rc {region.begin()}; rc != region.end(); rc++) {
-        using KritaUtils::addJobConcurrent;
+    for (const auto& rc: region) {
+        using namespace KritaUtils;
 
         if (f->allowsSplittingIntoPatches()) {
             using KritaUtils::optimalPatchSize;
             using KritaUtils::splitRectIntoPatches;
 
-            QVector<QRect> tiles = splitRectIntoPatches(*rc, optimalPatchSize());
+            QVector<QRect> tiles = splitRectIntoPatches(rc, optimalPatchSize());
 
-            Q_FOREACH (const QRect &tile, tiles) {
+            for(const auto& tile: tiles) {
                 KisProcessingInformation dstCfg(dev, tile.topLeft(), KisSelectionSP());
-                addJobConcurrent(jobsData, [process, dstCfg, tile] {
-                    process(dstCfg, tile);
+                addJobConcurrent(jobsData, [=]() {
+                    const_cast<QSharedPointer<bool> &>(cookie).clear();
+
+                    f->generate(dstCfg, tile.size(), filterConfig, helper->updater());
+
+                    // HACK ALERT!!!
+                    // this avoids cyclic loop with KisRecalculateGeneratorLayerJob::run()
+                    const_cast<KisGeneratorLayerSP &>(layer)->setDirty({tile});
                 });
             }
         } else {
-            KisProcessingInformation dstCfg(dev, (*rc).topLeft(), KisSelectionSP());
-            addJobConcurrent(jobsData, [process, dstCfg, rc] {
-                process(dstCfg, *rc);
+            KisProcessingInformation dstCfg(dev, rc.topLeft(), KisSelectionSP());
+
+            addJobConcurrent(jobsData, [=]() {
+                const_cast<QSharedPointer<bool>&>(cookie).clear();
+
+                f->generate(dstCfg, rc.size(), filterConfig, helper->updater());
+
+                // HACK ALERT!!!
+                // this avoids cyclic loop with KisRecalculateGeneratorLayerJob::run()
+                const_cast<KisGeneratorLayerSP &>(layer)->setDirty({rc});
             });
         }
     }

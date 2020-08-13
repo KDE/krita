@@ -290,7 +290,7 @@ void KisLayerManager::layerProperties()
         Q_ASSERT(configBefore);
         QString xmlBefore = configBefore->toXML();
 
-        KisDlgGeneratorLayer *dlg = new KisDlgGeneratorLayer(generatorLayer->name(), m_view, m_view->mainWindow(), generatorLayer, configBefore);
+        KisDlgGeneratorLayer *dlg = new KisDlgGeneratorLayer(generatorLayer->name(), m_view, m_view->mainWindow(), generatorLayer, configBefore, KisStrokeId());
         dlg->setCaption(i18n("Fill Layer Properties"));
         dlg->setAttribute(Qt::WA_DeleteOnClose);
 
@@ -695,30 +695,41 @@ KisAdjustmentLayerSP KisLayerManager::addAdjustmentLayer(KisNodeSP activeNode, c
     return layer;
 }
 
+KisGeneratorLayerSP KisLayerManager::addGeneratorLayer(KisNodeSP activeNode, const QString &name, KisFilterConfigurationSP filter, KisSelectionSP selection, KisProcessingApplicator *applicator)
+{
+    KisImageWSP image = m_view->image();
+    auto layer = new KisGeneratorLayer(image, name, filter, selection);
+    addLayerCommon(activeNode, layer, true, applicator);
+
+    return layer;
+}
+
 KisNodeSP KisLayerManager::addGeneratorLayer(KisNodeSP activeNode)
 {
     KisImageWSP image = m_view->image();
+    KisSelectionSP selection = m_view->selection();
     QColor currentForeground = m_view->canvasResourceProvider()->fgColor().toQColor();
 
+    KisProcessingApplicator applicator(image, 0, KisProcessingApplicator::NONE, KisImageSignalVector() << ModifiedSignal, kundo2_i18n("Add Layer"));
 
-    KisDlgGeneratorLayer dlg(image->nextLayerName(i18n("Fill Layer")), m_view, m_view->mainWindow(), 0, 0);
+    KisGeneratorLayerSP node = addGeneratorLayer(activeNode, QString(), nullptr, selection, &applicator);
+
+    KisDlgGeneratorLayer dlg(image->nextLayerName(i18n("Fill Layer")), m_view, m_view->mainWindow(), node, nullptr, applicator.getStroke());
     KisFilterConfigurationSP defaultConfig = dlg.configuration();
     defaultConfig->setProperty("color", currentForeground);
     dlg.setConfiguration(defaultConfig);
-
     dlg.resize(dlg.minimumSizeHint());
+
     if (dlg.exec() == QDialog::Accepted) {
-        KisSelectionSP selection = m_view->selection();
-        KisFilterConfigurationSP  generator = dlg.configuration();
-        QString name = dlg.layerName();
-
-        KisNodeSP node = new KisGeneratorLayer(image, name, generator, selection);
-
-        addLayerCommon(activeNode, node, true, 0);
-
+        node->setFilter(dlg.configuration());
+        node->setName(dlg.layerName());
+        applicator.end();
         return node;
     }
-    return 0;
+    else {
+        applicator.cancel();
+        return nullptr;
+    }
 }
 
 void KisLayerManager::flattenImage()

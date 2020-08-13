@@ -23,6 +23,7 @@
 #include <QList>
 
 #include "kis_adjustment_layer.h"
+#include "kis_generator_layer.h"
 #include "kis_types.h"
 #include "KisView.h"
 #include <filter/kis_filter_configuration.h>
@@ -103,6 +104,7 @@ private Q_SLOTS:
     KisAdjustmentLayerSP addAdjustmentLayer(KisNodeSP activeNode, const QString & name, KisFilterConfigurationSP  filter, KisSelectionSP selection, KisProcessingApplicator *applicator);
 
     KisNodeSP addGeneratorLayer(KisNodeSP activeNode);
+    KisGeneratorLayerSP addGeneratorLayer(KisNodeSP activeNode, const QString &name, KisFilterConfigurationSP filter, KisSelectionSP selection, KisProcessingApplicator *applicator);
 
     KisNodeSP addFileLayer(KisNodeSP activeNode);
 

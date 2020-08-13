@@ -66,6 +66,7 @@ public:
      * of the associated selection.
      */
     void update();
+    void requestUpdateJobsWithStroke(KisStrokeId stroke, KisFilterConfigurationSP configuration);
 
     using KisSelectionBasedLayer::setDirty;
     void setDirty(const QVector<QRect> &rects) override;

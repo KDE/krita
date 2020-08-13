@@ -36,10 +36,14 @@
 #include <KisDocument.h>
 #include <KisGlobalResourcesInterface.h>
 
-KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString & defaultName, KisViewManager *view, QWidget *parent, KisGeneratorLayerSP glayer = 0, const KisFilterConfigurationSP previousConfig = 0)
+#define UPDATE_DELAY 100 /*ms */
+
+KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString & defaultName, KisViewManager *view, QWidget *parent, KisGeneratorLayerSP glayer = 0, const KisFilterConfigurationSP previousConfig = 0, const KisStrokeId stroke = KisStrokeId())
         : KoDialog(parent)
         , m_customName(false)
         , m_freezeName(false)
+        , m_stroke(stroke)
+        , m_compressor(UPDATE_DELAY, KisSignalCompressor::FIRST_INACTIVE)
 {
 
     setButtons(Ok | Cancel);
@@ -48,9 +52,10 @@ KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString & defaultName, KisViewM
 
     if(isEditing){
         setModal(false);
-        layer = glayer;
         configBefore = previousConfig->cloneWithResourcesSnapshot();
     }
+
+    layer = glayer;
 
     QWidget *page = new QWidget(this);
 
@@ -63,6 +68,11 @@ KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString & defaultName, KisViewM
     connect(dlgWidget.txtLayerName, SIGNAL(textChanged(QString)),
             this, SLOT(slotNameChanged(QString)));
     connect(dlgWidget.wdgGenerator, SIGNAL(previewConfiguration()), this, SLOT(previewGenerator()));
+    connect(&m_compressor, SIGNAL(timeout()), this, SLOT(slotDelayedPreviewGenerator()));
+
+    if (layer && !isEditing) {
+        layer->setFilter(configuration());
+    }
 }
 
 KisDlgGeneratorLayer::~KisDlgGeneratorLayer()
@@ -105,10 +115,21 @@ void KisDlgGeneratorLayer::slotNameChanged(const QString & text)
     enableButtonOk(m_customName);
 }
 
+void KisDlgGeneratorLayer::slotDelayedPreviewGenerator()
+{
+    if (!m_stroke.isNull()) {
+        layer->requestUpdateJobsWithStroke(m_stroke, configuration());
+    }
+}
+
 void KisDlgGeneratorLayer::previewGenerator()
 {
-    if (isEditing && layer)
+    if (!m_stroke.isNull()) {
+        m_compressor.start();
+    }
+    else {
         layer->setFilter(configuration()->cloneWithResourcesSnapshot());
+    }
 }
 
 void KisDlgGeneratorLayer::setConfiguration(const KisFilterConfigurationSP  config)

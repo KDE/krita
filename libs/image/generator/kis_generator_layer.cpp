@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
+ *  Copỳright (c) 2020 L. E. Segovia <amy@amyspark.me>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,8 +35,9 @@
 #include "generator/kis_generator.h"
 #include "kis_node_visitor.h"
 #include "kis_thread_safe_signal_compressor.h"
-#include "kis_recalculate_generator_layer_job.h"
-#include "kis_generator_stroke_strategy.h"
+#include <kis_generator_stroke_strategy.h>
+#include <KisRunnableStrokeJobData.h>
+
 
 #define UPDATE_DELAY 100 /*ms */
 
@@ -122,7 +124,8 @@ void KisGeneratorLayer::update()
     }
 
     const QRegion processRegion(QRegion(updateRect) - m_d->preparedRect);
-    if (processRegion.isEmpty()) return;
+    if (processRegion.isEmpty())
+        return;
 
     KisGeneratorSP f = KisGeneratorRegistry::instance()->value(filterConfig->name());
     KIS_SAFE_ASSERT_RECOVER_RETURN(f);
@@ -131,21 +134,16 @@ void KisGeneratorLayer::update()
 
     KisPaintDeviceSP originalDevice = original();
 
-    KisGeneratorStrokeStrategy *stroke = new KisGeneratorStrokeStrategy(image);
+    KisGeneratorStrokeStrategy* stroke = new KisGeneratorStrokeStrategy();
 
     KisStrokeId strokeId = image->startStroke(stroke);
 
     QSharedPointer<bool> cookie(new bool(true));
 
-    auto rc = processRegion.begin();
-    while (rc != processRegion.end()) {
-        QList<KisStrokeJobData *> jobs = KisGeneratorStrokeStrategy::createJobsData(this, cookie, f, originalDevice, *rc, filterConfig);
+    auto jobs = KisGeneratorStrokeStrategy::createJobsData(this, cookie, f, originalDevice, processRegion, filterConfig);
 
-        Q_FOREACH (KisStrokeJobData *job, jobs) {
-            image->addJob(strokeId, job);
-        }
-
-        rc++;
+    Q_FOREACH(auto job, jobs) {
+        image->addJob(strokeId, job);
     }
 
     image->endStroke(strokeId);

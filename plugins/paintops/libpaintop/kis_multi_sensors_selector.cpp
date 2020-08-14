@@ -53,6 +53,9 @@ KisMultiSensorsSelector::~KisMultiSensorsSelector()
 void KisMultiSensorsSelector::setCurveOption(KisCurveOption *curveOption)
 {
     d->model->setCurveOption(curveOption);
+
+    if(!(curveOption->activeSensors().size() > 0))
+        return ;
     KisDynamicSensorSP s = curveOption->activeSensors().first();
     if (!s) {
         s = curveOption->sensors().first();

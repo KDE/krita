@@ -21,8 +21,8 @@ public:
     ~KisMyPaintBrushOptionsSelector() override;
 
     void setCurveOption(KisMyPaintCurveOption *curveOption);
-    void setCurrent(KisDynamicOptionSP _sensor);
-    KisDynamicOptionSP currentHighlighted();
+    void setCurrent(KisDynamicSensorSP _sensor);
+    KisDynamicSensorSP currentHighlighted();
     void setCurrentCurve(const KisCubicCurve& curve, bool useSameCurve);
     void reload();
 
@@ -33,14 +33,14 @@ private Q_SLOTS:
 
 Q_SIGNALS:
 
-    void sensorChanged(KisDynamicOptionSP sensor);
+    void sensorChanged(KisDynamicSensorSP sensor);
 
     /**
      * This signal is emitted when the parameters of sensor are changed.
      */
     void parametersChanged();
 
-    void highlightedSensorChanged(KisDynamicOptionSP sensor);
+    void highlightedSensorChanged(KisDynamicSensorSP sensor);
 private:
     struct Private;
     Private* const d;

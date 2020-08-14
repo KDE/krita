@@ -6,6 +6,7 @@
 #include <QAbstractListModel>
 #include <kis_mypaintbrush_option.h>
 #include <kis_mypaint_curve_option.h>
+#include <kis_multi_sensors_model_p.h>
 
 class KisCubicCurve;
 class KisCurveOption;
@@ -30,25 +31,25 @@ public:
 
     Qt::ItemFlags flags(const QModelIndex & index) const override;
 
-    KisDynamicOptionSP getSensor(const QModelIndex& index);
+    KisDynamicSensorSP getSensor(const QModelIndex& index);
 
     void setCurrentCurve(const QModelIndex& currentIndex, const KisCubicCurve& curve, bool useSameCurve);
 
     /**
      * Create an index that correspond to the sensor given in argument.
      */
-    QModelIndex sensorIndex(KisDynamicOptionSP arg1);
+    QModelIndex sensorIndex(KisDynamicSensorSP arg1);
 
     void resetCurveOption();
 
 Q_SIGNALS:
 
-    void sensorChanged(KisDynamicOptionSP sensor);
+    void sensorChanged(KisDynamicSensorSP sensor);
 
     /**
      * This signal is emitted when the parameters of sensor are changed.
      */
-    void parametersChanged();
+    void parametersChanged();    
 
 private:
 

@@ -692,6 +692,52 @@ namespace KisLayerUtils {
     };
 
 
+    void splitNonRemovableNodes(KisNodeList &nodesToRemove, KisNodeList &_nodesToHide)
+    {
+        QSet<KisNodeSP> nodesToHide;
+        QSet<KisNodeSP> extraNodesToRemove;
+
+        for (auto it = nodesToRemove.begin(); it != nodesToRemove.end(); ++it) {
+            KisNodeSP root = *it;
+            KIS_SAFE_ASSERT_RECOVER_NOOP(root->visible());
+
+            if (!root->isEditable(false)) {
+                nodesToHide.insert(root);
+            } else {
+                bool rootNeedsCarefulRemoval = false;
+
+                recursiveApplyNodes(root,
+                                    [root, &nodesToHide, &rootNeedsCarefulRemoval] (KisNodeSP node) {
+                                        if (!node->isEditable(false)) {
+                                            while (node != root) {
+                                                nodesToHide.insert(node);
+                                                node = node->parent();
+                                                KIS_SAFE_ASSERT_RECOVER_BREAK(node);
+                                            }
+                                            nodesToHide.insert(root);
+                                            rootNeedsCarefulRemoval = true;
+                                        }
+                                    });
+
+                if (rootNeedsCarefulRemoval) {
+                    recursiveApplyNodes(root,
+                                        [&extraNodesToRemove] (KisNodeSP node) {
+                                            extraNodesToRemove.insert(node);
+                                        });
+                }
+            }
+        }
+
+        nodesToRemove += extraNodesToRemove.toList();
+
+        KritaUtils::filterContainer<KisNodeList>(nodesToRemove,
+                                                 [nodesToHide](KisNodeSP node) {
+                                                     return !nodesToHide.contains(node);
+                                                 });
+
+        _nodesToHide = nodesToHide.toList();
+    }
+
     struct CleanUpNodes : private RemoveNodeHelper, public KisCommandUtils::AggregateCommand {
         CleanUpNodes(MergeDownInfoBaseSP info, KisNodeSP putAfter)
             : m_info(info), m_putAfter(putAfter) {}
@@ -792,16 +838,14 @@ namespace KisLayerUtils {
                 }
 
                 KisNodeList safeNodesToDelete = m_info->allSrcNodes();
-                for (KisNodeList::iterator it = safeNodesToDelete.begin(); it != safeNodesToDelete.end(); ++it) {
-                    KisNodeSP node = *it;
-                    if (node->userLocked() && node->visible()) {
-                        addCommand(new KisImageChangeVisibilityCommand(false, node));
-                    }
+                KisNodeList safeNodesToHide;
+
+                splitNonRemovableNodes(safeNodesToDelete, safeNodesToHide);
+
+                Q_FOREACH(KisNodeSP node, safeNodesToHide) {
+                    addCommand(new KisImageChangeVisibilityCommand(false, node));
                 }
 
-                KritaUtils::filterContainer<KisNodeList>(safeNodesToDelete, [](KisNodeSP node) {
-                  return !node->userLocked();
-                });
                 safeRemoveMultipleNodes(safeNodesToDelete, m_info->image);
             }
 
@@ -1312,25 +1356,46 @@ namespace KisLayerUtils {
         emitSignals << ModifiedSignal;
         emitSignals << ComplexNodeReselectionSignal(KisNodeSP(), KisNodeList(), KisNodeSP(), mergedNodes);
 
-        KisProcessingApplicator applicator(image, 0,
-                                           KisProcessingApplicator::NONE,
-                                           emitSignals,
-                                           actionName);
 
 
         KisNodeList originalNodes = mergedNodes;
         KisNodeList invisibleNodes;
         mergedNodes = filterInvisibleNodes(originalNodes, &invisibleNodes, &putAfter);
 
-        if (!invisibleNodes.isEmpty() && !mergedNodes.isEmpty()) {
-            /* If the putAfter node is invisible,
-             * we should instead pick one of the nodes
-             * to be merged to avoid a null putAfter.
-             */
-            if (!putAfter->visible()){
-                putAfter = mergedNodes.first();
-            }
+        if (mergedNodes.isEmpty()) return;
 
+        /* If the putAfter node is invisible,
+         * we should instead pick one of the nodes
+         * to be merged to avoid a null putAfter.
+         */
+        if (!putAfter->visible()){
+            putAfter = mergedNodes.first();
+        }
+
+        // make sure we don't add the new layer into a locked group
+        KIS_SAFE_ASSERT_RECOVER_RETURN(putAfter->parent());
+        while (putAfter->parent() && !putAfter->parent()->isEditable()) {
+            putAfter = putAfter->parent();
+        }
+
+        /**
+         * We have reached the root of the layer hierarchy and didn't manage
+         * to find a node that was editable enough for putting our merged
+         * result into it. That whouldn't happen in normal circumstances,
+         * unless the user chose to make the root layer visible and lock
+         * it manually.
+         */
+        if (!putAfter->parent()) {
+            return;
+        }
+
+        KisProcessingApplicator applicator(image, 0,
+                                           KisProcessingApplicator::NONE,
+                                           emitSignals,
+                                           actionName);
+
+
+        if (!invisibleNodes.isEmpty()) {
             applicator.applyCommand(
                 new SimpleRemoveLayers(invisibleNodes,
                                        image),

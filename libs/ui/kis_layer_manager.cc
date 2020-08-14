@@ -798,6 +798,24 @@ void KisLayerManager::mergeLayer()
     if (!m_view->blockUntilOperationsFinished(image)) return;
 
     QList<KisNodeSP> selectedNodes = m_view->nodeManager()->selectedNodes();
+
+    // check if all the layers are a part of a locked group
+    bool hasEditableLayer = false;
+    Q_FOREACH (KisNodeSP node, selectedNodes) {
+        if (node->isEditable()) {
+            hasEditableLayer = true;
+            break;
+        }
+    }
+
+    if (!hasEditableLayer) {
+        m_view->showFloatingMessage(
+                    i18nc("floating message in layer manager",
+                          "Layer is locked "),
+                    QIcon(), 2000, KisFloatingMessage::Low);
+        return;
+    }
+
     if (selectedNodes.size() > 1) {
         image->mergeMultipleLayers(selectedNodes, m_view->activeNode());
     }

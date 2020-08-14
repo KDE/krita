@@ -14,6 +14,7 @@
 #include <kis_cubic_curve.h>
 #include <kis_shared_ptr.h>
 #include <kis_shared.h>
+#include <kis_dynamic_sensor.h>
 #include <libmypaint/mypaint-brush.h>
 
 
@@ -30,97 +31,46 @@ const KoID Declination("tilt_declination", ki18n("Declination"));
 const KoID Ascension("tilt_ascension", ki18n("Ascension"));
 const KoID Custom("custom", ki18n("Custom"));
 
-const KoID SensorsListId("sensorslist", "SHOULD NOT APPEAR IN THE UI !"); ///< this a non user-visible sensor that can store a list of other sensors, and multiply their output
-
 class KisMyPaintBrushOption;
-typedef KisSharedPtr<KisMyPaintBrushOption> KisDynamicOptionSP;
+//typedef KisSharedPtr<KisMyPaintBrushOption> KisDynamicOptionSP;
 
-enum MyPaintBrushOptionType {
-
-    PRESSURE,
-    FINE_SPEED,
-    GROSS_SPEED,
-    RANDOM,
-    STROKE,
-    DIRECTION,
-    DECLINATION,
-    ASCENSION,
-    CUSTOM,
-    UNKNOWN = 255
-};
-
-class PAINTOP_EXPORT KisMyPaintBrushOption : public KisSerializableConfiguration
+class PAINTOP_EXPORT KisMyPaintBrushOption : public KisDynamicSensor
 {
 
 public:
-    enum ParameterSign {
-        NegativeParameter = -1,
-        UnSignedParameter = 0,
-        PositiveParameter = 1
-    };
 
-public:
-
-    KisMyPaintBrushOption(MyPaintBrushOptionType type);
+    KisMyPaintBrushOption(DynamicSensorType type);
     ~KisMyPaintBrushOption() override;
 
-    qreal parameter(const KisPaintInformation& info);
-
-    qreal parameter(const KisPaintInformation& info, const KisCubicCurve curve, const bool customCurve);
-
-    void reset();
-
-    QWidget* createConfigurationWidget(QWidget* parent, QWidget* selector);
-
-    static KisDynamicOptionSP id2Sensor(const KoID& id, const QString &parentOptionName);
-    static KisDynamicOptionSP id2Sensor(const QString& s, const QString &parentOptionName) {
+    qreal value(const KisPaintInformation &info) override;
+    static KisDynamicSensorSP id2Sensor(const KoID& id, const QString &parentOptionName);
+    static KisDynamicSensorSP id2Sensor(const QString& s, const QString &parentOptionName) {
         return id2Sensor(KoID(s), parentOptionName);
     }
 
-    static MyPaintBrushOptionType id2Type(const KoID& id);
-    static MyPaintBrushOptionType id2Type(const QString& s) {
+    static DynamicSensorType id2Type(const KoID& id);
+    static DynamicSensorType id2Type(const QString& s) {
         return id2Type(KoID(s));
     }
 
-    static KisDynamicOptionSP type2Sensor(MyPaintBrushOptionType sensorType, const QString &parentOptionName);
+    static KisDynamicSensorSP type2Sensor(DynamicSensorType sensorType, const QString &parentOptionName);
 
-    static QString minimumLabel(MyPaintBrushOptionType sensorType);
-    static QString maximumLabel(MyPaintBrushOptionType sensorType, int max = -1);
-    static int minimumValue(MyPaintBrushOptionType sensorType);
-    static int maximumValue(MyPaintBrushOptionType sensorType, int max = -1);
-    static QString valueSuffix(MyPaintBrushOptionType sensorType);
-
-    static KisDynamicOptionSP createFromXML(const QString&, const QString &parentOptionName);
-    static KisDynamicOptionSP createFromXML(const QDomElement&, const QString &parentOptionName);
+    static QString minimumLabel(DynamicSensorType sensorType);
+    static QString maximumLabel(DynamicSensorType sensorType, int max = -1);
+    static int minimumValue(DynamicSensorType sensorType);
+    static int maximumValue(DynamicSensorType sensorType, int max = -1);
+    static QString valueSuffix(DynamicSensorType sensorType);
 
     static QList<KoID> sensorsIds();
-    static QList<MyPaintBrushOptionType> sensorsTypes();
-    static MyPaintBrushOptionType typeForInput(MyPaintBrushInput input);
+    static QList<DynamicSensorType> sensorsTypes();
+    static DynamicSensorType typeForInput(MyPaintBrushInput input);
 
-    static QString id(MyPaintBrushOptionType sensorType);
+    QString id(DynamicSensorType sensorType);
     QString id();
 
-    using KisSerializableConfiguration::fromXML;
-    using KisSerializableConfiguration::toXML;
-
-    void toXML(QDomDocument&, QDomElement&) const override;
-    void fromXML(const QDomElement&) override;
-
-    void setCurve(const KisCubicCurve& curve);
     void setCurveFromPoints(QList<QPointF> points);
-    const KisCubicCurve& curve() const;
-    void removeCurve();
-    bool hasCustomCurve() const;
 
-    void setActive(bool active);
-    bool isActive() const;       
-
-    bool dependsOnCanvasRotation() const;
-
-    bool isAdditive() const;
-    bool isAbsoluteRotation() const;
-
-    inline MyPaintBrushOptionType sensorType() const { return m_type; }
+    inline DynamicSensorType sensorType() const { return m_type; }
 
     MyPaintBrushInput input();
 
@@ -153,7 +103,6 @@ public:
 
 protected:
 
-    qreal value(const KisPaintInformation& info);
     QPointF scaleTo0_1(QPointF point);
     QPointF scaleFrom0_1(QPointF point);
     qreal scaleToRange(qreal inMin, qreal inMax, qreal outMin, qreal outMax, qreal inValue);
@@ -166,7 +115,7 @@ private:
 
     Q_DISABLE_COPY(KisMyPaintBrushOption)
 
-    MyPaintBrushOptionType m_type;
+    DynamicSensorType m_type;
     bool m_customCurve;
     KisCubicCurve m_curve;
     bool m_active;

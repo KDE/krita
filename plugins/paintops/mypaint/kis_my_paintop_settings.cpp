@@ -75,10 +75,6 @@ QPainterPath KisMyPaintOpSettings::brushOutline(const KisPaintInformation &info,
         qreal radius = 0.5 * op.diameter;
         radius = radius > 1 ? radius : 1;
 
-//        MyPaintBrush *brush = mypaint_brush_new();
-//        mypaint_brush_from_defaults(brush);
-//        mypaint_brush_from_string(brush, op.json);
-
         qreal offset = op.offset;
 
         radius = radius + 2 * radius * offset;

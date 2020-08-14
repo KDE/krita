@@ -74,12 +74,15 @@ void KisMyPaintBrush::apply(KisPaintOpSettingsSP settings) {
     mypaint_brush_set_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC, log(diameter/2));
 
     float hardness = settings->getFloat(MYPAINT_HARDNESS);
+    m_d->hardness = hardness;
     mypaint_brush_set_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_HARDNESS, hardness);
 
     float opacity = settings->getFloat(MYPAINT_OPACITY);
+    m_d->opacity = opacity;
     mypaint_brush_set_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_OPAQUE, opacity);
 
     float offset = settings->getFloat(MYPAINT_OFFSET_BY_RANDOM);
+    m_d->offset = offset;
     mypaint_brush_set_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_OFFSET_BY_RANDOM, offset);
 
     mypaint_brush_new_stroke(m_d->m_brush);

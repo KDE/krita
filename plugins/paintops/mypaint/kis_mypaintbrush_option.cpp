@@ -27,8 +27,9 @@
 
 using namespace std;
 
-KisMyPaintBrushOption::KisMyPaintBrushOption(MyPaintBrushOptionType type)
-    : m_length(-1)
+KisMyPaintBrushOption::KisMyPaintBrushOption(DynamicSensorType type)
+    : KisDynamicSensor (type)
+    , m_length(-1)
     , m_type(type)
     , m_customCurve(false)
     , m_active(false)
@@ -36,16 +37,6 @@ KisMyPaintBrushOption::KisMyPaintBrushOption(MyPaintBrushOptionType type)
 }
 
 KisMyPaintBrushOption::~KisMyPaintBrushOption()
-{
-}
-
-QWidget* KisMyPaintBrushOption::createConfigurationWidget(QWidget* parent, QWidget*)
-{
-    Q_UNUSED(parent);
-    return 0;
-}
-
-void KisMyPaintBrushOption::reset()
 {
 }
 
@@ -59,69 +50,69 @@ qreal KisMyPaintBrushOption::value(const KisPaintInformation &info)
     return qreal(currentValue) / m_length;
 }
 
-KisDynamicOptionSP KisMyPaintBrushOption::id2Sensor(const KoID& id, const QString &parentOptionName)
+KisDynamicSensorSP KisMyPaintBrushOption::id2Sensor(const KoID& id, const QString &parentOptionName)
 {
     if(id.id()==Pressure.id())
-        return new KisMyPaintBrushOption(PRESSURE);
+        return new KisMyPaintBrushOption(MYPAINT_PRESSURE);
     else if(id.id()==FineSpeed.id())
-        return new KisMyPaintBrushOption(FINE_SPEED);
+        return new KisMyPaintBrushOption(MYPAINT_FINE_SPEED);
     else if(id.id()==GrossSpeed.id())
-        return new KisMyPaintBrushOption(GROSS_SPEED);
+        return new KisMyPaintBrushOption(MYPAINT_GROSS_SPEED);
     else if(id.id()==Random.id())
-        return new KisMyPaintBrushOption(RANDOM);
+        return new KisMyPaintBrushOption(MYPAINT_RANDOM);
     else if(id.id()==Stroke.id())
-        return new KisMyPaintBrushOption(STROKE);
+        return new KisMyPaintBrushOption(MYPAINT_STROKE);
     else if(id.id()==Direction.id())
-        return new KisMyPaintBrushOption(DIRECTION);
+        return new KisMyPaintBrushOption(MYPAINT_DIRECTION);
     else if(id.id()==Ascension.id())
-        return new KisMyPaintBrushOption(ASCENSION);
+        return new KisMyPaintBrushOption(MYPAINT_ASCENSION);
     else if(id.id()==Declination.id())
-        return new KisMyPaintBrushOption(DECLINATION);
+        return new KisMyPaintBrushOption(MYPAINT_DECLINATION);
     else if(id.id()==Custom.id())
-        return new KisMyPaintBrushOption(CUSTOM);
+        return new KisMyPaintBrushOption(MYPAINT_CUSTOM);
     else {
         return 0;
     }
 }
 
-MyPaintBrushOptionType KisMyPaintBrushOption::id2Type(const KoID &id)
+DynamicSensorType KisMyPaintBrushOption::id2Type(const KoID &id)
 {
     if (id.id() == Pressure.id()) {
-        return PRESSURE;
+        return MYPAINT_PRESSURE;
     }
     else if (id.id() == FineSpeed.id()) {
-        return FINE_SPEED;
+        return MYPAINT_FINE_SPEED;
     }
     else if (id.id() == GrossSpeed.id()) {
-        return GROSS_SPEED;
+        return MYPAINT_GROSS_SPEED;
     }
     else if (id.id() == Random.id()) {
-        return RANDOM;
+        return MYPAINT_RANDOM;
     }
     else if (id.id() == Stroke.id()) {
-        return STROKE;
+        return MYPAINT_STROKE;
     }
     else if (id.id() == Direction.id()) {
-        return DIRECTION;
+        return MYPAINT_DIRECTION;
     }
     else if (id.id() == Declination.id()) {
-        return DECLINATION;
+        return MYPAINT_DECLINATION;
     }
     else if (id.id() == Ascension.id()) {
-        return ASCENSION;
+        return MYPAINT_ASCENSION;
     }
     else if (id.id() == Custom.id()) {
-        return CUSTOM;
+        return MYPAINT_CUSTOM;
     }
     return UNKNOWN;
 }
 
-KisDynamicOptionSP KisMyPaintBrushOption::type2Sensor(MyPaintBrushOptionType sensorType, const QString &parentOptionName)
+KisDynamicSensorSP KisMyPaintBrushOption::type2Sensor(DynamicSensorType sensorType, const QString &parentOptionName)
 {
     return new KisMyPaintBrushOption(sensorType);
 }
 
-QString KisMyPaintBrushOption::minimumLabel(MyPaintBrushOptionType sensorType)
+QString KisMyPaintBrushOption::minimumLabel(DynamicSensorType sensorType)
 {
     switch (sensorType) {
     default:
@@ -129,7 +120,7 @@ QString KisMyPaintBrushOption::minimumLabel(MyPaintBrushOptionType sensorType)
     }
 }
 
-QString KisMyPaintBrushOption::maximumLabel(MyPaintBrushOptionType sensorType, int max)
+QString KisMyPaintBrushOption::maximumLabel(DynamicSensorType sensorType, int max)
 {
     switch (sensorType) {
     default:
@@ -157,7 +148,7 @@ QString KisMyPaintBrushOption::maximumYLabel() {
     return QString::number(curveYMax);
 }
 
-int KisMyPaintBrushOption::minimumValue(MyPaintBrushOptionType sensorType)
+int KisMyPaintBrushOption::minimumValue(DynamicSensorType sensorType)
 {
     switch (sensorType) {
 
@@ -167,7 +158,7 @@ int KisMyPaintBrushOption::minimumValue(MyPaintBrushOptionType sensorType)
 
 }
 
-int KisMyPaintBrushOption::maximumValue(MyPaintBrushOptionType sensorType, int max)
+int KisMyPaintBrushOption::maximumValue(DynamicSensorType sensorType, int max)
 {
     switch (sensorType) {
     default:
@@ -175,31 +166,13 @@ int KisMyPaintBrushOption::maximumValue(MyPaintBrushOptionType sensorType, int m
     };
 }
 
-QString KisMyPaintBrushOption::valueSuffix(MyPaintBrushOptionType sensorType)
+QString KisMyPaintBrushOption::valueSuffix(DynamicSensorType sensorType)
 {
     switch (sensorType) {
 
     default:
         return i18n("%");
     };
-}
-
-KisDynamicOptionSP KisMyPaintBrushOption::createFromXML(const QString& s, const QString &parentOptionName)
-{
-    QDomDocument doc;
-    doc.setContent(s);
-    QDomElement e = doc.documentElement();
-    return createFromXML(e, parentOptionName);
-}
-
-KisDynamicOptionSP KisMyPaintBrushOption::createFromXML(const QDomElement& e, const QString &parentOptionName)
-{
-    QString id = e.attribute("id", "");
-    KisDynamicOptionSP sensor = id2Sensor(id, parentOptionName);
-    if (sensor) {
-        sensor->fromXML(e);
-    }
-    return sensor;
 }
 
 QList<KoID> KisMyPaintBrushOption::sensorsIds()
@@ -219,48 +192,48 @@ QList<KoID> KisMyPaintBrushOption::sensorsIds()
     return ids;
 }
 
-QList<MyPaintBrushOptionType> KisMyPaintBrushOption::sensorsTypes()
+QList<DynamicSensorType> KisMyPaintBrushOption::sensorsTypes()
 {
-    QList<MyPaintBrushOptionType> sensorTypes;
+    QList<DynamicSensorType> sensorTypes;
     sensorTypes
-            << PRESSURE
-            << FINE_SPEED
-            << GROSS_SPEED
-            << RANDOM
-            << STROKE
-            << DIRECTION
-            << DECLINATION
-            << ASCENSION
-            << CUSTOM;
+            << MYPAINT_PRESSURE
+            << MYPAINT_FINE_SPEED
+            << MYPAINT_GROSS_SPEED
+            << MYPAINT_RANDOM
+            << MYPAINT_STROKE
+            << MYPAINT_DIRECTION
+            << MYPAINT_DECLINATION
+            << MYPAINT_ASCENSION
+            << MYPAINT_CUSTOM;
 
     return sensorTypes;
 }
 
-MyPaintBrushOptionType KisMyPaintBrushOption::typeForInput(MyPaintBrushInput input)
+DynamicSensorType KisMyPaintBrushOption::typeForInput(MyPaintBrushInput input)
 {
     switch(input) {
 
         case MYPAINT_BRUSH_INPUT_PRESSURE:
-            return MyPaintBrushOptionType::PRESSURE;
+            return MYPAINT_PRESSURE;
         case MYPAINT_BRUSH_INPUT_SPEED1:
-            return MyPaintBrushOptionType::FINE_SPEED;
+            return MYPAINT_FINE_SPEED;
         case MYPAINT_BRUSH_INPUT_SPEED2:
-            return MyPaintBrushOptionType::GROSS_SPEED;
+            return MYPAINT_GROSS_SPEED;
         case MYPAINT_BRUSH_INPUT_RANDOM:
-            return MyPaintBrushOptionType::RANDOM;
+            return MYPAINT_RANDOM;
         case MYPAINT_BRUSH_INPUT_STROKE:
-            return MyPaintBrushOptionType::STROKE;
+            return MYPAINT_STROKE;
         case MYPAINT_BRUSH_INPUT_DIRECTION:
-            return MyPaintBrushOptionType::DIRECTION;
+            return MYPAINT_DIRECTION;
         case MYPAINT_BRUSH_INPUT_TILT_DECLINATION:
-            return MyPaintBrushOptionType::DECLINATION;
+            return MYPAINT_DECLINATION;
         case MYPAINT_BRUSH_INPUT_TILT_ASCENSION:
-            return MyPaintBrushOptionType::ASCENSION;
+            return MYPAINT_ASCENSION;
         case MYPAINT_BRUSH_INPUT_CUSTOM:
-            return MyPaintBrushOptionType::CUSTOM;
+            return MYPAINT_CUSTOM;
 
         default:
-            return MyPaintBrushOptionType::PRESSURE;
+            return MYPAINT_PRESSURE;
     }
 }
 
@@ -268,23 +241,23 @@ MyPaintBrushInput KisMyPaintBrushOption::input()
 {
     switch(m_type) {
 
-        case PRESSURE:
+        case MYPAINT_PRESSURE:
             return  MYPAINT_BRUSH_INPUT_PRESSURE;
-        case FINE_SPEED:
+        case MYPAINT_FINE_SPEED:
             return MYPAINT_BRUSH_INPUT_SPEED1;
-        case GROSS_SPEED:
+        case MYPAINT_GROSS_SPEED:
             return MYPAINT_BRUSH_INPUT_SPEED2;
-        case RANDOM:
+        case MYPAINT_RANDOM:
             return MYPAINT_BRUSH_INPUT_RANDOM;
-        case STROKE:
+        case MYPAINT_STROKE:
             return MYPAINT_BRUSH_INPUT_STROKE;
-        case DIRECTION:
+        case MYPAINT_DIRECTION:
             return MYPAINT_BRUSH_INPUT_DIRECTION;
-        case DECLINATION:
+        case MYPAINT_DECLINATION:
             return MYPAINT_BRUSH_INPUT_TILT_DECLINATION;
-        case ASCENSION:
+        case MYPAINT_ASCENSION:
             return MYPAINT_BRUSH_INPUT_TILT_ASCENSION;
-        case CUSTOM:
+        case MYPAINT_CUSTOM:
             return MYPAINT_BRUSH_INPUT_CUSTOM;
 
         default:
@@ -333,27 +306,27 @@ void KisMyPaintBrushOption::setYRangeMax(qreal value) {
 }
 
 
-QString KisMyPaintBrushOption::id(MyPaintBrushOptionType sensorType)
+QString KisMyPaintBrushOption::id(DynamicSensorType sensorType)
 {
     switch (sensorType) {
 
-    case PRESSURE:
+    case MYPAINT_PRESSURE:
         return Pressure.id();
-    case FINE_SPEED:
+    case MYPAINT_FINE_SPEED:
         return FineSpeed.id();
-    case GROSS_SPEED:
+    case MYPAINT_GROSS_SPEED:
         return GrossSpeed.id();
-    case RANDOM:
+    case MYPAINT_RANDOM:
         return Random.id();
-    case DIRECTION:
+    case MYPAINT_DIRECTION:
         return Direction.id();
-    case ASCENSION:
+    case MYPAINT_ASCENSION:
         return Ascension.id();
-    case DECLINATION:
+    case MYPAINT_DECLINATION:
         return Declination.id();
-    case STROKE:
+    case MYPAINT_STROKE:
         return Stroke.id();
-    case CUSTOM:
+    case MYPAINT_CUSTOM:
         return Custom.id();
 
     default:
@@ -364,56 +337,6 @@ QString KisMyPaintBrushOption::id(MyPaintBrushOptionType sensorType)
 QString KisMyPaintBrushOption::id() {
 
     return id(m_type);
-}
-
-
-void KisMyPaintBrushOption::toXML(QDomDocument& doc, QDomElement& elt) const
-{
-    elt.setAttribute("id", id(sensorType()));
-    if (m_customCurve) {
-        QDomElement curve_elt = doc.createElement("curve");
-        QDomText text = doc.createTextNode(m_curve.toString());
-        curve_elt.appendChild(text);
-        elt.appendChild(curve_elt);
-    }
-}
-
-void KisMyPaintBrushOption::fromXML(const QDomElement& e)
-{
-    Q_ASSERT(e.attribute("id", "") == id(sensorType()));
-    m_customCurve = false;
-    QDomElement curve_elt = e.firstChildElement("curve");
-    if (!curve_elt.isNull()) {
-        m_customCurve = true;
-        m_curve.fromString(curve_elt.text());
-    }
-}
-
-qreal KisMyPaintBrushOption::parameter(const KisPaintInformation& info)
-{
-    return parameter(info, m_curve, m_customCurve);
-}
-
-qreal KisMyPaintBrushOption::parameter(const KisPaintInformation& info, const KisCubicCurve curve, const bool customCurve)
-{
-    const qreal val = value(info);
-    if (customCurve) {
-        qreal scaledVal = isAdditive() ? additiveToScaling(val) : val;
-
-        const QVector<qreal> transfer = curve.floatTransfer(256);
-        scaledVal = KisCubicCurve::interpolateLinear(scaledVal, transfer);
-
-        return isAdditive() ? scalingToAdditive(scaledVal) : scaledVal;
-    }
-    else {
-        return val;
-    }
-}
-
-void KisMyPaintBrushOption::setCurve(const KisCubicCurve& curve)
-{
-    m_customCurve = true;
-    m_curve = curve;
 }
 
 void KisMyPaintBrushOption::setCurveFromPoints(QList<QPointF> points) {
@@ -429,16 +352,6 @@ void KisMyPaintBrushOption::setCurveFromPoints(QList<QPointF> points) {
     setCurve(curve);
 }
 
-const KisCubicCurve& KisMyPaintBrushOption::curve() const
-{
-    return m_curve;
-}
-
-void KisMyPaintBrushOption::removeCurve()
-{
-    m_customCurve = false;
-}
-
 QList<QPointF> KisMyPaintBrushOption::getControlPoints() {
 
     QList<QPointF> curvePoints = curve().points();
@@ -448,36 +361,6 @@ QList<QPointF> KisMyPaintBrushOption::getControlPoints() {
     }
 
     return curvePoints;
-}
-
-bool KisMyPaintBrushOption::hasCustomCurve() const
-{
-    return m_customCurve;
-}
-
-bool KisMyPaintBrushOption::dependsOnCanvasRotation() const
-{
-    return true;
-}
-
-bool KisMyPaintBrushOption::isAdditive() const
-{
-    return false;
-}
-
-bool KisMyPaintBrushOption::isAbsoluteRotation() const
-{
-    return false;
-}
-
-void KisMyPaintBrushOption::setActive(bool active)
-{
-    m_active = active;
-}
-
-bool KisMyPaintBrushOption::isActive() const
-{
-    return m_active;
 }
 
 QPointF KisMyPaintBrushOption::scaleTo0_1(QPointF point) {
@@ -520,5 +403,11 @@ void KisMyPaintBrushOption::setRangeFromPoints(QList<QPointF> points) {
         curveYMin = min(curveYMin, points[i].y());
         curveXMax = max(curveXMax, points[i].x());
         curveYMax = max(curveYMax, points[i].y());
-    }   
+    }
+
+    if(abs(curveXMax-curveXMin) < 1)
+        curveXMin = curveXMax - 1;
+
+    if(abs(curveYMax-curveYMin) < 1)
+        curveYMin = curveYMax - 1;
 }

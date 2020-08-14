@@ -66,7 +66,7 @@ KisMyPaintOp::KisMyPaintOp(const KisPaintOpSettingsSP settings, KisPainter * pai
 
     dtime = -1;
     isStrokeStarted = false;
-    m_radius = settings->getFloat(MYPAINT_DIAMETER)/2;
+    m_radius = settings->getFloat(MYPAINT_DIAMETER)/2;    
 }
 
 KisMyPaintOp::~KisMyPaintOp() {    

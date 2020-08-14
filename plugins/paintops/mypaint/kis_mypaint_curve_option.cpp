@@ -34,25 +34,22 @@
 struct MyPaintBrush;
 KisMyPaintCurveOption::KisMyPaintCurveOption(const QString& name, KisPaintOpOption::PaintopCategory category,
                                bool checked, qreal value, qreal min, qreal max)
-    : m_name(name)
-    , m_category(category)
-    , m_checkable(false)
-    , m_checked(true)
-    , m_useCurve(true)
-    , m_useSameCurve(false)
-    , m_separateCurveValue(false)
-    , m_curveMode(0)
-{
-    Q_FOREACH (const MyPaintBrushOptionType sensorType, KisMyPaintBrushOption::sensorsTypes()) {
-        KisDynamicOptionSP sensor = KisMyPaintBrushOption::type2Sensor(sensorType, m_name);
+    : KisCurveOption (name, category, true, value, min, max)
+{            
+    m_checkable = false;
+    m_checked = true;
+    m_useCurve = true;
+    m_useSameCurve = false;
+
+    Q_FOREACH (const DynamicSensorType sensorType, KisMyPaintBrushOption::sensorsTypes()) {
+        KisDynamicSensorSP sensor = KisMyPaintBrushOption::type2Sensor(sensorType, m_name);
         sensor->setActive(false);
         replaceSensor(sensor);
     }
-    m_sensorMap[PRESSURE]->setActive(true);
+    m_sensorMap[MYPAINT_PRESSURE]->setActive(true);
 
     setValueRange(min, max);
     setValue(value);
-
 
     m_commonCurve = defaultCurve();
 }
@@ -61,34 +58,9 @@ KisMyPaintCurveOption::~KisMyPaintCurveOption()
 {
 }
 
-const QString& KisMyPaintCurveOption::name() const
-{
-    return m_name;
-}
-
-KisPaintOpOption::PaintopCategory KisMyPaintCurveOption::category() const
-{
-    return m_category;
-}
-
-qreal KisMyPaintCurveOption::minValue() const
-{
-    return m_minValue;
-}
-
-qreal KisMyPaintCurveOption::maxValue() const
-{
-    return m_maxValue;
-}
-
-qreal KisMyPaintCurveOption::value() const
-{
-    return m_value;
-}
-
 void KisMyPaintCurveOption::resetAllSensors()
 {
-    Q_FOREACH (KisDynamicOptionSP sensor, m_sensorMap.values()) {
+    Q_FOREACH (KisDynamicSensorSP sensor, m_sensorMap.values()) {
         if (sensor->isActive()) {
             sensor->reset();
         }
@@ -108,8 +80,9 @@ void KisMyPaintCurveOption::writeOptionSetting(KisPropertiesConfigurationSP sett
     QVariantMap name_map = settings_map[m_name].toMap();
     QVariantMap inputs_map = name_map["inputs"].toMap();
 
-    Q_FOREACH(KisDynamicOptionSP option, m_sensorMap.values()) {
+    Q_FOREACH(KisDynamicSensorSP val, m_sensorMap.values()) {
 
+        KisMyPaintBrushOption *option = dynamic_cast<KisMyPaintBrushOption*>(val.data());
         QVariantList pointsList;
         QList<QPointF> curve_points = option->getControlPoints();
 
@@ -139,10 +112,10 @@ void KisMyPaintCurveOption::writeOptionSetting(KisPropertiesConfigurationSP sett
 
     setting->setProperty(MYPAINT_JSON, doc2.toJson());
 
-//    QIODevice *dev = new QFile("/home/ashwin-dhakaita/b009.myb");
-//    dev->open(QIODevice::ReadWrite);
-//    dev->write(doc2.toJson());
-//    dev->close();
+    QIODevice *dev = new QFile("/home/ashwin/b009.myb");
+    dev->open(QIODevice::ReadWrite);
+    dev->write(doc2.toJson());
+    dev->close();
 
     setting->setProperty(m_name + "UseCurve", m_useCurve);
     setting->setProperty(m_name + "UseSameCurve", m_useSameCurve);
@@ -154,26 +127,6 @@ void KisMyPaintCurveOption::writeOptionSetting(KisPropertiesConfigurationSP sett
 void KisMyPaintCurveOption::readOptionSetting(KisPropertiesConfigurationSP setting)
 {
     readNamedOptionSetting(m_name, setting);
-}
-
-void KisMyPaintCurveOption::lodLimitations(KisPaintopLodLimitations *l) const
-{
-    Q_UNUSED(l);
-}
-
-int KisMyPaintCurveOption::intMinValue() const
-{
-    return 0;
-}
-
-int KisMyPaintCurveOption::intMaxValue() const
-{
-    return 100;
-}
-
-QString KisMyPaintCurveOption::valueSuffix() const
-{
-    return i18n("%");
 }
 
 void KisMyPaintCurveOption::readNamedOptionSetting(const QString& prefix, const KisPropertiesConfigurationSP setting)
@@ -188,7 +141,7 @@ void KisMyPaintCurveOption::readNamedOptionSetting(const QString& prefix, const 
 
     m_sensorMap.clear();    
 
-    Q_FOREACH (const MyPaintBrushOptionType sensorType, KisMyPaintBrushOption::sensorsTypes()) {
+    Q_FOREACH (const DynamicSensorType sensorType, KisMyPaintBrushOption::sensorsTypes()) {
         replaceSensor(KisMyPaintBrushOption::type2Sensor(sensorType, m_name));
     }
 
@@ -230,7 +183,7 @@ void KisMyPaintCurveOption::readNamedOptionSetting(const QString& prefix, const 
 
     m_useSameCurve = setting->getBool(m_name + "UseSameCurve", false);
 
-    Q_FOREACH(KisDynamicOptionSP sensor, m_sensorMap.values()) {
+    Q_FOREACH(KisDynamicSensorSP sensor, m_sensorMap.values()) {
         commonCurve = sensor->curve();
     }
 
@@ -241,7 +194,7 @@ void KisMyPaintCurveOption::readNamedOptionSetting(const QString& prefix, const 
 
     if (activeSensors().size() == 0) {
         m_useCurve = false;
-        m_sensorMap[PRESSURE]->setActive(true);
+        m_sensorMap[MYPAINT_PRESSURE]->setActive(true);
     }  
     if(!m_useCurve){
         emit unCheckUseCurve();
@@ -252,13 +205,13 @@ void KisMyPaintCurveOption::readNamedOptionSetting(const QString& prefix, const 
     m_curveMode = setting->getInt(m_name + "curveMode");    
 }
 
-void KisMyPaintCurveOption::replaceSensor(KisDynamicOptionSP s)
+void KisMyPaintCurveOption::replaceSensor(KisDynamicSensorSP s)
 {
     Q_ASSERT(s);
     m_sensorMap[s->sensorType()] = s;
 }
 
-KisDynamicOptionSP KisMyPaintCurveOption::sensor(MyPaintBrushOptionType sensorType, bool active) const
+KisDynamicSensorSP KisMyPaintCurveOption::sensor(DynamicSensorType sensorType, bool active) const
 {
     if (m_sensorMap.contains(sensorType)) {
         if (!active) {
@@ -273,80 +226,14 @@ KisDynamicOptionSP KisMyPaintCurveOption::sensor(MyPaintBrushOptionType sensorTy
     return 0;
 }
 
-
-bool KisMyPaintCurveOption::isRandom() const
-{
-    return false;
-}
-
-bool KisMyPaintCurveOption::isCurveUsed() const
-{
-    return m_useCurve;
-}
-
-bool KisMyPaintCurveOption::isSameCurveUsed() const
-{
-    return m_useSameCurve;
-}
-
-int KisMyPaintCurveOption::getCurveMode() const
-{
-    return m_curveMode;
-}
-
-KisCubicCurve KisMyPaintCurveOption::getCommonCurve() const
-{
-    return m_commonCurve;
-}
-
-void KisMyPaintCurveOption::setSeparateCurveValue(bool separateCurveValue)
-{
-    m_separateCurveValue = separateCurveValue;
-}
-
-bool KisMyPaintCurveOption::isCheckable()
-{
-    return m_checkable;
-}
-
-bool KisMyPaintCurveOption::isChecked() const
-{
-    return m_checked;
-}
-
-void KisMyPaintCurveOption::setChecked(bool checked)
-{
-    m_checked = checked;
-}
-
-void KisMyPaintCurveOption::setCurveUsed(bool useCurve)
-{
-    m_useCurve = useCurve;
-}
-
-void KisMyPaintCurveOption::setCurveMode(int mode)
-{
-    m_curveMode = mode;
-}
-
-void KisMyPaintCurveOption::setUseSameCurve(bool useSameCurve)
-{
-    m_useSameCurve = useSameCurve;
-}
-
-void KisMyPaintCurveOption::setCommonCurve(KisCubicCurve curve)
-{
-    m_commonCurve = curve;
-}
-
-void KisMyPaintCurveOption::setCurve(MyPaintBrushOptionType sensorType, bool useSameCurve, const KisCubicCurve &curve)
+void KisMyPaintCurveOption::setCurve(DynamicSensorType sensorType, bool useSameCurve, const KisCubicCurve &curve)
 {
     if (useSameCurve == m_useSameCurve) {
         if (useSameCurve) {
             m_commonCurve = curve;
         }
         else {
-            KisDynamicOptionSP s = sensor(sensorType, false);
+            KisDynamicSensorSP s = sensor(sensorType, false);
             if (s) {
                 s->setCurve(curve);
             }
@@ -358,12 +245,12 @@ void KisMyPaintCurveOption::setCurve(MyPaintBrushOptionType sensorType, bool use
             m_commonCurve = curve;
         }
         else { //if (m_useSameCurve && !useSameCurve)
-            KisDynamicOptionSP s = 0;
+            KisDynamicSensorSP s = 0;
             // And set the current sensor to the current curve
             if (!m_sensorMap.contains(sensorType)) {
                 s = KisMyPaintBrushOption::type2Sensor(sensorType, m_name);
             } else {
-                KisDynamicOptionSP s = sensor(sensorType, false);
+                KisDynamicSensorSP s = sensor(sensorType, false);
             }
             if (s) {
                 s->setCurve(curve);
@@ -374,26 +261,15 @@ void KisMyPaintCurveOption::setCurve(MyPaintBrushOptionType sensorType, bool use
     }
 }
 
-void KisMyPaintCurveOption::setValueRange(qreal min, qreal max)
-{
-    m_minValue = qMin(min, max);
-    m_maxValue = qMax(min, max);
-}
-
-void KisMyPaintCurveOption::setValue(qreal value)
-{
-    m_value = qBound(m_minValue, value, m_maxValue);
-}
-
 KisMyPaintCurveOption::ValueComponents KisMyPaintCurveOption::computeValueComponents(const KisPaintInformation& info) const
 {
     ValueComponents components;
 
     if (m_useCurve) {
-        QMap<MyPaintBrushOptionType, KisDynamicOptionSP>::const_iterator i;
+        QMap<DynamicSensorType, KisDynamicSensorSP>::const_iterator i;
         QList<double> sensorValues;
         for (i = m_sensorMap.constBegin(); i != m_sensorMap.constEnd(); ++i) {
-            KisDynamicOptionSP s(i.value());
+            KisDynamicSensorSP s(i.value());
 
             if (s->isActive()) {
                 qreal valueFromCurve = m_useSameCurve ? s->parameter(info, m_commonCurve, true) : s->parameter(info);
@@ -451,49 +327,16 @@ KisMyPaintCurveOption::ValueComponents KisMyPaintCurveOption::computeValueCompon
     return components;
 }
 
-qreal KisMyPaintCurveOption::computeSizeLikeValue(const KisPaintInformation& info) const
-{
-    const ValueComponents components = computeValueComponents(info);
-    return components.sizeLikeValue();
-}
-
-qreal KisMyPaintCurveOption::computeRotationLikeValue(const KisPaintInformation& info, qreal baseValue, bool absoluteAxesFlipped) const
-{
-    const ValueComponents components = computeValueComponents(info);
-    return components.rotationLikeValue(baseValue, absoluteAxesFlipped);
-}
-
-KisCubicCurve KisMyPaintCurveOption::defaultCurve()
-{
-    QList<QPointF> points;
-    // needs to be set to something, weird curve is better for debugging
-    // it will be reset to the curve from the preset anyway though
-    points.push_back(QPointF(0,0));
-    points.push_back(QPointF(0.25,0.9));
-    points.push_back(QPointF(0.5,0));
-    points.push_back(QPointF(0.75,0.6));
-    points.push_back(QPointF(1,0));
-    return KisCubicCurve(points);
-}
-
-KisCubicCurve KisMyPaintCurveOption::emptyCurve()
-{
-    QList<QPointF> points;
-    points.push_back(QPointF(0,0));
-    points.push_back(QPointF(1,1));
-    return KisCubicCurve(points);
-}
-
-QList<KisDynamicOptionSP> KisMyPaintCurveOption::sensors()
+QList<KisDynamicSensorSP> KisMyPaintCurveOption::sensors()
 {
     //dbgKrita << "ID" << name() << "has" <<  m_sensorMap.count() << "Sensors of which" << sensorList.count() << "are active.";
     return m_sensorMap.values();
 }
 
-QList<KisDynamicOptionSP> KisMyPaintCurveOption::activeSensors() const
+QList<KisDynamicSensorSP> KisMyPaintCurveOption::activeSensors() const
 {
-    QList<KisDynamicOptionSP> sensorList;
-    Q_FOREACH (KisDynamicOptionSP sensor, m_sensorMap.values()) {
+    QList<KisDynamicSensorSP> sensorList;
+    Q_FOREACH (KisDynamicSensorSP sensor, m_sensorMap.values()) {
         if (sensor->isActive()) {
             sensorList << sensor;
         }

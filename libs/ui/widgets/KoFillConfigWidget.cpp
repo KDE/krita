@@ -316,6 +316,13 @@ KoFillConfigWidget::KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVarian
     connect(d->ui->cmbGradientRepeat, SIGNAL(currentIndexChanged(int)), SLOT(slotGradientRepeatChanged()));
     connect(d->ui->cmbGradientType, SIGNAL(currentIndexChanged(int)), SLOT(slotGradientTypeChanged()));
 
+    // meshgradient
+    d->ui->spinbRows->setRange(1, 20);
+    d->ui->spinbColumns->setRange(1, 20);
+    connect(d->ui->spinbRows, SIGNAL(valueChanged(int)), SLOT(slotMeshGradientChanged()));
+    connect(d->ui->spinbColumns, SIGNAL(valueChanged(int)), SLOT(slotMeshGradientChanged()));
+    connect(d->ui->cmbSmoothingType, SIGNAL(currentIndexChanged(int)), SLOT(slotMeshGradientChanged()));
+
     // initialize deactivation locks
     d->deactivationLocks.push_back(KisAcyclicSignalConnector::Blocker(d->shapeChangedAcyclicConnector));
     d->deactivationLocks.push_back(KisAcyclicSignalConnector::Blocker(d->resourceManagerAcyclicConnector));
@@ -784,8 +791,37 @@ void KoFillConfigWidget::slotMeshGradientChanged()
     }
 
     KoShapeFillWrapper wrapper(selectedShapes, d->fillVariant);
-    SvgMeshGradient *gradient = new SvgMeshGradient;
-    KUndo2Command *command = wrapper.setMeshGradient(gradient, QTransform());
+
+    // use this for mesh creation
+    QSizeF maxSize;
+    for (const auto& shape: selectedShapes) {
+        QSizeF size = shape->boundingRect().size();
+        if (size.height() > maxSize.height()) {
+            maxSize.rheight() = size.height();
+        }
+        if (size.width() > maxSize.width()) {
+            maxSize.rwidth() = size.width();
+        }
+    }
+
+    QScopedPointer<SvgMeshGradient> gradient(new SvgMeshGradient);
+
+    QColor color =  d->canvas->resourceManager()->resource(KoFlake::Background).value<KoColor>().toQColor();
+
+    int nrows = d->ui->spinbRows->value();
+    int ncols = d->ui->spinbColumns->value();
+
+    if (d->ui->cmbSmoothingType->currentIndex()) {
+        gradient->setType(SvgMeshGradient::BICUBIC);
+    } else {
+        gradient->setType(SvgMeshGradient::BILINEAR);
+    }
+
+    gradient->getMeshArray()->createDefaultMesh(nrows, ncols, color, maxSize);
+    gradient->setGradientUnits(KoFlake::ObjectBoundingBox);
+
+    KUndo2Command *command = wrapper.setMeshGradient(gradient.data(), QTransform());
+
     if (command) {
         d->canvas->addCommand(command);
     }

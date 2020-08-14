@@ -18,12 +18,15 @@
 #include "SvgMeshGradient.h"
 
 SvgMeshGradient::SvgMeshGradient()
-    : m_mesharray(new SvgMeshArray())
+    : m_type(BILINEAR)
+    , m_gradientUnits(KoFlake::UserSpaceOnUse)
+    , m_mesharray(new SvgMeshArray())
 {
 }
 
 SvgMeshGradient::SvgMeshGradient(const SvgMeshGradient& other)
     : m_type(other.m_type)
+    , m_gradientUnits(other.m_gradientUnits)
     , m_mesharray(new SvgMeshArray(*other.m_mesharray))
 {
 }

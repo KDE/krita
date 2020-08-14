@@ -49,6 +49,63 @@ void SvgMeshArray::newRow()
     m_array << QVector<SvgMeshPatch*>();
 }
 
+void SvgMeshArray::createDefaultMesh(const int nrows,
+                                     const int ncols,
+                                     const QColor color,
+                                     const QSizeF size)
+{
+    // individual patch size should be:
+    qreal patchWidth  = size.width()  / ncols;
+    qreal patchHeight = size.height() / nrows;
+
+    // normalize
+    patchWidth  /= size.width();
+    patchHeight /= size.height();
+
+    QRectF start(0, 0, patchWidth, patchHeight);
+
+    QColor colors[2] = {Qt::white, color};
+
+    for (int irow = 0; irow < nrows; ++irow) {
+        newRow();
+
+        for (int icol = 0; icol < ncols; ++icol) {
+            SvgMeshPatch *patch = new SvgMeshPatch(start.topLeft());
+            // alternate between colors
+            int index = (irow + icol) % 2;
+
+            patch->addStop({start.topLeft(), start.topRight()},
+                           colors[index],
+                           SvgMeshPatch::Top);
+
+            index = (index + 1) % 2;
+            patch->addStop({start.topRight(), start.bottomRight()},
+                           colors[index],
+                           SvgMeshPatch::Right);
+
+            index = (index + 1) % 2;
+            patch->addStop({start.bottomRight(), start.bottomLeft()},
+                           colors[index],
+                           SvgMeshPatch::Bottom);
+
+            index = (index + 1) % 2;
+            patch->addStop({start.bottomLeft(), start.topLeft()},
+                           colors[index],
+                           SvgMeshPatch::Left);
+
+            m_array.last().append(patch);
+
+            // TopRight of the previous patch in this row
+            start.setX(patch->getStop(SvgMeshPatch::Right).point.x());
+            start.setWidth(patchWidth);
+        }
+
+        // BottomLeft of the patch is the starting point for new row
+        start.setTopLeft(m_array.last().first()->getStop(SvgMeshPatch::Left).point);
+        start.setSize({patchWidth, patchHeight});
+    }
+}
+
 bool SvgMeshArray::addPatch(QList<QPair<QString, QColor>> stops, const QPointF initialPoint)
 {
     // This is function is full of edge-case landmines, please run TestMeshArray after any changes

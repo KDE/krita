@@ -31,6 +31,9 @@ public:
 
     ~SvgMeshArray();
 
+    /// creates a default mesh in OBB coordinates (because it's easier and more logical in this case)
+    void createDefaultMesh(const int nrows, const int ncols, const QColor color, const QSizeF size);
+
     void newRow();
 
     bool addPatch(QList<QPair<QString, QColor>> stops, const QPointF initialPoint);

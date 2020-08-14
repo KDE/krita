@@ -253,11 +253,7 @@ bool StoryboardModel::updateDurationData(const QModelIndex & parentIndex)
     int currentKeyframeTime = data(index(StoryboardItem::FrameNumber, 0, parentIndex)).toInt();
     int nextKeyframeTime = nextKeyframeGlobal(currentKeyframeTime);
 
-    if (nextKeyframeTime == INT_MAX) {
-        setData (index (StoryboardItem::DurationSecond, 0, parentIndex), 0);
-        setData (index (StoryboardItem::DurationFrame, 0, parentIndex), 1);
-    }
-    else {
+    if (nextKeyframeTime != INT_MAX) {
         int timeInFrame = nextKeyframeTime - currentKeyframeTime;
 
         int fps = m_image->animationInterface()->framerate();
@@ -713,6 +709,12 @@ bool StoryboardModel::insertHoldFramesAfter(int newDuration, int oldDuration, QM
         && index.siblingAtRow(StoryboardItem::DurationSecond).data().toInt() == 0) {
         return false;
     }
+
+    //if the current keyframe is last keyframe globally, only set data in model
+    if (nextKeyframeGlobal(frame) == INT_MAX) {
+        setData(index, newDuration);
+        return true;
+    }
     KisNodeSP node = m_image->rootLayer();
     if (node) {
     KisLayerUtils::recursiveApplyNodes (node, [frame, durationChange] (KisNodeSP node)
@@ -753,23 +755,27 @@ bool StoryboardModel::insertItem(QModelIndex index, bool after)
 
     KisKeyframeChannel* keyframeChannel = m_activeNode->paintDevice()->keyframeChannel();
     if (!index.isValid()) {
-        if (keyframeChannel) {
-            int lastKeyframeTime = 0;
-            KisNodeSP node = m_image->rootLayer();
-            if (node) {
-            KisLayerUtils::recursiveApplyNodes (node, [&lastKeyframeTime] (KisNodeSP node)
-            {
-                if (node->isAnimated()) {
-                    lastKeyframeTime = qMax(lastKeyframeTime, node->paintDevice()->keyframeChannel()->lastKeyframe()->time());
-                }
-            });
-            }
 
-            keyframeChannel->addKeyframe(lastKeyframeTime + 1);
+        int lastKeyframeTime = 0;
+        KisNodeSP node = m_image->rootLayer();
+        if (node) {
+        KisLayerUtils::recursiveApplyNodes (node, [&lastKeyframeTime] (KisNodeSP node)
+        {
+            if (node->isAnimated()) {
+                lastKeyframeTime = qMax(lastKeyframeTime, node->paintDevice()->keyframeChannel()->lastKeyframe()->time());
+            }
+        });
         }
-        else {
+
+        QModelIndex lastIndex = this->index(rowCount() - 1, 0);
+        if (!keyframeChannel) {
             keyframeChannel = m_activeNode->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
             slotKeyframeAdded(keyframeChannel->keyframeAt(0));
+        }
+
+        //insert keyframe after the last storyboard item
+        if (lastIndex.isValid()) {
+            insertItem(lastIndex, true);
         }
     }
     else {
@@ -777,21 +783,31 @@ bool StoryboardModel::insertItem(QModelIndex index, bool after)
             keyframeChannel = m_activeNode->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
             slotKeyframeAdded(keyframeChannel->keyframeAt(0));
         }
+
         int frame = this->index(StoryboardItem::FrameNumber, 0, index).data().toInt();
+        QModelIndex frameIndex = this->index(StoryboardItem::DurationFrame, 0, index);
+
         if (after) {
-            insertHoldFramesAfter(1, 0, this->index(StoryboardItem::DurationFrame, 0, index));
             int fps = m_image->animationInterface()->framerate();
-            int durationInFrame = this->index(StoryboardItem::DurationFrame, 0, index).data().toInt() + fps * this->index(StoryboardItem::DurationSecond, 0, index).data().toInt();
-            keyframeChannel->addKeyframe(frame + qMax(1, durationInFrame));
+            int durationInFrame = frameIndex.data().toInt() + fps * frameIndex.siblingAtRow(StoryboardItem::DurationSecond).data().toInt();
+
+            //if this is the last keyframe globally don't insert hold frames
+            if (nextKeyframeGlobal(frame) == INT_MAX) {
+                keyframeChannel->addKeyframe(frame + qMax(1, durationInFrame));
+            }
+            else {
+            //move keyframes to right by 1 and insert keyframe
+                insertHoldFramesAfter(frameIndex.data().toInt() + 1, frameIndex.data().toInt(), frameIndex);
+                keyframeChannel->addKeyframe(frame + qMax(1, durationInFrame));
+            }
         }
         else {
-            insertHoldFramesAfter(1, 0, this->index(StoryboardItem::DurationFrame, 0, index.siblingAtRow(index.row() - 1)));
+            insertHoldFramesAfter(frameIndex.data().toInt() + 1, frameIndex.data().toInt(), this->index(StoryboardItem::DurationFrame, 0, index.siblingAtRow(index.row() - 1)));
             keyframeChannel->addKeyframe(frame);
         }
     }
     return true;
 }
-
 
 void StoryboardModel::resetData(StoryboardItemList list)
 {
@@ -826,6 +842,12 @@ void StoryboardModel::slotKeyframeAdded(KisKeyframeSP keyframe)
         int prevItemRow = lastIndexBeforeFrame(frame).row();
         insertRows(prevItemRow + 1, 1);
         setData (index (StoryboardItem::FrameNumber, 0, index(prevItemRow + 1, 0)), frame);
+
+        //default value for item corresponding to last keyframe is 0s 1f
+        if (nextKeyframeGlobal(frame) == INT_MAX) {
+            setData (index (StoryboardItem::DurationSecond, 0, index(prevItemRow + 1, 0)), 0);
+            setData (index (StoryboardItem::DurationFrame, 0, index(prevItemRow + 1, 0)), 1);
+        }
         updateDurationData(index(prevItemRow + 1, 0));
         updateDurationData(index(prevItemRow, 0));
         m_view->setCurrentItem(frame);

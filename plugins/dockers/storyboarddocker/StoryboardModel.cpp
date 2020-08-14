@@ -185,6 +185,10 @@ bool StoryboardModel::setData(const QModelIndex & index, const QVariant & value,
                     return false;
                 }
                 QModelIndex secondIndex = index.siblingAtRow(StoryboardItem::DurationSecond);
+
+                if (secondIndex.data().toInt() == 0 && value.toInt() == 0) {
+                    return false;
+                }
                 setData(secondIndex, secondIndex.data().toInt() + value.toInt() / fps, role);
                 child->setData(value.toInt() % fps);
             }
@@ -251,10 +255,10 @@ bool StoryboardModel::updateDurationData(const QModelIndex & parentIndex)
 
     if (nextKeyframeTime == INT_MAX) {
         setData (index (StoryboardItem::DurationSecond, 0, parentIndex), 0);
-        setData (index (StoryboardItem::DurationFrame, 0, parentIndex), 0);
+        setData (index (StoryboardItem::DurationFrame, 0, parentIndex), 1);
     }
     else {
-        int timeInFrame = nextKeyframeTime - currentKeyframeTime - 1;
+        int timeInFrame = nextKeyframeTime - currentKeyframeTime;
 
         int fps = m_image->animationInterface()->framerate();
 
@@ -689,7 +693,6 @@ int StoryboardModel::nextKeyframeGlobal(int keyframeTime) const
     return nextKeyframeTime;
 }
 
-//durations can be in frames or second, just provide right index
 bool StoryboardModel::insertHoldFramesAfter(int newDuration, int oldDuration, QModelIndex index)
 {
     if (!index.isValid() || newDuration < 0) {
@@ -703,6 +706,11 @@ bool StoryboardModel::insertHoldFramesAfter(int newDuration, int oldDuration, QM
     }
     int durationChange = newDuration - oldDuration;
     if (durationChange == 0) {
+        return false;
+    }
+    //minimum duration is 0s 1f
+    if (index.row() ==StoryboardItem::DurationFrame && newDuration < 1 
+        && index.siblingAtRow(StoryboardItem::DurationSecond).data().toInt() == 0) {
         return false;
     }
     KisNodeSP node = m_image->rootLayer();

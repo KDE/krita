@@ -1,6 +1,7 @@
 #include "KoMeshGradientBackground.h"
 #include <KoColorSpaceRegistry.h>
 #include <KoMixColorsOp.h>
+#include <kis_algebra_2d.h>
 
 #include <QRegion>
 #include <QPainter>
@@ -51,6 +52,12 @@ void KoMeshGradientBackground::paint(QPainter &painter,
     QRectF meshBoundingRect = d->gradient->boundingRect();
 
     if (d->renderer->patchImage()->isNull()) {
+
+        if (d->gradient->gradientUnits() == KoFlake::ObjectBoundingBox) {
+            const QTransform relativeToShape = KisAlgebra2D::mapToRect(fillPath.boundingRect());
+            d->gradient->setTransform(relativeToShape);
+            meshBoundingRect = d->gradient->boundingRect();
+        }
 
         d->renderer->configure(meshBoundingRect, painter.transform());
         SvgMeshArray *mesharray = d->gradient->getMeshArray().data();

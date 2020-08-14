@@ -20,6 +20,7 @@
 
 #include <QGradient>
 
+#include <KoFlakeCoordinateSystem.h>
 #include "SvgMeshPatch.h"
 #include "SvgMeshArray.h"
 
@@ -40,6 +41,14 @@ public:
     void setTransform(const QTransform& matrix);
     bool isValid() const;
 
+    void setGradientUnits(KoFlake::CoordinateSystem units = KoFlake::UserSpaceOnUse) {
+        m_gradientUnits = units;
+    }
+
+    KoFlake::CoordinateSystem gradientUnits() const {
+        return m_gradientUnits;
+    }
+
     // returns boundingRect of the meshpatches in "user" coordinates (QPainter's)
     QRectF boundingRect() const;
 
@@ -47,6 +56,7 @@ public:
 
 private:
     Shading m_type;
+    KoFlake::CoordinateSystem m_gradientUnits;
     QScopedPointer<SvgMeshArray> m_mesharray;
 };
 

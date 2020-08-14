@@ -19,9 +19,10 @@
 #include "kis_mypaint_curve_option.h"
 #include "kis_mypaintbrush_options_model.h"
 
+#include "kis_multi_sensors_model_p.h"
+
 KisMyPaintBrushOptionsModel::KisMyPaintBrushOptionsModel(QObject* parent)
-    : QAbstractListModel(parent)
-    , m_curveOption(0)
+    : m_curveOption(0)
 {
 }
 
@@ -55,7 +56,7 @@ QVariant KisMyPaintBrushOptionsModel::data(const QModelIndex &index, int role) c
     }
     else if (role == Qt::CheckStateRole) {
         QString selectedSensorId = KisMyPaintBrushOption::sensorsIds()[index.row()].id();
-        KisDynamicOptionSP sensor = m_curveOption->sensor(KisMyPaintBrushOption::id2Type(selectedSensorId), false);
+        KisDynamicSensorSP sensor = m_curveOption->sensor(KisMyPaintBrushOption::id2Type(selectedSensorId), false);
         if (sensor) {
             //dbgKrita << sensor->id() << sensor->isActive();
             return QVariant(sensor->isActive() ? Qt::Checked : Qt::Unchecked);
@@ -75,7 +76,7 @@ bool KisMyPaintBrushOptionsModel::setData(const QModelIndex &index, const QVaria
         bool checked = (value.toInt() == Qt::Checked);
 
         if (checked || m_curveOption->activeSensors().size() != 1) { // Don't uncheck the last sensor (but why not?)
-            KisDynamicOptionSP sensor = m_curveOption->sensor(KisMyPaintBrushOption::id2Type(KisMyPaintBrushOption::sensorsIds()[index.row()].id()), false);
+            KisDynamicSensorSP sensor = m_curveOption->sensor(KisMyPaintBrushOption::id2Type(KisMyPaintBrushOption::sensorsIds()[index.row()].id()), false);
 
             if (!sensor) {
                 sensor = KisMyPaintBrushOption::id2Sensor(KisMyPaintBrushOption::sensorsIds()[index.row()].id(), "NOT_VALID_NAME");
@@ -95,7 +96,7 @@ Qt::ItemFlags KisMyPaintBrushOptionsModel::flags(const QModelIndex & /*index */)
     return Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled;
 }
 
-KisDynamicOptionSP KisMyPaintBrushOptionsModel::getSensor(const QModelIndex& index)
+KisDynamicSensorSP KisMyPaintBrushOptionsModel::getSensor(const QModelIndex& index)
 {
     if (!index.isValid()) return 0;
     QString id = KisMyPaintBrushOption::sensorsIds()[index.row()].id();
@@ -110,9 +111,10 @@ void KisMyPaintBrushOptionsModel::setCurrentCurve(const QModelIndex& currentInde
     m_curveOption->setCurve(KisMyPaintBrushOption::id2Type(selectedSensorId), useSameCurve, curve);
 }
 
-QModelIndex KisMyPaintBrushOptionsModel::sensorIndex(KisDynamicOptionSP arg1)
+QModelIndex KisMyPaintBrushOptionsModel::sensorIndex(KisDynamicSensorSP arg1)
 {
-    return index(KisMyPaintBrushOption::sensorsIds().indexOf(KoID(KisMyPaintBrushOption::id(arg1->sensorType()))));
+    KisMyPaintBrushOption* sensor = dynamic_cast<KisMyPaintBrushOption*>(arg1.data());
+    return index(KisMyPaintBrushOption::sensorsIds().indexOf(KoID(sensor->id())));
 }
 
 void KisMyPaintBrushOptionsModel::resetCurveOption()

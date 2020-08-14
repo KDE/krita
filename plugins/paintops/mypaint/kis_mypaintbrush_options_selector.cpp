@@ -39,7 +39,7 @@ KisMyPaintBrushOptionsSelector::KisMyPaintBrushOptionsSelector(QWidget* parent)
     d->currentConfigWidget = 0;
     d->form.setupUi(this);
     d->model = new KisMyPaintBrushOptionsModel(this);
-    connect(d->model, SIGNAL(sensorChanged(KisDynamicOptionSP)), SIGNAL(sensorChanged(KisDynamicOptionSP)));
+    connect(d->model, SIGNAL(sensorChanged(KisDynamicSensorSP)), SIGNAL(sensorChanged(KisDynamicSensorSP)));
     connect(d->model, SIGNAL(parametersChanged()), SIGNAL(parametersChanged()));
     //connect(d->form.sensorsList, SIGNAL(activated(QModelIndex)), SLOT(sensorActivated(QModelIndex)));
     //connect(d->form.sensorsList, SIGNAL(clicked(QModelIndex)), SLOT(sensorActivated(QModelIndex)));
@@ -61,21 +61,21 @@ void KisMyPaintBrushOptionsSelector::setCurveOption(KisMyPaintCurveOption *curve
 
     if(!(curveOption->activeSensors().size() > 0))
         return ;
-    KisDynamicOptionSP s = curveOption->activeSensors().first();
+    KisDynamicSensorSP s = curveOption->activeSensors().first();
     if (!s) {
         s = curveOption->sensors().first();
     }
     setCurrent(s);
 }
 
-void KisMyPaintBrushOptionsSelector::setCurrent(KisDynamicOptionSP _sensor)
+void KisMyPaintBrushOptionsSelector::setCurrent(KisDynamicSensorSP _sensor)
 {
     d->form.sensorsList->setCurrentIndex(d->model->sensorIndex(_sensor)); // make sure the first element is selected
 
     // HACK ALERT: make sure the signal is delivered to us. Without this line it isn't.
     sensorActivated(d->model->sensorIndex(_sensor));
 
-    KisDynamicOptionSP sensor = currentHighlighted();
+    KisDynamicSensorSP sensor = currentHighlighted();
     if (!sensor) {
         sensor = d->model->getSensor(d->model->index(0, 0));
     }
@@ -89,14 +89,14 @@ void KisMyPaintBrushOptionsSelector::setCurrent(const QModelIndex& index)
     // HACK ALERT: make sure the signal is delivered to us. Without this line it isn't.
     sensorActivated(index);
 
-    KisDynamicOptionSP sensor = currentHighlighted();
+    KisDynamicSensorSP sensor = currentHighlighted();
     if (!sensor) {
         sensor = d->model->getSensor(d->model->index(0, 0));
     }
     emit(highlightedSensorChanged(sensor));
 }
 
-KisDynamicOptionSP KisMyPaintBrushOptionsSelector::currentHighlighted()
+KisDynamicSensorSP KisMyPaintBrushOptionsSelector::currentHighlighted()
 {
     return d->model->getSensor(d->form.sensorsList->currentIndex());
 }
@@ -104,7 +104,7 @@ KisDynamicOptionSP KisMyPaintBrushOptionsSelector::currentHighlighted()
 void KisMyPaintBrushOptionsSelector::sensorActivated(const QModelIndex& index)
 {
     delete d->currentConfigWidget;
-    KisDynamicOptionSP sensor = d->model->getSensor(index);
+    KisDynamicSensorSP sensor = d->model->getSensor(index);
     if (sensor) {
         d->currentConfigWidget = sensor->createConfigurationWidget(d->form.widgetConfiguration, this);
         if (d->currentConfigWidget) {

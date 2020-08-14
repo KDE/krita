@@ -691,11 +691,25 @@ int StoryboardModel::nextKeyframeGlobal(int keyframeTime) const
 
 bool StoryboardModel::insertHoldFramesAfter(int newDuration, int oldDuration, QModelIndex index)
 {
-    if (!index.isValid() || newDuration < 0) {
+    if (!index.isValid()) {
         return false;
     }
     int frame = index.siblingAtRow(StoryboardItem::FrameNumber).data().toInt();
     int fps = m_image.isValid() ? m_image->animationInterface()->framerate(): 24;
+
+    if (newDuration < 0) {
+        if (index.row() == StoryboardItem::DurationFrame
+        && index.siblingAtRow(StoryboardItem::DurationSecond).data().toInt() > 0) {
+
+            int durationSecond = index.siblingAtRow(StoryboardItem::DurationSecond).data().toInt();
+            insertHoldFramesAfter(fps + newDuration, 0, index);
+            insertHoldFramesAfter(durationSecond - 1, durationSecond, index.siblingAtRow(StoryboardItem::DurationSecond));
+        }
+        else {
+            return false;
+        }
+    }
+
     if (index.row() == StoryboardItem::DurationSecond) {
         newDuration *= fps;
         oldDuration *= fps;

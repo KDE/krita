@@ -343,7 +343,7 @@ bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
                 return true;
             }
             else if (leftButton && downButtonClicked) {
-                sbModel->insertHoldFramesAfter(std::max(0, index.data().toInt() - 1), index.data().toInt(), index);
+                sbModel->insertHoldFramesAfter(std::max(-1, index.data().toInt() - 1), index.data().toInt(), index);
                 return true;
             }
         }

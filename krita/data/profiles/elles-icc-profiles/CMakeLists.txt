@@ -2,6 +2,9 @@
 install(FILES
     ACEScg-elle-V4-g10.icc
     ClayRGB-elle-V4-srgbtrc.icc
+    ClayRGB-elle-V2-g22.icc # for AdobeRGB
+    WideRGB-elle-V2-g22.icc # for WideGamutRGB
+    LargeRGB-elle-V2-g22.icc # for ProPhotoRGB
 
     Gray-D50-elle-V2-g10.icc
     Gray-D50-elle-V2-g18.icc

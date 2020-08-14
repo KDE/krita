@@ -56,7 +56,7 @@ struct TimelineDocker::Private
 };
 
 TimelineDocker::TimelineDocker()
-    : QDockWidget(i18n("Animation Timeline"))
+    : QDockWidget(i18n("Timeline"))
     , m_d(new Private(this))
 {
     setWidget(m_d->view);

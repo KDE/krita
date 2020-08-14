@@ -476,6 +476,13 @@ struct DuplicateLayers : public KisCommandUtils::AggregateCommand {
         if (filteredNodes.isEmpty()) return;
 
         KisNodeSP newAbove = filteredNodes.last();
+
+        // make sure we don't add the new layer into a locked group
+        KIS_SAFE_ASSERT_RECOVER_RETURN(newAbove->parent());
+        while (newAbove->parent() && !newAbove->parent()->isEditable()) {
+            newAbove = newAbove->parent();
+        }
+
         KisNodeSP newParent = newAbove->parent();
 
         // override parent if provided externally

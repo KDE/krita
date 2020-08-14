@@ -508,7 +508,8 @@ inline bool KisPainter::Private::tryReduceSourceRect(const KisPaintDevice *srcDe
 
         // check if we have alpha channel locked
         if ((paramInfo.channelFlags & onlyColor) == paramInfo.channelFlags) {
-            *srcRect &= device->extent();
+            *srcRect &= device->extent().translated(*srcX - *dstX,
+                                                    *srcY - *dstY);
 
             if (srcRect->isEmpty()) return true;
             needsReadjustParams = true;

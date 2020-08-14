@@ -215,7 +215,6 @@ bool StoryboardModel::setCommentScrollData(const QModelIndex & index, const QVar
         CommentBox commentBox = qvariant_cast<CommentBox>(child->data());
         commentBox.scrollValue = value.toInt();
         child->setData(QVariant::fromValue<CommentBox>(commentBox));
-        emit dataChanged(index, index);
         emit(sigStoryboardItemListChanged());
         return true;
     }

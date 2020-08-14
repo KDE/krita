@@ -236,7 +236,7 @@ QStyleOptionSlider StoryboardDelegate::drawComment(QPainter *p, const QStyleOpti
     scrollRect.moveTopLeft(QPoint(0, 0));
     scrollbarOption.rect = scrollRect;
 
-    if (p) {
+    if (p && scrollbarOption.pageStep <= doc.size().height()) {
         p->save();
         p->setPen(QPen(option.palette.dark(), 2));
         p->translate(QPoint( option.rect.right()-15, option.rect.top() + option.fontMetrics.height() + 3));
@@ -561,6 +561,7 @@ QRect StoryboardDelegate::scrollBar(const QStyleOptionViewItem &option, QStyleOp
     QRect rect = style->subControlRect(QStyle::CC_ScrollBar, &scrollBarOption,
                     QStyle::QStyle::SC_ScrollBarSlider);
     rect.moveTopLeft(rect.topLeft() + scrollBarOption.rect.topLeft());
+    rect.moveTopLeft(rect.topLeft() + option.rect.bottomRight() - scrollBarOption.rect.bottomRight());
     return rect;
 }
 
@@ -570,6 +571,7 @@ QRect StoryboardDelegate::scrollDownButton(const QStyleOptionViewItem &option, Q
     QRect rect = style->subControlRect(QStyle::CC_ScrollBar, &scrollBarOption,
                     QStyle::QStyle::SC_ScrollBarAddLine);
     rect.moveTopLeft(rect.topLeft() + scrollBarOption.rect.topLeft());
+    rect.moveBottomRight(option.rect.bottomRight());
     return rect;
 }
 
@@ -579,6 +581,8 @@ QRect StoryboardDelegate::scrollUpButton(const QStyleOptionViewItem &option, QSt
     QRect rect = style->subControlRect(QStyle::CC_ScrollBar, &scrollBarOption,
                     QStyle::QStyle::SC_ScrollBarSubLine);
     rect.moveTopLeft(rect.topLeft() + scrollBarOption.rect.topLeft());
+    rect.moveTop(option.rect.bottom() - scrollBarOption.rect.height());
+    rect.moveRight(option.rect.right());
     return rect;
 }
 

@@ -35,6 +35,7 @@
 #include "commands/kis_image_layer_add_command.h"
 #include "KisTransformToolActivationCommand.h"
 #include "kis_processing_applicator.h"
+#include "kis_node_manager.h"
 
 #include <KoDocumentInfo.h>
 #include <KoSvgPaste.h>
@@ -202,6 +203,11 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
 {
     KisImageSP image = view->image();
     if (!image) return;
+
+    if (KisClipboard::instance()->hasLayers()) {
+        view->nodeManager()->pasteLayersFromClipboard();
+        return;
+    }
 
     if (tryPasteShapes(pasteAtCursorPosition, view)) {
         return;

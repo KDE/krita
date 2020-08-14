@@ -42,7 +42,7 @@ void WGShadeSelector::updateSettings()
         m_sliders.append(line);
         layout()->addWidget(m_sliders.last());
         connect(line, SIGNAL(sigChannelValuesChanged(QVector4D)), SLOT(slotSliderValuesChanged(QVector4D)));
-        connect(line, SIGNAL(sigInteraction(bool)), SIGNAL(sigColorInteraction(bool)));
+        connect(line, SIGNAL(sigInteraction(bool)), SLOT(slotSliderInteraction(bool)));
     }
     while (config.size() < m_sliders.size()) {
         layout()->removeWidget(m_sliders.last());
@@ -66,12 +66,30 @@ void WGShadeSelector::slotChannelValuesChanged(const QVector4D &values)
 
 void WGShadeSelector::slotSliderValuesChanged(const QVector4D &values)
 {
-    for (int i = 0; i < m_sliders.size(); i++) {
-        if (m_sliders[i] != sender()) {
-            m_sliders[i]->setSliderValue(0.0);
-        }
-    }
     m_allowUpdates = false;
     emit sigChannelValuesChanged(values);
     m_allowUpdates = true;
+}
+
+void WGShadeSelector::slotSliderInteraction(bool active)
+{
+    if (active) {
+        const WGShadeSlider* activeLine = qobject_cast<WGShadeSlider*>(sender());
+        for (WGShadeSlider* line: m_sliders) {
+            if (line != activeLine) {
+                line->setSliderValue(0.0);
+            }
+        }
+        emit sigColorInteraction(active);
+        if (activeLine) {
+            // the line may have different channel values at any position than the last used one
+            m_allowUpdates = false;
+            emit sigChannelValuesChanged(activeLine->channelValues());
+            m_allowUpdates = true;
+        }
+    }
+    else {
+        // TODO: else, reset slider base values if configured for automatic reset
+        emit sigColorInteraction(active);
+    }
 }

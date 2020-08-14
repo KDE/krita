@@ -33,6 +33,7 @@ public Q_SLOTS:
     void slotChannelValuesChanged(const QVector4D &values);
 private Q_SLOTS:
     void slotSliderValuesChanged(const QVector4D &values);
+    void slotSliderInteraction(bool active);
 
 Q_SIGNALS:
     void sigChannelValuesChanged(const QVector4D &values);

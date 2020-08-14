@@ -76,6 +76,7 @@ void WGColorSelectorDock::setCanvas(KoCanvasBase *canvas)
     m_canvas = qobject_cast<KisCanvas2*>(canvas);
     if (m_canvas) {
         KoColorDisplayRendererInterface *dri = m_canvas->displayColorConverter()->displayRendererInterface();
+        m_selector->setDisplayRenderer(dri);
         //m_toggle->setBackgroundColor(dri->toQColor(color));
         connect(dri, SIGNAL(displayConfigurationChanged()), this, SLOT(slotDisplayConfigurationChanged()));
         connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>365</width>
-    <height>259</height>
+    <width>399</width>
+    <height>330</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -49,9 +49,23 @@
           </widget>
          </item>
          <item>
+          <widget class="QLabel" name="label_6">
+           <property name="text">
+            <string>Font Size :</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QLabel" name="label_3">
            <property name="text">
             <string>Page Size :</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_7">
+           <property name="text">
+            <string>Page Orientation :</string>
            </property>
           </widget>
          </item>
@@ -69,10 +83,37 @@
           <widget class="QSpinBox" name="spinboxRow"/>
          </item>
          <item>
-          <widget class="QSpinBox" name="spinboxColumn"/>
+          <widget class="QSpinBox" name="spinboxColumn">
+           <property name="value">
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="spinboxFontSize"/>
          </item>
          <item>
           <widget class="QComboBox" name="cmbPageSize">
+           <item>
+            <property name="text">
+             <string>A4</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>A0</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>A1</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>A2</string>
+            </property>
+           </item>
            <item>
             <property name="text">
              <string>A3</string>
@@ -80,7 +121,21 @@
            </item>
            <item>
             <property name="text">
-             <string>A4</string>
+             <string>A5</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="cmbPageOrient">
+           <item>
+            <property name="text">
+             <string>Portrait</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Landscape</string>
             </property>
            </item>
           </widget>

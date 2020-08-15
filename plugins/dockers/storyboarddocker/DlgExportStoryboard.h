@@ -20,20 +20,17 @@
 #define DLG_EXPORTSTORYBOARD
 
 #include <QWidget>
+#include <QPageLayout>
+#include <QPageSize>
+
 #include <KoDialog.h>
 #include "ui_wdgexportstoryboard.h"
 
+class QPageSize;
 enum ExportFormat : unsigned int
 {
     PDF,
     SVG
-};
-
-enum PageSize : int
-{
-    None = -1,
-    A3,
-    A4
 };
 
 class WdgExportStoryboard : public QWidget, public Ui::WdgExportStoryboard
@@ -59,10 +56,12 @@ public:
     int lastItem() const;
     int rows() const;
     int columns() const;
-    PageSize pageSize() const;
+    QPageSize pageSize() const;
+    QPageLayout::Orientation pageOrientation() const;
     QString exportSvgFile() const;
     QString saveFileName() const;
     ExportFormat format() const;
+    int fontSize() const;
 
 private Q_SLOTS:
     void slotExportClicked();

@@ -319,7 +319,8 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
         QPrinter printer(QPrinter::HighResolution);
         printer.setOutputFormat(QPrinter::PdfFormat );
         printer.setOutputFileName(dlg.saveFileName());
-        printer.setPageSize(QPrinter::A3);
+        printer.setPageSize(dlg.pageSize());
+        printer.setPageOrientation(dlg.pageOrientation());
 
         bool layoutSpecifiedBySvg = dlg.exportSvgFile().isEmpty();
         if (layoutSpecifiedBySvg) {
@@ -333,7 +334,6 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
             int columns = dlg.columns();
             int firstItemFrame = dlg.firstItem();
             int lastItemFrame = dlg.lastItem();
-            PageSize size = dlg.pageSize();
 
             //get rects
             layoutCellRects = getLayoutCellRects(rows, columns, printer.pageRect());

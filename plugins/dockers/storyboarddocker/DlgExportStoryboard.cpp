@@ -41,7 +41,7 @@ DlgExportStoryboard::DlgExportStoryboard(ExportFormat format)
     defaults[ m_page->spinboxLastItem->objectName() ] = QVariant::fromValue<int>(0);
     defaults[ m_page->spinboxRow->objectName() ] = QVariant::fromValue<int>(3);
     defaults[ m_page->spinboxColumn->objectName() ] = QVariant::fromValue<int>(3);
-    // TO DO : set default page size
+
     KisDialogStateSaver::restoreState(m_page, "krita/storyboard_export", defaults);
 
     connect(this, SIGNAL(applyClicked()), this, SLOT(slotExportClicked()));
@@ -73,9 +73,28 @@ int DlgExportStoryboard::columns() const
     return m_page->spinboxColumn->value();
 }
 
-PageSize DlgExportStoryboard::pageSize() const
+QPageSize DlgExportStoryboard::pageSize() const
 {
-    return (PageSize)m_page->cmbPageSize->currentIndex();
+    int index = m_page->cmbPageSize->currentIndex();
+    switch (index) {
+        case 0:
+            return QPageSize(QPageSize::PageSizeId::A4);
+        case 1:
+            return QPageSize(QPageSize::PageSizeId::A0);
+        case 2:
+            return QPageSize(QPageSize::PageSizeId::A1);
+        case 3:
+            return QPageSize(QPageSize::PageSizeId::A2);
+        case 4:
+            return QPageSize(QPageSize::PageSizeId::A3);
+        default:
+            return QPageSize(QPageSize::PageSizeId::A5);
+    }
+}
+
+QPageLayout::Orientation DlgExportStoryboard::pageOrientation() const
+{
+    return (QPageLayout::Orientation)m_page->cmbPageOrient->currentIndex();
 }
 
 QString DlgExportStoryboard::exportSvgFile() const
@@ -93,6 +112,11 @@ ExportFormat DlgExportStoryboard::format() const
     return m_format;
 }
 
+int DlgExportStoryboard::fontSize() const
+{
+    return m_page->spinboxFontSize->value();
+}
+
 void DlgExportStoryboard::slotExportClicked()
 {
     KoFileDialog savedlg(this, KoFileDialog::SaveFile, "Export File location");
@@ -108,6 +132,7 @@ void DlgExportStoryboard::slotExportClicked()
     }
     savedlg.setMimeTypeFilters(mimeTypes);
 
+    m_exportFileName = "";
     m_exportFileName = savedlg.filename();
     if (m_exportFileName.isEmpty()) {
         this->cancelClicked();

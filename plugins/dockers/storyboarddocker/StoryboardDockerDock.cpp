@@ -353,11 +353,13 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
             StoryboardItemList list = m_storyboardModel->getData();
 
             for (int i = 0; i < list.size(); i++) {
-                QRectF cellRect = layoutCellRects.at(i);
+                if (i % layoutCellRects.size() == 0 && i != 0) {
+                    printer.newPage();
+                }
+                QRectF cellRect = layoutCellRects.at(i % layoutCellRects.size());
 
                 //draw the cell rectangle
                 p.setPen(QColor(100, 100, 0));
-                p.drawRect(cellRect);
 
                 ThumbnailData data = qvariant_cast<ThumbnailData>(list.at(i)->child(StoryboardItem::FrameNumber)->data());
                 QPixmap pxmp = qvariant_cast<QPixmap>(data.pixmap);
@@ -417,8 +419,13 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
 
                 QRectF clipRect = cellRect;
                 clipRect.setTop(thumbRect.bottom() + 15);
+                QRectF commentRect = clipRect;
                 clipRect.moveTopLeft(QPoint(0,0));
                 clipRect.setWidth(thumbRect.width());
+
+                if (clipRect.height() > 10) {
+                    p.drawRect(commentRect);
+                }
 
                 QAbstractTextDocumentLayout::PaintContext ctx;
                 ctx.palette.setColor(QPalette::Text, p.pen().color());
@@ -431,7 +438,7 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
                 p.restore();
 
                 QRectF eRect = printer.pageRect();
-                eRect.setTop(cellRect.bottom() + 2);
+                eRect.setTop(cellRect.bottom() + 20);
                 p.eraseRect(eRect);
             }
         }
@@ -506,10 +513,11 @@ QVector<QRectF> StoryboardDockerDock::getLayoutCellRects(int rows, int columns, 
     for (int row = 0; row < rows; row++) {
 
         QRectF cellRect = border;
-        cellRect.moveTop(border.top() + row * cellRect.height() + 100);
+        cellRect.moveTop(border.top() + row * cellSize.height());
         cellRect.setSize(cellSize - QSize(200,200));
         for (int column = 0; column < columns; column++) {
-            cellRect.moveLeft(border.left() + column * (cellRect.width() + 100));
+            cellRect.moveLeft(border.left() + column * cellSize.width());
+            cellRect.setSize(cellSize * 0.9);
             rectVec.push_back(cellRect);
         }
     }

@@ -19,6 +19,7 @@
 
 #include "kis_keyframe_commands.h"
 #include "kis_scalar_keyframe_channel.h"
+#include "kis_signals_blocker.h"
 
 KisInsertKeyframeCommand::KisInsertKeyframeCommand(KisKeyframeChannel *channel, int time, KisKeyframeSP keyframe, KUndo2Command *parentCmd)
     : KUndo2Command(parentCmd),
@@ -86,10 +87,17 @@ void KisScalarKeyframeUpdateCommand::undo()
     const QPointF leftTangent = keyframe->leftTangent();
     const QPointF rightTangent = keyframe->rightTangent();
 
-    keyframe->setValue(cachedValue);
-    keyframe->setInterpolationMode(cachedInterpolationMode);
-    keyframe->setTangentsMode(cachedTangentsMode);
-    keyframe->setInterpolationTangents(cachedTangentLeft, cachedTangentRight);
+    {
+        // We block the signals for `keyframe` so that 5 signals aren't emitted on undo/redo..
+        KisSignalsBlocker blocker(keyframe);
+        keyframe->setValue(cachedValue);
+        keyframe->setInterpolationMode(cachedInterpolationMode);
+        keyframe->setTangentsMode(cachedTangentsMode);
+        keyframe->setInterpolationTangents(cachedTangentLeft, cachedTangentRight);
+    }
+
+    // ..Because of the prior signal blocking, we need to manually emit the sigChanged signal once.
+    keyframe->sigChanged(keyframe);
 
     cachedValue = value;
     cachedInterpolationMode = interpolationMode;

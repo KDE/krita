@@ -107,6 +107,33 @@ void KisKeyframingTest::testChannelSignals()
         QVERIFY(spyRemoving.count() == originalSignalCount + 1);
         QVERIFY(spyUpdated.count() > updateSignalCount);
     }
+
+
+    // Setup scalar channel test environment
+    qRegisterMetaType<const KisScalarKeyframeChannel*>("const KisScalarKeyframeChannel*");
+    QScopedPointer<KisScalarKeyframeChannel> scalarChannel( new KisScalarKeyframeChannel(KoID(), bounds) );
+    scalarChannel->setLimits(0, 64);
+    scalarChannel->addScalarKeyframe(0, 32);
+    scalarChannel->addScalarKeyframe(10, 64);
+    QSignalSpy spyScalarKeyframeChanged(scalarChannel.data(), SIGNAL(sigKeyframeChanged(const KisKeyframeChannel*,int)));
+
+    {   // Test changing value of scalar keyframe. Should always emit **1** signal per assignment, undo or redo.
+        KUndo2Command undoCmd;
+        KisScalarKeyframeSP scalarKey = scalarChannel->keyframeAt<KisScalarKeyframe>(0);
+        scalarKey->setValue(20, &undoCmd);
+
+        QVERIFY(spyScalarKeyframeChanged.count() == 1);
+        spyScalarKeyframeChanged.clear();
+
+        undoCmd.undo();
+
+        QVERIFY(spyScalarKeyframeChanged.count() == 1);
+        spyScalarKeyframeChanged.clear();
+
+        undoCmd.redo();
+
+        QVERIFY(spyScalarKeyframeChanged.count() == 1);
+    }
 }
 
 // ===================== Raster Channel =================

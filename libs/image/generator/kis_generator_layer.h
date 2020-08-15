@@ -66,7 +66,11 @@ public:
      * of the associated selection.
      */
     void update();
-    void requestUpdateJobsWithStroke(KisStrokeId stroke, KisFilterConfigurationSP configuration);
+    /**
+     * re-runs the generator with the specified configuration.
+     * Used for previewing the layer inside the stroke.
+     */
+    void previewWithStroke(const KisStrokeId stroke, const KisFilterConfigurationSP configuration);
 
     using KisSelectionBasedLayer::setDirty;
     void setDirty(const QVector<QRect> &rects) override;
@@ -77,6 +81,12 @@ public:
 
 private Q_SLOTS:
     void slotDelayedStaticUpdate();
+
+private:
+    /**
+     * Injects render jobs into the given stroke.
+     */
+    void requestUpdateJobsWithStroke(const KisStrokeId stroke, const KisFilterConfigurationSP configuration);
 
 public:
     // KisIndirectPaintingSupport

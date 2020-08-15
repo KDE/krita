@@ -1,5 +1,6 @@
 /*
  *  Copyright (C) 2006 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2020 L. E. Segovia <amy@amyspark.me>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -721,7 +722,6 @@ KisNodeSP KisLayerManager::addGeneratorLayer(KisNodeSP activeNode)
     dlg.resize(dlg.minimumSizeHint());
 
     if (dlg.exec() == QDialog::Accepted) {
-        node->setFilter(dlg.configuration());
         node->setName(dlg.layerName());
         applicator.end();
         return node;

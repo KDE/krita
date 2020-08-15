@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2008
+ *  Copyright (c) 2020 L. E. Segovia <amy@amyspark.me>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -104,6 +105,10 @@ KisDlgGeneratorLayer::~KisDlgGeneratorLayer()
     else if (isEditing && result() == QDialog::Rejected){
         layer->setFilter(configBefore);
     }
+    else if (result() == QDialog::Accepted) {
+        KIS_ASSERT_RECOVER_RETURN(layer);
+        layer->setFilter(configuration());
+    }
 }
 
 void KisDlgGeneratorLayer::slotNameChanged(const QString & text)
@@ -118,7 +123,7 @@ void KisDlgGeneratorLayer::slotNameChanged(const QString & text)
 void KisDlgGeneratorLayer::slotDelayedPreviewGenerator()
 {
     if (!m_stroke.isNull()) {
-        layer->requestUpdateJobsWithStroke(m_stroke, configuration());
+        layer->previewWithStroke(m_stroke, configuration());
     }
 }
 
@@ -128,6 +133,7 @@ void KisDlgGeneratorLayer::previewGenerator()
         m_compressor.start();
     }
     else {
+        KIS_ASSERT_RECOVER_RETURN(layer);
         layer->setFilter(configuration()->cloneWithResourcesSnapshot());
     }
 }

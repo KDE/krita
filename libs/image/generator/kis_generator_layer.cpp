@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
- *  Copỳright (c) 2020 L. E. Segovia <amy@amyspark.me>
+ *  Copyright (c) 2020 L. E. Segovia <amy@amyspark.me>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -144,6 +144,13 @@ void KisGeneratorLayer::requestUpdateJobsWithStroke(KisStrokeId strokeId, KisFil
     m_d->preparedForFilter = filterConfig;
 }
 
+void KisGeneratorLayer::previewWithStroke(const KisStrokeId strokeId, const KisFilterConfigurationSP filterConfig)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(filterConfig);
+
+    requestUpdateJobsWithStroke(strokeId, filterConfig);
+}
+
 void KisGeneratorLayer::update()
 {
     KisImageSP image = this->image().toStrongRef();
@@ -214,12 +221,10 @@ void KisGeneratorLayer::resetCache()
         QMutexLocker(&m_d->mutex);
         m_d->preparedRect = QRect();
     }
-    m_d->updateSignalCompressor.start();
 }
 
 void KisGeneratorLayer::setDirty(const QVector<QRect> &rects)
 {
     KisSelectionBasedLayer::setDirty(rects);
-    m_d->updateSignalCompressor.start();
 }
 

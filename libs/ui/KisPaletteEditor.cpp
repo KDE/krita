@@ -151,23 +151,18 @@ void KisPaletteEditor::importPalette()
         return;
     }
 
-    QMessageBox messageBox;
-    messageBox.setText(i18n("Do you want to store this palette in your current image?"));
-    messageBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-    bool global = (messageBox.exec() == QMessageBox::Yes);
-
     KoColorSet *colorSet = new KoColorSet(filename);
     colorSet->load();
     QString name = filenameFromPath(colorSet->filename());
 
     if (duplicateExistsFilename(name, false)) {
-        colorSet->setFilename(newPaletteFileName(global));
+        colorSet->setFilename(newPaletteFileName(true));
     } else {
         colorSet->setFilename(name);
     }
 
-    colorSet->setIsGlobal(global);
-    m_d->rServer->addResource(colorSet, global);
+    colorSet->setIsGlobal(true);
+    m_d->rServer->addResource(colorSet, true);
     m_d->rServer->removeFromBlacklist(colorSet);
 
     uploadPaletteList();

@@ -53,7 +53,7 @@ bool KisPressureMirrorOption::isVerticalMirrorEnabled()
     return m_enableVerticalMirror;
 }
 
-void KisPressureMirrorOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
+void KisPressureMirrorOption::writeOptionSetting(KisPropertiesConfigurationSP setting)
 {
     KisCurveOption::writeOptionSetting(setting);
     setting->setProperty(MIRROR_HORIZONTAL_ENABLED, m_enableHorizontalMirror);

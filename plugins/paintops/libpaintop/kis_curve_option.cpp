@@ -84,7 +84,7 @@ void KisCurveOption::resetAllSensors()
     }
 }
 
-void KisCurveOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
+void KisCurveOption::writeOptionSetting(KisPropertiesConfigurationSP setting)
 {
     if (m_checkable) {
         setting->setProperty("Pressure" + m_name, isChecked());

@@ -26,31 +26,23 @@ public:
 
     virtual ~KisMyPaintCurveOption();
 
-    virtual void writeOptionSetting(KisPropertiesConfigurationSP setting);
-    virtual void readOptionSetting(KisPropertiesConfigurationSP setting);    
+    void writeOptionSetting(KisPropertiesConfigurationSP setting);
+    void readOptionSetting(KisPropertiesConfigurationSP setting);
 
-    void resetAllSensors();
-    KisDynamicSensorSP sensor(DynamicSensorType sensorType, bool active) const;
-    void replaceSensor(KisDynamicSensorSP sensor);
-    QList<KisDynamicSensorSP> sensors();
-    QList<KisDynamicSensorSP> activeSensors() const;
     MyPaintBrushSetting currentSetting();
     QList<MyPaintBrushInput> inputList();
 
     void setCurve(DynamicSensorType sensorType, bool useSameCurve, const KisCubicCurve &curve);
 
-    KisMyPaintCurveOption::ValueComponents computeValueComponents(const KisPaintInformation& info) const;
-
 protected:
 
-    void readNamedOptionSetting(const QString& prefix, const KisPropertiesConfigurationSP setting);
-    QMap<DynamicSensorType, KisDynamicSensorSP> m_sensorMap;
-
-private:
+    void readNamedOptionSetting(const QString& prefix, const KisPropertiesConfigurationSP setting);   
 
     qreal m_value;
     qreal m_minValue;
     qreal m_maxValue;
+
+private:
     bool firstRead = true;
 
 Q_SIGNALS:

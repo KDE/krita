@@ -224,16 +224,15 @@ protected:
 
     virtual qreal value(const KisPaintInformation& info) = 0;
 
-    int m_length;
-
-private:
-
-    Q_DISABLE_COPY(KisDynamicSensor)
+    int m_length;    
 
     DynamicSensorType m_type;
     bool m_customCurve;
     KisCubicCurve m_curve;
     bool m_active;
+
+private:
+    Q_DISABLE_COPY(KisDynamicSensor)
 
 };
 

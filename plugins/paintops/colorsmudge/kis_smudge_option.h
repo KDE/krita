@@ -50,7 +50,7 @@ public:
         m_mode = mode;
     }
 
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) override;
     void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
     bool getSmearAlpha() const;

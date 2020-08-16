@@ -43,7 +43,7 @@ public:
 
     qreal  getOpacityf(const KisPaintInformation& info);
 
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) override;
     void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
 };

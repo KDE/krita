@@ -58,7 +58,7 @@ public:
     */
     MirrorProperties apply(const KisPaintInformation& info) const;
 
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) override;
     void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
     void enableVerticalMirror(bool mirror);

@@ -40,7 +40,7 @@ public:
 
     QPointF apply(const KisPaintInformation& info, qreal width, qreal height) const;
 
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) override;
     void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
     void enableAxisY(bool enable);

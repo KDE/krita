@@ -56,7 +56,7 @@ public:
 
     virtual ~KisCurveOption();
 
-    virtual void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
+    virtual void writeOptionSetting(KisPropertiesConfigurationSP setting);
     virtual void readOptionSetting(KisPropertiesConfigurationSP setting);
     virtual void lodLimitations(KisPaintopLodLimitations *l) const;
 
@@ -175,7 +175,7 @@ protected:
     /**
      * Read the option using the prefix in argument
      */
-    void readNamedOptionSetting(const QString& prefix, const KisPropertiesConfigurationSP setting);
+    virtual void readNamedOptionSetting(const QString& prefix, const KisPropertiesConfigurationSP setting);
 
     QString m_name;
     KisPaintOpOption::PaintopCategory m_category;
@@ -195,8 +195,6 @@ protected:
     int m_curveMode;
 
     QMap<DynamicSensorType, KisDynamicSensorSP> m_sensorMap;
-
-private:
 
     qreal m_value;
     qreal m_minValue;

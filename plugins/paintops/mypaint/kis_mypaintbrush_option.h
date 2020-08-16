@@ -32,7 +32,6 @@ const KoID Ascension("tilt_ascension", ki18n("Ascension"));
 const KoID Custom("custom", ki18n("Custom"));
 
 class KisMyPaintBrushOption;
-//typedef KisSharedPtr<KisMyPaintBrushOption> KisDynamicOptionSP;
 
 class PAINTOP_EXPORT KisMyPaintBrushOption : public KisDynamicSensor
 {
@@ -108,22 +107,13 @@ protected:
     qreal scaleToRange(qreal inMin, qreal inMax, qreal outMin, qreal outMax, qreal inValue);
     void setRangeFromPoints(QList<QPointF> points);
 
-
-    int m_length;
-
-private:
-
-    Q_DISABLE_COPY(KisMyPaintBrushOption)
-
-    DynamicSensorType m_type;
-    bool m_customCurve;
-    KisCubicCurve m_curve;
-    bool m_active;
-
     qreal curveXMin = 0;
     qreal curveXMax = 1;
     qreal curveYMin = 0;
     qreal curveYMax = 1;
+
+private:
+    Q_DISABLE_COPY(KisMyPaintBrushOption)
 
 };
 

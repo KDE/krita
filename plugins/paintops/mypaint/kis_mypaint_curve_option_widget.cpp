@@ -46,64 +46,37 @@ inline void setLabel(QLabel* label, const KisCurveLabel& curve_label)
 }
 
 KisMyPaintCurveOptionWidget::KisMyPaintCurveOptionWidget(KisMyPaintCurveOption* curveOption, const QString &minLabel, const QString &maxLabel, bool hideSlider, KisMyPaintOpOption *baseOption)
-    : KisPaintOpOption(curveOption->category(), curveOption->isChecked())
-    , m_widget(new QWidget)
-    , m_curveOptionWidget(new Ui_WdgMyPaintCurveOption())
-    , m_curveOption(curveOption)
+    : KisCurveOptionWidget (curveOption, minLabel, maxLabel, hideSlider)
 {
-    setObjectName("KisMyPaintCurveOptionWidget");
+    setObjectName("KisMyPaintCurveOptionWidget");   
 
-    m_curveOptionWidget->setupUi(m_widget);
-    setConfigurationPage(m_widget);    
+    m_curveOptionWidget->xMaxBox->setHidden(false);
+    m_curveOptionWidget->xMinBox->setHidden(false);
+    m_curveOptionWidget->yMaxBox->setHidden(false);
+    m_curveOptionWidget->yMinBox->setHidden(false);
 
-    m_curveOptionWidget->sensorSelector->setCurveOption(curveOption);    
+    m_curveOptionWidget->xRangeLabel->setHidden(false);
+    m_curveOptionWidget->yRangeLabel->setHidden(false);
+    m_curveOptionWidget->toLabel1->setHidden(false);
+    m_curveOptionWidget->toLabel2->setHidden(false);
 
-    updateSensorCurveLabels(m_curveOptionWidget->sensorSelector->currentHighlighted());
-    updateCurve(m_curveOptionWidget->sensorSelector->currentHighlighted());
-
-    connect(m_curveOptionWidget->curveWidget, SIGNAL(modified()), this, SLOT(slotModified()));
-    connect(m_curveOptionWidget->sensorSelector, SIGNAL(parametersChanged()), SLOT(emitSettingChanged()));
-    connect(m_curveOptionWidget->sensorSelector, SIGNAL(parametersChanged()), SLOT(updateLabelsOfCurrentSensor()));
-    connect(m_curveOptionWidget->sensorSelector, SIGNAL(highlightedSensorChanged(KisDynamicSensorSP)), SLOT(updateSensorCurveLabels(KisDynamicSensorSP)));
-    connect(m_curveOptionWidget->sensorSelector, SIGNAL(highlightedSensorChanged(KisDynamicSensorSP)), SLOT(updateCurve(KisDynamicSensorSP)));
+    disconnect(m_curveOptionWidget->sensorSelector, SIGNAL(parametersChanged()), this, SLOT(emitSettingChanged()));
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(highlightedSensorChanged(KisDynamicSensorSP)), SLOT(updateRangeSpinBoxes(KisDynamicSensorSP)));
-    connect(m_curveOptionWidget->checkBoxUseSameCurve, SIGNAL(stateChanged(int)), SLOT(slotUseSameCurveChanged()));
     connect(m_curveOptionWidget->xMinBox, SIGNAL(valueChanged(double)), SLOT(emitSettingChanged()));
     connect(m_curveOptionWidget->xMaxBox, SIGNAL(valueChanged(double)), SLOT(emitSettingChanged()));
     connect(m_curveOptionWidget->yMinBox, SIGNAL(valueChanged(double)), SLOT(emitSettingChanged()));
     connect(m_curveOptionWidget->yMaxBox, SIGNAL(valueChanged(double)), SLOT(emitSettingChanged()));
 
-    // set all the icons for the curve preset shapes
-    updateThemedIcons();
-
-    // various curve preset buttons with predefined curves
-    connect(m_curveOptionWidget->linearCurveButton, SIGNAL(clicked(bool)), this, SLOT(changeCurveLinear()));
-    connect(m_curveOptionWidget->revLinearButton, SIGNAL(clicked(bool)), this, SLOT(changeCurveReverseLinear()));
-    connect(m_curveOptionWidget->jCurveButton, SIGNAL(clicked(bool)), this, SLOT(changeCurveJShape()));
-    connect(m_curveOptionWidget->lCurveButton, SIGNAL(clicked(bool)), this, SLOT(changeCurveLShape()));
-    connect(m_curveOptionWidget->sCurveButton, SIGNAL(clicked(bool)), this, SLOT(changeCurveSShape()));
-    connect(m_curveOptionWidget->reverseSCurveButton, SIGNAL(clicked(bool)), this, SLOT(changeCurveReverseSShape()));
-    connect(m_curveOptionWidget->uCurveButton, SIGNAL(clicked(bool)), this, SLOT(changeCurveUShape()));
-    connect(m_curveOptionWidget->revUCurveButton, SIGNAL(clicked(bool)), this, SLOT(changeCurveArchShape()));
-
-
-//    m_curveOptionWidget->label_ymin->setText(minLabel);
-//    m_curveOptionWidget->label_ymax->setText(maxLabel);
-
-
     m_curveOptionWidget->strengthSlider->setRange(curveOption->minValue(), curveOption->maxValue(), 2);
     m_curveOptionWidget->strengthSlider->setValue(curveOption->value());
     m_curveOptionWidget->strengthSlider->setPrefix(i18n("Strength: "));
-    m_curveOptionWidget->strengthSlider->setSuffix(i18n("%"));       
+    m_curveOptionWidget->strengthSlider->setSuffix(i18n("%"));
 
     if (hideSlider) {
-         m_curveOptionWidget->strengthSlider->hide();
+          m_curveOptionWidget->strengthSlider->hide();
     }
 
     connect(m_curveOption, SIGNAL(unCheckUseCurve()), SLOT(slotUnCheckUseCurve()));
-    connect(m_curveOptionWidget->checkBoxUseCurve, SIGNAL(stateChanged(int))  , SLOT(updateValues()));
-    connect(m_curveOptionWidget->curveMode, SIGNAL(currentIndexChanged(int)), SLOT(updateMode()));
-    connect(m_curveOptionWidget->strengthSlider, SIGNAL(valueChanged(qreal)), SLOT(updateValues()));  
 }
 
 KisMyPaintCurveOptionWidget::~KisMyPaintCurveOptionWidget()
@@ -132,7 +105,7 @@ void KisMyPaintCurveOptionWidget::writeOptionSetting(KisPropertiesConfigurationS
 }
 
 void KisMyPaintCurveOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP setting)
-{
+{    
     //setting->dump();    
     updateValuesCalled = true;
     m_curveOption->readOptionSetting(setting);
@@ -159,60 +132,6 @@ void KisMyPaintCurveOptionWidget::readOptionSetting(const KisPropertiesConfigura
     updateValuesCalled = false;
 }
 
-void KisMyPaintCurveOptionWidget::lodLimitations(KisPaintopLodLimitations *l) const
-{
-    m_curveOption->lodLimitations(l);
-}
-
-bool KisMyPaintCurveOptionWidget::isCheckable() const
-{
-    return m_curveOption->isCheckable();
-}
-
-bool KisMyPaintCurveOptionWidget::isChecked() const
-{
-    return m_curveOption->isChecked();
-}
-
-void KisMyPaintCurveOptionWidget::setChecked(bool checked)
-{
-    m_curveOption->setChecked(checked);
-}
-
-KisMyPaintCurveOption* KisMyPaintCurveOptionWidget::curveOption()
-{
-    return m_curveOption;
-}
-
-QWidget* KisMyPaintCurveOptionWidget::curveWidget()
-{
-    return m_widget;
-}
-
-void KisMyPaintCurveOptionWidget::slotModified()
-{    
-    if (!m_curveOption->isSameCurveUsed()) {        
-        m_curveOptionWidget->sensorSelector->currentHighlighted()->setCurve(getWidgetCurve());     
-    } else {
-        m_curveOption->setCommonCurve(getWidgetCurve());
-    }    
-    emitSettingChanged();    
-}
-
-void KisMyPaintCurveOptionWidget::slotUseSameCurveChanged()
-{
-    // this is a slot that answers on "Share Curve across all settings" checkbox
-    m_curveOption->setUseSameCurve(m_curveOptionWidget->checkBoxUseSameCurve->isChecked());
-    if (m_curveOption->isSameCurveUsed()) {
-        // !(UseSameCurve) => UseSameCurve
-        // set the current curve to the common curve
-        m_curveOption->setCommonCurve(getWidgetCurve());
-    } else {
-        updateCurve(m_curveOptionWidget->sensorSelector->currentHighlighted());
-    }
-    emitSettingChanged();
-}
-
 void KisMyPaintCurveOptionWidget::slotUnCheckUseCurve() {
 
     m_curveOptionWidget->checkBoxUseCurve->setChecked(false);
@@ -220,7 +139,7 @@ void KisMyPaintCurveOptionWidget::slotUnCheckUseCurve() {
 }
 
 void KisMyPaintCurveOptionWidget::updateSensorCurveLabels(KisDynamicSensorSP sensor) const
-{
+{    
     KisMyPaintBrushOption* mySensor = dynamic_cast<KisMyPaintBrushOption*>(sensor.data());
     if (mySensor) {
 
@@ -245,16 +164,6 @@ void KisMyPaintCurveOptionWidget::updateSensorCurveLabels(KisDynamicSensorSP sen
     }
 }
 
-void KisMyPaintCurveOptionWidget::updateCurve(KisDynamicSensorSP sensor)
-{    
-    if (sensor) {
-        bool blockSignal = m_curveOptionWidget->curveWidget->blockSignals(true);
-        KisCubicCurve curve = m_curveOption->isSameCurveUsed() ? m_curveOption->getCommonCurve() : sensor->curve();
-        m_curveOptionWidget->curveWidget->setCurve(curve);
-        m_curveOptionWidget->curveWidget->blockSignals(blockSignal);
-    }    
-}
-
 void KisMyPaintCurveOptionWidget::updateRangeSpinBoxes(KisDynamicSensorSP sensor) const {
 
     KisMyPaintBrushOption* mySensor = dynamic_cast<KisMyPaintBrushOption*>(sensor.data());
@@ -274,14 +183,8 @@ void KisMyPaintCurveOptionWidget::updateRangeSpinBoxes(KisDynamicSensorSP sensor
     m_curveOptionWidget->yMaxBox->blockSignals(false);
 }
 
-void KisMyPaintCurveOptionWidget::updateLabelsOfCurrentSensor()
-{
-    updateSensorCurveLabels(m_curveOptionWidget->sensorSelector->currentHighlighted());
-    updateCurve(m_curveOptionWidget->sensorSelector->currentHighlighted());
-}
-
 void KisMyPaintCurveOptionWidget::updateValues()
-{
+{    
     updateValuesCalled = true;
     m_curveOption->setValue(m_curveOptionWidget->strengthSlider->value());
     m_curveOption->setCurveUsed(m_curveOptionWidget->checkBoxUseCurve->isChecked());    
@@ -289,144 +192,22 @@ void KisMyPaintCurveOptionWidget::updateValues()
     emitSettingChanged();
 }
 
-void KisMyPaintCurveOptionWidget::updateMode()
-{
-    m_curveOption->setCurveMode(m_curveOptionWidget->curveMode->currentIndex());
-    emitSettingChanged();
-}
-
-void KisMyPaintCurveOptionWidget::changeCurveLinear()
-{
-    QList<QPointF> points;
-    points.push_back(QPointF(0,0));
-    points.push_back(QPointF(1,1));
-    m_curveOptionWidget->curveWidget->setCurve(KisCubicCurve(points));
-}
-
-void KisMyPaintCurveOptionWidget::changeCurveReverseLinear()
-{
-        QList<QPointF> points;
-        points.push_back(QPointF(0,1));
-        points.push_back(QPointF(1,0));
-        m_curveOptionWidget->curveWidget->setCurve(KisCubicCurve(points));
-}
-
-void KisMyPaintCurveOptionWidget::changeCurveSShape()
-{
-        QList<QPointF> points;
-        points.push_back(QPointF(0,0));
-        points.push_back(QPointF(0.25,0.1));
-        points.push_back(QPointF(0.75,0.9));
-        points.push_back(QPointF(1, 1));
-        m_curveOptionWidget->curveWidget->setCurve(KisCubicCurve(points));
-}
-
-
-void KisMyPaintCurveOptionWidget::changeCurveReverseSShape()
-{
-        QList<QPointF> points;
-        points.push_back(QPointF(0,1));
-        points.push_back(QPointF(0.25,0.9));
-        points.push_back(QPointF(0.75,0.1));
-        points.push_back(QPointF(1,0));
-        m_curveOptionWidget->curveWidget->setCurve(KisCubicCurve(points));
-}
-
-void KisMyPaintCurveOptionWidget::changeCurveJShape()
-{
-    QList<QPointF> points;
-    points.push_back(QPointF(0,0));
-    points.push_back(QPointF(0.35,0.1));
-    points.push_back(QPointF(1,1));
-    m_curveOptionWidget->curveWidget->setCurve(KisCubicCurve(points));
-}
-
-void KisMyPaintCurveOptionWidget::changeCurveLShape()
-{
-    QList<QPointF> points;
-    points.push_back(QPointF(0,1));
-    points.push_back(QPointF(0.25,0.48));
-    points.push_back(QPointF(1,0));
-    m_curveOptionWidget->curveWidget->setCurve(KisCubicCurve(points));
-}
-
-void KisMyPaintCurveOptionWidget::changeCurveUShape()
-{
-    QList<QPointF> points;
-    points.push_back(QPointF(0,1));
-    points.push_back(QPointF(0.5,0));
-    points.push_back(QPointF(1,1));
-    m_curveOptionWidget->curveWidget->setCurve(KisCubicCurve(points));
-}
-
-void KisMyPaintCurveOptionWidget::changeCurveArchShape()
-{
-    QList<QPointF> points;
-    points.push_back(QPointF(0,0));
-    points.push_back(QPointF(0.5,1));
-    points.push_back(QPointF(1,0));
-    m_curveOptionWidget->curveWidget->setCurve(KisCubicCurve(points));
-}
-
-void KisMyPaintCurveOptionWidget::disableWidgets(bool disable)
-{
-    m_curveOptionWidget->checkBoxUseSameCurve->setDisabled(disable);
-    m_curveOptionWidget->curveWidget->setDisabled(disable);
-    m_curveOptionWidget->sensorSelector->setDisabled(disable);
-    m_curveOptionWidget->label_xmax->setDisabled(disable);
-    m_curveOptionWidget->label_xmin->setDisabled(disable);
-    m_curveOptionWidget->label_ymax->setDisabled(disable);
-    m_curveOptionWidget->label_ymin->setDisabled(disable);   
-}
-
-
-void KisMyPaintCurveOptionWidget::updateThemedIcons()
-{
-    // set all the icons for the curve preset shapes
-    m_curveOptionWidget->linearCurveButton->setIcon(KisIconUtils::loadIcon("curve-preset-linear"));
-    m_curveOptionWidget->revLinearButton->setIcon(KisIconUtils::loadIcon("curve-preset-linear-reverse"));
-    m_curveOptionWidget->jCurveButton->setIcon(KisIconUtils::loadIcon("curve-preset-j"));
-    m_curveOptionWidget->lCurveButton->setIcon(KisIconUtils::loadIcon("curve-preset-l"));
-    m_curveOptionWidget->sCurveButton->setIcon(KisIconUtils::loadIcon("curve-preset-s"));
-    m_curveOptionWidget->reverseSCurveButton->setIcon(KisIconUtils::loadIcon("curve-preset-s-reverse"));
-    m_curveOptionWidget->uCurveButton->setIcon(KisIconUtils::loadIcon("curve-preset-u"));
-    m_curveOptionWidget->revUCurveButton->setIcon(KisIconUtils::loadIcon("curve-preset-arch"));
-
-    // this helps make the checkboxes show themselves on the dark color themes
-    QPalette pal = m_curveOptionWidget->sensorSelector->palette();
-    QPalette newPalette = pal;
-    newPalette.setColor(QPalette::Active, QPalette::Background, pal.text().color() );
-    m_curveOptionWidget->sensorSelector->setPalette(newPalette);
-
-}
-
-KisCubicCurve KisMyPaintCurveOptionWidget::getWidgetCurve()
-{
-    return m_curveOptionWidget->curveWidget->curve();
-}
-
-KisCubicCurve KisMyPaintCurveOptionWidget::getHighlightedSensorCurve()
-{
-    return m_curveOptionWidget->sensorSelector->currentHighlighted()->curve();
-    KisCubicCurve curve;
-    return curve;
-}
-
 float KisMyPaintCurveOptionWidget::getBaseValue(KisPropertiesConfigurationSP setting) {
 
     MyPaintBrush *brush = mypaint_brush_new();
     mypaint_brush_from_string(brush, setting->getProperty(MYPAINT_JSON).toByteArray());
 
-    if(m_curveOption->currentSetting() == MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC)
+    KisMyPaintCurveOption *curveOpt = dynamic_cast<KisMyPaintCurveOption*>(m_curveOption);
+    if(curveOpt->currentSetting() == MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC)
         return log(setting->getFloat(MYPAINT_DIAMETER)/2);
 
-    if(m_curveOption->currentSetting() == MYPAINT_BRUSH_SETTING_OPAQUE)
+    if(curveOpt->currentSetting() == MYPAINT_BRUSH_SETTING_OPAQUE)
         return setting->getFloat(MYPAINT_OPACITY);
 
-    if(m_curveOption->currentSetting() == MYPAINT_BRUSH_SETTING_HARDNESS)
+    if(curveOpt->currentSetting() == MYPAINT_BRUSH_SETTING_HARDNESS)
         return setting->getFloat(MYPAINT_HARDNESS);
 
-    return mypaint_brush_get_base_value(brush, m_curveOption->currentSetting());
+    return mypaint_brush_get_base_value(brush, curveOpt->currentSetting());
 }
 
 void KisMyPaintCurveOptionWidget::setBaseValue(KisPropertiesConfigurationSP setting, float val) const {
@@ -447,16 +228,17 @@ void KisMyPaintCurveOptionWidget::setBaseValue(KisPropertiesConfigurationSP sett
 
     setting->setProperty(MYPAINT_JSON, doc2.toJson());    
 
-    if(m_curveOption->currentSetting() == MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC)
+    KisMyPaintCurveOption *curveOpt = dynamic_cast<KisMyPaintCurveOption*>(m_curveOption);
+    if(curveOpt->currentSetting() == MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC)
         setting->setProperty(MYPAINT_DIAMETER, exp(val)*2);
 
-    if(m_curveOption->currentSetting() == MYPAINT_BRUSH_SETTING_HARDNESS)
+    if(curveOpt->currentSetting() == MYPAINT_BRUSH_SETTING_HARDNESS)
         setting->setProperty(MYPAINT_HARDNESS, val);
 
-    if(m_curveOption->currentSetting() == MYPAINT_BRUSH_SETTING_OPAQUE)
+    if(curveOpt->currentSetting() == MYPAINT_BRUSH_SETTING_OPAQUE)
         setting->setProperty(MYPAINT_OPACITY, val);
 
-    if(m_curveOption->currentSetting() == MYPAINT_BRUSH_SETTING_OFFSET_BY_RANDOM)
+    if(curveOpt->currentSetting() == MYPAINT_BRUSH_SETTING_OFFSET_BY_RANDOM)
         setting->setProperty(MYPAINT_OFFSET_BY_RANDOM, val);
 }
 
@@ -483,5 +265,6 @@ KisDoubleSliderSpinBox* KisMyPaintCurveOptionWidget::slider() {
 }
 
 void KisMyPaintCurveOptionWidget::refresh() {
+    return;
     emitSettingChanged();
 }

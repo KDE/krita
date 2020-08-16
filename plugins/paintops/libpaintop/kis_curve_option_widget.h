@@ -51,14 +51,14 @@ protected:
     KisCurveOption* curveOption();
     QWidget* curveWidget();
 
-private Q_SLOTS:
+protected Q_SLOTS:
 
     void slotModified();
     void slotUseSameCurveChanged();
 
-    void updateSensorCurveLabels(KisDynamicSensorSP sensor);
+    virtual void updateSensorCurveLabels(KisDynamicSensorSP sensor) const;
     void updateCurve(KisDynamicSensorSP sensor);
-    void updateValues();
+    virtual void updateValues();
     void updateMode();
     void updateLabelsOfCurrentSensor();
     void disableWidgets(bool disable);
@@ -76,7 +76,7 @@ private Q_SLOTS:
     void changeCurveArchShape();
 
 
-private:
+protected:
     QWidget* m_widget;
     Ui_WdgCurveOption* m_curveOptionWidget;
     QComboBox* m_curveMode;

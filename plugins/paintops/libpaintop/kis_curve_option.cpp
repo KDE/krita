@@ -71,8 +71,8 @@ KisCurveOption::KisCurveOption(const QString& name, KisPaintOpOption::PaintopCat
     , m_separateCurveValue(false)
     , m_curveMode(0)
 {
-    Q_FOREACH (const DynamicSensorType sensorType, KisDynamicSensor::sensorsTypes()) {
-        KisDynamicSensorSP sensor = KisDynamicSensor::type2Sensor(sensorType, m_name);
+    Q_FOREACH (const DynamicSensorType sensorType, this->sensorsTypes()) {
+        KisDynamicSensorSP sensor = this->type2Sensor(sensorType, m_name);
         sensor->setActive(false);
         replaceSensor(sensor);
     }
@@ -195,8 +195,8 @@ void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisProp
     m_sensorMap.clear();
 
     // Replace all sensors with the inactive defaults
-    Q_FOREACH (const DynamicSensorType sensorType, KisDynamicSensor::sensorsTypes()) {
-        replaceSensor(KisDynamicSensor::type2Sensor(sensorType, m_name));
+    Q_FOREACH (const DynamicSensorType sensorType, this->sensorsTypes()) {
+        replaceSensor(type2Sensor(sensorType, m_name));
     }
 
     QString sensorDefinition = setting->getString(prefix + "Sensor");
@@ -381,7 +381,7 @@ void KisCurveOption::setCurve(DynamicSensorType sensorType, bool useSameCurve, c
             KisDynamicSensorSP s = 0;
             // And set the current sensor to the current curve
             if (!m_sensorMap.contains(sensorType)) {
-                s = KisDynamicSensor::type2Sensor(sensorType, m_name);
+                s = type2Sensor(sensorType, m_name);
             } else {
                 KisDynamicSensorSP s = sensor(sensorType, false);
             }
@@ -652,3 +652,68 @@ KisDynamicSensorSP KisCurveOption::id2Sensor(const KoID& id, const QString &pare
     dbgPlugins << "Unknown transform parameter :" << id.id();
     return 0;
 }
+
+KisDynamicSensorSP KisCurveOption::type2Sensor(DynamicSensorType sensorType, const QString &parentOptionName)
+{
+    switch (sensorType) {
+    case FUZZY_PER_DAB:
+        return new KisDynamicSensorFuzzy(false, parentOptionName);
+    case FUZZY_PER_STROKE:
+        return new KisDynamicSensorFuzzy(true, parentOptionName);
+    case SPEED:
+        return new KisDynamicSensorSpeed();
+    case FADE:
+        return new KisDynamicSensorFade();
+    case DISTANCE:
+        return new KisDynamicSensorDistance();
+    case TIME:
+        return new KisDynamicSensorTime();
+    case ANGLE:
+        return new KisDynamicSensorDrawingAngle();
+    case ROTATION:
+        return new KisDynamicSensorRotation();
+    case PRESSURE:
+        return new KisDynamicSensorPressure();
+    case XTILT:
+        return new KisDynamicSensorXTilt();
+    case YTILT:
+        return new KisDynamicSensorYTilt();
+    case TILT_DIRECTION:
+        return new KisDynamicSensorTiltDirection();
+    case TILT_ELEVATATION:
+        return new KisDynamicSensorTiltElevation();
+    case PERSPECTIVE:
+        return new KisDynamicSensorPerspective();
+    case TANGENTIAL_PRESSURE:
+        return new KisDynamicSensorTangentialPressure();
+    case PRESSURE_IN:
+        return new KisDynamicSensorPressureIn();
+    default:
+        return 0;
+    }
+}
+
+QList<DynamicSensorType> KisCurveOption::sensorsTypes()
+{
+    QList<DynamicSensorType> sensorTypes;
+    sensorTypes
+            << PRESSURE
+            << PRESSURE_IN
+            << XTILT
+            << YTILT
+            << TILT_DIRECTION
+            << TILT_ELEVATATION
+            << SPEED
+            << ANGLE
+            << ROTATION
+            << DISTANCE
+            << TIME
+            << FUZZY_PER_DAB
+            << FUZZY_PER_STROKE
+            << FADE
+            << PERSPECTIVE
+            << TANGENTIAL_PRESSURE;
+    return sensorTypes;
+}
+
+

@@ -49,7 +49,7 @@ void KisSmudgeOption::apply(KisPainter& painter, const KisPaintInformation& info
     painter.setOpacity(opacity);
 }
 
-void KisSmudgeOption::writeOptionSetting(KisPropertiesConfigurationSP setting)
+void KisSmudgeOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     KisRateOption::writeOptionSetting(setting);
     setting->setProperty(name() + "Mode", m_mode);

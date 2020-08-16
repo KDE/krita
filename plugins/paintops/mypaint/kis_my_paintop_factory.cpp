@@ -99,7 +99,7 @@ void KisMyPaintOpFactory::processAfterLoading() {
         QFileInfo fileInfo(brush->filename());
 
         if(!brush->valid())
-            continue;
+            continue;        
 
         KisPaintOpSettingsSP s = new KisMyPaintOpSettings();
         s->setProperty("paintop", id());

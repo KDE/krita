@@ -68,7 +68,7 @@ qreal KisPressureScatterOption::scatterAmount()
 }
 
 
-void KisPressureScatterOption::writeOptionSetting(KisPropertiesConfigurationSP setting)
+void KisPressureScatterOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     KisCurveOption::writeOptionSetting(setting);
     setting->setProperty(SCATTER_X, m_axisX);

@@ -46,7 +46,7 @@ public:
     */
     void applyThreshold(KisFixedPaintDeviceSP dab, const KisPaintInformation &info);
 
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) override;
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
     void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
     /// threshold has 100 levels (like opacity)

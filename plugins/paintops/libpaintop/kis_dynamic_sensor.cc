@@ -106,59 +106,6 @@ KisDynamicSensorSP KisDynamicSensor::id2Sensor(const KoID& id, const QString &pa
     return 0;
 }
 
-DynamicSensorType KisDynamicSensor::id2Type(const KoID &id)
-{
-    if (id.id() == PressureId.id()) {
-        return PRESSURE;
-    }
-    else if (id.id() == PressureInId.id()) {
-        return PRESSURE_IN;
-    }
-    else if (id.id() == XTiltId.id()) {
-        return XTILT;
-    }
-    else if (id.id() == YTiltId.id()) {
-        return YTILT;
-    }
-    else if (id.id() == TiltDirectionId.id()) {
-        return TILT_DIRECTION;
-    }
-    else if (id.id() == TiltElevationId.id()) {
-        return TILT_ELEVATATION;
-    }
-    else if (id.id() == SpeedId.id()) {
-        return SPEED;
-    }
-    else if (id.id() == DrawingAngleId.id()) {
-        return ANGLE;
-    }
-    else if (id.id() == RotationId.id()) {
-        return ROTATION;
-    }
-    else if (id.id() == DistanceId.id()) {
-        return DISTANCE;
-    }
-    else if (id.id() == TimeId.id()) {
-        return TIME;
-    }
-    else if (id.id() == FuzzyPerDabId.id()) {
-        return FUZZY_PER_DAB;
-    }
-    else if (id.id() == FuzzyPerStrokeId.id()) {
-        return FUZZY_PER_STROKE;
-    }
-    else if (id.id() == FadeId.id()) {
-        return FADE;
-    }
-    else if (id.id() == PerspectiveId.id()) {
-        return PERSPECTIVE;
-    }
-    else if (id.id() == TangentialPressureId.id()) {
-        return TANGENTIAL_PRESSURE;
-    }
-    return UNKNOWN;
-}
-
 QString KisDynamicSensor::minimumLabel(DynamicSensorType sensorType)
 {
     switch (sensorType) {

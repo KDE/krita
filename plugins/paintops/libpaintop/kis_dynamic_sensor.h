@@ -153,24 +153,15 @@ public:
         return id2Sensor(KoID(s), parentOptionName);
     }
 
-    static DynamicSensorType id2Type(const KoID& id);
-    static DynamicSensorType id2Type(const QString& s) {
-        return id2Type(KoID(s));
-    }
-
-    static QString minimumLabel(DynamicSensorType sensorType);
-    static QString maximumLabel(DynamicSensorType sensorType, int max = -1);
-    static int minimumValue(DynamicSensorType sensorType);
-    static int maximumValue(DynamicSensorType sensorType, int max = -1);
-    static QString valueSuffix(DynamicSensorType sensorType);
+    virtual QString minimumLabel(DynamicSensorType sensorType);
+    virtual QString maximumLabel(DynamicSensorType sensorType, int max = -1);
+    virtual int minimumValue(DynamicSensorType sensorType);
+    virtual int maximumValue(DynamicSensorType sensorType, int max = -1);
+    virtual QString valueSuffix(DynamicSensorType sensorType);
 
     static KisDynamicSensorSP createFromXML(const QString&, const QString &parentOptionName);
     static KisDynamicSensorSP createFromXML(const QDomElement&, const QString &parentOptionName);
 
-    /**
-     * @return the list of sensors
-     */
-    static QList<KoID> sensorsIds();
 
     /**
      * @return the identifier of this sensor

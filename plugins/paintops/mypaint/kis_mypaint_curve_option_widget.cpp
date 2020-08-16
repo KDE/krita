@@ -229,9 +229,9 @@ void KisMyPaintCurveOptionWidget::updateSensorCurveLabels(KisDynamicSensorSP sen
         m_curveOptionWidget->label_ymin->setText(mySensor->minimumYLabel());
         m_curveOptionWidget->label_ymax->setText(mySensor->maximumYLabel());
 
-        int inMinValue = KisMyPaintBrushOption::minimumValue(sensor->sensorType());
-        int inMaxValue = KisMyPaintBrushOption::maximumValue(sensor->sensorType(), sensor->length());
-        QString inSuffix = KisMyPaintBrushOption::valueSuffix(sensor->sensorType());
+        int inMinValue = mySensor->minimumValue(sensor->sensorType());
+        int inMaxValue = mySensor->maximumValue(sensor->sensorType(), sensor->length());
+        QString inSuffix = mySensor->valueSuffix(sensor->sensorType());
 
         int outMinValue = m_curveOption->intMinValue();
         int outMaxValue = m_curveOption->intMaxValue();

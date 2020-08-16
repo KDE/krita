@@ -43,11 +43,11 @@ public:
 
     qreal value(const KisPaintInformation &info) override;    
 
-    static QString minimumLabel(DynamicSensorType sensorType);
-    static QString maximumLabel(DynamicSensorType sensorType, int max = -1);
-    static int minimumValue(DynamicSensorType sensorType);
-    static int maximumValue(DynamicSensorType sensorType, int max = -1);
-    static QString valueSuffix(DynamicSensorType sensorType);
+    QString minimumLabel(DynamicSensorType sensorType);
+    QString maximumLabel(DynamicSensorType sensorType, int max = -1);
+    int minimumValue(DynamicSensorType sensorType);
+    int maximumValue(DynamicSensorType sensorType, int max = -1);
+    QString valueSuffix(DynamicSensorType sensorType);
 
     static DynamicSensorType typeForInput(MyPaintBrushInput input);
 

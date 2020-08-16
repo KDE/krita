@@ -13,7 +13,7 @@
 #include "kis_mypaintbrush_option.h"
 #include "libmypaint/mypaint-brush.h"
 
-class PAINTOP_EXPORT KisMyPaintCurveOption: public QObject, public KisCurveOption
+class PAINTOP_EXPORT KisMyPaintCurveOption: public KisCurveOption
 {
     Q_OBJECT
 public:
@@ -49,8 +49,6 @@ protected:
 private:
     bool firstRead = true;
 
-Q_SIGNALS:
-    void unCheckUseCurve();
 };
 
 #endif // KIS_MYPAINT_CURVE_OPTION_H

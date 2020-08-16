@@ -3,7 +3,9 @@
 
 #include <QObject>
 #include <kis_paintop_option.h>
+#include <kis_curve_option_widget.h>
 #include "ui_wdgmypaintcurveoption.h"
+#include "ui_wdgcurveoption.h"
 #include <kis_mypaint_curve_option.h>
 #include <kis_my_paintop_option.h>
 
@@ -11,7 +13,7 @@ class Ui_WdgMyPaintCurveOption;
 class KisMyPaintCurveOption;
 class QComboBox;
 
-class PAINTOP_EXPORT KisMyPaintCurveOptionWidget : public KisPaintOpOption
+class PAINTOP_EXPORT KisMyPaintCurveOptionWidget : public KisCurveOptionWidget
 {
     Q_OBJECT
 public:
@@ -19,60 +21,26 @@ public:
     ~KisMyPaintCurveOptionWidget() override;
 
     void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
-    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
-    void lodLimitations(KisPaintopLodLimitations *l) const override;
-
-    bool isCheckable() const override;
-    bool isChecked() const override;
-    void setChecked(bool checked) override;
-    void show();
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;    
 
     KisDoubleSliderSpinBox* slider();
 
-protected:
+protected Q_SLOTS:
 
-    KisMyPaintCurveOption* curveOption();
-    QWidget* curveWidget();
-
-private Q_SLOTS:
-
-    void slotModified();
-    void slotUseSameCurveChanged();
     void slotUnCheckUseCurve();
 
-    void updateSensorCurveLabels(KisDynamicSensorSP sensor) const;
-    void updateCurve(KisDynamicSensorSP sensor);
+    void updateSensorCurveLabels(KisDynamicSensorSP sensor) const override;
     void updateRangeSpinBoxes(KisDynamicSensorSP sensor) const;
-    void updateValues();
-    void updateMode();
-    void updateLabelsOfCurrentSensor();    
-    void disableWidgets(bool disable);
-    void updateThemedIcons();
-
-
-    // curve shape preset buttons
-    void changeCurveLinear();
-    void changeCurveReverseLinear();
-    void changeCurveSShape();
-    void changeCurveReverseSShape();
-    void changeCurveJShape();
-    void changeCurveLShape();
-    void changeCurveUShape();
-    void changeCurveArchShape();
+    void updateValues() override;
 
 public Q_SLOTS:
     void refresh();
 
-private:
-    QWidget* m_widget;
-    Ui_WdgMyPaintCurveOption* m_curveOptionWidget;
-    QComboBox* m_curveMode;
-    KisMyPaintCurveOption* m_curveOption;
+protected:
+
     KisMyPaintOpOption *m_baseOption;
     bool updateValuesCalled = false;
 
-    KisCubicCurve getWidgetCurve();
-    KisCubicCurve getHighlightedSensorCurve();
     void checkRanges() const;
     float getBaseValue(KisPropertiesConfigurationSP setting);
     void setBaseValue(KisPropertiesConfigurationSP setting, float val) const;

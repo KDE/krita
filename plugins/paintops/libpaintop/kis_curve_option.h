@@ -44,8 +44,9 @@ class KisDynamicSensor;
  * manage to read and write its settings directly.
  *
  */
-class PAINTOP_EXPORT KisCurveOption
+class PAINTOP_EXPORT KisCurveOption: public QObject
 {
+    Q_OBJECT
 public:
     KisCurveOption(const QString& name,
                    KisPaintOpOption::PaintopCategory category,
@@ -204,6 +205,9 @@ protected:
     qreal m_value;
     qreal m_minValue;
     qreal m_maxValue;
+
+Q_SIGNALS:
+    void unCheckUseCurve();
 };
 
 #endif

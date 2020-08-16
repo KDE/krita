@@ -26,7 +26,7 @@ public:
 
     virtual ~KisMyPaintCurveOption();
 
-    void writeOptionSetting(KisPropertiesConfigurationSP setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
     void readOptionSetting(KisPropertiesConfigurationSP setting);
 
     MyPaintBrushSetting currentSetting();

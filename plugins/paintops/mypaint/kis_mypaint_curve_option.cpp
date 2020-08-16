@@ -59,7 +59,7 @@ KisMyPaintCurveOption::~KisMyPaintCurveOption()
 {
 }
 
-void KisMyPaintCurveOption::writeOptionSetting(KisPropertiesConfigurationSP setting)
+void KisMyPaintCurveOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {    
     if (m_checkable) {
         setting->setProperty("Pressure" + m_name, isChecked());
@@ -104,10 +104,10 @@ void KisMyPaintCurveOption::writeOptionSetting(KisPropertiesConfigurationSP sett
 
     setting->setProperty(MYPAINT_JSON, doc2.toJson());
 
-    QIODevice *dev = new QFile("/home/ashwin/b009.myb");
-    dev->open(QIODevice::ReadWrite);
-    dev->write(doc2.toJson());
-    dev->close();
+//     QIODevice *dev = new QFile("/home/ashwin/b009.myb");
+//     dev->open(QIODevice::ReadWrite);
+//     dev->write(doc2.toJson());
+//     dev->close();
 
     setting->setProperty(m_name + "UseCurve", m_useCurve);
     setting->setProperty(m_name + "UseSameCurve", m_useSameCurve);

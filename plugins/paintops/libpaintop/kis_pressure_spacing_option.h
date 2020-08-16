@@ -48,7 +48,7 @@ public:
     bool usingSpacingUpdates() const;
 
     void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) override;
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
 
 private:
     bool m_isotropicSpacing;

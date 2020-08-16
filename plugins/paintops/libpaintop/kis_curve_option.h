@@ -57,7 +57,7 @@ public:
 
     virtual ~KisCurveOption();
 
-    virtual void writeOptionSetting(KisPropertiesConfigurationSP setting);
+    virtual void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
     virtual void readOptionSetting(KisPropertiesConfigurationSP setting);
     virtual void lodLimitations(KisPaintopLodLimitations *l) const;
 

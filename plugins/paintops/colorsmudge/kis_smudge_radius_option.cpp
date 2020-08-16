@@ -159,7 +159,7 @@ void KisSmudgeRadiusOption::apply(KoColor *resultColor,
     *resultColor = color.convertedTo(resultColor->colorSpace());
 }
 
-void KisSmudgeRadiusOption::writeOptionSetting(KisPropertiesConfigurationSP setting)
+void KisSmudgeRadiusOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     KisCurveOption::writeOptionSetting(setting);
 }

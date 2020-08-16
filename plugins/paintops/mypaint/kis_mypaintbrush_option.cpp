@@ -51,68 +51,6 @@ qreal KisMyPaintBrushOption::value(const KisPaintInformation &info)
     return qreal(currentValue) / m_length;
 }
 
-KisDynamicSensorSP KisMyPaintBrushOption::id2Sensor(const KoID& id, const QString &parentOptionName)
-{
-    if(id.id()==Pressure.id())
-        return new KisMyPaintBrushOption(MYPAINT_PRESSURE);
-    else if(id.id()==FineSpeed.id())
-        return new KisMyPaintBrushOption(MYPAINT_FINE_SPEED);
-    else if(id.id()==GrossSpeed.id())
-        return new KisMyPaintBrushOption(MYPAINT_GROSS_SPEED);
-    else if(id.id()==Random.id())
-        return new KisMyPaintBrushOption(MYPAINT_RANDOM);
-    else if(id.id()==Stroke.id())
-        return new KisMyPaintBrushOption(MYPAINT_STROKE);
-    else if(id.id()==Direction.id())
-        return new KisMyPaintBrushOption(MYPAINT_DIRECTION);
-    else if(id.id()==Ascension.id())
-        return new KisMyPaintBrushOption(MYPAINT_ASCENSION);
-    else if(id.id()==Declination.id())
-        return new KisMyPaintBrushOption(MYPAINT_DECLINATION);
-    else if(id.id()==Custom.id())
-        return new KisMyPaintBrushOption(MYPAINT_CUSTOM);
-    else {
-        return 0;
-    }
-}
-
-DynamicSensorType KisMyPaintBrushOption::id2Type(const KoID &id)
-{
-    if (id.id() == Pressure.id()) {
-        return MYPAINT_PRESSURE;
-    }
-    else if (id.id() == FineSpeed.id()) {
-        return MYPAINT_FINE_SPEED;
-    }
-    else if (id.id() == GrossSpeed.id()) {
-        return MYPAINT_GROSS_SPEED;
-    }
-    else if (id.id() == Random.id()) {
-        return MYPAINT_RANDOM;
-    }
-    else if (id.id() == Stroke.id()) {
-        return MYPAINT_STROKE;
-    }
-    else if (id.id() == Direction.id()) {
-        return MYPAINT_DIRECTION;
-    }
-    else if (id.id() == Declination.id()) {
-        return MYPAINT_DECLINATION;
-    }
-    else if (id.id() == Ascension.id()) {
-        return MYPAINT_ASCENSION;
-    }
-    else if (id.id() == Custom.id()) {
-        return MYPAINT_CUSTOM;
-    }
-    return UNKNOWN;
-}
-
-KisDynamicSensorSP KisMyPaintBrushOption::type2Sensor(DynamicSensorType sensorType, const QString &parentOptionName)
-{
-    return new KisMyPaintBrushOption(sensorType);
-}
-
 QString KisMyPaintBrushOption::minimumLabel(DynamicSensorType sensorType)
 {
     switch (sensorType) {
@@ -174,40 +112,6 @@ QString KisMyPaintBrushOption::valueSuffix(DynamicSensorType sensorType)
     default:
         return i18n("%");
     };
-}
-
-QList<KoID> KisMyPaintBrushOption::sensorsIds()
-{
-    QList<KoID> ids;
-
-    ids << Pressure
-        << FineSpeed
-        << GrossSpeed
-        << Random
-        << Stroke
-        << Direction
-        << Declination
-        << Ascension
-        << Custom;
-
-    return ids;
-}
-
-QList<DynamicSensorType> KisMyPaintBrushOption::sensorsTypes()
-{
-    QList<DynamicSensorType> sensorTypes;
-    sensorTypes
-            << MYPAINT_PRESSURE
-            << MYPAINT_FINE_SPEED
-            << MYPAINT_GROSS_SPEED
-            << MYPAINT_RANDOM
-            << MYPAINT_STROKE
-            << MYPAINT_DIRECTION
-            << MYPAINT_DECLINATION
-            << MYPAINT_ASCENSION
-            << MYPAINT_CUSTOM;
-
-    return sensorTypes;
 }
 
 DynamicSensorType KisMyPaintBrushOption::typeForInput(MyPaintBrushInput input)

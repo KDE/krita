@@ -41,18 +41,7 @@ public:
     KisMyPaintBrushOption(DynamicSensorType type);
     ~KisMyPaintBrushOption() override;
 
-    qreal value(const KisPaintInformation &info) override;
-    static KisDynamicSensorSP id2Sensor(const KoID& id, const QString &parentOptionName);
-    static KisDynamicSensorSP id2Sensor(const QString& s, const QString &parentOptionName) {
-        return id2Sensor(KoID(s), parentOptionName);
-    }
-
-    static DynamicSensorType id2Type(const KoID& id);
-    static DynamicSensorType id2Type(const QString& s) {
-        return id2Type(KoID(s));
-    }
-
-    static KisDynamicSensorSP type2Sensor(DynamicSensorType sensorType, const QString &parentOptionName);
+    qreal value(const KisPaintInformation &info) override;    
 
     static QString minimumLabel(DynamicSensorType sensorType);
     static QString maximumLabel(DynamicSensorType sensorType, int max = -1);
@@ -60,8 +49,6 @@ public:
     static int maximumValue(DynamicSensorType sensorType, int max = -1);
     static QString valueSuffix(DynamicSensorType sensorType);
 
-    static QList<KoID> sensorsIds();
-    static QList<DynamicSensorType> sensorsTypes();
     static DynamicSensorType typeForInput(MyPaintBrushInput input);
 
     QString id(DynamicSensorType sensorType);    

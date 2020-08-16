@@ -158,11 +158,6 @@ public:
         return id2Type(KoID(s));
     }
 
-    /**
-     * type2Sensor creates a new sensor for the give type
-     */
-    static KisDynamicSensorSP type2Sensor(DynamicSensorType sensorType, const QString &parentOptionName);
-
     static QString minimumLabel(DynamicSensorType sensorType);
     static QString maximumLabel(DynamicSensorType sensorType, int max = -1);
     static int minimumValue(DynamicSensorType sensorType);
@@ -176,7 +171,6 @@ public:
      * @return the list of sensors
      */
     static QList<KoID> sensorsIds();
-    static QList<DynamicSensorType> sensorsTypes();
 
     /**
      * @return the identifier of this sensor

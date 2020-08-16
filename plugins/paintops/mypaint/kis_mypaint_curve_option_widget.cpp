@@ -116,10 +116,10 @@ void KisMyPaintCurveOptionWidget::writeOptionSetting(KisPropertiesConfigurationS
 {    
     checkRanges();
     KisMyPaintBrushOption* currentSensor = dynamic_cast<KisMyPaintBrushOption*>(m_curveOptionWidget->sensorSelector->currentHighlighted().data());
-    setting->setProperty(m_curveOption->name() + currentSensor->id() + "XMIN", m_curveOptionWidget->xMinBox->value());
-    setting->setProperty(m_curveOption->name() + currentSensor->id() + "XMAX", m_curveOptionWidget->xMaxBox->value());
-    setting->setProperty(m_curveOption->name() + currentSensor->id() + "YMIN", m_curveOptionWidget->yMinBox->value());
-    setting->setProperty(m_curveOption->name() + currentSensor->id() + "YMAX", m_curveOptionWidget->yMaxBox->value());
+    setting->setProperty(m_curveOption->name() + currentSensor->identifier() + "XMIN", m_curveOptionWidget->xMinBox->value());
+    setting->setProperty(m_curveOption->name() + currentSensor->identifier() + "XMAX", m_curveOptionWidget->xMaxBox->value());
+    setting->setProperty(m_curveOption->name() + currentSensor->identifier() + "YMIN", m_curveOptionWidget->yMinBox->value());
+    setting->setProperty(m_curveOption->name() + currentSensor->identifier() + "YMAX", m_curveOptionWidget->yMaxBox->value());
 
     currentSensor->setXRangeMin(m_curveOptionWidget->xMinBox->value());
     currentSensor->setXRangeMax(m_curveOptionWidget->xMaxBox->value());

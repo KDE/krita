@@ -34,6 +34,7 @@ KisDynamicSensor::KisDynamicSensor(DynamicSensorType type)
     , m_type(type)
     , m_customCurve(false)
     , m_active(false)
+    , m_id(KisDynamicSensor::id(type))
 {
 }
 
@@ -578,4 +579,9 @@ void KisDynamicSensor::setActive(bool active)
 bool KisDynamicSensor::isActive() const
 {
     return m_active;
+}
+
+QString KisDynamicSensor::identifier()
+{
+    return m_id;
 }

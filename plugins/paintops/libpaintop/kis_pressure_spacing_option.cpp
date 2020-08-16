@@ -58,7 +58,7 @@ bool KisPressureSpacingOption::usingSpacingUpdates() const
     return m_useSpacingUpdates;
 }
 
-void KisPressureSpacingOption::writeOptionSetting(KisPropertiesConfigurationSP setting)
+void KisPressureSpacingOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     KisCurveOption::writeOptionSetting(setting);
     setting->setProperty(ISOTROPIC_SPACING, m_isotropicSpacing);

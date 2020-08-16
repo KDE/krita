@@ -96,7 +96,10 @@ void KisMyPaintOpFactory::processAfterLoading() {
 
     foreach(KisMyPaintBrush* brush, m_d->brushServer->resources()) {
 
-        QFileInfo fileInfo(brush->filename());        
+        QFileInfo fileInfo(brush->filename());
+
+        if(!brush->valid())
+            continue;
 
         KisPaintOpSettingsSP s = new KisMyPaintOpSettings();
         s->setProperty("paintop", id());

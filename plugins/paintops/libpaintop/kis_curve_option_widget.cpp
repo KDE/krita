@@ -50,6 +50,16 @@ KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption* curveOption, const QS
     m_curveOptionWidget->setupUi(m_widget);
     setConfigurationPage(m_widget);
 
+    m_curveOptionWidget->xMaxBox->setHidden(true);
+    m_curveOptionWidget->xMinBox->setHidden(true);
+    m_curveOptionWidget->yMaxBox->setHidden(true);
+    m_curveOptionWidget->yMinBox->setHidden(true);
+
+    m_curveOptionWidget->xRangeLabel->setHidden(true);
+    m_curveOptionWidget->yRangeLabel->setHidden(true);
+    m_curveOptionWidget->toLabel1->setHidden(true);
+    m_curveOptionWidget->toLabel2->setHidden(true);
+
     m_curveOptionWidget->sensorSelector->setCurveOption(curveOption);
 
     updateSensorCurveLabels(m_curveOptionWidget->sensorSelector->currentHighlighted());
@@ -193,12 +203,12 @@ void KisCurveOptionWidget::slotUseSameCurveChanged()
 void KisCurveOptionWidget::updateSensorCurveLabels(KisDynamicSensorSP sensor)
 {
     if (sensor) {
-        m_curveOptionWidget->label_xmin->setText(KisDynamicSensor::minimumLabel(sensor->sensorType()));
-        m_curveOptionWidget->label_xmax->setText(KisDynamicSensor::maximumLabel(sensor->sensorType(), sensor->length()));
+        m_curveOptionWidget->label_xmin->setText(sensor->minimumLabel(sensor->sensorType()));
+        m_curveOptionWidget->label_xmax->setText(sensor->maximumLabel(sensor->sensorType(), sensor->length()));
 
-        int inMinValue = KisDynamicSensor::minimumValue(sensor->sensorType());
-        int inMaxValue = KisDynamicSensor::maximumValue(sensor->sensorType(), sensor->length());
-        QString inSuffix = KisDynamicSensor::valueSuffix(sensor->sensorType());
+        int inMinValue = sensor->minimumValue(sensor->sensorType());
+        int inMaxValue = sensor->maximumValue(sensor->sensorType(), sensor->length());
+        QString inSuffix = sensor->valueSuffix(sensor->sensorType());
 
         int outMinValue = m_curveOption->intMinValue();
         int outMaxValue = m_curveOption->intMaxValue();

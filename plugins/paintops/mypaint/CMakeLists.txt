@@ -20,7 +20,7 @@ set(kritamypaintop_SOURCES
     ../libpaintop/kis_multi_sensors_model_p.cpp
 )
 
-ki18n_wrap_ui(kritamypaintop_SOURCES wdgmypaintoptions.ui wdgmypaintcurveoption.ui wdgmypaintbrushoptionsselector.ui)
+ki18n_wrap_ui(kritamypaintop_SOURCES wdgmypaintoptions.ui wdgmypaintcurveoption.ui)
 #ki18n_wrap_ui(kritamypaintop_SOURCES wdgmypaintcurveoption.ui )
 
 add_library(kritamypaintop MODULE ${kritamypaintop_SOURCES})

@@ -42,8 +42,8 @@ KisMyPaintCurveOption::KisMyPaintCurveOption(const QString& name, KisPaintOpOpti
     m_useSameCurve = false;
     m_sensorMap.clear();
 
-    Q_FOREACH (const DynamicSensorType sensorType, KisMyPaintBrushOption::sensorsTypes()) {
-        KisDynamicSensorSP sensor = KisMyPaintBrushOption::type2Sensor(sensorType, m_name);
+    Q_FOREACH (const DynamicSensorType sensorType, this->sensorsTypes()) {
+        KisDynamicSensorSP sensor = type2Sensor(sensorType, m_name);
         sensor->setActive(false);
         replaceSensor(sensor);
     }
@@ -133,8 +133,8 @@ void KisMyPaintCurveOption::readNamedOptionSetting(const QString& prefix, const 
 
     m_sensorMap.clear();    
 
-    Q_FOREACH (const DynamicSensorType sensorType, KisMyPaintBrushOption::sensorsTypes()) {
-        replaceSensor(KisMyPaintBrushOption::type2Sensor(sensorType, m_name));
+    Q_FOREACH (const DynamicSensorType sensorType, this->sensorsTypes()) {
+        replaceSensor(type2Sensor(sensorType, m_name));
     }
 
     MyPaintBrush *brush = mypaint_brush_new();
@@ -195,41 +195,6 @@ void KisMyPaintCurveOption::readNamedOptionSetting(const QString& prefix, const 
     firstRead = false;
     m_value = setting->getDouble(m_name + "Value", m_maxValue);        
     m_curveMode = setting->getInt(m_name + "curveMode");    
-}
-
-void KisMyPaintCurveOption::setCurve(DynamicSensorType sensorType, bool useSameCurve, const KisCubicCurve &curve)
-{
-    if (useSameCurve == m_useSameCurve) {
-        if (useSameCurve) {
-            m_commonCurve = curve;
-        }
-        else {
-            KisDynamicSensorSP s = sensor(sensorType, false);
-            if (s) {
-                s->setCurve(curve);
-            }
-
-        }
-    }
-    else {
-        if (!m_useSameCurve && useSameCurve) {
-            m_commonCurve = curve;
-        }
-        else { //if (m_useSameCurve && !useSameCurve)
-            KisDynamicSensorSP s = 0;
-            // And set the current sensor to the current curve
-            if (!m_sensorMap.contains(sensorType)) {
-                s = KisMyPaintBrushOption::type2Sensor(sensorType, m_name);
-            } else {
-                KisDynamicSensorSP s = sensor(sensorType, false);
-            }
-            if (s) {
-                s->setCurve(curve);
-            }
-
-        }
-        m_useSameCurve = useSameCurve;
-    }
 }
 
 MyPaintBrushSetting KisMyPaintCurveOption::currentSetting() {
@@ -415,4 +380,26 @@ KisDynamicSensorSP KisMyPaintCurveOption::id2Sensor(const KoID& id, const QStrin
     else {
         return 0;
     }
+}
+
+QList<DynamicSensorType> KisMyPaintCurveOption::sensorsTypes()
+{
+    QList<DynamicSensorType> sensorTypes;
+    sensorTypes
+            << MYPAINT_PRESSURE
+            << MYPAINT_FINE_SPEED
+            << MYPAINT_GROSS_SPEED
+            << MYPAINT_RANDOM
+            << MYPAINT_STROKE
+            << MYPAINT_DIRECTION
+            << MYPAINT_DECLINATION
+            << MYPAINT_ASCENSION
+            << MYPAINT_CUSTOM;
+
+    return sensorTypes;
+}
+
+KisDynamicSensorSP KisMyPaintCurveOption::type2Sensor(DynamicSensorType sensorType, const QString &parentOptionName)
+{
+    return new KisMyPaintBrushOption(sensorType);
 }

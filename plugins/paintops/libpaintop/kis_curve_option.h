@@ -212,7 +212,9 @@ public:
 
     virtual QList<KoID> sensorsIds();
     virtual DynamicSensorType id2Type(const KoID &id);
-    virtual KisDynamicSensorSP id2Sensor(const KoID& id, const QString &parentOptionName);    
+    virtual KisDynamicSensorSP id2Sensor(const KoID& id, const QString &parentOptionName);
+    virtual KisDynamicSensorSP type2Sensor(DynamicSensorType sensorType, const QString &parentOptionName);
+    virtual QList<DynamicSensorType> sensorsTypes();
 
 protected:
 

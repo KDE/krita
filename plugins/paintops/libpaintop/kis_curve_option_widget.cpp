@@ -200,7 +200,7 @@ void KisCurveOptionWidget::slotUseSameCurveChanged()
     emitSettingChanged();
 }
 
-void KisCurveOptionWidget::updateSensorCurveLabels(KisDynamicSensorSP sensor)
+void KisCurveOptionWidget::updateSensorCurveLabels(KisDynamicSensorSP sensor) const
 {
     if (sensor) {
         m_curveOptionWidget->label_xmin->setText(sensor->minimumLabel(sensor->sensorType()));
@@ -360,9 +360,6 @@ void KisCurveOptionWidget::updateThemedIcons()
     m_curveOptionWidget->sensorSelector->setPalette(newPalette);
 
 }
-
-
-
 
 KisCubicCurve KisCurveOptionWidget::getWidgetCurve()
 {

@@ -17,6 +17,7 @@ class KisCanvas2;
 class KisColorSourceToggle;
 class KisSignalCompressor;
 class KisVisualColorSelector;
+class WGColorPatches;
 class WGColorPreviewPopup;
 class WGShadeSelector;
 class QVariant;
@@ -48,6 +49,7 @@ private:
     KisSignalCompressor *m_colorChangeCompressor;
     WGColorPreviewPopup *m_previewPopup {0};
     WGShadeSelector *m_shadeSelector {0};
+    WGColorPatches *m_history {0};
     bool m_pendingFgUpdate {false};
     bool m_pendingBgUpdate {false};
     KoColor m_fgColor;

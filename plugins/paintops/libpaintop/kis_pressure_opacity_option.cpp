@@ -29,7 +29,7 @@ KisPressureOpacityOption::KisPressureOpacityOption()
 }
 
 
-void KisPressureOpacityOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
+void KisPressureOpacityOption::writeOptionSetting(KisPropertiesConfigurationSP setting)
 {
     KisCurveOption::writeOptionSetting(setting);
     setting->setProperty("OpacityVersion", "2");

@@ -28,12 +28,12 @@
 using namespace std;
 
 KisMyPaintBrushOption::KisMyPaintBrushOption(DynamicSensorType type)
-    : KisDynamicSensor (type)
-    , m_length(-1)
-    , m_type(type)
-    , m_customCurve(false)
-    , m_active(false)
+    : KisDynamicSensor (type)       
 {
+    m_type = type;
+    m_customCurve = false;
+    m_active = false;
+    m_length = -1;
 }
 
 KisMyPaintBrushOption::~KisMyPaintBrushOption()

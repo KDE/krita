@@ -34,7 +34,7 @@ KisPressureSharpnessOption::KisPressureSharpnessOption()
 {
 }
 
-void KisPressureSharpnessOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
+void KisPressureSharpnessOption::writeOptionSetting(KisPropertiesConfigurationSP setting)
 {
     KisCurveOption::writeOptionSetting(setting);
     setting->setProperty(SHARPNESS_SOFTNESS, m_softness);

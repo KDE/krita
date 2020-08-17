@@ -454,7 +454,7 @@ QString SvgStyleWriter::saveSvgMeshGradient(SvgMeshGradient *gradient,
 
             SvgMeshPatch *patch = mesharray->getPatch(row, col);
 
-            for (int s = 1; s <= 4; ++s) {
+            for (int s = 0; s < 4; ++s) {
                 SvgMeshPatch::Type type = static_cast<SvgMeshPatch::Type> (s);
 
                 // only first row and first col have Top and Left stop, respectively
@@ -465,7 +465,7 @@ QString SvgStyleWriter::saveSvgMeshGradient(SvgMeshGradient *gradient,
 
                 context.styleWriter().startElement("stop");
 
-                QList<QPointF> segment = patch->getPathSegment(type).controlPoints();
+                std::array<QPointF, 4> segment = patch->getSegment(type);
 
                 QString pathstr;
                 QTextStream stream(&pathstr);

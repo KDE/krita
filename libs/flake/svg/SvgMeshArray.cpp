@@ -74,24 +74,24 @@ void SvgMeshArray::createDefaultMesh(const int nrows,
             // alternate between colors
             int index = (irow + icol) % 2;
 
-            patch->addStop({start.topLeft(), start.topRight()},
-                           colors[index],
-                           SvgMeshPatch::Top);
+            patch->addStopLinear({start.topLeft(), start.topRight()},
+                                 colors[index],
+                                 SvgMeshPatch::Top);
 
             index = (index + 1) % 2;
-            patch->addStop({start.topRight(), start.bottomRight()},
-                           colors[index],
-                           SvgMeshPatch::Right);
+            patch->addStopLinear({start.topRight(), start.bottomRight()},
+                                 colors[index],
+                                 SvgMeshPatch::Right);
 
             index = (index + 1) % 2;
-            patch->addStop({start.bottomRight(), start.bottomLeft()},
-                           colors[index],
-                           SvgMeshPatch::Bottom);
+            patch->addStopLinear({start.bottomRight(), start.bottomLeft()},
+                                 colors[index],
+                                 SvgMeshPatch::Bottom);
 
             index = (index + 1) % 2;
-            patch->addStop({start.bottomLeft(), start.topLeft()},
-                           colors[index],
-                           SvgMeshPatch::Left);
+            patch->addStopLinear({start.bottomLeft(), start.topLeft()},
+                                 colors[index],
+                                 SvgMeshPatch::Left);
 
             m_array.last().append(patch);
 
@@ -130,7 +130,7 @@ bool SvgMeshArray::addPatch(QList<QPair<QString, QColor>> stops, const QPointF i
         // path is already defined for rows >= 1
         QColor color = getStop(SvgMeshPatch::Left, irow - 1, icol).color;
 
-        QList<QPointF> points = getPath(SvgMeshPatch::Bottom, irow - 1, icol);
+        std::array<QPointF, 4> points = getPath(SvgMeshPatch::Bottom, irow - 1, icol);
         std::reverse(points.begin(), points.end());
 
         patch->addStop(points, color, SvgMeshPatch::Top);
@@ -169,7 +169,7 @@ bool SvgMeshArray::addPatch(QList<QPair<QString, QColor>> stops, const QPointF i
         QColor color = getStop(SvgMeshPatch::Bottom, irow, icol - 1).color;
 
         // reuse Right side of the previous patch
-        QList<QPointF> points = getPath(SvgMeshPatch::Right, irow, icol - 1);
+        std::array<QPointF, 4> points = getPath(SvgMeshPatch::Right, irow, icol - 1);
         std::reverse(points.begin(), points.end());
 
         patch->addStop(points, color, SvgMeshPatch::Left);
@@ -200,12 +200,12 @@ SvgMeshStop SvgMeshArray::getStop(const SvgMeshPatch::Type edge, const int row, 
     assert(false);
 }
 
-QList<QPointF> SvgMeshArray::getPath(const SvgMeshPatch::Type edge, const int row, const int col) const
+std::array<QPointF, 4> SvgMeshArray::getPath(const SvgMeshPatch::Type edge, const int row, const int col) const
 {
     KIS_ASSERT(row < m_array.size() && col < m_array[row].size()
             && row >= 0 && col >= 0);
 
-    return m_array[row][col]->getPathSegment(edge).controlPoints();
+    return m_array[row][col]->getSegment(edge);
 }
 
 SvgMeshPatch* SvgMeshArray::getPatch(const int row, const int col) const

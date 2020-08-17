@@ -658,12 +658,16 @@ QStringList KisNodeModel::mimeTypes() const
 
 QMimeData * KisNodeModel::mimeData(const QModelIndexList &indexes) const
 {
+    bool hasLockedLayer = false;
     KisNodeList nodes;
     Q_FOREACH (const QModelIndex &idx, indexes) {
-        nodes << nodeFromIndex(idx);
+        KisNodeSP node = nodeFromIndex(idx);
+
+        nodes << node;
+        hasLockedLayer |= !node->isEditable(false);
     }
 
-    return KisMimeData::mimeForLayers(nodes, m_d->image);
+    return KisMimeData::mimeForLayers(nodes, m_d->image, hasLockedLayer);
 }
 
 bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent)
@@ -728,7 +732,7 @@ void KisNodeModel::updateDropEnabled(const QList<KisNodeSP> &nodes, QModelIndex 
 
         bool dropEnabled = true;
         Q_FOREACH (const KisNodeSP &node, nodes) {
-            if (!target->allowAsChild(node)) {
+            if (!target->allowAsChild(node) || !target->isEditable(false)) {
                 dropEnabled = false;
                 break;
             }

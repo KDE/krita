@@ -42,7 +42,7 @@ public:
     SvgMeshStop getStop(const SvgMeshPatch::Type edge, const int row, const int col) const;
 
     /// Get the Path Points for a segment of the meshpatch
-    QList<QPointF> getPath(const SvgMeshPatch::Type edge, const int row, const int col) const;
+    std::array<QPointF, 4> getPath(const SvgMeshPatch::Type edge, const int row, const int col) const;
 
     SvgMeshPatch* getPatch(const int row, const int col) const;
 

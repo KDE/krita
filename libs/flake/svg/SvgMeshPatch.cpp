@@ -18,18 +18,63 @@
  */
 #include "SvgMeshPatch.h"
 
+#include <array>
 #include <math.h>
 #include <QDebug>
-#include <KoPathPoint.h>
-#include <KoPathSegment.h>
 #include <kis_global.h>
 
+
+inline QPointF lerp(const QPointF& p1, const QPointF& p2, qreal t)
+{
+    return (1 - t) * p1 + t * p2;
+}
+
+void deCasteljau(const std::array<QPointF, 4>& points,
+                 qreal t, QPointF *p1, QPointF *p2,
+                 QPointF *p3, QPointF *p4, QPointF *p5)
+{
+    QPointF q[4];
+
+    q[0] = points[0];
+    q[1] = points[1];
+    q[2] = points[2];
+    q[3] = points[3];
+
+    // points of the new segment after the split point
+    QPointF p[3];
+
+    // the De Casteljau algorithm
+    for (unsigned short j = 1; j <= 3; ++j) {
+        for (unsigned short i = 0; i <= 3 - j; ++i) {
+            q[i] = (1.0 - t) * q[i] + t * q[i + 1];
+        }
+        p[j - 1] = q[0];
+    }
+
+    if (p1)
+        *p1 = p[0];
+    if (p2)
+        *p2 = p[1];
+    if (p3)
+        *p3 = p[2];
+    if (p4)
+        *p4 = q[1];
+    if (p5)
+        *p5 = q[2];
+}
+
+QPair<std::array<QPointF, 4>, std::array<QPointF, 4>> splitAt(const std::array<QPointF, 4>& points, qreal t)
+{
+    QPointF newCP2, newCP1, splitP, splitCP1, splitCP2;
+    deCasteljau(points, t, &newCP2, &splitCP1, &splitP, &splitCP2, &newCP1);
+    return {{points[0], newCP2, splitCP1, splitP},
+            {splitP, splitCP2, newCP1, points[3]}};
+}
 
 SvgMeshPatch::SvgMeshPatch(QPointF startingPoint)
     : m_newPath(true)
     , m_startingPoint(startingPoint)
-    , m_path(new KoPathShape)
-    , m_parametricCoords({{0, 0}, {1, 0}, {1, 1}, {0, 1}})
+    , m_parametricCoords({QPointF(0, 0), {1, 0}, {1, 1}, {0, 1}})
 {
 }
 
@@ -37,60 +82,99 @@ SvgMeshPatch::SvgMeshPatch(const SvgMeshPatch& other)
     : m_newPath(other.m_newPath)
     , m_startingPoint(other.m_startingPoint)
     , m_nodes(other.m_nodes)
-    , m_path(static_cast<KoPathShape*>(other.m_path->cloneShape()))
-    , m_parametricCoords({{0, 0}, {1, 0}, {1, 1}, {0, 1}})
+    , controlPoints(other.controlPoints)
+    , m_parametricCoords({QPointF(0, 0), {1, 0}, {1, 1}, {0, 1}})
 {
+}
+
+void SvgMeshPatch::moveTo(const QPointF& p)
+{
+    controlPoints[counter][0] = p;
+}
+
+void SvgMeshPatch::lineTo(const QPointF& p)
+{
+    controlPoints[counter][1] = lerp(controlPoints[counter][0], p, 1.0 / 3);
+    controlPoints[counter][2] = lerp(controlPoints[counter][0], p, 2.0 / 3);
+    controlPoints[counter][3] = p;
+    counter++;
+    if (counter < Size)
+        controlPoints[counter][0] = p;
+}
+
+void SvgMeshPatch::curveTo(const QPointF& c1, const QPointF& c2, const QPointF& p)
+{
+    controlPoints[counter][1] = c1;
+    controlPoints[counter][2] = c2;
+    controlPoints[counter][3] = p;
+    counter++;
+    if (counter < Size)
+        controlPoints[counter][0] = p;
 }
 
 SvgMeshStop SvgMeshPatch::getStop(SvgMeshPatch::Type type) const
 {
-    if (m_nodes.find(type) == m_nodes.end())
-        return SvgMeshStop();
-
-    return *m_nodes.find(type);
+    return m_nodes[type];
 }
 
-KoPathSegment SvgMeshPatch::getPathSegment(Type type) const
+QPointF SvgMeshPatch::segmentPointAt(Type type, qreal t) const
 {
-    KoPathPointIndex index(0, type - 1);
-    return m_path->segmentByIndex(index);
+    QPointF p;
+    deCasteljau(controlPoints[type], t, 0, 0, &p, 0, 0);
+    return p;
 }
 
-KoPathShape* SvgMeshPatch::getPath() const
+QPair<std::array<QPointF, 4>, std::array<QPointF, 4>> SvgMeshPatch::segmentSplitAt(Type type, qreal t) const
 {
-    return m_path.get();
+    return splitAt(controlPoints[type], t);
+}
+
+std::array<QPointF, 4> SvgMeshPatch::getSegment(Type type) const
+{
+    return controlPoints[type];
+}
+
+QPainterPath SvgMeshPatch::getPath() const
+{
+    QPainterPath path;
+    path.moveTo(controlPoints[Top][0]);
+    for (const auto& i: controlPoints) {
+        path.cubicTo(i[1], i[2], i[3]);
+    }
+    return path;
+}
+
+QRectF SvgMeshPatch::boundingRect() const
+{
+    return getPath().boundingRect();
 }
 
 QSizeF SvgMeshPatch::size() const
 {
-    return m_path->size();
+    return boundingRect().size();
 }
 
-inline QPointF lerp(const QPointF& p1, const QPointF& p2, qreal t)
+std::array<QPointF, 4> SvgMeshPatch::getMidCurve(bool isVertical) const
 {
-    return (1 - t) * p1 + t * p2;
-}
-
-KoPathSegment SvgMeshPatch::getMidCurve(bool isVertical) const
-{
-    QList<QPointF> curvedBoundary0;
-    QList<QPointF> curvedBoundary1;
+    std::array<QPointF, 4> p;
+    std::array<QPointF, 4> curvedBoundary0;
+    std::array<QPointF, 4> curvedBoundary1;
 
     QPointF midpointRuled0;
     QPointF midpointRuled1;
 
     if (isVertical) {
-        curvedBoundary0 = getPathSegment(Right).controlPoints();
-        curvedBoundary1 = getPathSegment(Left).controlPoints();
+        curvedBoundary0 = getSegment(Right);
+        curvedBoundary1 = getSegment(Left);
 
-        midpointRuled0 = getPathSegment(Top).pointAt(0.5);
-        midpointRuled1 = getPathSegment(Bottom).pointAt(0.5);
+        midpointRuled0 = segmentPointAt(Top, 0.5);
+        midpointRuled1 = segmentPointAt(Bottom, 0.5);
     } else {
-        curvedBoundary0 = getPathSegment(Top).controlPoints();
-        curvedBoundary1 = getPathSegment(Bottom).controlPoints();
+        curvedBoundary0 = getSegment(Top);
+        curvedBoundary1 = getSegment(Bottom);
 
-        midpointRuled0 = getPathSegment(Left).pointAt(0.5);
-        midpointRuled1 = getPathSegment(Right).pointAt(0.5);
+        midpointRuled0 = segmentPointAt(Left, 0.5);
+        midpointRuled1 = segmentPointAt(Right, 0.5);
     }
 
     // we have to reverse it, cB1 & cB2 are in opposite direction
@@ -105,16 +189,13 @@ KoPathSegment SvgMeshPatch::getMidCurve(bool isVertical) const
     };
 
     // line cutting the bilinear surface in middle
-    KoPathSegment midBilinear = KoPathSegment(midpointRuled0, midpointRuled1).toCubic();
     QPointF x_2_1 = lerp(midpointRuled0, midpointRuled1, 1.0 / 3);
     QPointF x_2_2 = lerp(midpointRuled0, midpointRuled1, 2.0 / 3);
 
     // line cutting rulled surface in middle
-    KoPathSegment midRuled3 = KoPathSegment(midCurved[0], midCurved[3]).toCubic();
     QPointF x_3_1 = lerp(midCurved[0], midCurved[3], 1.0 / 3);
     QPointF x_3_2 = lerp(midCurved[0], midCurved[3], 2.0 / 3);
 
-    QPointF p[4];
 
     p[0] = midpointRuled0;
 
@@ -126,9 +207,8 @@ KoPathSegment SvgMeshPatch::getMidCurve(bool isVertical) const
 
     p[3] = midpointRuled1;
 
-    return KoPathSegment(p[0], p[1], p[2], p[3]);
+    return p;
 }
-
 
 void SvgMeshPatch::subdivide(QVector<SvgMeshPatch*>& subdivided, const QVector<QColor>& colors) const
 {
@@ -138,10 +218,10 @@ void SvgMeshPatch::subdivide(QVector<SvgMeshPatch*>& subdivided, const QVector<Q
     // Eg. the first part of splitTop is TopLeft and the second part is TopRight
     // Similarly the first part of splitRight is RightTop, but the first part of
     // splitLeft is splitLeft.second (once again, in Top to Bottom  convention)
-    QPair<KoPathSegment, KoPathSegment> splitTop    = getPathSegment(Top).splitAt(0.5);
-    QPair<KoPathSegment, KoPathSegment> splitRight  = getPathSegment(Right).splitAt(0.5);
-    QPair<KoPathSegment, KoPathSegment> splitBottom = getPathSegment(Bottom).splitAt(0.5);
-    QPair<KoPathSegment, KoPathSegment> splitLeft   = getPathSegment(Left).splitAt(0.5);
+    const QPair<std::array<QPointF, 4>, std::array<QPointF, 4>> splitTop    = segmentSplitAt(Top, 0.5);
+    const QPair<std::array<QPointF, 4>, std::array<QPointF, 4>> splitRight  = segmentSplitAt(Right, 0.5);
+    const QPair<std::array<QPointF, 4>, std::array<QPointF, 4>> splitBottom = segmentSplitAt(Bottom, 0.5);
+    const QPair<std::array<QPointF, 4>, std::array<QPointF, 4>> splitLeft   = segmentSplitAt(Left, 0.5);
 
     // The way the curve and the colors at the corners are arranged before and after subdivision
     //
@@ -159,18 +239,18 @@ void SvgMeshPatch::subdivide(QVector<SvgMeshPatch*>& subdivided, const QVector<Q
     //       c4       +       c3
     //              midc43
     //
-    QPair<KoPathSegment, KoPathSegment> midHor = getMidCurve(/*isVertical = */ false).splitAt(0.5);
-    QPair<KoPathSegment, KoPathSegment> midVer = getMidCurve(/*isVertical = */ true).splitAt(0.5);
+    QPair<std::array<QPointF, 4>, std::array<QPointF, 4>> midHor = splitAt(getMidCurve(/*isVertical = */ false), 0.5);
+    QPair<std::array<QPointF, 4>, std::array<QPointF, 4>> midVer = splitAt(getMidCurve(/*isVertical = */ true), 0.5);
 
     // middle curve is shared among the two, so we need both directions
-    QList<QPointF> reversedMidHorFirst = midHor.first.controlPoints();
+    std::array<QPointF, 4> reversedMidHorFirst = midHor.first;
     std::reverse(reversedMidHorFirst.begin(), reversedMidHorFirst.end());
-    QList<QPointF> reversedMidHorSecond = midHor.second.controlPoints();
+    std::array<QPointF, 4> reversedMidHorSecond = midHor.second;
     std::reverse(reversedMidHorSecond.begin(), reversedMidHorSecond.end());
 
-    QList<QPointF> reversedMidVerFirst = midVer.first.controlPoints();
+    std::array<QPointF, 4> reversedMidVerFirst = midVer.first;
     std::reverse(reversedMidVerFirst.begin(), reversedMidVerFirst.end());
-    QList<QPointF> reversedMidVerSecond = midVer.second.controlPoints();
+    std::array<QPointF, 4> reversedMidVerSecond = midVer.second;
     std::reverse(reversedMidVerSecond.begin(), reversedMidVerSecond.end());
 
     QColor c1 = getStop(Top).color;
@@ -191,11 +271,11 @@ void SvgMeshPatch::subdivide(QVector<SvgMeshPatch*>& subdivided, const QVector<Q
     QPointF centerP     = 0.5 * (midTopP + midBottomP);
 
     // patch 1: TopLeft/NorthWest
-    SvgMeshPatch *patch = new SvgMeshPatch(splitTop.first.first()->point());
-    patch->addStop(splitTop.first.controlPoints(), c1, Top);
-    patch->addStop(midVer.first.controlPoints(), midc12, Right);
+    SvgMeshPatch *patch = new SvgMeshPatch(splitTop.first[0]);
+    patch->addStop(splitTop.first, c1, Top);
+    patch->addStop(midVer.first, midc12, Right);
     patch->addStop(reversedMidHorFirst, center, Bottom);
-    patch->addStop(splitLeft.second.controlPoints(), midc41, Left);
+    patch->addStop(splitLeft.second, midc41, Left);
     patch->m_parametricCoords = {
         m_parametricCoords[0],
         midTopP,
@@ -205,9 +285,9 @@ void SvgMeshPatch::subdivide(QVector<SvgMeshPatch*>& subdivided, const QVector<Q
     subdivided.append(patch);
 
     // patch 2: TopRight/NorthRight
-    patch = new SvgMeshPatch(splitTop.second.first()->point());
-    patch->addStop(splitTop.second.controlPoints(), midc12, Top);
-    patch->addStop(splitRight.first.controlPoints(), c2, Right);
+    patch = new SvgMeshPatch(splitTop.second[0]);
+    patch->addStop(splitTop.second, midc12, Top);
+    patch->addStop(splitRight.first, c2, Right);
     patch->addStop(reversedMidHorSecond, midc23, Bottom);
     patch->addStop(reversedMidVerFirst, center, Left);
     patch->m_parametricCoords = {
@@ -219,11 +299,11 @@ void SvgMeshPatch::subdivide(QVector<SvgMeshPatch*>& subdivided, const QVector<Q
     subdivided.append(patch);
 
     // patch 3: BottomLeft/SouthWest
-    patch = new SvgMeshPatch(midHor.first.first()->point());
-    patch->addStop(midHor.first.controlPoints(), midc41, Top);
-    patch->addStop(midVer.second.controlPoints(), center, Right);
-    patch->addStop(splitBottom.second.controlPoints(), midc34, Bottom);
-    patch->addStop(splitLeft.first.controlPoints(), c4, Left);
+    patch = new SvgMeshPatch(midHor.first[0]);
+    patch->addStop(midHor.first, midc41, Top);
+    patch->addStop(midVer.second, center, Right);
+    patch->addStop(splitBottom.second, midc34, Bottom);
+    patch->addStop(splitLeft.first, c4, Left);
     patch->m_parametricCoords = {
         midLeftP,
         centerP,
@@ -233,10 +313,10 @@ void SvgMeshPatch::subdivide(QVector<SvgMeshPatch*>& subdivided, const QVector<Q
     subdivided.append(patch);
 
     // patch 4: BottomRight/SouthEast
-    patch = new SvgMeshPatch(midHor.second.first()->point());
-    patch->addStop(midHor.second.controlPoints(), center, Top);
-    patch->addStop(splitRight.second.controlPoints(), midc23, Right);
-    patch->addStop(splitBottom.first.controlPoints(), c3, Bottom);
+    patch = new SvgMeshPatch(midHor.second[0]);
+    patch->addStop(midHor.second, center, Top);
+    patch->addStop(splitRight.second, midc23, Right);
+    patch->addStop(splitBottom.first, c3, Bottom);
     patch->addStop(reversedMidVerSecond, midc34, Left);
     patch->m_parametricCoords = {
         centerP,
@@ -254,59 +334,48 @@ void SvgMeshPatch::addStop(const QString& pathStr,
                            QPointF lastPoint)
 {
     SvgMeshStop node(color, m_startingPoint);
-    m_nodes.insert(edge, node);
+    m_nodes[edge] = node;
 
     m_startingPoint = parseMeshPath(pathStr, pathIncomplete, lastPoint);
 }
 
-void SvgMeshPatch::addStop(const QList<QPointF>& pathPoints, QColor color, Type edge)
+void SvgMeshPatch::addStop(const std::array<QPointF, 4>& pathPoints, QColor color, Type edge)
 {
-    SvgMeshStop stop(color, pathPoints.first());
-    m_nodes.insert(edge, stop);
+    SvgMeshStop stop(color, pathPoints[0]);
+    m_nodes[edge] = stop;
 
     if (edge == SvgMeshPatch::Top) {
-        m_path->moveTo(pathPoints.first());
+        moveTo(pathPoints[0]);
         m_newPath = false;
     }
 
-    // if path is a line
-    if (pathPoints.size() == 2) {
-        // we convert lines to cubic curve
-        KoPathSegment cubicCurve(m_startingPoint, pathPoints.last());
-        m_path->curveTo(cubicCurve.pointAt(1.0 / 3),
-                        cubicCurve.pointAt(2.0 / 3),
-                        cubicCurve.second()->point());
-    } else if (pathPoints.size() == 4) {
-        // if path is a Bezier curve
-        m_path->curveTo(pathPoints[1], pathPoints[2], pathPoints[3]);
-    }
-
-    m_startingPoint = pathPoints.last();
+    curveTo(pathPoints[1], pathPoints[2], pathPoints[3]);
+    m_startingPoint = pathPoints[3];
 }
 
-void transformShape(const QTransform& matrix, QScopedPointer<KoPathShape>& shape)
+
+void SvgMeshPatch::addStopLinear(const std::array<QPointF, 2>& pathPoints, QColor color, Type edge)
 {
-    // apparently, you can't transform KoPathShape
-    for (int i = 0; i < shape->pointCount(); ++i) {
-        KoPathPointIndex index(0, i);
-        KoPathPoint *point = shape->pointByIndex(index);
+    SvgMeshStop stop(color, pathPoints[0]);
+    m_nodes[edge] = stop;
 
-        QPointF previous = point->point();
-        QPointF cp1 = point->controlPoint1();
-        QPointF cp2 = point->controlPoint2();
-
-        point->setPoint(matrix.map(previous));
-        point->setControlPoint1(matrix.map(cp1));
-        point->setControlPoint2(matrix.map(cp2));
+    if (edge == SvgMeshPatch::Top) {
+        moveTo(pathPoints[0]);
+        m_newPath = false;
     }
+
+    lineTo(pathPoints[1]);
+    m_startingPoint = pathPoints[1];
 }
 
 void SvgMeshPatch::setTransform(const QTransform& matrix)
 {
-    transformShape(matrix, m_path);
     m_startingPoint = matrix.map(m_startingPoint);
-    for (int i = 1; i < Size; ++i) {
-        m_nodes[static_cast<Type>(i)].point = matrix.map(m_nodes[static_cast<Type>(i)].point);
+    for (int i = 0; i < Size; ++i) {
+        m_nodes[i].point = matrix.map(m_nodes[i].point);
+        for (int j = 0; j < 4; ++j) {
+            controlPoints[i][j] = matrix.map(controlPoints[i][j]);
+        }
     }
 }
 
@@ -315,11 +384,6 @@ int SvgMeshPatch::countPoints() const
     return m_nodes.size();
 }
 
-
-QRectF SvgMeshPatch::boundingRect() const
-{
-    return m_path->absoluteOutlineRect();
-}
 
 QPointF SvgMeshPatch::parseMeshPath(const QString& s, bool pathIncomplete, const QPointF lastPoint)
 {
@@ -338,7 +402,7 @@ QPointF SvgMeshPatch::parseMeshPath(const QString& s, bool pathIncomplete, const
         char command = *(ptr++);
 
         if (m_newPath) {
-            m_path->moveTo(m_startingPoint);
+            moveTo(m_startingPoint);
             m_newPath = false;
         }
 
@@ -364,10 +428,7 @@ QPointF SvgMeshPatch::parseMeshPath(const QString& s, bool pathIncomplete, const
            }
 
            // we convert lines to cubic curve
-           KoPathSegment cubicCurve(m_startingPoint, {tox, toy});
-           m_path->curveTo(cubicCurve.pointAt(1.0 / 3),
-                           cubicCurve.pointAt(2.0 / 3),
-                           cubicCurve.second()->point());
+           lineTo({tox, toy});
            break;
        }
        case 'c':
@@ -395,7 +456,7 @@ QPointF SvgMeshPatch::parseMeshPath(const QString& s, bool pathIncomplete, const
                toy = lastPoint.y();
            }
 
-           m_path->curveTo(QPointF(x1, y1), QPointF(x2, y2), QPointF(tox, toy));
+           curveTo(QPointF(x1, y1), QPointF(x2, y2), QPointF(tox, toy));
            break;
        }
 

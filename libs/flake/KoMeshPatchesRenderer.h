@@ -70,7 +70,6 @@ public:
                    const SvgMeshArray *mesharray = nullptr,
                    const int row = -1,
                    const int col = -1) {
-        KoPathShape *patchPath = patch->getPath();
 
         QColor color0 = patch->getStop(SvgMeshPatch::Top).color;
         QColor color1 = patch->getStop(SvgMeshPatch::Right).color;
@@ -86,15 +85,18 @@ public:
         cs->fromQColor(color3, c[3]);
 
         const quint8 threshold = 0;
+        const QPainterPath outline = patch->getPath();
+        const QSizeF patchSize = outline.boundingRect().size();
 
         // check if color variation is acceptable and patch size is less than ~pixel width/heigh
         if ((cs->difference(c[0], c[1]) > threshold || cs->difference(c[1], c[2]) > threshold ||
              cs->difference(c[2], c[3]) > threshold || cs->difference(c[3], c[0]) > threshold ||
              cs->differenceA(c[0], c[1]) > threshold || cs->differenceA(c[1], c[2]) > threshold ||
              cs->differenceA(c[2], c[3]) > threshold || cs->differenceA(c[3], c[0]) > threshold) &&
-            (patch->size().width() > 1 || patch->size().height() > 1)) {
+            (patchSize.width() > 1 && patchSize.height() > 1)) {
 
             QVector<SvgMeshPatch*> patches;
+            patches.reserve(4);
             QVector<QColor> colors;
             if (type == SvgMeshGradient::BICUBIC) {
 
@@ -109,12 +111,8 @@ public:
             }
 
             patch->subdivide(patches, colors);
-
             for (const auto& p: patches) {
                 fillPatch(p, type);
-            }
-
-            for (auto& p: patches) {
                 delete p;
             }
         } else {
@@ -124,14 +122,12 @@ public:
             QColor average;
             cs->toQColor(mixed, &average);
 
-            QPen pen(average);
-            m_patchPainter.setPen(pen);
+            m_patchPainter.setPen(average);
 
             // if QPainterPath's size is 1px, Qt paints it as 2px - which creates artifacts
-            if (patch->size().width() <= 1 && patch->size().height() <= 1) {
-                m_patchPainter.drawPoint(patch->boundingRect().topLeft());
+            if (patchSize.width() <= 1 && patchSize.height() <= 1) {
+                m_patchPainter.drawPoint(outline.boundingRect().topLeft());
             } else {
-                QPainterPath outline = patchPath->outline();
                 m_patchPainter.setBrush(average);
                 m_patchPainter.drawPath(outline);
             }
@@ -571,12 +567,13 @@ public:
 
     QVector<QColor> getColorsBilinear(const SvgMeshPatch* patch)
     {
+        QVector<QColor> result(5);
+
         QColor c1 = patch->getStop(SvgMeshPatch::Top).color;
         QColor c2 = patch->getStop(SvgMeshPatch::Right).color;
         QColor c3 = patch->getStop(SvgMeshPatch::Bottom).color;
         QColor c4 = patch->getStop(SvgMeshPatch::Left).color;
 
-        QVector<QColor> result(5);
         result[0] = midPointColor(c1, c2);
         result[1] = midPointColor(c2, c3);
         result[2] = midPointColor(c3, c4);
@@ -598,3 +595,9 @@ private:
 };
 
 #endif // KOMESHPATCHESRENDERER_H
+
+/*
+  Local Variables:
+  mode:c++
+  End:
+*/

@@ -383,7 +383,7 @@ bool nodeAllowsAsChild(KisNodeSP parent, KisNodeList nodes)
 {
     bool result = true;
     Q_FOREACH (KisNodeSP node, nodes) {
-        if (!parent->allowAsChild(node)) {
+        if (!parent->allowAsChild(node) || !parent->isEditable(false)) {
             result = false;
             break;
         }

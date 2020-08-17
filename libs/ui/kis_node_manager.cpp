@@ -1404,9 +1404,30 @@ void KisNodeManager::cutLayersToClipboard()
 
     KisClipboard::instance()->setLayers(nodes, m_d->view->image(), false);
 
-    KUndo2MagicString actionName = kundo2_i18n("Cut Nodes");
-    KisNodeJugglerCompressed *juggler = m_d->lazyGetJuggler(actionName);
-    juggler->removeNode(nodes);
+
+    KisNodeSP lockedNode;
+    Q_FOREACH (KisNodeSP node, nodes) {
+        if (!node->isEditable(false)) {
+            lockedNode = node;
+            break;
+        }
+    }
+
+    if (!lockedNode) {
+        KUndo2MagicString actionName = kundo2_i18n("Cut Nodes");
+        KisNodeJugglerCompressed *juggler = m_d->lazyGetJuggler(actionName);
+        juggler->removeNode(nodes);
+    } else {
+        QString errorMessage;
+
+        if (nodes.size() <= 1) {
+            errorMessage = i18n("Layer is locked");
+        } else {
+            errorMessage = i18n("Layer \"%1\" is locked", lockedNode->name());
+        }
+
+        m_d->view->showFloatingMessage(errorMessage, QIcon());
+    }
 }
 
 void KisNodeManager::copyLayersToClipboard()

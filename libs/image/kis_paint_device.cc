@@ -354,6 +354,12 @@ public:
         QRect extent = data->dataManager()->extent();
         extent.translate(data->x(), data->y());
 
+        quint8 defaultOpacity = data->colorSpace()->opacityU8(data->dataManager()->defaultPixel());
+
+        if (defaultOpacity != OPACITY_TRANSPARENT_U8) {
+            extent |= defaultBounds->bounds();
+        }
+
         return extent;
     }
 

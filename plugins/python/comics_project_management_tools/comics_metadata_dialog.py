@@ -77,11 +77,16 @@ class language_combo_box(QComboBox):
                 if codeName not in self.codesList:
                     self.codesList.append(codeName)
             self.codesList.sort()
-            
+
         for lang in self.codesList:
             locale = QLocale(lang)
+
             if locale:
-                languageName = QLocale.languageToString(locale.language())
+                languageName = locale.nativeLanguageName()
+
+                if len(languageName)==0:
+                    languageName = QLocale.languageToString(locale.language())
+
                 self.languageList.append(languageName.title())
                 self.setIconSize(QSize(32, 22))
                 codeIcon = QImage(self.iconSize(), QImage.Format_ARGB32)

@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2020 L. E. Segovia <amy@amyspark.me>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,8 +35,9 @@
 #include "generator/kis_generator.h"
 #include "kis_node_visitor.h"
 #include "kis_thread_safe_signal_compressor.h"
-#include "kis_recalculate_generator_layer_job.h"
-#include "kis_generator_stroke_strategy.h"
+#include <kis_generator_stroke_strategy.h>
+#include <KisRunnableStrokeJobData.h>
+
 
 #define UPDATE_DELAY 100 /*ms */
 
@@ -105,15 +107,12 @@ void KisGeneratorLayer::slotDelayedStaticUpdate()
     }
 }
 
-void KisGeneratorLayer::update()
+void KisGeneratorLayer::requestUpdateJobsWithStroke(KisStrokeId strokeId, KisFilterConfigurationSP filterConfig)
 {
     QMutexLocker locker(&m_d->mutex);
-
+    
     KisImageSP image = this->image().toStrongRef();
     const QRect updateRect = extent() | image->bounds();
-
-    KisFilterConfigurationSP filterConfig = filter();
-    KIS_SAFE_ASSERT_RECOVER_RETURN(filterConfig);
 
     if (filterConfig != m_d->preparedForFilter) {
         locker.unlock();
@@ -122,7 +121,8 @@ void KisGeneratorLayer::update()
     }
 
     const QRegion processRegion(QRegion(updateRect) - m_d->preparedRect);
-    if (processRegion.isEmpty()) return;
+    if (processRegion.isEmpty())
+        return;
 
     KisGeneratorSP f = KisGeneratorRegistry::instance()->value(filterConfig->name());
     KIS_SAFE_ASSERT_RECOVER_RETURN(f);
@@ -131,28 +131,40 @@ void KisGeneratorLayer::update()
 
     KisPaintDeviceSP originalDevice = original();
 
-    KisGeneratorStrokeStrategy *stroke = new KisGeneratorStrokeStrategy(image);
-
-    KisStrokeId strokeId = image->startStroke(stroke);
-
     QSharedPointer<bool> cookie(new bool(true));
 
-    auto rc = processRegion.begin();
-    while (rc != processRegion.end()) {
-        QList<KisStrokeJobData *> jobs = KisGeneratorStrokeStrategy::createJobsData(this, cookie, f, originalDevice, *rc, filterConfig);
+    auto jobs = KisGeneratorStrokeStrategy::createJobsData(this, cookie, f, originalDevice, processRegion, filterConfig);
 
-        Q_FOREACH (KisStrokeJobData *job, jobs) {
-            image->addJob(strokeId, job);
-        }
-
-        rc++;
+    Q_FOREACH (auto job, jobs) {
+        image->addJob(strokeId, job);
     }
-
-    image->endStroke(strokeId);
 
     m_d->updateCookie = cookie;
     m_d->preparedRect = updateRect;
     m_d->preparedForFilter = filterConfig;
+}
+
+void KisGeneratorLayer::previewWithStroke(const KisStrokeId strokeId, const KisFilterConfigurationSP filterConfig)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(filterConfig);
+
+    requestUpdateJobsWithStroke(strokeId, filterConfig);
+}
+
+void KisGeneratorLayer::update()
+{
+    KisImageSP image = this->image().toStrongRef();
+
+    KisFilterConfigurationSP filterConfig = filter();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(filterConfig);
+
+    KisGeneratorStrokeStrategy *stroke = new KisGeneratorStrokeStrategy();
+
+    KisStrokeId strokeId = image->startStroke(stroke);
+
+    requestUpdateJobsWithStroke(strokeId, filterConfig);
+
+    image->endStroke(strokeId);
 }
 
 bool KisGeneratorLayer::accept(KisNodeVisitor & v)
@@ -209,12 +221,10 @@ void KisGeneratorLayer::resetCache()
         QMutexLocker(&m_d->mutex);
         m_d->preparedRect = QRect();
     }
-    m_d->updateSignalCompressor.start();
 }
 
 void KisGeneratorLayer::setDirty(const QVector<QRect> &rects)
 {
     KisSelectionBasedLayer::setDirty(rects);
-    m_d->updateSignalCompressor.start();
 }
 

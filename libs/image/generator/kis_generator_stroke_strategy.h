@@ -22,22 +22,14 @@
 #include <QSharedPointer>
 #include <kis_generator.h>
 #include <kis_generator_layer.h>
-#include "kis_simple_stroke_strategy.h"
+#include <KisRunnableBasedStrokeStrategy.h>
 
-class KisGeneratorStrokeStrategy: public QObject, public KisSimpleStrokeStrategy
+class KisGeneratorStrokeStrategy: public QObject, public KisRunnableBasedStrokeStrategy
 {
     Q_OBJECT
 public:
-    KisGeneratorStrokeStrategy(KisImageWSP image);
+    KisGeneratorStrokeStrategy();
     ~KisGeneratorStrokeStrategy() override;
 
-    static QList<KisStrokeJobData *> createJobsData(KisGeneratorLayerSP layer, QSharedPointer<bool> cookie, KisGeneratorSP f, KisPaintDeviceSP dev, const QRect &rc, const KisFilterConfigurationSP filterConfig);
-
-private:
-    void initStrokeCallback() override;
-    void doStrokeCallback(KisStrokeJobData *data) override;
-
-private:
-    struct Private;
-    KisImageSP m_image;
+    static QVector<KisStrokeJobData *> createJobsData(const KisGeneratorLayerSP layer, QSharedPointer<bool> cookie, const KisGeneratorSP f, const KisPaintDeviceSP dev, const QRegion &rc, const KisFilterConfigurationSP filterConfig);
 };

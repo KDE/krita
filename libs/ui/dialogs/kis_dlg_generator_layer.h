@@ -27,6 +27,8 @@ class KisViewManager;
 
 #include "ui_wdgdlggeneratorlayer.h"
 #include <generator/kis_generator.h>
+#include <kis_thread_safe_signal_compressor.h>
+
 /**
  * Create a new generator layer
  */
@@ -46,7 +48,7 @@ public:
      * @param glayer optional generator layer for editing
      * @param previousConfig optional configuration of layer being edited.
      */
-    KisDlgGeneratorLayer(const QString & defaultLayerName, KisViewManager *arg_view, QWidget *parent, KisGeneratorLayerSP glayer, const KisFilterConfigurationSP previousConfig);
+    KisDlgGeneratorLayer(const QString &defaultLayerName, KisViewManager *arg_view, QWidget *parent, KisGeneratorLayerSP glayer, const KisFilterConfigurationSP previousConfig, const KisStrokeId stroke);
     ~KisDlgGeneratorLayer() override;
 
     void setConfiguration(const KisFilterConfigurationSP  config);
@@ -56,6 +58,7 @@ public:
 protected Q_SLOTS:
     void slotNameChanged(const QString &);
     void previewGenerator();
+    void slotDelayedPreviewGenerator();
 
 private:
     Ui_WdgDlgGeneratorLayer dlgWidget;
@@ -66,6 +69,8 @@ private:
 
     bool m_customName;
     bool m_freezeName;
+    KisStrokeId m_stroke;
+    KisThreadSafeSignalCompressor m_compressor;
 };
 
 #endif

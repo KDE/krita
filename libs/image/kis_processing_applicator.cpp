@@ -223,6 +223,10 @@ KisProcessingApplicator::~KisProcessingApplicator()
 {
 }
 
+const KisStrokeId KisProcessingApplicator::getStroke() const
+{
+    return m_strokeId;
+}
 
 void KisProcessingApplicator::applyVisitor(KisProcessingVisitorSP visitor,
                                            KisStrokeJobData::Sequentiality sequentiality,

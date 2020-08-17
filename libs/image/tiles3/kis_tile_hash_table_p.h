@@ -344,6 +344,15 @@ KisTileData* KisTileHashTableTraits<T>::defaultTileData() const
     return defaultTileDataImp();
 }
 
+template <class T>
+inline KisTileData* KisTileHashTableTraits<T>::refAndFetchDefaultTileData() const
+{
+    QWriteLocker locker(&m_lock);
+    KisTileData *result = defaultTileDataImp();
+    result->ref();
+    return result;
+}
+
 
 /*************** Debugging stuff ***************/
 

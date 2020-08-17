@@ -44,7 +44,7 @@
 
 #include <KisResourceModel.h>
 #include <KisResourceModelProvider.h>
-#include <KisTagModelProvider.h>
+#include <KisResourceModelProvider.h>
 #include <kis_assert.h>
 #include <kis_debug.h>
 
@@ -66,7 +66,7 @@ public:
 
     KoResourceServer(const QString& type)
         : m_resourceModel(KisResourceModelProvider::resourceModel(type))
-        , m_tagModel(KisTagModelProvider::tagModel(type))
+        , m_tagModel(KisResourceModelProvider::tagModel(type))
         , m_type(type)
     {
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());

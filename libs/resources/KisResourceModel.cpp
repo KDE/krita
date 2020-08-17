@@ -28,9 +28,8 @@
 #include <KisResourceLocator.h>
 #include <KisResourceCacheDb.h>
 
-#include <KisTagModelProvider.h>
-
-
+#include <KisResourceModelProvider.h>
+#include <KisTagModel.h>
 
 struct KisAllResourcesModel::Private {
     QSqlQuery resourcesQuery;
@@ -548,7 +547,7 @@ bool KisAllResourcesModel::resetQuery()
 
 QVector<KisTagSP> KisAllResourcesModel::tagsForResource(int resourceId) const
 {
-    return KisTagModelProvider::tagModel(d->resourceType)->tagsForResource(resourceId);
+    return KisResourceModelProvider::tagModel(d->resourceType)->tagsForResource(resourceId);
 }
 
 int KisAllResourcesModel::rowCount(const QModelIndex &) const

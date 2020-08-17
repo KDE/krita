@@ -38,7 +38,7 @@ public:
     ~KisTagModelProvider();
 
     static KisTagModel *tagModel(const QString& resourceType);
-    static KisTagResourceModel *tagResourceModel();
+    static KisTagResourceModel *tagResourceModel(const QString& resourceType);
 
 private:
 

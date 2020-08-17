@@ -34,9 +34,10 @@
 #include <KisResourceLoaderRegistry.h>
 #include <KisResourceModel.h>
 #include <KisTagModel.h>
-#include <KisTagModelProvider.h>
+#include <KisResourceModelProvider.h>
 #include <KisTagResourceModel.h>
 #include <KisResourceModelProvider.h>
+#include <KisResourceTypes.h>
 
 #include <DummyResource.h>
 #include <ResourceTestHelper.h>
@@ -89,14 +90,14 @@ void TestTagResourceModel::testRowCount()
     int rowCount = q.value(0).toInt();
     QCOMPARE(rowCount, 2);
 
-    KisAllTagResourceModel *tagResourceModel = new KisAllTagResourceModel(0);
+    KisAllTagResourceModel *tagResourceModel = new KisAllTagResourceModel(ResourceType::PaintOpPresets);
     QCOMPARE(tagResourceModel->rowCount(), rowCount);
     delete tagResourceModel;
 }
 
 void TestTagResourceModel::testData()
 {
-     KisAllTagResourceModel *tagResourceModel = new KisAllTagResourceModel(0);
+     KisAllTagResourceModel *tagResourceModel = new KisAllTagResourceModel(ResourceType::PaintOpPresets);
      QModelIndex idx = tagResourceModel->index(0, 0);
      QVERIFY(idx.isValid());
 
@@ -132,15 +133,15 @@ void TestTagResourceModel::testData()
 
 void TestTagResourceModel::testTagResource()
 {
-    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel("paintoppresets");
+    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(ResourceType::PaintOpPresets);
     KoResourceSP resource = resourceModel->resourceForName("test2.kpp");
     Q_ASSERT(resource);
 
-    KisTagModel *tagModel = KisTagModelProvider::tagModel("paintoppresets");
+    KisTagModel *tagModel = KisResourceModelProvider::tagModel(ResourceType::PaintOpPresets);
     KisTagSP tag = tagModel->tagForIndex(tagModel->index(2, 0));
     Q_ASSERT(tag);
 
-    KisAllTagResourceModel *tagResourceModel = new KisAllTagResourceModel(0);
+    KisAllTagResourceModel *tagResourceModel = new KisAllTagResourceModel(ResourceType::PaintOpPresets);
     int rowCount = tagResourceModel->rowCount();
 
     QVERIFY(tagResourceModel->tagResource(tag, resource));
@@ -152,15 +153,15 @@ void TestTagResourceModel::testTagResource()
 
 void TestTagResourceModel::testUntagResource()
 {
-    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel("paintoppresets");
+    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(ResourceType::PaintOpPresets);
     KoResourceSP resource = resourceModel->resourceForName("test1.kpp");
     Q_ASSERT(resource);
 
-    KisTagModel *tagModel = KisTagModelProvider::tagModel("paintoppresets");
+    KisTagModel *tagModel = KisResourceModelProvider::tagModel(ResourceType::PaintOpPresets);
     KisTagSP tag = tagModel->tagForIndex(tagModel->index(2, 0));
     Q_ASSERT(tag);
 
-    KisAllTagResourceModel *tagResourceModel = new KisAllTagResourceModel(0);
+    KisAllTagResourceModel *tagResourceModel = new KisAllTagResourceModel(ResourceType::PaintOpPresets);
     int rowCount = tagResourceModel->rowCount();
     tagResourceModel->untagResource(tag, resource);
 
@@ -169,15 +170,15 @@ void TestTagResourceModel::testUntagResource()
 
 void TestTagResourceModel::testFilterTagResource()
 {
-    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel("paintoppresets");
+    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(ResourceType::PaintOpPresets);
     KoResourceSP resource = resourceModel->resourceForName("test2.kpp");
     Q_ASSERT(resource);
 
-    KisTagModel *tagModel = KisTagModelProvider::tagModel("paintoppresets");
+    KisTagModel *tagModel = KisResourceModelProvider::tagModel(ResourceType::PaintOpPresets);
     KisTagSP tag = tagModel->tagForIndex(tagModel->index(2, 0));
     Q_ASSERT(tag);
 
-    KisTagResourceModel *tagResourceModel = new KisTagResourceModel;
+    KisTagResourceModel *tagResourceModel = new KisTagResourceModel(ResourceType::PaintOpPresets);
     QCOMPARE(tagResourceModel->rowCount(), 2);
 
     QVector<int> tagIds;

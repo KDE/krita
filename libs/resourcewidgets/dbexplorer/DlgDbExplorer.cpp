@@ -30,7 +30,7 @@
 #include <KisResourceModel.h>
 #include <KisTagFilterResourceProxyModel.h>
 #include <KisResourceModelProvider.h>
-#include <KisTagModelProvider.h>
+#include <KisResourceModelProvider.h>
 #include <KisResourceTypeModel.h>
 #include <KisTagModel.h>
 #include <KisStorageModel.h>
@@ -138,7 +138,7 @@ DlgDbExplorer::~DlgDbExplorer()
 
 void DlgDbExplorer::updateTagModel(const QString& resourceType)
 {
-    m_tagModel = KisTagModelProvider::tagModel(resourceType);
+    m_tagModel = KisResourceModelProvider::tagModel(resourceType);
     m_page->cmbRvTags->setModelColumn(KisAllTagsModel::Name);
     m_page->cmbRvTags->setModel(m_tagModel);
     m_page->cmbRvTags->update();
@@ -155,8 +155,8 @@ void DlgDbExplorer::slotRvResourceTypeSelected(int index)
 
     KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(resourceType);
 
-    KisTagFilterResourceProxyModel *tagFilterModel = new KisTagFilterResourceProxyModel(KisTagModelProvider::tagModel(resourceType), this);
-    tagFilterModel->setSourceModel(resourceModel);
+    KisTagFilterResourceProxyModel *tagFilterModel = new KisTagFilterResourceProxyModel(resourceType, this);
+
     m_filterProxyModel = tagFilterModel;
 
     m_page->resourceItemView->setModel(tagFilterModel);
@@ -168,7 +168,7 @@ void DlgDbExplorer::slotTbResourceTypeSelected(int index)
     QString resourceType = idx.data(Qt::DisplayRole).toString();
     qDebug() << resourceType;
 
-    m_tagModel = KisTagModelProvider::tagModel(resourceType);
+    m_tagModel = KisResourceModelProvider::tagModel(resourceType);
 
     KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(resourceType);
     m_page->tableResources->setModel(resourceModel);

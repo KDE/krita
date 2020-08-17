@@ -41,7 +41,7 @@ class KRITARESOURCES_EXPORT KisAllTagResourceModel : public QAbstractTableModel,
 {
     Q_OBJECT
 public:
-    KisAllTagResourceModel(QObject *parent = 0);
+    KisAllTagResourceModel(const QString &resourceType, QObject *parent = 0);
     ~KisAllTagResourceModel() override;
 
 public:
@@ -83,7 +83,7 @@ class KRITARESOURCES_EXPORT KisTagResourceModel : public QSortFilterProxyModel, 
 {
     Q_OBJECT
 public:
-    KisTagResourceModel(QObject *parent = 0);
+    KisTagResourceModel(const QString &resourceType, QObject *parent = 0);
     ~KisTagResourceModel() override;
 
 public:

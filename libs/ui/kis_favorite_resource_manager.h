@@ -26,7 +26,7 @@
 #include "KoResourceServerObserver.h"
 #include <KisTag.h>
 #include "KisTagFilterResourceProxyModel.h"
-#include <KisTagModelProvider.h>
+#include <KisResourceModelProvider.h>
 
 #include <KoColor.h>
 #include <KoResource.h>

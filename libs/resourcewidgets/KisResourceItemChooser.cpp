@@ -58,7 +58,7 @@
 #include "KisTagChooserWidget.h"
 #include "KisResourceItemChooserSync.h"
 #include "KisResourceTaggingManager.h"
-#include "KisTagModelProvider.h"
+#include "KisResourceModelProvider.h"
 
 
 
@@ -77,7 +77,7 @@ public:
 
     KisResourceModel *resourceModel {0};
     KisTagFilterResourceProxyModel *tagFilterProxyModel {0};
-    QSortFilterProxyModel *extraFilterModel {0};
+    KisResourceModel *extraFilterModel {0};
 
     KisResourceTaggingManager *tagManager {0};
     KisResourceItemListView *view {0};
@@ -113,15 +113,13 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
 
     d->resourceModel = KisResourceModelProvider::resourceModel(resourceType);
 
-    d->tagFilterProxyModel = new KisTagFilterResourceProxyModel(KisTagModelProvider::tagModel(resourceType), this);
+    d->tagFilterProxyModel = new KisTagFilterResourceProxyModel(resourceType, this);
 
-    d->extraFilterModel = extraFilterProxy;
+    d->extraFilterModel = qobject_cast<KisResourceModel*>(extraFilterProxy);
     if (d->extraFilterModel) {
         d->extraFilterModel->setParent(this);
         d->extraFilterModel->setSourceModel(d->resourceModel);
-        d->tagFilterProxyModel->setSourceModel(d->extraFilterModel);
-    } else {
-        d->tagFilterProxyModel->setSourceModel(d->resourceModel);
+        d->tagFilterProxyModel->setResourceModel(d->extraFilterModel);
     }
 
     d->view = new KisResourceItemListView(this);

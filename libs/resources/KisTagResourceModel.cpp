@@ -22,16 +22,18 @@
 #include <KisResourceLocator.h>
 
 struct KisAllTagResourceModel::Private {
+    QString resourceType;
     QSqlQuery query;
     int columnCount {7};
     int cachedRowCount {-1};
 };
 
 
-KisAllTagResourceModel::KisAllTagResourceModel(QObject *parent)
+KisAllTagResourceModel::KisAllTagResourceModel(const QString &resourceType, QObject *parent)
     : QAbstractTableModel(parent)
     , d(new Private())
 {
+    d->resourceType = resourceType;
     resetQuery();
 }
 
@@ -45,10 +47,21 @@ int KisAllTagResourceModel::rowCount(const QModelIndex &/*parent*/) const
     if (d->cachedRowCount < 0) {
         QSqlQuery q;
         q.prepare("SELECT count(*)\n"
-                  "FROM   resource_tags");
+                  "FROM   resource_tags\n"
+                  ",      resources\n"
+                  ",      resource_types\n"
+                  "WHERE  resource_tags.resource_id = resources.id\n"
+                  "AND    resources.resource_type_id = resource_types.id\n"
+                  "AND    resource_types.name = :resource_type");
+
+        q.bindValue(":resource_type", d->resourceType);
+
         if (!q.exec()) {
             qWarning() << "Could not execute tags rowcount query" << q.lastError();
         }
+
+
+
         q.first();
 
         const_cast<KisAllTagResourceModel*>(this)->d->cachedRowCount = q.value(0).toInt();
@@ -208,6 +221,18 @@ bool KisAllTagResourceModel::resetQuery()
                               ",      resources.id           as resource_id\n"
                               ",      resources.status       as resource_active\n"
                               ",      storages.active        as resource_storage_active\n"
+                              ",      resources.id           as resource_id\n"
+                              ",      resources.storage_id   as storage_id\n"
+                              ",      resources.name         as resource_name\n"
+                              ",      resources.filename     as resource_filename\n"
+                              ",      resources.tooltip      as resource_tooltip\n"
+                              ",      resources.thumbnail    as resource_thumbnail\n"
+                              ",      resources.status       as resource_location\n"
+                              ",      storages.location      as storage_location\n"
+                              ",      resources.version      as resource_version\n"
+                              ",      resource_types.name    as resource_type\n"
+                              ",      resources.status       as resource_active\n"
+                              ",      storages.active        as storage_active\n"
                               "FROM   resources\n"
                               ",      resource_types\n"
                               ",      storages\n"
@@ -216,11 +241,15 @@ bool KisAllTagResourceModel::resetQuery()
                               "WHERE  tags.id = resource_tags.tag_id\n"
                               "AND    resources.id = resource_tags.resource_id\n"
                               "AND    resources.resource_type_id = resource_types.id\n"
-                              "AND    resources.storage_id = storages.id\n");
+                              "AND    resources.storage_id = storages.id\n"
+                              "AND    resource_types.id = resources.resource_type_id\n"
+                              "AND    resource_types.name = :resource_type\n");
 
     if (!r) {
         qWarning() << "Could not prepare KisAllTagResourcesModel query" << d->query.lastError();
     }
+
+    d->query.bindValue(":resource_type", d->resourceType);
 
     r = d->query.exec();
 
@@ -244,11 +273,11 @@ struct KisTagResourceModel::Private {
 };
 
 
-KisTagResourceModel::KisTagResourceModel(QObject *parent)
+KisTagResourceModel::KisTagResourceModel(const QString &resourceType, QObject *parent)
     : QSortFilterProxyModel(parent)
     , d(new Private())
 {
-    d->sourceModel = new KisAllTagResourceModel(parent);
+    d->sourceModel = new KisAllTagResourceModel(resourceType, parent);
     setSourceModel(d->sourceModel);
 }
 

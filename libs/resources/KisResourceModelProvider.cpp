@@ -18,6 +18,9 @@
 #include "KisResourceModelProvider.h"
 
 #include "KisResourceModel.h"
+#include "KisTagModel.h"
+#include "KisTagResourceModel.h"
+
 #include "KoResource.h"
 
 #include <memory>
@@ -29,6 +32,8 @@ Q_GLOBAL_STATIC(KisResourceModelProvider, s_instance)
 struct KisResourceModelProvider::Private
 {
     QMap<QString, KisResourceModel*> resourceModels;
+    QMap<QString, KisTagModel*> tagModels;
+    QMap<QString, KisTagResourceModel*> tagResourceModels;
 };
 
 KisResourceModelProvider::KisResourceModelProvider()
@@ -39,6 +44,8 @@ KisResourceModelProvider::KisResourceModelProvider()
 KisResourceModelProvider::~KisResourceModelProvider()
 {
     qDeleteAll(d->resourceModels);
+    qDeleteAll(d->tagModels);
+    qDeleteAll(d->tagResourceModels);
     delete d;
 }
 
@@ -48,4 +55,21 @@ KisResourceModel *KisResourceModelProvider::resourceModel(const QString &resourc
        s_instance->d->resourceModels[resourceType] = new KisResourceModel(resourceType);
     }
     return s_instance->d->resourceModels[resourceType];
+}
+
+KisTagModel *KisResourceModelProvider::tagModel(const QString &resourceType)
+{
+    if (!s_instance->d->tagModels.contains(resourceType)) {
+       s_instance->d->tagModels[resourceType] = new KisTagModel(resourceType);
+    }
+    return s_instance->d->tagModels[resourceType];
+}
+
+
+KisTagResourceModel *KisResourceModelProvider::tagResourceModel(const QString &resourceType)
+{
+    if (!s_instance->d->tagResourceModels.contains(resourceType)) {
+       s_instance->d->tagResourceModels[resourceType] = new KisTagResourceModel(resourceType);
+    }
+    return s_instance->d->tagResourceModels[resourceType];
 }

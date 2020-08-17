@@ -23,6 +23,8 @@
 #include "kritaresources_export.h"
 
 class KisResourceModel;
+class KisTagModel;
+class KisTagResourceModel;
 
 /**
  * KisResourceModelProvider should be used to retrieve resource models.
@@ -36,6 +38,8 @@ public:
     ~KisResourceModelProvider();
 
     static KisResourceModel *resourceModel(const QString &resourceType);
+    static KisTagModel *tagModel(const QString& resourceType);
+    static KisTagResourceModel *tagResourceModel(const QString& resourceType);
 
 private:
 

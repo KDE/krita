@@ -24,7 +24,6 @@ set(kritaresources_LIB_SRCS
 
     KisTag.cpp
     KisTagModel.cpp
-    KisTagModelProvider.cpp
 
     KisTagResourceModel.cpp
 

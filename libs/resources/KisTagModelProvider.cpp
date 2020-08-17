@@ -33,7 +33,6 @@ struct KisTagModelProvider::Private {
 KisTagModelProvider::KisTagModelProvider()
     : d(new Private())
 {
-    d->tagResourceModel.reset(new KisTagResourceModel());
 }
 
 
@@ -57,7 +56,7 @@ KisTagModel *KisTagModelProvider::tagModel(const QString& resourceType)
     return found->second.get();
 }
 
-KisTagResourceModel *KisTagModelProvider::tagResourceModel()
+KisTagResourceModel *KisTagModelProvider::tagResourceModel(const QString &resourceType)
 {
     return s_instance->d->tagResourceModel.get();
 }

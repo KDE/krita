@@ -40,7 +40,7 @@
 #include <KisResourceModelProvider.h>
 #include <KisTagFilterResourceProxyModel.h>
 #include <KisTagModel.h>
-#include <KisTagModelProvider.h>
+#include <KisResourceModelProvider.h>
 
 #include "KisTagFilterWidget.h"
 #include "KisTagChooserWidget.h"
@@ -73,7 +73,7 @@ KisResourceTaggingManager::KisResourceTaggingManager(QString resourceType, KisTa
 {
     d->model = model;
 
-    d->tagModel = KisTagModelProvider::tagModel(resourceType);
+    d->tagModel = KisResourceModelProvider::tagModel(resourceType);
     d->tagChooser = new KisTagChooserWidget(d->tagModel, parent);
     d->tagFilter = new KisTagFilterWidget(d->tagModel, parent);
 
@@ -106,7 +106,7 @@ void KisResourceTaggingManager::tagSearchLineEditTextChanged(const QString& line
 
 void KisResourceTaggingManager::slotFilterByTagChanged(const bool filterByTag)
 {
-    d->model->setFilterByCurrentTag(filterByTag);
+    d->model->setFilterInCurrentTag(filterByTag);
 }
 
 void KisResourceTaggingManager::contextMenuRequested(KoResourceSP resource, QPoint pos)

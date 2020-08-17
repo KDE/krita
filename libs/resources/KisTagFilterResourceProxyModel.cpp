@@ -19,7 +19,12 @@
 #include "KisTagFilterResourceProxyModel.h"
 
 #include <QDebug>
+
+#include <KisResourceModelProvider.h>
 #include <KisResourceModel.h>
+#include <KisTagResourceModel.h>
+#include <KisTagModel.h>
+
 #include <kis_debug.h>
 #include <KisResourceSearchBoxFilter.h>
 
@@ -30,24 +35,39 @@ struct KisTagFilterResourceProxyModel::Private
     {
     }
 
+    QString resourceType;
+
     QList<KisTagSP> tags;
-    KisTagModel *tagModel;
+
+    KisTagModel *tagModel {0};
+    KisResourceModel *resourceModel {0};
+    KisTagResourceModel *tagResourceModel {0};
+
     QScopedPointer<KisResourceSearchBoxFilter> filter;
     bool filterInCurrentTag {false};
 
 };
 
-KisTagFilterResourceProxyModel::KisTagFilterResourceProxyModel(KisTagModel *model, QObject *parent)
+KisTagFilterResourceProxyModel::KisTagFilterResourceProxyModel(const QString &resourceType, QObject *parent)
     : QSortFilterProxyModel(parent)
     , d(new Private)
 {
-    d->tagModel = model;
-    //connect(model, SIGNAL(modelReset()), this, SLOT(slotModelReset()));
+    d->resourceType = resourceType;
+    d->tagModel = KisResourceModelProvider::tagModel(resourceType);
+    d->resourceModel = KisResourceModelProvider::resourceModel(resourceType);
+    d->tagResourceModel = KisResourceModelProvider::tagResourceModel(resourceType);
+
+    setSourceModel(d->resourceModel);
 }
 
 KisTagFilterResourceProxyModel::~KisTagFilterResourceProxyModel()
 {
     delete d;
+}
+
+void KisTagFilterResourceProxyModel::setResourceModel(KisResourceModel *resourceModel)
+{
+    d->resourceModel = resourceModel;
 }
 
 KoResourceSP KisTagFilterResourceProxyModel::resourceForIndex(QModelIndex index) const
@@ -137,7 +157,7 @@ void KisTagFilterResourceProxyModel::setSearchBoxText(const QString& seatchBoxTe
     invalidateFilter();
 }
 
-void KisTagFilterResourceProxyModel::setFilterByCurrentTag(const bool filterInCurrentTag)
+void KisTagFilterResourceProxyModel::setFilterInCurrentTag(const bool filterInCurrentTag)
 {
     d->filterInCurrentTag = filterInCurrentTag;
     invalidateFilter();

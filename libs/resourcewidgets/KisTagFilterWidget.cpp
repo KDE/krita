@@ -96,7 +96,7 @@ KisTagFilterWidget::KisTagFilterWidget(KisTagModel* model, QWidget* parent)
 
     d->filterByTagCheckbox = new QCheckBox(this);
     d->filterByTagCheckbox->setText(i18nc("It appears in the checkbox next to the filter box "
-                                          "in resources dockers; must be short.", "filter by tag"));
+                                          "in resources dockers; must be short.", "Filter in Tag"));
 
     KConfigGroup cfg = KSharedConfig::openConfig()->group(d->configGroup);
     bool filterByTagCheckboxChecked = cfg.readEntry(d->configName, true);

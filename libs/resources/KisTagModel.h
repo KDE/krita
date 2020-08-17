@@ -124,7 +124,7 @@ class KRITARESOURCES_EXPORT KisTagModel : public QSortFilterProxyModel, KisAbstr
 
 private:
 
-    friend class KisTagModelProvider;
+    friend class KisResourceModelProvider;
     friend class TestTagModel;
 
     KisTagModel(const QString &type, QObject *parent = 0);

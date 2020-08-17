@@ -35,6 +35,7 @@
 #include <KoResource.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
+#include <KisTagModel.h>
 
 #include <kis_workspace_resource.h>
 #include <brushengine/kis_paintop_preset.h>
@@ -131,7 +132,7 @@ void DlgEmbedTags::resourceTypeSelected(int idx)
 
     QString standarizedResourceType = (resourceType == "presets" ? ResourceType::PaintOpPresets : resourceType);
 
-    KisTagModel* model = KisTagModelProvider::tagModel(standarizedResourceType);
+    KisTagModel* model = KisResourceModelProvider::tagModel(standarizedResourceType);
 
     for (int i = 0; i < model->rowCount(); i++) {
 

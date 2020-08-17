@@ -91,9 +91,8 @@ void TestTagFilterResourceProxyModel::testRowCount()
     int rowCount = q.value(0).toInt();
     QVERIFY(rowCount == 3);
 
-    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(resourceType);
-    KisTagFilterResourceProxyModel proxyModel;
-    proxyModel.setSourceModel(resourceModel);
+    KisTagFilterResourceProxyModel proxyModel(resourceType);
+
 
     QCOMPARE(proxyModel.rowCount(), rowCount);
 }
@@ -101,8 +100,7 @@ void TestTagFilterResourceProxyModel::testRowCount()
 void TestTagFilterResourceProxyModel::testData()
 {
     KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(resourceType);
-    KisTagFilterResourceProxyModel proxyModel;
-    proxyModel.setSourceModel(resourceModel);
+    KisTagFilterResourceProxyModel proxyModel(resourceType);
 
     QStringList names = QStringList() << "test0.kpp"
                                       << "test1.kpp"
@@ -117,8 +115,7 @@ void TestTagFilterResourceProxyModel::testData()
 void TestTagFilterResourceProxyModel::testResource()
 {
     KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(resourceType);
-    KisTagFilterResourceProxyModel proxyModel;
-    proxyModel.setSourceModel(resourceModel);
+    KisTagFilterResourceProxyModel proxyModel(resourceType);
 
     KoResourceSP resource = resourceModel->resourceForIndex(proxyModel.mapToSource(proxyModel.index(0, 0)));
     QVERIFY(resource);

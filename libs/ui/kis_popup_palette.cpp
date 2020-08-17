@@ -25,7 +25,7 @@
 #include <QElapsedTimer>
 
 #include <KisTagModel.h>
-#include <KisTagModelProvider.h>
+#include <KisResourceModelProvider.h>
 
 #include "kis_canvas2.h"
 #include "kis_config.h"
@@ -787,7 +787,7 @@ void KisPopupPalette::mousePressEvent(QMouseEvent *event)
 
 void KisPopupPalette::slotShowTagsPopup()
 {
-    KisTagModel *model = KisTagModelProvider::tagModel(ResourceType::PaintOpPresets);
+    KisTagModel *model = KisResourceModelProvider::tagModel(ResourceType::PaintOpPresets);
     QVector<QString> tags;
     for (int i = 0; i < model->rowCount(); ++i) {
         QModelIndex idx = model->index(i, 0);

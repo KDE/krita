@@ -28,7 +28,7 @@
 #include <KoIcon.h>
 #include <klocalizedstring.h>
 #include <KoResource.h>
-#include <KisTagModelProvider.h>
+#include <KisResourceModelProvider.h>
 #include <KisTag.h>
 
 
@@ -54,7 +54,7 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
     QMenu *removableTagsMenu;
     QMenu *assignableTagsMenu;
 
-    m_tagModel = KisTagModelProvider::tagModel(resource->resourceType().first);
+    m_tagModel = KisResourceModelProvider::tagModel(resource->resourceType().first);
 
     QList<KisTagSP> removables = m_tagModel->tagsForResource(resource->resourceId()).toList();
 

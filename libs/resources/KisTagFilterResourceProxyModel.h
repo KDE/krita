@@ -36,8 +36,11 @@ class KRITARESOURCES_EXPORT KisTagFilterResourceProxyModel : public QSortFilterP
 {
     Q_OBJECT
 public:
-    KisTagFilterResourceProxyModel(KisTagModel *model = 0, QObject *parent = 0);
+    KisTagFilterResourceProxyModel(const QString &resourceType, QObject *parent = 0);
     ~KisTagFilterResourceProxyModel() override;
+
+    // To be used if we need an extra proxy model, like for presets
+    void setResourceModel(KisResourceModel *resourceModel);
 
     // KisAbstractResourceModel interface
 public:
@@ -56,7 +59,7 @@ public:
      */
     void setTag(const KisTagSP tag);
     void setSearchBoxText(const QString& seatchBoxText);
-    void setFilterByCurrentTag(bool filterInCurrentTag);
+    void setFilterInCurrentTag(bool filterInCurrentTag);
 
 protected:
 

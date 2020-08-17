@@ -348,7 +348,7 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
 
             //take font size as input
             QFont font = p.font();
-            font.setPointSize(1.5 * font.pointSize());
+            font.setPointSize(dlg.fontSize());
             p.setFont(font);
             StoryboardItemList list = m_storyboardModel->getData();
 
@@ -359,7 +359,7 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
                 QRectF cellRect = layoutCellRects.at(i % layoutCellRects.size());
 
                 //draw the cell rectangle
-                p.setPen(QColor(100, 100, 0));
+                p.setPen(QColor(1, 0, 0));
 
                 ThumbnailData data = qvariant_cast<ThumbnailData>(list.at(i)->child(StoryboardItem::FrameNumber)->data());
                 QPixmap pxmp = qvariant_cast<QPixmap>(data.pixmap);

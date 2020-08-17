@@ -892,11 +892,8 @@ void StoryboardModel::slotKeyframeMoved(KisKeyframeSP keyframe, int from)
         QModelIndex destinationIndex = indexFromFrame(keyframe->time());
 
         if (onlyKeyframe && !destinationIndex.isValid()) {
-            setData(index(0, 0, fromIndex), keyframe->time());
+            setData(index(StoryboardItem::FrameNumber, 0, fromIndex), keyframe->time());
             moveRows(QModelIndex(), fromIndex.row(), 1, QModelIndex(), toItemRow + 1);
-
-            m_renderScheduler->cancelFrameRendering(fromIndex.row());
-            m_renderScheduler->cancelFrameRendering(toItemRow);
 
             updateDurationData(indexFromFrame(keyframe->time()));
             updateDurationData(lastIndexBeforeFrame(keyframe->time()));
@@ -907,21 +904,23 @@ void StoryboardModel::slotKeyframeMoved(KisKeyframeSP keyframe, int from)
         else if (onlyKeyframe && destinationIndex.isValid()) {
             removeRows(fromIndex.row(), 1);
 
-            m_renderScheduler->cancelFrameRendering(fromIndex.row());
             QModelIndex beforeFromIndex = lastIndexBeforeFrame(from);
             updateDurationData(beforeFromIndex);
         }
         else if (!destinationIndex.isValid()) {
             insertRows(toItemRow + 1, 1);
             destinationIndex = index(toItemRow + 1, 0);
+            setData(index(StoryboardItem::FrameNumber, 0, destinationIndex), keyframe->time());
+
+            QModelIndex fromIndex = indexFromFrame(from);
             for (int i=1; i < rowCount(destinationIndex); i++) {
                 setData(index(i, 0, destinationIndex), index(i, 0, fromIndex).data());
             }
-            setData(index(0, 0, destinationIndex), keyframe->time());
 
             updateDurationData(indexFromFrame(keyframe->time()));
             updateDurationData(lastIndexBeforeFrame(keyframe->time()));
         }
+        slotUpdateThumbnailForFrame(keyframe->time());
     }
 }
 

@@ -359,13 +359,16 @@ void KisToolFreehand::continueAlternateAction(KoPointerEvent *event, AlternateAc
 
     if (qAbs(sizeDiff) > 0.01) {
         KisPaintOpSettingsSP settings = currentPaintOpPreset()->settings();
-        const qreal newSize = qBound(0.01, m_lastPaintOpSize + sizeDiff, maxBrushSize);
 
-        if(action == ChangeSizeSnap) {
-            settings->setPaintOpSize(floor(newSize));
-        } else {
-            settings->setPaintOpSize(newSize);
+        qreal newSize = m_lastPaintOpSize + sizeDiff;
+
+        if (action == ChangeSizeSnap) {
+            newSize = qRound(newSize);
         }
+
+        newSize = qBound(0.01, newSize, maxBrushSize);
+
+        settings->setPaintOpSize(newSize);
 
         requestUpdateOutline(m_initialGestureDocPoint, 0);
         //m_brushResizeCompressor.start(newSize);

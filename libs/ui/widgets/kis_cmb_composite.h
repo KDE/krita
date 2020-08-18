@@ -61,6 +61,9 @@ public:
 
     QList<KisAction *> createBlendmodeActions();
 
+    void wheelEvent(QWheelEvent *e);
+    void keyPressEvent(QKeyEvent *e);
+
 private Q_SLOTS:
     void slotCategoryToggled(const QModelIndex& index, bool toggled);
     void slotEntryChecked(const QModelIndex& index);

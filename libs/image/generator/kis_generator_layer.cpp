@@ -50,6 +50,7 @@ struct Q_DECL_HIDDEN KisGeneratorLayer::Private
 
     KisThreadSafeSignalCompressor updateSignalCompressor;
     QRect preparedRect;
+    QRect preparedImageBounds;
     KisFilterConfigurationSP preparedForFilter;
     QWeakPointer<bool> updateCookie;
     QMutex mutex;
@@ -125,6 +126,10 @@ void KisGeneratorLayer::requestUpdateJobsWithStroke(KisStrokeId strokeId, KisFil
         locker.relock();
     }
 
+    if (m_d->preparedImageBounds != image->bounds()) {
+        m_d->preparedRect = QRect();
+    }
+
     const QRegion processRegion(QRegion(updateRect) - m_d->preparedRect);
     if (processRegion.isEmpty())
         return;
@@ -146,6 +151,7 @@ void KisGeneratorLayer::requestUpdateJobsWithStroke(KisStrokeId strokeId, KisFil
 
     m_d->updateCookie = cookie;
     m_d->preparedRect = updateRect;
+    m_d->preparedImageBounds = image->bounds();
     m_d->preparedForFilter = filterConfig;
 }
 

@@ -37,11 +37,12 @@ KisRasterKeyframe::KisRasterKeyframe(KisPaintDeviceWSP paintDevice)
     m_frameID = m_paintDevice->framesInterface()->createFrame(false, 0, QPoint(), nullptr);
 }
 
-KisRasterKeyframe::KisRasterKeyframe(KisPaintDeviceWSP paintDevice, int premadeFrameID)
+KisRasterKeyframe::KisRasterKeyframe(KisPaintDeviceWSP paintDevice, const int &premadeFrameID, const int &colorLabelId)
     : KisKeyframe()
 {
     m_paintDevice = paintDevice;
     m_frameID = premadeFrameID;
+    setColorLabel(colorLabelId);
 
     KIS_ASSERT(m_paintDevice);
 }
@@ -150,7 +151,8 @@ KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KisRasterKeyframeChanne
 
     Q_FOREACH (int time, rhs.constKeys().keys()) {
         KisRasterKeyframeSP copySource = rhs.keyframeAt<KisRasterKeyframe>(time);
-        keys().insert(time, toQShared(new KisRasterKeyframe(newPaintDevice, copySource->frameID())));
+        KisRasterKeyframeSP copiedKey = toQShared(new KisRasterKeyframe(newPaintDevice, copySource->frameID(), copySource->colorLabel()));
+        keys().insert(time, copiedKey);
     }
 }
 

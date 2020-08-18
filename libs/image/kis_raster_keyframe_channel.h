@@ -37,7 +37,7 @@ class KRITAIMAGE_EXPORT KisRasterKeyframe : public KisKeyframe
     Q_OBJECT
 public:
     KisRasterKeyframe(KisPaintDeviceWSP paintDevice);
-    KisRasterKeyframe(KisPaintDeviceWSP paintDevice, int premadeFrameID);
+    KisRasterKeyframe(KisPaintDeviceWSP paintDevice, const int &premadeFrameID, const int &colorLabelId = 0);
     ~KisRasterKeyframe() override;
 
     /** @brief Get the frameID of the "phsyical" raster frame on the associated KisPaintDevice. */

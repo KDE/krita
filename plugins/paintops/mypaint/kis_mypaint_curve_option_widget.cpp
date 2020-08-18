@@ -81,8 +81,8 @@ KisMyPaintCurveOptionWidget::KisMyPaintCurveOptionWidget(KisMyPaintCurveOption* 
 
 KisMyPaintCurveOptionWidget::~KisMyPaintCurveOptionWidget()
 {
-    delete m_curveOption;
-    delete m_curveOptionWidget;
+//    delete m_curveOption;
+//    delete m_curveOptionWidget;
 }
 
 void KisMyPaintCurveOptionWidget::writeOptionSetting(KisPropertiesConfigurationSP setting) const
@@ -265,6 +265,6 @@ KisDoubleSliderSpinBox* KisMyPaintCurveOptionWidget::slider() {
 }
 
 void KisMyPaintCurveOptionWidget::refresh() {
-    return;
+
     emitSettingChanged();
 }

@@ -58,8 +58,11 @@ KisMyPaintOpSettingsWidget:: KisMyPaintOpSettingsWidget(QWidget* parent)
     addPaintOpOption(new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("colorize", KisPaintOpOption::GENERAL, false, 0.0, 0, 1), "0", "100"), i18n("Colorize"), i18nc("Option Category", "Color"));
     addPaintOpOption(new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("speed1_gamma", KisPaintOpOption::GENERAL, false, 4, -8, 8), "0", "100"), i18n("Fine Speed Gamma"), i18nc("Option Category", "Speed"));
     addPaintOpOption(new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("speed2_gamma", KisPaintOpOption::GENERAL, false, 4, -8, 8), "0", "100"), i18n("Gross Speed Gamma"), i18nc("Option Category", "Speed"));
+    addPaintOpOption(new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("speed1_slowness", KisPaintOpOption::GENERAL, false, 4, -8, 8), "0", "100"), i18n("Fine Speed Slowness"), i18nc("Option Category", "Speed"));
+    addPaintOpOption(new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("speed2_slowness", KisPaintOpOption::GENERAL, false, 4, -8, 8), "0", "100"), i18n("Gross Speed Slowness"), i18nc("Option Category", "Speed"));
 
     addPaintOpOption(new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("offset_by_speed", KisPaintOpOption::GENERAL, false, 0.0, -3, 3), "0", "100"), i18n("Offset By Speed"), i18nc("Option Category", "Speed"));
+    addPaintOpOption(new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("offset_by_random", KisPaintOpOption::GENERAL, false, 0.0, -3, 3), "0", "100"), i18n("Offset By Random"), i18nc("Option Category", "Speed"));
 
     addPaintOpOption(new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("dabs_per_actual_radius", KisPaintOpOption::GENERAL, false, 2, 0, 6), "0", "100"), i18n("Dabs Per Actual Radius"), i18nc("Option Category", "Dabs"));
     addPaintOpOption(new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("dabs_per_second", KisPaintOpOption::GENERAL, false, 0, 0, 80), "0", "100"), i18n("Dabs per Second"), i18nc("Option Category", "Dabs"));

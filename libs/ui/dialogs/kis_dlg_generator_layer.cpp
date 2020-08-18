@@ -72,7 +72,7 @@ KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString & defaultName, KisViewM
     connect(&m_compressor, SIGNAL(timeout()), this, SLOT(slotDelayedPreviewGenerator()));
 
     if (layer && !isEditing) {
-        layer->setFilter(configuration());
+        slotDelayedPreviewGenerator();
     }
 }
 
@@ -123,7 +123,8 @@ void KisDlgGeneratorLayer::slotNameChanged(const QString & text)
 void KisDlgGeneratorLayer::slotDelayedPreviewGenerator()
 {
     if (!m_stroke.isNull()) {
-        layer->previewWithStroke(m_stroke, configuration());
+        layer->setFilterWithoutUpdate(configuration());
+        layer->previewWithStroke(m_stroke);
     }
 }
 

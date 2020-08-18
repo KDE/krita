@@ -28,7 +28,7 @@
 #include "kis_generator_stroke_strategy.h"
 
 KisGeneratorStrokeStrategy::KisGeneratorStrokeStrategy()
-    : KisRunnableBasedStrokeStrategy(QLatin1String("KisGenerator"), kundo2_noi18n("KisGenerator"))
+    : KisRunnableBasedStrokeStrategy(QLatin1String("KisGenerator"), kundo2_i18n("Fill Layer Render"))
 {
     enableJob(KisSimpleStrokeStrategy::JOB_INIT, true, KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE);
     enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
@@ -62,7 +62,7 @@ QVector<KisStrokeJobData *>KisGeneratorStrokeStrategy::createJobsData(const KisG
 
                     // HACK ALERT!!!
                     // this avoids cyclic loop with KisRecalculateGeneratorLayerJob::run()
-                    const_cast<KisGeneratorLayerSP &>(layer)->setDirty({tile});
+                    const_cast<KisGeneratorLayerSP &>(layer)->setDirtyWithoutUpdate({tile});
                 });
             }
         } else {
@@ -75,7 +75,7 @@ QVector<KisStrokeJobData *>KisGeneratorStrokeStrategy::createJobsData(const KisG
 
                 // HACK ALERT!!!
                 // this avoids cyclic loop with KisRecalculateGeneratorLayerJob::run()
-                const_cast<KisGeneratorLayerSP &>(layer)->setDirty({rc});
+                const_cast<KisGeneratorLayerSP &>(layer)->setDirtyWithoutUpdate({rc});
             });
         }
     }

@@ -79,12 +79,17 @@ KisGeneratorLayer::~KisGeneratorLayer()
 
 void KisGeneratorLayer::setFilter(KisFilterConfigurationSP filterConfig)
 {
+    setFilterWithoutUpdate(filterConfig);
+    m_d->updateSignalCompressor.start();
+}
+
+void KisGeneratorLayer::setFilterWithoutUpdate(KisFilterConfigurationSP filterConfig)
+{
     KisSelectionBasedLayer::setFilter(filterConfig);
     {
         QMutexLocker(&m_d->mutex);
         m_d->preparedRect = QRect();
     }
-    m_d->updateSignalCompressor.start();
 }
 
 void KisGeneratorLayer::slotDelayedStaticUpdate()
@@ -116,7 +121,7 @@ void KisGeneratorLayer::requestUpdateJobsWithStroke(KisStrokeId strokeId, KisFil
 
     if (filterConfig != m_d->preparedForFilter) {
         locker.unlock();
-        resetCache();
+        resetCacheWithoutUpdate();
         locker.relock();
     }
 
@@ -144,8 +149,9 @@ void KisGeneratorLayer::requestUpdateJobsWithStroke(KisStrokeId strokeId, KisFil
     m_d->preparedForFilter = filterConfig;
 }
 
-void KisGeneratorLayer::previewWithStroke(const KisStrokeId strokeId, const KisFilterConfigurationSP filterConfig)
+void KisGeneratorLayer::previewWithStroke(const KisStrokeId strokeId)
 {
+    KisFilterConfigurationSP filterConfig = filter();
     KIS_SAFE_ASSERT_RECOVER_RETURN(filterConfig);
 
     requestUpdateJobsWithStroke(strokeId, filterConfig);
@@ -216,6 +222,12 @@ void KisGeneratorLayer::setY(qint32 y)
 
 void KisGeneratorLayer::resetCache()
 {
+    resetCacheWithoutUpdate();
+    m_d->updateSignalCompressor.start();
+}
+
+void KisGeneratorLayer::resetCacheWithoutUpdate()
+{
     KisSelectionBasedLayer::resetCache();
     {
         QMutexLocker(&m_d->mutex);
@@ -225,6 +237,11 @@ void KisGeneratorLayer::resetCache()
 
 void KisGeneratorLayer::setDirty(const QVector<QRect> &rects)
 {
-    KisSelectionBasedLayer::setDirty(rects);
+    setDirtyWithoutUpdate(rects);
+    m_d->updateSignalCompressor.start();
 }
 
+void KisGeneratorLayer::setDirtyWithoutUpdate(const QVector<QRect> &rects)
+{
+    KisSelectionBasedLayer::setDirty(rects);
+}

@@ -211,10 +211,22 @@ QItemSelectionModel::SelectionFlags NodeView::selectionCommand(const QModelIndex
 QRect NodeView::visualRect(const QModelIndex &index) const
 {
     QRect rc = QTreeView::visualRect(index);
-    if (layoutDirection() == Qt::RightToLeft)
-        rc.setRight(width());
-    else
-        rc.setLeft(0);
+
+    /**
+     * Adjust visual rect to include the thumbnail. This visual
+     * rect is used for rendering the drop indicator. NodeDelegate
+     * uses `originalVisualRect()` instead. See bug 410970.
+     */
+
+    KisNodeViewColorScheme scm;
+    const int thumbnailOffset = scm.relThumbnailRect().width();
+
+    if (layoutDirection() == Qt::RightToLeft) {
+        rc.setRight(width() + thumbnailOffset);
+    } else {
+        rc.setLeft(rc.left() - thumbnailOffset);
+    }
+
     return rc;
 }
 

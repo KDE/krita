@@ -34,6 +34,7 @@ DlgExportStoryboard::DlgExportStoryboard(ExportFormat format)
     setDefaultButton(Apply);
 
     m_page->lblSvgFileName->hide();
+    m_page->lblSvgFileName->setText("");
     m_page->lblSvgFileName->setWordWrap(true);
 
     QMap<QString, QVariant> defaults;
@@ -169,5 +170,6 @@ void DlgExportStoryboard::slotSpecifySvgClicked()
         m_page->spinboxRow->setEnabled(false);
         m_page->spinboxColumn->setEnabled(false);
         m_page->cmbPageSize->setEnabled(false);
+        m_page->cmbPageOrient->setEnabled(false);
     }
 }

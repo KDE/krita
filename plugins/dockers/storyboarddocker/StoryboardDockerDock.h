@@ -35,6 +35,7 @@ class StoryboardModel;
 class StoryboardDelegate;
 class KisNodeManager;
 class DlgExportStoryboard;
+class QPrinter;
 enum ExportFormat : unsigned int;
 
 class StoryboardDockerDock : public QDockWidget, public KisMainwindowObserver{
@@ -49,7 +50,7 @@ public:
 
 private:
     QVector<QRectF> getLayoutCellRects(int rows, int columns, QRectF pageRect);
-    QVector<QRectF> getLayoutCellRects(QString layoutSvgFileName);
+    QVector<QRectF> getLayoutCellRects(QString layoutSvgFileName, QPrinter *printer);
 
 private Q_SLOTS:
     /**

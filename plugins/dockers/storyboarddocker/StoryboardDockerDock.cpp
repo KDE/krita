@@ -319,29 +319,29 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
         QPrinter printer(QPrinter::HighResolution);
         printer.setOutputFormat(QPrinter::PdfFormat );
         printer.setOutputFileName(dlg.saveFileName());
-        printer.setPageSize(dlg.pageSize());
-        printer.setPageOrientation(dlg.pageOrientation());
 
-        bool layoutSpecifiedBySvg = dlg.exportSvgFile().isEmpty();
+        bool layoutSpecifiedBySvg = !dlg.exportSvgFile().isEmpty();
         if (layoutSpecifiedBySvg) {
             QString svgFileName = dlg.exportSvgFile();
 
-            //get rects
-            layoutCellRects = getLayoutCellRects(svgFileName);
+            layoutCellRects = getLayoutCellRects(svgFileName, &printer);
         }
         else {
             int rows = dlg.rows();
             int columns = dlg.columns();
             int firstItemFrame = dlg.firstItem();
             int lastItemFrame = dlg.lastItem();
+            printer.setPageSize(dlg.pageSize());
+            printer.setPageOrientation(dlg.pageOrientation());
 
-            //get rects
             layoutCellRects = getLayoutCellRects(rows, columns, printer.pageRect());
         }
 
-        if (dlg.format() == ExportFormat::SVG) {
-            QApplication::restoreOverrideCursor();
-            return;
+        if (layoutCellRects.size() == 0) {
+                qDebug()<<"0 rects";
+        }
+        else if (dlg.format() == ExportFormat::SVG) {
+            //export to svg
         }
         else {
             QPainter p(&printer);
@@ -437,9 +437,11 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
                 doc.documentLayout()->draw( &p, ctx);
                 p.restore();
 
-                QRectF eRect = printer.pageRect();
-                eRect.setTop(cellRect.bottom() + 20);
-                p.eraseRect(eRect);
+                if (commentRect.height() < doc.size().height()) {
+                    QRectF eRect(QPointF(commentRect.topLeft()), doc.size());
+                    eRect.setTop(cellRect.bottom() + 20);
+                    p.eraseRect(eRect);
+                }
             }
         }
     }
@@ -524,9 +526,51 @@ QVector<QRectF> StoryboardDockerDock::getLayoutCellRects(int rows, int columns, 
     return rectVec;
 }
 
-QVector<QRectF> StoryboardDockerDock::getLayoutCellRects(QString layoutSvgFileName)
+QVector<QRectF> StoryboardDockerDock::getLayoutCellRects(QString layoutSvgFileName, QPrinter *printer)
 {
     QVector<QRectF> rectVec;
+    QDomDocument svgDoc;
+
+    QFile f(layoutSvgFileName);
+    if (!f.open(QIODevice::ReadOnly ))
+    {
+        qDebug()<<"svg layout file didn't open";
+        return rectVec;
+    }
+
+    svgDoc.setContent(&f);
+    f.close();
+
+    QDomElement eroot = svgDoc.documentElement();
+    QString Type = eroot.tagName();
+
+    QStringList lst = eroot.attribute("viewBox").split(" ");
+    QSizeF sizeMM(lst.at(2).toDouble(), lst.at(3).toDouble());
+    printer->setPageSizeMM(sizeMM);
+    QSizeF size = printer->pageRect().size();
+    double scaleFac = size.width() / sizeMM.width();
+
+    QDomNodeList  nodeList = svgDoc.elementsByTagName("rect");
+    for(int i = 0; i < nodeList.size(); i++) {
+        QDomNode node = nodeList.at(i);
+        QDomNamedNodeMap attrMap = node.attributes();
+
+        double x = scaleFac * attrMap.namedItem("x").nodeValue().toDouble();
+        double y = scaleFac * attrMap.namedItem("y").nodeValue().toDouble();
+        double width = scaleFac * attrMap.namedItem("width").nodeValue().toDouble();
+        double height = scaleFac * attrMap.namedItem("height").nodeValue().toDouble();
+        rectVec.append(QRectF(x, y, width, height));
+    }
+
+    std::sort(rectVec.begin(), rectVec.end(),
+                    [](const QRectF & a, const QRectF & b) -> bool
+                    {
+                        if (a.x() == b.x()) {
+                            return a.x() < b.x();
+                        }
+                        return a.y() < b.y();
+                    });
+
     return rectVec;
 }
 

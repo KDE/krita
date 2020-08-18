@@ -73,11 +73,12 @@ QPainterPath KisMyPaintOpSettings::brushOutline(const KisPaintInformation &info,
         qreal finalScale = 1.0;
 
         qreal radius = 0.5 * op.diameter;
+        qreal offset = op.offset;
+        radius = radius + 2 * radius * offset;
+
         radius = radius > 3.5 ? radius : 3.5;
 
-        
-        //qreal offset = op.offset;
-        //radius = radius + 2 * radius * offset;
+        radius = radius > 500 ? 500 : radius;
 
         QPainterPath realOutline;
         realOutline.addEllipse(QPointF(), radius, radius);

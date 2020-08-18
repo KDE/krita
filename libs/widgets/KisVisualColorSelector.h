@@ -20,17 +20,15 @@
 
 #include <QWidget>
 #include <QScopedPointer>
-#include <QPixmap>
-#include <QRegion>
-#include <QMouseEvent>
 
 #include <KoColor.h>
-#include <KoColorSpace.h>
-#include "KoColorDisplayRendererInterface.h"
 
 #include "KisColorSelectorConfiguration.h"
 #include "KisColorSelectorInterface.h"
 #include "kritawidgets_export.h"
+
+class KoColorSpace;
+class KoColorDisplayRendererInterface;
 
 /**
  * @brief The KisVisualColorSelector class

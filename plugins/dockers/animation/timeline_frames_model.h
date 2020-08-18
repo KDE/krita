@@ -65,7 +65,7 @@ public:
 
     bool insertFrames(int dstColumn, const QList<int> &dstRows, int count, int timing = 1);
 
-    bool insertHoldFrames(QModelIndexList selectedIndexes, int count);
+    bool insertHoldFrames(const QModelIndexList &selectedIndexes, int count);
 
     QString audioChannelFileName() const;
     void setAudioChannelFileName(const QString &fileName);

@@ -271,11 +271,12 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
         } else if (m_handleDrag && assistant->handles().size()>2 && (assistant->id() == "ellipse" ||
                                     assistant->id() == "concentric ellipse" ||
                                     assistant->id() == "fisheye-point")){
-            m_snapIsRadial = false;
             if (m_handleDrag == assistant->handles()[0]) {
                 m_dragStart = *assistant->handles()[1];
+                m_snapIsRadial = false;
             } else if (m_handleDrag == assistant->handles()[1]) {
                 m_dragStart = *assistant->handles()[0];
+                m_snapIsRadial = false;
             } else if (m_handleDrag == assistant->handles()[2]) {
                 m_dragStart = assistant->getEditorPosition();
                 m_radius = QLineF(m_dragStart, *assistant->handles()[0]);
@@ -376,15 +377,10 @@ void KisAssistantTool::continuePrimaryAction(KoPointerEvent *event)
 
     if (m_handleDrag) {
         *m_handleDrag = event->point;
-        //ported from the gradient tool... we need to think about this more in the future.
-        if (event->modifiers() == Qt::ShiftModifier && m_snapIsRadial) {
-            QLineF dragRadius = QLineF(m_dragStart, event->point);
-            dragRadius.setLength(m_radius.length());
-            *m_handleDrag = dragRadius.p2();
-        } else if (event->modifiers() == Qt::ShiftModifier ) {
-            QPointF move = snapToClosestAxis(event->point - m_dragStart);
-            *m_handleDrag = m_dragStart + move;
-        } else {
+
+        KisPaintingAssistantSP selectedAssistant = m_canvas->paintingAssistantsDecoration()->selectedAssistant();
+
+        if (!snap(event)) {
             *m_handleDrag = canvasDecoration->snapToGuide(event, QPointF(), false);
         }
         m_handleDrag->uncache();
@@ -408,7 +404,7 @@ void KisAssistantTool::continuePrimaryAction(KoPointerEvent *event)
         m_canvas->updateCanvas();
     } else if (m_assistantDrag) {
         QPointF newAdjustment = canvasDecoration->snapToGuide(event, QPointF(), false) - m_cursorStart;
-        if (event->modifiers() == Qt::ShiftModifier ) {
+        if (event->modifiers() & Qt::ShiftModifier ) {
             newAdjustment = snapToClosestAxis(newAdjustment);
         }
         Q_FOREACH (KisPaintingAssistantHandleSP handle, m_assistantDrag->handles()) {
@@ -618,9 +614,6 @@ void KisAssistantTool::updateToolOptionsUI()
      }
 
      // show/hide elements if an assistant is selected or not
-      m_options.assistantsGlobalOpacitySlider->setVisible(hasActiveAssistant);
-      m_options.assistantsColor->setVisible(hasActiveAssistant);
-      m_options.globalColorLabel->setVisible(hasActiveAssistant);
       m_options.useCustomAssistantColor->setVisible(hasActiveAssistant);
 
       // hide custom color options if use custom color is not selected
@@ -658,7 +651,11 @@ void KisAssistantTool::slotChangeVanishingPointAngle(double value)
 void KisAssistantTool::mouseMoveEvent(KoPointerEvent *event)
 {
     if (m_newAssistant && m_internalMode == MODE_CREATION) {
-        *m_newAssistant->handles().back() = event->point;
+
+        KisPaintingAssistantHandleSP new_handle = m_newAssistant->handles().back();
+        if (!snap(event)) {
+            *new_handle = event->point;
+        }
 
     } else if (m_newAssistant && m_internalMode == MODE_DRAGGING_TRANSLATING_TWONODES) {
         QPointF translate = event->point - m_dragEnd;
@@ -668,6 +665,22 @@ void KisAssistantTool::mouseMoveEvent(KoPointerEvent *event)
     }
 
      m_canvas->updateCanvas();
+}
+
+
+void KisAssistantTool::keyPressEvent(QKeyEvent *event)
+{
+    // When the user is in the middle of creating a new
+    // assistant the escape key can be used to cancel this process.
+    if (event->key()==Qt::Key_Escape && (m_newAssistant)) {
+        // Clear shared pointer to the assistant being created so
+        // it gets cleaned-up
+        m_newAssistant.clear();
+        m_canvas->updateCanvas();
+        event->accept();
+    } else {
+        event->ignore();
+    }
 }
 
 void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
@@ -750,6 +763,7 @@ void KisAssistantTool::loadAssistants()
     QByteArray data = file.readAll();
     QXmlStreamReader xml(data);
     QMap<int, KisPaintingAssistantHandleSP> handleMap;
+    QMap<int, KisPaintingAssistantHandleSP> sideHandleMap;
     KisPaintingAssistantSP assistant;
     bool errors = false;
     while (!xml.atEnd()) {
@@ -783,6 +797,30 @@ void KisAssistantTool::loadAssistants()
                         errors = true;
                     }
                 }
+	    // for vanishing point assistant
+            } else if (xml.name() == "sidehandle"){
+
+	      // read in sidehandles
+              if (!xml.attributes().value("id").isEmpty()) {
+		  QString strId = xml.attributes().value("id").toString(),
+			  strX = xml.attributes().value("x").toString(),
+			  strY = xml.attributes().value("y").toString();
+		  if (!strId.isEmpty() && !strX.isEmpty() && !strY.isEmpty()) {
+		      int id = strId.toInt();
+		      double x = strX.toDouble();
+		      double y = strY.toDouble();
+		      if (!sideHandleMap.contains(id)) {
+			  sideHandleMap.insert(id, new KisPaintingAssistantHandle(x,y));
+		      }}
+              }
+	      // addHandle to assistant
+              if (!xml.attributes().value("ref").isEmpty() && assistant) {
+		  KisPaintingAssistantHandleSP handle = sideHandleMap.value(xml.attributes().value("ref").toString().toInt());
+		  if (handle) {
+		      assistant->addHandle(handle, HandleType::SIDE);
+		  }
+	      }
+
             } else if (xml.name() == "assistant") {
                 const KisPaintingAssistantFactory* factory = KisPaintingAssistantFactoryRegistry::instance()->get(xml.attributes().value("type").toString());
 
@@ -826,8 +864,8 @@ void KisAssistantTool::loadAssistants()
             if (xml.name() == "assistant") {
                 if (assistant) {
                     if (assistant->handles().size() == assistant->numHandles()) {
-                        if (assistant->id() == "vanishing point"){
-                        //ideally we'd save and load side-handles as well, but this is all I've got//
+		        if (assistant->id() == "vanishing point" && sideHandleMap.empty()){
+                        // Create side handles if the saved vp assistant doesn't have any.
                             QPointF pos = *assistant->handles()[0];
                             assistant->addHandle(new KisPaintingAssistantHandle(pos+QPointF(-70,0)), HandleType::SIDE);
                             assistant->addHandle(new KisPaintingAssistantHandle(pos+QPointF(-140,0)), HandleType::SIDE);
@@ -894,6 +932,19 @@ void KisAssistantTool::saveAssistants()
         xml.writeEndElement();
     }
     xml.writeEndElement();
+    xml.writeStartElement("sidehandles");
+    QMap<KisPaintingAssistantHandleSP, int> sideHandleMap;
+    Q_FOREACH (KisPaintingAssistantSP assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
+	Q_FOREACH (KisPaintingAssistantHandleSP handle, assistant->sideHandles()) {
+	    int id = sideHandleMap.size();
+	    sideHandleMap.insert(handle, id);
+	    xml.writeStartElement("sidehandle");
+	    xml.writeAttribute("id", QString::number(id));
+	    xml.writeAttribute("x", QString::number(double(handle->x()), 'f', 3));
+	    xml.writeAttribute("y", QString::number(double(handle->y()), 'f', 3));
+	    xml.writeEndElement();
+	}
+    }
     xml.writeStartElement("assistants");
 
 
@@ -916,6 +967,15 @@ void KisAssistantTool::saveAssistants()
             xml.writeEndElement();
         }
         xml.writeEndElement();
+        if (!sideHandleMap.empty()) {
+	    xml.writeStartElement("sidehandles");
+	    Q_FOREACH (const KisPaintingAssistantHandleSP handle, assistant->sideHandles()) {
+		xml.writeStartElement("sidehandle");
+		xml.writeAttribute("ref", QString::number(sideHandleMap.value(handle)));
+		xml.writeEndElement();
+	    }
+	    xml.writeEndElement();
+        }
         xml.writeEndElement();
     }
     xml.writeEndElement();
@@ -1071,4 +1131,102 @@ void KisAssistantTool::slotCustomOpacityChanged()
     // this forces the canvas to refresh to see the changes immediately
     m_canvas->paintingAssistantsDecoration()->uncache();
     m_canvas->canvasWidget()->update();
+}
+
+void KisAssistantTool::beginAlternateAction(KoPointerEvent *event, AlternateAction action)
+{
+    Q_UNUSED(action);
+    setMode(KisTool::PAINT_MODE);
+
+    if (m_newAssistant && m_internalMode == MODE_CREATION) {
+        KisPaintingAssistantsDecorationSP canvasDecoration = m_canvas->paintingAssistantsDecoration();
+
+        *m_newAssistant->handles().back() = event->point;
+
+        if (!snap(event)) {
+            *m_newAssistant->handles().back() = canvasDecoration->snapToGuide(event, QPointF(), false);
+        }
+
+        if (m_newAssistant->handles().size() == m_newAssistant->numHandles()) {
+            addAssistant();
+        } else {
+            m_newAssistant->addHandle(new KisPaintingAssistantHandle(canvasDecoration->snapToGuide(event, QPointF(), false)), HandleType::NORMAL);
+        }
+        m_canvas->updateCanvas();
+        return;
+    }
+}
+
+void KisAssistantTool::continueAlternateAction(KoPointerEvent *event, AlternateAction action)
+{
+    Q_UNUSED(action);
+    event->ignore();
+}
+
+void KisAssistantTool::endAlternateAction(KoPointerEvent *event, AlternateAction action)
+{
+    Q_UNUSED(action);
+    setMode(KisTool::HOVER_MODE);
+    event->ignore();
+    m_canvas->updateCanvas();
+}
+
+bool KisAssistantTool::snap(KoPointerEvent *event)
+{
+    if ((event->modifiers() & Qt::ShiftModifier) == false) {
+        return false;
+    } else {
+
+        if (m_handleDrag) {
+            if (m_snapIsRadial == true) {
+                QLineF dragRadius = QLineF(m_dragStart, event->point);
+                dragRadius.setLength(m_radius.length());
+                *m_handleDrag = dragRadius.p2();
+            } else {
+                QPointF snap_point = snapToClosestAxis(event->point - m_dragStart);
+                *m_handleDrag = m_dragStart + snap_point;
+            }
+
+        } else {
+            if (m_newAssistant && m_internalMode == MODE_CREATION) {
+                QList<KisPaintingAssistantHandleSP> handles = m_newAssistant->handles();
+                KisPaintingAssistantHandleSP handle_snap = handles.back();
+                // for any assistant, snap 2nd handle to x or y axis relative to first handle
+                if (handles.size() == 2) {
+                    QPointF snap_point = snapToClosestAxis(event->point - *handles[0]);
+                    *handle_snap =  *handles[0] + snap_point;
+                } else {
+                    bool was_snapped = false;
+                    if (m_newAssistant->id() == "spline") {
+                        KisPaintingAssistantHandleSP start;
+                        handles.size() == 3 ? start = handles[0] : start = handles[1];
+                        QPointF snap_point = snapToClosestAxis(event->point - *start);
+                        *handle_snap =  *start + snap_point;
+                        was_snapped = true;
+                    }
+
+                    if (m_newAssistant->id() == "ellipse" ||
+                        m_newAssistant->id() == "concentric ellipse" ||
+                        m_newAssistant->id() == "fisheye-point") {
+                        QPointF center = QLineF(*handles[0], *handles[1]).center();
+                        QLineF radius = QLineF(center,*handles[0]);
+                        QLineF dragRadius = QLineF(center, event->point);
+                        dragRadius.setLength(radius.length());
+                        *handle_snap = dragRadius.p2();
+                        was_snapped = true;
+                    }
+
+                    if (m_newAssistant->id() == "perspective") {
+                        KisPaintingAssistantHandleSP start;
+                        handles.size() == 3 ? start = handles[1] : start = handles[2];
+                        QPointF snap_point = snapToClosestAxis(event->point - *start);
+                        *handle_snap =  *start + snap_point;
+                        was_snapped = true;
+                    }
+                    return was_snapped;
+                }
+            }
+        }
+        return true;
+    }
 }

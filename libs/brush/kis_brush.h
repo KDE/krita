@@ -28,6 +28,7 @@
 #include <kis_shared.h>
 #include <kis_dab_shape.h>
 #include <kritabrush_export.h>
+#include <resources/KoAbstractGradient.h>
 
 class KisQImagemask;
 typedef KisSharedPtr<KisQImagemask> KisQImagemaskSP;
@@ -48,7 +49,15 @@ enum enumBrushType {
     PIPE_IMAGE
 };
 
+enum enumBrushApplication {
+    ALPHAMASK,
+    IMAGESTAMP,
+    LIGHTNESSMAP,
+    GRADIENTMAP
+};
+
 static const qreal DEFAULT_SOFTNESS_FACTOR = 1.0;
+static const qreal DEFAULT_LIGHTNESS_STRENGTH = 1.0;
 
 class KisBrush;
 typedef KisSharedPtr<KisBrush> KisBrushSP;
@@ -279,7 +288,8 @@ public:
               const KoColor& color,
               KisDabShape const& shape,
               const KisPaintInformation& info,
-              double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
+              double subPixelX = 0, double subPixelY = 0, 
+              qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR, qreal lightnessStrength = DEFAULT_LIGHTNESS_STRENGTH) const;
 
     /**
      * clear dst and fill it with a mask colored with the corresponding colors of src
@@ -288,18 +298,19 @@ public:
               const KisPaintDeviceSP src,
               KisDabShape const& shape,
               const KisPaintInformation& info,
-              double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
+              double subPixelX = 0, double subPixelY = 0, 
+              qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR, qreal lightnessStrength = DEFAULT_LIGHTNESS_STRENGTH) const;
 
 
-    virtual bool hasColor() const;
+    virtual enumBrushApplication brushApplication() const;
+
+    virtual void setBrushApplication(enumBrushApplication brushApplication);
 
     virtual bool preserveLightness() const;
 
-    /**
-    * If the brush image data are colorful (e.g. you created the brush from the canvas with custom brush)
-    * and you want to paint with it as with masks, but preserve Lightness (Value), set to true.
-    */
-    virtual void setPreserveLightness(bool preserveLightness);
+    virtual bool applyingGradient() const;
+
+    virtual void setGradient(const KoAbstractGradient* gradient);
 
 
     /**
@@ -326,7 +337,15 @@ public:
             ColoringInformation* coloringInfo,
             KisDabShape const&,
             const KisPaintInformation& info,
-            double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
+            double subPixelX, double subPixelY,
+            qreal softnessFactor, qreal lightnessStrength) const;
+
+    virtual void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
+        ColoringInformation* coloringInfo,
+        KisDabShape const&,
+        const KisPaintInformation& info,
+        double subPixelX = 0, double subPixelY = 0,
+        qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
 
     /**
@@ -364,8 +383,6 @@ protected:
      * XXX
      */
     virtual void setBrushType(enumBrushType type);
-
-    virtual void setHasColor(bool hasColor);
 
 public:
 

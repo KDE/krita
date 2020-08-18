@@ -4,7 +4,7 @@
     <text>File</text>
     <Action name="file_new">
       <icon>document-new</icon>
-      <text>&amp;New</text>
+      <text context="New document">&amp;New...</text>
       <whatsThis></whatsThis>
       <toolTip>Create new document</toolTip>
       <iconText>New</iconText>
@@ -992,7 +992,7 @@
     <text>Image</text>
     <Action name="image_properties">
       <icon>document-properties</icon>
-      <text>&amp;Properties...</text>
+      <text context="Menu text of Image Properties">&amp;Properties...</text>
       <whatsThis></whatsThis>
       <toolTip>Properties</toolTip>
       <iconText>Properties</iconText>
@@ -1454,6 +1454,18 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="filter_apply_reprompt">
+        <icon></icon>
+        <text>Apply Filter Again (Reprompt)</text>
+        <whatsThis></whatsThis>
+        <toolTip>Reapply Last Used Filter with Prompt for Configuration</toolTip>
+        <iconText>Reapply Last Used Filter with Prompt for Configuration</iconText>
+        <activationFlags>0</activationFlags>
+        <activationConditions>0</activationConditions>
+        <shortcut></shortcut>
+        <isCheckable>false</isCheckable>
+        <statusTip></statusTip>
+    </Action>
     <Action name="adjust_filters">
       <icon></icon>
       <text>Adjust</text>
@@ -1812,6 +1824,16 @@
       <whatsThis></whatsThis>
       <toolTip>Brush option slider 3</toolTip>
       <iconText>Brush option slider 3</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+	<Action name="brushslider4">
+      <icon></icon>
+      <text>Brush option slider 4</text>
+      <whatsThis></whatsThis>
+      <toolTip>Brush option slider 4</toolTip>
+      <iconText>Brush option slider 4</iconText>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>

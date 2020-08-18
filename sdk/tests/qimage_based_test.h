@@ -109,8 +109,7 @@ protected:
         image->addNode(blur1);
         image->addNode(paintLayer1);
 
-        KisTransparencyMaskSP transparencyMask1 = new KisTransparencyMask();
-        transparencyMask1->setName("tmask1");
+        KisTransparencyMaskSP transparencyMask1 = new KisTransparencyMask(image, "tmask1");
         transparencyMask1->testingInitSelection(transpRect, paintLayer1);
 
         image->addNode(transparencyMask1, paintLayer1);

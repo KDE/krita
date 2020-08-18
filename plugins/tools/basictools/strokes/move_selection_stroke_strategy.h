@@ -33,6 +33,17 @@ class MoveSelectionStrokeStrategy : public QObject, public KisStrokeStrategyUndo
     Q_OBJECT
 
 public:
+    struct ShowSelectionData : public KisStrokeJobData
+    {
+        ShowSelectionData(bool _showSelection)
+            : KisStrokeJobData(),
+              showSelection(_showSelection)
+        {}
+
+        bool showSelection = false;
+    };
+
+public:
     MoveSelectionStrokeStrategy(KisPaintLayerSP paintLayer,
                                 KisSelectionSP selection,
                                 KisUpdatesFacade *updatesFacade,
@@ -45,6 +56,7 @@ public:
 
 Q_SIGNALS:
     void sigHandlesRectCalculated(const QRect &handlesRect);
+    void sigStrokeStartedEmpty();
 
 private:
     MoveSelectionStrokeStrategy(const MoveSelectionStrokeStrategy &rhs);
@@ -57,6 +69,7 @@ private:
     KisUpdatesFacade *m_updatesFacade;
     QPoint m_finalOffset;
     QPoint m_initialDeviceOffset;
+    QPoint m_initialSelectionOffset;
 };
 
 #endif /* __MOVE_SELECTION_STROKE_STRATEGY_H */

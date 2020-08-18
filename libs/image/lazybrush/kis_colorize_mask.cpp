@@ -51,7 +51,7 @@ using namespace KisLazyFillTools;
 
 struct KisColorizeMask::Private
 {
-    Private(KisColorizeMask *_q)
+    Private(KisColorizeMask *_q, KisImageWSP image)
         : q(_q),
           coloringProjection(new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8())),
           fakePaintDevice(new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8())),
@@ -68,6 +68,11 @@ struct KisColorizeMask::Private
           filteringOptions(false, 4.0, 15, 0.7),
           limitToDeviceBounds(false)
     {
+        KisDefaultBoundsSP bounds(new KisDefaultBounds(image));
+
+        coloringProjection->setDefaultBounds(bounds);
+        fakePaintDevice->setDefaultBounds(bounds);
+        filteredSource->setDefaultBounds(bounds);
     }
 
     Private(const Private &rhs, KisColorizeMask *_q)
@@ -137,9 +142,9 @@ struct KisColorizeMask::Private
     bool shouldShowColoring() const;
 };
 
-KisColorizeMask::KisColorizeMask(const QString name)
-    : KisEffectMask(name)
-    , m_d(new Private(this))
+KisColorizeMask::KisColorizeMask(KisImageWSP image, const QString &name)
+    : KisEffectMask(image, name)
+    , m_d(new Private(this, image))
 {
     connect(&m_d->updateCompressor,
             SIGNAL(timeout()),
@@ -382,7 +387,7 @@ void KisColorizeMask::slotUpdateOnDirtyParent()
         // the update is performed for all the layers,
         // so the invisible areas around the canvas are included in the merged layer.
         // Colorize Mask gets the info that its parent is "dirty" (needs updating),
-        // but when it arrives, the parent doesn't exists anymore and is set to null.
+        // but when it arrives, the parent doesn't exist anymore and is set to null.
         // Colorize Mask doesn't work outside of the canvas anyway (at least in time of writing).
         return;
     }

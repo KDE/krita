@@ -17,6 +17,7 @@
  */
 #include "View.h"
 #include <QPointer>
+#include <QScopedPointer>
 
 #include <KoPattern.h>
 #include <KoAbstractGradient.h>
@@ -39,6 +40,7 @@
 #include "ManagedColor.h"
 
 #include "LibKisUtils.h"
+
 
 struct View::Private {
     Private() {}
@@ -138,6 +140,7 @@ void View::activateResource(Resource *resource)
     }
 
 }
+
 
 ManagedColor *View::foregroundColor() const
 {
@@ -276,4 +279,13 @@ QList<Node *> View::selectedNodes() const
 
     KisNodeList selectedNodes = d->view->viewManager()->nodeManager()->selectedNodes();
     return LibKisUtils::createNodeList(selectedNodes, d->view->image());
+}
+void View::showFloatingMessage(const QString &message, const QIcon& icon, int timeout, int priority)
+{
+    if (!d->view) return;
+
+    KisFloatingMessage::Priority p;
+    p = static_cast<KisFloatingMessage::Priority>(priority);
+
+    d->view->showFloatingMessage(message, icon, timeout, p);
 }

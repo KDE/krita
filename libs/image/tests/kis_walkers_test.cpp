@@ -328,7 +328,7 @@ void KisWalkersTest::testVisitingWithTopmostMask()
     KisLayerSP adjustmentLayer = new KisAdjustmentLayer(image, "adj", 0, 0);
 
 
-    KisFilterMaskSP filterMask1 = new KisFilterMask();
+    KisFilterMaskSP filterMask1 = new KisFilterMask(image, "mask1");
     filterMask1->initSelection(groupLayer);
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
     KIS_ASSERT(filter);
@@ -905,9 +905,9 @@ void KisWalkersTest::testMasksVisiting()
     image->addNode(paintLayer1, image->rootLayer());
     image->addNode(paintLayer2, image->rootLayer());
 
-    KisFilterMaskSP filterMask1 = new KisFilterMask();
-    KisFilterMaskSP filterMask2 = new KisFilterMask();
-    KisTransparencyMaskSP transparencyMask = new KisTransparencyMask();
+    KisFilterMaskSP filterMask1 = new KisFilterMask(image, "fmask1");
+    KisFilterMaskSP filterMask2 = new KisFilterMask(image, "fmask2");
+    KisTransparencyMaskSP transparencyMask = new KisTransparencyMask(image, "tmask");
 
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
     Q_ASSERT(filter);
@@ -978,9 +978,9 @@ void KisWalkersTest::testMasksVisitingNoFilthy()
     image->addNode(paintLayer1, image->rootLayer());
     image->addNode(paintLayer2, image->rootLayer());
 
-    KisFilterMaskSP filterMask1 = new KisFilterMask();
-    KisFilterMaskSP filterMask2 = new KisFilterMask();
-    KisTransparencyMaskSP transparencyMask = new KisTransparencyMask();
+    KisFilterMaskSP filterMask1 = new KisFilterMask(image, "fmask1");
+    KisFilterMaskSP filterMask2 = new KisFilterMask(image, "fmask2");
+    KisTransparencyMaskSP transparencyMask = new KisTransparencyMask(image, "tmask");
 
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
     Q_ASSERT(filter);
@@ -1053,9 +1053,9 @@ void KisWalkersTest::testMasksOverlapping()
     image->addNode(paintLayer1, image->rootLayer());
     image->addNode(paintLayer2, image->rootLayer());
 
-    KisFilterMaskSP filterMask1 = new KisFilterMask();
-    KisFilterMaskSP filterMask2 = new KisFilterMask();
-    KisTransparencyMaskSP transparencyMask = new KisTransparencyMask();
+    KisFilterMaskSP filterMask1 = new KisFilterMask(image, "fmask1");
+    KisFilterMaskSP filterMask2 = new KisFilterMask(image, "fmask2");
+    KisTransparencyMaskSP transparencyMask = new KisTransparencyMask(image, "tmask");
 
     KisFilterSP blurFilter = KisFilterRegistry::instance()->value("blur");
     KisFilterSP invertFilter = KisFilterRegistry::instance()->value("invert");

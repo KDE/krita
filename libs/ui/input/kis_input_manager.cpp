@@ -213,7 +213,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     return eventFilterImpl(event);
 }
 
-// Qt's events do not have copy-ctors yes, so we should emulate them
+// Qt's events do not have copy-ctors yet, so we should emulate them
 // See https://bugreports.qt.io/browse/QTBUG-72488
 
 template <class Event> void copyEventHack(Event *src, QScopedPointer<QEvent> &dst);
@@ -367,14 +367,12 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             retval = d->matcher.autoRepeatedKeyPressed(key);
         }
 
-        /**
-         * Workaround for temporary switching of tools by
-         * KoCanvasControllerWidget. We don't need this switch because
-         * we handle it ourselves.
-         */
-        retval |= !d->forwardAllEventsToTool &&
-                (keyEvent->key() == Qt::Key_Space ||
-                 keyEvent->key() == Qt::Key_Escape);
+        // In case we matched ashortcut we should accept the event to
+        // notify Qt that it shouldn't try to trigger its partially matched
+        // shortcuts.
+        if (retval) {
+            keyEvent->setAccepted(true);
+        }
 
         break;
     }
@@ -475,7 +473,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             d->allowMouseEvents();
             d->touchHasBlockedPressEvents = false;
         }
-
         d->matcher.enterEvent();
         break;
     case QEvent::Leave:

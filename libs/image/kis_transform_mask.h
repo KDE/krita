@@ -37,7 +37,7 @@ public:
     /**
      * Create an empty transform mask.
      */
-    KisTransformMask(const QString &name = QString());
+    KisTransformMask(KisImageWSP image, const QString &name);
 
     ~KisTransformMask() override;
 

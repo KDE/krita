@@ -34,7 +34,10 @@
 #include <resources/KoColorSet.h>
 #include <resources/KoSvgSymbolCollectionResource.h>
 #include <resources/KoGamutMask.h>
-
+#include <config-seexpr.h>
+#if defined HAVE_SEEXPR
+#include <resources/KisSeExprScript.h>
+#endif
 
 /**
  * Provides default resource servers for gradients, patterns and palettes
@@ -63,6 +66,9 @@ public:
     KoResourceServer<KoColorSet>* paletteServer();
     KoResourceServer<KoSvgSymbolCollectionResource>* svgSymbolCollectionServer();
     KoResourceServer<KoGamutMask>* gamutMaskServer();
+#if defined HAVE_SEEXPR
+    KoResourceServer<KisSeExprScript> *seExprScriptServer();
+#endif
 
 private:
     KoResourceServerProvider(const KoResourceServerProvider&);

@@ -158,6 +158,7 @@ private:
 
     void insertOrRemoveHoldFrames(int count, bool entireColumn = false);
     void insertOrRemoveMultipleHoldFrames(bool insertion, bool entireColumn = false);
+    void fanSelectedFrames(const QModelIndexList &selection, int count, bool ignoreKeyless = true);
 
     void cutCopyImpl(bool entireColumn, bool copy);
 

@@ -38,6 +38,8 @@
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
 
+#include <KisPart.h>
+
 #include <kis_debug.h>
 #include <kis_action.h>
 #include <KisViewManager.h>
@@ -46,10 +48,13 @@
 #include <brushengine/kis_paintop_preset.h>
 #include <kis_brush_server.h>
 #include <kis_paintop_settings.h>
+#include <KisPaintopSettingsIds.h>
+#include <krita_container_utils.h>
+
+#include "config-seexpr.h"
+
 #include "dlg_bundle_manager.h"
 #include "dlg_create_bundle.h"
-#include <KisPaintopSettingsIds.h>
-#include "krita_container_utils.h"
 
 class ResourceManager::Private {
 
@@ -64,6 +69,9 @@ public:
         paletteServer = KoResourceServerProvider::instance()->paletteServer();
         workspaceServer = KisResourceServerProvider::instance()->workspaceServer();
         gamutMaskServer = KoResourceServerProvider::instance()->gamutMaskServer();
+#if defined HAVE_SEEXPR
+        seExprScriptServer = KoResourceServerProvider::instance() ->seExprScriptServer();
+#endif
     }
 
     KisBrushResourceServer* brushServer;
@@ -73,6 +81,9 @@ public:
     KoResourceServer<KoColorSet>* paletteServer;
     KoResourceServer<KisWorkspaceResource>* workspaceServer;
     KoResourceServer<KoGamutMask>* gamutMaskServer;
+#if defined HAVE_SEEXPR
+    KoResourceServer<KisSeExprScript>* seExprScriptServer;
+#endif
 };
 
 K_PLUGIN_FACTORY_WITH_JSON(ResourceManagerFactory, "kritaresourcemanager.json", registerPlugin<ResourceManager>();)
@@ -203,6 +214,14 @@ KisResourceBundle *ResourceManager::saveBundle(const DlgCreateBundle &dlgCreateB
         newBundle->addResource("ko_gamutmasks", res->filename(), d->gamutMaskServer->assignedTagsList(res), res->md5());
     }
 
+#if defined HAVE_SEEXPR
+    res = dlgCreateBundle.selectedSeExprScripts();
+    Q_FOREACH (const QString &r, res) {
+        KoResource *res = d->seExprScriptServer->resourceByFilename(r);
+        newBundle->addResource("kis_seexpr_scripts", res->filename(), d->gamutMaskServer->assignedTagsList(res), res->md5());
+    }
+#endif
+
     newBundle->addMeta("fileName", bundlePath);
     newBundle->addMeta("created", QDateTime::currentDateTime().toOffsetFromUtc(0).toString(Qt::ISODate));
 
@@ -227,7 +246,7 @@ KisResourceBundle *ResourceManager::saveBundle(const DlgCreateBundle &dlgCreateB
 
 void ResourceManager::slotManageBundles()
 {
-    DlgBundleManager* dlg = new DlgBundleManager(this, viewManager()->actionManager());
+    DlgBundleManager* dlg = new DlgBundleManager(this, viewManager()->actionManager(), KisPart::instance()->currentMainwindow());
     if (dlg->exec() != QDialog::Accepted) {
         return;
     }

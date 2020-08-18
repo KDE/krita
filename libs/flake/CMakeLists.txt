@@ -167,6 +167,7 @@ set(kritaflake_SRCS
     commands/KoMultiPathPointJoinCommand.cpp
     commands/KoKeepShapesSelectedCommand.cpp
     commands/KoPathMergeUtils.cpp
+    commands/KoAddRemoveShapeCommands.cpp
 
     html/HtmlSavingContext.cpp
     html/HtmlWriter.cpp
@@ -220,6 +221,12 @@ set(kritaflake_SRCS
     FlakeDebug.cpp
     tests/MockShapes.cpp
 )
+
+if (SeExpr2_FOUND)
+    set(kritaflake_SRCS ${kritaflake_SRCS}
+        resources/KisSeExprScript.cpp
+    )
+endif()
 
 ki18n_wrap_ui(kritaflake_SRCS
     tools/PathToolOptionWidgetBase.ui

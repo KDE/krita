@@ -77,7 +77,7 @@ KisSelectionSP createVectorSelection(KisPaintDeviceSP paintDevice, KisImageWSP i
     path->normalize();
     KisShapeSelection* shapeSelection = new KisShapeSelection(shapeController, image, vectorSelection);
     shapeSelection->addShape(path);
-    vectorSelection->setShapeSelection(shapeSelection);
+    vectorSelection->convertToVectorSelectionNoUndo(shapeSelection);
 
     return vectorSelection;
 }
@@ -158,8 +158,7 @@ KisDocument* createCompleteDocument(bool shouldMaskToShapeLayer = false)
     image->addNode(shapeLayer, group1);
     image->addNode(adjustmentLayer2, group1);
 
-    KisFilterMaskSP filterMask1 = new KisFilterMask();
-    filterMask1->setName("filterMask1");
+    KisFilterMaskSP filterMask1 = new KisFilterMask(image, "filterMask1");
 
     kfc = KisFilterRegistry::instance()->get("pixelize")->defaultConfiguration();
     filterMask1->setFilter(kfc);
@@ -168,8 +167,7 @@ KisDocument* createCompleteDocument(bool shouldMaskToShapeLayer = false)
     filterMask1->setSelection(createPixelSelection(paintLayer1->paintDevice()));
     image->addNode(filterMask1, paintLayer1);
 
-    KisFilterMaskSP filterMask2 = new KisFilterMask();
-    filterMask2->setName("filterMask2");
+    KisFilterMaskSP filterMask2 = new KisFilterMask(image, "filterMask2");
 
     kfc = KisFilterRegistry::instance()->get("pixelize")->defaultConfiguration();
     filterMask2->setFilter(kfc);
@@ -178,13 +176,11 @@ KisDocument* createCompleteDocument(bool shouldMaskToShapeLayer = false)
     filterMask2->setSelection(createVectorSelection(paintLayer2->paintDevice(), image, doc->shapeController()));
     image->addNode(filterMask2, paintLayer2);
 
-    KisTransparencyMaskSP transparencyMask1 = new KisTransparencyMask();
-    transparencyMask1->setName("transparencyMask1");
+    KisTransparencyMaskSP transparencyMask1 = new KisTransparencyMask(image, "transparencyMask1");
     transparencyMask1->setSelection(createPixelSelection(paintLayer1->paintDevice()));
     image->addNode(transparencyMask1, group1);
 
-    KisTransparencyMaskSP transparencyMask2 = new KisTransparencyMask();
-    transparencyMask2->setName("transparencyMask2");
+    KisTransparencyMaskSP transparencyMask2 = new KisTransparencyMask(image, "transparencyMask2");
     transparencyMask2->setSelection(createPixelSelection(paintLayer1->paintDevice()));
     image->addNode(transparencyMask2, group2);
 
@@ -198,8 +194,7 @@ KisDocument* createCompleteDocument(bool shouldMaskToShapeLayer = false)
     selectionMask2->setSelection(createPixelSelection(paintLayer2->paintDevice()));
     image->addNode(selectionMask2, paintLayer2);
 
-    KisTransformMaskSP transformMask = new KisTransformMask();
-    transformMask->setName("testTransformMask");
+    KisTransformMaskSP transformMask = new KisTransformMask(image, "testTransformMask");
     transformMask->setTransformParams(KisTransformMaskParamsInterfaceSP(
                                           new KisDumbTransformMaskParams(createTestingTransform())));
 
@@ -207,8 +202,7 @@ KisDocument* createCompleteDocument(bool shouldMaskToShapeLayer = false)
 
     if (shouldMaskToShapeLayer) {
         // add all-visible transparency mask to crash a shape layer
-        KisTransparencyMaskSP transparencyMask3 = new KisTransparencyMask();
-        transparencyMask3->setName("crashy-transparency-mask");
+        KisTransparencyMaskSP transparencyMask3 = new KisTransparencyMask(image, "crashy-transparency-mask");
         transparencyMask3->initSelection(shapeLayer);
         image->addNode(transparencyMask3, shapeLayer);
     }

@@ -217,7 +217,7 @@ bool KisKraLoadVisitor::visit(KisPaintLayer *layer)
             if (!pixelSelection->read(m_store->device())) {
                 pixelSelection->disconnect();
             } else {
-                KisTransparencyMask* mask = new KisTransparencyMask();
+                KisTransparencyMask* mask = new KisTransparencyMask(m_image, i18n("Transpareny Mask"));
                 mask->setSelection(selection);
                 m_image->addNode(mask, layer, layer->firstChild());
             }
@@ -230,6 +230,8 @@ bool KisKraLoadVisitor::visit(KisPaintLayer *layer)
 
 bool KisKraLoadVisitor::visit(KisGroupLayer *layer)
 {
+    loadNodeKeyframes(layer);
+
     if (*layer->colorSpace() != *m_image->colorSpace()) {
         layer->resetCache(m_image->colorSpace());
     }
@@ -688,7 +690,7 @@ bool KisKraLoadVisitor::loadSelection(const QString& location, KisSelectionSP ds
         m_store->enterDirectory(shapeSelectionLocation) ;
 
         KisShapeSelection* shapeSelection = new KisShapeSelection(m_shapeController, m_image, dstSelection);
-        dstSelection->setShapeSelection(shapeSelection);
+        dstSelection->convertToVectorSelectionNoUndo(shapeSelection);
         result = shapeSelection->loadSelection(m_store);
         m_store->popDirectory();
         if (!result) {

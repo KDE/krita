@@ -139,6 +139,8 @@ private Q_SLOTS:
     void slotOpacityKeyframeMoved(KisKeyframeSP keyframe, int fromTime);
     void slotImageTimeChanged(int time);
 
+    void slotForgetAboutSavedNodeBeforeEditSelectionMode();
+
 private:
     inline void connectActionToButton(KisViewManager* view, QAbstractButton *button, const QString &id);
     inline void addActionToMenu(QMenu *menu, const QString &id);
@@ -171,6 +173,7 @@ private:
     QSlider* thumbnailSizeSlider;
 
     KisNodeSP m_activeNode;
+    KisNodeWSP m_savedNodeBeforeEditSelectionMode;
     QPointer<KisKeyframeChannel> m_opacityChannel;
     bool m_blockOpacityUpdate {false};
 };

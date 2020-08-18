@@ -119,7 +119,7 @@
      </column>
      <column>
       <property name="text">
-       <string>Value</string>
+      <string comment="The value number each channel of picked color listed in a table">Value</string>
       </property>
      </column>
     </widget>

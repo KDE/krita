@@ -161,6 +161,11 @@ void KisCurveOptionWidget::setChecked(bool checked)
     m_curveOption->setChecked(checked);
 }
 
+void KisCurveOptionWidget::setEnabled(bool enabled)
+{
+    m_widget->setEnabled(enabled);
+}
+
 KisCurveOption* KisCurveOptionWidget::curveOption()
 {
     return m_curveOption;

@@ -361,7 +361,7 @@ void KisKraSaverTest::testRoundTripColorizeMask()
     KisPaintLayerSP layer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8, weirdCS);
     image->addNode(layer1);
 
-    KisColorizeMaskSP mask = new KisColorizeMask();
+    KisColorizeMaskSP mask = new KisColorizeMask(image, "mask1");
     image->addNode(mask, layer1);
     mask->initializeCompositeOp();
     delete mask->setColorSpace(layer1->colorSpace());
@@ -497,7 +497,7 @@ void KisKraSaverTest::testRoundTripShapeSelection()
     KisSelectionSP selection = new KisSelection(p.layer->paintDevice()->defaultBounds());
 
     KisShapeSelection *shapeSelection = new KisShapeSelection(doc->shapeController(), p.image, selection);
-    selection->setShapeSelection(shapeSelection);
+    selection->convertToVectorSelectionNoUndo(shapeSelection);
 
     KoPathShape* path = new KoPathShape();
     path->setShapeId(KoPathShapeId);
@@ -512,7 +512,7 @@ void KisKraSaverTest::testRoundTripShapeSelection()
 
     shapeSelection->addShape(path);
 
-    KisTransparencyMaskSP tmask = new KisTransparencyMask();
+    KisTransparencyMaskSP tmask = new KisTransparencyMask(p.image, "tmask");
     tmask->setSelection(selection);
     p.image->addNode(tmask, p.layer);
 
@@ -538,7 +538,7 @@ void KisKraSaverTest::testRoundTripShapeSelection()
     KisTransparencyMask *newMask = dynamic_cast<KisTransparencyMask*>(node.data());
     QVERIFY(newMask);
 
-    QVERIFY(newMask->selection()->hasShapeSelection());
+    QVERIFY(newMask->selection()->hasNonEmptyShapeSelection());
 
     QVERIFY(chk.testPassed());
 }

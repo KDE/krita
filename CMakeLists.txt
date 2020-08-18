@@ -75,20 +75,20 @@ endif()
 
 # define common versions of Krita applications, used to generate kritaversion.h
 # update these version for every release:
-set(KRITA_VERSION_STRING "4.3.0-beta2")
+set(KRITA_VERSION_STRING "4.3.1-alpha")
 # Major version: 3 for 3.x, 4 for 4.x, etc.
 set(KRITA_STABLE_VERSION_MAJOR 4)
 # Minor version: 0 for 4.0, 1 for 4.1, etc.
 set(KRITA_STABLE_VERSION_MINOR 3)
 # Bugfix release version, or 0 for before the first stable release
-set(KRITA_VERSION_RELEASE 0)
+set(KRITA_VERSION_RELEASE 1)
 # the 4th digit, really only used for the Windows installer:
 # - [Pre-]Alpha: Starts from 0, increment 1 per release
 # - Beta: Starts from 50, increment 1 per release
 # - Stable: Set to 100, bump to 101 if emergency update is needed
 set(KRITA_VERSION_REVISION 0)
-#set(KRITA_ALPHA 1) # uncomment only for Alpha
-set(KRITA_BETA 1) # uncomment only for Beta
+set(KRITA_ALPHA 1) # uncomment only for Alpha
+#set(KRITA_BETA 1) # uncomment only for Beta
 #set(KRITA_RC 1) # uncomment only for RC
 
 if(NOT DEFINED KRITA_ALPHA AND NOT DEFINED KRITA_BETA AND NOT DEFINED KRITA_RC)
@@ -583,6 +583,18 @@ endif()
 ## Optional dependencies  ##
 ############################
 ###########################
+
+##
+## Test for SeExpr
+##
+find_package(SeExpr2)
+set_package_properties(SeExpr2 PROPERTIES
+    URL "https://wdas.github.io/SeExpr/"
+    TYPE OPTIONAL
+    PURPOSE "Required by the SeExpr generator layer"
+)
+macro_bool_to_01(SeExpr2_FOUND HAVE_SEEXPR)
+configure_file(config-seexpr.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-seexpr.h )
 
 find_package(ZLIB)
 set_package_properties(ZLIB PROPERTIES

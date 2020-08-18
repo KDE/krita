@@ -581,6 +581,16 @@ public:
                            KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags());
 
     /**
+     * Cached version of createThumbnail that also adjusts aspect ratio of the
+     * thumbnail to fit the extents of the paint device.
+     */
+    QImage createThumbnail(qint32 maxw, qint32 maxh,
+                           Qt::AspectRatioMode aspectRatioMode,
+                           qreal oversample = 1,
+                           KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),
+                           KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags());
+
+    /**
      * Fill c and opacity with the values found at x and y.
      *
      * The color values will be transformed from the profile of
@@ -600,6 +610,12 @@ public:
      * @return true if the operation was successful.
      */
     bool pixel(qint32 x, qint32 y, KoColor * kc) const;
+
+    /**
+     * Return pixel value in a form of KoColor. Please don't use this method
+     * for iteration, it is highly inefficient. Use iterators instead.
+     */
+    KoColor pixel(const QPoint &pos) const;
 
     /**
      * Set the specified pixel to the specified color. Note that this
@@ -786,8 +802,8 @@ public:
     KisVLineIteratorSP createVLineIteratorNG(qint32 x, qint32 y, qint32 h);
     KisVLineConstIteratorSP createVLineConstIteratorNG(qint32 x, qint32 y, qint32 h) const;
 
-    KisRandomAccessorSP createRandomAccessorNG(qint32 x, qint32 y);
-    KisRandomConstAccessorSP createRandomConstAccessorNG(qint32 x, qint32 y) const;
+    KisRandomAccessorSP createRandomAccessorNG();
+    KisRandomConstAccessorSP createRandomConstAccessorNG() const;
 
     /**
      * Create an iterator that will "artificially" extend the paint device with the
@@ -818,6 +834,25 @@ public:
 
     /** Clear the selected pixels from the paint device */
     void clearSelection(KisSelectionSP selection);
+
+    /**
+     * Converts a paint device into a "new" paint device, that has
+     * unconnected history. That is, after reincarnation, the device's
+     * life starts a new page. No history. No memories.
+     *
+     * When the device is fed up with the new life, it can reincarnate
+     * back to its previous life by undoing the command returned by
+     * reincarnateWithDetachedHistory(). The old undo will continue
+     * working as if nothing has happened.
+     *
+     * NOTE: reincarnation affects only the current lod plane and/or
+     *       current frame. All other frames are kept unaffected.
+     *
+     * @param copyContent decides if the device should take its current
+     *                    content to the new life
+     * @return undo command for execution and undoing of the reincarnation
+     */
+    KUndo2Command* reincarnateWithDetachedHistory(bool copyContent);
 
 Q_SIGNALS:
 

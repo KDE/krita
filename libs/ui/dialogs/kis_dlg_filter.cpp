@@ -89,7 +89,7 @@ KisDlgFilter::KisDlgFilter(KisViewManager *view, KisNodeSP node, KisFilterManage
         d->uiFilterDialog.pushButtonCreateMaskEffect->setVisible(false);
     }
 
-    d->uiFilterDialog.filterSelection->setPaintDevice(true, d->node->original());
+    d->uiFilterDialog.filterSelection->setPaintDevice(true, d->node->paintDevice());
 
     connect(d->uiFilterDialog.buttonBox, SIGNAL(accepted()), SLOT(accept()));
     connect(d->uiFilterDialog.buttonBox, SIGNAL(rejected()), SLOT(reject()));
@@ -114,11 +114,11 @@ KisDlgFilter::~KisDlgFilter()
     delete d;
 }
 
-void KisDlgFilter::setFilter(KisFilterSP f)
+void KisDlgFilter::setFilter(KisFilterSP f, KisFilterConfigurationSP overrideDefaultConfig)
 {
     Q_ASSERT(f);
     setDialogTitle(f);
-    d->uiFilterDialog.filterSelection->setFilter(f);
+    d->uiFilterDialog.filterSelection->setFilter(f, overrideDefaultConfig);
     d->uiFilterDialog.pushButtonCreateMaskEffect->setEnabled(f->supportsAdjustmentLayers());
     d->currentFilter = f;
     updatePreview();
@@ -198,7 +198,7 @@ void KisDlgFilter::createMask()
     }
 
     KisLayer *layer = qobject_cast<KisLayer*>(d->node.data());
-    KisFilterMaskSP mask = new KisFilterMask(i18n("Filter Mask"));
+    KisFilterMaskSP mask = new KisFilterMask(d->view->image(), i18n("Filter Mask"));
     mask->setName(d->currentFilter->name());
     mask->initSelection(d->view->selection(), layer);
     mask->setFilter(d->uiFilterDialog.filterSelection->configuration());

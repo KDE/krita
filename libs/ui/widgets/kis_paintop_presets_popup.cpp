@@ -314,7 +314,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     updateThemedIcons();
 
     // setup things like the scene construct images, layers, etc that is a one-time thing
-    m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView->setup();
+    m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView->setup(resourceProvider->resourceManager());
 
 }
 

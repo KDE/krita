@@ -142,6 +142,11 @@ KoResource* KoResourcePopupAction::currentResource() const
     return static_cast<KoResource*>(index.internalPointer());
 }
 
+void KoResourcePopupAction::keepAspectRatio(bool keepRatio)
+{
+    d->resourceList->keepAspectRatio(keepRatio);
+}
+
 void KoResourcePopupAction::indexChanged(const QModelIndex &modelIndex)
 {
     if (! modelIndex.isValid()) {

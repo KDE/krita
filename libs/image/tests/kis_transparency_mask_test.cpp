@@ -43,16 +43,11 @@ KisPaintDeviceSP createDevice()
     return dev;
 }
 
-void KisTransparencyMaskTest::testCreation()
-{
-    KisTransparencyMask test;
-}
-
 #define initImage(image, layer, device, mask) do {                      \
     image = new KisImage(0, IMAGE_WIDTH, IMAGE_HEIGHT, 0, "tests");     \
     device = createDevice();                                            \
     layer = new KisPaintLayer(image, "paint1", 100, device);                  \
-    mask = new KisTransparencyMask();                                   \
+    mask = new KisTransparencyMask(image, "tmask");                                   \
     image->addNode(layer);                                              \
     image->addNode(mask, layer);                                        \
     } while(0)

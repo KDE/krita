@@ -132,37 +132,67 @@ void KisPaintingAssistantsDecoration::setAssistants(const QList<KisPaintingAssis
     emit assistantChanged();
 }
 
+void KisPaintingAssistantsDecoration::setAdjustedBrushPosition(const QPointF position)
+{
+    if (!assistants().empty()) {
+        Q_FOREACH (KisPaintingAssistantSP assistant, assistants()) {
+            assistant->setAdjustedBrushPosition(position);
+        }
+    }
+}
+
+
 QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, const QPointF& strokeBegin)
 {
 
     if (assistants().empty()) {
+        // No assisants, so no adjustment
         return point;
     }
 
+    // There is at least 1 assistant
     if (assistants().count() == 1) {
+        // Things are easy when there is only one assistant
         if(assistants().first()->isSnappingActive() == true){
             QPointF newpoint = assistants().first()->adjustPosition(point, strokeBegin);
             // check for NaN
             if (newpoint.x() != newpoint.x()) return point;
+            // Tell the assistant that its guidelines should
+            // follow the adjusted bush position.
+            assistants().first()->setFollowBrushPosition(true);
             return newpoint;
+        } else {
+            // One assisant, but it is not active, so no adjustment
+            return point;
         }
     }
+
+    // There is more than one assistant.
+    // We have to chose one of these.
+    // This is done by checking which assistant gives the an adjusted position
+    // that is closest to the current position.
+
     QPointF best = point;
     double distance = DBL_MAX;
-    //the following tries to find the closest point to stroke-begin. It checks all assistants for the closest point//
-    if(!d->snapOnlyOneAssistant){
+    if (!d->snapOnlyOneAssistant) {
+        // In this mode the best assistant is constantly computed anew.
         Q_FOREACH (KisPaintingAssistantSP assistant, assistants()) {
-            if(assistant->isSnappingActive() == true){//this checks if the assistant in question has it's snapping boolean turned on//
+            if (assistant->isSnappingActive() == true){//this checks if the assistant in question has it's snapping boolean turned on//
                 QPointF pt = assistant->adjustPosition(point, strokeBegin);
+                // check for NaN
                 if (pt.x() != pt.x()) continue;
                 double dist = qAbs(pt.x() - point.x()) + qAbs(pt.y() - point.y());
                 if (dist < distance) {
                     best = pt;
                     distance = dist;
                 }
+                assistant->setFollowBrushPosition(true);
             }
         }
     } else if (d->aFirstStroke==false) {
+        // In this mode we compute the best assistant during the initial
+        // movement and then keep using that assistant. (Called the first
+        // assistant).
         Q_FOREACH (KisPaintingAssistantSP assistant, assistants()) {
             if(assistant->isSnappingActive() == true){//this checks if the assistant in question has it's snapping boolean turned on//
                 QPointF pt = assistant->adjustPosition(point, strokeBegin);
@@ -173,9 +203,10 @@ QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, co
                     distance = dist;
                     d->firstAssistant = assistant;
                 }
+                assistant->setFollowBrushPosition(true);
             }
         }
-    } else if(d->firstAssistant) {
+    } else if (d->firstAssistant) {
         //make sure there's a first assistant to begin with.//
         QPointF newpoint = d->firstAssistant->adjustPosition(point, strokeBegin);
         // BUGFIX: 402535
@@ -187,12 +218,15 @@ QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, co
     } else {
         d->aFirstStroke=false;
     }
+
     //this is here to be compatible with the movement in the perspective tool.
-    qreal dx = point.x() - strokeBegin.x(), dy = point.y() - strokeBegin.y();
+    qreal dx = point.x() - strokeBegin.x();
+    qreal dy = point.y() - strokeBegin.y();
     if (dx * dx + dy * dy >= 4.0) {
         // allow some movement before snapping
         d->aFirstStroke=true;
     }
+
     return best;
 }
 
@@ -206,7 +240,7 @@ void KisPaintingAssistantsDecoration::endStroke()
 }
 
 void KisPaintingAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas)
-{    
+{
     if(assistants().length() == 0) {
         return; // no assistants to worry about, ok to exit
     }

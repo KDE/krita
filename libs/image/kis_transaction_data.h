@@ -54,6 +54,8 @@ private:
     void startUpdates();
     void possiblyNotifySelectionChanged();
     void possiblyResetOutlineCache();
+    void possiblyFlattenSelection(KisPaintDeviceSP device);
+    void doFlattenUndoRedo(bool undo);
 
 private:
     class Private;

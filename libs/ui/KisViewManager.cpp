@@ -348,6 +348,7 @@ void KisViewManager::initializeResourceManager(KoCanvasResourceProvider *resourc
     resourceManager->addDerivedResourceConverter(toQShared(new KisLodSizeThresholdResourceConverter));
     resourceManager->addDerivedResourceConverter(toQShared(new KisLodSizeThresholdSupportedResourceConverter));
     resourceManager->addDerivedResourceConverter(toQShared(new KisEraserModeResourceConverter));
+    resourceManager->addDerivedResourceConverter(toQShared(new KisPatternSizeResourceConverter));
     resourceManager->addResourceUpdateMediator(toQShared(new KisPresetUpdateMediator));
 }
 
@@ -971,7 +972,7 @@ void KisViewManager::slotSaveIncremental()
             newVersion.append(".");
         }
         fileName.replace(regex, newVersion);
-        fileAlreadyExists = QFile(fileName).exists();
+        fileAlreadyExists = QFileInfo(path + '/' + fileName).exists();
         if (fileAlreadyExists) {
             if (!letter.isNull()) {
                 char letterCh = letter.at(0).toLatin1();

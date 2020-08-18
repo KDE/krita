@@ -80,7 +80,13 @@ inline bool compareChannels(int ch1, int ch2, int fuzzy)
     return qAbs(ch1 - ch2) <= fuzzy;
 }
 
-inline bool compareQImages(QPoint & pt, const QImage & image1, const QImage & image2, int fuzzy = 0, int fuzzyAlpha = 0, int maxNumFailingPixels = 0, bool showDebug = true)
+inline bool compareChannelsPremultiplied(int ch1, int alpha1, int ch2, int alpha2, int fuzzy, int fuzzyAlpha)
+{
+    return qAbs(ch1 * alpha1 - ch2 * alpha2) / 255 <= fuzzy * qMax(1, fuzzyAlpha);
+}
+
+
+inline bool compareQImagesImpl(QPoint & pt, const QImage & image1, const QImage & image2, int fuzzy = 0, int fuzzyAlpha = 0, int maxNumFailingPixels = 0, bool showDebug = true, bool premultipliedMode = false)
 {
     //     QTime t;
     //     t.start();
@@ -108,10 +114,20 @@ inline bool compareQImages(QPoint & pt, const QImage & image1, const QImage & im
             for (int x = 0; x < w1; ++x) {
                 const QRgb a = firstLine[x];
                 const QRgb b = secondLine[x];
-                const bool same =
-                        compareChannels(qRed(a), qRed(b), fuzzy) &&
-                        compareChannels(qGreen(a), qGreen(b), fuzzy) &&
-                        compareChannels(qBlue(a), qBlue(b), fuzzy);
+
+                bool same = false;
+
+                if (!premultipliedMode) {
+                    same =
+                            compareChannels(qRed(a), qRed(b), fuzzy) &&
+                            compareChannels(qGreen(a), qGreen(b), fuzzy) &&
+                            compareChannels(qBlue(a), qBlue(b), fuzzy);
+                } else {
+                    same =
+                            compareChannelsPremultiplied(qRed(a), qAlpha(a), qRed(b), qAlpha(b), fuzzy, fuzzyAlpha) &&
+                            compareChannelsPremultiplied(qGreen(a), qAlpha(a), qGreen(b), qAlpha(b), fuzzy, fuzzyAlpha) &&
+                            compareChannelsPremultiplied(qBlue(a), qAlpha(a), qBlue(b), qAlpha(b), fuzzy, fuzzyAlpha);
+                }
                 const bool sameAlpha = compareChannels(qAlpha(a), qAlpha(b), fuzzyAlpha);
                 const bool bothTransparent = sameAlpha && qAlpha(a)==0;
 
@@ -139,6 +155,16 @@ inline bool compareQImages(QPoint & pt, const QImage & image1, const QImage & im
     //     qDebug() << "compareQImages time elapsed:" << t.elapsed();
     //    qDebug() << "Images are identical";
     return true;
+}
+
+inline bool compareQImages(QPoint & pt, const QImage & image1, const QImage & image2, int fuzzy = 0, int fuzzyAlpha = 0, int maxNumFailingPixels = 0, bool showDebug = true)
+{
+    return compareQImagesImpl(pt, image1, image2, fuzzy, fuzzyAlpha, maxNumFailingPixels, showDebug, false);
+}
+
+inline bool compareQImagesPremultiplied(QPoint & pt, const QImage & image1, const QImage & image2, int fuzzy = 0, int fuzzyAlpha = 0, int maxNumFailingPixels = 0, bool showDebug = true)
+{
+    return compareQImagesImpl(pt, image1, image2, fuzzy, fuzzyAlpha, maxNumFailingPixels, showDebug, true);
 }
 
 inline bool checkQImageImpl(bool externalTest,

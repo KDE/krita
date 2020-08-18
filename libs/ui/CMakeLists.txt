@@ -49,8 +49,8 @@ set(kritaui_LIB_SRCS
     canvas/kis_snap_line_strategy.cpp
     canvas/KisSnapPointStrategy.cpp
     canvas/KisSnapPixelStrategy.cpp
-	canvas/KisMirrorAxisConfig.cpp
-	dialogs/kis_about_application.cpp
+    canvas/KisMirrorAxisConfig.cpp
+    dialogs/kis_about_application.cpp
     dialogs/kis_dlg_adj_layer_props.cc
     dialogs/kis_dlg_adjustment_layer.cc
     dialogs/kis_dlg_filter.cpp
@@ -215,6 +215,7 @@ set(kritaui_LIB_SRCS
     tool/strokes/KisMaskingBrushRenderer.cpp
     tool/strokes/KisMaskingBrushCompositeOpFactory.cpp
     tool/strokes/move_stroke_strategy.cpp
+    tool/strokes/KisNodeSelectionRecipe.cpp
     tool/KisSelectionToolFactoryBase.cpp
     tool/KisToolPaintFactoryBase.cpp
 
@@ -320,6 +321,13 @@ set(kritaui_LIB_SRCS
     actions/kis_selection_action_factories.cpp
     actions/KisPasteActionFactories.cpp
     actions/KisTransformToolActivationCommand.cpp
+    animation/KisVideoSaver.cpp
+    animation/KisAnimationRenderingOptions.cpp
+    animation/KisAnimationRender.cpp
+    animation/KisDlgAnimationRenderer.cpp
+    animation/VideoExportOptionsDialog.cpp
+    animation/VideoHDRMetadataOptionsDialog.cpp
+    animation/KisHDRMetadataOptions.cpp
     input/kis_touch_shortcut.cpp
     kis_document_undo_store.cpp
     kis_gui_context_command.cpp
@@ -407,6 +415,12 @@ set(kritaui_LIB_SRCS
 
     KisDecorationsWrapperLayer.cpp
 )
+
+if (SeExpr2_FOUND)
+    set(kritaui_LIB_SRCS ${kritaui_LIB_SRCS}
+        widgets/kis_seexpr_script_chooser.cpp
+    )
+endif()
 
 if(WIN32)
     # Private headers are needed for:
@@ -559,6 +573,9 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     input/wintab/kis_screen_size_choice_dialog.ui
     input/wintab/drawpile_tablettester/tablettest.ui
 
+    animation/wdg_animationrenderer.ui
+    animation/video_export_options_dialog.ui
+    animation/VideoHDRMetadataOptionsDialog.ui
 )
 
 if(WIN32)

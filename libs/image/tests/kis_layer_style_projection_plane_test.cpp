@@ -73,6 +73,7 @@ void KisLayerStyleProjectionPlaneTest::test(KisPSDLayerStyleSP style, const QStr
     KisPaintDeviceSP projection = new KisPaintDevice(cs);
 
     {
+        projection->clear();
         const QRect changeRect = plane.changeRect(rFillRect, KisLayer::N_FILTHY);
         dbgKrita << ppVar(rFillRect) << ppVar(changeRect);
 
@@ -86,20 +87,55 @@ void KisLayerStyleProjectionPlaneTest::test(KisPSDLayerStyleSP style, const QStr
         KIS_DUMP_DEVICE_2(projection, imageRect, "03P_apply_on_fill", testName);
     }
 
+    {
+        KisNodeSP clonedNode = layer->clone();
+        KisLayerSP clonedLayer = dynamic_cast<KisLayer*>(layer.data());
+
+        KisLayerStyleProjectionPlaneSP clonedPlane =
+            toQShared(new KisLayerStyleProjectionPlane(plane,
+                                                       clonedLayer.data(),
+                                                       style));
+
+        const QRect changeRect = clonedPlane->changeRect(rFillRect, KisLayer::N_FILTHY);
+        dbgKrita << ppVar(rFillRect) << ppVar(changeRect);
+
+        KIS_DUMP_DEVICE_2(clonedLayer->projection(), imageRect, "04L_clone_state_after_copy", testName);
+
+        {
+            projection->clear();
+            KisPainter painter(projection);
+            clonedPlane->apply(&painter, changeRect);
+
+            KIS_DUMP_DEVICE_2(projection, imageRect, "05P_apply_clone_after_copy", testName);
+        }
+
+        clonedPlane->recalculate(changeRect, clonedLayer);
+
+        KIS_DUMP_DEVICE_2(clonedLayer->projection(), imageRect, "06L_recalculate_clone", testName);
+
+        {
+            projection->clear();
+            KisPainter painter(projection);
+            clonedPlane->apply(&painter, changeRect);
+
+            KIS_DUMP_DEVICE_2(projection, imageRect, "07P_apply_recalculated_clone", testName);
+        }
+    }
+
     //return;
 
-    KisTransparencyMaskSP transparencyMask = new KisTransparencyMask();
+    KisTransparencyMaskSP transparencyMask = new KisTransparencyMask(image, "tmask");
 
     KisSelectionSP selection = new KisSelection();
     selection->pixelSelection()->select(tMaskRect, OPACITY_OPAQUE_U8);
     transparencyMask->setSelection(selection);
     image->addNode(transparencyMask, layer);
 
-    KIS_DUMP_DEVICE_2(layer->projection(), imageRect, "04L_mask_added", testName);
+    KIS_DUMP_DEVICE_2(layer->projection(), imageRect, "08L_mask_added", testName);
 
     plane.recalculate(imageRect, layer);
 
-    KIS_DUMP_DEVICE_2(layer->projection(), imageRect, "05L_mask_added_recalculated", testName);
+    KIS_DUMP_DEVICE_2(layer->projection(), imageRect, "09_mask_added_recalculated", testName);
 
     {
         projection->clear();
@@ -107,7 +143,7 @@ void KisLayerStyleProjectionPlaneTest::test(KisPSDLayerStyleSP style, const QStr
         KisPainter painter(projection);
         plane.apply(&painter, imageRect);
 
-        KIS_DUMP_DEVICE_2(projection, imageRect, "06P_apply_on_mask", testName);
+        KIS_DUMP_DEVICE_2(projection, imageRect, "10P_apply_on_mask", testName);
     }
 
     selection->pixelSelection()->select(partialSelectionRect, OPACITY_OPAQUE_U8);
@@ -120,12 +156,12 @@ void KisLayerStyleProjectionPlaneTest::test(KisPSDLayerStyleSP style, const QStr
 
         plane.recalculate(changeRect, layer);
 
-        KIS_DUMP_DEVICE_2(layer->projection(), imageRect, "07L_recalculate_partial", testName);
+        KIS_DUMP_DEVICE_2(layer->projection(), imageRect, "11L_recalculate_partial", testName);
 
         KisPainter painter(projection);
         plane.apply(&painter, changeRect);
 
-        KIS_DUMP_DEVICE_2(projection, imageRect, "08P_apply_partial", testName);
+        KIS_DUMP_DEVICE_2(projection, imageRect, "12P_apply_partial", testName);
     }
 
     // half updates
@@ -139,12 +175,12 @@ void KisLayerStyleProjectionPlaneTest::test(KisPSDLayerStyleSP style, const QStr
 
         plane.recalculate(changeRect, layer);
 
-        KIS_DUMP_DEVICE_2(layer->projection(), imageRect, "09L_recalculate_half1", testName);
+        KIS_DUMP_DEVICE_2(layer->projection(), imageRect, "13recalculate_half1", testName);
 
         KisPainter painter(projection);
         plane.apply(&painter, changeRect);
 
-        KIS_DUMP_DEVICE_2(projection, imageRect, "10P_apply_half1", testName);
+        KIS_DUMP_DEVICE_2(projection, imageRect, "14P_apply_half1", testName);
     }
 
     {
@@ -155,12 +191,12 @@ void KisLayerStyleProjectionPlaneTest::test(KisPSDLayerStyleSP style, const QStr
 
         plane.recalculate(changeRect, layer);
 
-        KIS_DUMP_DEVICE_2(layer->projection(), imageRect, "09L_recalculate_half1", testName);
+        KIS_DUMP_DEVICE_2(layer->projection(), imageRect, "15L_recalculate_half1", testName);
 
         KisPainter painter(projection);
         plane.apply(&painter, changeRect);
 
-        KIS_DUMP_DEVICE_2(projection, imageRect, "10P_apply_half2", testName);
+        KIS_DUMP_DEVICE_2(projection, imageRect, "16P_apply_half2", testName);
     }
 }
 
@@ -614,4 +650,4 @@ void KisLayerStyleProjectionPlaneTest::testBlending()
     KIS_DUMP_DEVICE_2(originalBg, rc, "04_knockout", "dd");
 }
 
-QTEST_MAIN(KisLayerStyleProjectionPlaneTest)
+KISTEST_MAIN(KisLayerStyleProjectionPlaneTest)

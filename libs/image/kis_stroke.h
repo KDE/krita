@@ -49,6 +49,8 @@ public:
     void addMutatedJobs(const QVector<KisStrokeJobData *> list);
 
     KUndo2MagicString name() const;
+    QString id() const;
+
     bool hasJobs() const;
     qint32 numJobs() const;
     KisStrokeJob* popOneJob();

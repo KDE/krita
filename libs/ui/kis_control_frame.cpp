@@ -228,6 +228,10 @@ void KisControlFrame::createGradientsChooser(KisViewManager * view)
     connect(view->canvasResourceProvider(), SIGNAL(sigGradientChanged(KoAbstractGradient*)),
             this, SLOT(slotSetGradient(KoAbstractGradient*)));
 
+    connect(view->canvasResourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), m_gradientChooser, SLOT(setForegroundColor(KoColor)));
+    connect(view->canvasResourceProvider(), SIGNAL(sigBGColorChanged(KoColor)), m_gradientChooser, SLOT(setBackgroundColor(KoColor)));
+
+
     m_gradientChooser->setCurrentItem(0, 0);
     if (m_gradientChooser->currentResource() && view->canvasResourceProvider())
         view->canvasResourceProvider()->slotGradientActivated(m_gradientChooser->currentResource());

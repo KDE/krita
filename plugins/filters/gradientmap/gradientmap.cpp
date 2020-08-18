@@ -47,7 +47,9 @@ KritaGradientMapConfigWidget::KritaGradientMapConfigWidget(QWidget *parent, KisP
     m_gradientChangedCompressor = new KisSignalCompressor(100, KisSignalCompressor::FIRST_ACTIVE);
 
     m_gradientPopUp = new KoResourcePopupAction(gradientResourceAdapter,
-                                                  m_page->btnGradientChooser);
+                                                m_page->btnGradientChooser);
+    m_gradientPopUp->keepAspectRatio(false);
+
     m_activeGradient = KoStopGradient::fromQGradient(dynamic_cast<KoAbstractGradient*>(gradientResourceAdapter->resources().first())->toQGradient());
     m_page->gradientEditor->setGradient(m_activeGradient);
     m_page->gradientEditor->setCompactMode(true);

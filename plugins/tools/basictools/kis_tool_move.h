@@ -122,6 +122,8 @@ public Q_SLOTS:
     void commitChanges();
 
     void slotHandlesRectCalculated(const QRect &handlesRect);
+    void slotStrokeStartedEmpty();
+    void slotStrokePickedLayers(const KisNodeList &nodes);
 
 Q_SIGNALS:
     void moveToolModeChanged();
@@ -137,7 +139,6 @@ private:
     QPoint currentOffset() const;
     void notifyGuiAfterMove(bool showFloatingMessage = true);
     bool tryEndPreviousStroke(const KisNodeList &nodes);
-    KisNodeList fetchSelectedNodes(MoveToolMode mode, const QPoint *pixelPoint, KisSelectionSP selection);
     void requestHandlesRectUpdate();
 
 
@@ -163,6 +164,8 @@ private:
     KisStrokeId m_strokeId;
 
     KisNodeList m_currentlyProcessingNodes;
+    bool m_currentlyUsingSelection = false;
+    MoveToolMode m_currentMode = MoveSelectedLayer;
 
     int m_resolution;
 

@@ -14,7 +14,7 @@
    <item row="1" column="0">
     <widget class="QLabel" name="lblProfiles">
      <property name="text">
-      <string>Profile:</string>
+      <string comment="Label of ICC Color Profile in PNG import dialogue">Profile:</string>
      </property>
      <property name="buddy">
       <cstring>cmbProfile</cstring>

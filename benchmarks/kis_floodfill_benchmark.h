@@ -33,7 +33,10 @@ class KisFloodFillBenchmark : public QObject
 private:
     const KoColorSpace * m_colorSpace;
     KoColor m_color;
-    KisPaintDeviceSP m_device;        
+    KisPaintDeviceSP m_deviceStandardFloodFill;
+    KisPaintDeviceSP m_deviceWithSelectionAsBoundary;
+    KisPaintDeviceSP m_deviceWithoutSelectionAsBoundary;
+    KisPaintDeviceSP m_existingSelection;
     int m_startX;
     int m_startY;
     
@@ -42,6 +45,9 @@ private Q_SLOTS:
     void cleanupTestCase();
     
     void benchmarkFlood();
+    void benchmarkFloodWithoutSelectionAsBoundary();
+    void benchmarkFloodWithSelectionAsBoundary();
+
     
     
     

@@ -207,7 +207,6 @@ void KisTransformProcessingVisitor::transformPaintDevice(KisPaintDeviceSP device
                                                      this,
                                                      std::placeholders::_1,
                                                      helper.updater()));
-
 }
 
 void KisTransformProcessingVisitor::transformOneDevice(KisPaintDeviceSP device,

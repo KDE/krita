@@ -124,6 +124,9 @@ public:
      */
     QStatusBar *statusBar() const;
 
+
+
+
     /**
      * This adds a widget to the statusbar for this view.
      * If you use this method instead of using statusBar() directly,

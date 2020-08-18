@@ -399,13 +399,7 @@ QVariant TimelineFramesModel::data(const QModelIndex &index, int role) const
         }
         const int maxSize = 200;
 
-        QSize size = dummy->node()->extent().size();
-        size.scale(maxSize, maxSize, Qt::KeepAspectRatio);
-        if (size.width() == 0 || size.height() == 0) {
-            // No thumbnail can be shown if there isn't width or height...
-            return QVariant();
-        }
-        QImage image(dummy->node()->createThumbnailForFrame(size.width(), size.height(), index.column()));
+        QImage image(dummy->node()->createThumbnailForFrame(maxSize, maxSize, index.column(), Qt::KeepAspectRatio));
         return image;
     }
     }
@@ -884,7 +878,7 @@ bool TimelineFramesModel::insertFrames(int dstColumn, const QList<int> &dstRows,
     return true;
 }
 
-bool TimelineFramesModel::insertHoldFrames(QModelIndexList selectedIndexes, int count)
+bool TimelineFramesModel::insertHoldFrames(const QModelIndexList &selectedIndexes, int count)
 {
     if (selectedIndexes.isEmpty() || count == 0) return true;
 

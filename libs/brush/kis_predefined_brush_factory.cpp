@@ -69,18 +69,34 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
     double scale = KisDomUtils::toDouble(brushDefinition.attribute("scale", "1.0"));
     brush->setScale(scale);
 
-    int preserveLightness = KisDomUtils::toInt(brushDefinition.attribute("preserveLightness", "0"));
-    brush->setPreserveLightness(preserveLightness);
-
     KisColorfulBrush *colorfulBrush = dynamic_cast<KisColorfulBrush*>(brush.data());
     if (colorfulBrush) {
         /**
-         * WARNING: see comment in KisGbrBrush::setUseColorAsMask()
+         * WARNING: see comment in KisColorfulBrush::setUseColorAsMask()
          */
-        colorfulBrush->setUseColorAsMask((bool)brushDefinition.attribute("ColorAsMask").toInt());
         colorfulBrush->setAdjustmentMidPoint(brushDefinition.attribute("AdjustmentMidPoint", "127").toInt());
         colorfulBrush->setBrightnessAdjustment(brushDefinition.attribute("BrightnessAdjustment").toDouble());
         colorfulBrush->setContrastAdjustment(brushDefinition.attribute("ContrastAdjustment").toDouble());
+    }
+
+    if (brushDefinition.hasAttribute("preserveLightness")) {
+        const int preserveLightness = KisDomUtils::toInt(brushDefinition.attribute("preserveLightness", "0"));
+        const bool useColorAsMask = (bool)brushDefinition.attribute("ColorAsMask", "1").toInt();
+
+        brush->setBrushApplication(preserveLightness ? LIGHTNESSMAP : 
+                    colorfulBrush && !useColorAsMask ? IMAGESTAMP : ALPHAMASK);
+    }
+    else if (brushDefinition.hasAttribute("brushApplication")) {
+        enumBrushApplication brushApplication = static_cast<enumBrushApplication>(KisDomUtils::toInt(brushDefinition.attribute("brushApplication", "0")));
+        brush->setBrushApplication(brushApplication);
+    }
+    else if (brushDefinition.hasAttribute("ColorAsMask")) {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(colorfulBrush);
+
+        const bool useColorAsMask = (bool)brushDefinition.attribute("ColorAsMask", "1").toInt();
+        brush->setBrushApplication(colorfulBrush && !useColorAsMask ? IMAGESTAMP : ALPHAMASK);
+    } else {
+        brush->setBrushApplication(ALPHAMASK);
     }
 
     return brush;

@@ -70,6 +70,7 @@ KisPaletteListWidget::KisPaletteListWidget(QWidget *parent)
     m_d->itemChooser->setColumnCount(1);
     m_d->itemChooser->showButtons(false);
     m_d->itemChooser->showTaggingBar(true);
+    m_d->itemChooser->itemView()->keepAspectRatio(false);
     m_ui->viewPalette->setLayout(new QHBoxLayout(m_ui->viewPalette));
     m_ui->viewPalette->layout()->addWidget(m_d->itemChooser.data());
 

@@ -107,6 +107,8 @@ public:
     /**
      * Fill a rectangle with a certain pattern. The pattern is repeated if it does not fit the
      * entire rectangle.
+     *
+     * This one uses blitting and thus makes use of proper composition.
      */
     void fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisPaintDeviceSP device, const QRect& deviceRect);
 
@@ -114,6 +116,24 @@ public:
      * Overloaded version of the above function.
      */
     void fillRect(const QRect& rc, const KoPattern * pattern, const QPoint &offset = QPoint());
+
+    /**
+     * @brief fillRect
+     * Fill a rectangle with a certain pattern. The pattern is repeated if it does not fit the
+     * entire rectangle. Differs from other functions that it uses a transform, does not support
+     * composite ops in turn.
+     * @param rc rectangle to fill.
+     * @param pattern pattern to use.
+     * @param transform transformation to apply to the pattern.
+     */
+    void fillRect(const QRect& rc, const KoPattern *pattern, const QTransform transform);
+    /**
+     * Fill a rectangle with a certain pattern. The pattern is repeated if it does not fit the
+     * entire rectangle.
+     *
+     * This one supports transforms, but does not use blitting.
+     */
+    void fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisPaintDeviceSP device, const QRect& deviceRect, const QTransform transform);
 
     /**
      * Fill the specified area with the output of the generator plugin that is configured
@@ -144,8 +164,9 @@ public:
      * @param startY the Y position where the floodfill starts
      * @param sourceDevice the sourceDevice that determines the area that
      * is floodfilled if sampleMerged is on
+     * @param patternTransform transform applied to the pattern;
      */
-    void fillPattern(int startX, int startY, KisPaintDeviceSP sourceDevice);
+    void fillPattern(int startX, int startY, KisPaintDeviceSP sourceDevice, QTransform patternTransform = QTransform());
 
     /**
      * Returns a selection mask for the floodfill starting at the specified position.
@@ -157,7 +178,8 @@ public:
      * @param sourceDevice the sourceDevice that determines the area that
      * is floodfilled if sampleMerged is on
      */
-    KisPixelSelectionSP createFloodSelection(int startX, int startY, KisPaintDeviceSP sourceDevice);
+    KisPixelSelectionSP createFloodSelection(int startX, int startY,
+                                             KisPaintDeviceSP sourceDevice, KisPaintDeviceSP existingSelection);
 
     /**
      * Returns a selection mask for the floodfill starting at the specified position.
@@ -171,7 +193,8 @@ public:
      * @param sourceDevice the sourceDevice that determines the area that
      * is floodfilled if sampleMerged is on
      */
-    KisPixelSelectionSP createFloodSelection(KisPixelSelectionSP newSelection, int startX, int startY, KisPaintDeviceSP sourceDevice);
+    KisPixelSelectionSP createFloodSelection(KisPixelSelectionSP newSelection, int startX, int startY,
+                                             KisPaintDeviceSP sourceDevice, KisPaintDeviceSP existingSelection);
 
     /**
      * Set the threshold for floodfill. The range is 0-255: 0 means the fill will only
@@ -234,6 +257,16 @@ public:
         return m_feather;
     }
 
+    /** Sets selection borders being treated as boundary */
+    void setUseSelectionAsBoundary(bool useSelectionAsBoundary) {
+        m_useSelectionAsBoundary = useSelectionAsBoundary;
+    }
+
+    /** defines if the selection borders are treated as boundary in flood fill or not */
+    uint useSelectionAsBoundary() {
+        return m_useSelectionAsBoundary;
+    }
+
 private:
     // for floodfill
     void genericFillStart(int startX, int startY, KisPaintDeviceSP sourceDevice);
@@ -248,6 +281,7 @@ private:
     QRect m_rect;
     bool m_careForSelection;
     bool m_useCompositioning;
+    bool m_useSelectionAsBoundary;
 };
 
 

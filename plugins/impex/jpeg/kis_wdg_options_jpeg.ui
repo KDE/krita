@@ -231,7 +231,7 @@
        <item>
         <widget class="QCheckBox" name="optimize">
          <property name="text">
-          <string>Optimize</string>
+         <string comment="Label of Optimize in JPEG Exporting dialogue">Optimize</string>
          </property>
          <property name="checked">
           <bool>true</bool>

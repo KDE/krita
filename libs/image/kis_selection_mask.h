@@ -99,8 +99,6 @@ private:
     Q_PRIVATE_SLOT(m_d, void slotSelectionChangedCompressed())
     Q_PRIVATE_SLOT(m_d, void slotConfigChanged())
 
-    KisImageWSP image() const;
-
     struct Private;
     Private * const m_d;
 };

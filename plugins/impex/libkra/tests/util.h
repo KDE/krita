@@ -65,7 +65,7 @@ KisSelectionSP createPixelSelection(KisPaintDeviceSP paintDevice)
 
 KisSelectionSP createVectorSelection(KisPaintDeviceSP paintDevice, KisImageSP image, KoShapeControllerBase *shapeController)
 {
-    KisSelectionSP vectorSelection = new KisSelection(new KisSelectionDefaultBounds(paintDevice));
+    KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(paintDevice));
     KoPathShape* path = new KoPathShape();
     path->setShapeId(KoPathShapeId);
     path->moveTo(QPointF(10, 10));
@@ -74,11 +74,11 @@ KisSelectionSP createVectorSelection(KisPaintDeviceSP paintDevice, KisImageSP im
     path->lineTo(QPointF(10, 10) + QPointF(0, 100));
     path->close();
     path->normalize();
-    KisShapeSelection* shapeSelection = new KisShapeSelection(shapeController, image, vectorSelection);
+    KisShapeSelection* shapeSelection = new KisShapeSelection(shapeController, image, selection);
     shapeSelection->addShape(path);
-    vectorSelection->setShapeSelection(shapeSelection);
+    selection->convertToVectorSelectionNoUndo(shapeSelection);
 
-    return vectorSelection;
+    return selection;
 }
 
 QTransform createTestingTransform() {
@@ -158,8 +158,7 @@ KisDocument* createCompleteDocument()
     image->addNode(shapeLayer, group1);
     image->addNode(adjustmentLayer2, group1);
 
-    KisFilterMaskSP filterMask1 = new KisFilterMask();
-    filterMask1->setName("filterMask1");
+    KisFilterMaskSP filterMask1 = new KisFilterMask(image, "filterMask1");
 
     kfc = KisFilterRegistry::instance()->get("pixelize")->defaultConfiguration();
     filterMask1->setFilter(kfc);
@@ -168,8 +167,7 @@ KisDocument* createCompleteDocument()
     filterMask1->setSelection(createPixelSelection(paintLayer1->paintDevice()));
     image->addNode(filterMask1, paintLayer1);
 
-    KisFilterMaskSP filterMask2 = new KisFilterMask();
-    filterMask2->setName("filterMask2");
+    KisFilterMaskSP filterMask2 = new KisFilterMask(image, "filterMask2");
 
     kfc = KisFilterRegistry::instance()->get("pixelize")->defaultConfiguration();
     filterMask2->setFilter(kfc);
@@ -178,28 +176,23 @@ KisDocument* createCompleteDocument()
     filterMask2->setSelection(createVectorSelection(paintLayer2->paintDevice(), image, doc->shapeController()));
     image->addNode(filterMask2, paintLayer2);
 
-    KisTransparencyMaskSP transparencyMask1 = new KisTransparencyMask();
-    transparencyMask1->setName("transparencyMask1");
+    KisTransparencyMaskSP transparencyMask1 = new KisTransparencyMask(image, "transparencyMask1");
     transparencyMask1->setSelection(createPixelSelection(paintLayer1->paintDevice()));
     image->addNode(transparencyMask1, group1);
 
-    KisTransparencyMaskSP transparencyMask2 = new KisTransparencyMask();
-    transparencyMask2->setName("transparencyMask2");
+    KisTransparencyMaskSP transparencyMask2 = new KisTransparencyMask(image, "transparencyMask2");
     transparencyMask2->setSelection(createPixelSelection(paintLayer1->paintDevice()));
     image->addNode(transparencyMask2, group2);
 
-    KisSelectionMaskSP selectionMask1 = new KisSelectionMask(image);
+    KisSelectionMaskSP selectionMask1 = new KisSelectionMask(image, "selectionMask1");
     image->addNode(selectionMask1, paintLayer1);
-    selectionMask1->setName("selectionMask1");
     selectionMask1->setSelection(createPixelSelection(paintLayer1->paintDevice()));
 
-    KisSelectionMaskSP selectionMask2 = new KisSelectionMask(image);
-    selectionMask2->setName("selectionMask2");
+    KisSelectionMaskSP selectionMask2 = new KisSelectionMask(image, "selectionMask2");
     selectionMask2->setSelection(createPixelSelection(paintLayer2->paintDevice()));
     image->addNode(selectionMask2, paintLayer2);
 
-    KisTransformMaskSP transformMask = new KisTransformMask();
-    transformMask->setName("testTransformMask");
+    KisTransformMaskSP transformMask = new KisTransformMask(image, "testTransformMask");
     transformMask->setTransformParams(KisTransformMaskParamsInterfaceSP(
                                           new KisDumbTransformMaskParams(createTestingTransform())));
 

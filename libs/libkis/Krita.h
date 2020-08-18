@@ -91,6 +91,11 @@ public Q_SLOTS:
     QList<Document*> documents() const;
 
     /**
+     * @return a list of all the dockers
+     */
+    QList<QDockWidget*> dockers() const;
+
+    /**
      * @brief Filters are identified by an internal name. This function returns a list
      * of all existing registered filters.
      * @return a list of all registered filters
@@ -328,6 +333,7 @@ add_document_to_window()
     static QObject *fromVariant(const QVariant& v);
 
     static QString krita_i18n(const QString &text);
+    static QString krita_i18nc(const QString &context, const QString &text);
 
 private Q_SLOTS:
 

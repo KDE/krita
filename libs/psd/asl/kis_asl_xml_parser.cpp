@@ -111,7 +111,8 @@ QColor parseRGBColorObject(QDomElement parent)
 void parseColorStopsList(QDomElement parent,
                          QVector<qreal> &startLocations,
                          QVector<qreal> &middleOffsets,
-                         QVector<QColor> &colors)
+                         QVector<QColor> &colors,
+                         QVector<KoGradientSegmentEndpointType> &types)
 {
     QDomNode child = parent.firstChild();
     while (!child.isNull()) {
@@ -151,8 +152,12 @@ void parseColorStopsList(QDomElement parent,
                     }
 
                     QString value = childEl.attribute("value", "");
-                    if (value == "BckC" || value == "FrgC") {
-                        warnKrita << "WARNING: Using foreground/background colors in ASL gradients is not yet supported";
+                    if (value == "BckC"){
+                        types.append(BACKGROUND_ENDPOINT);
+                    } else if (value == "FrgC") {
+                        types.append(FOREGROUND_ENDPOINT);
+                    } else {
+                        types.append(COLOR_ENDPOINT);
                     }
                 }
 
@@ -404,10 +409,12 @@ bool tryParseDescriptor(const QDomElement &el,
         QVector<qreal> startLocations;
         QVector<qreal> middleOffsets;
         QVector<QColor> colors;
+        QVector<KoGradientSegmentEndpointType> types;
 
         QVector<qreal> transpStartLocations;
         QVector<qreal> transpMiddleOffsets;
         QVector<qreal> transparencies;
+
 
 
         QDomNode child = el.firstChild();
@@ -431,7 +438,7 @@ bool tryParseDescriptor(const QDomElement &el,
                 double value = KisDomUtils::toDouble(childEl.attribute("value", "4096"));
                 gradientSmoothness = 100.0 * value / 4096.0;
             } else if (type == "List" && key == "Clrs") {
-                parseColorStopsList(childEl, startLocations, middleOffsets, colors);
+                parseColorStopsList(childEl, startLocations, middleOffsets, colors, types);
             } else if (type == "List" && key == "Trns") {
                 parseTransparencyStopsList(childEl, transpStartLocations, transpMiddleOffsets, transparencies);
             }
@@ -439,16 +446,38 @@ bool tryParseDescriptor(const QDomElement &el,
             child = child.nextSibling();
         }
 
-        if (colors.size() < 2) {
-            warnKrita << "WARNING: ASL gradient has too few stops" << ppVar(colors.size());
+
+        if (colors.size() < transparencies.size()) {
+            const QColor lastColor = !colors.isEmpty() ? colors.last() : QColor(Qt::black);
+            const KoGradientSegmentEndpointType lastType = !types.isEmpty() ? types.last() : COLOR_ENDPOINT;
+            while (colors.size() != transparencies.size()) {
+                const int index = colors.size();
+                colors.append(lastColor);
+                startLocations.append(transpStartLocations[index]);
+                middleOffsets.append(transpMiddleOffsets[index]);
+                types.append(lastType);
+            }
         }
 
-        if (colors.size() != transparencies.size()) {
-            warnKrita << "WARNING: ASL gradient has inconsistent number of transparency stops. Dropping transparency..." << ppVar(colors.size()) << ppVar(transparencies.size());
-            transparencies.resize(colors.size());
-            for (int i = 0; i < colors.size(); i++) {
-                transparencies[i] = 1.0;
+        if (colors.size() > transparencies.size()) {
+            const qreal lastTransparency = !transparencies.isEmpty() ? transparencies.last() : 1.0;
+            while (colors.size() != transparencies.size()) {
+                const int index = transparencies.size();
+                transparencies.append(lastTransparency);
+                transpStartLocations.append(startLocations[index]);
+                transpMiddleOffsets.append(middleOffsets[index]);
             }
+        }
+
+        if (colors.size() == 1) {
+            colors.append(colors.last());
+            startLocations.append(1.0);
+            middleOffsets.append(0.5);
+            types.append(COLOR_ENDPOINT);
+
+            transparencies.append(transparencies.last());
+            transpStartLocations.append(1.0);
+            transpMiddleOffsets.append(0.5);
         }
 
         QString fileName = gradientName + ".ggr";
@@ -456,23 +485,31 @@ bool tryParseDescriptor(const QDomElement &el,
         Q_UNUSED(gradientSmoothness);
         gradient->setName(gradientName);
 
-        for (int i = 1; i < colors.size(); i++) {
-            QColor startColor = colors[i-1];
-            QColor endColor = colors[i];
-            startColor.setAlphaF(transparencies[i-1]);
-            endColor.setAlphaF(transparencies[i]);
+        if (colors.size() >= 2) {
+            for (int i = 1; i < colors.size(); i++) {
+                QColor startColor = colors[i-1];
+                QColor endColor = colors[i];
+                startColor.setAlphaF(transparencies[i-1]);
+                endColor.setAlphaF(transparencies[i]);
 
-            qreal start = startLocations[i-1];
-            qreal end = startLocations[i];
-            qreal middle = start + middleOffsets[i-1] * (end - start);
+                qreal start = startLocations[i-1];
+                qreal end = startLocations[i];
+                qreal middle = start + middleOffsets[i-1] * (end - start);
 
-            gradient->createSegment(INTERP_LINEAR, COLOR_INTERP_RGB,
-                                    start, end, middle,
-                                    startColor,
-                                    endColor);
+                KoGradientSegmentEndpointType startType = types[i - 1];
+                KoGradientSegmentEndpointType endType = types[i];
+
+
+                gradient->createSegment(INTERP_LINEAR, COLOR_INTERP_RGB,
+                                        start, end, middle,
+                                        startColor,
+                                        endColor,
+                                        startType, endType);
+            }
+            gradient->setValid(true);
+        } else {
+            gradient->setValid(false);
         }
-
-        gradient->setValid(true);
 
         catcher.addGradient(path, gradient);
     } else {

@@ -41,6 +41,7 @@
 #include <kis_debug.h>
 #include <KisImportExportUtils.h>
 #include <kis_config.h>
+#include "kis_scratch_pad.h"
 
 #include "kritaui_export.h"
 
@@ -643,6 +644,13 @@ public:
      * @brief Start saving when android activity is pushed to the background
      */
     void autoSaveOnPause();
+
+    /**
+      * @brief Helper method to convert a URI to path. Specifically for handling Android's
+      * "content://" URIs
+      */
+    QString toPath(const QUrl& url) const;
+
 Q_SIGNALS:
 
     void completed();

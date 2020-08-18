@@ -108,7 +108,13 @@ KisSelectionDefaultBounds::~KisSelectionDefaultBounds()
 QRect KisSelectionDefaultBounds::bounds() const
 {
     return m_d->parentDevice ?
-        m_d->parentDevice->extent() | m_d->parentDevice->defaultBounds()->bounds() : QRect();
+                m_d->parentDevice->extent() | m_d->parentDevice->defaultBounds()->bounds() : QRect();
+}
+
+QRect KisSelectionDefaultBounds::imageBorderRect() const
+{
+    return m_d->parentDevice ?
+                m_d->parentDevice->defaultBounds()->bounds() : QRect();
 }
 
 bool KisSelectionDefaultBounds::wrapAroundMode() const
@@ -156,4 +162,56 @@ KisSelectionEmptyBounds::~KisSelectionEmptyBounds()
 QRect KisSelectionEmptyBounds::bounds() const
 {
     return QRect(0, 0, 0, 0);
+}
+
+/******************************************************************/
+/*                 KisWrapAroundBoundsWrapper                     */
+/******************************************************************/
+
+
+struct Q_DECL_HIDDEN KisWrapAroundBoundsWrapper::Private
+{
+    KisDefaultBoundsBaseSP base;
+    QRect bounds;
+};
+
+KisWrapAroundBoundsWrapper::KisWrapAroundBoundsWrapper(KisDefaultBoundsBaseSP base, QRect bounds)
+: m_d(new Private())
+{
+    m_d->base = base;
+    m_d->bounds = bounds;
+}
+
+KisWrapAroundBoundsWrapper::~KisWrapAroundBoundsWrapper()
+{
+}
+
+QRect KisWrapAroundBoundsWrapper::bounds() const
+{
+    return m_d->bounds;
+}
+
+bool KisWrapAroundBoundsWrapper::wrapAroundMode() const
+{
+    return true;
+}
+
+int KisWrapAroundBoundsWrapper::currentLevelOfDetail() const
+{
+    return m_d->base->currentLevelOfDetail();
+}
+
+int KisWrapAroundBoundsWrapper::currentTime() const
+{
+    return m_d->base->currentTime();
+}
+
+bool KisWrapAroundBoundsWrapper::externalFrameActive() const
+{
+    return m_d->base->externalFrameActive();
+}
+
+void *KisWrapAroundBoundsWrapper::sourceCookie() const
+{
+    return m_d->base->sourceCookie();
 }

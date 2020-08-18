@@ -59,11 +59,12 @@ public:
     }
 
     void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
-            KisBrush::ColoringInformation* src,
-            KisDabShape const&,
-            const KisPaintInformation& info,
-            double subPixelX = 0, double subPixelY = 0,
-            qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const override;
+        KisBrush::ColoringInformation* src,
+        KisDabShape const&,
+        const KisPaintInformation& info,
+        double subPixelX = 0, double subPixelY = 0,
+        qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR,
+        qreal lightnessStrength = DEFAULT_LIGHTNESS_STRENGTH) const override;
 
     QPainterPath outline() const override;
 

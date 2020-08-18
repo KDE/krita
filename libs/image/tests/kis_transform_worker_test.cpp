@@ -57,7 +57,7 @@ void testMirror(const QRect &imageRect, const QRect &mirrorRect, Qt::Orientation
 
     qreal axis = QRectF(mirrorRect).center().x();
 
-    KisRandomAccessorSP it = dev->createRandomAccessorNG(imageRect.x(), imageRect.y());
+    KisRandomAccessorSP it = dev->createRandomAccessorNG();
 
     int i = 0;
     for (int y = imageRect.y(); y < imageRect.y() + imageRect.height(); y++) {
@@ -670,7 +670,7 @@ void testRotationImpl(qreal angle, QString filePrefix, bool useUniformColor = fa
 
     image = QImage();
     image.load(QString(FILES_DATA_DIR) + QDir::separator() + resFileName);
-    if (!TestUtil::compareQImages(errpoint, image, result)) {
+    if (!TestUtil::compareQImagesPremultiplied(errpoint, image, result, 2, 1)) {
         dbgKrita << filePrefix;
         image.save(refFileName);
         result.save(resFileName);
@@ -990,4 +990,4 @@ void KisTransformWorkerTest::testPartialProcessing()
     TestUtil::checkQImage(result, "transform_test", "partial", "single");
 }
 
-QTEST_MAIN(KisTransformWorkerTest)
+KISTEST_MAIN(KisTransformWorkerTest)

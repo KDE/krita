@@ -170,12 +170,6 @@ public:
         return m_parasite;
     }
 
-    void setUseColorAsMask(bool useColorAsMask) {
-        Q_FOREACH (KisGbrBrush * brush, m_brushes) {
-            brush->setUseColorAsMask(useColorAsMask);
-        }
-    }
-
     void setAdjustmentMidPoint(quint8 value) {
         Q_FOREACH (KisGbrBrush * brush, m_brushes) {
             brush->setAdjustmentMidPoint(value);
@@ -344,6 +338,8 @@ bool KisImagePipeBrush::initFromData(const QByteArray &data)
         setWidth(m_d->brushesPipe.firstBrush()->width());
         setHeight(m_d->brushesPipe.firstBrush()->height());
         setBrushTipImage(m_d->brushesPipe.firstBrush()->brushTipImage());
+        setBrushApplication(m_d->brushesPipe.firstBrush()->brushApplication());
+        setBrushType(m_d->brushesPipe.hasColor() ? PIPE_IMAGE : PIPE_MASK);
     }
 
     return true;
@@ -413,9 +409,9 @@ void KisImagePipeBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceS
         KisDabShape const& shape,
         const KisPaintInformation& info,
         double subPixelX , double subPixelY,
-        qreal softnessFactor) const
+        qreal softnessFactor, qreal lightnessStrength) const
 {
-    m_d->brushesPipe.generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, shape, info, subPixelX, subPixelY, softnessFactor);
+    m_d->brushesPipe.generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, shape, info, subPixelX, subPixelY, softnessFactor, lightnessStrength);
 }
 
 QVector<KisGbrBrush *> KisImagePipeBrush::brushes() const
@@ -431,31 +427,16 @@ KisFixedPaintDeviceSP KisImagePipeBrush::paintDevice(
     return m_d->brushesPipe.paintDevice(colorSpace, shape, info, subPixelX, subPixelY);
 }
 
-enumBrushType KisImagePipeBrush::brushType() const
-{
-    return !hasColor() || useColorAsMask() ? PIPE_MASK : PIPE_IMAGE;
-}
-
 QString KisImagePipeBrush::parasiteSelection()
 {
     return parasiteSelectionString;
 }
 
-bool KisImagePipeBrush::hasColor() const
-{
-    return m_d->brushesPipe.hasColor();
-}
-
 void KisImagePipeBrush::makeMaskImage(bool preserveAlpha)
 {
+    KisGbrBrush::makeMaskImage(preserveAlpha);
     m_d->brushesPipe.makeMaskImage(preserveAlpha);
-    setUseColorAsMask(true);
-}
-
-void KisImagePipeBrush::setUseColorAsMask(bool useColorAsMask)
-{
-    KisGbrBrush::setUseColorAsMask(useColorAsMask);
-    m_d->brushesPipe.setUseColorAsMask(useColorAsMask);
+    setBrushType(PIPE_MASK);
 }
 
 void KisImagePipeBrush::setAdjustmentMidPoint(quint8 value)
@@ -532,25 +513,17 @@ void KisImagePipeBrush::setSpacing(double _spacing)
     m_d->brushesPipe.setSpacing(_spacing);
 }
 
-void KisImagePipeBrush::setBrushType(enumBrushType type)
+void KisImagePipeBrush::setBrushApplication(enumBrushApplication brushApplication)
 {
-    Q_UNUSED(type);
-    qFatal("FATAL: protected member setBrushType has no meaning for KisImagePipeBrush");
-    // brushType() is a function of hasColor() and useColorAsMask()
+    //Set all underlying brushes to use the same brush Application
+    KisGbrBrush::setBrushApplication(brushApplication);
+    m_d->brushesPipe.setBrushApplication(brushApplication);
 }
 
-void KisImagePipeBrush::setHasColor(bool hasColor)
-{
-    Q_UNUSED(hasColor);
-    qFatal("FATAL: protected member setHasColor has no meaning for KisImagePipeBrush");
-    // hasColor() is a function of the underlying brushes
-}
-
-void KisImagePipeBrush::setPreserveLightness(bool preserveLightness)
-{
-    //Set all underlying brushes to preserve lightness
-    KisGbrBrush::setPreserveLightness(preserveLightness);
-    m_d->brushesPipe.setPreserveLightness(preserveLightness);
+void KisImagePipeBrush::setGradient(const KoAbstractGradient* gradient) {
+    //Set all underlying brushes to use the same gradient
+    KisGbrBrush::setGradient(gradient);
+    m_d->brushesPipe.setGradient(gradient);
 }
 
 KisGbrBrush* KisImagePipeBrush::testingGetCurrentBrush(const KisPaintInformation& info) const

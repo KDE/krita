@@ -66,6 +66,7 @@ struct KisResourcesSnapshot::Private {
 
     KisPainter::StrokeStyle strokeStyle = KisPainter::StrokeStyleBrush;
     KisPainter::FillStyle fillStyle = KisPainter::FillStyleForegroundColor;
+    QTransform fillTransform = QTransform();
 
     bool globalAlphaLock = false;
     qreal effectiveZoom = 1.0;
@@ -110,7 +111,7 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
     if (m_d->image) {
         relativeAxesCenter = m_d->image->mirrorAxesCenter();
     }
-    m_d->axesCenter = KisAlgebra2D::relativeToAbsolute(relativeAxesCenter, m_d->bounds->bounds());
+    m_d->axesCenter = KisAlgebra2D::relativeToAbsolute(relativeAxesCenter, m_d->bounds->imageBorderRect());
 
     m_d->mirrorMaskHorizontal = resourceManager->resource(KisCanvasResourceProvider::MirrorHorizontal).toBool();
     m_d->mirrorMaskVertical = resourceManager->resource(KisCanvasResourceProvider::MirrorVertical).toBool();
@@ -154,7 +155,7 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
     if (m_d->image) {
         relativeAxesCenter = m_d->image->mirrorAxesCenter();
     }
-    m_d->axesCenter = KisAlgebra2D::relativeToAbsolute(relativeAxesCenter, m_d->bounds->bounds());
+    m_d->axesCenter = KisAlgebra2D::relativeToAbsolute(relativeAxesCenter, m_d->bounds->imageBorderRect());
     m_d->opacity = OPACITY_OPAQUE_U8;
 
     setCurrentNode(currentNode);
@@ -194,6 +195,8 @@ void KisResourcesSnapshot::setupPainter(KisPainter* painter)
 
     painter->setStrokeStyle(m_d->strokeStyle);
     painter->setFillStyle(m_d->fillStyle);
+    painter->setPatternTransform(m_d->fillTransform);
+
 
     /**
      * The paintOp should be initialized the last, because it may
@@ -254,6 +257,11 @@ void KisResourcesSnapshot::setStrokeStyle(KisPainter::StrokeStyle strokeStyle)
 void KisResourcesSnapshot::setFillStyle(KisPainter::FillStyle fillStyle)
 {
     m_d->fillStyle = fillStyle;
+}
+
+void KisResourcesSnapshot::setFillTransform(QTransform transform)
+{
+    m_d->fillTransform = transform;
 }
 
 KisNodeSP KisResourcesSnapshot::currentNode() const
@@ -369,6 +377,15 @@ KisPaintOpPresetSP KisResourcesSnapshot::currentPaintOpPreset() const
     return m_d->currentPaintOpPreset;
 }
 
+KoAbstractGradient* KisResourcesSnapshot::currentGradient() const
+{
+    return m_d->currentGradient;
+}
+
+QTransform KisResourcesSnapshot::fillTransform() const
+{
+    return m_d->fillTransform;
+}
 
 QBitArray KisResourcesSnapshot::channelLockFlags() const
 {

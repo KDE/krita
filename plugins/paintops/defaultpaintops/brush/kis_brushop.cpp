@@ -87,6 +87,7 @@ KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter,
     m_rotationOption.readOptionSetting(settings);
     m_scatterOption.readOptionSetting(settings);
     m_sharpnessOption.readOptionSetting(settings);
+    m_lightnessStrengthOption.readOptionSetting(settings);
 
     m_opacityOption.resetAllSensors();
     m_flowOption.resetAllSensors();
@@ -98,6 +99,7 @@ KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter,
     m_rotationOption.resetAllSensors();
     m_scatterOption.resetAllSensors();
     m_sharpnessOption.resetAllSensors();
+    m_lightnessStrengthOption.resetAllSensors();
 
     m_rotationOption.applyFanCornersInfo(this);
 
@@ -167,7 +169,8 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
                                              cursorPos,
                                              shape,
                                              info,
-                                             m_softnessOption.apply(info));
+                                             m_softnessOption.apply(info),
+                                             m_lightnessStrengthOption.apply(info));
 
     m_dabExecutor->addDab(request, qreal(dabOpacity) / 255.0, qreal(dabFlow) / 255.0);
 
@@ -290,7 +293,7 @@ std::pair<int, bool> KisBrushOp::doAsyncronousUpdate(QVector<KisRunnableStrokeJo
              *    we paint only the parts intersecting the wrap rect.
              */
 
-            const QRect wrapRect = painter()->device()->defaultBounds()->bounds();
+            const QRect wrapRect = painter()->device()->defaultBounds()->imageBorderRect();
 
             QList<KisRenderedDab> wrappedDabs;
 

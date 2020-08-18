@@ -71,8 +71,9 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     cmbFilter->setToolTip(i18nc("@info:tooltip",
                                 "<p>Select filtering mode:\n"
                                 "<ul>"
-                                "<li><b>Bilinear</b> for areas with uniform color to avoid artifacts</li>"
-                                "<li><b>Bicubic</b> for smoother results</li>"
+                                "<li><b>Nearest neighbor</b> for pixel art. Does not produce new color.</li>"
+                                "<li><b>Bilinear</b> for areas with uniform color to avoid artifacts.</li>"
+                                "<li><b>Bicubic</b> for smoother results.</li>"
                                 "<li><b>Lanczos3</b> for sharp results. May produce aerials.</li>"
                                 "</ul></p>"));
     connect(cmbFilter, SIGNAL(activated(KoID)),
@@ -116,12 +117,12 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
 
 
     // initialize values for free transform sliders
-    shearXBox->setSuffix(i18n(" px"));
-    shearYBox->setSuffix(i18n(" px"));
-    shearXBox->setRange(-5.0, 5.0, 2);
-    shearYBox->setRange(-5.0, 5.0, 2);
-    shearXBox->setSingleStep(0.01);
-    shearYBox->setSingleStep(0.01);
+    shearXBox->setSuffix(QChar(Qt::Key_Percent));
+    shearYBox->setSuffix(QChar(Qt::Key_Percent));
+    shearXBox->setRange(-500, 500, 2);
+    shearYBox->setRange(-500, 500, 2);
+    shearXBox->setSingleStep(1);
+    shearYBox->setSingleStep(1);
     shearXBox->setValue(0.0);
     shearYBox->setValue(0.0);
 
@@ -553,8 +554,8 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
 
         scaleXBox->setValue(config.scaleX() * 100.);
         scaleYBox->setValue(config.scaleY() * 100.);
-        shearXBox->setValue(config.shearX());
-        shearYBox->setValue(config.shearY());
+        shearXBox->setValue(config.shearX() * 100.);
+        shearYBox->setValue(config.shearY() * 100.);
 
         const QPointF anchorPoint = config.originalCenter() + config.rotationCenterOffset();
         const KisTransformUtils::MatricesPack m(config);
@@ -931,7 +932,7 @@ void KisToolTransformConfigWidget::slotSetShearX(qreal value)
 
     {
         KisTransformUtils::AnchorHolder keeper(config->transformAroundRotationCenter(), config);
-        config->setShearX((double)value);
+        config->setShearX((double)value / 100.);
     }
 
     notifyConfigChanged();
@@ -946,7 +947,7 @@ void KisToolTransformConfigWidget::slotSetShearY(qreal value)
 
     {
         KisTransformUtils::AnchorHolder keeper(config->transformAroundRotationCenter(), config);
-        config->setShearY((double)value);
+        config->setShearY((double)value / 100.);
     }
 
 

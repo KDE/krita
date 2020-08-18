@@ -1,0 +1,9 @@
+{
+    "Id": "Multigrid Pattern Generator",
+    "Type": "Service",
+    "X-KDE-Library": "kritamultigridpatterngenerator",
+    "X-KDE-ServiceTypes": [
+        "Krita/Generator"
+    ],
+    "X-Krita-Version": "28"
+}

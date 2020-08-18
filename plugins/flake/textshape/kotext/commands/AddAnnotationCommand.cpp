@@ -26,6 +26,8 @@
 #include <KoShapeController.h>
 #include <KoShapeControllerBase.h>
 #include <KoTextDocument.h>
+#include <kis_assert.h>
+#include <KoShape.h>
 
 AddAnnotationCommand::AddAnnotationCommand(KoAnnotation *annotation, KUndo2Command *parent)
     : AddTextRangeCommand(annotation, parent)
@@ -38,18 +40,20 @@ AddAnnotationCommand::AddAnnotationCommand(KoAnnotation *annotation, KUndo2Comma
 void AddAnnotationCommand::undo()
 {
     AddTextRangeCommand::undo();
-    KoShapeController *shapeController = KoTextDocument(m_annotation->document()).shapeController();
     m_shape = m_annotation->annotationShape();
-    shapeController->documentBase()->removeShape(m_shape);
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_shape->parent());
+    m_shape->setParent(0);
 }
 
 void AddAnnotationCommand::redo()
 {
     AddTextRangeCommand::redo();
 
-    KoShapeController *shapeController = KoTextDocument(m_annotation->document()).shapeController();
-    shapeController->documentBase()->addShape(m_annotation->annotationShape());
- 
+    // FIXME: broken after KoShapeControllerBase refactoring!
+    // KoShapeController *shapeController = KoTextDocument(m_annotation->document()).shapeController();
+    // shapeController->documentBase()->addShape(m_annotation->annotationShape());
+
     m_shape = 0;
 
     //it's a textrange so we need to ask for a layout so we know where it is

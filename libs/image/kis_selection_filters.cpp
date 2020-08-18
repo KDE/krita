@@ -252,9 +252,10 @@ void KisDilateSelectionFilter::process(KisPixelSelectionSP pixelSelection, const
 }
 
 
-KisBorderSelectionFilter::KisBorderSelectionFilter(qint32 xRadius, qint32 yRadius)
+KisBorderSelectionFilter::KisBorderSelectionFilter(qint32 xRadius, qint32 yRadius, bool antialiasing)
   : m_xRadius(xRadius),
-    m_yRadius(yRadius)
+    m_yRadius(yRadius),
+    m_antialiasing(antialiasing)
 {
 }
 
@@ -336,27 +337,62 @@ void KisBorderSelectionFilter::process(KisPixelSelectionSP pixelSelection, const
         density[ x] += m_yRadius;
         density[-x]  = density[x];
     }
-    for (qint32 x = 0; x < (m_xRadius + 1); x++) { // compute density[][]
-        double tmpx, tmpy, dist;
-        quint8 a;
 
-        tmpx = x > 0.0 ? x - 0.5 : 0.0;
+    // compute density[][]
+    if (m_antialiasing) {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(m_xRadius == m_yRadius && "anisotropic fading is not implemented");
+        const qreal maxRadius = 0.5 * (m_xRadius + m_yRadius);
+        const qreal minRadius = maxRadius - 1.0;
 
-        for (qint32 y = 0; y < (m_yRadius + 1); y++) {
-            tmpy = y > 0.0 ? y - 0.5 : 0.0;
+        for (qint32 x = 0; x < (m_xRadius + 1); x++) {
+            double tmpx, tmpy, dist;
+            quint8 a;
 
-            dist = ((tmpy * tmpy) / (m_yRadius * m_yRadius) +
-                    (tmpx * tmpx) / (m_xRadius * m_xRadius));
-            if (dist < 1.0)
-                a = (quint8)(255 * (1.0 - sqrt(dist)));
-            else
-                a = 0;
-            density[ x][ y] = a;
-            density[ x][-y] = a;
-            density[-x][ y] = a;
-            density[-x][-y] = a;
+            tmpx = x > 0.0 ? x - 0.5 : 0.0;
+
+            for (qint32 y = 0; y < (m_yRadius + 1); y++) {
+                tmpy = y > 0.0 ? y - 0.5 : 0.0;
+
+                dist = sqrt(pow2(x) + pow2(y));
+
+                if (dist > maxRadius) {
+                    a = 0;
+                } else if (dist > minRadius) {
+                    a = qRound((1.0 - dist + minRadius) * 255.0);
+                } else {
+                    a = 255;
+                }
+
+                density[ x][ y] = a;
+                density[ x][-y] = a;
+                density[-x][ y] = a;
+                density[-x][-y] = a;
+            }
+        }
+
+    } else {
+        for (qint32 x = 0; x < (m_xRadius + 1); x++) {
+            double tmpx, tmpy, dist;
+            quint8 a;
+
+            tmpx = x > 0.0 ? x - 0.5 : 0.0;
+
+            for (qint32 y = 0; y < (m_yRadius + 1); y++) {
+                tmpy = y > 0.0 ? y - 0.5 : 0.0;
+
+                dist = (pow2(tmpy) / pow2(m_yRadius) +
+                        pow2(tmpx) / pow2(m_xRadius));
+
+                a = dist <= 1.0 ? 255 : 0;
+
+                density[ x][ y] = a;
+                density[ x][-y] = a;
+                density[-x][ y] = a;
+                density[-x][-y] = a;
+            }
         }
     }
+
     pixelSelection->readBytes(buf[0], rect.x(), rect.y(), rect.width(), 1);
     memcpy(buf[1], buf[0], rect.width());
     if (rect.height() > 1)
@@ -657,8 +693,7 @@ KUndo2MagicString KisShrinkSelectionFilter::name()
 
 QRect KisShrinkSelectionFilter::changeRect(const QRect& rect, KisDefaultBoundsBaseSP defaultBounds)
 {
-    Q_UNUSED(defaultBounds);
-    return rect.adjusted(-m_xRadius, -m_yRadius, m_xRadius, m_yRadius);
+    return m_edgeLock ? defaultBounds->imageBorderRect() : rect;
 }
 
 void KisShrinkSelectionFilter::process(KisPixelSelectionSP pixelSelection, const QRect& rect)

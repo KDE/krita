@@ -47,7 +47,6 @@
 #include "commands/kis_image_commands.h"
 #include "kis_layer.h"
 #include "kis_meta_data_merge_strategy_registry.h"
-#include "kis_name_server.h"
 #include "kis_paint_layer.h"
 #include "kis_projection_leaf.h"
 #include "kis_painter.h"
@@ -145,7 +144,6 @@ public:
         , width(w)
         , height(h)
         , colorSpace(c ? c : KoColorSpaceRegistry::instance()->rgb8())
-        , nserver(1)
         , undoStore(undo ? undo : new KisDumbUndoStore())
         , legacyUndoAdapter(undoStore.data(), _q)
         , postExecutionUndoAdapter(undoStore.data(), _q)
@@ -218,8 +216,6 @@ public:
     QList<KisLayerCompositionSP> compositions;
     KisNodeSP isolatedRootNode;
     bool wrapAroundModePermitted = false;
-
-    KisNameServer nserver;
 
     QScopedPointer<KisUndoStore> undoStore;
     KisLegacyUndoAdapter legacyUndoAdapter;
@@ -451,8 +447,6 @@ void KisImage::copyFromImageImpl(const KisImage &rhs, int policy)
 
     EMIT_IF_NEEDED sigLayersChangedAsync();
 
-    m_d->nserver = rhs.m_d->nserver;
-
     vKisAnnotationSP newAnnotations;
     Q_FOREACH (KisAnnotationSP annotation, rhs.m_d->annotations) {
         newAnnotations << annotation->clone();
@@ -647,21 +641,31 @@ QString KisImage::nextLayerName(const QString &_baseName) const
 {
     QString baseName = _baseName;
 
-    if (m_d->nserver.currentSeed() == 0) {
-        m_d->nserver.number();
+    int numLayers = 0;
+    int maxLayerIndex = 0;
+    QRegularExpression numberedLayerRegexp(".* (\\d+)$");
+    KisLayerUtils::recursiveApplyNodes(root(),
+        [&numLayers, &maxLayerIndex, &numberedLayerRegexp] (KisNodeSP node) {
+            if (node->inherits("KisLayer")) {
+                QRegularExpressionMatch match = numberedLayerRegexp.match(node->name());
+
+                if (match.hasMatch()) {
+                    maxLayerIndex = qMax(maxLayerIndex, match.captured(1).toInt());
+                }
+                numLayers++;
+            }
+        });
+
+    // special case if there is only root node
+    if (numLayers == 1) {
         return i18n("background");
     }
 
     if (baseName.isEmpty()) {
-        baseName = i18n("Layer");
+        baseName = i18n("Paint Layer");
     }
 
-    return QString("%1 %2").arg(baseName).arg(m_d->nserver.number());
-}
-
-void KisImage::rollBackLayerName()
-{
-    m_d->nserver.rollback();
+    return QString("%1 %2").arg(baseName).arg(maxLayerIndex + 1);
 }
 
 KisCompositeProgressProxy* KisImage::compositeProgressProxy()
@@ -1402,7 +1406,6 @@ void KisImage::setResolution(double xres, double yres)
 {
     m_d->xres = xres;
     m_d->yres = yres;
-    m_d->signalRouter.emitNotification(ResolutionChangedSignal);
 }
 
 QPointF KisImage::documentToPixel(const QPointF &documentCoord) const
@@ -1969,11 +1972,33 @@ void KisImage::refreshGraphAsync(KisNodeSP root, const QRect &rc)
 
 void KisImage::refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &cropRect)
 {
+    refreshGraphAsync(root, QVector<QRect>({rc}), cropRect);
+}
+
+void KisImage::refreshGraphAsync(KisNodeSP root, const QVector<QRect> &rects, const QRect &cropRect)
+{
     if (!root) root = m_d->rootLayer;
 
-    m_d->animationInterface->notifyNodeChanged(root.data(), rc, true);
-    m_d->scheduler.fullRefreshAsync(root, rc, cropRect);
+    /**
+     * We iterate through the filters in a reversed way. It makes the most nested filters
+     * to execute first.
+     */
+    for (auto it = m_d->projectionUpdatesFilters.rbegin();
+         it != m_d->projectionUpdatesFilters.rend();
+         ++it) {
+
+        KIS_SAFE_ASSERT_RECOVER(*it) { continue; }
+
+        if ((*it)->filterRefreshGraph(this, root.data(), rects, cropRect)) {
+            return;
+        }
+    }
+
+
+    m_d->animationInterface->notifyNodeChanged(root.data(), rects, true);
+    m_d->scheduler.fullRefreshAsync(root, rects, cropRect);
 }
+
 
 void KisImage::requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QRect &rc, const QRect &cropRect)
 {

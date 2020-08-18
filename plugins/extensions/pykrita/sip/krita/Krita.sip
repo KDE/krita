@@ -16,6 +16,8 @@ public Q_SLOTS:
     QList<QAction *> actions() const;
     QAction *action(const QString & name) const;
     QList<Document *> documents() const /Factory/;
+    QList<QDockWidget *> dockers() const;
+
     QStringList filters() const;
     Filter * filter(const QString &name) const /Factory/;
     QStringList colorModels() const;
@@ -59,6 +61,7 @@ public Q_SLOTS:
     static Krita * instance();
     static QObject * fromVariant(const QVariant & v);
     static QString krita_i18n(const QString &text);
+    static QString krita_i18nc(const QString &context, const QString &text);
 private:
     Krita(const Krita &); // Generated
 };

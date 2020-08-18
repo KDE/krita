@@ -76,7 +76,6 @@ struct KisGbrBrush::Private {
     quint32 version;      /*  brush file version #  */
     quint32 bytes;        /*  depth of brush in bytes */
     quint32 magic_number; /*  GIMP brush magic number  */
-
 };
 
 #define DEFAULT_SPACING 0.25
@@ -86,7 +85,6 @@ KisGbrBrush::KisGbrBrush(const QString& filename)
     , d(new Private)
 {
     d->ownData = true;
-    setHasColor(false);
     setSpacing(DEFAULT_SPACING);
 }
 
@@ -97,7 +95,6 @@ KisGbrBrush::KisGbrBrush(const QString& filename,
     , d(new Private)
 {
     d->ownData = false;
-    setHasColor(false);
     setSpacing(DEFAULT_SPACING);
 
     d->data = QByteArray::fromRawData(data.data() + dataPos, data.size() - dataPos);
@@ -111,7 +108,6 @@ KisGbrBrush::KisGbrBrush(KisPaintDeviceSP image, int x, int y, int w, int h)
     , d(new Private)
 {
     d->ownData = true;
-    setHasColor(false);
     setSpacing(DEFAULT_SPACING);
     initFromPaintDev(image, x, y, w, h);
 }
@@ -121,7 +117,6 @@ KisGbrBrush::KisGbrBrush(const QImage& image, const QString& name)
     , d(new Private)
 {
     d->ownData = false;
-    setHasColor(false);
     setSpacing(DEFAULT_SPACING);
 
     setBrushTipImage(image);
@@ -248,7 +243,8 @@ bool KisGbrBrush::init()
             return false;
         }
 
-        setHasColor(false);
+        setBrushApplication(ALPHAMASK);
+        setBrushType(MASK);
 
         for (quint32 y = 0; y < bh.height; y++) {
             uchar *pixel = reinterpret_cast<uchar *>(image.scanLine(y));
@@ -265,8 +261,8 @@ bool KisGbrBrush::init()
             return false;
         }
 
-        setHasColor(true);
-        setPreserveLightness(false);
+        setBrushApplication(IMAGESTAMP);
+        setBrushType(IMAGE);
 
         for (quint32 y = 0; y < bh.height; y++) {
             QRgb *pixel = reinterpret_cast<QRgb *>(image.scanLine(y));
@@ -298,8 +294,8 @@ bool KisGbrBrush::initFromPaintDev(KisPaintDeviceSP image, int x, int y, int w, 
     setBrushTipImage(image->convertToQImage(0, x, y, w, h, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags()));
     setName(image->objectName());
 
-    setHasColor(true);
-    setPreserveLightness(false);
+    setBrushType(IMAGE);
+    setBrushApplication(IMAGESTAMP);
 
     return true;
 }
@@ -386,17 +382,6 @@ bool KisGbrBrush::saveToDevice(QIODevice* dev) const
     return true;
 }
 
-enumBrushType KisGbrBrush::brushType() const
-{
-    return !hasColor() || useColorAsMask() ? MASK : IMAGE;
-}
-
-void KisGbrBrush::setBrushType(enumBrushType type)
-{
-    Q_UNUSED(type);
-    qFatal("FATAL: protected member setBrushType has no meaning for KisGbrBrush");
-}
-
 void KisGbrBrush::setBrushTipImage(const QImage& image)
 {
     KisBrush::setBrushTipImage(image);
@@ -408,11 +393,12 @@ void KisGbrBrush::makeMaskImage(bool preserveAlpha)
     if (!hasColor()) {
         return;
     }
+
     QImage brushTip = brushTipImage();
 
-    if (!preserveAlpha && brushTip.width() == width() && brushTip.height() == height()) {
-        int imageWidth = width();
-        int imageHeight = height();
+    if (!preserveAlpha) {
+        const int imageWidth = brushTip.width();
+        const int imageHeight = brushTip.height();
         QImage image(imageWidth, imageHeight, QImage::Format_Indexed8);
         QVector<QRgb> table;
         for (int i = 0; i < 256; ++i) {
@@ -434,13 +420,14 @@ void KisGbrBrush::makeMaskImage(bool preserveAlpha)
             }
         }
         setBrushTipImage(image);
+        setBrushType(MASK);
     }
     else {
         setBrushTipImage(brushTip);
+        setBrushType(IMAGE);
     }
 
-    setHasColor(preserveAlpha);
-    setUseColorAsMask(preserveAlpha);
+    setBrushApplication(ALPHAMASK);
     resetBoundary();
     clearBrushPyramid();
 }

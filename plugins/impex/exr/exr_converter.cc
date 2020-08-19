@@ -1232,20 +1232,20 @@ void EXRConverter::Private::recBuildPaintLayerSaveInfo(QList<ExrPaintLayerSaveIn
             }
             else {
 
-                if (paintLayer->colorSpace()->colorModelId() == RGBAColorModelID) {
+                if (info.layerDevice->colorSpace()->colorModelId() == RGBAColorModelID) {
                     info.channels.push_back(info.name + remap(current2original, "R"));
                     info.channels.push_back(info.name + remap(current2original, "G"));
                     info.channels.push_back(info.name + remap(current2original, "B"));
                     info.channels.push_back(info.name + remap(current2original, "A"));
                 }
-                else if (paintLayer->colorSpace()->colorModelId() == GrayAColorModelID) {
+                else if (info.layerDevice->colorSpace()->colorModelId() == GrayAColorModelID) {
                     info.channels.push_back(info.name + remap(current2original, "G"));
                     info.channels.push_back(info.name + remap(current2original, "A"));
                 }
-                else if (paintLayer->colorSpace()->colorModelId() == GrayColorModelID) {
+                else if (info.layerDevice->colorSpace()->colorModelId() == GrayColorModelID) {
                     info.channels.push_back(info.name + remap(current2original, "G"));
                 }
-                else if (paintLayer->colorSpace()->colorModelId() == XYZAColorModelID) {
+                else if (info.layerDevice->colorSpace()->colorModelId() == XYZAColorModelID) {
                     info.channels.push_back(info.name + remap(current2original, "X"));
                     info.channels.push_back(info.name + remap(current2original, "Y"));
                     info.channels.push_back(info.name + remap(current2original, "Z"));
@@ -1254,10 +1254,10 @@ void EXRConverter::Private::recBuildPaintLayerSaveInfo(QList<ExrPaintLayerSaveIn
 
             }
 
-            if (paintLayer->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
+            if (info.layerDevice->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
                 info.pixelType = Imf::HALF;
             }
-            else if (paintLayer->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
+            else if (info.layerDevice->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
                 info.pixelType = Imf::FLOAT;
             }
             else {

@@ -467,8 +467,7 @@ void EXRConverter::Private::decodeData1(Imf::InputFile& file, ExrPaintLayerInfo&
 
     QRect paintRegion(xstart, ystart, width, height);
     KisSequentialIterator it(layer->paintDevice(), paintRegion);
-    do {
-
+    while (it.nextPixel()) {
         if (hasAlpha) {
             unmultiplyAlpha<GrayPixelWrapper<_T_> >(srcPtr);
         }
@@ -479,7 +478,7 @@ void EXRConverter::Private::decodeData1(Imf::InputFile& file, ExrPaintLayerInfo&
         dstPtr->alpha = hasAlpha ? srcPtr->alpha : channel_type(1.0);
 
         ++srcPtr;
-    } while (it.nextPixel());
+    } ;
 }
 
 bool recCheckGroup(const ExrGroupLayerInfo& group, QStringList list, int idx1, int idx2)

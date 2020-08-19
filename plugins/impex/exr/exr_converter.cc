@@ -1077,7 +1077,7 @@ KisPaintDeviceSP wrapLayerDevice(KisPaintDeviceSP device)
             cs->colorModelId() == GrayAColorModelID ?
                 GrayAColorModelID.id() : RGBAColorModelID.id(),
             Float16BitsColorDepthID.id());
-    } else if (cs->colorModelId() != GrayColorModelID &&
+    } else if (cs->colorModelId() != GrayAColorModelID &&
                cs->colorModelId() != RGBAColorModelID) {
         cs = KoColorSpaceRegistry::instance()->colorSpace(
             RGBAColorModelID.id(),

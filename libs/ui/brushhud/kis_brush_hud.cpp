@@ -28,7 +28,7 @@
 #include <QScrollArea>
 #include <QEvent>
 #include <QToolButton>
-
+#include <QAction>
 
 #include "kis_uniform_paintop_property.h"
 #include "kis_slider_based_paintop_property.h"
@@ -43,6 +43,10 @@
 #include "kis_brush_hud_properties_config.h"
 #include "kis_elided_label.h"
 
+#include "kis_canvas2.h"
+#include "KisViewManager.h"
+#include "kactioncollection.h"
+
 #include "kis_debug.h"
 
 
@@ -53,6 +57,7 @@ struct KisBrushHud::Private
     QPointer<QWidget> wdgProperties;
     QPointer<QScrollArea> wdgPropertiesArea;
     QPointer<QVBoxLayout> propertiesLayout;
+    QPointer<QToolButton> btnReloadPreset;
     QPointer<QToolButton> btnConfigure;
 
     KisCanvasResourceProvider *provider;
@@ -80,15 +85,18 @@ KisBrushHud::KisBrushHud(KisCanvasResourceProvider *provider, QWidget *parent)
 
     m_d->lblPresetName = new KisElidedLabel("<Preset Name>", Qt::ElideMiddle, this);
 
+    m_d->btnReloadPreset = new QToolButton(this);
+    m_d->btnReloadPreset->setAutoRaise(true);
+
     m_d->btnConfigure = new QToolButton(this);
     m_d->btnConfigure->setAutoRaise(true);
 
-
-
+    connect(m_d->btnReloadPreset, SIGNAL(clicked()), SLOT(slotReloadPreset()));
     connect(m_d->btnConfigure, SIGNAL(clicked()), SLOT(slotConfigBrushHud()));
 
     labelLayout->addWidget(m_d->lblPresetIcon);
     labelLayout->addWidget(m_d->lblPresetName);
+    labelLayout->addWidget(m_d->btnReloadPreset);
     labelLayout->addWidget(m_d->btnConfigure);
 
     layout->addLayout(labelLayout);
@@ -152,6 +160,7 @@ void KisBrushHud::updateIcons()
             w->slotThemeChanged(qApp->palette());
         }
     }
+    m_d->btnReloadPreset->setIcon(KisIconUtils::loadIcon("view-refresh"));
     m_d->btnConfigure->setIcon(KisIconUtils::loadIcon("applications-system"));
 }
 
@@ -317,4 +326,11 @@ void KisBrushHud::slotConfigBrushHud()
     dlg.exec();
 
     slotReloadProperties();
+}
+
+void KisBrushHud::slotReloadPreset()
+{
+    KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(m_d->provider->canvas());
+    KIS_ASSERT_RECOVER_RETURN(canvas);
+    canvas->viewManager()->actionCollection()->action("reload_preset_action")->trigger();
 }

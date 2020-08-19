@@ -19,8 +19,10 @@
 
 #include "KoFileDialog.h"
 #include <KisDialogStateSaver.h>
+#include <kis_file_name_requester.h>
 
 #include <QSpinBox>
+#include <QMessageBox>
 
 DlgExportStoryboard::DlgExportStoryboard(ExportFormat format)
         : KoDialog()
@@ -28,25 +30,47 @@ DlgExportStoryboard::DlgExportStoryboard(ExportFormat format)
 {
     m_page = new WdgExportStoryboard(this);
 
-    setCaption(i18n("Export Storyboard"));
+    setCaption(i18n("Export Storyboard as ") + (format == ExportFormat::PDF ? "PDF":"SVG"));
     setButtons(Apply | Cancel);
     setButtonText(Apply, i18n("Export"));
     setDefaultButton(Apply);
 
-    m_page->lblSvgFileName->hide();
-    m_page->lblSvgFileName->setText("");
-    m_page->lblSvgFileName->setWordWrap(true);
+    connect(this, SIGNAL(applyClicked()), this, SLOT(slotExportClicked()));
+    connect(m_page->chkUseSVGLayout, SIGNAL(stateChanged(int)), this, SLOT(slotChkUseSvgLayoutChanged(int)));
+
+    m_page->spinboxRow->setMinimum(1);
+    m_page->spinboxColumn->setMinimum(1);
 
     QMap<QString, QVariant> defaults;
     defaults[ m_page->spinboxFirstItem->objectName() ] = QVariant::fromValue<int>(0);
     defaults[ m_page->spinboxLastItem->objectName() ] = QVariant::fromValue<int>(0);
     defaults[ m_page->spinboxRow->objectName() ] = QVariant::fromValue<int>(3);
     defaults[ m_page->spinboxColumn->objectName() ] = QVariant::fromValue<int>(3);
+    defaults[ m_page->spinboxFontSize->objectName() ] = QVariant::fromValue<int>(15);
 
     KisDialogStateSaver::restoreState(m_page, "krita/storyboard_export", defaults);
 
-    connect(this, SIGNAL(applyClicked()), this, SLOT(slotExportClicked()));
-    connect(m_page->btnSpecifySVG, SIGNAL(clicked()), this, SLOT(slotSpecifySvgClicked()));
+    if (format == ExportFormat::PDF) {
+        m_page->svgFileBaseName->hide();
+        m_page->lblSvgFileBaseName->hide();
+
+        QStringList mimeTypes;
+        mimeTypes << "application/pdf";
+        m_page->exportFileName->setMimeTypeFilters(mimeTypes);
+
+        m_page->exportFileName->setMode(KoFileDialog::SaveFile);
+    }
+    else {
+        m_page->exportFileName->setMode(KoFileDialog::OpenDirectory);
+        m_page->lblExportFileName->setText("Export Directory : ");
+    }
+
+    QStringList mimeTypes;
+    mimeTypes << "image/svg+xml";
+    m_page->svgLayoutFileName->setMimeTypeFilters(mimeTypes);
+    m_page->svgLayoutFileName->setMode(KoFileDialog::OpenFile);
+    slotChkUseSvgLayoutChanged(layoutSpecifiedBySvgFile());
+
     setMainWidget(m_page);
 }
 
@@ -98,14 +122,24 @@ QPageLayout::Orientation DlgExportStoryboard::pageOrientation() const
     return (QPageLayout::Orientation)m_page->cmbPageOrient->currentIndex();
 }
 
-QString DlgExportStoryboard::exportSvgFile() const
+bool DlgExportStoryboard::layoutSpecifiedBySvgFile() const
 {
-    return m_page->lblSvgFileName->text();
+    return m_page->chkUseSVGLayout->isChecked();
+}
+
+QString DlgExportStoryboard::layoutSvgFile() const
+{
+    return m_page->svgLayoutFileName->fileName();
 }
 
 QString DlgExportStoryboard::saveFileName() const
 {
-    return m_exportFileName;
+    return m_page->exportFileName->fileName();
+}
+
+QString DlgExportStoryboard::svgFileBaseName() const
+{
+    return m_page->svgFileBaseName->text();
 }
 
 ExportFormat DlgExportStoryboard::format() const
@@ -120,56 +154,71 @@ int DlgExportStoryboard::fontSize() const
 
 void DlgExportStoryboard::slotExportClicked()
 {
-    KoFileDialog savedlg(this, KoFileDialog::SaveFile, "Export File location");
-    savedlg.setCaption(i18nc("Export File loacation for storyboard", "Export File location"));
-    savedlg.setDefaultDir(QDir::cleanPath(QDir::homePath()));
-
-    QStringList mimeTypes;
-    if (m_format == ExportFormat::PDF) {
-        mimeTypes << "application/pdf";
+    if (m_page->exportFileName->fileName().isEmpty()) {
+        if (m_format == ExportFormat::PDF) {
+            QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("Please enter a file name to export to."));
+        }
+        else {
+            QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("Please enter a directory to export to."));
+        }
+        return;
     }
+
+    QFileInfo fil(m_page->svgLayoutFileName->fileName());
+    if (m_format == ExportFormat::PDF && !fil.exists()) {
+        QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("The file name is invalid. Please choose an valid PDF file name."));
+        return;
+    }
+
     if (m_format == ExportFormat::SVG) {
-        mimeTypes << "image/svg+xml";
-    }
-    savedlg.setMimeTypeFilters(mimeTypes);
 
-    m_exportFileName = "";
-    m_exportFileName = savedlg.filename();
-    if (m_exportFileName.isEmpty()) {
-        this->cancelClicked();
+        QDir dir(m_page->exportFileName->fileName());
+        if (!dir.exists()) {
+            QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("Please enter an existing directory."));
+            return;
+        }
+
+        QFileInfo info(svgFileBaseName() + "[0-9]*.svg");
+        QStringList filesList = dir.entryList({ info.fileName() });
+
+        if (!filesList.isEmpty()) {
+            QMessageBox::StandardButton result =
+                QMessageBox::warning(0,
+                                     i18n("Existing files with similar naming scheme"),
+                                     i18n("Files with the same naming "
+                                          "scheme exist in the destination "
+                                          "directory. They might be "
+                                          "deleted, continue?\n\n"
+                                          "Directory: %1\n"
+                                          "Files: %2",
+                                          dir.absolutePath(), filesList.at(0) + "..."),
+                                     QMessageBox::Yes | QMessageBox::No,
+                                     QMessageBox::No);
+            if (result == QMessageBox::No) {
+                return;
+            }
+        }
+    }
+
+    if (m_page->chkUseSVGLayout->isChecked() && m_page->svgLayoutFileName->fileName().isEmpty()) {
+        QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("Please choose svg file to specify the layout for exporting."));
+        return;
+    }
+    QFileInfo fi(m_page->svgLayoutFileName->fileName());
+    if (m_page->chkUseSVGLayout->isChecked() && !fi.exists()) {
+        QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("The SVG file to specify layout doesn't exist. Please choose an existing SVG file."));
+        return;
     }
 
     KisDialogStateSaver::saveState(m_page, "krita/storyboard_export");
     accept();
 }
 
-void DlgExportStoryboard::slotSpecifySvgClicked()
+void DlgExportStoryboard::slotChkUseSvgLayoutChanged(int state)
 {
-    KoFileDialog filedlg(this, KoFileDialog::OpenFile, "layout specification file");
-    filedlg.setCaption(i18nc("@title:window", "Choose SVG File to Specify Layout"));
-    filedlg.setDefaultDir(QDir::cleanPath(QDir::homePath()));
-
-    QStringList mimeTypes;
-    mimeTypes << "image/svg+xml";
-    filedlg.setMimeTypeFilters(mimeTypes);
-    QString fileName = filedlg.filename();
-
-    if (fileName.isEmpty()) {
-        return;
-    }
-
-    QFile f(fileName);
-    if (f.exists()) {
-        m_page->lblSvgFileName->setText(fileName);
-        m_page->lblSvgFileName->show();
-
-        //disable rows and column and size spinboxes
-        m_page->spinboxRow->setValue(0);
-        m_page->spinboxColumn->setValue(0);
-
-        m_page->spinboxRow->setEnabled(false);
-        m_page->spinboxColumn->setEnabled(false);
-        m_page->cmbPageSize->setEnabled(false);
-        m_page->cmbPageOrient->setEnabled(false);
-    }
+    m_page->spinboxRow->setEnabled(state != Qt::Checked);
+    m_page->spinboxColumn->setEnabled(state != Qt::Checked);
+    m_page->cmbPageSize->setEnabled(state != Qt::Checked);
+    m_page->cmbPageOrient->setEnabled(state != Qt::Checked);
+    m_page->svgLayoutFileName->setEnabled(state == Qt::Checked);
 }

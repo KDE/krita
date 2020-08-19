@@ -58,14 +58,16 @@ public:
     int columns() const;
     QPageSize pageSize() const;
     QPageLayout::Orientation pageOrientation() const;
-    QString exportSvgFile() const;
+    bool layoutSpecifiedBySvgFile() const;
+    QString layoutSvgFile() const;
     QString saveFileName() const;
+    QString svgFileBaseName() const;
     ExportFormat format() const;
     int fontSize() const;
 
 private Q_SLOTS:
     void slotExportClicked();
-    void slotSpecifySvgClicked();
+    void slotChkUseSvgLayoutChanged(int state);
 
 private:
     WdgExportStoryboard *m_page {0};

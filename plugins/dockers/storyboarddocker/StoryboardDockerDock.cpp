@@ -34,6 +34,7 @@
 #include <QPrinter>
 #include <QTextDocument>
 #include <QAbstractTextDocumentLayout>
+#include <QSvgGenerator>
 
 #include <klocalizedstring.h>
 
@@ -317,12 +318,11 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
 
         QVector<QRectF> layoutCellRects;
         QPrinter printer(QPrinter::HighResolution);
-        printer.setOutputFormat(QPrinter::PdfFormat );
-        printer.setOutputFileName(dlg.saveFileName());
 
-        bool layoutSpecifiedBySvg = !dlg.exportSvgFile().isEmpty();
+        //getting rectangles to paint panels in
+        bool layoutSpecifiedBySvg = dlg.layoutSpecifiedBySvgFile();
         if (layoutSpecifiedBySvg) {
-            QString svgFileName = dlg.exportSvgFile();
+            QString svgFileName = dlg.layoutSvgFile();
 
             layoutCellRects = getLayoutCellRects(svgFileName, &printer);
         }
@@ -331,22 +331,38 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
             int columns = dlg.columns();
             int firstItemFrame = dlg.firstItem();
             int lastItemFrame = dlg.lastItem();
+            printer.setOutputFileName(dlg.saveFileName());
             printer.setPageSize(dlg.pageSize());
             printer.setPageOrientation(dlg.pageOrientation());
 
             layoutCellRects = getLayoutCellRects(rows, columns, printer.pageRect());
         }
 
+        //exporting
         if (layoutCellRects.size() == 0) {
                 qDebug()<<"0 rects";
         }
-        else if (dlg.format() == ExportFormat::SVG) {
-            //export to svg
-        }
         else {
-            QPainter p(&printer);
+            QPainter p;
+            QSvgGenerator *generator;
 
-            //take font size as input
+            if (dlg.format() == ExportFormat::SVG) {
+                generator = new QSvgGenerator();
+                generator->setFileName(dlg.saveFileName() + "/" + dlg.svgFileBaseName() + "0.svg");
+                QSize sz = printer.pageRect().size();
+                generator->setSize(sz);
+                generator->setViewBox(QRect(0, 0, sz.width(), sz.height()));
+                generator->setResolution(printer.resolution());
+
+                p.begin(generator);
+            }
+            else {
+                printer.setOutputFileName(dlg.saveFileName());
+                printer.setOutputFormat(QPrinter::PdfFormat);
+
+                p.begin(&printer);
+            }
+
             QFont font = p.font();
             font.setPointSize(dlg.fontSize());
             p.setFont(font);
@@ -354,12 +370,29 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
 
             for (int i = 0; i < list.size(); i++) {
                 if (i % layoutCellRects.size() == 0 && i != 0) {
-                    printer.newPage();
+                    if (dlg.format() == ExportFormat::SVG) {
+                        p.end();
+                        p.eraseRect(printer.pageRect());
+                        delete generator;
+
+                        generator = new QSvgGenerator();
+                        generator->setFileName(dlg.saveFileName() + "/" + dlg.svgFileBaseName() + QString::number(i / layoutCellRects.size()) + ".svg");
+                        QSize sz = printer.pageRect().size();
+                        generator->setSize(sz);
+                        generator->setViewBox(QRect(0, 0, sz.width(), sz.height()));
+                        generator->setResolution(printer.resolution());
+                        p.begin(generator);
+                    }
+                    else {
+                        printer.newPage();
+                    }
                 }
                 QRectF cellRect = layoutCellRects.at(i % layoutCellRects.size());
 
                 //draw the cell rectangle
-                p.setPen(QColor(1, 0, 0));
+                QPen pen(QColor(1, 0, 0));
+                pen.setWidth(5);
+                p.setPen(pen);
 
                 ThumbnailData data = qvariant_cast<ThumbnailData>(list.at(i)->child(StoryboardItem::FrameNumber)->data());
                 QPixmap pxmp = qvariant_cast<QPixmap>(data.pixmap);
@@ -443,6 +476,7 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
                     p.eraseRect(eRect);
                 }
             }
+            p.end();
         }
     }
     QApplication::restoreOverrideCursor();

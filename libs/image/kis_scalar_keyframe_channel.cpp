@@ -449,9 +449,8 @@ QRect KisScalarKeyframeChannel::affectedRect(int time) const
 {
     Q_UNUSED(time);
 
-    // TODO: Performance might improve if we get content bounds from a node's paint device.
     if (node()) {
-        return node()->extent();
+        return node()->exactBounds();
     } else {
         return QRect();
     }

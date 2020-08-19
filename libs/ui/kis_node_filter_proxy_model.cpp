@@ -23,6 +23,7 @@
 #include "kis_node_model.h"
 #include "kis_node_manager.h"
 #include "kis_signal_compressor.h"
+#include "kis_signal_auto_connection.h"
 
 #include "kis_image.h"
 
@@ -40,6 +41,7 @@ struct KisNodeFilterProxyModel::Private
     QSet<int> acceptedLabels;
     KisSignalCompressor activeNodeCompressor;
     bool isUpdatingFilter = false;
+    KisSignalAutoConnectionsStore modelConnections;
 
     bool checkIndexAllowedRecursively(QModelIndex srcIndex);
 };
@@ -57,6 +59,10 @@ KisNodeFilterProxyModel::~KisNodeFilterProxyModel()
 
 void KisNodeFilterProxyModel::setNodeModel(KisNodeModel *model)
 {
+    m_d->modelConnections.clear();
+    m_d->modelConnections.addConnection(model, SIGNAL(sigBeforeBeginRemoveRows(const QModelIndex &, int, int)),
+                                        this, SLOT(slotBeforeBeginRemoveRows(const QModelIndex &, int, int)));
+
     m_d->nodeModel = model;
     setSourceModel(model);
 }
@@ -157,6 +163,15 @@ void KisNodeFilterProxyModel::slotUpdateCurrentNodeFilter()
     m_d->isUpdatingFilter = true;
     invalidateFilter();
     m_d->isUpdatingFilter = false;
+}
+
+void KisNodeFilterProxyModel::slotBeforeBeginRemoveRows(const QModelIndex &parent, int start, int end)
+{
+    for (int row = start; row <= end; row++) {
+        const QModelIndex sourceIndex = sourceModel()->index(row, 0, parent);
+        const QModelIndex mappedIndex = mapFromSource(sourceIndex);
+        emit sigBeforeBeginRemoveRows(mappedIndex.parent(), mappedIndex.row(), mappedIndex.row());
+    }
 }
 
 void KisNodeFilterProxyModel::unsetDummiesFacade()

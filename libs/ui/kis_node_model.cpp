@@ -372,6 +372,7 @@ void KisNodeModel::slotBeginRemoveDummy(KisNodeDummy *dummy)
 
     if (itemIndex.isValid()) {
         connectDummy(dummy, false);
+        emit sigBeforeBeginRemoveRows(parentIndex, itemIndex.row(), itemIndex.row());
         beginRemoveRows(parentIndex, itemIndex.row(), itemIndex.row());
         m_d->needFinishRemoveRows = true;
     }

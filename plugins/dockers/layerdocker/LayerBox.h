@@ -118,7 +118,7 @@ private Q_SLOTS:
     void slotEditGlobalSelection(bool showSelections);
     void slotRenameCurrentNode();
 
-    void slotAboutToRemoveRows(const QModelIndex &parent, int first, int last);
+    void slotAdjustCurrentBeforeRemoveRows(const QModelIndex &parent, int first, int last);
     void selectionChanged(const QModelIndexList selection);
     void slotNodeManagerChangedSelection(const QList<KisNodeSP> &nodes);
     void slotColorLabelChanged(int index);

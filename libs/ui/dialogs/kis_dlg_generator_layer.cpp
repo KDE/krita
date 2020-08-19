@@ -107,7 +107,7 @@ KisDlgGeneratorLayer::~KisDlgGeneratorLayer()
     }
     else if (result() == QDialog::Accepted) {
         KIS_ASSERT_RECOVER_RETURN(layer);
-        layer->setFilter(configuration());
+        layer->setFilter(configuration()->cloneWithResourcesSnapshot());
     }
 }
 
@@ -123,7 +123,7 @@ void KisDlgGeneratorLayer::slotNameChanged(const QString & text)
 void KisDlgGeneratorLayer::slotDelayedPreviewGenerator()
 {
     if (!m_stroke.isNull()) {
-        layer->setFilterWithoutUpdate(configuration());
+        layer->setFilterWithoutUpdate(configuration()->cloneWithResourcesSnapshot());
         layer->previewWithStroke(m_stroke);
     }
 }

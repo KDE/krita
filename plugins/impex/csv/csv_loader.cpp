@@ -298,7 +298,7 @@ KisImportExportErrorCode CSVLoader::decode(QIODevice *io, const QString &filenam
             if (frame > frameCount)
                 frameCount = frame;
 
-            animation->setFullClipRange(KisTimeSpan::fromTime(0,frameCount - 1));
+            animation->setFullClipRange(KisTimeSpan::fromTimeToTime(0,frameCount - 1));
             animation->setFramerate((int)framerate);
         }
 

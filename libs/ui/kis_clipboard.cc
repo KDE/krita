@@ -264,7 +264,7 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup, Ki
                     store->close();
                     QStringList list = str.split(' ');
                     if (list.size() == 2) {
-                        KisTimeSpan range(list[0].toInt(), list[1].toInt(), true);
+                        KisTimeSpan range = KisTimeSpan::fromTimeToTime(list[0].toInt(), list[1].toInt());
                         *clipRange = range;
                         qDebug() << "Pasted time range" << range;
                     }

@@ -83,11 +83,11 @@ void KisAnimationFrameCacheTest::testCache()
     verifyRangeIsCachedStatus(cache, 30, 40, KisAnimationFrameCache::Cached);
     QCOMPARE(cache->frameStatus(9999), KisAnimationFrameCache::Cached);
 
-    image->invalidateFrames(KisTimeSpan::fromTime(10, 12), QRect());
+    image->invalidateFrames(KisTimeSpan::fromTimeToTime(10, 12), QRect());
     verifyRangeIsCachedStatus(cache, 10, 12, KisAnimationFrameCache::Uncached);
     verifyRangeIsCachedStatus(cache, 13, 16, KisAnimationFrameCache::Cached);
 
-    image->invalidateFrames(KisTimeSpan::fromTime(15, 20), QRect());
+    image->invalidateFrames(KisTimeSpan::fromTimeToTime(15, 20), QRect());
     verifyRangeIsCachedStatus(cache, 13, 14, KisAnimationFrameCache::Cached);
     verifyRangeIsCachedStatus(cache, 15, 20, KisAnimationFrameCache::Uncached);
 
@@ -95,7 +95,7 @@ void KisAnimationFrameCacheTest::testCache()
     verifyRangeIsCachedStatus(cache, 90, 99, KisAnimationFrameCache::Cached);
     verifyRangeIsCachedStatus(cache, 100, 110, KisAnimationFrameCache::Uncached);
 
-    image->invalidateFrames(KisTimeSpan::fromTime(90, 100), QRect());
+    image->invalidateFrames(KisTimeSpan::fromTimeToTime(90, 100), QRect());
     verifyRangeIsCachedStatus(cache, 80, 89, KisAnimationFrameCache::Cached);
     verifyRangeIsCachedStatus(cache, 90, 100, KisAnimationFrameCache::Uncached);
 

@@ -215,8 +215,8 @@ KisImportExportErrorCode KisVideoSaver::encode(const QString &savedFilesMask, co
     KisImageAnimationInterface *animation = m_image->animationInterface();
 
     const int sequenceNumberingOffset = options.sequenceStart;
-    const KisTimeSpan clipRange(sequenceNumberingOffset + options.firstFrame,
-                                 sequenceNumberingOffset + options.lastFrame);
+    const KisTimeSpan clipRange = KisTimeSpan::fromTimeToTime(sequenceNumberingOffset + options.firstFrame,
+                                                        sequenceNumberingOffset + options.lastFrame);
 
      // export dimensions could be off a little bit, so the last force option tweaks the pixels for the export to work
     const QString exportDimensions =

@@ -711,7 +711,7 @@ void TimelineFramesView::slotSelectionChanged()
 
     KisTimeSpan range;
     if (maxColumn > minColumn) {
-        range = KisTimeSpan(minColumn, maxColumn - minColumn + 1);
+        range = KisTimeSpan::fromTimeWithDuration(minColumn, maxColumn - minColumn + 1);
     }
 
     if (m_d->model->isPlaybackPaused()) {

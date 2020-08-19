@@ -346,14 +346,14 @@ KisTimeSpan KisScalarKeyframeChannel::affectedFrames(int time) const
         if (prevScalarKey->interpolationMode() == KisScalarKeyframe::Constant) {
             return normalSpan;
         } else {
-            return normalSpan | KisTimeSpan::fromTime(previousKeyTime + 1, activeKeyTime);
+            return normalSpan | KisTimeSpan::fromTimeToTime(previousKeyTime + 1, activeKeyTime);
         }
     } else {
         const KisScalarKeyframeSP firstScalarKey = keyframeAt<KisScalarKeyframe>(firstKeyframeTime());
         if (!firstScalarKey) {
             return KisTimeSpan::infinite(0);
         }
-        return normalSpan | KisTimeSpan::fromTime(0, activeKeyTime);
+        return normalSpan | KisTimeSpan::fromTimeToTime(0, activeKeyTime);
     }
 }
 
@@ -371,14 +371,14 @@ KisTimeSpan KisScalarKeyframeChannel::identicalFrames(int time) const
         //TODO: Two keyframes should be considered identical if linear with same value..
         //TODO: Also, if bezier with same value AND tangents lie between points.
         //                                          (tangenty == keyframey)
-        return KisTimeSpan::fromTime(time, time);
+        return KisTimeSpan::fromTimeToTime(time, time);
     }
 
     const int nextKeyTime = nextKeyframeTime(time);
 
     //Before the first frame => there's no active frame but a valid next frame.
     if (!activeScalarKey && keyframeAt(nextKeyTime)) {
-        return KisTimeSpan::fromTime(0, nextKeyTime);
+        return KisTimeSpan::fromTimeToTime(0, nextKeyTime);
     }
 
     //No next frame, all frames after are identical.
@@ -386,7 +386,7 @@ KisTimeSpan KisScalarKeyframeChannel::identicalFrames(int time) const
        return KisTimeSpan::infinite(activeKeyframeTime(time));
     }
 
-    return KisTimeSpan(activeKeyframeTime(time), nextKeyTime - 1);
+    return KisTimeSpan::fromTimeToTime(activeKeyframeTime(time), nextKeyTime - 1);
 }
 
 qreal KisScalarKeyframeChannel::findCubicCurveParameter(int time0, qreal delta0, qreal delta1, int time1, int time)

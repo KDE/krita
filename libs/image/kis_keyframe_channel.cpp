@@ -323,7 +323,7 @@ KisTimeSpan KisKeyframeChannel::affectedFrames(int time) const
 
     // Check for keyframe behind..
     if (!keyframeAt(activeKeyTime)) {
-        return KisTimeSpan::fromTime(0, nextKeyTime - 1);
+        return KisTimeSpan::fromTimeToTime(0, nextKeyTime - 1);
     }
 
     // Check for keyframe ahead..
@@ -331,7 +331,7 @@ KisTimeSpan KisKeyframeChannel::affectedFrames(int time) const
         return KisTimeSpan::infinite(activeKeyTime);
     }
 
-    return KisTimeSpan::fromTime(activeKeyTime, nextKeyTime - 1);
+    return KisTimeSpan::fromTimeToTime(activeKeyTime, nextKeyTime - 1);
 }
 
 KisTimeSpan KisKeyframeChannel::identicalFrames(int time) const

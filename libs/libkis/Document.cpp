@@ -988,7 +988,7 @@ void Document::setPlayBackRange(int start, int stop)
     if (!d->document) return;
     if (!d->document->image()) return;
 
-    const KisTimeSpan newTimeRange = KisTimeSpan(start, (stop-start));
+    const KisTimeSpan newTimeRange = KisTimeSpan::fromTimeWithDuration(start, (stop-start));
     d->document->image()->animationInterface()->setPlaybackRange(newTimeRange);
 }
 

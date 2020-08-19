@@ -134,7 +134,7 @@ public:
     int channelHash() const;
 
     /** @brief Get the set of frames affected by any changes to the value
-     * of the active keyframe at the given time. */
+     * or content of the active keyframe at the given time. */
     virtual KisTimeSpan affectedFrames(int time) const;
 
     /** @brief Get a span of times for which the channel gives identical

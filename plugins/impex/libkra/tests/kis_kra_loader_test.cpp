@@ -139,7 +139,7 @@ void KisKraLoaderTest::testLoadAnimated()
     QCOMPARE(channel1->keyframeCount(), 3);
 
     QCOMPARE(image->animationInterface()->framerate(), 17);
-    QCOMPARE(image->animationInterface()->fullClipRange(), KisTimeSpan::fromTime(15, 45));
+    QCOMPARE(image->animationInterface()->fullClipRange(), KisTimeSpan::fromTimeToTime(15, 45));
     QCOMPARE(image->animationInterface()->currentTime(), 19);
 
     KisPaintDeviceSP dev = layer1->paintDevice();

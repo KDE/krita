@@ -63,7 +63,7 @@ void KisAnimationRender::render(KisDocument *doc, KisViewManager *viewManager, K
 
     const bool batchMode = false; // TODO: fetch correctly!
     KisAsyncAnimationFramesSaveDialog exporter(doc->image(),
-                                               KisTimeSpan::fromTime(encoderOptions.firstFrame,
+                                               KisTimeSpan::fromTimeToTime(encoderOptions.firstFrame,
                                                                       encoderOptions.lastFrame),
                                                baseFileName,
                                                encoderOptions.sequenceStart,

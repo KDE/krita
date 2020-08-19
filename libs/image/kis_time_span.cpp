@@ -142,7 +142,7 @@ bool loadValue(const QDomElement &parent, const QString &tag, KisTimeSpan *range
     } else if (end == -1) {
         *range = KisTimeSpan::infinite(start);
     } else {
-        *range = KisTimeSpan::fromTime(start, end);
+        *range = KisTimeSpan::fromTimeToTime(start, end);
     }
     return true;
 }

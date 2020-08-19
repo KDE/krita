@@ -172,7 +172,7 @@ void KisImageAnimationInterfaceTest::testFramesChangedSignal()
 
     QCOMPARE(spy.count(), 1);
     arguments = spy.takeFirst();
-    QCOMPARE(arguments.at(0).value<KisTimeSpan>(), KisTimeSpan(10, 10));
+    QCOMPARE(arguments.at(0).value<KisTimeSpan>(), KisTimeSpan::fromTimeWithDuration(10, 10));
 
     // Recursive
 

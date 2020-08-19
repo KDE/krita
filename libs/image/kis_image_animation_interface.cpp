@@ -103,7 +103,7 @@ KisImageAnimationInterface::KisImageAnimationInterface(KisImage *image)
     m_d->image = image;
 
     m_d->framerate = 24;
-    m_d->fullClipRange = KisTimeSpan::fromTime(0, 100);
+    m_d->fullClipRange = KisTimeSpan::fromTimeToTime(0, 100);
 
     connect(this, SIGNAL(sigInternalRequestTimeSwitch(int,bool)), SLOT(switchCurrentTimeAsync(int,bool)));
 }
@@ -155,13 +155,13 @@ void KisImageAnimationInterface::setFullClipRange(const KisTimeSpan range)
 
 void KisImageAnimationInterface::setFullClipRangeStartTime(int column)
 {
-    KisTimeSpan newRange(column,  m_d->fullClipRange.end(), false);
+    KisTimeSpan newRange = KisTimeSpan::fromTimeToTime(column,  m_d->fullClipRange.end());
     setFullClipRange(newRange);
 }
 
 void KisImageAnimationInterface::setFullClipRangeEndTime(int column)
 {
-    KisTimeSpan newRange(m_d->fullClipRange.start(), column, false);
+    KisTimeSpan newRange = KisTimeSpan::fromTimeToTime(m_d->fullClipRange.start(), column);
     setFullClipRange(newRange);
 }
 

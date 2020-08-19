@@ -255,8 +255,8 @@ LayerBox::LayerBox()
     m_wdgLayerBox->listLayers->setModel(m_filteringModel);
     // this connection should be done *after* the setModel() call to
     // happen later than the internal selection model
-    connect(m_filteringModel.data(), &KisNodeFilterProxyModel::rowsAboutToBeRemoved,
-            this, &LayerBox::slotAboutToRemoveRows);
+    connect(m_filteringModel.data(), &KisNodeFilterProxyModel::sigBeforeBeginRemoveRows,
+            this, &LayerBox::slotAdjustCurrentBeforeRemoveRows);
 
 
     //LayerFilter Menu
@@ -1007,17 +1007,17 @@ void LayerBox::selectionChanged(const QModelIndexList selection)
     updateUI();
 }
 
-void LayerBox::slotAboutToRemoveRows(const QModelIndex &parent, int start, int end)
+void LayerBox::slotAdjustCurrentBeforeRemoveRows(const QModelIndex &parent, int start, int end)
 {
     /**
      * Qt has changed its behavior when deleting an item. Previously
      * the selection priority was on the next item in the list, and
      * now it has shanged to the previous item. Here we just adjust
-     * the selected item after the node removal. Please take care that
-     * this method overrides what was done by the corresponding method
-     * of QItemSelectionModel, which *has already done* its work. That
-     * is why we use (start - 1) and (end + 1) in the activation
-     * condition.
+     * the selected item after the node removal.
+     *
+     * This method is called right before the Qt's beginRemoveRows()
+     * is called, that is we make sure that Qt will never have to
+     * adjust the position of the removed cursor.
      *
      * See bug: https://bugs.kde.org/show_bug.cgi?id=345601
      */
@@ -1026,7 +1026,7 @@ void LayerBox::slotAboutToRemoveRows(const QModelIndex &parent, int start, int e
     QAbstractItemModel *model = m_filteringModel;
 
     if (currentIndex.isValid() && parent == currentIndex.parent()
-            && currentIndex.row() >= start - 1 && currentIndex.row() <= end + 1) {
+            && currentIndex.row() >= start && currentIndex.row() <= end) {
         QModelIndex old = currentIndex;
 
         if (model && end < model->rowCount(parent) - 1) // there are rows left below the change

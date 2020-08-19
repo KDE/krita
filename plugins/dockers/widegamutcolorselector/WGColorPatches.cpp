@@ -48,7 +48,7 @@ void WGColorPatches::setColors(QList<KoColor> colors)
 
 void WGColorPatches::setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer)
 {
-    m_displayRenderer = displayRenderer;
+    m_displayRenderer = displayRenderer ? displayRenderer : KoDumbColorDisplayRenderer::instance();
 }
 
 void WGColorPatches::mouseMoveEvent(QMouseEvent *event)

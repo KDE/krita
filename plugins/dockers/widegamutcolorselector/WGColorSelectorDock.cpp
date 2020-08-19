@@ -97,6 +97,8 @@ void WGColorSelectorDock::setCanvas(KoCanvasBase *canvas)
 void WGColorSelectorDock::unsetCanvas()
 {
     setEnabled(false);
+    m_selector->setDisplayRenderer(0);
+    m_history->setDisplayRenderer(0);
     m_canvas = 0;
 }
 

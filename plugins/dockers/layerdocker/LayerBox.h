@@ -40,6 +40,7 @@
 #include "KisViewManager.h"
 #include "kis_mainwindow_observer.h"
 #include "kis_signal_compressor.h"
+#include "kis_signal_auto_connection.h"
 #include <QSlider>
 
 class QModelIndex;
@@ -176,6 +177,7 @@ private:
     KisNodeWSP m_savedNodeBeforeEditSelectionMode;
     QPointer<KisKeyframeChannel> m_opacityChannel;
     bool m_blockOpacityUpdate {false};
+    KisSignalAutoConnectionsStore m_activeNodeConnections;
 };
 
 class LayerBoxFactory : public KoDockFactoryBase

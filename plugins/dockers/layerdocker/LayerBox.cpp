@@ -507,17 +507,26 @@ void LayerBox::updateUI()
     KisNodeSP activeNode = m_nodeManager->activeNode();
 
     if (activeNode != m_activeNode) {
-        if( !m_activeNode.isNull() )
-            m_activeNode->disconnect(this);
+        m_activeNodeConnections.clear();
         m_activeNode = activeNode;
 
         if (activeNode) {
+            KisPaintDeviceSP parentLayerDevice = activeNode->parent() ? activeNode->parent()->original() : 0;
+            if (parentLayerDevice) {
+                // update blending modes availability
+                m_activeNodeConnections.addConnection(
+                     parentLayerDevice, SIGNAL(colorSpaceChanged(const KoColorSpace*)),
+                     this, SLOT(updateUI()));
+            }
+
             KisKeyframeChannel *opacityChannel = activeNode->getKeyframeChannel(KisKeyframeChannel::Opacity.id(), false);
             if (opacityChannel) {
                 watchOpacityChannel(opacityChannel);
             } else {
                 watchOpacityChannel(0);
-                connect(activeNode.data(), &KisNode::keyframeChannelAdded, this, &LayerBox::slotKeyframeChannelAdded);
+                m_activeNodeConnections.addConnection(
+                    activeNode, SIGNAL(keyframeChannelAdded(KisKeyframeChannel*)),
+                    this, SLOT(slotKeyframeChannelAdded(KisKeyframeChannel*)));
             }
         }
     }
@@ -530,7 +539,6 @@ void LayerBox::updateUI()
     m_wdgLayerBox->doubleOpacity->setEnabled(activeNode && activeNode->isEditable(false));
 
     m_wdgLayerBox->cmbComposite->setEnabled(activeNode && activeNode->isEditable(false));
-    m_wdgLayerBox->cmbComposite->validate(m_image->colorSpace());
 
     if (activeNode) {
         if (activeNode->inherits("KisColorizeMask") || activeNode->inherits("KisLayer")) {
@@ -543,6 +551,9 @@ void LayerBox::updateUI()
 
             const KoCompositeOp* compositeOp = activeNode->compositeOp();
             if (compositeOp) {
+                /// the composite op works in the color space of the parent layer,
+                /// not the active one.
+                m_wdgLayerBox->cmbComposite->validate(compositeOp->colorSpace());
                 slotSetCompositeOp(compositeOp);
             } else {
                 m_wdgLayerBox->cmbComposite->setEnabled(false);

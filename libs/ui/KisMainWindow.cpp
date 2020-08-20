@@ -210,6 +210,7 @@ public:
         widgetStack->addWidget(mdiArea);
         mdiArea->setTabsMovable(true);
         mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
+        mdiArea->setDocumentMode(true);
     }
 
     ~Private() {
@@ -917,29 +918,40 @@ void KisMainWindow::reloadRecentFileList()
 void KisMainWindow::updateCaption()
 {
     if (!d->mdiArea->activeSubWindow()) {
-        updateCaption(QString(), false);
+        setWindowTitle("");
+        setWindowModified(false);
     }
     else if (d->activeView && d->activeView->document() && d->activeView->image()){
         KisDocument *doc = d->activeView->document();
 
-        QString caption(doc->caption());
+        QString caption = doc->caption();
+
+        if (d->mdiArea->activeSubWindow() && d->mdiArea->activeSubWindow()->isMaximized() && d->mdiArea->viewMode() == QMdiArea::SubWindowView) {
+            caption = "";
+        }
 
         if (d->readOnly) {
-            caption += " [" + i18n("Write Protected") + "] ";
+            caption += " " + i18n("Write Protected") + " ";
         }
 
         if (doc->isRecovered()) {
-            caption += " [" + i18n("Recovered") + "] ";
+            caption += " " + i18n("Recovered") + " ";
         }
 
         // show the file size for the document
         KisMemoryStatisticsServer::Statistics m_fileSizeStats = KisMemoryStatisticsServer::instance()->fetchMemoryStatistics(d->activeView ? d->activeView->image() : 0);
 
         if (m_fileSizeStats.imageSize) {
-            caption += QString(" (").append( KFormat().formatByteSize(m_fileSizeStats.imageSize)).append( ")");
+            caption += QString(" (").append( KFormat().formatByteSize(m_fileSizeStats.imageSize)).append( ") ");
         }
 
-        updateCaption(caption, doc->isModified());
+        if (doc->isModified()) {
+            caption += " *";
+        }
+
+        d->mdiArea->activeSubWindow()->setWindowTitle(doc->caption());
+        setWindowTitle(caption);
+        setWindowModified(doc->isModified());
 
         if (!doc->url().fileName().isEmpty()) {
             d->saveAction->setToolTip(i18n("Save as %1", doc->url().fileName()));
@@ -950,19 +962,6 @@ void KisMainWindow::updateCaption()
     }
 }
 
-void KisMainWindow::updateCaption(const QString &caption, bool modified)
-{
-    QString title = caption;
-    if (!title.contains(QStringLiteral("[*]"))) { // append the placeholder so that the modified mechanism works
-        title.append(QStringLiteral(" [*]"));
-    }
-
-    if (d->mdiArea->activeSubWindow()) {
-        d->mdiArea->activeSubWindow()->setWindowTitle(title);
-    }
-    setWindowTitle(title);
-    setWindowModified(modified);
-}
 
 
 KisView *KisMainWindow::activeView() const

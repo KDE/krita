@@ -33,46 +33,46 @@ class TimelineWidget;
 enum TimelineDirection : short
 {
     LEFT = -1,
-    BEFORE = -1,
-
     RIGHT = 1,
-    AFTER = 1
+    BEFORE = LEFT,
+    AFTER = RIGHT
 };
 
 class KRITAANIMATIONDOCKER_EXPORT TimelineFramesView : public QTableView
 {
     Q_OBJECT
-
 public:
     TimelineFramesView(QWidget *parent);
     ~TimelineFramesView() override;
 
     void setModel(QAbstractItemModel *model) override;
+    void setActionManager(KisActionManager *actionManager);
 
     void updateGeometries() override;
 
-    void setPinToTimeline(KisAction *action);
-
-    void setActionManager(KisActionManager *actionManager);
-
 public Q_SLOTS:
-    void slotSelectionChanged();
-    void slotUpdateIcons();
-
     void slotCanvasUpdate(class KoCanvasBase* canvas);
 
-private Q_SLOTS:
+    void slotUpdateIcons();
     void slotUpdateLayersMenu();
     void slotUpdateFrameActions();
+
+    void slotSelectionChanged();
+    void slotReselectCurrentIndex();
 
     void slotSetStartTimeToCurrentPosition();
     void slotSetEndTimeToCurrentPosition();
     void slotUpdatePlackbackRange();
+    void slotUpdateInfiniteFramesCount();
+
+    void slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
+    void slotHeaderDataChanged(Qt::Orientation orientation, int first, int last);
+
+    void slotColorLabelChanged(int);
 
     // Layer
     void slotAddNewLayer();
     void slotAddExistingLayer(QAction *action);
-    void slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
     void slotRemoveLayer();
     void slotLayerContextMenuRequested(const QPoint &globalPos);
 
@@ -120,19 +120,6 @@ private Q_SLOTS:
     void slotPasteFrames(bool entireColumn = false);
     void slotPasteColumns() {slotPasteFrames(true);}
 
-    void slotReselectCurrentIndex();
-
-    void slotUpdateInfiniteFramesCount();
-
-    void slotHeaderDataChanged(Qt::Orientation orientation, int first, int last);
-
-    void slotZoomButtonChanged(qreal value);
-
-    void slotScrollbarZoom(qreal zoom);
-
-    void slotColorLabelChanged(int);
-    void slotEnsureRowVisible(int row);
-
     // Audio
     void slotSelectAudioChannelFile();
     void slotAudioChannelMute(bool value);
@@ -140,18 +127,43 @@ private Q_SLOTS:
     void slotUpdateAudioActions();
     void slotAudioVolumeChanged(int value);
 
-    // DragScroll
+    // Zoom & Scroll
+    void slotZoomButtonChanged(qreal value);
     void slotScrollerStateChanged(QScroller::State state);
+    void slotScrollbarZoom(qreal zoom);
     void slotUpdateDragInfiniteFramesCount();
-
     void slotRealignScrollBars();
+    void slotEnsureRowVisible(int row);
+
+protected:
+    bool viewportEvent(QEvent *event) override;
+
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *e) override;
+    void mouseReleaseEvent(QMouseEvent *e) override;
+
+    void startDrag(Qt::DropActions supportedActions) override;
+    void dragEnterEvent(QDragEnterEvent *event) override;
+    void dragMoveEvent(QDragMoveEvent *event) override;
+    void dragLeaveEvent(QDragLeaveEvent *event) override;
+    void dropEvent(QDropEvent *event) override;
+
+    void wheelEvent(QWheelEvent *e) override;
+    void resizeEvent(QResizeEvent *e) override;
+
+    void rowsInserted(const QModelIndex &parent, int start, int end) override;
+    void currentChanged(const QModelIndex &current, const QModelIndex &previous) override;
+
+    QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index,
+                                                         const QEvent *event) const override;
 
 private:
     void setFramesPerSecond(int fps);
 
+    QModelIndexList calculateSelectionSpan(bool entireColumn, bool editableOnly = true) const;
     void calculateSelectionMetrics(int &minColumn, int &maxColumn, QSet<int> &rows) const;
 
-    /*   Insert new keyframes/columns.
+    /**   Insert new keyframes/columns.
      *
      *   count        - Number of frames to add. If <0, use number of currently SELECTED frames.
      *   timing       - Animation timing of frames to be added (on 1s, 2s, 3s, etc.)
@@ -170,31 +182,10 @@ private:
 
     void createFrameEditingMenuActions(QMenu *menu, bool addFrameCreationActions);
 
-    QModelIndexList calculateSelectionSpan(bool entireColumn, bool editableOnly = true) const;
-
-    int estimateLastVisibleColumn();
     int estimateFirstVisibleColumn();
+    int estimateLastVisibleColumn();
     int scrollPositionFromColumn( int column );
 
-protected:
-    QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index,
-                                                         const QEvent *event) const override;
-
-    void currentChanged(const QModelIndex &current, const QModelIndex &previous) override;
-    void startDrag(Qt::DropActions supportedActions) override;
-    void dragEnterEvent(QDragEnterEvent *event) override;
-    void dragMoveEvent(QDragMoveEvent *event) override;
-    void dropEvent(QDropEvent *event) override;
-    void dragLeaveEvent(QDragLeaveEvent *event) override;
-    void mousePressEvent(QMouseEvent *event) override;
-    void mouseMoveEvent(QMouseEvent *e) override;
-    void mouseReleaseEvent(QMouseEvent *e) override;
-    void wheelEvent(QWheelEvent *e) override;
-    void resizeEvent(QResizeEvent *e) override;
-    void rowsInserted(const QModelIndex &parent, int start, int end) override;
-    bool viewportEvent(QEvent *event) override;
-
-private:
     struct Private;
     const QScopedPointer<Private> m_d;
 };

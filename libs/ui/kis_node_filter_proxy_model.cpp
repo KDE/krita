@@ -170,7 +170,10 @@ void KisNodeFilterProxyModel::slotBeforeBeginRemoveRows(const QModelIndex &paren
     for (int row = start; row <= end; row++) {
         const QModelIndex sourceIndex = sourceModel()->index(row, 0, parent);
         const QModelIndex mappedIndex = mapFromSource(sourceIndex);
-        emit sigBeforeBeginRemoveRows(mappedIndex.parent(), mappedIndex.row(), mappedIndex.row());
+
+        if (mappedIndex.isValid()) {
+            emit sigBeforeBeginRemoveRows(mappedIndex.parent(), mappedIndex.row(), mappedIndex.row());
+        }
     }
 }
 

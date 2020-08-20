@@ -919,8 +919,7 @@ void KisMainWindow::updateCaption()
 {
     if (!d->mdiArea->activeSubWindow()) {
         setWindowTitle("");
-        setWindowModified(false);
-    }
+   }
     else if (d->activeView && d->activeView->document() && d->activeView->image()){
         KisDocument *doc = d->activeView->document();
 
@@ -951,7 +950,6 @@ void KisMainWindow::updateCaption()
 
         d->mdiArea->activeSubWindow()->setWindowTitle(doc->caption());
         setWindowTitle(caption);
-        setWindowModified(doc->isModified());
 
         if (!doc->url().fileName().isEmpty()) {
             d->saveAction->setToolTip(i18n("Save as %1", doc->url().fileName()));

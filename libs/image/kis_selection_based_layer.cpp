@@ -212,8 +212,11 @@ void KisSelectionBasedLayer::resetCache()
         return;
     }
 
-    if (!m_d->paintDevice || *m_d->paintDevice->colorSpace() != *imageSP->colorSpace()) {
+    if (!m_d->paintDevice) {
         m_d->paintDevice = KisPaintDeviceSP(new KisPaintDevice(KisNodeWSP(this), imageSP->colorSpace(), new KisDefaultBounds(image())));
+    } else if (*m_d->paintDevice->colorSpace() != *imageSP->colorSpace()) {
+        m_d->paintDevice->clear();
+        m_d->paintDevice->convertTo(imageSP->colorSpace());
     } else {
         m_d->paintDevice->clear();
     }

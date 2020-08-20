@@ -884,8 +884,6 @@ KisImportExportErrorCode EXRConverter::decode(const QString &filename)
                 dbgFile << "No decoding " << info.name << " with " << info.channelMap.size() << " channels, and lack of a color space";
             }
         }
-        // Set projectionColor to opaque
-        d->image->setDefaultProjectionColor(KoColor(Qt::transparent, colorSpace));
 
         // After reading the image, notify the user about changed alpha.
         if (d->alphaWasModified) {

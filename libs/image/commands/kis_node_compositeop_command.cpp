@@ -30,14 +30,23 @@ KisNodeCompositeOpCommand::KisNodeCompositeOpCommand(KisNodeSP node, const QStri
     m_newCompositeOp = newCompositeOp;
 }
 
+void KisNodeCompositeOpCommand::setCompositeOpImpl(const QString &compositeOp)
+{
+    /**
+     * The node might have had "Destination Atop" blending
+     * that changes extent of the layer
+     */
+    const QRect oldExtent = m_node->extent();
+    m_node->setCompositeOpId(compositeOp);
+    m_node->setDirty(oldExtent | m_node->extent());
+}
+
 void KisNodeCompositeOpCommand::redo()
 {
-    m_node->setCompositeOpId(m_newCompositeOp);
-    m_node->setDirty();
+    setCompositeOpImpl(m_newCompositeOp);
 }
 
 void KisNodeCompositeOpCommand::undo()
 {
-    m_node->setCompositeOpId(m_oldCompositeOp);
-    m_node->setDirty();
+    setCompositeOpImpl(m_oldCompositeOp);
 }

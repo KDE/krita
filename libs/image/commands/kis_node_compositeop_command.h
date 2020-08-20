@@ -39,6 +39,9 @@ public:
     void undo() override;
 
 private:
+    void setCompositeOpImpl(const QString &compositeOp);
+
+private:
     QString m_oldCompositeOp;
     QString m_newCompositeOp;
 };

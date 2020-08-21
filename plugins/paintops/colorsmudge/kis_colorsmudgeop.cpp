@@ -242,19 +242,8 @@ void KisColorSmudgeOp::mixSmudgePaintAt(const KisPaintInformation& info, KisPrec
 
     qreal dullingFactor = smudgeLength * 0.8 * fpOpacity;
 
-    qreal opacityAdjusted; //Adjust opacity value to get a visually better curve
-    if (fpOpacity > 0.8) {
-        opacityAdjusted = fpOpacity * fpOpacity * fpOpacity * fpOpacity;
-    } else if (fpOpacity > 0.6) {
-        opacityAdjusted = fpOpacity * fpOpacity * fpOpacity * 0.8;
-    } else if (fpOpacity > 0.3) {
-        opacityAdjusted = fpOpacity * fpOpacity * 0.6 * 0.8;
-    } else {
-        opacityAdjusted = fpOpacity * (0.6 - fpOpacity) * 0.6 * 0.75;
-    }
-
-    int colorAlpha = qRound(colorRate * colorRate * opacityAdjusted * 255.0);
-    int smudgeAlpha = qRound(smudgeLength * opacityAdjusted * 255.0);
+    int colorAlpha = qRound(colorRate * colorRate * fpOpacity * 255.0);
+    int smudgeAlpha = qRound(smudgeLength * fpOpacity * 255.0);
     int numPixels = width * height;
 
     activeWrapper.readRect(m_dstDabRect); //copy the current data in the destination

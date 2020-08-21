@@ -278,6 +278,7 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev)
     setValid(true);
     setImage(img);
 
+    saveInitialState();
     return true;
 }
 
@@ -295,6 +296,7 @@ bool KisPaintOpPreset::save()
     QFile f(filename());
     f.open(QFile::WriteOnly);
 
+    saveInitialState();
     return saveToDevice(&f);
 }
 

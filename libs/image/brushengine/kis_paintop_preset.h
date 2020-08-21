@@ -69,6 +69,9 @@ public:
     bool save() override;
     bool saveToDevice(QIODevice* dev) const override;
 
+    void saveInitialState();
+    void loadInitialState();
+
     void toXML(QDomDocument& doc, QDomElement& elt) const;
 
     void fromXML(const QDomElement& elt);
@@ -146,7 +149,9 @@ public:
 private:
 
     struct Private;
+    struct State;
     Private * const m_d;
+    State * m_state;
 };
 
 Q_DECLARE_METATYPE(KisPaintOpPresetSP)

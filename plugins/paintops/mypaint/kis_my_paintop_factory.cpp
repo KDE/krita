@@ -118,7 +118,8 @@ void KisMyPaintOpFactory::processAfterLoading() {
         KoID paintOpID(id(), name());
         preset->setPaintOp(paintOpID);        
         preset->setImage(brush->image());        
-        preset->setValid(true);        
+        preset->setValid(true);
+        preset->saveInitialState();
 
         paintOpServer->addResource(preset, false);
     }

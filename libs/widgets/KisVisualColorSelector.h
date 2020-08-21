@@ -57,6 +57,7 @@ public Q_SLOTS:
 
     void slotSetColor(const KoColor &c) override;
     void slotSetColorSpace(const KoColorSpace *cs) override;
+    void slotSetChannelValues(const QVector4D &values);
     void slotSetHSX(const QVector3D &hsx);
     void configurationChanged();
     void setDisplayRenderer (const KoColorDisplayRendererInterface *displayRenderer) override;
@@ -77,6 +78,7 @@ Q_SIGNALS:
      * @see getColorModel()
      */
     void sigColorModelChanged();
+    void sigChannelValuesChanged(const QVector4D &values);
     void sigHSXChanged(const QVector3D &hsx);
 
 protected:

@@ -40,6 +40,7 @@ struct KisVisualColorSelector::Private
     bool isRGBA {false};
     bool isLinear {false};
     bool applyGamma {false};
+    bool allowUpdates {true};
     int displayPosition[4]; // map channel index to storage index for display
     int colorChannelCount {0};
     qreal gamma {2.2};
@@ -76,6 +77,10 @@ QSize KisVisualColorSelector::minimumSizeHint() const
 
 void KisVisualColorSelector::slotSetColor(const KoColor &c)
 {
+    if (!m_d->allowUpdates) {
+        return;
+    }
+
     if (!m_d->currentCS) {
         m_d->currentcolor = c;
         slotSetColorSpace(c.colorSpace());
@@ -110,6 +115,26 @@ void KisVisualColorSelector::slotSetColorSpace(const KoColorSpace *cs)
         m_d->currentCS = csNew;
         m_d->currentcolor = KoColor(csNew);
         slotRebuildSelectors();
+    }
+}
+
+void KisVisualColorSelector::slotSetChannelValues(const QVector4D &values)
+{
+    if (!m_d->allowUpdates) {
+        return;
+    }
+
+    QVector4D newValues(0, 0, 0, 0);
+    for (int i = 0; i < m_d->colorChannelCount; i++) {
+        newValues[i] = values[i];
+    }
+    if (newValues != m_d->channelValues) {
+        m_d->allowUpdates = false;
+        m_d->channelValues = newValues;
+        m_d->currentcolor = convertShapeCoordsToKoColor(newValues);
+        emit sigChannelValuesChanged(m_d->channelValues);
+        emit sigNewColor(m_d->currentcolor);
+        m_d->allowUpdates = true;
     }
 }
 

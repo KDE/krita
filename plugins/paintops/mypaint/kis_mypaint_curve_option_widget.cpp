@@ -60,7 +60,7 @@ KisMyPaintCurveOptionWidget::KisMyPaintCurveOptionWidget(KisMyPaintCurveOption* 
     m_curveOptionWidget->toLabel1->setHidden(false);
     m_curveOptionWidget->toLabel2->setHidden(false);
 
-    disconnect(m_curveOptionWidget->sensorSelector, SIGNAL(parametersChanged()), this, SLOT(emitSettingChanged()));
+    //disconnect(m_curveOptionWidget->sensorSelector, SIGNAL(parametersChanged()), this, SLOT(emitSettingChanged()));
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(highlightedSensorChanged(KisDynamicSensorSP)), SLOT(updateRangeSpinBoxes(KisDynamicSensorSP)));
     connect(m_curveOptionWidget->xMinBox, SIGNAL(valueChanged(double)), SLOT(emitSettingChanged()));
     connect(m_curveOptionWidget->xMaxBox, SIGNAL(valueChanged(double)), SLOT(emitSettingChanged()));
@@ -69,8 +69,7 @@ KisMyPaintCurveOptionWidget::KisMyPaintCurveOptionWidget(KisMyPaintCurveOption* 
 
     m_curveOptionWidget->strengthSlider->setRange(curveOption->minValue(), curveOption->maxValue(), 2);
     m_curveOptionWidget->strengthSlider->setValue(curveOption->value());
-    m_curveOptionWidget->strengthSlider->setPrefix(i18n("Strength: "));
-    m_curveOptionWidget->strengthSlider->setSuffix(i18n("%"));
+    m_curveOptionWidget->strengthSlider->setPrefix(i18n("Strength: "));    
 
     if (hideSlider) {
           m_curveOptionWidget->strengthSlider->hide();
@@ -81,8 +80,6 @@ KisMyPaintCurveOptionWidget::KisMyPaintCurveOptionWidget(KisMyPaintCurveOption* 
 
 KisMyPaintCurveOptionWidget::~KisMyPaintCurveOptionWidget()
 {
-//    delete m_curveOption;
-//    delete m_curveOptionWidget;
 }
 
 void KisMyPaintCurveOptionWidget::writeOptionSetting(KisPropertiesConfigurationSP setting) const

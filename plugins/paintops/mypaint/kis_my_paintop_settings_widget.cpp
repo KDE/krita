@@ -32,10 +32,10 @@ KisMyPaintOpSettingsWidget:: KisMyPaintOpSettingsWidget(QWidget* parent)
     KisMyPaintOpOption *basicOption = new KisMyPaintOpOption();
     m_baseOption = basicOption;    
 
-    KisMyPaintCurveOptionWidget *radiusOption = new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("radius_logarithmic", KisPaintOpOption::GENERAL, false, 2.0, 0.0, 6.0), "0", "100");
+    KisMyPaintCurveOptionWidget *radiusOption = new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("radius_logarithmic", KisPaintOpOption::GENERAL, false, 2.0, 0.01, 6.0), "0", "100");
     m_radiusWidget = radiusOption;
 
-    KisMyPaintCurveOptionWidget *hardnessOption = new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("hardness", KisPaintOpOption::GENERAL, false, 0.8, 0, 1), "0", "100");
+    KisMyPaintCurveOptionWidget *hardnessOption = new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("hardness", KisPaintOpOption::GENERAL, false, 0.8, 0.02, 1), "0", "100");
     m_hardnessWidget = hardnessOption;
 
     KisMyPaintCurveOptionWidget *opacityOption = new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("opaque", KisPaintOpOption::GENERAL, false, 1, 0, 2), "0", "100");

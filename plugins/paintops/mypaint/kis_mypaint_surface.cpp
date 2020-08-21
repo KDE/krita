@@ -189,6 +189,9 @@ void KisMyPaintSurface::getColorImpl(MyPaintSurface *self, float x, float y, flo
     const QPoint pt = QPoint(x - radius, y - radius);
     const QSize sz = QSize(2 * radius, 2 * radius);
 
+    if( m_image.isNull() && m_imageDevice.isNull())
+        return;
+
     const QRect dabRectAligned = QRect(pt, sz);
     const QPointF center = QPointF(x, y);
     KisAlgebra2D::OuterCircle outer(center, radius);

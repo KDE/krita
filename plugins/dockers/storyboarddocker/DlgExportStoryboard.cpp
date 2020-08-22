@@ -164,12 +164,6 @@ void DlgExportStoryboard::slotExportClicked()
         return;
     }
 
-    QFileInfo fil(m_page->svgLayoutFileName->fileName());
-    if (m_format == ExportFormat::PDF && !fil.exists()) {
-        QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("The file name is invalid. Please choose an valid PDF file name."));
-        return;
-    }
-
     if (m_format == ExportFormat::SVG) {
 
         QDir dir(m_page->exportFileName->fileName());

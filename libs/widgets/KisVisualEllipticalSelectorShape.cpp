@@ -16,11 +16,10 @@
 
 KisVisualEllipticalSelectorShape::KisVisualEllipticalSelectorShape(KisVisualColorSelector *parent,
                                                                  Dimensions dimension,
-                                                                 const KoColorSpace *cs,
                                                                  int channel1, int channel2,
                                                                  int barWidth,
                                                                  singelDTypes d)
-    : KisVisualColorSelectorShape(parent, dimension, cs, channel1, channel2)
+    : KisVisualColorSelectorShape(parent, dimension, channel1, channel2)
 {
     //qDebug() << "creating KisVisualEllipticalSelectorShape" << this;
     m_type = d;

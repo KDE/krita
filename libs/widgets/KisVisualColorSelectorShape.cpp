@@ -11,14 +11,11 @@
 #include <QRect>
 #include <QVector>
 #include <QVector4D>
-#include <QVBoxLayout>
 #include <QList>
 #include <QtMath>
 
-#include <KSharedConfig>
-#include <KConfigGroup>
-
 #include "KoColorConversions.h"
+#include "KoColorSpace.h"
 #include "KoColorDisplayRendererInterface.h"
 #include "KoChannelInfo.h"
 #include <KoColorModelStandardIds.h>
@@ -37,20 +34,17 @@ struct KisVisualColorSelectorShape::Private
     QPointF dragStart;
     QVector4D currentChannelValues;
     Dimensions dimension;
-    const KoColorSpace *colorSpace;
     int channel1;
     int channel2;
 };
 
 KisVisualColorSelectorShape::KisVisualColorSelectorShape(KisVisualColorSelector *parent,
                                                          KisVisualColorSelectorShape::Dimensions dimension,
-                                                         const KoColorSpace *cs,
                                                          int channel1,
                                                          int channel2): QWidget(parent), m_d(new Private)
 {
     m_d->dimension = dimension;
-    m_d->colorSpace = cs;
-    int maxchannel = m_d->colorSpace->colorChannelCount()-1;
+    int maxchannel = parent->colorSpace()->colorChannelCount()-1;
     m_d->channel1 = qBound(0, channel1, maxchannel);
     m_d->channel2 = qBound(0, channel2, maxchannel);
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -136,7 +130,7 @@ QImage KisVisualColorSelectorShape::getImageMap()
 
     if (m_d->imagesNeedUpdate) {
         // Fill a buffer with the right kocolors
-        m_d->gradient = renderBackground(m_d->currentChannelValues, m_d->colorSpace->pixelSize());
+        m_d->gradient = renderBackground(m_d->currentChannelValues, colorSelector()->colorSpace()->pixelSize());
         m_d->imagesNeedUpdate = false;
     }
     return m_d->gradient;
@@ -153,11 +147,12 @@ const QImage KisVisualColorSelectorShape::getAlphaMask() const
 
 QImage KisVisualColorSelectorShape::convertImageMap(const quint8 *rawColor, quint32 bufferSize, QSize imgSize) const
 {
-    Q_ASSERT(bufferSize == imgSize.width() * imgSize.height() * m_d->colorSpace->pixelSize());
+    const KoColorSpace *colorSpace = colorSelector()->colorSpace();
+    Q_ASSERT(bufferSize == imgSize.width() * imgSize.height() * colorSpace->pixelSize());
     const KoColorDisplayRendererInterface *renderer = colorSelector()->displayRenderer();
 
     // Convert the buffer to a qimage
-    QImage image = renderer->convertToQImage(m_d->colorSpace, rawColor, imgSize.width(), imgSize.height());
+    QImage image = renderer->convertToQImage(colorSpace, rawColor, imgSize.width(), imgSize.height());
 
     // safeguard:
     if (image.isNull())
@@ -179,7 +174,7 @@ QImage KisVisualColorSelectorShape::renderBackground(const QVector4D &channelVal
     const qreal deviceDivider = 1.0 / devicePixelRatioF();
     const int deviceWidth = qCeil(width() * devicePixelRatioF());
     const int deviceHeight = qCeil(height() * devicePixelRatioF());
-    quint32 imageSize = deviceWidth * deviceHeight * m_d->colorSpace->pixelSize();
+    quint32 imageSize = deviceWidth * deviceHeight * selector->colorSpace()->pixelSize();
     QScopedArrayPointer<quint8> raw(new quint8[imageSize] {});
     quint8 *dataPtr = raw.data();
     QVector4D coordinates = channelValues;
@@ -190,7 +185,7 @@ QImage KisVisualColorSelectorShape::renderBackground(const QVector4D &channelVal
         checkAlpha = false;
     }
 
-    KoColor filler(Qt::white, m_d->colorSpace);
+    KoColor filler(Qt::white, selector->colorSpace());
     for (int y = 0; y < deviceHeight; y++) {
         const uchar *alphaLine = checkAlpha ? alpha.scanLine(y) : 0;
         for (int x=0; x < deviceWidth; x++) {
@@ -328,7 +323,7 @@ KoColor KisVisualColorSelectorShape::getCurrentColor()
     {
         return selector->convertShapeCoordsToKoColor(m_d->currentChannelValues);
     }
-    return KoColor(m_d->colorSpace);
+    return KoColor();
 }
 
 QVector <int> KisVisualColorSelectorShape::getChannels() const

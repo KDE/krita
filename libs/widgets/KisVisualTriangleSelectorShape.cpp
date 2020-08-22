@@ -15,10 +15,9 @@
 
 KisVisualTriangleSelectorShape::KisVisualTriangleSelectorShape(KisVisualColorSelector *parent,
                                                                Dimensions dimension,
-                                                               const KoColorSpace *cs,
                                                                int channel1, int channel2,
                                                                int margin)
-    : KisVisualColorSelectorShape(parent, dimension, cs, channel1, channel2),
+    : KisVisualColorSelectorShape(parent, dimension, channel1, channel2),
       m_margin(margin)
 {
     //qDebug() << "creating KisVisualTriangleSelectorShape" << this;

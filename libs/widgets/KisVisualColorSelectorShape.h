@@ -13,7 +13,6 @@
 #include <QMouseEvent>
 
 #include <KoColor.h>
-#include <KoColorSpace.h>
 #include "KoColorDisplayRendererInterface.h"
 
 #include "KisVisualColorSelector.h"
@@ -42,7 +41,6 @@ public:
     enum Dimensions{onedimensional, twodimensional};
     explicit KisVisualColorSelectorShape(KisVisualColorSelector *parent,
                                          KisVisualColorSelectorShape::Dimensions dimension,
-                                         const KoColorSpace *cs,
                                          int channel1, int channel2);
     ~KisVisualColorSelectorShape() override;
 

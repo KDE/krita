@@ -14,7 +14,6 @@ class KisVisualTriangleSelectorShape : public KisVisualColorSelectorShape
 public:
     explicit KisVisualTriangleSelectorShape(KisVisualColorSelector *parent,
                                             Dimensions dimension,
-                                            const KoColorSpace *cs,
                                             int channel1, int channel2,
                                             int margin = 5
             );

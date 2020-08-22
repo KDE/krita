@@ -182,6 +182,11 @@ KisVisualColorSelector::ColorModel KisVisualColorSelector::getColorModel() const
     return m_d->model;
 }
 
+const KoColorSpace *KisVisualColorSelector::colorSpace() const
+{
+    return m_d->currentCS;
+}
+
 bool KisVisualColorSelector::isHSXModel() const
 {
     return (m_d->model >= ColorModel::HSV && m_d->model <= ColorModel::HSY);
@@ -395,10 +400,10 @@ void KisVisualColorSelector::slotRebuildSelectors()
         KisVisualColorSelectorShape *bar;
 
         if (m_d->circular==false) {
-            bar = new KisVisualRectangleSelectorShape(this, KisVisualColorSelectorShape::onedimensional, m_d->currentCS, 0, 0, 20);
+            bar = new KisVisualRectangleSelectorShape(this, KisVisualColorSelectorShape::onedimensional, 0, 0, 20);
         }
         else {
-            bar = new KisVisualEllipticalSelectorShape(this, KisVisualColorSelectorShape::onedimensional, m_d->currentCS, 0, 0, 20, KisVisualEllipticalSelectorShape::borderMirrored);
+            bar = new KisVisualEllipticalSelectorShape(this, KisVisualColorSelectorShape::onedimensional, 0, 0, 20, KisVisualEllipticalSelectorShape::borderMirrored);
         }
 
         connect(bar, SIGNAL(sigCursorMoved(QPointF)), SLOT(slotCursorMoved(QPointF)));
@@ -518,18 +523,18 @@ void KisVisualColorSelector::slotRebuildSelectors()
         if (m_d->acs_config.subType == KisColorSelectorConfiguration::Ring) {
             bar = new KisVisualEllipticalSelectorShape(this,
                                                        KisVisualColorSelectorShape::onedimensional,
-                                                       m_d->currentCS, channel1, channel1, 20,
+                                                       channel1, channel1, 20,
                                                        KisVisualEllipticalSelectorShape::border);
         }
         else if (m_d->acs_config.subType == KisColorSelectorConfiguration::Slider && m_d->circular == false) {
             bar = new KisVisualRectangleSelectorShape(this,
                                                       KisVisualColorSelectorShape::onedimensional,
-                                                      m_d->currentCS, channel1, channel1, 20);
+                                                      channel1, channel1, 20);
         }
         else if (m_d->acs_config.subType == KisColorSelectorConfiguration::Slider && m_d->circular == true) {
             bar = new KisVisualEllipticalSelectorShape(this,
                                                        KisVisualColorSelectorShape::onedimensional,
-                                                       m_d->currentCS, channel1, channel1,
+                                                       channel1, channel1,
                                                        20, KisVisualEllipticalSelectorShape::borderMirrored);
         } else {
             // Accessing bar below would crash since it's not initialized.
@@ -544,15 +549,15 @@ void KisVisualColorSelector::slotRebuildSelectors()
         KisVisualColorSelectorShape *block;
         if (m_d->acs_config.mainType == KisColorSelectorConfiguration::Triangle) {
             block = new KisVisualTriangleSelectorShape(this, KisVisualColorSelectorShape::twodimensional,
-                                                       m_d->currentCS, channel2, channel3);
+                                                       channel2, channel3);
         }
         else if (m_d->acs_config.mainType == KisColorSelectorConfiguration::Square) {
             block = new KisVisualRectangleSelectorShape(this, KisVisualColorSelectorShape::twodimensional,
-                                                        m_d->currentCS, channel2, channel3);
+                                                        channel2, channel3);
         }
         else {
             block = new KisVisualEllipticalSelectorShape(this, KisVisualColorSelectorShape::twodimensional,
-                                                         m_d->currentCS, channel2, channel3);
+                                                         channel2, channel3);
         }
 
         connect(bar, SIGNAL(sigCursorMoved(QPointF)), SLOT(slotCursorMoved(QPointF)));
@@ -560,8 +565,8 @@ void KisVisualColorSelector::slotRebuildSelectors()
         m_d->widgetlist.append(block);
     }
     else if (m_d->currentCS->colorChannelCount() == 4) {
-        KisVisualRectangleSelectorShape *block =  new KisVisualRectangleSelectorShape(this, KisVisualRectangleSelectorShape::twodimensional, m_d->currentCS, 0, 1);
-        KisVisualRectangleSelectorShape *block2 =  new KisVisualRectangleSelectorShape(this, KisVisualRectangleSelectorShape::twodimensional, m_d->currentCS, 2, 3);
+        KisVisualRectangleSelectorShape *block =  new KisVisualRectangleSelectorShape(this, KisVisualRectangleSelectorShape::twodimensional, 0, 1);
+        KisVisualRectangleSelectorShape *block2 =  new KisVisualRectangleSelectorShape(this, KisVisualRectangleSelectorShape::twodimensional, 2, 3);
         connect(block, SIGNAL(sigCursorMoved(QPointF)), SLOT(slotCursorMoved(QPointF)));
         connect(block2, SIGNAL(sigCursorMoved(QPointF)), SLOT(slotCursorMoved(QPointF)));
         m_d->widgetlist.append(block);

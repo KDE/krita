@@ -48,6 +48,7 @@ public:
     KoColor getCurrentColor() const override;
     QVector4D getChannelValues() const;
     ColorModel getColorModel() const;
+    const KoColorSpace* colorSpace() const;
     const KoColorDisplayRendererInterface* displayRenderer() const;
     bool isHSXModel() const;
     KoColor convertShapeCoordsToKoColor(const QVector4D &coordinates) const;

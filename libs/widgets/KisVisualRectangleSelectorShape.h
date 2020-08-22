@@ -15,7 +15,6 @@ public:
     enum singelDTypes{vertical, horizontal, border, borderMirrored};
     explicit KisVisualRectangleSelectorShape(KisVisualColorSelector *parent,
                                              Dimensions dimension,
-                                             const KoColorSpace *cs,
                                              int channel1, int channel2, int width=20,
                                              KisVisualRectangleSelectorShape::singelDTypes d = KisVisualRectangleSelectorShape::vertical
             );

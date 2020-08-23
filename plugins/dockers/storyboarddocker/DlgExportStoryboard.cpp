@@ -154,6 +154,11 @@ int DlgExportStoryboard::fontSize() const
 
 void DlgExportStoryboard::slotExportClicked()
 {
+    if (firstItem() > lastItem()) {
+        QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("Please enter correct range. The first frame should be less than or equal to the last frame."));
+        return;
+    }
+
     if (m_page->exportFileName->fileName().isEmpty()) {
         if (m_format == ExportFormat::PDF) {
             QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("Please enter a file name to export to."));

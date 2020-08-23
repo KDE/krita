@@ -35,6 +35,7 @@
 #include <QTextDocument>
 #include <QAbstractTextDocumentLayout>
 #include <QSvgGenerator>
+#include <QMessageBox>
 
 #include <klocalizedstring.h>
 
@@ -329,14 +330,49 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
         else {
             int rows = dlg.rows();
             int columns = dlg.columns();
-            int firstItemFrame = dlg.firstItem();
-            int lastItemFrame = dlg.lastItem();
             printer.setOutputFileName(dlg.saveFileName());
             printer.setPageSize(dlg.pageSize());
             printer.setPageOrientation(dlg.pageOrientation());
 
             layoutCellRects = getLayoutCellRects(rows, columns, printer.pageRect());
         }
+
+        //getting the range of items to render
+        int firstItemFrame = dlg.firstItem();
+        QModelIndex firstIndex = m_storyboardModel->lastIndexBeforeFrame(firstItemFrame);
+        if (!firstIndex.isValid()) {
+            firstIndex = m_storyboardModel->index(0,0);
+        }
+        else {
+            firstIndex = firstIndex.siblingAtRow(firstIndex.row() + 1);
+        }
+
+        int lastItemFrame = dlg.lastItem();
+        QModelIndex lastIndex  = m_storyboardModel->indexFromFrame(lastItemFrame);
+        if (!lastIndex.isValid()) {
+            lastIndex = m_storyboardModel->lastIndexBeforeFrame(lastItemFrame);
+        }
+        if (!lastIndex.isValid()) {
+            lastIndex = m_storyboardModel->index(0, 0);
+        }
+
+        if (!firstIndex.isValid() || !lastIndex.isValid()) {
+            QMessageBox::warning((QWidget*)(&dlg), i18nc("@title:window", "Krita"), i18n("Please enter correct range. There are no panels in the range of frames provided."));
+            QApplication::restoreOverrideCursor();
+            return;
+        }
+        int firstItemRow = firstIndex.row();
+        int lastItemRow = lastIndex.row();
+        qDebug() << "first" <<firstItemRow <<" last "<<lastItemRow;
+
+        int numItems = lastItemRow - firstItemRow + 1;
+        if (numItems <= 0) {
+            QMessageBox::warning((QWidget*)(&dlg), i18nc("@title:window", "Krita"), i18n("Please enter correct range. There are no panels in the range of frames provided."));
+            QApplication::restoreOverrideCursor();
+            return;
+        }
+
+
 
         //exporting
         if (layoutCellRects.size() == 0) {
@@ -368,7 +404,7 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
             p.setFont(font);
             StoryboardItemList list = m_storyboardModel->getData();
 
-            for (int i = 0; i < list.size(); i++) {
+            for (int i = 0; i < numItems; i++) {
                 if (i % layoutCellRects.size() == 0 && i != 0) {
                     if (dlg.format() == ExportFormat::SVG) {
                         p.end();
@@ -394,7 +430,7 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
                 pen.setWidth(5);
                 p.setPen(pen);
 
-                ThumbnailData data = qvariant_cast<ThumbnailData>(list.at(i)->child(StoryboardItem::FrameNumber)->data());
+                ThumbnailData data = qvariant_cast<ThumbnailData>(list.at(i + firstItemRow)->child(StoryboardItem::FrameNumber)->data());
                 QPixmap pxmp = qvariant_cast<QPixmap>(data.pixmap);
 
                 //get the thumbnail rectangle and draw it with content
@@ -415,7 +451,7 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
                 panelInfoRect.setHeight(p.fontMetrics().height());
                 panelInfoRect.setWidth((scale * pxmp.rect().size()).width() - 6 * numericFontWidth);
 
-                QString str = list.at(i)->child(StoryboardItem::ItemName)->data().toString();
+                QString str = list.at(i + firstItemRow)->child(StoryboardItem::ItemName)->data().toString();
                 p.drawRect(panelInfoRect);
                 QRectF boundRect = panelInfoRect;
                 p.drawText(panelInfoRect, Qt::AlignLeft | Qt::AlignVCenter, str, &boundRect);
@@ -425,9 +461,9 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
                 durationRect.setWidth(6 * numericFontWidth);
                 durationRect.moveLeft(panelInfoRect.right());
 
-                QString duration = QString::number(list.at(i)->child(StoryboardItem::DurationSecond)->data().toInt());
+                QString duration = QString::number(list.at(i + firstItemRow)->child(StoryboardItem::DurationSecond)->data().toInt());
                 duration +=i18nc("suffix in spin box in storyboard that means 'seconds'", "s");
-                duration += QString::number(list.at(i)->child(StoryboardItem::DurationFrame)->data().toInt());
+                duration += QString::number(list.at(i + firstItemRow)->child(StoryboardItem::DurationFrame)->data().toInt());
                 duration +=i18nc("suffix in spin box in storyboard that means 'frames'", "f");
 
                 boundRect = durationRect;
@@ -444,7 +480,7 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
                 QString comment;
                 for (int j = 0; j < numComments; j++) {
                     comment += "<p><b>" + comments.at(j).name + "</b>"; // if arrange options are used check for visibility
-                    comment += " : " + qvariant_cast<CommentBox>(list.at(i)->child(StoryboardItem::Comments + j)->data()).content.toString() + "</p>";
+                    comment += " : " + qvariant_cast<CommentBox>(list.at(i + firstItemRow)->child(StoryboardItem::Comments + j)->data()).content.toString() + "</p>";
                 }
 
                 doc.setHtml(comment);

@@ -20,11 +20,12 @@
 
 #include <QtSql>
 #include <KisResourceLocator.h>
+#include <KisResourceModelProvider.h>
 
 struct KisAllTagResourceModel::Private {
     QString resourceType;
     QSqlQuery query;
-    int columnCount {7};
+    int columnCount {KisAbstractResourceModel::StorageActive + ResourceName};
     int cachedRowCount {-1};
 };
 
@@ -77,14 +78,30 @@ int KisAllTagResourceModel::columnCount(const QModelIndex &/*parent*/) const
 QVariant KisAllTagResourceModel::data(const QModelIndex &index, int role) const
 {
     QVariant v;
-    if (!index.isValid()) {return v; }
-    if (index.row() > rowCount()) {return v; }
-    if (index.column() > d->columnCount) {return v;}
+
+    if (!index.isValid()) { return v; }
+    if (index.row() > rowCount()) { return v; }
+    if (index.column() > d->columnCount) { return v;}
 
     bool pos = const_cast<KisAllTagResourceModel*>(this)->d->query.seek(index.row());
-    if (!pos) {return v;}
+    if (!pos) { return v;}
 
-    switch (role) {
+    if (role < TagId) {
+
+        // XXX: Stupid linear search for now... We could copy all the code in KisAllResourcesModel but that's so ugly
+        KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(d->resourceType);
+        int id = d-> query.value("resource_id").toInt();
+
+        for (int row = 0; row < resourceModel->rowCount(); row++) {
+            QModelIndex idx = resourceModel->index(row, index.column());
+            if (idx.isValid() && idx.data(Qt::UserRole + KisAbstractResourceModel::Id) == id) {
+                return resourceModel->data(idx, role);
+            }
+        }
+    }
+
+    // These are not shown, but needed for the filter
+    switch(role) {
     case Qt::UserRole + TagId:
     {
         v = d->query.value("tag_id");
@@ -110,8 +127,7 @@ QVariant KisAllTagResourceModel::data(const QModelIndex &index, int role) const
     }
     case Qt::UserRole + Resource:
     {
-        int resourceId = d->query.value("resource_id").toInt();
-        v = QVariant::fromValue(KisResourceLocator::instance()->resourceForId(resourceId));
+        v = QVariant::fromValue(KisResourceLocator::instance()->resourceForId(d->query.value("resource_id").toInt()));
         break;
     }
     case Qt::UserRole + ResourceActive:
@@ -129,6 +145,12 @@ QVariant KisAllTagResourceModel::data(const QModelIndex &index, int role) const
         v = d->query.value("resource_storage_active");
         break;
     }
+    case Qt::UserRole + ResourceName:
+    {
+        v = d->query.value("resource_name").toInt();
+        break;
+    }
+
     default:
         ;
     }
@@ -222,28 +244,20 @@ bool KisAllTagResourceModel::resetQuery()
                               ",      resources.status       as resource_active\n"
                               ",      storages.active        as resource_storage_active\n"
                               ",      resources.id           as resource_id\n"
-                              ",      resources.storage_id   as storage_id\n"
                               ",      resources.name         as resource_name\n"
-                              ",      resources.filename     as resource_filename\n"
-                              ",      resources.tooltip      as resource_tooltip\n"
-                              ",      resources.thumbnail    as resource_thumbnail\n"
-                              ",      resources.status       as resource_location\n"
-                              ",      storages.location      as storage_location\n"
-                              ",      resources.version      as resource_version\n"
-                              ",      resource_types.name    as resource_type\n"
-                              ",      resources.status       as resource_active\n"
+                              ",      resources.storage_id   as storage_id\n"
                               ",      storages.active        as storage_active\n"
                               "FROM   resources\n"
                               ",      resource_types\n"
                               ",      storages\n"
                               ",      tags\n"
                               ",      resource_tags\n"
-                              "WHERE  tags.id = resource_tags.tag_id\n"
-                              "AND    resources.id = resource_tags.resource_id\n"
+                              "WHERE  tags.id                    = resource_tags.tag_id\n"
+                              "AND    resources.id               = resource_tags.resource_id\n"
                               "AND    resources.resource_type_id = resource_types.id\n"
-                              "AND    resources.storage_id = storages.id\n"
-                              "AND    resource_types.id = resources.resource_type_id\n"
-                              "AND    resource_types.name = :resource_type\n");
+                              "AND    resources.storage_id       = storages.id\n"
+                              "AND    resource_types.id          = resources.resource_type_id\n"
+                              "AND    resource_types.name        = :resource_type");
 
     if (!r) {
         qWarning() << "Could not prepare KisAllTagResourcesModel query" << d->query.lastError();
@@ -382,3 +396,11 @@ bool KisTagResourceModel::filterAcceptsRow(int source_row, const QModelIndex &so
     return ((d->tagIds.contains(tagId) || d->tagIds.isEmpty())
             && (d->resourceIds.contains(resourceId) || d->resourceIds.isEmpty()));
 }
+
+bool KisTagResourceModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const
+{
+    QString nameLeft = sourceModel()->data(source_left, Qt::UserRole + KisAllTagResourceModel::ResourceName).toString();
+    QString nameRight = sourceModel()->data(source_right, Qt::UserRole + KisAllTagResourceModel::ResourceName).toString();
+    return nameLeft < nameRight;
+}
+

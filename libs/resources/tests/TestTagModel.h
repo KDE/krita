@@ -41,8 +41,6 @@ private Q_SLOTS:
     void testRenameTag();
     void testChangeTagActive();
 
-    void testTagResource();
-    void testUntagResource();
     void testAddEmptyTagWithResources();
     void testAddTagWithResources();
 

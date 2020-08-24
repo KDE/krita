@@ -29,6 +29,7 @@
 #include <KisTag.h>
 
 #include <KisResourceModelProvider.h>
+#include <KisTagResourceModel.h>
 #include <QVector>
 
 #include <kis_assert.h>
@@ -37,9 +38,6 @@ static int s_fakeRowsCount {2};
 
 struct KisAllTagsModel::Private {
     QSqlQuery query;
-
-    QSqlQuery tagsForResourceQuery;
-    QSqlQuery resourcesForTagQuery;
 
     QString resourceType;
     int columnCount {5};
@@ -256,16 +254,16 @@ KisTagSP KisAllTagsModel::tagForIndex(QModelIndex index) const
         if (index.row() == KisAllTagsModel::All + s_fakeRowsCount) {
             tag.reset(new KisTag());
             tag->setName(i18n("All"));
-            tag->setUrl("All");
-            tag->setComment(i18n("All"));
+            tag->setUrl("All"); // XXX: make this a static string
+            tag->setComment(i18n("All Resources"));
             tag->setId(KisAllTagsModel::All);
             tag->setActive(true);
             tag->setValid(true);
         } else if (index.row() == KisAllTagsModel::AllUntagged + s_fakeRowsCount) {
             tag.reset(new KisTag());
             tag->setName(i18n("All Untagged"));
-            tag->setUrl("All Untagged");
-            tag->setComment(i18n("All Untagged"));
+            tag->setUrl("All Untagged"); // XXX: make this a static string
+            tag->setComment(i18n("All Untagged Resources"));
             tag->setId(KisAllTagsModel::AllUntagged);
             tag->setActive(true);
             tag->setValid(true);
@@ -288,7 +286,7 @@ KisTagSP KisAllTagsModel::tagForIndex(QModelIndex index) const
     return tag;
 }
 
-KisTagSP KisAllTagsModel::addEmptyTag(const QString& tagName, QVector<KoResourceSP> taggedResouces)
+KisTagSP KisAllTagsModel::addEmptyTag(const QString& tagName, QVector<KoResourceSP> taggedResources)
 {
     //qDebug() << "bool KisAllTagsModel::addEmptyTag(const QString& tagName, QVector<KoResourceSP> taggedResouces) ### " << tagName << taggedResouces;
     KisTagSP tag = KisTagSP(new KisTag());
@@ -297,7 +295,7 @@ KisTagSP KisAllTagsModel::addEmptyTag(const QString& tagName, QVector<KoResource
     tag->setValid(true);
     tag->setActive(true);
 
-    if (addTag(tag, taggedResouces)) {
+    if (addTag(tag, taggedResources)) {
         return tag;
     }
     else {
@@ -336,7 +334,7 @@ bool KisAllTagsModel::addTag(const KisTagSP tag, QVector<KoResourceSP> taggedRes
             if (!resource->valid()) continue;
             if (resource->resourceId() < 0) continue;
 
-            tagResource(tagFromDb, resource);
+            KisResourceModelProvider::tagResourceModel(d->resourceType)->tagResource(tag, resource);
         }
     }
 
@@ -362,80 +360,6 @@ bool KisAllTagsModel::setTagInactive(const KisTagSP tag)
     tag->setActive(false);
 
     return setData(indexForTag(tag), QVariant::fromValue(false), Qt::CheckStateRole);
-}
-
-bool KisAllTagsModel::tagResource(const KisTagSP tag, const KoResourceSP resource)
-{
-    if (!tag) return false;
-    if (!tag->valid()) return false;
-
-    //qDebug() << "tagresource" << tag << " tag id " << tag->id();
-
-    if (!resource) return false;
-    if (!resource->valid()) return false;
-    if (resource->resourceId() < 0) return false;
-
-    QSqlQuery q;
-    bool r = q.prepare("INSERT INTO resource_tags\n"
-                       "(resource_id, tag_id)\n"
-                       "VALUES\n"
-                       "( (SELECT id\n"
-                       "   FROM   resources\n"
-                       "   WHERE  id = :resource_id)\n"
-                       ", (SELECT id\n"
-                       "   FROM   tags\n"
-                       "   WHERE  id = :tag_id\n"
-                       "   AND    resource_type_id = (SELECT id\n"
-                       "                              FROM   resource_types\n"
-                       "                              WHERE  name = :resource_type)\n"
-                       "  )\n"
-                       ")\n");
-    if (!r) {
-        qWarning() << "Could not prepare insert into resource tags statement" << q.lastError();
-        return false;
-    }
-
-    q.bindValue(":resource_id", resource->resourceId());
-    q.bindValue(":tag_id", tag->id());
-    q.bindValue(":resource_type", d->resourceType);
-
-    if (!q.exec()) {
-        qWarning() << "Could not execute insert into resource tags statement" << q.boundValues() << q.lastError();
-        return false;
-    }
-    return true;
-}
-
-bool KisAllTagsModel::untagResource(const KisTagSP tag, const KoResourceSP resource)
-{
-    if (!tag) return false;
-    if (!tag->valid()) return false;
-    if (!tag->id()) return false;
-
-    if (!resource) return false;
-    if (!resource->valid()) return false;
-    if (resource->resourceId() < 0) return false;
-
-    // we need to delete an entry in resource_tags
-    QSqlQuery query;
-    bool r = query.prepare("DELETE FROM resource_tags\n"
-                           "WHERE  resource_id = :resource_id\n"
-                           "AND    tag_id = :tag_id");
-
-    if (!r) {
-        qWarning() << "Could not prepare KisAllTagsModel query untagResource " << query.lastError();
-    }
-
-    query.bindValue(":resource_id", resource->resourceId());
-    query.bindValue(":tag_id", tag->id());
-
-
-    r = query.exec();
-
-    if (!r) {
-        qWarning() << "Could not select tags" << query.lastError();
-    }
-    return true;
 }
 
 bool KisAllTagsModel::renameTag(const KisTagSP tag)
@@ -484,41 +408,6 @@ bool KisAllTagsModel::changeTagActive(const KisTagSP tag, bool active)
     tag->setActive(active);
     return setData(idx, QVariant::fromValue(active), Qt::CheckStateRole);
 
-}
-
-QVector<KisTagSP> KisAllTagsModel::tagsForResource(int resourceId) const
-{
-    bool r = d->tagsForResourceQuery.prepare("SELECT tags.id\n"
-                                             ",      tags.url\n"
-                                             ",      tags.name\n"
-                                             ",      tags.comment\n"
-                                             "FROM   tags\n"
-                                             ",      resource_tags\n"
-                                             "WHERE  tags.id = resource_tags.tag_id\n"                // join tags + resource_tags by tag_id
-                                             "AND    resource_tags.resource_id = :resource_id\n");    // make sure we're looking for tags for a specific resource
-    if (!r)  {
-        qWarning() << "Could not prepare TagsForResource query" << d->tagsForResourceQuery.lastError();
-    }
-
-    d->tagsForResourceQuery.bindValue(":resource_id", resourceId);
-    r = d->tagsForResourceQuery.exec();
-    if (!r) {
-        qWarning() << "Could not select tags for" << resourceId << d->tagsForResourceQuery.lastError() << d->tagsForResourceQuery.boundValues();
-    }
-
-    QVector<KisTagSP> tags;
-    while (d->tagsForResourceQuery.next()) {
-        //qDebug() << d->tagQuery.value(0).toString() << d->tagQuery.value(1).toString() << d->tagQuery.value(2).toString();
-        KisTagSP tag(new KisTag());
-        tag->setId(d->tagsForResourceQuery.value("id").toInt());
-        tag->setUrl(d->tagsForResourceQuery.value("url").toString());
-        tag->setName(d->tagsForResourceQuery.value("name").toString());
-        tag->setComment(d->tagsForResourceQuery.value("comment").toString());
-        tag->setValid(true);
-        tag->setActive(true);
-        tags << tag;
-    }
-    return tags;
 }
 
 KisTagSP KisAllTagsModel::tagByUrl(const QString& tagUrl) const
@@ -693,24 +582,6 @@ bool KisTagModel::setTagActive(const KisTagSP tag)
 
 }
 
-bool KisTagModel::tagResource(const KisTagSP tag, const KoResourceSP resource)
-{
-    KisAbstractTagModel *source = dynamic_cast<KisAbstractTagModel*>(sourceModel());
-    if (source) {
-        return source->tagResource(tag, resource) ;
-    }
-    return false;
-}
-
-bool KisTagModel::untagResource(const KisTagSP tag, const KoResourceSP resource)
-{
-    KisAbstractTagModel *source = dynamic_cast<KisAbstractTagModel*>(sourceModel());
-    if (source) {
-        return source->untagResource(tag, resource);
-    }
-    return false;
-}
-
 bool KisTagModel::renameTag(const KisTagSP tag)
 {
     KisAbstractTagModel *source = dynamic_cast<KisAbstractTagModel*>(sourceModel());
@@ -727,15 +598,6 @@ bool KisTagModel::changeTagActive(const KisTagSP tag, bool active)
         return source->changeTagActive(tag, active);
     }
     return false;
-}
-
-QVector<KisTagSP> KisTagModel::tagsForResource(int resourceId) const
-{
-    KisAbstractTagModel *source = dynamic_cast<KisAbstractTagModel*>(sourceModel());
-    if (source) {
-        return source->tagsForResource(resourceId);
-    }
-    return {};
 }
 
 bool KisTagModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const

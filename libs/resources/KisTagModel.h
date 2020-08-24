@@ -40,11 +40,15 @@ public:
     virtual bool addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces = QVector<KoResourceSP>()) = 0;
     virtual bool setTagActive(const KisTagSP tag) = 0;
     virtual bool setTagInactive(const KisTagSP tag) = 0;
-    virtual bool tagResource(const KisTagSP tag, const KoResourceSP resource) = 0;
-    virtual bool untagResource(const KisTagSP tag, const KoResourceSP resource) = 0;
     virtual bool renameTag(const KisTagSP tag) = 0;
     virtual bool changeTagActive(const KisTagSP tag, bool active) = 0;
+
+
+    virtual bool tagResource(const KisTagSP tag, const KoResourceSP resource) = 0;
+    virtual bool untagResource(const KisTagSP tag, const KoResourceSP resource) = 0;
     virtual QVector<KisTagSP> tagsForResource(int resourceId) const = 0;
+
+
 };
 
 
@@ -94,14 +98,14 @@ public:
     bool addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces = QVector<KoResourceSP>()) override;
     bool setTagActive(const KisTagSP tag) override;
     bool setTagInactive(const KisTagSP tag) override;
-    bool tagResource(const KisTagSP tag, const KoResourceSP resource) override;
-    bool untagResource(const KisTagSP tag, const KoResourceSP resource) override;
 
     bool renameTag(const KisTagSP tag) override;
     bool changeTagActive(const KisTagSP tag, bool active) override;
 
-    // TODO: Like here
-    QVector<KisTagSP> tagsForResource(int resourceId) const override;
+    bool tagResource(const KisTagSP tag, const KoResourceSP resource) override {return false;}
+    bool untagResource(const KisTagSP tag, const KoResourceSP resource) override {return false;}
+    QVector<KisTagSP> tagsForResource(int resourceId) const override {return QVector<KisTagSP>();}
+
 
 private:
 
@@ -158,11 +162,13 @@ public:
     bool addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces = QVector<KoResourceSP>()) override;
     bool setTagInactive(const KisTagSP tag) override;
     bool setTagActive(const KisTagSP tag) override;
-    bool tagResource(const KisTagSP tag, const KoResourceSP resource) override;
-    bool untagResource(const KisTagSP tag, const KoResourceSP resource) override;
     bool renameTag(const KisTagSP tag) override;
     bool changeTagActive(const KisTagSP tag, bool active) override;
-    QVector<KisTagSP> tagsForResource(int resourceId) const override;
+
+    bool tagResource(const KisTagSP tag, const KoResourceSP resource) override {return false;}
+    bool untagResource(const KisTagSP tag, const KoResourceSP resource) override {return false;}
+    QVector<KisTagSP> tagsForResource(int resourceId) const override {return QVector<KisTagSP>();}
+
 
 protected:
 

@@ -273,40 +273,6 @@ void TestTagModel::testChangeTagActive()
 
 }
 
-
-void TestTagModel::testTagResource()
-{
-    KisTagModel tagModel(resourceType);
-    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel("paintoppresets");
-    KoResourceSP resource = resourceModel->resourceForIndex(resourceModel->index(0, 0));
-    QVERIFY(resource);
-    KisTagSP tag = tagModel.tagForIndex(tagModel.index(3, 0));
-    QVERIFY(tag);
-
-    tagModel.tagResource(tag, resource);
-
-    QVector<KisTagSP> tagsForResource = tagModel.tagsForResource(resource->resourceId());
-    QCOMPARE(tagsForResource.size(), 1);
-    QCOMPARE(tagsForResource.first()->name(), tag->name());
-
-}
-
-void TestTagModel::testUntagResource()
-{
-    KisTagModel tagModel(resourceType);
-    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel("paintoppresets");
-    KoResourceSP resource = resourceModel->resourceForIndex(resourceModel->index(0, 0));
-    QVERIFY(resource);
-    KisTagSP tag = tagModel.tagForIndex(tagModel.index(3, 0));
-    QVERIFY(tag);
-
-    tagModel.untagResource(tag, resource);
-
-    QVector<KisTagSP> tagsForResource = tagModel.tagsForResource(resource->resourceId());
-
-    QCOMPARE(tagsForResource.size(), 0);
-}
-
 void TestTagModel::testAddEmptyTagWithResources()
 {
     KisTagModel tagModel(resourceType);
@@ -321,10 +287,7 @@ void TestTagModel::testAddEmptyTagWithResources()
 
     tagModel.addEmptyTag(tagName, resources);
 
-    QVector<KisTagSP> tagsForResource = tagModel.   tagsForResource(resources.first()->resourceId());
-    QCOMPARE(tagsForResource.size(), 1);
-    QCOMPARE(tagsForResource.first()->name(), tagName);
-
+    // XXX: check KisTagResourceModel
 }
 
 void TestTagModel::testAddTagWithResources()
@@ -346,10 +309,7 @@ void TestTagModel::testAddTagWithResources()
     tagModel.addTag(tag, {resource});
     QVERIFY(tag->id() >= 0);
 
-    QVector<KisTagSP> tagsForResource = tagModel.   tagsForResource(resource->resourceId());
-    QCOMPARE(tagsForResource.size(), 2);
-    QCOMPARE(tagsForResource[0]->name(), "A Brand New Tag"); // Inserted in testAddEmptyTagWithResources
-    QCOMPARE(tagsForResource[1]->name(), tagName);
+    // XXX: check KisTagResourceModel
 
 }
 

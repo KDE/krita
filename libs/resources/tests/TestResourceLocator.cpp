@@ -161,8 +161,8 @@ void TestResourceLocator::testDocumentStorage()
 
     m_locator->addStorage(documentName, documentStorage);
 
-    QVERIFY(model->rowCount() > rowcount);
     QVERIFY(m_locator->hasStorage(documentName));
+    QVERIFY(model->rowCount() > rowcount);
 
     m_locator->removeStorage(documentName);
     QVERIFY(!m_locator->hasStorage(documentName));

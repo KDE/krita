@@ -101,7 +101,7 @@ void KisResourceTaggingManager::tagChooserIndexChanged(const KisTagSP tag)
 
 void KisResourceTaggingManager::tagSearchLineEditTextChanged(const QString& lineEditText)
 {
-    d->model->setSearchBoxText(lineEditText);
+    d->model->setSearchText(lineEditText);
 }
 
 void KisResourceTaggingManager::slotFilterByTagChanged(const bool filterByTag)

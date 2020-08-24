@@ -22,28 +22,33 @@
 
 #include <QSortFilterProxyModel>
 #include <QObject>
-#include <KoResource.h>
-#include <KisResourceModel.h>
-#include <KisTag.h>
-#include <KisTagModel.h>
+
+#include "KoResource.h"
+#include "KisResourceModel.h"
+#include "KisTag.h"
+#include "KisTagModel.h"
+#include "KisTagResourceModel.h"
 
 #include "kritaresources_export.h"
 
 /**
  * @brief The KisTagFilterResourceProxyModel class filters the resources by tag or resource name
  */
-class KRITARESOURCES_EXPORT KisTagFilterResourceProxyModel : public QSortFilterProxyModel, public KisAbstractResourceModel
+class KRITARESOURCES_EXPORT KisTagFilterResourceProxyModel
+        : public QSortFilterProxyModel
+        , public KisAbstractResourceModel
 {
     Q_OBJECT
 public:
+
     KisTagFilterResourceProxyModel(const QString &resourceType, QObject *parent = 0);
     ~KisTagFilterResourceProxyModel() override;
 
-    // To be used if we need an extra proxy model, like for presets
+    // To be used if we need an extra proxy model, like for
     void setResourceModel(KisResourceModel *resourceModel);
 
-    // KisAbstractResourceModel interface
-public:
+// KisAbstractResourceModel interface
+
     KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const override;
     QModelIndex indexForResource(KoResourceSP resource) const override;
     bool setResourceInactive(const QModelIndex &index) override;
@@ -58,7 +63,7 @@ public:
      * @param tag
      */
     void setTag(const KisTagSP tag);
-    void setSearchBoxText(const QString& seatchBoxText);
+    void setSearchText(const QString& seatchText);
     void setFilterInCurrentTag(bool filterInCurrentTag);
 
 protected:
@@ -66,12 +71,6 @@ protected:
     bool filterAcceptsColumn(int source_column, const QModelIndex &source_parent) const override;
     bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
     bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;
-
-    bool resourceHasCurrentTag(KisTagSP currentTag, QVector<KisTagSP> tagsForResource) const;
-
-private Q_SLOTS:
-    void slotModelReset();
-
 
 private:
     struct Private;

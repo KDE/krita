@@ -55,8 +55,6 @@ public:
     bool load(KisResourcesInterfaceSP resourcesInterface) override
     {
         Q_UNUSED(resourcesInterface);
-
-        Q_ASSERT(false);
         setValid(true);
         return true;
     }
@@ -75,7 +73,6 @@ public:
 
     bool save() override
     {
-        Q_ASSERT(false);
         return true;
     }
 

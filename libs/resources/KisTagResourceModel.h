@@ -25,6 +25,7 @@
 
 #include <KisTag.h>
 #include <KoResource.h>
+#include <KisResourceModel.h>
 
 #include "kritaresources_export.h"
 
@@ -37,7 +38,9 @@ public:
     virtual bool untagResource(const KisTagSP tag, const KoResourceSP resource) = 0;
 };
 
-class KRITARESOURCES_EXPORT KisAllTagResourceModel : public QAbstractTableModel, public KisAbstractTagResourceModel
+class KRITARESOURCES_EXPORT KisAllTagResourceModel
+        : public QAbstractTableModel
+        , public KisAbstractTagResourceModel
 {
     Q_OBJECT
 public:
@@ -47,23 +50,26 @@ public:
 public:
 
     enum Columns {
-        TagId = 0,
+        TagId = KisAbstractResourceModel::StorageActive + 1,
         ResourceId,
         Tag,
         Resource,
         ResourceActive,
         TagActive,
-        ResourceStorageActive
+        ResourceStorageActive,
+        ResourceName
     };
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+// QAbstractItemModel API
 
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
+    /// Note: only role is significant, column is not.
     QVariant data(const QModelIndex &index, int role) const override;
 
+// Abstract Tag API
     bool tagResource(const KisTagSP tag, const KoResourceSP resource) override;
-
     bool untagResource(const KisTagSP tag, const KoResourceSP resource) override;
 
 private:
@@ -111,19 +117,21 @@ public:
 
     void setStorageFilter(StorageFilter filter);
 
-    bool tagResource(const KisTagSP tag, const KoResourceSP resource) override;
-    bool untagResource(const KisTagSP tag, const KoResourceSP resource) override;
-
     void setTagsFilter(const QVector<int> tagIds);
     void setResourcesFilter(const QVector<int> resourceIds);
 
     void setTagsFilter(const QVector<KisTagSP> tags);
     void setResourcesFilter(const QVector<KoResourceSP> resources);
 
+// KisAbstractTagResourceModel API
+
+    bool tagResource(const KisTagSP tag, const KoResourceSP resource) override;
+    bool untagResource(const KisTagSP tag, const KoResourceSP resource) override;
+
 protected:
 
     bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
-
+    bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;
 private:
     struct Private;
     Private* const d;

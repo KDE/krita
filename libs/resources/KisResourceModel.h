@@ -36,7 +36,6 @@ class KRITARESOURCES_EXPORT KisAbstractResourceModel {
 
 public:
 
-
     /**
      * @brief The Columns enum indexes the columns in the model. To get
      * the thumbnail for a particular resource, create the index with
@@ -64,15 +63,13 @@ public:
         /// Whether the current resource is active
         ResourceActive,
         /// Whether the current resource's storage isa ctive
-        StorageActive
+        StorageActive,
     };
 
     virtual ~KisAbstractResourceModel(){}
 
     /**
-     * @brief resourceForIndex
-     * @param index
-     * @return
+     * @brief resourceForIndex returns a properly versioned and id'ed resource object
      */
     virtual KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const = 0;
 
@@ -162,9 +159,7 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 
 // Resources API
-    /**
-     * @brief resourceForIndex returns a properly versioned and id's resource object
-     */
+
     KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const override;
     QModelIndex indexForResource(KoResourceSP resource) const override;
     bool setResourceInactive(const QModelIndex &index) override;
@@ -242,6 +237,8 @@ public:
     };
 
     void setStorageFilter(StorageFilter filter);
+
+    void showOnlyUntaggedResources(bool showOnlyUntagged);
 
 public:
 

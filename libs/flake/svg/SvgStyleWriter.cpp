@@ -423,8 +423,11 @@ QString SvgStyleWriter::saveSvgMeshGradient(SvgMeshGradient *gradient,
     context.styleWriter().startElement("meshgradient");
     context.styleWriter().addAttribute("id", uid);
 
-    // TODO: we convert obb to userSpaceOnUse, while reading
-    context.styleWriter().addAttribute("gradientUnits", "userSpaceOnUse");
+    if (gradient->gradientUnits() == KoFlake::ObjectBoundingBox) {
+        context.styleWriter().addAttribute("gradientUnits", "objectBoundingBox");
+    } else {
+        context.styleWriter().addAttribute("gradientUnits", "userSpaceOnUse");
+    }
 
     SvgUtil::writeTransformAttributeLazy("transform", transform, context.styleWriter());
 

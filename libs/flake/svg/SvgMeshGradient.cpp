@@ -56,7 +56,7 @@ QRectF SvgMeshGradient::boundingRect() const
     return m_mesharray->boundingRect();
 }
 
-QScopedPointer<SvgMeshArray>& SvgMeshGradient::getMeshArray()
+const QScopedPointer<SvgMeshArray>& SvgMeshGradient::getMeshArray() const
 {
     return m_mesharray;
 }

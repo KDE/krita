@@ -22,6 +22,12 @@
 
 #include "SvgMeshPatch.h"
 
+struct SvgMeshPosition {
+    int row;
+    int col;
+    SvgMeshPatch::Type segmentType;
+};
+
 class KRITAFLAKE_EXPORT SvgMeshArray
 {
 public:
@@ -52,6 +58,11 @@ public:
     void setTransform(const QTransform& matrix);
 
     QRectF boundingRect() const;
+
+    void modifyHandle(const SvgMeshPosition &position, const std::array<QPointF, 4> &newPath);
+    void modifyCorner(const SvgMeshPosition &position, const QPointF &newPos);
+
+    void modifyColor(const SvgMeshPosition &position, const QColor &color);
 
     //  get color of a stop
     QColor getColor(SvgMeshPatch::Type edge, int row, int col) const;

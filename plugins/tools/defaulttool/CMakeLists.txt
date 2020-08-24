@@ -12,8 +12,10 @@ set ( defaulttools_SRCS
     defaulttool/ShapeShearStrategy.cpp
     defaulttool/ShapeGradientEditStrategy.cpp
     defaulttool/SelectionDecorator.cpp
+    defaulttool/ShapeMeshGradientEditStrategy.cpp
 
     defaulttool/KoShapeGradientHandles.cpp
+    defaulttool/KoShapeMeshGradientHandles.cpp
 
     connectionTool/ConnectionTool.cpp
     connectionTool/ConnectionToolFactory.cpp

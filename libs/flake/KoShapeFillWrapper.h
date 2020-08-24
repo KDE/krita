@@ -46,6 +46,7 @@ public:
     const QGradient* gradient() const;
     QTransform gradientTransform() const;
     bool hasZeroLineWidth() const;
+    const SvgMeshGradient* meshgradient() const;
 
     KUndo2Command* setColor(const QColor &color);
     KUndo2Command* setLineWidth(const float &lineWidth);

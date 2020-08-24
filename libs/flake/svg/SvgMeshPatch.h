@@ -42,7 +42,7 @@ struct SvgMeshStop {
 };
 
 
-class SvgMeshPatch
+class KRITAFLAKE_EXPORT SvgMeshPatch
 {
 public:
     /// Position of stop in the patch
@@ -108,6 +108,11 @@ public:
 
     /// Adds linear path to the shape
     void addStopLinear(const std::array<QPointF, 2>& pathPoints, QColor color, Type edge);
+
+    void modifyPath(SvgMeshPatch::Type type, std::array<QPointF, 4> newPath);
+    void modifyCorner(SvgMeshPatch::Type type, const QPointF &delta);
+
+    void setStopColor(SvgMeshPatch::Type type, const QColor &color);
 
     void setTransform(const QTransform& matrix);
 

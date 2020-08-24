@@ -27,11 +27,13 @@
 #include <QSharedPointer>
 #include <KoFlake.h>
 #include <KoFlakeTypes.h>
+#include <SvgMeshGradient.h>
 
 class KoShapeFillWrapper;
 class KoCanvasBase;
 class KoShapeBackground;
 class KoShape;
+class KoColor;
 
 /// A widget for configuring the fill of a shape
 class KRITAUI_EXPORT KoFillConfigWidget : public QWidget
@@ -72,6 +74,8 @@ public:
 
     void forceUpdateOnSelectionChanged();
 
+    void setSelectedMeshGradientHandle(const SvgMeshPosition &position);
+
 private Q_SLOTS:
     void styleButtonPressed(int buttonId);
 
@@ -101,7 +105,10 @@ private Q_SLOTS:
     void slotProposeCurrentColorToResourceManager();
     void slotRecoverColorInResourceManager();
 
+    /// this won't preserve the rows and columns
     void slotMeshGradientChanged();
+    void slotMeshGradientShadingChanged(int index);
+    void slotMeshHandleColorChanged(const KoColor &c);
 
 Q_SIGNALS:
     void sigFillChanged();
@@ -114,6 +121,12 @@ private:
     void setNewGradientBackgroundToShape();
     void updateGradientSaveButtonAvailability();
     void loadCurrentFillFromResourceServer();
+
+    /// sets the active gradient either from the shape (if present) or creates a new one
+    void createNewMeshGradientBackground();
+    void createNewDefaultMeshGradientBackground();
+    void setNewMeshGradientBackgroundToShape();
+    void updateMeshGradientUI();
 
     void updateWidgetComponentVisbility();
 

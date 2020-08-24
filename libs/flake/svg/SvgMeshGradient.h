@@ -52,7 +52,7 @@ public:
     // returns boundingRect of the meshpatches in "user" coordinates (QPainter's)
     QRectF boundingRect() const;
 
-    QScopedPointer<SvgMeshArray>& getMeshArray();
+    const QScopedPointer<SvgMeshArray>& getMeshArray() const;
 
 private:
     Shading m_type;

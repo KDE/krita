@@ -34,7 +34,7 @@
 struct KisAllResourcesModel::Private {
     QSqlQuery resourcesQuery;
     QString resourceType;
-    int columnCount {10};
+    int columnCount {StorageActive};
     int cachedRowCount {-1};
 };
 

@@ -62,7 +62,7 @@ public:
         KoResourceRole,
         /// Whether the current resource is active
         ResourceActive,
-        /// Whether the current resource's storage isa ctive
+        /// Whether the current resource's storage is active
         StorageActive,
     };
 

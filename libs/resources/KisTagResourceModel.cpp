@@ -25,7 +25,7 @@
 struct KisAllTagResourceModel::Private {
     QString resourceType;
     QSqlQuery query;
-    int columnCount {KisAbstractResourceModel::StorageActive + ResourceName};
+    int columnCount {ResourceName};
     int cachedRowCount {-1};
 };
 

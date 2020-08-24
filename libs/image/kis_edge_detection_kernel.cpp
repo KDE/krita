@@ -347,7 +347,8 @@ void KisEdgeDetectionKernel::convertToNormalMap(KisPaintDeviceSP device,
                                                 QVector<int> channelOrder,
                                                 QVector<bool> channelFlip,
                                                 const QBitArray &channelFlags,
-                                                KoUpdater *progressUpdater)
+                                                KoUpdater *progressUpdater,
+                                                boost::optional<bool> useFftw)
 {
     QPoint srcTopLeft = rect.topLeft();
     KisPainter finalPainter(device);
@@ -362,6 +363,11 @@ void KisEdgeDetectionKernel::convertToNormalMap(KisPaintDeviceSP device,
     KisConvolutionKernelSP kernelVerticalTopBottom = KisEdgeDetectionKernel::createVerticalKernel(xRadius, type, true, !channelFlip[0]);
 
     KisConvolutionPainter horizPainterLR(y_denormalised);
+
+    if (useFftw) {
+        horizPainterLR.setEnginePreference(*useFftw ? KisConvolutionPainter::FFTW : KisConvolutionPainter::SPATIAL);
+    }
+
     horizPainterLR.setChannelFlags(channelFlags);
     horizPainterLR.setProgress(progressUpdater);
     horizPainterLR.applyMatrix(kernelHorizLeftRight, device,
@@ -370,6 +376,11 @@ void KisEdgeDetectionKernel::convertToNormalMap(KisPaintDeviceSP device,
 
 
     KisConvolutionPainter verticalPainterTB(x_denormalised);
+
+    if (useFftw) {
+        verticalPainterTB.setEnginePreference(*useFftw ? KisConvolutionPainter::FFTW : KisConvolutionPainter::SPATIAL);
+    }
+
     verticalPainterTB.setChannelFlags(channelFlags);
     verticalPainterTB.setProgress(progressUpdater);
     verticalPainterTB.applyMatrix(kernelVerticalTopBottom, device,

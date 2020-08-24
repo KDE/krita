@@ -506,7 +506,12 @@ void KisCompositeOpComboBox::wheelEvent(QWheelEvent *e)
 
     QStyleOptionComboBox opt;
     initStyleOption(&opt);
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
     if (style()->styleHint(QStyle::SH_ComboBox_AllowWheelScrolling, &opt, this)) {
+#else
+    if (1) {
+#endif
         const int rowCount = count();
         int newIndex = currentIndex();
 

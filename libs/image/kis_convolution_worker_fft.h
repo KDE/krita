@@ -296,7 +296,7 @@ public:
         qreal channelPixelValue;
 
         if (additionalMultiplierActive) {
-            channelPixelValue = (*channelValuePtr * info.fftScale + info.absoluteOffset[channel]) * additionalMultiplier;
+            channelPixelValue = *channelValuePtr * info.fftScale * additionalMultiplier + info.absoluteOffset[channel];
         } else {
             channelPixelValue = *channelValuePtr * info.fftScale + info.absoluteOffset[channel];
         }

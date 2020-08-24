@@ -159,6 +159,17 @@ void KisTagFilterResourceProxyModel::setTag(const KisTagSP tag)
     invalidateFilter();
 }
 
+void KisTagFilterResourceProxyModel::setResource(const KoResourceSP resource)
+{
+    if (resource) {
+        d->tagResourceModel->setResourcesFilter(QVector<KoResourceSP>() << resource);
+    }
+    else {
+        setSourceModel(d->resourceModel);
+    }
+    invalidateFilter();
+}
+
 void KisTagFilterResourceProxyModel::setSearchText(const QString& searchText)
 {
     d->filter->setFilter(searchText);

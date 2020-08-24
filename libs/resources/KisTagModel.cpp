@@ -286,7 +286,7 @@ KisTagSP KisAllTagsModel::tagForIndex(QModelIndex index) const
     return tag;
 }
 
-KisTagSP KisAllTagsModel::addEmptyTag(const QString& tagName, QVector<KoResourceSP> taggedResources)
+KisTagSP KisAllTagsModel::addNewTag(const QString& tagName, QVector<KoResourceSP> taggedResources)
 {
     //qDebug() << "bool KisAllTagsModel::addEmptyTag(const QString& tagName, QVector<KoResourceSP> taggedResouces) ### " << tagName << taggedResouces;
     KisTagSP tag = KisTagSP(new KisTag());
@@ -544,11 +544,11 @@ KisTagSP KisTagModel::tagForIndex(QModelIndex index) const
 }
 
 
-KisTagSP KisTagModel::addEmptyTag(const QString &tagName, QVector<KoResourceSP> taggedResources)
+KisTagSP KisTagModel::addNewTag(const QString &tagName, QVector<KoResourceSP> taggedResources)
 {
     KisAbstractTagModel *source = dynamic_cast<KisAbstractTagModel*>(sourceModel());
     if (source) {
-        return source->addEmptyTag(tagName, taggedResources);
+        return source->addNewTag(tagName, taggedResources);
     }
     return 0;
 }
@@ -598,6 +598,43 @@ bool KisTagModel::changeTagActive(const KisTagSP tag, bool active)
         return source->changeTagActive(tag, active);
     }
     return false;
+}
+
+QVector<KisTagSP> KisTagModel::tagsForResource(int resourceId) const
+{
+    QSqlQuery q;
+    bool r = q.prepare("SELECT tags.id\n"
+                       ",      tags.url\n"
+                       ",      tags.name\n"
+                       ",      tags.comment\n"
+                       "FROM   tags\n"
+                       ",      resource_tags\n"
+                       "WHERE  tags.active > 0\n"                               // make sure the tag is active
+                       "AND    tags.id = resource_tags.tag_id\n"                // join tags + resource_tags by tag_id
+                       "AND    resource_tags.resource_id = :resource_id\n");    // make sure we're looking for tags for a specific resource
+    if (!r)  {
+        qWarning() << "Could not prepare TagsForResource query" << q.lastError();
+    }
+
+    q.bindValue(":resource_id", resourceId);
+    r = q.exec();
+    if (!r) {
+        qWarning() << "Could not select tags for" << resourceId << q.lastError() << q.boundValues();
+    }
+
+    QVector<KisTagSP> tags;
+    while (q.next()) {
+        //qDebug() << d->tagQuery.value(0).toString() << d->tagQuery.value(1).toString() << d->tagQuery.value(2).toString();
+        KisTagSP tag(new KisTag());
+        tag->setId(q.value("id").toInt());
+        tag->setUrl(q.value("url").toString());
+        tag->setName(q.value("name").toString());
+        tag->setComment(q.value("comment").toString());
+        tag->setValid(true);
+        tag->setActive(true);
+        tags << tag;
+    }
+    return tags;
 }
 
 bool KisTagModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const

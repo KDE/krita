@@ -36,19 +36,17 @@ public:
 
     virtual QModelIndex indexForTag(KisTagSP tag) const = 0;
     virtual KisTagSP tagForIndex(QModelIndex index = QModelIndex()) const = 0;
-    virtual KisTagSP addEmptyTag(const QString &tagName, QVector<KoResourceSP> taggedResouces)  = 0;
+
+    /// Add a new tag with a possibly empty list of resources to tag
+    virtual KisTagSP addNewTag(const QString &tagName, QVector<KoResourceSP> taggedResouces)  = 0;
+
+    /// Add a tag, if it doesn't exist yet, with a possibly empty list of resources to tag
     virtual bool addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces = QVector<KoResourceSP>()) = 0;
+
     virtual bool setTagActive(const KisTagSP tag) = 0;
     virtual bool setTagInactive(const KisTagSP tag) = 0;
     virtual bool renameTag(const KisTagSP tag) = 0;
     virtual bool changeTagActive(const KisTagSP tag, bool active) = 0;
-
-
-    virtual bool tagResource(const KisTagSP tag, const KoResourceSP resource) = 0;
-    virtual bool untagResource(const KisTagSP tag, const KoResourceSP resource) = 0;
-    virtual QVector<KisTagSP> tagsForResource(int resourceId) const = 0;
-
-
 };
 
 
@@ -94,18 +92,13 @@ public:
     KisTagSP tagForIndex(QModelIndex index = QModelIndex()) const override;
 
     // TODO: replace ALL occurrences of KoResourceSP here with the resource id's.
-    KisTagSP addEmptyTag(const QString &tagName, QVector<KoResourceSP> taggedResouces) override;
+    KisTagSP addNewTag(const QString &tagName, QVector<KoResourceSP> taggedResouces) override;
     bool addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces = QVector<KoResourceSP>()) override;
     bool setTagActive(const KisTagSP tag) override;
     bool setTagInactive(const KisTagSP tag) override;
 
     bool renameTag(const KisTagSP tag) override;
     bool changeTagActive(const KisTagSP tag, bool active) override;
-
-    bool tagResource(const KisTagSP tag, const KoResourceSP resource) override {return false;}
-    bool untagResource(const KisTagSP tag, const KoResourceSP resource) override {return false;}
-    QVector<KisTagSP> tagsForResource(int resourceId) const override {return QVector<KisTagSP>();}
-
 
 private:
 
@@ -158,16 +151,14 @@ public:
 
     QModelIndex indexForTag(KisTagSP tag) const override;
     KisTagSP tagForIndex(QModelIndex index = QModelIndex()) const override;
-    KisTagSP addEmptyTag(const QString &tagName, QVector<KoResourceSP> taggedResouces) override;
+    KisTagSP addNewTag(const QString &tagName, QVector<KoResourceSP> taggedResouces) override;
     bool addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces = QVector<KoResourceSP>()) override;
     bool setTagInactive(const KisTagSP tag) override;
     bool setTagActive(const KisTagSP tag) override;
     bool renameTag(const KisTagSP tag) override;
     bool changeTagActive(const KisTagSP tag, bool active) override;
 
-    bool tagResource(const KisTagSP tag, const KoResourceSP resource) override {return false;}
-    bool untagResource(const KisTagSP tag, const KoResourceSP resource) override {return false;}
-    QVector<KisTagSP> tagsForResource(int resourceId) const override {return QVector<KisTagSP>();}
+    QVector<KisTagSP> tagsForResource(int resourceId) const;
 
 
 protected:

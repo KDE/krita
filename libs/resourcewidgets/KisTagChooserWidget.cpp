@@ -163,7 +163,7 @@ void KisTagChooserWidget::setCurrentItem(const QString &tag)
 
 void KisTagChooserWidget::tagToolCreateNewTag(const QString &tagName)
 {
-    d->model->addEmptyTag(tagName, {});
+    d->model->addNewTag(tagName, {});
     setCurrentItem(tagName);
 }
 

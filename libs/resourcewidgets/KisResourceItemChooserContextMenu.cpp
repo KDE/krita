@@ -28,6 +28,7 @@
 #include <KoIcon.h>
 #include <klocalizedstring.h>
 #include <KoResource.h>
+#include <KisTagResourceModel.h>
 #include <KisResourceModelProvider.h>
 #include <KisTag.h>
 
@@ -172,16 +173,16 @@ KisResourceItemChooserContextMenu::~KisResourceItemChooserContextMenu()
 
 void KisResourceItemChooserContextMenu::addResourceExistingTag(KoResourceSP resource, const KisTagSP tag)
 {
-    m_tagModel->tagResource(tag, resource);
+    m_tagModel->addTag(tag, {resource});
 }
 
 void KisResourceItemChooserContextMenu::removeResourceExistingTag(KoResourceSP resource, const KisTagSP tag)
 {
-    m_tagModel->untagResource(tag, resource);
+    KisTagResourceModel *tagResourceModel = KisResourceModelProvider::tagResourceModel(resource->resourceType().first);
+    tagResourceModel->untagResource(tag, resource);
 }
 
 void KisResourceItemChooserContextMenu::addResourceNewTag(KoResourceSP resource, const QString tag)
 {
-    qDebug() << "addResourceNewTag" << tag << resource;
-    m_tagModel->addEmptyTag(tag, {resource});
+    m_tagModel->addNewTag(tag, {resource});
 }

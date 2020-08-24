@@ -136,6 +136,12 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent,
     connect(m_page->cmbAnnotations, SIGNAL(activated(QString)), SLOT(setAnnotation(QString)));
     setAnnotation(m_page->cmbAnnotations->currentText());
     connect(this, SIGNAL(accepted()), SLOT(slotSaveDialogState()));
+
+    connect(m_page->colorSpaceSelector,
+            SIGNAL(colorSpaceChanged(const KoColorSpace*)),
+            SLOT(slotColorSpaceChanged(const KoColorSpace*)));
+
+    slotColorSpaceChanged(m_image->colorSpace());
 }
 
 KisDlgImageProperties::~KisDlgImageProperties()
@@ -194,6 +200,19 @@ void KisDlgImageProperties::slotSaveDialogState()
 
     KisConfig cfg(false);
     cfg.setConvertLayerColorSpaceInProperties(m_page->chkConvertLayers->isChecked());
+}
+
+void KisDlgImageProperties::slotColorSpaceChanged(const KoColorSpace *cs)
+{
+    if (*m_image->profile() != *cs->profile() &&
+        !KisLayerUtils::canChangeImageProfileInvisibly(m_image)) {
+
+        m_page->wdgWarningNotice->setVisible(true);
+        m_page->wdgWarningNotice->setText(
+                    m_page->wdgWarningNotice->changeImageProfileWarningText());
+    } else {
+        m_page->wdgWarningNotice->setVisible(false);
+    }
 }
 
 void KisDlgImageProperties::setAnnotation(const QString &type)

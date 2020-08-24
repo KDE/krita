@@ -76,7 +76,7 @@ void ColorSpaceConversion::slotImageColorSpaceConversion()
     Q_CHECK_PTR(dlgColorSpaceConversion);
 
     dlgColorSpaceConversion->setCaption(i18n("Convert All Layers From %1", image->colorSpace()->name()));
-    dlgColorSpaceConversion->setInitialColorSpace(image->colorSpace());
+    dlgColorSpaceConversion->setInitialColorSpace(image->colorSpace(), image);
 
     if (dlgColorSpaceConversion->exec() == QDialog::Accepted) {
 
@@ -105,7 +105,7 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
     Q_CHECK_PTR(dlgColorSpaceConversion);
 
     dlgColorSpaceConversion->setCaption(i18n("Convert Current Layer From %1", layer->colorSpace()->name()));
-    dlgColorSpaceConversion->setInitialColorSpace(layer->colorSpace());
+    dlgColorSpaceConversion->setInitialColorSpace(layer->colorSpace(), 0);
 
     if (dlgColorSpaceConversion->exec() == QDialog::Accepted) {
         const KoColorSpace * cs = dlgColorSpaceConversion->m_page->colorSpaceSelector->currentColorSpace();

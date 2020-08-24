@@ -81,10 +81,14 @@ public:
      */
     void setShowStrokeFillGradientHandles(bool value);
 
+    void setShowFillMeshGradientHandles(bool value);
+
     void setForceShapeOutlines(bool value);
 
 private:
     void paintGradientHandles(KoShape *shape, KoFlake::FillVariant fillVariant, QPainter &painter, const KoViewConverter &converter);
+
+    void paintMeshGradientHandles(KoShape *shape, KoFlake::FillVariant fillVariant, QPainter &painter, const KoViewConverter &converter);
 
 private:
     KoFlake::AnchorPosition m_hotPosition;
@@ -93,6 +97,7 @@ private:
     int m_lineWidth;
     bool m_showFillGradientHandles;
     bool m_showStrokeFillGradientHandles;
+    bool m_showFillMeshGradientHandles;
     bool m_forceShapeOutlines;
 };
 

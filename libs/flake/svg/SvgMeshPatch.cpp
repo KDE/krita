@@ -368,6 +368,27 @@ void SvgMeshPatch::addStopLinear(const std::array<QPointF, 2>& pathPoints, QColo
     m_startingPoint = pathPoints[1];
 }
 
+void SvgMeshPatch::modifyPath(SvgMeshPatch::Type type, std::array<QPointF, 4> newPath)
+{
+    controlPoints[type] = newPath;
+    m_nodes[type].point = newPath[0];
+}
+
+void SvgMeshPatch::modifyCorner(SvgMeshPatch::Type type, const QPointF &delta)
+{
+    controlPoints[type][0] -= delta;
+    controlPoints[type][1] -= delta;
+    m_nodes[type].point = controlPoints[type][0];
+
+    controlPoints[(Size + type - 1) % Size][3] -= delta;
+    controlPoints[(Size + type - 1) % Size][2] -= delta;
+}
+
+void SvgMeshPatch::setStopColor(SvgMeshPatch::Type type, const QColor &color)
+{
+    m_nodes[type].color = color;
+}
+
 void SvgMeshPatch::setTransform(const QTransform& matrix)
 {
     m_startingPoint = matrix.map(m_startingPoint);

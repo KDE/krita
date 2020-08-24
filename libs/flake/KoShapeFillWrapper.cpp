@@ -86,6 +86,16 @@ struct ShapeBackgroundFetchPolicy
         return gradientBackground ? gradientBackground->transform() : QTransform();
     }
 
+    static const SvgMeshGradient* meshgradient(KoShape *shape) {
+        QSharedPointer<KoMeshGradientBackground> meshgradientBackground = qSharedPointerDynamicCast<KoMeshGradientBackground>(shape->background());
+        return meshgradientBackground ? meshgradientBackground->gradient() : nullptr;
+    }
+
+    static QTransform meshgradientTransform(KoShape *shape) {
+        QSharedPointer<KoMeshGradientBackground> meshgradientBackground = qSharedPointerDynamicCast<KoMeshGradientBackground>(shape->background());
+        return meshgradientBackground ? meshgradientBackground->transform() : QTransform();
+    }
+
     static bool compareTo(PointerType p1, PointerType p2) {
         return p1->compareTo(p2.data());
     }
@@ -319,7 +329,17 @@ QTransform KoShapeFillWrapper::gradientTransform() const
                 ShapeStrokeFillFetchPolicy::gradientTransform(shape);
 }
 
+const SvgMeshGradient* KoShapeFillWrapper::meshgradient() const
+{
+    if (type() != KoFlake::MeshGradient) return nullptr;
 
+    KoShape *shape = m_d->shapes.first();
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(shape, 0);
+
+    return m_d->fillVariant == KoFlake::Fill ?
+        ShapeBackgroundFetchPolicy::meshgradient(shape) :
+        nullptr;
+}
 
 KUndo2Command *KoShapeFillWrapper::setColor(const QColor &color)
 {

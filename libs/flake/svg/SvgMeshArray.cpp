@@ -19,7 +19,6 @@
 
 #include <KoPathSegment.h>
 #include <kis_global.h>
-#include <QDebug>
 
 SvgMeshArray::SvgMeshArray()
 {
@@ -269,6 +268,97 @@ QRectF SvgMeshArray::boundingRect() const
     // return extremas
     return QRectF(topLeft, bottomRight);
 }
+
+void SvgMeshArray::modifyHandle(const SvgMeshPosition &position,
+                                const std::array<QPointF, 4> &newPath)
+{
+    std::array<QPointF, 4> reversed = newPath;
+    std::reverse(reversed.begin(), reversed.end());
+
+    if (position.segmentType == SvgMeshPatch::Top && position.row > 0) {
+        // modify the shared side
+        m_array[position.row - 1][position.col]->modifyPath(SvgMeshPatch::Bottom, reversed);
+
+    } else if (position.segmentType == SvgMeshPatch::Left && position.col > 0) {
+        // modify the shared side as well
+        m_array[position.row][position.col - 1]->modifyPath(SvgMeshPatch::Right, reversed);
+    }
+    m_array[position.row][position.col]->modifyPath(position.segmentType, newPath);
+}
+
+void SvgMeshArray::modifyCorner(const SvgMeshPosition &position,
+                                const QPointF &newPos)
+{
+    int row = position.row;
+    int col = position.col;
+    SvgMeshPatch::Type type = position.segmentType;
+
+    QPointF delta = m_array[row][col]->getStop(type).point - newPos;
+
+    SvgMeshPatch::Type nextType = static_cast<SvgMeshPatch::Type>(type + 1);
+    SvgMeshPatch::Type previousType = static_cast<SvgMeshPatch::Type>((SvgMeshPatch::Size + type - 1) % SvgMeshPatch::Size);
+
+    if (type == SvgMeshPatch::Top) {
+        if (row == 0) {
+            if (col > 0) {
+                m_array[row][col - 1]->modifyCorner(nextType, delta);
+            }
+        } else {
+            if (col > 0) {
+                m_array[row][col - 1]->modifyCorner(nextType , delta);
+                m_array[row - 1][col - 1]->modifyCorner(SvgMeshPatch::Bottom , delta);
+            }
+            m_array[row - 1][col]->modifyCorner(previousType, delta);
+        }
+    } else if (type == SvgMeshPatch::Right) {
+        if (row > 0) {
+            m_array[row - 1][col]->modifyCorner(nextType, delta);
+        }
+
+    } else if (type == SvgMeshPatch::Left) {
+        if (col > 0) {
+            m_array[row][col - 1]->modifyCorner(previousType , delta);
+        }
+    }
+
+    m_array[row][col]->modifyCorner(type , delta);
+}
+
+void SvgMeshArray::modifyColor(const SvgMeshPosition &position, const QColor &color)
+{
+    int row = position.row;
+    int col = position.col;
+    auto type = position.segmentType;
+
+    SvgMeshPatch::Type nextType = static_cast<SvgMeshPatch::Type>(type + 1);
+    SvgMeshPatch::Type previousType = static_cast<SvgMeshPatch::Type>((SvgMeshPatch::Size + type - 1) % SvgMeshPatch::Size);
+
+    if (type == SvgMeshPatch::Top) {
+        if (row == 0) {
+            if (col > 0) {
+                m_array[row][col - 1]->setStopColor(nextType, color);
+            }
+        } else {
+            if (col > 0) {
+                m_array[row][col - 1]->setStopColor(nextType , color);
+                m_array[row - 1][col - 1]->setStopColor(SvgMeshPatch::Bottom , color);
+            }
+            m_array[row - 1][col]->setStopColor(previousType, color);
+        }
+    } else if (type == SvgMeshPatch::Right) {
+        if (row > 0) {
+            m_array[row - 1][col]->setStopColor(nextType, color);
+        }
+
+    } else if (type == SvgMeshPatch::Left) {
+        if (col > 0) {
+            m_array[row][col - 1]->setStopColor(previousType , color);
+        }
+    }
+
+    m_array[position.row][position.col]->setStopColor(position.segmentType, color);
+}
+
 QColor SvgMeshArray::getColor(SvgMeshPatch::Type edge, int row, int col) const
 {
     return getStop(edge, row, col).color;

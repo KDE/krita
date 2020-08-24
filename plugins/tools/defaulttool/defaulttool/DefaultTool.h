@@ -27,6 +27,7 @@
 #include <commands/KoShapeAlignCommand.h>
 #include <commands/KoShapeReorderCommand.h>
 #include "SelectionDecorator.h"
+#include "KoShapeMeshGradientHandles.h"
 
 #include <QPolygonF>
 #include <QTime>
@@ -97,6 +98,9 @@ public Q_SLOTS:
     void activate(ToolActivation activation, const QSet<KoShape *> &shapes) override;
     void deactivate() override;
 
+Q_SIGNALS:
+    void meshgradientHandleSelected(KoShapeMeshGradientHandles::Handle);
+
 private Q_SLOTS:
     void selectionAlign(int _align);
     void selectionDistribute(int _distribute);
@@ -115,6 +119,8 @@ private Q_SLOTS:
 
     void slotActivateEditFillGradient(bool value);
     void slotActivateEditStrokeGradient(bool value);
+
+    void slotActivateEditFillMeshGradient(bool value);
 
 protected Q_SLOTS:
     /// Update actions on selection change
@@ -151,6 +157,7 @@ protected:
 
 private:
     class MoveGradientHandleInteractionFactory;
+    class MoveMeshGradientHandleInteractionFactory;
 
 private:
     void setupActions();
@@ -178,6 +185,8 @@ private:
     QPointF m_lastPoint;
 
     SelectionDecorator *m_decorator;
+
+    KoShapeMeshGradientHandles::Handle m_selectedMeshHandle;
 
     // TODO alter these 3 arrays to be static const instead
     QCursor m_sizeCursors[8];

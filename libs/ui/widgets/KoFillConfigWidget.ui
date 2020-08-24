@@ -347,6 +347,24 @@
    <item>
     <layout class="QVBoxLayout" name="meshgradientLayout">
      <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QLabel" name="stopColorLabel">
+         <property name="text">
+          <string>Stop:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="KisColorButton" name="meshStopColorButton">
+         <property name="text">
+          <string>PushButton</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
         <widget class="QLabel" name="rowsLabel">
@@ -438,6 +456,11 @@
    <extends>QWidget</extends>
    <header>kis_stopgradient_editor.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisColorButton</class>
+   <extends>QPushButton</extends>
+   <header>kis_color_button.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -49,23 +49,25 @@ void KoMeshGradientBackground::paint(QPainter &painter,
     if (!d->gradient || !d->gradient->isValid())   return;
     painter.save();
 
-    QRectF meshBoundingRect = d->gradient->boundingRect();
+    SvgMeshGradient *gradient = new SvgMeshGradient(*d->gradient);
+
+    QRectF meshBoundingRect = gradient->boundingRect();
+
+    if (gradient->gradientUnits() == KoFlake::ObjectBoundingBox) {
+        const QTransform relativeToShape = KisAlgebra2D::mapToRect(fillPath.boundingRect());
+        gradient->setTransform(relativeToShape);
+        meshBoundingRect = gradient->boundingRect();
+    }
 
     if (d->renderer->patchImage()->isNull()) {
 
-        if (d->gradient->gradientUnits() == KoFlake::ObjectBoundingBox) {
-            const QTransform relativeToShape = KisAlgebra2D::mapToRect(fillPath.boundingRect());
-            d->gradient->setTransform(relativeToShape);
-            meshBoundingRect = d->gradient->boundingRect();
-        }
-
         d->renderer->configure(meshBoundingRect, painter.transform());
-        SvgMeshArray *mesharray = d->gradient->getMeshArray().data();
+        SvgMeshArray *mesharray = gradient->getMeshArray().data();
 
         for (int row = 0; row < mesharray->numRows(); ++row) {
             for (int col = 0; col < mesharray->numColumns(); ++col) {
                 SvgMeshPatch *patch = mesharray->getPatch(row, col);
-                d->renderer->fillPatch(patch, d->gradient->type(), mesharray, row, col);
+                d->renderer->fillPatch(patch, gradient->type(), mesharray, row, col);
             }
         }
         // uncomment to debug

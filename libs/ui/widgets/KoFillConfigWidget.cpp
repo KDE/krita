@@ -64,7 +64,6 @@
 #include <KoStopGradient.h>
 #include <QInputDialog>
 #include <KoShapeFillWrapper.h>
-#include <SvgMeshGradient.h>
 
 #include "kis_global.h"
 #include "kis_debug.h"
@@ -204,6 +203,9 @@ public:
 
     bool noSelectionTrackingMode;
 
+    SvgMeshPosition meshposition;
+    QScopedPointer<SvgMeshGradient> activeMeshGradient;
+
     Ui_KoFillConfigWidget *ui;
 
     std::vector<KisAcyclicSignalConnector::Blocker> deactivationLocks;
@@ -317,11 +319,12 @@ KoFillConfigWidget::KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVarian
     connect(d->ui->cmbGradientType, SIGNAL(currentIndexChanged(int)), SLOT(slotGradientTypeChanged()));
 
     // meshgradient
+    connect(d->ui->meshStopColorButton, SIGNAL(changed(const KoColor&)), this, SLOT(slotMeshHandleColorChanged(const KoColor&)));
     d->ui->spinbRows->setRange(1, 20);
     d->ui->spinbColumns->setRange(1, 20);
     connect(d->ui->spinbRows, SIGNAL(valueChanged(int)), SLOT(slotMeshGradientChanged()));
     connect(d->ui->spinbColumns, SIGNAL(valueChanged(int)), SLOT(slotMeshGradientChanged()));
-    connect(d->ui->cmbSmoothingType, SIGNAL(currentIndexChanged(int)), SLOT(slotMeshGradientChanged()));
+    connect(d->ui->cmbSmoothingType, SIGNAL(currentIndexChanged(int)), SLOT(slotMeshGradientShadingChanged(int)));
 
     // initialize deactivation locks
     d->deactivationLocks.push_back(KisAcyclicSignalConnector::Blocker(d->shapeChangedAcyclicConnector));
@@ -370,6 +373,11 @@ void KoFillConfigWidget::deactivate()
 void KoFillConfigWidget::forceUpdateOnSelectionChanged()
 {
     d->shapeChangedCompressor.start();
+}
+
+void KoFillConfigWidget::setSelectedMeshGradientHandle(const SvgMeshPosition &position)
+{
+    d->meshposition = position;
 }
 
 void KoFillConfigWidget::setNoSelectionTrackingMode(bool value)
@@ -454,7 +462,11 @@ void KoFillConfigWidget::styleButtonPressed(int buttonId)
             //patternChanged(d->patternAction->currentBackground());
             break;
         case KoFillConfigWidget::MeshGradient:
-            slotMeshGradientChanged();
+            if (d->activeMeshGradient) {
+                setNewMeshGradientBackgroundToShape();
+            } else {
+                createNewMeshGradientBackground();
+            }
             break;
     }
 
@@ -781,52 +793,24 @@ void KoFillConfigWidget::patternChanged(QSharedPointer<KoShapeBackground>  backg
 
 void KoFillConfigWidget::slotMeshGradientChanged()
 {
-    KisAcyclicSignalConnector::Blocker b(d->shapeChangedAcyclicConnector);
+    createNewDefaultMeshGradientBackground();
+    setNewMeshGradientBackgroundToShape();
+}
 
-    QList<KoShape*> selectedShapes = currentShapes();
-    // if called by "manager"
-    if (selectedShapes.isEmpty()) {
-        emit sigFillChanged();
+void KoFillConfigWidget::slotMeshGradientShadingChanged(int index)
+{
+    d->activeMeshGradient->setType(static_cast<SvgMeshGradient::Shading>(index));
+    setNewMeshGradientBackgroundToShape();
+}
+
+void KoFillConfigWidget::slotMeshHandleColorChanged(const KoColor &c)
+{
+    if (d->activeMeshGradient) {
+        d->activeMeshGradient->getMeshArray()->modifyColor(d->meshposition, c.toQColor());
+        setNewMeshGradientBackgroundToShape();
         return;
     }
-
-    KoShapeFillWrapper wrapper(selectedShapes, d->fillVariant);
-
-    // use this for mesh creation
-    QSizeF maxSize;
-    for (const auto& shape: selectedShapes) {
-        QSizeF size = shape->boundingRect().size();
-        if (size.height() > maxSize.height()) {
-            maxSize.rheight() = size.height();
-        }
-        if (size.width() > maxSize.width()) {
-            maxSize.rwidth() = size.width();
-        }
-    }
-
-    QScopedPointer<SvgMeshGradient> gradient(new SvgMeshGradient);
-
-    QColor color =  d->canvas->resourceManager()->resource(KoFlake::Background).value<KoColor>().toQColor();
-
-    int nrows = d->ui->spinbRows->value();
-    int ncols = d->ui->spinbColumns->value();
-
-    if (d->ui->cmbSmoothingType->currentIndex()) {
-        gradient->setType(SvgMeshGradient::BICUBIC);
-    } else {
-        gradient->setType(SvgMeshGradient::BILINEAR);
-    }
-
-    gradient->getMeshArray()->createDefaultMesh(nrows, ncols, color, maxSize);
-    gradient->setGradientUnits(KoFlake::ObjectBoundingBox);
-
-    KUndo2Command *command = wrapper.setMeshGradient(gradient.data(), QTransform());
-
-    if (command) {
-        d->canvas->addCommand(command);
-    }
-
-    emit sigFillChanged();
+    KIS_ASSERT(false);
 }
 
 void KoFillConfigWidget::loadCurrentFillFromResourceServer()
@@ -846,6 +830,94 @@ void KoFillConfigWidget::loadCurrentFillFromResourceServer()
     }
 
     emit sigFillChanged();
+}
+
+void KoFillConfigWidget::createNewMeshGradientBackground()
+{
+    QList<KoShape*> selectedShapes = currentShapes();
+    if (selectedShapes.isEmpty()) {
+        return;
+    }
+
+    KoShapeFillWrapper wrapper(selectedShapes, d->fillVariant);
+    const SvgMeshGradient *g = wrapper.meshgradient();
+    if (g) {
+        d->activeMeshGradient.reset(new SvgMeshGradient(*g));
+    } else {
+        createNewDefaultMeshGradientBackground();
+    }
+
+    updateMeshGradientUI();
+}
+
+void KoFillConfigWidget::createNewDefaultMeshGradientBackground()
+{
+    QList<KoShape*> selectedShapes = currentShapes();
+    if (selectedShapes.isEmpty()) {
+        return;
+    }
+
+    // use this for mesh creation
+    QSizeF maxSize;
+    for (const auto& shape: selectedShapes) {
+        QSizeF size = shape->boundingRect().size();
+        if (size.height() > maxSize.height()) {
+            maxSize.rheight() = size.height();
+        }
+        if (size.width() > maxSize.width()) {
+            maxSize.rwidth() = size.width();
+        }
+    }
+
+    SvgMeshGradient *gradient = new SvgMeshGradient;
+
+    QColor color =  d->canvas->resourceManager()->resource(KoFlake::Background).value<KoColor>().toQColor();
+
+    int nrows = d->ui->spinbRows->value();
+    int ncols = d->ui->spinbColumns->value();
+
+    if (d->ui->cmbSmoothingType->currentIndex()) {
+        gradient->setType(SvgMeshGradient::BICUBIC);
+    } else {
+        gradient->setType(SvgMeshGradient::BILINEAR);
+    }
+
+    gradient->getMeshArray()->createDefaultMesh(nrows, ncols, color, maxSize);
+    gradient->setGradientUnits(KoFlake::ObjectBoundingBox);
+    d->activeMeshGradient.reset(gradient);
+}
+
+void KoFillConfigWidget::setNewMeshGradientBackgroundToShape()
+{
+    KisAcyclicSignalConnector::Blocker b(d->shapeChangedAcyclicConnector);
+
+    QList<KoShape*> selectedShapes = currentShapes();
+    // if called by "manager"
+    if (selectedShapes.isEmpty()) {
+        emit sigFillChanged();
+        return;
+    }
+
+    KoShapeFillWrapper wrapper(selectedShapes, d->fillVariant);
+
+    KUndo2Command *command = wrapper.setMeshGradient(d->activeMeshGradient.data(), QTransform());
+    if (command) {
+        d->canvas->addCommand(command);
+    }
+
+    emit sigFillChanged();
+}
+
+void KoFillConfigWidget::updateMeshGradientUI()
+{
+    KisSignalsBlocker b(d->ui->spinbRows,
+                        d->ui->spinbColumns,
+                        d->ui->cmbSmoothingType);
+
+    SvgMeshArray *mesharray = d->activeMeshGradient->getMeshArray().data();
+    d->ui->spinbRows->setValue(mesharray->numRows());
+    d->ui->spinbColumns->setValue(mesharray->numColumns());
+    d->ui->cmbSmoothingType->setCurrentIndex(d->activeMeshGradient->type());
 }
 
 void KoFillConfigWidget::shapeChanged()
@@ -934,6 +1006,9 @@ void KoFillConfigWidget::updateFillColorFromShape(KoShape *shape)
             break;
         case KoFlake::Pattern:
             break;
+        case KoFlake::MeshGradient:
+            createNewMeshGradientBackground();
+            break;
     }
 }
 
@@ -956,6 +1031,8 @@ void KoFillConfigWidget::updateWidgetComponentVisbility()
     d->ui->gradientTypeLine->setVisible(false);
     d->ui->soldStrokeColorLabel->setVisible(false);
     d->ui->presetLabel->setVisible(false);
+    d->ui->stopColorLabel->setVisible(false);
+    d->ui->meshStopColorButton->setVisible(false);
     d->ui->rowsLabel->setVisible(false);
     d->ui->spinbRows->setVisible(false);
     d->ui->columnsLabel->setVisible(false);
@@ -991,6 +1068,8 @@ void KoFillConfigWidget::updateWidgetComponentVisbility()
         case KoFillConfigWidget::Pattern:
             break;
         case KoFillConfigWidget::MeshGradient:
+            d->ui->stopColorLabel->setVisible(true);
+            d->ui->meshStopColorButton->setVisible(true);
             d->ui->rowsLabel->setVisible(true);
             d->ui->spinbRows->setVisible(true);
             d->ui->columnsLabel->setVisible(true);

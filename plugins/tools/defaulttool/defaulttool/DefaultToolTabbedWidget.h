@@ -20,6 +20,7 @@
 #define DEFAULTTOOLTABBEDWIDGET_H
 
 #include <KoTitledTabWidget.h>
+#include "KoShapeMeshGradientHandles.h"
 
 class KoInteractionTool;
 class KoFillConfigWidget;
@@ -48,6 +49,9 @@ public:
 Q_SIGNALS:
     void sigSwitchModeEditFillGradient(bool value);
     void sigSwitchModeEditStrokeGradient(bool value);
+
+public Q_SLOTS:
+    void slotMeshGradientHandleSelected(KoShapeMeshGradientHandles::Handle h);
 
 private Q_SLOTS:
     void slotCurrentIndexChanged(int current);

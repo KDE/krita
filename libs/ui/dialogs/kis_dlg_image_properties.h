@@ -55,12 +55,15 @@ private Q_SLOTS:
     void setProofingConfig();
 
     void slotSaveDialogState();
+
+    void slotColorSpaceChanged(const KoColorSpace*);
 private:
 
     WdgImageProperties *m_page;
     KisImageWSP m_image;
     KisProofingConfigurationSP m_proofingConfig;
     bool m_firstProofingConfigChange {true};
+    QLabel *m_colorWarningLabel {0};
 };
 
 

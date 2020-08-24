@@ -1726,4 +1726,35 @@ namespace KisLayerUtils {
         return node;
     }
 
+    bool canChangeImageProfileInvisibly(KisImageSP image)
+    {
+        int numLayers = 0;
+        bool hasNonNormalLayers = false;
+        bool hasTransparentLayer = false;
+
+
+        recursiveApplyNodes(image->root(),
+            [&numLayers, &hasNonNormalLayers, &hasTransparentLayer, image] (KisNodeSP node) {
+                if (!node->inherits("KisLayer")) return;
+
+                numLayers++;
+
+                if (node->exactBounds().isEmpty()) return;
+
+                // this is only an approximation! it is not exact!
+                if (!hasTransparentLayer &&
+                    node->exactBounds() != image->bounds()) {
+
+                    hasTransparentLayer = true;
+                }
+
+                if (!hasNonNormalLayers &&
+                    node->compositeOpId() != COMPOSITE_OVER) {
+
+                    hasNonNormalLayers = true;
+                }
+            });
+
+        return numLayers == 1 || (!hasNonNormalLayers && !hasTransparentLayer);
+    }
 }

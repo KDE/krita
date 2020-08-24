@@ -197,7 +197,7 @@
       <attribute name="title">
        <string>Image Color Space</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout">
+      <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,1">
        <item>
         <widget class="KisColorSpaceSelector" name="colorSpaceSelector" native="true"/>
        </item>
@@ -209,6 +209,32 @@
         </widget>
        </item>
        <item>
+        <spacer name="verticalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::MinimumExpanding</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>10</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="KisWarningWidget" name="wdgWarningNotice" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="verticalSpacer_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -216,7 +242,7 @@
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>40</height>
+           <height>20</height>
           </size>
          </property>
         </spacer>
@@ -402,6 +428,12 @@
    <class>KisColorSpaceSelector</class>
    <extends>QWidget</extends>
    <header>widgets/kis_color_space_selector.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisWarningWidget</class>
+   <extends>QWidget</extends>
+   <header>widgets/KisWarningWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

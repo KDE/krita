@@ -165,6 +165,11 @@ apps.each do |app|
         f.close
     end
 
+    if !found
+        puts " -> Application '#{app}' not found."
+        next
+    end
+
     if (kde_release && appdata["kde_release"] != "yes")
       puts "  -> Skipping because kde_release is not set in the config.ini"
       next
@@ -248,11 +253,13 @@ apps.each do |app|
     end
 
     if appdata["gitModule"]
-        if !appdata["gitTag"]
-            temp = { "gitTag" => "HEAD" }
-            appdata = appdata.merge(temp)
+        if !appdata["category"]
+            appdata["category"] = "kde"
         end
-        puts "-> Fetching git://anongit.kde.org/" + app + ".git " +  appdata["gitTag"] + " into " + appdata["folder"] + "..."
+        if !appdata["gitTag"]
+            appData["gitTag"] = "master"
+        end
+        puts "-> Fetching https://invent.kde.org/#{appdata["category"]}/#{app}/-/archive/#{appdata["gitTag"]}/#{app}-#{appdata["gitTag"]}.tar.gz"
     else
         puts "-> Fetching " + appdata["mainmodule"] + "/" + appdata["submodulepath"] + app + revString + " into " + appdata["folder"] + "..."
     end
@@ -276,7 +283,7 @@ apps.each do |app|
 
     # Do the main checkouts.
     if appdata["gitModule"]
-        `git archive --remote git://anongit.kde.org/#{app}.git #{appdata["gitTag"]} | tar -x`
+        `curl "https://invent.kde.org/#{appdata["category"]}/#{app}/-/archive/#{appdata["gitTag"]}/#{app}-#{appdata["gitTag"]}.tar.gz" | tar xz --strip-components=1`
     else
         if appdata["wholeModule"]
             `svn co #{svnroot}/#{appdata["mainmodule"]}/#{appdata["submodulepath"]} #{rev} #{app}-tmp`

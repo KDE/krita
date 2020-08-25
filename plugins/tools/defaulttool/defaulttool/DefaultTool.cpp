@@ -348,6 +348,7 @@ private:
 
     KoShapeMeshGradientHandles::Handle handleAt(const QPointF &pos) const
     {
+        // FIXME: copy of KoShapeGradientHandles. use a template?
         KoShapeMeshGradientHandles::Handle result;
 
         KoShape *shape = onlyEditableShape();
@@ -363,15 +364,13 @@ private:
 
             KoShapeMeshGradientHandles sh(m_fillVariant, shape);
 
-            for (const auto& segment: sh.handles()) {
-                for (const auto& handle: segment) {
-                    const QPointF handlePoint = converter->documentToView(handle.pos);
-                    const qreal distanceSq = kisSquareDistance(viewPoint, handlePoint);
+            for (const auto& handle: sh.handles()) {
+                const QPointF handlePoint = converter->documentToView(handle.pos);
+                const qreal distanceSq = kisSquareDistance(viewPoint, handlePoint);
 
-                    if (distanceSq < distanceThresholdSq && distanceSq < minDistanceSq) {
-                        result = handle;
-                        minDistanceSq = distanceSq;
-                    }
+                if (distanceSq < distanceThresholdSq && distanceSq < minDistanceSq) {
+                    result = handle;
+                    minDistanceSq = distanceSq;
                 }
             }
         }

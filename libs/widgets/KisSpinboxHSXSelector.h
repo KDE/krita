@@ -8,7 +8,7 @@
 #define KISSPINBOXHSXSELECTOR_H
 
 #include <QWidget>
-#include <QVector3D>
+#include <QVector4D>
 #include "kritawidgets_export.h"
 #include <QScopedPointer>
 
@@ -27,21 +27,21 @@ public:
     ~KisSpinboxHSXSelector() override;
 
     /**
-     * @brief connect signals and slots with given selector to
-     *        synchronize value and color model changes.
+     * @brief connect signals and slots with given selector model
+     *        to synchronize value and color model changes.
      *
      * Note: in case the selector switches to a non-HSX color model,
      * it needs to be deactivated or hidden manually since it will
      * not synchronize values for other selector models.
      */
-    void attachToSelector(KisVisualColorModel *selector);
+    void setModel(KisVisualColorModel *model);
 
 Q_SIGNALS:
-    void sigHSXChanged(const QVector3D &hsx);
+    void sigChannelValuesChanged(const QVector4D &values);
 
 public Q_SLOTS:
     void slotColorModelChanged();
-    void slotHSXChanged(const QVector3D &hsx);
+    void slotChannelValuesChanged(const QVector4D &values);
 private Q_SLOTS:
     void slotSpinBoxChanged();
 private:

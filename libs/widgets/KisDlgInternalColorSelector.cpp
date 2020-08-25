@@ -76,7 +76,7 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
     m_ui->spinboxselector->slotSetColor(color);
     connect(m_ui->spinboxselector, SIGNAL(sigNewColor(KoColor)), this, SLOT(slotColorUpdated(KoColor)));
 
-    m_ui->spinboxHSXSelector->attachToSelector(m_d->selectorModel);
+    m_ui->spinboxHSXSelector->setModel(m_d->selectorModel);
 
     m_ui->visualSelector->setDisplayRenderer(displayRenderer);
     m_ui->visualSelector->setConfig(false, config.modal);

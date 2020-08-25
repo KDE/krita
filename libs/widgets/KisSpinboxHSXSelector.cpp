@@ -18,6 +18,7 @@ struct KisSpinboxHSXSelector::Private
     QList <QLabel*> labels;
     QList <KisDoubleParseSpinBox*> spinBoxes;
     QFormLayout *layout {0};
+    KisVisualColorModel *selectorModel {0};
 };
 
 KisSpinboxHSXSelector::KisSpinboxHSXSelector(QWidget *parent)
@@ -46,51 +47,68 @@ KisSpinboxHSXSelector::~KisSpinboxHSXSelector()
 {
 }
 
-void KisSpinboxHSXSelector::attachToSelector(KisVisualColorModel *selector)
+void KisSpinboxHSXSelector::setModel(KisVisualColorModel *model)
 {
-    connect(selector, SIGNAL(sigColorModelChanged()), this, SLOT(slotColorModelChanged()));
-    connect(selector, SIGNAL(sigHSXChanged(QVector3D)), this, SLOT(slotHSXChanged(QVector3D)));
-    connect(this, SIGNAL(sigHSXChanged(QVector3D)), selector, SLOT(slotSetHSX(QVector3D)));
-    slotColorModelChanged();
+    if (m_d->selectorModel) {
+        m_d->selectorModel->disconnect(this);
+        disconnect(m_d->selectorModel);
+    }
+    m_d->selectorModel = model;
+    if (model) {
+        connect(model, SIGNAL(sigColorModelChanged()), this, SLOT(slotColorModelChanged()));
+        slotColorModelChanged();
+        if (model->isHSXModel()) {
+            slotChannelValuesChanged(model->channelValues());
+        }
+    }
 }
 
 void KisSpinboxHSXSelector::slotColorModelChanged()
 {
-    const KisVisualColorModel *selector = qobject_cast<KisVisualColorModel *>(sender());
-    if (!selector) {
+    if (!m_d->selectorModel) {
         return;
     }
 
-    switch (selector->colorModel()) {
-    case KisVisualColorModel::HSV:
-        m_d->labels[2]->setText(i18n("Value:"));
-        break;
-    case KisVisualColorModel::HSL:
-        m_d->labels[2]->setText(i18n("Lightness:"));
-        break;
-    case KisVisualColorModel::HSI:
-        m_d->labels[2]->setText(i18n("Intensity:"));
-        break;
-    case KisVisualColorModel::HSY:
-        m_d->labels[2]->setText(i18n("Luma:"));
-        break;
-    default:
-        break;
+    if (m_d->selectorModel->isHSXModel()) {
+        switch (m_d->selectorModel->colorModel()) {
+        case KisVisualColorModel::HSV:
+            m_d->labels[2]->setText(i18n("Value:"));
+            break;
+        case KisVisualColorModel::HSL:
+            m_d->labels[2]->setText(i18n("Lightness:"));
+            break;
+        case KisVisualColorModel::HSI:
+            m_d->labels[2]->setText(i18n("Intensity:"));
+            break;
+        case KisVisualColorModel::HSY:
+            m_d->labels[2]->setText(i18n("Luma:"));
+            break;
+        default:
+            break;
+        }
+        connect(m_d->selectorModel, SIGNAL(sigChannelValuesChanged(QVector4D)),
+                this, SLOT(slotChannelValuesChanged(QVector4D)), Qt::UniqueConnection);
+        connect(this, SIGNAL(sigChannelValuesChanged(QVector4D)),
+                m_d->selectorModel, SLOT(slotSetChannelValues(QVector4D)), Qt::UniqueConnection);
+    } else {
+        m_d->selectorModel->disconnect(SIGNAL(sigChannelValuesChanged(QVector4D)), this);
+        disconnect(SIGNAL(sigChannelValuesChanged(QVector4D)));
     }
 }
 
-void KisSpinboxHSXSelector::slotHSXChanged(const QVector3D &hsx)
+void KisSpinboxHSXSelector::slotChannelValuesChanged(const QVector4D &values)
 {
     const QSignalBlocker s1(m_d->spinBoxes[0]), s2(m_d->spinBoxes[1]), s3(m_d->spinBoxes[2]);
-    m_d->spinBoxes[0]->setValue(hsx[0] * 360.0);
-    m_d->spinBoxes[1]->setValue(hsx[1] * 100.0);
-    m_d->spinBoxes[2]->setValue(hsx[2] * 100.0);
+    m_d->spinBoxes[0]->setValue(values[0] * 360.0);
+    m_d->spinBoxes[1]->setValue(values[1] * 100.0);
+    m_d->spinBoxes[2]->setValue(values[2] * 100.0);
 }
 
 void KisSpinboxHSXSelector::slotSpinBoxChanged()
 {
-    QVector3D hsx(m_d->spinBoxes[0]->value() / 360.0,
+    QVector4D hsx(m_d->spinBoxes[0]->value() / 360.0,
                   m_d->spinBoxes[1]->value() / 100.0,
-                  m_d->spinBoxes[2]->value() / 100.0);
-    emit sigHSXChanged(hsx);
+                  m_d->spinBoxes[2]->value() / 100.0,
+                  0);
+    emit sigChannelValuesChanged(hsx);
 }

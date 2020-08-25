@@ -271,14 +271,16 @@ apps.each do |app|
 
     if appdata["mainmodule"][0,5] == "trunk" || appdata["mainmodule"][0,8] == "branches"
         svnroot = "#{svnbase}/"
+        if !appdata["l10npath"]
+            appdata["l10npath"] = appdata["mainmodule"]
+        end
     else
         #trunk is assumed for all mainmodules that don't start with "trunk" or "branches"
-    svnroot = "#{svnbase}/trunk/"
-    end
+        svnroot = "#{svnbase}/trunk/"
 
-    if !appdata["l10npath"]
-        temp = { "l10npath" => "." }
-        appdata = appdata.merge(temp)
+        if !appdata["l10npath"]
+            appdata["l10npath"] = ""
+        end
     end
 
     # Do the main checkouts.
@@ -310,7 +312,7 @@ apps.each do |app|
 
     # translations
     if appdata["translations"] != "no" && options.translations
-        puts "-> Fetching l10n docs for #{appdata["submodulepath"]}#{app} #{revString}..."
+        puts "-> Fetching l10n docs for #{appdata["submodulepath"]}#{app} #{revString} from '#{svnroot}/#{appdata["l10npath"]}/l10n-kf5/subdirs #{rev}'..."
 
         i18nlangs = `svn cat #{svnroot}/#{appdata["l10npath"]}/l10n-kf5/subdirs #{rev}`.split
         i18nlangsCleaned = []
@@ -359,7 +361,7 @@ apps.each do |app|
         end
 
         # app translations
-        puts "-> Fetching l10n po for #{appdata["submodulepath"]}#{app}...\n"
+        puts "-> Fetching l10n po for #{appdata["submodulepath"]}#{app} from '#{svnroot}/#{appdata["l10npath"]}/l10n-kf5/'..."
 
         Dir.chdir( ".." ) # in submodule now
 

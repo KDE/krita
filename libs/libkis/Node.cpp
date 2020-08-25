@@ -503,7 +503,7 @@ QByteArray Node::pixelDataAtTime(int x, int y, int w, int h, int time) const
     if (!rkc) return ba;
     KisKeyframeSP frame = rkc->keyframeAt(time);
     if (!frame) return ba;
-    KisPaintDeviceSP dev = d->node->paintDevice();
+    KisPaintDeviceSP dev = new KisPaintDevice(*d->node->paintDevice(), KritaUtils::DeviceCopyMode::CopySnapshot);
     if (!dev) return ba;
 
     rkc->fetchFrame(frame, dev);

@@ -42,6 +42,7 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
     const QString brushFileName = brushDefinition.attribute("filename", "");
     KisBrushSP brush = resourceSourceAdapter.resourceForFilename(brushFileName);
 
+    bool brushtipFound = true;
     //Fallback for files that still use the old format
     if (!brush) {
         QFileInfo info(brushFileName);
@@ -50,6 +51,7 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
 
     if (!brush) {
         brush = resourceSourceAdapter.fallbackResource();
+        brushtipFound = false;
     }
 
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(brush, 0);
@@ -79,8 +81,10 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
         colorfulBrush->setBrightnessAdjustment(brushDefinition.attribute("BrightnessAdjustment").toDouble());
         colorfulBrush->setContrastAdjustment(brushDefinition.attribute("ContrastAdjustment").toDouble());
     }
-
-    if (brushDefinition.hasAttribute("preserveLightness")) {
+    if (!brushtipFound) {
+        brush->setBrushApplication(ALPHAMASK);
+    } 
+    else if (brushDefinition.hasAttribute("preserveLightness")) {
         const int preserveLightness = KisDomUtils::toInt(brushDefinition.attribute("preserveLightness", "0"));
         const bool useColorAsMask = (bool)brushDefinition.attribute("ColorAsMask", "1").toInt();
 

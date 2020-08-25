@@ -305,10 +305,20 @@ bool KisResourceCacheDb::initialize(const QString &location)
 
 int KisResourceCacheDb::resourceIdForResource(const QString &resourceName, const QString &resourceFileName, const QString &resourceType, const QString &storageLocation)
 {
-    QFile f(":/select_resource_id.sql");
-    f.open(QFile::ReadOnly);
+    //qDebug() << "resourceIdForResource" << resourceName << resourceFileName << resourceType << storageLocation;
+
     QSqlQuery q;
-    if (!q.prepare(f.readAll())) {
+
+    if (!q.prepare("SELECT resources.id\n"
+                   "FROM   resources\n"
+                   ",      resource_types\n"
+                   ",      storages\n"
+                   "WHERE  resources.resource_type_id = resource_types.id\n"
+                   "AND    storages.id = resources.storage_id\n"
+                   "AND    storages.location = :storage_location\n"
+                   "AND    resource_types.name = :resource_type\n"
+                   "AND    resources.name = :name\n"
+                   "AND    resources.filename = :filename\n")) {
         qWarning() << "Could not read and prepare resourceIdForResource" << q.lastError();
         return -1;
     }
@@ -317,13 +327,17 @@ int KisResourceCacheDb::resourceIdForResource(const QString &resourceName, const
     q.bindValue(":filename", resourceFileName);
     q.bindValue(":resource_type", resourceType);
     q.bindValue(":storage_location", storageLocation);
+
     if (!q.exec()) {
         qWarning() << "Could not query resourceIdForResource" << q.boundValues() << q.lastError();
         return -1;
     }
     if (!q.first()) {
+        //qWarning() << "Could not find resource" << resourceName << resourceFileName << resourceType << storageLocation;
         return -1;
     }
+
+    //qDebug() << "Found resource" << q.value(0).toInt();
 
     return q.value(0).toInt();
 
@@ -510,7 +524,7 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
 
     r = q.exec();
     if (!r) {
-        qWarning() << "Could not execute addResource statement" << q.lastError();
+        qWarning() << "Could not execute addResource statement" << q.lastError() << resourceId << storage->name() << storage->location() << resource->name() << resource->filename() << "version" << resource->version();;
         return r;
     }
 
@@ -603,7 +617,7 @@ bool KisResourceCacheDb::tagResource(KisResourceStorageSP storage, const QString
     int resourceId = resourceIdForResource(resourceName, resourceFileName, resourceType, KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
 
     if (resourceId < 0) {
-        qWarning() << "Could not find resource to tag" << KisResourceLocator::instance()->makeStorageLocationRelative(storage->location())  << resourceName << resourceType;
+        qWarning() << "Could not find resource to tag" << KisResourceLocator::instance()->makeStorageLocationRelative(storage->location())  << resourceName << resourceFileName << resourceType;
         return false;
     }
 
@@ -787,9 +801,17 @@ bool KisResourceCacheDb::addTags(KisResourceStorageSP storage, QString resourceT
             qWarning() << "Could not add tag" << iter->url() << "to the database";
         }
         if (!iter->tag()->defaultResources().isEmpty()) {
-            Q_FOREACH(const QString &resourceName, iter->tag()->defaultResources()) {
-                if (!tagResource(storage, resourceName, resourceName, iter->tag(), resourceType)) {
-                    qWarning() << "Could not tag resource" << resourceName << "with tag" << iter->url();
+            Q_FOREACH(const QString &resourceFileName, iter->tag()->defaultResources()) {
+                QString resourceName = resourceFileName;
+
+                if (resourceName.contains("_default")) {
+                    resourceName = resourceName.remove("_default");
+                }
+
+                //qDebug() << "Tagging" << storage << QFileInfo(resourceName).baseName() << resourceFileName <<  resourceType << "with tag" << iter->url();
+
+                if (!tagResource(storage, QFileInfo(resourceName).baseName(), resourceFileName, iter->tag(), resourceType)) {
+                    qWarning() << "Could not tag resource" << QFileInfo(resourceName).baseName() << "from" << storage->name() << "filename" << resourceName << "with tag" << iter->url();
                 }
             }
         }

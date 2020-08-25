@@ -48,7 +48,7 @@ public:
                 }
                 KoResourceSP resource = m_bundle->resource(resourceType, resourceReference.resourcePath);
                 if (resource) {
-                    m_tags[tagname]->setDefaultResources(m_tags[tagname]->defaultResources() << resource->name());
+                    m_tags[tagname]->setDefaultResources(m_tags[tagname]->defaultResources() << resource->filename());
                 } else {
                     qWarning() << tagname << "The following resource could not be tagged:" << resourceReference.resourcePath << "from" << bundle->filename();
                 }

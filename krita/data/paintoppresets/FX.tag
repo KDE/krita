@@ -1,5 +1,5 @@
 [Desktop Entry]
 Type=Tag
 Name=FX
-Comment=Special Effects
+Comment=Special Effects.kpp
 URL=FX

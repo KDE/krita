@@ -79,6 +79,7 @@ QVariant KisAllTagResourceModel::data(const QModelIndex &index, int role) const
 {
     QVariant v;
 
+
     if (!index.isValid()) { return v; }
     if (index.row() > rowCount()) { return v; }
     if (index.column() > d->columnCount) { return v;}
@@ -86,7 +87,7 @@ QVariant KisAllTagResourceModel::data(const QModelIndex &index, int role) const
     bool pos = const_cast<KisAllTagResourceModel*>(this)->d->query.seek(index.row());
     if (!pos) { return v;}
 
-    if (role < TagId) {
+    if (role < Qt::UserRole + TagId) {
 
         // XXX: Stupid linear search for now... We could copy all the code in KisAllResourcesModel but that's so ugly
         KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(d->resourceType);
@@ -162,7 +163,7 @@ bool KisAllTagResourceModel::tagResource(const KisTagSP tag, const KoResourceSP 
     if (!resource || !resource->valid()) return false;
     if (!tag || !tag->valid()) return false;
 
-    beginInsertRows(QModelIndex(), rowCount(), rowCount() + 1);
+    beginInsertRows(QModelIndex(), rowCount(), rowCount());
 
     QSqlQuery q;
     if (!q.prepare("INSERT INTO resource_tags\n"
@@ -345,7 +346,7 @@ void KisTagResourceModel::setTagsFilter(const QVector<KisTagSP> tags)
 {
     d->tagIds.clear();
     Q_FOREACH(const KisTagSP tag, tags) {
-        if (tag->valid() && tag->id() > -1) {
+        if (tag && tag->valid() && tag->id() > -1) {
             d->tagIds << tag->id();
         }
     }

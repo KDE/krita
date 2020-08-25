@@ -27,11 +27,20 @@ class TestTagFilterResourceProxyModel : public QObject
     Q_OBJECT
 private Q_SLOTS:
     void initTestCase();
+
     void testRowCount();
     void testData();
     void testResource();
+
+    void testFilterByResource();
+    void testFilterByTag();
+    void testFilterByString();
+
     void cleanupTestCase();
+
 private:
+
+
 
     QString m_srcLocation;
     QString m_dstLocation;

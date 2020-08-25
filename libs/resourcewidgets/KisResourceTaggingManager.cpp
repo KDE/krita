@@ -96,7 +96,7 @@ void KisResourceTaggingManager::showTaggingBar(bool show)
 
 void KisResourceTaggingManager::tagChooserIndexChanged(const KisTagSP tag)
 {
-    d->model->setTag(tag);
+    d->model->setTagFilter(tag);
 }
 
 void KisResourceTaggingManager::tagSearchLineEditTextChanged(const QString& lineEditText)

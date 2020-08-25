@@ -161,11 +161,11 @@ void TestTagResourceModel::testUntagResource()
     KisTagSP tag = tagModel->tagForIndex(tagModel->index(2, 0));
     Q_ASSERT(tag);
 
-    KisAllTagResourceModel *tagResourceModel = new KisAllTagResourceModel(ResourceType::PaintOpPresets);
-    int rowCount = tagResourceModel->rowCount();
-    tagResourceModel->untagResource(tag, resource);
+    KisAllTagResourceModel tagResourceModel(ResourceType::PaintOpPresets);
+    int rowCount = tagResourceModel.rowCount();
+    tagResourceModel.untagResource(tag, resource);
 
-    QCOMPARE(tagResourceModel->rowCount(), rowCount - 1);
+    QCOMPARE(tagResourceModel.rowCount(), rowCount - 1);
 }
 
 void TestTagResourceModel::testFilterTagResource()

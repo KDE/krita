@@ -37,7 +37,6 @@ struct KisTagFilterResourceProxyModel::Private
 
     QString resourceType;
 
-    KisTagModel *tagModel {0}; // Not sure whether we'll need this
     KisResourceModel *resourceModel {0}; // This is the source model if we are _not_ filtering by tag
     KisTagResourceModel *tagResourceModel {0}; // This is the source model if we are filtering by tag
 
@@ -51,7 +50,6 @@ KisTagFilterResourceProxyModel::KisTagFilterResourceProxyModel(const QString &re
     , d(new Private)
 {
     d->resourceType = resourceType;
-    d->tagModel = KisResourceModelProvider::tagModel(resourceType);
     d->resourceModel = KisResourceModelProvider::resourceModel(resourceType);
     d->tagResourceModel = KisResourceModelProvider::tagResourceModel(resourceType);
 
@@ -140,12 +138,12 @@ bool KisTagFilterResourceProxyModel::setResourceMetaData(KoResourceSP resource, 
     return false;
 }
 
-void KisTagFilterResourceProxyModel::setTag(const KisTagSP tag)
+void KisTagFilterResourceProxyModel::setTagFilter(const KisTagSP tag)
 {
-    if (!tag.isNull()) {
+    if (tag) {
         if (tag->url() != "All Untagged") {
-            d->tagResourceModel->setTagsFilter(QVector<KisTagSP>() << tag);
             setSourceModel(d->tagResourceModel);
+            d->tagResourceModel->setTagsFilter(QVector<KisTagSP>() << tag);
         }
         else {
             setSourceModel(d->resourceModel);
@@ -153,21 +151,24 @@ void KisTagFilterResourceProxyModel::setTag(const KisTagSP tag)
         }
     }
     else {
+        d->tagResourceModel->setTagsFilter(QVector<KisTagSP>());
         setSourceModel(d->resourceModel);
         d->resourceModel->showOnlyUntaggedResources(false);
     }
     invalidateFilter();
 }
 
-void KisTagFilterResourceProxyModel::setResource(const KoResourceSP resource)
+void KisTagFilterResourceProxyModel::setResourceFilter(const KoResourceSP resource)
 {
     if (resource) {
         d->tagResourceModel->setResourcesFilter(QVector<KoResourceSP>() << resource);
+        setSourceModel(d->tagResourceModel);
     }
     else {
         setSourceModel(d->resourceModel);
     }
     invalidateFilter();
+
 }
 
 void KisTagFilterResourceProxyModel::setSearchText(const QString& searchText)
@@ -176,10 +177,20 @@ void KisTagFilterResourceProxyModel::setSearchText(const QString& searchText)
     invalidateFilter();
 }
 
-void KisTagFilterResourceProxyModel::setFilterInCurrentTag(const bool filterInCurrentTag)
+void KisTagFilterResourceProxyModel::setFilterInCurrentTag(bool filterInCurrentTag)
 {
     d->filterInCurrentTag = filterInCurrentTag;
     invalidateFilter();
+}
+
+bool KisTagFilterResourceProxyModel::tagResource(KisTagSP tag, KoResourceSP resource)
+{
+    return d->tagResourceModel->tagResource(tag, resource);
+}
+
+bool KisTagFilterResourceProxyModel::untagResource(const KisTagSP tag, const KoResourceSP resource)
+{
+    return d->tagResourceModel->untagResource(tag, resource);
 }
 
 bool KisTagFilterResourceProxyModel::filterAcceptsColumn(int /*source_column*/, const QModelIndex &/*source_parent*/) const
@@ -189,15 +200,23 @@ bool KisTagFilterResourceProxyModel::filterAcceptsColumn(int /*source_column*/, 
 
 bool KisTagFilterResourceProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
+    // we don't need to check anything else because the user wants to search in all resources
+    // but if the filter text is empty, we do need to filter by the current tag
+    if (!d->filterInCurrentTag && d->filter->isEmpty()) {
+        return true;
+    }
+
     // If there's a tag set to filter on, we use the tagResourceModel, so that already filters for the tag
     // Here, we only have to filter by the search string.
+    QModelIndex idx = sourceModel()->index(source_row, 0, source_parent);
 
-    QModelIndex idx = sourceModel()->index(source_row, KisAbstractResourceModel::Name, source_parent);
+    if (!idx.isValid()) {
+        return false;
+    }
 
     QString resourceName = sourceModel()->data(idx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
 
     return d->filter->matchesResource(resourceName);
-
 }
 
 bool KisTagFilterResourceProxyModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const

@@ -200,6 +200,6 @@ void DlgDbExplorer::slotRvTagSelected(int index)
     KisTagSP tag = m_tagModel->tagForIndex(idx);
 
     if (m_filterProxyModel && !tag.isNull() && tag->valid()) {
-        m_filterProxyModel->setTag(tag);
+        m_filterProxyModel->setTagFilter(tag);
     }
 }

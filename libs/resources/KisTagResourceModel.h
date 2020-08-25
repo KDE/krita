@@ -88,8 +88,16 @@ private:
 class KRITARESOURCES_EXPORT KisTagResourceModel : public QSortFilterProxyModel, KisAbstractTagResourceModel
 {
     Q_OBJECT
-public:
+
+private:
+
+    friend class KisResourceModelProvider;
+    friend class TestTagResourceModel;
+
     KisTagResourceModel(const QString &resourceType, QObject *parent = 0);
+
+public:
+
     ~KisTagResourceModel() override;
 
 public:

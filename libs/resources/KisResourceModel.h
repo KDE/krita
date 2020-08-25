@@ -215,10 +215,13 @@ private:
 class KRITARESOURCES_EXPORT KisResourceModel : public QSortFilterProxyModel, public KisAbstractResourceModel
 {
     Q_OBJECT
+
 private:
+
     friend class TestResourceModel;
     friend class KisResourceModelProvider;
     KisResourceModel(const QString &type, QObject *parent = 0);
+
 public:
     ~KisResourceModel() override;
 

@@ -443,7 +443,7 @@ bool KisAllResourcesModel::setResourceInactive(const QModelIndex &index)
 bool KisAllResourcesModel::importResourceFile(const QString &filename)
 {
     bool r = true;
-    beginInsertRows(QModelIndex(), rowCount(), rowCount() + 1);
+    beginInsertRows(QModelIndex(), rowCount(), rowCount());
     if (!KisResourceLocator::instance()->importResourceFromFile(d->resourceType, filename)) {
         r = false;
         qWarning() << "Failed to import resource" << filename;
@@ -464,7 +464,7 @@ bool KisAllResourcesModel::addResource(KoResourceSP resource, const QString &sto
     }
 
     bool r = true;
-    beginInsertRows(QModelIndex(), rowCount(), rowCount() + 1);
+    beginInsertRows(QModelIndex(), rowCount(), rowCount());
     if (!KisResourceLocator::instance()->addResource(d->resourceType, resource, storageId)) {
         qWarning() << "Failed to add resource" << resource->name();
         r = false;
@@ -608,7 +608,7 @@ struct KisResourceModel::Private
 {
     ResourceFilter resourceFilter {ShowActiveResources};
     StorageFilter storageFilter {ShowActiveStorages};
-    bool showOnlyUntaggedResources;
+    bool showOnlyUntaggedResources {false};
 };
 
 KisResourceModel::KisResourceModel(const QString &type, QObject *parent)
@@ -735,19 +735,19 @@ bool KisResourceModel::filterAcceptsRow(int source_row, const QModelIndex &sourc
                                    "FROM   resource_tags\n"
                                    ",      resources\n"
                                    ",      storages\n"
-                                   "WHERE  resource_tags.resource_id == resources.id\n"
-                                   "AND    storages.resource_id = resource.storage_id"
-                                   "AND    resources.id = :resource_id\n");
+                                   "WHERE  resource_tags.resource_id = resources.id\n"
+                                   "AND    storages.id               = resources.storage_id\n"
+                                   "AND    resources.id              = :resource_id\n");
 
             if (d->resourceFilter == ShowActiveResources) {
-                queryString.append("AND    resources.status = 1\n");
+                queryString.append("AND    resources.status > 0\n");
             }
             else if (d->resourceFilter == ShowInactiveResources) {
                 queryString.append("AND    resources.status = 0\n");
             }
 
             if (d->storageFilter == ShowActiveStorages) {
-                queryString.append("AND    storages.active = 1\n");
+                queryString.append("AND    storages.active > 0\n");
             }
             else if (d->storageFilter == ShowInactiveStorages) {
                 queryString.append("AND    storages.active = 0\n");
@@ -762,11 +762,10 @@ bool KisResourceModel::filterAcceptsRow(int source_row, const QModelIndex &sourc
             q.bindValue(":resource_id", id);
 
             if (!q.exec()) {
-                qWarning() << "KisResourceModel: Could not executeresource_tags query" << q.lastError();
+                qWarning() << "KisResourceModel: Could not execute resource_tags query" << q.lastError() << q.boundValues();
             }
 
             q.first();
-
             if (q.value(0).toInt() > 0) {
                 return false;
             }

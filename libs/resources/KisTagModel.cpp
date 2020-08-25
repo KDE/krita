@@ -316,7 +316,7 @@ bool KisAllTagsModel::addTag(const KisTagSP tag, QVector<KoResourceSP> taggedRes
             qWarning() << "Could not add tag" << tag;
             return false;
         }
-        beginInsertRows(QModelIndex(), rowCount(), rowCount() + 1);
+        beginInsertRows(QModelIndex(), rowCount(), rowCount());
         resetQuery();
         endInsertRows();
 
@@ -600,42 +600,6 @@ bool KisTagModel::changeTagActive(const KisTagSP tag, bool active)
     return false;
 }
 
-QVector<KisTagSP> KisTagModel::tagsForResource(int resourceId) const
-{
-    QSqlQuery q;
-    bool r = q.prepare("SELECT tags.id\n"
-                       ",      tags.url\n"
-                       ",      tags.name\n"
-                       ",      tags.comment\n"
-                       "FROM   tags\n"
-                       ",      resource_tags\n"
-                       "WHERE  tags.active > 0\n"                               // make sure the tag is active
-                       "AND    tags.id = resource_tags.tag_id\n"                // join tags + resource_tags by tag_id
-                       "AND    resource_tags.resource_id = :resource_id\n");    // make sure we're looking for tags for a specific resource
-    if (!r)  {
-        qWarning() << "Could not prepare TagsForResource query" << q.lastError();
-    }
-
-    q.bindValue(":resource_id", resourceId);
-    r = q.exec();
-    if (!r) {
-        qWarning() << "Could not select tags for" << resourceId << q.lastError() << q.boundValues();
-    }
-
-    QVector<KisTagSP> tags;
-    while (q.next()) {
-        //qDebug() << d->tagQuery.value(0).toString() << d->tagQuery.value(1).toString() << d->tagQuery.value(2).toString();
-        KisTagSP tag(new KisTag());
-        tag->setId(q.value("id").toInt());
-        tag->setUrl(q.value("url").toString());
-        tag->setName(q.value("name").toString());
-        tag->setComment(q.value("comment").toString());
-        tag->setValid(true);
-        tag->setActive(true);
-        tags << tag;
-    }
-    return tags;
-}
 
 bool KisTagModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
@@ -645,7 +609,6 @@ bool KisTagModel::filterAcceptsRow(int source_row, const QModelIndex &source_par
 
     QModelIndex idx = sourceModel()->index(source_row, 0, source_parent);
     if (!idx.isValid()) return false;
-
     int tagId = sourceModel()->data(idx, Qt::UserRole + KisAllTagsModel::Id).toInt();
 
     if (tagId < 0) {

@@ -100,7 +100,6 @@ bool KisResourceSearchBoxFilter::matchesResource(const QString &_resourceName)
             return false;
         }
     }
-    // tags matches
 
     return true;
 }

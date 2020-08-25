@@ -59,17 +59,23 @@ public:
     bool setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata) override;
 
     /**
-     * @brief setTag sets the tag to filter with
+     * @brief setTagFilter sets the tag to filter with
      * @param tag a valid tag with a valid id, or 0 to clear the filter
      */
-    void setTag(const KisTagSP tag);
+    void setTagFilter(const KisTagSP tag);
+
     /**
-     * @brief setResource sets the resource to filter with
+     * @brief setResourceFilter sets the resource to filter with
      * @param resource a valid resource with a valid id, or 0 to clear the filter
      */
-    void setResource(const KoResourceSP resource);
+    void setResourceFilter(const KoResourceSP resource);
+
     void setSearchText(const QString& seatchText);
+
     void setFilterInCurrentTag(bool filterInCurrentTag);
+
+    bool tagResource(KisTagSP tag, KoResourceSP resource);
+    bool untagResource(const KisTagSP tag, const KoResourceSP resource);
 
 protected:
 

@@ -301,7 +301,7 @@ void KisStorageModel::addStorage(const QString &location)
 {
     qDebug() << "before" << d->storages << rowCount();
 
-    beginInsertRows(QModelIndex(), rowCount(), rowCount() + 1);
+    beginInsertRows(QModelIndex(), rowCount(), rowCount());
     d->storages.append(location);
     endInsertRows();
 

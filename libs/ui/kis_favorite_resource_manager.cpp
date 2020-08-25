@@ -226,7 +226,7 @@ QList<QImage> KisFavoriteResourceManager::favoritePresetImages()
 void KisFavoriteResourceManager::setCurrentTag(const KisTagSP tag)
 {
     m_currentTag = tag;
-    m_resourcesProxyModel->setTag(tag);
+    m_resourcesProxyModel->setTagFilter(tag);
     KisConfig(false).writeEntry<QString>("favoritePresetsTag", tag->url());
     updateFavoritePresets();
 }
@@ -358,7 +358,7 @@ void KisFavoriteResourceManager::init()
                  break;
             }
         }
-        m_resourcesProxyModel->setTag(m_currentTag);
+        m_resourcesProxyModel->setTagFilter(m_currentTag);
 
         updateFavoritePresets();
     }

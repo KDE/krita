@@ -90,9 +90,8 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
     QImage preview = index.data(Qt::UserRole + KisAbstractResourceModel::Thumbnail).value<QImage>();
 
     if (preview.isNull()) {
-        qDebug() << "KisPresetDelegate::paint:  Preview is null";
-        painter->restore();
-        return;
+        preview = QImage(512, 512, QImage::Format_RGB32);
+        preview.fill(Qt::red);
     }
 
     QMap<QString, QVariant> metaData = index.data(Qt::UserRole + KisAbstractResourceModel::MetaData).value<QMap<QString, QVariant>>();

@@ -47,6 +47,7 @@ private Q_SLOTS:
     void slotCanvasResourceChanged(int key, const QVariant &resource);
     void slotReloadProperties();
     void slotConfigBrushHud();
+    void slotReloadPreset();
 
 private:
     void clearProperties() const;

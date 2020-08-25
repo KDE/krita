@@ -151,6 +151,7 @@ public:
 Q_SIGNALS:
 
     void toggleIsolateActiveNode();
+    void sigBeforeBeginRemoveRows(const QModelIndex &parent, int start, int end);
 
 protected Q_SLOTS:
     void slotBeginInsertDummy(KisNodeDummy *parent, int index, const QString &metaObjectType);

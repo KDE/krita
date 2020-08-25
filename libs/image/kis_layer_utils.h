@@ -79,6 +79,8 @@ namespace KisLayerUtils
 
     KRITAIMAGE_EXPORT void changeImageDefaultProjectionColor(KisImageSP image, const KoColor &color);
 
+    KRITAIMAGE_EXPORT bool canChangeImageProfileInvisibly(KisImageSP image);
+
     typedef QMap<int, QSet<KisNodeSP> > FrameJobs;
     void updateFrameJobs(FrameJobs *jobs, KisNodeSP node);
     void updateFrameJobsRecursive(FrameJobs *jobs, KisNodeSP rootNode);

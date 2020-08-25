@@ -19,6 +19,10 @@
 
 #include "kis_composite_ops_model.h"
 
+#include <QApplication>
+#include <QStyle>
+#include <QStyleOptionButton>
+
 #include <KoCompositeOp.h>
 #include <KoCompositeOpRegistry.h>
 #include <kis_icon.h>
@@ -120,7 +124,12 @@ QVariant KisCompositeOpListModel::data(const QModelIndex& idx, int role) const
         Q_ASSERT(item);
 
         if (!item->isCategory() && !item->isEnabled()) {
-            return KisIconUtils::loadIcon("dialog-warning");
+            QStyle *style = QApplication::style();
+            QStyleOptionButton so;
+            QSize size = style->sizeFromContents(QStyle::CT_CheckBox, &so, QSize(), 0);
+
+            const QIcon icon = KisIconUtils::loadIcon("warning").pixmap(size);
+            return icon;
         }
     }
 

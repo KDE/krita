@@ -117,6 +117,13 @@ public:
 
     bool trySetNodeProperties(KisNodeSP node, KisImageSP image, KisBaseNode::PropertyList properties) const;
 
+
+    bool canModifyLayers(KisNodeList nodes, bool showWarning = true);
+    bool canModifyLayer(KisNodeSP node, bool showWarning = true);
+
+    bool canMoveLayers(KisNodeList nodes, bool showWarning = true);
+    bool canMoveLayer(KisNodeSP node, bool showWarning = true);
+
 public Q_SLOTS:
 
     /**
@@ -268,7 +275,7 @@ private:
     qint32 convertOpacityToInt(qreal opacity);
     void removeSelectedNodes(KisNodeList selectedNodes);
     void slotSomethingActivatedNodeImpl(KisNodeSP node);
-    void createQuickGroupImpl(KisNodeJugglerCompressed *juggler,
+    bool createQuickGroupImpl(KisNodeJugglerCompressed *juggler,
                               const QString &overrideGroupName,
                               KisNodeSP *newGroup,
                               KisNodeSP *newLastChild);

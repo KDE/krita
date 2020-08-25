@@ -236,6 +236,8 @@ void KisLayerManager::layerProperties()
     QList<KisNodeSP> selectedNodes = m_view->nodeManager()->selectedNodes();
     const bool multipleLayersSelected = selectedNodes.size() > 1;
 
+    if (!m_view->nodeManager()->canModifyLayers(selectedNodes)) return;
+
     KisAdjustmentLayerSP adjustmentLayer = KisAdjustmentLayerSP(dynamic_cast<KisAdjustmentLayer*>(layer.data()));
     KisGeneratorLayerSP generatorLayer = KisGeneratorLayerSP(dynamic_cast<KisGeneratorLayer*>(layer.data()));
     KisFileLayerSP fileLayer = KisFileLayerSP(dynamic_cast<KisFileLayer*>(layer.data()));
@@ -363,6 +365,8 @@ void KisLayerManager::changeCloneSource()
         return;
     }
 
+    if (!m_view->nodeManager()->canModifyLayers(implicitCastList<KisNodeSP>(cloneLayers))) return;
+
     KisDlgChangeCloneSource *dialog = new KisDlgChangeCloneSource(cloneLayers, m_view);
     dialog->setCaption(i18n("Change Clone Layer"));
     dialog->resize(dialog->minimumSizeHint());
@@ -376,6 +380,9 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
 {
     KisImageWSP image = m_view->image();
     if (!image) return;
+
+    // this precondition must be checked at higher level
+    KIS_SAFE_ASSERT_RECOVER_RETURN(source->isEditable(false));
 
     KisLayer *srcLayer = qobject_cast<KisLayer*>(source.data());
     if (srcLayer && (srcLayer->inherits("KisGroupLayer") || srcLayer->layerStyle() || srcLayer->childCount() > 0)) {
@@ -459,6 +466,8 @@ void KisLayerManager::convertGroupToAnimated()
     KisGroupLayerSP group = dynamic_cast<KisGroupLayer*>(activeLayer().data());
     if (group.isNull()) return;
 
+    if (!m_view->nodeManager()->canModifyLayer(group)) return;
+
     KisPaintLayerSP animatedLayer = new KisPaintLayer(m_view->image(), group->name(), OPACITY_OPAQUE_U8);
     animatedLayer->enableAnimation();
     KisRasterKeyframeChannel *contentChannel = dynamic_cast<KisRasterKeyframeChannel*>(
@@ -484,6 +493,9 @@ void KisLayerManager::convertLayerToFileLayer(KisNodeSP source)
 {
     KisImageSP image = m_view->image();
     if (!image) return;
+
+    // this precondition must be checked at higher level
+    KIS_SAFE_ASSERT_RECOVER_RETURN(source->isEditable(false));
 
     QStringList listMimeFilter = KisImportExportManager::supportedMimeTypes(KisImportExportManager::Export);
 
@@ -577,7 +589,7 @@ void KisLayerManager::adjustLayerPosition(KisNodeSP node, KisNodeSP activeNode, 
     }
 
     while (parent &&
-           (!parent->allowAsChild(node) || parent->userLocked())) {
+           (!parent->allowAsChild(node) || !parent->isEditable(false))) {
 
         above = parent;
         parent = parent->parent();
@@ -819,7 +831,7 @@ void KisLayerManager::mergeLayer()
     // check if all the layers are a part of a locked group
     bool hasEditableLayer = false;
     Q_FOREACH (KisNodeSP node, selectedNodes) {
-        if (node->isEditable()) {
+        if (node->isEditable(false)) {
             hasEditableLayer = true;
             break;
         }
@@ -827,8 +839,8 @@ void KisLayerManager::mergeLayer()
 
     if (!hasEditableLayer) {
         m_view->showFloatingMessage(
-                    i18nc("floating message in layer manager",
-                          "Layer is locked "),
+                    i18ncp("floating message in layer manager",
+                          "Layer is locked ", "Layers are locked", selectedNodes.size()),
                     QIcon(), 2000, KisFloatingMessage::Low);
         return;
     }
@@ -875,6 +887,7 @@ void KisLayerManager::flattenLayer()
     if (!layer) return;
 
     if (!m_view->blockUntilOperationsFinished(image)) return;
+    if (!m_view->nodeManager()->canModifyLayer(layer)) return;
 
     convertNodeToPaintLayer(layer);
     m_view->updateGUI();
@@ -889,6 +902,7 @@ void KisLayerManager::rasterizeLayer()
     if (!layer) return;
 
     if (!m_view->blockUntilOperationsFinished(image)) return;
+    if (!m_view->nodeManager()->canModifyLayer(layer)) return;
 
     KisPaintLayerSP paintLayer = new KisPaintLayer(image, layer->name(), layer->opacity());
     KisPainter gc(paintLayer->paintDevice());
@@ -1012,6 +1026,7 @@ void KisLayerManager::layerStyle()
     if (!layer) return;
 
     if (!m_view->blockUntilOperationsFinished(image)) return;
+    if (!m_view->nodeManager()->canModifyLayer(layer)) return;
 
     KisPSDLayerStyleSP oldStyle;
     if (layer->layerStyle()) {

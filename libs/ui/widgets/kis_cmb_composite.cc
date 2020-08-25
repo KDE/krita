@@ -27,6 +27,7 @@
 #include "kis_composite_ops_model.h"
 #include "kis_categorized_item_delegate.h"
 #include <kis_action.h>
+#include <QWheelEvent>
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // ---- KisCompositeOpListWidget ------------------------------------------------------ //
@@ -297,8 +298,18 @@ void KisCompositeOpComboBox::validate(const KoColorSpace *cs) {
 }
 
 void KisCompositeOpComboBox::selectCompositeOp(const KoID &op) {
+    KoID currentOp;
+    if (m_model->entryAt(currentOp, m_model->index(currentIndex(), 0)) &&
+            currentOp == op) {
+
+        return;
+    }
+
     QModelIndex index = m_model->indexOf(op);
+
     setCurrentIndex(index.row());
+    emit activated(index.row());
+    emit activated(op.name());
 }
 
 KoID KisCompositeOpComboBox::selectedCompositeOp() const {
@@ -483,6 +494,152 @@ void KisCompositeOpComboBox::slotColor()
 void KisCompositeOpComboBox::slotLuminosity()
 {
     selectCompositeOp(KoCompositeOpRegistry::instance().getKoID(COMPOSITE_LUMINIZE));
+}
+
+void KisCompositeOpComboBox::wheelEvent(QWheelEvent *e)
+{
+    /**
+     * This code is a copy of QComboBox::wheelEvent. It does the same thing,
+     * except that it skips "Category" items, by checking m_model->entryAt()
+     * on each step.
+     */
+
+    QStyleOptionComboBox opt;
+    initStyleOption(&opt);
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+    if (style()->styleHint(QStyle::SH_ComboBox_AllowWheelScrolling, &opt, this)) {
+#else
+    if (1) {
+#endif
+        const int rowCount = count();
+        int newIndex = currentIndex();
+
+        QAbstractItemModel *model = this->model();
+        KoID op;
+
+        if (e->delta() > 0) {
+            newIndex--;
+            while ((newIndex >= 0) &&
+                   (!(model->flags(model->index(newIndex, modelColumn(), rootModelIndex())) & Qt::ItemIsEnabled) ||
+                    !m_model->entryAt(op, m_model->index(newIndex, modelColumn()))))
+
+                newIndex--;
+        } else if (e->delta() < 0) {
+            newIndex++;
+            while (newIndex < rowCount &&
+                   (!(model->index(newIndex, modelColumn(), rootModelIndex()).flags() & Qt::ItemIsEnabled) ||
+                    !m_model->entryAt(op, m_model->index(newIndex, modelColumn()))))
+
+                newIndex++;
+        }
+
+        if (newIndex >= 0 && newIndex < rowCount && newIndex != currentIndex()) {
+            setCurrentIndex(newIndex);
+
+            emit activated(newIndex);
+            if (m_model->entryAt(op, m_model->index(newIndex, 0))) {
+                emit activated(op.name());
+            }
+        }
+        e->accept();
+    } else {
+        KisSqueezedComboBox::wheelEvent(e);
+    }
+}
+
+void KisCompositeOpComboBox::keyPressEvent(QKeyEvent *e)
+{
+    /**
+     * This code is a copy of QComboBox::keyPressEvent. It does the same thing,
+     * except that it skips "Category" items, by checking m_model->entryAt()
+     * on each step.
+     */
+
+    enum Move { NoMove=0 , MoveUp , MoveDown , MoveFirst , MoveLast};
+
+    Move move = NoMove;
+    int newIndex = currentIndex();
+    switch (e->key()) {
+    case Qt::Key_Up:
+        if (e->modifiers() & Qt::ControlModifier)
+            break; // pass to line edit for auto completion
+        Q_FALLTHROUGH();
+    case Qt::Key_PageUp:
+        move = MoveUp;
+        break;
+    case Qt::Key_Down:
+        if (e->modifiers() & Qt::AltModifier) {
+            showPopup();
+            return;
+        } else if (e->modifiers() & Qt::ControlModifier)
+            break; // pass to line edit for auto completion
+        Q_FALLTHROUGH();
+    case Qt::Key_PageDown:
+        move = MoveDown;
+        break;
+    case Qt::Key_Home:
+        move = MoveFirst;
+        break;
+    case Qt::Key_End:
+        move = MoveLast;
+        break;
+    case Qt::Key_F4:
+        if (!e->modifiers()) {
+            showPopup();
+            return;
+        }
+        break;
+    case Qt::Key_Space:
+        showPopup();
+        return;
+    default:
+        break;
+    }
+
+    const int rowCount = count();
+
+    if (move != NoMove) {
+        KoID op;
+
+        e->accept();
+        switch (move) {
+        case MoveFirst:
+            newIndex = -1;
+            Q_FALLTHROUGH();
+        case MoveDown:
+            newIndex++;
+            while (newIndex < rowCount &&
+                   (!(model()->index(newIndex, modelColumn(), rootModelIndex()).flags() & Qt::ItemIsEnabled) ||
+                    !m_model->entryAt(op, m_model->index(newIndex, modelColumn()))))
+                newIndex++;
+            break;
+        case MoveLast:
+            newIndex = rowCount;
+            Q_FALLTHROUGH();
+        case MoveUp:
+            newIndex--;
+            while ((newIndex >= 0) &&
+                   (!(model()->flags(model()->index(newIndex, modelColumn(), rootModelIndex())) & Qt::ItemIsEnabled) ||
+                    !m_model->entryAt(op, m_model->index(newIndex, modelColumn()))))
+                newIndex--;
+            break;
+        default:
+            e->ignore();
+            break;
+        }
+
+        if (newIndex >= 0 && newIndex < rowCount && newIndex != currentIndex()) {
+            setCurrentIndex(newIndex);
+            emit activated(newIndex);
+
+            if (m_model->entryAt(op, m_model->index(newIndex, 0))) {
+                emit activated(op.name());
+            }
+        }
+    } else {
+        KisSqueezedComboBox::keyPressEvent(e);
+    }
 }
 
 KisLayerStyleCompositeOpComboBox::KisLayerStyleCompositeOpComboBox(QWidget* parent)

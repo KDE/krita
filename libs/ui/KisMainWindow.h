@@ -482,12 +482,6 @@ private:
 
     bool openDocumentInternal(const QUrl &url, KisMainWindow::OpenFlags flags = 0);
 
-
-    /**
-     * Updates the window caption based on the document info and path.
-     */
-    void updateCaption(const QString & caption, bool modified);
-
     void saveWindowSettings();
 
     QPointer<KisView> activeKisView();

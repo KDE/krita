@@ -54,6 +54,10 @@ public:
     }
 
     void setFilter(KisFilterConfigurationSP filterConfig) override;
+    /**
+     * Changes the filter configuration without triggering an update.
+     */
+    void setFilterWithoutUpdate(KisFilterConfigurationSP filterConfig);
 
     bool accept(KisNodeVisitor &) override;
     void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter) override;
@@ -70,10 +74,14 @@ public:
      * re-runs the generator with the specified configuration.
      * Used for previewing the layer inside the stroke.
      */
-    void previewWithStroke(const KisStrokeId stroke, const KisFilterConfigurationSP configuration);
+    void previewWithStroke(const KisStrokeId stroke);
 
     using KisSelectionBasedLayer::setDirty;
     void setDirty(const QVector<QRect> &rects) override;
+    /**
+     * Updates the selected tiles without triggering the update job.
+     */
+    void setDirtyWithoutUpdate(const QVector<QRect> &rects);
     void setX(qint32 x) override;
     void setY(qint32 y) override;
 
@@ -87,6 +95,10 @@ private:
      * Injects render jobs into the given stroke.
      */
     void requestUpdateJobsWithStroke(const KisStrokeId stroke, const KisFilterConfigurationSP configuration);
+    /**
+     * Resets the projection cache without triggering the update job.
+     */
+    void resetCacheWithoutUpdate();
 
 public:
     // KisIndirectPaintingSupport

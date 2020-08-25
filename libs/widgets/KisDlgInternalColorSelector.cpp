@@ -53,6 +53,7 @@ struct KisDlgInternalColorSelector::Private
     KisPaletteModel *paletteModel = 0;
     KisPaletteChooser *paletteChooser = 0;
     KisScreenColorSamplerBase *screenColorSampler = 0;
+    KisVisualColorModel *selectorModel {0};
 };
 
 KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColor color, Config config, const QString &caption, const KoColorDisplayRendererInterface *displayRenderer)
@@ -66,6 +67,8 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
 
     setWindowTitle(caption);
 
+    m_d->selectorModel = m_ui->visualSelector->selectorModel();
+
     m_d->currentColor = color;
     m_d->currentColorSpace = m_d->currentColor.colorSpace();
     m_d->displayRenderer = displayRenderer;
@@ -73,14 +76,14 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
     m_ui->spinboxselector->slotSetColor(color);
     connect(m_ui->spinboxselector, SIGNAL(sigNewColor(KoColor)), this, SLOT(slotColorUpdated(KoColor)));
 
-    m_ui->spinboxHSXSelector->attachToSelector(m_ui->visualSelector);
+    m_ui->spinboxHSXSelector->attachToSelector(m_d->selectorModel);
 
     m_ui->visualSelector->setDisplayRenderer(displayRenderer);
     m_ui->visualSelector->setConfig(false, config.modal);
     if (config.visualColorSelector) {
-        connect(m_ui->visualSelector, SIGNAL(sigNewColor(KoColor)), this, SLOT(slotColorUpdated(KoColor)));
-        connect(m_ui->visualSelector, SIGNAL(sigColorModelChanged()), this, SLOT(slotSelectorModelChanged()));
-        connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), m_ui->visualSelector, SLOT(configurationChanged()));
+        connect(m_d->selectorModel, SIGNAL(sigNewColor(KoColor)), this, SLOT(slotColorUpdated(KoColor)));
+        connect(m_d->selectorModel, SIGNAL(sigColorModelChanged()), this, SLOT(slotSelectorModelChanged()));
+        connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), m_ui->visualSelector, SLOT(slotConfigurationChanged()));
     } else {
         m_ui->visualSelector->hide();
     }
@@ -304,19 +307,19 @@ void KisDlgInternalColorSelector::updateAllElements(QObject *source)
 
 void KisDlgInternalColorSelector::slotSelectorModelChanged()
 {
-    if (m_ui->visualSelector->isHSXModel()) {
+    if (m_d->selectorModel->isHSXModel()) {
         QString label;
-        switch (m_ui->visualSelector->getColorModel()) {
-        case KisVisualColorSelector::HSV:
+        switch (m_d->selectorModel->colorModel()) {
+        case KisVisualColorModel::HSV:
             label = i18n("HSV");
             break;
-        case KisVisualColorSelector::HSL:
+        case KisVisualColorModel::HSL:
             label = i18n("HSL");
             break;
-        case KisVisualColorSelector::HSI:
+        case KisVisualColorModel::HSI:
             label = i18n("HSI");
             break;
-        case KisVisualColorSelector::HSY:
+        case KisVisualColorModel::HSY:
             label = i18n("HSY'");
             break;
         default:

@@ -310,11 +310,15 @@ void KisPopupPalette::reconfigure()
         if (useVisualSelector) {
             KisVisualColorSelector *selector = new KisVisualColorSelector(this);
             selector->setAcceptTabletEvents(true);
+            connect(KisConfigNotifier::instance(), SIGNAL(configChanged()),
+                    selector, SLOT(slotConfigurationChanged()));
             m_colorSelector = selector;
         }
         else {
             m_colorSelector  = new PopupColorTriangle(m_displayRenderer, this);
             connect(m_colorSelector, SIGNAL(requestCloseContainer()), this, SIGNAL(finished()));
+            connect(KisConfigNotifier::instance(), SIGNAL(configChanged()),
+                    m_colorSelector, SLOT(configurationChanged()));
         }
         m_colorSelector->setDisplayRenderer(m_displayRenderer);
         m_colorSelector->setConfig(true,false);
@@ -322,8 +326,7 @@ void KisPopupPalette::reconfigure()
         slotDisplayConfigurationChanged();
         connect(m_colorSelector, SIGNAL(sigNewColor(KoColor)),
                 m_colorChangeCompressor.data(), SLOT(start()));
-        connect(KisConfigNotifier::instance(), SIGNAL(configChanged()),
-                m_colorSelector, SLOT(configurationChanged()));
+
     }
 
 

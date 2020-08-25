@@ -1,5 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2016 Wolthera van Hovell tot Westerflier <griffinvalley@gmail.com>
+ * SPDX-FileCopyrightText: 2020 Mathias Wein <lynx.mw+kde@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -9,14 +10,11 @@
 #include <QWidget>
 #include <QScopedPointer>
 
-#include <KoColor.h>
-
-#include "KisColorSelectorConfiguration.h"
 #include "KisColorSelectorInterface.h"
+#include "KisVisualColorModel.h"
 #include "kritawidgets_export.h"
 
-class KoColorSpace;
-class KoColorDisplayRendererInterface;
+class QVector4D;
 
 /**
  * @brief The KisVisualColorSelector class
@@ -30,12 +28,12 @@ class KRITAWIDGETS_EXPORT KisVisualColorSelector : public KisColorSelectorInterf
 {
     Q_OBJECT
 public:
-    enum ColorModel { None, Channel, HSV, HSL, HSI, HSY, YUV };
-
     explicit KisVisualColorSelector(QWidget *parent = 0);
     ~KisVisualColorSelector() override;
 
     QSize minimumSizeHint() const override;
+    void setSelectorModel(KisVisualColorModel *model);
+    KisVisualColorModel *selectorModel() const;
     /**
      * @brief setConfig
      * @param forceCircular
@@ -46,41 +44,19 @@ public:
     void setConfig(bool forceCircular, bool forceSelfUpdate) override;
     void setAcceptTabletEvents(bool on);
     KoColor getCurrentColor() const override;
-    QVector4D getChannelValues() const;
-    ColorModel getColorModel() const;
-    const KoColorSpace* colorSpace() const;
-    const KoColorDisplayRendererInterface* displayRenderer() const;
-    bool isHSXModel() const;
-    KoColor convertShapeCoordsToKoColor(const QVector4D &coordinates) const;
-    QVector4D convertKoColorToShapeCoordinates(KoColor c) const;
 
 public Q_SLOTS:
-
     void slotSetColor(const KoColor &c) override;
     void slotSetColorSpace(const KoColorSpace *cs) override;
-    void slotSetChannelValues(const QVector4D &values);
-    void slotSetHSX(const QVector3D &hsx);
-    void configurationChanged();
-    void setDisplayRenderer (const KoColorDisplayRendererInterface *displayRenderer) override;
+    void slotConfigurationChanged();
+    void setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer) override;
 
 private Q_SLOTS:
+    void slotChannelValuesChanged(const QVector4D &values);
+    void slotColorModelChanged();
     void slotCursorMoved(QPointF pos);
     void slotDisplayConfigurationChanged();
     void slotRebuildSelectors();
-
-Q_SIGNALS:
-    /**
-     * @brief sigColorModelChanged is emitted whenever the selector's color model changes.
-     *
-     * This is mostly relevant for configuration changes where the same RGB model
-     * gets represented in a different way like HSV, HSL etc. so the values of
-     * sigHSXChanged() change meaning.
-     *
-     * @see getColorModel()
-     */
-    void sigColorModelChanged();
-    void sigChannelValuesChanged(const QVector4D &values);
-    void sigHSXChanged(const QVector3D &hsx);
 
 protected:
     void resizeEvent(QResizeEvent *) override;
@@ -88,7 +64,6 @@ protected:
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
-
 };
 
-#endif
+#endif // KIS_VISUAL_COLOR_SELECTOR_H

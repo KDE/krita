@@ -130,6 +130,7 @@ Q_SIGNALS:
 
 protected:
     KisVisualColorSelector* colorSelector() const;
+    KisVisualColorModel* selectorModel() const;
     /**
      * @brief convertImageMap
      * convert image data containing raw KoColor data into a QImage

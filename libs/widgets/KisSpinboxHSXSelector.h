@@ -12,7 +12,7 @@
 #include "kritawidgets_export.h"
 #include <QScopedPointer>
 
-class KisVisualColorSelector;
+class KisVisualColorModel;
 
 /**
  * A set of spinboxes to adjust HSV, HSL, HSI or HSY' values.
@@ -34,7 +34,7 @@ public:
      * it needs to be deactivated or hidden manually since it will
      * not synchronize values for other selector models.
      */
-    void attachToSelector(KisVisualColorSelector *selector);
+    void attachToSelector(KisVisualColorModel *selector);
 
 Q_SIGNALS:
     void sigHSXChanged(const QVector3D &hsx);

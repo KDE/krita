@@ -11,7 +11,7 @@
 #include <QList>
 #include <QSignalBlocker>
 #include "kis_double_parse_spin_box.h"
-#include "KisVisualColorSelector.h"
+#include "KisVisualColorModel.h"
 
 struct KisSpinboxHSXSelector::Private
 {
@@ -46,31 +46,32 @@ KisSpinboxHSXSelector::~KisSpinboxHSXSelector()
 {
 }
 
-void KisSpinboxHSXSelector::attachToSelector(KisVisualColorSelector *selector)
+void KisSpinboxHSXSelector::attachToSelector(KisVisualColorModel *selector)
 {
     connect(selector, SIGNAL(sigColorModelChanged()), this, SLOT(slotColorModelChanged()));
     connect(selector, SIGNAL(sigHSXChanged(QVector3D)), this, SLOT(slotHSXChanged(QVector3D)));
     connect(this, SIGNAL(sigHSXChanged(QVector3D)), selector, SLOT(slotSetHSX(QVector3D)));
+    slotColorModelChanged();
 }
 
 void KisSpinboxHSXSelector::slotColorModelChanged()
 {
-    const KisVisualColorSelector *selector = qobject_cast<KisVisualColorSelector *>(sender());
+    const KisVisualColorModel *selector = qobject_cast<KisVisualColorModel *>(sender());
     if (!selector) {
         return;
     }
 
-    switch (selector->getColorModel()) {
-    case KisVisualColorSelector::HSV:
+    switch (selector->colorModel()) {
+    case KisVisualColorModel::HSV:
         m_d->labels[2]->setText(i18n("Value:"));
         break;
-    case KisVisualColorSelector::HSL:
+    case KisVisualColorModel::HSL:
         m_d->labels[2]->setText(i18n("Lightness:"));
         break;
-    case KisVisualColorSelector::HSI:
+    case KisVisualColorModel::HSI:
         m_d->labels[2]->setText(i18n("Intensity:"));
         break;
-    case KisVisualColorSelector::HSY:
+    case KisVisualColorModel::HSY:
         m_d->labels[2]->setText(i18n("Luma:"));
         break;
     default:

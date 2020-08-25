@@ -39,6 +39,9 @@
 #include "KisResourceLocator.h"
 #include "KisResourceLoaderRegistry.h"
 
+#include "ResourceDebug.h"
+
+
 const QString dbDriver = "QSQLITE";
 
 const QString KisResourceCacheDb::dbLocationKey { "ResourceCacheDbDirectory" };
@@ -814,7 +817,7 @@ bool KisResourceCacheDb::addStorage(KisResourceStorageSP storage, bool preinstal
             return r;
         }
         if (q.first()) {
-            qDebug() << "Storage already exists" << storage;
+            debugResource << "Storage already exists" << storage;
             return true;
         }
     }
@@ -947,7 +950,7 @@ bool KisResourceCacheDb::deleteStorage(KisResourceStorageSP storage)
 
 bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
 {
-    qDebug() << "Going to synchronize" << storage->location();
+    debugResource << "Going to synchronize" << storage->location();
 
     QElapsedTimer t;
     t.start();
@@ -978,7 +981,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
 
     if (!q.first()) {
         // This is a new storage, the user must have dropped it in the path before restarting Krita, so add it.
-        qDebug() << "Adding storage to the database:" << storage;
+        debugResource << "Adding storage to the database:" << storage;
         if (!addStorage(storage, false)) {
             qWarning() << "Could not add new storage" << storage->name() << "to the database";
             success = false;
@@ -990,7 +993,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
     // Only check the time stamp for container storages, not the contents
     if (storage->type() != KisResourceStorage::StorageType::Folder) {
 
-        qDebug() << storage->location() << "is not a folder, going to check timestamps. Database:"
+        debugResource << storage->location() << "is not a folder, going to check timestamps. Database:"
                  << q.value(1).toInt() << ", File:" << storage->timestamp().toSecsSinceEpoch();
 
         if (!q.value(0).isValid()) {
@@ -998,12 +1001,12 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
             success = false;
         }
         if (storage->timestamp().toSecsSinceEpoch() > q.value(1).toInt()) {
-            qDebug() << "Deleting" << storage->location() << "because the one on disk is newer.";
+            debugResource << "Deleting" << storage->location() << "because the one on disk is newer.";
             if (!deleteStorage(storage)) {
                 qWarning() << "Could not delete storage" << KisResourceLocator::instance()->makeStorageLocationRelative(storage->location());
                 success = false;
             }
-            qDebug() << "Inserting" << storage->location();
+            debugResource << "Inserting" << storage->location();
             if (!addStorage(storage, q.value(2).toBool())) {
                 qWarning() << "Could not add storage" << KisResourceLocator::instance()->makeStorageLocationRelative(storage->location());
                 success = false;
@@ -1023,7 +1026,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
             QSharedPointer<KisResourceStorage::ResourceIterator> iter = storage->resources(resourceType);
             while (iter->hasNext()) {
                 iter->next();
-                // qDebug() << "\tadding resources" << iter->url();
+                // debugResource << "\tadding resources" << iter->url();
                 KoResourceSP resource = iter->resource();
                 resourcesOnDisk << QFileInfo(iter->url()).fileName();
                 if (resource) {
@@ -1034,7 +1037,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
                 }
             }
 
-            // qDebug() << "Checking for" << resourceType << ":" << resourcesOnDisk;
+            // debugResource << "Checking for" << resourceType << ":" << resourcesOnDisk;
 
             QSqlQuery q;
             q.setForwardOnly(true);
@@ -1094,7 +1097,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
         }
     }
     QSqlDatabase::database().commit();
-    qDebug() << "Synchronizing the storages took" << t.elapsed() << "milliseconds for" << storage->location();
+    debugResource << "Synchronizing the storages took" << t.elapsed() << "milliseconds for" << storage->location();
 
     return success;
 }

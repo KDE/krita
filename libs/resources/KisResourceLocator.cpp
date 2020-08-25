@@ -49,6 +49,7 @@
 #include <KisGlobalResourcesInterface.h>
 #include <KisStorageModel.h>
 
+#include "ResourceDebug.h"
 
 const QString KisResourceLocator::resourceLocationKey {"ResourceDirectory"};
 
@@ -336,7 +337,7 @@ bool KisResourceLocator::updateResource(const QString &resourceType, const KoRes
 {
     QString storageLocation = makeStorageLocationAbsolute(resource->storageLocation());
 
-    //qDebug() << ">>>>>>>>>>>>>>>> storageLocation"<< storageLocation << "resource storage location" << resource->storageLocation();
+    //debugResource << ">>>>>>>>>>>>>>>> storageLocation"<< storageLocation << "resource storage location" << resource->storageLocation();
 
     Q_ASSERT(d->storages.contains(storageLocation));
     Q_ASSERT(resource->resourceId() > -1);
@@ -521,7 +522,7 @@ bool KisResourceLocator::initializeDb()
             d->errorMessages.append(i18n("Could not add storage %1 to the cache database", storage->location()));
         }
 
-        qDebug() << "Adding storage" << storage->location() << "to the database took" << t.elapsed() << "ms";
+        debugResource << "Adding storage" << storage->location() << "to the database took" << t.elapsed() << "ms";
     }
 
     return (d->errorMessages.isEmpty());
@@ -623,7 +624,7 @@ KisResourceLocator::ResourceStorage KisResourceLocator::getResourceStorage(int r
 
 QString KisResourceLocator::makeStorageLocationAbsolute(QString storageLocation) const
 {
-//    qDebug() << "makeStorageLocationAbsolute" << storageLocation;
+//    debugResource << "makeStorageLocationAbsolute" << storageLocation;
 
     if (storageLocation.isEmpty()) {
         return resourceLocationBase();
@@ -640,7 +641,7 @@ QString KisResourceLocator::makeStorageLocationAbsolute(QString storageLocation)
         }
     }
 
-//    qDebug()  << "\t" << storageLocation;
+//    debugResource  << "\t" << storageLocation;
     return storageLocation;
 }
 
@@ -659,6 +660,6 @@ bool KisResourceLocator::synchronizeDb()
 
 QString KisResourceLocator::makeStorageLocationRelative(QString location) const
 {
-//    qDebug() << "makeStorageLocationRelative" << location << "locationbase" << resourceLocationBase();
+//    debugResource << "makeStorageLocationRelative" << location << "locationbase" << resourceLocationBase();
     return location.remove(resourceLocationBase());
 }

@@ -554,7 +554,7 @@ void KisConvolutionPainterTest::testNormalMap(KisPaintDeviceSP dev, bool useFftw
            QVERIFY(TestUtil::checkQImage(result,
                                          "convolution_painter_test",
                                          QString("normalmap_") + prefix,
-                                         testCaseName));
+                                         testCaseName, 1));
 
            gc.revertTransaction();
        }

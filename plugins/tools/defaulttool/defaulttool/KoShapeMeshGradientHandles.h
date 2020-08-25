@@ -53,8 +53,8 @@ public:
 public:
     KoShapeMeshGradientHandles(KoFlake::FillVariant fillVariant, KoShape *shape);
 
-    // get all nodes in the mesh
-    QVector<QVector<Handle>> handles() const;
+    /// get all nodes in the mesh, don't use this for drawing the path but use path()
+    QVector<Handle> handles() const;
 
     KUndo2Command* moveGradientHandle(const Handle &handle, const QPointF &newPos);
 
@@ -65,10 +65,17 @@ private:
 
     int getHandleIndex(const std::array<QPointF, 4> &path, QPointF point);
 
-    QVector<Handle> toHandles(const SvgMeshArray *mesharray,
-                              SvgMeshPatch::Type type,
-                              int row,
-                              int col) const;
+    /// get handles including the corner
+    QVector<Handle> getHandles(const SvgMeshArray *mesharray,
+                                SvgMeshPatch::Type type,
+                                int row,
+                                int col) const;
+
+    // get only bezier handles
+    QVector<Handle> getBezierHandles(const SvgMeshArray *mesharray,
+                                     SvgMeshPatch::Type type,
+                                     int row,
+                                     int col) const;
 
     QTransform abosoluteTransformation(KoFlake::CoordinateSystem system) const;
 

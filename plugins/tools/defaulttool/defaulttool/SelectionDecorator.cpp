@@ -225,11 +225,13 @@ void SelectionDecorator::paintMeshGradientHandles(KoShape *shape,
 
     // invert them, because we draw in logical coordinates.
     QTransform t = shape->absoluteTransformation().inverted();
-    auto cornerHandles = gradientHandles.handles();
+    QVector<KoShapeMeshGradientHandles::Handle> cornerHandles = gradientHandles.handles();
     for (const auto& corner: cornerHandles) {
-        helper.drawHandleRect(t.map(corner[0].pos));
-        helper.drawHandleSmallCircle(t.map(corner[1].pos));
-        helper.drawHandleSmallCircle(t.map(corner[2].pos));
+        if (corner.type == KoShapeMeshGradientHandles::Handle::BezierHandle) {
+            helper.drawHandleSmallCircle(t.map(corner.pos));
+        } else if (corner.type == KoShapeMeshGradientHandles::Handle::Corner) {
+            helper.drawHandleRect(t.map(corner.pos));
+        }
     }
 }
 

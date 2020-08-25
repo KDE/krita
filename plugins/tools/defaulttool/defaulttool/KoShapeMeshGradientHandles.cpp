@@ -30,9 +30,9 @@ KoShapeMeshGradientHandles::KoShapeMeshGradientHandles(KoFlake::FillVariant fill
 {
 }
 
-QVector<QVector<KoShapeMeshGradientHandles::Handle>> KoShapeMeshGradientHandles::handles() const
+QVector<KoShapeMeshGradientHandles::Handle> KoShapeMeshGradientHandles::handles() const
 {
-    QVector<QVector<Handle>> result;
+    QVector<Handle> result;
 
     const SvgMeshGradient *g = gradient();
     if (!g) return result;
@@ -41,17 +41,23 @@ QVector<QVector<KoShapeMeshGradientHandles::Handle>> KoShapeMeshGradientHandles:
 
     for (int irow = 0; irow < mesharray->numRows(); ++irow) {
         for (int icol = 0; icol < mesharray->numColumns(); ++icol) {
-            result << toHandles(mesharray, SvgMeshPatch::Top, irow, icol);
+            // add corners as well
+            result << getHandles(mesharray, SvgMeshPatch::Top, irow, icol);
+
+            result << getBezierHandles(mesharray, SvgMeshPatch::Left, irow, icol);
 
             if (irow == mesharray->numRows() - 1) {
-                result << toHandles(mesharray, SvgMeshPatch::Left, irow, icol);
+                result << getHandles(mesharray, SvgMeshPatch::Left, irow, icol);
+
                 if (icol == mesharray->numColumns() - 1) {
-                    result << toHandles(mesharray, SvgMeshPatch::Bottom, irow, icol);
+                    result << getHandles(mesharray, SvgMeshPatch::Bottom, irow, icol);
+                } else {
+                    result << getBezierHandles(mesharray, SvgMeshPatch::Bottom, irow, icol);
                 }
             }
 
             if (icol == mesharray->numColumns() - 1) {
-                result << toHandles(mesharray, SvgMeshPatch::Right, irow, icol);
+                result << getHandles(mesharray, SvgMeshPatch::Right, irow, icol);
             }
         }
     }
@@ -59,10 +65,8 @@ QVector<QVector<KoShapeMeshGradientHandles::Handle>> KoShapeMeshGradientHandles:
     // we get pointer events in points (pts, not logical), so we transform these now
     // and then invert them while drawing handles (see SelectionDecorator).
     QTransform t = abosoluteTransformation(g->gradientUnits());
-    for (auto &path: result) {
-        for (auto& handle: path) {
-            handle.pos = t.map(handle.pos);
-        }
+    for (auto &handle: result) {
+        handle.pos = t.map(handle.pos);
     }
 
     return result;
@@ -134,14 +138,27 @@ const SvgMeshGradient* KoShapeMeshGradientHandles::gradient() const
     return wrapper.meshgradient();
 }
 
-QVector<KoShapeMeshGradientHandles::Handle> KoShapeMeshGradientHandles::toHandles(const SvgMeshArray *mesharray,
-                                                                                  SvgMeshPatch::Type type,
-                                                                                  int row,
-                                                                                  int col) const
+QVector<KoShapeMeshGradientHandles::Handle> KoShapeMeshGradientHandles::getHandles(const SvgMeshArray *mesharray,
+                                                                                   SvgMeshPatch::Type type,
+                                                                                   int row,
+                                                                                   int col) const
 {
     QVector<Handle> buffer;
     std::array<QPointF, 4> path = mesharray->getPath(type, row, col);
     buffer << Handle(Handle::Corner, path[0], row, col, type);
+    buffer << Handle(Handle::BezierHandle, path[1], row, col, type);
+    buffer << Handle(Handle::BezierHandle, path[2], row, col, type);
+
+    return buffer;
+}
+
+QVector<KoShapeMeshGradientHandles::Handle> KoShapeMeshGradientHandles::getBezierHandles(const SvgMeshArray *mesharray,
+                                                                                         SvgMeshPatch::Type type,
+                                                                                         int row,
+                                                                                         int col) const
+{
+    QVector<Handle> buffer;
+    std::array<QPointF, 4> path = mesharray->getPath(type, row, col);
     buffer << Handle(Handle::BezierHandle, path[1], row, col, type);
     buffer << Handle(Handle::BezierHandle, path[2], row, col, type);
 

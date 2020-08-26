@@ -952,7 +952,13 @@ void KisMainWindow::updateCaption()
             caption += " *";
         }
 
-        d->mdiArea->activeSubWindow()->setWindowTitle(doc->caption());
+        if (doc->isModified()) {
+            d->mdiArea->activeSubWindow()->setWindowTitle(doc->caption() + " *");
+        }
+        else {
+            d->mdiArea->activeSubWindow()->setWindowTitle(doc->caption());
+        }
+
         setWindowTitle(caption);
 
         if (!doc->url().fileName().isEmpty()) {

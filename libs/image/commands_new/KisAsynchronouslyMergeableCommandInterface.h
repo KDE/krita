@@ -27,7 +27,7 @@ class KUndo2Command;
  * (compress) when used inside KisProcessingApplicator (or anything
  * else that uses KisSavedMacroCommand).
  *
- * KisProcessignApplicator generates many commands, but undo stack
+ * KisProcessingApplicator generates many commands, but undo stack
  * wants only one command to represent user's action. That is why
  * the action is wrapped into KisSavedMacroCommand. This macro command
  * class has a special algorithm for merging an action consisting of

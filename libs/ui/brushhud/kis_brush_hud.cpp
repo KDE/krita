@@ -87,9 +87,11 @@ KisBrushHud::KisBrushHud(KisCanvasResourceProvider *provider, QWidget *parent)
 
     m_d->btnReloadPreset = new QToolButton(this);
     m_d->btnReloadPreset->setAutoRaise(true);
+    m_d->btnReloadPreset->setToolTip(i18n("Reload Original Preset"));
 
     m_d->btnConfigure = new QToolButton(this);
     m_d->btnConfigure->setAutoRaise(true);
+    m_d->btnConfigure->setToolTip(i18n("Configure the on-canvas brush editor"));
 
     connect(m_d->btnReloadPreset, SIGNAL(clicked()), SLOT(slotReloadPreset()));
     connect(m_d->btnConfigure, SIGNAL(clicked()), SLOT(slotConfigBrushHud()));

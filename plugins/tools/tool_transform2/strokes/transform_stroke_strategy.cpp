@@ -80,6 +80,27 @@ TransformStrokeStrategy::~TransformStrokeStrategy()
 {
 }
 
+bool TransformStrokeStrategy::shouldRestartStrokeOnModeChange(ToolTransformArgs::TransformMode oldMode, ToolTransformArgs::TransformMode newMode, KisNodeList processedNodes)
+{
+    bool hasExternalLayers = false;
+    Q_FOREACH (KisNodeSP node, processedNodes) {
+        if (node->inherits("KisShapeLayer")) {
+            hasExternalLayers = true;
+            break;
+        }
+    }
+
+    bool result = false;
+
+    if (hasExternalLayers) {
+        result =
+            (oldMode == ToolTransformArgs::FREE_TRANSFORM) !=
+            (newMode == ToolTransformArgs::FREE_TRANSFORM);
+    }
+
+    return result;
+}
+
 KisPaintDeviceSP TransformStrokeStrategy::createDeviceCache(KisPaintDeviceSP dev)
 {
     KisPaintDeviceSP cache;

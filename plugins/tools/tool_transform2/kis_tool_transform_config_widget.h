@@ -46,7 +46,8 @@ public Q_SLOTS:
 Q_SIGNALS:
     void sigConfigChanged();
     void sigApplyTransform();
-    void sigResetTransform();
+    void sigResetTransform(ToolTransformArgs::TransformMode mode);
+    void sigCancelTransform();
     void sigRestartTransform();
     void sigEditingFinished();
 

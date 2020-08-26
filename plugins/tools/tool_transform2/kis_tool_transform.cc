@@ -747,7 +747,7 @@ void KisToolTransform::requestStrokeCancellation()
     if (!m_transaction.rootNode() || m_currentArgs.isIdentity()) {
         cancelStroke();
     } else {
-        slotResetTransform();
+        slotCancelTransform();
     }
 }
 
@@ -971,8 +971,11 @@ QWidget* KisToolTransform::createOptionWidget()
     connect(m_optionsWidget, SIGNAL(sigApplyTransform()),
             this, SLOT(slotApplyTransform()));
 
-    connect(m_optionsWidget, SIGNAL(sigResetTransform()),
-            this, SLOT(slotResetTransform()));
+    connect(m_optionsWidget, SIGNAL(sigResetTransform(ToolTransformArgs::TransformMode)),
+            this, SLOT(slotResetTransform(ToolTransformArgs::TransformMode)));
+
+    connect(m_optionsWidget, SIGNAL(sigCancelTransform()),
+            this, SLOT(slotCancelTransform()));
 
     connect(m_optionsWidget, SIGNAL(sigRestartTransform()),
             this, SLOT(slotRestartTransform()));
@@ -994,7 +997,7 @@ QWidget* KisToolTransform::createOptionWidget()
     connect(cageAction, SIGNAL(triggered(bool)), this, SLOT(slotUpdateToCageType()));
 
     connect(applyTransformation, SIGNAL(triggered(bool)), this, SLOT(slotApplyTransform()));
-    connect(resetTransformation, SIGNAL(triggered(bool)), this, SLOT(slotResetTransform()));
+    connect(resetTransformation, SIGNAL(triggered(bool)), this, SLOT(slotCancelTransform()));
 
 
     updateOptionWidget();
@@ -1044,8 +1047,16 @@ void KisToolTransform::slotApplyTransform()
     QApplication::restoreOverrideCursor();
 }
 
-void KisToolTransform::slotResetTransform()
+void KisToolTransform::slotResetTransform(ToolTransformArgs::TransformMode mode)
 {
+    ToolTransformArgs *config = m_transaction.currentConfig();
+    const ToolTransformArgs::TransformMode previousMode = config->mode();
+    config->setMode(mode);
+
+    if (mode == ToolTransformArgs::WARP) {
+        config->setWarpCalculation(KisWarpTransformWorker::WarpCalculation::GRID);
+    }
+
     if (!m_strokeId || !m_transaction.rootNode()) return;
 
     if (m_currentArgs.continuedTransform()) {
@@ -1064,21 +1075,35 @@ void KisToolTransform::slotResetTransform()
 
         if (transformDiffers &&
             m_currentArgs.continuedTransform()->mode() == savedMode) {
+
             m_currentArgs.restoreContinuedState();
             initGuiAfterTransformMode();
             slotEditingFinished();
 
         } else {
-            KisNodeSP root = m_transaction.rootNode() ? m_transaction.rootNode() : image()->root();
             cancelStroke();
             startStroke(savedMode, true);
 
             KIS_ASSERT_RECOVER_NOOP(!m_currentArgs.continuedTransform());
         }
     } else {
-        initTransformMode(m_currentArgs.mode());
-        slotEditingFinished();
+        if (!TransformStrokeStrategy::shouldRestartStrokeOnModeChange(previousMode,
+                                                                      m_currentArgs.mode(),
+                                                                      m_transaction.transformedNodes())) {
+            initTransformMode(m_currentArgs.mode());
+            slotEditingFinished();
+
+        } else {
+            cancelStroke();
+            startStroke(m_currentArgs.mode(), true);
+
+        }
     }
+}
+
+void KisToolTransform::slotCancelTransform()
+{
+    slotResetTransform(m_transaction.currentConfig()->mode());
 }
 
 void KisToolTransform::slotRestartTransform()

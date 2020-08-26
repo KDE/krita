@@ -769,7 +769,7 @@ void KisToolTransformConfigWidget::slotButtonBoxClicked(QAbstractButton *button)
         emit sigApplyTransform();
     }
     else if (button == resetButton) {
-        emit sigResetTransform();
+        emit sigCancelTransform();
     }
 
 }
@@ -780,9 +780,7 @@ void KisToolTransformConfigWidget::slotSetFreeTransformModeButtonClicked(bool va
 
     lblTransformType->setText(freeTransformButton->toolTip());
 
-    ToolTransformArgs *config = m_transaction->currentConfig();
-    config->setMode(ToolTransformArgs::FREE_TRANSFORM);
-    emit sigResetTransform();
+    emit sigResetTransform(ToolTransformArgs::FREE_TRANSFORM);
 }
 
 void KisToolTransformConfigWidget::slotSetWarpModeButtonClicked(bool value)
@@ -791,10 +789,7 @@ void KisToolTransformConfigWidget::slotSetWarpModeButtonClicked(bool value)
 
     lblTransformType->setText(warpButton->toolTip());
 
-    ToolTransformArgs *config = m_transaction->currentConfig();
-    config->setMode(ToolTransformArgs::WARP);
-    config->setWarpCalculation(KisWarpTransformWorker::WarpCalculation::GRID);
-    emit sigResetTransform();
+    emit sigResetTransform(ToolTransformArgs::WARP);
 }
 
 void KisToolTransformConfigWidget::slotSetCageModeButtonClicked(bool value)
@@ -803,9 +798,7 @@ void KisToolTransformConfigWidget::slotSetCageModeButtonClicked(bool value)
 
     lblTransformType->setText(cageButton->toolTip());
 
-    ToolTransformArgs *config = m_transaction->currentConfig();
-    config->setMode(ToolTransformArgs::CAGE);
-    emit sigResetTransform();
+    emit sigResetTransform(ToolTransformArgs::CAGE);
 }
 
 void KisToolTransformConfigWidget::slotSetLiquifyModeButtonClicked(bool value)
@@ -814,9 +807,7 @@ void KisToolTransformConfigWidget::slotSetLiquifyModeButtonClicked(bool value)
 
     lblTransformType->setText(liquifyButton->toolTip());
 
-    ToolTransformArgs *config = m_transaction->currentConfig();
-    config->setMode(ToolTransformArgs::LIQUIFY);
-    emit sigResetTransform();
+    emit sigResetTransform(ToolTransformArgs::LIQUIFY);
 }
 
 void KisToolTransformConfigWidget::slotSetPerspectiveModeButtonClicked(bool value)
@@ -825,9 +816,7 @@ void KisToolTransformConfigWidget::slotSetPerspectiveModeButtonClicked(bool valu
 
     lblTransformType->setText(perspectiveTransformButton->toolTip());
 
-    ToolTransformArgs *config = m_transaction->currentConfig();
-    config->setMode(ToolTransformArgs::PERSPECTIVE_4POINT);
-    emit sigResetTransform();
+    emit sigResetTransform(ToolTransformArgs::PERSPECTIVE_4POINT);
 }
 
 void KisToolTransformConfigWidget::slotFilterChanged(const KoID &filterId)

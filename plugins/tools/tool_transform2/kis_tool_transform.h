@@ -313,7 +313,8 @@ private Q_SLOTS:
     void slotTrackerChangedConfig(KisToolChangesTrackerDataSP status);
     void slotUiChangedConfig();
     void slotApplyTransform();
-    void slotResetTransform();
+    void slotResetTransform(ToolTransformArgs::TransformMode mode);
+    void slotCancelTransform();
     void slotRestartTransform();
     void slotEditingFinished();
 

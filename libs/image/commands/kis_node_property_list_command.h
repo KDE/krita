@@ -21,10 +21,11 @@
 
 #include "kis_node_command.h"
 #include "kis_base_node.h"
+#include "commands_new/KisAsynchronouslyMergeableCommandInterface.h"
 
 
 /// The command for changing the property list of a layer
-class KRITAIMAGE_EXPORT KisNodePropertyListCommand : public KisNodeCommand
+class KRITAIMAGE_EXPORT KisNodePropertyListCommand : public KisNodeCommand, public KisAsynchronouslyMergeableCommandInterface
 {
 
 public:
@@ -38,6 +39,9 @@ public:
     void redo() override;
     void undo() override;
 
+    int id() const override;
+    bool mergeWith(const KUndo2Command *command) override;
+    bool canMergeWith(const KUndo2Command *command) const override;
 
     typedef KisBaseNode::PropertyList PropertyList;
     static void setNodePropertiesNoUndo(KisNodeSP node, KisImageSP image, PropertyList proplist);

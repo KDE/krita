@@ -62,18 +62,56 @@ private:
 class KisScalarKeyframeUpdateCommand : public KUndo2Command
 {
 public:
-    KisScalarKeyframeUpdateCommand(KisScalarKeyframe* keyframe, KUndo2Command *parentCmd);
+    KisScalarKeyframeUpdateCommand(KisScalarKeyframe* keyframe,
+                                   qreal value,
+                                   KisScalarKeyframe::InterpolationMode interpolationMode,
+                                   KisScalarKeyframe::TangentsMode tangentMode,
+                                   QPointF tangentLeft,
+                                   QPointF tangentRight,
+                                   KUndo2Command *parentCmd);
+
+    KisScalarKeyframeUpdateCommand(KisScalarKeyframe* keyframe,
+                                   qreal value,
+                                   KUndo2Command *parentCmd)
+        : KisScalarKeyframeUpdateCommand(keyframe, value, keyframe->m_interpolationMode,
+                                         keyframe->m_tangentsMode, keyframe->m_leftTangent,
+                                         keyframe->m_rightTangent, parentCmd) {};
+
+    KisScalarKeyframeUpdateCommand(KisScalarKeyframe* keyframe,
+                                   KisScalarKeyframe::InterpolationMode interpMode,
+                                   KUndo2Command *parentCmd)
+        : KisScalarKeyframeUpdateCommand(keyframe, keyframe->m_value, interpMode,
+                                         keyframe->m_tangentsMode, keyframe->m_leftTangent,
+                                         keyframe->m_rightTangent, parentCmd) {};
+
+    KisScalarKeyframeUpdateCommand(KisScalarKeyframe* keyframe,
+                                   KisScalarKeyframe::TangentsMode tangentMode,
+                                   KUndo2Command *parentCmd)
+        : KisScalarKeyframeUpdateCommand(keyframe, keyframe->m_value, keyframe->m_interpolationMode,
+                                         tangentMode, keyframe->m_leftTangent,
+                                         keyframe->m_rightTangent, parentCmd) {};
+
+    KisScalarKeyframeUpdateCommand(KisScalarKeyframe* keyframe,
+                                   QPointF tangentLeft,
+                                   QPointF tangentRight,
+                                   KUndo2Command *parentCmd)
+        : KisScalarKeyframeUpdateCommand(keyframe, keyframe->m_value, keyframe->m_interpolationMode,
+                                         keyframe->m_tangentsMode, tangentLeft,
+                                         tangentRight, parentCmd) {};
 
     void redo() override;
     void undo() override;
 
+    template<typename T>
+    using UndoStore = QPair<T, T>;
+
 private:
     KisScalarKeyframe* keyframe;
-    qreal cachedValue;
-    KisScalarKeyframe::InterpolationMode cachedInterpolationMode;
-    KisScalarKeyframe::TangentsMode cachedTangentsMode;
-    QPointF cachedTangentLeft;
-    QPointF cachedTangentRight;
+    UndoStore<qreal> cachedValue;
+    UndoStore<KisScalarKeyframe::InterpolationMode> cachedInterpolationMode;
+    UndoStore<KisScalarKeyframe::TangentsMode> cachedTangentsMode;
+    UndoStore<QPointF> cachedTangentLeft;
+    UndoStore<QPointF> cachedTangentRight;
 
 };
 

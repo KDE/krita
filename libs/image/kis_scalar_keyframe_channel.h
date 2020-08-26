@@ -94,6 +94,9 @@ public:
      */
     QMetaObject::Connection valueChangedChannelConnection;
 
+    // Friend class for commands to avoid multi-signal calls..
+    friend class KisScalarKeyframeUpdateCommand;
+
 Q_SIGNALS:
     void sigChanged(const KisScalarKeyframe* scalarKey);
 

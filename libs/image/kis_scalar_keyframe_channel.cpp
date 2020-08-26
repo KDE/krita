@@ -69,28 +69,29 @@ qreal KisScalarKeyframe::value() const
 void KisScalarKeyframe::setValue(qreal value, KUndo2Command *parentUndoCmd)
 {
     if (parentUndoCmd) {
-        KUndo2Command* cmd = new KisScalarKeyframeUpdateCommand(this, parentUndoCmd);
+        KUndo2Command* cmd = new KisScalarKeyframeUpdateCommand(this, value, parentUndoCmd);
+        cmd->redo();
+    } else {
+        m_value = value;
+
+        QSharedPointer<ScalarKeyframeLimits> limits = m_channelLimits.toStrongRef();
+        if (limits) {
+            m_value = limits->clamp(m_value);
+        }
+
+        emit sigChanged(this);
     }
-
-    m_value = value;
-
-    QSharedPointer<ScalarKeyframeLimits> limits = m_channelLimits.toStrongRef();
-    if (limits) {
-        m_value = limits->clamp(m_value);
-    }
-
-    emit sigChanged(this);
 }
 
 void KisScalarKeyframe::setInterpolationMode(InterpolationMode mode, KUndo2Command *parentUndoCmd)
 {
     if (parentUndoCmd) {
-        KUndo2Command* cmd = new KisScalarKeyframeUpdateCommand(this, parentUndoCmd);
+        KUndo2Command* cmd = new KisScalarKeyframeUpdateCommand(this, mode, parentUndoCmd);
+        cmd->redo();
+    } else {
+        m_interpolationMode = mode;
+        emit sigChanged(this);
     }
-
-    m_interpolationMode = mode;
-
-    emit sigChanged(this);
 }
 
 KisScalarKeyframe::InterpolationMode KisScalarKeyframe::interpolationMode() const
@@ -101,12 +102,12 @@ KisScalarKeyframe::InterpolationMode KisScalarKeyframe::interpolationMode() cons
 void KisScalarKeyframe::setTangentsMode(TangentsMode mode, KUndo2Command *parentUndoCmd)
 {
     if (parentUndoCmd) {
-        KUndo2Command* cmd = new KisScalarKeyframeUpdateCommand(this, parentUndoCmd);
+        KUndo2Command* cmd = new KisScalarKeyframeUpdateCommand(this, mode, parentUndoCmd);
+        cmd->redo();
+    } else {
+        m_tangentsMode = mode;
+        emit sigChanged(this);
     }
-
-    m_tangentsMode = mode;
-
-    emit sigChanged(this);
 }
 
 KisScalarKeyframe::TangentsMode KisScalarKeyframe::tangentsMode() const
@@ -117,13 +118,13 @@ KisScalarKeyframe::TangentsMode KisScalarKeyframe::tangentsMode() const
 void KisScalarKeyframe::setInterpolationTangents(QPointF leftTangent, QPointF rightTangent, KUndo2Command *parentUndoCmd)
 {
     if (parentUndoCmd) {
-        KUndo2Command* cmd = new KisScalarKeyframeUpdateCommand(this, parentUndoCmd);
+        KUndo2Command* cmd = new KisScalarKeyframeUpdateCommand(this, leftTangent, rightTangent, parentUndoCmd);
+        cmd->redo();
+    } else {
+        m_leftTangent = leftTangent;
+        m_rightTangent = rightTangent;
+        emit sigChanged(this);
     }
-
-    m_leftTangent = leftTangent;
-    m_rightTangent = rightTangent;
-
-    emit sigChanged(this);
 }
 
 QPointF KisScalarKeyframe::leftTangent() const

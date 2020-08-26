@@ -45,11 +45,10 @@ inline bool operator==(const TimelineSelectionEntry& lhs, const TimelineSelectio
     return (lhs.time == rhs.time) && (lhs.channel == rhs.channel) && (lhs.keyframe == rhs.keyframe);
 }
 
-inline uint qHash(const TimelineSelectionEntry &key, uint seed)
+inline uint qHash(const TimelineSelectionEntry &key)
 {
-    return seed + key.time;
+    return reinterpret_cast<quint64>(key.channel) * reinterpret_cast<quint64>(key.keyframe.data()) * key.time;
 }
-
 
 class KRITAANIMATIONDOCKER_EXPORT TimelineFramesModel : public TimelineNodeListKeeper::ModelWithExternalNotifications
 {

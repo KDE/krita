@@ -165,6 +165,11 @@ apps.each do |app|
         f.close
     end
 
+    if !found
+        puts " -> Application '#{app}' not found."
+        next
+    end
+
     if (kde_release && appdata["kde_release"] != "yes")
       puts "  -> Skipping because kde_release is not set in the config.ini"
       next
@@ -248,11 +253,13 @@ apps.each do |app|
     end
 
     if appdata["gitModule"]
-        if !appdata["gitTag"]
-            temp = { "gitTag" => "HEAD" }
-            appdata = appdata.merge(temp)
+        if !appdata["category"]
+            appdata["category"] = "kde"
         end
-        puts "-> Fetching git://anongit.kde.org/" + app + ".git " +  appdata["gitTag"] + " into " + appdata["folder"] + "..."
+        if !appdata["gitTag"]
+            appData["gitTag"] = "master"
+        end
+        puts "-> Fetching https://invent.kde.org/#{appdata["category"]}/#{app}/-/archive/#{appdata["gitTag"]}/#{app}-#{appdata["gitTag"]}.tar.gz"
     else
         puts "-> Fetching " + appdata["mainmodule"] + "/" + appdata["submodulepath"] + app + revString + " into " + appdata["folder"] + "..."
     end
@@ -264,19 +271,21 @@ apps.each do |app|
 
     if appdata["mainmodule"][0,5] == "trunk" || appdata["mainmodule"][0,8] == "branches"
         svnroot = "#{svnbase}/"
+        if !appdata["l10npath"]
+            appdata["l10npath"] = appdata["mainmodule"]
+        end
     else
         #trunk is assumed for all mainmodules that don't start with "trunk" or "branches"
-    svnroot = "#{svnbase}/trunk/"
-    end
+        svnroot = "#{svnbase}/trunk/"
 
-    if !appdata["l10npath"]
-        temp = { "l10npath" => "." }
-        appdata = appdata.merge(temp)
+        if !appdata["l10npath"]
+            appdata["l10npath"] = ""
+        end
     end
 
     # Do the main checkouts.
     if appdata["gitModule"]
-        `git archive --remote git://anongit.kde.org/#{app}.git #{appdata["gitTag"]} | tar -x`
+        `curl "https://invent.kde.org/#{appdata["category"]}/#{app}/-/archive/#{appdata["gitTag"]}/#{app}-#{appdata["gitTag"]}.tar.gz" | tar xz --strip-components=1`
     else
         if appdata["wholeModule"]
             `svn co #{svnroot}/#{appdata["mainmodule"]}/#{appdata["submodulepath"]} #{rev} #{app}-tmp`
@@ -303,7 +312,7 @@ apps.each do |app|
 
     # translations
     if appdata["translations"] != "no" && options.translations
-        puts "-> Fetching l10n docs for #{appdata["submodulepath"]}#{app} #{revString}..."
+        puts "-> Fetching l10n docs for #{appdata["submodulepath"]}#{app} #{revString} from '#{svnroot}/#{appdata["l10npath"]}/l10n-kf5/subdirs #{rev}'..."
 
         i18nlangs = `svn cat #{svnroot}/#{appdata["l10npath"]}/l10n-kf5/subdirs #{rev}`.split
         i18nlangsCleaned = []
@@ -352,7 +361,7 @@ apps.each do |app|
         end
 
         # app translations
-        puts "-> Fetching l10n po for #{appdata["submodulepath"]}#{app}...\n"
+        puts "-> Fetching l10n po for #{appdata["submodulepath"]}#{app} from '#{svnroot}/#{appdata["l10npath"]}/l10n-kf5/'..."
 
         Dir.chdir( ".." ) # in submodule now
 

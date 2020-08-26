@@ -26,7 +26,7 @@
 #include <kis_dom_utils.h>
 
 
-KisScalarKeyframe::KisScalarKeyframe(qreal value, QWeakPointer<ScalarKeyframeLimits> limits)
+KisScalarKeyframe::KisScalarKeyframe(qreal value, QSharedPointer<ScalarKeyframeLimits> limits)
     : KisKeyframe(),
       m_value(value),
       m_channelLimits(limits),
@@ -74,8 +74,9 @@ void KisScalarKeyframe::setValue(qreal value, KUndo2Command *parentUndoCmd)
 
     m_value = value;
 
-    if (m_channelLimits) {
-        m_value = m_channelLimits.data()->clamp(m_value);
+    QSharedPointer<ScalarKeyframeLimits> limits = m_channelLimits.toStrongRef();
+    if (limits) {
+        m_value = limits->clamp(m_value);
     }
 
     emit sigChanged(this);
@@ -135,7 +136,7 @@ QPointF KisScalarKeyframe::rightTangent() const
     return m_rightTangent;
 }
 
-void KisScalarKeyframe::setLimits(QWeakPointer<ScalarKeyframeLimits> limits)
+void KisScalarKeyframe::setLimits(QSharedPointer<ScalarKeyframeLimits> limits)
 {
     m_channelLimits = limits;
 }
@@ -205,7 +206,7 @@ void KisScalarKeyframeChannel::addScalarKeyframe(int time, qreal value, KUndo2Co
     }
 }
 
-QWeakPointer<ScalarKeyframeLimits> KisScalarKeyframeChannel::limits() const
+QSharedPointer<ScalarKeyframeLimits> KisScalarKeyframeChannel::limits() const
 {
     return m_d->limits;
 }

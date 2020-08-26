@@ -68,7 +68,7 @@ public:
         Smooth /**< Tangents are locked inline for smooth transitions across key values. */
     };
 
-    KisScalarKeyframe(qreal value, QWeakPointer<ScalarKeyframeLimits> limits);
+    KisScalarKeyframe(qreal value, QSharedPointer<ScalarKeyframeLimits> limits);
     KisScalarKeyframe(const KisScalarKeyframe &rhs);
 
     KisKeyframeSP duplicate(KisKeyframeChannel* newChannel = 0) override;
@@ -86,7 +86,7 @@ public:
     QPointF leftTangent() const;
     QPointF rightTangent() const;
 
-    void setLimits(QWeakPointer<ScalarKeyframeLimits> limits);
+    void setLimits(QSharedPointer<ScalarKeyframeLimits> limits);
 
     /** @brief For now, scalar keyframes have a callback connection to
      * the channel that owns them in order to signal that their
@@ -137,7 +137,7 @@ public:
     /** Utility for adding keyframe with non-default value. */
     void addScalarKeyframe(int time, qreal value, KUndo2Command *parentUndoCmd = nullptr);
 
-    QWeakPointer<ScalarKeyframeLimits> limits() const;
+    QSharedPointer<ScalarKeyframeLimits> limits() const;
     /** Limit channel within scalar value range. */
     void setLimits(qreal low, qreal high);
     /** Remove limits, allowing channel to operate within any range of values. */

@@ -950,7 +950,7 @@ bool KisNodeManager::trySetNodeProperties(KisNodeSP node, KisImageSP image, KisB
         }
     }
 
-    KisNodePropertyListCommand::setNodePropertiesNoUndo(node, image, properties);
+    KisNodePropertyListCommand::setNodePropertiesAutoUndo(node, image, properties);
 
     return true;
 }

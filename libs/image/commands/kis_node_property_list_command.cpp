@@ -194,7 +194,7 @@ void KisNodePropertyListCommand::doUpdate(const KisBaseNode::PropertyList &oldPr
     }
 }
 
-void KisNodePropertyListCommand::setNodePropertiesNoUndo(KisNodeSP node, KisImageSP image, PropertyList proplist)
+void KisNodePropertyListCommand::setNodePropertiesAutoUndo(KisNodeSP node, KisImageSP image, PropertyList proplist)
 {
     bool undo = false;
 

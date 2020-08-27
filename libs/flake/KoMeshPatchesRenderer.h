@@ -86,7 +86,8 @@ public:
 
         const quint8 threshold = 0;
         const QPainterPath outline = patch->getPath();
-        const QSizeF patchSize = outline.boundingRect().size();
+        const QRectF patchRect = outline.boundingRect();
+        const QSizeF patchSize = patchRect.size();
 
         // check if color variation is acceptable and patch size is less than ~pixel width/heigh
         if ((cs->difference(c[0], c[1]) > threshold || cs->difference(c[1], c[2]) > threshold ||
@@ -122,12 +123,28 @@ public:
             QColor average;
             cs->toQColor(mixed, &average);
 
-            m_patchPainter.setPen(average);
+            QPen pen(average);
 
             // if QPainterPath's size is 1px, Qt paints it as 2px - which creates artifacts
             if (patchSize.width() <= 1 && patchSize.height() <= 1) {
-                m_patchPainter.drawPoint(outline.boundingRect().topLeft());
+                // not a cosmetic one
+                m_patchPainter.setPen(average);
+
+                // NOTE:
+                // Let's say the subdivision is such, that the curve cuts 2 pixels in 1.75 and 0.25 chunks
+                // (this can happen at intersection of drawPath() and drawPoint() ). Then upon
+                // further subdivion of the 1.75, floor(point) for both end up being the same pixels.
+                // So, one pixel isn't filled and other is filled twice. Which is a problem - SZ
+
+                m_patchPainter.drawPoint(patchRect.topLeft());
+                m_patchPainter.drawPoint(patchRect.topRight());
+                m_patchPainter.drawPoint(patchRect.bottomLeft());
+                m_patchPainter.drawPoint(patchRect.bottomRight());
+
             } else {
+                // cosmetic pen
+                pen.setWidth(0);
+                m_patchPainter.setPen(pen);
                 m_patchPainter.setBrush(average);
                 m_patchPainter.drawPath(outline);
             }
@@ -595,9 +612,3 @@ private:
 };
 
 #endif // KOMESHPATCHESRENDERER_H
-
-/*
-  Local Variables:
-  mode:c++
-  End:
-*/

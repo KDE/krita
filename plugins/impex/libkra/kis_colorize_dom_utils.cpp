@@ -45,7 +45,7 @@ namespace KisDomUtils {
         e.setAttribute(COLORBYTEDATA, QString(colorData.toBase64()));
     }
 
-    bool loadValue(const QDomElement &e, KisLazyFillTools::KeyStroke *stroke, const KoColorSpace *colorSpace)
+    bool loadValue(const QDomElement &e, KisLazyFillTools::KeyStroke *stroke, const KoColorSpace *colorSpace, const QPoint &offset)
     {
         using namespace KRA;
 
@@ -58,6 +58,7 @@ namespace KisDomUtils {
         stroke->color = color;
 
         stroke->dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
+        stroke->dev->moveTo(offset);
 
         return true;
     }

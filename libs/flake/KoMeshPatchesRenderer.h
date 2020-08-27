@@ -84,17 +84,12 @@ public:
         cs->fromQColor(color2, c[2]);
         cs->fromQColor(color3, c[3]);
 
-        const quint8 threshold = 0;
         const QPainterPath outline = patch->getPath();
         const QRectF patchRect = outline.boundingRect();
         const QSizeF patchSize = patchRect.size();
 
         // check if color variation is acceptable and patch size is less than ~pixel width/heigh
-        if ((cs->difference(c[0], c[1]) > threshold || cs->difference(c[1], c[2]) > threshold ||
-             cs->difference(c[2], c[3]) > threshold || cs->difference(c[3], c[0]) > threshold ||
-             cs->differenceA(c[0], c[1]) > threshold || cs->differenceA(c[1], c[2]) > threshold ||
-             cs->differenceA(c[2], c[3]) > threshold || cs->differenceA(c[3], c[0]) > threshold) &&
-            (patchSize.width() > 1 && patchSize.height() > 1)) {
+        if (checkColorVariance(c) && (patchSize.width() > 1 && patchSize.height() > 1)) {
 
             QVector<SvgMeshPatch*> patches;
             patches.reserve(4);
@@ -151,6 +146,23 @@ public:
         }
     }
 
+    bool checkColorVariance(quint8 c[4][4])
+    {
+        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
+        const quint8 tolerance = 0;
+
+        bool variation = false;
+
+        for (int i = 0; i < 3 && !variation; ++i) {
+            variation |= cs->difference(c[i], c[i + 1]) > tolerance;
+
+            if (c[i][3] != c[i + 1][3]) {
+                variation |= cs->differenceA(c[i], c[i + 1]) > tolerance;
+            }
+        }
+
+        return variation;
+    }
 
     QVector<qreal> difference(const QVector<qreal>& v1, const QVector<qreal>& v2)
     {

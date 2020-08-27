@@ -38,6 +38,7 @@ class KoViewConverter;
 class KoShapeControllerBase;
 class KoDocumentResourceManager;
 class KisShapeLayerCanvasBase;
+class KoSelectedShapesProxy;
 
 const QString KIS_SHAPE_LAYER_ID = "KisShapeLayer";
 /**
@@ -162,6 +163,13 @@ public:
     bool hasPendingTimedUpdates() const override;
 
     void forceUpdateHiddenAreaOnOriginal() override;
+
+    /**
+     * @brief selectedShapesProxy
+     * @return returns the selectedShapesProxy of the KoCanvasBase of this layer,
+     * used for certain undo commands.
+     */
+    KoSelectedShapesProxy* selectedShapesProxy();
 
 protected:
     using KoShape::isVisible;

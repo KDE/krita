@@ -79,9 +79,6 @@ void KisVisualColorModel::slotSetColor(const KoColor &c)
         m_d->channelValues = convertKoColorToChannelValues(m_d->currentcolor);
         emitChannelValues();
     }
-    if (isHSXModel()) {
-        emit sigHSXChanged(QVector3D(m_d->channelValues));
-    }
 }
 
 void KisVisualColorModel::slotSetColorSpace(const KoColorSpace *cs)
@@ -124,20 +121,6 @@ void KisVisualColorModel::slotSetChannelValues(const QVector4D &values)
         emit sigChannelValuesChanged(m_d->channelValues);
         emit sigNewColor(m_d->currentcolor);
         m_d->allowUpdates = true;
-    }
-}
-
-// deprecated, and broken...
-void KisVisualColorModel::slotSetHSX(const QVector3D &hsx)
-{
-    if (isHSXModel()) {
-        m_d->channelValues = QVector4D(hsx, 0.f);
-
-        KoColor newColor = convertChannelValuesToKoColor(QVector4D(hsx));
-        if (newColor != m_d->currentcolor) {
-            m_d->currentcolor = newColor;
-            emit sigNewColor(m_d->currentcolor);
-        }
     }
 }
 
@@ -391,9 +374,6 @@ void KisVisualColorModel::slotDisplayConfigurationChanged()
         m_d->channelValues = convertKoColorToChannelValues(m_d->currentcolor);
 
         emitChannelValues();
-        if (isHSXModel()) {
-            emit sigHSXChanged(QVector3D(m_d->channelValues));
-        }
     }
 }
 

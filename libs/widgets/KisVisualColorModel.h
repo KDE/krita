@@ -43,7 +43,6 @@ public Q_SLOTS:
     void slotSetColor(const KoColor &c);
     void slotSetColorSpace(const KoColorSpace *cs);
     void slotSetChannelValues(const QVector4D &values);
-    void slotSetHSX(const QVector3D &hsx);
     void setDisplayRenderer (const KoColorDisplayRendererInterface *displayRenderer);
     /**
      * @brief slotLoadACSConfig loads supported settings from Advanced Color Selector
@@ -77,7 +76,6 @@ Q_SIGNALS:
      */
     void sigColorSpaceChanged();
     void sigChannelValuesChanged(const QVector4D &values);
-    void sigHSXChanged(const QVector3D &hsx);
     void sigNewColor(const KoColor &c);
 
 private:

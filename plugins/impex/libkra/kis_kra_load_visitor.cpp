@@ -433,8 +433,13 @@ bool KisKraLoadVisitor::visit(KisColorizeMask *mask)
         return false;
 
     QVector<KisLazyFillTools::KeyStroke> strokes;
-    if (!KisDomUtils::loadValue(doc.documentElement(), COLORIZE_KEYSTROKES_SECTION, &strokes, mask->colorSpace()))
+    if (!KisDomUtils::loadValue(doc.documentElement(),
+                                COLORIZE_KEYSTROKES_SECTION,
+                                &strokes,
+                                mask->colorSpace(),
+                                QPoint(mask->x(), mask->y()))) {
         return false;
+    }
 
     int i = 0;
     Q_FOREACH (const KisLazyFillTools::KeyStroke &stroke, strokes) {

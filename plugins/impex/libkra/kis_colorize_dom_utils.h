@@ -27,7 +27,10 @@ namespace KisLazyFillTools {
 
 namespace KisDomUtils {
     void KRITALIBKRA_EXPORT saveValue(QDomElement *parent, const QString &tag, const KisLazyFillTools::KeyStroke &stroke);
-    bool KRITALIBKRA_EXPORT loadValue(const QDomElement &e, KisLazyFillTools::KeyStroke *stroke, const KoColorSpace *colorSpace);
+    bool KRITALIBKRA_EXPORT loadValue(const QDomElement &e,
+                                      KisLazyFillTools::KeyStroke *stroke,
+                                      const KoColorSpace *colorSpace,
+                                      const QPoint &offset);
 }
 
 #endif /* __KIS_COLORIZE_DOM_UTILS_H */

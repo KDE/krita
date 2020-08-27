@@ -36,11 +36,17 @@ public:
             BezierHandle
         };
 
+        enum Index {
+            First = 1,
+            Second
+        };
+
         Handle() : type(None) {}
-        Handle(Type t, const QPointF &p, int row, int col, SvgMeshPatch::Type segmentType)
+        Handle(Type t, const QPointF &p, int row, int col, SvgMeshPatch::Type segmentType, Index index = First)
             : type(t) , pos(p)
             , row(row) , col(col)
             , segmentType(segmentType)
+            , index(index)
         {
         }
 
@@ -48,6 +54,7 @@ public:
         QPointF pos;
         int row, col;
         SvgMeshPatch::Type segmentType;
+        Index index; // first or the second bezier handle
     };
 
 public:
@@ -62,8 +69,6 @@ public:
 
 private:
     const SvgMeshGradient* gradient() const;
-
-    int getHandleIndex(const std::array<QPointF, 4> &path, QPointF point);
 
     /// get handles including the corner
     QVector<Handle> getHandles(const SvgMeshArray *mesharray,

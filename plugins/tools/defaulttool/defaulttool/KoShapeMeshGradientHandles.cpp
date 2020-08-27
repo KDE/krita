@@ -84,8 +84,7 @@ KUndo2Command* KoShapeMeshGradientHandles::moveGradientHandle(const Handle &hand
     QTransform t = abosoluteTransformation(newGradient->gradientUnits()).inverted();
 
     if (handle.type == Handle::BezierHandle) {
-        int index = getHandleIndex(path, handle.pos);
-        path[index] = t.map(newPos);
+        path[handle.index] = t.map(newPos);
         mesharray->modifyHandle(SvgMeshPosition {handle.row, handle.col, handle.segmentType}, path);
 
     } else if (handle.type == Handle::Corner) {
@@ -119,19 +118,6 @@ QPainterPath KoShapeMeshGradientHandles::path() const
     return painterPath;
 }
 
-int KoShapeMeshGradientHandles::getHandleIndex(const std::array<QPointF, 4> &path, QPointF point)
-{
-    QTransform t = abosoluteTransformation(gradient()->gradientUnits());
-    int index = 0;
-    for (; index < 4; ++index) {
-        if (t.map(path[index]) == point) {
-            return index;
-        }
-    }
-    KIS_ASSERT(false); // a bug
-    return -1;
-}
-
 const SvgMeshGradient* KoShapeMeshGradientHandles::gradient() const
 {
     KoShapeFillWrapper wrapper(m_shape, m_fillVariant);
@@ -146,8 +132,8 @@ QVector<KoShapeMeshGradientHandles::Handle> KoShapeMeshGradientHandles::getHandl
     QVector<Handle> buffer;
     std::array<QPointF, 4> path = mesharray->getPath(type, row, col);
     buffer << Handle(Handle::Corner, path[0], row, col, type);
-    buffer << Handle(Handle::BezierHandle, path[1], row, col, type);
-    buffer << Handle(Handle::BezierHandle, path[2], row, col, type);
+    buffer << Handle(Handle::BezierHandle, path[1], row, col, type, Handle::First);
+    buffer << Handle(Handle::BezierHandle, path[2], row, col, type, Handle::Second);
 
     return buffer;
 }
@@ -159,8 +145,8 @@ QVector<KoShapeMeshGradientHandles::Handle> KoShapeMeshGradientHandles::getBezie
 {
     QVector<Handle> buffer;
     std::array<QPointF, 4> path = mesharray->getPath(type, row, col);
-    buffer << Handle(Handle::BezierHandle, path[1], row, col, type);
-    buffer << Handle(Handle::BezierHandle, path[2], row, col, type);
+    buffer << Handle(Handle::BezierHandle, path[1], row, col, type, Handle::First);
+    buffer << Handle(Handle::BezierHandle, path[2], row, col, type, Handle::Second);
 
     return buffer;
 }

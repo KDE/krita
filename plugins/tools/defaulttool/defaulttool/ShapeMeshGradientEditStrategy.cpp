@@ -19,7 +19,7 @@
 #include "ShapeMeshGradientEditStrategy.h"
 
 #include <KoToolBase.h>
-#include <kundo2command.h>
+#include <KoCanvasBase.h>
 
 struct ShapeMeshGradientEditStrategy::Private {
     Private(const QPointF& start, KoShape *shape, KoFlake::FillVariant fillVariant)
@@ -28,10 +28,10 @@ struct ShapeMeshGradientEditStrategy::Private {
     {
     }
 
+    // TODO: for snapping..
     QPointF start;
     KoShapeMeshGradientHandles::Handle startHandle;
     KoShapeMeshGradientHandles handles;
-    QScopedPointer<KUndo2Command> intermediateCommand;
 };
 
 ShapeMeshGradientEditStrategy::ShapeMeshGradientEditStrategy(KoToolBase *tool,
@@ -52,19 +52,13 @@ ShapeMeshGradientEditStrategy::~ShapeMeshGradientEditStrategy()
 void ShapeMeshGradientEditStrategy::handleMouseMove(const QPointF &mouseLocation,
                                                     Qt::KeyboardModifiers modifiers)
 {
-    // we wish to add only one command per action
-    if (m_d->intermediateCommand) {
-        m_d->intermediateCommand->undo();
-        m_d->intermediateCommand.reset();
-    }
-
-    m_d->intermediateCommand.reset(m_d->handles.moveGradientHandle(m_d->startHandle, mouseLocation));
-    m_d->intermediateCommand->redo();
+    Q_UNUSED(modifiers);
+    tool()->canvas()->addCommand(m_d->handles.moveGradientHandle(m_d->startHandle, mouseLocation));
 }
 
 KUndo2Command* ShapeMeshGradientEditStrategy::createCommand()
 {
-    return m_d->intermediateCommand.take();
+    return nullptr;
 }
 
 void ShapeMeshGradientEditStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)

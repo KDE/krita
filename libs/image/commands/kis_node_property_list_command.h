@@ -44,7 +44,7 @@ public:
     bool canMergeWith(const KUndo2Command *command) const override;
 
     typedef KisBaseNode::PropertyList PropertyList;
-    static void setNodePropertiesNoUndo(KisNodeSP node, KisImageSP image, PropertyList proplist);
+    static void setNodePropertiesAutoUndo(KisNodeSP node, KisImageSP image, PropertyList proplist);
 
 private:
     void doUpdate(const KisBaseNode::PropertyList &oldPropertyList,

@@ -386,8 +386,9 @@ void KisKraSaverTest::testRoundTripColorizeMask()
         // KIS_DUMP_DEVICE_2(key3, refRect, "key3", "dd");
     }
 
-    KisLayerPropertiesIcons::setNodeProperty(mask, KisLayerPropertiesIcons::colorizeEditKeyStrokes, false, image);
-    KisLayerPropertiesIcons::setNodeProperty(mask, KisLayerPropertiesIcons::colorizeShowColoring, false, image);
+    KisLayerPropertiesIcons::setNodePropertyAutoUndo(mask, KisLayerPropertiesIcons::colorizeEditKeyStrokes, false, image);
+    KisLayerPropertiesIcons::setNodePropertyAutoUndo(mask, KisLayerPropertiesIcons::colorizeShowColoring, false, image);
+    image->waitForDone();
 
 
 

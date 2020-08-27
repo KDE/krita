@@ -25,6 +25,7 @@
 #include <kis_types.h>
 
 class KisDocument;
+class KoCanvasBase;
 
 class KRITAUI_EXPORT KisReferenceImagesLayer : public KisShapeLayer
 {

@@ -53,12 +53,12 @@ void KisAnimationFrameCacheTest::testCache()
 
     KUndo2Command parentCommand;
 
-    KisKeyframeChannel *rasterChannel2 = layer2->getKeyframeChannel(KisKeyframeChannel::Raster.id());
+    KisKeyframeChannel *rasterChannel2 = layer2->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
     rasterChannel2->addKeyframe(10, &parentCommand);
     rasterChannel2->addKeyframe(20, &parentCommand);
     rasterChannel2->addKeyframe(30, &parentCommand);
 
-    KisKeyframeChannel *rasterChannel3 = layer2->getKeyframeChannel(KisKeyframeChannel::Raster.id());
+    KisKeyframeChannel *rasterChannel3 = layer2->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
     rasterChannel3->addKeyframe(17, &parentCommand);
 
     KisOpenGLImageTexturesSP glTex = KisOpenGLImageTextures::getImageTextures(image, 0, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::Empty);

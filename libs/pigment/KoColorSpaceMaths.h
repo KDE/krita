@@ -302,6 +302,10 @@ public:
     inline static _Tdst clampAfterScale(dst_compositetype val) {
         return qMin<dst_compositetype>(val, KoColorSpaceMathsTraits<_Tdst>::max);
     }
+
+    inline static _T isUnsafeAsDivisor(_T value) {
+        return value == KoColorSpaceMathsTraits<_T>::zeroValue;
+    }
 };
 
 //------------------------------ double specialization ------------------------------//
@@ -335,6 +339,11 @@ template<>
 inline double KoColorSpaceMaths<double>::clamp(double a)
 {
     return a;
+}
+
+template<>
+inline double KoColorSpaceMaths<double>::isUnsafeAsDivisor(double value) {
+    return value < 1e-6; // negative values are also unsafe!
 }
 
 //------------------------------ float specialization ------------------------------//
@@ -387,6 +396,11 @@ template<>
 inline double KoColorSpaceMaths<float>::clamp(double a)
 {
     return a;
+}
+
+template<>
+inline float KoColorSpaceMaths<float>::isUnsafeAsDivisor(float value) {
+    return value < 1e-6; // negative values are also unsafe!
 }
 
 //------------------------------ half specialization ------------------------------//
@@ -460,6 +474,10 @@ inline double KoColorSpaceMaths<half>::clamp(double a)
     return a;
 }
 
+template<>
+inline half KoColorSpaceMaths<half>::isUnsafeAsDivisor(half value) {
+    return value < 1e-6; // negative values are also unsafe!
+}
 
 #endif
 
@@ -647,6 +665,11 @@ namespace Arithmetic
     template<class T>
     inline typename KoColorSpaceMathsTraits<T>::compositetype
     mod(T a, T b) { return KoColorSpaceMaths<T>::modulus(a, b); }    
+
+    template<typename T>
+    inline T isUnsafeAsDivisor(T value) {
+        return KoColorSpaceMaths<T>::isUnsafeAsDivisor(value);
+    }
 }
 
 struct HSYType

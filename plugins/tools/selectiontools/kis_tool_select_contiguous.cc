@@ -160,8 +160,13 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
                     fillpainter.setFillThreshold(fuzziness);
                     fillpainter.setFeather(feather);
                     fillpainter.setSizemod(sizemod);
-                    fillpainter.setUseSelectionAsBoundary((existingSelection.isNull() || existingSelection->isEmpty()) ? false : useSelectionAsBoundary);
 
+                    useSelectionAsBoundary &=
+                        existingSelection &&
+                        !existingSelection->isEmpty() &&
+                        existingSelection->pixel(pos).opacityU8() != OPACITY_TRANSPARENT_U8;
+
+                    fillpainter.setUseSelectionAsBoundary(useSelectionAsBoundary);
                     fillpainter.createFloodSelection(selection, pos.x(), pos.y(), sourceDevice, existingSelection);
 
                     // If we're not antialiasing, threshold the entire selection

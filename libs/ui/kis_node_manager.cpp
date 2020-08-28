@@ -1242,6 +1242,7 @@ void KisNodeManager::saveNodeAsImage()
     KisPaintDeviceSP saveDevice = node->projection();
 
     if (!saveDevice) {
+        m_d->view->showFloatingMessage(i18nc("warning message when trying to export a transform mask", "Layer has no pixel data"), QIcon());
         return;
     }
 

@@ -54,8 +54,8 @@ inline T maskingLinearBurn(T src, T dst) {
  * A special Linear Dodge variant for alpha channel.
  *
  * The meaning of alpha channel is a bit different from the one in color. If
- * alpha channel of the destination is totally null, we should try to resurrect
- * its contents from ashes :)
+ * alpha channel of the destination is totally null, we should not try
+ * to resurrect its contents from ashes :)
  */
 template<class T>
 inline T maskingAddition(T src, T dst) {

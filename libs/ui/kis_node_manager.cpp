@@ -1239,10 +1239,16 @@ void KisNodeManager::saveNodeAsImage()
         return;
     }
 
-    KisImageWSP image = m_d->view->image();
+    KisPaintDeviceSP saveDevice = node->projection();
+
+    if (!saveDevice) {
+        return;
+    }
+
+    KisImageSP image = m_d->view->image();
     QRect saveRect = image->bounds() | node->exactBounds();
 
-    m_d->saveDeviceAsImage(node->projection(),
+    m_d->saveDeviceAsImage(saveDevice,
                            node->name(),
                            saveRect,
                            image->xRes(), image->yRes(),

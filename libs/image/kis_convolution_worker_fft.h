@@ -192,9 +192,11 @@ public:
 
             toDoubleFuncPtr.resize(convChannelList.count());
             fromDoubleFuncPtr.resize(convChannelList.count());
+            fromDoubleCheckNullFuncPtr.resize(convChannelList.count());
 
             bool result = mathToolbox.getToDoubleChannelPtr(convChannelList, toDoubleFuncPtr);
             result &= mathToolbox.getFromDoubleChannelPtr(convChannelList, fromDoubleFuncPtr);
+            result &= mathToolbox.getFromDoubleCheckNullChannelPtr(convChannelList, fromDoubleCheckNullFuncPtr);
 
             KIS_ASSERT(result);
         }
@@ -213,6 +215,7 @@ public:
 
         QVector<PtrToDouble> toDoubleFuncPtr;
         QVector<PtrFromDouble> fromDoubleFuncPtr;
+        QVector<PtrFromDoubleCheckNull> fromDoubleCheckNullFuncPtr;
 
         int alphaCachePos;
         int alphaRealPos;
@@ -287,6 +290,20 @@ public:
         }
     }
 
+    inline qreal writeAlphaFromCache(quint8* dstPtr,
+                                     const quint32 channel,
+                                     const FFTInfo &info,
+                                     double* channelValuePtr,
+                                     bool *dstValueIsNull) {
+        qreal channelPixelValue;
+
+        channelPixelValue = *channelValuePtr * info.fftScale + info.absoluteOffset[channel];
+        limitValue(&channelPixelValue, info.minClamp[channel], info.maxClamp[channel]);
+        info.fromDoubleCheckNullFuncPtr[channel](dstPtr, info.convChannelList[channel]->pos(), channelPixelValue, dstValueIsNull);
+
+        return channelPixelValue;
+    }
+
     template <bool additionalMultiplierActive>
     inline qreal writeOneChannelFromCache(quint8* dstPtr,
                                           const quint32 channel,
@@ -344,13 +361,18 @@ public:
                 quint8 *dstPtr = hitDst->rawData();
 
                 if (info.alphaCachePos >= 0) {
-                    qreal alphaValue =
-                        writeOneChannelFromCache<false>(dstPtr,
-                                                        info.alphaCachePos,
-                                                        info,
-                                                        channelPtr.at(info.alphaCachePos));
+                    bool alphaIsNullInDstSpace = false;
 
-                    if (alphaValue > std::numeric_limits<qreal>::epsilon()) {
+                    qreal alphaValue =
+                        writeAlphaFromCache(dstPtr,
+                                            info.alphaCachePos,
+                                            info,
+                                            channelPtr.at(info.alphaCachePos),
+                                            &alphaIsNullInDstSpace);
+
+                    if (!alphaIsNullInDstSpace &&
+                        alphaValue > std::numeric_limits<qreal>::epsilon()) {
+
                         qreal alphaValueInv = 1.0 / alphaValue;
 
                         int k = 0;
@@ -369,8 +391,8 @@ public:
                         for (auto i = channelPtrBegin; i != channelPtrEnd; ++i, ++k) {
                             if (k != info.alphaCachePos) {
                                 info.fromDoubleFuncPtr[k](dstPtr,
-                                info.convChannelList[k]->pos(),
-                                0.0);
+                                        info.convChannelList[k]->pos(),
+                                        0.0);
                             }
                             ++(*i);
                         }

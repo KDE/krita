@@ -10,6 +10,8 @@
 #include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_configuration.h>
 
+#include "KisWdgFilterFastColorOverlay.h"
+
 KisFilterFastColorOverlay::KisFilterFastColorOverlay()
     : KisFilter(id(), FiltersCategoryColorId, i18n("Fast Color &Overlay..."))
 {
@@ -18,19 +20,19 @@ KisFilterFastColorOverlay::KisFilterFastColorOverlay()
 
 void KisFilterFastColorOverlay::processImpl(KisPaintDeviceSP device, const QRect &rect, const KisFilterConfigurationSP config, KoUpdater *progressUpdater) const
 {
-    Q_UNUSED(config);
     Q_UNUSED(progressUpdater);
 
     const KoColorSpace *colorSpace = device->colorSpace();
 
-    KoColor overlayColor(QColor(138, 212, 228), colorSpace);
+    KoColor overlayColor = config->getColor("color", KoColor(QColor(185, 221, 255), KoColorSpaceRegistry::instance()->rgb8()));
 
     KoCompositeOp::ParameterInfo paramInfo;
-    paramInfo.opacity = 1.0;
+    paramInfo.opacity = config->getPropertyLazy("opacity", 75) / 100.0f;
     paramInfo.flow = 1.0;
     paramInfo.channelFlags = colorSpace->channelFlags(true, false);
 
-    const KoCompositeOp *compositeOp = colorSpace->compositeOp(COMPOSITE_OVER);
+    const KoCompositeOp *compositeOp =
+        colorSpace->compositeOp(config->getPropertyLazy("compositeop", COMPOSITE_OVER));
 
     KisRandomAccessorSP dstIt = device->createRandomAccessorNG();
 
@@ -75,13 +77,15 @@ void KisFilterFastColorOverlay::processImpl(KisPaintDeviceSP device, const QRect
 
 KisConfigWidget *KisFilterFastColorOverlay::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, bool useForMasks) const
 {
-    return 0;
+    Q_UNUSED(useForMasks);
+    return new KisWdgFilterFastColorOverlay(parent);
 }
 
 KisFilterConfigurationSP KisFilterFastColorOverlay::defaultConfiguration() const
 {
     KisFilterConfigurationSP config = factoryConfiguration();
-    config->setProperty("overlaycolor", QColor(138, 212, 228));
-    config->setProperty("opacity", 100);
+    config->setProperty("color", QColor(185, 221, 255));
+    config->setProperty("opacity", 75);
+    config->setProperty("compositeop", COMPOSITE_OVER);
     return config;
 }

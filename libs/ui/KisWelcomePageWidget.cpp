@@ -170,10 +170,12 @@ void KisWelcomePageWidget::setMainWindow(KisMainWindow* mainWin)
 
         // set the shortcut links from actions (only if a shortcut exists)
         if ( mainWin->viewManager()->actionManager()->actionByName("file_new")->shortcut().toString() != "") {
-            newFileLinkShortcut->setText(QString("(") + mainWin->viewManager()->actionManager()->actionByName("file_new")->shortcut().toString() + QString(")"));
+            newFileLinkShortcut->setText(
+                QString("(") + mainWin->viewManager()->actionManager()->actionByName("file_new")->shortcut().toString(QKeySequence::NativeText) + QString(")"));
         }
         if (mainWin->viewManager()->actionManager()->actionByName("file_open")->shortcut().toString()  != "") {
-            openFileShortcut->setText(QString("(") + mainWin->viewManager()->actionManager()->actionByName("file_open")->shortcut().toString() + QString(")"));
+            openFileShortcut->setText(
+                QString("(") + mainWin->viewManager()->actionManager()->actionByName("file_open")->shortcut().toString(QKeySequence::NativeText) + QString(")"));
         }
         connect(recentDocumentsListView, SIGNAL(clicked(QModelIndex)), this, SLOT(recentDocumentClicked(QModelIndex)));
         // we need the view manager to actually call actions, so don't create the connections

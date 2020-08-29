@@ -517,7 +517,7 @@ void KisPart::updateShortcuts()
             if (action->shortcut() == QKeySequence(0))
                 action->setToolTip(strippedTooltip);
             else
-                action->setToolTip( strippedTooltip + " (" + action->shortcut().toString() + ")");
+                action->setToolTip( strippedTooltip + " (" + action->shortcut().toString(QKeySequence::NativeText) + ")");
         }
     }
 }

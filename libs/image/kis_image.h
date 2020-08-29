@@ -660,6 +660,16 @@ public:
     void removeComposition(KisLayerCompositionSP composition);
 
     /**
+     * Move a composition up in the composition list
+     */
+    void moveCompositionUp(KisLayerCompositionSP composition);
+
+    /**
+     * Move a composition down in the composition list
+     */
+    void moveCompositionDown(KisLayerCompositionSP composition);
+
+    /**
      * Permit or deny the wrap-around mode for all the paint devices
      * of the image. Note that permitting the wraparound mode will not
      * necessarily activate it right now. To be activated the wrap

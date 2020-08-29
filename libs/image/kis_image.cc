@@ -2264,6 +2264,24 @@ void KisImage::removeComposition(KisLayerCompositionSP composition)
     m_d->compositions.removeAll(composition);
 }
 
+void KisImage::moveCompositionUp(KisLayerCompositionSP composition)
+{
+    int index = m_d->compositions.indexOf(composition);
+    if (index <= 0) {
+        return;
+    }
+    m_d->compositions.move(index, index - 1);
+}
+
+void KisImage::moveCompositionDown(KisLayerCompositionSP composition)
+{
+    int index = m_d->compositions.indexOf(composition);
+    if (index >= m_d->compositions.size() -1) {
+        return;
+    }
+    m_d->compositions.move(index, index + 1);
+}
+
 bool checkMasksNeedConversion(KisNodeSP root, const QRect &bounds)
 {
     KisSelectionMask *mask = dynamic_cast<KisSelectionMask*>(root.data());

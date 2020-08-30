@@ -7,12 +7,14 @@
 #include "WGColorPreviewPopup.h"
 #include "WGColorSelectorDock.h"
 #include "WGColorPatches.h"
+#include "WGQuickSettingsWidget.h"
 #include "WGShadeSelector.h"
 #include "KisVisualColorSelector.h"
 #include "KisColorSourceToggle.h"
 
 #include <klocalizedstring.h>
 
+#include <kis_icon.h>
 #include <kis_canvas2.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_display_color_converter.h>
@@ -21,6 +23,9 @@
 
 #include <QLabel>
 #include <QBoxLayout>
+#include <QMenu>
+#include <QToolButton>
+#include <QWidgetAction>
 
 #include <QDebug>
 #include <kis_assert.h>
@@ -39,11 +44,35 @@ WGColorSelectorDock::WGColorSelectorDock()
     connect(m_selector, SIGNAL(sigNewColor(KoColor)), SLOT(slotColorSelected(KoColor)));
     connect(m_selector, SIGNAL(sigInteraction(bool)), SLOT(slotColorInteraction(bool)));
     connect(m_colorChangeCompressor, SIGNAL(timeout()), SLOT(slotSetNewColors()));
-    mainWidget->layout()->addWidget(m_selector);
+
+    // Header
+    QWidget *headerWidget = new QWidget(mainWidget);
+    QHBoxLayout *headerLayout = new QHBoxLayout(headerWidget);
 
     m_toggle = new KisColorSourceToggle(mainWidget);
     connect(m_toggle, SIGNAL(toggled(bool)), SLOT(slotColorSourceToggled(bool)));
-    mainWidget->layout()->addWidget(m_toggle);
+    headerLayout->addWidget(m_toggle);
+    headerLayout->addStretch();
+    headerLayout->setMargin(0);
+
+    QToolButton *configBtn = new QToolButton(this);
+    configBtn->setIcon(KisIconUtils::loadIcon("configure"));
+    configBtn->setPopupMode(QToolButton::InstantPopup);
+    headerLayout->addWidget(configBtn);
+
+    // Quick settings menu
+    QMenu *configureMenu = new QMenu();
+    WGQuickSettingsWidget *qsw = new WGQuickSettingsWidget(this, m_selector);
+    QWidgetAction *quickSettingAction = new QWidgetAction(configBtn);
+    quickSettingAction->setDefaultWidget(qsw);
+    configureMenu->addAction(quickSettingAction);
+    configureMenu->addAction("Configure...");
+
+    configBtn->setMenu(configureMenu);
+
+    mainWidget->layout()->addWidget(headerWidget);
+    mainWidget->layout()->addWidget(m_selector);
+
 
     KisVisualColorModel *model = m_selector->selectorModel();
     m_shadeSelector = new WGShadeSelector(model, this);

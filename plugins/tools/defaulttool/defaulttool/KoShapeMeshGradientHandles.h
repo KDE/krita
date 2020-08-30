@@ -50,6 +50,10 @@ public:
         {
         }
 
+        SvgMeshPosition getPosition() const {
+            return SvgMeshPosition {row, col, segmentType};
+        }
+
         Type type;
         QPointF pos;
         int row, col;
@@ -66,6 +70,7 @@ public:
     KUndo2Command* moveGradientHandle(const Handle &handle, const QPointF &newPos);
 
     QPainterPath path() const;
+    QVector<QPainterPath> getConnectedPath(const Handle &handle) const;
 
 private:
     const SvgMeshGradient* gradient() const;

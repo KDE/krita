@@ -806,8 +806,10 @@ void KoFillConfigWidget::slotMeshGradientShadingChanged(int index)
 void KoFillConfigWidget::slotMeshHandleColorChanged(const KoColor &c)
 {
     if (d->activeMeshGradient) {
-        d->activeMeshGradient->getMeshArray()->modifyColor(d->meshposition, c.toQColor());
-        setNewMeshGradientBackgroundToShape();
+        if (d->meshposition.isValid()) {
+            d->activeMeshGradient->getMeshArray()->modifyColor(d->meshposition, c.toQColor());
+            setNewMeshGradientBackgroundToShape();
+        }
         return;
     }
     KIS_ASSERT(false);

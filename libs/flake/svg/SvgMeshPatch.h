@@ -41,6 +41,7 @@ struct SvgMeshStop {
     bool isValid() const { return color.isValid(); }
 };
 
+using SvgMeshPath = std::array<QPointF, 4>;
 
 class KRITAFLAKE_EXPORT SvgMeshPatch
 {

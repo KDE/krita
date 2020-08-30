@@ -118,6 +118,34 @@ QPainterPath KoShapeMeshGradientHandles::path() const
     return painterPath;
 }
 
+QVector<QPainterPath> KoShapeMeshGradientHandles::getConnectedPath(const Handle &handle) const
+{
+    KIS_ASSERT(handle.type != Handle::None);
+
+    QVector<QPainterPath> result;
+
+    const SvgMeshArray *mesharray = gradient()->getMeshArray().data();
+    QPainterPath painterPath;
+
+    if (handle.type == Handle::BezierHandle) {
+        SvgMeshPath path = mesharray->getPath(handle.getPosition());
+        painterPath.moveTo(path[0]);
+        painterPath.cubicTo(path[1], path[2], path[3]);
+        result << painterPath;
+    } else {
+        QVector<SvgMeshPosition> positions = mesharray->getConnectedPaths(handle.getPosition());
+        for (const auto &position: positions) {
+            SvgMeshPath path = mesharray->getPath(position);
+            painterPath.clear();
+            painterPath.moveTo(path[0]);
+            painterPath.cubicTo(path[1], path[2], path[3]);
+            result << painterPath;
+        }
+    }
+
+    return result;
+}
+
 const SvgMeshGradient* KoShapeMeshGradientHandles::gradient() const
 {
     KoShapeFillWrapper wrapper(m_shape, m_fillVariant);

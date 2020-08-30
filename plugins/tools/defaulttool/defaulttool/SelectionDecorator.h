@@ -25,6 +25,8 @@
 #include <KoViewConverter.h>
 #include <KoFlake.h>
 
+#include "KoShapeMeshGradientHandles.h"
+
 #include <QPainter>
 #include <QPointer>
 
@@ -82,6 +84,7 @@ public:
     void setShowStrokeFillGradientHandles(bool value);
 
     void setShowFillMeshGradientHandles(bool value);
+    void setCurrentMeshGradientHandle(const KoShapeMeshGradientHandles::Handle &handle);
 
     void setForceShapeOutlines(bool value);
 
@@ -93,6 +96,7 @@ private:
 private:
     KoFlake::AnchorPosition m_hotPosition;
     KoSelection *m_selection;
+    KoShapeMeshGradientHandles::Handle m_currentMeshHandle;
     int m_handleRadius;
     int m_lineWidth;
     bool m_showFillGradientHandles;

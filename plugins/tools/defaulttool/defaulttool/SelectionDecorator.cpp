@@ -33,7 +33,6 @@
 #include <KoCanvasResourceProvider.h>
 #include <KisQPainterStateSaver.h>
 #include "KoShapeGradientHandles.h"
-#include "KoShapeMeshGradientHandles.h"
 #include <KoCanvasBase.h>
 #include <KoSvgTextShape.h>
 
@@ -82,6 +81,11 @@ void SelectionDecorator::setShowStrokeFillGradientHandles(bool value)
 void SelectionDecorator::setShowFillMeshGradientHandles(bool value)
 {
     m_showFillMeshGradientHandles = value;
+}
+
+void SelectionDecorator::setCurrentMeshGradientHandle(const KoShapeMeshGradientHandles::Handle &handle)
+{
+    m_currentMeshHandle = handle;
 }
 
 void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &converter)
@@ -231,6 +235,15 @@ void SelectionDecorator::paintMeshGradientHandles(KoShape *shape,
             helper.drawHandleSmallCircle(t.map(corner.pos));
         } else if (corner.type == KoShapeMeshGradientHandles::Handle::Corner) {
             helper.drawHandleRect(t.map(corner.pos));
+        }
+    }
+
+    // highlight the path which is being hovered/moved
+    if (m_currentMeshHandle.type != KoShapeMeshGradientHandles::Handle::None) {
+        helper.setHandleStyle(KisHandleStyle::highlightedPrimaryHandlesWithSolidOutline());
+        QVector<QPainterPath> paths = gradientHandles.getConnectedPath(m_currentMeshHandle);
+        for (const auto &path: paths) {
+            helper.drawPath(path);
         }
     }
 }

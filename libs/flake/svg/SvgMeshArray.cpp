@@ -207,6 +207,11 @@ std::array<QPointF, 4> SvgMeshArray::getPath(const SvgMeshPatch::Type edge, cons
     return m_array[row][col]->getSegment(edge);
 }
 
+SvgMeshPath SvgMeshArray::getPath(const SvgMeshPosition &pos) const
+{
+    return getPath(pos.segmentType, pos.row, pos.col);
+}
+
 SvgMeshPatch* SvgMeshArray::getPatch(const int row, const int col) const
 {
     KIS_ASSERT(row < m_array.size() && col < m_array[row].size()
@@ -267,6 +272,42 @@ QRectF SvgMeshArray::boundingRect() const
 
     // return extremas
     return QRectF(topLeft, bottomRight);
+}
+
+QVector<SvgMeshPosition> SvgMeshArray::getConnectedPaths(const SvgMeshPosition &position) const
+{
+    QVector<SvgMeshPosition> positions;
+
+    int row = position.row;
+    int col = position.col;
+    SvgMeshPatch::Type type = position.segmentType;
+
+    SvgMeshPatch::Type nextType = static_cast<SvgMeshPatch::Type>(type + 1);
+    SvgMeshPatch::Type previousType = static_cast<SvgMeshPatch::Type>((SvgMeshPatch::Size + type - 1) % SvgMeshPatch::Size);
+
+    if (type == SvgMeshPatch::Top) {
+        if (row == 0) {
+            if (col > 0) {
+                positions << SvgMeshPosition {row, col - 1, type};
+            }
+        } else {
+            if (col > 0) {
+                positions << SvgMeshPosition {row, col - 1, type};
+                positions << SvgMeshPosition {row - 1, col - 1, nextType};
+            }
+            positions << SvgMeshPosition {row - 1, col, previousType};
+        }
+    } else if (type == SvgMeshPatch::Right && row > 0) {
+        positions << SvgMeshPosition {row - 1, col, type};
+
+    } else if (type == SvgMeshPatch::Left && col > 0) {
+        positions << SvgMeshPosition {row, col - 1, previousType};
+    }
+
+    positions << SvgMeshPosition {row, col, previousType};
+    positions << SvgMeshPosition {row, col, type};
+
+    return positions;
 }
 
 void SvgMeshArray::modifyHandle(const SvgMeshPosition &position,

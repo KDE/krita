@@ -330,46 +330,31 @@ void SvgMeshArray::modifyHandle(const SvgMeshPosition &position,
 void SvgMeshArray::modifyCorner(const SvgMeshPosition &position,
                                 const QPointF &newPos)
 {
-    int row = position.row;
-    int col = position.col;
-    SvgMeshPatch::Type type = position.segmentType;
+    QVector<SvgMeshPosition> paths = getSharedPaths(position);
 
-    QPointF delta = m_array[row][col]->getStop(type).point - newPos;
+    QPointF delta = m_array[position.row][position.col]->getStop(position.segmentType).point - newPos;
 
-    SvgMeshPatch::Type nextType = static_cast<SvgMeshPatch::Type>(type + 1);
-    SvgMeshPatch::Type previousType = static_cast<SvgMeshPatch::Type>((SvgMeshPatch::Size + type - 1) % SvgMeshPatch::Size);
-
-    if (type == SvgMeshPatch::Top) {
-        if (row == 0) {
-            if (col > 0) {
-                m_array[row][col - 1]->modifyCorner(nextType, delta);
-            }
-        } else {
-            if (col > 0) {
-                m_array[row][col - 1]->modifyCorner(nextType , delta);
-                m_array[row - 1][col - 1]->modifyCorner(SvgMeshPatch::Bottom , delta);
-            }
-            m_array[row - 1][col]->modifyCorner(previousType, delta);
-        }
-    } else if (type == SvgMeshPatch::Right) {
-        if (row > 0) {
-            m_array[row - 1][col]->modifyCorner(nextType, delta);
-        }
-
-    } else if (type == SvgMeshPatch::Left) {
-        if (col > 0) {
-            m_array[row][col - 1]->modifyCorner(previousType , delta);
-        }
+    for (const auto &path: paths) {
+        m_array[path.row][path.col]->modifyCorner(path.segmentType, delta);
     }
-
-    m_array[row][col]->modifyCorner(type , delta);
 }
 
 void SvgMeshArray::modifyColor(const SvgMeshPosition &position, const QColor &color)
 {
+    QVector<SvgMeshPosition> paths = getSharedPaths(position);
+
+    for (const auto &path: paths) {
+        m_array[path.row][path.col]->setStopColor(path.segmentType, color);
+    }
+}
+
+QVector<SvgMeshPosition> SvgMeshArray::getSharedPaths(const SvgMeshPosition &position) const
+{
+    QVector<SvgMeshPosition> positions;
+
     int row = position.row;
     int col = position.col;
-    auto type = position.segmentType;
+    SvgMeshPatch::Type type = position.segmentType;
 
     SvgMeshPatch::Type nextType = static_cast<SvgMeshPatch::Type>(type + 1);
     SvgMeshPatch::Type previousType = static_cast<SvgMeshPatch::Type>((SvgMeshPatch::Size + type - 1) % SvgMeshPatch::Size);
@@ -377,27 +362,25 @@ void SvgMeshArray::modifyColor(const SvgMeshPosition &position, const QColor &co
     if (type == SvgMeshPatch::Top) {
         if (row == 0) {
             if (col > 0) {
-                m_array[row][col - 1]->setStopColor(nextType, color);
+                positions << SvgMeshPosition {row, col - 1, nextType};
             }
         } else {
             if (col > 0) {
-                m_array[row][col - 1]->setStopColor(nextType , color);
-                m_array[row - 1][col - 1]->setStopColor(SvgMeshPatch::Bottom , color);
+                positions << SvgMeshPosition {row, col - 1, nextType};
+                positions << SvgMeshPosition {row - 1, col - 1, SvgMeshPatch::Bottom};
             }
-            m_array[row - 1][col]->setStopColor(previousType, color);
+            positions << SvgMeshPosition {row - 1, col, previousType};
         }
-    } else if (type == SvgMeshPatch::Right) {
-        if (row > 0) {
-            m_array[row - 1][col]->setStopColor(nextType, color);
-        }
+    } else if (type == SvgMeshPatch::Right && row > 0) {
+        positions << SvgMeshPosition {row - 1, col, nextType};
 
-    } else if (type == SvgMeshPatch::Left) {
-        if (col > 0) {
-            m_array[row][col - 1]->setStopColor(previousType , color);
-        }
+    } else if (type == SvgMeshPatch::Left && col > 0) {
+        positions << SvgMeshPosition {row, col - 1, previousType};
     }
 
-    m_array[position.row][position.col]->setStopColor(position.segmentType, color);
+    positions << SvgMeshPosition {row, col, type};
+
+    return positions;
 }
 
 QColor SvgMeshArray::getColor(SvgMeshPatch::Type edge, int row, int col) const

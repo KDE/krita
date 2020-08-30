@@ -80,7 +80,11 @@ bool DefaultToolTabbedWidget::useUniformScaling() const
 
 void DefaultToolTabbedWidget::slotMeshGradientHandleSelected(KoShapeMeshGradientHandles::Handle h)
 {
-    m_fillWidget->setSelectedMeshGradientHandle(SvgMeshPosition {h.row, h.col, h.segmentType});
+    if (h.type == KoShapeMeshGradientHandles::Handle::Corner) {
+        m_fillWidget->setSelectedMeshGradientHandle(SvgMeshPosition {h.row, h.col, h.segmentType});
+    } else {
+        m_fillWidget->setSelectedMeshGradientHandle(SvgMeshPosition());
+    }
 }
 
 void DefaultToolTabbedWidget::slotCurrentIndexChanged(int current)

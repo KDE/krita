@@ -26,6 +26,23 @@ struct SvgMeshPosition {
     int row;
     int col;
     SvgMeshPatch::Type segmentType;
+    SvgMeshPosition()
+        : row(-1)
+        , col(-1)
+        , segmentType(SvgMeshPatch::Size)
+    {
+    }
+
+    SvgMeshPosition(int row, int col, SvgMeshPatch::Type type)
+        : row(row)
+        , col(col)
+        , segmentType(type)
+    {
+    }
+
+    bool isValid() const {
+        return row >= 0 && col >= 0;
+    }
 };
 
 class KRITAFLAKE_EXPORT SvgMeshArray
@@ -50,6 +67,9 @@ public:
     /// Get the Path Points for a segment of the meshpatch
     std::array<QPointF, 4> getPath(const SvgMeshPatch::Type edge, const int row, const int col) const;
 
+    // overload
+    SvgMeshPath getPath(const SvgMeshPosition &pos) const;
+
     SvgMeshPatch* getPatch(const int row, const int col) const;
 
     int numRows() const;
@@ -58,6 +78,8 @@ public:
     void setTransform(const QTransform& matrix);
 
     QRectF boundingRect() const;
+
+    QVector<SvgMeshPosition> getConnectedPaths(const SvgMeshPosition &position) const;
 
     void modifyHandle(const SvgMeshPosition &position, const std::array<QPointF, 4> &newPath);
     void modifyCorner(const SvgMeshPosition &position, const QPointF &newPos);

@@ -291,11 +291,9 @@ public:
     KoInteractionStrategy* createStrategy(KoPointerEvent *ev) override
     {
         m_currentHandle = handleAt(ev->point);
+        q->m_selectedMeshHandle = m_currentHandle;
+        emit q->meshgradientHandleSelected(m_currentHandle);
 
-        if (m_currentHandle.type == KoShapeMeshGradientHandles::Handle::Corner) {
-            q->m_selectedMeshHandle = m_currentHandle;
-            emit q->meshgradientHandleSelected(m_currentHandle);
-        }
 
         if (m_currentHandle.type != KoShapeMeshGradientHandles::Handle::None) {
             KoShape *shape = onlyEditableShape();
@@ -310,7 +308,20 @@ public:
     bool hoverEvent(KoPointerEvent *ev) override
     {
         // for custom cursor
-        m_currentHandle = handleAt(ev->point);
+        KoShapeMeshGradientHandles::Handle handle = handleAt(ev->point);
+
+        // refresh
+        if (handle.type != m_currentHandle.type && handle.type == KoShapeMeshGradientHandles::Handle::None) {
+            q->repaintDecorations();
+        }
+
+        m_currentHandle = handle;
+        q->m_selectedMeshHandle = m_currentHandle;
+
+        // highlight the decoration which is being hovered
+        if (m_currentHandle.type != KoShapeMeshGradientHandles::Handle::None) {
+            q->repaintDecorations();
+        }
         return false;
     }
 
@@ -818,6 +829,7 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
         m_decorator->setShowFillGradientHandles(hasInteractioFactory(EditFillGradientFactoryId));
         m_decorator->setShowStrokeFillGradientHandles(hasInteractioFactory(EditStrokeGradientFactoryId));
         m_decorator->setShowFillMeshGradientHandles(hasInteractioFactory(EditFillMeshGradientFactoryId));
+        m_decorator->setCurrentMeshGradientHandle(m_selectedMeshHandle);
         m_decorator->paint(painter, converter);
     }
 

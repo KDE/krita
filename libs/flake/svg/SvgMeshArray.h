@@ -79,12 +79,18 @@ public:
 
     QRectF boundingRect() const;
 
+    /// Return the paths connected to the corner. Can be thought of as edges connected to a vertex
     QVector<SvgMeshPosition> getConnectedPaths(const SvgMeshPosition &position) const;
 
     void modifyHandle(const SvgMeshPosition &position, const std::array<QPointF, 4> &newPath);
     void modifyCorner(const SvgMeshPosition &position, const QPointF &newPos);
 
     void modifyColor(const SvgMeshPosition &position, const QColor &color);
+
+private:
+    /// return the shared path between two patches.
+    /// NOTE: Not to be confused with getConnectedPaths
+    QVector<SvgMeshPosition> getSharedPaths(const SvgMeshPosition &position) const;
 
     //  get color of a stop
     QColor getColor(SvgMeshPatch::Type edge, int row, int col) const;

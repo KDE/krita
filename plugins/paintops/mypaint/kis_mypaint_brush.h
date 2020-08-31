@@ -17,7 +17,7 @@ public:
     KisMyPaintBrush(const QString &fileName="");
     virtual ~KisMyPaintBrush() {} ;
 
-    void setColor(const KoColor color);
+    void setColor(const KoColor color, const KoColorSpace *colorSpace);
     void apply(KisPaintOpSettingsSP settings);
     MyPaintBrush* brush();
 

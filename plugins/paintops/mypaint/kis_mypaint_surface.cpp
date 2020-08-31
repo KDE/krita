@@ -107,8 +107,8 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
         if(outer.fadeSq(pt) > 1.0f)
             continue;
 
-        qreal rr, base_alpha, alpha, dst_alpha, r, g, b, a;
-        qreal opacity;
+        float rr, base_alpha, alpha, dst_alpha, r, g, b, a;
+        float opacity;
 
         if (radius < 3.0) {
             rr = calculate_rr_antialiased (it.x(), it.y(), x, y, aspect_ratio, sn, cs, one_over_radius2, r_aa_start);
@@ -120,10 +120,19 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
         base_alpha = calculate_alpha_for_rr (rr, hardness, segment1_slope, segment2_slope);
         alpha = base_alpha * normal_mode;
 
-        b = it.rawData()[0]/(255.0f);
-        g = it.rawData()[1]/(255.0f);
-        r = it.rawData()[2]/(255.0f);
-        dst_alpha = it.rawData()[3]/(255.0f);
+        QVector<float> vec = {b, g, r, dst_alpha};
+        colorSpace->normalisedChannelsValue(it.rawData(), vec);
+
+        b = vec[0];
+        g = vec[1];
+        r = vec[2];
+        dst_alpha = vec[3];
+
+        if(colorSpace->channels()[0]->channelValueType()==KoChannelInfo::FLOAT16 || colorSpace->channels()[0]->channelValueType()==KoChannelInfo::FLOAT32) {
+
+            r = vec[0];
+            b = vec[2];
+        }
 
         a = alpha * (color_a - dst_alpha) + dst_alpha;
 
@@ -163,11 +172,13 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
             }
         }
 
-        it.rawData()[0] = b*255;
-        it.rawData()[1] = g*255;
-        it.rawData()[2] = r*255;
-        it.rawData()[3] = a*255;
+        if(colorSpace->channels()[0]->channelValueType()==KoChannelInfo::UINT8 || colorSpace->channels()[0]->channelValueType()==KoChannelInfo::UINT16) {
 
+            colorSpace->fromNormalisedChannelsValue(it.rawData(), {b,g,r,a});
+        }
+        else {
+            colorSpace->fromNormalisedChannelsValue(it.rawData(), {r,g,b,a});
+        }
     }
 
     painter()->addDirtyRect(dabRectAligned);    
@@ -212,7 +223,8 @@ void KisMyPaintSurface::getColorImpl(MyPaintSurface *self, float x, float y, flo
     }
     else { targetDevice = m_imageDevice; }
 
-    KisSequentialIterator it(targetDevice, dabRectAligned);    
+    KisSequentialIterator it(targetDevice, dabRectAligned);
+    QVector<float> surface_color_vec = {0,0,0,0};
 
     while(it.nextPixel()) {
 
@@ -232,10 +244,18 @@ void KisMyPaintSurface::getColorImpl(MyPaintSurface *self, float x, float y, flo
 
         qreal r, g, b, a;
 
-        b = it.rawData()[0]/(255.0f);
-        g = it.rawData()[1]/(255.0f);
-        r = it.rawData()[2]/(255.0f);
-        a = it.rawData()[3]/(255.0f);
+        colorSpace->normalisedChannelsValue(it.rawData(), surface_color_vec);
+
+        b = surface_color_vec[0];
+        g = surface_color_vec[1];
+        r = surface_color_vec[2];
+        a = surface_color_vec[3];
+
+        if(colorSpace->channels()[0]->channelValueType()==KoChannelInfo::FLOAT16 || colorSpace->channels()[0]->channelValueType()==KoChannelInfo::FLOAT32) {
+
+            r = surface_color_vec[0];
+            b = surface_color_vec[2];
+        }
 
         sum_r += pixel_weight * r;
         sum_g += pixel_weight * g;

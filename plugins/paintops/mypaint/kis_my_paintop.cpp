@@ -49,16 +49,16 @@ KisMyPaintOp::KisMyPaintOp(const KisPaintOpSettingsSP settings, KisPainter * pai
 
         mypaint_brush_from_defaults(m_brush->brush());
         mypaint_brush_set_base_value(m_brush->brush(), MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC, log(settings->getFloat(MYPAINT_DIAMETER)/2));
-        m_brush->setColor(this->painter()->backgroundColor());
+        m_brush->setColor(this->painter()->backgroundColor(), painter->device()->colorSpace());
         mypaint_brush_set_base_value(m_brush->brush(), MYPAINT_BRUSH_SETTING_ERASER, false);
     }
     else if(qRound(settings->getFloat(MYPAINT_ERASER)) && settings->getBool("EraserMode")) {
 
-        m_brush->setColor(this->painter()->backgroundColor());
+        m_brush->setColor(this->painter()->backgroundColor(), painter->device()->colorSpace());
         mypaint_brush_set_base_value(m_brush->brush(), MYPAINT_BRUSH_SETTING_ERASER, false);
     }
     else {
-        m_brush->setColor(this->painter()->paintColor());
+        m_brush->setColor(this->painter()->paintColor(), painter->device()->colorSpace());
     }
 
     m_settings = settings;

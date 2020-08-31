@@ -46,12 +46,15 @@ KisMyPaintBrush::KisMyPaintBrush(const QString &fileName)
     mypaint_brush_from_defaults(m_d->m_brush);
 }
 
-void KisMyPaintBrush::setColor(const KoColor color) {
+void KisMyPaintBrush::setColor(const KoColor color, const KoColorSpace *colorSpace) {
 
     float hue, saturation, value;
     qreal r, g, b;
+    QColor dstColor;
 
-    color.toQColor().getRgbF(&r ,&g ,&b);
+    colorSpace->toQColor(color.data(), &dstColor, colorSpace->profile());
+    dstColor.getRgbF(&r, &g, &b);
+
     RGBToHSV(r , g, b, &hue, &saturation, &value);
 
     mypaint_brush_set_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_COLOR_H, (hue)/360);

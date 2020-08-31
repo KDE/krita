@@ -2010,7 +2010,7 @@
               </size>
              </property>
              <property name="text">
-              <string>Amount:</string>
+              <string comment="Amount of transformation">Amount:</string>
              </property>
             </widget>
            </item>

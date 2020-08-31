@@ -47,13 +47,13 @@
      </widget>
      <widget class="QWidget" name="tabLines">
       <attribute name="title">
-       <string>Lines</string>
+       <string comment="Lines in Multigridpattern">Lines</string>
       </attribute>
       <layout class="QFormLayout" name="formLayout_3">
        <item row="0" column="0">
         <widget class="QLabel" name="label_4">
          <property name="text">
-          <string comment="Line width of Multigridpattern generator">Line Width:</string>
+          <string comment="Line width of Multigridpattern">Line Width:</string>
          </property>
         </widget>
        </item>
@@ -63,7 +63,7 @@
        <item row="1" column="0" colspan="2">
         <widget class="QGroupBox" name="gbConnector">
          <property name="title">
-          <string>Connector Lines</string>
+          <string comment="Connector Lines in Multigridpattern">Connector Lines</string>
          </property>
          <layout class="QFormLayout" name="formLayout_2">
           <item row="0" column="0">

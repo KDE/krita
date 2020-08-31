@@ -56,7 +56,7 @@
      </widget>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
-       <string>Options</string>
+       <string comment="SeExpr script option">Options</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>

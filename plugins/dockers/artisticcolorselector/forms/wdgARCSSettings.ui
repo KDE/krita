@@ -231,7 +231,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Red': </string>
+              <string>Red':</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

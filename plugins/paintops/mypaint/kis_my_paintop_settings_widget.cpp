@@ -38,7 +38,7 @@ KisMyPaintOpSettingsWidget:: KisMyPaintOpSettingsWidget(QWidget* parent)
     KisMyPaintCurveOptionWidget *hardnessOption = new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("hardness", KisPaintOpOption::GENERAL, false, 0.8, 0.02, 1), "0", "100");
     m_hardnessWidget = hardnessOption;
 
-    KisMyPaintCurveOptionWidget *opacityOption = new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("opaque", KisPaintOpOption::GENERAL, false, 1, 0, 2), "0", "100");
+    KisMyPaintCurveOptionWidget *opacityOption = new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("opaque", KisPaintOpOption::GENERAL, false, 1, 0, 1), "0", "100");
     m_opacityWidget = opacityOption;
 
     addPaintOpOption(basicOption, i18nc("Option Category", "Basic"));

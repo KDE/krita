@@ -34,17 +34,6 @@
 #include "kis_my_paintop_settings_widget.h"
 #include "kis_mypaint_curve_option_widget.h"
 
-
-inline void setLabel(QLabel* label, const KisCurveLabel& curve_label)
-{
-    if (curve_label.icon().isNull()) {
-        label->setText(curve_label.name());
-    }
-    else {
-        label->setPixmap(QPixmap::fromImage(curve_label.icon()));
-    }
-}
-
 KisMyPaintCurveOptionWidget::KisMyPaintCurveOptionWidget(KisMyPaintCurveOption* curveOption, const QString &minLabel, const QString &maxLabel, bool hideSlider, KisMyPaintOpOption *baseOption)
     : KisCurveOptionWidget (curveOption, minLabel, maxLabel, hideSlider)
 {
@@ -69,7 +58,8 @@ KisMyPaintCurveOptionWidget::KisMyPaintCurveOptionWidget(KisMyPaintCurveOption* 
 
     m_curveOptionWidget->strengthSlider->setRange(curveOption->minValue(), curveOption->maxValue(), 2);
     m_curveOptionWidget->strengthSlider->setValue(curveOption->value());
-    m_curveOptionWidget->strengthSlider->setPrefix(i18n("Strength: "));    
+    m_curveOptionWidget->strengthSlider->setPrefix(i18n("BaseValue: "));
+    m_curveOptionWidget->strengthSlider->setSuffix("");
 
     if (hideSlider) {
           m_curveOptionWidget->strengthSlider->hide();

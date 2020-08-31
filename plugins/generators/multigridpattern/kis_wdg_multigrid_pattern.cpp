@@ -57,7 +57,7 @@ KisWdgMultigridPattern::KisWdgMultigridPattern(QWidget* parent, const KoColorSpa
     widget()->sldColorRatio->setPrefix(i18n("Ratio:"));
 
     widget()->sldColorIndex->setRange(-2.0, 2.0, 2);
-    widget()->sldColorIndex->setPrefix(i18n("Index:"));
+    widget()->sldColorIndex->setPrefix(i18nc("Index number of how far away from center", "Index:"));
 
     widget()->sldColorIntersect->setRange(-2.0, 2.0, 2);
     widget()->sldColorIntersect->setPrefix(i18n("Intersect:"));

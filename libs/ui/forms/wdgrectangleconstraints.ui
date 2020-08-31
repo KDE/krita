@@ -137,7 +137,7 @@
      <item row="2" column="1">
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>Ratio:</string>
+        <string comment="Ratio of width and height">Ratio:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

@@ -37,7 +37,6 @@
 KisMyPaintOp::KisMyPaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp (painter) {
 
-    m_node = node;
     m_image = image;
 
     m_brush.reset(new KisMyPaintBrush());

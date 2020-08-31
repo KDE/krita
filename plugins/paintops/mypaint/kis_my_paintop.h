@@ -37,7 +37,6 @@ private:
     QScopedPointer<KisMyPaintSurface> m_surface;
     KisPaintOpSettingsSP m_settings;
     KisAirbrushOptionProperties m_airBrushOption;
-    KisNodeSP m_node;
     KisImageWSP m_image;
     double dtime, m_radius, previousTime = 0;
     bool isStrokeStarted;    

@@ -583,7 +583,7 @@ bool KisImportExportManager::askUserAboutExportConfiguration(
         }
 
         if (wdg) {
-            QGroupBox *box = new QGroupBox(i18n("Options"));
+            QGroupBox *box = new QGroupBox(i18nc("Options of Import and Export Manager", "Options"));
             QVBoxLayout *boxLayout = new QVBoxLayout(box);
             wdg->setConfiguration(exportConfiguration);
             boxLayout->addWidget(wdg);

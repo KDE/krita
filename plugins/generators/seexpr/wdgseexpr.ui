@@ -39,7 +39,7 @@
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
-       <string>Script</string>
+       <string comment="Script list label">Script</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>

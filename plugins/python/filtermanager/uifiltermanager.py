@@ -51,7 +51,7 @@ class UIFilterManager(object):
         self.documentsTreeView.resizeColumnToContents(1)
         self.documentsTreeView.resizeColumnToContents(2)
 
-        self.formLayout.addRow(i18n("Filters:"), self.filterComboBox)
+        self.formLayout.addRow(i18nc("Python filters", "Filters:"), self.filterComboBox)
 
         self.line = QFrame()
         self.line.setFrameShape(QFrame.HLine)

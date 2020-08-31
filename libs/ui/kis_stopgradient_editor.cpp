@@ -312,7 +312,7 @@ void KisStopGradientEditor::sortByValue( SortFlags flags = SORT_ASCENDING )
 
 void KisStopGradientEditor::showContextMenu(const QPoint &origin)
 {
-    QMenu contextMenu(i18n("Options"), this);
+    QMenu contextMenu(i18nc("Option in Stop Gradient Editor", "Options"), this);
 
     QAction reverseValues(i18n("Reverse Values"), this);
     connect(&reverseValues, &QAction::triggered, this, &KisStopGradientEditor::reverse);

@@ -920,6 +920,10 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
     intPoolLimit->setMinimumWidth(80);
     intUndoLimit->setMinimumWidth(80);
 
+    label_5->setVisible(false);
+    sliderPoolLimit->setVisible(false);
+    intPoolLimit->setVisible(false);
+
 
     SliderAndSpinBoxSync *sync1 =
         new SliderAndSpinBoxSync(sliderMemoryLimit,

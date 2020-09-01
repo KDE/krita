@@ -251,6 +251,9 @@ void KisKeyframingTest::testRasterChannel()
 
         QVERIFY(channel->keyframeAt<KisRasterKeyframe>(6) == channel->keyframeAt<KisRasterKeyframe>(12));
         QVERIFY(channel->keyframeAt<KisRasterKeyframe>(6)->frameID() == channel->keyframeAt<KisRasterKeyframe>(12)->frameID());
+        QVERIFY(channel->clonesOf(6).size() == 1);
+        QVERIFY(channel->clonesOf(12).size() == 1);
+        QVERIFY(channel->areClones(6, 12));
 
         // Writing to 6 should change 12..
         bounds->testingSetTime(6);
@@ -277,6 +280,13 @@ void KisKeyframingTest::testRasterChannel()
         }
 
         QVERIFY(channel->keyframeCount() > dev->framesInterface()->frames().count());
+
+        // Remove one of the clones..
+        channel->removeKeyframe(6);
+
+        QVERIFY(!channel->keyframeAt(6));
+        QVERIFY(channel->keyframeAt(12));
+        QVERIFY(channel->clonesOf(12).size() == 0);
     }
 }
 
@@ -356,7 +366,6 @@ void KisKeyframingTest::testRasterUndoRedo()
         QVERIFY(keyframe->frameID() == originalFrameID);
     }
 
-
     {   // Remove
         KUndo2Command cmd;
 
@@ -400,7 +409,6 @@ void KisKeyframingTest::testRasterUndoRedo()
 
         cmd.undo(); // (Sets up the next test.)
     }
-
 
     {   // Copy
         KUndo2Command cmd;
@@ -448,7 +456,7 @@ void KisKeyframingTest::testRasterUndoRedo()
         QVERIFY(channel->keyframeAt<KisRasterKeyframe>(66)->frameID() == original_f33_frameID);
     }
 
-    {
+    {   // Clone
         KUndo2Command cmd;
         int original_f33_frameID = channel->keyframeAt<KisRasterKeyframe>(33)->frameID();
         int original_f66_frameID = channel->keyframeAt<KisRasterKeyframe>(66)->frameID();
@@ -461,6 +469,8 @@ void KisKeyframingTest::testRasterUndoRedo()
         QVERIFY(channel->keyframeAt<KisRasterKeyframe>(33)->frameID() == original_f33_frameID);
         QVERIFY(channel->keyframeAt<KisRasterKeyframe>(66)->frameID() != original_f66_frameID);
         QVERIFY(channel->keyframeAt<KisRasterKeyframe>(66)->frameID() == original_f33_frameID);
+        QVERIFY(channel->clonesOf(33).size() == 1);
+        QVERIFY(channel->areClones(33, 66));
 
         cmd.undo();
 
@@ -468,6 +478,8 @@ void KisKeyframingTest::testRasterUndoRedo()
         QVERIFY(channel->keyframeAt(66));
         QVERIFY(channel->keyframeAt<KisRasterKeyframe>(33)->frameID() == original_f33_frameID);
         QVERIFY(channel->keyframeAt<KisRasterKeyframe>(66)->frameID() == original_f66_frameID);
+        QVERIFY(channel->clonesOf(33).size() == 0);
+        QVERIFY(channel->areClones(33, 66) == false);
 
         cmd.redo();
         QVERIFY(channel->keyframeAt(33));
@@ -475,6 +487,8 @@ void KisKeyframingTest::testRasterUndoRedo()
         QVERIFY(channel->keyframeAt<KisRasterKeyframe>(33)->frameID() == original_f33_frameID);
         QVERIFY(channel->keyframeAt<KisRasterKeyframe>(66)->frameID() != original_f66_frameID);
         QVERIFY(channel->keyframeAt<KisRasterKeyframe>(66)->frameID() == original_f33_frameID);
+        QVERIFY(channel->clonesOf(33).size() == 1);
+        QVERIFY(channel->areClones(33, 66));
 
         //Let's remove the clone frame again
         cmd.undo();
@@ -1002,7 +1016,5 @@ void KisKeyframingTest::testChangeOfScalarLimits()
     QCOMPARE(key15->value(), channel->valueAt(15));
     QCOMPARE(key30->value(), channel->valueAt(30));
 }
-
-
 
 QTEST_MAIN(KisKeyframingTest)

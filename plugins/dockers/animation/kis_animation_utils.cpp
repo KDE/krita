@@ -23,6 +23,7 @@
 #include "kis_image.h"
 #include "kis_node.h"
 #include "kis_keyframe_channel.h"
+#include "kis_raster_keyframe_channel.h"
 #include "kis_post_execution_undo_adapter.h"
 #include "kis_global.h"
 #include "kis_tool_utils.h"
@@ -335,10 +336,65 @@ namespace KisAnimationUtils {
                     }
                 }
 
-                return result ? new KisCommandUtils::SkipFirstRedoWrapper(cmd.take()) : 0;
+                return result ? new KisCommandUtils::SkipFirstRedoWrapper(cmd.take()) : nullptr;
         });
 
         return cmd;
+    }
+
+    KUndo2Command* createCloneKeyframesCommand(const FrameMovePairList &srcDstPairs,
+                                              KUndo2Command *parentCommand)
+    {
+        return new KisCommandUtils::LambdaCommand(
+                kundo2_i18np("Clone Keyframes",
+                             "Clones %1 Keyframes",
+                             srcDstPairs.size()),
+                parentCommand,
+                [srcDstPairs, parentCommand]() -> KUndo2Command*
+        {
+            QScopedPointer<KUndo2Command> cmd(new KUndo2Command());
+
+            foreach (const FrameMovePair &move, srcDstPairs) {
+                KisRasterKeyframeChannel *srcRasterChan = dynamic_cast<KisRasterKeyframeChannel*>(move.first.node->getKeyframeChannel(move.first.channel));
+                KisRasterKeyframeChannel *dstRasterChan = dynamic_cast<KisRasterKeyframeChannel*>(move.second.node->getKeyframeChannel(move.second.channel));
+
+                if (!srcRasterChan || !dstRasterChan) {
+                    continue;
+                }
+
+                if (srcRasterChan == dstRasterChan) {
+                    srcRasterChan->cloneKeyframe(move.first.time, move.second.time, cmd.data());
+                } else {
+                    KisKeyframeChannel::copyKeyframe(srcRasterChan, move.first.time, dstRasterChan, move.second.time, cmd.data());
+                }
+            }
+
+            return cmd.take();
+        });
+    }
+
+    void makeClonesUnique(KisImageSP image, const FrameItemList &frames)
+    {
+        KUndo2Command* cmd = new KisCommandUtils::LambdaCommand(
+                    kundo2_i18n("Make clones Unique"),
+                    [frames]() {
+            QScopedPointer<KUndo2Command> cmd(new KUndo2Command());
+
+            foreach (const FrameItem &frameItem, frames) {
+                KisRasterKeyframeChannel *rasterChan = dynamic_cast<KisRasterKeyframeChannel*>(frameItem.node->getKeyframeChannel(frameItem.channel));
+                if (!rasterChan) {
+                    continue;
+                }
+
+                rasterChan->makeUnique(frameItem.time, cmd.data());
+            }
+
+            return cmd.take();
+        });
+
+        KisProcessingApplicator::runSingleCommandStroke(image, cmd,
+                                                        KisStrokeJobData::BARRIER,
+                                                        KisStrokeJobData::EXCLUSIVE);
     }
 
     QDebug operator<<(QDebug dbg, const FrameItem &item)
@@ -346,6 +402,5 @@ namespace KisAnimationUtils {
         dbg.nospace() << "FrameItem(" << item.node->name() << ", " << item.channel << ", " << item.time << ")";
         return dbg.space();
     }
-
 }
 

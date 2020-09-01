@@ -58,7 +58,8 @@ public:
     enum MimeCopyPolicy {
         UndefinedPolicy = 0,
         MoveFramesPolicy,
-        CopyFramesPolicy
+        CopyFramesPolicy,
+        CloneFramesPolicy
     };
 
 public:
@@ -77,6 +78,7 @@ public:
 
     bool createFrame(const QModelIndex &dstIndex);
     bool copyFrame(const QModelIndex &dstIndex);
+    void makeClonesUnique(const QModelIndexList &indices);
 
     bool insertFrames(int dstColumn, const QList<int> &dstRows, int count, int timing = 1);
 
@@ -149,6 +151,7 @@ public:
 
 protected:
     QMap<QString, KisKeyframeChannel *> channelsAt(QModelIndex index) const override;
+    KisKeyframeChannel* channelByID(QModelIndex index, const QString &id) const;
 
 private Q_SLOTS:
     void slotDummyChanged(KisNodeDummy *dummy);

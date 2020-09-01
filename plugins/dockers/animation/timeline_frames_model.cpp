@@ -252,6 +252,12 @@ QMap<QString, KisKeyframeChannel*> TimelineFramesModel::channelsAt(QModelIndex i
     return srcDummy->node()->keyframeChannels();
 }
 
+KisKeyframeChannel *TimelineFramesModel::channelByID(QModelIndex index, const QString &id) const
+{
+    KisNodeDummy *srcDummy = m_d->converter->dummyFromRow(index.row());
+    return srcDummy->node()->getKeyframeChannel(id);
+}
+
 void TimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade,
                                            KisImageSP image,
                                            KisNodeDisplayModeAdapter *displayModeAdapter)
@@ -548,12 +554,12 @@ bool TimelineFramesModel::setHeaderData(int section, Qt::Orientation orientation
 
 Qt::DropActions TimelineFramesModel::supportedDragActions() const
 {
-    return Qt::MoveAction | Qt::CopyAction;
+    return Qt::MoveAction | Qt::CopyAction | Qt::LinkAction;
 }
 
 Qt::DropActions TimelineFramesModel::supportedDropActions() const
 {
-    return Qt::MoveAction | Qt::CopyAction;
+    return Qt::MoveAction | Qt::CopyAction | Qt::LinkAction;
 }
 
 QStringList TimelineFramesModel::mimeTypes() const
@@ -640,7 +646,7 @@ bool TimelineFramesModel::dropMimeDataExtended(const QMimeData *data, Qt::DropAc
 {
     bool result = false;
 
-    if ((action != Qt::MoveAction && action != Qt::CopyAction) ||
+    if ((action != Qt::MoveAction && action != Qt::CopyAction && action != Qt::LinkAction) ||
         !parent.isValid()) return result;
 
     QByteArray encoded = data->data("application/x-krita-frame");
@@ -725,10 +731,11 @@ bool TimelineFramesModel::dropMimeDataExtended(const QMimeData *data, Qt::DropAc
         copyPolicy = MimeCopyPolicy(value);
     }
 
-    const bool copyFrames =
-        copyPolicy == UndefinedPolicy ?
+    const bool copyFrames = copyPolicy == UndefinedPolicy ?
         action == Qt::CopyAction :
         copyPolicy == CopyFramesPolicy;
+
+    const bool cloneFrames = action == Qt::LinkAction || copyPolicy == CloneFramesPolicy;
 
     if (dataMoved) {
         *dataMoved = !copyFrames;
@@ -738,7 +745,12 @@ bool TimelineFramesModel::dropMimeDataExtended(const QMimeData *data, Qt::DropAc
 
     if (!frameMoves.isEmpty()) {
         KisImageBarrierLockerWithFeedback locker(m_d->image);
-        cmd = KisAnimationUtils::createMoveKeyframesCommand(frameMoves, copyFrames, false, 0);
+
+        if (cloneFrames) {
+            cmd = KisAnimationUtils::createCloneKeyframesCommand(frameMoves, nullptr);
+        } else {
+            cmd = KisAnimationUtils::createMoveKeyframesCommand(frameMoves, copyFrames, false, nullptr);
+        }
     }
 
     if (cmd) {
@@ -827,6 +839,19 @@ bool TimelineFramesModel::copyFrame(const QModelIndex &dstIndex)
     if (!dstIndex.isValid()) return false;
 
     return m_d->addKeyframe(dstIndex.row(), dstIndex.column(), true);
+}
+
+void TimelineFramesModel::makeClonesUnique(const QModelIndexList &indices)
+{
+    KisAnimationUtils::FrameItemList frameItems;
+
+    foreach (const QModelIndex &index, indices) {
+        const int time = index.column();
+        KisKeyframeChannel *channel = channelByID(index, KisKeyframeChannel::Raster.id());
+        frameItems << KisAnimationUtils::FrameItem(channel->node(), channel->id(), time);
+    }
+
+    KisAnimationUtils::makeClonesUnique(m_d->image, frameItems);
 }
 
 bool TimelineFramesModel::insertFrames(int dstColumn, const QList<int> &dstRows, int count, int timing)

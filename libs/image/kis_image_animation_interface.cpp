@@ -25,6 +25,7 @@
 #include "kis_regenerate_frame_stroke_strategy.h"
 #include "kis_switch_time_stroke_strategy.h"
 #include "kis_keyframe_channel.h"
+#include "kis_raster_keyframe_channel.h"
 #include "kis_time_span.h"
 
 #include "kis_post_execution_undo_adapter.h"
@@ -363,22 +364,39 @@ void KisImageAnimationInterface::notifyNodeChanged(const KisNode *node,
     // even overlay selection masks are not rendered in the cache
     if (node->inherits("KisSelectionMask")) return;
 
-    const int currentTime = m_d->currentTime();
-    KisTimeSpan invalidateRange;
+    QSet<int> affectedTimes;
+    affectedTimes << m_d->currentTime();
 
+    // We need to also invalidate ranges that contain cloned keyframe data.
     if (recursive) {
-        invalidateRange = KisTimeSpan::calculateAffectedFramesRecursive(node, currentTime);
+        QSet<int> clonedTimes;
+        const int time = m_d->currentTime();
+        KisLayerUtils::recursiveApplyNodes(node, [&clonedTimes, time](const KisNode* node){
+            clonedTimes += KisRasterKeyframeChannel::clonesOf(node, time);
+        });
+
+        affectedTimes += clonedTimes;
     } else {
-        invalidateRange = KisTimeSpan::calculateNodeAffectedFrames(node, currentTime);
+        affectedTimes += KisRasterKeyframeChannel::clonesOf(node, m_d->currentTime());
     }
 
-    // we compress the updated rect (atm, no one uses it anyway)
-    QRect unitedRect;
-    Q_FOREACH (const QRect &rc, rects) {
-        unitedRect |= rc;
-    }
+    foreach (const int& time, affectedTimes ){
+        KisTimeSpan invalidateRange;
 
-    invalidateFrames(invalidateRange, unitedRect);
+        if (recursive) {
+            invalidateRange = KisTimeSpan::calculateAffectedFramesRecursive(node, time);
+        } else {
+            invalidateRange = KisTimeSpan::calculateNodeAffectedFrames(node, time);
+        }
+
+        // we compress the updated rect (atm, no one uses it anyway)
+        QRect unitedRect;
+        Q_FOREACH (const QRect &rc, rects) {
+            unitedRect |= rc;
+        }
+
+        invalidateFrames(invalidateRange, unitedRect);
+    }
 }
 
 void KisImageAnimationInterface::invalidateFrames(const KisTimeSpan &range, const QRect &rect)

@@ -31,6 +31,7 @@
 #include <QScrollBar>
 #include <QScroller>
 #include <QDrag>
+#include <QKeySequence>
 #include <QInputDialog>
 #include <QClipboard>
 #include <QMimeData>
@@ -138,7 +139,7 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
 {
     m_d->modifiersCatcher = new KisCustomModifiersCatcher(this);
     m_d->modifiersCatcher->addModifier("pan-zoom", Qt::Key_Space);
-    m_d->modifiersCatcher->addModifier("offset-frame", Qt::Key_Alt);
+    m_d->modifiersCatcher->addModifier("offset-frame", Qt::Key_Shift);
 
     setCornerButtonEnabled(false);
     setSelectionBehavior(QAbstractItemView::SelectItems);
@@ -411,13 +412,19 @@ void TimelineFramesView::setActionManager(KisActionManager *actionManager)
         action = m_d->actionMan->createAction("mirror_frames");
         connect(action, SIGNAL(triggered()), SLOT(slotMirrorFrames()));
 
-        action = m_d->actionMan->createAction("copy_frames_to_clipboard");
+        action = m_d->actionMan->createAction("copy_frames");
         connect(action, SIGNAL(triggered()), SLOT(slotCopyFrames()));
 
-        action = m_d->actionMan->createAction("cut_frames_to_clipboard");
+        action = m_d->actionMan->createAction("copy_frames_as_clones");
+        connect(action, &KisAction::triggered, [this](){clone(false);});
+
+        action = m_d->actionMan->createAction("make_clones_unique");
+        connect(action, SIGNAL(triggered()), SLOT(slotMakeClonesUnique()));
+
+        action = m_d->actionMan->createAction("cut_frames");
         connect(action, SIGNAL(triggered()), SLOT(slotCutFrames()));
 
-        action = m_d->actionMan->createAction("paste_frames_from_clipboard");
+        action = m_d->actionMan->createAction("paste_frames");
         connect(action, SIGNAL(triggered()), SLOT(slotPasteFrames()));
 
         action = m_d->actionMan->createAction("set_start_time");
@@ -527,8 +534,8 @@ void TimelineFramesView::slotUpdateFrameActions()
 
     enableAction("mirror_frames", hasEditableFrames && editableIndexes.size() > 1);
 
-    enableAction("copy_frames_to_clipboard", true);
-    enableAction("cut_frames_to_clipboard", hasEditableFrames);
+    enableAction("copy_frames", true);
+    enableAction("cut_frames", hasEditableFrames);
 }
 
 void TimelineFramesView::slotSelectionChanged()
@@ -749,6 +756,14 @@ void TimelineFramesView::slotPasteFrames(bool entireColumn)
     }
 }
 
+void TimelineFramesView::slotMakeClonesUnique()
+{
+    if (!m_d->model) return;
+
+    const QModelIndexList indices = calculateSelectionSpan(false);
+    m_d->model->makeClonesUnique(indices);
+}
+
 void TimelineFramesView::slotSelectAudioChannelFile()
 {
     if (!m_d->model) return;
@@ -949,7 +964,6 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
             model()->setData(index, true, TimelineFramesModel::ActiveFrameRole);
             setCurrentIndex(index);
 
-
             if (model()->data(index, TimelineFramesModel::FrameExistsRole).toBool() ||
                     model()->data(index, TimelineFramesModel::SpecialKeyframeExists).toBool()) {
 
@@ -960,8 +974,10 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
                     m_d->colorSelector->setCurrentIndex(labelIndex);
                 }
 
+                const bool hasClones = model()->data(index, TimelineFramesModel::CloneCount).toInt() > 0;
+
                 QMenu menu;
-                createFrameEditingMenuActions(&menu, false);
+                createFrameEditingMenuActions(&menu, false, hasClones);
                 menu.addSeparator();
                 menu.addAction(m_d->colorSelectorAction);
                 menu.exec(event->globalPos());
@@ -974,37 +990,47 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
                 }
 
                 QMenu menu;
-                createFrameEditingMenuActions(&menu, true);
-
+                createFrameEditingMenuActions(&menu, true, false);
                 menu.addSeparator();
                 menu.addAction(m_d->colorSelectorAction);
                 menu.exec(event->globalPos());
             }
         } else if (numSelectedItems > 1) {
             int labelIndex = -1;
-            bool haveFrames = false;
+            bool firstKeyframe = true;
+            bool hasKeyframes = false;
+            bool containsClones = false;
             Q_FOREACH(QModelIndex index, selectedIndexes()) {
-                haveFrames |= index.data(TimelineFramesModel::FrameExistsRole).toBool();
+                hasKeyframes |= index.data(TimelineFramesModel::FrameExistsRole).toBool();
+                containsClones |= (index.data(TimelineFramesModel::CloneCount).toInt() > 0);
+
                 QVariant colorLabel = index.data(TimelineFramesModel::FrameColorLabelIndexRole);
                 if (colorLabel.isValid()) {
-                    if (labelIndex == -1) {
-                        // First label
+                    if (firstKeyframe) {
                         labelIndex = colorLabel.toInt();
                     } else if (labelIndex != colorLabel.toInt()) {
                         // Mixed colors in selection
                         labelIndex = -1;
-                        break;
                     }
+
+                    firstKeyframe = false;
+                }
+
+                if (!firstKeyframe
+                    && hasKeyframes
+                    && containsClones
+                    && labelIndex == -1) {
+                    break; // Break out early if we find all of the above.
                 }
             }
 
-            if (haveFrames) {
+            if (hasKeyframes) {
                 KisSignalsBlocker b(m_d->multiframeColorSelector);
                 m_d->multiframeColorSelector->setCurrentIndex(labelIndex);
             }
 
             QMenu menu;
-            createFrameEditingMenuActions(&menu, false);
+            createFrameEditingMenuActions(&menu, false, containsClones);
             menu.addSeparator();
             KisActionManager::safePopulateMenu(&menu, "mirror_frames", m_d->actionMan);
             menu.addSeparator();
@@ -1541,14 +1567,12 @@ void TimelineFramesView::cutCopyImpl(bool entireColumn, bool copy)
 
     int minColumn = std::numeric_limits<int>::max();
     int minRow = std::numeric_limits<int>::max();
-
     Q_FOREACH (const QModelIndex &index, selectedIndices) {
         minRow = qMin(minRow, index.row());
         minColumn = qMin(minColumn, index.column());
     }
 
     const QModelIndex baseIndex = m_d->model->index(minRow, minColumn);
-
     QMimeData *data = m_d->model->mimeDataExtended(selectedIndices,
                                                    baseIndex,
                                                    copy ?
@@ -1561,7 +1585,30 @@ void TimelineFramesView::cutCopyImpl(bool entireColumn, bool copy)
     }
 }
 
-void TimelineFramesView::createFrameEditingMenuActions(QMenu *menu, bool addFrameCreationActions)
+void TimelineFramesView::clone(bool entireColumn)
+{
+    const QModelIndexList selectedIndices = calculateSelectionSpan(entireColumn, false);
+    if (selectedIndices.isEmpty()) return;
+
+    int minColumn = std::numeric_limits<int>::max();
+    int minRow = std::numeric_limits<int>::max();
+    Q_FOREACH (const QModelIndex &index, selectedIndices) {
+        minRow = qMin(minRow, index.row());
+        minColumn = qMin(minColumn, index.column());
+    }
+
+    const QModelIndex baseIndex = m_d->model->index(minRow, minColumn);
+    QMimeData *data = m_d->model->mimeDataExtended(selectedIndices,
+                                                   baseIndex,
+                                                   TimelineFramesModel::CloneFramesPolicy);
+
+    if (data) {
+        QClipboard *cb = QApplication::clipboard();
+        cb->setMimeData(data);
+    }
+}
+
+void TimelineFramesView::createFrameEditingMenuActions(QMenu *menu, bool emptyFrame, bool cloneFrameSelected)
 {
     slotUpdateFrameActions();
 
@@ -1584,9 +1631,17 @@ void TimelineFramesView::createFrameEditingMenuActions(QMenu *menu, bool addFram
 
     menu->addSeparator();
 
-    KisActionManager::safePopulateMenu(menu, "cut_frames_to_clipboard", m_d->actionMan);
-    KisActionManager::safePopulateMenu(menu, "copy_frames_to_clipboard", m_d->actionMan);
-    KisActionManager::safePopulateMenu(menu, "paste_frames_from_clipboard", m_d->actionMan);
+    if (!emptyFrame) {
+        KisActionManager::safePopulateMenu(menu, "cut_frames", m_d->actionMan);
+        KisActionManager::safePopulateMenu(menu, "copy_frames", m_d->actionMan);
+        KisActionManager::safePopulateMenu(menu, "copy_frames_as_clones", m_d->actionMan);
+    }
+
+    KisActionManager::safePopulateMenu(menu, "paste_frames", m_d->actionMan);
+
+    if (!emptyFrame && cloneFrameSelected) {
+        KisActionManager::safePopulateMenu(menu, "make_clones_unique", m_d->actionMan);
+    }
 
     menu->addSeparator();
 
@@ -1609,12 +1664,14 @@ void TimelineFramesView::createFrameEditingMenuActions(QMenu *menu, bool addFram
 
     menu->addSeparator();
 
-    KisActionManager::safePopulateMenu(menu, "remove_frames", m_d->actionMan);
+    if (!emptyFrame) {
+        KisActionManager::safePopulateMenu(menu, "remove_frames", m_d->actionMan);
+    }
     KisActionManager::safePopulateMenu(menu, "remove_frames_and_pull", m_d->actionMan);
 
     menu->addSeparator();
 
-    if (addFrameCreationActions) {
+    if (emptyFrame) {
         KisActionManager::safePopulateMenu(menu, "add_blank_frame", m_d->actionMan);
         KisActionManager::safePopulateMenu(menu, "add_duplicate_frame", m_d->actionMan);
         menu->addSeparator();

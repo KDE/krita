@@ -114,6 +114,11 @@ void KisKeyframeChannel::insertKeyframe(int time, KisKeyframeSP keyframe, KUndo2
     KIS_ASSERT(time >= 0);
     KIS_ASSERT(keyframe);
 
+    if (m_d->keys.contains(time)) {
+        // Properly remove overwritten frames.
+        removeKeyframe(time, parentUndoCmd);
+    }
+
     if (parentUndoCmd) {
         KUndo2Command* cmd = new KisInsertKeyframeCommand(this, time, keyframe, parentUndoCmd);
     }

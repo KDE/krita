@@ -110,7 +110,7 @@ public Q_SLOTS:
     void slotMirrorFrames(bool entireColumn = false);
     void slotMirrorColumns() {slotMirrorFrames(true);}
 
-    // Copy-paste
+    // Copy, paste & clone.
     void slotCopyFrames() {cutCopyImpl(false, true);}
     void slotCutFrames() {cutCopyImpl(false, false);}
 
@@ -119,6 +119,8 @@ public Q_SLOTS:
 
     void slotPasteFrames(bool entireColumn = false);
     void slotPasteColumns() {slotPasteFrames(true);}
+
+    void slotMakeClonesUnique();
 
     // Audio
     void slotSelectAudioChannelFile();
@@ -179,8 +181,9 @@ private:
     void fanSelectedFrames(const QModelIndexList &selection, int count, bool ignoreKeyless = true);
 
     void cutCopyImpl(bool entireColumn, bool copy);
+    void clone(bool entireColumn);
 
-    void createFrameEditingMenuActions(QMenu *menu, bool addFrameCreationActions);
+    void createFrameEditingMenuActions(QMenu *menu, bool emptyFrame, bool cloneFrameSelected);
 
     int estimateFirstVisibleColumn();
     int estimateLastVisibleColumn();

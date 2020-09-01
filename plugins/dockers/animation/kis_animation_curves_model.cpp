@@ -403,6 +403,11 @@ QMap<QString, KisKeyframeChannel *> KisAnimationCurvesModel::channelsAt(QModelIn
     return list;
 }
 
+KisKeyframeChannel *KisAnimationCurvesModel::channelByID(QModelIndex index, const QString &id) const
+{
+    return nodeAt(index)->getKeyframeChannel(id);
+}
+
 void KisAnimationCurvesModel::slotKeyframeChanged(const KisKeyframeChannel *channel, int time)
 {
     int row = m_d->rowForChannel(channel);

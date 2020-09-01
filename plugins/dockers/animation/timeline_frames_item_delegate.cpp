@@ -21,6 +21,7 @@
 #include <QPen>
 #include <QPainter>
 #include <QApplication>
+#include <QSvgRenderer>
 #include "krita_utils.h"
 #include "timeline_frames_model.h"
 #include "timeline_color_scheme.h"
@@ -28,10 +29,16 @@
 #include "kis_node_view_color_scheme.h"
 
 TimelineFramesItemDelegate::TimelineFramesItemDelegate(QObject *parent)
-    : QItemDelegate(parent)
+    : QItemDelegate(parent),
+      stripes(64, 64)
 {
     KisNodeViewColorScheme scm;
     labelColors = scm.allColorLabels();
+
+    // Clone frame stripes SVG -> Pixmap..
+    QImage stripesImage(":/pics/svg/light_diagonal-stripe.png", "png");
+    stripesImage.save("/tmp/krita_stripes.png", "png");
+    stripes = QPixmap::fromImage(stripesImage);
 }
 
 TimelineFramesItemDelegate::~TimelineFramesItemDelegate()
@@ -224,12 +231,32 @@ void TimelineFramesItemDelegate::drawFocus(QPainter *painter,
     style->drawPrimitive(QStyle::PE_FrameFocusRect, &o, painter, widget);
 }
 
+void TimelineFramesItemDelegate::drawCloneGraphics(QPainter *painter, const QRect &rect) const
+{
+    painter->save();
+
+    QBrush brush(stripes);
+    brush.setStyle(Qt::TexturePattern);
+
+    painter->setPen(Qt::NoPen);
+    painter->setBrush(brush);
+    painter->setOpacity(0.25f);
+    painter->drawRect(rect);
+
+    painter->restore();
+}
+
 void TimelineFramesItemDelegate::paint(QPainter *painter,
                                const QStyleOptionViewItem &option,
                                const QModelIndex &index) const
-{    
+{
     // draws background as well as fills normal keyframes
     drawBackground(painter, index, option.rect);
+
+    // Clone graphics..
+    if (index.data(TimelineFramesModel::CloneOfActiveFrame).toBool() && index.data(TimelineFramesModel::ActiveLayerRole).toBool()) {
+        drawCloneGraphics(painter, option.rect);
+    }
 
     // creates a semi transparent orange rectangle in the frame that is actively selected on the active row
     if (option.showDecorationSelected &&

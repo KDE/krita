@@ -25,6 +25,7 @@ void KisFilterFastColorOverlay::processImpl(KisPaintDeviceSP device, const QRect
     const KoColorSpace *colorSpace = device->colorSpace();
 
     KoColor overlayColor = config->getColor("color", KoColor(QColor(185, 221, 255), KoColorSpaceRegistry::instance()->rgb8()));
+    overlayColor.convertTo(colorSpace);
 
     KoCompositeOp::ParameterInfo paramInfo;
     paramInfo.opacity = config->getPropertyLazy("opacity", 75) / 100.0f;

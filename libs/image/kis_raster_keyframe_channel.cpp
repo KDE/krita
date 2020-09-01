@@ -79,7 +79,7 @@ void KisRasterKeyframe::writeFrameToDevice(KisPaintDeviceSP writeTarget)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_paintDevice);
 
-    m_paintDevice->framesInterface()->fetchFrame(m_frameID, writeTarget);
+    m_paintDevice->framesInterface()->writeFrameToDevice(m_frameID, writeTarget);
 }
 
 KisKeyframeSP KisRasterKeyframe::duplicate(KisKeyframeChannel *newChannel)
@@ -160,7 +160,7 @@ KisRasterKeyframeChannel::~KisRasterKeyframeChannel()
 {
 }
 
-void KisRasterKeyframeChannel::fetchFrame(int time, KisPaintDeviceSP targetDevice)
+void KisRasterKeyframeChannel::writeToDevice(int time, KisPaintDeviceSP targetDevice)
 {
     KisRasterKeyframeSP key = keyframeAt<KisRasterKeyframe>(time);
     if (!key) {

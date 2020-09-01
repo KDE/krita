@@ -308,16 +308,16 @@ void KisKeyframingTest::testRasterFrameFetching()
     QImage frame50 = dev->createThumbnail(50, 50);
 
     // Fetch frames..
-    channel->fetchFrame(0, devTarget);
+    channel->writeToDevice(0, devTarget);
     QImage fetched0 = devTarget->createThumbnail(50, 50);
 
-    channel->fetchFrame(10, devTarget);
+    channel->writeToDevice(10, devTarget);
     QImage fetched10 = devTarget->createThumbnail(50, 50);
 
-    channel->fetchFrame(50, devTarget);
+    channel->writeToDevice(50, devTarget);
     QImage fetched50 = devTarget->createThumbnail(50, 50);
 
-    channel->fetchFrame(20, devTarget);
+    channel->writeToDevice(20, devTarget);
     QImage fetched20 = devTarget->createThumbnail(50, 50);
 
     QVERIFY(fetched0 == frame0);

@@ -88,7 +88,7 @@ public:
      * @param  keyframe  Keyframe to copy from.
      * @param  targetDevice  Device to copy the frame to.
      */
-    void fetchFrame(int time, KisPaintDeviceSP targetDevice);
+    void writeToDevice(int time, KisPaintDeviceSP targetDevice);
 
     /** Copy the content of the sourceDevice into a new keyframe at given time.
      * @param  time  Position of new keyframe.

@@ -126,8 +126,8 @@ public:
     QString id() const;
     QString name() const;
 
-    Q_DECL_DEPRECATED void setNode(KisNodeWSP node);
-    Q_DECL_DEPRECATED KisNodeWSP node() const;
+    void setNode(KisNodeWSP node);
+    KisNodeWSP node() const;
 
     /** @brief Calculates a pseudo-unique hash based on
      * the relevant internal state of the channel. */

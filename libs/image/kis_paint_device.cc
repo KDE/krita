@@ -411,7 +411,7 @@ public:
                        data->colorSpace());
     }
 
-    void fetchFrame(int frameId, KisPaintDeviceSP targetDevice);
+    void writeFrameToDevice(int frameId, KisPaintDeviceSP targetDevice);
     void uploadFrame(int srcFrameId, int dstFrameId, KisPaintDeviceSP srcDevice);
     void uploadFrame(int dstFrameId, KisPaintDeviceSP srcDevice);
     void uploadFrameData(DataSP srcData, DataSP dstData);
@@ -867,7 +867,7 @@ void KisPaintDevice::Private::transferFromData(Data *data, KisPaintDeviceSP targ
     targetDevice->m_d->currentStrategy()->fastBitBltRough(data->dataManager(), extent);
 }
 
-void KisPaintDevice::Private::fetchFrame(int frameId, KisPaintDeviceSP targetDevice)
+void KisPaintDevice::Private::writeFrameToDevice(int frameId, KisPaintDeviceSP targetDevice)
 {
     DataSP data = m_frames[frameId];
     transferFromData(data.data(), targetDevice);
@@ -2178,9 +2178,9 @@ void KisPaintDeviceFramesInterface::deleteFrame(int frame, KUndo2Command *parent
     return q->m_d->deleteFrame(frame, parentCommand);
 }
 
-void KisPaintDeviceFramesInterface::fetchFrame(int frameId, KisPaintDeviceSP targetDevice)
+void KisPaintDeviceFramesInterface::writeFrameToDevice(int frameId, KisPaintDeviceSP targetDevice)
 {
-    q->m_d->fetchFrame(frameId, targetDevice);
+    q->m_d->writeFrameToDevice(frameId, targetDevice);
 }
 
 void KisPaintDeviceFramesInterface::uploadFrame(int srcFrameId, int dstFrameId, KisPaintDeviceSP srcDevice)

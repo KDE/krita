@@ -49,7 +49,7 @@
 
 #include "timeline_frames_model.h"
 #include "timeline_frames_view.h"
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 #include "kis_animation_frame_cache.h"
 #include "kis_image_animation_interface.h"
 #include "kis_signal_auto_connection.h"
@@ -585,23 +585,21 @@ void TimelineDocker::previousKeyframe()
     if (!node) return;
 
     KisKeyframeChannel *keyframes =
-        node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+        node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
     if (!keyframes) return;
 
     KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
-    int time = animInterface->currentUITime();
+    int currentFrame = animInterface->currentUITime();
 
-    KisKeyframeSP currentKeyframe = keyframes->keyframeAt(time);
-    KisKeyframeSP destinationKeyframe;
-
-    if (!currentKeyframe) {
-        destinationKeyframe = keyframes->activeKeyframeAt(time);
+    int destinationTime = -1;
+    if (!keyframes->keyframeAt(currentFrame)) {
+        destinationTime = keyframes->activeKeyframeTime(currentFrame);
     } else {
-        destinationKeyframe = keyframes->previousKeyframe(currentKeyframe);
+        destinationTime = keyframes->previousKeyframeTime(currentFrame);
     }
 
-    if (destinationKeyframe) {
-        animInterface->requestTimeSwitchWithUndo(destinationKeyframe->time());
+    if (keyframes->keyframeAt(destinationTime)) {
+        animInterface->requestTimeSwitchWithUndo(destinationTime);
     }
 }
 
@@ -613,21 +611,19 @@ void TimelineDocker::nextKeyframe()
     if (!node) return;
 
     KisKeyframeChannel *keyframes =
-        node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+        node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
     if (!keyframes) return;
 
     KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
-    int time = animation->currentUITime();
+    int currentTime = animation->currentUITime();
 
-    KisKeyframeSP currentKeyframe = keyframes->activeKeyframeAt(time);
-    KisKeyframeSP destinationKeyframe;
-
-    if (currentKeyframe) {
-        destinationKeyframe = keyframes->nextKeyframe(currentKeyframe);
+    int destinationTime = -1;
+    if (keyframes->activeKeyframeAt(currentTime)) {
+        destinationTime = keyframes->nextKeyframeTime(currentTime);
     }
 
-    if (destinationKeyframe) {
-        animation->requestTimeSwitchWithUndo(destinationKeyframe->time());
+    if (keyframes->keyframeAt(destinationTime)) {
+        animation->requestTimeSwitchWithUndo(destinationTime);
     }
 }
 
@@ -639,22 +635,22 @@ void TimelineDocker::previousMatchingKeyframe()
     if (!node) return;
 
     KisKeyframeChannel *keyframes =
-        node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+        node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
     if (!keyframes) return;
 
     KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
     int time = animInterface->currentUITime();
 
     KisKeyframeSP currentKeyframe = keyframes->keyframeAt(time);
-    KisKeyframeSP destinationKeyframe = keyframes->activeKeyframeAt(time);
-    const int desiredColor = currentKeyframe ? currentKeyframe->colorLabel() : destinationKeyframe->colorLabel();
-    while (destinationKeyframe &&
-           (currentKeyframe == destinationKeyframe || destinationKeyframe->colorLabel() != desiredColor)) {
-        destinationKeyframe = keyframes->previousKeyframe(destinationKeyframe);
+    int destinationTime = keyframes->activeKeyframeTime(time);
+    const int desiredColor = currentKeyframe ? currentKeyframe->colorLabel() : keyframes->keyframeAt(destinationTime)->colorLabel();
+    while (keyframes->keyframeAt(destinationTime) &&
+           (currentKeyframe == keyframes->keyframeAt(destinationTime) || keyframes->keyframeAt(destinationTime)->colorLabel() != desiredColor)) {
+        destinationTime = keyframes->previousKeyframeTime(destinationTime);
     }
 
-    if (destinationKeyframe) {
-        animInterface->requestTimeSwitchWithUndo(destinationKeyframe->time());
+    if (keyframes->keyframeAt(destinationTime)) {
+        animInterface->requestTimeSwitchWithUndo(destinationTime);
     }
 
 }
@@ -667,28 +663,27 @@ void TimelineDocker::nextMatchingKeyframe()
     if (!node) return;
 
     KisKeyframeChannel *keyframes =
-        node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+        node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
     if (!keyframes) return;
 
     KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
     int time = animation->currentUITime();
 
-    KisKeyframeSP currentKeyframe = keyframes->activeKeyframeAt(time);
-
-    if (!currentKeyframe) {
+    if (!keyframes->activeKeyframeAt(time)) {
         return;
     }
 
-    KisKeyframeSP destinationKeyframe = currentKeyframe;
-    const int desiredColor = currentKeyframe->colorLabel();
+    int destinationTime = keyframes->activeKeyframeTime(time);
+    const int desiredColor = keyframes->keyframeAt(destinationTime)->colorLabel();
 
-    while ( destinationKeyframe &&
-            (currentKeyframe == destinationKeyframe || destinationKeyframe->colorLabel() != desiredColor)){
-        destinationKeyframe = keyframes->nextKeyframe(destinationKeyframe);
+    while (keyframes->keyframeAt(destinationTime) &&
+                (keyframes->keyframeAt(destinationTime) == keyframes->keyframeAt(time) ||
+                 keyframes->keyframeAt(destinationTime)->colorLabel() != desiredColor)){
+        destinationTime = keyframes->nextKeyframeTime(destinationTime);
     }
 
-    if (destinationKeyframe) {
-        animation->requestTimeSwitchWithUndo(destinationKeyframe->time());
+    if (keyframes->keyframeAt(destinationTime)) {
+        animation->requestTimeSwitchWithUndo(destinationTime);
     }
 }
 

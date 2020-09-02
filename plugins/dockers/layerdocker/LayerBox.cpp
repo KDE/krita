@@ -53,6 +53,7 @@
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>
 #include <KisDocument.h>
+#include <kis_time_span.h>
 
 #include <kis_types.h>
 #include <kis_image.h>
@@ -1129,32 +1130,20 @@ void LayerBox::slotKeyframeChannelAdded(KisKeyframeChannel *channel)
     }
 }
 
-void LayerBox::watchOpacityChannel(KisKeyframeChannel *channel)
+void LayerBox::watchOpacityChannel(KisKeyframeChannel *newChannel)
 {
-    if (m_opacityChannel) {
-        m_opacityChannel->disconnect(this);
+    if (newChannel) {
+        if (m_opacityChannel) {
+            m_opacityChannel->disconnect(this);
+        }
+
+        m_opacityChannel = newChannel;
+        connect(m_opacityChannel, &KisKeyframeChannel::sigChannelUpdated, [this](const KisTimeSpan &affectedTimeSpan, const QRect &affectedArea){
+            if (!m_blockOpacityUpdate) {
+                updateUI(); // TODO: Make sure this is doing something useful.
+            }
+        });
     }
-
-    m_opacityChannel = channel;
-    if (m_opacityChannel) {
-        connect(m_opacityChannel, SIGNAL(sigKeyframeAdded(KisKeyframeSP)), this, SLOT(slotOpacityKeyframeChanged(KisKeyframeSP)));
-        connect(m_opacityChannel, SIGNAL(sigKeyframeRemoved(KisKeyframeSP)), this, SLOT(slotOpacityKeyframeChanged(KisKeyframeSP)));
-        connect(m_opacityChannel, SIGNAL(sigKeyframeMoved(KisKeyframeSP)), this, SLOT(slotOpacityKeyframeMoved(KisKeyframeSP)));
-        connect(m_opacityChannel, SIGNAL(sigKeyframeChanged(KisKeyframeSP)), this, SLOT(slotOpacityKeyframeChanged(KisKeyframeSP)));
-    }
-}
-
-void LayerBox::slotOpacityKeyframeChanged(KisKeyframeSP keyframe)
-{
-    Q_UNUSED(keyframe);
-    if (m_blockOpacityUpdate) return;
-    updateUI();
-}
-
-void LayerBox::slotOpacityKeyframeMoved(KisKeyframeSP keyframe, int fromTime)
-{
-    Q_UNUSED(fromTime);
-    slotOpacityKeyframeChanged(keyframe);
 }
 
 void LayerBox::slotImageTimeChanged(int time)

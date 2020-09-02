@@ -43,8 +43,7 @@ class KisCanvas2;
 class KisAction;
 
 
-/*
- * A customized titlebar for the Animation Timeline Docker that's
+/** @brief A customized titlebar for the Animation Timeline Docker that's
  * packed with useful widgets and menus.
  *
  * To avoid cluttering the UI, elements that are important to the
@@ -86,8 +85,7 @@ private:
 };
 
 
-/*
- * Krita's Animation Timeline Docker.
+/** @brief Krita's Animation Timeline Docker.
  * This is the GUI heart of Krita's traditional animation workflow,
  * and is where artists can configure, edit, scrub and play their animation.
  *

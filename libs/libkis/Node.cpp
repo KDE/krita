@@ -457,17 +457,15 @@ bool Node::hasKeyframeAtTime(int frameNumber)
 {
     if (!d->node || !d->node->isAnimated()) return false;
 
-    KisRasterKeyframeChannel *rkc = dynamic_cast<KisRasterKeyframeChannel*>(d->node->getKeyframeChannel(KisKeyframeChannel::Content.id()));
+    KisRasterKeyframeChannel *rkc = dynamic_cast<KisRasterKeyframeChannel*>(d->node->getKeyframeChannel(KisKeyframeChannel::Raster.id()));
     if (!rkc) return false;
 
-    KisKeyframeSP timeOfCurrentKeyframe = rkc->keyframeAt(frameNumber);
+    KisKeyframeSP currentKeyframe = rkc->keyframeAt(frameNumber);
 
-    if (!timeOfCurrentKeyframe) {
+    if (!currentKeyframe) {
         return false;
     }
 
-    // do an assert just to be careful
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(timeOfCurrentKeyframe->time() == frameNumber, false);
     return true;
 }
 
@@ -499,14 +497,14 @@ QByteArray Node::pixelDataAtTime(int x, int y, int w, int h, int time) const
     if (!d->node || !d->node->isAnimated()) return ba;
 
     //
-    KisRasterKeyframeChannel *rkc = dynamic_cast<KisRasterKeyframeChannel*>(d->node->getKeyframeChannel(KisKeyframeChannel::Content.id()));
+    KisRasterKeyframeChannel *rkc = dynamic_cast<KisRasterKeyframeChannel*>(d->node->getKeyframeChannel(KisKeyframeChannel::Raster.id()));
     if (!rkc) return ba;
-    KisKeyframeSP frame = rkc->keyframeAt(time);
+    KisRasterKeyframeSP frame = rkc->keyframeAt<KisRasterKeyframe>(time);
     if (!frame) return ba;
     KisPaintDeviceSP dev = new KisPaintDevice(*d->node->paintDevice(), KritaUtils::DeviceCopyMode::CopySnapshot);
     if (!dev) return ba;
 
-    rkc->fetchFrame(frame, dev);
+    frame->writeFrameToDevice(dev);
 
     ba.resize(w * h * dev->pixelSize());
     dev->readBytes(reinterpret_cast<quint8*>(ba.data()), x, y, w, h);

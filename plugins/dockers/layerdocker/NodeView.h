@@ -130,6 +130,7 @@ public:
     void toggleSolo(const QModelIndex &index);
 
     QRect originalVisualRect(const QModelIndex &index) const;
+    QRect fullLineVisualRect(const QModelIndex &index) const;
 
 protected:
     QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index,

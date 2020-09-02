@@ -432,12 +432,12 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
                                          clone);
 
     if (srcDevice->framesInterface()) {
-        KisKeyframeChannel *cloneKeyChannel = layer->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+        KisKeyframeChannel *cloneKeyChannel = layer->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
         layer->enableAnimation();
         KisKeyframeChannel *sourceKeyChannel = srcDevice->keyframeChannel();
 
-        foreach (const int &index, sourceKeyChannel->allKeyframeIds()) {
-            cloneKeyChannel->copyExternalKeyframe(sourceKeyChannel, index, index);
+        foreach (const int &index, sourceKeyChannel->allKeyframeTimes()) {
+            KisKeyframeChannel::copyKeyframe(sourceKeyChannel, index, cloneKeyChannel, index);
         }
     }
 
@@ -471,7 +471,7 @@ void KisLayerManager::convertGroupToAnimated()
     KisPaintLayerSP animatedLayer = new KisPaintLayer(m_view->image(), group->name(), OPACITY_OPAQUE_U8);
     animatedLayer->enableAnimation();
     KisRasterKeyframeChannel *contentChannel = dynamic_cast<KisRasterKeyframeChannel*>(
-                animatedLayer->getKeyframeChannel(KisKeyframeChannel::Content.id(), true));
+                animatedLayer->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true));
     KIS_ASSERT_RECOVER_RETURN(contentChannel);
 
     KisNodeSP child = group->firstChild();

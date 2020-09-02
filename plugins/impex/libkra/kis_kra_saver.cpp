@@ -55,7 +55,7 @@
 #include <kis_painting_assistants_decoration.h>
 #include "kis_png_converter.h"
 #include "kis_keyframe_channel.h"
-#include <kis_time_range.h>
+#include <kis_time_span.h>
 #include "KisDocument.h"
 #include <string>
 #include "kis_dom_utils.h"

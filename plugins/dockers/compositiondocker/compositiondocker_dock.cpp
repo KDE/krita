@@ -54,7 +54,7 @@
 #include <animation/KisAnimationRenderingOptions.h>
 #include <animation/KisAnimationRender.h>
 #include <kis_image_animation_interface.h>
-#include <kis_time_range.h>
+#include <kis_time_span.h>
 #include <KisMimeDatabase.h>
 
 
@@ -72,10 +72,14 @@ CompositionDockerDock::CompositionDockerDock( )
     compositionView->installEventFilter(this);
     deleteButton->setIcon(KisIconUtils::loadIcon("edit-delete"));
     saveButton->setIcon(KisIconUtils::loadIcon("list-add"));
+    moveUpButton->setIcon(KisIconUtils::loadIcon("arrow-up"));
+    moveDownButton->setIcon(KisIconUtils::loadIcon("arrow-down"));
 
     deleteButton->setToolTip(i18n("Delete Composition"));
     saveButton->setToolTip(i18n("New Composition"));
     exportCompositions->setToolTip(i18n("Export Composition"));
+    moveUpButton->setToolTip(i18n("Move Composition Up"));
+    moveDownButton->setToolTip(i18n("Move Composition Down"));
 
     setWidget(widget);
 
@@ -88,6 +92,8 @@ CompositionDockerDock::CompositionDockerDock( )
 
     connect( deleteButton, SIGNAL(clicked(bool)), this, SLOT(deleteClicked()));
     connect( saveButton, SIGNAL(clicked(bool)), this, SLOT(saveClicked()));
+    connect( moveUpButton, SIGNAL(clicked(bool)), this, SLOT(moveCompositionUp()));
+    connect( moveDownButton, SIGNAL(clicked(bool)), this, SLOT(moveCompositionDown()));
 
     QAction* imageAction = new QAction(KisIconUtils::loadIcon("document-export"), i18n("Export Images"), this);
     connect(imageAction, SIGNAL(triggered(bool)), this, SLOT(exportImageClicked()));
@@ -204,6 +210,28 @@ void CompositionDockerDock::saveClicked()
     updateModel();
     compositionView->setCurrentIndex(m_model->index(image->compositions().count()-1, 0));
     image->setModified();
+}
+
+void CompositionDockerDock::moveCompositionUp()
+{
+    QModelIndex index = compositionView->currentIndex();
+    if (m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->image() && index.isValid()) {
+        KisLayerCompositionSP composition = m_model->compositionFromIndex(index);
+        m_canvas->viewManager()->image()->moveCompositionUp(composition);
+        updateModel();
+        compositionView->setCurrentIndex(m_model->index(m_canvas->viewManager()->image()->compositions().indexOf(composition),0));
+    }
+}
+
+void CompositionDockerDock::moveCompositionDown()
+{
+    QModelIndex index = compositionView->currentIndex();
+    if (m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->image() && index.isValid()) {
+        KisLayerCompositionSP composition = m_model->compositionFromIndex(index);
+        m_canvas->viewManager()->image()->moveCompositionDown(composition);
+        updateModel();
+        compositionView->setCurrentIndex(m_model->index(m_canvas->viewManager()->image()->compositions().indexOf(composition),0));
+    }
 }
 
 void CompositionDockerDock::updateModel()
@@ -326,7 +354,7 @@ void CompositionDockerDock::exportAnimationClicked()
             image->waitForDone();
             image->refreshGraph();
 
-            KisTimeRange range = image->animationInterface()->fullClipRange();
+            KisTimeSpan range = image->animationInterface()->fullClipRange();
 
             exportOptions.firstFrame = range.start();
             exportOptions.lastFrame = range.end();

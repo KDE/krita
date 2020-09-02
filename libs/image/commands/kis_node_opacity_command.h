@@ -20,10 +20,10 @@
 #define KIS_NODE_OPACITY_COMMAND_H
 
 #include "kis_node_command.h"
-
+#include "commands_new/KisAsynchronouslyMergeableCommandInterface.h"
 
 /// The command for setting the node opacity
-class KRITAIMAGE_EXPORT KisNodeOpacityCommand : public KisNodeCommand
+class KRITAIMAGE_EXPORT KisNodeOpacityCommand : public KisNodeCommand, public KisAsynchronouslyMergeableCommandInterface
 {
 
 public:
@@ -37,6 +37,10 @@ public:
 
     void redo() override;
     void undo() override;
+
+    int id() const override;
+    bool mergeWith(const KUndo2Command *command) override;
+    bool canMergeWith(const KUndo2Command *command) const override;
 
 private:
     quint8 m_oldOpacity;

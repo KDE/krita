@@ -377,7 +377,7 @@ namespace KisLayerUtils {
 
             if (m_info->frames.size() > 0) {
                 m_info->dstNode->enableAnimation();
-                m_info->dstNode->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+                m_info->dstNode->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
             }
 
             m_info->dstNode->setPinnedToTimeline(m_info->pinnedToTimeline);
@@ -417,7 +417,7 @@ namespace KisLayerUtils {
 
             if (m_info->frames.size() > 0) {
                 m_info->dstNode->enableAnimation();
-                m_info->dstNode->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+                m_info->dstNode->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
             }
 
 
@@ -912,10 +912,10 @@ namespace KisLayerUtils {
 
         void populateChildCommands() override {
             KUndo2Command *cmd = new KisCommandUtils::SkipFirstRedoWrapper();
-            KisKeyframeChannel *channel = m_info->dstNode->getKeyframeChannel(KisKeyframeChannel::Content.id());
-            KisKeyframeSP keyframe = channel->addKeyframe(m_frame, cmd);
+            KisKeyframeChannel *channel = m_info->dstNode->getKeyframeChannel(KisKeyframeChannel::Raster.id());
+            channel->addKeyframe(m_frame, cmd);
 
-            applyKeyframeColorLabel(keyframe);
+            applyKeyframeColorLabel(channel->keyframeAt(m_frame));
 
             addCommand(cmd);
         }
@@ -940,10 +940,10 @@ namespace KisLayerUtils {
     };
 
     QSet<int> fetchLayerFrames(KisNodeSP node) {
-        KisKeyframeChannel *channel = node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+        KisKeyframeChannel *channel = node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
         if (!channel) return QSet<int>();
 
-        return channel->allKeyframeIds();
+        return channel->allKeyframeTimes();
     }
 
     QSet<int> fetchLayerFramesRecursive(KisNodeSP rootNode) {

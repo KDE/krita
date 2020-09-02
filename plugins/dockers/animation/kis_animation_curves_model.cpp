@@ -96,7 +96,7 @@ struct KisAnimationCurvesModel::Private
         return curves.indexOf(curve);
     }
 
-    int rowForChannel(KisKeyframeChannel *channel) {
+    int rowForChannel(const KisKeyframeChannel *channel) {
         for (int row = 0; row < curves.count(); row++) {
             if (curves.at(row)->channel() == channel) return row;
         }
@@ -138,13 +138,13 @@ QVariant KisAnimationCurvesModel::data(const QModelIndex &index, int role) const
         KisScalarKeyframeChannel *channel = curve->channel();
 
         int time = index.column();
-        KisKeyframeSP keyframe = channel->keyframeAt(time);
+        KisScalarKeyframeSP keyframe = channel->keyframeAt(time).dynamicCast<KisScalarKeyframe>();
 
         switch (role) {
         case SpecialKeyframeExists:
             return !keyframe.isNull();
         case ScalarValueRole:
-            return channel->interpolatedValue(time);
+            return channel->valueAt(time);
         case LeftTangentRole:
             return (keyframe.isNull()) ? QVariant() : keyframe->leftTangent();
         case RightTangentRole:
@@ -159,28 +159,30 @@ QVariant KisAnimationCurvesModel::data(const QModelIndex &index, int role) const
             return curve->visible();
         case PreviousKeyframeTime:
         {
-            KisKeyframeSP active = channel->activeKeyframeAt(time);
-            if (active.isNull()) return QVariant();
-            if (active->time() < time) {
-                return active->time();
+            int activeKeyframeIndex = channel->activeKeyframeTime(time);
+            if (!channel->keyframeAt(activeKeyframeIndex)) return QVariant();
+            if (activeKeyframeIndex < time) {
+                return activeKeyframeIndex;
             }
-            KisKeyframeSP previous = channel->previousKeyframe(active);
-            if (previous.isNull()) return QVariant();
-            return previous->time();
+
+            int previousKeyframeIndex = channel->previousKeyframeTime(activeKeyframeIndex);
+            if (!channel->keyframeAt(previousKeyframeIndex)) return QVariant();
+            return previousKeyframeIndex;
         }
         case NextKeyframeTime:
         {
-            KisKeyframeSP active = channel->activeKeyframeAt(time);
-            if (active.isNull()) {
-                KisKeyframeSP first = channel->firstKeyframe();
-                if (!first.isNull() && first->time() > time) {
-                    return first->time();
+            int activeKeyframeIndex = channel->activeKeyframeTime(time);
+            if (!channel->keyframeAt(activeKeyframeIndex)) {
+                int firstKeyIndex = channel->firstKeyframeTime();
+                if (firstKeyIndex != -1 && firstKeyIndex > time) {
+                    return firstKeyIndex;
                 }
                 return QVariant();
             }
-            KisKeyframeSP next = channel->nextKeyframe(active);
-            if (next.isNull()) return QVariant();
-            return next->time();
+
+            int nextKeyframeIndex = channel->nextKeyframeTime(activeKeyframeIndex);
+            if (!channel->keyframeAt(nextKeyframeIndex)) return QVariant();
+            return nextKeyframeIndex;
         }
         default:
             break;
@@ -199,51 +201,45 @@ bool KisAnimationCurvesModel::setData(const QModelIndex &index, const QVariant &
     switch (role) {
     case ScalarValueRole:
     {
-        KisKeyframeSP keyframe = channel->keyframeAt(index.column());
-        if (keyframe) {
+        if (channel->keyframeAt(index.column())) {
             if (!command) command = new KUndo2Command(kundo2_i18n("Adjust keyframe"));
-            channel->setScalarValue(keyframe, value.toReal(), command);
+            channel->keyframeAt<KisScalarKeyframe>(index.column())->setValue(value.toReal(), command);
         } else {
             if (!command) command = new KUndo2Command(kundo2_i18n("Insert keyframe"));
-            auto *addKeyframeCommand = new KisScalarKeyframeChannel::AddKeyframeCommand(
-                channel, index.column(), value.toReal(), command);
-            addKeyframeCommand->redo();
+            channel->addScalarKeyframe(index.column(), value.toReal(), command);
         }
     }
         break;
     case LeftTangentRole:
     case RightTangentRole:
     {
-        KisKeyframeSP keyframe = channel->keyframeAt(index.column());
+        KisScalarKeyframeSP keyframe = channel->keyframeAt<KisScalarKeyframe>(index.column());
         if (!keyframe) return false;
 
         QPointF leftTangent = (role == LeftTangentRole ? value.toPointF() : keyframe->leftTangent());
         QPointF rightTangent = (role == RightTangentRole ? value.toPointF() : keyframe->rightTangent());
 
         if (!command) command = new KUndo2Command(kundo2_i18n("Adjust tangent"));
-        channel->setInterpolationTangents(keyframe, keyframe->tangentsMode(), leftTangent, rightTangent, command);
+        keyframe->setInterpolationTangents(leftTangent, rightTangent, command);
     }
         break;
     case InterpolationModeRole:
     {
-        KisKeyframeSP keyframe = channel->keyframeAt(index.column());
-        if (!keyframe) return false;
+        KisScalarKeyframeSP key = channel->keyframeAt<KisScalarKeyframe>(index.column());
 
         if (!command) command = new KUndo2Command(kundo2_i18n("Set interpolation mode"));
-        channel->setInterpolationMode(keyframe, (KisKeyframe::InterpolationMode)value.toInt(), command);
+        key->setInterpolationMode((KisScalarKeyframe::InterpolationMode)value.toInt(), command);
     }
         break;
     case TangentsModeRole:
     {
-        KisKeyframeSP keyframe = channel->keyframeAt(index.column());
+        KisScalarKeyframeSP keyframe = channel->keyframeAt<KisScalarKeyframe>(index.column());
         if (!keyframe) return false;
 
-        KisKeyframe::InterpolationTangentsMode mode = (KisKeyframe::InterpolationTangentsMode)value.toInt();
-        QPointF leftTangent = keyframe->leftTangent();
-        QPointF rightTangent = keyframe->rightTangent();
+        KisScalarKeyframe::TangentsMode mode = (KisScalarKeyframe::TangentsMode)value.toInt();
 
         if (!command) command = new KUndo2Command(kundo2_i18n("Set interpolation mode"));
-        channel->setInterpolationTangents(keyframe, mode, leftTangent, rightTangent, command);
+        keyframe->setTangentsMode( mode, command );
     }
         break;
     default:
@@ -323,11 +319,13 @@ bool KisAnimationCurvesModel::adjustKeyframes(const QModelIndexList &indexes, in
 
                     if (!channel) continue;
 
-                    KisKeyframeSP keyframe = channel->keyframeAt(time);
-                    if (!keyframe) continue;
+                    KisScalarKeyframeSP scalarKeyframe = channel->keyframeAt(time).dynamicCast<KisScalarKeyframe>();
 
-                    const qreal currentValue = channel->scalarValue(keyframe);
-                    channel->setScalarValue(keyframe, currentValue + valueOffset, cmd.data());
+                    if (!scalarKeyframe) continue;
+
+                    const qreal currentValue = scalarKeyframe->value();
+                    //TODO Undo considerations.
+                    scalarKeyframe->setValue(currentValue + valueOffset, cmd.data());
                     result = true;
                 }
 
@@ -351,17 +349,16 @@ KisAnimationCurve *KisAnimationCurvesModel::addCurve(KisScalarKeyframeChannel *c
 
     endInsertRows();
 
-    connect(channel, &KisScalarKeyframeChannel::sigKeyframeAdded,
+    connect(channel, &KisScalarKeyframeChannel::sigAddedKeyframe,
             this, &KisAnimationCurvesModel::slotKeyframeChanged);
 
-    connect(channel, &KisScalarKeyframeChannel::sigKeyframeMoved,
-            this, &KisAnimationCurvesModel::slotKeyframeChanged);
+    connect(channel, &KisScalarKeyframeChannel::sigRemovingKeyframe,
+            this, [this](const KisKeyframeChannel* channel, int time) {
+        this->slotKeyframeChanged(channel, time);
+    });
 
-    connect(channel, &KisScalarKeyframeChannel::sigKeyframeRemoved,
-            this, &KisAnimationCurvesModel::slotKeyframeChanged);
-
-    connect(channel, &KisScalarKeyframeChannel::sigKeyframeChanged,
-            this, &KisAnimationCurvesModel::slotKeyframeChanged);
+    connect(channel, SIGNAL(sigKeyframeChanged(const KisKeyframeChannel*,int)),
+            this, SLOT(slotKeyframeChanged(const KisKeyframeChannel*,int)));
 
     return curve;
 }
@@ -406,9 +403,14 @@ QMap<QString, KisKeyframeChannel *> KisAnimationCurvesModel::channelsAt(QModelIn
     return list;
 }
 
-void KisAnimationCurvesModel::slotKeyframeChanged(KisKeyframeSP keyframe)
+KisKeyframeChannel *KisAnimationCurvesModel::channelByID(QModelIndex index, const QString &id) const
 {
-    int row = m_d->rowForChannel(keyframe->channel());
-    QModelIndex changedIndex = index(row, keyframe->time());
+    return nodeAt(index)->getKeyframeChannel(id);
+}
+
+void KisAnimationCurvesModel::slotKeyframeChanged(const KisKeyframeChannel *channel, int time)
+{
+    int row = m_d->rowForChannel(channel);
+    QModelIndex changedIndex = index(row, time);
     emit dataChanged(changedIndex, changedIndex);
 }

@@ -47,7 +47,7 @@ void KisAnimationImporterTest::testImport()
     KisGroupLayerSP root = mp.image->rootLayer();
     KisNodeSP importedLayer = root->lastChild();
 
-    KisKeyframeChannel* contentChannel = importedLayer->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    KisKeyframeChannel* contentChannel = importedLayer->getKeyframeChannel(KisKeyframeChannel::Raster.id());
 
     QVERIFY(contentChannel != 0);
     QCOMPARE(contentChannel->keyframeCount(), 4); // Three imported ones + blank at time 0

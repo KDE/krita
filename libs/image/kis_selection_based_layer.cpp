@@ -282,8 +282,8 @@ void KisSelectionBasedLayer::setY(qint32 y)
 
 KisKeyframeChannel *KisSelectionBasedLayer::requestKeyframeChannel(const QString &id)
 {
-    if (id == KisKeyframeChannel::Content.id()) {
-        KisRasterKeyframeChannel *contentChannel = m_d->selection->pixelSelection()->createKeyframeChannel(KisKeyframeChannel::Content);
+    if (id == KisKeyframeChannel::Raster.id()) {
+        KisRasterKeyframeChannel *contentChannel = m_d->selection->pixelSelection()->createKeyframeChannel(KisKeyframeChannel::Raster);
         contentChannel->setFilenameSuffix(".pixelselection");
         return contentChannel;
     }
@@ -293,7 +293,7 @@ KisKeyframeChannel *KisSelectionBasedLayer::requestKeyframeChannel(const QString
 
 bool KisSelectionBasedLayer::supportsKeyframeChannel(const QString &id)
 {
-    if (id == KisKeyframeChannel::Content.id()) {
+    if (id == KisKeyframeChannel::Raster.id()) {
         return true;
     }
 

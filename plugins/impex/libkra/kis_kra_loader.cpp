@@ -82,7 +82,7 @@
 #include "kis_kra_load_visitor.h"
 #include "kis_dom_utils.h"
 #include "kis_image_animation_interface.h"
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 #include "kis_grid_config.h"
 #include "kis_guides_config.h"
 #include "kis_image_config.h"
@@ -603,7 +603,7 @@ void KisKraLoader::loadAnimationMetadata(const KoXmlElement &element, KisImageSP
     QDomElement qElement = qDom.firstChildElement();
 
     float framerate;
-    KisTimeRange range;
+    KisTimeSpan range;
     int currentTime;
 
     KisImageAnimationInterface *animation = image->animationInterface();
@@ -1136,8 +1136,10 @@ KisNodeSP KisKraLoader::loadColorizeMask(KisImageSP image, const KoXmlElement& e
     const bool editKeystrokes = element.attribute(COLORIZE_EDIT_KEYSTROKES, "1") == "0" ? false : true;
     const bool showColoring = element.attribute(COLORIZE_SHOW_COLORING, "1") == "0" ? false : true;
 
-    KisLayerPropertiesIcons::setNodeProperty(mask, KisLayerPropertiesIcons::colorizeEditKeyStrokes, editKeystrokes, image);
-    KisLayerPropertiesIcons::setNodeProperty(mask, KisLayerPropertiesIcons::colorizeShowColoring, showColoring, image);
+    KisBaseNode::PropertyList props = mask->sectionModelProperties();
+    KisLayerPropertiesIcons::setNodeProperty(&props, KisLayerPropertiesIcons::colorizeEditKeyStrokes, editKeystrokes);
+    KisLayerPropertiesIcons::setNodeProperty(&props, KisLayerPropertiesIcons::colorizeShowColoring, showColoring);
+    mask->setSectionModelProperties(props);
 
     const bool useEdgeDetection = KisDomUtils::toInt(element.attribute(COLORIZE_USE_EDGE_DETECTION, "0"));
     const qreal edgeDetectionSize = KisDomUtils::toDouble(element.attribute(COLORIZE_EDGE_DETECTION_SIZE, "4"));

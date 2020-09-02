@@ -1,0 +1,50 @@
+From 260540b5e6b16facfa900f0ad1eef8e39b7ae992 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Tue, 1 Sep 2020 11:59:23 +0300
+Subject: [PATCH 3/3] Make sure if WinInk is correctly initialized if
+ wintab.dll is not found
+
+If the app requests WinTab, but the library is not found, WinInk sould
+still be fully initialized.
+---
+ .../platforms/windows/qwindowsintegration.cpp | 19 +++++++++++++------
+ 1 file changed, 13 insertions(+), 6 deletions(-)
+
+diff --git a/src/plugins/platforms/windows/qwindowsintegration.cpp b/src/plugins/platforms/windows/qwindowsintegration.cpp
+index d2d12ff7..47b2bbeb 100644
+--- a/src/plugins/platforms/windows/qwindowsintegration.cpp
++++ b/src/plugins/platforms/windows/qwindowsintegration.cpp
+@@ -237,17 +237,24 @@ QWindowsIntegrationPrivate::QWindowsIntegrationPrivate(const QStringList &paramL
+     QWindowsFontDatabase::setFontOptions(m_options);
+ 
+     if (QCoreApplication::testAttribute(Qt::AA_MSWindowsUseWinTabAPI)) {
+-        m_options |= QWindowsIntegration::DontUseWMPointer;
++        if (m_context.initTablet(m_options)) {
++            m_options |= QWindowsIntegration::DontUseWMPointer;
++            if (tabletAbsoluteRange >= 0)
++                m_context.setTabletAbsoluteRange(tabletAbsoluteRange);
++        } else {
++            QCoreApplication::setAttribute(Qt::AA_MSWindowsUseWinTabAPI, false);
++        }
+     }
+ 
+     if (m_context.initPointer(m_options)) {
+         QCoreApplication::setAttribute(Qt::AA_CompressHighFrequencyEvents);
+-    } else {
+-        if (m_context.initTablet(m_options))
++    } else if (!QCoreApplication::testAttribute(Qt::AA_MSWindowsUseWinTabAPI)) {
++        if (m_context.initTablet(m_options)) {
++            m_options |= QWindowsIntegration::DontUseWMPointer;
+             QCoreApplication::setAttribute(Qt::AA_MSWindowsUseWinTabAPI);
+-
+-        if (tabletAbsoluteRange >= 0)
+-            m_context.setTabletAbsoluteRange(tabletAbsoluteRange);
++            if (tabletAbsoluteRange >= 0)
++                m_context.setTabletAbsoluteRange(tabletAbsoluteRange);
++        }
+     }
+ 
+     if (!dpiAwarenessSet) { // Set only once in case of repeated instantiations of QGuiApplication.
+-- 
+2.20.1.windows.1
+

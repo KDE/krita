@@ -103,7 +103,7 @@
 
 #include <functional>
 
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 
 #include "KisRunnableBasedStrokeStrategy.h"
 #include "KisRunnableStrokeJobData.h"
@@ -525,7 +525,7 @@ void KisImage::nodeChanged(KisNode* node)
 
 void KisImage::invalidateAllFrames()
 {
-    invalidateFrames(KisTimeRange::infinite(0), QRect());
+    invalidateFrames(KisTimeSpan::infinite(0), QRect());
 }
 
 void KisImage::setOverlaySelectionMask(KisSelectionMaskSP mask)
@@ -2234,7 +2234,7 @@ void KisImage::requestProjectionUpdate(KisNode *node, const QVector<QRect> &rect
     KisNodeGraphListener::requestProjectionUpdate(node, rects, resetAnimationCache);
 }
 
-void KisImage::invalidateFrames(const KisTimeRange &range, const QRect &rect)
+void KisImage::invalidateFrames(const KisTimeSpan &range, const QRect &rect)
 {
     m_d->animationInterface->invalidateFrames(range, rect);
 }
@@ -2262,6 +2262,24 @@ void KisImage::addComposition(KisLayerCompositionSP composition)
 void KisImage::removeComposition(KisLayerCompositionSP composition)
 {
     m_d->compositions.removeAll(composition);
+}
+
+void KisImage::moveCompositionUp(KisLayerCompositionSP composition)
+{
+    int index = m_d->compositions.indexOf(composition);
+    if (index <= 0) {
+        return;
+    }
+    m_d->compositions.move(index, index - 1);
+}
+
+void KisImage::moveCompositionDown(KisLayerCompositionSP composition)
+{
+    int index = m_d->compositions.indexOf(composition);
+    if (index >= m_d->compositions.size() -1) {
+        return;
+    }
+    m_d->compositions.move(index, index + 1);
 }
 
 bool checkMasksNeedConversion(KisNodeSP root, const QRect &bounds)

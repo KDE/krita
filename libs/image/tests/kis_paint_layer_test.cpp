@@ -114,7 +114,7 @@ void KisPaintLayerTest::testKeyframing()
     KisPaintLayerSP layer = new KisPaintLayer(image, "", OPACITY_OPAQUE_U8);
     KisPaintDeviceSP dev = layer->paintDevice();
 
-    KisKeyframeChannel *contentChannel = layer->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    KisKeyframeChannel *contentChannel = layer->getKeyframeChannel(KisKeyframeChannel::Raster.id());
     QVERIFY(!contentChannel);
 
     layer->enableAnimation();

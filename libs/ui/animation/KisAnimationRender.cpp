@@ -28,7 +28,7 @@
 #include "KisAnimationRenderingOptions.h"
 #include "KisMimeDatabase.h"
 #include "dialogs/KisAsyncAnimationFramesSaveDialog.h"
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 
 #include "krita_container_utils.h"
 
@@ -63,7 +63,7 @@ void KisAnimationRender::render(KisDocument *doc, KisViewManager *viewManager, K
 
     const bool batchMode = false; // TODO: fetch correctly!
     KisAsyncAnimationFramesSaveDialog exporter(doc->image(),
-                                               KisTimeRange::fromTime(encoderOptions.firstFrame,
+                                               KisTimeSpan::fromTimeToTime(encoderOptions.firstFrame,
                                                                       encoderOptions.lastFrame),
                                                baseFileName,
                                                encoderOptions.sequenceStart,

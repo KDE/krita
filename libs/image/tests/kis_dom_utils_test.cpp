@@ -155,12 +155,12 @@ void KisDomUtilsTest::testG2R()
     checkLoadData(xmlData);
 }
 
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 
 void KisDomUtilsTest::testIntegralType()
 {
-    KisTimeRange r1(1, 10);
-    KisTimeRange r2(5, 15);
+    KisTimeSpan r1 = KisTimeSpan::fromTimeWithDuration(1, 10);
+    KisTimeSpan r2 = KisTimeSpan::fromTimeWithDuration(5, 15);
 
 
     QDomDocument doc("testdoc");

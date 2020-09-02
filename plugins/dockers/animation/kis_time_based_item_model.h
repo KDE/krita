@@ -27,7 +27,7 @@
 
 #include "kis_types.h"
 
-class KisTimeRange;
+class KisTimeSpan;
 class KisAnimationPlayer;
 class KisKeyframeChannel;
 
@@ -52,6 +52,8 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
     bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role) override;
 
+    void scrubHorizontalHeaderUpdate(int activeHeader);
+
     bool removeFrames(const QModelIndexList &indexes);
 
     bool removeFramesAndOffset(QModelIndexList indicesToRemove);
@@ -62,7 +64,7 @@ public:
     bool isScrubbing();
     void scrubTo(int time, bool preview);
 
-    void setPlaybackRange(const KisTimeRange &range);
+    void setPlaybackRange(const KisTimeSpan &range);
     bool isPlaybackActive() const;
     bool isPlaybackPaused() const;
     void stopPlayback() const;
@@ -71,24 +73,29 @@ public:
     enum ItemDataRole
     {
         ActiveFrameRole = Qt::UserRole + 101,
+        CloneOfActiveFrame,
+        CloneCount,
         FrameExistsRole,
         SpecialKeyframeExists,
         FrameCachedRole,
         FrameEditableRole,
         FramesPerSecondRole,
         UserRole,
-        FrameHasContent // is it an empty frame with nothing in it?
+        FrameHasContent
     };
 
 protected:
     virtual KisNodeSP nodeAt(QModelIndex index) const = 0;
     virtual QMap<QString, KisKeyframeChannel *> channelsAt(QModelIndex index) const = 0;
+    virtual KisKeyframeChannel* channelByID(QModelIndex index, const QString &id) const = 0;
     KisImageWSP image() const;
 
     KUndo2Command* createOffsetFramesCommand(QModelIndexList srcIndexes, const QPoint &offset,
                                              bool copyFrames, bool moveEmptyFrames,
                                              KUndo2Command *parentCommand = 0);
 
+    bool cloneOfActiveFrame(const QModelIndex &index) const;
+    int cloneCount(const QModelIndex &index) const;
 
 protected Q_SLOTS:
     void slotCurrentTimeChanged(int time);

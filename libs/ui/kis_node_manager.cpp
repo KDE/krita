@@ -950,7 +950,7 @@ bool KisNodeManager::trySetNodeProperties(KisNodeSP node, KisImageSP image, KisB
         }
     }
 
-    KisNodePropertyListCommand::setNodePropertiesNoUndo(node, image, properties);
+    KisNodePropertyListCommand::setNodePropertiesAutoUndo(node, image, properties);
 
     return true;
 }
@@ -1239,10 +1239,17 @@ void KisNodeManager::saveNodeAsImage()
         return;
     }
 
-    KisImageWSP image = m_d->view->image();
+    KisPaintDeviceSP saveDevice = node->projection();
+
+    if (!saveDevice) {
+        m_d->view->showFloatingMessage(i18nc("warning message when trying to export a transform mask", "Layer has no pixel data"), QIcon());
+        return;
+    }
+
+    KisImageSP image = m_d->view->image();
     QRect saveRect = image->bounds() | node->exactBounds();
 
-    m_d->saveDeviceAsImage(node->projection(),
+    m_d->saveDeviceAsImage(saveDevice,
                            node->name(),
                            saveRect,
                            image->xRes(), image->yRes(),

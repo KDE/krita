@@ -223,7 +223,7 @@ inline T cfDivide(T src, T dst) {
     using namespace Arithmetic;
     //typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
     
-    if(src == zeroValue<T>())
+    if(isUnsafeAsDivisor(src))
         return (dst == zeroValue<T>()) ? zeroValue<T>() : unitValue<T>();
     
     return clamp<T>(div(dst, src));
@@ -284,7 +284,7 @@ inline T cfVividLight(T src, T dst) {
     typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
     
     if(src < halfValue<T>()) {
-        if(src == zeroValue<T>())
+        if(isUnsafeAsDivisor(src))
             return (dst == unitValue<T>()) ? unitValue<T>() : zeroValue<T>();
 
         // min(1,max(0,1-(1-dst) / (2*src)))
@@ -345,17 +345,17 @@ inline T cfParallel(T src, T dst) {
     using namespace Arithmetic;
     typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
     
-    // min(max(2 / (1/dst + 1/src), 0), 1)
-    composite_type unit = unitValue<T>();
-    composite_type s    = (src != zeroValue<T>()) ? div<T>(unit, src) : unit;
-    composite_type d    = (dst != zeroValue<T>()) ? div<T>(unit, dst) : unit;    
-    if (src == zeroValue<T>()) {
-        return zeroValue<T>();    
+    const bool srcIsSafe = !isUnsafeAsDivisor(src);
+    const bool dstIsSafe = !isUnsafeAsDivisor(dst);
+
+    if (!srcIsSafe && !dstIsSafe) {
+        return zeroValue<T>();
     }
 
-    if (dst == zeroValue<T>()) {
-        return zeroValue<T>();    
-    }
+    // min(max(2 / (1/dst + 1/src), 0), 1)
+    composite_type unit = unitValue<T>();
+    composite_type s    = srcIsSafe ? div<T>(unit, src) : unit;
+    composite_type d    = dstIsSafe ? div<T>(unit, dst) : unit;
 
     return clamp<T>((unit+unit) * unit / (d+s));
 }

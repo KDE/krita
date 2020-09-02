@@ -490,6 +490,11 @@ void KisShapeLayer::forceUpdateHiddenAreaOnOriginal()
     m_d->canvas->forceRepaintWithHiddenAreas();
 }
 
+KoSelectedShapesProxy *KisShapeLayer::selectedShapesProxy()
+{
+    return m_d->canvas->selectedShapesProxy();
+}
+
 bool KisShapeLayer::saveShapesToStore(KoStore *store, QList<KoShape *> shapes, const QSizeF &sizeInPt)
 {
     if (!store->open("content.svg")) {

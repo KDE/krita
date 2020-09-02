@@ -31,7 +31,7 @@
 
 #include "KisViewManager.h"
 #include "KisAsyncAnimationRendererBase.h"
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 #include "kis_image.h"
 #include "kis_image_config.h"
 #include "kis_memory_statistics_server.h"

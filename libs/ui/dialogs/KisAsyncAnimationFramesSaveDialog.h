@@ -27,7 +27,7 @@ class KRITAUI_EXPORT KisAsyncAnimationFramesSaveDialog : public KisAsyncAnimatio
 {
 public:
     KisAsyncAnimationFramesSaveDialog(KisImageSP image,
-                                      const KisTimeRange &range,
+                                      const KisTimeSpan &range,
                                       const QString &baseFilename,
                                       int sequenceNumberingOffset,
                                       bool onlyNeedsUniqueFrames,

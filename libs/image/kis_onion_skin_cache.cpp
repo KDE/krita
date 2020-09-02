@@ -46,7 +46,7 @@ struct KisOnionSkinCache::Private
 
         const int time = source->defaultBounds()->currentTime();
         const int seqNo = compositor->configSeqNo();
-        const int hash = keyframes->framesHash();
+        const int hash = keyframes->channelHash();
 
         return time == cacheTime && cacheConfigSeqNo == seqNo && framesHash == hash;
     }
@@ -56,7 +56,7 @@ struct KisOnionSkinCache::Private
 
         const int time = source->defaultBounds()->currentTime();
         const int seqNo = compositor->configSeqNo();
-        const int hash = keyframes->framesHash();
+        const int hash = keyframes->channelHash();
 
         cacheTime = time;
         cacheConfigSeqNo = seqNo;

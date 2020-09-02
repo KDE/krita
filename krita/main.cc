@@ -579,10 +579,13 @@ extern "C" int main(int argc, char **argv)
 #elif defined QT_HAS_WINTAB_SWITCH
 
     // Check if WinTab/WinInk has actually activated
-    const bool useWinTabAPI = app.testAttribute(Qt::AA_MSWindowsUseWinTabAPI);
+    const bool useWinInkAPI = !app.testAttribute(Qt::AA_MSWindowsUseWinTabAPI);
 
-    if (useWinTabAPI != !cfg.useWin8PointerInput()) {
-        cfg.setUseWin8PointerInput(useWinTabAPI);
+    if (useWinInkAPI != cfg.useWin8PointerInput()) {
+        KisUsageLogger::log("WARNING: WinTab tablet protocol is not supported on this device. Switching to WinInk...");
+
+        cfg.setUseWin8PointerInput(useWinInkAPI);
+        cfg.setUseRightMiddleTabletButtonWorkaround(true);
     }
 
 #endif

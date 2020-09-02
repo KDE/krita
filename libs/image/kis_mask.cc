@@ -487,10 +487,10 @@ void KisMask::testingInitSelection(const QRect &rect, KisLayerSP parentLayer)
 
 KisKeyframeChannel *KisMask::requestKeyframeChannel(const QString &id)
 {
-    if (id == KisKeyframeChannel::Content.id()) {
+    if (id == KisKeyframeChannel::Raster.id()) {
         KisPaintDeviceSP device = paintDevice();
         if (device) {
-            KisRasterKeyframeChannel *contentChannel = device->createKeyframeChannel(KisKeyframeChannel::Content);
+            KisRasterKeyframeChannel *contentChannel = device->createKeyframeChannel(KisKeyframeChannel::Raster);
             contentChannel->setFilenameSuffix(".pixelselection");
             return contentChannel;
        }
@@ -501,7 +501,7 @@ KisKeyframeChannel *KisMask::requestKeyframeChannel(const QString &id)
 
 bool KisMask::supportsKeyframeChannel(const QString &id)
 {
-    if (id == KisKeyframeChannel::Content.id() && paintDevice()) {
+    if (id == KisKeyframeChannel::Raster.id() && paintDevice()) {
         return true;
     }
 

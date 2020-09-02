@@ -26,10 +26,10 @@
 class KisAsyncAnimationCacheRenderDialog : public KisAsyncAnimationRenderDialogBase
 {
 public:
-    KisAsyncAnimationCacheRenderDialog(KisAnimationFrameCacheSP cache, const KisTimeRange &range, int busyWait = 200);
+    KisAsyncAnimationCacheRenderDialog(KisAnimationFrameCacheSP cache, const KisTimeSpan &range, int busyWait = 200);
     virtual ~KisAsyncAnimationCacheRenderDialog();
 
-    static int calcFirstDirtyFrame(KisAnimationFrameCacheSP cache, const KisTimeRange &playbackRange, const KisTimeRange &skipRange);
+    static int calcFirstDirtyFrame(KisAnimationFrameCacheSP cache, const KisTimeSpan &playbackRange, const KisTimeSpan &skipRange);
 
 protected:
     QList<int> calcDirtyFrames() const override;

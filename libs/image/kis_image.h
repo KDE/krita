@@ -92,7 +92,7 @@ public: // KisNodeGraphListener implementation
     void invalidateAllFrames() override;
     void notifySelectionChanged() override;
     void requestProjectionUpdate(KisNode *node, const QVector<QRect> &rects, bool resetAnimationCache) override;
-    void invalidateFrames(const KisTimeRange &range, const QRect &rect) override;
+    void invalidateFrames(const KisTimeSpan &range, const QRect &rect) override;
     void requestTimeSwitch(int time) override;
     KisNode* graphOverlayNode() const override;
 
@@ -658,6 +658,16 @@ public:
      * Remove the layer compostion
      */
     void removeComposition(KisLayerCompositionSP composition);
+
+    /**
+     * Move a composition up in the composition list
+     */
+    void moveCompositionUp(KisLayerCompositionSP composition);
+
+    /**
+     * Move a composition down in the composition list
+     */
+    void moveCompositionDown(KisLayerCompositionSP composition);
 
     /**
      * Permit or deny the wrap-around mode for all the paint devices

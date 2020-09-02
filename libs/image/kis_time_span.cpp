@@ -16,31 +16,31 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 
 #include <QDebug>
 #include "kis_keyframe_channel.h"
 #include "kis_node.h"
 #include "kis_layer_utils.h"
 
-struct KisTimeRangeStaticRegistrar {
-    KisTimeRangeStaticRegistrar() {
-        qRegisterMetaType<KisTimeRange>("KisTimeRange");
+struct KisTimeSpanStaticRegistrar {
+    KisTimeSpanStaticRegistrar() {
+        qRegisterMetaType<KisTimeSpan>("KisTimeSpan");
     }
 };
 
-static KisTimeRangeStaticRegistrar __registrar;
+static KisTimeSpanStaticRegistrar __registrar;
 
-QDebug operator<<(QDebug dbg, const KisTimeRange &r)
+QDebug operator<<(QDebug dbg, const KisTimeSpan &r)
 {
-    dbg.nospace() << "KisTimeRange(" << r.start() << ", " << r.end() << ")";
+    dbg.nospace() << "KisTimeSpan(" << r.start() << ", " << r.end() << ")";
 
     return dbg.space();
 }
 
-KisTimeRange KisTimeRange::calculateIdenticalFramesRecursive(const KisNode *node, int time)
+KisTimeSpan KisTimeSpan::calculateIdenticalFramesRecursive(const KisNode *node, int time)
 {
-    KisTimeRange range = KisTimeRange::infinite(0);
+    KisTimeSpan range = KisTimeSpan::infinite(0);
 
     KisLayerUtils::recursiveApplyNodes(node,
         [&range, time] (const KisNode *node) {
@@ -52,9 +52,9 @@ KisTimeRange KisTimeRange::calculateIdenticalFramesRecursive(const KisNode *node
     return range;
 }
 
-KisTimeRange KisTimeRange::calculateAffectedFramesRecursive(const KisNode *node, int time)
+KisTimeSpan KisTimeSpan::calculateAffectedFramesRecursive(const KisNode *node, int time)
 {
-    KisTimeRange range;
+    KisTimeSpan range;
 
     KisLayerUtils::recursiveApplyNodes(node,
         [&range, time] (const KisNode *node) {
@@ -66,9 +66,9 @@ KisTimeRange KisTimeRange::calculateAffectedFramesRecursive(const KisNode *node,
     return range;
 }
 
-KisTimeRange KisTimeRange::calculateNodeIdenticalFrames(const KisNode *node, int time)
+KisTimeSpan KisTimeSpan::calculateNodeIdenticalFrames(const KisNode *node, int time)
 {
-    KisTimeRange range = KisTimeRange::infinite(0);
+    KisTimeSpan range = KisTimeSpan::infinite(0);
 
     const QMap<QString, KisKeyframeChannel*> channels =
         node->keyframeChannels();
@@ -81,9 +81,9 @@ KisTimeRange KisTimeRange::calculateNodeIdenticalFrames(const KisNode *node, int
     return range;
 }
 
-KisTimeRange KisTimeRange::calculateNodeAffectedFrames(const KisNode *node, int time)
+KisTimeSpan KisTimeSpan::calculateNodeAffectedFrames(const KisNode *node, int time)
 {
-    KisTimeRange range;
+    KisTimeSpan range;
 
     if (!node->visible()) return range;
 
@@ -94,8 +94,8 @@ KisTimeRange KisTimeRange::calculateNodeAffectedFrames(const KisNode *node, int 
     //       to avoid the dirty range to be stretched into infinity!
 
     if (channels.isEmpty() ||
-        !channels.contains(KisKeyframeChannel::Content.id())) {
-        range = KisTimeRange::infinite(0);
+        !channels.contains(KisKeyframeChannel::Raster.id())) {
+        range = KisTimeSpan::infinite(0);
         return range;
     }
 
@@ -109,7 +109,7 @@ KisTimeRange KisTimeRange::calculateNodeAffectedFrames(const KisNode *node, int 
 
 namespace KisDomUtils {
 
-void saveValue(QDomElement *parent, const QString &tag, const KisTimeRange &range)
+void saveValue(QDomElement *parent, const QString &tag, const KisTimeSpan &range)
 {
     QDomDocument doc = parent->ownerDocument();
     QDomElement e = doc.createElement(tag);
@@ -127,7 +127,7 @@ void saveValue(QDomElement *parent, const QString &tag, const KisTimeRange &rang
 }
 
 
-bool loadValue(const QDomElement &parent, const QString &tag, KisTimeRange *range)
+bool loadValue(const QDomElement &parent, const QString &tag, KisTimeSpan *range)
 {
     QDomElement e;
     if (!findOnlyElement(parent, tag, &e)) return false;
@@ -138,11 +138,11 @@ bool loadValue(const QDomElement &parent, const QString &tag, KisTimeRange *rang
     int end = toInt(e.attribute("to", "-1"));
 
     if (start == -1) {
-        *range = KisTimeRange();
+        *range = KisTimeSpan();
     } else if (end == -1) {
-        *range = KisTimeRange::infinite(start);
+        *range = KisTimeSpan::infinite(start);
     } else {
-        *range = KisTimeRange::fromTime(start, end);
+        *range = KisTimeSpan::fromTimeToTime(start, end);
     }
     return true;
 }

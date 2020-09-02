@@ -28,6 +28,7 @@
 #include <KoResource.h>
 #include <KisTag.h>
 
+
 /**
  * KisAbstractResourceModel defines the interface for accessing resources
  * that is used in KisResourceModel and the various filter/proxy models
@@ -58,8 +59,6 @@ public:
         Dirty,
         /// MetaData is a map of key, value pairs that is associated with this resource
         MetaData,
-        /// XXX: what is this used for, again?
-        KoResourceRole,
         /// Whether the current resource is active
         ResourceActive,
         /// Whether the current resource's storage is active

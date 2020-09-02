@@ -31,6 +31,8 @@
 #include <KisResourceModelProvider.h>
 #include <KisTagModel.h>
 
+#include "KisResourceQueryMapper.h"
+
 struct KisAllResourcesModel::Private {
     QSqlQuery resourcesQuery;
     QString resourceType;
@@ -100,133 +102,7 @@ QVariant KisAllResourcesModel::data(const QModelIndex &index, int role) const
     bool pos = const_cast<KisAllResourcesModel*>(this)->d->resourcesQuery.seek(index.row());
     
     if (pos) {
-        switch(role) {
-        case Qt::DisplayRole:
-        {
-            switch(index.column()) {
-            case Id:
-                return d->resourcesQuery.value("id");
-            case StorageId:
-                return d->resourcesQuery.value("storage_id");
-            case Name:
-                return d->resourcesQuery.value("name");
-            case Filename:
-                return d->resourcesQuery.value("filename");
-            case Tooltip:
-                return d->resourcesQuery.value("tooltip");
-            case Thumbnail:
-            {
-                QByteArray ba = d->resourcesQuery.value("thumbnail").toByteArray();
-                QBuffer buf(&ba);
-                buf.open(QBuffer::ReadOnly);
-                QImage img;
-                img.load(&buf, "PNG");
-                return QVariant::fromValue<QImage>(img);
-            }
-            case Status:
-                return d->resourcesQuery.value("status");
-            case Location:
-                return d->resourcesQuery.value("location");
-            case ResourceType:
-                return d->resourcesQuery.value("resource_type");
-            case ResourceActive:
-                return d->resourcesQuery.value("resource_active");
-            case StorageActive:
-                return d->resourcesQuery.value("storage_active");
-            default:
-                ;
-            };
-            Q_FALLTHROUGH();
-        }
-        case Qt::DecorationRole:
-        {
-            if (index.column() == Thumbnail) {
-                QByteArray ba = d->resourcesQuery.value("thumbnail").toByteArray();
-                QBuffer buf(&ba);
-                buf.open(QBuffer::ReadOnly);
-                QImage img;
-                img.load(&buf, "PNG");
-                return QVariant::fromValue<QImage>(img);
-            }
-            return QVariant();
-        }
-        case Qt::ToolTipRole:
-            Q_FALLTHROUGH();
-        case Qt::StatusTipRole:
-            Q_FALLTHROUGH();
-        case Qt::WhatsThisRole:
-            return d->resourcesQuery.value("tooltip");
-        case Qt::UserRole + Id:
-            return d->resourcesQuery.value("id");
-        case Qt::UserRole + StorageId:
-            return d->resourcesQuery.value("storage_id");
-        case Qt::UserRole + Name:
-            return d->resourcesQuery.value("name");
-        case Qt::UserRole + Filename:
-            return d->resourcesQuery.value("filename");
-        case Qt::UserRole + Tooltip:
-            return d->resourcesQuery.value("tooltip");
-        case Qt::UserRole + Thumbnail:
-        {
-            QByteArray ba = d->resourcesQuery.value("thumbnail").toByteArray();
-            QBuffer buf(&ba);
-            buf.open(QBuffer::ReadOnly);
-            QImage img;
-            img.load(&buf, "PNG");
-            return QVariant::fromValue<QImage>(img);
-        }
-        case Qt::UserRole + Status:
-            return d->resourcesQuery.value("status");
-        case Qt::UserRole + Location:
-            return d->resourcesQuery.value("location");
-        case Qt::UserRole + ResourceType:
-            return d->resourcesQuery.value("resource_type");
-        case Qt::UserRole + Tags:
-        {
-            QStringList tagNames;
-            Q_FOREACH(const KisTagSP tag, tagsForResource(d->resourcesQuery.value("id").toInt())) {
-                tagNames << tag->name();
-            }
-            return tagNames;
-        }
-        case Qt::UserRole + Dirty:
-        {
-            QString storageLocation = d->resourcesQuery.value("location").toString();
-            QString filename = d->resourcesQuery.value("filename").toString();
-            
-            // An uncached resource has not been loaded, so it cannot be dirty
-            if (!KisResourceLocator::instance()->resourceCached(storageLocation, d->resourceType, filename)) {
-                return false;
-            }
-            else {
-                // Now we have to check the resource, but that's cheap since it's been loaded in any case
-                KoResourceSP resource = resourceForIndex(index);
-                return resource->isDirty();
-            }
-        }
-        case Qt::UserRole + MetaData:
-        {
-            QMap<QString, QVariant> r = KisResourceLocator::instance()->metaDataForResource(d->resourcesQuery.value("id").toInt());
-            return r;
-        }
-        case Qt::UserRole + KoResourceRole:
-        {
-            KoResourceSP tag = resourceForIndex(index);
-            QVariant response;
-            response.setValue(tag);
-            return response;
-        }
-        case Qt::UserRole + ResourceActive:
-        {
-            return d->resourcesQuery.value("resource_active");
-        }
-        case Qt::UserRole + StorageActive:
-        {
-              return d->resourcesQuery.value("storage_active");
-        }
-        default:
-            ;
-        }
+        v = KisResourceQueryMapper::variantFromResourceQuery(d->resourcesQuery, index.column(), role);
     }
     return v;
 }

@@ -28,6 +28,13 @@ class TestTagFilterResourceProxyModel : public QObject
 private Q_SLOTS:
     void initTestCase();
 
+
+    void testDataWhenSwitchingBetweenTagAllAllUntagged();
+
+    void cleanupTestCase();
+
+private:
+
     void testRowCount();
     void testData();
     void testResource();
@@ -35,12 +42,6 @@ private Q_SLOTS:
     void testFilterByResource();
     void testFilterByTag();
     void testFilterByString();
-
-    void cleanupTestCase();
-
-private:
-
-
 
     QString m_srcLocation;
     QString m_dstLocation;

@@ -128,10 +128,10 @@ void TestTagFilterResourceProxyModel::testFilterByTag()
     KisTagFilterResourceProxyModel proxyModel(resourceType);
 
     KoResourceSP resource = resourceModel->resourceForName("test2.kpp");
-    Q_ASSERT(resource);
+    QVERIFY(resource);
 
     KisTagSP tag = tagModel->tagForIndex(tagModel->index(2, 0));
-    Q_ASSERT(tag);
+    QVERIFY(tag);
 
     proxyModel.setTagFilter(tag);
     int rowCount = proxyModel.rowCount();
@@ -151,7 +151,7 @@ void TestTagFilterResourceProxyModel::testFilterByResource()
     KisTagFilterResourceProxyModel proxyModel(resourceType);
 
     KoResourceSP resource = resourceModel->resourceForName("test2.kpp");
-    Q_ASSERT(resource);
+    QVERIFY(resource);
 
     tagModel->addNewTag("testtag1", QVector<KoResourceSP>() << resource);
     tagModel->addNewTag("testtag2", QVector<KoResourceSP>() << resource);
@@ -176,16 +176,39 @@ void TestTagFilterResourceProxyModel::testFilterByString()
     QCOMPARE(proxyModel.rowCount(), 1);
 
     KoResourceSP resource = resourceModel->resourceForName("test2.kpp");
-    Q_ASSERT(resource);
+    QVERIFY(resource);
 
     KisTagSP tag = tagModel->tagForIndex(tagModel->index(2, 0));
-    Q_ASSERT(tag);
+    QVERIFY(tag);
 
     proxyModel.tagResource(tag, resource);
     proxyModel.setTagFilter(tag);
     proxyModel.setFilterInCurrentTag(true);
 
     QCOMPARE(proxyModel.rowCount(), 1);
+}
+
+void TestTagFilterResourceProxyModel::testDataWhenSwitchingBetweenTagAllAllUntagged()
+{
+    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(ResourceType::PaintOpPresets);
+    KisTagModel *tagModel = KisResourceModelProvider::tagModel(ResourceType::PaintOpPresets);
+    KisTagFilterResourceProxyModel proxyModel(resourceType);
+
+    KoResourceSP resource = resourceModel->resourceForName("test2.kpp");
+    QModelIndex idx = proxyModel.indexForResource(resource);
+
+    QVERIFY(idx.isValid());
+
+    QString name = proxyModel.data(idx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
+    QCOMPARE(name, "test2.kpp");
+
+    QImage thumbnail = proxyModel.data(idx, Qt::UserRole + KisAbstractResourceModel::Thumbnail).value<QImage>();
+    QVERIFY(!thumbnail.isNull());
+
+    proxyModel.setSearchText("test2");
+    idx = proxyModel.indexForResource(resource);
+
+
 }
 
 

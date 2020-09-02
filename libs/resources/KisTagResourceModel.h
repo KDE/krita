@@ -85,7 +85,9 @@ private:
  * tags or the tags for certain resources. If the filter for tags or resources is empty, all
  * tags or resources that match for the active/inactive/all filters will match.
  */
-class KRITARESOURCES_EXPORT KisTagResourceModel : public QSortFilterProxyModel, KisAbstractTagResourceModel
+class KRITARESOURCES_EXPORT KisTagResourceModel : public QSortFilterProxyModel
+        , KisAbstractTagResourceModel
+        , KisAbstractResourceModel
 {
     Q_OBJECT
 
@@ -143,6 +145,17 @@ protected:
 private:
     struct Private;
     Private* const d;
+
+    // KisAbstractResourceModel interface
+public:
+    KoResourceSP resourceForIndex(QModelIndex index) const override;
+    QModelIndex indexForResource(KoResourceSP resource) const override;
+    bool setResourceInactive(const QModelIndex &index) override;
+    bool importResourceFile(const QString &filename) override;
+    bool addResource(KoResourceSP resource, const QString &storageId) override;
+    bool updateResource(KoResourceSP resource) override;
+    bool renameResource(KoResourceSP resource, const QString &name) override;
+    bool setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata) override;
 };
 
 #endif // KISTAGRESOURCEMODEL_H

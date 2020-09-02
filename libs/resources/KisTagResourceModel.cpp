@@ -21,6 +21,7 @@
 #include <QtSql>
 #include <KisResourceLocator.h>
 #include <KisResourceModelProvider.h>
+#include <KisResourceQueryMapper.h>
 
 struct KisAllTagResourceModel::Private {
     QString resourceType;
@@ -61,8 +62,6 @@ int KisAllTagResourceModel::rowCount(const QModelIndex &/*parent*/) const
             qWarning() << "Could not execute tags rowcount query" << q.lastError();
         }
 
-
-
         q.first();
 
         const_cast<KisAllTagResourceModel*>(this)->d->cachedRowCount = q.value(0).toInt();
@@ -77,28 +76,23 @@ int KisAllTagResourceModel::columnCount(const QModelIndex &/*parent*/) const
 
 QVariant KisAllTagResourceModel::data(const QModelIndex &index, int role) const
 {
-    QVariant v;
+    qDebug() << index.isValid() << index.row() << index.column() << "role" << role << "local role" << Qt::UserRole + TagId;
 
+    QVariant v;
 
     if (!index.isValid()) { return v; }
     if (index.row() > rowCount()) { return v; }
     if (index.column() > d->columnCount) { return v;}
 
     bool pos = const_cast<KisAllTagResourceModel*>(this)->d->query.seek(index.row());
-    if (!pos) { return v;}
+    if (!pos) { abort(); return v;}
+
+
 
     if (role < Qt::UserRole + TagId) {
 
-        // XXX: Stupid linear search for now... We could copy all the code in KisAllResourcesModel but that's so ugly
-        KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(d->resourceType);
         int id = d-> query.value("resource_id").toInt();
-
-        for (int row = 0; row < resourceModel->rowCount(); row++) {
-            QModelIndex idx = resourceModel->index(row, index.column());
-            if (idx.isValid() && idx.data(Qt::UserRole + KisAbstractResourceModel::Id) == id) {
-                return resourceModel->data(idx, role);
-            }
-        }
+        v = KisResourceQueryMapper::variantFromResourceQueryById(id, index.column(), role);
     }
 
     // These are not shown, but needed for the filter
@@ -405,3 +399,42 @@ bool KisTagResourceModel::lessThan(const QModelIndex &source_left, const QModelI
     return nameLeft < nameRight;
 }
 
+KoResourceSP KisTagResourceModel::resourceForIndex(QModelIndex index) const
+{
+    return 0;
+}
+
+QModelIndex KisTagResourceModel::indexForResource(KoResourceSP resource) const
+{
+    return createIndex(-1, -1);
+}
+
+bool KisTagResourceModel::setResourceInactive(const QModelIndex &index)
+{
+    return false;
+}
+
+bool KisTagResourceModel::importResourceFile(const QString &filename)
+{
+    return false;
+}
+
+bool KisTagResourceModel::addResource(KoResourceSP resource, const QString &storageId)
+{
+    return false;
+}
+
+bool KisTagResourceModel::updateResource(KoResourceSP resource)
+{
+    return false;
+}
+
+bool KisTagResourceModel::renameResource(KoResourceSP resource, const QString &name)
+{
+    return false;
+}
+
+bool KisTagResourceModel::setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata)
+{
+    return false;
+}

@@ -317,13 +317,11 @@ int KisResourceCacheDb::resourceIdForResource(const QString &resourceName, const
                    "AND    storages.id = resources.storage_id\n"
                    "AND    storages.location = :storage_location\n"
                    "AND    resource_types.name = :resource_type\n"
-                   "AND    resources.name = :name\n"
                    "AND    resources.filename = :filename\n")) {
         qWarning() << "Could not read and prepare resourceIdForResource" << q.lastError();
         return -1;
     }
 
-    q.bindValue(":name", resourceName);
     q.bindValue(":filename", resourceFileName);
     q.bindValue(":resource_type", resourceType);
     q.bindValue(":storage_location", storageLocation);

@@ -480,10 +480,9 @@ KisAnimationCachePopulator* KisPart::cachePopulator() const
 
 void KisPart::prioritizeFrameForCache(KisImageSP image, int frame) {
     KisImageAnimationInterface* animInterface = image->animationInterface();
-    KIS_SAFE_ASSERT_RECOVER_RETURN(animInterface->fullClipRange().contains(frame));
-
-    d->animationCachePopulator.requestRegenerationWithPriorityFrame(image, frame);
-
+    if ( animInterface && animInterface->fullClipRange().contains(frame)) {
+        d->animationCachePopulator.requestRegenerationWithPriorityFrame(image, frame);
+    }
 }
 
 void KisPart::openExistingFile(const QUrl &url)

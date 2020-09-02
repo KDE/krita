@@ -554,8 +554,8 @@ void StoryboardModel::setImage(KisImageWSP image)
             this, SLOT(slotKeyframeAdded(const KisKeyframeChannel*,int)), Qt::UniqueConnection);
     connect(m_image->animationInterface(), SIGNAL(sigKeyframeRemoved(const KisKeyframeChannel*,int)),
             this, SLOT(slotKeyframeRemoved(const KisKeyframeChannel*,int)), Qt::UniqueConnection);
-    connect(m_image->animationInterface(), SIGNAL(sigKeyframeMoved(KisKeyframeSP, int)),
-            this, SLOT(slotKeyframeMoved(KisKeyframeSP, int)), Qt::UniqueConnection);
+    //connect(m_image->animationInterface(), SIGNAL(sigKeyframeMoved(KisKeyframeSP, int)),
+    //        this, SLOT(slotKeyframeMoved(KisKeyframeSP, int)), Qt::UniqueConnection);
 
     //for selection sync with timeline
     slotCurrentFrameChanged(m_image->animationInterface()->currentUITime());
@@ -667,7 +667,6 @@ int StoryboardModel::nextKeyframeGlobal(int keyframeTime) const
         if (node->isAnimated()) {
             KisKeyframeChannel *keyframeChannel = node->paintDevice()->keyframeChannel();
 
-            //check for keyframe at the next frame, Kf == keyframe
             int nextKeyframeTimeQuery = keyframeChannel->nextKeyframeTime(keyframeTime);
             if (keyframeChannel->keyframeAt(nextKeyframeTimeQuery)) {
                 if (nextKeyframeTime == INT_MAX) {
@@ -943,9 +942,9 @@ void StoryboardModel::slotUpdateThumbnailForFrame(int frame)
         if (frame == m_image->animationInterface()->currentUITime()) {
             setThumbnailPixmapData(index, m_image->projection());
             affected = false;
-        } else {
-            m_renderScheduler->scheduleFrameForRegeneration(frame, affected);
         }
+
+        m_renderScheduler->scheduleFrameForRegeneration(frame, affected);
     }
 }
 

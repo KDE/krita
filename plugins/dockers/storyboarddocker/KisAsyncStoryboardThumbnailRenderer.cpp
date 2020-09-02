@@ -17,6 +17,7 @@
  */
 
 #include "KisAsyncStoryboardThumbnailRenderer.h"
+#include "kis_image_animation_interface.h"
 #include "kis_image.h"
 
 KisAsyncStoryboardThumbnailRenderer::KisAsyncStoryboardThumbnailRenderer(QObject *parent)
@@ -33,7 +34,7 @@ void KisAsyncStoryboardThumbnailRenderer::frameCompletedCallback(int frame, cons
 {
     KisImageSP image = requestedImage();
     if (image) {
-        m_requestedFrameProjection = image->projection();
+        m_requestedFrameProjection = new KisPaintDevice(*image->projection(), KritaUtils::CopySnapshot);
     }
     emit sigNotifyFrameCompleted(frame);
 }

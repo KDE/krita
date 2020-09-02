@@ -621,6 +621,8 @@ bool TimelineFramesModel::canDropFrameData(const QMimeData */*data*/, const QMod
 {
     if (!index.isValid()) return false;
 
+    if ( !m_d->layerEditable(index.row()) ) return false;
+
     /**
      * Now we support D&D around any layer, so just return 'true' all
      * the time.

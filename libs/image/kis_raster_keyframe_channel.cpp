@@ -306,7 +306,7 @@ QSet<int> KisRasterKeyframeChannel::clonesOf(int time)
     }
 
     QList<int> values = m_d->frameIDTimesMap.values(rasterKey->frameID());
-    QSet<int> clones = QSet<int>(values.begin(), values.end());
+    QSet<int> clones = QSet<int>::fromList(values);
     clones.remove(time); // Clones only! Remove input time from the list.
     return clones;
 }

@@ -346,8 +346,8 @@ namespace KisAnimationUtils {
                                               KUndo2Command *parentCommand)
     {
         return new KisCommandUtils::LambdaCommand(
-                kundo2_i18np("Clone Keyframes",
-                             "Clones %1 Keyframes",
+                kundo2_i18np("Clone Keyframe",
+                             "Clone %1 Keyframes",
                              srcDstPairs.size()),
                 parentCommand,
                 [srcDstPairs, parentCommand]() -> KUndo2Command*

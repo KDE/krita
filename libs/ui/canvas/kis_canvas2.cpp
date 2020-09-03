@@ -788,12 +788,12 @@ void KisCanvas2::updateCanvasProjection()
         if (!m_d->isBatchUpdateActive) {
             // TODO: Implement info->dirtyViewportRect() for KisOpenGLCanvas2 to avoid updating whole canvas
             if (m_d->currentCanvasIsOpenGL) {
-                m_d->savedUpdateRect = QRect();
+                m_d->savedUpdateRect |= vRect;
 
                 // we already had a compression in frameRenderStartCompressor, so force the update directly
                 slotDoCanvasUpdate();
             } else if (/* !m_d->currentCanvasIsOpenGL && */ !vRect.isEmpty()) {
-                m_d->savedUpdateRect = m_d->coordinatesConverter->viewportToWidget(vRect).toAlignedRect();
+                m_d->savedUpdateRect |= m_d->coordinatesConverter->viewportToWidget(vRect).toAlignedRect();
 
                 // we already had a compression in frameRenderStartCompressor, so force the update directly
                 slotDoCanvasUpdate();
@@ -896,10 +896,7 @@ void KisCanvas2::slotDoCanvasUpdate()
         return;
     }
 
-    if (m_d->savedUpdateRect.isEmpty()) {
-        m_d->canvasWidget->widget()->update();
-        emit updateCanvasRequested(m_d->canvasWidget->widget()->rect());
-    } else {
+    if (!m_d->savedUpdateRect.isEmpty()) {
         emit updateCanvasRequested(m_d->savedUpdateRect);
         m_d->canvasWidget->widget()->update(m_d->savedUpdateRect);
     }
@@ -909,10 +906,7 @@ void KisCanvas2::slotDoCanvasUpdate()
 
 void KisCanvas2::updateCanvasWidgetImpl(const QRect &rc)
 {
-    if (!m_d->canvasUpdateCompressor.isActive() ||
-        !m_d->savedUpdateRect.isEmpty()) {
-        m_d->savedUpdateRect |= rc;
-    }
+    m_d->savedUpdateRect |= !rc.isEmpty() ? rc : m_d->canvasWidget->widget()->rect();
     m_d->canvasUpdateCompressor.start();
 }
 
@@ -923,7 +917,7 @@ void KisCanvas2::updateCanvas()
 
 void KisCanvas2::updateCanvas(const QRectF& documentRect)
 {
-    if (m_d->currentCanvasIsOpenGL && m_d->canvasWidget->decorations().size() > 0) {
+    if (0 && m_d->currentCanvasIsOpenGL && m_d->canvasWidget->decorations().size() > 0) {
         updateCanvasWidgetImpl();
     }
     else {

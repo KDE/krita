@@ -74,12 +74,13 @@ void KisCanvasDecoration::toggleVisibility()
 
 void KisCanvasDecoration::paint(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter *converter, KisCanvas2 *canvas = 0)
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(visible());
+
     if (!canvas) {
         dbgFile<<"canvas does not exist:"<<canvas;
     }
-    if (visible()) {
-        drawDecoration(gc, updateArea, converter,canvas);
-    }
+
+    drawDecoration(gc, updateArea, converter,canvas);
 }
 
 int KisCanvasDecoration::priority() const

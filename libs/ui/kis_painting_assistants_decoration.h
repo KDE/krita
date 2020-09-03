@@ -72,6 +72,8 @@ public:
     QList<KisPaintingAssistantHandleSP> handles();
     QList<KisPaintingAssistantSP> assistants() const;
 
+    bool hasPaintableAssistants() const;
+
 
     /// getter and setter functions for what assistant is currently selected
     /// this is used to control some tool options that are specific to a assistant

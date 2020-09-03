@@ -180,12 +180,21 @@ public:
 KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KoID &id, KisNodeWSP node)
     : KisScalarKeyframeChannel(id, new KisDefaultBoundsNodeWrapper(node))
 {
+    setNode(node);
 }
 
 KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KoID &id, KisDefaultBoundsBaseSP bounds)
     : KisKeyframeChannel(id, bounds)
     , m_d(new Private)
 {
+    // When keyframe is changed (value, tangents, etc), we should notify that the channel has been updated.
+    connect(this, &KisScalarKeyframeChannel::sigKeyframeChanged, [](const KisKeyframeChannel *channel, int time) {
+        const KisScalarKeyframeChannel* chan = dynamic_cast<const KisScalarKeyframeChannel*>(channel);
+        chan->sigChannelUpdated(
+                    chan->affectedFrames(time),
+                    chan->affectedRect(time)
+                    );
+    });
 }
 
 KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KisScalarKeyframeChannel &rhs, KisNodeWSP newParent)

@@ -724,7 +724,7 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
 
     KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(canvas());
     KisPaintingAssistantsDecorationSP decoration = kiscanvas->paintingAssistantsDecoration();
-    if (decoration && decoration->visible()) {
+    if (decoration && decoration->visible() && decoration->hasPaintableAssistants()) {
         kiscanvas->updateCanvas();
     } else {
         // TODO: only this branch should be present!

@@ -165,8 +165,6 @@ void TimelineFramesItemDelegate::drawBackground(QPainter *painter, const QModelI
         painter->fillRect(rc, color);
     }
 
-
-
     // pass of outline for empty keyframes
     if (doesFrameExist && !hasContent) {
 
@@ -180,7 +178,6 @@ void TimelineFramesItemDelegate::drawBackground(QPainter *painter, const QModelI
         painter->setBrush(oldBrush);
         painter->setPen(oldPen);
     }
-
 
     // pass of hold frame line
     if (!doesFrameExist && hasContent) {
@@ -204,8 +201,6 @@ void TimelineFramesItemDelegate::drawBackground(QPainter *painter, const QModelI
         painter->setPen(holdFramePen);
         painter->drawLine(QLine(lineStart, lineEnd));
     }
-
-
 
 }
 
@@ -288,5 +283,16 @@ void TimelineFramesItemDelegate::paint(QPainter *painter,
     bool layerIsCurrent = index.data(TimelineFramesModel::ActiveLayerRole).toBool();
     if (active) {
         paintActiveFrameSelector(painter, option.rect, layerIsCurrent);
+    }
+
+    { // Shade over anthing that's outside of the animation range...
+        if (index.data(TimelineFramesModel::WithinClipRange).toBool() == false) {
+            painter->save();
+
+            painter->setOpacity(0.50f);
+            painter->fillRect(option.rect, qApp->palette().color(QPalette::Base).darker(110));
+
+            painter->restore();
+        }
     }
 }

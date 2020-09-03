@@ -86,6 +86,12 @@ struct KisTimeBasedItemModel::Private
     int framesPerSecond() {
         return image->animationInterface()->framerate();
     }
+
+    bool withinClipRange(const QModelIndex& index) {
+        const int time = index.column();
+        KisTimeSpan clipRange = image->animationInterface()->fullClipRange();
+        return clipRange.contains(time);
+    }
 };
 
 KisTimeBasedItemModel::KisTimeBasedItemModel(QObject *parent)
@@ -200,7 +206,9 @@ QVariant KisTimeBasedItemModel::data(const QModelIndex &index, int role) const
         case CloneCount: {
             return cloneCount(index);
         }
-    }
+        case WithinClipRange:
+            return m_d->withinClipRange(index);
+        }
 
     return QVariant();
 }

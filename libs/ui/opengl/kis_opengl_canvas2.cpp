@@ -451,14 +451,14 @@ void KisOpenGLCanvas2::paintGL()
         QOpenGLFramebufferObject::bindDefault();
     }
 
+    QPainter gc(this);
+    renderDecorations(&gc);
+    gc.end();
+
     if (d->glSyncObject) {
         Sync::deleteSync(d->glSyncObject);
     }
     d->glSyncObject = Sync::getSync();
-
-    QPainter gc(this);
-    renderDecorations(&gc);
-    gc.end();
 
     if (!OPENGL_SUCCESS) {
         KisConfig cfg(false);

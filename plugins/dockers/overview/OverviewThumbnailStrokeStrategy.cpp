@@ -42,11 +42,12 @@ public:
     QRect tileRect;
 };
 
-OverviewThumbnailStrokeStrategy::OverviewThumbnailStrokeStrategy(KisPaintDeviceSP device, const QRect& rect, const QSize& thumbnailSize)
+OverviewThumbnailStrokeStrategy::OverviewThumbnailStrokeStrategy(KisPaintDeviceSP device, const QRect& rect, const QSize& thumbnailSize, bool isPixelArt)
     : KisSimpleStrokeStrategy(QLatin1String("OverviewThumbnail")),
       m_device(device),
       m_rect(rect),
-      m_thumbnailSize(thumbnailSize)
+      m_thumbnailSize(thumbnailSize),
+      m_isPixelArt(isPixelArt)
 {
     enableJob(KisSimpleStrokeStrategy::JOB_INIT, true, KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE);
     enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
@@ -117,8 +118,11 @@ void OverviewThumbnailStrokeStrategy::finishStrokeCallback()
     QImage overviewImage;
 
     KoDummyUpdater updater;
-    KisTransformWorker worker(m_thumbnailDevice, 1 / oversample, 1 / oversample, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-                              &updater, KisFilterStrategyRegistry::instance()->value("Bilinear"));
+    qreal xscale = m_thumbnailSize.width() / (qreal)m_thumbnailOversampledSize.width();
+    qreal yscale = m_thumbnailSize.height() / (qreal)m_thumbnailOversampledSize.height();
+    QString algorithm = m_isPixelArt ? "Box" : "Bilinear";
+    KisTransformWorker worker(m_thumbnailDevice, yscale, xscale, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                              &updater, KisFilterStrategyRegistry::instance()->value(algorithm));
     worker.run();
 
     overviewImage = m_thumbnailDevice->convertToQImage(KoColorSpaceRegistry::instance()->rgb8()->profile(),

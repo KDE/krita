@@ -121,6 +121,7 @@ void KisKeyframeChannel::insertKeyframe(int time, KisKeyframeSP keyframe, KUndo2
 
     if (parentUndoCmd) {
         KUndo2Command* cmd = new KisInsertKeyframeCommand(this, time, keyframe, parentUndoCmd);
+        Q_UNUSED(cmd);
     }
 
     m_d->keys.insert(time, keyframe);
@@ -131,9 +132,8 @@ void KisKeyframeChannel::removeKeyframe(int time, KUndo2Command *parentUndoCmd)
 {
     if (parentUndoCmd) {
         KUndo2Command* cmd = new KisRemoveKeyframeCommand(this, time, parentUndoCmd);
+        Q_UNUSED(cmd);
     }
-
-    KisKeyframeSP keyframe = keyframeAt(time);
 
     emit sigRemovingKeyframe(this, time);
     m_d->keys.remove(time);

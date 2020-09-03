@@ -49,9 +49,6 @@ public:
      * for example, the registration of a KisRasterKeyframe with the new channel's paint device. */
     virtual KisKeyframeSP duplicate(class KisKeyframeChannel* newChannel = nullptr) = 0;
 
-protected:
-    KisKeyframe(const KisKeyframe &rhs);
-
 private:
     struct Private;
     QScopedPointer<Private> m_d;

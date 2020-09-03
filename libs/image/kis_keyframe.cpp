@@ -35,12 +35,6 @@ KisKeyframe::KisKeyframe()
 {
 }
 
-KisKeyframe::KisKeyframe(const KisKeyframe &rhs)
-    : m_d(new Private)
-{
-    m_d->colorLabel = rhs.m_d->colorLabel;
-}
-
 KisKeyframe::~KisKeyframe()
 {
 }

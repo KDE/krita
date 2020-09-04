@@ -1576,7 +1576,6 @@
   <Actions category="Blending Modes">
     <text>Blending Modes</text>
 
-<!-- commented out in the code right now
     <Action name="Next Blending Mode">
       <icon></icon>
       <text>Next Blending Mode</text>
@@ -1587,6 +1586,7 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+
     <Action name="Previous Blending Mode">
       <icon></icon>
       <text>Previous Blending Mode</text>
@@ -1597,7 +1597,7 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
--->
+
     <Action name="Select Normal Blending Mode">
       <icon></icon>
       <text>Select Normal Blending Mode</text>

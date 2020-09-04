@@ -96,11 +96,11 @@ void KisCompositeOpComboBox::connectBlendmodeActions(KisActionManager *manager)
 {
     KisAction *action = 0;
 
-//    action = manager->createAction("Next Blending Mode");
-//    connect(action, SIGNAL(triggered()), SLOT(slotNextBlendingMode()));
+    action = manager->createAction("Next Blending Mode");
+    connect(action, SIGNAL(triggered()), SLOT(slotNextBlendingMode()));
 
-//    action = manager->createAction("Previous Blending Mode");
-//    connect(action, SIGNAL(triggered()), SLOT(slotPreviousBlendingMode()));
+    action = manager->createAction("Previous Blending Mode");
+    connect(action, SIGNAL(triggered()), SLOT(slotPreviousBlendingMode()));
 
     action = manager->createAction("Select Normal Blending Mode");
     connect(action, SIGNAL(triggered()), SLOT(slotNormal()));

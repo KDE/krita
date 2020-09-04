@@ -83,10 +83,10 @@ private Q_SLOTS:
     // From the node manager to the layerbox
     void slotSetCompositeOp(const KoCompositeOp* compositeOp);
     void slotSetOpacity(double opacity);
+    void slotUpdateOpacitySlider(quint8 value);
     void updateUI();
     void setCurrentNode(KisNodeSP node);
     void slotModelReset();
-
 
     // from the layerbox to the node manager
     void slotRmClicked();
@@ -123,9 +123,6 @@ private Q_SLOTS:
 
     void slotUpdateThumbnailIconSize();
 
-
-    // Opacity keyframing
-    void slotKeyframeChannelAdded(KisKeyframeChannel *channel);
     void slotImageTimeChanged(int time);
     void slotForgetAboutSavedNodeBeforeEditSelectionMode();
 
@@ -135,7 +132,6 @@ Q_SIGNALS:
 private:
     inline void connectActionToButton(KisViewManager* view, QAbstractButton *button, const QString &id);
     inline void addActionToMenu(QMenu *menu, const QString &id);
-    void watchOpacityChannel(KisKeyframeChannel *newChannel);
 
     KisNodeSP findNonHidableNode(KisNodeSP startNode);
 private:
@@ -167,7 +163,6 @@ private:
 
     KisNodeSP m_activeNode;
     KisNodeWSP m_savedNodeBeforeEditSelectionMode;
-    QPointer<KisKeyframeChannel> m_opacityChannel;
     bool m_blockOpacityUpdate {false};
     KisSignalAutoConnectionsStore m_activeNodeConnections;
 };

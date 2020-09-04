@@ -13,6 +13,8 @@
 
 #include <KoID.h>
 
+#include <functional>
+
 #include "kis_shared.h"
 #include "kis_paint_device.h"
 #include "kis_processing_visitor.h" // included, not forward declared for msvc
@@ -25,8 +27,6 @@ class KisUndoAdapter;
 class KisKeyframeChannel;
 
 #include "kritaimage_export.h"
-
-
 
 /**
  * A KisBaseNode is the base class for all components of an image:
@@ -598,6 +598,7 @@ public:
 
 Q_SIGNALS:
     void keyframeChannelAdded(KisKeyframeChannel *channel);
+    void opacityChanged(quint8 value);
 
 private:
 

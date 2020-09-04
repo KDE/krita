@@ -531,6 +531,8 @@ void LayerBox::updateUI()
     if (!m_canvas) return;
     if (!m_nodeManager) return;
 
+    ENTER_FUNCTION();
+
     KisNodeSP activeNode = m_nodeManager->activeNode();
 
     if (activeNode != m_activeNode) {
@@ -546,15 +548,9 @@ void LayerBox::updateUI()
                      this, SLOT(updateUI()));
             }
 
-            KisKeyframeChannel *opacityChannel = activeNode->getKeyframeChannel(KisKeyframeChannel::Opacity.id(), false);
-            if (opacityChannel) {
-                watchOpacityChannel(opacityChannel);
-            } else {
-                watchOpacityChannel(0);
-                m_activeNodeConnections.addConnection(
-                    activeNode, SIGNAL(keyframeChannelAdded(KisKeyframeChannel*)),
-                    this, SLOT(slotKeyframeChannelAdded(KisKeyframeChannel*)));
-            }
+            m_activeNodeConnections.addConnection(
+                    activeNode, SIGNAL(opacityChanged(quint8)),
+                    this, SLOT(slotUpdateOpacitySlider(quint8)));
         }
     }
 
@@ -644,6 +640,15 @@ void LayerBox::slotSetOpacity(double opacity)
     Q_ASSERT(opacity >= 0 && opacity <= 100);
     m_wdgLayerBox->doubleOpacity->blockSignals(true);
     m_wdgLayerBox->doubleOpacity->setValue(opacity);
+    m_wdgLayerBox->doubleOpacity->blockSignals(false);
+}
+
+void LayerBox::slotUpdateOpacitySlider(quint8 value) {
+    double percentage = value * 100 / 255;
+    ENTER_FUNCTION();
+
+    m_wdgLayerBox->doubleOpacity->blockSignals(true);
+    m_wdgLayerBox->doubleOpacity->setValue(percentage);
     m_wdgLayerBox->doubleOpacity->blockSignals(false);
 }
 
@@ -1111,29 +1116,6 @@ void LayerBox::updateLayerFiltering()
 {
     m_filteringModel->setAcceptedLabels(layerFilterWidget->getActiveColors());
     m_filteringModel->setTextFilter(layerFilterWidget->getTextFilter());
-}
-
-void LayerBox::slotKeyframeChannelAdded(KisKeyframeChannel *channel)
-{
-    if (channel->id() == KisKeyframeChannel::Opacity.id()) {
-        watchOpacityChannel(channel);
-    }
-}
-
-void LayerBox::watchOpacityChannel(KisKeyframeChannel *newChannel)
-{
-    if (newChannel) {
-        if (m_opacityChannel) {
-            m_opacityChannel->disconnect(this);
-        }
-
-        m_opacityChannel = newChannel;
-        connect(m_opacityChannel, &KisKeyframeChannel::sigChannelUpdated, [this](const KisTimeSpan &affectedTimeSpan, const QRect &affectedArea){
-            if (!m_blockOpacityUpdate) {
-                updateUI(); // TODO: Make sure this is doing something useful.
-            }
-        });
-    }
 }
 
 void LayerBox::slotImageTimeChanged(int time)

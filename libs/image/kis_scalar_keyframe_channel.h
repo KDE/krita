@@ -138,6 +138,8 @@ public:
     qreal valueAt(int time) const;
     qreal currentValue() { return valueAt(currentTime()); }
 
+    bool isCurrentTimeAffectedBy(int keyTime);
+
     void setDefaultValue(qreal value);
     void setDefaultInterpolationMode(KisScalarKeyframe::InterpolationMode mode);
 

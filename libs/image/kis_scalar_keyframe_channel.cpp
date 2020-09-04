@@ -289,6 +289,10 @@ qreal KisScalarKeyframeChannel::valueAt(int time) const
     }
 }
 
+bool KisScalarKeyframeChannel::isCurrentTimeAffectedBy(int keyTime) {
+    return affectedFrames(activeKeyframeTime(keyTime)).contains(currentTime());
+}
+
 void KisScalarKeyframeChannel::setDefaultValue(qreal value)
 {
     m_d->defaultValue = value;

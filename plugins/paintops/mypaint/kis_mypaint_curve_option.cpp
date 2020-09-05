@@ -22,6 +22,7 @@
 #include <QDomNode>
 #include <QJsonObject>
 #include <QJsonDocument>
+#include <kis_paintop_lod_limitations.h>
 
 #include <libmypaint/mypaint-brush.h>
 #include <libmypaint/mypaint-config.h>
@@ -195,6 +196,21 @@ void KisMyPaintCurveOption::readNamedOptionSetting(const QString& prefix, const 
     firstRead = false;
     m_value = setting->getDouble(m_name + "Value", m_maxValue);        
     m_curveMode = setting->getInt(m_name + "curveMode");    
+}
+
+void KisMyPaintCurveOption::lodLimitations(KisPaintopLodLimitations *l) const {
+
+    if(m_sensorMap.find(MYPAINT_RANDOM) != m_sensorMap.end()) {
+        l->blockers << KoID("Random Sensor Active", i18nc("PaintOp instant preview limitation", "Random Sensor Active, consider disabling Instant Preview"));
+    }
+
+    if(m_name == "offset_by_random") {
+        l->blockers << KoID("Offset by Random", i18nc("PaintOp instant preview limitation", "Offset by Random, consider disabling Instant Preview"));
+    }
+
+    if(m_name == "radius_by_random") {
+        l->blockers << KoID("Radius by Random", i18nc("PaintOp instant preview limitation", "Radius by Random, consider disabling Instant Preview"));
+    }
 }
 
 MyPaintBrushSetting KisMyPaintCurveOption::currentSetting() {

@@ -28,6 +28,7 @@ public:
 
     void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
     void readOptionSetting(KisPropertiesConfigurationSP setting);
+    void lodLimitations(KisPaintopLodLimitations *l) const override;
 
     MyPaintBrushSetting currentSetting();
     QList<MyPaintBrushInput> inputList();

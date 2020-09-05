@@ -30,7 +30,7 @@ struct KisVisualColorSelector::Private
     bool circular {false};
     //bool isRGBA {false};
     bool initialized {false};
-    bool loadingConfig {false};
+    bool useACSConfig {true};
     int colorChannelCount {0};
     qreal stretchLimit {1.5};
     QVector4D channelValues;
@@ -44,12 +44,15 @@ KisVisualColorSelector::KisVisualColorSelector(QWidget *parent)
     : KisColorSelectorInterface(parent)
     , m_d(new Private)
 {
+    m_d->acs_config = validatedConfiguration(KisColorSelectorConfiguration());
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
+    loadACSConfig();
     setSelectorModel(new KisVisualColorModel(this));
     m_d->selector->slotLoadACSConfig();
+
     m_d->updateTimer = new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE);
-    connect(m_d->updateTimer, SIGNAL(timeout()), SLOT(slotRebuildSelectors()), Qt::UniqueConnection);
+    connect(m_d->updateTimer, SIGNAL(timeout()), SLOT(slotReloadConfiguration()), Qt::UniqueConnection);
 }
 
 KisVisualColorSelector::~KisVisualColorSelector()
@@ -75,10 +78,8 @@ void KisVisualColorSelector::setSelectorModel(KisVisualColorModel *model)
     // to keep the KisColorSelectorInterface API functional:
     connect(model, SIGNAL(sigNewColor(KoColor)), this, SIGNAL(sigNewColor(KoColor)));
     m_d->selector = model;
-    if (m_d->updateTimer) {
-        m_d->initialized = false;
-        m_d->updateTimer->start();
-    }
+    m_d->initialized = false;
+    rebuildSelector();
 }
 
 KisVisualColorModel *KisVisualColorSelector::selectorModel() const
@@ -92,6 +93,26 @@ void KisVisualColorSelector::setConfig(bool forceCircular, bool forceSelfUpdate)
     if (forceCircular != m_d->circular) {
         m_d->circular = forceCircular;
         m_d->initialized = false;
+        rebuildSelector();
+    }
+}
+
+const KisColorSelectorConfiguration &KisVisualColorSelector::configuration() const
+{
+    return m_d->acs_config;
+}
+
+void KisVisualColorSelector::setConfiguration(const KisColorSelectorConfiguration *config)
+{
+    m_d->useACSConfig = !config;
+    m_d->initialized = false;
+    if (config) {
+        // applies immediately, while signalled rebuilds from krita configuration changes
+        // are queued, so make sure we cancel queued updates
+        m_d->updateTimer->stop();
+        m_d->acs_config = validatedConfiguration(*config);
+        rebuildSelector();
+    } else {
         m_d->updateTimer->start();
     }
 }
@@ -144,8 +165,10 @@ void KisVisualColorSelector::slotSetColorSpace(const KoColorSpace *cs)
 
 void KisVisualColorSelector::slotConfigurationChanged()
 {
-    if (m_d->updateTimer) {
-        m_d->loadingConfig = true;
+    if (m_d->updateTimer && m_d->useACSConfig) {
+        // NOTE: this timer is because notifyConfigChanged() is only called
+        // via KisConfig::setCustomColorSelectorColorSpace(), but at this point
+        // Advanced Color Selector has not written the relevant config values yet.
         m_d->initialized = false;
         m_d->updateTimer->start();
     }
@@ -172,14 +195,11 @@ void KisVisualColorSelector::slotChannelValuesChanged(const QVector4D &values)
 
 void KisVisualColorSelector::slotColorModelChanged()
 {
-    // while reloading configuration the color model may change, but we
-    // don't want to restart the timer here because the rebuild is happening now.
-    // maybe delaying triggered rebuilds is not necessary anymore after decoupling
-    // it from configuration reloads.
-    if (!m_d->loadingConfig)
-    {
+    if (!m_d->initialized || m_d->selector->colorChannelCount() != m_d->colorChannelCount) {
         m_d->initialized = false;
-        m_d->updateTimer->start();
+        rebuildSelector();
+    } else {
+        slotDisplayConfigurationChanged();
     }
 }
 
@@ -204,26 +224,31 @@ void KisVisualColorSelector::slotCursorMoved(QPointF pos)
 
 void KisVisualColorSelector::slotDisplayConfigurationChanged()
 {
-    // TODO...
+    for (KisVisualColorSelectorShape *shape: m_d->widgetlist) {
+        shape->forceImageUpdate();
+    }
 }
 
-void KisVisualColorSelector::slotRebuildSelectors()
+void KisVisualColorSelector::slotReloadConfiguration()
 {
-    if (m_d->loadingConfig) {
+    if (m_d->useACSConfig) {
+        loadACSConfig();
+        // this may trigger slotColorModelChanged() so check afterwards if we already rebuild
         m_d->selector->slotLoadACSConfig();
-        m_d->loadingConfig = false;
+        if (!m_d->initialized) {
+            rebuildSelector();
+        }
     }
-    // TODO: not all changes to color model (e.g. HSV->HSI) require and actual rebuild
+}
 
+void KisVisualColorSelector::rebuildSelector()
+{
     qDeleteAll(m_d->widgetlist);
     m_d->widgetlist.clear();
 
     if (!m_d->selector || m_d->selector->colorModel() == KisVisualColorModel::None) {
         return;
     }
-
-    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
-    m_d->acs_config = KisColorSelectorConfiguration::fromString(cfg.readEntry("colorSelectorConfiguration", KisColorSelectorConfiguration().toString()));
 
     m_d->colorChannelCount = m_d->selector->colorChannelCount();
 
@@ -256,16 +281,10 @@ void KisVisualColorSelector::slotRebuildSelectors()
         case KisColorSelectorConfiguration::Hluma:
             channel1 = 0;
             break;
-        case KisColorSelectorConfiguration::hsyS:
-        case KisColorSelectorConfiguration::hsiS:
-        case KisColorSelectorConfiguration::hslS:
         case KisColorSelectorConfiguration::hsvS:
             channel1 = 1;
             break;
         case KisColorSelectorConfiguration::V:
-        case KisColorSelectorConfiguration::L:
-        case KisColorSelectorConfiguration::I:
-        case KisColorSelectorConfiguration::Y:
             channel1 = 2;
             break;
         default:
@@ -275,24 +294,14 @@ void KisVisualColorSelector::slotRebuildSelectors()
         switch(m_d->acs_config.mainTypeParameter)
         {
         case KisColorSelectorConfiguration::hsvSH:
-        case KisColorSelectorConfiguration::hslSH:
-        case KisColorSelectorConfiguration::hsiSH:
-        case KisColorSelectorConfiguration::hsySH:
             channel2 = 0;
             channel3 = 1;
             break;
         case KisColorSelectorConfiguration::VH:
-        case KisColorSelectorConfiguration::LH:
-        case KisColorSelectorConfiguration::IH:
-        case KisColorSelectorConfiguration::YH:
             channel2 = 0;
             channel3 = 2;
             break;
-        case KisColorSelectorConfiguration::SL:
         case KisColorSelectorConfiguration::SV:
-        case KisColorSelectorConfiguration::SV2:
-        case KisColorSelectorConfiguration::SI:
-        case KisColorSelectorConfiguration::SY:
             channel2 = 1;
             channel3 = 2;
             break;
@@ -426,4 +435,91 @@ void KisVisualColorSelector::resizeEvent(QResizeEvent *)
         m_d->widgetlist.at(0)->setGeometry(0, 0, sizeBlock, sizeBlock);
         m_d->widgetlist.at(1)->setGeometry(sizeBlock + 8, 0, sizeBlock, sizeBlock);
     }
+}
+
+void KisVisualColorSelector::loadACSConfig()
+{
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
+    KisColorSelectorConfiguration raw_config = KisColorSelectorConfiguration::fromString(
+                cfg.readEntry("colorSelectorConfiguration", KisColorSelectorConfiguration().toString()));
+    m_d->acs_config = validatedConfiguration(raw_config);
+}
+
+KisColorSelectorConfiguration KisVisualColorSelector::validatedConfiguration(const KisColorSelectorConfiguration &cfg)
+{
+    KisColorSelectorConfiguration validated(cfg);
+    bool ok = true;
+
+    switch (validated.mainType) {
+    case KisColorSelectorConfiguration::Triangle:
+    case KisColorSelectorConfiguration::Square:
+    case KisColorSelectorConfiguration::Wheel:
+        break;
+    default:
+        ok = false;
+    }
+
+    switch (validated.subType) {
+    case KisColorSelectorConfiguration::Ring:
+    case KisColorSelectorConfiguration::Slider:
+        break;
+    default:
+        ok = false;
+    }
+
+    switch(validated.subTypeParameter)
+    {
+    case KisColorSelectorConfiguration::H:
+    case KisColorSelectorConfiguration::hsvS:
+    case KisColorSelectorConfiguration::V:
+        break;
+    // translate to HSV
+    case KisColorSelectorConfiguration::hsyS:
+    case KisColorSelectorConfiguration::hsiS:
+    case KisColorSelectorConfiguration::hslS:
+        validated.subTypeParameter = KisColorSelectorConfiguration::hsvS;
+        break;
+    case KisColorSelectorConfiguration::L:
+    case KisColorSelectorConfiguration::I:
+    case KisColorSelectorConfiguration::Y:
+        validated.subTypeParameter = KisColorSelectorConfiguration::V;
+        break;
+    default:
+        ok = false;
+    }
+
+    switch(validated.mainTypeParameter)
+    {
+    case KisColorSelectorConfiguration::SV:
+    case KisColorSelectorConfiguration::hsvSH:
+    case KisColorSelectorConfiguration::VH:
+        break;
+    // translate to HSV
+    case KisColorSelectorConfiguration::SL:
+    case KisColorSelectorConfiguration::SV2:
+    case KisColorSelectorConfiguration::SI:
+    case KisColorSelectorConfiguration::SY:
+        validated.mainTypeParameter = KisColorSelectorConfiguration::SV;
+        break;
+    case KisColorSelectorConfiguration::hslSH:
+    case KisColorSelectorConfiguration::hsiSH:
+    case KisColorSelectorConfiguration::hsySH:
+        validated.mainTypeParameter = KisColorSelectorConfiguration::hsvSH;
+        break;
+    case KisColorSelectorConfiguration::LH:
+    case KisColorSelectorConfiguration::IH:
+    case KisColorSelectorConfiguration::YH:
+        validated.mainTypeParameter = KisColorSelectorConfiguration::VH;
+        break;
+    default:
+        ok = false;
+    }
+
+    if (ok) {
+        return validated;
+    }
+    return KisColorSelectorConfiguration(KisColorSelectorConfiguration::Triangle,
+                                         KisColorSelectorConfiguration::Ring,
+                                         KisColorSelectorConfiguration::SV,
+                                         KisColorSelectorConfiguration::H);
 }

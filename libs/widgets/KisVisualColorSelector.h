@@ -15,6 +15,7 @@
 #include "kritawidgets_export.h"
 
 class QVector4D;
+class KisColorSelectorConfiguration;
 
 /**
  * @brief The KisVisualColorSelector class
@@ -49,6 +50,17 @@ public:
      * ignored, can possibly be removed from parent class now
      */
     void setConfig(bool forceCircular, bool forceSelfUpdate) override;
+    const KisColorSelectorConfiguration& configuration() const;
+    /**
+    * @brief Explicitly set the shape configuration.
+    * Accepts all valid combinations of Advanced Color Selector, however parameters
+    * will be converted to HSV equivalent since color model is independent.
+    * @param config
+    * Passing null will load the Advanced Color Selector configuration
+    * Note: Null will also set the HSX color model for compatibility reasons,
+    * while otherwise shape layout and color model are independent.
+    */
+    void setConfiguration(const KisColorSelectorConfiguration *config);
     void setAcceptTabletEvents(bool on);
     KoColor getCurrentColor() const override;
     RenderMode renderMode() const;
@@ -65,7 +77,7 @@ private Q_SLOTS:
     void slotColorModelChanged();
     void slotCursorMoved(QPointF pos);
     void slotDisplayConfigurationChanged();
-    void slotRebuildSelectors();
+    void slotReloadConfiguration();
 
 Q_SIGNALS:
     /**
@@ -79,6 +91,10 @@ protected:
     void resizeEvent(QResizeEvent *) override;
 
 private:
+    void rebuildSelector();
+    void loadACSConfig();
+    static KisColorSelectorConfiguration validatedConfiguration(const KisColorSelectorConfiguration &cfg);
+
     struct Private;
     const QScopedPointer<Private> m_d;
 };

@@ -19,6 +19,7 @@
 #include <QWidget>
 #include "ui_wdgmypaintoptions.h"
 #include "kis_my_paintop_option.h"
+#include <kis_paintop_lod_limitations.h>
 
 class KisMyPaintOpOptionsWidget: public QWidget, public Ui::WdgMyPaintOptions
 {
@@ -86,6 +87,11 @@ void KisMyPaintOpOption::readOptionSetting(const KisPropertiesConfigurationSP se
     m_options->opacitySPBox->setValue(op.opacity);
     m_options->eraserBox->setChecked(op.eraserMode);
     this->eraserVal = op.eraser;
+}
+
+void KisMyPaintOpOption::lodLimitations(KisPaintopLodLimitations *l) const {
+
+   Q_UNUSED(l);
 }
 
 void KisMyPaintOpOption::refresh() {

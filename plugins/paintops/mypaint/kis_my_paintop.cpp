@@ -77,6 +77,11 @@ KisSpacingInformation KisMyPaintOp::paintAt(const KisPaintInformation& info) {
         return KisSpacingInformation(1.0);
     }
 
+    const qreal lodScale = KisLodTransform::lodToScale(painter()->device());
+    qreal radius = m_radius * lodScale;
+
+    mypaint_brush_set_base_value(m_brush->brush(), MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC, log(radius));
+
     isStrokeStarted = mypaint_brush_get_state(m_brush->brush(), MYPAINT_BRUSH_STATE_STROKE_STARTED);
     if(!isStrokeStarted) {
 
@@ -93,9 +98,6 @@ KisSpacingInformation KisMyPaintOp::paintAt(const KisPaintInformation& info) {
                            info.xTilt(), info.yTilt(), dtime);
 
     previousTime = info.currentTime();
-
-    const qreal lodScale = KisLodTransform::lodToScale(painter()->device());
-    m_radius = m_radius*lodScale;
 
     return computeSpacing(info, lodScale);
 }

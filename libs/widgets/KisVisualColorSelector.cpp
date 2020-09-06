@@ -19,6 +19,7 @@
 #include "kis_debug.h"
 
 #include "KisVisualColorSelectorShape.h"
+#include "KisVisualDiamondSelectorShape.h"
 #include "KisVisualRectangleSelectorShape.h"
 #include "KisVisualTriangleSelectorShape.h"
 #include "KisVisualEllipticalSelectorShape.h"
@@ -195,7 +196,10 @@ void KisVisualColorSelector::slotChannelValuesChanged(const QVector4D &values)
 
 void KisVisualColorSelector::slotColorModelChanged()
 {
-    if (!m_d->initialized || m_d->selector->colorChannelCount() != m_d->colorChannelCount) {
+    // TODO: triangle <=> diamond switch only happens on HSV <=> non-HSV, but
+    // the previous color model is not accessible right now
+    if (!m_d->initialized || m_d->selector->colorChannelCount() != m_d->colorChannelCount
+            || m_d->acs_config.mainType == KisColorSelectorConfiguration::Triangle) {
         m_d->initialized = false;
         rebuildSelector();
     } else {
@@ -338,8 +342,13 @@ void KisVisualColorSelector::rebuildSelector()
 
         KisVisualColorSelectorShape *block;
         if (m_d->acs_config.mainType == KisColorSelectorConfiguration::Triangle) {
-            block = new KisVisualTriangleSelectorShape(this, KisVisualColorSelectorShape::twodimensional,
-                                                       channel2, channel3);
+            if (m_d->selector->colorModel() == KisVisualColorModel::HSV) {
+                block = new KisVisualTriangleSelectorShape(this, KisVisualColorSelectorShape::twodimensional,
+                                                           channel2, channel3);
+            } else {
+                block = new KisVisualDiamondSelectorShape(this, KisVisualColorSelectorShape::twodimensional,
+                                                           channel2, channel3);
+            }
         }
         else if (m_d->acs_config.mainType == KisColorSelectorConfiguration::Square) {
             block = new KisVisualRectangleSelectorShape(this, KisVisualColorSelectorShape::twodimensional,
@@ -416,7 +425,11 @@ void KisVisualColorSelector::resizeEvent(QResizeEvent *)
         }
 
         if (m_d->acs_config.mainType == KisColorSelectorConfiguration::Triangle) {
-            m_d->widgetlist.at(1)->setGeometry(m_d->widgetlist.at(0)->getSpaceForTriangle(newrect));
+            if (m_d->selector->colorModel() == KisVisualColorModel::HSV) {
+                m_d->widgetlist.at(1)->setGeometry(m_d->widgetlist.at(0)->getSpaceForTriangle(newrect));
+            } else {
+                m_d->widgetlist.at(1)->setGeometry(m_d->widgetlist.at(0)->getSpaceForCircle(newrect));
+            }
         }
         else if (m_d->acs_config.mainType == KisColorSelectorConfiguration::Square) {
             m_d->widgetlist.at(1)->setGeometry(m_d->widgetlist.at(0)->getSpaceForSquare(newrect));

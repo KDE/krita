@@ -80,12 +80,18 @@ void KisToolPolylineBase::beginPrimaryAction(KoPointerEvent *event)
 {
     Q_UNUSED(event);
     NodePaintAbility paintability = nodePaintAbility();
-    if ((m_type == PAINT && (!nodeEditable() || paintability == UNPAINTABLE || paintability  == KisToolPaint::CLONE)) ||
+    if ((m_type == PAINT && (!nodeEditable() || paintability == UNPAINTABLE || paintability  == KisToolPaint::CLONE || paintability == KisToolPaint::MYPAINTBRUSH_UNPAINTABLE)) ||
         (m_type == SELECT && !selectionEditable())) {
 
         if (paintability == KisToolPaint::CLONE){
             KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
             QString message = i18n("This tool cannot paint on clone layers.  Please select a paint or vector layer or mask.");
+            kiscanvas->viewManager()->showFloatingMessage(message, koIcon("object-locked"));
+        }
+
+        if (paintability == KisToolPaint::MYPAINTBRUSH_UNPAINTABLE) {
+            KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+            QString message = i18n("The MyPaint Brush Engine is not available for this colorspace");
             kiscanvas->viewManager()->showFloatingMessage(message, koIcon("object-locked"));
         }
 

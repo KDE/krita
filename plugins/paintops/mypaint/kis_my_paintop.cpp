@@ -50,18 +50,15 @@ KisMyPaintOp::KisMyPaintOp(const KisPaintOpSettingsSP settings, KisPainter * pai
         mypaint_brush_from_defaults(m_brush->brush());
         mypaint_brush_set_base_value(m_brush->brush(), MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC, log(settings->getFloat(MYPAINT_DIAMETER)/2));
         painter->setCompositeOp(COMPOSITE_ERASE);
-        m_brush->setColor(this->painter()->paintColor(), painter->device()->colorSpace());
         mypaint_brush_set_base_value(m_brush->brush(), MYPAINT_BRUSH_SETTING_ERASER, false);
     }
     else if(qRound(settings->getFloat(MYPAINT_ERASER)) && settings->getBool("EraserMode")) {
 
         painter->setCompositeOp(COMPOSITE_ERASE);
-        m_brush->setColor(this->painter()->paintColor(), painter->device()->colorSpace());
         mypaint_brush_set_base_value(m_brush->brush(), MYPAINT_BRUSH_SETTING_ERASER, false);
     }
-    else {
-        m_brush->setColor(this->painter()->paintColor(), painter->device()->colorSpace());
-    }
+
+    m_brush->setColor(this->painter()->paintColor(), painter->device()->colorSpace());
 
     m_settings = settings;
     m_airBrushOption.readOptionSetting(m_settings);

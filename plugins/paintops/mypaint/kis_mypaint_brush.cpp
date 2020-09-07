@@ -52,10 +52,12 @@ void KisMyPaintBrush::setColor(const KoColor color, const KoColorSpace *colorSpa
     qreal r, g, b;
     QColor dstColor;
 
-    colorSpace->toQColor(color.data(), &dstColor, colorSpace->profile());
-    dstColor.getRgbF(&r, &g, &b);
+    if (colorSpace->id().startsWith("RGBA")) {
+        colorSpace->toQColor(color.data(), &dstColor, colorSpace->profile());
+        dstColor.getRgbF(&r, &g, &b);
+    }
 
-    RGBToHSV(r , g, b, &hue, &saturation, &value);
+    RGBToHSV(r, g, b, &hue, &saturation, &value);
 
     mypaint_brush_set_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_COLOR_H, (hue)/360);
     mypaint_brush_set_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_COLOR_S, (saturation));

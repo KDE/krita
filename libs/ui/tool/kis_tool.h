@@ -167,7 +167,8 @@ public:
         VECTOR,
         CLONE,
         PAINT,
-        UNPAINTABLE
+        UNPAINTABLE,
+        MYPAINTBRUSH_UNPAINTABLE
     };
     Q_ENUMS(NodePaintAbility)
 

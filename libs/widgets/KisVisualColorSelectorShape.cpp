@@ -354,8 +354,11 @@ void KisVisualColorSelectorShape::paintEvent(QPaintEvent*)
     if (!fullSelector.isNull()) {
         painter.drawImage(0, 0, fullSelector);
     }
-    painter.setRenderHint(QPainter::Antialiasing);
-    drawCursor(painter);
+
+    if (isEnabled()) {
+        painter.setRenderHint(QPainter::Antialiasing);
+        drawCursor(painter);
+    }
 }
 
 void KisVisualColorSelectorShape::resizeEvent(QResizeEvent *)

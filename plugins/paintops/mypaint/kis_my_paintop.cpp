@@ -28,6 +28,7 @@
 #include <kis_paint_information.h>
 #include <kis_spacing_information.h>
 #include <kis_paintop_plugin_utils.h>
+#include <KoCompositeOpRegistry.h>
 #include <kis_brush_based_paintop_settings.h>
 #include <libmypaint/mypaint-brush.h>
 
@@ -48,12 +49,14 @@ KisMyPaintOp::KisMyPaintOp(const KisPaintOpSettingsSP settings, KisPainter * pai
 
         mypaint_brush_from_defaults(m_brush->brush());
         mypaint_brush_set_base_value(m_brush->brush(), MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC, log(settings->getFloat(MYPAINT_DIAMETER)/2));
-        m_brush->setColor(this->painter()->backgroundColor(), painter->device()->colorSpace());
+        painter->setCompositeOp(COMPOSITE_ERASE);
+        m_brush->setColor(this->painter()->paintColor(), painter->device()->colorSpace());
         mypaint_brush_set_base_value(m_brush->brush(), MYPAINT_BRUSH_SETTING_ERASER, false);
     }
     else if(qRound(settings->getFloat(MYPAINT_ERASER)) && settings->getBool("EraserMode")) {
 
-        m_brush->setColor(this->painter()->backgroundColor(), painter->device()->colorSpace());
+        painter->setCompositeOp(COMPOSITE_ERASE);
+        m_brush->setColor(this->painter()->paintColor(), painter->device()->colorSpace());
         mypaint_brush_set_base_value(m_brush->brush(), MYPAINT_BRUSH_SETTING_ERASER, false);
     }
     else {

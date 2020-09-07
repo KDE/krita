@@ -40,6 +40,7 @@
 #include <brushengine/kis_paintop_registry.h>
 #include <kis_figure_painting_tool_helper.h>
 #include <kis_canvas2.h>
+#include <KisViewManager.h>
 #include <kis_action_registry.h>
 #include <kis_painting_information_builder.h>
 
@@ -179,6 +180,12 @@ void KisToolLine::beginPrimaryAction(KoPointerEvent *event)
     if (nodeAbility == UNPAINTABLE || !nodeEditable()) {
         event->ignore();
         return;
+    }
+
+    if (nodeAbility == MYPAINTBRUSH_UNPAINTABLE) {
+        KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+        QString message = i18n("The MyPaint Brush Engine is not available for this colorspace");
+        kiscanvas->viewManager()->showFloatingMessage(message, koIcon("object-locked"));
     }
 
     setMode(KisTool::PAINT_MODE);

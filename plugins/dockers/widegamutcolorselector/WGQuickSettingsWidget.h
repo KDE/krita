@@ -13,7 +13,9 @@
 class QAbstractButton;
 class QButtonGroup;
 class Ui_QuickSettingsWidget;
+class KisColorSelectorConfiguration;
 class KisVisualColorSelector;
+class WGSelectorConfigGrid;
 
 class WGQuickSettingsWidget : public QWidget
 {
@@ -27,11 +29,13 @@ protected:
 
 private Q_SLOTS:
     void slotColorGroupToggled(int id, bool checked);
+    void slotConfigSelected(const KisColorSelectorConfiguration &cfg);
 
 private:
     Ui_QuickSettingsWidget *m_ui;
     QButtonGroup *m_modelGroup;
     KisVisualColorSelector *m_selector;
+    WGSelectorConfigGrid *m_selectorConf;
 };
 
 #endif // WGQUICKSETTINGSWIDGET_H

@@ -38,10 +38,12 @@ public:
     static void get_color(MyPaintSurface *self, float x, float y, float radius,
                             float * color_r, float * color_g, float * color_b, float * color_a);
 
+    template <typename channelType>
     int drawDabImpl(MyPaintSurface *self, float x, float y, float radius, float color_r, float color_g,
                                     float color_b, float opaque, float hardness, float color_a,
                                     float aspect_ratio, float angle, float lock_alpha, float colorize);
 
+    template <typename channelType>
     void getColorImpl(MyPaintSurface *self, float x, float y, float radius,
                                 float * color_r, float * color_g, float * color_b, float * color_a);
 
@@ -62,7 +64,8 @@ public:
     qreal calculateOpacity(float angle, float hardness, float opaque, float x, float y,
                                             float xp, float yp, float aspect_ratio, float radius);
 
-    MyPaintSurface* surface();    
+    MyPaintSurface* surface();
+    static KoChannelInfo::enumChannelValueType bitDepth;
 
 private:
     KisPainter *m_painter;

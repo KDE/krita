@@ -25,11 +25,14 @@
 #include <kis_algebra_2d.h>
 #include <kis_sequential_iterator.h>
 #include <KoColorConversions.h>
+#include <KoColorSpaceMaths.h>
 #include <kis_cross_device_color_picker.h>
 
 #include "kis_mypaint_surface.h"
 
 using namespace std;
+
+KoChannelInfo::enumChannelValueType KisMyPaintSurface::bitDepth;
 
 KisMyPaintSurface::KisMyPaintSurface(KisPainter *painter, KisPaintDeviceSP paintNode, KisImageSP image)
 {
@@ -43,6 +46,7 @@ KisMyPaintSurface::KisMyPaintSurface(KisPainter *painter, KisPaintDeviceSP paint
 
     m_surface->draw_dab = this->draw_dab;
     m_surface->get_color = this->get_color;
+    bitDepth = painter->device()->colorSpace()->channels()[0]->channelValueType();
 }
 
 int KisMyPaintSurface::draw_dab(MyPaintSurface *self, float x, float y, float radius, float color_r, float color_g,
@@ -50,20 +54,54 @@ int KisMyPaintSurface::draw_dab(MyPaintSurface *self, float x, float y, float ra
                                 float aspect_ratio, float angle, float lock_alpha, float colorize) {
 
     MyPaintSurfaceInternal *surface = static_cast<MyPaintSurfaceInternal*>(self);
-    return surface->m_owner->drawDabImpl(self, x, y, radius, color_r, color_g,
-             color_b, opaque, hardness, color_a,
-            aspect_ratio, angle, lock_alpha,  colorize);
+
+    if (bitDepth == KoChannelInfo::UINT8) {
+        return surface->m_owner->drawDabImpl<quint8>(self, x, y, radius, color_r, color_g,
+                 color_b, opaque, hardness, color_a,
+                aspect_ratio, angle, lock_alpha,  colorize);
+    }
+    else if (bitDepth == KoChannelInfo::UINT16) {
+        return surface->m_owner->drawDabImpl<quint16>(self, x, y, radius, color_r, color_g,
+                 color_b, opaque, hardness, color_a,
+                aspect_ratio, angle, lock_alpha,  colorize);
+    }
+#if defined HAVE_OPENEXR
+    else if (bitDepth == KoChannelInfo::FLOAT16) {
+        return surface->m_owner->drawDabImpl<half>(self, x, y, radius, color_r, color_g,
+                 color_b, opaque, hardness, color_a,
+                aspect_ratio, angle, lock_alpha,  colorize);
+    }
+#endif
+    else {
+        return surface->m_owner->drawDabImpl<float>(self, x, y, radius, color_r, color_g,
+                 color_b, opaque, hardness, color_a,
+                aspect_ratio, angle, lock_alpha,  colorize);
+    }
 }
 
 void KisMyPaintSurface::get_color(MyPaintSurface *self, float x, float y, float radius,
                             float * color_r, float * color_g, float * color_b, float * color_a) {
 
     MyPaintSurfaceInternal *surface = static_cast<MyPaintSurfaceInternal*>(self);
-    surface->m_owner->getColorImpl(self, x, y, radius, color_r, color_g, color_b, color_a);
+    if (bitDepth == KoChannelInfo::UINT8) {
+        surface->m_owner->getColorImpl<quint8>(self, x, y, radius, color_r, color_g, color_b, color_a);
+    }
+    else if (bitDepth == KoChannelInfo::UINT16) {
+        surface->m_owner->getColorImpl<quint16>(self, x, y, radius, color_r, color_g, color_b, color_a);
+    }
+#if defined HAVE_OPENEXR
+    else if (bitDepth == KoChannelInfo::FLOAT16) {
+        surface->m_owner->getColorImpl<half>(self, x, y, radius, color_r, color_g, color_b, color_a);
+    }
+#endif
+    else {
+        surface->m_owner->getColorImpl<float>(self, x, y, radius, color_r, color_g, color_b, color_a);
+    }
 }
 
 
 /*GIMP's draw_dab and get_color code*/
+template <typename channelType>
 int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float radius, float color_r, float color_g,
                                 float color_b, float opaque, float hardness, float color_a,
                                 float aspect_ratio, float angle, float lock_alpha, float colorize) {
@@ -120,18 +158,16 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
         base_alpha = calculate_alpha_for_rr (rr, hardness, segment1_slope, segment2_slope);
         alpha = base_alpha * normal_mode;
 
-        QVector<float> vec = {b, g, r, dst_alpha};
-        colorSpace->normalisedChannelsValue(it.rawData(), vec);
+        channelType* nativeArray = reinterpret_cast<channelType*>(it.rawData());
+        float unitValue = KoColorSpaceMathsTraits<channelType>::unitValue;
 
-        b = vec[0];
-        g = vec[1];
-        r = vec[2];
-        dst_alpha = vec[3];
+        b = nativeArray[0]/unitValue;
+        g = nativeArray[1]/unitValue;
+        r = nativeArray[2]/unitValue;
+        dst_alpha = nativeArray[3]/unitValue;
 
-        if(colorSpace->channels()[0]->channelValueType()==KoChannelInfo::FLOAT16 || colorSpace->channels()[0]->channelValueType()==KoChannelInfo::FLOAT32) {
-
-            r = vec[0];
-            b = vec[2];
+        if (unitValue == 1.0f) {
+            swap(b, r);
         }
 
         a = alpha * (color_a - dst_alpha) + dst_alpha;
@@ -172,19 +208,21 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
             }
         }
 
-        if(colorSpace->channels()[0]->channelValueType()==KoChannelInfo::UINT8 || colorSpace->channels()[0]->channelValueType()==KoChannelInfo::UINT16) {
+        if (unitValue == 1.0f) {
+            swap(b, r);
+        }
 
-            colorSpace->fromNormalisedChannelsValue(it.rawData(), {b,g,r,a});
-        }
-        else {
-            colorSpace->fromNormalisedChannelsValue(it.rawData(), {r,g,b,a});
-        }
+        nativeArray[0] = b * unitValue;
+        nativeArray[1] = g * unitValue;
+        nativeArray[2] = r * unitValue;
+        nativeArray[3] = a * unitValue;
     }
 
     painter()->addDirtyRect(dabRectAligned);    
     return 1;
 }
 
+template <typename channelType>
 void KisMyPaintSurface::getColorImpl(MyPaintSurface *self, float x, float y, float radius,
                             float * color_r, float * color_g, float * color_b, float * color_a) {
 
@@ -244,17 +282,16 @@ void KisMyPaintSurface::getColorImpl(MyPaintSurface *self, float x, float y, flo
 
         qreal r, g, b, a;
 
-        colorSpace->normalisedChannelsValue(it.rawData(), surface_color_vec);
+        channelType* nativeArray = reinterpret_cast<channelType*>(it.rawData());
+        float unitValue = KoColorSpaceMathsTraits<channelType>::unitValue;
 
-        b = surface_color_vec[0];
-        g = surface_color_vec[1];
-        r = surface_color_vec[2];
-        a = surface_color_vec[3];
+        b = nativeArray[0]/unitValue;
+        g = nativeArray[1]/unitValue;
+        r = nativeArray[2]/unitValue;
+        a = nativeArray[3]/unitValue;
 
-        if(colorSpace->channels()[0]->channelValueType()==KoChannelInfo::FLOAT16 || colorSpace->channels()[0]->channelValueType()==KoChannelInfo::FLOAT32) {
-
-            r = surface_color_vec[0];
-            b = surface_color_vec[2];
+        if (unitValue == 1.0f) {
+            swap(b, r);
         }
 
         sum_r += pixel_weight * r;

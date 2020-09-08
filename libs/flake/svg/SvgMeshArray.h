@@ -64,6 +64,8 @@ public:
     /// Get the point of a node in mesharray
     SvgMeshStop getStop(const SvgMeshPatch::Type edge, const int row, const int col) const;
 
+    SvgMeshStop getStop(const SvgMeshPosition &pos) const;
+
     /// Get the Path Points for a segment of the meshpatch
     std::array<QPointF, 4> getPath(const SvgMeshPatch::Type edge, const int row, const int col) const;
 

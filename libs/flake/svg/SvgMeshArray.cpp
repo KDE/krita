@@ -199,6 +199,11 @@ SvgMeshStop SvgMeshArray::getStop(const SvgMeshPatch::Type edge, const int row, 
     assert(false);
 }
 
+SvgMeshStop SvgMeshArray::getStop(const SvgMeshPosition &pos) const
+{
+    return getStop(pos.segmentType, pos.row, pos.col);
+}
+
 std::array<QPointF, 4> SvgMeshArray::getPath(const SvgMeshPatch::Type edge, const int row, const int col) const
 {
     KIS_ASSERT(row < m_array.size() && col < m_array[row].size()

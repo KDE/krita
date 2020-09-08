@@ -324,6 +324,7 @@ KoFillConfigWidget::KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVarian
 
     // meshgradient
     connect(d->ui->meshStopColorButton, SIGNAL(changed(const KoColor&)), this, SLOT(slotMeshHandleColorChanged(const KoColor&)));
+
     d->ui->spinbRows->setRange(1, 20);
     d->ui->spinbColumns->setRange(1, 20);
     connect(d->ui->spinbRows, SIGNAL(valueChanged(int)), SLOT(slotMeshGradientChanged()));
@@ -384,6 +385,7 @@ void KoFillConfigWidget::forceUpdateOnSelectionChanged()
 void KoFillConfigWidget::setSelectedMeshGradientHandle(const SvgMeshPosition &position)
 {
     d->meshposition = position;
+    updateMeshGradientUI();
 }
 
 void KoFillConfigWidget::setNoSelectionTrackingMode(bool value)
@@ -923,12 +925,24 @@ void KoFillConfigWidget::updateMeshGradientUI()
 {
     KisSignalsBlocker b(d->ui->spinbRows,
                         d->ui->spinbColumns,
-                        d->ui->cmbSmoothingType);
+                        d->ui->cmbSmoothingType,
+                        d->ui->meshStopColorButton);
 
     SvgMeshArray *mesharray = d->activeMeshGradient->getMeshArray().data();
     d->ui->spinbRows->setValue(mesharray->numRows());
     d->ui->spinbColumns->setValue(mesharray->numColumns());
     d->ui->cmbSmoothingType->setCurrentIndex(d->activeMeshGradient->type());
+    if (d->meshposition.isValid()) {
+        QColor qc = d->activeMeshGradient->getMeshArray()->getStop(d->meshposition).color;
+
+        KoColor c = d->ui->meshStopColorButton->color();
+        c.fromQColor(qc);
+
+        d->ui->meshStopColorButton->setColor(c);
+        d->ui->meshStopColorButton->setDisabled(false);
+    } else {
+        d->ui->meshStopColorButton->setDisabled(true);
+    }
 }
 
 void KoFillConfigWidget::shapeChanged()
@@ -1087,6 +1101,7 @@ void KoFillConfigWidget::updateWidgetComponentVisbility()
             d->ui->spinbColumns->setVisible(true);
             d->ui->smoothingTypeLabel->setVisible(true);
             d->ui->cmbSmoothingType->setVisible(true);
+            d->ui->meshStopColorButton->setAlphaChannelEnabled(true);
             break;
     }
 

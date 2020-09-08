@@ -120,14 +120,14 @@ protected:
     QCursor m_selectCursor;
 
 private:
-    KoPathToolHandle * m_activeHandle;       ///< the currently active handle
+    QScopedPointer<KoPathToolHandle> m_activeHandle;       ///< the currently active handle
     QPointF m_lastPoint; ///< needed for interaction strategy
-    PathSegment *m_activeSegment;
+    QScopedPointer<PathSegment> m_activeSegment;
 
     // make a frind so that it can test private member/methods
     friend class TestPathTool;
 
-    KoInteractionStrategy *m_currentStrategy; ///< the rubber selection strategy
+    QScopedPointer<KoInteractionStrategy> m_currentStrategy; ///< the rubber selection strategy
 
     QButtonGroup *m_pointTypeGroup;
     QActionGroup *m_points;

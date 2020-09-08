@@ -94,7 +94,17 @@ public:
     /// Gets the curve passing through the middle of meshpatch
     std::array<QPointF, 4> getMidCurve(bool isVertical) const;
 
-    void subdivide(QVector<SvgMeshPatch*>& subdivided, const QVector<QColor>& colors) const;
+    void subdivideHorizontally(QVector<SvgMeshPatch*>& subdivided,
+                               const QVector<QColor>& colors) const;
+
+    void subdivideVertically(QVector<SvgMeshPatch*>& subdivided,
+                             const QVector<QColor>& colors) const;
+
+    void subdivide(QVector<SvgMeshPatch*>& subdivided,
+                   const QVector<QColor>& colors) const;
+
+    bool isDivisbleVertically() const;
+    bool isDivisibleHorizontally() const;
 
     int countPoints() const;
 

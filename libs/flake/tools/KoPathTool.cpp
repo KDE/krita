@@ -108,9 +108,6 @@ struct KoPathTool::PathSegment {
 KoPathTool::KoPathTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
     , m_pointSelection(this)
-    , m_activeHandle(0)
-    , m_activeSegment(0)
-    , m_currentStrategy(0)
     , m_activatedTemporarily(false)
 {
     m_points = new QActionGroup(this);
@@ -162,9 +159,6 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
 
 KoPathTool::~KoPathTool()
 {
-    delete m_activeHandle;
-    delete m_activeSegment;
-    delete m_currentStrategy;
 }
 
 QList<QPointer<QWidget> >  KoPathTool::createOptionWidgets()
@@ -240,10 +234,9 @@ void KoPathTool::removePoints()
     Q_D(KoToolBase);
     if (m_pointSelection.size() > 0) {
         KUndo2Command *cmd = KoPathPointRemoveCommand::createCommand(m_pointSelection.selectedPointsData(), d->canvas->shapeController());
-        PointHandle *pointHandle = dynamic_cast<PointHandle*>(m_activeHandle);
+        PointHandle *pointHandle = dynamic_cast<PointHandle*>(m_activeHandle.data());
         if (pointHandle && m_pointSelection.contains(pointHandle->activePoint())) {
-            delete m_activeHandle;
-            m_activeHandle = 0;
+            m_activeHandle.reset();
         }
         clearActivePointSelectionReferences();
         d->canvas->addCommand(cmd);
@@ -506,8 +499,7 @@ void KoPathTool::paint(QPainter &painter, const KoViewConverter &converter)
         if (m_activeHandle->check(m_pointSelection.selectedShapes())) {
             m_activeHandle->paint(painter, converter, handleRadius());
         } else {
-            delete m_activeHandle;
-            m_activeHandle = 0;
+            m_activeHandle.reset();
         }
     } else if (m_activeSegment && m_activeSegment->isValid()) {
 
@@ -586,7 +578,7 @@ void KoPathTool::mousePressEvent(KoPointerEvent *event)
     // we are moving if we hit a point and use the left mouse button
     event->ignore();
     if (m_activeHandle) {
-        m_currentStrategy = m_activeHandle->handleMousePress(event);
+        m_currentStrategy.reset(m_activeHandle->handleMousePress(event));
         event->accept();
     } else {
         if (event->button() & Qt::LeftButton) {
@@ -602,7 +594,7 @@ void KoPathTool::mousePressEvent(KoPointerEvent *event)
                 m_pointSelection.add(segment.second(), false);
 
                 KoPathPointData data(shape, index);
-                m_currentStrategy = new KoPathSegmentChangeStrategy(this, event->point, data, m_activeSegment->positionOnSegment);
+                m_currentStrategy.reset(new KoPathSegmentChangeStrategy(this, event->point, data, m_activeSegment->positionOnSegment));
                 event->accept();
             } else {
 
@@ -620,7 +612,7 @@ void KoPathTool::mousePressEvent(KoPointerEvent *event)
                     selection->select(shape);
                 } else {
                     KIS_ASSERT_RECOVER_RETURN(m_currentStrategy == 0);
-                    m_currentStrategy = new KoPathPointRubberSelectStrategy(this, event->point);
+                    m_currentStrategy.reset(new KoPathPointRubberSelectStrategy(this, event->point));
                     event->accept();
                 }
             }
@@ -643,8 +635,7 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
     }
 
     if (m_activeSegment) {
-        delete m_activeSegment;
-        m_activeSegment = 0;
+        m_activeSegment.reset();
         repaintDecorations();
     }
 
@@ -656,10 +647,8 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
             if (handleId != -1) {
                 useCursor(m_moveCursor);
                 emit statusTextChanged(i18n("Drag to move handle."));
-                delete m_activeHandle;
 
-                //debugFlake << "handleId" << handleId;
-                m_activeHandle = new ParameterHandle(this, parameterShape, handleId);
+                m_activeHandle.reset(new ParameterHandle(this, parameterShape, handleId));
                 repaintDecorations();
                 return;
             }
@@ -715,12 +704,11 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
                 else
                     emit statusTextChanged(i18n("Drag to move control point."));
 
-                PointHandle *prev = dynamic_cast<PointHandle*>(m_activeHandle);
+                PointHandle *prev = dynamic_cast<PointHandle*>(m_activeHandle.data());
                 if (prev && prev->activePoint() == bestPoint && prev->activePointType() == bestPointType)
                     return; // no change;
 
-                delete m_activeHandle;
-                m_activeHandle = new PointHandle(this, bestPoint, bestPointType);
+                m_activeHandle.reset(new PointHandle(this, bestPoint, bestPointType));
                 repaintDecorations();
                 return;
             }
@@ -730,8 +718,7 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
     useCursor(m_selectCursor);
 
     if (m_activeHandle) {
-        delete m_activeHandle;
-        m_activeHandle = 0;
+        m_activeHandle.reset();
         repaintDecorations();
     }
 
@@ -739,7 +726,7 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
     if(hoveredSegment) {
         useCursor(Qt::PointingHandCursor);
         emit statusTextChanged(i18n("Drag to change curve directly. Double click to insert new path point."));
-        m_activeSegment = hoveredSegment;
+        m_activeSegment.reset(hoveredSegment);
         repaintDecorations();
     } else {
         uint selectedPointCount = m_pointSelection.size();
@@ -761,13 +748,12 @@ void KoPathTool::mouseReleaseEvent(KoPointerEvent *event)
         KUndo2Command *command = m_currentStrategy->createCommand();
         if (command)
             d->canvas->addCommand(command);
-        if (hadNoSelection && dynamic_cast<KoPathPointRubberSelectStrategy*>(m_currentStrategy)
+        if (hadNoSelection && dynamic_cast<KoPathPointRubberSelectStrategy*>(m_currentStrategy.data())
                 && !m_pointSelection.hasSelection()) {
             // the click didn't do anything at all. Allow it to be used by others.
             event->ignore();
         }
-        delete m_currentStrategy;
-        m_currentStrategy = 0;
+        m_currentStrategy.reset();
         repaintDecorations();
     }
 }
@@ -786,8 +772,7 @@ void KoPathTool::keyPressEvent(QKeyEvent *event)
             break;
         case Qt::Key_Escape:
             m_currentStrategy->cancelInteraction();
-            delete m_currentStrategy;
-            m_currentStrategy = 0;
+            m_currentStrategy.reset();
             break;
         default:
             event->ignore();
@@ -973,19 +958,14 @@ void KoPathTool::notifyPathPointsChanged(KoPathShape *shape)
     // active handle and selection might have already become invalid, so just
     // delete them without dereferencing anything...
 
-    delete m_activeHandle;
-    m_activeHandle = 0;
-    delete m_activeSegment;
-    m_activeSegment = 0;
+    m_activeHandle.reset();
+    m_activeSegment.reset();
 }
 
 void KoPathTool::clearActivePointSelectionReferences()
 {
-    delete m_activeHandle;
-    m_activeHandle = 0;
-    delete m_activeSegment;
-    m_activeSegment = 0;
-
+    m_activeHandle.reset();
+    m_activeSegment.reset();
     m_pointSelection.clear();
 }
 
@@ -1138,12 +1118,9 @@ void KoPathTool::deactivate()
     m_canvasConnections.clear();
     m_pointSelection.clear();
     m_pointSelection.setSelectedShapes(QList<KoPathShape*>());
-    delete m_activeHandle;
-    m_activeHandle = 0;
-    delete m_activeSegment;
-    m_activeSegment = 0;
-    delete m_currentStrategy;
-    m_currentStrategy = 0;
+    m_activeHandle.reset();
+    m_activeSegment.reset();
+    m_currentStrategy.reset();
     d->canvas->snapGuide()->reset();
 
     disconnect(m_actionCurvePoint, 0, this, 0);

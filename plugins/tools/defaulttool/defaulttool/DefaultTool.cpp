@@ -349,8 +349,8 @@ DefaultTool::DefaultTool(KoCanvasBase *canvas, bool connectToSelectedShapesProxy
     if (connectToSelectedShapesProxy) {
         connect(canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(updateActions()));
 
-        connect(canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(updateDecorations()));
-        connect(canvas->selectedShapesProxy(), SIGNAL(selectionContentChanged()), this, SLOT(updateDecorations()));
+        connect(canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(slotUpdateDecorations()));
+        connect(canvas->selectedShapesProxy(), SIGNAL(selectionContentChanged()), this, SLOT(slotUpdateDecorations()));
     }
 }
 
@@ -1642,7 +1642,7 @@ void DefaultTool::updateActions()
     emit selectionChanged(editableShapes.size());
 }
 
-void DefaultTool::updateDecorations()
+void DefaultTool::slotUpdateDecorations()
 {
     repaintDecorations();
 }

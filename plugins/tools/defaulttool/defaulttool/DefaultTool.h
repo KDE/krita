@@ -119,7 +119,7 @@ private Q_SLOTS:
 protected Q_SLOTS:
     /// Update actions on selection change
     void updateActions();
-    void updateDecorations();
+    void slotUpdateDecorations();
 
 public: // Events
 

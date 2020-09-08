@@ -122,8 +122,6 @@ protected:
 
 private:
     KoPathToolHandle * m_activeHandle;       ///< the currently active handle
-    int m_handleRadius;    ///< the radius of the control point handles
-    uint m_grabSensitivity; ///< the grab sensitivity
     QPointF m_lastPoint; ///< needed for interaction strategy
     PathSegment *m_activeSegment;
 

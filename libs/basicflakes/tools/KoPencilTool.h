@@ -38,7 +38,6 @@ public:
     ~KoPencilTool() override;
 
     void paint(QPainter &painter, const KoViewConverter &converter) override;
-    void repaintDecorations() override;
 
     void mousePressEvent(KoPointerEvent *event) override ;
     void mouseMoveEvent(KoPointerEvent *event) override;

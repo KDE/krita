@@ -123,9 +123,7 @@ ShapeResizeStrategy::~ShapeResizeStrategy()
 
 void ShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers)
 {
-    tool()->canvas()->updateCanvas(tool()->canvas()->snapGuide()->boundingRect());
     QPointF newPos = tool()->canvas()->snapGuide()->snap(point, modifiers);
-    tool()->canvas()->updateCanvas(tool()->canvas()->snapGuide()->boundingRect());
 
     bool keepAspect = modifiers & Qt::ShiftModifier;
     Q_FOREACH (KoShape *shape, m_selectedShapes) {
@@ -242,7 +240,6 @@ KUndo2Command *ShapeResizeStrategy::createCommand()
 void ShapeResizeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 {
     Q_UNUSED(modifiers);
-    tool()->canvas()->updateCanvas(tool()->canvas()->snapGuide()->boundingRect());
 }
 
 void ShapeResizeStrategy::paint(QPainter &painter, const KoViewConverter &converter)

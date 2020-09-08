@@ -157,6 +157,8 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
     m = b.createHeuristicMask(false);
 
     m_moveCursor = QCursor(b, m, 2, 0);
+
+    connect(&m_pointSelection, SIGNAL(selectionChanged()), SLOT(slotUpdateDecorations()));
 }
 
 KoPathTool::~KoPathTool()
@@ -543,13 +545,40 @@ void KoPathTool::paint(QPainter &painter, const KoViewConverter &converter)
     }
 }
 
-void KoPathTool::repaintDecorations()
+QRectF KoPathTool::decorationsRect() const
 {
+    const_cast<KoPathToolSelection&>(m_pointSelection).update();
+
+    QRectF newDecorationsRect;
+
     Q_FOREACH (KoShape *shape, m_pointSelection.selectedShapes()) {
-        repaint(shape->boundingRect());
+        newDecorationsRect |= kisGrowRect(shape->boundingRect(), handleDocRadius());
     }
 
-    m_pointSelection.repaint();
+    Q_FOREACH(const KoPathPoint *point, m_pointSelection.selectedPoints()) {
+        newDecorationsRect |= kisGrowRect(point->boundingRect(false), handleDocRadius());
+    }
+
+    if (m_activeHandle) {
+        newDecorationsRect |= kisGrowRect(m_activeHandle->boundingRect(), handleDocRadius());
+    }
+
+    if (m_activeSegment) {
+        KoPathPointIndex index = m_activeSegment->path->pathPointIndex(m_activeSegment->segmentStart);
+        KoPathSegment segment = m_activeSegment->path->segmentByIndex(index);
+
+        QRectF rect = segment.boundingRect();
+        rect = m_activeSegment->path->shapeToDocument(rect);
+
+        newDecorationsRect |= kisGrowRect(rect, handleDocRadius());
+    }
+
+    return newDecorationsRect;
+}
+
+void KoPathTool::repaintDecorations()
+{
+    KoToolBase::repaintDecorations();
     updateOptionsWidget();
 }
 
@@ -609,26 +638,15 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
         m_lastPoint = event->point;
         m_currentStrategy->handleMouseMove(event->point, event->modifiers());
 
-        // repaint new handle positions
-        m_pointSelection.repaint();
-        if (m_activeHandle) {
-            m_activeHandle->repaint();
-        }
-
-        if (m_activeSegment) {
-            repaintSegment(m_activeSegment);
-        }
+        repaintDecorations();
 
         return;
     }
 
     if (m_activeSegment) {
-        KoPathPointIndex index = m_activeSegment->path->pathPointIndex(m_activeSegment->segmentStart);
-        KoPathSegment segment = m_activeSegment->path->segmentByIndex(index);
-        repaint(segment.boundingRect());
-
         delete m_activeSegment;
         m_activeSegment = 0;
+        repaintDecorations();
     }
 
     Q_FOREACH (KoPathShape *shape, m_pointSelection.selectedShapes()) {
@@ -639,12 +657,11 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
             if (handleId != -1) {
                 useCursor(m_moveCursor);
                 emit statusTextChanged(i18n("Drag to move handle."));
-                if (m_activeHandle)
-                    m_activeHandle->repaint();
                 delete m_activeHandle;
+
                 //debugFlake << "handleId" << handleId;
                 m_activeHandle = new ParameterHandle(this, parameterShape, handleId);
-                m_activeHandle->repaint();
+                repaintDecorations();
                 return;
             }
         } else {
@@ -688,8 +705,10 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
                     }
                 }
 
-                if (! bestPoint)
+                if (! bestPoint) {
+                    repaintDecorations();
                     return;
+                }
 
                 useCursor(m_moveCursor);
                 if (bestPointType == KoPathPoint::Node)
@@ -701,11 +720,9 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
                 if (prev && prev->activePoint() == bestPoint && prev->activePointType() == bestPointType)
                     return; // no change;
 
-                if (m_activeHandle)
-                    m_activeHandle->repaint();
                 delete m_activeHandle;
                 m_activeHandle = new PointHandle(this, bestPoint, bestPointType);
-                m_activeHandle->repaint();
+                repaintDecorations();
                 return;
             }
         }
@@ -714,18 +731,17 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
     useCursor(m_selectCursor);
 
     if (m_activeHandle) {
-        m_activeHandle->repaint();
+        delete m_activeHandle;
+        m_activeHandle = 0;
+        repaintDecorations();
     }
-
-    delete m_activeHandle;
-    m_activeHandle = 0;
 
     PathSegment *hoveredSegment = segmentAtPoint(event->point);
     if(hoveredSegment) {
         useCursor(Qt::PointingHandCursor);
         emit statusTextChanged(i18n("Drag to change curve directly. Double click to insert new path point."));
         m_activeSegment = hoveredSegment;
-        repaintSegment(m_activeSegment);
+        repaintDecorations();
     } else {
         uint selectedPointCount = m_pointSelection.size();
         if (selectedPointCount == 0)
@@ -735,15 +751,6 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
         else
             emit statusTextChanged(i18n("Press B to break path at selected segments."));
     }
-}
-
-void KoPathTool::repaintSegment(PathSegment *pathSegment)
-{
-    if (!pathSegment || !pathSegment->isValid()) return;
-
-    KoPathPointIndex index = pathSegment->path->pathPointIndex(pathSegment->segmentStart);
-    KoPathSegment segment = pathSegment->path->segmentByIndex(index);
-    repaint(segment.boundingRect());
 }
 
 void KoPathTool::mouseReleaseEvent(KoPointerEvent *event)
@@ -762,6 +769,7 @@ void KoPathTool::mouseReleaseEvent(KoPointerEvent *event)
         }
         delete m_currentStrategy;
         m_currentStrategy = 0;
+        repaintDecorations();
     }
 }
 
@@ -927,6 +935,9 @@ void KoPathTool::activate(ToolActivation activation, const QSet<KoShape*> &shape
     useCursor(m_selectCursor);
     m_canvasConnections.addConnection(d->canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
     m_canvasConnections.addConnection(d->canvas->selectedShapesProxy(), SIGNAL(selectionContentChanged()), this, SLOT(updateActions()));
+
+    m_canvasConnections.addConnection(d->canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(slotUpdateDecorations()));
+    m_canvasConnections.addConnection(d->canvas->selectedShapesProxy(), SIGNAL(selectionContentChanged()), this, SLOT(slotUpdateDecorations()));
     m_shapeFillResourceConnector.connectToCanvas(d->canvas);
 #if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
     initializeWithShapes(QList<KoShape*>(shapes.begin(), shapes.end()));
@@ -956,6 +967,11 @@ void KoPathTool::slotSelectionChanged()
             d->canvas->selectedShapesProxy()->selection()->selectedEditableShapesAndDelegates();
 
     initializeWithShapes(shapes);
+}
+
+void KoPathTool::slotUpdateDecorations()
+{
+    repaintDecorations();
 }
 
 void KoPathTool::notifyPathPointsChanged(KoPathShape *shape)
@@ -1000,14 +1016,6 @@ void KoPathTool::initializeWithShapes(const QList<KoShape*> shapes)
         m_pointSelection.setSelectedShapes(selectedShapes);
         repaintDecorations();
     }
-
-    Q_FOREACH (KoPathShape *shape, selectedShapes) {
-        // as the tool is just in activation repaintDecorations does not yet get called
-        // so we need to use repaint of the tool and it is only needed to repaint the
-        // current canvas
-        repaint(shape->boundingRect());
-    }
-    repaint(oldBoundingRect);
 
     updateOptionsWidget();
     updateActions();
@@ -1166,16 +1174,8 @@ void KoPathTool::deactivate()
 void KoPathTool::documentResourceChanged(int key, const QVariant & res)
 {
     if (key == KoDocumentResourceManager::HandleRadius) {
-        int oldHandleRadius = m_handleRadius;
-
-        m_handleRadius = res.toUInt();
-
-        // repaint with the bigger of old and new handle radius
-        int maxRadius = qMax(m_handleRadius, oldHandleRadius);
-        Q_FOREACH (KoPathShape *shape, m_pointSelection.selectedShapes()) {
-            QRectF controlPointRect = shape->absoluteTransformation().map(shape->outline()).controlPointRect();
-            repaint(controlPointRect.adjusted(-maxRadius, -maxRadius, maxRadius, maxRadius));
-        }
+        m_handleRadius = handleRadius();
+        repaintDecorations();
     }
 }
 
@@ -1189,15 +1189,6 @@ void KoPathTool::pointSelectionChanged()
     d->canvas->snapGuide()->setIgnoredPathPoints(QList<KoPathPoint*>::fromSet(m_pointSelection.selectedPoints()));
 #endif
     emit selectionChanged(m_pointSelection.hasSelection());
-}
-
-void KoPathTool::repaint(const QRectF &repaintRect)
-{
-    Q_D(KoToolBase);
-    //debugFlake <<"KoPathTool::repaint(" << repaintRect <<")" << m_handleRadius;
-    // widen border to take antialiasing into account
-    qreal radius = m_handleRadius + 1;
-    d->canvas->updateCanvas(repaintRect.adjusted(-radius, -radius, radius, radius));
 }
 
 namespace {

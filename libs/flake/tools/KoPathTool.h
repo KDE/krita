@@ -53,7 +53,8 @@ public:
     ~KoPathTool() override;
 
     void paint(QPainter &painter, const KoViewConverter &converter) override;
-    void repaintDecorations() override;
+    void repaintDecorations();
+    QRectF decorationsRect() const override;
     void mousePressEvent(KoPointerEvent *event) override;
     void mouseMoveEvent(KoPointerEvent *event) override;
     void mouseReleaseEvent(KoPointerEvent *event) override;
@@ -68,9 +69,6 @@ public:
     void requestStrokeCancellation() override;
     void requestStrokeEnd() override;
     void explicitUserStrokeEndRequest() override;
-
-    /// repaints the specified rect
-    void repaint(const QRectF &repaintRect);
 
     QMenu* popupActionsMenu() override;
 
@@ -110,12 +108,12 @@ private Q_SLOTS:
     void pointToLine();
     void pointToCurve();
     void slotSelectionChanged();
+    void slotUpdateDecorations();
 
 private:
     void clearActivePointSelectionReferences();
     void initializeWithShapes(const QList<KoShape*> shapes);
     KUndo2Command* createPointToCurveCommand(const QList<KoPathPointData> &points);
-    void repaintSegment(PathSegment *pathSegment);
     void mergePointsImpl(bool doJoin);
 
 protected:

@@ -36,6 +36,7 @@ public:
 
     void handleMouseMove(const QPointF &p, Qt::KeyboardModifiers modifiers) override;
     void finishInteraction(Qt::KeyboardModifiers modifiers) override;
+    void cancelInteraction() override;
 
 private:
     /// pointer to the path tool

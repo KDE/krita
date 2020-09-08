@@ -84,6 +84,8 @@ public:
      */
     virtual void repaintDecorations();
 
+    virtual QRectF decorationsRect() const;
+
     /**
      * Return if dragging (moving with the mouse down) to the edge of a canvas should scroll the
      * canvas (default is true).
@@ -455,10 +457,14 @@ protected:
     virtual QList<QPointer<QWidget> > createOptionWidgets();
 
     /// Convenience function to get the current handle radius
-    uint handleRadius() const;
+    int handleRadius() const;
+
+    /// Convenience function to get the current handle radius measured in document
+    /// coordinates (points)
+    qreal handleDocRadius() const;
 
     /// Convencience function to get the current grab sensitivity
-    uint grabSensitivity() const;
+    int grabSensitivity() const;
 
     /**
     * Returns a handle grab rect at the given position.

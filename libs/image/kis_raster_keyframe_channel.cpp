@@ -384,6 +384,7 @@ QPair<int, KisKeyframeSP> KisRasterKeyframeChannel::loadKeyframe(const QDomEleme
     QString frameFilename = keyframeNode.attribute("frame");
 
     if (m_d->frameFilenames.isEmpty()) {
+
         // First keyframe loaded: use the existing frame
         KIS_SAFE_ASSERT_RECOVER_NOOP(keyframeCount() == 1);
         int firstKeyframeTime = constKeys().begin().key();
@@ -391,16 +392,20 @@ QPair<int, KisKeyframeSP> KisRasterKeyframeChannel::loadKeyframe(const QDomEleme
 
         // Remove from keys. It will get reinserted with new time once we return
         removeKeyframe(firstKeyframeTime);
-
         m_d->paintDevice->framesInterface()->setFrameOffset(keyframe->frameID(), offset);
     } else {
+
         // If the filename already exists, it's **probably** a clone we can reinstance.
         if (m_d->frameFilenames.values().contains(frameFilename)) {
-            int frameId = m_d->frameFilenames.key(frameFilename);
+
+            const int frameId = m_d->frameFilenames.key(frameFilename);
             const int cloneOf = m_d->frameIDTimesMap.values(frameId).first();
-            return QPair<int, KisKeyframeSP>(time, keyframeAt(cloneOf));
+            const KisRasterKeyframeSP instance = keyframeAt<KisRasterKeyframe>(cloneOf);
+            return QPair<int, KisKeyframeSP>(time, instance);
         } else {
+
             keyframe = toQShared(new KisRasterKeyframe(m_d->paintDevice));
+            m_d->paintDevice->framesInterface()->setFrameOffset(keyframe->frameID(), offset);
         }
     }
 

@@ -108,7 +108,6 @@ private Q_SLOTS:
     void pointToLine();
     void pointToCurve();
     void slotSelectionChanged();
-    void slotUpdateDecorations();
 
 private:
     void clearActivePointSelectionReferences();

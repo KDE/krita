@@ -78,12 +78,6 @@ public:
     explicit KoToolBase(KoCanvasBase *canvas);
     ~KoToolBase() override;
 
-    /**
-     * request a repaint of the decorations to be made. This triggers
-     * an update call on the canvas, but does not paint directly.
-     */
-    virtual void repaintDecorations();
-
     virtual QRectF decorationsRect() const;
 
     /**
@@ -396,6 +390,12 @@ public Q_SLOTS:
      * @param statusText the new status text
      */
     void setStatusText(const QString &statusText);
+
+    /**
+     * request a repaint of the decorations to be made. This triggers
+     * an update call on the canvas, but does not paint directly.
+     */
+    virtual void repaintDecorations();
 
 Q_SIGNALS:
 

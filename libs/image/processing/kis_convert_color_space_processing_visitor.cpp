@@ -34,12 +34,10 @@
 #include <commands_new/KisChangeChannelLockFlagsCommand.h>
 
 
-KisConvertColorSpaceProcessingVisitor::KisConvertColorSpaceProcessingVisitor(const KoColorSpace *srcColorSpace,
-                                                                             const KoColorSpace *dstColorSpace,
+KisConvertColorSpaceProcessingVisitor::KisConvertColorSpaceProcessingVisitor(const KoColorSpace *dstColorSpace,
                                                                              KoColorConversionTransformation::Intent renderingIntent,
                                                                              KoColorConversionTransformation::ConversionFlags conversionFlags)
-    : m_srcColorSpace(srcColorSpace)
-    , m_dstColorSpace(dstColorSpace)
+    : m_dstColorSpace(dstColorSpace)
     , m_renderingIntent(renderingIntent)
     , m_conversionFlags(conversionFlags)
 
@@ -65,7 +63,7 @@ void KisConvertColorSpaceProcessingVisitor::visitNodeWithPaintDevice(KisNode *no
 
     KUndo2Command *parentConversionCommand = new KUndo2Command();
 
-    if (m_srcColorSpace->colorModelId() != m_dstColorSpace->colorModelId()) {
+    if (node->colorSpace()->colorModelId() != m_dstColorSpace->colorModelId()) {
         alphaDisabled = layer->alphaChannelDisabled();
         new KisChangeChannelFlagsCommand(QBitArray(), layer, parentConversionCommand);
         if ((paintLayer = dynamic_cast<KisPaintLayer*>(layer))) {

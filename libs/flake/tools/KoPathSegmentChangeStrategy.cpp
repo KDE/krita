@@ -62,10 +62,7 @@ KoPathSegmentChangeStrategy::~KoPathSegmentChangeStrategy()
 
 void KoPathSegmentChangeStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers)
 {
-    m_tool->canvas()->updateCanvas(m_tool->canvas()->snapGuide()->boundingRect());
     QPointF snappedPosition = m_tool->canvas()->snapGuide()->snap(mouseLocation, modifiers);
-    m_tool->canvas()->updateCanvas(m_tool->canvas()->snapGuide()->boundingRect());
-
     QPointF localPos = m_path->documentToShape(snappedPosition);
 
     if (m_segment.degree() == 1) {
@@ -113,7 +110,6 @@ void KoPathSegmentChangeStrategy::handleMouseMove(const QPointF &mouseLocation, 
         move1 = (feel_good/(3*t*t*(1-t))) * delta;
     }
 
-    m_path->update();
     if(m_segment.first()->activeControlPoint2()) {
         KoPathControlPointMoveCommand cmd(m_pointData1, move2, KoPathPoint::ControlPoint2);
         cmd.redo();
@@ -123,7 +119,6 @@ void KoPathSegmentChangeStrategy::handleMouseMove(const QPointF &mouseLocation, 
         cmd.redo();
     }
     m_path->normalize();
-    m_path->update();
 
     m_ctrlPoint1Move += move1;
     m_ctrlPoint2Move += move2;
@@ -139,8 +134,6 @@ void KoPathSegmentChangeStrategy::finishInteraction(Qt::KeyboardModifiers modifi
 
 KUndo2Command* KoPathSegmentChangeStrategy::createCommand()
 {
-    m_tool->canvas()->updateCanvas(m_tool->canvas()->snapGuide()->boundingRect());
-
     bool hasControlPoint1 = m_segment.second()->activeControlPoint1();
     bool hasControlPoint2 = m_segment.first()->activeControlPoint2();
 

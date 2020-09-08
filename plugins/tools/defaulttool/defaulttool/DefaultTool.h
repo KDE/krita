@@ -67,7 +67,7 @@ public:
     bool wantsAutoScroll() const override;
     void paint(QPainter &painter, const KoViewConverter &converter) override;
 
-    void repaintDecorations() override;
+    QRectF decorationsRect() const override;
 
     ///reimplemented
     void copy() const override;
@@ -119,6 +119,7 @@ private Q_SLOTS:
 protected Q_SLOTS:
     /// Update actions on selection change
     void updateActions();
+    void updateDecorations();
 
 public: // Events
 

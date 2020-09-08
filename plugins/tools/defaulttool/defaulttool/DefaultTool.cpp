@@ -146,6 +146,11 @@ public:
         KoShapeRubberSelectStrategy::paint(painter, converter);
     }
 
+    void cancelInteraction() override
+    {
+        tool()->canvas()->updateCanvas(selectedRectangle() | tool()->decorationsRect());
+    }
+
     void finishInteraction(Qt::KeyboardModifiers modifiers = 0) override
     {
         Q_UNUSED(modifiers);
@@ -166,8 +171,7 @@ public:
                 selection->select(shape);
             }
 
-        defaultTool->repaintDecorations();
-        defaultTool->canvas()->updateCanvas(selectedRectangle());
+        tool()->canvas()->updateCanvas(selectedRectangle() | tool()->decorationsRect());
     }
 };
 #include <KoGradientBackground.h>
@@ -345,6 +349,9 @@ DefaultTool::DefaultTool(KoCanvasBase *canvas, bool connectToSelectedShapesProxy
 
     if (connectToSelectedShapesProxy) {
         connect(canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(updateActions()));
+
+        connect(canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(updateDecorations()));
+        connect(canvas->selectedShapesProxy(), SIGNAL(selectionContentChanged()), this, SLOT(updateDecorations()));
     }
 }
 
@@ -740,11 +747,8 @@ void DefaultTool::mouseMoveEvent(KoPointerEvent *event)
             if (inside != m_mouseWasInsideHandles || m_lastHandle != newDirection) {
                 m_lastHandle = newDirection;
                 m_mouseWasInsideHandles = inside;
-                //repaintDecorations();
             }
         } else {
-            /*if (m_lastHandle != KoFlake::NoHandle)
-                repaintDecorations(); */
             m_lastHandle = KoFlake::NoHandle;
             m_mouseWasInsideHandles = false;
 
@@ -781,9 +785,6 @@ void DefaultTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     KoInteractionTool::mouseReleaseEvent(event);
     updateCursor();
-
-    // This makes sure the decorations that are shown are refreshed. especally the "T" icon
-    canvas()->updateCanvas(QRectF(0,0,canvas()->canvasWidget()->width(), canvas()->canvasWidget()->height()));
 }
 
 void DefaultTool::mouseDoubleClickEvent(KoPointerEvent *event)
@@ -866,11 +867,19 @@ void DefaultTool::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void DefaultTool::repaintDecorations()
+QRectF DefaultTool::decorationsRect() const
 {
+    QRectF dirtyRect;
+
     if (koSelection() && koSelection()->count() > 0) {
-        canvas()->updateCanvas(handlesSize());
+        dirtyRect = const_cast<DefaultTool*>(this)->handlesSize();
     }
+
+    if (canvas()->snapGuide()->isSnapping()) {
+        dirtyRect |= canvas()->snapGuide()->boundingRect();
+    }
+
+    return dirtyRect;
 }
 
 void DefaultTool::copy() const
@@ -1558,7 +1567,6 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
 
     if (avoidSelection || (!shape && handle == KoFlake::NoHandle)) {
         if (!selectMultiple) {
-            repaintDecorations();
             selection->deselectAll();
         }
         return new SelectionInteractionStrategy(this, event->point, false);
@@ -1566,16 +1574,13 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
 
     if (selection->isSelected(shape)) {
         if (selectMultiple) {
-            repaintDecorations();
             selection->deselect(shape);
         }
     } else if (handle == KoFlake::NoHandle) { // clicked on shape which is not selected
-        repaintDecorations();
         if (!selectMultiple) {
             selection->deselectAll();
         }
         selection->select(shape);
-        repaintDecorations();
         // tablet selection isn't precise and may lead to a move, preventing that
         if (event->isTabletEvent()) {
             return new NopInteractionStrategy(this);
@@ -1636,6 +1641,11 @@ void DefaultTool::updateActions()
     updateDistinctiveActions(editableShapes);
 
     emit selectionChanged(editableShapes.size());
+}
+
+void DefaultTool::updateDecorations()
+{
+    repaintDecorations();
 }
 
 void DefaultTool::updateDistinctiveActions(const QList<KoShape*> &editableShapes) {

@@ -62,8 +62,7 @@ void KoZoomStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 void KoZoomStrategy::cancelInteraction()
 {
     Q_D(KoShapeRubberSelectStrategy);
-    d->tool->repaintDecorations();
-    d->tool->canvas()->updateCanvas(d->selectedRect().toRect().normalized());
+    d->tool->canvas()->updateCanvas(d->selectedRect().normalized() | d->tool->decorationsRect());
 }
 
 KoShapeRubberSelectStrategy::SelectionMode KoZoomStrategy::currentMode() const

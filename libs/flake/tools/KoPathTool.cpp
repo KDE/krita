@@ -111,7 +111,6 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
     , m_pointSelection(this)
     , m_activeHandle(0)
-    , m_handleRadius(3)
     , m_activeSegment(0)
     , m_currentStrategy(0)
     , m_activatedTemporarily(false)
@@ -481,7 +480,7 @@ void KoPathTool::paint(QPainter &painter, const KoViewConverter &converter)
 
     Q_FOREACH (KoPathShape *shape, m_pointSelection.selectedShapes()) {
         KisHandlePainterHelper helper =
-                KoShape::createHandlePainterHelperView(&painter, shape, converter, m_handleRadius);
+                KoShape::createHandlePainterHelperView(&painter, shape, converter, handleRadius());
         helper.setHandleStyle(KisHandleStyle::primarySelection());
 
         KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>(shape);
@@ -503,11 +502,11 @@ void KoPathTool::paint(QPainter &painter, const KoViewConverter &converter)
         painter.restore();
     }
 
-    m_pointSelection.paint(painter, converter, m_handleRadius);
+    m_pointSelection.paint(painter, converter, handleRadius());
 
     if (m_activeHandle) {
         if (m_activeHandle->check(m_pointSelection.selectedShapes())) {
-            m_activeHandle->paint(painter, converter, m_handleRadius);
+            m_activeHandle->paint(painter, converter, handleRadius());
         } else {
             delete m_activeHandle;
             m_activeHandle = 0;
@@ -524,7 +523,7 @@ void KoPathTool::paint(QPainter &painter, const KoViewConverter &converter)
             KIS_SAFE_ASSERT_RECOVER_RETURN(segment.isValid());
 
             KisHandlePainterHelper helper =
-                    KoShape::createHandlePainterHelperView(&painter, shape, converter, m_handleRadius);
+                    KoShape::createHandlePainterHelperView(&painter, shape, converter, handleRadius());
             helper.setHandleStyle(KisHandleStyle::secondarySelection());
 
             QPainterPath path;
@@ -936,8 +935,6 @@ void KoPathTool::activate(ToolActivation activation, const QSet<KoShape*> &shape
 
     m_activatedTemporarily = activation == TemporaryActivation;
 
-    // retrieve the actual global handle radius
-    m_handleRadius = handleRadius();
     d->canvas->snapGuide()->reset();
 
     useCursor(m_selectCursor);
@@ -1180,7 +1177,6 @@ void KoPathTool::deactivate()
 void KoPathTool::documentResourceChanged(int key, const QVariant & res)
 {
     if (key == KoDocumentResourceManager::HandleRadius) {
-        m_handleRadius = handleRadius();
         repaintDecorations();
     }
 }

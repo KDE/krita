@@ -457,7 +457,7 @@ BOOST_PP_REPEAT_FROM_TO(1, 25, EXTRA_BUTTON, _)
 
     if (!buttonSet.empty()) {
 #if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
-        strokeShortcut->setButtons(QSet<Qt::Key>(modifiers.begin(), modifiers.end()), buttonSet);
+        strokeShortcut->setButtons(QSet<Qt::Key>(modifiers.cbegin(), modifiers.cend()), buttonSet);
 #else
         strokeShortcut->setButtons(QSet<Qt::Key>::fromList(modifiers), buttonSet);
 #endif

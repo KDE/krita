@@ -84,15 +84,11 @@ public:
         cs->fromQColor(color2, c[2]);
         cs->fromQColor(color3, c[3]);
 
-        const QPainterPath outline = patch->getPath();
-        const QRectF patchRect = outline.boundingRect();
-        const QSizeF patchSize = patchRect.size();
+        bool verticalDiv = patch->isDivisbleVertically();
+        bool horizontalDiv = patch->isDivisibleHorizontally();
+        bool colorVariationExists = checkColorVariance(c);
 
-        // check if color variation is acceptable and patch size is less than ~pixel width/heigh
-        if (checkColorVariance(c) && (patchSize.width() > 1 && patchSize.height() > 1)) {
-
-            QVector<SvgMeshPatch*> patches;
-            patches.reserve(4);
+        if (colorVariationExists && (verticalDiv || horizontalDiv)) {
             QVector<QColor> colors;
             if (type == SvgMeshGradient::BICUBIC) {
 
@@ -106,12 +102,39 @@ public:
                 colors = getColorsBilinear(patch);
             }
 
-            patch->subdivide(patches, colors);
-            for (const auto& p: patches) {
-                fillPatch(p, type);
-                delete p;
+            if (verticalDiv && horizontalDiv) {
+                QVector<SvgMeshPatch*> patches;
+                patches.reserve(4);
+
+                patch->subdivide(patches, colors);
+                for (const auto& p: patches) {
+                    fillPatch(p, type);
+                    delete p;
+                }
+            } else if (verticalDiv) {
+                QVector<SvgMeshPatch*> patches;
+                patches.reserve(2);
+
+                patch->subdivideVertically(patches, colors);
+                for (const auto& p: patches) {
+                    fillPatch(p, type);
+                    delete p;
+                }
+            } else if (horizontalDiv) {
+                QVector<SvgMeshPatch*> patches;
+                patches.reserve(2);
+
+                patch->subdivideHorizontally(patches, colors);
+                for (const auto& p: patches) {
+                    fillPatch(p, type);
+                    delete p;
+                }
             }
+
         } else {
+            const QPainterPath outline = patch->getPath();
+            const QRectF patchRect = outline.boundingRect();
+
             quint8 mixed[4];
             cs->mixColorsOp()->mixColors(c[0], 4, mixed);
 
@@ -119,49 +142,39 @@ public:
             cs->toQColor(mixed, &average);
 
             QPen pen(average);
+            pen.setWidth(0);
+            m_patchPainter.setPen(pen);
 
-            // if QPainterPath's size is 1px, Qt paints it as 2px - which creates artifacts
-            if (patchSize.width() <= 1 && patchSize.height() <= 1) {
-                // not a cosmetic one
-                m_patchPainter.setPen(average);
-
-                // NOTE:
-                // Let's say the subdivision is such, that the curve cuts 2 pixels in 1.75 and 0.25 chunks
-                // (this can happen at intersection of drawPath() and drawPoint() ). Then upon
-                // further subdivion of the 1.75, floor(point) for both end up being the same pixels.
-                // So, one pixel isn't filled and other is filled twice. Which is a problem - SZ
-
+            if (patchRect.width() <= 1 && patchRect.height() <= 1) {
                 m_patchPainter.drawPoint(patchRect.topLeft());
-                m_patchPainter.drawPoint(patchRect.topRight());
-                m_patchPainter.drawPoint(patchRect.bottomLeft());
-                m_patchPainter.drawPoint(patchRect.bottomRight());
+                m_patchPainter.fillPath(outline, average);
 
             } else {
-                // cosmetic pen
-                pen.setWidth(0);
-                m_patchPainter.setPen(pen);
                 m_patchPainter.setBrush(average);
                 m_patchPainter.drawPath(outline);
             }
         }
     }
 
+    /*
+     * returns false if the variation is below tolerance.
+     */
     bool checkColorVariance(quint8 c[4][4])
     {
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
         const quint8 tolerance = 0;
 
-        bool variation = false;
+        for (int i = 0; i < 3; ++i) {
+            if (cs->difference(c[i], c[i + 1]) > tolerance) {
+                return true;
+            }
 
-        for (int i = 0; i < 3 && !variation; ++i) {
-            variation |= cs->difference(c[i], c[i + 1]) > tolerance;
-
-            if (c[i][3] != c[i + 1][3]) {
-                variation |= cs->differenceA(c[i], c[i + 1]) > tolerance;
+            if (c[i][3] != c[i + 1][3] && cs->differenceA(c[i], c[i + 1]) > tolerance) {
+                return true;
             }
         }
 
-        return variation;
+        return false;
     }
 
     QVector<qreal> difference(const QVector<qreal>& v1, const QVector<qreal>& v2)

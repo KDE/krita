@@ -210,7 +210,102 @@ std::array<QPointF, 4> SvgMeshPatch::getMidCurve(bool isVertical) const
     return p;
 }
 
-void SvgMeshPatch::subdivide(QVector<SvgMeshPatch*>& subdivided, const QVector<QColor>& colors) const
+void SvgMeshPatch::subdivideHorizontally(QVector<SvgMeshPatch*>& subdivided,
+                                         const QVector<QColor>& colors) const
+{
+    const QPair<SvgMeshPath, SvgMeshPath> splitRight = segmentSplitAt(Right, 0.5);
+    const QPair<SvgMeshPath, SvgMeshPath> splitLeft  = segmentSplitAt(Left, 0.5);
+
+    SvgMeshPath midHor = getMidCurve(/*isVertical = */ false);
+    SvgMeshPath rMidHor = midHor;
+    std::reverse(rMidHor.begin(), rMidHor.end());
+
+    QColor c1 = getStop(Top).color;
+    QColor c2 = getStop(Right).color;
+    QColor c3 = getStop(Bottom).color;
+    QColor c4 = getStop(Left).color;
+    QColor midc23 = colors[1];
+    QColor midc41 = colors[3];
+
+    QPointF midRightParametric = getMidpointParametric(Right);
+    QPointF midLeftParametric = getMidpointParametric(Left);
+
+    SvgMeshPatch *patch = new SvgMeshPatch(getSegment(Top)[0]);
+    patch->addStop(getSegment(Top), c1, Top);
+    patch->addStop(splitRight.first, c2, Right);
+    patch->addStop(rMidHor, midc23, Bottom);
+    patch->addStop(splitLeft.second, midc41, Left);
+    patch->m_parametricCoords = {
+        m_parametricCoords[0],
+        m_parametricCoords[1],
+        midRightParametric,
+        midLeftParametric
+    };
+    subdivided.append(patch);
+
+    patch = new SvgMeshPatch(midHor[0]);
+    patch->addStop(midHor, midc41, Top);
+    patch->addStop(splitRight.second, midc23, Right);
+    patch->addStop(getSegment(Bottom), c3, Bottom);
+    patch->addStop(splitLeft.first,c4, Left);
+    patch->m_parametricCoords = {
+        midLeftParametric,
+        midRightParametric,
+        m_parametricCoords[2],
+        m_parametricCoords[3]
+    };
+    subdivided.append(patch);
+}
+
+void SvgMeshPatch::subdivideVertically(QVector<SvgMeshPatch*>& subdivided,
+                                       const QVector<QColor>& colors) const
+{
+    const QPair<SvgMeshPath, SvgMeshPath> splitTop    = segmentSplitAt(Top, 0.5);
+    const QPair<SvgMeshPath, SvgMeshPath> splitBottom = segmentSplitAt(Bottom, 0.5);
+
+    SvgMeshPath midVer = getMidCurve(/*isVertical = */ true);
+    SvgMeshPath rMidVer = midVer;
+    std::reverse(rMidVer.begin(), rMidVer.end());
+
+    QColor c1 = getStop(Top).color;
+    QColor c2 = getStop(Right).color;
+    QColor c3 = getStop(Bottom).color;
+    QColor c4 = getStop(Left).color;
+    QColor midc12 = colors[0];
+    QColor midc34 = colors[2];
+
+    QPointF midTopParametric = getMidpointParametric(Top);
+    QPointF midBottomParametric = getMidpointParametric(Bottom);
+
+    SvgMeshPatch *patch = new SvgMeshPatch(splitTop.first[0]);
+    patch->addStop(splitTop.first, c1, Top);
+    patch->addStop(midVer, midc12, Right);
+    patch->addStop(splitBottom.second, midc34, Bottom);
+    patch->addStop(getSegment(Left), c4, Left);
+    patch->m_parametricCoords = {
+        m_parametricCoords[0],
+        midTopParametric,
+        midBottomParametric,
+        m_parametricCoords[3]
+    };
+    subdivided.append(patch);
+
+    patch = new SvgMeshPatch(splitTop.second[0]);
+    patch->addStop(splitTop.second, midc12, Top);
+    patch->addStop(getSegment(Right), c2, Right);
+    patch->addStop(splitBottom.first, c3, Bottom);
+    patch->addStop(rMidVer, midc34, Left);
+    patch->m_parametricCoords = {
+        midTopParametric,
+        m_parametricCoords[1],
+        m_parametricCoords[2],
+        midBottomParametric
+    };
+    subdivided.append(patch);
+}
+
+void SvgMeshPatch::subdivide(QVector<SvgMeshPatch*>& subdivided,
+                             const QVector<QColor>& colors) const
 {
     KIS_ASSERT(colors.size() == 5);
 
@@ -239,6 +334,11 @@ void SvgMeshPatch::subdivide(QVector<SvgMeshPatch*>& subdivided, const QVector<Q
     //       c4       +       c3
     //              midc43
     //
+    //             
+    //  midHor --> left to right
+    //  midVer --> top to bottom
+
+
     QPair<std::array<QPointF, 4>, std::array<QPointF, 4>> midHor = splitAt(getMidCurve(/*isVertical = */ false), 0.5);
     QPair<std::array<QPointF, 4>, std::array<QPointF, 4>> midVer = splitAt(getMidCurve(/*isVertical = */ true), 0.5);
 
@@ -325,6 +425,54 @@ void SvgMeshPatch::subdivide(QVector<SvgMeshPatch*>& subdivided, const QVector<Q
         midBottomP
     };
     subdivided.append(patch);
+}
+
+static qreal controlrectLen(const SvgMeshPath &path) {
+    return QLineF(path[0], path[1]).length() +
+        QLineF(path[1], path[2]).length() +
+        QLineF(path[2], path[3]).length();
+}
+
+bool SvgMeshPatch::isDivisbleVertically() const
+{
+    // I arrived at this number by the virute called trial 'n error
+    const qreal minlength = 1.7;
+    const qreal line1 = QLineF(controlPoints[Top][0], controlPoints[Top][3]).length();
+    const qreal control1 = controlrectLen(getSegment(Top));
+
+    // a decent average, thanks to Khronos's forums
+    if ((line1 + control1 / 2) < minlength) {
+        return false;
+    }
+
+    const qreal line2 = QLineF(controlPoints[Bottom][0], controlPoints[Bottom][3]).length();
+    const qreal control2 = controlrectLen(getSegment(Bottom));
+    if ((line2 + control2 / 2) < minlength) {
+        return false;
+    }
+
+    return true;
+}
+
+bool SvgMeshPatch::isDivisibleHorizontally() const
+{
+    // I arrived at this number by the virute called trial 'n error
+    const qreal minlength = 1.7;
+
+    // a decent average, thanks to Khronos's forums
+    const qreal line1 = QLineF(controlPoints[Right][0], controlPoints[Right][3]).length();
+    const qreal control1 = controlrectLen(getSegment(Right));
+    if ((line1 + control1 / 2) < minlength) {
+        return false;
+    }
+
+    const qreal line2 = QLineF(controlPoints[Left][0], controlPoints[Left][3]).length();
+    const qreal control2 = controlrectLen(getSegment(Left));
+    if ((line2 + control2 / 2) < minlength) {
+        return false;
+    }
+
+    return true;
 }
 
 void SvgMeshPatch::addStop(const QString& pathStr,

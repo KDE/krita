@@ -157,7 +157,7 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
 
     m_moveCursor = QCursor(b, m, 2, 0);
 
-    connect(&m_pointSelection, SIGNAL(selectionChanged()), SLOT(slotUpdateDecorations()));
+    connect(&m_pointSelection, SIGNAL(selectionChanged()), SLOT(repaintDecorations()));
 }
 
 KoPathTool::~KoPathTool()
@@ -933,8 +933,8 @@ void KoPathTool::activate(ToolActivation activation, const QSet<KoShape*> &shape
     m_canvasConnections.addConnection(d->canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
     m_canvasConnections.addConnection(d->canvas->selectedShapesProxy(), SIGNAL(selectionContentChanged()), this, SLOT(updateActions()));
 
-    m_canvasConnections.addConnection(d->canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(slotUpdateDecorations()));
-    m_canvasConnections.addConnection(d->canvas->selectedShapesProxy(), SIGNAL(selectionContentChanged()), this, SLOT(slotUpdateDecorations()));
+    m_canvasConnections.addConnection(d->canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(repaintDecorations()));
+    m_canvasConnections.addConnection(d->canvas->selectedShapesProxy(), SIGNAL(selectionContentChanged()), this, SLOT(repaintDecorations()));
     m_shapeFillResourceConnector.connectToCanvas(d->canvas);
 #if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
     initializeWithShapes(QList<KoShape*>(shapes.begin(), shapes.end()));
@@ -964,11 +964,6 @@ void KoPathTool::slotSelectionChanged()
             d->canvas->selectedShapesProxy()->selection()->selectedEditableShapesAndDelegates();
 
     initializeWithShapes(shapes);
-}
-
-void KoPathTool::slotUpdateDecorations()
-{
-    repaintDecorations();
 }
 
 void KoPathTool::notifyPathPointsChanged(KoPathShape *shape)

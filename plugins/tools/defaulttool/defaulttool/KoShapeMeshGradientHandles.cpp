@@ -149,7 +149,7 @@ QVector<QPainterPath> KoShapeMeshGradientHandles::getConnectedPath(const Handle 
         QVector<SvgMeshPosition> positions = mesharray->getConnectedPaths(handle.getPosition());
         for (const auto &position: positions) {
             SvgMeshPath path = mesharray->getPath(position);
-            painterPath.clear();
+            painterPath = QPainterPath();
             painterPath.moveTo(path[0]);
             painterPath.cubicTo(path[1], path[2], path[3]);
             result << painterPath;

@@ -184,7 +184,6 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
     setAttribute(Qt::WA_InputMethodEnabled, false);
     setAttribute(Qt::WA_DontCreateNativeAncestors, true);
     setUpdateBehavior(PartialUpdate);
-    ENTER_FUNCTION() << ppVar(updateBehavior());
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
     // we should make sure the texture doesn't have alpha channel,
@@ -436,8 +435,6 @@ void KisOpenGLCanvas2::resizeGL(int width, int height)
 void KisOpenGLCanvas2::paintGL()
 {
     const QRect updateRect = d->updateRect ? *d->updateRect : QRect();
-
-    //ENTER_FUNCTION() << ppVar(bool(d->updateRect)) << d->updateRect.get_value_or(QRect());
 
     if (!OPENGL_SUCCESS) {
         KisConfig cfg(false);

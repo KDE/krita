@@ -21,7 +21,7 @@ public:
     ~KisMyPaintCurveOptionWidget() override;
 
     void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
-    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;    
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
     KisDoubleSliderSpinBox* slider();
 
@@ -31,7 +31,6 @@ protected Q_SLOTS:
 
     void updateSensorCurveLabels(KisDynamicSensorSP sensor) const override;
     void updateRangeSpinBoxes(KisDynamicSensorSP sensor) const;
-    void updateValues() override;
 
 public Q_SLOTS:
     void refresh();
@@ -39,7 +38,6 @@ public Q_SLOTS:
 protected:
 
     KisMyPaintOpOption *m_baseOption;
-    bool updateValuesCalled = false;
 
     void checkRanges() const;
     float getBaseValue(KisPropertiesConfigurationSP setting);

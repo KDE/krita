@@ -50,15 +50,8 @@ KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption* curveOption, const QS
     m_curveOptionWidget->setupUi(m_widget);
     setConfigurationPage(m_widget);
 
-    m_curveOptionWidget->xMaxBox->setHidden(true);
-    m_curveOptionWidget->xMinBox->setHidden(true);
-    m_curveOptionWidget->yMaxBox->setHidden(true);
-    m_curveOptionWidget->yMinBox->setHidden(true);
-
-    m_curveOptionWidget->xRangeLabel->setHidden(true);
-    m_curveOptionWidget->yRangeLabel->setHidden(true);
-    m_curveOptionWidget->toLabel1->setHidden(true);
-    m_curveOptionWidget->toLabel2->setHidden(true);
+    strengthToCurveOptionValueScale = 100.0;
+    hideRangeLabelsAndBoxes(true);
 
     m_curveOptionWidget->sensorSelector->setCurveOption(curveOption);
 
@@ -136,7 +129,8 @@ void KisCurveOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP 
     disableWidgets(!m_curveOption->isCurveUsed());
 
     m_curveOptionWidget->sensorSelector->reload();
-    m_curveOptionWidget->sensorSelector->setCurrent(m_curveOption->activeSensors().first());
+    if(m_curveOption->activeSensors().size() > 0)
+        m_curveOptionWidget->sensorSelector->setCurrent(m_curveOption->activeSensors().first());
     updateSensorCurveLabels(m_curveOptionWidget->sensorSelector->currentHighlighted());
     updateCurve(m_curveOptionWidget->sensorSelector->currentHighlighted());
 }
@@ -240,7 +234,7 @@ void KisCurveOptionWidget::updateLabelsOfCurrentSensor()
 
 void KisCurveOptionWidget::updateValues()
 {
-    m_curveOption->setValue(m_curveOptionWidget->strengthSlider->value()/100.0); // convert back to 0-1 for data
+    m_curveOption->setValue(m_curveOptionWidget->strengthSlider->value()/strengthToCurveOptionValueScale); // convert back to 0-1 for data
     m_curveOption->setCurveUsed(m_curveOptionWidget->checkBoxUseCurve->isChecked());
     disableWidgets(!m_curveOptionWidget->checkBoxUseCurve->isChecked());
     emitSettingChanged();
@@ -358,6 +352,20 @@ void KisCurveOptionWidget::updateThemedIcons()
     QPalette newPalette = pal;
     newPalette.setColor(QPalette::Active, QPalette::Background, pal.text().color() );
     m_curveOptionWidget->sensorSelector->setPalette(newPalette);
+
+}
+
+void KisCurveOptionWidget::hideRangeLabelsAndBoxes(bool isHidden) {
+
+    m_curveOptionWidget->xMaxBox->setHidden(isHidden);
+    m_curveOptionWidget->xMinBox->setHidden(isHidden);
+    m_curveOptionWidget->yMaxBox->setHidden(isHidden);
+    m_curveOptionWidget->yMinBox->setHidden(isHidden);
+
+    m_curveOptionWidget->xRangeLabel->setHidden(isHidden);
+    m_curveOptionWidget->yRangeLabel->setHidden(isHidden);
+    m_curveOptionWidget->toLabel1->setHidden(isHidden);
+    m_curveOptionWidget->toLabel2->setHidden(isHidden);
 
 }
 

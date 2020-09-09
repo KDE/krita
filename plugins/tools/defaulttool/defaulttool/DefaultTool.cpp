@@ -871,6 +871,9 @@ QRectF DefaultTool::decorationsRect() const
     QRectF dirtyRect;
 
     if (koSelection() && koSelection()->count() > 0) {
+        /// TODO: avoid cons_cast by implementing proper
+        ///       caching strategy inrecalcSelectionBox() and
+        ///       handlesSize()
         dirtyRect = const_cast<DefaultTool*>(this)->handlesSize();
     }
 

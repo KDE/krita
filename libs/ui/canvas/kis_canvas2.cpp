@@ -917,17 +917,12 @@ void KisCanvas2::updateCanvas()
 
 void KisCanvas2::updateCanvas(const QRectF& documentRect)
 {
-    if (0 && m_d->currentCanvasIsOpenGL && m_d->canvasWidget->decorations().size() > 0) {
-        updateCanvasWidgetImpl();
-    }
-    else {
-        // updateCanvas is called from tools, never from the projection
-        // updates, so no need to prescale!
-        QRect widgetRect = m_d->coordinatesConverter->documentToWidget(documentRect).toAlignedRect();
-        widgetRect.adjust(-2, -2, 2, 2);
-        if (!widgetRect.isEmpty()) {
-            updateCanvasWidgetImpl(widgetRect);
-        }
+    // updateCanvas is called from tools, never from the projection
+    // updates, so no need to prescale!
+    QRect widgetRect = m_d->coordinatesConverter->documentToWidget(documentRect).toAlignedRect();
+    widgetRect.adjust(-2, -2, 2, 2);
+    if (!widgetRect.isEmpty()) {
+        updateCanvasWidgetImpl(widgetRect);
     }
 }
 

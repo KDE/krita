@@ -77,8 +77,8 @@ endif(WIN32)
 IF ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8" AND NOT CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64.*|AARCH64.*|arm64.*|ARM64.*)")
     ExternalProject_Add(ext_libx265_10bit
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://bitbucket.org/multicoreware/x265/downloads/x265_3.4.tar.gz
-        URL_MD5 e37b91c1c114f8815a3f46f039fe79b5
+        URL http://ftp.videolan.org/pub/videolan/x265/x265_3.2.1.tar.gz
+        URL_MD5 94808045a34d88a857e5eaf3f68f4bca
 
         SOURCE_SUBDIR source/
 
@@ -87,8 +87,8 @@ IF ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8" AND NOT CMAKE_SYSTEM_PROCESSOR MATCHES "^
     )
     ExternalProject_Add(ext_libx265_12bit
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://bitbucket.org/multicoreware/x265/downloads/x265_3.4.tar.gz
-        URL_MD5 e37b91c1c114f8815a3f46f039fe79b5
+        URL http://ftp.videolan.org/pub/videolan/x265/x265_3.2.1.tar.gz
+        URL_MD5 94808045a34d88a857e5eaf3f68f4bca
 
         SOURCE_SUBDIR source/
 
@@ -99,8 +99,8 @@ IF ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8" AND NOT CMAKE_SYSTEM_PROCESSOR MATCHES "^
     ExternalProject_Add(
         ext_libx265
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://bitbucket.org/multicoreware/x265/downloads/x265_3.4.tar.gz
-        URL_MD5 e37b91c1c114f8815a3f46f039fe79b5
+        URL http://ftp.videolan.org/pub/videolan/x265/x265_3.2.1.tar.gz
+        URL_MD5 94808045a34d88a857e5eaf3f68f4bca
 
         SOURCE_SUBDIR source/
 
@@ -120,8 +120,8 @@ else ()
     ExternalProject_Add(
         ext_libx265
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://bitbucket.org/multicoreware/x265/downloads/x265_3.4.tar.gz
-        URL_MD5 e37b91c1c114f8815a3f46f039fe79b5
+        URL http://ftp.videolan.org/pub/videolan/x265/x265_3.2.1.tar.gz
+        URL_MD5 94808045a34d88a857e5eaf3f68f4bca
 
         SOURCE_SUBDIR source/
 
@@ -138,8 +138,8 @@ endif ()
 ExternalProject_Add(
     ext_libheif
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/strukturag/libheif/releases/download/v1.7.0/libheif-1.7.0.tar.gz
-    URL_HASH SHA256=842a9ab4b8d6f0faf5a6dc5e8507321199ec44c0b1d8eb199f2de9b49e2db092
+    URL https://github.com/strukturag/libheif/releases/download/v1.6.2/libheif-1.6.2.tar.gz
+    URL_HASH SHA256=bb229e855621deb374f61bee95c4642f60c2a2496bded35df3d3c42cc6d8eefc
 
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/03-fix-build-macos-windows.diff
 

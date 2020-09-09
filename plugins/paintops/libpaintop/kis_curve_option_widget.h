@@ -82,7 +82,9 @@ protected:
     Ui_WdgCurveOption* m_curveOptionWidget;
     QComboBox* m_curveMode;
     KisCurveOption* m_curveOption;
+    qreal strengthToCurveOptionValueScale;
 
+    void hideRangeLabelsAndBoxes(bool isHidden);
     KisCubicCurve getWidgetCurve();
     KisCubicCurve getHighlightedSensorCurve();
 

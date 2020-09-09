@@ -67,6 +67,9 @@ public:
     /// get all nodes in the mesh, don't use this for drawing the path but use path()
     QVector<Handle> handles() const;
 
+    /// convenience method to get a handle by its position in the mesharray
+    Handle getHandle(SvgMeshPosition position) const;
+
     KUndo2Command* moveGradientHandle(const Handle &handle, const QPointF &newPos);
 
     QPainterPath path() const;

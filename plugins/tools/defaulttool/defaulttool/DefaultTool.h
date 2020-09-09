@@ -187,6 +187,7 @@ private:
     SelectionDecorator *m_decorator;
 
     KoShapeMeshGradientHandles::Handle m_selectedMeshHandle;
+    KoShapeMeshGradientHandles::Handle m_hoveredMeshHandle;
 
     // TODO alter these 3 arrays to be static const instead
     QCursor m_sizeCursors[8];

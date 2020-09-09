@@ -72,6 +72,19 @@ QVector<KoShapeMeshGradientHandles::Handle> KoShapeMeshGradientHandles::handles(
     return result;
 }
 
+KoShapeMeshGradientHandles::Handle KoShapeMeshGradientHandles::getHandle(SvgMeshPosition position) const
+{
+    const SvgMeshGradient *g = gradient();
+    if (!g) return Handle();
+
+    Handle handle = getHandles(g->getMeshArray().data(), position.segmentType, position.row, position.col)[0];
+
+    QTransform t = abosoluteTransformation(g->gradientUnits());
+    handle.pos = t.map(handle.pos);
+
+    return handle;
+}
+
 KUndo2Command* KoShapeMeshGradientHandles::moveGradientHandle(const Handle &handle,
                                                               const QPointF &newPos)
 {

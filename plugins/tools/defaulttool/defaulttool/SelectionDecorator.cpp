@@ -83,9 +83,11 @@ void SelectionDecorator::setShowFillMeshGradientHandles(bool value)
     m_showFillMeshGradientHandles = value;
 }
 
-void SelectionDecorator::setCurrentMeshGradientHandle(const KoShapeMeshGradientHandles::Handle &handle)
+void SelectionDecorator::setCurrentMeshGradientHandles(const KoShapeMeshGradientHandles::Handle &selectedHandle,
+                                                       const KoShapeMeshGradientHandles::Handle &hoveredHandle)
 {
-    m_currentMeshHandle = handle;
+    m_selectedMeshHandle = selectedHandle;
+    m_currentHoveredMeshHandle = hoveredHandle;
 }
 
 void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &converter)
@@ -238,10 +240,16 @@ void SelectionDecorator::paintMeshGradientHandles(KoShape *shape,
         }
     }
 
+    helper.setHandleStyle(KisHandleStyle::highlightedPrimaryHandlesWithSolidOutline());
+
+    // highlight the selected handle (only corner)
+    if (m_selectedMeshHandle.type == KoShapeMeshGradientHandles::Handle::Corner) {
+        helper.drawHandleRect(t.map(gradientHandles.getHandle(m_selectedMeshHandle.getPosition()).pos));
+    }
+
     // highlight the path which is being hovered/moved
-    if (m_currentMeshHandle.type != KoShapeMeshGradientHandles::Handle::None) {
-        helper.setHandleStyle(KisHandleStyle::highlightedPrimaryHandlesWithSolidOutline());
-        QVector<QPainterPath> paths = gradientHandles.getConnectedPath(m_currentMeshHandle);
+    if (m_currentHoveredMeshHandle.type != KoShapeMeshGradientHandles::Handle::None) {
+        QVector<QPainterPath> paths = gradientHandles.getConnectedPath(m_currentHoveredMeshHandle);
         for (const auto &path: paths) {
             helper.drawPath(path);
         }

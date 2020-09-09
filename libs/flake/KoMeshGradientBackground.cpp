@@ -82,17 +82,17 @@ void KoMeshGradientBackground::paint(QPainter &painter,
     painter.restore();
 }
 
-bool KoMeshGradientBackground::compareTo(const KoShapeBackground *other) const
+bool KoMeshGradientBackground::compareTo(const KoShapeBackground*) const
 {
     return false;
 }
 
-void KoMeshGradientBackground::fillStyle(KoGenStyle &style, KoShapeSavingContext &context)
+void KoMeshGradientBackground::fillStyle(KoGenStyle&, KoShapeSavingContext&)
 {
 
 }
 
-bool KoMeshGradientBackground::loadStyle(KoOdfLoadingContext &context, const QSizeF &shapeSize)
+bool KoMeshGradientBackground::loadStyle(KoOdfLoadingContext&, const QSizeF&)
 {
     return false;
 }

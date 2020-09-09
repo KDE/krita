@@ -19,12 +19,18 @@ public:
         , renderer(new KoMeshPatchesRenderer)
     {}
 
+    Private(const Private& other)
+        : gradient(new SvgMeshGradient(*other.gradient))
+        , matrix(other.matrix)
+        , renderer(new KoMeshPatchesRenderer)
+    {
+    }
+
     ~Private() {
-        delete gradient;
         delete renderer;
     }
 
-    SvgMeshGradient *gradient;
+    QScopedPointer<SvgMeshGradient> gradient;
     QTransform matrix;
     KoMeshPatchesRenderer *renderer;
 };
@@ -33,7 +39,7 @@ KoMeshGradientBackground::KoMeshGradientBackground(SvgMeshGradient *gradient, co
     : KoShapeBackground()
     , d(new Private)
 {
-    d->gradient = gradient;
+    d->gradient.reset(new SvgMeshGradient(*gradient));
     d->matrix = matrix;
     Q_ASSERT(d->gradient);
 }
@@ -99,7 +105,7 @@ bool KoMeshGradientBackground::loadStyle(KoOdfLoadingContext&, const QSizeF&)
 
 SvgMeshGradient* KoMeshGradientBackground::gradient()
 {
-    return d->gradient;
+    return d->gradient.data();
 }
 
 QTransform KoMeshGradientBackground::transform()

@@ -106,11 +106,13 @@ void KisAutogradientEditor::slotSelectedSegment(KoGradientSegment* segment)
         leftColorRadioButton->setChecked(true); break;
     case FOREGROUND_TRANSPARENT_ENDPOINT:
         leftForegroundTransparent->setChecked(true);
+        Q_FALLTHROUGH();
     case FOREGROUND_ENDPOINT:
         leftForegroundTransparent->setEnabled(true);
         leftForegroundRadioButton->setChecked(true); break;
     case BACKGROUND_TRANSPARENT_ENDPOINT:
         leftBackgroundTransparent->setChecked(true);
+        Q_FALLTHROUGH();
     case BACKGROUND_ENDPOINT:
         leftBackgroundTransparent->setEnabled(true);
         leftBackgroundRadioButton->setChecked(true); break;
@@ -120,11 +122,13 @@ void KisAutogradientEditor::slotSelectedSegment(KoGradientSegment* segment)
         rightColorRadioButton->setChecked(true); break;
     case FOREGROUND_TRANSPARENT_ENDPOINT:
         rightForegroundTransparent->setChecked(true);
+        Q_FALLTHROUGH();
     case FOREGROUND_ENDPOINT:
         rightForegroundTransparent->setEnabled(true);
         rightForegroundRadioButton->setChecked(true); break;
     case BACKGROUND_TRANSPARENT_ENDPOINT:
         rightBackgroundTransparent->setChecked(true);
+        Q_FALLTHROUGH();
     case BACKGROUND_ENDPOINT:
         rightBackgroundTransparent->setEnabled(true);
         rightBackgroundRadioButton->setChecked(true); break;

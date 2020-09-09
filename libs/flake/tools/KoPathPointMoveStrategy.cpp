@@ -28,6 +28,7 @@
 #include "KoSnapGuide.h"
 #include "KoCanvasBase.h"
 #include "kis_global.h"
+#include "kis_command_utils.h"
 
 KoPathPointMoveStrategy::KoPathPointMoveStrategy(KoPathTool *tool, const QPointF &pos)
     : KoInteractionStrategy(*(new KoInteractionStrategyPrivate(tool))),
@@ -76,10 +77,7 @@ KUndo2Command* KoPathPointMoveStrategy::createCommand()
 
     KUndo2Command *cmd = 0;
     if (!m_move.isNull()) {
-        // as the point is already at the new position we need to undo the change
-        KoPathPointMoveCommand revert(selection->selectedPointsData(), -m_move);
-        revert.redo();
-        cmd = new KoPathPointMoveCommand(selection->selectedPointsData(), m_move);
+        cmd = new KisCommandUtils::SkipFirstRedoWrapper(new KoPathPointMoveCommand(selection->selectedPointsData(), m_move));
     }
     return cmd;
 }

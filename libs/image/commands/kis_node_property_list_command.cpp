@@ -196,43 +196,15 @@ void KisNodePropertyListCommand::doUpdate(const KisBaseNode::PropertyList &oldPr
 
 void KisNodePropertyListCommand::setNodePropertiesAutoUndo(KisNodeSP node, KisImageSP image, PropertyList proplist)
 {
-    bool undo = false;
+    QSet<QString> changedProps = changedProperties(node->sectionModelProperties(),
+                                                         proplist);
 
-
-    Q_FOREACH (const KisBaseNode::Property &prop, proplist) {
-
-        if (prop.name == i18n("Visible") && node->visible() != prop.state.toBool()) {
-            continue;
-        }
-        else if (prop.name == i18n("Locked") && node->userLocked() != prop.state.toBool()) {
-            continue;
-        }
-        else if (prop.name == i18n("Active")) {
-            if (KisSelectionMask *m = dynamic_cast<KisSelectionMask*>(node.data())) {
-                if (m->active() != prop.state.toBool()) {
-                    continue;
-                }
-            }
-        }
-        else if (prop.name == i18n("Alpha Locked")) {
-            if (KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(node.data())) {
-                if (l->alphaLocked() != prop.state.toBool()) {
-                    continue;
-                }
-            }
-        }
-
-        // This property is known, but it hasn't got the same value, and it isn't one of
-        // the previous properties, so we need to add the command to the undo list.
-        Q_FOREACH(const KisBaseNode::Property &p2, node->sectionModelProperties()) {
-            if (p2.name == prop.name && p2.state != prop.state) {
-                undo |= true;
-                break;
-            }
-        }
-
-
-    }
+    changedProps.remove(KisLayerPropertiesIcons::visible.id());
+    changedProps.remove(KisLayerPropertiesIcons::locked.id());
+    changedProps.remove(KisLayerPropertiesIcons::selectionActive.id());
+    changedProps.remove(KisLayerPropertiesIcons::alphaLocked.id());
+    changedProps.remove(KisLayerPropertiesIcons::colorizeNeedsUpdate.id());
+    const bool undo = !changedProps.isEmpty();
 
     QScopedPointer<KUndo2Command> cmd(new KisNodePropertyListCommand(node, proplist));
 

@@ -319,7 +319,7 @@ public:
         }
 
         m_currentHandle = handle;
-        q->m_selectedMeshHandle = m_currentHandle;
+        q->m_hoveredMeshHandle = m_currentHandle;
 
         // highlight the decoration which is being hovered
         if (m_currentHandle.type != KoShapeMeshGradientHandles::Handle::None) {
@@ -835,7 +835,7 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
         m_decorator->setShowFillGradientHandles(hasInteractioFactory(EditFillGradientFactoryId));
         m_decorator->setShowStrokeFillGradientHandles(hasInteractioFactory(EditStrokeGradientFactoryId));
         m_decorator->setShowFillMeshGradientHandles(hasInteractioFactory(EditFillMeshGradientFactoryId));
-        m_decorator->setCurrentMeshGradientHandle(m_selectedMeshHandle);
+        m_decorator->setCurrentMeshGradientHandles(m_selectedMeshHandle, m_hoveredMeshHandle);
         m_decorator->paint(painter, converter);
     }
 

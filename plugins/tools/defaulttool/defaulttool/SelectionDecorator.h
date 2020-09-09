@@ -84,7 +84,8 @@ public:
     void setShowStrokeFillGradientHandles(bool value);
 
     void setShowFillMeshGradientHandles(bool value);
-    void setCurrentMeshGradientHandle(const KoShapeMeshGradientHandles::Handle &handle);
+    void setCurrentMeshGradientHandles(const KoShapeMeshGradientHandles::Handle &selectedHandle,
+                                       const KoShapeMeshGradientHandles::Handle &hoveredHandle);
 
     void setForceShapeOutlines(bool value);
 
@@ -96,7 +97,8 @@ private:
 private:
     KoFlake::AnchorPosition m_hotPosition;
     KoSelection *m_selection;
-    KoShapeMeshGradientHandles::Handle m_currentMeshHandle;
+    KoShapeMeshGradientHandles::Handle m_currentHoveredMeshHandle;
+    KoShapeMeshGradientHandles::Handle m_selectedMeshHandle;
     int m_handleRadius;
     int m_lineWidth;
     bool m_showFillGradientHandles;

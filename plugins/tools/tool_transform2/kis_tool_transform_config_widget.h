@@ -116,10 +116,6 @@ public Q_SLOTS:
     void slotPreviewGranularityChanged(QString value);
 
 private:
-    // rad being in |R, the returned value is in [0; 360]
-    double radianToDegree(double rad);
-    // degree being in |R, the returned value is in [0; 2*M_PI]
-    double degreeToRadian(double degree);
 
     void blockNotifications();
     void unblockNotifications();

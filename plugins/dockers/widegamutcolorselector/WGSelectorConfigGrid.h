@@ -27,7 +27,7 @@ public:
     void clear();
     void setColorModel(KisVisualColorModel::ColorModel model);
     void setConfigurations(const QVector<KisColorSelectorConfiguration> &configurations);
-    //void setChecked(const KisColorSelectorConfiguration &configuration);
+    void setChecked(const KisColorSelectorConfiguration &configuration);
     QIcon generateIcon(const KisColorSelectorConfiguration &configuration, qreal pixelRatio = 1.0) const;
 
 private Q_SLOTS:

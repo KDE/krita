@@ -90,7 +90,6 @@ void WGSelectorConfigGrid::setConfigurations(const QVector<KisColorSelectorConfi
     }
 }
 
-/*
 void WGSelectorConfigGrid::setChecked(const KisColorSelectorConfiguration &configuration)
 {
     const QList<QAction*> actions = m_actionGroup->actions();
@@ -103,7 +102,6 @@ void WGSelectorConfigGrid::setChecked(const KisColorSelectorConfiguration &confi
     }
     m_dummyAction->setChecked(true);
 }
-*/
 
 QIcon WGSelectorConfigGrid::generateIcon(const KisColorSelectorConfiguration &configuration, qreal pixelRatio) const
 {

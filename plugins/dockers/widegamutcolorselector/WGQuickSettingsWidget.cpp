@@ -31,7 +31,7 @@ WGQuickSettingsWidget::WGQuickSettingsWidget(QWidget *parent, KisVisualColorSele
     m_selectorConf = new WGSelectorConfigGrid(this);
     // test configuration
     QVector<KisColorSelectorConfiguration> confs;
-    confs.append(KisColorSelectorConfiguration());
+    confs.append(KisColorSelectorConfiguration(KisColorSelectorConfiguration::Triangle, KisColorSelectorConfiguration::Ring, KisColorSelectorConfiguration::SV, KisColorSelectorConfiguration::H));
     confs.append(KisColorSelectorConfiguration(KisColorSelectorConfiguration::Square, KisColorSelectorConfiguration::Ring, KisColorSelectorConfiguration::SV, KisColorSelectorConfiguration::H));
     confs.append(KisColorSelectorConfiguration(KisColorSelectorConfiguration::Wheel, KisColorSelectorConfiguration::Slider, KisColorSelectorConfiguration::VH, KisColorSelectorConfiguration::hsvS));
     m_selectorConf->setConfigurations(confs);
@@ -59,6 +59,7 @@ void WGQuickSettingsWidget::showEvent(QShowEvent *event)
         }
     }
     m_selectorConf->setColorModel(m_selector->selectorModel()->colorModel());
+    m_selectorConf->setChecked(m_selector->configuration());
 }
 
 void WGQuickSettingsWidget::slotColorGroupToggled(int id, bool checked)

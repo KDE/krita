@@ -29,20 +29,21 @@
 KisScalarKeyframe::KisScalarKeyframe(qreal value, QSharedPointer<ScalarKeyframeLimits> limits)
     : KisKeyframe(),
       m_value(value),
-      m_channelLimits(limits),
       m_interpolationMode(Constant),
-      m_tangentsMode(Smooth)
+      m_tangentsMode(Smooth),
+      m_channelLimits(limits)
 {
 }
 
-KisScalarKeyframe::KisScalarKeyframe(const KisScalarKeyframe &rhs)
-    : KisKeyframe(rhs),
-      m_value(rhs.m_value),
-      m_interpolationMode(rhs.m_interpolationMode),
-      m_tangentsMode(rhs.m_tangentsMode),
-      m_leftTangent(rhs.m_leftTangent),
-      m_rightTangent(rhs.m_rightTangent),
-      m_channelLimits(rhs.m_channelLimits)
+KisScalarKeyframe::KisScalarKeyframe(qreal value, InterpolationMode interpMode, TangentsMode tangentMode,
+                                     QPointF leftTangent, QPointF rightTangent,
+                                     QSharedPointer<ScalarKeyframeLimits> limits)
+    : m_value(value),
+      m_interpolationMode(interpMode),
+      m_tangentsMode(tangentMode),
+      m_leftTangent(leftTangent),
+      m_rightTangent(rightTangent),
+      m_channelLimits(limits)
 {
 }
 
@@ -57,7 +58,9 @@ KisKeyframeSP KisScalarKeyframe::duplicate(KisKeyframeChannel *newChannel)
         scalarKey->setInterpolationTangents(leftTangent(), rightTangent());
         return scalarKey;
     } else {
-        return toQShared(new KisScalarKeyframe(*this));
+        return toQShared(new KisScalarKeyframe(value(), interpolationMode(), tangentsMode(),
+                                               leftTangent(), rightTangent(),
+                                               m_channelLimits.toStrongRef()));
     }
 }
 
@@ -177,12 +180,21 @@ public:
 KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KoID &id, KisNodeWSP node)
     : KisScalarKeyframeChannel(id, new KisDefaultBoundsNodeWrapper(node))
 {
+    setNode(node);
 }
 
 KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KoID &id, KisDefaultBoundsBaseSP bounds)
     : KisKeyframeChannel(id, bounds)
     , m_d(new Private)
 {
+    // When keyframe is changed (value, tangents, etc), we should notify that the channel has been updated.
+    connect(this, &KisScalarKeyframeChannel::sigKeyframeChanged, [](const KisKeyframeChannel *channel, int time) {
+        const KisScalarKeyframeChannel* chan = dynamic_cast<const KisScalarKeyframeChannel*>(channel);
+        chan->sigChannelUpdated(
+                    chan->affectedFrames(time),
+                    chan->affectedRect(time)
+                    );
+    });
 }
 
 KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KisScalarKeyframeChannel &rhs, KisNodeWSP newParent)
@@ -319,6 +331,7 @@ void KisScalarKeyframeChannel::insertKeyframe(int time, KisKeyframeSP keyframe, 
                 QObject::connect(scalarKeyframe.data(),
                                  &KisScalarKeyframe::sigChanged,
                                  [this, time](const KisScalarKeyframe* key){
+                                     Q_UNUSED(key);
                                      emit sigKeyframeChanged(this, time);
                                  });
     }

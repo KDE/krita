@@ -81,7 +81,8 @@ public:
         FrameEditableRole,
         FramesPerSecondRole,
         UserRole,
-        FrameHasContent
+        FrameHasContent,
+        WithinClipRange
     };
 
 protected:

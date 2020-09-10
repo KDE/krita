@@ -298,9 +298,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     m_cmbCompositeOp = new KisCompositeOpComboBox();
     m_cmbCompositeOp->setFixedHeight(iconsize);
-    Q_FOREACH (KisAction * a, m_cmbCompositeOp->createBlendmodeActions()) {
-        m_viewManager->actionManager()->addAction(a->text(), a);
-    }
+    m_cmbCompositeOp->connectBlendmodeActions(m_viewManager->actionManager());
 
     m_workspaceWidget = new KisPopupButton(this);
     m_workspaceWidget->setIcon(KisIconUtils::loadIcon("view-choose"));

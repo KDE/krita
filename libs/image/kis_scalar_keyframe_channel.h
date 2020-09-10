@@ -69,7 +69,7 @@ public:
     };
 
     KisScalarKeyframe(qreal value, QSharedPointer<ScalarKeyframeLimits> limits);
-    KisScalarKeyframe(const KisScalarKeyframe &rhs);
+    KisScalarKeyframe(qreal value, InterpolationMode interpMode, TangentsMode tangentMode, QPointF leftTangent, QPointF rightTangent, QSharedPointer<ScalarKeyframeLimits> limits);
 
     KisKeyframeSP duplicate(KisKeyframeChannel* newChannel = 0) override;
 

@@ -457,7 +457,7 @@ BOOST_PP_REPEAT_FROM_TO(1, 25, EXTRA_BUTTON, _)
 
     if (!buttonSet.empty()) {
 #if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
-        strokeShortcut->setButtons(QSet<Qt::Key>(modifiers.begin(), modifiers.end()), buttonSet);
+        strokeShortcut->setButtons(QSet<Qt::Key>(modifiers.cbegin(), modifiers.cend()), buttonSet);
 #else
         strokeShortcut->setButtons(QSet<Qt::Key>::fromList(modifiers), buttonSet);
 #endif
@@ -636,6 +636,27 @@ void KisInputManager::Private::blockMouseEvents()
 
 void KisInputManager::Private::allowMouseEvents()
 {
+    /**
+     * On Windows tablet events may arrive asynchronously to the
+     * mouse events (in WinTab mode). The problem is that Qt
+     * generates Enter/Leave and FocusIn/Out events via mouse
+     * events only. It means that TabletPress may come much before
+     * Enter and FocusIn event and start the stroke. In such a case
+     * we shouldn't unblock mouse events.
+     *
+     * See https://bugs.kde.org/show_bug.cgi?id=417040
+     *
+     * PS:
+     * Ideally, we should fix Qt to generate Enter/Leave and
+     * FocusIn/Out events based on tablet events as well, but
+     * it is a lot of work.
+     */
+#ifdef Q_OS_WIN32
+    if (eventEater.hungry && matcher.hasRunningShortcut()) {
+        return;
+    }
+#endif
+
     eventEater.deactivate();
 }
 

@@ -484,7 +484,7 @@ KisKeyframeChannel *KisBaseNode::requestKeyframeChannel(const QString &id)
             KisNode* node = dynamic_cast<KisNode*>(this);
             KisScalarKeyframeChannel * channel = new KisScalarKeyframeChannel(
                 KisKeyframeChannel::Opacity,
-                new KisDefaultBoundsNodeWrapper(node)
+                node
             );
 
             channel->setLimits(0, 255);

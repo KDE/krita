@@ -909,6 +909,18 @@ void KisPaintDevice::Private::uploadFrameData(DataSP srcData, DataSP dstData)
                                        &tempCommand);
     }
 
+    /* If the destination data doesn't share a default pixel value
+     * with src, we should make sure that the default pixel is set
+     * properly before clearing and writing contents.
+     */
+    const int defaultPixelcmp =
+            memcmp(srcData->dataManager()->defaultPixel(),
+                   dstData->dataManager()->defaultPixel(),
+                   dstData->dataManager()->pixelSize());
+    if (defaultPixelcmp != 0) {
+        dstData->dataManager()->setDefaultPixel(srcData->dataManager()->defaultPixel());
+    }
+
     dstData->dataManager()->clear();
     dstData->cache()->invalidate();
 

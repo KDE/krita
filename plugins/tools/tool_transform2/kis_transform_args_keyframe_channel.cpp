@@ -20,22 +20,17 @@
 
 struct KisTransformArgsKeyframe : public KisKeyframe
 {
-    KisTransformArgsKeyframe(KisTransformArgsKeyframeChannel *channel)
+    KisTransformArgsKeyframe()
         : KisKeyframe()
     {}
 
-    KisTransformArgsKeyframe(KisTransformArgsKeyframeChannel *channel, const ToolTransformArgs &args)
+    KisTransformArgsKeyframe(const ToolTransformArgs &args)
         : KisKeyframe()
         , args(args)
     {}
 
-    KisTransformArgsKeyframe(const KisTransformArgsKeyframe *rhs)
-        : KisKeyframe(*rhs)
-        , args(rhs->args)
-    {}
-
     KisKeyframeSP duplicate(KisKeyframeChannel* channel) override {
-        return toQShared(new KisTransformArgsKeyframe(this));
+        return toQShared(new KisTransformArgsKeyframe(args));
     }
 
     ToolTransformArgs args;
@@ -63,7 +58,7 @@ bool KisTransformArgsKeyframeChannel::hasScalarValue() const
 
 KisKeyframeSP KisTransformArgsKeyframeChannel::createKeyframe()
 {
-    return toQShared( new KisTransformArgsKeyframe(this) );
+    return toQShared( new KisTransformArgsKeyframe() );
 }
 
 QPair<int, KisKeyframeSP> KisTransformArgsKeyframeChannel::loadKeyframe(const QDomElement &keyframeNode)
@@ -74,7 +69,7 @@ QPair<int, KisKeyframeSP> KisTransformArgsKeyframeChannel::loadKeyframe(const QD
     int time = keyframeNode.attribute("time").toInt();
     workaroundBrokenFrameTimeBug(&time);
 
-    KisTransformArgsKeyframe *keyframe = new KisTransformArgsKeyframe(this, args);
+    KisTransformArgsKeyframe *keyframe = new KisTransformArgsKeyframe(args);
 
     return QPair<int, KisKeyframeSP>(time, toQShared(keyframe));
 }

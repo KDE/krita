@@ -59,7 +59,7 @@ public:
     static const KoID TransformRotationY;
     static const KoID TransformRotationZ;
 
-    Q_DECL_DEPRECATED KisKeyframeChannel(const KoID &id, KisNodeWSP parent = 0);
+    KisKeyframeChannel(const KoID &id, KisNodeWSP parent = 0);
     KisKeyframeChannel(const KoID &id, KisDefaultBoundsBaseSP bounds);
     KisKeyframeChannel(const KisKeyframeChannel &rhs, KisNodeWSP newParent);
     ~KisKeyframeChannel() override;

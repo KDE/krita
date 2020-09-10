@@ -49,7 +49,7 @@ KisFrameDataSerializer::Frame generateTestFrame(int frameSeed, KisTextureTileInf
         frame.frameTiles.push_back(std::move(tile));
     }
 
-    return std::move(frame);
+    return frame;
 }
 
 bool verifyTestFrame(int frameSeed, const KisFrameDataSerializer::Frame &frame)

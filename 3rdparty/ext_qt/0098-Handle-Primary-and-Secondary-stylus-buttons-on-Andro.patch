@@ -1,16 +1,19 @@
-commit 813119dfeb9c9aa659156ac5b6bcd5a6525988b8
-Author: Sharaf Zaman <sharafzaz121@gmail.com>
-Date:   Sun Apr 26 03:03:00 2020 +0530
+From 87e7c56efb62aa990c54ac795fa04948a4e51fdd Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <sharafzaz121@gmail.com>
+Date: Thu, 10 Sep 2020 10:46:57 +0000
+Subject: [PATCH 5/5] Handle Primary and Secondary stylus buttons on Android
 
-    Stylus buttons for Krita
-    
-    Change-Id: I57634a8dc18329b3f092cb60bea5440012358320
+Change-Id: Ibe4fcae58cf994c92fe7dcc525d5daa3699996ca
+---
+ .../platforms/android/androidjniinput.cpp      | 18 ++++++++++++------
+ .../platforms/android/androidjniinput.h        | 10 ++++++++++
+ 2 files changed, 22 insertions(+), 6 deletions(-)
 
 diff --git a/src/plugins/platforms/android/androidjniinput.cpp b/src/plugins/platforms/android/androidjniinput.cpp
-index f2a4f4c6e7..cd373efdd5 100644
+index deb30e404a..313407575e 100644
 --- a/src/plugins/platforms/android/androidjniinput.cpp
 +++ b/src/plugins/platforms/android/androidjniinput.cpp
-@@ -62,6 +62,7 @@ namespace QtAndroidInput
+@@ -63,6 +63,7 @@ namespace QtAndroidInput
      static bool m_ignoreMouseEvents = false;
      static bool m_softwareKeyboardVisible = false;
      static QRect m_softwareKeyboardRect;
@@ -18,7 +21,7 @@ index f2a4f4c6e7..cd373efdd5 100644
  
      static QList<QWindowSystemInterface::TouchPoint> m_touchPoints;
  
-@@ -359,17 +360,22 @@ namespace QtAndroidInput
+@@ -357,17 +358,22 @@ namespace QtAndroidInput
          // when action == ACTION_UP (1) it's a release; otherwise we say which button is pressed
          Qt::MouseButtons buttons = Qt::NoButton;
          switch (action) {
@@ -68,3 +71,6 @@ index cc3070c4aa..8f32485193 100644
      // Software keyboard support
      void showSoftwareKeyboard(int top, int left, int width, int height, int inputHints, int enterKeyType);
      void resetSoftwareKeyboard();
+-- 
+2.28.0
+

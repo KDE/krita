@@ -1,5 +1,18 @@
+From c8bbe706618bcb859733cd9be1ab8fd7faa78ad8 Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <sharafzaz121@gmail.com>
+Date: Thu, 10 Sep 2020 10:42:31 +0000
+Subject: [PATCH 4/5] Pass keyboard modifiers for mouse and tablet events
+
+[Android] Pass keyboard modifiers for tablet and mouse events
+
+Change-Id: I79238d8454d8e10303af794625dcc704642f99e5
+---
+ .../org/qtproject/qt5/android/QtNative.java   | 18 ++++++------
+ .../platforms/android/androidjniinput.cpp     | 28 +++++++++++--------
+ 2 files changed, 25 insertions(+), 21 deletions(-)
+
 diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
-index cd9cbe539d..0d8bf7b8a0 100644
+index 6850e89ef5..f8f1d31c4d 100644
 --- a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
 +++ b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
 @@ -495,7 +495,7 @@ public class QtNative
@@ -27,7 +40,7 @@ index cd9cbe539d..0d8bf7b8a0 100644
                  break;
 @@ -560,12 +560,12 @@ public class QtNative
              case MotionEvent.ACTION_MOVE:
-                 if (event.isFromSource(InputDevice.SOURCE_MOUSE) || 
+                 if (event.isFromSource(InputDevice.SOURCE_MOUSE) ||
                      event.isFromSource(InputDevice.SOURCE_TOUCHPAD)) {
 -                    mouseMove(id, (int) event.getX(), (int) event.getY());
 +                    mouseMove(id, (int) event.getX(), (int) event.getY(), event.getMetaState());
@@ -40,7 +53,7 @@ index cd9cbe539d..0d8bf7b8a0 100644
                          m_oldx = (int) event.getX();
                          m_oldy = (int) event.getY();
                      }
-@@ -1019,9 +1019,9 @@ public class QtNative
+@@ -1047,9 +1047,9 @@ public class QtNative
      // screen methods
  
      // pointer methods
@@ -53,7 +66,7 @@ index cd9cbe539d..0d8bf7b8a0 100644
      public static native void mouseWheel(int winId, int x, int y, float hdelta, float vdelta);
      public static native void touchBegin(int winId);
      public static native void touchAdd(int winId, int pointerId, int action, boolean primary, int x, int y, float major, float minor, float rotation, float pressure);
-@@ -1031,7 +1031,7 @@ public class QtNative
+@@ -1059,7 +1059,7 @@ public class QtNative
  
      // tablet methods
      public static native boolean isTabletEventSupported();
@@ -63,7 +76,7 @@ index cd9cbe539d..0d8bf7b8a0 100644
  
      // keyboard methods
 diff --git a/src/plugins/platforms/android/androidjniinput.cpp b/src/plugins/platforms/android/androidjniinput.cpp
-index cd373efdd5..0de98e5908 100644
+index 864744bf49..deb30e404a 100644
 --- a/src/plugins/platforms/android/androidjniinput.cpp
 +++ b/src/plugins/platforms/android/androidjniinput.cpp
 @@ -59,6 +59,7 @@ using namespace QtAndroid;
@@ -74,7 +87,7 @@ index cd373efdd5..0de98e5908 100644
      static bool m_ignoreMouseEvents = false;
      static bool m_softwareKeyboardVisible = false;
      static QRect m_softwareKeyboardRect;
-@@ -133,7 +134,7 @@ namespace QtAndroidInput
+@@ -132,7 +133,7 @@ namespace QtAndroidInput
                                                    anchor.x(), anchor.y(), rtl);
      }
  
@@ -83,7 +96,7 @@ index cd373efdd5..0de98e5908 100644
      {
          if (m_ignoreMouseEvents)
              return;
-@@ -149,10 +150,11 @@ namespace QtAndroidInput
+@@ -148,10 +149,11 @@ namespace QtAndroidInput
          QWindowSystemInterface::handleMouseEvent(tlw,
                                                   localPos,
                                                   globalPos,
@@ -97,7 +110,7 @@ index cd373efdd5..0de98e5908 100644
      {
          QPoint globalPos(x,y);
          QWindow *tlw = m_mouseGrabber.data();
-@@ -165,12 +167,12 @@ namespace QtAndroidInput
+@@ -164,12 +166,12 @@ namespace QtAndroidInput
              localPos = platformWindow ? platformWindow->mapFromGlobal(globalPos) : globalPos;
          }
          QWindowSystemInterface::handleMouseEvent(tlw, localPos, globalPos
@@ -112,7 +125,7 @@ index cd373efdd5..0de98e5908 100644
      {
          if (m_ignoreMouseEvents)
              return;
-@@ -188,7 +190,8 @@ namespace QtAndroidInput
+@@ -187,7 +189,8 @@ namespace QtAndroidInput
          QWindowSystemInterface::handleMouseEvent(tlw,
                                                   localPos,
                                                   globalPos,
@@ -122,7 +135,7 @@ index cd373efdd5..0de98e5908 100644
      }
  
      static void mouseWheel(JNIEnv */*env*/, jobject /*thiz*/, jint /*winId*/, jint x, jint y, jfloat hdelta, jfloat vdelta)
-@@ -330,7 +333,8 @@ namespace QtAndroidInput
+@@ -323,7 +326,8 @@ namespace QtAndroidInput
      }
  
      static void tabletEvent(JNIEnv */*env*/, jobject /*thiz*/, jint /*winId*/, jint deviceId, jlong time, jint action,
@@ -132,7 +145,7 @@ index cd373efdd5..0de98e5908 100644
      {
  #if QT_CONFIG(tabletevent)
          QPointF globalPosF(x, y);
-@@ -383,7 +387,7 @@ namespace QtAndroidInput
+@@ -371,7 +375,7 @@ namespace QtAndroidInput
  
          QWindowSystemInterface::handleTabletEvent(tlw, ulong(time),
              localPos, globalPosF, QTabletEvent::Stylus, pointerType,
@@ -141,7 +154,7 @@ index cd373efdd5..0de98e5908 100644
  #endif // QT_CONFIG(tabletevent)
      }
  
-@@ -882,13 +886,13 @@ namespace QtAndroidInput
+@@ -870,13 +874,13 @@ namespace QtAndroidInput
          {"touchBegin","(I)V",(void*)touchBegin},
          {"touchAdd","(IIIZIIFFFF)V",(void*)touchAdd},
          {"touchEnd","(II)V",(void*)touchEnd},
@@ -159,3 +172,6 @@ index cd373efdd5..0de98e5908 100644
          {"keyDown", "(IIIZ)V", (void *)keyDown},
          {"keyUp", "(IIIZ)V", (void *)keyUp},
          {"keyboardVisibilityChanged", "(Z)V", (void *)keyboardVisibilityChanged},
+-- 
+2.28.0
+

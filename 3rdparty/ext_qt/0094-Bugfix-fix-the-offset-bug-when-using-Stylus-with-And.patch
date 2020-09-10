@@ -1,8 +1,35 @@
+From 63cc83dc5a123bf5efbde740d562a569c73f33ae Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <sharafzaz121@gmail.com>
+Date: Tue, 11 Feb 2020 18:12:20 +0300
+Subject: [PATCH 1/5] Bugfix: fix the offset bug when using Stylus with Android
+
+Platform plugin for Android calculated the local coordinates of the
+tabletEvent by using QWindow::position(), which returned High-DPI
+scaled coordinates. But, globalPosF being unscaled made the
+calculation invalid.
+
+Proper demonstration of this can be seen in Krita Android.
+
+[ChangeLog][Android] Fix offset bug in tabletEvents
+
+Change-Id: I4679df7de3b1491009708d7e80d5bc176e29afed
+---
+ .../platforms/android/androidjniinput.cpp     | 36 +++++++++++++++----
+ 1 file changed, 30 insertions(+), 6 deletions(-)
+
 diff --git a/src/plugins/platforms/android/androidjniinput.cpp b/src/plugins/platforms/android/androidjniinput.cpp
-index b0ca32d689..5b36d5b4bb 100644
+index 56885f2e23..b97de05270 100644
 --- a/src/plugins/platforms/android/androidjniinput.cpp
 +++ b/src/plugins/platforms/android/androidjniinput.cpp
-@@ -138,9 +138,13 @@ namespace QtAndroidInput
+@@ -43,6 +43,7 @@
+ #include "androidjniinput.h"
+ #include "androidjnimain.h"
+ #include "qandroidplatformintegration.h"
++#include "qandroidplatformwindow.h"
+ 
+ #include <qpa/qwindowsysteminterface.h>
+ #include <QTouchEvent>
+@@ -137,9 +138,13 @@ namespace QtAndroidInput
              return;
  
          QPoint globalPos(x,y);
@@ -17,12 +44,12 @@ index b0ca32d689..5b36d5b4bb 100644
          QWindowSystemInterface::handleMouseEvent(tlw,
                                                   localPos,
                                                   globalPos,
-@@ -153,7 +157,12 @@ namespace QtAndroidInput
+@@ -152,7 +157,12 @@ namespace QtAndroidInput
          QWindow *tlw = m_mouseGrabber.data();
          if (!tlw)
              tlw = topLevelWindowAt(globalPos);
 -        QPoint localPos = tlw ? (globalPos -tlw->position()) : globalPos;
-+        
++
 +        QPoint localPos = globalPos;
 +        if (tlw) {
 +            QPlatformWindow *platformWindow = tlw->handle();
@@ -31,7 +58,7 @@ index b0ca32d689..5b36d5b4bb 100644
          QWindowSystemInterface::handleMouseEvent(tlw, localPos, globalPos
                                                  , Qt::MouseButtons(Qt::NoButton));
          m_ignoreMouseEvents = false;
-@@ -162,7 +171,6 @@ namespace QtAndroidInput
+@@ -161,7 +171,6 @@ namespace QtAndroidInput
  
      static void mouseMove(JNIEnv */*env*/, jobject /*thiz*/, jint /*winId*/, jint x, jint y)
      {
@@ -39,7 +66,7 @@ index b0ca32d689..5b36d5b4bb 100644
          if (m_ignoreMouseEvents)
              return;
  
-@@ -170,7 +178,12 @@ namespace QtAndroidInput
+@@ -169,7 +178,12 @@ namespace QtAndroidInput
          QWindow *tlw = m_mouseGrabber.data();
          if (!tlw)
              tlw = topLevelWindowAt(globalPos);
@@ -53,7 +80,7 @@ index b0ca32d689..5b36d5b4bb 100644
          QWindowSystemInterface::handleMouseEvent(tlw,
                                                   localPos,
                                                   globalPos,
-@@ -186,7 +199,12 @@ namespace QtAndroidInput
+@@ -185,7 +199,12 @@ namespace QtAndroidInput
          QWindow *tlw = m_mouseGrabber.data();
          if (!tlw)
              tlw = topLevelWindowAt(globalPos);
@@ -67,3 +94,20 @@ index b0ca32d689..5b36d5b4bb 100644
          QPoint angleDelta(hdelta * 120, vdelta * 120);
  
          QWindowSystemInterface::handleWheelEvent(tlw,
+@@ -310,7 +329,12 @@ namespace QtAndroidInput
+         QPointF globalPosF(x, y);
+         QPoint globalPos((int)x, (int)y);
+         QWindow *tlw = topLevelWindowAt(globalPos);
+-        QPointF localPos = tlw ? (globalPosF - tlw->position()) : globalPosF;
++
++        QPointF localPos = globalPosF;
++        if (tlw) {
++            QPlatformWindow *platformWindow = tlw->handle();
++            localPos = platformWindow ? platformWindow->mapFromGlobal(globalPos) : globalPosF;
++        }
+ 
+         // Galaxy Note with plain Android:
+         // 0 1 0    stylus press
+-- 
+2.28.0
+

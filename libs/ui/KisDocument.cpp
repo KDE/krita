@@ -554,6 +554,7 @@ KisDocument::~KisDocument()
 {
     // wait until all the pending operations are in progress
     waitForSavingToComplete();
+    d->imageIdleWatcher.setTrackedImage(0);
 
     /**
      * Push a timebomb, which will try to release the memory after

@@ -25,7 +25,7 @@
 
 #include <kis_shared.h>
 #include <kis_shared_ptr.h>
-#include "config-hash-table-implementaion.h"
+#include "config-hash-table-implementation.h"
 
 //#include "kis_debug.h"
 #include "kritaimage_export.h"

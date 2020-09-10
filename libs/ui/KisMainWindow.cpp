@@ -440,14 +440,12 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     updateWindowMenu();
 
     if (isHelpMenuEnabled() && !d->helpMenu) {
-        // workaround for KHelpMenu (or rather KAboutData::applicationData()) internally
-        // not using the Q*Application metadata ATM, which results e.g. in the bugreport wizard
-        // not having the app version preset
-        // fixed hopefully in KF5 5.22.0, patch pending
         QGuiApplication *app = qApp;
-        KAboutData aboutData(app->applicationName(), app->applicationDisplayName(), app->applicationVersion());
+        KAboutData aboutData(KAboutData::applicationData());
         aboutData.setOrganizationDomain(app->organizationDomain().toUtf8());
+
         d->helpMenu = new KHelpMenu(this, aboutData, false);
+
         // workaround-less version:
         // d->helpMenu = new KHelpMenu(this, QString()/*unused*/, false);
 

@@ -46,13 +46,13 @@ void KisAnimatedTransformParametersTest::testTransformKeyframing()
 
     params_out = dynamic_cast<KisAnimatedTransformMaskParameters*>(mask->transformParams().data());
     QVERIFY(params_out != 0);
-    QCOMPARE(params_out->transformArgs().scaleX(), 0.5);
+    QCOMPARE(params_out->transformArgs()->scaleX(), 0.5);
 
     p.image->animationInterface()->switchCurrentTimeAsync(0);
     p.image->waitForDone();
     params_out = dynamic_cast<KisAnimatedTransformMaskParameters*>(mask->transformParams().data());
     QVERIFY(params_out != 0);
-    QCOMPARE(params_out->transformArgs().scaleX(), 0.75);
+    QCOMPARE(params_out->transformArgs()->scaleX(), 0.75);
 
 }
 

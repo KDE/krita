@@ -20,12 +20,10 @@ public:
     KisAnimatedTransformMaskParameters(const KisTransformMaskAdapter *staticTransform);
     ~KisAnimatedTransformMaskParameters() override;
 
-    const ToolTransformArgs& transformArgs() const override;
+    const QSharedPointer<ToolTransformArgs> transformArgs() const override;
 
     QString id() const override;
     void toXML(QDomElement *e) const override;
-    static KisTransformMaskParamsInterfaceSP fromXML(const QDomElement &e);
-    static KisTransformMaskParamsInterfaceSP animate(KisTransformMaskParamsInterfaceSP params);
 
     void translate(const QPointF &offset) override;
 
@@ -38,6 +36,12 @@ public:
     bool hasChanged() const override;
     bool isAnimated() const;
 
+    static KisTransformMaskParamsInterfaceSP fromXML(const QDomElement &e);
+
+    /*** Some utility methods for creating an animated transform mask and for creating keyframes using a reference
+     * set of parameters. Used by the transform mask and stroke respectively to update keyframe data. */
+    static KisTransformMaskParamsInterfaceSP makeAnimated(KisTransformMaskParamsInterfaceSP params);
+    static void makeScalarKeyframeOnMask(KisTransformMaskSP mask, const KoID &channelId, int time, qreal value, KUndo2Command *parentCommand);
     static void addKeyframes(KisTransformMaskSP mask, int time, KisTransformMaskParamsInterfaceSP params, KUndo2Command *parentCommand);
 
     

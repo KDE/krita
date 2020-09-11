@@ -6,73 +6,43 @@
 
 #include "kis_transform_args_keyframe_channel.h"
 
-struct KisTransformArgsKeyframe : public KisKeyframe
-{
-    KisTransformArgsKeyframe()
-        : KisKeyframe()
-    {}
+//KisTransformArgsKeyframeChannel::KisTransformArgsKeyframeChannel(const KoID &id, KisNodeWSP parent, const ToolTransformArgs &initialValue)
+//    : KisKeyframeChannel(id, parent)
+//{
+//    addKeyframe(0);
+//    KisTransformArgsKeyframe *argsKeyframe = keyframeAt<KisTransformArgsKeyframe>(0).data();
+//    argsKeyframe->args = initialValue;
+//}
 
-    KisTransformArgsKeyframe(const ToolTransformArgs &args)
-        : KisKeyframe()
-        , args(args)
-    {}
+//KisKeyframeSP KisTransformArgsKeyframeChannel::createKeyframe()
+//{
+//    return toQShared( new KisTransformArgsKeyframe() );
+//}
 
-    KisKeyframeSP duplicate(KisKeyframeChannel* channel) override {
-        return toQShared(new KisTransformArgsKeyframe(args));
-    }
+//QPair<int, KisKeyframeSP> KisTransformArgsKeyframeChannel::loadKeyframe(const QDomElement &keyframeNode)
+//{
+//    ToolTransformArgs args;
+//    args.fromXML(keyframeNode);
 
-    ToolTransformArgs args;
-};
+//    int time = keyframeNode.attribute("time").toInt();
+//    workaroundBrokenFrameTimeBug(&time);
 
-KisTransformArgsKeyframeChannel::KisTransformArgsKeyframeChannel(const KoID &id, KisNodeWSP parent, const ToolTransformArgs &initialValue)
-    : KisKeyframeChannel(id, parent)
-{
-    addKeyframe(0);
-    KisTransformArgsKeyframe *argsKeyframe = keyframeAt<KisTransformArgsKeyframe>(0).data();
-    argsKeyframe->args = initialValue;
-}
+//    KisTransformArgsKeyframe *keyframe = new KisTransformArgsKeyframe(args);
 
-ToolTransformArgs &KisTransformArgsKeyframeChannel::transformArgs(KisKeyframeSP keyframe) const
-{
-    KisTransformArgsKeyframe *key = dynamic_cast<KisTransformArgsKeyframe*>(keyframe.data());
-    Q_ASSERT(key != 0);
-    return key->args;
-}
+//    return QPair<int, KisKeyframeSP>(time, toQShared(keyframe));
+//}
 
-bool KisTransformArgsKeyframeChannel::hasScalarValue() const
-{
-    return false;
-}
+//void KisTransformArgsKeyframeChannel::saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename)
+//{
+//    Q_UNUSED(layerFilename);
+//    KisTransformArgsKeyframe *key = dynamic_cast<KisTransformArgsKeyframe*>(keyframe.data());
+//    KIS_ASSERT_RECOVER_RETURN(key);
 
-KisKeyframeSP KisTransformArgsKeyframeChannel::createKeyframe()
-{
-    return toQShared( new KisTransformArgsKeyframe() );
-}
+//    key->args.toXML(&keyframeElement);
+//}
 
-QPair<int, KisKeyframeSP> KisTransformArgsKeyframeChannel::loadKeyframe(const QDomElement &keyframeNode)
-{
-    ToolTransformArgs args;
-    args.fromXML(keyframeNode);
-
-    int time = keyframeNode.attribute("time").toInt();
-    workaroundBrokenFrameTimeBug(&time);
-
-    KisTransformArgsKeyframe *keyframe = new KisTransformArgsKeyframe(args);
-
-    return QPair<int, KisKeyframeSP>(time, toQShared(keyframe));
-}
-
-void KisTransformArgsKeyframeChannel::saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename)
-{
-    Q_UNUSED(layerFilename);
-    KisTransformArgsKeyframe *key = dynamic_cast<KisTransformArgsKeyframe*>(keyframe.data());
-    KIS_ASSERT_RECOVER_RETURN(key);
-
-    key->args.toXML(&keyframeElement);
-}
-
-QRect KisTransformArgsKeyframeChannel::affectedRect(int time) const
-{
-    Q_UNIMPLEMENTED();
-    return QRect();
-}
+//QRect KisTransformArgsKeyframeChannel::affectedRect(int time) const
+//{
+//    Q_UNIMPLEMENTED();
+//    return QRect();
+//}

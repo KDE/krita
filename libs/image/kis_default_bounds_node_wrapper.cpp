@@ -3,6 +3,7 @@
  */
 
 #include "kis_default_bounds_node_wrapper.h"
+#include "kis_mask.h"
 #include "kis_global.h"
 
 struct Q_DECL_HIDDEN KisDefaultBoundsNodeWrapper::Private {
@@ -50,8 +51,11 @@ int KisDefaultBoundsNodeWrapper::currentLevelOfDetail() const
 }
 
 int KisDefaultBoundsNodeWrapper::currentTime() const
-{
-    return m_d->node->original() ? m_d->node->original()->defaultBounds()->currentTime() : 0;
+{   
+    KisMaskWSP mask = dynamic_cast<KisMask*>(m_d->node.data());
+    KisNodeWSP toSample = mask.isValid() ? mask->parent().data() : m_d->node;
+
+    return toSample->original() ? toSample->original()->defaultBounds()->currentTime() : 0;
 }
 
 bool KisDefaultBoundsNodeWrapper::externalFrameActive() const

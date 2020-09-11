@@ -547,15 +547,15 @@ void KisTransformMask::slotInternalForceStaticImageUpdate()
 KisKeyframeChannel *KisTransformMask::requestKeyframeChannel(const QString &id)
 {
     if (id == KisKeyframeChannel::TransformArguments.id() ||
-        id == KisKeyframeChannel::TransformPositionX.id() ||
-        id == KisKeyframeChannel::TransformPositionY.id() ||
-        id == KisKeyframeChannel::TransformScaleX.id() ||
-        id == KisKeyframeChannel::TransformScaleY.id() ||
-        id == KisKeyframeChannel::TransformShearX.id() ||
-        id == KisKeyframeChannel::TransformShearY.id() ||
-        id == KisKeyframeChannel::TransformRotationX.id() ||
-        id == KisKeyframeChannel::TransformRotationY.id() ||
-        id == KisKeyframeChannel::TransformRotationZ.id()) {
+        id == KisKeyframeChannel::PositionX.id() ||
+        id == KisKeyframeChannel::PositionY.id() ||
+        id == KisKeyframeChannel::ScaleX.id() ||
+        id == KisKeyframeChannel::ScaleY.id() ||
+        id == KisKeyframeChannel::ShearX.id() ||
+        id == KisKeyframeChannel::ShearY.id() ||
+        id == KisKeyframeChannel::RotationX.id() ||
+        id == KisKeyframeChannel::RotationY.id() ||
+        id == KisKeyframeChannel::RotationZ.id()) {
 
         KisAnimatedTransformParamsInterface *animatedParams = dynamic_cast<KisAnimatedTransformParamsInterface*>(m_d->params.data());
 
@@ -576,15 +576,15 @@ KisKeyframeChannel *KisTransformMask::requestKeyframeChannel(const QString &id)
 bool KisTransformMask::supportsKeyframeChannel(const QString &id)
 {
     if (id == KisKeyframeChannel::TransformArguments.id() ||
-        id == KisKeyframeChannel::TransformPositionX.id() ||
-        id == KisKeyframeChannel::TransformPositionY.id() ||
-        id == KisKeyframeChannel::TransformScaleX.id() ||
-        id == KisKeyframeChannel::TransformScaleY.id() ||
-        id == KisKeyframeChannel::TransformShearX.id() ||
-        id == KisKeyframeChannel::TransformShearY.id() ||
-        id == KisKeyframeChannel::TransformRotationX.id() ||
-        id == KisKeyframeChannel::TransformRotationY.id() ||
-            id == KisKeyframeChannel::TransformRotationZ.id()) {
+        id == KisKeyframeChannel::PositionX.id() ||
+        id == KisKeyframeChannel::PositionY.id() ||
+        id == KisKeyframeChannel::ScaleX.id() ||
+        id == KisKeyframeChannel::ScaleY.id() ||
+        id == KisKeyframeChannel::ShearX.id() ||
+        id == KisKeyframeChannel::ShearY.id() ||
+        id == KisKeyframeChannel::RotationX.id() ||
+        id == KisKeyframeChannel::RotationY.id() ||
+            id == KisKeyframeChannel::RotationZ.id()) {
         return true;
     }
     else if (id == KisKeyframeChannel::Opacity.id()) {

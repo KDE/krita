@@ -37,15 +37,15 @@ public:
     static const KoID Raster;
     static const KoID Opacity;
     static const KoID TransformArguments;
-    static const KoID TransformPositionX;
-    static const KoID TransformPositionY;
-    static const KoID TransformScaleX;
-    static const KoID TransformScaleY;
-    static const KoID TransformShearX;
-    static const KoID TransformShearY;
-    static const KoID TransformRotationX;
-    static const KoID TransformRotationY;
-    static const KoID TransformRotationZ;
+    static const KoID PositionX;
+    static const KoID PositionY;
+    static const KoID ScaleX;
+    static const KoID ScaleY;
+    static const KoID ShearX;
+    static const KoID ShearY;
+    static const KoID RotationX;
+    static const KoID RotationY;
+    static const KoID RotationZ;
 
     KisKeyframeChannel(const KoID &id, KisNodeWSP parent = 0);
     KisKeyframeChannel(const KoID &id, KisDefaultBoundsBaseSP bounds);

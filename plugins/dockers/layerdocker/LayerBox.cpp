@@ -531,8 +531,6 @@ void LayerBox::updateUI()
     if (!m_canvas) return;
     if (!m_nodeManager) return;
 
-    ENTER_FUNCTION();
-
     KisNodeSP activeNode = m_nodeManager->activeNode();
 
     if (activeNode != m_activeNode) {

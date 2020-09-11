@@ -652,7 +652,7 @@ bool KisTransformUtils::tryInitArgsFromNode(KisNodeSP node, ToolTransformArgs *a
             dynamic_cast<KisTransformMaskAdapter*>(savedParams.data());
 
         if (adapter) {
-            *args = adapter->transformArgs();
+            *args = *adapter->transformArgs();
             result = true;
         }
     }

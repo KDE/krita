@@ -18,14 +18,19 @@
 
 struct KisTransformMaskAdapter::Private
 {
-    ToolTransformArgs args;
+    QSharedPointer<ToolTransformArgs> args;
 };
 
+
+KisTransformMaskAdapter::KisTransformMaskAdapter()
+{
+    m_d->args = toQShared(new ToolTransformArgs);
+}
 
 KisTransformMaskAdapter::KisTransformMaskAdapter(const ToolTransformArgs &args)
     : m_d(new Private)
 {
-    m_d->args = args;
+    m_d->args = toQShared(new ToolTransformArgs(args));
 }
 
 KisTransformMaskAdapter::~KisTransformMaskAdapter()
@@ -34,13 +39,13 @@ KisTransformMaskAdapter::~KisTransformMaskAdapter()
 
 QTransform KisTransformMaskAdapter::finalAffineTransform() const
 {
-    KisTransformUtils::MatricesPack m(transformArgs());
+    KisTransformUtils::MatricesPack m(*transformArgs());
     return m.finalTransform();
 }
 
 bool KisTransformMaskAdapter::isAffine() const
 {
-    const ToolTransformArgs args = transformArgs();
+    const ToolTransformArgs args = *transformArgs();
 
     return args.mode() == ToolTransformArgs::FREE_TRANSFORM ||
         args.mode() == ToolTransformArgs::PERSPECTIVE_4POINT;
@@ -56,12 +61,18 @@ void KisTransformMaskAdapter::transformDevice(KisNodeSP node, KisPaintDeviceSP s
     dst->prepareClone(src);
 
     KisProcessingVisitor::ProgressHelper helper(node);
-    KisTransformUtils::transformDevice(transformArgs(), src, dst, &helper);
+
+    KisTransformUtils::transformDevice(*transformArgs(), dst, &helper);
 }
 
-const ToolTransformArgs& KisTransformMaskAdapter::transformArgs() const
+const QSharedPointer<ToolTransformArgs> KisTransformMaskAdapter::transformArgs() const
 {
     return m_d->args;
+}
+
+void KisTransformMaskAdapter::setBaseArgs(const ToolTransformArgs &args)
+{
+    *m_d->args = args;
 }
 
 QString KisTransformMaskAdapter::id() const
@@ -71,7 +82,7 @@ QString KisTransformMaskAdapter::id() const
 
 void KisTransformMaskAdapter::toXML(QDomElement *e) const
 {
-    m_d->args.toXML(e);
+    m_d->args->toXML(e);
 }
 
 KisTransformMaskParamsInterfaceSP KisTransformMaskAdapter::fromXML(const QDomElement &e)
@@ -82,17 +93,17 @@ KisTransformMaskParamsInterfaceSP KisTransformMaskAdapter::fromXML(const QDomEle
 
 void KisTransformMaskAdapter::translate(const QPointF &offset)
 {
-    m_d->args.translate(offset);
+    m_d->args->translate(offset);
 }
 
 QRect KisTransformMaskAdapter::nonAffineChangeRect(const QRect &rc)
 {
-    return KisTransformUtils::changeRect(transformArgs(), rc);
+    return KisTransformUtils::changeRect(*transformArgs(), rc);
 }
 
 QRect KisTransformMaskAdapter::nonAffineNeedRect(const QRect &rc, const QRect &srcBounds)
 {
-    return KisTransformUtils::needRect(transformArgs(), rc, srcBounds);
+    return KisTransformUtils::needRect(*transformArgs(), rc, srcBounds);
 }
 
 bool KisTransformMaskAdapter::isAnimated() const

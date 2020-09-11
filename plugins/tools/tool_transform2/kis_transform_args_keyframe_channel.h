@@ -13,22 +13,37 @@
 #include "kundo2command.h"
 
 
-class KisTransformArgsKeyframeChannel : public KisKeyframeChannel
-{
-public:
-    KisTransformArgsKeyframeChannel(const KoID &id, KisNodeWSP parent, const ToolTransformArgs &initialValue);
+//struct KisTransformArgsKeyframe : public KisKeyframe
+//{
+//    KisTransformArgsKeyframe()
+//        : KisKeyframe()
+//    {}
 
-    ToolTransformArgs &transformArgs(KisKeyframeSP keyframe) const;
-    bool hasScalarValue() const;
+//    KisTransformArgsKeyframe(const ToolTransformArgs &args)
+//        : KisKeyframe()
+//        , args(args)
+//    {}
 
-private:
-    friend class KisAnimatedTransformMaskParameters; // TODO: Ugly...
+//    KisKeyframeSP duplicate(KisKeyframeChannel* channel) override {
+//        return toQShared(new KisTransformArgsKeyframe(args));
+//    }
 
-    KisKeyframeSP createKeyframe() override;
-    QPair<int, KisKeyframeSP> loadKeyframe(const QDomElement &keyframeNode);
-    void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename);
+//    ToolTransformArgs args;
+//};
 
-    QRect affectedRect(int time) const override;
-};
+//class KisTransformArgsKeyframeChannel : public KisKeyframeChannel
+//{
+//public:
+//    KisTransformArgsKeyframeChannel(const KoID &id, KisNodeWSP parent, const ToolTransformArgs &initialValue);
+
+//private:
+//    friend class KisAnimatedTransformMaskParameters; // TODO: Ugly...
+
+//    KisKeyframeSP createKeyframe() override;
+//    QPair<int, KisKeyframeSP> loadKeyframe(const QDomElement &keyframeNode);
+//    void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename);
+
+//    QRect affectedRect(int time) const override;
+//};
 
 #endif

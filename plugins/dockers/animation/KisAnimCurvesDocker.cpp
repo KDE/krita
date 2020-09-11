@@ -535,7 +535,8 @@ void KisAnimCurvesDocker::slotScrollerStateChanged(QScroller::State state)
 void KisAnimCurvesDocker::slotNodeActivated(KisNodeSP node)
 {
     if (!node) return;
-    m_d->titlebar->btnAddKey->setEnabled(node->supportsKeyframeChannel(KisKeyframeChannel::Opacity.id()));
+    bool supported = node->supportsKeyframeChannel(KisKeyframeChannel::Opacity.id()) | node->supportsKeyframeChannel(KisKeyframeChannel::PositionX.id());
+    m_d->titlebar->btnAddKey->setEnabled(supported);
 }
 
 void KisAnimCurvesDocker::updateFrameRegister(){
@@ -590,6 +591,10 @@ void KisAnimCurvesDocker::slotAddAllEnabledKeys()
      * key officially supported, we will just presume opacity. */
     if (node->supportsKeyframeChannel(KisKeyframeChannel::Opacity.id())) {
         addKeyframe(KisKeyframeChannel::Opacity.id());
+    }
+
+    if (node->supportsKeyframeChannel(KisKeyframeChannel::PositionX.id())) {
+        addKeyframe(KisKeyframeChannel::PositionX.id());
     }
 }
 

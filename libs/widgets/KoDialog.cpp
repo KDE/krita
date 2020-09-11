@@ -924,10 +924,6 @@ QString KoDialog::helpLinkText() const
     return (d->mHelpLinkText.isEmpty() ? i18n("Get help...") : d->mHelpLinkText);
 }
 
-void KoDialog::updateGeometry()
-{
-}
-
 void KoDialog::hideEvent(QHideEvent *event)
 {
     emit hidden();

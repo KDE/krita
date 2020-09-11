@@ -1,4 +1,4 @@
-/*  This file is part of the KDE Librariesfsignals
+/*  This file is part of the KDE Libraries
  *  Copyright (C) 1998 Thomas Tanghus (tanghus@earthling.net)
  *  Additions 1999-2000 by Espen Sand (espen@kde.org)
  *                      and Holger Freyther <freyther@kde.org>
@@ -790,14 +790,6 @@ protected Q_SLOTS:
      * @deprecated since 5.0 use QDialogButtonBox and connect to the clicked signal
      */
     virtual void slotButtonClicked(int button);
-
-    /**
-     * Updates the margins and spacings.
-     *
-     * @deprecated KoDialog respects the style's margins and spacings automatically. Calling
-     * this function has no effect.
-     */
-    void updateGeometry();
 
 private:
     KoDialog(KoDialogPrivate &dd, QWidget *parent, Qt::WindowFlags flags = 0);

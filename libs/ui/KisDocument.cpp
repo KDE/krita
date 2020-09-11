@@ -343,6 +343,7 @@ public:
     QPointer<KoUpdater> savingUpdater;
     QFuture<KisImportExportErrorCode> childSavingFuture;
     KritaUtils::ExportFileJob backgroundSaveJob;
+    KisSignalAutoConnectionsStore referenceLayerConnections;
 
     bool isRecovered = false;
 
@@ -946,7 +947,14 @@ void KisDocument::copyFromDocumentImpl(const KisDocument &rhs, CopyPolicy policy
 
     // reinitialize references' signal connection
     KisReferenceImagesLayerSP referencesLayer = this->referenceImagesLayer();
-    setReferenceImagesLayer(referencesLayer, false);
+    if (referencesLayer) {
+        d->referenceLayerConnections.clear();
+        d->referenceLayerConnections.addConnection(
+            referencesLayer, SIGNAL(sigUpdateCanvas(QRectF)),
+            this, SIGNAL(sigReferenceImagesChanged()));
+
+        emit sigReferenceImagesLayerChanged(referencesLayer);
+    }
 
     KisDecorationsWrapperLayerSP decorationsLayer =
         KisLayerUtils::findNodeByType<KisDecorationsWrapperLayer>(d->image->root());
@@ -2227,9 +2235,7 @@ void KisDocument::setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> 
         return;
     }
 
-    if (currentReferenceLayer) {
-        currentReferenceLayer->disconnect(this);
-    }
+    d->referenceLayerConnections.clear();
 
     if (updateImage) {
         if (currentReferenceLayer) {
@@ -2244,8 +2250,9 @@ void KisDocument::setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> 
     currentReferenceLayer = layer;
 
     if (currentReferenceLayer) {
-        connect(currentReferenceLayer, SIGNAL(sigUpdateCanvas(QRectF)),
-                this, SIGNAL(sigReferenceImagesChanged()));
+        d->referenceLayerConnections.addConnection(
+            currentReferenceLayer, SIGNAL(sigUpdateCanvas(QRectF)),
+            this, SIGNAL(sigReferenceImagesChanged()));
     }
 
     emit sigReferenceImagesLayerChanged(layer);

@@ -170,15 +170,21 @@ void KisReferenceImagesDecoration::setReferenceImageLayer(KisSharedPtr<KisRefere
         if (d->layer) {
             d->layer.toStrongRef()->disconnect(this);
         }
-        d->layer = layer;
-        connect(layer.data(), SIGNAL(sigUpdateCanvas(QRectF)),
-                this, SLOT(slotReferenceImagesChanged(QRectF)));
 
-        // If the view is not ready yet (because this is being constructed
-        // from view.d's ctor and thus view.d is not available now),
-        // do not update canvas because it will lead to a crash.
-        if (updateCanvas) {
-            slotReferenceImagesChanged(layer->extent());
+        d->layer = layer;
+
+        if (layer) {
+            connect(layer.data(), SIGNAL(sigUpdateCanvas(QRectF)),
+                    this, SLOT(slotReferenceImagesChanged(QRectF)));
+
+            const QRectF dirtyRect = layer->boundingImageRect();
+
+            // If the view is not ready yet (because this is being constructed
+            // from view.d's ctor and thus view.d is not available now),
+            // do not update canvas because it will lead to a crash.
+            if (updateCanvas && !dirtyRect.isEmpty()) { // in case the reference layer is just being loaded from the .kra file
+                slotReferenceImagesChanged(dirtyRect);
+            }
         }
     }
 }

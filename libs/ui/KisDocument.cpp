@@ -346,6 +346,7 @@ public:
     bool isRecovered = false;
 
     bool batchMode { false };
+    bool decorationsSyncingDisabled = false;
 
     void syncDecorationsWrapperLayerState();
 
@@ -368,7 +369,7 @@ public:
 
 void KisDocument::Private::syncDecorationsWrapperLayerState()
 {
-    if (!this->image) return;
+    if (!this->image || this->decorationsSyncingDisabled) return;
 
     KisImageSP image = this->image;
     KisDecorationsWrapperLayerSP decorationsLayer =
@@ -884,7 +885,9 @@ void KisDocument::copyFromDocument(const KisDocument &rhs)
 void KisDocument::copyFromDocumentImpl(const KisDocument &rhs, CopyPolicy policy)
 {
     if (policy == REPLACE) {
+        d->decorationsSyncingDisabled = true;
         d->copyFrom(*(rhs.d), this);
+        d->decorationsSyncingDisabled = false;
 
         d->undoStack->clear();
     } else {
@@ -915,6 +918,10 @@ void KisDocument::copyFromDocumentImpl(const KisDocument &rhs, CopyPolicy policy
             // NOTE: we expect the image to be locked!
             setCurrentImage(rhs.image()->clone(/* exactCopy = */ true), /* forceInitialUpdate = */ false);
         }
+    }
+
+    if (policy == REPLACE) {
+        d->syncDecorationsWrapperLayerState();
     }
 
     if (rhs.d->preActivatedNode) {

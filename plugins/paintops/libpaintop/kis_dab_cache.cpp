@@ -188,7 +188,8 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
                                cursorPoint,
                                shape,
                                info,
-                               softnessFactor),
+                               softnessFactor,
+                               lightnessStrength),
                            &di,
                            &shouldUseCache);
 

@@ -144,7 +144,7 @@ KisDabCacheBase::getDabParameters(KisBrushSP brush,
     params.subPixelY = subPixelY;
     params.softnessFactor = softnessFactor;
     params.lightnessStrength = lightnessStrength;
-    params.index = brush->brushIndex(info);
+    params.index = brush->brushIndex();
     params.mirrorProperties = mirrorProperties;
     params.ratio = shape.ratio();
 

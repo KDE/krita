@@ -86,6 +86,15 @@ KisPaintingAssistantsDecoration::~KisPaintingAssistantsDecoration()
     delete d;
 }
 
+void KisPaintingAssistantsDecoration::slotUpdateDecorationVisibility()
+{
+    const bool shouldBeVisible = !assistants().isEmpty();
+
+    if (visible() != shouldBeVisible) {
+        setVisible(shouldBeVisible);
+    }
+}
+
 void KisPaintingAssistantsDecoration::addAssistant(KisPaintingAssistantSP assistant)
 {
     QList<KisPaintingAssistantSP> assistants = view()->document()->assistants();

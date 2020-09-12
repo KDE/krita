@@ -6,6 +6,7 @@
 
 #include "WGColorPreviewPopup.h"
 #include "WGColorSelectorDock.h"
+#include "WGColorSelectorSettings.h"
 #include "WGColorPatches.h"
 #include "WGQuickSettingsWidget.h"
 #include "WGShadeSelector.h"
@@ -17,6 +18,7 @@
 #include <kis_icon.h>
 #include <kis_canvas2.h>
 #include <kis_canvas_resource_provider.h>
+#include <kis_config_notifier.h>
 #include <kis_display_color_converter.h>
 #include <kis_signal_compressor.h>
 #include <KoCanvasResourceProvider.h>
@@ -66,7 +68,8 @@ WGColorSelectorDock::WGColorSelectorDock()
     QWidgetAction *quickSettingAction = new QWidgetAction(configBtn);
     quickSettingAction->setDefaultWidget(qsw);
     configureMenu->addAction(quickSettingAction);
-    configureMenu->addAction("Configure...");
+    QAction *cfgAction = configureMenu->addAction("Configure...");
+    connect(cfgAction, SIGNAL(triggered(bool)), SLOT(slotOpenSettings()));
 
     configBtn->setMenu(configureMenu);
 
@@ -87,6 +90,8 @@ WGColorSelectorDock::WGColorSelectorDock()
     mainWidget->layout()->addWidget(m_history);
     connect(m_history, SIGNAL(sigColorChanged(KoColor)), SLOT(slotColorSelected(KoColor)));
     connect(m_history, SIGNAL(sigInteraction(bool)), SLOT(slotColorInteraction(bool)));
+
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigurationChanged()));
 
     setWidget(mainWidget);
     setEnabled(false);
@@ -136,6 +141,15 @@ void WGColorSelectorDock::disconnectFromCanvas()
     m_canvas->disconnectCanvasObserver(this);
     m_canvas->displayColorConverter()->displayRendererInterface()->disconnect(this);
     m_canvas = 0;
+}
+
+void WGColorSelectorDock::slotConfigurationChanged()
+{
+    qDebug() << "reloading config";
+    KConfigGroup cfg = KSharedConfig::openConfig()->group(WGColorSelectorSettings::stringID());
+    int renderMode = qBound(int(KisVisualColorSelector::StaticBackground), cfg.readEntry("renderMode", 1),
+                            int(KisVisualColorSelector::CompositeBackground));
+    m_selector->setRenderMode(static_cast<KisVisualColorSelector::RenderMode>(renderMode));
 }
 
 void WGColorSelectorDock::slotDisplayConfigurationChanged()
@@ -240,5 +254,15 @@ void WGColorSelectorDock::slotCanvasResourceChanged(int key, const QVariant &val
         }
     default:
         break;
+    }
+}
+
+void WGColorSelectorDock::slotOpenSettings()
+{
+    if (!m_canvas) return;
+
+    WGColorSelectorSettingsDialog settings;
+    if (settings.exec() == QDialog::Accepted) {
+        KisConfigNotifier::instance()->notifyConfigChanged();
     }
 }

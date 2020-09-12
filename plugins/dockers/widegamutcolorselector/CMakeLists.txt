@@ -1,8 +1,9 @@
 set(KRITA_WGCOLORSELECTOR_SOURCES
     WGColorPatches.cpp
     WGColorPreviewPopup.cpp
-    WGColorSelectorPlugin.cpp
     WGColorSelectorDock.cpp
+    WGColorSelectorPlugin.cpp
+    WGColorSelectorSettings.cpp
     WGQuickSettingsWidget.cpp
     WGSelectorConfigGrid.cpp
     WGShadeSelector.cpp
@@ -13,6 +14,7 @@ set(KRITA_WGCOLORSELECTOR_SOURCES
 
 ki18n_wrap_ui(KRITA_WGCOLORSELECTOR_SOURCES
     WdgQuickSettings.ui
+    WdgWGSelectorSettings.ui
 )
 
 add_library(kritawgcolorselector MODULE ${KRITA_WGCOLORSELECTOR_SOURCES})

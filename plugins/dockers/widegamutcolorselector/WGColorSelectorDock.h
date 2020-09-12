@@ -35,6 +35,7 @@ protected:
     void disconnectFromCanvas();
 
 private Q_SLOTS:
+    void slotConfigurationChanged();
     void slotDisplayConfigurationChanged();
     void slotColorSelected(const KoColor &color);
     void slotColorSourceToggled(bool selectingBg);
@@ -42,6 +43,7 @@ private Q_SLOTS:
     void slotFGColorUsed(const KoColor&color);
     void slotSetNewColors();
     void slotCanvasResourceChanged(int key, const QVariant &value);
+    void slotOpenSettings();
 private:
     QPointer<KisCanvas2> m_canvas;
     KisVisualColorSelector *m_selector {0};

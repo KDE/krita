@@ -63,7 +63,14 @@
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="KisPopupButton" name="btnSelectorShape"/>
+        <widget class="KisPopupButton" name="btnSelectorShape">
+         <property name="iconSize">
+          <size>
+           <width>96</width>
+           <height>96</height>
+          </size>
+         </property>
+        </widget>
        </item>
        <item row="1" column="1">
         <widget class="QComboBox" name="cmbColorModel">

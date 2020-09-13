@@ -6,7 +6,6 @@
 
 #include "WGSelectorConfigGrid.h"
 
-#include "KisColorSelectorConfiguration.h"
 #include "KisVisualColorSelector.h"
 
 #include "kis_debug.h"
@@ -58,6 +57,22 @@ void WGSelectorConfigGrid::clear()
     qDeleteAll(m_actionGroup->actions());
 }
 
+QIcon WGSelectorConfigGrid::currentIcon() const
+{
+    return (m_currentAction && m_currentAction != m_dummyAction) ? m_currentAction->icon() : QIcon();
+}
+
+KisColorSelectorConfiguration WGSelectorConfigGrid::currentConfiguration() const
+{
+    if (m_currentAction != m_dummyAction) {
+        SelectorConfigAction *sa = dynamic_cast<SelectorConfigAction *>(m_currentAction);
+        if (sa) {
+            return sa->configuration();
+        }
+    }
+    return KisColorSelectorConfiguration();
+}
+
 void WGSelectorConfigGrid::setColorModel(KisVisualColorModel::ColorModel model)
 {
     if (model != m_selector->selectorModel()->colorModel()) {
@@ -97,10 +112,12 @@ void WGSelectorConfigGrid::setChecked(const KisColorSelectorConfiguration &confi
         SelectorConfigAction *sa = dynamic_cast<SelectorConfigAction *>(action);
         if (sa && sa->configuration() == configuration) {
             sa->setChecked(true);
+            m_currentAction = action;
             return;
         }
     }
     m_dummyAction->setChecked(true);
+    m_currentAction = m_dummyAction;
 }
 
 QIcon WGSelectorConfigGrid::generateIcon(const KisColorSelectorConfiguration &configuration, qreal pixelRatio) const
@@ -112,6 +129,20 @@ QIcon WGSelectorConfigGrid::generateIcon(const KisColorSelectorConfiguration &co
     m_selector->setConfiguration(&configuration);
     m_selector->render(&pixmap, QPoint(), QRegion(), RenderFlag::DrawChildren);
     return QIcon(pixmap);
+}
+
+QVector<KisColorSelectorConfiguration> WGSelectorConfigGrid::hueBasedconfigurations()
+{
+    using KCSC = KisColorSelectorConfiguration;
+    QVector<KCSC> configs;
+    configs.push_back(KCSC(KCSC::Triangle, KCSC::Ring, KCSC::SV, KCSC::H));
+    configs.push_back(KCSC(KCSC::Square, KCSC::Ring, KCSC::SV, KCSC::H));
+    configs.push_back(KCSC(KCSC::Wheel, KCSC::Slider, KCSC::VH, KCSC::hsvS));
+    configs.push_back(KCSC(KCSC::Wheel, KCSC::Slider, KCSC::hsvSH, KCSC::V));
+    configs.push_back(KCSC(KCSC::Square, KCSC::Slider, KCSC::SV, KCSC::H));
+    configs.push_back(KCSC(KCSC::Square, KCSC::Slider, KCSC::VH, KCSC::hsvS));
+    configs.push_back(KCSC(KCSC::Square, KCSC::Slider, KCSC::hsvSH, KCSC::V));
+    return configs;
 }
 
 void WGSelectorConfigGrid::slotActionTriggered(QAction *action)

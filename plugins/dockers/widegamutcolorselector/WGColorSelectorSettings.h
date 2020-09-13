@@ -11,10 +11,12 @@
 #include <QScopedPointer>
 
 #include "kis_preference_set_registry.h"
+#include "KisColorSelectorConfiguration.h"
 
 namespace Ui {
     class WGConfigWidget;
 }
+class WGSelectorConfigGrid;
 
 class WGColorSelectorSettings : public KisPreferenceSet
 {
@@ -34,8 +36,12 @@ public Q_SLOTS:
     void loadPreferences() override;
     void loadDefaultPreferences() override;
 
+private Q_SLOTS:
+    void slotSetSelectorConfiguration(const KisColorSelectorConfiguration &cfg);
+    void slotSetColorModel(int index);
 private:
     QScopedPointer<Ui::WGConfigWidget> m_ui;
+    WGSelectorConfigGrid *m_selectorConfigGrid;
 };
 
 

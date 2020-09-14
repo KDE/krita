@@ -114,7 +114,7 @@ public:
      * currently for rendering cursor with image overlay
      * fx.
      */
-    static bool supportsRenderToFBO();
+    static bool useFBOForToolOutlineRendering();
 
 
     /**

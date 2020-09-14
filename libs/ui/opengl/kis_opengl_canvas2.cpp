@@ -423,7 +423,7 @@ void KisOpenGLCanvas2::resizeGL(int width, int height)
 {
     // The given size is the widget size but here we actually want to give
     // KisCoordinatesConverter the viewport size aligned to device pixels.
-    if (KisOpenGL::supportsRenderToFBO()) {
+    if (KisOpenGL::useFBOForToolOutlineRendering()) {
         d->canvasFBO.reset(new QOpenGLFramebufferObject(QSize(width * devicePixelRatioF(), height * devicePixelRatioF())));
     }
     coordinatesConverter()->setCanvasWidgetSize(widgetSizeAlignedToDevicePixel());
@@ -500,9 +500,11 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
 
     d->overlayInvertedShader->setUniformValue(d->overlayInvertedShader->location(Uniform::TextureMatrix), textureMatrix);
 
+    bool shouldRestoreLogicOp = false;
+
     // For the legacy shader, we should use old fixed function
     // blending operations if available.
-    if (!KisOpenGL::hasOpenGL3() && !KisOpenGL::hasOpenGLES()) {
+    if (!d->canvasFBO && !KisOpenGL::hasOpenGL3() && !KisOpenGL::hasOpenGLES()) {
         #ifndef HAS_ONLY_OPENGL_ES
         glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
         glEnable(GL_COLOR_LOGIC_OP);
@@ -514,6 +516,8 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
         #else   // Q_OS_MACOS
         glLogicOp(GL_XOR);
         #endif  // Q_OS_MACOS
+
+        shouldRestoreLogicOp = true;
 
         #else   // HAS_ONLY_OPENGL_ES
         KIS_ASSERT_X(false, "KisOpenGLCanvas2::paintToolOutline",
@@ -557,16 +561,15 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
             d->overlayInvertedShader->setAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE, texCoords.constData());
         }
 
-        const bool usingLegacyShader = !((KisOpenGL::hasOpenGL3() || KisOpenGL::hasOpenGLES()) && KisOpenGL::supportsRenderToFBO());
-        if (usingLegacyShader){
-            glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
-        } else {
+        if (d->canvasFBO){
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, d->canvasFBO->texture());
 
             glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
 
             glBindTexture(GL_TEXTURE_2D, 0);
+        } else {
+            glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
         }
     }
 
@@ -575,15 +578,13 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
         d->outlineVAO.release();
     }
 
-    if (!KisOpenGL::hasOpenGLES()) {
+    if (shouldRestoreLogicOp) {
 #ifndef HAS_ONLY_OPENGL_ES
         glDisable(GL_COLOR_LOGIC_OP);
 #else
         KIS_ASSERT_X(false, "KisOpenGLCanvas2::paintToolOutline",
                 "Unexpected KisOpenGL::hasOpenGLES returned false");
 #endif
-    } else {
-        glDisable(GL_BLEND);
     }
 
     d->overlayInvertedShader->release();

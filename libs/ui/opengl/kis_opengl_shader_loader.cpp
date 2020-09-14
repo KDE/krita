@@ -215,9 +215,14 @@ KisShaderProgram *KisOpenGLShaderLoader::loadOverlayInvertedShader()
     QString vertPath, fragPath;
 
     // Select appropriate shader files
-    if ((KisOpenGL::hasOpenGL3()  || KisOpenGL::hasOpenGLES()) && KisOpenGL::supportsRenderToFBO()) {
+    if (KisOpenGL::hasOpenGL3()  || KisOpenGL::hasOpenGLES()) {
         vertPath = "matrix_transform.vert";
-        fragPath = "overlay_inverted.frag";
+
+        if (KisOpenGL::useFBOForToolOutlineRendering()) {
+            fragPath = "overlay_inverted.frag";
+        } else {
+            fragPath = "solid_color.frag";
+        }
     } else {
         vertPath = "matrix_transform_legacy.vert";
         fragPath = "solid_color_legacy.frag";

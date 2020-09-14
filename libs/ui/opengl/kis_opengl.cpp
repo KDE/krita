@@ -301,8 +301,6 @@ bool KisOpenGL::supportsFenceSync()
 
 bool KisOpenGL::useFBOForToolOutlineRendering()
 {
-    return true;
-
     initialize();
     return openGLCheckResult && openGLCheckResult->supportsFBO();
 }

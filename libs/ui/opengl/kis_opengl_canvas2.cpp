@@ -504,7 +504,7 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
 
     // For the legacy shader, we should use old fixed function
     // blending operations if available.
-    if (!d->canvasFBO && !KisOpenGL::hasOpenGL3() && !KisOpenGL::hasOpenGLES()) {
+    if (!d->canvasFBO && !KisOpenGL::supportsLoD() && !KisOpenGL::hasOpenGLES()) {
         #ifndef HAS_ONLY_OPENGL_ES
         glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
         glEnable(GL_COLOR_LOGIC_OP);

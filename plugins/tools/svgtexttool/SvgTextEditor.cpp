@@ -340,7 +340,7 @@ SvgTextEditor::~SvgTextEditor()
 }
 
 
-void SvgTextEditor::setShape(KoSvgTextShape *shape)
+void SvgTextEditor::setInitialShape(KoSvgTextShape *shape)
 {
     m_shape = shape;
     if (m_shape) {
@@ -388,7 +388,7 @@ void SvgTextEditor::setShape(KoSvgTextShape *shape)
     KisSignalsBlocker b(m_textEditorWidget.richTextEdit);
     cursor.setBlockCharFormat(format);
 
-
+    m_textEditorWidget.richTextEdit->document()->setModified(false);
 }
 
 void SvgTextEditor::save()

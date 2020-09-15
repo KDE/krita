@@ -262,7 +262,7 @@ public:
     /// Naming convention adopted from: https://en.wikipedia.org/wiki/Bicubic_interpolation#Computation
     QVector<qreal> getAlpha(const QVector<qreal>& X)
     {
-        QVector<QVector<qreal>> A = {
+        const static qreal A[16][16] = {
             { 1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},
             { 0, 0, 0, 0,  1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},
             {-3, 3, 0, 0, -2,-1, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0},

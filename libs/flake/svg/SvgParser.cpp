@@ -460,7 +460,7 @@ SvgGradientHelper* SvgParser::parseMeshGradient(const KoXmlElement &e)
 {
     SvgGradientHelper gradHelper;
     QString gradientId = e.attribute("id");
-    SvgMeshGradient *g = new SvgMeshGradient;
+    QScopedPointer<SvgMeshGradient> g(new SvgMeshGradient);
 
     // check if we have this gradient already parsed
     // copy existing gradient if it exists
@@ -537,7 +537,7 @@ SvgGradientHelper* SvgParser::parseMeshGradient(const KoXmlElement &e)
             irow++;
         }
     }
-    gradHelper.setMeshGradient(g);
+    gradHelper.setMeshGradient(g.data());
     m_gradients.insert(gradientId, gradHelper);
 
     return &m_gradients[gradientId];
@@ -1103,7 +1103,7 @@ SvgMeshGradient* prepareMeshGradientForShape(SvgGradientHelper *gradient,
                                              const KoShape *shape,
                                              const SvgGraphicsContext *gc) {
 
-    SvgMeshGradient *resultGradient;
+    SvgMeshGradient *resultGradient = nullptr;
 
     if (gradient->gradientUnits() == KoFlake::ObjectBoundingBox) {
 

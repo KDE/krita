@@ -20,7 +20,8 @@ public:
     {}
 
     Private(const Private& other)
-        : gradient(new SvgMeshGradient(*other.gradient))
+        : QSharedData()
+        , gradient(new SvgMeshGradient(*other.gradient))
         , matrix(other.matrix)
         , renderer(new KoMeshPatchesRenderer)
     {
@@ -55,7 +56,7 @@ void KoMeshGradientBackground::paint(QPainter &painter,
     if (!d->gradient || !d->gradient->isValid())   return;
     painter.save();
 
-    SvgMeshGradient *gradient = new SvgMeshGradient(*d->gradient);
+    QScopedPointer<SvgMeshGradient> gradient(new SvgMeshGradient(*d->gradient));
 
     QRectF meshBoundingRect = gradient->boundingRect();
 

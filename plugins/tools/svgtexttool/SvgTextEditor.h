@@ -56,7 +56,7 @@ public:
         Both
     };
 
-    void setShape(KoSvgTextShape *shape);
+    void setInitialShape(KoSvgTextShape *shape);
 
 private Q_SLOTS:
     /**

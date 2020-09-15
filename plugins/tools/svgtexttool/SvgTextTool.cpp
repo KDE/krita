@@ -239,7 +239,7 @@ void SvgTextTool::showEditor()
 
         m_editor->activateWindow(); // raise on creation only
     }
-    m_editor->setShape(shape);
+    m_editor->setInitialShape(shape);
     m_editor->show();
 }
 

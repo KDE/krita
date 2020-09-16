@@ -72,6 +72,12 @@ bool FillLayer::setGenerator(const QString &generatorName, InfoObject *config)
             cfg->setProperty(property, config->property(property));
         }
         layer->setFilter(cfg->cloneWithResourcesSnapshot());
+
+        if (layer->hasPendingTimedUpdates()) {
+            layer->forceUpdateTimedNode();
+        }
+
+        image()->waitForDone();
         return true;
     }
     return false;

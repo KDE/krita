@@ -232,6 +232,21 @@ void KisGeneratorLayer::resetCache()
     m_d->updateSignalCompressor.start();
 }
 
+void KisGeneratorLayer::forceUpdateTimedNode()
+{
+    if (hasPendingTimedUpdates()) {
+        m_d->updateSignalCompressor.stop();
+        m_d->updateCookie.clear();
+
+        slotDelayedStaticUpdate();
+    }
+}
+
+bool KisGeneratorLayer::hasPendingTimedUpdates() const
+{
+    return m_d->updateSignalCompressor.isActive();
+}
+
 void KisGeneratorLayer::resetCacheWithoutUpdate()
 {
     KisSelectionBasedLayer::resetCache();

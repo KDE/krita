@@ -45,6 +45,8 @@
 #include <kis_meta_data_merge_strategy.h>
 #include <kis_meta_data_merge_strategy_registry.h>
 #include <kis_filter_strategy.h>
+#include <commands/kis_node_compositeop_command.h>
+#include <kis_processing_applicator.h>
 
 #include <kis_raster_keyframe_channel.h>
 #include <kis_keyframe.h>
@@ -170,7 +172,13 @@ QString Node::blendingMode() const
 void Node::setBlendingMode(QString value)
 {
     if (!d->node) return;
-    d->node->setCompositeOpId(value);
+
+    KUndo2Command *cmd = new KisNodeCompositeOpCommand(d->node,
+                                                       d->node->compositeOpId(),
+                                                       value);
+
+    KisProcessingApplicator::runSingleCommandStroke(d->image, cmd);
+    d->image->waitForDone();
 }
 
 

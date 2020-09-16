@@ -130,7 +130,7 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
     }
 
     painter.save();
-    painter.setTransform(converter.documentToView());
+    painter.setTransform(converter.documentToView(), true);
     canvas()->snapGuide()->paint(painter, converter);
     painter.restore();
 }

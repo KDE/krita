@@ -46,6 +46,7 @@
 #include <kis_meta_data_merge_strategy_registry.h>
 #include <kis_filter_strategy.h>
 #include <commands/kis_node_compositeop_command.h>
+#include <commands/kis_image_layer_add_command.h>
 #include <kis_processing_applicator.h>
 
 #include <kis_raster_keyframe_channel.h>
@@ -214,12 +215,19 @@ QList<Node*> Node::childNodes() const
 bool Node::addChildNode(Node *child, Node *above)
 {
     if (!d->node) return false;
+
+    KUndo2Command *cmd = 0;
+
     if (above) {
-        return d->image->addNode(child->node(), d->node, above->node());
+        cmd = new KisImageLayerAddCommand(d->image, child->node(), d->node, above->node());
+    } else {
+        cmd = new KisImageLayerAddCommand(d->image, child->node(), d->node, d->node->childCount());
     }
-    else {
-        return d->image->addNode(child->node(), d->node, d->node->childCount());
-    }
+
+    KisProcessingApplicator::runSingleCommandStroke(d->image, cmd);
+    d->image->waitForDone();
+
+    return true;
 }
 
 bool Node::removeChildNode(Node *child)

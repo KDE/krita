@@ -184,13 +184,6 @@ KisNode::KisNode(const KisNode & rhs)
     m_d->graphListener = 0;
     moveToThread(qApp->thread());
 
-    // HACK ALERT: we create opacity channel in KisBaseNode, but we cannot
-    //             initialize its node from there! So workaround it here!
-    QMap<QString, KisKeyframeChannel*> channels = keyframeChannels();
-    for (auto it = channels.begin(); it != channels.end(); ++it) {
-        it.value()->setNode(this);
-    }
-
     // NOTE: the nodes are not supposed to be added/removed while
     // creation of another node, so we do *no* locking here!
 

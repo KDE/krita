@@ -23,8 +23,9 @@ struct KisTransformMaskAdapter::Private
 
 
 KisTransformMaskAdapter::KisTransformMaskAdapter()
+    : m_d(new Private)
 {
-    m_d->args = toQShared(new ToolTransformArgs);
+    m_d->args.reset(new ToolTransformArgs());
 }
 
 KisTransformMaskAdapter::KisTransformMaskAdapter(const ToolTransformArgs &args)
@@ -65,8 +66,7 @@ void KisTransformMaskAdapter::transformDevice(KisNodeSP node, KisPaintDeviceSP s
     KisTransformUtils::transformDevice(*transformArgs(), dst, &helper);
 }
 
-const QSharedPointer<ToolTransformArgs> KisTransformMaskAdapter::transformArgs() const
-{
+const QSharedPointer<ToolTransformArgs> KisTransformMaskAdapter::transformArgs() const {
     return m_d->args;
 }
 
@@ -124,6 +124,10 @@ void KisTransformMaskAdapter::clearChangedFlag()
 bool KisTransformMaskAdapter::hasChanged() const
 {
     return false;
+}
+
+KisTransformMaskParamsInterfaceSP KisTransformMaskAdapter::clone() const {
+    return toQShared(new KisTransformMaskAdapter(*this->transformArgs()));
 }
 
 #include "kis_transform_mask_params_factory_registry.h"

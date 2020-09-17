@@ -18,6 +18,7 @@ class KRITATOOLTRANSFORM_EXPORT KisAnimatedTransformMaskParameters : public KisT
 public:
     KisAnimatedTransformMaskParameters();
     KisAnimatedTransformMaskParameters(const KisTransformMaskAdapter *staticTransform);
+    KisAnimatedTransformMaskParameters(const KisAnimatedTransformMaskParameters& rhs);
     ~KisAnimatedTransformMaskParameters() override;
 
     const QSharedPointer<ToolTransformArgs> transformArgs() const override;
@@ -27,7 +28,11 @@ public:
 
     void translate(const QPointF &offset) override;
 
-    KisKeyframeChannel *getKeyframeChannel(const QString &id, KisNodeSP defaultBounds) override;
+    KisKeyframeChannel *requestKeyframeChannel(const QString &id, KisNodeWSP parent) override;
+    void setKeyframeChannel(const QString &name, QSharedPointer<KisKeyframeChannel> kcsp) override;
+    KisKeyframeChannel* getKeyframeChannel(const KoID& koid) const override;
+    QList<KisKeyframeChannel*> copyChannelsFrom(const KisAnimatedTransformParamsInterface *other) override;
+
 
     bool isHidden() const override;
     void setHidden(bool hidden);
@@ -36,6 +41,8 @@ public:
     bool hasChanged() const override;
     bool isAnimated() const;
 
+    KisTransformMaskParamsInterfaceSP clone() const override;
+
     static KisTransformMaskParamsInterfaceSP fromXML(const QDomElement &e);
 
     /*** Some utility methods for creating an animated transform mask and for creating keyframes using a reference
@@ -43,7 +50,6 @@ public:
     static KisTransformMaskParamsInterfaceSP makeAnimated(KisTransformMaskParamsInterfaceSP params);
     static void makeScalarKeyframeOnMask(KisTransformMaskSP mask, const KoID &channelId, int time, qreal value, KUndo2Command *parentCommand);
     static void addKeyframes(KisTransformMaskSP mask, int time, KisTransformMaskParamsInterfaceSP params, KUndo2Command *parentCommand);
-
     
 private:
     struct Private;

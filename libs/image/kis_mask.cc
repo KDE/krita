@@ -104,6 +104,7 @@ void KisMask::setImage(KisImageWSP image)
 {
     KisPaintDeviceSP parentPaintDevice = parent() ? parent()->original() : 0;
     KisDefaultBoundsBaseSP defaultBounds = new KisSelectionDefaultBounds(parentPaintDevice);
+
     if (m_d->selection) {
         m_d->selection->setDefaultBounds(defaultBounds);
     }

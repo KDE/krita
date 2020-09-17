@@ -75,6 +75,7 @@
 #include "kis_wrapped_rect.h"
 #include "kis_crop_saved_extra_data.h"
 #include "kis_layer_utils.h"
+#include "kis_keyframe_channel.h"
 
 #include "kis_lod_transform.h"
 
@@ -433,6 +434,21 @@ void KisImage::copyFromImageImpl(const KisImage &rhs, int policy)
     KisLayerUtils::recursiveApplyNodes(newRoot,
                                        [](KisNodeSP node) {
                                            dbgImage << "Node: " << (void *)node.data();
+                                       });
+
+    // Keyframe channel boundary and node connections
+    // Previously, this was done in the copy constructors, but was error prone
+    // due to the construction of node 'tree' being incomplete when the constructors
+    // ran.
+    KisLayerUtils::recursiveApplyNodes(newRoot,
+                                       [this](KisNodeSP node) {
+                                            using KeyframeChannelContainer = QMap<QString, KisKeyframeChannel*>;
+                                            KeyframeChannelContainer keyframeChannels = node->keyframeChannels();
+                                            for (KeyframeChannelContainer::iterator i = keyframeChannels.begin();
+                                                 i != keyframeChannels.end(); i++) {
+                                                keyframeChannels[i.key()]->setBounds(new KisDefaultBounds(this));
+                                                keyframeChannels[i.key()]->setNode(node);
+                                            }
                                        });
 
     m_d->compositions.clear();

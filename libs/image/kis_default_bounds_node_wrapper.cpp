@@ -53,9 +53,9 @@ int KisDefaultBoundsNodeWrapper::currentLevelOfDetail() const
 int KisDefaultBoundsNodeWrapper::currentTime() const
 {   
     KisMaskWSP mask = dynamic_cast<KisMask*>(m_d->node.data());
-    KisNodeWSP toSample = mask.isValid() ? mask->parent().data() : m_d->node;
-
-    return toSample->original() ? toSample->original()->defaultBounds()->currentTime() : 0;
+    KisNodeWSP toSample = !mask.isNull() ? mask->parent().data() : m_d->node;
+    const int time = toSample->original() ? toSample->original()->defaultBounds()->currentTime() : 0;
+    return time;
 }
 
 bool KisDefaultBoundsNodeWrapper::externalFrameActive() const

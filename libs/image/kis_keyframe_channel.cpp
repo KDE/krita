@@ -17,6 +17,7 @@
 #include "kis_keyframe_commands.h"
 #include "kis_scalar_keyframe_channel.h"
 #include "kis_mask.h"
+#include "kis_image.h"
 
 #include <QMap>
 
@@ -40,7 +41,6 @@ struct KisKeyframeChannel::Private
     Private(const KoID &temp_id, KisDefaultBoundsBaseSP bounds) {
         bounds = bounds;
         id = temp_id;
-        parentNode = nullptr;
     }
 
     Private(const Private &rhs) {
@@ -56,12 +56,6 @@ struct KisKeyframeChannel::Private
     bool haveBrokenFrameTimeBug = false;
 };
 
-
-KisKeyframeChannel::KisKeyframeChannel(const KoID &id, KisNodeWSP parent)
-    : KisKeyframeChannel(id, KisDefaultBoundsNodeWrapperSP( new KisDefaultBoundsNodeWrapper(parent)))
-{
-    setNode(parent);
-}
 
 KisKeyframeChannel::KisKeyframeChannel(const KoID &id, KisDefaultBoundsBaseSP bounds)
     : m_d(new Private(id, bounds))
@@ -83,11 +77,10 @@ KisKeyframeChannel::KisKeyframeChannel(const KoID &id, KisDefaultBoundsBaseSP bo
     });
 }
 
-KisKeyframeChannel::KisKeyframeChannel(const KisKeyframeChannel &rhs, KisNodeWSP newParent)
-    : KisKeyframeChannel(rhs.m_d->id, KisDefaultBoundsNodeWrapperSP( new KisDefaultBoundsNodeWrapper(newParent)))
+KisKeyframeChannel::KisKeyframeChannel(const KisKeyframeChannel &rhs)
+    : KisKeyframeChannel(rhs.m_d->id, new KisDefaultBounds(nullptr))
 {
     m_d.reset(new Private(*rhs.m_d));
-    setNode(newParent);
 }
 
 KisKeyframeChannel::~KisKeyframeChannel()
@@ -283,7 +276,7 @@ void KisKeyframeChannel::setNode(KisNodeWSP node)
     }
 
     m_d->parentNode = node;
-    m_d->bounds = KisDefaultBoundsNodeWrapperSP(new KisDefaultBoundsNodeWrapper(node));
+//    m_d->bounds = KisDefaultBoundsNodeWrapperSP( new KisDefaultBoundsNodeWrapper( node ));
 
     if (m_d->parentNode) { // Connect new..
         connect(this, &KisKeyframeChannel::sigChannelUpdated, m_d->parentNode, &KisNode::handleKeyframeChannelUpdate);
@@ -293,6 +286,10 @@ void KisKeyframeChannel::setNode(KisNodeWSP node)
 KisNodeWSP KisKeyframeChannel::node() const
 {
     return m_d->parentNode;
+}
+
+void KisKeyframeChannel::setBounds(KisDefaultBoundsBaseSP bounds) {
+    m_d->bounds = bounds;
 }
 
 int KisKeyframeChannel::channelHash() const

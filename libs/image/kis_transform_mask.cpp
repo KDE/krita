@@ -32,6 +32,7 @@
 #include "kis_algebra_2d.h"
 #include "kis_safe_transform.h"
 #include "kis_keyframe_channel.h"
+#include "kis_scalar_keyframe_channel.h"
 
 #include "kis_image_config.h"
 #include "kis_lod_capable_layer_offset.h"
@@ -56,9 +57,10 @@ struct Q_DECL_HIDDEN KisTransformMask::Private
 
     Private(const Private &rhs)
         : worker(rhs.worker),
-          params(rhs.params),
+          params(rhs.params->clone()),
           staticCacheValid(rhs.staticCacheValid),
           recalculatingStaticImage(rhs.recalculatingStaticImage),
+          staticCacheDevice(nullptr),
           offset(rhs.offset),
           updateSignalCompressor(UPDATE_DELAY, KisSignalCompressor::POSTPONE),
           offBoundsReadArea(rhs.offBoundsReadArea)
@@ -115,6 +117,16 @@ KisTransformMask::KisTransformMask(const KisTransformMask& rhs)
       m_d(new Private(*rhs.m_d))
 {
     connect(&m_d->updateSignalCompressor, SIGNAL(timeout()), SLOT(slotDelayedStaticUpdate()));
+
+    KisAnimatedTransformParamsInterface* rhsAniTransform = dynamic_cast<KisAnimatedTransformParamsInterface*>(rhs.m_d->params.data());
+    KisAnimatedTransformParamsInterface* aniTransform = dynamic_cast<KisAnimatedTransformParamsInterface*>(m_d->params.data());
+    if(rhsAniTransform && aniTransform) {
+        QList<KisKeyframeChannel*> chans;
+        chans = aniTransform->copyChannelsFrom(rhsAniTransform);
+        foreach( KisKeyframeChannel* chan, chans) {
+            addKeyframeChannel(chan);
+        }
+    }
 }
 
 KisPaintDeviceSP KisTransformMask::paintDevice() const
@@ -566,7 +578,9 @@ KisKeyframeChannel *KisTransformMask::requestKeyframeChannel(const QString &id)
             animatedParams = dynamic_cast<KisAnimatedTransformParamsInterface*>(converted.data());
         }
 
-        KisKeyframeChannel *channel = animatedParams->getKeyframeChannel(id, parent());
+        KisKeyframeChannel *channel = animatedParams->requestKeyframeChannel(id, this);
+        channel->setNode(this);
+        channel->setBounds(new KisDefaultBounds(this->image()));
         if (channel) return channel;
     }
 

@@ -10,12 +10,16 @@
 #include "tool_transform_args.h"
 #include "kis_time_span.h"
 #include "kis_transform_mask.h"
+#include "kis_image.h"
 #include <QHash>
 
 struct KisAnimatedTransformMaskParameters::Private
 {
+    using TransformChannels = QHash<QString, QSharedPointer<KisScalarKeyframeChannel>>;
+
     Private() :
-        hidden(false)
+        hidden(false),
+        hash()
     {
         transformChannels.insert(KisKeyframeChannel::PositionX.name(), nullptr);
         transformChannels.insert(KisKeyframeChannel::PositionY.name(), nullptr);
@@ -28,31 +32,18 @@ struct KisAnimatedTransformMaskParameters::Private
         transformChannels.insert(KisKeyframeChannel::RotationZ.name(), nullptr);
     }
 
-    QHash<QString, QSharedPointer<KisScalarKeyframeChannel>> transformChannels;
+    TransformChannels transformChannels;
 
     bool hidden;
     quint64 hash;
-//    KisTimeSpan identicalRange;
-
-//    void clearChangedFlag() {
-//        KisTimeSpan validRange = KisTimeSpan::infinite(0);
-
-//        for (QHash<QString, QSharedPointer<KisScalarKeyframeChannel>>::const_iterator e = transformChannels.constBegin();
-//             e; e++) {
-//            if (e.value().isNull()) continue;
-
-//            validRange &= e.value()->identicalFrames(e.value()->currentTime());
-//        }
-
-//        identicalRange = validRange;
-//    }
 };
 
 KisAnimatedTransformMaskParameters::KisAnimatedTransformMaskParameters()
-    : KisTransformMaskAdapter(ToolTransformArgs()),
+    : KisTransformMaskAdapter(),
       m_d(new Private())
 {
 }
+
 
 KisAnimatedTransformMaskParameters::KisAnimatedTransformMaskParameters(const KisTransformMaskAdapter *staticTransform)
     : KisTransformMaskAdapter(*staticTransform->transformArgs()),
@@ -60,9 +51,16 @@ KisAnimatedTransformMaskParameters::KisAnimatedTransformMaskParameters(const Kis
 {
 }
 
+KisAnimatedTransformMaskParameters::KisAnimatedTransformMaskParameters(const KisAnimatedTransformMaskParameters &rhs)
+    : KisTransformMaskAdapter(*rhs.transformArgs()),
+      m_d(new Private())
+{
+    m_d->hash = rhs.m_d->hash;
+}
+
+
 KisAnimatedTransformMaskParameters::~KisAnimatedTransformMaskParameters()
 {
-    ENTER_FUNCTION();
 }
 
 const QSharedPointer<ToolTransformArgs> KisAnimatedTransformMaskParameters::transformArgs() const
@@ -111,12 +109,9 @@ void KisAnimatedTransformMaskParameters::translate(const QPointF &offset)
     args->translate(offset);
 }
 
-KisKeyframeChannel *KisAnimatedTransformMaskParameters::getKeyframeChannel(const QString &id, KisNodeSP parent)
+KisKeyframeChannel *KisAnimatedTransformMaskParameters::requestKeyframeChannel(const QString &id, KisNodeWSP parent)
 {
     KoID channelId;
-
-    ENTER_FUNCTION() << id;
-
 
     //TODO -- clean this up.
     if (id == KisKeyframeChannel::PositionX.id()) {
@@ -141,17 +136,70 @@ KisKeyframeChannel *KisAnimatedTransformMaskParameters::getKeyframeChannel(const
         return nullptr;
     }
 
-
-    if (!m_d->transformChannels[channelId.name()]) {
-        m_d->transformChannels[channelId.name()].reset(new KisScalarKeyframeChannel(channelId, new KisDefaultBoundsNodeWrapper(parent)));
-        m_d->transformChannels[channelId.name()]->setDefaultValue(0);
-        m_d->transformChannels[channelId.name()]->setDefaultInterpolationMode(KisScalarKeyframe::Linear);
-        m_d->transformChannels[channelId.name()]->connect(m_d->transformChannels[channelId.name()].data(), &KisKeyframeChannel::sigChannelUpdated, [this](const KisTimeSpan&, const QRect&){
-            this->clearChangedFlag();
-        });
+    if (m_d->transformChannels[channelId.name()].isNull()) {
+        setKeyframeChannel(channelId.name(), toQShared(new KisScalarKeyframeChannel(channelId, new KisDefaultBoundsNodeWrapper(parent))));
+        m_d->transformChannels[channelId.name()]->setNode(parent);
     }
 
     return m_d->transformChannels[channelId.name()].data();
+}
+
+void KisAnimatedTransformMaskParameters::setKeyframeChannel(const QString &name, QSharedPointer<KisKeyframeChannel> kcsp) {
+    if (kcsp.dynamicCast<KisScalarKeyframeChannel>()) {
+        m_d->transformChannels[name] = kcsp.dynamicCast<KisScalarKeyframeChannel>();
+        m_d->transformChannels[name]->setDefaultValue(0);
+        m_d->transformChannels[name]->setDefaultInterpolationMode(KisScalarKeyframe::Linear);
+        m_d->transformChannels[name]->connect(m_d->transformChannels[name].data(), &KisKeyframeChannel::sigChannelUpdated, [this](const KisTimeSpan&, const QRect&){
+            this->clearChangedFlag();
+        });
+    }
+}
+
+KisKeyframeChannel *KisAnimatedTransformMaskParameters::getKeyframeChannel(const KoID &koid) const
+{
+    return m_d->transformChannels[koid.name()].data();
+}
+
+QList<KisKeyframeChannel *> KisAnimatedTransformMaskParameters::copyChannelsFrom(const KisAnimatedTransformParamsInterface *other)
+{
+    QList<KisKeyframeChannel*> chans;
+
+    for (Private::TransformChannels::iterator i = m_d->transformChannels.begin();
+         i != m_d->transformChannels.end(); i++) {
+        //TODO -- clean this up.
+        KoID channelId;
+
+        if (i.key() == KisKeyframeChannel::PositionX.name()) {
+            channelId = KisKeyframeChannel::PositionX;
+        } else if (i.key() == KisKeyframeChannel::PositionY.name()) {
+            channelId = KisKeyframeChannel::PositionY;
+        } else if (i.key() == KisKeyframeChannel::ScaleX.name()) {
+            channelId = KisKeyframeChannel::ScaleX;
+        } else if (i.key() == KisKeyframeChannel::ScaleY.name()) {
+            channelId = KisKeyframeChannel::ScaleY;
+        } else if (i.key() == KisKeyframeChannel::ShearX.name()) {
+            channelId = KisKeyframeChannel::ShearX;
+        } else if (i.key() == KisKeyframeChannel::ShearY.name()) {
+            channelId = KisKeyframeChannel::ShearY;
+        } else if (i.key() == KisKeyframeChannel::RotationX.name()) {
+            channelId = KisKeyframeChannel::RotationX;
+        } else if (i.key() == KisKeyframeChannel::RotationY.name()) {
+            channelId = KisKeyframeChannel::RotationY;
+        } else if (i.key() == KisKeyframeChannel::RotationZ.name()) {
+            channelId = KisKeyframeChannel::RotationZ;
+        } else {
+            continue;
+        }
+
+        const KisScalarKeyframeChannel* src = dynamic_cast<KisScalarKeyframeChannel*>(other->getKeyframeChannel(channelId));
+
+        if (!src) continue;
+
+        setKeyframeChannel(channelId.name(), toQShared(new KisScalarKeyframeChannel(*src)));
+        chans.append(getKeyframeChannel(channelId));
+    }
+
+    return chans;
 }
 
 bool KisAnimatedTransformMaskParameters::isHidden() const
@@ -166,12 +214,14 @@ void KisAnimatedTransformMaskParameters::setHidden(bool hidden)
 
 void KisAnimatedTransformMaskParameters::clearChangedFlag()
 {
-    m_d->hash = reinterpret_cast<quint64>(transformArgs().data());
+    // m_d->hash = transformArgs()->hash();
+    //ENTER_FUNCTION() << ppVar(m_d->hash);
 }
 
 bool KisAnimatedTransformMaskParameters::hasChanged() const
 {
-    return m_d->hash == reinterpret_cast<quint64>(transformArgs().data());
+    //return m_d->hash != transformArgs()->hash();
+    return true;
 }
 
 bool KisAnimatedTransformMaskParameters::isAnimated() const
@@ -179,10 +229,16 @@ bool KisAnimatedTransformMaskParameters::isAnimated() const
     return true;
 }
 
+KisTransformMaskParamsInterfaceSP KisAnimatedTransformMaskParameters::clone() const
+{
+    return toQShared(new KisAnimatedTransformMaskParameters(*this));
+}
+
 KisTransformMaskParamsInterfaceSP KisAnimatedTransformMaskParameters::fromXML(const QDomElement &e)
 {
-    Q_UNUSED(e);
-    return toQShared(new KisAnimatedTransformMaskParameters());
+    QSharedPointer<KisAnimatedTransformMaskParameters> aniparam = toQShared(new KisAnimatedTransformMaskParameters());
+    aniparam->setBaseArgs(ToolTransformArgs::fromXML(e));
+    return aniparam;
 }
 
 KisTransformMaskParamsInterfaceSP KisAnimatedTransformMaskParameters::makeAnimated(KisTransformMaskParamsInterfaceSP params)
@@ -203,7 +259,7 @@ KisTransformMaskParamsInterfaceSP KisAnimatedTransformMaskParameters::makeAnimat
 
 void KisAnimatedTransformMaskParameters::makeScalarKeyframeOnMask(KisTransformMaskSP mask, const KoID &channelId, int time, qreal value, KUndo2Command *parentCommand)
 {
-    KisScalarKeyframeChannel *channel = dynamic_cast<KisScalarKeyframeChannel*>(mask->getKeyframeChannel(channelId.id(), true));
+    KisScalarKeyframeChannel *channel = dynamic_cast<KisScalarKeyframeChannel*>(mask->getKeyframeChannel(channelId.id(), false));
     if (channel){
         channel->addScalarKeyframe(time, value, parentCommand);
     }
@@ -237,21 +293,18 @@ void KisAnimatedTransformMaskParameters::addKeyframes(KisTransformMaskSP mask, i
         tma->setBaseArgs(args);
     }
 
-
     makeScalarKeyframeOnMask(mask, KisKeyframeChannel::PositionX, time, args.transformedCenter().x(), parentCommand);
     makeScalarKeyframeOnMask(mask, KisKeyframeChannel::PositionY, time, args.transformedCenter().y(), parentCommand);
 
     makeScalarKeyframeOnMask(mask, KisKeyframeChannel::ScaleX, time, args.scaleX(), parentCommand);
     makeScalarKeyframeOnMask(mask, KisKeyframeChannel::ScaleY, time, args.scaleY(), parentCommand);
 
-    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::ShearX, time, args.shearX(), parentCommand);
-    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::ShearY, time, args.shearY(), parentCommand);
+//    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::ShearX, time, args.shearX(), parentCommand);
+//    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::ShearY, time, args.shearY(), parentCommand);
 
-    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::RotationX, time, args.aX(), parentCommand);
-    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::RotationY, time, args.aY(), parentCommand);
-    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::RotationZ, time, args.aZ(), parentCommand);
-
-
+//    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::RotationX, time, args.aX(), parentCommand);
+//    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::RotationY, time, args.aY(), parentCommand);
+//    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::RotationZ, time, args.aZ(), parentCommand);
 }
 
 #include "kis_transform_mask_params_factory_registry.h"

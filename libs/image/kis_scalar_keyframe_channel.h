@@ -120,9 +120,8 @@ class KRITAIMAGE_EXPORT KisScalarKeyframeChannel : public KisKeyframeChannel
 {
     Q_OBJECT
 public:
-    KisScalarKeyframeChannel(const KoID& id, KisNodeWSP node);
     KisScalarKeyframeChannel(const KoID& id, KisDefaultBoundsBaseSP bounds);
-    KisScalarKeyframeChannel(const KisScalarKeyframeChannel &rhs, KisNodeWSP newParent);
+    KisScalarKeyframeChannel(const KisScalarKeyframeChannel &rhs);
     ~KisScalarKeyframeChannel() override;
 
     /** Utility for adding keyframe with non-default value. */

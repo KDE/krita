@@ -80,7 +80,8 @@ void KisRecalculateTransformMaskJob::run()
         QRect updateRect = oldMaskExtent |
             layer->projectionPlane()->changeRect(layer->extent(), KisLayer::N_FILTHY);
 
-        image->requestProjectionUpdateNoFilthy(layer, updateRect, image->bounds(),layer->isAnimated());
+        image->requestProjectionUpdateNoFilthy(layer, updateRect, image->bounds(), false); // Should there be a case where this is flushed?
+        // TODO: Check if layer-isAnimated() should be past into requestProjectionUpdateNoFilthy...
     }
 }
 

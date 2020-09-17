@@ -1098,7 +1098,7 @@ void KisPaintDevice::makeFullCopyFrom(const KisPaintDevice &rhs, KritaUtils::Dev
         KIS_ASSERT_RECOVER_RETURN(rhs.m_d->framesInterface);
         KIS_ASSERT_RECOVER_RETURN(rhs.m_d->contentChannel);
         m_d->framesInterface.reset(new KisPaintDeviceFramesInterface(this));
-        m_d->contentChannel.reset(new KisRasterKeyframeChannel(*rhs.m_d->contentChannel.data(), newParentNode, this));
+        m_d->contentChannel.reset(new KisRasterKeyframeChannel(*rhs.m_d->contentChannel.data(), this));
     }
 
     setDefaultBounds(rhs.m_d->defaultBounds);
@@ -2032,7 +2032,7 @@ KisRasterKeyframeChannel *KisPaintDevice::createKeyframeChannel(const KoID &id)
 
     Q_ASSERT(!m_d->contentChannel);
     if (m_d->parent.isValid()) {
-        m_d->contentChannel.reset(new KisRasterKeyframeChannel(id, this, m_d->parent));
+        m_d->contentChannel.reset(new KisRasterKeyframeChannel(id, this, new KisDefaultBoundsNodeWrapper(m_d->parent)));
     } else {
         //fallback when paint device is isolated / does not belong to a node.
         m_d->contentChannel.reset(new KisRasterKeyframeChannel(id, this, m_d->defaultBounds));

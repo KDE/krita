@@ -10,7 +10,7 @@
 #include <kis_image.h>
 #include <kis_icon.h>
 #include <KoProperties.h>
-#include <KisPropertyWrapper.h>
+#include <KisAnimatedOpacityProperty.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>
 
@@ -92,7 +92,7 @@ KisBaseNode::KisBaseNode(const KisBaseNode & rhs)
     , m_d(new Private(*rhs.m_d))
 {
     if (rhs.m_d->opacityProperty.hasChannel()) {
-        m_d->opacityProperty.transferKeyframeData(rhs.m_d->opacityProperty, dynamic_cast<KisNode*>(this));
+        m_d->opacityProperty.transferKeyframeData(rhs.m_d->opacityProperty);
         m_d->keyframeChannels.insert(m_d->opacityProperty.channel()->id(), m_d->opacityProperty.channel());
     }
 

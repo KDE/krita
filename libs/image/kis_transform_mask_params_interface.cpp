@@ -164,6 +164,11 @@ bool KisDumbTransformMaskParams::hasChanged() const
     return false;
 }
 
+KisTransformMaskParamsInterfaceSP KisDumbTransformMaskParams::clone() const
+{
+    return toQShared(new KisDumbTransformMaskParams(m_d->transform));
+}
+
 QTransform KisDumbTransformMaskParams::testingGetTransform() const
 {
     return m_d->transform;

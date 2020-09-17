@@ -47,9 +47,8 @@ public:
     static const KoID RotationY;
     static const KoID RotationZ;
 
-    KisKeyframeChannel(const KoID &id, KisNodeWSP parent = 0);
     KisKeyframeChannel(const KoID &id, KisDefaultBoundsBaseSP bounds);
-    KisKeyframeChannel(const KisKeyframeChannel &rhs, KisNodeWSP newParent);
+    KisKeyframeChannel(const KisKeyframeChannel &rhs);
     ~KisKeyframeChannel() override;
 
     /** @brief Add a new keyframe to the channel at the specified time. */
@@ -116,6 +115,7 @@ public:
 
     void setNode(KisNodeWSP node);
     KisNodeWSP node() const;
+    void setBounds(KisDefaultBoundsBaseSP bounds);
 
     /** @brief Calculates a pseudo-unique hash based on
      * the relevant internal state of the channel. */

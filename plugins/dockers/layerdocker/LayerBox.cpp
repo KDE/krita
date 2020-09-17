@@ -643,7 +643,6 @@ void LayerBox::slotSetOpacity(double opacity)
 
 void LayerBox::slotUpdateOpacitySlider(quint8 value) {
     double percentage = value * 100 / 255;
-    ENTER_FUNCTION();
 
     m_wdgLayerBox->doubleOpacity->blockSignals(true);
     m_wdgLayerBox->doubleOpacity->setValue(percentage);

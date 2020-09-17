@@ -164,13 +164,6 @@ public:
     QSharedPointer<ScalarKeyframeLimits> limits;
 };
 
-
-KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KoID &id, KisNodeWSP node)
-    : KisScalarKeyframeChannel(id, new KisDefaultBoundsNodeWrapper(node))
-{
-    setNode(node);
-}
-
 KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KoID &id, KisDefaultBoundsBaseSP bounds)
     : KisKeyframeChannel(id, bounds)
     , m_d(new Private)
@@ -185,8 +178,8 @@ KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KoID &id, KisDefaultBou
     });
 }
 
-KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KisScalarKeyframeChannel &rhs, KisNodeWSP newParent)
-    : KisKeyframeChannel(rhs, newParent)
+KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KisScalarKeyframeChannel &rhs)
+    : KisKeyframeChannel(rhs)
 {
     m_d.reset(new Private(*rhs.m_d));
 

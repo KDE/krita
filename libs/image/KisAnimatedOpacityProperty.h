@@ -7,6 +7,7 @@
 
 #include "kis_scalar_keyframe_channel.h"
 #include "kis_time_span.h"
+#include "kis_image.h"
 #include "KoProperties.h"
 
 #include "kritawidgetutils_export.h"
@@ -65,9 +66,11 @@ public:
     void makeAnimated(KisNode* parentNode) {
         m_channel.reset( new KisScalarKeyframeChannel(
                              KisKeyframeChannel::Opacity,
-                             parentNode
+                             new KisDefaultBoundsNodeWrapper(parentNode)
                          ));
 
+        m_channel->setNode(parentNode);
+        m_channel->setBounds(new KisDefaultBoundsNodeWrapper(parentNode));
         m_channel->setLimits(0, 100);
         m_channel->setDefaultInterpolationMode(KisScalarKeyframe::Linear);
         m_channel->setDefaultValue(100);
@@ -75,10 +78,10 @@ public:
         connect(m_channel.data(), SIGNAL(sigKeyframeChanged(const KisKeyframeChannel*,int)), this, SLOT(slotKeyChanged(const KisKeyframeChannel*,int)));
     }
 
-    void transferKeyframeData(const KisAnimatedOpacityProperty &rhs, KisNode* node){
+    void transferKeyframeData(const KisAnimatedOpacityProperty &rhs){
         KisScalarKeyframeChannel* channel = rhs.channel();
         KIS_ASSERT_RECOVER(channel) {}
-        KisScalarKeyframeChannel* channelNew = new KisScalarKeyframeChannel(*channel, node);
+        KisScalarKeyframeChannel* channelNew = new KisScalarKeyframeChannel(*channel);
         KIS_ASSERT(channelNew);
         m_channel.reset(channelNew);
 
@@ -86,7 +89,6 @@ public:
     }
 
     KisScalarKeyframeChannel* channel() const { return m_channel.data(); }
-
 
 Q_SIGNALS:
     void changed(quint8 value);

@@ -136,6 +136,13 @@ void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
                     v = 0.0;
                 }
             }
+            else if (std::min(std::abs(dx - dy), std::abs(dx + dy)) < stripe_width) {
+                h = 0;
+                // x-axis = value, y-axis = saturation
+                v =    dx*v_factor + signedSqr(dx)*v_factor2;
+                s = - (dy*s_factor + signedSqr(dy)*s_factor2);
+                // both at once
+            }
             else if (r < s_radius+1) {
                 // hue
                 if (dx > 0)

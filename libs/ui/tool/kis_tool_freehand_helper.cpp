@@ -170,7 +170,7 @@ QPainterPath KisToolFreehandHelper::paintOpOutline(const QPointF &savedCursorPos
                                                    KisPaintOpSettings::OutlineMode mode) const
 {
     KisPaintOpSettingsSP settings = globalSettings;
-    KisPaintInformation info = m_d->infoBuilder->hover(savedCursorPos, event);
+    KisPaintInformation info = m_d->infoBuilder->hover(savedCursorPos, event, !m_d->strokeInfos.isEmpty());
     QPointF prevPoint = m_d->lastCursorPos.pushThroughHistory(savedCursorPos, currentZoom());
     qreal startAngle = KisAlgebra2D::directionBetweenPoints(prevPoint, savedCursorPos, 0);
     KisDistanceInformation distanceInfo(prevPoint, startAngle);

@@ -32,12 +32,15 @@ export CMAKE_PREFIX_PATH=$DEPS_INSTALL_PREFIX:$CMAKE_PREFIX_PATH
 export PYTHONPATH=$DEPS_INSTALL_PREFIX/sip/:$DEPS_INSTALL_PREFIX/lib/python3.8/site-packages/:$DEPS_INSTALL_PREFIX/lib/python3.8/
 export PYTHONHOME=$DEPS_INSTALL_PREFIX
 
-# download
-# XXX: bundle this inside the Docker image *and* make it portable to ARM
-mkdir -p $DOWNLOADS_DIR
-cd $DOWNLOADS_DIR
-wget "https://files.kde.org/krita/build/AppImageUpdate-x86_64.AppImage" -O AppImageUpdate
-echo -n "ebc4763e8eac6aa7b9dfcbea77ec07d2e01fa1b9f10a38d4af0fc040bc965c1f AppImageUpdate" | sha256sum -c -
+if [ -n "${CHANNEL}" ]; then
+    # download
+    # XXX: bundle this inside the Docker image *and* make it portable to ARM
+    mkdir -p $DOWNLOADS_DIR
+    cd $DOWNLOADS_DIR
+    wget "https://files.kde.org/krita/build/AppImageUpdate-x86_64.AppImage" -O AppImageUpdate
+    echo -n "ebc4763e8eac6aa7b9dfcbea77ec07d2e01fa1b9f10a38d4af0fc040bc965c1f AppImageUpdate" | sha256sum -c -
+    CHANNEL=
+fi
 
 # Switch over to our build prefix
 cd $BUILD_PREFIX

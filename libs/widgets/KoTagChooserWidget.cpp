@@ -132,18 +132,8 @@ void KoTagChooserWidget::addReadOnlyItem(QString tagName)
 
 void KoTagChooserWidget::insertItem(QString tagName)
 {
-    QStringList tags = allTags();
-    tags.append(tagName);
-    tags.sort();
-    foreach (QString readOnlyTag, d->readOnlyTags) {
-        tags.prepend(readOnlyTag);
-    }
-
-    int index = tags.indexOf(tagName);
-    if (d->comboBox->findOriginalText(tagName) == -1) {
-        d->comboBox->insertSqueezedItem(tagName, index);
-        d->tags.append(tagName);
-    }
+    QStringList newTagName = { tagName };
+    addItems(newTagName);
 }
 
 QString KoTagChooserWidget::currentlySelectedTag()

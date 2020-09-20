@@ -200,15 +200,15 @@ void KisMyPaintCurveOption::readNamedOptionSetting(const QString& prefix, const 
 
 void KisMyPaintCurveOption::lodLimitations(KisPaintopLodLimitations *l) const {
 
-    if(m_sensorMap.find(MYPAINT_RANDOM) != m_sensorMap.end()) {
+    if(m_sensorMap[MYPAINT_RANDOM]->isActive()) {
         l->blockers << KoID("Random Sensor Active", i18nc("PaintOp instant preview limitation", "Random Sensor Active, consider disabling Instant Preview"));
     }
 
-    if(m_name == "offset_by_random") {
+    if(m_name == "offset_by_random" && (m_value > 0.05 || m_value < -0.05)) {
         l->blockers << KoID("Offset by Random", i18nc("PaintOp instant preview limitation", "Offset by Random, consider disabling Instant Preview"));
     }
 
-    if(m_name == "radius_by_random") {
+    if(m_name == "radius_by_random" && qRound(m_value) >= 0.05) {
         l->blockers << KoID("Radius by Random", i18nc("PaintOp instant preview limitation", "Radius by Random, consider disabling Instant Preview"));
     }
 }

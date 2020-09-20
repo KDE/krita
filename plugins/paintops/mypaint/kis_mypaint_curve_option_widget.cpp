@@ -51,7 +51,7 @@ KisMyPaintCurveOptionWidget::KisMyPaintCurveOptionWidget(KisMyPaintCurveOption* 
 
     m_curveOptionWidget->strengthSlider->setRange(curveOption->minValue(), curveOption->maxValue(), 2);
     m_curveOptionWidget->strengthSlider->setValue(curveOption->value());
-    m_curveOptionWidget->strengthSlider->setPrefix(i18n("BaseValue: "));
+    m_curveOptionWidget->strengthSlider->setPrefix(i18n("Base Value: "));
     m_curveOptionWidget->strengthSlider->setSuffix("");
 
     if (hideSlider) {

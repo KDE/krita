@@ -133,9 +133,6 @@ void KisMyPaintCurveOptionWidget::updateRangeSpinBoxes(KisDynamicSensorSP sensor
 
 float KisMyPaintCurveOptionWidget::getBaseValue(KisPropertiesConfigurationSP setting) {
 
-    MyPaintBrush *brush = mypaint_brush_new();
-    mypaint_brush_from_string(brush, setting->getProperty(MYPAINT_JSON).toByteArray());
-
     KisMyPaintCurveOption *curveOpt = dynamic_cast<KisMyPaintCurveOption*>(m_curveOption);
     if(curveOpt->currentSetting() == MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC)
         return log(setting->getFloat(MYPAINT_DIAMETER)/2);
@@ -146,7 +143,12 @@ float KisMyPaintCurveOptionWidget::getBaseValue(KisPropertiesConfigurationSP set
     if(curveOpt->currentSetting() == MYPAINT_BRUSH_SETTING_HARDNESS)
         return setting->getFloat(MYPAINT_HARDNESS);
 
-    return mypaint_brush_get_base_value(brush, curveOpt->currentSetting());
+    MyPaintBrush *brush = mypaint_brush_new();
+    mypaint_brush_from_string(brush, setting->getProperty(MYPAINT_JSON).toByteArray());
+
+    float ret = mypaint_brush_get_base_value(brush, curveOpt->currentSetting());
+    delete brush;
+    return ret;
 }
 
 void KisMyPaintCurveOptionWidget::setBaseValue(KisPropertiesConfigurationSP setting, float val) const {

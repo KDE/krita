@@ -23,6 +23,7 @@
 #include <kis_image.h>
 #include <kis_paintop.h>
 #include <kis_painter.h>
+#include <KoToolManager.h>
 #include <KoColorConversions.h>
 #include <kis_paintop_settings.h>
 #include <kis_paint_information.h>
@@ -60,12 +61,15 @@ KisMyPaintOp::KisMyPaintOp(const KisPaintOpSettingsSP settings, KisPainter * pai
 
     m_brush->setColor(this->painter()->paintColor(), painter->device()->colorSpace());
 
+    if (KoToolManager::instance()->activeToolId() != "KritaShape/KisToolBrush")
+        mypaint_brush_set_base_value(m_brush->brush(), MYPAINT_BRUSH_SETTING_SLOW_TRACKING, 0.0);
+
     m_settings = settings;
     m_airBrushOption.readOptionSetting(m_settings);
 
     dtime = -1;
     isStrokeStarted = false;
-    m_radius = settings->getFloat(MYPAINT_DIAMETER)/2;    
+    m_radius = settings->getFloat(MYPAINT_DIAMETER)/2;
 }
 
 KisMyPaintOp::~KisMyPaintOp() {    

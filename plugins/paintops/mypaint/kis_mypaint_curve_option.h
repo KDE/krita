@@ -43,10 +43,6 @@ protected:
 
     void readNamedOptionSetting(const QString& prefix, const KisPropertiesConfigurationSP setting);   
 
-    qreal m_value;
-    qreal m_minValue;
-    qreal m_maxValue;
-
 private:
     bool firstRead = true;
 

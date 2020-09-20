@@ -94,7 +94,7 @@ void KisMyPaintOpFactory::processAfterLoading() {
 
     KisPaintOpPresetResourceServer *paintOpServer = KisResourceServerProvider::instance()->paintOpPresetServer();
 
-    foreach(KisMyPaintBrush* brush, m_d->brushServer->resources()) {
+    Q_FOREACH(KisMyPaintBrush* brush, m_d->brushServer->resources()) {
 
         QFileInfo fileInfo(brush->filename());
 

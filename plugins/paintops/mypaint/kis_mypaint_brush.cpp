@@ -46,6 +46,12 @@ KisMyPaintBrush::KisMyPaintBrush(const QString &fileName)
     mypaint_brush_from_defaults(m_d->m_brush);
 }
 
+KisMyPaintBrush::~KisMyPaintBrush() {
+
+    delete m_d->m_brush;
+    delete m_d;
+}
+
 void KisMyPaintBrush::setColor(const KoColor color, const KoColorSpace *colorSpace) {
 
     float hue, saturation, value;

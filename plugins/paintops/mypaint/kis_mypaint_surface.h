@@ -24,6 +24,7 @@ public:
 
 public:
     KisMyPaintSurface(KisPainter* painter, KisPaintDeviceSP paintNode=nullptr, KisImageSP image = nullptr);
+    ~KisMyPaintSurface();
 
     /**
       * mypaint_surface_draw_dab:

@@ -49,6 +49,11 @@ KisMyPaintSurface::KisMyPaintSurface(KisPainter *painter, KisPaintDeviceSP paint
     bitDepth = painter->device()->colorSpace()->channels()[0]->channelValueType();
 }
 
+KisMyPaintSurface::~KisMyPaintSurface() {
+
+    delete m_surface;
+}
+
 int KisMyPaintSurface::draw_dab(MyPaintSurface *self, float x, float y, float radius, float color_r, float color_g,
                                 float color_b, float opaque, float hardness, float color_a,
                                 float aspect_ratio, float angle, float lock_alpha, float colorize) {
@@ -238,8 +243,9 @@ void KisMyPaintSurface::getColorImpl(MyPaintSurface *self, float x, float y, flo
     const QPoint pt = QPoint(x - radius, y - radius);
     const QSize sz = QSize(2 * radius, 2 * radius);
 
-    if( m_image.isNull() && m_imageDevice.isNull())
+    if( m_image.isNull() && m_imageDevice.isNull()) {
         return;
+    }
 
     const QRect dabRectAligned = QRect(pt, sz);
     const QPointF center = QPointF(x, y);

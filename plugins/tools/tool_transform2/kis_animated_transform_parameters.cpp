@@ -214,14 +214,13 @@ void KisAnimatedTransformMaskParameters::setHidden(bool hidden)
 
 void KisAnimatedTransformMaskParameters::clearChangedFlag()
 {
-    // m_d->hash = transformArgs()->hash();
-    //ENTER_FUNCTION() << ppVar(m_d->hash);
+    m_d->hash = qHash(*transformArgs());
+    ENTER_FUNCTION() << ppVar(m_d->hash);
 }
 
 bool KisAnimatedTransformMaskParameters::hasChanged() const
 {
-    //return m_d->hash != transformArgs()->hash();
-    return true;
+    return m_d->hash != qHash(*transformArgs());
 }
 
 bool KisAnimatedTransformMaskParameters::isAnimated() const

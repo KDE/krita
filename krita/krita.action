@@ -609,7 +609,7 @@
       <whatsThis></whatsThis>
       <toolTip>Selection Mode: Add</toolTip>
       <iconText>Selection Mode: Add</iconText>
-      <shortcut>A</shortcut>
+      <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -619,7 +619,7 @@
       <whatsThis></whatsThis>
       <toolTip>Selection Mode: Subtract</toolTip>
       <iconText>Selection Mode: Subtract</iconText>
-      <shortcut>S</shortcut>
+      <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -639,7 +639,7 @@
       <whatsThis></whatsThis>
       <toolTip>Selection Mode: Replace</toolTip>
       <iconText>Selection Mode: Replace</iconText>
-      <shortcut>R</shortcut>
+      <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>

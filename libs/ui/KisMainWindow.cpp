@@ -1656,7 +1656,6 @@ void KisMainWindow::slotImportFile()
 
 void KisMainWindow::slotFileOpen(bool isImporting)
 {
-#ifndef Q_OS_ANDROID
     QStringList urls = showOpenFileDialog(isImporting);
 
     if (urls.isEmpty())
@@ -1672,11 +1671,6 @@ void KisMainWindow::slotFileOpen(bool isImporting)
             }
         }
     }
-#else
-    Q_UNUSED(isImporting);
-
-    d->fileManager->openImportFile();
-#endif
 }
 
 void KisMainWindow::slotFileOpenRecent(const QUrl &url)

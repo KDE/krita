@@ -197,6 +197,7 @@ private:
     QToolButton*                        m_alphaLockButton;
     QToolButton*                        m_hMirrorButton;
     QToolButton*                        m_vMirrorButton;
+    QToolButton*                        m_wrapAroundButton;
     KisToolOptionsPopup*                m_toolOptionsPopup;
     KisPaintOpPresetsPopup*             m_presetsPopup;
     KisPaintOpPresetsChooserPopup*      m_presetsChooserPopup;

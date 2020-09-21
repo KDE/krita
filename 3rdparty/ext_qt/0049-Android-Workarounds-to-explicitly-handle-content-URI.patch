@@ -1,0 +1,171 @@
+From d327fc5ac59fb55f5d21d7353c806301b117583e Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <sharafzaz121@gmail.com>
+Date: Mon, 21 Sep 2020 12:05:19 +0000
+Subject: [PATCH] Android: Workarounds to explicitly handle content URIs
+
+On Android we can't reliably get fileName, suffix etc
+from the Uri of the path, so we need to use ContentResolver
+to handle them explicitly for such Uris
+---
+ src/corelib/io/qfileinfo.cpp                  | 20 ++++++++++++++++---
+ src/corelib/io/qurl.cpp                       | 18 +++++++++++++++++
+ .../android/androidcontentfileengine.cpp      | 10 ++++++++++
+ .../android/androidcontentfileengine.h        |  1 +
+ .../qandroidplatformfiledialoghelper.cpp      |  6 ++----
+ 5 files changed, 48 insertions(+), 7 deletions(-)
+
+diff --git a/src/corelib/io/qfileinfo.cpp b/src/corelib/io/qfileinfo.cpp
+index 189b704b51..f14c0591d4 100644
+--- a/src/corelib/io/qfileinfo.cpp
++++ b/src/corelib/io/qfileinfo.cpp
+@@ -758,7 +758,7 @@ QString QFileInfo::fileName() const
+     if (d->isDefaultConstructed)
+         return QLatin1String("");
+ #ifdef Q_OS_ANDROID
+-    if (d->fileEntry.filePath().startsWith("content:") && d->fileEngine) {
++    if (d->fileEntry.filePath().startsWith(QLatin1String("content://")) && d->fileEngine) {
+         QString fname = d->fileEngine->fileName();
+         return fname;
+     }
+@@ -807,6 +807,12 @@ QString QFileInfo::baseName() const
+     Q_D(const QFileInfo);
+     if (d->isDefaultConstructed)
+         return QLatin1String("");
++#ifdef Q_OS_ANDROID
++    if (d->fileEntry.filePath().startsWith(QLatin1String("content://")) && d->fileEngine) {
++        QString fname = d->fileEngine->fileName();
++        return QFileInfo(fname).baseName();
++    }
++#endif
+     return d->fileEntry.baseName();
+ }
+ 
+@@ -845,6 +851,12 @@ QString QFileInfo::completeSuffix() const
+     Q_D(const QFileInfo);
+     if (d->isDefaultConstructed)
+         return QLatin1String("");
++#ifdef Q_OS_ANDROID
++    if (d->fileEntry.filePath().startsWith(QLatin1String("content://")) && d->fileEngine) {
++        QString fname = fileName();
++        return QFileInfo(fname).completeSuffix();
++    }
++#endif
+     return d->fileEntry.completeSuffix();
+ }
+ 
+@@ -870,8 +882,10 @@ QString QFileInfo::suffix() const
+         return QLatin1String("");
+ 
+ #ifdef Q_OS_ANDROID
+-    QString fname = fileName();
+-    return fname.split(".").last();
++    if (d->fileEntry.filePath().startsWith(QLatin1String("content://")) && d->fileEngine) {
++        QString fname = fileName();
++        return QFileInfo(fname).suffix();
++    }
+ #endif
+     return d->fileEntry.suffix();
+ }
+diff --git a/src/corelib/io/qurl.cpp b/src/corelib/io/qurl.cpp
+index 6d82981fd6..5341c6db01 100644
+--- a/src/corelib/io/qurl.cpp
++++ b/src/corelib/io/qurl.cpp
+@@ -2641,6 +2641,9 @@ QString QUrl::path(ComponentFormattingOptions options) const
+ */
+ QString QUrl::fileName(ComponentFormattingOptions options) const
+ {
++#ifdef Q_OS_ANDROID
++    return QFileInfo(toString()).fileName();
++#endif
+     const QString ourPath = path(options);
+     const int slash = ourPath.lastIndexOf(QLatin1Char('/'));
+     if (slash == -1)
+@@ -3842,6 +3845,11 @@ bool QUrl::isDetached() const
+ */
+ QUrl QUrl::fromLocalFile(const QString &localFile)
+ {
++#ifdef Q_OS_ANDROID
++    if (localFile.startsWith(QLatin1String("content://"))) {
++        return localFile;
++    }
++#endif
+     QUrl url;
+     if (localFile.isEmpty())
+         return url;
+@@ -3895,6 +3903,13 @@ QString QUrl::toLocalFile() const
+     if (!isLocalFile())
+         return QString();
+ 
++#ifdef Q_OS_ANDROID
++    if (d->isLocalFile()) {
++        return d->toLocalFile(QUrl::FullyDecoded);
++    } else {
++        return toString();
++    }
++#endif
+     return d->toLocalFile(QUrl::FullyDecoded);
+ }
+ 
+@@ -3911,6 +3926,9 @@ QString QUrl::toLocalFile() const
+ */
+ bool QUrl::isLocalFile() const
+ {
++#ifdef Q_OS_ANDROID
++    return d;
++#endif
+     return d && d->isLocalFile();
+ }
+ 
+diff --git a/src/plugins/platforms/android/androidcontentfileengine.cpp b/src/plugins/platforms/android/androidcontentfileengine.cpp
+index cdefacfaf9..9a743f3946 100644
+--- a/src/plugins/platforms/android/androidcontentfileengine.cpp
++++ b/src/plugins/platforms/android/androidcontentfileengine.cpp
+@@ -133,6 +133,16 @@ QString AndroidContentFileEngine::fileName(FileName f) const
+     }
+ }
+ 
++bool AndroidContentFileEngine::isRelativePath() const
++{
++    if (m_file.startsWith(QLatin1String("content://"))) {
++        return false;
++    } else {
++        // well then it's just a Unix path
++        return m_file.length() ? m_file.at(0) != QLatin1Char('/') : true;
++    }
++}
++
+ void AndroidContentFileEngine::setResolvedFileName(const QString& uri)
+ {
+     QJNIObjectPrivate resolvedName = QJNIObjectPrivate::callStaticObjectMethod(
+diff --git a/src/plugins/platforms/android/androidcontentfileengine.h b/src/plugins/platforms/android/androidcontentfileengine.h
+index abf969ba20..6769352ffd 100644
+--- a/src/plugins/platforms/android/androidcontentfileengine.h
++++ b/src/plugins/platforms/android/androidcontentfileengine.h
+@@ -51,6 +51,7 @@ public:
+     qint64 size() const override;
+     FileFlags fileFlags(FileFlags type = FileInfoAll) const override;
+     QString fileName(FileName file = DefaultName) const override;
++    bool isRelativePath() const override;
+ 
+     /// Resolves the URI to the actual filename
+     void setResolvedFileName(const QString& uri);
+diff --git a/src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp b/src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp
+index 6bb3372380..05e4ccbbee 100644
+--- a/src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp
++++ b/src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp
+@@ -107,10 +107,8 @@ void QAndroidPlatformFileDialogHelper::takePersistableUriPermission(const QJNIOb
+     int modeFlags = QJNIObjectPrivate::getStaticField<jint>(
+             JniIntentClass, "FLAG_GRANT_READ_URI_PERMISSION");
+ 
+-    if (options()->acceptMode() == QFileDialogOptions::AcceptSave) {
+-        modeFlags |= QJNIObjectPrivate::getStaticField<jint>(
+-                JniIntentClass, "FLAG_GRANT_WRITE_URI_PERMISSION");
+-    }
++    modeFlags |= QJNIObjectPrivate::getStaticField<jint>(
++            JniIntentClass, "FLAG_GRANT_WRITE_URI_PERMISSION");
+ 
+     QJNIObjectPrivate contentResolver = m_activity.callObjectMethod(
+             "getContentResolver", "()Landroid/content/ContentResolver;");
+-- 
+2.28.0
+

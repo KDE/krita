@@ -1626,11 +1626,7 @@ void KisDocument::autoSaveOnPause()
 
 QString KisDocument::toPath(const QUrl &url) const
 {
-#ifdef Q_OS_ANDROID
-    return (url.toLocalFile().isEmpty()) ? url.toString() : url.toLocalFile();
-#else
     return url.toLocalFile();
-#endif
 }
 
 // shared between openFile and koMainWindow's "create new empty document" code

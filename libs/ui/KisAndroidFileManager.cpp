@@ -69,6 +69,36 @@ void KisAndroidFileManager::openImportFile()
     }
 }
 
+void KisAndroidFileManager::takePersistableUriPermission(const QUrl &url)
+{
+    QAndroidJniObject rawUri = QAndroidJniObject::fromString(url.toString());
+    QAndroidJniObject uri = QAndroidJniObject::callStaticObjectMethod("android/net/Uri",
+                                                                      "parse",
+                                                                      "(Ljava/lang/String;)Landroid/net/Uri;",
+                                                                      rawUri.object());
+    if (uri.isValid()) {
+        takePersistableUriPermission(uri);
+    } else {
+        warnKrita << "Uri returned is not valid";
+    }
+}
+
+QString KisAndroidFileManager::mimeType(const QString& uri)
+{
+    QAndroidJniObject mimeType = QAndroidJniObject::callStaticObjectMethod(
+        "org/qtproject/qt5/android/QtNative",
+        "getMimeTypeFromUri",
+        "(Landroid/content/Context;Ljava/lang/String;)Ljava/lang/String;",
+        QtAndroid::androidContext().object(),
+        QAndroidJniObject::fromString(uri).object());
+
+    if (mimeType.isValid()) {
+        return mimeType.toString();
+    } else {
+        return QString();
+    }
+}
+
 void KisAndroidFileManager::takePersistableUriPermission(const QAndroidJniObject& uri)
 {
     int mode = QAndroidJniObject::getStaticField<jint>("android/content/Intent",

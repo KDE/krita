@@ -33,6 +33,7 @@ public:
     KisKeyframeChannel* getKeyframeChannel(const KoID& koid) const override;
     QList<KisKeyframeChannel*> copyChannelsFrom(const KisAnimatedTransformParamsInterface *other) override;
 
+    qreal defaultValueForScalarChannel(QString name);
 
     bool isHidden() const override;
     void setHidden(bool hidden);

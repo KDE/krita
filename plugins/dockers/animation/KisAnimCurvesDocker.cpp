@@ -535,9 +535,11 @@ void KisAnimCurvesDocker::slotScrollerStateChanged(QScroller::State state)
 void KisAnimCurvesDocker::slotNodeActivated(KisNodeSP node)
 {
     if (!node) return;
-    bool supported = node->supportsKeyframeChannel(KisKeyframeChannel::Opacity.id())
-                   | node->supportsKeyframeChannel(KisKeyframeChannel::PositionX.id())
-                   | node->supportsKeyframeChannel(KisKeyframeChannel::PositionY.id());
+    bool supported = node->supportsKeyframeChannel(KisKeyframeChannel::Opacity.id()) |
+            node->supportsKeyframeChannel(KisKeyframeChannel::PositionX.id()) |
+            node->supportsKeyframeChannel(KisKeyframeChannel::PositionY.id()) |
+            node->supportsKeyframeChannel(KisKeyframeChannel::ScaleX.id()) |
+            node->supportsKeyframeChannel(KisKeyframeChannel::ScaleY.id());
     m_d->titlebar->btnAddKey->setEnabled(supported);
 }
 
@@ -601,6 +603,14 @@ void KisAnimCurvesDocker::slotAddAllEnabledKeys()
 
     if (node->supportsKeyframeChannel(KisKeyframeChannel::PositionY.id())) {
         addKeyframe(KisKeyframeChannel::PositionY.id());
+    }
+
+    if (node->supportsKeyframeChannel(KisKeyframeChannel::ScaleX.id())) {
+        addKeyframe(KisKeyframeChannel::ScaleX.id());
+    }
+
+    if (node->supportsKeyframeChannel(KisKeyframeChannel::ScaleY.id())) {
+        addKeyframe(KisKeyframeChannel::ScaleY.id());
     }
 }
 

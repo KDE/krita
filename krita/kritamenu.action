@@ -572,7 +572,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="wrap_around_mode">
-      <icon>mirror-view</icon>
+      <icon>wraparound</icon>
       <text>&amp;Wrap Around Mode</text>
       <whatsThis></whatsThis>
       <toolTip>Wrap Around Mode</toolTip>

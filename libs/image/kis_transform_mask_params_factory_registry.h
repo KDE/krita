@@ -17,10 +17,9 @@
 
 class QDomElement;
 
-
 using KisTransformMaskParamsFactory    = std::function<KisTransformMaskParamsInterfaceSP (const QDomElement &)>;
 using KisTransformMaskParamsFactoryMap = QMap<QString, KisTransformMaskParamsFactory>;
-using KisAnimatedTransformMaskParamsFactory = std::function<KisTransformMaskParamsInterfaceSP (KisTransformMaskParamsInterfaceSP)>;
+using KisAnimatedTransformMaskParamsFactory = std::function<KisTransformMaskParamsInterfaceSP (KisTransformMaskParamsInterfaceSP, const KisTransformMaskSP)>;
 using KisTransformMaskKeyframeFactory = std::function<void (KisTransformMaskSP, int, KisTransformMaskParamsInterfaceSP, KUndo2Command*)>;
 
 class KRITAIMAGE_EXPORT KisTransformMaskParamsFactoryRegistry
@@ -34,7 +33,7 @@ public:
     KisTransformMaskParamsInterfaceSP createParams(const QString &id, const QDomElement &e);
 
     void setAnimatedParamsFactory(const KisAnimatedTransformMaskParamsFactory &factory);
-    KisTransformMaskParamsInterfaceSP animateParams(KisTransformMaskParamsInterfaceSP params);
+    KisTransformMaskParamsInterfaceSP animateParams(KisTransformMaskParamsInterfaceSP params, const KisTransformMaskSP mask);
 
     void setKeyframeFactory(const KisTransformMaskKeyframeFactory &factory);
     void autoAddKeyframe(KisTransformMaskSP mask, int time, KisTransformMaskParamsInterfaceSP params, KUndo2Command *parentCommand);

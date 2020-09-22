@@ -215,7 +215,6 @@ void KisAnimatedTransformMaskParameters::setHidden(bool hidden)
 void KisAnimatedTransformMaskParameters::clearChangedFlag()
 {
     m_d->hash = qHash(*transformArgs());
-    ENTER_FUNCTION() << ppVar(m_d->hash);
 }
 
 bool KisAnimatedTransformMaskParameters::hasChanged() const
@@ -240,20 +239,21 @@ KisTransformMaskParamsInterfaceSP KisAnimatedTransformMaskParameters::fromXML(co
     return aniparam;
 }
 
-KisTransformMaskParamsInterfaceSP KisAnimatedTransformMaskParameters::makeAnimated(KisTransformMaskParamsInterfaceSP params)
+KisTransformMaskParamsInterfaceSP KisAnimatedTransformMaskParameters::makeAnimated(KisTransformMaskParamsInterfaceSP params, const KisTransformMaskSP mask)
 {
-    KisTransformMaskParamsInterface *animatedParams;
-
-    KisTransformMaskAdapter *tma = dynamic_cast<KisTransformMaskAdapter*>(params.data());
+    KisAnimatedTransformMaskParameters* animMask;
+    QSharedPointer<KisTransformMaskAdapter> tma = params.dynamicCast<KisTransformMaskAdapter>();
     if (tma) {
-        animatedParams = new KisAnimatedTransformMaskParameters(tma);
+        animMask = new KisAnimatedTransformMaskParameters(tma.data());
     } else {
-        animatedParams = new KisAnimatedTransformMaskParameters();
+        animMask = new KisAnimatedTransformMaskParameters();
+        animMask->transformArgs()->setOriginalCenter(mask->sourceDataBounds().center());
     }
 
-    animatedParams->clearChangedFlag();
 
-    return toQShared(animatedParams);
+    animMask->clearChangedFlag();
+
+    return toQShared(animMask);
 }
 
 void KisAnimatedTransformMaskParameters::makeScalarKeyframeOnMask(KisTransformMaskSP mask, const KoID &channelId, int time, qreal value, KUndo2Command *parentCommand)
@@ -269,7 +269,7 @@ void KisAnimatedTransformMaskParameters::addKeyframes(KisTransformMaskSP mask, i
 {
     KisTransformMaskParamsInterfaceSP currentParams = mask->transformParams();
     if (dynamic_cast<KisAnimatedTransformMaskParameters*>(currentParams.data()) == 0) {
-        mask->setTransformParams(makeAnimated(currentParams));
+        mask->setTransformParams(makeAnimated(currentParams, mask));
     }
 
     if (params.isNull()) {
@@ -292,18 +292,20 @@ void KisAnimatedTransformMaskParameters::addKeyframes(KisTransformMaskSP mask, i
         tma->setBaseArgs(args);
     }
 
+//    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::PositionX, time, args.transformedCenter().x() - args.originalCenter().x(), parentCommand);
+//    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::PositionY, time, args.transformedCenter().y() - args.originalCenter().y(), parentCommand);
     makeScalarKeyframeOnMask(mask, KisKeyframeChannel::PositionX, time, args.transformedCenter().x(), parentCommand);
     makeScalarKeyframeOnMask(mask, KisKeyframeChannel::PositionY, time, args.transformedCenter().y(), parentCommand);
 
     makeScalarKeyframeOnMask(mask, KisKeyframeChannel::ScaleX, time, args.scaleX(), parentCommand);
     makeScalarKeyframeOnMask(mask, KisKeyframeChannel::ScaleY, time, args.scaleY(), parentCommand);
 
-//    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::ShearX, time, args.shearX(), parentCommand);
-//    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::ShearY, time, args.shearY(), parentCommand);
+    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::ShearX, time, args.shearX(), parentCommand);
+    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::ShearY, time, args.shearY(), parentCommand);
 
-//    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::RotationX, time, args.aX(), parentCommand);
-//    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::RotationY, time, args.aY(), parentCommand);
-//    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::RotationZ, time, args.aZ(), parentCommand);
+    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::RotationX, time, args.aX(), parentCommand);
+    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::RotationY, time, args.aY(), parentCommand);
+    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::RotationZ, time, args.aZ(), parentCommand);
 }
 
 #include "kis_transform_mask_params_factory_registry.h"

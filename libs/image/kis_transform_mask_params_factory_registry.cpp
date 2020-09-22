@@ -39,11 +39,11 @@ void KisTransformMaskParamsFactoryRegistry::setAnimatedParamsFactory(const KisAn
     m_animatedParamsFactory = factory;
 }
 
-KisTransformMaskParamsInterfaceSP KisTransformMaskParamsFactoryRegistry::animateParams(KisTransformMaskParamsInterfaceSP params)
+KisTransformMaskParamsInterfaceSP KisTransformMaskParamsFactoryRegistry::animateParams(KisTransformMaskParamsInterfaceSP params, const KisTransformMaskSP mask)
 {
     if (!m_animatedParamsFactory) return KisTransformMaskParamsInterfaceSP();
 
-    return m_animatedParamsFactory(params);
+    return m_animatedParamsFactory(params, mask);
 }
 
 void KisTransformMaskParamsFactoryRegistry::setKeyframeFactory(const KisTransformMaskKeyframeFactory &factory)

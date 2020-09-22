@@ -147,6 +147,7 @@ void KisTransformMask::setTransformParams(KisTransformMaskParamsInterfaceSP para
     }
 
     m_d->params = params;
+
     m_d->reloadParameters();
 
     m_d->updateSignalCompressor.stop();
@@ -572,7 +573,7 @@ KisKeyframeChannel *KisTransformMask::requestKeyframeChannel(const QString &id)
         KisAnimatedTransformParamsInterface *animatedParams = dynamic_cast<KisAnimatedTransformParamsInterface*>(m_d->params.data());
 
         if (!animatedParams) {
-            auto converted = KisTransformMaskParamsFactoryRegistry::instance()->animateParams(m_d->params);
+            auto converted = KisTransformMaskParamsFactoryRegistry::instance()->animateParams(m_d->params, this);
             if (converted.isNull()) return KisEffectMask::requestKeyframeChannel(id);
             m_d->params = converted;
             animatedParams = dynamic_cast<KisAnimatedTransformParamsInterface*>(converted.data());

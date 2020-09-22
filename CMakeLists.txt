@@ -651,6 +651,7 @@ set_package_properties(JPEG PROPERTIES
     PURPOSE "Required by the Krita JPEG filter")
 if (JPEG_FOUND)
     list (APPEND ANDROID_EXTRA_LIBS ${JPEG_LIBRARY})
+    macro_bool_to_01(JPEG_FOUND HAVE_JPEG)
 endif()
 
 find_package(GIF)
@@ -727,6 +728,13 @@ set_package_properties(PyQt5 PROPERTIES
     PURPOSE "Required by the Krita PyQt plugin")
 macro_bool_to_01(PYQT5_FOUND HAVE_PYQT5)
 
+find_package(FFmpeg)
+set_package_properties(FFmpeg PROPERTIES
+    DESCRIPTION "FFmpeg video encoder."
+    URL "http://ffmpeg.org/"
+    TYPE OPTIONAL
+    PURPOSE "Required by the Krita recorder plugin")
+macro_bool_to_01(FFMPEG_FOUND HAVE_FFMPEG)
 
 ##
 ## Look for OpenGL

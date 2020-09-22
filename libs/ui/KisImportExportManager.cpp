@@ -554,7 +554,7 @@ bool KisImportExportManager::askUserAboutExportConfiguration(
             KisPopupButton *bn = new KisPopupButton(0);
 
             bn->setText(i18nc("Keep the extra space at the end of the sentence, please", "Warning: saving as a %1 will lose information from your image.    ", mimeUserDescription));
-            bn->sizePolicy()
+
             hLayout->addWidget(bn);
 
             layout->addLayout(hLayout);

@@ -111,8 +111,6 @@ public:
         , canvas(&viewConverter, viewManager->canvasResourceProvider()->resourceManager(), viewManager->mainWindow(), _q, document->shapeController())
         , zoomManager(_q, &this->viewConverter, &this->canvasController)
         , viewManager(viewManager)
-        , paintingAssistantsDecoration(new KisPaintingAssistantsDecoration(_q))
-        , referenceImagesDecoration(new KisReferenceImagesDecoration(_q, document))
         , floatingMessageCompressor(100, KisSignalCompressor::POSTPONE)
     {
     }
@@ -236,9 +234,11 @@ KisView::KisView(KisDocument *document, KisViewManager *viewManager, QWidget *pa
     connect(d->document, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
     connect(d->document, SIGNAL(sigSavingFinished()), this, SLOT(slotSavingFinished()));
 
+    d->referenceImagesDecoration = new KisReferenceImagesDecoration(this, document);
     d->canvas.addDecoration(d->referenceImagesDecoration);
     d->referenceImagesDecoration->setVisible(true);
 
+    d->paintingAssistantsDecoration = new KisPaintingAssistantsDecoration(this);
     d->canvas.addDecoration(d->paintingAssistantsDecoration);
     d->paintingAssistantsDecoration->setVisible(true);
 
